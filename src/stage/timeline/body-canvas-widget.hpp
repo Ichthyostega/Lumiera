@@ -59,6 +59,7 @@
 
 #include "stage/gtk-base.hpp"
 #include "stage/timeline/track-profile.hpp"
+#include "stage/model/view-hook.hpp"
 
 //#include "lib/util.hpp"
 
@@ -105,6 +106,7 @@ namespace timeline {
    */
   class BodyCanvasWidget
     : public Gtk::Box
+    , public model::ViewHook<Gtk::Widget>
     {
       DisplayManager& layout_;
       TrackProfile profile_;
@@ -135,6 +137,13 @@ namespace timeline {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
       void DEBUG_injectTrackLabel(cuString const& trackName, int startLine);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
+      
+    protected: /* ==== Interface: ViewHook ===== */
+      
+      void hook (Gtk::Widget&, int xPos=0, int yPos=0) override;
+      void move (Gtk::Widget&, int xPos, int yPos)     override;
+      void remove (Gtk::Widget&)                       override;
+      void rehook (model::ViewHooked<Gtk::Widget>&)  noexcept override;
       
     private:/* ===== Internals ===== */
       

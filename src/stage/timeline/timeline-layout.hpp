@@ -140,6 +140,12 @@ namespace timeline {
       PixSpan getPixSpan()  override;
       void triggerDisplayEvaluation()  override;
       
+    protected: /* ==== Interface: DisplayViewHooks===== */
+      
+      model::ViewHook<TrackHeadWidget>& getHeadHook()  override { return *this;       };
+      model::ViewHook<TrackBody>&       getBodyHook()  override { return *this;       };
+      model::ViewHook<Gtk::Widget>&     getClipHook()  override { return bodyCanvas_; };
+      
     protected: /* ==== Interface: ViewHook ===== */
       
       void hook (TrackHeadWidget&, int xPos=0, int yPos=0) override;

@@ -57,13 +57,10 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-
+#include "stage/model/view-hook.hpp"
 #include "lib/util.hpp"
 
 #include <sigc++/signal.h>
-
-//#include <memory>
-//#include <vector>
 
 
 
@@ -72,10 +69,35 @@ namespace timeline {
   
   using util::max;
   
-//  class TrackHeadWidget;
+  class TrackHeadWidget;
+  class TrackBody;
   
   
-  /** @todo quick-n-dirty hack. Should consider the Range TR (C++20) */
+  /**
+   * Interface: a compound of anchoring facilities.
+   * With the help of view-hooking, some detail presentation component
+   * or widget can attach itself into the overarching view context or canvas
+   * of the Timeline, while remaining agnostic about actual structure or implementation
+   * of this »display umbrella«. The local presentation component itself is then model::ViewHooked,
+   * thereby managing its attachment to the global context automatically. As it turns out, within
+   * the timeline display, we typically need a specific combination of such model::ViewHook, and
+   * we need them recursively: the actual timeline::DisplayFrame, while attaching below such
+   * DisplayViewHooks, is in turn itself again such a sub-anchor, allowing to attach
+   * child display frames recursively, which is required to display sub-tracks.
+   */
+  class DisplayViewHooks
+    {
+    public:
+      virtual ~DisplayViewHooks() { }    ///< this is an interface
+      
+      virtual model::ViewHook<TrackHeadWidget>& getHeadHook()  =0;
+      virtual model::ViewHook<TrackBody>&       getBodyHook()  =0;
+      virtual model::ViewHook<Gtk::Widget>&     getClipHook()  =0;
+    };
+  
+  
+  
+  /** @todo quick-n-dirty hack. Should consider the Range TS (C++20) */
   struct PixSpan
     {
       int b = 0;
@@ -100,11 +122,12 @@ namespace timeline {
     };
   
   /**
-   * Interface used by the widgets to translate themselves into screen layout.
-   * @todo WIP-WIP as of 11/2018
+   * Interface used by the widgets to attach and translate themselves into screen layout.
+   * @todo WIP-WIP as of 12/2019
    */
   class DisplayManager
     : util::NonCopyable
+    , public DisplayViewHooks
     {
       
 //    TimelineLayout();

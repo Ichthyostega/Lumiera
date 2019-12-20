@@ -21895,6 +21895,28 @@
 <icon BUILTIN="smily_bad"/>
 </node>
 <node CREATED="1576760324713" ID="ID_1267786696" MODIFIED="1576760340354" TEXT="einziger Ausweg... Display-Manager wird zum Super-Hook"/>
+<node COLOR="#338800" CREATED="1576806720057" ID="ID_805988831" MODIFIED="1576855579888" TEXT="noch besser: das in ein Sammel-Interface packen">
+<icon BUILTIN="idea"/>
+<node CREATED="1576806744893" ID="ID_526365809" MODIFIED="1576855570801" TEXT="vielleicht sogar ein Accessor-Interface">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1576806754123" ID="ID_931227814" MODIFIED="1576806765651" TEXT="das was wir brauchen -- nicht generisch">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1576806780944" ID="ID_424677663" MODIFIED="1576806787371" TEXT="wo definieren?">
+<node CREATED="1576806800277" ID="ID_1586259922" MODIFIED="1576806811655" TEXT="Track-Presenter (zumindest) mu&#xdf; das sehen"/>
+<node CREATED="1576806815591" ID="ID_1412328590" MODIFIED="1576806824733" TEXT="ViewHook sollte reine Implementierung bleiben"/>
+<node COLOR="#435e98" CREATED="1576806845175" ID="ID_302576498" MODIFIED="1576855554242" TEXT="DisplayManager">
+<icon BUILTIN="yes"/>
+<node CREATED="1576806881586" ID="ID_1243796008" MODIFIED="1576806891357" TEXT="ja da geh&#xf6;rt&apos;s eigentlich hin"/>
+<node CREATED="1576806892609" ID="ID_981763412" MODIFIED="1576806908361" TEXT="versuch, m&#xf6;glichst mit forward-decl zu arbeiten"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1576855633920" ID="ID_1642579599" MODIFIED="1576855726346" TEXT="damit ist auch die Basis zum relativen Positionieren gegeben">
+<arrowlink COLOR="#6780d3" DESTINATION="ID_1121301646" ENDARROW="Default" ENDINCLINATION="551;-498;" ID="Arrow_ID_229033893" STARTARROW="None" STARTINCLINATION="-477;21;"/>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 <node CREATED="1576710544415" ID="ID_88564726" MODIFIED="1576710556729" TEXT="zwei F&#xe4;lle zu unterscheiden">
@@ -22022,6 +22044,10 @@
 <node CREATED="1576705769431" ID="ID_6854402" MODIFIED="1576705777946" TEXT="delegierende ViewHook-Implementierung schaffen"/>
 <node CREATED="1576705779910" ID="ID_968522268" MODIFIED="1576705792920" TEXT="damit ViewHook&lt;Clip&gt;"/>
 <node CREATED="1576705802515" ID="ID_674496871" MODIFIED="1576705809765" TEXT="und ViewHook&lt;Marker&gt;"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576855620250" ID="ID_1121301646" MODIFIED="1576855705548" TEXT="relatives Positionieren erm&#xf6;glichen">
+<linktarget COLOR="#6780d3" DESTINATION="ID_1121301646" ENDARROW="Default" ENDINCLINATION="551;-498;" ID="Arrow_ID_229033893" SOURCE="ID_1642579599" STARTARROW="None" STARTINCLINATION="-477;21;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576705946751" ID="ID_478555928" MODIFIED="1576705956429" TEXT="re-Konstrkutions-Mechanismus realisieren">

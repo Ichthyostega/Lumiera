@@ -537,6 +537,32 @@ namespace timeline {
   }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
   
+  /* ==== Interface: ViewHook ===== */
+  
+  void
+  BodyCanvasWidget::hook (Gtk::Widget& head, int xPos, int yPos)
+  {
+    UNIMPLEMENTED ("find the relevant canvas and attach the widget at given pos");
+  }
+  
+  void
+  BodyCanvasWidget::remove (Gtk::Widget& head)
+  {
+    UNIMPLEMENTED ("find the relevant canvas and search and attach the widget");
+  }
+  
+  void
+  BodyCanvasWidget::rehook (model::ViewHooked<Gtk::Widget>&)  noexcept
+  {
+    UNIMPLEMENTED ("find the relevant canvas and attach the widget anew");
+  }
+  
+  void
+  BodyCanvasWidget::move (Gtk::Widget& head, int xPos, int yPos)
+  {
+    UNIMPLEMENTED ("find the relevant canvas and reposition the widget");
+  }
+  
   
   
   
