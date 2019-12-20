@@ -107,6 +107,34 @@ namespace timeline {
   }
   
   
+  /* ==== Interface: ViewHook ===== */
+  
+  void
+  TrackBody::hook (TrackBody& subBody, int xPos, int yPos)
+  {
+    UNIMPLEMENTED ("attach sub-TrackBody");
+  }
+  
+  void
+  TrackBody::move (TrackBody& subBody, int xPos, int yPos)
+  {
+    NOTREACHED ("woot?? can we even move a sub-TrackBody????");
+  }
+
+  void
+  TrackBody::remove (TrackBody& subBody)
+  {
+    UNIMPLEMENTED ("detach sub-TrackBody");
+  }
+  
+  void
+  TrackBody::rehook (ViewHooked<TrackBody>& subBody)  noexcept
+  {
+    UNIMPLEMENTED ("re-attach sub-TrackBody");
+  }
+  
+  
+  /* ==== Code for vertical track display layout ==== */
   
   /**
    * recursively calculate the height in pixels to display this track,

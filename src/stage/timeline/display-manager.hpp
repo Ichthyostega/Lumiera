@@ -69,6 +69,7 @@ namespace timeline {
   
   using util::max;
   
+  using model::ViewHooked;
   class TrackHeadWidget;
   class TrackBody;
   

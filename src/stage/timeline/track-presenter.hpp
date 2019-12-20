@@ -74,43 +74,103 @@ namespace timeline {
   
   
   /**
-   * Reference frame to organise the display related to a specific Track in the Timeline-GUI.
+   * ViewHook decorator to apply a (dynamic) offset
+   * when attaching or moving Widgets on the shared canvas.
+   */
+  class CanvasOffsetHook
+    : public model::ViewHook<Gtk::Widget>
+    {
+      model::ViewHook<Gtk::Widget>& refHook_;
+      
+      
+      /* ==== Interface: ViewHook ===== */
+      
+      void
+      hook (Gtk::Widget& widget, int xPos=0, int yPos=0) override
+        {
+          refHook_.hook (widget, hookAdjX (xPos), hookAdjY (yPos));
+        }
+      
+      void
+      move (Gtk::Widget& widget, int xPos, int yPos)  override
+        {
+          refHook_.move (widget, hookAdjX (xPos), hookAdjY (yPos));
+        }
+
+      void
+      remove (Gtk::Widget& widget)  override
+        {
+          refHook_.remove (widget);
+        }
+      
+      void
+      rehook (ViewHooked<Gtk::Widget>& hookedWidget)  noexcept override
+        {
+          refHook_.rehook (hookedWidget);
+        }
+      
+    protected: /* === extended Interface for relative view hook === */
+      virtual int hookAdjX (int xPos)  =0;
+      virtual int hookAdjY (int yPos)  =0;
+      
+    public:
+      CanvasOffsetHook(model::ViewHook<Gtk::Widget>& refHook)
+        : refHook_{refHook}
+        { }
+    };
+  
+  
+  /**
+   * Reference frame to organise the presentation related to a specific Track in the Timeline-GUI.
    * With the help of such a common frame of reference, we solve the problem that each individual
    * track display needs to hook into two distinct UI presentation structures: the track head controls
    * and the presentation of track contents on the BodyCanvasWidget.
    */
-  struct DisplayFrame
+  class DisplayFrame
     : util::NonCopyable
+    , public DisplayViewHooks
+    , public CanvasOffsetHook
     {
-      TrackHeadWidget head;
-      TrackBody       body;
+      TrackHeadWidget head_;
+      TrackBody       body_;
       
-      template<class FUN>
-      DisplayFrame (FUN anchorDisplay)
-        : head{}
-        , body{}
-        {
-          anchorDisplay (head, body);
-        }
+      /* ==== Interface: DisplayViewHooks===== */
       
-     ~DisplayFrame()
-        {
-          // Note: ~TrackBody triggers DisplayManager::signalStructureChange_()
-          TODO ("cause the managed presentation elements to detach from their parents");
-        }                            ///////////////////////////////////TICKET #1198 -- clarify to what extent esp. the header widgets need to be actively removed from the display structure. Is it sufficient just to kill the TrackHeadWidget 
+      model::ViewHook<TrackHeadWidget>& getHeadHook()  override { return head_; };
+      model::ViewHook<TrackBody>&       getBodyHook()  override { return body_; };
+      model::ViewHook<Gtk::Widget>&     getClipHook()  override { return *this; };
+      
+      /* === extended Interface for relative view hook === */
+      
+      int hookAdjX (int xPos)  override { return xPos; };
+      int hookAdjY (int yPos)  override { return yPos + body_.getContentOffsetY(); };
+      
+      
+    public:
+      DisplayFrame (DisplayViewHooks& displayAnchor)
+        : CanvasOffsetHook{displayAnchor.getClipHook()}
+        , head_{}
+        , body_{}
+        { }
       
       void
       setTrackName (cuString& name)
         {
-          head.setTrackName (name);
-          body.setTrackName (name);  ///////////////////////////////////TICKET #1017 -- TODO 11/18 : not clear yet if TrackBody needs to know its name
+          head_.setTrackName (name);
+          body_.setTrackName (name);  ///////////////////////////////////TICKET #1017 -- TODO 11/18 : not clear yet if TrackBody needs to know its name
         }
 
       void
       injectSubTrack (TrackHeadWidget& subHead, TrackBody& subBody)
         {
-          head.injectSubFork (subHead);
-          body.attachSubTrack (&subBody);
+          head_.injectSubFork (subHead);
+          body_.attachSubTrack (&subBody);
+        }
+      
+      vector<unique_ptr<RulerTrack>>&
+      bindRulers()
+        {
+          return body_.bindRulers();
         }
     };
   
@@ -136,10 +196,9 @@ namespace timeline {
        * @param nexus a way to connect this Controller to the UI-Bus.
        * @param anchorDisplay a one-way closure to attach into the display fabric
        */
-      template<class FUN>
-      TrackPresenter (ID id, ctrl::BusTerm& nexus, FUN anchorDisplay)
+      TrackPresenter (ID id, ctrl::BusTerm& nexus, DisplayViewHooks& displayAnchor)
         : Controller{id, nexus}
-        , display_{anchorDisplay}
+        , display_{displayAnchor}
         , subFork_{}
         , markers_{}
         , clips_{}

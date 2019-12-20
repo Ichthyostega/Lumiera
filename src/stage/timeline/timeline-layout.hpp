@@ -101,8 +101,6 @@ namespace timeline {
   class TrackHeadWidget;
   class TrackBody;
   
-  using model::ViewHooked;
-  
   
   /**
    * Top-level anchor point for the timeline display (widgets).

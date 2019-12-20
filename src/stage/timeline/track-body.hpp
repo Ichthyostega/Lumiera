@@ -92,6 +92,7 @@ namespace timeline {
    * @todo WIP-WIP as of 6/2019
    */
   class TrackBody
+    : public model::ViewHook<TrackBody>
     {
       uint contentHeight_;
       uint contentOffset_;
@@ -117,13 +118,21 @@ namespace timeline {
       uint calcRulerHeight();
       uint calcHeight();
       
+      uint getContentOffsetY() { return startLine_; }
+      
       DisplayManager::SignalStructureChange signalStructureChange_;
       
       
-    private:/* ===== Internals ===== */
+      /* ==== Interface: ViewHook ===== */
       
+      void hook (TrackBody&, int xPos=0, int yPos=0) override;
+      void move (TrackBody&, int xPos, int yPos)     override;
+      void remove (TrackBody&)                       override;
+      void rehook (ViewHooked<TrackBody>&)  noexcept override;
+      
+      /* ===== Internals ===== */
       /**
-       * Allow the TrackPresenter to manage the rulers
+       * @internal Allow the TrackPresenter to manage the rulers
        * The collection of rulers is part of the systematic UI model
        * and thus formally a direct child of the TrackPresenter; however they
        * are only relevant for the immediate display and interaction mechanics,
@@ -138,7 +147,6 @@ namespace timeline {
           return rulers_;
         }
       
-      friend class TrackPresenter;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
       uString TODO_trackName_;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this

@@ -48,6 +48,7 @@
 
 #include "stage/gtk-base.hpp"
 #include "stage/ctrl/bus-term.hpp"
+#include "stage/model/view-hook.hpp"
 
 //#include "lib/util.hpp"
 
@@ -60,6 +61,7 @@ namespace stage  {
 namespace timeline {
   
   using ID = ctrl::BusTerm::ID;
+  using model::ViewHooked;
   
   /**
    * Header pane control area corresponding to a Track with nested child Tracks.
@@ -70,11 +72,19 @@ namespace timeline {
    */
   class TrackHeadWidget
     : public Gtk::Grid
+    , public model::ViewHook<TrackHeadWidget>
     {
       Gtk::Label nameTODO_;
       Gtk::Label treeTODO_;
       
       uint childCnt_;
+      
+      /* ==== Interface: ViewHook ===== */
+      
+      void hook (TrackHeadWidget&, int xPos=0, int yPos=0) override;
+      void move (TrackHeadWidget&, int xPos, int yPos)     override;
+      void remove (TrackHeadWidget&)                       override;
+      void rehook (ViewHooked<TrackHeadWidget>&)  noexcept override;
       
     public:
       TrackHeadWidget();

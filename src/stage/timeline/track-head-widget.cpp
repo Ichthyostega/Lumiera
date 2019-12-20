@@ -112,5 +112,32 @@ namespace timeline {
   }
   
   
+  /* ==== Interface: ViewHook ===== */
+  
+  void
+  TrackHeadWidget::hook (TrackHeadWidget& subHead, int xPos, int yPos)
+  {
+    UNIMPLEMENTED ("attach sub-TrackHead");
+  }
+  
+  void
+  TrackHeadWidget::move (TrackHeadWidget& subHead, int xPos, int yPos)
+  {
+    NOTREACHED ("woot?? can we even move a sub-TrackHead????");
+  }
+
+  void
+  TrackHeadWidget::remove (TrackHeadWidget& subHead)
+  {
+    UNIMPLEMENTED ("detach sub-TrackHead");
+  }
+  
+  void
+  TrackHeadWidget::rehook (ViewHooked<TrackHeadWidget>& hookedSubHead)  noexcept
+  {
+    UNIMPLEMENTED ("re-attach sub-TrackHead");
+  }
+  
+  
   
 }}// namespace stage::timeline

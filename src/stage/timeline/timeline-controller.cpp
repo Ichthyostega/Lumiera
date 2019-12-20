@@ -89,10 +89,7 @@ namespace timeline {
     : Controller{identity, nexus}
     , name_{identity.getSym()}    // fallback initialise name from human-readable ID symbol 
     , markers_{}
-    , fork_{new TrackPresenter{trackID, nexus, [&](TrackHeadWidget& head,TrackBody& body)
-                                                 {
-                                                   layoutManager.installRootTrack (head, body); 
-                                                 }}}
+    , fork_{new TrackPresenter{trackID, nexus, layoutManager}}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
     , DEBUG_canvas_{layoutManager.exposeCanvasForDebug()}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this

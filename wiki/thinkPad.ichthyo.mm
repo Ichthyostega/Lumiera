@@ -21435,7 +21435,7 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#5f74b7" DESTINATION="ID_1964864197" ENDARROW="Default" ENDINCLINATION="-1024;0;" ID="Arrow_ID_465735263" STARTARROW="None" STARTINCLINATION="-717;0;"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573315138011" ID="ID_1957325688" MODIFIED="1575652920080" TEXT="brauchen wir hier eine Erweiterung auf mehrere Typen...?">
+<node COLOR="#435e98" CREATED="1573315138011" FOLDED="true" ID="ID_1957325688" MODIFIED="1576876407022" TEXT="brauchen wir hier eine Erweiterung auf mehrere Typen...?">
 <arrowlink COLOR="#684be4" DESTINATION="ID_1458279581" ENDARROW="Default" ENDINCLINATION="-1681;0;" ID="Arrow_ID_1672277618" STARTARROW="None" STARTINCLINATION="788;-76;"/>
 <icon BUILTIN="help"/>
 <node CREATED="1575652924086" ID="ID_996829512" MODIFIED="1575653116780" TEXT="Antwort: im Prinzip ja">
@@ -21464,11 +21464,34 @@
 <icon BUILTIN="stop-sign"/>
 </node>
 <node CREATED="1575653121588" ID="ID_46973905" MODIFIED="1575653151603" TEXT="also bleibt nur, die Typisierung in den Funktions-Signaturen explizit auszudr&#xfc;cken"/>
+<node CREATED="1576876291037" ID="ID_114617089" MODIFIED="1576876404029" TEXT="dieses Problem versuchen wir, &quot;pragmatisch auszusitzen&quot;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Streng genommen w&#252;rden wir in der Tat einen generischen Quer-Zugriffsmechanismus brauchen.
+    </p>
+    <p>
+      Allerdings ist dieser entweder nicht implementierbar, oder, wenn implementierbar, dann auch redundant.
+    </p>
+    <p>
+      Und zudem kristallisiert sich bereits heraus, da&#223; wir es nicht mit einem &quot;Universum&quot; generischer Typen zu tun bekommen, sondern mit einer kleinen Auswahl, f&#252;r die wir halt dann die Quer-Verbindungen direkt auscoden und gut is...
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1575065263201" ID="ID_1640997956" MODIFIED="1575065274457" TEXT="zu kl&#xe4;ren: Zugang zu diesem ViewHook">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1575065263201" FOLDED="true" ID="ID_1640997956" MODIFIED="1576876415142" TEXT="zu kl&#xe4;ren: Zugang zu diesem ViewHook">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1575653188938" ID="ID_619809248" MODIFIED="1575653206332" TEXT="es l&#xe4;uft darauf hinaus, den Zugang in den DisplayFrames zusammenzufassen"/>
-<node CREATED="1575653207328" ID="ID_1942901156" MODIFIED="1575653233600" TEXT="diese m&#xfc;ssen daher eine Referenz auf einen &quot;irgendwo vorhandenen&quot; Timeline-ViewHook haben"/>
+<node CREATED="1575653207328" ID="ID_1942901156" MODIFIED="1576876278735" TEXT="diese brauchen daher eine Referenz auf einen &quot;irgendwo vorhandenen&quot; Timeline-ViewHook"/>
+<node COLOR="#338800" CREATED="1576876251659" ID="ID_1249561924" MODIFIED="1576876267532" TEXT="und tats&#xe4;chlich bekommen sie diesen per verketteter Initialisierung">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node CREATED="1563467398036" ID="ID_828698459" MODIFIED="1563467403607" TEXT="Implementierung">
@@ -21817,10 +21840,28 @@
 <arrowlink COLOR="#507b9b" DESTINATION="ID_1193961919" ENDARROW="Default" ENDINCLINATION="-877;88;" ID="Arrow_ID_624713040" STARTARROW="None" STARTINCLINATION="706;62;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576757730509" ID="ID_1816490333" MODIFIED="1576758006669" TEXT="Thema &#xbb;Widget-Position&#xab;">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576757730509" ID="ID_1816490333" MODIFIED="1576876200239" TEXT="Thema &#xbb;Widget-Position&#xab;">
 <arrowlink COLOR="#605bb8" DESTINATION="ID_1949130658" ENDARROW="Default" ENDINCLINATION="204;611;" ID="Arrow_ID_993970158" STARTARROW="None" STARTINCLINATION="512;51;"/>
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576758030604" HGAP="54" ID="ID_1869378616" MODIFIED="1576758051786" TEXT="entsprechende Erweiterung f&#xfc;r delegating-ViewHook notwendig" VSHIFT="26">
+<linktarget COLOR="#15bcc9" DESTINATION="ID_1816490333" ENDARROW="Default" ENDINCLINATION="-785;86;" ID="Arrow_ID_408864676" SOURCE="ID_1121301646" STARTARROW="None" STARTINCLINATION="-225;17;"/>
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1576758030604" HGAP="54" ID="ID_1869378616" MODIFIED="1576876023320" TEXT="entsprechende Erweiterung f&#xfc;r delegating-ViewHook notwendig" VSHIFT="26">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576876029833" HGAP="57" ID="ID_893654405" MODIFIED="1576876116458" TEXT="kl&#xe4;ren: brauchen wir verschiedene Offsets per Typ" VSHIFT="3">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      also einen speziellen Offset f&#252;r Clips und einen anderen speziellen Offset f&#252;r Effekt-Marker?
+    </p>
+    <p>
+      Oder, anders, wie bekommen wir diese Dinger jeweils in den richtigen unter-Bereich des Track-Layouts??
+    </p>
+  </body>
+</html>
+</richcontent>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -21879,8 +21920,8 @@
 <node CREATED="1576705652570" ID="ID_551481195" MODIFIED="1576705666257" TEXT="ViewHook&lt;Widget&gt;">
 <icon BUILTIN="info"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576705712654" ID="ID_1745971143" MODIFIED="1576705720810" TEXT="implementieren im TrackCanvas">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1576705712654" ID="ID_1745971143" MODIFIED="1576876014371" TEXT="implementieren im TrackCanvas">
+<icon BUILTIN="flag-pink"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576705413085" ID="ID_1979905155" MODIFIED="1576705430397" TEXT="Konstruktor / &quot;ein-H&#xe4;kel&quot;-Mchanismus darauf umstellen">
@@ -21895,7 +21936,8 @@
 <icon BUILTIN="smily_bad"/>
 </node>
 <node CREATED="1576760324713" ID="ID_1267786696" MODIFIED="1576760340354" TEXT="einziger Ausweg... Display-Manager wird zum Super-Hook"/>
-<node COLOR="#338800" CREATED="1576806720057" ID="ID_805988831" MODIFIED="1576855579888" TEXT="noch besser: das in ein Sammel-Interface packen">
+<node COLOR="#338800" CREATED="1576806720057" ID="ID_805988831" MODIFIED="1576875959056" TEXT="noch besser: das in ein Sammel-Interface packen">
+<linktarget COLOR="#67d289" DESTINATION="ID_805988831" ENDARROW="Default" ENDINCLINATION="-36;221;" ID="Arrow_ID_909815140" SOURCE="ID_1966295709" STARTARROW="None" STARTINCLINATION="495;16;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1576806744893" ID="ID_526365809" MODIFIED="1576855570801" TEXT="vielleicht sogar ein Accessor-Interface">
 <icon BUILTIN="idea"/>
@@ -21919,7 +21961,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1576710544415" ID="ID_88564726" MODIFIED="1576710556729" TEXT="zwei F&#xe4;lle zu unterscheiden">
+<node CREATED="1576710544415" FOLDED="true" ID="ID_88564726" MODIFIED="1576875999707" TEXT="zwei F&#xe4;lle zu unterscheiden">
 <icon BUILTIN="idea"/>
 <node CREATED="1576710558354" ID="ID_146653361" MODIFIED="1576710566077" TEXT="top-Level">
 <node CREATED="1576710810240" ID="ID_1493306680" MODIFIED="1576710989724" TEXT="bisher...">
@@ -21963,7 +22005,14 @@
 </node>
 </node>
 </node>
-<node CREATED="1576710566905" ID="ID_1380718144" MODIFIED="1576710570556" TEXT="Rekursion"/>
+<node CREATED="1576710566905" ID="ID_1380718144" MODIFIED="1576710570556" TEXT="Rekursion">
+<node CREATED="1576875874270" ID="ID_345044928" MODIFIED="1576875883513" TEXT="unproblematisch"/>
+<node CREATED="1576875884389" ID="ID_209901177" MODIFIED="1576875891784" TEXT="basierend auf der L&#xf6;sung f&#xfc;r top-Level"/>
+<node CREATED="1576875892588" ID="ID_1966295709" MODIFIED="1576875968903" TEXT="DisplayFrame selber implementiert wieder das DisplayViewHooks Sammel-Interface">
+<arrowlink COLOR="#67d289" DESTINATION="ID_805988831" ENDARROW="Default" ENDINCLINATION="-36;221;" ID="Arrow_ID_909815140" STARTARROW="None" STARTINCLINATION="495;16;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576753128134" ID="ID_1066136383" MODIFIED="1576753147236" TEXT="signalStructureChange_ anders l&#xf6;sen">
 <icon BUILTIN="flag-yellow"/>
@@ -22045,7 +22094,8 @@
 <node CREATED="1576705779910" ID="ID_968522268" MODIFIED="1576705792920" TEXT="damit ViewHook&lt;Clip&gt;"/>
 <node CREATED="1576705802515" ID="ID_674496871" MODIFIED="1576705809765" TEXT="und ViewHook&lt;Marker&gt;"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576855620250" ID="ID_1121301646" MODIFIED="1576855705548" TEXT="relatives Positionieren erm&#xf6;glichen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576855620250" ID="ID_1121301646" MODIFIED="1576876200239" TEXT="relatives Positionieren erm&#xf6;glichen">
+<arrowlink COLOR="#15bcc9" DESTINATION="ID_1816490333" ENDARROW="Default" ENDINCLINATION="-785;86;" ID="Arrow_ID_408864676" STARTARROW="None" STARTINCLINATION="-225;17;"/>
 <linktarget COLOR="#6780d3" DESTINATION="ID_1121301646" ENDARROW="Default" ENDINCLINATION="551;-498;" ID="Arrow_ID_229033893" SOURCE="ID_1642579599" STARTARROW="None" STARTINCLINATION="-477;21;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>

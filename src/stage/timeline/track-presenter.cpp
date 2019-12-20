@@ -85,7 +85,8 @@ namespace timeline {
   void
   TrackPresenter::injectDebugTrackLabels(BodyCanvasWidget& bodyCanvas)
   {
-    bodyCanvas.DEBUG_injectTrackLabel (display_.body.TODO_trackName_, display_.body.startLine_ + display_.body.contentOffset_);
+    ///////////////////////////TODO TOD-oh
+//    bodyCanvas.DEBUG_injectTrackLabel (display_.body_.TODO_trackName_, display_.body_.startLine_ + display_.body_.contentOffset_);
     for (auto& subTrack : subFork_)
       subTrack->injectDebugTrackLabels (bodyCanvas);
   }
@@ -109,7 +110,7 @@ namespace timeline {
     
     buffer.create (
       TreeMutator::build()
-        .attach (collection(display_.body.bindRulers())
+        .attach (collection(display_.bindRulers())
                .isApplicableIf ([&](GenNode const& spec) -> bool
                   {                                            // »Selector« : require object-like sub scope with type-field "Ruler"
                     return TYPE_Ruler == spec.data.recordType();
@@ -177,12 +178,7 @@ namespace timeline {
                   })
                .constructFrom ([&](GenNode const& spec) -> PFork
                   {
-                    return make_unique<TrackPresenter> (spec.idi
-                                                       ,this->uiBus_
-                                                       ,[&](TrackHeadWidget& head,TrackBody& body)
-                                                          {
-                                                            display_.injectSubTrack (head, body); 
-                                                          });
+                    return make_unique<TrackPresenter> (spec.idi, uiBus_, this->display_);
                   })
                .buildChildMutator ([&](PFork& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
