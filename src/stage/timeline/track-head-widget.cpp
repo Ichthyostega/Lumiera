@@ -94,15 +94,31 @@ namespace timeline {
    *       the whole structure has to be re-built accordingly.
    */
   void
-  TrackHeadWidget::injectSubFork (TrackHeadWidget& subForkHead)
+  TrackHeadWidget::attachSubFork (TrackHeadWidget& subForkHead)
   {
     ++childCnt_;
     this->attach (subForkHead, 1, childCnt_, 1,1);
   }
   
+  /**
+   * @internal remove a complete sub-fork from display.
+   * @remarks due to the automatic ref-counting system of GTK+, it is sufficient
+   *          just to remove the entry from the `Gtk::Container` baseclass, which
+   *          automatically decrements the refcount; alternatively we could as well
+   *          destroy the Gtkmm wrapper-Object (i.e. the `Gtk::Widget` subclass),
+   *          since this also destroys the underlying `gobj` and automatically
+   *          detaches it from any container.
+   */
+  void
+  TrackHeadWidget::detachSubFork (TrackHeadWidget& subForkHead)
+  {
+    --childCnt_;
+    this->remove (subForkHead);
+  }
+  
   
   void
-  TrackHeadWidget::clearSubFork()
+  TrackHeadWidget::clearFork()
   {
     while (childCnt_ > 0)
       {
@@ -117,7 +133,8 @@ namespace timeline {
   void
   TrackHeadWidget::hook (TrackHeadWidget& subHead, int xPos, int yPos)
   {
-    UNIMPLEMENTED ("attach sub-TrackHead");
+    REQUIRE (xPos==0 && yPos==0, "selection of arbitrary row not yet implemented");
+    attachSubFork (subHead);
   }
   
   void
@@ -129,13 +146,22 @@ namespace timeline {
   void
   TrackHeadWidget::remove (TrackHeadWidget& subHead)
   {
-    UNIMPLEMENTED ("detach sub-TrackHead");
+    detachSubFork (subHead);
   }
   
+  /** @remark This implementation will not interfere with the widget's lifecycle.
+   *   The widget with all its children is just detached from presentation (leaving an
+   *   empty grid cell), and immediately re-attached into the "bottom most" cell, as
+   *   given by the current childCnt_
+   *  @note in theory it is possible to end up with several widgets in a single cell,
+   *   and GTK can handle that. Given our actual usage of these functions, such should
+   *   never happen, since we manage all widgets as slave of the model::Tangible in charge.
+   */
   void
   TrackHeadWidget::rehook (ViewHooked<TrackHeadWidget>& hookedSubHead)  noexcept
   {
-    UNIMPLEMENTED ("re-attach sub-TrackHead");
+    detachSubFork (hookedSubHead);
+    attachSubFork (hookedSubHead);
   }
   
   

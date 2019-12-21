@@ -278,7 +278,7 @@ namespace util {
    *  in any sequential collection */
   template <typename SEQ>
   inline typename SEQ::iterator 
-  removeall (SEQ& coll, typename SEQ::value_type& val)
+  removeall (SEQ& coll, typename SEQ::value_type const& val)
   {
     typename SEQ::iterator collEnd = coll.end();
     return coll.erase (std::remove (coll.begin(), collEnd, val),

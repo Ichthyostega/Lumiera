@@ -114,7 +114,6 @@ namespace timeline {
       
       void setTrackName (cuString&);
       uint establishTrackSpace (TrackProfile&);
-      void attachSubTrack (TrackBody*);
       uint calcRulerHeight();
       uint calcHeight();
       

@@ -131,8 +131,8 @@ namespace timeline {
     , public DisplayViewHooks
     , public CanvasOffsetHook
     {
-      TrackHeadWidget head_;
-      TrackBody       body_;
+      ViewHooked<TrackHeadWidget> head_;
+      ViewHooked<TrackBody>       body_;
       
       /* ==== Interface: DisplayViewHooks===== */
       
@@ -149,8 +149,8 @@ namespace timeline {
     public:
       DisplayFrame (DisplayViewHooks& displayAnchor)
         : CanvasOffsetHook{displayAnchor.getClipHook()}
-        , head_{}
-        , body_{}
+        , head_{displayAnchor.getHeadHook()}
+        , body_{displayAnchor.getBodyHook()}
         { }
       
       void
@@ -158,13 +158,6 @@ namespace timeline {
         {
           head_.setTrackName (name);
           body_.setTrackName (name);  ///////////////////////////////////TICKET #1017 -- TODO 11/18 : not clear yet if TrackBody needs to know its name
-        }
-
-      void
-      injectSubTrack (TrackHeadWidget& subHead, TrackBody& subBody)
-        {
-          head_.injectSubFork (subHead);
-          body_.attachSubTrack (&subBody);
         }
       
       vector<unique_ptr<RulerTrack>>&

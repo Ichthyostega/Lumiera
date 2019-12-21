@@ -91,14 +91,15 @@ namespace timeline {
      ~TrackHeadWidget();
       
       void setTrackName (cuString&);
-      
-      /** Integrate the control area for a nested sub track fork. */
-      void injectSubFork (TrackHeadWidget& subForkHead);
-      
-      /** Discard all nested sub track display widgets. */
-      void clearSubFork();
 
     private:/* ===== Internals ===== */
+      
+      /** Integrate the control area for a nested sub track fork. */
+      void attachSubFork (TrackHeadWidget& subForkHead);
+      void detachSubFork (TrackHeadWidget& subForkHead);
+      
+      /** Discard all nested sub track display widgets. */
+      void clearFork();
      
     };
   

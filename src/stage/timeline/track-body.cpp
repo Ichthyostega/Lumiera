@@ -95,24 +95,17 @@ namespace timeline {
   }
   
   
-  void
-  TrackBody::attachSubTrack (TrackBody* subBody)
-  {
-    REQUIRE (subBody);
-    subTracks_.push_back (subBody);           /////////////////////////////////////////////////////TICKET #1199 : this can not possibly work; we need a way to retain the order of tracks, and we need to detach tracks...
-    
-    // detect changes of the track structure
-    subBody->signalStructureChange_ = signalStructureChange_;
-    signalStructureChange_(); // this _is_ such a change
-  }
-  
-  
   /* ==== Interface: ViewHook ===== */
   
   void
   TrackBody::hook (TrackBody& subBody, int xPos, int yPos)
   {
-    UNIMPLEMENTED ("attach sub-TrackBody");
+    REQUIRE (xPos==0 && yPos==0, "arbitrary positioning of TrackBody contradicts the concept of track-profile.");  ///TODO remove that API
+    subTracks_.push_back (&subBody);
+    
+    // notify presentation code of the changed structure
+    subBody.signalStructureChange_ = signalStructureChange_;
+    signalStructureChange_(); // this _is_ such a change
   }
   
   void
@@ -124,13 +117,16 @@ namespace timeline {
   void
   TrackBody::remove (TrackBody& subBody)
   {
-    UNIMPLEMENTED ("detach sub-TrackBody");
+    util::removeall (subTracks_, &subBody);
+    signalStructureChange_();
   }
   
   void
   TrackBody::rehook (ViewHooked<TrackBody>& subBody)  noexcept
   {
-    UNIMPLEMENTED ("re-attach sub-TrackBody");
+    util::removeall (subTracks_, &subBody);
+    subTracks_.push_back (&subBody);
+    signalStructureChange_();
   }
   
   
