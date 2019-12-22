@@ -147,6 +147,7 @@ namespace timeline {
       
     private:/* ===== Internals ===== */
       
+      TimelineCanvas& getCanvas(int yPos);
       void slotStructureChange()  noexcept;
       void maybeRebuildLayout();
       void adjustCanvasSize(int canvasWidth, int totalHeight, int rulerHeight);

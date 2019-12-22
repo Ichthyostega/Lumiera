@@ -22,10 +22,10 @@
 
 
 /** @file timeline-layout.cpp
- ** Implementation details of global timeline layout management. 
+ ** Implementation details of global timeline layout management.
  ** 
- ** @todo WIP-WIP-WIP as of 12/2016
  ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
+ ** @todo WIP-WIP-WIP as of 12/2019
  ** 
  */
 
@@ -129,32 +129,34 @@ namespace timeline {
   void
   TimelineLayout::hook (TrackHeadWidget& head, int xPos, int yPos)
   {
+    REQUIRE (xPos==0 && yPos==0, "arbitrary positioning of sub-Tracks contradicts the concept of track-profile.");  ///TODO remove that API
     headerPane_.installForkRoot (head);
   }
 
   void
   TimelineLayout::hook (TrackBody& body, int xPos, int yPos)
   {
+    REQUIRE (xPos==0 && yPos==0, "arbitrary positioning of sub-Tracks contradicts the concept of track-profile.");  ///TODO remove that API
     bodyCanvas_.installForkRoot (body);
     
     // detect changes of the track structure
     body.signalStructureChange_ = signalStructureChange_;
     signalStructureChange_(); // this _is_ such a change
   }
-
+  
   
   void
-  TimelineLayout::remove (TrackHeadWidget& head)
+  TimelineLayout::remove (TrackHeadWidget&)
   {
     headerPane_.disable();
   }
 
   void
-  TimelineLayout::remove (TrackBody& body)
+  TimelineLayout::remove (TrackBody&)
   {
     bodyCanvas_.disable();
   }
-
+  
   
   void
   TimelineLayout::rehook (model::ViewHooked<TrackHeadWidget>&)  noexcept
@@ -167,21 +169,19 @@ namespace timeline {
   {
     NOTREACHED ("TimelineLayout: top-Level must not be re-ordered");
   }
-
+  
   
   void
   TimelineLayout::move (TrackHeadWidget& head, int xPos, int yPos)
   {
-    UNIMPLEMENTED ("ViewHooked: not supported -- refactor?");
+    NOTREACHED ("ViewHooked: not supported -- refactor?");
   }
 
   void
   TimelineLayout::move (TrackBody& body, int xPos, int yPos)
   {
-    UNIMPLEMENTED ("ViewHooked: not supported -- refactor?");
+    NOTREACHED ("ViewHooked: not supported -- refactor?");
   }
-
-  
   
   
   

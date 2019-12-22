@@ -537,30 +537,40 @@ namespace timeline {
   }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
   
+  TimelineCanvas&
+  BodyCanvasWidget::getCanvas (int yPos)
+  {
+    return mainCanvas_; /////////////////////////////////////////////TICKET #1199 : TODO any need for a more elaborate Impl here?
+  }
+  
+  
   /* ==== Interface: ViewHook ===== */
   
   void
-  BodyCanvasWidget::hook (Gtk::Widget& head, int xPos, int yPos)
+  BodyCanvasWidget::hook (Gtk::Widget& widget, int xPos, int yPos)
   {
-    UNIMPLEMENTED ("find the relevant canvas and attach the widget at given pos");
+    /////////////////////////////////////////////////////////////////TICKET #1199 : need to adjust y-coord??
+    getCanvas(yPos).put (widget, xPos, yPos);
   }
   
   void
-  BodyCanvasWidget::remove (Gtk::Widget& head)
+  BodyCanvasWidget::remove (Gtk::Widget& widget)
   {
-    UNIMPLEMENTED ("find the relevant canvas and search and attach the widget");
+    /////////////////////////////////////////////////////////////////TICKET #1199 : TODO any need to care for the overview canvas??
+    getCanvas(0).remove (widget);
   }
   
   void
   BodyCanvasWidget::rehook (model::ViewHooked<Gtk::Widget>&)  noexcept
   {
-    UNIMPLEMENTED ("find the relevant canvas and attach the widget anew");
+    /* NOOP */
   }
   
   void
-  BodyCanvasWidget::move (Gtk::Widget& head, int xPos, int yPos)
+  BodyCanvasWidget::move (Gtk::Widget& widget, int xPos, int yPos)
   {
-    UNIMPLEMENTED ("find the relevant canvas and reposition the widget");
+    /////////////////////////////////////////////////////////////////TICKET #1199 : need to adjust y-coord??
+    getCanvas(yPos).move (widget, xPos, yPos);
   }
   
   

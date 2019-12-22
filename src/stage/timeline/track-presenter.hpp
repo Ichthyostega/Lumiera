@@ -77,34 +77,35 @@ namespace timeline {
    * ViewHook decorator to apply a (dynamic) offset
    * when attaching or moving Widgets on the shared canvas.
    */
+  template<class WID>
   class CanvasOffsetHook
-    : public model::ViewHook<Gtk::Widget>
+    : public model::ViewHook<WID>
     {
-      model::ViewHook<Gtk::Widget>& refHook_;
+      model::ViewHook<WID>& refHook_;
       
       
       /* ==== Interface: ViewHook ===== */
       
       void
-      hook (Gtk::Widget& widget, int xPos=0, int yPos=0) override
+      hook (WID& widget, int xPos=0, int yPos=0) override
         {
           refHook_.hook (widget, hookAdjX (xPos), hookAdjY (yPos));
         }
       
       void
-      move (Gtk::Widget& widget, int xPos, int yPos)  override
+      move (WID& widget, int xPos, int yPos)  override
         {
           refHook_.move (widget, hookAdjX (xPos), hookAdjY (yPos));
         }
 
       void
-      remove (Gtk::Widget& widget)  override
+      remove (WID& widget)  override
         {
           refHook_.remove (widget);
         }
       
       void
-      rehook (ViewHooked<Gtk::Widget>& hookedWidget)  noexcept override
+      rehook (ViewHooked<WID>& hookedWidget)  noexcept override
         {
           refHook_.rehook (hookedWidget);
         }
@@ -129,7 +130,7 @@ namespace timeline {
   class DisplayFrame
     : util::NonCopyable
     , public DisplayViewHooks
-    , public CanvasOffsetHook
+    , public CanvasOffsetHook<Gtk::Widget>
     {
       ViewHooked<TrackHeadWidget> head_;
       ViewHooked<TrackBody>       body_;
