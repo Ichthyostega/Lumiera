@@ -446,7 +446,8 @@ namespace lib {
   
   namespace iter_explorer { // Implementation of Iterator decorating layers...
     
-    constexpr auto ACCEPT_ALL = [](auto){return true;};
+  /*constexpr*/ ///////////////////////////////////////////////////////////TICKET #1138 : lambdas are literal only in C++17
+              auto ACCEPT_ALL = [](auto){return true;};
     
     /**
      * @internal technical details of binding a functor into the TreeExplorer.

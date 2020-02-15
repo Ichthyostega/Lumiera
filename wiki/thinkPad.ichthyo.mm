@@ -44515,13 +44515,16 @@
 </node>
 <node CREATED="1439176872457" HGAP="15" ID="ID_355008543" MODIFIED="1557498707241" POSITION="left" TEXT="Plattform" VSHIFT="41">
 <icon BUILTIN="go"/>
-<node CREATED="1439176875682" HGAP="47" ID="ID_1487331591" MODIFIED="1557498707241" TEXT="Debian/Jessie" VSHIFT="60">
+<node CREATED="1439176875682" HGAP="47" ID="ID_1487331591" MODIFIED="1581812835067" TEXT="Referenzplattform" VSHIFT="60">
+<icon BUILTIN="stop"/>
+<node COLOR="#435e98" CREATED="1439176875682" FOLDED="true" ID="ID_263510975" MODIFIED="1581813331909" TEXT="Debian/Jessie">
+<edge COLOR="#648f70" STYLE="linear"/>
+<icon BUILTIN="licq"/>
+<node CREATED="1439176890840" FOLDED="true" ID="ID_99751679" MODIFIED="1561237091609" TEXT="Probleme">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1439176890840" FOLDED="true" ID="ID_170863947" MODIFIED="1561237091609" TEXT="Probleme">
+<node CREATED="1439176900293" ID="ID_972499182" MODIFIED="1557498707241" TEXT="Linker rpath $ORIGIN">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1439176900293" ID="ID_949460307" MODIFIED="1557498707241" TEXT="Linker rpath $ORIGIN">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1439593020264" ID="ID_356536017" LINK="https://sourceware.org/bugzilla/show_bug.cgi?id=16936" MODIFIED="1557498707241">
+<node CREATED="1439593020264" ID="ID_1565713533" LINK="https://sourceware.org/bugzilla/show_bug.cgi?id=16936" MODIFIED="1557498707241">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -44533,7 +44536,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1439593578558" ID="ID_1155824773" LINK="http://issues.lumiera.org/ticket/965" MODIFIED="1557498707241">
+<node CREATED="1439593578558" ID="ID_808711591" LINK="http://issues.lumiera.org/ticket/965" MODIFIED="1557498707241">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -44545,7 +44548,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1439593646645" ID="ID_917747701" MODIFIED="1557498707241">
+<node CREATED="1439593646645" ID="ID_633732119" MODIFIED="1557498707241">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -44571,7 +44574,7 @@
 </html></richcontent>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1439176912636" ID="ID_584884488" MODIFIED="1561237078734" TEXT="failed tests">
+<node COLOR="#338800" CREATED="1439176912636" ID="ID_1261107088" MODIFIED="1561237078734" TEXT="failed tests">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -44583,12 +44586,12 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1439176982698" HGAP="59" ID="ID_1330966528" MODIFIED="1557498707241" TEXT="Beobachtung: Meldungen im journal" VSHIFT="2"/>
-<node CREATED="1439176948063" HGAP="54" ID="ID_1726494484" MODIFIED="1557498707241" TEXT="5 Thread/Parallel" VSHIFT="1">
-<node CREATED="1439566266701" ID="ID_1280061419" MODIFIED="1557498707241" TEXT="h&#xe4;ngt mit ulimit zusammen">
+<node CREATED="1439176982698" HGAP="59" ID="ID_1313800263" MODIFIED="1557498707241" TEXT="Beobachtung: Meldungen im journal" VSHIFT="2"/>
+<node CREATED="1439176948063" HGAP="54" ID="ID_885669922" MODIFIED="1557498707241" TEXT="5 Thread/Parallel" VSHIFT="1">
+<node CREATED="1439566266701" ID="ID_525193086" MODIFIED="1557498707241" TEXT="h&#xe4;ngt mit ulimit zusammen">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1439566274091" ID="ID_1628790738" MODIFIED="1557498707241" TEXT="ohne ulimit gehts">
+<node CREATED="1439566274091" ID="ID_589175513" MODIFIED="1557498707241" TEXT="ohne ulimit gehts">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -44600,10 +44603,10 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1439566868460" ID="ID_620984495" MODIFIED="1557498707241" TEXT="Untersuchung">
-<node CREATED="1439566872203" ID="ID_1734454643" MODIFIED="1557498707241" TEXT="ulimit -T funktioniert nicht">
-<node CREATED="1439566882418" ID="ID_410204401" MODIFIED="1557498707241" TEXT="bekanntes Problem"/>
-<node CREATED="1439566886513" ID="ID_1412848120" LINK="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=724461" MODIFIED="1557498707241">
+<node CREATED="1439566868460" ID="ID_1483801405" MODIFIED="1557498707241" TEXT="Untersuchung">
+<node CREATED="1439566872203" ID="ID_1412884783" MODIFIED="1557498707241" TEXT="ulimit -T funktioniert nicht">
+<node CREATED="1439566882418" ID="ID_267430691" MODIFIED="1557498707241" TEXT="bekanntes Problem"/>
+<node CREATED="1439566886513" ID="ID_439373884" LINK="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=724461" MODIFIED="1557498707241">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -44616,7 +44619,7 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1439588367804" ID="ID_1494433818" MODIFIED="1557498707241">
+<node CREATED="1439588367804" ID="ID_369587621" MODIFIED="1557498707241">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -44630,7 +44633,7 @@
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1439592731687" ID="ID_715556229" MODIFIED="1557498707241">
+<node CREATED="1439592731687" ID="ID_404027904" MODIFIED="1557498707241">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -44642,7 +44645,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1439592774041" ID="ID_1603492676" MODIFIED="1557498707242" TEXT="ist reine CPU-Zeit">
+<node CREATED="1439592774041" ID="ID_1425557829" MODIFIED="1557498707242" TEXT="ist reine CPU-Zeit">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -44657,7 +44660,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1439176927657" ID="ID_453561058" MODIFIED="1557498707242" TEXT="EntryID">
+<node CREATED="1439176927657" ID="ID_145666096" MODIFIED="1557498707242" TEXT="EntryID">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -44669,9 +44672,9 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1439608908133" ID="ID_1023076054" MODIFIED="1557498707242" TEXT="Problem mit der Hash-Funktion"/>
-<node CREATED="1439609043316" ID="ID_1585741290" MODIFIED="1557498707242" TEXT="hatte ich schon mal untersucht"/>
-<node CREATED="1439608917061" ID="ID_1631109794" LINK="http://issues.lumiera.org/ticket/587" MODIFIED="1557498707242">
+<node CREATED="1439608908133" ID="ID_1142031172" MODIFIED="1557498707242" TEXT="Problem mit der Hash-Funktion"/>
+<node CREATED="1439609043316" ID="ID_523440203" MODIFIED="1557498707242" TEXT="hatte ich schon mal untersucht"/>
+<node CREATED="1439608917061" ID="ID_1747491586" LINK="http://issues.lumiera.org/ticket/587" MODIFIED="1557498707242">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -44683,7 +44686,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1439609055443" ID="ID_325526736" MODIFIED="1557498707242" TEXT="Problem hat sich versch&#xe4;rft">
+<node CREATED="1439609055443" ID="ID_794021326" MODIFIED="1557498707242" TEXT="Problem hat sich versch&#xe4;rft">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -44698,7 +44701,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1439609098853" ID="ID_1076015737" MODIFIED="1557498707242">
+<node CREATED="1439609098853" ID="ID_1375367812" MODIFIED="1557498707242">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -44713,7 +44716,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1439609127137" ID="ID_509487220" MODIFIED="1557498707242">
+<node CREATED="1439609127137" ID="ID_46539031" MODIFIED="1557498707242">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -44734,9 +44737,9 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1439176963604" ID="ID_582047980" MODIFIED="1561237061397" TEXT="test-lib nicht zu debuggern">
+<node COLOR="#338800" CREATED="1439176963604" ID="ID_1448738464" MODIFIED="1561237061397" TEXT="test-lib nicht zu debuggern">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1439177141197" FOLDED="true" ID="ID_140380975" MODIFIED="1561237041546" TEXT="Segfault in GDB">
+<node CREATED="1439177141197" FOLDED="true" ID="ID_1753441069" MODIFIED="1561237041546" TEXT="Segfault in GDB">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -44752,10 +44755,10 @@
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1439477348298" ID="ID_1975408018" MODIFIED="1557498707242" TEXT="heruntergedampft auf einen Aufruf">
+<node CREATED="1439477348298" ID="ID_1127859836" MODIFIED="1557498707242" TEXT="heruntergedampft auf einen Aufruf">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1439491824537" ID="ID_1765691004" MODIFIED="1557498707242">
+<node CREATED="1439491824537" ID="ID_822305366" MODIFIED="1557498707242">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -44774,11 +44777,11 @@
 </html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1439492258423" ID="ID_1751368693" MODIFIED="1557498707242" TEXT="Plan">
-<node CREATED="1439492266470" ID="ID_730637506" MODIFIED="1557498707242" TEXT="reproduzieren auf einer sauberen VM">
+<node CREATED="1439492258423" ID="ID_1184070545" MODIFIED="1557498707242" TEXT="Plan">
+<node CREATED="1439492266470" ID="ID_343206049" MODIFIED="1557498707242" TEXT="reproduzieren auf einer sauberen VM">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1439492277444" ID="ID_840779753" LINK="http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=795445" MODIFIED="1557498707242">
+<node CREATED="1439492277444" ID="ID_351705498" LINK="http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=795445" MODIFIED="1557498707242">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -44790,9 +44793,9 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1439492285635" ID="ID_1706807629" MODIFIED="1557498707242" TEXT="gdb-Version untersuchen">
-<node CREATED="1439516472396" ID="ID_1002859575" MODIFIED="1557498707242" TEXT="backports">
-<node CREATED="1439516512684" ID="ID_1031030614" MODIFIED="1557498707242">
+<node CREATED="1439492285635" ID="ID_1216081677" MODIFIED="1557498707242" TEXT="gdb-Version untersuchen">
+<node CREATED="1439516472396" ID="ID_1130713450" MODIFIED="1557498707242" TEXT="backports">
+<node CREATED="1439516512684" ID="ID_1963171277" MODIFIED="1557498707242">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -44804,9 +44807,9 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1439516477008" ID="ID_1182795741" MODIFIED="1557498707242" TEXT="Ver 7.8.2">
+<node CREATED="1439516477008" ID="ID_956982844" MODIFIED="1557498707242" TEXT="Ver 7.8.2">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1439516495534" ID="ID_413946117" MODIFIED="1557498707242" TEXT="Bau-Abh&#xe4;ngigkeiten">
+<node CREATED="1439516495534" ID="ID_228349393" MODIFIED="1557498707242" TEXT="Bau-Abh&#xe4;ngigkeiten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -44819,7 +44822,7 @@
 </html></richcontent>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node CREATED="1439519150614" ID="ID_644868114" MODIFIED="1557498707242">
+<node CREATED="1439519150614" ID="ID_690017930" MODIFIED="1557498707242">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -44832,7 +44835,7 @@
 </html></richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
-<node CREATED="1439519171155" ID="ID_509605117" MODIFIED="1557498707242" TEXT="das scheint nicht ungew&#xf6;hnlich zu sein">
+<node CREATED="1439519171155" ID="ID_1728409463" MODIFIED="1557498707242" TEXT="das scheint nicht ungew&#xf6;hnlich zu sein">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -44868,33 +44871,33 @@
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#f7f2b7" CREATED="1439521655505" ID="ID_746337758" MODIFIED="1561237018921" TEXT="funktioniert, kein Segfault mehr">
-<linktarget COLOR="#64c53d" DESTINATION="ID_746337758" ENDARROW="Default" ENDINCLINATION="-80;156;" ID="Arrow_ID_856102300" SOURCE="ID_1500720502" STARTARROW="None" STARTINCLINATION="404;0;"/>
+<node BACKGROUND_COLOR="#f7f2b7" CREATED="1439521655505" ID="ID_388085317" MODIFIED="1561237018921" TEXT="funktioniert, kein Segfault mehr">
+<linktarget COLOR="#64c53d" DESTINATION="ID_388085317" ENDARROW="Default" ENDINCLINATION="-80;156;" ID="Arrow_ID_173819250" SOURCE="ID_569521888" STARTARROW="None" STARTINCLINATION="404;0;"/>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
 </node>
-<node CREATED="1439492295754" ID="ID_199817664" MODIFIED="1557498707242" TEXT="ggfs. upstream reporten"/>
-<node CREATED="1439492301698" ID="ID_1431884134" MODIFIED="1557498707242" TEXT="workaround">
-<node CREATED="1439492309920" ID="ID_1258344281" MODIFIED="1557498707242" TEXT="andere gdb-version">
+<node CREATED="1439492295754" ID="ID_1511393529" MODIFIED="1557498707242" TEXT="ggfs. upstream reporten"/>
+<node CREATED="1439492301698" ID="ID_717647683" MODIFIED="1557498707242" TEXT="workaround">
+<node CREATED="1439492309920" ID="ID_1813059120" MODIFIED="1557498707242" TEXT="andere gdb-version">
 <icon BUILTIN="help"/>
 </node>
-<node CREATED="1439492315080" ID="ID_45132365" MODIFIED="1557498707242" TEXT="clang verwenden">
-<icon BUILTIN="help"/>
-</node>
-</node>
-</node>
-</node>
-<node COLOR="#435e98" CREATED="1561237001239" ID="ID_1500720502" MODIFIED="1561237037464" TEXT="gel&#xf6;st mit gdb &gt;= 7.8.2">
-<arrowlink COLOR="#64c53d" DESTINATION="ID_746337758" ENDARROW="Default" ENDINCLINATION="-80;156;" ID="Arrow_ID_856102300" STARTARROW="None" STARTINCLINATION="404;0;"/>
-</node>
-</node>
-<node CREATED="1439177191998" ID="ID_1188941582" MODIFIED="1557498707242" TEXT="Syslog nicht mehr STDOUT">
+<node CREATED="1439492315080" ID="ID_334485884" MODIFIED="1557498707242" TEXT="clang verwenden">
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node CREATED="1439655684119" ID="ID_1194655899" MODIFIED="1557498707242" TEXT="Warnungen">
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1561237001239" ID="ID_569521888" MODIFIED="1561237037464" TEXT="gel&#xf6;st mit gdb &gt;= 7.8.2">
+<arrowlink COLOR="#64c53d" DESTINATION="ID_388085317" ENDARROW="Default" ENDINCLINATION="-80;156;" ID="Arrow_ID_173819250" STARTARROW="None" STARTINCLINATION="404;0;"/>
+</node>
+</node>
+<node CREATED="1439177191998" ID="ID_1918895194" MODIFIED="1557498707242" TEXT="Syslog nicht mehr STDOUT">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1439655684119" ID="ID_852404111" MODIFIED="1557498707242" TEXT="Warnungen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -44913,7 +44916,7 @@
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1439644339480" ID="ID_239239923" MODIFIED="1557498707242" TEXT="Lumiera DEB">
+<node CREATED="1439644339480" ID="ID_954549190" MODIFIED="1557498707242" TEXT="Lumiera DEB">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -44926,8 +44929,55 @@
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1439644368572" ID="ID_106785551" MODIFIED="1557498707242" TEXT="Doku: Referenz-System">
+<node CREATED="1439644368572" ID="ID_107825553" MODIFIED="1557498707242" TEXT="Doku: Referenz-System">
 <icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1439176875682" ID="ID_1546966992" MODIFIED="1581813317904" TEXT="Debian/Buster">
+<edge COLOR="#956a6a" STYLE="linear"/>
+<icon BUILTIN="flag-pink"/>
+<node CREATED="1581813838219" ID="ID_292810279" MODIFIED="1581813843787" TEXT="Aufgaben">
+<node CREATED="1581813846914" ID="ID_1924268278" MODIFIED="1581813850500" TEXT="C++17">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1439176890840" ID="ID_1573907176" MODIFIED="1581813253348" TEXT="Probleme"/>
+<node CREATED="1439655684119" ID="ID_448576273" MODIFIED="1581813253348" TEXT="Warnungen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581813910737" ID="ID_760008259" MODIFIED="1581813934464" TEXT="invalid function signature">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1581813924247" ID="ID_1396033299" MODIFIED="1581813932477" TEXT="in Christians MUTEX-Macros"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1439644339480" ID="ID_1582631934" MODIFIED="1581813253348" TEXT="Lumiera DEB">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        sinnvollen Zustand erreichen: zumindest das neue GUI sollte wieder starten
+      </li>
+      <li>
+        dann Paket aktualisieren und neu bauen
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="bell"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1439644368572" ID="ID_688656048" MODIFIED="1581813253348" TEXT="Doku: Referenz-System">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1439176875682" FOLDED="true" ID="ID_1482098521" MODIFIED="1581813429187" TEXT="Debian/Bullseye">
+<edge COLOR="#cead77" STYLE="linear"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1439176890840" ID="ID_535116778" MODIFIED="1581813253348" TEXT="Probleme"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1439644368572" ID="ID_1667125104" MODIFIED="1581813253348" TEXT="Doku: Referenz-System">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 <node CREATED="1446505444775" FOLDED="true" HGAP="106" ID="ID_721807850" MODIFIED="1561311686974" TEXT="Buildsystem" VSHIFT="-5">
@@ -45163,13 +45213,13 @@
 </node>
 </node>
 </node>
-<node CREATED="1447978374453" HGAP="140" ID="ID_156552320" MODIFIED="1561311589295" TEXT="Compiler" VSHIFT="-10">
-<icon BUILTIN="go"/>
-<node CREATED="1447978472591" ID="ID_281213456" MODIFIED="1557498707243" TEXT="GCC-4.9">
-<icon BUILTIN="button_ok"/>
+<node CREATED="1447978374453" HGAP="140" ID="ID_156552320" MODIFIED="1581813549648" TEXT="Compiler" VSHIFT="-10">
+<icon BUILTIN="prepare"/>
+<node CREATED="1447978472591" ID="ID_281213456" MODIFIED="1581813532154" TEXT="GCC-4.9">
+<icon BUILTIN="licq"/>
 </node>
-<node CREATED="1447978381986" FOLDED="true" ID="ID_378439500" MODIFIED="1561237738148" TEXT="GCC-5">
-<icon BUILTIN="button_ok"/>
+<node CREATED="1447978381986" FOLDED="true" ID="ID_378439500" MODIFIED="1581813532154" TEXT="GCC-5">
+<icon BUILTIN="licq"/>
 <node CREATED="1447983098958" ID="ID_291439119" MODIFIED="1557498707243">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -45210,8 +45260,7 @@
       Grund ist die Umstellung auf inline-Storage
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1561237693445" ID="ID_795236381" MODIFIED="1561237730770" TEXT="noch offen: Umstellung auf lib::Symbol in EntryID">
@@ -45227,14 +45276,13 @@
       da wir nun eine vollwertige String-Tabelle haben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
 </node>
-<node CREATED="1561237793933" ID="ID_938708757" MODIFIED="1561237803527" TEXT="GCC-6">
-<icon BUILTIN="back"/>
+<node CREATED="1561237793933" ID="ID_938708757" MODIFIED="1581813532155" TEXT="GCC-6">
+<icon BUILTIN="licq"/>
 <node CREATED="1561237816056" ID="ID_584388122" MODIFIED="1561237823947" TEXT="Debian/Stretch">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 </node>
@@ -45252,8 +45300,7 @@
       waren nur minimale Anpassungen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1561237831168" ID="ID_1760455064" MODIFIED="1561311488940" TEXT="Juni 2019">
@@ -45264,13 +45311,50 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581813455951" ID="ID_1821559366" MODIFIED="1581813539449" TEXT="GCC-8">
+<icon BUILTIN="back"/>
+<node CREATED="1581813466582" ID="ID_1727015963" MODIFIED="1581813471691" TEXT="Februar 2020">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581740476035" ID="ID_1259527140" MODIFIED="1581813881579" TEXT="Build-Fixes (analog Paketbau)">
+<icon BUILTIN="pencil"/>
+<node CREATED="1581740511638" ID="ID_673829980" MODIFIED="1581812450753" TEXT="die FSecs-Problematik">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1581812473146" ID="ID_1228189647" MODIFIED="1581812478016" TEXT="betroffen...">
+<node CREATED="1581740610730" ID="ID_696004750" MODIFIED="1581740610730" TEXT="src/lib/time/timevalue.hpp"/>
+<node CREATED="1581740623344" ID="ID_1853788907" MODIFIED="1581740623344" TEXT="src/lib/time/time.cpp"/>
+<node CREATED="1581740661389" ID="ID_1959026707" MODIFIED="1581740661389" TEXT="tests/core/proc/asset/meta/time-grid-basics-test.cpp"/>
+</node>
+<node CREATED="1581812452760" ID="ID_284310017" MODIFIED="1581812543320" TEXT="inzwischen l&#xe4;ngst schon sauberer gel&#xf6;st">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das Problem wurde vom GCC beim Bauen des alten Lumiera-Paketes angemahnt; tats&#228;chlich aber hatte ich das Problem inzwischen l&#228;ngst schon anderweitig bemerkt und an der Wurzel gel&#246;st, anstatt nur Symptome zu behandeln
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581740733368" ID="ID_1726260734" MODIFIED="1581740740712" TEXT="TICKET #939 : should better use 64bit base type for FSecs?">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1581740750350" ID="ID_1497724243" MODIFIED="1581740764240" TEXT="macht sich als 32bit vs 64bit-Problematik bemerkbar"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581813859601" ID="ID_728753164" MODIFIED="1581813869304" TEXT="auf C++17 heben">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
 <node CREATED="1447978388930" ID="ID_78828927" MODIFIED="1557498707243" TEXT="Clang 3.5">
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1446480582168" FOLDED="true" HGAP="46" ID="ID_554745278" MODIFIED="1561237383673" TEXT="Release" VSHIFT="-5">
-<icon BUILTIN="go"/>
-<node CREATED="1446480601381" ID="ID_1870415321" MODIFIED="1541088155542" TEXT="release prep: clean-up obsolete information">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446480582168" FOLDED="true" HGAP="46" ID="ID_554745278" MODIFIED="1581813780309" TEXT="Release" VSHIFT="-5">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1446480601381" ID="ID_1870415321" MODIFIED="1581813706345" TEXT="release prep: clean-up obsolete information">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -45283,8 +45367,7 @@
 </html></richcontent>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="full-1"/>
-<icon BUILTIN="button_ok"/>
-<node CREATED="1446482192807" ID="ID_852733328" MODIFIED="1541088155549" TEXT="Debian">
+<node CREATED="1446482192807" ID="ID_852733328" MODIFIED="1581813646886" TEXT="Debian">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -45294,13 +45377,13 @@
       hier nach offensichtlich obsoleter Info checken
     </p>
     <p>
-      <font color="#d40222">WICHTIG</font>: keine vorgreifende Infor publizieren!!!!!
+      <font color="#d40222">WICHTIG</font>: keine vorgreifende Infos publizieren!!!!!
     </p>
   </body>
-</html></richcontent>
-<icon BUILTIN="button_ok"/>
+</html>
+</richcontent>
 </node>
-<node CREATED="1446482445325" ID="ID_1134936512" MODIFIED="1541088155556" TEXT="Build-Tutorial">
+<node CREATED="1446482445325" ID="ID_1134936512" MODIFIED="1581813646885" TEXT="Build-Tutorial">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -45317,16 +45400,13 @@
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="button_ok"/>
 <node CREATED="1446489425420" ID="ID_1155768637" MODIFIED="1518487921104" TEXT="building from source"/>
 <node CREATED="1446489431443" ID="ID_1672115205" MODIFIED="1518487921104" TEXT="building the debian way"/>
 <node CREATED="1446489436395" ID="ID_52990160" MODIFIED="1518487921104" TEXT="contributing"/>
 </node>
-<node CREATED="1446482485648" ID="ID_718218074" MODIFIED="1518487921104" TEXT="technical/build/Dependencies">
-<icon BUILTIN="button_ok"/>
+<node CREATED="1446482485648" ID="ID_718218074" MODIFIED="1581813646878" TEXT="technical/build/Dependencies"/>
 </node>
-</node>
-<node CREATED="1446480725508" ID="ID_789754974" MODIFIED="1541088155586" TEXT="release prep: bump version number">
+<node CREATED="1446480725508" ID="ID_789754974" MODIFIED="1581813706345" TEXT="release prep: bump version number">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -45338,13 +45418,12 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="full-2"/>
-<icon BUILTIN="button_ok"/>
 <node CREATED="1446480787391" ID="ID_1824008353" MODIFIED="1518487921104" TEXT="admin/scons/Setup.py"/>
 <node CREATED="1446480787392" ID="ID_1638555946" MODIFIED="1518487921104" TEXT="data/config/setup.ini"/>
 <node CREATED="1446480787392" ID="ID_619067196" MODIFIED="1518487921104" TEXT="doc/devel/Doxyfile"/>
 <node CREATED="1446480787392" ID="ID_193733835" MODIFIED="1518487921104" TEXT="doc/devel/Doxyfile.browse"/>
 </node>
-<node CREATED="1446481181543" ID="ID_1995398229" MODIFIED="1541088155615" TEXT="R&#xfc;ck-Merge vom Release-Zweig">
+<node CREATED="1446481181543" ID="ID_1995398229" MODIFIED="1581813706345" TEXT="R&#xfc;ck-Merge vom Release-Zweig">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -45365,18 +45444,11 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="full-3"/>
-<icon BUILTIN="button_ok"/>
-<node CREATED="1446481302159" ID="ID_1330024662" MODIFIED="1518487921104" TEXT="Release-Zweig">
-<icon BUILTIN="button_ok"/>
+<node CREATED="1446481302159" ID="ID_1330024662" MODIFIED="1581813653732" TEXT="Release-Zweig"/>
+<node CREATED="1446481305102" ID="ID_1191774545" MODIFIED="1581813653732" TEXT="lfd Fixes von den DEBs"/>
+<node CREATED="1446481314669" ID="ID_477388235" MODIFIED="1581813653725" TEXT="Plattform-Abh&#xe4;ngigkeiten checken"/>
 </node>
-<node CREATED="1446481305102" ID="ID_1191774545" MODIFIED="1518487921104" TEXT="lfd Fixes von den DEBs">
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1446481314669" ID="ID_477388235" MODIFIED="1518487921104" TEXT="Plattform-Abh&#xe4;ngigkeiten checken">
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-<node CREATED="1446480963028" ID="ID_83763074" MODIFIED="1541088155639" TEXT="Release-commit: Pre-release 0.pre.03">
+<node CREATED="1446480963028" ID="ID_83763074" MODIFIED="1581813706345" TEXT="Release-commit: Pre-release 0.pre.03">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -45391,7 +45463,6 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="full-4"/>
-<icon BUILTIN="button_ok"/>
 <node CREATED="1446481123991" ID="ID_1319204482" MODIFIED="1518487921104" TEXT="README"/>
 <node CREATED="1446481126974" ID="ID_537666758" MODIFIED="1518487921104" TEXT="AUTHORS">
 <node CREATED="1446481146548" ID="ID_1310945179" MODIFIED="1518487921104" TEXT="GTK-UI">
@@ -45403,7 +45474,7 @@
 </node>
 <node CREATED="1446481129206" ID="ID_799927356" MODIFIED="1518487921104" TEXT="LICENSE"/>
 </node>
-<node CREATED="1446481516578" ID="ID_552450474" MODIFIED="1541088155672" TEXT="Release-Zweig: upgrade current release to 0.pre.03">
+<node CREATED="1446481516578" ID="ID_552450474" MODIFIED="1581813706345" TEXT="Release-Zweig: upgrade current release to 0.pre.03">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -45418,26 +45489,16 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="full-5"/>
-<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1446481591568" ID="ID_1120064498" MODIFIED="1518487921104" TEXT="Paketieren">
+<node CREATED="1446481591568" ID="ID_1120064498" MODIFIED="1581813706344" TEXT="Paketieren">
 <icon BUILTIN="full-6"/>
-<icon BUILTIN="button_ok"/>
-<node CREATED="1446481606134" ID="ID_212330450" MODIFIED="1518487921104" TEXT="Merge release -&gt; deb">
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1446481618196" ID="ID_1882691551" MODIFIED="1518487921104" TEXT="Paket-Beschreibung">
-<icon BUILTIN="button_ok"/>
-</node>
+<node CREATED="1446481606134" ID="ID_212330450" MODIFIED="1581813706344" TEXT="Merge release -&gt; deb"/>
+<node CREATED="1446481618196" ID="ID_1882691551" MODIFIED="1581813706344" TEXT="Paket-Beschreibung"/>
 <node CREATED="1446481637738" ID="ID_1002196753" MODIFIED="1518487921104" TEXT="Manpages">
 <icon BUILTIN="bell"/>
 </node>
-<node CREATED="1446481646057" ID="ID_262549512" MODIFIED="1518487921104" TEXT="control">
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1446481655743" ID="ID_269337100" MODIFIED="1518487921104" TEXT="rules">
-<icon BUILTIN="button_ok"/>
-</node>
+<node CREATED="1446481646057" ID="ID_262549512" MODIFIED="1581813706344" TEXT="control"/>
+<node CREATED="1446481655743" ID="ID_269337100" MODIFIED="1581813706344" TEXT="rules"/>
 </node>
 <node CREATED="1446481713984" ID="ID_1112453089" MODIFIED="1541088155714" TEXT="ausliefern">
 <richcontent TYPE="NOTE"><html>
@@ -45457,7 +45518,7 @@
 <node CREATED="1447566826434" HGAP="4" ID="ID_1582615496" MODIFIED="1518487921104" TEXT="Bugfix-Release 0.pre.03-3" VSHIFT="-14">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1446482059174" ID="ID_1294670881" MODIFIED="1518487921104">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1446482059174" ID="ID_1294670881" MODIFIED="1581813751238">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -45468,7 +45529,7 @@
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="button_ok"/>
+<icon BUILTIN="bell"/>
 <node CREATED="1447566711958" ID="ID_450859594" MODIFIED="1518487921105" TEXT="alte version war broken"/>
 <node CREATED="1447566721616" ID="ID_520179523" MODIFIED="1518487921105" TEXT="32 / 64bit Probleme"/>
 <node CREATED="1447566743461" ID="ID_1754275668" LINK="http://issues.lumiera.org/ticket/973" MODIFIED="1518487921105">
@@ -45488,9 +45549,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1446482059174" ID="ID_1693967692" MODIFIED="1518487921105" TEXT="Ubuntu/Trusty (14.LTS) : i386 and x86_64">
-<icon BUILTIN="button_ok"/>
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446482059174" ID="ID_1693967692" MODIFIED="1581813738594" TEXT="Ubuntu/Trusty (14.LTS) : i386 and x86_64">
+<icon BUILTIN="licq"/>
 <node CREATED="1446509774664" ID="ID_458867123" MODIFIED="1518487921105" TEXT="Ausnahmen f&#xfc;r libgdl-3-dev 3.8"/>
 <node CREATED="1447567139480" ID="ID_183954019" MODIFIED="1518487921105" TEXT="-&gt; diese Ausnahmen in Paketdefinition &#xfc;bernommen">
 <icon BUILTIN="button_ok"/>
@@ -45549,8 +45609,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1446482059174" ID="ID_1906801117" MODIFIED="1518487921105" TEXT="Ubuntu/Vivid (15.04) : i386">
-<icon BUILTIN="button_ok"/>
+<node CREATED="1446482059174" ID="ID_1906801117" MODIFIED="1581813769708" TEXT="Ubuntu/Vivid (15.04) : i386">
+<icon BUILTIN="closed"/>
 </node>
 <node CREATED="1446482059175" ID="ID_1107419581" MODIFIED="1518487921105" TEXT="Ubuntu/Wily (15.10) : x86_64">
 <icon BUILTIN="button_cancel"/>
@@ -45620,10 +45680,10 @@
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#990000" CREATED="1447990802803" ID="ID_1667893677" MODIFIED="1518487921105" TEXT="ABBRUCH"/>
 </node>
-<node CREATED="1446482059175" ID="ID_904094860" MODIFIED="1518487921105" TEXT="Mint/Rafaela (17.2.LTS) : x86_64">
-<icon BUILTIN="button_ok"/>
+<node CREATED="1446482059175" ID="ID_904094860" MODIFIED="1581813769707" TEXT="Mint/Rafaela (17.2.LTS) : x86_64">
+<icon BUILTIN="closed"/>
 </node>
-<node CREATED="1446482249336" ID="ID_1088469455" MODIFIED="1541088155847" TEXT="Web/Doku aktualisieren">
+<node CREATED="1446482249336" ID="ID_1088469455" MODIFIED="1581813706344" TEXT="Web/Doku aktualisieren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -45634,28 +45694,19 @@
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1446589479832" ID="ID_1851762530" MODIFIED="1518487921105" TEXT="alte Repos wegwerfen">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1446589487798" ID="ID_1080472422" MODIFIED="1518487921105" TEXT="Lumi-Depot: Wheezy">
-<icon BUILTIN="button_ok"/>
+<node CREATED="1446589479832" ID="ID_1851762530" MODIFIED="1581813706344" TEXT="alte Repos wegwerfen">
+<node CREATED="1446589487798" ID="ID_1080472422" MODIFIED="1581813706344" TEXT="Lumi-Depot: Wheezy"/>
+<node CREATED="1446589495445" ID="ID_1083044545" MODIFIED="1581813706344" TEXT="VBox Wheezy"/>
+<node CREATED="1446589502132" ID="ID_271504207" MODIFIED="1581813706344" TEXT="VBox Mint Quiana"/>
 </node>
-<node CREATED="1446589495445" ID="ID_1083044545" MODIFIED="1518487921105" TEXT="VBox Wheezy">
-<icon BUILTIN="button_ok"/>
-</node>
-<node CREATED="1446589502132" ID="ID_271504207" MODIFIED="1518487921105" TEXT="VBox Mint Quiana">
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-<node CREATED="1446481892624" ID="ID_1020531472" MODIFIED="1518487921105" TEXT="Ticket schlie&#xdf;en">
+<node CREATED="1446481892624" ID="ID_1020531472" MODIFIED="1581813706342" TEXT="Ticket schlie&#xdf;en">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
-<node CREATED="1439842359711" ID="ID_1982964862" MODIFIED="1561237224483" TEXT="Paket">
-<icon BUILTIN="go"/>
+<node CREATED="1439842359711" ID="ID_1982964862" MODIFIED="1581813505207" TEXT="Paket">
+<icon BUILTIN="stop"/>
 <node COLOR="#6a1928" CREATED="1561237113163" ID="ID_1613245846" MODIFIED="1561237134536" TEXT="zu kl&#xe4;ren">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1439842379420" ID="ID_1336697213" MODIFIED="1557498707243" TEXT="gtk-Abh&#xe4;ngigkeiten"/>
