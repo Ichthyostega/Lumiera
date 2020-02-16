@@ -44943,9 +44943,35 @@
 </node>
 <node CREATED="1439176890840" ID="ID_1573907176" MODIFIED="1581813253348" TEXT="Probleme"/>
 <node CREATED="1439655684119" ID="ID_448576273" MODIFIED="1581813253348" TEXT="Warnungen">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581813910737" ID="ID_760008259" MODIFIED="1581813934464" TEXT="invalid function signature">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1581813910737" FOLDED="true" ID="ID_760008259" MODIFIED="1581815088793" TEXT="invalid function signature">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1581813924247" ID="ID_1396033299" MODIFIED="1581813932477" TEXT="in Christians MUTEX-Macros"/>
+<node CREATED="1581814268376" ID="ID_1146072064" MODIFIED="1581814285793" TEXT="lumiera_sectionlock_unlock_fn hat R&#xfc;ckgabetyp int"/>
+<node CREATED="1581814286382" ID="ID_1070334895" MODIFIED="1581814362629" TEXT="&#xfc;berfl&#xfc;ssig...">
+<icon BUILTIN="yes"/>
+<node CREATED="1581814293205" ID="ID_1473686899" MODIFIED="1581814302847" TEXT="wird nur in den magischen MACROS genutzt"/>
+<node CREATED="1581814303324" ID="ID_947550011" MODIFIED="1581814323655" TEXT="dort KANN man gar nichts mit einem Fehler-Wert machen"/>
+<node CREATED="1581814324097" ID="ID_1238690607" MODIFIED="1581814359836" TEXT="alle real existierenden Implementierungen: LUMIERA_DIE (LOCK_RELEASE);">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1581814366704" ID="ID_68752359" MODIFIED="1581814371078" TEXT="gef&#xe4;hrlich...">
+<node CREATED="1581814371794" ID="ID_1259356965" MODIFIED="1581814384324" TEXT="hatte grade eben in Cinelerra eine Tonne von Segfaults gefixt"/>
+<node CREATED="1581814384745" ID="ID_1154039482" MODIFIED="1581814458257" TEXT="GCC-8 ist nicht mehr gutm&#xfc;tig bei fehlenden Return_Statements">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      fr&#252;her war das so eine typische &quot;n&#246;rgel&quot;-Warnung, die man unter den Teppich kehren konnte: 'ey, der Compiler bekommt es ja trotzdem richtig hin.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1439644339480" ID="ID_1582631934" MODIFIED="1581813253348" TEXT="Lumiera DEB">
