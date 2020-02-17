@@ -122,14 +122,14 @@ namespace time {
       static regex fracSecs_parser ("(?:^|[^\\./\\d\\-])(\\-?\\d+)(?:([\\-\\+]\\d+)?/(\\d+))?sec");
                                   //__no leading[./-\d]   number      [+-]  number '/' number 'sec'   
       
-      #define SUB_EXPR(N) lexical_cast<long> (match[N])
+      #define SUB_EXPR(N) lexical_cast<int> (match[N])
       smatch match;
       if (regex_search (seconds, match, fracSecs_parser))
         if (match[2].matched)
           {
             // complete spec with all parts
             FSecs fractionalPart (SUB_EXPR(2), SUB_EXPR(3));
-            long fullSeconds (SUB_EXPR(1));
+            int fullSeconds (SUB_EXPR(1));
             return grid.timeOf (fullSeconds + fractionalPart);
           }
         else

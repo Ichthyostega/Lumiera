@@ -44967,8 +44967,7 @@
       fr&#252;her war das so eine typische &quot;n&#246;rgel&quot;-Warnung, die man unter den Teppich kehren konnte: 'ey, der Compiler bekommt es ja trotzdem richtig hin.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="clanbomber"/>
 </node>
 </node>
@@ -44989,8 +44988,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="bell"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1439644368572" ID="ID_688656048" MODIFIED="1581813253348" TEXT="Doku: Referenz-System">
@@ -45363,9 +45361,144 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581740733368" ID="ID_1726260734" MODIFIED="1581740740712" TEXT="TICKET #939 : should better use 64bit base type for FSecs?">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1581740750350" ID="ID_1497724243" MODIFIED="1581740764240" TEXT="macht sich als 32bit vs 64bit-Problematik bemerkbar"/>
+<node COLOR="#338800" CREATED="1581740733368" ID="ID_1726260734" MODIFIED="1581903029633" TEXT="TICKET #939 : should better use 64bit base type for FSecs?">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1581740750350" ID="ID_1497724243" MODIFIED="1581819702167" TEXT="macht sich als 32bit vs 64bit-Problematik bemerkbar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      als &quot;workaround&quot; hatte ich boost::rational&lt;long&gt; genommen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1581819704923" ID="ID_1047068236" MODIFIED="1581819708983" TEXT="was ist die Gefahr?">
+<node CREATED="1581819714050" ID="ID_314031332" MODIFIED="1581819747785" TEXT="wenn FSecs == rational&lt;int64_t&gt;"/>
+<node CREATED="1581819818091" ID="ID_135964502" MODIFIED="1581819829735" TEXT="k&#xf6;nnte dann...">
+<node CREATED="1581819830610" ID="ID_1892644470" MODIFIED="1581819869673" TEXT="ein gavl_time_t als FSecs reinrutschen?"/>
+<node CREATED="1581819875124" ID="ID_1881211496" MODIFIED="1581819926345" TEXT="ein FrameCnt (==int64_t) als FSecs reinrutschen"/>
+</node>
+<node CREATED="1581830913676" ID="ID_1851233163" MODIFIED="1581831276538" TEXT="m&#xf6;glicherweise">
+<icon BUILTIN="smiley-neutral"/>
+<node CREATED="1581830921543" ID="ID_1634734053" MODIFIED="1581830932821" TEXT="FixedFramesQuantiser-ctor">
+<node CREATED="1581830948928" ID="ID_1558541350" MODIFIED="1581831146865" TEXT="Framerate">
+<node CREATED="1581831157480" ID="ID_425744081" MODIFIED="1581831161915" TEXT="via uint fps">
+<node CREATED="1581833787784" ID="ID_208241204" MODIFIED="1581833800782" TEXT="hat Vorfahrt bei einfachen Zahlen">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1581831174129" ID="ID_283797015" MODIFIED="1581831181172" TEXT="via rational&lt;uint&gt;"/>
+</node>
+<node CREATED="1581830970509" ID="ID_892094269" MODIFIED="1581831262411" TEXT="via Duration">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1581831241536" ID="ID_1150857436" MODIFIED="1581831259798" TEXT="keine Gefahr"/>
+<node CREATED="1581831244519" ID="ID_270912881" MODIFIED="1581833828374" TEXT="ctor via FSecs ist explicit"/>
+</node>
+</node>
+<node CREATED="1581831295432" ID="ID_897252634" MODIFIED="1581831298540" TEXT="Grid::timeOf">
+<node CREATED="1581831305831" ID="ID_775298577" MODIFIED="1581831317561" TEXT="FrameCnt gridPoint"/>
+<node CREATED="1581831336819" ID="ID_742904480" MODIFIED="1581831547730" TEXT="FSecs [, offset]">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1581831549990" ID="ID_1767803348" MODIFIED="1581831553618" TEXT="keine Gefahr"/>
+<node CREATED="1581831554078" ID="ID_292991581" MODIFIED="1581831588989" TEXT="da stets der direkte Match auf FrameCnt bevorzugt wird"/>
+</node>
+</node>
+<node CREATED="1581833987508" ID="ID_1945258109" MODIFIED="1581834001127" TEXT="die sonstiten TimeValues sind bereits &quot;wasserdicht&quot;">
+<node CREATED="1581834003850" ID="ID_1726640094" MODIFIED="1581834011693" TEXT="alle gef&#xe4;hrlichen ctor sind explicit"/>
+</node>
+</node>
+</node>
+<node CREATED="1581834016097" ID="ID_943401392" MODIFIED="1581834026595" TEXT="L&#xf6;sungs-Alternativen">
+<node COLOR="#338800" CREATED="1581834028399" ID="ID_1290001374" MODIFIED="1581905054869" TEXT="FSecs := rational&lt;int64_t&gt;">
+<icon BUILTIN="back"/>
+<node CREATED="1581834219506" ID="ID_1492786906" MODIFIED="1581834235727" TEXT="erlaubt Einstieg mit maximal gro&#xdf;en Sekundenbetr&#xe4;gen"/>
+<node CREATED="1581904944430" ID="ID_95309143" MODIFIED="1581905174089">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und wir brauchen die <b>definitiv</b>&#160;zum sinnvollen Rechenen mit Zeiten auf micro-Scala
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Der kritsche Fall ist n&#228;mlich, wenn wir mit FSecs anfangen, und dann irgendwo in der Rechnung mal Time::SCALE multiplizieren, um auf die &#181;-Skala zu wechseln. Am Ende der Rechnung w&#252;rde dann typischerweise ein rational_cast stehen. Damit das funktioniert, mu&#223; vor allem der Z&#228;hler des Bruches die volle Zeitskala unterst&#252;tzen. Daher sind <b>64bit zwingend</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#265a98" DESTINATION="ID_95309143" ENDARROW="Default" ENDINCLINATION="389;0;" ID="Arrow_ID_1170592297" SOURCE="ID_38565900" STARTARROW="None" STARTINCLINATION="670;0;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1581834047228" ID="ID_622470274" MODIFIED="1581905031525" TEXT="FSecs := rational&lt;int&gt;">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1581834077245" ID="ID_897585288" MODIFIED="1581834173627" TEXT="h&#xe4;tte den Charme, da&#xdf; weder ein FrameCnt, noch eine gavl-Time direkt reinrutschen kann">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil 64bit -&gt; 32bit eine <i>narrowing conversion</i>&#160;ist, die zumindest eine Warnung erzeugt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#338800" CREATED="1581834174595" ID="ID_1571757083" MODIFIED="1581902077277" TEXT="TODO: ist dieses Argument stichhaltig?">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1581902078156" ID="ID_1759780689" MODIFIED="1581902089742" TEXT="ja... durch Experiment gepr&#xfc;ft"/>
+<node CREATED="1581902090474" ID="ID_355415579" MODIFIED="1581902102205" TEXT="aber ohnehin ist lib::Time schon sehr gut abgedichtet"/>
+</node>
+<node CREATED="1581905033868" ID="ID_1903781960" MODIFIED="1581905047679" TEXT="aber die Genauigkeit reicht nicht">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1581834243675" ID="ID_1426215906" MODIFIED="1581902070280" TEXT="FSecs-ctor explicit machen">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1581834266215" ID="ID_221160071" MODIFIED="1581834285216" TEXT="man w&#xfc;rde damit ein &quot;Schlupfloch&quot; schlie&#xdf;en"/>
+<node CREATED="1581834285684" ID="ID_1178771813" MODIFIED="1581834312204" TEXT="im Moment kann man schreiben Time(12L) (und bekommt 12 Sekunden)"/>
+<node CREATED="1581834377896" ID="ID_897382203" MODIFIED="1581834390340" TEXT="geplant: Integration mit std::chrono">
+<icon BUILTIN="idea"/>
+<node CREATED="1581834393889" ID="ID_220525990" MODIFIED="1581834410119" TEXT="das w&#xfc;rde wieder eine bequeme Notation bieten"/>
+<node CREATED="1581834411251" ID="ID_509607126" MODIFIED="1581834424225" TEXT="wobei, &quot;FSecs(12)&quot; ist jetzt nicht sooo schlecht"/>
+<node CREATED="1581834424753" ID="ID_1621101278" MODIFIED="1581834434707" TEXT="und au&#xdf;erdem mache ich es in der Praxis ohnehin so"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1581834553800" ID="ID_1858355977" MODIFIED="1581834582609" TEXT="erscheint mir als die sauberste Variante">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1581902038450" ID="ID_676891454" MODIFIED="1581902066045" TEXT="nicht einfach realisierbar">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+</node>
+<node CREATED="1581834456924" ID="ID_515357939" MODIFIED="1581834461008" TEXT="Typ-Fragen">
+<node CREATED="1581834461832" ID="ID_1605358591" MODIFIED="1581834471551" TEXT="warum ist der FrameCnt ein signed integer?">
+<node CREATED="1581883352929" ID="ID_1846298026" MODIFIED="1581883367592" TEXT="FrameCnt kann ein spezieller Timecode sein"/>
+<node CREATED="1581883325779" ID="ID_573587391" MODIFIED="1581883342672" TEXT="weil es sich um eine Koordinate handelt"/>
+<node CREATED="1581883343219" ID="ID_613888469" MODIFIED="1581883351652" TEXT="FrameCnt ist bisweilen negativ"/>
+<node COLOR="#338800" CREATED="1581883360863" ID="ID_1550240767" MODIFIED="1581883366505" TEXT="also OK">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1581834473819" ID="ID_38565900" MODIFIED="1581905067507" TEXT="brauchen / wollen wir 64bit f&#xfc;r die FSecs?">
+<arrowlink COLOR="#265a98" DESTINATION="ID_95309143" ENDARROW="Default" ENDINCLINATION="389;0;" ID="Arrow_ID_1170592297" STARTARROW="None" STARTINCLINATION="670;0;"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581813859601" ID="ID_728753164" MODIFIED="1581813869304" TEXT="auf C++17 heben">
@@ -45406,8 +45539,7 @@
       <font color="#d40222">WICHTIG</font>: keine vorgreifende Infos publizieren!!!!!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1446482445325" ID="ID_1134936512" MODIFIED="1581813646885" TEXT="Build-Tutorial">
 <richcontent TYPE="NOTE"><html>

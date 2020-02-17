@@ -55,6 +55,7 @@ extern "C" {
 #include <math.h>
 #include <limits>
 #include <string>
+#include <sstream>
 #include <boost/rational.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -73,6 +74,9 @@ namespace error = lumiera::error;
 
 
 namespace lib {
+namespace meta {
+  extern const std::string FAILURE_INDICATOR;
+}
 namespace time {
   
   
@@ -175,15 +179,28 @@ namespace time {
   }
   
   
+  namespace {
+    template<typename INT>
+    string
+    renderFraction (INT const& frac, Literal postfx) noexcept
+    try {
+      std::ostringstream buffer;
+      if (1 == frac.denominator() or 0 == frac.numerator())
+        buffer << frac.numerator() << postfx;
+      else
+        buffer << frac <<postfx;
+      return buffer.str();
+    }
+    catch(...)
+    { return meta::FAILURE_INDICATOR; }
+  }
+
   /** visual framerate representation (for diagnostics) */
   FrameRate::operator string() const
   {
-    return 1==denominator() ? lexical_cast<string> (numerator())+"FPS"
-                            : lexical_cast<string> (numerator())
-                               + "/"
-                               + lexical_cast<string> (denominator())
-                               + "FPS";
+    return renderFraction (*this, "FPS");
   }
+  
   
   
   /** @internal backdoor to sneak in a raw time value
@@ -247,6 +264,13 @@ namespace time {
   
 }} // namespace lib::Time
 
+namespace util {
+  string
+  StringConv<lib::time::FSecs, void>::invoke (lib::time::FSecs val) noexcept
+  {
+    return lib::time::renderFraction (val, "sec");
+  }
+} // namespace util
 
 
 
@@ -285,7 +309,7 @@ lumiera_tmpbuf_print_time (gavl_time_t time)
 gavl_time_t
 lumiera_rational_to_time (FSecs const& fractionalSeconds)
 {
-  return rational_cast<gavl_time_t> (lib::time::TimeValue::SCALE * fractionalSeconds);
+  return rational_cast<gavl_time_t> (fractionalSeconds * int{lib::time::TimeValue::SCALE});
 }
 
 gavl_time_t
@@ -304,7 +328,7 @@ lumiera_frame_duration (FrameRate const& fps)
     throw error::Logic ("Impossible to quantise to an zero spaced frame grid"
                        , error::LUMIERA_ERROR_BOTTOM_VALUE);
   
-  FSecs duration = rational_cast<FSecs> (1/fps);
+  FSecs duration = 1 / fps;
   return lumiera_rational_to_time (duration);
 }
 
