@@ -496,9 +496,11 @@ namespace test{
           {
             EventLog::ArgSeq strings;
             strings.reserve (argData.childSize());
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
             append_all (transformIterator (childData (argData.scope())
                                           , util::toString<DataCap>)
                        ,strings);
+#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
             return strings;
           }
         

@@ -194,6 +194,7 @@ namespace util {
     using Coll = typename lib::meta::Strip<CON>::TypePlain;
     _RangeIter<Coll> range(std::forward<CON>(coll));
     
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
     auto strings = stringify (std::move (range.iter));
     if (!strings) return "";
     
@@ -205,6 +206,8 @@ namespace util {
     size_t len = buffer.str().length();
     ASSERT (len >= delim.length());
     return buffer.str().substr(0, len - delim.length());
+#endif   //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
+    return "bääh";
   }
   
   template<class X>

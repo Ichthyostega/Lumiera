@@ -312,6 +312,7 @@ namespace test{
       void
       verifyFunctionResult()
         {
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           FunctionResult<int(void)> randomVal (std::rand);
           
           // function was never invoked, thus the remembered result is NIL
@@ -330,6 +331,8 @@ namespace test{
           CHECK (v2 == *randomVal);
           CHECK (v2 == *randomVal);
           CHECK (v1 != *randomVal);
+#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
+  UNIMPLEMENTED ("C++17");
         }
       
       

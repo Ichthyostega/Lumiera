@@ -408,7 +408,10 @@ namespace test{
           
           mutator1.injectNew (ATTRIB1);
           CHECK (!isnil (target));
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           CHECK (contains(join(target), "≺α∣1≻"));
+#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
+  UNIMPLEMENTED ("C++17");
           
           mutator1.injectNew (ATTRIB3);
           mutator1.injectNew (ATTRIB3);
@@ -417,6 +420,7 @@ namespace test{
           mutator1.injectNew (CHILD_T);
           CHECK (mutator1.completeScope());
           
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           auto contents = stringify(eachElm(target));
           CHECK ("≺α∣1≻" == *contents);
           ++contents;
@@ -431,6 +435,8 @@ namespace test{
           CHECK (contains(*contents, "∣78:56:34.012≻"));
           ++contents;
           CHECK (isnil (contents));
+#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
+  UNIMPLEMENTED ("C++17");
           
           cout << "injected......" << join(target) <<endl;
           
@@ -498,6 +504,7 @@ namespace test{
           CHECK (mutator2.completeScope());         // no pending elements left, everything resolved
           
           // verify reordered shape
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           contents = stringify(eachElm(target));
           CHECK ("≺α∣1≻" == *contents);
           ++contents;
@@ -514,6 +521,7 @@ namespace test{
           CHECK (contains(*contents, "∣b≻"));
           ++contents;
           CHECK (isnil (contents));
+#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           
           cout << "Content after reordering...."
                << join(target) <<endl;
@@ -617,6 +625,7 @@ namespace test{
           cout << "Sub|" << join(subScopes[SUB_NODE.idi]) <<endl;  //  some new content into our implementation defined sub scope!
           
           // verify contents of nested scope after mutation
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           contents = stringify(eachElm(subScopes[SUB_NODE.idi]));
           CHECK ("≺type∣ξ≻" == *contents);
           ++contents;
@@ -627,6 +636,7 @@ namespace test{
           CHECK (contains(*contents, "∣a≻"));
           ++contents;
           CHECK (isnil (contents));
+#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           
           
           // now back to parent scope....
@@ -644,6 +654,7 @@ namespace test{
           cout << "Sub|" << join(subScopes[ATTRIB_NODE.idi]) <<endl;
           
           // verify contents of this second nested scope
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           contents = stringify(eachElm(subScopes[ATTRIB_NODE.idi]));
           CHECK ("≺type∣ζ≻" == *contents);
           ++contents;
@@ -654,6 +665,7 @@ namespace test{
           CHECK (contains(*contents, "∣a≻"));
           ++contents;
           CHECK (isnil (contents));
+#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           
           
           // back to parent scope....

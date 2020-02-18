@@ -119,7 +119,10 @@ namespace play {
       bool
       isActive()  const
         {
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           return not and_all (processes_, isDead);
+#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
+          return false;
         }
       
     private:

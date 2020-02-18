@@ -45338,8 +45338,8 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581813455951" ID="ID_1821559366" MODIFIED="1581813539449" TEXT="GCC-8">
 <icon BUILTIN="back"/>
 <node CREATED="1581813466582" ID="ID_1727015963" MODIFIED="1581813471691" TEXT="Februar 2020">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581740476035" ID="ID_1259527140" MODIFIED="1581813881579" TEXT="Build-Fixes (analog Paketbau)">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1581740476035" ID="ID_1259527140" MODIFIED="1581906957998" TEXT="Build-Fixes (analog Paketbau)">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1581740511638" ID="ID_673829980" MODIFIED="1581812450753" TEXT="die FSecs-Problematik">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1581812473146" ID="ID_1228189647" MODIFIED="1581812478016" TEXT="betroffen...">
@@ -45361,7 +45361,7 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1581740733368" ID="ID_1726260734" MODIFIED="1581903029633" TEXT="TICKET #939 : should better use 64bit base type for FSecs?">
+<node COLOR="#338800" CREATED="1581740733368" FOLDED="true" ID="ID_1726260734" MODIFIED="1581906950545" TEXT="TICKET #939 : should better use 64bit base type for FSecs?">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1581740750350" ID="ID_1497724243" MODIFIED="1581819702167" TEXT="macht sich als 32bit vs 64bit-Problematik bemerkbar">
 <richcontent TYPE="NOTE"><html>
@@ -45504,6 +45504,96 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581813859601" ID="ID_728753164" MODIFIED="1581813869304" TEXT="auf C++17 heben">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1581991434932" ID="ID_104376570" MODIFIED="1581991443172" TEXT="Schalter setzen in Setup.py">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581991444571" ID="ID_351533384" MODIFIED="1581991483705" TEXT="Problemcode vorerst auskommentiert">
+<icon BUILTIN="back"/>
+<node CREATED="1581992755658" ID="ID_1595558796" MODIFIED="1581992775966" TEXT="util-coll.hpp">
+<node CREATED="1581991489253" ID="ID_821303087" MODIFIED="1581992404462" TEXT=" and_all ">
+<node CREATED="1581991517974" ID="ID_1722922510" MODIFIED="1581991517974" TEXT="can_STL_ForEach&lt;Container&gt;,"/>
+<node CREATED="1581992406361" ID="ID_1457450258" MODIFIED="1581992409589" TEXT="von asset.cpp"/>
+<node CREATED="1581992410249" ID="ID_845644128" MODIFIED="1581992429202" TEXT="von play-service.cpp : ProcessTable::isActive"/>
+<node CREATED="1581992496443" ID="ID_1556779228" MODIFIED="1581992504496" TEXT="SubsystemRunner::triggerStartup"/>
+<node CREATED="1581993273716" ID="ID_187313835" MODIFIED="1581993284470" TEXT="von util-foreach-test.cpp">
+<icon BUILTIN="back"/>
+</node>
+</node>
+<node CREATED="1581995065708" ID="ID_167787591" MODIFIED="1581995069528" TEXT="has_any">
+<node CREATED="1581995072059" ID="ID_266292535" MODIFIED="1581995075974" TEXT="von dock-area.cpp:153">
+<node CREATED="1581995087331" ID="ID_1008790341" MODIFIED="1581995091844" TEXT="hier &#xfc;ber std::list"/>
+</node>
+<node CREATED="1581995173317" ID="ID_1482525339" MODIFIED="1581995175625" TEXT="von panel-manager.cpp:146"/>
+</node>
+<node CREATED="1581992780940" ID="ID_846156960" MODIFIED="1581992784682" TEXT="last">
+<node CREATED="1581992786719" ID="ID_868210635" MODIFIED="1581992786719" TEXT="enable_if&lt; treat_as_LumieraIterator&lt;IT&gt;"/>
+<node CREATED="1581992844006" ID="ID_1452486285" MODIFIED="1581992844915" TEXT="enable_if&lt;util::{anonymous}::can_direct_access_Last&lt;COLL&gt;"/>
+<node CREATED="1581992817306" ID="ID_1958248231" MODIFIED="1581992819485" TEXT="von dispatcher-interface-test.cpp"/>
+<node CREATED="1581994136969" ID="ID_1071697988" MODIFIED="1581994140342" TEXT="util-collection-test.cpp">
+<icon BUILTIN="back"/>
+<node CREATED="1581994205823" ID="ID_548485755" MODIFIED="1581994218847" TEXT="sehr interessant: der Iterator-Fall funktioniert n&#xe4;mlich">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1581993060793" ID="ID_1110262639" MODIFIED="1581993091688" TEXT="TreeExplorer _DecoratorTraits : kann Collection-Fall nicht entscheiden">
+<node CREATED="1581993101618" ID="ID_367690402" MODIFIED="1581993115453" TEXT="Verdarcht: wieder Lumiera Iter vs Collection enable-If"/>
+<node CREATED="1581993133055" ID="ID_7676282" MODIFIED="1581993136234" TEXT="von iter-chain-search-test.cpp"/>
+<node CREATED="1581993437094" ID="ID_553794215" MODIFIED="1581993437978" TEXT="verb-visitor-dispatch-test.cpp:203"/>
+<node CREATED="1581993764266" ID="ID_1301200739" MODIFIED="1581993765334" TEXT="iter-tree-explorer-test.cpp:343"/>
+</node>
+<node CREATED="1581992139781" ID="ID_1486869166" MODIFIED="1581992148980" TEXT="util::join &#xfc;ber einen transformIter">
+<node CREATED="1581992186951" ID="ID_510132051" MODIFIED="1581992235886" TEXT="transformIter kan Ret-Type nicht abgreifen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      src/lib/itertools.hpp:805
+    </p>
+    <p>
+      error: no type named 'Ret' in 'struct lib::meta::_Fun&lt;std::__cxx11::basic_string&lt;char&gt; (*)(const std::__cxx11::basic_string&lt;char&gt;&amp;) noexcept, void&gt;'
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1581992163401" ID="ID_1538196186" MODIFIED="1581993587078" TEXT="src/lib/variant.hpp:549:3:   required from here"/>
+<node CREATED="1581994935333" ID="ID_1128036242" MODIFIED="1581994936473" TEXT="test-nexus.cpp:50"/>
+<node CREATED="1581993620189" ID="ID_868294584" MODIFIED="1581994635577" TEXT="ebenfalls via stringify()">
+<node CREATED="1581993588898" ID="ID_1089387725" MODIFIED="1581994651213" TEXT="format-helper-test.cpp:142"/>
+<node CREATED="1581994623271" ID="ID_628781534" MODIFIED="1581994658943" TEXT="tree-mutator-binding-test.cpp 420"/>
+</node>
+</node>
+<node CREATED="1581994485434" ID="ID_942628679" MODIFIED="1581994495082" TEXT="MutationMessage">
+<node CREATED="1581994497448" ID="ID_635292284" MODIFIED="1581994499252" TEXT="von mutation-message-test.cpp">
+<node CREATED="1581994524698" ID="ID_582179423" MODIFIED="1581994535359" TEXT="kann nicht MutaionMessage-ctor ausw&#xe4;hlen"/>
+</node>
+</node>
+<node CREATED="1581993910615" ID="ID_439067077" MODIFIED="1581993928904" TEXT="meta::_Fun Type-Deduction">
+<node CREATED="1581993931924" ID="ID_1676073018" MODIFIED="1581993936207" TEXT="von item-wrapper-test.cpp:315">
+<node CREATED="1581993971527" ID="ID_1616033054" MODIFIED="1581993977618" TEXT="ruft wrapper.hpp FunctionResult"/>
+<node CREATED="1581994006526" ID="ID_1829879519" MODIFIED="1581994013677" TEXT="function-closure.hpp: _chain"/>
+</node>
+<node CREATED="1581994029929" ID="ID_20368460" MODIFIED="1581994030643" TEXT="no type named &apos;Args&apos; in &apos;struct lib::meta::_Fun&lt;int (*)() noexcept, void&gt;&apos;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1581995421239" ID="ID_1730281364" MODIFIED="1581995495636" TEXT="mutma&#xdf;liche Probleme">
+<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581995443649" ID="ID_986769823" MODIFIED="1581995498074" TEXT="STL collection duck detector greift nicht mehr">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1581995510176" ID="ID_1166388129" MODIFIED="1581995518450" TEXT="util-coll-Pr&#xe4;dikate"/>
+<node CREATED="1581995535628" ID="ID_829639067" MODIFIED="1581995540536" TEXT="TreeExplorer"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581995458449" ID="ID_524595490" MODIFIED="1581995499994" TEXT="meta::_Fun Type-Deduction greift nicht mehr">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1581995542307" ID="ID_1935687224" MODIFIED="1581995545415" TEXT="transformIterator"/>
+<node CREATED="1581995546475" ID="ID_1004262725" MODIFIED="1581995552782" TEXT="stringify"/>
+<node CREATED="1581995553206" ID="ID_984495822" MODIFIED="1581995556030" TEXT="util::join"/>
+</node>
+</node>
 </node>
 </node>
 </node>

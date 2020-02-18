@@ -131,6 +131,7 @@ namespace test {
           VecI container = buildTestNumberz (NUM_ELMS);
           RangeI iterator(container.begin(), container.end());
           
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           check_foreach_plain (container);
           check_foreach_plain (iterator);
           
@@ -151,6 +152,8 @@ namespace test {
           CHECK (int(NUM_ELMS) ==container[0]);
           
           check_ref_argument_bind (container);
+#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
+  UNIMPLEMENTED ("C++17");
           CHECK (int(NUM_ELMS) ==container[0]);
           
           check_ref_argument_bind (iterator);
@@ -410,6 +413,7 @@ namespace test {
           
           // fed the element pointer as "this" pointer of the member function
           for_each (elmPtrs, &TestElm::operation, _1 );      _NL_
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           and_all  (elmPtrs, &TestElm::operation, _1 );      _NL_
           has_any  (elmPtrs, &TestElm::operation, _1 );      _NL_
           
@@ -417,6 +421,8 @@ namespace test {
           for_each (elms, &TestElm::operation, _1 );         _NL_
           and_all  (elms, &TestElm::operation, _1 );         _NL_
           has_any  (elms, &TestElm::operation, _1 );         _NL_
+#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
+  UNIMPLEMENTED ("C++17");
           
           // note: it seems not to be possible to create a binder, which takes the "*this"-Argument by ref
         }

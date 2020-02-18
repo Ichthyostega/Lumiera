@@ -198,6 +198,7 @@ namespace test{
         {
           VerboseRenderer verbose;
           DiagnosticRenderer diagnostic;
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           auto render = [&](Receiver& renderer)
                           {
                             return join (lib::treeExplore(tokens)
@@ -210,6 +211,8 @@ namespace test{
           
           CHECK (render(diagnostic) == "woof(false,3)-honk(quaack)-honk(Hoonk)-woof(true,2)-moo(3)-meh()");
           CHECK (render(verbose)    == "haw-hawhaw-hawhaw-hawhaw-haw-quaack-quaack!-Hoonk-Hoonk!-Woof..Woof..-Moo__Moo__Moo-Meh?");
+#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
+  UNIMPLEMENTED ("C++17");
         }
       
       

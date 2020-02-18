@@ -193,7 +193,10 @@ namespace lumiera {
                 throw error::Logic("Subsystem "+string(*susy)+" failed to start");
             }
           
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           if (not and_all (susy->getPrerequisites(), isRunning() ))
+#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
+       if (true) ////FIXME
             {
               susy->triggerShutdown();
               throw error::State("Unable to start all prerequisites of Subsystem "+string(*susy));

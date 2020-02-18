@@ -340,10 +340,13 @@ namespace test{
           CHECK (materialise(jj) ==    "3--5-8--13");
           
           // can even adapt STL container automatically
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           auto kk = treeExplore(numz);
           CHECK (!isnil (kk));
           CHECK (1 == *kk);
           CHECK (materialise(kk) == "1--2-3--5-8--13");
+#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
+  UNIMPLEMENTED ("C++17");
         }
       
       
@@ -392,10 +395,12 @@ namespace test{
                       .expand([](uint j){ return CountDown{j-1}; })                                   // expand-functor: Val > StateCore
                       );
           
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
                       .expand([](uint j){ return NumberSequence{j-1}; })                              // expand-functor: Val > Iter
                       );                // NOTE: different Iterator type than the source!
+#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           
           // lambda with side-effect and return type different from source iter
           vector<vector<uint>> childBuffer;
@@ -408,10 +413,12 @@ namespace test{
                                             return childNumbz;
                                           };
           
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           verify_treeExpandingIterator(
                     treeExplore(CountDown{5})
                       .expand(expandIntoChildBuffer)                                                  // expand-functor: Val > STL-container&
                       );
+#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           
           // test routine called the expansion functor five times
           CHECK (5 == childBuffer.size());
@@ -579,6 +586,7 @@ namespace test{
           // demonstrate chaining of several transformation layers
           vector<int64_t> numz{1,-2,3,-5,8,-13};
           
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           CHECK ("≺1≻-≺-2≻-≺3≻-≺-5≻-≺8≻-≺-13≻"                == materialise (treeExplore(numz)
                                                                                 .transform(formatify)) );
           
@@ -591,6 +599,8 @@ namespace test{
                                                                                 .transform(multiply)
                                                                                 .transform(formatify)
                                                                                 .transform(formatify)) );
+#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
+  UNIMPLEMENTED ("C++17");
           
           
           // demonstrate the functor is evaluated only once per step

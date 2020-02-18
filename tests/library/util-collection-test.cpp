@@ -96,8 +96,11 @@ namespace test {
           VecI container = someNumberz (NUM_ELMS);
           RangeI iterator(container.begin(), container.end());
           
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           verify_accessFirstLast (container, NUM_ELMS);
+#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           verify_accessFirstLast (iterator, NUM_ELMS);
+  UNIMPLEMENTED ("C++17");
         }
       
       

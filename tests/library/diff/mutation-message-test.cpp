@@ -276,6 +276,7 @@ namespace test{
                               ,set(ATTRIB1)
                               ,del(CHILD_T)}), steps);
           
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           diffMsg = MutationMessage{steps};
           
           CHECK (!isnil (diffMsg));
@@ -283,6 +284,8 @@ namespace test{
           CHECK (set(ATTRIB1) == *++diffMsg);
           CHECK (del(CHILD_T) == *++diffMsg);
           CHECK (isnil (++diffMsg));
+#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
+  UNIMPLEMENTED ("C++17");
         }
       
       
