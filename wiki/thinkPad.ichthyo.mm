@@ -44515,8 +44515,8 @@
 </node>
 <node CREATED="1439176872457" HGAP="15" ID="ID_355008543" MODIFIED="1557498707241" POSITION="left" TEXT="Plattform" VSHIFT="41">
 <icon BUILTIN="go"/>
-<node CREATED="1439176875682" HGAP="47" ID="ID_1487331591" MODIFIED="1581812835067" TEXT="Referenzplattform" VSHIFT="60">
-<icon BUILTIN="stop"/>
+<node CREATED="1439176875682" HGAP="47" ID="ID_1487331591" MODIFIED="1582315396874" TEXT="Referenzplattform" VSHIFT="60">
+<icon BUILTIN="prepare"/>
 <node COLOR="#435e98" CREATED="1439176875682" FOLDED="true" ID="ID_263510975" MODIFIED="1581813331909" TEXT="Debian/Jessie">
 <edge COLOR="#648f70" STYLE="linear"/>
 <icon BUILTIN="licq"/>
@@ -44933,12 +44933,13 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1439176875682" ID="ID_1546966992" MODIFIED="1581813317904" TEXT="Debian/Buster">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1439176875682" ID="ID_1546966992" MODIFIED="1582315392127" TEXT="Debian/Buster">
 <edge COLOR="#956a6a" STYLE="linear"/>
-<icon BUILTIN="flag-pink"/>
+<icon BUILTIN="pencil"/>
 <node CREATED="1581813838219" ID="ID_292810279" MODIFIED="1581813843787" TEXT="Aufgaben">
-<node CREATED="1581813846914" ID="ID_1924268278" MODIFIED="1581813850500" TEXT="C++17">
+<node COLOR="#338800" CREATED="1581813846914" ID="ID_1924268278" MODIFIED="1582315382771" TEXT="C++17">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node CREATED="1439176890840" ID="ID_1573907176" MODIFIED="1581813253348" TEXT="Probleme"/>
@@ -44972,6 +44973,9 @@
 </node>
 </node>
 </node>
+</node>
+<node COLOR="#338800" CREATED="1582315830960" ID="ID_284872523" MODIFIED="1582315840434" TEXT="Testsuite GR&#xdc;N">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1439644339480" ID="ID_1582631934" MODIFIED="1581813253348" TEXT="Lumiera DEB">
 <richcontent TYPE="NOTE"><html>
@@ -45237,8 +45241,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1447978374453" HGAP="140" ID="ID_156552320" MODIFIED="1581813549648" TEXT="Compiler" VSHIFT="-10">
-<icon BUILTIN="prepare"/>
+<node CREATED="1447978374453" HGAP="140" ID="ID_156552320" MODIFIED="1582315374832" TEXT="Compiler" VSHIFT="-10">
+<icon BUILTIN="go"/>
 <node CREATED="1447978472591" ID="ID_281213456" MODIFIED="1581813532154" TEXT="GCC-4.9">
 <icon BUILTIN="licq"/>
 </node>
@@ -45335,8 +45339,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581813455951" ID="ID_1821559366" MODIFIED="1581813539449" TEXT="GCC-8">
-<icon BUILTIN="back"/>
+<node CREATED="1581813455951" ID="ID_1821559366" MODIFIED="1582315344844" TEXT="GCC-8">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1581813466582" ID="ID_1727015963" MODIFIED="1581813471691" TEXT="Februar 2020">
 <node COLOR="#338800" CREATED="1581740476035" ID="ID_1259527140" MODIFIED="1581906957998" TEXT="Build-Fixes (analog Paketbau)">
 <icon BUILTIN="button_ok"/>
@@ -45501,14 +45505,14 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581813859601" ID="ID_728753164" MODIFIED="1581813869304" TEXT="auf C++17 heben">
+<node COLOR="#338800" CREATED="1581813859601" FOLDED="true" ID="ID_728753164" MODIFIED="1582315336837" TEXT="auf C++17 heben">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="flag-yellow"/>
-<node COLOR="#338800" CREATED="1581991434932" ID="ID_104376570" MODIFIED="1581991443172" TEXT="Schalter setzen in Setup.py">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1581991434932" ID="ID_104376570" MODIFIED="1582312758108" TEXT="Schalter setzen in Setup.py">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581991444571" ID="ID_351533384" MODIFIED="1581991483705" TEXT="Problemcode vorerst auskommentiert">
-<icon BUILTIN="back"/>
+<node COLOR="#435e98" CREATED="1581991444571" FOLDED="true" ID="ID_351533384" MODIFIED="1582312758109" TEXT="Problemcode vorerst auskommentiert">
+<icon BUILTIN="licq"/>
 <node CREATED="1581992755658" ID="ID_1595558796" MODIFIED="1581992775966" TEXT="util-coll.hpp">
 <node CREATED="1581991489253" ID="ID_821303087" MODIFIED="1581992404462" TEXT=" and_all ">
 <node CREATED="1581991517974" ID="ID_1722922510" MODIFIED="1581991517974" TEXT="can_STL_ForEach&lt;Container&gt;,"/>
@@ -45594,9 +45598,9 @@
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1581995421239" ID="ID_1730281364" MODIFIED="1582312452693" TEXT="mutma&#xdf;liche Probleme">
+<node COLOR="#435e98" CREATED="1581995421239" ID="ID_1730281364" MODIFIED="1582312758109" TEXT="mutma&#xdf;liche Probleme">
 <icon BUILTIN="info"/>
-<node COLOR="#435e98" CREATED="1581995443649" ID="ID_986769823" MODIFIED="1582306722680" TEXT="STL collection duck detector greift nicht mehr">
+<node COLOR="#435e98" CREATED="1581995443649" FOLDED="true" ID="ID_986769823" MODIFIED="1582312758109" TEXT="STL collection duck detector greift nicht mehr">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1582073183681" ID="ID_652495805" MODIFIED="1582073205034" TEXT="erkl&#xe4;rt Defekt">
 <node CREATED="1582073420161" ID="ID_1988954672" MODIFIED="1582073427721" TEXT="util-foreach-Pr&#xe4;dikate"/>
@@ -45643,7 +45647,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1581995458449" ID="ID_524595490" MODIFIED="1582312410611" TEXT="meta::_Fun Type-Deduction greift nicht mehr">
+<node COLOR="#435e98" CREATED="1581995458449" FOLDED="true" ID="ID_524595490" MODIFIED="1582312758109" TEXT="meta::_Fun Type-Deduction greift nicht mehr">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1582073209005" ID="ID_1128456119" MODIFIED="1582073212094" TEXT="erkl&#xe4;rt Defekt">
 <node CREATED="1581995542307" ID="ID_1935687224" MODIFIED="1581995545415" TEXT="transformIterator"/>
@@ -45654,15 +45658,16 @@
 <arrowlink COLOR="#8dbd97" DESTINATION="ID_698919272" ENDARROW="Default" ENDINCLINATION="551;0;" ID="Arrow_ID_1462827757" STARTARROW="None" STARTINCLINATION="551;0;"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582226930039" ID="ID_520524824" MODIFIED="1582312457500" TEXT="Union-Initialisierung on-the-fly">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582226930039" ID="ID_520524824" MODIFIED="1582312758109" TEXT="Union-Initialisierung on-the-fly">
 <arrowlink COLOR="#ca99b1" DESTINATION="ID_1404034997" ENDARROW="Default" ENDINCLINATION="-5;81;" ID="Arrow_ID_402256801" STARTARROW="None" STARTINCLINATION="235;22;"/>
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
-<node CREATED="1582233568711" ID="ID_1046617766" MODIFIED="1582233574777" TEXT="L&#xf6;sungen">
-<node COLOR="#338800" CREATED="1582233577705" ID="ID_1368671019" MODIFIED="1582306571178" TEXT="STL-Iterierbarkeit">
+<node CREATED="1582233568711" ID="ID_1046617766" MODIFIED="1582312758109" TEXT="L&#xf6;sungen">
+<icon BUILTIN="idea"/>
+<node COLOR="#338800" CREATED="1582233577705" ID="ID_1368671019" MODIFIED="1582312758109" TEXT="STL-Iterierbarkeit">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1582233592571" ID="ID_409234723" MODIFIED="1582233639556">
+<node CREATED="1582233592571" ID="ID_409234723" MODIFIED="1582312758109">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -45675,24 +45680,24 @@
 </html>
 </richcontent>
 <icon BUILTIN="help"/>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1582233691150" ID="ID_860044262" MODIFIED="1582233697555" TEXT="NEIN">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1582233691150" ID="ID_860044262" MODIFIED="1582312758109" TEXT="NEIN">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1582233699511" ID="ID_287790035" MODIFIED="1582233717614" TEXT="das ist nicht Teil des Konzepts &#xbb;Iterierbarkeit&#xab;">
-<node CREATED="1582233730337" ID="ID_1576759110" MODIFIED="1582233744219" TEXT="hier ganz klar &quot;im weitesten Sinne&quot; gemeint"/>
-<node CREATED="1582233816125" ID="ID_1024965560" MODIFIED="1582233839557" TEXT="Beweis: &lt;bits/range_access.h&gt;">
-<node CREATED="1582233844361" ID="ID_697050029" MODIFIED="1582233864786" TEXT="Funktion std::begin(X) ist ohne noexcept definiert"/>
-<node CREATED="1582233871134" ID="ID_439487192" MODIFIED="1582233878481" TEXT="macht auch inhaltlich Sinn so"/>
+<node CREATED="1582233699511" ID="ID_287790035" MODIFIED="1582312758109" TEXT="das ist nicht Teil des Konzepts &#xbb;Iterierbarkeit&#xab;">
+<node CREATED="1582233730337" ID="ID_1576759110" MODIFIED="1582312758109" TEXT="hier ganz klar &quot;im weitesten Sinne&quot; gemeint"/>
+<node CREATED="1582233816125" ID="ID_1024965560" MODIFIED="1582312758109" TEXT="Beweis: &lt;bits/range_access.h&gt;">
+<node CREATED="1582233844361" ID="ID_697050029" MODIFIED="1582312758109" TEXT="Funktion std::begin(X) ist ohne noexcept definiert"/>
+<node CREATED="1582233871134" ID="ID_439487192" MODIFIED="1582312758109" TEXT="macht auch inhaltlich Sinn so"/>
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1582233905345" ID="ID_374929365" MODIFIED="1582306757303" TEXT="L&#xf6;sungsansatz-1: beide Varianten explizit pr&#xfc;fen">
+<node COLOR="#338800" CREATED="1582233905345" ID="ID_374929365" MODIFIED="1582312758109" TEXT="L&#xf6;sungsansatz-1: beide Varianten explizit pr&#xfc;fen">
 <linktarget COLOR="#0eaf68" DESTINATION="ID_374929365" ENDARROW="Default" ENDINCLINATION="143;-60;" ID="Arrow_ID_325541082" SOURCE="ID_173149831" STARTARROW="None" STARTINCLINATION="279;23;"/>
 <icon BUILTIN="back"/>
-<node CREATED="1582237126809" ID="ID_885223940" MODIFIED="1582237134567" TEXT="das w&#xfc;rde den Status-quo einfach reparieren"/>
-<node CREATED="1582237135080" ID="ID_247923480" MODIFIED="1582237151522" TEXT="dieser ist aber selbst einigerma&#xdf;en &quot;pragmatisch&quot; und verworren">
-<node CREATED="1582237183692" ID="ID_898840580" MODIFIED="1582237277357" TEXT="siehe z.B. lib/meta/trait-special.hpp">
+<node CREATED="1582237126809" ID="ID_885223940" MODIFIED="1582312758109" TEXT="das w&#xfc;rde den Status-quo einfach reparieren"/>
+<node CREATED="1582237135080" ID="ID_247923480" MODIFIED="1582312758109" TEXT="dieser ist aber selbst einigerma&#xdf;en &quot;pragmatisch&quot; und verworren">
+<node CREATED="1582237183692" ID="ID_898840580" MODIFIED="1582312758109" TEXT="siehe z.B. lib/meta/trait-special.hpp">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -45715,8 +45720,8 @@
 <icon BUILTIN="smily_bad"/>
 </node>
 </node>
-<node CREATED="1582237153893" ID="ID_1734163342" MODIFIED="1582237170263" TEXT="...und ich wei&#xdf;, da&#xdf; das Thema f&#xfc;r C++20 angegangen und aufger&#xe4;umt werden mu&#xdf;"/>
-<node COLOR="#435e98" CREATED="1582305423630" ID="ID_406561498" MODIFIED="1582305474131" TEXT="ist die einzige zur Zeit sinnvoll umsetzbare L&#xf6;sung">
+<node CREATED="1582237153893" ID="ID_1734163342" MODIFIED="1582312758109" TEXT="...und ich wei&#xdf;, da&#xdf; das Thema f&#xfc;r C++20 angegangen und aufger&#xe4;umt werden mu&#xdf;"/>
+<node COLOR="#435e98" CREATED="1582305423630" ID="ID_406561498" MODIFIED="1582312758109" TEXT="ist die einzige zur Zeit sinnvoll umsetzbare L&#xf6;sung">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -45739,15 +45744,15 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1582233920415" ID="ID_1234146956" MODIFIED="1582305405142" TEXT="L&#xf6;sungsansatz-2: umstellen auf RangeTS-Iterierbarkeit">
+<node CREATED="1582233920415" ID="ID_1234146956" MODIFIED="1582312758109" TEXT="L&#xf6;sungsansatz-2: umstellen auf RangeTS-Iterierbarkeit">
 <icon BUILTIN="closed"/>
-<node CREATED="1582236780720" ID="ID_617011073" MODIFIED="1582236796290" TEXT="welchen Zweck erf&#xfc;llt dieser Trait?">
-<node CREATED="1582236798072" ID="ID_626851812" MODIFIED="1582236835100" TEXT="geht es um &#xbb;Iterierbarket&#xab;?"/>
-<node CREATED="1582236809676" ID="ID_1014412331" MODIFIED="1582236832229" TEXT="oder geht es um STL-Container?"/>
+<node CREATED="1582236780720" ID="ID_617011073" MODIFIED="1582312758109" TEXT="welchen Zweck erf&#xfc;llt dieser Trait?">
+<node CREATED="1582236798072" ID="ID_626851812" MODIFIED="1582312758110" TEXT="geht es um &#xbb;Iterierbarket&#xab;?"/>
+<node CREATED="1582236809676" ID="ID_1014412331" MODIFIED="1582312758110" TEXT="oder geht es um STL-Container?"/>
 </node>
-<node CREATED="1582237912798" ID="ID_1995184792" MODIFIED="1582237920945" TEXT="alle bisherigen Verwendungen....">
-<node CREATED="1582237974967" ID="ID_1205441472" MODIFIED="1582238028108" TEXT="...dienen dazu, Lumiera-Itarator und STL-Container einheitlich &#xbb;iterierbar&#xab; zu adaptieren"/>
-<node CREATED="1582237960985" ID="ID_1470506535" MODIFIED="1582238123532" TEXT="...es gibt gar nicht so viele Verwendungen">
+<node CREATED="1582237912798" ID="ID_1995184792" MODIFIED="1582312758110" TEXT="alle bisherigen Verwendungen....">
+<node CREATED="1582237974967" ID="ID_1205441472" MODIFIED="1582312758110" TEXT="...dienen dazu, Lumiera-Itarator und STL-Container einheitlich &#xbb;iterierbar&#xab; zu adaptieren"/>
+<node CREATED="1582237960985" ID="ID_1470506535" MODIFIED="1582312758110" TEXT="...es gibt gar nicht so viele Verwendungen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -45765,14 +45770,14 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1582305384364" ID="ID_238579581" MODIFIED="1582305402839" TEXT="ist nicht das was wir hier wollen">
+<node CREATED="1582305384364" ID="ID_238579581" MODIFIED="1582312758110" TEXT="ist nicht das was wir hier wollen">
 <icon BUILTIN="button_cancel"/>
 </node>
 </node>
-<node CREATED="1582237046588" ID="ID_400180049" MODIFIED="1582305363418" TEXT="L&#xf6;sunsansatz-3: ein ma&#xdf;geschneidertes Concept bauen">
+<node CREATED="1582237046588" ID="ID_400180049" MODIFIED="1582312758110" TEXT="L&#xf6;sunsansatz-3: ein ma&#xdf;geschneidertes Concept bauen">
 <icon BUILTIN="button_cancel"/>
-<node CREATED="1582237081319" ID="ID_1673821136" MODIFIED="1582237093290" TEXT="bereits im Vorgriff auf C++20 implementiert"/>
-<node CREATED="1582237094158" ID="ID_206423592" MODIFIED="1582237113383">
+<node CREATED="1582237081319" ID="ID_1673821136" MODIFIED="1582312758110" TEXT="bereits im Vorgriff auf C++20 implementiert"/>
+<node CREATED="1582237094158" ID="ID_206423592" MODIFIED="1582312758110">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -45785,31 +45790,31 @@
 </html>
 </richcontent>
 </node>
-<node CREATED="1582305280750" ID="ID_1737226688" MODIFIED="1582305293156" TEXT="hab&apos;s versucht">
+<node CREATED="1582305280750" ID="ID_1737226688" MODIFIED="1582312758110" TEXT="hab&apos;s versucht">
 <icon BUILTIN="stop-sign"/>
-<node CREATED="1582305294632" ID="ID_1508436965" LINK="https://stackoverflow.com/a/16316640/444796" MODIFIED="1582305314720" TEXT="in Anlehnung an (SO)"/>
-<node CREATED="1582305317917" ID="ID_63672565" MODIFIED="1582305325880" TEXT="wird aber sehr komplex im Detail"/>
+<node CREATED="1582305294632" ID="ID_1508436965" LINK="https://stackoverflow.com/a/16316640/444796" MODIFIED="1582312758110" TEXT="in Anlehnung an (SO)"/>
+<node CREATED="1582305317917" ID="ID_63672565" MODIFIED="1582312758110" TEXT="wird aber sehr komplex im Detail"/>
 </node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1582305327187" ID="ID_393824782" MODIFIED="1582305337183" TEXT="Abbruch">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1582305327187" ID="ID_393824782" MODIFIED="1582312758110" TEXT="Abbruch">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
-<node CREATED="1582305338154" ID="ID_529828571" MODIFIED="1582305347714" TEXT="L&#xf6;sung ist nicht lesbar"/>
-<node CREATED="1582305348153" ID="ID_1318841418" MODIFIED="1582305360490" TEXT="in 2 Jahren nutzen wir Concepts">
+<node CREATED="1582305338154" ID="ID_529828571" MODIFIED="1582312758110" TEXT="L&#xf6;sung ist nicht lesbar"/>
+<node CREATED="1582305348153" ID="ID_1318841418" MODIFIED="1582312758110" TEXT="in 2 Jahren nutzen wir Concepts">
 <icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1582312227006" ID="ID_1679109428" MODIFIED="1582312398197" TEXT="Funktions-Detektor">
+<node COLOR="#338800" CREATED="1582312227006" ID="ID_1679109428" MODIFIED="1582312758110" TEXT="Funktions-Detektor">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1582312235632" ID="ID_1383769424" MODIFIED="1582312241748" TEXT="es ist ebenfalls noexcept">
+<node CREATED="1582312235632" ID="ID_1383769424" MODIFIED="1582312758110" TEXT="es ist ebenfalls noexcept">
 <icon BUILTIN="idea"/>
 </node>
-<node COLOR="#338800" CREATED="1582312256096" ID="ID_698919272" MODIFIED="1582312433072" TEXT="l&#xe4;&#xdf;t sich mit forwarding-specialisation wegstrippen">
+<node COLOR="#338800" CREATED="1582312256096" ID="ID_698919272" MODIFIED="1582312758110" TEXT="l&#xe4;&#xdf;t sich mit forwarding-specialisation wegstrippen">
 <linktarget COLOR="#8dbd97" DESTINATION="ID_698919272" ENDARROW="Default" ENDINCLINATION="551;0;" ID="Arrow_ID_1462827757" SOURCE="ID_1422313569" STARTARROW="None" STARTINCLINATION="551;0;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1582312269622" ID="ID_1014206981" LINK="https://stackoverflow.com/a/55701361/444796" MODIFIED="1582312395433" TEXT="Gefahr der kombinatorischen Explosion">
+<node CREATED="1582312269622" ID="ID_1014206981" LINK="https://stackoverflow.com/a/55701361/444796" MODIFIED="1582312758110" TEXT="Gefahr der kombinatorischen Explosion">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -45828,8 +45833,11 @@
 </node>
 </node>
 </node>
-<node CREATED="1447978388930" ID="ID_78828927" MODIFIED="1557498707243" TEXT="Clang 3.5">
-<icon BUILTIN="button_ok"/>
+<node CREATED="1447978388930" ID="ID_78828927" MODIFIED="1582315355090" TEXT="Clang 3.5">
+<icon BUILTIN="licq"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582315356166" ID="ID_568554401" MODIFIED="1582315369107" TEXT="Clang-7">
+<icon BUILTIN="bell"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446480582168" FOLDED="true" HGAP="46" ID="ID_554745278" MODIFIED="1581813780309" TEXT="Release" VSHIFT="-5">
