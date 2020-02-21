@@ -117,7 +117,6 @@ namespace test{
       void
       simpleSearch ()
         {
-#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           auto search = chainSearch(SPAM)
                           .search("bacon")
                           .search("tomato");
@@ -139,8 +138,6 @@ namespace test{
           CHECK (not search);
           CHECK (isnil (search));
           VERIFY_ERROR (ITER_EXHAUST, *search);
-#endif  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
-  UNIMPLEMENTED ("C++17");
         }
       
       
@@ -155,7 +152,6 @@ namespace test{
       void
       chainedIteration ()
         {
-#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           auto search = chainSearch(SPAM)                                  // Note: 1st filter step picks all s-words
                           .search([](string const& str){ return startsWith (str, "s"); });
           
@@ -179,8 +175,6 @@ namespace test{
                     "bacon-tomato-and-"                       // any non-spam behind the 3rd spam
                     "tomato-and"                              // any non-spam behind the 4th spam
                     "");                                      // and any non-spam behind the final spam
-#endif  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
-  UNIMPLEMENTED ("C++17");
         }
       
       

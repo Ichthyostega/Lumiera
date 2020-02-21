@@ -147,13 +147,10 @@ namespace workspace {
   bool
   DockArea::hasPanel (const int description_index)
   {
-#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
     return util::has_any (panels_, [=](panel::Panel* panel)
                                     {
                                       return getPanelType(panel) == description_index;
                                     });
-#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
-  return false;  /////FIXME
   }
 
   panel::Panel&

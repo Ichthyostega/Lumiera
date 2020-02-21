@@ -117,10 +117,7 @@ namespace asset {
   bool
   all_parents_enabled (const vector<PAsset>& parents)
   {
-#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
     return and_all (parents, check_isActive);
-#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
-    return false;
   }
   
   /**

@@ -45528,7 +45528,9 @@
 <node CREATED="1581992780940" ID="ID_846156960" MODIFIED="1581992784682" TEXT="last">
 <node CREATED="1581992786719" ID="ID_868210635" MODIFIED="1581992786719" TEXT="enable_if&lt; treat_as_LumieraIterator&lt;IT&gt;"/>
 <node CREATED="1581992844006" ID="ID_1452486285" MODIFIED="1581992844915" TEXT="enable_if&lt;util::{anonymous}::can_direct_access_Last&lt;COLL&gt;"/>
-<node CREATED="1581992817306" ID="ID_1958248231" MODIFIED="1581992819485" TEXT="von dispatcher-interface-test.cpp"/>
+<node CREATED="1581992817306" ID="ID_1958248231" MODIFIED="1582226909217" TEXT="von dispatcher-interface-test.cpp">
+<arrowlink COLOR="#1b487d" DESTINATION="ID_1278435250" ENDARROW="Default" ENDINCLINATION="531;0;" ID="Arrow_ID_1907491946" STARTARROW="Default" STARTINCLINATION="436;0;"/>
+</node>
 <node CREATED="1581994136969" ID="ID_1071697988" MODIFIED="1581994140342" TEXT="util-collection-test.cpp">
 <icon BUILTIN="back"/>
 <node CREATED="1581994205823" ID="ID_548485755" MODIFIED="1581994218847" TEXT="sehr interessant: der Iterator-Fall funktioniert n&#xe4;mlich">
@@ -45579,19 +45581,221 @@
 </node>
 <node CREATED="1581994029929" ID="ID_20368460" MODIFIED="1581994030643" TEXT="no type named &apos;Args&apos; in &apos;struct lib::meta::_Fun&lt;int (*)() noexcept, void&gt;&apos;"/>
 </node>
+<node CREATED="1582226720811" ID="ID_1404034997" MODIFIED="1582226979278" TEXT="job.h : InvocationInstanceID ctor unclear">
+<linktarget COLOR="#ca99b1" DESTINATION="ID_1404034997" ENDARROW="Default" ENDINCLINATION="-5;81;" ID="Arrow_ID_402256801" SOURCE="ID_520524824" STARTARROW="None" STARTINCLINATION="235;22;"/>
+<node CREATED="1582226760132" ID="ID_1708527048" MODIFIED="1582226852847" TEXT="bis jetzt hat der Compiler einen &quot;pa&#xdf;t scho&quot;-ctor synthetisiert">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node CREATED="1582226854666" ID="ID_1829839467" MODIFIED="1582226871843" TEXT="sieht aber nach unvollst&#xe4;ndigem oder schlampigem Design aus">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1581992817306" ID="ID_1278435250" MODIFIED="1582226909217" TEXT="ebenfalls von dispatcher-interface-test.cpp">
+<linktarget COLOR="#1b487d" DESTINATION="ID_1278435250" ENDARROW="Default" ENDINCLINATION="531;0;" ID="Arrow_ID_1907491946" SOURCE="ID_1958248231" STARTARROW="Default" STARTINCLINATION="436;0;"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1581995421239" ID="ID_1730281364" MODIFIED="1581995495636" TEXT="mutma&#xdf;liche Probleme">
 <icon BUILTIN="flag-pink"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581995443649" ID="ID_986769823" MODIFIED="1581995498074" TEXT="STL collection duck detector greift nicht mehr">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1581995443649" ID="ID_986769823" MODIFIED="1582306722680" TEXT="STL collection duck detector greift nicht mehr">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1582073183681" ID="ID_652495805" MODIFIED="1582073205034" TEXT="erkl&#xe4;rt Defekt">
+<node CREATED="1582073420161" ID="ID_1988954672" MODIFIED="1582073427721" TEXT="util-foreach-Pr&#xe4;dikate"/>
 <node CREATED="1581995510176" ID="ID_1166388129" MODIFIED="1581995518450" TEXT="util-coll-Pr&#xe4;dikate"/>
 <node CREATED="1581995535628" ID="ID_829639067" MODIFIED="1581995540536" TEXT="TreeExplorer"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581995458449" ID="ID_524595490" MODIFIED="1581995499994" TEXT="meta::_Fun Type-Deduction greift nicht mehr">
+<node COLOR="#338800" CREATED="1582073220260" ID="ID_140955956" MODIFIED="1582233559353" TEXT="Untersuchung">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1582073223795" ID="ID_596161629" MODIFIED="1582073232715" TEXT="DuckDetector_test PASS">
+<icon BUILTIN="idea"/>
+<node CREATED="1582073234062" ID="ID_1909467497" MODIFIED="1582073239279" TEXT="also kein elementares Problem"/>
+</node>
+<node CREATED="1582075935580" ID="ID_27838904" MODIFIED="1582075956597" TEXT="begin() / end() sind jetzt noexcept"/>
+<node CREATED="1582075957329" ID="ID_1720366662" MODIFIED="1582075973818" TEXT="das hat wohl Einflu&#xdf; auf die type deduction"/>
+<node CREATED="1582233029258" ID="ID_1301588264" MODIFIED="1582233055488" TEXT="Duck-Detector (in try.cpp) nachgebaut...">
+<icon BUILTIN="idea"/>
+<node CREATED="1582233058772" ID="ID_1586059095" MODIFIED="1582233088483">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die <b>&#252;berladene const</b>-Variante ist der Grund
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1582233338068" ID="ID_982873335" MODIFIED="1582233352296" TEXT="eine einzeln stehende Funktion w&#xfc;rde implizit konvertiert"/>
+<node CREATED="1582233362797" ID="ID_833938257" MODIFIED="1582233401713" TEXT="aber er kann nicht entscheiden func const">
+<node CREATED="1582233402761" ID="ID_712697643" MODIFIED="1582233402761" TEXT="-&gt; func noexcept"/>
+<node CREATED="1582233405153" ID="ID_248777238" MODIFIED="1582233417751" TEXT="-&gt; func const noexcept"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1582233448999" ID="ID_1418345816" MODIFIED="1582233462949" TEXT="Fazit">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="back"/>
+<node CREATED="1582233464208" ID="ID_1766502973" MODIFIED="1582233477724" TEXT="wenn wir beide Varianten &quot;greifen&quot; wollen...."/>
+<node CREATED="1582233478442" ID="ID_173149831" MODIFIED="1582306757303" TEXT="dann brauchen wir zwei &quot;Greifer&quot;!!!">
+<arrowlink COLOR="#0eaf68" DESTINATION="ID_374929365" ENDARROW="Default" ENDINCLINATION="143;-60;" ID="Arrow_ID_325541082" STARTARROW="None" STARTINCLINATION="279;23;"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581995458449" ID="ID_524595490" MODIFIED="1582226929460" TEXT="meta::_Fun Type-Deduction greift nicht mehr">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1582073209005" ID="ID_1128456119" MODIFIED="1582073212094" TEXT="erkl&#xe4;rt Defekt">
 <node CREATED="1581995542307" ID="ID_1935687224" MODIFIED="1581995545415" TEXT="transformIterator"/>
 <node CREATED="1581995546475" ID="ID_1004262725" MODIFIED="1581995552782" TEXT="stringify"/>
 <node CREATED="1581995553206" ID="ID_984495822" MODIFIED="1581995556030" TEXT="util::join"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582226930039" ID="ID_520524824" MODIFIED="1582226984574" TEXT="Union-Initialisierung on-the-fly">
+<arrowlink COLOR="#ca99b1" DESTINATION="ID_1404034997" ENDARROW="Default" ENDINCLINATION="-5;81;" ID="Arrow_ID_402256801" STARTARROW="None" STARTINCLINATION="235;22;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1582233568711" ID="ID_1046617766" MODIFIED="1582233574777" TEXT="L&#xf6;sungen">
+<node COLOR="#338800" CREATED="1582233577705" ID="ID_1368671019" MODIFIED="1582306571178" TEXT="STL-Iterierbarkeit">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1582233592571" ID="ID_409234723" MODIFIED="1582233639556">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Frage: wollen wir auf <i>noexcept</i>&#160;einschr&#228;nken?
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1582233691150" ID="ID_860044262" MODIFIED="1582233697555" TEXT="NEIN">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1582233699511" ID="ID_287790035" MODIFIED="1582233717614" TEXT="das ist nicht Teil des Konzepts &#xbb;Iterierbarkeit&#xab;">
+<node CREATED="1582233730337" ID="ID_1576759110" MODIFIED="1582233744219" TEXT="hier ganz klar &quot;im weitesten Sinne&quot; gemeint"/>
+<node CREATED="1582233816125" ID="ID_1024965560" MODIFIED="1582233839557" TEXT="Beweis: &lt;bits/range_access.h&gt;">
+<node CREATED="1582233844361" ID="ID_697050029" MODIFIED="1582233864786" TEXT="Funktion std::begin(X) ist ohne noexcept definiert"/>
+<node CREATED="1582233871134" ID="ID_439487192" MODIFIED="1582233878481" TEXT="macht auch inhaltlich Sinn so"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1582233905345" ID="ID_374929365" MODIFIED="1582306757303" TEXT="L&#xf6;sungsansatz-1: beide Varianten explizit pr&#xfc;fen">
+<linktarget COLOR="#0eaf68" DESTINATION="ID_374929365" ENDARROW="Default" ENDINCLINATION="143;-60;" ID="Arrow_ID_325541082" SOURCE="ID_173149831" STARTARROW="None" STARTINCLINATION="279;23;"/>
+<icon BUILTIN="back"/>
+<node CREATED="1582237126809" ID="ID_885223940" MODIFIED="1582237134567" TEXT="das w&#xfc;rde den Status-quo einfach reparieren"/>
+<node CREATED="1582237135080" ID="ID_247923480" MODIFIED="1582237151522" TEXT="dieser ist aber selbst einigerma&#xdf;en &quot;pragmatisch&quot; und verworren">
+<node CREATED="1582237183692" ID="ID_898840580" MODIFIED="1582237277357" TEXT="siehe z.B. lib/meta/trait-special.hpp">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        als schneller Fix implementiert
+      </li>
+      <li>
+        und tats&#228;chlich nur einmal, f&#252;r einen Test verwendet
+      </li>
+      <li>
+        eigentlich wird damit das Problem &quot;unter den Teppich gekehrt&quot;
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node CREATED="1582237153893" ID="ID_1734163342" MODIFIED="1582237170263" TEXT="...und ich wei&#xdf;, da&#xdf; das Thema f&#xfc;r C++20 angegangen und aufger&#xe4;umt werden mu&#xdf;"/>
+<node COLOR="#435e98" CREATED="1582305423630" ID="ID_406561498" MODIFIED="1582305474131" TEXT="ist die einzige zur Zeit sinnvoll umsetzbare L&#xf6;sung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &quot;sinnvoll&quot; hei&#223;t
+    </p>
+    <ul>
+      <li>
+        stabil
+      </li>
+      <li>
+        lesbar
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1582233920415" ID="ID_1234146956" MODIFIED="1582305405142" TEXT="L&#xf6;sungsansatz-2: umstellen auf RangeTS-Iterierbarkeit">
+<icon BUILTIN="closed"/>
+<node CREATED="1582236780720" ID="ID_617011073" MODIFIED="1582236796290" TEXT="welchen Zweck erf&#xfc;llt dieser Trait?">
+<node CREATED="1582236798072" ID="ID_626851812" MODIFIED="1582236835100" TEXT="geht es um &#xbb;Iterierbarket&#xab;?"/>
+<node CREATED="1582236809676" ID="ID_1014412331" MODIFIED="1582236832229" TEXT="oder geht es um STL-Container?"/>
+</node>
+<node CREATED="1582237912798" ID="ID_1995184792" MODIFIED="1582237920945" TEXT="alle bisherigen Verwendungen....">
+<node CREATED="1582237974967" ID="ID_1205441472" MODIFIED="1582238028108" TEXT="...dienen dazu, Lumiera-Itarator und STL-Container einheitlich &#xbb;iterierbar&#xab; zu adaptieren"/>
+<node CREATED="1582237960985" ID="ID_1470506535" MODIFIED="1582238123532" TEXT="...es gibt gar nicht so viele Verwendungen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      warum...?
+    </p>
+    <p>
+      ..vermutlich, weil ich ab einem gewissen Punkt damit angefangen habe, auch die Lumiera-Iteratoren als &quot;foreach-iterierbar&quot; zu dekorieren (indem sie freie begin(iter) und end(iter)-Funktionen bieten).
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1582305384364" ID="ID_238579581" MODIFIED="1582305402839" TEXT="ist nicht das was wir hier wollen">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node CREATED="1582237046588" ID="ID_400180049" MODIFIED="1582305363418" TEXT="L&#xf6;sunsansatz-3: ein ma&#xdf;geschneidertes Concept bauen">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1582237081319" ID="ID_1673821136" MODIFIED="1582237093290" TEXT="bereits im Vorgriff auf C++20 implementiert"/>
+<node CREATED="1582237094158" ID="ID_206423592" MODIFIED="1582237113383">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es sollte genau die Eigenschaften abdecken, die wir <b>tats&#228;chlich brauchen</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1582305280750" ID="ID_1737226688" MODIFIED="1582305293156" TEXT="hab&apos;s versucht">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1582305294632" ID="ID_1508436965" LINK="https://stackoverflow.com/a/16316640/444796" MODIFIED="1582305314720" TEXT="in Anlehnung an (SO)"/>
+<node CREATED="1582305317917" ID="ID_63672565" MODIFIED="1582305325880" TEXT="wird aber sehr komplex im Detail"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1582305327187" ID="ID_393824782" MODIFIED="1582305337183" TEXT="Abbruch">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1582305338154" ID="ID_529828571" MODIFIED="1582305347714" TEXT="L&#xf6;sung ist nicht lesbar"/>
+<node CREATED="1582305348153" ID="ID_1318841418" MODIFIED="1582305360490" TEXT="in 2 Jahren nutzen wir Concepts">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>

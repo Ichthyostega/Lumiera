@@ -211,10 +211,7 @@ namespace test  {
           vector<Job> plannedChunk;
           lib::append_all (jobs, plannedChunk);
           
-#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           Duration coveredTime (Offset(refPoint, last(plannedChunk).getNominalTime()));
-#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
-   Duration coveredTime (lib::time::FSecs(23,55)); /////////////////////FIXME
           CHECK (coveredTime >= timings.getPlanningChunkDuration());
           
           ///TODO nachfolgendes muß komplett umgeschrieben werden
@@ -223,7 +220,7 @@ namespace test  {
           
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
           TimeVar frameStart (refPoint);
-          InvocationInstanceID prevInvocationID(0);
+          InvocationInstanceID prevInvocationID(0);  ///////////////////////////////////////////////////////TICKET #1138 : C++17 requires explicit ctor for initialisation of union
           Offset expectedTimeIncrement (1, FrameRate::PAL);
           for (uint i=0; i < plannedChunk.size(); ++i )
             {
