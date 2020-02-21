@@ -129,6 +129,13 @@ namespace meta{
       using Sig  = RET(ARGS...);
       using Functor = std::function<Sig>;
     };
+  
+  /** Specialisation to strip `noexcept` from the signature */
+  template<typename RET, typename...ARGS>
+  struct _Fun<RET(ARGS...) noexcept>
+    : _Fun<RET(ARGS...)>
+    { };
+  
   /** Specialisation for using a function pointer */
   template<typename SIG>
   struct _Fun<SIG*>
@@ -150,6 +157,12 @@ namespace meta{
   /** Specialisation to deal with member pointer to function */
   template<class C, typename RET, typename...ARGS>
   struct _Fun<RET (C::*) (ARGS...)>
+    : _Fun<RET(ARGS...)>
+    { };
+  
+  /** Specialisation to deal with member pointer to noexcept function */
+  template<class C, typename RET, typename...ARGS>
+  struct _Fun<RET (C::*) (ARGS...) noexcept>
     : _Fun<RET(ARGS...)>
     { };
   

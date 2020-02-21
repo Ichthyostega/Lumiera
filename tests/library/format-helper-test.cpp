@@ -139,7 +139,6 @@ namespace test {
       checkStringify()
         {
           // use as transformer within an (iterator) pipeline
-#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           auto ss = stringify (eachNum (1.11, 10.2));
           
           CHECK (ss);
@@ -152,8 +151,6 @@ namespace test {
             res += s;
           
           CHECK (res == "..2.113.114.115.116.117.118.119.1110.11");
-#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
-  UNIMPLEMENTED ("C++17");
           
           
           using VecS = vector<string>;
@@ -169,7 +166,6 @@ namespace test {
           ++nn;
           CHECK (6 == *nn);
           
-#if false //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
           auto sn = stringify (nn);
           CHECK ("6" == *sn);
           ++sn;
@@ -186,8 +182,6 @@ namespace test {
           CHECK ("9" == *sn);
           ++sn;
           CHECK (isnil (sn));
-#endif    //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1138 : sort out C++17 compatibility
-  UNIMPLEMENTED ("C++17");
         }
       
       

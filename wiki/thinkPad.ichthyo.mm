@@ -45594,8 +45594,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1581995421239" ID="ID_1730281364" MODIFIED="1581995495636" TEXT="mutma&#xdf;liche Probleme">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#435e98" CREATED="1581995421239" ID="ID_1730281364" MODIFIED="1582312452693" TEXT="mutma&#xdf;liche Probleme">
+<icon BUILTIN="info"/>
 <node COLOR="#435e98" CREATED="1581995443649" ID="ID_986769823" MODIFIED="1582306722680" TEXT="STL collection duck detector greift nicht mehr">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1582073183681" ID="ID_652495805" MODIFIED="1582073205034" TEXT="erkl&#xe4;rt Defekt">
@@ -45643,17 +45643,20 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1581995458449" ID="ID_524595490" MODIFIED="1582226929460" TEXT="meta::_Fun Type-Deduction greift nicht mehr">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1581995458449" ID="ID_524595490" MODIFIED="1582312410611" TEXT="meta::_Fun Type-Deduction greift nicht mehr">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1582073209005" ID="ID_1128456119" MODIFIED="1582073212094" TEXT="erkl&#xe4;rt Defekt">
 <node CREATED="1581995542307" ID="ID_1935687224" MODIFIED="1581995545415" TEXT="transformIterator"/>
 <node CREATED="1581995546475" ID="ID_1004262725" MODIFIED="1581995552782" TEXT="stringify"/>
 <node CREATED="1581995553206" ID="ID_984495822" MODIFIED="1581995556030" TEXT="util::join"/>
 </node>
+<node CREATED="1582312412651" ID="ID_1422313569" MODIFIED="1582312440377" TEXT="ebenfalls durch Spezialisierung auf noexcept l&#xf6;sbar">
+<arrowlink COLOR="#8dbd97" DESTINATION="ID_698919272" ENDARROW="Default" ENDINCLINATION="551;0;" ID="Arrow_ID_1462827757" STARTARROW="None" STARTINCLINATION="551;0;"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582226930039" ID="ID_520524824" MODIFIED="1582226984574" TEXT="Union-Initialisierung on-the-fly">
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582226930039" ID="ID_520524824" MODIFIED="1582312457500" TEXT="Union-Initialisierung on-the-fly">
 <arrowlink COLOR="#ca99b1" DESTINATION="ID_1404034997" ENDARROW="Default" ENDINCLINATION="-5;81;" ID="Arrow_ID_402256801" STARTARROW="None" STARTINCLINATION="235;22;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 <node CREATED="1582233568711" ID="ID_1046617766" MODIFIED="1582233574777" TEXT="L&#xf6;sungen">
@@ -45795,6 +45798,30 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1582312227006" ID="ID_1679109428" MODIFIED="1582312398197" TEXT="Funktions-Detektor">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1582312235632" ID="ID_1383769424" MODIFIED="1582312241748" TEXT="es ist ebenfalls noexcept">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1582312256096" ID="ID_698919272" MODIFIED="1582312433072" TEXT="l&#xe4;&#xdf;t sich mit forwarding-specialisation wegstrippen">
+<linktarget COLOR="#8dbd97" DESTINATION="ID_698919272" ENDARROW="Default" ENDINCLINATION="551;0;" ID="Arrow_ID_1462827757" SOURCE="ID_1422313569" STARTARROW="None" STARTINCLINATION="551;0;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1582312269622" ID="ID_1014206981" LINK="https://stackoverflow.com/a/55701361/444796" MODIFIED="1582312395433" TEXT="Gefahr der kombinatorischen Explosion">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      mit const und volatile...
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
