@@ -446,8 +446,7 @@ namespace lib {
   
   namespace iter_explorer { // Implementation of Iterator decorating layers...
     
-  /*constexpr*/ ///////////////////////////////////////////////////////////TICKET #1138 : lambdas are literal only in C++17
-              auto ACCEPT_ALL = [](auto){return true;};
+    constexpr auto ACCEPT_ALL = [](auto){return true;};
     
     /**
      * @internal technical details of binding a functor into the TreeExplorer.
@@ -578,8 +577,9 @@ namespace lib {
      * series of new elements. Other layers might need to sync to this operation, and thus it is passed
      * down the chain. For that reason, we need a dedicated BaseAdapter to adsorb such chained calls.
      * @remark when building the TreeExplorer, the to-be-wrapped source is fed down into its place
-     *         within BaseAdapter. For that reason, we need to lift the copy ctors of the base.
-     *         Just inheriting the base class ctors won't do that, at least not in C++14.
+     *         within BaseAdapter. For that reason, it is not sufficient just to lift the copy ctors
+     *         of the base (as inheriting the base class ctors would do). Rather, we need dedicated
+     *         further copy ctors to clone and move from the _undecorated base type._
      */
     template<class SRC>
     struct BaseAdapter

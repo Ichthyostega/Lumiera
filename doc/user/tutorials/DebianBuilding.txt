@@ -37,7 +37,7 @@ should _not_ be done as root.
 . add a suitable source line to your *Apt configuration* ('/etc/apt/sources.lst')
 +
 ----
-deb-src https://lumiera.org/debian/ jessie experimental
+deb-src https://lumiera.org/debian/ buster experimental
 ----
 . get all the *build dependencies*
 +

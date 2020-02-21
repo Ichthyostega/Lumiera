@@ -40,7 +40,7 @@ Requirements
 To build Lumiera, you'll need a _build environment_ together with the
 _development packages_ of the libraries Lumiera depends on.
 footnote:[there is a separate documentation page listing the
-link:{ldoc}/technical/build/Dependencies.html[build dependencies] explicitly.
+link:{ldoc}/technical/build/BuildDependencies.html[build dependencies] explicitly.
 We'll try to keep that information up to date -- but in the end, the really
 authoritative information about the build dependencies is encoded into the
 link:{ldoc}/technical/build/SCons.html[build system]. Thus, when the build

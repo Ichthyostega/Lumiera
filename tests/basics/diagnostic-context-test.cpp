@@ -188,13 +188,11 @@ namespace test{
           VecI sequence = descend (seed);
           
           uint prev = 0;
-          for (uint i=0; i < sequence.size(); ++i)
-            {
-              uint val = sequence[i];
-              if (! (isOdd(val) && seed >= val && val > prev ))
-                throw error::Fatal ("thread-local diagnostic stack");
+          for (uint val : sequence)
+            if (not (isOdd(val) and seed >= val and val > prev ))
+              throw error::Fatal ("thread-local diagnostic stack");
+            else
               prev = val;
-            }
         }
       
       static VecI
