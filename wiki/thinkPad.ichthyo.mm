@@ -41433,8 +41433,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582387518143" ID="ID_1511785718" MODIFIED="1582387563106" TEXT="Aufspiel-Fehler beim 2.Timeline-Diff">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1582387518143" FOLDED="true" ID="ID_1511785718" MODIFIED="1582402573961" TEXT="Aufspiel-Fehler beim 2.Timeline-Diff">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1582387575560" ID="ID_1823810514" MODIFIED="1582387638910" TEXT="Reihenfolge egal">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -41447,6 +41447,35 @@
   </body>
 </html>
 </richcontent>
+</node>
+<node CREATED="1582393056148" ID="ID_229440778" MODIFIED="1582393060752" TEXT="Beobachtungen">
+<node CREATED="1582393085696" ID="ID_1075791214" MODIFIED="1582393107401" TEXT="DiffApplicationStrategie::completeDiffApplication()">
+<node CREATED="1582393112229" ID="ID_1475137884" MODIFIED="1582393122112" TEXT="ruft treeMutator_-&gt; completeScope"/>
+</node>
+<node CREATED="1582393123699" ID="ID_1039117196" MODIFIED="1582393142133" TEXT="treeMutator_ ist ein ChildCollectionMutator"/>
+<node CREATED="1582393142889" ID="ID_1845205771" MODIFIED="1582393160850" TEXT="beim 2.Mal ist noch ein Element im contentBuffer">
+<node CREATED="1582393170325" ID="ID_1722906303" MODIFIED="1582393180658" TEXT="und zwar ein TimelineGui"/>
+<node CREATED="1582393189518" ID="ID_1633116205" MODIFIED="1582394694300" TEXT="HA! das weitere Element im anderen Tab?">
+<arrowlink COLOR="#d51f26" DESTINATION="ID_679335170" ENDARROW="Default" ENDINCLINATION="78;0;" ID="Arrow_ID_1157526655" STARTARROW="None" STARTINCLINATION="51;30;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node COLOR="#990000" CREATED="1582393210408" ID="ID_1214546082" MODIFIED="1582402538776" TEXT="wenn diese Hypothese stimmt, dann w&#xe4;re das gesendete Diff falsch">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1582394658942" ID="ID_679335170" MODIFIED="1582394694300" TEXT="so isses">
+<linktarget COLOR="#d51f26" DESTINATION="ID_679335170" ENDARROW="Default" ENDINCLINATION="78;0;" ID="Arrow_ID_1157526655" SOURCE="ID_1633116205" STARTARROW="None" STARTINCLINATION="51;30;"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1582394706704" ID="ID_1236044094" MODIFIED="1582394709051" TEXT="siehe DummySessionConnection::fabricateSeq1"/>
+<node CREATED="1582394712392" ID="ID_1029818508" MODIFIED="1582394730872" TEXT="der Diff f&#xe4;ngt ganz naiv an mit &quot;ins(timeline)&quot;"/>
+<node CREATED="1582394734004" ID="ID_587085406" MODIFIED="1582394749618" TEXT="es fehlt ein after(Ref::END)">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1582402556417" ID="ID_1819542704" MODIFIED="1582402568155" TEXT="kaum macht ma&apos;s richtig, schon funktioniert&apos;s">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
 </node>

@@ -137,7 +137,8 @@ namespace session {
     const GenNode rootTrackName = GenNode{string{stage::ATTR_name}, "Track-"+baseID};
     const GenNode forkRoot      = MakeRec().genNode(forkRootID);
     
-    return MutationMessage{ ins (timeline)
+    return MutationMessage{after(Ref::END)
+                          , ins (timeline)
                           , mut (timeline)
                             , mut (forkRoot)
                               , set (rootTrackName)
@@ -169,7 +170,8 @@ namespace session {
     const GenNode scopeRuler22  = ruler();
     const GenNode scopeRuler221 = ruler();
     
-    return MutationMessage{ ins (timeline)
+    return MutationMessage{after(Ref::END)
+                          , ins (timeline)
                           , mut (timeline)
                             , mut (forkRoot)
                               , ins (rootTrackName)
