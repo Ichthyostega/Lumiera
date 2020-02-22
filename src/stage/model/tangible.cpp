@@ -35,6 +35,7 @@
 #include "stage/model/controller.hpp"
 #include "include/ui-protocol.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/meta/util.hpp"
 
 
 namespace stage {
@@ -44,6 +45,18 @@ namespace model {
   
   Tangible::~Tangible() { }  // Emit VTables here...
   
+  
+  
+  /** diagnostic representation.
+   * @note used in exceptions to indicate the origin.
+   */
+  Tangible::operator string() const
+  {
+    return lib::meta::typeStr (this)
+         + "("
+         + string{this->getID()}
+         + ")";
+  }
   
   
   /** invoke the generic reset hook
@@ -59,10 +72,10 @@ namespace model {
    */
   void
   Tangible::reset()
-    {
-      if (this->doReset())
-        uiBus_.note (GenNode{string{MARK_reset}, true});
-    }
+  {
+    if (this->doReset())
+      uiBus_.note (GenNode{string{MARK_reset}, true});
+  }
   
   
   /** invoke the hook to clear error markers
@@ -81,10 +94,10 @@ namespace model {
    */
   void
   Tangible::clearErr()
-    {
-      if (this->doClearErr())
-        uiBus_.note (GenNode{string{MARK_clearErr}, true});
-    }
+  {
+    if (this->doClearErr())
+      uiBus_.note (GenNode{string{MARK_clearErr}, true});
+  }
   
   
   /** invoke the hook to clear notification messages
@@ -92,10 +105,10 @@ namespace model {
    */
   void
   Tangible::clearMsg()
-    {
-      if (this->doClearMsg())
-        uiBus_.note (GenNode{string{MARK_clearMsg}, true});
-    }
+  {
+    if (this->doClearMsg())
+      uiBus_.note (GenNode{string{MARK_clearMsg}, true});
+  }
   
   
   /** highlight the element visually to catch the user's attention
@@ -104,9 +117,9 @@ namespace model {
    */
   void
   Tangible::markFlash()
-    {
-      this->doFlash();
-    }
+  {
+    this->doFlash();
+  }
   
   
   /** push a notification (or warning) message to the element.
@@ -124,10 +137,10 @@ namespace model {
    */
   void
   Tangible::markMsg (string message)
-    {
-      if (this->doMsg (message))
-        uiBus_.note (GenNode{string{MARK_Message}, message});
-    }
+  {
+    if (this->doMsg (message))
+      uiBus_.note (GenNode{string{MARK_Message}, message});
+  }
   
   
   /** push an error state tag to the element
@@ -135,10 +148,10 @@ namespace model {
    */
   void
   Tangible::markErr (string error)
-    {
-      if (this->doErr (error))
-        uiBus_.note (GenNode{string{MARK_Error}, error});
-    }
+  {
+    if (this->doErr (error))
+      uiBus_.note (GenNode{string{MARK_Error}, error});
+  }
   
   
   /**
@@ -156,7 +169,7 @@ namespace model {
   void
   Tangible::slotExpand()
   {
-    if (this->doExpand(true))
+    if (this->doExpand (true))
       uiBus_.note (GenNode{string{MARK_expand}, true});
   }
   
@@ -168,7 +181,7 @@ namespace model {
   void
   Tangible::slotCollapse()
   {
-    if (this->doExpand(false))
+    if (this->doExpand (false))
       uiBus_.note (GenNode{string{MARK_expand}, false});
   }
   

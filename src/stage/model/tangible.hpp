@@ -189,8 +189,11 @@ namespace model {
     public:
       virtual ~Tangible();  ///< this is an interface
       
-      operator ID()    const { return uiBus_.getID();}
-      operator LuidH() const { return uiBus_.getID().getHash(); }
+      operator ID()     const { return uiBus_.getID();}
+      operator LuidH()  const { return uiBus_.getID().getHash(); }
+      
+      operator string() const;
+      ID getID()        const { return uiBus_.getID();}
       
       void reset();
       void clearMsg();
