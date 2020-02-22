@@ -1,6 +1,6 @@
 Building Lumiera from source
 ============================
-:Date: 2013
+:Date: 2020
 :toc:
 
 At the moment you can build Lumiera, start the standard Lumiera GUI and run the
@@ -40,13 +40,13 @@ Requirements
 To build Lumiera, you'll need a _build environment_ together with the
 _development packages_ of the libraries Lumiera depends on.
 footnote:[there is a separate documentation page listing the
-link:{ldoc}/technical/build/Dependencies.html[build dependencies] explicitly.
+link:{ldoc}/technical/build/BuildDependencies.html[build dependencies] explicitly.
 We'll try to keep that information up to date -- but in the end, the really
 authoritative information about the build dependencies is encoded into the
 link:{ldoc}/technical/build/SCons.html[build system]. Thus, when the build
 system aborts, indicating that a never version of some library is required,
 then usually the build system is right...]
-More specifically, you'll need the GNU C/C\++ compiler with C++14 support (Version >= 4.9)
+More specifically, you'll need the GNU C/C\++ compiler with C++17 support (Version >= 7)
 in addition to the following tools and libraries:
 
  * link:http://git-scm.com/[Git] (version management system)
@@ -63,12 +63,6 @@ The GUI depends on the following:
  * link:https://wiki.gnome.org/LibRsvg[lib rSVG]
  * link:https://git.gnome.org/browse/gdl[lib GDL]
 
-CAUTION: there are known problems with *GCC-5.x* as of 11/2015 +
-         on recent distributions (Ubuntu/wily, Debian/stretch) you might
-         encounter failing tests.footnote:[these problems aren't really serious;
-         basically we're sometimes checking mangled class/type names, and seemingly
-         the mangling behaviour of GCC has changed slightly. We're working on that...]
-
 TIP: Generally speaking, when you want to build software, you'll need the
 _development_ version of the packages that contain the headers and pre-built
 libraries to link against. These packages are usually named `-devel` or `-dev`.
@@ -80,17 +74,6 @@ sudo apt-get install build-essential scons git-core valgrind intltool \
 libboost-dev libboost-program-options-dev libboost-regex-dev libboost-filesystem-dev \
 libgavl-dev libgtkmm-3.0-dev libgdl-3-dev librsvg2-dev libxv-dev
 -------------------------------------------------------------------------------------
-
-Ubuntu note::
-  some people reported you need to install the `intltool` package from the standard
-  Ubuntu repository (for this reason it is included in the above collection)
-Mint-17.2 (Rafaela) and Ubuntu 12.LTS::
-  we really need the gcc-4.9, so building on these platforms is a bit tricky. See our
-  link:{ldoc}/technical/howto/backporting.html#_building_on_mint_17_2_rafaela_8201_8212_8201_gcc_and_libstdc_4_9[»Backporting«]
-  page for detailed info...
-GCC-5.0::
-  we're aware of some changes in mangled names (or type-IDs), which cause some tests to fail.
-  Other than that, compilation worked for us.
 
 
 

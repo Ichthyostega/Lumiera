@@ -36,17 +36,17 @@
 #include "lib/util.hpp"
 #include "lib/util-quant.hpp"
 
+#include <regex>
 #include <functional>
-#include <boost/regex.hpp>
 #include <boost/lexical_cast.hpp>
 
-using std::string;
 using util::unConst;
 using util::isSameObject;
 using util::floorwrap;
-using boost::regex;
-using boost::smatch;
-using boost::regex_search;
+using std::string;
+using std::regex;
+using std::smatch;
+using std::regex_search;
 using boost::lexical_cast;
 
 namespace error = lumiera::error;
@@ -71,8 +71,8 @@ namespace time {
     TimeValue
     Frames::parse (string const& frameNumber, QuantR frameGrid)
     {
-      static regex frameNr_parser  ("(?<![\\.\\-\\d])(-?\\d+)#");   // no leading [.-\d],  number+'#'
-      smatch match;
+      static regex frameNr_parser{"(?:^|[^\\d\\.\\-])(\\-?\\d+)#"};   // no leading [.-\d],  digit+'#'
+      smatch match;                                                   // note: ECMA regexp does not support lookbehind
       if (regex_search (frameNumber, match, frameNr_parser))
         return frameGrid.timeOf (lexical_cast<FrameCnt> (match[1]));
       else
@@ -119,17 +119,17 @@ namespace time {
     TimeValue
     Seconds::parse (string const& seconds, QuantR grid)
     {
-      static regex fracSecs_parser ("(?<![\\./\\-\\d])(-?\\d+)(?:([\\-\\+]\\d+)?/(\\d+))?sec");
-                                  //__no leading[./-\d] number    [+-]  number '/' number 'sec'   
+      static regex fracSecs_parser ("(?:^|[^\\./\\d\\-])(\\-?\\d+)(?:([\\-\\+]\\d+)?/(\\d+))?sec");
+                                  //__no leading[./-\d]   number      [+-]  number '/' number 'sec'   
       
-      #define SUB_EXPR(N) lexical_cast<long> (match[N])
+      #define SUB_EXPR(N) lexical_cast<int> (match[N])
       smatch match;
       if (regex_search (seconds, match, fracSecs_parser))
         if (match[2].matched)
           {
             // complete spec with all parts
             FSecs fractionalPart (SUB_EXPR(2), SUB_EXPR(3));
-            long fullSeconds (SUB_EXPR(1));
+            int fullSeconds (SUB_EXPR(1));
             return grid.timeOf (fullSeconds + fractionalPart);
           }
         else

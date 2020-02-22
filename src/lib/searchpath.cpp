@@ -43,6 +43,8 @@ namespace lib {
   LUMIERA_ERROR_DEFINE (FILE_NOT_DIRECTORY, "path element points at a file instead of a directory");
   
   
+  using std::regex;
+  using std::regex_replace;
   
   const regex SearchPathSplitter::EXTRACT_PATHSPEC   ("[^:]+");
   
@@ -78,7 +80,7 @@ namespace lib {
     static const string expandedOriginDir  
       = fsys::path (findExePath()).parent_path().string() + "/";          ///////////TICKET #896
     
-    return boost::regex_replace(src, PICK_ORIGIN_TOKEN, expandedOriginDir);
+    return regex_replace(src, PICK_ORIGIN_TOKEN, expandedOriginDir);
   }
   
   

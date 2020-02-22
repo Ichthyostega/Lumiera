@@ -60,7 +60,7 @@ namespace test    {
    *       interface. Add/remove a command instance to the index, allocate an
    *       CommandImpl frame and verify it is removed properly on ref count zero.
    * @note this test covers the internal bits of functionality,
-   *       not the behaviour of the (integrated) command framework 
+   *       not the behaviour of the (integrated) command framework
    * 
    * @see Command
    * @see CommandRegistry
@@ -75,7 +75,7 @@ namespace test    {
       
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           CommandRegistry& registry = CommandRegistry::instance();
           CHECK (&registry);
@@ -124,9 +124,10 @@ namespace test    {
           
           // now create a clone, registered under a different ID
           Command cmd2 = cmd1.storeDef(TEST_CMD2);
-          CHECK (cmd2 == cmd1);
-          cmd2.bind(54321);
-          CHECK (cmd2 != cmd1);
+          CHECK (cmd2 != cmd1);     // note: while they are equivalent, they are not identical
+          Command cm2x = cmd2.bind(54321);
+          CHECK (cm2x != cmd1);
+          CHECK (cm2x == cmd2);
           
           // this created exactly one additional instance allocation:
           CHECK (1+cnt_inst == registry.instance_count());
@@ -142,6 +143,10 @@ namespace test    {
           CHECK (!registry.queryIndex(TEST_CMD2));
           CHECK (cnt_defs == registry.index_size());        //  removed from index
           CHECK (1+cnt_inst == registry.instance_count()); //...but still alive
+          
+          CHECK (cmdX.isAnonymous());
+          CHECK (cmd2.isAnonymous());                   //......they got deached
+          CHECK (!cmd1.isAnonymous());
           
           // create a new registration..
           registry.track(TEST_CMD2, cmd2);
@@ -165,6 +170,7 @@ namespace test    {
           cmdX.close();
           CHECK (1+cnt_inst == registry.instance_count());
           cmd2.close();
+          cm2x.close();
           CHECK (0+cnt_inst == registry.instance_count()); // ...as long as it's still referred
         }
       
@@ -211,7 +217,6 @@ namespace test    {
           CHECK (2+cnt_inst == registry.instance_count());
           
           CHECK (!isSameObject (*pImpl, *clone));
-          CHECK (*pImpl == *clone);
           
           CHECK (!pImpl->canExec());
           typedef Types<int> ArgType;
@@ -220,12 +225,10 @@ namespace test    {
           CHECK (pImpl->canExec());
           
           CHECK (!clone->canExec()); // this proves the clone has indeed a separate identity
-          CHECK (*pImpl != *clone);
           
           // discard the first clone and overwrite with a new one
           clone = registry.createCloneImpl(*pImpl);
           CHECK (2+cnt_inst == registry.instance_count());
-          CHECK (*pImpl == *clone);
           CHECK (clone->canExec());
           
           clone.reset();

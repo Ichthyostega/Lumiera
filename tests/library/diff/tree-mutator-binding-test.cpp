@@ -977,6 +977,11 @@ namespace test{
                                          +sizeof(void*)          // the VTable for each layer of TreeMutator impl
                                          )
                                    + 1 * sizeof(void*));         // plus one unused selector, implemented as pointer to the default impl
+//////////
+//////////NOTE: unexpected behaviour confirmed with GCC-8
+//////////
+//////////      However, the practice of verifying data size and layout assumptions
+//////////      is increasingly questionable, given that all modern compilers do data flow based optimisations.
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1007
           
           

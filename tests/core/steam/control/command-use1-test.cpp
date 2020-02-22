@@ -224,7 +224,7 @@ namespace test    {
           CHECK (!c2.canUndo());
           CHECK (c2.isAnonymous());
           
-          CHECK (c1 == c2);
+          CHECK (c1 != c2);
           CHECK (!isSameObject(c1, c2));
           
           CHECK (0 == command1::check_);
@@ -234,7 +234,6 @@ namespace test    {
           CHECK (randVal == command1::check_);
           CHECK ( c1.canUndo());
           CHECK (!c2.canUndo());
-          CHECK (c1 != c2);
           
           c2();
           CHECK (randVal + randVal == command1::check_);
@@ -271,7 +270,7 @@ namespace test    {
           CHECK (c4.canUndo());
           CHECK (not c4.isAnonymous());
           CHECK (    c2.isAnonymous());
-          CHECK (c4 == c2);
+          CHECK (c4 != c2); // note: it was stored as independent clone copy
           CHECK (c4 != c1);
           c4();
           CHECK (c4 != c2); // now lives independently from the original

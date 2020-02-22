@@ -92,8 +92,6 @@ def configure(env):
             problems.append('We need the boost::system support library (including binary lib).')
         if not conf.CheckLibWithHeader('boost_filesystem','boost/filesystem.hpp','C++'):
             problems.append('We need the boost::filesystem lib (including binary lib for linking).')
-        if not conf.CheckLibWithHeader('boost_regex','boost/regex.hpp','C++'):
-            problems.append('We need the boost regular expression lib (incl. binary lib for linking).')
     
     
     if not conf.CheckPkgConfig('gavl', '1.4'):

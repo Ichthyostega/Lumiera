@@ -87,7 +87,6 @@ namespace test    {
       run (Arg) 
         {
           checkStateCapturingMechanism();
-          verifyComparisons();
         }
       
       
@@ -133,50 +132,6 @@ namespace test    {
           testVal = -20;
           bound_undo_func(3*rr);
           CHECK (testVal == -20 + 3*rr - (5+rr));
-        }
-      
-      
-      void
-      verifyComparisons()
-        {
-          function<void(short,int)> u1_fun;             // deliberately unbound
-          function<void(short,int)> u2_fun  = undo;
-          function< int(short)>     c1_fun;
-          function< int(short)>     c2_fun  = capture;
-          
-          MemHolder m11 (u1_fun, c1_fun);
-          MemHolder m12 (u1_fun, c2_fun);
-          MemHolder m21 (u2_fun, c1_fun);
-          MemHolder m22 (u2_fun, c2_fun);
-          
-          CHECK (!m11 && !m12 && !m21 && !m22);
-          CHECK ( (m11 == m11));
-          CHECK (!(m11 != m11));
-          
-          CHECK (m11 != m12);
-          CHECK (m11 != m21);
-          CHECK (m11 != m22);
-          CHECK (m12 != m11);
-          CHECK (m12 != m21);
-          CHECK (m12 != m22);
-          CHECK (m21 != m11);
-          CHECK (m21 != m12);
-          CHECK (m21 != m22);
-          CHECK (m22 != m11);
-          CHECK (m22 != m12);
-          CHECK (m22 != m21);
-          
-          MemHolder m22x (m22); // clone copy
-          CHECK (!m22x);
-          CHECK (m22 == m22x);  // same functions, no state --> equal
-          
-          testVal = 0;
-          m22x.tieCaptureFunc() (1 + (rand() % 9));   // produce a random memento value != 0
-          CHECK (0 < m22x.getState());
-          
-          CHECK (m22 != m22x);
-          m22.tieCaptureFunc() (m22x.getState()); // get the same value into the memento within m22
-          CHECK (m22 == m22x);
         }
     };
   

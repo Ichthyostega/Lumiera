@@ -205,7 +205,7 @@ namespace time {
   
   /** rational representation of fractional seconds
    * @warning do not mix up gavl_time_t and FSecs */
-  typedef boost::rational<long> FSecs;
+  typedef boost::rational<int64_t> FSecs;
   
   
   /**
@@ -550,12 +550,10 @@ namespace time {
   class FrameRate
     : public boost::rational<uint>
     {
-      typedef boost::rational<uint> IFrac;
-      
     public:
       FrameRate (uint fps) ;
       FrameRate (uint num, uint denom);
-      FrameRate (IFrac const& fractionalRate);
+      FrameRate (boost::rational<uint> const& fractionalRate);
       
       // standard copy acceptable;
       
@@ -572,6 +570,13 @@ namespace time {
       operator std::string() const;
     };
   
+  /** convenient conversion to duration in fractional seconds */
+  inline FSecs
+  operator/ (int n, FrameRate rate)
+  {
+    return FSecs{ n*rate.denominator(), rate.numerator()};
+  }
+  
   
   
   
@@ -583,7 +588,7 @@ namespace time {
     inline NUM
     __ensure_nonzero (NUM n)
     {
-      if (n == 0)
+      if (n == NUM{0})
         throw error::Logic ("Degenerated frame grid not allowed"
                            , error::LERR_(BOTTOM_VALUE));
       return n;
@@ -614,17 +619,17 @@ namespace time {
   
   inline
   FrameRate::FrameRate (uint fps)
-    : IFrac (__ensure_nonzero(fps))
+    : boost::rational<uint> (__ensure_nonzero(fps))
     { }
   
   inline
   FrameRate::FrameRate (uint num, uint denom)
-    : IFrac (__ensure_nonzero(num), denom)
+    : boost::rational<uint> (__ensure_nonzero(num), denom)
     { }
   
   inline
-  FrameRate::FrameRate (IFrac const& fractionalRate)
-    : IFrac (__ensure_nonzero(fractionalRate))
+  FrameRate::FrameRate (boost::rational<uint> const& fractionalRate)
+    : boost::rational<uint> (__ensure_nonzero(fractionalRate))
     { }
   
   inline double
@@ -647,5 +652,16 @@ namespace util {
     return 0 == dur;
   }
 
+  // repeated or forward declaration, see meta/util.hpp
+  template<typename X, typename COND>
+  struct StringConv;
+  
+  /** specialisation: render fractional seconds (for diagnostics) */
+  template<>
+  struct StringConv<lib::time::FSecs, void>
+    {
+      static std::string
+      invoke (lib::time::FSecs) noexcept;
+    };
 }
-#endif
+#endif /*LIB_TIME_TIMEVALUE_H*/

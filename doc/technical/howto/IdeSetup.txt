@@ -29,7 +29,7 @@ There is nothing really fancy with the configuration, things work as you'd expec
       actually enabled. This provider is used by the IDE to retrieve definitions from the compiler for syntax checks
       while you type and for building the search index. Typically, this provider is called ``GCC Builtin Compiler Settings'';
       please ensure in the global (or the project specific) configuration that the invocation command line includes
-      the argument `-std=gnu++14` -- otherwise you'll get a lot of red squiggles on the new language features ;-)
+      the argument `-std=gnu++17` -- otherwise you'll get a lot of red squiggles on the new language features ;-)
 
 Indexer troubleshooting
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -54,6 +54,20 @@ was able to see the right files with the right locations
  * After upgrading to a new version of such library dependencies, it might be necessary to remove the old search paths
    _manually_ -- more so if they are still accessible on the system. Dont blame the Indexer, which basically
    has no way to find out he is looking at the obsolete source files...
+
+Sourcecode for relevant external libraries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Especially when working on the GUI, it can be handy to have some of the most relevant libraries around:
+`gdl`, `gdlmm3`, `glib2.0`, `glibmm2.4`, `gtk+3.0`, `gtkmm3.0`. Just extract the source code into a directory
+and add it via the ``Makefile Project with Existing Code'' wizard. Of course it helps to some degree if you're
+also able to _build_ that code (even partially) from within the IDE, since the indexer is than able to pick up
+more cross linking information. However, this is not a strict requirement -- even while `F3` often fails, the
+``Open Type'' dialog is able to spot the definition in many cases non the less, and when this fails, you can
+still use ``brute-force'' file search. What turns out to be much more an impediment in practice is the fact
+that you'll have to jump through that C++ binding layer, and you need to pick up some basic knowledge how
+this layer works to wrap the underlying plain-C GTK entities; don't confuse the C++ _wrapper objects_
+with the _gobject_ (a concept from GLib) used by GTK.
+
 
 Debugger Breakpoints not working
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -4,14 +4,14 @@ Lumiera build system
 As work progresses, we will add more information on the Lumiera build system.
 
 //Menu: label Build System
-//Menu: prepend child 'Dependencies'
+//Menu: prepend child 'BuildDependencies'
 //Menu: prepend child 'SCons'
 
 
 build -- continuous integration -- packaging
 
 * link:SCons.html[Buildsystem]
-* link:Dependencies.html[Dependencies]
+* link:BuildDependencies.html[Lumiera Build Dependencies]
 * link:BuildDroneDraft.html[»Builddrone« concept from 2008]
 * Packaging: link:LumieraDebianPackage.html[Debian] RPM
 * Lumiera link:../infra/debianDepot.html/[debian depot]

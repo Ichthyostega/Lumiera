@@ -1,7 +1,7 @@
-Dependencies
-============
+Build Dependencies
+==================
 :Author: core-devs
-:Date: 11/2015
+:Date: 2/2020
 :toc:
 
 
@@ -54,30 +54,32 @@ Languages and Tools
 
 * C / C++
 
- - a C99 / C++14 compatible compiler footnote:[in practice, we build using GCC and
+ - a C99 / C++17 compatible compiler footnote:[in practice, we build using GCC and
    occasionally we check using Clang]
- - GCC *4.9* or Clang *3.5* should be fine footnote:[basically we try to use just the stock language.
+ - GCC *7* or Clang *6* should be fine footnote:[basically we try to use just the stock language.
    On rare occasions in the past, we _did_ use some GCC extensions, like `typeof()`, but we care for
    workarounds, in case this becomes a problem. Incidentally, `typeof()` is obsoleted by the new
    C++ standard, which provides `decltype()` for this purpose.].
  
 * BOOST (listed below are the Debian package names)
- - libboost-dev (at least *1.55*)
+ - libboost-dev (at least *1.67*)
  - libboost-program-options-dev
  - libboost-program-options-dev
  - libboost-filesystem-dev
- - libboost-regex-dev
 
 * Script languages
- - Python (*2.7*) for build scripts
+ - Python (*2.x*) might still be handy for build scripts.footnote:[SCons supports both Python 2.x
+   and Python 3.x transparently. Basically there is no reason to stick to Python 2.x -- just the standard
+   python is not yet switched on Debian/stable, and so we might miss out on some scripts.] 
  - bash (some test scripts use bash specific extensions)
 
 Build Tools
 ~~~~~~~~~~~
 
 * Git
-* SCons *2.0* footnote:[we build with SCons >= 2.0 since a long time. Previously the buildsystem used to work with 1.0
-  In addition, we use some SCons plug-ins, which are all shipped in-tree (`admin/scons`)]
+* SCons *2.0* footnote:[we build with SCons >= 3.0 since a long time. However, since the times of 2.0,
+  there are no major breaking improvements we rely on -- so chances are that the Build works fine with
+  older versions. In addition, we use some SCons plug-ins, which are all shipped in-tree (`admin/scons`)]
 * pkg-config
 * Doxygen
 

@@ -213,7 +213,6 @@ namespace test    {
           Tracker<string>::instanceCnt = 0;
           
           createTuples (testTuples);
-          checkArgumentComparison ();
           serialiseArgTuples (testTuples);
           testTuples.clear();
           
@@ -287,50 +286,6 @@ namespace test    {
       serialiseArgTuples (ArgTuples& tup)
         {
           for_each (tup, checkSerialisation);
-        }
-      
-      
-      
-      /** @test verify the comparison operators */
-      void
-      checkArgumentComparison ()
-        {
-          StorageHolder<void(int,int), int> one, two;
-          CHECK (one == two);               // empty, identically typed argument holders -->equal
-          
-          one.tie(dummyU,dummyC)
-              .tieCaptureFunc()(1,9);
-          CHECK (one != two);               // now one contains captured UNDO state
-          
-          two.tie(dummyU,dummyC)
-              .tieCaptureFunc()(1,9);
-          two.memento() = one.memento();     // put the same UNDO state in both
-          CHECK (one == two);               // ...makes them equal again
-          
-          one.storeTuple (make_tuple (1,2));
-          CHECK (one != two);               // verify argument tuple comparison
-          CHECK (two != one);
-          CHECK (!isnil (one));
-          CHECK ( isnil (two));
-          
-          two.storeTuple (make_tuple (3,4));
-          CHECK (!isnil (two));
-          CHECK (one != two);
-          CHECK (two != one);
-          
-          one.storeTuple (make_tuple (1,4));
-          CHECK (!isnil (one));
-          CHECK (one != two);
-          CHECK (two != one);
-          
-          one.storeTuple (make_tuple (3,4));
-          CHECK (!isnil (one));
-          CHECK (one == two);
-          CHECK (two == one);
-          two.memento() = 12345;
-          CHECK (!isnil (two));
-          CHECK (one != two);
-          CHECK (two != one);
         }
       
       

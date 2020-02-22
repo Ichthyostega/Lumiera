@@ -112,7 +112,6 @@ namespace control {
       virtual operator string() const                      =0;
       virtual bool isValid ()   const                      =0;    ///< does this closure hold a valid argument tuple?
       virtual bool isCaptured () const                     =0;    ///< does this closure hold captured UNDO state?
-      virtual bool equals (CmdClosure const&)  const       =0;    ///< is equivalent to the given other closure?
       virtual void bindArguments (Arguments&)              =0;    ///< store a set of parameter values within this closure
       virtual void bindArguments (lib::diff::Rec const&)   =0;    ///< store a set of parameter values, passed as GenNode sequence
       virtual void unbindArguments()                       =0;    ///< discard any parameters and return to _unbound state_        

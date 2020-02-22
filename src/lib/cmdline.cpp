@@ -30,15 +30,14 @@
 #include "lib/util.hpp"
 #include "include/logging.h"
 #include "lib/cmdline.hpp"
+#include "lib/format-util.hpp"
 
-#include <boost/regex.hpp>
-#include <boost/algorithm/string/join.hpp>
+#include <regex>
 
-using boost::regex;
-using boost::smatch;
-using boost::regex_search;
-using boost::algorithm::join;
-
+using std::regex;
+using std::smatch;
+using std::regex_search;
+using util::join;
 using util::noneg;
 
 
@@ -64,12 +63,12 @@ namespace lib {
    */ 
   Cmdline::Cmdline (const string cmdline)
     {
-      regex tokendef("[^ \r\n\t]+");
+      static regex TOKENDEF{"\\S+"};
       smatch match;
       string::const_iterator it = cmdline.begin();
       string::const_iterator end = cmdline.end();
       
-      while (regex_search(it, end, match, tokendef))
+      while (regex_search(it, end, match, TOKENDEF))
         {
           string ss(match[0]);
           this->push_back(ss);

@@ -204,30 +204,6 @@ namespace control {
         {
           arguments_.template create<ArgHolder>();
         }
-      
-      
-      bool
-      equals (CmdClosure const& other)  const override
-        {
-          const SimpleClosure* toCompare = dynamic_cast<const SimpleClosure*> (&other);
-          return (toCompare)
-             and (*this == *toCompare);
-        }
-      
-      /// Supporting equality comparisons...
-      friend bool
-      operator== (SimpleClosure const& a1, SimpleClosure const& a2)
-        {
-          return (a1.arguments_->isValid() == a2.arguments_->isValid())
-             and (*a1.arguments_ == *a2.arguments_)
-               ;
-        }
-      
-      friend bool
-      operator!= (SimpleClosure const& a1, SimpleClosure const& a2)
-        {
-          return not (a1 == a2);
-        }
     };
     
   

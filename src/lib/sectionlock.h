@@ -31,7 +31,7 @@
 #include <nobug.h>
 
 
-typedef int
+typedef void
 (*lumiera_sectionlock_unlock_fn)(void*, struct nobug_flag* flag,
                                  struct nobug_resource_user** handle,
                                  const struct nobug_context ctx);

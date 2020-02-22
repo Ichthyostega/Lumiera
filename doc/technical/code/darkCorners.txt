@@ -7,46 +7,6 @@ nonportable hacks, terrorism and other misdemeanour_
 Library
 -------
 
-Equality of Functors
-~~~~~~~~~~~~~~~~~~~~
-One of the more important recent additions to the C++ language are function objects.
-In addition to the features actually provided by the boost implementation, the tr1 report
-also requires function instances to implement an equality operator. Unfortunately the
-implementation approach choosen by boost makes a 100% correct implementation of
-comparision very dificult, if not impossible. Thus, the boost developers refused
-to implement this feature.
-
-The bad news is that really using the power of opaque function objects quickly drove
-us (Lumiera) into a situation where such an equalty test and a hash calculation on
-function objects would be necessary. The whole point of using function objects is
-the ability to ``erase'' specific details, which has the downside that the resulting
-generic objects are opaque and often dificult to manage, when it comes to storing
-and retrieving objects building on such functors.
-
-Thus I built an hack, based on the implementation details of boost::function.
-In +functor-util.hpp+ we define a +class HijackedFunction+, which has the same
-data layout as the original boost::function. After forcibly casting such an function
-(reference or pointer) into a +HijackedFunction+, we're able to inspect and evaluate
-the implementation pointers for equality comparison and hash value calculation.
-This approach works and actually detects copied functions to be _equal_, but is
-unable to pinpoint _equivalence_, e.g. functors bound to the same function with
-the same arguments through separate but otherwise identical invocations of +bind+.
-Besides, should boost or the standard library implementors eventually change the
-implementation, this workaround will break.
-
-post C++11
-^^^^^^^^^^
-As of this writing (1/2016), this still remains an unsolved issue. +
-The new standard _does indeed require a comparison_, but only a comparison against
-`nullptr`, which is equivalent to the `bool` conversion. It seems we need more.
-
-WARNING: what we have here is a really evil hack, and even the notion of ``equality''
-         is not correct. We admit that real equality can not be achieved with something
-         like `std::function`, but in spite of that, we do have our own needs.
-         
-[red]#TODO# investigate what we _really_ need and come up with a better concept...
-
-
 Binding Placeholders
 ~~~~~~~~~~~~~~~~~~~~
 The standard allows function objects to be partially closed; this is achieved by

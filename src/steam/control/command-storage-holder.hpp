@@ -255,31 +255,6 @@ namespace control {
         {
           return memento_->getState();
         }
-      
-      bool
-      equals (CmdClosure const& other)  const
-        {
-          const StorageHolder* toCompare = dynamic_cast<const StorageHolder*> (&other);
-          return (toCompare)
-             and (*this == *toCompare);
-        }
-      
-      /// Supporting equality comparisons...
-      friend bool
-      operator== (StorageHolder const& a1, StorageHolder const& a2)
-        {
-          return (a1.arguments_->isValid() == a2.arguments_->isValid())
-              && (*a1.arguments_ == *a2.arguments_)
-              && (a1.memento_->isValid() == a2.memento_->isValid())
-              && (*a1.memento_ == *a2.memento_)
-               ;
-        }
-      
-      friend bool
-      operator!= (StorageHolder const& a1, StorageHolder const& a2)
-        {
-          return not (a1 == a2);
-        }
     };
     
   

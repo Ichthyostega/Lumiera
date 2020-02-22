@@ -29,8 +29,6 @@
  ** identity and usually located within the (pooled) storage managed by the
  ** CommandRegistry. Client code gets access to a specific CommandImpl through
  ** a Command instance, which is a small (refcounting smart-ptr) handle.
- ** 
- ** //TODO 
  **
  ** @see Command
  ** @see SteamDispatcher
@@ -246,26 +244,6 @@ namespace control {
                      % canUndo()
                      % (pClo_? string(*pClo_) : util::FAILURE_INDICATOR);
         }
-      
-      
-      
-      friend bool
-      operator== (CommandImpl const& ci1, CommandImpl const& ci2)
-      {
-        return (ci1.do_ == ci2.do_)
-//         and (ci1.undo_ == ci2.undo_)                     // causes failure regularly, due to the missing equality on boost::function. See Ticket #294
-           and (ci1.defaultPatt_ == ci2.defaultPatt_)
-           and (ci1.canExec() == ci2.canExec())
-           and (ci1.canUndo() == ci2.canUndo())
-           and (ci1.pClo_->equals(*ci2.pClo_))
-             ;
-      }
-      
-      friend bool
-      operator!= (CommandImpl const& ci1, CommandImpl const& ci2)
-      {
-        return not (ci1==ci2);
-      }
     };
   
   

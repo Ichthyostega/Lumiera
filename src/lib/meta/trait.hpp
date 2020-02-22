@@ -477,6 +477,18 @@ namespace meta {
                       && HasFunSig_end<Type>::value
            };
         };
+       
+      struct is_noexcept_iterable
+        {
+          META_DETECT_NESTED(iterator);
+          META_DETECT_FUNCTION(typename X::iterator, begin,(void) noexcept);
+          META_DETECT_FUNCTION(typename X::iterator, end  ,(void) noexcept);
+          
+          enum { value = HasNested_iterator<Type>::value
+                      && HasFunSig_begin<Type>::value
+                      && HasFunSig_end<Type>::value
+           };
+        };
       
       struct is_const_iterable
         {
@@ -490,10 +502,24 @@ namespace meta {
            };
         };
       
+      struct is_const_noexcept_iterable
+        {
+          META_DETECT_NESTED(const_iterator);
+          META_DETECT_FUNCTION(typename X::const_iterator, begin,(void) const noexcept);
+          META_DETECT_FUNCTION(typename X::const_iterator, end  ,(void) const noexcept);
+          
+          enum { value = HasNested_const_iterator<Type>::value
+                      && HasFunSig_begin<Type>::value
+                      && HasFunSig_end<Type>::value
+           };
+        };
+      
       
     public:
       enum { value = is_iterable::value
-                  || is_const_iterable::value
+                  or is_const_iterable::value
+                  or is_noexcept_iterable::value
+                  or is_const_noexcept_iterable::value
            };
     };
   
@@ -516,6 +542,18 @@ namespace meta {
            };
         };
       
+      struct is_noexcept_backIterable
+        {
+          META_DETECT_NESTED(reverse_iterator);
+          META_DETECT_FUNCTION(typename X::reverse_iterator, rbegin,(void) noexcept);
+          META_DETECT_FUNCTION(typename X::reverse_iterator, rend  ,(void) noexcept);
+          
+          enum { value = HasNested_reverse_iterator<Type>::value
+                      && HasFunSig_rbegin<Type>::value
+                      && HasFunSig_rend<Type>::value
+           };
+        };
+      
       struct is_const_backIterable
         {
           META_DETECT_NESTED(const_reverse_iterator);
@@ -528,10 +566,24 @@ namespace meta {
            };
         };
       
+      struct is_const_noexcept_backIterable
+        {
+          META_DETECT_NESTED(const_reverse_iterator);
+          META_DETECT_FUNCTION(typename X::const_reverse_iterator, rbegin,(void) const noexcept);
+          META_DETECT_FUNCTION(typename X::const_reverse_iterator, rend  ,(void) const noexcept);
+          
+          enum { value = HasNested_const_reverse_iterator<Type>::value
+                      && HasFunSig_rbegin<Type>::value
+                      && HasFunSig_rend<Type>::value
+           };
+        };
+      
       
     public:
       enum { value = is_backIterable::value
-                  || is_const_backIterable::value
+                  or is_const_backIterable::value
+                  or is_noexcept_backIterable::value
+                  or is_const_noexcept_backIterable::value
            };
     };
   

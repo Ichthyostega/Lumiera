@@ -52,8 +52,8 @@ namespace test {
   
   namespace { // Test definitions...
     
-    const Time testOrigin (12,34);
-    const FrameRate testFps (5,6);
+    const Time TEST_ORIGIN (12,34);
+    const FrameRate TEST_FPS (5,6);
     
     const uint MAX_FRAMES = 1000;
     const uint DIRT_GRAIN = 50;
@@ -89,8 +89,8 @@ namespace test {
           CHECK ( spec.origin == TimeValue(0));
           CHECK (!spec.predecessor);
           
-          spec.fps    = testFps;
-          spec.origin = testOrigin;
+          spec.fps    = TEST_FPS;
+          spec.origin = TEST_ORIGIN;
           
           PGrid myGrid = spec.commit();
           CHECK (myGrid);
@@ -101,15 +101,15 @@ namespace test {
           int randomFrame = (rand() % MAX_FRAMES);
           
           Time point (myGrid->timeOf (randomFrame));
-          CHECK (point == testOrigin + randomFrame * testFps.duration());
+          CHECK (point == TEST_ORIGIN + randomFrame * TEST_FPS.duration());
           
-          uint fract = 2 + rand() % DIRT_GRAIN;
-          FSecs dirt = rational_cast<FSecs> (1 / testFps / fract);
-          ASSERT (Time(dirt) < testFps.duration());
+          int fract = 2 + rand() % DIRT_GRAIN;
+          FSecs dirt = (1/TEST_FPS) / fract;
+          ASSERT (Time(dirt) < TEST_FPS.duration());
           ASSERT (0 < dirt);
           
           Time dirty(point + Time(dirt));
-          CHECK (point == testOrigin + myGrid->gridAlign(dirty));
+          CHECK (point == TEST_ORIGIN + myGrid->gridAlign(dirty));
         }
       
       

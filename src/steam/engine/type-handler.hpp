@@ -28,7 +28,7 @@
  ** "clean up" after usage.
  ** 
  ** Within the Lumiera Engine, the BufferProvider default implementation utilises instances
- ** of TypeHandler to \em describe specific buffer types capable of managing an attached object,
+ ** of TypeHandler to _describe specific buffer types_ capable of managing an attached object,
  ** or requiring some other kind of special treatment of the memory area used for the buffer.
  ** This BufferDescriptor is embodied into the BufferMetadata::Key and used later on to invoke
  ** the contained ctor / dtor functors, passing a concrete buffer (memory area).
@@ -44,7 +44,6 @@
 
 #include "lib/error.hpp"
 #include "lib/hash-value.h"
-#include "lib/functor-util.hpp"
 
 #include <functional>
 #include <boost/functional/hash.hpp>
@@ -84,6 +83,16 @@ namespace engine {
       X* embedded = static_cast<X*> (storageBuffer);
       embedded->~X();
     }
+    
+    template<typename CTOR, typename DTOR>
+    inline HashVal
+    deriveCombinedTypeIdenity()
+    {
+      HashVal hash{0};
+      boost::hash_combine (hash, typeid(CTOR).hash_code());
+      boost::hash_combine (hash, typeid(DTOR).hash_code());
+      return hash;
+    }
   }//(End)placement-new helpers
   
   
@@ -97,8 +106,14 @@ namespace engine {
    *       special treatment of a buffer space. When defined, the buffer
    *       will be prepared on locking and cleanup will be invoked
    *       automatically when releasing. 
-   * @warning comparison and hash values rely on internals of the
-   *       std::function implementation and might not be 100% accurate
+   * @warning comparison and hash values are based merely on the type
+   *       of the Ctor and Dtor functions -- so all type handlers bound
+   *       to the same functor type count as equivalent. This might not
+   *       be what you'd expect, however, there is no sane way to test
+   *       for equivalence of functors anyway. In the typical usage,
+   *       a TypeHandler will be created by TypeHandler::create<TY>(),
+   *       and thus will be dedicated to a given type to be placed
+   *       into the storage buffer.
    */
   struct TypeHandler
     {
@@ -106,11 +121,13 @@ namespace engine {
       
       DoInBuffer createAttached;
       DoInBuffer destroyAttached;
+      HashVal identity;
       
       /** build an invalid NIL TypeHandler */
       TypeHandler()
         : createAttached()
         , destroyAttached()
+        , identity{0}
         { }
       
       /** build a TypeHandler
@@ -124,6 +141,7 @@ namespace engine {
       TypeHandler(CTOR ctor, DTOR dtor)
         : createAttached (ctor)
         , destroyAttached (dtor)
+        , identity{deriveCombinedTypeIdenity<CTOR,DTOR>()}
         { }
       
       /** builder function defining a TypeHandler
@@ -154,22 +172,14 @@ namespace engine {
       friend HashVal
       hash_value (TypeHandler const& handler)
       {
-        HashVal hash(0);
-        if (handler.isValid())
-          {
-            boost::hash_combine(hash, handler.createAttached);
-            boost::hash_combine(hash, handler.destroyAttached);
-          }
-        return hash;
+        return handler.identity;
       }
       
       friend bool
       operator== (TypeHandler const& left, TypeHandler const& right)
       {
         return (not left.isValid() and not right.isValid())
-            || (  util::rawComparison(left.createAttached, right.createAttached)
-               && util::rawComparison(left.destroyAttached, right.destroyAttached)
-               );
+            || (left.identity == right.identity);
       }
       friend bool
       operator!= (TypeHandler const& left, TypeHandler const& right)

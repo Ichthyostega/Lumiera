@@ -218,7 +218,8 @@ namespace test {
       struct Verbose
         : Silent
         {
-          Verbose(int i) : Silent(i) { }
+          using Silent::Silent;
+          virtual ~Verbose() { }
           
           virtual
           operator string()  const
@@ -230,7 +231,7 @@ namespace test {
       struct Explosive
         : Verbose
         {
-          Explosive(int i) : Verbose(i) { }
+          using Verbose::Verbose;
           
           operator string()  const
             {
@@ -291,7 +292,7 @@ namespace test {
           cout << _Fmt("__%d__") % "1234" << endl;
           cout << _Fmt("__%d__") % "0xff" << endl;
           
-          VERIFY_ERROR(FORMAT_SYNTAX, _Fmt("%broken"));
+          VERIFY_ERROR(FORMAT_SYNTAX, _Fmt("%madness"));
         }
       
       

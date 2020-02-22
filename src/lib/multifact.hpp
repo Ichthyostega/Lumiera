@@ -47,12 +47,10 @@
  ** 
  ** @remarks this is the second attempt at building a skeleton of the core factory mechanics.
  **       The first attempt was pre-C++11, relied on partial specialisations and was hard to
- **       understand and maintain. In theory, with C++11 the task should be quite simple now,
- **       relying on rvalue references and variadic templates. Unfortunately, as of 9/2014,
- **       the compiler support is not yet robust enough on Debian/stable really to deal with
- **       \em all the conceivable cases when forwarding arbitrary factory products. Thus
- **       for now we choose to avoid the "perfect forwarding" problem and rather let the
- **       wrapper invoke the fabrication function and handle the result properly.
+ **       understand and maintain. Now, after C++11 the basic task was greatly simplified,
+ **       relying on rvalue references and variadic templates. However, we still need a
+ **       specialised factory template to allow for a _family of factory functions_ with
+ **       common configuration.
  ** 
  ** @see multifact-test.cpp
  ** @see multifact-singleton-test.cpp

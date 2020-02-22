@@ -37,19 +37,15 @@
 #include "lib/nocopy.hpp"
 
 #include <boost/filesystem.hpp>
-#include <boost/regex.hpp>
 #include <string>
+#include <regex>
 
 
 namespace lib {
   
   using std::string;
-  using boost::regex;
-  using boost::smatch;
-  using boost::regex_search;
-  using boost::sregex_iterator;
   
-  typedef smatch::value_type const& SubMatch;
+  using SubMatch = std::smatch::value_type const&;
   
   namespace error = lumiera::error;
   namespace fsys = boost::filesystem;
@@ -77,10 +73,10 @@ namespace lib {
     : util::NonCopyable
     {
       string pathSpec_;
-      sregex_iterator pos_,
-                      end_;
+      std::sregex_iterator pos_,
+                           end_;
       
-      static const regex EXTRACT_PATHSPEC;
+      static const std::regex EXTRACT_PATHSPEC;
       
     public:
       SearchPathSplitter (string const& searchPath)

@@ -268,7 +268,6 @@ Steam Layer::
   * implement a command dispatcher to allow blocking and queuing of commands
   * develop a scheme how to code the GUI commands in practice
 
-- implement a symbol table for the `lib::Symbol` datatype
 - provide the foundation for symbolic rules and script bindings
 
   * expand on the work done for symbolic and hash references

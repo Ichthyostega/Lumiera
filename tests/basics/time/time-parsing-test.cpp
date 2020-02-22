@@ -144,6 +144,7 @@ namespace test{
           Parsing<format::Frames> ("xxx25#xxx")       .should_yield (1);
           Parsing<format::Frames> ("12 25#")          .should_yield (1);
           Parsing<format::Frames> ("12 25#  33#")     .should_yield (1);                // note pitfall: the first valid number is used
+          Parsing<format::Frames> ("12 25# \n 33#")   .should_yield (1);
           Parsing<format::Frames> ("12\n 25# \n 33#") .should_yield (1);
           Parsing<format::Frames> ("12.25#")          .should_fail();                   // rejected because of leading dot (ambiguity)
         }

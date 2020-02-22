@@ -43,8 +43,8 @@ namespace test{
   
   namespace {
     
-    const uint MAX_FRAMES = 25*500;
-    const uint DIRT_GRAIN = 50;
+    const int MAX_FRAMES = 25*500;
+    const int DIRT_GRAIN = 50;
     
     const FSecs F25(1,25); // duration of one PAL frame
     
@@ -91,10 +91,10 @@ namespace test{
         {
           FixedFrameQuantiser fixQ(25);
           
-          uint frames = (rand() % MAX_FRAMES);
+          int frames = (rand() % MAX_FRAMES);
           FSecs dirt  = (F25 / (2 + rand() % DIRT_GRAIN));
           
-          Time rawTime = Time(frames*F25) + Duration(dirt);            ////////////////TICKET #939 : should better use 64bit base type for FSecs ??
+          Time rawTime = Time(frames*F25) + Duration(dirt);
           
           CHECK (Time( frames   *F25) <= rawTime);
           CHECK (Time((frames+1)*F25) >  rawTime);

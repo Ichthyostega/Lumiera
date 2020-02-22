@@ -220,7 +220,7 @@ namespace test  {
           
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
           TimeVar frameStart (refPoint);
-          InvocationInstanceID prevInvocationID(0);
+          InvocationInstanceID prevInvocationID(0);  ///////////////////////////////////////////////////////TICKET #1138 : C++17 requires explicit ctor for initialisation of union
           Offset expectedTimeIncrement (1, FrameRate::PAL);
           for (uint i=0; i < plannedChunk.size(); ++i )
             {
