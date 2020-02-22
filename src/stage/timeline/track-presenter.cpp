@@ -117,7 +117,7 @@ namespace timeline {
                   })
                .matchElement ([&](GenNode const& spec, PRuler const& elm) -> bool
                   {
-                    return spec.idi == ID{*elm};
+                    return spec.idi == elm->getID();
                   })
                .constructFrom ([&](GenNode const& spec) -> PRuler
                   {                                            // »Constructor« : how to attach a new ruler track
@@ -125,7 +125,7 @@ namespace timeline {
                   })
                .buildChildMutator ([&](PRuler& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
-                    if (ID{*target} != subID) return false;
+                    if (subID != target->getID()) return false;
                     target->buildMutator (buff);
                     return true;
                   }))
@@ -136,7 +136,7 @@ namespace timeline {
                   })
                .matchElement ([&](GenNode const& spec, PMarker const& elm) -> bool
                   {
-                    return spec.idi == ID{*elm};
+                    return spec.idi == elm->getID();
                   })
                .constructFrom ([&](GenNode const& spec) -> PMarker
                   {
@@ -144,7 +144,7 @@ namespace timeline {
                   })
                .buildChildMutator ([&](PMarker& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
-                    if (ID{*target} != subID) return false;
+                    if (subID != target->getID()) return false;
                     target->buildMutator (buff);
                     return true;
                   }))
@@ -155,7 +155,7 @@ namespace timeline {
                   })
                .matchElement ([&](GenNode const& spec, PClip const& elm) -> bool
                   {
-                    return spec.idi == ID{*elm};
+                    return spec.idi == elm->getID();
                   })
                .constructFrom ([&](GenNode const& spec) -> PClip
                   {
@@ -163,7 +163,7 @@ namespace timeline {
                   })
                .buildChildMutator ([&](PClip& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
-                    if (ID{*target} != subID) return false;
+                    if (subID != target->getID()) return false;
                     target->buildMutator (buff);
                     return true;
                   }))
@@ -174,7 +174,7 @@ namespace timeline {
                   })
                .matchElement ([&](GenNode const& spec, PFork const& elm) -> bool
                   {
-                    return spec.idi == ID{*elm};
+                    return spec.idi == elm->getID();
                   })
                .constructFrom ([&](GenNode const& spec) -> PFork
                   {
@@ -182,7 +182,7 @@ namespace timeline {
                   })
                .buildChildMutator ([&](PFork& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
-                    if (ID{*target} != subID) return false;
+                    if (subID != target->getID()) return false;
                     target->buildMutator (buff);
                     return true;
                   }))

@@ -99,7 +99,7 @@ namespace timeline {
                   })
                .matchElement ([&](GenNode const& spec, PMarker const& elm) -> bool
                   {
-                    return spec.idi == ID{*elm};
+                    return spec.idi == elm->getID();
                   })
                .constructFrom ([&](GenNode const& spec) -> PMarker
                   {
@@ -107,7 +107,7 @@ namespace timeline {
                   })
                .buildChildMutator ([&](PMarker& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
-                    if (ID{*target} != subID) return false;
+                    if (subID != target->getID()) return false;
                     target->buildMutator (buff);
                     return true;
                   }))
@@ -118,7 +118,7 @@ namespace timeline {
                   })
                .matchElement ([&](GenNode const& spec, PEffect const& elm) -> bool
                   {
-                    return spec.idi == ID{*elm};
+                    return spec.idi == elm->getID();
                   })
                .constructFrom ([&](GenNode const& spec) -> PEffect
                   {
@@ -126,7 +126,7 @@ namespace timeline {
                   })
                .buildChildMutator ([&](PEffect& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
-                    if (ID{*target} != subID) return false;
+                    if (subID != target->getID()) return false;
                     target->buildMutator (buff);
                     return true;
                   }))
@@ -137,7 +137,7 @@ namespace timeline {
                   })
                .matchElement ([&](GenNode const& spec, PChannel const& elm) -> bool
                   {
-                    return spec.idi == ID{*elm};
+                    return spec.idi == elm->getID();
                   })
                .constructFrom ([&](GenNode const& spec) -> PChannel
                   {
@@ -145,7 +145,7 @@ namespace timeline {
                   })
                .buildChildMutator ([&](PChannel& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
-                    if (ID{*target} != subID) return false;
+                    if (subID != target->getID()) return false;
                     target->buildMutator (buff);
                     return true;
                   })));

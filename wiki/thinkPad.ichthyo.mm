@@ -31627,6 +31627,19 @@
 <node COLOR="#338800" CREATED="1582388728476" ID="ID_1154344311" MODIFIED="1582390885990" TEXT="operator string: Typ und ID">
 <icon BUILTIN="button_ok"/>
 </node>
+<node CREATED="1582390900917" ID="ID_1137278126" MODIFIED="1582390969068" TEXT="ID (Bus-Term-ID) bekommt man per getID()">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      anfangs hatte ich da eine implizite Konvertierung. Man konnte schreiben ID{xyz}. Das war cool; und verwirrend; und hat jede Menge &#196;rger gemacht, wie immer
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 </node>

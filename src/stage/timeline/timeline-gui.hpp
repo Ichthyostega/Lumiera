@@ -89,7 +89,7 @@ namespace timeline {
       TimelineGui (TimelineGui const&);
       TimelineGui (TimelineGui &&);
       
-      operator ID()  const { return timelineID_; }
+      ID getID()  const { return timelineID_; }
       
       
       /** actually build a TimelineWidget to enact the role
