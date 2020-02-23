@@ -168,6 +168,8 @@ for link:{ldoc}/technical/library/Dependencies.html[lazily initialised dependenc
 establish the policy that *destructors must not rely on dependencies*. In fact, they should
 not do any tangible work at all, beyond releasing other resources.
 
+anchor:lifecycle[]
+
 Lifecycle Events
 ~~~~~~~~~~~~~~~~
 The Application as a whole conducts a well defined lifecycle; whenever transitioning to the next phase,
