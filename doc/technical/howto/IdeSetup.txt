@@ -64,7 +64,7 @@ also able to _build_ that code (even partially) from within the IDE, since the i
 more cross linking information. However, this is not a strict requirement -- even while `F3` often fails, the
 ``Open Type'' dialog is able to spot the definition in many cases non the less, and when this fails, you can
 still use ``brute-force'' file search. What turns out to be much more an impediment in practice is the fact
-that you'll have to jump through that C++ binding layer, and you need to pick up some basic knowledge how
+that you'll have to jump through that C\++ binding layer, and you need to pick up some basic knowledge how
 this layer works to wrap the underlying plain-C GTK entities; don't confuse the C++ _wrapper objects_
 with the _gobject_ (a concept from GLib) used by GTK.
 
