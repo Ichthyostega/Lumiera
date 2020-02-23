@@ -3485,17 +3485,59 @@ The foundation of population and display of pop-up menues is provided by GTK -- 
 
 {{red{OMG 11/2018 -- I have no idea where to start here...}}}</pre>
 </div>
-<div title="GuiStart" modifier="Ichthyostega" created="200812050525" modified="201808070201" tags="GuiIntegration GuiPattern" changecount="9">
+<div title="GuiStart" modifier="Ichthyostega" created="200812050525" modified="202002232138" tags="GuiIntegration GuiPattern" changecount="19">
 <pre>Starting up the GUI is optional and is considered part of the Application start/stop and lifecycle.
 * main and {{{lumiera::AppState}}} activate the lifecyle methods on the ~GuiSubsysDescriptor, accessible via the GuiFacade
-* loading a GuiStarterPlugin actually
+** invocation of {{{GuiFacade::start}}}
+** creates {{{unique_ptr&lt;GuiRunner&gt;}}}
+** the ~GuiRunner holds a ~GuiHandle as member, which causes loading and activation of the plug-in
+* loading the {{{gtk_gui.lum}}} plug-in...
 ** loads the GUI (shared lib)
-** creates instances of all the GUI services available through LayerSeparationInterfaces
-*** GuiNotificationFacade
-*** DisplayFacade
-** Finally, the ~GTK-main() is invoked.
-* bring up a network of framework entities known als the GuiTopLevel
-* establish a connection to allow the GUI to be [[populated with content|GuiContentPopulation]]
+** after loading, the sole interface method {{{launchUI()}}} is triggered
+* the GUI plug-in implementation in {{{gtk-lumiera.cpp}}}
+** implements the GUI plug-in interface
+** and the~launchUI-Function ''spawns the GUI thread''.
+* the ~GuiThread ({{{runGUI()}}})...
+** creates the {{{GtkLumiera}}} object, which is the &quot;GUI main&quot;
+** invokes the {{{GtkLumiera::run()}}} function (guarded with appropriate error handlers) &amp;rarr; {{{sigTerm}}} at the end
+*** this first creates the ''~GUI-Backbone''
+**** {{red{TODO 2/2020: unexpected error in ctor might kill the GUI thread, possibly leading to deadlock #1192}}}
+***;~UiBus
+***:the UI-Bus is the communication backbone and hub
+***;~UiManager
+***:responsible for wiring a cohesive GuiTopLevel
+***:*wired with the UI-Bus
+***:*populates the Menu and binds the Actions
+***:*populates the {{{GlobalCtx}}} with...
+***:**{{{UiBus}}}
+***:** {{{UiManager}}}
+***:** {{{WindowLocator}}}
+***:** {{{InteractionDirector}}}
+***:** {{{interact::Wizard}}}
+***;~InteractionDirector
+***:the InteractionDirector acts as top-level controller within the UI -- corresponding to the root context in the session
+***;Application Windows (GTK)
+***:a hierarchy of GTK widgets to implement the actual user interface
+***;Event Loop
+***:this is what makes the UI &quot;live&quot; and responsive
+** activating the Event Loop through {{{UiManager.performMainLoop()}}}
+*** first installs and opens the primary LayerSeparationInterfaces
+**** GuiNotificationFacade (for pushing messages via UI-Bus)
+**** DisplayService (to display rendered content)
+*** then activates the {{{Gio::Application}}} main loop (blocking event loop)
+** establishing the UI-Bus
+*** creates the ''Core Service'' as node attached to the bus&lt;br/&gt;this in turn holds...
+***:the Nexus
+***;this is the communication Hub, and actually every &quot;uplink&quot; into the Bus-term eventually ends here
+***:State Manager
+***;special service to handle &quot;state mark&quot; messages on the bus
+***;this is what essentially creates persistent interface state
+** the InteractionDirector immediately launches a ~Callback-Action into the ~Event-Loop
+*** which, when performed, sends a &quot;population request&quot; command down to the session
+*** the session will response asynchronously by pushing a &quot;population diff&quot; up into the UI-Bus (via Notification façade)
+
+!!!questions of sanity and locking
+The initial start-function of the subsystem is protected by a locking guard. Thus, everything up to and including the launch of the GUI thread is &quot;make it or break it&quot;. If the {{{facade}}} smart-ptr is not set, the GUI is considered as not started. Likewise, everything //within the GUI thread// is protected by a top-level error handler, which invokes the termination signal and thus causes application shutdown, whenever the thread exits. There is only one tiny gap in this reasoning: when the overall application shuts down //after// the GUI has been launched, but //before// the GUI was able to open the Notification façade, the GUI will miss the shutdown notification and thus the application will hang with defunct core, but with running and responsive UI. However, the Lumiera thread handling framework implements a dedicated barrier to ensure the started thread has picked up its arguments and is about to enter the thread operation function. This means, the tread launching the GUI thread will block for a short period, and when the thread launching function returns (successfully), we can sure the spawned thread is running and at the begin of its payload function. Now, since opening the facade interfaces happens early in this GUI function, and prior to building up all the GTK widgets, the chances for such a race actually happening are rather remote.
 
 !public services
 The GUI provides a small number of public services, callable through LayerSeparationInterfaces. Besides that, the main purpose of the GUI of course is user interaction. Effectively the behaviour of the whole system is driven by GUI events to a large extent. These events are executed within the event handling thread (~GTK-main-Thread) and may in turn invoke services of the lower layers, again through the respective LayerSeparationInterfaces.
