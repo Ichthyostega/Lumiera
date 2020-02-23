@@ -1,17 +1,10 @@
-Startup and Shutdown of Subsystems
-==================================
-:Date: Dec 2008
+The Application : Start-up and Subsystems
+=========================================
+:Date: 2009
 :Author: Ichthyo
 
-//MENU: label Subsystem start
+//MENU: label Start-up
 
-.copied from 'pipapo.org'
-NOTE: This page was moved from _Cehteh_'s MoinMoin-wiki,
-      which at that time was the first home of Lumiera development +
-      The design and techniques outlined here are in use without major
-      changes as of 2015 (and can be expected to remain this way). The
-      documentation needs rewording in a more neutral and descriptive
-      way and probably an introductory paragraph might be helpful [yellow-background]#TODO#
 
 ...There is now sort-of an ``application realm'', which doesn't belong strictly to
 any one of the Layers. It serves the purpose of pulling up and tearing down the
