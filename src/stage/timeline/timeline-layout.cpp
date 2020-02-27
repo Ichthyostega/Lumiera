@@ -159,13 +159,13 @@ namespace timeline {
   
   
   void
-  TimelineLayout::rehook (model::ViewHooked<TrackHeadWidget>&)  noexcept
+  TimelineLayout::rehook (TrackHeadWidget&)  noexcept
   {
     NOTREACHED ("TimelineLayout: top-Level must not be re-ordered");
   }
   
   void
-  TimelineLayout::rehook (model::ViewHooked<TrackBody>&)  noexcept
+  TimelineLayout::rehook (TrackBody&)  noexcept
   {
     NOTREACHED ("TimelineLayout: top-Level must not be re-ordered");
   }

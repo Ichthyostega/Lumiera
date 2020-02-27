@@ -158,7 +158,7 @@ namespace timeline {
    *   never happen, since we manage all widgets as slave of the model::Tangible in charge.
    */
   void
-  TrackHeadWidget::rehook (ViewHooked<TrackHeadWidget>& hookedSubHead)  noexcept
+  TrackHeadWidget::rehook (TrackHeadWidget& hookedSubHead)  noexcept
   {
     detachSubFork (hookedSubHead);
     attachSubFork (hookedSubHead);

@@ -84,7 +84,7 @@ namespace timeline {
       void hook (TrackHeadWidget&, int xPos=0, int yPos=0) override;
       void move (TrackHeadWidget&, int xPos, int yPos)     override;
       void remove (TrackHeadWidget&)                       override;
-      void rehook (ViewHooked<TrackHeadWidget>&)  noexcept override;
+      void rehook (TrackHeadWidget&) noexcept              override;
       
     public:
       TrackHeadWidget();

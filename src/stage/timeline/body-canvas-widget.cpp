@@ -527,13 +527,15 @@ namespace timeline {
   void
   BodyCanvasWidget::DEBUG_injectTrackLabel (cuString const& trackName, int startLine)
   {
-    Gtk::Button* butt = Gtk::manage (new Gtk::Button{trackName});
-    butt->signal_clicked().connect(
-          [butt]{ cout << "|=="<<butt->get_label()<<endl; });
-    
-    uint x = rand() % 50;
-    mainCanvas_.put (*butt, x, startLine);
-    butt->show();
+    NOTREACHED ("debug code obsoleted by the new ViewHook concept");
+    ///////////////////////////TODO TOD-oh
+//  Gtk::Button* butt = Gtk::manage (new Gtk::Button{trackName});
+//  butt->signal_clicked().connect(
+//        [butt]{ cout << "|=="<<butt->get_label()<<endl; });
+//  
+//  uint x = rand() % 50;
+//  mainCanvas_.put (*butt, x, startLine);
+//  butt->show();
   }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
   
@@ -561,7 +563,7 @@ namespace timeline {
   }
   
   void
-  BodyCanvasWidget::rehook (model::ViewHooked<Gtk::Widget>&)  noexcept
+  BodyCanvasWidget::rehook (Gtk::Widget&)  noexcept
   {
     /* NOOP */
   }

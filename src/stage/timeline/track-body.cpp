@@ -122,7 +122,7 @@ namespace timeline {
   }
   
   void
-  TrackBody::rehook (ViewHooked<TrackBody>& subBody)  noexcept
+  TrackBody::rehook (TrackBody& subBody)  noexcept
   {
     util::removeall (subTracks_, &subBody);
     subTracks_.push_back (&subBody);

@@ -1,8 +1,7 @@
 <map version="1.0.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node BACKGROUND_COLOR="#6666ff" CREATED="1434127882200" ID="ID_1452170048" MODIFIED="1582493202609" STYLE="fork" TEXT="Lumi">
+<node BACKGROUND_COLOR="#6666ff" CREATED="1434127882200" ID="ID_1452170048" MODIFIED="1582498450512" STYLE="fork" TEXT="Lumi">
 <font NAME="SansSerif" SIZE="25"/>
-<hook NAME="accessories/plugins/CreationModificationPlugin_new.properties"/>
 <node CREATED="1434128046296" ID="ID_1900827283" MODIFIED="1557498707213" POSITION="right" TEXT="GUI">
 <font BOLD="true" NAME="SansSerif" SIZE="14"/>
 <node CREATED="1434128054470" HGAP="7" ID="ID_1166611516" MODIFIED="1557498707213" TEXT="Workflow" VSHIFT="-15">
@@ -19519,6 +19518,98 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1582503131945" ID="ID_1439869815" MODIFIED="1582833270452" TEXT="Problem Covarianz">
+<linktarget COLOR="#6c2232" DESTINATION="ID_1439869815" ENDARROW="Default" ENDINCLINATION="-760;97;" ID="Arrow_ID_655919678" SOURCE="ID_1081924103" STARTARROW="None" STARTINCLINATION="1660;0;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1582503148935" ID="ID_10487556" MODIFIED="1582503193549" TEXT="ViewHooked&lt;WiX&gt; f&#xfc;r ViewHook&lt;WID&gt; mit WiX &lt;: WID">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1582503195681" ID="ID_1990820177" MODIFIED="1582503216832" TEXT="d.h. der ViewHook kann f&#xfc;r einen Basistyp sein (Gtk::Widget)"/>
+<node CREATED="1582503217854" ID="ID_251546067" MODIFIED="1582503228370" TEXT="aber das ViewHooked mu&#xdf; definitiv auf den konkreten Typ laufen"/>
+<node COLOR="#338800" CREATED="1582503985261" ID="ID_257480805" MODIFIED="1582833223291" TEXT="formale Probleme">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1582503991839" ID="ID_1202924681" MODIFIED="1582503998695" TEXT="C++ unterst&#xfc;tzt keine Covarianz">
+<node CREATED="1582504004549" ID="ID_1855610953" MODIFIED="1582504013861" TEXT="d.h. an einer Seite &quot;klemmt&quot; es immer"/>
+<node CREATED="1582504016734" ID="ID_973744286" MODIFIED="1582504028245" TEXT="entweder wir  verlangen einen zu konkreten Typ"/>
+<node CREATED="1582504058994" ID="ID_638337039" MODIFIED="1582504106019" TEXT="oder der Callback auf den generischen ViewHook wird vom Typsystem abgelehnt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil dieses nicht wei&#223;, da&#223; es sich um eine Subtyp-Beziehung handelt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1582504116207" ID="ID_1623671836" MODIFIED="1582833196285" TEXT="Versuch, einen 2.Template-Parameter einzuf&#xfc;hren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1582504139651" ID="ID_1687494401" MODIFIED="1582504144187" TEXT="analoges Problem"/>
+<node COLOR="#338800" CREATED="1582504145369" ID="ID_580143907" MODIFIED="1582832828804" TEXT="die rehook()-Funktion ist virtuell">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1582504155332" ID="ID_1039269734" MODIFIED="1582504165753" TEXT="aber auf welchen Argument-Typ soll sie gehen"/>
+<node COLOR="#752823" CREATED="1582504166485" ID="ID_1815913326" MODIFIED="1582832879268" TEXT="leider steckt im Argument-Typ das konkrete ViewHookable">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1582832787665" ID="ID_770114878" MODIFIED="1582832790629" TEXT="warum?"/>
+<node CREATED="1582832791081" ID="ID_921622013" MODIFIED="1582833095134" TEXT="aus logischen Gr&#xfc;nden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...ich wollte dadurch ausdr&#252;cken, da&#223; das &#252;bergebene ViewHooked&lt;Widget&gt;&amp; urspr&#252;nglich schon einmal geHooked worden war. Tats&#228;chlich hat ja im originalen Design der ViewHook das Hookable sogar erst konstruiert, und niemand sonst konnte das. Da wir aber nun inzwischen immer mit einem ViewHookable mit eingebettetem Widget arbeiten, mu&#223; dieses freistehend konstruiert werden, und des gibt keine direkte M&#246;glichkeit mehr, diese &quot;Verdongelung&quot; auszudr&#252;cken. Und au&#223;erdem sind auch alle weiteren Ideen aufgegeben, welche auf eine engere Verzahnung der Interfaces aufbauen w&#252;rden (Stichwort &quot;quer-Beweglichkeit&quot;).
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1582832796288" ID="ID_1100021505" MODIFIED="1582833171700" TEXT="praktisch wird es nie gebraucht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...praktisch k&#246;nnte es zwar sein, da&#223; wir darauf angewiesen sind, das Widget schon zu kennen. Konkret ist das aber im Moment nicht der Fall, und ich sollte mir dar&#252;ber jetzt auch keine Gedanken machen; das Design mu&#223; ohnehin sp&#228;ter nochmal &#252;berarbeitet werden...
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1582832808423" ID="ID_1387322839" MODIFIED="1582833220634" TEXT="zur&#xfc;ckbauen; rehook(Widget&amp;,...) gen&#xfc;gt">
+<arrowlink COLOR="#26405f" DESTINATION="ID_397336403" ENDARROW="Default" ENDINCLINATION="144;5;" ID="Arrow_ID_782941996" STARTARROW="None" STARTINCLINATION="112;14;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1582833177077" ID="ID_397336403" MODIFIED="1582833220634" TEXT="damit geht das dann, und ist auch nicht besonders schlimm">
+<linktarget COLOR="#26405f" DESTINATION="ID_397336403" ENDARROW="Default" ENDINCLINATION="144;5;" ID="Arrow_ID_782941996" SOURCE="ID_1387322839" STARTARROW="None" STARTINCLINATION="112;14;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1582833227086" ID="ID_895188425" MODIFIED="1582833268779" TEXT="man kann das Problem im Moment &quot;umschiffen&quot;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und ich glaube, das ganze Konstrukt wird nicht wesentlich &quot;tiefer&quot; werden
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1582833292120" ID="ID_476079369" MODIFIED="1582833303018" TEXT="der ViewHook arbeitet eben implizit immer mit dem Basistyp"/>
+<node CREATED="1582833303639" ID="ID_1136204632" MODIFIED="1582833315633" TEXT="und konvertiert die Referenzen automatisch hoch"/>
+</node>
+</node>
 <node COLOR="#338800" CREATED="1573242259267" ID="ID_1903570032" MODIFIED="1576166466194" TEXT="Test">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1573242271641" ID="ID_226481127" MODIFIED="1573242355581" TEXT="Basisfall">
@@ -19538,7 +19629,7 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1575845743838" ID="ID_1827383151" MODIFIED="1576282358088" TEXT="testContainsSequence()-predicate does not work properly in the initial base check">
+<node COLOR="#338800" CREATED="1575845743838" ID="ID_1827383151" MODIFIED="1582503290754" TEXT="testContainsSequence()-predicate does not work properly in the initial base check">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19548,7 +19639,8 @@
       again the problem with the reversed order due to forward_list
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -21811,8 +21903,8 @@
 <node CREATED="1576705652570" ID="ID_551481195" MODIFIED="1576705666257" TEXT="ViewHook&lt;Widget&gt;">
 <icon BUILTIN="info"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1576705712654" ID="ID_1745971143" MODIFIED="1576876014371" TEXT="implementieren im TrackCanvas">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1576705712654" ID="ID_1745971143" MODIFIED="1582502959217" TEXT="implementieren im TrackCanvas">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1576705413085" ID="ID_1979905155" MODIFIED="1576973024213" TEXT="Konstruktor / &quot;ein-H&#xe4;kel&quot;-Mchanismus darauf umstellen">
@@ -21998,10 +22090,10 @@
 <node CREATED="1576705779910" ID="ID_968522268" MODIFIED="1576705792920" TEXT="damit ViewHook&lt;Clip&gt;"/>
 <node CREATED="1576705802515" ID="ID_674496871" MODIFIED="1576705809765" TEXT="und ViewHook&lt;Marker&gt;"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576855620250" ID="ID_1121301646" MODIFIED="1576876200239" TEXT="relatives Positionieren erm&#xf6;glichen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576855620250" ID="ID_1121301646" MODIFIED="1582833388440" TEXT="relatives Positionieren erm&#xf6;glichen">
 <arrowlink COLOR="#15bcc9" DESTINATION="ID_1816490333" ENDARROW="Default" ENDINCLINATION="-785;86;" ID="Arrow_ID_408864676" STARTARROW="None" STARTINCLINATION="-225;17;"/>
 <linktarget COLOR="#6780d3" DESTINATION="ID_1121301646" ENDARROW="Default" ENDINCLINATION="551;-498;" ID="Arrow_ID_229033893" SOURCE="ID_1642579599" STARTARROW="None" STARTINCLINATION="-477;21;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582410135584" ID="ID_969058360" MODIFIED="1582410320625" TEXT="#1207 relative attachment and (custom) drawing of sub-widgets">
 <arrowlink COLOR="#f17745" DESTINATION="ID_1208770677" ENDARROW="Default" ENDINCLINATION="-696;74;" ID="Arrow_ID_1555581659" STARTARROW="None" STARTINCLINATION="1109;48;"/>
 <icon BUILTIN="flag-yellow"/>
@@ -22027,6 +22119,36 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1582503247986" ID="ID_1081924103" MODIFIED="1582833337026" TEXT="Problem Covarianz Clip vs Widget">
+<arrowlink COLOR="#6c2232" DESTINATION="ID_1439869815" ENDARROW="Default" ENDINCLINATION="-760;97;" ID="Arrow_ID_655919678" STARTARROW="None" STARTINCLINATION="1660;0;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1582503411035" HGAP="45" ID="ID_1293494572" MODIFIED="1582503470645" TEXT="der Canvas braucht nur ein Widget, wir aber konstruieren einen Clip" VSHIFT="22">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      eigentlich brauchen wir den konkreten Typ nur f&#252;r den ctor-Aufruf
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1582833357879" ID="ID_35914064" MODIFIED="1582833382960">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>Proof-of-Concept</u>: <i>grunds&#228;tzlich</i>&#160;lassen sich die Aufrufe so realisieren
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576974176981" ID="ID_1792139654" MODIFIED="1576975019591" TEXT="Kind-Widget-Offsets">
 <linktarget COLOR="#5e57bd" DESTINATION="ID_1792139654" ENDARROW="Default" ENDINCLINATION="-2065;214;" ID="Arrow_ID_1917645572" SOURCE="ID_178738138" STARTARROW="None" STARTINCLINATION="-949;44;"/>
 <icon BUILTIN="flag-yellow"/>
@@ -22043,6 +22165,22 @@
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1576975078209" ID="ID_272168913" MODIFIED="1576975242072" TEXT="suche L&#xf6;sung f&#xfc;r Koordinaten pro Canvas">
 <linktarget COLOR="#c9405c" DESTINATION="ID_272168913" ENDARROW="Default" ENDINCLINATION="-1471;82;" ID="Arrow_ID_1415590908" SOURCE="ID_1095950959" STARTARROW="None" STARTINCLINATION="-1695;79;"/>
 <icon BUILTIN="flag-pink"/>
+<node CREATED="1582503867646" ID="ID_1320872157" MODIFIED="1582503952812" TEXT="versuchen, das ViewHook-Konzept daf&#xfc;r nutzbar zu machen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. der Versuch, die Probleme geschickt wegzuabstrahieren.
+    </p>
+    <p>
+      Au&#223;erdem ist ja beim Design des ViewHook aufgefallen, da&#223; der Fall mit dem Positionieren per Koordinaten ehr der Spezialfall ist, und nicht der Basisfall, als welches er modlliert wurde...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 </node>
 </node>
@@ -26561,6 +26699,19 @@
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1568581076086" ID="ID_536195735" MODIFIED="1568581089407" TEXT="Problem: der ist seinerseits eine Sackgasse">
 <icon BUILTIN="broken-line"/>
+<node CREATED="1582498722221" ID="ID_90390359" MODIFIED="1582498771653" TEXT="naja... hab ihn jetzt als ViewHook ausgebaut">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das war ein gr&#246;&#223;eres Refactoring; daf&#252;r f&#228;llt dann die L&#246;sung mit den rekursiv &quot;eingeh&#228;kelten&quot; Lambdas weg. Ist sicherlich besser so...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node CREATED="1573926191124" ID="ID_1389602122" MODIFIED="1573928984092" TEXT="Display-Frame geh&#xf6;rt eigentlich zum Track">
 <arrowlink COLOR="#2769d6" DESTINATION="ID_1953592630" ENDARROW="Default" ENDINCLINATION="-300;1096;" ID="Arrow_ID_928857904" STARTARROW="None" STARTINCLINATION="-1987;53;"/>

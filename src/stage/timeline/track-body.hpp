@@ -127,7 +127,7 @@ namespace timeline {
       void hook (TrackBody&, int xPos=0, int yPos=0) override;
       void move (TrackBody&, int xPos, int yPos)     override;
       void remove (TrackBody&)                       override;
-      void rehook (ViewHooked<TrackBody>&)  noexcept override;
+      void rehook (TrackBody&) noexcept              override;
       
       /* ===== Internals ===== */
       /**

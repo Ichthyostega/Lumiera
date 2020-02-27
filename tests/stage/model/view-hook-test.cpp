@@ -168,7 +168,7 @@ namespace test {
         
         
         void
-        rehook (HookedWidget& existingHook)  noexcept override
+        rehook (DummyWidget& existingHook)  noexcept override
           {
             auto pos = findEntry (existingHook);
             REQUIRE (pos != widgets_.end(), "the given iterator must yield previously hooked-up elements");

@@ -66,7 +66,7 @@ namespace stage  {
 namespace model {
   
   
-  template<class WID>
+  template<class WID, class BASE>
   class ViewHooked;
   
   
@@ -90,7 +90,7 @@ namespace model {
       virtual void hook (WID& widget, int xPos=0, int yPos=0)  =0;
       virtual void move (WID& widget, int xPos, int yPos)      =0;
       virtual void remove (WID& widget)                        =0;
-      virtual void rehook (ViewHooked<WID>& widget)  noexcept  =0;
+      virtual void rehook (WID& widget) noexcept               =0;
       
       template<class IT>
       void reOrder (IT newOrder);
@@ -132,12 +132,12 @@ namespace model {
    *         the latter still needs to be alive at that point. Which basically means
    *         you must ensure the ViewHooked "Widgets" are destroyed prior to the "Canvas".
    */
-  template<class WID>
+  template<class WID, class BASE =WID>
   class ViewHooked
     : public WID
     , util::NonCopyable
     {
-      using View = ViewHook<WID>;
+      using View = ViewHook<BASE>;
       
       View* view_;
       
