@@ -44,9 +44,6 @@
 #include "stage/timeline/timeline-controller.hpp"
 #include "stage/timeline/track-presenter.hpp"
 #include "stage/timeline/marker-widget.hpp"
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
-#include "stage/timeline/body-canvas-widget.hpp"
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
 
 //#include "stage/workspace/workspace-window.hpp"
 //#include "stage/ui-bus.hpp"
@@ -90,9 +87,6 @@ namespace timeline {
     , name_{identity.getSym()}    // fallback initialise name from human-readable ID symbol 
     , markers_{}
     , fork_{new TrackPresenter{trackID, nexus, layoutManager}}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
-    , DEBUG_canvas_{layoutManager.exposeCanvasForDebug()}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
     { }
   
   
@@ -107,7 +101,7 @@ namespace timeline {
   {
     if (mark.idi.getSym() == "test" && this->fork_)
       {
-        this->fork_->injectDebugTrackLabels(DEBUG_canvas_);
+        this->fork_->injectDebugTrackLabels();
       }
     else // forward to default handler
       model::Controller::doMark (mark);

@@ -38,9 +38,6 @@
 #include "include/ui-protocol.hpp"
 #include "stage/timeline/track-presenter.hpp"
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
-#include "stage/timeline/body-canvas-widget.hpp"
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
 #include "lib/format-cout.hpp"
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
 
@@ -86,11 +83,8 @@ namespace timeline {
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
   void
-  TrackPresenter::injectDebugTrackLabels(BodyCanvasWidget& bodyCanvas)
+  TrackPresenter::injectDebugTrackLabels()
   {
-    ///////////////////////////TODO TOD-oh
-//    bodyCanvas.DEBUG_injectTrackLabel (display_.body_.TODO_trackName_, display_.body_.startLine_ + display_.body_.contentOffset_);
-    ///////////////////////////TODO TOD-oh
     uint x = rand() % 50;
     uint y = 0;
     Gtk::Button* butt = Gtk::manage (new ViewHooked<Gtk::Button, Gtk::Widget>{display_.hookedAt(x,y), TODO_trackName_});
@@ -99,7 +93,7 @@ namespace timeline {
     butt->show();
     
     for (auto& subTrack : subFork_)
-      subTrack->injectDebugTrackLabels (bodyCanvas);
+      subTrack->injectDebugTrackLabels();
   }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
   /**

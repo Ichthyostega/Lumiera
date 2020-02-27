@@ -42,9 +42,6 @@
 
 #include "common/advice.hpp"
 #include "lib/util.hpp"
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
-#include "lib/format-cout.hpp"
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
 
 //#include <algorithm>
 //#include <vector>
@@ -521,23 +518,6 @@ namespace timeline {
     adjust (rulerCanvas_, canvasWidth, rulerHeight);
     adjust (mainCanvas_, canvasWidth, max(0, totalHeight-rulerHeight));
   }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
-/// 
-/// 
-  void
-  BodyCanvasWidget::DEBUG_injectTrackLabel (cuString const& trackName, int startLine)
-  {
-    NOTREACHED ("debug code obsoleted by the new ViewHook concept");
-    ///////////////////////////TODO TOD-oh
-//  Gtk::Button* butt = Gtk::manage (new Gtk::Button{trackName});
-//  butt->signal_clicked().connect(
-//        [butt]{ cout << "|=="<<butt->get_label()<<endl; });
-//  
-//  uint x = rand() % 50;
-//  mainCanvas_.put (*butt, x, startLine);
-//  butt->show();
-  }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
   
   TimelineCanvas&
   BodyCanvasWidget::getCanvas (int yPos)
