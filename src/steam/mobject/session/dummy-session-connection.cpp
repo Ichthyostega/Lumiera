@@ -77,7 +77,10 @@ namespace mobject {
 namespace session {
   
   namespace { //Implementation details....
-  
+    
+    /** @note timeline(toplevel) follows a special convention:
+     *        initial population already includes track fork (root).
+     */
     GenNode
     emptyTimeline (string baseID, RandID const& forkRootID)
     {
@@ -115,15 +118,17 @@ namespace session {
   } //(End)Implementation details....
   
   
-  DummySessionConnection::~DummySessionConnection() { }
-  
-  DummySessionConnection::DummySessionConnection()
-    {
-    }
   
   
   /** storage for the Singleton accessor */
   lib::Depend<DummySessionConnection> DummySessionConnection::instance;
+  
+  
+  DummySessionConnection::DummySessionConnection()
+    { }
+  
+  DummySessionConnection::~DummySessionConnection() { }
+  
   
   
   /**

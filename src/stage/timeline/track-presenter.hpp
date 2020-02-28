@@ -71,54 +71,6 @@ namespace timeline {
   
   
   /**
-   * ViewHook decorator to apply a (dynamic) offset
-   * when attaching or moving Widgets on the shared canvas.
-   */
-  template<class WID>
-  class CanvasOffsetHook
-    : public model::ViewHook<WID>
-    {
-      model::ViewHook<WID>& refHook_;
-      
-      
-      /* ==== Interface: ViewHook ===== */
-      
-      void
-      hook (WID& widget, int xPos=0, int yPos=0) override
-        {
-          refHook_.hook (widget, hookAdjX (xPos), hookAdjY (yPos));
-        }
-      
-      void
-      move (WID& widget, int xPos, int yPos)  override
-        {
-          refHook_.move (widget, hookAdjX (xPos), hookAdjY (yPos));
-        }
-
-      void
-      remove (WID& widget)  override
-        {
-          refHook_.remove (widget);
-        }
-      
-      void
-      rehook (WID& hookedWidget)  noexcept override
-        {
-          refHook_.rehook (hookedWidget);
-        }
-      
-    protected: /* === extended Interface for relative view hook === */
-      virtual int hookAdjX (int xPos)  =0;
-      virtual int hookAdjY (int yPos)  =0;
-      
-    public:
-      CanvasOffsetHook(model::ViewHook<Gtk::Widget>& refHook)
-        : refHook_{refHook}
-        { }
-    };
-  
-  
-  /**
    * Reference frame to organise the presentation related to a specific Track in the Timeline-GUI.
    * With the help of such a common frame of reference, we solve the problem that each individual
    * track display needs to hook into two distinct UI presentation structures: the track head controls
@@ -127,7 +79,7 @@ namespace timeline {
   class DisplayFrame
     : util::NonCopyable
     , public DisplayViewHooks
-    , public CanvasOffsetHook<Gtk::Widget>
+    , public ViewRefHook<Gtk::Widget>
     {
       ViewHooked<TrackHeadWidget> head_;
       ViewHooked<TrackBody>       body_;
@@ -146,7 +98,7 @@ namespace timeline {
       
     public:
       DisplayFrame (DisplayViewHooks& displayAnchor)
-        : CanvasOffsetHook{displayAnchor.getClipHook()}
+        : ViewRefHook{displayAnchor.getClipHook()}
         , head_{displayAnchor.getHeadHook()}
         , body_{displayAnchor.getBodyHook()}
         { }

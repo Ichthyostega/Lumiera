@@ -75,6 +75,61 @@ namespace timeline {
   
   
   /**
+   * Special ViewHook decorator to apply a (dynamic) offset
+   * when attaching or moving Widgets on the shared canvas.
+   */
+  template<class WID>
+  class ViewRefHook
+    : public model::ViewHook<WID>
+    {
+      model::ViewHook<WID>& refHook_;
+      
+      
+      /* ==== Interface: ViewHook ===== */
+      
+      void
+      hook (WID& widget, int xPos=0, int yPos=0) override
+        {
+          refHook_.hook (widget, hookAdjX (xPos), hookAdjY (yPos));
+        }
+      
+      void
+      move (WID& widget, int xPos, int yPos)  override
+        {
+          refHook_.move (widget, hookAdjX (xPos), hookAdjY (yPos));
+        }
+
+      void
+      remove (WID& widget)  override
+        {
+          refHook_.remove (widget);
+        }
+      
+      void
+      rehook (WID& hookedWidget)  noexcept override
+        {
+          refHook_.rehook (hookedWidget);
+        }
+      
+      /** allow to build a derived ViewRefHook with different offset */
+      model::ViewHook<WID>&
+      getAnchorHook()  noexcept override
+        {
+          return this->refHook_;
+        }
+      
+    protected: /* === extended Interface for relative view hook === */
+      virtual int hookAdjX (int xPos)  =0;
+      virtual int hookAdjY (int yPos)  =0;
+      
+    public:
+      ViewRefHook(model::ViewHook<WID>& baseHook)
+        : refHook_{baseHook.getAnchorHook()}
+        { }
+    };
+  
+  
+  /**
    * Interface: a compound of anchoring facilities.
    * With the help of view-hooking, some detail presentation component
    * or widget can attach itself into the overarching view context or canvas

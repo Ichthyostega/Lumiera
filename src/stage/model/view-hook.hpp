@@ -66,9 +66,6 @@ namespace stage  {
 namespace model {
   
   
-  template<class WID, class BASE>
-  class ViewHooked;
-  
   
   /**
    * Interface to represent _"some presentation layout entity",_
@@ -105,6 +102,13 @@ namespace model {
       hookedAt (int x, int y)
         {
           return Pos{*this, x,y};
+        }
+      
+      /** Anchor point to build chains of related View Hooks */
+      virtual ViewHook<WID>&
+      getAnchorHook()  noexcept
+        {
+          return *this;
         }
     };
   

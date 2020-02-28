@@ -26529,12 +26529,7 @@
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1567876430941" ID="ID_1855510589" MODIFIED="1582836000650" TEXT="Ursache untersuchen">
 <linktarget COLOR="#d3384d" DESTINATION="ID_1855510589" ENDARROW="Default" ENDINCLINATION="-764;-101;" ID="Arrow_ID_1877663178" SOURCE="ID_75969285" STARTARROW="None" STARTINCLINATION="570;60;"/>
 <icon BUILTIN="flag-pink"/>
-<node CREATED="1582845744756" ID="ID_965171553" MODIFIED="1582845757790" TEXT="wir haben jeweils zwei Interpreter">
-<node CREATED="1582845760250" ID="ID_1399771576" MODIFIED="1582845770516" TEXT="einer nur f&#xfc;r den feststehenden Overview-Ruler"/>
-<node CREATED="1582845771288" ID="ID_1968190860" MODIFIED="1582845788754" TEXT="der zweite beginnt mit dem Content des Root-Track"/>
-<node CREATED="1582845789534" ID="ID_1600590667" MODIFIED="1582845801976" TEXT="jeder z&#xe4;hlt seine line_ separat hoch"/>
-</node>
-<node CREATED="1582845817042" ID="ID_317035495" MODIFIED="1582845823193" TEXT="nebenbei aufgefallen">
+<node COLOR="#435e98" CREATED="1582845817042" ID="ID_317035495" MODIFIED="1582901732132" TEXT="nebenbei aufgefallen">
 <node CREATED="1582845824385" ID="ID_1853554200" MODIFIED="1582845841960" TEXT="Denkfehler beim Z&#xe4;hlen der Anzahl Pr&#xe4;fix-Elemente"/>
 <node CREATED="1582845855165" ID="ID_1657667532" MODIFIED="1582845856441" TEXT="TrackBody::establishTrackSpace">
 <node CREATED="1582845898576" ID="ID_1214624406" MODIFIED="1582845927319" TEXT="profile.pinnedPrefixCnt = 1 + rulers_.size();">
@@ -26548,6 +26543,212 @@
 <linktarget COLOR="#e10705" DESTINATION="ID_959308964" ENDARROW="Default" ENDINCLINATION="54;0;" ID="Arrow_ID_1772031431" SOURCE="ID_1214624406" STARTARROW="None" STARTINCLINATION="-1;44;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
+<node COLOR="#338800" CREATED="1582901642866" ID="ID_1916425956" MODIFIED="1582901724294" TEXT="bessere L&#xf6;sung...">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1582901712969" ID="ID_532243486" MODIFIED="1582901722384" TEXT="empirisch vorgehen">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1582901692334" ID="ID_941827355" MODIFIED="1582901712145" TEXT="explizit auswerten und markieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      direkt in der Berechnungs-Schleife erkennen, wenn wir den Pr&#228;fix-Bereich durchschritten haben
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1582845744756" ID="ID_965171553" MODIFIED="1582902381463" TEXT="wir haben jeweils zwei Interpreter">
+<icon BUILTIN="idea"/>
+<node CREATED="1582845760250" ID="ID_1399771576" MODIFIED="1582845770516" TEXT="einer nur f&#xfc;r den feststehenden Overview-Ruler"/>
+<node CREATED="1582845771288" ID="ID_1968190860" MODIFIED="1582845788754" TEXT="der zweite beginnt mit dem Content des Root-Track"/>
+<node CREATED="1582845789534" ID="ID_1600590667" MODIFIED="1582845801976" TEXT="jeder z&#xe4;hlt seine line_ separat hoch"/>
+</node>
+<node CREATED="1582902389601" ID="ID_240179937" MODIFIED="1582902409203" TEXT="das hei&#xdf;t, hier sind definitiv zwei Koordinatensysteme involviert">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#435e98" CREATED="1582902428822" ID="ID_829811888" MODIFIED="1582902650580" TEXT="Ansatz(Versuch): &#xdc;bersetzung im DisplayFrame">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1582902457871" ID="ID_1162389366" MODIFIED="1582902473485" TEXT="genau dort werden auch die Track-lokalen Koordinaten gebildet"/>
+<node CREATED="1582902494453" ID="ID_986992726" MODIFIED="1582902504457" TEXT="CanvasOffsetHook::hookAdjY"/>
+<node CREATED="1582902510004" ID="ID_1627491014" MODIFIED="1582902518936" TEXT="technische Details delegiert">
+<node CREATED="1582902540815" ID="ID_857717809" MODIFIED="1582902540815" TEXT="TrackBody::establishTrackSpace"/>
+<node COLOR="#338800" CREATED="1582902544283" ID="ID_76600735" MODIFIED="1582902584265" TEXT="dort versteckt: line nach Overview-Ruler auf 0 zur&#xfc;cksetzen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1582902593784" ID="ID_984846963" MODIFIED="1582902611866" TEXT="damit bekommen die sub-Tracks die real korrekten Start-Koordinaten"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582902653211" ID="ID_1818419302" MODIFIED="1582902777541" TEXT="ab 2. Sub-Ebene immer noch falsch positioniert">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1582903546261" ID="ID_1725318843" MODIFIED="1582903552175" TEXT="beobachte(Debugger)">
+<node CREATED="1582903562092" ID="ID_510339383" MODIFIED="1582904078739" TEXT="establishTrackSpace">
+<node CREATED="1582904081457" ID="ID_1429267862" MODIFIED="1582907004900" TEXT="ruler-Prefix(after) = 107">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1429267862" ENDARROW="Default" ENDINCLINATION="375;31;" ID="Arrow_ID_650469273" SOURCE="ID_1193104474" STARTARROW="None" STARTINCLINATION="438;0;"/>
+</node>
+<node CREATED="1582904219421" ID="ID_672384800" MODIFIED="1582904230295" TEXT="Root-Track-content = 122"/>
+<node CREATED="1582904431278" ID="ID_1322672602" MODIFIED="1582907742555" TEXT="Track1-startLine = 0+127">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1582904514539" ID="ID_1295892623" MODIFIED="1582904521816" TEXT="contentOffset = 0"/>
+<node CREATED="1582904560362" ID="ID_752277468" MODIFIED="1582904566598" TEXT="Track1-content = 122"/>
+</node>
+<node CREATED="1582904626737" ID="ID_1813609462" MODIFIED="1582904642294" TEXT="line == 122 + 127 == 249"/>
+<node CREATED="1582904731713" ID="ID_1658550754" MODIFIED="1582907808467" TEXT="Track2-startLiine = 0+249">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1582904827935" ID="ID_1958391380" MODIFIED="1582904836490" TEXT="rulerHeight = 20 + 0"/>
+<node CREATED="1582904870226" ID="ID_545156872" MODIFIED="1582904875725" TEXT="contentOffset = 48">
+<node CREATED="1582907863745" ID="ID_857608861" MODIFIED="1582907902330" TEXT="line == 297 (249+48)">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1582904995139" ID="ID_1851164004" MODIFIED="1582905014710" TEXT="Track2-content = 122 (80 + deco)"/>
+<node CREATED="1582905032854" ID="ID_641952627" MODIFIED="1582905063158" TEXT="line == 48 +122 == 170">
+<node CREATED="1582907950438" ID="ID_1853966130" MODIFIED="1582908083600" TEXT="line(global) == 419 (249+170)">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1582905091279" ID="ID_1290848966" MODIFIED="1582905097523" TEXT="+5 (down-slope)">
+<node CREATED="1582907999767" ID="ID_1914135364" MODIFIED="1582908088879" TEXT="line(global) == 424">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1582905153591" ID="ID_1291398442" MODIFIED="1582908037189" TEXT="Track-21-startLine := 249 + 175 == 424">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1582905291109" ID="ID_99409263" MODIFIED="1582905300304" TEXT="contentOffset = 0"/>
+<node CREATED="1582905314298" ID="ID_1814819446" MODIFIED="1582905321029" TEXT="Track21-content = 122"/>
+</node>
+<node CREATED="1582905358964" ID="ID_20842083" MODIFIED="1582905474065" TEXT="line == 175 + 122 == 297"/>
+<node CREATED="1582905524030" ID="ID_271881918" MODIFIED="1582908073123" TEXT="Track-22-startLine := 249 + 297 == 546">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1582905686984" ID="ID_1911307638" MODIFIED="1582905694883" TEXT="rulerHeight = 20 + 0"/>
+<node CREATED="1582905727971" ID="ID_1314377409" MODIFIED="1582905733758" TEXT="contentOffset = 48">
+<node CREATED="1582908146046" ID="ID_738674814" MODIFIED="1582908177368" TEXT="line(global) == 594(546+48)">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1582905766220" ID="ID_157127194" MODIFIED="1582905792493" TEXT="Track22-content = 170 - 48 == 122"/>
+<node CREATED="1582905830637" ID="ID_899096367" MODIFIED="1582905843337" TEXT="line == 48 + 122 + 5 == 175"/>
+<node CREATED="1582905896753" ID="ID_381270881" MODIFIED="1582908235770" TEXT="Track221-startLine := 546 + 175 == 721">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1582906289133" ID="ID_1734369263" MODIFIED="1582906297119" TEXT="rulerHeigt = 20 +0"/>
+<node CREATED="1582906298092" ID="ID_1471119167" MODIFIED="1582906302995" TEXT="contentOffset = 48">
+<node CREATED="1582908287463" ID="ID_1992316773" MODIFIED="1582908400297" TEXT="line(global) == 769(721+48)">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1582906325651" ID="ID_1127420186" MODIFIED="1582906346780" TEXT="line = 48 + 122 == 170"/>
+</node>
+<node CREATED="1582906387686" ID="ID_1480877285" MODIFIED="1582906434468" TEXT="line == 175+170 == 345">
+<node CREATED="1582908377032" ID="ID_950247145" MODIFIED="1582908395915" TEXT="line(global) == 891(546+345)">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1582906440264" ID="ID_1906259495" MODIFIED="1582908538979" TEXT="Track222-startLine := 546 + 345 == 891">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1582906513386" ID="ID_1921963697" MODIFIED="1582906518050" TEXT="contentOffset = 0"/>
+<node CREATED="1582906527452" ID="ID_1177882770" MODIFIED="1582906540015" TEXT="line = 122"/>
+</node>
+<node CREATED="1582906560121" ID="ID_1803290356" MODIFIED="1582906571437" TEXT="line == 345 + 122 == 467">
+<node CREATED="1582908565738" ID="ID_112631959" MODIFIED="1582908605833" TEXT="line(global) == 1013(546+467)">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node CREATED="1582906612443" ID="ID_677398663" MODIFIED="1582906645875" TEXT="line == 297 + 467 == 764"/>
+</node>
+<node CREATED="1582906668404" ID="ID_518041792" MODIFIED="1582908632933" TEXT="line == 249 + 764 == 1013">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1582906724418" ID="ID_201815304" MODIFIED="1582908692685" TEXT="line := 1027 (+14 slope-up)">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1582906786918" ID="ID_1986285948" MODIFIED="1582908719783" STYLE="fork" TEXT="line := 1027 + 11(botMar) + 5(TIMELINE_BOTTOM_PADDING) == 1043">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1986285948" ENDARROW="Default" ENDINCLINATION="281;0;" ID="Arrow_ID_1870504607" SOURCE="ID_356719128" STARTARROW="None" STARTINCLINATION="281;0;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1582906910047" ID="ID_356719128" MODIFIED="1582906981791" TEXT="-&gt; overallHeight = 1043">
+<arrowlink DESTINATION="ID_1986285948" ENDARROW="Default" ENDINCLINATION="281;0;" ID="Arrow_ID_1870504607" STARTARROW="None" STARTINCLINATION="281;0;"/>
+</node>
+<node CREATED="1582906933077" ID="ID_1193104474" MODIFIED="1582907004900" TEXT="-&gt; rulerHeight = 107">
+<arrowlink DESTINATION="ID_1429267862" ENDARROW="Default" ENDINCLINATION="375;31;" ID="Arrow_ID_650469273" STARTARROW="None" STARTINCLINATION="438;0;"/>
+</node>
+</node>
+<node CREATED="1582903553636" ID="ID_421630336" MODIFIED="1582903561127" TEXT="Zeichen-Code">
+<node COLOR="#338800" CREATED="1582909038719" ID="ID_24233739" MODIFIED="1582909049674" TEXT="oberer Canvas: H&#xf6;he OK">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1582909051606" ID="ID_1642616871" MODIFIED="1582909067741" TEXT="(w,h) == (248,107)">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1582908797551" ID="ID_1600925226" MODIFIED="1582908821787" TEXT="unteren Canvas durchverfolgt: alle globalen Zeilen korrekt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582908823851" ID="ID_1086427567" MODIFIED="1582923789123" TEXT="danach: H&#xf6;he weicht ab">
+<arrowlink COLOR="#4f4bb1" DESTINATION="ID_407125396" ENDARROW="Default" ENDINCLINATION="59;-200;" ID="Arrow_ID_902537277" STARTARROW="None" STARTINCLINATION="-179;19;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1582908842568" ID="ID_528889024" MODIFIED="1582908844275" TEXT="TimelineCanvas::drawGrounding"/>
+<node CREATED="1582908852313" ID="ID_1725810299" MODIFIED="1582908890292" TEXT="(w,h) == (248,936)">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1582923677605" ID="ID_69601825" MODIFIED="1582923752314" TEXT="der refHook schl&#xe4;gt bereits den ganzen Offset drauf">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1582923645762" ID="ID_1584147087" MODIFIED="1582923659699" TEXT="w&#xe4;hrend der Beobachtung springt&apos;s mir geradezu ins Auge..."/>
+<node CREATED="1582923715319" ID="ID_1041462784" MODIFIED="1582923727431" TEXT="dann kanns ja gar nicht funktionieren">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1582923663958" ID="ID_573118783" MODIFIED="1582923713665" TEXT="wie immer">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1582923858068" ID="ID_373464934" MODIFIED="1582924053211" TEXT="L&#xf6;sung: Verkettung bereits im ViewHook anlegen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1582923873957" ID="ID_1453835216" MODIFIED="1582923895363" TEXT="der neue Offset-Hook mu&#xdf; den Offset des alten Hook entfernen k&#xf6;nnen"/>
+<node CREATED="1582923896129" ID="ID_188826667" MODIFIED="1582923913079" TEXT="wir wollen auch zur Laufzeit keine Dekorator-Ketten-Aufrufe">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1582923916162" ID="ID_879903056" MODIFIED="1582923946222">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      daher Policy &#228;ndern: jeder schl&#228;gt den <b>totalen absoluten</b>&#160; Offset drauf
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1582923948176" ID="ID_1562514737" MODIFIED="1582924052715" TEXT="und damit das geht, mu&#xdf; man irgendwo vom reinen ViewHook starten k&#xf6;nnen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und dieser mu&#223; deshalb auch schon eine Funktion <font face="Monospaced">getAnchorHook()</font>&#160;auf dem API bieten
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#338800" CREATED="1582924064889" ID="ID_1581753872" MODIFIED="1582924093938" TEXT="Template umbennen in ViewRefHook und hochschieben">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582902750166" ID="ID_407125396" MODIFIED="1582923789123" TEXT="Canvas-H&#xf6;he insgesamt falsch (zu gering)">
+<linktarget COLOR="#4f4bb1" DESTINATION="ID_407125396" ENDARROW="Default" ENDINCLINATION="59;-200;" ID="Arrow_ID_902537277" SOURCE="ID_1086427567" STARTARROW="None" STARTINCLINATION="-179;19;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
