@@ -117,7 +117,7 @@ namespace timeline {
       uint calcRulerHeight();
       uint calcHeight();
       
-      uint getContentOffsetY() { return startLine_; }
+      uint getContentOffsetY() { return startLine_ + contentOffset_; }
       
       DisplayManager::SignalStructureChange signalStructureChange_;
       

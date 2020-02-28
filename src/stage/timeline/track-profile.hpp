@@ -84,15 +84,15 @@ namespace timeline {
    * @todo WIP-WIP as of 4/2019
    * @todo the number of pinned elements should be a member field, instead of sneaking it into the prelude element...
    */
-  struct TrackProfile
+  class TrackProfile
     {
       using SlopeVerb = lib::VerbPack<ProfileInterpreter, void, ProfileInterpreter::MAX_ARG_SIZE>;
       using Elements =  std::vector<SlopeVerb>;
       
       Elements elements;
-      
       int pinnedPrefixCnt = 0;
       
+    public:
       // default constructible, standard copy operations
       
       bool
@@ -114,7 +114,7 @@ namespace timeline {
               slopeVerb.applyTo (interpreter);
         }
       
-      void performWith (ProfileInterpreter& interpreter, bool selectRuler);
+      void performWith (ProfileInterpreter& interpreter, bool isRulerSegment);
       
       
       
@@ -167,6 +167,12 @@ namespace timeline {
           return 0;
         }
       
+      void
+      markPrefixEnd()
+        {
+          pinnedPrefixCnt = elements.size();
+        }
+      
     private:
       bool
       lastEntryIs (Literal expectedToken)
@@ -215,15 +221,15 @@ namespace timeline {
    * down on large arrangements with several tracks. Effectively this means we have to
    * split the TrackProfile into two segments, which are to be rendered within two
    * distinct TimelineCanvas widgets (the first one always on top, while the second one
-   * with the actual track content is shown within pane with scrollbars).
+   * with the actual track content is shown within a pane with scrollbars).
    * @param selectRuler decide if this evaluation shall render the overview rulers
    *                    (when given `true`) or alternatively the remaining standard body
    *                    part of the timeline (when given `false`).
    */
   inline void
-  TrackProfile::performWith (ProfileInterpreter& interpreter, bool selectRuler)
+  TrackProfile::performWith (ProfileInterpreter& interpreter, bool isRulerSegment)
   {
-    for (auto& slopeVerb : filterSegment(selectRuler))
+    for (auto& slopeVerb : filterSegment(isRulerSegment))
       slopeVerb.applyTo (interpreter);
   }
   

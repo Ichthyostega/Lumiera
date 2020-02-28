@@ -89,6 +89,7 @@ namespace timeline {
       
     public:
       TimelineCanvas (_Renderer groundingFac, _Renderer overlayFac);
+      virtual ~TimelineCanvas() { }
       
     private:
       virtual bool on_draw (CairoC)  override;

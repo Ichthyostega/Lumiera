@@ -26529,6 +26529,26 @@
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1567876430941" ID="ID_1855510589" MODIFIED="1582836000650" TEXT="Ursache untersuchen">
 <linktarget COLOR="#d3384d" DESTINATION="ID_1855510589" ENDARROW="Default" ENDINCLINATION="-764;-101;" ID="Arrow_ID_1877663178" SOURCE="ID_75969285" STARTARROW="None" STARTINCLINATION="570;60;"/>
 <icon BUILTIN="flag-pink"/>
+<node CREATED="1582845744756" ID="ID_965171553" MODIFIED="1582845757790" TEXT="wir haben jeweils zwei Interpreter">
+<node CREATED="1582845760250" ID="ID_1399771576" MODIFIED="1582845770516" TEXT="einer nur f&#xfc;r den feststehenden Overview-Ruler"/>
+<node CREATED="1582845771288" ID="ID_1968190860" MODIFIED="1582845788754" TEXT="der zweite beginnt mit dem Content des Root-Track"/>
+<node CREATED="1582845789534" ID="ID_1600590667" MODIFIED="1582845801976" TEXT="jeder z&#xe4;hlt seine line_ separat hoch"/>
+</node>
+<node CREATED="1582845817042" ID="ID_317035495" MODIFIED="1582845823193" TEXT="nebenbei aufgefallen">
+<node CREATED="1582845824385" ID="ID_1853554200" MODIFIED="1582845841960" TEXT="Denkfehler beim Z&#xe4;hlen der Anzahl Pr&#xe4;fix-Elemente"/>
+<node CREATED="1582845855165" ID="ID_1657667532" MODIFIED="1582845856441" TEXT="TrackBody::establishTrackSpace">
+<node CREATED="1582845898576" ID="ID_1214624406" MODIFIED="1582845927319" TEXT="profile.pinnedPrefixCnt = 1 + rulers_.size();">
+<arrowlink COLOR="#e10705" DESTINATION="ID_959308964" ENDARROW="Default" ENDINCLINATION="54;0;" ID="Arrow_ID_1772031431" STARTARROW="None" STARTINCLINATION="-1;44;"/>
+</node>
+<node CREATED="1582845900167" ID="ID_453347449" MODIFIED="1582845907889" TEXT="das ist falsch">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node CREATED="1582845871107" ID="ID_959308964" MODIFIED="1582845922007" TEXT="die Gaps sind separate Elemente">
+<linktarget COLOR="#e10705" DESTINATION="ID_959308964" ENDARROW="Default" ENDINCLINATION="54;0;" ID="Arrow_ID_1772031431" SOURCE="ID_1214624406" STARTARROW="None" STARTINCLINATION="-1;44;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -26555,10 +26575,27 @@
 <node CREATED="1568384121791" ID="ID_1073937095" MODIFIED="1568384131713" TEXT="ich neige immer mehr dieser L&#xf6;sung zu">
 <icon BUILTIN="smiley-neutral"/>
 </node>
+<node CREATED="1582847591411" ID="ID_262535896" MODIFIED="1582847617087" TEXT="das hei&#xdf;t: man versteckt diese zus&#xe4;tzliche Komplexit&#xe4;t als lokaler Belang"/>
+</node>
+<node CREATED="1582847416211" ID="ID_1315976508" MODIFIED="1582847542678">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>dann</i>&#160;mu&#223; ich aber die zwei Bezugssyteme wirklich auseinanderhalten
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1582847500246" ID="ID_1385190844" MODIFIED="1582847507162" TEXT="globale logische Koordinaten"/>
+<node CREATED="1582847508092" ID="ID_38965837" MODIFIED="1582847520169" TEXT="im unteren Canvas: lokal justierte Koordinaten"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566955956741" ID="ID_1266359061" MODIFIED="1568383460511" TEXT="wie k&#xf6;nnen wir dann aber Clips korrekt positionieren?">
-<arrowlink COLOR="#4943a0" DESTINATION="ID_1270677756" ENDARROW="Default" ENDINCLINATION="954;-120;" ID="Arrow_ID_1809237545" STARTARROW="None" STARTINCLINATION="-271;0;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566955956741" ID="ID_1266359061" MODIFIED="1582847535244" TEXT="wie k&#xf6;nnen wir dann aber Clips korrekt positionieren?">
+<arrowlink COLOR="#4943a0" DESTINATION="ID_1270677756" ENDARROW="Default" ENDINCLINATION="954;-120;" ID="Arrow_ID_1809237545" STARTARROW="None" STARTINCLINATION="-298;16;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1568383045628" ID="ID_557151257" MODIFIED="1576282358040" TEXT="daf&#xfc;r brauchen wir ohnehin eine access-Funtkion">
 <richcontent TYPE="NOTE"><html>
@@ -26608,6 +26645,9 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1564955227226" ID="ID_1402788844" MODIFIED="1564955247840" TEXT="erster Entwurf: mehrfach rechnen, Werte merken">
 <icon BUILTIN="flag-yellow"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582849672936" ID="ID_1387330222" MODIFIED="1582849685414" TEXT="Irgendwas stimmt hier nicht">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
@@ -26682,8 +26722,8 @@
 </node>
 <node CREATED="1480741362389" ID="ID_328415412" MODIFIED="1557498707230" TEXT="ClipWidget">
 <node CREATED="1480741370347" ID="ID_1275685315" MODIFIED="1557498707230" TEXT="erzeugen"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1480741374451" ID="ID_1270677756" MODIFIED="1568383447744" TEXT="in Display injizieren">
-<linktarget COLOR="#4943a0" DESTINATION="ID_1270677756" ENDARROW="Default" ENDINCLINATION="954;-120;" ID="Arrow_ID_1809237545" SOURCE="ID_1266359061" STARTARROW="None" STARTINCLINATION="-271;0;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1480741374451" ID="ID_1270677756" MODIFIED="1582847535244" TEXT="in Display injizieren">
+<linktarget COLOR="#4943a0" DESTINATION="ID_1270677756" ENDARROW="Default" ENDINCLINATION="954;-120;" ID="Arrow_ID_1809237545" SOURCE="ID_1266359061" STARTARROW="None" STARTINCLINATION="-298;16;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1568383480998" ID="ID_263963478" MODIFIED="1568383491356" TEXT="Problem: Zugang zum Canvas">
 <icon BUILTIN="messagebox_warning"/>

@@ -203,13 +203,11 @@ namespace timeline {
         // global setup for the profile
         line += decoration.topMar;
         profile.append_prelude();
-        
-        // The first Profile elements are always visible on top:
-        // Top-level rules and one additionally for the prelude
-        profile.pinnedPrefixCnt = 1 + rulers_.size();
       }
-    // adjust if preceded by a combined up-slope
-    line += combinedSlopeHeight (profile.getPrecedingSlopeUp());
+    else
+      { // adjust if preceded by a combined up-slope
+        line += combinedSlopeHeight (profile.getPrecedingSlopeUp());
+      }
     
     // reserve space for the overview rulers
     for (auto& ruler : rulers_)
@@ -220,6 +218,15 @@ namespace timeline {
         profile.append_ruler (rulerHeight);
         if (gapHeight > 0)
           profile.append_gap (gapHeight);
+      }
+    if (topLevel)
+      {
+        // The first Profile elements are always visible on top;
+        // we render this prefix part on a separate drawing canvas,
+        profile.markPrefixEnd();
+        // ...and now we switch to the second, scrollable canvas,
+        // which thus needs to use adjusted coordinates for widgets.
+        line = 0;
       }
     // mark offset of the content area relative to this track's top
     this->contentOffset_ = line;
