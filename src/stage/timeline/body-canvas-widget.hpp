@@ -49,6 +49,23 @@
  ** As result, some new widgets may be injected, existing widgets might be removed or
  ** hidden, and other widgets may be relocated to different virtual canvas coordinates.
  ** 
+ ** ## Coordinate systems
+ ** When drawing onto a canvas, we need to define the coordinate system. This task is
+ ** complicated here, since -- on implementation level -- we end up with several `Gtk::Layout`
+ ** elements (the actual canvas widget). This is necessary to accommodate for the display
+ ** "mechanics": part of the timeline has to stay "pinned" on top, including the time
+ ** overview ruler and possible further marker displays. Based on practical considerations
+ ** we decide to handle this situation as follows
+ ** - Each drawing canvas gets its own coordinate system; its extension is defined to
+ **   match the size of the scrolling area, and coordinates are adjusted so to match
+ **   drawing primitives and coordinates of attached sub-widgets
+ ** - However, the timeline as a whole constitutes a global coordinate system on its own.
+ **   It is the actual drawing codes's responsibility to translate into canvas coordinates.
+ ** - To hide those complexities from the display management code, we introduce an abstraction
+ **   model::ViewHook. This allows to place sub-widgets _relative_ to each track locally.
+ **   So effectively, from the view point of (sub)widget management, we thus get virtual
+ **   canvas coordinates per (sub)track.
+ ** 
  ** @todo WIP-WIP-WIP as of 6/2019
  ** 
  */
@@ -103,6 +120,23 @@ namespace timeline {
   
   
   /**
+   * Presentation of the timeline workspace by custom drawing on a canvas.
+   * This widget allows for uniform access and handling of that body area;
+   * however, in fact we need several TimelineCanvas spaces, since part of
+   * the display needs to stay "pinned" on top (the overview rulers), while
+   * the majority of the track body area is packaged into a scrolling pane.
+   * 
+   * ## Interface
+   * We have to distinguish two kinds of drawing access to this BodyCanvasWidget:
+   * - painting of areas for background, profile and for overlays
+   * - relative attachment of widgets onto this canvas
+   * For the former, we use the TrackProfile as a drawing Visitor (double dispatch):
+   * The layout code identifies a sequence of spaces (horizontally extended) corresponding
+   * to tracks and rulers. This is abstracted into the profile, and can then be (re)rendered
+   * as often as necessary by "playback" of this profile.
+   * On the other hand, for attachment of sub-widgets onto the canvas (Clips, Effects, Markers)
+   * we use the Interface model::ViewHook, which allows us to break down the access hierarchically.
+   * Each sub-Track can be outfitted with its own "virtual canvas", exposed as delegating ViewHook. 
    * @todo WIP-WIP as of 6/2019
    */
   class BodyCanvasWidget

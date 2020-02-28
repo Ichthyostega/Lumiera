@@ -486,9 +486,9 @@ namespace timeline {
       {
         setupAdditionalTrackPadding_fromCSS();
         layout_.triggerDisplayEvaluation();
-        uint overallHeight = rootBody_->establishTrackSpace (profile_);
+        uint contentHeight = rootBody_->establishTrackSpace (profile_);
         uint rulerHeight = rootBody_->calcRulerHeight() + TrackBody::decoration.topMar;
-        adjustCanvasSize(layout_.getPixSpan().delta(), overallHeight, rulerHeight);
+        adjustCanvasSize(layout_.getPixSpan().delta(), contentHeight, rulerHeight);
         ENSURE (not isnil (profile_));
       }
   }
@@ -502,7 +502,7 @@ namespace timeline {
    * pane to accommodate an arbitrary number of tracks
    */
   void
-  BodyCanvasWidget::adjustCanvasSize(int canvasWidth, int totalHeight, int rulerHeight)
+  BodyCanvasWidget::adjustCanvasSize(int canvasWidth, int contentHeight, int rulerHeight)
   {
     auto adjust = [](Gtk::Layout& canvas, guint newWidth, guint newHeight) -> void
                     {
@@ -516,7 +516,7 @@ namespace timeline {
                     };
     
     adjust (rulerCanvas_, canvasWidth, rulerHeight);
-    adjust (mainCanvas_, canvasWidth, max(0, totalHeight-rulerHeight));
+    adjust (mainCanvas_, canvasWidth, contentHeight);
   }
   
   TimelineCanvas&
