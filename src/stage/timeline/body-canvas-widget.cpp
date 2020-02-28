@@ -117,6 +117,9 @@ namespace timeline {
                                     + styleBody->get_padding().get_top()
                                     + styleBody->get_padding().get_bottom()
                                     ;
+      TrackBody::decoration.trackPad = styleBody->get_margin().get_top()
+                                     + styleBody->get_padding().get_top()
+                                     ;
       TrackBody::decoration.topMar = styleBody->get_margin().get_top();
       TrackBody::decoration.botMar = styleBody->get_margin().get_bottom();
       

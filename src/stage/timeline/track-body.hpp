@@ -73,6 +73,7 @@ namespace timeline {
       uint ruler  = 0;
       uint topMar = 0;
       uint botMar = 0;
+      uint trackPad = 0;
       
       using Borders = std::array<uint, 6>;
       Borders borders{0,0,0,0,0,0};    ///< width of up to 6 levels of combined upward slope borders (defined in CSS)

@@ -228,8 +228,8 @@ namespace timeline {
         // which thus needs to use adjusted coordinates for widgets.
         line = 0;
       }
-    // mark offset of the content area relative to this track's top
-    this->contentOffset_ = line;
+    // mark offset of the actual content area relative to this track's top
+    this->contentOffset_ = line + decoration.trackPad;
     
     // allocate space for the track content
     line += this->contentHeight_ + decoration.content;
