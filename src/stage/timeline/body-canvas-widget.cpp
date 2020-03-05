@@ -23,6 +23,20 @@
 
 /** @file body-canvas-widget.cpp
  ** Implementation details of timeline custom drawing.
+ ** This translation unit holds the central part of the timeline custom drawing code.
+ ** While the timeline::TimelineCanvas implementation functions (bottom part of the source)
+ ** govern the high-level invocation control structure and [entry point](}ref TimelineCancas::on_draw()),
+ ** the actual drawing is performed by the implementation code within timeline::BodyCanvasWidget,
+ ** which in turn delegates to the actual drawing mechanism -- implemented in the local namespace
+ ** at the top of this file. The actual drawing is decomposed into some building blocks, like
+ ** drawing a background, drawing an inset slope etc. These blocks are activated with the help
+ ** of the timeline::TrackProfile, which in fact enacts a _visitor_ (double-dispatch) mechanism.
+ ** The actual _track profile_ is a sequence of _verbs_ describing the structure of a vertical
+ ** cross-section over the track space; it is assembled at runtime within the function
+ ** timeline::TrackBody::establishTrackSpace(), based on specifications drawn from the real
+ ** CSS layout definitions. Here, within this translation unit, we define the corresponding
+ ** timeline::ProfileInterpreter implementations; these are the concrete visitors and are
+ ** invoked repeatedly to carry out the actual drawing requests. 
  ** 
  ** @todo WIP-WIP-WIP as of 6/2019
  ** 
@@ -145,9 +159,9 @@ namespace timeline {
      *  the nested widget structure; this results in a sequence of drawing
      *  "verbs", which we call the \ref TrackProfile. This class here
      *  implements a \ref ProfileInterpreter, which is a double-dispatch
-     *  mechanism to call a set of (virtual) drawing primitives, the
+     *  mechanism to invoke a set of (virtual) drawing primitives, the
      *  actual drawing code is in the two following subclasses,
-     *  for the background and for drawing overlays.
+     *  separate for the background and for drawing overlays.
      */
     class AbstractTrackRenderer
       : public ProfileInterpreter
@@ -501,8 +515,8 @@ namespace timeline {
    * After the (recent) [display evaluation pass](\ref DisplayManager::triggerDisplayEvaluation() )
    * has negotiated the required space for the currently presented content, this function adjusts
    * the actual Gtk::Layout canvas extension to match. Note that we use two Gtk::Layout controls,
-   * one to show the always visible overview rules, while the second one is placed into a scrollable
-   * pane to accommodate an arbitrary number of tracks
+   * one to show the overview rules always visible at the top, while the second one is placed
+   * into a scrollable pane to accommodate an arbitrary number of tracks.
    */
   void
   BodyCanvasWidget::adjustCanvasSize(int canvasWidth, int contentHeight, int rulerHeight)

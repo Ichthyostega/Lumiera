@@ -35,18 +35,14 @@
  ** ## Display evaluation pass
  ** 
  ** Whenever the layout of timeline contents has to be (re)established, we trigger a recursive
- ** evaluation pass, which in fact is a tree walk. The layout manager creates a DisplayEvaluation
- ** record, which is passed to the [Element's allocate function](\ref Element::allocate). The element
- ** in turn has the liability to walk its children and recursively initiate a nested evaluation
- ** by invoking DisplayEvaluation::evaluateChild(Element), which in turn calls back to
- ** LayoutManager::evaluate() to initiate a recursive evaluation pass. Within the recursively
- ** created DisplayEvaluation elements, we are able to transport and aggregate information
- ** necessary to give each element it' screen allocation. And this in turn allows us to
- ** decide upon a suitable display strategy for each individual element, within a local
- ** and self-contained context.
+ ** evaluation pass, which in fact is a tree walk. The layout manager maintains a DisplayEvaluation
+ ** record, which is passed to the involved layout elements within the timeline. Each element in turn
+ ** has the liability to walk its children and recursively initiate a nested evaluation. During that
+ ** pass, we are able to transport and aggregate information necessary to give each element the
+ ** necessary amount of screen real estate. 
  ** 
- ** @todo WIP-WIP-WIP as of 11/2018
  ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
+ ** @todo WIP-WIP-WIP - drafting the DisplayEvaluation as of 3/2020
  ** 
  */
 
@@ -186,7 +182,6 @@ namespace timeline {
     , public DisplayViewHooks
     {
       
-//    TimelineLayout();
       
     public:
       virtual ~DisplayManager();    ///< this is an interface

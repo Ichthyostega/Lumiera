@@ -1,8 +1,8 @@
 /*
-  DisplayManager  -  abstraction to translate model structure and extension into screen layout
+  DisplayEvaluation  -  recursive interwoven timeline layout allocation
 
   Copyright (C)         Lumiera.org
-    2018,               Hermann Vosseler <Ichthyostega@web.de>
+    2020,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,17 +21,16 @@
 * *****************************************************/
 
 
-/** @file display-manager.cpp
- ** Implementation details regarding timeline layout management and widget coordination.
+/** @file display-evaluation.cpp
+ ** Implementation details of collaborative and global timeline display allocation.
  ** 
- ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
- ** @todo 3/2020 do we actually need this global translation unit?
+ ** @todo WIP-WIP-WIP as of 3/2020
  ** 
  */
 
 
 #include "stage/gtk-base.hpp"
-#include "stage/timeline/display-manager.hpp"
+#include "stage/timeline/display-evaluation.hpp"
 
 //#include "gui/ui-bus.hpp"
 //#include "lib/format-string.hpp"
@@ -59,7 +58,7 @@ namespace timeline {
   
   
   
-  DisplayManager::~DisplayManager() { }   // emit VTables here....
+//DisplayEvaluation::~DisplayEvaluation() { }   // emit VTables here....  /////////TICKET #1211 : not sure if we get a VTable at all....
   
   
 //DisplayManager::DisplayManager()

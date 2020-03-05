@@ -166,10 +166,6 @@ namespace timeline {
           return contentArea_.get_vadjustment();
         }
       
-      /** a way to get and possibly (re)compute the current TrackProfile */
-      using ProfileGetter = std::function<TrackProfile&()>;
-      ProfileGetter getProfile;
-      
     protected: /* ==== Interface: ViewHook ===== */
       
       void hook (Gtk::Widget&, int xPos=0, int yPos=0) override;
@@ -178,6 +174,10 @@ namespace timeline {
       void rehook (Gtk::Widget&) noexcept              override;
       
     private:/* ===== Internals ===== */
+      
+      /** a way to get and possibly (re)compute the current TrackProfile */
+      using ProfileGetter = std::function<TrackProfile&()>;
+      ProfileGetter getProfile;
       
       TimelineCanvas& getCanvas(int yPos);
       void slotStructureChange()  noexcept;

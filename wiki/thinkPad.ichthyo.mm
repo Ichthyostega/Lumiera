@@ -91,7 +91,7 @@
 </node>
 <node CREATED="1538938685096" HGAP="138" ID="ID_511824194" MODIFIED="1557498707215" TEXT="gr&#xfc;nden" VSHIFT="42">
 <node CREATED="1477784793993" ID="ID_1868522177" MODIFIED="1566487594554" TEXT="Umbau">
-<linktarget COLOR="#bc4930" DESTINATION="ID_1868522177" ENDARROW="Default" ENDINCLINATION="221;282;" ID="Arrow_ID_600425644" SOURCE="ID_707273464" STARTARROW="None" STARTINCLINATION="1984;197;"/>
+<linktarget COLOR="#bc4930" DESTINATION="ID_1868522177" ENDARROW="Default" ENDINCLINATION="221;282;" ID="Arrow_ID_600425644" SOURCE="ID_707273464" STARTARROW="None" STARTINCLINATION="1864;201;"/>
 <icon BUILTIN="hourglass"/>
 <node CREATED="1477784813895" ID="ID_1343270939" MODIFIED="1557498707215" TEXT="Model durch UI-Bus ersetzen">
 <linktarget COLOR="#f9b709" DESTINATION="ID_1343270939" ENDARROW="Default" ENDINCLINATION="-36;-73;" ID="Arrow_ID_1867016690" SOURCE="ID_635303062" STARTARROW="None" STARTINCLINATION="-34;70;"/>
@@ -16689,7 +16689,7 @@
 </node>
 <node CREATED="1489777837120" ID="ID_466927949" MODIFIED="1557498707220" TEXT="Ort f&#xfc;r Command-Definitionen"/>
 <node COLOR="#338800" CREATED="1489777846095" ID="ID_1401258681" MODIFIED="1575131582794" TEXT="Design Proc-Command-Framework vorantreiben">
-<arrowlink COLOR="#352c7d" DESTINATION="ID_1622574347" ENDARROW="Default" ENDINCLINATION="-240;-3336;" ID="Arrow_ID_1512127407" STARTARROW="None" STARTINCLINATION="1848;0;"/>
+<arrowlink COLOR="#352c7d" DESTINATION="ID_1622574347" ENDARROW="Default" ENDINCLINATION="-240;-3336;" ID="Arrow_ID_1512127407" STARTARROW="None" STARTINCLINATION="1996;0;"/>
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="button_ok"/>
 </node>
@@ -17042,7 +17042,7 @@
   </body>
 </html></richcontent>
 <node CREATED="1488419854029" ID="ID_932507511" MODIFIED="1566955621428" TEXT="erst mal: Konzept">
-<arrowlink COLOR="#715f85" DESTINATION="ID_329609486" ENDARROW="Default" ENDINCLINATION="-368;-2533;" ID="Arrow_ID_575977434" STARTARROW="None" STARTINCLINATION="1555;-260;"/>
+<arrowlink COLOR="#715f85" DESTINATION="ID_329609486" ENDARROW="Default" ENDINCLINATION="-368;-2533;" ID="Arrow_ID_575977434" STARTARROW="None" STARTINCLINATION="1641;-256;"/>
 <icon BUILTIN="help"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1487313191100" ID="ID_1619021408" MODIFIED="1561827465228" TEXT="Fazit(TODO)">
@@ -19175,7 +19175,7 @@
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576757730509" ID="ID_1949130658" MODIFIED="1576758006669" TEXT="&#xbb;Widget-Position&#xab; heraus-abstrahieren">
-<linktarget COLOR="#605bb8" DESTINATION="ID_1949130658" ENDARROW="Default" ENDINCLINATION="204;611;" ID="Arrow_ID_993970158" SOURCE="ID_1816490333" STARTARROW="None" STARTINCLINATION="512;51;"/>
+<linktarget COLOR="#605bb8" DESTINATION="ID_1949130658" ENDARROW="Default" ENDINCLINATION="204;611;" ID="Arrow_ID_993970158" SOURCE="ID_1816490333" STARTARROW="None" STARTINCLINATION="299;12;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1576757867075" ID="ID_1947629675" MODIFIED="1576757891150" TEXT="der Themenkomplex &quot;move()&quot; steht isoliert da">
 <icon BUILTIN="idea"/>
@@ -19192,7 +19192,7 @@
 </node>
 <node COLOR="#338800" CREATED="1575057172259" ID="ID_1193961919" MODIFIED="1575670553256" TEXT="Umordnen">
 <linktarget COLOR="#507b9b" DESTINATION="ID_1193961919" ENDARROW="Default" ENDINCLINATION="-877;88;" ID="Arrow_ID_1469804818" SOURCE="ID_876124745" STARTARROW="None" STARTINCLINATION="576;33;"/>
-<linktarget COLOR="#507b9b" DESTINATION="ID_1193961919" ENDARROW="Default" ENDINCLINATION="-877;88;" ID="Arrow_ID_624713040" SOURCE="ID_673183519" STARTARROW="None" STARTINCLINATION="706;62;"/>
+<linktarget COLOR="#507b9b" DESTINATION="ID_1193961919" ENDARROW="Default" ENDINCLINATION="-877;88;" ID="Arrow_ID_624713040" SOURCE="ID_673183519" STARTARROW="None" STARTINCLINATION="483;9;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1575057384974" FOLDED="true" ID="ID_1385277309" MODIFIED="1576973973893" TEXT="komplexe Interaktion, die den ViewHook nur involviert">
 <icon BUILTIN="messagebox_warning"/>
@@ -19517,7 +19517,7 @@
 </node>
 </node>
 <node COLOR="#338800" CREATED="1582503131945" FOLDED="true" ID="ID_1439869815" MODIFIED="1582835809970" TEXT="Problem Covarianz">
-<linktarget COLOR="#66226c" DESTINATION="ID_1439869815" ENDARROW="Default" ENDINCLINATION="-760;97;" ID="Arrow_ID_655919678" SOURCE="ID_1081924103" STARTARROW="None" STARTINCLINATION="1660;0;"/>
+<linktarget COLOR="#66226c" DESTINATION="ID_1439869815" ENDARROW="Default" ENDINCLINATION="-760;97;" ID="Arrow_ID_655919678" SOURCE="ID_1081924103" STARTARROW="None" STARTINCLINATION="1574;0;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1582503148935" ID="ID_10487556" MODIFIED="1582503193549" TEXT="ViewHooked&lt;WiX&gt; f&#xfc;r ViewHook&lt;WID&gt; mit WiX &lt;: WID">
 <icon BUILTIN="info"/>
@@ -19719,7 +19719,7 @@
 <arrowlink COLOR="#507b9b" DESTINATION="ID_1193961919" ENDARROW="Default" ENDINCLINATION="-877;88;" ID="Arrow_ID_1469804818" STARTARROW="None" STARTINCLINATION="576;33;"/>
 </node>
 <node CREATED="1575050510878" ID="ID_646844971" MODIFIED="1575577381370" TEXT="Diff bietet automatische Benachrichtigung bei Struktur&#xe4;nderung">
-<arrowlink COLOR="#624d7d" DESTINATION="ID_101148427" ENDARROW="Default" ENDINCLINATION="-3637;-782;" ID="Arrow_ID_498364014" STARTARROW="None" STARTINCLINATION="2976;130;"/>
+<arrowlink COLOR="#624d7d" DESTINATION="ID_101148427" ENDARROW="Default" ENDINCLINATION="-3637;-782;" ID="Arrow_ID_498364014" STARTARROW="None" STARTINCLINATION="2862;94;"/>
 <node COLOR="#338800" CREATED="1576168044826" ID="ID_1758473434" MODIFIED="1576441607969" TEXT="#1206 diff structure change listener">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -20762,7 +20762,7 @@
 <node CREATED="1541857349526" ID="ID_1259099260" MODIFIED="1557498707226" TEXT="bietet Konzept &quot;Grid&quot;"/>
 </node>
 <node CREATED="1541861495569" ID="ID_1949450244" MODIFIED="1557498707226" TEXT="generische ZoomWindow-Komponente">
-<arrowlink COLOR="#5b5ca1" DESTINATION="ID_838803024" ENDARROW="Default" ENDINCLINATION="-519;-1168;" ID="Arrow_ID_1674512697" STARTARROW="None" STARTINCLINATION="490;0;"/>
+<arrowlink COLOR="#5b5ca1" DESTINATION="ID_838803024" ENDARROW="Default" ENDINCLINATION="-519;-1168;" ID="Arrow_ID_1674512697" STARTARROW="None" STARTINCLINATION="446;0;"/>
 </node>
 <node CREATED="1541857367446" ID="ID_34718193" MODIFIED="1557498707226" TEXT="Anfragen">
 <node CREATED="1541857411462" ID="ID_1874282992" MODIFIED="1557498707226" TEXT="Pixel-Intervall -&gt; TimeSpan">
@@ -20904,7 +20904,7 @@
 <arrowlink COLOR="#4d8b82" DESTINATION="ID_727500820" ENDARROW="Default" ENDINCLINATION="-1859;0;" ID="Arrow_ID_680446238" STARTARROW="None" STARTINCLINATION="-2344;0;"/>
 </node>
 <node CREATED="1582988189302" ID="ID_1886398385" MODIFIED="1582988334866" TEXT="triggert re-Konstruieren">
-<arrowlink COLOR="#6e8c9b" DESTINATION="ID_1911321905" ENDARROW="Default" ENDINCLINATION="-700;-194;" ID="Arrow_ID_528411186" STARTARROW="None" STARTINCLINATION="1654;175;"/>
+<arrowlink COLOR="#6e8c9b" DESTINATION="ID_1911321905" ENDARROW="Default" ENDINCLINATION="-733;-208;" ID="Arrow_ID_528411186" STARTARROW="None" STARTINCLINATION="1621;161;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1582988593441" ID="ID_1045867973" MODIFIED="1582988608129" TEXT="das l&#xf6;st seinerseits signalStructureChange aus"/>
 </node>
@@ -21076,7 +21076,7 @@
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#8c6572" DESTINATION="ID_483543888" ENDARROW="Default" ENDINCLINATION="544;-34;" ID="Arrow_ID_759404699" STARTARROW="None" STARTINCLINATION="836;57;"/>
+<arrowlink COLOR="#8c6572" DESTINATION="ID_483543888" ENDARROW="Default" ENDINCLINATION="544;-34;" ID="Arrow_ID_759404699" STARTARROW="None" STARTINCLINATION="393;-27;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -21196,7 +21196,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1582991961258" ID="ID_545649889" MODIFIED="1582991965501" TEXT="pro Track">
+<node CREATED="1582991961258" FOLDED="true" ID="ID_545649889" MODIFIED="1582991965501" TEXT="pro Track">
 <node CREATED="1582992016890" ID="ID_1705972913" MODIFIED="1582992030828" TEXT="Aufsammeln der vertikalen Ausdehnung"/>
 <node CREATED="1582992031648" ID="ID_752229981" MODIFIED="1582992037387" TEXT="Maximum + Padding"/>
 <node CREATED="1582992060135" ID="ID_446948891" MODIFIED="1582992233901">
@@ -21258,6 +21258,7 @@
 <node CREATED="1582993092825" ID="ID_1779309098" MODIFIED="1582993104811" TEXT="Clip und Effekt">
 <node CREATED="1582993119758" ID="ID_1843431209" MODIFIED="1582993172267" TEXT="enth&#xe4;lt (voraussichtlich) komplette verschachtelte Timeline-Struktur"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582993256244" ID="ID_1054753498" MODIFIED="1582993279274" TEXT="Problem: wie gehen wir mit dem Head-Bereich um?">
+<linktarget COLOR="#9a5670" DESTINATION="ID_1054753498" ENDARROW="Default" ENDINCLINATION="-3030;165;" ID="Arrow_ID_948617682" SOURCE="ID_1626144230" STARTARROW="None" STARTINCLINATION="989;91;"/>
 <icon BUILTIN="help"/>
 <node CREATED="1582993283464" ID="ID_187092898" MODIFIED="1582993298033" TEXT="horizontale Ausdehnung ist limitiert"/>
 <node CREATED="1582993311469" ID="ID_1905724855" MODIFIED="1582993324697" TEXT="L&#xf6;sungsans&#xe4;tze">
@@ -21342,15 +21343,133 @@
 <node CREATED="1582995644603" ID="ID_1368190539" MODIFIED="1582995658084" TEXT="im BodyCanvas ist das der Platz f&#xfc;r Sub-Tracks"/>
 </node>
 </node>
+<node CREATED="1583103616819" ID="ID_635184052" MODIFIED="1583103674376">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>Nein</b>: keine Abh&#228;ngigkeiten,
+    </p>
+    <p>
+      sondern Iterationen!
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1583103686706" ID="ID_1021464384" MODIFIED="1583103698796" TEXT="wir n&#xe4;hern uns dem korrekten Layout inkrementell an"/>
+<node CREATED="1583103711798" ID="ID_1460889946" MODIFIED="1583104046449" TEXT="daher ist die Reihenfolge des Besuchs fast egal">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>Warum</u>? Weil wir immer die Hilfe von GTK brauchen, um aus unseren ver&#228;nderten Vorgaben eine Platz-Allokation zu machen. Und diese Hilfe k&#246;nnen wir nicht synchron anfordern, sondern triggern sie indirekt durch setzen neuer Mindestgr&#246;&#223;en...
+    </p>
+    <p>
+      <u>Warum &quot;fast&quot;</u>? weil dann der Header-Pass eben doch eine globale Information transportiert, und zwar den &#220;bertrag. Da die Auswertung aber auch hier ausf&#228;chert (&#252;ber die Header in den Clips), sollte man tats&#228;chlich versuchen, globale Datenhaltung (jenseits der Auswertungs-Phase) zu vermeiden!
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1583104061758" ID="ID_970866414" MODIFIED="1583104078795" TEXT="&quot;fast&quot; vermeiden, indem man rekursiv auswertet!">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1583104117487" ID="ID_1016623445" MODIFIED="1583104131498" TEXT="Konsequenz: rekursive Auswertungs-Scopes">
+<icon BUILTIN="forward"/>
+<node CREATED="1583434078579" ID="ID_718475738" MODIFIED="1583434227770" TEXT="behandelt implizite Abh&#xe4;ngigkeiten">
+<linktarget COLOR="#f0e0c0" DESTINATION="ID_718475738" ENDARROW="Default" ENDINCLINATION="-190;15;" ID="Arrow_ID_1507039489" SOURCE="ID_1287988941" STARTARROW="None" STARTINCLINATION="201;15;"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1583434172775" ID="ID_1444249960" MODIFIED="1583434412688" TEXT="Aufgabe ist, dieses orthogonal darzustellen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Rekursion ist immer doppelb&#246;dig:
+    </p>
+    <ul>
+      <li>
+        angeblich haben wir selbst&#228;hnliche Strukturen
+      </li>
+      <li>
+        aber tats&#228;chlich steckt eine Absicht dahinter
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1583434976100" ID="ID_1359440" MODIFIED="1583435092878" TEXT="hierf&#xfc;r wird die Abfolge verpflichtend geordnet">
+<arrowlink COLOR="#6f56e5" DESTINATION="ID_1485425520" ENDARROW="Default" ENDINCLINATION="250;14;" ID="Arrow_ID_832303335" STARTARROW="None" STARTINCLINATION="298;17;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
 </node>
 <node CREATED="1582995993706" HGAP="62" ID="ID_333264806" MODIFIED="1582996007182" TEXT="Aktivit&#xe4;ten" VSHIFT="8">
-<node CREATED="1582996051549" ID="ID_29139061" MODIFIED="1582996201143" TEXT="Track bestimmt Maximum &#xfc;ber seinen Inhalt">
+<node CREATED="1583427610013" ID="ID_1910384749" MODIFIED="1583427716087" TEXT="Teilschritte">
+<node CREATED="1582996051549" ID="ID_29139061" MODIFIED="1583427655853" TEXT="Track bestimmt Maximum &#xfc;ber seinen Inhalt">
+<icon BUILTIN="full-1"/>
 <node CREATED="1582996202265" ID="ID_218499874" MODIFIED="1582996202265" TEXT="(Clips, Effekte)"/>
 <node CREATED="1582996203830" ID="ID_149464381" MODIFIED="1582996209358" TEXT="input vom zugeh&#xf6;rigen Head"/>
 <node CREATED="1582996562758" ID="ID_1180945302" MODIFIED="1582996602940" TEXT="Ergebnis wird in contentHeight_ abgelegt"/>
 </node>
-<node CREATED="1582996608127" ID="ID_92521449" MODIFIED="1582996700175" TEXT="Canvas evaluation: TrackBody::establishTrackSpace"/>
-<node CREATED="1582996722829" ID="ID_842289587" MODIFIED="1583009048676" TEXT="Head-Ausgleichs-Pass"/>
+<node CREATED="1582996608127" ID="ID_92521449" MODIFIED="1583427660810" TEXT="Canvas evaluation: TrackBody::establishTrackSpace">
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1582996722829" ID="ID_842289587" MODIFIED="1583427701893" TEXT="Head-Ausgleichs-Pass">
+<icon BUILTIN="full-3"/>
+</node>
+</node>
+<node CREATED="1583427622167" ID="ID_1142872612" MODIFIED="1583427625373" TEXT="Zusammenhang">
+<node CREATED="1583427626479" ID="ID_954689662" MODIFIED="1583427635727" TEXT="jeder Teil ist in-sich geschlossen"/>
+<node CREATED="1583427636950" ID="ID_1936738462" MODIFIED="1583427650200" TEXT="mu&#xdf; aber in sinnvoller Reihenfolge laufen">
+<node CREATED="1583433528741" ID="ID_1966240809" MODIFIED="1583433550809" TEXT="Problem dabei: Aysmmetrie">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1583433557458" ID="ID_260365198" MODIFIED="1583433567364" TEXT="es sind nur zwei Teilsysteme, aber drei Passes"/>
+<node CREATED="1583433572927" ID="ID_242969113" MODIFIED="1583433619074" TEXT="der erste und der dritte Pass braucht die DisplayFrames">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil wir eine Verkn&#252;pfung der Body und Header-Informationen herstellen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1583433986108" ID="ID_542008018" MODIFIED="1583434006913" TEXT="der dritte Pass mu&#xdf; obendrein ein Integral transportieren"/>
+</node>
+<node CREATED="1583434059006" ID="ID_1287988941" MODIFIED="1583434227770" TEXT="Idee: in der Rekursion verstecken">
+<arrowlink COLOR="#f0e0c0" DESTINATION="ID_718475738" ENDARROW="Default" ENDINCLINATION="-190;15;" ID="Arrow_ID_1507039489" STARTARROW="None" STARTINCLINATION="201;15;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#8d0099" CREATED="1583435024997" ID="ID_1485425520" MODIFIED="1583435263295" TEXT="Verpflichtend in Layout-Ordnung auszuwerten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ausnahmslos von oben nach unten und von links nach rechts!
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#c34e8a" DESTINATION="ID_1346473468" ENDARROW="Default" ENDINCLINATION="-294;-13;" ID="Arrow_ID_1976656108" STARTARROW="None" STARTINCLINATION="-358;20;"/>
+<linktarget COLOR="#6f56e5" DESTINATION="ID_1485425520" ENDARROW="Default" ENDINCLINATION="250;14;" ID="Arrow_ID_832303335" SOURCE="ID_1359440" STARTARROW="None" STARTINCLINATION="298;17;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1582995698667" HGAP="165" ID="ID_1849412034" MODIFIED="1583012162492" TEXT="zu Bauen" VSHIFT="27">
@@ -21372,12 +21491,33 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1583009002945" ID="ID_1360288962" MODIFIED="1583009011003" TEXT="Ausl&#xf6;se-Mechanismus kl&#xe4;ren"/>
+<node CREATED="1583009002945" ID="ID_1360288962" MODIFIED="1583009011003" TEXT="Ausl&#xf6;se-Mechanismus kl&#xe4;ren">
+<node CREATED="1583434315708" ID="ID_1757558045" MODIFIED="1583434327974" TEXT="ausl&#xf6;sbar &#xfc;ber das DisplayManager-API"/>
+<node CREATED="1583435433150" ID="ID_641720015" MODIFIED="1583435453391" TEXT="der evaluation-Pass ist synchron und stateful"/>
+<node CREATED="1583435417845" ID="ID_1265153119" MODIFIED="1583435463063" TEXT="und die Komponenten k&#xf6;nnen Annahmen &#xfc;ber das Resultat machen"/>
+<node CREATED="1583435479472" ID="ID_1015699978" MODIFIED="1583435597100">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b><u>Invariante</u></b>: <i><font size="2">(nach dem Pass)</font></i>&#160;liegen vorl&#228;ufig/hinreichend brauchbare Layout-Ma&#223;e vor
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="info"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582995724279" ID="ID_742111018" MODIFIED="1583010908452" TEXT="Steuer-Komponente">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1582995734606" ID="ID_1813411794" MODIFIED="1582995739220" TEXT="lebt im Layout-Manager"/>
 <node CREATED="1582995740053" ID="ID_521808189" MODIFIED="1582995755383" TEXT="stateful (evaluationPhase)"/>
+<node CREATED="1583435618709" ID="ID_1501002443" MODIFIED="1583435629364" TEXT="es ist die DisplayEvaluation selber">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582995826081" ID="ID_1814756232" MODIFIED="1583010909674" TEXT="Evaluation-Ctx?">
 <icon BUILTIN="flag-yellow"/>
@@ -21388,6 +21528,30 @@
 <node CREATED="1582995935542" ID="ID_755542037" MODIFIED="1582995942497" TEXT="k&#xf6;nnte verzichtbar sein...">
 <node CREATED="1582995943761" ID="ID_1763997736" MODIFIED="1582995951988" TEXT="wenn es nur um eine Trigger-Reihenfolge geht"/>
 <node CREATED="1582995952856" ID="ID_1376470251" MODIFIED="1582995967965" TEXT="wenn stattdessen der Layout-Manager als Inteface durchgereicht wird"/>
+</node>
+<node CREATED="1583103170639" ID="ID_1199980563" MODIFIED="1583103203649" TEXT="k&#xf6;nnte die DisplayEvaluation selber sein">
+<icon BUILTIN="idea"/>
+<node CREATED="1583103181267" ID="ID_1854299076" MODIFIED="1583103191631" TEXT="diese w&#xe4;re dann auch ein Interface"/>
+<node CREATED="1583103192422" ID="ID_1947518764" MODIFIED="1583103201511" TEXT="und w&#xfc;rde per Referenz durchgegeben"/>
+</node>
+<node CREATED="1583435165604" ID="ID_1346473468" MODIFIED="1583435263295" TEXT="&#xfc;berneme die Zusammenhangs-Struktur vom Visitor">
+<linktarget COLOR="#c34e8a" DESTINATION="ID_1346473468" ENDARROW="Default" ENDINCLINATION="-294;-13;" ID="Arrow_ID_1976656108" SOURCE="ID_1485425520" STARTARROW="None" STARTINCLINATION="-358;20;"/>
+<node CREATED="1583435179556" ID="ID_857623389" MODIFIED="1583435203049" TEXT="alle Komponenten bieten eine Challenge-Funktion"/>
+<node CREATED="1583435204373" ID="ID_741511380" MODIFIED="1583435220824" TEXT="sie rekurieren mit Insider-Wissen auf den Visitor zur&#xfc;ck"/>
+<node CREATED="1583435311207" ID="ID_146344730" MODIFIED="1583435342779" TEXT="aber die DisplayEvaluation ist selbst der Visitor">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      insofern f&#228;llt die doppelte Abstraktion und indirektion hier weg
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583010104257" ID="ID_82409060" MODIFIED="1583010910968" TEXT="Evaluation-Pass">
@@ -22208,11 +22372,11 @@
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1575576971732" ID="ID_673183519" MODIFIED="1575670587273" TEXT="Mechanismus zum Umordnen">
-<arrowlink COLOR="#507b9b" DESTINATION="ID_1193961919" ENDARROW="Default" ENDINCLINATION="-877;88;" ID="Arrow_ID_624713040" STARTARROW="None" STARTINCLINATION="706;62;"/>
+<arrowlink COLOR="#507b9b" DESTINATION="ID_1193961919" ENDARROW="Default" ENDINCLINATION="-877;88;" ID="Arrow_ID_624713040" STARTARROW="None" STARTINCLINATION="483;9;"/>
 <icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576757730509" ID="ID_1816490333" MODIFIED="1582926717705" TEXT="Thema &#xbb;Widget-Position&#xab;">
-<arrowlink COLOR="#605bb8" DESTINATION="ID_1949130658" ENDARROW="Default" ENDINCLINATION="204;611;" ID="Arrow_ID_993970158" STARTARROW="None" STARTINCLINATION="512;51;"/>
+<arrowlink COLOR="#605bb8" DESTINATION="ID_1949130658" ENDARROW="Default" ENDINCLINATION="204;611;" ID="Arrow_ID_993970158" STARTARROW="None" STARTINCLINATION="299;12;"/>
 <linktarget COLOR="#15bcc9" DESTINATION="ID_1816490333" ENDARROW="Default" ENDINCLINATION="-454;46;" ID="Arrow_ID_408864676" SOURCE="ID_1121301646" STARTARROW="None" STARTINCLINATION="-235;17;"/>
 <icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1576758030604" HGAP="54" ID="ID_1869378616" MODIFIED="1576876023320" TEXT="entsprechende Erweiterung f&#xfc;r delegating-ViewHook notwendig" VSHIFT="26">
@@ -22524,7 +22688,7 @@
 </node>
 </node>
 <node COLOR="#338800" CREATED="1582503247986" ID="ID_1081924103" MODIFIED="1582835894937" TEXT="Problem Covarianz Clip vs Widget">
-<arrowlink COLOR="#66226c" DESTINATION="ID_1439869815" ENDARROW="Default" ENDINCLINATION="-760;97;" ID="Arrow_ID_655919678" STARTARROW="None" STARTINCLINATION="1660;0;"/>
+<arrowlink COLOR="#66226c" DESTINATION="ID_1439869815" ENDARROW="Default" ENDINCLINATION="-760;97;" ID="Arrow_ID_655919678" STARTARROW="None" STARTINCLINATION="1574;0;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1582503411035" HGAP="45" ID="ID_1293494572" MODIFIED="1582503470645" TEXT="der Canvas braucht nur ein Widget, wir aber konstruieren einen Clip" VSHIFT="22">
 <richcontent TYPE="NOTE"><html>
@@ -22602,7 +22766,7 @@
 </node>
 </node>
 <node CREATED="1575050224708" ID="ID_1911321905" MODIFIED="1582988334867" TEXT="Trigger">
-<linktarget COLOR="#6e8c9b" DESTINATION="ID_1911321905" ENDARROW="Default" ENDINCLINATION="-700;-194;" ID="Arrow_ID_528411186" SOURCE="ID_1886398385" STARTARROW="None" STARTINCLINATION="1654;175;"/>
+<linktarget COLOR="#6e8c9b" DESTINATION="ID_1911321905" ENDARROW="Default" ENDINCLINATION="-733;-208;" ID="Arrow_ID_528411186" SOURCE="ID_1886398385" STARTARROW="None" STARTINCLINATION="1621;161;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1575050232723" ID="ID_1373278767" MODIFIED="1575050241511" TEXT="Struktur-&#xc4;nderung">
 <node CREATED="1575050261439" ID="ID_1211501481" MODIFIED="1575050408505" TEXT="Sequenz der unmittelbaren Kinder ge&#xe4;ndert">
@@ -27301,7 +27465,7 @@
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1567689637751" ID="ID_1333933230" MODIFIED="1567689647034" TEXT="Scrollbar verschwindet nach Fokus-Verlust">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582988892133" ID="ID_483543888" MODIFIED="1582989024765" TEXT="#1208 automatic vertical scrollbar malfunctioning">
-<linktarget COLOR="#8c6572" DESTINATION="ID_483543888" ENDARROW="Default" ENDINCLINATION="544;-34;" ID="Arrow_ID_759404699" SOURCE="ID_829958563" STARTARROW="None" STARTINCLINATION="836;57;"/>
+<linktarget COLOR="#8c6572" DESTINATION="ID_483543888" ENDARROW="Default" ENDINCLINATION="544;-34;" ID="Arrow_ID_759404699" SOURCE="ID_829958563" STARTARROW="None" STARTINCLINATION="393;-27;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node CREATED="1567689657945" ID="ID_243238670" MODIFIED="1567689670071" TEXT="wird durch Gr&#xf6;&#xdf;en&#xe4;nderung wieder sichtbar"/>
@@ -27494,6 +27658,35 @@
 <node CREATED="1541095855984" ID="ID_1437927701" MODIFIED="1557498707231" TEXT="verwendet ElementBoxWidget">
 <arrowlink COLOR="#f6cca4" DESTINATION="ID_368245484" ENDARROW="Default" ENDINCLINATION="-599;39;" ID="Arrow_ID_703893400" STARTARROW="None" STARTINCLINATION="42;-316;"/>
 <icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1583102068949" ID="ID_1157479559" MODIFIED="1583102075826" TEXT="Probleme / Entscheidungen">
+<node CREATED="1583102099206" ID="ID_1626144230" MODIFIED="1583102474759" TEXT="Umgang mit einem Clip-Header">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      was ist das?
+    </p>
+    <p>
+      Wenn ein Clip mehrere Spuren oder Datenstr&#246;me oder sonst irgend eine Art innerer Struktur tr&#228;gt, dann braucht man irgendwann einen vom Zeitpunkt unabh&#228;ngigen &#187;Kopf-Bereich&#171;, um die Struktur zu steuern und zu manipulieren. F&#252;r die Tracks gibt es daf&#252;r einen eigenen &quot;patchbay&quot;-Bereich links von der Timeline-Anzeige. Aber f&#252;r die Clips ist nicht klar
+    </p>
+    <ul>
+      <li>
+        ob wir das wirklich brauchen
+      </li>
+      <li>
+        wo wir es anordnen
+      </li>
+      <li>
+        und wie wir mit Clips umgehen, die weit &#252;ber das Anzeigefenster hinsausreichen
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#9a5670" DESTINATION="ID_1054753498" ENDARROW="Default" ENDINCLINATION="-3030;165;" ID="Arrow_ID_948617682" STARTARROW="None" STARTINCLINATION="989;91;"/>
 </node>
 </node>
 </node>
@@ -28113,7 +28306,7 @@
 <node CREATED="1487464489143" ID="ID_1990719718" MODIFIED="1557498707232" TEXT="noch erhalten als Bezugspunkt"/>
 <node CREATED="1487464495494" ID="ID_1238357229" MODIFIED="1557498707232" TEXT="daneben neue Controller-Backbone hochziehen"/>
 <node CREATED="1487464505469" ID="ID_707273464" MODIFIED="1566487594554" TEXT="Umbau in neuen top-level">
-<arrowlink COLOR="#bc4930" DESTINATION="ID_1868522177" ENDARROW="Default" ENDINCLINATION="221;282;" ID="Arrow_ID_600425644" STARTARROW="None" STARTINCLINATION="1984;197;"/>
+<arrowlink COLOR="#bc4930" DESTINATION="ID_1868522177" ENDARROW="Default" ENDINCLINATION="221;282;" ID="Arrow_ID_600425644" STARTARROW="None" STARTINCLINATION="1864;201;"/>
 </node>
 </node>
 <node CREATED="1477522287316" ID="ID_1942021610" MODIFIED="1557498707232" TEXT="TimelinePanel"/>
@@ -29229,7 +29422,7 @@
 <node CREATED="1488423493014" ID="ID_64529473" MODIFIED="1557498707233" TEXT="Navigation"/>
 <node CREATED="1488423514355" ID="ID_917891687" MODIFIED="1557498707233" TEXT="Steuerelemente">
 <node CREATED="1541858529489" ID="ID_838803024" MODIFIED="1557498707233" TEXT="ZoomWindow">
-<linktarget COLOR="#5b5ca1" DESTINATION="ID_838803024" ENDARROW="Default" ENDINCLINATION="-519;-1168;" ID="Arrow_ID_1674512697" SOURCE="ID_1949450244" STARTARROW="None" STARTINCLINATION="490;0;"/>
+<linktarget COLOR="#5b5ca1" DESTINATION="ID_838803024" ENDARROW="Default" ENDINCLINATION="-519;-1168;" ID="Arrow_ID_1674512697" SOURCE="ID_1949450244" STARTARROW="None" STARTINCLINATION="446;0;"/>
 <linktarget COLOR="#5b5ca1" DESTINATION="ID_838803024" ENDARROW="Default" ENDINCLINATION="-499;-1329;" ID="Arrow_ID_842684168" SOURCE="ID_1828075998" STARTARROW="None" STARTINCLINATION="490;0;"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1541858541550" ID="ID_1912142591" MODIFIED="1557498707233" TEXT="generische Abstraktionskomponente">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
@@ -32554,7 +32747,7 @@
 </node>
 <node CREATED="1448669332204" HGAP="76" ID="ID_329609486" MODIFIED="1566955621429" TEXT="InteractionControl">
 <arrowlink COLOR="#b694bf" DESTINATION="ID_430949603" ENDARROW="Default" ENDINCLINATION="178;425;" ID="Arrow_ID_1062305149" STARTARROW="Default" STARTINCLINATION="-629;-2354;"/>
-<linktarget COLOR="#715f85" DESTINATION="ID_329609486" ENDARROW="Default" ENDINCLINATION="-368;-2533;" ID="Arrow_ID_575977434" SOURCE="ID_932507511" STARTARROW="None" STARTINCLINATION="1555;-260;"/>
+<linktarget COLOR="#715f85" DESTINATION="ID_329609486" ENDARROW="Default" ENDINCLINATION="-368;-2533;" ID="Arrow_ID_575977434" SOURCE="ID_932507511" STARTARROW="None" STARTINCLINATION="1641;-256;"/>
 <linktarget COLOR="#5f0ac8" DESTINATION="ID_329609486" ENDARROW="Default" ENDINCLINATION="219;-148;" ID="Arrow_ID_1101633958" SOURCE="ID_1009169288" STARTARROW="None" STARTINCLINATION="-315;0;"/>
 <font NAME="SansSerif" SIZE="15"/>
 <node CREATED="1448669439582" HGAP="41" ID="ID_307071507" MODIFIED="1518487921087" TEXT="ad-hoc oder systematisch" VSHIFT="-2">
@@ -35291,7 +35484,7 @@
 </node>
 </node>
 <node COLOR="#252298" CREATED="1489546623162" HGAP="-24" ID="ID_1622574347" MODIFIED="1575131582794" TEXT="was wird gebraucht" VSHIFT="21">
-<linktarget COLOR="#352c7d" DESTINATION="ID_1622574347" ENDARROW="Default" ENDINCLINATION="-240;-3336;" ID="Arrow_ID_1512127407" SOURCE="ID_1401258681" STARTARROW="None" STARTINCLINATION="1848;0;"/>
+<linktarget COLOR="#352c7d" DESTINATION="ID_1622574347" ENDARROW="Default" ENDINCLINATION="-240;-3336;" ID="Arrow_ID_1512127407" SOURCE="ID_1401258681" STARTARROW="None" STARTINCLINATION="1996;0;"/>
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="help"/>
 <node COLOR="#f10a1a" CREATED="1489546678250" ID="ID_228157787" MODIFIED="1518487921093" TEXT="Vorsicht UI-Programmierung">
@@ -36947,7 +37140,7 @@
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573837634757" ID="ID_101148427" MODIFIED="1575577381370" TEXT="Aufgabe: Ordnung (re)Konstruieren">
-<linktarget COLOR="#624d7d" DESTINATION="ID_101148427" ENDARROW="Default" ENDINCLINATION="-3637;-782;" ID="Arrow_ID_498364014" SOURCE="ID_646844971" STARTARROW="None" STARTINCLINATION="2976;130;"/>
+<linktarget COLOR="#624d7d" DESTINATION="ID_101148427" ENDARROW="Default" ENDINCLINATION="-3637;-782;" ID="Arrow_ID_498364014" SOURCE="ID_646844971" STARTARROW="None" STARTINCLINATION="2862;94;"/>
 <linktarget COLOR="#624d7d" DESTINATION="ID_101148427" ENDARROW="Default" ENDINCLINATION="-3637;-782;" ID="Arrow_ID_1277214644" SOURCE="ID_350484232" STARTARROW="None" STARTINCLINATION="2973;244;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1573837829595" ID="ID_613778773" MODIFIED="1573837833320" TEXT="immer wenn...">
