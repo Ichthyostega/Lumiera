@@ -503,10 +503,7 @@ namespace timeline {
       {
         setupAdditionalTrackPadding_fromCSS();
         layout_.triggerDisplayEvaluation();
-        uint contentHeight = rootBody_->establishTrackSpace (profile_);
-        uint rulerHeight = rootBody_->calcRulerHeight() + TrackBody::decoration.topMar;
-        adjustCanvasSize(layout_.getPixSpan().delta(), contentHeight, rulerHeight);
-        ENSURE (not isnil (profile_));
+        ENSURE (not isnil (profile_), "DisplayEvaluation logic broken");
       }
   }
   
@@ -572,6 +569,18 @@ namespace timeline {
     getCanvas(yPos).move (widget, xPos, yPos);
   }
   
+  /** @todo 2/2020 */
+  void
+  BodyCanvasWidget::establishLaylut (DisplayEvaluation& displayEvaluation)
+  {
+    UNIMPLEMENTED ("respond to the DisplayEvaluation-Pass and recalculate space allocation");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1211 : need to publish those values via DisplayEvaluation
+//        uint contentHeight = rootBody_->establishTrackSpace (profile_);
+//        uint rulerHeight = rootBody_->calcRulerHeight() + TrackBody::decoration.topMar;
+//        adjustCanvasSize(layout_.getPixSpan().delta(), contentHeight, rulerHeight);
+  }
+
   
   
   

@@ -103,11 +103,15 @@ namespace timeline {
   class DisplayEvaluation
     : util::NonCopyable
     {
+      LayoutElement* forkRoot_{nullptr};
+      LayoutElement* canvas_{nullptr};
       
     public:
       /**  */
       void perform();
       
+      void wireForkRoot (LayoutElement& r) { forkRoot_ = &r; }
+      void wireCanvas (LayoutElement& c)   { canvas_ = &c; }
       
     private:/* ===== Internals ===== */
      

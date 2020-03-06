@@ -67,9 +67,11 @@ namespace timeline {
     : paneSplitPosition_{topLevelContainer.property_position()}
     , bodyCanvas_{*this}                           // inject (as interface DisplayManager)
     , headerPane_{bodyCanvas_.get_vadjustment()}  //  wire the patchbay (Gtk::Viewport) to follow the body vertical scroll movement
+    , displayEvaluation_{}
     {
       topLevelContainer.add1 (headerPane_);
       topLevelContainer.add2 (bodyCanvas_);
+      displayEvaluation_.wireCanvas (bodyCanvas_);
     }
   
   
@@ -92,6 +94,12 @@ namespace timeline {
     signalStructureChange_(); // this _is_ such a change
   }
   
+  void
+  TimelineLayout::wireForkRoot (LayoutElement& forkRoot)
+  {
+    displayEvaluation_.wireForkRoot (forkRoot);
+  }
+
   Gtk::WidgetPath
   TimelineLayout::getBodyWidgetPath()  const
   {
@@ -119,7 +127,7 @@ namespace timeline {
   void
   TimelineLayout::triggerDisplayEvaluation()
   {
-    TODO ("actually visit all parts and negotiate the Layout");
+    displayEvaluation_.perform();
   }
 
   

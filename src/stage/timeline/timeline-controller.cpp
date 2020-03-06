@@ -84,10 +84,12 @@ namespace timeline {
   
   TimelineController::TimelineController (ID identity, ID trackID, ctrl::BusTerm& nexus, TimelineLayout& layoutManager)
     : Controller{identity, nexus}
-    , name_{identity.getSym()}    // fallback initialise name from human-readable ID symbol 
+    , name_{identity.getSym()}    // fallback initialise name from human-readable ID symbol
     , markers_{}
     , fork_{new TrackPresenter{trackID, nexus, layoutManager}}
-    { }
+    {
+      layoutManager.wireForkRoot (*fork_);
+    }
   
   
   TimelineController::~TimelineController()

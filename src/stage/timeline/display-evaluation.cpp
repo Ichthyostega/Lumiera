@@ -58,7 +58,7 @@ namespace timeline {
   
   
   
-//DisplayEvaluation::~DisplayEvaluation() { }   // emit VTables here....  /////////TICKET #1211 : not sure if we get a VTable at all....
+  LayoutElement::~LayoutElement() { }   // emit VTables here....
   
   
 //DisplayManager::DisplayManager()
@@ -77,7 +77,7 @@ namespace timeline {
   void
   DisplayEvaluation::perform()
   {
-    
+    UNIMPLEMENTED ("actually perform the Display Evaluation Pass");
   }
   
   

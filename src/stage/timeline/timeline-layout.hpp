@@ -84,6 +84,7 @@
 
 #include "stage/gtk-base.hpp"
 #include "stage/timeline/display-manager.hpp"
+#include "stage/timeline/display-evaluation.hpp"
 #include "stage/timeline/header-pane-widget.hpp"
 #include "stage/timeline/body-canvas-widget.hpp"
 #include "stage/model/view-hook.hpp"
@@ -98,6 +99,7 @@
 namespace stage  {
 namespace timeline {
   
+  class LayoutElement;
   class TrackHeadWidget;
   class TrackBody;
   
@@ -118,6 +120,7 @@ namespace timeline {
       BodyCanvasWidget bodyCanvas_;
       HeaderPaneWidget headerPane_;
       
+      DisplayEvaluation displayEvaluation_;
       /////////////////////////////////////////////////////////////////////////////////////////////TICKET 1019 : need a "ZoomWindow" here to manage the visible area
       
     public:
@@ -126,6 +129,7 @@ namespace timeline {
       
       /** @internal anchor the display of the root track into the two display panes */
       void installRootTrack (TrackHeadWidget&,TrackBody&);
+      void wireForkRoot (LayoutElement&);
       
       Gtk::WidgetPath getBodyWidgetPath()  const;
       

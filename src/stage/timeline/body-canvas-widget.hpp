@@ -76,6 +76,7 @@
 
 #include "stage/gtk-base.hpp"
 #include "stage/timeline/track-profile.hpp"
+#include "stage/timeline/display-evaluation.hpp"
 #include "stage/model/view-hook.hpp"
 
 //#include "lib/util.hpp"
@@ -142,6 +143,7 @@ namespace timeline {
   class BodyCanvasWidget
     : public Gtk::Box
     , public model::ViewHook<Gtk::Widget>
+    , public LayoutElement
     {
       DisplayManager& layout_;
       TrackProfile profile_;
@@ -172,6 +174,10 @@ namespace timeline {
       void move (Gtk::Widget&, int xPos, int yPos)     override;
       void remove (Gtk::Widget&)                       override;
       void rehook (Gtk::Widget&) noexcept              override;
+      
+    protected: /* ==== Interface: LayoutElement ===== */
+      
+      void establishLaylut (DisplayEvaluation&)        override;
       
     private:/* ===== Internals ===== */
       

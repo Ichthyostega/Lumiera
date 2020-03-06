@@ -49,6 +49,7 @@
 
 #include "stage/gtk-base.hpp"
 #include "stage/model/controller.hpp"
+#include "stage/timeline/display-evaluation.hpp"
 #include "stage/timeline/marker-widget.hpp"
 #include "stage/timeline/clip-presenter.hpp"
 #include "stage/timeline/track-head-widget.hpp"
@@ -123,6 +124,7 @@ namespace timeline {
    */
   class TrackPresenter
     : public model::Controller
+    , public LayoutElement
     {
       DisplayFrame display_;
       
@@ -158,6 +160,10 @@ namespace timeline {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
       uString TODO_trackName_;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
+      
+    protected: /* ==== Interface: LayoutElement ===== */
+      
+      void establishLaylut (DisplayEvaluation&)  override;
       
     private:/* ===== Internals ===== */
       
