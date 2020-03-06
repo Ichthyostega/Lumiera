@@ -61,23 +61,25 @@ namespace timeline {
   LayoutElement::~LayoutElement() { }   // emit VTables here....
   
   
-//DisplayManager::DisplayManager()
-//  : paneSplitPosition_{topLevelContainer.property_position()}
-//  , bodyCanvas_{}
-//  , headerPane_{bodyCanvas_.get_vadjustment()}   // wire the header pane (Gtk::Viewport) to follow the body vertical scroll movement
-//  {
-//    topLevelContainer.add1 (headerPane_);
-//    topLevelContainer.add2 (bodyCanvas_);
-//  }
-  
   
   /**
-   * This function is
+   * Conduct global passes over the wired layout elements, in order to adjust
+   * and coordinate the overall timeline layout. Within these passes, each element
+   * starts with the (vertical) extension as allocated by GTK; typically these values
+   * need to be increased slightly, in order to align the track headers and the track
+   * body display, and to accommodate the clips and effect placed into each track.
+   * Such local adjustments will typically re-trigger the custom drawing code, and
+   * thus re-invoke this function, until the overall layout is stable. In a similar
+   * vein, the expanding or collapsing of clips and even whole sub-track scopes
+   * will cause adjustments and a re-evaluation.
+   * @warning care has to be taken to not "overshoot" each adjustment, since this
+   *          might lead to never ending re-invocations and "layout oscillation".
    */
   void
   DisplayEvaluation::perform()
   {
-    UNIMPLEMENTED ("actually perform the Display Evaluation Pass");
+    this->forkRoot_->establishLayout (*this);
+    this->canvas_->establishLayout (*this);
   }
   
   

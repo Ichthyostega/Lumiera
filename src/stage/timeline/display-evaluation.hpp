@@ -92,7 +92,7 @@ namespace timeline {
     public:
       virtual ~LayoutElement();        ///< this is an interface
       
-      virtual void establishLaylut (DisplayEvaluation&)  =0;
+      virtual void establishLayout (DisplayEvaluation&)  =0;
     };
   
   
@@ -107,7 +107,6 @@ namespace timeline {
       LayoutElement* canvas_{nullptr};
       
     public:
-      /**  */
       void perform();
       
       void wireForkRoot (LayoutElement& r) { forkRoot_ = &r; }

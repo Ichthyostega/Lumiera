@@ -177,7 +177,7 @@ namespace timeline {
       
     protected: /* ==== Interface: LayoutElement ===== */
       
-      void establishLaylut (DisplayEvaluation&)        override;
+      void establishLayout (DisplayEvaluation&)        override;
       
     private:/* ===== Internals ===== */
       

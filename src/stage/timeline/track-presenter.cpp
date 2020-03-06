@@ -200,7 +200,7 @@ namespace timeline {
   
   /** @todo 2/2020 */
   void
-  TrackPresenter::establishLaylut (DisplayEvaluation& displayEvaluation)
+  TrackPresenter::establishLayout (DisplayEvaluation& displayEvaluation)
   {
     UNIMPLEMENTED ("respond to the DisplayEvaluation-Pass and pass on evaluation recursively");
   }

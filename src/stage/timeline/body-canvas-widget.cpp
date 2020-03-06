@@ -569,16 +569,20 @@ namespace timeline {
     getCanvas(yPos).move (widget, xPos, yPos);
   }
   
-  /** @todo 2/2020 */
+  /** respond to the DisplayEvaluation pass.
+   * @remark assuming that each track has already established it own vertical space requirement,
+   *         thereby placing the extension values into TrackBody::contentHeight_
+   * @todo 2/2020 WIP
+   */
   void
-  BodyCanvasWidget::establishLaylut (DisplayEvaluation& displayEvaluation)
+  BodyCanvasWidget::establishLayout (DisplayEvaluation& displayEvaluation)
   {
-    UNIMPLEMENTED ("respond to the DisplayEvaluation-Pass and recalculate space allocation");
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1211 : need to publish those values via DisplayEvaluation
-//        uint contentHeight = rootBody_->establishTrackSpace (profile_);
-//        uint rulerHeight = rootBody_->calcRulerHeight() + TrackBody::decoration.topMar;
-//        adjustCanvasSize(layout_.getPixSpan().delta(), contentHeight, rulerHeight);
+    // Traverse TrackBody structure and populate the (track)profile
+    uint contentHeight = rootBody_->establishTrackSpace (profile_);
+    uint rulerHeight = rootBody_->calcRulerHeight() + TrackBody::decoration.topMar;
+    adjustCanvasSize(layout_.getPixSpan().delta(), contentHeight, rulerHeight);
+    
+    ///TODO: anything to publish into the DisplayEvaluation ??
   }
 
   
