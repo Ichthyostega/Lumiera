@@ -53,10 +53,10 @@
  ** 
  ** ## Evaluation state and phases
  ** 
- ** The DisplayEvaluation works both by direct (side)effect within the invoked elements, and by collecting
- ** [resizing requests](\ref ReSizeRequest) for asynchronous dispatch. Thus the data and state within the
- ** evaluation record itself is also used to control the successive phases of the evaluation. The evaluation
- ** is triggered repeatedly, until the layout is _globally balanced_ and no further resizing requests emerge.
+ ** The DisplayEvaluation works by direct (side)effect within the invoked elements, eventually leading
+ ** to some of the embedded GTK widgets being resized -- which typically will re-trigger our custom drawing
+ ** code and consequently the DisplayEvaluation at a later time point in UI event processing. So the evaluation
+ ** is triggered repeatedly, until the layout is _globally balanced_ and no further resizing is necessary.
  ** 
  ** @todo WIP-WIP-WIP as of 3/2020
  ** 
@@ -83,21 +83,16 @@ namespace timeline {
 //using model::ViewHooked;
 //class TrackHeadWidget;
 //class TrackBody;
-  template<class WID>
   class DisplayEvaluation;
   
   
   /** @todo WIP-WIP as of 3/2020 */
-  template<class WID>
   class LayoutElement
     {
     public:
-      using SubKey = WID*;
-          
       virtual ~LayoutElement();        ///< this is an interface
       
-      virtual void establishLaylut (DisplayEvaluation<WID>&)  =0;
-      virtual void doResize (SubKey elm, int newSize)         =0;
+      virtual void establishLaylut (DisplayEvaluation&)  =0;
     };
   
   
@@ -105,23 +100,13 @@ namespace timeline {
    * Visitor and state holder for a collaborative layout adjustment pass.
    * @todo WIP-WIP as of 3/2020
    */
-  template<class WID>
   class DisplayEvaluation
     : util::NonCopyable
     {
       
-//    DisplayEvaluation();
-      
     public:
-      using SubKey = WID*;
-      
-      virtual ~DisplayEvaluation() { };    ///< this is an interface
-      
       /**  */
-      virtual void perform()                                  =0;
-      
-      /** schedule to resize the indicated sub-element */
-      virtual void planResize (SubKey elm, int newSize)       =0;
+      void perform();
       
       
     private:/* ===== Internals ===== */

@@ -74,6 +74,11 @@ namespace timeline {
   /**
    * This function is
    */
+  void
+  DisplayEvaluation::perform()
+  {
+    
+  }
   
   
   

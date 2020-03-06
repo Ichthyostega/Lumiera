@@ -21311,10 +21311,41 @@
 <node CREATED="1582994362415" ID="ID_534180238" MODIFIED="1582994380448" TEXT="eine wilde Rekursion kann zu Oszillationen f&#xfc;hren"/>
 <node CREATED="1582994386724" ID="ID_640491515" MODIFIED="1582994396631" TEXT="wir m&#xfc;ssen f&#xfc;r monotone &#xc4;nderungen sorgen"/>
 <node CREATED="1582994409209" ID="ID_1593855255" MODIFIED="1582994419307" TEXT="diese m&#xfc;ssen so gro&#xdf; wie m&#xf6;glich, aber niemals zu gro&#xdf; sein"/>
-<node CREATED="1582994430718" ID="ID_1659605004" MODIFIED="1582994476828" TEXT="wir m&#xfc;ssen alle korrelierten &#xc4;nderungen auf einmal einbringen">
+<node CREATED="1582994430718" ID="ID_1659605004" MODIFIED="1583525063060" TEXT="wir m&#xfc;ssen alle korrelierten &#xc4;nderungen auf einmal einbringen">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1582994490311" ID="ID_1537290692" MODIFIED="1582994497769" TEXT="das bedeutet...."/>
-<node CREATED="1582994498669" ID="ID_889822565" MODIFIED="1582994513631" TEXT="Gr&#xf6;&#xdf;en&#xe4;nderungen m&#xfc;ssen als Nachrichten abgesetzt werden"/>
-<node CREATED="1582994514659" ID="ID_620800362" MODIFIED="1582994546179" TEXT="diese m&#xfc;ssen in einem sp&#xe4;teren UI-Event aggregiert behandelt werden"/>
+<node CREATED="1582994498669" ID="ID_889822565" MODIFIED="1583525068436" TEXT="Gr&#xf6;&#xdf;en&#xe4;nderungen m&#xfc;ssen als Nachrichten abgesetzt werden">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1582994514659" ID="ID_620800362" MODIFIED="1583525074189" TEXT="diese m&#xfc;ssen in einem sp&#xe4;teren UI-Event aggregiert behandelt werden">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1583525076319" ID="ID_815242494" MODIFIED="1583525638834" TEXT="geht so nicht -- Widgets nicht sicher addressierbar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es gibt keinen <i>einfachen und performanten</i>&#160;Mechanismus, &#252;ber den ich mir irgend ein Widget merken und sp&#228;ter noch sicher addressieren kann, selbst wenn eine Diff-Nachricht inzwischen die Anzeige umbaut und das bezeichnete Element inzwischen gel&#246;scht ist. Und zwar deshalb, weil wir hier von echten einfachen GTK-Widgets reden, und nicht von unseren &quot;Tangibles&quot;, die am UI-Bus h&#228;ngen. Selbst wenn wir noch gesicherte &#187;Mediatoren&#171; dazwischenschalten, also z.B. diese Nachrichten &#252;ber jeweils ein zust&#228;ndiges model::Tangible zustellen, dann haben wiederum diese das identische Problem: sie bekommen nicht garantiert mit, wenn eines der von ihnen verwalteten Widgets inzwischen nicht mehr existiert. Wir br&#228;uchten
+    </p>
+    <ul>
+      <li>
+        entweder ein universelles Addressierungs-Schema, das aber dann auch bis auf das einzelne Widget herunter wirksam sein m&#252;&#223;te
+      </li>
+      <li>
+        oder jeder Mediator (oder zumindest der DisplayManager selber) m&#252;&#223;te Diff-Listener installieren, die auch sicher f&#252;r Diffs auf ihre Kinder ansprechen (!)
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#db337d" DESTINATION="ID_815242494" ENDARROW="Default" ENDINCLINATION="-814;0;" ID="Arrow_ID_1920099327" SOURCE="ID_1528548638" STARTARROW="None" STARTINCLINATION="812;88;"/>
+<icon BUILTIN="closed"/>
+</node>
+<node CREATED="1583525520828" ID="ID_785480961" MODIFIED="1583525553466" TEXT="wohl auch nicht notwendig -- da das UI single-threaded l&#xe4;uft">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node CREATED="1582994588889" ID="ID_1127174838" MODIFIED="1582994596164" TEXT="(idealer)Entpunkt">
 <node CREATED="1582994614549" ID="ID_436198586" MODIFIED="1582994630335" TEXT="die sub-Clip und Header-Allokationen passen bereits"/>
@@ -21402,8 +21433,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1583434976100" ID="ID_1359440" MODIFIED="1583435092878" TEXT="hierf&#xfc;r wird die Abfolge verpflichtend geordnet">
 <arrowlink COLOR="#6f56e5" DESTINATION="ID_1485425520" ENDARROW="Default" ENDINCLINATION="250;14;" ID="Arrow_ID_832303335" STARTARROW="None" STARTINCLINATION="298;17;"/>
@@ -21443,8 +21473,7 @@
       weil wir eine Verkn&#252;pfung der Body und Header-Informationen herstellen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1583433986108" ID="ID_542008018" MODIFIED="1583434006913" TEXT="der dritte Pass mu&#xdf; obendrein ein Integral transportieren"/>
 </node>
@@ -21462,8 +21491,7 @@
       ausnahmslos von oben nach unten und von links nach rechts!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#c34e8a" DESTINATION="ID_1346473468" ENDARROW="Default" ENDINCLINATION="-294;-13;" ID="Arrow_ID_1976656108" STARTARROW="None" STARTINCLINATION="-358;20;"/>
 <linktarget COLOR="#6f56e5" DESTINATION="ID_1485425520" ENDARROW="Default" ENDINCLINATION="250;14;" ID="Arrow_ID_832303335" SOURCE="ID_1359440" STARTARROW="None" STARTINCLINATION="298;17;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -21505,8 +21533,7 @@
       <b><u>Invariante</u></b>: <i><font size="2">(nach dem Pass)</font></i>&#160;liegen vorl&#228;ufig/hinreichend brauchbare Layout-Ma&#223;e vor
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="info"/>
 </node>
 </node>
@@ -21548,8 +21575,7 @@
       insofern f&#228;llt die doppelte Abstraktion und indirektion hier weg
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -21584,13 +21610,21 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583009909800" ID="ID_968621649" MODIFIED="1583010912098" TEXT="ReSizeMediator">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#990000" CREATED="1583009909800" ID="ID_968621649" MODIFIED="1583525572283" TEXT="ReSizeMediator">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1583009921904" ID="ID_562662536" MODIFIED="1583009932169" TEXT="Key-Schema entwerfen"/>
 <node CREATED="1583009934307" ID="ID_1843559579" MODIFIED="1583009940268" TEXT="Registry"/>
 <node CREATED="1583009941021" ID="ID_1229178947" MODIFIED="1583009948045" TEXT="Verteile / Callback-Mechanismus">
 <node CREATED="1583009949267" ID="ID_44481088" MODIFIED="1583009956166" TEXT="wenige Verteiler-Hubs"/>
 <node CREATED="1583009956826" ID="ID_619375937" MODIFIED="1583009961965" TEXT="auf WLink aufbauen"/>
+</node>
+<node CREATED="1583525577464" ID="ID_1528548638" MODIFIED="1583525638834" TEXT="so nicht sicher umsetzbar">
+<arrowlink COLOR="#db337d" DESTINATION="ID_815242494" ENDARROW="Default" ENDINCLINATION="-814;0;" ID="Arrow_ID_1920099327" STARTARROW="None" STARTINCLINATION="812;88;"/>
+</node>
+<node CREATED="1583525607796" ID="ID_1583316557" MODIFIED="1583525625915" TEXT="stattdessen einfach direkt die Widgets manipulieren und gut is">
+<icon BUILTIN="idea"/>
+<node CREATED="1583525671643" ID="ID_1346439197" MODIFIED="1583525685861" TEXT="geht anscheinend problemlos"/>
+<node CREATED="1583525686596" ID="ID_99335407" MODIFIED="1583525695780" TEXT="weil das UI single-threaded ist"/>
 </node>
 </node>
 </node>
@@ -53078,9 +53112,10 @@
 <node CREATED="1439176872457" HGAP="15" ID="ID_355008543" MODIFIED="1557498707241" POSITION="left" TEXT="Plattform" VSHIFT="41">
 <icon BUILTIN="go"/>
 <node CREATED="1561736857971" ID="ID_662811521" MODIFIED="1561736871424" TEXT="Dependencies">
-<node CREATED="1561736649007" ID="ID_1295139073" MODIFIED="1561736899379" TEXT="GTK in Debian">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561736649007" ID="ID_1295139073" MODIFIED="1583523610926" TEXT="GTK in Debian">
 <linktarget COLOR="#355ad5" DESTINATION="ID_1295139073" ENDARROW="Default" ENDINCLINATION="-816;0;" ID="Arrow_ID_1376879556" SOURCE="ID_1920301340" STARTARROW="None" STARTINCLINATION="-753;0;"/>
 <icon BUILTIN="info"/>
+<icon BUILTIN="flag-yellow"/>
 <node CREATED="1561733634234" ID="ID_283837231" MODIFIED="1561734827667" TEXT="libcairomm-1.0-dev">
 <node CREATED="1561734539908" ID="ID_1171069121" MODIFIED="1561734577386" TEXT="Stretch(stable): 1.12.0-1+b1"/>
 <node CREATED="1561734579119" ID="ID_261683999" MODIFIED="1561734596480" TEXT="Buster(testing): 1.12.2-4"/>
@@ -53107,6 +53142,19 @@
 <node CREATED="1561736106556" ID="ID_957399714" MODIFIED="1561736786976" TEXT="Stretch(stable): 3.22.11-1"/>
 <node CREATED="1561736119157" ID="ID_1252132002" MODIFIED="1561736803582" TEXT="Buster(testing): 3.24.5-1"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583523613062" ID="ID_601841679" MODIFIED="1583523726831" TEXT="f&#xfc;r Debian/Buster pr&#xfc;fen und aktualisieren">
+<linktarget COLOR="#c35b60" DESTINATION="ID_601841679" ENDARROW="Default" ENDINCLINATION="53;0;" ID="Arrow_ID_198244235" SOURCE="ID_1032664307" STARTARROW="None" STARTINCLINATION="53;0;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1583523694636" HGAP="56" ID="ID_446319704" MODIFIED="1583523704860" TEXT="Build-Umgabung" VSHIFT="6">
+<node COLOR="#338800" CREATED="1583523705722" ID="ID_1278670650" MODIFIED="1583523709609" TEXT="Eclipse-Projekt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583523710795" ID="ID_1032664307" MODIFIED="1583523732513" TEXT="wichtige Abh&#xe4;ngigkeiten im Quellcode">
+<arrowlink COLOR="#c35b60" DESTINATION="ID_601841679" ENDARROW="Default" ENDINCLINATION="53;0;" ID="Arrow_ID_198244235" STARTARROW="None" STARTINCLINATION="53;0;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node CREATED="1439176875682" HGAP="47" ID="ID_1487331591" MODIFIED="1582315396874" TEXT="Referenzplattform" VSHIFT="60">
@@ -53935,8 +53983,9 @@
 </node>
 <node CREATED="1581813455951" ID="ID_1821559366" MODIFIED="1582315344844" TEXT="GCC-8">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1581813466582" ID="ID_1727015963" MODIFIED="1581813471691" TEXT="Februar 2020">
-<node COLOR="#338800" CREATED="1581740476035" ID="ID_1259527140" MODIFIED="1581906957998" TEXT="Build-Fixes (analog Paketbau)">
+<node COLOR="#338800" CREATED="1581813466582" ID="ID_1727015963" MODIFIED="1583523550183" TEXT="Februar 2020">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1581740476035" FOLDED="true" ID="ID_1259527140" MODIFIED="1583523540875" TEXT="Build-Fixes (analog Paketbau)">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1581740511638" ID="ID_673829980" MODIFIED="1581812450753" TEXT="die FSecs-Problematik">
 <icon BUILTIN="button_cancel"/>
