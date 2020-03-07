@@ -38,8 +38,43 @@
  ** represent potentially several thousand individual elements as GTK entities, while at any time
  ** only a small number of elements can be visible and active as far as user interaction is concerned.
  ** 
- ** @todo WIP-WIP-WIP as of 12/2016
+ ** # Structure of the TrackPresenter
+ ** 
+ ** Each TrackPresenter corresponds to a "sub-Fork" of timeline tracks. Since Lumiera always arranges
+ ** tracks as nested scopes into a tree, there is one root fork, recursively holding several sub forks.
+ ** - thus each TrackPresenter holds a collection #subFor_ -- possibly empty.
+ ** - moreover, it holds a collection #clips_, which represent the actual content of this track itself,
+ **   as opposed to content on some sub-track. These clips are to be arranged within the _content area_
+ **   of the track display, in the track body area (at the right side of the timeline). Actually, this
+ **   collection holds timeline::ClipPresenter objects, thus repeating the same design pattern.
+ ** - in addition, there can be a collection of #markers_, to be translated into various kinds of
+ **   region or point/location markup, typically shown in the (optional) _overview ruler,_ running
+ **   along the top-side of this track's display area.
+ **   
+ ** Since TrackPresenter is a model::Tangible, a central concern is the ability to respond to
+ ** _diff messages._ In fact, any actual content, including all the nested sub-structures, is
+ ** _populated_ through such _mutation messages_ sent from the session up via the stage::UiBus.
+ ** Thus, the TrackPresenter::buildMutator() implementation hooks up the necessary callbacks,
+ ** to allow adding and removing of sub elements and properties of a track.
+ ** 
+ ** Another concern handled here is the coordination of layout and display activities.
+ ** A special twist arises here: The track header ("patchbay") display can be designed as a
+ ** classical tree / grid control, while the actual timeline body contents require us to perform
+ ** custom drawing activities. Which leads to the necessity to coordinate and connect two distinct
+ ** presentation schemes to form a coherent layout. We solve this challenge by introducing a helper
+ ** entity, the DisplayFrame. These act as a bridge to hook into both display hierarchies (the nested
+ ** TrackHeaderWidget and the TrackBody record managed by the BodyCanvasWidget). Display frames are
+ ** hooked down from their respective parent frame, thereby creating a properly interwoven fabric.  
+ ** 
+ ** After assembling the necessary GTK widgets, typically our custom drawing code will be invoked
+ ** at some point, thereby triggering BodyCanvasWidget::maybeRebuildLayout(). At this point the
+ ** timeline::TrackProfile needs to be established, so to reflect the succession and extension
+ ** of actual track spaces running alongside the time axis. This is accomplished through a global
+ ** timeline::DisplayEvaluation pass, recursively visiting all the involved parts to perform
+ ** size adjustments, until the layout is globally balanced.
+ ** 
  ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
+ ** @todo still WIP as of 3/2020 -- yet the basic structure is settled by now.
  ** 
  */
 
@@ -48,12 +83,16 @@
 #define STAGE_TIMELINE_TRACK_PRESENTER_H
 
 #include "stage/gtk-base.hpp"
+#include "include/ui-protocol.hpp"
 #include "stage/model/controller.hpp"
 #include "stage/timeline/display-evaluation.hpp"
 #include "stage/timeline/marker-widget.hpp"
 #include "stage/timeline/clip-presenter.hpp"
 #include "stage/timeline/track-head-widget.hpp"
 #include "stage/timeline/track-body.hpp"
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
+#include "lib/format-cout.hpp"
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
 
 #include "lib/nocopy.hpp"
 //#include "lib/util.hpp"
@@ -69,6 +108,10 @@ namespace timeline {
   
   using std::vector;
   using std::unique_ptr;
+  
+  using lib::diff::TreeMutator;
+  using lib::diff::collection;
+  using std::make_unique;
   
   
   /**
@@ -134,8 +177,6 @@ namespace timeline {
       
       
     public:
-     ~TrackPresenter();
-      
       /**
        * @param id identity used to refer to a corresponding session::Fork
        * @param nexus a way to connect this Controller to the UI-Bus.
@@ -177,6 +218,133 @@ namespace timeline {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
         }
     };
+  
+  
+  
+  
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
+  inline void
+  TrackPresenter::injectDebugTrackLabels()
+  {
+    uint x = rand() % 50;
+    uint y = 0;
+    Gtk::Button* butt = Gtk::manage (new ViewHooked<Gtk::Button, Gtk::Widget>{display_.hookedAt(x,y), TODO_trackName_});
+    butt->signal_clicked().connect(
+          [butt]{ cout << "|=="<<butt->get_label()<<endl; });
+    butt->show();
+    
+    for (auto& subTrack : subFork_)
+      subTrack->injectDebugTrackLabels();
+  }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
+  /**
+   * @note we distinguish between the contents of our four nested child collections
+   *       based on the symbolic type field sent in the Record type within the diff representation
+   *       - "Marker" designates a Marker object
+   *       - "Clip" designates a Clip placed on this track
+   *       - "Fork" designates a nested sub-track
+   *       - "Ruler" designates a nested ruler (timescale, overview,....) belonging to this track
+   * @see TimelineController::buildMutator() for a basic explanation of the data binding mechanism
+   */
+  inline void
+  TrackPresenter::buildMutator (TreeMutator::Handle buffer)
+  {
+    using PFork   = unique_ptr<TrackPresenter>;
+    using PClip   = unique_ptr<ClipPresenter>;
+    using PMarker = unique_ptr<MarkerWidget>;
+    using PRuler  = unique_ptr<RulerTrack>;
+    
+    buffer.create (
+      TreeMutator::build()
+        .attach (collection(display_.bindRulers())
+               .isApplicableIf ([&](GenNode const& spec) -> bool
+                  {                                            // »Selector« : require object-like sub scope with type-field "Ruler"
+                    return TYPE_Ruler == spec.data.recordType();
+                  })
+               .matchElement ([&](GenNode const& spec, PRuler const& elm) -> bool
+                  {
+                    return spec.idi == elm->getID();
+                  })
+               .constructFrom ([&](GenNode const& spec) -> PRuler
+                  {                                            // »Constructor« : how to attach a new ruler track
+                    return make_unique<RulerTrack> (spec.idi, this->uiBus_, *this);
+                  })
+               .buildChildMutator ([&](PRuler& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
+                  {
+                    if (subID != target->getID()) return false;
+                    target->buildMutator (buff);
+                    return true;
+                  }))
+        .attach (collection(markers_)
+               .isApplicableIf ([&](GenNode const& spec) -> bool
+                  {                                            // »Selector« : require object-like sub scope with type-field "Marker"
+                    return TYPE_Marker == spec.data.recordType();
+                  })
+               .matchElement ([&](GenNode const& spec, PMarker const& elm) -> bool
+                  {
+                    return spec.idi == elm->getID();
+                  })
+               .constructFrom ([&](GenNode const& spec) -> PMarker
+                  {
+                    return make_unique<MarkerWidget> (spec.idi, this->uiBus_);
+                  })
+               .buildChildMutator ([&](PMarker& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
+                  {
+                    if (subID != target->getID()) return false;
+                    target->buildMutator (buff);
+                    return true;
+                  }))
+        .attach (collection(clips_)
+               .isApplicableIf ([&](GenNode const& spec) -> bool
+                  {                                            // »Selector« : require object-like sub scope with type-field "Clip"
+                    return TYPE_Clip == spec.data.recordType();
+                  })
+               .matchElement ([&](GenNode const& spec, PClip const& elm) -> bool
+                  {
+                    return spec.idi == elm->getID();
+                  })
+               .constructFrom ([&](GenNode const& spec) -> PClip
+                  {
+                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_);
+                  })
+               .buildChildMutator ([&](PClip& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
+                  {
+                    if (subID != target->getID()) return false;
+                    target->buildMutator (buff);
+                    return true;
+                  }))
+        .attach (collection(subFork_)
+               .isApplicableIf ([&](GenNode const& spec) -> bool
+                  {                                            // »Selector« : require object-like sub scope with type-field "Fork"
+                    return TYPE_Fork == spec.data.recordType();
+                  })
+               .matchElement ([&](GenNode const& spec, PFork const& elm) -> bool
+                  {
+                    return spec.idi == elm->getID();
+                  })
+               .constructFrom ([&](GenNode const& spec) -> PFork
+                  {
+                    return make_unique<TrackPresenter> (spec.idi, uiBus_, this->display_);
+                  })
+               .buildChildMutator ([&](PFork& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
+                  {
+                    if (subID != target->getID()) return false;
+                    target->buildMutator (buff);
+                    return true;
+                  }))
+        .change(ATTR_name, [&](string val)
+            {                                                  // »Attribute Setter« : receive a new value for the track name field
+              this->setTrackName (val);
+            }));
+  }
+  
+  
+  /** @todo 2/2020 */
+  inline void
+  TrackPresenter::establishLayout (DisplayEvaluation& displayEvaluation)
+  {
+    UNIMPLEMENTED ("respond to the DisplayEvaluation-Pass and pass on evaluation recursively");
+  }
   
   
 }}// namespace stage::timeline
