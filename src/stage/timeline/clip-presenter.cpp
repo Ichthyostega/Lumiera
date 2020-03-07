@@ -152,6 +152,12 @@ namespace timeline {
   }
   
   
+  int
+  ClipPresenter::determineRequiredVerticalExtension()  const
+  {
+    UNIMPLEMENTED ("any details regarding clip presentation");
+  }
+  
   
   
 }}// namespace stage::timeline

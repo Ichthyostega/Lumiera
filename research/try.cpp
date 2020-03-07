@@ -43,28 +43,40 @@
 // 12/18 - investigate the trinomial random number algorithm from the C standard lib
 // 04/19 - forwarding tuple element(s) to function invocation
 // 06/19 - use a statefull counting filter in a treeExplorer pipeline
+// 03/20 - investigate type deduction bug with PtrDerefIter
 
 
 /** @file try.cpp
- * How to pick a configurable prefix segment from an iterable sequence.
- * Instead of using a classic indexed for loop, the same effect can be achieved
- * through a statefull filter functor in a `treeExplore()`-pipeline; after full
- * optimisation I'd expect even to get the same assembly as from an equivalent
- * hand written for loop. (Caveat: debug builds will be bloated)
+ * Compiling a seemingly valid iterator pipeline failed, due to type deduction problems.
+ * As expected, they originate within PtrDerefIter, which I abused here to dereference
+ * an unique_ptr -- which might seem strange, yet is true to the spirit of generic programming.
+ * Since I consider this a valid usage, the fix is to add a further specialisation to my
+ * hand-written RemovePtr trait template in iter-adapter-ptr-deref.hpp (which also justifies
+ * in hindsight to use a hand-written trait right within this header, instead of some library).
  */
 
 typedef unsigned int uint;
 
+namespace std {
+template <typename _Tp, typename _Dp>
+    class unique_ptr;
+}
+
 #include "lib/format-cout.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
-#include "lib/iter-tree-explorer.hpp"
+#include "lib/iter-adapter-ptr-deref.hpp"
+#include "lib/iter-adapter-stl.hpp"
+#include "lib/itertools.hpp"
 
 #include <utility>
 #include <string>
 #include <vector>
+#include <memory>
+#include <type_traits>
 
 using std::string;
+using std::make_unique;
 
 
 
@@ -73,37 +85,56 @@ using std::string;
 #define SHOW_EXPR(_XX_) \
     cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
 
-template<class IT>
-auto
-selectSeg(IT&& it, bool useFirst)
-{
-      struct CountingFilter
-        {
-          int cnt;
-          bool useFirst;
-          
-          bool
-          operator() (...)
-            {
-              bool isPrefixPart = 0 < cnt--;
-              return useFirst? isPrefixPart : not isPrefixPart;
-            }
-        };
-  return lib::treeExplore(std::forward<IT> (it))
-                .filter(CountingFilter{50, useFirst});
-}
+using PStr = std::unique_ptr<string>;
+using Strs = std::vector<PStr>;
 
+constexpr auto elems = [](auto& coll) { return lib::ptrDeref (lib::iter_stl::eachElm (coll)); };
+
+namespace lib {
+  
+  namespace {
+    
+    template<typename T, typename D>
+    struct RemovePtr<std::unique_ptr<T,D>> { typedef T Type; };
+  }
+}
+  namespace {
+    template<class IT>
+    inline auto
+    max (IT&& elms)
+    {
+      using Val = std::remove_reference_t<typename IT::value_type>;
+      Val res = std::numeric_limits<Val>::min();
+      for (auto& elm : std::forward<IT> (elms))
+        if (elm > res)
+          res = elm;
+      return res;
+    }
+  }
 
 int
 main (int, char**)
   {
-    using VecN = std::vector<int>;
-    VecN numz{1,1,2,3,5,8,13,21};
+    Strs ss;
+    ss.emplace_back(new string{"li"});
+    ss.emplace_back(new string{"la"});
+    ss.emplace_back(new string{"lutsch"});
+    SHOW_EXPR (ss);
+    SHOW_EXPR (elems(ss));
+    using ITS = decltype(elems(ss));
+    SHOW_TYPE (ITS);
     
-    for (auto& elm : selectSeg(numz, false))
-      cout << elm<<"::";
-    for (auto& elm : selectSeg(numz, true))
-      cout << elm<<"::";
+//  using ITSR = typename ITS::reference;
+//  lib::test::TypeDebugger<ITSR> buggy;
+    
+    auto dings = elems(ss);
+    
+    int maxVSize = max (lib::transformIterator(dings,
+                                               [](string const& ding)
+                                                 {
+                                                   return ding.length();
+                                                 }));
+    SHOW_EXPR (maxVSize);
     
     cout <<  "\n.gulp.\n";
     return 0;

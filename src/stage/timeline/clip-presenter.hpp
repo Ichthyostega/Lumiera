@@ -98,6 +98,11 @@ namespace timeline {
       virtual void buildMutator (lib::diff::TreeMutator::Handle)  override;
       
       
+      /** find out the number of pixels necessary to render this clip properly,
+       *  assuming its current presentation mode (abbreviated, full, expanded).
+       */
+      int determineRequiredVerticalExtension()  const;
+      
     private:/* ===== Internals ===== */
     };
   

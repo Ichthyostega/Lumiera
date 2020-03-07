@@ -21338,8 +21338,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#db337d" DESTINATION="ID_815242494" ENDARROW="Default" ENDINCLINATION="-814;0;" ID="Arrow_ID_1920099327" SOURCE="ID_1528548638" STARTARROW="None" STARTINCLINATION="812;88;"/>
 <icon BUILTIN="closed"/>
 </node>
@@ -21585,10 +21584,29 @@
 <node CREATED="1583010115679" ID="ID_181195318" MODIFIED="1583010181687" TEXT="alle Tracks">
 <node CREATED="1583010186970" ID="ID_1754142891" MODIFIED="1583010203965" TEXT="Ping-Pong auf DisplayFrame ausl&#xf6;sen">
 <node CREATED="1583010212766" ID="ID_1377321766" MODIFIED="1583010221404" TEXT="Gr&#xf6;&#xdf;e vom Header"/>
-<node CREATED="1583010223312" ID="ID_929067099" MODIFIED="1583010245037" TEXT="damit die Maximums-Berechnung auf dem Track-Inhalt ausl&#xf6;sen"/>
+<node CREATED="1583010223312" ID="ID_929067099" MODIFIED="1583010245037" TEXT="damit die Maximums-Berechnung auf dem Track-Inhalt ausl&#xf6;sen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583606375028" ID="ID_1922972295" MODIFIED="1583606379904" TEXT="funktionales Max">
+<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1583606385337" ID="ID_1117598680" MODIFIED="1583626259305" TEXT="Type-deduction-Probleme">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      h&#228;ngen garnicht direkt damit zusammen, sondern wurden getriggert durch den &quot;unorthodoxen&quot; Gebrauch des PtrDerefIter
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
 <node CREATED="1583010246034" ID="ID_113344286" MODIFIED="1583010268212" TEXT="Resultat mit Wert vom Header vergleichen"/>
 </node>
-<node CREATED="1583010270152" ID="ID_689332581" MODIFIED="1583010283258" TEXT="depth-first-Suche und Aktion auf dem R&#xfc;ckweg">
+<node COLOR="#338800" CREATED="1583010270152" ID="ID_689332581" MODIFIED="1583606371280" TEXT="depth-first-Suche und Aktion auf dem R&#xfc;ckweg">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1583010287758" ID="ID_101138504" MODIFIED="1583010298353" TEXT="relative Reihenfolge der Sibling-Tracks ist egal"/>
 </node>
 </node>

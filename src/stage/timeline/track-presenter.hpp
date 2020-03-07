@@ -90,6 +90,9 @@
 #include "stage/timeline/clip-presenter.hpp"
 #include "stage/timeline/track-head-widget.hpp"
 #include "stage/timeline/track-body.hpp"
+#include "lib/iter-adapter-ptr-deref.hpp"
+#include "lib/iter-adapter-stl.hpp"
+#include "lib/itertools.hpp"
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
 #include "lib/format-cout.hpp"
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
@@ -112,6 +115,16 @@ namespace timeline {
   using lib::diff::TreeMutator;
   using lib::diff::collection;
   using std::make_unique;
+  
+  using PFork  = unique_ptr<TrackPresenter>;
+  using PClip  = unique_ptr<ClipPresenter>;
+  using PMark  = unique_ptr<MarkerWidget>;
+  using PRuler = unique_ptr<RulerTrack>;
+  
+  namespace{
+    /** Helper: iterator to yield direct reference to collection members managed by (unique)pointer. */
+    constexpr auto elems = [](auto& coll) { return lib::ptrDeref (lib::iter_stl::eachElm (coll)); };
+  }
   
   
   /**
@@ -159,6 +172,9 @@ namespace timeline {
         {
           return body_.bindRulers();
         }
+      
+      template<class CLPS, class MRKS>
+      void establishExtension (CLPS, MRKS);
     };
   
   
@@ -171,9 +187,9 @@ namespace timeline {
     {
       DisplayFrame display_;
       
-      vector<unique_ptr<TrackPresenter>> subFork_;
-      vector<unique_ptr<MarkerWidget>>   markers_;
-      vector<unique_ptr<ClipPresenter>>  clips_;
+      vector<PFork> subFork_;
+      vector<PMark> markers_;
+      vector<PClip> clips_;
       
       
     public:
@@ -249,11 +265,6 @@ namespace timeline {
   inline void
   TrackPresenter::buildMutator (TreeMutator::Handle buffer)
   {
-    using PFork   = unique_ptr<TrackPresenter>;
-    using PClip   = unique_ptr<ClipPresenter>;
-    using PMarker = unique_ptr<MarkerWidget>;
-    using PRuler  = unique_ptr<RulerTrack>;
-    
     buffer.create (
       TreeMutator::build()
         .attach (collection(display_.bindRulers())
@@ -280,15 +291,15 @@ namespace timeline {
                   {                                            // »Selector« : require object-like sub scope with type-field "Marker"
                     return TYPE_Marker == spec.data.recordType();
                   })
-               .matchElement ([&](GenNode const& spec, PMarker const& elm) -> bool
+               .matchElement ([&](GenNode const& spec, PMark const& elm) -> bool
                   {
                     return spec.idi == elm->getID();
                   })
-               .constructFrom ([&](GenNode const& spec) -> PMarker
+               .constructFrom ([&](GenNode const& spec) -> PMark
                   {
                     return make_unique<MarkerWidget> (spec.idi, this->uiBus_);
                   })
-               .buildChildMutator ([&](PMarker& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
+               .buildChildMutator ([&](PMark& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
                     if (subID != target->getID()) return false;
                     target->buildMutator (buff);
@@ -343,8 +354,47 @@ namespace timeline {
   inline void
   TrackPresenter::establishLayout (DisplayEvaluation& displayEvaluation)
   {
-    UNIMPLEMENTED ("respond to the DisplayEvaluation-Pass and pass on evaluation recursively");
+    display_.establishExtension (elems(clips_), elems(markers_));
+    for (auto& subTrack: subFork_)
+      subTrack->establishLayout (displayEvaluation);
   }
+  
+  namespace {
+    template<class IT>
+    inline auto
+    max (IT&& elms)
+    {
+      using Val = typename IT::value_type;
+      Val res = std::numeric_limits<Val>::min();
+      for (auto& elm : std::forward<IT> (elms))
+        if (elm > res)
+          res = elm;
+      return res;
+    }
+  }
+  
+  /** */
+  template<class CLPS, class MRKS>
+  inline void
+  DisplayFrame::establishExtension (CLPS clips, MRKS markers)
+  {
+//    int maxVSize = max (lib::transformIterator(clips,
+//                                               [](ClipPresenter const& clip)
+//                                                 {
+//                                                   return clip.determineRequiredVerticalExtension();
+//                                                 }));
+    int headSize = this->head_.get_height();
+    int bodySize = this->body_.calcHeight();
+    
+    
+    ////////////////////TODO: was ist? 
+//      typedef typename IT::value_type           pointer;
+//      typedef typename RemovePtr<pointer>::Type value_type;
+    
+/// wobei IT = lib::RangeIter<__gnu_cxx::__normal_iterator<std::unique_ptr<stage::timeline::MarkerWidget>*, ...
+  }
+
+  
   
   
 }}// namespace stage::timeline
