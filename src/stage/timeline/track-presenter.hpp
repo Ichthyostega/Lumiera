@@ -90,10 +90,8 @@
 #include "stage/timeline/clip-presenter.hpp"
 #include "stage/timeline/track-head-widget.hpp"
 #include "stage/timeline/track-body.hpp"
-#include "lib/iter-adapter-ptr-deref.hpp"
-#include "lib/iter-adapter-stl.hpp"
+#include "lib/iter-tree-explorer.hpp"
 #include "lib/util-coll.hpp"
-#include "lib/itertools.hpp"
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
 #include "lib/format-cout.hpp"
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
@@ -116,16 +114,13 @@ namespace timeline {
   using lib::diff::TreeMutator;
   using lib::diff::collection;
   using std::make_unique;
+  using lib::explore;
+  using util::max;
   
   using PFork  = unique_ptr<TrackPresenter>;
   using PClip  = unique_ptr<ClipPresenter>;
   using PMark  = unique_ptr<MarkerWidget>;
   using PRuler = unique_ptr<RulerTrack>;
-  
-  namespace{
-    /** Helper: iterator to yield direct reference to collection members managed by (unique)pointer. */
-    constexpr auto elems = [](auto& coll) { return lib::ptrDeref (lib::iter_stl::eachElm (coll)); };
-  }
   
   
   /**
@@ -174,8 +169,7 @@ namespace timeline {
           return body_.bindRulers();
         }
       
-      template<class CLPS, class MRKS>
-      void establishExtension (CLPS, MRKS);
+      void establishExtension (vector<PClip>&, vector<PMark>&);
     };
   
   
@@ -351,25 +345,27 @@ namespace timeline {
   }
   
   
-  /** @todo 2/2020 */
+  
+  /** handle the DisplayEvaluation pass for this track and its sub-tracks.
+   * @todo 2/2020 WIP-WIP initial draft; need to find out more about Clip display
+   */
   inline void
   TrackPresenter::establishLayout (DisplayEvaluation& displayEvaluation)
   {
-    display_.establishExtension (elems(clips_), elems(markers_));
+    display_.establishExtension (clips_, markers_);
     for (auto& subTrack: subFork_)
       subTrack->establishLayout (displayEvaluation);
   }
   
-  /** */
-  template<class CLPS, class MRKS>
+  /** find out about the vertical extension of a single track display. */
   inline void
-  DisplayFrame::establishExtension (CLPS clips, MRKS markers)
+  DisplayFrame::establishExtension (vector<PClip>& clips, vector<PMark>&)
   {
-    int maxVSize = util::max (lib::transformIterator(clips,
-                                                     [](ClipPresenter const& clip)
-                                                       {
-                                                         return clip.determineRequiredVerticalExtension();
-                                                       }));
+    int maxVSize = max (explore (clips)
+                          .transform([](PClip const& clip)
+                                       {
+                                         return clip->determineRequiredVerticalExtension();
+                                       }));
     int headSize = this->head_.get_height();
     int bodySize = this->body_.calcHeight();
   }

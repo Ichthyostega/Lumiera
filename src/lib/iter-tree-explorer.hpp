@@ -1636,6 +1636,16 @@ namespace lib {
     return TreeExplorer<Base> (std::forward<IT> (srcSeq));
   }
   
+  /** synonym for #treeExplore.
+   * @remark this might become an extension to C++20 pipelines
+   */
+  template<class IT>
+  inline auto
+  explore (IT&& srcSeq)
+  {
+    return treeExplore (std::forward<IT> (srcSeq));
+  }
+  
   
 } // namespace lib
 #endif /* LIB_ITER_TREE_EXPLORER_H */
