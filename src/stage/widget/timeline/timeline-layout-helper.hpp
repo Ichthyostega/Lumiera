@@ -37,6 +37,18 @@
 #include <boost/optional.hpp>
 
 
+namespace util {                  ///////////////////////////////////////////////////////////////////////////////TICKET #959 : obsolete helper utility inlined here directly
+  struct WeakPtrComparator     ///< @deprecated unsafe and generally a bad idea   
+    {
+      template<typename T>
+      bool
+      operator() (std::weak_ptr<T> const& l, std::weak_ptr<T> const& r) const
+        {
+          return l.lock().get() < r.lock().get();
+        }
+    };
+}                                 ///////////////////////////////////////////////////////////////////////////////TICKET #959 : obsolete helper utility inlined here directly
+
 namespace stage {
   
   namespace model {

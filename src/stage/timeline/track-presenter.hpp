@@ -92,6 +92,7 @@
 #include "stage/timeline/track-body.hpp"
 #include "lib/iter-adapter-ptr-deref.hpp"
 #include "lib/iter-adapter-stl.hpp"
+#include "lib/util-coll.hpp"
 #include "lib/itertools.hpp"
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
 #include "lib/format-cout.hpp"
@@ -359,39 +360,18 @@ namespace timeline {
       subTrack->establishLayout (displayEvaluation);
   }
   
-  namespace {
-    template<class IT>
-    inline auto
-    max (IT&& elms)
-    {
-      using Val = typename IT::value_type;
-      Val res = std::numeric_limits<Val>::min();
-      for (auto& elm : std::forward<IT> (elms))
-        if (elm > res)
-          res = elm;
-      return res;
-    }
-  }
-  
   /** */
   template<class CLPS, class MRKS>
   inline void
   DisplayFrame::establishExtension (CLPS clips, MRKS markers)
   {
-//    int maxVSize = max (lib::transformIterator(clips,
-//                                               [](ClipPresenter const& clip)
-//                                                 {
-//                                                   return clip.determineRequiredVerticalExtension();
-//                                                 }));
+    int maxVSize = util::max (lib::transformIterator(clips,
+                                                     [](ClipPresenter const& clip)
+                                                       {
+                                                         return clip.determineRequiredVerticalExtension();
+                                                       }));
     int headSize = this->head_.get_height();
     int bodySize = this->body_.calcHeight();
-    
-    
-    ////////////////////TODO: was ist? 
-//      typedef typename IT::value_type           pointer;
-//      typedef typename RemovePtr<pointer>::Type value_type;
-    
-/// wobei IT = lib::RangeIter<__gnu_cxx::__normal_iterator<std::unique_ptr<stage::timeline::MarkerWidget>*, ...
   }
 
   

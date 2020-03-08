@@ -98,6 +98,9 @@ namespace test {
           
           verify_accessFirstLast (container, NUM_ELMS);
           verify_accessFirstLast (iterator, NUM_ELMS);
+          
+          verify_Min_Max (container, NUM_ELMS);
+          verify_Min_Max (iterator, NUM_ELMS);
         }
       
       
@@ -110,6 +113,25 @@ namespace test {
           
           CHECK (first(col) == theFirst);
           CHECK (last(col) == theLast);
+        }
+      
+      
+      template<class COL>
+      void
+      verify_Min_Max (COL const& col, uint lim)
+        {
+          uint expectedMax = lim;
+          uint expectedMin = 1;
+          
+          CHECK (max (col) == expectedMax);
+          CHECK (min (col) == expectedMin);
+          
+          COL empty;
+          
+          using Val = typename COL::value_type;
+          
+          CHECK (max (empty) == std::numeric_limits<Val>::min());
+          CHECK (min (empty) == std::numeric_limits<Val>::max());
         }
       
       

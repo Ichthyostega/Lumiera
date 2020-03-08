@@ -51,6 +51,11 @@
 #include <boost/type_traits/remove_const.hpp>
 
 
+namespace std {
+  template <typename _Tp, typename _Dp>
+  class unique_ptr;
+}
+
 namespace lib {
   
   namespace {
@@ -72,6 +77,9 @@ namespace lib {
     template<typename T>
     struct RemovePtr<const T* const> { typedef const T Type; };
     
+    /** allow automatic dereferencing of std::unique_ptr */
+    template<typename T, typename D>
+    struct RemovePtr<std::unique_ptr<T,D>> { typedef T Type; };
   }
   
   

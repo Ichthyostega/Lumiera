@@ -26,8 +26,11 @@
  ** collections and sequences (given by iterator). Mostly, these are tiny bits of
  ** existing functionality, just packaged in a more fluent and readable way.
  ** - accessors
- **   - \c first() to get the first element
- **   - \c last() to access the last element
+ **   - util::first() to get the first element
+ **   - util::last() to access the last element
+ ** - aggregate functions
+ **   - util::max() compute the maximum of comparable numbers
+ **   - util::min()
  ** 
  ** @warning some functions only available when including itertools.hpp beforehand
  ** 
@@ -42,6 +45,8 @@
 
 #include "lib/util.hpp"
 #include "lib/meta/trait.hpp"
+
+#include <limits>
 
 
 
@@ -157,21 +162,60 @@ namespace util {
     __ensure_nonempty(ii);
     return lib::pull_last (ii);
   }
-#endif  
+#endif
   
   
   
   /* === generic container helpers === */
   
-  struct WeakPtrComparator
-    {
-      template<typename T>
-      bool
-      operator() (std::weak_ptr<T> const& l, std::weak_ptr<T> const& r) const
-        {
-          return l.lock().get() < r.lock().get();
-        }
-    };
+  template<class IT>
+  inline auto
+  max (IT&& elms)
+  {
+    using Val = typename std::remove_reference_t<IT>::value_type;
+    Val res = std::numeric_limits<Val>::min();
+    for (auto const& elm : std::forward<IT> (elms))
+      if (elm > res)
+        res = elm;
+    return res;
+  }
+  
+  template<class CON>
+  inline auto
+  max (CON const& elms)
+  {
+    using Val = typename std::remove_reference_t<CON>::value_type;
+    Val res = std::numeric_limits<Val>::min();
+    for (auto const& elm : elms)
+      if (elm > res)
+        res = elm;
+    return res;
+  }
+  
+  
+  template<class IT>
+  inline auto
+  min (IT&& elms)
+  {
+    using Val = typename std::remove_reference_t<IT>::value_type;
+    Val res = std::numeric_limits<Val>::max();
+    for (auto const& elm : std::forward<IT> (elms))
+      if (elm < res)
+        res = elm;
+    return res;
+  }
+  
+  template<class CON>
+  inline auto
+  min (CON const& elms)
+  {
+    using Val = typename std::remove_reference_t<CON>::value_type;
+    Val res = std::numeric_limits<Val>::max();
+    for (auto const& elm : elms)
+      if (elm < res)
+        res = elm;
+    return res;
+  }
   
   
   

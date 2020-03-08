@@ -22,7 +22,7 @@
 
 /** @file timeline-panel-obsolete.hpp
  ** This file contains the definition of the timeline panel
- ** @deprecated rework of timeline widget iminent
+ ** @deprecated rework of timeline widget imminent
  */
 
 

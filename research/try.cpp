@@ -68,6 +68,7 @@ template <typename _Tp, typename _Dp>
 #include "lib/iter-adapter-ptr-deref.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/itertools.hpp"
+#include "lib/util-coll.hpp"
 
 #include <utility>
 #include <string>
@@ -77,6 +78,7 @@ template <typename _Tp, typename _Dp>
 
 using std::string;
 using std::make_unique;
+using util::max;
 
 
 
@@ -90,27 +92,6 @@ using Strs = std::vector<PStr>;
 
 constexpr auto elems = [](auto& coll) { return lib::ptrDeref (lib::iter_stl::eachElm (coll)); };
 
-namespace lib {
-  
-  namespace {
-    
-    template<typename T, typename D>
-    struct RemovePtr<std::unique_ptr<T,D>> { typedef T Type; };
-  }
-}
-  namespace {
-    template<class IT>
-    inline auto
-    max (IT&& elms)
-    {
-      using Val = std::remove_reference_t<typename IT::value_type>;
-      Val res = std::numeric_limits<Val>::min();
-      for (auto& elm : std::forward<IT> (elms))
-        if (elm > res)
-          res = elm;
-      return res;
-    }
-  }
 
 int
 main (int, char**)
