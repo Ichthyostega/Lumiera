@@ -82,6 +82,7 @@ namespace stage {
   extern const Symbol ATTR_name;
   extern const Symbol ATTR_fork;
   extern const Symbol ATTR_assets;
+  extern const Symbol ATTR_start;
   
   
   /* ======== UI-Element protocol ======== */

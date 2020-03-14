@@ -82,7 +82,7 @@ namespace timeline {
       vector<unique_ptr<ClipPresenter>> effects_;
       vector<unique_ptr<MarkerWidget>>  markers_;
       
-      ClipWidget widget_;
+      unique_ptr<ClipDelegate> widget_;
       
     public:
       /**

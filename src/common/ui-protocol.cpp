@@ -43,6 +43,7 @@ namespace stage {
   const Symbol ATTR_name{"name"};
   const Symbol ATTR_fork{"fork"};
   const Symbol ATTR_assets{"assets"};
+  const Symbol ATTR_start{"start"};
   
   
   /* ======== UI-Element protocol ======== */

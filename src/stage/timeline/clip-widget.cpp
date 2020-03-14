@@ -64,15 +64,28 @@ namespace timeline {
   
   
   
-  ClipWidget::ClipWidget ()
+  ClipDelegate::~ClipDelegate() { }
+  
+  
+  ClipDelegate::ClipDelegate ()
     {
     }
   
   
-  ClipWidget::~ClipWidget()
-  {
-  }
-  
+  namespace {// details of concrete clip appearance styles...
+    
+    class ClipWidget
+      : public Gtk::Button       //////////////////////////////////////////////////////////////////TICKET #1211 : need preliminary placeholder clip widget for timeline layout
+      , public ClipDelegate
+      , util::MoveOnly
+      {
+        /* === Interface ClipDelegate === */
+        
+      public:
+        ClipWidget() { }
+      };
+    
+  }//(End)clip appearance details.
   
   
   

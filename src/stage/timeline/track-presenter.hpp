@@ -90,6 +90,7 @@
 #include "stage/timeline/clip-presenter.hpp"
 #include "stage/timeline/track-head-widget.hpp"
 #include "stage/timeline/track-body.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/iter-tree-explorer.hpp"
 #include "lib/util-coll.hpp"
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
@@ -100,6 +101,7 @@
 //#include "lib/util.hpp"
 
 //#include <memory>
+#include <optional>
 #include <utility>
 #include <vector>
 
@@ -110,10 +112,11 @@ namespace timeline {
   
   using std::vector;
   using std::unique_ptr;
+  using std::make_unique;
   
+  using lib::time::Time;
   using lib::diff::TreeMutator;
   using lib::diff::collection;
-  using std::make_unique;
   using lib::explore;
   using util::max;
   
@@ -121,6 +124,11 @@ namespace timeline {
   using PClip  = unique_ptr<ClipPresenter>;
   using PMark  = unique_ptr<MarkerWidget>;
   using PRuler = unique_ptr<RulerTrack>;
+  
+  namespace {
+    const int TODO_px_per_second = 25;
+    const int TODO_px_per_microtick = TODO_px_per_second / Time::SCALE;
+  }
   
   
   /**
@@ -219,6 +227,18 @@ namespace timeline {
       
     private:/* ===== Internals ===== */
       
+      /** try to extract the start coordinates from a given Diff spec */
+      std::optional<int>
+      extractStartOffset (GenNode const& spec)
+        {
+          Rec const& data{spec.data.get<Rec>()};
+          if (!data.hasAttribute(string{ATTR_start}))
+            return std::nullopt;
+          int x = TODO_px_per_microtick * _raw(data.get(string{ATTR_start}).data.get<Time>());   ////////////TICKET #1213 : need to abstract that away!!
+          return x;
+        }
+      
+      
       /** invoked via diff to show a (changed) track name */
       void
       setTrackName (string name)
@@ -311,6 +331,7 @@ namespace timeline {
                   })
                .constructFrom ([&](GenNode const& spec) -> PClip
                   {
+                    std::optional<int> startOffsetX{extractStartOffset (spec)}; 
                     return make_unique<ClipPresenter> (spec.idi, this->uiBus_);
                   })
                .buildChildMutator ([&](PClip& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool

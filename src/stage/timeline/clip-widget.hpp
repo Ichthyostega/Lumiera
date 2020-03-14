@@ -46,7 +46,7 @@
  ** content is stylised and the temporal extension does not matter. In this form,
  ** the clip is reduced to an icon, an expand widget and a ID label. This is the
  ** standard representation encountered within the _media bins._ The intent of this
- ** representation is to save on screen area, especially to minimise vertical extension.
+ ** representation is to save on screen estate, especially to minimise vertical extension.
  ** But as a derivative of this layout style, a clip may be shown in abridged form, but
  ** in fact _with proper representation of the temporal extension;_ to this end, the
  ** enclosing box is extended horizontally as needed, while the compound of icon,
@@ -115,13 +115,16 @@ namespace timeline {
   
   
   /**
-   * @todo WIP-WIP as of 12/2016
+   * @todo WIP-WIP as of 3/2020
    */
-  class ClipWidget
+  class ClipDelegate
     {
     public:
-      ClipWidget();
-     ~ClipWidget();
+      enum Appearance {PENDING, ABRIDGED, COMPACT, EXPANDED, DEGRADED};
+      
+      virtual ~ClipDelegate();   ///< this is an interface
+      
+      ClipDelegate();
      
     private:/* ===== Internals ===== */
      
