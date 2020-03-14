@@ -110,6 +110,7 @@
 #include "lib/variant.hpp"
 #include "lib/util.hpp"
 
+#include <optional>
 #include <utility>
 #include <string>
 #include <deque>
@@ -200,12 +201,6 @@ namespace diff{
       template<typename X>
       X const& get()  const;
       
-      /** determine if payload constitutes a nested scope ("object") */
-      bool isNested()  const;
-      
-      /** peek into the type field of a nested `Record<GenNode>` */
-      string recordType()  const;
-      
       /** visit _children_ of a nested `Record<GenNode>` */
       Rec::scopeIter
       childIter()  const
@@ -216,6 +211,22 @@ namespace diff{
           else
             return rec->scope();
         }
+      
+      /** determine if payload constitutes a nested scope ("object") */
+      bool isNested()  const;
+      
+      /** peek into the type field of a nested `Record<GenNode>` */
+      string recordType()  const;
+      
+      /** peek into the attributes of a nested Record */
+      template<typename X>
+      std::optional<X>
+      retrieveAttribute (string key)  const;
+      
+      bool hasAttribute (string key)  const;
+      
+    private:
+      Rec* maybeAccessNestedRec();
     };
   
   
@@ -454,6 +465,15 @@ namespace diff{
         {
           return GenNode{ID{move (rawID)}, DataCap{forward<X> (payload)}};
         }
+      
+      /** mismatch tolerant convenience shortcut to peek
+       *  into the attributes of a nested Record */
+      template<typename X>
+      std::optional<X>
+      retrieveAttribute (string key)  const;
+      
+      bool hasAttribute (string key)  const;
+      bool isNested()                 const;
       
       
     protected:
@@ -715,6 +735,20 @@ namespace diff{
     return Variant<DataValues>::get<RecRef>();
   }
   
+  /** @internal helper to possibly peek into a nested record */
+  inline Rec*
+  DataCap::maybeAccessNestedRec()
+  {
+    Rec* nested = maybeGet<Rec>();
+    if (!nested)
+      { // 2nd try: maybe we hold a reference?
+        RecRef* ref = maybeGet<RecRef>();
+        if (ref and not ref->empty())
+          nested = ref->get();
+      }
+    return nested;
+  }
+  
   /**
    * @return either the contents of a nested record's type field
    *         or the util::BOTTOM_INDICATOR, when not a record.
@@ -725,14 +759,7 @@ namespace diff{
   inline string
   DataCap::recordType()  const
   {
-    Rec* nested = unConst(this)->maybeGet<Rec>();
-    if (!nested)
-      {
-        RecRef* ref = unConst(this)->maybeGet<RecRef>();
-        if (ref and not ref->empty())
-          nested = ref->get();
-      }
-    
+    Rec* nested = unConst(this)->maybeAccessNestedRec();
     return nested? nested->getType()
                  : util::BOTTOM_INDICATOR;
   }
@@ -740,8 +767,53 @@ namespace diff{
   inline bool
   DataCap::isNested()  const
   {
-    return util::BOTTOM_INDICATOR != recordType();
+    return nullptr != unConst(this)->maybeAccessNestedRec();
   }
+  
+  
+  template<typename X>
+  inline std::optional<X>
+  DataCap::retrieveAttribute (string key)  const
+  {
+    static_assert (not std::is_reference_v<X>
+                  ,"optional access only possible by value");
+    
+    Rec* nested = unConst(this)->maybeAccessNestedRec();
+    if (nested and nested->hasAttribute (key))
+      {
+        DataCap const& nestedAttributeData = nested->get(key).data;
+        X* payload = unConst(nestedAttributeData).maybeGet<X>();
+        if (payload) return *payload;  // Note: payload copied into optional
+      }
+    return std::nullopt;
+  }
+  
+  inline bool
+  DataCap::hasAttribute (string key)  const
+  {
+    Rec* nested = unConst(this)->maybeAccessNestedRec();
+    return nested and nested->hasAttribute (key);
+  }
+  
+  template<typename X>
+  inline std::optional<X>
+  GenNode::retrieveAttribute (string key)  const
+  {
+    return data.retrieveAttribute<X> (key);
+  }
+  
+  inline bool
+  GenNode::hasAttribute (string key)  const
+  {
+    return data.hasAttribute (key);
+  }
+  
+  inline bool
+  GenNode::isNested()  const
+  {
+    return data.isNested();
+  }
+  
   
   
   

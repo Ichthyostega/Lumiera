@@ -99,6 +99,7 @@ namespace test{
           objectShortcut();
           symbolReference();
           sequenceIteration();
+          convenienceRecAccess();
         }
       
       
@@ -946,6 +947,52 @@ namespace test{
           
           // NOTE: "match" operation is shallow on records
           CHECK (copy.matches(ni1)); CHECK (ni1.matches(copy));
+        }
+      
+      
+      /** @test simplified notation for access to nested record properties.
+       * This is a somewhat questionable shorthand, insofar it allows to "probe"
+       * the contents of a GenNode to some limited extent. Generally speaking,
+       * we'd prefer if the code using GenNode operates based on precise
+       * structural knowledge, instead of peeking into the data.
+       */
+      void
+      convenienceRecAccess()
+        {
+          GenNode n1(42);
+          GenNode n2 = MakeRec().type("spam").genNode("eggs");
+          GenNode n3 = MakeRec().attrib("Ψ", Time(3,2,1)).genNode();
+          
+          CHECK (not n1.isNamed());
+          CHECK (    n2.isNamed());
+          CHECK (not n3.isNamed());
+          
+          CHECK (not n1.isNested());
+          CHECK (    n2.isNested());
+          CHECK (    n3.isNested());
+          
+          CHECK (n1.data.recordType() == util::BOTTOM_INDICATOR);
+          CHECK (n2.data.recordType() == "spam"                );
+          CHECK (n3.data.recordType() == Rec::TYPE_NIL         );
+          
+          CHECK (not n1.hasAttribute("baked beans"));
+          CHECK (not n2.hasAttribute("baked beans"));
+          CHECK (not n3.hasAttribute("baked beans"));
+          
+          CHECK (not n1.hasAttribute("Ψ"));
+          CHECK (not n2.hasAttribute("Ψ"));
+          CHECK (    n3.hasAttribute("Ψ"));
+          
+          CHECK (not n1.retrieveAttribute<float>("Ψ"));
+          CHECK (not n2.retrieveAttribute<float>("Ψ"));
+          CHECK (not n3.retrieveAttribute<float>("Ψ"));
+          
+          CHECK (not n1.retrieveAttribute<Time>("Ψ"));
+          CHECK (not n2.retrieveAttribute<Time>("Ψ"));
+          CHECK (    n3.retrieveAttribute<Time>("Ψ"));
+          
+          CHECK (Time(3,2,1) == *n3.retrieveAttribute<Time>("Ψ"));
+          CHECK (std::nullopt == n2.retrieveAttribute<Time>("Ψ"));
         }
     };
   

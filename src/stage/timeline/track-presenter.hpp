@@ -231,11 +231,11 @@ namespace timeline {
       std::optional<int>
       extractStartOffset (GenNode const& spec)
         {
-          Rec const& data{spec.data.get<Rec>()};
-          if (!data.hasAttribute(string{ATTR_start}))
+          auto startTime = spec.retrieveAttribute<Time> (string{ATTR_start});
+          if (startTime)
+            return TODO_px_per_microtick * _raw(*startTime);   //////////////////////////////////////////////TICKET #1213 : need to abstract that away!!
+          else
             return std::nullopt;
-          int x = TODO_px_per_microtick * _raw(data.get(string{ATTR_start}).data.get<Time>());   ////////////TICKET #1213 : need to abstract that away!!
-          return x;
         }
       
       
