@@ -331,8 +331,8 @@ namespace timeline {
                   })
                .constructFrom ([&](GenNode const& spec) -> PClip
                   {
-                    std::optional<int> startOffsetX{extractStartOffset (spec)}; 
-                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_);
+                    std::optional<int> startOffsetX{extractStartOffset (spec)};    //////////////////////////TICKET #1213 : should pass the start time instead!!
+                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_, startOffsetX);
                   })
                .buildChildMutator ([&](PClip& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {

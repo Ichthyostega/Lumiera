@@ -59,6 +59,7 @@
 //#include "lib/util.hpp"
 
 //#include <memory>
+#include <optional>
 #include <vector>
 
 
@@ -67,6 +68,7 @@ namespace stage  {
 namespace timeline {
   
   using std::vector;
+  using std::optional;
   using std::unique_ptr;
   
   class MarkerWidget;
@@ -89,7 +91,7 @@ namespace timeline {
        * @param identity used to refer to a corresponding session::Fork in the Session
        * @param nexus a way to connect this Controller to the UI-Bus.
        */
-      ClipPresenter (ID identity, ctrl::BusTerm& nexus);
+      ClipPresenter (ID identity, ctrl::BusTerm& nexus, optional<int> offsetX);
       
      ~ClipPresenter();
       

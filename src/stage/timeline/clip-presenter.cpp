@@ -65,14 +65,14 @@ namespace timeline {
   
   
   
-  ClipPresenter::ClipPresenter (ID identity, ctrl::BusTerm& nexus)
+  ClipPresenter::ClipPresenter (ID identity, ctrl::BusTerm& nexus, optional<int> offsetX)
     : Controller{identity, nexus}
     , channels_{}
     , effects_{}
     , markers_{}
     , widget_{}
     {
-      UNIMPLEMENTED ("how inject the ClipWidget into the appropriate GTK display context");
+      UNIMPLEMENTED ("decide upon the appearance style, based on the presence of the offset. Instantiate the appropriate delegate");
     }
   
   
@@ -122,7 +122,7 @@ namespace timeline {
                   })
                .constructFrom ([&](GenNode const& spec) -> PEffect
                   {
-                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_);
+                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_, std::nullopt);     ///////////TICKET #1213 : is it really such a good idea to pass that here??
                   })
                .buildChildMutator ([&](PEffect& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
@@ -141,7 +141,7 @@ namespace timeline {
                   })
                .constructFrom ([&](GenNode const& spec) -> PChannel
                   {
-                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_);
+                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_, std::nullopt);     ///////////TICKET #1213 : is it really such a good idea to pass that here??
                   })
                .buildChildMutator ([&](PChannel& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {

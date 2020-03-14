@@ -27838,6 +27838,21 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584229199851" HGAP="47" ID="ID_1146096669" MODIFIED="1584229499004" TEXT="Vorsicht: Darstellung von Spuren und Effekten im Clip" VSHIFT="2">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wir verwenden das ClipDelegate aber auch, um in Clips eingebettete Effekte oder die einzelnen Spuren darzustellen. Die Logik f&#252;r den Anzeigestil mu&#223; das mit ber&#252;cksichtigen
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#a92d35" DESTINATION="ID_63120870" ENDARROW="Default" ENDINCLINATION="246;-353;" ID="Arrow_ID_973658371" STARTARROW="None" STARTINCLINATION="392;20;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1584203074908" HGAP="34" ID="ID_366939108" MODIFIED="1584203089228" TEXT="das f&#xfc;hrt zu einem State-Pattern" VSHIFT="6">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
@@ -27939,6 +27954,44 @@
 <node CREATED="1541095855984" ID="ID_1437927701" MODIFIED="1557498707231" TEXT="verwendet ElementBoxWidget">
 <arrowlink COLOR="#f6cca4" DESTINATION="ID_368245484" ENDARROW="Default" ENDINCLINATION="-599;39;" ID="Arrow_ID_703893400" STARTARROW="None" STARTINCLINATION="42;-316;"/>
 <icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584229399430" ID="ID_1431813131" MODIFIED="1584229407583" TEXT="Logik zur Auswahl des Anzeigestils">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1584229415906" ID="ID_153053846" MODIFIED="1584229421096" TEXT="ist teilweise generisch">
+<node CREATED="1584229508960" ID="ID_1415254796" MODIFIED="1584229544527" TEXT="ausreichend spezifiziert f&#xfc;r eine Anzeige"/>
+<node CREATED="1584229545211" ID="ID_1361609374" MODIFIED="1584229556397" TEXT="zumindest die Zeitspanne mu&#xdf; feststellbar sein">
+<node CREATED="1584229568528" ID="ID_890807423" MODIFIED="1584229573721" TEXT="lib::TimeSpan"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584229557893" ID="ID_1779361600" MODIFIED="1584229577271" TEXT="Spezialfall &quot;alles&quot;">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1584229580470" ID="ID_1095483529" MODIFIED="1584229645233" TEXT="Effekt/Medienspur">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...diese erstreckt sich typischerweise &#252;ber die gesamte L&#228;nge des umschlie&#223;enden Containers, und pa&#223;t sich dieser ohne weiteres dynamisch an
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1584229601787" ID="ID_4294703" MODIFIED="1584229614293" TEXT="Unterschied zwischen &quot;unbekannt&quot; und &quot;nicht limitiert&quot;">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1584229422204" ID="ID_184368820" MODIFIED="1584229433862" TEXT="teilweise abh&#xe4;ngig von &#xe4;u&#xdf;eren Vorgaben">
+<node CREATED="1584229436514" ID="ID_973243748" MODIFIED="1584229447389" TEXT="Zoom und Anzeimodus global"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584229448099" ID="ID_63120870" MODIFIED="1584229493037" TEXT="Fallunterscheidung">
+<linktarget COLOR="#a92d35" DESTINATION="ID_63120870" ENDARROW="Default" ENDINCLINATION="246;-353;" ID="Arrow_ID_973658371" SOURCE="ID_1146096669" STARTARROW="None" STARTINCLINATION="392;20;"/>
+<icon BUILTIN="messagebox_warning"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1584229452911" ID="ID_1237351867" MODIFIED="1584229457411" TEXT="Clip auf Track"/>
+<node CREATED="1584229458191" ID="ID_911164271" MODIFIED="1584229464666" TEXT="Effekt / Medienspur im clip"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1583102068949" ID="ID_1157479559" MODIFIED="1583102075826" TEXT="Probleme / Entscheidungen">
