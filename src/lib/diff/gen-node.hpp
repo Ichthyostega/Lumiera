@@ -630,13 +630,13 @@ namespace diff{
   /** @internal Core operation to expand nested scopes recursively */
   inline DataCap::Locator
   DataCap::expand()  const
-    {
-      Rec* val = unConst(this)->maybeGet<Rec>();
-      if (!val)
-        return Locator();
-      else
-        return Locator(*val);
-    }
+  {
+    Rec* val = unConst(this)->maybeGet<Rec>();
+    if (!val)
+      return Locator();
+    else
+      return Locator(*val);
+  }
   
   
   struct GenNode::ScopeExplorerIterator
@@ -671,16 +671,16 @@ namespace diff{
   template<typename X>
   inline X&
   DataCap::get()
-    {
-      return Variant<DataValues>::get<X>();
-    }
+  {
+    return Variant<DataValues>::get<X>();
+  }
   
   template<typename X>
   inline X const&
   DataCap::get()  const
-    {
-      return Variant<DataValues>::get<X>();
-    }
+  {
+    return Variant<DataValues>::get<X>();
+  }
   
   /** especially when accessing for a Record,
    * a payload of type \c RecordRef<Record<GenNode>> (aka RecRef)
@@ -698,22 +698,22 @@ namespace diff{
   template<>
   inline Rec&
   DataCap::get()
-    {
-      Rec* rec = maybeGet<Rec>();
-      if (rec) return *rec;
-      
-      return Variant<DataValues>::get<RecRef>();
-    }
+  {
+    Rec* rec = maybeGet<Rec>();
+    if (rec) return *rec;
+    
+    return Variant<DataValues>::get<RecRef>();
+  }
   
   template<>
   inline Rec const&
   DataCap::get()  const
-    {
-      Rec* rec = unConst(this)->maybeGet<Rec>();
-      if (rec) return *rec;
-      
-      return Variant<DataValues>::get<RecRef>();
-    }
+  {
+    Rec* rec = unConst(this)->maybeGet<Rec>();
+    if (rec) return *rec;
+    
+    return Variant<DataValues>::get<RecRef>();
+  }
   
   /**
    * @return either the contents of a nested record's type field
@@ -724,24 +724,24 @@ namespace diff{
    */
   inline string
   DataCap::recordType()  const
-    {
-      Rec* nested = unConst(this)->maybeGet<Rec>();
-      if (!nested)
-        {
-          RecRef* ref = unConst(this)->maybeGet<RecRef>();
-          if (ref and not ref->empty())
-            nested = ref->get();
-        }
-      
-      return nested? nested->getType()
-                   : util::BOTTOM_INDICATOR;
-    }
+  {
+    Rec* nested = unConst(this)->maybeGet<Rec>();
+    if (!nested)
+      {
+        RecRef* ref = unConst(this)->maybeGet<RecRef>();
+        if (ref and not ref->empty())
+          nested = ref->get();
+      }
+    
+    return nested? nested->getType()
+                 : util::BOTTOM_INDICATOR;
+  }
   
   inline bool
   DataCap::isNested()  const
-    {
-      return util::BOTTOM_INDICATOR != recordType();
-    }
+  {
+    return util::BOTTOM_INDICATOR != recordType();
+  }
   
   
   
