@@ -458,11 +458,19 @@ namespace diff{
          *  be invoked _after_ applying a diff with any `INS`, `DEL`, `FIND`, `SKIP` verb.
          * @remark in theory, one could also drop contents indirectly, by sending only
          *         part of the necessary PICK verbs (or using AFTER(...)). However,
-         *         such a diff is formally not prohibited, and will indeed be detected as
+         *         such a diff is formally not allowed, and will indeed be detected as
          *         error when leaving a scope, in ChildCollectionMutator::completeScope()
          */
         template<typename LIS>
         auto onSeqChange (LIS changeListener);
+        
+        /** attach a listener function, to be invoked on any _local change._
+         *  This includes the [structural changes](\ref onSeqChange()), but also
+         *  value assignments to any attribute or element.
+         * @note mutation of a nested child scope will _not_ trigger this listener.
+         */
+        template<typename LIS>
+        auto onLocalChange (LIS changeListener);
       };
     
   }//(END) Mutator-Builder...

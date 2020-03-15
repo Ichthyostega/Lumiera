@@ -27794,8 +27794,7 @@
       kann erst erfolgen, <i>wenn's soweit ist</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27805,13 +27804,38 @@
       ...und mu&#223; damit in den State-Change-Mechanismus f&#252;r den Pr&#228;sentationsstil verlegt werden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1584289349339" ID="ID_1202416542" MODIFIED="1584289360503" TEXT="also eben doch nicht gleich beim ctor-Aufruf"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584289361215" ID="ID_1687516658" MODIFIED="1584289369023" TEXT="brauche stattdessen einen Diff-Listener">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584307692087" ID="ID_1525336492" MODIFIED="1584307714957" TEXT="gen&#xfc;gen uns Struktur-&#xc4;nderungen (onSeqChange)?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1584307718907" ID="ID_211654301" MODIFIED="1584307729382" TEXT="im Moment ja, aber vermutlich l&#xe4;ngerfristig nicht">
+<node COLOR="#338800" CREATED="1584309711112" ID="ID_161551669" MODIFIED="1584309897727" TEXT="Diff-Listener um assignElm() erg&#xe4;nzen">
+<arrowlink COLOR="#427176" DESTINATION="ID_274485695" ENDARROW="Default" ENDINCLINATION="-1913;0;" ID="Arrow_ID_1484023114" STARTARROW="None" STARTINCLINATION="926;63;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584309903737" ID="ID_1025527544" MODIFIED="1584309912017" TEXT="onLocalChange()-Listener installieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1584307731586" ID="ID_1716161483" MODIFIED="1584307998380">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Nebenbei bemerkt: die Aktion mu&#223; <b>idempotent</b>&#160;sein
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 <node CREATED="1584201751260" ID="ID_1492285349" MODIFIED="1584201760641" TEXT="Problem: initiale Koordinaten">
@@ -27855,8 +27879,7 @@
       wir verwenden das ClipDelegate aber auch, um in Clips eingebettete Effekte oder die einzelnen Spuren darzustellen. Die Logik f&#252;r den Anzeigestil mu&#223; das mit ber&#252;cksichtigen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#a92d35" DESTINATION="ID_63120870" ENDARROW="Default" ENDINCLINATION="246;-353;" ID="Arrow_ID_973658371" STARTARROW="None" STARTINCLINATION="392;20;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -27902,8 +27925,7 @@
       Letzteres gef&#228;llt mir definitiv besser
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -27989,8 +28011,7 @@
       ...diese erstreckt sich typischerweise &#252;ber die gesamte L&#228;nge des umschlie&#223;enden Containers, und pa&#223;t sich dieser ohne weiteres dynamisch an
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1584229601787" ID="ID_4294703" MODIFIED="1584229614293" TEXT="Unterschied zwischen &quot;unbekannt&quot; und &quot;nicht limitiert&quot;">
 <icon BUILTIN="idea"/>
@@ -37942,6 +37963,12 @@
 <linktarget COLOR="#4d8b82" DESTINATION="ID_727500820" ENDARROW="Default" ENDINCLINATION="-1859;0;" ID="Arrow_ID_680446238" SOURCE="ID_1492167964" STARTARROW="None" STARTINCLINATION="-2344;0;"/>
 <linktarget COLOR="#519b84" DESTINATION="ID_727500820" ENDARROW="Default" ENDINCLINATION="-67;7;" ID="Arrow_ID_115955006" SOURCE="ID_1220310042" STARTARROW="None" STARTINCLINATION="71;200;"/>
 <icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1584309662354" ID="ID_274485695" MODIFIED="1584309897727" TEXT="onLocalChange">
+<linktarget COLOR="#427176" DESTINATION="ID_274485695" ENDARROW="Default" ENDINCLINATION="-1913;0;" ID="Arrow_ID_1484023114" SOURCE="ID_161551669" STARTARROW="None" STARTINCLINATION="926;63;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1584309681495" HGAP="26" ID="ID_466790810" MODIFIED="1584309702146" TEXT="einfache Erg&#xe4;nzung" VSHIFT="14"/>
+<node CREATED="1584309688390" ID="ID_9063913" MODIFIED="1584309697322" TEXT="schlie&#xdf;t auch Wert-Zuweisungen mit ein"/>
 </node>
 </node>
 </node>

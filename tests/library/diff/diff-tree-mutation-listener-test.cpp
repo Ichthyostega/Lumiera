@@ -87,7 +87,10 @@ namespace test{
    * @test When creating a TreeMutator binding, a listener (lambda) can be attached,
    *       to be invoked on structural changes...
    *       - inserting, removing and reordering of children counts as "structural" change
-   *       - whereas assignment of a new value or nested mutation does not trigger
+   *       - whereas assignment of a new value will only trigger `onLocalChange()`
+   *       - mutation of nested scopes does not trigger any of these listeners,
+   *         since (within the existing framework) there is no simple way to
+   *         intercept also the child mutation stream to check for relevance.
    * @note This test binds the test class itself for diff mutation, applying changes
    *       onto a vector with test data.  The binding itself is somewhat unusual,
    *       insofar it allows to re-assign elements within the vector, which can be
@@ -115,10 +118,13 @@ namespace test{
     {
       std::vector<string> subject_;
       int structChanges_ = 0;
+      int localChanges_ = 0;
       
       /** rig the test class itself to receive a diff mutation.
        *  - bind the #subject_ data collection to be changed by diff
-       *  - attach a listener, to be invoked on _structural changes
+       *  - attach a listener, to be invoked on _structural changes_
+       *  - attach another listener, activated both on structural
+       *    changes and on _value assignment._
        */
       void
       buildMutator (TreeMutator::Handle buff)  override
@@ -137,7 +143,11 @@ namespace test{
                                           }))
               .onSeqChange ([&]()
                   {
-                    ++structChanges_;    // Note: this lambda is the key point for this test
+                    ++structChanges_;    // Note: these lambdas are the key point for this test
+                  })
+              .onLocalChange ([&]()
+                  {
+                    ++localChanges_;
                   })
             );
         }
@@ -148,6 +158,7 @@ namespace test{
         {
           CHECK (isnil (subject_));
           CHECK (0 == structChanges_);
+          CHECK (0 == localChanges_);
           
           DiffApplicator<DiffTreeMutationListener_test> applicator{*this};
           
@@ -158,6 +169,7 @@ namespace test{
                                              }});
           CHECK ("a, c, d, c" == contents(subject_));
           CHECK (1 == structChanges_);
+          CHECK (1 == localChanges_);
           
           applicator.consume (MutationMessage{{after(Ref::END)
                                              , set (VAL_C_UPPER)    // Note: the current element is tried first, which happens to match
@@ -165,6 +177,7 @@ namespace test{
                                              }});
           CHECK ("a, c, D, C" == contents(subject_));
           CHECK (1 == structChanges_);                              // Note: the listener has not fired, since this counts as value change.
+          CHECK (2 == localChanges_);
           
           applicator.consume (MutationMessage{{pick(VAL_A)
                                              , ins (VAL_B)
@@ -174,12 +187,14 @@ namespace test{
                                              , del (VAL_C)
                                              }});
           CHECK ("a, b, D, c" == contents(subject_));
-          CHECK (2 == structChanges_);                              // Note: this obviously is a structure change, so the listener fired.
+          CHECK (2 == structChanges_);                              // Note: this obviously is a structure change, so both listeners fired.
+          CHECK (3 == localChanges_);
           
           applicator.consume (MutationMessage{{after(Ref::END)
                                              }});
           CHECK ("a, b, D, c" == contents(subject_));
-          CHECK (2 == structChanges_);                              // Note: contents confirmed as-is, listener not invoked.
+          CHECK (2 == structChanges_);                              // Note: contents confirmed as-is, none of the listeners is invoked.
+          CHECK (3 == localChanges_);
         }
     };
   

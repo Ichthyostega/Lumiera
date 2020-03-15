@@ -60,22 +60,39 @@ namespace diff{
     
     /**
      * Decorator for TreeMutator bindings, to fire a listener function
-     * when the applied diff describes a structural change. By convention,
-     * all changes pertaining the sequence of children count as structural.
-     * Thus, effectively a structural change incurs usage of the `INS`, `DEL`
-     * `SKIP` or `FIND` verbs, which in turn are translated into the three
-     * API operation intercepted here.
+     * when the applied diff describes a relevant change. Changes can be
+     * _structural,_ they can be _value mutations_ or _child mutations._
+     * By convention, all changes pertaining the sequence of children are
+     * classified as structural changes. Thus, effectively a structural
+     * change incurs usage of the `INS`, `DEL`, `SKIP` or `FIND` verbs,
+     * which in turn will be translated into the three API operations
+     * intercepted here in the basic setup. When value assignments
+     * count as "relevant", then we'll also have to intercept the
+     * `assignElm` API operation. However, the relevance of
+     * mutations to child elements is difficult to assess
+     * on this level, since we can not see what a nested
+     * scope actually does to the mutated child elements.
+     * @tparam assign also trigger on assignments in addition to
+     *       structural changes (which will always trigger).
+     *       Defaults to `false`
      * @note TreeMutator is a disposable one-way object;
      *       the triggering mechanism directly relies on that.
      *       The listener is invoked, whenever a scope is complete,
      *       including processing of any nested scopes.
      */
-    template<class PAR, typename LIS>
+    template<class PAR, typename LIS, bool assign =false>
     class Detector4StructuralChanges
       : public PAR
       {
         LIS changeListener_;
         bool triggered_ = false;
+        
+        void
+        trigger(bool relevant =true)
+          {
+            if (relevant)
+              triggered_ = true;
+          }
         
       public:
         Detector4StructuralChanges (LIS functor, PAR&& chain)
@@ -86,9 +103,9 @@ namespace diff{
         // move construction allowed and expected to happen
         Detector4StructuralChanges (Detector4StructuralChanges&&) =default;
         
-        /** once the diff is for this level is completely applied,
-         *  the TreeMutator will be discarded, and we can fire our
-         *  change listener at that point. */
+        /** once the diff for this level is completely applied,
+         *  the TreeMutator will be discarded, and we can fire
+         *  our change listener at that point. */
        ~Detector4StructuralChanges()
           {
             if (triggered_)
@@ -99,9 +116,10 @@ namespace diff{
         
         using Elm  = GenNode const&;
         
-        bool injectNew (Elm elm) override { triggered_ = true; return PAR::injectNew (elm); }
-        bool findSrc (Elm elm)   override { triggered_ = true; return PAR::findSrc (elm); }
-        void skipSrc (Elm elm)   override { triggered_ = true;        PAR::skipSrc (elm); }
+        bool injectNew (Elm elm) override { trigger();       return PAR::injectNew (elm); }
+        bool findSrc   (Elm elm) override { trigger();       return PAR::findSrc   (elm); }
+        void skipSrc   (Elm elm) override { trigger();              PAR::skipSrc   (elm); }
+        bool assignElm (Elm elm) override { trigger(assign); return PAR::assignElm (elm); }
       };
     
     
@@ -116,6 +134,19 @@ namespace diff{
       ASSERT_VALID_SIGNATURE (LIS, void(void))
       
       return chainedBuilder<Detector4StructuralChanges<PAR,LIS>> (changeListener);
+    }
+    
+    /** Entry point for DSL builder: attach a functor as listener to be notified after either
+     * a structural change, or a value assignment within the local scope of this TreeMutator.
+     */
+    template<class PAR>
+    template<typename LIS>
+    inline auto
+    Builder<PAR>::onLocalChange (LIS changeListener)
+    {
+      ASSERT_VALID_SIGNATURE (LIS, void(void))
+                                                            //  vvvv---note: including assignments
+      return chainedBuilder<Detector4StructuralChanges<PAR,LIS, true>> (changeListener);
     }
     
   }//(END)Mutator-Builder decorator components...
