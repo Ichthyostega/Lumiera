@@ -146,17 +146,16 @@ namespace timeline {
       ViewHooked<TrackHeadWidget> head_;
       ViewHooked<TrackBody>       body_;
       
-      /* ==== Interface: DisplayViewHooks===== */
-      
-      model::ViewHook<TrackHeadWidget>& getHeadHook()  override { return head_; };
-      model::ViewHook<TrackBody>&       getBodyHook()  override { return body_; };
-      model::ViewHook<Gtk::Widget>&     getClipHook()  override { return *this; };
-      
       /* === extended Interface for relative view hook === */
       
       int hookAdjX (int xPos)  override { return xPos; };
       int hookAdjY (int yPos)  override { return yPos + body_.getContentOffsetY(); };
       
+    public: /* ==== Interface: DisplayViewHooks===== */
+      
+      model::ViewHook<TrackHeadWidget>& getHeadHook()  override { return head_; };
+      model::ViewHook<TrackBody>&       getBodyHook()  override { return body_; };
+      model::ViewHook<Gtk::Widget>&     getClipHook()  override { return *this; };
       
     public:
       DisplayFrame (DisplayViewHooks& displayAnchor)
@@ -333,7 +332,7 @@ namespace timeline {
                .constructFrom ([&](GenNode const& spec) -> PClip
                   {
                     std::optional<int> startOffsetX{extractStartOffset (spec)};    //////////////////////////TICKET #1213 : should pass the start time instead!!
-                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_, startOffsetX);
+                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_, display_.getClipHook(), startOffsetX);
                   })
                .buildChildMutator ([&](PClip& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {

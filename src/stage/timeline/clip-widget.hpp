@@ -106,13 +106,17 @@
 
 //#include "lib/util.hpp"
 
+#include <optional>
 #include <memory>
+#include <string>
 //#include <vector>
 
 
 
 namespace stage  {
 namespace timeline {
+  
+  using std::string;
   
   using WidgetViewHook = model::ViewHook<Gtk::Widget>;
   
@@ -125,16 +129,20 @@ namespace timeline {
    */
   class ClipDelegate
     {
-      WidgetViewHook* display_;
-      
     public:
       virtual ~ClipDelegate();   ///< this is an interface
+      ClipDelegate();
       
       
       enum Appearance {PENDING, SYMBOLIC, ABRIDGED, COMPACT, EXPANDED, DEGRADED};
       
       
-      ClipDelegate(WidgetViewHook& displayAnchor);
+      /** vertical offset below the track start */
+      static const int defaultOffsetY;
+      
+      /** placeholder name -- typically overridden from the model */
+      static const string defaultName;
+      
       
       /** request to change the clip delegate's appearance style, if possible.
        * @param manager entity to hold and maintain this specific appearance state.
@@ -160,6 +168,12 @@ namespace timeline {
       static Appearance switchAppearance (PDelegate& manager,
                                           Appearance desired =PENDING,
                                           WidgetViewHook* newView =nullptr);
+      
+      /** build the initial presentation widget on construction, using a minimally
+       *  viable appearance style. This is the first incantation of #switchAppearance.
+       */
+      static Appearance buildDelegate (PDelegate& manager, WidgetViewHook& view,
+                                       std::optional<int> startOffsetX);    ///////////////////////TICKET #1213 : translation time->offset should be built into the ViewHook!!!
       
     private:/* ===== Internals ===== */
      

@@ -86,12 +86,15 @@ namespace timeline {
       
       unique_ptr<ClipDelegate> widget_;
       
+      /** default level of detail presentation desired for each clip.
+       * @note the actual appearance style is chosen based on this setting
+       *       yet limited by the additional information necessary to establish
+       *       a given level; e.g. name or content renderer must be available
+       *       to allow for a detailed rendering of the clip in the timeline. */
+      static const ClipDelegate::Appearance defaultAppearance = ClipDelegate::COMPACT;
+      
     public:
-      /**
-       * @param identity used to refer to a corresponding session::Fork in the Session
-       * @param nexus a way to connect this Controller to the UI-Bus.
-       */
-      ClipPresenter (ID identity, ctrl::BusTerm& nexus, optional<int> offsetX);
+      ClipPresenter (ID, ctrl::BusTerm&, WidgetViewHook&, optional<int> offsetX);
       
      ~ClipPresenter();
       
@@ -106,6 +109,19 @@ namespace timeline {
       int determineRequiredVerticalExtension()  const;
       
     private:/* ===== Internals ===== */
+      
+      /** reevaluate desired presentation mode and available data,
+       * possibly leading to a changed appearance style of the clip.
+       * @remark a typical example would be, when a clip's temporal position,
+       *         previously unspecified, now becomes defined through a diff message.
+       *         With this data, it becomes feasible _actually to show the clip_ in
+       *         the timeline. Thus the [Appearance style](\ref ClipDelegate::Appearance)
+       *         of the presentation widget (delegate) can be switched up from `PENDING`
+       *         to `ABRIDGED`.
+       */
+      void resetAppearanceStyle();
+      
+      WidgetViewHook& getClipContentCanvas();
     };
   
   

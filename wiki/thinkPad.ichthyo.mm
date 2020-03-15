@@ -27808,18 +27808,21 @@
 <icon BUILTIN="messagebox_warning"/>
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1584289349339" ID="ID_1202416542" MODIFIED="1584289360503" TEXT="also eben doch nicht gleich beim ctor-Aufruf"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584289361215" ID="ID_1687516658" MODIFIED="1584289369023" TEXT="brauche stattdessen einen Diff-Listener">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584307692087" ID="ID_1525336492" MODIFIED="1584307714957" TEXT="gen&#xfc;gen uns Struktur-&#xc4;nderungen (onSeqChange)?">
+<node COLOR="#338800" CREATED="1584289361215" ID="ID_1687516658" MODIFIED="1584319384536" TEXT="brauche stattdessen einen Diff-Listener">
+<linktarget COLOR="#38abc2" DESTINATION="ID_1687516658" ENDARROW="Default" ENDINCLINATION="30;37;" ID="Arrow_ID_901736037" SOURCE="ID_560620961" STARTARROW="None" STARTINCLINATION="129;9;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1584307692087" ID="ID_1525336492" MODIFIED="1584318646372" TEXT="gen&#xfc;gen uns Struktur-&#xc4;nderungen (onSeqChange)?">
 <icon BUILTIN="help"/>
+<icon BUILTIN="hourglass"/>
 </node>
-<node CREATED="1584307718907" ID="ID_211654301" MODIFIED="1584307729382" TEXT="im Moment ja, aber vermutlich l&#xe4;ngerfristig nicht">
+<node COLOR="#435e98" CREATED="1584307718907" ID="ID_211654301" MODIFIED="1584318632228" TEXT="im Moment ja, aber vermutlich l&#xe4;ngerfristig nicht">
+<icon BUILTIN="yes"/>
 <node COLOR="#338800" CREATED="1584309711112" ID="ID_161551669" MODIFIED="1584309897727" TEXT="Diff-Listener um assignElm() erg&#xe4;nzen">
 <arrowlink COLOR="#427176" DESTINATION="ID_274485695" ENDARROW="Default" ENDINCLINATION="-1913;0;" ID="Arrow_ID_1484023114" STARTARROW="None" STARTINCLINATION="926;63;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584309903737" ID="ID_1025527544" MODIFIED="1584309912017" TEXT="onLocalChange()-Listener installieren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1584309903737" ID="ID_1025527544" MODIFIED="1584318627678" TEXT="onLocalChange()-Listener installieren">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node CREATED="1584307731586" ID="ID_1716161483" MODIFIED="1584307998380">
@@ -27839,7 +27842,10 @@
 </node>
 </node>
 <node CREATED="1584201751260" ID="ID_1492285349" MODIFIED="1584201760641" TEXT="Problem: initiale Koordinaten">
-<node CREATED="1584201782842" ID="ID_560620961" MODIFIED="1584201793508" TEXT="sind nicht (zwingend) im Populations-Diff"/>
+<node COLOR="#338800" CREATED="1584201782842" ID="ID_560620961" MODIFIED="1584319384536" TEXT="sind nicht (zwingend) im Populations-Diff">
+<arrowlink COLOR="#38abc2" DESTINATION="ID_1687516658" ENDARROW="Default" ENDINCLINATION="30;37;" ID="Arrow_ID_901736037" STARTARROW="None" STARTINCLINATION="129;9;"/>
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1584202974665" ID="ID_920397941" MODIFIED="1584203052619" TEXT="eigentlich ehr vom Anzeigestil abh&#xe4;ngig">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -27863,6 +27869,20 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="idea"/>
+</node>
+<node CREATED="1584319394162" ID="ID_1919037634" MODIFIED="1584319465811" TEXT="wir wollen aber eine unn&#xf6;tige Doppel-Allokation pro Clip vermeiden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn man das naiv coden w&#252;rde, dann w&#252;rden wir f&#252;r jeden Clip erst mal einen ClipData-Placeholder erzeugen, nur um dann, nach dem Empfangen des vollst&#228;ndigen Diff, diesen wieder zu deallozieren und daf&#252;r ein ClipWidget zu erzeugen...
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
 </node>
 <node CREATED="1584201841529" ID="ID_1310327519" MODIFIED="1584202923362" TEXT="Nebengedanke: Eigenheiten des Populations-Diff">
 <arrowlink COLOR="#2e3f60" DESTINATION="ID_1634323626" ENDARROW="Default" ENDINCLINATION="-1672;80;" ID="Arrow_ID_1671674197" STARTARROW="None" STARTINCLINATION="-1515;90;"/>
@@ -28026,7 +28046,33 @@
 <icon BUILTIN="messagebox_warning"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1584229452911" ID="ID_1237351867" MODIFIED="1584229457411" TEXT="Clip auf Track"/>
-<node CREATED="1584229458191" ID="ID_911164271" MODIFIED="1584229464666" TEXT="Effekt / Medienspur im clip"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584229458191" ID="ID_911164271" MODIFIED="1584318715606" TEXT="Effekt / Medienspur im clip">
+<icon BUILTIN="flag"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1584318674620" ID="ID_789719668" MODIFIED="1584318732864" TEXT="noch TOTAL ungekl&#xe4;rt">
+<icon BUILTIN="flag-pink"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584318680419" ID="ID_1709596760" MODIFIED="1584318690915" TEXT="TODO: brauche nested Canvas-ViewHook">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584319635024" ID="ID_1833569495" MODIFIED="1584319648254" TEXT="Logik im Detail ausimplementieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1584319522106" ID="ID_600779996" MODIFIED="1584319541312" TEXT="Vorsicht Falle: Kopieren beim Wechsel des Anzeigestils">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1584319543957" ID="ID_615255607" MODIFIED="1584319606901" TEXT="erst den alten ClipDelegate vom smart-Ptr abkoppeln">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1584319564342" ID="ID_1748945736" MODIFIED="1584319609077" TEXT="denn den neuen per Copy-Initialisierung erzeugen">
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1584319578712" ID="ID_1036218022" MODIFIED="1584319612171" TEXT="dann den alten ClipDelegate verwerfen">
+<icon BUILTIN="full-3"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584319587975" ID="ID_609955363" MODIFIED="1584319603776" TEXT="und das alles am Besten per smart-Ptr abgesichert">
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
@@ -28067,6 +28113,9 @@
 <icon BUILTIN="forward"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583678075045" ID="ID_1071916226" MODIFIED="1583678101462" TEXT="erst mal &#xfc;berhaupt einen Block belegen">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1584318751425" ID="ID_1908104469" MODIFIED="1584318760838" TEXT="nehme mal einen Gtk::Button...">
+<icon BUILTIN="ksmiletris"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583678122516" ID="ID_73602256" MODIFIED="1583678142379" TEXT="...und dessen vertikale Ausdehnung ermitteln und zur&#xfc;ckmelden">
 <icon BUILTIN="flag-yellow"/>

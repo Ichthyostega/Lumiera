@@ -55,36 +55,55 @@
 //using sigc::ptr_fun;
 //using std::cout;
 //using std::endl;
+using std::optional;
+using std::nullopt;
 
 
 namespace stage {
 namespace timeline {
   
-  
-  
+  const int    ClipDelegate::defaultOffsetY{0};
+  const string ClipDelegate::defaultName{_("clip")};
   
   
   ClipDelegate::~ClipDelegate() { }
   
   
-  ClipDelegate::ClipDelegate(WidgetViewHook& displayAnchor)
-    : display_{&displayAnchor}
+  ClipDelegate::ClipDelegate()
     {
     }
   
   
   namespace {// details of concrete clip appearance styles...
     
+    class ClipData
+      : public ClipDelegate
+      , util::NonCopyable
+      {
+        WidgetViewHook& display_;
+        
+        /* === Interface ClipDelegate === */
+        
+      public:
+        ClipData(WidgetViewHook& displayAnchor)
+          : ClipDelegate{}
+          , display_{displayAnchor}
+          { }
+      };
+    
+    using ViewHookedWidget = model::ViewHooked<Gtk::Button, Gtk::Widget>;   ///////////////////////////////////////////TICKET #1211 : need preliminary placeholder clip widget for timeline layout 
+    
     class ClipWidget
-      : public Gtk::Button       //////////////////////////////////////////////////////////////////TICKET #1211 : need preliminary placeholder clip widget for timeline layout
+      : public ViewHookedWidget
       , public ClipDelegate
-      , util::MoveOnly
+      , util::NonCopyable
       {
         /* === Interface ClipDelegate === */
         
       public:
-        ClipWidget(WidgetViewHook& displayAnchor)
-          : ClipDelegate{displayAnchor}
+        ClipWidget(WidgetViewHook& displayAnchor, int x, int y, uString clipName)
+          : ViewHookedWidget{displayAnchor.hookedAt(x,y), clipName}
+          , ClipDelegate{}
           { }
       };
     
@@ -98,6 +117,15 @@ namespace timeline {
   ClipDelegate::switchAppearance (PDelegate& manager, Appearance desired, WidgetViewHook* newView)
   {
     UNIMPLEMENTED ("clip appearance style state management");
+  }
+  
+  ClipDelegate::Appearance
+  ClipDelegate::buildDelegate (PDelegate& manager, WidgetViewHook& view, optional<int> startOffsetX)   ////////////////TICKET #1213 : translation time->offset should be built into the ViewHook!!!
+  {
+    if (startOffsetX)
+      manager.reset (new ClipWidget{view, *startOffsetX, defaultOffsetY, defaultName});
+    else
+      manager.reset (new ClipData{view});
   }
   
   

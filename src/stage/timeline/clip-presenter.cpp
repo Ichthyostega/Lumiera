@@ -64,15 +64,20 @@ namespace timeline {
   
   
   
-  
-  ClipPresenter::ClipPresenter (ID identity, ctrl::BusTerm& nexus, optional<int> offsetX)
+  /**
+   * @param identity referring to the corresponding session::Clip in Steam-Layer.
+   * @param nexus a way to connect this Controller to the UI-Bus.
+   * @param view (abstracted) canvas or display framework to attach this clip to
+   * @param offsetX offset relative to the start of the track       ///////////////////////////////TICKET #1213 : translation time->offset should be built into the ViewHook!!!
+   */
+  ClipPresenter::ClipPresenter (ID identity, ctrl::BusTerm& nexus, WidgetViewHook& view, optional<int> offsetX)
     : Controller{identity, nexus}
     , channels_{}
     , effects_{}
     , markers_{}
     , widget_{}
     {
-      UNIMPLEMENTED ("decide upon the appearance style, based on the presence of the offset. Instantiate the appropriate delegate");
+      ClipDelegate::buildDelegate (widget_, view, offsetX);
     }
   
   
@@ -122,7 +127,9 @@ namespace timeline {
                   })
                .constructFrom ([&](GenNode const& spec) -> PEffect
                   {
-                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_, std::nullopt);     ///////////TICKET #1213 : is it really such a good idea to pass that here??
+                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_
+                                                      ,getClipContentCanvas()
+                                                      ,std::nullopt);     /////////////////////////TICKET #1213 : is it really such a good idea to pass that here?? Note: nullopt effectively disables any display
                   })
                .buildChildMutator ([&](PEffect& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
@@ -141,17 +148,36 @@ namespace timeline {
                   })
                .constructFrom ([&](GenNode const& spec) -> PChannel
                   {
-                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_, std::nullopt);     ///////////TICKET #1213 : is it really such a good idea to pass that here??
+                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_
+                                                      ,getClipContentCanvas()
+                                                      ,std::nullopt);     /////////////////////////TICKET #1213 : how to represent "always" / "the whole track"??
                   })
                .buildChildMutator ([&](PChannel& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
                     if (subID != target->getID()) return false;
                     target->buildMutator (buff);
                     return true;
-                  })));
+                  }))
+        .onLocalChange ([this]()
+                  {
+                    this->resetAppearanceStyle();
+                  }));
+    
   }
   
   
+  void
+  ClipPresenter::resetAppearanceStyle()
+  {
+    ClipDelegate::switchAppearance (this->widget_, defaultAppearance);
+  }
+  
+  WidgetViewHook&
+  ClipPresenter::getClipContentCanvas()
+  {
+    UNIMPLEMENTED ("how to create and wire an embedded canvas for the clip contents/effects");
+  }
+
   int
   ClipPresenter::determineRequiredVerticalExtension()  const
   {
