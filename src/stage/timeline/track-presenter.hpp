@@ -84,6 +84,7 @@
 
 #include "stage/gtk-base.hpp"
 #include "include/ui-protocol.hpp"
+#include "stage/model/view-hook.hpp"
 #include "stage/model/controller.hpp"
 #include "stage/timeline/display-evaluation.hpp"
 #include "stage/timeline/marker-widget.hpp"

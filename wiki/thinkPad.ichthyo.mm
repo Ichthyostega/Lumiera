@@ -27762,10 +27762,12 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1583679368212" ID="ID_1574493569" MODIFIED="1584201569001" TEXT="Einh&#xe4;nge-Mechanismus">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583679368212" ID="ID_1574493569" MODIFIED="1584289385953" TEXT="Einh&#xe4;nge-Mechanismus">
 <arrowlink COLOR="#4668c0" DESTINATION="ID_1121301646" ENDARROW="Default" ENDINCLINATION="-360;299;" ID="Arrow_ID_1147127867" STARTARROW="None" STARTINCLINATION="466;56;"/>
 <arrowlink COLOR="#8395a4" DESTINATION="ID_178738138" ENDARROW="Default" ENDINCLINATION="-297;15;" ID="Arrow_ID_1606292545" STARTARROW="None" STARTINCLINATION="269;32;"/>
-<node CREATED="1584201581597" HGAP="61" ID="ID_1793842194" MODIFIED="1584201599382" TEXT="mu&#xdf; direkt beim Ctor-Aufruf passieren" VSHIFT="19">
+<icon BUILTIN="pencil"/>
+<node CREATED="1584201581597" HGAP="61" ID="ID_1793842194" MODIFIED="1584289376633" TEXT="mu&#xdf; direkt beim Ctor-Aufruf passieren" VSHIFT="19">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1584201621519" ID="ID_1861895495" MODIFIED="1584201634905" TEXT="und zwar des demjenigen des tats&#xe4;chlichen Widget">
 <node CREATED="1584201671057" ID="ID_1545904786" MODIFIED="1584201682507" TEXT="der aber mit dem des Presenters zusammenf&#xe4;llt..."/>
 <node CREATED="1584201683192" ID="ID_1482356055" MODIFIED="1584201718557" TEXT="weil man keine aufgedoppelte Referenz auf den ViewHook m&#xf6;chte">
@@ -27806,6 +27808,11 @@
 </html>
 </richcontent>
 <icon BUILTIN="messagebox_warning"/>
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1584289349339" ID="ID_1202416542" MODIFIED="1584289360503" TEXT="also eben doch nicht gleich beim ctor-Aufruf"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584289361215" ID="ID_1687516658" MODIFIED="1584289369023" TEXT="brauche stattdessen einen Diff-Listener">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node CREATED="1584201751260" ID="ID_1492285349" MODIFIED="1584201760641" TEXT="Problem: initiale Koordinaten">
 <node CREATED="1584201782842" ID="ID_560620961" MODIFIED="1584201793508" TEXT="sind nicht (zwingend) im Populations-Diff"/>
@@ -27857,9 +27864,18 @@
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1584203074908" HGAP="34" ID="ID_366939108" MODIFIED="1584203089228" TEXT="das f&#xfc;hrt zu einem State-Pattern" VSHIFT="6">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
-<node CREATED="1584203093953" ID="ID_1630684905" MODIFIED="1584203110139" TEXT="das jeweilge Slave-Widgtet repr&#xe4;asntiert auch den Anzeigestil"/>
+<node CREATED="1584203093953" ID="ID_1630684905" MODIFIED="1584289430184" TEXT="das jeweilge Slave-Widgtet repr&#xe4;sentiert auch den Anzeigestil"/>
 <node CREATED="1584203184258" ID="ID_465578643" MODIFIED="1584203194792" TEXT="es gibt einen Placeholder f&#xfc;r den Fall &quot;unsichtbar&quot;"/>
 <node CREATED="1584203854907" ID="ID_796620475" MODIFIED="1584203870238" TEXT="PImpl + ClipDelegate-Interface"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584289439497" ID="ID_1171233423" MODIFIED="1584289445670" TEXT="Zustandswahl">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584289446828" ID="ID_1852467427" MODIFIED="1584289455699" TEXT="Initial-Zustand errichten">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584289456539" ID="ID_375798695" MODIFIED="1584289466378" TEXT="Zustands-Wechsel implementieren">
+<icon BUILTIN="pencil"/>
+</node>
+</node>
 </node>
 </node>
 </node>

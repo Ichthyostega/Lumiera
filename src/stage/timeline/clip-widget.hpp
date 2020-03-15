@@ -102,10 +102,11 @@
 #define STAGE_TIMELINE_CLIP_WIDGET_H
 
 #include "stage/gtk-base.hpp"
+#include "stage/model/view-hook.hpp"
 
 //#include "lib/util.hpp"
 
-//#include <memory>
+#include <memory>
 //#include <vector>
 
 
@@ -113,19 +114,53 @@
 namespace stage  {
 namespace timeline {
   
+  using WidgetViewHook = model::ViewHook<Gtk::Widget>;
+  
+  class ClipDelegate;
+  using PDelegate = std::unique_ptr<ClipDelegate>;
+  
   
   /**
    * @todo WIP-WIP as of 3/2020
    */
   class ClipDelegate
     {
-    public:
-      enum Appearance {PENDING, ABRIDGED, COMPACT, EXPANDED, DEGRADED};
+      WidgetViewHook* display_;
       
+    public:
       virtual ~ClipDelegate();   ///< this is an interface
       
-      ClipDelegate();
-     
+      
+      enum Appearance {PENDING, SYMBOLIC, ABRIDGED, COMPACT, EXPANDED, DEGRADED};
+      
+      
+      ClipDelegate(WidgetViewHook& displayAnchor);
+      
+      /** request to change the clip delegate's appearance style, if possible.
+       * @param manager entity to hold and maintain this specific appearance state.
+       * @param desired the intended style of mode to achieve
+       * @param displayAnchor (optionally) a different view to hook up the delegate.
+       * @return the actual mode the presentation was switched to
+       * @remark switching the appearance style is a state transition; sometimes
+       *         this change also implies switching the actual implementation of
+       *         the delegate. And thus there can be prerequisites for achieving
+       *         a specific appearance and presentation mode. Most notably, to
+       *         reach any style beyond `SYMBOLIC`, we need to know the temporal
+       *         extension of the clip. If such requirements can not be fulfilled,
+       *         presentation stays or drops to the most elaborate state possible
+       *         with the current configuration.
+       * @note Default and fallback appearance style is `PENDING`, which turns the
+       *         delegate into a mere data record without visual representation.
+       * @note whenever a ViewHook (instance) different than the existing one is
+       *         given, the existing widget / delegate will be destroyed and
+       *         replaced by a suitable copy hooked up into the new display.
+       *         The ctor #ClipDelegate(WidgetViewHook) ensures there is
+       *         always a display_ (ViewHook) to refer to.
+       */
+      static Appearance switchAppearance (PDelegate& manager,
+                                          Appearance desired =PENDING,
+                                          WidgetViewHook* newView =nullptr);
+      
     private:/* ===== Internals ===== */
      
     };

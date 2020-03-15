@@ -67,7 +67,8 @@ namespace timeline {
   ClipDelegate::~ClipDelegate() { }
   
   
-  ClipDelegate::ClipDelegate ()
+  ClipDelegate::ClipDelegate(WidgetViewHook& displayAnchor)
+    : display_{&displayAnchor}
     {
     }
   
@@ -82,10 +83,22 @@ namespace timeline {
         /* === Interface ClipDelegate === */
         
       public:
-        ClipWidget() { }
+        ClipWidget(WidgetViewHook& displayAnchor)
+          : ClipDelegate{displayAnchor}
+          { }
       };
     
   }//(End)clip appearance details.
+  
+  
+  
+  /* === Appearance Style state transitions === */
+  
+  ClipDelegate::Appearance
+  ClipDelegate::switchAppearance (PDelegate& manager, Appearance desired, WidgetViewHook* newView)
+  {
+    UNIMPLEMENTED ("clip appearance style state management");
+  }
   
   
   
