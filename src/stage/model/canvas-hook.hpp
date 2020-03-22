@@ -1,8 +1,8 @@
 /*
-  VIEW-HOOK.hpp  -  abstracted attachment to a canvas or display facility
+  CANVAS-HOOK.hpp  -  abstracted attachment to a canvas with free positioning
 
   Copyright (C)         Lumiera.org
-    2019,               Hermann Vosseler <Ichthyostega@web.de>
+    2020,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,28 +21,19 @@
 */
 
 
-/** @file view-hook.hpp
- ** Allow widgets to connect to a common shared presentation context.
- ** This is an abstraction to overcome the problem of cross-cutting a complex
- ** hierarchical widget structure in order to maintain a connection to some central
- ** presentation entity or canvas. We do not want a central "God class" to manage and
- ** remote-control the widgets, nor do we want the widgets to be aware of the hierarchical
- ** control structure they are part of. Yet still, widgets typically require to have some
- ** access to those shared central structures, especially if they need to "draw themselves".
- ** A widget must be able to attach itself to a presentation canvas, and it must be able
- ** to control its position thereon. As usual, we solve this problem by abstracting away
- ** the actual implementation of the central facility. The attachment of a widget is thus
- ** modelled by a smart-handle stage::timeline::ViewHooked, which -- on destruction --
- ** automatically detaches the widget from the presentation.
- ** 
- ** As it turns out in practice, we get two flavours or _view attachment:_
- ** - Widgets just somehow placed into a grid or widget layout
- ** - Widgets attached to a canvas with positioning by coordinates
- ** Moreover, such a "hooked" widget will never exist apart from its attachment.
- ** Consequently, we locate the widget within the smart-handle itself, thus tightly
- ** linking together the lifecycle of the widget and the presentation attachment.
- ** However, this combined memory layout incurs some liabilities:
- ** - the combined `ViewHooked<W>` must be non-copyable, since it can be expected
+/** @file canvas-hook.hpp
+ ** Specialised (abstracted) presentation context with positioning by coordinates.
+ ** This extends the generic abstraction of a ViewHook, and works in a similar way,
+ ** in close collaboration with the corresponding CanvasHooked entity (abstraction).
+ ** Elements relying on those abstractions maintain an attachment to "their view",
+ ** while remaining agnostic about the view's implementation details. But the key
+ ** point with this extended abstraction is that elements can be placed onto a
+ ** coordinate system or canvas, and they can be moved to a different position.
+ ** A CanvasHooked element is basically a decorator directly attached to the
+ ** element, adding automatic detachment on destruction, similar to a smart-ptr.
+ ** So the "hooked" widget will live within the common allocation, together with
+ ** its attachment; the whole arrangement must be set up at construction time
+ ** - the combined `CanvasHooked<W>` must be non-copyable, since it can be expected
  **   for the canvas to store some pointer to the attached widget.
  ** - moreover, the canvas/presentation need to be available and activated when
  **   constructing the widget(s) due to the interwoven lifecycle.
@@ -56,8 +47,8 @@
  */
 
 
-#ifndef STAGE_MODEL_VIEW_HOOK_H
-#define STAGE_MODEL_VIEW_HOOK_H
+#ifndef STAGE_MODEL_CANVAS_HOOK_H
+#define STAGE_MODEL_CANVAS_HOOK_H
 
 #include "lib/time/timevalue.hpp"
 #include "lib/nocopy.hpp"
@@ -225,4 +216,4 @@ namespace model {
   
   
 }}// namespace stage::model
-#endif /*STAGE_MODEL_VIEW_HOOK_H*/
+#endif /*STAGE_MODEL_CANVAS_HOOK_H*/
