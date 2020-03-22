@@ -53,7 +53,7 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "stage/model/view-hook.hpp"
+#include "stage/model/canvas-hook.hpp"
 #include "lib/util.hpp"
 
 #include <sigc++/signal.h>

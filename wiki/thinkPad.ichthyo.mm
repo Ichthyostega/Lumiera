@@ -19174,28 +19174,28 @@
 <node CREATED="1575581015219" ID="ID_1015965713" MODIFIED="1575581026974" TEXT="f&#xfc;r den Widget -&gt; Canvas - Fall"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576757730509" ID="ID_1949130658" MODIFIED="1584889187771" TEXT="&#xbb;Widget-Position&#xab; heraus-abstrahieren">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576757730509" ID="ID_1949130658" MODIFIED="1584894698264" TEXT="&#xbb;Widget-Position&#xab; heraus-abstrahieren">
 <linktarget COLOR="#605bb8" DESTINATION="ID_1949130658" ENDARROW="Default" ENDINCLINATION="204;611;" ID="Arrow_ID_993970158" SOURCE="ID_1816490333" STARTARROW="None" STARTINCLINATION="299;12;"/>
 <linktarget COLOR="#cd478c" DESTINATION="ID_1949130658" ENDARROW="Default" ENDINCLINATION="-1150;77;" ID="Arrow_ID_662295339" SOURCE="ID_730955223" STARTARROW="None" STARTINCLINATION="872;48;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="pencil"/>
 <node CREATED="1576757867075" ID="ID_1947629675" MODIFIED="1576757891150" TEXT="der Themenkomplex &quot;move()&quot; steht isoliert da">
 <icon BUILTIN="idea"/>
 <node CREATED="1576757893399" ID="ID_309464876" MODIFIED="1576757905274" TEXT="eigentlich ein orthogonaler Belang"/>
 <node CREATED="1576757919627" ID="ID_1712747746" MODIFIED="1576757937781" TEXT="tifft nur auf Widgets zu"/>
 <node CREATED="1576757938869" ID="ID_89045363" MODIFIED="1576757947183" TEXT="k&#xf6;nnte man nach innen weg abstrahieren?"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576757948912" ID="ID_441928116" MODIFIED="1576757992298" TEXT="Idee: Spezialisierung f&#xfc;r Positioned&lt;Widget&gt;">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576973905681" ID="ID_1230527469" MODIFIED="1576973919835" TEXT="Frage: sollte das seine Position kennen?">
+<node COLOR="#435e98" CREATED="1576757948912" ID="ID_441928116" MODIFIED="1584894637483" TEXT="Idee: Spezialisierung f&#xfc;r Positioned&lt;Widget&gt;">
+<icon BUILTIN="idea"/>
+<node COLOR="#435e98" CREATED="1576973905681" ID="ID_1230527469" MODIFIED="1584894640972" TEXT="Frage: sollte das seine Position kennen?">
 <icon BUILTIN="help"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584889312752" ID="ID_606340373" MODIFIED="1584889343532" TEXT="Problem: redundante Storage ">
+<node COLOR="#990000" CREATED="1584889312752" ID="ID_606340373" MODIFIED="1584894649772" TEXT="Problem: redundante Storage ">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1584889354160" ID="ID_1826251720" MODIFIED="1584889364042" TEXT="immer genau wenn es attached ist"/>
 <node CREATED="1584889364726" ID="ID_1490833507" MODIFIED="1584889375017" TEXT="sind seine Koordinaten im Canvas gespeichert"/>
 </node>
-</node>
-<node CREATED="1584889393669" ID="ID_444152936" MODIFIED="1584889595263" TEXT="eigenes Interface -- n&#xe4;her am DisplayManager">
+<node COLOR="#338800" CREATED="1584889393669" ID="ID_444152936" MODIFIED="1584894656821" TEXT="eigenes Interface -- n&#xe4;her am DisplayManager">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1584889606542" MODIFIED="1584889606542" TEXT="man k&#xf6;nnte es sogar direkt in den display-manager.hpp packen"/>
 <node CREATED="1584889606543" MODIFIED="1584889606543" TEXT="allerdings spielt es oft die Rolle eines &quot;vereinfachten DisplayManager&quot;"/>
 <node CREATED="1584889606544" ID="ID_298422140" MODIFIED="1584889621323" TEXT="und daher dann doch besser in einem eigenen Header"/>
@@ -19209,8 +19209,32 @@
       erleichtert das Testen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584894608428" ID="ID_1214957016" MODIFIED="1584894628941" TEXT="Sub-Interface CanvasHooked herausl&#xf6;sen">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1584894703681" ID="ID_101352353" MODIFIED="1584894725463" TEXT="ViewHook / CanvasHook">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1584894715892" ID="ID_70510619" MODIFIED="1584894722576" TEXT="oh Ja... viel sch&#xf6;ner">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1584894728286" ID="ID_414399172" MODIFIED="1584894738145" TEXT="Test umschreiben auf CanvasHook">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584894739041" ID="ID_1191395338" MODIFIED="1584894750232" TEXT="separaten Test f&#xfc;r den Basis-Fall">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584894751623" ID="ID_674921950" MODIFIED="1584894785196" TEXT="Interfaces in DisplayManager differenzieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584894766013" ID="ID_1003825239" MODIFIED="1584894784715" TEXT="Interfaces im TrackPresenter differenzieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584894775935" ID="ID_241955108" MODIFIED="1584894783892" TEXT="Interfaces im ClipPresenter differenzieren">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>

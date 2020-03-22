@@ -1,5 +1,5 @@
 /*
-  ViewHook(Test)  -  verify abstracted presentation attachment
+  CanvasHook(Test)  -  verify abstracted canvas attachment
 
   Copyright (C)         Lumiera.org
     2019,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,14 +20,14 @@
 
 * *****************************************************/
 
-/** @file view-hook-test.cpp
- ** unit test \ref ViewHook_test
+/** @file canvas-hook-test.cpp
+ ** unit test \ref CanvasHook_test
  */
 
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "stage/model/view-hook.hpp"
+#include "stage/model/canvas-hook.hpp"
 #include "lib/scoped-collection.hpp"
 #include "lib/iter-tree-explorer.hpp"
 #include "lib/iter-adapter-stl.hpp"
@@ -66,12 +66,12 @@ namespace test {
         }
       };
     
-    using HookedWidget = ViewHooked<DummyWidget>;
+    using HookedWidget = CanvasHooked<DummyWidget>;
     
     
     
     class FakeCanvas
-      : public ViewHook<DummyWidget>
+      : public CanvasHook<DummyWidget>
       {
         struct Attachment
           {
@@ -176,6 +176,14 @@ namespace test {
             this->remove (existing.widget);
             this->hook (existing.widget, existing.posX,existing.posY);
           }
+        
+      protected:
+        int
+        translateTimeToPixels (Time)  const override
+          {
+            NOTREACHED ("Time to pixel translation not covered in this unit test");
+            return -1;
+          }
       };
   }
   
@@ -191,10 +199,10 @@ namespace test {
    * @remark this test focuses on the concepts and the API, and thus uses a
    *         dummy implementation of the "Canvas", which just registers a
    *         list of widgets with a dedicated "position" for each.
-   * @see view-hook.hpp
    * @see canvas-hook.hpp
+   * @see ViewHook_test
    */
-  class ViewHook_test : public Test
+  class CanvasHook_test : public Test
     {
       
       virtual void
@@ -215,7 +223,7 @@ namespace test {
           FakeCanvas canvas;
           CHECK (canvas.empty());
           {
-            HookedWidget widget{canvas};
+            HookedWidget widget{canvas.hookedAt(0,0) };
             CHECK (canvas.testContains (widget.i));
             CHECK (not canvas.empty());
           }// hook goes out of scope...
@@ -231,13 +239,13 @@ namespace test {
           FakeCanvas canvas;
           CHECK (canvas.empty());
           
-          HookedWidget widget{canvas};
+          HookedWidget widget{canvas.hookedAt(1,1)};
           CHECK (canvas.testContains (widget.i));
           CHECK (not canvas.empty());
           
           int someID;
           {
-            HookedWidget otherWidget{canvas};
+            HookedWidget otherWidget{canvas.hookedAt(2,2)};
             someID = otherWidget.i;
             CHECK (canvas.testContains (someID));
             CHECK (canvas.testContains (widget.i));
@@ -308,7 +316,7 @@ namespace test {
           Widgets widgets{20};
           OrderIdx orderIdx;
           for (uint i=0; i<20; ++i)
-            orderIdx.push_back (& widgets.emplace<HookedWidget>(canvas));
+            orderIdx.push_back (& widgets.emplace<HookedWidget>(canvas.hookedAt(0,1)));
           
           // helper: use the orderIdx to generate sequence of widget refs (not pointers)
           auto orderSequence = [&] { return lib::ptrDeref(eachElm(orderIdx)); };
@@ -328,7 +336,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (ViewHook_test, "unit gui");
+  LAUNCHER (CanvasHook_test, "unit gui");
   
   
 }}} // namespace stage::model::test

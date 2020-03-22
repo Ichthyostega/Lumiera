@@ -37,12 +37,12 @@
  **   for the canvas to store some pointer to the attached widget.
  ** - moreover, the canvas/presentation need to be available and activated when
  **   constructing the widget(s) due to the interwoven lifecycle.
- ** - and, most notably, the presentation/canvas (the ViewHook) must be arranged to
- **   outlive the attached widgets, since they call back on destruction.
+ ** - and, most notably, the presentation/canvas (the CanvasHook) must be arranged
+ **   such as to outlive the attached widgets, since they call back on destruction.
  ** In the typical usage situation these points can be ensured naturally by housing
  ** the widgets in some detail data structure owned by the top level presentation frame.
  ** 
- ** @see ViewHook_test
+ ** @see CanvasHook_test
  ** 
  */
 
@@ -50,6 +50,7 @@
 #ifndef STAGE_MODEL_CANVAS_HOOK_H
 #define STAGE_MODEL_CANVAS_HOOK_H
 
+#include "stage/model/view-hook.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
@@ -66,32 +67,27 @@ namespace model {
   
   /**
    * Interface to represent _"some presentation layout entity",_
-   * with the ability to _attach_ widgets (managed elsewhere), to
+   * with the ability to _place_ widgets (managed elsewhere), to
    * relocate those widgets to another position, and to re-establish
    * a different sequence of the widgets (whatever this means).
-   * @remark some typical examples for the kind of collaboration modelled here:
-   *         - a _canvas widget,_ (e.g. `Gtk::Layout`), allowing to attach
-   *           child widgets at specific positions, together with custom drawing.
-   *         - a tree or grid control, allowing to populate some row with a given widget.
-   * @warning please ensure the ViewHook outlives any attached ViewHooked.
+   * @remark the canonical example is a _canvas widget,_ (e.g. `Gtk::Layout`),
+   *    allowing to attach child widgets at specific positions, together with
+   *    custom drawing.
+   * @warning please ensure the CanvasHook outlives any attached CanvasHooked.
    */
   template<class WID>
-  class ViewHook
+  class CanvasHook
+    : public ViewHook<WID>
     {
     public:
-      virtual ~ViewHook() { }    ///< this is an interface
+      virtual ~CanvasHook() { }    ///< this is an interface
       
-      virtual void hook (WID& widget, int xPos=0, int yPos=0)  =0;
-      virtual void move (WID& widget, int xPos, int yPos)      =0;
-      virtual void remove (WID& widget)                        =0;
-      virtual void rehook (WID& widget) noexcept               =0;
-      
-      template<class IT>
-      void reOrder (IT newOrder);
+      virtual void hook (WID& widget, int xPos, int yPos)  =0;
+      virtual void move (WID& widget, int xPos, int yPos)  =0;
       
       struct Pos
         {
-          ViewHook& view;
+          CanvasHook& view;
           int x,y;
         };
       
@@ -112,106 +108,68 @@ namespace model {
           return hookedAt (translateTimeToPixels (start), downshift);
         }
       
-      /** Anchor point to build chains of related View Hooks */
-      virtual ViewHook<WID>&
-      getAnchorHook()  noexcept
-        {
-          return *this;
-        }
-      
     protected:
       /** extension point for time axis zoom management. */
-      int translateTimeToPixels (Time)  const                  =0;
+      virtual int translateTimeToPixels (Time)  const      =0;
+      
+    private:
+      /** adapted but also turned unaccessible; use #hook(WID&,int,int) */
+      void hook (WID& w) override { hook (w,0,0); }
     };
   
   
   
   /**
    * A widget attached onto a display canvas or similar central presentation context.
-   * This decorator inherits from the widget to be attached, i.e. the widget itself becomes
-   * embedded; moreover, the attachment is immediately performed at construction time and
-   * managed automatically thereafter. When the `ViewHooked` element goes out of scope, it is
-   * automatically detached from presentation. With the help of ViewHooked, a widget (or similar
-   * entity) may control some aspects of its presentation placement, typically the coordinates
-   * on some kind of _canvas_ (-> `Gtk::Layout`), while remaining agnostic regarding the
-   * implementation details of the canvas and its placement thereon.
+   * This decorator is an extension to the ViewHooked decorator, and thus inherits from
+   * the widget to be attached, i.e. the widget itself becomes embedded; moreover, the attachment
+   * is immediately performed at construction time and managed automatically thereafter. When the
+   * `CanvasHooked` element goes out of scope, it is automatically detached from presentation.
+   * With the help of the CanvasHooked API, a widget (or similar entity) may control the coordinates
+   * of its placement onto some kind of _canvas_ (-> `Gtk::Layout`), while remaining agnostic
+   * regarding any further implementation details of the canvas and its placement thereon.
    * 
-   * The prominent example of a `ViewHooked` element is the stage::timeline::DisplayFrame, maintained
-   * by the TrackPresenter within the timeline UI. This connection entity allows to place ClipWidget
-   * elements into the appropriate display region for this track, without exposing the actual
+   * The canonical example of a `CanvasHooked` element is the stage::timeline::ClipWidget, as created
+   * and managed by the TrackPresenter within the timeline UI. This connection entity allows to place
+   * ClipWidget elements into the appropriate display region for this track, without exposing the actual
    * stage::timeline::BodyCanvasWidget to each and every Clip or Label widget.
    * 
    * @tparam WID type of the embedded widget, which is to be hooked-up into the view/canvas.
-   * @remark since ViewHooked represents one distinct attachment to some view or canvas,
-   *         is has a clear-cut identity and thus may be moved, but not copied.
+   * @remark since CanvasHooked represents one distinct attachment to some view or canvas,
+   *         is has a clear-cut identity and and will be identified by its allocation address.
    * @warning since ViewHooked entities call back into the ViewHook on destruction,
    *         the latter still needs to be alive at that point. Which basically means
    *         you must ensure the ViewHooked "Widgets" are destroyed prior to the "Canvas".
    */
   template<class WID, class BASE =WID>
-  class ViewHooked
-    : public WID
-    , util::NonCopyable
+  class CanvasHooked
+    : public ViewHooked<WID,BASE>
     {
-      using View = ViewHook<BASE>;
+      using Hooked = ViewHooked<WID,BASE>;
+      using Canvas = CanvasHook<BASE>;
       
-      View* view_;
+      Canvas&
+      getCanvas()
+        {
+          REQUIRE (INSTANCEOF(ViewHook<BASE>, &Hooked::getView() ));
+          return static_cast<Canvas&> (Hooked::getView()); 
+        }
       
     public:
       template<typename...ARGS>
-      ViewHooked (View& view, ARGS&& ...args)
-        : WID{std::forward<ARGS>(args)...}
-        , view_{&view}
+      CanvasHooked (typename Canvas::Pos attachmentPos, ARGS&& ...args)
+        : ViewHooked<WID,BASE>{attachmentPos.view
+                              ,std::forward<ARGS>(args)...}
         {
-          view_->hook (*this);
-        }
-      template<typename...ARGS>
-      ViewHooked (typename View::Pos viewPos, ARGS&& ...args)
-        : WID{std::forward<ARGS>(args)...}
-        , view_{&viewPos.view}
-        {
-          view_->hook (*this, viewPos.x, viewPos.y);
-        }
-      
-     ~ViewHooked()  noexcept
-        {
-          try {
-              if (view_)
-                view_->remove (*this);
-            }
-          ERROR_LOG_AND_IGNORE (progress, "Detaching of ViewHooked widgets from the presentation")
+          getCanvas().hook (*this, attachmentPos.x, attachmentPos.y);
         }
       
       void
       moveTo (int xPos, int yPos)
         {
-          view_->move (*this, xPos,yPos);
+          getCanvas().move (*this, xPos,yPos);
         }
     };
-  
-  
-  
-  /**
-   * re-attach elements in a given, new order.
-   * @param newOrder a Lumiera Forward Iterator to yield a reference to
-   *        all attached elements, and in the new order to be established.
-   * @remark this operation becomes relevant, when "attaching an element" also
-   *        constitutes some kind of arrangement in the visual presentation, like
-   *        e.g. a stacking order, or by populating some table cells in sequence.
-   *        The expected semantics is for this operation to detach each given element,
-   *        and then immediately re-attach it _at the "beginning"_ (whatever this means).
-   *        The element as such, and all associated presentation entities are not destroyed,
-   *        but continue to exist with the same identity (and possibly all signal wirings).
-   *        Just they now appear as if attached with the new ordering.
-   */
-  template<class WID>
-  template<class IT>
-  void
-  ViewHook<WID>::reOrder (IT newOrder)
-  {
-    for (ViewHooked<WID>& existingHook : newOrder)
-      this->rehook (existingHook);
-  }
   
   
   

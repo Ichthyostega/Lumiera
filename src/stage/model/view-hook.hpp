@@ -59,7 +59,6 @@
 #ifndef STAGE_MODEL_VIEW_HOOK_H
 #define STAGE_MODEL_VIEW_HOOK_H
 
-#include "lib/time/timevalue.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
@@ -69,20 +68,17 @@
 namespace stage  {
 namespace model {
   
-  using lib::time::Time;
-  
-  
   
   /**
    * Interface to represent _"some presentation layout entity",_
-   * with the ability to _attach_ widgets (managed elsewhere), to
-   * relocate those widgets to another position, and to re-establish
-   * a different sequence of the widgets (whatever this means).
+   * with the ability to _attach_ widgets (managed elsewhere), and
+   * to re-establish a different sequence of the widgets (whatever this means).
    * @remark some typical examples for the kind of collaboration modelled here:
+   *         - a tree or grid control, allowing to populate some row with a given widget.
    *         - a _canvas widget,_ (e.g. `Gtk::Layout`), allowing to attach
    *           child widgets at specific positions, together with custom drawing.
-   *         - a tree or grid control, allowing to populate some row with a given widget.
    * @warning please ensure the ViewHook outlives any attached ViewHooked.
+   * @see CanvasHook extended interface to support positioning by coordinates
    */
   template<class WID>
   class ViewHook
@@ -90,36 +86,12 @@ namespace model {
     public:
       virtual ~ViewHook() { }    ///< this is an interface
       
-      virtual void hook (WID& widget, int xPos=0, int yPos=0)  =0;
-      virtual void move (WID& widget, int xPos, int yPos)      =0;
-      virtual void remove (WID& widget)                        =0;
-      virtual void rehook (WID& widget) noexcept               =0;
+      virtual void hook (WID& widget)             =0;
+      virtual void remove (WID& widget)           =0;
+      virtual void rehook (WID& widget) noexcept  =0;
       
       template<class IT>
       void reOrder (IT newOrder);
-      
-      struct Pos
-        {
-          ViewHook& view;
-          int x,y;
-        };
-      
-      Pos
-      hookedAt (int x, int y)
-        {
-          return Pos{*this, x,y};
-        }
-      
-      /** build the "construction hook" for a \ref ViewHooked element,
-       *  which is to be attached to some timeline canvas view.
-       * @param start anchor point / nominal start point of the element
-       * @param downshift (optional) vertical shift down from the baseline
-       * @return opaque registration argument for the ViewHooked ctor */
-      Pos
-      hookedAt (Time start, int downshift=0)
-        {
-          return hookedAt (translateTimeToPixels (start), downshift);
-        }
       
       /** Anchor point to build chains of related View Hooks */
       virtual ViewHook<WID>&
@@ -127,10 +99,6 @@ namespace model {
         {
           return *this;
         }
-      
-    protected:
-      /** extension point for time axis zoom management. */
-      int translateTimeToPixels (Time)  const                  =0;
     };
   
   
@@ -141,18 +109,19 @@ namespace model {
    * embedded; moreover, the attachment is immediately performed at construction time and
    * managed automatically thereafter. When the `ViewHooked` element goes out of scope, it is
    * automatically detached from presentation. With the help of ViewHooked, a widget (or similar
-   * entity) may control some aspects of its presentation placement, typically the coordinates
-   * on some kind of _canvas_ (-> `Gtk::Layout`), while remaining agnostic regarding the
+   * entity) may control some aspects of its presentation placement, typically the order or
+   * arrangement within a grid or layout, while remaining agnostic regarding the
    * implementation details of the canvas and its placement thereon.
    * 
-   * The prominent example of a `ViewHooked` element is the stage::timeline::DisplayFrame, maintained
-   * by the TrackPresenter within the timeline UI. This connection entity allows to place ClipWidget
-   * elements into the appropriate display region for this track, without exposing the actual
-   * stage::timeline::BodyCanvasWidget to each and every Clip or Label widget.
+   * The prominent usage example of ViewHooked` elements is in the stage::timeline::DisplayFrame,
+   * maintained  by the TrackPresenter within the timeline UI. This connection entity allows to
+   * attach \ref TrackHeaderWidget elements into the appropriate part of the patchbay, and to place
+   * \ref ClipWidget elements into the appropriate display region for this track, without exposing
+   * the actual stage::timeline::BodyCanvasWidget to each and every Clip or Label widget.
    * 
    * @tparam WID type of the embedded widget, which is to be hooked-up into the view/canvas.
    * @remark since ViewHooked represents one distinct attachment to some view or canvas,
-   *         is has a clear-cut identity and thus may be moved, but not copied.
+   *         is has a clear-cut identity, linked to an allocation and must not be moved.
    * @warning since ViewHooked entities call back into the ViewHook on destruction,
    *         the latter still needs to be alive at that point. Which basically means
    *         you must ensure the ViewHooked "Widgets" are destroyed prior to the "Canvas".
@@ -163,8 +132,10 @@ namespace model {
     , util::NonCopyable
     {
       using View = ViewHook<BASE>;
-      
       View* view_;
+      
+    protected:
+      View& getView() { return *view_; }
       
     public:
       template<typename...ARGS>
@@ -174,13 +145,6 @@ namespace model {
         {
           view_->hook (*this);
         }
-      template<typename...ARGS>
-      ViewHooked (typename View::Pos viewPos, ARGS&& ...args)
-        : WID{std::forward<ARGS>(args)...}
-        , view_{&viewPos.view}
-        {
-          view_->hook (*this, viewPos.x, viewPos.y);
-        }
       
      ~ViewHooked()  noexcept
         {
@@ -189,12 +153,6 @@ namespace model {
                 view_->remove (*this);
             }
           ERROR_LOG_AND_IGNORE (progress, "Detaching of ViewHooked widgets from the presentation")
-        }
-      
-      void
-      moveTo (int xPos, int yPos)
-        {
-          view_->move (*this, xPos,yPos);
         }
     };
   
