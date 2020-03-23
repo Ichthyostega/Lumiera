@@ -55,6 +55,7 @@
 #include "stage/gtk-base.hpp"
 #include "stage/model/controller.hpp"
 #include "stage/timeline/clip-widget.hpp"
+#include "lib/time/timevalue.hpp"
 
 //#include "lib/util.hpp"
 
@@ -70,6 +71,7 @@ namespace timeline {
   using std::vector;
   using std::optional;
   using std::unique_ptr;
+  using lib::time::Time;
   
   class MarkerWidget;
   
@@ -94,7 +96,7 @@ namespace timeline {
       static const ClipDelegate::Appearance defaultAppearance = ClipDelegate::COMPACT;
       
     public:
-      ClipPresenter (ID, ctrl::BusTerm&, WidgetHook&, optional<int> offsetX);
+      ClipPresenter (ID, ctrl::BusTerm&, WidgetHook&, optional<Time> startTime);
       
      ~ClipPresenter();
       

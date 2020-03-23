@@ -126,11 +126,6 @@ namespace timeline {
   using PMark  = unique_ptr<MarkerWidget>;
   using PRuler = unique_ptr<RulerTrack>;
   
-  namespace {
-    const int TODO_px_per_second = 25;
-    const int TODO_px_per_microtick = TODO_px_per_second / Time::SCALE;
-  }
-  
   
   /**
    * Reference frame to organise the presentation related to a specific Track in the Timeline-GUI.
@@ -227,18 +222,6 @@ namespace timeline {
       
     private:/* ===== Internals ===== */
       
-      /** try to extract the start coordinates from a given Diff spec */
-      std::optional<int>
-      extractStartOffset (GenNode const& spec)
-        {
-          auto startTime = spec.retrieveAttribute<Time> (string{ATTR_start});
-          if (startTime)
-            return TODO_px_per_microtick * _raw(*startTime);   //////////////////////////////////////////////TICKET #1213 : need to abstract that away!!
-          else
-            return std::nullopt;
-        }
-      
-      
       /** invoked via diff to show a (changed) track name */
       void
       setTrackName (string name)
@@ -331,8 +314,8 @@ namespace timeline {
                   })
                .constructFrom ([&](GenNode const& spec) -> PClip
                   {
-                    std::optional<int> startOffsetX{extractStartOffset (spec)};    //////////////////////////TICKET #1213 : should pass the start time instead!!
-                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_, display_.getClipHook(), startOffsetX);
+                    std::optional<Time> startTime = spec.retrieveAttribute<Time> (string{ATTR_start});
+                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_, display_.getClipHook(), startTime);
                   })
                .buildChildMutator ([&](PClip& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {

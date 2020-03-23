@@ -103,6 +103,7 @@
 
 #include "stage/gtk-base.hpp"
 #include "stage/model/canvas-hook.hpp"
+#include "lib/time/timevalue.hpp"
 
 //#include "lib/util.hpp"
 
@@ -117,6 +118,7 @@ namespace stage  {
 namespace timeline {
   
   using std::string;
+  using lib::time::Time;
   
   using WidgetHook = model::CanvasHook<Gtk::Widget>;
   
@@ -173,7 +175,7 @@ namespace timeline {
        *  viable appearance style. This is the first incantation of #switchAppearance.
        */
       static Appearance buildDelegate (PDelegate& manager, WidgetHook& view,
-                                       std::optional<int> startOffsetX);    ///////////////////////TICKET #1213 : translation time->offset should be built into the ViewHook!!!
+                                       std::optional<Time> startTime);
       
     private:/* ===== Internals ===== */
      

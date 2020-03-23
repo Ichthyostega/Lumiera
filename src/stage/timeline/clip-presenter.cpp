@@ -68,16 +68,17 @@ namespace timeline {
    * @param identity referring to the corresponding session::Clip in Steam-Layer.
    * @param nexus a way to connect this Controller to the UI-Bus.
    * @param view (abstracted) canvas or display framework to attach this clip to
-   * @param offsetX offset relative to the start of the track       ///////////////////////////////TICKET #1213 : translation time->offset should be built into the ViewHook!!!
+   * @param startTime (optional) start time point of the clip.
+   * @note Clip can not be displayed unless startTime is given
    */
-  ClipPresenter::ClipPresenter (ID identity, ctrl::BusTerm& nexus, WidgetHook& view, optional<int> offsetX)
+  ClipPresenter::ClipPresenter (ID identity, ctrl::BusTerm& nexus, WidgetHook& view, optional<Time> startTime)
     : Controller{identity, nexus}
     , channels_{}
     , effects_{}
     , markers_{}
     , widget_{}
     {
-      ClipDelegate::buildDelegate (widget_, view, offsetX);
+      ClipDelegate::buildDelegate (widget_, view, startTime);
     }
   
   

@@ -122,12 +122,15 @@ namespace timeline {
   }
   
   ClipDelegate::Appearance
-  ClipDelegate::buildDelegate (PDelegate& manager, WidgetHook& view, optional<int> startOffsetX)   ////////////////TICKET #1213 : translation time->offset should be built into the ViewHook!!!
+  ClipDelegate::buildDelegate (PDelegate& manager, WidgetHook& view, optional<Time> startTime)
   {
-    if (startOffsetX)
-      manager.reset (new ClipWidget{view.hookedAt(*startOffsetX, defaultOffsetY), defaultName});
+    if (startTime)
+      manager.reset (new ClipWidget{view.hookedAt(*startTime, defaultOffsetY), defaultName});
     else
       manager.reset (new ClipData{view});
+    
+    return startTime? Appearance::COMPACT
+                    : Appearance::PENDING;
   }
   
   
