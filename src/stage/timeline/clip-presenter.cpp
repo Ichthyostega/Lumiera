@@ -70,7 +70,7 @@ namespace timeline {
    * @param view (abstracted) canvas or display framework to attach this clip to
    * @param offsetX offset relative to the start of the track       ///////////////////////////////TICKET #1213 : translation time->offset should be built into the ViewHook!!!
    */
-  ClipPresenter::ClipPresenter (ID identity, ctrl::BusTerm& nexus, WidgetViewHook& view, optional<int> offsetX)
+  ClipPresenter::ClipPresenter (ID identity, ctrl::BusTerm& nexus, WidgetHook& view, optional<int> offsetX)
     : Controller{identity, nexus}
     , channels_{}
     , effects_{}
@@ -172,7 +172,7 @@ namespace timeline {
     ClipDelegate::switchAppearance (this->widget_, defaultAppearance);
   }
   
-  WidgetViewHook&
+  WidgetHook&
   ClipPresenter::getClipContentCanvas()
   {
     UNIMPLEMENTED ("how to create and wire an embedded canvas for the clip contents/effects");

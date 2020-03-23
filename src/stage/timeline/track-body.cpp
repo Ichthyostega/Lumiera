@@ -95,20 +95,13 @@ namespace timeline {
   /* ==== Interface: ViewHook ===== */
   
   void
-  TrackBody::hook (TrackBody& subBody, int xPos, int yPos)
+  TrackBody::hook (TrackBody& subBody)
   {
-    REQUIRE (xPos==0 && yPos==0, "arbitrary positioning of TrackBody contradicts the concept of track-profile.");  ///TODO remove that API
     subTracks_.push_back (&subBody);
     
     // notify presentation code of the changed structure
     subBody.signalStructureChange_ = signalStructureChange_;
     signalStructureChange_(); // this _is_ such a change
-  }
-  
-  void
-  TrackBody::move (TrackBody& subBody, int xPos, int yPos)
-  {
-    NOTREACHED ("woot?? can we even move a sub-TrackBody????");
   }
 
   void

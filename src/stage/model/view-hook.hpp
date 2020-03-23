@@ -92,13 +92,6 @@ namespace model {
       
       template<class IT>
       void reOrder (IT newOrder);
-      
-      /** Anchor point to build chains of related View Hooks */
-      virtual ViewHook<WID>&
-      getAnchorHook()  noexcept
-        {
-          return *this;
-        }
     };
   
   
@@ -176,7 +169,7 @@ namespace model {
   void
   ViewHook<WID>::reOrder (IT newOrder)
   {
-    for (ViewHooked<WID>& existingHook : newOrder)
+    for (WID& existingHook : newOrder)
       this->rehook (existingHook);
   }
   

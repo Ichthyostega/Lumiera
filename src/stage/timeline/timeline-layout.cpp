@@ -135,16 +135,14 @@ namespace timeline {
   /* ==== Interface: ViewHook ===== */
   
   void
-  TimelineLayout::hook (TrackHeadWidget& head, int xPos, int yPos)
+  TimelineLayout::hook (TrackHeadWidget& head)
   {
-    REQUIRE (xPos==0 && yPos==0, "arbitrary positioning of sub-Tracks contradicts the concept of track-profile.");  ///TODO remove that API
     headerPane_.installForkRoot (head);
   }
 
   void
-  TimelineLayout::hook (TrackBody& body, int xPos, int yPos)
+  TimelineLayout::hook (TrackBody& body)
   {
-    REQUIRE (xPos==0 && yPos==0, "arbitrary positioning of sub-Tracks contradicts the concept of track-profile.");  ///TODO remove that API
     bodyCanvas_.installForkRoot (body);
     
     // detect changes of the track structure
@@ -176,19 +174,6 @@ namespace timeline {
   TimelineLayout::rehook (TrackBody&)  noexcept
   {
     NOTREACHED ("TimelineLayout: top-Level must not be re-ordered");
-  }
-  
-  
-  void
-  TimelineLayout::move (TrackHeadWidget& head, int xPos, int yPos)
-  {
-    NOTREACHED ("ViewHooked: not supported -- refactor?");
-  }
-
-  void
-  TimelineLayout::move (TrackBody& body, int xPos, int yPos)
-  {
-    NOTREACHED ("ViewHooked: not supported -- refactor?");
   }
   
   

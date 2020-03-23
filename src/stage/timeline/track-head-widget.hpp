@@ -61,7 +61,6 @@ namespace stage  {
 namespace timeline {
   
   using ID = ctrl::BusTerm::ID;
-  using model::ViewHooked;
   
   /**
    * Header pane control area corresponding to a Track with nested child Tracks.
@@ -81,10 +80,9 @@ namespace timeline {
       
       /* ==== Interface: ViewHook ===== */
       
-      void hook (TrackHeadWidget&, int xPos=0, int yPos=0) override;
-      void move (TrackHeadWidget&, int xPos, int yPos)     override;
-      void remove (TrackHeadWidget&)                       override;
-      void rehook (TrackHeadWidget&) noexcept              override;
+      void hook   (TrackHeadWidget&)          override;
+      void remove (TrackHeadWidget&)          override;
+      void rehook (TrackHeadWidget&) noexcept override;
       
     public:
       TrackHeadWidget();

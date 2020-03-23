@@ -131,16 +131,9 @@ namespace timeline {
   /* ==== Interface: ViewHook ===== */
   
   void
-  TrackHeadWidget::hook (TrackHeadWidget& subHead, int xPos, int yPos)
+  TrackHeadWidget::hook (TrackHeadWidget& subHead)
   {
-    REQUIRE (xPos==0 && yPos==0, "selection of arbitrary row not yet implemented");
     attachSubFork (subHead);
-  }
-  
-  void
-  TrackHeadWidget::move (TrackHeadWidget& subHead, int xPos, int yPos)
-  {
-    NOTREACHED ("woot?? can we even move a sub-TrackHead????");
   }
 
   void

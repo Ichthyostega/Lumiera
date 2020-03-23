@@ -85,6 +85,13 @@ namespace model {
       virtual void hook (WID& widget, int xPos, int yPos)  =0;
       virtual void move (WID& widget, int xPos, int yPos)  =0;
       
+      /** Anchor point to build chains of related View Hooks */
+      virtual CanvasHook<WID>&
+      getAnchorHook()  noexcept
+        {
+          return *this;
+        }
+      
       struct Pos
         {
           CanvasHook& view;

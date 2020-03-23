@@ -87,7 +87,7 @@
 #include "stage/timeline/display-evaluation.hpp"
 #include "stage/timeline/header-pane-widget.hpp"
 #include "stage/timeline/body-canvas-widget.hpp"
-#include "stage/model/view-hook.hpp"
+#include "stage/model/canvas-hook.hpp"
 
 //#include "lib/util.hpp"
 
@@ -143,19 +143,17 @@ namespace timeline {
       
       model::ViewHook<TrackHeadWidget>& getHeadHook()  override { return *this;       };
       model::ViewHook<TrackBody>&       getBodyHook()  override { return *this;       };
-      model::ViewHook<Gtk::Widget>&     getClipHook()  override { return bodyCanvas_; };
+      model::CanvasHook<Gtk::Widget>&   getClipHook()  override { return bodyCanvas_; };
       
     protected: /* ==== Interface: ViewHook ===== */
       
-      void hook (TrackHeadWidget&, int xPos=0, int yPos=0) override;
-      void move (TrackHeadWidget&, int xPos, int yPos)     override;
-      void remove (TrackHeadWidget&)                       override;
-      void rehook (TrackHeadWidget&) noexcept              override;
+      void hook   (TrackHeadWidget&)          override;
+      void remove (TrackHeadWidget&)          override;
+      void rehook (TrackHeadWidget&) noexcept override;
       
-      void hook (TrackBody&, int xPos=0, int yPos=0) override;
-      void move (TrackBody&, int xPos, int yPos)     override;
-      void remove (TrackBody&)                       override;
-      void rehook (TrackBody&) noexcept              override;
+      void hook   (TrackBody&)          override;
+      void remove (TrackBody&)          override;
+      void rehook (TrackBody&) noexcept override;
 
     private:/* ===== Internals ===== */
      

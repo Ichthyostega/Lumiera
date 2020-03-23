@@ -94,7 +94,7 @@ namespace timeline {
       static const ClipDelegate::Appearance defaultAppearance = ClipDelegate::COMPACT;
       
     public:
-      ClipPresenter (ID, ctrl::BusTerm&, WidgetViewHook&, optional<int> offsetX);
+      ClipPresenter (ID, ctrl::BusTerm&, WidgetHook&, optional<int> offsetX);
       
      ~ClipPresenter();
       
@@ -121,7 +121,7 @@ namespace timeline {
        */
       void resetAppearanceStyle();
       
-      WidgetViewHook& getClipContentCanvas();
+      WidgetHook& getClipContentCanvas();
     };
   
   

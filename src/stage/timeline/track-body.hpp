@@ -41,6 +41,7 @@
 #define STAGE_TIMELINE_TRACK_BODY_H
 
 #include "stage/gtk-base.hpp"
+#include "stage/model/view-hook.hpp"
 #include "stage/timeline/ruler-track.hpp"
 #include "stage/timeline/display-manager.hpp"
 
@@ -125,10 +126,9 @@ namespace timeline {
       
       /* ==== Interface: ViewHook ===== */
       
-      void hook (TrackBody&, int xPos=0, int yPos=0) override;
-      void move (TrackBody&, int xPos, int yPos)     override;
-      void remove (TrackBody&)                       override;
-      void rehook (TrackBody&) noexcept              override;
+      void hook   (TrackBody&)          override;
+      void remove (TrackBody&)          override;
+      void rehook (TrackBody&) noexcept override;
       
       /* ===== Internals ===== */
       /**

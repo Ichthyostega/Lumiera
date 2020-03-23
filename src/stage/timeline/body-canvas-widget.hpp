@@ -77,7 +77,7 @@
 #include "stage/gtk-base.hpp"
 #include "stage/timeline/track-profile.hpp"
 #include "stage/timeline/display-evaluation.hpp"
-#include "stage/model/view-hook.hpp"
+#include "stage/model/canvas-hook.hpp"
 
 //#include "lib/util.hpp"
 
@@ -89,6 +89,8 @@
 
 namespace stage  {
 namespace timeline {
+  
+  using lib::time::Time;
   
   using CairoC = Cairo::RefPtr<Cairo::Context> const&;
   
@@ -142,7 +144,7 @@ namespace timeline {
    */
   class BodyCanvasWidget
     : public Gtk::Box
-    , public model::ViewHook<Gtk::Widget>
+    , public model::CanvasHook<Gtk::Widget>
     , public LayoutElement
     {
       DisplayManager& layout_;
@@ -168,12 +170,14 @@ namespace timeline {
           return contentArea_.get_vadjustment();
         }
       
-    protected: /* ==== Interface: ViewHook ===== */
+    protected: /* ==== Interface: CanvasHook ===== */
       
       void hook (Gtk::Widget&, int xPos=0, int yPos=0) override;
       void move (Gtk::Widget&, int xPos, int yPos)     override;
       void remove (Gtk::Widget&)                       override;
       void rehook (Gtk::Widget&) noexcept              override;
+      
+      int translateTimeToPixels (Time)  const          override;
       
     protected: /* ==== Interface: LayoutElement ===== */
       

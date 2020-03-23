@@ -33,8 +33,8 @@
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/util.hpp"
 
+#include <list>
 #include <vector>
-#include <forward_list>
 #include <algorithm>
 #include <random>
 
@@ -43,9 +43,8 @@ using util::isnil;
 using util::contains;
 using util::isSameObject;
 using lib::iter_stl::eachElm;
-using std::vector;
-using std::forward_list;
 using std::shuffle;
+using std::vector;
 
 
 namespace stage{
@@ -73,21 +72,15 @@ namespace test {
     class FakeCanvas
       : public ViewHook<DummyWidget>
       {
-        struct Attachment
-          {
-            DummyWidget& widget;
-            int posX, posY;
-          };
-        forward_list<Attachment> widgets_;
-
+        std::list<DummyWidget> widgets_;
         
         auto
         allWidgetIDs()  const
           {
             return lib::treeExplore(widgets_)
-                       .transform([](Attachment const& entry)
+                       .transform([](DummyWidget const& entry)
                                     {
-                                      return entry.widget.i;
+                                      return entry.i;
                                     });
           }
         
@@ -96,7 +89,7 @@ namespace test {
           {
             return std::find_if (widgets_.begin()
                                 ,widgets_.end()
-                                , [&](Attachment const& a) { return a.widget == someWidget; });
+                                , [&](DummyWidget const& widget) { return widget == someWidget; });
           }
         
       public:
@@ -113,26 +106,12 @@ namespace test {
             return util::linearSearch (allWidgetIDs(), someWidgetID);
           }
         
-        bool
-        testVerifyPos (DummyWidget const& someWidget, int x_expected, int y_expected)
-          {
-            auto end = widgets_.end();
-            auto pos = findEntry (someWidget);
-            return pos != end
-               and pos->posX == x_expected
-               and pos->posY == y_expected;
-          }
-        
         /** verify our internal sequence matches the given one */
         template<class IT>
         bool
         testContainsSequence (IT refSeq)
           {
-            // NOTE the implementation twist of using a std::forward_list,
-            //      which causes reversed order of our internal elements
-            lib::IterStack<int> ids;
-            for (auto& entry : widgets_)
-              ids.push (entry.widget.i);
+            auto ids = allWidgetIDs();
             for ( ; refSeq and ids; ++refSeq, ++ids)
               if (refSeq->i != *ids) break;
             return isnil(refSeq)
@@ -143,27 +122,15 @@ namespace test {
         /* === Interface ViewHook === */
         
         void
-        hook (DummyWidget& elm, int xPos, int yPos)  override
+        hook (DummyWidget& elm)  override
           {
-            widgets_.push_front (Attachment{elm, xPos,yPos});
-          }
-        
-        void
-        move (DummyWidget& elm, int xPos, int yPos)  override
-          {
-            auto end = widgets_.end();
-            auto pos = findEntry (elm);
-            if (pos != end)
-              {
-                pos->posX = xPos;
-                pos->posY = yPos;
-              }
+            widgets_.push_back (elm);
           }
         
         void
         remove (DummyWidget& elm)  override
           {
-            widgets_.remove_if ([&](Attachment const& a) { return a.widget == elm; });
+            widgets_.remove_if ([&](auto const& widget) { return widget == elm; });
           }
         
         
@@ -172,9 +139,9 @@ namespace test {
           {
             auto pos = findEntry (existingHook);
             REQUIRE (pos != widgets_.end(), "the given iterator must yield previously hooked-up elements");
-            Attachment existing{*pos};
-            this->remove (existing.widget);
-            this->hook (existing.widget, existing.posX,existing.posY);
+            DummyWidget& widget{*pos};
+            this->remove (widget);
+            this->hook (widget);
           }
       };
   }
@@ -202,7 +169,6 @@ namespace test {
         {
           verify_standardUsage();
           verify_multiplicity();
-          relocateWidget();
           reOrderHooked();
         }
       
@@ -245,44 +211,6 @@ namespace test {
           CHECK (not canvas.testContains (someID));
           CHECK (canvas.testContains (widget.i));
           CHECK (not canvas.empty());
-        }
-      
-      
-      /** @test hook a widget at a specific position and then later
-       *   relocate it on the canvas through the ViewHook front-end.
-       */
-      void
-      relocateWidget()
-        {
-          int x1 = rand() % 100;
-          int y1 = rand() % 100;
-          int x2 = rand() % 100;
-          int y2 = rand() % 100;
-          int x3 = rand() % 100;
-          int y3 = rand() % 100;
-          
-          FakeCanvas canvas;
-          HookedWidget w1{canvas.hookedAt(x1,y1)};
-          HookedWidget w3{canvas.hookedAt(x3,y3)};
-          
-          int id2;
-          {
-            HookedWidget w2{canvas.hookedAt(x2,y2)};
-            id2 = w2.i;
-            CHECK (canvas.testContains (id2));
-            CHECK (canvas.testVerifyPos (w2, x2,y2));
-            
-            int newX = ++x2;
-            int newY = --y2;
-            w2.moveTo (newX,newY);
-            
-            CHECK (canvas.testVerifyPos (w2, newX,newY));
-            CHECK (canvas.testVerifyPos (w1, x1,y1));
-            CHECK (canvas.testVerifyPos (w3, x3,y3));
-          }
-          CHECK (not canvas.testContains (id2));
-          CHECK (canvas.testVerifyPos (w1, x1,y1));
-          CHECK (canvas.testVerifyPos (w3, x3,y3));
         }
       
       

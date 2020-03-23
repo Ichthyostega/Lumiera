@@ -65,7 +65,7 @@ namespace timeline {
   
   using util::max;
   
-  using model::ViewHooked;
+  using lib::time::Time;
   class TrackHeadWidget;
   class TrackBody;
   
@@ -75,10 +75,10 @@ namespace timeline {
    * when attaching or moving Widgets on the shared canvas.
    */
   template<class WID>
-  class ViewRefHook
-    : public model::ViewHook<WID>
+  class RelativeCanvasHook
+    : public model::CanvasHook<WID>
     {
-      model::ViewHook<WID>& refHook_;
+      model::CanvasHook<WID>& refHook_;
       
       
       /* ==== Interface: ViewHook ===== */
@@ -108,7 +108,7 @@ namespace timeline {
         }
       
       /** allow to build a derived ViewRefHook with different offset */
-      model::ViewHook<WID>&
+      model::CanvasHook<WID>&
       getAnchorHook()  noexcept override
         {
           return this->refHook_;
@@ -118,8 +118,15 @@ namespace timeline {
       virtual int hookAdjX (int xPos)  =0;
       virtual int hookAdjY (int yPos)  =0;
       
+      /** delegating default implementation for timeline zoom */
+      int
+      translateTimeToPixels (Time startTimePoint)  const override
+        {
+          return refHook_.hookedAt(startTimePoint).x;
+        }
+      
     public:
-      ViewRefHook(model::ViewHook<WID>& baseHook)
+      RelativeCanvasHook(model::CanvasHook<WID>& baseHook)
         : refHook_{baseHook.getAnchorHook()}
         { }
     };
@@ -144,7 +151,7 @@ namespace timeline {
       
       virtual model::ViewHook<TrackHeadWidget>& getHeadHook()  =0;
       virtual model::ViewHook<TrackBody>&       getBodyHook()  =0;
-      virtual model::ViewHook<Gtk::Widget>&     getClipHook()  =0;
+      virtual model::CanvasHook<Gtk::Widget>&   getClipHook()  =0;
     };
   
   

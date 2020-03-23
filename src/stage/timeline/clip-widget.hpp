@@ -102,7 +102,7 @@
 #define STAGE_TIMELINE_CLIP_WIDGET_H
 
 #include "stage/gtk-base.hpp"
-#include "stage/model/view-hook.hpp"
+#include "stage/model/canvas-hook.hpp"
 
 //#include "lib/util.hpp"
 
@@ -118,7 +118,7 @@ namespace timeline {
   
   using std::string;
   
-  using WidgetViewHook = model::ViewHook<Gtk::Widget>;
+  using WidgetHook = model::CanvasHook<Gtk::Widget>;
   
   class ClipDelegate;
   using PDelegate = std::unique_ptr<ClipDelegate>;
@@ -167,12 +167,12 @@ namespace timeline {
        */
       static Appearance switchAppearance (PDelegate& manager,
                                           Appearance desired =PENDING,
-                                          WidgetViewHook* newView =nullptr);
+                                          WidgetHook* newView =nullptr);
       
       /** build the initial presentation widget on construction, using a minimally
        *  viable appearance style. This is the first incantation of #switchAppearance.
        */
-      static Appearance buildDelegate (PDelegate& manager, WidgetViewHook& view,
+      static Appearance buildDelegate (PDelegate& manager, WidgetHook& view,
                                        std::optional<int> startOffsetX);    ///////////////////////TICKET #1213 : translation time->offset should be built into the ViewHook!!!
       
     private:/* ===== Internals ===== */

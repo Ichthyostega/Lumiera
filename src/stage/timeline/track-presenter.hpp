@@ -141,10 +141,10 @@ namespace timeline {
   class DisplayFrame
     : util::NonCopyable
     , public DisplayViewHooks
-    , public ViewRefHook<Gtk::Widget>
+    , public RelativeCanvasHook<Gtk::Widget>
     {
-      ViewHooked<TrackHeadWidget> head_;
-      ViewHooked<TrackBody>       body_;
+      model::ViewHooked<TrackHeadWidget> head_;
+      model::ViewHooked<TrackBody>       body_;
       
       /* === extended Interface for relative view hook === */
       
@@ -155,11 +155,11 @@ namespace timeline {
       
       model::ViewHook<TrackHeadWidget>& getHeadHook()  override { return head_; };
       model::ViewHook<TrackBody>&       getBodyHook()  override { return body_; };
-      model::ViewHook<Gtk::Widget>&     getClipHook()  override { return *this; };
+      model::CanvasHook<Gtk::Widget>&   getClipHook()  override { return *this; };
       
     public:
       DisplayFrame (DisplayViewHooks& displayAnchor)
-        : ViewRefHook{displayAnchor.getClipHook()}
+        : RelativeCanvasHook{displayAnchor.getClipHook()}
         , head_{displayAnchor.getHeadHook()}
         , body_{displayAnchor.getBodyHook()}
         { }
@@ -259,7 +259,7 @@ namespace timeline {
   {
     uint x = rand() % 50;
     uint y = 0;
-    Gtk::Button* butt = Gtk::manage (new ViewHooked<Gtk::Button, Gtk::Widget>{display_.hookedAt(x,y), TODO_trackName_});
+    Gtk::Button* butt = Gtk::manage (new model::CanvasHooked<Gtk::Button, Gtk::Widget>{display_.hookedAt(x,y), TODO_trackName_});
     butt->signal_clicked().connect(
           [butt]{ cout << "|=="<<butt->get_label()<<endl; });
     butt->show();
