@@ -136,7 +136,7 @@ namespace timeline {
       ClipDelegate();
       
       
-      enum Appearance {PENDING, SYMBOLIC, ABRIDGED, COMPACT, EXPANDED, DEGRADED};
+      enum Appearance {PENDING, SYMBOLIC, DEGRADED, ABRIDGED, COMPACT, EXPANDED};
       
       
       /** vertical offset below the track start */
@@ -145,10 +145,31 @@ namespace timeline {
       /** placeholder name -- typically overridden from the model */
       static const string defaultName;
       
+      /** presentation mode and style currently employed */
+      virtual Appearance currentAppearance()  const  =0;
+      
+      /** alter appearance style, to the degree possible for this delegate.
+       * @return the new #Appearance style acquired */
+      virtual Appearance changeAppearance (Appearance desired)  =0;
+      
+      /** human readable rendering of the clip's name or identity */
+      virtual cuString getClipName()  const  =0;
+      
+      virtual Time getStartTime()  const  =0;
+      
+      virtual WidgetHook& getCanvas()  const =0;
+
+      /** (re)establish current canvas attachment coordinates,
+       *  thereby possibly switching to a new canvas implementation
+       * @param newView (optional) new canvas; use existing if not given
+       * @return record defining the canvas and the coordinates thereon
+       */
+      virtual WidgetHook::Pos establishHookPoint (WidgetHook* newView)  const =0;
+      
       
       /** request to change the clip delegate's appearance style, if possible.
        * @param manager entity to hold and maintain this specific appearance state.
-       * @param desired the intended style of mode to achieve
+       * @param desired the intended style or mode to acquire
        * @param displayAnchor (optionally) a different view to hook up the delegate.
        * @return the actual mode the presentation was switched to
        * @remark switching the appearance style is a state transition; sometimes
@@ -161,11 +182,11 @@ namespace timeline {
        *         with the current configuration.
        * @note Default and fallback appearance style is `PENDING`, which turns the
        *         delegate into a mere data record without visual representation.
-       * @note whenever a ViewHook (instance) different than the existing one is
-       *         given, the existing widget / delegate will be destroyed and
+       * @note whenever a WidgetHook (instance) different than the existing one
+       *         is given, the existing widget / delegate will be destroyed and
        *         replaced by a suitable copy hooked up into the new display.
-       *         The ctor #ClipDelegate(WidgetViewHook) ensures there is
-       *         always a display_ (ViewHook) to refer to.
+       *         The base ctor #ClipData(WidgetHook&) ensures there is
+       *         always a display_ (WidgetHook) to refer to.
        */
       static Appearance switchAppearance (PDelegate& manager,
                                           Appearance desired =PENDING,

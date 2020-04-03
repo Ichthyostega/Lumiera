@@ -155,6 +155,7 @@ namespace model {
       using Hooked = ViewHooked<WID,BASE>;
       using Canvas = CanvasHook<BASE>;
       
+    protected:
       Canvas&
       getCanvas()
         {

@@ -41,7 +41,7 @@
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <algorithm>
 //#include <vector>
@@ -53,6 +53,7 @@
 //using Gtk::Widget;
 //using sigc::mem_fun;
 //using sigc::ptr_fun;
+using util::unConst;
 //using std::cout;
 //using std::endl;
 using std::optional;
@@ -77,8 +78,19 @@ namespace timeline {
   namespace {// details of concrete clip appearance styles...
    
     using WidgetHook   = model::CanvasHook<Gtk::Widget>;
-    using HookedWidget = model::CanvasHooked<Gtk::Button, Gtk::Widget>;   ///////////////////////////////////////////TICKET #1211 : need preliminary placeholder clip widget for timeline layout 
-   
+    using HookedWidget = model::CanvasHooked<Gtk::Button, Gtk::Widget>;   ///////////////////////////////////////////TICKET #1211 : need preliminary placeholder clip widget for timeline layout
+    
+    enum Mode { HIDDEN, SUMMARY, INDIVIDUAL };
+    
+    inline Mode
+    classify (ClipDelegate::Appearance appearance)
+      {
+        return appearance < ClipDelegate::SYMBOLIC? HIDDEN
+             : appearance < ClipDelegate::ABRIDGED? SUMMARY
+             :                                      INDIVIDUAL;
+      }
+    
+    
     class ClipData
       : public ClipDelegate
       , util::NonCopyable
@@ -87,27 +99,136 @@ namespace timeline {
         
         /* === Interface ClipDelegate === */
         
+        Appearance
+        currentAppearance()  const override
+          {
+            return Appearance::PENDING;
+          }
+        
+        Appearance
+        changeAppearance (Appearance desired)  override
+          {
+            return currentAppearance();
+          }
+        
+        cuString
+        getClipName()  const override
+          {
+            return "lala LOLO";     ///////////////////////////////////////////////////////////////TICKET #1038 : data storage; here : store the clip name/ID
+          }
+        
+        Time
+        getStartTime()  const override
+          {
+            return Time::NEVER;     ///////////////////////////////////////////////////////////////TICKET #1038 : data storage; here : store the clip start time
+          }
+
+        WidgetHook&
+        getCanvas()  const override
+          {
+            return unConst(this)->display_;
+          }
+
+        WidgetHook::Pos
+        establishHookPoint (WidgetHook* newView)  const override
+          {
+            if (not newView)
+              newView = &display_;
+            return newView->hookedAt (getStartTime(), defaultOffsetY);
+          }
+        
       public:
         ClipData(WidgetHook& displayAnchor)
           : ClipDelegate{}
           , display_{displayAnchor}
           { }
+        
+        /** state switch ctor */
+        ClipData(ClipDelegate& existing)
+          : ClipDelegate{}
+          , display_{existing.getCanvas()}
+          { 
+            TODO("copy further clip presentation properties");
+          }
       };
     
     
     class ClipWidget
       : public HookedWidget
       , public ClipDelegate
-      , util::NonCopyable
       {
         /* === Interface ClipDelegate === */
+        
+        Appearance
+        currentAppearance()  const override
+          {
+            ///////////////////////////////////////////////////////////////////////////////////////TICKET #1038 : determine appearance style dynamically
+            return Appearance::COMPACT;
+          }
+        
+        Appearance
+        changeAppearance (Appearance desired)  override
+          {
+            ///////////////////////////////////////////////////////////////////////////////////////TICKET #1038 : change possible appearance style dynamically
+            return currentAppearance();
+          }
+        
+        cuString
+        getClipName()  const override
+          {
+            return this->get_label();
+          }
+        
+        Time
+        getStartTime()  const override
+          {
+            return Time::NEVER;     ///////////////////////////////////////////////////////////////TICKET #1038 : data storage; here : store the clip start time
+          }
+
+        WidgetHook&
+        getCanvas()  const override
+          {
+            UNIMPLEMENTED("sort the base access out"); //return static_cast<HookedWidget&> (unConst(*this)).getCanvas(); 
+          }
+
+        WidgetHook::Pos
+        establishHookPoint (WidgetHook* newView)  const override
+          {
+            if (not newView)
+              newView = &getCanvas();
+            return newView->hookedAt (getStartTime(), defaultOffsetY);
+          }                         ///////////////////////////////////////////////////////////////TICKET #1038 : TODO mostly duplicated implementation
+        
         
       public:
         ClipWidget(WidgetHook::Pos hookPoint, uString clipName)
           : HookedWidget{hookPoint, clipName}
           , ClipDelegate{}
           { }
+        
+        /** state switch ctor */
+        ClipWidget(ClipDelegate& existing, WidgetHook* newView)
+          : HookedWidget{existing.establishHookPoint(newView), existing.getClipName()}
+          , ClipDelegate{}
+          { 
+            TODO("copy further clip presentation properties");
+          }
       };
+    
+    
+    inline ClipDelegate*
+    buildDelegateFor (Mode newMode, ClipDelegate& existingDelegate, WidgetHook* newView =0)
+      {
+        switch (newMode)
+          { 
+            case HIDDEN:
+              return new ClipData (existingDelegate);
+            case INDIVIDUAL:
+              return new ClipWidget (existingDelegate, newView);
+            case SUMMARY:
+              UNIMPLEMENTED ("Summary/Overview presentation style");
+          }
+      }
     
   }//(End)clip appearance details.
   
@@ -118,8 +239,19 @@ namespace timeline {
   ClipDelegate::Appearance
   ClipDelegate::switchAppearance (PDelegate& manager, Appearance desired, WidgetHook* newView)
   {
-    UNIMPLEMENTED ("clip appearance style state management");
+    REQUIRE (manager, "pre-existing clip delegate required");
+    Mode curMode = classify (manager->currentAppearance());
+    Mode newMode = classify (desired);
+    if (newMode != curMode or newView)
+      { // need to switch the clip delegate
+        PDelegate newState (buildDelegateFor (newMode, *manager, newView));
+        swap (manager, newState);
+        return manager->changeAppearance (desired);
+      }
+    else
+      return manager->changeAppearance (desired);
   }
+  
   
   ClipDelegate::Appearance
   ClipDelegate::buildDelegate (PDelegate& manager, WidgetHook& view, optional<Time> startTime)

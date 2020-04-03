@@ -88,12 +88,13 @@ namespace timeline {
       
       unique_ptr<ClipDelegate> widget_;
       
-      /** default level of detail presentation desired for each clip.
-       * @note the actual appearance style is chosen based on this setting
-       *       yet limited by the additional information necessary to establish
-       *       a given level; e.g. name or content renderer must be available
+      /** default maximum level of detail presentation desired for each clip.
+       * @note the actual appearance style is chosen based on this setting, yet
+       *       limited by the additional information necessary to establish a
+       *       given level; e.g. name and content renderer must be available
        *       to allow for a detailed rendering of the clip in the timeline. */
       static const ClipDelegate::Appearance defaultAppearance = ClipDelegate::COMPACT;
+      
       
     public:
       ClipPresenter (ID, ctrl::BusTerm&, WidgetHook&, optional<Time> startTime);
