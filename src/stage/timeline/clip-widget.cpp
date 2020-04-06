@@ -128,14 +128,7 @@ namespace timeline {
           {
             return unConst(this)->display_;
           }
-
-        WidgetHook::Pos
-        establishHookPoint (WidgetHook* newView)  const override
-          {
-            if (not newView)
-              newView = &display_;
-            return newView->hookedAt (getStartTime(), defaultOffsetY);
-          }
+        
         
       public:
         ClipData(WidgetHook& displayAnchor)
@@ -147,7 +140,7 @@ namespace timeline {
         ClipData(ClipDelegate& existing)
           : ClipDelegate{}
           , display_{existing.getCanvas()}
-          { 
+          {
             TODO("copy further clip presentation properties");
           }
       };
@@ -188,16 +181,8 @@ namespace timeline {
         WidgetHook&
         getCanvas()  const override
           {
-            UNIMPLEMENTED("sort the base access out"); //return static_cast<HookedWidget&> (unConst(*this)).getCanvas(); 
+            return HookedWidget::getCanvas();
           }
-
-        WidgetHook::Pos
-        establishHookPoint (WidgetHook* newView)  const override
-          {
-            if (not newView)
-              newView = &getCanvas();
-            return newView->hookedAt (getStartTime(), defaultOffsetY);
-          }                         ///////////////////////////////////////////////////////////////TICKET #1038 : TODO mostly duplicated implementation
         
         
       public:
@@ -210,7 +195,7 @@ namespace timeline {
         ClipWidget(ClipDelegate& existing, WidgetHook* newView)
           : HookedWidget{existing.establishHookPoint(newView), existing.getClipName()}
           , ClipDelegate{}
-          { 
+          {
             TODO("copy further clip presentation properties");
           }
       };
@@ -265,6 +250,14 @@ namespace timeline {
                     : Appearance::PENDING;
   }
   
+  
+  WidgetHook::Pos
+  ClipDelegate::establishHookPoint (WidgetHook* newView)
+  {
+    if (not newView)
+      newView = & getCanvas();
+    return newView->hookedAt (getStartTime(), defaultOffsetY);
+  }
   
   
 }}// namespace stage::timeline

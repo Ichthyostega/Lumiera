@@ -157,7 +157,7 @@ namespace model {
       
     protected:
       Canvas&
-      getCanvas()
+      getCanvas()  const
         {
           REQUIRE (INSTANCEOF(ViewHook<BASE>, &Hooked::getView() ));
           return static_cast<Canvas&> (Hooked::getView()); 

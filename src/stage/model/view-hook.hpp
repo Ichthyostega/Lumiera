@@ -86,7 +86,7 @@ namespace model {
     public:
       virtual ~ViewHook() { }    ///< this is an interface
       
-      virtual void hook (WID& widget)             =0;
+      virtual void hook   (WID& widget)           =0;
       virtual void remove (WID& widget)           =0;
       virtual void rehook (WID& widget) noexcept  =0;
       
@@ -128,7 +128,8 @@ namespace model {
       View* view_;
       
     protected:
-      View& getView() { return *view_; }
+      View&
+      getView() const { return *view_; }
       
     public:
       template<typename...ARGS>

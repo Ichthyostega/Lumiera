@@ -164,7 +164,7 @@ namespace timeline {
        * @param newView (optional) new canvas; use existing if not given
        * @return record defining the canvas and the coordinates thereon
        */
-      virtual WidgetHook::Pos establishHookPoint (WidgetHook* newView)  const =0;
+      WidgetHook::Pos establishHookPoint (WidgetHook* newView);
       
       
       /** request to change the clip delegate's appearance style, if possible.
