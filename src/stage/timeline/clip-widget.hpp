@@ -119,6 +119,8 @@ namespace timeline {
   
   using std::string;
   using lib::time::Time;
+  using lib::time::Duration;
+  using lib::time::TimeSpan;
   
   using WidgetHook = model::CanvasHook<Gtk::Widget>;
   
@@ -131,6 +133,8 @@ namespace timeline {
    */
   class ClipDelegate
     {
+      TimeSpan timing_;
+      
     public:
       virtual ~ClipDelegate();   ///< this is an interface
       ClipDelegate();
@@ -196,7 +200,7 @@ namespace timeline {
        *  viable appearance style. This is the first incantation of #switchAppearance.
        */
       static Appearance buildDelegate (PDelegate& manager, WidgetHook& view,
-                                       std::optional<Time> startTime);
+                                       std::optional<TimeSpan> timing);
       
     private:/* ===== Internals ===== */
      

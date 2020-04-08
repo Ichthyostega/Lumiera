@@ -28306,6 +28306,37 @@
 </html></richcontent>
 <arrowlink COLOR="#9a5670" DESTINATION="ID_1054753498" ENDARROW="Default" ENDINCLINATION="-3030;165;" ID="Arrow_ID_948617682" STARTARROW="None" STARTINCLINATION="991;88;"/>
 </node>
+<node CREATED="1586383134447" ID="ID_415124968" MODIFIED="1586383138432" TEXT="Clip-Timings">
+<node CREATED="1586383139624" ID="ID_683488370" MODIFIED="1586383149522" TEXT="gegeben als TimeSpan"/>
+<node CREATED="1586383150821" ID="ID_51987562" MODIFIED="1586383287858" TEXT="&#xdc;bersetzung in Pixel ist rein Client-seitig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Zoomen, Scrollen, Scroll-Window und View-Path sind reine Gui-Bildungen und werden instantan ohne Round-Trip realisiert
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#821a26" CREATED="1586383188716" ID="ID_1268226317" MODIFIED="1586383420749" TEXT="mu&#xdf; daher komplett im Clip gespeichert werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font color="#e12e2e"><b>Vorsicht Falle</b></font>: es reicht nicht, nur die auf Pixel quantisierte Position zu speichern, denn diese wird bei geringem Zoom relativ ungenau. Es w&#228;re leicht m&#246;glich, durch Heraus- und wieder Hereinscrollen die sichtbare Position eines Clip massiv zu verschieben.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
 </node>
 <node CREATED="1583678040736" ID="ID_1805643410" MODIFIED="1583678050738" TEXT="Umsetzung">
 <node CREATED="1583677631958" ID="ID_811510338" MODIFIED="1583678064711" TEXT="vorl&#xe4;ufige Clip-Repr&#xe4;sentation">

@@ -71,14 +71,14 @@ namespace timeline {
    * @param startTime (optional) start time point of the clip.
    * @note Clip can not be displayed unless startTime is given
    */
-  ClipPresenter::ClipPresenter (ID identity, ctrl::BusTerm& nexus, WidgetHook& view, optional<Time> startTime)
+  ClipPresenter::ClipPresenter (ID identity, ctrl::BusTerm& nexus, WidgetHook& view, optional<TimeSpan> timing)
     : Controller{identity, nexus}
     , channels_{}
     , effects_{}
     , markers_{}
     , widget_{}
     {
-      ClipDelegate::buildDelegate (widget_, view, startTime);
+      ClipDelegate::buildDelegate (widget_, view, timing);
     }
   
   

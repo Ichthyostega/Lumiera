@@ -115,7 +115,7 @@ namespace timeline {
   using std::unique_ptr;
   using std::make_unique;
   
-  using lib::time::Time;
+  using lib::time::TimeSpan;
   using lib::diff::TreeMutator;
   using lib::diff::collection;
   using lib::explore;
@@ -314,8 +314,8 @@ namespace timeline {
                   })
                .constructFrom ([&](GenNode const& spec) -> PClip
                   {
-                    std::optional<Time> startTime = spec.retrieveAttribute<Time> (string{ATTR_start});
-                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_, display_.getClipHook(), startTime);
+                    std::optional<TimeSpan> timing = spec.retrieveAttribute<TimeSpan> (string{ATTR_timing});
+                    return make_unique<ClipPresenter> (spec.idi, this->uiBus_, display_.getClipHook(), timing);
                   })
                .buildChildMutator ([&](PClip& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {

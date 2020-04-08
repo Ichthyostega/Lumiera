@@ -71,7 +71,7 @@ namespace timeline {
   using std::vector;
   using std::optional;
   using std::unique_ptr;
-  using lib::time::Time;
+  using lib::time::TimeSpan;
   
   class MarkerWidget;
   
@@ -97,7 +97,7 @@ namespace timeline {
       
       
     public:
-      ClipPresenter (ID, ctrl::BusTerm&, WidgetHook&, optional<Time> startTime);
+      ClipPresenter (ID, ctrl::BusTerm&, WidgetHook&, optional<TimeSpan>);
       
      ~ClipPresenter();
       

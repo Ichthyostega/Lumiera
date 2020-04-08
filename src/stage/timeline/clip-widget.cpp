@@ -186,7 +186,7 @@ namespace timeline {
         
         
       public:
-        ClipWidget(WidgetHook::Pos hookPoint, uString clipName)
+        ClipWidget(WidgetHook::Pos hookPoint, Duration dur, uString clipName)
           : HookedWidget{hookPoint, clipName}
           , ClipDelegate{}
           { }
@@ -239,15 +239,15 @@ namespace timeline {
   
   
   ClipDelegate::Appearance
-  ClipDelegate::buildDelegate (PDelegate& manager, WidgetHook& view, optional<Time> startTime)
+  ClipDelegate::buildDelegate (PDelegate& manager, WidgetHook& view, optional<TimeSpan> timing)
   {
-    if (startTime)
-      manager.reset (new ClipWidget{view.hookedAt(*startTime, defaultOffsetY), defaultName});
+    if (timing)
+      manager.reset (new ClipWidget{view.hookedAt(*timing, defaultOffsetY), timing->duration(), defaultName});
     else
       manager.reset (new ClipData{view});
     
-    return startTime? Appearance::COMPACT
-                    : Appearance::PENDING;
+    return timing? Appearance::COMPACT
+                 : Appearance::PENDING;
   }
   
   
