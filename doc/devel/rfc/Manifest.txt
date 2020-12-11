@@ -27,9 +27,9 @@ Background
 ~~~~~~~~~~
 
 Cinelerra is quite an old project, there is an original version from
-heroinewarrior.com and a community fork at cinelerra-cv.org. The original author
-claims that there was no-one producing useable input despite their proposes
-while cinelerra was in development, and indeed the Cinelerra-CV community only
+heroinewarrior.com and a community fork link:https://cinelerra-cv.wikidot.com/[Cinelerra-CV].
+The original author claims that there was no-one producing useable input despite their
+requests while cinelerra was in development, and indeed the Cinelerra-CV community only
 feeds back the source released by the original author into their SVN repository
 and maintains few fixes. There is not much development going on. Some people
 have created new functionality/features from time to time which have rarely

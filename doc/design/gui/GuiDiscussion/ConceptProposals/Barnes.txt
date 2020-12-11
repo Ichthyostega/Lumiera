@@ -14,7 +14,7 @@ He previously worked for Intrigo as a User Experience Designer while living in T
 ***********************************************************************************************************
 
 I’ve pulled together some drafts of my ideas for the design of the timeline portion
-of the Lumiera non-linear video editor (hopefully, the successor to http://cinelerra-cv.org[Cinelerra]).
+of the Lumiera non-linear video editor (hopefully, the successor to http://cinelerra-cv.wikidot.com[Cinelerra]).
 
 The un-annotated version::
   image:{imgg}/Barnes.proposal.png[
