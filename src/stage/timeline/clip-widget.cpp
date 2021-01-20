@@ -29,7 +29,7 @@
  **       a clip. Moreover, this clip display can be used both
  **       within the context of the timeline or as element in a
  **       media bin in the asset management section.
- ** @todo WIP-WIP-WIP as of 12/2016
+ ** @todo WIP-WIP-WIP as of 1/2021
  ** 
  */
 
@@ -106,7 +106,7 @@ namespace timeline {
           }
         
         Appearance
-        changeAppearance (Appearance desired)  override
+        changeAppearance (Appearance)  override
           {
             return currentAppearance();
           }

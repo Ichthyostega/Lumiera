@@ -128,9 +128,10 @@ namespace timeline {
                   })
                .constructFrom ([&](GenNode const& spec) -> PEffect
                   {
+                    std::optional<TimeSpan> timing = spec.retrieveAttribute<TimeSpan> (string{ATTR_timing});
                     return make_unique<ClipPresenter> (spec.idi, this->uiBus_
                                                       ,getClipContentCanvas()
-                                                      ,std::nullopt);     /////////////////////////TICKET #1213 : is it really such a good idea to pass that here?? Note: nullopt effectively disables any display
+                                                      ,timing);
                   })
                .buildChildMutator ([&](PEffect& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {
@@ -151,7 +152,7 @@ namespace timeline {
                   {
                     return make_unique<ClipPresenter> (spec.idi, this->uiBus_
                                                       ,getClipContentCanvas()
-                                                      ,std::nullopt);     /////////////////////////TICKET #1213 : how to represent "always" / "the whole track"??
+                                                      ,std::nullopt);     /////////////////////////TICKET #1213 : time → horizontal extension : how to represent "always" / "the whole track"??
                   })
                .buildChildMutator ([&](PChannel& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
                   {

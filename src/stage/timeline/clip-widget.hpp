@@ -174,7 +174,7 @@ namespace timeline {
       /** request to change the clip delegate's appearance style, if possible.
        * @param manager entity to hold and maintain this specific appearance state.
        * @param desired the intended style or mode to acquire
-       * @param displayAnchor (optionally) a different view to hook up the delegate.
+       * @param newView (optionally) a different view to hook up the delegate.
        * @return the actual mode the presentation was switched to
        * @remark switching the appearance style is a state transition; sometimes
        *         this change also implies switching the actual implementation of

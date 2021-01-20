@@ -29,7 +29,7 @@
  ** UI elements, their state and immediate feedback to user interactions. The _Presenter_ --
  ** as known from the [MVP pattern](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) --
  ** serves as link between both levels. For the global angle of view, it is a model::Tangible and thus
- ** plays the role of the _View_, while the _Model_ and _Controler_ roles are mediated through the
+ ** plays the role of the _View_, while the _Model_ and _Controller_ roles are mediated through the
  ** stage::UiBus, exchanging command, state and mutation messages. On the other hand, for the local
  ** angle of view, the _Presenter_ is a structural model element, kind of a _view model_, and corresponds
  ** to the respective element within the session. In addition, it manages actively the collaborative
@@ -40,7 +40,7 @@
  ** 
  ** Especially the ClipPresenter plays a crucial role when it comes to deciding which *clip appearance style*
  ** to use for the actual display. Depending on the zoom level, the ClipPresenter may even decide to hide
- ** the individual clip and join it into a combined placeholder for degraded display of a hole strike of
+ ** the individual clip and join it into a combined placeholder for degraded display of a whole strike of
  ** clips, just to indicate some content is actually present in this part of the timeline.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016

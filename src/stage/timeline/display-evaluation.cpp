@@ -67,7 +67,7 @@ namespace timeline {
    * and coordinate the overall timeline layout. Within these passes, each element
    * starts with the (vertical) extension as allocated by GTK; typically these values
    * need to be increased slightly, in order to align the track headers and the track
-   * body display, and to accommodate the clips and effect placed into each track.
+   * body display, and to accommodate the clips and effects placed into each track.
    * Such local adjustments will typically re-trigger the custom drawing code, and
    * thus re-invoke this function, until the overall layout is stable. In a similar
    * vein, the expanding or collapsing of clips and even whole sub-track scopes

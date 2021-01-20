@@ -140,6 +140,7 @@ namespace test{
           using It = ReplaceableItem<X>;
           
           It one{she}, two{he};
+          REQUIRE (one != two);
           CHECK (two == he);
           CHECK (one == she);
           CHECK (sizeof(one) == sizeof(X));

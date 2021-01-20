@@ -42,7 +42,7 @@
  ** 
  ** Each TrackPresenter corresponds to a "sub-Fork" of timeline tracks. Since Lumiera always arranges
  ** tracks as nested scopes into a tree, there is one root fork, recursively holding several sub forks.
- ** - thus each TrackPresenter holds a collection #subFor_ -- possibly empty.
+ ** - thus each TrackPresenter holds a collection #subFork_ -- possibly empty.
  ** - moreover, it holds a collection #clips_, which represent the actual content of this track itself,
  **   as opposed to content on some sub-track. These clips are to be arranged within the _content area_
  **   of the track display, in the track body area (at the right side of the timeline). Actually, this

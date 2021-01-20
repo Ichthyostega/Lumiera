@@ -160,7 +160,7 @@ namespace model {
    *        constitutes some kind of arrangement in the visual presentation, like
    *        e.g. a stacking order, or by populating some table cells in sequence.
    *        The expected semantics is for this operation to detach each given element,
-   *        and then immediately re-attach it _at the "beginning"_ (whatever this means).
+   *        and then immediately re-attach it _at the "front side"_ (whatever this means).
    *        The element as such, and all associated presentation entities are not destroyed,
    *        but continue to exist with the same identity (and possibly all signal wirings).
    *        Just they now appear as if attached with the new ordering.
