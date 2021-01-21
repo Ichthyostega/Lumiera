@@ -61,8 +61,8 @@
 
 
 #include "lib/diff/gen-node.hpp"
-#include "lib/diff/tree-mutator-collection-binding.hpp"
 #include "lib/diff/tree-mutator.hpp"
+#include "lib/diff/tree-mutator-collection-binding.hpp"
 
 #include <tuple>
 

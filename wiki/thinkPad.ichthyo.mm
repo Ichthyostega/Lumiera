@@ -37878,6 +37878,39 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1573835265349" ID="ID_352943196" MODIFIED="1573835276049" TEXT="Diff-Anwendung einbinden">
 <icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1611218580537" ID="ID_1387738684" MODIFIED="1611218916752" TEXT="&quot;habituellen&quot; Standard-Fall etablieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1611218653199" ID="ID_353919229" MODIFIED="1611218879611" TEXT="einzelne Objekt-Properties werden explizit gebunden">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1611218673196" ID="ID_104829523" MODIFIED="1611218882295" TEXT="ansonsten nur Sub-Collections">
+<icon BUILTIN="idea"/>
+<node CREATED="1611218685874" ID="ID_503186465" MODIFIED="1611218887833" TEXT="STL-Collection von Smart-Pointern">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1611218698241" ID="ID_766067661" MODIFIED="1611218890019" TEXT="das Pointee ist wieder DiffMutable">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1611218724397" ID="ID_495328814" MODIFIED="1611218907878" TEXT="Bindungs-Schema">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1611218730812" ID="ID_718558563" MODIFIED="1611218900241" TEXT="der Selector pr&#xfc;ft ein Typfeld">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1611218788908" ID="ID_1503520124" MODIFIED="1611218900241" TEXT="der Matcher pr&#xfc;ft die Objekt-ID">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1611218813169" ID="ID_1174818531" MODIFIED="1611218900241" TEXT="der Konstruktor enth&#xe4;lt das relevante Closure-Binding">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611218846053" ID="ID_1626706964" MODIFIED="1611221187326" TEXT="Standard-Implementierung f&#xfc;r den rekursiven Kind-Mutator">
+<arrowlink COLOR="#64b2d0" DESTINATION="ID_341242193" ENDARROW="Default" ENDINCLINATION="-1947;126;" ID="Arrow_ID_1779456185" STARTARROW="None" STARTINCLINATION="1123;53;"/>
+<icon BUILTIN="yes"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1573835763482" ID="ID_1220310042" MODIFIED="1576441741737" TEXT="Problem: Slave-Collection">
 <arrowlink COLOR="#519b84" DESTINATION="ID_727500820" ENDARROW="Default" ENDINCLINATION="-67;7;" ID="Arrow_ID_115955006" STARTARROW="None" STARTINCLINATION="71;200;"/>
 <icon BUILTIN="messagebox_warning"/>
@@ -42385,7 +42418,7 @@
 </node>
 <node CREATED="1465428839332" ID="ID_655341963" MODIFIED="1561827465587" TEXT="Diff-Anwendung" VSHIFT="36">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1465428850946" FOLDED="true" ID="ID_1546287157" MODIFIED="1576200627485">
+<node COLOR="#435e98" CREATED="1465428850946" FOLDED="true" MODIFIED="1611218290572">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -42486,14 +42519,54 @@
 <icon BUILTIN="yes"/>
 <node CREATED="1465666541419" ID="ID_787956112" MODIFIED="1465666552293" TEXT="entweder ein festes Interface"/>
 <node CREATED="1465666552842" ID="ID_1360512685" MODIFIED="1465666574594" TEXT="oder &#xfc;ber Metaprogrammierung / Spezialisierung"/>
-<node CREATED="1468761997202" FOLDED="true" ID="ID_206940182" MODIFIED="1561827483836" TEXT="kombinierte L&#xf6;sung">
+<node CREATED="1468761997202" FOLDED="true" ID="ID_206940182" MODIFIED="1611219082511" TEXT="kombinierte L&#xf6;sung">
 <icon BUILTIN="idea"/>
-<node CREATED="1468762009304" ID="ID_170152384" MODIFIED="1468762018314" TEXT="Interface DiffMutable"/>
+<node CREATED="1468762009304" ID="ID_170152384" MODIFIED="1611219253284" TEXT="Interface DiffMutable">
+<icon BUILTIN="forward"/>
+<node COLOR="#435e98" CREATED="1611219255178" ID="ID_790740828" MODIFIED="1611221058698" TEXT="dies entwickelt sich zum Standardfall...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...zumindest im GUI, wo parktisch alle Empf&#228;nger auch ein Tangible (Widget oder Controller) sind
+    </p>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1611221009482" ID="ID_1797198606" MODIFIED="1611226329184" TEXT="exponiert builder-Methode">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und genau diese virtuelle Builder-Methode ist &#252;blicherweise der Ort, wo mit einer DSL und &#252;ber Lambdas das Mapping auf die internen Strukturen des DiffMutable hergestellt wird; deshalb kann auch DiffMutable selber ein sehr schlankes Interface sein; der resultierende TreeMutator ist dann eine f&#252;r den jeweiligen konkreten Typ aus Bausteinen generierte Hilfsklasse
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1611226844354" ID="ID_252206662" MODIFIED="1611227312132" TEXT="oft in einer Collection...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und dort per smart-Ptr.<br />F&#252;r diesen Fall kann die Verdrahtung weitgehend automatisch konfiguiert werden, und man mu&#223; eigentlich nur noch den Konstruktor-Aufruf explizit (per Lambda) in das TreeMuator-Binding integrieren. Wenn es mehrere &#187;onion layer&#171; gibt, mu&#223; allerdings auch noch ein &#187;Selector&#171; definiert werden, um zu steuern, wo genau dieses Binding angewendet wird, und wo sonst auf einen anderen Layer delegiert wird, z.B. f&#252;r explizit gebundene Objekt-Attribute.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#1ebca6" DESTINATION="ID_489519336" ENDARROW="Default" ENDINCLINATION="689;-28;" ID="Arrow_ID_1973768518" STARTARROW="None" STARTINCLINATION="490;52;"/>
+</node>
+</node>
 <node CREATED="1468762031701" FOLDED="true" ID="ID_1455212830" MODIFIED="1561827482931" TEXT="Meta-Adapter">
-<linktarget COLOR="#503382" DESTINATION="ID_1455212830" ENDARROW="Default" ENDINCLINATION="8;131;" ID="Arrow_ID_1591967504" SOURCE="ID_993360353" STARTARROW="None" STARTINCLINATION="535;0;"/>
+<linktarget COLOR="#503382" DESTINATION="ID_1455212830" ENDARROW="Default" ENDINCLINATION="32;58;" ID="Arrow_ID_1591967504" SOURCE="ID_993360353" STARTARROW="None" STARTINCLINATION="222;18;"/>
 <node CREATED="1468762052858" ID="ID_1870920189" MODIFIED="1468762066764" TEXT="synthetisiert dieses Interface"/>
 <node CREATED="1468762067383" ID="ID_1801995068" MODIFIED="1468762075059" TEXT="erkennt passende Methoden"/>
-<node CREATED="1468762075671" FOLDED="true" ID="ID_1201929549" MODIFIED="1561827469159" TEXT="Problem: Storage">
+<node CREATED="1468762075671" ID="ID_1201929549" MODIFIED="1611219223899" TEXT="Problem: Storage">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1468762092660" ID="ID_1968257665" MODIFIED="1468762097264" TEXT="Adapter oder Lambda"/>
 <node CREATED="1468762097684" ID="ID_438037423" MODIFIED="1468762107374" TEXT="mu&#xdf; l&#xe4;nger leben als der Adapter"/>
@@ -42530,7 +42603,7 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node CREATED="1469121877371" FOLDED="true" HGAP="38" ID="ID_1614796496" MODIFIED="1561827469159" TEXT="freie funktion" VSHIFT="16">
+<node CREATED="1469121877371" FOLDED="true" HGAP="38" ID="ID_1614796496" MODIFIED="1561827469159" TEXT="freie Funktion" VSHIFT="16">
 <icon BUILTIN="yes"/>
 <node CREATED="1469121882782" ID="ID_695291968" MODIFIED="1469121933463" TEXT="keine Spezialisierung notwendig">
 <icon BUILTIN="idea"/>
@@ -42574,7 +42647,7 @@
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#503382" DESTINATION="ID_1455212830" ENDARROW="Default" ENDINCLINATION="8;131;" ID="Arrow_ID_1591967504" STARTARROW="None" STARTINCLINATION="535;0;"/>
+<arrowlink COLOR="#503382" DESTINATION="ID_1455212830" ENDARROW="Default" ENDINCLINATION="32;58;" ID="Arrow_ID_1591967504" STARTARROW="None" STARTINCLINATION="222;18;"/>
 </node>
 </node>
 <node CREATED="1469544264955" HGAP="35" ID="ID_1303383911" MODIFIED="1561827465596" VSHIFT="16">
@@ -42719,6 +42792,7 @@
 <node CREATED="1469545456549" ID="ID_300958644" MODIFIED="1469545459401" TEXT="ScopeManager"/>
 </node>
 <node CREATED="1469545522445" FOLDED="true" ID="ID_1403539911" MODIFIED="1561827482932" TEXT="ScopeManager">
+<icon BUILTIN="info"/>
 <node CREATED="1469545526380" ID="ID_1121286637" MODIFIED="1469545535550" TEXT="Imp. wird per Zieltyp generiert"/>
 <node CREATED="1469545536139" ID="ID_53324473" MODIFIED="1469545543750" TEXT="lebt in opaquem Buffer"/>
 <node CREATED="1469545546209" ID="ID_347304855" MODIFIED="1469545561067" TEXT="enth&#xe4;lt Stack,"/>
@@ -42964,7 +43038,7 @@
 <node CREATED="1472172593710" ID="ID_539813118" MODIFIED="1472172608024" TEXT="geschachtelter Scope mu&#xdf; beim Verlassen komplett abgearbeitet sein"/>
 <node CREATED="1472172608636" ID="ID_904329399" MODIFIED="1472172634020" TEXT="wir steigen niemals &#xfc;ber den root-Scope hinaus auf"/>
 </node>
-<node CREATED="1472172651974" ID="ID_717242686" MODIFIED="1512926192130" TEXT="ins-Problem">
+<node COLOR="#435e98" CREATED="1472172651974" FOLDED="true" ID="ID_717242686" MODIFIED="1611218246329" TEXT="ins-Problem beim Mutieren von  Attributen">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1472172658349" ID="ID_279579205" MODIFIED="1472172806077">
 <richcontent TYPE="NODE"><html>
@@ -42986,18 +43060,104 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1472172711846" ID="ID_67509104" MODIFIED="1472172809794" TEXT="wir haben es hier mit objektwertigen Attributen zu tun">
-<icon BUILTIN="idea"/>
+<icon BUILTIN="info"/>
 </node>
-<node CREATED="1472172723853" ID="ID_397776543" MODIFIED="1472172732503" TEXT="das ist ein sonderbarer Grenzfall"/>
-<node CREATED="1472172733307" ID="ID_1698922494" MODIFIED="1472172753564" TEXT="man wird die normalerweise auf Impl-Ebene erzeugen"/>
+<node CREATED="1472172723853" ID="ID_397776543" MODIFIED="1472172732503" TEXT="das ist ein sonderbarer Grenzfall">
+<icon BUILTIN="idea"/>
+<node CREATED="1611218058623" ID="ID_948845594" MODIFIED="1611218075752" TEXT="Attribute tendieren zur Wertsemantik"/>
+<node CREATED="1611218104017" ID="ID_1247405117" MODIFIED="1611218113067" TEXT="Attribute kann man eigentlich auch nicht umordnen"/>
+<node CREATED="1611218115055" ID="ID_1628532981" MODIFIED="1611218183029" TEXT="Objekte k&#xf6;nnen zudem Ctor-Constraints haben"/>
+</node>
+<node CREATED="1472172733307" ID="ID_1698922494" MODIFIED="1611217973598" TEXT="Attribute werden normalerweise fest in der Objekt-Impl erzeugt"/>
 <node CREATED="1472172754136" ID="ID_205435085" MODIFIED="1472172765458" TEXT="ein INS hat dann nichts sinnvolles zu tun"/>
-<node CREATED="1472172772494" ID="ID_842638924" MODIFIED="1472172795138" TEXT="default-Implementierung absorbiert das INS stillschweigend">
+<node COLOR="#435e98" CREATED="1472172772494" ID="ID_842638924" MODIFIED="1472172795138" TEXT="default-Implementierung absorbiert das INS stillschweigend">
 <icon BUILTIN="forward"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611218339864" ID="ID_341242193" MODIFIED="1611314480869" TEXT="Abk&#xfc;rzung f&#xfc;r rekursives Standard-Binding">
+<linktarget COLOR="#64b2d0" DESTINATION="ID_341242193" ENDARROW="Default" ENDINCLINATION="-1947;126;" ID="Arrow_ID_1779456185" SOURCE="ID_1626706964" STARTARROW="None" STARTINCLINATION="1123;53;"/>
+<icon BUILTIN="pencil"/>
+<node CREATED="1611227233973" ID="ID_489519336" MODIFIED="1611227312132" TEXT="f&#xfc;r den h&#xe4;ufigsten Fall: STL-Collection von Smart-Ptr auf DiffMutable">
+<linktarget COLOR="#1ebca6" DESTINATION="ID_489519336" ENDARROW="Default" ENDINCLINATION="689;-28;" ID="Arrow_ID_1973768518" SOURCE="ID_252206662" STARTARROW="None" STARTINCLINATION="490;52;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1611227337956" ID="ID_284850401" MODIFIED="1611227346387" TEXT="wird per MetaPr&#xe4;dikat erkannt">
+<node CREATED="1611227487011" ID="ID_1701933719" MODIFIED="1611227500783" TEXT="wenn die Elemente entweder selber direkt DiffMutable sind"/>
+<node CREATED="1611227501552" ID="ID_752689541" MODIFIED="1611227529633" TEXT="oder alternativ ein (smart)Pointer/Wrapper auf ein DiffMutable"/>
+</node>
+<node CREATED="1611261538911" ID="ID_498748918" MODIFIED="1611261552068" TEXT="Standard-Imlementierung">
+<node CREATED="1611261602057" ID="ID_160823769" MODIFIED="1611261614523" TEXT="inzwischen hat sich ein Standard-Schema etabliert">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1611261556183" ID="ID_236586609" MODIFIED="1611261601349" TEXT="Frage: warum machen wir einen ID-Match?">
+<node CREATED="1611261593546" ID="ID_1666826303" MODIFIED="1611261791971" TEXT="typischerweise pr&#xfc;fen wir zu Beginn, ob das zu mutierende Sub-Element auch matcht"/>
+<node CREATED="1611261792751" ID="ID_1188415737" MODIFIED="1611261815910" TEXT="man k&#xf6;nnte hierf&#xfc;r den &#xbb;Matcher&#xab; des Collection-Bindings verwenden"/>
+<node CREATED="1611261840272" ID="ID_922368010" MODIFIED="1611261871424" TEXT="mehr noch: wie kommt es zu diesem Match-Guard?">
+<node CREATED="1611261874508" ID="ID_1431589128" MODIFIED="1611261892215" TEXT="das Standard-Schema hat sich per Copy-n-Paste entwickelt">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1611261893793" ID="ID_1503357970" MODIFIED="1611261910755" TEXT="k&#xf6;nnte durchaus sein, da&#xdf; dieser Schritt redundant ist"/>
+<node CREATED="1611270254702" ID="ID_781667464" MODIFIED="1611271568520" TEXT="und genau so ist es">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das ist verst&#228;ndlich aus der Historie: Zun&#228;chst einmal war der TreeMutator gedacht als ein Interface, das der client des Diff-Frameworks zu implementieren hat. Nachdem ich diese &#220;bung aber drei mal gemacht hatte, war mir klar, da&#223; dies zu viel verlangt ist. Denn der TreeMutator ist notwendigerweise stark an den Implementierungs-Ansatz im Diff-Framework gebunden. Das hei&#223;t, man kann dieses Interface nur implementieren, wenn man diese interne Funktionsweise verstanden hat. Und das Diff-Framework w&#252;rde seinen Zweck verfehlen, wenn der Nutzer dieses Wissen haben m&#252;&#223;te. Also habe ich &#252;ber den TreeMutator ein Baukastensystem errichtet, welches &#252;ber Lambdas in den Anwendungskontext gebunden wird.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      In einem zweiten Anlauf habe ich schlie&#223;lich die schon bestehenden, explizitien Implementierungen des TreeMutator-Interfaces allesamt &quot;eingefangen&quot; und durch ein Meshup aus dem Bauskastensystem ersetzt. Daher gibt es jetzt nur noch eine einzige valide Implementierung, n&#228;mlich die im Baukasen. Und das soll auch so bleiben.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Daher ist es zul&#228;ssig, sich diese Implementierung anzuschauen: in der Tat geht n&#228;mlich dort jedem Aufruf des Mutators ein Suchvorgang voraus, und dieser endet immer mit einer erfolgreichen Anwendung des Matchers. Daher ist es grunds&#228;tzlich nicht notwendig, den ID-Match nochmal zu pr&#252;fen, bevor man in die rekursive Mutation einsteigt.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Wie kommt nun aber dieser explizit ausprogrammierte ID-Match in die Standard-Implementierung? Die Antwort ist, letztlich aus Verlegenheit. Denn zun&#228;chst einmal hatte ich f&#252;r den Unit-Test alles f&#252;r ein sehr spezielles Setup ausprogrammiert. Das ist auch gut so, denn dieses Setup deckt auch Grenzf&#228;lle mit ab. Also im Besonderen auch Bindings, die sich sehr speziell in Implementierungsstrukturen einklinken, und eben grade nicht direkt an ein DiffMutable-Subobjekt delegieren. Und diese Offenheit ist der essentielle Grund, warum ich auf ein Diff-Framework setze, und nicht auf ein Datenmodell mit festen Interfaces. Diese Offenheit bedingt aber auch, da&#223; man dem Client die letztendliche &#220;bersetzung der IDs &#252;berlassen mu&#223;. F&#252;r die rekursive Kind-Mutation mu&#223; der Client sich ggfs ein internes Implementierungs-Objekt anhand der gegebenen ID heraussuchen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Im einfachen Standardfall jedoch ist das nicht notwendig, denn in diesem h&#228;ufigsten Standardfall haben wir mehr oder weniger direkt das Objekt aus der Collection in der Hand, auf welches dann der rekursive Mutator angewendet werden soll. Also stand ich beim ersten Schreiben einer Implementierung f&#252;r diesen einfachen Standardfall vor dem Paradoxon, da&#223; die Funktion einen ID-Parameter bekommt, den man anscheinend hier gar nicht braucht. Und, ohne diese Zusammenh&#228;nge damals zu verstehen, habe ich dann aus Verlegenheit noch eine Zeile Code eingebaut, die &quot;was Sinnvolles mit dieser ID macht&quot;, denn es war ja zun&#228;chst auch erst mal ein Proof-of-Concept (und zu diesem Zeitpunkt gab es noch zwei weitere, alternative Implementierungen des TreeMutator-Interfaces). Letztlich hat sich dann dieses &quot;anstandshalber&quot; eingebaute Zeile, eben genau der ID-match, welcher mithin &quot;etwas Sinnvolles&quot; mit der ID macht, per Copy-n-Paste in alle konkreten Implementierungen fortgepflanzt. Wiewohl dieser Schritt im Stand der gegenw&#228;rtigen Implementierung stets redundant ist.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
 </node>
 </node>
-<node CREATED="1465860740971" ID="ID_1905457534" MODIFIED="1512926192131" TEXT="Unit-Test">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1611271855692" ID="ID_1449093831" MODIFIED="1611271873489" TEXT="Fazit: der Match-Guard kann aus allen Implementierungen entfernt werden">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1611271971948" ID="ID_1541118749" MODIFIED="1611271982750" TEXT="der ID-Parameter wird normalerweise nicht gebraucht"/>
+<node CREATED="1611271983506" ID="ID_1671925205" MODIFIED="1611272055176" TEXT="er ist nur f&#xfc;r Grenzf&#xe4;lle gedacht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...falls die clientseitige Datenstruktur einen Index verwendet, um per ID die eigentliche Zieldatenstruktur zu betreten.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1465860740971" ID="ID_1905457534" MODIFIED="1512926192131" TEXT="Unit-Test">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1472122365079" ID="ID_781825543" MODIFIED="1512926192131" TEXT="Aussagekr&#xe4;ftiges Beispiel-Diff">
 <node CREATED="1472122379548" ID="ID_1273829051" MODIFIED="1472122384864" TEXT="sollte alle Features vorf&#xfc;hren"/>

@@ -31,12 +31,43 @@
  ** Each concrete TreeMutator instance will be configured differently, and this
  ** adaptation is done by implementing binding templates, in the way of building
  ** blocks, attached and customised through lambdas. It is possible to layer
- ** several bindings on top of a single TreeMutator -- and especially this header
- ** defines a building block for one such layer, especially for binding to a
+ ** several bindings on top of a single TreeMutator -- and indeed this header
+ ** defines a building block for one such layer, specifically for binding to a
  ** representation of "child objects" managed within a typical STL container.
  ** 
  ** As a _special case_, binding to a STL map is supported, while this usage is rather
  ** discouraged, since it contradicts the diff semantics due to intrinsic ordering.
+ ** 
+ ** ## Internal structure
+ ** 
+ ** The task to set up a binding to a _generic STL collection_ has to face some
+ ** technical intricacies, leading to a rather involved implementation, which can
+ ** be hard to understand and maintain. We attempt to address this challenge through
+ ** a decomposition into several sub-tasks, organised into four levels of abstraction
+ ** - at the bottom we use an adaptation layer in the form of a traits template,
+ **   with two concrete specialisations of the ContainerTraits for vector-like
+ **   and map-like collections
+ ** - on top of this the CollectionBinding is established to establish a kind of
+ **   generic access protocol for consuming a collection guided by diff instructions
+ ** - the third level then holds the actual TreeMutator implementation, embodied into
+ **   the ChildCollectionMutator template, which in fact translates and delegates
+ **   any actual access to the underlying collection to its embedded CollectionBinding
+ **   instance...
+ ** - which in turn is assembled on the top level, the DSL level, from building blocks
+ **   provided by the client of this collection binding. The entrance point to this
+ **   DSL layer is the _DefaultBinding, which is established by wrapping the actual
+ **   collection into the concrete CollectionBinding at the point where the builder
+ **   is created. The further DSL verbs on the CollectionBindingBuilder just server
+ **   to provide or overlay some lambdas to fill in the flexible parts of the binding.
+ ** 
+ ** And these flexible parts are mostly concerned with the _actual contents_ of the
+ ** STL collection to be bound. Because, at this point, we can not assume much without
+ ** loosing genericity. Thus, the user of this binding has to fill in the missing link
+ ** - to decide if a given diff specification is addressed at this collection binding (»Selector«)
+ ** - when to consider a concrete content element as a _match_ for the diff specification (»Matcher«)
+ ** - the way actually to construct a new content element in accordance to the given diff spec (»Constructor«)
+ ** - the actual implementation of value assignment (optional)
+ ** - and the recursive entrance into mutation of a specific element within that collection (optional)
  ** 
  ** @note the header tree-mutator-collection-binding.hpp was split off for sake of readability
  **       and is included automatically from bottom of tree-mutator.hpp

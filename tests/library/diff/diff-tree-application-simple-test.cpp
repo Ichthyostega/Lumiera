@@ -130,7 +130,7 @@ namespace test{
         }
       
       
-      /** @test mutate a Record<GenNode> by applying a the sample diff */
+      /** @test mutate a Record<GenNode> by applying the [sample diff](\ref #someDiff) */
       void
       demo_one()
         {

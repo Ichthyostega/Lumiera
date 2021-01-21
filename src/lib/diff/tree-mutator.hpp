@@ -136,8 +136,8 @@ namespace diff{
    * on arbitrary, hierarchical object-like data.
    * The TreeMutator exposes two distinct interfaces
    * - the \em operation API -- similar to what a container exposes --
-   *   is the entirety of abstract operations that can be done to the
-   *   subsumed, tree like target structure
+   *   is the entirety of abstract operations that can be performed
+   *   on the subsumed, tree like target structure
    * - the \em binding API allows to link some or all of these generic
    *   activities to concrete manipulations known within target scope.
    */
@@ -197,8 +197,8 @@ namespace diff{
        *          to prevent a SEGFAULT. Thus `skipSrc` can not match
        *          and thus can not return anything. Consequently the
        *          `del` implementation has to use `matchSrc` explicitly,
-       *          and the latter must invoke the selector prior to
-       *          performing the local match. */
+       *          and the latter must invoke the "layer selector" prior
+       *          to performing the local match. */
       virtual void
       skipSrc (GenNode const&)
         {
@@ -412,9 +412,12 @@ namespace diff{
          *     allows for recursive descent into nested child scopes. On invocation, it has
          *     to build a suitable custom TreeMutator implementation into the provided buffer
          *     (handle), and this nested TreeMutator should be wired with the internal
-         *     representation of the nested scope to enter. The code invoking this closure
-         *     typically pushes the buffer on some internal stack and switches then to use
-         *     this nested mutator until encountering the corresponding `EMU` bracket verb.
+         *     representation of the nested scope to enter. At this point, the implementation
+         *     can safely assume that the given `target` data element has already be checked
+         *     with the configured _matcher closure_, and thus can be considered equivalent
+         *     to the given ID. The code invoking this closure then typically pushes the
+         *     buffer onto some internal stack and switches then to use this nested mutator
+         *     until encountering the corresponding `EMU` bracket verb.
          * @note the `after(Ref::ATTRIBS)` verb can only processed if the selector responds
          *     correct to a Ref::ATTRIBS spec. The implicit default selector does so, i.e.
          *     it rejects `Ref::ATTRIBS`. Please be sure to accept this token _only_ if
@@ -484,7 +487,6 @@ namespace diff{
   
   
 }} // namespace lib::diff
-#endif /*LIB_DIFF_TREE_MUTATOR_H*/
 
 
          /* == implementation detail headers == */
@@ -492,6 +494,10 @@ namespace diff{
 #include "lib/diff/tree-mutator-gen-node-binding.hpp"
 #include "lib/diff/tree-mutator-attribute-binding.hpp"
 #include "lib/diff/tree-mutator-collection-binding.hpp"
+#include "lib/diff/tree-mutator-diffmutable-binding.hpp"
 #include "lib/diff/tree-mutator-listener-binding.hpp"
 #include "lib/diff/tree-mutator-noop-binding.hpp"
 
+
+
+#endif /*LIB_DIFF_TREE_MUTATOR_H*/

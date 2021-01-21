@@ -68,7 +68,7 @@
  ** 
  ** #### State and nested scopes
  ** For performance reasons, the diff is applied _in place_, directly mutating the
- ** target data structure. This makes the diff application _stateful_ -- and in case of
+ ** target data structure. This makes the diff application _statefull_ -- and in case of
  ** a *diff conflict*, the target *will be corrupted*.
  ** 
  ** Our tree like data structures are conceived as a system of nested scopes. Within
