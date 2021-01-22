@@ -60,6 +60,7 @@
 #include "lib/diff/gen-node.hpp"
 #include "lib/diff/tree-mutator.hpp"
 #include "lib/diff/tree-mutator-collection-binding.hpp"
+#include "lib/diff/diff-mutable.hpp"
 
 namespace lib {
 namespace diff{
@@ -71,86 +72,51 @@ namespace diff{
     using lib::meta::enable_if;
     using lib::meta::Yes_t;
     using lib::meta::No_t;
+    using std::__and_;
+    using std::__or_;
     
-    META_DETECT_FUNCTION(typename X::iterator, begin,(void));
-    
-    template<typename T>
-    class can_recursively_bind_DiffMutable
-      {
-//        typedef typename Strip<T>::Type Type;
-         
-        
-        
-      public:
-        enum { value = false
-//          is_iterable::value
-//                    or is_const_iterable::value
-//                    or is_noexcept_iterable::value
-//                    or is_const_noexcept_iterable::value
-             };
-      };
-    
+    META_DETECT_FUNCTION(GenNode::ID const&, getID,(void));
     
     template<typename T>
-    class Is_DiffMutable
+    struct Can_access_ID
+      : HasFunSig_getID<typename meta::Strip<T>::Type>
       { };
     
     template<typename T>
-    class Is_wrapped_DiffMutable
+    struct Is_DiffMutable
+      : meta::is_Subclass<T,DiffMutable>
       { };
     
     template<typename T>
-    class Can_access_ID
+    struct Is_wrapped_DiffMutable
+      : __and_< meta::Unwrap<T>
+              , Is_DiffMutable<typename meta::Unwrap<T>::Type>>
       { };
     
+    template<typename T>
+    struct can_recursively_bind_DiffMutable
+      : __or_< Is_DiffMutable<T>
+             , Is_wrapped_DiffMutable<T>>
+      { } ;
+      
     
     template<class TAR, typename SEL =void>
     struct _AccessID
       {
-        GenNode::ID const&
-        getID (TAR const& target)
+        static GenNode::ID const&
+        getID (TAR const&)
           {
             throw error::Logic ("Unable to access the target element's object ID. "
                                 "Please define a »Matcher« explicitly by invoking the builder function \"matchElement\".");
           }
       };
-    template<class TAR>
-    struct _AccessID<TAR, enable_if<Can_access_ID<TAR>>>
-      {
-        GenNode::ID const&
-        getID (TAR const& target)
-          {
-            return target.getID();
-          }
-      };
-    
-    
-    template<class ELM, typename SEL =void>
-    struct _AccessTarget
-      {
-        DiffMutable&
-        access (ELM const& elm)
-          {
-            throw error::Logic ("Unable to determine if the target is DiffMutable, and how to access it. "
-                                "Please define a »Mutator« explicitly by invoking the builder function \"buildChildMutator\".");
-          }
-      };
     template<class ELM>
-    struct _AccessTarget<ELM, enable_if<Is_DiffMutable<ELM>>>
+    struct _AccessID<ELM, enable_if<Can_access_ID<ELM>>>
       {
-        DiffMutable&
-        access (ELM const& elm)
+        static GenNode::ID const&
+        getID (ELM const& target)
           {
-            return elm;
-          }
-      };
-    template<class ELM>
-    struct _AccessTarget<ELM, enable_if<Is_wrapped_DiffMutable<ELM>>>
-      {
-        DiffMutable&
-        access (ELM const& elm)
-          {
-            return *elm;
+            return meta::unwrap(target).getID();
           }
       };
 
@@ -159,8 +125,6 @@ namespace diff{
     /** */
     template<class ELM>
     struct _DefaultBinding<ELM, enable_if<can_recursively_bind_DiffMutable<ELM>>>
-      : private _AccessTarget<ELM>
-      , private _AccessID<ELM>
       {
         template<class COLL>
         static auto
@@ -169,11 +133,12 @@ namespace diff{
             return _EmptyBinding<ELM>::attachTo(coll)
                       .matchElement([](GenNode const& spec, ELM const& elm)
                          {
-                           return spec.idi == getID (access (elm));
+                           return spec.idi == _AccessID<ELM>::getID(elm);
                          })
                       .buildChildMutator ([&](ELM& target, GenNode::ID const&, TreeMutator::Handle buff) -> bool
                          {
-                           access(target).buildMutator (buff);
+                           DiffMutable& child = meta::unwrap(target);
+                           child.buildMutator (buff);
                            return true;
                          });
           }

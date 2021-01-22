@@ -24,7 +24,8 @@
 /** @file trait.hpp
  ** Helpers for type detection, type rewriting and metaprogramming.
  ** This header is a collection of frequently used templates for working with types.
- ** It incurs only modest header inclusion overhead (be sure not to jeopardise that!).
+ ** It incurs only modest header inclusion overhead
+ ** @warning be sure not to jeopardise that!
  ** 
  ** \par unwrapping
  ** Strip away all kinds of type adornments, like const, reference, pointer, smart-ptr.
@@ -66,11 +67,12 @@
 
 //Forward declarations for the Unwrap helper....
 namespace boost{
-  template<class X> class reference_wrapper; 
+  template<class X> class reference_wrapper;
 }
 namespace std {
   template<class X> class reference_wrapper;
-  template<class X> class shared_ptr; 
+  template<class X> class shared_ptr;
+  template<class X, class D> class unique_ptr;
 }
 namespace lib{
   template<class X, class B>  class P;
@@ -109,17 +111,19 @@ namespace meta {
   using std::__or_;
   
   
-  /** 
+  /**
    * Helper for type analysis and convenience accessors:
    * attempts to extract a base type from various wrappers.
    * Additionally allows to extract/deref the wrapped element.
+   * @note can also be used as a meta function to detect "anything wrapped"
    * @warning strips away any const
    * @warning also strips away smart-ptrs and lifecycle managers!
    */
   template<typename X>
   struct Unwrap
+    : std::false_type
     {
-      typedef X Type;
+      using Type = X;
       
       static  X&
       extract (X const& x)
@@ -130,14 +134,16 @@ namespace meta {
   
   template<>
   struct Unwrap<void>   ///< @note we can't unwrap void!
+    : std::false_type
     {
-      typedef void Type;
+      using Type = void;
     };
   
   template<typename X>
   struct Unwrap<X*>
+    : std::true_type
     {
-      typedef typename std::remove_cv<X>::type Type;
+      using Type = typename std::remove_cv<X>::type;
       
       static Type&
       extract (const X* ptr)
@@ -149,8 +155,9 @@ namespace meta {
   
   template<typename X>
   struct Unwrap<boost::reference_wrapper<X>>
+    : std::true_type
     {
-      typedef X  Type;
+      using Type = X;
       
       static X&
       extract (boost::reference_wrapper<X> wrapped)
@@ -161,8 +168,9 @@ namespace meta {
   
   template<typename X>
   struct Unwrap<std::reference_wrapper<X>>
+    : std::true_type
     {
-      typedef X  Type;
+      using Type = X;
       
       static X&
       extract (std::reference_wrapper<X> wrapped)
@@ -171,13 +179,28 @@ namespace meta {
         }
     };
   
-  template<typename X>
-  struct Unwrap<std::shared_ptr<X>>
+  template<typename X, class D>
+  struct Unwrap<std::unique_ptr<X,D>>
+    : std::true_type
     {
-      typedef X  Type;
+      using Type = X;
       
       static X&
-      extract (std::shared_ptr<X> ptr)
+      extract (std::unique_ptr<X,D> const& ptr)
+        {
+          ASSERT (ptr);
+          return *ptr;
+        }
+    };
+  
+  template<typename X>
+  struct Unwrap<std::shared_ptr<X>>
+    : std::true_type
+    {
+      using Type = X;
+      
+      static X&
+      extract (std::shared_ptr<X> const& ptr)
         {
           ASSERT (ptr);
           return *ptr;
@@ -186,8 +209,9 @@ namespace meta {
   
   template<typename X, class B>
   struct Unwrap<P<X, B>>
+    : std::true_type
     {
-      typedef X  Type;
+      using Type = X;
       
       static X&
       extract (P<X,B> ptr)
@@ -219,12 +243,12 @@ namespace meta {
   template<typename X>
   struct Strip
     {
-      typedef typename std::remove_cv<X>                 ::type TypeUnconst;
-      typedef typename std::remove_reference<TypeUnconst>::type TypeReferred;
-      typedef typename std::remove_pointer<TypeReferred> ::type TypePointee;
-      typedef typename std::remove_cv<TypePointee>       ::type TypePlain;
+      using TypeUnconst  = typename std::remove_cv<X>                 ::type;
+      using TypeReferred = typename std::remove_reference<TypeUnconst>::type;
+      using TypePointee  = typename std::remove_pointer<TypeReferred> ::type;
+      using TypePlain    = typename std::remove_cv<TypePointee>       ::type;
       
-      typedef typename Unwrap<TypePlain>                   ::Type Type;
+      using Type         = typename Unwrap<TypePlain>::Type;
     };
   
   
@@ -373,8 +397,8 @@ namespace meta {
    *  is not clear we'll trigger those cases, and, when we do, we'll get narrowing
    *  conversions in a context where we're unable to cope with them or protect
    *  ourselves against spurious conversions.
-   *  What follows is a quick-n-dirty hack to remove such unwanted conversions. 
-   * 
+   *  What follows is a quick-n-dirty hack to remove such unwanted conversions.
+   *
    * [Bug-63723]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63723
    */
   template<typename SRC, typename TAR>
@@ -436,7 +460,7 @@ namespace meta {
   /** Trait template to detect a type usable immediately as
    *  "Lumiera Forward Iterator" in a specialised for-each loop
    *  This is just a heuristic, based on some common properties
-   *  of such iterators; it is enough to distinguish it from an 
+   *  of such iterators; it is enough to distinguish it from an
    *  STL container, but can certainly be refined.
    */
   template<typename T>
@@ -465,7 +489,7 @@ namespace meta {
   class can_STL_ForEach
     {
       typedef typename Strip<T>::Type Type;
-       
+      
       struct is_iterable
         {
           META_DETECT_NESTED(iterator);
@@ -477,7 +501,7 @@ namespace meta {
                       && HasFunSig_end<Type>::value
            };
         };
-       
+      
       struct is_noexcept_iterable
         {
           META_DETECT_NESTED(iterator);
