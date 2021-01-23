@@ -143,6 +143,10 @@ namespace timeline {
    * is simply achieved by relying on the common interface of all those "elements", which
    * is stage::model::Tangible and just happens to require each such "tangible" to offer
    * a mutation building method, just like this one here. Plain recursive programming.
+   * @remark in fact the `.buildChildMutator` binding could have been omitted here,
+   *         since it is precisely the default, which will be provided for a DiffMutable
+   *         target object automatically (the TimelineController is a stage::model::Tangible,
+   *         and thus implements the DiffMutable interface, with abstract #buildMutator method.
    * @see DiffComplexApplication_test
    */
   void
@@ -158,18 +162,13 @@ namespace timeline {
                   {                                            // »Selector« : require object-like sub scope
                     return spec.data.isNested();
                   })
-               .matchElement ([&](GenNode const& spec, PMarker const& elm) -> bool
-                  {                                            // »Matcher« : how to know we're dealing with the right object
-                    return spec.idi == elm->getID();
-                  })
                .constructFrom ([&](GenNode const& spec) -> PMarker
                   {                                            // »Constructor« : what to do when the diff mentions a new entity
                     return make_unique<MarkerWidget>(spec.idi, this->uiBus_);
                   })
-               .buildChildMutator ([&](PMarker& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
+               .buildChildMutator ([&](PMarker& target, GenNode::ID const&, TreeMutator::Handle buff) -> bool
                   {                                            // »Mutator« : how to apply the diff recursively to a nested scope
-                    if (subID != target->getID()) return false;//  - require match on already existing child object
-                    target->buildMutator (buff);               //  - delegate to child to build nested TreeMutator
+                    target->buildMutator (buff);               //           : delegate to child for building a nested TreeMutator
                     return true;
                   }))
         .mutateAttrib(rootForkID, [&](TreeMutator::Handle buff)

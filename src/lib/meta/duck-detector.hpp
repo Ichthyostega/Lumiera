@@ -34,7 +34,7 @@
  ** 
  ** While C++ certainly isn't a dynamic language and does not provide any kind of run time introspection,
  ** doing such check-and branch at compile time allows to combine flexibility as known from dynamic
- ** languages with static type safety, which is compelling. We can generate similar implementation
+ ** languages with static type safety, which is compelling. We can generate similar implementations
  ** for types not further related by inheritance. Building on this, we're able to emulate some
  ** of the features enabled by type classes (or "concepts").
  ** 
@@ -62,8 +62,8 @@
  **   to determine if a member function of a type in question has the desired signature.
  ** 
  ** All these detection building blocks are written such as to provide a bool member `::value`,
- ** which is in accordance to the conventions of C++11 metaprogramming. I.e. you can immediately
- ** use them within `std::enable_if`
+ ** which is in accordance to the conventions of modern C++ metaprogramming. I.e. you can
+ ** directly use them within `std::enable_if`
  ** 
  ** # some pitfalls to consider
  ** 
@@ -72,7 +72,7 @@
  **          you'd be better off explicitly checking the detection result by an unit test.
  ** 
  ** There are several *typical problems* to care about
- ** - none of these tests can detect any private members
+ ** - none of these tests is able to detect any private members
  ** - the name-only detectors will fail if the name is ambiguous
  ** - a member can be both a variable or a function of that name
  ** - function signatures need to match precisely, including const modifiers
@@ -115,7 +115,7 @@
  *  with the given name. To answer this question, instantiate
  *  resulting HasNested_XXX template with the type in question
  *  and check the static bool value field.
- * @warning none of these checks can not detect private members
+ * @warning none of these checks can detect private members
  */
 #define META_DETECT_NESTED(_TYPE_)                            \
     template<typename TY>                                      \
@@ -138,7 +138,7 @@
  *  the presence of a member with the given name within
  *  a type in question.
  * @note this check will likely fail if the name is ambiguous.
- * @warning none of these checks can not detect private members
+ * @warning none of these checks can detect private members
  */
 #define META_DETECT_MEMBER(_NAME_)                         \
     template<typename TY>                                   \

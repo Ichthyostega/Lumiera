@@ -21,7 +21,7 @@
 */
 
 
-/** @file tree-mutator-Diffmutable-binding.hpp
+/** @file tree-mutator-diffmutable-binding.hpp
  ** Special supplement for TreeMutator and the STL collection binding,
  ** to provide a shortcut and default wiring for a collection holding
  ** [DiffMutable](\ref diff-mutable.hpp) objects -- either directly or
@@ -32,7 +32,7 @@
  ** Each concrete TreeMutator instance will be configured differently, and this
  ** adaptation is done by combining various building blocks. One of the most relevant
  ** binding cases is to attach to a collection of child objects, which are themselves
- ** _recursively diff mutable_. This header is based on the
+ ** _recursively diff mutable_. This header here is based on the
  ** [generic STL collection binding](\ref tree-mutator-collection-binding.hpp)
  ** and provides the most common default implementation for a »Matcher« and
  ** for building a recursive TreeMutator for the child elements by means of
@@ -40,9 +40,9 @@
  ** requirement for this standard setup to be used is that the objects in the
  ** collection must expose a `getID()` function to determine the object identity.
  ** 
- ** @note the header tree-mutator-collection-diffmutable-binding.hpp was split off 
- **       or sake of readability and is included automatically from bottom of
- **       tree-mutator.hpp -- no need to include it explicitly
+ ** @note the header tree-mutator-diffmutable-binding.hpp was split off
+ **       for sake of readability and is included automatically from the
+ **       bottom of diff-mutable.hpp -- no need to include it explicitly
  ** 
  ** @see tree-mutator-test.cpp
  ** @see _DefaultBinding
@@ -65,8 +65,6 @@
 namespace lib {
 namespace diff{
   
-  class DiffMutable;
-  
   namespace { // Mutator-Builder decorator components...
     
     using lib::meta::enable_if;
@@ -75,20 +73,43 @@ namespace diff{
     using std::__and_;
     using std::__or_;
     
-    META_DETECT_FUNCTION(GenNode::ID const&, getID,(void));
+    /**
+     * Metaprogramming helper to detect if the given target class allows us
+     * to build a default »Matcher« automatically. (The »Matcher« is used to
+     * determine the applicability of a given diff verb to this target object)
+     * @note we directly probe the desired functionality: can we equality compare
+     *       a given GenNode::ID (from the diff) with this type's object ID?
+     * @see duck-detector.hpp for explanation of this technique
+     */
+    template<typename TY>
+    class Can_retrieve_and_compare_ID
+      {
+        template<typename X,
+                 typename SEL = decltype(std::declval<GenNode::ID>() == std::declval<X>().getID())>
+        struct Probe
+          { };
+        
+        template<class X>
+        static Yes_t check(Probe<X> * );
+        template<class>
+        static No_t  check(...);
+        
+      public:
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));
+      };
     
     template<typename T>
     struct Can_access_ID
-      : HasFunSig_getID<typename meta::Strip<T>::Type>
+      : Can_retrieve_and_compare_ID<typename meta::Strip<T>::Type>
       { };
     
     template<typename T>
-    struct Is_DiffMutable
+    struct Is_DiffMutable          ///< Metafunction: does the target implement the DiffMutable interface?
       : meta::is_Subclass<T,DiffMutable>
       { };
     
     template<typename T>
-    struct Is_wrapped_DiffMutable
+    struct Is_wrapped_DiffMutable  ///< Metafunction: is this a DiffMutable wrapped into a smart-ptr?
       : __and_< meta::Unwrap<T>
               , Is_DiffMutable<typename meta::Unwrap<T>::Type>>
       { };
@@ -98,22 +119,26 @@ namespace diff{
       : __or_< Is_DiffMutable<T>
              , Is_wrapped_DiffMutable<T>>
       { } ;
-      
     
+    
+    /**
+     * Metaprogramming helper to retrieve the object identity, whenever
+     * the target object for the diff defines a `getID()` function.
+     */
     template<class TAR, typename SEL =void>
     struct _AccessID
       {
-        static GenNode::ID const&
+        static idi::BareEntryID const&
         getID (TAR const&)
           {
-            throw error::Logic ("Unable to access the target element's object ID. "
+            throw error::Logic ("TreeMutator::build() .attach(collection...) : Unable to access the target element's object ID. "
                                 "Please define a »Matcher« explicitly by invoking the builder function \"matchElement\".");
           }
       };
     template<class ELM>
     struct _AccessID<ELM, enable_if<Can_access_ID<ELM>>>
       {
-        static GenNode::ID const&
+        static idi::BareEntryID const&
         getID (ELM const& target)
           {
             return meta::unwrap(target).getID();
@@ -122,7 +147,15 @@ namespace diff{
 
     
     
-    /** */
+    /**
+     * Entry Point: Specialisation of the collection binding to work on a collection of DiffMutable objects,
+     * either embedded directly, or attached via smart-ptr. Since the DiffMutable interface directly
+     * exposes a function to build a TreeMutator, a generic implementation for recursive child mutation
+     * can be supplied automatically. Moreover, if the target objects also offer a `getID()` function
+     * to reveal their object identity, the »Matcher« (to check applicability of some diff verb) can
+     * likewise be generated automatically.
+     * @note different than in the base case, recursive child mutation is thus enabled automatically.
+     */
     template<class ELM>
     struct _DefaultBinding<ELM, enable_if<can_recursively_bind_DiffMutable<ELM>>>
       {
@@ -145,7 +178,7 @@ namespace diff{
       };
     
     
-
+    
     
     
   }//(END)Mutator-Builder decorator components...

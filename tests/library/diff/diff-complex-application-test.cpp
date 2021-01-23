@@ -210,15 +210,15 @@ namespace test{
                           })
                        .matchElement ([&](GenNode const& spec, string const& elm) -> bool
                           {
-                            return elm == render(spec.data);
+                            return elm == render(spec.data);          // »Matcher« : does the diff verb #spec apply to this object?
                           })
                        .constructFrom ([&](GenNode const& spec) -> string
                           {
-                            return render (spec.data);
+                            return render (spec.data);                // »Constructor« : build a new child entity to reflect the given diff #spec
                           })
                        .assignElement ([&](string& target, GenNode const& spec) -> bool
                           {
-                            target = render (spec.data);
+                            target = render (spec.data);              // »Assigner« : treat this object as value and assign data from the #spec payload
                             return true;
                           }))
                 .attach (collection(nestedObj_)
@@ -234,10 +234,9 @@ namespace test{
                           {
                             return Opaque{spec.idi};
                           })
-                       .buildChildMutator ([&](Opaque& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
+                       .buildChildMutator ([&](Opaque& target, GenNode::ID const&, TreeMutator::Handle buff) -> bool
                           {
-                            if (target.key_ != subID) return false;    // require match on already existing child object
-                            target.buildMutator (buff);               //  delegate to child to build nested TreeMutator
+                            target.buildMutator (buff);               // »Recursive Mutator« : delegate to child for building a nested TreeMutator
                             return true;
                           }))
                 .change("type", [&](string typeID)

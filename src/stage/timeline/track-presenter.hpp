@@ -270,77 +270,37 @@ namespace timeline {
                   {                                            // »Selector« : require object-like sub scope with type-field "Ruler"
                     return TYPE_Ruler == spec.data.recordType();
                   })
-               .matchElement ([&](GenNode const& spec, PRuler const& elm) -> bool
-                  {
-                    return spec.idi == elm->getID();
-                  })
                .constructFrom ([&](GenNode const& spec) -> PRuler
                   {                                            // »Constructor« : how to attach a new ruler track
                     return make_unique<RulerTrack> (spec.idi, this->uiBus_, *this);
-                  })
-               .buildChildMutator ([&](PRuler& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
-                  {
-                    if (subID != target->getID()) return false;
-                    target->buildMutator (buff);
-                    return true;
                   }))
         .attach (collection(markers_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
                   {                                            // »Selector« : require object-like sub scope with type-field "Marker"
                     return TYPE_Marker == spec.data.recordType();
                   })
-               .matchElement ([&](GenNode const& spec, PMark const& elm) -> bool
-                  {
-                    return spec.idi == elm->getID();
-                  })
                .constructFrom ([&](GenNode const& spec) -> PMark
                   {
                     return make_unique<MarkerWidget> (spec.idi, this->uiBus_);
-                  })
-               .buildChildMutator ([&](PMark& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
-                  {
-                    if (subID != target->getID()) return false;
-                    target->buildMutator (buff);
-                    return true;
                   }))
         .attach (collection(clips_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
                   {                                            // »Selector« : require object-like sub scope with type-field "Clip"
                     return TYPE_Clip == spec.data.recordType();
                   })
-               .matchElement ([&](GenNode const& spec, PClip const& elm) -> bool
-                  {
-                    return spec.idi == elm->getID();
-                  })
                .constructFrom ([&](GenNode const& spec) -> PClip
                   {
                     std::optional<TimeSpan> timing = spec.retrieveAttribute<TimeSpan> (string{ATTR_timing});
                     return make_unique<ClipPresenter> (spec.idi, this->uiBus_, display_.getClipHook(), timing);
-                  })
-               .buildChildMutator ([&](PClip& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
-                  {
-                    if (subID != target->getID()) return false;
-                    target->buildMutator (buff);
-                    return true;
                   }))
         .attach (collection(subFork_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
                   {                                            // »Selector« : require object-like sub scope with type-field "Fork"
                     return TYPE_Fork == spec.data.recordType();
                   })
-               .matchElement ([&](GenNode const& spec, PFork const& elm) -> bool
-                  {
-                    return spec.idi == elm->getID();
-                  })
                .constructFrom ([&](GenNode const& spec) -> PFork
                   {
                     return make_unique<TrackPresenter> (spec.idi, uiBus_, this->display_);
-                  })
-               .buildChildMutator ([&](PFork& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
-                  {
-                    if (subID != target->getID()) return false;
-                    target->buildMutator (buff);
-                    return true;
                   }))
         .change(ATTR_name, [&](string val)
             {                                                  // »Attribute Setter« : receive a new value for the track name field

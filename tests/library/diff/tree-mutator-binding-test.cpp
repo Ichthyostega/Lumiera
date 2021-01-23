@@ -525,7 +525,7 @@ namespace test{
           // This time we build the Mutator bindings in a way to allow mutation
           // For one, "mutation" means to assign a changed value to a simple node / attribute.
           // And beyond that, mutation entails to open a nested scope and delve into that recursively.
-          // Here, as this is really just a test and demonstration, we implement those nested scopes aside
+          // Here, as this is really just a test and demonstration, we implement those nested scopes aside,
           // managed within a map and keyed by the sub node's ID.
           auto mutator3 =
           TreeMutator::build()

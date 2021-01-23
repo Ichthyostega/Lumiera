@@ -44,42 +44,34 @@
 // 04/19 - forwarding tuple element(s) to function invocation
 // 06/19 - use a statefull counting filter in a treeExplorer pipeline
 // 03/20 - investigate type deduction bug with PtrDerefIter
+// 01/21 - look for ways to detect the presence of an (possibly inherited) getID() function
 
 
 /** @file try.cpp
- * Compiling a seemingly valid iterator pipeline failed, due to type deduction problems.
- * As expected, they originate within PtrDerefIter, which I abused here to dereference
- * an unique_ptr -- which might seem strange, yet is true to the spirit of generic programming.
- * Since I consider this a valid usage, the fix is to add a further specialisation to my
- * hand-written RemovePtr trait template in iter-adapter-ptr-deref.hpp (which also justifies
- * in hindsight to use a hand-written trait right within this header, instead of some library).
+ * Verify a way to detect the presence of a specific implementation function,
+ * even when it is just inherited and thus not part of the concrete class definition.
+ * The trick is to _emulate the use_ of the object method in question within a `decltype( )`
+ * statement, which in turn is used to build the concrete template signature.
  */
 
 typedef unsigned int uint;
 
-namespace std {
-template <typename _Tp, typename _Dp>
-    class unique_ptr;
-}
 
 #include "lib/format-cout.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
-#include "lib/iter-adapter-ptr-deref.hpp"
-#include "lib/iter-adapter-stl.hpp"
-#include "lib/itertools.hpp"
-#include "lib/util-coll.hpp"
+#include "lib/idi/entry-id.hpp"
+#include "lib/meta/duck-detector.hpp"
 
 #include <utility>
 #include <string>
-#include <vector>
-#include <memory>
-#include <type_traits>
 
 using std::string;
-using std::make_unique;
-using util::max;
 
+using lib::idi::EntryID;
+using lib::idi::BareEntryID;
+using lib::meta::Yes_t;
+using lib::meta::No_t;
 
 
 #define SHOW_TYPE(_TY_) \
@@ -87,35 +79,71 @@ using util::max;
 #define SHOW_EXPR(_XX_) \
     cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
 
-using PStr = std::unique_ptr<string>;
-using Strs = std::vector<PStr>;
 
-constexpr auto elems = [](auto& coll) { return lib::ptrDeref (lib::iter_stl::eachElm (coll)); };
+META_DETECT_FUNCTION(BareEntryID const&, getID,(void) const);
+META_DETECT_FUNCTION_ARGLESS(getID);
+
+template<typename TY>
+    class Can_retrieve_and_compare_ID
+      {
+        template<typename X,
+                 typename SEL = decltype(std::declval<BareEntryID>() == std::declval<X>().getID())>
+        struct Probe
+          { };                                                    \
+                                                                   \
+        template<class X>                                           \
+        static Yes_t check(Probe<X> * );                             \
+        template<class>                                               \
+        static No_t  check(...);                                       \
+                                                                        \
+      public:                                                            \
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));  \
+      };
+
+
+class Base
+  {
+    EntryID<Base> idi;
+  public:
+    BareEntryID const&
+    getID() const
+      {
+        return idi;
+      }
+  };
+
+class Derived
+  : public Base
+  { };
+
+class Derailed
+  { };
 
 
 int
 main (int, char**)
   {
-    Strs ss;
-    ss.emplace_back(new string{"li"});
-    ss.emplace_back(new string{"la"});
-    ss.emplace_back(new string{"lutsch"});
-    SHOW_EXPR (ss);
-    SHOW_EXPR (elems(ss));
-    using ITS = decltype(elems(ss));
-    SHOW_TYPE (ITS);
+    Base b1;
+    Derived d1;
+    Derailed r1;
+    SHOW_EXPR( b1 );
+    SHOW_EXPR( b1.getID() );
+    SHOW_EXPR( HasFunSig_getID<Base>::value );
+    SHOW_EXPR( HasArglessFun_getID<Base>::value );
+    SHOW_EXPR( Can_retrieve_and_compare_ID<Base>::value );
     
-//  using ITSR = typename ITS::reference;
-//  lib::test::TypeDebugger<ITSR> buggy;
+    SHOW_EXPR( d1 );
+    SHOW_EXPR( d1.getID() );
+    SHOW_EXPR( HasFunSig_getID<Derived>::value );
+    SHOW_EXPR( HasArglessFun_getID<Derived>::value );
+    SHOW_EXPR( Can_retrieve_and_compare_ID<Derived>::value );
     
-    auto dings = elems(ss);
+    SHOW_EXPR( r1 );
+    SHOW_EXPR( HasFunSig_getID<Derailed>::value );
+    SHOW_EXPR( HasArglessFun_getID<Derailed>::value );
+    SHOW_EXPR( Can_retrieve_and_compare_ID<Derailed>::value );
     
-    int maxVSize = max (lib::transformIterator(dings,
-                                               [](string const& ding)
-                                                 {
-                                                   return ding.length();
-                                                 }));
-    SHOW_EXPR (maxVSize);
+//    SHOW_TYPE( decltype( d1.getID() ))
     
     cout <<  "\n.gulp.\n";
     return 0;

@@ -103,28 +103,14 @@ namespace timeline {
                   {                                            // »Selector« : require object-like sub scope with type-field "Marker"
                     return TYPE_Marker == spec.data.recordType();
                   })
-               .matchElement ([&](GenNode const& spec, PMarker const& elm) -> bool
-                  {
-                    return spec.idi == elm->getID();
-                  })
                .constructFrom ([&](GenNode const& spec) -> PMarker
                   {
                     return make_unique<MarkerWidget> (spec.idi, this->uiBus_);
-                  })
-               .buildChildMutator ([&](PMarker& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
-                  {
-                    if (subID != target->getID()) return false;
-                    target->buildMutator (buff);
-                    return true;
                   }))
         .attach (collection(effects_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
                   {                                            // »Selector« : require object-like sub scope with type-field "Effect"
                     return TYPE_Effect == spec.data.recordType();
-                  })
-               .matchElement ([&](GenNode const& spec, PEffect const& elm) -> bool
-                  {
-                    return spec.idi == elm->getID();
                   })
                .constructFrom ([&](GenNode const& spec) -> PEffect
                   {
@@ -132,33 +118,17 @@ namespace timeline {
                     return make_unique<ClipPresenter> (spec.idi, this->uiBus_
                                                       ,getClipContentCanvas()
                                                       ,timing);
-                  })
-               .buildChildMutator ([&](PEffect& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
-                  {
-                    if (subID != target->getID()) return false;
-                    target->buildMutator (buff);
-                    return true;
                   }))
         .attach (collection(channels_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
                   {                                            // »Selector« : require object-like sub scope with type-field "Channel"
                     return TYPE_Channel == spec.data.recordType();
                   })
-               .matchElement ([&](GenNode const& spec, PChannel const& elm) -> bool
-                  {
-                    return spec.idi == elm->getID();
-                  })
                .constructFrom ([&](GenNode const& spec) -> PChannel
                   {
                     return make_unique<ClipPresenter> (spec.idi, this->uiBus_
                                                       ,getClipContentCanvas()
                                                       ,std::nullopt);     /////////////////////////TICKET #1213 : time → horizontal extension : how to represent "always" / "the whole track"??
-                  })
-               .buildChildMutator ([&](PChannel& target, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
-                  {
-                    if (subID != target->getID()) return false;
-                    target->buildMutator (buff);
-                    return true;
                   }))
         //-Diff-Change-Listener----------------
         .onLocalChange ([this]()

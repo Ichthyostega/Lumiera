@@ -89,4 +89,8 @@ namespace diff{
   
   
 }} // namespace lib::diff
+
+// enable an extension to the TreeMutator builder DSL for DiffMutable
+#include "lib/diff/tree-mutator-diffmutable-binding.hpp"
+
 #endif /*LIB_DIFF_DIFF_MUTABLE_H*/

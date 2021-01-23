@@ -397,7 +397,7 @@ namespace diff{
             if (binding_.isApplicable(n))
               {
                 bool isSrcMatch = pos_ and binding_.matches (n, *pos_);
-                if (isSrcMatch) //NOTE: crucial to perform only our own match check here 
+                if (isSrcMatch)  //NOTE: crucial to perform only our own match check here
                   {
                     binding_.inject (move(*pos_));
                     ++pos_;

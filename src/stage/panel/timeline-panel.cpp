@@ -74,8 +74,9 @@ namespace panel {
   
   
   namespace {
-    bool
-    isEmptyTimeline (auto& pages)
+    template<class P>
+    inline bool
+    isEmptyTimeline (P const& pages)
     {
       return 1 == pages.size()
          and dynamic_cast<TimelineWidgetEmpty*> (pages[0].get());

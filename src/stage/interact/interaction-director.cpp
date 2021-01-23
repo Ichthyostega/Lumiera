@@ -142,19 +142,9 @@ namespace interact {
                   {                                            // »Selector« : require object-like sub scope
                     return spec.data.isNested();
                   })
-               .matchElement ([&](GenNode const& spec, TimelineGui const& elm) -> bool
-                  {                                            // »Matcher« : how to know we're dealing with the right timeline object
-                    return spec.idi == elm.getID();
-                  })
                .constructFrom ([&](GenNode const& spec) -> TimelineGui
                   {                                            // »Constructor« : what to do when the diff mentions a new entity
                     return injectTimeline (spec);
-                  })
-               .buildChildMutator ([&](TimelineGui& targetTimeline, GenNode::ID const& subID, TreeMutator::Handle buff) -> bool
-                  {                                            // »Mutator« : how to apply the diff recursively to a nested scope
-                    if (subID != targetTimeline.getID()) return false;
-                    targetTimeline.buildMutator (buff);        //  - delegate to child(Timeline) to build nested TreeMutator
-                    return true;
                   }))
         .mutateAttrib(ATTR_fork, [&](TreeMutator::Handle buff)
             {                                                  // »Attribute Mutator« : how enter an object field as nested scope

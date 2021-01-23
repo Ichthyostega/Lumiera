@@ -37898,15 +37898,19 @@
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1611218788908" ID="ID_1503520124" MODIFIED="1611218900241" TEXT="der Matcher pr&#xfc;ft die Objekt-ID">
+<arrowlink COLOR="#4a72bc" DESTINATION="ID_1274607629" ENDARROW="Default" ENDINCLINATION="366;0;" ID="Arrow_ID_289559805" STARTARROW="None" STARTINCLINATION="155;13;"/>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1611218813169" ID="ID_1174818531" MODIFIED="1611218900241" TEXT="der Konstruktor enth&#xe4;lt das relevante Closure-Binding">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611218846053" ID="ID_1626706964" MODIFIED="1611221187326" TEXT="Standard-Implementierung f&#xfc;r den rekursiven Kind-Mutator">
+<node COLOR="#435e98" CREATED="1611218846053" ID="ID_1626706964" MODIFIED="1611402381612" TEXT="Standard-Implementierung f&#xfc;r den rekursiven Kind-Mutator">
 <arrowlink COLOR="#64b2d0" DESTINATION="ID_341242193" ENDARROW="Default" ENDINCLINATION="-1947;126;" ID="Arrow_ID_1779456185" STARTARROW="None" STARTINCLINATION="1123;53;"/>
 <icon BUILTIN="yes"/>
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#435e98" CREATED="1611402402991" ID="ID_1274607629" MODIFIED="1611402440457" TEXT="Standard-Implementierung f&#xfc;r Matcher auf Objekt-ID">
+<linktarget COLOR="#4a72bc" DESTINATION="ID_1274607629" ENDARROW="Default" ENDINCLINATION="366;0;" ID="Arrow_ID_289559805" SOURCE="ID_1503520124" STARTARROW="None" STARTINCLINATION="155;13;"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
@@ -39575,7 +39579,7 @@
 <node CREATED="1576202990623" ID="ID_1903460265" MODIFIED="1576203228840" TEXT="konkret entwickelt f&#xfc;r das UI-Element">
 <arrowlink COLOR="#298c9e" DESTINATION="ID_645743424" ENDARROW="Default" ENDINCLINATION="-928;-33;" ID="Arrow_ID_653906070" STARTARROW="None" STARTINCLINATION="-2105;61;"/>
 </node>
-<node COLOR="#338800" CREATED="1456506101544" FOLDED="true" HGAP="322" ID="ID_61713493" MODIFIED="1576281717228" TEXT="Implementierung: Diff-Anbindung" VSHIFT="87">
+<node COLOR="#338800" CREATED="1456506101544" FOLDED="true" HGAP="322" ID="ID_61713493" MODIFIED="1611315117066" TEXT="Implementierung: Diff-Anbindung" VSHIFT="87">
 <linktarget COLOR="#47e573" DESTINATION="ID_61713493" ENDARROW="Default" ENDINCLINATION="-3400;234;" ID="Arrow_ID_1763921751" SOURCE="ID_486184645" STARTARROW="None" STARTINCLINATION="-792;48;"/>
 <linktarget COLOR="#2ab880" DESTINATION="ID_61713493" ENDARROW="Default" ENDINCLINATION="-125;-80;" ID="Arrow_ID_958576106" SOURCE="ID_464295846" STARTARROW="None" STARTINCLINATION="-317;9;"/>
 <icon BUILTIN="button_ok"/>
@@ -42973,7 +42977,7 @@
 <node CREATED="1472122015157" ID="ID_507093208" MODIFIED="1472122038334" TEXT="sinnvolle interne Fehler-Funktionen aufbauen"/>
 <node CREATED="1472141026525" ID="ID_215668060" MODIFIED="1512926192127" TEXT="Scope-Wechsel">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1472172154624" ID="ID_916630849" MODIFIED="1512926192127" TEXT="Zugang zum erzeugten Mutator....">
+<node CREATED="1472172154624" FOLDED="true" ID="ID_916630849" MODIFIED="1512926192127" TEXT="Zugang zum erzeugten Mutator....">
 <node CREATED="1472172310187" ID="ID_487326937" MODIFIED="1575133339222" TEXT="via buffer-Handle">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -43074,9 +43078,9 @@
 <icon BUILTIN="forward"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611218339864" ID="ID_341242193" MODIFIED="1611314480869" TEXT="Abk&#xfc;rzung f&#xfc;r rekursives Standard-Binding">
+<node COLOR="#338800" CREATED="1611218339864" FOLDED="true" ID="ID_341242193" MODIFIED="1611402354322" TEXT="Abk&#xfc;rzung f&#xfc;r rekursives Standard-Binding">
 <linktarget COLOR="#64b2d0" DESTINATION="ID_341242193" ENDARROW="Default" ENDINCLINATION="-1947;126;" ID="Arrow_ID_1779456185" SOURCE="ID_1626706964" STARTARROW="None" STARTINCLINATION="1123;53;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1611227233973" ID="ID_489519336" MODIFIED="1611227312132" TEXT="f&#xfc;r den h&#xe4;ufigsten Fall: STL-Collection von Smart-Ptr auf DiffMutable">
 <linktarget COLOR="#1ebca6" DESTINATION="ID_489519336" ENDARROW="Default" ENDINCLINATION="689;-28;" ID="Arrow_ID_1973768518" SOURCE="ID_252206662" STARTARROW="None" STARTINCLINATION="490;52;"/>
 <icon BUILTIN="idea"/>
@@ -43085,11 +43089,13 @@
 <node CREATED="1611227487011" ID="ID_1701933719" MODIFIED="1611227500783" TEXT="wenn die Elemente entweder selber direkt DiffMutable sind"/>
 <node CREATED="1611227501552" ID="ID_752689541" MODIFIED="1611227529633" TEXT="oder alternativ ein (smart)Pointer/Wrapper auf ein DiffMutable"/>
 </node>
-<node CREATED="1611261538911" ID="ID_498748918" MODIFIED="1611261552068" TEXT="Standard-Imlementierung">
+<node COLOR="#338800" CREATED="1611261538911" ID="ID_498748918" MODIFIED="1611402319966" TEXT="Standard-Imlementierung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1611261602057" ID="ID_160823769" MODIFIED="1611261614523" TEXT="inzwischen hat sich ein Standard-Schema etabliert">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1611261556183" ID="ID_236586609" MODIFIED="1611261601349" TEXT="Frage: warum machen wir einen ID-Match?">
+<node COLOR="#435e98" CREATED="1611261556183" ID="ID_236586609" MODIFIED="1611402310840" TEXT="Frage: warum machen wir einen ID-Match?">
+<icon BUILTIN="help"/>
 <node CREATED="1611261593546" ID="ID_1666826303" MODIFIED="1611261791971" TEXT="typischerweise pr&#xfc;fen wir zu Beginn, ob das zu mutierende Sub-Element auch matcht"/>
 <node CREATED="1611261792751" ID="ID_1188415737" MODIFIED="1611261815910" TEXT="man k&#xf6;nnte hierf&#xfc;r den &#xbb;Matcher&#xab; des Collection-Bindings verwenden"/>
 <node CREATED="1611261840272" ID="ID_922368010" MODIFIED="1611261871424" TEXT="mehr noch: wie kommt es zu diesem Match-Guard?">
@@ -43150,6 +43156,58 @@
     </p>
   </body>
 </html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1611402003818" ID="ID_1246335581" MODIFIED="1611402016011" TEXT="den ID-Matcher ebenfalls generieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1611402016970" ID="ID_1067306968" MODIFIED="1611402027948" TEXT="wir brauchen zwar keinen ID-Match beim Erzeugen des Mutators"/>
+<node CREATED="1611402028489" ID="ID_809714103" MODIFIED="1611402068427" TEXT="aber der ID-basierte Matcher ist ebenfalls generisch, und sollte automatisch generiert werden">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1611402077673" ID="ID_361760144" MODIFIED="1611402210308" TEXT="Problem: Zugang zur Target-Objekt-ID">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1611402092625" ID="ID_19089272" MODIFIED="1611402150879" TEXT="k&#xf6;nnte man in DiffMutable-Interface aufnehmen">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1611402121148" ID="ID_1241594472" MODIFIED="1611402129847" TEXT="Vorsicht: DiffMutable ist opitonal"/>
+<node CREATED="1611402130459" ID="ID_899835141" MODIFIED="1611402146172" TEXT="man m&#xfc;&#xdf;te dann trotzdem noch Duck-Typing verwenden"/>
+</node>
+<node CREATED="1611402151832" ID="ID_1518275784" MODIFIED="1611402160776" TEXT="Duck-Typing verwenden">
+<icon BUILTIN="forward"/>
+<node CREATED="1611402162870" ID="ID_697592973" MODIFIED="1611402180642">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      erwarte eine Funktion <b>getID()</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1611402182252" ID="ID_12989992" MODIFIED="1611402197061" TEXT="und deren Resultat mu&#xdf; per == vergleichbar sein"/>
+<node CREATED="1611402199145" ID="ID_317509193" MODIFIED="1611402204788" TEXT="...mit einer GenNode::ID"/>
+</node>
+<node CREATED="1611402212151" ID="ID_543092941" MODIFIED="1611402232768" TEXT="wenn dies gegeben ist, dann kann man auch den &#xbb;Matcher&#xab; generieren">
+<node CREATED="1611402234140" ID="ID_1471601030" MODIFIED="1611402244652" TEXT="f&#xfc;r stage::model::Tangible stets gegeben">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1611402245626" ID="ID_1721371942" MODIFIED="1611402285886" TEXT="sonst: Exception werfen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...d.h. man mu&#223; dann halt doch noch den Matcher explizit in der DSL konfigurieren
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 </node>
