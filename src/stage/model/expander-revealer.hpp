@@ -32,7 +32,7 @@
  ** - sometimes it is necessary to bring a given widget into sight, be it to show
  **   the effect of some processing, or be it to indicate an error situation.
  ** 
- ** ## Usage in the default implementation
+ ** # Usage in the default implementation
  ** 
  ** The base class of all [tangible UI elements](\ref Tangible) provides a default implementation
  ** for these generic interaction mechanisms: It offers slots to connect UI signals against, and

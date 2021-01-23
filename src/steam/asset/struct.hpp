@@ -37,7 +37,7 @@
  ** - "tracks" are implemented as Fork represented as \c entryID within the asset view.
  ** - ProcPatt is used as a blueprint in the build process, a standard connection pattern
  ** 
- ** ## access and creation
+ ** # access and creation
  ** 
  ** asset::Struct instances are created on demand; the interface is to invoke the
  ** StructFactory with a (typed) Query describing properties or capabilities.

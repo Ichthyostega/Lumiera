@@ -29,7 +29,7 @@
  ** actual event handling code. Rather, the ViewLocator, as a service related to the InteractionDirector,
  ** can be invoked to draw on some default configuration plus the actual UI topology present at this time.
  ** 
- ** ## Pattern matching against the actual UI-tree
+ ** # Pattern matching against the actual UI-tree
  ** 
  ** This Location solver is based on the pattern matching algorithm [embedded](\ref ui-coord-resolver.cpp)
  ** within the UICoordResolver component. This mechanism allows to treat (typically) incomplete coordinate
@@ -39,7 +39,7 @@
  ** (there is no common variable binding); the first clause to produce a successful match is used as
  ** solution -- with any placeholders replaced by the actually matching UI elements.
  ** 
- ** ## Default View location configuration DSL
+ ** # Default View location configuration DSL
  ** 
  ** Whenever a new UI element of a given kind is to be created, we query a standard location configuration
  ** to determine it's actual location within the interface. This standard configuration is known as

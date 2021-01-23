@@ -40,7 +40,7 @@
  ** the separation of actual drawing code from the nested track controller structure.
  ** 
  ** 
- ** ## implementation technique
+ ** # implementation technique
  ** 
  ** The actual foundation is quite simple: we store a [member pointer]. Typically, this embedded
  ** pointer-to-member shall be bound to an abstract virtual function on the _visitor interface._

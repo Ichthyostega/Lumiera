@@ -64,7 +64,7 @@ namespace stage {
    * and wired internally such as to allow transparent access from
    * within the core.
    * 
-   * ## intended usage
+   * # intended usage
    * This is an facade interface to the GUI subsystem, but it's setup
    * is somewhat special, as its sole purpose is to expose the subsystem
    * descriptor, which, when started, loads the GUI as a plugin and

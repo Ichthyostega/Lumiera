@@ -22,7 +22,7 @@
 
 
 /** @file tree-mutator-collection-binding.hpp
- ** Special binding implementation for TreeMutator, allowing to map
+ ** Special binding implementation for lib::diff::TreeMutator, allowing to map
  ** tree diff operations onto a STL collection of native implementation objects.
  ** TreeMutator is a customisable intermediary, which enables otherwise opaque
  ** implementation data structures to receive and respond to generic structural
@@ -38,7 +38,7 @@
  ** As a _special case_, binding to a STL map is supported, while this usage is rather
  ** discouraged, since it contradicts the diff semantics due to intrinsic ordering.
  ** 
- ** ## Internal structure
+ ** # Internal structure
  ** 
  ** The task to set up a binding to a _generic STL collection_ has to face some
  ** technical intricacies, leading to a rather involved implementation, which can
@@ -298,7 +298,7 @@ namespace diff{
     /**
      * Attach to collection: Building block for a concrete `TreeMutator`.
      * This decorator will be outfitted with actual binding and closures
-     * and then layered on top of the (\ref TreeMutaor) base. The resulting
+     * and then layered on top of the (\ref TreeMutator) base. The resulting
      * compound is able to consume tree diff messages and apply the respective
      * changes and mutations to an otherwise opaque implementation data structure.
      * @remarks in practice, this is the most relevant and typical `TreeMutator` setup.

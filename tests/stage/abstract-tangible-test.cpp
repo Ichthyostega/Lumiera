@@ -196,7 +196,7 @@ namespace test {
        * embodies an [event log](\ref EventLog), the unit test code can verify
        * the occurrence of expected events, invocations and responses.
        * 
-       * ### connectivity
+       * \par connectivity
        * Any mock element will automatically connect against the [Test-Nexus](\ref test/test-nexus.hpp),
        * so to be suitably rigged for unit testing. This means, there is no _live connection_
        * to the session, but any command- or other messages will be captured and can be

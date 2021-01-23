@@ -67,7 +67,7 @@ namespace engine {
    * evaluation and planning of new jobs, which can then be handed over to the Scheduler
    * for time-bound activation.
    * 
-   * ## usage considerations
+   * # usage considerations
    * the asynchronous and ongoing nature of the render process mandates to avoid a central
    * instance for operating this planning process. Instead, together with each chunk of
    * planned jobs we generate a continuation job, which -- on activation -- will pick up

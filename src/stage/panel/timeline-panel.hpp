@@ -24,7 +24,7 @@
 /** @file timeline-panel.hpp
  ** A dockable container to hold a notebook of timeline displays.
  ** 
- ** ## Management of Timeline display
+ ** # Management of Timeline display
  ** Within the Lumiera GTK UI, there is an UI top-level circle of managing entities to handle global
  ** concerns and actions. The ctrl::InteractionDirector incorporates the role of _model root_ and thus
  ** manages a collection of timelines. The timeline panel exposes this collection and allows to view and

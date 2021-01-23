@@ -23,6 +23,8 @@
 
 /** @file advice.cpp
  ** Implementation of the AdviceSystem, to support the advice collaboration.
+ ** 
+ ** # Implementation notes
  ** The AdviceSystem is implemented as singleton, but is never accessed directly
  ** by clients participating in an advice collaboration. Rather, they use the
  ** advice::Request and advice::Provision value classes as a frontend. While

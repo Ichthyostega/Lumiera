@@ -36,7 +36,7 @@
  ** - for \c SRC, the actual type of values to impose _as change_
  ** - for \c TAR, the target time value's type, receiving those changes.
  ** 
- ** ## mutating a time value entity
+ ** # mutating a time value entity
  ** 
  ** Actually imposing a change to the attached time value entity involves several
  ** steps. Each of these steps might be adapted specifically, in accordance to

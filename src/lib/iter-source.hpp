@@ -33,7 +33,7 @@
  **       with the purpose of this adapter. Rather, it should be shaped
  **       similar to IterStateWrapper with three control functions     //////////////////////////////////////TICKET #1125
  ** 
- ** ## Standard Adapters
+ ** # Standard Adapters
  ** As a complement, this header contains a generic implementation
  ** of the IterSource interface by wrapping an existing Lumiera Forward Iterator.
  ** Using this WrappedLumieraIter, the details of this wrapped source iterator

@@ -31,7 +31,7 @@
  **   to the TypedAllocationManager
  ** - maintaining an index to find pre-built command definitions (prototypes)
  ** 
- ** ## Services during command lifecycle
+ ** # Services during command lifecycle
  ** 
  ** Each command starts out as command definition, accessed by client code through CommandDef.
  ** While collecting the necessary parts of such a definition, there is just an empty (pending)

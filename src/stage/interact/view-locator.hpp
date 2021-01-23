@@ -33,7 +33,7 @@
  ** - multiplicity (one, one per window, many) depends on the type of view and needs to be managed.
  ** - such a view is not just _created_ -- rather it needs to be _allocated_
  ** 
- ** ## LocationQuery and the View-Spec DSL
+ ** # LocationQuery and the View-Spec DSL
  ** 
  ** Implementation wise, there is a tight connection between the ViewLocator service, the Navigator service
  ** and the configuration how and where to create standard view elements (the "View-Spec DSL"). Several interactions

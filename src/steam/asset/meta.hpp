@@ -34,7 +34,7 @@
  ** from the general Asset interface. To be able to get asset::Meta instances
  ** directly from the AssetManager, we define a specialisation of the Asset ID.
  ** 
- ** ## using meta assets
+ ** # using meta assets
  ** 
  ** The usage pattern of asset::Meta entities differs from the other assets,
  ** insofar they aren't created as individual entries, rather added as part

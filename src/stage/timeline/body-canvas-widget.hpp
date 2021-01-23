@@ -129,7 +129,7 @@ namespace timeline {
    * the display needs to stay "pinned" on top (the overview rulers), while
    * the majority of the track body area is packaged into a scrolling pane.
    * 
-   * ## Interface
+   * # Interface
    * We have to distinguish two kinds of drawing access to this BodyCanvasWidget:
    * - painting of areas for background, profile and for overlays
    * - relative attachment of widgets onto this canvas

@@ -43184,8 +43184,7 @@
       erwarte eine Funktion <b>getID()</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1611402182252" ID="ID_12989992" MODIFIED="1611402197061" TEXT="und deren Resultat mu&#xdf; per == vergleichbar sein"/>
 <node CREATED="1611402199145" ID="ID_317509193" MODIFIED="1611402204788" TEXT="...mit einer GenNode::ID"/>
@@ -43204,8 +43203,7 @@
       ...d.h. man mu&#223; dann halt doch noch den Matcher explizit in der DSL konfigurieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -53898,6 +53896,18 @@
   </body>
 </html></richcontent>
 </node>
+<node CREATED="1611414331032" ID="ID_772377087" MODIFIED="1611414385896" TEXT="Dokumentations-Kommentar mu&#xdf; mit &quot;/**&quot; beginnen (exakt zwei Sterne!)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      also keine &quot;Banner&quot; aus Sternen.<br />Abhilfe: /*********************//**
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 <node CREATED="1491098382888" ID="ID_1568153886" MODIFIED="1557498707240" TEXT="Probleme">
 <node CREATED="1491098385823" ID="ID_801230289" MODIFIED="1557498707240" TEXT="Auto-Links">
@@ -53927,12 +53937,33 @@
   </body>
 </html></richcontent>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611412636691" ID="ID_972826576" MODIFIED="1611412651452" TEXT="Fehlersuche">
+<icon BUILTIN="back"/>
+<node CREATED="1611412673543" ID="ID_1658996929" MODIFIED="1611412691750" TEXT="versuchshalber explizit einen Link per \ref erzweingen"/>
+<node CREATED="1611412652657" ID="ID_1149640138" MODIFIED="1611412667586" TEXT="doxygen-warning.txt durchsuchen"/>
+<node CREATED="1611412694100" ID="ID_1782021607" MODIFIED="1611412711705" TEXT="sicherstellen da&#xdf;...">
+<node CREATED="1611412712385" ID="ID_1286698190" LINK="https://stackoverflow.com/a/46895346" MODIFIED="1611416096145" TEXT="der umschlie&#xdf;ende Namespace dokumentiert ist">
+<icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1491098487889" ID="ID_1401713015" MODIFIED="1557498707240" TEXT="Sqlite-Support">
+<node CREATED="1611412720896" ID="ID_1416946834" MODIFIED="1611412732531" TEXT="das definierende File einen @file-Kommentar hat"/>
+</node>
+</node>
+</node>
+<node CREATED="1611414193640" ID="ID_1495280173" MODIFIED="1611414203972" TEXT="Markdown">
+<node CREATED="1611414205207" ID="ID_1304449575" MODIFIED="1611414215413" TEXT="funktioniert generell recht zuverl&#xe4;ssig"/>
+<node CREATED="1611414215893" ID="ID_1250665044" MODIFIED="1611414235234" TEXT="Header-Hierarchie mu&#xdf; konsistent sein">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1611414254368" ID="ID_1103685826" MODIFIED="1611414275946" TEXT="d.h. die erste Zwischen&#xfc;berschrift auf Level-1 (Pr&#xe4;fix &quot;#&quot;)"/>
+<node CREATED="1611414236218" ID="ID_1711467407" MODIFIED="1611414253828" TEXT="sonst werden die btrf. &#xdc;berschriften komplett unterdr&#xfc;ckt"/>
+</node>
+</node>
+<node CREATED="1491098487889" ID="ID_1401713015" MODIFIED="1611412586548" TEXT="Sqlite-Support">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1491098494497" ID="ID_1565133197" MODIFIED="1557498707241" TEXT="ist wohl noch sehr vorl&#xe4;ufig"/>
 <node CREATED="1491098499712" ID="ID_1643743799" MODIFIED="1557498707241" TEXT="wenn eine Sqlite-DB gefunden wird...."/>
 <node CREATED="1491098515845" ID="ID_1313255620" MODIFIED="1557498707241" TEXT="produziert er jede Menge Constraint-Verletzungen"/>
 <node CREATED="1491098525396" ID="ID_1962242264" MODIFIED="1557498707241" TEXT="Tip: Sqlite-DB wegl&#xf6;schen!!!"/>
+<node CREATED="1611412589929" ID="ID_1865414656" MODIFIED="1611412626461" TEXT="Doxygen 1.8.13 generiert jetzt per default kein Sqlite mehr"/>
 </node>
 </node>
 </node>

@@ -32,7 +32,7 @@
  ** Besides, this header defines the basic NLS. Most parts of the GUI rely on this header.
  ** 
  ** 
- ** ## configuration and resource search
+ ** # configuration and resource search
  ** 
  ** The GUI backbone retrieves the necessary configuration values from lumiera::Config,
  ** the config facade in the application core. Currently as of 2/2011 these values are

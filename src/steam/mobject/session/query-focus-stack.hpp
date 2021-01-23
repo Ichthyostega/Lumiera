@@ -54,8 +54,7 @@ namespace session {
    * a boost::intrusive_ptr, which stores the ref-count within
    * the mentioned ScopePath frames located in the stack.
    * 
-   * ## automatic cleanup of unused frames
-   * 
+   * \par automatic cleanup of unused frames
    * The stack is aware of this ref-counting mechanism and will --
    * on each access -- automatically clean up any unused frames starting
    * from stack top, until encountering the first frame still in use.

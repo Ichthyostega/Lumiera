@@ -27,7 +27,7 @@
  ** into a sequence of planning steps. The net result is to present a <i>sequence of job planing</i>
  ** to the user, while actually encapsulating a depth-first tree exploration, which proceeds on demand.
  ** 
- ** ## participating elements
+ ** # participating elements
  ** All of these job planning operations are implemented on top of the JobTicket. This is where to look
  ** for "actual" implementation code. Here, within this header, the following entities cooperate to
  ** create a simple sequence out of this implementation level tasks:
@@ -37,7 +37,7 @@
  ** - steam::engine::expandPrerequisites(JobPlanning const&) is the operation to explore further prerequisite Jobs recursively
  ** - PlanningStepGenerator yields the underlying "master beat": a sequence of frame locations to be planned
  ** 
- ** ## how the PlanningState (sequence) is advanced
+ ** # how the PlanningState (sequence) is advanced
  ** PlanningState is an iterator to expose a sequence of JobPlanning elements. On the implementation level,
  ** there is always just a single JobPlanning element, which represents the \em current element; this element
  ** lives as "state core" within the PlanningState object. Advancing to the next JobPlanning element (i.e. to

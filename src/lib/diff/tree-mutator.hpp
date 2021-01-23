@@ -36,12 +36,13 @@
  ** representation of types as chained identifiers. (path dependent types).
  ** 
  ** The interface implemented by the TreeMutator is shaped such as to support
- ** the primitives of Lumiera's tree \link diff-language.hpp diff handling language. \endlink
+ ** the primitives of Lumiera's tree [diff handling language](\ref diff-language.hpp).
  ** By default, each of these primitives is implemented as a \c NOP -- but each operation
  ** can be replaced by a binding closure, which allows to invoke arbitrary code in the
  ** context of the given object's implementation internals.
  ** 
- ** ## Builder/Adapter concept
+ ** # Builder/Adapter concept
+ ** 
  ** TreeMutator is both an interface and a set of building blocks.
  ** On concrete usage, the (private, non disclosed) target data structure is assumed
  ** to _build a subclass of TreeMutator._ To this end, the TreeMutator is complemented

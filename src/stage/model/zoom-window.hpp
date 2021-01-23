@@ -28,11 +28,11 @@
  ** - it is a place or excerpt within the model topology (e.g. the n-th track in the fork)
  ** - it has a temporal extension within a larger temporal frame (e.g. some seconds within the timeline)
  ** 
- ** ## rationale
+ ** # rationale
  ** 
  ** TBW
  ** 
- ** ## Interactions
+ ** # Interactions
  ** 
  ** - *bla*: connect to blubb
  ** see [sigc-track] for an explanation.

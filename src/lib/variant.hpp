@@ -42,7 +42,7 @@
  ** handling for _all the possible types._ As an alternative, you might consider the
  ** lib::PolymorphicValue to hold types implementing a common interface.
  ** 
- ** ## implementation notes
+ ** # implementation notes
  ** 
  ** We use a "double capsule" implementation technique similar to lib::OpaqueHolder.
  ** In fact, Variant is almost identical to the latter, just omitting unnecessary flexibility.

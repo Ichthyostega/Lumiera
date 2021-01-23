@@ -27,7 +27,7 @@
  ** entries can be added with a severity level, causing the widget to scroll
  ** down to the last line of the content buffer.
  ** 
- ** ## Lifecycle considerations
+ ** # Lifecycle considerations
  ** 
  ** The ErrorLogDisplay is typically managed as child of a container widget.
  ** However, the ctrl::NotificationHub as controller does a lookup and attaches

@@ -33,7 +33,7 @@
  ** then lead to a match. Basically we have to try all combinations of all possible local
  ** matches, to find a solution to satisfy the whole chain of conditions.
  ** 
- ** ## Design
+ ** # Design
  ** 
  ** The IterChainSearch component is built as a processing pipeline, based on the
  ** [Tree-Explorer framework](\ref iter-tree-explorer.hpp). This yields several benefits, but
@@ -51,7 +51,7 @@
  ** compilation times and rather large size of the generated code (which in debugging mode
  ** with full type information can even become excessively large).
  ** 
- ** Some caveats
+ ** ## Some caveats
  ** - the resulting pipeline is copyable, and it is typically moved out from a builder
  **   function into the target location. So beware of _lambda captures by reference._
  **   When you capture _anything_ within the pipeline itself, like some `this` pointer,

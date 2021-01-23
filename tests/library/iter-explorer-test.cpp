@@ -223,7 +223,7 @@ namespace test{
    *       - a [recursively self-integrating](\ref verifyRecrusiveSelfIntegration())
    *         evaluation pattern
    * 
-   * ## Explanation
+   * # Explanation
    * 
    * Both this test and the IterExplorer template might be bewildering
    * and cryptic, unless you know the *Monad design pattern*. Monads are
@@ -420,7 +420,7 @@ namespace test{
       /** @test a depth-first visiting and exploration scheme of a tree like system,
        *        built on top of the IterExplorer monad.
        * 
-       * ## Test data structure
+       * # Test data structure
        * We build a functional datastructure here, on the fly, while exploring it.
        * The `exploreChildren(m)` function generates this tree like datastructure:
        * For a given number, it tries to divide by 5, 3 and 2 respectively, possibly
@@ -435,7 +435,7 @@ namespace test{
        * \endcode
        * This tree has no meaning in itself, beyond being an easy testbed for tree exploration schemes.
        * 
-       * ## How the exploration works
+       * # How the exploration works
        * We use a pre defined Template \ref DepthFirstExplorer, which is built on top of IterExplorer.
        * It contains the depth-first exploration strategy in a hardwired fashion. Actually this effect is
        * achieved by defining a specific way how to _combine the results of an exploration_ -- the latter

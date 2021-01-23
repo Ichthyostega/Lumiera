@@ -35,7 +35,7 @@
  ** actual command operation function), which implements the invocation of the
  ** operation function with the stored argument tuple.
  ** 
- ** ## Command Closure and Lifecycle
+ ** # Command Closure and Lifecycle
  ** When defining a command, Mutation objects are to be created based on a concrete function.
  ** These are stored embedded into a type erasure container, thus disposing the specific type
  ** information of the function and function arguments. Each command needs an Mutation object

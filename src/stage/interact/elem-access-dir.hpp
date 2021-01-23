@@ -21,7 +21,7 @@
 */
 
 
-/** @file elem-access-directory.hpp
+/** @file elem-access-dir.hpp
  ** A service to discover and access raw UI elements in a cross cutting way.
  ** This is the actual low-level implementation of the model::ElementAccess interface
  ** Tightly coupled to the internals of Lumiera's GTK UI, this implementation embodies

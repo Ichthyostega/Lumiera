@@ -35,7 +35,7 @@
  ** Invocation object (a sub-interface of StateAdapter) to access the various aspects of the
  ** invocation state.
  ** 
- ** ## composition of the Invocation State
+ ** # composition of the Invocation State
  ** 
  ** For each individual ProcNode#pull() call, the WiringAdapter#callDown() builds an StateAdapter
  ** instance directly on the stack, managing the actual buffer pointers and state references. Using this

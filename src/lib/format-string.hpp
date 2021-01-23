@@ -33,7 +33,7 @@
  ** than the (small) performance gain of directly invoking boost::format (which is
  ** known to be 10 times slower than printf anyway).
  ** 
- ** ## Implementation notes
+ ** # Implementation notes
  ** To perform the formatting, usually a \c _Fmt object is created as an anonymous
  ** temporary, but it may as well be stored into a variable. Copying is not permitted.
  ** Individual parameters are then fed for formatting through the \c '%' operator.
@@ -64,7 +64,7 @@
  ** for all primitive types. In the test showed above, the corresponding object file
  ** had a size of 1300k (with debug information) resp. 290k (stripped).
  ** 
- ** ## Usage
+ ** # Usage
  ** The syntax of the format string is defined by boost::format and closely mimics
  ** the printf formatting directives. The notable difference is that boost::format
  ** uses the C++ stream output framework, and thus avoids the perils of printf.

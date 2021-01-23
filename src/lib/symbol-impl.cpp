@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-/** @file symbol-impl.hpp
+/** @file symbol-impl.cpp
  ** Collection of helpers for working with the lib::Symbol.
  ** 
  ** @todo currently as of 9/09 this is more of a placeholder.

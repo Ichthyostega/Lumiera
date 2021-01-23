@@ -26,7 +26,7 @@
  ** and use this for custom drawing. Within Lumiera, we use custom drawing for some parts
  ** of the Timeline UI presentation.
  ** 
- ** ## Setup for investigation
+ ** # Setup for investigation
  ** - add a separate dummy Gtk::Frame widget as `testFrame_`
  ** - apply custom styling to that frame, by virtue of a CSS class '.experiment'
  ** - pick up the Gtk::StyleContext of that `testFrame_` to get the CSS path
@@ -34,7 +34,7 @@
  ** - use this style context to draw a custom frame and background onto the canvas
  ** - control extension of that custom drawing through the top margin CSS setting of testFrame_
  ** 
- ** ## Findings
+ ** # Findings
  ** - it works as intended
  ** - however, care must be taken to apply CSS cascading properly (generic vs specific selectors)
  ** - the context_save/restore functionality seems to be broken on a "free standing" style context;

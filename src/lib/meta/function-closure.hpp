@@ -626,7 +626,7 @@ namespace func{
           return func::Apply<ARG_CNT>::template bind<LeftReducedFunc> (f, params);
         }
       
-      /** do a partial function application, closing the last arguments</br>
+      /** do a partial function application, closing the last arguments<br/>
        *  `f(a,b,c)->res  +  (b,c)`  yields  `f(a)->res`
        *  
        *  @param f   function, function pointer or functor

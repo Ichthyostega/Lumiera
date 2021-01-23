@@ -85,7 +85,7 @@ namespace demo {
    * Dockable panel to hold timeline widget(s).
    * @todo build the actual implementation, after finishing the investigation
    * 
-   * ## Investigation of gtk::GtkLayout
+   * # Investigation of gtk::GtkLayout
    * As of 10/2016, we start this task with an exploration of GTK behaviour
    * 
    * \par Plan of investigation

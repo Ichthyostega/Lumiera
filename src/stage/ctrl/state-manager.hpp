@@ -30,7 +30,7 @@
  ** typically expect these choices and traces of usage to remain sticky, persistent
  ** across editing sessions.
  ** 
- ** ## Implementation technique
+ ** # Implementation technique
  ** In Lumiera, handling of persistent presentation state relies on the UI backbone
  ** structure known as [UI-Bus](\ref ui-bus.hpp). Any element of more than local relevance,
  ** as attached to this backbone, will emit *state mark notification* messages, whenever

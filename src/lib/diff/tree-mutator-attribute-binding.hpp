@@ -35,7 +35,7 @@
  ** a building block for one specific kind of layer, used to bind object fields
  ** through "setter" lambdas.
  ** 
- ** ## architecture considerations
+ ** # architecture considerations
  ** Together with the (\ref tree-mutator-collection-binding.hpp), the attribute binding
  ** is the most relevant building block -- yet it is special in several respects. There
  ** is kind of a "impedance mismatch" between the concept of an "attribute", as used in

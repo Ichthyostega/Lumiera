@@ -31,7 +31,7 @@
  ** an explicit configuration, lib::Depend will automatically create and manage a
  ** singleton instance of the type given as type parameter.
  ** 
- ** ## Architecture
+ ** # Architecture
  ** A _dependency_ is understood as something we need to perform the task at hand,
  ** yet a dependency referres beyond that task and relates to concerns outside the
  ** scope and theme of this actual task. The usage site of the dependency is only
@@ -47,9 +47,10 @@
  ** configuration of services is not centralised, and can not be static; it need
  ** to happen prior to any service access (on violation error::Logic is raised)
  ** 
+ ** # Configuration
  ** The public configuration mechanisms offered by DependInject address various concerns:
  ** 
- ** \paragraph Wiring
+ ** ## Wiring
  ** Even when relying on lazy on-demand initialisation, a concrete service implementation
  ** typically needs to connect to further services, and maybe even decide upon the actual
  ** subclass to be instantiated. By invoking the DependInject<SRV>::useSingleton(FUN)
@@ -58,7 +59,7 @@
  ** This function is expected to deliver a heap allocated instance on invocation, which
  ** will be owned and managed by lib::Depend<SRV>::factory (A DependencyFactory<SRV>).
  ** 
- ** \paragraph Service Lifecycle
+ ** ## Lifecycle
  ** Whenever a module or subsystem can be started and stopped, several interconnected
  ** services become operational together, with dependent lifecycle. It is possible to
  ** expose such services through a lib::Depend<SRV> front-end; this way, the actual
@@ -67,7 +68,7 @@
  ** This kind of configuration can be achieved by planting a smart-handle of type
  ** DependInject<SRV>::ServiceInstance<IMP>
  ** 
- ** \paragraph Unit Testing with Mock Services
+ ** ## Unit Testing with Mock Services
  ** Dependencies tend to hamper unit testing, but global variables and actively
  ** linked and collaborating implementations are worse and often prevent test coverage
  ** altogether. Preferably dependencies are limited to an interface and a focused topic,

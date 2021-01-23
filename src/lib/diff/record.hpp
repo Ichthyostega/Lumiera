@@ -36,7 +36,7 @@
  ** - a collection of _named attributes_ (key-value data)
  ** - a list of _enclosed children_ (contents within the "scope" of this Record)
  ** 
- ** ## design decisions
+ ** # design decisions
  ** The Record type is shaped from its intended use: It serves to symbolically represent
  ** *objects* in the "external tree description". Here, "objects" means objects _for real_,
  ** i.e. with types, fields and an enclosed scope. Yet the term *external* means that we do not

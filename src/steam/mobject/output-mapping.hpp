@@ -111,7 +111,7 @@ namespace mobject {
    * may be derived by querying the OutputMapping. Here, the kind of
    * the target specification is defined through the type parameter.
    * 
-   * ## definition of specific mapping behaviour
+   * # definition of specific mapping behaviour
    * 
    * This is an generic map-like container, acting as Interface to be used
    * in the signature of API functions either providing or requiring a Mapping.
@@ -356,7 +356,7 @@ namespace mobject {
    *  which then is considered the mapped result and handed over to the `DEF::output`
    *  functor for resolution to a result object to be returned.
    *  
-   *  ## Query for the Nth default instance
+   *  \par Query for the Nth default instance
    *  OutputMapping provides a special behaviour for retrieving "the Nth default pipe".
    *  The rationale being the request for connection to the Nth bus of a given kind, like
    *  e.g. the 3rd audio subgroup or the 2nd video master. This special behaviour is triggered

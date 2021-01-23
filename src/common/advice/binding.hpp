@@ -21,7 +21,7 @@
 */
 
 
-/** @file binding.hpp
+/** @file advice/binding.hpp
  ** A pattern to define and identify a specific attachment to the Advice system.
  ** This pattern is comprised of a predicate list and intended to be matched or unified
  ** against a similar pattern associated with the attachment of a possible collaboration partner.

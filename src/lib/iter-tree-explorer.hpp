@@ -1588,7 +1588,7 @@ namespace lib {
    *         TreeExplorer will invalidate that variable (by moving it into the
    *         augmented iterator returned from such builder call).
    * 
-   * ## usage
+   * # usage
    * 
    * This function starts a *Builder* expression. It picks up the given source,
    * which can be something "sequence-like" or "iterable", and will automatically

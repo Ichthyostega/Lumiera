@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file label-widget.cpp
+/** @file element-box-widget.cpp
  ** Implementation details of the UI building block to display an ID label.
  ** 
  ** @todo WIP-WIP-WIP as of 11/2018   ///////////////////////////////////////////////////////////////////////TICKET #1185

@@ -69,7 +69,7 @@ namespace engine {
    * the TimeAnchor closure is the definitive binding between the abstract logical time of the
    * session timeline, and the real wall-clock time forming the deadline for rendering.
    * 
-   * ## internals
+   * # internals
    * The time anchor associates a nominal time, defined on the implicit time grid
    * of some given Timings, with an actual wall clock time. Due to the usage situation,
    * the TimeAnchor takes on the secondary meaning of a breaking point; everything \em before

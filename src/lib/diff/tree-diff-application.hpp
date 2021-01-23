@@ -27,7 +27,7 @@
  ** to receive linearised structural diff descriptions and apply them to
  ** a given target data structure, to effect the corresponding changes.
  ** 
- ** ## Design considerations
+ ** # Design considerations
  ** While -- conceptually -- our tree diff handling can be seen as an extension
  ** and generalisation of list diffing, the decision was \em not to embody this
  ** extension into the implementation technically, for sake of clarity. This would
@@ -37,7 +37,7 @@
  ** needs to embodied into two distinct contexts of implementation. So the list diff
  ** application strategy can be seen as blueprint and demonstration of principles.
  ** 
- ** ### Use cases
+ ** ## Use cases
  ** Initially, we'd have to distinguish two usage situations
  **  - apply a diff to a generic tree representation, based on Record<GenNode>
  **  - apply a diff to some tree shaped implementation data structure.
@@ -49,7 +49,7 @@
  ** goals of our "diff framework", since we want to allow collaboration between
  ** loosely coupled subsystems, without the need of a shared data structure.
  ** 
- ** ### Implementation
+ ** ## Implementation
  ** On the implementation level though, relations are the other way round: the
  ** framework and technique to enable applying a diff onto private implementation data
  ** is used also to apply the diff onto the (likewise private) implementation of our
@@ -66,7 +66,7 @@
  ** - binding especially to a collection of GenNode elements,
  **   which basically covers also the generic tree representation.
  ** 
- ** #### State and nested scopes
+ ** ### State and nested scopes
  ** For performance reasons, the diff is applied _in place_, directly mutating the
  ** target data structure. This makes the diff application _statefull_ -- and in case of
  ** a *diff conflict*, the target *will be corrupted*.
@@ -86,7 +86,7 @@
  ** descent and diff application is implemented with the help of a stack, where a new
  ** TreeMutator is constructed whenever we enter (push) a new nested scope.
  ** 
- ** #### Yet another indirection
+ ** ### Yet another indirection
  ** Unfortunately this leads to yet another indirection layer: Implementing a
  ** language in itself is necessarily a double dispatch (we have to abstract the
  ** verbs and we have to abstract the implementation side). And now we're decoupling
@@ -95,7 +95,7 @@
  ** functors) to translate the _implementation actions_ underlying the language into
  ** _concrete actions_ working on local data.
  ** 
- ** #### Generic and variable parts
+ ** ### Generic and variable parts
  ** So there is a link between generic [»tree diff language«](\ref tree-diff.hpp)
  ** interpretation and the concrete yet undisclosed private data structure, and
  ** most of this implementation is entirely generic, since the specifics are
@@ -105,7 +105,7 @@
  ** figure out a way how to "get" a suitable TreeMutator implementation
  ** for the given concrete target data.
  ** 
- ** ### the TreeMutator DSL
+ ** ## the TreeMutator DSL
  ** In the end, for each target structure, a concrete TreeMutator needs to be built
  ** or provided within the realm of the actual data implementation, so the knowledge
  ** about the actual data layout remains confined there. While this requires some

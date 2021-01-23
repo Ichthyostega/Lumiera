@@ -236,7 +236,7 @@ namespace test{
    *         an extension (sub interface) to allow for "tree exploration" without
    *         any knowledge regarding the concrete implementation of the data source.
    * 
-   * ## Explanation
+   * # Explanation
    * 
    * These tests build a evaluation pipeline by _wrapping_ some kind of data source
    * and then layering some evaluation stages on top. There are two motivations why

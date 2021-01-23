@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file config-type.c
+/** @file config-typed.c
  ** Implementation draft for a configuration system (2008).
  ** This file implements high level typed configuration interfaces.
  ** @note unfinished draft from 2008

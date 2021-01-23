@@ -411,7 +411,7 @@ namespace lib {
    * Lock template, which should be instantiated as an automatic variable
    * within the scope to be protected.
    * 
-   * ## Usage
+   * # Usage
    * - for *locking*, just place an instant of the embedded Lock into the local
    *   scope to be protected. All lock instances within the same object share
    *   the monitor; thus any time, only one of them gets the mutex all other

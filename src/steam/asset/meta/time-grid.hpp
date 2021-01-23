@@ -34,7 +34,7 @@
  ** Time grid specifications are integrated into Lumiera's framework
  ** for meta assets, automation, configuration and similar metadata.
  ** 
- ** ## using time grids
+ ** # using time grids
  ** 
  ** TimeGrid is an interface (ABC), but provides some actual factory
  ** functions, which can be used as a convenience shortcut to fabricate

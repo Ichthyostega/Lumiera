@@ -501,7 +501,7 @@ namespace lib {
    * The whole compound is copyable if and only if the contained
    * object is copyable.
    *
-   * ## using OpaqueHolder
+   * # using OpaqueHolder
    * OpaqueHolder instances are copyable value objects. They are created
    * either empty, by copy from an existing OpaqueHolder, or by directly
    * specifying the concrete object to embed. This target object will be

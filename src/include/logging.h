@@ -54,7 +54,11 @@
  ** Any log level can be overridden by an environment variable, for example
  ** `NOBUG_LOG='progress:INFO' ./lumiera`
  **
- ** @todo logging to files? `NOBUG_LOG='progress:INFO@file(name=filename)'` api to set this statically up by the program will follow  --cehteh
+ ** @todo logging to files?
+ ** \verbatim
+ ** `NOBUG_LOG='progress:INFO@file(name=filename)'` api to set this statically up by the program will follow
+ ** \endverbatim
+ **   --cehteh
  */
 
 

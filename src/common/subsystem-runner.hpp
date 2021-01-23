@@ -95,7 +95,7 @@ namespace lumiera {
    * correspond to a single component, interface or plugin. It may well be a
    * complete layer of the application (e.g. the GUI).
    * 
-   * ## Protocol of operation
+   * # Protocol of operation
    * The SubsystemRunner is to be configured with a lumiera::Option object first.
    * Then, primary subsystems are \link #maybeRun provided \endlink for eventual
    * startup, which may depend on conditions defined by the subsystem. When
