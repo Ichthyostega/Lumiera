@@ -68,8 +68,8 @@ namespace timeline {
    * @param identity referring to the corresponding session::Clip in Steam-Layer.
    * @param nexus a way to connect this Controller to the UI-Bus.
    * @param view (abstracted) canvas or display framework to attach this clip to
-   * @param startTime (optional) start time point of the clip.
-   * @note Clip can not be displayed unless startTime is given
+   * @param timing (optional) start time point and duration of the clip.
+   * @note Clip can not be displayed unless #timing is given
    */
   ClipPresenter::ClipPresenter (ID identity, ctrl::BusTerm& nexus, WidgetHook& view, optional<TimeSpan> timing)
     : Controller{identity, nexus}

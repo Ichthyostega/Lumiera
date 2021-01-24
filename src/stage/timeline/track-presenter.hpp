@@ -141,7 +141,7 @@ namespace timeline {
       model::ViewHooked<TrackHeadWidget> head_;
       model::ViewHooked<TrackBody>       body_;
       
-      /* === extended Interface for relative view hook === */
+      /* === extended Interface for relative view/canvas hook === */
       
       int hookAdjX (int xPos)  override { return xPos; };
       int hookAdjY (int yPos)  override { return yPos + body_.getContentOffsetY(); };

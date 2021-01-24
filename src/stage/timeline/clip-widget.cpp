@@ -29,6 +29,59 @@
  **       a clip. Moreover, this clip display can be used both
  **       within the context of the timeline or as element in a
  **       media bin in the asset management section.
+ ** 
+ ** # Managing Clip appearance and behaviour
+ ** 
+ ** Here we are looking at the actual implementation of the clip display,
+ ** which is hidden behind two layers of abstraction. The interface for
+ ** controlling the _desired representation style_ can be found within the
+ ** ClipPresenter, which in turn delegates through the ClipDelegate interface.
+ ** 
+ ** ## Organisation of representation mode
+ ** 
+ ** Due to the various clip appearance styles, the actual implementation needs
+ ** to be flexible on several levels. Thus, the presentation mode is structured
+ ** as follows:
+ ** - the the Mode of representation controls the basic implementation approach
+ ** 
+ **   * in Mode::HIDDEN, there is no actual UI representation; rather, the ClipDelegate
+ **     acts as data container to receive and hold the presentation relevant properties
+ **     of the clip, so to be able to return to a visible representation later on.
+ **   * in Mode::SUMMARY, we use the help of a mediator to create a summarised display
+ **     of timeline contents; the clip is not mapped individually into the display.
+ **   * only in Mode::INDIVIDUAL there is an actual GTK widget, attached into the
+ **     display framework _in some appropriate way_ -- even in this mode there is
+ **     still a lot of flexibility, since the implementing widget itself has several
+ **     options for representation, and, moreover, the widget can still be hidden
+ **     or out of view.
+ **     
+ ** - the ClipDelegate::Appearance can be seen as an ordered scale of increasingly
+ **   detailed representation. Some segments of this scale are mapped into the
+ **   aforementioned three modes of representation. Especially within the
+ **   Mode::INDIVIDUAL, the appearance can be distinguished into
+ **   
+ **   * ClipDelegate::Appearance::ABRIDGED : the clip acts as placeholder icon
+ **   * ClipDelegate::Appearance::COMPACT  : the clip has real extension
+ **   * ClipDelegate::Appearance::EXPANDED : details within the clip are revealed
+ ** 
+ ** ## Choosing the appropriate representation
+ ** On construction, the ClipPresenter invokes ClipDelegate::buildDelegate().
+ ** This is a limited variant of the more general ClipDelegate::switchAppearance(),
+ ** insofar on construction we must ensure there always exists some kind of delegate.
+ ** When especially the optional argument `timing` is provided by the _population diff_
+ ** creating the clip, then we can use the given lib::time::TimeSpan data for actually
+ ** allocating a screen rectangle, and thus only in this case, a ClipWidget is constructed
+ ** and mapped into presentation.
+ ** 
+ ** Later the appearance style can be switched, which might incur the necessity also to
+ ** exchange the actual implementation of the clip delegate. The latter is the case whenever
+ ** we detect a different Mode of representation. Beyond that, we always know there is an
+ ** existing delegate, which can be used to retrieve the further detail presentation data.
+ ** In some cases the clip needs to be "re-hooked", in which case the existing CanvasHook
+ ** is used to establish a new display attachment. For this to work, even the modes not
+ ** directly representing the clip need to hold onto some CanvasHook, so each delegate
+ ** can implement the ClipDelegate::getCanvas()
+ ** 
  ** @todo WIP-WIP-WIP as of 1/2021
  ** 
  */

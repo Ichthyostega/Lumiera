@@ -582,7 +582,7 @@ namespace timeline {
   
   /** respond to the DisplayEvaluation pass.
    * @remark assuming that each track has already established it own vertical space requirement,
-   *         thereby placing the extension values into TrackBody::contentHeight_
+   *         thereby placing the established vertical extension into TrackBody::contentHeight_
    * @todo 2/2020 WIP
    */
   void

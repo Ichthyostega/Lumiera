@@ -46,6 +46,7 @@
 #include "lib/diff/tree-diff-application.hpp"
 #include "lib/diff/mutation-message.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "lib/time/timevalue.hpp"
 //#include "lib/idi/entry-id.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
@@ -60,6 +61,9 @@ using lib::diff::GenNode;
 using lib::diff::MakeRec;
 using lib::diff::Ref;
 using lib::idi::RandID;
+using lib::time::Time;
+using lib::time::FSecs;
+using lib::time::Duration;
 //using util::cStr;
 using util::_Fmt;
 using std::string;
@@ -107,6 +111,14 @@ namespace session {
                .type (string{stage::TYPE_Ruler})
              .genNode("Ruler");
     }
+  
+    GenNode
+    clip(string clipID)
+    {
+      return MakeRec()
+               .type (string{stage::TYPE_Clip})
+             .genNode(clipID);
+    }
     
     /** fabricate an attribute node based on the
      * human-readable part of the given elemen's ID */
@@ -114,6 +126,13 @@ namespace session {
     makeName (GenNode const& elm)
     {
       return GenNode{string{stage::ATTR_name}, elm.idi.getSym() };
+    }
+    
+    /** define the (optional) timings for a clip */
+    GenNode
+    defineTiming (Time start, Duration dur = Duration{FSecs{1}})
+    {
+      return GenNode{string{stage::ATTR_timing}, lib::time::TimeSpan{start,dur} };
     }
   } //(End)Implementation details....
   
@@ -141,12 +160,18 @@ namespace session {
     const GenNode timeline      = emptyTimeline (baseID, forkRootID);
     const GenNode rootTrackName = GenNode{string{stage::ATTR_name}, "Track-"+baseID};
     const GenNode forkRoot      = MakeRec().genNode(forkRootID);
+    const GenNode clip1         = clip ("Clip-1");
     
     return MutationMessage{after(Ref::END)
                           , ins (timeline)
                           , mut (timeline)
                             , mut (forkRoot)
                               , set (rootTrackName)
+                              , ins (clip1)
+                              , mut (clip1)
+                                , ins (makeName(clip1))
+                                , ins (defineTiming(Time::ZERO))
+                              , emu (clip1)
                             , emu (forkRoot)
                           , emu (timeline)
                           };

@@ -27,8 +27,8 @@
  ** # Architecture
  ** 
  ** We strive to break up the whole process of controlling the layout into several
- ** local concerns, each of which can be made self contained. The backbone is formed by
- ** a recursive collaboration between two abstractions (interfaces)
+ ** local concerns, each of which can be made self contained. The backbone is formed
+ ** by a recursive collaboration between two abstractions (interfaces)
  ** - the building blocks of the timeline expose the interface timeline::Element
  ** - the global timeline widget implements a timeline::LayoutManager interface
  ** 
@@ -39,10 +39,31 @@
  ** record, which is passed to the involved layout elements within the timeline. Each element in turn
  ** has the liability to walk its children and recursively initiate a nested evaluation. During that
  ** pass, we are able to transport and aggregate information necessary to give each element the
- ** necessary amount of screen real estate. 
+ ** necessary amount of screen real estate.
+ ** 
+ ** ## Abstracted relative coordinate system
+ ** 
+ ** There is real danger for the DisplayManager to turn into some kind of GUI God class, which
+ ** hooks deep into the innards of various widgets to effect some coordinated UI response. To
+ ** defeat this threat, we are rather reluctant to expose the DisplayManager itself. Rather,
+ ** essential functionality is decomposed into self contained sub interfaces targeted at
+ ** some specific aspect of drawing or layout management. Especially, there is the
+ ** system of interwoven DisplayHook / CanvasHook incantations
+ ** 
+ ** Widgets are wrapped and decorated as ViewHookable, which is tightly linked to the corresponding
+ ** ViewHook interface. This collaboration allows to attach or "hook" the widget into some display
+ ** and layout management framework, without exposing the internals of said layout management to
+ ** the widget, allowing just do detach or to re-hook those widgets in a different order. And
+ ** in a similar vein, the sub-interfaces CanvasHooked / CanvasHook expand the same principle
+ ** to an attachment at some coordinate point `(x,y)`. In fact, CanvasHook allows to introduce
+ ** a [relative coordinate system](\ref stage::timeline::RelativeCanvasHook), without the necessity
+ ** for the actual widgets and their managing entities to be aware of these coordinate adjustments.
+ ** This builds the foundation for implementing UI structures recursively, leading to somewhat
+ ** simplified code, which hopefully is also easier to maintain and extend in the long run.
  ** 
  ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
  ** @todo WIP-WIP-WIP - drafting the DisplayEvaluation as of 3/2020
+ ** @todo WIP as of 1/2021 about to build a first preliminary Clip representation
  ** 
  */
 

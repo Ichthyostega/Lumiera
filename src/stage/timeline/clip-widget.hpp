@@ -93,7 +93,25 @@
  ** - even further collapsing several entities into a strike of elements, to indicate at least
  **   that some content is present in this part of the timeline.
  ** 
- ** @todo WIP-WIP-WIP as of 12/2016
+ ** ## Structure of the clip representation
+ ** Obviously, managing all these wildly different appearance styles incurs a lot of complexity,
+ ** which needs to be decomposed to become manageable. Thus, we introduce several responsibilities
+ ** - the ClipPresenter is what formally corresponds to the session::Clip, i.e. in a birds
+ **   eyes view, it "is" the clip. However, in fact the ClipPresenter only manages the
+ **   desired properties and delegates the actual realisation to "some widget"
+ ** - and this "widget" is in fact a "PImpl", the ClipDelegate, which foremost exposes an interface
+ **   to adapt and control the appearance style, while the actual clip widget is only accessible
+ **   through the ClipDelegate interface
+ ** - behind the scenes, [within the implementation](\ref clip-widget.cpp), several implementation
+ **   subclasses are available, to be installed and exchanged to accommodate the desired appearance
+ **   style. These are managed semi-automatically and hooked into the appropriate display framework
+ **   as required. And this attachment is itself again abstracted as CanvasHook -- which means the
+ **   actual clip widget implements the interaction mechanics, and can draw itself on demand, while
+ **   remaining agnostic about details regarding zoom management, scrolling and visibility of
+ **   timeline contents, or the actual allocation of display extension, which happens within the
+ **   stage::timeline::DisplayEvaluation pass.
+ ** 
+ ** @todo WIP-WIP as of 1/2021
  ** 
  */
 
@@ -140,6 +158,7 @@ namespace timeline {
       ClipDelegate();
       
       
+      /** desired appearance style for the clip */
       enum Appearance {PENDING, SYMBOLIC, DEGRADED, ABRIDGED, COMPACT, EXPANDED};
       
       
@@ -203,7 +222,7 @@ namespace timeline {
                                        std::optional<TimeSpan> timing);
       
     private:/* ===== Internals ===== */
-     
+      
     };
   
   
