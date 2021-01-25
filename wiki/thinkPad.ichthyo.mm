@@ -21300,7 +21300,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1582991961258" FOLDED="true" ID="ID_545649889" MODIFIED="1582991965501" TEXT="pro Track">
+<node CREATED="1582991961258" ID="ID_545649889" MODIFIED="1582991965501" TEXT="pro Track">
 <node CREATED="1582992016890" ID="ID_1705972913" MODIFIED="1582992030828" TEXT="Aufsammeln der vertikalen Ausdehnung"/>
 <node CREATED="1582992031648" ID="ID_752229981" MODIFIED="1582992037387" TEXT="Maximum + Padding"/>
 <node CREATED="1582992060135" ID="ID_446948891" MODIFIED="1582992233901">
@@ -21755,8 +21755,20 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583010246034" ID="ID_113344286" MODIFIED="1583677197995" TEXT="Resultat mit Wert vom Header vergleichen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583010246034" ID="ID_113344286" MODIFIED="1611533767877" TEXT="Resultat mit Wert vom Header abgleichen">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611527674130" ID="ID_1530876056" MODIFIED="1611533938726" TEXT="Ergebnis &#x2259; lokales Maximum &#x2192; TrackBody::contentHeight_">
+<linktarget COLOR="#43447b" DESTINATION="ID_1530876056" ENDARROW="Default" ENDINCLINATION="802;689;" ID="Arrow_ID_471691943" SOURCE="ID_1232626344" STARTARROW="None" STARTINCLINATION="655;24;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1611533783838" ID="ID_504265049" MODIFIED="1611533798915" TEXT="Vorsicht: es sind zwei Belange">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1611533829992" ID="ID_1527761356" MODIFIED="1611533848566" TEXT="der Content mu&#xdf; in den Content-Bereich im Track passen"/>
+<node CREATED="1611533811939" ID="ID_254664541" MODIFIED="1611533828996" TEXT="Synchronisation zwischen Header und Body"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611533873746" ID="ID_1129757567" MODIFIED="1611533921023" TEXT="wo/wie werden die Sub-Tracks ber&#xfc;cksichtigt?">
+<icon BUILTIN="help"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1583010270152" ID="ID_689332581" MODIFIED="1583606371280" TEXT="depth-first-Suche und Aktion auf dem R&#xfc;ckweg">
@@ -21771,6 +21783,9 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583010590180" ID="ID_253184113" MODIFIED="1583677738518" TEXT="Header-Ausgleich">
 <arrowlink COLOR="#8b71ae" DESTINATION="ID_1925515175" ENDARROW="Default" ENDINCLINATION="259;-76;" ID="Arrow_ID_44202222" STARTARROW="None" STARTINCLINATION="-426;50;"/>
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611534925644" ID="ID_1754764132" MODIFIED="1611534940798" TEXT="#1211 coordinate track extension">
+<icon BUILTIN="flag-yellow"/>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583677270535" ID="ID_1729172771" MODIFIED="1583677289501" TEXT="ungekl&#xe4;rt: wann genau mu&#xdf; der Header-Ausgleich laufen?">
 <icon BUILTIN="help"/>
 <node CREATED="1583677300836" ID="ID_893081931" MODIFIED="1583677581501" TEXT="Plan-A">
@@ -27975,13 +27990,16 @@
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1611478658033" HGAP="73" ID="ID_1825783827" MODIFIED="1611479264977" TEXT="diese L&#xf6;sung scheint tragf&#xe4;hig. Nun fertig bauen!" VSHIFT="12">
 <arrowlink COLOR="#f2d4e1" DESTINATION="ID_811510338" ENDARROW="Default" ENDINCLINATION="-516;-1779;" ID="Arrow_ID_1877167801" STARTARROW="None" STARTINCLINATION="481;25;"/>
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611479345795" HGAP="88" ID="ID_911852543" MODIFIED="1611479554687" STYLE="bubble" TEXT="einen Clip via Diff injizieren" VSHIFT="-7">
+<node COLOR="#435e98" CREATED="1611479345795" HGAP="88" ID="ID_911852543" MODIFIED="1611540320555" STYLE="bubble" TEXT="einen Clip via Diff injizieren" VSHIFT="-7">
 <edge COLOR="#fad1c1"/>
 <icon BUILTIN="full-1"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611479345795" HGAP="88" ID="ID_1289774279" MODIFIED="1611492845512" STYLE="bubble" TEXT="ein funktionsf&#xe4;higes Clip-Widget..." VSHIFT="-7">
 <edge COLOR="#fad1c1"/>
 <icon BUILTIN="full-2"/>
+<node CREATED="1611540326300" ID="ID_126501533" MODIFIED="1611540332119" TEXT="Clip erscheint">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611479345795" HGAP="94" ID="ID_915417374" MODIFIED="1611479560862" STYLE="bubble" TEXT="an der richtigen Stelle zur Anzeige bringen" VSHIFT="-7">
 <edge COLOR="#fad1c1"/>
@@ -28589,6 +28607,7 @@
 <node CREATED="1584318751425" ID="ID_1908104469" MODIFIED="1584318760838" TEXT="nehme mal einen Gtk::Button...">
 <icon BUILTIN="ksmiletris"/>
 </node>
+<node CREATED="1611539454282" ID="ID_1159321207" MODIFIED="1611539483874" TEXT="Data-Storage: erst mal lauter lokale Datenfelder"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611479299338" ID="ID_1803753965" MODIFIED="1611479325824" TEXT="damit die erste lauff&#xe4;hige Clip-Widget-Implementierung">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1611492890873" ID="ID_458756808" MODIFIED="1611492956892" TEXT="sollte in der seit 4/20 existierenden Implementierung bereits funktionieren">
@@ -28604,23 +28623,26 @@
 </html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1611494845768" ID="ID_591566495" MODIFIED="1611495181481" TEXT="tja....">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      UNIMPLEMENTED: clip-presenter.cpp:157: worker_3: determineRequiredVerticalExtension: any details regarding clip presentation
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="smiley-oh"/>
+<node COLOR="#338800" CREATED="1611494845768" ID="ID_591566495" MODIFIED="1611540171140" TEXT="erst mal vorl&#xe4;ufig die Datenfelder anlegen &#x27f9; kann vertikale Ausdehnung berechnen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611527884423" ID="ID_1232626344" MODIFIED="1611533938726" TEXT="Ergebnis der DisplayEvaluation &#x2259; lokales Maximum &#x2192; TrackBody::contentHeight_ ">
+<arrowlink COLOR="#43447b" DESTINATION="ID_1530876056" ENDARROW="Default" ENDINCLINATION="802;689;" ID="Arrow_ID_471691943" STARTARROW="None" STARTINCLINATION="655;24;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583678122516" ID="ID_73602256" MODIFIED="1583678142379" TEXT="...und dessen vertikale Ausdehnung ermitteln und zur&#xfc;ckmelden">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611539501493" ID="ID_1849626018" MODIFIED="1611539513626" TEXT="TODO: &#xdc;berlegungen zur Daten-Storage">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611539517985" ID="ID_1850041925" MODIFIED="1611539580594" TEXT="macht es Sinn, f&#xfc;r alle Clip-Anzeigeformen einen gemeinsamen Daten-Record zu verwenden?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611539550821" ID="ID_219259739" MODIFIED="1611539584717" TEXT="und: diesen einbetten, oder per Pointer halten und weitergeben?">
+<icon BUILTIN="help"/>
+</node>
 </node>
 </node>
 <node CREATED="1583678162183" ID="ID_798000610" MODIFIED="1583678185165" TEXT="Stufe-2">

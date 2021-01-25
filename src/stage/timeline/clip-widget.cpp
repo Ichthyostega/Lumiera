@@ -106,6 +106,7 @@
 //using Gtk::Widget;
 //using sigc::mem_fun;
 //using sigc::ptr_fun;
+using lib::time::TimeVar;
 using util::unConst;
 //using std::cout;
 //using std::endl;
@@ -149,6 +150,9 @@ namespace timeline {
       , util::NonCopyable
       {
         WidgetHook& display_;
+        uString clipName_;
+        TimeVar start_;           /////////////////////////////////////////////////////////////////TICKET #1038 : how to handle storage of timings??
+        TimeVar len_;
         
         /* === Interface ClipDelegate === */
         
@@ -167,15 +171,51 @@ namespace timeline {
         cuString
         getClipName()  const override
           {
-            return "lala LOLO";     ///////////////////////////////////////////////////////////////TICKET #1038 : data storage; here : store the clip name/ID
+            return clipName_;       ///////////////////////////////////////////////////////////////TICKET #1038 : data storage; here : store the clip name/ID
           }
+        
+        void
+        setClipName(cuString newName)  override
+          {
+            clipName_ = newName;
+          }
+
         
         Time
         getStartTime()  const override
           {
-            return Time::NEVER;     ///////////////////////////////////////////////////////////////TICKET #1038 : data storage; here : store the clip start time
+            return start_;              ////////////////////////////////////////////////////////////TICKET #1038 : data storage; here : store the clip start time
           }
-
+        
+        Duration
+        getLen()  const override
+          {
+            return Duration{this->len_};
+          }
+        
+        void
+        changeTiming (TimeSpan changedTimings)  override
+          {
+            this->start_ = changedTimings.start();
+            this->len_ = changedTimings.duration();
+          }
+        
+        /**
+         * This is a mere data record without actual presentation,
+         * and thus can not occupy any screen extension.
+         */
+        uint
+        calcRequiredHeight()  const override
+          {
+            return 0;
+          }
+        
+        uint
+        getVerticalOffset()  const override
+          {
+            return 0;
+          }
+        
         WidgetHook&
         getCanvas()  const override
           {
@@ -187,12 +227,18 @@ namespace timeline {
         ClipData(WidgetHook& displayAnchor)
           : ClipDelegate{}
           , display_{displayAnchor}
+          , clipName_{"?name?"}
+          , start_{Time::NEVER}
+          , len_{Duration::NIL}
           { }
         
         /** state switch ctor */
         ClipData(ClipDelegate& existing)
           : ClipDelegate{}
           , display_{existing.getCanvas()}
+          , clipName_{existing.getClipName()}
+          , start_{existing.getStartTime()}
+          , len_{existing.getLen()}
           {
             TODO("copy further clip presentation properties");
           }
@@ -203,6 +249,9 @@ namespace timeline {
       : public HookedWidget
       , public ClipDelegate
       {
+        TimeVar start_;           /////////////////////////////////////////////////////////////////TICKET #1038 : how to handle storage of timings??
+        TimeVar len_;
+        
         /* === Interface ClipDelegate === */
         
         Appearance
@@ -225,10 +274,41 @@ namespace timeline {
             return this->get_label();
           }
         
+        void
+        setClipName(cuString newName)  override
+          {
+            this->set_label (newName);
+          }
+        
+        void
+        changeTiming (TimeSpan changedTimings)  override
+          {
+            this->start_ = changedTimings.start();
+            this->len_ = changedTimings.duration();
+          }
+        
         Time
         getStartTime()  const override
           {
-            return Time::NEVER;     ///////////////////////////////////////////////////////////////TICKET #1038 : data storage; here : store the clip start time
+            return this->start_;    ///////////////////////////////////////////////////////////////TICKET #1038 : data storage; here : store the clip start time
+          }
+        
+        Duration
+        getLen()  const override
+          {
+            return Duration{this->len_};
+          }
+        
+        uint
+        getVerticalOffset() const override
+          {
+            return defaultOffsetY;  ///////////////////////////////////////////////////////////////TICKET #1038 : data storage; here : store a per clip vertical offset
+          }
+
+        uint
+        calcRequiredHeight()  const override
+          {
+            return this->get_height();   //////////////////////////////////////////////////////////TICKET #1038 : for the first draft we just use a Button; TODO: actual calculation here
           }
 
         WidgetHook&
@@ -239,17 +319,24 @@ namespace timeline {
         
         
       public:
-        ClipWidget(WidgetHook::Pos hookPoint, Duration dur, uString clipName)
+        ClipWidget(WidgetHook::Pos hookPoint, Duration dur, uString clipName) /////////////////////TICKET #1038 : it's probably wrong only to pass-in the duration, beacuse we also need to retain the start point in full precision
           : HookedWidget{hookPoint, clipName}
           , ClipDelegate{}
-          { }
+          , start_{Time::NEVER}
+          , len_{dur}
+          {
+            show_all();
+          }
         
         /** state switch ctor */
         ClipWidget(ClipDelegate& existing, WidgetHook* newView)
           : HookedWidget{existing.establishHookPoint(newView), existing.getClipName()}
           , ClipDelegate{}
+          , start_{existing.getStartTime()}
+          , len_{existing.getLen()}
           {
             TODO("copy further clip presentation properties");
+            show_all();
           }
       };
     

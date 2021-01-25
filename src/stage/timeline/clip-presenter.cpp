@@ -130,6 +130,16 @@ namespace timeline {
                                                       ,getClipContentCanvas()
                                                       ,std::nullopt);     /////////////////////////TICKET #1213 : time → horizontal extension : how to represent "always" / "the whole track"??
                   }))
+        .change(ATTR_name, [&](string val)
+            {                                                  // »Attribute Setter« : receive a new value for the clip name field
+              REQUIRE (widget_);
+              widget_->setClipName (val);
+            })
+        .change(ATTR_timing, [&](TimeSpan val)
+            {
+              REQUIRE (widget_);
+              widget_->changeTiming (val);
+            })
         //-Diff-Change-Listener----------------
         .onLocalChange ([this]()
                   {
@@ -154,7 +164,9 @@ namespace timeline {
   int
   ClipPresenter::determineRequiredVerticalExtension()  const
   {
-    UNIMPLEMENTED ("any details regarding clip presentation");
+    REQUIRE (widget_);
+    return widget_->calcRequiredHeight()
+         + widget_->getVerticalOffset();
   }
   
   

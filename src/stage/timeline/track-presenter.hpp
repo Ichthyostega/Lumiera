@@ -330,6 +330,8 @@ namespace timeline {
                                        {
                                          return clip->determineRequiredVerticalExtension();
                                        }));
+    this->body_.accomodateHeight(maxVSize);
+                   //////////////////////////////////////////////////////////////////////////////////////////TICKET #1211 : actually implement a coordination of head / body sizes here
     int headSize = this->head_.get_height();
     int bodySize = this->body_.calcHeight();
   }

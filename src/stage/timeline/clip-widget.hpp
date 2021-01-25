@@ -177,10 +177,17 @@ namespace timeline {
       
       /** human readable rendering of the clip's name or identity */
       virtual cuString getClipName()  const  =0;
+      virtual void setClipName (cuString)    =0;
       
-      virtual Time getStartTime()  const  =0;
+      virtual void changeTiming (TimeSpan)   =0;
+      virtual Time getStartTime()      const  =0;
+      virtual Duration getLen()        const  =0;
+
+      virtual uint getVerticalOffset() const  =0;
       
       virtual WidgetHook& getCanvas()  const =0;
+      
+      virtual uint calcRequiredHeight()  const =0;
 
       /** (re)establish current canvas attachment coordinates,
        *  thereby possibly switching to a new canvas implementation

@@ -32,7 +32,7 @@
  ** pass; typically additional space requirements are discovered and propagated _as message_ to GTK,
  ** and so the DisplayEvaluation can be expected to be re-triggered soon thereafter.
  ** 
- ** # Tasks to perform
+ ** # Specification
  ** 
  ** The basic goal is to establish a coherent vertical space allocation for all tracks within the
  ** timeline (while, to the contrary, the horizontal extension is a fixed requirement and can be
@@ -41,7 +41,7 @@
  ** - buildup of a timeline::TrackProfile to accommodate those requirements and all decorations
  ** - adjustment of the TrackHeadWidget extensions to match the allocated track body space precisely.
  ** 
- ** # Evaluation structure
+ ** ## Evaluation structure
  ** 
  ** This is an intricate collaboration of closely related elements; however, each of the aforementioned
  ** tasks is defined such as to operate in a self-confined way on some part of the timeline. All the
@@ -49,9 +49,9 @@
  ** to pass on the DisplayEvaluation itself by reference, recursively. To make the overall process work,
  ** moreover we establish a *Requirement* to pass on this invocation _strictly in layout order_ -- which
  ** implies a recursive depth-first invocation proceeding *top-down* and *from left to right*. It is
- ** each LayoutElement's liability to recurse appropriately to make this happen.
+ ** each LayoutElement's liability to recurse appropriately in order to make this happen.
  ** 
- ** # Evaluation state and phases
+ ** ## Evaluation state and phases
  ** 
  ** The DisplayEvaluation works by direct (side)effect within the invoked elements, eventually leading
  ** to some of the embedded GTK widgets being resized -- which typically will re-trigger our custom drawing

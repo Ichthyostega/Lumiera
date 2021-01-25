@@ -121,6 +121,17 @@ namespace timeline {
   
   
   /* ==== Code for vertical track display layout ==== */
+
+  /**
+   * ensure content with the given extension can be accommodated
+   * within this track's content area
+   */
+  void
+  TrackBody::accomodateHeight(uint contentExtension)
+  {
+    if (contentExtension > contentHeight_)
+      contentHeight_ = contentExtension;
+  }
   
   /**
    * recursively calculate the height in pixels to display this track,
@@ -218,7 +229,7 @@ namespace timeline {
         // we render this prefix part on a separate drawing canvas,
         profile.markPrefixEnd();
         // ...and now we switch to the second, scrollable canvas,
-        // which thus needs to use adjusted coordinates for widgets.
+        // which uses its own local coordinates, thus restart Y-pos.
         line = 0;
       }
     // mark offset of the actual content area relative to this track's top
