@@ -169,6 +169,11 @@ namespace timeline {
          + widget_->getVerticalOffset();
   }
   
+  void
+  ClipPresenter::relink()
+  {
+    UNIMPLEMENTED ("attach the Delegate again at its nominal position, if applicable");
+  }
   
   
 }}// namespace stage::timeline

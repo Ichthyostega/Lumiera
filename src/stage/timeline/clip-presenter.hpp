@@ -111,6 +111,15 @@ namespace timeline {
        */
       int determineRequiredVerticalExtension()  const;
       
+      /** update and re-attach the presentation widget into its presentation context. 
+       *  Will be called during the "re-link phase" of DisplayEvaluation, after the
+       *  timeline layout has been (re)established globally. Often, this incurs
+       *  attaching the presentation widget (ClipDelegate) at a different actual
+       *  position onto the drawing canvas, be it due to a zoom change, or
+       *  as result of layout re-flow.
+       */
+        void relink();
+      
     private:/* ===== Internals ===== */
       
       /** reevaluate desired presentation mode and available data,

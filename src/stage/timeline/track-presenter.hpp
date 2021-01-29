@@ -173,6 +173,7 @@ namespace timeline {
         }
       
       void establishExtension (vector<PClip>&, vector<PMark>&);
+      void sync_and_balance (DisplayEvaluation&);
     };
   
   
@@ -231,6 +232,8 @@ namespace timeline {
           TODO_trackName_ = name;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
         }
+      
+      void relinkContents (DisplayEvaluation&);
     };
   
   
@@ -311,14 +314,31 @@ namespace timeline {
   
   
   /** handle the DisplayEvaluation pass for this track and its sub-tracks.
-   * @todo 2/2020 WIP-WIP initial draft; need to find out more about Clip display
    */
   inline void
   TrackPresenter::establishLayout (DisplayEvaluation& displayEvaluation)
   {
-    display_.establishExtension (clips_, markers_);
+    if (displayEvaluation.isCollectPhase())
+      display_.establishExtension (clips_, markers_);
+    else
+      relinkContents (displayEvaluation);
     for (auto& subTrack: subFork_)
       subTrack->establishLayout (displayEvaluation);
+  }
+  
+  /** second pass of the DisplayEvaluation:
+   *  reassemble content to match adjusted layout
+   * @todo 2/2021 WIP-WIP initial draft; many aspects still unclear
+   */
+  inline void
+  TrackPresenter::relinkContents (DisplayEvaluation& displayEvaluation)
+  {
+    for (auto& clip: clips_)
+      clip->relink();
+    for (auto& mark: markers_)
+      mark->relink();
+    // re-sync and match the header / body display
+    display_.sync_and_balance (displayEvaluation);
   }
   
   /** find out about the vertical extension of a single track display. */
@@ -335,6 +355,27 @@ namespace timeline {
     int headSize = this->head_.get_height();
     int bodySize = this->body_.calcHeight();
   }
+  
+  /** re-flow and adjust after the global layout has been established
+   *  At this point we can assume that both header and body are updated
+   *  and have valid extensions within their perimeter. But the coordination
+   *  of track head display and body content might be out of sync and needs
+   *  readjustments. This second pass gives the opportunity to fix such
+   *  discrepancies by further increasing vertical extension, but this
+   *  also has the consequence to trigger yet another DisplayEvaluation,
+   *  since any readjustment invalidates the global layout. However, since
+   *  all adjustments are done by increasing monotonously, after several
+   *  recursions the layout will be balanced eventually.
+   * @note any discrepancy not solvable at this local level should be
+   *       propagated downwards, which can be achieved by transporting
+   *       this information through the DisplayEvaluation object.
+   */
+  inline void
+  DisplayFrame::sync_and_balance (DisplayEvaluation& displayEvaluation)
+  {
+    TODO ("actually do something to keep Header and Body in Sync. Save a delta into the displayEvaluation");
+  }
+
 
   
   

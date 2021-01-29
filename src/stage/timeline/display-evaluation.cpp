@@ -74,12 +74,24 @@ namespace timeline {
    * will cause adjustments and a re-evaluation.
    * @warning care has to be taken to not "overshoot" each adjustment, since this
    *          might lead to never ending re-invocations and "layout oscillation".
+   * @remark the Layout is established in two phases
+   *         - first the necessary screen extension is determined
+   *           and the global profile of tracks is reconstructed
+   *         - the second pass verifies and possibly reflows
+   *           to achieve consistency, possibly triggering
+   *           recursing through additional size adjustments.
    */
   void
   DisplayEvaluation::perform()
   {
-    this->forkRoot_->establishLayout (*this);
-    this->canvas_->establishLayout (*this);
+    REQUIRE (collectLayout_ == true,
+             "Lifecycle error: DisplayEvaluation object reused");
+    // Phase-1 : collect Layout information
+    forkRoot_->establishLayout (*this);
+    canvas_->establishLayout (*this);
+    // Phase-2 : reflow and balance the Layout
+    collectLayout_ = false;
+    forkRoot_->establishLayout (*this);
   }
   
   

@@ -106,11 +106,15 @@ namespace timeline {
       LayoutElement* forkRoot_{nullptr};
       LayoutElement* canvas_{nullptr};
       
+      bool collectLayout_{true};
+      
     public:
       void perform();
       
       void wireForkRoot (LayoutElement& r) { forkRoot_ = &r; }
       void wireCanvas (LayoutElement& c)   { canvas_ = &c; }
+      
+      bool isCollectPhase()  const         { return this->collectLayout_; }
       
     private:/* ===== Internals ===== */
      

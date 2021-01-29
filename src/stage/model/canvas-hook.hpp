@@ -108,7 +108,7 @@ namespace model {
        *  which is to be attached to some timeline canvas view.
        * @param start anchor point / nominal start point of the element
        * @param downshift (optional) vertical shift down from the baseline
-       * @return opaque registration argument for the ViewHooked ctor */
+       * @return opaque registration argument for the CanvasHooked ctor */
       Pos
       hookedAt (Time start, int downshift=0)
         {
