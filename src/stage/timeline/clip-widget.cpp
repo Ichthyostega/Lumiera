@@ -43,7 +43,7 @@
  ** to be flexible on several levels. Thus, the presentation mode is structured
  ** as follows:
  ** - the the Mode of representation controls the basic implementation approach
- ** 
+ **   
  **   * in Mode::HIDDEN, there is no actual UI representation; rather, the ClipDelegate
  **     acts as data container to receive and hold the presentation relevant properties
  **     of the clip, so to be able to return to a visible representation later on.
@@ -54,7 +54,7 @@
  **     still a lot of flexibility, since the implementing widget itself has several
  **     options for representation, and, moreover, the widget can still be hidden
  **     or out of view.
- **     
+ ** 
  ** - the ClipDelegate::Appearance can be seen as an ordered scale of increasingly
  **   detailed representation. Some segments of this scale are mapped into the
  **   aforementioned three modes of representation. Especially within the
@@ -98,6 +98,7 @@
 
 //#include <algorithm>
 //#include <vector>
+#include <utility>
 
 
 
@@ -111,7 +112,6 @@ using util::unConst;
 //using std::cout;
 //using std::endl;
 using std::optional;
-using std::nullopt;
 
 
 namespace stage {
@@ -147,12 +147,53 @@ namespace timeline {
     
     class ClipData
       : public ClipDelegate
-      , util::NonCopyable
+      , util::MoveOnly
+      {
+        TimeVar start_;
+        TimeVar len_;
+        
+        /* === Partial implementation of ClipDelegate === */
+        
+        Time
+        getStartTime()  const override
+          {
+            return start_;
+          }
+        
+        Duration
+        getLen()  const override
+          {
+            return Duration{this->len_};
+          }
+        
+        void
+        changeTiming (TimeSpan changedTimings)  override
+          {
+            this->start_ = changedTimings.start();
+            this->len_ = changedTimings.duration();
+          }
+        
+        
+      public:
+        ClipData(TimeSpan timings =TimeSpan{Time::NEVER, Duration::NIL})
+          : ClipDelegate{}
+          , start_{timings.start()}
+          , len_{timings.duration()}
+          { }
+        
+        ClipData (ClipData&&)   = default;
+      };
+    
+    
+    /**
+     * A Clip not directly mapped into presentation,
+     * yet present as entity within the timeline framework.
+     */
+    class DormantClip
+      : public ClipData
       {
         WidgetHook& display_;
         uString clipName_;
-        TimeVar start_;           /////////////////////////////////////////////////////////////////TICKET #1038 : how to handle storage of timings??
-        TimeVar len_;
         
         /* === Interface ClipDelegate === */
         
@@ -171,7 +212,7 @@ namespace timeline {
         cuString
         getClipName()  const override
           {
-            return clipName_;       ///////////////////////////////////////////////////////////////TICKET #1038 : data storage; here : store the clip name/ID
+            return clipName_;
           }
         
         void
@@ -179,26 +220,7 @@ namespace timeline {
           {
             clipName_ = newName;
           }
-
         
-        Time
-        getStartTime()  const override
-          {
-            return start_;              ////////////////////////////////////////////////////////////TICKET #1038 : data storage; here : store the clip start time
-          }
-        
-        Duration
-        getLen()  const override
-          {
-            return Duration{this->len_};
-          }
-        
-        void
-        changeTiming (TimeSpan changedTimings)  override
-          {
-            this->start_ = changedTimings.start();
-            this->len_ = changedTimings.duration();
-          }
         
         /**
          * This is a mere data record without actual presentation,
@@ -224,33 +246,25 @@ namespace timeline {
         
         
       public:
-        ClipData(WidgetHook& displayAnchor)
-          : ClipDelegate{}
+        DormantClip(WidgetHook& displayAnchor)
+          : ClipData{}
           , display_{displayAnchor}
           , clipName_{"?name?"}
-          , start_{Time::NEVER}
-          , len_{Duration::NIL}
           { }
         
         /** state switch ctor */
-        ClipData(ClipDelegate& existing)
-          : ClipDelegate{}
+        DormantClip(ClipData&& existing)
+          : ClipData{std::move (existing)}
           , display_{existing.getCanvas()}
           , clipName_{existing.getClipName()}
-          , start_{existing.getStartTime()}
-          , len_{existing.getLen()}
-          {
-            TODO("copy further clip presentation properties");
-          }
+          { }
       };
     
     
     class ClipWidget
       : public HookedWidget
-      , public ClipDelegate
+      , public ClipData
       {
-        TimeVar start_;           /////////////////////////////////////////////////////////////////TICKET #1038 : how to handle storage of timings??
-        TimeVar len_;
         
         /* === Interface ClipDelegate === */
         
@@ -280,25 +294,6 @@ namespace timeline {
             this->set_label (newName);
           }
         
-        void
-        changeTiming (TimeSpan changedTimings)  override
-          {
-            this->start_ = changedTimings.start();
-            this->len_ = changedTimings.duration();
-          }
-        
-        Time
-        getStartTime()  const override
-          {
-            return this->start_;    ///////////////////////////////////////////////////////////////TICKET #1038 : data storage; here : store the clip start time
-          }
-        
-        Duration
-        getLen()  const override
-          {
-            return Duration{this->len_};
-          }
-        
         uint
         getVerticalOffset() const override
           {
@@ -319,23 +314,18 @@ namespace timeline {
         
         
       public:
-        ClipWidget(WidgetHook::Pos hookPoint, Duration dur, uString clipName) /////////////////////TICKET #1038 : it's probably wrong only to pass-in the duration, beacuse we also need to retain the start point in full precision
+        ClipWidget(WidgetHook::Pos hookPoint, TimeSpan timings, uString clipName)
           : HookedWidget{hookPoint, clipName}
-          , ClipDelegate{}
-          , start_{Time::NEVER}
-          , len_{dur}
+          , ClipData{timings}
           {
             show_all();
           }
         
         /** state switch ctor */
-        ClipWidget(ClipDelegate& existing, WidgetHook* newView)
+        ClipWidget(ClipData&& existing, WidgetHook* newView)
           : HookedWidget{existing.establishHookPoint(newView), existing.getClipName()}
-          , ClipDelegate{}
-          , start_{existing.getStartTime()}
-          , len_{existing.getLen()}
+          , ClipData{std::move (existing)}
           {
-            TODO("copy further clip presentation properties");
             show_all();
           }
       };
@@ -344,12 +334,15 @@ namespace timeline {
     inline ClipDelegate*
     buildDelegateFor (Mode newMode, ClipDelegate& existingDelegate, WidgetHook* newView =0)
       {
+        REQUIRE (INSTANCEOF (ClipData, &existingDelegate));
+        ClipData& clipData = static_cast<ClipData&> (existingDelegate);
+        
         switch (newMode)
-          { 
+          {
             case HIDDEN:
-              return new ClipData (existingDelegate);
+              return new DormantClip (std::move (clipData));
             case INDIVIDUAL:
-              return new ClipWidget (existingDelegate, newView);
+              return new ClipWidget (std::move (clipData), newView);
             case SUMMARY:
               UNIMPLEMENTED ("Summary/Overview presentation style");
           }
@@ -382,9 +375,9 @@ namespace timeline {
   ClipDelegate::buildDelegate (PDelegate& manager, WidgetHook& view, optional<TimeSpan> timing)
   {
     if (timing)
-      manager.reset (new ClipWidget{view.hookedAt(*timing, defaultOffsetY), timing->duration(), defaultName});
+      manager.reset (new ClipWidget{view.hookedAt(*timing, defaultOffsetY), *timing, defaultName});
     else
-      manager.reset (new ClipData{view});
+      manager.reset (new DormantClip{view});
     
     return timing? Appearance::COMPACT
                  : Appearance::PENDING;
