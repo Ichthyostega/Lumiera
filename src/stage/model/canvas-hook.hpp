@@ -23,12 +23,14 @@
 
 /** @file canvas-hook.hpp
  ** Specialised (abstracted) presentation context with positioning by coordinates.
- ** This extends the generic abstraction of a ViewHook, and works in a similar way,
+ ** This expands the idea behind the ViewHook abstraction, and works in a similar way,
  ** in close collaboration with the corresponding CanvasHooked entity (abstraction).
  ** Elements relying on those abstractions maintain an attachment to "their view",
- ** while remaining agnostic about the view's implementation details. But the key
- ** point with this extended abstraction is that elements can be placed onto a
- ** coordinate system or canvas, and they can be moved to a different position.
+ ** while remaining agnostic about the view's implementation details. However,
+ ** the key point with this extended variant of the abstraction is that elements
+ ** can be placed onto a coordinate system or canvas, and they can be moved to a
+ ** different position.
+ ** 
  ** A CanvasHooked element is basically a decorator directly attached to the
  ** element, adding automatic detachment on destruction, similar to a smart-ptr.
  ** So the "hooked" widget will live within the common allocation, together with
@@ -50,7 +52,6 @@
 #ifndef STAGE_MODEL_CANVAS_HOOK_H
 #define STAGE_MODEL_CANVAS_HOOK_H
 
-#include "stage/model/view-hook.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
@@ -67,24 +68,25 @@ namespace model {
   
   /**
    * Interface to represent _"some presentation layout entity",_
-   * with the ability to _place_ widgets (managed elsewhere), to
-   * relocate those widgets to another position, and to re-establish
-   * a different sequence of the widgets (whatever this means).
+   * with the ability to _place_ widgets (managed elsewhere) onto it,
+   * to relocate those widgets to another position.
    * @remark the canonical example is a _canvas widget,_ (e.g. `Gtk::Layout`),
    *    allowing to attach child widgets at specific positions, together with
    *    custom drawing.
    * @warning please ensure the CanvasHook outlives any attached CanvasHooked.
+   * @see ViewHook embodies the same scheme for widgets just "added" into
+   *    the presentation without the notion of explicit coordinates.
    */
   template<class WID>
   class CanvasHook
-    : public ViewHook<WID>
     {
     public:
       virtual ~CanvasHook() { }    ///< this is an interface
       
-      virtual void hook (WID& widget, int xPos, int yPos)  =0;
-      virtual void move (WID& widget, int xPos, int yPos)  =0;
-      
+      virtual void hook   (WID& widget, int xPos, int yPos)  =0;
+      virtual void move   (WID& widget, int xPos, int yPos)  =0;
+      virtual void remove (WID& widget)                      =0;
+
       /** Anchor point to build chains of related View Hooks */
       virtual CanvasHook<WID>&
       getAnchorHook()  noexcept
@@ -94,14 +96,14 @@ namespace model {
       
       struct Pos
         {
-          CanvasHook& view;
+          CanvasHook* view;
           int x,y;
         };
       
       Pos
       hookedAt (int x, int y)
         {
-          return Pos{*this, x,y};
+          return Pos{this, x,y};
         }
       
       /** build the "construction hook" for a \ref ViewHooked element,
@@ -118,20 +120,16 @@ namespace model {
     protected:
       /** extension point for time axis zoom management. */
       virtual int translateTimeToPixels (Time)  const      =0;
-      
-    private:
-      /** adapted but also turned unaccessible; use #hook(WID&,int,int) */
-      void hook (WID& w) override { hook (w,0,0); }
     };
   
   
   
   /**
    * A widget attached onto a display canvas or similar central presentation context.
-   * This decorator is an extension to the ViewHooked decorator, and thus inherits from
-   * the widget to be attached, i.e. the widget itself becomes embedded; moreover, the attachment
-   * is immediately performed at construction time and managed automatically thereafter. When the
-   * `CanvasHooked` element goes out of scope, it is automatically detached from presentation.
+   * This decorator is a variation of the ViewHooked decorator, and likewise embodies
+   * the widget to be attached; moreover, the attachment is immediately performed at
+   * construction time and managed automatically thereafter. When the `CanvasHooked`
+   * element goes out of scope, it is automatically detached from presentation.
    * With the help of the CanvasHooked API, a widget (or similar entity) may control the coordinates
    * of its placement onto some kind of _canvas_ (-> `Gtk::Layout`), while remaining agnostic
    * regarding any further implementation details of the canvas and its placement thereon.
@@ -150,26 +148,31 @@ namespace model {
    */
   template<class WID, class BASE =WID>
   class CanvasHooked
-    : public ViewHooked<WID,BASE>
+    : public WID
+    , util::NonCopyable
     {
-      using Hooked = ViewHooked<WID,BASE>;
       using Canvas = CanvasHook<BASE>;
+      Canvas* view_;
       
     protected:
-      Canvas&
-      getCanvas()  const
-        {
-          REQUIRE (INSTANCEOF(ViewHook<BASE>, &Hooked::getView() ));
-          return static_cast<Canvas&> (Hooked::getView()); 
-        }
+      Canvas& getCanvas()  const { return *view_; }
       
     public:
       template<typename...ARGS>
       CanvasHooked (typename Canvas::Pos attachmentPos, ARGS&& ...args)
-        : ViewHooked<WID,BASE>{attachmentPos.view
-                              ,std::forward<ARGS>(args)...}
+        : WID{std::forward<ARGS>(args)...}
+        , view_{attachmentPos.view}
         {
           getCanvas().hook (*this, attachmentPos.x, attachmentPos.y);
+        }
+      
+     ~CanvasHooked()  noexcept
+        {
+          try {
+              if (view_)
+                view_->remove (*this);
+            }
+          ERROR_LOG_AND_IGNORE (progress, "Detaching of CanvasHooked widgets from the presentation")
         }
       
       void

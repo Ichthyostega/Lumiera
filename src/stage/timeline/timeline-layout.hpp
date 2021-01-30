@@ -88,6 +88,7 @@
 #include "stage/timeline/header-pane-widget.hpp"
 #include "stage/timeline/body-canvas-widget.hpp"
 #include "stage/model/canvas-hook.hpp"
+#include "stage/model/view-hook.hpp"
 
 //#include "lib/util.hpp"
 

@@ -150,17 +150,6 @@ namespace test {
             widgets_.remove_if ([&](Attachment const& a) { return a.widget == elm; });
           }
         
-        
-        void
-        rehook (DummyWidget& existingHook)  noexcept override
-          {
-            auto pos = findEntry (existingHook);
-            REQUIRE (pos != widgets_.end(), "the given iterator must yield previously hooked-up elements");
-            Attachment existing{*pos};
-            this->remove (existing.widget);
-            this->hook (existing.widget, existing.posX,existing.posY);
-          }
-        
       protected:
         int
         translateTimeToPixels (Time)  const override

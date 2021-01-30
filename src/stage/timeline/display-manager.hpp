@@ -74,6 +74,7 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
+#include "stage/model/view-hook.hpp"
 #include "stage/model/canvas-hook.hpp"
 #include "lib/util.hpp"
 
@@ -120,12 +121,6 @@ namespace timeline {
       remove (WID& widget)  override
         {
           refHook_.remove (widget);
-        }
-      
-      void
-      rehook (WID& hookedWidget)  noexcept override
-        {
-          refHook_.rehook (hookedWidget);
         }
       
       /** allow to build a derived ViewRefHook with different offset */

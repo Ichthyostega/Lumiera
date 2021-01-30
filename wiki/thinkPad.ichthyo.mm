@@ -19213,7 +19213,7 @@
 <node CREATED="1575581015219" ID="ID_1015965713" MODIFIED="1575581026974" TEXT="f&#xfc;r den Widget -&gt; Canvas - Fall"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1576757730509" FOLDED="true" ID="ID_1949130658" MODIFIED="1584932567087" TEXT="&#xbb;Widget-Position&#xab; heraus-abstrahieren">
+<node COLOR="#338800" CREATED="1576757730509" FOLDED="true" ID="ID_1949130658" MODIFIED="1612002019554" TEXT="&#xbb;Widget-Position&#xab; heraus-abstrahieren">
 <linktarget COLOR="#47cdcd" DESTINATION="ID_1949130658" ENDARROW="Default" ENDINCLINATION="-1150;77;" ID="Arrow_ID_662295339" SOURCE="ID_730955223" STARTARROW="None" STARTINCLINATION="877;53;"/>
 <linktarget COLOR="#605bb8" DESTINATION="ID_1949130658" ENDARROW="Default" ENDINCLINATION="204;611;" ID="Arrow_ID_993970158" SOURCE="ID_1816490333" STARTARROW="None" STARTINCLINATION="299;12;"/>
 <icon BUILTIN="button_ok"/>
@@ -19279,6 +19279,32 @@
 <node COLOR="#435e98" CREATED="1584932523675" ID="ID_715711411" MODIFIED="1584932535644" TEXT="hat auf allen Ebenen den Code verbessert">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612002421081" ID="ID_704646941" MODIFIED="1612003549568">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aber dieses Design ist <i>schief</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#ab3058" DESTINATION="ID_704646941" ENDARROW="Default" ENDINCLINATION="434;181;" ID="Arrow_ID_932322384" SOURCE="ID_781800644" STARTARROW="None" STARTINCLINATION="240;20;"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1612002459090" ID="ID_336676484" MODIFIED="1612002485623" TEXT="und zwar die Code-reuse-Inheritance">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1612002487402" ID="ID_922768406" MODIFIED="1612002504506" TEXT="dadurch sind beide Belange &#xfc;bereinander geschichtet"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1612002505382" ID="ID_1693567978" MODIFIED="1612009171119" TEXT="Bug: deshalb wird ein Widget zweimal an den Canvas geheftet">
+<linktarget COLOR="#c16b96" DESTINATION="ID_1693567978" ENDARROW="Default" ENDINCLINATION="223;491;" ID="Arrow_ID_624678696" SOURCE="ID_1950742827" STARTARROW="None" STARTINCLINATION="1328;54;"/>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1612008761963" ID="ID_1362647591" MODIFIED="1612008774354" TEXT="die beiden Varianten komplett voneinander getrennt">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1575057172259" ID="ID_1193961919" MODIFIED="1575670553256" TEXT="Umordnen">
@@ -19706,6 +19732,37 @@
 <icon BUILTIN="idea"/>
 <node CREATED="1582833292120" ID="ID_476079369" MODIFIED="1582833303018" TEXT="der ViewHook arbeitet eben implizit immer mit dem Basistyp"/>
 <node CREATED="1582833303639" ID="ID_1136204632" MODIFIED="1582833315633" TEXT="und konvertiert die Referenzen automatisch hoch"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1612003404589" ID="ID_1629772875" MODIFIED="1612008746849" TEXT="Problem Code-reuse-Inheritance">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1612003423875" ID="ID_781800644" MODIFIED="1612003549567">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ursache ist ein <i>schiefes Design</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und das ist wohl entstanden, weil ich urspr&#252;nglich einen generischen Visitor im Blick hatte; es hat sich aber dann gezeigt, da&#223; eine solche universelle &quot;Quer-Beweglichkeit&quot; weder notwendig noch w&#252;nschenswert ist
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#ab3058" DESTINATION="ID_704646941" ENDARROW="Default" ENDINCLINATION="434;181;" ID="Arrow_ID_932322384" STARTARROW="None" STARTINCLINATION="240;20;"/>
+</node>
+<node COLOR="#338800" CREATED="1612003579934" ID="ID_852410527" MODIFIED="1612008743069" TEXT="Refactoring: ViewHook und CanvasHook komplett trennen">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1573242259267" ID="ID_1903570032" MODIFIED="1576166466194" TEXT="Test">
@@ -28945,8 +29002,7 @@
       diese Alternative w&#252;rde dann attraktiv, wenn es h&#228;ufig vorkommt, da&#223; zwischen einem Clip-Widget und einer anderen Repr&#228;sentation des ClipDelegate dynamisch hin- und hergeschaltet werden mu&#223;. Weil man dann den relativ schwergewichtigen Datencontainer einfach umh&#228;ngen k&#246;nnte
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>

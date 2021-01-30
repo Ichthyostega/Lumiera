@@ -562,12 +562,6 @@ namespace timeline {
   }
   
   void
-  BodyCanvasWidget::rehook (Gtk::Widget&)  noexcept
-  {
-    /* NOOP */
-  }
-  
-  void
   BodyCanvasWidget::move (Gtk::Widget& widget, int xPos, int yPos)
   {
     /////////////////////////////////////////////////////////////////TICKET #1199 : need to adjust y-coord??

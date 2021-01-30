@@ -78,7 +78,7 @@ namespace model {
    *         - a _canvas widget,_ (e.g. `Gtk::Layout`), allowing to attach
    *           child widgets at specific positions, together with custom drawing.
    * @warning please ensure the ViewHook outlives any attached ViewHooked.
-   * @see CanvasHook extended interface to support positioning by coordinates
+   * @see CanvasHook similar interface to support positioning by coordinates
    */
   template<class WID>
   class ViewHook
@@ -126,10 +126,6 @@ namespace model {
     {
       using View = ViewHook<BASE>;
       View* view_;
-      
-    protected:
-      View&
-      getView() const { return *view_; }
       
     public:
       template<typename...ARGS>
