@@ -117,7 +117,7 @@ namespace timeline {
       bool isCollectPhase()  const         { return this->collectLayout_; }
       
     private:/* ===== Internals ===== */
-     
+      void reset();
     };
   
   

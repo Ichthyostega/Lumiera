@@ -84,8 +84,7 @@ namespace timeline {
   void
   DisplayEvaluation::perform()
   {
-    REQUIRE (collectLayout_ == true,
-             "Lifecycle error: DisplayEvaluation object reused");
+    this->reset();
     // Phase-1 : collect Layout information
     forkRoot_->establishLayout (*this);
     canvas_->establishLayout (*this);
@@ -93,6 +92,14 @@ namespace timeline {
     collectLayout_ = false;
     forkRoot_->establishLayout (*this);
   }
+  
+  /** pristine state for the next DisplayEvaluation pass */
+  void
+  DisplayEvaluation::reset()
+  {
+    collectLayout_ = true;
+  }
+
   
   
   

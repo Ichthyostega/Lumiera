@@ -175,7 +175,7 @@ namespace timeline {
         
         
       public:
-        ClipData(TimeSpan timings =TimeSpan{Time::NEVER, Duration::NIL})
+        ClipData(TimeSpan const& timings =TimeSpan{Time::NEVER, Duration::NIL})
           : ClipDelegate{}
           , start_{timings.start()}
           , len_{timings.duration()}
@@ -255,7 +255,7 @@ namespace timeline {
         DormantClip(WidgetHook& displayAnchor)
           : ClipData{}
           , display_{displayAnchor}
-          , clipName_{"?name?"}
+          , clipName_{}
           { }
         
         /** state switch ctor */
@@ -327,7 +327,7 @@ namespace timeline {
         
         
       public:
-        ClipWidget(WidgetHook::Pos hookPoint, TimeSpan timings, uString clipName)
+        ClipWidget(WidgetHook::Pos hookPoint, TimeSpan const& timings, uString clipName)
           : HookedWidget{hookPoint, clipName}
           , ClipData{timings}
           {
@@ -385,7 +385,7 @@ namespace timeline {
   
   
   ClipDelegate::Appearance
-  ClipDelegate::buildDelegate (PDelegate& manager, WidgetHook& view, optional<TimeSpan> timing)
+  ClipDelegate::buildDelegate (PDelegate& manager, WidgetHook& view, optional<TimeSpan> const& timing)
   {
     if (timing)
       manager.reset (new ClipWidget{view.hookedAt(*timing, defaultOffsetY), *timing, defaultName});

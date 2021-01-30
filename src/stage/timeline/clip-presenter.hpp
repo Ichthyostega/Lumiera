@@ -97,7 +97,7 @@ namespace timeline {
       
       
     public:
-      ClipPresenter (ID, ctrl::BusTerm&, WidgetHook&, optional<TimeSpan>);
+      ClipPresenter (ID, ctrl::BusTerm&, WidgetHook&, optional<TimeSpan> const&);
       
      ~ClipPresenter();
       
@@ -109,7 +109,7 @@ namespace timeline {
       /** find out the number of pixels necessary to render this clip properly,
        *  assuming its current presentation mode (abbreviated, full, expanded).
        */
-      int determineRequiredVerticalExtension()  const;
+      uint determineRequiredVerticalExtension()  const;
       
       /** update and re-attach the presentation widget into its presentation context. 
        *  Will be called during the "re-link phase" of DisplayEvaluation, after the

@@ -345,15 +345,15 @@ namespace timeline {
   inline void
   DisplayFrame::establishExtension (vector<PClip>& clips, vector<PMark>&)
   {
-    int maxVSize = max (explore (clips)
+    uint maxVSize = max (explore (clips)
                           .transform([](PClip const& clip)
                                        {
                                          return clip->determineRequiredVerticalExtension();
                                        }));
     this->body_.accomodateHeight(maxVSize);
                    //////////////////////////////////////////////////////////////////////////////////////////TICKET #1211 : actually implement a coordination of head / body sizes here
-    int headSize = this->head_.get_height();
-    int bodySize = this->body_.calcHeight();
+    uint headSize = this->head_.get_height();
+    uint bodySize = this->body_.calcHeight();
   }
   
   /** re-flow and adjust after the global layout has been established

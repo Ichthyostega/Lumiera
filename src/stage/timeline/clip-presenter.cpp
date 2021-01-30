@@ -71,7 +71,7 @@ namespace timeline {
    * @param timing (optional) start time point and duration of the clip.
    * @note Clip can not be displayed unless #timing is given
    */
-  ClipPresenter::ClipPresenter (ID identity, ctrl::BusTerm& nexus, WidgetHook& view, optional<TimeSpan> timing)
+  ClipPresenter::ClipPresenter (ID identity, ctrl::BusTerm& nexus, WidgetHook& view, optional<TimeSpan> const& timing)
     : Controller{identity, nexus}
     , channels_{}
     , effects_{}
@@ -162,7 +162,7 @@ namespace timeline {
     UNIMPLEMENTED ("how to create and wire an embedded canvas for the clip contents/effects");
   }
 
-  int
+  uint
   ClipPresenter::determineRequiredVerticalExtension()  const
   {
     REQUIRE (widget_);

@@ -22190,9 +22190,9 @@
 </html></richcontent>
 </node>
 <node CREATED="1611959645562" ID="ID_4339474" MODIFIED="1611959664916" TEXT="aber explizit injizierte Buttons erscheinen an der richtigen Stelle"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611959706282" ID="ID_568799045" MODIFIED="1611959710747" TEXT="Debugging...">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611959706282" ID="ID_568799045" MODIFIED="1612022028099" TEXT="Debugging...">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1612000363951" ID="ID_1611539170" MODIFIED="1612000370232" TEXT="Beobachtungen">
+<node CREATED="1612000363951" ID="ID_1611539170" MODIFIED="1612022026662" TEXT="Beobachtungen">
 <node CREATED="1612000371364" ID="ID_36603158" MODIFIED="1612000392460">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -22209,6 +22209,10 @@
 <node COLOR="#338800" CREATED="1612000432043" ID="ID_174378469" MODIFIED="1612000442318" TEXT="aber das wird alles korrekt gehandhabt">
 <icon BUILTIN="button_ok"/>
 </node>
+<node COLOR="#338800" CREATED="1612026280255" ID="ID_1932586467" MODIFIED="1612026308920" TEXT="Trotzdem: senden wie vorgesehen, sofort mit Timings">
+<linktarget COLOR="#5cb39f" DESTINATION="ID_1932586467" ENDARROW="Default" ENDINCLINATION="-194;262;" ID="Arrow_ID_1566553463" SOURCE="ID_99599203" STARTARROW="None" STARTINCLINATION="435;33;"/>
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node CREATED="1612000444241" ID="ID_1290239156" MODIFIED="1612000568427" TEXT="TimeSpan und optional&lt;TimeSpan&gt; werden x-fach kopiert">
 <icon BUILTIN="messagebox_warning"/>
@@ -22220,11 +22224,12 @@
 <node CREATED="1612000529308" ID="ID_874373043" MODIFIED="1612000550279" TEXT="zumindest am &#xdc;bergang zum ClipDelegate kann das der Optimizer nicht knacken">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612000552676" ID="ID_103077891" MODIFIED="1612000562804" TEXT="TODO: in Referenzen umschreiben">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1612000552676" ID="ID_103077891" MODIFIED="1612024898535" TEXT="TODO: in Referenzen umschreiben">
+<linktarget COLOR="#20a47e" DESTINATION="ID_103077891" ENDARROW="Default" ENDINCLINATION="-16;56;" ID="Arrow_ID_55769950" SOURCE="ID_1194581288" STARTARROW="None" STARTINCLINATION="304;18;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612000682337" ID="ID_1950742827" MODIFIED="1612009171119" TEXT="Widget wird vom Ctor zweimal hintereinander an den Canvas geheftet">
+<node COLOR="#435e98" CREATED="1612000682337" ID="ID_1950742827" MODIFIED="1612022042102" TEXT="Widget wird vom Ctor zweimal hintereinander an den Canvas geheftet">
 <arrowlink COLOR="#c16b96" DESTINATION="ID_1693567978" ENDARROW="Default" ENDINCLINATION="223;491;" ID="Arrow_ID_624678696" STARTARROW="None" STARTINCLINATION="1328;54;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1612000718837" ID="ID_1844571428" MODIFIED="1612000743430" TEXT="Design von CanvasHook fragw&#xfc;rdig">
@@ -22275,17 +22280,83 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1612019580954" ID="ID_940366698" MODIFIED="1612020114802" TEXT="mit den Korrekturen wird die Position nun korrekt gesetzt">
+<node COLOR="#338800" CREATED="1612019580954" ID="ID_940366698" MODIFIED="1612022026663" TEXT="mit den Korrekturen wird die Position nun korrekt gesetzt">
 <icon BUILTIN="button_ok"/>
 </node>
+<node COLOR="#338800" CREATED="1612023445690" ID="ID_404822600" MODIFIED="1612024837285" TEXT="Regression: die komplexe Timeline zeichnet nicht mehr richtig">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1612023464364" ID="ID_1135923056" MODIFIED="1612023511217" TEXT="Eingef&#xfc;hrt durch Changeset 5b336054">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      commit 5b33605469352f3403d44cb0d77ef3c224895f5b (HEAD, ichthyo/gui)
+    </p>
+    <p>
+      Author: Ichthyostega &lt;prg@ichthyostega.de&gt;
+    </p>
+    <p>
+      Date:&#160;&#160;&#160;Mon Jan 25 03:06:27 2021 +0100
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Clip: fill in minimal implementation to make the clip appear
+    </p>
+  </body>
+</html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612001961759" ID="ID_279893834" MODIFIED="1612009206509" TEXT="Probleme und Defekte beheben">
-<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1612024513406" ID="ID_1145874251" MODIFIED="1612024615254" TEXT="Aua!">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1612024549519" ID="ID_445021769" MODIFIED="1612024626079" TEXT="meine subergeni(t)ale max()-Funktion!!!!">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1612024571430" ID="ID_755468027" MODIFIED="1612024603966" TEXT="liefert -&#x221e;  wenn die Quellsequenz leer ist"/>
+<node CREATED="1612024557000" ID="ID_1759594738" MODIFIED="1612024569834" TEXT="in DisplayFrame::establishExtension()"/>
+</node>
+<node COLOR="#338800" CREATED="1612024633318" ID="ID_1173144029" MODIFIED="1612024661776" TEXT="L&#xf6;sung: unit statt int zur&#xfc;ckgeben">
+<icon BUILTIN="ksmiletris"/>
+<node CREATED="1612024666745" ID="ID_1549387212" MODIFIED="1612024677267" TEXT="ist das jetzt &quot;unter den Teppich&quot;....?"/>
+<node CREATED="1612024678071" ID="ID_714221228" MODIFIED="1612024832503" TEXT="ja und nein. Es ist sogar korrekt so">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Aber der Punkt ist, nach der reinen Lehre sollte eine solche Funktion eine Options-Monade zur&#252;ckgeben. Aber ich wollte stattdessen den guten alten Fallback-Wert. Wenn man <i>das </i>erst mal akzeptiert, dann mu&#223; &quot;man&quot; verdammt noch einmal auch die Wertebereiche ernst nehmen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1612001961759" ID="ID_279893834" MODIFIED="1612025196962" TEXT="Probleme und Defekte beheben">
+<arrowlink COLOR="#767b93" DESTINATION="ID_1752337691" ENDARROW="Default" ENDINCLINATION="-53;-147;" ID="Arrow_ID_569461745" STARTARROW="None" STARTINCLINATION="-103;9;"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1612009188967" ID="ID_734571483" MODIFIED="1612009201239" TEXT="ViewHook und CanvasHook komplett getrennt">
 <icon BUILTIN="button_ok"/>
 </node>
+<node COLOR="#338800" CREATED="1612024842825" ID="ID_920380509" MODIFIED="1612024857000" TEXT="Regrsssion in der DisplayEvaluation behoben">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1612024858159" ID="ID_1194581288" MODIFIED="1612024903951" TEXT="Timings und optional&lt;Timings&gt; als Referenz">
+<arrowlink COLOR="#20a47e" DESTINATION="ID_103077891" ENDARROW="Default" ENDINCLINATION="-16;56;" ID="Arrow_ID_55769950" STARTARROW="None" STARTINCLINATION="304;18;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1612026260569" ID="ID_99599203" MODIFIED="1612026319040" TEXT="Diff im kanonischen Format senden">
+<arrowlink COLOR="#5cb39f" DESTINATION="ID_1932586467" ENDARROW="Default" ENDINCLINATION="-194;262;" ID="Arrow_ID_1566553463" STARTARROW="None" STARTINCLINATION="435;33;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612019599970" ID="ID_1752337691" MODIFIED="1612019623795" TEXT="Clip bewegt sich aber erst beim n&#xe4;chsten Redraw">
+<linktarget COLOR="#767b93" DESTINATION="ID_1752337691" ENDARROW="Default" ENDINCLINATION="-53;-147;" ID="Arrow_ID_569461745" SOURCE="ID_279893834" STARTARROW="None" STARTINCLINATION="-103;9;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1612019625163" ID="ID_191145933" MODIFIED="1612019777333" TEXT="liegt vmtl. darin, da&#xdf; wir uns grade in einem Draw()-Callback befinden">
 <richcontent TYPE="NOTE"><html>
@@ -22329,7 +22400,28 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1612020078974" ID="ID_25005774" MODIFIED="1612020100183" TEXT="den Canvas grunds&#xe4;tzlich nach der DisplayEvaluation nochmal invalidieren"/>
+<node CREATED="1612020078974" ID="ID_25005774" MODIFIED="1612020100183" TEXT="den Canvas grunds&#xe4;tzlich nach der DisplayEvaluation nochmal invalidieren">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1612025039375" ID="ID_826424244" MODIFIED="1612025048929" TEXT="versucht">
+<node CREATED="1612025050103" ID="ID_1320349894" MODIFIED="1612025062527" TEXT="sowohl mit dem ganzen TimelineBodyWidget"/>
+<node CREATED="1612025062956" ID="ID_1000543035" MODIFIED="1612025073590" TEXT="alsauch nur mit den beiden Canvas-Widgets"/>
+</node>
+<node CREATED="1612025074794" ID="ID_800250683" MODIFIED="1612025088412" TEXT="zeigt keinerlei Reaktion">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1612025095479" ID="ID_1775295616" MODIFIED="1612025105906" TEXT="der Clip bleibt wo er ist (am falschen Ort)"/>
+<node CREATED="1612025106830" ID="ID_1695696156" MODIFIED="1612025160707" TEXT="auch die anderen Layout-Anpassungen erfolgen erst beim n&#xe4;chsten Trigger">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      also z.B: wenn man das TestControl schlie&#223;t, oder auch nur den Fokus an das Lumiera-Hauptfenster gibt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -23528,7 +23620,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576705946751" ID="ID_478555928" MODIFIED="1576705956429" TEXT="re-Konstrkutions-Mechanismus realisieren">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1576705946751" ID="ID_478555928" MODIFIED="1576705956429" TEXT="den re-Konstrkutions-Mechanismus realisieren">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -25719,7 +25811,13 @@
 </node>
 </node>
 <node CREATED="1541861495569" ID="ID_1828075998" MODIFIED="1557498707230" TEXT="Thema: ZoomWindow">
-<arrowlink COLOR="#5b5ca1" DESTINATION="ID_838803024" ENDARROW="Default" ENDINCLINATION="-499;-1329;" ID="Arrow_ID_842684168" STARTARROW="None" STARTINCLINATION="490;0;"/>
+<arrowlink COLOR="#5b5ca1" DESTINATION="ID_838803024" ENDARROW="Default" ENDINCLINATION="-499;-1329;" ID="Arrow_ID_842684168" STARTARROW="None" STARTINCLINATION="517;66;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612027709754" ID="ID_694928494" MODIFIED="1612027847880" TEXT="Kann u.U. Clips aus der Anzeige ausblenden">
+<arrowlink COLOR="#654e8d" DESTINATION="ID_1027750978" ENDARROW="Default" ENDINCLINATION="-33;-18;" ID="Arrow_ID_1904178479" STARTARROW="None" STARTINCLINATION="-254;16;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1612027750832" ID="ID_422490582" MODIFIED="1612027764227" TEXT="wenn die Clips zu weit vom sichtbaren Bereich entfernt w&#xe4;ren"/>
+<node CREATED="1612027765032" ID="ID_1742732980" MODIFIED="1612027777304" TEXT="und dadurch der Canvas zu extrem ausgedehnt w&#xfc;rde"/>
+</node>
 </node>
 </node>
 <node CREATED="1542383648143" HGAP="41" ID="ID_718536842" MODIFIED="1557498707230" VSHIFT="-6">
@@ -25768,6 +25866,7 @@
 </node>
 </node>
 <node CREATED="1542383813145" ID="ID_1027750978" MODIFIED="1557498707230" TEXT="Lumiera display strategy">
+<linktarget COLOR="#654e8d" DESTINATION="ID_1027750978" ENDARROW="Default" ENDINCLINATION="-33;-18;" ID="Arrow_ID_1904178479" SOURCE="ID_694928494" STARTARROW="None" STARTINCLINATION="-254;16;"/>
 <node CREATED="1542383825895" ID="ID_47938908" MODIFIED="1557498707230" TEXT="zweistufige &#xdc;bersetzung in ein Pixel-Fenster">
 <node CREATED="1542383840687" ID="ID_1981380274" MODIFIED="1557498707230" TEXT="Stufe-1 == Timespan der Timeline"/>
 <node CREATED="1542383859851" ID="ID_892953664" MODIFIED="1557498707230" TEXT="Stufe-2 == gegenw&#xe4;rtig relevanter Ausschnitt">
@@ -25781,6 +25880,20 @@
 <linktarget COLOR="#677e9a" DESTINATION="ID_1781062229" ENDARROW="Default" ENDINCLINATION="230;6;" ID="Arrow_ID_733563643" SOURCE="ID_118083348" STARTARROW="None" STARTINCLINATION="296;77;"/>
 </node>
 </node>
+</node>
+<node CREATED="1612027859654" ID="ID_1866609580" MODIFIED="1612027898972">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b><font color="#6d2828">Konvention</font></b>: Clips mit start==Time::NEVER werden verborgen
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 <node CREATED="1566394354106" HGAP="46" ID="ID_1805397888" MODIFIED="1566394373770" TEXT="Zeichen-Strategie" VSHIFT="-10">
@@ -28719,6 +28832,9 @@
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1584932910051" HGAP="63" ID="ID_1737560927" MODIFIED="1584932955050" TEXT="Zustands-Wechsel-Logik" VSHIFT="16">
 <arrowlink COLOR="#4768d0" DESTINATION="ID_1833569495" ENDARROW="Default" ENDINCLINATION="943;-75;" ID="Arrow_ID_416244548" STARTARROW="None" STARTINCLINATION="207;23;"/>
+<node CREATED="1612028128117" HGAP="71" ID="ID_631122092" MODIFIED="1612028188306" TEXT="Konvention: Time::NEVER &#x27f9; Clip bleibt verborgen" VSHIFT="-15">
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584229199851" HGAP="47" ID="ID_1146096669" MODIFIED="1584229499004" TEXT="Vorsicht: Darstellung von Spuren und Effekten im Clip" VSHIFT="2">
@@ -29278,6 +29394,7 @@
 </node>
 </node>
 <node CREATED="1585011013867" ID="ID_1777393889" MODIFIED="1585011031594" TEXT="Methode im Basis-Delegate">
+<linktarget COLOR="#6bd6de" DESTINATION="ID_1777393889" ENDARROW="Default" ENDINCLINATION="-24;52;" ID="Arrow_ID_1626468139" SOURCE="ID_418040349" STARTARROW="None" STARTINCLINATION="106;6;"/>
 <node CREATED="1585013060956" ID="ID_1696216374" MODIFIED="1585013076512" TEXT="kann nur den Zugang zum Modus weisen"/>
 <node CREATED="1585013104936" ID="ID_280575875" MODIFIED="1585013115674" TEXT="kann aber ekennen, ob das Delgate wechselt"/>
 </node>
@@ -29286,7 +29403,9 @@
 <node CREATED="1585013162456" ID="ID_1644140186" MODIFIED="1585013172896" TEXT="und justiert diese in einer virtuellen Methode"/>
 </node>
 </node>
-<node CREATED="1585010936491" ID="ID_418040349" MODIFIED="1585013943024" TEXT="wer entscheidet &#xfc;ber den konkreten Delegate-Typ?"/>
+<node CREATED="1585010936491" ID="ID_418040349" MODIFIED="1585013943024" TEXT="wer entscheidet &#xfc;ber den konkreten Delegate-Typ?">
+<arrowlink COLOR="#6bd6de" DESTINATION="ID_1777393889" ENDARROW="Default" ENDINCLINATION="-24;52;" ID="Arrow_ID_1626468139" STARTARROW="None" STARTINCLINATION="106;6;"/>
+</node>
 <node CREATED="1585013943839" ID="ID_1056640354" MODIFIED="1585013970000" TEXT="kann ein bereits eingeschlagener Weg abelehnt werden?">
 <node CREATED="1585013977195" ID="ID_727500697" MODIFIED="1585013993925" TEXT="d.h. wer pr&#xfc;ft die Mindestanforderungen?">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1585931039924" ID="ID_29030858" MODIFIED="1585931110002" TEXT="Problem Mindestl&#xe4;nge">
@@ -29313,6 +29432,9 @@
 <node CREATED="1585010953762" ID="ID_236488907" MODIFIED="1585010961491" TEXT="wer baut/klont ein Delegate?">
 <node CREATED="1611120913617" ID="ID_187744399" MODIFIED="1611120932339" TEXT="...hier zun&#xe4;chst einfache L&#xf6;sung verfolgt">
 <node CREATED="1611120934086" ID="ID_1626846671" MODIFIED="1611120949303" TEXT="das ClipDelegate (Basisklasse)"/>
+<node CREATED="1612028377220" ID="ID_289156345" MODIFIED="1612028395368" TEXT="...im Moment gef&#xe4;llt mir diese L&#xf6;sung sogar ganz gut">
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 </node>
@@ -29326,6 +29448,14 @@
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1585924446046" ID="ID_554920835" MODIFIED="1585924462752" TEXT="dieses wird auf &#xe4;u&#xdf;erer/innerer Kapsel aufgedoppelt"/>
 <node CREATED="1585924468627" ID="ID_1944983930" MODIFIED="1585924475997" TEXT="was brauchen wir hier f&#xfc;r Operationen?"/>
+</node>
+</node>
+<node CREATED="1612028431732" ID="ID_1246129167" MODIFIED="1612028851514" TEXT="Implementierungsdetails">
+<icon BUILTIN="info"/>
+<node CREATED="1612028439450" ID="ID_1104410954" MODIFIED="1612028458261" TEXT="die Entscheidungslogik wird in der generischen ClipDelegate-Implementierung untergebracht"/>
+<node CREATED="1612028459191" ID="ID_1113891567" MODIFIED="1612028476585" TEXT="auf absehbare Zeit ist diese Logik recht einfach"/>
+<node CREATED="1612028487004" ID="ID_619535893" MODIFIED="1612029020769" TEXT="spezielle Konvention: start == Time::NEVER &#x27f9; Appearance::PENDING">
+<linktarget COLOR="#4663c4" DESTINATION="ID_619535893" ENDARROW="Default" ENDINCLINATION="-1983;81;" ID="Arrow_ID_309098301" SOURCE="ID_592528621" STARTARROW="None" STARTINCLINATION="631;32;"/>
 </node>
 </node>
 </node>
@@ -30968,7 +31098,7 @@
 <node CREATED="1488423514355" ID="ID_917891687" MODIFIED="1557498707233" TEXT="Steuerelemente">
 <node CREATED="1541858529489" ID="ID_838803024" MODIFIED="1557498707233" TEXT="ZoomWindow">
 <linktarget COLOR="#5b5ca1" DESTINATION="ID_838803024" ENDARROW="Default" ENDINCLINATION="-519;-1168;" ID="Arrow_ID_1674512697" SOURCE="ID_1949450244" STARTARROW="None" STARTINCLINATION="446;0;"/>
-<linktarget COLOR="#5b5ca1" DESTINATION="ID_838803024" ENDARROW="Default" ENDINCLINATION="-499;-1329;" ID="Arrow_ID_842684168" SOURCE="ID_1828075998" STARTARROW="None" STARTINCLINATION="490;0;"/>
+<linktarget COLOR="#5b5ca1" DESTINATION="ID_838803024" ENDARROW="Default" ENDINCLINATION="-499;-1329;" ID="Arrow_ID_842684168" SOURCE="ID_1828075998" STARTARROW="None" STARTINCLINATION="517;66;"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1541858541550" ID="ID_1912142591" MODIFIED="1557498707233" TEXT="generische Abstraktionskomponente">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
@@ -31461,6 +31591,31 @@
 <node CREATED="1538956802701" ID="ID_1715846940" MODIFIED="1557498707234" TEXT="Sequence{Marker}">
 <node CREATED="1538957049292" ID="ID_98299428" MODIFIED="1557498707234" TEXT="if typeID = &quot;Marker&quot;"/>
 </node>
+<node CREATED="1612027392040" ID="ID_319683499" MODIFIED="1612027448852" TEXT="&quot;timing&quot; &#x2254; TimeSpan{start, len}">
+<node CREATED="1612027460343" ID="ID_1526970445" MODIFIED="1612027635585" TEXT="Attribut soll bereits bei Konstruktion mitgegeben werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aus Performance-Gr&#252;nden.
+    </p>
+    <p>
+      Weil dann sofort bei ins(clip) == Konstruktion ein ClipDelegate vom Typ ClipWidget erzeugt, und in den GTK-Canvas geheftet wird.&#160;&#160;Andernfalls w&#252;rde erst ein DormantClip erzeugt, der dann erst sp&#228;ter, wenn das timing-Attribut gesetzt wird, sich in ein ClipWidget verwandelt. Das w&#228;re dann im Normalfall eine zus&#228;tzliche, unn&#246;tige Allokation
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1612027475574" ID="ID_1569710848" MODIFIED="1612027531925" TEXT="es wird aber toleriert, wenn es fehlt">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1612027485908" ID="ID_592528621" MODIFIED="1612029020769" TEXT="start == Time::NEVER &#x27f9; Clip im Anzeige-Modus &quot;Pending&quot;">
+<arrowlink COLOR="#4663c4" DESTINATION="ID_619535893" ENDARROW="Default" ENDINCLINATION="-1983;81;" ID="Arrow_ID_309098301" STARTARROW="None" STARTINCLINATION="631;32;"/>
+</node>
+</node>
+<node CREATED="1612027454614" ID="ID_210949800" MODIFIED="1612027457315" TEXT="&quot;name&quot;"/>
 </node>
 <node CREATED="1544840312839" ID="ID_433238862" MODIFIED="1560173044668" TEXT="Ruler">
 <linktarget COLOR="#3e63c5" DESTINATION="ID_433238862" ENDARROW="Default" ENDINCLINATION="-612;-125;" ID="Arrow_ID_1858329997" SOURCE="ID_1391546845" STARTARROW="None" STARTINCLINATION="-747;0;"/>

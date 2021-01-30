@@ -228,7 +228,7 @@ namespace timeline {
        *  viable appearance style. This is the first incantation of #switchAppearance.
        */
       static Appearance buildDelegate (PDelegate& manager, WidgetHook& view,
-                                       std::optional<TimeSpan> timing);
+                                       std::optional<TimeSpan> const& timing);
       
     private:/* ===== Internals ===== */
       

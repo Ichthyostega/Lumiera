@@ -85,7 +85,6 @@ namespace timeline {
   
   namespace {   /////////////////////////////////////////////////////TICKET #1213 : use proper zoom handling instead of dummy constants!!
     const int TODO_px_per_second = 25;
-    const int TODO_px_per_microtick = TODO_px_per_second / Time::SCALE;
   }             /////////////////////////////////////////////////////TICKET #1213 : (END) get rid of these dummy constants!!
   
   namespace { // details of track background painting
@@ -538,6 +537,14 @@ namespace timeline {
     adjust (mainCanvas_, canvasWidth, contentHeight);
   }
   
+
+  void
+  BodyCanvasWidget::forceRedraw()
+  {
+    rulerCanvas_.queue_draw();
+    mainCanvas_.queue_draw();
+  }
+  
   TimelineCanvas&
   BodyCanvasWidget::getCanvas (int yPos)
   {
@@ -571,7 +578,7 @@ namespace timeline {
   int
   BodyCanvasWidget::translateTimeToPixels (Time startTimePoint)  const
   {
-    return TODO_px_per_microtick * _raw(startTimePoint);   //////////TICKET #1213 : delegate zoom handling to the display manager (field #layout_) !!
+    return _raw(startTimePoint) * TODO_px_per_second / Time::SCALE;   //////////TICKET #1213 : delegate zoom handling to the display manager (field #layout_) !!
   }
   
   /** respond to the DisplayEvaluation pass.
