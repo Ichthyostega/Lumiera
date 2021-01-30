@@ -335,7 +335,7 @@ namespace timeline {
           }
         
         /** state switch ctor */
-        ClipWidget(ClipData&& existing, WidgetHook* newView)
+        ClipWidget(ClipData&& existing, WidgetHook* newView =nullptr)
           : HookedWidget{existing.establishHookPoint(newView), existing.getClipName()}
           , ClipData{std::move (existing)}
           {
@@ -345,21 +345,28 @@ namespace timeline {
     
     
     inline ClipDelegate*
-    buildDelegateFor (Mode newMode, ClipDelegate& existingDelegate, WidgetHook* newView =0)
-      {
-        REQUIRE (INSTANCEOF (ClipData, &existingDelegate));
-        ClipData& clipData = static_cast<ClipData&> (existingDelegate);
-        
-        switch (newMode)
-          {
-            case HIDDEN:
-              return new DormantClip (std::move (clipData));
-            case INDIVIDUAL:
-              return new ClipWidget (std::move (clipData), newView);
-            case SUMMARY:
-              UNIMPLEMENTED ("Summary/Overview presentation style");
-          }
-      }
+    buildDelegateFor (Mode newMode, ClipDelegate& existingDelegate, WidgetHook* newView =nullptr)
+    {
+      REQUIRE (INSTANCEOF (ClipData, &existingDelegate));
+      ClipData& clipData = static_cast<ClipData&> (existingDelegate);
+      
+      switch (newMode)
+        {
+          case HIDDEN:
+            return new DormantClip (std::move (clipData));
+          case INDIVIDUAL:
+            return new ClipWidget (std::move (clipData), newView);
+          case SUMMARY:
+            UNIMPLEMENTED ("Summary/Overview presentation style");
+        }
+    }
+    
+    /** special convention to suppress a clip with start time == Time::NEVER */
+    inline bool
+    canShow (Time start)
+    {
+      return start != Time::NEVER;
+    }
     
   }//(End)clip appearance details.
   
@@ -368,32 +375,34 @@ namespace timeline {
   /* === Appearance Style state transitions === */
   
   ClipDelegate::Appearance
-  ClipDelegate::switchAppearance (PDelegate& manager, Appearance desired, WidgetHook* newView)
-  {
-    REQUIRE (manager, "pre-existing clip delegate required");
-    Mode curMode = classify (manager->currentAppearance());
-    Mode newMode = classify (desired);
-    if (newMode != curMode or newView)
-      { // need to switch the clip delegate
-        PDelegate newState (buildDelegateFor (newMode, *manager, newView));
-        swap (manager, newState);
-        return manager->changeAppearance (desired);
-      }
-    else
-      return manager->changeAppearance (desired);
-  }
-  
-  
-  ClipDelegate::Appearance
   ClipDelegate::buildDelegate (PDelegate& manager, WidgetHook& view, optional<TimeSpan> const& timing)
   {
-    if (timing)
+    if (timing and canShow (timing->start()))
       manager.reset (new ClipWidget{view.hookedAt(*timing, defaultOffsetY), *timing, defaultName});
     else
       manager.reset (new DormantClip{view});
     
     return timing? Appearance::COMPACT
                  : Appearance::PENDING;
+  }
+  
+  
+  ClipDelegate::Appearance
+  ClipDelegate::switchAppearance (PDelegate& existing, Appearance desired, WidgetHook* newView)
+  {
+    REQUIRE (existing, "pre-existing clip delegate required");
+    if (not canShow(existing->getStartTime()))
+      desired = Appearance::PENDING;
+    Mode curMode = classify (existing->currentAppearance());
+    Mode newMode = classify (desired);
+    if (newMode != curMode or newView)
+      { // need to switch the clip delegate
+        PDelegate newState (buildDelegateFor (newMode, *existing, newView));
+        swap (existing, newState);
+        return existing->changeAppearance (desired);
+      }
+    else
+      return existing->changeAppearance (desired);
   }
   
   

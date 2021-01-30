@@ -200,7 +200,7 @@ namespace timeline {
       
       
       /** request to change the clip delegate's appearance style, if possible.
-       * @param manager entity to hold and maintain this specific appearance state.
+       * @param existing entity to hold and maintain this specific appearance state.
        * @param desired the intended style or mode to acquire
        * @param newView (optionally) a different view to hook up the delegate.
        * @return the actual mode the presentation was switched to
@@ -220,7 +220,7 @@ namespace timeline {
        *         The base ctor #ClipData(WidgetHook&) ensures there is
        *         always a display_ (WidgetHook) to refer to.
        */
-      static Appearance switchAppearance (PDelegate& manager,
+      static Appearance switchAppearance (PDelegate& existing,
                                           Appearance desired =PENDING,
                                           WidgetHook* newView =nullptr);
       
