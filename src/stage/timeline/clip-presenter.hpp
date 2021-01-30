@@ -118,7 +118,7 @@ namespace timeline {
        *  position onto the drawing canvas, be it due to a zoom change, or
        *  as result of layout re-flow.
        */
-        void relink();
+      void relink();
       
     private:/* ===== Internals ===== */
       

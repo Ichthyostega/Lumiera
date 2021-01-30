@@ -19290,8 +19290,7 @@
       aber dieses Design ist <i>schief</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#ab3058" DESTINATION="ID_704646941" ENDARROW="Default" ENDINCLINATION="434;181;" ID="Arrow_ID_932322384" SOURCE="ID_781800644" STARTARROW="None" STARTINCLINATION="240;20;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1612002459090" ID="ID_336676484" MODIFIED="1612002485623" TEXT="und zwar die Code-reuse-Inheritance">
@@ -19746,8 +19745,7 @@
       Ursache ist ein <i>schiefes Design</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -19757,8 +19755,7 @@
       ...und das ist wohl entstanden, weil ich urspr&#252;nglich einen generischen Visitor im Blick hatte; es hat sich aber dann gezeigt, da&#223; eine solche universelle &quot;Quer-Beweglichkeit&quot; weder notwendig noch w&#252;nschenswert ist
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#ab3058" DESTINATION="ID_704646941" ENDARROW="Default" ENDINCLINATION="434;181;" ID="Arrow_ID_932322384" STARTARROW="None" STARTINCLINATION="240;20;"/>
 </node>
 <node COLOR="#338800" CREATED="1612003579934" ID="ID_852410527" MODIFIED="1612008743069" TEXT="Refactoring: ViewHook und CanvasHook komplett trennen">
@@ -22160,20 +22157,181 @@
 <node CREATED="1611921687575" ID="ID_1008400960" MODIFIED="1611921701733" TEXT="(kann dann aber auch den Header-Ausgleich mit erledigen)"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611925014039" ID="ID_1261732954" MODIFIED="1611925022335" TEXT="relink() der Clips implementieren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1611925014039" ID="ID_1261732954" MODIFIED="1611959573577" TEXT="relink() der Clips implementieren">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1611925026550" ID="ID_1629005155" MODIFIED="1611925046136" TEXT="L&#xf6;sung: einfach mit den aktuellen logischen Koordinaten">
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611925047162" ID="ID_949058382" MODIFIED="1611925063792" TEXT="feststellen ob &#xfc;berhaupt ein angebundenes ClipDelegate gegeben ist">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1611925047162" ID="ID_949058382" MODIFIED="1611959549842" TEXT="feststellen ob &#xfc;berhaupt ein angebundenes ClipDelegate gegeben ist">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1611959550608" ID="ID_706043253" MODIFIED="1611959559211" TEXT="erledigt durch virtuelle Methode">
+<icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611925067536" ID="ID_1433993572" MODIFIED="1611925081855" TEXT="letztlich die CanvasHook::move()-Funktion nutzen">
-<icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611953633107" ID="ID_866053960" MODIFIED="1611957509515" TEXT="&#x27f9; Thema speichern der Clip-Daten">
+<node COLOR="#338800" CREATED="1611925067536" ID="ID_1433993572" MODIFIED="1611959566203" TEXT="letztlich die CanvasHook::move()-Funktion nutzen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1611953633107" ID="ID_866053960" MODIFIED="1611959528314" TEXT="&#x27f9; Thema speichern der Clip-Daten">
 <arrowlink COLOR="#70365f" DESTINATION="ID_814561596" ENDARROW="Default" ENDINCLINATION="-427;-565;" ID="Arrow_ID_1226103397" STARTARROW="None" STARTINCLINATION="805;58;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611959606145" ID="ID_877670109" MODIFIED="1611959627010" TEXT="Problem: Clip (noch) nicht am rechten Fleck">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1611959630868" ID="ID_268739743" MODIFIED="1611959702682" TEXT="Clip erscheint am oberen Rand des Track">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ber&#252;cksichtigt also nicht die Dekoration und das Padding... obwohl doch eigentlich der 2.Pass das Track-Profil aufgebaut haben sollte
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1611959645562" ID="ID_4339474" MODIFIED="1611959664916" TEXT="aber explizit injizierte Buttons erscheinen an der richtigen Stelle"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611959706282" ID="ID_568799045" MODIFIED="1611959710747" TEXT="Debugging...">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1612000363951" ID="ID_1611539170" MODIFIED="1612000370232" TEXT="Beobachtungen">
+<node CREATED="1612000371364" ID="ID_36603158" MODIFIED="1612000392460">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      der Test-Diff ist <i>ungeschickt geschrieben</i>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1612000397098" ID="ID_1350143023" MODIFIED="1612000406123" TEXT="er sendet erst ein ins(Clip)"/>
+<node CREATED="1612000406975" ID="ID_1469300848" MODIFIED="1612000417872" TEXT="und mutiert dannach die Timings von diesem Clip"/>
+<node COLOR="#338800" CREATED="1612000432043" ID="ID_174378469" MODIFIED="1612000442318" TEXT="aber das wird alles korrekt gehandhabt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1612000444241" ID="ID_1290239156" MODIFIED="1612000568427" TEXT="TimeSpan und optional&lt;TimeSpan&gt; werden x-fach kopiert">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1612000475795" ID="ID_1550787880" MODIFIED="1612000489077" TEXT="da per Value-Argument">
+<node CREATED="1612000496775" ID="ID_177231276" MODIFIED="1612000505843" TEXT="im ClipPresenter-ctor"/>
+<node CREATED="1612000490724" ID="ID_1501412770" MODIFIED="1612000496039" TEXT="in der Getter-Funktion"/>
+<node CREATED="1612000510489" ID="ID_1095678322" MODIFIED="1612000520712" TEXT="in allen Settern / Mutatoren"/>
+</node>
+<node CREATED="1612000529308" ID="ID_874373043" MODIFIED="1612000550279" TEXT="zumindest am &#xdc;bergang zum ClipDelegate kann das der Optimizer nicht knacken">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612000552676" ID="ID_103077891" MODIFIED="1612000562804" TEXT="TODO: in Referenzen umschreiben">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612000682337" ID="ID_1950742827" MODIFIED="1612009171119" TEXT="Widget wird vom Ctor zweimal hintereinander an den Canvas geheftet">
+<arrowlink COLOR="#c16b96" DESTINATION="ID_1693567978" ENDARROW="Default" ENDINCLINATION="223;491;" ID="Arrow_ID_624678696" STARTARROW="None" STARTINCLINATION="1328;54;"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1612000718837" ID="ID_1844571428" MODIFIED="1612000743430" TEXT="Design von CanvasHook fragw&#xfc;rdig">
+<node CREATED="1612000744873" ID="ID_1198437143" MODIFIED="1612000756012" TEXT="modelliert als &quot;spezieller ViewHook&quot;"/>
+<node CREATED="1612000757240" ID="ID_828923416" MODIFIED="1612000775058" TEXT="das f&#xfc;hrt zu einem stellenweise umgebogenen API"/>
+<node CREATED="1612000776126" ID="ID_64509148" MODIFIED="1612000794345" TEXT="und zu verketteten &quot;magischen&quot; ctors">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#435e98" CREATED="1612000906004" ID="ID_89016969" MODIFIED="1612008915157" TEXT="wird jemals ein CanvasHook als ViewHook gebraucht?">
+<icon BUILTIN="help"/>
+<node CREATED="1612008916353" ID="ID_1376139143" MODIFIED="1612008920019" TEXT="Nein">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1612008922562" ID="ID_458884534" MODIFIED="1612009068409" TEXT="nur ein historisches &#xdc;berbleibsel">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ich wollte mal ein viel generischeres Design schaffen, das sogar eine Art Grundger&#252;st f&#252;r das Zusammenbauen des GUI sein k&#246;nnte. In der vertieften Analyse wurde dann aber klar, da&#223; dieses Design nicht so ohne Weiteres realisierbar ist. Daraufhin habe ich beschlossen, die Idee aufzugeben und stattdessen auf Einzelf&#228;lle zu spezialisieren. Und in einem weiteren Schritt habe ich dann die Themen &quot;Grid&quot; und &quot;Canvas&quot; voneinander getrennt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1612000823535" ID="ID_602205033" MODIFIED="1612000891040" TEXT="Frage: blo&#xdf; ungeschickt, oder sogar falsch?">
+<icon BUILTIN="help"/>
+<node CREATED="1612000862978" ID="ID_292607955" MODIFIED="1612000878500" TEXT="kl&#xe4;ren: wie geht Gtk::Layout damit um?"/>
+<node CREATED="1612001686428" ID="ID_1708452319" MODIFIED="1612001730290" TEXT="&#x2192; gtk_layout_put()  in gtklayout.c, line 462"/>
+<node CREATED="1612001824933" ID="ID_1012337567" MODIFIED="1612001854632" TEXT="konstruiert neuen Entry und f&#xfc;gt ihn an interne Liste an">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...and &quot;realizes&quot; the widget
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#bf335c" CREATED="1612001856494" ID="ID_896331202" MODIFIED="1612001914846" TEXT="Ergebnis: es ist ein Defekt">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1612019580954" ID="ID_940366698" MODIFIED="1612020114802" TEXT="mit den Korrekturen wird die Position nun korrekt gesetzt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612001961759" ID="ID_279893834" MODIFIED="1612009206509" TEXT="Probleme und Defekte beheben">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1612009188967" ID="ID_734571483" MODIFIED="1612009201239" TEXT="ViewHook und CanvasHook komplett getrennt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612019599970" ID="ID_1752337691" MODIFIED="1612019623795" TEXT="Clip bewegt sich aber erst beim n&#xe4;chsten Redraw">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1612019625163" ID="ID_191145933" MODIFIED="1612019777333" TEXT="liegt vmtl. darin, da&#xdf; wir uns grade in einem Draw()-Callback befinden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      beim ersten Mal wird &quot;nebenbei&quot; festgestellt, da&#223; das Track-Profil (noch)nicht existiert.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1612019648505" ID="ID_1699675594" MODIFIED="1612019656044" TEXT="ist erst mal nur ein Sch&#xf6;nheitsfehler">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1612019794709" ID="ID_921471388" MODIFIED="1612019884371" TEXT="k&#xf6;nnte sich aber zu einem wirklichen Problem auswachsen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn selbst wenn wir das f&#252;r das erste Mal irgendwie hinbiegen, so kann das doch in jedem sp&#228;teren draw() wieder passieren
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1612019894343" ID="ID_1448053043" MODIFIED="1612019901396" TEXT="m&#xf6;gliche Workarounds...">
+<node CREATED="1612019903134" ID="ID_1689432083" MODIFIED="1612020045315" TEXT="die DisplayEvaluation schon per Diff-Listener ausl&#xf6;sen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...daf&#252;r br&#228;uchte ich aber einen Diff-Listener f&#252;r alle strukturellen &#196;nderungen incl sub-Scope. Das ist nicht trivial zu implementieren, weil die sub-Scopes ja beliebig tief verschachtelt sein k&#246;nnen, und alle rekursiv delegiert werden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1612020078974" ID="ID_25005774" MODIFIED="1612020100183" TEXT="den Canvas grunds&#xe4;tzlich nach der DisplayEvaluation nochmal invalidieren"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -28116,7 +28274,7 @@
 <arrowlink COLOR="#dd4f7b" DESTINATION="ID_1709866969" ENDARROW="Default" ENDINCLINATION="684;566;" ID="Arrow_ID_541728210" STARTARROW="None" STARTINCLINATION="-1876;104;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611788484755" ID="ID_1242261012" MODIFIED="1611788507334" TEXT="wie kann eine Neu-Anordnung &#xfc;berhaupt bewirkt werden?">
+<node COLOR="#435e98" CREATED="1611788484755" ID="ID_1242261012" MODIFIED="1612019536549" TEXT="wie kann eine Neu-Anordnung &#xfc;berhaupt bewirkt werden?">
 <icon BUILTIN="help"/>
 <node CREATED="1611789188712" ID="ID_292272154" MODIFIED="1611789377585" TEXT="Problem: wer kennt die Koordinaten?">
 <node CREATED="1611789203502" ID="ID_974096123" MODIFIED="1611789223591" TEXT="die urspr&#xfc;nglichen Koordinaten sind schon eine Summe"/>
@@ -28127,6 +28285,10 @@
 <node CREATED="1611789399027" ID="ID_61457943" MODIFIED="1611789413824" TEXT="entweder einen Zugang zu den roh-Koordinaten"/>
 <node CREATED="1611789415136" ID="ID_1771759059" MODIFIED="1611789426867" TEXT="oder ein Delta der Layout-Anpassung"/>
 </node>
+</node>
+<node CREATED="1612019484247" ID="ID_1243648856" MODIFIED="1612019504224" TEXT="L&#xf6;sung: den 3.Pass der DisplayEvaluation auch hierf&#xfc;r nutzen">
+<node CREATED="1612019507497" ID="ID_877065301" MODIFIED="1612019522485" TEXT="alle Widgets auf dem Canvas...."/>
+<node CREATED="1612019523193" ID="ID_1272964807" MODIFIED="1612019533076" TEXT="...per move() repositionieren"/>
 </node>
 </node>
 </node>
@@ -28975,7 +29137,7 @@
 <node CREATED="1611954093314" ID="ID_962423794" MODIFIED="1611954107569" TEXT="erlaubt Umschalten des Anzeige-Modus"/>
 <node CREATED="1611953963818" ID="ID_1698628993" MODIFIED="1611953976829" TEXT="h&#xe4;ngt als Slave am ClipPresenter"/>
 </node>
-<node CREATED="1611954113609" ID="ID_814561596" MODIFIED="1611957509515" TEXT="Clip-Daten-Storage">
+<node COLOR="#435e98" CREATED="1611954113609" ID="ID_814561596" MODIFIED="1611959535616" TEXT="Clip-Daten-Storage">
 <linktarget COLOR="#70365f" DESTINATION="ID_814561596" ENDARROW="Default" ENDINCLINATION="-427;-565;" ID="Arrow_ID_1226103397" SOURCE="ID_866053960" STARTARROW="None" STARTINCLINATION="805;58;"/>
 <node CREATED="1611954160033" ID="ID_327901028" MODIFIED="1611954175455" TEXT="h&#xe4;ngt stark vom Nutzungsmuster ab">
 <icon BUILTIN="bell"/>
@@ -53221,7 +53383,8 @@
 <node CREATED="1476375733298" ID="ID_1024321268" MODIFIED="1557498707239" TEXT="allows custom drawing"/>
 <node CREATED="1476468254712" HGAP="64" ID="ID_1424353399" MODIFIED="1564926360754" TEXT="Eigenschaften" VSHIFT="45">
 <icon BUILTIN="info"/>
-<node CREATED="1476468265399" HGAP="2" ID="ID_257790579" MODIFIED="1557498707239" TEXT="Test-Setup schaffen" VSHIFT="-15">
+<node COLOR="#338800" CREATED="1476468265399" HGAP="2" ID="ID_257790579" MODIFIED="1612018172610" TEXT="Test-Setup schaffen" VSHIFT="-15">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1476468390830" ID="ID_1922633406" MODIFIED="1557498707239" TEXT="soll">
 <icon BUILTIN="yes"/>
 <node CREATED="1476468393174" ID="ID_412857359" MODIFIED="1557498707239" TEXT="schnell gehen"/>

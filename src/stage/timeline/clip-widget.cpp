@@ -244,6 +244,12 @@ namespace timeline {
             return unConst(this)->display_;
           }
         
+        void
+        updatePosition()  override
+          {
+            /* NOOP */
+          }
+
         
       public:
         DormantClip(WidgetHook& displayAnchor)
@@ -310,6 +316,13 @@ namespace timeline {
         getCanvas()  const override
           {
             return HookedWidget::getCanvas();
+          }
+        
+        void
+        updatePosition()  override
+          {
+            WidgetHook::Pos nominalPos = establishHookPoint(nullptr);
+            this->moveTo (nominalPos.x, nominalPos.y);
           }
         
         

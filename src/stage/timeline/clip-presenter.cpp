@@ -79,6 +79,7 @@ namespace timeline {
     , widget_{}
     {
       ClipDelegate::buildDelegate (widget_, view, timing);
+      ENSURE (widget_);
     }
   
   
@@ -172,7 +173,8 @@ namespace timeline {
   void
   ClipPresenter::relink()
   {
-    UNIMPLEMENTED ("attach the Delegate again at its nominal position, if applicable");
+    REQUIRE (widget_);
+    widget_->updatePosition();
   }
   
   
