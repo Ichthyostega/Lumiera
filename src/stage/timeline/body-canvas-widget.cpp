@@ -64,6 +64,7 @@
 
 
 //using util::_Fmt;
+using lib::time::Time;
 using util::max;
 using util::isnil;
 //using util::contains;
@@ -576,7 +577,7 @@ namespace timeline {
   }
   
   int
-  BodyCanvasWidget::translateTimeToPixels (Time startTimePoint)  const
+  BodyCanvasWidget::translateTimeToPixels (TimeValue startTimePoint)  const
   {
     return _raw(startTimePoint) * TODO_px_per_second / Time::SCALE;   //////////TICKET #1213 : delegate zoom handling to the display manager (field #layout_) !!
   }

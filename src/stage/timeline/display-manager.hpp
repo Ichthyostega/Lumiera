@@ -87,7 +87,7 @@ namespace timeline {
   
   using util::max;
   
-  using lib::time::Time;
+  using lib::time::TimeValue;
   class TrackHeadWidget;
   class TrackBody;
   
@@ -136,9 +136,9 @@ namespace timeline {
       
       /** delegating default implementation for timeline zoom */
       int
-      translateTimeToPixels (Time startTimePoint)  const override
+      translateTimeToPixels (TimeValue startTimePoint)  const override
         {
-          return refHook_.hookedAt(startTimePoint).x;
+          return refHook_.translateTimeToPixels (startTimePoint);
         }
       
     public:

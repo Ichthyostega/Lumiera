@@ -12619,7 +12619,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1506175097367" ID="ID_1442345755" MODIFIED="1561827465011" TEXT="ViewSpec-DSL">
 <arrowlink COLOR="#b45c5a" DESTINATION="ID_686917529" ENDARROW="Default" ENDINCLINATION="-468;-196;" ID="Arrow_ID_1955094318" STARTARROW="None" STARTINCLINATION="360;85;"/>
-<linktarget COLOR="#6a8499" DESTINATION="ID_1442345755" ENDARROW="Default" ENDINCLINATION="-971;84;" ID="Arrow_ID_1191206769" SOURCE="ID_1844877136" STARTARROW="None" STARTINCLINATION="502;0;"/>
+<linktarget COLOR="#6a8499" DESTINATION="ID_1442345755" ENDARROW="Default" ENDINCLINATION="-971;84;" ID="Arrow_ID_1191206769" SOURCE="ID_1844877136" STARTARROW="None" STARTINCLINATION="507;-51;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1515877499720" HGAP="-59" ID="ID_1283126436" MODIFIED="1518487921066" TEXT="Basis" VSHIFT="29">
 <node CREATED="1515877527300" ID="ID_1356241564" MODIFIED="1518487921066" TEXT="ist Teil des ViewLocators">
@@ -23513,7 +23513,7 @@
 <node COLOR="#338800" CREATED="1576855620250" ID="ID_1121301646" MODIFIED="1612031401163" TEXT="relatives Positionieren erm&#xf6;glichen">
 <arrowlink COLOR="#15bcc9" DESTINATION="ID_1816490333" ENDARROW="Default" ENDINCLINATION="-454;46;" ID="Arrow_ID_408864676" STARTARROW="None" STARTINCLINATION="-235;17;"/>
 <linktarget COLOR="#6780d3" DESTINATION="ID_1121301646" ENDARROW="Default" ENDINCLINATION="551;-498;" ID="Arrow_ID_229033893" SOURCE="ID_1642579599" STARTARROW="None" STARTINCLINATION="-477;21;"/>
-<linktarget COLOR="#4668c0" DESTINATION="ID_1121301646" ENDARROW="Default" ENDINCLINATION="-360;299;" ID="Arrow_ID_1147127867" SOURCE="ID_1574493569" STARTARROW="None" STARTINCLINATION="466;56;"/>
+<linktarget COLOR="#4668c0" DESTINATION="ID_1121301646" ENDARROW="Default" ENDINCLINATION="-360;299;" ID="Arrow_ID_1147127867" SOURCE="ID_1574493569" STARTARROW="None" STARTINCLINATION="472;50;"/>
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582410135584" ID="ID_969058360" MODIFIED="1611478497698" TEXT="#1207 relative attachment and (custom) drawing of sub-widgets">
 <arrowlink COLOR="#f17745" DESTINATION="ID_1208770677" ENDARROW="Default" ENDINCLINATION="-696;74;" ID="Arrow_ID_1555581659" STARTARROW="None" STARTINCLINATION="1109;48;"/>
@@ -28577,6 +28577,19 @@
   </body>
 </html></richcontent>
 </node>
+<node CREATED="1612438613382" ID="ID_167120458" MODIFIED="1612438705315" TEXT="DisplayFrame bleibt als einzige Alternative &#xfc;brig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...f&#252;r eine zentrale Schaltstelle und Verteiler.<br />Denn nur der DisplayFrame ist hinreichend loka und dennoch erreichbar
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1612438770925" ID="ID_225186300" MODIFIED="1612438799056" TEXT="&#x27f9; DisplayFrame ist keine Abstraktion im strengen Sinn"/>
 </node>
 <node CREATED="1573926191124" ID="ID_1389602122" MODIFIED="1573928984092" TEXT="Display-Frame geh&#xf6;rt eigentlich zum Track">
 <arrowlink COLOR="#2769d6" DESTINATION="ID_1953592630" ENDARROW="Default" ENDINCLINATION="-300;1096;" ID="Arrow_ID_928857904" STARTARROW="None" STARTINCLINATION="-1987;53;"/>
@@ -28592,7 +28605,7 @@
 </node>
 <node CREATED="1568587312669" ID="ID_178738138" MODIFIED="1576975019591" TEXT="die vertikalen Start-Offsets aus dem passenden Display-Frame">
 <arrowlink COLOR="#5e57bd" DESTINATION="ID_1792139654" ENDARROW="Default" ENDINCLINATION="-2065;214;" ID="Arrow_ID_1917645572" STARTARROW="None" STARTINCLINATION="-949;44;"/>
-<linktarget COLOR="#8395a4" DESTINATION="ID_178738138" ENDARROW="Default" ENDINCLINATION="-297;15;" ID="Arrow_ID_1606292545" SOURCE="ID_1574493569" STARTARROW="None" STARTINCLINATION="269;32;"/>
+<linktarget COLOR="#8395a4" DESTINATION="ID_178738138" ENDARROW="Default" ENDINCLINATION="-297;15;" ID="Arrow_ID_1606292545" SOURCE="ID_1574493569" STARTARROW="None" STARTINCLINATION="273;30;"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1611478658033" HGAP="73" ID="ID_1825783827" MODIFIED="1611479264977" TEXT="diese L&#xf6;sung scheint tragf&#xe4;hig. Nun fertig bauen!" VSHIFT="12">
@@ -28687,10 +28700,14 @@
     </ul>
   </body>
 </html></richcontent>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612438537570" ID="ID_336118739" MODIFIED="1612438557683" TEXT="schrittweise herausfinden was gebraucht wird...">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="bell"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583679368212" ID="ID_1574493569" MODIFIED="1584289385953" TEXT="Einh&#xe4;nge-Mechanismus">
-<arrowlink COLOR="#4668c0" DESTINATION="ID_1121301646" ENDARROW="Default" ENDINCLINATION="-360;299;" ID="Arrow_ID_1147127867" STARTARROW="None" STARTINCLINATION="466;56;"/>
-<arrowlink COLOR="#8395a4" DESTINATION="ID_178738138" ENDARROW="Default" ENDINCLINATION="-297;15;" ID="Arrow_ID_1606292545" STARTARROW="None" STARTINCLINATION="269;32;"/>
+<arrowlink COLOR="#4668c0" DESTINATION="ID_1121301646" ENDARROW="Default" ENDINCLINATION="-360;299;" ID="Arrow_ID_1147127867" STARTARROW="None" STARTINCLINATION="472;50;"/>
+<arrowlink COLOR="#8395a4" DESTINATION="ID_178738138" ENDARROW="Default" ENDINCLINATION="-297;15;" ID="Arrow_ID_1606292545" STARTARROW="None" STARTINCLINATION="273;30;"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1584201581597" HGAP="61" ID="ID_1793842194" MODIFIED="1584289376633" TEXT="mu&#xdf; direkt beim Ctor-Aufruf passieren" VSHIFT="19">
 <icon BUILTIN="button_cancel"/>
@@ -29562,8 +29579,8 @@
 <icon BUILTIN="pencil"/>
 <node CREATED="1583678069596" ID="ID_749021089" MODIFIED="1583678189115" TEXT="Stufe-1">
 <icon BUILTIN="forward"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583678075045" ID="ID_1071916226" MODIFIED="1583678101462" TEXT="erst mal &#xfc;berhaupt einen Block belegen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1583678075045" ID="ID_1071916226" MODIFIED="1612439673716" TEXT="erst mal &#xfc;berhaupt einen Block belegen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1584318751425" ID="ID_1908104469" MODIFIED="1584318760838" TEXT="nehme mal einen Gtk::Button...">
 <icon BUILTIN="ksmiletris"/>
 </node>
@@ -29592,8 +29609,101 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583678122516" ID="ID_73602256" MODIFIED="1583678142379" TEXT="...und dessen vertikale Ausdehnung ermitteln und zur&#xfc;ckmelden">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1583678122516" ID="ID_73602256" MODIFIED="1612439671575" TEXT="...und dessen vertikale Ausdehnung ermitteln und zur&#xfc;ckmelden">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612439704954" ID="ID_102633650" MODIFIED="1612480364697" TEXT="Clip-Parameter &#x2192; horizontale Ausdehnung">
+<icon BUILTIN="pencil"/>
+<node CREATED="1612471194589" ID="ID_1485158816" MODIFIED="1612471203240" TEXT="mehrere Probleme zu &#xfc;berwinden">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1612471205161" ID="ID_544296566" MODIFIED="1612471456398" TEXT="GTK erlaubt keine explizite Gr&#xf6;&#xdf;e">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das ist eine grundlegende Design-Enscheidung (und zwar eine Gute), aber in der Praxis mu&#223; es nat&#252;rlich trotzdem einen Weg geben, nur ist der dann relativ indirekt und auch nicht wirklich dokumentiert
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#a09aae" DESTINATION="ID_1508852681" ENDARROW="Default" ENDINCLINATION="-2048;204;" ID="Arrow_ID_1446927054" STARTARROW="None" STARTINCLINATION="-3602;0;"/>
+<node COLOR="#990000" CREATED="1612471458578" ID="ID_611633103" MODIFIED="1612480292438" TEXT="Experiment: gen&#xfc;gt der size_request?">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1612480298341" ID="ID_1348090876" MODIFIED="1612480308730" TEXT="funktioniert nur zur Vergr&#xf6;&#xdf;erung"/>
+<node CREATED="1612480309646" ID="ID_1463447127" MODIFIED="1612480315253" TEXT="aber beschneidet nicht"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1612471480502" ID="ID_103620026" MODIFIED="1612480353892" TEXT="&#xdc;bersetzung Zeit in Pixel">
+<node CREATED="1612471500084" ID="ID_269480980" MODIFIED="1612474845425" TEXT="eigentlich Aufgabe der Zoom-Steuerung">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1612471511450" ID="ID_116082667" MODIFIED="1612471518541" TEXT="Problematisch ist der Zugang">
+<node CREATED="1612471524505" ID="ID_1226213044" MODIFIED="1612471811699" TEXT="Widgets sollen nicht direkt mit dem Layout-Manager reden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ich will nicht, da&#223; der DisplayManager zu bedeutend wird, weil dann eine direkte Manipulation einzelner Widgets durch den DisplayManager als die &quot;einfachste&quot; und &quot;nat&#252;rlichste&quot; L&#246;sung erscheinen k&#246;nnte. Dagegen wehre ich mich, weil es zu einer starken Kopplung f&#252;hrt.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1612471562435" ID="ID_1613228671" MODIFIED="1612471569974" TEXT="abstrahiert &#xfc;ber den CanvasHook">
+<node CREATED="1612471572242" ID="ID_1034906351" MODIFIED="1612471577173" TEXT="hatte es dort sch&#xf6;n versteckt"/>
+<node CREATED="1612471577749" ID="ID_1723611368" MODIFIED="1612471646979" TEXT="aber anscheinend ist das doch eine API-Funktion">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es gibt bereits einen <i>S&#252;ndenfall,</i>&#160;n&#228;mlich im RelativeCanvasHook: der mu&#223; delegieren, und daher von au&#223;en diese Methode aufrufen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1612471892599" ID="ID_97557081" MODIFIED="1612471918991" TEXT="und noch schlimmer: wir haben jetzt zwei verkettete virtual calls"/>
+</node>
+<node CREATED="1612473087980" ID="ID_1089235510" MODIFIED="1612473100872" TEXT="ist dieser Zugangspunkt sinnvoll?">
+<node CREATED="1612473107642" ID="ID_790590091" MODIFIED="1612473145384" TEXT="daf&#xfc;r spricht: per Zeit an den Canvas geheftet"/>
+<node CREATED="1612473146517" ID="ID_116246629" MODIFIED="1612473172733" TEXT="dagegen spricht">
+<node CREATED="1612473174072" ID="ID_589866375" MODIFIED="1612473205808" TEXT="bei Zoom-&#xc4;nderung mu&#xdf; sich das Widget neu anheften"/>
+<node CREATED="1612473206764" ID="ID_383710389" MODIFIED="1612473258913" TEXT="Widget und nicht Canvas ist f&#xfc;r die Ausdehnung des Widgets zust&#xe4;ndig"/>
+</node>
+</node>
+<node CREATED="1612474248183" ID="ID_1920258813" MODIFIED="1612474254178" TEXT="Neben-Constraint: Storage">
+<node CREATED="1612474255953" ID="ID_1180938524" MODIFIED="1612474796077" TEXT="den Pointer auf den View habe ich zwangsl&#xe4;ufig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das ist eine Konsequenz aus dem Design des Diff-Framework; genauer, aus der konkreten Form, die die Implementierung des Diff-Framework bekommen hat: Und zwar, da&#223; ein generischer Container gebunden wird. Das bedeutet, da&#223; die Elemente im Container wie Werte behandelt werden. Und deshalb m&#252;ssen sich Widgets selbst&#228;ndig vom Canvas abmelden. Die Alternative dazu w&#228;re, da&#223; der Parent den Diff interpretiert, und seine Kinder direkt manipuliert. Dann w&#228;ren diese Kinder aber auch Widgets, und nicht nochmal indirekt als Presenter angebunden. K&#246;nnte man machen, habe ich aber ein mulmiges Gef&#252;hl. Da nehme ich dann doch lieber ein smart-Handle und einen Back-Pointer in Kauf.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1612474798393" ID="ID_426717931" MODIFIED="1612474928592" TEXT="jeder andere Service m&#xfc;&#xdf;te noch zus&#xe4;tzlich verdrahtet werden">
+<arrowlink COLOR="#6377b1" DESTINATION="ID_1343110314" ENDARROW="Default" ENDINCLINATION="33;-52;" ID="Arrow_ID_1779941265" STARTARROW="None" STARTINCLINATION="-154;7;"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1612474853633" ID="ID_1343110314" MODIFIED="1612480345782" TEXT="Beschlu&#xdf;: es wird explizit Bestandteil des CanvasHook-API">
+<linktarget COLOR="#6377b1" DESTINATION="ID_1343110314" ENDARROW="Default" ENDINCLINATION="33;-52;" ID="Arrow_ID_1779941265" SOURCE="ID_426717931" STARTARROW="None" STARTINCLINATION="-154;7;"/>
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1612480328315" ID="ID_1469666563" MODIFIED="1612480344504" TEXT="public machen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1612480333285" ID="ID_435258153" MODIFIED="1612480343249" TEXT="direkt verwenden im RelativeCanvasHook">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611539501493" ID="ID_1849626018" MODIFIED="1611539513626" TEXT="TODO: &#xdc;berlegungen zur Daten-Storage">
 <icon BUILTIN="flag-yellow"/>
@@ -31698,7 +31808,7 @@
 <icon BUILTIN="info"/>
 <node CREATED="1523021612818" ID="ID_366179512" MODIFIED="1557498707234" TEXT="Per Konvention festgelegt">
 <node CREATED="1523022525819" ID="ID_1844877136" MODIFIED="1557498707234" TEXT="ViewSpec-DSL">
-<arrowlink COLOR="#6a8499" DESTINATION="ID_1442345755" ENDARROW="Default" ENDINCLINATION="-971;84;" ID="Arrow_ID_1191206769" STARTARROW="None" STARTINCLINATION="502;0;"/>
+<arrowlink COLOR="#6a8499" DESTINATION="ID_1442345755" ENDARROW="Default" ENDINCLINATION="-971;84;" ID="Arrow_ID_1191206769" STARTARROW="None" STARTINCLINATION="507;-51;"/>
 <icon BUILTIN="forward"/>
 </node>
 </node>
@@ -53547,6 +53657,36 @@
 <node CREATED="1554476906923" ID="ID_437420072" MODIFIED="1557498707239" TEXT="Cairo-Doku(allgemein)"/>
 <node CREATED="1554476956084" ID="ID_541824716" LINK="https://www.cairographics.org/documentation/cairomm/reference/classCairo_1_1Context.html" MODIFIED="1557498707239" TEXT="CairoContext(C++)"/>
 </node>
+<node CREATED="1612468919379" ID="ID_1508852681" MODIFIED="1612471386536" TEXT="Problem: explizite Gr&#xf6;&#xdf;e">
+<linktarget COLOR="#a09aae" DESTINATION="ID_1508852681" ENDARROW="Default" ENDINCLINATION="-2048;204;" ID="Arrow_ID_1446927054" SOURCE="ID_544296566" STARTARROW="None" STARTINCLINATION="-3602;0;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1612468930840" ID="ID_340039660" MODIFIED="1612468940602" TEXT="das ist von GTK nicht vorgesehen"/>
+<node CREATED="1612468941622" ID="ID_1584501445" MODIFIED="1612468951097" TEXT="wegen Layout, Themes, Schriftarten"/>
+<node CREATED="1612468955668" ID="ID_719115150" MODIFIED="1612468971046" TEXT="Workaround">
+<node CREATED="1612468972770" ID="ID_54239834" MODIFIED="1612468994420" TEXT="set_size_request">
+<node CREATED="1612468999397" ID="ID_766492418" MODIFIED="1612469008793" TEXT="das legt aber nur die minimal-Ausdehnung fest"/>
+<node CREATED="1612469009709" ID="ID_378480430" MODIFIED="1612469044092" TEXT="Umgebung: Canvas oder Box mit pack_shrink"/>
+<node CREATED="1612469193268" ID="ID_881317091" MODIFIED="1612469202517" TEXT="danach: queue_resize()">
+<icon BUILTIN="back"/>
+</node>
+</node>
+<node CREATED="1612469049536" ID="ID_382411942" MODIFIED="1612469057208" TEXT="size_allocate">
+<node CREATED="1612469059390" ID="ID_545938622" MODIFIED="1612469079936" TEXT="man tut so, als w&#xe4;re man der Container / das Framework"/>
+<node CREATED="1612469081850" ID="ID_138109291" MODIFIED="1612469185623" TEXT="Problem: braucht beide Dimensionen incl Dekoration">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      in dem Widget, das diesen Aufruf empf&#228;ngt, wird der Margin abgezogen, und nur dieser reduzierte Wert wird im Widget selber als Allocation gespeichert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1476375676818" ID="ID_1029920942" MODIFIED="1557498707239" TEXT="Canvas">
 <node CREATED="1476375696215" ID="ID_1397403295" MODIFIED="1557498707239" TEXT="GtkDrawingArea">
@@ -53559,7 +53699,7 @@
 <node CREATED="1476375733298" ID="ID_1024321268" MODIFIED="1557498707239" TEXT="allows custom drawing"/>
 <node CREATED="1476468254712" HGAP="64" ID="ID_1424353399" MODIFIED="1564926360754" TEXT="Eigenschaften" VSHIFT="45">
 <icon BUILTIN="info"/>
-<node COLOR="#338800" CREATED="1476468265399" HGAP="2" ID="ID_257790579" MODIFIED="1612018172610" TEXT="Test-Setup schaffen" VSHIFT="-15">
+<node COLOR="#338800" CREATED="1476468265399" FOLDED="true" HGAP="2" ID="ID_257790579" MODIFIED="1612018172610" TEXT="Test-Setup schaffen" VSHIFT="-15">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1476468390830" ID="ID_1922633406" MODIFIED="1557498707239" TEXT="soll">
 <icon BUILTIN="yes"/>

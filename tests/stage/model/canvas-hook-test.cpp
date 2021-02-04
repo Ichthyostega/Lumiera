@@ -152,7 +152,7 @@ namespace test {
         
       protected:
         int
-        translateTimeToPixels (Time)  const override
+        translateTimeToPixels (TimeValue)  const override
           {
             NOTREACHED ("Time to pixel translation not covered in this unit test");
             return -1;

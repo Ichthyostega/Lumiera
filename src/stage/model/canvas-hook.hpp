@@ -63,6 +63,7 @@ namespace stage  {
 namespace model {
   
   using lib::time::Time;
+  using lib::time::TimeValue;
   
   
   
@@ -117,9 +118,8 @@ namespace model {
           return hookedAt (translateTimeToPixels (start), downshift);
         }
       
-    protected:
       /** extension point for time axis zoom management. */
-      virtual int translateTimeToPixels (Time)  const      =0;
+      virtual int translateTimeToPixels (TimeValue)  const      =0;
     };
   
   

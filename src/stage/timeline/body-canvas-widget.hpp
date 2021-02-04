@@ -90,7 +90,7 @@
 namespace stage  {
 namespace timeline {
   
-  using lib::time::Time;
+  using lib::time::TimeValue;
   
   using CairoC = Cairo::RefPtr<Cairo::Context> const&;
   
@@ -177,7 +177,7 @@ namespace timeline {
       void move (Gtk::Widget&, int xPos, int yPos)     override;
       void remove (Gtk::Widget&)                       override;
       
-      int translateTimeToPixels (Time)  const          override;
+      int translateTimeToPixels (TimeValue)  const     override;
       
     protected: /* ==== Interface: LayoutElement ===== */
       

@@ -152,8 +152,7 @@ namespace timeline {
         TimeVar start_;
         TimeVar len_;
         
-        /* === Partial implementation of ClipDelegate === */
-        
+      public: /* === Partial implementation of ClipDelegate === */
         Time
         getStartTime()  const override
           {
@@ -319,10 +318,38 @@ namespace timeline {
           }
         
         void
+        changeTiming (TimeSpan changedTimings)  override
+          {
+            ClipData::changeTiming (changedTimings);
+            establishHorizontalExtension();
+          }
+        
+        void
         updatePosition()  override
           {
             WidgetHook::Pos nominalPos = establishHookPoint(nullptr);
             this->moveTo (nominalPos.x, nominalPos.y);
+          }
+        
+        /* ==== Size and Layout handling ==== */
+        
+        /** */
+        void
+        establishHorizontalExtension()
+          {
+            int hSize = getCanvas().translateTimeToPixels (getLen());
+            set_size_request (hSize, -1);
+            queue_resize();
+          }
+        
+        /** @todo preliminary / draft of a clip widget, just using a Gtk::Button.
+         *  @note Gtk assumes no fixed size, but a size negotiation.
+         */
+        Gtk::SizeRequestMode
+        get_request_mode_vfunc()  const override
+          {
+            return Gtk::SizeRequestMode::SIZE_REQUEST_CONSTANT_SIZE;
+//          return Gtk::SizeRequestMode::SIZE_REQUEST_HEIGHT_FOR_WIDTH;
           }
         
         
@@ -331,6 +358,7 @@ namespace timeline {
           : HookedWidget{hookPoint, clipName}
           , ClipData{timings}
           {
+            establishHorizontalExtension();
             show_all();
           }
         
@@ -339,6 +367,7 @@ namespace timeline {
           : HookedWidget{existing.establishHookPoint(newView), existing.getClipName()}
           , ClipData{std::move (existing)}
           {
+            establishHorizontalExtension();
             show_all();
           }
       };
