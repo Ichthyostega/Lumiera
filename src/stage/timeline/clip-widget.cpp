@@ -339,7 +339,7 @@ namespace timeline {
           {
             int hSize = getCanvas().translateTimeToPixels (getLen());
             set_size_request (hSize, -1);
-            queue_resize();
+//            queue_resize();
           }
         
         /** @todo preliminary / draft of a clip widget, just using a Gtk::Button.
@@ -348,8 +348,18 @@ namespace timeline {
         Gtk::SizeRequestMode
         get_request_mode_vfunc()  const override
           {
-            return Gtk::SizeRequestMode::SIZE_REQUEST_CONSTANT_SIZE;
-//          return Gtk::SizeRequestMode::SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+            return Gtk::SizeRequestMode::SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+          }
+        
+        /**
+         * the default implementation would ask the embedded child widgets;
+         * however we just force the given size confinement onto them
+         * @todo 1/21 this kindof works, but produces lots of layout warings
+         */
+        void
+        get_preferred_width_vfunc(int& minimum_width, int& natural_width)  const override
+          {
+            minimum_width = natural_width = getCanvas().translateTimeToPixels (getLen());
           }
         
         
