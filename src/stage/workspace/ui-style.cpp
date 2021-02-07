@@ -111,7 +111,7 @@ namespace workspace {
    *     of widget parent relationships down from the top-level window
    *   - this Gtk::WidgetPath is then used to match against CSS selectors of the GTK stylesheet,
    *     either the global system theme, or (with precedence) an application stylesheet (`lumiera.css`)
-   *   - but the Gtk::StyleContext and (and should) also be used outside of the core GTK framework to
+   *   - but the Gtk::StyleContext can (and should) also be used outside of the core GTK framework to
    *     carry out custom drawing tasks, which allows custom drawing to "blend in" with the desktop theme.
    *   - to support this usage, we construct a "virtual widget" and place it at a systematically correct
    *     position in the widget hierarchy, causing the corresponding style context to pick up the appropriate

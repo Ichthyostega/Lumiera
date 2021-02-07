@@ -36,7 +36,7 @@
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <algorithm>
 //#include <vector>
@@ -50,6 +50,7 @@
 //using sigc::ptr_fun;
 //using std::cout;
 //using std::endl;
+using util::max;
 
 
 namespace stage {
@@ -81,15 +82,57 @@ namespace timeline {
       nameTODO_.set_label (trackName);
     }
   
+  uint
+  TrackHeadWidget::calcContentHeight() const
+    {
+      if (childCnt_ == 0) return calcOverallHeight();
+      
+      auto* chld1 = this->get_child_at(0,0);
+      auto* chld2 = this->get_child_at(1,0);
+      int h1 = chld1? chld1->get_height() :0;
+      int h2 = chld2? chld2->get_height() :0;
+      
+      return max (0, max (h1,h2));
+    }
+  
+  uint
+  TrackHeadWidget::calcOverallHeight()  const
+    {
+      return this->get_height();
+    }
+  
+  void
+  TrackHeadWidget::accommodateContentHeight(uint contentHeight)
+    {
+      uint localHeight = calcContentHeight();
+      if (contentHeight > localHeight)
+        increaseContentHeight (contentHeight-localHeight);
+    }
+  
+  /** apply the Δ to some child in first row */
+  void
+  TrackHeadWidget::increaseContentHeight(uint delta)
+    {
+      auto* cell = this->get_child_at(1,0);
+      if (not cell)
+        cell = this->get_child_at(0,0);
+      REQUIRE (cell);
+      int h = cell->get_height();
+      cell->set_size_request (-1, h+delta);
+    }
+
+
+  
   /**
    * @remark The Lumiera Timeline model does not rely on a list of tracks, as most conventional
    * video editing software does -- rather, each sequence holds a _fork of nested scopes._
    * This recursively nested structure is reflected in the patchbay area corresponding to
    * each track in the _header pane_ of the timeline display, located to the left. The
    * patchbay for each track is a grid with initially four quadrants, and the 4th quadrant
-   * holds the _content area,_ which is again a TrackHeadWidget. Additional sub-Tracks
-   * are added as additional lines to the grid, while nested sub-Tracks will be handled
-   * recursively by the corresponding nested TrackHeadWidget.
+   * corresponds to the _content area,_ in case this is a leaf track. Otherwise there would
+   * be nested sub-Tracks, and this lower right grid cell would then hold a TrackHeadWidget
+   * recursively. Additional sub-Tracks are added as additional lines to the grid, while
+   * further nested sub-Tracks will be handled by the corresponding nested TrackHeadWidget.
    * @note Child tracks are always appended. When tracks are reordered or deleted,
    *       the whole structure has to be re-built accordingly.
    */
@@ -107,7 +150,8 @@ namespace timeline {
    *          automatically decrements the refcount; alternatively we could as well
    *          destroy the Gtkmm wrapper-Object (i.e. the `Gtk::Widget` subclass),
    *          since this also destroys the underlying `gobj` and automatically
-   *          detaches it from any container.
+   *          detaches it from any container. (however, here this isn't necessary,
+   *          since the TrackHeadWidget is managed by the DisplayFrame)
    */
   void
   TrackHeadWidget::detachSubFork (TrackHeadWidget& subForkHead)

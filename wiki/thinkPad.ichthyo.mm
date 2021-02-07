@@ -21329,8 +21329,8 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611920958639" ID="ID_672952621" MODIFIED="1611920980292" TEXT="2/2021">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611920993410" ID="ID_73368483" MODIFIED="1611921012112" TEXT="Ziel: vorl&#xe4;ufige Clip-Anzeige an der richtigen Stelle">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1611920993410" ID="ID_73368483" MODIFIED="1612641365225" TEXT="Ziel: vorl&#xe4;ufige Clip-Anzeige an der richtigen Stelle">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -21909,6 +21909,32 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611533873746" ID="ID_1129757567" MODIFIED="1611533921023" TEXT="wo/wie werden die Sub-Tracks ber&#xfc;cksichtigt?">
 <icon BUILTIN="help"/>
+<node CREATED="1612645297486" ID="ID_847170359" MODIFIED="1612646097627" TEXT="ergibt sich aus der Struktur des Display-Frame">
+<arrowlink COLOR="#696fb6" DESTINATION="ID_535248075" ENDARROW="Default" ENDINCLINATION="696;-47;" ID="Arrow_ID_88289028" STARTARROW="None" STARTINCLINATION="-1205;73;"/>
+</node>
+<node CREATED="1612646163776" ID="ID_146112525" MODIFIED="1612646172800" TEXT="es mu&#xdf; auf zwei Ebenen passen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1612646174439" ID="ID_275074702" MODIFIED="1612646188585" TEXT="Beginn und Ende eines Track (incl Kinder)"/>
+<node CREATED="1612646196212" ID="ID_965864393" MODIFIED="1612646208439" TEXT="Beginn und Ende jedes einzelnen Sub-Tracks"/>
+</node>
+<node CREATED="1612646254925" ID="ID_910305950" MODIFIED="1612646291779">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Invariante gilt <i>auf einem</i>&#160;Fork
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1612646316870" ID="ID_91413726" MODIFIED="1612646544159" TEXT="Heads und Bodies are reasonably synced">
+<arrowlink COLOR="#af5182" DESTINATION="ID_253184113" ENDARROW="Default" ENDINCLINATION="47;-31;" ID="Arrow_ID_116043165" STARTARROW="None" STARTINCLINATION="-838;0;"/>
+</node>
+<node CREATED="1612646343880" ID="ID_811479327" MODIFIED="1612646385206" TEXT="&#x27ff; add same height to Head and Body compound"/>
+<node CREATED="1612646393898" ID="ID_162830410" MODIFIED="1612646408248" TEXT="&#x27f9; Invariant holds at begin of next compound"/>
+</node>
 </node>
 </node>
 </node>
@@ -21923,14 +21949,16 @@
 <node CREATED="1583010386420" ID="ID_719664576" MODIFIED="1583010408429" TEXT="Gesamtresultat mit Ist-Zustand vergleichen"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583010590180" ID="ID_253184113" MODIFIED="1583677738518" TEXT="Header-Ausgleich">
 <arrowlink COLOR="#8b71ae" DESTINATION="ID_1925515175" ENDARROW="Default" ENDINCLINATION="259;-76;" ID="Arrow_ID_44202222" STARTARROW="None" STARTINCLINATION="-426;50;"/>
+<linktarget COLOR="#af5182" DESTINATION="ID_253184113" ENDARROW="Default" ENDINCLINATION="47;-31;" ID="Arrow_ID_116043165" SOURCE="ID_91413726" STARTARROW="None" STARTINCLINATION="-838;0;"/>
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611534925644" ID="ID_1754764132" MODIFIED="1611534940798" TEXT="#1211 coordinate track extension">
+<linktarget COLOR="#4b98e2" DESTINATION="ID_1754764132" ENDARROW="Default" ENDINCLINATION="-2912;207;" ID="Arrow_ID_468901844" SOURCE="ID_1506262956" STARTARROW="None" STARTINCLINATION="698;66;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583677270535" ID="ID_1729172771" MODIFIED="1583677289501" TEXT="ungekl&#xe4;rt: wann genau mu&#xdf; der Header-Ausgleich laufen?">
+<node COLOR="#435e98" CREATED="1583677270535" ID="ID_1729172771" MODIFIED="1612714274794" TEXT="wann genau mu&#xdf; der Header-Ausgleich laufen?">
 <icon BUILTIN="help"/>
-<node CREATED="1583677300836" ID="ID_893081931" MODIFIED="1583677581501" TEXT="Plan-A">
-<icon BUILTIN="forward"/>
+<node CREATED="1583677300836" ID="ID_893081931" MODIFIED="1612712793203" TEXT="Plan-A">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1583677323867" ID="ID_1147387689" MODIFIED="1583677337542" TEXT="gekoppelt mit der lokalen Platz-Ermittlung"/>
 <node CREATED="1583677426338" ID="ID_6669047" MODIFIED="1583677442862" TEXT="Problem: R&#xfc;ckwirkung der Canvas-Platz-Ermittlung"/>
 <node CREATED="1583677385064" ID="ID_822192050" MODIFIED="1583677399994" TEXT="indirekte Hoffnung: die Rekursion wird das l&#xf6;sen">
@@ -21952,27 +21980,44 @@
 </node>
 </node>
 <node CREATED="1583677357807" ID="ID_685227170" MODIFIED="1583677579039" TEXT="Plan-B">
-<icon BUILTIN="hourglass"/>
-<node CREATED="1583677365234" ID="ID_1695342185" MODIFIED="1583677370926" TEXT="separater Pass am Ende"/>
-<node CREATED="1583677528693" ID="ID_83309172" MODIFIED="1583677541604" TEXT="bedingt zus&#xe4;tzliche Komplikationen">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1583677546194" ID="ID_1618387866" MODIFIED="1583677554734" TEXT="brauche daf&#xfc;r eigenes API oder Flag"/>
-<node CREATED="1583677556049" ID="ID_1478791335" MODIFIED="1583677574810" TEXT="mu&#xdf; die Ausl&#xf6;se-Bedingung auf top-Level erkennen"/>
-</node>
-</node>
-</node>
-<node CREATED="1583010602619" ID="ID_245791707" MODIFIED="1583010640224" TEXT="Eingabe: neuer Soll-Zustand laut Body"/>
-<node CREATED="1583010645645" ID="ID_352331285" MODIFIED="1583010737649" TEXT="Einzel-Header besuchen mit &#xdc;bertrag">
+<icon BUILTIN="forward"/>
+<node CREATED="1583677365234" ID="ID_1695342185" MODIFIED="1612712806916" TEXT="separater zweiter Pass"/>
+<node CREATED="1612712807625" ID="ID_1219345647" MODIFIED="1612712819659" TEXT="nachdem das Track-Profil konstruiert wurde"/>
+<node CREATED="1612712830629" ID="ID_713212199" MODIFIED="1612712864077" TEXT="dieser 2.Pass ist ohnehin notwendig">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      in geometrischer Reihenfolge von oben nach unten
+      ...um die Widgets an die nun korrekte Position gem&#228;&#223; Track-Profil zu schieben
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1612712922845" ID="ID_1653554586" MODIFIED="1612726635680" TEXT="Problem: wenn Body zu klein ist">
+<arrowlink COLOR="#c6696c" DESTINATION="ID_1102509163" ENDARROW="Default" ENDINCLINATION="68;-71;" ID="Arrow_ID_215519404" STARTARROW="None" STARTINCLINATION="-26;78;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1612712941815" ID="ID_1546276985" MODIFIED="1612712963120" TEXT="...wir merken das erst, nachddem das Profil konstruiert wurde"/>
+<node CREATED="1612712987992" ID="ID_1461659027" MODIFIED="1612713002175" TEXT="...aber dann ist es nicht mehr m&#xf6;glich den Body zu vergr&#xf6;&#xdf;ern"/>
+</node>
+</node>
+</node>
+<node CREATED="1583010602619" ID="ID_245791707" MODIFIED="1583010640224" TEXT="Eingabe: neuer Soll-Zustand laut Body">
+<node CREATED="1612714376084" ID="ID_1212522067" MODIFIED="1612714380543" TEXT="f&#xfc;r die Content-Area"/>
+<node CREATED="1612714380972" ID="ID_1481576243" MODIFIED="1612714393222" TEXT="f&#xfc;r den gesamten sub-Fork"/>
+</node>
+<node CREATED="1612726548017" ID="ID_1808095522" MODIFIED="1612726561622" TEXT="jeden einzelnen Header besuchen und ggfs vergr&#xf6;&#xdf;ern"/>
+<node COLOR="#7a3459" CREATED="1612726562591" ID="ID_37470143" MODIFIED="1612726582625" TEXT="kann Body nicht vergr&#xf6;&#xdf;ern">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1612726584909" ID="ID_1102509163" MODIFIED="1612726635680" TEXT="weil zu dem Zeitpunkt das TrackProfile schon berechnet ist">
+<linktarget COLOR="#c6696c" DESTINATION="ID_1102509163" ENDARROW="Default" ENDINCLINATION="68;-71;" ID="Arrow_ID_215519404" SOURCE="ID_1653554586" STARTARROW="None" STARTINCLINATION="-26;78;"/>
+</node>
+<node CREATED="1612726638878" ID="ID_350050993" MODIFIED="1612726655223" TEXT="vermute / hoffe, da&#xdf; das die Ausnahme bleibt">
+<node CREATED="1612726657796" ID="ID_474492345" MODIFIED="1612726672996" TEXT="und zwar, weil wir durchaus auf der Ebene einzelner Tracks einen Ausgleich machen"/>
+<node CREATED="1612726674105" ID="ID_228252726" MODIFIED="1612726705766" TEXT="&#x27f9; bei der Diskrepanz kann es sich nur um Dekorationen handeln"/>
+</node>
 </node>
 </node>
 </node>
@@ -22440,6 +22485,9 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612030849154" ID="ID_242090895" MODIFIED="1612030858673" TEXT="verbleibende Probleme">
 <icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1612726745183" ID="ID_1213054592" MODIFIED="1612726758921" TEXT="Header-Ausglieich funktioniert (noch) nicht">
+<icon BUILTIN="flag-pink"/>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612030881439" ID="ID_306268306" MODIFIED="1612030903673" TEXT="nach dem DisplayEvaluationPass: Zustand nicht vollst&#xe4;ndig realisiert">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1612030907643" ID="ID_607409982" MODIFIED="1612030927924" TEXT="obwohl aller Anzeigezustand korrekt gesetzt wurde"/>
@@ -22539,6 +22587,7 @@
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#436cbd" DESTINATION="ID_600150628" ENDARROW="Default" ENDINCLINATION="-340;35;" ID="Arrow_ID_1431681301" STARTARROW="None" STARTINCLINATION="2;30;"/>
 <icon BUILTIN="help"/>
 <node CREATED="1540259854597" ID="ID_330440597" MODIFIED="1557498707226" TEXT="Invariante gesucht">
 <icon BUILTIN="yes"/>
@@ -22575,7 +22624,18 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1540346455423" ID="ID_535248075" MODIFIED="1557498707226" TEXT="schafft die invariante Struktur im Verh&#xe4;ltnis zu den Kindern"/>
+<node CREATED="1540346455423" ID="ID_535248075" MODIFIED="1557498707226" TEXT="schafft die invariante Struktur im Verh&#xe4;ltnis zu den Kindern">
+<linktarget COLOR="#696fb6" DESTINATION="ID_535248075" ENDARROW="Default" ENDINCLINATION="696;-47;" ID="Arrow_ID_88289028" SOURCE="ID_847170359" STARTARROW="None" STARTINCLINATION="-1205;73;"/>
+<node CREATED="1612645714351" ID="ID_504975313" MODIFIED="1612645720472" TEXT="Display-Frame verklammert">
+<node CREATED="1612645738946" ID="ID_1516329442" MODIFIED="1612645749156" TEXT="einen Track-Head incl nested sub-Heads"/>
+<node CREATED="1612645752193" ID="ID_863983538" MODIFIED="1612645762738" TEXT="einen Track-Body incl nested sub-Tracks"/>
+</node>
+<node CREATED="1612645786635" ID="ID_600150628" MODIFIED="1612645961414" TEXT="Kind-Display-Frame injiziert">
+<linktarget COLOR="#436cbd" DESTINATION="ID_600150628" ENDARROW="Default" ENDINCLINATION="-340;35;" ID="Arrow_ID_1431681301" SOURCE="ID_1869427213" STARTARROW="None" STARTINCLINATION="2;30;"/>
+<node CREATED="1612645828669" ID="ID_117377953" MODIFIED="1612645878450" TEXT="neuen sub-Track-Head am Ende der verschachtelten Liste"/>
+<node CREATED="1612645847854" ID="ID_661575710" MODIFIED="1612645874284" TEXT="neuen sub-Track-Body an die Kinder des Track-Body eingeh&#xe4;ngt"/>
+</node>
+</node>
 <node CREATED="1540505441706" HGAP="28" ID="ID_1492670388" MODIFIED="1563466899646" TEXT="Lebenszyklus" VSHIFT="20">
 <linktarget COLOR="#ac8396" DESTINATION="ID_1492670388" ENDARROW="Default" ENDINCLINATION="-473;37;" ID="Arrow_ID_1838431568" SOURCE="ID_1349567495" STARTARROW="None" STARTINCLINATION="-428;36;"/>
 <node CREATED="1540505464975" ID="ID_195276443" MODIFIED="1557498707226" TEXT="DisplayFrame (als Member) an TrackPresenter gebunden"/>
@@ -22793,17 +22853,6 @@
 </node>
 </node>
 </node>
-<node CREATED="1563467223350" ID="ID_16819001" MODIFIED="1563467230773" TEXT="Problem: neu-Anordnung">
-<node CREATED="1563467236241" ID="ID_711529393" MODIFIED="1563467248187" TEXT="wenn sich die Reihenfolge der Spuren &#xe4;ndert"/>
-<node CREATED="1563467263669" ID="ID_1535368629" MODIFIED="1563467269910" TEXT="wenn eine Spur wegf&#xe4;llt"/>
-<node CREATED="1563467279931" ID="ID_563915021" MODIFIED="1563467289047" TEXT="...dann m&#xfc;ssen">
-<node CREATED="1563467290138" ID="ID_568668070" MODIFIED="1563467296500" TEXT="bestehende Verankerungen beseitigt werden"/>
-<node CREATED="1563467297369" ID="ID_737072989" MODIFIED="1575053380683" TEXT="alle Verankerungen neu re-Konstruiert werden">
-<arrowlink COLOR="#927aa8" DESTINATION="ID_1728979524" ENDARROW="Default" ENDINCLINATION="-421;17;" ID="Arrow_ID_445844094" STARTARROW="None" STARTINCLINATION="398;25;"/>
-<arrowlink COLOR="#d73f41" DESTINATION="ID_1414960950" ENDARROW="Default" ENDINCLINATION="203;-36;" ID="Arrow_ID_1023645457" STARTARROW="None" STARTINCLINATION="2;57;"/>
-</node>
-</node>
-</node>
 <node CREATED="1569711798770" ID="ID_27191288" MODIFIED="1584888645436">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -22871,6 +22920,17 @@
 <node CREATED="1575653207328" ID="ID_1942901156" MODIFIED="1576876278735" TEXT="diese brauchen daher eine Referenz auf einen &quot;irgendwo vorhandenen&quot; Timeline-ViewHook"/>
 <node COLOR="#338800" CREATED="1576876251659" ID="ID_1249561924" MODIFIED="1576876267532" TEXT="und tats&#xe4;chlich bekommen sie diesen per verketteter Initialisierung">
 <icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node CREATED="1563467223350" ID="ID_16819001" MODIFIED="1612645643066" TEXT="Problem: neu-Anordnung">
+<node CREATED="1563467236241" ID="ID_711529393" MODIFIED="1563467248187" TEXT="wenn sich die Reihenfolge der Spuren &#xe4;ndert"/>
+<node CREATED="1563467263669" ID="ID_1535368629" MODIFIED="1563467269910" TEXT="wenn eine Spur wegf&#xe4;llt"/>
+<node CREATED="1563467279931" ID="ID_563915021" MODIFIED="1563467289047" TEXT="...dann m&#xfc;ssen">
+<node CREATED="1563467290138" ID="ID_568668070" MODIFIED="1563467296500" TEXT="bestehende Verankerungen beseitigt werden"/>
+<node CREATED="1563467297369" ID="ID_737072989" MODIFIED="1575053380683" TEXT="alle Verankerungen neu re-Konstruiert werden">
+<arrowlink COLOR="#927aa8" DESTINATION="ID_1728979524" ENDARROW="Default" ENDINCLINATION="-421;17;" ID="Arrow_ID_445844094" STARTARROW="None" STARTINCLINATION="398;25;"/>
+<arrowlink COLOR="#d73f41" DESTINATION="ID_1414960950" ENDARROW="Default" ENDINCLINATION="203;-36;" ID="Arrow_ID_1023645457" STARTARROW="None" STARTINCLINATION="2;57;"/>
 </node>
 </node>
 </node>
@@ -23820,7 +23880,9 @@
 </node>
 </node>
 <node CREATED="1566955554876" ID="ID_1903815723" MODIFIED="1566955559495" TEXT="Layout-Steuerung">
-<node CREATED="1566955560666" ID="ID_1506262956" MODIFIED="1566955573502" TEXT="mit Body-Canvas koordinieren"/>
+<node CREATED="1566955560666" ID="ID_1506262956" MODIFIED="1566955573502" TEXT="mit Body-Canvas koordinieren">
+<arrowlink COLOR="#4b98e2" DESTINATION="ID_1754764132" ENDARROW="Default" ENDINCLINATION="-2912;207;" ID="Arrow_ID_468901844" STARTARROW="None" STARTINCLINATION="698;66;"/>
+</node>
 <node CREATED="1566955574281" ID="ID_1649819002" MODIFIED="1566955652259" TEXT="mu&#xdf; gemeinsam mit unterem Body-Canvas scrollen">
 <arrowlink COLOR="#327dd5" DESTINATION="ID_1718751102" ENDARROW="Default" ENDINCLINATION="-1329;-302;" ID="Arrow_ID_1962173714" STARTARROW="None" STARTINCLINATION="631;0;"/>
 </node>
@@ -27801,7 +27863,7 @@
 <arrowlink COLOR="#b75674" DESTINATION="ID_31825370" ENDARROW="Default" ENDINCLINATION="178;986;" ID="Arrow_ID_1663311989" STARTARROW="None" STARTINCLINATION="-248;-11;"/>
 <arrowlink COLOR="#9f91a7" DESTINATION="ID_261041772" ENDARROW="Default" ENDINCLINATION="-490;-44;" ID="Arrow_ID_462162449" STARTARROW="None" STARTINCLINATION="345;14;"/>
 <icon BUILTIN="pencil"/>
-<node CREATED="1566956340002" ID="ID_1472575231" MODIFIED="1566956344957" TEXT="stimmen die Werte?">
+<node COLOR="#435e98" CREATED="1566956340002" ID="ID_1472575231" MODIFIED="1612643628908" TEXT="stimmen die Werte?">
 <node CREATED="1566957803903" ID="ID_474929251" MODIFIED="1566957807116" TEXT="beobachtet">
 <node CREATED="1566957808335" ID="ID_1187167099" MODIFIED="1566957813234" TEXT="Gr&#xf6;&#xdf;enberechnung">
 <node CREATED="1566957814421" ID="ID_600013220" MODIFIED="1566957837743" TEXT="total 860"/>
@@ -29706,8 +29768,7 @@
       das ist eine Flag in der privaten Widget-Struktur. Keine Ahnung was das bedeutet.<br />Und &#252;brigens: sichtbar mu&#223; das Widget auch noch sein...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1612529820222" ID="ID_1943944289" MODIFIED="1612529840523" TEXT="unterscheidet dann">
@@ -29729,8 +29790,7 @@
       also stellt eigentlich grade nicht die versprochene Logik bereit
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1612614424711" ID="ID_407129358" MODIFIED="1612614528239" TEXT="Button: delegiert an gtk_css_gadget_get_preferred_size (ORIENTATION_VERTICAL und &quot;forSize&quot;)"/>
 </node>
@@ -29768,8 +29828,7 @@
       danach noch die <i>adjust_baseline_allocation</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1612530059555" ID="ID_1426144413" MODIFIED="1612534894781" TEXT="Signal: SIZE_ALLOCATE">
@@ -29808,8 +29867,7 @@
       also entweder in horizontaler, oder in vertikaler Richtung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1612530653137" ID="ID_1843450417" MODIFIED="1612530654181" TEXT="adjust_for_margin"/>
 <node CREATED="1612530676214" ID="ID_277814433" MODIFIED="1612530677407" TEXT="adjust_for_align"/>
 </node>

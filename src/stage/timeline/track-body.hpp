@@ -118,7 +118,7 @@ namespace timeline {
       uint establishTrackSpace (TrackProfile&);
       uint calcRulerHeight();
       uint calcHeight();
-      void accomodateHeight(uint contentExtension);
+      void accommodateContentHeight(uint contentExtension);
       
       uint getContentOffsetY() { return startLine_ + contentOffset_; }
       

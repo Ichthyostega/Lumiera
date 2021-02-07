@@ -127,7 +127,7 @@ namespace timeline {
    * within this track's content area
    */
   void
-  TrackBody::accomodateHeight(uint contentExtension)
+  TrackBody::accommodateContentHeight(uint contentExtension)
   {
     if (contentExtension > contentHeight_)
       contentHeight_ = contentExtension;

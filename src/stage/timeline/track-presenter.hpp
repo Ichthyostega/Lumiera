@@ -341,7 +341,15 @@ namespace timeline {
     display_.sync_and_balance (displayEvaluation);
   }
   
-  /** find out about the vertical extension of a single track display. */
+  /**
+   * Find out about the vertical extension of a single track display.
+   * @note will be invoked during the first recursive walk, at which point
+   *       the TrackProfile has not yet been established; the latter will
+   *       happen after returning from that recursive walk. Thus within this
+   *       first pass, we can only adjust local sizes within the content area,
+   *       while the second pass, in #relinkContents() can also investigate
+   *       the track body vertical extension, defined by the TrackProfile.
+   */
   inline void
   DisplayFrame::establishExtension (vector<PClip>& clips, vector<PMark>&)
   {
@@ -350,10 +358,9 @@ namespace timeline {
                                        {
                                          return clip->determineRequiredVerticalExtension();
                                        }));
-    this->body_.accomodateHeight(maxVSize);
-                   //////////////////////////////////////////////////////////////////////////////////////////TICKET #1211 : actually implement a coordination of head / body sizes here
-    uint headSize = this->head_.get_height();
-    uint bodySize = this->body_.calcHeight();
+    maxVSize = max (maxVSize, head_.calcContentHeight());
+    this->body_.accommodateContentHeight (maxVSize);
+    this->head_.accommodateContentHeight (maxVSize);
   }
   
   /** re-flow and adjust after the global layout has been established
@@ -366,14 +373,20 @@ namespace timeline {
    *  since any readjustment invalidates the global layout. However, since
    *  all adjustments are done by increasing monotonously, after several
    *  recursions the layout will be balanced eventually.
-   * @note any discrepancy not solvable at this local level should be
-   *       propagated downwards, which can be achieved by transporting
-   *       this information through the DisplayEvaluation object.
+   * @note We can increase a head to match body size. Otherwise, if the body
+   *       is too small, we're out of luck, since the Profile is already calculated.
+   *       However, since we accommodated the local extension within each content area
+   *       prior to calculating the Profile, chances are that such a discrepancy is small.
+   * @remark we could also consider to transport a discrepancy downwards by using a
+   *       state variable in the DisplayEvaluation
    */
   inline void
-  DisplayFrame::sync_and_balance (DisplayEvaluation& displayEvaluation)
+  DisplayFrame::sync_and_balance (DisplayEvaluation&)
   {
-    TODO ("actually do something to keep Header and Body in Sync. Save a delta into the displayEvaluation");
+    uint headSize = head_.calcOverallHeight();
+    uint bodySize = body_.calcHeight();
+    if (bodySize > headSize)
+      head_.increaseContentHeight (bodySize-headSize);
   }
 
 

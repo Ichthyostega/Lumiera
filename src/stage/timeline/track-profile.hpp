@@ -24,7 +24,7 @@
 /** @file track-profile.hpp
  ** Abstraction to build the layout for the track spaces within timeline display.
  ** In Lumiera, tracks are arranged into a fork of nested shapes, which structure
- ** is parallelled into nested structure of TrackBody elements. A tree walk over
+ ** is parallelled into a nested structure of TrackBody elements. A tree walk over
  ** this structure yields a sequence of adjacent timeline elements, like overview
  ** rulers, content area and nested child track display. This sequence can then
  ** be transformed into suitable drawing instructions to create a 3D shaded

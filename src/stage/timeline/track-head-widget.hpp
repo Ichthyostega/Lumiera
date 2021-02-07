@@ -89,6 +89,12 @@ namespace timeline {
      ~TrackHeadWidget();
       
       void setTrackName (cuString&);
+      
+      uint calcContentHeight() const;
+      uint calcOverallHeight()  const;
+      
+      void accommodateContentHeight(uint);
+      void increaseContentHeight(uint delta);
 
     private:/* ===== Internals ===== */
       
