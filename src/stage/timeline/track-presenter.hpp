@@ -233,7 +233,7 @@ namespace timeline {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
         }
       
-      void relinkContents (DisplayEvaluation&);
+      void relinkContents ();
     };
   
   
@@ -319,26 +319,19 @@ namespace timeline {
   TrackPresenter::establishLayout (DisplayEvaluation& displayEvaluation)
   {
     if (displayEvaluation.isCollectPhase())
-      display_.establishExtension (clips_, markers_);
+      {
+        display_.establishExtension (clips_, markers_);
+        for (auto& subTrack: subFork_)
+          subTrack->establishLayout (displayEvaluation);
+      }
     else
-      relinkContents (displayEvaluation);
-    for (auto& subTrack: subFork_)
-      subTrack->establishLayout (displayEvaluation);
-  }
-  
-  /** second pass of the DisplayEvaluation:
-   *  reassemble content to match adjusted layout
-   * @todo 2/2021 WIP-WIP initial draft; many aspects still unclear
-   */
-  inline void
-  TrackPresenter::relinkContents (DisplayEvaluation& displayEvaluation)
-  {
-    for (auto& clip: clips_)
-      clip->relink();
-    for (auto& mark: markers_)
-      mark->relink();
-    // re-sync and match the header / body display
-    display_.sync_and_balance (displayEvaluation);
+      { // recursion first, so all sub-Tracks are already balanced
+        for (auto& subTrack: subFork_)
+          subTrack->establishLayout (displayEvaluation);
+        this->relinkContents();
+        // re-sync and match the header / body display
+        display_.sync_and_balance (displayEvaluation);
+      }
   }
   
   /**
@@ -362,6 +355,20 @@ namespace timeline {
     this->body_.accommodateContentHeight (maxVSize);
     this->head_.accommodateContentHeight (maxVSize);
   }
+  
+  /** second pass of the DisplayEvaluation:
+   *  reassemble content to match adjusted layout
+   * @todo 2/2021 WIP-WIP initial draft; many aspects still unclear
+   */
+  inline void
+  TrackPresenter::relinkContents ()
+  {
+    for (auto& clip: clips_)
+      clip->relink();
+    for (auto& mark: markers_)
+      mark->relink();
+  }
+  
   
   /** re-flow and adjust after the global layout has been established
    *  At this point we can assume that both header and body are updated

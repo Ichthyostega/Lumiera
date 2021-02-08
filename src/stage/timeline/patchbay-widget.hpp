@@ -68,7 +68,7 @@ namespace timeline {
    * @todo WIP-WIP as of 4/2019
    */
   class PatchbayWidget
-    : public Gtk::Viewport
+    : public Gtk::ScrolledWindow
     {
     public:
       PatchbayWidget (PAdjustment const& vScroll);

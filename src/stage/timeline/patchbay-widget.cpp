@@ -79,8 +79,12 @@ namespace timeline {
    *       thus we create a disabled Adjustment for this parameter.
    */
   PatchbayWidget::PatchbayWidget (PAdjustment const& vScroll)
-    : Gtk::Viewport{Gtk::Adjustment::create (0,0,0,0,0,0), vScroll}
-    { }
+    : Gtk::ScrolledWindow{Gtk::Adjustment::create (0,0,0,0,0,0), vScroll}
+    {
+      set_shadow_type (Gtk::SHADOW_NONE);
+      set_policy (Gtk::POLICY_NEVER, Gtk::POLICY_EXTERNAL); // horizontal extension is fixed, using the track body vertical scrollbar
+      property_expand() = true;                            //  dynamically grab additional space
+    }
   
   
   void

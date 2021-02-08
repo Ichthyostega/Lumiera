@@ -104,6 +104,9 @@ namespace timeline {
       
       /** Discard all nested sub track display widgets. */
       void clearFork();
+      
+      /** get the height allocated at cell(x,y) */
+      uint getHeightAt (int left, int top)  const;
      
     };
   

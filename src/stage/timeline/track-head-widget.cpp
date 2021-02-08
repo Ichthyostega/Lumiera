@@ -69,6 +69,10 @@ namespace timeline {
     , treeTODO_{"↳"}
     , childCnt_{0}
     {
+      nameTODO_.set_xalign(0);
+      nameTODO_.set_yalign(0);
+      treeTODO_.set_xalign(0);
+      treeTODO_.set_yalign(0.5);
       this->attach (nameTODO_, 0,0, 2,1);
       this->attach (treeTODO_, 0,1, 1,1);
       
@@ -83,14 +87,23 @@ namespace timeline {
     }
   
   uint
+  TrackHeadWidget::getHeightAt (int left, int top)  const
+    {
+      auto* cell = this->get_child_at(left,top);
+      if (cell == nullptr) return 0;
+      int actual = cell->get_height();
+      int minimal=0, natural=0;
+      cell->get_preferred_height(minimal, natural);
+      return max (0, max (actual, natural));
+    }
+
+  uint
   TrackHeadWidget::calcContentHeight() const
     {
       if (childCnt_ == 0) return calcOverallHeight();
       
-      auto* chld1 = this->get_child_at(0,0);
-      auto* chld2 = this->get_child_at(1,0);
-      int h1 = chld1? chld1->get_height() :0;
-      int h2 = chld2? chld2->get_height() :0;
+      int h1 = getHeightAt (0,0);
+      int h2 = getHeightAt (1,0);
       
       return max (0, max (h1,h2));
     }
@@ -98,7 +111,15 @@ namespace timeline {
   uint
   TrackHeadWidget::calcOverallHeight()  const
     {
-      return this->get_height();
+      uint heightSum = 0;
+      for (uint line=0; line <= max(1u, childCnt_); ++line)
+        {
+          int h1 = getHeightAt (0,line);
+          int h2 = getHeightAt (1,line);
+          
+          heightSum += max (0, max (h1,h2));
+        }
+      return heightSum;
     }
   
   void
@@ -114,10 +135,8 @@ namespace timeline {
   TrackHeadWidget::increaseContentHeight(uint delta)
     {
       auto* cell = this->get_child_at(1,0);
-      if (not cell)
-        cell = this->get_child_at(0,0);
       REQUIRE (cell);
-      int h = cell->get_height();
+      uint h = getHeightAt (1,0);
       cell->set_size_request (-1, h+delta);
     }
 

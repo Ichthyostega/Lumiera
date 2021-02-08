@@ -21947,10 +21947,10 @@
 </node>
 <node CREATED="1583010359364" ID="ID_1532117771" MODIFIED="1583010378225" TEXT="&quot;danach&quot; auf jedem Canvas die Platz-Ermittlung ausl&#xf6;sen"/>
 <node CREATED="1583010386420" ID="ID_719664576" MODIFIED="1583010408429" TEXT="Gesamtresultat mit Ist-Zustand vergleichen"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583010590180" ID="ID_253184113" MODIFIED="1583677738518" TEXT="Header-Ausgleich">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583010590180" ID="ID_253184113" MODIFIED="1612742654585" TEXT="Header-Ausgleich">
 <arrowlink COLOR="#8b71ae" DESTINATION="ID_1925515175" ENDARROW="Default" ENDINCLINATION="259;-76;" ID="Arrow_ID_44202222" STARTARROW="None" STARTINCLINATION="-426;50;"/>
 <linktarget COLOR="#af5182" DESTINATION="ID_253184113" ENDARROW="Default" ENDINCLINATION="47;-31;" ID="Arrow_ID_116043165" SOURCE="ID_91413726" STARTARROW="None" STARTINCLINATION="-838;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611534925644" ID="ID_1754764132" MODIFIED="1611534940798" TEXT="#1211 coordinate track extension">
 <linktarget COLOR="#4b98e2" DESTINATION="ID_1754764132" ENDARROW="Default" ENDINCLINATION="-2912;207;" ID="Arrow_ID_468901844" SOURCE="ID_1506262956" STARTARROW="None" STARTINCLINATION="698;66;"/>
 <icon BUILTIN="flag-yellow"/>
@@ -22082,9 +22082,9 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611787674741" ID="ID_1709866969" MODIFIED="1611788022804" TEXT="Canvas-Koordinaten nachf&#xfc;hren">
+<node COLOR="#338800" CREATED="1611787674741" ID="ID_1709866969" MODIFIED="1612742632732" TEXT="Canvas-Koordinaten nachf&#xfc;hren">
 <linktarget COLOR="#675b85" DESTINATION="ID_1709866969" ENDARROW="Default" ENDINCLINATION="684;566;" ID="Arrow_ID_541728210" SOURCE="ID_791476178" STARTARROW="None" STARTINCLINATION="-1876;104;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1611915466838" ID="ID_355225110" MODIFIED="1611915483757" TEXT="Problem: Storage der Koordinaten">
 <node CREATED="1611915485454" ID="ID_1653031142" MODIFIED="1611915494045" TEXT="welche Form?">
 <node CREATED="1611915495602" ID="ID_269674665" MODIFIED="1611915511620" TEXT="logische Koordinaten">
@@ -22143,10 +22143,10 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611915390832" ID="ID_1488484275" MODIFIED="1612031224261" TEXT="Clips m&#xfc;ssen partizipieren">
+<node COLOR="#338800" CREATED="1611915390832" ID="ID_1488484275" MODIFIED="1612742624778" TEXT="Clips m&#xfc;ssen partizipieren">
 <linktarget COLOR="#e33b64" DESTINATION="ID_1488484275" ENDARROW="Default" ENDINCLINATION="-14;-84;" ID="Arrow_ID_1820616086" SOURCE="ID_1829463115" STARTARROW="None" STARTINCLINATION="-70;14;"/>
 <linktarget COLOR="#5c849c" DESTINATION="ID_1488484275" ENDARROW="Default" ENDINCLINATION="-838;79;" ID="Arrow_ID_1236233773" SOURCE="ID_1248959265" STARTARROW="None" STARTINCLINATION="612;56;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1611916037617" ID="ID_1961599171" MODIFIED="1611916053240" TEXT="weil die Layout-Koordinaten erneut aufgebaut werden m&#xfc;ssen"/>
 <node CREATED="1611916054695" ID="ID_178492743" MODIFIED="1611916077488" TEXT="und nur die logischen Koordinaten gespeichert sein sollten, und zwar im Clip"/>
 <node CREATED="1611921176093" ID="ID_1185756571" MODIFIED="1611921186371" TEXT="Entscheidung: Art der Einbindung">
@@ -22485,8 +22485,47 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612030849154" ID="ID_242090895" MODIFIED="1612030858673" TEXT="verbleibende Probleme">
 <icon BUILTIN="bell"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1612726745183" ID="ID_1213054592" MODIFIED="1612726758921" TEXT="Header-Ausglieich funktioniert (noch) nicht">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1612726745183" ID="ID_1213054592" MODIFIED="1612742170046" TEXT="Header-Ausglieich funktioniert (noch) nicht">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1612742259238" ID="ID_607718286" MODIFIED="1612742418037" TEXT="wichtig: die desired_height verwenden (&#x2192;size-request)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...nachdem erstmals ein size-request gesetzt wurde, hat sich die tats&#228;chliche H&#246;he des Widget noch nicht ver&#228;ndert (das wird erst mit dem nachfolgenden resize-event vollzogen). Aber der size-request spiegelt sich sofort in der desired_height wieder. Wir m&#252;ssen also die Ermittlung der &quot;aktuellen&quot; H&#246;he <i>darauf</i>&#160;aufbauen, damit die schon vorgenommenen Anpassungen nicht nochmal im Delta landen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1612742186077" ID="ID_1081995188" MODIFIED="1612742421843" TEXT="Weiterer Fehler war die Auswertungs-Reihenfolge">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1612742199694" ID="ID_354715180" MODIFIED="1612742247324" TEXT="der 2.Pass mu&#xdf; r&#xfc;ckw&#xe4;rts aufsteigen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      damit die H&#246;hen f&#252;r die Kind-Tracks bereits gesetzt sind, wenn die Gesamth&#246;he des Parent-Track betrachtet wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612742429043" ID="ID_1739285791" MODIFIED="1612742461497" TEXT="die scroll-H&#xf6;he / Canvas-H&#xf6;he stimmt nicht">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1612742467558" ID="ID_929888474" MODIFIED="1612742484264" TEXT="und zwar fehlt genau die zus&#xe4;tzliche H&#xf6;he der schlie&#xdf;enden Slope"/>
+<node CREATED="1612742484972" ID="ID_1291566735" MODIFIED="1612742498974" TEXT="nachdem man aber das Fenster einmal resized hat, stimmt es wieder"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612742527238" ID="ID_1543056669" MODIFIED="1612742537453" TEXT="die Header-Starts rutschen minimal nach oben">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1612742538724" ID="ID_1839437599" MODIFIED="1612742544871" TEXT="ein off-by-one?"/>
+<node CREATED="1612742545690" ID="ID_1735908408" MODIFIED="1612742563442" TEXT="sieht so aus, als w&#xfc;rden uns pro Zeile nur wenige Pixel fehlen"/>
+<node CREATED="1612742574675" ID="ID_20715943" MODIFIED="1612742616893" TEXT="d.h. der TrackBody ist minimal Gr&#xf6;&#xdf;er, als die H&#xf6;he, die wir als Delta anwenden"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612030881439" ID="ID_306268306" MODIFIED="1612030903673" TEXT="nach dem DisplayEvaluationPass: Zustand nicht vollst&#xe4;ndig realisiert">
 <icon BUILTIN="messagebox_warning"/>
