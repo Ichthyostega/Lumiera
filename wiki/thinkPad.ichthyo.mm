@@ -5331,6 +5331,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538943061633" ID="ID_1972040317" MODIFIED="1557498707218" TEXT="minimale Feedback-Aktionen">
 <icon BUILTIN="hourglass"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538943095252" ID="ID_1784185766" MODIFIED="1557498707218" TEXT="drag clip">
+<arrowlink COLOR="#fbd7b5" DESTINATION="ID_1472064878" ENDARROW="Default" ENDINCLINATION="-1443;-151;" ID="Arrow_ID_1918638969" STARTARROW="None" STARTINCLINATION="1644;332;"/>
 <icon BUILTIN="hourglass"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538943104651" ID="ID_948012732" MODIFIED="1557498707218" TEXT="delete clip">
@@ -31542,6 +31543,78 @@
 <node CREATED="1488423482303" ID="ID_1337577946" MODIFIED="1557498707233" TEXT="Optionen"/>
 </node>
 <node CREATED="1488423493014" ID="ID_64529473" MODIFIED="1557498707233" TEXT="Navigation"/>
+<node CREATED="1613329386385" ID="ID_1761463492" MODIFIED="1613329391457" TEXT="Manipulation">
+<node CREATED="1613334019420" ID="ID_273976893" MODIFIED="1613334021390" TEXT="Formen">
+<node CREATED="1613333615153" ID="ID_1085666433" MODIFIED="1613333624019" TEXT="Parameter &#xe4;ndern"/>
+<node CREATED="1613333666090" ID="ID_553562827" MODIFIED="1613333678204" TEXT="expandieren / reduzieren"/>
+<node CREATED="1613334131322" ID="ID_58235423" MODIFIED="1613334141028" TEXT="weitere Navigationsvorg&#xe4;nge"/>
+<node CREATED="1613333624820" ID="ID_563935930" MODIFIED="1613333633188" TEXT="Wiedergabemodus steuern"/>
+<node CREATED="1613333635078" ID="ID_335562573" MODIFIED="1613334024426" TEXT="Edit-Aktionen">
+<node CREATED="1613333732545" ID="ID_1462682314" MODIFIED="1613333745363" TEXT="Clip aus Bin einf&#xfc;gen"/>
+<node CREATED="1613333746464" ID="ID_1372531625" MODIFIED="1613333836699" TEXT="Clip: verschieben (slide)"/>
+<node CREATED="1613333751169" ID="ID_1489464895" MODIFIED="1613349460429" TEXT="Clip: Inhalt verschieben (shuffle)">
+<arrowlink COLOR="#f6b667" DESTINATION="ID_1472064878" ENDARROW="Default" ENDINCLINATION="-9;-115;" ID="Arrow_ID_209732384" STARTARROW="None" STARTINCLINATION="220;19;"/>
+</node>
+<node CREATED="1613333842378" ID="ID_381580402" MODIFIED="1613333859963" TEXT="Clip: trimmen"/>
+<node CREATED="1613333860599" ID="ID_1789286116" MODIFIED="1613333863659" TEXT="Clip: rollen"/>
+</node>
+</node>
+<node CREATED="1613334058285" ID="ID_699726141" MODIFIED="1613334067760" TEXT="Konzept">
+<node CREATED="1613334069323" ID="ID_1723320752" MODIFIED="1613334078757" TEXT="die Manipulation wird durch eine Geste eingeleitet"/>
+<node CREATED="1613334079466" ID="ID_1589128984" MODIFIED="1613334088647" TEXT="sie f&#xfc;hrt in einen Manipulations-Modus"/>
+<node CREATED="1613334091808" ID="ID_1887267653" MODIFIED="1613334098755" TEXT="dieser wird durch eine Befehls-Geste beendet"/>
+</node>
+<node CREATED="1613334160328" ID="ID_1964361228" MODIFIED="1613334167289" TEXT="konstruktives Problem">
+<node CREATED="1613334172704" ID="ID_1733713020" MODIFIED="1613334204445" TEXT="typischerweise wird dieses gemeinsame Schema &#xfc;bersehen"/>
+<node CREATED="1613334205144" ID="ID_1296878721" MODIFIED="1613334219861" TEXT="daher ist es &#xfc;blich, diese Manipulationen lokal und ad hoc zu implementieren"/>
+<node CREATED="1613334249690" ID="ID_1792797047" MODIFIED="1613334275524" TEXT="&#x27f9; in den Frameworks fehlt der abstrakte gemeiname Einstiegspunkt">
+<node CREATED="1613334316121" ID="ID_1190900510" MODIFIED="1613334356211" TEXT="GTK bietet nur ein copy/move drag-n-drop">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und das zu allem &#220;berflu&#223; auch noch ziemlich hart verdrahtet. Man kann nicht einmal frei &#252;ber die Modifier-Keys verf&#252;gen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1613334362547" ID="ID_894562756" MODIFIED="1613334386083" TEXT="andere Gesten sind im Einzelwidget implementiert"/>
+</node>
+<node CREATED="1613334402564" ID="ID_1103909311" MODIFIED="1613349184568" TEXT="wir m&#xfc;ssen lauter dezentrale Einstiegspunkte bauen">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#cec3da" CREATED="1613917449274" HGAP="42" ID="ID_1824168791" MODIFIED="1613917680542" VSHIFT="4">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>Achtung</u>: <i><font color="#402160">abstrakter Entwurf war Ende 2017 in eine Sackgasse geraten....</font></i>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#7b7696" DESTINATION="ID_1743832326" ENDARROW="Default" ENDINCLINATION="321;-3493;" ID="Arrow_ID_741454137" STARTARROW="None" STARTINCLINATION="-1121;45;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1613349240614" ID="ID_1472064878" MODIFIED="1613349442831" TEXT="erster Entwurf: drag clip">
+<linktarget COLOR="#fbd7b5" DESTINATION="ID_1472064878" ENDARROW="Default" ENDINCLINATION="-1443;-151;" ID="Arrow_ID_1918638969" SOURCE="ID_1784185766" STARTARROW="None" STARTINCLINATION="1644;332;"/>
+<linktarget COLOR="#f6b667" DESTINATION="ID_1472064878" ENDARROW="Default" ENDINCLINATION="-9;-115;" ID="Arrow_ID_209732384" SOURCE="ID_1489464895" STARTARROW="None" STARTINCLINATION="220;19;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1613349479473" ID="ID_1618505083" MODIFIED="1613349488782" TEXT="Doku / Tutorials">
+<node CREATED="1613349541627" ID="ID_1745870905" MODIFIED="1613349560713" TEXT="man mu&#xdf; das motion_notify_event beobachten">
+<icon BUILTIN="idea"/>
+<node CREATED="1613349562305" ID="ID_601856481" MODIFIED="1613349567420" TEXT="das ist ein GDK-Event"/>
+<node CREATED="1613349568104" ID="ID_1883086551" MODIFIED="1613349579450" TEXT="also das Low-level-System"/>
+</node>
+<node CREATED="1613349531741" ID="ID_84820441" LINK="https://gist.github.com/KurtJacobson/57679e5036dc78e6a7a3ba5e0155dad1" MODIFIED="1613349537230" TEXT="Beispiel C"/>
+<node CREATED="1613349637668" ID="ID_1098657356" LINK="http://www.kcjengr.com/programing/2017/10/16/dragable-gtk-widgets.html" MODIFIED="1613349643402" TEXT="Beispiel Python"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1488423514355" ID="ID_917891687" MODIFIED="1557498707233" TEXT="Steuerelemente">
 <node CREATED="1541858529489" ID="ID_838803024" MODIFIED="1557498707233" TEXT="ZoomWindow">
 <linktarget COLOR="#5b5ca1" DESTINATION="ID_838803024" ENDARROW="Default" ENDINCLINATION="-519;-1168;" ID="Arrow_ID_1674512697" SOURCE="ID_1949450244" STARTARROW="None" STARTINCLINATION="446;0;"/>
@@ -31776,7 +31849,7 @@
 <node CREATED="1541545696185" ID="ID_1907010009" MODIFIED="1557498707234" TEXT="Grund: UI-Bus - Routing">
 <icon BUILTIN="info"/>
 </node>
-<node COLOR="#435e98" CREATED="1541545933006" ID="ID_1850412206" MODIFIED="1561827465322" TEXT="t&#xfc;ckisches Problem">
+<node COLOR="#435e98" CREATED="1541545933006" FOLDED="true" ID="ID_1850412206" MODIFIED="1561827465322" TEXT="Duplikate sind ein t&#xfc;ckisches Problem">
 <linktarget COLOR="#c9876a" DESTINATION="ID_1850412206" ENDARROW="Default" ENDINCLINATION="49;-155;" ID="Arrow_ID_1571993328" SOURCE="ID_787025622" STARTARROW="None" STARTINCLINATION="-11;173;"/>
 <linktarget COLOR="#c9876a" DESTINATION="ID_1850412206" ENDARROW="Default" ENDINCLINATION="369;179;" ID="Arrow_ID_1229280605" SOURCE="ID_659707505" STARTARROW="None" STARTINCLINATION="586;-203;"/>
 <icon BUILTIN="messagebox_warning"/>
@@ -36549,7 +36622,7 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1491753036895" ID="ID_1029946389" MODIFIED="1491753047201" TEXT="fall-back auf Command integrieren"/>
 <node CREATED="1491753645531" ID="ID_597184850" MODIFIED="1491753650607" TEXT="maybeGet entfernen"/>
-<node CREATED="1491753047981" ID="ID_1220888974" MODIFIED="1491753330643" TEXT="Referenz rausgeben">
+<node CREATED="1491753047981" FOLDED="true" ID="ID_1220888974" MODIFIED="1491753330643" TEXT="Referenz rausgeben">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1491753058620" ID="ID_1772710050" MODIFIED="1491753078866" TEXT="nicht thradsafe">
 <icon BUILTIN="messagebox_warning"/>
@@ -36965,18 +37038,20 @@
 </node>
 </node>
 <node CREATED="1492094512876" HGAP="32" ID="ID_953384901" MODIFIED="1518487921092" TEXT="vorl&#xe4;ufig eigenst&#xe4;ndig" VSHIFT="4">
-<node CREATED="1492094528370" ID="ID_1032947061" MODIFIED="1518487921092" TEXT="sp&#xe4;ter mal integrieren">
+<node COLOR="#338800" CREATED="1492094528370" ID="ID_1032947061" MODIFIED="1518487921092" TEXT="sp&#xe4;ter mal integrieren">
 <arrowlink COLOR="#8697be" DESTINATION="ID_451964727" ENDARROW="Default" ENDINCLINATION="200;-562;" ID="Arrow_ID_1211717131" STARTARROW="None" STARTINCLINATION="1387;-152;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1613916810040" HGAP="23" ID="ID_69431933" MODIFIED="1613916831791" TEXT="(DependencyInjection Schema)" VSHIFT="3"/>
 </node>
 <node CREATED="1492095379262" ID="ID_16023242" MODIFIED="1518487921092" TEXT="einfache Implementierung"/>
 <node CREATED="1492096252231" ID="ID_1892095908" MODIFIED="1518487921092" TEXT="Problem">
-<node CREATED="1492096257182" ID="ID_682054688" MODIFIED="1518487921092" TEXT="externe Kompnente mu&#xdf; kooperieren"/>
+<node CREATED="1492096257182" ID="ID_682054688" MODIFIED="1518487921092" TEXT="externe Komponente mu&#xdf; kooperieren"/>
 <node CREATED="1492096285706" ID="ID_1257721538" MODIFIED="1518487921092" TEXT="oder externe Kompnente mu&#xdf; einen Adapter installieren"/>
 <node CREATED="1492096269716" ID="ID_527173807" MODIFIED="1518487921092" TEXT="oder externe Komponente mu&#xdf; das Front-end betreiben"/>
 </node>
 </node>
 </node>
-<node CREATED="1492095433567" HGAP="69" ID="ID_1208499974" MODIFIED="1576282357985" TEXT="DSL schaffen" VSHIFT="1">
+<node CREATED="1492095433567" FOLDED="true" HGAP="69" ID="ID_1208499974" MODIFIED="1576282357985" TEXT="DSL schaffen" VSHIFT="1">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -36995,6 +37070,7 @@
     </ul>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#b82856" DESTINATION="ID_73450627" ENDARROW="Default" ENDINCLINATION="-641;29;" ID="Arrow_ID_1593125080" STARTARROW="None" STARTINCLINATION="122;76;"/>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1492095437190" ID="ID_491978759" MODIFIED="1492095481564" TEXT="Wunsch: access(ID).&lt;operation&gt;(args)"/>
 <node CREATED="1492096317382" ID="ID_554292510" MODIFIED="1492096319497" TEXT="m&#xf6;glich">
@@ -37080,6 +37156,30 @@
 <node CREATED="1492099579824" ID="ID_727878406" MODIFIED="1492099585163" TEXT="CommandDef-DSL erweitern">
 <node CREATED="1492099587359" ID="ID_453414313" MODIFIED="1492099599513" TEXT="mu&#xdf; Argument-Rollen auszeichnen k&#xf6;nnen"/>
 <node CREATED="1492099622066" ID="ID_1927536817" MODIFIED="1492099630669" TEXT="erweiterbar auf binding rules"/>
+<node CREATED="1576282357985" ID="ID_318475227" MODIFIED="1613917141790" TEXT="erster Entwurf: &#x2192; CmdContext">
+<icon BUILTIN="forward"/>
+<node CREATED="1518487921093" HGAP="57" ID="ID_1013004860" MODIFIED="1613917115257" TEXT="umgewidmet in einen komplexeren Spezialfall" VSHIFT="17">
+<arrowlink COLOR="#6c9dbe" DESTINATION="ID_143339688" ENDARROW="Default" ENDINCLINATION="2023;-1563;" ID="Arrow_ID_1767017735" STARTARROW="None" STARTINCLINATION="303;19;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1576282357985" HGAP="43" ID="ID_73450627" MODIFIED="1613917052881" TEXT="Thema vorerst vertagt und einfache L&#xf6;sung implementiert" VSHIFT="3">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u><font size="2">(Anmerkung 2/2021)</font></u>
+    </p>
+    <p>
+      &#220;ber dieses Thema, und &#187;InteractionControl&#171; im Allgemeinen habe ich intensiv nachgedacht &#252;ber den Sommer 2017. Die damals aufgestellten Grundz&#252;ge erscheinen mir auch heute noch sinnvoll. Allerdings kann dieser Entwurf nicht nur allein aus first principles abgeleitet werden. Daher habe ich im Winter 2017/18 dann entschieden, eine Verkopplung mit dem direkten Aufruf von Commands aufzul&#246;sen, wodurch Letztere einfach implementiert werden konnte. &#220;berhaupt mu&#223; das UI ein gutes St&#252;ck weiter erst konkret gebaut werden, damit &#252;berhaupt ein Sachbezug f&#252;r die &#220;berlegungen gewonnen werden kann....
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#b82856" DESTINATION="ID_73450627" ENDARROW="Default" ENDINCLINATION="-641;29;" ID="Arrow_ID_1593125080" SOURCE="ID_1208499974" STARTARROW="None" STARTINCLINATION="122;76;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -37458,6 +37558,7 @@
 </node>
 <node CREATED="1492268981885" HGAP="114" ID="ID_1743832326" MODIFIED="1561827465755" TEXT="Design-Kritik" VSHIFT="-55">
 <arrowlink COLOR="#f7335a" DESTINATION="ID_43582318" ENDARROW="Default" ENDINCLINATION="-123;-43;" ID="Arrow_ID_601519634" STARTARROW="Default" STARTINCLINATION="-63;109;"/>
+<linktarget COLOR="#7b7696" DESTINATION="ID_1743832326" ENDARROW="Default" ENDINCLINATION="321;-3493;" ID="Arrow_ID_741454137" SOURCE="ID_1824168791" STARTARROW="None" STARTINCLINATION="-1121;45;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1492269138424" ID="ID_1682612433" MODIFIED="1492269153284" TEXT="gef&#xe4;hrlich stark vom komplexen Fall getrieben">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -37622,9 +37723,12 @@
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1492281383613" ID="ID_143339688" MODIFIED="1518487921093" TEXT="CmdAccess wird f&#xfc;r den komplexen Fall umgewidmet">
+<linktarget COLOR="#6c9dbe" DESTINATION="ID_143339688" ENDARROW="Default" ENDINCLINATION="2023;-1563;" ID="Arrow_ID_1767017735" SOURCE="ID_1013004860" STARTARROW="None" STARTINCLINATION="303;19;"/>
 <icon BUILTIN="hourglass"/>
 <node CREATED="1492281402666" ID="ID_1263822028" MODIFIED="1518487921093" TEXT="es bleibt ein Access-front-End"/>
-<node CREATED="1492281417025" ID="ID_1229681605" MODIFIED="1518487921093" TEXT="der Name wird angepa&#xdf;t"/>
+<node COLOR="#435e98" CREATED="1492281417025" ID="ID_1229681605" MODIFIED="1518487921093" TEXT="der Name wird angepa&#xdf;t &#x2192; CmdContext">
+<icon BUILTIN="yes"/>
+</node>
 <node CREATED="1492281425672" ID="ID_1330862297" MODIFIED="1518487921093" TEXT="es dient zum Konfigurieren eines Kontextes"/>
 <node CREATED="1492281434678" ID="ID_1036338249" MODIFIED="1518487921093" TEXT="f&#xfc;r Zugriff auf den InteractionState"/>
 <node CREATED="1492281448845" ID="ID_1396633899" MODIFIED="1518487921093" TEXT="f&#xfc;r Callback-Registrierung"/>
