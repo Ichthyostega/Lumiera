@@ -31611,6 +31611,22 @@
 <node CREATED="1613349531741" ID="ID_84820441" LINK="https://gist.github.com/KurtJacobson/57679e5036dc78e6a7a3ba5e0155dad1" MODIFIED="1613349537230" TEXT="Beispiel C"/>
 <node CREATED="1613349637668" ID="ID_1098657356" LINK="http://www.kcjengr.com/programing/2017/10/16/dragable-gtk-widgets.html" MODIFIED="1613349643402" TEXT="Beispiel Python"/>
 </node>
+<node CREATED="1613948743240" ID="ID_493349480" MODIFIED="1613948751697" TEXT="klar ist bisher...">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1613948753365" ID="ID_1004192521" MODIFIED="1613948775315" TEXT="das Command-Framework wird das nicht l&#xf6;sen k&#xf6;nnen"/>
+<node CREATED="1613948776291" ID="ID_889206511" MODIFIED="1613948802398" TEXT="es wird irgendwo einen InteractionState geben (einen pro Art der Geste)"/>
+<node CREATED="1613949082860" ID="ID_783934711" MODIFIED="1613949094507" TEXT="die Grundz&#xfc;ge der Interaktion sind klar">
+<node CREATED="1613948886082" ID="ID_715355641" MODIFIED="1613948906861" TEXT="drag-start: wird in einem ClipWidget registriert"/>
+<node CREATED="1613948907784" ID="ID_544273304" MODIFIED="1613948924747" TEXT="..mu&#xdf; aber im InteractionState qualifiziert werden"/>
+<node CREATED="1613948926156" ID="ID_1360301287" MODIFIED="1613948955718" TEXT="dieses Widget empf&#xe4;ngt die Bewegungs-Nachrichten"/>
+<node CREATED="1613948956471" ID="ID_16210689" MODIFIED="1613948967678" TEXT="es gibt sie aber nur weiter, wenn eine Geste erwartet wird"/>
+<node CREATED="1613948968503" ID="ID_388032830" MODIFIED="1613948989927" TEXT="au&#xdf;erdem mu&#xdf; der Canvas instruiert werden, das CliipWidget zu verschieben"/>
+<node CREATED="1613949007667" ID="ID_1378086489" MODIFIED="1613949053999" TEXT="die Vollendung der Geste wird am &quot;button up&quot; im ClipWidget erkannt"/>
+<node CREATED="1613949054869" ID="ID_1463749596" MODIFIED="1613949079061" TEXT="daraufhin mu&#xdf; aber der ClipPresenter eine UI-Bus-Nachricht absetzen"/>
+</node>
+<node CREATED="1613948811142" ID="ID_1149934346" MODIFIED="1613948873809" TEXT="Verkn&#xfc;pfung  von Widgets und InteractionState erfordert einen generischen Adapter"/>
+<node CREATED="1613949125310" ID="ID_1021022187" MODIFIED="1613949147008" TEXT="die Zustands-Aktualisierungen laufen &#xfc;ber direkte Referenzen (nicht den UI-Bus)"/>
+</node>
 </node>
 </node>
 </node>
@@ -36059,8 +36075,9 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1488936638247" ID="ID_699367403" MODIFIED="1518487921091" TEXT="man sollte auf das Bauchgef&#xfc;hl h&#xf6;ren"/>
 <node CREATED="1488936653341" ID="ID_629143054" MODIFIED="1518487921091" TEXT="Design leitet in richtige Bahnen"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1488936670970" ID="ID_697148715" MODIFIED="1518487921091" TEXT="die Trennung respektieren">
-<arrowlink COLOR="#79d29b" DESTINATION="ID_1131387570" ENDARROW="Default" ENDINCLINATION="-48;-109;" ID="Arrow_ID_1598234794" STARTARROW="None" STARTINCLINATION="-421;-27;"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1488936670970" ID="ID_697148715" MODIFIED="1613941754293" TEXT="die Trennung respektieren">
+<arrowlink COLOR="#79d2c4" DESTINATION="ID_1131387570" ENDARROW="Default" ENDINCLINATION="-70;-129;" ID="Arrow_ID_1598234794" STARTARROW="None" STARTINCLINATION="-500;47;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -36076,6 +36093,9 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1488936425628" ID="ID_273815265" MODIFIED="1518487921092" TEXT="neue Entit&#xe4;t"/>
 <node CREATED="1488936429139" ID="ID_858892843" MODIFIED="1518487921092" TEXT="geh&#xf6;rt zum Command-System"/>
+<node COLOR="#435e98" CREATED="1512926192223" ID="ID_283015913" MODIFIED="1613941797180" TEXT="CommandInstanceManager">
+<icon BUILTIN="info"/>
+</node>
 </node>
 </node>
 <node CREATED="1488675795485" ID="ID_560742641" MODIFIED="1518487921092" TEXT="wer benennt die Instanz?">
@@ -36160,7 +36180,7 @@
 </node>
 </node>
 <node CREATED="1488936070394" ID="ID_1131387570" MODIFIED="1488936736607" TEXT="Schlu&#xdf;folgerung">
-<linktarget COLOR="#79d29b" DESTINATION="ID_1131387570" ENDARROW="Default" ENDINCLINATION="-48;-109;" ID="Arrow_ID_1598234794" SOURCE="ID_697148715" STARTARROW="None" STARTINCLINATION="-421;-27;"/>
+<linktarget COLOR="#79d2c4" DESTINATION="ID_1131387570" ENDARROW="Default" ENDINCLINATION="-70;-129;" ID="Arrow_ID_1598234794" SOURCE="ID_697148715" STARTARROW="None" STARTINCLINATION="-500;47;"/>
 <icon BUILTIN="forward"/>
 <node CREATED="1488936102272" ID="ID_414025307" MODIFIED="1488936125740" TEXT="eigenes Instantiierungs-Protokoll">
 <icon BUILTIN="idea"/>
@@ -36481,6 +36501,71 @@
 </node>
 </node>
 </node>
+<node COLOR="#53102b" CREATED="1613947659276" ID="ID_1657972773" MODIFIED="1613947682366" TEXT="Stand">
+<font NAME="SansSerif" SIZE="16"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1613947688776" ID="ID_1133022481" MODIFIED="1613947709441" TEXT="2017 - 2/2021">
+<node CREATED="1613947717729" ID="ID_1840082890" MODIFIED="1613948142348" TEXT="es gibt eine Vision">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        Interaktion mit einem UI formuliert Befehls-Aussagen indem sie die &#187;<b>Gesten</b>&#171; des Benutzers beobachtet; dieser bewegt sich dabei in konzeptionell in einem &#187;Interface-<b>Raum</b>&#171;
+      </li>
+      <li>
+        das konkrete Interaktions-System (Keyboard, Mouse, Pen, Hardware-Controller, VR...) ist konsequent zu <b>abstrahieren</b>
+      </li>
+      <li>
+        eine Zwischenschicht trennt die Widgets, die das UI realisieren, und die vom UI abgesetzten Handlungs-Anweisungen (&#187;Commands&#171;)
+      </li>
+      <li>
+        diese Zwischenschicht &#8213; oder Interaktions-Schicht &#8213; zu entwickeln ist ein Kern-Belang; dieser Belang kann niemals von irgend einem Framework abgedeckt werden
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1613947727636" ID="ID_729788594" MODIFIED="1613948283484" TEXT="ein elaboriertes Framework wurde geplant und wieder verworfen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      2017 habe ich zun&#228;chst versucht, die Analyse soweit zu treiben, da&#223; sich daraus Strukturen ablesen lassen; die Intention war, darin die einfache Struktur eines direkt &quot;point and shot&quot; gegebenen Commands eingebettet zu finden. Dieses Bestreben mu&#223;te abgebrochen werden, da ich noch nicht genug &#252;ber das konrete Interface wei&#223;, um sachad&#228;quat beurteilen zu k&#246;nnen, was <i>notwendig ist.</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1613947757959" ID="ID_1626123352" MODIFIED="1613948424917" TEXT="darauf aufbauend wurde der einfachste Fall bereits fertig implementiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...stattdessen habe ich dann die schon bestehenden und definierten Teile zusammengebunden, um das direkte Absetzen von fest im Code vorgegebenen Commands zu erm&#246;glichen. Diese gehen seither als einfache symbolische Nachrichten &#252;ber den UI-Bus. Das gesamte Thema &quot;Argument Binding&quot; ist bereits abschlie&#223;end behandelt (Marshalling via GenNode). Ebenso der asynchrone Dispatch, und die ebenso asynchron entkoppelte R&#252;ckmeldung (&quot;push up&quot;) in das UI.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1613947778476" ID="ID_1664459728" MODIFIED="1613948672376" TEXT="an der Grundidee wird festgehalten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      2018-2019 habe ich eine dieser Vision entsprechende, offene und generische Grundstruktur des UI angelegt, und begonnen, konkret f&#252;r die Timeline-Repr&#228;sentation auszuimplementieren. Auch dies ist grunds&#228;tzlich alles geregelt, wir k&#246;nnen ein Custom-Stylesheet aufgreifen, wir k&#246;nnen eigene Widgets mit custom-drawing realisieren, und trotzdem weitgehend auf das UI-Toolkitset mit allen seinen Zusatzfunktionen zur&#252;ckgreifen. Nun (2/2021) bin ich wieder an dem Punkt, an dem die erste, einfachste &#187;Geste&#171; zu realisieren w&#228;re: n&#228;mlich das Verschieben eines Clip in der Timeline. Und ich halte genau an der Einsicht fest, da&#223; diese Interaktions-Logik nicht fest in ein Widget eingebaut werden darf.<br /><i><font color="#a33449">Da stehe ich, und mehr wei&#223; ich noch nicht...</font></i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
 <node CREATED="1488672585310" ID="ID_50525010" MODIFIED="1518487921092" TEXT="framework">
 <node CREATED="1489191062441" ID="ID_772085108" MODIFIED="1518487921092" TEXT="Aktoren">
 <node CREATED="1489191072415" ID="ID_546981226" MODIFIED="1518487921092" TEXT="Command Definition"/>
@@ -36504,6 +36589,30 @@
 </node>
 <node CREATED="1490986198683" ID="ID_658767230" MODIFIED="1518487921092" TEXT="Build-Skript vertagt">
 <icon BUILTIN="hourglass"/>
+<node CREATED="1518487921092" ID="ID_1694595239" MODIFIED="1613943616179" TEXT="vorl&#xe4;ufig werden Commands von Hand definiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Der Plan ist, einmal Command-Skripts (C++ basierte DSL-Notation) direkt vom Build-System verarbeiten zu lassen; der Build wird daraus passende C++-Translation-Units generieren und &#252;bersetzen. Tats&#228;chlich ist all dies nicht besonders anspruchsvoll, denn die eigentliche Arbeit, die DSL-Notation ist bereits geschaffen. Trotzdem ist das Thema vorerst vertagt, weil zur praktischen Ausf&#252;hrung eine Menge zus&#228;tzlichem Wissen aus der Praxis notwendig ist, wie z.B. wie teilt man die Commands ein, wer definiert &#252;berhaupt Commands, und zu welchem Zweck. Beispielsweise ist es durchaus sp&#228;ter einmal denkbar, da&#223; auch eine Lumiera-Extension (Plug-in) zus&#228;tzliche Command-Scripts bereitstellt. Dann stellt sich nat&#252;rlich auf das (ziemlich anspruchsvolle) Problem der Belegung von Command-IDs erneut.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Vorerst und auf l&#228;ngere Sicht gen&#252;gt es v&#246;llig, die Command-Scripts von Hand zu schreiben und in einigen Cpp-Files im Steam-Layer abzulegen. Als allgemein sichtbare Schnittstelle dient der Header cmd.hpp, in dem die Command-IDs fest als globale Konstanten definiert sind. Diesen Ansatz behalten wir solange bei, bis die Pflege dieser fest verdrahteten Definitionen und Command-Skripte tats&#228;chlich zum Problem wird.
+    </p>
+    <p>
+      <b>YAGNI</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1613942454968" ID="ID_1870290710" MODIFIED="1613942458935" TEXT="proc/cmd.hpp">
+<icon BUILTIN="forward"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1489191229098" ID="ID_341428100" MODIFIED="1582989005605" TEXT="#1089 Command instance management">
@@ -36541,11 +36650,12 @@
 <node CREATED="1491005509448" ID="ID_709599195" MODIFIED="1491005512147" TEXT="Fehler?"/>
 <node CREATED="1491005514015" ID="ID_66770459" MODIFIED="1491495268579" TEXT="bestehende Instanz &#xfc;berb&#xfc;geln"/>
 <node CREATED="1491495244653" ID="ID_1710448495" MODIFIED="1491495254015" TEXT="stillschweigend die bestehende Instanz verwenden"/>
-<node CREATED="1491495254699" ID="ID_1848409976" MODIFIED="1491495265858" TEXT="per Fehler abweisen">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1491495254699" ID="ID_1848409976" MODIFIED="1613943705388" TEXT="per Fehler abweisen">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="forward"/>
 </node>
 </node>
-<node CREATED="1491008040105" HGAP="50" ID="ID_662216926" MODIFIED="1561827465708" TEXT="Implementierung">
+<node COLOR="#338800" CREATED="1491008040105" FOLDED="true" HGAP="50" ID="ID_662216926" MODIFIED="1561827465708" TEXT="Implementierung">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1491008045936" ID="ID_1071153669" MODIFIED="1491008146180" TEXT="CommandInstanceManager_test">
 <icon BUILTIN="button_ok"/>
@@ -36699,7 +36809,7 @@
       ....k&#252;nftige Weiterung:
     </p>
     <p>
-      auch in EntryID k&#246;nnte ein Symbol-Stecken,
+      auch in EntryID k&#246;nnte ein Symbol stecken,
     </p>
     <p>
       mithin in der GenNode::ID
@@ -36750,8 +36860,9 @@
 </node>
 </node>
 </node>
-<node CREATED="1491692398913" HGAP="27" ID="ID_1349137025" MODIFIED="1491753610374" TEXT="in UI-Bus" VSHIFT="6">
+<node CREATED="1491692398913" FOLDED="true" HGAP="27" ID="ID_1349137025" MODIFIED="1561827465708" TEXT="in UI-Bus" VSHIFT="6">
 <icon BUILTIN="help"/>
+<icon BUILTIN="closed"/>
 <node COLOR="#990000" CREATED="1491692419958" ID="ID_411638678" MODIFIED="1582487370244" TEXT="#1058 consider expanding UI-Bus protocol for command cloning">
 <icon BUILTIN="button_cancel"/>
 </node>
@@ -36858,6 +36969,9 @@
 <node CREATED="1492293286802" ID="ID_980352671" MODIFIED="1492293292141" TEXT="weitgehend automatisch"/>
 <node CREATED="1492293292801" ID="ID_556604895" MODIFIED="1492293305099" TEXT="Zyklus mu&#xdf; nicht explizit er&#xf6;ffnet werden"/>
 <node CREATED="1492293307511" ID="ID_582978700" MODIFIED="1492293317442" TEXT="Instanzen selbst f&#xfc;r globale Commands"/>
+<node CREATED="1561827465708" ID="ID_1337375396" MODIFIED="1613945493715" TEXT="zun&#xe4;chst einfach &#x2015; aber komplexere L&#xf6;sung kann sp&#xe4;ter noch realiseiert werden">
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node CREATED="1492293359944" ID="ID_1367582526" MODIFIED="1492293429410" TEXT="Konsequenzen">
 <node CREATED="1492293430689" ID="ID_1472205001" MODIFIED="1492293430689" TEXT="weitgehender Verzicht auf Konsistenzpr&#xfc;fungen"/>
@@ -36944,7 +37058,7 @@
 <node CREATED="1492295137387" ID="ID_1142805823" MODIFIED="1492295146318" TEXT="offene Instanz wird genommen"/>
 <node CREATED="1492295146794" ID="ID_715268835" MODIFIED="1492295159372" TEXT="Sonst wird anonyme Instanz gebildet"/>
 <node CREATED="1492295160320" ID="ID_289465814" MODIFIED="1492295164348" TEXT="gebunden und gefeuert"/>
-<node CREATED="1492350125119" ID="ID_1349289727" MODIFIED="1492350141681" TEXT="Suche zuerst in der globalen Registry"/>
+<node CREATED="1492350125119" ID="ID_1349289727" MODIFIED="1613945576576" TEXT="Suche zuerst in der globalen Command-Registry"/>
 </node>
 </node>
 <node CREATED="1492294454001" ID="ID_1498558942" MODIFIED="1492359486258">
@@ -37214,6 +37328,9 @@
 </node>
 <node CREATED="1489777438663" ID="ID_729917092" MODIFIED="1518487921093" TEXT="InteractionState">
 <icon BUILTIN="hourglass"/>
+<node CREATED="1613945185345" ID="ID_357126744" MODIFIED="1613945202633" TEXT="f&#xfc;r komplexe kontext-abh&#xe4;ngige &#xbb;Gesten&#xab;">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node CREATED="1489777502366" ID="ID_1798143241" MODIFIED="1518487921093" TEXT="Command-Definitionen">
 <icon BUILTIN="button_ok"/>
@@ -37388,7 +37505,7 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node CREATED="1492167970338" ID="ID_1983035921" MODIFIED="1576282357982" TEXT="InteractionState &lt;=&gt; InvocationTrail">
+<node CREATED="1492167970338" FOLDED="true" ID="ID_1983035921" MODIFIED="1613945160418" TEXT="InteractionState &#x27fa; Invocation-Instance">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -38037,6 +38154,7 @@
 <node CREATED="1489790167669" ID="ID_156312862" MODIFIED="1489790182247" TEXT="und nur die explizite Spezialisierung generiert Code"/>
 </node>
 <node CREATED="1489790425251" ID="ID_1099709668" MODIFIED="1489790430606" TEXT="auto-Registrierung">
+<icon BUILTIN="forward"/>
 <node CREATED="1489790431810" ID="ID_1253214974" MODIFIED="1489790442380" TEXT="variable statisch initialisieren"/>
 <node CREATED="1489790522958" ID="ID_1454213723" MODIFIED="1489790532345" TEXT="Lambda an Basis-Ctor geben"/>
 </node>
@@ -38086,6 +38204,9 @@
 <node CREATED="1489791864787" ID="ID_891631217" MODIFIED="1489791877373" TEXT="in den Impl-Einheiten eine Folge von Definitionen"/>
 <node CREATED="1489791877913" ID="ID_387208356" MODIFIED="1489793604385" TEXT="zugh&#xf6;rigen Header proc/cmd.hpp im Build-Proze&#xdf; regenerieren">
 <icon BUILTIN="idea"/>
+<node CREATED="1613944850941" ID="ID_716808675" MODIFIED="1613944856389" TEXT="vorerst nicht">
+<icon BUILTIN="hourglass"/>
+</node>
 </node>
 </node>
 </node>
