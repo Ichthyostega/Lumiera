@@ -71,6 +71,8 @@ namespace control {
    *       Command definition, in case the given ID is not known
    *       as a local command instance. This allows to use the
    *       SessionCommand service without explicit instantiation
+   * @warning this simplified command invocation scheme is intended for
+   *       single-threaded use from the UI. It is *not threadsafe*.
    */
   void
   SessionCommandService::trigger (Symbol cmdID, Rec const& argSeq)

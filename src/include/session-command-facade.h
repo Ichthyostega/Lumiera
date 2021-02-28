@@ -87,6 +87,9 @@ namespace control {
    * use the embedded #facade factory, which yields a proxy to route any
    * calls through the lumieraorg_SessionCommand interface
    * @throws lumiera::error::State when interface is not opened
+   * @todo as of 2/2021 only the #trigger operation is used; if no case for
+   *       an elaborated command cycle with binding step and deferred invocation
+   *       shows up, we may consider dropping the other operations
    * @see [Command system](\ref command.hpp)
    * @see SessionCommandFunction_test
    */
