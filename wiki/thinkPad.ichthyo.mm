@@ -31759,7 +31759,7 @@
 </node>
 <node CREATED="1614460011582" ID="ID_952822551" MODIFIED="1614460030108" TEXT="tats&#xe4;chlich wird auf Dauer nur das Subjekt ben&#xf6;tigt">
 <icon BUILTIN="idea"/>
-<node CREATED="1614460032928" ID="ID_1290991040" MODIFIED="1614460064068" TEXT="die Event-Quelle dient nur dazu, das Reaktionsmuster zu Verdrahten"/>
+<node CREATED="1614460032928" ID="ID_1290991040" MODIFIED="1614460064068" TEXT="die Event-Quelle dient nur dazu, das Reaktionsmuster zu verdrahten"/>
 <node CREATED="1614460064989" ID="ID_1051234344" MODIFIED="1614460079097" TEXT="als Event-Quelle gen&#xfc;gt eine Gtk::Widget-Referenz">
 <node CREATED="1614460082069" ID="ID_1366205359" MODIFIED="1614460235413" TEXT="man kann alles auf Signale aufbauen">
 <arrowlink COLOR="#6c87a6" DESTINATION="ID_1054817075" ENDARROW="Default" ENDINCLINATION="-7;-84;" ID="Arrow_ID_1471465547" STARTARROW="None" STARTINCLINATION="-115;9;"/>
@@ -31846,7 +31846,8 @@
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1614545300952" ID="ID_1467191869" MODIFIED="1614545455246" TEXT="L&#xf6;sung-1: &#xdc;bersetzungs-Service bereitstellen">
+<linktarget COLOR="#6c97d3" DESTINATION="ID_937435961" ENDARROW="Default" ENDINCLINATION="144;280;" ID="Arrow_ID_1259911083" SOURCE="ID_369222912" STARTARROW="None" STARTINCLINATION="-332;20;"/>
+<node CREATED="1614545300952" ID="ID_1467191869" MODIFIED="1614545455246" TEXT="L&#xf6;sung-1: per &#xdc;bersetzungs-Service direkt manipulieren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -31862,10 +31863,22 @@
       <li>
         aus der gegenw&#228;rtig im Clip gespeicherten Zeit ergibt sich dann ein Delta
       </li>
+      <li>
+        dieses Delta wird sofort auf den Clip angewendet
+      </li>
     </ul>
+    <p>
+      Am Ende der Geste steht die neue Zeit-Position fertig im Clip und wird von dort per Command in den Steam-Layer gesendet. Sp&#228;ter, nach der Verarbeitung in der Session kommt ein Update &#252;ber den UI-Bus, welches die Position &#252;berschreibt und infolgedessen ggfs auch nochmal das Widget verschiebt
+    </p>
   </body>
 </html></richcontent>
-<node CREATED="1614545483516" ID="ID_586854382" MODIFIED="1614545519119" TEXT="Vorsicht: Unterscheide Screen-Koordinaten vs. Canvas-Koordinaten"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1615558216850" ID="ID_351359335" MODIFIED="1615558243862" TEXT="Kennzeichnung: Geste manipuliert UI-Modell; es gibt kein &quot;Zur&#xfc;ck&quot;">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1614545483516" ID="ID_586854382" MODIFIED="1614545519119" TEXT="Vorsicht: Unterscheide Screen-Koordinaten vs. Canvas-Koordinaten">
+<icon BUILTIN="messagebox_warning"/>
+</node>
 <node CREATED="1614545520061" ID="ID_421638066" MODIFIED="1614545552889" TEXT="das kann eigentlich nur der Canvas implementieren">
 <icon BUILTIN="forward"/>
 </node>
@@ -31877,12 +31890,33 @@
   </head>
   <body>
     <p>
-      ...das hei&#223;t, durch die Drag-Geste entstehen vor&#252;bergehend lokal inkonsistente Koordinaten; der n&#228;chste DisplayEvaluation-Pass w&#252;rde dies wieder beseitigen. Dieser Ansatz w&#228;re rein logisch der konsktentere Weg, denn erst durch eine R&#252;ckmeldung von der Session wird eine neue Position auch offiziell. Allerdings m&#252;&#223;te man bei diesem Ansatz vorsichtig vorgehen, und m&#246;gliche Interferenzen mit der DisplayEvaluation und dem Layout-Managment bedenken; besonders wenn man eine weite Strecke zur&#252;cklegt, k&#246;nnte es passieren, da&#223; der Clip dann pl&#246;tzlich aus der Anzeige verschwindet und den Fokus verliert, weil eine DisplayEvaluation ihn wieder an seine gegenw&#228;rtig nominelle Position geschoben hat.
+      ...das hei&#223;t, durch die Drag-Geste entstehen vor&#252;bergehend lokal inkonsistente Koordinaten; der n&#228;chste DisplayEvaluation-Pass w&#252;rde dies wieder beseitigen. Dieser Ansatz w&#228;re rein logisch der konsistentere Weg, denn erst durch eine R&#252;ckmeldung von der Session wird eine neue Position auch offiziell. Allerdings m&#252;&#223;te man bei diesem Ansatz vorsichtig vorgehen, und m&#246;gliche Interferenzen mit der DisplayEvaluation und dem Layout-Managment bedenken; besonders wenn man eine weite Strecke zur&#252;cklegt, k&#246;nnte es passieren, da&#223; der Clip dann pl&#246;tzlich aus der Anzeige verschwindet und den Fokus verliert, weil eine DisplayEvaluation ihn wieder an seine gegenw&#228;rtig nominelle Position geschoben hat.
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#cf927e" DESTINATION="ID_819484059" ENDARROW="Default" ENDINCLINATION="30;162;" ID="Arrow_ID_713111774" SOURCE="ID_1040288867" STARTARROW="None" STARTINCLINATION="-23;-182;"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1615558187255" ID="ID_1107620857" MODIFIED="1615558212485" TEXT="Kennzeichnung: Geste als reine Manipulation von UI-Zustand">
+<icon BUILTIN="info"/>
+</node>
 <node CREATED="1614546132968" ID="ID_1588362914" MODIFIED="1614546175118" TEXT="auch in diesem Fall zumindest eine &#xdc;bersetzung Screen&#x2192;Canvas Koordinaten "/>
 <node CREATED="1614546235626" ID="ID_1042308082" MODIFIED="1614546278044" TEXT="am Ende brauchen wir dann auch noch die Metrik vom Layout(Canvas), f&#xfc;r das Zeit-Delta"/>
+<node CREATED="1615558270517" ID="ID_295152392" MODIFIED="1615558374895" TEXT="Widerspr&#xfc;chliche Ownership der UI-Position">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      geh&#246;rt er nun dem Layout-Manager, oder geh&#246;rt er der Geste?
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1615558355906" ID="ID_36290343" MODIFIED="1615558371149" TEXT="Interferenz mit der DisplayEvaluation">
+<icon BUILTIN="clanbomber"/>
+</node>
 </node>
 </node>
 <node CREATED="1614543982261" ID="ID_268537549" MODIFIED="1614544001288" TEXT="der ClipPresenter hat keinen direkten Zugriff auf das konkrete ClipDelegate"/>
@@ -31899,9 +31933,22 @@
 </html></richcontent>
 <node CREATED="1614544489998" ID="ID_1208107119" MODIFIED="1614544503226" TEXT="...und davon h&#xe4;ngt aber ab, ob eine Drag-Geste &#xfc;berhaupt m&#xf6;glich ist"/>
 </node>
+<node CREATED="1615558696844" ID="ID_1299483978" MODIFIED="1615558784590" TEXT="Ende der Geste mu&#xdf; zuverl&#xe4;ssig erkannt werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...sonst bleibt ein inkonsistender Zustand irgendwo &quot;h&#228;ngen&quot;.<br />Leider ist das nun das bekannterma&#223;en unl&#246;sbare Problem eines sicheren Verbindungsabbaus, und wir m&#252;ssen uns deshalb mit einem Timeout, oder re-check-Mechanismus behelfen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614547936791" ID="ID_972139852" MODIFIED="1614547946332" TEXT="L&#xf6;sungskompromi&#xdf; suchen">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614547936791" ID="ID_972139852" MODIFIED="1615563862998" TEXT="L&#xf6;sungskompromi&#xdf; suchen">
+<icon BUILTIN="pencil"/>
 <node CREATED="1614548567759" ID="ID_1502155745" MODIFIED="1614548579105" TEXT="kl&#xe4;ren welche Entit&#xe4;t f&#xfc;hrt">
 <node CREATED="1614548580160" ID="ID_1068834365" MODIFIED="1614549019860" TEXT="das Subject (Presenter)?">
 <icon BUILTIN="closed"/>
@@ -31923,8 +31970,8 @@
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614549056549" ID="ID_202229623" MODIFIED="1614549072636" TEXT="wieder das l&#xe4;stige Problem mit den vielen Querlinks">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1614549074954" ID="ID_1803715980" MODIFIED="1614549087844" TEXT="hatte das grade beim Layout m&#xfc;hsam niedergek&#xe4;mpft"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1614549074954" ID="ID_1803715980" MODIFIED="1614549087844" TEXT="hatte das k&#xfc;rzlich erst beim Layout m&#xfc;hsam niedergek&#xe4;mpft"/>
 <node CREATED="1614549303989" ID="ID_228758963" MODIFIED="1614549326657" TEXT="Idee: jeweils beim Beginn einer Geste den Kontext etablieren">
 <icon BUILTIN="idea"/>
 <node CREATED="1614549430019" ID="ID_1189932533" MODIFIED="1614549464686" TEXT="das l&#xf6;st (nur) das Storage-Problem">
@@ -31940,12 +31987,116 @@
 </html>
 </richcontent>
 </node>
-<node CREATED="1614549465737" ID="ID_1592517509" MODIFIED="1614549474705" TEXT="bleibt zu l&#xf6;sen...">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614549465737" ID="ID_1592517509" MODIFIED="1614549474705" TEXT="bleibt zu l&#xf6;sen...">
+<icon BUILTIN="flag-yellow"/>
 <node CREATED="1614549475656" ID="ID_1108253772" MODIFIED="1614549505036" TEXT="gegeben ein Widget &#x27f9; wer ist das Subject(Presenter)?"/>
 <node CREATED="1614549505881" ID="ID_1111066543" MODIFIED="1614549522610" TEXT="gegeben ein Widget &#x27f9; welcher Canvas managt das Layout?"/>
+<node COLOR="#435e98" CREATED="1614865416841" ID="ID_369222912" MODIFIED="1615558812749" TEXT="Entscheidung zur &#xdc;bersetzung in Domain-Werte">
+<arrowlink COLOR="#6c97d3" DESTINATION="ID_937435961" ENDARROW="Default" ENDINCLINATION="144;280;" ID="Arrow_ID_1259911083" STARTARROW="None" STARTINCLINATION="-332;20;"/>
+<node CREATED="1615558454300" ID="ID_1040288867" MODIFIED="1615558819335" TEXT="Entscheidung f&#xe4;llt gegen L&#xf6;sung-2">
+<arrowlink COLOR="#cf927e" DESTINATION="ID_819484059" ENDARROW="Default" ENDINCLINATION="30;162;" ID="Arrow_ID_713111774" STARTARROW="None" STARTINCLINATION="-23;-182;"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1615558821048" ID="ID_553122702" MODIFIED="1615559148819">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die Konsequenz aus L&#246;sung-1 ist aber nicht <i>wirklich abwegig</i>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Warum m&#246;chte man denn &#252;berhaupt eine Geste &quot;abbrechen k&#246;nnen&quot;?
+    </p>
+    <ul>
+      <li>
+        weil sie versehentlich ausgel&#246;st wurde
+      </li>
+      <li>
+        weil man besorgt ist, ein bereits Erreichtes dadurch &quot;kaputt&quot; zu machen
+      </li>
+      <li>
+        weil man ein &#171;UNDO&#171; nicht zuverl&#228;ssig sieht
+      </li>
+    </ul>
+    <p>
+      Die Konsequenz daraus ist dann, da&#223; das UI von Lumiera stets offen, non-modal und manipulierbar ist. Und die zweite Konsequenz ist, da&#223; wir ein klar und <b>zuverl&#228;ssig steuerbares</b>&#160;&#171;UNDO&#187; brauchen.
+    </p>
+  </body>
+</html></richcontent>
 </node>
 </node>
 </node>
+</node>
+<node COLOR="#338800" CREATED="1615561656493" ID="ID_1379998024" MODIFIED="1615563798670" TEXT="Analyse und L&#xf6;sungssuche">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1615561662796" ID="ID_997009920" MODIFIED="1615561681046" TEXT="klar ist...">
+<node CREATED="1615561682058" ID="ID_1964677732" MODIFIED="1615561698859" TEXT="sobald die Geste startet..."/>
+<node CREATED="1615561699447" ID="ID_1546726168" MODIFIED="1615561719329">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ..brauchen wir Widget <i>und </i>Subject <i>und </i>Canvas
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1615561804761" ID="ID_1425406746" MODIFIED="1615561837841" TEXT="und das Event-Binding braucht zumindest den Gesten-Controller"/>
+<node CREATED="1615561875768" ID="ID_989749499" MODIFIED="1615561888969" TEXT="..plus einen Context-Indicator"/>
+</node>
+<node CREATED="1615563494951" ID="ID_1331675338" MODIFIED="1615563508330" TEXT="nun erscheine eine L&#xf6;sung naheliegend">
+<icon BUILTIN="idea"/>
+<node CREATED="1615563510172" ID="ID_1273139871" MODIFIED="1615563531003" TEXT="speichere im Binding den Gesten-Controller + das Subject"/>
+<node CREATED="1615563531896" ID="ID_1041794659" MODIFIED="1615563551170" TEXT="bei Start der Geste: das Subjekt bringt den Kontext bei...">
+<node CREATED="1615563552422" ID="ID_276415471" MODIFIED="1615563561233" TEXT="es kennt das Widget"/>
+<node CREATED="1615563561965" ID="ID_765212431" MODIFIED="1615563568584" TEXT="und das Widget kennt den Canvas"/>
+</node>
+<node CREATED="1615563610750" ID="ID_1241019416" MODIFIED="1615563624318" TEXT="der Canvas dient damit nur zur Metrik-&#xdc;bersetzung"/>
+<node CREATED="1615563630412" ID="ID_1025610010" MODIFIED="1615563683159" TEXT="das Widget wird direkt per CanvasHook verschoben"/>
+</node>
+<node CREATED="1615563869355" ID="ID_411566224" MODIFIED="1615563956504" TEXT="Zeiger verwenden, und keine Registry">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Registry hat zus&#228;tzlichen Overhead (sowohl Speicher, alsauch Management) und ist nur sinnvoll, wenn eine ID in mehreren Objekten vorkommt, oder die ID aus mehreren Thread-Kontexten ben&#246;tigt wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1615563757154" ID="ID_1223828386" MODIFIED="1615563849447" TEXT="diese L&#xf6;sung erscheint tragf&#xe4;hig und koh&#xe4;rent">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...insofern sie genau an die Struktur anbaut, welche ich schon zur L&#246;sung der Querbeziehungen f&#252;r das Layout genutzt habe
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#3363bf" DESTINATION="ID_1714668959" ENDARROW="Default" ENDINCLINATION="36;-129;" ID="Arrow_ID_794903503" STARTARROW="None" STARTINCLINATION="-320;19;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1615563740336" ID="ID_1714668959" MODIFIED="1615563782709" TEXT="L&#xf6;sungs-Skizze f&#xfc;r Clip-Drag erstellen">
+<linktarget COLOR="#3363bf" DESTINATION="ID_1714668959" ENDARROW="Default" ENDINCLINATION="36;-129;" ID="Arrow_ID_794903503" SOURCE="ID_1223828386" STARTARROW="None" STARTINCLINATION="-320;19;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
