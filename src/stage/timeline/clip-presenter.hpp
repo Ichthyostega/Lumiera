@@ -55,6 +55,7 @@
 #include "stage/gtk-base.hpp"
 #include "stage/model/controller.hpp"
 #include "stage/timeline/clip-widget.hpp"
+#include "stage/interact/cmd-context.hpp"
 #include "lib/time/timevalue.hpp"
 
 //#include "lib/util.hpp"
@@ -77,10 +78,12 @@ namespace timeline {
   
   
   /**
+   * A View-Model entity to represent a clip within the timeline-UI.
    * @todo WIP-WIP as of 12/2016
    */
   class ClipPresenter
     : public model::Controller
+    , public interact::Subject
     {
       vector<unique_ptr<ClipPresenter>> channels_;
       vector<unique_ptr<ClipPresenter>> effects_;

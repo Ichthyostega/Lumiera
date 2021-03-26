@@ -24,7 +24,7 @@
 /** @file interaction-state.cpp
  ** Common base implementation for UI state tracking components.
  ** 
- ** @see TODO___abstract-tangible-test.cpp
+ ** @todo do we really need a separate implementation unit for this??
  ** 
  */
 
@@ -52,7 +52,7 @@ namespace interact {
   
   
   
-//Tangible::~Tangible() { }  // Emit VTables here...
+  InteractionState::~InteractionState() { }  // Emit VTables here...
   
   
   

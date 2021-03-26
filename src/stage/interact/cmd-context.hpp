@@ -37,7 +37,7 @@
  ** - is responsible for the specific command to be invoked
  ** - can handle context information related to a specific _control system_ (e.g mouse, keyboard,
  **   hardware controller, pen)
- ** - might handle changing contextual state and thus decide if a command can be invoked
+ ** - might observe changes in contextual state and thus decide if a command can be invoked
  ** From the InteractionState instance, it is possible to retrieve a notification when a specific,
  ** context-bound command becomes executable by picking up suitable parameter values from this context.
  ** 
@@ -77,20 +77,50 @@ namespace interact {
   
   
   /**
-   * Abstract foundation of UI state tracking components.
+   * Role-Interface: the Subject of Interaction.
+   * An entity implementing the Subject interface can be targeted by gestures,
+   * finally leading to the invocation of a specific command on that subject,
+   * with parameters picked up from the gesture invocation (e.g dragging).
+   */
+  class Subject
+    : util::NonCopyable
+    {
+    protected:
+        virtual ~Subject();  ///< this is an interface
+    };
+  
+  
+  
+  /**
+   * Builder to define a binding to relate some entity or place within the UI
+   * with a specific from of interaction gesture or context dependent command invocation.
    * @todo write type comment...
    */
   class CmdContext
     : util::NonCopyable
     {
+      Subject* subject_{nullptr};
       
     public:
-     ~CmdContext();  ///< @todo do we need a VTable / virtual dtor?
-      
       /* === access front-end === */
       static CmdContext& of (Symbol cmdID, string ctxID);
       
       struct Resolver;
+      
+      /** Builder operation: define the subject to use
+       *  for the following interaction bindings.
+       */
+      CmdContext& linkSubect (Subject&);
+      
+      /** Terminal builder operation: establish the infrastructure
+       *  for the already defined participants to be involved into a
+       *  dragging gesture, for the purpose of relocating the subject.
+       * @remark Typical example would be dragging a Clip within the timeline.
+       *    This invocation would then create a suitable InteractionState subclass
+       *    and use the previously given Subject to hook up signal bindings for the
+       *    trigger condition to start forming the "drag a clip" gesture.
+       */
+      void setupRelocateDrag();
       
     protected:
     private:

@@ -178,6 +178,7 @@ namespace timeline {
   
   
   /**
+   * A View-Model entity to represent a timeline track in the UI.
    * @todo WIP-WIP as of 12/2016
    */
   class TrackPresenter

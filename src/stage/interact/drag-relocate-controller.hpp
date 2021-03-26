@@ -1,8 +1,8 @@
 /*
-  INTERACTION-STATE.hpp  -  facility to watch and guide one aspect of UI interaction
+  DRAG-RELOCATE-CONTROLLER.hpp  -  concrete gesture controller to relocate a widget by dragging
 
   Copyright (C)         Lumiera.org
-    2015,               Hermann Vosseler <Ichthyostega@web.de>
+    2021,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,29 +21,38 @@
 */
 
 
-/** @file interaction-state.hpp
- ** Abstraction: a component to watch, maintain and guide UI state.
- ** Typically, each such component is focused on one specific aspect
- ** of complex interface interactions. An example would be a component
- ** to track gestures for trimming edits.
+/** @file drag-relocate-controller.hpp
+ ** Concrete implementation of a dragging gesture to relocate an UI entity.
+ ** This gesture controller is maintained as an InteractionState holder within
+ ** the InteractionDirector and serves as target to receive signals, in order to
+ ** observe a draggable widget and possibly activate the formation of a dragging
+ ** gesture. When this happens, the DragRelocateController is responsible for
+ ** observing the mouse movements, to integrate a movement delta, and finally
+ ** to recognise the end of the dragging gesture and invoke the associated
+ ** command on the entity to be dragged, which serves as \ref Subject for
+ ** this gesture and the resulting command.
  ** 
- ** @todo as of 11/2015 this is complete WIP-WIP-WIP
- ** @todo and as of 3/2021 this is at least just WIP-WIP
+ ** @note this implementation level header is meant to be included
+ **       solely for the purpose of creating an instance from within
+ **       facility responsible for actually managing InvocationState
+ ** 
+ ** @todo WIP and prototypical implementation as of 3/2021
  ** 
  ** @see ////TODO_test usage example
  ** 
  */
 
 
-#ifndef STAGE_INTERACT_INTERACTION_STATE_H
-#define STAGE_INTERACT_INTERACTION_STATE_H
+#ifndef STAGE_INTERACT_DRAG_RELOCATE_CONTROLLER_H
+#define STAGE_INTERACT_DRAG_RELOCATE_CONTROLLER_H
 
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-//#include "stage/ctrl/bus-term.hpp"
+#include "stage/interact/interaction-state.hpp"
+#include "stage/interact/cmd-context.hpp"
 //#include "lib/idi/entry-id.hpp"
-#include "lib/symbol.hpp"
+//#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
 //#include <string>
@@ -53,11 +62,8 @@ namespace stage {
 namespace interact {
   
 //  using lib::HashVal;
-  using lib::Symbol;
 //  using util::isnil;
 //  using std::string;
-  
-  class Subject;
   
   
   /**
@@ -75,27 +81,20 @@ namespace interact {
    * @todo WIP-WIP as of /3/2021
    * ///////////////////////////////////TODO do we need a translation unit interaction-state.cpp (otherwise delete it!)
    */
-  class InteractionState
-    : util::NonCopyable
+  class DragRelocateController
+    : public InteractionState
     {
-    protected:
-      virtual ~InteractionState();   ///< this is an interface
+      
+      void
+      linkTrigger (Subject& subject, Symbol cmdID)  override
+        {
+          UNIMPLEMENTED ("use the Subject interface to hook up a trigger signal");
+        }
       
     public:
-      /**
-       * Hook up a trigger signal to initiate a specific interaction gesture.
-       * Within the concrete controller implementation for each gesture, the Subject interface
-       * shall be used to access an actual widget and to wire this widget's signals to a private
-       * implementation function within the concrete gesture controller. The purpose is then
-       * to observe this widget and to activate recognition of the gesture when applicable.
-       * @param Subject the subject of the interaction gesture; typically implemented by a
-       *                controller or widget responsible for the UI entity involved.
-       * @param cmdID   the actual command to be issued on completion of the interaction
-       * @remark typically this contextual information is bound into the signal wiring,
-       *                meaning that the actual interaction context will be established "late",
-       *                i.e. only when an actual gesture is about to commence
-       */
-      virtual void linkTrigger (Subject&, Symbol cmdID)    =0;
+      DragRelocateController()
+//      :
+        { }
       
     private:
     };
@@ -103,4 +102,4 @@ namespace interact {
   
   
 }} // namespace stage::interact
-#endif /*STAGE_INTERACT_INTERACTION_STATE_H*/
+#endif /*STAGE_INTERACT_DRAG_RELOCATE_CONTROLLER_H*/

@@ -52,7 +52,7 @@ namespace interact {
   
   
   
-  CmdContext::~CmdContext() { }  // Emit dtors of embedded objects here...
+  Subject::~Subject() { }  // Emit VTable here...
   
   
   /** global static service accessor function.

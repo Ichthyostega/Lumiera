@@ -31662,12 +31662,12 @@
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1614381552342" ID="ID_134319916" MODIFIED="1614381561843" TEXT="CmdContext wird entweder ein sehr breites Interface"/>
 <node CREATED="1614381562642" ID="ID_972576172" MODIFIED="1614389749670" TEXT="oder es wird ein Metasprache-Interface">
-<arrowlink COLOR="#fbe4a1" DESTINATION="ID_826730643" ENDARROW="Default" ENDINCLINATION="25;-50;" ID="Arrow_ID_354156309" STARTARROW="None" STARTINCLINATION="-227;15;"/>
+<arrowlink COLOR="#fbe4a1" DESTINATION="ID_826730643" ENDARROW="Default" ENDINCLINATION="25;-50;" ID="Arrow_ID_354156309" STARTARROW="None" STARTINCLINATION="-239;17;"/>
 </node>
 </node>
 </node>
 <node CREATED="1614382663099" ID="ID_826730643" MODIFIED="1614389739519" TEXT="L&#xf6;sungsidee: den Kontext als eine Sammlung von Rollen deuten">
-<linktarget COLOR="#fbe4a1" DESTINATION="ID_826730643" ENDARROW="Default" ENDINCLINATION="25;-50;" ID="Arrow_ID_354156309" SOURCE="ID_972576172" STARTARROW="None" STARTINCLINATION="-227;15;"/>
+<linktarget COLOR="#fbe4a1" DESTINATION="ID_826730643" ENDARROW="Default" ENDINCLINATION="25;-50;" ID="Arrow_ID_354156309" SOURCE="ID_972576172" STARTARROW="None" STARTINCLINATION="-239;17;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1614384116295" ID="ID_1776177560" MODIFIED="1614384119969" TEXT="Beispiele">
 <node CREATED="1614384121198" ID="ID_2774291" MODIFIED="1614384129725" TEXT="Event-Quelle"/>
@@ -31696,7 +31696,12 @@
 <node CREATED="1614391153839" ID="ID_1357502282" MODIFIED="1614391168548" TEXT="CmdContext ist ein Metasprache-Interface">
 <icon BUILTIN="yes"/>
 <node CREATED="1614391170141" ID="ID_832546901" MODIFIED="1614391190901" TEXT="es erlaubt, eine fest vorgegebene Auswahl an Rollen zu registrieren"/>
-<node CREATED="1614391193833" ID="ID_1074859407" MODIFIED="1614391217868" TEXT="es erlaubt, einzelne Instanzen zu deregistrieren"/>
+<node CREATED="1614391193833" ID="ID_1074859407" MODIFIED="1616685033738" TEXT="es erlaubt, einzelne Instanzen zu deregistrieren">
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616685039180" HGAP="129" ID="ID_378066021" MODIFIED="1616685084561" TEXT="YAGNI?" VSHIFT="5">
+<icon BUILTIN="help"/>
+</node>
+</node>
 </node>
 <node CREATED="1614391222237" ID="ID_1021447273" MODIFIED="1614391253965" TEXT="jedes einzelne Interaktionsmuster ist individuell ausprogrammiert">
 <node CREATED="1614391255630" ID="ID_1652285552" MODIFIED="1614391268915" TEXT="das bedeutet: es gibt ein implizites Protokoll"/>
@@ -31956,9 +31961,11 @@
 <node CREATED="1614548720714" ID="ID_1355759542" MODIFIED="1614548742103" TEXT="trotzdem ungel&#xf6;st: Zeitpunkt der Registrierung f&#xfc;r den Drag-Mechanismus"/>
 <node CREATED="1614548979543" ID="ID_950023949" MODIFIED="1614549014231" TEXT="pa&#xdf;t insgesamt schlecht ins Konzept: Gesten sind reine GUI-Mechanik"/>
 </node>
-<node CREATED="1614548586972" ID="ID_1092961950" MODIFIED="1614549022486" TEXT="oder das Widget?">
-<icon BUILTIN="forward"/>
-<node CREATED="1614548745039" ID="ID_1301052915" MODIFIED="1614548763432" TEXT="dann ist (mindestens) ein Backlink auf das Subjekt notwendig"/>
+<node CREATED="1614548586972" ID="ID_1092961950" MODIFIED="1616684185562" TEXT="oder das Widget?">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1614548745039" ID="ID_1301052915" MODIFIED="1616684201445" TEXT="dann ist (mindestens) ein Backlink auf das Subjekt notwendig">
+<icon BUILTIN="stop-sign"/>
+</node>
 <node CREATED="1614548782314" ID="ID_1708909721" MODIFIED="1614548792788" TEXT="ansonsten k&#xf6;nnte aber das Widget autonom agieren">
 <node CREATED="1614548816117" ID="ID_934774711" MODIFIED="1614548839550" TEXT="sofern man alles dynamische Positionieren in den Canvas verlagert"/>
 <node CREATED="1614548843386" ID="ID_1197536023" MODIFIED="1614548864523" TEXT="der Canvas m&#xfc;&#xdf;te sich dann also als Partizipant beim CmdContext registrieren">
@@ -31967,9 +31974,27 @@
 </node>
 </node>
 </node>
+<node CREATED="1616684203994" ID="ID_1768434265" MODIFIED="1616684226073" TEXT="dann w&#xe4;re aber die eigentliche Detail-Logik wieder &#xfc;ber die Widgets verstreut">
+<icon BUILTIN="stop-sign"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614549056549" ID="ID_202229623" MODIFIED="1614549072636" TEXT="wieder das l&#xe4;stige Problem mit den vielen Querlinks">
+<node CREATED="1616684172294" ID="ID_1075366662" MODIFIED="1616684179286" TEXT="der Gesten-Controller">
+<icon BUILTIN="forward"/>
+<node COLOR="#435e98" CREATED="1616684235790" ID="ID_280567268" MODIFIED="1616684329617" TEXT="allerdings wirft das dann wieder das Storage-Problem auf">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#435e98" CREATED="1616684251451" ID="ID_1302771113" MODIFIED="1616684329623" TEXT="und die Frage: wie kommt man an die Kollaborationspartner">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1615563494951" ID="ID_1886279726" MODIFIED="1616684443111" TEXT="L&#xf6;sung">
+<linktarget COLOR="#fbf89a" DESTINATION="ID_1886279726" ENDARROW="Default" ENDINCLINATION="37;75;" ID="Arrow_ID_1201469200" SOURCE="ID_135851896" STARTARROW="None" STARTINCLINATION="-345;12;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1616684283858" ID="ID_922873284" MODIFIED="1616684285148" TEXT="das Subject leitet die Geste ein"/>
+<node CREATED="1616684286015" ID="ID_113807772" MODIFIED="1616684309504" TEXT="der Auswertungs-Kontext wird erst dann (late) im Gesten-Controller gebildet"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1614549056549" ID="ID_202229623" MODIFIED="1616684814536" TEXT="wieder das l&#xe4;stige Problem mit den vielen Querlinks">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1614549074954" ID="ID_1803715980" MODIFIED="1614549087844" TEXT="hatte das k&#xfc;rzlich erst beim Layout m&#xfc;hsam niedergek&#xe4;mpft"/>
 <node CREATED="1614549303989" ID="ID_228758963" MODIFIED="1614549326657" TEXT="Idee: jeweils beim Beginn einer Geste den Kontext etablieren">
@@ -31984,11 +32009,10 @@
       insofern wir die Storage nur einmal, im jeweilgen CmdContext der Geste vorsehen m&#252;ssen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614549465737" ID="ID_1592517509" MODIFIED="1614549474705" TEXT="bleibt zu l&#xf6;sen...">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1614549465737" ID="ID_1592517509" MODIFIED="1616684802531" TEXT="bleibt zu l&#xf6;sen...">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1614549475656" ID="ID_1108253772" MODIFIED="1614549505036" TEXT="gegeben ein Widget &#x27f9; wer ist das Subject(Presenter)?"/>
 <node CREATED="1614549505881" ID="ID_1111066543" MODIFIED="1614549522610" TEXT="gegeben ein Widget &#x27f9; welcher Canvas managt das Layout?"/>
 <node COLOR="#435e98" CREATED="1614865416841" ID="ID_369222912" MODIFIED="1615558812749" TEXT="Entscheidung zur &#xdc;bersetzung in Domain-Werte">
@@ -32034,6 +32058,10 @@
 </html></richcontent>
 </node>
 </node>
+<node COLOR="#435e98" CREATED="1616684105407" ID="ID_135851896" MODIFIED="1616684443111" TEXT="Entscheidung Misch-L&#xf6;sung: Subject leitet ein, Gesten-Controller f&#xfc;hrt durch die Geste">
+<arrowlink COLOR="#fbf89a" DESTINATION="ID_1331675338" ENDARROW="Default" ENDINCLINATION="-9;-33;" ID="Arrow_ID_646745936" STARTARROW="None" STARTINCLINATION="-345;12;"/>
+<arrowlink COLOR="#fbf89a" DESTINATION="ID_1886279726" ENDARROW="Default" ENDINCLINATION="37;75;" ID="Arrow_ID_1201469200" STARTARROW="None" STARTINCLINATION="-345;12;"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1615561656493" ID="ID_1379998024" MODIFIED="1615563798670" TEXT="Analyse und L&#xf6;sungssuche">
@@ -32055,7 +32083,8 @@
 <node CREATED="1615561804761" ID="ID_1425406746" MODIFIED="1615561837841" TEXT="und das Event-Binding braucht zumindest den Gesten-Controller"/>
 <node CREATED="1615561875768" ID="ID_989749499" MODIFIED="1615561888969" TEXT="..plus einen Context-Indicator"/>
 </node>
-<node CREATED="1615563494951" ID="ID_1331675338" MODIFIED="1615563508330" TEXT="nun erscheine eine L&#xf6;sung naheliegend">
+<node CREATED="1615563494951" ID="ID_1331675338" MODIFIED="1615563508330" TEXT="nun erscheint eine L&#xf6;sung naheliegend">
+<linktarget COLOR="#fbf89a" DESTINATION="ID_1331675338" ENDARROW="Default" ENDINCLINATION="-9;-33;" ID="Arrow_ID_646745936" SOURCE="ID_135851896" STARTARROW="None" STARTINCLINATION="-345;12;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1615563510172" ID="ID_1273139871" MODIFIED="1615563531003" TEXT="speichere im Binding den Gesten-Controller + das Subject"/>
 <node CREATED="1615563531896" ID="ID_1041794659" MODIFIED="1615563551170" TEXT="bei Start der Geste: das Subjekt bringt den Kontext bei...">
@@ -32089,14 +32118,101 @@
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#3363bf" DESTINATION="ID_1714668959" ENDARROW="Default" ENDINCLINATION="36;-129;" ID="Arrow_ID_794903503" STARTARROW="None" STARTINCLINATION="-320;19;"/>
+<arrowlink COLOR="#3363bf" DESTINATION="ID_1714668959" ENDARROW="Default" ENDINCLINATION="36;-129;" ID="Arrow_ID_794903503" STARTARROW="None" STARTINCLINATION="-320;18;"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1615563740336" ID="ID_1714668959" MODIFIED="1615563782709" TEXT="L&#xf6;sungs-Skizze f&#xfc;r Clip-Drag erstellen">
-<linktarget COLOR="#3363bf" DESTINATION="ID_1714668959" ENDARROW="Default" ENDINCLINATION="36;-129;" ID="Arrow_ID_794903503" SOURCE="ID_1223828386" STARTARROW="None" STARTINCLINATION="-320;19;"/>
+<linktarget COLOR="#3363bf" DESTINATION="ID_1714668959" ENDARROW="Default" ENDINCLINATION="36;-129;" ID="Arrow_ID_794903503" SOURCE="ID_1223828386" STARTARROW="None" STARTINCLINATION="-320;18;"/>
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616684903452" ID="ID_1953335093" MODIFIED="1616684964824">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      1.Schritt: <i>irgendwie implementieren</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="pencil"/>
+<node CREATED="1616709287996" ID="ID_315052965" MODIFIED="1616709307502" TEXT="CmdContext ist ein Builder">
+<icon BUILTIN="idea"/>
+<node CREATED="1616709876647" ID="ID_134820105" MODIFIED="1616709888050" TEXT="(ver)bindet eine UI-Entit&#xe4;t"/>
+<node CREATED="1616709888782" ID="ID_1557466321" MODIFIED="1616709896625" TEXT="mit einer Interaktionsform"/>
+<node CREATED="1616709937487" ID="ID_1221710731" MODIFIED="1616709984652" TEXT="idealerweise abstrakt und &#xfc;bergreifend">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das Ideal w&#228;re, da&#223; man das nicht speziell f&#252;r Maus, Tastatur, Stift und Hardware einrichten mu&#223;, sondern lediglich qualifizieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1616710016525" ID="ID_454513850" MODIFIED="1616710159000" TEXT="dies sollte der einzige Ort der Konfiguration sein">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...d.h. es w&#228;re zu vermeiden, da&#223; ein irgendwo vorgegebenes Konfigurations-Setup an anderer Stelle im Code noch passend verankert oder korrespondieren eingerichtet werden mu&#223;.<br /><br />Konkret: die drag-F&#228;higkeit eines Clip wird konfiguriert im Clip-Presenter. Fertig.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1616712549985" ID="ID_1845795661" MODIFIED="1616712552436" TEXT="Methoden">
+<node CREATED="1616712555705" ID="ID_1629230692" MODIFIED="1616713670273" TEXT="linkSubect(subj&amp;)"/>
+<node CREATED="1616713811416" ID="ID_1212233389" MODIFIED="1616713852706" TEXT="setupRelocateDrag()"/>
+</node>
+</node>
+<node CREATED="1616710202252" ID="ID_220049730" MODIFIED="1616710247050" TEXT="InteractionState sollte nur intern mit CmdContext interagieren">
+<node CREATED="1616710625955" ID="ID_69401594" MODIFIED="1616710644751" TEXT="gemeint ist: die Implementation von InteractionState ist konkret">
+<node CREATED="1616712015758" ID="ID_1460580308" MODIFIED="1616712028383" TEXT="Entscheidung: jede Geste ist konkret"/>
+<node CREATED="1616712031119" ID="ID_17685044" MODIFIED="1616712197269" TEXT="also &quot;Clip-Move&quot; vs &quot;Clip-Attach&quot; vs &quot;Clip-Trim&quot;"/>
+<node CREATED="1616712201691" ID="ID_1586890794" MODIFIED="1616712288188" TEXT="denn es sind nicht so viele, da&#xdf; eine zus&#xe4;tzliche Abstraktionsstufe gerechtfertig w&#xe4;re">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Und au&#223;erdem: die Wiederverwendung einer Implementierung z.B. f&#252;r Dragging kann man per Vererbung oder per nested component lokal in der Implementierung regeln
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1616710500336" ID="ID_1572154704" MODIFIED="1616710506215" TEXT="was wird gebraucht?">
+<node CREATED="1616711335594" ID="ID_179541553" MODIFIED="1616711349572" TEXT="den Trigger einrichten">
+<node CREATED="1616711351275" ID="ID_1259806938" MODIFIED="1616711357761" TEXT="linkTrigger(Subject)"/>
+</node>
+<node CREATED="1616711814740" ID="ID_1488797823" MODIFIED="1616711828149" TEXT="einen Modifier festlegen"/>
+<node CREATED="1616711873564" ID="ID_1116020717" MODIFIED="1616711888542" TEXT="eine Zusatzbedingung(Lambda) angeben"/>
+<node CREATED="1616711889538" ID="ID_672191940" MODIFIED="1616711925929" TEXT="Zugang zum slotEnabled()">
+<node CREATED="1616711927102" ID="ID_1174752717" MODIFIED="1616711964852" TEXT="damit l&#xe4;&#xdf;t sich eine bestimmte Geste aktivieren/deaktivieren"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616684916746" ID="ID_571239713" MODIFIED="1616684947088">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      2.Schritt: <i>rektifizieren</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="hourglass"/>
+</node>
 </node>
 </node>
 </node>
