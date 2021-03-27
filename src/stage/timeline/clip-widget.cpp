@@ -347,7 +347,7 @@ namespace timeline {
         /**
          * the default implementation would ask the embedded child widgets;
          * however we just force the given size confinement onto them
-         * @todo 1/21 this kindof works, but produces lots of layout warings
+         * @todo 1/21 this kindof works, but produces lots of layout warnings
          */
         void
         get_preferred_width_vfunc(int& minimum_width, int& natural_width)  const override
@@ -464,6 +464,7 @@ namespace timeline {
       }
     ENSURE (existing);
     return existing->changeAppearance (desired);
+    // fine-tune appearance style within limits of the mode established
   }
   
   

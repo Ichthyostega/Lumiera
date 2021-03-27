@@ -215,16 +215,26 @@ namespace timeline {
       /**
        * reevaluate desired presentation mode and available data,
        * possibly leading to a changed appearance style of the clip.
+       * Whenever a new clip widget has been created, this function is also responsible
+       * for additional setup, and especially to enable the dragging gestures on this clip.
        * @remark a typical example would be, when a clip's temporal position, previously unspecified,
        *     now becomes defined through a diff message. With this data, it becomes feasible
        *     _actually to show the clip_ in the timeline. Thus the [Appearance style](\ref ClipDelegate::Appearance)
        *     of the presentation widget (delegate) can be switched up from `PENDING` to `ABRIDGED`.
+       * @note however this function is invoked from ctor and then serves to allocate the delegate initially.
        */
       void
       establishAppearance(WidgetHook* newView =nullptr,
                           optional<TimeSpan> const& timing =nullopt)
         {
-          ClipDelegate::selectAppearance (this->widget_, defaultAppearance, newView, timing);
+          void* prevDelegate = widget_.get();
+          auto newAppearance = ClipDelegate::selectAppearance (this->widget_, defaultAppearance, newView, timing);
+          
+          if (prevDelegate != widget_.get()
+              and newAppearance > ClipDelegate::DEGRADED)
+            {// a new dedicated clip widget has been created...
+              WARN (stage, "configure clip-dragging");
+            }
         }
       
       

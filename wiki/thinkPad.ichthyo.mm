@@ -32202,7 +32202,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1616771214558" ID="ID_1771867762" MODIFIED="1616771231731" TEXT="Problem: Widget-Existenz wird dynamisch gesteuert">
+<node COLOR="#435e98" CREATED="1616771214558" ID="ID_1771867762" MODIFIED="1616852161665" TEXT="Problem: Widget-Existenz wird dynamisch gesteuert">
+<icon BUILTIN="messagebox_warning"/>
 <node CREATED="1616771234015" ID="ID_240157641" MODIFIED="1616771254326" TEXT="relativ autonom">
 <node CREATED="1616771255343" ID="ID_620255063" MODIFIED="1616771287475" TEXT="deshalb kann das Subject die Einrichtung nicht fix machen"/>
 <node CREATED="1616771294654" ID="ID_334680468" MODIFIED="1616771818181" TEXT="auch der Zeitpunkt ist nicht absolut festgelegt">
@@ -32225,7 +32226,8 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node CREATED="1616771830690" ID="ID_1923283447" MODIFIED="1616771854190" TEXT="Konsequenz: Setup f&#xfc;r Dragging mu&#xdf; immer wieder erneut erfolgen">
+<node COLOR="#435e98" CREATED="1616771830690" ID="ID_1923283447" MODIFIED="1616852149613" TEXT="Konsequenz: Setup f&#xfc;r Dragging mu&#xdf; immer wieder erneut erfolgen">
+<icon BUILTIN="yes"/>
 <node CREATED="1616771909543" ID="ID_704625942" MODIFIED="1616771922497" TEXT="und zwar genau dann, wenn ein neues Widget geschaffen wurde"/>
 <node CREATED="1616772271009" ID="ID_1822723171" MODIFIED="1616772366205" TEXT="Problem: es ist nicht (einfach) m&#xf6;glich, eine bestehende Gesten-Konfiguration zu erkennen">
 <richcontent TYPE="NOTE"><html>
@@ -32240,7 +32242,8 @@
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1616771937519" ID="ID_897110549" MODIFIED="1616771965142" TEXT="Aufgabe: diese &#xc4;nderungen zuverl&#xe4;ssig erkennen">
+<node COLOR="#338800" CREATED="1616771937519" FOLDED="true" ID="ID_897110549" MODIFIED="1616852141975" TEXT="Aufgabe: diese &#xc4;nderungen zuverl&#xe4;ssig erkennen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1616771968190" ID="ID_1961266206" MODIFIED="1616771986228" TEXT="es k&#xf6;nnte onLocalChange() passieren">
 <icon BUILTIN="idea"/>
 </node>
@@ -32310,15 +32313,27 @@
 <icon BUILTIN="smiley-neutral"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616804300325" ID="ID_480439366" MODIFIED="1616804320898" TEXT="auf dieser Basis nun ein neu erzeugtes Widget erkennen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1616804300325" ID="ID_480439366" MODIFIED="1616852111077" TEXT="auf dieser Basis nun ein neu erzeugtes Widget erkennen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1616804350672" ID="ID_1181865023" MODIFIED="1616804359373" TEXT="Kriterien">
 <icon BUILTIN="idea"/>
 <node CREATED="1616804323416" ID="ID_1065320975" MODIFIED="1616804335337" TEXT="immer wenn sich das Delegate &#xe4;ndert"/>
 <node CREATED="1616804336046" ID="ID_438456915" MODIFIED="1616804350049" TEXT="und der neue Stil ein eigentst&#xe4;ndiges Widget rechtfertigt"/>
 </node>
+<node COLOR="#435e98" CREATED="1616852094050" ID="ID_1854197256" MODIFIED="1616852126061" TEXT="eingebaut und per Log-Meldung verifiziert">
+<icon BUILTIN="info"/>
 </node>
 </node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616852178983" ID="ID_389047439" MODIFIED="1616852207108" TEXT="Strukturen gem&#xe4;&#xdf; Konzept anlegen">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616852190829" ID="ID_1663212368" MODIFIED="1616852206157" TEXT="CmdContext">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616852275162" ID="ID_1272601084" MODIFIED="1616852283276" TEXT="DragRelocateController verwalten">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
