@@ -73,8 +73,8 @@
  ** 
  ** When especially the optional argument `timing` is provided by the _population diff_
  ** creating the clip, then we can use the given lib::time::TimeSpan data for actually
- ** allocating a screen rectangle, and thus only in this case, a ClipWidget is constructed
- ** and mapped into presentation.
+ ** allocating a screen rectangle, and thus only when this condition is met (which should
+ ** be the default), a ClipWidget is constructed and mapped into presentation.
  ** 
  ** Later the appearance style can be switched, which might incur the necessity also to
  ** exchange the actual implementation of the clip delegate. The latter is the case whenever
