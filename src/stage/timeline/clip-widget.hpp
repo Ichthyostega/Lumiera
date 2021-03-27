@@ -136,6 +136,8 @@ namespace stage  {
 namespace timeline {
   
   using std::string;
+  using std::nullopt;
+  using std::optional;
   using lib::time::Time;
   using lib::time::Duration;
   using lib::time::TimeSpan;
@@ -201,8 +203,9 @@ namespace timeline {
       
       /** request to change the clip delegate's appearance style, if possible.
        * @param existing entity to hold and maintain this specific appearance state.
-       * @param desired the intended style or mode to acquire
+       * @param desired (optionally) the intended style or mode to acquire
        * @param newView (optionally) a different view to hook up the delegate.
+       * @param timing position and duration of the clip, required when `existing` is empty
        * @return the actual mode the presentation was switched to
        * @remark switching the appearance style is a state transition; sometimes
        *         this change also implies switching the actual implementation of
@@ -212,6 +215,8 @@ namespace timeline {
        *         extension of the clip. If such requirements can not be fulfilled,
        *         presentation stays or drops to the most elaborate state possible
        *         with the current configuration.
+       * @note This function can build a new delegate from scratch, when the `existing`
+       *         smart-ptr is empty. However, in this case it is mandatory to pass `newView`
        * @note Default and fallback appearance style is `PENDING`, which turns the
        *         delegate into a mere data record without visual representation.
        * @note whenever a WidgetHook (instance) different than the existing one
@@ -220,15 +225,11 @@ namespace timeline {
        *         The base ctor #ClipData(WidgetHook&) ensures there is
        *         always a display_ (WidgetHook) to refer to.
        */
-      static Appearance switchAppearance (PDelegate& existing,
-                                          Appearance desired =PENDING,
-                                          WidgetHook* newView =nullptr);
+      static Appearance selectAppearance (PDelegate& existing,
+                                          Appearance desired  =PENDING,
+                                          WidgetHook* newView =nullptr,
+                                          optional<TimeSpan> const& timing =nullopt);
       
-      /** build the initial presentation widget on construction, using a minimally
-       *  viable appearance style. This is the first incantation of #switchAppearance.
-       */
-      static Appearance buildDelegate (PDelegate& manager, WidgetHook& view,
-                                       std::optional<TimeSpan> const& timing);
       
     private:/* ===== Internals ===== */
       

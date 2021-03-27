@@ -65,9 +65,12 @@
  **   * ClipDelegate::Appearance::EXPANDED : details within the clip are revealed
  ** 
  ** ## Choosing the appropriate representation
- ** On construction, the ClipPresenter invokes ClipDelegate::buildDelegate().
- ** This is a limited variant of the more general ClipDelegate::switchAppearance(),
- ** insofar on construction we must ensure there always exists some kind of delegate.
+ ** On construction, the ClipPresenter invokes ClipPresenter::establishAppearance(),
+ ** which in turn invokes the generic function ClipDelegate::selectAppearance(), which
+ ** in this case will always build a new ClipDelegate, since a CanvasHook ("view") is
+ ** explicitly given. Generally speaking, this function ensures there is a delegate,
+ ** and this delegate reflects the desired presentation style.
+ ** 
  ** When especially the optional argument `timing` is provided by the _population diff_
  ** creating the clip, then we can use the given lib::time::TimeSpan data for actually
  ** allocating a screen rectangle, and thus only in this case, a ClipWidget is constructed
@@ -133,16 +136,6 @@ namespace timeline {
    
     using WidgetHook   = model::CanvasHook<Gtk::Widget>;
     using HookedWidget = model::CanvasHooked<Gtk::Button, Gtk::Widget>;   ///////////////////////////////////////////TICKET #1211 : need preliminary placeholder clip widget for timeline layout
-    
-    enum Mode { HIDDEN, SUMMARY, INDIVIDUAL };
-    
-    inline Mode
-    classify (ClipDelegate::Appearance appearance)
-      {
-        return appearance < ClipDelegate::SYMBOLIC? HIDDEN
-             : appearance < ClipDelegate::ABRIDGED? SUMMARY
-             :                                      INDIVIDUAL;
-      }
     
     
     class ClipData
@@ -364,8 +357,8 @@ namespace timeline {
         
         
       public:
-        ClipWidget(WidgetHook::Pos hookPoint, TimeSpan const& timings, uString clipName)
-          : HookedWidget{hookPoint, clipName}
+        ClipWidget(WidgetHook& displayAnchor, TimeSpan const& timings)
+          : HookedWidget{displayAnchor.hookedAt(timings, defaultOffsetY), defaultName}
           , ClipData{timings}
           {
             establishHorizontalExtension();
@@ -383,22 +376,17 @@ namespace timeline {
       };
     
     
-    inline ClipDelegate*
-    buildDelegateFor (Mode newMode, ClipDelegate& existingDelegate, WidgetHook* newView =nullptr)
-    {
-      REQUIRE (INSTANCEOF (ClipData, &existingDelegate));
-      ClipData& clipData = static_cast<ClipData&> (existingDelegate);
-      
-      switch (newMode)
-        {
-          case HIDDEN:
-            return new DormantClip (std::move (clipData));
-          case INDIVIDUAL:
-            return new ClipWidget (std::move (clipData), newView);
-          case SUMMARY:
-            UNIMPLEMENTED ("Summary/Overview presentation style");
-        }
-    }
+    
+    enum Mode { HIDDEN, SUMMARY, INDIVIDUAL };
+    
+    inline Mode
+    classifyAppearance (ClipDelegate::Appearance appearance)
+      {
+        return appearance < ClipDelegate::SYMBOLIC? HIDDEN
+             : appearance < ClipDelegate::ABRIDGED? SUMMARY
+             :                                      INDIVIDUAL;
+      }
+    
     
     /** special convention to suppress a clip with start time == Time::NEVER */
     inline bool
@@ -407,6 +395,49 @@ namespace timeline {
       return start != Time::NEVER;
     }
     
+    inline bool
+    canRepresentAsClip (PDelegate& existing, optional<TimeSpan> const& timing)
+    {
+      return (existing and canShow(existing->getStartTime()))
+          or (not existing and timing and canShow(timing->start())) ;
+    }
+    
+    
+    /** @internal either build a new delegate from scratch or build it based on the `existingDelegate` */
+    inline ClipDelegate*
+    buildDelegateFor (Mode newMode, PDelegate& existingDelegate, WidgetHook* newView, optional<TimeSpan> const& timing)
+    {
+      if (existingDelegate)
+        { // flip existing delegate to another instance for newMode...
+          REQUIRE (INSTANCEOF (ClipData, existingDelegate.get()));
+          ClipData& clipData = static_cast<ClipData&> (*existingDelegate);
+          
+          switch (newMode)
+            {
+              case HIDDEN:
+                return new DormantClip (std::move (clipData));
+              case INDIVIDUAL:
+                return new ClipWidget (std::move (clipData), newView);
+              case SUMMARY:
+                UNIMPLEMENTED ("Summary/Overview presentation style");
+            }
+        }
+      else
+        { // First time: build new delegate from scratch
+          REQUIRE (newMode==HIDDEN or (timing and canShow (timing->start())));
+          REQUIRE (newView);
+          
+          switch (newMode)
+            {
+              case HIDDEN:
+                return new DormantClip{*newView};
+              case INDIVIDUAL:
+                return new ClipWidget{*newView, *timing};
+              case SUMMARY:
+                UNIMPLEMENTED ("Summary/Overview presentation style");
+            }
+        }
+    }
   }//(End)clip appearance details.
   
   
@@ -414,34 +445,25 @@ namespace timeline {
   /* === Appearance Style state transitions === */
   
   ClipDelegate::Appearance
-  ClipDelegate::buildDelegate (PDelegate& manager, WidgetHook& view, optional<TimeSpan> const& timing)
+  ClipDelegate::selectAppearance (PDelegate& existing, Appearance desired, WidgetHook* newView, optional<TimeSpan> const& timing)
   {
-    if (timing and canShow (timing->start()))
-      manager.reset (new ClipWidget{view.hookedAt(*timing, defaultOffsetY), *timing, defaultName});
-    else
-      manager.reset (new DormantClip{view});
+    REQUIRE (existing or newView, "need either an existing delegate or also a new View/Canvas");
     
-    return timing? Appearance::COMPACT
-                 : Appearance::PENDING;
-  }
-  
-  
-  ClipDelegate::Appearance
-  ClipDelegate::switchAppearance (PDelegate& existing, Appearance desired, WidgetHook* newView)
-  {
-    REQUIRE (existing, "pre-existing clip delegate required");
-    if (not canShow(existing->getStartTime()))
+    Appearance current = existing? existing->currentAppearance()
+                                 : Appearance::PENDING;
+    if (not canRepresentAsClip (existing, timing))
       desired = Appearance::PENDING;
-    Mode curMode = classify (existing->currentAppearance());
-    Mode newMode = classify (desired);
-    if (newMode != curMode or newView)
+    // classify all possible appearances into three base presentation modes
+    Mode curMode = classifyAppearance (current);
+    Mode newMode = classifyAppearance (desired);
+    
+    if (newView or newMode != curMode)
       { // need to switch the clip delegate
-        PDelegate newState (buildDelegateFor (newMode, *existing, newView));
+        PDelegate newState (buildDelegateFor (newMode, existing, newView, timing));
         swap (existing, newState);
-        return existing->changeAppearance (desired);
       }
-    else
-      return existing->changeAppearance (desired);
+    ENSURE (existing);
+    return existing->changeAppearance (desired);
   }
   
   

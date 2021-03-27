@@ -31958,7 +31958,10 @@
 <node CREATED="1614548580160" ID="ID_1068834365" MODIFIED="1614549019860" TEXT="das Subject (Presenter)?">
 <icon BUILTIN="closed"/>
 <node CREATED="1614548621184" ID="ID_313965279" MODIFIED="1614548638025" TEXT="dann mu&#xdf; das ClipDelegate-API entsprechend erweitert werden"/>
-<node CREATED="1614548720714" ID="ID_1355759542" MODIFIED="1614548742103" TEXT="trotzdem ungel&#xf6;st: Zeitpunkt der Registrierung f&#xfc;r den Drag-Mechanismus"/>
+<node CREATED="1614548720714" ID="ID_1355759542" MODIFIED="1614548742103" TEXT="trotzdem ungel&#xf6;st: Zeitpunkt der Registrierung f&#xfc;r den Drag-Mechanismus">
+<linktarget COLOR="#fd6d53" DESTINATION="ID_1355759542" ENDARROW="Default" ENDINCLINATION="968;36;" ID="Arrow_ID_1110351466" SOURCE="ID_334680468" STARTARROW="None" STARTINCLINATION="210;12;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 <node CREATED="1614548979543" ID="ID_950023949" MODIFIED="1614549014231" TEXT="pa&#xdf;t insgesamt schlecht ins Konzept: Gesten sind reine GUI-Mechanik"/>
 </node>
 <node CREATED="1614548586972" ID="ID_1092961950" MODIFIED="1616684185562" TEXT="oder das Widget?">
@@ -32196,6 +32199,125 @@
 <node CREATED="1616711873564" ID="ID_1116020717" MODIFIED="1616711888542" TEXT="eine Zusatzbedingung(Lambda) angeben"/>
 <node CREATED="1616711889538" ID="ID_672191940" MODIFIED="1616711925929" TEXT="Zugang zum slotEnabled()">
 <node CREATED="1616711927102" ID="ID_1174752717" MODIFIED="1616711964852" TEXT="damit l&#xe4;&#xdf;t sich eine bestimmte Geste aktivieren/deaktivieren"/>
+</node>
+</node>
+</node>
+<node CREATED="1616771214558" ID="ID_1771867762" MODIFIED="1616771231731" TEXT="Problem: Widget-Existenz wird dynamisch gesteuert">
+<node CREATED="1616771234015" ID="ID_240157641" MODIFIED="1616771254326" TEXT="relativ autonom">
+<node CREATED="1616771255343" ID="ID_620255063" MODIFIED="1616771287475" TEXT="deshalb kann das Subject die Einrichtung nicht fix machen"/>
+<node CREATED="1616771294654" ID="ID_334680468" MODIFIED="1616771818181" TEXT="auch der Zeitpunkt ist nicht absolut festgelegt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        es <i>kann passieren,</i>&#160;da&#223; zu Beginn keine Timings gegeben sind, und deshalb erst mal nur ein Platzhalter erstellt wird...
+      </li>
+      <li>
+        es <i>kann passieren,</i>&#160;da&#223; die Anzeige sofort in den degradierten-Modus schaltet (z.B. Timeline-&#220;bersicht)...
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#fd6d53" DESTINATION="ID_1355759542" ENDARROW="Default" ENDINCLINATION="968;36;" ID="Arrow_ID_1110351466" STARTARROW="None" STARTINCLINATION="210;12;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1616771830690" ID="ID_1923283447" MODIFIED="1616771854190" TEXT="Konsequenz: Setup f&#xfc;r Dragging mu&#xdf; immer wieder erneut erfolgen">
+<node CREATED="1616771909543" ID="ID_704625942" MODIFIED="1616771922497" TEXT="und zwar genau dann, wenn ein neues Widget geschaffen wurde"/>
+<node CREATED="1616772271009" ID="ID_1822723171" MODIFIED="1616772366205" TEXT="Problem: es ist nicht (einfach) m&#xf6;glich, eine bestehende Gesten-Konfiguration zu erkennen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn ich will ja grade unn&#246;tige Storage-Slots f&#252;r R&#252;ckpointer und sonstige Flags vermeiden; daher besteht eine Gesten-Konfiguration nur darin, irgendwo ganz versteckt ein Signal auf das Widget verdrahtet zu haben...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1616771937519" ID="ID_897110549" MODIFIED="1616771965142" TEXT="Aufgabe: diese &#xc4;nderungen zuverl&#xe4;ssig erkennen">
+<node CREATED="1616771968190" ID="ID_1961266206" MODIFIED="1616771986228" TEXT="es k&#xf6;nnte onLocalChange() passieren">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1616771987478" ID="ID_1833918929" MODIFIED="1616772006656" TEXT="...denn das ist auch die Stelle, die die &#xc4;nderung im Anzeigestil m&#xf6;glicherweise ausl&#xf6;st"/>
+<node CREATED="1616772215184" ID="ID_1727128481" MODIFIED="1616772242264" TEXT="wird auch von injectNew() mit getriggert">
+<icon BUILTIN="idea"/>
+<node CREATED="1616772374800" ID="ID_898444334" MODIFIED="1616772380678" TEXT="das ist sch&#xf6;n..."/>
+<node CREATED="1616772381362" ID="ID_211141572" MODIFIED="1616772481922" TEXT="wirft aber ein Problem der Asymetrie auf">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn nach dem Konstruktor-Aufruf existiert das Widget bereits &#8213;<b>&#160;</b>und das hei&#223;t, diese Funktion im Listener mu&#223; nichts mehr tun, und deshalb sieht es lokal dort so aus, als h&#228;tte sich das Widget gar nicht ge&#228;ndert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1616772483932" ID="ID_1983461836" MODIFIED="1616772500046" TEXT="das ist auch eine &quot;halbe&quot; Code-Duplikation">
+<node COLOR="#435e98" CREATED="1616772500937" ID="ID_1952528681" MODIFIED="1616803786000" TEXT="kann man das begradigen?">
+<icon BUILTIN="help"/>
+<node CREATED="1616773381049" ID="ID_1361368724" MODIFIED="1616773396790" TEXT="w&#xfc;rde bedeuten: buildDelegate l&#xe4;uft erst on-demand"/>
+<node CREATED="1616773425807" ID="ID_1108287644" MODIFIED="1616773436809" TEXT="Konsequenz">
+<node CREATED="1616773437629" ID="ID_1627883677" MODIFIED="1616773455118" TEXT="entweder die Invariante ist verletzt (widget_ != null)"/>
+<node CREATED="1616773456274" ID="ID_1362418383" MODIFIED="1616773479027" TEXT="oder das switchAppearance mu&#xdf; schon vom ctor aus laufen"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1616773513426" ID="ID_493085702" MODIFIED="1616803787953" TEXT="Analyse-Aufgabe: was ist der Unteschied?">
+<icon BUILTIN="help"/>
+<node CREATED="1616773528369" ID="ID_783515324" MODIFIED="1616773535478" TEXT="buildDelegate">
+<node CREATED="1616773740990" ID="ID_709835603" MODIFIED="1616773753903" TEXT="bekommt die Timings explizit von Au&#xdf;en hereingereicht"/>
+<node CREATED="1616773822417" ID="ID_435836434" MODIFIED="1616773829885" TEXT="ermittelt nur den neuen Stil"/>
+<node CREATED="1616773839167" ID="ID_186857995" MODIFIED="1616773868828" TEXT="baut stets das Delegate from scratch"/>
+<node CREATED="1616773969494" ID="ID_711732245" MODIFIED="1616773998586" TEXT="vereinfachte Logik f&#xfc;r den Anzeigestil">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      da man verschiedene F&#228;lle hier zu beginn gleich ausschlie&#223;en kann
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1616773543578" ID="ID_1381781962" MODIFIED="1616773547522" TEXT="switchAppearance">
+<node CREATED="1616773755299" ID="ID_982537729" MODIFIED="1616773767855" TEXT="zieht sich die Timings vom existierenden Delegate"/>
+<node CREATED="1616773776856" ID="ID_1919770258" MODIFIED="1616773804888" TEXT="entnimmt vom existierenden Deletate einen bisherigen Anzeigestil"/>
+<node CREATED="1616773832223" ID="ID_27000350" MODIFIED="1616773837508" TEXT="ermittelt den neuen Stil"/>
+<node CREATED="1616773805721" ID="ID_1164727185" MODIFIED="1616773819718" TEXT="pr&#xfc;ft, ob &#xfc;berhaupt eine &#xc4;nderung notwendig ist"/>
+<node CREATED="1616773870819" ID="ID_158611366" MODIFIED="1616773891716" TEXT="macht ggfs eine move-Konstruktion (verwendet das bestehende Delegate)"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1616803774776" ID="ID_511524095" MODIFIED="1616803986956" TEXT="puh... machbar aber komplex">
+<arrowlink COLOR="#01ae93" DESTINATION="ID_1192722099" ENDARROW="Default" ENDINCLINATION="266;0;" ID="Arrow_ID_1620313417" STARTARROW="None" STARTINCLINATION="145;0;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1616803853431" ID="ID_1036949484" MODIFIED="1616803911454" TEXT="buildDelegate | switchAppearance &#x2192; selectAppearance">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1616803913136" ID="ID_272741103" MODIFIED="1616803932728" TEXT="jetzt ist nur noch eine einzige Funktion f&#xfc;r das ganze Zustandsmanagement verantwortlich"/>
+<node CREATED="1616803933773" ID="ID_1192722099" MODIFIED="1616803982084" TEXT="der code war vorher etwas verworren... und jetzt ist er sauberer, aber sehr komplex">
+<linktarget COLOR="#01ae93" DESTINATION="ID_1192722099" ENDARROW="Default" ENDINCLINATION="266;0;" ID="Arrow_ID_1620313417" SOURCE="ID_511524095" STARTARROW="None" STARTINCLINATION="145;0;"/>
+<icon BUILTIN="smiley-neutral"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616804300325" ID="ID_480439366" MODIFIED="1616804320898" TEXT="auf dieser Basis nun ein neu erzeugtes Widget erkennen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1616804350672" ID="ID_1181865023" MODIFIED="1616804359373" TEXT="Kriterien">
+<icon BUILTIN="idea"/>
+<node CREATED="1616804323416" ID="ID_1065320975" MODIFIED="1616804335337" TEXT="immer wenn sich das Delegate &#xe4;ndert"/>
+<node CREATED="1616804336046" ID="ID_438456915" MODIFIED="1616804350049" TEXT="und der neue Stil ein eigentst&#xe4;ndiges Widget rechtfertigt"/>
+</node>
+</node>
 </node>
 </node>
 </node>

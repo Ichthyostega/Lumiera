@@ -114,7 +114,7 @@ namespace timeline {
        */
       uint determineRequiredVerticalExtension()  const;
       
-      /** update and re-attach the presentation widget into its presentation context. 
+      /** update and re-attach the presentation widget into its presentation context.
        *  Will be called during the "re-link phase" of DisplayEvaluation, after the
        *  timeline layout has been (re)established globally. Often, this incurs
        *  attaching the presentation widget (ClipDelegate) at a different actual
@@ -134,7 +134,7 @@ namespace timeline {
        *         of the presentation widget (delegate) can be switched up from `PENDING`
        *         to `ABRIDGED`.
        */
-      void resetAppearanceStyle();
+      void establishAppearance(WidgetHook* newView =nullptr, optional<TimeSpan> const& timing =nullopt);
       
       WidgetHook& getClipContentCanvas();
     };

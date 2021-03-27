@@ -78,7 +78,7 @@ namespace timeline {
     , markers_{}
     , widget_{}
     {
-      ClipDelegate::buildDelegate (widget_, view, timing);
+      establishAppearance (&view, timing);
       ENSURE (widget_);
     }
   
@@ -144,16 +144,16 @@ namespace timeline {
         //-Diff-Change-Listener----------------
         .onLocalChange ([this]()
                   {
-                    this->resetAppearanceStyle();
+                    this->establishAppearance();
                   }));
-    
   }
   
   
+  
   void
-  ClipPresenter::resetAppearanceStyle()
+  ClipPresenter::establishAppearance (WidgetHook* newView, optional<TimeSpan> const& timing)
   {
-    ClipDelegate::switchAppearance (this->widget_, defaultAppearance);
+    ClipDelegate::selectAppearance (this->widget_, defaultAppearance, newView, timing);
   }
   
   WidgetHook&
