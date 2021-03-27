@@ -58,6 +58,8 @@
  ** As a minimum requirement, each LocationRule should be concluded with such a "catch-all" explicit
  ** create clause, which describes the standard location of the element in question.
  ** 
+ ** @todo as of 2017 .. 2021, this is a half-finished draft and postponed in favour of building the actually visible timeline display first
+ ** 
  ** @see UILocationSolver_test
  ** @see ViewSpecDSL_test
  ** @see UICoordResolver

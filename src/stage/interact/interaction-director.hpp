@@ -93,6 +93,8 @@ namespace interact {
   class FocusTracker;
   class ViewLocator;
   
+  class GestureState;
+  
   using timeline::TimelineGui;
   
   
@@ -106,11 +108,13 @@ namespace interact {
     {
       ctrl::GlobalCtx& globalCtx_;
       
-      // == exposed to Depend on ==
+      // == exposed for Dependency-Incection ==
       using Service_LocationQuery = lib::DependInject<LocationQuery>::ServiceInstance<Navigator>;
+      using Service_GestureState  = lib::DependInject<GestureState>::ServiceInstance<>;
       
       
       // == global Services ==
+      Service_GestureState    gestureState_;
       unique_ptr<ViewLocator> viewLocator_;
       unique_ptr<SpotLocator> spotLocator_;
       Service_LocationQuery    navigator_;

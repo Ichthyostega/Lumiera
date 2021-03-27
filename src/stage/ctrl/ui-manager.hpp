@@ -29,7 +29,8 @@
  ** of the UI-Layer and thus, indirectly offers services to provide Icons and other resources, to
  ** open and manage workspace windows, to form and issue (global) actions and to delve into the
  ** UI representation of top-level parts of the session model. And, last but not least, it
- ** exposes the functions to start and stop the GTK event loop.
+ ** exposes the functions to start and stop the GTK event loop. However -- most of these
+ ** activities are in fact performed and maintained by delegates and sub components.
  ** 
  ** The initialisation and shutdown of the framework is handled by the ApplicationBase parent,
  ** while the constituents of the Lumiera UI backbone are allocated as member fields:

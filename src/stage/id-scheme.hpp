@@ -40,7 +40,21 @@
  ** Thus, starting from a given model element, it is always possible to "cast" some message towards
  ** the corresponding UI view element, without actually knowing much about that element's implementation.
  ** 
- ** @note This header provides the basic definitions for easily accessing relevant UI elements. 
+ ** @note This header provides the basic definitions for easily accessing relevant UI elements.
+ ** 
+ ** ## The View-Spec DSL
+ ** 
+ ** The goal for the Lumiera UI is not to totally hard-wire the overall structure. Rather, it shall be
+ ** possible to "allocate" a view based of rules where to place it within the existing UI structure.
+ ** This is especially important, since we expect much editing work to be done in a multi-monitor setup,
+ ** where the UI has to span several top-level windows, and allow for location of views in accordance
+ ** to the individual editor's habits.
+ ** 
+ ** In the current state (2017/2021) the foundation for such a rule based view allocation was worked out,
+ ** but all the possibly quite elaborated details of hooking into the actual widget tree was postponed,
+ ** until we have a more mature implementation of actual presentation widgets in place. 
+ ** 
+ ** @todo as of 2017 .. 2021, this is a half-finished draft and postponed in favour of building the actually visible timeline display first
  ** 
  ** @see interaction-director.hpp
  ** @see ui-bus.hpp

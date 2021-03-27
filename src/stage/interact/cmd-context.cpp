@@ -31,8 +31,10 @@
 
 //#include "lib/util.hpp"
 //#include "lib/symbol.hpp"
+#include "lib/depend.hpp"
 //#include "include/logging.h"
 #include "stage/interact/cmd-context.hpp"
+#include "stage/interact/gesture-state.hpp"
 
 //#include <string>
 //#include <map>
@@ -47,7 +49,7 @@ namespace stage {
 namespace interact {
   
   namespace { // internal details
-    
+    lib::Depend<GestureState> gestures;
   } // internal details
   
   
@@ -62,6 +64,7 @@ namespace interact {
   CmdContext&
   CmdContext::of (Symbol cmdID, string ctxID)
   {
+    InteractionState& state = gestures().getStateFor (ctxID);
     UNIMPLEMENTED ("context-bound commands: tap into the InteractionDirector to access the interaction state");
   }
   

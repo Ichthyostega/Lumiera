@@ -36,6 +36,7 @@
 #include "stage/interact/navigator.hpp"
 #include "stage/interact/focus-tracker.hpp"
 #include "stage/interact/ui-coord-resolver.hpp"
+#include "stage/interact/gesture-state.hpp"
 #include "stage/dialog/preferences-dialog.hpp"
 #include "stage/dialog/render.hpp"
 #include "stage/workspace/workspace-window.hpp"
@@ -100,6 +101,7 @@ namespace interact {
   InteractionDirector::InteractionDirector (GlobalCtx& globals)
     : model::Controller(session::Root::getID(), globals.uiBus_.getAccessPoint())
     , globalCtx_(globals)
+    , gestureState_{}
     , viewLocator_{new ViewLocator}
     , spotLocator_{new SpotLocator}
     , navigator_{*spotLocator_, *viewLocator_}    // Service exposed as Depend<LocationQuery>
@@ -246,7 +248,7 @@ namespace interact {
   void
   InteractionDirector::render()
   {
-    dialog::Render dialog(getWorkspaceWindow());                                   //////global -> InteractionDirector
+    dialog::Render dialog{getWorkspaceWindow()};                                   //////global -> InteractionDirector
     dialog.run();
     
     unimplemented ("start render");
@@ -305,7 +307,7 @@ namespace interact {
   
   namespace {
     /**
-     * The timeline is actually a front-end to a binding to a root track.
+     * The timeline is actually a front-end for a binding to some root track.
      * For that reason, we always create the root-track representation alongside
      * the timeline, and thus we need a very special INS message to create a timeline:
      * - it must be a record (an "object")

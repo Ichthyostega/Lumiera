@@ -31601,7 +31601,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1613349240614" ID="ID_1472064878" MODIFIED="1613349442831" TEXT="erster Entwurf: drag clip">
 <linktarget COLOR="#fbd7b5" DESTINATION="ID_1472064878" ENDARROW="Default" ENDINCLINATION="-1443;-151;" ID="Arrow_ID_1918638969" SOURCE="ID_1784185766" STARTARROW="None" STARTINCLINATION="1644;332;"/>
 <linktarget COLOR="#f6b667" DESTINATION="ID_1472064878" ENDARROW="Default" ENDINCLINATION="-9;-115;" ID="Arrow_ID_209732384" SOURCE="ID_1489464895" STARTARROW="None" STARTINCLINATION="220;19;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="pencil"/>
 <node CREATED="1613349479473" ID="ID_1618505083" MODIFIED="1613349488782" TEXT="Doku / Tutorials">
 <node CREATED="1613349541627" ID="ID_1745870905" MODIFIED="1613349560713" TEXT="man mu&#xdf; das motion_notify_event beobachten">
 <icon BUILTIN="idea"/>
@@ -31629,7 +31629,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614379765040" ID="ID_1624270915" MODIFIED="1614380579512" TEXT="neuer Anlauf f&#xfc;r Kontext-bezogene Commands">
 <arrowlink COLOR="#5b4964" DESTINATION="ID_1221036425" ENDARROW="Default" ENDINCLINATION="717;-46;" ID="Arrow_ID_1875882072" STARTARROW="None" STARTINCLINATION="586;34;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614380675501" ID="ID_163523275" MODIFIED="1614380716283" TEXT="Leitfrage: was mu&#xdf; ich jetzt konkret anlegen, damit &#xbb;drag Clip&#xab; in dieses Schema pa&#xdf;t?">
 <icon BUILTIN="help"/>
 </node>
@@ -31690,8 +31690,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614391106909" ID="ID_829290263" MODIFIED="1614391113925" TEXT="Ausarbeitung dieser L&#xf6;sung">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614391106909" ID="ID_829290263" MODIFIED="1616859849980" TEXT="Ausarbeitung dieser L&#xf6;sung">
+<icon BUILTIN="pencil"/>
 <node CREATED="1614391126643" ID="ID_339143488" MODIFIED="1614391152827" TEXT="Grundlage">
 <node CREATED="1614391153839" ID="ID_1357502282" MODIFIED="1614391168548" TEXT="CmdContext ist ein Metasprache-Interface">
 <icon BUILTIN="yes"/>
@@ -31835,8 +31835,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614543493162" ID="ID_1473378249" MODIFIED="1614543505465" TEXT="mit der bestehenden Implementierung verbinden">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614543493162" ID="ID_1473378249" MODIFIED="1616859840596" TEXT="mit der bestehenden Implementierung verbinden">
+<icon BUILTIN="pencil"/>
 <node CREATED="1614543561632" ID="ID_1754386766" MODIFIED="1614543810211" TEXT="diverse Widerspr&#xfc;che und Spannungen">
 <linktarget COLOR="#f45679" DESTINATION="ID_1754386766" ENDARROW="Default" ENDINCLINATION="93;-23;" ID="Arrow_ID_367937676" SOURCE="ID_1302795590" STARTARROW="None" STARTINCLINATION="-164;8;"/>
 <icon BUILTIN="messagebox_warning"/>
@@ -32128,7 +32128,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1615563740336" ID="ID_1714668959" MODIFIED="1615563782709" TEXT="L&#xf6;sungs-Skizze f&#xfc;r Clip-Drag erstellen">
 <linktarget COLOR="#3363bf" DESTINATION="ID_1714668959" ENDARROW="Default" ENDINCLINATION="36;-129;" ID="Arrow_ID_794903503" SOURCE="ID_1223828386" STARTARROW="None" STARTINCLINATION="-320;18;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616684903452" ID="ID_1953335093" MODIFIED="1616684964824">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -32327,10 +32327,31 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616852178983" ID="ID_389047439" MODIFIED="1616852207108" TEXT="Strukturen gem&#xe4;&#xdf; Konzept anlegen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616852178983" ID="ID_389047439" MODIFIED="1616859822702" TEXT="Strukturen gem&#xe4;&#xdf; Konzept anlegen">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616852190829" ID="ID_1663212368" MODIFIED="1616859815753" TEXT="CmdContext">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1616859779196" ID="ID_848065191" MODIFIED="1616859786984" TEXT="Dependency-Injection nutzen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616859787843" ID="ID_1635546920" MODIFIED="1616859809178" TEXT="Kl&#xe4;ren: wie wird die CtxID aufgel&#xf6;st?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616854202348" ID="ID_340156587" MODIFIED="1616854226249" TEXT="Auswahl und Zugriff auf den passenden InteractionState">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616852190829" ID="ID_1663212368" MODIFIED="1616852206157" TEXT="CmdContext">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1616856060491" ID="ID_44406517" MODIFIED="1616859101168" TEXT="einen Manager f&#xfc;r den InteractionState schaffen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1616859073891" ID="ID_909388621" MODIFIED="1616859108655" TEXT="Name: GestureState">
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#338800" CREATED="1616859080858" ID="ID_1168738584" MODIFIED="1616859110568" TEXT="angesiedelt im InteractionDirector">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1616859087201" ID="ID_1804482999" MODIFIED="1616859111916" TEXT="zug&#xe4;nglich via lib::Depend&lt;GestureState&gt;">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616852275162" ID="ID_1272601084" MODIFIED="1616852283276" TEXT="DragRelocateController verwalten">
 <icon BUILTIN="flag-yellow"/>
@@ -37141,6 +37162,10 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614379530868" ID="ID_131071232" MODIFIED="1614379614382" TEXT="werden Parameter sofort &#xfc;bersetzt, oder schrittweise aufgesammelt?">
 <linktarget COLOR="#6b709e" DESTINATION="ID_131071232" ENDARROW="Default" ENDINCLINATION="275;0;" ID="Arrow_ID_1369499964" SOURCE="ID_130562988" STARTARROW="Default" STARTINCLINATION="275;0;"/>
 <icon BUILTIN="help"/>
+</node>
+<node COLOR="#3301ae" CREATED="1616854028288" ID="ID_1575859119" MODIFIED="1616854070566" TEXT="neige mehr und mehr dazu, dies rein intern in gewissen &#xbb;Gesten-Controllern&#xab; zu regeln...">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
