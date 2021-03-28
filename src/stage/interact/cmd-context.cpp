@@ -24,6 +24,11 @@
 /** @file cmd-context.cpp
  ** Implementation details of support for context-bound commands.
  ** 
+ ** @todo as of 3/2021 the first prototype for a dragging gesture is shaped
+ **       The scheme for addressing gestures and scopes is nothing but guesswork currently,
+ **       since we mostly lack any real-world implementation and haven't done any detailed
+ **       analysis regarding the actual gestures to be implemented. Only the concept is clear. 
+ ** 
  ** @see TODO___cmd-access-test.cpp
  ** 
  */
@@ -33,6 +38,7 @@
 //#include "lib/symbol.hpp"
 #include "lib/depend.hpp"
 //#include "include/logging.h"
+#include "include/ui-protocol.hpp"
 #include "stage/interact/cmd-context.hpp"
 #include "stage/interact/gesture-state.hpp"
 
@@ -50,6 +56,13 @@ namespace interact {
   
   namespace { // internal details
     lib::Depend<GestureState> gestures;
+    
+    inline InteractionState&
+    selectStateImplementation (string ctxID)
+    {
+      if ( GESTURE_dragReolcate == ctxID)
+        return gestures().getStateFor (GestureState::DRAG, GestureState::ON_TIMELINE);
+    }
   } // internal details
   
   
@@ -64,8 +77,9 @@ namespace interact {
   CmdContext&
   CmdContext::of (Symbol cmdID, string ctxID)
   {
-    InteractionState& state = gestures().getStateFor (ctxID);
-    UNIMPLEMENTED ("context-bound commands: tap into the InteractionDirector to access the interaction state");
+    
+    InteractionState& state = selectStateImplementation (ctxID);
+    UNIMPLEMENTED ("context-bound commands: build a suitable CmdContext builder for further outfitting this state");
   }
   
   

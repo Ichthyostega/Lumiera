@@ -44,10 +44,13 @@
 //#include "lib/symbol.hpp"
 #include "lib/idi/entry-id.hpp"
 //#include "lib/format-string.hpp"
+#include "lib/time/timevalue.hpp"
 
 //#include <string>
 
 using lib::hash::LuidH;
+using lib::time::Time;
+using lib::time::Offset;
 //using std::string;
 //using util::cStr;
 //using util::_Fmt;
@@ -65,24 +68,25 @@ namespace cmd {
   
   
   
-  /** @todo placeholder 4/2017 -- need to build a timeline display first...
+  /** @todo WIP-WIP 3/2021 -- working on a prototype for dragging clips...
    */
-//COMMAND_DEFINITION (session_newSequence)
-//  {
-//    def.operation ([](LuidH context, LuidH newID)
-//                      {
-//                        UNIMPLEMENTED ("add a new Sequence into the given context scope within the Session");
-//                      })
-//       .captureUndo ([](LuidH, LuidH addedSeq) -> LuidH
-//                      {
-//                        return addedSeq;
-//                      })
-//       .undoOperation ([](LuidH context, LuidH addedSeq, LuidH newID)
-//                      {
-//                        REQUIRE (addedSeq == newID);
-//                        UNIMPLEMENTED ("how to remove a sub-sequence from the given context");
-//                      });
-//  };
+  COMMAND_DEFINITION (scope_moveRelocateClip)
+    {
+      def.operation ([](LuidH clipID, Offset timeDelta)
+                        {
+                          UNIMPLEMENTED ("shift a clip by the given timeDelta offset");
+                        })
+         .captureUndo ([](LuidH clipID, Offset timeDelta) -> Time
+                        {
+                          TODO ("actually find out the previous position of the Clip");
+                          return Time::ZERO;
+                        })
+         .undoOperation ([](LuidH clipID, Offset timeDelta, Time originalPos)
+                        {
+                          UNIMPLEMENTED ("how to revert shifting a clip. Shall we restore the captured Position or reverse apply the delta??");
+                        })
+                        ;
+    };
   
   
   

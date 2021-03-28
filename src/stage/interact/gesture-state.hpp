@@ -66,7 +66,8 @@ namespace interact {
    * Holder for InteractionState dedicated to UI gestures and complex interactions.
    * 
    * @todo write type comment...
-   * @todo WIP-WIP as of /3/2021
+   * @todo WIP-WIP as of 3/2021
+   * @todo as of 3/2021 the whole scheme for addressing gestures and actual state implementations is rather just guesswork
    * ///////////////////////////////////TODO do we need a translation unit interaction-state.cpp (otherwise delete it!)
    */
   class GestureState
@@ -76,10 +77,19 @@ namespace interact {
      ~GestureState();   ///////////TODO required??
       
     public:
+      enum Action {
+        DRAG,
+        UNKNOWN //////TODO
+      };
+      enum Scope {
+        ON_TIMELINE,
+        OTHER //////TODO
+      };
+      
       /**
        */
       InteractionState&
-      getStateFor (std::string ctxID)
+      getStateFor (Action action, Scope qualifier)
         {
           UNIMPLEMENTED ("how to designate and access state for specific gestures");
         }

@@ -23,7 +23,7 @@
 
 /** @file sequence-cmd.cpp
  ** Actual definition of Steam-Layer command scripts for actions within a sequence.
- ** Especially all those actions working within the track tree go into this file
+ ** Especially all those actions working on and reconfiguring the track tree.
  ** @todo WIP 4/2017 early draft
  ** 
  ** @see cmd.hpp

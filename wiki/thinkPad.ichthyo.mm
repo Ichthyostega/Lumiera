@@ -32128,6 +32128,8 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1615563740336" ID="ID_1714668959" MODIFIED="1615563782709" TEXT="L&#xf6;sungs-Skizze f&#xfc;r Clip-Drag erstellen">
 <linktarget COLOR="#3363bf" DESTINATION="ID_1714668959" ENDARROW="Default" ENDINCLINATION="36;-129;" ID="Arrow_ID_794903503" SOURCE="ID_1223828386" STARTARROW="None" STARTINCLINATION="-320;18;"/>
+<linktarget COLOR="#2381d3" DESTINATION="ID_1714668959" ENDARROW="Default" ENDINCLINATION="-533;1807;" ID="Arrow_ID_1818387200" SOURCE="ID_1401408143" STARTARROW="None" STARTINCLINATION="1260;198;"/>
+<linktarget COLOR="#5f7a9f" DESTINATION="ID_1714668959" ENDARROW="Default" ENDINCLINATION="-533;1807;" ID="Arrow_ID_1378120058" SOURCE="ID_1570729566" STARTARROW="None" STARTINCLINATION="1673;76;"/>
 <icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616684903452" ID="ID_1953335093" MODIFIED="1616684964824">
 <richcontent TYPE="NODE"><html>
@@ -32334,8 +32336,44 @@
 <node COLOR="#338800" CREATED="1616859779196" ID="ID_848065191" MODIFIED="1616859786984" TEXT="Dependency-Injection nutzen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616859787843" ID="ID_1635546920" MODIFIED="1616859809178" TEXT="Kl&#xe4;ren: wie wird die CtxID aufgel&#xf6;st?">
+<node COLOR="#435e98" CREATED="1616859787843" ID="ID_1635546920" MODIFIED="1616947177038" TEXT="Kl&#xe4;ren: wie wird die CtxID aufgel&#xf6;st?">
 <icon BUILTIN="help"/>
+<node CREATED="1616943046889" ID="ID_1350466164" MODIFIED="1616943061375" TEXT="oder anders herum: was sagt die CtxID aus?"/>
+<node CREATED="1616943103092" ID="ID_1028957642" MODIFIED="1616944099163" TEXT="welche Informationen m&#xfc;ssen mitgegeben werden?">
+<icon BUILTIN="help"/>
+<node CREATED="1616943128136" ID="ID_1348629069" MODIFIED="1616943136864" TEXT="die Command-ID selber">
+<node CREATED="1616943138039" ID="ID_183656293" MODIFIED="1616943154225" TEXT="Frage: ist diese  ein Bedeutungstr&#xe4;ger?"/>
+<node CREATED="1616943154981" ID="ID_687890378" MODIFIED="1616943170211" TEXT="...oder nur ein Wert der nach unten durchgereicht wird?"/>
+</node>
+<node CREATED="1616943184573" ID="ID_318484387" MODIFIED="1616943210017" TEXT="der Umstand da&#xdf; eine Dragging-Aktion stattfinden soll"/>
+<node CREATED="1616943213342" ID="ID_1854935612" MODIFIED="1616943235062" TEXT="der Umstand da&#xdf; wir auf einem Canvas arbeiten">
+<node CREATED="1616943236338" ID="ID_233441382" MODIFIED="1616943253094" TEXT="im Sinne meiner Abstraktion CanvasHooked"/>
+<node CREATED="1616943425489" ID="ID_409371890" MODIFIED="1616943450039" TEXT="aber auch die Info, da&#xdf; die x-Koordinate eine Zeit darstellt"/>
+</node>
+<node CREATED="1616943463635" ID="ID_926220296" MODIFIED="1616943481983" TEXT="Zus&#xe4;tzlich mu&#xdf; die Geste noch im Detail konfiguriert werden">
+<node CREATED="1616943486336" ID="ID_1614368580" MODIFIED="1616943496907" TEXT="sind Modifier notwendig?"/>
+<node CREATED="1616943497591" ID="ID_1693918542" MODIFIED="1616943512497" TEXT="kann der Drag den Canvas verlassen?"/>
+<node CREATED="1616943513205" ID="ID_1329503612" MODIFIED="1616943532774" TEXT="kann der Drag &#xfc;ber den bisherigen virtuellen Canvas hinausgehen?"/>
+<node CREATED="1616943533930" ID="ID_1957877957" MODIFIED="1616943546988" TEXT="soll der Canvas automatsich scrollen?"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1616943578428" ID="ID_115517003" MODIFIED="1616944103109" TEXT="wie allgemein / generisch mu&#xdf; das System sein?">
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1616943995900" ID="ID_999660840" MODIFIED="1616944008942" TEXT="Antwort: anfangs so wenig wie m&#xf6;glich">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1616944014145" ID="ID_1496729936" MODIFIED="1616944031389" TEXT="ich deute aber die Verallgemeinerung an">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1616944032896" ID="ID_1402431957" MODIFIED="1616944054424" TEXT="indem...">
+<node CREATED="1616944055492" ID="ID_1975883626" MODIFIED="1616944073921" TEXT="die Kontext-ID strukturiert angelegt wird (mit Scope und Punkt)"/>
+<node CREATED="1616944076448" ID="ID_932332417" MODIFIED="1616944085018" TEXT="die &#xdc;bersetzung zweistufig erfolgt"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616947165410" ID="ID_300128108" MODIFIED="1616947174719" TEXT="also: vorherst ferst verdrahten">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616854202348" ID="ID_340156587" MODIFIED="1616854226249" TEXT="Auswahl und Zugriff auf den passenden InteractionState">
@@ -38138,6 +38176,12 @@
 <node CREATED="1489777523266" ID="ID_136474944" MODIFIED="1518487921093" TEXT="trigger Invocation">
 <icon BUILTIN="button_ok"/>
 </node>
+<node CREATED="1616946525068" FOLDED="true" ID="ID_1115109193" MODIFIED="1616946583608" TEXT="Service f&#xfc;r InteractionState">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1616946542052" ID="ID_475841090" MODIFIED="1616946549992" TEXT="GestureState (Service)"/>
+<node CREATED="1616946552171" ID="ID_441985158" MODIFIED="1616946565598" TEXT="vom InteractionDirector konfiguriert"/>
+<node CREATED="1616946568902" ID="ID_290290362" MODIFIED="1616946580856" TEXT="verwaltet Art der Gesten und Scopes"/>
+</node>
 </node>
 <node CREATED="1489778159357" HGAP="105" ID="ID_1046149430" MODIFIED="1518487921093" TEXT="Command-Zyklus" VSHIFT="36">
 <node CREATED="1489544225984" ID="ID_695057205" MODIFIED="1518487921093" TEXT="Triggern">
@@ -38648,6 +38692,19 @@
 <node CREATED="1492281448845" ID="ID_1396633899" MODIFIED="1518487921093" TEXT="f&#xfc;r Callback-Registrierung"/>
 <node CREATED="1492281466282" ID="ID_1012579063" MODIFIED="1518487921093" TEXT="Callbacks schicken direkt eine GenNode"/>
 </node>
+<node CREATED="1616946594556" ID="ID_54239665" MODIFIED="1616946613439" TEXT="das System der komplexeren Interaktionen wird ein reiner UI-Belang">
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1616946615845" ID="ID_554876862" MODIFIED="1616946628768" TEXT="GestureState (Service im InteractionDirector)">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616946630071" ID="ID_303553781" MODIFIED="1616946650346" TEXT="dort: Klassifkation und Zuordnung">
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616946652692" ID="ID_1401408143" MODIFIED="1616946776521" TEXT="erster Entwurf">
+<arrowlink COLOR="#2381d3" DESTINATION="ID_1714668959" ENDARROW="Default" ENDINCLINATION="-533;1807;" ID="Arrow_ID_1818387200" STARTARROW="None" STARTINCLINATION="1260;198;"/>
+<icon BUILTIN="pencil"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -38877,6 +38934,24 @@
 </node>
 <node CREATED="1492281659520" ID="ID_1742758477" MODIFIED="1518487921094" TEXT="Argument-Resolver f&#xfc;r Kontext-Zugriff"/>
 <node CREATED="1492281675557" ID="ID_1809773326" MODIFIED="1518487921094" TEXT="InvocationState mit Callbacks"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616946803314" HGAP="-20" ID="ID_1642737972" MODIFIED="1616946817268" TEXT="System f&#xfc;r UI-Gesten" VSHIFT="13">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1616946819438" ID="ID_752209156" MODIFIED="1616946829713" TEXT="Kontext-Zuordnung ist reiner UI-Belang">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1616946831044" ID="ID_160240965" MODIFIED="1616946847970" TEXT="angelegt im GestureState (Service im InteractionDirector)">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1616946854861" ID="ID_273700034" MODIFIED="1616947006922" TEXT="Thema wartet auf eine viel weiter gediehene konkrete Implementierung">
+<arrowlink COLOR="#565ec8" DESTINATION="ID_1000039605" ENDARROW="Default" ENDINCLINATION="-1327;-47;" ID="Arrow_ID_33928560" STARTARROW="None" STARTINCLINATION="-397;16;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616946652692" ID="ID_1570729566" MODIFIED="1616947147359" TEXT="Entwurf &quot;drag clip&quot;: Gesten-Controller vorl&#xe4;ufig fest gedrahtet">
+<arrowlink COLOR="#5f7a9f" DESTINATION="ID_1714668959" ENDARROW="Default" ENDINCLINATION="-533;1807;" ID="Arrow_ID_1378120058" STARTARROW="None" STARTINCLINATION="1673;76;"/>
+<icon BUILTIN="pencil"/>
+</node>
 </node>
 </node>
 </node>
@@ -39160,6 +39235,19 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616946908520" HGAP="14" ID="ID_616646922" MODIFIED="1616946925604" TEXT="Gesten und Kontext-IDs" VSHIFT="3">
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1616946854861" ID="ID_1000039605" MODIFIED="1616947006922" TEXT="Thema wartet auf eine viel weiter gediehene konkrete Implementierung">
+<linktarget COLOR="#565ec8" DESTINATION="ID_1000039605" ENDARROW="Default" ENDINCLINATION="-1327;-47;" ID="Arrow_ID_33928560" SOURCE="ID_273700034" STARTARROW="None" STARTINCLINATION="-397;16;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#435e98" CREATED="1616947016539" ID="ID_955611798" MODIFIED="1616947047035" TEXT="&#xdc;bersetzung findet statt">
+<icon BUILTIN="info"/>
+<node CREATED="1616947023730" ID="ID_1003665654" MODIFIED="1616947029562" TEXT="in CmdContext"/>
+<node CREATED="1616947030273" ID="ID_892803974" MODIFIED="1616947043732" TEXT="in GestureState (Service"/>
 </node>
 </node>
 </node>

@@ -98,5 +98,10 @@ namespace stage {
   extern const Symbol MARK_Message;
   
   
+  /* ======== Gesture Scopes ======== */
+  
+  extern const Symbol GESTURE_dragReolcate;
+  
+  
 }// namespace stage
 #endif /*STAGE_INTERFACE_UI_PROTOCOL_H*/

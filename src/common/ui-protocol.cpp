@@ -59,6 +59,11 @@ namespace stage {
   const Symbol MARK_Message{"Message"};
   
   
+  /* ======== Gesture Scopes ======== */
+  
+  const Symbol GESTURE_dragReolcate{"DRAG.relocateInTimeline"};
+  
+  
   /**  */
   
   

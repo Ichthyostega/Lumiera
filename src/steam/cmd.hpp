@@ -71,6 +71,12 @@ namespace cmd {
   
   
   
+  /* ========= actions in local scope ======= */
+  
+  extern CommandSetup scope_moveRelocateClip;
+  
+  
+  
   /* ========= meta actions ======= */
   
   extern CommandSetup test_meta_activateContentDiff;               ////////////////////////////////TICKET #211 prefix test_ bypasses logging and immediately executes for now (2018)
