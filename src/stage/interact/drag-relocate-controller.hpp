@@ -53,7 +53,7 @@
 #include "stage/interact/cmd-context.hpp"
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/symbol.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <string>
 
@@ -64,6 +64,7 @@ namespace interact {
 //  using lib::HashVal;
 //  using util::isnil;
 //  using std::string;
+  using util::isnil;
   
   
   /**
@@ -88,6 +89,7 @@ namespace interact {
       void
       linkTrigger (Subject& subject, Symbol cmdID)  override
         {
+          REQUIRE (not isnil (cmdID));
           UNIMPLEMENTED ("use the Subject interface to hook up a trigger signal");
         }
       

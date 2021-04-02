@@ -58,7 +58,7 @@ namespace interact {
     lib::Depend<GestureState> gestures;
     
     inline InteractionState&
-    selectStateImplementation (string ctxID)
+    selectStateImplementation (Symbol ctxID)
     {
       if ( GESTURE_dragReolcate == ctxID)
         return gestures().getStateFor (GestureState::DRAG, GestureState::ON_TIMELINE);
@@ -74,13 +74,21 @@ namespace interact {
    * @remarks the implementation of this function taps into the UI-Backbone
    *          to access the InteractionDirector for the context interaction state
    */
-  CmdContext&
-  CmdContext::of (Symbol cmdID, string ctxID)
+  CmdContext
+  CmdContext::of (Symbol cmdID, Symbol ctxID)
   {
     
-    InteractionState& state = selectStateImplementation (ctxID);
-    UNIMPLEMENTED ("context-bound commands: build a suitable CmdContext builder for further outfitting this state");
+    return CmdContext {selectStateImplementation(ctxID), cmdID};
   }
+  
+  
+  void
+  CmdContext::setupRelocateDrag()
+  {
+    REQUIRE (subject_);
+    iState_.linkTrigger (*subject_, cmdID_);
+  }
+  
   
   
   /**

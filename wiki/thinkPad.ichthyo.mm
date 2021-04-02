@@ -32331,8 +32331,8 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616852178983" ID="ID_389047439" MODIFIED="1616859822702" TEXT="Strukturen gem&#xe4;&#xdf; Konzept anlegen">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616852190829" ID="ID_1663212368" MODIFIED="1616859815753" TEXT="CmdContext">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1616852190829" ID="ID_1663212368" MODIFIED="1617377719039" TEXT="CmdContext">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1616859779196" ID="ID_848065191" MODIFIED="1616859786984" TEXT="Dependency-Injection nutzen">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -32360,6 +32360,7 @@
 <node COLOR="#435e98" CREATED="1616943578428" ID="ID_115517003" MODIFIED="1616944103109" TEXT="wie allgemein / generisch mu&#xdf; das System sein?">
 <icon BUILTIN="help"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1616943995900" ID="ID_999660840" MODIFIED="1616944008942" TEXT="Antwort: anfangs so wenig wie m&#xf6;glich">
+<linktarget COLOR="#2c9eb4" DESTINATION="ID_999660840" ENDARROW="Default" ENDINCLINATION="-136;9;" ID="Arrow_ID_453101984" SOURCE="ID_1611970353" STARTARROW="None" STARTINCLINATION="60;-184;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -32372,12 +32373,16 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616947165410" ID="ID_300128108" MODIFIED="1616947174719" TEXT="also: vorherst ferst verdrahten">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1616947165410" ID="ID_300128108" MODIFIED="1617377719039" TEXT="also: vorherst ferst verdrahten">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616854202348" ID="ID_340156587" MODIFIED="1616854226249" TEXT="Auswahl und Zugriff auf den passenden InteractionState">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1616854202348" ID="ID_340156587" MODIFIED="1617377719039" TEXT="Auswahl und Zugriff auf den passenden InteractionState">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1617377586150" ID="ID_1611970353" MODIFIED="1617377719039" TEXT="erst mal fest verdrahtet">
+<arrowlink COLOR="#2c9eb4" DESTINATION="ID_999660840" ENDARROW="Default" ENDINCLINATION="-136;9;" ID="Arrow_ID_453101984" STARTARROW="None" STARTINCLINATION="60;-184;"/>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1616856060491" ID="ID_44406517" MODIFIED="1616859101168" TEXT="einen Manager f&#xfc;r den InteractionState schaffen">
 <icon BUILTIN="button_ok"/>
@@ -32391,8 +32396,42 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616852275162" ID="ID_1272601084" MODIFIED="1616852283276" TEXT="DragRelocateController verwalten">
+<node COLOR="#338800" CREATED="1616852275162" ID="ID_1272601084" MODIFIED="1617377719039" TEXT="DragRelocateController verwalten">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1617377637909" ID="ID_1302268767" MODIFIED="1617377719039" TEXT="Entscheidung: erst mal direkt als PImpl in GestureController">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1617377669085" ID="ID_1519120855" MODIFIED="1617377719039" TEXT="k&#xf6;nnte sp&#xe4;ter mal dynamsiche Auswahl nach Regeln sein (je nach Interaction-System)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Maus, Tastenk&#252;rzel, Stift, Hardware....
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1617377650756" ID="ID_735449737" MODIFIED="1617377719039" TEXT="TODO f&#xfc;r sp&#xe4;ter im Code hinterlassen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617377786842" ID="ID_1829220190" MODIFIED="1617377793038" TEXT="Interface Subject definieren">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617377754742" ID="ID_1574394085" MODIFIED="1617377766937" TEXT="linkSubject im konkreten Controller">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617377734341" ID="ID_1697355210" MODIFIED="1617377784921" TEXT="Widget-Signal-Binding anlegen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617377772355" ID="ID_1391847346" MODIFIED="1617377784091" TEXT="Subject im Signal-Binding binden">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617377798336" ID="ID_1680080732" MODIFIED="1617377807908" TEXT="Signal-Callbacks anlegen">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 </node>

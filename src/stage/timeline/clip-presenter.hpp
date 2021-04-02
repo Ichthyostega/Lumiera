@@ -59,6 +59,7 @@
 #include "stage/timeline/marker-widget.hpp"
 #include "stage/interact/cmd-context.hpp"
 #include "lib/time/timevalue.hpp"
+#include "steam/cmd.hpp"
 
 //#include "lib/util.hpp"
 
@@ -74,10 +75,10 @@ namespace timeline {
   using std::vector;
   using std::optional;
   using std::unique_ptr;
+  using std::make_unique;
   using lib::time::TimeSpan;
   using lib::diff::TreeMutator;
   using lib::diff::collection;
-  using std::make_unique;
   
   
   /**
@@ -233,7 +234,9 @@ namespace timeline {
           if (prevDelegate != widget_.get()
               and newAppearance > ClipDelegate::DEGRADED)
             {// a new dedicated clip widget has been created...
-              WARN (stage, "configure clip-dragging");
+              interact::CmdContext::of (steam::cmd::scope_moveRelocateClip, GESTURE_dragReolcate)
+                                   .linkSubject (*this)
+                                   .setupRelocateDrag();
             }
         }
       

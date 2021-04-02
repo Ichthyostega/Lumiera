@@ -62,7 +62,8 @@
 #include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
-#include <string>
+//#include <string>
+#include <utility>
 
 
 namespace stage {
@@ -72,7 +73,9 @@ namespace interact {
   using lib::hash::LuidH;
   using lib::Symbol;
 //  using util::isnil;
-  using std::string;
+//  using std::string;
+  
+  class InteractionState;
   
   
   
@@ -97,20 +100,28 @@ namespace interact {
    * @todo write type comment...
    */
   class CmdContext
-    : util::NonCopyable
+    : util::MoveOnly
     {
+      InteractionState& iState_;
+      Symbol cmdID_;
+      
+      /* ===== Builder State ===== */
       Subject* subject_{nullptr};
       
+      CmdContext (InteractionState& iState, Symbol cmdID)
+        : iState_{iState}
+        , cmdID_{cmdID}
+        { }
     public:
+      // using the default move-ctor
+        
       /* === access front-end === */
-      static CmdContext& of (Symbol cmdID, string ctxID);
+      static CmdContext of (Symbol cmdID, Symbol ctxID);
       
       struct Resolver;
       
-      /** Builder operation: define the subject to use
-       *  for the following interaction bindings.
-       */
-      CmdContext& linkSubect (Subject&);
+      /** Builder operation: define the subject to use for the following interaction bindings. */
+      CmdContext&& linkSubject (Subject& subj) { this->subject_ = &subj; return std::move (*this); }
       
       /** Terminal builder operation: establish the infrastructure
        *  for the already defined participants to be involved into a
