@@ -129,6 +129,7 @@ namespace interact {
   
   /**
    * Helper for dynamic command argument resolution.
+   * @todo 4/2021 this was part of a design draft in 2017, not clear yet if we need it
    */
   struct CmdContext::Resolver
     {

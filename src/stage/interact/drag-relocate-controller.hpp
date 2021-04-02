@@ -25,7 +25,7 @@
  ** Concrete implementation of a dragging gesture to relocate an UI entity.
  ** This gesture controller is maintained as an InteractionState holder within
  ** the InteractionDirector and serves as target to receive signals, in order to
- ** observe a draggable widget and possibly activate the formation of a dragging
+ ** observe a draggable widget and possibly activate on formation of a dragging
  ** gesture. When this happens, the DragRelocateController is responsible for
  ** observing the mouse movements, to integrate a movement delta, and finally
  ** to recognise the end of the dragging gesture and invoke the associated
@@ -34,7 +34,7 @@
  ** 
  ** @note this implementation level header is meant to be included
  **       solely for the purpose of creating an instance from within
- **       facility responsible for actually managing InvocationState
+ **       GestureState, the facility managing InvocationState instances.
  ** 
  ** @todo WIP and prototypical implementation as of 3/2021
  ** 

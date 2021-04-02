@@ -49,6 +49,7 @@
 //#include "lib/util.hpp"
 
 //#include <string>
+#include <memory>
 
 
 namespace stage {
@@ -58,8 +59,10 @@ namespace interact {
   using lib::Symbol;
 //  using util::isnil;
 //  using std::string;
+  using std::unique_ptr;
   
 //class Subject;
+  class DragRelocateController;
   
   
   /**
@@ -73,8 +76,11 @@ namespace interact {
   class GestureState
     : util::NonCopyable
     {
+      unique_ptr<DragRelocateController> dragRelocate_;
+      
     public:
-     ~GestureState();   ///////////TODO required??
+      GestureState();
+     ~GestureState();
       
     public:
       enum Action {
@@ -87,12 +93,14 @@ namespace interact {
       };
       
       /**
+       * Decode the classification of the kind of interaction and gesture,
+       * and thus translate to a concrete InteractionState implementation.
+       * @return reference to the actual UI state with respect to the
+       *     specific gesture requested, which can then e.g. be used
+       *     to wire a specific UI widget to become responsive to
+       *     this kind of gesture.
        */
-      InteractionState&
-      getStateFor (Action action, Scope qualifier)
-        {
-          UNIMPLEMENTED ("how to designate and access state for specific gestures");
-        }
+      InteractionState& getStateFor (Action action, Scope qualifier);
       
     private:
     };
