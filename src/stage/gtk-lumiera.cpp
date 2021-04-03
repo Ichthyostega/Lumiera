@@ -128,7 +128,7 @@ namespace stage {
     
     
     void
-    runGUI (Subsys::SigTerm reportOnTermination)
+    runGUI (Subsys::SigTerm reportOnTermination)       ///< this is the UI-Thread
     {
       string shutdownLog = GtkLumiera{}.run();
       

@@ -65,7 +65,9 @@
 //#include <string>
 #include <utility>
 
-
+namespace Gtk {
+  class Widget;
+}
 namespace stage {
 namespace interact {
   
@@ -90,6 +92,9 @@ namespace interact {
     {
     protected:
         virtual ~Subject();  ///< this is an interface
+        
+    public:
+        virtual Gtk::Widget& exposeWidget()    =0;
     };
   
   

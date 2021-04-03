@@ -230,6 +230,15 @@ namespace timeline {
                                           WidgetHook* newView =nullptr,
                                           optional<TimeSpan> const& timing =nullopt);
       
+      /**
+       * Wrapper to safely expose the actual clip implementation widget.
+       * @throws error::State if the current presentation / appearance style
+       *         does not actually use a dedicated clip widget.
+       * @remark the assumption is for the caller to arrange the calling context
+       *         such that existence of an actual widget can safely be assumed.
+       */
+      static Gtk::Widget& expect_and_expose_Widget (PDelegate& manager);
+      
       
     private:/* ===== Internals ===== */
       

@@ -94,7 +94,7 @@
 #include "stage/timeline/clip-widget.hpp"
 
 //#include "stage/ui-bus.hpp"
-//#include "lib/format-string.hpp"
+#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 
 #include "lib/util.hpp"
@@ -105,7 +105,7 @@
 
 
 
-//using util::_Fmt;
+using util::_Fmt;
 //using util::contains;
 //using Gtk::Widget;
 //using sigc::mem_fun;
@@ -118,7 +118,9 @@ using std::optional;
 
 
 namespace stage {
+  LUMIERA_ERROR_DEFINE (UIWIRING, "GUI state contradicts assumptions in signal wiring");
 namespace timeline {
+  namespace error = lumiera::error;
   
   const int    ClipDelegate::defaultOffsetY{0};
   const string ClipDelegate::defaultName{_("clip")};
@@ -475,6 +477,23 @@ namespace timeline {
       newView = & getCanvas();
     return newView->hookedAt (getStartTime(), defaultOffsetY);
   }
+  
+  
+  Gtk::Widget&
+  ClipDelegate::expect_and_expose_Widget (PDelegate& manager)
+  {
+    if (manager and manager->currentAppearance() >= ClipDelegate::ABRIDGED)
+      return static_cast<ClipWidget&> (*manager);
+    
+    else
+      throw error::State (_Fmt{"Attempt to access the Widget for clip('%s') in presentation state %d. "
+                               "This implies an error in the signal wiring logic and state handling."}
+                              % string{manager? manager->getClipName() : "<not initialised>"}
+                              % int   {manager? manager->currentAppearance() : -1}
+                         ,LERR_(UIWIRING)
+                         );
+  }
+
   
   
 }}// namespace stage::timeline

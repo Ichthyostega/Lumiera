@@ -37,13 +37,12 @@
  */
 
 
-#include "lib/error.hpp"
-//#include "lib/util.hpp"
-//#include "lib/symbol.hpp"
-//#include "include/logging.h"
-#include "lib/format-string.hpp"
+#include "stage/gtk-base.hpp"
 #include "stage/interact/gesture-state.hpp"
 #include "stage/interact/drag-relocate-controller.hpp"
+#include "lib/format-string.hpp"
+//#include "lib/symbol.hpp"
+//#include "lib/util.hpp"
 
 //#include <string>
 //#include <map>

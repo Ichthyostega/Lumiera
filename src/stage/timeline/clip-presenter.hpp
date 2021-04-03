@@ -83,6 +83,11 @@ namespace timeline {
   
   /**
    * A View-Model entity to represent a clip within the timeline-UI.
+   * @remarks
+   *   - by means of implementing \ref interact::Subject, "the Clip", as represented
+   *     through the ClipPresenter, can be subject to dragging gestures; the wiring
+   *     to trigger the detection of such gestures is provided by #establishAppearance(),
+   *     more specifically, this wiring happens whenever a new clip-widget is established.
    * @todo WIP-WIP as of 12/2016
    */
   class ClipPresenter
@@ -209,6 +214,14 @@ namespace timeline {
         {
           REQUIRE (widget_);
           widget_->updatePosition();
+        }
+      
+      
+    private:/* ===== Subject-Interface ===== */
+      Gtk::Widget&
+      exposeWidget() override
+        {
+          return ClipDelegate::expect_and_expose_Widget (widget_);
         }
       
       

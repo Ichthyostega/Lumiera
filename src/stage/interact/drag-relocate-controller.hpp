@@ -47,12 +47,12 @@
 #define STAGE_INTERACT_DRAG_RELOCATE_CONTROLLER_H
 
 
-#include "lib/error.hpp"
-#include "lib/nocopy.hpp"
+#include "stage/gtk-base.hpp"
 #include "stage/interact/interaction-state.hpp"
 #include "stage/interact/cmd-context.hpp"
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/symbol.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
 //#include <string>
@@ -66,6 +66,24 @@ namespace interact {
 //  using std::string;
   using util::isnil;
   
+
+#define ON_EXCEPTION_RETURN(_VAL_,_OP_DESCR_)   \
+  catch (std::exception& problem)                \
+    {                                             \
+      const char* errID = lumiera_error();         \
+      WARN (stage, "%s (Signal Handler) failed: %s",\
+                   _OP_DESCR_, problem.what());      \
+      TRACE (debugging, "Error flag was: %s", errID); \
+      return (_VAL_);                                  \
+    }                                                   \
+  catch (...)                                            \
+    {                                                     \
+      const char* errID = lumiera_error();                 \
+      ERROR (stage, "(Signal Handler) %s failed with "      \
+                    "unknown exception; error flag is: %s"   \
+                   , _OP_DESCR_, errID);                      \
+      return (_VAL_);                                          \
+    }
   
   /**
    * Abstract foundation context dependent UI interactions.
@@ -85,13 +103,26 @@ namespace interact {
   class DragRelocateController
     : public InteractionState
     {
-      
       void
       linkTrigger (Subject& subject, Symbol cmdID)  override
         {
           REQUIRE (not isnil (cmdID));
-          UNIMPLEMENTED ("use the Subject interface to hook up a trigger signal");
+          subject.exposeWidget().signal_button_press_event().connect(
+              [&](GdkEventButton* button) -> bool
+                {
+                  try{ return detectActivation(subject, button); }
+                  ON_EXCEPTION_RETURN (false, "activate dragging gesture")
+                }
+          );
         }
+      
+      bool
+      detectActivation (Subject& subject, GdkEventButton* button_event)
+        {
+          throw lumiera::error::Fatal("UNIMPLEMENTED Maybe DRAG-start?????");
+          //return false;
+        }
+      
       
     public:
       DragRelocateController()

@@ -644,7 +644,12 @@
 <node CREATED="1582493598679" ID="ID_14952077" MODIFIED="1582493672224" TEXT="es gibt einen Race im Start-up (#1192)">
 <arrowlink COLOR="#f12a42" DESTINATION="ID_540724043" ENDARROW="Default" ENDINCLINATION="-942;0;" ID="Arrow_ID_893876754" STARTARROW="None" STARTINCLINATION="864;64;"/>
 </node>
-<node CREATED="1582493675037" ID="ID_974783388" MODIFIED="1582493696790" TEXT="zus&#xe4;tzlich gibt es die L&#xfc;cke mit der noch nicht ge&#xf6;ffneten Facade"/>
+<node CREATED="1582493675037" ID="ID_974783388" MODIFIED="1582493696790" TEXT="zus&#xe4;tzlich gibt es die L&#xfc;cke mit der noch nicht ge&#xf6;ffneten Facade">
+<arrowlink COLOR="#d68361" DESTINATION="ID_590420902" ENDARROW="Default" ENDINCLINATION="314;0;" ID="Arrow_ID_1471960575" STARTARROW="None" STARTINCLINATION="109;5;"/>
+<node COLOR="#ab7a47" CREATED="1617458903748" HGAP="36" ID="ID_603424020" MODIFIED="1617459170807" TEXT="unwahrscheinlich aber besteht weiterhin" VSHIFT="-1">
+<edge COLOR="#b28c66"/>
+</node>
+</node>
 <node CREATED="1582493784351" ID="ID_548491726" MODIFIED="1582493794113" TEXT="sonst ist die Synchronisation sauber">
 <icon BUILTIN="idea"/>
 </node>
@@ -653,6 +658,18 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582493761032" ID="ID_117656877" LINK="https://issues.lumiera.org/ticket/1177" MODIFIED="1582493774585" TEXT=" #1177 Subsytem-Runner design rework ">
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node COLOR="#435e98" CREATED="1617459426438" ID="ID_1892682204" MODIFIED="1617459482615">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      verbleibende Probleme sind <i>&quot;marginal&quot;</i>&#160;und besser im Subsystem-Runner zu addressieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 </node>
@@ -660,17 +677,17 @@
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1484871188635" ID="ID_1922412139" MODIFIED="1557498707217" TEXT="Storage/Lebenzyklus des Term-Funktors (jetzt) OK">
-<arrowlink COLOR="#a9b4c1" DESTINATION="ID_375871642" ENDARROW="Default" ENDINCLINATION="-164;-16;" ID="Arrow_ID_896120556" STARTARROW="None" STARTINCLINATION="345;-16;"/>
+<arrowlink COLOR="#68b4bb" DESTINATION="ID_375871642" ENDARROW="Default" ENDINCLINATION="-300;-60;" ID="Arrow_ID_896120556" STARTARROW="None" STARTINCLINATION="495;28;"/>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1484793022924" HGAP="36" ID="ID_1019455888" MODIFIED="1557498707217" TEXT="neuer Facade-Kontext" VSHIFT="-8">
+<node CREATED="1484793022924" HGAP="100" ID="ID_1019455888" MODIFIED="1557498707217" TEXT="neuer Facade-Kontext" VSHIFT="2">
 <linktarget COLOR="#4072ad" DESTINATION="ID_1019455888" ENDARROW="Default" ENDINCLINATION="6;-96;" ID="Arrow_ID_693735378" SOURCE="ID_66499328" STARTARROW="None" STARTINCLINATION="-105;33;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1501866627055" ID="ID_1521184600" MODIFIED="1557498707217" TEXT="RAII-Stil"/>
 <node CREATED="1501866591164" ID="ID_751026549" MODIFIED="1557498707217" TEXT="&#xf6;ffnet/schlie&#xdf;t die &#xf6;ffentlichen Interfaces"/>
 </node>
-<node CREATED="1481502251450" HGAP="96" ID="ID_1125529151" MODIFIED="1557498707217" TEXT="m&#xf6;glicher Race" VSHIFT="16">
+<node COLOR="#7a2f10" CREATED="1481502251450" FOLDED="true" HGAP="96" ID="ID_1125529151" MODIFIED="1557498707217" TEXT="m&#xf6;glicher Race" VSHIFT="14">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1484797174890" ID="ID_986391148" MODIFIED="1557498707217" TEXT="triggerShutdown() kommt bevor GuiNotification offen ist">
 <icon BUILTIN="info"/>
@@ -678,6 +695,7 @@
 <node CREATED="1484797210597" ID="ID_1555304752" MODIFIED="1557498707217" TEXT="ist das &#xfc;berhaupt ein Problem">
 <icon BUILTIN="help"/>
 <node CREATED="1484797230051" ID="ID_590420902" MODIFIED="1557498707217" TEXT="ja, weil dann das GUI weiterl&#xe4;uft">
+<linktarget COLOR="#d68361" DESTINATION="ID_590420902" ENDARROW="Default" ENDINCLINATION="314;0;" ID="Arrow_ID_1471960575" SOURCE="ID_974783388" STARTARROW="None" STARTINCLINATION="109;5;"/>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1501867017251" ID="ID_1980251688" MODIFIED="1557498707217" TEXT="...und der shutdown-Proze&#xdf; blockt"/>
@@ -726,7 +744,7 @@
 <node COLOR="#435e98" CREATED="1484797646771" HGAP="44" ID="ID_1605520996" MODIFIED="1557498707217" TEXT="Ausgestaltung" VSHIFT="10">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1501859455212" ID="ID_751494565" MODIFIED="1557498707217" TEXT="Lebenszyklus">
-<node CREATED="1484797663121" ID="ID_134980216" MODIFIED="1557498707217" TEXT="braucht Bus-Connection">
+<node COLOR="#435e98" CREATED="1484797663121" FOLDED="true" ID="ID_134980216" MODIFIED="1557498707217" TEXT="braucht Bus-Connection">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1484797863862" ID="ID_464230340" MODIFIED="1561827464529" TEXT="zum Controller machen?">
 <icon BUILTIN="button_cancel"/>
@@ -772,7 +790,7 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1484799525344" ID="ID_640788614" MODIFIED="1561827464533" TEXT="mu&#xdf; sauber vom Nexus disconnecten">
+<node COLOR="#338800" CREATED="1484799525344" FOLDED="true" ID="ID_640788614" MODIFIED="1561827464533" TEXT="mu&#xdf; sauber vom Nexus disconnecten">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#ff0000" CREATED="1484799538686" ID="ID_1136883698" MODIFIED="1518487921046" TEXT="tut es nicht">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -795,7 +813,7 @@
 <icon BUILTIN="help"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584932093080" ID="ID_1234616959" MODIFIED="1584932222621" TEXT="es gibt aber noch einen &#xe4;hnlichen Fehler....">
-<arrowlink COLOR="#b183a2" DESTINATION="ID_535289114" ENDARROW="Default" ENDINCLINATION="-2880;0;" ID="Arrow_ID_1219325605" STARTARROW="None" STARTINCLINATION="595;36;"/>
+<arrowlink COLOR="#b183a2" DESTINATION="ID_535289114" ENDARROW="Default" ENDINCLINATION="-2880;0;" ID="Arrow_ID_1219325605" STARTARROW="None" STARTINCLINATION="1004;61;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -820,8 +838,8 @@
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1484802745625" ID="ID_375871642" MODIFIED="1561827464537" TEXT="Heisenbug">
-<linktarget COLOR="#a9b4c1" DESTINATION="ID_375871642" ENDARROW="Default" ENDINCLINATION="-164;-16;" ID="Arrow_ID_896120556" SOURCE="ID_1922412139" STARTARROW="None" STARTINCLINATION="345;-16;"/>
+<node COLOR="#435e98" CREATED="1484802745625" ID="ID_375871642" MODIFIED="1561827464537" TEXT="Heisenbug">
+<linktarget COLOR="#68b4bb" DESTINATION="ID_375871642" ENDARROW="Default" ENDINCLINATION="-300;-60;" ID="Arrow_ID_896120556" SOURCE="ID_1922412139" STARTARROW="None" STARTINCLINATION="495;28;"/>
 <icon BUILTIN="smily_bad"/>
 <node CREATED="1484802752728" ID="ID_634426848" MODIFIED="1518487921046" TEXT="passiert beim Aufruf des TerminationHandle"/>
 <node CREATED="1484802766966" ID="ID_370736554" MODIFIED="1518487921046">
@@ -871,7 +889,7 @@
 </html></richcontent>
 </node>
 <node CREATED="1484865316147" ID="ID_687373412" MODIFIED="1518487921047" TEXT="wenn ich den Thread mit Lambda starte..."/>
-<node CREATED="1484865349366" ID="ID_652410738" MODIFIED="1518487921047" TEXT="betrifft das den term-Functor"/>
+<node CREATED="1484865349366" ID="ID_652410738" MODIFIED="1518487921047" TEXT="betrifft den term-Functor intern"/>
 <node CREATED="1484865513568" ID="ID_696204655" MODIFIED="1576282358157" TEXT="selbst wenn der Funktor selber per Value &#xfc;bergeben wird">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -927,7 +945,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1484876114521" ID="ID_1082250595" MODIFIED="1557498707217" TEXT="Protokoll zur Kommunikation">
+<node COLOR="#435e98" CREATED="1484876114521" ID="ID_1082250595" MODIFIED="1557498707217" TEXT="Protokoll zur Kommunikation">
 <icon BUILTIN="info"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#4e0099" CREATED="1484876122960" ID="ID_31825421" MODIFIED="1560688098496" STYLE="fork" TEXT="UI-Bus nur im GUI-Thread">
 <arrowlink COLOR="#6c5f80" DESTINATION="ID_489078622" ENDARROW="Default" ENDINCLINATION="712;-47;" ID="Arrow_ID_485145709" STARTARROW="None" STARTINCLINATION="1538;-37;"/>
@@ -21895,13 +21913,26 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611486765168" ID="ID_62818590" MODIFIED="1611487348314" TEXT="Clip-Positionen und Ausdehnungen integrieren">
 <linktarget COLOR="#de4b7e" DESTINATION="ID_62818590" ENDARROW="Default" ENDINCLINATION="-1193;64;" ID="Arrow_ID_1779091384" SOURCE="ID_392294660" STARTARROW="None" STARTINCLINATION="817;64;"/>
 <icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1617470705305" HGAP="40" ID="ID_644438911" MODIFIED="1617470805539" TEXT="Stand: vorl&#xe4;ufige Implementierung" VSHIFT="6">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      erst mal nur mit einem Button, und die Layout-Logik ehr &quot;gesch&#228;tzt&quot; den pr&#228;zise verstanden und umgesetzt. Immerhinn l&#228;uft der DisplayEvaluationPass nun, und auch die Buttons erscheinen an der Stelle, an der ich das erwarten w&#252;rde...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583010246034" ID="ID_113344286" MODIFIED="1611533767877" TEXT="Resultat mit Wert vom Header abgleichen">
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node COLOR="#338800" CREATED="1611527674130" ID="ID_1530876056" MODIFIED="1612030681158" TEXT="Ergebnis &#x2259; lokales Maximum &#x2192; TrackBody::contentHeight_">
-<linktarget COLOR="#3b4b73" DESTINATION="ID_1530876056" ENDARROW="Default" ENDINCLINATION="802;689;" ID="Arrow_ID_471691943" SOURCE="ID_1232626344" STARTARROW="None" STARTINCLINATION="676;28;"/>
+<linktarget COLOR="#3b4b73" DESTINATION="ID_1530876056" ENDARROW="Default" ENDINCLINATION="802;689;" ID="Arrow_ID_471691943" SOURCE="ID_1232626344" STARTARROW="None" STARTINCLINATION="700;24;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1611533783838" ID="ID_504265049" MODIFIED="1611533798915" TEXT="Vorsicht: es sind zwei Belange">
 <icon BUILTIN="messagebox_warning"/>
@@ -29114,7 +29145,7 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584932054082" ID="ID_535289114" MODIFIED="1584932261288" TEXT="#1216 Some UI components are still connected to the backbone at shutdown">
-<linktarget COLOR="#b183a2" DESTINATION="ID_535289114" ENDARROW="Default" ENDINCLINATION="-2880;0;" ID="Arrow_ID_1219325605" SOURCE="ID_1234616959" STARTARROW="None" STARTINCLINATION="595;36;"/>
+<linktarget COLOR="#b183a2" DESTINATION="ID_535289114" ENDARROW="Default" ENDINCLINATION="-2880;0;" ID="Arrow_ID_1219325605" SOURCE="ID_1234616959" STARTARROW="None" STARTINCLINATION="1004;61;"/>
 <linktarget COLOR="#d23194" DESTINATION="ID_535289114" ENDARROW="Default" ENDINCLINATION="90;0;" ID="Arrow_ID_186398670" SOURCE="ID_429363053" STARTARROW="None" STARTINCLINATION="110;9;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
@@ -29346,6 +29377,9 @@
 <arrowlink COLOR="#fd654f" DESTINATION="ID_1270677756" ENDARROW="Default" ENDINCLINATION="-300;38;" ID="Arrow_ID_278984117" STARTARROW="None" STARTINCLINATION="131;-344;"/>
 <linktarget COLOR="#3f67c9" DESTINATION="ID_1043075543" ENDARROW="Default" ENDINCLINATION="210;7;" ID="Arrow_ID_678826417" SOURCE="ID_685143843" STARTARROW="None" STARTINCLINATION="199;11;"/>
 <icon BUILTIN="pencil"/>
+</node>
+<node CREATED="1617471014218" ID="ID_1520693411" MODIFIED="1617471181936" TEXT="Setup und Wiring f&#xfc;r Clip-drag">
+<arrowlink COLOR="#883a4e" DESTINATION="ID_1472064878" ENDARROW="Default" ENDINCLINATION="-642;-252;" ID="Arrow_ID_1448328801" STARTARROW="None" STARTINCLINATION="-814;80;"/>
 </node>
 </node>
 </node>
@@ -29714,7 +29748,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1611527884423" ID="ID_1232626344" MODIFIED="1612030654011" TEXT="Ergebnis der DisplayEvaluation &#x2259; lokales Maximum &#x2192; TrackBody::contentHeight_ ">
-<arrowlink COLOR="#3b4b73" DESTINATION="ID_1530876056" ENDARROW="Default" ENDINCLINATION="802;689;" ID="Arrow_ID_471691943" STARTARROW="None" STARTINCLINATION="676;28;"/>
+<arrowlink COLOR="#3b4b73" DESTINATION="ID_1530876056" ENDARROW="Default" ENDINCLINATION="802;689;" ID="Arrow_ID_471691943" STARTARROW="None" STARTINCLINATION="700;24;"/>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -31601,6 +31635,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1613349240614" ID="ID_1472064878" MODIFIED="1613349442831" TEXT="erster Entwurf: drag clip">
 <linktarget COLOR="#fbd7b5" DESTINATION="ID_1472064878" ENDARROW="Default" ENDINCLINATION="-1443;-151;" ID="Arrow_ID_1918638969" SOURCE="ID_1784185766" STARTARROW="None" STARTINCLINATION="1644;332;"/>
 <linktarget COLOR="#f6b667" DESTINATION="ID_1472064878" ENDARROW="Default" ENDINCLINATION="-9;-115;" ID="Arrow_ID_209732384" SOURCE="ID_1489464895" STARTARROW="None" STARTINCLINATION="220;19;"/>
+<linktarget COLOR="#883a4e" DESTINATION="ID_1472064878" ENDARROW="Default" ENDINCLINATION="-642;-252;" ID="Arrow_ID_1448328801" SOURCE="ID_1520693411" STARTARROW="None" STARTINCLINATION="-814;80;"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1613349479473" ID="ID_1618505083" MODIFIED="1613349488782" TEXT="Doku / Tutorials">
 <node CREATED="1613349541627" ID="ID_1745870905" MODIFIED="1613349560713" TEXT="man mu&#xdf; das motion_notify_event beobachten">
@@ -31975,6 +32010,10 @@
 <node CREATED="1614548871925" ID="ID_1738624566" MODIFIED="1614548889914" TEXT="Vorsicht... es gibt nicht nur einen Canvas">
 <icon BUILTIN="stop-sign"/>
 </node>
+<node CREATED="1617454766067" ID="ID_179209651" MODIFIED="1617454788398" TEXT="als Voraussetzung mu&#xdf; also das Subject seinen Canvas kennen"/>
+<node CREATED="1617454793154" ID="ID_133939529" MODIFIED="1617454803637" TEXT="Canvas selber als Abstraktion zu behandeln">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 <node CREATED="1616684203994" ID="ID_1768434265" MODIFIED="1616684226073" TEXT="dann w&#xe4;re aber die eigentliche Detail-Logik wieder &#xfc;ber die Widgets verstreut">
@@ -32177,8 +32216,12 @@
 </node>
 </node>
 <node CREATED="1616710202252" ID="ID_220049730" MODIFIED="1616710247050" TEXT="InteractionState sollte nur intern mit CmdContext interagieren">
+<icon BUILTIN="idea"/>
+<node CREATED="1617454641530" ID="ID_104565280" MODIFIED="1617454704165" TEXT="InteractionState ist ein Adapter zwischen dem Anker (CmdContext) und der konkreten Geste"/>
 <node CREATED="1616710625955" ID="ID_69401594" MODIFIED="1616710644751" TEXT="gemeint ist: die Implementation von InteractionState ist konkret">
-<node CREATED="1616712015758" ID="ID_1460580308" MODIFIED="1616712028383" TEXT="Entscheidung: jede Geste ist konkret"/>
+<node CREATED="1616712015758" ID="ID_1460580308" MODIFIED="1616712028383" TEXT="Entscheidung: jede Geste ist konkret">
+<icon BUILTIN="yes"/>
+</node>
 <node CREATED="1616712031119" ID="ID_17685044" MODIFIED="1616712197269" TEXT="also &quot;Clip-Move&quot; vs &quot;Clip-Attach&quot; vs &quot;Clip-Trim&quot;"/>
 <node CREATED="1616712201691" ID="ID_1586890794" MODIFIED="1616712288188" TEXT="denn es sind nicht so viele, da&#xdf; eine zus&#xe4;tzliche Abstraktionsstufe gerechtfertig w&#xe4;re">
 <richcontent TYPE="NOTE"><html>
@@ -32418,19 +32461,80 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617377786842" ID="ID_1829220190" MODIFIED="1617377793038" TEXT="Interface Subject definieren">
+<node COLOR="#338800" CREATED="1617377786842" ID="ID_1829220190" MODIFIED="1617471190700" TEXT="Interface Subject definieren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1617471241490" ID="ID_293482403" MODIFIED="1617471251679" TEXT="implementieren f&#xfc;r ClipPresenter">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1617471252385" ID="ID_1769679679" MODIFIED="1617471266204" TEXT="Problem: Zugriff auf das Widget">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1617471267594" ID="ID_1351328929" MODIFIED="1617471285896" TEXT="eigentlich kein Problem, sondern nur h&#xe4;sslich"/>
+<node CREATED="1617471305929" ID="ID_663980291" MODIFIED="1617471447147" TEXT="Steht im Widerspruch zum selbst&#xe4;ndig verwalteten Anzeigestil">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und dadurch ensteht hier ein &quot;linke-Tasche-rechte-Tasche-Spiel&quot;.
+    </p>
+    <p>
+      Wir m&#252;ssen annehmen...
+    </p>
+    <ul>
+      <li>
+        da&#223; der ClipPresenter das Wiring nur dann einrichtet, wenn tats&#228;chlich ein Clip-Widget erzeugt wurde
+      </li>
+      <li>
+        und da&#223; ein deaktiviertes oder aus dem Display herausgenommenes Widget auch keine Signale mehr sendet
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1617471286628" ID="ID_601378287" MODIFIED="1617471303401" TEXT="in statischer Funktion im ClipDelegate versteckt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1617471454724" ID="ID_347955053" MODIFIED="1617471465856" TEXT="gr&#xfc;ndliche Fehlerbehandlung">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617377754742" ID="ID_1574394085" MODIFIED="1617471528060" TEXT="linkSubject im konkreten Controller">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617377734341" ID="ID_1697355210" MODIFIED="1617471509681" TEXT="Widget-Signal-Binding anlegen">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1617471221445" ID="ID_1213832173" MODIFIED="1617471225697" TEXT="Exceptions fangen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1617471484385" ID="ID_764496740" MODIFIED="1617471492221" TEXT="hierf&#xfc;r ein Makro erfunden">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617471493055" ID="ID_1798821612" MODIFIED="1617471502221" TEXT="TODO: in einen zentralen Header verlegen">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617377754742" ID="ID_1574394085" MODIFIED="1617377766937" TEXT="linkSubject im konkreten Controller">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617377734341" ID="ID_1697355210" MODIFIED="1617377784921" TEXT="Widget-Signal-Binding anlegen">
-<icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617377772355" ID="ID_1391847346" MODIFIED="1617377784091" TEXT="Subject im Signal-Binding binden">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1617377772355" ID="ID_1391847346" MODIFIED="1617471513483" TEXT="Subject im Signal-Binding binden">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1617459517745" ID="ID_1350194192" MODIFIED="1617459539394" TEXT="brauchen wir ein Sigc::Trackable zum Binden?">
+<icon BUILTIN="help"/>
+<node CREATED="1617459546014" ID="ID_1656180985" MODIFIED="1617459578397" TEXT="konkret: kann der Gesten-Controller vorzeitig zerst&#xf6;rt werden?"/>
+<node CREATED="1617459579286" ID="ID_214055342" MODIFIED="1617459650805" TEXT="Nein, sofern er an den Lebenszyklus des InteractionDirectors gebunden ist">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1617459599031" ID="ID_481151247" MODIFIED="1617459613224" TEXT="denn: der UiManager wird erst nach Ende des UI-Thread zerst&#xf6;rt"/>
+<node CREATED="1617459627675" ID="ID_1337959173" MODIFIED="1617459642132" TEXT="(solange das UI keine weiteren Threads verwendet sind wir sauber)"/>
+</node>
+<node CREATED="1617459659278" ID="ID_976541024" LINK="#ID_230224690" MODIFIED="1617459721740" TEXT="kann also bequem ein Lambda verwenden..."/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617377798336" ID="ID_1680080732" MODIFIED="1617377807908" TEXT="Signal-Callbacks anlegen">
 <icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1617471204921" ID="ID_1381735452" MODIFIED="1617471216758" TEXT="Vorl&#xe4;ufie Implementierung: Button-Click">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617471543992" ID="ID_1461453973" MODIFIED="1617471552073" TEXT="auch noch die CommandID mit binden">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 </node>
@@ -54730,7 +54834,47 @@
 <node CREATED="1614467221680" ID="ID_1190660197" MODIFIED="1614467233958" TEXT="alternativ kann man lambdas direkt anschlie&#xdf;en">
 <node CREATED="1614467235118" ID="ID_1908157491" MODIFIED="1614467242637" TEXT="dann gibt es aber kein Tracking"/>
 <node CREATED="1614467243390" ID="ID_162571863" MODIFIED="1614467252868" TEXT="se sei denn, man verwendet sigc::track_obj"/>
-<node CREATED="1614467253912" ID="ID_230224690" LINK="https://developer.gnome.org/libsigc++/stable/group__track__obj.html" MODIFIED="1614467260623" TEXT="siehe Beispiel in der Doku"/>
+<node CREATED="1614467253912" ID="ID_230224690" LINK="https://developer.gnome.org/libsigc++/stable/group__track__obj.html" MODIFIED="1617458023813" TEXT="siehe Beispiel in der Doku">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <div http-equiv="content-type" content="text/html; charset=utf-8" class="fragment">
+      <div class="line">
+        struct bar : public&#160;<a class="code" href="https://developer.gnome.org/libsigc++/stable/structsigc_1_1trackable.html">sigc::trackable</a>&#160;{};
+      </div>
+      <div class="line">
+        sigc::signal&lt;void()&gt; some_signal;
+      </div>
+      <div class="line">
+        void&#160;foo(bar&amp;);
+      </div>
+      <div class="line">
+        {
+      </div>
+      <div class="line">
+        bar some_bar;
+      </div>
+      <div class="line">
+        some_signal.connect([&amp;some_bar](){ foo(some_bar); });
+      </div>
+      <div class="line">
+        // NOT disconnected automatically when some_bar goes out of scope
+      </div>
+      <div class="line">
+        some_signal.connect(<a class="code" href="https://developer.gnome.org/libsigc++/stable/group__track__obj.html#ga7986f33675aec143d9afbfe968f1c7ba">sigc::track_obj</a>([&amp;some_bar](){ foo(some_bar); }, some_bar);
+      </div>
+      <div class="line">
+        // disconnected automatically when some_bar goes out of scope
+      </div>
+      <div class="line">
+        }
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 </node>
