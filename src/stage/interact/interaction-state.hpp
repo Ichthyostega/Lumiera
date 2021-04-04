@@ -61,15 +61,15 @@ namespace interact {
   
   
   /**
-   * Abstract foundation context dependent UI interactions.
+   * Abstract foundation for context dependent UI interactions.
    * While forming an interaction gesture, context state is picked up
    * incrementally, and maintained here, together with parameters of degree,
-   * amount or relative position. Typically, an concrete implementation subclass
+   * amount or relative position. Typically, a concrete implementation subclass
    * is geared for one specific kind of interaction or gesture and used as target
    * for wiring Signals to trigger and carry out this specific interaction.
-   * The InteractionDirector is responsible for allocating and maintaining those
-   * concrete InteractionState instances, which can then be used to issue complex
-   * commands for subjects and further arguments picked up from the interaction.
+   * The GestureState holder within InteractionDirector is responsible for allocating
+   * and maintaining those concrete InteractionState instances, which can then be used to
+   * issue complex commands for subjects and further arguments picked up from the interaction.
    * 
    * @todo write type comment...
    * @todo WIP-WIP as of /3/2021

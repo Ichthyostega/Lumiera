@@ -125,12 +125,8 @@ namespace timeline {
   const string ClipDelegate::defaultName{_("clip")};
   
   
+  ClipDelegate::ClipDelegate()  { }
   ClipDelegate::~ClipDelegate() { }
-  
-  
-  ClipDelegate::ClipDelegate()
-    {
-    }
   
   
   namespace {// details of concrete clip appearance styles...

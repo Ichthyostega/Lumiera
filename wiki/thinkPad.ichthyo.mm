@@ -30052,6 +30052,19 @@
 <icon BUILTIN="help"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617888163319" ID="ID_1711872430" MODIFIED="1617888189172" TEXT="vorl&#xe4;ufige Impl. f&#xfc;r Clip-dragging versuchen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1617888201086" ID="ID_1199769870" MODIFIED="1617888281168" TEXT="das schafft schon mal einen Entwurf f&#xfc;r das Framework">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1617888226463" ID="ID_650089378" MODIFIED="1617888281168" TEXT="und erlaubt zugleich, die Struktur des Designs zu &#xfc;berpr&#xfc;fen">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617888246955" ID="ID_719593541" MODIFIED="1617888390837" TEXT="zun&#xe4;chst einmal: neuer Anlauf f&#xfc;r kontext-bezogene Commands">
+<arrowlink COLOR="#684254" DESTINATION="ID_1624270915" ENDARROW="Default" ENDINCLINATION="-809;-2134;" ID="Arrow_ID_1181760372" STARTARROW="None" STARTINCLINATION="-299;13;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 <node CREATED="1583678162183" ID="ID_798000610" MODIFIED="1583678185165" TEXT="Stufe-2">
 <icon BUILTIN="hourglass"/>
@@ -31634,8 +31647,8 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1613349240614" ID="ID_1472064878" MODIFIED="1613349442831" TEXT="erster Entwurf: drag clip">
 <linktarget COLOR="#fbd7b5" DESTINATION="ID_1472064878" ENDARROW="Default" ENDINCLINATION="-1443;-151;" ID="Arrow_ID_1918638969" SOURCE="ID_1784185766" STARTARROW="None" STARTINCLINATION="1644;332;"/>
-<linktarget COLOR="#f6b667" DESTINATION="ID_1472064878" ENDARROW="Default" ENDINCLINATION="-9;-115;" ID="Arrow_ID_209732384" SOURCE="ID_1489464895" STARTARROW="None" STARTINCLINATION="220;19;"/>
 <linktarget COLOR="#883a4e" DESTINATION="ID_1472064878" ENDARROW="Default" ENDINCLINATION="-642;-252;" ID="Arrow_ID_1448328801" SOURCE="ID_1520693411" STARTARROW="None" STARTINCLINATION="-814;80;"/>
+<linktarget COLOR="#f6b667" DESTINATION="ID_1472064878" ENDARROW="Default" ENDINCLINATION="-9;-115;" ID="Arrow_ID_209732384" SOURCE="ID_1489464895" STARTARROW="None" STARTINCLINATION="220;19;"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1613349479473" ID="ID_1618505083" MODIFIED="1613349488782" TEXT="Doku / Tutorials">
 <node CREATED="1613349541627" ID="ID_1745870905" MODIFIED="1613349560713" TEXT="man mu&#xdf; das motion_notify_event beobachten">
@@ -31664,6 +31677,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614379765040" ID="ID_1624270915" MODIFIED="1614380579512" TEXT="neuer Anlauf f&#xfc;r Kontext-bezogene Commands">
 <arrowlink COLOR="#5b4964" DESTINATION="ID_1221036425" ENDARROW="Default" ENDINCLINATION="717;-46;" ID="Arrow_ID_1875882072" STARTARROW="None" STARTINCLINATION="586;34;"/>
+<linktarget COLOR="#684254" DESTINATION="ID_1624270915" ENDARROW="Default" ENDINCLINATION="-809;-2134;" ID="Arrow_ID_1181760372" SOURCE="ID_719593541" STARTARROW="None" STARTINCLINATION="-299;13;"/>
 <icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614380675501" ID="ID_163523275" MODIFIED="1614380716283" TEXT="Leitfrage: was mu&#xdf; ich jetzt konkret anlegen, damit &#xbb;drag Clip&#xab; in dieses Schema pa&#xdf;t?">
 <icon BUILTIN="help"/>
@@ -32502,16 +32516,26 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617377754742" ID="ID_1574394085" MODIFIED="1617471528060" TEXT="linkSubject im konkreten Controller">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617377734341" ID="ID_1697355210" MODIFIED="1617471509681" TEXT="Widget-Signal-Binding anlegen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1617377734341" ID="ID_1697355210" MODIFIED="1617568263119" TEXT="Widget-Signal-Binding anlegen">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1617471221445" ID="ID_1213832173" MODIFIED="1617471225697" TEXT="Exceptions fangen">
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1617471484385" ID="ID_764496740" MODIFIED="1617471492221" TEXT="hierf&#xfc;r ein Makro erfunden">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617471493055" ID="ID_1798821612" MODIFIED="1617471502221" TEXT="TODO: in einen zentralen Header verlegen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1617471493055" ID="ID_1798821612" MODIFIED="1617568252066" TEXT="Makro in einen zentralen Header verlegen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      habs in error.hpp untergebracht, direkt unter ERROR_LOG_AND_IGNORE
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1617377772355" ID="ID_1391847346" MODIFIED="1617471513483" TEXT="Subject im Signal-Binding binden">
@@ -32534,6 +32558,219 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617471543992" ID="ID_1461453973" MODIFIED="1617471552073" TEXT="auch noch die CommandID mit binden">
 <icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617568275423" ID="ID_705403474" MODIFIED="1617568293029" TEXT="Trigger-Bedingung formulieren">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1617568301466" ID="ID_1738730292" MODIFIED="1617568534103" TEXT="inhaltlich...">
+<node CREATED="1617568311385" ID="ID_120327257" MODIFIED="1617568327148" TEXT="&quot;klicken und ziehen&quot;"/>
+<node CREATED="1617568432466" ID="ID_1992031404" MODIFIED="1617568445795" TEXT="der Klick war im Bereich des zu ziehenden Objekts"/>
+<node CREATED="1617568398748" ID="ID_1460645724" MODIFIED="1617568423269" TEXT="Mausbewegung bevor die Maustaste losgelassen wurde"/>
+<node CREATED="1617568452526" ID="ID_1020620586" MODIFIED="1617568457857" TEXT="konfigurierbare Varianten">
+<node CREATED="1617568459021" ID="ID_1056703616" MODIFIED="1617568484821" TEXT="welcher Mausknopf?"/>
+<node CREATED="1617568485487" ID="ID_1125938046" MODIFIED="1617568496877" TEXT="Modifier-Tasten gedr&#xfc;ckt"/>
+</node>
+</node>
+<node CREATED="1617568504346" ID="ID_261021912" MODIFIED="1617568528369" TEXT="Event-Logik">
+<node CREATED="1617568536923" ID="ID_711862925" MODIFIED="1617568637660" TEXT="Maus-Button-Events beobachten">
+<node CREATED="1617568559447" ID="ID_945977734" MODIFIED="1617568566236" TEXT="sie kommen separat">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1617568567502" ID="ID_420708332" MODIFIED="1617568581548" TEXT="button_press / button_release"/>
+<node CREATED="1617568582983" ID="ID_55959030" MODIFIED="1617568587863" TEXT="brauche also State-Flag"/>
+</node>
+<node CREATED="1617568619294" ID="ID_1632840058" MODIFIED="1617568634721" TEXT="Maus-Bewegungen beobachten">
+<node CREATED="1617568707539" ID="ID_295174792" MODIFIED="1617568780036" TEXT="mit Button-State verkn&#xfc;pfen"/>
+<node CREATED="1617568786464" ID="ID_186028355" MODIFIED="1617568842406" TEXT="fast return falls irrelevant">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1617568863750" ID="ID_390541368" MODIFIED="1617568877088" TEXT="Modifier ermitteln">
+<node CREATED="1617568878012" ID="ID_1639356381" MODIFIED="1617568904641" TEXT="sie werden im Button-Event mitgeliefert"/>
+<node CREATED="1617568905353" ID="ID_1257545245" MODIFIED="1617568925825" TEXT="Danke! andere Leute stehen vor der gleichen Aufgabe"/>
+</node>
+<node COLOR="#635891" CREATED="1617568934636" ID="ID_1210824074" MODIFIED="1617912478569" TEXT="Problem: unvollst&#xe4;ndige Gesten">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1617568988701" ID="ID_1692187742" MODIFIED="1617568996132" TEXT="kann man &quot;locker&quot; handhaben"/>
+<node CREATED="1617568997013" ID="ID_651241520" MODIFIED="1617569006963" TEXT="entweder es wird doch noch was"/>
+<node CREATED="1617569007698" ID="ID_415678427" MODIFIED="1617569041770" TEXT="oder ein anderes Subjekt &#xfc;berschreibt"/>
+<node CREATED="1617569057644" ID="ID_1030532541" MODIFIED="1617569060954" TEXT="Beispiele">
+<node CREATED="1617569061629" ID="ID_1273582846" MODIFIED="1617569661108" TEXT="schon au&#xdf;erhalb geklickt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das bekommt dieser Controller dann nicht mit, und die Geste wird insofern auch nicht getriggert. Da hat der User eben Pech gehabt.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1617569148000" ID="ID_1188278692" MODIFIED="1617569598605" TEXT="Widget vor&#xfc;bergehend verlassen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Wenig problematisch ist dieser Fall, wenn der Button gedr&#252;ckt bleibt und wir irgendwann zur&#252;ckkommen; dann setzt sich das Dragging eben an der Stelle fort. Wenn dagegen der Button au&#223;erhalb released wurde, handelt es sich tats&#228;chlich um den 3.Fall &#8213; wenn aber eine normale Maus-Bewegung sp&#228;ter wieder &#252;ber das Widget f&#228;hrt, wird das Dragging fortgesetzt, f&#228;lschlicherweise.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1617569170845" ID="ID_1128795128" MODIFIED="1617888975813" TEXT="Widget verlassen und Release au&#xdf;erhalb">
+<arrowlink COLOR="#5274c4" DESTINATION="ID_670270677" ENDARROW="Default" ENDINCLINATION="-142;-46;" ID="Arrow_ID_1779430894" STARTARROW="None" STARTINCLINATION="-54;103;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1617569229030" ID="ID_601910999" MODIFIED="1617569234719" TEXT="echtes Problem"/>
+<node CREATED="1617569235666" ID="ID_1093451410" MODIFIED="1617569408809" TEXT="betrachte ich als Unfall">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn das <i>Dragging </i>funktioniert, sollte es eigentlich rein logisch unm&#246;glich sein, das Widget zu verlassen, weil dieses sich ja mitbewegt. Allerdings sind vielerlei undl&#252;ckliche Umst&#228;nde denkbar, z.B. versp&#228;tete Reaktion der Software, sehr schnelle Mausbewegungen, limitierte Bewegung am Rand eines Containers.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617569409798" ID="ID_1474484984" MODIFIED="1617569431870" TEXT="Puh! sprengt das Konzept">
+<icon BUILTIN="smiley-angry"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617569687944" ID="ID_109351275" MODIFIED="1617569696784" TEXT="Modifier sollten konfigurierbar sein">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1617569722132" ID="ID_1004932792" MODIFIED="1617569729653" TEXT="Einschr&#xe4;nkung der Maustaste"/>
+<node CREATED="1617569730283" ID="ID_1098298417" MODIFIED="1617569798116" TEXT="Modifier-Key auf der Tastatur"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617569873288" ID="ID_32172316" MODIFIED="1617569973233" TEXT="Modus durch Tastenfolge aktiviert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Beispiel: das &quot;grab&quot; von Blender ist ein praktisches Konzept. Dort kann man ein Element &#252;berhaupt nur bewegen, wenn man vorher die &quot;g&quot;-Taste gedr&#252;ckt hatte. So etwas will ich in Lumiera auch haben... ist aber nicht so ganz einfach
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1617570608516" ID="ID_1536648683" MODIFIED="1617570619960" TEXT="Vorsicht: das ist ein Riesen-Thema">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1617570633938" ID="ID_1636227122" MODIFIED="1617570654929" TEXT="Stichwort: globale und konsistente Tasenk&#xfc;rzel">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1617570674708" ID="ID_1037850042" MODIFIED="1617570685158" TEXT="Zugang / Definitionen">
+<node CREATED="1617570694344" ID="ID_752689969" MODIFIED="1617570698161" TEXT="gdkevents.h">
+<node CREATED="1617570706079" ID="ID_1486587603" MODIFIED="1617913056949" TEXT="_GdkEventMotion"/>
+<node CREATED="1617570898727" ID="ID_116829584" MODIFIED="1617913060361" TEXT="_GdkEventButton"/>
+</node>
+<node COLOR="#338800" CREATED="1617570908580" ID="ID_104139138" MODIFIED="1617912332831" TEXT="zu kl&#xe4;ren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1617570913996" ID="ID_1217512191" MODIFIED="1617889193688" TEXT="was ist ein &quot;grab&quot;?">
+<arrowlink COLOR="#3f56d9" DESTINATION="ID_366430158" ENDARROW="Default" ENDINCLINATION="-1512;175;" ID="Arrow_ID_1894977369" STARTARROW="None" STARTINCLINATION="-5374;669;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1617888877662" ID="ID_670270677" MODIFIED="1617912236623" TEXT="das ist genau die L&#xf6;sung f&#xfc;r das Problem hier">
+<arrowlink COLOR="#5c9fd8" DESTINATION="ID_1612782952" ENDARROW="Default" ENDINCLINATION="201;0;" ID="Arrow_ID_1004134548" STARTARROW="None" STARTINCLINATION="246;0;"/>
+<linktarget COLOR="#5274c4" DESTINATION="ID_670270677" ENDARROW="Default" ENDINCLINATION="-142;-46;" ID="Arrow_ID_1779430894" SOURCE="ID_1128795128" STARTARROW="None" STARTINCLINATION="-54;103;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1617898534818" ID="ID_315802107" MODIFIED="1617898613561" TEXT="und zwar gibt es demnach sogar zwei L&#xf6;sungen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die L&#246;sung auf X-Display / GDK-Ebene f&#252;r die Maus und das grab-widget von GTK, welches alle Events fangen kann.
+    </p>
+  </body>
+</html></richcontent>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1617898615759" ID="ID_1865733725" MODIFIED="1617898713481" TEXT="hier erscheint die GTK-L&#xf6;sung angemessen">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1617898649667" ID="ID_1080170926" MODIFIED="1617898706244" TEXT="weil man damit auch die Tastatur &quot;fangen&quot; kann">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1617898661671" ID="ID_1301082143" MODIFIED="1617898703204" TEXT="allerdings ist diese L&#xf6;sung auch schon ein starker Eintriff">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617898678071" ID="ID_1991806520" MODIFIED="1617898698197" TEXT="...mu&#xdf; also sauber und defensiv genutzt werden">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1617912342820" ID="ID_131592994" MODIFIED="1617912428285" TEXT="noch besser... gar nichts zu tun">
+<arrowlink COLOR="#7098c7" DESTINATION="ID_1996728887" ENDARROW="Default" ENDINCLINATION="10;-39;" ID="Arrow_ID_952711609" STARTARROW="None" STARTINCLINATION="-63;5;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1617570926506" ID="ID_803602163" MODIFIED="1617912330239" TEXT="was ist ein &quot;implicit grab&quot;?">
+<icon BUILTIN="help"/>
+<node CREATED="1617570946843" ID="ID_90860434" MODIFIED="1617570988184" TEXT="siehe _GdkEventGrabBroken">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#160;* Generated when a pointer or keyboard grab is broken. On X11, this happens
+    </p>
+    <p>
+      &#160;* when the grab window becomes unviewable (i.e. it or one of its ancestors
+    </p>
+    <p>
+      &#160;* is unmapped), or if the same application grabs the pointer or keyboard
+    </p>
+    <p>
+      &#160;* again. Note that implicit grabs (which are initiated by button presses)
+    </p>
+    <p>
+      &#160;* can also cause #GdkEventGrabBroken events.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1617912124088" ID="ID_1996728887" MODIFIED="1617912425749" TEXT="Nach Maus- und Touch-Events gehen Folge-Events an das gleiche Widget">
+<linktarget COLOR="#7098c7" DESTINATION="ID_1996728887" ENDARROW="Default" ENDINCLINATION="10;-39;" ID="Arrow_ID_952711609" SOURCE="ID_131592994" STARTARROW="None" STARTINCLINATION="-63;5;"/>
+</node>
+<node CREATED="1617912195242" ID="ID_1612782952" MODIFIED="1617912230315" TEXT="GTK implementiert also ohnehin die L&#xf6;sung f&#xfc;r mein Problem hier">
+<linktarget COLOR="#5c9fd8" DESTINATION="ID_1612782952" ENDARROW="Default" ENDINCLINATION="201;0;" ID="Arrow_ID_1004134548" SOURCE="ID_670270677" STARTARROW="None" STARTINCLINATION="246;0;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1617912240372" ID="ID_1225920019" MODIFIED="1617912288730" TEXT="GdkEventButtonPress &#x27f9; empfangenes Widget bekommt den &quot;implicit grab&quot;"/>
+<node CREATED="1617912289933" ID="ID_1605333590" MODIFIED="1617912313582" TEXT="dieser bleibt bestehen bis GdkEventButtonRelease"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617913164868" ID="ID_113135132" MODIFIED="1617919660564" TEXT="einzurichten">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1617913214193" ID="ID_51699428" MODIFIED="1617919672112" TEXT="state flags">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1617913172095" ID="ID_389454227" MODIFIED="1617919654631" TEXT="Callbacks f&#xfc;r Button-Events">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617919674980" ID="ID_1535616039" MODIFIED="1617919704165" TEXT="TODO: spezielle Buttons und Modifier konfigurierbar machen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617913205146" ID="ID_1972128766" MODIFIED="1617919747441" TEXT="Callback f&#xfc;r Motion-Events">
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1617919712790" ID="ID_886546906" MODIFIED="1617919741084" TEXT="sehe hier die Motion-Events">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1617919725773" ID="ID_309690589" MODIFIED="1617919738379" TEXT="implicit grab funktioniert">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -54810,6 +55047,9 @@
 <node CREATED="1477785747138" ID="ID_4618201" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-xeventsignals.html.en" MODIFIED="1557498707238" TEXT="speziell Details zu event Handlern: X event signals">
 <icon BUILTIN="idea"/>
 </node>
+<node CREATED="1617889469414" ID="ID_1224226747" LINK="https://developer.gnome.org/gtk3/stable/chap-input-handling.html" MODIFIED="1617889488739" TEXT="The GTK Event handling model">
+<icon BUILTIN="info"/>
+</node>
 <node CREATED="1477785807338" ID="ID_80062368" MODIFIED="1557498707238" TEXT="wie">
 <icon BUILTIN="info"/>
 <node CREATED="1477785809930" ID="ID_596393977" MODIFIED="1557498707238" TEXT="signal connect()"/>
@@ -54874,6 +55114,53 @@
     </div>
   </body>
 </html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1617571049865" ID="ID_1775827325" MODIFIED="1617571061764" TEXT="Low-Level-Events (GDK)">
+<node CREATED="1617571081549" ID="ID_758420897" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-xeventsignals.html.en" MODIFIED="1617571132608" TEXT="Tutorial"/>
+<node CREATED="1617578520434" ID="ID_1901070467" MODIFIED="1617578522333" TEXT="Quellen">
+<node CREATED="1617578526137" ID="ID_1073829112" MODIFIED="1617578530459" TEXT="gdkevents.h"/>
+</node>
+<node CREATED="1617576420772" ID="ID_1731089051" MODIFIED="1617578512853" TEXT="F&#xe4;lle">
+<node CREATED="1617578538614" MODIFIED="1617578538614" TEXT="_GdkEventMotion"/>
+<node CREATED="1617578546055" MODIFIED="1617578546055" TEXT="_GdkEventButton"/>
+</node>
+</node>
+<node CREATED="1617889018573" ID="ID_366430158" MODIFIED="1617889193688" TEXT="&quot;grab&quot; (some) events">
+<linktarget COLOR="#3f56d9" DESTINATION="ID_366430158" ENDARROW="Default" ENDINCLINATION="-1512;175;" ID="Arrow_ID_1894977369" SOURCE="ID_1217512191" STARTARROW="None" STARTINCLINATION="-5374;669;"/>
+<node CREATED="1617889216544" ID="ID_758949629" MODIFIED="1617889221522" TEXT="Doku/Beschreibungen">
+<node CREATED="1617889225238" ID="ID_1356113723" LINK="https://www.linuxtopia.org/online_books/gui_toolkit_guides/gtk+_gnome_application_development/sec-gdkcursor_1.html" MODIFIED="1617889237503" TEXT="Linuxtopia: grabbing the pointer"/>
+<node CREATED="1617912074084" ID="ID_1495099926" LINK="https://developer.gnome.org/gtk3/stable/chap-input-handling.html#id-1.2.7.3.7" MODIFIED="1617912084177" TEXT="Definition: implicit and explicit grabs"/>
+</node>
+<node CREATED="1617889737497" ID="ID_1734077476" MODIFIED="1617889751715" TEXT="auf GDK-Ebene f&#xfc;r das Display(X) insgesamt">
+<node CREATED="1617891813242" ID="ID_573627567" MODIFIED="1617891819801" TEXT="gilt f&#xfc;r alle Applikationen"/>
+<node CREATED="1617891820437" ID="ID_159394462" MODIFIED="1617891886412" TEXT="aber nur f&#xfc;r die low-level-Maus-Events">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      jedoch indirekt dann auch f&#252;r darauf aufbauende Events, z.B. GTK-Events, weil eben nur noch das zum grabbed window geh&#246;rige Widgets diese Events &#252;berhaupt sieht
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1617891887779" ID="ID_659611722" MODIFIED="1617891903519" TEXT="zuverl&#xe4;ssig beenden, sonst friert das gesamte Display ein">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1617889752694" ID="ID_1346101076" MODIFIED="1617889805828" TEXT="GTK+ bietet zus&#xe4;tzlich ein &quot;grabbing widget&quot; (z.B. modale Dialogbox)">
+<node CREATED="1617889845780" ID="ID_786899199" LINK="https://www.linuxtopia.org/online_books/gui_toolkit_guides/gtk+_gnome_application_development/sec-gdkevent_2.html#SEC-GRABS" MODIFIED="1617889861555" TEXT="Linuxtopia: receiving GDK events in GTK+"/>
+<node CREATED="1617891663427" ID="ID_548825317" LINK="https://developer.gnome.org/gtk3/stable/gtk3-General.html#gtk-grab-add" MODIFIED="1617891680797" TEXT="gtk_grab_add(widget)"/>
+<node CREATED="1617891683600" ID="ID_546679257" MODIFIED="1617891717399" TEXT="das ist ein ziemlich starker Eingriff">
+<node CREATED="1617891718627" ID="ID_498617078" MODIFIED="1617891750043" TEXT="ein &quot;grabed widget&quot; empf&#xe4;ngt alle Maus- und Tastatur-Events"/>
+<node CREATED="1617891750628" ID="ID_1890756438" MODIFIED="1617891763768" TEXT="der Rest des GUI ist weitgehend deaktiviert"/>
+<node CREATED="1617891777971" ID="ID_919159260" MODIFIED="1617891803969" TEXT="man mu&#xdf; es zuverl&#xe4;ssig beenden, sonst ist das UI praktisch tot">
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 </node>
@@ -55867,6 +56154,85 @@
     </p>
   </body>
 </html></richcontent>
+</node>
+</node>
+<node CREATED="1617648902994" ID="ID_276316646" MODIFIED="1617648906362" TEXT="C++20">
+<node CREATED="1617648907316" ID="ID_899199723" MODIFIED="1617650703506" TEXT="Coroutine">
+<node COLOR="#435e98" CREATED="1617648912609" ID="ID_996261679" LINK="https://lewissbaker.github.io/2017/09/25/coroutine-theory" MODIFIED="1617648936772" TEXT="Theorie und Definitionen">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1617650510224" ID="ID_537278734" MODIFIED="1617650515623" TEXT="Einsichten">
+<node CREATED="1617650518471" ID="ID_1004580056" MODIFIED="1617650549015" TEXT="Coroutinen schaffen einen lokalen Scope losgel&#xf6;st vom klassischen Stack(Frame)"/>
+<node CREATED="1617650550016" ID="ID_1391380626" MODIFIED="1617650576747">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Coroutinen sind nicht <i>per se asynchron</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1617650606227" ID="ID_416722817" MODIFIED="1617650622874" TEXT="Coroutinen in C++20 sind ein low-level-Framework">
+<node CREATED="1617650631616" ID="ID_139816499" MODIFIED="1617650648065" TEXT="auf dieser Basis werden high-level Primitive geschaffen"/>
+<node CREATED="1617650648518" ID="ID_817552618" MODIFIED="1617650728738" TEXT="z.B. ein Generator (&quot;yield value&quot;)"/>
+<node CREATED="1617650655741" ID="ID_1425746097" MODIFIED="1617650665884" TEXT="oder eine asynchrone Continuation"/>
+<node CREATED="1617653847900" ID="ID_921128772" MODIFIED="1617654081995" TEXT="oder leichtgewichtige Synchronisations-Primitive">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      welche dann jedoch stets aus einer Coroutine heraus per co_await aktiviert werden. Beispiel: ein lock-free mutex
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1617650754576" ID="ID_716091070" MODIFIED="1617650874465">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Kontroll&#252;berg&#228;nge erfolgen ausschlie&#223;lich an den <b>suspend points</b>&#160;in der Coroutine selber
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das untermauert nochmal, da&#223; Coroutinen inh&#228;rent synchron und deterministisch sind. Man kann allerdings das low-level-Framework nutzen, um an einem bestimmten suspend-point den &quot;eingefrorenen&quot; Zustand der Coroutine asynchron an einen anderen Thread zu &#252;bertragen
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1617650891093" ID="ID_437757373" MODIFIED="1617650895248" TEXT="co_await"/>
+<node CREATED="1617650895909" ID="ID_1237269411" MODIFIED="1617650899008" TEXT="co_yield"/>
+<node CREATED="1617650899843" ID="ID_1357448847" MODIFIED="1617650902190" TEXT="co_return"/>
+</node>
+</node>
+<node CREATED="1617653924444" ID="ID_1196316784" MODIFIED="1617653933147" TEXT="Konfiguration des konkreten Verhaltens">
+<node CREATED="1617653934065" ID="ID_141023118" MODIFIED="1617653953451" TEXT="wird per Trait aus dem deklarierten R&#xfc;ckgabewert der Coroutine gewonnen">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1617653960317" ID="ID_137807168" MODIFIED="1617653980002" TEXT="dieser ist typischerweise ein RAII-handle f&#xfc;r die Coroutine selber"/>
+<node CREATED="1617653981935" ID="ID_1379306731" MODIFIED="1617654010674" TEXT="...und implementiert geeignet die Interfaces Promise und Awaiter/Awaitable"/>
+<node CREATED="1617654011852" ID="ID_1777400524" MODIFIED="1617654029031" TEXT="dar&#xfc;ber wird das tats&#xe4;chliche Verhalten gesteuert">
+<icon BUILTIN="back"/>
+</node>
+</node>
+<node CREATED="1617654109856" ID="ID_232615938" MODIFIED="1617654116092" TEXT="high-level-Libraries">
+<node CREATED="1617654117016" ID="ID_1078296581" LINK="https://github.com/lewissbaker/cppcoro" MODIFIED="1617654125575" TEXT="Cppcoro"/>
+</node>
 </node>
 </node>
 <node CREATED="1512178947582" ID="ID_1778761323" MODIFIED="1557498707240">

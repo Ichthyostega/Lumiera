@@ -50,6 +50,8 @@
 #include "stage/gtk-base.hpp"
 #include "stage/interact/interaction-state.hpp"
 #include "stage/interact/cmd-context.hpp"
+#include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/symbol.hpp"
 #include "lib/nocopy.hpp"
@@ -65,19 +67,19 @@ namespace interact {
 //  using util::isnil;
 //  using std::string;
   using util::isnil;
+  using util::_Fmt;
   
 
   
   /**
-   * Abstract foundation context dependent UI interactions.
-   * While forming an interaction gesture, context state is picked up
-   * incrementally, and maintained here, together with parameters of degree,
-   * amount or relative position. Typically, an concrete implementation subclass
-   * is geared for one specific kind of interaction or gesture and used as target
-   * for wiring Signals to trigger and carry out this specific interaction.
-   * The InteractionDirector is responsible for allocating and maintaining those
-   * concrete InteractionState instances, which can then be used to issue complex
-   * commands for subjects and further arguments picked up from the interaction.
+   * Gesture controller for dragging objects within the Timeline display.
+   * The gesture to drag an entity is triggered by observing mouse movements
+   * while a mouse key and possibly some modifier key is pressed. To recognise
+   * this condition, every possible subject for a drag gesture will be wired through
+   * the #linkTrigger call into this controller. When #detectActivation is fulfilled
+   * for one specific subject, the corresponding context data will be tracked as state
+   * of the ongoing gesture in formation, maintained within the member fields of this
+   * controller.
    * 
    * @todo write type comment...
    * @todo WIP-WIP as of /3/2021
@@ -86,24 +88,50 @@ namespace interact {
   class DragRelocateController
     : public InteractionState
     {
+      bool buttonPressed_ = false;
+      
       void
       linkTrigger (Subject& subject, Symbol cmdID)  override
         {
           REQUIRE (not isnil (cmdID));
-          subject.exposeWidget().signal_button_press_event().connect(
-              [&](GdkEventButton* button) -> bool
+          auto& widget = subject.exposeWidget();
+          widget.signal_button_press_event().connect(
+              sigc::mem_fun (*this, &DragRelocateController::watchButton));
+          widget.signal_button_release_event().connect(
+              sigc::mem_fun (*this, &DragRelocateController::watchButton));
+          widget.signal_motion_notify_event().connect(
+              [&](GdkEventMotion* motion) -> bool
                 {
-                  try{ return detectActivation(subject, button); }
+                  try{ return detectActivation(subject, motion); }
                   ON_EXCEPTION_RETURN (false, "activate dragging gesture")
                 }
           );
         }
       
       bool
-      detectActivation (Subject& subject, GdkEventButton* button_event)
+      watchButton (GdkEventButton* button_event)  noexcept
         {
-          throw lumiera::error::Fatal("UNIMPLEMENTED Maybe DRAG-start?????");
-          //return false;
+          REQUIRE (button_event);
+          if (button_event->type & GDK_BUTTON_PRESS)
+            buttonPressed_ = true;
+          else
+          if (button_event->type & GDK_BUTTON_RELEASE)
+            buttonPressed_ = true;
+          return false;
+        }
+      
+      bool
+      detectActivation (Subject& subject, GdkEventMotion* motion_event)
+        {
+          if (not buttonPressed_)
+            return false;
+          REQUIRE (motion_event);
+          std::cerr << _Fmt{"MOVE x=%3.1f y=%3.1f subject=%s"}
+                       % motion_event->x
+                       % motion_event->y
+                       % subject
+                    << std::endl;
+          return true; // Event handled
         }
       
       
