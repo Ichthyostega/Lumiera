@@ -87,6 +87,10 @@
 /** Lumiera GTK UI implementation root. */
 namespace stage {
   
+  /* some commonly used error marks for the UI... */
+  LUMIERA_ERROR_DECLARE (UIWIRING); // "GUI state contradicts assumptions in signal wiring"
+  
+  /* widely used type abbreviations */
   using uString =  Glib::ustring;
   using cuString = const uString;
   

@@ -67,23 +67,6 @@ namespace interact {
   using util::isnil;
   
 
-#define ON_EXCEPTION_RETURN(_VAL_,_OP_DESCR_)   \
-  catch (std::exception& problem)                \
-    {                                             \
-      const char* errID = lumiera_error();         \
-      WARN (stage, "%s (Signal Handler) failed: %s",\
-                   _OP_DESCR_, problem.what());      \
-      TRACE (debugging, "Error flag was: %s", errID); \
-      return (_VAL_);                                  \
-    }                                                   \
-  catch (...)                                            \
-    {                                                     \
-      const char* errID = lumiera_error();                 \
-      ERROR (stage, "(Signal Handler) %s failed with "      \
-                    "unknown exception; error flag is: %s"   \
-                   , _OP_DESCR_, errID);                      \
-      return (_VAL_);                                          \
-    }
   
   /**
    * Abstract foundation context dependent UI interactions.

@@ -284,6 +284,30 @@ namespace lumiera {
                    , _OP_DESCR_, errID);                    \
     }
 
+/******************************************************//**
+ * convenience shortcut to catch and absorb any exception,
+ * then returning a default value instead. This scheme is
+ * typically used within signal handlers in the GTK UI,
+ * since GTK (written in C) can not propagate exceptions
+ */
+#define ON_EXCEPTION_RETURN(_VAL_,_OP_DESCR_)   \
+  catch (std::exception& problem)                \
+    {                                             \
+      const char* errID = lumiera_error();         \
+      WARN (stage, "%s (Signal Handler) failed: %s",\
+                   _OP_DESCR_, problem.what());      \
+      TRACE (debugging, "Error flag was: %s", errID); \
+      return (_VAL_);                                  \
+    }                                                   \
+  catch (...)                                            \
+    {                                                     \
+      const char* errID = lumiera_error();                 \
+      ERROR (stage, "(Signal Handler) %s failed with "      \
+                    "unknown exception; error flag is: %s"   \
+                   , _OP_DESCR_, errID);                      \
+      return (_VAL_);                                          \
+    }
+
 
 
 /**************************************************//**

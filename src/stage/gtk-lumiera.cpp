@@ -75,6 +75,9 @@ using std::string;
 
 namespace stage {
   
+  /* == definition common error marks for the UI, declared in gtk-base.hpp == */
+  LUMIERA_ERROR_DEFINE (UIWIRING, "GUI state contradicts assumptions in signal wiring");
+  
   namespace { // implementation details
     
     using ctrl::UiManager;

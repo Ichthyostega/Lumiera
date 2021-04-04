@@ -118,7 +118,6 @@ using std::optional;
 
 
 namespace stage {
-  LUMIERA_ERROR_DEFINE (UIWIRING, "GUI state contradicts assumptions in signal wiring");
 namespace timeline {
   namespace error = lumiera::error;
   
