@@ -30,6 +30,13 @@
  ** @todo as of 11/2015 this is complete WIP-WIP-WIP
  ** @todo and as of 3/2021 this is at least just WIP-WIP
  ** 
+ ** @todo *Future Plan*: in the general case, detecting and handling of complex
+ **       UI interactions and gestures translates itself into a state machine,
+ **       maybe even a hierarchical compound of state machines, where the
+ **       subordinate state machines will detect and handle elementary gestures.
+ **       The role of InteractionState will then be to provide the building blocks
+ **       and interfaces for assembling such complex state tracking engines.
+ ** 
  ** @see ////TODO_test usage example
  ** 
  */

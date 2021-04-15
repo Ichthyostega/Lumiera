@@ -6,7 +6,20 @@
 <font BOLD="true" NAME="SansSerif" SIZE="14"/>
 <node CREATED="1434128054470" HGAP="7" ID="ID_1166611516" MODIFIED="1557498707213" TEXT="Workflow" VSHIFT="-15">
 <node CREATED="1455289597596" ID="ID_970065036" MODIFIED="1557498707213" TEXT="work site"/>
-<node CREATED="1455289466261" ID="ID_273679080" MODIFIED="1557498707213" TEXT="PresentationState"/>
+<node CREATED="1455289466261" ID="ID_273679080" MODIFIED="1557498707213" TEXT="PresentationState">
+<node CREATED="1618494980292" ID="ID_1626014832" MODIFIED="1618494985867" TEXT="Anordnung">
+<node CREATED="1618494998061" ID="ID_1125409607" MODIFIED="1618495002909" TEXT="top-level-Windows"/>
+<node CREATED="1618495003597" ID="ID_1454902343" MODIFIED="1618495009282" TEXT="docking panels"/>
+<node CREATED="1618495027486" ID="ID_1793800259" MODIFIED="1618495032901" TEXT="Layout / Aufteilung"/>
+</node>
+<node CREATED="1618495052150" ID="ID_1652649228" MODIFIED="1618495059502" TEXT="lokale Auspr&#xe4;gung">
+<node CREATED="1618495060622" ID="ID_1081072599" MODIFIED="1618495064592" TEXT="expand / collapse"/>
+<node CREATED="1618495065300" ID="ID_1443213129" MODIFIED="1618495072066" TEXT="Darstellungsmodi"/>
+</node>
+<node CREATED="1618495095336" ID="ID_1765572056" MODIFIED="1618495654883" TEXT="Thema: Interaction-State">
+<arrowlink COLOR="#382ab9" DESTINATION="ID_1679641405" ENDARROW="Default" ENDINCLINATION="-1203;-127;" ID="Arrow_ID_1636278357" STARTARROW="None" STARTINCLINATION="-743;85;"/>
+</node>
+</node>
 <node CREATED="1487210691163" ID="ID_1259700796" MODIFIED="1557498707214" TEXT="konzeptioneller Rahmen">
 <linktarget COLOR="#34dbd3" DESTINATION="ID_1259700796" ENDARROW="Default" ENDINCLINATION="473;607;" ID="Arrow_ID_114106295" SOURCE="ID_1430752735" STARTARROW="None" STARTINCLINATION="-1346;-1090;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
@@ -32665,6 +32678,19 @@
 <node CREATED="1617570633938" ID="ID_1636227122" MODIFIED="1617570654929" TEXT="Stichwort: globale und konsistente Tasenk&#xfc;rzel">
 <icon BUILTIN="idea"/>
 </node>
+<node CREATED="1618499304789" ID="ID_636470529" MODIFIED="1618499325642" TEXT="das sollte besser durch Komposition gel&#xf6;st werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Hierarchische Gesten-Controller
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
 </node>
 </node>
 <node CREATED="1617570674708" ID="ID_1037850042" MODIFIED="1617570685158" TEXT="Zugang / Definitionen">
@@ -32737,8 +32763,7 @@
       &#160;* can also cause #GdkEventGrabBroken events.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1617912124088" ID="ID_1996728887" MODIFIED="1617912425749" TEXT="Nach Maus- und Touch-Events gehen Folge-Events an das gleiche Widget">
 <linktarget COLOR="#7098c7" DESTINATION="ID_1996728887" ENDARROW="Default" ENDINCLINATION="10;-39;" ID="Arrow_ID_952711609" SOURCE="ID_131592994" STARTARROW="None" STARTINCLINATION="-63;5;"/>
@@ -32760,6 +32785,19 @@
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617919674980" ID="ID_1535616039" MODIFIED="1617919704165" TEXT="TODO: spezielle Buttons und Modifier konfigurierbar machen">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618499388465" ID="ID_540657197" MODIFIED="1618499424481" TEXT="Problem: wie kann man dies einkapseln?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es ist total an das Framework gebunden
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617913205146" ID="ID_1972128766" MODIFIED="1617919747441" TEXT="Callback f&#xfc;r Motion-Events">
@@ -32769,6 +32807,43 @@
 </node>
 <node COLOR="#338800" CREATED="1617919725773" ID="ID_309690589" MODIFIED="1617919738379" TEXT="implicit grab funktioniert">
 <icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618499488724" ID="ID_1241205333" MODIFIED="1618499503562" TEXT="Basis schaffen f&#xfc;r eine Hysterese">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1618499514672" ID="ID_934736120" MODIFIED="1618499526802" TEXT="nicht jede minimale Bewegung soll eine Dragging-Geste ausl&#xf6;sen">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618499530732" ID="ID_1305245635" MODIFIED="1618499549200" TEXT="das bedeutet: Gestenerkennung vorl&#xe4;ufig beginnen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1618498875079" ID="ID_1267546019" MODIFIED="1618499117546" TEXT="(Draft) Framework-Anforderungen beachten">
+<linktarget COLOR="#5c4052" DESTINATION="ID_1267546019" ENDARROW="Default" ENDINCLINATION="-834;0;" ID="Arrow_ID_1826514843" SOURCE="ID_420683622" STARTARROW="None" STARTINCLINATION="-58;-277;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1618499152610" ID="ID_1853176159" MODIFIED="1618504461568" TEXT="die Aktion beim Triggern mu&#xdf; konfigurierbar sein">
+<icon BUILTIN="yes"/>
+<node CREATED="1618499163912" ID="ID_21588422" MODIFIED="1618499182405" TEXT="Alternative-1: ein Command ausl&#xf6;sen (auf dem Subject)"/>
+<node CREATED="1618499184805" ID="ID_1304825104" MODIFIED="1618499247024" TEXT="Alternative-2: Erfolg-R&#xfc;ckmeldung an eine &#xfc;bergeordnete Geste"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618504436926" ID="ID_1670097568" MODIFIED="1618504458159" TEXT="die Geste mu&#xdf; generell deaktivierbar sein">
+<icon BUILTIN="yes"/>
+<node CREATED="1618504468418" ID="ID_1575120322" MODIFIED="1618504482540" TEXT="und zwar erst mal vom Subjekt aus">
+<node CREATED="1618504487367" ID="ID_1202198317" MODIFIED="1618504512315" TEXT="Clip und Sequenz k&#xf6;nnen fixiert sein"/>
+<node CREATED="1618504518013" ID="ID_1762835695" MODIFIED="1618504554622" TEXT="es ist besser, dies unmittelbar im UI erfahrbar zu machen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...anstatt blo&#223; die Ausf&#252;hrung entsprechender Commands zur&#252;ckzuweisen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
@@ -35959,7 +36034,7 @@
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#81759f" DESTINATION="ID_1679641405" ENDARROW="Default" ENDINCLINATION="604;-108;" ID="Arrow_ID_1210299906" STARTARROW="None" STARTINCLINATION="702;0;"/>
+<arrowlink COLOR="#81759f" DESTINATION="ID_1690039650" ENDARROW="Default" ENDINCLINATION="513;-275;" ID="Arrow_ID_838588653" STARTARROW="None" STARTINCLINATION="702;0;"/>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -36179,9 +36254,13 @@
 <node CREATED="1448669675495" ID="ID_1257367197" MODIFIED="1518487921088" TEXT="Perspektiven"/>
 <node CREATED="1448669699148" ID="ID_1264820517" MODIFIED="1518487921088" TEXT="Gesten"/>
 </node>
-<node CREATED="1448669742334" HGAP="41" ID="ID_1679641405" MODIFIED="1518487921088" TEXT="InteractionStateManager" VSHIFT="-4">
-<linktarget COLOR="#81759f" DESTINATION="ID_1679641405" ENDARROW="Default" ENDINCLINATION="604;-108;" ID="Arrow_ID_1210299906" SOURCE="ID_839961131" STARTARROW="None" STARTINCLINATION="702;0;"/>
+<node CREATED="1448669742334" HGAP="41" ID="ID_1679641405" MODIFIED="1518487921088" TEXT="InteractionState" VSHIFT="-4">
+<linktarget COLOR="#382ab9" DESTINATION="ID_1679641405" ENDARROW="Default" ENDINCLINATION="-1203;-127;" ID="Arrow_ID_1636278357" SOURCE="ID_1765572056" STARTARROW="None" STARTINCLINATION="-743;85;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="13"/>
+<node CREATED="1448669742334" FOLDED="true" HGAP="41" ID="ID_1690039650" MODIFIED="1618498433404" TEXT="Plan: InteractionStateManager" VSHIFT="-4">
+<linktarget COLOR="#81759f" DESTINATION="ID_1690039650" ENDARROW="Default" ENDINCLINATION="513;-275;" ID="Arrow_ID_838588653" SOURCE="ID_839961131" STARTARROW="None" STARTINCLINATION="702;0;"/>
+<font NAME="SansSerif" SIZE="13"/>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1448669816476" ID="ID_1895677880" MODIFIED="1518487921088" TEXT="lauscht als Observer mit"/>
 <node CREATED="1448669824243" ID="ID_1225519733" MODIFIED="1518487921088" TEXT="h&#xe4;ngt sich in diverse Punkte ein"/>
 <node CREATED="1448669838745" ID="ID_1663939304" MODIFIED="1518487921088" TEXT="h&#xe4;llt ein lokales Zustansmodell"/>
@@ -36189,6 +36268,198 @@
 <node CREATED="1448669869973" ID="ID_1259588429" MODIFIED="1518487921088" TEXT="sendet Enablement">
 <node CREATED="1448669889514" ID="ID_1191247113" MODIFIED="1518487921088" TEXT="an die konkreten Trigger-Orte"/>
 <node CREATED="1448669899113" ID="ID_990871123" MODIFIED="1518487921088" TEXT="er sendet jeweils die passende Command-ID"/>
+</node>
+<node CREATED="1618498269433" HGAP="14" ID="ID_1337185518" MODIFIED="1618498378416" VSHIFT="44">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>Stand 2021</u>:
+    </p>
+    <p>
+      l&#228;uft ehr auf ein Framework hinaus,<br />denn auf eine zentrale Einrichtung
+    </p>
+  </body>
+</html></richcontent>
+<edge COLOR="#c91d1d" STYLE="linear"/>
+<linktarget COLOR="#cf4c6f" DESTINATION="ID_1337185518" ENDARROW="Default" ENDINCLINATION="306;59;" ID="Arrow_ID_1170485905" SOURCE="ID_379254820" STARTARROW="None" STARTINCLINATION="-233;0;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1618493709187" ID="ID_1168598401" MODIFIED="1618495853582" TEXT="Komplexe zusammengesetze Interaktionen im Allgemeinen">
+<linktarget COLOR="#436b85" DESTINATION="ID_1168598401" ENDARROW="Default" ENDINCLINATION="-1067;53;" ID="Arrow_ID_811903885" SOURCE="ID_1188739544" STARTARROW="None" STARTINCLINATION="325;54;"/>
+<node CREATED="1618495879293" ID="ID_1360772859" MODIFIED="1618495885480" TEXT="systematisch-hierarchisch">
+<node CREATED="1618496027489" ID="ID_433642660" MODIFIED="1618496038562" TEXT="Geten k&#xf6;nnen zusammengesetzt sein"/>
+<node CREATED="1618496039575" ID="ID_447958440" MODIFIED="1618496053097" TEXT="Gesten k&#xf6;nnen aus verschiednen Interaktions-Systemen kommen">
+<node CREATED="1618496175709" ID="ID_295780689" MODIFIED="1618496178440" TEXT="Beispiele">
+<node CREATED="1618496180165" ID="ID_1445994046" MODIFIED="1618496198598" TEXT="mit der Maus ziehen bei gedr&#xfc;ckten Modifier-Tasten"/>
+<node CREATED="1618496199625" ID="ID_254053569" MODIFIED="1618496214248" TEXT="mit der Maus ziehen, nachdem ein Modus (per Tastenkombi) eingeleitet wurde"/>
+<node CREATED="1618496228147" ID="ID_388393264" MODIFIED="1618496241259" TEXT="Hardware-Controller (linke Hand) + Maus (rechte Hand)"/>
+</node>
+<node CREATED="1618496287798" ID="ID_36219632" MODIFIED="1618496306375" TEXT="Maus + Tastatur wird sehr gut im UI-Toolkit unterst&#xfc;tzt">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618496307555" ID="ID_21337541" MODIFIED="1618496363210" TEXT="das ist tats&#xe4;chlich ein Architektur-Problem">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        weil es einer generischen L&#246;sung im Weg steht
+      </li>
+      <li>
+        weil die partikul&#228;re Ebene tief in das UI-Toolkit verwoben ist
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1618496370865" ID="ID_1338391945" MODIFIED="1618496636196" TEXT="Stichwort: GTK &#xbb;grabbing widget&#xab;">
+<arrowlink COLOR="#6578a3" DESTINATION="ID_1346101076" ENDARROW="Default" ENDINCLINATION="-2521;108;" ID="Arrow_ID_1579913575" STARTARROW="None" STARTINCLINATION="-5109;432;"/>
+</node>
+</node>
+</node>
+<node CREATED="1618496053958" ID="ID_19157814" MODIFIED="1618496066054" TEXT="Gesten k&#xf6;nnen mehrere Interaktionssysteme &#xfc;bergreifen">
+<node CREATED="1618496071304" ID="ID_78497449" MODIFIED="1618496104797" TEXT="hierf&#xfc;r fehlt jedwede Basis">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1618496127068" ID="ID_1355352407" MODIFIED="1618496134433" TEXT="warum f&#xe4;llt das niemandem auf?"/>
+<node CREATED="1618496135139" ID="ID_1442135716" MODIFIED="1618496162854">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Spaltung in <b>Pragmatismus</b>&#160;und <b>Vision</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1618496079577" ID="ID_563221674" MODIFIED="1618496098344" TEXT="das hei&#xdf;t, man l&#xf6;st das &#xbb;ad hoc&#xab;"/>
+</node>
+<node CREATED="1618496658035" ID="ID_135287349" MODIFIED="1618496668822" TEXT="Gesten k&#xf6;nnen miteinander konkurrieren">
+<node CREATED="1618496682104" ID="ID_1913068365" MODIFIED="1618496695090" TEXT="erst der Abschlu&#xdf; trifft die Entscheidung"/>
+<node CREATED="1618496744993" ID="ID_1229062418" MODIFIED="1618496754547" TEXT="Problem: was passiert mit den unterlegenen Gesten"/>
+<node CREATED="1618496755358" ID="ID_716551546" MODIFIED="1618498427806" TEXT="L&#xf6;sungsans&#xe4;tze">
+<icon BUILTIN="idea"/>
+<node CREATED="1618496761069" ID="ID_379254820" MODIFIED="1618498420683" TEXT="zentral">
+<arrowlink COLOR="#cf4c6f" DESTINATION="ID_1337185518" ENDARROW="Default" ENDINCLINATION="306;59;" ID="Arrow_ID_1170485905" STARTARROW="None" STARTINCLINATION="-233;0;"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1618496875438" ID="ID_1506165136" MODIFIED="1618496888277" TEXT="entspricht genau der Situation in einem LR-Parser"/>
+<node CREATED="1618496888986" ID="ID_1950167576" MODIFIED="1618497035456" TEXT="l&#xe4;uft auf einen Table-driven-Approach hinaus">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Auf theoretischer Ebene handel es sich um eine (nicht notwendigerweise deterministische) State-Machine. Allerdings ist diese sehr breit, und daher nicht sinnvoll direkt zu konstruieren. Wohingegen eine Tabellen-Implementierung aus Regeln dynamisch populiert werden kann
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1618498401639" ID="ID_507606816" MODIFIED="1618498415609" TEXT="nur sinnvoll bei einer geschlossenen Grammatik">
+<icon BUILTIN="closed"/>
+</node>
+</node>
+<node CREATED="1618496767069" ID="ID_1798540136" MODIFIED="1618498423780" TEXT="dezentral">
+<icon BUILTIN="forward"/>
+<node CREATED="1618496774556" ID="ID_1999438460" MODIFIED="1618496815452" TEXT="pa&#xdf;t gut in bestehende UI-Toolkits">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      GTK macht das auch in der Tat genau so
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1618496819919" ID="ID_1097969614" MODIFIED="1618496835033" TEXT="es gibt dedizierte Gesten-Controller">
+<node CREATED="1618497392949" ID="ID_88952849" MODIFIED="1618497404458" TEXT="jeder realisiert eine einzige Regel"/>
+<node CREATED="1618497434424" ID="ID_1014765909" MODIFIED="1618497441669" TEXT="und feuert bei Abschlu&#xdf;"/>
+<node CREATED="1618497485166" ID="ID_595584701" MODIFIED="1618497505049" TEXT="Konsequenz: &quot;R&#xfc;ckmeldung&quot; steht neben &quot;Feuern&quot;">
+<node CREATED="1618497536204" ID="ID_1376398950" MODIFIED="1618497584286" TEXT="wird relevant wenn man Gesten wiederverwendet">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Also eine generische Implementierung einer Gesten-Erkennung (z.B. dragging), welche dann durch Parametrisierung eingebunden wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1618497591954" ID="ID_1424456420" MODIFIED="1618497607007" TEXT="wenn eine Geste aus Elementargesten zusammengesetzt wird"/>
+<node CREATED="1618497615124" ID="ID_379280777" MODIFIED="1618497622069" TEXT="Stichwort: Multi-touch"/>
+</node>
+</node>
+<node CREATED="1618497244266" ID="ID_1420529728" MODIFIED="1618497255222" TEXT="Konflikt wird ad hoc oder gar nicht gel&#xf6;st">
+<node CREATED="1618497261101" ID="ID_1256260657" MODIFIED="1618497268700" TEXT="entweder beide konkurrieren um ein Widget">
+<node CREATED="1618497357042" ID="ID_1520371593" MODIFIED="1618497369234" TEXT="das f&#xfc;rhrt dann entweder zu einem Defekt"/>
+<node CREATED="1618497369928" ID="ID_731581277" MODIFIED="1618497376382" TEXT="oder wird im Einzelfall gel&#xf6;st"/>
+</node>
+<node CREATED="1618497269745" ID="ID_1183185638" MODIFIED="1618497294713" TEXT="und wenn nicht, kann die 2.Geste u.U. auch noch zum Zuge kommen"/>
+<node CREATED="1618497299262" ID="ID_891092207" MODIFIED="1618497331892" TEXT="&quot;wen das st&#xf6;rt, der soll&apos;s es eben nicht so machen&quot;"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1618495906753" ID="ID_119188335" MODIFIED="1618495911709" TEXT="Konfigurierbarkeit">
+<node CREATED="1618495927271" ID="ID_1746632538" MODIFIED="1618495993283" TEXT="mehrfach problematisch">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1618495945349" ID="ID_920863702" MODIFIED="1618495955348" TEXT="Konfigurations-System mu&#xdf; verst&#xe4;ndlich sein"/>
+<node CREATED="1618495958122" ID="ID_74493493" MODIFIED="1618495986674" TEXT="ist ein &#xbb;cross-cutting Concern&#xab;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1618498463806" HGAP="-1" ID="ID_420683622" MODIFIED="1618499095806" TEXT="Framework-Anforderungen" VSHIFT="13">
+<arrowlink COLOR="#5c4052" DESTINATION="ID_1822212049" ENDARROW="Default" ENDINCLINATION="-834;0;" ID="Arrow_ID_1506237506" STARTARROW="None" STARTINCLINATION="112;439;"/>
+<arrowlink COLOR="#5c4052" DESTINATION="ID_1267546019" ENDARROW="Default" ENDINCLINATION="-834;0;" ID="Arrow_ID_1826514843" STARTARROW="None" STARTINCLINATION="-58;-277;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1618498492515" ID="ID_434535661" MODIFIED="1618498499278" TEXT="wachstumsf&#xe4;hig und erweiterbar">
+<node CREATED="1618498697295" ID="ID_985799133" MODIFIED="1618498710022" TEXT="die Grammatik bleibt auf Dauer offen"/>
+</node>
+<node CREATED="1618498500504" ID="ID_1449824942" MODIFIED="1618498513276" TEXT="nur relativ generische Bausteine">
+<node CREATED="1618498677130" ID="ID_1157411868" MODIFIED="1618498680757" TEXT="Komposition"/>
+<node CREATED="1618498683938" ID="ID_1253283120" MODIFIED="1618498686868" TEXT="R&#xfc;ckmeldung"/>
+<node CREATED="1618498687576" ID="ID_1585243737" MODIFIED="1618498690994" TEXT="Konfigurierbarkeit"/>
+</node>
+<node CREATED="1618498580703" ID="ID_1269910425" MODIFIED="1618498648892" TEXT="konkrete Systembez&#xfc;ge an den Rand schieben">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        also entweder auf den top-Level
+      </li>
+      <li>
+        oder auf die Bl&#228;tter hinunter<br />
+      </li>
+      <li>
+        oder in Hilfskomponenten
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1618498735650" ID="ID_1694960381" MODIFIED="1618498748164" TEXT="einige Aspekte zentralisieren">
+<node CREATED="1618498749104" ID="ID_1756775375" MODIFIED="1618498754793" TEXT="Namens-Schema"/>
+<node CREATED="1618498755479" ID="ID_1965831950" MODIFIED="1618498759650" TEXT="Konfigurations-Service">
+<node CREATED="1618498773365" ID="ID_855501540" MODIFIED="1618498780622" TEXT="im Besonderen: die Modifier"/>
+<node CREATED="1618498781540" ID="ID_1040416937" MODIFIED="1618498794523" TEXT="in erster N&#xe4;herung: Lambda vorsehen"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1487213803525" HGAP="36" ID="ID_735655054" MODIFIED="1518487921088" TEXT="InteractionDirector" VSHIFT="-3">
@@ -37562,7 +37833,7 @@
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614379298743" ID="ID_1608963281" MODIFIED="1614379434193" TEXT="Frage: mu&#xdf; das UI-Bus-Protokoll erweiter werden?">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614379298743" ID="ID_1608963281" MODIFIED="1614379434193" TEXT="Frage: mu&#xdf; das UI-Bus-Protokoll erweitert werden?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -37585,6 +37856,10 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="idea"/>
 </node>
+</node>
+<node CREATED="1618493782498" ID="ID_1188739544" MODIFIED="1618495853582" TEXT="im Allgemeinen....">
+<arrowlink COLOR="#436b85" DESTINATION="ID_1168598401" ENDARROW="Default" ENDINCLINATION="-1067;53;" ID="Arrow_ID_811903885" STARTARROW="None" STARTINCLINATION="325;54;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
 <node CREATED="1488674268407" ID="ID_284516869" MODIFIED="1518487921092" TEXT="Parameter">
@@ -37696,6 +37971,10 @@
 <node CREATED="1488937947004" ID="ID_1297081811" MODIFIED="1518487921092" TEXT="Schlu&#xdf;folgerung: nur die Strategie vorsehen">
 <icon BUILTIN="yes"/>
 </node>
+</node>
+<node CREATED="1618498875079" ID="ID_1822212049" MODIFIED="1618499095806" TEXT="Framework-Anforderungen beachten">
+<linktarget COLOR="#5c4052" DESTINATION="ID_1822212049" ENDARROW="Default" ENDINCLINATION="-834;0;" ID="Arrow_ID_1506237506" SOURCE="ID_420683622" STARTARROW="None" STARTINCLINATION="112;439;"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
@@ -39317,8 +39596,31 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616946803314" HGAP="-20" ID="ID_1642737972" MODIFIED="1616946817268" TEXT="System f&#xfc;r UI-Gesten" VSHIFT="13">
 <icon BUILTIN="hourglass"/>
-<node CREATED="1616946819438" ID="ID_752209156" MODIFIED="1616946829713" TEXT="Kontext-Zuordnung ist reiner UI-Belang">
+<node COLOR="#2b95af" CREATED="1616946819438" ID="ID_752209156" MODIFIED="1617979552380" TEXT="Kontext-Zuordnung ist reiner UI-Belang">
 <icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1617979322413" FOLDED="true" ID="ID_512298093" MODIFIED="1617979760982" TEXT="Gesten sollen im Lumiera-UI eine zentrale Rolle spielen">
+<icon BUILTIN="yes"/>
+<node CREATED="1617979344655" FOLDED="true" ID="ID_1851586839" MODIFIED="1617979758591" TEXT="deshalb wird die Grundstruktur im Projekt selber entwickelt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wir versuchen gar nicht erst, &#187;etwas Bestehendes zu nutzen&#171; &#8213; sondern wir machen <i>unser eigenes Ding.</i>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1617979579143" ID="ID_748564389" MODIFIED="1617979590729" TEXT="sp&#xe4;ter sollen Gesten-Frameworks mit integriert werden"/>
+<node CREATED="1617979591490" ID="ID_1553590368" MODIFIED="1617979602103" TEXT="aber nur insofern das einen Mehrwert bringt"/>
+<node CREATED="1617979616050" ID="ID_1797789056" LINK="https://developer.gnome.org/gtk3/stable/chap-input-handling.html#event-controllers-and-gestures" MODIFIED="1617979753210" TEXT="Beispiel: GTK Gesten-Controller">
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node CREATED="1617979423537" ID="ID_1042187795" MODIFIED="1617979467715" TEXT="Gesten sollen eine Zwischenschicht bilden &#x2015; oberhalb des konkreten Interaktions-Systems"/>
+<node CREATED="1617979477669" ID="ID_1946864730" MODIFIED="1617979494327" TEXT="die Koordination von Gesten darf nicht &#xfc;ber die Einzel-Widgets verstreut sein"/>
+<node CREATED="1617979495483" ID="ID_118392564" MODIFIED="1617979506317" TEXT="Gesten werden nach dem Muster eines Aussage-Satzes modelliert"/>
 </node>
 <node COLOR="#338800" CREATED="1616946831044" ID="ID_160240965" MODIFIED="1616946847970" TEXT="angelegt im GestureState (Service im InteractionDirector)">
 <icon BUILTIN="button_ok"/>
@@ -55146,14 +55448,14 @@
       jedoch indirekt dann auch f&#252;r darauf aufbauende Events, z.B. GTK-Events, weil eben nur noch das zum grabbed window geh&#246;rige Widgets diese Events &#252;berhaupt sieht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1617891887779" ID="ID_659611722" MODIFIED="1617891903519" TEXT="zuverl&#xe4;ssig beenden, sonst friert das gesamte Display ein">
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 <node CREATED="1617889752694" ID="ID_1346101076" MODIFIED="1617889805828" TEXT="GTK+ bietet zus&#xe4;tzlich ein &quot;grabbing widget&quot; (z.B. modale Dialogbox)">
+<linktarget COLOR="#6578a3" DESTINATION="ID_1346101076" ENDARROW="Default" ENDINCLINATION="-2521;108;" ID="Arrow_ID_1579913575" SOURCE="ID_1338391945" STARTARROW="None" STARTINCLINATION="-5109;432;"/>
 <node CREATED="1617889845780" ID="ID_786899199" LINK="https://www.linuxtopia.org/online_books/gui_toolkit_guides/gtk+_gnome_application_development/sec-gdkevent_2.html#SEC-GRABS" MODIFIED="1617889861555" TEXT="Linuxtopia: receiving GDK events in GTK+"/>
 <node CREATED="1617891663427" ID="ID_548825317" LINK="https://developer.gnome.org/gtk3/stable/gtk3-General.html#gtk-grab-add" MODIFIED="1617891680797" TEXT="gtk_grab_add(widget)"/>
 <node CREATED="1617891683600" ID="ID_546679257" MODIFIED="1617891717399" TEXT="das ist ein ziemlich starker Eingriff">
@@ -55162,6 +55464,13 @@
 <node CREATED="1617891777971" ID="ID_919159260" MODIFIED="1617891803969" TEXT="man mu&#xdf; es zuverl&#xe4;ssig beenden, sonst ist das UI praktisch tot">
 <icon BUILTIN="messagebox_warning"/>
 </node>
+</node>
+</node>
+</node>
+<node CREATED="1618067891301" ID="ID_1730673667" MODIFIED="1618067900500" TEXT="Gestures in GTK">
+<node CREATED="1618067902248" ID="ID_713192110" MODIFIED="1618067922572" TEXT="relatetd topic: Shortcuts">
+<node CREATED="1618067923908" ID="ID_989712509" MODIFIED="1618067928769" TEXT="GtkShortcutController">
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
@@ -56173,8 +56482,7 @@
       Coroutinen sind nicht <i>per se asynchron</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1617650606227" ID="ID_416722817" MODIFIED="1617650622874" TEXT="Coroutinen in C++20 sind ein low-level-Framework">
 <node CREATED="1617650631616" ID="ID_139816499" MODIFIED="1617650648065" TEXT="auf dieser Basis werden high-level Primitive geschaffen"/>
@@ -56190,8 +56498,7 @@
       welche dann jedoch stets aus einer Coroutine heraus per co_await aktiviert werden. Beispiel: ein lock-free mutex
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1617650754576" ID="ID_716091070" MODIFIED="1617650874465">
