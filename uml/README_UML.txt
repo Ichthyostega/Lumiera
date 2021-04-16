@@ -24,8 +24,13 @@ Umbrello:: from the KDE Software Collection.
 
 Umbrello
 ~~~~~~~~
-As of 11/2016, we abandon our existing BoUML model and start over from scratch, +
-using the version of Umbrello available from Debian/stable (`umbrello-4:4.14.2-1`)
+As of 11/2016, we abandon our existing BoUML model and start over from scratch.
+
+- we use the version of Umbrello available from Debian/stable (`umbrello-4:4.17.08.3-1`)
+- we use UML only occasionally as a drawing tool; there is no attempt to build "an UML model of Lumiera"
+- the diagrams and models can be found in 'uml/Lumiera.xmi'
+- typically we render into PNG images, which are _checked in to Git_
+- these can be found in 'doc/devel/uml', also symlinked as 'wiki/uml'
 
 
 BoUML
@@ -49,8 +54,8 @@ As a consequence, Bouml was dropped from Debian, since it relies on qt3.
 - we tracked all these bouml session files in our Git tree
 - *minor problems*
 
-  * the actual format is slightly dependent on the actual bouml version in use footnote:[as of
-    1/2015, we still use Version *`4.21`* of bouml, which is the Version found in Debian/Squeeze. It runs
+  * the actual format is slightly dependent on the actual bouml version in use footnote:[the last usable
+    Version as 1/2015 was *`4.21`* of bouml, which is the Version found in Debian/Squeeze. It runs
     without modification on Debian/Wheezy, but can no longer be used on Debian/Jessie]
   * and the layout of the rendered diagrams is unfortunatly _highly dependent on the installed fonts_.
   * for that reason, we checked any _relevant_ diagram images also into Git. See `doc/devel/uml`
