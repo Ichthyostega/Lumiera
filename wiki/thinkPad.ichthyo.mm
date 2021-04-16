@@ -32863,6 +32863,74 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618573848753" ID="ID_1175000803" MODIFIED="1618575118786" TEXT="Re-Design als State-Machine">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1618573871374" ID="ID_716003171" MODIFIED="1618574116896" TEXT="Ziel: Entwicklungspfad zur vollst&#xe4;ndigen L&#xf6;sung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Die Gesten-Controller sollen sp&#228;ter einmal Teile eines umfangreicheren Frameworks werden; im Besonderen wollen wir abstrahierte Gesten, die verschiedene Eingabesysteme &#252;bergreifen k&#246;nnen. F&#252;r dieses Ziel mu&#223; der konkrete Gesten-Controller soweit schematisiert sein, da&#223; man im Zuge der weiteren Entwicklung sich ergebende Erweiterungspunkte einf&#252;hren kann, auch in schon bestehende Implementierungen. Als naheliegendes Schema bietet sich die State-Machine an, da die Gesten-Erkennung auf theoretischer Ebene ohnehin ein (ggfs nichdeterministischer) FSA ist.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+<node CREATED="1618574127123" ID="ID_1684392869" MODIFIED="1618574459686" TEXT="hierarchische Gesten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        Multi-Touch<br />
+      </li>
+      <li>
+        Zusammensetzen einer komplexen Geste aus bereits implementierten Elementar-Gesten<br />
+      </li>
+      <li>
+        Einbinden eines bestehenden Gesten-Controller-Systems (z.B. in GTK) per Adapter
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1618574134031" ID="ID_448471388" MODIFIED="1618574349745" TEXT="konkurrierende Gesten erkennen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      einfachers Dragging mit der Maus? oder kommt zum Abschlu&#223; eine spezielle Taste? oder eine spezielle Mausgeste?
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1618574145104" ID="ID_1569426176" MODIFIED="1618574244273" TEXT="Gesten &#xfc;ber mehrere Eingabesysteme hinweg">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        Linke Hand: Hardware-Controller; Rechte Hand: Maus
+      </li>
+      <li>
+        Modus per Tastenkombination ausgel&#246;st; Geste dann per Maus oder Stift abgeschlossen
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618575194230" ID="ID_144431144" MODIFIED="1618575227970" TEXT="Planung: State-Machine f&#xfc;r Gesten">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 </node>
 </node>

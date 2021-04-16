@@ -2770,70 +2770,14 @@ In a typical editing application, the user can expect to get some visual clue re
 To start with, mostly this means to avoid a naive approach, like having code in the UI to pull in some graphics from media files. We certainly won't just render every media channel blindly. Rather, we acknowledge that we'll have a //strategy,// depending on the media content and some further parameters of the clip. This might well just be a single ''pivot image'' chosen explicitly by the editor to represent a given take. Seemingly, the proper place to hose that display strategy is ''within the session model'', not within the UI. And the actual implementation of content preview rendering will largely be postponed until we get our rendering engine into a roughly working state.
 </pre>
 </div>
-<div title="GuiCommandAccess" creator="Ichthyostega" modifier="Ichthyostega" created="201704131649" modified="201704171822" tags="spec draft GuiPattern GuiIntegration" changecount="22">
+<div title="GuiCommandAccess" creator="Ichthyostega" modifier="Ichthyostega" created="201704131649" modified="202104161548" tags="spec draft GuiPattern GuiIntegration" changecount="24">
 <pre>//how to access proc layer commands from the UI and to talk to the command framework//
 
-!Command access DSL
-{{red{WIP 4/2017}}} first rough draft of a framework for dealing with proc layer commands from within UI code
-{{{
-Symbol ADD_CLIP = CmdAccess::to (cmd::scope_addClip, INTO_FORK);
-prepareCommand (cmdAccess(ADD_CLIP).bind (scope(HERE), element(RECENT)))
-issueCommand (cmdAccess(ADD_CLIP).execute());
-}}}
-* access to commands is prepared by defining an instanceID as a local Symbol
-** here »instance« means a command instance, and the ID is formed by decorating the ID of the command definition
-** such an instance is visible and accessible from within a context, which is indicated by the second part of the ID
-** we use some standardised context designators
-**;~INTO_PROJECT
-**:operations working on the project, the project setup or configuration
-**;~INTO_SCOPE
-**:operations working on or adding something into whatever container is currently in focus
-**;~INTO_FORK
-**:operations especially working on tracks or media bins
-**;~INTO_BIN
-**:operations limited to asset management
-** beyond that, individual UI elements are always free to add their own, local context symbols&lt;br/&gt;the result of such is a command instance known and accessibly only to the element defining this context
-** we rely on a naming scheme for the command definitions.&lt;br/&gt;the expectation is for commands to be rather generic and adapt to the usage scope
-* the task of supplying or binding the command arguments can be automated to some degree
-** we use several standardised ''roles'' for the command arguments, 
-** so instead of explicit parameters, the binding can indicate //argument resolver expressions//
-**;scope(HERE)
-**:will be resolved to the scope right at or encompassing the [[Spot]] (&amp;rarr; InteractionControl)
-**;element(RECENT)
-**:the most recently touched object which is applicable for this argument
-**:* in the example this might be the last clip or media selected in the asset section
-**:* but another clip, which was copied to clipboard more recently will take precedence
-**:* but if the last action was a drag-n-drop, the binding will try to use the dropped element first
-* overall, these invocations generate messages for use on the UI-Bus. It is up to the client to issue them through some {{{BusTerm}}}&lt;br/&gt;in the example given, the code obviously is within the scope of a {{{model::Tangible}}}, allowing to use the  API {{{Tangible::prepareCommand()}}} and {{{Tangible::issueCommand()}}}
+!Usage patterns
+Most commands are simple; they correspond to some action to be performed within the session, and they are in a ''fire and forget'' style from within the widgets of the UI. For this simple case to work, all we need to know is the ''Command ID''. We can then issue a command invocation message over the UI-Bus, possibly supplying further command arguments.
 
-!Design Critique
-The above design for command access looked as a good idea -- at first sight. Yet on further investigation, it seems to miss the most common use case. Basically, we can identify three styles of usage for command bindings
-;fire and forget
-:trigger some action, maybe with well determined additional arguments, and not in any further relation to the context.
-:just do it and be done with it -- no framework whatever is required beyond the basic command ID
-;widget-local
-:some action is bound to incoming signals; everything of relevant is confined within that widget
-:while the arguments are in this case picked up from widget fields or sub widgets, again no further framework is necessary
-;context bound
-:this is the //sole case// where all the above mentioned complexities might make sense.
-:we should not dismiss this case, since in fact most known existing applications fall short in that very area
-
-Another point of contention is the duality between a command access framework and the UI-Bus. It turns out this is rooted in a fundamental conflict. The command system and by extension also a command access framework represents the classic »command and control« style API (to use a term coined by Martin Fowler). This kind of interface shines when used on top of a shared data or object model. Which is exactly the kind of architecture we shun, on a global level. It is fine when //confined within some subsystem,// yet creates a corroding tendency towards high coupling, when used on a global scale. For this reason, we introduced a message driven connection, and for the same reason, we should refrain from using the command and control structure as a second channel, bypassing the bus. //This is entirely an architectural decision// -- on the level of tracing actual calls, any message based connection looks overengineered, when compared to &quot;just invoke the f**cking function&quot;
-
-The ''conclusions'' drawn from this critique is to forego using the InvocationTrail, in favour of a plain command ID, and to simplify and automate the command instance management (&amp;rarr; GuiCommandCycle)
-
-!reworked DSL draft
-{{red{WIP 4/2017 unimplemented for the time being}}}
-{{{
-CmdContext::of (cmd::scope_addClip, INTO_FORK)
-          .activate ([&amp;](yes) { addClip.enabled (yes); });
-...
-this-&gt;invoke (cmd::scope_addClip, scope(HERE), element(RECENT))
-}}}
-* define a callback when the command becomes executable
-* {{red{TODO 4/2017}}} not clear how the InteractionState is able to figure out this is the case.&lt;br/&gt;probably need either binding rules or need to pre-bind the arguments
-* when actual invocation shall be triggered, use the //argument resolvers// to fill in the arguments&lt;br/&gt;these yield intermediary objects, which can be converted to LUID
-</pre>
+However, some actions within the UI are more elaborate, since they might span several widgets and need to pick up //contextual state//.
+Typically, those elaborate interactions can be modelled as [[generalised Gestures|GuiGesture]] -- in fact this means we model them like language sentences, with a ''Subject'', a ''Verb'' (action) and some additional qualifications. Since such a sentence requires some time to be spelled out, we have to collect InteractionState, up to the point where it is clear which command shall finally be issued, and in relation to what subject this command should act.</pre>
 </div>
 <div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201704140008" modified="201704140029" tags="design GuiPattern GuiIntegration discuss" changecount="8">
 <pre>The topic of command binding addresses the way to access, parametrise and issue [[»Steam-Layer Commands«|CommandHandling]] from within the UI structures.
@@ -2887,7 +2831,7 @@ This contrastive approach attempts to keep knowledge and definition clustered in
 &amp;rarr; CommandSetup
 </pre>
 </div>
-<div title="GuiCommandCycle" creator="Ichthyostega" modifier="Ichthyostega" created="201703031817" modified="201704171730" tags="design operational GuiPattern GuiIntegration draft discuss img" changecount="61">
+<div title="GuiCommandCycle" creator="Ichthyostega" modifier="Ichthyostega" created="201703031817" modified="202104161534" tags="design operational GuiPattern GuiIntegration draft discuss img" changecount="72">
 <pre>//the process of issuing a session command from the UI//
 Within the Lumiera UI, we distinguish between core concerns and the //local mechanics of the UI.// The latter is addressed in the usual way, based on a variation of the [[MVC-Pattern|http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller]]. The UI toolkit set, here the GTK, affords ample ways to express actions and reactions within this framework, where widgets in the presentation view are wired with the corresponding controllers vice versa (GTK terms these connections as //&quot;signals&quot;//, we rely on {{{libSigC++}}} for implementation).
 A naive approach would extend these mature mechanisms to also cover the actual functionality of the application. This compelling solution allows quickly to get &quot;something tangible&quot; up and running, yet -- on the long run -- inevitably leads to core concerns being tangled into the presentation layer, which in turn becomes hard to maintain and loaded with &quot;code behind&quot;. Since we are here &quot;for the long run&quot;, we immediately draw the distinction between UI mechanics and core concerns. The latter are, by decree and axiom, required to perform without even an UI layer running. This decision gives rise to the challenge how to form and integrate the invocation of ''core commands'' into the presentation layer.
@@ -2928,20 +2872,24 @@ from these use cases, we can derive the //crucial activities for command handlin
 *:invocation of a command is formed within a context, typically through a //interaction gesture.//
 *:most, if not all arguments of the command are picked up from the context, based on the current [[Spot]]
 *:* on setup of such an invocation context, the responsible part in the UI queries the {{{CmdContext}}} for an InteractionState
-*:* the latter in turn retrieves a new command instance ID from the {{{CmdInstanceManager}}} in Proc
-*:* and the latter keeps a smart-ptr corresponding to this instance in its internal registration table
-*:* within the UI, the InteractionState instance responsible for this context tracks state changes and keeps track of all command instances bound to this context
-*:* ~UI-Elements use the services of {{{CmdContext}}} to act as observer of state changes &amp;rarr; GuiCommandAccess
-*:* when a command is completely parametrised, it can be invoked. The managing {{{InteractionState}}} knows about this
-*:* on invocation, the ID of the instance and the fully resolved arguments are sent via UI-Bus to the {{{CmdInstanceManager}}}
-*:* which in turn removes the instance handle from its registration table and hands it over into the SteamDispatcher
-* in any case, only the {{{CmdInstanceManager}}} need to know about this actual command instance; there is no global registration
+*:* the latter exposes a //builder interface// to define the specifics of the //Binding.//
+*:* ...resulting in a concrete [[Gesture controllrer|GuiGesture]] to be configured and wired with the //anchor widget.//
+*:* Gesture controllers are a sprcific kind of InteractionState (implementation), which means using some kind of ''state machine'' to observe ongoing UI events, detect trigger conditions to start the formation of a Gesture, and finally, when the Gesture is complete, invoke the configured Command and supply the arguments from the invocation state and context information gathered during formation of the gesture.
+&amp;rarr; GuiCommandAccess
+
 [&lt;img[Access to Session Commands from UI|uml/Command-ui-access.png]]
-An immediate consequence is that command instances may be formed //per instance// of InteractionState. Each distinct kind of control system has its own instances, which are kept around, until they are ready for invocation. Each invocation &quot;burns&quot; an instance -- on next access, a new instance ID will be allocated, and the next command invocation cycle starts...
+
+
+
+
+
+
+
 
 Command instances are like prototypes -- thus each additional level of differentiation will create a clone copy and decorate the basic command ID. This is necessary, since the same command may be used and parametrised differently at various places in the UI. If necessary, the {{{CmdInstanceManager}}} internally maintains and tracks a prepared anonymous command instance within a local registration table. The //smart-handle//-nature of command instance is enough to keep concurrently existing instances apart; instances might be around for an extended period, because commands are enqueued with the SteamDispatcher.
 
-''command definition'':
+
+!command definition
 &amp;rarr; Command scripts are defined in translation units in {{{proc/cmd}}}
 &amp;rarr; They reside in the corresponding namespace, which is typically aliased as {{{cmd}}}
 &amp;rarr; definitions and usage include the common header {{{proc/cmd.hpp}}}
@@ -3311,6 +3259,14 @@ Especially when the component determines a placement of the //window// within it
 <pre>special LayerSeparationInterface which serves the main purpose to load the GuiStarterPlugin, thus bringing up the Lumiera GTK UI at application start.
 
 It is of no further relevance beyond management of subsystem lifecycle -- which in itself is treated in Lumiera as a mere implementation concern and is not accessible by general application logic. Thus, the UI is largely independent and will be actively accessing the other parts of the application, while these in turn need to go through the public UI façades, esp. the GuiNotificationFacade for any active access to the UI and presentation layer.</pre>
+</div>
+<div title="GuiGesture" creator="Ichthyostega" modifier="Ichthyostega" created="202104161556" modified="202104161605" tags="def GuiPattern draft" changecount="3">
+<pre>//A complex interaction within the UI, akin to a language sentence, to spell out some action to be performed within the context at hand//
+Contrary to a simple command, a gesture is not just triggered -- it will be formed rather, involving a coordinated usage of the ''input system'' (keyboard, mouse, pen, hardware controller), possibly even spanning the usage of several imput systems. Typical example would be the trimming or rolling of a clip within the timeline; such an adjustment could be achieved by various means, like e.g. dragging the mouse while pressing some modifier keys, or by a specific keyboard command, followed by usage of the cursor keys, or otherwise followed by usage of a shuttle wheel on a hardware controller.
+
+Within the Lumiera UI, conceptually we introduce an intermittent and cross-cutting level, the InteractionControl, to mediate between the actual widgets receiving UI events, and the commands to be issued via the UI-Bus to translate the user's interation into tangible changes within the session. This seemingly complex approach allows us to abstract from the concrete input system, and to allow for several gestures to achieve the same effect.
+&amp;rarr; InteractionState
+</pre>
 </div>
 <div title="GuiIntegration" modifier="Ichthyostega" created="200812050532" modified="201612021642" tags="overview" changecount="5">
 <pre>Considering how to interface to and integrate with the GUI Layer. Running the GUI is //optional,// but it requires to be [[started up|GuiStart]], installing the necessary LayerSeparationInterfaces. Probably the most important aspect regarding the GUI integration is how to get [[access to and operate|GuiConnection]] on the [[Session|SessionInterface]].
@@ -4151,7 +4107,7 @@ The InteractionDirector is part of the model, and thus we have to distinguish be
 The InteractionDirector interconnects various aspects of UI management and thus can be expected to exhibit cyclic dependencies on several levels. Bootstraping the InteractionDirector is thus a tricky procedure and requires all participating services to operate demand-driven. In fact, these services represent some aspects of the same whole -- the UI. They are bounded by thematic considerations, not so much implementation concerns, and many of them rely on their siblings actually provide some essential part of their service. For example, the Navigator exposes the UI as topological tree structure, while the ViewLocator encapsulates the concrete access paths towards specific kinds of UI entities (views, panels). Obviously, the Navigator needs the ViewLocator to build its tree abstraction on top. But, thematically, //resolving a view// is part of accessing and / or creating  some view, and thus the ViewLocator becomes indirectly dependent on the tree topology established by the Navigator.
 </pre>
 </div>
-<div title="InteractionState" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="201704171824" tags="def design GuiIntegration draft" changecount="9">
+<div title="InteractionState" creator="Ichthyostega" modifier="Ichthyostega" created="201511280402" modified="202104161552" tags="def design GuiIntegration draft" changecount="10">
 <pre>A facility within the GUI to// track and manage one specific aspect of interaction state.//
 In a more elaborate UI, as can be expected for such a task like editing, there are interactions beyond &quot;point and shot&quot;. For a fluid and natural interaction it is vital to build and exploit an operation context, so to guide and specify the ongoing operations. Interaction events can not be treated in isolation, but rather in spatial and temporal clusters known as ''gestures''. A good example is the intention to trim or roll an edit. Here the user has some clips in mind, which happen to be located in immediate succession, and the kind of adjustment has to be determined from the way the user approaches the junction point. To deal with such an interaction pattern, we need to track a possible future interpretation of the user's actions as a hypothesis, to be confirmed and executed when all pieces fall into place.
 
@@ -4165,7 +4121,8 @@ An InteractionState is a global component, but often not addressed directly. To 
 ! interaction state and the actual widgets
 InteractionControl is conceived as an additional intermediary layer, distinct from the actual widgets. The whole idea is that we //do not want// intricate state managing logic to be scattered all over the concrete UI widget code -- doing so would defeat any higher level structuring and turn the UI code into highly tangled very technical implementation logic; ideally, UI code should mostly be specification, setup and wiring, yet void of procedural logic.
 
-The actual widgets rely {{red{planned 4/2017}}} on the {{{CmdContext}}} to be notified when a specific command becomes executable &amp;rarr; GuiCommandAccess.
+The actual widgets rely on the {{{CmdContext}}} to as access point, to set up a binding with some elaborate interaction pattern or [[Gesture|GuiGesture]]; the implementation of such a Gesture typically acts like a ''state machine'' -- it observes UI events and eventually detects the formation of the specific gesture in question.
+[img[Access to Session Commands from UI|uml/Command-ui-access.png]]
 </pre>
 </div>
 <div title="InterfaceNamespaces" modifier="Ichthyostega" created="200708080338" modified="201003160209" tags="impl decision draft">
@@ -4200,13 +4157,21 @@ From experiences with other middle scale projects, I prefer having the test code
 [img[Example: Interfaces/Namespaces of the ~Session-Subsystems|uml/fig130053.png]]
 </pre>
 </div>
-<div title="InvocationTrail" creator="Ichthyostega" modifier="Ichthyostega" created="201512190210" modified="201704171619" tags="def GuiIntegration draft" changecount="13">
+<div title="InvocationTrail" creator="Ichthyostega" modifier="Ichthyostega" created="201512190210" modified="202104161302" tags="def GuiIntegration draft" changecount="16">
 <pre>//one specific way to prepare and issue a ~Steam-Layer-Command from the UI.//
 The actual persistent operations on the session model are defined through DSL scripts acting on the session interface, and configured as a //command prototype.// Typically these need to be enriched with at least the actual subject to invoke this command on; many commands require additional parameters, e.g. some time or colour value. These actual invocation parameters need to be picked up from UI elements, sometimes even from the context of the triggering event. When all arguments are known, finally the command -- as identified by a command-ID -- can be issued on any bus terminal, i.e. on any [[tangible interface element|UI-Element]].
 &amp;rarr; CommandInvocationAnalysis
 
-Thus an invocation trail represents one specific path leading to the invocation of a command. In the current state of the design, this is a concept; initially it was meant to exist as object, but this approach turned out to be unnecessarily complex. We can foresee that there will be the somewhat tricky situation, where a command is ''context-bound''. In those cases, we rely on the InteractionState helper, which is to track {{red{planned 4/2017}}} an enablement entry for each possible invocation trail. Basically this means that some commands need to be prepared and bound explicitly into some context (e.g. the tracks within a sequence), while enabling and parameter binding happens automatically, driven by interaction events.
+Thus an invocation trail represents one specific path leading to the invocation of a command. In the current state of the design ({{red{in late 2017}}}), this is a concept; initially it was meant to exist as object, but this approach turned out to be unnecessarily complex. We can foresee that there will be the somewhat tricky situation, where a command is ''context-bound''. In those cases, we rely on the InteractionState helper, which is to track {{red{planned 4/2017}}} an enablement entry for each possible invocation trail. Basically this means that some commands need to be prepared and bound explicitly into some context (e.g. the tracks within a sequence), while enabling and parameter binding happens automatically, driven by interaction events.
 &amp;rarr; InteractionControl
+
+!further evolution of this concept {{red{WIP 2021}}}
+* it was coined 2015-2017, with the intention to represent it as actual stateful object
+* late in 2017, this design was ''postponed'' -- more or less abandoned -- since it is unable to represent the simple case in a simple way
+* in spring 2021, after successfully building the backbone for [[Timeline display|GuiTimelineWidgetStructure]], an initial draft for [[dragging a clip|ClipRelocateDrag]] is on the agenda {{red{WIP 4/21}}}
+* at that point {{red{in 4/21}}}, handling of [[Gestures within the UI|GuiGesture]] is reconsidered, leaning towards a system of hierarchical controllers
+* //it is conceivable// that the idea of an InvocationTrail might be reinstated as a //generalised hierarchical gesture controller.//
+''Note'': {{red{future plans and visions -- no clear and distinct meaning -- as of 4/21}}}
 </pre>
 </div>
 <div title="JobTicket" modifier="Ichthyostega" created="201202120018" modified="201208311625" tags="spec Rendering draft">
