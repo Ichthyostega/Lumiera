@@ -94,7 +94,9 @@ namespace interact {
         virtual ~Subject();  ///< this is an interface
         
     public:
-        virtual Gtk::Widget& exposeWidget()    =0;
+        virtual Gtk::Widget& exposeWidget()                                       =0;
+        virtual void fireGesture (Symbol cmdID)                                   =0;
+        virtual void gestureOffset (Symbol cmdID, gdouble deltaX, gdouble deltaY) =0;
     };
   
   

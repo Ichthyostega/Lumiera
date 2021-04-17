@@ -50,8 +50,8 @@
 #include "stage/gtk-base.hpp"
 #include "stage/interact/interaction-state.hpp"
 #include "stage/interact/cmd-context.hpp"
-#include "lib/format-string.hpp"
-#include "lib/format-cout.hpp"
+#include "lib/format-string.hpp"//////////////////////////////////TODO
+#include "lib/format-cout.hpp"  //////////////////////////////////TODO
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/symbol.hpp"
 #include "lib/nocopy.hpp"
@@ -67,7 +67,7 @@ namespace interact {
 //  using util::isnil;
 //  using std::string;
   using util::isnil;
-  using util::_Fmt;
+  using util::_Fmt;//////////////////////////////////TODO
   
 
   
@@ -82,6 +82,8 @@ namespace interact {
    * controller.
    * 
    * @todo write type comment...
+   * @remarks tracking of signal connections _is not relevant here,_ since this controller
+   *     is managed by the UI backbone and thus ensured to outlive any event processing.
    * @todo WIP-WIP as of /3/2021
    * ///////////////////////////////////TODO do we need a translation unit interaction-state.cpp (otherwise delete it!)
    */
@@ -89,6 +91,11 @@ namespace interact {
     : public InteractionState
     {
       bool buttonPressed_ = false;
+      Symbol cmdID_ = Symbol::BOTTOM;
+      Subject* subject_ = nullptr;
+      bool isInFormation_ = false;
+      gdouble anchorX_ = 0.0;
+      gdouble anchorY_ = 0.0;
       
       void
       linkTrigger (Subject& subject, Symbol cmdID)  override
@@ -100,9 +107,9 @@ namespace interact {
           widget.signal_button_release_event().connect(
               sigc::mem_fun (*this, &DragRelocateController::watchButton));
           widget.signal_motion_notify_event().connect(
-              [&](GdkEventMotion* motion) -> bool
+              [&, cmdID](GdkEventMotion* motion) -> bool
                 {
-                  try{ return detectActivation(subject, motion); }
+                  try{ return maybeActivate(cmdID, subject, motion); }
                   ON_EXCEPTION_RETURN (false, "activate dragging gesture")
                 }
           );
@@ -116,22 +123,77 @@ namespace interact {
             buttonPressed_ = true;
           else
           if (button_event->type & GDK_BUTTON_RELEASE)
-            buttonPressed_ = true;
+            buttonPressed_ = false;
           return false;
         }
       
+      /** Gesture detection state logic */
       bool
-      detectActivation (Subject& subject, GdkEventMotion* motion_event)
+      maybeActivate (Symbol cmdID, Subject& subject, GdkEventMotion* motion_event)
         {
           if (not buttonPressed_)
-            return false;
+            {
+              if (isActive())
+                doCompleteGesture();
+              return false; // Event not handled by this controller
+            }
           REQUIRE (motion_event);
           std::cerr << _Fmt{"MOVE x=%3.1f y=%3.1f subject=%s"}
                        % motion_event->x
                        % motion_event->y
                        % subject
                     << std::endl;
+          if (not isAnchored())
+            anchor (cmdID, subject, motion_event);
+          if (not isActive())
+            return false;
+          doTrackGesture(motion_event);
           return true; // Event handled
+        }
+      
+      
+      /* === gesture implementation === */
+      bool
+      isActive()
+        {
+          return subject_
+             and isInFormation_;
+        }
+      
+      bool
+      isAnchored()
+        {
+          return bool{subject_};
+        }
+      
+      void
+      anchor (Symbol cmdID, Subject& subject, GdkEventMotion* motion_event)
+        {
+          REQUIRE (motion_event);
+          this->cmdID_   = cmdID;
+          this->subject_ = & subject;
+          this->anchorX_ = motion_event->x;
+          this->anchorY_ = motion_event->y;
+        }
+      
+      void
+      doTrackGesture (GdkEventMotion* motion_event)
+        {
+          REQUIRE (motion_event);
+          gdouble deltaX = motion_event->x - this->anchorX_;
+          gdouble deltaY = motion_event->y - this->anchorY_;
+          // notify Subject to feed current delta
+          subject_->gestureOffset (cmdID_, deltaX, deltaY);
+        }
+      
+      void
+      doCompleteGesture()
+        {
+          subject_->fireGesture (cmdID_);
+          // return to inactive state
+          cmdID_   = Symbol::BOTTOM;
+          subject_ = nullptr;
+          anchorX_ = anchorY_ = 0.0;
         }
       
       

@@ -36,11 +36,13 @@
 
 //#include "lib/util.hpp"
 //#include "lib/symbol.hpp"
+#include "stage/gtk-base.hpp"
 #include "lib/depend.hpp"
 //#include "include/logging.h"
 #include "include/ui-protocol.hpp"
 #include "stage/interact/cmd-context.hpp"
 #include "stage/interact/gesture-state.hpp"
+#include "lib/format-string.hpp"
 
 //#include <string>
 //#include <map>
@@ -50,9 +52,11 @@
 
 //using util::contains;
 //using util::isnil;
+using util::_Fmt;
 
 namespace stage {
 namespace interact {
+  namespace error = lumiera::error;
   
   namespace { // internal details
     lib::Depend<GestureState> gestures;
@@ -62,6 +66,8 @@ namespace interact {
     {
       if ( GESTURE_dragReolcate == ctxID)
         return gestures().getStateFor (GestureState::DRAG, GestureState::ON_TIMELINE);
+      throw error::Config (_Fmt{"Unknown Context-ID '%s' encountered in Gesture wiring."}
+                               % ctxID);
     }
   } // internal details
   
@@ -95,6 +101,7 @@ namespace interact {
    * @remarks this service is used to resolve command arguments
    *  based on the current state of UI interaction. This can be used
    *  to get e.g. the scope enclosing the element currently in focus
+   * @todo 4/21 this was an idea from the initial draft in 2017 -- undecided yet
    */
   CmdContext::Resolver::operator LuidH ()
   {

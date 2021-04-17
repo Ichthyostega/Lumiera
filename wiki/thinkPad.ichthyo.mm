@@ -5773,7 +5773,33 @@
 </node>
 </node>
 <node CREATED="1537659082073" ID="ID_986070389" MODIFIED="1557498707218" TEXT="Schema">
-<node CREATED="1537659311850" ID="ID_741254991" MODIFIED="1557498707218" TEXT="Struktur"/>
+<node CREATED="1618677634680" ID="ID_1029801853" MODIFIED="1618677651554" TEXT="Konventionen">
+<font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1618677661972" ID="ID_1188964744" MODIFIED="1618677666928" TEXT="GTK-Datentypen">
+<node CREATED="1618677671271" ID="ID_1068107778" MODIFIED="1618677684903" TEXT="Unterscheidung Framework-nah">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1618677686257" ID="ID_144011796" MODIFIED="1618677697439" TEXT="Framework-naher Code verwendet GTK-Datentypen">
+<node CREATED="1618677785956" ID="ID_472749737" MODIFIED="1618677813236" TEXT="GString f&#xfc;r UI-Labels"/>
+<node CREATED="1618677813944" ID="ID_389115801" MODIFIED="1618678210573" TEXT="gdouble f&#xfc;r Screen-Koordinaten">
+<linktarget COLOR="#798bb0" DESTINATION="ID_389115801" ENDARROW="Default" ENDINCLINATION="1665;148;" ID="Arrow_ID_267819706" SOURCE="ID_1287724015" STARTARROW="None" STARTINCLINATION="2440;141;"/>
+</node>
+</node>
+<node CREATED="1618677699359" ID="ID_1890482479" MODIFIED="1618677716892" TEXT="Aber: GObject ist zu vermeiden wannimmer m&#xf6;glich">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1618677723026" ID="ID_910079217" MODIFIED="1618677755632" TEXT="keine Sprache &#xfc;ber der Sprache schaffen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1618677765275" ID="ID_1013650167" MODIFIED="1618677775137" TEXT="die Ausdrucksmittel von C++ sind gut genug"/>
+</node>
+</node>
+</node>
+<node CREATED="1537659311850" ID="ID_741254991" MODIFIED="1557498707218" TEXT="Struktur">
+<node CREATED="1618677865801" ID="ID_708518061" MODIFIED="1618678028294" TEXT="Innere Struktur: Struktur-Schemata">
+<arrowlink COLOR="#86889b" DESTINATION="ID_974158229" ENDARROW="Default" ENDINCLINATION="-381;-944;" ID="Arrow_ID_1816207037" STARTARROW="None" STARTINCLINATION="1299;101;"/>
+</node>
+</node>
 <node CREATED="1537659316321" ID="ID_1046162234" MODIFIED="1557498707218" TEXT="Style">
 <node CREATED="1537660235757" ID="ID_1679504678" MODIFIED="1557498707218" TEXT="Leitlinie">
 <node CREATED="1537660241420" ID="ID_1559839657" MODIFIED="1557498707218" TEXT="m&#xf6;glichst generisch belassen"/>
@@ -6907,7 +6933,7 @@
 </node>
 </node>
 <node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1504393149140" HGAP="38" ID="ID_48107354" MODIFIED="1561827464745" TEXT="Addressierung" VSHIFT="55">
-<arrowlink COLOR="#4f5d91" DESTINATION="ID_974158229" ENDARROW="Default" ENDINCLINATION="383;-2505;" ID="Arrow_ID_1832380552" STARTARROW="None" STARTINCLINATION="-597;127;"/>
+<arrowlink COLOR="#4f5d91" DESTINATION="ID_974158229" ENDARROW="Default" ENDINCLINATION="383;-2505;" ID="Arrow_ID_1832380552" STARTARROW="None" STARTINCLINATION="-730;103;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1504393160466" ID="ID_450547493" MODIFIED="1541547317746" TEXT="globales Addre&#xdf;-Schema">
@@ -31975,7 +32001,7 @@
   </head>
   <body>
     <p>
-      geh&#246;rt er nun dem Layout-Manager, oder geh&#246;rt er der Geste?
+      geh&#246;rt diese nun dem Layout-Manager, oder geh&#246;rt er der Geste?
     </p>
   </body>
 </html></richcontent>
@@ -32527,8 +32553,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617377754742" ID="ID_1574394085" MODIFIED="1617471528060" TEXT="linkSubject im konkreten Controller">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1617377754742" ID="ID_1574394085" MODIFIED="1618681141799" TEXT="linkSubject im konkreten Controller">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1617377734341" ID="ID_1697355210" MODIFIED="1617568263119" TEXT="Widget-Signal-Binding anlegen">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1617471221445" ID="ID_1213832173" MODIFIED="1617471225697" TEXT="Exceptions fangen">
@@ -32564,13 +32590,13 @@
 </node>
 <node CREATED="1617459659278" ID="ID_976541024" LINK="#ID_230224690" MODIFIED="1617459721740" TEXT="kann also bequem ein Lambda verwenden..."/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617377798336" ID="ID_1680080732" MODIFIED="1617377807908" TEXT="Signal-Callbacks anlegen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1617377798336" ID="ID_1680080732" MODIFIED="1618681140125" TEXT="Signal-Callbacks anlegen">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1617471204921" ID="ID_1381735452" MODIFIED="1617471216758" TEXT="Vorl&#xe4;ufie Implementierung: Button-Click">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617471543992" ID="ID_1461453973" MODIFIED="1617471552073" TEXT="auch noch die CommandID mit binden">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1617471543992" ID="ID_1461453973" MODIFIED="1618681138718" TEXT="auch noch die CommandID mit binden">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -32846,6 +32872,94 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618672697029" ID="ID_1737377416" MODIFIED="1618672706489" TEXT="Verfolgung und Pos-Updates">
+<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1618675384464" ID="ID_381912051" MODIFIED="1618675399330" TEXT="Zustandslogik der Gesten-Erkennung selber">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618672711536" ID="ID_1916597982" MODIFIED="1618672719742" TEXT="Verbindung zum Canvas herstellen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618672732077" ID="ID_949915263" MODIFIED="1618672739781" TEXT="Logik zur Positions-&#xdc;bersetzung">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1618676950908" ID="ID_69237451" MODIFIED="1618677116146" TEXT="hier deutet sich ein mehrstufiger Ansatz an">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Demnach w&#228;re die &#220;bersetzung von Pixel-Koordinaten in <i>irgend etwas modell-Releavantes</i>&#160;komplet in das Subject eingekapselt; der Gesten-Controller w&#252;rde dann einen Screen-relativen Offset aggregieren. Aber auf der zweiten Stufe bleiben wir bei dem Ansatz, da&#223; die Geste direkt das Modell manipuliert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1618676975232" ID="ID_196334292" MODIFIED="1618677288680" TEXT="es erscheint vorl&#xe4;ufig sinnvoll, dieser Richtung zu Folgen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...Auch wenn ich ein ungutes Bauchgef&#252;hl habe, alle Argumente sprechen im Moment daf&#252;r, diesem Hinweis zu folgen und das Design in dieser Richtung auszubauen. Im Besonderen w&#252;rde n&#228;mlich ein konsequentes Umsetzen meines urspr&#252;nglichen Konzepts bedeuten, da&#223; das Subject-Interface etwas von der Metrik im Modell, und im Besonderen von eine Zeit-Parameter wissen m&#252;&#223;te &#8213; es ist aber absehbar, da&#223; in anderen Situationen g&#228;nzlich andere Parameter relevant sein k&#246;nnten ... man denke blo&#223; an die &quot;Position im Fork&quot;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1618672754370" ID="ID_1707555267" MODIFIED="1618678693304" TEXT="Deta ermitteln und speichern">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1618677375507" ID="ID_1988208665" MODIFIED="1618677380678" TEXT="Frage: in welchem Typ">
+<node CREATED="1618677381682" ID="ID_1297330759" MODIFIED="1618677391341" TEXT="GTK f&#xfc;hrt hier einen &quot;gdouble&quot; ein"/>
+<node CREATED="1618677393499" ID="ID_1949606460" MODIFIED="1618677453343" TEXT="Grund ist Portabilit&#xe4;t">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>(gtypes.h)</u>: Provide type definitions for commonly used types.
+    </p>
+    <p>
+      These are useful because a &quot;gint8&quot; can be adjusted &#160;to be 1 byte (8 bits) on all platforms. Similarly and more importantly, &quot;gint32&quot; can be adjusted to be&#160;4 bytes (32 bits) on all platforms.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1618677455637" ID="ID_1287724015" MODIFIED="1618678210573" TEXT="Beschlu&#xdf;: Pixel-Koordinaten bleiben in gdouble">
+<arrowlink COLOR="#798bb0" DESTINATION="ID_389115801" ENDARROW="Default" ENDINCLINATION="1665;148;" ID="Arrow_ID_267819706" STARTARROW="None" STARTINCLINATION="2440;141;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1618680945551" HGAP="87" ID="ID_1888024059" MODIFIED="1618680976094" TEXT="Problem: erfordert GTK-Include" VSHIFT="10">
+<edge COLOR="#ef844b"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1618680980802" ID="ID_1858177352" MODIFIED="1618680998860" TEXT="zumindest f&#xfc;r den CmdContext_test ist das ein Problem"/>
+</node>
+</node>
+</node>
+<node CREATED="1618678631049" ID="ID_416362140" MODIFIED="1618678643480" TEXT="Delta wird gar nicht gespeichert"/>
+<node CREATED="1618678644600" ID="ID_246060471" MODIFIED="1618678652922" TEXT="Delta wird on-the-fly errechnet"/>
+<node CREATED="1618678668124" ID="ID_284887160" MODIFIED="1618678688381" TEXT="Konsequenz: Scroll-Adjustment mu&#xdf; &quot;downstream&quot; erfolgen">
+<icon BUILTIN="bell"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618672778615" ID="ID_623020020" MODIFIED="1618681177621" TEXT="Position aktualisieren">
+<icon BUILTIN="pencil"/>
+<node CREATED="1618681116488" ID="ID_1434451478" MODIFIED="1618681123602" TEXT="Daten an das Subject weitergeben"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1618681157532" ID="ID_905364501" MODIFIED="1618681248572" TEXT="Gestenerkennungs-Logik funktioniert noch nicht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sehe nur die MOVE-Meldungen.<br />eigentlich sollte das Subject ebenfalls Meldungen ausspucken
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
 </node>
 </node>
 </node>
@@ -33156,8 +33270,9 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#3a8df0" DESTINATION="ID_1618124128" ENDARROW="Default" ENDINCLINATION="-25;-262;" ID="Arrow_ID_539627804" STARTARROW="Default" STARTINCLINATION="-2;35;"/>
-<node CREATED="1523019258000" HGAP="-51" ID="ID_974158229" MODIFIED="1557498707234" TEXT="Struktur-Schemata" VSHIFT="-16">
-<linktarget COLOR="#4f5d91" DESTINATION="ID_974158229" ENDARROW="Default" ENDINCLINATION="383;-2505;" ID="Arrow_ID_1832380552" SOURCE="ID_48107354" STARTARROW="None" STARTINCLINATION="-597;127;"/>
+<node CREATED="1523019258000" HGAP="-51" ID="ID_974158229" MODIFIED="1618678028294" TEXT="Struktur-Schemata" VSHIFT="-16">
+<linktarget COLOR="#4f5d91" DESTINATION="ID_974158229" ENDARROW="Default" ENDINCLINATION="383;-2505;" ID="Arrow_ID_1832380552" SOURCE="ID_48107354" STARTARROW="None" STARTINCLINATION="-730;103;"/>
+<linktarget COLOR="#86889b" DESTINATION="ID_974158229" ENDARROW="Default" ENDINCLINATION="-381;-944;" ID="Arrow_ID_1816207037" SOURCE="ID_708518061" STARTARROW="None" STARTINCLINATION="1299;101;"/>
 <font NAME="SansSerif" SIZE="14"/>
 <node CREATED="1523019333461" ID="ID_631113825" MODIFIED="1557498707234" TEXT="UI-Element - Hierarchie">
 <node CREATED="1523019501198" ID="ID_531041967" MODIFIED="1557498707234" TEXT="Systematisches UI-Modell">
