@@ -236,7 +236,7 @@ namespace timeline {
         }
       
       void
-      gestureOffset (Symbol cmdID, gdouble deltaX, gdouble deltaY)  override
+      gestureOffset (Symbol cmdID, double deltaX, double deltaY)  override
         {
           std::cerr << _Fmt{"Gesture(%s) --> Δ := (%3.1f,%3.1f)"}
                            % cmdID

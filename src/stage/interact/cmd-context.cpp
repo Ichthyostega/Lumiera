@@ -36,7 +36,6 @@
 
 //#include "lib/util.hpp"
 //#include "lib/symbol.hpp"
-#include "stage/gtk-base.hpp"
 #include "lib/depend.hpp"
 //#include "include/logging.h"
 #include "include/ui-protocol.hpp"

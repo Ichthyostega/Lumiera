@@ -69,6 +69,9 @@ namespace interact {
   using util::isnil;
   using util::_Fmt;//////////////////////////////////TODO
   
+  namespace {
+    const gdouble DISTANCE_THRESHOLD = 5.0;
+  }
 
   
   /**
@@ -82,8 +85,13 @@ namespace interact {
    * controller.
    * 
    * @todo write type comment...
-   * @remarks tracking of signal connections _is not relevant here,_ since this controller
-   *     is managed by the UI backbone and thus ensured to outlive any event processing.
+   * @remarks
+   *     - tracking of signal connections _is not relevant here,_ since this controller
+   *       is managed by the UI backbone and thus ensured to outlive any event processing.
+   *     - this concrete controller handles _all_ drag-relocate gestures for all widgets
+   *     - the actual Subject (widget) and command are bound into the signal wiring
+   *     - whenever a new gesture possibly starts, we pick up these arguments and
+   *       store them into the current gesture state within this object's fields.
    * @todo WIP-WIP as of /3/2021
    * ///////////////////////////////////TODO do we need a translation unit interaction-state.cpp (otherwise delete it!)
    */
@@ -119,11 +127,17 @@ namespace interact {
       watchButton (GdkEventButton* button_event)  noexcept
         {
           REQUIRE (button_event);
-          if (button_event->type & GDK_BUTTON_PRESS)
+          if (GDK_BUTTON_PRESS == button_event->type)
             buttonPressed_ = true;
           else
-          if (button_event->type & GDK_BUTTON_RELEASE)
-            buttonPressed_ = false;
+          if (GDK_BUTTON_RELEASE == button_event->type)
+            {
+              buttonPressed_ = false;
+              if (isActive())
+                doCompleteGesture();
+              resetState();
+            }
+          std::cerr << _Fmt{"BUTT %s flag=%d"} % buttonPressed_ % button_event->type << std::endl;
           return false;
         }
       
@@ -132,11 +146,7 @@ namespace interact {
       maybeActivate (Symbol cmdID, Subject& subject, GdkEventMotion* motion_event)
         {
           if (not buttonPressed_)
-            {
-              if (isActive())
-                doCompleteGesture();
               return false; // Event not handled by this controller
-            }
           REQUIRE (motion_event);
           std::cerr << _Fmt{"MOVE x=%3.1f y=%3.1f subject=%s"}
                        % motion_event->x
@@ -146,9 +156,15 @@ namespace interact {
           if (not isAnchored())
             anchor (cmdID, subject, motion_event);
           if (not isActive())
-            return false;
-          doTrackGesture(motion_event);
-          return true; // Event handled
+            {
+              probeActivation (motion_event);
+              return false;
+            }
+          else
+            {
+              doTrackGesture (motion_event);
+              return true; // Event handled
+            }
         }
       
       
@@ -174,6 +190,18 @@ namespace interact {
           this->subject_ = & subject;
           this->anchorX_ = motion_event->x;
           this->anchorY_ = motion_event->y;
+          std::cerr << _Fmt{"ANCHOR at x=%3.1f y=%3.1f ('%s')"}
+                           % anchorX_
+                           % anchorY_
+                           % cmdID_
+                    << std::endl;
+        }
+      
+      void
+      probeActivation (GdkEventMotion* motion_event)
+        {
+          isInFormation_ = DISTANCE_THRESHOLD < abs (motion_event->x - anchorX_)
+                        or DISTANCE_THRESHOLD < abs (motion_event->y - anchorY_);
         }
       
       void
@@ -190,10 +218,15 @@ namespace interact {
       doCompleteGesture()
         {
           subject_->fireGesture (cmdID_);
-          // return to inactive state
+        }
+      
+      void
+      resetState()
+        {
+          isInFormation_ = false;
           cmdID_   = Symbol::BOTTOM;
-          subject_ = nullptr;
           anchorX_ = anchorY_ = 0.0;
+          subject_ = nullptr;
         }
       
       

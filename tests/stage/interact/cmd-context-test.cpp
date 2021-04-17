@@ -29,7 +29,6 @@
 
 #include "lib/test/run.hpp"
 //#include "lib/test/test-helper.hpp"
-typedef double  gdouble;  ////////////////////TODO this is a code smell. Test Code should not depend on GTK. Problem is the usage of gdouble for Screen coordinates in cmdt-context.hpp
 #include "stage/interact/cmd-context.hpp"
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/diff/gen-node.hpp"

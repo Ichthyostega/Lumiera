@@ -32802,8 +32802,8 @@
 <node CREATED="1617912289933" ID="ID_1605333590" MODIFIED="1617912313582" TEXT="dieser bleibt bestehen bis GdkEventButtonRelease"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617913164868" ID="ID_113135132" MODIFIED="1617919660564" TEXT="einzurichten">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1617913164868" ID="ID_113135132" MODIFIED="1618690916629" TEXT="einzurichten">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1617913214193" ID="ID_51699428" MODIFIED="1617919672112" TEXT="state flags">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -32826,21 +32826,22 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617913205146" ID="ID_1972128766" MODIFIED="1617919747441" TEXT="Callback f&#xfc;r Motion-Events">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1617913205146" ID="ID_1972128766" MODIFIED="1618690918521" TEXT="Callback f&#xfc;r Motion-Events">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1617919712790" ID="ID_886546906" MODIFIED="1617919741084" TEXT="sehe hier die Motion-Events">
 <icon BUILTIN="idea"/>
 </node>
 <node COLOR="#338800" CREATED="1617919725773" ID="ID_309690589" MODIFIED="1617919738379" TEXT="implicit grab funktioniert">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618499488724" ID="ID_1241205333" MODIFIED="1618499503562" TEXT="Basis schaffen f&#xfc;r eine Hysterese">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1618499488724" ID="ID_1241205333" MODIFIED="1618690930013" TEXT="Basis schaffen f&#xfc;r eine Hysterese">
+<linktarget COLOR="#22d66c" DESTINATION="ID_1241205333" ENDARROW="Default" ENDINCLINATION="35;105;" ID="Arrow_ID_1887863096" SOURCE="ID_1184207694" STARTARROW="None" STARTINCLINATION="348;20;"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1618499514672" ID="ID_934736120" MODIFIED="1618499526802" TEXT="nicht jede minimale Bewegung soll eine Dragging-Geste ausl&#xf6;sen">
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618499530732" ID="ID_1305245635" MODIFIED="1618499549200" TEXT="das bedeutet: Gestenerkennung vorl&#xe4;ufig beginnen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1618499530732" ID="ID_1305245635" MODIFIED="1618690910469" TEXT="das bedeutet: Gestenerkennung vorl&#xe4;ufig beginnen">
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
@@ -32876,7 +32877,7 @@
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618672697029" ID="ID_1737377416" MODIFIED="1618672706489" TEXT="Verfolgung und Pos-Updates">
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1618675384464" ID="ID_381912051" MODIFIED="1618675399330" TEXT="Zustandslogik der Gesten-Erkennung selber">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -32932,10 +32933,16 @@
 <node CREATED="1618677455637" ID="ID_1287724015" MODIFIED="1618678210573" TEXT="Beschlu&#xdf;: Pixel-Koordinaten bleiben in gdouble">
 <arrowlink COLOR="#798bb0" DESTINATION="ID_389115801" ENDARROW="Default" ENDINCLINATION="1665;148;" ID="Arrow_ID_267819706" STARTARROW="None" STARTINCLINATION="2440;141;"/>
 <icon BUILTIN="yes"/>
-<node CREATED="1618680945551" HGAP="87" ID="ID_1888024059" MODIFIED="1618680976094" TEXT="Problem: erfordert GTK-Include" VSHIFT="10">
+<node COLOR="#435e98" CREATED="1618680945551" FOLDED="true" HGAP="87" ID="ID_1888024059" MODIFIED="1618691004190" TEXT="Problem: erfordert GTK-Include" VSHIFT="10">
 <edge COLOR="#ef844b"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1618680980802" ID="ID_1858177352" MODIFIED="1618680998860" TEXT="zumindest f&#xfc;r den CmdContext_test ist das ein Problem"/>
+<node COLOR="#435e98" CREATED="1618690973298" ID="ID_37829159" MODIFIED="1618690986175" TEXT="daher: nicht auf das Subject-Interface">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1618690987320" ID="ID_1868741682" MODIFIED="1618690998458" TEXT="nur f&#xfc;r framework-nahen-Code">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 </node>
@@ -32948,7 +32955,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618672778615" ID="ID_623020020" MODIFIED="1618681177621" TEXT="Position aktualisieren">
 <icon BUILTIN="pencil"/>
 <node CREATED="1618681116488" ID="ID_1434451478" MODIFIED="1618681123602" TEXT="Daten an das Subject weitergeben"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1618681157532" ID="ID_905364501" MODIFIED="1618681248572" TEXT="Gestenerkennungs-Logik funktioniert noch nicht">
+<node COLOR="#435e98" CREATED="1618681157532" ID="ID_905364501" MODIFIED="1618690878227" TEXT="Gestenerkennungs-Logik funktioniert noch nicht">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -32957,9 +32964,36 @@
     <p>
       sehe nur die MOVE-Meldungen.<br />eigentlich sollte das Subject ebenfalls Meldungen ausspucken
     </p>
+    <p>
+      
+    </p>
+    <p>
+      &#10233; mehrere Gr&#252;nde...<br />
+    </p>
+    <ul>
+      <li>
+        bekomme &#252;berhaupt kein motion_event, wenn kein Button gedr&#252;ckt ist. Liegt das daran, da&#223; ich ein Button-Widget zum Testen verwende??
+      </li>
+      <li>
+        unabh&#228;ngig davon war die Logik auch sonst kaputt. Die Flag isInFormation_ wurde nicht gesetetzt
+      </li>
+    </ul>
   </body>
 </html></richcontent>
 <icon BUILTIN="broken-line"/>
+</node>
+<node COLOR="#338800" CREATED="1618690884114" ID="ID_1184207694" MODIFIED="1618690935797" TEXT="Logik jetzt repariert und Hysterese eingebaut">
+<arrowlink COLOR="#22d66c" DESTINATION="ID_1241205333" ENDARROW="Default" ENDINCLINATION="35;105;" ID="Arrow_ID_1887863096" STARTARROW="None" STARTINCLINATION="348;20;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618691013997" ID="ID_429908834" MODIFIED="1618691021757" TEXT="Delta an das Subject weitergeben">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618691023427" ID="ID_1396949384" MODIFIED="1618691041225" TEXT="im Subject in Modell-Koordinaten transformieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618691042073" ID="ID_1909659922" MODIFIED="1618691048993" TEXT="tats&#xe4;chlich im Canvas verschieben">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
@@ -33271,8 +33305,8 @@
 </html></richcontent>
 <arrowlink COLOR="#3a8df0" DESTINATION="ID_1618124128" ENDARROW="Default" ENDINCLINATION="-25;-262;" ID="Arrow_ID_539627804" STARTARROW="Default" STARTINCLINATION="-2;35;"/>
 <node CREATED="1523019258000" HGAP="-51" ID="ID_974158229" MODIFIED="1618678028294" TEXT="Struktur-Schemata" VSHIFT="-16">
-<linktarget COLOR="#4f5d91" DESTINATION="ID_974158229" ENDARROW="Default" ENDINCLINATION="383;-2505;" ID="Arrow_ID_1832380552" SOURCE="ID_48107354" STARTARROW="None" STARTINCLINATION="-730;103;"/>
 <linktarget COLOR="#86889b" DESTINATION="ID_974158229" ENDARROW="Default" ENDINCLINATION="-381;-944;" ID="Arrow_ID_1816207037" SOURCE="ID_708518061" STARTARROW="None" STARTINCLINATION="1299;101;"/>
+<linktarget COLOR="#4f5d91" DESTINATION="ID_974158229" ENDARROW="Default" ENDINCLINATION="383;-2505;" ID="Arrow_ID_1832380552" SOURCE="ID_48107354" STARTARROW="None" STARTINCLINATION="-730;103;"/>
 <font NAME="SansSerif" SIZE="14"/>
 <node CREATED="1523019333461" ID="ID_631113825" MODIFIED="1557498707234" TEXT="UI-Element - Hierarchie">
 <node CREATED="1523019501198" ID="ID_531041967" MODIFIED="1557498707234" TEXT="Systematisches UI-Modell">
