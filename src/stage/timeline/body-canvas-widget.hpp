@@ -108,7 +108,7 @@ namespace timeline {
       _Renderer renderOverlay_;
       
     public:
-      TimelineCanvas (_Renderer groundingFac, _Renderer overlayFac);
+      TimelineCanvas (_Renderer groundingFun, _Renderer overlayFun);
       virtual ~TimelineCanvas() { }
       
     private:

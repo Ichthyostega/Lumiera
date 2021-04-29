@@ -27033,19 +27033,20 @@
 <node CREATED="1561740889255" ID="ID_388774572" LINK="https://developer.gnome.org/gtk3/stable/GtkStyleContext.html#gtk-render-background" MODIFIED="1561740901097" TEXT="gtk-render-background()"/>
 </node>
 </node>
-<node CREATED="1561412911257" FOLDED="true" ID="ID_1173541827" LINK="https://www.cairographics.org/tutorial/#L1draw" MODIFIED="1562843576977" TEXT="Cairo-Konzepte">
-<node CREATED="1561412945044" FOLDED="true" ID="ID_1336013492" MODIFIED="1561827469138" TEXT="Source">
-<node CREATED="1561412970112" ID="ID_358371042" MODIFIED="1561412984826" TEXT="Colour"/>
-<node CREATED="1561412985423" ID="ID_761624981" MODIFIED="1561412991540" TEXT="Gradient"/>
-<node CREATED="1561412992114" ID="ID_457063785" MODIFIED="1561412994561" TEXT="Image"/>
+<node CREATED="1561412911257" FOLDED="true" ID="ID_1322665426" MODIFIED="1619107323206" TEXT="siehe Cairo-Konzepte">
+<arrowlink COLOR="#5579dd" DESTINATION="ID_1173541827" ENDARROW="Default" ENDINCLINATION="-2313;407;" ID="Arrow_ID_1216025940" STARTARROW="None" STARTINCLINATION="-2437;323;"/>
+<node CREATED="1561412945044" FOLDED="true" ID="ID_475888521" MODIFIED="1561827469138" TEXT="Source">
+<node CREATED="1561412970112" ID="ID_1991984042" MODIFIED="1561412984826" TEXT="Colour"/>
+<node CREATED="1561412985423" ID="ID_108728469" MODIFIED="1561412991540" TEXT="Gradient"/>
+<node CREATED="1561412992114" ID="ID_1558296708" MODIFIED="1561412994561" TEXT="Image"/>
 </node>
-<node CREATED="1561412948428" FOLDED="true" ID="ID_66649578" MODIFIED="1561827469138" TEXT="Mask">
-<node CREATED="1561412996428" ID="ID_621110720" MODIFIED="1561413006567" TEXT="stroke, fill, text, set_mask()"/>
-<node CREATED="1561413034863" ID="ID_1207183549" MODIFIED="1561413051569" TEXT="die Source wird durch die Mask durch &quot;gestempelt&quot;"/>
+<node CREATED="1561412948428" FOLDED="true" ID="ID_1910080580" MODIFIED="1561827469138" TEXT="Mask">
+<node CREATED="1561412996428" ID="ID_414991349" MODIFIED="1561413006567" TEXT="stroke, fill, text, set_mask()"/>
+<node CREATED="1561413034863" ID="ID_580910330" MODIFIED="1561413051569" TEXT="die Source wird durch die Mask durch &quot;gestempelt&quot;"/>
 </node>
-<node CREATED="1561412961226" FOLDED="true" ID="ID_670962008" MODIFIED="1561827469138" TEXT="Destination">
-<node CREATED="1561413010338" ID="ID_773980893" MODIFIED="1561413014990" TEXT="Ausgabeformat"/>
-<node CREATED="1561413017945" ID="ID_362589945" MODIFIED="1561413025642" TEXT="auf dieses wird &quot;gestempelt&quot;"/>
+<node CREATED="1561412961226" FOLDED="true" ID="ID_1284012969" MODIFIED="1561827469138" TEXT="Destination">
+<node CREATED="1561413010338" ID="ID_1707967544" MODIFIED="1561413014990" TEXT="Ausgabeformat"/>
+<node CREATED="1561413017945" ID="ID_1938576222" MODIFIED="1561413025642" TEXT="auf dieses wird &quot;gestempelt&quot;"/>
 </node>
 </node>
 <node CREATED="1561414516226" ID="ID_824931972" LINK="https://stackoverflow.com/a/28004070" MODIFIED="1561414534852" TEXT="Hexagonale Cusotm_Buttons zeichen (Python-Beispiel)"/>
@@ -32909,6 +32910,291 @@
     </p>
   </body>
 </html></richcontent>
+</node>
+<node CREATED="1618752912540" ID="ID_709707680" MODIFIED="1618752978056" TEXT="konkrete Schwierigkeiten f&#xfc;r den Clip">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1618752984873" ID="ID_126063856" MODIFIED="1618753010634" TEXT="mu&#xdf; ein Delta in ein Zeit-Delta &#xfc;bersetzen">
+<node CREATED="1618753017759" ID="ID_1766339786" MODIFIED="1618753019825" TEXT="gegeben">
+<node CREATED="1618753020812" ID="ID_958370173" MODIFIED="1618753025665" TEXT="eine Basis-Zeit"/>
+<node CREATED="1618753026451" ID="ID_1831542689" MODIFIED="1618753035110" TEXT="ein Delta in UI-Koordinaten"/>
+</node>
+<node CREATED="1618753071285" ID="ID_1208729894" MODIFIED="1618753082199" TEXT="bei homogener Metrik sollte das aber m&#xf6;glich sein">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1618778672386" ID="ID_1242087872" MODIFIED="1618778698205" TEXT="Bisher in BodyCanvasWidget angelegt">
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618778688276" ID="ID_1895003083" MODIFIED="1618778695704" TEXT="aber &#xfc;berhaupt noch nicht implementiert">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619104316816" ID="ID_907598549" MODIFIED="1619104329752" TEXT="zu Kl&#xe4;ren: Rolle und Zugang zum Layout-Manager">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619104748998" ID="ID_1862152665" MODIFIED="1619106836504" TEXT="zu Kl&#xe4;ren: Skala f&#xfc;r Screen-Koordinaten und/oder Pixel">
+<arrowlink COLOR="#6084b9" DESTINATION="ID_206049495" ENDARROW="Default" ENDINCLINATION="-1698;230;" ID="Arrow_ID_1554039358" STARTARROW="None" STARTINCLINATION="-5472;269;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1619104774025" ID="ID_1244834056" MODIFIED="1619105073946" TEXT="habe mir dar&#xfc;ber nie Gedanken gemacht">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1619104785553" ID="ID_1913808351" MODIFIED="1619104792020" TEXT="Cairo und GDK liefern doubles"/>
+<node CREATED="1619104793778" ID="ID_988488039" MODIFIED="1619105005937" TEXT="die Maus-Events haben typischerweise eine Nachkommastelle">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      BUTT true flag=&#171;GdkEventType&#187;
+    </p>
+    <p>
+      MOVE x=18.4 y=12.5
+    </p>
+    <p>
+      ANCHOR at x=18.4 y=12.5 ('scope_moveRelocateClip')
+    </p>
+    <p>
+      MOVE x=18.8 y=12.5
+    </p>
+    <p>
+      MOVE x=19.3 y=12.5
+    </p>
+    <p>
+      MOVE x=19.8 y=13.0
+    </p>
+    <p>
+      MOVE x=20.2 y=13.0
+    </p>
+    <p>
+      MOVE x=20.5 y=13.0
+    </p>
+    <p>
+      MOVE x=20.9 y=13.0
+    </p>
+    <p>
+      MOVE x=21.4 y=13.0
+    </p>
+    <p>
+      MOVE x=21.9 y=13.0
+    </p>
+    <p>
+      MOVE x=22.3 y=13.0
+    </p>
+    <p>
+      MOVE x=23.0 y=13.0
+    </p>
+    <p>
+      MOVE x=23.9 y=13.0
+    </p>
+    <p>
+      MOVE x=24.8 y=13.0
+    </p>
+    <p>
+      Gesture(scope_moveRelocateClip) --&gt; &#916; := (6.4,0.5)
+    </p>
+    <p>
+      MOVE x=25.8 y=13.0
+    </p>
+    <p>
+      Gesture(scope_moveRelocateClip) --&gt; &#916; := (7.4,0.5)
+    </p>
+    <p>
+      MOVE x=26.7 y=13.0
+    </p>
+    <p>
+      Gesture(scope_moveRelocateClip) --&gt; &#916; := (8.3,0.5)
+    </p>
+    <p>
+      MOVE x=27.3 y=13.0
+    </p>
+    <p>
+      Gesture(scope_moveRelocateClip) --&gt; &#916; := (8.9,0.5)
+    </p>
+    <p>
+      MOVE x=27.9 y=13.0
+    </p>
+    <p>
+      Gesture(scope_moveRelocateClip) --&gt; &#916; := (9.5,0.5)
+    </p>
+    <p>
+      MOVE x=28.6 y=13.0
+    </p>
+    <p>
+      Gesture(scope_moveRelocateClip) --&gt; &#916; := (10.2,0.5)
+    </p>
+    <p>
+      MOVE x=29.0 y=13.0
+    </p>
+    <p>
+      Gesture(scope_moveRelocateClip) --&gt; &#916; := (10.6,0.5)
+    </p>
+    <p>
+      MOVE x=30.6 y=12.0
+    </p>
+    <p>
+      Gesture(scope_moveRelocateClip) --&gt; &#916; := (12.2,-0.5)
+    </p>
+    <p>
+      MOVE x=31.5 y=12.0
+    </p>
+    <p>
+      Gesture(scope_moveRelocateClip) --&gt; &#916; := (13.1,-0.5)
+    </p>
+    <p>
+      ...
+    </p>
+    <p>
+      ...
+    </p>
+    <p>
+      MOVE x=97.8 y=97.9
+    </p>
+    <p>
+      Gesture(scope_moveRelocateClip) --&gt; &#916; := (79.4,85.4)
+    </p>
+    <p>
+      MOVE x=97.8 y=98.7
+    </p>
+    <p>
+      Gesture(scope_moveRelocateClip) --&gt; &#916; := (79.4,86.2)
+    </p>
+    <p>
+      MOVE x=97.8 y=100.6
+    </p>
+    <p>
+      Gesture(scope_moveRelocateClip) --&gt; &#916; := (79.4,88.1)
+    </p>
+    <p>
+      MOVE x=97.8 y=102.6
+    </p>
+    <p>
+      Gesture(scope_moveRelocateClip) --&gt; &#916; := (79.4,90.1)
+    </p>
+    <p>
+      MOVE x=97.8 y=103.6
+    </p>
+    <p>
+      Gesture(scope_moveRelocateClip) --&gt; &#916; := (79.4,91.1)
+    </p>
+    <p>
+      MOVE x=98.6 y=104.4
+    </p>
+    <p>
+      Gesture(scope_moveRelocateClip) --&gt; &#916; := (80.2,91.9)
+    </p>
+    <p>
+      MOVE x=98.6 y=105.2
+    </p>
+    <p>
+      Gesture(scope_moveRelocateClip) --&gt; &#916; := (80.2,92.7)
+    </p>
+    <p>
+      MOVE x=98.6 y=106.2
+    </p>
+    <p>
+      Gesture(scope_moveRelocateClip) --&gt; &#916; := (80.2,93.7)
+    </p>
+    <p>
+      !!BANG!! Gesture-Cmd 'scope_moveRelocateClip'
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619697245422" ID="ID_1061197338" MODIFIED="1619697783176" TEXT="Forwarding &#xfc;ber mehrere Schritte">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        der clipHook() delegiert an seinen jweiligen refHook_
+      </li>
+      <li>
+        dieser wird bei der Konstruktion tats&#228;chlich jweils auf den Anchor-Hook des Parent-Hook gesetzt
+      </li>
+      <li>
+        damit steht im refHook_ effektiv der top-level Canvas, und die jeweilige Blatt-Ebene f&#252;gt ihren Offset hinzu
+      </li>
+      <li>
+        allerdings w&#252;rde nun zur &#220;bersetzung der Koordinaten der top-Level-Canvas nochmal an den Layout-Manager delegieren
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1619697735697" ID="ID_1610716398" MODIFIED="1619697746057" TEXT="effektiv 2-Schritt-Forwarding f&#xfc;r jeden Aufruf"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619697793583" ID="ID_800939749" MODIFIED="1619697865895" TEXT="kann man (opaque) direkt aufrufen?">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1619698100329" ID="ID_1983859376" MODIFIED="1619698109360" TEXT="ja: wenn es ein VTable-Slot ist">
+<node CREATED="1619698280744" ID="ID_1197467052" MODIFIED="1619698299342" TEXT="dazu m&#xfc;&#xdf;te das Delegate ein Sub-Interface implementieren"/>
+<node CREATED="1619698300242" ID="ID_498514293" MODIFIED="1619698315566" TEXT="und der Wrapper ebenfalls"/>
+<node CREATED="1619698316317" ID="ID_629600190" MODIFIED="1619698329643" TEXT="dann kann der Wrapper seine Sub-Komponente vom Delegate initialisieren"/>
+</node>
+<node CREATED="1619697887065" ID="ID_1694064911" MODIFIED="1619697892300" TEXT="RelativeCanvasHook">
+<node CREATED="1619698448530" ID="ID_231932844" MODIFIED="1619698455469" TEXT="ist zu 100% ein Dekorator"/>
+<node CREATED="1619698460320" ID="ID_1397414962" MODIFIED="1619698473284" TEXT="erbt zudem vom gleichen Interface wie sein Delegate"/>
+<node CREATED="1619698474655" ID="ID_609667543" MODIFIED="1619698501783" TEXT="&#x27f9; klassishe linearisierte Vererbung"/>
+</node>
+<node CREATED="1619698512378" ID="ID_333159714" MODIFIED="1619698546465" TEXT="Metrik-&#xdc;bersetzung">
+<node CREATED="1619698551205" ID="ID_994295604" MODIFIED="1619698871778" TEXT="sieht nach einem isolierten Belang aus">
+<arrowlink COLOR="#fef4ac" DESTINATION="ID_560285819" ENDARROW="Default" ENDINCLINATION="150;-12;" ID="Arrow_ID_514924311" STARTARROW="None" STARTINCLINATION="-370;27;"/>
+</node>
+<node CREATED="1619698570431" ID="ID_1571275788" MODIFIED="1619698582909" TEXT="wird durch den RelativeCanvasHook nur durchgereicht"/>
+<node CREATED="1619698583671" ID="ID_1092960475" MODIFIED="1619698623962" TEXT="ein Sub-Interface w&#xfc;rde das Design versbessern">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619698607118" ID="ID_239118181" MODIFIED="1619698618056" TEXT="Umbau sehr w&#xfc;nschenswert">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619104345461" ID="ID_414006920" MODIFIED="1619105085361" TEXT="Aufgabe: API">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1619104353964" ID="ID_1748021574" MODIFIED="1619104378116" TEXT="vorhanden: translateTimeToPixels(TimeValue startTimePoint)"/>
+<node CREATED="1619132261261" ID="ID_1989281789" MODIFIED="1619132284186" TEXT="erst mal nach Bedarf &#x2015; aber genau">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1619132344961" ID="ID_168747829" MODIFIED="1619132509806" TEXT="konkret hier...">
+<node CREATED="1619132510942" ID="ID_1513485460" MODIFIED="1619132510942" TEXT="applyScreenDelta(TimeValue, deltaPx)"/>
+<node CREATED="1619132513720" ID="ID_718240764" MODIFIED="1619132619351" TEXT="translateScreenDeltaToTime(deltaPx)"/>
+</node>
+<node CREATED="1619698634099" ID="ID_1185723124" MODIFIED="1619698643209" TEXT="Sub-Interface einf&#xfc;hren">
+<node CREATED="1619698644218" ID="ID_560285819" MODIFIED="1619698871778" TEXT="es ist ein komplett isolierter Belang">
+<linktarget COLOR="#fef4ac" DESTINATION="ID_560285819" ENDARROW="Default" ENDINCLINATION="150;-12;" ID="Arrow_ID_514924311" SOURCE="ID_994295604" STARTARROW="None" STARTINCLINATION="-370;27;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1619698681269" ID="ID_969574933" MODIFIED="1619698719015">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Name: <b>DisplayMetric</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619698722008" ID="ID_755674225" MODIFIED="1619698813353" TEXT="wird (parametrisierbare) Komponente im LayoutManager">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619698793375" ID="ID_127168366" MODIFIED="1619698814669" TEXT="und Mix-In f&#xfc;r die CanvasHook-Hierarchie">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1619132645927" ID="ID_3614055" MODIFIED="1619696704275" TEXT="Umgang mit Zeit-Werten (immutable)">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618753085285" ID="ID_560686142" MODIFIED="1618753216324" TEXT="noch keinerlei Infrastruktur f&#xfc;r die vertikale Anordnung">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1618753226088" ID="ID_338199340" MODIFIED="1618753660191" TEXT="die notwendigen Daten k&#xf6;nnen aus dem TrackPofil abgeleitet werden"/>
+<node CREATED="1618753661418" ID="ID_1032426032" MODIFIED="1618753679006" TEXT="der TrackBody hat eine startLine_"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1618672754370" ID="ID_1707555267" MODIFIED="1618678693304" TEXT="Deta ermitteln und speichern">
@@ -54342,6 +54628,25 @@
 </node>
 </node>
 </node>
+<node CREATED="1619106728852" ID="ID_206049495" MODIFIED="1619106836504" TEXT="Thema: Koordinaten">
+<linktarget COLOR="#6084b9" DESTINATION="ID_206049495" ENDARROW="Default" ENDINCLINATION="-1698;230;" ID="Arrow_ID_1554039358" SOURCE="ID_1862152665" STARTARROW="None" STARTINCLINATION="-5472;269;"/>
+<node CREATED="1619106846804" ID="ID_1212718074" MODIFIED="1619106850872" TEXT="Frameworks">
+<node CREATED="1619106864558" ID="ID_939967817" MODIFIED="1619106876785" TEXT="Xlib bzw Wayland"/>
+<node CREATED="1619106851723" ID="ID_255903990" MODIFIED="1619106862766" TEXT="GDK (low-level-screen handling)"/>
+<node CREATED="1619106880439" ID="ID_1910905372" MODIFIED="1619106889322" TEXT="Cairo (Vektor-Grafik)"/>
+<node CREATED="1619106890429" ID="ID_248432300" MODIFIED="1619106903137" TEXT="Gnome Application-Framwork"/>
+</node>
+<node CREATED="1619106913492" ID="ID_1464583836" MODIFIED="1619106920910" TEXT="wo spielen Koordinaten eine Rolle?">
+<node CREATED="1619106921874" ID="ID_1221635906" MODIFIED="1619106926267" TEXT="Ma&#xdf;e in CSS"/>
+<node CREATED="1619106926922" ID="ID_405918613" MODIFIED="1619106940067" TEXT="direkte Layout-Properties in GTK-Widgets"/>
+<node CREATED="1619106941065" ID="ID_1727127052" MODIFIED="1619106952490" TEXT="das GTK Canvas-Control (Gtk::Layout)"/>
+<node CREATED="1619106954997" ID="ID_1964121895" MODIFIED="1619106961377" TEXT="Cairo drawing-context"/>
+<node CREATED="1619106962340" ID="ID_453051214" MODIFIED="1619106972463" TEXT="der Gnome-Canvas"/>
+</node>
+<node CREATED="1619107449907" ID="ID_1457702957" MODIFIED="1619107458558" TEXT="Doku / Infos / Tutorials">
+<node CREATED="1619107459690" ID="ID_1000844260" LINK="https://www.linuxtopia.org/online_books/gui_toolkit_guides/gtk+_gnome_application_development/z174_1.html" MODIFIED="1619107497044" TEXT="Linuxtopia: Coordinates (Kontext: Gnome-canvas)"/>
+</node>
+</node>
 </node>
 <node CREATED="1537575934664" ID="ID_849901633" MODIFIED="1557498707238" TEXT="Style">
 <font NAME="SansSerif" SIZE="13"/>
@@ -56092,11 +56397,9 @@
 </node>
 </node>
 </node>
-<node CREATED="1554476592342" ID="ID_1236197922" LINK="https://developer.gnome.org/cairo/stable/cairo-cairo-t.html" MODIFIED="1557498707239" TEXT="Zeichnen: Cairo-Context">
+<node CREATED="1554476592342" ID="ID_21219709" MODIFIED="1619107416274" TEXT="siehe Zeichnen im Cairo-Context">
+<arrowlink COLOR="#4e97d4" DESTINATION="ID_1236197922" ENDARROW="Default" ENDINCLINATION="-654;81;" ID="Arrow_ID_1110216219" STARTARROW="None" STARTINCLINATION="-308;527;"/>
 <icon BUILTIN="info"/>
-<node CREATED="1554476799366" ID="ID_977796922" LINK="https://www.cairographics.org/documentation/cairomm/reference/" MODIFIED="1557498707239" TEXT="Cairomm"/>
-<node CREATED="1554476906923" ID="ID_437420072" MODIFIED="1557498707239" TEXT="Cairo-Doku(allgemein)"/>
-<node CREATED="1554476956084" ID="ID_541824716" LINK="https://www.cairographics.org/documentation/cairomm/reference/classCairo_1_1Context.html" MODIFIED="1557498707239" TEXT="CairoContext(C++)"/>
 </node>
 <node CREATED="1612468919379" ID="ID_1508852681" MODIFIED="1612471386536" TEXT="Problem: explizite Gr&#xf6;&#xdf;e">
 <linktarget COLOR="#a09aae" DESTINATION="ID_1508852681" ENDARROW="Default" ENDINCLINATION="-2048;204;" ID="Arrow_ID_1446927054" SOURCE="ID_544296566" STARTARROW="None" STARTINCLINATION="-3602;0;"/>
@@ -56663,6 +56966,35 @@
 </node>
 </node>
 <node CREATED="1534511699368" ID="ID_243375657" MODIFIED="1557498707240" TEXT="C++ Bindings"/>
+</node>
+<node CREATED="1619107069744" HGAP="69" ID="ID_132670678" MODIFIED="1619107100691" TEXT="Cairo (Vektorgraphik-Lib)" VSHIFT="13">
+<font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="info"/>
+<node CREATED="1619107266947" ID="ID_1506011612" MODIFIED="1619107277974" TEXT="Doku und Konzepte">
+<node CREATED="1561412911257" FOLDED="true" ID="ID_1173541827" LINK="https://www.cairographics.org/tutorial/#L1draw" MODIFIED="1619107323206" TEXT="Cairo-Konzepte">
+<linktarget COLOR="#5579dd" DESTINATION="ID_1173541827" ENDARROW="Default" ENDINCLINATION="-2313;407;" ID="Arrow_ID_1216025940" SOURCE="ID_1322665426" STARTARROW="None" STARTINCLINATION="-2437;323;"/>
+<node CREATED="1561412945044" FOLDED="true" ID="ID_1336013492" MODIFIED="1561827469138" TEXT="Source">
+<node CREATED="1561412970112" ID="ID_358371042" MODIFIED="1561412984826" TEXT="Colour"/>
+<node CREATED="1561412985423" ID="ID_761624981" MODIFIED="1561412991540" TEXT="Gradient"/>
+<node CREATED="1561412992114" ID="ID_457063785" MODIFIED="1561412994561" TEXT="Image"/>
+</node>
+<node CREATED="1561412948428" FOLDED="true" ID="ID_66649578" MODIFIED="1561827469138" TEXT="Mask">
+<node CREATED="1561412996428" ID="ID_621110720" MODIFIED="1561413006567" TEXT="stroke, fill, text, set_mask()"/>
+<node CREATED="1561413034863" ID="ID_1207183549" MODIFIED="1561413051569" TEXT="die Source wird durch die Mask durch &quot;gestempelt&quot;"/>
+</node>
+<node CREATED="1561412961226" FOLDED="true" ID="ID_670962008" MODIFIED="1561827469138" TEXT="Destination">
+<node CREATED="1561413010338" ID="ID_773980893" MODIFIED="1561413014990" TEXT="Ausgabeformat"/>
+<node CREATED="1561413017945" ID="ID_362589945" MODIFIED="1561413025642" TEXT="auf dieses wird &quot;gestempelt&quot;"/>
+</node>
+</node>
+<node CREATED="1554476592342" ID="ID_1236197922" LINK="https://developer.gnome.org/cairo/stable/cairo-cairo-t.html" MODIFIED="1619107409051" TEXT="Zeichnen: Cairo-Context">
+<linktarget COLOR="#4e97d4" DESTINATION="ID_1236197922" ENDARROW="Default" ENDINCLINATION="-654;81;" ID="Arrow_ID_1110216219" SOURCE="ID_21219709" STARTARROW="None" STARTINCLINATION="-308;527;"/>
+<icon BUILTIN="info"/>
+<node CREATED="1554476799366" ID="ID_977796922" LINK="https://www.cairographics.org/documentation/cairomm/reference/" MODIFIED="1557498707239" TEXT="Cairomm"/>
+<node CREATED="1554476906923" ID="ID_437420072" MODIFIED="1557498707239" TEXT="Cairo-Doku(allgemein)"/>
+<node CREATED="1554476956084" ID="ID_541824716" LINK="https://www.cairographics.org/documentation/cairomm/reference/classCairo_1_1Context.html" MODIFIED="1557498707239" TEXT="CairoContext(C++)"/>
+</node>
+</node>
 </node>
 <node CREATED="1482365415326" HGAP="71" ID="ID_886002365" MODIFIED="1557498707240" TEXT="Standard C++" VSHIFT="-25">
 <node CREATED="1482365430484" ID="ID_1414724077" MODIFIED="1557498707240" TEXT="chrono">

@@ -603,10 +603,10 @@ namespace timeline {
   
   
   
-  TimelineCanvas::TimelineCanvas (_Renderer groundingFac, _Renderer overlayFac)
+  TimelineCanvas::TimelineCanvas (_Renderer groundingFun, _Renderer overlayFun)
     : Gtk::Layout{}
-    , renderGrounding_{groundingFac}
-    , renderOverlay_{overlayFac}
+    , renderGrounding_{groundingFun}
+    , renderOverlay_{overlayFun}
     { }
   
   

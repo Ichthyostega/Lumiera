@@ -132,6 +132,9 @@ namespace timeline {
    * With the help of such a common frame of reference, we solve the problem that each individual
    * track display needs to hook into two distinct UI presentation structures: the track head controls
    * and the presentation of track contents on the BodyCanvasWidget.
+   * @note the RelativeCanvasHook sub-interface is initialised by chaining with the given displayAnchor.
+   *       Now, since RelativeCanvasHook itself removes intermediary delegates when chaining, in the end
+   *       the #getClipHook() exposes the top-level canvas, while applying our local #hookAdjX()
    */
   class DisplayFrame
     : util::NonCopyable

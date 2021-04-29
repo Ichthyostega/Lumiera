@@ -95,6 +95,9 @@ namespace timeline {
   /**
    * Special ViewHook decorator to apply a (dynamic) offset
    * when attaching or moving Widgets on the shared canvas.
+   * @note the ctor uses #getAnchorHook, thus effectively,
+   *       for a chain of RelativeCanvasHook instances,
+   *       the #refHook_ holds the top level anchor.
    */
   template<class WID>
   class RelativeCanvasHook
@@ -197,7 +200,7 @@ namespace timeline {
     };
   
   /**
-   * Interface used by the widgets to attach and translate themselves into screen layout.
+   * Interface for coordination of the overall timeline display.
    * @todo WIP-WIP as of 12/2019
    */
   class DisplayManager
