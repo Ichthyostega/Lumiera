@@ -61,6 +61,13 @@
  ** This builds the foundation for implementing UI structures recursively, leading to somewhat
  ** simplified code, which hopefully is also easier to maintain and extend in the long run.
  ** 
+ ** \par Avoiding the double-indirect calls?
+ ** In theory, it would be possible to avoid the double forwarding indirect calls in all the
+ ** operations of RelativeCanvasHook: We'd have to provide a concrete mix-in to be used already
+ ** within body-canvas-widget.cpp, and this mixin would hold a _direct reference_ to the embedded
+ ** Gtk::Layout and provide an additional API to adjust the offset. However, the savings through
+ ** such an implementation scheme would be dwarfed by the effort for actually rendering a widget.
+ ** 
  ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
  ** @todo WIP-WIP-WIP - drafting the DisplayEvaluation as of 3/2020
  ** @todo WIP as of 1/2021 about to build a first preliminary Clip representation
@@ -98,6 +105,8 @@ namespace timeline {
    * @note the ctor uses #getAnchorHook, thus effectively,
    *       for a chain of RelativeCanvasHook instances,
    *       the #refHook_ holds the top level anchor.
+   * @remark avoiding this 2-step indirect dispatch is not
+   *       justified here, given the overhead of drawing.
    */
   template<class WID>
   class RelativeCanvasHook

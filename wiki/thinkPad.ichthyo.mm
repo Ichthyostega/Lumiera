@@ -33130,10 +33130,46 @@
 <node CREATED="1619698300242" ID="ID_498514293" MODIFIED="1619698315566" TEXT="und der Wrapper ebenfalls"/>
 <node CREATED="1619698316317" ID="ID_629600190" MODIFIED="1619698329643" TEXT="dann kann der Wrapper seine Sub-Komponente vom Delegate initialisieren"/>
 </node>
-<node CREATED="1619697887065" ID="ID_1694064911" MODIFIED="1619697892300" TEXT="RelativeCanvasHook">
+<node CREATED="1619697887065" ID="ID_1694064911" MODIFIED="1619788146033" TEXT="RelativeCanvasHook">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1619698448530" ID="ID_231932844" MODIFIED="1619698455469" TEXT="ist zu 100% ein Dekorator"/>
 <node CREATED="1619698460320" ID="ID_1397414962" MODIFIED="1619698473284" TEXT="erbt zudem vom gleichen Interface wie sein Delegate"/>
 <node CREATED="1619698474655" ID="ID_609667543" MODIFIED="1619698501783" TEXT="&#x27f9; klassishe linearisierte Vererbung"/>
+<node CREATED="1619787501628" ID="ID_1894601265" MODIFIED="1619787526640" TEXT="trotzdem wird es stets zwei indirekte Aufrufe geben">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1619787529209" ID="ID_1165327118" MODIFIED="1619787547480" TEXT="kann man einen davon einsparen?">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1619787550612" ID="ID_1297192304" MODIFIED="1619787577240" TEXT="jaa man kannnn...">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1619787584274" FOLDED="true" ID="ID_1256984812" MODIFIED="1619788141013" TEXT="das wird aber durchaus komplex">
+<icon BUILTIN="flag-orange"/>
+<node CREATED="1619787756234" ID="ID_566753329" MODIFIED="1619787782836" TEXT="das konkrete Body-Canvas-Widget m&#xfc;&#xdf;te umgeschrieben werden"/>
+<node CREATED="1619787783758" ID="ID_955157823" MODIFIED="1619787838923" TEXT="die eigentliche Implementierung des CanvasHook m&#xfc;&#xdf;te per Mix-In realisiert werden"/>
+<node CREATED="1619787839607" ID="ID_736108938" MODIFIED="1619787853365" TEXT="und zwar ein konkretes Implementieruns-Mix-in"/>
+<node CREATED="1619787854247" ID="ID_1799143382" MODIFIED="1619787870551" TEXT="dieses bekommt einen konkreten GTK-Canvas als Referenz"/>
+<node CREATED="1619787894264" ID="ID_982929479" MODIFIED="1619787918928" TEXT="und au&#xdf;erdem m&#xfc;&#xdf;te es bereits den Offset als Ctor-Parameter mitbekommen"/>
+<node CREATED="1619787926203" ID="ID_166173193" MODIFIED="1619788009055" TEXT="und der Nutzer (DisplayFrame im TrackPresenter) m&#xfc;&#xdf;te dieses konkrete Objekt-API sehen"/>
+<node CREATED="1619788024275" ID="ID_1728948599" MODIFIED="1619788043839" TEXT="allerdings k&#xf6;nnte man trotzdem die Impl. in einem separaten Translation-Unit &quot;verbergen&quot;"/>
+<node CREATED="1619788065160" ID="ID_1004040494" MODIFIED="1619788100395" TEXT="Ergebnis: alle Aufrufe gehen direkt durch die VTable in dieses konkrete Canvas-Mixin"/>
+</node>
+<node CREATED="1619787626757" ID="ID_1522870458" MODIFIED="1619799442131" TEXT="und ist hier nicht gerechtfertigt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das Platzieren auf den Canvas ist <b>keine</b>&#160;high-Performance-Operation;<br />vielmehr ist es sogar <i>vernachl&#228;ssigbar im Vergleich </i>zum Aufwand der Zeichen-Operationen; und letztere werden eben genau aus Performance-Gr&#252;nden gebatcht und geb&#252;ndelt....
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#6775b4" DESTINATION="ID_1522870458" ENDARROW="Default" ENDINCLINATION="125;10;" ID="Arrow_ID_565826448" SOURCE="ID_1388699771" STARTARROW="None" STARTINCLINATION="290;14;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
 </node>
 <node CREATED="1619698512378" ID="ID_333159714" MODIFIED="1619698546465" TEXT="Metrik-&#xdc;bersetzung">
 <node CREATED="1619698551205" ID="ID_994295604" MODIFIED="1619698871778" TEXT="sieht nach einem isolierten Belang aus">
@@ -33142,6 +33178,24 @@
 <node CREATED="1619698570431" ID="ID_1571275788" MODIFIED="1619698582909" TEXT="wird durch den RelativeCanvasHook nur durchgereicht"/>
 <node CREATED="1619698583671" ID="ID_1092960475" MODIFIED="1619698623962" TEXT="ein Sub-Interface w&#xfc;rde das Design versbessern">
 <icon BUILTIN="yes"/>
+</node>
+<node CREATED="1619799300329" ID="ID_170912303" MODIFIED="1619799331661" TEXT="direkt im Gesture-Controller nutzen">
+<icon BUILTIN="idea"/>
+<node CREATED="1619799349705" ID="ID_281542411" MODIFIED="1619799359972" TEXT="in diesem Fall dann nur noch eine Indirektion"/>
+<node CREATED="1619799367600" ID="ID_1388699771" MODIFIED="1619799442130">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      im Gegensatz zum CanvasHook ist <i>das hier durchaus relevant</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#6775b4" DESTINATION="ID_1522870458" ENDARROW="Default" ENDINCLINATION="125;10;" ID="Arrow_ID_565826448" STARTARROW="None" STARTINCLINATION="290;14;"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619698607118" ID="ID_239118181" MODIFIED="1619698618056" TEXT="Umbau sehr w&#xfc;nschenswert">

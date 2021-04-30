@@ -68,6 +68,27 @@ namespace model {
   
   
   /**
+   * Mix-in interface to allow for concrete CanvasHooked widgets
+   * to adapt themselves to the metric currently employed on the canvas.
+   * In some cases, most notably when a timeline canvas is calibrated to
+   * represent temporal extension precisely, the widgets (clips, effects)
+   * within such a display need to adjust themselves. A relevant special
+   * case is when such a widget _is dragged_ -- receiving mouse move events
+   * in screen coordinates -- which need to be translated into a resulting
+   * temporal offset or change as a result of this _interaction gesture._
+   */
+  class DisplayMetric
+    {
+    public:
+      virtual ~DisplayMetric() { }    ///< this is an interface
+      
+      /** extension point for time axis zoom management. */
+      virtual int translateTimeToPixels (TimeValue)  const      =0;
+    };
+  
+  
+  
+  /**
    * Interface to represent _"some presentation layout entity",_
    * with the ability to _place_ widgets (managed elsewhere) onto it,
    * to relocate those widgets to another position.
@@ -80,6 +101,7 @@ namespace model {
    */
   template<class WID>
   class CanvasHook
+    : public DisplayMetric
     {
     public:
       virtual ~CanvasHook() { }    ///< this is an interface
@@ -117,9 +139,6 @@ namespace model {
         {
           return hookedAt (translateTimeToPixels (start), downshift);
         }
-      
-      /** extension point for time axis zoom management. */
-      virtual int translateTimeToPixels (TimeValue)  const      =0;
     };
   
   

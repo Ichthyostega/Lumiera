@@ -553,7 +553,7 @@ namespace timeline {
   }
   
   
-  /* ==== Interface: ViewHook ===== */
+  /* ==== Interface: CanvasHook ===== */
   
   void
   BodyCanvasWidget::hook (Gtk::Widget& widget, int xPos, int yPos)
