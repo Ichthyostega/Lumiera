@@ -146,11 +146,11 @@ namespace timeline {
       virtual int hookAdjX (int xPos)  =0;
       virtual int hookAdjY (int yPos)  =0;
       
-      /** delegating default implementation for timeline zoom */
-      int
-      translateTimeToPixels (TimeValue startTimePoint)  const override
+      /** delegating layout metric to the root canvas */
+      model::DisplayMetric&
+      getMetric()  const override
         {
-          return refHook_.translateTimeToPixels (startTimePoint);
+          return refHook_.getMetric();
         }
       
     public:
@@ -215,14 +215,12 @@ namespace timeline {
   class DisplayManager
     : util::NonCopyable
     , public DisplayViewHooks
+    , public model::DisplayMetric
     {
       
       
     public:
       virtual ~DisplayManager();    ///< this is an interface
-      
-      /** the overall horizontal pixel span to cover by this timeline */
-      virtual PixSpan getPixSpan()         =0;
       
       /** cause a re-allocation of the complete layout */
       virtual void triggerDisplayEvaluation() =0;
@@ -235,6 +233,16 @@ namespace timeline {
        * arrangement of the timeline layout.
        */
       SignalStructureChange signalStructureChange_;
+
+
+      /** the overall horizontal pixel span to cover by this timeline */
+      PixSpan
+      getPixSpan()
+        {
+          return {translateTimeToPixels (coveredTime().start())
+                 ,translateTimeToPixels (coveredTime().end())
+                 };
+        }
       
       
     private:/* ===== Internals ===== */

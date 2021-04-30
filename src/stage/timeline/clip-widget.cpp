@@ -327,7 +327,7 @@ namespace timeline {
         void
         establishHorizontalExtension()
           {
-            int hSize = getCanvas().translateTimeToPixels (getLen());
+            int hSize = getCanvas().getMetric().translateTimeToPixels (getLen());
             set_size_request (hSize, -1);
 //            queue_resize();
           }
@@ -349,7 +349,7 @@ namespace timeline {
         void
         get_preferred_width_vfunc(int& minimum_width, int& natural_width)  const override
           {
-            minimum_width = natural_width = getCanvas().translateTimeToPixels (getLen());
+            minimum_width = natural_width = getCanvas().getMetric().translateTimeToPixels (getLen());
           }
         
         

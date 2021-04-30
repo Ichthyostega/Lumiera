@@ -33099,7 +33099,7 @@
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619697245422" ID="ID_1061197338" MODIFIED="1619697783176" TEXT="Forwarding &#xfc;ber mehrere Schritte">
+<node COLOR="#435e98" CREATED="1619697245422" ID="ID_1061197338" MODIFIED="1619804310109" TEXT="Forwarding &#xfc;ber mehrere Schritte">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -33123,8 +33123,8 @@
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1619697735697" ID="ID_1610716398" MODIFIED="1619697746057" TEXT="effektiv 2-Schritt-Forwarding f&#xfc;r jeden Aufruf"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619697793583" ID="ID_800939749" MODIFIED="1619697865895" TEXT="kann man (opaque) direkt aufrufen?">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1619697793583" FOLDED="true" ID="ID_800939749" MODIFIED="1619804558065" TEXT="kann man (opaque) direkt aufrufen?">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1619698100329" ID="ID_1983859376" MODIFIED="1619698109360" TEXT="ja: wenn es ein VTable-Slot ist">
 <node CREATED="1619698280744" ID="ID_1197467052" MODIFIED="1619698299342" TEXT="dazu m&#xfc;&#xdf;te das Delegate ein Sub-Interface implementieren"/>
 <node CREATED="1619698300242" ID="ID_498514293" MODIFIED="1619698315566" TEXT="und der Wrapper ebenfalls"/>
@@ -33164,14 +33164,14 @@
       das Platzieren auf den Canvas ist <b>keine</b>&#160;high-Performance-Operation;<br />vielmehr ist es sogar <i>vernachl&#228;ssigbar im Vergleich </i>zum Aufwand der Zeichen-Operationen; und letztere werden eben genau aus Performance-Gr&#252;nden gebatcht und geb&#252;ndelt....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#6775b4" DESTINATION="ID_1522870458" ENDARROW="Default" ENDINCLINATION="125;10;" ID="Arrow_ID_565826448" SOURCE="ID_1388699771" STARTARROW="None" STARTINCLINATION="290;14;"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
-<node CREATED="1619698512378" ID="ID_333159714" MODIFIED="1619698546465" TEXT="Metrik-&#xdc;bersetzung">
+<node COLOR="#435e98" CREATED="1619698512378" ID="ID_333159714" MODIFIED="1619804302859" TEXT="Metrik-&#xdc;bersetzung">
+<icon BUILTIN="forward"/>
 <node CREATED="1619698551205" ID="ID_994295604" MODIFIED="1619698871778" TEXT="sieht nach einem isolierten Belang aus">
 <arrowlink COLOR="#fef4ac" DESTINATION="ID_560285819" ENDARROW="Default" ENDINCLINATION="150;-12;" ID="Arrow_ID_514924311" STARTARROW="None" STARTINCLINATION="-370;27;"/>
 </node>
@@ -33192,14 +33192,13 @@
       im Gegensatz zum CanvasHook ist <i>das hier durchaus relevant</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#6775b4" DESTINATION="ID_1522870458" ENDARROW="Default" ENDINCLINATION="125;10;" ID="Arrow_ID_565826448" STARTARROW="None" STARTINCLINATION="290;14;"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619698607118" ID="ID_239118181" MODIFIED="1619698618056" TEXT="Umbau sehr w&#xfc;nschenswert">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1619698607118" ID="ID_239118181" MODIFIED="1619804296540" TEXT="Umbau sehr w&#xfc;nschenswert">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -33214,7 +33213,8 @@
 <node CREATED="1619132510942" ID="ID_1513485460" MODIFIED="1619132510942" TEXT="applyScreenDelta(TimeValue, deltaPx)"/>
 <node CREATED="1619132513720" ID="ID_718240764" MODIFIED="1619132619351" TEXT="translateScreenDeltaToTime(deltaPx)"/>
 </node>
-<node CREATED="1619698634099" ID="ID_1185723124" MODIFIED="1619698643209" TEXT="Sub-Interface einf&#xfc;hren">
+<node COLOR="#338800" CREATED="1619698634099" ID="ID_1185723124" MODIFIED="1619804547408" TEXT="Sub-Interface einf&#xfc;hren">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1619698644218" ID="ID_560285819" MODIFIED="1619698871778" TEXT="es ist ein komplett isolierter Belang">
 <linktarget COLOR="#fef4ac" DESTINATION="ID_560285819" ENDARROW="Default" ENDINCLINATION="150;-12;" ID="Arrow_ID_514924311" SOURCE="ID_994295604" STARTARROW="None" STARTINCLINATION="-370;27;"/>
 <icon BUILTIN="idea"/>
@@ -33232,11 +33232,15 @@
 </html></richcontent>
 <icon BUILTIN="forward"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619698722008" ID="ID_755674225" MODIFIED="1619698813353" TEXT="wird (parametrisierbare) Komponente im LayoutManager">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619698722008" FOLDED="true" ID="ID_755674225" MODIFIED="1619804539751" TEXT="wird (parametrisierbare) Komponente im LayoutManager">
+<icon BUILTIN="bell"/>
+<node CREATED="1619804516182" ID="ID_303795305" MODIFIED="1619804534566" TEXT="vorl&#xe4;ufige Dummy-Implementierung">
+<icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619698793375" ID="ID_127168366" MODIFIED="1619698814669" TEXT="und Mix-In f&#xfc;r die CanvasHook-Hierarchie">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1619804525392" ID="ID_1563089049" MODIFIED="1619804538286" TEXT="in timeline-layout.cpp, Zeile 123"/>
+</node>
+<node COLOR="#338800" CREATED="1619698793375" ID="ID_127168366" MODIFIED="1619804320757" TEXT="und Mix-In f&#xfc;r die CanvasHook-Hierarchie">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

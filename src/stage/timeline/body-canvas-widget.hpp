@@ -176,8 +176,8 @@ namespace timeline {
       void hook (Gtk::Widget&, int xPos=0, int yPos=0) override;
       void move (Gtk::Widget&, int xPos, int yPos)     override;
       void remove (Gtk::Widget&)                       override;
-      
-      int translateTimeToPixels (TimeValue)  const     override;
+
+      model::DisplayMetric& getMetric()  const         override;
       
     protected: /* ==== Interface: LayoutElement ===== */
       

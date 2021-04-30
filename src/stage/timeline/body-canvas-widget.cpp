@@ -84,10 +84,6 @@ namespace timeline {
   using CairoC = PCairoContext const&;
   using StyleC = PStyleContext const&;
   
-  namespace {   /////////////////////////////////////////////////////TICKET #1213 : use proper zoom handling instead of dummy constants!!
-    const int TODO_px_per_second = 25;
-  }             /////////////////////////////////////////////////////TICKET #1213 : (END) get rid of these dummy constants!!
-  
   namespace { // details of track background painting
     
     const int INITIAL_TIMERULER_HEIGHT_px = 30;
@@ -576,10 +572,10 @@ namespace timeline {
     getCanvas(yPos).move (widget, xPos, yPos);
   }
   
-  int
-  BodyCanvasWidget::translateTimeToPixels (TimeValue startTimePoint)  const
+  model::DisplayMetric&
+  BodyCanvasWidget::getMetric()  const
   {
-    return _raw(startTimePoint) * TODO_px_per_second / Time::SCALE;   //////////TICKET #1213 : delegate zoom handling to the display manager (field #layout_) !!
+    return layout_;
   }
   
   /** respond to the DisplayEvaluation pass.

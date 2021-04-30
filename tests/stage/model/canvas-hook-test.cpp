@@ -151,11 +151,10 @@ namespace test {
           }
         
       protected:
-        int
-        translateTimeToPixels (TimeValue)  const override
+        DisplayMetric&
+        getMetric()  const override
           {
             NOTREACHED ("Time to pixel translation not covered in this unit test");
-            return -1;
           }
       };
   }

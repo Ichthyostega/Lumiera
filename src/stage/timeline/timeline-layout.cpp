@@ -40,6 +40,7 @@
 
 #include "common/advice.hpp"
 //#include "lib/util.hpp"
+#include "lib/time/timevalue.hpp"
 
 //#include <algorithm>
 //#include <vector>
@@ -53,10 +54,18 @@
 //using sigc::ptr_fun;
 //using std::cout;
 //using std::endl;
+using lib::time::Time;
+using lib::time::FSecs;
+//using lib::time::Duration;
+using lib::time::TimeSpan;
 
 
 namespace stage {
 namespace timeline {
+  
+  namespace {   /////////////////////////////////////////////////////TICKET #1213 : use proper zoom handling instead of dummy constants!!
+    const int TODO_px_per_second = 25;
+  }             /////////////////////////////////////////////////////TICKET #1213 : (END) get rid of these dummy constants!!
   
   
   
@@ -108,14 +117,19 @@ namespace timeline {
   
   
   
-  /* ==== Interface: LayoutManager===== */
+  /* ==== Interface: DisplayManager===== */
   
-  PixSpan
-  TimelineLayout::getPixSpan()
+  TimeSpan
+  TimelineLayout::coveredTime() const
+  {                                        /////////////////////////////////////TICKET #1019 : need a "ZoomWindow" here to manage the visible area
+                                           /////////////////////////////////////TICKET #1039 : "somehow" wire with the TimelineController to find out the covered span
+    return TimeSpan {Time::ZERO, FSecs{23}}; ////////////////Lalala Lalü
+  }
+  
+  int
+  TimelineLayout::translateTimeToPixels (TimeValue startTimePoint)  const
   {
-                                           ////////////////////////////////////////////////////////TICKET #1019 : need a "ZoomWindow" here to manage the visible area
-                                           ////////////////////////////////////////////////////////TICKET #1039 : "somehow" wire with the TimelineController to find out the covered span
-    return PixSpan {0, 248}; ////////////////Lalala Lalü
+    return _raw(startTimePoint) * TODO_px_per_second / Time::SCALE;   //////////TICKET #1213 : delegate zoom handling to the display manager (field #layout_) !!
   }
   
   

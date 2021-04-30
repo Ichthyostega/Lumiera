@@ -137,8 +137,13 @@ namespace timeline {
       
     protected: /* ==== Interface: LayoutManager===== */
       
-      PixSpan getPixSpan()  override;
       void triggerDisplayEvaluation()  override;
+      
+      /////////////////////////////////////////////////////////////////////////////////////////////TICKET 1218 : better extract into a sub component when providing a non-dummy implementation
+      virtual lib::time::TimeSpan coveredTime()     const override;
+      virtual int translateTimeToPixels (TimeValue) const override;
+      /////////////////////////////////////////////////////////////////////////////////////////////TICKET 1218 : better extract into a sub component when providing a non-dummy implementation
+      
       
     protected: /* ==== Interface: DisplayViewHooks===== */
       

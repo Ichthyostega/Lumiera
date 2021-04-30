@@ -64,6 +64,7 @@ namespace model {
   
   using lib::time::Time;
   using lib::time::TimeValue;
+  using lib::time::TimeSpan;
   
   
   
@@ -82,8 +83,11 @@ namespace model {
     public:
       virtual ~DisplayMetric() { }    ///< this is an interface
       
+      /** the overall time Duration covered by this timeline canvas */
+      virtual TimeSpan coveredTime()  const                =0;
+      
       /** extension point for time axis zoom management. */
-      virtual int translateTimeToPixels (TimeValue)  const      =0;
+      virtual int translateTimeToPixels (TimeValue)  const =0;
     };
   
   
@@ -101,7 +105,6 @@ namespace model {
    */
   template<class WID>
   class CanvasHook
-    : public DisplayMetric
     {
     public:
       virtual ~CanvasHook() { }    ///< this is an interface
@@ -110,6 +113,9 @@ namespace model {
       virtual void move   (WID& widget, int xPos, int yPos)  =0;
       virtual void remove (WID& widget)                      =0;
 
+      /** access the component to handle layout metric */
+      virtual DisplayMetric& getMetric()  const              =0;
+      
       /** Anchor point to build chains of related View Hooks */
       virtual CanvasHook<WID>&
       getAnchorHook()  noexcept
@@ -137,7 +143,7 @@ namespace model {
       Pos
       hookedAt (Time start, int downshift=0)
         {
-          return hookedAt (translateTimeToPixels (start), downshift);
+          return hookedAt (getMetric().translateTimeToPixels (start), downshift);
         }
     };
   
