@@ -33477,6 +33477,30 @@
 <node COLOR="#338800" CREATED="1619972797494" ID="ID_1468885512" MODIFIED="1619972821488" TEXT="nebenbei: Operation &quot;create&quot; &#x2192; &quot;emplace&quot;">
 <icon BUILTIN="button_ok"/>
 </node>
+<node COLOR="#338800" CREATED="1619976082135" ID="ID_416166359" MODIFIED="1619976677236" TEXT="Variante f&#xfc;r placement-new einbauen">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619976099788" ID="ID_1451882006" MODIFIED="1619976684789" TEXT="Problem: DEFAULT-Typ und SIZE-Parameter in das Handle einbetten">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#435e98" CREATED="1619976624404" ID="ID_1394264630" MODIFIED="1619976674356" TEXT="DEFAULT-Typ kann als Typ-Parameter weiteregeben werden">
+<icon BUILTIN="idea"/>
+<node CREATED="1619976641856" ID="ID_960415515" MODIFIED="1619976671474" TEXT="dann wird eben auch der Typ vom Handle komplexer">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1619976655262" ID="ID_411012847" MODIFIED="1619976666398" TEXT="daf&#xfc;r in InPlaceBuffer einen Typ-Konstruktor anbieten">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619976688954" ID="ID_1451984496" MODIFIED="1619976700633" TEXT="nochmal &#xfc;ber den Size-Parameter nachdenken...">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619976702067" ID="ID_1433875229" MODIFIED="1619976734718" TEXT="kann man den dann auch zur Compile-Zeit weitergeben?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619976718142" ID="ID_210847961" MODIFIED="1619976734718" TEXT="wie sieht&apos;s mit Assignments aus?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>

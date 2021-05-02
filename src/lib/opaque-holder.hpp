@@ -571,6 +571,9 @@ namespace lib {
   
   
   
+  template<class BA, class DEFAULT>
+  class PlantingHandle;
+  
   /**
    * Buffer to place and maintain an object instance privately within another object.
    * Variation of a similar concept as with OpaqueHolder, but implemented here
@@ -652,7 +655,10 @@ namespace lib {
        *  Use as `InPlaceBuffer(embedType<XYZ>, arg1, arg2, arg3)` */
       template<typename SUB>
       static auto embedType() { return (SUB*) nullptr; }
-
+      
+      /** a "planting handle" can be used to expose an opaque InPlaceBuffer through an API */
+      using Handle = PlantingHandle<BA, DEFAULT>;
+      
       
       /** Abbreviation for placement new */
       template<class TY, typename...ARGS>
@@ -713,7 +719,7 @@ namespace lib {
    * @warning the type BA must expose a virtual dtor, since the targeted
    *    InPlaceBuffer has to take ownership of the implanted object.
    */
-  template<class BA>
+  template<class BA, class DEFAULT = BA>
   class PlantingHandle
     {
       void* buffer_;
@@ -723,30 +729,17 @@ namespace lib {
                      "target interface BA must provide virtual dtor, "
                      "since InPlaceBuffer needs to take ownership.");
       
+      template<class SUB>
+      void __ensure_can_create();
+      
+      
     public:
       template<size_t maxSiz>
-      PlantingHandle (InPlaceBuffer<BA, maxSiz>& targetBuffer)
+      PlantingHandle (InPlaceBuffer<BA, maxSiz, DEFAULT>& targetBuffer)
         : buffer_(&targetBuffer)
         , maxSiz_(maxSiz)
         { }
       
-      
-      template<class SUB>
-      BA&
-      emplace (SUB&& implementation)
-        {
-          if (sizeof(SUB) > maxSiz_)
-            throw error::Fatal("Unable to implant implementation object of size "
-                               "exceeding the pre-established storage buffer capacity. "
-                               +boost::lexical_cast<std::string>(sizeof(SUB)) + " > "
-                               +boost::lexical_cast<std::string>(maxSiz_)
-                              ,error::LUMIERA_ERROR_CAPACITY);
-          
-          using Holder = InPlaceBuffer<BA, sizeof(SUB)>;
-          Holder& holder = *static_cast<Holder*> (buffer_);
-          
-          return holder.template create<SUB> (std::forward<SUB> (implementation));
-        }
       
       template<class SUB>
       bool
@@ -754,6 +747,33 @@ namespace lib {
         {
           return sizeof(SUB) <= maxSiz_;
         }
+      
+      /** move-construct an instance of subclass into the opaque buffer */
+      template<class SUB>
+      SUB&
+      emplace (SUB&& implementation)
+        {
+          __ensure_can_create<SUB>();
+          
+          using Holder = InPlaceBuffer<BA, sizeof(SUB), DEFAULT>;
+          Holder& holder = *static_cast<Holder*> (buffer_);
+          
+          return holder.template create<SUB> (std::forward<SUB> (implementation));
+        }
+      
+      /** Abbreviation for placement new of a subclass SUB into the opaque buffer*/
+      template<class SUB, typename...ARGS>
+      SUB&
+      create (ARGS&& ...args)
+        {
+          __ensure_can_create<SUB>();
+          
+          using Holder = InPlaceBuffer<BA, sizeof(SUB), DEFAULT>;
+          Holder& holder = *static_cast<Holder*> (buffer_);
+          
+          return holder.template create<SUB> (std::forward<ARGS> (args)...);
+        }
+      
       
       BA*
       get()  const
@@ -764,6 +784,23 @@ namespace lib {
         }
     };
   
+  
+  
+  /** @internal Helper to ensure the opaque buffer provides sufficient storage 
+   *  @tparam SUB actual subclass type to be implanted into the opaque buffer
+   */
+  template<class BA, class B0>
+  template<class SUB>
+  inline void
+  PlantingHandle<BA,B0>::__ensure_can_create()
+  {
+    if (not this->canCreate<SUB>())
+      throw error::Fatal("Unable to implant implementation object of size "
+                         "exceeding the pre-established storage buffer capacity. "
+                         +boost::lexical_cast<std::string>(sizeof(SUB)) + " > "
+                         +boost::lexical_cast<std::string>(maxSiz_)
+                        ,error::LUMIERA_ERROR_CAPACITY);
+  }
   
   
   

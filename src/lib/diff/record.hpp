@@ -109,7 +109,7 @@
 
 namespace lib {
   
-  template<class BA>
+  template<class BA, class DEFAULT>
   class PlantingHandle;
   
 namespace idi {
@@ -511,7 +511,7 @@ namespace diff{
       
       /* === low-level access (for diff application) === */
       
-      using BufferHandle = PlantingHandle<TreeMutator>;
+      using BufferHandle = PlantingHandle<TreeMutator, TreeMutator>;
       
       /** attachment point to receive and apply tree-diff changes.
        *  The actual implementation needs to be provided for concrete Record payload types;

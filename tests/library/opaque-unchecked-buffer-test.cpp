@@ -121,7 +121,7 @@ namespace test{
      *  due to alignment of the contained object
      *  within OpaqueHolder's buffer
      */
-    const size_t _ALIGN_ = sizeof(size_t);
+    const size_t _ALIGNMENT_OVERHEAD_ = sizeof(size_t);
     
   }
   
@@ -141,10 +141,10 @@ namespace test{
           _checksum = 0;
           _create_count = 0;
           {
-            typedef InPlaceBuffer<Base, sizeof(DD<42>), DD<0>> Buffer;
+            using Buffer = InPlaceBuffer<Base, sizeof(DD<42>), DD<0>>;
             
             Buffer buff;
-            CHECK (sizeof(buff) <= sizeof(DD<42>) + _ALIGN_);
+            CHECK (sizeof(buff) <= sizeof(DD<42>) + _ALIGNMENT_OVERHEAD_);
             CHECK (1 == _create_count);
             CHECK (0 == _checksum);
             buff->confess();          // one default object of type DD<0> has been created
@@ -159,7 +159,14 @@ namespace test{
             
             CHECK(0 == buff->id_);   // default object was created, due to exception...
             
-            buff.create<D42Sub> ("what the f**","is going on here?");
+            // as a variation: use a "planting handle" to implant yet another subtype
+            // into the opaque buffer. This setup helps to expose such a buffer via API
+            using Handle = Buffer::Handle;
+            
+            Handle plantingHandle{buff};
+            plantingHandle.create<D42Sub> ("what the f**","is going on here?");
+            
+            // subclass instance was indeed implanted into the opaque buffer
             buff->confess();
             
             CHECK (6 == _create_count);
