@@ -703,7 +703,7 @@ namespace lib {
   
   
   /**
-   * handle to allow for safe _»remote implantation«_
+   * A handle to allow for safe _»remote implantation«_
    * of an unknown subclass into a given opaque InPlaceBuffer,
    * without having to disclose the concrete buffer type or size.
    * @remarks this copyable value object is especially geared towards use
@@ -733,7 +733,7 @@ namespace lib {
       
       template<class SUB>
       BA&
-      create (SUB&& implementation)
+      emplace (SUB&& implementation)
         {
           if (sizeof(SUB) > maxSiz_)
             throw error::Fatal("Unable to implant implementation object of size "

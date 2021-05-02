@@ -201,7 +201,7 @@ namespace test{
         void
         buildMutator (TreeMutator::Handle buff)
           {
-            buff.create (
+            buff.emplace (
               TreeMutator::build()
                 .attach (collection(nestedData_)
                        .isApplicableIf ([&](GenNode const& spec) -> bool

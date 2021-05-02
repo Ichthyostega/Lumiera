@@ -474,7 +474,17 @@ namespace diff{
           }
         
         /** locate the designated target element and build a suitable
-         *  sub-mutator for this element into the provided target buffer */
+         *  sub-mutator for this element into the provided target buffer.
+         * @remark basically we just delegate the implementation to the lambda
+         *    provided as "mutator" `MUT` to the  CollectionBinding instance, which
+         *    in turn was created by the TreeMutator builder-DSL. However, in practice,
+         *    the most relevant implementation will be the _default implementation,_ which
+         *    recursively forwards this invocation again to the DiffMutable::buildMutator()
+         *    virtual function, which then is implemented on each actual "diff mutable" UI-Element.
+         *    This default implementation can be found in tree-mutator-diffmutable-binding.cpp,
+         *    within the `struct _DefaultBinding` (at the bottom of the file). Typically the
+         *    concrete implementation will invoke `targetBuff.emplant( TreeMutator::build() ...)`
+         * @see stage::timeline::TimelineController::buildMutator (TreeMutator::Handle) */
         virtual bool
         mutateChild (GenNode const& spec, TreeMutator::Handle targetBuff)  override
           {

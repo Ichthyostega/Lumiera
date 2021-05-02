@@ -158,7 +158,7 @@ namespace test{
                       void
                       buildMutator (TreeMutator::Handle buff)  override
                         {
-                          buff.create (
+                          buff.emplace(
                             TreeMutator::build()
                               .attach (collection (*this)
                                       ));

@@ -551,7 +551,7 @@ namespace test{
                           {
                             // use our "inside knowledge" to get at the nested scope implementation
                             VecD& subScope = subScopes[subID];
-                            buff.create (
+                            buff.emplace (
                               TreeMutator::build()
                                 .attach (collection(subScope)
                                            .constructFrom ([&](GenNode const& spec) -> Data
@@ -862,7 +862,7 @@ namespace test{
               {
                 // NOTE: we use "implementation inside knowledge" regarding the nested scope,
                 //       which is here represented as TestMutationTarget
-                buff.create (
+                buff.emplace (
                   TreeMutator::build()
                     .attachDummy (delta));
                 

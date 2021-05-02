@@ -113,7 +113,7 @@ namespace timeline {
     if (this->isActive())
       operator*().buildMutator (buffer);  // delegate to TimelineController
     else                                 //  else when no widget exists...
-      buffer.create(
+      buffer.emplace(
         TreeMutator::build()
           .ignoreAllChanges());       //     ...consume and ignore diff
   }

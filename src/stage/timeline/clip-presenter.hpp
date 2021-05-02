@@ -141,7 +141,7 @@ namespace timeline {
           using PEffect  = unique_ptr<ClipPresenter>;
           using PMarker  = unique_ptr<MarkerWidget>;
           
-          buffer.create (
+          buffer.emplace(
             TreeMutator::build()
               .attach (collection(markers_)
                      .isApplicableIf ([&](GenNode const& spec) -> bool

@@ -514,7 +514,7 @@ namespace diff{
                 Iter targetElm = target_.locate (spec.idi);
                 if (targetElm)
                   {
-                    targetBuff.create (TreeMutator::build());
+                    targetBuff.emplace (TreeMutator::build());
                     target_.logMutation (*targetElm);
                     return true;
                   }

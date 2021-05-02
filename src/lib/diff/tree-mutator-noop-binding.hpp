@@ -91,7 +91,7 @@ namespace diff{
         bool
         mutateChild (Elm, Buff buff) override                   ///< ignore inferiors, yet reproduce yourself
           {
-            buff.create (BlackHoleMutation());
+            buff.emplace (BlackHoleMutation());
             return true;
           }
       };

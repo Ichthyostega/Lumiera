@@ -155,7 +155,7 @@ namespace timeline {
     using PMarker = unique_ptr<MarkerWidget>;
     auto rootForkID = fork_->getID();
     
-    buffer.create (
+    buffer.emplace(
       TreeMutator::build()
         .attach (collection(markers_)
                .isApplicableIf ([&](GenNode const& spec) -> bool

@@ -86,7 +86,7 @@ namespace timeline {
   {
     UNIMPLEMENTED ("what can actually be manipulated on a RulerTrack by diff message?");
     
-//  buffer.create (
+//  buffer.emplace(
 //    TreeMutator::build()
 //      .change(ATTR_name, [&](string val)
 //          {                                                  // »Attribute Setter« : receive a new value for the track name field

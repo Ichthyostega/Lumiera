@@ -94,7 +94,7 @@ namespace ctrl {
       void
       buildMutator (lib::diff::TreeMutator::Handle buffer)  override
         {
-          buffer.create (
+          buffer.emplace(
             TreeMutator::build()
           );
           UNIMPLEMENTED ("define and implement what need to be reflected from asset::ErrorLog");

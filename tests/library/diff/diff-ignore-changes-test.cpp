@@ -174,10 +174,10 @@ namespace test{
               buildMutator (TreeMutator::Handle buff)
                 {
                   if (diligent)
-                    buff.create(
+                    buff.emplace(
                       TreeMutator());
                   else
-                    buff.create(
+                    buff.emplace(
                       TreeMutator::build()
                         .ignoreAllChanges());
                 }
@@ -216,7 +216,7 @@ namespace test{
               void
               buildMutator (TreeMutator::Handle buff)
                 {
-                  buff.create(
+                  buff.emplace (
                     TreeMutator::build()
                       .ignoreAllChanges()
                       .change("γ", [&](double val) { loot = val; }));

@@ -74,7 +74,7 @@ namespace diff{
   void
   Record<GenNode>::Mutator::buildMutator (BufferHandle buff)
   {
-     buff.create (
+     buff.emplace (
        TreeMutator::build()
                    .attach (*this));
   }

@@ -270,7 +270,7 @@ namespace timeline {
   inline void
   TrackPresenter::buildMutator (TreeMutator::Handle buffer)
   {
-    buffer.create (
+    buffer.emplace(
       TreeMutator::build()
         .attach (collection(display_.bindRulers())
                .isApplicableIf ([&](GenNode const& spec) -> bool

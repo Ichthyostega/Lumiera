@@ -32882,11 +32882,19 @@
 <node COLOR="#338800" CREATED="1618675384464" ID="ID_381912051" MODIFIED="1618675399330" TEXT="Zustandslogik der Gesten-Erkennung selber">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618672711536" ID="ID_1916597982" MODIFIED="1618672719742" TEXT="Verbindung zum Canvas herstellen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1618672711536" ID="ID_1916597982" MODIFIED="1619881347856" TEXT="Verbindung zum Canvas herstellen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1619881349481" ID="ID_1566054765" MODIFIED="1619881362478" TEXT="nutze das CanvasHooked">
+<icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618672732077" ID="ID_949915263" MODIFIED="1618672739781" TEXT="Logik zur Positions-&#xdc;bersetzung">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1619881363596" ID="ID_120077248" MODIFIED="1619882215112" TEXT="CanvasHook exponiert jetzt DisplayMetric">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1619881405244" ID="ID_1235657284" MODIFIED="1619881421990" TEXT="das passiert dann aber alles bereits im Subject"/>
+<node CREATED="1619882166616" ID="ID_1792609740" MODIFIED="1619882178102" TEXT="Subject::gestureOffset(cmd, deltaX, deltaY)"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618672732077" ID="ID_949915263" MODIFIED="1619882205422" TEXT="Logik zur Positions-&#xdc;bersetzung">
+<icon BUILTIN="pencil"/>
 <node CREATED="1618676950908" ID="ID_69237451" MODIFIED="1618677116146" TEXT="hier deutet sich ein mehrstufiger Ansatz an">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -32926,8 +32934,13 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618778688276" ID="ID_1895003083" MODIFIED="1618778695704" TEXT="aber &#xfc;berhaupt noch nicht implementiert">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619104316816" ID="ID_907598549" MODIFIED="1619104329752" TEXT="zu Kl&#xe4;ren: Rolle und Zugang zum Layout-Manager">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1619104316816" FOLDED="true" ID="ID_907598549" MODIFIED="1619880556650" TEXT="zu Kl&#xe4;ren: Rolle und Zugang zum Layout-Manager">
+<icon BUILTIN="yes"/>
+<node CREATED="1619880229221" ID="ID_667002483" MODIFIED="1619880246203" TEXT="der Belang wird von einer eigenen Komponente behandelt"/>
+<node CREATED="1619880246897" ID="ID_1360417037" MODIFIED="1619880264379" TEXT="diese wird Teil des DisplayManager-Interface"/>
+<node CREATED="1619880345173" ID="ID_1065721692" MODIFIED="1619880538264" TEXT="sp&#xe4;ter mal: Integration mit ZoomWindow">
+<arrowlink COLOR="#8e7ba1" DESTINATION="ID_838803024" ENDARROW="Default" ENDINCLINATION="171;760;" ID="Arrow_ID_1707924491" STARTARROW="None" STARTINCLINATION="-1855;126;"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619104748998" ID="ID_1862152665" MODIFIED="1619106836504" TEXT="zu Kl&#xe4;ren: Skala f&#xfc;r Screen-Koordinaten und/oder Pixel">
 <arrowlink COLOR="#6084b9" DESTINATION="ID_206049495" ENDARROW="Default" ENDINCLINATION="-1698;230;" ID="Arrow_ID_1554039358" STARTARROW="None" STARTINCLINATION="-5472;269;"/>
@@ -33203,8 +33216,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619104345461" ID="ID_414006920" MODIFIED="1619105085361" TEXT="Aufgabe: API">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619104345461" ID="ID_414006920" MODIFIED="1619880189377" TEXT="Aufgabe: API">
+<icon BUILTIN="pencil"/>
 <node CREATED="1619104353964" ID="ID_1748021574" MODIFIED="1619104378116" TEXT="vorhanden: translateTimeToPixels(TimeValue startTimePoint)"/>
 <node CREATED="1619132261261" ID="ID_1989281789" MODIFIED="1619132284186" TEXT="erst mal nach Bedarf &#x2015; aber genau">
 <icon BUILTIN="yes"/>
@@ -33332,6 +33345,142 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618691013997" ID="ID_429908834" MODIFIED="1618691021757" TEXT="Delta an das Subject weitergeben">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619887175393" ID="ID_54981427" MODIFIED="1619887223546" TEXT="Problem: Aufwand f&#xfc;r Gesten-Verfolgung">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1619887230011" ID="ID_1178141750" MODIFIED="1619887552418" TEXT="Push von low-Level-Events erzeugt &#xdc;bersetzungsaufwand">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      typischerweise liefern die low-level-Events ger&#228;tespezifische Koordinaten ab, und deren &#220;bersetzung in die Modell/Dom&#228;nenwerte erfordert Hilfsmittel, die man sich mehrstufig beschaffen mu&#223;. Da aber die einzelnen Events unverbunden daherkommen, mu&#223; die Verarbeitung vereinzelt erfolgen. Und das hei&#223;t, man leistet diesen Einrichtungs-Aufwand f&#252;r jedes einzelne Event; dies geht zu Lasten der &#187;Reaktivit&#228;t&#171;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1619887281662" ID="ID_843790040" MODIFIED="1619887627626" TEXT="Spezial-Konventionen bl&#xe4;hen das API auf">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wenn man nun eine fest-vorbereitete L&#246;sung f&#252;r jeden Fall vorsieht, wird die Schnittstelle bereit, un&#252;bersichtlich und k&#246;nnte im Lauf der Zeit verwuchern. Zudem mu&#223; eine komplexe Konvention errichtet werden, wer wann f&#252;r wen welche Variante aufruft
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1619887333950" ID="ID_1150224022" MODIFIED="1619887725547" TEXT="ein &#xdc;bersetzungs-Funktor braucht Platz">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Daher erscheint ein Adapter sinnvoll, der jeweils f&#252;r eine einzelne Gesten-Instanz erzeugt wird. Dies erfordert jedoch Storage, welche ohne gro&#223;en Overhead bereitgestellt und effizient genutzt sein will
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1619887730416" ID="ID_915000313" MODIFIED="1619887745442" TEXT="L&#xf6;sung: Subject zu einem Protokoll ausbauen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619887769934" ID="ID_15885968" MODIFIED="1619887783910" TEXT="Schnittstelle zum Verdrahten">
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619887785265" ID="ID_194430924" MODIFIED="1619887803248" TEXT="ein Adapter f&#xfc;r die Gesten-Instanz">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1619887907477" ID="ID_580784250" MODIFIED="1619887914507" TEXT="wird vom Subject konkret bereitgestellt"/>
+<node CREATED="1619887915592" ID="ID_1016019139" MODIFIED="1619887925546" TEXT="wird in der Storage des Gesten-Controllers abgelegt"/>
+<node CREATED="1619887926542" ID="ID_234628540" MODIFIED="1619887933409" TEXT="lebt bis zum Ende der Geste"/>
+</node>
+<node COLOR="#990000" CREATED="1619888087712" ID="ID_279012098" MODIFIED="1619903390115" TEXT="Anforderung: Generische Implementierung mit konkretem Typ">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1619888991781" ID="ID_1808059433" MODIFIED="1619888994864" TEXT="warum?">
+<node CREATED="1619888150728" ID="ID_1072043025" MODIFIED="1619888160161" TEXT="yet-another-indirection vermeiden"/>
+<node CREATED="1619888165743" ID="ID_1820882158" MODIFIED="1619888172801" TEXT="Inlining erm&#xf6;glichen"/>
+</node>
+<node COLOR="#990000" CREATED="1619889004742" ID="ID_962466680" MODIFIED="1619903372110" TEXT="geht das &#xfc;berhaupt?">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1619893616079" ID="ID_1820351141" MODIFIED="1619894138543" TEXT="ehr nicht....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...sobald irgendwo eine Abstraktionsbarriere errichtet wird, mu&#223; mindestens ein Call indirekt oder virtuell sein....
+    </p>
+    <ul>
+      <li>
+        die Abstraktion zwischen Widget und Canvas mu&#223; ich erhalten, weil die Timeline-Anzeige noch ziemlich komplex wird
+      </li>
+      <li>
+        sofern der Gesten-Controller mit beliebigen Widgets umgehen soll, gibt es eine weitere Abstraktion
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1619903180827" ID="ID_250477630" MODIFIED="1619903245581" TEXT="dar&#xfc;ber mu&#xdf; ich wohl (zun&#xe4;chst?) gro&#xdf;z&#xfc;gig hinwegsehen"/>
+<node CREATED="1619903259743" ID="ID_872225515" MODIFIED="1619903353944" TEXT="zu Vieles ist noch nicht klar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        im Bezug auf die Performance wei&#223; ich nicht, wo die Me&#223;latte liegt
+      </li>
+      <li>
+        die tats&#228;chlich ben&#246;tigte Abstraktion kann sich noch als ganz anders herausstellen
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619967216789" ID="ID_1503155358" MODIFIED="1619967554656" TEXT="aber an der Idee mit dem Adapter halte ich fest...">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1619967266842" ID="ID_1478677945" MODIFIED="1619967373917">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...die konkrete Interpretation der Mausbewegung
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1619967375039" ID="ID_1955578195" MODIFIED="1619967379379" TEXT="...aus dem Gesten-Controller herauszuhalten"/>
+<node CREATED="1619967252543" ID="ID_630081269" MODIFIED="1619967547078" TEXT="ich sehe keinen anderen Weg....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...sonst w&#252;rde entweder das Subject selber ad hoc etwas bereitstellen m&#252;ssen und daf&#252;r zus&#228;tzliche Storage brauchen (<b>Hebel</b>, es gibt sehr viele Subjekte!), oder das Interface &quot;Subject&quot; w&#252;rde l&#246;chrigt und zu einer Kodifizierung von Einzelf&#228;llen. Die L&#246;sung mit dem Adapter stattdessen f&#228;llt unter das Prinzip <i>Inversion of Control</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1619972768498" ID="ID_1614732760" MODIFIED="1619972785748" TEXT="das bedeutet: opaque buffer verwenden">
+<node CREATED="1619972787360" ID="ID_82004044" MODIFIED="1619972793139" TEXT="PlantingHandle">
+<icon BUILTIN="idea"/>
+<node COLOR="#338800" CREATED="1619972797494" ID="ID_1468885512" MODIFIED="1619972821488" TEXT="nebenbei: Operation &quot;create&quot; &#x2192; &quot;emplace&quot;">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618691023427" ID="ID_1396949384" MODIFIED="1618691041225" TEXT="im Subject in Modell-Koordinaten transformieren">
 <icon BUILTIN="flag-yellow"/>
@@ -33437,6 +33586,7 @@
 <node CREATED="1541858529489" ID="ID_838803024" MODIFIED="1557498707233" TEXT="ZoomWindow">
 <linktarget COLOR="#5b5ca1" DESTINATION="ID_838803024" ENDARROW="Default" ENDINCLINATION="-519;-1168;" ID="Arrow_ID_1674512697" SOURCE="ID_1949450244" STARTARROW="None" STARTINCLINATION="446;0;"/>
 <linktarget COLOR="#5b5ca1" DESTINATION="ID_838803024" ENDARROW="Default" ENDINCLINATION="-599;-1344;" ID="Arrow_ID_842684168" SOURCE="ID_1828075998" STARTARROW="None" STARTINCLINATION="417;51;"/>
+<linktarget COLOR="#8e7ba1" DESTINATION="ID_838803024" ENDARROW="Default" ENDINCLINATION="171;760;" ID="Arrow_ID_1707924491" SOURCE="ID_1065721692" STARTARROW="None" STARTINCLINATION="-1855;126;"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1541858541550" ID="ID_1912142591" MODIFIED="1557498707233" TEXT="generische Abstraktionskomponente">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>

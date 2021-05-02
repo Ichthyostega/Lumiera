@@ -63,7 +63,7 @@ namespace setting {
   void
   AssetController::buildMutator (TreeMutator::Handle buffer)
   {
-    buffer.create (
+    buffer.emplace(
       TreeMutator::build()
     );
     UNIMPLEMENTED ("create a sensible binding between AssetManager in the section and AssetController in the UI");

@@ -81,7 +81,7 @@ namespace timeline {
   void
   MarkerWidget::buildMutator (TreeMutator::Handle buffer)
   {
-    buffer.create (
+    buffer.emplace(
       TreeMutator::build()
         .change(ATTR_name, [&](string val)
             {

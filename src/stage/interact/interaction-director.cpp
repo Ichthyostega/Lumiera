@@ -137,7 +137,7 @@ namespace interact {
   void
   InteractionDirector::buildMutator (TreeMutator::Handle buffer)
   {
-    buffer.create (
+    buffer.emplace(
       TreeMutator::build()
         .attach (collection(timelines_)
                .isApplicableIf ([&](GenNode const& spec) -> bool

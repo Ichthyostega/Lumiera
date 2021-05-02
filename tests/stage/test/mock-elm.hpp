@@ -232,7 +232,7 @@ namespace test{
           log_.call (this->identify(), "buildMutator");
           cout << this->identify() << " <-- DIFF" <<endl;
           
-          buffer.create (
+          buffer.emplace(
             TreeMutator::build()
               .attach (collection(scope)
                      .isApplicableIf ([&](GenNode const& spec) -> bool
