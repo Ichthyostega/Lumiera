@@ -24583,6 +24583,7 @@
 </node>
 </node>
 <node CREATED="1557435595988" ID="ID_1773619805" MODIFIED="1557498707228" TEXT="abgebrochen, da unverh&#xe4;ltnism&#xe4;&#xdf;ig">
+<arrowlink COLOR="#a98ca6" DESTINATION="ID_1691540337" ENDARROW="Default" ENDINCLINATION="2957;477;" ID="Arrow_ID_1272525320" STARTARROW="None" STARTINCLINATION="-1064;82;"/>
 <icon BUILTIN="stop-sign"/>
 </node>
 </node>
@@ -33471,15 +33472,16 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1619972768498" ID="ID_1614732760" MODIFIED="1619972785748" TEXT="das bedeutet: opaque buffer verwenden">
-<node CREATED="1619972787360" ID="ID_82004044" MODIFIED="1619972793139" TEXT="PlantingHandle">
+<node CREATED="1619972768498" ID="ID_1614732760" MODIFIED="1620419721948" TEXT="das bedeutet: opaque buffer verwenden">
+<icon BUILTIN="yes"/>
+<node CREATED="1619972787360" FOLDED="true" ID="ID_82004044" MODIFIED="1620419687276" TEXT="PlantingHandle">
 <icon BUILTIN="idea"/>
 <node COLOR="#338800" CREATED="1619972797494" ID="ID_1468885512" MODIFIED="1619972821488" TEXT="nebenbei: Operation &quot;create&quot; &#x2192; &quot;emplace&quot;">
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1619976082135" ID="ID_416166359" MODIFIED="1619976677236" TEXT="Variante f&#xfc;r placement-new einbauen">
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619976099788" ID="ID_1451882006" MODIFIED="1619976684789" TEXT="Problem: DEFAULT-Typ und SIZE-Parameter in das Handle einbetten">
+<node COLOR="#435e98" CREATED="1619976099788" ID="ID_1451882006" MODIFIED="1620419375147" TEXT="Problem: DEFAULT-Typ und SIZE-Parameter in das Handle einbetten">
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node COLOR="#435e98" CREATED="1619976624404" ID="ID_1394264630" MODIFIED="1619976674356" TEXT="DEFAULT-Typ kann als Typ-Parameter weiteregeben werden">
@@ -33491,16 +33493,114 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619976688954" ID="ID_1451984496" MODIFIED="1619976700633" TEXT="nochmal &#xfc;ber den Size-Parameter nachdenken...">
+<node COLOR="#338800" CREATED="1619976688954" ID="ID_1451984496" MODIFIED="1620406002701" TEXT="nochmal &#xfc;ber den Size-Parameter nachdenken...">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#990000" CREATED="1619976702067" ID="ID_1433875229" MODIFIED="1620406026837" TEXT="kann man den dann auch zur Compile-Zeit weitergeben?">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1620406047028" ID="ID_433743632" MODIFIED="1620406164545" TEXT="definitiv nicht, denn dann wird der Client-Code daf&#xfc;r zust&#xe4;ndig">
+<icon BUILTIN="idea"/>
+<node CREATED="1620406133809" ID="ID_370253197" MODIFIED="1620406152098" TEXT="InPlaceBuffer == Implementierung"/>
+<node CREATED="1620406153388" ID="ID_664190536" MODIFIED="1620406159849" TEXT="PlantingHandle == Schnittstelle"/>
+</node>
+<node CREATED="1620406074960" ID="ID_1455403417" MODIFIED="1620406114628">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn wir trotzdem einen Overrun-Check haben wollen,
+    </p>
+    <p>
+      kommen wir an einem zur Laufzeit verf&#252;gbaren Wert nicht vorbei
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1620406031439" ID="ID_481915593" MODIFIED="1620406248233" TEXT="das hatte ich mir fr&#xfc;her schon mal &#xfc;berlegt....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...jetzt nach einigem &#220;berlegen d&#228;mmert mir die Erinnerung...
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1620406188961" ID="ID_1221022666" MODIFIED="1620406231393" TEXT="man kann ihn nicht einmal constexpr machen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...auch daran kann ich mich jetzt wieder erinnern...<br />Dann w&#228;re n&#228;mlich das Handle nicht mehr kopierbar
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1619976718142" ID="ID_210847961" MODIFIED="1620406270405" TEXT="wie sieht&apos;s mit Assignments aus?">
+<icon BUILTIN="help"/>
+<node CREATED="1620406271998" ID="ID_870285433" MODIFIED="1620406308773" TEXT="f&#xfc;r das Handle: m&#xf6;glich und explizit erw&#xfc;nscht">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1620406283493" ID="ID_302408091" MODIFIED="1620406290904" TEXT="nun sogar im Test mit abgedeckt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1620406315000" ID="ID_492931720" MODIFIED="1620419379057" TEXT="Test erweitern">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1620406319933" ID="ID_710376106" MODIFIED="1620406337957" TEXT="emplace hat so seine T&#xfc;cken">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1620406339380" ID="ID_154149353" MODIFIED="1620409041229" TEXT="wieder das Problem mit perfect-forwarding + Varargs + ctor-Overload">
+<arrowlink COLOR="#9a74a0" DESTINATION="ID_1554664514" ENDARROW="Default" ENDINCLINATION="1930;405;" ID="Arrow_ID_1066770776" STARTARROW="None" STARTINCLINATION="-6776;285;"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1620409042922" ID="ID_1128192662" MODIFIED="1620409049869" TEXT="nein... oder vielleicht..."/>
+<node CREATED="1620409051737" ID="ID_889061911" MODIFIED="1620409075166" TEXT="das Problem sind implizit definierte Konstruktoren in der Vererbuns-Hierarchie"/>
+<node CREATED="1620409076118" ID="ID_1437249592" MODIFIED="1620409089599" TEXT="sobald ich alle Move-Konstruktoren explizit definiere, funktionieren alle F&#xe4;lle"/>
+<node CREATED="1620409290592" ID="ID_1921177921" MODIFIED="1620409322983" TEXT="gabs da nicht eine Regel, da&#xdf; explizit definierte dtor einen impliziten move-ctor unterdr&#xfc;ckt">
+<icon BUILTIN="idea"/>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1620419440753" ID="ID_88675651" LINK="https://lumiera.org/documentation/technical/code/c++11.html" MODIFIED="1620419505615" TEXT="dokumentiert...."/>
+</node>
+<node COLOR="#338800" CREATED="1620406576782" ID="ID_791550280" MODIFIED="1620419382240" TEXT="also doch besser eine dedizierte emplace()-Funktion auch auf dem InPlaceBuffer">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1620419383512" ID="ID_30151801" MODIFIED="1620419404721" TEXT="Genzf&#xe4;lle +  Handle-Kopie">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1620419779271" ID="ID_64726693" MODIFIED="1620419947646" TEXT="brauche Fallback-Adapter">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619976702067" ID="ID_1433875229" MODIFIED="1619976734718" TEXT="kann man den dann auch zur Compile-Zeit weitergeben?">
-<icon BUILTIN="help"/>
+<node CREATED="1620419793888" ID="ID_1040008985" MODIFIED="1620419938844" TEXT="Einschr&#xe4;nkung von InPlaceBuffer / PlantingHandle">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      diese verwalten nicht aktiv den Typ und Zustand im Buffer.
+    </p>
+    <p>
+      Daher mu&#223; stets ein Objekt im Buffer (default)-konstruiert sein; ein reines (abstraktes) Interface gen&#252;gt nicht. An dieser Stelle bietet sich ein &quot;NULL-Ojbekt&quot; an
+    </p>
+  </body>
+</html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619976718142" ID="ID_210847961" MODIFIED="1619976734718" TEXT="wie sieht&apos;s mit Assignments aus?">
-<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1620419964630" ID="ID_1402318337" MODIFIED="1620419991597" TEXT="dieser bewirkt, da&#xdf; keine Geste erkannt werden kann">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1620419708341" ID="ID_53797308" MODIFIED="1620419714535" TEXT="Subject-API erweitern">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
@@ -57244,6 +57344,88 @@
     </p>
   </body>
 </html></richcontent>
+</node>
+</node>
+<node CREATED="1620405445951" ID="ID_1127258714" MODIFIED="1620405460977" TEXT="&#xbb;perfect forwarding&#xab;">
+<node CREATED="1620405462300" ID="ID_1712821553" MODIFIED="1620405478341" TEXT="hatte nun mehrfach Probleme in Kombination mit Variadic-Templates"/>
+<node CREATED="1620405479689" ID="ID_53418276" MODIFIED="1620405514581" TEXT="std::forward&lt;ARGS&gt;(args) ...  ">
+<node CREATED="1620405515532" ID="ID_89296387" MODIFIED="1620405524655" TEXT="wenn man damit einen ctor aufruft..."/>
+<node CREATED="1620405525238" ID="ID_728173351" MODIFIED="1620405542709" TEXT="dann w&#xe4;hlt das den copy-ctor, nicht den move-ctor"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1620405545856" ID="ID_766649583" MODIFIED="1620405565420" TEXT="mehrfach untersucht, bisher nicht verstanden">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1620405577484" ID="ID_1691540337" MODIFIED="1620405876689" TEXT="a57799d0186">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
+      09.05.19 17:10
+    </p>
+    <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
+      <font face="Bitstream Vera Sans Mono" size="9pt">Library: further narrowing down the tuple-forwarding problem</font>
+    </p>
+    <pre style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px"><font face="Bitstream Vera Sans Mono" size="9pt">    </font></pre>
+    <pre style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px"><font face="Bitstream Vera Sans Mono" size="9pt">    ...yet still not successful.</font></pre>
+    <pre style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px"><font face="Bitstream Vera Sans Mono" size="9pt">    </font></pre>
+    <pre style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px"><font face="Bitstream Vera Sans Mono" size="9pt">    The mechanism used for std::apply(tuple&amp;) works fine when applied directly to the target function,</font></pre>
+    <pre style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px"><font face="Bitstream Vera Sans Mono" size="9pt">    but fails to select the proper overload when passed to a std::forward-call for</font></pre>
+    <pre style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px"><font face="Bitstream Vera Sans Mono" size="9pt">    &quot;perfect forwarding&quot;. I tried again to re-build the situation of std::forward</font></pre>
+    <pre style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px"><font face="Bitstream Vera Sans Mono" size="9pt">    with an explicitly coded function, but failed in the end to supply a type parameter</font></pre>
+    <pre style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px"><font face="Bitstream Vera Sans Mono" size="9pt">    to std::forward suitably for all possible cases</font></pre>
+    <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
+      
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#a98ca6" DESTINATION="ID_1691540337" ENDARROW="Default" ENDINCLINATION="2957;477;" ID="Arrow_ID_1272525320" SOURCE="ID_1773619805" STARTARROW="None" STARTINCLINATION="-1064;82;"/>
+</node>
+<node CREATED="1620405634252" ID="ID_1554664514" MODIFIED="1620406559164" TEXT="7.5.2021">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      OpaqueUncheckedBuffer_test f&#252;r InPlaceBuffer
+    </p>
+    <p>
+      Wieder das Gleiche: die create&lt;ARGS....&gt; - Funktion delegiert an den copy-ctor, selbst wenn dieser deleted ist
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#9a74a0" DESTINATION="ID_1554664514" ENDARROW="Default" ENDINCLINATION="1930;405;" ID="Arrow_ID_1066770776" SOURCE="ID_154149353" STARTARROW="None" STARTINCLINATION="-6776;285;"/>
+<node CREATED="1620409111535" HGAP="73" ID="ID_1792287707" MODIFIED="1620409151241" VSHIFT="27">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      vielleicht doch
+    </p>
+    <p>
+      etwas Anderes
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das Problem sind implizit definierte Konstruktoren in der Vererbuns-Hierarchie
+    </p>
+    <p>
+      sobald ich alle Move-Konstruktoren explizit definiere, funktionieren alle F&#228;lle
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1617648902994" ID="ID_276316646" MODIFIED="1617648906362" TEXT="C++20">

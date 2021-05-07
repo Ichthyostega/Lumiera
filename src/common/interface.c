@@ -106,7 +106,7 @@ push_dependency (LumieraInterfacenode parent, LumieraInterfacenode child)
       ++itr;
       if (sz == 1)
         {
-          /* block to small, realloc it with twice its size, we keep the block NULL terminated */
+          /* block too small, realloc it with twice its size, we keep the block NULL terminated */
           sz = parent->deps_size + 1;
           parent->deps_size *= 2;
           parent->deps = lumiera_realloc (parent->deps, parent->deps_size * sizeof (LumieraInterface));

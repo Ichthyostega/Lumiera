@@ -29,6 +29,8 @@
  ** an inline buffer holding an object of the concrete subclass. Typically,
  ** this situation arises when dealing with functor objects.
  ** 
+ ** # Managed opaque placement buffer
+ ** 
  ** These templates help with building custom objects and wrappers based on
  ** this pattern: lib::InPlaceAnyHolder provides a buffer for target objects
  ** and controls access through a two-layer capsule; while the outer container
@@ -47,9 +49,16 @@
  ** object requires knowledge of the actual type, similar to boost::any
  ** (but contrary to OpaqueHolder the latter uses heap storage).
  ** 
+ ** # Lightweight passively managed opaque holder buffer
+ ** 
  ** As a supplement, a more lightweight implementation is provided as
  ** lib::InPlaceBuffer, requiring just the object storage and lacking the
- ** ability to track the actual type of the embedded object.
+ ** ability to track the actual type of the embedded object, and the buffer
+ ** can not be empty with this model -- which turns out to be adequate in
+ ** most usage scenarios. This kind of lightweight "inline buffer" can even
+ ** be exposed on API through a lib::PlantingHandle, allowing an arbitrary
+ ** client to plant an likewise opaque implementation subclass into the
+ ** buffer, as long as the storage size constraint is observed.
  ** 
  ** Using this approach is bound to specific stipulations regarding the
  ** properties of the contained object and the kind of access needed.
@@ -617,7 +626,7 @@ namespace lib {
       void
       placeDefault()
         {
-          static_assert (siz >= sizeof(DEFAULT), "InPlaceBuffer to small");
+          static_assert (siz >= sizeof(DEFAULT), "InPlaceBuffer too small");
           
           new(&buf_) DEFAULT();
         }
@@ -644,7 +653,7 @@ namespace lib {
       template<class TY, typename...ARGS>
       InPlaceBuffer (TY*, ARGS&& ...args)
         {
-          static_assert (siz >= sizeof(TY), "InPlaceBuffer to small");
+          static_assert (siz >= sizeof(TY), "InPlaceBuffer too small");
           
           new(&buf_) TY (std::forward<ARGS> (args)...);
         }
@@ -665,11 +674,29 @@ namespace lib {
       TY&
       create (ARGS&& ...args)
         {
-          static_assert (siz >= sizeof(TY), "InPlaceBuffer to small");
+          static_assert (siz >= sizeof(TY), "InPlaceBuffer too small");
           
           destroy();
           try {
-              return *new(&buf_) TY (std::forward<ARGS> (args)...);
+              return *new(&buf_) TY {std::forward<ARGS> (args)...};
+            }
+          catch (...)
+            {
+              placeDefault();
+              throw;
+            }
+        }
+      
+      /** move-construct an instance of subclass into the opaque buffer */
+      template<class SUB>
+      SUB&
+      emplace (SUB&& implementation)
+        {
+          static_assert (siz >= sizeof(SUB), "InPlaceBuffer too small");
+          
+          destroy();
+          try {
+              return *new(&buf_) SUB {std::forward<SUB> (implementation)};
             }
           catch (...)
             {
@@ -718,6 +745,12 @@ namespace lib {
    *    of the service exposed.
    * @warning the type BA must expose a virtual dtor, since the targeted
    *    InPlaceBuffer has to take ownership of the implanted object.
+   * @note the `siz` (buffer size) template parameter from #InPlaceBuffer
+   *    is deliberately not part of the `PlantingHandle<BA,DEFAULT>` type,
+   *    since buffer size can be considered an opaque implementation detail.
+   *    As a consequence, we must capture this size information at construction
+   *    time and store it at runtime #maxSiz_, to protect against buffer overrun.
+   * @see OpaqueUncheckedBuffer_test
    */
   template<class BA, class DEFAULT = BA>
   class PlantingHandle
@@ -740,15 +773,19 @@ namespace lib {
         , maxSiz_(maxSiz)
         { }
       
+      // default copy acceptable...
+      
       
       template<class SUB>
       bool
       canCreate()  const
         {
+          static_assert(std::is_base_of<BA,SUB>(), "concrete object implanted into the opaque "
+                                                   "buffer must implement the defined interface");
           return sizeof(SUB) <= maxSiz_;
         }
       
-      /** move-construct an instance of subclass into the opaque buffer */
+      /** move-construct an instance of a subclass into the opaque buffer */
       template<class SUB>
       SUB&
       emplace (SUB&& implementation)
@@ -758,7 +795,7 @@ namespace lib {
           using Holder = InPlaceBuffer<BA, sizeof(SUB), DEFAULT>;
           Holder& holder = *static_cast<Holder*> (buffer_);
           
-          return holder.template create<SUB> (std::forward<SUB> (implementation));
+          return holder.template emplace (std::forward<SUB> (implementation));
         }
       
       /** Abbreviation for placement new of a subclass SUB into the opaque buffer*/
@@ -786,7 +823,7 @@ namespace lib {
   
   
   
-  /** @internal Helper to ensure the opaque buffer provides sufficient storage 
+  /** @internal Helper to ensure the opaque buffer provides sufficient storage
    *  @tparam SUB actual subclass type to be implanted into the opaque buffer
    */
   template<class BA, class B0>

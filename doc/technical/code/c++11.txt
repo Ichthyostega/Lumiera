@@ -3,6 +3,7 @@ Transition to C++11
 :Author: Ichthyo
 :Date: 2014
 :toc:
+:toclevels: 3
 
 _this page is a notepad for topics and issues related to the new C++ standard_
 
@@ -88,7 +89,7 @@ main (int, char**)
     This is idiomatic C usage to check for the validity of an object. In this case, the _bound_
     function object yields `true`, while the _unbound_ function object yields `false`
 <5> but the function object is _not automatically convertible_ to bool
-<6> yet it is possible to _construct_ a `bool` from a funktor (we just did that)
+<6> yet it is possible to _construct_ a `bool` from a functor (we just did that)
 <7> while it is not possible to _construct_ a bool from a string (we'd need to interpret and
     parse the string, which mustn't be confused with a conversion)
 
@@ -99,7 +100,7 @@ ASCII 'A' = 65 defined: 1 undefd; 0 bool-convertible: 0 can build bool: 1 bool f
 
 Moving values
 ~~~~~~~~~~~~~
-Amongst the most prominent improvements brought with C\+\+11 is the addition of *move semantics*. +
+Amongst the most prominent improvements brought with C\+\+11 is the addition of *move semantics*.
 This isn't a fundamental change, though. It doesn't change the fundamental approach like -- say,
 the introduction of function abstraction and lambdas. It is well along the lines C++ developers
 were thinking since ages; it is more like an official affirmation of that style of thinking.
@@ -123,8 +124,8 @@ Guidlines
 ^^^^^^^^^
  * embrace value semantics. Copies are 'good' not 'evil'
  * embrace fine grained abstractions. Make objects part of your everyday thinking style.
- * embrace `swap` operations to decouple the moving of data from the moving of ownership
- * embrace the abilities of the compiler, abandon the attempt to write ``smart'' implementations
+ * embrace `swap` operations, separate moving of data from transfer of ownership
+ * trust the compiler, stop writing ``smart'' implementations
 
 Thus, in everyday practice, we do not often use rvalue references explicitly. And when we do,
 it is by writing a 'move constructor.' In most cases, we try to cast our objects in such a way
@@ -166,18 +167,34 @@ of arbitrary type to the constructor of type `TY`. Note the following details
 - `std::forward` needs an explicit type parameter to be able to deduce the right target type in any case.
   It is _crucial to pass this type parameter in the correct way,_ as demonstrated above. Because, if we
   invoke this function for _copying_ (i.e. with a lvalue reference), this type parameter will _carry on_
-  this refrerence. Only a rvalue reference is stripped. This is the only way ``downstream'' receivers can
+  this reference. Only a rvalue reference is stripped. This is the only way ``downstream'' receivers can
   tell the copy or move case apart.
 - note how we're allowed to ``wrap'' a function call around the unpacking of the _argument pack_ (`args`):
   the three dots `...` are _outside_ the parenthesis, and thus the `std::forward` is applied to each of
   the arguments individually
 
-NOTE: forwarding calls can be chained, but at some point you get to acutally _consuming_ the value passed through.
+NOTE: forwarding calls can be chained, but at some point you get to actually _consuming_ the value passed through.
       To support the maximum flexibility at this point, you typically need to write two flavours of the receiving
       function or constructor: one version taking a rvalue reference, and one version taking `const&`. Moving is
       _destructive_, while the `const&` variant deals with all those cases where we copy without affecting the
       source object.
 
+Forwarding to Constructors can be problematic
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+When combining a generic forwarding factory function with invocation of -- possibly overloaded -- ctor invocations,
+matters can get rather confusing. Several times, we faced a situation where the compiler picked another overload
+as expected, and it is hard trace down what actually happens here. Thus, for the time being, it seems good
+advice to avoid the combination of flexible arguments, forwarding and overload resolution; especially for
+construction objects, when _it is important to avoid spurious copying,_ it is better to have a dedicated
+helper function do the actual ctor invocation.
+
+WARNING: One insidious point to note is the rule that _explicitly defining a destructor_ will automatically
+         _suppress an otherwise automatically defined, implicit move constructor._ Move ctors really behave
+         different than implicitly defined copy constructors; this was an often criticised, unfortunate
+         design decision for C++. So the common advice is to observe the »**rule of five**«: ``whenever you
+         define one of them, then define all of them''.footnote:[And it is sufficient to use `=default`
+         or `=delete`, for copy constructor, move constructor and the assignment operators, and thus
+         observing this rule boils down to adding just some lines of boilerplate]
 
 
 Known bugs and tricky situations
@@ -204,7 +221,10 @@ August 2015::
 February 2020::
   our »reference system« (platform) is Debian/Buster from now on.
   We have switched to **C\+\+17** and use (even require) GCC-8 or CLang 7 -- we can expect solid support
-  for all C\+\+17 features.
+  for all C++17 features.
+  
+  * still running into problems with perfect forwarding in combination with overload resolution;
+    not clear if this is a shortcoming of current compilers, or the current shape of the language
 
 
 
@@ -274,4 +294,30 @@ you must decide upon the concrete argument and return type(s) and thus instantia
 The only remedy to get around these serious limitations will be when C++ starts to support *Concepts* -- which
 can be expected to replace the usage of unbounded type inference in many situations: for example, it would then
 be possible to accept just ``an Iterator'' or ``a STL container''...
+
+Future plans
+------------
+C++20 is around the corner now, but there is no pressing need to use the new languages features immediately.
+Even more so, since some of those innovations will certainly help to improve the code base over time, but also
+impose some challenging effort to retrofit existing structures.
+
+- *Concepts* are a game changer. We will gradually start using them, while porting all the existing metraprogramming
+  code will take some time, and will possibly also benefit from compile-time introspection (C++23 ??)
+
+- *Coroutines* are a perfect fit for our jobs and scheduling. At that point, we will likely also switch over to
+  the standard threading and worker pools provided by the language, thereby reducing the amount of bare-bone C
+  code we have to maintain. Our thread management and locking helpers will probably be turned into thin wrappers
+  at that point, just retaining the convenience shortcuts.
+
+- Pipelines and the *range framework* will be a real challenge though. We have developed our own filter and
+  pipeline framework with slightly different (and more powerful) semantics, and getting both aligned will
+  by no means be a small task. The first goal will likely be to make both frameworks compatible, similar
+  to what we've done for C++11 to use our iterators and pipelines with the new standard ``for each'' loops.
+
+- *Modules* do not solve any real problems for the code base in its current shape. A migration to modules is
+  mostly a rather mechanical task, while requiring a fairly good understanding of the ``dark corners'' in the
+  code base, like e.g. the size and build time for test code. Such a transition will also raise again the topic
+  of the buildsystem. Unfortunately, what we've built on top of Scons with a little bit of python scripting is
+  much cleaner and high-level than most ``mainstream'' usage of other common build systems out there.footnote:[
+  ``hello CMake'', ``hello Autotools'', anyone else? Meson, Ninja? Maven? should maybe consider a switch to WAF?]
 
