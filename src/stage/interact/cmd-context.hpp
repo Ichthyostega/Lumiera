@@ -59,7 +59,9 @@
 //#include "stage/ctrl/bus-term.hpp"
 //#include "lib/idi/entry-id.hpp"
 #include "lib/hash-indexed.hpp"
+#include "lib/opaque-holder.hpp"
 #include "lib/symbol.hpp"
+#include "lib/nocopy.hpp"
 //#include "lib/util.hpp"
 
 //#include <string>
@@ -82,6 +84,49 @@ namespace interact {
   
   
   /**
+   * Collaboration interface for tracking the formation of a gesture.
+   * The Subject (of the Gesture) provides an actual GestureObserver
+   * as an adapter, and the gesture controller uses this adapter to push
+   * events to track and form the gesture. When the conditions for completing
+   * the gesture are met, the Subject will be notified through this adapter
+   * and might issue a command to propagate the results of the gesture,
+   * while the gesture controller, after this notification, proceeds to
+   * disable and discard the gesture context and return to passive mode,
+   * waiting for the next trigger condition.
+   */
+  class GestureObserver
+    : public util::MoveAssign
+    {
+      Symbol cmdID_;
+      
+    public:
+      virtual ~GestureObserver();  ///< this is an interface
+      
+      GestureObserver ()             : cmdID_(Symbol::BOTTOM){ }
+      GestureObserver (Symbol cmdID) : cmdID_(cmdID)         { }
+      
+      GestureObserver (GestureObserver&&)             = default;
+      GestureObserver& operator= (GestureObserver&&)  = default;
+      
+      
+      Symbol getCmdID()  const { return cmdID_; }
+      
+      virtual void updateOffset (double deltaX, double deltaY) =0;
+      virtual void markGestureCompleted()                      =0;
+    };
+  
+  
+  /** »Null Object« when no gesture is being tracked currently */
+  class InactiveObserver
+    : public GestureObserver
+    {
+      void updateOffset (double, double)  override { /*NOOP*/ }
+      void markGestureCompleted()         override { /*NOOP*/ }
+    };
+  
+  
+  
+  /**
    * Role-Interface: the Subject of Interaction.
    * An entity implementing the Subject interface can be targeted by gestures,
    * finally leading to the invocation of a specific command on that subject,
@@ -97,6 +142,9 @@ namespace interact {
         virtual Gtk::Widget& exposeWidget()                                     =0;
         virtual void fireGesture (Symbol cmdID)                                 =0;
         virtual void gestureOffset (Symbol cmdID, double deltaX, double deltaY) =0;
+        
+        using Buffer = lib::PlantingHandle<GestureObserver, InactiveObserver>;
+        virtual void buildGestureObserver (Symbol cmdID, Buffer)                =0;
     };
   
   

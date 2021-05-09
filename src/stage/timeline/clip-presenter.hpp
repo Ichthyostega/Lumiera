@@ -245,6 +245,41 @@ namespace timeline {
                     << std::endl;
         }
       
+      class DragRelocateObserver
+        : public interact::GestureObserver
+        {
+          ClipPresenter& subject_;
+          
+          void
+          updateOffset (double deltaX, double deltaY)  override
+            {
+              std::cerr << _Fmt{"Gesture(%s) --> Δ := (%3.1f,%3.1f)"}
+                               % getCmdID()
+                               % deltaX
+                               % deltaY
+                        << std::endl;
+            }
+          
+          void
+          markGestureCompleted()  override
+            {
+              std::cerr << _Fmt{"!!BANG!! Gesture-Cmd '%s'"}
+                               % getCmdID()
+                        << std::endl;
+            }
+          
+        public:
+          DragRelocateObserver(ClipPresenter& clipPresenter)
+            : subject_{clipPresenter}
+          { }
+        };
+      
+      void
+      buildGestureObserver (Symbol cmdID, Buffer buffer)  override
+        {
+          buffer.create<DragRelocateObserver> (*this);
+        }
+      
       
     private:/* ===== Internals ===== */
       /**

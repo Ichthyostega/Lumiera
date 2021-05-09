@@ -74,6 +74,9 @@ namespace interact {
   
   Subject::~Subject() { }  // Emit VTable here...
   
+  GestureObserver::~GestureObserver() { }
+  
+  
   
   /** global static service accessor function.
    * @remarks the implementation of this function taps into the UI-Backbone

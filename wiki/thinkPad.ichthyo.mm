@@ -33386,11 +33386,11 @@
 </node>
 </node>
 <node CREATED="1619887730416" ID="ID_915000313" MODIFIED="1619887745442" TEXT="L&#xf6;sung: Subject zu einem Protokoll ausbauen">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619887769934" ID="ID_15885968" MODIFIED="1619887783910" TEXT="Schnittstelle zum Verdrahten">
-<icon BUILTIN="hourglass"/>
+<node COLOR="#338800" CREATED="1619887769934" ID="ID_15885968" MODIFIED="1620565933367" TEXT="Schnittstelle zum Verdrahten">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619887785265" ID="ID_194430924" MODIFIED="1619887803248" TEXT="ein Adapter f&#xfc;r die Gesten-Instanz">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619887785265" ID="ID_194430924" MODIFIED="1620565819404" TEXT="ein Adapter f&#xfc;r die Gesten-Instanz">
+<icon BUILTIN="pencil"/>
 <node CREATED="1619887907477" ID="ID_580784250" MODIFIED="1619887914507" TEXT="wird vom Subject konkret bereitgestellt"/>
 <node CREATED="1619887915592" ID="ID_1016019139" MODIFIED="1619887925546" TEXT="wird in der Storage des Gesten-Controllers abgelegt"/>
 <node CREATED="1619887926542" ID="ID_234628540" MODIFIED="1619887933409" TEXT="lebt bis zum Ende der Geste"/>
@@ -33578,8 +33578,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1620419779271" ID="ID_64726693" MODIFIED="1620419947646" TEXT="brauche Fallback-Adapter">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1620419779271" ID="ID_64726693" MODIFIED="1620565782987" TEXT="brauche Fallback-Adapter">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1620419793888" ID="ID_1040008985" MODIFIED="1620419938844" TEXT="Einschr&#xe4;nkung von InPlaceBuffer / PlantingHandle">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -33595,13 +33595,29 @@
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1620419964630" ID="ID_1402318337" MODIFIED="1620419991597" TEXT="dieser bewirkt, da&#xdf; keine Geste erkannt werden kann">
+<node COLOR="#338800" CREATED="1620419964630" ID="ID_1402318337" MODIFIED="1620565784596" TEXT="dieser bewirkt, da&#xdf; keine Geste erkannt werden kann">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1620565871398" ID="ID_574697565" MODIFIED="1620565887201">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Name: <b>GestureObserver</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1620419708341" ID="ID_53797308" MODIFIED="1620565786800" TEXT="Subject-API erweitern">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1620565789665" ID="ID_515994897" MODIFIED="1620565795370" TEXT="Implementierung schwenken">
 <icon BUILTIN="flag-yellow"/>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1620419708341" ID="ID_53797308" MODIFIED="1620419714535" TEXT="Subject-API erweitern">
-<icon BUILTIN="flag-yellow"/>
-</node>
 </node>
 </node>
 </node>
