@@ -40,7 +40,9 @@
  ** of time-like entities -- be it the running time display in a GUI widget, a ruler marker
  ** which can be dragged, a modifiable selection or the animated playhead cursor.
  ** 
- ** \par usage scenarios
+ ** 
+ ** # Usage scenarios
+ ** 
  ** The time::Control element provides mediating functionality, but doesn't assume or provide
  ** anything special regarding the usage pattern or the lifecycle, beyond the ability to
  ** attach listeners, attach to a (different) target and to detach from all connections.
@@ -59,10 +61,10 @@
  ** may expose a time::Control, thus allowing to attach target and listeners, while the
  ** actual changes will originate somewhere within the opaque service implementation.
  ** 
- ** Another usage pattern would be to expose a time::Control \c const&, allowing only to
+ ** Another usage pattern would be to expose a `time::Control const&`, allowing only to
  ** impose changes, but not to change the target or listener attachments. To the contrary,
- ** when exposing only a time::Mutation \c const& through an interface allows only to
- ** attach new target elements, but not to change listeners or feed any value changes.
+ ** exposing only a time::Mutation \c const& through some interface allows only to attach
+ ** new target elements, but not to change listeners or feed any value changes.
  ** 
  ** Using time::Control as an implementation building block and just exposing the
  ** change (function) operators or the listener attachment through an forwarding sub
@@ -71,7 +73,7 @@
  ** @note time::Control is default constructible and freely copyable.
  ** 
  ** 
- ** \par changing quantised (grid aligned) time entities
+ ** ## Changing quantised (grid aligned) time entities
  ** 
  ** The time::Control element includes the functionality to handle grid aligned time values,
  ** both as target and as change/notification value. This ability is compiled in conditionally,
@@ -80,7 +82,8 @@
  ** the LIB_TIME_TIMEQUANT_H header guard needs to be defined, which happens automatically
  ** if lib/time/mutation.hpp is included prior to lib/time/control.hpp.
  ** 
- ** \par implementation notes
+ ** 
+ ** # implementation notes
  ** - the validity of a given combination of change and target is checked immediately,
  **   when connecting to the target. Depending on the situation, the actual changes later
  **   are subject to specific treatment (e.g. frame quantisation)

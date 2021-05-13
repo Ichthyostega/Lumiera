@@ -129,8 +129,15 @@ namespace timeline {
   int
   TimelineLayout::translateTimeToPixels (TimeValue startTimePoint)  const
   {
-    return _raw(startTimePoint) * TODO_px_per_second / Time::SCALE;   //////////TICKET #1213 : delegate zoom handling to the display manager (field #layout_) !!
+    return _raw(startTimePoint) * TODO_px_per_second / Time::SCALE;   //////////TICKET #1213 : use a mix-in component, which in turn relies on the "ZoomWindow" !!
   }
+  
+  TimeValue
+  TimelineLayout::applyScreenDelta(Time anchor, double deltaPx)  const
+  {                                                                   //////////TICKET #1213 : use a mix-in component, which in turn relies on the "ZoomWindow" !!
+    return anchor + TimeValue{gavl_time_t(Time::SCALE * deltaPx / TODO_px_per_second)};
+  }
+
   
   
   /**

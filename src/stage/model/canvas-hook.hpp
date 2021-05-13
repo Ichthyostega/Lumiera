@@ -88,6 +88,13 @@ namespace model {
       
       /** extension point for time axis zoom management. */
       virtual int translateTimeToPixels (TimeValue)  const =0;
+      
+      /** translate an offset in pixel coordinates into a temporal position
+       * @param anchor the start point on the time axis where to apply the delta
+       * @param deltaPx a delta given as canvas pixel displacement
+       * @return resulting TimeValue when applying the offset within current metric  
+       */
+      virtual TimeValue applyScreenDelta(Time anchor, double deltaPx)  const =0;
     };
   
   

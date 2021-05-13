@@ -32884,7 +32884,23 @@
 <node CREATED="1618778672386" ID="ID_1242087872" MODIFIED="1618778698205" TEXT="Bisher in BodyCanvasWidget angelegt">
 <icon BUILTIN="idea"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618778688276" ID="ID_1895003083" MODIFIED="1618778695704" TEXT="aber &#xfc;berhaupt noch nicht implementiert">
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1620922762073" ID="ID_878659189" MODIFIED="1620922781290" TEXT="vorl&#xe4;ufige Dummy-Implementierung in TimelineLayout"/>
+<node CREATED="1620922782734" ID="ID_1695744984" MODIFIED="1620922815553">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      verwendet hart gedrahtete Konstante <font color="#b42e2e">TODO_px_per_second</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1620922817299" ID="ID_849178366" MODIFIED="1620922830205" TEXT="der Rest der Berechnung ist aber hiermit schon mal korrekt ausgef&#xfc;hrt">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node COLOR="#435e98" CREATED="1619104316816" FOLDED="true" ID="ID_907598549" MODIFIED="1619880556650" TEXT="zu Kl&#xe4;ren: Rolle und Zugang zum Layout-Manager">
 <icon BUILTIN="yes"/>
@@ -33072,7 +33088,7 @@
   <body>
     <ul>
       <li>
-        der clipHook() delegiert an seinen jweiligen refHook_
+        der clipHook() delegiert an seinen jeweiligen refHook_
       </li>
       <li>
         dieser wird bei der Konstruktion tats&#228;chlich jweils auf den Anchor-Hook des Parent-Hook gesetzt
@@ -33168,15 +33184,15 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619104345461" ID="ID_414006920" MODIFIED="1619880189377" TEXT="Aufgabe: API">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1619104345461" ID="ID_414006920" MODIFIED="1620922860429" TEXT="Aufgabe: API">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1619104353964" ID="ID_1748021574" MODIFIED="1619104378116" TEXT="vorhanden: translateTimeToPixels(TimeValue startTimePoint)"/>
 <node CREATED="1619132261261" ID="ID_1989281789" MODIFIED="1619132284186" TEXT="erst mal nach Bedarf &#x2015; aber genau">
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1619132344961" ID="ID_168747829" MODIFIED="1619132509806" TEXT="konkret hier...">
-<node CREATED="1619132510942" ID="ID_1513485460" MODIFIED="1619132510942" TEXT="applyScreenDelta(TimeValue, deltaPx)"/>
-<node CREATED="1619132513720" ID="ID_718240764" MODIFIED="1619132619351" TEXT="translateScreenDeltaToTime(deltaPx)"/>
+<node COLOR="#435e98" CREATED="1619132510942" ID="ID_1513485460" MODIFIED="1620922851937" TEXT="applyScreenDelta(TimeValue, deltaPx)"/>
+<node COLOR="#435e98" CREATED="1619132513720" ID="ID_718240764" MODIFIED="1619132619351" TEXT="translateScreenDeltaToTime(deltaPx)"/>
 </node>
 <node COLOR="#338800" CREATED="1619698634099" ID="ID_1185723124" MODIFIED="1619804547408" TEXT="Sub-Interface einf&#xfc;hren">
 <icon BUILTIN="button_ok"/>
@@ -33213,6 +33229,9 @@
 <node CREATED="1619132645927" ID="ID_3614055" MODIFIED="1619696704275" TEXT="Umgang mit Zeit-Werten (immutable)">
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1620913903207" ID="ID_236784465" MODIFIED="1620913912953" TEXT="L&#xf6;sung time::Control (Mutator)">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1620917838309" ID="ID_1646116499" MODIFIED="1620917859760" TEXT="das time::Control lebt dann wohl im Observer">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -33298,8 +33317,8 @@
 <arrowlink COLOR="#22d66c" DESTINATION="ID_1241205333" ENDARROW="Default" ENDINCLINATION="35;105;" ID="Arrow_ID_1887863096" STARTARROW="None" STARTINCLINATION="348;20;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618691013997" ID="ID_429908834" MODIFIED="1618691021757" TEXT="Delta an das Subject weitergeben">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1618691013997" ID="ID_429908834" MODIFIED="1620922873764" TEXT="Delta an das Subject weitergeben">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1619887175393" FOLDED="true" ID="ID_54981427" MODIFIED="1619887223546" TEXT="Problem: Aufwand f&#xfc;r Gesten-Verfolgung">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1619887230011" ID="ID_1178141750" MODIFIED="1619887552418" TEXT="Push von low-Level-Events erzeugt &#xdc;bersetzungsaufwand">
@@ -33607,8 +33626,18 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618691023427" ID="ID_1396949384" MODIFIED="1618691041225" TEXT="im Subject in Modell-Koordinaten transformieren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1618691023427" ID="ID_1396949384" MODIFIED="1620922896886" TEXT="im Subject in Modell-Koordinaten transformieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      funktioniert... Zeit-Werte werden an der Konsole ausgegeben
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618691042073" ID="ID_1909659922" MODIFIED="1618691048993" TEXT="tats&#xe4;chlich im Canvas verschieben">
 <icon BUILTIN="flag-yellow"/>

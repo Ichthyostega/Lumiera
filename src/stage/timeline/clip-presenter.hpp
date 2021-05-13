@@ -226,14 +226,18 @@ namespace timeline {
         : public interact::GestureObserver
         {
           ClipPresenter& subject_;
+          model::DisplayMetric const& metric_;
           
           void
           updateOffset (double deltaX, double deltaY)  override
             {
-              std::cerr << _Fmt{"Gesture(%s) --> Δ := (%3.1f,%3.1f)"}
+              TimeValue newStartTime = metric_.applyScreenDelta(subject_.widget_->getStartTime(), deltaX);
+              std::cerr << _Fmt{"Gesture(%s) → Δ ≔ (%3.1f,%3.1f) ⟹ %s ↷ %s"}
                                % getCmdID()
                                % deltaX
                                % deltaY
+                               % subject_.widget_->getStartTime()
+                               % newStartTime
                         << std::endl;
             }
           
@@ -249,6 +253,7 @@ namespace timeline {
           DragRelocateObserver(Symbol cmdID, ClipPresenter& clipPresenter)
             : interact::GestureObserver{cmdID}
             , subject_{clipPresenter}
+            , metric_{clipPresenter.widget_->getCanvas().getMetric()}
           { }
         };
       

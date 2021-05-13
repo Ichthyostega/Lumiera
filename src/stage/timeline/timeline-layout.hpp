@@ -89,6 +89,7 @@
 #include "stage/timeline/body-canvas-widget.hpp"
 #include "stage/model/canvas-hook.hpp"
 #include "stage/model/view-hook.hpp"
+#include "lib/time/timevalue.hpp"
 
 //#include "lib/util.hpp"
 
@@ -99,6 +100,8 @@
 
 namespace stage  {
 namespace timeline {
+  
+  using lib::time::Time;
   
   class LayoutElement;
   class TrackHeadWidget;
@@ -140,8 +143,9 @@ namespace timeline {
       void triggerDisplayEvaluation()  override;
       
       /////////////////////////////////////////////////////////////////////////////////////////////TICKET 1218 : better extract into a sub component when providing a non-dummy implementation
-      virtual lib::time::TimeSpan coveredTime()     const override;
-      virtual int translateTimeToPixels (TimeValue) const override;
+      virtual lib::time::TimeSpan coveredTime()         const override;
+      virtual int translateTimeToPixels (TimeValue)     const override;
+      virtual TimeValue applyScreenDelta(Time, double)  const override;
       /////////////////////////////////////////////////////////////////////////////////////////////TICKET 1218 : better extract into a sub component when providing a non-dummy implementation
       
       
