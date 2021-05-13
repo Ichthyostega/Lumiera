@@ -32602,8 +32602,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617568275423" ID="ID_705403474" MODIFIED="1617568293029" TEXT="Trigger-Bedingung formulieren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1617568275423" ID="ID_705403474" MODIFIED="1620913868535" TEXT="Trigger-Bedingung formulieren">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1617568301466" ID="ID_1738730292" MODIFIED="1617568534103" TEXT="inhaltlich...">
 <node CREATED="1617568311385" ID="ID_120327257" MODIFIED="1617568327148" TEXT="&quot;klicken und ziehen&quot;"/>
 <node CREATED="1617568432466" ID="ID_1992031404" MODIFIED="1617568445795" TEXT="der Klick war im Bereich des zu ziehenden Objekts"/>
@@ -32684,42 +32684,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617569687944" ID="ID_109351275" MODIFIED="1617569696784" TEXT="Modifier sollten konfigurierbar sein">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1617569722132" ID="ID_1004932792" MODIFIED="1617569729653" TEXT="Einschr&#xe4;nkung der Maustaste"/>
-<node CREATED="1617569730283" ID="ID_1098298417" MODIFIED="1617569798116" TEXT="Modifier-Key auf der Tastatur"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617569873288" ID="ID_32172316" MODIFIED="1617569973233" TEXT="Modus durch Tastenfolge aktiviert">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Beispiel: das &quot;grab&quot; von Blender ist ein praktisches Konzept. Dort kann man ein Element &#252;berhaupt nur bewegen, wenn man vorher die &quot;g&quot;-Taste gedr&#252;ckt hatte. So etwas will ich in Lumiera auch haben... ist aber nicht so ganz einfach
-    </p>
-  </body>
-</html></richcontent>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617569687944" ID="ID_109351275" MODIFIED="1620913776693" TEXT="Modifier sollten konfigurierbar sein">
+<arrowlink COLOR="#d54526" DESTINATION="ID_914526002" ENDARROW="Default" ENDINCLINATION="-19;-306;" ID="Arrow_ID_1156051405" STARTARROW="None" STARTINCLINATION="-130;185;"/>
 <icon BUILTIN="bell"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1617570608516" ID="ID_1536648683" MODIFIED="1617570619960" TEXT="Vorsicht: das ist ein Riesen-Thema">
-<icon BUILTIN="clanbomber"/>
-</node>
-<node CREATED="1617570633938" ID="ID_1636227122" MODIFIED="1617570654929" TEXT="Stichwort: globale und konsistente Tasenk&#xfc;rzel">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1618499304789" ID="ID_636470529" MODIFIED="1618499325642" TEXT="das sollte besser durch Komposition gel&#xf6;st werden">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Hierarchische Gesten-Controller
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="stop-sign"/>
-</node>
-</node>
 </node>
 <node CREATED="1617570674708" ID="ID_1037850042" MODIFIED="1617570685158" TEXT="Zugang / Definitionen">
 <node CREATED="1617570694344" ID="ID_752689969" MODIFIED="1617570698161" TEXT="gdkevents.h">
@@ -32811,22 +32778,6 @@
 </node>
 <node COLOR="#338800" CREATED="1617913172095" ID="ID_389454227" MODIFIED="1617919654631" TEXT="Callbacks f&#xfc;r Button-Events">
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617919674980" ID="ID_1535616039" MODIFIED="1617919704165" TEXT="TODO: spezielle Buttons und Modifier konfigurierbar machen">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618499388465" ID="ID_540657197" MODIFIED="1618499424481" TEXT="Problem: wie kann man dies einkapseln?">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      es ist total an das Framework gebunden
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="flag-yellow"/>
-</node>
-</node>
 </node>
 <node COLOR="#338800" CREATED="1617913205146" ID="ID_1972128766" MODIFIED="1618690918521" TEXT="Callback f&#xfc;r Motion-Events">
 <icon BUILTIN="button_ok"/>
@@ -32945,7 +32896,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619104748998" ID="ID_1862152665" MODIFIED="1619106836504" TEXT="zu Kl&#xe4;ren: Skala f&#xfc;r Screen-Koordinaten und/oder Pixel">
 <arrowlink COLOR="#6084b9" DESTINATION="ID_206049495" ENDARROW="Default" ENDINCLINATION="-1698;230;" ID="Arrow_ID_1554039358" STARTARROW="None" STARTINCLINATION="-5472;269;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="bell"/>
 <node CREATED="1619104774025" ID="ID_1244834056" MODIFIED="1619105073946" TEXT="habe mir dar&#xfc;ber nie Gedanken gemacht">
 <icon BUILTIN="smiley-oh"/>
 </node>
@@ -33261,6 +33212,9 @@
 </node>
 <node CREATED="1619132645927" ID="ID_3614055" MODIFIED="1619696704275" TEXT="Umgang mit Zeit-Werten (immutable)">
 <icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1620913903207" ID="ID_236784465" MODIFIED="1620913912953" TEXT="L&#xf6;sung time::Control (Mutator)">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618753085285" ID="ID_560686142" MODIFIED="1618753216324" TEXT="noch keinerlei Infrastruktur f&#xfc;r die vertikale Anordnung">
 <icon BUILTIN="hourglass"/>
@@ -33345,8 +33299,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618691013997" ID="ID_429908834" MODIFIED="1618691021757" TEXT="Delta an das Subject weitergeben">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619887175393" ID="ID_54981427" MODIFIED="1619887223546" TEXT="Problem: Aufwand f&#xfc;r Gesten-Verfolgung">
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1619887175393" FOLDED="true" ID="ID_54981427" MODIFIED="1619887223546" TEXT="Problem: Aufwand f&#xfc;r Gesten-Verfolgung">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1619887230011" ID="ID_1178141750" MODIFIED="1619887552418" TEXT="Push von low-Level-Events erzeugt &#xdc;bersetzungsaufwand">
 <richcontent TYPE="NOTE"><html>
@@ -33385,12 +33339,13 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1619887730416" ID="ID_915000313" MODIFIED="1619887745442" TEXT="L&#xf6;sung: Subject zu einem Protokoll ausbauen">
+<node COLOR="#338800" CREATED="1619887730416" FOLDED="true" ID="ID_915000313" MODIFIED="1620913945733" TEXT="L&#xf6;sung: Subject zu einem Protokoll ausbauen">
+<icon BUILTIN="idea"/>
 <node COLOR="#338800" CREATED="1619887769934" ID="ID_15885968" MODIFIED="1620565933367" TEXT="Schnittstelle zum Verdrahten">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619887785265" ID="ID_194430924" MODIFIED="1620565819404" TEXT="ein Adapter f&#xfc;r die Gesten-Instanz">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1619887785265" ID="ID_194430924" MODIFIED="1620913562059" TEXT="ein Adapter f&#xfc;r die Gesten-Instanz">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1619887907477" ID="ID_580784250" MODIFIED="1619887914507" TEXT="wird vom Subject konkret bereitgestellt"/>
 <node CREATED="1619887915592" ID="ID_1016019139" MODIFIED="1619887925546" TEXT="wird in der Storage des Gesten-Controllers abgelegt"/>
 <node CREATED="1619887926542" ID="ID_234628540" MODIFIED="1619887933409" TEXT="lebt bis zum Ende der Geste"/>
@@ -33445,8 +33400,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619967216789" ID="ID_1503155358" MODIFIED="1619967554656" TEXT="aber an der Idee mit dem Adapter halte ich fest...">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1619967216789" ID="ID_1503155358" MODIFIED="1620913547263" TEXT="aber an der Idee mit dem Adapter halte ich fest...">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1619967266842" ID="ID_1478677945" MODIFIED="1619967373917">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -33616,8 +33571,38 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1620565789665" ID="ID_515994897" MODIFIED="1620565795370" TEXT="Implementierung schwenken">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1620565789665" ID="ID_515994897" MODIFIED="1620913405382" TEXT="Implementierung schwenken">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1620913417225" ID="ID_1322371180" MODIFIED="1620913542016" TEXT="cmd-ID kann in den Observer verlegt werden">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1620913426512" ID="ID_1802612620" MODIFIED="1620913444069" TEXT="Pointer auf das Subject k&#xf6;nne eigentlich auch dorthin">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1620913445509" ID="ID_1831141576" MODIFIED="1620913451984" TEXT="bringt aber nix"/>
+<node CREATED="1620913452692" ID="ID_339655971" MODIFIED="1620913529933" TEXT="und au&#xdf;erdem benutze ich den Pointer auch als Flag">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und das ist eleganter, als jede der denkbaren Alternativen
+    </p>
+    <ul>
+      <li>
+        stattdessen eine virtuelle Funktion f&#252;r diesen State verwenden<br />
+      </li>
+      <li>
+        stattdessen einen &quot;magischen wert&quot; in den Anker-Koordinaten speichern
+      </li>
+      <li>
+        <br />
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -33710,6 +33695,65 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618575194230" ID="ID_144431144" MODIFIED="1618575227970" TEXT="Planung: State-Machine f&#xfc;r Gesten">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617919674980" ID="ID_1535616039" MODIFIED="1620913818152" TEXT="TODO: spezielle Buttons und Modifier konfigurierbar machen">
+<linktarget COLOR="#eb4353" DESTINATION="ID_1535616039" ENDARROW="Default" ENDINCLINATION="-48;51;" ID="Arrow_ID_695007412" SOURCE="ID_914526002" STARTARROW="None" STARTINCLINATION="275;0;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618499388465" ID="ID_540657197" MODIFIED="1618499424481" TEXT="Problem: wie kann man dies einkapseln?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es ist total an das Framework gebunden
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1620913676837" ID="ID_1104135051" MODIFIED="1620913687082" TEXT="Weiterungen(ungel&#xf6;st)">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617569687944" ID="ID_914526002" MODIFIED="1620913823880" TEXT="Modifier sollten konfigurierbar sein">
+<arrowlink COLOR="#eb4353" DESTINATION="ID_1535616039" ENDARROW="Default" ENDINCLINATION="-48;51;" ID="Arrow_ID_695007412" STARTARROW="None" STARTINCLINATION="275;0;"/>
+<linktarget COLOR="#d54526" DESTINATION="ID_914526002" ENDARROW="Default" ENDINCLINATION="-19;-306;" ID="Arrow_ID_1156051405" SOURCE="ID_109351275" STARTARROW="None" STARTINCLINATION="-130;185;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1617569722132" ID="ID_1004932792" MODIFIED="1617569729653" TEXT="Einschr&#xe4;nkung der Maustaste"/>
+<node CREATED="1617569730283" ID="ID_1098298417" MODIFIED="1617569798116" TEXT="Modifier-Key auf der Tastatur"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617569873288" ID="ID_32172316" MODIFIED="1617569973233" TEXT="Modus durch Tastenfolge aktiviert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Beispiel: das &quot;grab&quot; von Blender ist ein praktisches Konzept. Dort kann man ein Element &#252;berhaupt nur bewegen, wenn man vorher die &quot;g&quot;-Taste gedr&#252;ckt hatte. So etwas will ich in Lumiera auch haben... ist aber nicht so ganz einfach
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1617570608516" ID="ID_1536648683" MODIFIED="1617570619960" TEXT="Vorsicht: das ist ein Riesen-Thema">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1617570633938" ID="ID_1636227122" MODIFIED="1617570654929" TEXT="Stichwort: globale und konsistente Tasenk&#xfc;rzel">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1618499304789" ID="ID_636470529" MODIFIED="1618499325642" TEXT="das sollte besser durch Komposition gel&#xf6;st werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Hierarchische Gesten-Controller
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
 </node>
 </node>
 </node>

@@ -221,29 +221,6 @@ namespace timeline {
       
       
     private:/* ===== Subject-Interface ===== */
-      Gtk::Widget&
-      exposeWidget()  override
-        {
-          return ClipDelegate::expect_and_expose_Widget (widget_);
-        }
-      
-      void
-      fireGesture (Symbol cmdID)  override
-        {
-          std::cerr << _Fmt{"!!BANG!! Gesture-Cmd '%s'"}
-                           % cmdID
-                    << std::endl;
-        }
-      
-      void
-      gestureOffset (Symbol cmdID, double deltaX, double deltaY)  override
-        {
-          std::cerr << _Fmt{"Gesture(%s) --> Δ := (%3.1f,%3.1f)"}
-                           % cmdID
-                           % deltaX
-                           % deltaY
-                    << std::endl;
-        }
       
       class DragRelocateObserver
         : public interact::GestureObserver
@@ -269,16 +246,24 @@ namespace timeline {
             }
           
         public:
-          DragRelocateObserver(ClipPresenter& clipPresenter)
-            : subject_{clipPresenter}
+          DragRelocateObserver(Symbol cmdID, ClipPresenter& clipPresenter)
+            : interact::GestureObserver{cmdID}
+            , subject_{clipPresenter}
           { }
         };
       
       void
       buildGestureObserver (Symbol cmdID, Buffer buffer)  override
         {
-          buffer.create<DragRelocateObserver> (*this);
+          buffer.create<DragRelocateObserver> (cmdID, *this);
         }
+      
+      Gtk::Widget&
+      exposeWidget()  override
+        {
+          return ClipDelegate::expect_and_expose_Widget (widget_);
+        }
+      
       
       
     private:/* ===== Internals ===== */

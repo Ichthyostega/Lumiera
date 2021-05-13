@@ -705,6 +705,14 @@ namespace lib {
             }
         }
       
+      DEFAULT&
+      reset()
+        {
+          destroy();
+          placeDefault();
+          return static_cast<DEFAULT&> (getObj());
+        }
+      
       
       
       

@@ -50,6 +50,7 @@
 #include "stage/gtk-base.hpp"
 #include "stage/interact/interaction-state.hpp"
 #include "stage/interact/cmd-context.hpp"
+#include "lib/opaque-holder.hpp"
 #include "lib/format-string.hpp"//////////////////////////////////TODO
 #include "lib/format-cout.hpp"  //////////////////////////////////TODO
 //#include "lib/idi/entry-id.hpp"
@@ -71,6 +72,12 @@ namespace interact {
   
   namespace {
     const gdouble DISTANCE_THRESHOLD = 5.0;
+    
+    /** heuristics for sizing the inline buffer
+        where the Subject will construct its Observer/Adapter */
+    const size_t OBSERVER_BUFF_SIZ = sizeof(void*)
+                                   + sizeof(Symbol)
+                                   + 4 * sizeof(void*);
   }
 
   
@@ -99,11 +106,14 @@ namespace interact {
     : public InteractionState
     {
       bool buttonPressed_ = false;
-      Symbol cmdID_ = Symbol::BOTTOM;
       Subject* subject_ = nullptr;
       bool isInFormation_ = false;
       gdouble anchorX_ = 0.0;
       gdouble anchorY_ = 0.0;
+      
+      using Observer = lib::InPlaceBuffer<GestureObserver, OBSERVER_BUFF_SIZ, InactiveObserver>;
+      
+      Observer observer_;
       
       void
       linkTrigger (Subject& subject, Symbol cmdID)  override
@@ -158,6 +168,8 @@ namespace interact {
           if (not isActive())
             {
               probeActivation (motion_event);
+              if (isActive())
+                initGestureTracking(cmdID, subject);
               return false;
             }
           else
@@ -186,14 +198,13 @@ namespace interact {
       anchor (Symbol cmdID, Subject& subject, GdkEventMotion* motion_event)
         {
           REQUIRE (motion_event);
-          this->cmdID_   = cmdID;
           this->subject_ = & subject;
           this->anchorX_ = motion_event->x;
           this->anchorY_ = motion_event->y;
           std::cerr << _Fmt{"ANCHOR at x=%3.1f y=%3.1f ('%s')"}
                            % anchorX_
                            % anchorY_
-                           % cmdID_
+                           % cmdID
                     << std::endl;
         }
       
@@ -205,34 +216,40 @@ namespace interact {
         }
       
       void
+      initGestureTracking(Symbol cmdID, Subject& subject)
+        {
+          subject.buildGestureObserver (cmdID, Observer::Handle{observer_});
+        }
+      
+      void
       doTrackGesture (GdkEventMotion* motion_event)
         {
           REQUIRE (motion_event);
           gdouble deltaX = motion_event->x - this->anchorX_;
           gdouble deltaY = motion_event->y - this->anchorY_;
           // notify Subject to feed current delta
-          subject_->gestureOffset (cmdID_, deltaX, deltaY);
+          observer_->updateOffset (deltaX, deltaY);
         }
       
       void
       doCompleteGesture()
         {
-          subject_->fireGesture (cmdID_);
+          observer_->markGestureCompleted();
         }
       
       void
       resetState()
         {
           isInFormation_ = false;
-          cmdID_   = Symbol::BOTTOM;
           anchorX_ = anchorY_ = 0.0;
           subject_ = nullptr;
+          observer_.reset();
         }
       
       
     public:
       DragRelocateController()
-//      :
+        : observer_{}
         { }
       
     private:
