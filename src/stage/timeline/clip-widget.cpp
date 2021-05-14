@@ -140,26 +140,19 @@ namespace timeline {
       , util::MoveOnly
       {
         TimeVar start_;
-        TimeVar len_;
+        TimeVar dur_;
         
       public: /* === Partial implementation of ClipDelegate === */
-        Time
-        getStartTime()  const override
+        TimeVar&
+        accessStartTime()  override
           {
             return start_;
           }
         
-        Duration
-        getLen()  const override
+        TimeVar&
+        accessDuration()  override
           {
-            return Duration{this->len_};
-          }
-        
-        void
-        changeTiming (TimeSpan changedTimings)  override
-          {
-            this->start_ = changedTimings.start();
-            this->len_ = changedTimings.duration();
+            return this->dur_;
           }
         
         
@@ -167,7 +160,7 @@ namespace timeline {
         ClipData(TimeSpan const& timings =TimeSpan{Time::NEVER, Duration::NIL})
           : ClipDelegate{}
           , start_{timings.start()}
-          , len_{timings.duration()}
+          , dur_{timings.duration()}
           { }
         
         ClipData (ClipData&&)   = default;
@@ -308,17 +301,11 @@ namespace timeline {
           }
         
         void
-        changeTiming (TimeSpan changedTimings)  override
-          {
-            ClipData::changeTiming (changedTimings);
-            establishHorizontalExtension();
-          }
-        
-        void
         updatePosition()  override
           {
             WidgetHook::Pos nominalPos = establishHookPoint(nullptr);
             this->moveTo (nominalPos.x, nominalPos.y);
+            establishHorizontalExtension();
           }
         
         /* ==== Size and Layout handling ==== */
@@ -327,7 +314,7 @@ namespace timeline {
         void
         establishHorizontalExtension()
           {
-            int hSize = getCanvas().getMetric().translateTimeToPixels (getLen());
+            int hSize = getCanvas().getMetric().translateTimeToPixels (accessDuration());
             set_size_request (hSize, -1);
 //            queue_resize();
           }
@@ -349,7 +336,8 @@ namespace timeline {
         void
         get_preferred_width_vfunc(int& minimum_width, int& natural_width)  const override
           {
-            minimum_width = natural_width = getCanvas().getMetric().translateTimeToPixels (getLen());
+            minimum_width = natural_width =
+                getCanvas().getMetric().translateTimeToPixels (unConst(this)->accessDuration());
           }
         
         
@@ -395,7 +383,7 @@ namespace timeline {
     inline bool
     canRepresentAsClip (PDelegate& existing, optional<TimeSpan> const& timing)
     {
-      return (existing and canShow(existing->getStartTime()))
+      return (existing and canShow(existing->accessStartTime()))
           or (not existing and timing and canShow(timing->start())) ;
     }
     
@@ -470,7 +458,7 @@ namespace timeline {
   {
     if (not newView)
       newView = & getCanvas();
-    return newView->hookedAt (getStartTime(), defaultOffsetY);
+    return newView->hookedAt (Time{accessStartTime()}, defaultOffsetY);
   }
   
   

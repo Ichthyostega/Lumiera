@@ -139,6 +139,7 @@ namespace timeline {
   using std::nullopt;
   using std::optional;
   using lib::time::Time;
+  using lib::time::TimeVar;
   using lib::time::Duration;
   using lib::time::TimeSpan;
   
@@ -178,17 +179,16 @@ namespace timeline {
       virtual Appearance changeAppearance (Appearance desired)  =0;
       
       /** human readable rendering of the clip's name or identity */
-      virtual cuString getClipName()   const =0;
-      virtual void setClipName (cuString)    =0;
+      virtual cuString getClipName()    const =0;
+      virtual void setClipName (cuString)     =0;
       
-      virtual void changeTiming (TimeSpan)   =0;
-      virtual Time getStartTime()      const =0;
-      virtual Duration getLen()        const =0;
+      virtual TimeVar& accessStartTime()      =0;
+      virtual TimeVar& accessDuration()       =0;
 
-      virtual uint getVerticalOffset() const =0;
+      virtual uint getVerticalOffset()  const =0;
       
-      virtual WidgetHook& getCanvas()  const =0;
-      virtual void updatePosition()          =0;
+      virtual WidgetHook& getCanvas()   const =0;
+      virtual void updatePosition()           =0;
       
       virtual uint calcRequiredHeight() const =0;
       

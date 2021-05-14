@@ -31810,9 +31810,9 @@
 </node>
 </node>
 </node>
-<node CREATED="1614391489665" ID="ID_1919040945" MODIFIED="1614391495581" TEXT="Verklammerung">
+<node COLOR="#435e98" CREATED="1614391489665" ID="ID_1919040945" MODIFIED="1621013631256" TEXT="Verklammerung">
 <node CREATED="1614391506656" ID="ID_1004859029" MODIFIED="1614391520280" TEXT="Event-Quelle mu&#xdf; mit einem Subjekt ausgezeichnet werden"/>
-<node CREATED="1614391615637" ID="ID_1108644497" MODIFIED="1614391627843" TEXT="zur Event-Quelle wird eine Closure gebildet">
+<node CREATED="1614391615637" FOLDED="true" ID="ID_1108644497" MODIFIED="1614391627843" TEXT="zur Event-Quelle wird eine Closure gebildet">
 <node CREATED="1614391628734" ID="ID_1671010257" MODIFIED="1614391663130" TEXT="und zwar f&#xfc;r den konkreten Typ der Interaktion">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -31852,7 +31852,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1614460011582" ID="ID_952822551" MODIFIED="1614460030108" TEXT="tats&#xe4;chlich wird auf Dauer nur das Subjekt ben&#xf6;tigt">
+<node CREATED="1614460011582" FOLDED="true" ID="ID_952822551" MODIFIED="1614460030108" TEXT="tats&#xe4;chlich wird auf Dauer nur das Subjekt ben&#xf6;tigt">
 <icon BUILTIN="idea"/>
 <node CREATED="1614460032928" ID="ID_1290991040" MODIFIED="1614460064068" TEXT="die Event-Quelle dient nur dazu, das Reaktionsmuster zu verdrahten"/>
 <node CREATED="1614460064989" ID="ID_1051234344" MODIFIED="1614460079097" TEXT="als Event-Quelle gen&#xfc;gt eine Gtk::Widget-Referenz">
@@ -31868,7 +31868,7 @@
 <linktarget COLOR="#6c87a6" DESTINATION="ID_1054817075" ENDARROW="Default" ENDINCLINATION="-7;-84;" ID="Arrow_ID_1471465547" SOURCE="ID_1366205359" STARTARROW="None" STARTINCLINATION="-115;9;"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1614475571869" ID="ID_1751028671" MODIFIED="1614543472364" TEXT="wie kann die Verklammerung realisiert werden?">
+<node COLOR="#435e98" CREATED="1614475571869" FOLDED="true" ID="ID_1751028671" MODIFIED="1614543472364" TEXT="wie kann die Verklammerung realisiert werden?">
 <icon BUILTIN="help"/>
 <node CREATED="1614475601650" ID="ID_205574857" MODIFIED="1614543459768" TEXT="allein &#xfc;ber die Signal-Bindung ...">
 <icon BUILTIN="forward"/>
@@ -31927,7 +31927,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614543493162" ID="ID_1473378249" MODIFIED="1616859840596" TEXT="mit der bestehenden Implementierung verbinden">
 <icon BUILTIN="pencil"/>
-<node CREATED="1614543561632" ID="ID_1754386766" MODIFIED="1614543810211" TEXT="diverse Widerspr&#xfc;che und Spannungen">
+<node COLOR="#435e98" CREATED="1614543561632" FOLDED="true" ID="ID_1754386766" MODIFIED="1621013612918" TEXT="diverse Widerspr&#xfc;che und Spannungen">
 <linktarget COLOR="#f45679" DESTINATION="ID_1754386766" ENDARROW="Default" ENDINCLINATION="93;-23;" ID="Arrow_ID_367937676" SOURCE="ID_1302795590" STARTARROW="None" STARTINCLINATION="-164;8;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1614543836195" ID="ID_937435961" MODIFIED="1614543924536" TEXT="Koordinaten im Widget dargestellt als Domain-Werte (Zeit)">
@@ -32042,9 +32042,9 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614547936791" ID="ID_972139852" MODIFIED="1615563862998" TEXT="L&#xf6;sungskompromi&#xdf; suchen">
-<icon BUILTIN="pencil"/>
-<node CREATED="1614548567759" ID="ID_1502155745" MODIFIED="1614548579105" TEXT="kl&#xe4;ren welche Entit&#xe4;t f&#xfc;hrt">
+<node COLOR="#338800" CREATED="1614547936791" ID="ID_972139852" MODIFIED="1621013665552" TEXT="L&#xf6;sungskompromi&#xdf; suchen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1614548567759" FOLDED="true" ID="ID_1502155745" MODIFIED="1621013605879" TEXT="kl&#xe4;ren welche Entit&#xe4;t f&#xfc;hrt">
 <node CREATED="1614548580160" ID="ID_1068834365" MODIFIED="1614549019860" TEXT="das Subject (Presenter)?">
 <icon BUILTIN="closed"/>
 <node CREATED="1614548621184" ID="ID_313965279" MODIFIED="1614548638025" TEXT="dann mu&#xdf; das ClipDelegate-API entsprechend erweitert werden"/>
@@ -32091,7 +32091,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1614549056549" ID="ID_202229623" MODIFIED="1616684814536" TEXT="wieder das l&#xe4;stige Problem mit den vielen Querlinks">
+<node COLOR="#435e98" CREATED="1614549056549" FOLDED="true" ID="ID_202229623" MODIFIED="1616684814536" TEXT="wieder das l&#xe4;stige Problem mit den vielen Querlinks">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1614549074954" ID="ID_1803715980" MODIFIED="1614549087844" TEXT="hatte das k&#xfc;rzlich erst beim Layout m&#xfc;hsam niedergek&#xe4;mpft"/>
 <node CREATED="1614549303989" ID="ID_228758963" MODIFIED="1614549326657" TEXT="Idee: jeweils beim Beginn einer Geste den Kontext etablieren">
@@ -32270,7 +32270,7 @@
 <node CREATED="1616713811416" ID="ID_1212233389" MODIFIED="1616713852706" TEXT="setupRelocateDrag()"/>
 </node>
 </node>
-<node CREATED="1616710202252" ID="ID_220049730" MODIFIED="1616710247050" TEXT="InteractionState sollte nur intern mit CmdContext interagieren">
+<node CREATED="1616710202252" FOLDED="true" ID="ID_220049730" MODIFIED="1616710247050" TEXT="InteractionState sollte nur intern mit CmdContext interagieren">
 <icon BUILTIN="idea"/>
 <node CREATED="1617454641530" ID="ID_104565280" MODIFIED="1617454704165" TEXT="InteractionState ist ein Adapter zwischen dem Anker (CmdContext) und der konkreten Geste"/>
 <node CREATED="1616710625955" ID="ID_69401594" MODIFIED="1616710644751" TEXT="gemeint ist: die Implementation von InteractionState ist konkret">
@@ -32302,7 +32302,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1616771214558" ID="ID_1771867762" MODIFIED="1616852161665" TEXT="Problem: Widget-Existenz wird dynamisch gesteuert">
+<node COLOR="#435e98" CREATED="1616771214558" FOLDED="true" ID="ID_1771867762" MODIFIED="1616852161665" TEXT="Problem: Widget-Existenz wird dynamisch gesteuert">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1616771234015" ID="ID_240157641" MODIFIED="1616771254326" TEXT="relativ autonom">
 <node CREATED="1616771255343" ID="ID_620255063" MODIFIED="1616771287475" TEXT="deshalb kann das Subject die Einrichtung nicht fix machen"/>
@@ -32429,7 +32429,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1616852178983" ID="ID_389047439" MODIFIED="1616859822702" TEXT="Strukturen gem&#xe4;&#xdf; Konzept anlegen">
 <icon BUILTIN="pencil"/>
-<node COLOR="#338800" CREATED="1616852190829" ID="ID_1663212368" MODIFIED="1617377719039" TEXT="CmdContext">
+<node COLOR="#338800" CREATED="1616852190829" FOLDED="true" ID="ID_1663212368" MODIFIED="1617377719039" TEXT="CmdContext">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1616859779196" ID="ID_848065191" MODIFIED="1616859786984" TEXT="Dependency-Injection nutzen">
 <icon BUILTIN="button_ok"/>
@@ -32482,7 +32482,7 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1616856060491" ID="ID_44406517" MODIFIED="1616859101168" TEXT="einen Manager f&#xfc;r den InteractionState schaffen">
+<node COLOR="#338800" CREATED="1616856060491" FOLDED="true" ID="ID_44406517" MODIFIED="1616859101168" TEXT="einen Manager f&#xfc;r den InteractionState schaffen">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1616859073891" ID="ID_909388621" MODIFIED="1616859108655" TEXT="Name: GestureState">
 <icon BUILTIN="info"/>
@@ -32494,7 +32494,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1616852275162" ID="ID_1272601084" MODIFIED="1617377719039" TEXT="DragRelocateController verwalten">
+<node COLOR="#338800" CREATED="1616852275162" FOLDED="true" ID="ID_1272601084" MODIFIED="1617377719039" TEXT="DragRelocateController verwalten">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1617377637909" ID="ID_1302268767" MODIFIED="1617377719039" TEXT="Entscheidung: erst mal direkt als PImpl in GestureController">
 <icon BUILTIN="yes"/>
@@ -32516,7 +32516,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1617377786842" ID="ID_1829220190" MODIFIED="1617471190700" TEXT="Interface Subject definieren">
+<node COLOR="#338800" CREATED="1617377786842" FOLDED="true" ID="ID_1829220190" MODIFIED="1617471190700" TEXT="Interface Subject definieren">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1617471241490" ID="ID_293482403" MODIFIED="1617471251679" TEXT="implementieren f&#xfc;r ClipPresenter">
 <icon BUILTIN="button_ok"/>
@@ -32555,7 +32555,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1617377754742" ID="ID_1574394085" MODIFIED="1618681141799" TEXT="linkSubject im konkreten Controller">
+<node COLOR="#338800" CREATED="1617377754742" FOLDED="true" ID="ID_1574394085" MODIFIED="1618681141799" TEXT="linkSubject im konkreten Controller">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1617377734341" ID="ID_1697355210" MODIFIED="1617568263119" TEXT="Widget-Signal-Binding anlegen">
 <icon BUILTIN="button_ok"/>
@@ -32602,7 +32602,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1617568275423" ID="ID_705403474" MODIFIED="1620913868535" TEXT="Trigger-Bedingung formulieren">
+<node COLOR="#338800" CREATED="1617568275423" FOLDED="true" ID="ID_705403474" MODIFIED="1620913868535" TEXT="Trigger-Bedingung formulieren">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1617568301466" ID="ID_1738730292" MODIFIED="1617568534103" TEXT="inhaltlich...">
 <node CREATED="1617568311385" ID="ID_120327257" MODIFIED="1617568327148" TEXT="&quot;klicken und ziehen&quot;"/>
@@ -32912,6 +32912,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1619104748998" ID="ID_1862152665" MODIFIED="1619106836504" TEXT="zu Kl&#xe4;ren: Skala f&#xfc;r Screen-Koordinaten und/oder Pixel">
 <arrowlink COLOR="#6084b9" DESTINATION="ID_206049495" ENDARROW="Default" ENDINCLINATION="-1698;230;" ID="Arrow_ID_1554039358" STARTARROW="None" STARTINCLINATION="-5472;269;"/>
+<linktarget COLOR="#de5c6e" DESTINATION="ID_1862152665" ENDARROW="Default" ENDINCLINATION="139;212;" ID="Arrow_ID_1129738995" SOURCE="ID_671218820" STARTARROW="None" STARTINCLINATION="686;61;"/>
 <icon BUILTIN="bell"/>
 <node CREATED="1619104774025" ID="ID_1244834056" MODIFIED="1619105073946" TEXT="habe mir dar&#xfc;ber nie Gedanken gemacht">
 <icon BUILTIN="smiley-oh"/>
@@ -33639,8 +33640,95 @@
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1618691042073" ID="ID_1909659922" MODIFIED="1618691048993" TEXT="tats&#xe4;chlich im Canvas verschieben">
+<node COLOR="#338800" CREATED="1618691042073" ID="ID_1909659922" MODIFIED="1621013334123" TEXT="tats&#xe4;chlich im Canvas verschieben">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1621010969579" ID="ID_226757951" MODIFIED="1621011049406" TEXT="Frage: wann wird der Wert im GUI-Model ge&#xe4;ndert?">
+<icon BUILTIN="help"/>
+<node CREATED="1621011000382" ID="ID_1931186164" MODIFIED="1621011011561" TEXT="konkret: GUI-Model == Daten im Clip-Widget"/>
+<node CREATED="1621011012379" ID="ID_456544957" MODIFIED="1621011043485" TEXT="Variante-1: erst beim Bang!">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1621011155018" ID="ID_1965916269" MODIFIED="1621011188855" TEXT="Vorteil: Abbruch der Geste w&#xe4;re einfach">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      nein.... nicht wirklich, weil man ja doch noch die Position korrigieren mu&#223;
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node CREATED="1621011025347" ID="ID_833583889" MODIFIED="1621011040553" TEXT="Variante-2: inkrementell">
+<icon BUILTIN="forward"/>
+<node CREATED="1621011125061" ID="ID_1728131930" MODIFIED="1621011137840" TEXT="Vorteil: GUI-Position und interne Daten konsistent"/>
+<node CREATED="1621011138669" ID="ID_1744077157" MODIFIED="1621011148646" TEXT="Vorteil: verwende nur eine updatePosition()"/>
+</node>
+</node>
+<node CREATED="1621011053631" ID="ID_336933112" MODIFIED="1621011076192" TEXT="ClipData speichert bereits in zwei TimeVar">
+<icon BUILTIN="idea"/>
+<node CREATED="1621011078108" ID="ID_1533766777" MODIFIED="1621011080673" TEXT="macht Sinn"/>
+<node CREATED="1621011195716" ID="ID_504607651" MODIFIED="1621011206066" TEXT="hier brauchen wir kein time::Control">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1621011209299" ID="ID_26838929" MODIFIED="1621011219916" TEXT="Quantisierung passiert bereits im Session-Modell"/>
+</node>
+<node COLOR="#338800" CREATED="1621011086402" ID="ID_1715852739" MODIFIED="1621013328247" TEXT="dann m&#xfc;ssen diese aber auch auf das ClipWidget-Interface">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      letztlich kein Problem.
+    </p>
+    <p>
+      Das ClipWidget-Interface ist nur f&#252;r den Clip-Presenter gedacht, um von der konkreten GUI-Repr&#228;sentation (abdriged, extended) zu abstrahieren
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1621011225712" ID="ID_1506268791" MODIFIED="1621013320534" TEXT="getStart f&#xe4;llt daf&#xfc;r weg">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1621011235478" ID="ID_1478696622" MODIFIED="1621013319072" TEXT="und changeTimings ebenfalls">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1621013307550" ID="ID_1002878072" MODIFIED="1621013317717" TEXT="Accessor hei&#xdf;en jetzt access*">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1621013334938" ID="ID_492704684" MODIFIED="1621013457226" TEXT="Metrik korrekt &#xfc;bersetzen">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1621013341929" ID="ID_417943116" MODIFIED="1621013379533" TEXT="Clip ist nicht an der Maus-Position">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1621013385355" ID="ID_1141346152" MODIFIED="1621013452506" TEXT="sondern etwa nur das halbe Delta">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1621013395618" ID="ID_671218820" MODIFIED="1621013523662" TEXT="dh. Canvas-Pixel &#x2260; GDK-Pixel">
+<arrowlink COLOR="#de5c6e" DESTINATION="ID_1862152665" ENDARROW="Default" ENDINCLINATION="139;212;" ID="Arrow_ID_1129738995" STARTARROW="None" STARTINCLINATION="686;61;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1621013349165" ID="ID_1048588084" MODIFIED="1621013380765">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Clip <i>zappelt</i>&#160;&#8213; warum?
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1621013468896" ID="ID_129803095" MODIFIED="1621013477775" TEXT="pr&#xfc;fen: Anzeigegrenzen?">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 </node>

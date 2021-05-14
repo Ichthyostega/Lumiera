@@ -183,7 +183,8 @@ namespace timeline {
               .change(ATTR_timing, [&](TimeSpan val)
                   {
                     REQUIRE (widget_);
-                    widget_->changeTiming (val);
+                    widget_->accessStartTime() = val.start();
+                    widget_->accessDuration() = val.duration();
                   })
               //-Diff-Change-Listener----------------
               .onLocalChange ([this]()
@@ -227,25 +228,29 @@ namespace timeline {
         {
           ClipPresenter& subject_;
           model::DisplayMetric const& metric_;
+          TimeVar&  newTime_;
+          Time      oldTime_;
           
           void
           updateOffset (double deltaX, double deltaY)  override
             {
-              TimeValue newStartTime = metric_.applyScreenDelta(subject_.widget_->getStartTime(), deltaX);
+              newTime_ = metric_.applyScreenDelta(oldTime_, deltaX);
+              subject_.widget_->updatePosition();
               std::cerr << _Fmt{"Gesture(%s) → Δ ≔ (%3.1f,%3.1f) ⟹ %s ↷ %s"}
                                % getCmdID()
                                % deltaX
                                % deltaY
-                               % subject_.widget_->getStartTime()
-                               % newStartTime
+                               % subject_.widget_->accessStartTime()
+                               % oldTime_
                         << std::endl;
             }
           
           void
           markGestureCompleted()  override
             {
-              std::cerr << _Fmt{"!!BANG!! Gesture-Cmd '%s'"}
+              std::cerr << _Fmt{"!!BANG!! Gesture-Cmd '%s' Time ↷ %s"}
                                % getCmdID()
+                               % newTime_
                         << std::endl;
             }
           
@@ -253,7 +258,9 @@ namespace timeline {
           DragRelocateObserver(Symbol cmdID, ClipPresenter& clipPresenter)
             : interact::GestureObserver{cmdID}
             , subject_{clipPresenter}
-            , metric_{clipPresenter.widget_->getCanvas().getMetric()}
+            , metric_ {subject_.widget_->getCanvas().getMetric()}
+            , newTime_{subject_.widget_->accessStartTime()}
+            , oldTime_{newTime_}
           { }
         };
       
