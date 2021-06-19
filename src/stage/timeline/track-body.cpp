@@ -23,7 +23,9 @@
 
 /** @file track-body.cpp
  ** Implementation details regarding display management of the
- ** track body area within the timeline display canvas.
+ ** track body area within the timeline display canvas. Especially,
+ ** this code handles the structuring of vertical space, and the way
+ ** this vertical extension maps to specific tracks.
  ** 
  ** @todo WIP-WIP-WIP as of 6/2019
  ** 

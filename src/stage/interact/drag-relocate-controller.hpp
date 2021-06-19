@@ -159,8 +159,8 @@ namespace interact {
               return false; // Event not handled by this controller
           REQUIRE (motion_event);
           std::cerr << _Fmt{"MOVE x=%3.1f y=%3.1f subject=%s"}
-                       % motion_event->x
-                       % motion_event->y
+                       % motion_event->x_root
+                       % motion_event->y_root
                        % subject
                     << std::endl;
           if (not isAnchored())
@@ -199,8 +199,8 @@ namespace interact {
         {
           REQUIRE (motion_event);
           this->subject_ = & subject;
-          this->anchorX_ = motion_event->x;
-          this->anchorY_ = motion_event->y;
+          this->anchorX_ = motion_event->x_root;
+          this->anchorY_ = motion_event->y_root;
           std::cerr << _Fmt{"ANCHOR at x=%3.1f y=%3.1f ('%s')"}
                            % anchorX_
                            % anchorY_
@@ -211,8 +211,8 @@ namespace interact {
       void
       probeActivation (GdkEventMotion* motion_event)
         {
-          isInFormation_ = DISTANCE_THRESHOLD < abs (motion_event->x - anchorX_)
-                        or DISTANCE_THRESHOLD < abs (motion_event->y - anchorY_);
+          isInFormation_ = DISTANCE_THRESHOLD < abs (motion_event->x_root - anchorX_)
+                        or DISTANCE_THRESHOLD < abs (motion_event->y_root - anchorY_);
         }
       
       void
@@ -225,8 +225,8 @@ namespace interact {
       doTrackGesture (GdkEventMotion* motion_event)
         {
           REQUIRE (motion_event);
-          gdouble deltaX = motion_event->x - this->anchorX_;
-          gdouble deltaY = motion_event->y - this->anchorY_;
+          gdouble deltaX = motion_event->x_root - this->anchorX_;
+          gdouble deltaY = motion_event->y_root - this->anchorY_;
           // notify Subject to feed current delta
           observer_->updateOffset (deltaX, deltaY);
         }

@@ -223,6 +223,7 @@ namespace timeline {
       
     private:/* ===== Subject-Interface ===== */
       
+      /** @internal Adapter used while a dragging gesture is in formation */
       class DragRelocateObserver
         : public interact::GestureObserver
         {
@@ -240,8 +241,8 @@ namespace timeline {
                                % getCmdID()
                                % deltaX
                                % deltaY
-                               % subject_.widget_->accessStartTime()
                                % oldTime_
+                               % subject_.widget_->accessStartTime()
                         << std::endl;
             }
           
@@ -285,10 +286,10 @@ namespace timeline {
        * Whenever a new clip widget has been created, this function is also responsible
        * for additional setup, and especially to enable the dragging gestures on this clip.
        * @remark a typical example would be, when a clip's temporal position, previously unspecified,
-       *     now becomes defined through a diff message. With this data, it becomes feasible
+       *     now becomes defined through a diff message. With this data, it then would become feasible
        *     _actually to show the clip_ in the timeline. Thus the [Appearance style](\ref ClipDelegate::Appearance)
        *     of the presentation widget (delegate) can be switched up from `PENDING` to `ABRIDGED`.
-       * @note however this function is invoked from ctor and then serves to allocate the delegate initially.
+       * @note however this function is also invoked from ctor and then serves to allocate the delegate initially.
        */
       void
       establishAppearance(WidgetHook* newView =nullptr,

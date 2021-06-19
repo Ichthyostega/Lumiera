@@ -27,6 +27,9 @@
  ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
  ** @todo WIP-WIP-WIP as of 12/2019
  ** 
+ ** @see track-body.cpp for mapping individual tracks onto the common canvas
+ ** @see body-canvas-widget.cpp for painting track background and overlays
+ ** 
  */
 
 

@@ -436,7 +436,7 @@ namespace timeline {
       // respond to any structure changes of the timeline by recomputing the TrackProfile
       layout_.signalStructureChange_.connect (sigc::mem_fun (*this, &BodyCanvasWidget::slotStructureChange));
       
-      // access and possible (re)establish the current "profile" of the tracks on demand...
+      // on demand access and possible (re)establish the current "profile" of the tracks for drawing...
       getProfile = [this]() -> TrackProfile&
                         {
                           maybeRebuildLayout();
@@ -704,6 +704,7 @@ namespace timeline {
     
     cox->set_source_rgb(0.2, 0.4, 0.9);     // blue
     cox->set_line_width (2.0);
+    cox->move_to(w, 0);
     cox->arc(rad, rad, rad, 0.0, 2.0*M_PI); // full circle
     cox->stroke();
     /////////////////////////////////////////////TICKET #1039 : placeholder drawing
