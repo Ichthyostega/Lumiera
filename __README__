@@ -1,0 +1,14 @@
+# Excerpt of statistics utilities from Yoshimi-test
+
+[Yoshimi](http://yoshimi.sourceforge.net/) is a software sound synthesizer, derived from ZynAddSubFx
+and developed by an OpenSource community. The Repository [Yoshimi-test](https://github.com/Ichthyostega/yoshimi-test/)
+is used by the Yoshimi developers to maintain a suite of automated acceptance tests for the Yoshimi application.
+
+This task involves watching execution times to detect long-term performance trends,
+which in turn requires to maintain time-series data and perfrom some simple statistic calculations.
+Requiring any external statistics package as dependency was not deemed adequate for such a simple task,
+and thus a set of very limited self-contained helper functions was created as a byproduct.
+
+
+2024-03-10: This is a filtered Git-history featuring only those helper functions
+
