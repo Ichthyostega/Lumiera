@@ -17874,7 +17874,6 @@
 <node CREATED="1480639254498" ID="ID_601165955" MODIFIED="1557498707223" TEXT="Placement"/>
 <node CREATED="1480639279591" ID="ID_887618627" MODIFIED="1557498707223" TEXT="Timecode"/>
 <node CREATED="1480639276064" ID="ID_1418536459" MODIFIED="1557498707223" TEXT="Fader"/>
-<node CREATED="1480639258169" ID="ID_1876553930" MODIFIED="1557498707223" TEXT="Label">
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1541089187808" ID="ID_368245484" MODIFIED="1612621029065" TEXT="ElementBoxWidget">
 <linktarget COLOR="#f6cca4" DESTINATION="ID_368245484" ENDARROW="Default" ENDINCLINATION="-599;39;" ID="Arrow_ID_1199047781" SOURCE="ID_1032237384" STARTARROW="None" STARTINCLINATION="-698;-271;"/>
 <linktarget COLOR="#f6cca4" DESTINATION="ID_368245484" ENDARROW="Default" ENDINCLINATION="-599;39;" ID="Arrow_ID_703893400" SOURCE="ID_1437927701" STARTARROW="None" STARTINCLINATION="42;-316;"/>
@@ -17883,14 +17882,6 @@
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1541095743511" ID="ID_96949358" MODIFIED="1557498707223" TEXT="#1185 ElementBoxWidget">
 <icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612620683850" ID="ID_1290975013" MODIFIED="1612620687427" TEXT="auszuarbeiten....">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612620568330" ID="ID_1826613475" MODIFIED="1612620738928" TEXT="Problem: feste Gr&#xf6;&#xdf;en-Vorgabe">
-<linktarget COLOR="#f17881" DESTINATION="ID_1826613475" ENDARROW="Default" ENDINCLINATION="1266;110;" ID="Arrow_ID_1550601686" SOURCE="ID_351516626" STARTARROW="None" STARTINCLINATION="2103;126;"/>
-<icon BUILTIN="hourglass"/>
-</node>
-</node>
 </node>
 <node CREATED="1541087843514" ID="ID_1798999985" MODIFIED="1557498707223" TEXT="weit verbreiteter Grundbaustein">
 <icon BUILTIN="idea"/>
@@ -17999,6 +17990,222 @@
 </node>
 <node CREATED="1541089600063" ID="ID_1799506646" MODIFIED="1557498707223" TEXT="Expander mit Arrow verbunden"/>
 <node CREATED="1541089613961" ID="ID_857454578" MODIFIED="1557498707223" TEXT="jedes Binding kann d&#xfc;rch ein Pop-Up-Men&#xfc; ersetzt werden"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625072684078" ID="ID_1863177537" MODIFIED="1625072724798" TEXT="als CustomWidget realisieren">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1624118406176" ID="ID_589554755" MODIFIED="1624118411682" TEXT="Festlegungen">
+<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1624118413444" ID="ID_525135958" MODIFIED="1625072535770" TEXT="Basis-Widget">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1624118429389" ID="ID_875793943" MODIFIED="1624118433820" TEXT="Ansatzpunkte">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1624118435548" ID="ID_683607951" MODIFIED="1624118442679" TEXT="es ist ein Container"/>
+<node CREATED="1624118448617" ID="ID_855361232" MODIFIED="1624118458532" TEXT="es funktioniert analog wie ein Gtk::Frame"/>
+<node CREATED="1624118530287" ID="ID_1198328917" MODIFIED="1624118546896" TEXT="aber es hat auch Verhalten wie eine Gtk::Box"/>
+<node CREATED="1624118488100" ID="ID_1709129346" MODIFIED="1624118551677" TEXT="es hat feste Kind-Elemente plus ein w&#xe4;hlbares Content-Widget"/>
+</node>
+<node CREATED="1625069073522" ID="ID_1232660529" MODIFIED="1625070765303" TEXT="M&#xf6;glichkeiten">
+<icon BUILTIN="info"/>
+<node CREATED="1625069082685" ID="ID_1397995115" MODIFIED="1625070771572" TEXT="Gtk::Bin">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1625069092758" ID="ID_402763047" MODIFIED="1625069101883" TEXT="abstrakte Basisklasse"/>
+<node CREATED="1625069102548" ID="ID_1617772051" MODIFIED="1625069113063" TEXT="kann ein Kind-Widget halten"/>
+<node CREATED="1625069113915" ID="ID_153758398" MODIFIED="1625069125077" TEXT="kann f&#xfc;r dieses ein Label hinzuf&#xfc;gen">
+<node CREATED="1625070050530" ID="ID_903940935" MODIFIED="1625070054889" TEXT="aber nur ein textuell"/>
+<node CREATED="1625070055598" ID="ID_403424864" MODIFIED="1625070058809" TEXT="oder ein Bitmap"/>
+</node>
+<node CREATED="1625070065123" ID="ID_1597717716" MODIFIED="1625070075262" TEXT="f&#xfc;r alles weitere mu&#xdf; man sich selber in das draw() reinh&#xe4;ngen"/>
+</node>
+<node CREATED="1625069187289" ID="ID_872591254" MODIFIED="1625070774327" TEXT="Gtk::Frame">
+<icon BUILTIN="forward"/>
+<node CREATED="1625069192432" ID="ID_709423265" MODIFIED="1625069203664" TEXT="macht eigentlich exakt was wir brauchen"/>
+<node CREATED="1625069204446" ID="ID_47523093" MODIFIED="1625069786876" TEXT="aber etwas &#xbb;fest verdrahtet&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        es hat nur genau ein Label
+      </li>
+      <li>
+        f&#252;r dieses Label kann man nur den Text angeben
+      </li>
+      <li>
+        auch der Frame wird praktisch &quot;schl&#252;sselfertig&quot; bereitgestellt
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<node CREATED="1625069345843" ID="ID_184340763" MODIFIED="1625069366548" TEXT="aber optional kann man ein LabelWidget verwenden"/>
+<node CREATED="1625069370600" ID="ID_1171321554" MODIFIED="1625069378659" TEXT="und das Alignment ist gut steuerbar">
+<node CREATED="1625069794391" ID="ID_873265878" MODIFIED="1625069810266" TEXT="horizontale Position"/>
+<node CREATED="1625069810952" ID="ID_1320642493" MODIFIED="1625069816840" TEXT="Label relativ zum Frame">
+<node CREATED="1625069836370" ID="ID_1994693951" MODIFIED="1625069850491" TEXT="steuert indirekt ob der Frame unterbrochen wird"/>
+</node>
+</node>
+</node>
+<node CREATED="1625069860086" ID="ID_190251401" MODIFIED="1625069890868" TEXT="offene Punkte">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1625069893018" ID="ID_1485806735" MODIFIED="1625069898845" TEXT="Zusammenspiel mit dem Theme">
+<node CREATED="1625069902209" ID="ID_415033973" MODIFIED="1625069919149" TEXT="alle lieben den flachen Stil">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1625069931093" ID="ID_1105083016" MODIFIED="1625069942833" TEXT="es kann passieren, da&#xdf; der Frame unsichtbar ist"/>
+</node>
+<node CREATED="1625069979972" ID="ID_426678553" MODIFIED="1625069994216" TEXT="Overlays und custom drawing"/>
+</node>
+</node>
+<node CREATED="1625070116748" ID="ID_848351976" MODIFIED="1625070768379" TEXT="Gtk::Layout">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1625070136274" ID="ID_104505251" MODIFIED="1625070160572">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das hei&#223;t: weitgehend <i>custom drawing</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1625070617312" ID="ID_916760742" MODIFIED="1625070638385" TEXT="die komplexe Anordnung w&#xe4;re leicht zu realisieren, incl Overlays"/>
+<node CREATED="1625070640413" ID="ID_1387457523" MODIFIED="1625070725403" TEXT="Gefahr: h&#xf6;herer interner Verwaltungsaufwand">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1625070686998" ID="ID_751700152" MODIFIED="1625070725416" TEXT="Gefahr: spezieller Anzeigecode wird rasch komplex">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node CREATED="1625070776368" ID="ID_458451861" MODIFIED="1625070789467" TEXT="Beschlu&#xdf;: mit Gtk::Frame anfangen...">
+<icon BUILTIN="yes"/>
+<node CREATED="1625070800382" ID="ID_745380101" MODIFIED="1625070836175" TEXT="mit geschickter Parametrisierung k&#xf6;nnte das sogar auf Dauer die L&#xf6;sung sein"/>
+<node CREATED="1625070967367" ID="ID_584171745" MODIFIED="1625070976257" TEXT="f&#xfc;r den Inhalt bleiben wir flexibel">
+<node CREATED="1625070978909" ID="ID_1566586463" MODIFIED="1625071001086" TEXT="Frame mu&#xdf; nah am Rand liegen"/>
+<node CREATED="1625071002410" ID="ID_1625945732" MODIFIED="1625071018403" TEXT="...dann k&#xf6;nnen wir alle Overlays per Gtk::Layout-Child handhaben"/>
+<node CREATED="1625071050555" ID="ID_1277840158" MODIFIED="1625071065981" TEXT="alternativ blo&#xdf; ein Gtk::Canvas (Wellenform)"/>
+<node CREATED="1625071114066" ID="ID_1417509025" MODIFIED="1625071118604" TEXT="oder ein Gtk::Image"/>
+<node CREATED="1625071125657" ID="ID_27403748" MODIFIED="1625071134499" TEXT="oder ein Video-Player-Widget"/>
+<node CREATED="1625071135319" ID="ID_778840777" MODIFIED="1625071140731" TEXT="oder ein Gtk::TextView"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625072797631" ID="ID_841790569" MODIFIED="1625072818628" TEXT="Basis-Eigenschaften">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1625072864330" ID="ID_438468634" MODIFIED="1625072878647" TEXT="Ausdehnung fest vorgebbar">
+<node CREATED="1625072881602" ID="ID_1324969264" MODIFIED="1625072892300" TEXT="mu&#xdf; sich dieser Vorgabe flexibel anpassen k&#xf6;nnen"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625073121818" ID="ID_1588690810" MODIFIED="1625073648828" TEXT="Baukasten-System">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625073160693" ID="ID_741459865" MODIFIED="1625073652499" TEXT="Icon">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1625073209509" ID="ID_1647215892" MODIFIED="1625073216705" TEXT="Knopf mit Ein/Aus-Funktion"/>
+<node CREATED="1625073252395" ID="ID_1887674930" MODIFIED="1625073270866" TEXT="Placement mit Placement-Properties"/>
+<node CREATED="1625073397733" ID="ID_252893466" MODIFIED="1625073403209" TEXT="Typ-Icon"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625073420073" ID="ID_1610907627" MODIFIED="1625073651531" TEXT="Expander">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625073503359" ID="ID_795687889" MODIFIED="1625073650316" TEXT="Label mit intellilgentem Inhalt">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1625073544225" ID="ID_714674809" MODIFIED="1625073574690" TEXT="ID-Nummer"/>
+<node CREATED="1625073613360" ID="ID_881063614" MODIFIED="1625073620611" TEXT="erg&#xe4;nzende Beschreibung"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625073654626" ID="ID_1873888723" MODIFIED="1625073685735" TEXT="Content-Schema">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625073669648" ID="ID_1387633826" MODIFIED="1625073684495" TEXT="Hintergrund in Marker-Farbe">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625073693037" ID="ID_800072798" MODIFIED="1625073713363" TEXT="konfigurierbarer Renderer">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625073746174" ID="ID_978569677" MODIFIED="1625073749633" TEXT="Overlays">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625073757173" ID="ID_1408901221" MODIFIED="1625073764844" TEXT="Resize-Ecken">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625073766170" ID="ID_1361820852" MODIFIED="1625073794056" TEXT="horizontal gebundene Positions-Marker">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625073626910" ID="ID_874230795" MODIFIED="1625073647305" TEXT="Kontext-Men&#xfc; bereitstellen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625073639178" ID="ID_103540197" MODIFIED="1625073646355" TEXT="Verbindung zu einer Property-Box">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075636602" ID="ID_1335603093" MODIFIED="1625075658764" TEXT="standardisierte Status-Reaktionen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612620683850" ID="ID_1290975013" MODIFIED="1612620687427" TEXT="auszuarbeiten....">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075258497" ID="ID_1793264120" MODIFIED="1625075268568" TEXT="Steuerung des Darstellungs-Verhaltens">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075337795" ID="ID_873107891" MODIFIED="1625075355499" TEXT="Analyse">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075422300" ID="ID_1618347962" MODIFIED="1625075428886" TEXT="was ist flexibel?">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1625075536956" ID="ID_1129688450" MODIFIED="1625075544135" TEXT="expanded vs collapsed"/>
+<node CREATED="1625075675850" ID="ID_1669027675" MODIFIED="1625075700208" TEXT="Status-Anzeige-Elemente">
+<node CREATED="1625075772886" ID="ID_181698364" MODIFIED="1625075778071" TEXT="m&#xfc;ssen kombinierbar sein"/>
+<node CREATED="1625075778875" ID="ID_888134732" MODIFIED="1625075798044" TEXT="konkret...">
+<node CREATED="1625075799440" ID="ID_402285439" MODIFIED="1625075801836" TEXT="Fehler"/>
+<node CREATED="1625075802531" ID="ID_1393529935" MODIFIED="1625075807091" TEXT="Warnung"/>
+<node CREATED="1625075807920" ID="ID_212997652" MODIFIED="1625075819771" TEXT="Aktivit&#xe4;t"/>
+<node CREATED="1625075828060" ID="ID_193924085" MODIFIED="1625075831264" TEXT="Gesperrt"/>
+</node>
+</node>
+<node CREATED="1625075575855" ID="ID_7348918" MODIFIED="1625075584153" TEXT="ScollWindowPos"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075342643" ID="ID_1177317250" MODIFIED="1625075354429" TEXT="Design-Entscheidungen">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075347837" ID="ID_1633859495" MODIFIED="1625075372486" TEXT="statisch oder dynamisch?">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612620568330" ID="ID_1826613475" MODIFIED="1612620738928" TEXT="Problem: feste Gr&#xf6;&#xdf;en-Vorgabe">
+<linktarget COLOR="#f17881" DESTINATION="ID_1826613475" ENDARROW="Default" ENDINCLINATION="1266;110;" ID="Arrow_ID_1550601686" SOURCE="ID_351516626" STARTARROW="None" STARTINCLINATION="2103;126;"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1625072904888" ID="ID_373040535" MODIFIED="1625072974106" TEXT="pa&#xdf;t nicht recht in den Gtk-Standard">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn GTK geht von einer fixen Mindestgr&#246;&#223;e aus, einem Allocation-Request und dann einer Platzzuteilung
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075098065" HGAP="75" ID="ID_740164704" MODIFIED="1625075127483" TEXT="Frage: wo mu&#xdf; man anpassen...." VSHIFT="-5">
+<edge COLOR="#a56a6a"/>
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075206250" ID="ID_721261085" MODIFIED="1625075212634" TEXT="Strukturen aufbauen">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075275103" ID="ID_1622786444" MODIFIED="1625075281429" TEXT="Konstruktor">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075282830" ID="ID_1730704998" MODIFIED="1625075292624" TEXT="mini-DSL f&#xfc;r die Konfigurations-Varianten schaffen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075301830" ID="ID_792792003" MODIFIED="1625075315505" TEXT="M&#xf6;glichkeiten vordefinierter Ausstattung">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -30142,7 +30349,7 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#844764" DESTINATION="ID_368245484" ENDARROW="Default" ENDINCLINATION="-469;652;" ID="Arrow_ID_264431308" STARTARROW="None" STARTINCLINATION="-1673;136;"/>
-<linktarget COLOR="#5a3557" DESTINATION="ID_485594461" ENDARROW="Default" ENDINCLINATION="872;71;" ID="Arrow_ID_1204090343" SOURCE="ID_474563596" STARTARROW="None" STARTINCLINATION="2236;101;"/>
+<linktarget COLOR="#5a3557" DESTINATION="ID_485594461" ENDARROW="Default" ENDINCLINATION="872;71;" ID="Arrow_ID_1204090343" SOURCE="ID_474563596" STARTARROW="None" STARTINCLINATION="2244;96;"/>
 </node>
 </node>
 <node CREATED="1583678206105" ID="ID_1843404430" MODIFIED="1583678219642" TEXT="Stufe-3">
@@ -33884,8 +34091,8 @@
 </node>
 <node CREATED="1624106236054" ID="ID_859963027" MODIFIED="1624106261516" TEXT="ich glaube ehr, es liegt an dem Button, der bereits die linke Taste &quot;greift&quot;"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1624106269815" ID="ID_474563596" MODIFIED="1624106692190" TEXT="stattdessen k&#xf6;nnte man schon mal das EventBoxWidget anlegen">
-<arrowlink COLOR="#5a3557" DESTINATION="ID_485594461" ENDARROW="Default" ENDINCLINATION="872;71;" ID="Arrow_ID_1204090343" STARTARROW="None" STARTINCLINATION="2236;101;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1624106269815" ID="ID_474563596" MODIFIED="1624115572971" TEXT="stattdessen k&#xf6;nnte man schon mal das ElementBoxWidget anlegen">
+<arrowlink COLOR="#5a3557" DESTINATION="ID_485594461" ENDARROW="Default" ENDINCLINATION="872;71;" ID="Arrow_ID_1204090343" STARTARROW="None" STARTINCLINATION="2244;96;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -58124,6 +58331,39 @@
 <node CREATED="1576411779540" ID="ID_816697044" MODIFIED="1576411801603" TEXT="ein nicht verf&#xfc;gbarer/aufrufbarer dtor (wegen move!)"/>
 <node CREATED="1576411803728" ID="ID_1798497956" MODIFIED="1576411812841" TEXT="Variant-Typen (unions)"/>
 </node>
+</node>
+</node>
+<node CREATED="1625963909013" ID="ID_772999255" MODIFIED="1625963914852" TEXT="std::initializer_list">
+<node CREATED="1625963919421" ID="ID_898662178" MODIFIED="1625963952504">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die <i>uniform initialisation</i>&#160;ist leider unrund geraten
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1625963954723" ID="ID_867098334" MODIFIED="1625963998275" TEXT="ein eigens definierter initializer_list-Ctor setzt praktisch alle anderen Ctors &quot;au&#xdf;er Gefecht&quot;">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1625964012581" ID="ID_725341195" LINK="https://akrzemi1.wordpress.com/2016/07/07/the-cost-of-stdinitializer_list" MODIFIED="1625964083266">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die Werte in der initializer_list sind Values und werden <b>per copy-Konstruktion erstellt</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 </node>
