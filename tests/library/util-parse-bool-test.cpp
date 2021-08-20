@@ -47,6 +47,7 @@ namespace test {
           CHECK (boolVal ("true"));
           CHECK (boolVal ("True"));
           CHECK (boolVal ("TRUE"));
+          CHECK (boolVal ("tRuE"));
           CHECK (boolVal ("yes"));
           CHECK (boolVal ("Yes"));
           CHECK (boolVal ("YES"));
@@ -56,6 +57,7 @@ namespace test {
           CHECK (not boolVal ("false"));
           CHECK (not boolVal ("False"));
           CHECK (not boolVal ("FALSE"));
+          CHECK (not boolVal ("fAlSe"));
           CHECK (not boolVal ("no"));
           CHECK (not boolVal ("No"));
           CHECK (not boolVal ("NO"));
@@ -69,8 +71,8 @@ namespace test {
           
           VERIFY_ERROR (INVALID, boolVal("")         );
           VERIFY_ERROR (INVALID, boolVal(" ")        );
-          VERIFY_ERROR (INVALID, boolVal("yEs")      );
-          VERIFY_ERROR (INVALID, boolVal("tRuE")     );
+          VERIFY_ERROR (INVALID, boolVal("Ja")       );
+          VERIFY_ERROR (INVALID, boolVal("truth")    );
           VERIFY_ERROR (INVALID, boolVal("falsehood"));
           VERIFY_ERROR (INVALID, boolVal("11")       );
           VERIFY_ERROR (INVALID, boolVal("+1")       );
@@ -79,6 +81,7 @@ namespace test {
           
           CHECK (isYes ("true"));
           CHECK (isYes ("True"));
+          CHECK (isYes ("tRuE"));
           CHECK (isYes ("TRUE"));
           CHECK (isYes ("yes"));
           CHECK (isYes ("Yes"));
@@ -89,7 +92,6 @@ namespace test {
           CHECK (isYes (" \n\n 1 \t "));
 
           CHECK (not isYes (" True and False"));
-          CHECK (not isYes ("tRuE"));
           CHECK (not isYes ("+2"));
           CHECK (not isYes ("no"));
           CHECK (not isYes ("1010"));

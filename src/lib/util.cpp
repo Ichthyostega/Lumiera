@@ -99,8 +99,8 @@ namespace util {
   
   
   namespace {
-    regex trueTokens{ "\\s*(true|True|TRUE|yes|Yes|YES|1|\\+)\\s*",  regex::ECMAScript | regex::optimize};
-    regex falseTokens{"\\s*(false|False|FALSE|no|No|NO|0|\\-)\\s*",  regex::ECMAScript | regex::optimize};
+    regex trueTokens { "\\s*(true|yes|on|1|\\+)\\s*",  regex::icase | regex::optimize };
+    regex falseTokens{ "\\s*(false|no|off|0|\\-)\\s*", regex::icase | regex::optimize };
   }
   
   bool
