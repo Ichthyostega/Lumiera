@@ -36,7 +36,7 @@
  ** 
  ** @see lumiera::Query
  ** @see mobject::session::DefsManager
- ** @see asset::StructFactory 
+ ** @see asset::StructFactory
  ** @see fake-configrules.hpp currently used dummy-implementation
  ** @see 
  **
@@ -66,7 +66,7 @@ namespace steam {
   
   /* ============= global configuration ==================== */
   
-  /** 
+  /**
    *  the list of all concrete types participating in the
    *  rule based config query system
    */
@@ -78,7 +78,7 @@ namespace steam {
                            > ::List
                              InterfaceTypes;
   
-  /** 
+  /**
    * user-visible Interface to the ConfigRules subsystem.
    * Configured as Singleton (with hidden Implementation class)
    */

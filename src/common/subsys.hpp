@@ -1,5 +1,5 @@
 /*
-  SUBSYS.hpp  -  interface for describing an application part to be handled by main() 
+  SUBSYS.hpp  -  interface for describing an application part to be handled by main()
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -26,13 +26,13 @@
  ** need to be started and maintained, observing some interrelations.
  ** While the activation of the key components is controlled by options, maybe
  ** some prerequisite subsystems need to be pulled up, and in case of an regular
- ** or irregular exit of a given subsystem, the whole dependency graph needs 
+ ** or irregular exit of a given subsystem, the whole dependency graph needs
  ** to be brought down in a clean manner. The purpose of lumiera::Subsys is
  ** to maintain these in a self-explanatory script-like fashion within main(),
  ** without forcing the individual subsystems into a fixed implementation scheme.
  ** The only requirement is that for each subsystem there is sort-of an entry
  ** point or facade object, providing a Subsys descriptor instance to be
- ** used within main. 
+ ** used within main.
  **
  ** @see lumiera::AppState
  ** @see lumiera::Option
@@ -88,7 +88,7 @@ namespace lumiera {
       bool isRunning()  noexcept;
       
       
-      /** query application option state to determine 
+      /** query application option state to determine
        *  if this subsystem should be activated.
        * @note even if not started explicitly, it could still
        *       be started as prerequisite of another one */
@@ -100,9 +100,9 @@ namespace lumiera {
        *  Failure to start up usually terminates the whole application.
        *  When this subsystem ceases to work, it must ensure to activate
        *  the given callback signal.
-       *  @param options may be influencing the operation mode 
+       *  @param options may be influencing the operation mode
        *  @param SigTerm to be signalled by the subsystem.
-       *  @warning termination must be signalled reliably.  
+       *  @warning termination must be signalled reliably.
        *  @return `true` if actually started. */
       virtual bool start (lumiera::Option& options, SigTerm)  =0;
       
@@ -111,7 +111,7 @@ namespace lumiera {
        *  This trigger may be called repeatedly any time...
        *  When the subsystem actually has terminated,
        *  the SigTerm passed to #start must be invoked.
-       * @note called within a locked context (barrier) 
+       * @note called within a locked context (barrier)
        * @warning must not block nor throw. */
       virtual void triggerShutdown()  noexcept  =0;
       

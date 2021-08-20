@@ -74,7 +74,7 @@ namespace util {
   
   /** cut a numeric value to be >=0 */
   template <typename NUM>
-  inline NUM 
+  inline NUM
   noneg (NUM val)
   {
     return (0<val? val : 0);
@@ -82,7 +82,7 @@ namespace util {
   
   /** force a numeric to be within bounds, inclusively */
   template <typename NUM, typename NB>
-  inline NUM 
+  inline NUM
   limited (NB lowerBound, NUM val, NB upperBound)
   {
     return min ( max (val, lowerBound)
@@ -90,7 +90,7 @@ namespace util {
   }
   
   /** positive integral number from textual representation
-   * @return always a number, 0 in case of unparseable text,  
+   * @return always a number, 0 in case of unparseable text,
    *         limited to 0 <= num <= LUMIERA_MAX_ORDINAL_NUMBER */
   inline uint
   uNum (const char* pCStr)
@@ -201,7 +201,7 @@ namespace util {
   
   /** shortcut for containment test on a map */
   template <typename MAP>
-  inline bool 
+  inline bool
   contains (MAP& map, typename MAP::key_type const& key)
   {
     return map.find(key) != map.end();
@@ -209,7 +209,7 @@ namespace util {
   
   /** shortcut for set value containment test */
   template <typename T>
-  inline bool 
+  inline bool
   contains (std::set<T> const& set, T const& val)
   {
     return set.end() != set.find (val);
@@ -217,7 +217,7 @@ namespace util {
   
   /** shortcut for string value containment test */
   template <typename T>
-  inline bool 
+  inline bool
   contains (std::string const& str, const T& val)
   {
     return str.find (val) != std::string::npos;
@@ -226,7 +226,7 @@ namespace util {
   /** shortcut for brute-force containment test
    *  in any sequential container */
   template <typename SEQ>
-  inline bool 
+  inline bool
   contains (SEQ const& cont, typename SEQ::const_reference val)
   {
     typename SEQ::const_iterator begin = cont.begin();
@@ -277,7 +277,7 @@ namespace util {
   /** shortcut for removing all copies of an Element
    *  in any sequential collection */
   template <typename SEQ>
-  inline typename SEQ::iterator 
+  inline typename SEQ::iterator
   removeall (SEQ& coll, typename SEQ::value_type const& val)
   {
     typename SEQ::iterator collEnd = coll.end();
@@ -305,7 +305,7 @@ namespace util {
           else
             {
               found = true;
-              if (pos==begin) 
+              if (pos==begin)
                 {
                   set.erase(pos);
                   pos = begin = set.begin();
@@ -354,10 +354,10 @@ namespace util {
   
   
   /** produce an identifier based on the given string.
-   *  remove non-standard-chars, reduce sequences of punctuation 
+   *  remove non-standard-chars, reduce sequences of punctuation
    *  and whitespace to single underscores. The sanitised string
    *  will start with an alphanumeric character.
-   * 
+   *
    * @par Example Conversions
 \verbatim
    "Word"                             --> "Word"
@@ -403,7 +403,7 @@ namespace util {
   /** convenience shortcut: conversion to c-String via string.
    *  usable for printf with objects providing to-string conversion.
    */
-  inline const char* 
+  inline const char*
   cStr (string const& org)
   {
     return org.c_str();

@@ -182,7 +182,7 @@ apologies for that."
    *   the cache, so it doesn't make much of a difference if we scan
    *   the same comparatively short string multiple times
    * 
-   * [stdRegEx-threadsafe]: http://stackoverflow.com/questions/15752910/is-stdregex-thread-safe 
+   * [stdRegEx-threadsafe]: http://stackoverflow.com/questions/15752910/is-stdregex-thread-safe
    */
   string
   humanReadableTypeID (Literal rawType)

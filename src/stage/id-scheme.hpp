@@ -52,7 +52,7 @@
  ** 
  ** In the current state (2017/2021) the foundation for such a rule based view allocation was worked out,
  ** but all the possibly quite elaborated details of hooking into the actual widget tree was postponed,
- ** until we have a more mature implementation of actual presentation widgets in place. 
+ ** until we have a more mature implementation of actual presentation widgets in place.
  ** 
  ** @todo as of 2017 .. 2021, this is a half-finished draft and postponed in favour of building the actually visible timeline display first
  ** 

@@ -61,7 +61,7 @@
  * the API and backbone of the renderengine. Most render implementation
  * code resides in the vault layer or is loaded from plug-ins though.
  */
-namespace steam { 
+namespace steam {
   
   
   
@@ -82,7 +82,7 @@ namespace steam {
    * The so called "player" combines and orchestrates services from
    * the engine, session and vault to perform playback or rendering
    */
-  namespace play { 
+  namespace play {
     
   }
   
@@ -124,8 +124,8 @@ namespace steam {
      */
     namespace builder { }
   
-  }
   
+  }//(End)namespace mobject
 } //(End)namespace steam
 
 #endif /*STEAM_COMMON_H*/

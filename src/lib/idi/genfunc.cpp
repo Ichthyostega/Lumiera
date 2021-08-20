@@ -49,7 +49,7 @@ namespace idi {
     instance_format (string const& prefix, size_t instanceNr)
     {
       return _Fmt("%s.%03d")
-                % prefix % instanceNr; 
+                % prefix % instanceNr;
     }
     
     string

@@ -58,7 +58,7 @@ namespace stage {
    * of the GUI available, i.e. stage::GuiNotification
    * 
    * When running Lumiera with a GUI is required (the default case),
-   * it is loaded as dynamic module, thus defining the interface(s) 
+   * it is loaded as dynamic module, thus defining the interface(s)
    * for any further access. After successfully loading and starting
    * the GUI, the actual "business" interfaces of the GUI are opened
    * and wired internally such as to allow transparent access from
