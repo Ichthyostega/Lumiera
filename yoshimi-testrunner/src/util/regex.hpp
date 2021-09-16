@@ -52,10 +52,6 @@ struct MatchSeq
     iterator end()   { return iterator(); }
 };
 
-/**
- */
-MatchSeq allMatches(std::regex regex);
-
 
 }//(End)namespace util
 #endif /*TESTRUNNER_UTIL_PARSE_HPP_*/
