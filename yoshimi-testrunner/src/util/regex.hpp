@@ -26,8 +26,8 @@
 
 
 
-#ifndef TESTRUNNER_UTIL_PARSE_HPP_
-#define TESTRUNNER_UTIL_PARSE_HPP_
+#ifndef TESTRUNNER_UTIL_REGEX_HPP_
+#define TESTRUNNER_UTIL_REGEX_HPP_
 
 
 #include <regex>
@@ -54,4 +54,4 @@ struct MatchSeq
 
 
 }//(End)namespace util
-#endif /*TESTRUNNER_UTIL_PARSE_HPP_*/
+#endif /*TESTRUNNER_UTIL_REGEX_HPP_*/

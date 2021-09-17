@@ -151,6 +151,12 @@ public:
            and not curr_->empty();
     }
 
+    bool isParseFail()
+    {
+        return curr_ == end()
+           and not isValid();
+    }
+
     void fail()
     {
         if (curr_ == end())

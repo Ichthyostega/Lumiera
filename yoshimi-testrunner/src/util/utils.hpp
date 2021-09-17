@@ -191,6 +191,24 @@ backwards (ITA&& iterable)
 }
 
 
+/**
+ * Shortcut for casting away `const`.
+ * @warning Use with care. Can be very handy to simplify defining
+ *          const and non-const variants of member functions though.
+ */
+template<class OBJ>
+inline OBJ* unConst (const OBJ* o)
+{
+return const_cast<OBJ*> (o);
+}
+
+template<class OBJ>
+inline OBJ& unConst (OBJ const& ro)
+{
+return const_cast<OBJ&> (ro);
+}
+
+
 /** @return content without leading or trailing whitespace */
 string trimmed(string);
 

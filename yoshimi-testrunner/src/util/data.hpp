@@ -54,8 +54,10 @@
 
 //#include <string>
 //#include <memory>
+#include <type_traits>
 #include <utility>
 #include <vector>
+#include <limits>
 #include <tuple>
 
 
@@ -92,6 +94,8 @@ struct Column : util::NonCopyable
     string header;
     vector<VAL> data;
 
+    using ValueType = VAL;
+
 
     Column(string headerID)
         : header{headerID}
@@ -126,6 +130,8 @@ class DataFile
 {
 
 public:
+    static constexpr size_t columnCnt = std::tuple_size_v<decltype(std::declval<TAB>().allColumns())>;
+
     DataFile()
     {
         newRow();
@@ -147,6 +153,61 @@ public:
                 {
                     col.data.reserve(expectedCapacity);
                 });
+    }
+
+    void appendRowFromCSV(string line)
+    {
+        newRow();
+        CsvLine csv(line);
+        forEach(TAB::allColumns(),
+                [&](auto& col)
+                {
+                    if (!csv)
+                        if (csv.isParseFail())
+                            csv.fail();
+                        else
+                            throw error::Invalid("Insufficient data; only "
+                                                +formatVal(csv.getParsedFieldCnt())
+                                                +" fields. Line="+line);
+
+                    using Value = typename std::remove_reference<decltype(col)>::type::ValueType;
+                    col.get() = parseAs<Value>(*csv);
+                    ++csv;
+                });
+    }
+
+    string formatCSVRow(size_t rownum)
+    {
+        if (this->empty())
+            throw error::LogicBroken("Attempt to access data from empty DataTable.");
+        if (rownum >= this->size())
+            throw error::LogicBroken("Attempt to access row #"+str(rownum)
+                                    +" beyond range [0.."+str(size()-1)+"].");
+
+        string csvLine;
+        forEach(TAB::allColumns(),
+                [&](auto& col)
+                {
+                    appendCsvField(csvLine, col.data.at(rownum));
+                });
+        return csvLine;
+    }
+
+    size_t size()  const
+    {
+        if (0 == columnCnt) return 0;
+        size_t rowCnt = std::numeric_limits<size_t>::max();
+        forEach(unConst(this)->allColumns(),
+                [&](auto& col)
+                {
+                    rowCnt = std::min(rowCnt, col.data.size());
+                });
+        return rowCnt;
+    }
+
+    bool empty()  const
+    {
+        return 0 == this->size();
     }
 
     template<size_t i>

@@ -30,7 +30,8 @@
 #define TESTRUNNER_UTIL_FORMAT_HPP_
 
 
-//#include <algorithm>
+#include "util/utils.hpp"
+
 #include <string>
 #include <sstream>
 
@@ -76,6 +77,24 @@ inline string formatVal(float f)
    oss << f;
    return oss.str();
 }
+
+
+/** parse string representation into typed value */
+template<typename TAR>
+inline TAR parseAs(string const& encodedVal)
+{
+    std::istringstream converter{encodedVal};
+    TAR value;
+    converter >> value;
+    return value;
+}
+
+inline bool parseAs(string const& encodedBool)
+{
+    return util::boolVal(encodedBool);
+}
+
+
 
 }//namespace util
 #endif /*TESTRUNNER_UTIL_FORMAT_HPP_*/
