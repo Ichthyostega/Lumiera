@@ -86,9 +86,12 @@ inline TAR parseAs(string const& encodedVal)
     std::istringstream converter{encodedVal};
     TAR value;
     converter >> value;
+    if (converter.fail())
+        throw error::Invalid("unable to parse "+formatVal(encodedVal));
     return value;
 }
 
+template<>
 inline bool parseAs(string const& encodedBool)
 {
     return util::boolVal(encodedBool);

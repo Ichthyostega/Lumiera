@@ -153,7 +153,7 @@ public:
 
     bool isParseFail()
     {
-        return curr_ == end()
+        return curr_ != end()
            and not isValid();
     }
 

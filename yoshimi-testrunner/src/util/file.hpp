@@ -72,4 +72,13 @@ inline fs::path consolidated(fs::path rawPath)
 }
 
 }//(End)namespace fs
+
+namespace util {
+
+inline string formatVal(fs::path path)
+{
+    return "\""+string{path}+"\"";
+}
+
+}//(End)namespace util
 #endif /*TESTRUNNER_UTIL_TEE_HPP_*/
