@@ -49,7 +49,7 @@
  **     Column<double> x{"X value"};
  **     Column<double> y{"Y value"};
  **
- **     auto allColumns(){ return std::tie(name,count,x,y); }
+ **     auto allColumns(){ return std::tie(name,n,x,y); }
  ** };
  **
  ** using Dataz = util::DataFile<Storage>;

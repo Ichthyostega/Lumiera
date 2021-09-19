@@ -96,6 +96,11 @@ inline bool parseAs(string const& encodedBool)
 {
     return util::boolVal(encodedBool);
 }
+template<>
+inline string parseAs(string const& string)
+{
+    return string; // pass-through (even if empty)
+}
 
 
 
