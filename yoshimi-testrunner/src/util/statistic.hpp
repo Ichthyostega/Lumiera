@@ -52,5 +52,16 @@ namespace { // Implementation details
 }//(End)Implementation namespace
 
 
+inline double averageLastN(VecD const& data, size_t n)
+{
+    n = std::min(n, data.size());
+    size_t oldest = data.size() - n;
+    double sum = 0.0;
+    for (size_t i=data.size(); oldest < i; --i)
+        sum += data[i-1];
+    return 0<n? sum/n : 0.0;
+}
+
+
 }//(End)namespace util
 #endif /*TESTRUNNER_UTIL_STATISTIC_HPP_*/

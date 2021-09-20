@@ -93,7 +93,6 @@ namespace util {
 using std::tuple;
 using std::vector;
 using std::string;
-using util::isnil;
 
 
 
@@ -147,6 +146,11 @@ struct Column : util::NonCopyable
     operator VAL&()
     {
         return get();
+    }
+
+    operator VAL const&()  const
+    {
+        return unConst(this)->get();
     }
 
     template<typename X>
