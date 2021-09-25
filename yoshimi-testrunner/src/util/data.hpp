@@ -264,7 +264,7 @@ public:
 
 
     /** @param lineLimit number of rows to retain, back from the newest */
-    void save(size_t lineLimit =std::numeric_limits<size_t>::max())
+    void save(size_t lineLimit =std::numeric_limits<size_t>::max(), bool backupOld =false)
     {
         fs::path newFilename{filename_};
         newFilename += ".tmp";
@@ -274,10 +274,13 @@ public:
             throw error::State("Unable to create CSV output file "+formatVal(newFilename));
         saveData(csvFile, lineLimit);
 
-        fs::path oldFile{filename_};
-        oldFile += ".bak";
-        if (fs::exists(filename_))
-            fs::rename(filename_, oldFile);
+        if (backupOld)
+        {
+            fs::path oldFile{filename_};
+            oldFile += ".bak";
+            if (fs::exists(filename_))
+                fs::rename(filename_, oldFile);
+        }
         fs::rename(newFilename, filename_);
     }
 
@@ -335,8 +338,8 @@ private: /* === Implementation === */
                 [&](auto& col)
                 {
                     if (*header != col.header)
-                        throw error::Invalid("Header mismatch in CSV file. "
-                                             "Expecting column("+formatVal(col.header)
+                        throw error::Invalid("Header mismatch in CSV file "+formatVal(filename_)
+                                            +". Expecting column("+formatVal(col.header)
                                             +") but found "+formatVal(*header));
                     ++header;
                 });

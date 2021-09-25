@@ -48,23 +48,18 @@
 #define TESTRUNNER_UTIL_CSV_HPP_
 
 
-//#include "util/nocopy.hpp"
 #include "util/error.hpp"
 #include "util/format.hpp"
 #include "util/regex.hpp"
-//#include "util/utils.hpp"
 
-//#include <string>
-//#include <memory>
-//#include <utility>
-//#include <vector>
+#include <limits>
+#include <string>
 
 
 namespace util {
 
 using std::regex;
-//using std::vector;
-//using util::isnil;
+using std::string;
 
 namespace { // Implementation details...
 
@@ -79,11 +74,18 @@ namespace { // Implementation details...
     template<typename VAL>
     inline string format4Csv(VAL const& val)
     {
-        return util::str(val);
+        std::ostringstream oss;
+        oss.precision(std::numeric_limits<VAL>::digits10);
+        oss << val;
+        return oss.str();
     }
     inline string format4Csv(string const& val)
     {
         return '"'+val+'"';
+    }
+    inline string format4Csv(bool boo)
+    {
+        return formatVal(boo);
     }
 
 }//(End)Implementation
