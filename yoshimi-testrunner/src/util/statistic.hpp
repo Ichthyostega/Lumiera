@@ -20,9 +20,10 @@
 
 /** @file statistic.cpp
  ** Support for generic statistics calculations.
- ** 
- ** @todo WIP as of 9/21
- ** 
+ ** - average over the N last elements in a data sequence
+ ** - simple linear regression with weights (single predictor variable)
+ ** - also over a time series with zero-based indices
+ **
  */
 
 
@@ -32,9 +33,10 @@
 
 
 #include "util/error.hpp"
+#include "util/nocopy.hpp"
+#include "util/format.hpp"
+#include "util/utils.hpp"
 
-//#include <algorithm>
-//#include <cassert>
 #include <vector>
 #include <array>
 #include <tuple>
@@ -42,26 +44,110 @@
 
 namespace util {
 
-//using util::formatVal;
-//using std::log10;
-//using std::fabs;
-//using std::max;
-//using std::min;
+using std::fabs;
+using std::array;
+using std::tuple;
+using std::make_tuple;
 
+
+
+/**
+ * Read-only view into a segment within a sequence of data
+ * @tparam D value type of the data series
+ * @remark simplistic workaround since we don't support C++20 yet
+ * @todo replace by const std::span
+ */
+template<typename D>
+class DataSpan
+    : util::Cloneable
+{
+    const D* const b_{nullptr};
+    const D* const e_{nullptr};
+
+public:
+    DataSpan() = default;
+    DataSpan(D const& begin, D const& end)
+        : b_{&begin}
+        , e_{&end}
+    {   if (e_ < b_) throw error::Invalid("End point before begin."); }
+
+    template<class CON>
+    DataSpan(CON const& container)
+        : DataSpan{*std::begin(container), *std::end(container)}
+    { }
+
+
+    using iterator = const D*;
+
+    size_t size()  const { return e_ - b_; }
+    bool empty()   const { return b_ == e_; }
+
+    iterator begin() const { return b_; }
+    iterator end()   const { return e_; }
+
+    D const& operator[](size_t i) const { return b_ + i; }
+    D const& at(size_t i) const
+    {
+        if (i >= size()) throw error::Invalid("Index "+str(i)+" beyond size="+str(size()));
+        return this->operator[](i);
+    }
+};
+
+
+template<typename D>
+using Span = DataSpan<D> const&;
 using VecD = std::vector<double>;
 
-namespace { // Implementation details
-}//(End)Implementation namespace
+/** helper to unpack a std::tuple into a homogeneous std::array */
+template<typename TUP>
+constexpr auto array_from_tuple(TUP&& tuple)
+{
+    constexpr auto makeArray = [](auto&& ... x){ return std::array{std::forward<decltype(x)>(x) ... }; };
+    return std::apply(makeArray, std::forward<TUP>(tuple));
+}
 
 
-inline double averageLastN(VecD const& data, size_t n)
+
+template<typename D>
+inline double average(Span<D> data)
+{
+    if (isnil(data)) return 0.0;
+    double sum = 0.0;
+    for (auto val : data)
+        sum += val;
+    return sum / data.size();
+}
+
+
+inline DataSpan<double> lastN(VecD const& data, size_t n)
 {
     n = std::min(n, data.size());
     size_t oldest = data.size() - n;
-    double sum = 0.0;
-    for (size_t i=data.size(); oldest < i; --i)
-        sum += data[i-1];
-    return 0<n? sum/n : 0.0;
+    return DataSpan<double>{data[oldest], *data.end()};
+}
+
+inline double averageLastN(VecD const& data, size_t n)
+{
+    return average(lastN(data,n));
+}
+
+
+/** "building blocks" for mean, variance and covariance of time series data */
+template<typename D>
+inline auto computeStatSums(Span<D> series)
+{
+    double ysum = 0.0;
+    double yysum = 0.0;
+    double xysum = 0.0;
+    size_t x = 0;
+    for (auto& y : series)
+    {
+        ysum += y;
+        yysum += y*y;
+        xysum += x*y;
+        ++x;
+    }
+    return make_tuple(ysum,yysum, xysum);
 }
 
 
@@ -81,9 +167,10 @@ using RegressionData = std::vector<RegressionPoint>;
 
 
 /** "building blocks" for weighted mean, weighted variance and covariance */
-inline auto computeWeightedStatSums(RegressionData const& points)
+inline auto computeWeightedStatSums(Span<RegressionPoint> points)
 {
-    std::array<double,6> sums = {0.0,0.0,0.0,0.0,0.0,0.0};
+    std::array<double,6> sums;
+    sums.fill(0.0);
     auto& [wsum, wxsum, wysum, wxxsum, wyysum, wxysum] = sums;
     for (auto& p : points)
     {
@@ -99,7 +186,7 @@ inline auto computeWeightedStatSums(RegressionData const& points)
 
 /**
  * Compute simple linear regression with a single predictor variable (x).
- * @param points data to fit the linear model with
+ * @param points 2D data to fit the linear model with, including weights.
  * @return the computed linear model `b + a·x`, and the resulting fit
  *         - socket (constant offset `b`)
  *         - gradient (linear factor `a`)
@@ -109,7 +196,7 @@ inline auto computeWeightedStatSums(RegressionData const& points)
  *         - maximum absolute delta
  *         - delta standard deviation
  */
-inline std::tuple<double,double, VecD,VecD, double,double,double> computeLinearRegression(RegressionData const& points)
+inline auto computeLinearRegression(Span<RegressionPoint> points)
 {
     auto [wsum, wxsum, wysum, wxxsum, wyysum, wxysum] = computeWeightedStatSums(points);
 
@@ -140,14 +227,53 @@ inline std::tuple<double,double, VecD,VecD, double,double,double> computeLinearR
         maxDelta = std::max(maxDelta, fabs(delta));
         variance += p.w * delta*delta;
     }
-    return std::make_tuple(socket,gradient
-                          ,move(predicted)
-                          ,move(deltas)
-                          ,correlation
-                          ,maxDelta
-                          ,sqrt(variance/wsum)
-                          );
+    return make_tuple(socket,gradient
+                     ,move(predicted)
+                     ,move(deltas)
+                     ,correlation
+                     ,maxDelta
+                     ,sqrt(variance/wsum)
+                     );
 }
+
+inline auto computeLinearRegression(RegressionData const& points)
+{   return computeLinearRegression(DataSpan<RegressionPoint>{points}); }
+
+
+
+/**
+ * Compute linear regression over a time series with zero-based indices.
+ * @remark using the indices as x-values, the calculations for a regression line
+ *         can be simplified, using the known closed formula for a sum of integers,
+ *         shifting the indices to 0…n-1 (leaving out the 0 and 0² term)
+ *         - `1+…+n = n·(n+1)/2`
+ *         - `1+…+n² = n·(n+1)·(2n+1)/6`
+ * @return `(socket,gradient)` to describe the regression line y = socket + gradient · i
+ */
+template<typename D>
+inline auto computeTimeSeriesLinearRegression(Span<D> series)
+{
+    auto [ysum,yysum, xysum] = computeStatSums(series);
+
+    size_t n = series.size();
+    double im = (n-1)/2.0;                     // mean of zero-based indices i ∈ {0 … n-1}
+    double ym = ysum / n;                      // mean y
+    double varx = (n-1)*(n+1)/12.0;            // variance of zero-based indices Σ(i-im)² / n
+    double vary = yysum/n - ym*ym;             // variance of data values  Σ(y-ym)² / n
+    double cova = xysum  - ysum *(n-1)/2;      // Time series Covariance = Σ(i-im)(y-ym) = Σiy + im·ym·n - ym·Σi - im·Σy; use n*ym = Σy
+
+    // Linear Regression minimising σ²
+    double gradient = cova / (n*varx);         // Gradient = Correlation · σy / σx ; σ = √Variance;  Correlation = Covariance /(√Σx √Σy)
+    double socket   = ym - gradient * im;      // Regression line:  Y-ym = Gradient · (i-im)  ; set i≔0 yields socket
+
+    // Correlation (Pearson's r)
+    double correlation = gradient * sqrt(varx/vary);
+    return make_tuple(socket,gradient,correlation);
+}
+
+inline auto computeTimeSeriesLinearRegression(VecD const& series)
+{   return computeTimeSeriesLinearRegression(Span<double>{series}); }
+
 
 
 }//(End)namespace util
