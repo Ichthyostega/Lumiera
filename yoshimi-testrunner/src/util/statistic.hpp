@@ -49,6 +49,17 @@ using std::array;
 using std::tuple;
 using std::make_tuple;
 
+using VecD = std::vector<double>;
+
+/** helper to unpack a std::tuple into a homogeneous std::array */
+template<typename TUP>
+constexpr auto array_from_tuple(TUP&& tuple)
+{
+    constexpr auto makeArray = [](auto&& ... x){ return std::array{std::forward<decltype(x)>(x) ... }; };
+    return std::apply(makeArray, std::forward<TUP>(tuple));
+}
+
+
 
 
 /**
@@ -94,22 +105,10 @@ public:
 };
 
 
-template<typename D>
-using Span = DataSpan<D> const&;
-using VecD = std::vector<double>;
-
-/** helper to unpack a std::tuple into a homogeneous std::array */
-template<typename TUP>
-constexpr auto array_from_tuple(TUP&& tuple)
-{
-    constexpr auto makeArray = [](auto&& ... x){ return std::array{std::forward<decltype(x)>(x) ... }; };
-    return std::apply(makeArray, std::forward<TUP>(tuple));
-}
-
 
 
 template<typename D>
-inline double average(Span<D> data)
+inline double average(DataSpan<D> const& data)
 {
     if (isnil(data)) return 0.0;
     double sum = 0.0;
@@ -117,6 +116,25 @@ inline double average(Span<D> data)
         sum += val;
     return sum / data.size();
 }
+
+template<typename D>
+inline double sdev(DataSpan<D> const& data, D mean)
+{
+    if (isnil(data)) return 0.0;
+    double sdev = 0.0;
+    for (auto val : data)
+    {
+        D offset = val - mean;
+        sdev += offset*offset;
+    }
+    size_t n = data.size();
+    sdev /= n<2? 1: n-1;
+    return sqrt(sdev);
+}
+
+inline double sdev(VecD const& data, double mean)
+{   return sdev(DataSpan<double>{data}, mean); }
+
 
 
 inline DataSpan<double> lastN(VecD const& data, size_t n)
@@ -131,10 +149,15 @@ inline double averageLastN(VecD const& data, size_t n)
     return average(lastN(data,n));
 }
 
+inline double sdevLastN(VecD const& data, double mean, size_t n)
+{
+    return sdev(lastN(data,n), mean);
+}
+
 
 /** "building blocks" for mean, variance and covariance of time series data */
 template<typename D>
-inline auto computeStatSums(Span<D> series)
+inline auto computeStatSums(DataSpan<D> const& series)
 {
     double ysum = 0.0;
     double yysum = 0.0;
@@ -167,7 +190,7 @@ using RegressionData = std::vector<RegressionPoint>;
 
 
 /** "building blocks" for weighted mean, weighted variance and covariance */
-inline auto computeWeightedStatSums(Span<RegressionPoint> points)
+inline auto computeWeightedStatSums(DataSpan<RegressionPoint> const& points)
 {
     std::array<double,6> sums;
     sums.fill(0.0);
@@ -196,7 +219,7 @@ inline auto computeWeightedStatSums(Span<RegressionPoint> points)
  *         - maximum absolute delta
  *         - delta standard deviation
  */
-inline auto computeLinearRegression(Span<RegressionPoint> points)
+inline auto computeLinearRegression(DataSpan<RegressionPoint> const& points)
 {
     auto [wsum, wxsum, wysum, wxxsum, wyysum, wxysum] = computeWeightedStatSums(points);
 
@@ -214,8 +237,9 @@ inline auto computeLinearRegression(Span<RegressionPoint> points)
     double correlation = gradient * sqrt(varx/vary);
 
     // calculate error Δ for all measurement points
-    VecD predicted;  predicted.reserve(points.size());
-    VecD deltas;     deltas.reserve(points.size());
+    size_t n = points.size();
+    VecD predicted;  predicted.reserve(n);
+    VecD deltas;     deltas.reserve(n);
     double maxDelta = 0.0;
     double variance = 0.0;
     for (auto& p : points)
@@ -227,12 +251,14 @@ inline auto computeLinearRegression(Span<RegressionPoint> points)
         maxDelta = std::max(maxDelta, fabs(delta));
         variance += p.w * delta*delta;
     }
+    variance /= wsum * (n<=2? 1 : (n-2)/double(n)); // N-2 because it's an estimation,
+                                                    // based on 2 other estimated values (socket,gradient)
     return make_tuple(socket,gradient
                      ,move(predicted)
                      ,move(deltas)
                      ,correlation
                      ,maxDelta
-                     ,sqrt(variance/wsum)
+                     ,sqrt(variance)
                      );
 }
 
@@ -251,7 +277,7 @@ inline auto computeLinearRegression(RegressionData const& points)
  * @return `(socket,gradient)` to describe the regression line y = socket + gradient · i
  */
 template<typename D>
-inline auto computeTimeSeriesLinearRegression(Span<D> series)
+inline auto computeTimeSeriesLinearRegression(DataSpan<D> const& series)
 {
     auto [ysum,yysum, xysum] = computeStatSums(series);
 
@@ -272,7 +298,7 @@ inline auto computeTimeSeriesLinearRegression(Span<D> series)
 }
 
 inline auto computeTimeSeriesLinearRegression(VecD const& series)
-{   return computeTimeSeriesLinearRegression(Span<double>{series}); }
+{   return computeTimeSeriesLinearRegression(DataSpan<double>{series}); }
 
 
 
