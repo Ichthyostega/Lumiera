@@ -106,6 +106,15 @@ public:
 
 
 
+/** summation of variances, for error propagation: √Σe² */
+template<typename... NUMS>
+inline double errorSum(NUMS ...vals)
+{
+    auto sqr = [](auto val){ return val*val; };
+    return sqrt((sqr(vals)+ ... + 0.0));
+}
+
+
 
 template<typename D>
 inline double average(DataSpan<D> const& data)
@@ -149,7 +158,7 @@ inline double averageLastN(VecD const& data, size_t n)
     return average(lastN(data,n));
 }
 
-inline double sdevLastN(VecD const& data, double mean, size_t n)
+inline double sdevLastN(VecD const& data, size_t n, double mean)
 {
     return sdev(lastN(data,n), mean);
 }
@@ -234,7 +243,7 @@ inline auto computeLinearRegression(DataSpan<RegressionPoint> const& points)
     double socket   = ym - gradient * xm;                           // Regression line:  Y-ym = gradient · (x-xm)  ; set x≔0 yields socket
 
     // Correlation (Pearson's r)
-    double correlation = gradient * sqrt(varx/vary);
+    double correlation = wyysum==0.0? 0.0 : gradient * sqrt(varx/vary);
 
     // calculate error Δ for all measurement points
     size_t n = points.size();
@@ -279,6 +288,8 @@ inline auto computeLinearRegression(RegressionData const& points)
 template<typename D>
 inline auto computeTimeSeriesLinearRegression(DataSpan<D> const& series)
 {
+    if (series.size() < 2) return make_tuple(0.0,0.0,0.0);
+
     auto [ysum,yysum, xysum] = computeStatSums(series);
 
     size_t n = series.size();
@@ -293,7 +304,7 @@ inline auto computeTimeSeriesLinearRegression(DataSpan<D> const& series)
     double socket   = ym - gradient * im;      // Regression line:  Y-ym = Gradient · (i-im)  ; set i≔0 yields socket
 
     // Correlation (Pearson's r)
-    double correlation = gradient * sqrt(varx/vary);
+    double correlation = yysum==0.0? 0.0 : gradient * sqrt(varx/vary);
     return make_tuple(socket,gradient,correlation);
 }
 
