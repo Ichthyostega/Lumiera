@@ -243,7 +243,7 @@ inline auto computeLinearRegression(DataSpan<RegressionPoint> const& points)
     double socket   = ym - gradient * xm;                           // Regression line:  Y-ym = gradient · (x-xm)  ; set x≔0 yields socket
 
     // Correlation (Pearson's r)
-    double correlation = wyysum==0.0? 0.0 : gradient * sqrt(varx/vary);
+    double correlation = wyysum==0.0? 1.0 : gradient * sqrt(varx/vary);
 
     // calculate error Δ for all measurement points
     size_t n = points.size();
@@ -304,7 +304,7 @@ inline auto computeTimeSeriesLinearRegression(DataSpan<D> const& series)
     double socket   = ym - gradient * im;      // Regression line:  Y-ym = Gradient · (i-im)  ; set i≔0 yields socket
 
     // Correlation (Pearson's r)
-    double correlation = yysum==0.0? 0.0 : gradient * sqrt(varx/vary);
+    double correlation = yysum==0.0? 1.0 : gradient * sqrt(varx/vary);
     return make_tuple(socket,gradient,correlation);
 }
 

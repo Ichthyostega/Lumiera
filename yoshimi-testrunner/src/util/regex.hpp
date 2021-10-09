@@ -32,9 +32,12 @@
 
 #include <regex>
 #include <string>
+#include <optional>
 
 namespace util {
 
+using std::regex;
+using std::smatch;
 using std::string;
 
 
@@ -43,13 +46,40 @@ using std::string;
 struct MatchSeq
     : std::sregex_iterator
 {
-    MatchSeq(string const& toParse, std::regex const& regex)
+    MatchSeq(string const& toParse, regex const& regex)
         : std::sregex_iterator{toParse.begin(), toParse.end(), regex}
     { }
 
     using iterator = std::sregex_iterator;
     iterator begin() { return *this; }
     iterator end()   { return iterator(); }
+};
+
+
+
+/** encapsulated regex buildable from string */
+class Matcher
+{
+    std::optional<regex> pattern_;
+
+public:
+    Matcher()  = default;
+    Matcher(string const& regexDefinition)
+        : pattern_{regexDefinition.empty()? std::nullopt
+                                          : std::make_optional<regex>(regexDefinition, regex::optimize)}
+    { }
+    // standard copy acceptable
+
+    explicit operator bool()  const
+    {
+        return bool(pattern_);
+    }
+
+    bool matchesWithin(string probe)  const
+    {
+        return pattern_? std::regex_search(probe, *pattern_)
+                       : true; // undefined pattern matches everything
+    }
 };
 
 

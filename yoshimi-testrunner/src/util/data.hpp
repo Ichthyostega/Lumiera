@@ -253,6 +253,17 @@ public:
                 });
     }
 
+    void dropLastRow()
+    {
+        if (not empty())
+            forEach(TAB::allColumns(),
+                [](auto& col)
+                {
+                    size_t siz = col.data.size();
+                    col.data.resize(siz>0? siz-1 : 0);
+                });
+    }
+
     void reserve(size_t expectedCapacity)
     {
         forEach(TAB::allColumns(),
@@ -282,6 +293,7 @@ public:
                 fs::rename(filename_, oldFile);
         }
         fs::rename(newFilename, filename_);
+        filename_ = consolidated(filename_); // lock onto absolute path
     }
 
 
