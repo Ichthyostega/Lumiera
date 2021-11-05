@@ -325,14 +325,14 @@ namespace util {
    *  const and non-const variants of member functions
    */
   template<class OBJ>
-  OBJ*
+  inline OBJ*
   unConst (const OBJ* o)
   {
     return const_cast<OBJ*> (o);
   }
   
   template<class OBJ>
-  OBJ&
+  inline OBJ&
   unConst (OBJ const& ro)
   {
     return const_cast<OBJ&> (ro);

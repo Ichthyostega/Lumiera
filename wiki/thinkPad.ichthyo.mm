@@ -18186,8 +18186,7 @@
       ...denn GTK geht von einer fixen Mindestgr&#246;&#223;e aus, einem Allocation-Request und dann einer Platzzuteilung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075098065" HGAP="75" ID="ID_740164704" MODIFIED="1625075127483" TEXT="Frage: wo mu&#xdf; man anpassen...." VSHIFT="-5">
 <edge COLOR="#a56a6a"/>
@@ -58133,6 +58132,33 @@
 </node>
 </node>
 </node>
+<node CREATED="1636143147825" ID="ID_224980157" MODIFIED="1636143159589" TEXT="Assembly">
+<node CREATED="1636143161969" ID="ID_1119605136" MODIFIED="1636143179445" TEXT="r?x : 64-Bit-Regixter"/>
+<node CREATED="1636143180154" ID="ID_858272401" MODIFIED="1636143194684" TEXT="e?x : 32-Bit-Sicht auf die gleichen Register">
+<node CREATED="1636143276893" ID="ID_594751359" MODIFIED="1636143297151" TEXT="Zuweisungen/Laden f&#xfc;llt die oberen 32bit mit Nullen"/>
+</node>
+<node CREATED="1636143195465" ID="ID_1616965661" MODIFIED="1636143201882" TEXT="AT&amp;T-Syntax">
+<node CREATED="1636143203026" ID="ID_933207767" MODIFIED="1636143220340" TEXT="% vor den Registern"/>
+<node CREATED="1636143221216" ID="ID_641364971" MODIFIED="1636143234231" TEXT="runde Klammer f&#xfc;r Dereferenzierung"/>
+<node CREATED="1636143235054" ID="ID_1739317797" MODIFIED="1636143243374" TEXT="Zuweisung (mov) von links nach rechts"/>
+</node>
+<node CREATED="1636143494277" ID="ID_1080108853" MODIFIED="1636143500226" TEXT="Anweisungen">
+<node CREATED="1636143501180" ID="ID_1211472193" MODIFIED="1636143506273" TEXT="mov : Zuweisung"/>
+<node CREATED="1636143506942" ID="ID_1875495168" MODIFIED="1636143548281" TEXT="lea : Adresse laden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &quot;load effective address&quot;<br />Es entspricht also dem &amp;-Operator in C
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
 <node CREATED="1512178947582" ID="ID_1778761323" MODIFIED="1557498707240">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -58344,8 +58370,7 @@
       die <i>uniform initialisation</i>&#160;ist leider unrund geraten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
 <node CREATED="1625963954723" ID="ID_867098334" MODIFIED="1625963998275" TEXT="ein eigens definierter initializer_list-Ctor setzt praktisch alle anderen Ctors &quot;au&#xdf;er Gefecht&quot;">
@@ -58361,8 +58386,7 @@
       die Werte in der initializer_list sind Values und werden <b>per copy-Konstruktion erstellt</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>

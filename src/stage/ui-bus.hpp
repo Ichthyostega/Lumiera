@@ -38,7 +38,7 @@
  ** 
  ** # Rationale
  ** The UI-Bus acts as a **mediating backbone**, impersonating the role
- ** of the _Model_ and the _Controler_ in the [MVC-Pattern]in common UI architecture.
+ ** of the _Model_ and the _Controller_ in the [MVC-Pattern]in common UI architecture.
  ** 
  ** The MVC-Pattern as such is fine, and probably the best we know for construction of
  ** user interfaces. But it doesn't scale well towards the integration into a larger and
