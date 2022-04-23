@@ -59,6 +59,13 @@ constexpr auto array_from_tuple(TUP&& tuple)
     return std::apply(makeArray, std::forward<TUP>(tuple));
 }
 
+template<size_t places>
+inline double round(double val)
+{
+    constexpr double shiftFac = pow(10.0,places);
+    return std::round(val * shiftFac)/shiftFac;
+}
+
 
 
 
