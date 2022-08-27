@@ -45,13 +45,11 @@
 // 06/19 - use a statefull counting filter in a treeExplorer pipeline
 // 03/20 - investigate type deduction bug with PtrDerefIter
 // 01/21 - look for ways to detect the presence of an (possibly inherited) getID() function
+// 08/22 - techniques to supply additional feature selectors to a constructor call
 
 
 /** @file try.cpp
- * Verify a way to detect the presence of a specific implementation function,
- * even when it is just inherited and thus not part of the concrete class definition.
- * The trick is to _emulate the use_ of the object method in question within a `decltype( )`
- * statement, which in turn is used to build the concrete template signature.
+ * Investigate techniques to supply additional descriptive ctor arguments in a type safe way.
  */
 
 typedef unsigned int uint;
@@ -60,19 +58,12 @@ typedef unsigned int uint;
 #include "lib/format-cout.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
-#include "lib/idi/entry-id.hpp"
-#include "lib/meta/duck-detector.hpp"
 
-#include <utility>
+//#include <utility>
+#include <functional>
 #include <string>
 
 using std::string;
-
-using lib::idi::EntryID;
-using lib::idi::BareEntryID;
-using lib::meta::Yes_t;
-using lib::meta::No_t;
-
 
 #define SHOW_TYPE(_TY_) \
     cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
@@ -80,70 +71,73 @@ using lib::meta::No_t;
     cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
 
 
-META_DETECT_FUNCTION(BareEntryID const&, getID,(void) const);
-META_DETECT_FUNCTION_ARGLESS(getID);
-
-template<typename TY>
-    class Can_retrieve_and_compare_ID
-      {
-        template<typename X,
-                 typename SEL = decltype(std::declval<BareEntryID>() == std::declval<X>().getID())>
-        struct Probe
-          { };                                                    \
-                                                                   \
-        template<class X>                                           \
-        static Yes_t check(Probe<X> * );                             \
-        template<class>                                               \
-        static No_t  check(...);                                       \
-                                                                        \
-      public:                                                            \
-        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));  \
-      };
-
-
-class Base
+class Feat
   {
-    EntryID<Base> idi;
-  public:
-    BareEntryID const&
-    getID() const
+    string prop_{"∅"};
+    
+    using Manipulator = std::function<Feat(Feat)>; 
+    
+    struct Qualifier
+      : Manipulator
       {
-        return idi;
+        using Manipulator::Manipulator;  
+      };
+    
+    friend Qualifier bla();
+    friend Qualifier blubb(string);
+    
+  public:
+    operator string ()  const
+      {
+        return "Feat{"+prop_+"}";
       }
+    
+    Feat() = default;
+    
+    template<class... QS>
+    Feat(Qualifier qual, QS... qs)
+      : Feat{qual(Feat{qs...})}
+      { }
   };
 
-class Derived
-  : public Base
-  { };
+Feat::Qualifier
+bla()
+{
+  return Feat::Qualifier{[](Feat feat)
+                            {
+                              feat.prop_ = "bla";
+                              return feat;
+                            }};
+}
 
-class Derailed
-  { };
+Feat::Qualifier
+blubb(string murks)
+{
+  return Feat::Qualifier{[=](Feat feat)
+                            {
+                              feat.prop_ += ".blubb("+murks+")";
+                              return feat;
+                            }};
+}
 
 
 int
 main (int, char**)
   {
-    Base b1;
-    Derived d1;
-    Derailed r1;
-    SHOW_EXPR( b1 );
-    SHOW_EXPR( b1.getID() );
-    SHOW_EXPR( HasFunSig_getID<Base>::value );
-    SHOW_EXPR( HasArglessFun_getID<Base>::value );
-    SHOW_EXPR( Can_retrieve_and_compare_ID<Base>::value );
+    Feat f0;
+    SHOW_EXPR(f0);
     
-    SHOW_EXPR( d1 );
-    SHOW_EXPR( d1.getID() );
-    SHOW_EXPR( HasFunSig_getID<Derived>::value );
-    SHOW_EXPR( HasArglessFun_getID<Derived>::value );
-    SHOW_EXPR( Can_retrieve_and_compare_ID<Derived>::value );
+    Feat f1(bla());
+    SHOW_EXPR(f1);
     
-    SHOW_EXPR( r1 );
-    SHOW_EXPR( HasFunSig_getID<Derailed>::value );
-    SHOW_EXPR( HasArglessFun_getID<Derailed>::value );
-    SHOW_EXPR( Can_retrieve_and_compare_ID<Derailed>::value );
+    Feat f2(blubb("Ψ"));
+    SHOW_EXPR(f2);
     
-//    SHOW_TYPE( decltype( d1.getID() ))
+    Feat f3(bla(),blubb("↯"));  // Note: evaluated from right to left, bla() overwrites prop
+    SHOW_EXPR(f3);
+    
+    Feat f4(blubb("💡"), bla());
+    SHOW_EXPR(f4);
     
     cout <<  "\n.gulp.\n";
     return 0;

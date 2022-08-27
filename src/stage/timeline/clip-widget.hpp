@@ -95,13 +95,13 @@
  ** 
  ** ## Structure of the clip representation
  ** Obviously, managing all these wildly different appearance styles incurs a lot of complexity,
- ** which needs to be decomposed to become manageable. Thus, we introduce several responsibilities
+ ** which needs to be decomposed to keep it manageable. Thus, we introduce several responsibilities
  ** - the ClipPresenter is what formally corresponds to the session::Clip, i.e. in a birds
  **   eyes view, it "is" the clip. However, in fact the ClipPresenter only manages the
  **   desired properties and delegates the actual realisation to "some widget"
  ** - and this "widget" is in fact a "PImpl", the ClipDelegate, which foremost exposes an interface
- **   to adapt and control the appearance style, while the actual clip widget is only accessible
- **   through the ClipDelegate interface
+ **   to adapt and control the appearance style, while the actual clip widget remains a private detail
+ **   and is only accessible through the ClipDelegate interface
  ** - behind the scenes, [within the implementation](\ref clip-widget.cpp), several implementation
  **   subclasses are available, to be installed and exchanged to accommodate the desired appearance
  **   style. These are managed semi-automatically and hooked into the appropriate display framework

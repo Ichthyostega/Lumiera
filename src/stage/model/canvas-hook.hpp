@@ -59,7 +59,7 @@
 #include <utility>
 
 
-namespace stage  {
+namespace stage {
 namespace model {
   
   using lib::time::Time;
