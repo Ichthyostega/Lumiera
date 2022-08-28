@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <script id="versionArea" type="text/javascript">
@@ -1529,7 +1529,7 @@ Lumiera agrees to this common understanding (of most film editing and sound hand
 &amp;rarr; PipeHandling
 </pre>
 </div>
-<div title="ClipPresenter" creator="Ichthyostega" modifier="Ichthyostega" created="201611200101" modified="201808311828" tags="def GuiPattern img" changecount="11">
+<div title="ClipPresenter" creator="Ichthyostega" modifier="Ichthyostega" created="201611200101" modified="202208282123" tags="def GuiPattern img" changecount="13">
 <pre>//mediating entity used to guide and control the presentation of a clip in the UI.//
 
 The clip representation in the UI links together two distinct realms and systems of concerns. For one, there are the properties and actions performed on the clip for sake of editing a movie. Everything which has a tangible effect on the resulting render. These information and operations are embodied into the HighLevelModel and can be manipulated script driven, without relying on an UI. But beyond that, there is also the local mechanics of the interface, everything which makes working on the edit and interacting with the model into a smooth experience and workflow. With respect to these concerns, a clip is a self-contained entity which owns its own state and behaviour. The ClipPresenter is the pivotal element to link together those two realms.
@@ -1538,7 +1538,11 @@ The clip representation in the UI links together two distinct realms and systems
 Regarding the global angle, the ClipPresenter is an UI-Element connected to the UI-Bus, and it is added as child element to some parent entity, a TrackPresenter, which likewise serves as UI representation of a [[fork (&quot;track&quot;)|Fork]], and controls widgets to render a track like working scope (in the header pane and in the timeline contents pane). Commands manipulating the clip can be sent via the embedded bus terminal, and status regarding clip properties and nested child elements (effects, transitions) is received as messages via the bus, which insofar plays the role of model and controller.
 
 But regarding the local UI behaviour, the ClipPresenter acts autonomous. It controls an actual {{{ClipWidget}}} for presentation, negotiating the display strategy with some overarching presentation manager. Active parts of the widget are wired back to handling methods of the presenter.
-</pre>
+
+Moreover, the ClipPresenter acts as ''Mediator''
+* for commands and actions
+* for connection to a »property Box« or [[Placement-UI|GuiPlacementDisplay]]
+* to support content preview rendering for the Clip</pre>
 </div>
 <div title="ColorPalette" modifier="Ichthyostega" created="200706190033" modified="200807131329" tags="excludeMissing">
 <pre>Background: #fefefd
@@ -2723,7 +2727,7 @@ As starting point, {{red{in winter 2016/17}}} the old (broken) timeline panel wa
 After that initial experiments, my focus shifted to the still unsatisfactory top-level UI structure, and I am working towards an initial integration with Steam-Layer since then.
 </pre>
 </div>
-<div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="201811011859" tags="GuiPattern design draft" changecount="30">
+<div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="202208282100" tags="GuiPattern design draft" changecount="31">
 <pre>//The representation of a [[media clip|Clip]] for manipulation by the user within the UI.//
 Within Lumiera, a clip is conceived as a //chunk of media,// which can be handled in compound. Clip as such is an abstract concept, which is treated with minimal assumptions...
 * we know that a clip has //media content,// which need not be uniform and can be inherently structured (e.g. several media, several channels, a processing function)
@@ -2757,7 +2761,7 @@ Starting from the architecture as predetermined by the UI-Bus, it is clear that 
 !!!how to carry out the clip appearances
 Initially, one could think that we'd need to build several widgets to realise the wide variety of clip appearances. But in fact it turns out that we're able to reshape a single base widget to encompass all the presentation styles. Almost all of the necessary styles, to be more precise, omitting the mere overview drawing where several entities are combined into a single box. However, this basic [[element-box-widget|GuiElementBoxWidget]] can be generalised, and even used beyond the clip display itself. It is a simple, one-element container, with an Icon and a textual label. This gives us already a rectangular covered space, and the ability to include a menu and to control the alignment of the label. All the more elaborate presentation styles can be achieved by adding a canvas widget into this frame and then placing additional stuff on top of that. The only tricky part arises in overview display, when just some clip rectangle can stand-in for a whole series of clips, which themselves remain hidden as UI elements.
 
-A prime consideration regarding this whole clip presentation strategy is the performance concern. It is quite common for movie edits to encompass several hundred individual clips. Combined with several tracks and an elaborate audio edit, it may well happen that we end up with thousands of individual UI objects. If treated naively, this load might seriously degrade the responsiveness of the interface. Thus we need to care for the relevant infrastructure to enable optimisation of the display. For that reason, the memory footprint of the ClipPresenter and the basic widget has to be kept as small as possible. And moreover, since we do our own layout management in the timeline display, in theory it is possible //only to add// those widgets to the enclosing GTK container, which are //actually about to become visible.// (if we follow this approach, a problem yet to be solved is how to remove widgets falling out of sight, since removing N widgets easily turns into a quadratic operation).
+A prime consideration regarding this whole clip presentation strategy is the performance concern. It is quite common for movie edits to encompass several hundred individual clips. Combined with several tracks and an elaborate audio edit, it may well happen that we end up with thousands of individual UI objects. If treated naively, this load might seriously degrade the responsiveness of the interface. Thus we need to care for the relevant infrastructure to enable optimisation of the display. For that reason, the memory footprint of the ClipPresenter and the basic widget has to be kept as small as possible. And moreover, since we do our own layout management in the timeline display, in theory it is possible //only to add// those widgets to the enclosing GTK container, which are //actually about to become visible.// (if we follow this approach, a problem yet to be solved is how to remove widgets falling out of sight, since removing N widgets easily turns into a quadratic operation -- {{red{2022/8 however...}}} alternatively we might just throw away existing widgets and start from scratch with a new minimal set).
 
 !clip content rendering
 In a typical editing application, the user can expect to get some visual clue regarding the media content of a clip. For example, sound clips can be visualised as waveform, while movie clips might feature a sequence of images taken from the video. Our intention is to ''use our own rendering engine'' to produce these thumbnails. In fact, our engine is perfectly suited for this task: it has precisely the necessary media decoding and rendering abilities, plus it offers an elaborate system of priorities and deadlines, allowing to throttle the load produced by thumbnail generation. In addition to all those qualities, our engine is planned to be complemented by an &quot;intelligent&quot; frame cache, which, given proper parametrisation, ensures the frequently requested thumbnails will be available for quick display. For this approach to work, we need to provide some infrastructure
@@ -3423,13 +3427,13 @@ The most fundamental principle is that of ''subsidiarity'': we understand both &
 Based on these foundations, we shape and form the core part of the interface, which is the [[timeline display|GuiTimelineView]]
 </pre>
 </div>
-<div title="GuiPlacementDisplay" creator="Ichthyostega" modifier="Ichthyostega" created="201810281744" modified="201811011910" tags="spec GuiPattern draft" changecount="3">
+<div title="GuiPlacementDisplay" creator="Ichthyostega" modifier="Ichthyostega" created="201810281744" modified="202208282128" tags="spec GuiPattern draft" changecount="6">
 <pre>A cross-cutting and somewhat tricky concern is how to represent and expose the [[MObject Placements|Placement]] within the UI.
 For one, a Placement is a set of rules picked up from enclosing scopes -- and it is one of the most fundamental traits of Lumiera that the user is able to edit those placement rules. Yet the combination and final application of those rules also materialises itself into actual properties of the objects of the edit session -- most notably the time position of any element. Consequently, parts of the Placement are unfolded to appear as properties of the placed object, as far as the UI representation is concerned. However, Placement as a generic building block is prominently exposed, insofar pretty much every entity you'll see in the UI has the ability to &quot;edit its placement&quot;. This is indicated by a characteristic Icon decoration, leading to a common placement editor, where the user can
 * see all the explicitly given locating pins
 * see the effective, resulting ExplicitPlacement
 * add and manipulate existing rules
-To support this generic setup, pretty much every UI element needs to be outfitted with a &quot;placement&quot; attribute, to reflect those distinct information to be exposed in aforementioned placement edit UI.
+To support this generic setup, pretty much every UI element needs to be outfitted with a &quot;placement&quot; attribute, to reflect those distinct information to be exposed in aforementioned placement edit UI. This can be achieved with the help of the GuiElementBoxWidget and mediated by the ClipPresenter, which acts as counterpart for the Clip and Placement in the HighLevelModel, and is connected to the UI-Bus.
 &amp;rarr; see also [[Ticket #1188|https://issues.lumiera.org/ticket/1188]].
 </pre>
 </div>

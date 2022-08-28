@@ -5665,7 +5665,6 @@
 </node>
 </node>
 </node>
-<node CREATED="1534336325916" ID="ID_762624766" MODIFIED="1557498707218" TEXT="Bindeglieder"/>
 <node CREATED="1534336335963" ID="ID_1176525116" MODIFIED="1557498707218" TEXT="Werkzeug">
 <node COLOR="#338800" CREATED="1534334810537" ID="ID_1326202399" MODIFIED="1561827464715" TEXT="Link zum Widget">
 <linktarget COLOR="#a66b86" DESTINATION="ID_1326202399" ENDARROW="Default" ENDINCLINATION="279;-1333;" ID="Arrow_ID_664593340" SOURCE="ID_203145360" STARTARROW="None" STARTINCLINATION="-1296;0;"/>
@@ -5786,6 +5785,12 @@
 </node>
 </node>
 </node>
+</node>
+<node CREATED="1534336325916" ID="ID_762624766" MODIFIED="1661695557878" TEXT="Bindeglieder">
+<node CREATED="1661695565675" ID="ID_1782348054" MODIFIED="1661695571623" TEXT="UI-Koordinaten"/>
+<node CREATED="1661695572958" ID="ID_913092890" MODIFIED="1661695581265" TEXT="Docking"/>
+<node CREATED="1661695582329" ID="ID_42645093" MODIFIED="1661695594438" TEXT="Pop-up-Men&#xfc;s"/>
+<node CREATED="1661695595096" ID="ID_1811221630" MODIFIED="1661695602731" TEXT="Property-Box-Connection"/>
 </node>
 <node CREATED="1537659082073" ID="ID_986070389" MODIFIED="1557498707218" TEXT="Schema">
 <node CREATED="1618677634680" ID="ID_1029801853" MODIFIED="1618677651554" TEXT="Konventionen">
@@ -18371,24 +18376,41 @@
 </node>
 <node CREATED="1654449181597" ID="ID_1379040287" MODIFIED="1654449618220" TEXT="Qualifier">
 <node CREATED="1654449673650" ID="ID_1156591730" MODIFIED="1654449696235" TEXT="Wunsch: offene Erg&#xe4;nzung mit weiteren Parametern"/>
-<node CREATED="1654449697703" ID="ID_1842181934" MODIFIED="1654449981522" TEXT="Ideal: algebraischer Datentyp">
+<node CREATED="1654449697703" ID="ID_1842181934" MODIFIED="1661721298137" TEXT="analog zu algebraischen Datentypen">
 <icon BUILTIN="yes"/>
 <node CREATED="1654449709778" ID="ID_1842345806" MODIFIED="1654449715002" TEXT="pr&#xe4;dikat-artiger Term"/>
 <node CREATED="1654449716467" ID="ID_1816176358" MODIFIED="1654449724831" TEXT="aber mit Compile-Time safety"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1661640883263" ID="ID_606322224" MODIFIED="1661640890135" TEXT="ist das m&#xf6;glich?">
+<node COLOR="#435e98" CREATED="1661640883263" ID="ID_606322224" MODIFIED="1661721271303" TEXT="ist das m&#xf6;glich?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>Ja,</i>&#160;und zwar sogar ziemlich <i>einfach und lesbar...</i>&#160;
+    </p>
+    <p>
+      auch wenn ich mal wieder einen ganzen Tag gebraucht habe, um diese paar Zeilen Code auszuknobeln
+    </p>
+  </body>
+</html></richcontent>
 <icon BUILTIN="help"/>
 <node CREATED="1661640991591" ID="ID_1210145081" MODIFIED="1661641017079" TEXT="Idee: Funktor auf einen Konfiguration-Record anwenden">
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1661641024133" ID="ID_610957557" MODIFIED="1661641043428" TEXT="kann man das in eine Library-Implementierung verpacken?">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1661641024133" ID="ID_610957557" MODIFIED="1661721177675" TEXT="in eine Library-Implementierung verpacken (mix-in)">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1661721182726" ID="ID_1592354346" MODIFIED="1661721188107" TEXT="Dest / Demo">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node CREATED="1661721308152" ID="ID_1192772963" MODIFIED="1661721429475" TEXT="Konsequenz: brauche eine build()-Funktion zur Validation">
+<arrowlink COLOR="#c63166" DESTINATION="ID_293134573" ENDARROW="Default" ENDINCLINATION="64;-83;" ID="Arrow_ID_543159170" STARTARROW="None" STARTINCLINATION="-313;15;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1661721330773" ID="ID_335266282" MODIFIED="1661721341869" TEXT="denn dieses Konzept wenden die Funktoren blindlings an"/>
+<node CREATED="1661721342572" ID="ID_1569355841" MODIFIED="1661721355870" TEXT="es mu&#xdf; dann eigens gepr&#xfc;ft werden, ob diese Einstellungen konsistent sind"/>
 </node>
-<node CREATED="1654449882246" ID="ID_1662756745" MODIFIED="1654449895484" TEXT="vorl&#xe4;ufige Vereinfachungen...">
-<node CREATED="1654449896988" ID="ID_1099433261" MODIFIED="1654449909989" TEXT="Map&lt;string,string&gt;"/>
-<node CREATED="1654449911058" ID="ID_1825599568" MODIFIED="1654449918440" TEXT="GenNode"/>
-<node CREATED="1654449948724" ID="ID_1744293050" MODIFIED="1654449961807" TEXT="Spec-string"/>
 </node>
 <node CREATED="1654449966426" ID="ID_100214768" MODIFIED="1654449972509" TEXT="Zweck">
 <icon BUILTIN="idea"/>
@@ -18403,6 +18425,150 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075301830" ID="ID_792792003" MODIFIED="1625075315505" TEXT="M&#xf6;glichkeiten vordefinierter Ausstattung">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1661721385054" ID="ID_229098374" MODIFIED="1661721388942" TEXT="Framework anlegen">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1661721522872" ID="ID_1721632208" MODIFIED="1661721527187" TEXT="ENUMs">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1661721389797" ID="ID_96735997" MODIFIED="1661721400786" TEXT="Qualifier">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1661721393893" ID="ID_293134573" MODIFIED="1661721423931" TEXT="Validierungs-Funktion">
+<linktarget COLOR="#c63166" DESTINATION="ID_293134573" ENDARROW="Default" ENDINCLINATION="64;-83;" ID="Arrow_ID_543159170" SOURCE="ID_1192772963" STARTARROW="None" STARTINCLINATION="-313;15;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1661703437825" ID="ID_1401386216" MODIFIED="1661703453368" TEXT="proportional Head placement">
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1661703477179" ID="ID_1739233114" MODIFIED="1661703485808" TEXT="#1186 proportional Head placement">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1661703490282" ID="ID_1702374688" MODIFIED="1661703511348" TEXT="als sub-Komponente anlegen">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1661703520158" ID="ID_1872452150" MODIFIED="1661703524686" TEXT="Unit-Test schreiben">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1661703532196" ID="ID_170724374" MODIFIED="1661703542907" TEXT="anfangs Platzhalter-Implementierung">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#435e98" CREATED="1661703645714" ID="ID_247022344" MODIFIED="1661704606196" TEXT="Entscheidung: Pixel oder zeitbasiert?">
+<icon BUILTIN="help"/>
+<node CREATED="1661703679376" ID="ID_1132759558" MODIFIED="1661704522137" TEXT="Pixel">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1661703686271" ID="ID_876601888" MODIFIED="1661704164479" TEXT="L&#xe4;nge und Fenster-Spec einheitlich in Pixeln">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hierbei ist...
+    </p>
+    <p>
+      <u>L&#228;nge</u>: die <i>horizontale</i>&#160;Ausdehnung in der <i>zeitartigen Dimension</i>
+    </p>
+    <p>
+      <u>Fenster</u>: die Position und L&#228;nge eines Anzeige-Fensters im Verh&#228;ltnis zur L&#228;nge
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1661703733113" ID="ID_1280505961" MODIFIED="1661704551822" TEXT="Angaben m&#xfc;ssen angepa&#xdf;t werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wannimmersich die Display-Metrik &#228;ndert (bei jeder Zoom-Anpassung!)
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#c14b62" DESTINATION="ID_844385062" ENDARROW="Default" ENDINCLINATION="192;0;" ID="Arrow_ID_418259958" STARTARROW="Default" STARTINCLINATION="192;0;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1661703818006" ID="ID_1356134223" MODIFIED="1661703862455" TEXT="keine Verbindung zum Layoutmanager notwendig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Naja, stimmt nicht wirklich, denn Pixel-Angaben m&#252;ssen angepa&#223;t werden, also besteht faktisch eine Verbindung
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node CREATED="1661703682724" ID="ID_258332905" MODIFIED="1661704522143" TEXT="Zeit">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1661703897467" ID="ID_1062096597" MODIFIED="1661704080771" TEXT="L&#xe4;nge und Fenster-Spec in Timeline-Zeit">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      egal ob nun absolut oder relativ, aber die Lumiera Time-Koordinaten sind gemein. Das ist nicht die &#187;wall clock time&#171;
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1661704028802" ID="ID_844385062" MODIFIED="1661704576860" TEXT="Entscheidungen m&#xfc;ssen nach Layoutwechsel erneut getroffen werden">
+<arrowlink COLOR="#c14b4e" DESTINATION="ID_674852170" ENDARROW="Default" ENDINCLINATION="130;0;" ID="Arrow_ID_971214477" STARTARROW="None" STARTINCLINATION="130;0;"/>
+<linktarget COLOR="#c14b62" DESTINATION="ID_844385062" ENDARROW="Default" ENDINCLINATION="192;0;" ID="Arrow_ID_418259958" SOURCE="ID_1280505961" STARTARROW="Default" STARTINCLINATION="192;0;"/>
+</node>
+<node CREATED="1661704046831" ID="ID_1429751432" MODIFIED="1661704592099" TEXT="das Widget braucht Pixel-Angaben &#x27f9; &#xdc;bersetzungs-Mechanismus">
+<icon BUILTIN="closed"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1661703881189" ID="ID_1847710987" MODIFIED="1661721501719" TEXT="proportional">
+<icon BUILTIN="forward"/>
+<node CREATED="1661704175885" ID="ID_1381922176" MODIFIED="1661704361482" TEXT="die gesamte Positionierungs-Logik arbeitet mit Verh&#xe4;ltniszahlen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wobei der Datentyp dieser Verh&#228;ltniszahlen noch w&#228;hlbar ist
+    </p>
+    <ul>
+      <li>
+        k&#246;nnte ein Floating-point sein (float w&#252;rde eigentlich gen&#252;gen)
+      </li>
+      <li>
+        k&#246;nnte ein <i>rational</i>&#160;sein mit kleinen Integerzahlen
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1661704193107" ID="ID_279484931" MODIFIED="1661704240383" TEXT="Bezugspunkt k&#xf6;nnte sein">
+<icon BUILTIN="idea"/>
+<node CREATED="1661704212873" ID="ID_1162803069" MODIFIED="1661704237529" TEXT="(absolut) eine Einheits-Zeit">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1661704217016" ID="ID_910021722" MODIFIED="1661704233921" TEXT="(relativ) die L&#xe4;nge des Widget">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node CREATED="1661704403383" ID="ID_674852170" MODIFIED="1661704558666" TEXT="jeder Layoutwechsel &#xe4;ndert die relative Fenster-Spec &#x27f9; Neuauswertung">
+<linktarget COLOR="#c14b4e" DESTINATION="ID_674852170" ENDARROW="Default" ENDINCLINATION="130;0;" ID="Arrow_ID_971214477" SOURCE="ID_844385062" STARTARROW="None" STARTINCLINATION="130;0;"/>
+</node>
+<node CREATED="1661704490787" ID="ID_1576808360" MODIFIED="1661704596118" TEXT="(nur) Client mu&#xdf; die absolute L&#xe4;nge wissen">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1661703561288" ID="ID_1074390800" MODIFIED="1661703581358" TEXT="endg&#xfc;ltige Implementierung">
+<icon BUILTIN="hourglass"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1661558691874" ID="ID_1119666560" MODIFIED="1661558709710" TEXT="Kontext-Anbindung planen...">
@@ -18429,6 +18595,9 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1654445594924" ID="ID_1266679575" MODIFIED="1654445604128" TEXT="Clip auf ElementBoxWidget umstellen">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1661695361415" ID="ID_1615822639" MODIFIED="1661695374805" TEXT="Integration mit Pop-up-Men&#xfc;/Framework">
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 </node>
@@ -29863,6 +30032,7 @@
 <arrowlink COLOR="#598cc8" DESTINATION="ID_633007604" ENDARROW="Default" ENDINCLINATION="-292;0;" ID="Arrow_ID_290509509" STARTARROW="None" STARTINCLINATION="765;42;"/>
 <arrowlink COLOR="#3f67c9" DESTINATION="ID_1043075543" ENDARROW="Default" ENDINCLINATION="210;7;" ID="Arrow_ID_678826417" STARTARROW="None" STARTINCLINATION="199;11;"/>
 </node>
+<node CREATED="1661693443440" ID="ID_107743433" MODIFIED="1661695034015" TEXT="ClipPresenter vermittelt beim Content-Preview-Rendering"/>
 </node>
 <node CREATED="1480741362389" ID="ID_328415412" MODIFIED="1557498707230" TEXT="ClipWidget">
 <node CREATED="1480741370347" ID="ID_1275685315" MODIFIED="1557498707230" TEXT="erzeugen">
@@ -29880,6 +30050,68 @@
 <node CREATED="1568580214139" ID="ID_461989100" MODIFIED="1568580217102" TEXT="passiv....">
 <node CREATED="1568580218145" ID="ID_1698735124" MODIFIED="1568580229519" TEXT="im Hinblick auf die Wahl des Darstellungsformats"/>
 <node CREATED="1568580230888" ID="ID_384933602" MODIFIED="1568580242882" TEXT="im Hinblick auf die Layout- und Anzeigesteuerung"/>
+</node>
+<node CREATED="1661693565527" ID="ID_361309488" MODIFIED="1661693572119" TEXT="vermittelnd.....">
+<node CREATED="1661693573892" ID="ID_554831193" MODIFIED="1661693649780" TEXT="Endpunkt f&#xfc;r UI-Signal-Wiring">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aktive Elemente im Clip-Widget l&#246;sen UI-Signale aus, die eine abstrahierte Funktion aufrufen &#8212; und diese gebundene Funktion (zumindest der Einsprungpunkt) liegt im Clip-Presenter
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1661693668281" ID="ID_470989168" MODIFIED="1661693685843" TEXT="sendet dann Command-Nachrichten in den UI-Bus"/>
+<node CREATED="1661695924875" ID="ID_1090402146" MODIFIED="1661696035362" TEXT="kann auch f&#xfc;r allgemeine Men&#xfc;/UI-Aktionen vermitteln">
+<linktarget COLOR="#4b557b" DESTINATION="ID_1090402146" ENDARROW="Default" ENDINCLINATION="-1035;0;" ID="Arrow_ID_1722473168" SOURCE="ID_634897151" STARTARROW="None" STARTINCLINATION="-385;32;"/>
+<node CREATED="1661696072514" ID="ID_1764427475" MODIFIED="1661696199675" TEXT="Verwaltung der pop-Up-Men&#xfc;(s)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist ein &#252;bergreifendes Thema zum UI-Verhalten
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#b75976" DESTINATION="ID_847601277" ENDARROW="Default" ENDINCLINATION="599;-2197;" ID="Arrow_ID_579055023" STARTARROW="None" STARTINCLINATION="945;81;"/>
+</node>
+</node>
+<node CREATED="1661693702610" ID="ID_1055135476" MODIFIED="1661693718279" TEXT="empf&#xe4;ngt Inhalts- und Metadaten-&#xc4;nderungen als Nachricht per UI-Bus"/>
+<node CREATED="1661695087724" ID="ID_1578237138" MODIFIED="1661695191411" TEXT="stellt bei Bedarf die Verbindung her zu einem Placement-UI">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das Placement-UI wird z.B. durch Klick auf das Placement-Icon aktiviert &#8212; aber es kann auch <i>modal gemacht werden, </i>und dann wird es in ein Property-Box/Grid-UI alloziert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1661693729872" ID="ID_1318749773" MODIFIED="1661693884693" TEXT="Koordiniert das Preview-Rendering vom Clip-Content">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1661693756725" ID="ID_610729215" MODIFIED="1661693776364" TEXT="komplexes Thema &#x27f9; sp&#xe4;ter">
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1661693786231" ID="ID_439776533" MODIFIED="1661693870436" TEXT="vorerst/anfangs zeigt das Clip-Widget einen Content-Platzhalter">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und dieser mu&#223; einfach lokal im UI zu realisieren sein, also ein Stock-Icon und ggfs ein Vektorgraphic-Element
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 </node>
 <node CREATED="1568587417811" ID="ID_525225515" MODIFIED="1568587421270" TEXT="Beziehungen">
 <node CREATED="1568587422690" ID="ID_1184376218" MODIFIED="1568587435748" TEXT="vollkommene Herrschaft &#xfc;ber das ClipWidget"/>
@@ -29969,7 +30201,7 @@
 <linktarget COLOR="#50457a" DESTINATION="ID_471098853" ENDARROW="Default" ENDINCLINATION="-144;-446;" ID="Arrow_ID_49809880" SOURCE="ID_682261661" STARTARROW="None" STARTINCLINATION="-439;32;"/>
 <node CREATED="1538940683586" ID="ID_1478100178" MODIFIED="1557498707231" TEXT="placeholder"/>
 <node CREATED="1538940686978" ID="ID_1747675588" MODIFIED="1557498707231" TEXT="abridged"/>
-<node CREATED="1538940690154" ID="ID_1132412756" MODIFIED="1557498707231" TEXT="collapsed"/>
+<node CREATED="1538940690154" ID="ID_1132412756" MODIFIED="1661694144478" TEXT="compact"/>
 <node CREATED="1538940692545" ID="ID_1827979765" MODIFIED="1557498707231" TEXT="expanded"/>
 </node>
 <node CREATED="1541095848871" ID="ID_1480696061" MODIFIED="1557498707231" TEXT="Anzeige-Modi">
@@ -30153,6 +30385,23 @@
 </node>
 </node>
 </node>
+<node CREATED="1661693939894" ID="ID_498333619" MODIFIED="1661693947269" TEXT="Aufgaben / Anforderungen">
+<node CREATED="1661693951292" ID="ID_92526598" MODIFIED="1661693963022" TEXT="sichtbarer Rahmen mit pr&#xe4;ziser L&#xe4;nge"/>
+<node CREATED="1661693966450" ID="ID_1491933608" MODIFIED="1661693986619" TEXT="Men&#xfc;+Label in Sicht halten (bei Scrolling)"/>
+<node CREATED="1661693992375" ID="ID_892363221" MODIFIED="1661694009584" TEXT="Bindings f&#xfc;r Men&#xfc; + ggfs.Standard-Aktion">
+<node CREATED="1661695952095" ID="ID_355417196" MODIFIED="1661695968945" TEXT="(Pop-up) Men&#xfc;"/>
+<node CREATED="1661695972709" ID="ID_348063726" MODIFIED="1661695981528" TEXT="kontextsensitive Aktions-Button"/>
+<node CREATED="1661695983467" ID="ID_634897151" MODIFIED="1661696042865" TEXT="&#x27f9; werden via Presenter vermittelt">
+<arrowlink COLOR="#4b557b" DESTINATION="ID_1090402146" ENDARROW="Default" ENDINCLINATION="-1035;0;" ID="Arrow_ID_1722473168" STARTARROW="None" STARTINCLINATION="-385;32;"/>
+</node>
+</node>
+<node CREATED="1661694023197" ID="ID_1963221274" MODIFIED="1661694032933" TEXT="Registrierung von/mit Gesten-Controllern"/>
+<node CREATED="1661694049166" ID="ID_68957599" MODIFIED="1661694057265" TEXT="Content-Rendering">
+<node CREATED="1661694058286" ID="ID_1358424088" MODIFIED="1661694080438" TEXT="abridged: nur Farbe/Stil"/>
+<node CREATED="1661694156704" ID="ID_389557944" MODIFIED="1661694179001" TEXT="compact: Farbe + Platzhalter / Preview optional"/>
+<node CREATED="1661694180301" ID="ID_962010212" MODIFIED="1661694231410" TEXT="expanded: Canvas &#x27f9; Content-Display delegiert an nested Widgets"/>
+</node>
+</node>
 <node CREATED="1583102068949" ID="ID_1157479559" MODIFIED="1583102075826" TEXT="Probleme / Entscheidungen">
 <node CREATED="1583102099206" ID="ID_1626144230" MODIFIED="1583102474759" TEXT="Umgang mit einem Clip-Header">
 <richcontent TYPE="NOTE"><html>
@@ -30209,6 +30458,10 @@
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1661694782421" ID="ID_1828319625" MODIFIED="1661694793230" TEXT="Strategy-Pattern verwenden!">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 <node CREATED="1583678040736" ID="ID_1805643410" MODIFIED="1583678050738" TEXT="Umsetzung">
@@ -32112,6 +32365,7 @@
 <node CREATED="1613334069323" ID="ID_1723320752" MODIFIED="1613334078757" TEXT="die Manipulation wird durch eine Geste eingeleitet"/>
 <node CREATED="1613334079466" ID="ID_1589128984" MODIFIED="1613334088647" TEXT="sie f&#xfc;hrt in einen Manipulations-Modus"/>
 <node CREATED="1613334091808" ID="ID_1887267653" MODIFIED="1613334098755" TEXT="dieser wird durch eine Befehls-Geste beendet"/>
+<node CREATED="1661695780231" ID="ID_1944954005" MODIFIED="1661695793169" TEXT="klassische Men&#xfc;-Aktion als einfacher Sonderfall"/>
 </node>
 <node CREATED="1613334160328" ID="ID_1964361228" MODIFIED="1613334167289" TEXT="konstruktives Problem">
 <node CREATED="1613334172704" ID="ID_1733713020" MODIFIED="1613334204445" TEXT="typischerweise wird dieses gemeinsame Schema &#xfc;bersehen"/>
@@ -34550,6 +34804,47 @@
 </node>
 </node>
 </node>
+</node>
+<node CREATED="1661695805867" ID="ID_1948510442" MODIFIED="1661695811742" TEXT="klassische Aktionen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1661695813570" ID="ID_847601277" MODIFIED="1661696199675" TEXT="Pop-up-Men&#xfc;">
+<linktarget COLOR="#b75976" DESTINATION="ID_847601277" ENDARROW="Default" ENDINCLINATION="599;-2197;" ID="Arrow_ID_579055023" SOURCE="ID_1764427475" STARTARROW="None" STARTINCLINATION="945;81;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1661696222283" ID="ID_1568591637" MODIFIED="1661696237648" TEXT="&#xfc;bergreifendes Thema: Konzept fehlt">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1661696243936" ID="ID_323696283" MODIFIED="1661696248139" TEXT="Anforderungen">
+<node CREATED="1661696249705" ID="ID_504989161" MODIFIED="1661696270808" TEXT="wird ausgel&#xf6;st &#xfc;ber lokales Widget-Binding"/>
+<node CREATED="1661696271684" ID="ID_1004582513" MODIFIED="1661696338493" TEXT="k&#xf6;nnte auch durch ein generisches Fallback-Binding ausgel&#xf6;st werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ich meine rechts-Klick; typischerweise implementiert man den Handler daf&#252;r auf einem Canvas; aber dann ist das Problem: wie findet der Handler das konkrete Widget, und von diesem den Kontext f&#252;r das pop-Up?
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1661696344091" ID="ID_1244762978" MODIFIED="1661696359080" TEXT="mu&#xdf; aber spezifisch passend f&#xfc;r jedes Element best&#xfc;ckt werden"/>
+<node CREATED="1661696374631" ID="ID_94228587" MODIFIED="1661696389416" TEXT="aber ein Teil ist generisch &#x27f9; wir brauchen Schablonen"/>
+<node CREATED="1661696398507" ID="ID_912582971" MODIFIED="1661696544568" TEXT="in das Action-Binding mu&#xdf; die jeweilige Element-ID injiziert werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      genauer, das Action-Binding sendet eine Nachricht in den UI-Bus, aber diese mu&#223; an das korrespondierende Modell-Element addressiert werden; zwar gibt es unten im Steam-Layer einen gemeinsamen Command-Handler, und f&#252;r jeden Command-Typ ist ein Skript hinterlegt &#8212; welches jedoch dann eine Element-ID als Parameter bekommen mu&#223; (oder besser sogar schon eine direkte Dependency-Injection?)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1661695822737" ID="ID_1370769282" MODIFIED="1661695834347" TEXT="Toolbar-Buttons"/>
+<node CREATED="1661695835007" ID="ID_1327781873" MODIFIED="1661695841666" TEXT="Manipulation per Property-Box"/>
 </node>
 </node>
 <node CREATED="1488423514355" ID="ID_917891687" MODIFIED="1557498707233" TEXT="Steuerelemente">

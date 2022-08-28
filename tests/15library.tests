@@ -2,6 +2,11 @@ TESTING "Library Test Suite: basic and low-level components" ./test-suite --grou
 
 
 
+TEST "Builder Support (qualifiers)" BuilderQualifierSupport_test <<END
+return: 0
+END
+
+
 TEST "CmdlineWrapper_test" CmdlineWrapper_test <<END
 out-lit: wrapping cmdline:...
 out-lit: -->

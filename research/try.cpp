@@ -50,6 +50,13 @@
 
 /** @file try.cpp
  * Investigate techniques to supply additional descriptive ctor arguments in a type safe way.
+ * The idea is to provide friend functors, which might tweak or reset internal settings;
+ * these functors are packaged into free standing friend functions with intuitive naming,
+ * which, on call-site, look like algebraic expressions/data-types.
+ * 
+ * If desired, this mechanism can be mixed-in and integrated into a constructor call,
+ * thus optionally allowing for arbitrary extra qualifiers, even with extra arguments.
+ * @see builder-qualifier-support.hpp (wrapped as support lib)
  */
 
 typedef unsigned int uint;
@@ -59,7 +66,6 @@ typedef unsigned int uint;
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
 
-//#include <utility>
 #include <functional>
 #include <string>
 
@@ -71,52 +77,74 @@ using std::string;
     cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
 
 
-class Feat
+template<class TAR>
+class PropertyQualifierSupport
   {
-    string prop_{"∅"};
-    
-    using Manipulator = std::function<Feat(Feat)>; 
+  protected:
+    using Manipulator = std::function<void(TAR&)>;
     
     struct Qualifier
       : Manipulator
       {
-        using Manipulator::Manipulator;  
+        using Manipulator::Manipulator;
       };
+
+    template<class... QUALS>
+    friend void qualify(TAR& target, Qualifier& qualifier, QUALS& ...qs)
+    {
+      qualifier(target);
+      qualify(target, qs...);
+    }
+    
+    friend void qualify(TAR&){ }
+
+  public:
+    // default construct and copyable
+  };
+
+
+class Feat
+  : PropertyQualifierSupport<Feat>
+  {
     
     friend Qualifier bla();
     friend Qualifier blubb(string);
-    
+
   public:
+    Feat() = default;
+    
+    template<class... QS>
+    Feat(Qualifier qual, QS... qs)
+      : Feat{}
+      {
+        qualify(*this, qual, qs...);
+      }
+    
     operator string ()  const
       {
         return "Feat{"+prop_+"}";
       }
     
-    Feat() = default;
-    
-    template<class... QS>
-    Feat(Qualifier qual, QS... qs)
-      : Feat{qual(Feat{qs...})}
-      { }
+  private:
+    string prop_{"∅"};
   };
+
 
 Feat::Qualifier
 bla()
 {
-  return Feat::Qualifier{[](Feat feat)
+  return Feat::Qualifier{[](Feat& feat)
                             {
                               feat.prop_ = "bla";
-                              return feat;
                             }};
 }
 
 Feat::Qualifier
 blubb(string murks)
 {
-  return Feat::Qualifier{[=](Feat feat)
+  return Feat::Qualifier{[=](Feat& feat)
                             {
                               feat.prop_ += ".blubb("+murks+")";
-                              return feat;
                             }};
 }
 
@@ -133,10 +161,10 @@ main (int, char**)
     Feat f2(blubb("Ψ"));
     SHOW_EXPR(f2);
     
-    Feat f3(bla(),blubb("↯"));  // Note: evaluated from right to left, bla() overwrites prop
+    Feat f3(bla(),blubb("↯"));
     SHOW_EXPR(f3);
     
-    Feat f4(blubb("💡"), bla());
+    Feat f4(blubb("💡"), bla());  // Note: evaluated from left to right, bla() overwrites prop
     SHOW_EXPR(f4);
     
     cout <<  "\n.gulp.\n";

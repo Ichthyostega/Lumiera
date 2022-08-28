@@ -6,7 +6,7 @@ Design: Playback and Render Control
 //MENU: label Player subsystem
 
 **************************************************************************************
-This part of the architecture is concened with how to initiate, coordinate and control
+This part of the architecture is concerned with how to initiate, coordinate and control
 the calculation processes necessary to generate visible / audible data from our source
 media. This design is _not so much_ concerned with the actual calculations; indeed it
 takes a ``birds eye view'', treating the actual render engine mostly just like an

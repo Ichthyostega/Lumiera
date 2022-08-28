@@ -27,7 +27,7 @@
  ** forming a distinct type. Such helper types are established during compilation
  ** and typically trigger the instantiation of further types from templates, while
  ** there is never the intention to emit any actual code from these entities.
- ** As a safety measure, such _stricly metaprogramming related_ facilities may be
+ ** As a safety measure, such _strictly metaprogramming related_ facilities may be
  ** marked to provoke a compilation failure, when the compiler -- accidentally --
  ** attempts to generate code to incorporate such an entity into the runtime world.
  ** 
@@ -42,8 +42,6 @@
 #ifndef LIB_META_NO_INSTANCE_H
 #define LIB_META_NO_INSTANCE_H
 
-#include <boost/static_assert.hpp>
-
   
 namespace lib {
 namespace meta{
@@ -57,8 +55,8 @@ namespace meta{
   template<class X>
   struct NoInstance
     {
-      NoInstance()                   { BOOST_STATIC_ASSERT(!sizeof(X)); }
-      NoInstance (NoInstance const&) { BOOST_STATIC_ASSERT(!sizeof(X)); }
+      NoInstance()                   { static_assert (!sizeof(X)); }
+      NoInstance (NoInstance const&) { static_assert (!sizeof(X)); }
     };
   
 }} // namespace lib::meta
