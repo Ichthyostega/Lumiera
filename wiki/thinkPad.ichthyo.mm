@@ -18490,6 +18490,14 @@
 <node CREATED="1661898071047" ID="ID_1263290203" MODIFIED="1661898088744" TEXT="Detail-Pfeil &#xf6;ffnet Property-Box"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1662074862784" ID="ID_1262449587" MODIFIED="1662074946153" TEXT="Support f&#xfc;r CSS-styling">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1662074874623" ID="ID_89564608" MODIFIED="1662074885181" TEXT="verwende den Gtk-Inspector">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1662074886207" ID="ID_1586325013" MODIFIED="1662074920204" TEXT="Klasse .background &#x27f9; Hintergrund undurchsichtig"/>
+<node CREATED="1662074921529" ID="ID_1811056856" MODIFIED="1662074940890" TEXT="Widgets benennen &#x27f9; im CSS als #name (ID) ansprechbar"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1662051984940" ID="ID_974876977" MODIFIED="1662051988957" TEXT="Icon verwalten">

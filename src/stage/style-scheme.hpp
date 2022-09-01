@@ -59,6 +59,9 @@ namespace stage {
   extern const Symbol NODE_fork;
   extern const Symbol NODE_frame;
   
+  extern cuString ID_element;
+  extern cuString ID_caption;
+  
   extern cuString CLASS_timeline;
   extern cuString CLASS_timeline_page;
   extern cuString CLASS_timeline_body;
@@ -70,6 +73,7 @@ namespace stage {
   extern cuString CLASS_slope_deep4;
   extern cuString CLASS_slope_verydeep;
   
+  extern cuString CLASS_background;
   
   
 }// namespace stage

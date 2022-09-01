@@ -48,6 +48,9 @@ namespace stage {
   const Symbol NODE_fork{"fork"};
   const Symbol NODE_frame{"frame"};
   
+  cuString ID_element{"element"};
+  cuString ID_caption{"caption"};
+  
   cuString CLASS_timeline      {"timeline"};
   cuString CLASS_timeline_page {"timeline__page"};
   cuString CLASS_timeline_body {"timeline__body"};
@@ -59,6 +62,7 @@ namespace stage {
   cuString CLASS_slope_deep4   {"track-slope--deep4"};
   cuString CLASS_slope_verydeep{"track-slope--verydeep"};
   
+  cuString CLASS_background    {"background"};            ///< opaque backdrop
   
   
 }// namespace stage

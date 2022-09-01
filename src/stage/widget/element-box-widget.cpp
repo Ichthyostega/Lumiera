@@ -31,6 +31,7 @@
 
 #include "stage/gtk-base.hpp"
 #include "stage/widget/element-box-widget.hpp"
+#include "stage/style-scheme.hpp"
 
 //#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
@@ -59,9 +60,7 @@ namespace widget {
   
   
   
-  ElementBoxWidget::~ElementBoxWidget()
-  {
-  }
+  ElementBoxWidget::~ElementBoxWidget()  { }
   
   void
   ElementBoxWidget::Strategy::configure()
@@ -75,9 +74,15 @@ namespace widget {
     , icon_{Gtk::StockID{"track_enabled"}, Gtk::ICON_SIZE_MENU}  ////////////////TODO: use of stockIDs is deprecated; care for a more modern icon naming scheme
     {
       strategy.configure();
+      set_name(ID_element);
+      get_style_context()->add_class(CLASS_background);
+      set_label_align(0.0, 0.0);
+      
       set_label_widget(label_);
       label_.add(icon_);
       label_.add(name_);
+      label_.set_name(ID_caption);
+      label_.get_style_context()->add_class(CLASS_background);
       name_.set_text(strategy.getName());
       name_.set_hexpand(true);
       
