@@ -59,14 +59,31 @@ namespace widget {
   
   
   
-  ElementBoxWidget::ElementBoxWidget ()
-    {
-    }
-  
-  
   ElementBoxWidget::~ElementBoxWidget()
   {
   }
+  
+  void
+  ElementBoxWidget::Strategy::configure()
+  {
+    
+  }
+  
+  ElementBoxWidget::ElementBoxWidget (Strategy strategy)
+    : Frame{}
+    , label_{Gtk::ORIENTATION_HORIZONTAL}
+    , icon_{Gtk::StockID{"track_enabled"}, Gtk::ICON_SIZE_MENU}  ////////////////TODO: use of stockIDs is deprecated; care for a more modern icon naming scheme
+    {
+      strategy.configure();
+      set_label_widget(label_);
+      label_.add(icon_);
+      label_.add(name_);
+      name_.set_text(strategy.getName());
+      name_.set_hexpand(true);
+      
+      this->show_all();
+    }
+  
   
   
   

@@ -105,6 +105,11 @@ namespace timeline {
       {
         this->fork_->injectDebugTrackLabels();
       }
+    else
+    if (mark.idi.getSym() == "box" && this->fork_)
+      {
+        this->fork_->attachElementBox();
+      }
     else // forward to default handler
       model::Controller::doMark (mark);
   }

@@ -63,7 +63,8 @@ namespace timeline {
   
   
   MarkerWidget::MarkerWidget (ID identity, ctrl::BusTerm& nexus)
-    : Widget{identity, nexus}
+    : model::Widget{identity, nexus}
+    , ElementBoxWidget(widget::MARK, widget::Type::LABEL)
     , kind_{MARK}
     , name_{identity.getSym()}  // ID symbol as name fallback
     {

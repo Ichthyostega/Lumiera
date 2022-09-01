@@ -152,7 +152,7 @@ namespace dialog {
    * A complex, tabbed-notebook-style non-modal dialog window,
    * dedicated to development, diagnostics and experimentation.
    * The TestControl can be launched from Lumiera's "Help" menu,
-   * offers an (passive, up-link) [UI-Bus connection](\ref ui-bus.hpp)
+   * offers a (passive, up-link) [UI-Bus connection](\ref ui-bus.hpp)
    * and simplifies adding pages for occasional experiments and diagnostics.
    */
   class TestControl

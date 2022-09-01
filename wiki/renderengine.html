@@ -3217,7 +3217,7 @@ In accordance with this structure, we introduce a central component, the {{{Pane
 
 </pre>
 </div>
-<div title="GuiElementBoxWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201811011919" modified="201811011920" tags="GuiPattern spec draft" changecount="4">
+<div title="GuiElementBoxWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201811011919" modified="202209011727" tags="GuiPattern spec draft" changecount="6">
 <pre>//A building block used pervasively throughout the Lumiera UI  to represent a named entity.//
 This widget presents a horizontally extended body, which holds a characteristic ''Head-Triplet'' of visual Elements:
 * an //Icon// to create the visual anchor point. In many cases, this will be ''the Placment Icon'' (a hallmark of Lumiera's UI)
@@ -3250,6 +3250,31 @@ We offer pre-arranged options for standard wiring of interaction response
 * yet there can be two distinct bindings (signals) for the icon and the button
 * the ''Expander'' (which is part of the UI-Element protocol) is pre-wired with the arrow on the menu button, to yield a visible clue for the expand/collapse state
 * each of the bindings can be easily replaced by a [[pop-up menu|GuiPopupMenu]]
+
+!!!usage and setup
+The class {{{widget::ElementBoxWidget}}} uses a flexible declarative constructor style, defining the //intended use// while delegating the details of styling to CSS classes. On construction, it is mandatory to define
+;presentation intent
+:what we want to achieve with this widget instance
+:*{{{MARK}}} : Widget is a pin or marks a position 
+:*{{{SPAN}}} : Widget spans a time range
+:*{{{ITEM}}} : Widget represents an entity within a collection (Bin)
+:*{{{CONTENT}}} : Widget serves to represent a piece of content (Clip)
+;object type
+:the type of data to be represented by this widget
+:*{{{VIDEO}}} : represents moving (or still) image data
+:*{{{AUDIO}}} : represents sound data
+:*{{{TEXT}}} : represents text content, e.g. Subtitles, Credits
+:*{{{AUTO}}} : represents automation
+:*{{{EVENT}}} : represents event streams or live connections, like e.g. MIDI data
+:*{{{EFFECT}}} : represents a processor or transformer
+:*{{{LABEL}}} : represents a label or descriptor
+:*{{{RULER}}} : represents an overview ruler or TOC
+:*{{{GROUP}}} : represents a [[Fork]], Bin or similar container to group other entities
+:*{{{META}}} : represents some meta entity
+In addition to these mandatory arguments, a sequence of //qualifiers// can be supplied to tweak the details of the presentation
+*{{{name(string)}}} : define the name or ID to be shown in the label field
+*{{{expander(ref)}}} : use a expand/collapse button, wired with the given »expander« functor (part of the standard UI-Element protocol)
+
 
 !!!proportional Head placement
 This behaviour pattern (see [[#1186|https://issues.lumiera.org/ticket/1186]]) is a distinguishing trait of the Lumiera timeline display. It indicates elements with a temporal extension surpassing the current display window. Such elements are typically represented by an {{{ElementBoxWidget}}} with an large horizontal extension. Yet when scrolling, the head-triplet shall always remain within the visible area, but it will slowly glide from one side to the other, thereby indicating the our relative position. This pattern of behaviour matters, since, together with the scolled content display, it creates the dominant movement when scrolling an extended timeline

@@ -216,6 +216,7 @@ namespace timeline {
       virtual void buildMutator (lib::diff::TreeMutator::Handle)  override;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
       void injectDebugTrackLabels();
+      void attachElementBox();
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
       uString TODO_trackName_;
@@ -256,6 +257,18 @@ namespace timeline {
     
     for (auto& subTrack : subFork_)
       subTrack->injectDebugTrackLabels();
+  }
+  inline void
+  TrackPresenter::attachElementBox()
+  {
+    uint x = rand() % 200;
+    uint y = 0;
+    widget::ElementBoxWidget* box = Gtk::manage (
+        new model::CanvasHooked<widget::ElementBoxWidget, Gtk::Widget>{display_.hookedAt(x,y)
+                                                                      , widget::Kind::MARK
+                                                                      , widget::Type::LABEL
+                                                                      , widget::name("Ω")
+                                                                      });
   }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
   /**
