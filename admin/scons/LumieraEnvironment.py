@@ -48,7 +48,7 @@ class LumieraEnvironment(Environment):
     
     def Configure (self, *args, **kw):
         kw['env'] = self
-        return apply(LumieraConfigContext, args, kw)
+        return LumieraConfigContext(*args, **kw)
     
     def mergeConf (self,other):
         """ extract the library/compiler flags from other Environment.
@@ -77,7 +77,7 @@ class LumieraEnvironment(Environment):
         """
         minVersion = str(minVersion)
         if 0 != os.system('pkg-config --print-errors --exists "%s >= %s"' % (libID,minVersion)):
-            print "Problems configuring the Library %s (>= %s)" % (libID,minVersion)
+            print("Problems configuring the Library %s (>= %s)" % (libID,minVersion))
             return False
         
         self.libInfo[libID] = libInfo = Environment()
@@ -104,7 +104,7 @@ class LumieraConfigContext(ConfigBase):
         ConfigBase.__init__(self,*args,**kw)
     
     def CheckPkgConfig (self, libID, minVersion=0, alias=None):
-        print "Checking for library configuration: %s " % libID
+        print("Checking for library configuration: %s " % libID)
         # self.Message(self,"Checking for library configuration: %s " % libID)
         return self.env.addLibInfo (libID, minVersion, alias)
 
@@ -212,7 +212,7 @@ class WrappedStandardExeBuilder(SCons.Util.Proxy):
     def __init__(self, originalBuilder):
         SCons.Util.Proxy.__init__ (self, originalBuilder)
     
-    def __nonzero__(self): return True
+    def __bool__(self): return True
     
     def __call__(self, env, target=None, source=None, **kw):
         """ when the builder gets invoked from the SConscript...

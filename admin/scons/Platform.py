@@ -57,7 +57,7 @@ def configure(env):
     if conf.CheckCHeader('valgrind/valgrind.h'):
         conf.env.Append(CPPFLAGS = ' -DHAVE_VALGRIND_H')
     else:
-        print 'Valgrind not found. The use of Valgrind is optional; building without.'
+        print('Valgrind not found. The use of Valgrind is optional; building without.')
     
     if not conf.CheckPkgConfig('nobugmt', 201008.1):
         problems.append('Did not find NoBug [http://nobug.pipapo.org/].')
@@ -141,14 +141,14 @@ def configure(env):
     
     # report missing dependencies
     if problems:
-        print "*** unable to build due to the following problems:"
+        print("*** unable to build due to the following problems:")
         for isue in problems:
-            print " *  %s" % isue
-        print
-        print "build aborted."
+            print(" *  %s" % isue)
+        print()
+        print("build aborted.")
         Exit(1)
     
-    print "** Gathered Library Info: %s" % conf.env.libInfo.keys()
+    print("** Gathered Library Info: %s" % list(conf.env.libInfo.keys()))
     
     
     # create new env containing the finished configuration

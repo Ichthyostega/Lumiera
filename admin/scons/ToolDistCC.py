@@ -34,7 +34,7 @@ def generate(env):
         env['CC'] = env.subst('$DISTCC $CC')
     if not env['DISTCC'] in env['CXX']:
         env['CXX'] = env.subst('$DISTCC $CXX')
-    print env.subst("* Build using $DISTCC")
+    print(env.subst("* Build using $DISTCC"))
     for i in ['HOME'
              ,'DISTCC_HOSTS'
              ,'DISTCC_VERBOSE'
@@ -45,7 +45,7 @@ def generate(env):
              ,'DISTCC_TCP_CORK'
              ,'DISTCC_SSH'
              ]:
-        if os.environ.has_key(i) and not env.has_key(i):
+        if i in os.environ and i not in env:
             env['ENV'][i] = os.environ[i]
 
 

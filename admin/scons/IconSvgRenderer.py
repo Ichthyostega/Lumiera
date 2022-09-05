@@ -54,7 +54,7 @@ def createDirectory (name):
         if not os.path.exists (name):
             os.mkdir (name)
     except:
-        print 'WARNING: createDirectory("%s") failed. Permission problems?' % name
+        print('WARNING: createDirectory("%s") failed. Permission problems?' % name)
 
 
 def copyMergeDirectory (src, dst):
@@ -91,7 +91,7 @@ def parsePlateLayer (layer):
 
 
 def parseSVG (file_path):
-    print "Parsing " + file_path
+    print("Parsing " + file_path)
     svgdoc = minidom.parse (file_path)
     for root_node in svgdoc.childNodes:
         if root_node.nodeType == minidom.Node.ELEMENT_NODE:
@@ -114,7 +114,7 @@ def renderSvgRsvg (file_path, out_dir, artwork_name, rectangle, _doc_size):
     height = int(rectangle[3])
     
     if not os.path.exists(rsvgPath):
-        print "Error: executable %s not found." % rsvgPath
+        print("Error: executable %s not found." % rsvgPath)
     
     os.spawnlp(os.P_WAIT, rsvgPath, rsvgPath,
                "--source-rect=%g:%g:%g:%g" % (rectangle[0], rectangle[1], width, height),
@@ -135,8 +135,8 @@ def getTargetNames (file_path):
 
 
 def printHelp():
-    print "render-icon.py SRCFILE.svg TARGETDIR"
-    print "An icon rendering utility script for lumiera"
+    print("render-icon.py SRCFILE.svg TARGETDIR")
+    print("An icon rendering utility script for lumiera")
 
 def parseArguments(argv):
     _optlist, args = getopt.getopt(argv, "")
@@ -152,14 +152,14 @@ def main (argv):
     in_path, out_dir = parseArguments(argv)
     
     if not (in_path and out_dir):
-        print "Missing arguments in_path and out_dir."
+        print("Missing arguments in_path and out_dir.")
         sys.exit(1)
     
     if os.path.isfile(out_dir):
-        print "Unable to use '%s' as output directory, because it\'s a file." % out_dir
+        print("Unable to use '%s' as output directory, because it\'s a file." % out_dir)
         sys.exit(1)
     if not os.path.isdir(out_dir):
-        print "Output directory '%s' not found." % out_dir
+        print("Output directory '%s' not found." % out_dir)
         sys.exit(1)
     
     # Create the icons folders

@@ -34,7 +34,7 @@ def generate(env):
         env['CC'] = env.subst('$CCACHE $CC')
     if not env['CCACHE'] in env['CXX']:
         env['CXX'] = env.subst('$CCACHE $CXX')
-    print env.subst("* Build using $CCACHE")
+    print(env.subst("* Build using $CCACHE"))
     
     for i in ['HOME'
              ,'CCACHE_DIR'
@@ -55,7 +55,7 @@ def generate(env):
              ,'CCACHE_UNIFY'
              ,'CCACHE_EXTENSION'
              ]:
-        if os.environ.has_key(i) and not env.has_key(i):
+        if i in os.environ and i not in env:
             env['ENV'][i] = os.environ[i]
 
 

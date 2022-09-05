@@ -113,7 +113,7 @@ def filterNodes(nlist, removeName=None):
     else:
         predicate = lambda n : True
     
-    return filter(predicate, nlist)
+    return list(filter(predicate, nlist))
 
 
 
@@ -167,13 +167,13 @@ def checkCommandOption(env, optID, val=None, cmdName=None):
     
     if val=='True' or val=='true' or val=='yes' or val=='1' or val == 1 :
         if not cmdName:
-            print "WARNING: no default for %s, please specify a full path." % optID
+            print("WARNING: no default for %s, please specify a full path." % optID)
             del env[optID]
             return False
         else:
             val = env.WhereIs(cmdName)
             if not val:
-                print "WARNING: %s not found, please specify a full path" % cmdName
+                print("WARNING: %s not found, please specify a full path" % cmdName)
                 del env[optID]
                 return False
     
@@ -218,7 +218,7 @@ def extract_localPathDefs (localDefs):
         pattern and returns them wrapped into a Record for convenient access
     """
     def relevantPathDefs (mapping):
-        for (k,v) in mapping.items():
+        for (k,v) in list(mapping.items()):
             if (k.startswith('src') or k.startswith('build') or k.startswith('install')) and Util.is_String(v):
                 v = v.strip()
                 if not v.endswith('/'): v += '/'

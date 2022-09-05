@@ -47,11 +47,11 @@ def setup_dependency(target,source,env, key):
     path = scanner.path(env)
     deps = scanner(source[0], env, path)
 
-    if env.has_key(key) and env[key]:
+    if key in env and env[key]:
         for header in env[key]:
             header_path = header.path.strip('.gch')
             if header_path in [x.path for x in deps]:
-                print "Precompiled header(%s) %s  \t <--- %s" % (key,header_path,source[0])
+                print("Precompiled header(%s) %s  \t <--- %s" % (key,header_path,source[0]))
                 env.Depends(target, header)
 
 
