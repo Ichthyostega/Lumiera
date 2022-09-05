@@ -16,8 +16,15 @@
 # history: 8/2008 adapted for Lumiera build system
 #                 changed to accept a list of precompiled header defs 
 
-
-from types import ListType
+# TODO: WIP-remove these comments when port to Python 3.x is DONE 
+# types.py does not contain ListType in Python 3.x
+# # Why do we require ListType?
+# To do something like
+#    if type(item) is ListType:
+#        ....
+# But types.py does not have ListType anymore
+#    if isinstance(item, list):
+#from types import ListType
 
 import SCons.Action
 import SCons.Builder
