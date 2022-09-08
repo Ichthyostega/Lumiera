@@ -58,28 +58,28 @@ namespace cmd {
   //using std::shared_ptr;
   
   
-  /* ========= global actions ========= */
+  /* ========= commands for global actions ========= */
   
   extern CommandSetup session_saveSnapshot;
   extern CommandSetup session_newSequence;
   
   
   
-  /* ========= sequence actions ======= */
+  /* ========= commands for sequence actions ======= */
   
   extern CommandSetup sequence_newTrack;
   
   
   
-  /* ========= actions in local scope ======= */
+  /* ========= commands for actions in local scope ======= */
   
   extern CommandSetup scope_moveRelocateClip;
   
   
   
-  /* ========= meta actions ======= */
+  /* ========= commands for meta actions ======= */
   
-  extern CommandSetup test_meta_activateContentDiff;               ////////////////////////////////TICKET #211 prefix test_ bypasses logging and immediately executes for now (2018)
+  extern CommandSetup test_meta_activateContentDiff;               ////////////////////////////////TICKET #211 prefix test_ bypasses action logging and immediately executes for now (2018)
   extern CommandSetup meta_deactivateContentDiff;
   
   //--Demo-and-Development----
