@@ -46,6 +46,7 @@
 #include "lib/builder-qualifier-support.hpp"
 
 //#include "lib/util.hpp"
+#include "lib/symbol.hpp"
 #include "lib/format-string.hpp"
 
 //#include <memory>
@@ -57,6 +58,7 @@
 namespace stage  {
 namespace widget {
   
+  using lib::Literal;
   using std::string; /////TODO
   using util::_Fmt;  /////TODO debugging?
   
@@ -131,6 +133,9 @@ namespace widget {
         
         /** decide upon the presentation strategy */
         void configure();
+        
+        Literal getIconID()  const;
+        Gtk::IconSize getIconSize() const;
         
         cuString
         getName()  const

@@ -68,14 +68,30 @@ namespace widget {
     
   }
   
+  Literal
+  ElementBoxWidget::Strategy::getIconID()  const
+  {
+    ///////////////////////////////////////////////////////////////////////////TICKET #1185 : implement logic to pick suitable icon...
+    return "track_enabled";      //////////////////////////////////////////////TICKET #1219 : maybe at leas a better generic placeholder icon...?
+  }
+  
+  Gtk::IconSize
+  ElementBoxWidget::Strategy::getIconSize()  const
+  {
+    ///////////////////////////////////////////////////////////////////////////TICKET #1185 : is Icon-Size flexible under some circumstances?
+    return Gtk::ICON_SIZE_MENU;
+  }
+
+  
   ElementBoxWidget::ElementBoxWidget (Strategy strategy)
     : Frame{}
     , label_{Gtk::ORIENTATION_HORIZONTAL}
-    , icon_{Gtk::StockID{"track_enabled"}, Gtk::ICON_SIZE_MENU}  ////////////////TODO: use of stockIDs is deprecated; care for a more modern icon naming scheme
+    , icon_{Gtk::StockID{strategy.getIconID()}  ///////////////////////////////TICKET #1030 : use of stockIDs is deprecated; care for a more modern icon naming scheme
+           , strategy.getIconSize()}
     {
       strategy.configure();
       set_name(ID_element);
-      get_style_context()->add_class(CLASS_background);
+      get_style_context()->add_class(CLASS_background);     // Style to ensure an opaque backdrop
       set_label_align(0.0, 0.0);
       
       set_label_widget(label_);

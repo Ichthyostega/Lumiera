@@ -6359,6 +6359,25 @@
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1662052275502" ID="ID_297910960" MODIFIED="1662052382908" TEXT="Icons verwalten / Ressourcen bereitstellen">
 <linktarget COLOR="#864e7a" DESTINATION="ID_297910960" ENDARROW="Default" ENDINCLINATION="-843;-48;" ID="Arrow_ID_154615679" SOURCE="ID_1280255371" STARTARROW="None" STARTINCLINATION="695;60;"/>
 <icon BUILTIN="hourglass"/>
+<node CREATED="1662151277190" ID="ID_1508158518" MODIFIED="1662151299801" TEXT="bestehender Code">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...stammt im Kern noch von Joel Holdsworth &lt; 2012
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+<node CREATED="1662151302627" ID="ID_442009739" MODIFIED="1662151321940" TEXT="verwendet einen &quot;Suchpfad&quot; aus der Lumiera setup.ini"/>
+<node CREATED="1662151324313" ID="ID_1725316253" MODIFIED="1662151341612" TEXT="normalerweise $ORIGIN/gui  sowie $ORIGIN/gui/icons"/>
+<node CREATED="1662151365635" ID="ID_1658097871" MODIFIED="1662151366575" TEXT="UiStyle::registerStockItems()"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1662151474747" ID="ID_127382457" MODIFIED="1662151477893" TEXT="#1030 : use &quot;icon names&quot; instead of Gtk::StockItem">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 </node>
@@ -18505,7 +18524,22 @@
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1662051990492" ID="ID_264004203" MODIFIED="1662052527424" TEXT="Verwaltung vordefinierter Icons">
 <arrowlink COLOR="#b73b74" DESTINATION="ID_1998357180" ENDARROW="Default" ENDINCLINATION="-1444;146;" ID="Arrow_ID_373354654" STARTARROW="None" STARTINCLINATION="-586;-482;"/>
 <icon BUILTIN="help"/>
+<node CREATED="1662247852505" ID="ID_685267801" MODIFIED="1662247866746" TEXT="wird relevant mit Gtk-4">
+<icon BUILTIN="messagebox_warning"/>
 </node>
+<node CREATED="1662247868126" ID="ID_487747089" MODIFIED="1662247880210" TEXT="vorerst m&#xf6;glichst das bestehende System nutzen">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1662241779699" ID="ID_178231784" MODIFIED="1662241797228" TEXT="Placement-Icon">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1662241785372" ID="ID_1501125340" MODIFIED="1662241797229" TEXT="Expander-Icon">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1662241925929" ID="ID_217944947" MODIFIED="1662241933868" TEXT="horizontale Ausdehnung">
+<icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1661703437825" ID="ID_1401386216" MODIFIED="1661703453368" TEXT="proportional Head placement">
 <icon BUILTIN="hourglass"/>

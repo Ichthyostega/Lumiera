@@ -62,6 +62,7 @@ namespace timeline {
   
   /**
    * @todo WIP-WIP as of 12/2016
+   * @todo 9/2022 baseclass sigc::trackable is ambiguous, we inherit it from two chains (diamond of death)
    */
   class MarkerWidget
     : public model::Widget
