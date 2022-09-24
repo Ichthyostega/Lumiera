@@ -3217,7 +3217,7 @@ In accordance with this structure, we introduce a central component, the {{{Pane
 
 </pre>
 </div>
-<div title="GuiElementBoxWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201811011919" modified="202209011727" tags="GuiPattern spec draft" changecount="6">
+<div title="GuiElementBoxWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201811011919" modified="202209240032" tags="GuiPattern spec draft" changecount="10">
 <pre>//A building block used pervasively throughout the Lumiera UI  to represent a named entity.//
 This widget presents a horizontally extended body, which holds a characteristic ''Head-Triplet'' of visual Elements:
 * an //Icon// to create the visual anchor point. In many cases, this will be ''the Placment Icon'' (a hallmark of Lumiera's UI)
@@ -3282,6 +3282,22 @@ This behaviour pattern (see [[#1186|https://issues.lumiera.org/ticket/1186]]) is
 ''Technically'', this has to be build as a self-contained component, which can be unit-tested. The input and reference is a &quot;Window&quot; (in fact an interval) together with its start position //relative// to the element's own start position. The component has to derive from this input the actual relational configuration of the window's extension with respect to its own extension. For context, the //window// corresponds to the visible area, which can be larger, smaller disjoint, partially overlapping and fully contained. Please note that ''handling the relations of intervals is a notoriously challenging problem.''
 
 Especially when the component determines a placement of the //window// within its own extension, it has to derive a proportional placement position, which can be used to arrange the head-triplet of the {{{EventBoxWidget}}}. This proportional placement needs to reflect the location of the window within the overall extension, similar to the hand of a scrollbar. However, when the extension of the head-triplet, together with its placement disallows to show the the triplet unclipped, the triplets shall just be clipped naturally. Ideally, there would be a soft graceful transition between those two representation modes.
+
+!!!constrained Widget size
+When used as Clip display on a timeline canvas with calibrated time axis, the requirement arises to confine a GTK widget to a pre established size constraint. This requirement is problematic, as it stands in ''direct contradiction'' to ''GTK's fundamental design'': Elements are never to be positioned explicitly, but rather the layout will flow into balance, factoring in the specific font, language support and interface styling and theming. GTK does not provide any API to set layout explicitly — not even for special corner cases.
+Thus, if we intend to bring a custom widget into compliance with our contextual size constraints, the only solution is to //make the GTK layout engine turn out the desired extension allocation// for this custom widget. An detailed survey of the GTK implementation reveals the possible extension points, were such a layout manipulation could be injected.
+* some amount of screen extension is allocated by the framework or by a container widget for its children
+* this happens on first &quot;realisation&quot; of the Widget, or later, when a resize request is processed and the layout cache invalidated
+* the entry point is {{{Gtk::Widget::size_allocate()}}}  (possibly with an additional &quot;baseline&quot; value)
+* the implementation first queries the widget for its preferences
+*# first, the layout trend is determined: either width-for-given-height, or height-for-given-width
+*# then, the widget is queried for its preference in the leading dimension
+*# followed by a call to the widget's width-for-given-height, or height-for-given-width implementation
+* the resulting desired (&quot;natural&quot;) size allocation is then adjusted by widget decoration and finally passed to the widget for storage and use
+It turns out that the GTK layout management implementation always observes the widget's preferred extension, but possibly expands the allocation to fill additional space. And the standard implementation of {{{Gtk::Widget}}} in turn delegates those queries to the ''GTK CSS Gadget'' — which is a mapping of the hierarchical widget structure into CSS layout nodes.
+
+So the seemingly ''optimal leverage point'' is to ''return our pre established size constraint as result'' from these query functions — which can be overridden in the Gtkmm C++ implementation through the {{{Gtk::Widget::get_preferred_width_vfunc()}}} and {{{Gtk::Widget::get_preferred_height_for_width_vfunc()}}}. However, since GTK assumes these values to be sane and sufficient for a proper realisation of any embedded content, at this point we get the responsibility to control and reduce the embedded child widget's extension to bring them into compliance. Failing to do so will lead to garbled drawing on screen.
+Our solution approach is to watch the results returned by the default implementation and possibly to hide content until the remaining content conforms to the size constraint; after that, we can return //exactly our calibrated size// and expect GTK to observe this request, passing it down to embedded widgets reduced by style decorations.
 </pre>
 </div>
 <div title="GuiFacade" modifier="Ichthyostega" created="200902080719" modified="201708041501" tags="def spec" changecount="1">

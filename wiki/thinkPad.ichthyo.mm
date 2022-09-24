@@ -18240,9 +18240,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612620568330" ID="ID_1826613475" MODIFIED="1612620738928" TEXT="Problem: feste Gr&#xf6;&#xdf;en-Vorgabe">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1612620568330" ID="ID_1826613475" MODIFIED="1663977403139" TEXT="Problem: feste Gr&#xf6;&#xdf;en-Vorgabe">
 <linktarget COLOR="#f17881" DESTINATION="ID_1826613475" ENDARROW="Default" ENDINCLINATION="1266;110;" ID="Arrow_ID_1550601686" SOURCE="ID_351516626" STARTARROW="None" STARTINCLINATION="2103;126;"/>
-<icon BUILTIN="hourglass"/>
+<icon BUILTIN="pencil"/>
 <node CREATED="1625072904888" ID="ID_373040535" MODIFIED="1625072974106" TEXT="pa&#xdf;t nicht recht in den Gtk-Standard">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -18255,9 +18255,32 @@
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075098065" HGAP="75" ID="ID_740164704" MODIFIED="1625075127483" TEXT="Frage: wo mu&#xdf; man anpassen...." VSHIFT="-5">
+<node COLOR="#435e98" CREATED="1625075098065" HGAP="75" ID="ID_740164704" MODIFIED="1663977387429" TEXT="Frage: wo mu&#xdf; man anpassen...." VSHIFT="-5">
 <edge COLOR="#a56a6a"/>
+<arrowlink COLOR="#796ba9" DESTINATION="ID_1143769023" ENDARROW="Default" ENDINCLINATION="-733;-40;" ID="Arrow_ID_1215170372" STARTARROW="None" STARTINCLINATION="-1892;158;"/>
 <icon BUILTIN="help"/>
+<node CREATED="1663977162683" ID="ID_948579259" MODIFIED="1663977175076" TEXT="dazu mu&#xdf; man den Layout-Allokations-Mechanismus verstehen"/>
+<node CREATED="1663977179224" ID="ID_1440569490" MODIFIED="1663977197290" TEXT="die Standard-Implementierung ist eine Kette von Aggregation und Delegation"/>
+<node BACKGROUND_COLOR="#d5d1ef" COLOR="#435e98" CREATED="1663976907423" ID="ID_1507590849" MODIFIED="1663977378741" TEXT="Fazit">
+<arrowlink COLOR="#6b229a" DESTINATION="ID_1503005110" ENDARROW="Default" ENDINCLINATION="-1806;-166;" ID="Arrow_ID_1347071203" STARTARROW="None" STARTINCLINATION="-2004;582;"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="info"/>
+<node CREATED="1663976912732" ID="ID_1628642843" MODIFIED="1663976935956" TEXT="direkt bei den get_preferred-VFuncs ansetzen"/>
+<node CREATED="1663976936598" ID="ID_538084170" MODIFIED="1663976947659" TEXT="Standard-Impl delegiert und aggregiert hier nur"/>
+<node CREATED="1663976948910" ID="ID_665707543" MODIFIED="1663976964397" TEXT="die Basiswerte stammen aus der CSS-Auswertung"/>
+<node CREATED="1663976973787" ID="ID_1501027418" MODIFIED="1663977503034" TEXT="also drei Schritte">
+<arrowlink COLOR="#825098" DESTINATION="ID_763928282" ENDARROW="Default" ENDINCLINATION="-708;-358;" ID="Arrow_ID_1762163985" STARTARROW="None" STARTINCLINATION="-29;281;"/>
+<node CREATED="1663976978882" ID="ID_1756884177" MODIFIED="1663977086920" TEXT="Basis-Impl aufrufen &#x27f9; holt Standard-Layout von CSS">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1663976986201" ID="ID_280056674" MODIFIED="1663977065627" TEXT="Abgleich, Manipulation, Ausblenden &#x27f9; bis Constraint erf&#xfc;llt">
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1663977014990" ID="ID_696754346" MODIFIED="1663977067787" TEXT="dann schlie&#xdf;lich den vordefinierten Size-Constraint zur&#xfc;ckliefern">
+<icon BUILTIN="full-3"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1661557586218" ID="ID_859822896" MODIFIED="1661620110453" TEXT="Zeitangabe in Ausdehnung umsetzen">
@@ -18540,6 +18563,41 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1662241925929" ID="ID_217944947" MODIFIED="1662241933868" TEXT="horizontale Ausdehnung">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1663945598778" ID="ID_1866891133" MODIFIED="1663945862337" TEXT="Ansatz">
+<icon BUILTIN="idea"/>
+<node CREATED="1663945603065" ID="ID_1792803134" MODIFIED="1663945629088" TEXT="Mechanismus zur Gr&#xf6;&#xdf;enbeschr&#xe4;nkung auf dem Haupt-Widget"/>
+<node CREATED="1663945637397" ID="ID_1469516364" MODIFIED="1663945650908" TEXT="erforderliche Ausdehnung der Kind-Elemente feststellen"/>
+<node CREATED="1663945651910" ID="ID_897434501" MODIFIED="1663945668859" TEXT="Kind-Elemente ggfs verbergen"/>
+<node CREATED="1663945669814" ID="ID_1057659827" MODIFIED="1663945692748">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ver&#228;nderte Men&#252;-Steuerung bei derartiger <i>Degradierung</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1663945712608" ID="ID_1162263503" MODIFIED="1663945819361" TEXT="minimal-Ausdehung per API bereitstellen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das bedeutet: es ist Aufgabe eines &#252;bergeordneten Layout-Managers, dann auch ein <i>reduziertes Display</i>&#160;zu schalten; das ElementBoxWidget kann davon ausgehen, den minimal ben&#246;tigten Platz auch zu bekommen (size request)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1663977435805" ID="ID_763928282" MODIFIED="1663977503035" TEXT="L&#xf6;sungs-Mechanismus GTK+CSS">
+<linktarget COLOR="#825098" DESTINATION="ID_763928282" ENDARROW="Default" ENDINCLINATION="-708;-358;" ID="Arrow_ID_1762163985" SOURCE="ID_1501027418" STARTARROW="None" STARTINCLINATION="-29;281;"/>
+<icon BUILTIN="pencil"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1661703437825" ID="ID_1401386216" MODIFIED="1661703453368" TEXT="proportional Head placement">
 <icon BUILTIN="hourglass"/>
@@ -26768,7 +26826,7 @@
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1542383666724" ID="ID_1850932291" MODIFIED="1557498707230" TEXT="Clipping-Region">
 <node COLOR="#435e98" CREATED="1542383689152" ID="ID_1534655843" MODIFIED="1557498707230" TEXT="wird der on_draw() mitgegeben">
-<arrowlink COLOR="#5e86ca" DESTINATION="ID_577859258" ENDARROW="Default" ENDINCLINATION="-1325;0;" ID="Arrow_ID_1966515866" STARTARROW="None" STARTINCLINATION="-1797;81;"/>
+<arrowlink COLOR="#5e86ca" DESTINATION="ID_577859258" ENDARROW="Default" ENDINCLINATION="-1494;46;" ID="Arrow_ID_1966515866" STARTARROW="None" STARTINCLINATION="-1797;81;"/>
 <icon BUILTIN="info"/>
 <node CREATED="1555021726291" ID="ID_529262560" MODIFIED="1557498707230" TEXT="Entnehmen und Aufbereiten">
 <node CREATED="1555021755898" ID="ID_968519712" MODIFIED="1557498707230" TEXT="Cairo liefert double-Koordinaten"/>
@@ -30642,187 +30700,86 @@
 <node CREATED="1612480298341" ID="ID_1348090876" MODIFIED="1612480308730" TEXT="funktioniert nur zur Vergr&#xf6;&#xdf;erung"/>
 <node CREATED="1612480309646" ID="ID_1463447127" MODIFIED="1612480315253" TEXT="aber beschneidet nicht"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612527452448" FOLDED="true" ID="ID_1007765197" MODIFIED="1612620519992" TEXT="gen&#xfc;gt noch nicht: kann nicht beschneiden">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612527452448" ID="ID_1007765197" MODIFIED="1663946037264" TEXT="gen&#xfc;gt noch nicht: kann nicht beschneiden">
 <icon BUILTIN="bell"/>
 <node CREATED="1612527477300" ID="ID_734302531" MODIFIED="1612527498185" TEXT="es funktioniert so bereits, das Widget zu vergr&#xf6;&#xdf;ern">
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612527499386" HGAP="34" ID="ID_615948747" MODIFIED="1612620501553" TEXT="was passiert da konkret im Framework?" VSHIFT="-49">
-<linktarget COLOR="#4b67b0" DESTINATION="ID_615948747" ENDARROW="Default" ENDINCLINATION="-1100;0;" ID="Arrow_ID_1297405131" SOURCE="ID_1143769023" STARTARROW="None" STARTINCLINATION="-1942;189;"/>
-<icon BUILTIN="help"/>
-<node CREATED="1612530135923" ID="ID_597723725" MODIFIED="1612530155607" TEXT="gtkwidget.c Zeile 5960ff">
+<node COLOR="#435e98" CREATED="1612620409921" ID="ID_643882250" MODIFIED="1663946479492" TEXT="size handling in Framework">
+<arrowlink COLOR="#364ec7" DESTINATION="ID_615948747" ENDARROW="Default" ENDINCLINATION="-1440;0;" ID="Arrow_ID_866144981" STARTARROW="None" STARTINCLINATION="-1942;189;"/>
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1612532127121" ID="ID_1698900734" MODIFIED="1612532140107" TEXT="gtk_widget_set_size_request">
-<node CREATED="1612532223794" ID="ID_1417902323" MODIFIED="1612532224951" TEXT="gtk_widget_set_usize_internal">
-<node CREATED="1612532273671" ID="ID_1466904431" MODIFIED="1612532285991" TEXT="&#xfc;bernimmt die Werte in den internen PImpl"/>
-<node CREATED="1612532301521" ID="ID_1985717542" MODIFIED="1612532313462" TEXT="setzt bei Bedarf ein queue_resize ab">
-<icon BUILTIN="idea"/>
-</node>
-</node>
-<node CREATED="1612532323107" ID="ID_194122765" MODIFIED="1612532337848" TEXT="d.h. danach sind priv-&gt;height bzw priv-&gt;width gesetzt"/>
-</node>
-<node CREATED="1612534268245" ID="ID_1296614142" MODIFIED="1612534272767" TEXT="gtk_widget_ensure_allocate">
-<icon BUILTIN="forward"/>
-<node CREATED="1612534275444" ID="ID_1132981577" MODIFIED="1612534290190" TEXT="pr&#xfc;ft Flag ob Allokation notwendig ist">
-<node CREATED="1612534410570" ID="ID_620587901" MODIFIED="1612534423818" TEXT="Anscheined geht die initiale Allokation &#xfc;ber einen anderen Weg">
-<icon BUILTIN="help"/>
-</node>
-<node CREATED="1612534429503" ID="ID_567668302" MODIFIED="1612534445049" TEXT="hier wird vorausgesezt, da&#xdf; bereits eine valide Allokation besteht"/>
-</node>
-<node CREATED="1612534325037" ID="ID_947651551" MODIFIED="1612534327833" TEXT="ruft auf">
-<node CREATED="1612534329157" ID="ID_682604518" MODIFIED="1612534330137" TEXT="gtk_widget_get_allocated_size"/>
-<node CREATED="1612534338443" ID="ID_585162600" MODIFIED="1612534339967" TEXT="gtk_widget_size_allocate_with_baseline"/>
-</node>
-<node CREATED="1612534361857" ID="ID_1011780997" MODIFIED="1612534383361" TEXT="Container: ruft rekursiv auf jedem Kind gtk_widget_ensure_allocate"/>
-</node>
-<node CREATED="1612535382254" ID="ID_1555274499" MODIFIED="1612535383977" TEXT="gtk_button_size_allocate">
-<node CREATED="1612535387227" ID="ID_986479404" MODIFIED="1612535395872" TEXT="ruft f&#xfc;r sich selber gtk_widget_size_allocate"/>
-<node CREATED="1612535398051" ID="ID_565262993" MODIFIED="1612535410704" TEXT="dann: gtk_css_gadget_allocate">
-<node CREATED="1612535412121" ID="ID_950467979" MODIFIED="1612535417956" TEXT="f&#xfc;r den Inhalt des Buttons"/>
-<node CREATED="1612535418784" ID="ID_1076896202" MODIFIED="1612535429635" TEXT="ensprechend um Margin + Padding reduziert"/>
-<node CREATED="1612535549422" ID="ID_1526326867" MODIFIED="1612535563481" TEXT="gadget-&gt;allocate   (virtuelle Funktion)">
-<node CREATED="1612535615766" ID="ID_261273731" MODIFIED="1612535656704" TEXT="z.B. gtk_box_gadget_allocate">
-<arrowlink DESTINATION="ID_526990189" ENDARROW="Default" ENDINCLINATION="24;0;" ID="Arrow_ID_1005009779" STARTARROW="None" STARTINCLINATION="24;0;"/>
-</node>
-<node CREATED="1612535648889" ID="ID_526990189" MODIFIED="1612535656704" TEXT="gtk_box_gadget_allocate_child">
-<linktarget COLOR="#a9b4c1" DESTINATION="ID_526990189" ENDARROW="Default" ENDINCLINATION="24;0;" ID="Arrow_ID_1005009779" SOURCE="ID_261273731" STARTARROW="None" STARTINCLINATION="24;0;"/>
-<node CREATED="1612535679525" HGAP="30" ID="ID_1762849787" MODIFIED="1612535732163" TEXT="ruft dann gtk_widget_size_allocate_with_baseline" VSHIFT="26">
-<arrowlink COLOR="#4c96df" DESTINATION="ID_619170334" ENDARROW="Default" ENDINCLINATION="22;-288;" ID="Arrow_ID_1708313707" STARTARROW="None" STARTINCLINATION="-30;150;"/>
-</node>
-</node>
-</node>
-</node>
-</node>
-<node CREATED="1612527537150" ID="ID_619170334" MODIFIED="1612535718797" TEXT="gtk_widget_size_allocate">
-<linktarget COLOR="#4c96df" DESTINATION="ID_619170334" ENDARROW="Default" ENDINCLINATION="22;-288;" ID="Arrow_ID_1708313707" SOURCE="ID_1762849787" STARTARROW="None" STARTINCLINATION="-30;150;"/>
-<node CREATED="1612528130053" ID="ID_1806340634" MODIFIED="1612528177893" TEXT="macht nur etwas f&#xfc;r &quot;toplevel&quot;-Widgets">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      das ist eine Flag in der privaten Widget-Struktur. Keine Ahnung was das bedeutet.<br />Und &#252;brigens: sichtbar mu&#223; das Widget auch noch sein...
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node CREATED="1612529820222" ID="ID_1943944289" MODIFIED="1612529840523" TEXT="unterscheidet dann">
-<node CREATED="1612529852915" ID="ID_1335328932" MODIFIED="1612529852915" TEXT="GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH">
-<node CREATED="1612531874357" ID="ID_321040886" MODIFIED="1612531874357" TEXT="gtk_widget_get_preferred_width">
-<node CREATED="1612613898889" ID="ID_1906328896" MODIFIED="1612613898889" TEXT="gtk_widget_real_get_width"/>
-<node CREATED="1612614169294" ID="ID_1044574457" MODIFIED="1612614182044" TEXT="default-Impl (widget) liefert einfach 0"/>
-<node CREATED="1612614424711" ID="ID_876925671" MODIFIED="1612614453769" TEXT="Button: delegiert an gtk_css_gadget_get_preferred_size"/>
-</node>
-<node CREATED="1612531881837" ID="ID_503088638" MODIFIED="1612531883430" TEXT="gtk_widget_get_preferred_height_for_width">
-<node CREATED="1612613911103" ID="ID_1759726068" MODIFIED="1612613912600" TEXT="gtk_widget_real_get_height_for_width"/>
-<node CREATED="1612614183776" ID="ID_1283663519" MODIFIED="1612614233786" TEXT="default-Impl (widget) delegiert an get_preferred_heigt">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      also stellt eigentlich grade nicht die versprochene Logik bereit
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1612614424711" ID="ID_407129358" MODIFIED="1612614528239" TEXT="Button: delegiert an gtk_css_gadget_get_preferred_size (ORIENTATION_VERTICAL und &quot;forSize&quot;)"/>
-</node>
-</node>
-<node CREATED="1612529854679" ID="ID_620839789" MODIFIED="1612529865489" TEXT="sonst == default">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1612531908423" ID="ID_981765041" MODIFIED="1612531909730" TEXT="gtk_widget_get_preferred_height"/>
-<node CREATED="1612531918893" ID="ID_1720836756" MODIFIED="1612531919753" TEXT="gtk_widget_get_preferred_width_for_height"/>
-</node>
-<node CREATED="1612529867091" ID="ID_1467925874" MODIFIED="1612531897569" TEXT="d.h. es gibt zwei, nicht drei Alternativen">
-<icon BUILTIN="idea"/>
-</node>
-</node>
-<node CREATED="1612529887521" ID="ID_761185703" MODIFIED="1612529894551" TEXT="danach liegt vor">
-<node CREATED="1612529924676" ID="ID_677442017" MODIFIED="1612529929887" TEXT="min_width"/>
-<node CREATED="1612529930763" ID="ID_540378683" MODIFIED="1612529935382" TEXT="natural_width"/>
-<node CREATED="1612529935882" ID="ID_574785014" MODIFIED="1612529938438" TEXT="min_height"/>
-<node CREATED="1612529939218" ID="ID_226125510" MODIFIED="1612529942181" TEXT="natural_heigt"/>
-</node>
-<node CREATED="1612529944548" ID="ID_1276575353" MODIFIED="1612529951405" TEXT="nun wird justiert">
-<node CREATED="1612530023488" ID="ID_716347716" MODIFIED="1612530028518" TEXT="(widget)-&gt;adjust_size_allocation">
-<icon BUILTIN="info"/>
-</node>
-<node CREATED="1612530030341" ID="ID_1722501910" MODIFIED="1612530038256" TEXT="stets zweimal aufgerufen">
-<node CREATED="1612529954784" ID="ID_1163322850" MODIFIED="1612529961136" TEXT="zuerst in horizontaler Dimension"/>
-<node CREATED="1612529961751" ID="ID_1659658095" MODIFIED="1612529966442" TEXT="dann in vertikaler Dimension"/>
-</node>
-<node CREATED="1612530387661" ID="ID_1677551972" MODIFIED="1612530414969">
-<richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      danach noch die <i>adjust_baseline_allocation</i>
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1612530059555" ID="ID_1426144413" MODIFIED="1612534894781" TEXT="Signal: SIZE_ALLOCATE">
-<arrowlink COLOR="#3156c0" DESTINATION="ID_800205161" ENDARROW="Default" ENDINCLINATION="-5;-110;" ID="Arrow_ID_1513246240" STARTARROW="None" STARTINCLINATION="-67;9;"/>
-</node>
-<node CREATED="1612530091126" ID="ID_1651628600" MODIFIED="1612530097016" TEXT="ggfs ein Redraw ausgel&#xf6;st"/>
-</node>
-<node CREATED="1612534851565" ID="ID_800205161" MODIFIED="1612534894781" TEXT="widget-&gt;size_allocate">
-<linktarget COLOR="#3156c0" DESTINATION="ID_800205161" ENDARROW="Default" ENDINCLINATION="-5;-110;" ID="Arrow_ID_1513246240" SOURCE="ID_1426144413" STARTARROW="None" STARTINCLINATION="-67;9;"/>
-<node CREATED="1612534944266" ID="ID_1372642184" MODIFIED="1612534985979" TEXT="gtk_widget_real_size_allocate">
-<arrowlink COLOR="#6f6096" DESTINATION="ID_384051197" ENDARROW="Default" ENDINCLINATION="189;0;" ID="Arrow_ID_31086336" STARTARROW="None" STARTINCLINATION="161;15;"/>
-<node CREATED="1612535006062" ID="ID_1456025781" MODIFIED="1612535014459" TEXT="pa&#xdf;t dann auch noch das GDK-Window an"/>
-</node>
-</node>
-<node CREATED="1612534965805" ID="ID_384051197" MODIFIED="1612534981305" TEXT="gtk_widget_set_allocation">
-<linktarget COLOR="#6f6096" DESTINATION="ID_384051197" ENDARROW="Default" ENDINCLINATION="189;0;" ID="Arrow_ID_31086336" SOURCE="ID_1372642184" STARTARROW="None" STARTINCLINATION="161;15;"/>
-<node CREATED="1612535196135" HGAP="24" ID="ID_293434969" MODIFIED="1612535244957" TEXT="weist einfach die Allokation zu" VSHIFT="12"/>
-<node CREATED="1612535204550" ID="ID_1965689659" MODIFIED="1612535224055" TEXT="setzt au&#xdf;erdem auch noch die ClipArea auf genau diese Allokation"/>
-</node>
-<node CREATED="1612530262998" ID="ID_300054220" MODIFIED="1612530266178" TEXT="Einsichten">
-<node CREATED="1612530267006" ID="ID_1055756887" MODIFIED="1612530295140" TEXT="man hat grunds&#xe4;tzlich nur die Wahl &quot;height for width&quot; oder anders herum?"/>
-<node CREATED="1612530297000" ID="ID_786276329" MODIFIED="1612530314209" TEXT="die minimal_width|heigt wird nur f&#xfc;r einen Konsistenzcheck verwendet">
-<node CREATED="1612530584619" ID="ID_51694809" MODIFIED="1612530601140" TEXT="in der weiteren Verarbeitung steht an der Stelle eine Variable &quot;dummy&quot;"/>
-</node>
-<node CREATED="1612530343387" ID="ID_750045618" MODIFIED="1612530358270" TEXT="jedoch die natural_width|height wird weiterverarbeitet"/>
-<node CREATED="1612530419105" ID="ID_1290168160" MODIFIED="1612530523191" TEXT="und zwar &#xfc;ber die Indirektion">
-<node CREATED="1612530440941" ID="ID_894448937" MODIFIED="1612530446521" TEXT="widget-&gt;adjust_size_allocation"/>
-<node CREATED="1612530498191" ID="ID_117553121" MODIFIED="1612530503860" TEXT="gtk_widget_real_adjust_size_allocation()"/>
-<node CREATED="1612530640491" ID="ID_1645471050" MODIFIED="1612530666958" TEXT="ruft auf (entsprechend Orientierung)">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      also entweder in horizontaler, oder in vertikaler Richtung
-    </p>
-  </body>
-</html></richcontent>
-<node CREATED="1612530653137" ID="ID_1843450417" MODIFIED="1612530654181" TEXT="adjust_for_margin"/>
-<node CREATED="1612530676214" ID="ID_277814433" MODIFIED="1612530677407" TEXT="adjust_for_align"/>
-</node>
-</node>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612613065268" ID="ID_700841626" LINK="https://stackoverflow.com/q/66076682/444796" MODIFIED="1612613080947" TEXT="Frage auf Stackoverflow gestellt">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612613065268" FOLDED="true" ID="ID_700841626" LINK="https://stackoverflow.com/q/66076682/444796" MODIFIED="1663962502206" TEXT="Frage auf Stackoverflow gestellt">
 <icon BUILTIN="hourglass"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1663957087480" ID="ID_9335539" MODIFIED="1663957260417" TEXT="Frage wurde automatisch gel&#xf6;scht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p http-equiv="content-type" content="text/html; charset=utf-8">
+      <strong>If the question is more than <code>365</code>&#160;days old, and ...</strong>
+    </p>
+    <ul>
+      <li>
+        has a score of 0 or less, <strong>or</strong>&#160;a score of 1 and a deleted owner
+      </li>
+      <li>
+        has no answers
+      </li>
+      <li>
+        is not locked
+      </li>
+      <li>
+        has view count &lt;= the age of the question in days times 1.5
+      </li>
+      <li>
+        has 1 or 0 comments
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<node CREATED="1663957105414" ID="ID_1623688955" MODIFIED="1663957110606" TEXT="nur 55 Views"/>
+<node CREATED="1663957111175" ID="ID_1833399738" MODIFIED="1663957115320" TEXT="kein Upvote"/>
+<node CREATED="1663957116078" ID="ID_713646207" MODIFIED="1663957119176" TEXT="kein Kommentar"/>
+<node CREATED="1663957119988" ID="ID_1332345095" MODIFIED="1663957122487" TEXT="keine Antwort"/>
+</node>
+<node CREATED="1663957303187" ID="ID_697240020" MODIFIED="1663957310774" TEXT="ist definitiv keine B&#xf6;sartigkeit"/>
+<node CREATED="1663957264448" ID="ID_642110272" MODIFIED="1663962465341" TEXT="Merke: um &quot;m&#xfc;hsame&quot; Fragen mu&#xdf; man sich k&#xfc;mmern">
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1612619390361" ID="ID_571017696" MODIFIED="1612619500409" TEXT="n&#xe4;chster Ansatz: get_preferred_width_vfunc">
+</node>
+<node COLOR="#338800" CREATED="1612619390361" ID="ID_571017696" MODIFIED="1663955991363" TEXT="n&#xe4;chster Ansatz: get_preferred_width_vfunc">
+<arrowlink COLOR="#77afb6" DESTINATION="ID_321040886" ENDARROW="Default" ENDINCLINATION="-3752;338;" ID="Arrow_ID_765236235" STARTARROW="None" STARTINCLINATION="-3454;-1310;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1612619418068" ID="ID_506962706" MODIFIED="1612619499778" TEXT="auf dem Clip-Widget selber &#xfc;berschrieben"/>
 <node CREATED="1612619434154" ID="ID_1820519135" MODIFIED="1612619499778" TEXT="ignoriert das Kind und liefert den nominellen Wert zur&#xfc;ck"/>
 <node CREATED="1612619448816" ID="ID_616104406" MODIFIED="1612620546458" TEXT="funktioniert, aber es gibt eine Menge von Warnungen">
 <linktarget COLOR="#67384d" DESTINATION="ID_616104406" ENDARROW="Default" ENDINCLINATION="-856;39;" ID="Arrow_ID_349418044" SOURCE="ID_548348096" STARTARROW="None" STARTINCLINATION="241;19;"/>
 <icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1663955680592" HGAP="19" ID="ID_1517213874" MODIFIED="1663955701843" TEXT="trotzdem: das ist vermutlich der einzige gangbare Weg" VSHIFT="5">
+<icon BUILTIN="yes"/>
+<node CREATED="1663955710647" ID="ID_1436931569" MODIFIED="1663955749454">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil dies die einzige Info ist,
+    </p>
+    <p>
+      welche direkt vom Widget abgefragt wird,
+    </p>
+    <p>
+      im Zuge der Layout-Berechnung
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 </node>
@@ -57599,6 +57556,436 @@
 </node>
 </node>
 </node>
+<node CREATED="1663946250024" ID="ID_1142643633" MODIFIED="1663946255308" TEXT="Layout management">
+<node CREATED="1663946256977" ID="ID_1464608958" MODIFIED="1663946261875" TEXT="Thema: Size-Handling">
+<node COLOR="#435e98" CREATED="1612527499386" HGAP="34" ID="ID_615948747" MODIFIED="1663946547267" TEXT="Untersuchung: size_request &#x2014; 2/21 f&#xfc;r Clip-Display" VSHIFT="-49">
+<linktarget COLOR="#4b67b0" DESTINATION="ID_615948747" ENDARROW="Default" ENDINCLINATION="-1100;0;" ID="Arrow_ID_1297405131" SOURCE="ID_1143769023" STARTARROW="None" STARTINCLINATION="-2000;141;"/>
+<linktarget COLOR="#364ec7" DESTINATION="ID_615948747" ENDARROW="Default" ENDINCLINATION="-1440;0;" ID="Arrow_ID_866144981" SOURCE="ID_643882250" STARTARROW="None" STARTINCLINATION="-1942;189;"/>
+<icon BUILTIN="info"/>
+<node CREATED="1612530135923" ID="ID_597723725" MODIFIED="1612530155607" TEXT="gtkwidget.c Zeile 5960ff">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1612532127121" ID="ID_1698900734" MODIFIED="1612532140107" TEXT="gtk_widget_set_size_request">
+<node CREATED="1663948672795" ID="ID_1935344830" MODIFIED="1663948681710" TEXT=" gtkwidget.c 11186"/>
+<node CREATED="1663949014421" ID="ID_761292468" MODIFIED="1663949024301" TEXT="definiert die Mindes-Anforderung dieses Widgets"/>
+<node CREATED="1663949035261" ID="ID_1775424216" MODIFIED="1663949054174" TEXT="kann undefiniert sein (-1) &#x27f9; dann natural request"/>
+<node CREATED="1612532223794" ID="ID_1417902323" MODIFIED="1612532224951" TEXT="gtk_widget_set_usize_internal">
+<node CREATED="1612532273671" ID="ID_1466904431" MODIFIED="1612532285991" TEXT="&#xfc;bernimmt die Werte in den internen PImpl"/>
+<node CREATED="1612532301521" ID="ID_1985717542" MODIFIED="1663954418865">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      setzt bei Bedarf ein <b>queue_resize</b>&#160;ab
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1663948849724" ID="ID_592500885" MODIFIED="1663948855049" TEXT="wenn widget sichtbar ist"/>
+<node CREATED="1663948855574" ID="ID_1581313527" MODIFIED="1663948882381" TEXT="und H&#xf6;he oder Breite wirklich ge&#xe4;ndert sind"/>
+</node>
+<node CREATED="1663954499071" ID="ID_1959081786" MODIFIED="1663955501010">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>danach</u>: priv-&gt;resize_needed = TRUE
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#852376" DESTINATION="ID_563938836" ENDARROW="Default" ENDINCLINATION="18;-93;" ID="Arrow_ID_1194665328" STARTARROW="None" STARTINCLINATION="-211;17;"/>
+</node>
+</node>
+<node CREATED="1612532323107" ID="ID_194122765" MODIFIED="1612532337848" TEXT="d.h. danach sind priv-&gt;height bzw priv-&gt;width gesetzt"/>
+<node CREATED="1663949727304" ID="ID_1165234670" MODIFIED="1663949735266" TEXT="setzt gtk_widget_set_alloc_needed">
+<node CREATED="1663949745454" ID="ID_313723300" MODIFIED="1663951388123" TEXT="Flag priv-&gt;alloc_needed">
+<arrowlink COLOR="#b51c69" DESTINATION="ID_1132981577" ENDARROW="Default" ENDINCLINATION="34;-19;" ID="Arrow_ID_684196469" STARTARROW="None" STARTINCLINATION="-49;6;"/>
+</node>
+</node>
+</node>
+<node CREATED="1663954860585" ID="ID_1293292924" MODIFIED="1663954864003" TEXT="resize_needed">
+<node CREATED="1663954865611" ID="ID_1181046845" MODIFIED="1663954871465" TEXT="interne Flag im widget"/>
+<node CREATED="1663954879636" ID="ID_1910791425" MODIFIED="1663954884163" TEXT="Verwendungen">
+<node CREATED="1663954901013" MODIFIED="1663954901013" TEXT="gtk_widget_needs_allocate"/>
+<node CREATED="1663954909806" ID="ID_1374760334" MODIFIED="1663954909806" TEXT="gtk_widget_ensure_resize">
+<node CREATED="1663954912759" ID="ID_600146300" MODIFIED="1663954920356" TEXT="implementiert durch L&#xf6;schen eines Cache*"/>
+<node CREATED="1663954925510" ID="ID_1181014721" MODIFIED="1663954926481" TEXT="_gtk_size_request_cache_clear"/>
+<node CREATED="1663954927597" ID="ID_871436829" MODIFIED="1663954950237" TEXT="Vermutung: dort wird gespeichert, was nicht resized werden mu&#xdf;">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1663954959625" ID="ID_758176211" MODIFIED="1663954960741" TEXT="gtk_widget_get_resize_needed"/>
+</node>
+</node>
+<node CREATED="1612535679525" HGAP="30" ID="ID_563938836" MODIFIED="1663955495496" VSHIFT="26">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      alle F&#228;den laufen zusammen bei....
+    </p>
+    <p>
+      <b>gtk_widget_size_allocate_with_baseline</b>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#4c96df" DESTINATION="ID_619170334" ENDARROW="Default" ENDINCLINATION="22;-288;" ID="Arrow_ID_1241133759" STARTARROW="None" STARTINCLINATION="-30;150;"/>
+<linktarget COLOR="#852376" DESTINATION="ID_563938836" ENDARROW="Default" ENDINCLINATION="18;-93;" ID="Arrow_ID_1194665328" SOURCE="ID_1959081786" STARTARROW="None" STARTINCLINATION="-211;17;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1663955121019" ID="ID_1249298775" MODIFIED="1663955138898" TEXT="wird direkt anscheinend nur von Init aus aktiviert"/>
+<node CREATED="1663955139409" ID="ID_857432800" MODIFIED="1663955255321" TEXT="aber die Call-Graphen sind schwer durchschaubar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...da Funktionen irgendwo dann an Funktionspointer zugewiesen werden f&#252;r &quot;virtuelle Funktionen&quot;
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1663955335710" ID="ID_1881953589" MODIFIED="1663955347072" TEXT="Einstieg: gtk_widget_ensure_allocate">
+<node CREATED="1663955359715" ID="ID_627182614" MODIFIED="1663955359715" TEXT="gtk_container_real_check_resize"/>
+<node CREATED="1663955369802" ID="ID_929212584" MODIFIED="1663955415140" TEXT="das ist die  class-&gt;check_resize   VFunk">
+<arrowlink COLOR="#627791" DESTINATION="ID_1244279782" ENDARROW="Default" ENDINCLINATION="226;-55;" ID="Arrow_ID_1806488152" STARTARROW="None" STARTINCLINATION="400;28;"/>
+</node>
+</node>
+</node>
+<node CREATED="1612534268245" ID="ID_1296614142" MODIFIED="1663947680137" TEXT="gtk_widget_ensure_allocate">
+<icon BUILTIN="back"/>
+<node CREATED="1612534275444" ID="ID_1132981577" MODIFIED="1663951388124" TEXT="pr&#xfc;ft Flag ob Allokation notwendig ist">
+<linktarget COLOR="#b51c69" DESTINATION="ID_1132981577" ENDARROW="Default" ENDINCLINATION="34;-19;" ID="Arrow_ID_684196469" SOURCE="ID_313723300" STARTARROW="None" STARTINCLINATION="-49;6;"/>
+<node CREATED="1612534410570" ID="ID_620587901" MODIFIED="1612534423818" TEXT="Anscheined geht die initiale Allokation &#xfc;ber einen anderen Weg">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1612534429503" ID="ID_567668302" MODIFIED="1612534445049" TEXT="hier wird vorausgesezt, da&#xdf; bereits eine valide Allokation besteht"/>
+</node>
+<node CREATED="1663949865622" ID="ID_758836772" MODIFIED="1663949872083" TEXT="aufgerufen von...">
+<node CREATED="1663949997924" ID="ID_1496580283" MODIFIED="1663950003095" TEXT="nach Container-Init"/>
+<node CREATED="1663950003563" ID="ID_59538652" MODIFIED="1663950006646" TEXT="rekursiv von ">
+<node CREATED="1663950018185" ID="ID_238633492" MODIFIED="1663950018877" TEXT="gtk_widget_size_allocate_with_baseline"/>
+<node CREATED="1663950027784" ID="ID_1937200960" MODIFIED="1663950030291" TEXT="f&#xfc;r Kinder"/>
+</node>
+</node>
+<node CREATED="1612534325037" ID="ID_947651551" MODIFIED="1612534327833" TEXT="ruft auf">
+<node CREATED="1612534329157" ID="ID_682604518" MODIFIED="1612534330137" TEXT="gtk_widget_get_allocated_size"/>
+<node CREATED="1612534338443" ID="ID_585162600" MODIFIED="1612534339967" TEXT="gtk_widget_size_allocate_with_baseline"/>
+</node>
+<node CREATED="1612534361857" ID="ID_1011780997" MODIFIED="1612534383361" TEXT="Container: ruft rekursiv auf jedem Kind gtk_widget_ensure_allocate"/>
+<node CREATED="1663953791941" HGAP="65" ID="ID_1244279782" MODIFIED="1663955453989" TEXT="f&#xfc;hrt weiter zu check_resize" VSHIFT="43">
+<linktarget COLOR="#627791" DESTINATION="ID_1244279782" ENDARROW="Default" ENDINCLINATION="226;-55;" ID="Arrow_ID_1806488152" SOURCE="ID_929212584" STARTARROW="None" STARTINCLINATION="400;28;"/>
+<node CREATED="1663953805363" ID="ID_1587549150" MODIFIED="1663953812528" TEXT="wieder eine virtuelle Funktion"/>
+<node CREATED="1663953813403" ID="ID_656209552" MODIFIED="1663953825583" TEXT="wird offensichtlich von der Initialisierung aus aufgerufen"/>
+<node CREATED="1663953843699" ID="ID_1950479692" MODIFIED="1663953845946" TEXT="gtk_window_check_resize">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1663953826319" ID="ID_1109844083" MODIFIED="1663953841300" TEXT="weitere Aufrufe verlieren sich im Nebel">
+<icon BUILTIN="smiley-angry"/>
+</node>
+</node>
+</node>
+<node CREATED="1663951703391" ID="ID_427278328" MODIFIED="1663951706793" TEXT="widget_class-&gt;size_allocate">
+<icon BUILTIN="back"/>
+<node CREATED="1663951707842" ID="ID_315178651" MODIFIED="1663951753639" TEXT="virtuelle Funktion">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wird im class-init mit der jeweiligen konkreten Implementierung belegt, z.b. gtk_button_size_allocate
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1663954200285" ID="ID_398055899" MODIFIED="1663954210495" TEXT="au&#xdf;erdem kann ein Handler / Signal angeschlossen sein">
+<node CREATED="1663954234237" ID="ID_1380094030" MODIFIED="1663954234909" TEXT="widget_signals[SIZE_ALLOCATE]"/>
+</node>
+<node CREATED="1663954295573" ID="ID_1498770016" MODIFIED="1663954312087" TEXT="aufgerufen von gtk_widget_size_allocate_with_baseline">
+<arrowlink DESTINATION="ID_1762849787" ENDARROW="Default" ENDINCLINATION="38;-96;" ID="Arrow_ID_1571144985" STARTARROW="None" STARTINCLINATION="476;0;"/>
+<node CREATED="1663954335100" HGAP="39" ID="ID_1824384222" MODIFIED="1663954342338" TEXT="letztlich von init" VSHIFT="18"/>
+</node>
+</node>
+<node CREATED="1612535382254" ID="ID_1555274499" MODIFIED="1612535383977" TEXT="gtk_button_size_allocate">
+<node CREATED="1612535679525" HGAP="30" ID="ID_462243081" MODIFIED="1663948420227" TEXT="ruft f&#xfc;r sich selber gtk_widget_size_allocate" VSHIFT="26">
+<arrowlink COLOR="#4c96df" DESTINATION="ID_619170334" ENDARROW="Default" ENDINCLINATION="22;-288;" ID="Arrow_ID_89255297" STARTARROW="None" STARTINCLINATION="-30;150;"/>
+</node>
+<node CREATED="1612535398051" ID="ID_565262993" MODIFIED="1612535410704" TEXT="dann: gtk_css_gadget_allocate">
+<node CREATED="1612535412121" ID="ID_950467979" MODIFIED="1612535417956" TEXT="f&#xfc;r den Inhalt des Buttons"/>
+<node CREATED="1612535418784" ID="ID_1076896202" MODIFIED="1612535429635" TEXT="ensprechend um Margin + Padding reduziert"/>
+<node CREATED="1612535549422" ID="ID_1526326867" MODIFIED="1612535563481" TEXT="gadget-&gt;allocate   (virtuelle Funktion)">
+<node CREATED="1612535615766" ID="ID_261273731" MODIFIED="1612535656704" TEXT="z.B. gtk_box_gadget_allocate">
+<arrowlink DESTINATION="ID_526990189" ENDARROW="Default" ENDINCLINATION="24;0;" ID="Arrow_ID_1005009779" STARTARROW="None" STARTINCLINATION="24;0;"/>
+</node>
+<node CREATED="1612535648889" ID="ID_526990189" MODIFIED="1612535656704" TEXT="gtk_box_gadget_allocate_child">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_526990189" ENDARROW="Default" ENDINCLINATION="24;0;" ID="Arrow_ID_1005009779" SOURCE="ID_261273731" STARTARROW="None" STARTINCLINATION="24;0;"/>
+<node CREATED="1612535679525" HGAP="30" ID="ID_1762849787" MODIFIED="1663956468314" TEXT="ruft dann gtk_widget_size_allocate_with_baseline" VSHIFT="26">
+<arrowlink COLOR="#4c96df" DESTINATION="ID_619170334" ENDARROW="Default" ENDINCLINATION="22;-288;" ID="Arrow_ID_1708313707" STARTARROW="None" STARTINCLINATION="-77;137;"/>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1762849787" ENDARROW="Default" ENDINCLINATION="38;-96;" ID="Arrow_ID_1571144985" SOURCE="ID_1498770016" STARTARROW="None" STARTINCLINATION="476;0;"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1612527537150" ID="ID_619170334" MODIFIED="1663967533656" TEXT="gtk_widget_size_allocate">
+<arrowlink COLOR="#5c5a78" DESTINATION="ID_1103556230" ENDARROW="Default" ENDINCLINATION="-618;-30;" ID="Arrow_ID_1785324866" STARTARROW="Default" STARTINCLINATION="-4;247;"/>
+<linktarget COLOR="#4c96df" DESTINATION="ID_619170334" ENDARROW="Default" ENDINCLINATION="22;-288;" ID="Arrow_ID_1708313707" SOURCE="ID_1762849787" STARTARROW="None" STARTINCLINATION="-77;137;"/>
+<linktarget COLOR="#4c96df" DESTINATION="ID_619170334" ENDARROW="Default" ENDINCLINATION="22;-288;" ID="Arrow_ID_89255297" SOURCE="ID_462243081" STARTARROW="None" STARTINCLINATION="-30;150;"/>
+<linktarget COLOR="#4c96df" DESTINATION="ID_619170334" ENDARROW="Default" ENDINCLINATION="22;-288;" ID="Arrow_ID_1241133759" SOURCE="ID_563938836" STARTARROW="None" STARTINCLINATION="-30;150;"/>
+<node CREATED="1612528130053" ID="ID_1806340634" MODIFIED="1612528177893" TEXT="macht nur etwas f&#xfc;r &quot;toplevel&quot;-Widgets">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist eine Flag in der privaten Widget-Struktur. Keine Ahnung was das bedeutet.<br />Und &#252;brigens: sichtbar mu&#223; das Widget auch noch sein...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1612529820222" HGAP="22" ID="ID_1943944289" MODIFIED="1663956475522" TEXT="unterscheidet dann" VSHIFT="12">
+<node CREATED="1663956186778" HGAP="117" ID="ID_834898748" MODIFIED="1663956450989" TEXT="gtk_widget_get_request_mode()" VSHIFT="37">
+<node CREATED="1663956207368" ID="ID_18553128" MODIFIED="1663956217421" TEXT="gtksizerequest.c 450"/>
+<node CREATED="1663956419563" ID="ID_1026472626" MODIFIED="1663956420751" TEXT="GTK_WIDGET_GET_CLASS (widget)-&gt;get_request_mode (widget)"/>
+<node CREATED="1663956425698" ID="ID_225463858" MODIFIED="1663956441088" TEXT="Doku">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#160;* Gets whether the widget prefers a height-for-width layout
+    </p>
+    <p>
+      &#160;* or a width-for-height layout.
+    </p>
+    <p>
+      &#160;*
+    </p>
+    <p>
+      &#160;* #GtkBin widgets generally propagate the preference of
+    </p>
+    <p>
+      &#160;* their child, container widgets need to request something either in
+    </p>
+    <p>
+      &#160;* context of their children or in context of their allocation
+    </p>
+    <p>
+      &#160;* capabilities.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node CREATED="1612529852915" HGAP="22" ID="ID_1335328932" MODIFIED="1663956457164" TEXT="GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH" VSHIFT="-25">
+<node CREATED="1612531874357" ID="ID_321040886" MODIFIED="1663955991363" TEXT="gtk_widget_get_preferred_width">
+<linktarget COLOR="#77afb6" DESTINATION="ID_321040886" ENDARROW="Default" ENDINCLINATION="-3752;338;" ID="Arrow_ID_765236235" SOURCE="ID_571017696" STARTARROW="None" STARTINCLINATION="-3454;-1310;"/>
+<node CREATED="1612613898889" ID="ID_1906328896" MODIFIED="1612613898889" TEXT="gtk_widget_real_get_width"/>
+<node CREATED="1612614169294" ID="ID_1044574457" MODIFIED="1612614182044" TEXT="default-Impl (widget) liefert einfach 0"/>
+<node CREATED="1612614424711" ID="ID_876925671" MODIFIED="1612614453769" TEXT="Button: delegiert an gtk_css_gadget_get_preferred_size"/>
+</node>
+<node CREATED="1612531881837" ID="ID_503088638" MODIFIED="1612531883430" TEXT="gtk_widget_get_preferred_height_for_width">
+<node CREATED="1612613911103" ID="ID_1759726068" MODIFIED="1612613912600" TEXT="gtk_widget_real_get_height_for_width"/>
+<node CREATED="1612614183776" ID="ID_1283663519" MODIFIED="1612614233786" TEXT="default-Impl (widget) delegiert an get_preferred_heigt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      also stellt eigentlich grade nicht die versprochene Logik bereit
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1612614424711" ID="ID_407129358" MODIFIED="1612614528239" TEXT="Button: delegiert an gtk_css_gadget_get_preferred_size (ORIENTATION_VERTICAL und &quot;forSize&quot;)"/>
+</node>
+</node>
+<node CREATED="1612529854679" ID="ID_620839789" MODIFIED="1612529865489" TEXT="sonst == default">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1612531908423" ID="ID_981765041" MODIFIED="1612531909730" TEXT="gtk_widget_get_preferred_height"/>
+<node CREATED="1612531918893" ID="ID_1720836756" MODIFIED="1612531919753" TEXT="gtk_widget_get_preferred_width_for_height"/>
+</node>
+<node CREATED="1612529867091" ID="ID_1467925874" MODIFIED="1612531897569" TEXT="d.h. es gibt zwei, nicht drei Alternativen">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1612529887521" ID="ID_761185703" MODIFIED="1612529894551" TEXT="danach liegt vor">
+<node CREATED="1612529924676" ID="ID_677442017" MODIFIED="1612529929887" TEXT="min_width"/>
+<node CREATED="1612529930763" ID="ID_540378683" MODIFIED="1612529935382" TEXT="natural_width"/>
+<node CREATED="1612529935882" ID="ID_574785014" MODIFIED="1612529938438" TEXT="min_height"/>
+<node CREATED="1612529939218" ID="ID_226125510" MODIFIED="1612529942181" TEXT="natural_heigt"/>
+</node>
+<node CREATED="1612529944548" ID="ID_1276575353" MODIFIED="1612529951405" TEXT="nun wird justiert">
+<node CREATED="1612530023488" ID="ID_716347716" MODIFIED="1612530028518" TEXT="(widget)-&gt;adjust_size_allocation">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1612530030341" ID="ID_1722501910" MODIFIED="1612530038256" TEXT="stets zweimal aufgerufen">
+<node CREATED="1612529954784" ID="ID_1163322850" MODIFIED="1612529961136" TEXT="zuerst in horizontaler Dimension"/>
+<node CREATED="1612529961751" ID="ID_1659658095" MODIFIED="1612529966442" TEXT="dann in vertikaler Dimension"/>
+</node>
+<node CREATED="1612530387661" ID="ID_1677551972" MODIFIED="1612530414969">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      danach noch die <i>adjust_baseline_allocation</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1612530059555" ID="ID_1426144413" MODIFIED="1612534894781" TEXT="Signal: SIZE_ALLOCATE">
+<arrowlink COLOR="#3156c0" DESTINATION="ID_800205161" ENDARROW="Default" ENDINCLINATION="-5;-110;" ID="Arrow_ID_1513246240" STARTARROW="None" STARTINCLINATION="-67;9;"/>
+</node>
+<node CREATED="1612530091126" ID="ID_1651628600" MODIFIED="1612530097016" TEXT="ggfs ein Redraw ausgel&#xf6;st"/>
+</node>
+<node CREATED="1612534851565" ID="ID_800205161" MODIFIED="1612534894781" TEXT="widget-&gt;size_allocate">
+<linktarget COLOR="#3156c0" DESTINATION="ID_800205161" ENDARROW="Default" ENDINCLINATION="-5;-110;" ID="Arrow_ID_1513246240" SOURCE="ID_1426144413" STARTARROW="None" STARTINCLINATION="-67;9;"/>
+<node CREATED="1612534944266" ID="ID_1372642184" MODIFIED="1612534985979" TEXT="gtk_widget_real_size_allocate">
+<arrowlink COLOR="#6f6096" DESTINATION="ID_384051197" ENDARROW="Default" ENDINCLINATION="189;0;" ID="Arrow_ID_31086336" STARTARROW="None" STARTINCLINATION="161;15;"/>
+<node CREATED="1612535006062" ID="ID_1456025781" MODIFIED="1612535014459" TEXT="pa&#xdf;t dann auch noch das GDK-Window an"/>
+</node>
+</node>
+<node CREATED="1612534965805" ID="ID_384051197" MODIFIED="1612534981305" TEXT="gtk_widget_set_allocation">
+<linktarget COLOR="#6f6096" DESTINATION="ID_384051197" ENDARROW="Default" ENDINCLINATION="189;0;" ID="Arrow_ID_31086336" SOURCE="ID_1372642184" STARTARROW="None" STARTINCLINATION="161;15;"/>
+<node CREATED="1612535196135" HGAP="24" ID="ID_293434969" MODIFIED="1612535244957" TEXT="weist einfach die Allokation zu" VSHIFT="12"/>
+<node CREATED="1612535204550" ID="ID_1965689659" MODIFIED="1612535224055" TEXT="setzt au&#xdf;erdem auch noch die ClipArea auf genau diese Allokation"/>
+</node>
+<node CREATED="1612530262998" ID="ID_300054220" MODIFIED="1612530266178" TEXT="Einsichten">
+<node CREATED="1612530267006" ID="ID_1055756887" MODIFIED="1612530295140" TEXT="man hat grunds&#xe4;tzlich nur die Wahl &quot;height for width&quot; oder anders herum?"/>
+<node CREATED="1612530297000" ID="ID_786276329" MODIFIED="1612530314209" TEXT="die minimal_width|heigt wird nur f&#xfc;r einen Konsistenzcheck verwendet">
+<node CREATED="1612530584619" ID="ID_51694809" MODIFIED="1612530601140" TEXT="in der weiteren Verarbeitung steht an der Stelle eine Variable &quot;dummy&quot;"/>
+</node>
+<node CREATED="1612530343387" ID="ID_750045618" MODIFIED="1612530358270" TEXT="jedoch die natural_width|height wird weiterverarbeitet"/>
+<node CREATED="1612530419105" ID="ID_1290168160" MODIFIED="1612530523191" TEXT="und zwar &#xfc;ber die Indirektion">
+<node CREATED="1612530440941" ID="ID_894448937" MODIFIED="1612530446521" TEXT="widget-&gt;adjust_size_allocation"/>
+<node CREATED="1612530498191" ID="ID_117553121" MODIFIED="1612530503860" TEXT="gtk_widget_real_adjust_size_allocation()"/>
+<node CREATED="1612530640491" ID="ID_1645471050" MODIFIED="1612530666958" TEXT="ruft auf (entsprechend Orientierung)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      also entweder in horizontaler, oder in vertikaler Richtung
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1612530653137" ID="ID_1843450417" MODIFIED="1612530654181" TEXT="adjust_for_margin"/>
+<node CREATED="1612530676214" ID="ID_277814433" MODIFIED="1612530677407" TEXT="adjust_for_align"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1663975843179" ID="ID_1935747548" MODIFIED="1663976133002" TEXT="was ist ein CSS Gadget?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      /*
+    </p>
+    <p>
+      &#160;* Gadgets are 'next-generation widgets' - they combine a CSS node
+    </p>
+    <p>
+      &#160;* for style matching with geometry management and drawing. Each gadget
+    </p>
+    <p>
+      &#160;* corresponds to 'CSS box'. Compared to traditional widgets, they are more
+    </p>
+    <p>
+      &#160;* like building blocks - a typical GTK+ widget will have multiple gadgets,
+    </p>
+    <p>
+      &#160;* for example a check button has its main gadget, and sub-gadgets for
+    </p>
+    <p>
+      &#160;* the checkmark and the text.
+    </p>
+    <p>
+      &#160;*
+    </p>
+    <p>
+      &#160;* Gadgets are not themselves hierarchically organized, but it is common
+    </p>
+    <p>
+      &#160;* to have a 'main' gadget, which gets used by the widgets size_allocate,
+    </p>
+    <p>
+      &#160;* get_preferred_width, etc. and draw callbacks, and which in turn calls out
+    </p>
+    <p>
+      &#160;* to the sub-gadgets. This call tree might extend further if there are
+    </p>
+    <p>
+      &#160;* sub-sub-gadgets that a allocated relative to sub-gadgets. In typical
+    </p>
+    <p>
+      &#160;* situations, the callback chain will reflect the tree structure of the
+    </p>
+    <p>
+      &#160;* gadgets CSS nodes.
+    </p>
+    <p>
+      &#160;*
+    </p>
+    <p>
+      &#160;* Geometry management - Gadgets implement much of the CSS box model for you:
+    </p>
+    <p>
+      &#160;* margins, border, padding, shadows, min-width/height are all applied automatically.
+    </p>
+    <p>
+      &#160;*
+    </p>
+    <p>
+      &#160;* Drawing - Gadgets implement standardized CSS drawing for you: background,
+    </p>
+    <p>
+      &#160;* shadows and border are drawn before any custom drawing, and the focus outline
+    </p>
+    <p>
+      &#160;* is (optionally) drawn afterwards.
+    </p>
+    <p>
+      &#160;*
+    </p>
+    <p>
+      &#160;* Invalidation - Gadgets sit 'between' widgets and CSS nodes, and connect
+    </p>
+    <p>
+      &#160;* to the nodes ::style-changed signal and trigger appropriate invalidations
+    </p>
+    <p>
+      &#160;* on the widget side.
+    </p>
+    <p>
+      &#160;*/
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#56719e" DESTINATION="ID_1935747548" ENDARROW="Default" ENDINCLINATION="-1149;116;" ID="Arrow_ID_875944733" SOURCE="ID_1277756929" STARTARROW="None" STARTINCLINATION="-702;39;"/>
+<icon BUILTIN="info"/>
+</node>
+</node>
 <node CREATED="1504215708147" ID="ID_975007807" MODIFIED="1557498707238" TEXT="Widget">
 <node CREATED="1535630469053" ID="ID_608304313" MODIFIED="1557498707238" TEXT="konkret...">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -57929,6 +58316,7 @@
 <node CREATED="1540646156591" ID="ID_1103556230" MODIFIED="1560693186079" TEXT="Gtk::Widget::size_allocate(Allocation const&amp;) ">
 <linktarget COLOR="#59699c" DESTINATION="ID_1103556230" ENDARROW="Default" ENDINCLINATION="-876;0;" ID="Arrow_ID_72712594" SOURCE="ID_841316619" STARTARROW="None" STARTINCLINATION="-1659;0;"/>
 <linktarget COLOR="#7573ab" DESTINATION="ID_1103556230" ENDARROW="Default" ENDINCLINATION="763;-59;" ID="Arrow_ID_1309280117" SOURCE="ID_1615499339" STARTARROW="None" STARTINCLINATION="537;121;"/>
+<linktarget COLOR="#5c5a78" DESTINATION="ID_1103556230" ENDARROW="Default" ENDINCLINATION="-618;-30;" ID="Arrow_ID_1785324866" SOURCE="ID_619170334" STARTARROW="Default" STARTINCLINATION="-4;247;"/>
 <node CREATED="1540646197649" ID="ID_1973894224" MODIFIED="1557498707239" TEXT="kann ein Container auf einem Kind-Widget aufrufen"/>
 <node CREATED="1540646207146" ID="ID_781482261" MODIFIED="1557498707239" TEXT="Folge: Framework adjustiert die Allocation (f&#xfc;r Margins)"/>
 <node CREATED="1540646220099" ID="ID_219594395" MODIFIED="1557498707239" TEXT="und ruft die virtuelle Funktion adjust_size_allocation"/>
@@ -57985,7 +58373,7 @@
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1540647547755" ID="ID_577859258" MODIFIED="1557498707239" TEXT="die Clip-Region ist auf den tats&#xe4;chlich zu zeichnenden Bereich gesetzt">
-<linktarget COLOR="#5e86ca" DESTINATION="ID_577859258" ENDARROW="Default" ENDINCLINATION="-1325;0;" ID="Arrow_ID_1966515866" SOURCE="ID_1534655843" STARTARROW="None" STARTINCLINATION="-1797;81;"/>
+<linktarget COLOR="#5e86ca" DESTINATION="ID_577859258" ENDARROW="Default" ENDINCLINATION="-1494;46;" ID="Arrow_ID_1966515866" SOURCE="ID_1534655843" STARTARROW="None" STARTINCLINATION="-1797;81;"/>
 </node>
 <node CREATED="1554476229422" ID="ID_1814758951" MODIFIED="1557498707239" TEXT="dirty-region des Widget">
 <node CREATED="1554476290649" ID="ID_1743268737" MODIFIED="1557498707239" TEXT="der Bereich welcher tats&#xe4;chlich neu gezeichnet werden mu&#xdf;">
@@ -58008,9 +58396,179 @@
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1612468930840" ID="ID_340039660" MODIFIED="1612468940602" TEXT="das ist von GTK nicht vorgesehen"/>
 <node CREATED="1612468941622" ID="ID_1584501445" MODIFIED="1612468951097" TEXT="wegen Layout, Themes, Schriftarten"/>
-<node COLOR="#435e98" CREATED="1612620409921" ID="ID_1143769023" MODIFIED="1612620497457" TEXT="size handling in Framework">
-<arrowlink COLOR="#4b67b0" DESTINATION="ID_615948747" ENDARROW="Default" ENDINCLINATION="-1100;0;" ID="Arrow_ID_1297405131" STARTARROW="None" STARTINCLINATION="-1942;189;"/>
-<icon BUILTIN="info"/>
+<node COLOR="#435e98" CREATED="1612620409921" ID="ID_1143769023" MODIFIED="1663946886390" TEXT="explizite Gr&#xf6;&#xdf;e vs automatische Gr&#xf6;&#xdf;e">
+<arrowlink COLOR="#4b67b0" DESTINATION="ID_615948747" ENDARROW="Default" ENDINCLINATION="-1100;0;" ID="Arrow_ID_1297405131" STARTARROW="None" STARTINCLINATION="-2000;141;"/>
+<linktarget COLOR="#796ba9" DESTINATION="ID_1143769023" ENDARROW="Default" ENDINCLINATION="-733;-40;" ID="Arrow_ID_1215170372" SOURCE="ID_740164704" STARTARROW="None" STARTINCLINATION="-1892;158;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1663955547906" ID="ID_1016430790" MODIFIED="1663955571483" TEXT="Widget kann nur an zwei Stellen mitbestimmen">
+<node CREATED="1663955572854" ID="ID_1528456404" MODIFIED="1663955585704" TEXT="size_request == Minimalanforderung"/>
+<node CREATED="1663955586196" ID="ID_16918762" MODIFIED="1663955605462" TEXT="get_width_for_height | get_height_for_width"/>
+</node>
+<node CREATED="1663967697587" ID="ID_502729133" MODIFIED="1663967701287" TEXT="Platz-Zuteilung">
+<node CREATED="1663967702275" ID="ID_1441338062" MODIFIED="1663967710309" TEXT="macht normalerweise das Framework(GTK)"/>
+<node CREATED="1663967711002" ID="ID_1524127663" MODIFIED="1663967716503" TEXT="Container machen das f&#xfc;r ihre Kinder">
+<node CREATED="1663967756387" ID="ID_1440467863" MODIFIED="1663967792184" TEXT="Einstieg: Gtk::Widget::size_allocate | ggfs. incl &#xbb;Baseline&#xab;">
+<node CREATED="1663967838832" ID="ID_930797784" MODIFIED="1663967902777" TEXT="void gtk_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)">
+<font NAME="Monospaced" SIZE="12"/>
+</node>
+<node COLOR="#3f1d5e" CREATED="1663967838832" ID="ID_952771766" MODIFIED="1663968099720" TEXT="void gtk_widget_size_allocate_with_baseline (GtkWidget*, GtkAllocation*, baseline) ">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Hier steckt die Implementierung, und zwar die Kernimplementierung der Platzzuteilungs-Logik von GTK
+    </p>
+  </body>
+</html></richcontent>
+<font BOLD="true" NAME="Monospaced" SIZE="12"/>
+<icon BUILTIN="back"/>
+</node>
+</node>
+<node CREATED="1663968217230" ID="ID_189000213" MODIFIED="1663968243111" TEXT="das ermittelt Pr&#xe4;ferenz und width-for-height | vis versa">
+<node CREATED="1663973733068" ID="ID_419342062" MODIFIED="1663973735583" TEXT="delegiert an">
+<node CREATED="1663973741555" ID="ID_49363701" MODIFIED="1663973742215" TEXT="gtk_widget_compute_size_for_orientation">
+<node CREATED="1663973794195" ID="ID_639016320" MODIFIED="1663973821275" TEXT="for_size : Vorgabe oder -1 (=preferred)"/>
+</node>
+<node CREATED="1663974052296" ID="ID_1989206706" MODIFIED="1663974059035" TEXT="delegiert weiter...">
+<node CREATED="1663974060249" ID="ID_186068184" MODIFIED="1663974060249" TEXT="gtk_widget_query_size_for_orientation"/>
+<node CREATED="1663974135813" ID="ID_1305072943" MODIFIED="1663974144367" TEXT="dies ruft dann je nach orientation..."/>
+<node CREATED="1663974315044" ID="ID_137296585" MODIFIED="1663974409384" TEXT="Warnung: hier wird ein Cache verwendet">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1663974144931" ID="ID_566577800" MODIFIED="1663976168903" TEXT="widget_class-&gt;get_preferred_width | height">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_566577800" ENDARROW="Default" ENDINCLINATION="236;14;" ID="Arrow_ID_129364884" SOURCE="ID_1912357851" STARTARROW="None" STARTINCLINATION="224;0;"/>
+<node CREATED="1663975550843" ID="ID_650217219" MODIFIED="1663975618095" TEXT="gtk_widget_real_get_width">
+<node CREATED="1663975562545" ID="ID_1821813272" MODIFIED="1663975567220" TEXT="basis: setzt auf 0"/>
+</node>
+<node CREATED="1663975607443" HGAP="62" ID="ID_1509275843" MODIFIED="1663975616192" TEXT="gtk_button_get_preferred_width" VSHIFT="-18">
+<node CREATED="1663975632692" ID="ID_151194506" MODIFIED="1663975639133" TEXT="delegiert an den Content"/>
+<node CREATED="1663976074208" ID="ID_1192731327" MODIFIED="1663976171045" TEXT="gtk_css_gadget_get_preferred_size">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1192731327" ENDARROW="Default" ENDINCLINATION="-210;-13;" ID="Arrow_ID_1198291141" SOURCE="ID_774587702" STARTARROW="None" STARTINCLINATION="-209;-13;"/>
+</node>
+<node CREATED="1663975629109" ID="ID_1277756929" MODIFIED="1663976133002" TEXT="CSS Gadget als strukturierte Layout-Repr&#xe4;sentation">
+<arrowlink COLOR="#56719e" DESTINATION="ID_1935747548" ENDARROW="Default" ENDINCLINATION="-1149;116;" ID="Arrow_ID_875944733" STARTARROW="None" STARTINCLINATION="-702;39;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1663976709823" ID="ID_1269320643" MODIFIED="1663976752139">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">min_size = get_number (style, GTK_CSS_PROPERTY_MIN_WIDTH); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">min_for_size = get_number (style, GTK_CSS_PROPERTY_MIN_HEIGHT);&#160;</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="back"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1663976761113" HGAP="22" ID="ID_1693421261" MODIFIED="1663976876203" TEXT="&#x27f9; hier wird die CSS-Maschinerie verwendet" VSHIFT="-24">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      basierend auf der Widget-Struktur, welche in Widget-Paths &#252;bersetzt wurde
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1663975664139" HGAP="92" ID="ID_1592877551" MODIFIED="1663976850634" TEXT="gtk_frame_get_preferred_width" VSHIFT="-93">
+<node CREATED="1663975671490" ID="ID_774587702" MODIFIED="1663976171045" TEXT="macht das Gleiche">
+<arrowlink DESTINATION="ID_1192731327" ENDARROW="Default" ENDINCLINATION="-210;-13;" ID="Arrow_ID_1198291141" STARTARROW="None" STARTINCLINATION="-209;-13;"/>
+</node>
+</node>
+</node>
+<node CREATED="1663974411518" ID="ID_174035361" MODIFIED="1663974421271" TEXT="widget_class-&gt;get_preferred_width_for_height | vv"/>
+<node CREATED="1663974161185" ID="ID_92203435" MODIFIED="1663974166116" TEXT="C++-Impl">
+<node CREATED="1663974247357" ID="ID_848538209" MODIFIED="1663974553681" TEXT="get_preferred_width_vfunc_callback">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_848538209" ENDARROW="Default" ENDINCLINATION="-494;38;" ID="Arrow_ID_1696341233" SOURCE="ID_802152831" STARTARROW="None" STARTINCLINATION="516;0;"/>
+</node>
+<node CREATED="1663974480522" ID="ID_247416623" MODIFIED="1663974480522" TEXT="get_preferred_height_for_width_vfunc_callback"/>
+<node CREATED="1663974483852" ID="ID_1328435851" MODIFIED="1663974485496" TEXT="..."/>
+<node CREATED="1663975266562" ID="ID_193702026" MODIFIED="1663975273676" TEXT="derzeit nur wenig &#xfc;berschrieben">
+<node CREATED="1663975287575" ID="ID_1399216426" MODIFIED="1663975290066" TEXT="cellarea"/>
+<node CREATED="1663975290518" ID="ID_10312011" MODIFIED="1663975293146" TEXT="cellrenderer"/>
+</node>
+<node CREATED="1663975306932" ID="ID_591034887" MODIFIED="1663975310679" TEXT="default-Impl">
+<node CREATED="1663975347758" ID="ID_1211531094" MODIFIED="1663975348658" TEXT="obj-&gt;get_preferred_width_vfunc"/>
+<node CREATED="1663975459159" ID="ID_1719040764" MODIFIED="1663975464370" TEXT="default: forward to C"/>
+<node CREATED="1663975481644" ID="ID_1912357851" MODIFIED="1663976168903" TEXT="class-&gt;get_preferred_width()">
+<arrowlink DESTINATION="ID_566577800" ENDARROW="Default" ENDINCLINATION="236;14;" ID="Arrow_ID_129364884" STARTARROW="None" STARTINCLINATION="224;0;"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1663968248218" ID="ID_488172276" MODIFIED="1663968271389" TEXT="anschlie&#xdf;end: Setzen der definitiven Allokation">
+<node CREATED="1663968280678" ID="ID_1563364759" MODIFIED="1663973460119" TEXT="GTK_WIDGET_GET_CLASS (widget)-&gt;adjust_size_allocation (widget, ...">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1563364759" ENDARROW="Default" ENDINCLINATION="-180;327;" ID="Arrow_ID_1165457983" SOURCE="ID_1930369741" STARTARROW="None" STARTINCLINATION="95;0;"/>
+<node CREATED="1663969331505" ID="ID_860014929" MODIFIED="1663969332124" TEXT="GTK_ORIENTATION_HORIZONTAL"/>
+<node CREATED="1663969338016" ID="ID_1868599605" MODIFIED="1663969338876" TEXT="GTK_ORIENTATION_VERTICAL"/>
+</node>
+<node CREATED="1663969724108" ID="ID_67142013" MODIFIED="1663969726858" TEXT="..."/>
+<node CREATED="1663972196609" ID="ID_913451433" MODIFIED="1663972209869" TEXT="konkrete Impl darf Alokation (nur) verkleinern!"/>
+<node CREATED="1663969727523" ID="ID_550077604" MODIFIED="1663971827915" TEXT="danach WidgetClass(widget)-&gt;size_allocate  (VFunk)">
+<linktarget COLOR="#506199" DESTINATION="ID_550077604" ENDARROW="Default" ENDINCLINATION="-162;174;" ID="Arrow_ID_1680419356" SOURCE="ID_1979640179" STARTARROW="None" STARTINCLINATION="-159;129;"/>
+<node CREATED="1663969785664" ID="ID_1143121525" MODIFIED="1663969791918" TEXT="das ruft die konkrete Impl"/>
+<node CREATED="1663969803900" ID="ID_1949557883" MODIFIED="1663969806396" TEXT="z.B. gtk_button_size_allocate"/>
+<node CREATED="1663969820251" ID="ID_952077630" MODIFIED="1663969826890" TEXT="und das ruft schlie&#xdf;lich...">
+<node CREATED="1663969828135" ID="ID_1626874931" MODIFIED="1663969828135" TEXT="gtk_widget_set_allocation"/>
+<node CREATED="1663969842691" ID="ID_919978139" MODIFIED="1663969855134" TEXT="(speichert die konkrete Allokation)"/>
+</node>
+</node>
+<node CREATED="1663971550770" ID="ID_1511210757" MODIFIED="1663971557365" TEXT="C++ - Implementierung">
+<node CREATED="1663971558346" ID="ID_637074498" MODIFIED="1663971558346" TEXT="Widget_Class::size_allocate_callback"/>
+<node CREATED="1663971666578" ID="ID_1071539118" MODIFIED="1663971709675" TEXT="forward to derived">
+<node CREATED="1663971689747" ID="ID_499744986" MODIFIED="1663973438074" TEXT="Gtk::Widget::on_size_allocate(Allocation&amp;)">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_499744986" ENDARROW="Default" ENDINCLINATION="-267;18;" ID="Arrow_ID_1734773493" SOURCE="ID_864492298" STARTARROW="None" STARTINCLINATION="419;0;"/>
+</node>
+<node CREATED="1663972038503" ID="ID_1044601758" MODIFIED="1663972051960" TEXT="(anscheinend nirgends &#xfc;berschrieben)">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1663971747679" ID="ID_525494669" MODIFIED="1663971763793" TEXT="default-Impl delegiert via C-VFunk">
+<node CREATED="1663971794704" ID="ID_1979640179" MODIFIED="1663971833811" TEXT="base-&gt;size_allocate">
+<arrowlink COLOR="#506199" DESTINATION="ID_550077604" ENDARROW="Default" ENDINCLINATION="-162;174;" ID="Arrow_ID_1680419356" STARTARROW="None" STARTINCLINATION="-159;129;"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1663973268539" ID="ID_1503005110" MODIFIED="1663977346992" TEXT="m&#xf6;gliche Eingriffspunkte">
+<linktarget COLOR="#6b229a" DESTINATION="ID_1503005110" ENDARROW="Default" ENDINCLINATION="-1806;-166;" ID="Arrow_ID_1347071203" SOURCE="ID_1507590849" STARTARROW="None" STARTINCLINATION="-2004;582;"/>
+<node CREATED="1663973286144" ID="ID_933960506" MODIFIED="1663973296163" TEXT="size_request auf absolutes Minimum"/>
+<node CREATED="1663973298002" ID="ID_802152831" MODIFIED="1663974553681" TEXT="gtk_widget_get_preferred_width">
+<arrowlink DESTINATION="ID_848538209" ENDARROW="Default" ENDINCLINATION="-494;38;" ID="Arrow_ID_1696341233" STARTARROW="None" STARTINCLINATION="516;0;"/>
+</node>
+<node CREATED="1663973353379" ID="ID_309346877" MODIFIED="1663974513324" TEXT="gtk_widget_get_preferred_height_for_width"/>
+<node CREATED="1663973369308" ID="ID_1930369741" MODIFIED="1663974669350" TEXT="man k&#xf6;nnte die C-VFunk adjust_size_allocation &#xfc;berlagern">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Keine gute Idee: diese Funtktion wird verwendet, um die Dekoration zu entfernen, und Stil-Anpassungen zu machen; sie sollte daher besser als <i>pure function </i>betrachtet werden
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink DESTINATION="ID_1563364759" ENDARROW="Default" ENDINCLINATION="-180;327;" ID="Arrow_ID_1165457983" STARTARROW="None" STARTINCLINATION="95;0;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1663973396270" ID="ID_864492298" MODIFIED="1663973438074" TEXT="rein informativ: Widget::on_size_allocate()">
+<arrowlink DESTINATION="ID_499744986" ENDARROW="Default" ENDINCLINATION="-267;18;" ID="Arrow_ID_1734773493" STARTARROW="None" STARTINCLINATION="419;0;"/>
+</node>
+</node>
 </node>
 <node CREATED="1612468955668" ID="ID_719115150" MODIFIED="1612468971046" TEXT="Workaround">
 <node CREATED="1612468972770" ID="ID_54239834" MODIFIED="1612468994420" TEXT="set_size_request">
