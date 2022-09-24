@@ -93,17 +93,25 @@ namespace widget {
   class ElementBoxWidget
     : public Gtk::Frame
     {
+      struct Strategy
+        {
+          string lambdaLaLa;
+        };
+      
+      /** actual layout strategy binding for this widget */
+      Strategy strategy_;
+      
       Gtk::Box label_;
       Gtk::Image icon_;
       Gtk::Label name_;
       
     public:
-      class Strategy;
+      class Config;
       
       template<class... QS>
       ElementBoxWidget (Kind kind, Type type, QS ...qualifiers);
       
-      ElementBoxWidget (Strategy);
+      ElementBoxWidget (Config);
      ~ElementBoxWidget();
       
       // default copy acceptable
@@ -112,12 +120,12 @@ namespace widget {
      
     };
   
-  class ElementBoxWidget::Strategy
-    : lib::BuilderQualifierSupport<Strategy>
+  class ElementBoxWidget::Config
+    : lib::BuilderQualifierSupport<Config>
     {
       Type type_;
       uString nameID_{"∅"};
-      string logTODO_{nameID_};
+      string logTODO_{nameID_};    //////////////////////////////////////////////////////////////////////////TICKET #1219 : Placeholder for detailed layout configuration
       
       friend Qualifier kind(Kind);
       friend Qualifier name(string id);
@@ -125,14 +133,14 @@ namespace widget {
       
       public:
         template<class... QS>
-        Strategy(Type type, Qualifier qual, QS... qs)
+        Config(Type type, Qualifier qual, QS... qs)
           : type_{type}
         {
           qualify(*this, qual, qs...);
         }
         
         /** decide upon the presentation strategy */
-        void configure();
+        Strategy buildLayoutStrategy();
         
         Literal getIconID()  const;
         Gtk::IconSize getIconSize() const;
@@ -145,33 +153,33 @@ namespace widget {
     };
   
   
-  inline ElementBoxWidget::Strategy::Qualifier
+  inline ElementBoxWidget::Config::Qualifier
   kind(Kind kind)
   {
-    return ElementBoxWidget::Strategy::Qualifier{
-            [=](ElementBoxWidget::Strategy& strategy)
+    return ElementBoxWidget::Config::Qualifier{
+            [=](ElementBoxWidget::Config& config)
               {
-                strategy.logTODO_ += util::_Fmt{"+kind(%s)"} % kind;
+                config.logTODO_ += util::_Fmt{"+kind(%s)"} % kind;
               }};
   }
   
-  inline ElementBoxWidget::Strategy::Qualifier
+  inline ElementBoxWidget::Config::Qualifier
   name(string id)
   {
-    return ElementBoxWidget::Strategy::Qualifier{
-            [=](ElementBoxWidget::Strategy& strategy)
+    return ElementBoxWidget::Config::Qualifier{
+            [=](ElementBoxWidget::Config& config)
               {
-                strategy.nameID_ = id;
+                config.nameID_ = id;
               }};
   }
   
-  inline ElementBoxWidget::Strategy::Qualifier
+  inline ElementBoxWidget::Config::Qualifier
   expander(model::Expander& expander)
   {
-    return ElementBoxWidget::Strategy::Qualifier{
-            [&](ElementBoxWidget::Strategy& strategy)
+    return ElementBoxWidget::Config::Qualifier{
+            [&](ElementBoxWidget::Config& config)
               {
-                strategy.logTODO_ += util::_Fmt{"+expander(%s)"} % &expander;
+                config.logTODO_ += util::_Fmt{"+expander(%s)"} % &expander;
               }};
   }
   
@@ -183,7 +191,7 @@ namespace widget {
    */
   template<class... QS>
   inline ElementBoxWidget::ElementBoxWidget (Kind widgetKind, Type type, QS ...qualifiers)
-    : ElementBoxWidget{Strategy(type, kind(widgetKind), qualifiers...)}
+    : ElementBoxWidget{Config(type, kind(widgetKind), qualifiers...)}
   { }
   
   

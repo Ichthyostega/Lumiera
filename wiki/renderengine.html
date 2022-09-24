@@ -3217,7 +3217,7 @@ In accordance with this structure, we introduce a central component, the {{{Pane
 
 </pre>
 </div>
-<div title="GuiElementBoxWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201811011919" modified="202209240032" tags="GuiPattern spec draft" changecount="10">
+<div title="GuiElementBoxWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201811011919" modified="202209241501" tags="GuiPattern spec draft" changecount="13">
 <pre>//A building block used pervasively throughout the Lumiera UI  to represent a named entity.//
 This widget presents a horizontally extended body, which holds a characteristic ''Head-Triplet'' of visual Elements:
 * an //Icon// to create the visual anchor point. In many cases, this will be ''the Placment Icon'' (a hallmark of Lumiera's UI)
@@ -3274,6 +3274,7 @@ The class {{{widget::ElementBoxWidget}}} uses a flexible declarative constructor
 In addition to these mandatory arguments, a sequence of //qualifiers// can be supplied to tweak the details of the presentation
 *{{{name(string)}}} : define the name or ID to be shown in the label field
 *{{{expander(ref)}}} : use a expand/collapse button, wired with the given »expander« functor (part of the standard UI-Element protocol)
+*{{{constrained(λ, [λₙ])}}} : constrain widget extension, providing getter functors to retrieve desired size in canvas pixels
 
 
 !!!proportional Head placement
@@ -3296,7 +3297,8 @@ Thus, if we intend to bring a custom widget into compliance with our contextual 
 * the resulting desired (&quot;natural&quot;) size allocation is then adjusted by widget decoration and finally passed to the widget for storage and use
 It turns out that the GTK layout management implementation always observes the widget's preferred extension, but possibly expands the allocation to fill additional space. And the standard implementation of {{{Gtk::Widget}}} in turn delegates those queries to the ''GTK CSS Gadget'' — which is a mapping of the hierarchical widget structure into CSS layout nodes.
 
-So the seemingly ''optimal leverage point'' is to ''return our pre established size constraint as result'' from these query functions — which can be overridden in the Gtkmm C++ implementation through the {{{Gtk::Widget::get_preferred_width_vfunc()}}} and {{{Gtk::Widget::get_preferred_height_for_width_vfunc()}}}. However, since GTK assumes these values to be sane and sufficient for a proper realisation of any embedded content, at this point we get the responsibility to control and reduce the embedded child widget's extension to bring them into compliance. Failing to do so will lead to garbled drawing on screen.
+So the seemingly ''optimal leverage point'' is to ''return our pre established size constraint as result'' from these query functions — which can be overridden in the Gtkmm C++ implementation through the {{{Gtk::Widget::get_preferred_width_vfunc()}}} and {{{Gtk::Widget::get_preferred_height_for_width_vfunc()}}}. However, since GTK assumes these values to be sane and sufficient for a proper realisation of any embedded content, at this point it becomes our responsibility to control and reduce the embedded child widget's extension to bring them into compliance. Failing to do so will lead to garbled drawing on screen.
+
 Our solution approach is to watch the results returned by the default implementation and possibly to hide content until the remaining content conforms to the size constraint; after that, we can return //exactly our calibrated size// and expect GTK to observe this request, passing it down to embedded widgets reduced by style decorations.
 </pre>
 </div>

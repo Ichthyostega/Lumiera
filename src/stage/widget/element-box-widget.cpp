@@ -62,34 +62,34 @@ namespace widget {
   
   ElementBoxWidget::~ElementBoxWidget()  { }
   
-  void
-  ElementBoxWidget::Strategy::configure()
+  ElementBoxWidget::Strategy
+  ElementBoxWidget::Config::buildLayoutStrategy()
   {
-    
+    return Strategy{"LoLoLo"};
   }
   
   Literal
-  ElementBoxWidget::Strategy::getIconID()  const
+  ElementBoxWidget::Config::getIconID()  const
   {
     ///////////////////////////////////////////////////////////////////////////TICKET #1185 : implement logic to pick suitable icon...
     return "track_enabled";      //////////////////////////////////////////////TICKET #1219 : maybe at leas a better generic placeholder icon...?
   }
   
   Gtk::IconSize
-  ElementBoxWidget::Strategy::getIconSize()  const
+  ElementBoxWidget::Config::getIconSize()  const
   {
     ///////////////////////////////////////////////////////////////////////////TICKET #1185 : is Icon-Size flexible under some circumstances?
     return Gtk::ICON_SIZE_MENU;
   }
 
   
-  ElementBoxWidget::ElementBoxWidget (Strategy strategy)
+  ElementBoxWidget::ElementBoxWidget (Config config)
     : Frame{}
+    , strategy_{config.buildLayoutStrategy()}
     , label_{Gtk::ORIENTATION_HORIZONTAL}
-    , icon_{Gtk::StockID{strategy.getIconID()}  ///////////////////////////////TICKET #1030 : use of stockIDs is deprecated; care for a more modern icon naming scheme
-           , strategy.getIconSize()}
+    , icon_{Gtk::StockID{config.getIconID()}  ///////////////////////////////TICKET #1030 : use of stockIDs is deprecated; care for a more modern icon naming scheme
+           , config.getIconSize()}
     {
-      strategy.configure();
       set_name(ID_element);
       get_style_context()->add_class(CLASS_background);     // Style to ensure an opaque backdrop
       set_label_align(0.0, 0.0);
@@ -99,7 +99,7 @@ namespace widget {
       label_.add(name_);
       label_.set_name(ID_caption);
       label_.get_style_context()->add_class(CLASS_background);
-      name_.set_text(strategy.getName());
+      name_.set_text(config.getName());
       name_.set_hexpand(true);
       
       this->show_all();
