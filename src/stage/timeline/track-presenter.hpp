@@ -267,7 +267,13 @@ namespace timeline {
         new model::CanvasHooked<widget::ElementBoxWidget, Gtk::Widget>{display_.hookedAt(x,y)
                                                                       , widget::Kind::MARK
                                                                       , widget::Type::LABEL
-                                                                      , widget::name("Ω")
+                                                                      , widget::name("ΩΩΩΩΩ")
+                                                                      , widget::constrained(
+                                                                          []()
+                                                                            {
+                                                                              uint arbitrarySiz = 10 + rand() % 60;
+                                                                              return arbitrarySiz;
+                                                                            })
                                                                       });
   }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this

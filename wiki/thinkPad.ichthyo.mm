@@ -18668,6 +18668,9 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664027526879" ID="ID_849843415" MODIFIED="1664027540069" TEXT="an der konkreten Implementierung beobachten">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1664152872453" ID="ID_1559151133" MODIFIED="1664152874424" TEXT="korrekt"/>
+<node CREATED="1664152875229" ID="ID_1591242265" MODIFIED="1664152886391" TEXT="definitiv aus der Event-Loop"/>
+<node CREATED="1664152887076" ID="ID_1667743717" MODIFIED="1664152893950" TEXT="und nicht aus dem Widget-ctor"/>
 </node>
 </node>
 <node CREATED="1664027626370" ID="ID_244953029" MODIFIED="1664027646110" TEXT="eine falsche Angabe f&#xfc;hrt zu (vor&#xfc;bergehend) falschem Layout"/>
@@ -18767,13 +18770,13 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664028782841" ID="ID_1596292708" MODIFIED="1664028795533" TEXT="Implementierung der Schnittstelle">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664028797404" ID="ID_1421736344" MODIFIED="1664028806653" TEXT="die &#x3bb; speichern">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1664028782841" ID="ID_1596292708" MODIFIED="1664152807960" TEXT="Implementierung der Schnittstelle">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1664028797404" ID="ID_1421736344" MODIFIED="1664152806643" TEXT="die &#x3bb; speichern">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664028811314" ID="ID_1790496772" MODIFIED="1664028821834" TEXT="die H&#xf6;hen-Angabe optional machen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1664028811314" ID="ID_1790496772" MODIFIED="1664152804500" TEXT="die H&#xf6;hen-Angabe optional machen">
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1664028833680" ID="ID_822885755" MODIFIED="1664136676337" TEXT="Pr&#xe4;dikat: Erkennung size-constrained">
 <linktarget COLOR="#fff78b" DESTINATION="ID_822885755" ENDARROW="Default" ENDINCLINATION="-71;5;" ID="Arrow_ID_502040558" SOURCE="ID_10961106" STARTARROW="None" STARTINCLINATION="67;7;"/>
@@ -18781,16 +18784,16 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664028974965" ID="ID_1683239335" MODIFIED="1664028982693" TEXT="Weiche in den Layout-Callbacks">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664028987763" ID="ID_10961106" MODIFIED="1664029045885" TEXT="beruht auf dem Pr&#xe4;dikat">
+<node COLOR="#338800" CREATED="1664028974965" ID="ID_1683239335" MODIFIED="1664152835281" TEXT="Weiche in den Layout-Callbacks">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1664028987763" ID="ID_10961106" MODIFIED="1664152816917" TEXT="beruht auf dem Pr&#xe4;dikat">
 <arrowlink COLOR="#fff78b" DESTINATION="ID_822885755" ENDARROW="Default" ENDINCLINATION="-71;5;" ID="Arrow_ID_502040558" STARTARROW="None" STARTINCLINATION="67;7;"/>
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664029083790" ID="ID_1708491997" MODIFIED="1664029103893" TEXT="Antwort der Callbacks implementieren">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664029105419" ID="ID_1976797471" MODIFIED="1664029125271" TEXT="entweder per &#x3bb;">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1664029083790" ID="ID_1708491997" MODIFIED="1664152834413" TEXT="Antwort der Callbacks implementieren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1664029105419" ID="ID_1976797471" MODIFIED="1664152823165" TEXT="entweder per &#x3bb;">
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1664029112435" ID="ID_82095109" MODIFIED="1664136681131" TEXT="oder die Basis-Impl verwenden">
 <arrowlink COLOR="#6873c6" DESTINATION="ID_986565985" ENDARROW="Default" ENDINCLINATION="31;1;" ID="Arrow_ID_1518071893" STARTARROW="None" STARTINCLINATION="-102;26;"/>
@@ -18810,8 +18813,8 @@
 </node>
 <node CREATED="1664029267136" ID="ID_1383671067" MODIFIED="1664029355911" TEXT="zwei Themen">
 <icon BUILTIN="idea"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664029340460" ID="ID_1398837731" MODIFIED="1664029426849" TEXT="Ausdehnung des Labels steuern">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1664029340460" ID="ID_1398837731" MODIFIED="1664152792801" TEXT="Ausdehnung des Labels steuern">
+<icon BUILTIN="pencil"/>
 <node CREATED="1664031831907" ID="ID_701574899" MODIFIED="1664031980972" TEXT="Problem: reaktiv getriggert">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -18828,8 +18831,8 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664035985288" ID="ID_1514029086" MODIFIED="1664035990688" TEXT="#1238 hide ElementBoxWidget label to meet size constraint">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664032709767" ID="ID_89148369" MODIFIED="1664032719812" TEXT="einfache L&#xf6;sung: per Seiteneffekt verbergen">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1664032709767" ID="ID_89148369" MODIFIED="1664152782210" TEXT="einfache L&#xf6;sung: per Seiteneffekt verbergen">
+<icon BUILTIN="pencil"/>
 <node CREATED="1664032721142" ID="ID_999001948" MODIFIED="1664033062210" TEXT="geht das?">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -18852,6 +18855,20 @@
     </ul>
   </body>
 </html></richcontent>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1664152924415" ID="ID_1883395520" MODIFIED="1664152940446" TEXT="funktioniert nicht zuverl&#xe4;asig">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1664152946955" ID="ID_5147112" MODIFIED="1664152961325" TEXT="beim 1.Aufruf sind die Allocationen noch allesamt 0"/>
+<node CREATED="1664152963036" ID="ID_1568702731" MODIFIED="1664152994857" TEXT="es gibt sp&#xe4;ter bei jedem Focus-Wechsel einen Aufruf"/>
+<node CREATED="1664152996461" ID="ID_1521476415" MODIFIED="1664153038156" TEXT="und dieser f&#xfc;hrt jeweils zu einer anderen Ausdehnung des Hintergrunds (Flackern?)">
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664153044266" ID="ID_175410634" MODIFIED="1664153998416" TEXT="und das Debugging per cout gibt Hexzahlen aus">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1664152748537" ID="ID_1604673752" MODIFIED="1664152775554" TEXT="besser: on_size_allocate  verwenden">
+<icon BUILTIN="idea"/>
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1664027420141" ID="ID_969143327" MODIFIED="1664032937882" TEXT="f&#xfc;hrt das zu einem re-Draw?">
 <linktarget COLOR="#bf4283" DESTINATION="ID_969143327" ENDARROW="Default" ENDINCLINATION="-1003;96;" ID="Arrow_ID_190980327" SOURCE="ID_945958753" STARTARROW="None" STARTINCLINATION="260;-42;"/>

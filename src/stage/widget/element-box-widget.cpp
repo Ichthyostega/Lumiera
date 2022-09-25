@@ -35,9 +35,9 @@
 
 //#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
-//#include "lib/format-cout.hpp"
+#include "lib/format-cout.hpp" //////////////////////TODO debugging
 
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <algorithm>
 //#include <vector>
@@ -78,10 +78,13 @@ namespace widget {
 
   
   ElementBoxWidget::Strategy
-  ElementBoxWidget::Config::buildLayoutStrategy(ElementBoxWidget& widget)
+  ElementBoxWidget::Config::buildLayoutStrategy(ElementBoxWidget&)
   {
-    Strategy strategy;          //NOTE: relying on return-value-optimisation
-    ///////////////////////////////////////////////////////////////////////////TICKET #1235 : evaluate size constraint here
+    Strategy strategy;
+    if (widthConstraint_)
+      strategy.getWidth = move(widthConstraint_);
+    if (heightConstraint_)
+      strategy.getHeight = move(heightConstraint_);
     return strategy;
   }
   
@@ -141,7 +144,7 @@ namespace widget {
    *   - adjust_for_align
    *   After these adjustments and some sanity checks, the resulting size allocation
    *   is passed to the `size_allocate` vfunc, which could be tapped on the Gtk::Widget
-   *   C++ wrapper, but usually just stores this allocation into the widget private data. 
+   *   C++ wrapper, but usually just stores this allocation into the widget private data.
    */
   void
   ElementBoxWidget::get_preferred_width_vfunc (int& minimum_width, int& natural_width)  const
@@ -159,6 +162,68 @@ namespace widget {
       minimum_height = natural_height = strategy_.getHeight();
     else
       _Base::get_preferred_height_for_width_vfunc (width, minimum_height,natural_height);
+  }
+  
+  /**
+   * Tap into the notification of screen space allocation to possibly enforce size constraints.
+   * Generally speaking, explicit size constrained widgets are not a concept supported by GTK,
+   * due to its flexible layout model and the use of CSS for styling and theming. Unfortunately
+   * we need this feature, in order to implement Clip widgets on a time calibrated canvas.
+   * Thus we use an **implementation trick**: we report our size constraints as "natural size"
+   * to GTK, knowing that GTK will respect those extensions (unless the widget is placed into
+   * a container with fill-alignment). However, by doing so, we have effectively lied to GTK
+   * with respect to our child widgets. Thus we now have to take on the responsibility to
+   * somehow make those child widgets fit into the limited size allocation....
+   */
+  void
+  ElementBoxWidget::on_size_allocate (Gtk::Allocation& availableSize)
+  {
+    if (strategy_.is_size_constrained())
+      imposeSizeConstraint (availableSize.get_width(), availableSize.get_height());
+    _Base::on_size_allocate(availableSize);
+  }
+  
+  
+  /**
+   * Ensure the child widgets can be represented and possibly adjust or hide content,
+   * in case the extension of ElementBoxWidget is explicitly constrained in size.
+   */
+  void
+  ElementBoxWidget::imposeSizeConstraint(int widthC, int heightC)
+  {
+    //if (not icon_.get_realized()) return;
+    bool isRe = name_.get_realized();
+    bool isMa = name_.get_mapped();
+
+    bool hiddenCaption = not name_.get_visible();
+    
+    Gtk::Allocation iconSiz = icon_.get_allocation();
+    Gtk::Allocation nameSiz = name_.get_allocation();
+    
+    if (not hiddenCaption)
+      {
+        labelWidth_ = nameSiz.get_width();
+        labelHeight_= nameSiz.get_height();
+      }
+    int requiredWidth = iconSiz.get_width()   + labelWidth_;
+    int requiredHeight = iconSiz.get_height() + labelHeight_;
+    
+    if (hiddenCaption)
+      {
+        if (requiredWidth <= widthC and requiredHeight <= heightC)
+          { /////////////////////////////////////////////////////////////////////////////////////////////////TODO: diagnostics -- remove this
+          name_.show();
+            cout << "SHOW::"<<this<<":: "<<requiredWidth<<" <= "<<widthC <<endl;/////////////////////////////TODO: diagnostics -- remove this
+          } /////////////////////////////////////////////////////////////////////////////////////////////////TODO: diagnostics -- remove this
+      }
+    else
+      {
+        if (requiredWidth > widthC or requiredHeight > heightC)
+          { /////////////////////////////////////////////////////////////////////////////////////////////////TODO: diagnostics -- remove this
+          name_.hide();
+            cout << "HIDE::"<<this<<":: "<<requiredWidth<<" > "<<widthC <<endl;//////////////////////////////TODO: diagnostics -- remove this
+          } /////////////////////////////////////////////////////////////////////////////////////////////////TODO: diagnostics -- remove this
+      }
   }
   
   

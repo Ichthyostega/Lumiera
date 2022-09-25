@@ -52,6 +52,7 @@
 //#include <memory>
 //#include <vector>
 #include <functional>
+#include <utility>
 #include <string> //////TODO debugging
 
 
@@ -59,6 +60,7 @@
 namespace stage  {
 namespace widget {
   
+  using std::move;
   using lib::Literal;
   using std::string; /////TODO
   using util::_Fmt;  /////TODO debugging?
@@ -83,6 +85,7 @@ namespace widget {
             , META     ///< represents some meta entity
             };
   
+  using SizeGetter = std::function<int()>;
   
   /**
    * A basic building block of the Lumiera UI.
@@ -97,7 +100,6 @@ namespace widget {
     : public Gtk::Frame
     {
       using _Base = Gtk::Frame;
-      using SizeGetter = std::function<int()>;
       struct Strategy
         {
           SizeGetter getWidth{};
@@ -130,8 +132,10 @@ namespace widget {
       Gtk::SizeRequestMode get_request_mode_vfunc()              const final;
       void get_preferred_width_vfunc (int&, int&)                const override;
       void get_preferred_height_for_width_vfunc (int, int&,int&) const override;
+      void on_size_allocate (Gtk::Allocation&)                         override;
       
-      _Base& getBase() { return *this; }
+      void imposeSizeConstraint(int, int);
+      int labelWidth_{0}, labelHeight_{0};
     };
   
   
@@ -140,11 +144,15 @@ namespace widget {
     {
       Type type_;
       uString nameID_{"∅"};
+      SizeGetter widthConstraint_;
+      SizeGetter heightConstraint_;
       string logTODO_{nameID_};    //////////////////////////////////////////////////////////////////////////TICKET #1219 : Placeholder for detailed layout configuration
       
       friend Qualifier kind(Kind);
       friend Qualifier name(string id);
       friend Qualifier expander(model::Expander&);
+      friend Qualifier constrained(SizeGetter);
+      friend Qualifier constrained(SizeGetter,SizeGetter);
       
       public:
         template<class... QS>
@@ -195,6 +203,28 @@ namespace widget {
             [&](ElementBoxWidget::Config& config)
               {
                 config.logTODO_ += util::_Fmt{"+expander(%s)"} % &expander;
+              }};
+  }
+  
+  inline ElementBoxWidget::Config::Qualifier
+  constrained(SizeGetter widthConstraint)
+  {
+    return ElementBoxWidget::Config::Qualifier{
+            [wC=move(widthConstraint)](ElementBoxWidget::Config& config) -> void
+              {
+                config.widthConstraint_ = move(wC);
+              }};
+  }
+  
+  inline ElementBoxWidget::Config::Qualifier
+  constrained(SizeGetter widthConstraint, SizeGetter heightConstraint)
+  {
+    return ElementBoxWidget::Config::Qualifier{
+            [wC=move(widthConstraint),hC=move(heightConstraint)]
+            (ElementBoxWidget::Config& config) -> void
+              {
+                config.widthConstraint_ = move(wC);
+                config.heightConstraint_ = move(hC);
               }};
   }
   
