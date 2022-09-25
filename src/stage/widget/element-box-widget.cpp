@@ -62,17 +62,11 @@ namespace widget {
   
   ElementBoxWidget::~ElementBoxWidget()  { }
   
-  ElementBoxWidget::Strategy
-  ElementBoxWidget::Config::buildLayoutStrategy()
-  {
-    return Strategy{"LoLoLo"};
-  }
-  
   Literal
   ElementBoxWidget::Config::getIconID()  const
   {
     ///////////////////////////////////////////////////////////////////////////TICKET #1185 : implement logic to pick suitable icon...
-    return "track_enabled";      //////////////////////////////////////////////TICKET #1219 : maybe at leas a better generic placeholder icon...?
+    return "track_enabled";      //////////////////////////////////////////////TICKET #1219 : maybe at least a better generic placeholder icon...?
   }
   
   Gtk::IconSize
@@ -83,9 +77,19 @@ namespace widget {
   }
 
   
+  ElementBoxWidget::Strategy
+  ElementBoxWidget::Config::buildLayoutStrategy(ElementBoxWidget& widget)
+  {
+    Strategy strategy;          //NOTE: relying on return-value-optimisation
+    ///////////////////////////////////////////////////////////////////////////TICKET #1235 : evaluate size constraint here
+    return strategy;
+  }
+  
+  
+  
   ElementBoxWidget::ElementBoxWidget (Config config)
     : Frame{}
-    , strategy_{config.buildLayoutStrategy()}
+    , strategy_{config.buildLayoutStrategy(*this)}
     , label_{Gtk::ORIENTATION_HORIZONTAL}
     , icon_{Gtk::StockID{config.getIconID()}  ///////////////////////////////TICKET #1030 : use of stockIDs is deprecated; care for a more modern icon naming scheme
            , config.getIconSize()}
@@ -106,6 +110,56 @@ namespace widget {
     }
   
   
+  /**
+   * Layout trend for ElementBoxWidget is nailed down (`final`) to "height-for-width".
+   * The reason is, some of the use cases entail placing the element box onto a canvas
+   * with horizontal extension calibrated to time units; doing so requires us to control
+   * the extension, which is delegated through the strategy
+   */
+  Gtk::SizeRequestMode
+  ElementBoxWidget::get_request_mode_vfunc()  const
+  {
+    return Gtk::SizeRequestMode::SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+  }
+  
+  /**
+   * Layout preferences are delegated through the Strategy
+   * - by default, the strategy will just invoke the inherited vfuncs
+   * - however, when a size constraint for the ElementBoxWidget must be observed,
+   *   the strategy will control the extension of our child widgets (side-effect)
+   *   and then just return the extension as dictated by the constraints
+   * @remark Based on the GTK-3.22 implementation code, we know that the minimum_width
+   *   is only used for consistency checks (and otherwise ignored), while the natural_width
+   *   will always be respected. The GKT layout management might _increase_ that value...
+   *   - do adjust for additional border and margin settings from CSS
+   *   - and to expand the widget when used within a container with fill-alignment
+   *   Moreover the #get_preferred_height_for_width_vfunc will be invoked with the
+   *   results from this function. The possible adjustment is done by invoking the
+   *   vfunc `adjust_size_allocation` on the GTK-class, which typically delegates to
+   *   gtk_widget_real_adjust_size_allocation, and the latter invokes
+   *   - adjust_for_margin
+   *   - adjust_for_align
+   *   After these adjustments and some sanity checks, the resulting size allocation
+   *   is passed to the `size_allocate` vfunc, which could be tapped on the Gtk::Widget
+   *   C++ wrapper, but usually just stores this allocation into the widget private data. 
+   */
+  void
+  ElementBoxWidget::get_preferred_width_vfunc (int& minimum_width, int& natural_width)  const
+  {
+    if (strategy_.is_size_constrained())
+      minimum_width = natural_width = strategy_.getWidth();
+    else
+      _Base::get_preferred_width_vfunc (minimum_width,natural_width);
+  }
+  
+  void
+  ElementBoxWidget::get_preferred_height_for_width_vfunc (int width, int& minimum_height, int& natural_height)  const
+  {
+    if (strategy_.is_size_constrained() and strategy_.shall_control_height())
+      minimum_height = natural_height = strategy_.getHeight();
+    else
+      _Base::get_preferred_height_for_width_vfunc (width, minimum_height,natural_height);
+  }
   
   
   

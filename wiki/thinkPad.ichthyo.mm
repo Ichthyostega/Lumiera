@@ -17955,6 +17955,10 @@
 <node CREATED="1664029840817" ID="ID_1206826425" MODIFIED="1664029866386" TEXT="dynamic Head-Placement"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664132799979" ID="ID_1304690112" MODIFIED="1664133192469" TEXT="#1239 consider Policy Based Design for ElementBoxWidget">
+<linktarget COLOR="#8d81ac" DESTINATION="ID_1304690112" ENDARROW="Default" ENDINCLINATION="654;32;" ID="Arrow_ID_1945811186" SOURCE="ID_1356714491" STARTARROW="None" STARTINCLINATION="942;-96;"/>
+<icon BUILTIN="hourglass"/>
+</node>
 <node CREATED="1541087843514" ID="ID_1798999985" MODIFIED="1557498707223" TEXT="weit verbreiteter Grundbaustein">
 <icon BUILTIN="idea"/>
 <node CREATED="1541087865477" ID="ID_1163649496" MODIFIED="1557498707223" TEXT="f&#xfc;r Marker"/>
@@ -18536,8 +18540,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1661721393893" ID="ID_293134573" MODIFIED="1661721423931" TEXT="Validierungs-Funktion">
-<linktarget COLOR="#c63166" DESTINATION="ID_293134573" ENDARROW="Default" ENDINCLINATION="64;-83;" ID="Arrow_ID_543159170" SOURCE="ID_1192772963" STARTARROW="None" STARTINCLINATION="-313;15;"/>
 <linktarget COLOR="#404289" DESTINATION="ID_293134573" ENDARROW="Default" ENDINCLINATION="175;-873;" ID="Arrow_ID_1989504612" SOURCE="ID_1939158808" STARTARROW="None" STARTINCLINATION="768;94;"/>
+<linktarget COLOR="#c63166" DESTINATION="ID_293134573" ENDARROW="Default" ENDINCLINATION="64;-83;" ID="Arrow_ID_543159170" SOURCE="ID_1192772963" STARTARROW="None" STARTINCLINATION="-313;15;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1662051084085" ID="ID_906734828" MODIFIED="1662051103543" TEXT="Strategy::configure()"/>
 </node>
@@ -18590,8 +18594,8 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1662241925929" ID="ID_217944947" MODIFIED="1662241933868" TEXT="horizontale Ausdehnung">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1662241925929" ID="ID_217944947" MODIFIED="1664136727535" TEXT="horizontale Ausdehnung">
+<icon BUILTIN="pencil"/>
 <node CREATED="1663945598778" ID="ID_1866891133" MODIFIED="1663945862337" TEXT="Ansatz">
 <icon BUILTIN="idea"/>
 <node CREATED="1663945603065" ID="ID_1792803134" MODIFIED="1663945629088" TEXT="Mechanismus zur Gr&#xf6;&#xdf;enbeschr&#xe4;nkung auf dem Haupt-Widget"/>
@@ -18630,8 +18634,8 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664027101386" ID="ID_325165287" MODIFIED="1664027119181" TEXT="erforderliche Ausdehnung feststellen">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1664027101386" ID="ID_325165287" MODIFIED="1664136719643" TEXT="erforderliche Ausdehnung feststellen">
+<icon BUILTIN="pencil"/>
 <node CREATED="1664027121220" ID="ID_1123910943" MODIFIED="1664027234710" TEXT="f&#xfc;r das ElementBoxWidget stets in Pixel">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -18645,8 +18649,8 @@
 </html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664027274328" ID="ID_1533967380" MODIFIED="1664027327221" TEXT="Interaktionsmuster der Schnittstelle">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1664027274328" ID="ID_1533967380" MODIFIED="1664136711917" TEXT="Interaktionsmuster der Schnittstelle">
+<icon BUILTIN="pencil"/>
 <node COLOR="#435e98" CREATED="1664027342687" ID="ID_987588934" MODIFIED="1664028893912" TEXT="Analyse">
 <icon BUILTIN="info"/>
 <node CREATED="1664027374909" ID="ID_1916479707" MODIFIED="1664027563708" TEXT="Information wird von den GTK-Callbacks ben&#xf6;tigt">
@@ -18771,9 +18775,9 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664028811314" ID="ID_1790496772" MODIFIED="1664028821834" TEXT="die H&#xf6;hen-Angabe optional machen">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664028833680" ID="ID_822885755" MODIFIED="1664029036890" TEXT="Pr&#xe4;dikat: Erkennung size-constrained">
+<node COLOR="#338800" CREATED="1664028833680" ID="ID_822885755" MODIFIED="1664136676337" TEXT="Pr&#xe4;dikat: Erkennung size-constrained">
 <linktarget COLOR="#fff78b" DESTINATION="ID_822885755" ENDARROW="Default" ENDINCLINATION="-71;5;" ID="Arrow_ID_502040558" SOURCE="ID_10961106" STARTARROW="None" STARTINCLINATION="67;7;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -18788,19 +18792,19 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664029105419" ID="ID_1976797471" MODIFIED="1664029125271" TEXT="entweder per &#x3bb;">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664029112435" ID="ID_82095109" MODIFIED="1664030643111" TEXT="oder die Basis-Impl verwenden">
+<node COLOR="#338800" CREATED="1664029112435" ID="ID_82095109" MODIFIED="1664136681131" TEXT="oder die Basis-Impl verwenden">
 <arrowlink COLOR="#6873c6" DESTINATION="ID_986565985" ENDARROW="Default" ENDINCLINATION="31;1;" ID="Arrow_ID_1518071893" STARTARROW="None" STARTINCLINATION="-102;26;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664029128360" ID="ID_986565985" MODIFIED="1664030643111" TEXT="Aufruf der Basis-Impl vorsehen">
+<node COLOR="#338800" CREATED="1664029128360" ID="ID_986565985" MODIFIED="1664136684354" TEXT="Aufruf der Basis-Impl vorsehen">
 <linktarget COLOR="#6873c6" DESTINATION="ID_986565985" ENDARROW="Default" ENDINCLINATION="31;1;" ID="Arrow_ID_1518071893" SOURCE="ID_82095109" STARTARROW="None" STARTINCLINATION="-102;26;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664029223580" ID="ID_825294836" MODIFIED="1664029246522" TEXT="Framework zur Steuerung der Ausdehnung">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1664029223580" ID="ID_825294836" MODIFIED="1664136733333" TEXT="Framework zur Steuerung der Ausdehnung">
+<icon BUILTIN="pencil"/>
 <node CREATED="1664029250424" ID="ID_1097443082" MODIFIED="1664029265588" TEXT="hier erst mal nur das Fundament legen">
 <icon BUILTIN="yes"/>
 </node>
@@ -18889,13 +18893,15 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664054365436" ID="ID_74006008" MODIFIED="1664054707374" TEXT="Shared Strategy">
 <linktarget COLOR="#fde2be" DESTINATION="ID_74006008" ENDARROW="Default" ENDINCLINATION="6;128;" ID="Arrow_ID_1045794051" SOURCE="ID_1399625126" STARTARROW="None" STARTINCLINATION="-266;36;"/>
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1664055105139" ID="ID_594735349" MODIFIED="1664055121994" TEXT="sind mehrfache Indirektionen ein Problem?">
+<node COLOR="#435e98" CREATED="1664055105139" ID="ID_594735349" MODIFIED="1664136644965" TEXT="sind mehrfache Indirektionen ein Problem?">
 <icon BUILTIN="help"/>
 <node CREATED="1664055185035" ID="ID_1386788488" MODIFIED="1664055198439" TEXT="wir h&#xe4;tten konkrete Clip-delegates">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1664055199606" ID="ID_1356714491" MODIFIED="1664055210233" TEXT="also doch policy based design?">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1664055199606" ID="ID_1356714491" MODIFIED="1664133207079" TEXT="also doch policy based design?">
+<arrowlink COLOR="#8d81ac" DESTINATION="ID_1304690112" ENDARROW="Default" ENDINCLINATION="654;32;" ID="Arrow_ID_1945811186" STARTARROW="None" STARTINCLINATION="942;-96;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
 <node CREATED="1664055305064" ID="ID_794765074" MODIFIED="1664055318882" TEXT="dann m&#xfc;&#xdf;te ElementBoxWidget von der Strategy erben"/>
 <node CREATED="1664055333428" ID="ID_383670287" MODIFIED="1664055344687" TEXT="denn GTK verwendet bereits die VTable zur Differenzierung"/>
 </node>
@@ -18918,8 +18924,21 @@
 <node CREATED="1664055541961" ID="ID_1385566332" MODIFIED="1664055595693" TEXT="reRender &#x27f9; bereits festgelegte Konfiguration + berechnetes Content-Pixmap"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664060239692" ID="ID_1617851912" MODIFIED="1664060250875" TEXT="also doch erst mal &quot;bodenst&#xe4;ndig&quot; beginnen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Aua!
+    </p>
+    <p>
+      f&#228;llt mir schwer... ich sehe andauernd die sp&#228;teren Probleme
+    </p>
+  </body>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 <node CREATED="1664054377646" ID="ID_309729651" MODIFIED="1664054397978" TEXT="nur eine Instanz pro Render-Methode">
@@ -18935,8 +18954,8 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664055731547" ID="ID_1438169680" MODIFIED="1664055749953" TEXT="Daten der individuellen Instanz">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1664055731547" ID="ID_1438169680" MODIFIED="1664136751044" TEXT="Daten der individuellen Instanz">
+<icon BUILTIN="info"/>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1664055752785" ID="ID_1076715259" MODIFIED="1664055785130">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -19016,8 +19035,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664060277055" ID="ID_319446276" MODIFIED="1664060297750" TEXT="Strategy als lokales Front-End anlegen">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1664060277055" ID="ID_319446276" MODIFIED="1664136766596" TEXT="Strategy als lokales Front-End anlegen">
+<icon BUILTIN="pencil"/>
 <node CREATED="1664060308706" ID="ID_346748114" MODIFIED="1664060333637" TEXT="gruppiert die w&#xe4;hlbaren Detail-Strategien und Binding-&#x3bb;"/>
 <node CREATED="1664060335335" ID="ID_210836901" MODIFIED="1664060373437" TEXT="h&#xe4;lt die Informationen f&#xfc;r den Zugang zu den individuellen Instanz-Werten"/>
 <node CREATED="1664060379716" ID="ID_853921300" MODIFIED="1664060395210" TEXT="und zwar insofern diese zur Verwendung der generischen Strategy notwendig sind"/>
@@ -52473,8 +52492,8 @@
 <node CREATED="1482524516371" ID="ID_396707258" MODIFIED="1557498707236" TEXT="Event-Sourcing">
 <node CREATED="1539135156755" ID="ID_1302245670" MODIFIED="1557498707236" TEXT="vermittelnder Tr&#xe4;ger">
 <node CREATED="1539134733747" ID="ID_1189184036" MODIFIED="1557498707236" TEXT="DiffConstituent">
-<linktarget COLOR="#4e31e2" DESTINATION="ID_1189184036" ENDARROW="Default" ENDINCLINATION="-432;-65;" ID="Arrow_ID_1794591374" SOURCE="ID_1179407482" STARTARROW="None" STARTINCLINATION="-1379;-131;"/>
 <linktarget COLOR="#4e31e2" DESTINATION="ID_1189184036" ENDARROW="Default" ENDINCLINATION="-767;-123;" ID="Arrow_ID_156898929" SOURCE="ID_353086867" STARTARROW="None" STARTINCLINATION="-1608;-84;"/>
+<linktarget COLOR="#4e31e2" DESTINATION="ID_1189184036" ENDARROW="Default" ENDINCLINATION="-432;-65;" ID="Arrow_ID_1794591374" SOURCE="ID_1179407482" STARTARROW="None" STARTINCLINATION="-1379;-131;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1539134841549" ID="ID_818387120" MODIFIED="1557498707236" TEXT="neues Konzept">
 <icon BUILTIN="idea"/>

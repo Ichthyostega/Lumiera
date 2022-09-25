@@ -30,7 +30,7 @@
  ** that they combine some icon with a possibly abridged text and render
  ** them with a given indicator style, configurable via CSS. There is
  ** support for picking the icon and the indicator style based on some
- ** notion of _"type"._ 
+ ** notion of _"type"._
  ** 
  ** @todo WIP-WIP-WIP as of 11/2018   ///////////////////////////////////////////////////////////////////////TICKET #1185
  ** @todo WIP-WIP-WIP as of 9/2022    ///////////////////////////////////////////////////////////////////////TICKET #1219
@@ -51,6 +51,7 @@
 
 //#include <memory>
 //#include <vector>
+#include <functional>
 #include <string> //////TODO debugging
 
 
@@ -89,13 +90,21 @@ namespace widget {
    * possibly a content renderer (e.g. for a video clip). Depending on the presentation intent,
    * the widget can extend to a defined time range horizontally. Pre-defined styling and bindings
    * to expand the display and to invoke a menu are provided
+   * @todo consider policy based design,   //////////////////////////////////////////////////////////////////TICKET #1239 : re-evaluate Design, maybe use Policy Based Design
+   *       but need more exposure and real world usage as of 9/22
    */
   class ElementBoxWidget
     : public Gtk::Frame
     {
+      using _Base = Gtk::Frame;
+      using SizeGetter = std::function<int()>;
       struct Strategy
         {
-          string lambdaLaLa;
+          SizeGetter getWidth{};
+          SizeGetter getHeight{};
+          
+          bool is_size_constrained()  const { return bool(getWidth); }
+          bool shall_control_height() const { return bool(getHeight); }
         };
       
       /** actual layout strategy binding for this widget */
@@ -115,10 +124,16 @@ namespace widget {
      ~ElementBoxWidget();
       
       // default copy acceptable
-     
+      
     private:/* ===== Internals ===== */
-     
+      
+      Gtk::SizeRequestMode get_request_mode_vfunc()              const final;
+      void get_preferred_width_vfunc (int&, int&)                const override;
+      void get_preferred_height_for_width_vfunc (int, int&,int&) const override;
+      
+      _Base& getBase() { return *this; }
     };
+  
   
   class ElementBoxWidget::Config
     : lib::BuilderQualifierSupport<Config>
@@ -140,7 +155,7 @@ namespace widget {
         }
         
         /** decide upon the presentation strategy */
-        Strategy buildLayoutStrategy();
+        Strategy buildLayoutStrategy(ElementBoxWidget&);
         
         Literal getIconID()  const;
         Gtk::IconSize getIconSize() const;
