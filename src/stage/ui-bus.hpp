@@ -38,7 +38,7 @@
  ** 
  ** # Rationale
  ** The UI-Bus acts as a **mediating backbone**, impersonating the role
- ** of the _Model_ and the _Controller_ in the [MVC-Pattern]in common UI architecture.
+ ** of the _Model_ and the _Controller_ in the [MVC-Pattern] in common UI architecture.
  ** 
  ** The MVC-Pattern as such is fine, and probably the best we know for construction of
  ** user interfaces. But it doesn't scale well towards the integration into a larger and
@@ -66,9 +66,9 @@
  ** directed towards individual elements. The interactions at the bus are closely interrelated
  ** with the [elementary UI-Element operations](\ref tangible.hpp).
  ** 
- ** - *act*: send a [GenNode] representing the action
+ ** - *act*: send a \ref GenNode representing the action
  **   - the ID is either a globally registered command-ID or an explicitly
- **     ["opened"](\ref steam::control::SessionCommand::cycle(Symbol,string)) command instance ID.
+ **     [opened](\ref steam::control::SessionCommand::cycle(Symbol,string const&)) command instance ID.
  **   - the payload is a Record<GenNode> holding the actual command arguments
  **   - on reception, an _instance_ (anonymous clone copy) of the command is created, bound
  **     with the arguments and handed over to the SteamDispatcher to be enqueued for execution.

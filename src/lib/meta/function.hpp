@@ -85,7 +85,7 @@ namespace meta{
    * The following explicit specialisations handle the other cases, which are
    * not objects, but primitive types (function (member) pointers and references).
    * @remarks The key trick of this solution is to rely on `decltype` of `operator()`
-   *          and was proposed 10/2011 by user "[kennytm]" in this [stackoverflow].
+   *          and was proposed 10/2011 by user «[kennytm]» in this [stackoverflow].
    * @note for a member pointer to function, only the actual arguments in the
    *          function signature are reflected. But if you bind such a member
    *          pointer into a `std::function`, an additional first parameter
@@ -102,7 +102,7 @@ namespace meta{
    * @see FunctionSignature_test
    * 
    * [kennytm]: http://stackoverflow.com/users/224671/kennytm
-   * [stackoverflow] : http://stackoverflow.com/questions/7943525/is-it-possible-to-figure-out-the-parameter-type-and-return-type-of-a-lambda/7943765#7943765 "answer on stackoverflow"
+   * [stackoverflow]: http://stackoverflow.com/questions/7943525/is-it-possible-to-figure-out-the-parameter-type-and-return-type-of-a-lambda/7943765#7943765 "figure out parameter and return type of a Lambda"
    */
   template<typename FUN, typename SEL =void>
   struct _Fun

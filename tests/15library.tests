@@ -424,6 +424,21 @@ return: 0
 END
 
 
+TEST "IOS restore format" IosSavepoint_test <<END
+out-lit: 0x2a
+out-lit:         42
+out-lit: ******************42
+out-lit:         42
+out-lit: 2a
+out-lit: 052
+out-lit: 2a
+out-lit:         42
+out-lit: 1234
+out-lit: Tilt
+out-lit:         42
+END
+
+
 TEST "configurable Factory" MultiFact_test <<END
 END
 

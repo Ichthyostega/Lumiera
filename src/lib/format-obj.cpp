@@ -42,6 +42,7 @@
 
 #include "lib/error.hpp"
 #include "lib/format-obj.hpp"
+#include "lib/ios-savepoint.hpp"
 //#include "lib/format-string.hpp"
 #include "lib/unique-malloc-owner.hpp"
 #include "lib/symbol.hpp"
@@ -375,6 +376,7 @@ namespace util {
   ostream&
   showAddr (ostream& stream, void const* addr)
   {
+    IosSavepoint save{stream};
     size_t suffix_modulus = size_t(1) << DIAGNOSTICS_ADDRESS_SUFFIX_LEN * 8;
     return stream << "╲"
                   << hex

@@ -18862,8 +18862,30 @@
 <node CREATED="1664152996461" ID="ID_1521476415" MODIFIED="1664153038156" TEXT="und dieser f&#xfc;hrt jeweils zu einer anderen Ausdehnung des Hintergrunds (Flackern?)">
 <icon BUILTIN="broken-line"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664153044266" ID="ID_175410634" MODIFIED="1664153998416" TEXT="und das Debugging per cout gibt Hexzahlen aus">
+<node COLOR="#435e98" CREATED="1664153044266" FOLDED="true" ID="ID_175410634" MODIFIED="1664236010809" TEXT="und das Debugging per cout gibt Hexzahlen aus">
 <icon BUILTIN="broken-line"/>
+<node CREATED="1664235646216" ID="ID_1679047596" MODIFIED="1664236010445" TEXT="Ursache waren naiv verwendete stream-Manipulatoren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Die meisten IOS-Stream-Manipulatoren sind &#187;sticky&#171;, d.h. sie ver&#228;ndern per Seiteneffekt den Zustand im jeweiligen ostream. Ich hatte eine Methode zum Ausgeben einer Addresse, eingebaut im to-String-Framework, und diese hat std::output auf Hex-Ausgabe umgeschaltet. Erstaunlich da&#223; ich das jahrelang nicht gemerkt habe!
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1664235664755" ID="ID_1756013187" MODIFIED="1664235705945" TEXT="RAII-Helper-Klasse, die ostream-Format-Zustand speichern und restaurieren kann">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1664235714143" ID="ID_1375500060" MODIFIED="1664235720200" TEXT="mit Test abgedeckt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1664235720902" ID="ID_558625134" MODIFIED="1664235875234" TEXT="Bug in format-obj.cpp damit gefixt">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>
