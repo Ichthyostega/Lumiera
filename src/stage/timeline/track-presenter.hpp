@@ -267,11 +267,11 @@ namespace timeline {
         new model::CanvasHooked<widget::ElementBoxWidget, Gtk::Widget>{display_.hookedAt(x,y)
                                                                       , widget::Kind::MARK
                                                                       , widget::Type::LABEL
-                                                                      , widget::name("ΩΩΩΩΩ")
+                                                                      , widget::name("ΩΩΩ")
                                                                       , widget::constrained(
-                                                                          []()
+                                                                          [arbitrarySiz = 10 + rand() % 80]() -> int
                                                                             {
-                                                                              uint arbitrarySiz = 10 + rand() % 60;
+                                                                              cout << "PPPP:: arbitrary="<<arbitrarySiz<<endl;
                                                                               return arbitrarySiz;
                                                                             })
                                                                       });

@@ -54,6 +54,7 @@
 #include <functional>
 #include <utility>
 #include <string> //////TODO debugging
+#include "lib/format-cout.hpp" ////////TODO debugging
 
 
 
@@ -86,6 +87,35 @@ namespace widget {
             };
   
   using SizeGetter = std::function<int()>;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1219 : TESTCODE : remove this
+  class HackedTxt
+    : public Gtk::Label
+    {
+    public:
+      using Gtk::Label::Label;
+    protected:
+      void
+      get_preferred_width_vfunc (int& mw, int& nw) const override
+        {
+          Gtk::Label::get_preferred_width_vfunc (mw,nw);
+          cout << "Haxx::"<<this<<":: pref.w=("<<mw<<", "<<nw<<")"<<endl;
+        }
+      void
+      get_preferred_height_vfunc (int& mh, int& nh) const override
+        {
+          Gtk::Label::get_preferred_height_vfunc (mh,nh);
+          cout << "Haxx::"<<this<<":: pref.h=("<<mh<<", "<<nh<<")"<<endl;
+        }
+
+      void
+      on_size_allocate (Gtk::Allocation& alloc) override
+        {
+          cout << "Haxx::"<<this<<":: alloc.w="<<alloc.get_width()<<", h="<<alloc.get_height()<<endl;
+          Gtk::Label::on_size_allocate(alloc);
+        }
+
+    };
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1219 : TESTCODE : remove this
   
   /**
    * A basic building block of the Lumiera UI.
@@ -114,7 +144,8 @@ namespace widget {
       
       Gtk::Box label_;
       Gtk::Image icon_;
-      Gtk::Label name_;
+//    Gtk::Label name_;
+      HackedTxt name_;
       
     public:
       class Config;
@@ -135,7 +166,7 @@ namespace widget {
       void on_size_allocate (Gtk::Allocation&)                         override;
       
       void imposeSizeConstraint(int, int);
-      int labelWidth_{0}, labelHeight_{0};
+      Gtk::Requisition labelFullSize_{};
     };
   
   

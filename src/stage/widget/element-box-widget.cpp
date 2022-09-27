@@ -153,6 +153,7 @@ namespace widget {
       minimum_width = natural_width = strategy_.getWidth();
     else
       _Base::get_preferred_width_vfunc (minimum_width,natural_width);
+    cout << "IIII::"<<this<<":: width="<<natural_width<<endl;
   }
   
   void
@@ -197,31 +198,32 @@ namespace widget {
 
     bool hiddenCaption = not name_.get_visible();
     
-    Gtk::Allocation iconSiz = icon_.get_allocation();
-    Gtk::Allocation nameSiz = name_.get_allocation();
     
     if (not hiddenCaption)
       {
-        labelWidth_ = nameSiz.get_width();
-        labelHeight_= nameSiz.get_height();
+        Gtk::Requisition minDummy{};
+        label_.get_preferred_size(minDummy, labelFullSize_);
       }
-    int requiredWidth = iconSiz.get_width()   + labelWidth_;
-    int requiredHeight = iconSiz.get_height() + labelHeight_;
+    cout <<"IMPO::"<<this<<":: labReq.w="<<labelFullSize_.width<<",h="<<labelFullSize_.height
+                           <<" hidden:"<<hiddenCaption<<endl;
     
     if (hiddenCaption)
       {
-        if (requiredWidth <= widthC and requiredHeight <= heightC)
+        if (labelFullSize_.width <= widthC and labelFullSize_.height <= heightC)
           { /////////////////////////////////////////////////////////////////////////////////////////////////TODO: diagnostics -- remove this
           name_.show();
-            cout << "SHOW::"<<this<<":: "<<requiredWidth<<" <= "<<widthC <<endl;/////////////////////////////TODO: diagnostics -- remove this
+            cout << "SHOW::"<<this<<":: "<<labelFullSize_.width<<" <= "<<widthC <<endl;//////////////////////TODO: diagnostics -- remove this
           } /////////////////////////////////////////////////////////////////////////////////////////////////TODO: diagnostics -- remove this
       }
     else
       {
-        if (requiredWidth > widthC or requiredHeight > heightC)
+        if (labelFullSize_.width > widthC or labelFullSize_.height > heightC)
           { /////////////////////////////////////////////////////////////////////////////////////////////////TODO: diagnostics -- remove this
           name_.hide();
-            cout << "HIDE::"<<this<<":: "<<requiredWidth<<" > "<<widthC <<endl;//////////////////////////////TODO: diagnostics -- remove this
+            cout << "HIDE::"<<this<<":: "<<labelFullSize_.width<<" > "<<widthC <<endl;///////////////////////TODO: diagnostics -- remove this
+             Gtk::Requisition m2, n2;             ///////////////////////////////////////////////////////////TODO: diagnostics -- remove this
+             label_.get_preferred_size(m2,n2);    ///////////////////////////////////////////////////////////TODO: diagnostics -- remove this
+            cout << "    ::"<<this<<":: labReq.w="<<n2.width<<",h="<<n2.height<<endl; ///////////////////////TODO: diagnostics -- remove this
           } /////////////////////////////////////////////////////////////////////////////////////////////////TODO: diagnostics -- remove this
       }
   }

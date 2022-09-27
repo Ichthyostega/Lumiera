@@ -18833,7 +18833,7 @@
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1664032709767" ID="ID_89148369" MODIFIED="1664152782210" TEXT="einfache L&#xf6;sung: per Seiteneffekt verbergen">
 <icon BUILTIN="pencil"/>
-<node CREATED="1664032721142" ID="ID_999001948" MODIFIED="1664033062210" TEXT="geht das?">
+<node COLOR="#338800" CREATED="1664032721142" ID="ID_999001948" MODIFIED="1664313668307" TEXT="geht das?">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -18855,12 +18855,15 @@
     </ul>
   </body>
 </html></richcontent>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1664152924415" ID="ID_1883395520" MODIFIED="1664152940446" TEXT="funktioniert nicht zuverl&#xe4;asig">
+<icon BUILTIN="help"/>
+<node COLOR="#435e98" CREATED="1664152924415" FOLDED="true" ID="ID_1883395520" MODIFIED="1664313655185" TEXT="funktioniert nicht zuverl&#xe4;asig">
 <icon BUILTIN="broken-line"/>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1664152946955" ID="ID_5147112" MODIFIED="1664152961325" TEXT="beim 1.Aufruf sind die Allocationen noch allesamt 0"/>
 <node CREATED="1664152963036" ID="ID_1568702731" MODIFIED="1664152994857" TEXT="es gibt sp&#xe4;ter bei jedem Focus-Wechsel einen Aufruf"/>
-<node CREATED="1664152996461" ID="ID_1521476415" MODIFIED="1664153038156" TEXT="und dieser f&#xfc;hrt jeweils zu einer anderen Ausdehnung des Hintergrunds (Flackern?)">
-<icon BUILTIN="broken-line"/>
+<node CREATED="1664152996461" ID="ID_1521476415" MODIFIED="1664308648349" TEXT="der verbirgt dann auch korrekt das Label-Widget"/>
+<node CREATED="1664308676289" ID="ID_1647971325" MODIFIED="1664308701317" TEXT="aber das passiert dann eben zu sp&#xe4;t &#x2014; die initiale Anzeige ist falsch">
+<icon BUILTIN="messagebox_warning"/>
 </node>
 <node COLOR="#435e98" CREATED="1664153044266" FOLDED="true" ID="ID_175410634" MODIFIED="1664236010809" TEXT="und das Debugging per cout gibt Hexzahlen aus">
 <icon BUILTIN="broken-line"/>
@@ -18887,14 +18890,131 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1664313591898" ID="ID_1408861050" MODIFIED="1664313653715" TEXT="Probleme aufgekl&#xe4;rt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        Zufallszahl wurde re-evaluiert im callback
+      </li>
+      <li>
+        darf nicht die Allokation verwenden, sondern stattdessen das Kind nach seiner preferred_size fragen
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1664308707648" ID="ID_1988489591" MODIFIED="1664308984611" TEXT="Untersuchung mit Trace-Print">
+<icon BUILTIN="info"/>
+<node CREATED="1664308730228" ID="ID_964535587" MODIFIED="1664308762363" TEXT="zum Zeitpunkt der Alloc-Zuteilung haben die nexted-children noch keine Allokation"/>
+<node CREATED="1664308866802" ID="ID_993068829" MODIFIED="1664308941471" TEXT="die Alloc-Zuteiltung f&#xfc;r die Kiner passiert irgendwann sp&#xe4;ter">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...was normalerweise ja auch irrelevant ist, denn per Voraussetzung sollte ein Container die Werte von seinen Kindern bereits bei seiner initialen Meldung ber&#252;cksichtigt haben
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1664308771838" ID="ID_263801875" MODIFIED="1664308782506" TEXT="deshalb wird der Constraint initial immer erf&#xfc;llt"/>
+</node>
+<node COLOR="#435e98" CREATED="1664308954262" FOLDED="true" ID="ID_1280341553" MODIFIED="1664313708451" TEXT="Problem: wie erfahren wir den Bedarf der Kinder?">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1664309487207" ID="ID_787731711" MODIFIED="1664309508504" TEXT="man k&#xf6;nnte die get_preferred_*-Funktionen aufrufen"/>
+<node CREATED="1664309544264" ID="ID_1683308991" MODIFIED="1664309560656" TEXT="wie geht denn die Implementierung von GTK vor?">
+<node CREATED="1664309851614" ID="ID_1826397011" MODIFIED="1664309859201" TEXT="Beispiel Gtk::Frame"/>
+<node CREATED="1664309859981" ID="ID_1769727317" MODIFIED="1664309861000" TEXT="gtk_widget_get_preferred_width">
+<node CREATED="1664309926372" ID="ID_1300086457" MODIFIED="1664309930855" TEXT="gtksizerequest.c"/>
+</node>
+<node CREATED="1664309950440" ID="ID_1543575708" MODIFIED="1664309951372" TEXT="gtk_widget_compute_size_for_orientation"/>
+<node CREATED="1664310005913" ID="ID_856747886" MODIFIED="1664310007318" TEXT="gtk_widget_query_size_for_orientation"/>
+<node CREATED="1664310069177" ID="ID_667553135" MODIFIED="1664310070644" TEXT="widget_class-&gt;get_preferred_width">
+<node CREATED="1664310105612" ID="ID_863371349" MODIFIED="1664310110172" TEXT="gtk_frame_get_preferred_width">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1664310126129" ID="ID_519479957" MODIFIED="1664310128423" TEXT="gtk_css_gadget_get_preferred_size"/>
+</node>
+<node CREATED="1664310467699" ID="ID_1970422819" MODIFIED="1664311129407" TEXT="das CSS Gadget ist Zukunft">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1664310476354" ID="ID_1555596776" MODIFIED="1664310481829" TEXT="&quot;next gen widgets&quot;"/>
+<node CREATED="1664310482704" ID="ID_915376669" MODIFIED="1664311133350" TEXT="aber aktuell noch nicht nach Gtkmm gemapped">
+<icon BUILTIN="closed"/>
+</node>
+<node CREATED="1664310512341" ID="ID_1313597088" MODIFIED="1664311136031" TEXT="widget-&gt;priv-&gt;gadget">
+<icon BUILTIN="closed"/>
+</node>
+</node>
+</node>
+<node CREATED="1664310586763" ID="ID_64937663" MODIFIED="1664313705215" TEXT="Gtk::Widget::get_preferred_size(Requistion, Requisition)">
+<arrowlink COLOR="#2080c0" DESTINATION="ID_117097226" ENDARROW="Default" ENDINCLINATION="108;6;" ID="Arrow_ID_766467833" STARTARROW="None" STARTINCLINATION="-29;46;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1664310599964" ID="ID_751138081" MODIFIED="1664310626241" TEXT="das ist eine Abk&#xfc;rzug &#xfc;ber die preferred_-Funtkionen plus den Layout-Trend"/>
+<node COLOR="#338800" CREATED="1664311100685" ID="ID_1082035208" MODIFIED="1664311120569" TEXT="und liefert bereits zu Beginn die korrekten Werte">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1664313525651" ID="ID_117097226" MODIFIED="1664313699335">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>Fazit</b>: ja die L&#246;sung <font color="#6206ae">funktioniert</font>&#160;uns erscheint stabil
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#2080c0" DESTINATION="ID_117097226" ENDARROW="Default" ENDINCLINATION="108;6;" ID="Arrow_ID_766467833" SOURCE="ID_64937663" STARTARROW="None" STARTINCLINATION="-29;46;"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1664152748537" ID="ID_1604673752" MODIFIED="1664152775554" TEXT="besser: on_size_allocate  verwenden">
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1664027420141" ID="ID_969143327" MODIFIED="1664032937882" TEXT="f&#xfc;hrt das zu einem re-Draw?">
+<node COLOR="#435e98" CREATED="1664027420141" ID="ID_969143327" MODIFIED="1664312508858" TEXT="f&#xfc;hrt das zu einem re-Draw?">
 <linktarget COLOR="#bf4283" DESTINATION="ID_969143327" ENDARROW="Default" ENDINCLINATION="-1003;96;" ID="Arrow_ID_190980327" SOURCE="ID_945958753" STARTARROW="None" STARTINCLINATION="260;-42;"/>
 <icon BUILTIN="help"/>
+<node CREATED="1664312511033" ID="ID_1716799052" MODIFIED="1664312589370" TEXT="wahrscheinlich Nein">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1664312522879" ID="ID_568381694" MODIFIED="1664312946309" TEXT="denn der erste Draw erfolgt nach der Zuteilung einer Allokation">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      zwar machen wir im Ctor zuletzt ein show_all(), welches dann erst diese Layout-Berechnung anst&#246;&#223;t. Aber zum Zeitpunkt der Allokations-Zuteilung f&#252;r das Container-Widget (ElementBox selber) haben die nested-children noch keine Allokation bekommen; zwar gelten sie schon als &quot;mapped&quot; und &quot;realized&quot;, aber offensichtlich f&#252;hrt eine &#196;nderung des visible()-Status dazu, da&#223; das damit ausgeblendete Kind-Widget schon gleich gar nicht gezeichnet wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1664312590502" ID="ID_694110716" MODIFIED="1664312697424" TEXT="definitiv: keine erneute Layout-Berechnung und Allokation">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ersichtlich aus Trace-Meldungen, welche ich zur Analyse in den get_preferred_*-Funktionen und beim Setzen der Allokation hatte. Auch auf dem Kind-Elementen sehe ich keine erneuten Aufrufe
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1664313319325" ID="ID_1660318028" MODIFIED="1664313502546" TEXT="aber: nach dem hide() liefert die umschlie&#xdf;ende Box sofort angepa&#xdf;te preferred_size">
+<arrowlink COLOR="#fcf2bc" DESTINATION="ID_611179505" ENDARROW="Default" ENDINCLINATION="88;-31;" ID="Arrow_ID_96952850" STARTARROW="None" STARTINCLINATION="76;2;"/>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664033098675" ID="ID_617752641" MODIFIED="1664033125288" TEXT="differenziertere L&#xf6;sung evaluieren">
@@ -18905,6 +19025,10 @@
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1664027420141" ID="ID_891209068" MODIFIED="1664033227851" TEXT="kann man den Label-Text &#xe4;ndern und sieht sofort eine &#xc4;nderung auf dem Layout-Callback?">
 <linktarget COLOR="#bf4283" DESTINATION="ID_891209068" ENDARROW="Default" ENDINCLINATION="-836;28;" ID="Arrow_ID_120092077" SOURCE="ID_945958753" STARTARROW="None" STARTINCLINATION="260;-42;"/>
 <icon BUILTIN="help"/>
+<node CREATED="1664313375789" ID="ID_611179505" MODIFIED="1664313504665" TEXT="zumindest nach hide() ist sofort die prefered_size angepa&#xdf;t">
+<linktarget COLOR="#fcf2bc" DESTINATION="ID_611179505" ENDARROW="Default" ENDINCLINATION="88;-31;" ID="Arrow_ID_96952850" SOURCE="ID_1660318028" STARTARROW="None" STARTINCLINATION="76;2;"/>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664033233729" ID="ID_73562728" MODIFIED="1664033252543" TEXT="ggfs &#xdc;bersetzungs-Faktor im Advice-System ablegen">
 <icon BUILTIN="hourglass"/>
