@@ -18272,9 +18272,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1612620568330" ID="ID_1826613475" MODIFIED="1663977403139" TEXT="Problem: feste Gr&#xf6;&#xdf;en-Vorgabe">
+<node COLOR="#338800" CREATED="1612620568330" ID="ID_1826613475" MODIFIED="1664494458140" TEXT="Problem: feste Gr&#xf6;&#xdf;en-Vorgabe">
 <linktarget COLOR="#f17881" DESTINATION="ID_1826613475" ENDARROW="Default" ENDINCLINATION="1266;110;" ID="Arrow_ID_1550601686" SOURCE="ID_351516626" STARTARROW="None" STARTINCLINATION="2103;126;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1625072904888" ID="ID_373040535" MODIFIED="1625072974106" TEXT="pa&#xdf;t nicht recht in den Gtk-Standard">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -18337,8 +18337,8 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075275103" ID="ID_1622786444" MODIFIED="1625075281429" TEXT="Konstruktor">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075282830" ID="ID_1730704998" MODIFIED="1625075292624" TEXT="mini-DSL f&#xfc;r die Konfigurations-Varianten schaffen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1625075282830" ID="ID_1730704998" MODIFIED="1664494473359" TEXT="mini-DSL f&#xfc;r die Konfigurations-Varianten schaffen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1654445954424" ID="ID_1720484280" MODIFIED="1661558650010" TEXT="1.Ansatz: explizit">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1654445618173" ID="ID_1315147546" MODIFIED="1654445654111" TEXT="Icon per vordefinierter Spec">
@@ -18633,9 +18633,28 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664036044208" ID="ID_1165985409" MODIFIED="1664036049568" TEXT="#1235 draft solution for size-constrained widgets">
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node CREATED="1664486479334" ID="ID_1175352945" MODIFIED="1664486498010" TEXT="Fazit: Widget liefert den Constraint als minimal und als natural request">
+<icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1664027101386" ID="ID_325165287" MODIFIED="1664136719643" TEXT="erforderliche Ausdehnung feststellen">
-<icon BUILTIN="pencil"/>
+<node CREATED="1664486499547" ID="ID_1517909946" MODIFIED="1664486599158" TEXT="CSS mu&#xdf; daf&#xfc;r sorgen, da&#xdf; dem nichts hinzugef&#xfc;gt wird">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      im Besonderen keine Border!
+    </p>
+    <p>
+      Das ist auch genau ein Argument, warum wir auf Gtk::Frame aufsetzen &#8212; damit ist der Frame n&#228;mlich ins <i>Innere des Widget</i>&#160;verlagert, und das Label liegt on-top und grenzt an den Rand an.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1664027101386" ID="ID_325165287" MODIFIED="1664494902370" TEXT="erforderliche Ausdehnung feststellen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1664027121220" ID="ID_1123910943" MODIFIED="1664027234710" TEXT="f&#xfc;r das ElementBoxWidget stets in Pixel">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -18649,28 +18668,55 @@
 </html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1664027274328" ID="ID_1533967380" MODIFIED="1664136711917" TEXT="Interaktionsmuster der Schnittstelle">
-<icon BUILTIN="pencil"/>
-<node COLOR="#435e98" CREATED="1664027342687" ID="ID_987588934" MODIFIED="1664028893912" TEXT="Analyse">
+<node COLOR="#338800" CREATED="1664027274328" ID="ID_1533967380" MODIFIED="1664494894900" TEXT="Interaktionsmuster der Schnittstelle">
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1664027342687" FOLDED="true" ID="ID_987588934" MODIFIED="1664494887246" TEXT="Analyse">
 <icon BUILTIN="info"/>
 <node CREATED="1664027374909" ID="ID_1916479707" MODIFIED="1664027563708" TEXT="Information wird von den GTK-Callbacks ben&#xf6;tigt">
 <icon BUILTIN="info"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1664027389923" ID="ID_1208852991" MODIFIED="1664027552105" TEXT="sie ist also berets zur Initialisierung (oder kurz danach) erforderlich">
-<icon BUILTIN="help"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1664027420141" ID="ID_217473035" MODIFIED="1664032905958" TEXT="wann und wie werden die Callbacks aufgerufen?">
-<linktarget COLOR="#bf4283" DESTINATION="ID_217473035" ENDARROW="Default" ENDINCLINATION="-989;57;" ID="Arrow_ID_1041626932" SOURCE="ID_945958753" STARTARROW="None" STARTINCLINATION="260;-42;"/>
+<node COLOR="#435e98" CREATED="1664027389923" FOLDED="true" ID="ID_1208852991" MODIFIED="1664494880330" TEXT="sie ist also berets zur Initialisierung (oder kurz danach) erforderlich">
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1664027420141" ID="ID_217473035" MODIFIED="1664494566272" TEXT="wann und wie werden die Callbacks aufgerufen?">
+<linktarget COLOR="#4285bf" DESTINATION="ID_217473035" ENDARROW="Default" ENDINCLINATION="-989;57;" ID="Arrow_ID_1041626932" SOURCE="ID_945958753" STARTARROW="None" STARTINCLINATION="260;-42;"/>
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1664027451687" ID="ID_26942945" MODIFIED="1664027457671" TEXT="Vermutung...">
 <node CREATED="1664027458520" ID="ID_53350409" MODIFIED="1664027468099" TEXT="aus dem Event-Handling"/>
 <node CREATED="1664027505881" ID="ID_102723884" MODIFIED="1664027518260" TEXT="als Folge einer &quot;invalidation&quot;"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664027526879" ID="ID_849843415" MODIFIED="1664027540069" TEXT="an der konkreten Implementierung beobachten">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1664027526879" ID="ID_849843415" MODIFIED="1664494543169" TEXT="an der konkreten Implementierung beobachten">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1664152872453" ID="ID_1559151133" MODIFIED="1664152874424" TEXT="korrekt"/>
 <node CREATED="1664152875229" ID="ID_1591242265" MODIFIED="1664152886391" TEXT="definitiv aus der Event-Loop"/>
 <node CREATED="1664152887076" ID="ID_1667743717" MODIFIED="1664152893950" TEXT="und nicht aus dem Widget-ctor"/>
+</node>
+<node COLOR="#435e98" CREATED="1664494523077" ID="ID_509196294" MODIFIED="1664494548030" TEXT="die Implementierung der GTK Layout-Engine stellt das sicher">
+<icon BUILTIN="idea"/>
+<node CREATED="1664494602946" ID="ID_1093994466" MODIFIED="1664494618443" TEXT="zum &quot;mapping&quot; des Widgets wird die size-Allocation ermittelt"/>
+<node CREATED="1664494619248" ID="ID_1432947442" MODIFIED="1664494782463" TEXT="hierf&#xfc;r gibt es nur wenige Standard-Implementierungen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        die wichtigste Implementierung ist in <b>gtk_widget_size_allocate_with_baseline</b>; sie wird von fast allen Containern verwendet, um ihre Kinder zu allozieren
+      </li>
+      <li>
+        top-level Windows, Dialogboxen und Menu-Items verwenden ihre eigene Implementierung
+      </li>
+      <li>
+        Gtk::Layout hat ebenfalls eine vereinfachte Variante: diese geht von dem <b>minimal_size</b>&#160;des Widgets aus!
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1664494784130" ID="ID_710050245" MODIFIED="1664494808538" TEXT="Alle diese werden nach dem ctor aber vor dem ersten &quot;draw&quot; aufgerufen"/>
+<node CREATED="1664494810334" ID="ID_1899633587" MODIFIED="1664494830787" TEXT="au&#xdf;erdem werden sie bei jedem Fokus-Wechsel aufgerufen"/>
+<node CREATED="1664494863383" ID="ID_402498612" MODIFIED="1664494874185" TEXT="danach erfolgt ein set_allocation"/>
 </node>
 </node>
 <node CREATED="1664027626370" ID="ID_244953029" MODIFIED="1664027646110" TEXT="eine falsche Angabe f&#xfc;hrt zu (vor&#xfc;bergehend) falschem Layout"/>
@@ -18831,8 +18877,8 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664035985288" ID="ID_1514029086" MODIFIED="1664035990688" TEXT="#1238 hide ElementBoxWidget label to meet size constraint">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1664032709767" ID="ID_89148369" MODIFIED="1664152782210" TEXT="einfache L&#xf6;sung: per Seiteneffekt verbergen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1664032709767" FOLDED="true" ID="ID_89148369" MODIFIED="1664494944351" TEXT="einfache L&#xf6;sung: per Seiteneffekt verbergen">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1664032721142" ID="ID_999001948" MODIFIED="1664313668307" TEXT="geht das?">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -18969,7 +19015,7 @@
   </head>
   <body>
     <p>
-      <b>Fazit</b>: ja die L&#246;sung <font color="#6206ae">funktioniert</font>&#160;uns erscheint stabil
+      <b>Fazit</b>: ja die L&#246;sung <font color="#6206ae">funktioniert</font>&#160;und erscheint stabil
     </p>
   </body>
 </html></richcontent>
@@ -18980,8 +19026,72 @@
 <node COLOR="#435e98" CREATED="1664152748537" ID="ID_1604673752" MODIFIED="1664152775554" TEXT="besser: on_size_allocate  verwenden">
 <icon BUILTIN="idea"/>
 </node>
-<node COLOR="#435e98" CREATED="1664027420141" ID="ID_969143327" MODIFIED="1664312508858" TEXT="f&#xfc;hrt das zu einem re-Draw?">
-<linktarget COLOR="#bf4283" DESTINATION="ID_969143327" ENDARROW="Default" ENDINCLINATION="-1003;96;" ID="Arrow_ID_190980327" SOURCE="ID_945958753" STARTARROW="None" STARTINCLINATION="260;-42;"/>
+<node CREATED="1664404663320" FOLDED="true" ID="ID_1822441152" MODIFIED="1664494935891" TEXT="minimal-size einf&#xfc;hren">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1664404674695" ID="ID_1745650030" MODIFIED="1664404686405" TEXT="Minimum sollte die Ausdehnung des Icon sein">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1664404687461" ID="ID_464093874" MODIFIED="1664404789460" TEXT="size_request und minimal-size werden von GTK nicht wirklich verwendet">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...daher scheidet die offensichtliche einfache L&#246;sung aus: n&#228;mlich einen size-request in der Gr&#246;&#223;e des Icon zu setzen...
+    </p>
+    <p>
+      Stattdessen m&#252;ssen wir dieses Minimum explizit in die Verarbeitung des size-Constraint einarbeiten, und dabe auf der <i>natural-size</i>&#160;des Icon aufbauen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1664404791911" ID="ID_1038149541" MODIFIED="1664486283099">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Nein! minimal und natural size <b>sollten gleich sein</b>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#bed1fd" DESTINATION="ID_1768206919" ENDARROW="Default" ENDINCLINATION="-2510;160;" ID="Arrow_ID_1173769741" STARTARROW="None" STARTINCLINATION="-2083;106;"/>
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1664486239918" ID="ID_393871048" MODIFIED="1664486273354" TEXT="unser size-constraint sollte auf beide gleicherma&#xdf;en wirken">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1664486285336" ID="ID_1824223190" MODIFIED="1664486318819" TEXT="die allermeisten Container gehen von natural_size aus">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1664486295583" ID="ID_375004402" MODIFIED="1664486313154" TEXT="aber (relevant!) Gtk::Layout geht von minimal_width aus">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1664486326706" ID="ID_23033105" MODIFIED="1664486428143" TEXT="strikt an die logische Bedeutung halten">
+<icon BUILTIN="idea"/>
+<node CREATED="1664486342176" ID="ID_1766841402" MODIFIED="1664486354403" TEXT="minimal: &quot;the minimum a widget neets to work properly&quot;"/>
+<node CREATED="1664486355182" ID="ID_1887502358" MODIFIED="1664486366330" TEXT="in unserem Fall ist das der Size-constraint"/>
+<node CREATED="1664486367173" ID="ID_203408708" MODIFIED="1664486380447" TEXT="und das Widget mu&#xdf; dann intern daf&#xfc;r sorgen, da&#xdf; es seinen Content da reinbekommt"/>
+<node CREATED="1664486398329" ID="ID_1798174878" MODIFIED="1664486423313" TEXT="GTK wird selber niemals ein Widget &quot;stauchen&quot;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn, dann mu&#223; man das dynamisch implementieren...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1664027420141" FOLDED="true" ID="ID_969143327" MODIFIED="1664312508858" TEXT="f&#xfc;hrt das zu einem re-Draw?">
+<linktarget COLOR="#4272bf" DESTINATION="ID_969143327" ENDARROW="Default" ENDINCLINATION="-1003;96;" ID="Arrow_ID_190980327" SOURCE="ID_945958753" STARTARROW="None" STARTINCLINATION="260;-42;"/>
 <icon BUILTIN="help"/>
 <node CREATED="1664312511033" ID="ID_1716799052" MODIFIED="1664312589370" TEXT="wahrscheinlich Nein">
 <icon BUILTIN="forward"/>
@@ -19384,9 +19494,9 @@
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664032772511" ID="ID_1018439357" MODIFIED="1664032782461" TEXT="Untersuchungen">
 <icon BUILTIN="hourglass"/>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664032818869" ID="ID_945958753" MODIFIED="1664033227851" TEXT="GTK-Interna">
-<arrowlink COLOR="#bf4283" DESTINATION="ID_217473035" ENDARROW="Default" ENDINCLINATION="-989;57;" ID="Arrow_ID_1041626932" STARTARROW="None" STARTINCLINATION="260;-42;"/>
-<arrowlink COLOR="#bf4283" DESTINATION="ID_969143327" ENDARROW="Default" ENDINCLINATION="-1003;96;" ID="Arrow_ID_190980327" STARTARROW="None" STARTINCLINATION="260;-42;"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664032818869" ID="ID_945958753" MODIFIED="1664494574785" TEXT="GTK-Interna">
+<arrowlink COLOR="#4285bf" DESTINATION="ID_217473035" ENDARROW="Default" ENDINCLINATION="-989;57;" ID="Arrow_ID_1041626932" STARTARROW="None" STARTINCLINATION="260;-42;"/>
+<arrowlink COLOR="#4272bf" DESTINATION="ID_969143327" ENDARROW="Default" ENDINCLINATION="-1003;96;" ID="Arrow_ID_190980327" STARTARROW="None" STARTINCLINATION="260;-42;"/>
 <arrowlink COLOR="#bf4283" DESTINATION="ID_891209068" ENDARROW="Default" ENDINCLINATION="-836;28;" ID="Arrow_ID_120092077" STARTARROW="None" STARTINCLINATION="260;-42;"/>
 <icon BUILTIN="hourglass"/>
 </node>
@@ -32218,7 +32328,7 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node COLOR="#338800" CREATED="1532788645307" FOLDED="true" ID="ID_254810710" MODIFIED="1561827465292" TEXT="Trigger-Technik kl&#xe4;ren">
+<node COLOR="#338800" CREATED="1532788645307" ID="ID_254810710" MODIFIED="1561827465292" TEXT="Trigger-Technik kl&#xe4;ren">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1532788681197" HGAP="336" ID="ID_32192034" MODIFIED="1576282358033" TEXT="bei GTK selber abschauen" VSHIFT="-52">
 <richcontent TYPE="NOTE"><html>
@@ -32598,7 +32708,7 @@
 <node CREATED="1532797180066" ID="ID_687615166" MODIFIED="1532797192496" TEXT="siehe Ticket #1032">
 <icon BUILTIN="info"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533218052308" ID="ID_1734927969" MODIFIED="1533218091117" TEXT="neue Kategorie: technical/code base/ GTK">
+<node COLOR="#435e98" CREATED="1533218052308" ID="ID_1734927969" LINK="https://lumiera.org/documentation/technical/code/gtk/index.html" MODIFIED="1664481533409" TEXT="neue Kategorie: technical/code base/ GTK">
 <icon BUILTIN="yes"/>
 </node>
 <node COLOR="#338800" CREATED="1533218096245" ID="ID_1901487140" MODIFIED="1533325344852" TEXT="dort Seite startup">
@@ -58211,14 +58321,28 @@
 </node>
 <node CREATED="1663946250024" ID="ID_1142643633" MODIFIED="1663946255308" TEXT="Layout management">
 <node CREATED="1663946256977" ID="ID_1464608958" MODIFIED="1663946261875" TEXT="Thema: Size-Handling">
-<node COLOR="#435e98" CREATED="1612527499386" HGAP="34" ID="ID_615948747" MODIFIED="1663946547267" TEXT="Untersuchung: size_request &#x2014; 2/21 f&#xfc;r Clip-Display" VSHIFT="-49">
+<node COLOR="#435e98" CREATED="1612527499386" HGAP="34" ID="ID_615948747" MODIFIED="1664401278771" TEXT="Untersuchung: size_request &#x2014; 2/21 + 9/22 f&#xfc;r Clip-Display" VSHIFT="-49">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....bin damals mit size_request eingestiegen &#8212; aber von dort bald auf <font face="Monospaced" size="3" color="#f72929">gtk_widget_size_allocate_with_baseline </font>gesto&#223;en; letzteres ist die eigentliche zentrale Funktion
+    </p>
+  </body>
+</html></richcontent>
 <linktarget COLOR="#364ec7" DESTINATION="ID_615948747" ENDARROW="Default" ENDINCLINATION="-1440;0;" ID="Arrow_ID_866144981" SOURCE="ID_643882250" STARTARROW="None" STARTINCLINATION="-1942;189;"/>
 <linktarget COLOR="#4b67b0" DESTINATION="ID_615948747" ENDARROW="Default" ENDINCLINATION="-1100;0;" ID="Arrow_ID_1297405131" SOURCE="ID_1143769023" STARTARROW="None" STARTINCLINATION="-2000;141;"/>
 <icon BUILTIN="info"/>
 <node CREATED="1612530135923" ID="ID_597723725" MODIFIED="1612530155607" TEXT="gtkwidget.c Zeile 5960ff">
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1612532127121" ID="ID_1698900734" MODIFIED="1612532140107" TEXT="gtk_widget_set_size_request">
+<node COLOR="#990000" CREATED="1664400907408" HGAP="25" ID="ID_1036425614" MODIFIED="1664401150443" TEXT="Vorsicht Sackgasse" VSHIFT="1">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1612532127121" FOLDED="true" ID="ID_1698900734" MODIFIED="1664474635424" TEXT="gtk_widget_set_size_request">
+<icon BUILTIN="idea"/>
+<icon BUILTIN="stop-sign"/>
 <node CREATED="1663948672795" ID="ID_1935344830" MODIFIED="1663948681710" TEXT=" gtkwidget.c 11186"/>
 <node CREATED="1663949014421" ID="ID_761292468" MODIFIED="1663949024301" TEXT="definiert die Mindes-Anforderung dieses Widgets"/>
 <node CREATED="1663949035261" ID="ID_1775424216" MODIFIED="1663949054174" TEXT="kann undefiniert sein (-1) &#x27f9; dann natural request"/>
@@ -58260,6 +58384,284 @@
 </node>
 </node>
 </node>
+<node CREATED="1664400929963" ID="ID_1240876072" MODIFIED="1664400943998" TEXT="size_request sieht ganz stark nach einem obsoleten Konzept aus">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1664400954960" ID="ID_776024263" MODIFIED="1664400966888" TEXT="er wirkt sich eigentlich nur auf die min-size aus"/>
+<node CREATED="1664400967726" ID="ID_1498608883" MODIFIED="1664465602240" TEXT="und diese wird oft nur f&#xfc;r Konsistenzchecks verwendet"/>
+<node CREATED="1664465681826" ID="ID_1467702205" MODIFIED="1664465820561" TEXT="nicht klar wann die min-size verwendet wird">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        Container-Widgets haben so etwas wie ein generisches Layout-Muster &#10233; <b>gtk_widget_size_allocate_with_baseline</b>
+      </li>
+      <li>
+        ABER es gibt anscheinend viele Widgets, die das direkt machen (und vom Container-Konzept bewegt sich GTK weg, zu Gunsten des Konzepts &quot;CSS Gadget&quot;); konkret habe ich bei einem <b>GtkFrame</b>&#160;durchaus beobachtet, da&#223; dem Widget nur seine geforderte min-size zugeteilt wurde
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1664474172428" ID="ID_982750434" MODIFIED="1664474183159" TEXT="normaler Container-Code ignoriert sie"/>
+<node CREATED="1664474184106" ID="ID_1675446189" MODIFIED="1664474193374" TEXT="flow-Layout beachtet sie als Anschlag"/>
+<node CREATED="1664474193962" ID="ID_1768206919" MODIFIED="1664486187383" TEXT="GtkLayout(Canvas) verwendet sie als Basis">
+<arrowlink COLOR="#a9b4c1" DESTINATION="ID_1788566311" ENDARROW="Default" ENDINCLINATION="-47;-177;" ID="Arrow_ID_590130036" STARTARROW="None" STARTINCLINATION="287;18;"/>
+<linktarget COLOR="#bed1fd" DESTINATION="ID_1768206919" ENDARROW="Default" ENDINCLINATION="-2510;160;" ID="Arrow_ID_1173769741" SOURCE="ID_1038149541" STARTARROW="None" STARTINCLINATION="-2083;106;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1664467386286" ID="ID_175060844" MODIFIED="1664474394992" TEXT="widget_class-&gt;size_allocate">
+<font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="back"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1664467416306" ID="ID_111898596" MODIFIED="1664474697760" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>Einstiegspunkt</u>&#160;aus vielen Widgets
+    </p>
+  </body>
+</html></richcontent>
+<edge COLOR="#5247dc"/>
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+<node CREATED="1664474418764" ID="ID_602033868" MODIFIED="1664474496100" TEXT="wer ruft das auf?">
+<linktarget COLOR="#655e7d" DESTINATION="ID_602033868" ENDARROW="Default" ENDINCLINATION="-419;67;" ID="Arrow_ID_1884820801" SOURCE="ID_165291290" STARTARROW="None" STARTINCLINATION="-846;67;"/>
+<node CREATED="1664471955447" ID="ID_748019971" MODIFIED="1664474513890" TEXT="Aufruf via widget_class!"/>
+<node CREATED="1664471995913" ID="ID_486609942" MODIFIED="1664472003787" TEXT="h&#xe4;ngt vom Widget ab">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1664472301300" ID="ID_1282453232" MODIFIED="1664472485480" TEXT="nur wenige Aufrufe">
+<node CREATED="1664472486343" ID="ID_12332143" MODIFIED="1664472489155" TEXT="top-level">
+<node CREATED="1664472498670" ID="ID_928074515" MODIFIED="1664472506937" TEXT="gtk_application_window_real_size_allocate"/>
+<node CREATED="1664472541528" ID="ID_1301393892" MODIFIED="1664472545202" TEXT="einige Dialogboxen"/>
+<node CREATED="1664472707992" ID="ID_1435876974" MODIFIED="1664474945399">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>gtk_widget_size_allocate_with_baseline</b>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#692b5b" DESTINATION="ID_563938836" ENDARROW="Default" ENDINCLINATION="668;-205;" ID="Arrow_ID_378269338" STARTARROW="None" STARTINCLINATION="-279;578;"/>
+</node>
+</node>
+<node CREATED="1664472574035" ID="ID_535631528" MODIFIED="1664472582542" TEXT="gtk_label_size_allocate"/>
+<node CREATED="1664474775284" ID="ID_1855152369" MODIFIED="1664474877769" TEXT="gtk_layout_size_allocate">
+<arrowlink COLOR="#d8764f" DESTINATION="ID_159142787" ENDARROW="Default" ENDINCLINATION="53;-60;" ID="Arrow_ID_1501616113" STARTARROW="None" STARTINCLINATION="217;26;"/>
+</node>
+<node CREATED="1664472596690" ID="ID_1526836824" MODIFIED="1664472603892" TEXT="gtk_level_bar_size_allocate"/>
+<node CREATED="1664472629652" ID="ID_844975218" MODIFIED="1664472635736" TEXT="gtk_overlay_size_allocate"/>
+<node CREATED="1664472651913" ID="ID_1391420718" MODIFIED="1664472657652" TEXT="gtk_scale_size_allocate"/>
+</node>
+</node>
+<node CREATED="1664473954962" ID="ID_1808329181" MODIFIED="1664474389674" TEXT="">
+<node CREATED="1664473992889" ID="ID_1943066029" MODIFIED="1664474570171" TEXT="Normalerweise">
+<node CREATED="1664474571526" ID="ID_1267258985" MODIFIED="1664474577490" TEXT="fragt das Kind-Widget"/>
+<node CREATED="1664474578174" ID="ID_1361243851" MODIFIED="1664474587235" TEXT="ermittelt daraus den Platzbedarf"/>
+</node>
+<node CREATED="1664474033815" ID="ID_559670461" MODIFIED="1664474077090">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>aber</b>: spezielle Widgets/Container
+    </p>
+    <p>
+      behandeln hier die Child-Widgets
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1664472707992" ID="ID_1917960846" MODIFIED="1664474093490">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>gtk_widget_size_allocate_with_baseline</b>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#692b5b" DESTINATION="ID_563938836" ENDARROW="Default" ENDINCLINATION="621;-190;" ID="Arrow_ID_152388281" STARTARROW="None" STARTINCLINATION="-357;417;"/>
+</node>
+<node CREATED="1664474775284" ID="ID_256729062" MODIFIED="1664474808855" TEXT="gtk_layout_size_allocate">
+<node CREATED="1664474099975" ID="ID_159142787" MODIFIED="1664474867466" TEXT="Canvas-Widget: GtkLayout">
+<linktarget COLOR="#d8764f" DESTINATION="ID_159142787" ENDARROW="Default" ENDINCLINATION="53;-60;" ID="Arrow_ID_1501616113" SOURCE="ID_1855152369" STARTARROW="None" STARTINCLINATION="217;26;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1664474832124" ID="ID_489352324" MODIFIED="1664474842148" TEXT="gtk_layout_allocate_child"/>
+<node CREATED="1664474124347" ID="ID_304352916" MODIFIED="1664474846281" TEXT="ist speziell">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1664474128731" ID="ID_1788566311" MODIFIED="1664474227120" TEXT="geht bei der Zuteilung vom min-Size aus">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1788566311" ENDARROW="Default" ENDINCLINATION="-47;-177;" ID="Arrow_ID_590130036" SOURCE="ID_1768206919" STARTARROW="None" STARTINCLINATION="287;18;"/>
+</node>
+<node CREATED="1664474142145" ID="ID_1619579487" MODIFIED="1664474155419" TEXT="dann weiter height-for-width oder umgekehrt"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1664467426400" ID="ID_323560628" MODIFIED="1664467636855">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Beachte: <font face="Monospaced" size="3">_GtkCssGadgetClass-&gt;<b>allocate</b></font>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1664467481890" ID="ID_1905806062" MODIFIED="1664467488412" TEXT="bekommt eine &quot;allocate_func&quot;"/>
+<node CREATED="1664467720488" ID="ID_994987639" MODIFIED="1664467794848">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u><i>typischerweise</i>(via GadgetClass)</u>: <font face="Monospaced">gtk_css_gadget_real_allocate</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1664467644459" ID="ID_45450826" MODIFIED="1664467662907" TEXT="CSS-Gadgets werden in Zukunft wichtiger">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1664468000858" ID="ID_1650947202" MODIFIED="1664468006117" TEXT="gadget_class-&gt;allocate">
+<node CREATED="1664468030167" ID="ID_1269527361" MODIFIED="1664468035642" TEXT="von: gtk_css_custom_gadget_allocate"/>
+<node CREATED="1664468049900" ID="ID_1444284149" MODIFIED="1664468072369" TEXT="von: gtk_css_gadget_allocate">
+<icon BUILTIN="back"/>
+</node>
+</node>
+<node CREATED="1664468221301" ID="ID_815029757" MODIFIED="1664468225639" TEXT="Beispiel GtkFrame">
+<node CREATED="1664468568742" ID="ID_276645627" MODIFIED="1664468573479" TEXT="Aufruf kommt von gtk_css_custom_gadget_allocate">
+<node CREATED="1664468592906" ID="ID_240073713" MODIFIED="1664468602629" TEXT="effektiv von gadget_class-&gt;allocate"/>
+<node CREATED="1664468725965" ID="ID_1819801827" MODIFIED="1664468747176">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und damit wieder von <b><font face="Monospaced">gtk_css_gadget_allocate</font></b>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#3865cd" DESTINATION="ID_1819801827" ENDARROW="Default" ENDINCLINATION="99;109;" ID="Arrow_ID_1378453284" SOURCE="ID_588778933" STARTARROW="None" STARTINCLINATION="390;0;"/>
+</node>
+<node CREATED="1664469502600" ID="ID_611893108" MODIFIED="1664469518960">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      allerdings dann vom <u>umschlie&#223;enden Widget</u>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1664469528852" ID="ID_1753828620" MODIFIED="1664469548960">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Implementierung: <b><font face="Monospaced">gtk_frame_allocate</font></b>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1664469632391" ID="ID_1730366357" MODIFIED="1664469639668" TEXT="ignoriert die &#xfc;bergebene Allocation"/>
+<node CREATED="1664469640285" ID="ID_1706931088" MODIFIED="1664469888214" TEXT="Ausgabe-Parameter ist: out_clip">
+<linktarget COLOR="#35d4cd" DESTINATION="ID_1706931088" ENDARROW="Default" ENDINCLINATION="-220;-17;" ID="Arrow_ID_1835745476" SOURCE="ID_1957306429" STARTARROW="None" STARTINCLINATION="74;-5;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1664469669402" ID="ID_925561460" MODIFIED="1664469736117" TEXT="berechnet from scratch eine child_allocation">
+<arrowlink COLOR="#4483c1" DESTINATION="ID_24474469" ENDARROW="Default" ENDINCLINATION="75;-66;" ID="Arrow_ID_839164355" STARTARROW="None" STARTINCLINATION="-113;9;"/>
+</node>
+<node CREATED="1664468238896" ID="ID_1603959960" MODIFIED="1664468245349" TEXT="justiert die um die Frame-Dekoration"/>
+<node CREATED="1664469756095" ID="ID_1426249821" MODIFIED="1664469802527" TEXT="und gibt das an das eigene Gadget weiter">
+<arrowlink COLOR="#49a9e2" DESTINATION="ID_588778933" ENDARROW="Default" ENDINCLINATION="17;-13;" ID="Arrow_ID_1888006033" STARTARROW="None" STARTINCLINATION="-114;8;"/>
+</node>
+</node>
+<node CREATED="1664468227932" ID="ID_24474469" MODIFIED="1664469730107" TEXT="gtk_frame_compute_child_allocation">
+<linktarget COLOR="#4483c1" DESTINATION="ID_24474469" ENDARROW="Default" ENDINCLINATION="75;-66;" ID="Arrow_ID_839164355" SOURCE="ID_925561460" STARTARROW="None" STARTINCLINATION="-113;9;"/>
+<node CREATED="1664468348482" ID="ID_1161990345" MODIFIED="1664468349364" TEXT="gtk_frame_real_compute_child_allocation"/>
+<node CREATED="1664468414498" ID="ID_1237799901" MODIFIED="1664468418149" TEXT="diese ruft auf: gtk_css_gadget_get_content_allocation">
+<node CREATED="1664470070987" ID="ID_1498695149" MODIFIED="1664470117430">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      dieses baut auf auf: <b><font face="Monospaced">gtk_css_gadget_allocate</font></b>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1664471526800" ID="ID_346003014" MODIFIED="1664471579040" TEXT="es verwendet n&#xe4;mlich den vorhandenen priv-&gt;allocated_size"/>
+<node CREATED="1664471678866" ID="ID_1301393710" MODIFIED="1664471693326" TEXT="und der wird nur von gtk_css_gadget_allocate gesetzt"/>
+<node CREATED="1664471696617" ID="ID_165291290" MODIFIED="1664474496099" TEXT="Preisfrage: wer ruft letzteres auf?">
+<arrowlink COLOR="#655e7d" DESTINATION="ID_602033868" ENDARROW="Default" ENDINCLINATION="-419;67;" ID="Arrow_ID_1884820801" STARTARROW="None" STARTINCLINATION="-846;67;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1664472004680" ID="ID_1104307328" MODIFIED="1664473489163">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      (konkret im Beispiel): <b><font face="Monospaced">gtk_frame_size_allocate</font></b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1664473514122" ID="ID_1482686732" MODIFIED="1664473548372" TEXT="Fazit: die Basis-Allokation stammt aus der bekannten Berechnungs-Routine">
+<icon BUILTIN="back"/>
+</node>
+</node>
+<node CREATED="1664470127589" ID="ID_737926476" MODIFIED="1664470137023" TEXT="dekoriert und erweitert gem&#xe4;&#xdf; CSS"/>
+<node CREATED="1664470140690" ID="ID_155338555" MODIFIED="1664470151199" TEXT="setzt damit die Werte im Ausgabe-parameter"/>
+</node>
+</node>
+<node CREATED="1664468245849" ID="ID_588778933" MODIFIED="1664469796939">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ruft damit <b><font face="Monospaced">gtk_css_gadget_allocate</font></b>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#3865cd" DESTINATION="ID_1819801827" ENDARROW="Default" ENDINCLINATION="99;109;" ID="Arrow_ID_1378453284" STARTARROW="None" STARTINCLINATION="390;0;"/>
+<linktarget COLOR="#49a9e2" DESTINATION="ID_588778933" ENDARROW="Default" ENDINCLINATION="17;-13;" ID="Arrow_ID_1888006033" SOURCE="ID_1426249821" STARTARROW="None" STARTINCLINATION="-114;8;"/>
+</node>
+<node CREATED="1664469820733" ID="ID_1957306429" MODIFIED="1664469888214" TEXT="Resultat: out-clip (incl shaddow)">
+<arrowlink COLOR="#35d4cd" DESTINATION="ID_1706931088" ENDARROW="Default" ENDINCLINATION="-220;-17;" ID="Arrow_ID_1835745476" STARTARROW="None" STARTINCLINATION="74;-5;"/>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1663954860585" ID="ID_1293292924" MODIFIED="1663954864003" TEXT="resize_needed">
 <node CREATED="1663954865611" ID="ID_1181046845" MODIFIED="1663954871465" TEXT="interne Flag im widget"/>
 <node CREATED="1663954879636" ID="ID_1910791425" MODIFIED="1663954884163" TEXT="Verwendungen">
@@ -58289,6 +58691,8 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#4c96df" DESTINATION="ID_619170334" ENDARROW="Default" ENDINCLINATION="22;-288;" ID="Arrow_ID_1241133759" STARTARROW="None" STARTINCLINATION="-30;150;"/>
+<linktarget COLOR="#692b5b" DESTINATION="ID_563938836" ENDARROW="Default" ENDINCLINATION="621;-190;" ID="Arrow_ID_152388281" SOURCE="ID_1917960846" STARTARROW="None" STARTINCLINATION="-357;417;"/>
+<linktarget COLOR="#692b5b" DESTINATION="ID_563938836" ENDARROW="Default" ENDINCLINATION="668;-205;" ID="Arrow_ID_378269338" SOURCE="ID_1435876974" STARTARROW="None" STARTINCLINATION="-279;578;"/>
 <linktarget COLOR="#852376" DESTINATION="ID_563938836" ENDARROW="Default" ENDINCLINATION="18;-93;" ID="Arrow_ID_1194665328" SOURCE="ID_1959081786" STARTARROW="None" STARTINCLINATION="-211;17;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1663955121019" ID="ID_1249298775" MODIFIED="1663955138898" TEXT="wird direkt anscheinend nur von Init aus aktiviert"/>
@@ -61046,7 +61450,7 @@
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
-<node COLOR="#174f60" CREATED="1664058057316" FOLDED="true" ID="ID_1582660555" MODIFIED="1664059276465" TEXT="vergessen">
+<node COLOR="#174f60" CREATED="1664058057316" FOLDED="true" ID="ID_1582660555" MODIFIED="1664481410091" TEXT="vergessen">
 <icon BUILTIN="licq"/>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664058236108" ID="ID_616634560" LINK="#ID_633007604" MODIFIED="1664058551602" TEXT="Design um den Display-Frame im Timeline-Layout">
 <richcontent TYPE="NOTE"><html>

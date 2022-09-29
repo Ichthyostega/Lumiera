@@ -23,14 +23,22 @@
 
 /** @file element-box-widget.hpp
  ** Widget to render an ID label with associated icon.
- ** This is a UI building block used at various places, e.g. to show
- ** the name of a clip in the media bins or in the timeline, to indicate
- ** the kind of an effect, or to render a marker label in the tracks or
- ** the timeline ruler. The common denominator of all those elements is
- ** that they combine some icon with a possibly abridged text and render
- ** them with a given indicator style, configurable via CSS. There is
- ** support for picking the icon and the indicator style based on some
- ** notion of _"type"._
+ ** This is a UI building block used at various places, e.g. to show the name of a clip
+ ** in the media bins or in the timeline, to indicate the kind of an effect, or to render
+ ** a marker label in the tracks or the timeline ruler. The common denominator of all those
+ ** elements is that they combine some icon with a possibly abridged text and render them
+ ** with a given indicator style, configurable via CSS. There is support for picking the
+ ** icon and the indicator style based on some notion of _"type"._
+ ** 
+ ** # Usage
+ ** Build a custom widget with ElementBoxWidget as base class; invoke the base ctor using
+ ** the DSL qualifier syntax to select from the preconfigured layout options
+ ** - the stage::widget::Kind specifies the basic usage situation
+ ** - expand / collapse functionality can be directly wired with a model::Tangible
+ ** - a special _size constrained layout_ mode can be activated, to allow for display
+ **   on a time calibrated canvas; the actual translation from time to pixel size must
+ **   be done by the concrete subclass (e.g. stage::model::Clip), accessible through
+ **   the _getter-λ_ passed to the `constrained(λ)` clause.
  ** 
  ** @todo WIP-WIP-WIP as of 11/2018   ///////////////////////////////////////////////////////////////////////TICKET #1185
  ** @todo WIP-WIP-WIP as of 9/2022    ///////////////////////////////////////////////////////////////////////TICKET #1219
@@ -45,12 +53,9 @@
 #include "stage/model/expander-revealer.hpp"
 #include "lib/builder-qualifier-support.hpp"
 
-//#include "lib/util.hpp"
+#include "lib/format-string.hpp" ////////TODO debugging
 #include "lib/symbol.hpp"
-#include "lib/format-string.hpp"
 
-//#include <memory>
-//#include <vector>
 #include <functional>
 #include <utility>
 #include <string> //////TODO debugging
@@ -73,7 +78,7 @@ namespace widget {
             , CONTENT  ///< Widget serves to represent a piece of content (Clip)
             };
   
-  /** the type of content object to derive suitable styling */
+  /** the type of content object to derive suitable styling (background colour, icon) */
   enum Type { VIDEO    ///< represents moving (or still) image data
             , AUDIO    ///< represents sound data
             , TEXT     ///< represents text content
@@ -87,35 +92,6 @@ namespace widget {
             };
   
   using SizeGetter = std::function<int()>;
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1219 : TESTCODE : remove this
-  class HackedTxt
-    : public Gtk::Label
-    {
-    public:
-      using Gtk::Label::Label;
-    protected:
-      void
-      get_preferred_width_vfunc (int& mw, int& nw) const override
-        {
-          Gtk::Label::get_preferred_width_vfunc (mw,nw);
-          cout << "Haxx::"<<this<<":: pref.w=("<<mw<<", "<<nw<<")"<<endl;
-        }
-      void
-      get_preferred_height_vfunc (int& mh, int& nh) const override
-        {
-          Gtk::Label::get_preferred_height_vfunc (mh,nh);
-          cout << "Haxx::"<<this<<":: pref.h=("<<mh<<", "<<nh<<")"<<endl;
-        }
-
-      void
-      on_size_allocate (Gtk::Allocation& alloc) override
-        {
-          cout << "Haxx::"<<this<<":: alloc.w="<<alloc.get_width()<<", h="<<alloc.get_height()<<endl;
-          Gtk::Label::on_size_allocate(alloc);
-        }
-
-    };
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1219 : TESTCODE : remove this
   
   /**
    * A basic building block of the Lumiera UI.
@@ -144,8 +120,7 @@ namespace widget {
       
       Gtk::Box label_;
       Gtk::Image icon_;
-//    Gtk::Label name_;
-      HackedTxt name_;
+      Gtk::Label name_;
       
     public:
       class Config;
@@ -162,6 +137,7 @@ namespace widget {
       
       Gtk::SizeRequestMode get_request_mode_vfunc()              const final;
       void get_preferred_width_vfunc (int&, int&)                const override;
+      void get_preferred_height_vfunc (int&, int&)               const override;
       void get_preferred_height_for_width_vfunc (int, int&,int&) const override;
       void on_size_allocate (Gtk::Allocation&)                         override;
       
@@ -207,6 +183,7 @@ namespace widget {
     };
   
   
+  /** qualify the basic use case for the new ElementBoxWidget */
   inline ElementBoxWidget::Config::Qualifier
   kind(Kind kind)
   {
@@ -217,6 +194,7 @@ namespace widget {
               }};
   }
   
+  /** define the name-ID displayed in the caption */
   inline ElementBoxWidget::Config::Qualifier
   name(string id)
   {
@@ -227,6 +205,7 @@ namespace widget {
               }};
   }
   
+  /** provide an expand/collapse button, wired with the given Expander */
   inline ElementBoxWidget::Config::Qualifier
   expander(model::Expander& expander)
   {
@@ -237,6 +216,11 @@ namespace widget {
               }};
   }
   
+  /**
+   * switch in to size-constrained layout mode.
+   * The base size allocation (without borders and margin) will span exactly
+   * the horizontal extension as retrieved from invoking the SizeGetter.
+   */
   inline ElementBoxWidget::Config::Qualifier
   constrained(SizeGetter widthConstraint)
   {
@@ -247,6 +231,10 @@ namespace widget {
               }};
   }
   
+  /**
+   * activate size-constrained layout mode, similar as #constrained(SizeGetter).
+   * Additionally, also the vertical extension is controlled in this variant.
+   */
   inline ElementBoxWidget::Config::Qualifier
   constrained(SizeGetter widthConstraint, SizeGetter heightConstraint)
   {
@@ -258,6 +246,7 @@ namespace widget {
                 config.heightConstraint_ = move(hC);
               }};
   }
+  
   
   
   /** setup an ElementBoxWidget with suitable presentation style.

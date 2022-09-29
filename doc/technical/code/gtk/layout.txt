@@ -1,0 +1,95 @@
+GTK Widget Layout
+=================
+:Date: 2022
+
+//Menu: label layout
+
+.collecting insights on inner workings of the GTK Layout Engine
+GTK is a powerful framework, yet also carries along some legacy and homegrown structures,
+hidden within a huge code base. While there are excellent beginner tutorials, definitive technical
+documentation is scarce, and design decisions must be inferred from the existing code sometimes.
+Since Lumiera is on the mission of building a quite elaborate user interface -- well beyond the
+abilities of a typical office application -- we're often forced to identify possible extension
+points and or work out reliable and future proof techniques to create behaviour beyond the
+original intentions of the GTK developers.
+
+Allocation of Screen Space
+--------------------------
+
+GTK is built from ground up with the assumption of a _dynamical layout_ -- designing the UI layout
+with fixed sizes and widget placements is not seen as a viable option and only marginally supported
+as an exotic corner case. An user interface built with GTK is comprised of widgets arranged into a
+hierarchical structure, and styled by matching a corresponding structure of _layout nodes_ against
+a set of _cascading style rules_ (CSS). When a new widget is attached into this structure, it has
+to progress through several stages
+
+- creation / allocation
+- wiring
+- ``map'' : associate a display window (GDK window) and dedicated extension on screen
+- ``realize'' : bring all structures into workable state
+- ``draw'' : render the visuals into pixels for display
+- ``unrealize'' : remove from active interconnections
+- ``unmap'' : release the ties to the associated (GDK) window
+- ``destroy'' : detach from managers and deallocate data
+
+After passing through the _realize phase,_ a widget holds unto a `Allocation` -- a struct defining
+the position of the upper left corner, and its extension (width, height) in pixel coordinates. Due
+to dynamic interaction responses, a widget can be _resized,_ causing the emission of a _resize event._
+Processing this resize event within the GTK Event Loop will create and assign an _updated allocation,_
+followed by _redrawing_ the widget. GTK uses double buffering, and thus it is sufficient to draw the
+widget in its new shape, without having to clear out the old state from the display buffer.
+
+Allocation strategy
+~~~~~~~~~~~~~~~~~~~
+.verified with Gtk 3.24
+In GTK, as a rule, screen extension is never squeezed, but rather expanded to fit. Every widget is
+queried through a set of virtual functions (``vfunc'') to define its basic layout trend (the ``size
+request mode''), and its minimal and natural extension
+
+minimal:: the absolute minimum required by the widget to work properly
+natural:: the extension necessary to use the widget properly, without wasting screen estate
+
+size request mode::
+  by implementing ´get_request_mode_vfunc()`, the widget defines how its allocation shall be treated...
+  
+  - `SIZE_REQUEST_HEIGHT_FOR_WIDTH` : start with a desired width and then accommodate the vertical extension
+  - `SIZE_REQUEST_WIDTH_FOR_HEIGHT` : start with a desired height and expand horizontally as needed
+  - `SIZE_REQUEST_CONSTANT_SIZE` (this seems to be there for sake of completeness, but is typically
+    not treated explicitly as a distinct case in layout code; expect to fall back to the default,
+    which is height-for-width)
+
+Starting from these requirements as defined by the widget, next the CSS definitions are accessed through
+the *CSS Gadget*, which is associated internally with each widget. This typically causes the allocation
+to be _increased_ to allow for borders, margins, padding and drop shadows. In case the widget is placed
+into a container with fill-layout, the widget may be expanded further, or margins will be created by
+shifting the pixel coordinates. From the allocation worked out thus far, all headroom necessary for
+proper drawing is then _subtracted,_ and the resulting bare allocation is passed to the widget through
+the function `gtk_widget_set_allocation()`, which also invokes the `Gtk::Widget::on_size_allocate()`
+hook. Note that the fully expanded allocation is not stored; GTK just assumes that widgets will
+draw themselves properly, including their decorations, thereby possibly using extended screen space. 
+ 
+Minimal vs. natural size request
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+In short: you need to define both, while the natural size request is more relevant in most cases.
+All top level entities and most layout containers will start with the natural size. However, some
+containers initiate the with-for-height (or height-for-width) request sequence with the minimal
+extension. Most notably, the _canvas control,_ `Gtk::Layout` allocates widgets according to
+this scheme (see `gtk_layout_allocate_child()` in 'gtklayout.c').
+
+NOTE: judging from the code, it is recommended to implement both `get_preferred_height|width()`,
+      irrespective of the layout trend. However, it is only necessary to implement the derivative
+      function matching the trend, e.g. `Gtk::Widget::get_preferred_height_for_width_vfunc() in
+      case of `SIZE_REQUEST_HEIGHT_FOR_WIDTH`, since the default implementation will fall back
+      on `get_preferred_with()` for the other one.
+
+However -- in most cases (custom) widgets are assembled by arranging pre defined standard widgets
+into some layout container (Box or Grid or Tree); in those cases, the default implementation works
+out the required extension bottom-up from the building blocks, and there is no need to define
+any specific size request
+
+Explicit size_request
+^^^^^^^^^^^^^^^^^^^^^
+There is a set of functions `set|get_size_request()`. These seem to be a mostly obsolete leftover from
+earlier days. They are implemented by forcibly increasing the _minimal size request_ -- and since many
+standard containers today (as of 2022) work based on the natural size request rather, this information
+is not treated coherently, and sometimes leads to surprising behaviour.
