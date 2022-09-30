@@ -95,13 +95,23 @@ namespace widget {
   
   
   
+  
+  IDLabel::~IDLabel()                    { }
   ElementBoxWidget::~ElementBoxWidget()  { }
+  
   
   Literal
   ElementBoxWidget::Config::getIconID()  const
   {
     ///////////////////////////////////////////////////////////////////////////TICKET #1185 : implement logic to pick suitable icon...
     return "track_enabled";      //////////////////////////////////////////////TICKET #1219 : maybe at least a better generic placeholder icon...?
+  }
+  
+  Literal
+  ElementBoxWidget::Config::getMenuSymb()  const
+  {
+    ///////////////////////////////////////////////////////////////////////////TICKET #1185 : implement logic to pick suitable icon...
+    return "gtk-go-down";        //////////////////////////////////////////////TICKET #1219 : maybe at least a better generic placeholder icon...?
   }
   
   Gtk::IconSize
@@ -124,25 +134,49 @@ namespace widget {
   }
   
   
+  IDLabel::IDLabel (Literal iconID, Literal menuSymb, Gtk::IconSize siz)
+    : Gtk::Box{Gtk::ORIENTATION_HORIZONTAL}
+    , imgIcon_{Gtk::StockID{iconID},   siz}    ///////////////////////////////TICKET #1030 : use of stockIDs is deprecated; care for a more modern icon naming scheme
+    , imgMenu_{Gtk::StockID{menuSymb}, siz}   ////////////////////////
+    {
+      icon_.set_image(imgIcon_);
+      menu_.set_image(imgMenu_);
+      this->add(icon_);
+      this->add(menu_);
+      this->add(name_);
+      this->set_name(ID_caption);
+      this->get_style_context()->add_class(CLASS_background);
+      name_.set_hexpand(true);
+    }
+  
+  
+  cuString
+  IDLabel::getCaption()  const
+  {
+    return name_.get_text();
+  }
+  
+  void
+  IDLabel::setCaption(cuString& idCaption)
+  {
+    name_.set_text(idCaption);
+  }
+  
+  
   
   ElementBoxWidget::ElementBoxWidget (Config config)
     : Frame{}
     , strategy_{config.buildLayoutStrategy(*this)}
-    , label_{Gtk::ORIENTATION_HORIZONTAL}
-    , icon_{Gtk::StockID{config.getIconID()}  ///////////////////////////////TICKET #1030 : use of stockIDs is deprecated; care for a more modern icon naming scheme
-           , config.getIconSize()}
+    , label_{config.getIconID()
+            ,config.getMenuSymb()
+            ,config.getIconSize()}
     {
       set_name(ID_element);
       get_style_context()->add_class(CLASS_background);     // Style to ensure an opaque backdrop
       set_label_align(0.0, 0.0);
       
       set_label_widget(label_);
-      label_.add(icon_);
-      label_.add(name_);
-      label_.set_name(ID_caption);
-      label_.get_style_context()->add_class(CLASS_background);
-      name_.set_text(config.getName());
-      name_.set_hexpand(true);
+      label_.setCaption(config.getName());
       
       this->show_all();
     }
@@ -238,15 +272,29 @@ namespace widget {
    * in case the extension of ElementBoxWidget is explicitly constrained in size.
    */
   void
-  ElementBoxWidget::imposeSizeConstraint(int widthC, int heightC)
+  ElementBoxWidget::imposeSizeConstraint (int widthC, int heightC)
   {
-    ASSERT (name_.get_realized(), "ElementBoxWidget layout constraint imposed "
-                                  "on widget not yet realized by GTK");
-
-    bool hiddenCaption = not name_.get_visible();
-    if (not hiddenCaption)
+    ASSERT (label_.get_realized(), "ElementBoxWidget layout constraint imposed "
+                                   "on widget not yet realized by GTK");
+    label_.imposeSizeConstraint (widthC, heightC);
+  }
+  
+  /**
+   * Ensure the IDLabel stays within a given size constraint.
+   * In case the standard rendering of with icon and name caption exceeds
+   * the given screen space, this simplified initial implementation just
+   * hides the name caption, assuming without further check that the two
+   * icons will fit into the constrained space.
+   * @todo as of 9/22, a planned full implementation will eventually
+   *       shorten the caption text and possibly also combine both
+   *       Icons into a single button when necessary...     ///////////////////TICKET #1238 : adjust size of the ID caption
+   */
+  void
+  IDLabel::imposeSizeConstraint (int widthC, int heightC)
+  {
+    if (name_.get_visible())
       { // detect if label box fits within given size constraint
-        queryNaturalSize (label_, labelFullSize_);
+        queryNaturalSize (*this, labelFullSize_);
         
         if (labelFullSize_.width > widthC or labelFullSize_.height > heightC)
           name_.hide();

@@ -3217,7 +3217,7 @@ In accordance with this structure, we introduce a central component, the {{{Pane
 
 </pre>
 </div>
-<div title="GuiElementBoxWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201811011919" modified="202209241501" tags="GuiPattern spec draft" changecount="13">
+<div title="GuiElementBoxWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201811011919" modified="202209301654" tags="GuiPattern spec draft" changecount="18">
 <pre>//A building block used pervasively throughout the Lumiera UI  to represent a named entity.//
 This widget presents a horizontally extended body, which holds a characteristic ''Head-Triplet'' of visual Elements:
 * an //Icon// to create the visual anchor point. In many cases, this will be ''the Placment Icon'' (a hallmark of Lumiera's UI)
@@ -3237,7 +3237,7 @@ This characteristic cadence of elements gives us a horizontal box with distinct 
 !Properties
 * the Icon shall be easily configurable (from the coding view point, of course this is all hard wired in the code or the theme)
 ** the default is to configure the ''Placement Icon''
-** alternatively a ~Stock-ID can be given
+** alternatively the icon shall indicate the type of the object (video, audio, events, meta,...)
 * the horizontal extension is easy to control, through several options
 ** natural extension; don't give any ''size request'', let GTK figure out the extension rather
 ** set a fixed length-limit, causing the text label to be abridged eventually
@@ -3247,9 +3247,10 @@ This characteristic cadence of elements gives us a horizontal box with distinct 
 We offer pre-arranged options for standard wiring of interaction response
 * when the Icon is a Placement, it will launch the [[Placement-Pop-up|GuiPlacementDisplay]] -- which in turn can be de-modalised, thereby allocating a place in the [[Property grid pane|GuiPropertyPane]]. When such a placement control already is open and allocated, the click to the placement icon will lead there.
 * in the most basic case, there is only one common binding, which is a signal, emitted when clicking on the icon or the menu button
-* yet there can be two distinct bindings (signals) for the icon and the button
-* the ''Expander'' (which is part of the UI-Element protocol) is pre-wired with the arrow on the menu button, to yield a visible clue for the expand/collapse state
+* yet there can be two distinct bindings (signals) for the icon and the button; when present, these //push aside (or shadow)// the generic signal
+* the ''Expander'' (which is part of the UI-Element protocol) is pre-wired with the arrow on the menu button, to yield a visible clue for the expand/collapse state; in this case, the menu changes to an up/down arrow and shadows the generic signal (which is typically a context menu)
 * each of the bindings can be easily replaced by a [[pop-up menu|GuiPopupMenu]]
+* the context menu opens on ''left click'' (selection will be ''right click'' in Lumiera!)
 
 !!!usage and setup
 The class {{{widget::ElementBoxWidget}}} uses a flexible declarative constructor style, defining the //intended use// while delegating the details of styling to CSS classes. On construction, it is mandatory to define
@@ -3277,8 +3278,23 @@ In addition to these mandatory arguments, a sequence of //qualifiers// can be su
 *{{{constrained(λ, [λₙ])}}} : constrain widget extension, providing getter functors to retrieve desired size in canvas pixels
 
 
+!!!presentation intent and layout
+The indicated //intent of presentation// controls various aspects of the basic arrangement and wiring -- this custom widget has to cover two quite different usage situations, and aims at establishing an uniform handling scheme throughout the UI. For one, it will represent an //item,// either within a selection or within a control pane (e.g. track head). While the other usage scenario is to present //content.//
+* presentation of items should be concise, and the visual clues serve to indicate the type of data or object
+* while the presentation of content aims at manipulation and arrangement; in many cases there is also an interaction with the content itself
+The common denominator however is, that ''each element is an object'' and thus can be ''placed'' (by a [[Placement]]), and it offers ''methods'' through a ''context menu''. Moreover, //mutations and manipulations// shall only be possible on ''selected elements'' (never accidentally by just clicking on something). Selection has to be //kept distinct from manipulation.// Just clicking on the placement icon (or the type icon for that) will activate a //property box,// enabling to tweak the //way of placement// together with some further generic marks and tags. Settings and tweaks on the content are rather accessed through the content display -- while there should be also a shortcut to move from the property box into tweaking of parameters (e.g. of effects)
+
+!!!!To summarise...
+* first icon &amp;rarr; placement property box
+* second icon &amp;rarr;
+** either expand / collapse
+** or the regular object context menu
+* click on the object also yields that context menu
+* mutation methods are only accessible when the entity is selected
+* the same holds true for manipulation through gestures (dragging, trim edits)
+
 !!!proportional Head placement
-This behaviour pattern (see [[#1186|https://issues.lumiera.org/ticket/1186]]) is a distinguishing trait of the Lumiera timeline display. It indicates elements with a temporal extension surpassing the current display window. Such elements are typically represented by an {{{ElementBoxWidget}}} with an large horizontal extension. Yet when scrolling, the head-triplet shall always remain within the visible area, but it will slowly glide from one side to the other, thereby indicating the our relative position. This pattern of behaviour matters, since, together with the scolled content display, it creates the dominant movement when scrolling an extended timeline
+This behaviour pattern (see [[#1186|https://issues.lumiera.org/ticket/1186]]) is a distinguishing trait of the Lumiera timeline display. It indicates elements with a temporal extension surpassing the current display window. Such elements are typically represented by an {{{ElementBoxWidget}}} with an large horizontal extension. Yet when scrolling, the head-triplet shall always remain within the visible area, but it will slowly glide from one side to the other, thereby indicating the our relative position. This pattern of behaviour matters, since, together with the scrolled content display, it creates the dominant movement when scrolling an extended timeline
 
 ''Technically'', this has to be build as a self-contained component, which can be unit-tested. The input and reference is a &quot;Window&quot; (in fact an interval) together with its start position //relative// to the element's own start position. The component has to derive from this input the actual relational configuration of the window's extension with respect to its own extension. For context, the //window// corresponds to the visible area, which can be larger, smaller disjoint, partially overlapping and fully contained. Please note that ''handling the relations of intervals is a notoriously challenging problem.''
 

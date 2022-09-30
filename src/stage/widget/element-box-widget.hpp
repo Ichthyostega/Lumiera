@@ -93,12 +93,49 @@ namespace widget {
   
   using SizeGetter = std::function<int()>;
   
+  
+  
   /**
+   * Widget arrangement to represent an entity for manipulation.
+   * This uniform standard arrangement is comprised of
+   * - a leading Placement- or Type-Icon
+   * - a Menu button
+   * - a caption for identification
+   * The IDLabel widget offers standard hooks for wiring signals
+   * and controlling the layout; notably the widget extension
+   * can be confined to stay within given constraints.
+   */
+  class IDLabel
+    : public Gtk::Box
+    {
+      Gtk::Image  imgIcon_;
+      Gtk::Image  imgMenu_;
+      Gtk::Button icon_;
+      Gtk::Button menu_;
+      Gtk::Label  name_;
+      
+    public:
+     ~IDLabel();
+      IDLabel(Literal iconID, Literal menuSymb, Gtk::IconSize);
+      
+      cuString getCaption()  const;
+      void setCaption(cuString&);
+      
+      void imposeSizeConstraint(int, int);
+      
+    private:
+      Gtk::Requisition labelFullSize_{};
+    };
+  
+  
+  
+  /*************************************************************************//**
    * A basic building block of the Lumiera UI.
-   * Representation of an entity, with a marker icon, a menu, descriptive label and
-   * possibly a content renderer (e.g. for a video clip). Depending on the presentation intent,
-   * the widget can extend to a defined time range horizontally. Pre-defined styling and bindings
-   * to expand the display and to invoke a menu are provided
+   * Representation of an entity, with a marker icon, a menu, descriptive label
+   * and possibly a content renderer (e.g. for a video clip). Depending on the
+   * presentation intent, the widget can be set to a fixed horizontal extension,
+   * to allow presentation on a time calibrated canvas. Pre-defined styling and
+   * bindings to expand the display and to invoke a menu are provided.
    * @todo consider policy based design,   //////////////////////////////////////////////////////////////////TICKET #1239 : re-evaluate Design, maybe use Policy Based Design
    *       but need more exposure and real world usage as of 9/22
    */
@@ -117,10 +154,7 @@ namespace widget {
       
       /** actual layout strategy binding for this widget */
       Strategy strategy_;
-      
-      Gtk::Box label_;
-      Gtk::Image icon_;
-      Gtk::Label name_;
+      IDLabel label_;
       
     public:
       class Config;
@@ -142,7 +176,6 @@ namespace widget {
       void on_size_allocate (Gtk::Allocation&)                         override;
       
       void imposeSizeConstraint(int, int);
-      Gtk::Requisition labelFullSize_{};
     };
   
   
@@ -172,7 +205,8 @@ namespace widget {
         /** decide upon the presentation strategy */
         Strategy buildLayoutStrategy(ElementBoxWidget&);
         
-        Literal getIconID()  const;
+        Literal getIconID()         const;
+        Literal getMenuSymb()       const;
         Gtk::IconSize getIconSize() const;
         
         cuString

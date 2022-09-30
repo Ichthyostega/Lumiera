@@ -18184,6 +18184,79 @@
 <node CREATED="1625073209509" ID="ID_1647215892" MODIFIED="1625073216705" TEXT="Knopf mit Ein/Aus-Funktion"/>
 <node CREATED="1625073252395" ID="ID_1887674930" MODIFIED="1625073270866" TEXT="Placement mit Placement-Properties"/>
 <node CREATED="1625073397733" ID="ID_252893466" MODIFIED="1625073403209" TEXT="Typ-Icon"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664546626719" ID="ID_482244613" MODIFIED="1664548727113" TEXT="Varianten">
+<linktarget COLOR="#5559e6" DESTINATION="ID_482244613" ENDARROW="Default" ENDINCLINATION="-920;179;" ID="Arrow_ID_1621895884" SOURCE="ID_303509395" STARTARROW="None" STARTINCLINATION="226;27;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1664546651860" ID="ID_54475262" MODIFIED="1664546667097" TEXT="das Grundmuster ist unver&#xe4;nderbar fixiert"/>
+<node CREATED="1664546675817" ID="ID_1608209700" MODIFIED="1664546690747" TEXT="das erste Icon wird nach Presentation-Intent belegt">
+<node CREATED="1664546694038" ID="ID_375518756" MODIFIED="1664546699722" TEXT="default: Placement"/>
+<node CREATED="1664546700429" ID="ID_1871717245" MODIFIED="1664546714656" TEXT="Bin-Item: Typ-Icon"/>
+</node>
+<node CREATED="1664546716995" ID="ID_1893051713" MODIFIED="1664546729304" TEXT="das zweite Icon ist entweder ein Men&#xfc;, oder ein Expander">
+<node CREATED="1664546774836" ID="ID_1104234333" MODIFIED="1664548057947" TEXT="Men&#xfc; == normales Kontext-Men&#xfc;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das hei&#223;t, der Men&#252;-Button ist dann nur <i>pro forma </i>da, und bietet eine Fl&#228;che, auf der man zuverl&#228;ssig dieses Men&#252; trifft; letzteres ist relevant f&#252;r eine Anzeige in Listen und Bins, bei der ansonsten die Ausdehnung des Widgets stark reduziert ist. Ein Klick auf das Name-Label hat eine andere Funktion (n&#228;mlich Editieren des Namens). Ein Weiterer Aspekt ist die Drag-Geste: es ist denkbar, diese auf dem Men&#252;-Button <i>nicht</i>&#160;zu starten (wobei allerdings zu bedenken ist, das Ziehen auch noch an weitere Voraussetzungen zu kn&#252;pfen, z.B. einen Modifiere, oder den Umstand, da&#223; das Objekt auch selektiert ist)
+    </p>
+  </body>
+</html></richcontent>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1664546786666" ID="ID_418065847" MODIFIED="1664546893122" TEXT="links-Klick">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ja, wir wollen das alte Blender-Modell: Selektion mit rechts, Aktion mit links
+    </p>
+  </body>
+</html></richcontent>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1664546793973" ID="ID_79262414" MODIFIED="1664546802948" TEXT="auch auf dem freien Hintergrund"/>
+</node>
+<node CREATED="1664546805728" ID="ID_162637423" MODIFIED="1664547883294" TEXT="Expander typischerweise f&#xfc;r Timeline-Content">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      in diesem Fall ist das dann eine Art Toggle-Button, d.h. er wechselt auch seine Gestalt
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1664546823853" ID="ID_1235252109" MODIFIED="1664546831232" TEXT="dann verdrahtet mit Tangible"/>
+<node CREATED="1664546831980" ID="ID_1813900014" MODIFIED="1664547929394">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das <i>verdr&#228;ngt lediglich </i>das Kontext-Men&#252;
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn das Kontext-Men&#252; soll auf dem ganzen Widget liegen (und konkurriert &#252;brigens mit der Drag-Geste)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625073420073" ID="ID_1610907627" MODIFIED="1625073651531" TEXT="Expander">
 <icon BUILTIN="flag-yellow"/>
@@ -18223,8 +18296,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612620683850" ID="ID_1290975013" MODIFIED="1612620687427" TEXT="auszuarbeiten....">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1612620683850" ID="ID_1290975013" MODIFIED="1664548424931" TEXT="auszuarbeiten....">
+<icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075258497" ID="ID_1793264120" MODIFIED="1625075268568" TEXT="Steuerung des Darstellungs-Verhaltens">
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075337795" ID="ID_873107891" MODIFIED="1625075355499" TEXT="Analyse">
@@ -18260,7 +18333,7 @@
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075342643" ID="ID_1177317250" MODIFIED="1625075354429" TEXT="Design-Entscheidungen">
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1625075347837" ID="ID_1633859495" MODIFIED="1664029945723" TEXT="dynamic composition in ctor">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
@@ -18585,6 +18658,43 @@
 </node>
 <node CREATED="1662247868126" ID="ID_487747089" MODIFIED="1662247880210" TEXT="vorerst m&#xf6;glichst das bestehende System nutzen">
 <icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#210f69" CREATED="1664548449268" ID="ID_303509395" MODIFIED="1664548735480" TEXT="Design-Prinzipien">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        festes Schema aus zwei Icons
+      </li>
+      <li>
+        nur die Art der Icons wird ausgewechselt
+      </li>
+      <li>
+        beide Icons sind Buttons und l&#246;sen f&#252;hren eine Steuer-Aktion aus (keine direkte Manipulation)
+      </li>
+      <li>
+        der erste Button f&#252;hrt immer in den Placement-Editor, der so etwas wie eine Property-Box darstellt (ggfs als Pop-Up, ggfs in einem Pannel-Grid)
+      </li>
+      <li>
+        der zweite Button &#246;ffnet entweder das normale Pop-up-Men&#252; (das auf <b>Linksklick</b>&#160;liegt), oder er bet&#228;tigt den Expander
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#5559e6" DESTINATION="ID_482244613" ENDARROW="Default" ENDINCLINATION="-920;179;" ID="Arrow_ID_1621895884" STARTARROW="None" STARTINCLINATION="226;27;"/>
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664548762473" ID="ID_1889891499" MODIFIED="1664548771120" TEXT="Icons belegen">
+<icon BUILTIN="hourglass"/>
+<node COLOR="#338800" CREATED="1664548773656" ID="ID_1911341239" MODIFIED="1664553930837" TEXT="M&#xf6;glichkeit f&#xfc;r zwei Icon-Button vorsehen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1664548786932" ID="ID_1354120525" MODIFIED="1664553936475" TEXT="Konfigurierbarkeit gew&#xe4;hrleisten">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1662241779699" ID="ID_178231784" MODIFIED="1664036010955" TEXT="#1236 Placement-Icon">
@@ -19139,17 +19249,61 @@
 <linktarget COLOR="#fcf2bc" DESTINATION="ID_611179505" ENDARROW="Default" ENDINCLINATION="88;-31;" ID="Arrow_ID_96952850" SOURCE="ID_1660318028" STARTARROW="None" STARTINCLINATION="76;2;"/>
 <icon BUILTIN="idea"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664543738587" ID="ID_418832883" MODIFIED="1664543749125" TEXT="Experiment durchf&#xfc;hren">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664543750721" ID="ID_1515243070" MODIFIED="1664543842744">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font face="Monospaced">setName(cuString&amp;)</font>&#160;implementieren
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664543863364" ID="ID_1704098172" MODIFIED="1664543873447" TEXT="Test-Manipulationsfunktion">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664543973587" ID="ID_1411171343" MODIFIED="1664544008919" TEXT="Verb &quot;manip&quot;">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664543988561" ID="ID_622195313" MODIFIED="1664544008920" TEXT="manipuliert die zuletzt erzeugte Box">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664543997192" ID="ID_332394972" MODIFIED="1664544008921" TEXT="setzt einen neuen Random-String">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664544020621" ID="ID_1995553965" MODIFIED="1664544039227" TEXT="Verhalten per Dump-msg beobachten">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664033233729" ID="ID_73562728" MODIFIED="1664033252543" TEXT="ggfs &#xdc;bersetzungs-Faktor im Advice-System ablegen">
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664033337194" ID="ID_142928718" MODIFIED="1664033344674" TEXT="Label-Komponente anlegen">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1664033348579" ID="ID_575467306" MODIFIED="1664033378313" TEXT="erst mal nur als eine Gruppierung mit HIlfsfunktionen">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1664033337194" ID="ID_142928718" MODIFIED="1664553871141" TEXT="Label-Komponente anlegen">
+<arrowlink COLOR="#feebc1" DESTINATION="ID_1075411565" ENDARROW="Default" ENDINCLINATION="-16;-582;" ID="Arrow_ID_957764469" STARTARROW="None" STARTINCLINATION="-606;54;"/>
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1664033348579" ID="ID_575467306" MODIFIED="1664553856140" TEXT="erst mal als gruppiertes Sub-Widget extrahieren">
 <icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1664544131446" ID="ID_448994253" MODIFIED="1664553853255" TEXT="der Box-Container">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1664033361175" ID="ID_314954032" MODIFIED="1664033374574" TEXT="k&#xf6;nnte sp&#xe4;ter mal selber ein Custom-Widget werden">
+<node COLOR="#338800" CREATED="1664544138573" ID="ID_334656865" MODIFIED="1664553854357" TEXT="plus die Size-Handling-Logik">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1664553879483" ID="ID_923634948" MODIFIED="1664553900007" TEXT="Buttons sind zu gro&#xdf;">
+<icon BUILTIN="broken-line"/>
+</node>
+<node COLOR="#338800" CREATED="1664544186535" ID="ID_272598573" MODIFIED="1664553847453" TEXT="Auslegung der Icons per Strategy steuerbar machen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664033361175" ID="ID_314954032" MODIFIED="1664544103011" TEXT="k&#xf6;nnte sp&#xe4;ter mal eigenst&#xe4;ndiges Custom-Widget werden">
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
@@ -19349,6 +19503,10 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664548844498" ID="ID_1075411565" MODIFIED="1664548893098" TEXT="Label-Komponente weiterentwickeln">
+<linktarget COLOR="#feebc1" DESTINATION="ID_1075411565" ENDARROW="Default" ENDINCLINATION="-16;-582;" ID="Arrow_ID_957764469" SOURCE="ID_142928718" STARTARROW="None" STARTINCLINATION="-606;54;"/>
+<icon BUILTIN="hourglass"/>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1661703437825" ID="ID_1401386216" MODIFIED="1661703453368" TEXT="proportional Head placement">
 <icon BUILTIN="hourglass"/>
@@ -58691,9 +58849,9 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#4c96df" DESTINATION="ID_619170334" ENDARROW="Default" ENDINCLINATION="22;-288;" ID="Arrow_ID_1241133759" STARTARROW="None" STARTINCLINATION="-30;150;"/>
-<linktarget COLOR="#692b5b" DESTINATION="ID_563938836" ENDARROW="Default" ENDINCLINATION="621;-190;" ID="Arrow_ID_152388281" SOURCE="ID_1917960846" STARTARROW="None" STARTINCLINATION="-357;417;"/>
-<linktarget COLOR="#692b5b" DESTINATION="ID_563938836" ENDARROW="Default" ENDINCLINATION="668;-205;" ID="Arrow_ID_378269338" SOURCE="ID_1435876974" STARTARROW="None" STARTINCLINATION="-279;578;"/>
 <linktarget COLOR="#852376" DESTINATION="ID_563938836" ENDARROW="Default" ENDINCLINATION="18;-93;" ID="Arrow_ID_1194665328" SOURCE="ID_1959081786" STARTARROW="None" STARTINCLINATION="-211;17;"/>
+<linktarget COLOR="#692b5b" DESTINATION="ID_563938836" ENDARROW="Default" ENDINCLINATION="668;-205;" ID="Arrow_ID_378269338" SOURCE="ID_1435876974" STARTARROW="None" STARTINCLINATION="-279;578;"/>
+<linktarget COLOR="#692b5b" DESTINATION="ID_563938836" ENDARROW="Default" ENDINCLINATION="621;-190;" ID="Arrow_ID_152388281" SOURCE="ID_1917960846" STARTARROW="None" STARTINCLINATION="-357;417;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1663955121019" ID="ID_1249298775" MODIFIED="1663955138898" TEXT="wird direkt anscheinend nur von Init aus aktiviert"/>
 <node CREATED="1663955139409" ID="ID_857432800" MODIFIED="1663955255321" TEXT="aber die Call-Graphen sind schwer durchschaubar">
