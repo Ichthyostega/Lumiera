@@ -21,6 +21,16 @@
 
 /* ---------- Styles for Lumiera Widgets ---------- */
 
+/* ElementBoxWidget and IDLabel within */
+.idlabel .image-button {
+  min-width: unset;
+  min-height: unset;
+  padding: inherit;
+}
+.idlabel__icon image {
+  padding-left: 0.5ex;
+}
+
 
 /* ---------- Styles for special markup ---------- */
 

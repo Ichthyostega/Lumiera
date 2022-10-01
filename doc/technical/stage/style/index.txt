@@ -1,31 +1,52 @@
 Lumiera GUI style and theming
 =============================
+:date: 2022
+:toc:
 
 //Menu: label Theme/Style
+//Menu: sort children
+//Menu: prepend child Navigation
 
 .a guide towards styling
 This page is a place _to collect pieces of information_ regarding the visual appearance of the Lumiera GTK UI.
 Further (more technical) aspects regarding the inner workings of the toolkit can be found
 link:{ldoc}/technical/code/gtk/[in the »Code Base« section regarding GTK]. Details about the concrete
-arrangement and conventions within some parts of the UI are given on the sub pages +
+arrangement and conventions within some parts of the UI are given on the sub pages... +
 link:Timeline.html[Timeline]
 &middot; link:Navigation.html[Navigation]
 &middot; link:PropEditor.html[Property Editors]
 
-
 GTK-3 styles
 ------------
 Styling of GTK-3 interfaces is based on CSS, with some specific conventions about the selectors
-and some additional makro functions to generate colours and gradients. When GTK actually renders a widget,
-id consults a 'strategy object' known as *Theme Engine*, passing it the region to draw in a abstracted way.
+and some additional macro functions to generate colours and gradients. When GTK actually renders a widget,
+it consults a 'strategy object' known as *Theme Engine*, passing it the region to draw in a abstracted way.
 The Theme Engine in turn uses a '``style provider''' to retrieve the generic style properties it uses for drawing.
 Thus, the Theme Engine defines the actual meaning of any style and is in the position to understand and thus
 introduce additional engine specific styles and settings.
 
+***************************************
+.CSS Selectors
+Rules can be targeted towards some style nodes using
+https://docs.gtk.org/gtk3/css-overview.html#selectors[selectors] as known from CSS,
+notably including _contextual selectors._
+
+- the base widgets from GTK+ and Gtkmm define the ``tag'' names
+- custom widgets bear the name of the base widget they extend
+- individual nodes can be addressed by `#id` if the widget instance invokes `set_name("id")`
+- moreover, if the widget associates itself with a _style class_ through its _style context,_
+  i.e. by invoking `get_style_context()->add_class("class")`, it will also pick up rules
+  bound to that `.class` in the CSS.
+***************************************
+
 GTK-3 supports the powerful 'cascading' and 'contextual selectors' from CSS. Thus the nesting of elements
 in the GUI forms the base for creating styling rules. Hereby, widget class names translate into ``tag'' names
 in the CSS selectors.footnote:[The ``tag'' name is the widget's class name without the `Gtk::` prefix, and transformed
-into all lower caps, single word, no underscores. E.g. `Gtk::TextView` -> `textview`]
+into all lower caps, single word, no underscores. E.g. `Gtk::TextView` -> `textview`. +
+However -- these names are established programmatically, unfortunately within _the C implementation of the style
+class constructor,_ which makes them more or less hard wired. The `Gtk::Widget` subclasses from Gtkmm (C\++ language) use
+their own naming scheme, apart from the basic GTK+ (C language) names, and it is _basically not possible_ for _custom widgets_
+to expose their distinct type names -- rather they will show up under the name of the base class used from Gtkmm.]
 Widgets may also expose CSS classes for styling -- the standard widgets define a generic set
 of https://developer.gnome.org/gtk3/3.4/GtkStyleContext.html#gtkstylecontext-classes[predefined CSS style classes],
 which can be used to establish the foundation for theming. Obviously it is preferable to keep styling rules as
@@ -42,7 +63,7 @@ Recommended reading
    and a https://developer.gnome.org/gtk3/stable/chap-css-properties.html[reference of supported properties].
  * to start, look at this http://thegnomejournal.wordpress.com/2011/03/15/styling-gtk-with-css/[introductory text],
    or the more http://worldofgnome.org/making-gtk3-themes-part-1-basics/[hands-on series of articles from world of gnome]
- * this http://forums.fedoraforum.org/showthread.php?t=281568[post from fedora forum] features a conciese description
+ * this http://forums.fedoraforum.org/showthread.php?t=281568[post from fedora forum] features a concise description
    of the task of theme creation
  * to understand the old (now obsolete) GTK-2 stylesheets, you might
    http://orford.org/gtk/[look here]
@@ -78,8 +99,8 @@ GTK-3 supports binary theme bundles, which combine CSS style sheets and accompan
 into a single archive file. See http://wibblystuff.blogspot.de/2012/06/building-binary-for-gtk3-theme.html[this blog entry]
 for a tutorial. But when it comes to investigating an existing theme, we need a way to 'extract' the original sources
 from such a distribution bundle. This can be achieved with the help of the `gresource` command. The following bash
-srcipt footnote:[published  by mailto:peter@thecodergeek.com[Peter Gordon] to the Public Domain 
-http://projects.thecodergeek.com/scripts/gresource-extract[at his blog] in 2012] simplifies this process, allowing 
+script footnote:[published  by mailto:peter@thecodergeek.com[Peter Gordon] to the Public Domain
+http://projects.thecodergeek.com/scripts/gresource-extract[at his blog] in 2012] simplifies this process, allowing
 to extract all resource files in a given GResource file, with the given base URL. For example, if a GResource file
 contained the resource with the URL `/org/foo/bar/baz.txt`, and the base URL defined as `"/org/foo/"`, then the resource
 named `/org/foo/bar/baz.txt` in that file would be extracted and written to `bar/baz.txt` in the current directory.
@@ -110,3 +131,69 @@ done
 ---------------------------------
 
 
+UI building blocks
+------------------
+
+The Lumiera UI achieves some degree of uniformity by adhering to common schemes and conventions; moreover,
+we ship a dedicated _Application Style Sheet_ to establish a distinct look and feel^[orange]##(planned as of 2022)##^ --
+additionally, as alternative, we ship __ ``theme complement'' style sheets__ to add just those CSS definitions necessary
+for Lumiera to properly work together with a typical GTK desktop theme.
+
+
+BEM Methodology
+~~~~~~~~~~~~~~~
+More elaborate websites as well as larger applications tend to run into problems with naming of components.
+Unintended matches of CSS rules in other segments of the site may cause side effects, thereby hampering the ability to
+adapt a given part to new requirements. While the true cause for such problems is rooted in an unsystematic and ``pragmatic''
+attitude, treating the style as an assortment of local tweaks, a _coherent naming scheme_ helps to indicate which setting
+is _meant to be generic_ and global, and which one _addresses a bounded scope._
+As an ubiquitous naming scheme, the BEM notation^[orange]##(TODO find a good authoritative website to link)##^ has gained
+some traction in the context of naming of CSS selectors. Yet at the same time, also an unfortunate trend could be observed
+to neglect or even defeat the *cascading* nature of CSS and to apply redundant and repetitive fine grained styles to
+individual elements.footnote:[Some people even think they need style generators to cope with the resulting combinatoric
+explosion. A similar tendency can be observed in the realm of publication, where people frequently disregard or even directly
+reject the idea of a style sheet, and then create elaborate schemes of work organisation, combined with text processor macros,
+to cope with the nonsensical task of having to format each paragraph individually. Those disdaining the use of abstractions
+have to suffer and deserve no mercy.]
+
+In Lumiera, we use a combination of style classes and element-IDs to define the anchor points to attach specific styling;
+typically, we also have to designate sub elements below such an anchor point, and here the usage of BEM notation is recommended:
+
+  block[__element][--modifier]
+
+- the first part of a name designates the enclosing *block* -- which must be a building block to be used in varying context
+  and without the tie to a single specific hierarchy
+- the second part of the name, separated by "`__`", designates the individual *element* within this block. Such an element
+  should be tied logically to the block; if this use is just an optional combination of building blocks and the element
+  can also be used elsewhere, then it should be treated as another block rather.
+- sometimes we want to _modify some aspects_ of the presentation by a fixed set of options, and in this case, the name can
+  be extended by a *modifier* component, attached with a "`--`" separator.
+
+
+
+The ElementBoxWidget
+~~~~~~~~~~~~~~~~~~~~
+A flexible and open structure model is one of the cornerstones of the Lumiera architecture: Instead of relying on a
+common global data model, the application rather defines some structural conventions, assuming that individual _Entities_
+will be arranged in accordance to standardised patterns.
+
+Those ``Entities'' are conceived as _objects,_ which are _placed into a context_ and expose _properties_ and _methods._
+Within the UI, this structure finds its correspondence in the *ElementBoxWidget*^[orange]##(TODO dedicated page and link)##^,
+which is used pervasively as a building block in several contexts and for various purposes. All these usages visually
+share some kind of common denominator:
+
+- the »Entity« is represented as a box with a name
+- it features an icon as a leading handle
+- followed by a expander/collapser or menu button
+
+This structure is _implemented_ as a specialised `Gtk::Frame` -- which uses a _label widget_ comprised of a box with
+three elements: two icon buttons, and a text field. The _content area_ of the `Frame` widget is used to represent the
+content of this ``Element''; be it just a background box coloured in accordance to the type or kind of object, or
+be it a dedicated content renderer (for Clips in the Timeline) or even a canvas further exposing inner structures.
+
+Style Tree
+^^^^^^^^^^
+ElementBoxWidget:: `frame#element`
+IDLabel:: `box#caption`
+Buttons::
+  both icons are placed into a `Gtk::Button` to receive events

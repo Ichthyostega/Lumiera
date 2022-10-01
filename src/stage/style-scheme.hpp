@@ -60,7 +60,24 @@ namespace stage {
   extern const Symbol NODE_frame;
   
   extern cuString ID_element;
-  extern cuString ID_caption;
+  extern cuString ID_idlabel;
+  
+  extern cuString CLASS_idlabel;
+  extern cuString CLASS_idlabel_icon;
+  extern cuString CLASS_idlabel_menu;
+  extern cuString CLASS_idlabel_name;
+  extern cuString CLASS_elementbox;
+  extern cuString CLASS_elementbox_idlabel;
+  extern cuString CLASS_elementbox_video;
+  extern cuString CLASS_elementbox_audio;
+  extern cuString CLASS_elementbox_text;
+  extern cuString CLASS_elementbox_auto;
+  extern cuString CLASS_elementbox_event;
+  extern cuString CLASS_elementbox_effect;
+  extern cuString CLASS_elementbox_label;
+  extern cuString CLASS_elementbox_ruler;
+  extern cuString CLASS_elementbox_group;
+  extern cuString CLASS_elementbox_meta;
   
   extern cuString CLASS_timeline;
   extern cuString CLASS_timeline_page;

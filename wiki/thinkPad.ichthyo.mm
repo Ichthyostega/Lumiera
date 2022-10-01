@@ -6306,7 +6306,8 @@
 </node>
 </node>
 <node CREATED="1563020384655" ID="ID_1309805657" MODIFIED="1563020388552" TEXT="Aufgaben">
-<node CREATED="1563020407852" ID="ID_280366952" MODIFIED="1563020411340" TEXT="Style / CSS">
+<node CREATED="1563020407852" ID="ID_280366952" MODIFIED="1664668979749" TEXT="Style / CSS">
+<linktarget COLOR="#4369a6" DESTINATION="ID_280366952" ENDARROW="Default" ENDINCLINATION="-1736;397;" ID="Arrow_ID_1332353653" SOURCE="ID_1339380234" STARTARROW="None" STARTINCLINATION="-2101;-134;"/>
 <node CREATED="1563020429008" ID="ID_8715605" MODIFIED="1563020434665" TEXT="Delegate: UIStyle">
 <node CREATED="1563020438839" ID="ID_390066923" MODIFIED="1563020453938" TEXT="der &#xbb;StyleManager&#xab;"/>
 <node CREATED="1563020456445" ID="ID_134906113" MODIFIED="1563020474783" TEXT="Stand 2019: weitgehend Funktionen von Joel Holdsworth"/>
@@ -18616,7 +18617,18 @@
 <linktarget COLOR="#404289" DESTINATION="ID_293134573" ENDARROW="Default" ENDINCLINATION="175;-873;" ID="Arrow_ID_1989504612" SOURCE="ID_1939158808" STARTARROW="None" STARTINCLINATION="768;94;"/>
 <linktarget COLOR="#c63166" DESTINATION="ID_293134573" ENDARROW="Default" ENDINCLINATION="64;-83;" ID="Arrow_ID_543159170" SOURCE="ID_1192772963" STARTARROW="None" STARTINCLINATION="-313;15;"/>
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1662051084085" ID="ID_906734828" MODIFIED="1662051103543" TEXT="Strategy::configure()"/>
+<node CREATED="1662051084085" ID="ID_906734828" MODIFIED="1664668205361">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font face="Monospaced">ElementBoxWidget::Config::<b>buildLayoutStrategy</b>(</font><font color="#2d40af" face="Monospaced">ElementBoxWidget</font><font face="Monospaced">&amp;)</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 <node CREATED="1661896735138" ID="ID_1956334148" MODIFIED="1662037245996" TEXT="Darstellungs-Varianten">
@@ -18761,6 +18773,31 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1664668298178" ID="ID_1102642211" MODIFIED="1664674552382" TEXT="geeignete Selektoren vorsehen">
+<arrowlink COLOR="#543f8c" DESTINATION="ID_696787535" ENDARROW="Default" ENDINCLINATION="-344;-15;" ID="Arrow_ID_1626542451" STARTARROW="None" STARTINCLINATION="560;45;"/>
+<arrowlink COLOR="#4482cb" DESTINATION="ID_1131035647" ENDARROW="Default" ENDINCLINATION="1109;-797;" ID="Arrow_ID_860130995" STARTARROW="None" STARTINCLINATION="394;586;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1664669909170" HGAP="54" ID="ID_353257786" MODIFIED="1664670075595" TEXT="frame#element.elementbox" VSHIFT="-10">
+<edge COLOR="#493d57" STYLE="linear"/>
+<node CREATED="1664670077106" ID="ID_23637100" MODIFIED="1664670080590" TEXT="box#idlabel">
+<node CREATED="1664670436370" ID="ID_169682858" MODIFIED="1664670440905" TEXT=".idlabel"/>
+<node CREATED="1664671305061" ID="ID_1650353361" MODIFIED="1664671309328" TEXT="Kinder...">
+<node CREATED="1664671310329" ID="ID_96245401" MODIFIED="1664671312682" TEXT=".idlabel__icon"/>
+<node CREATED="1664671313875" ID="ID_858160172" MODIFIED="1664671319782" TEXT=".idlabel__menu"/>
+<node CREATED="1664671320674" ID="ID_19239170" MODIFIED="1664671325085" TEXT=".idlabel__name"/>
+</node>
+<node CREATED="1664670133617" ID="ID_1907146399" MODIFIED="1664670140958" TEXT=".elementbox__idlabel">
+<node CREATED="1664670252291" ID="ID_423384579" MODIFIED="1664670271427" TEXT="Achtung: nur wenn in einer ElementBox">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node CREATED="1664670174435" ID="ID_54680565" MODIFIED="1664670179225" TEXT="zus&#xe4;tzlich...">
+<node CREATED="1664670194762" ID="ID_1459999893" MODIFIED="1664670202630" TEXT=".elementbox--video"/>
+<node CREATED="1664670203554" ID="ID_471735544" MODIFIED="1664670210996" TEXT=".elementbox--audio"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1664027101386" ID="ID_325165287" MODIFIED="1664494902370" TEXT="erforderliche Ausdehnung feststellen">
@@ -19285,9 +19322,9 @@
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1664033337194" ID="ID_142928718" MODIFIED="1664553871141" TEXT="Label-Komponente anlegen">
+<node COLOR="#338800" CREATED="1664033337194" ID="ID_142928718" MODIFIED="1664674849781" TEXT="Label-Komponente anlegen">
 <arrowlink COLOR="#feebc1" DESTINATION="ID_1075411565" ENDARROW="Default" ENDINCLINATION="-16;-582;" ID="Arrow_ID_957764469" STARTARROW="None" STARTINCLINATION="-606;54;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1664033348579" ID="ID_575467306" MODIFIED="1664553856140" TEXT="erst mal als gruppiertes Sub-Widget extrahieren">
 <icon BUILTIN="yes"/>
 <node COLOR="#338800" CREATED="1664544131446" ID="ID_448994253" MODIFIED="1664553853255" TEXT="der Box-Container">
@@ -19297,8 +19334,25 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1664553879483" ID="ID_923634948" MODIFIED="1664553900007" TEXT="Buttons sind zu gro&#xdf;">
+<node COLOR="#435e98" CREATED="1664553879483" ID="ID_923634948" MODIFIED="1664674831082" TEXT="Buttons sind zu gro&#xdf;">
 <icon BUILTIN="broken-line"/>
+<node COLOR="#338800" CREATED="1664668329069" ID="ID_696787535" MODIFIED="1664674548169" TEXT="Anforderung: mu&#xdf; diese Buttons &quot;greifen&quot; k&#xf6;nnen">
+<linktarget COLOR="#543f8c" DESTINATION="ID_696787535" ENDARROW="Default" ENDINCLINATION="-344;-15;" ID="Arrow_ID_1626542451" SOURCE="ID_1102642211" STARTARROW="None" STARTINCLINATION="560;45;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1664674559510" ID="ID_1604472823" MODIFIED="1664674623071" TEXT="Untersuchung...">
+<icon BUILTIN="idea"/>
+<node CREATED="1664674569649" ID="ID_892636850" MODIFIED="1664674628657" TEXT="zwei Ursachen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1664674575884" ID="ID_1453761517" MODIFIED="1664674589737" TEXT="alle Buttons haben ein min-width und min-height"/>
+<node CREATED="1664674590960" ID="ID_1398294801" MODIFIED="1664674608939" TEXT="zumindest image-button hat auch ein Padding (4px bei mir)"/>
+</node>
+<node COLOR="#338800" CREATED="1664674677718" ID="ID_692056808" MODIFIED="1664674712628" TEXT="Style-Regeln">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1664674687597" ID="ID_1042549380" MODIFIED="1664674693955" TEXT="unset-Regel auf: .idlabel .image-button"/>
+<node CREATED="1664674699611" ID="ID_1706886045" MODIFIED="1664674710229" TEXT="minimales Padding auf das Icon"/>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1664544186535" ID="ID_272598573" MODIFIED="1664553847453" TEXT="Auslegung der Icons per Strategy steuerbar machen">
 <icon BUILTIN="button_ok"/>
@@ -36529,6 +36583,78 @@
 <node CREATED="1523019972924" ID="ID_1402741681" MODIFIED="1557498707235" TEXT="Grundbausteine">
 <node CREATED="1523019978236" ID="ID_103533434" MODIFIED="1557498707235" TEXT="GTK-Container"/>
 <node CREATED="1523019982331" ID="ID_533152750" MODIFIED="1557498707235" TEXT="Widget"/>
+</node>
+</node>
+<node CREATED="1664668670633" ID="ID_281557130" MODIFIED="1664668687274" TEXT="CSS-Schema f&#xfc;r das Lumiera-GTK-UI">
+<node CREATED="1664668701652" ID="ID_1339380234" MODIFIED="1664668992057" TEXT="Einrichtung durch den UI-Manager">
+<arrowlink COLOR="#4369a6" DESTINATION="ID_280366952" ENDARROW="Default" ENDINCLINATION="-1736;397;" ID="Arrow_ID_1332353653" STARTARROW="None" STARTINCLINATION="-2101;-134;"/>
+<icon BUILTIN="info"/>
+<node CREATED="1664669003788" ID="ID_1496995299" MODIFIED="1664669012883" TEXT="laden der Applicaton Style-Sheet(s)"/>
+<node CREATED="1664669017642" ID="ID_1750503334" MODIFIED="1664669048777" TEXT="synthetische CSS-Pfade f&#xfc;r generische (Timeline)-Styles"/>
+</node>
+<node CREATED="1664669065764" ID="ID_1839743760" LINK="#ID_417783849" MODIFIED="1664669180575" TEXT="CSS-Style-Konventionen">
+<icon BUILTIN="yes"/>
+<node CREATED="1664669186884" ID="ID_458273565" MODIFIED="1664669799291" TEXT="BEM-Notation sinnvoll verwenden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      block[__element][--modifier]
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1664669206239" ID="ID_419151463" MODIFIED="1664669277092" TEXT="nicht &#xfc;bertreiben...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Hier besteht die Gefahr, das Stylesheet mit redundanten Definitionen zu fluten!<br />Die BEM-Notation ist sinnvoll, insodern sie die <b>intendierte Bedeutung</b>&#160;einer Klasse klar macht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1664669329825" ID="ID_1131035647" MODIFIED="1664669851599" TEXT="erlaubt Styling relativ zu einem Ankerpunkt">
+<linktarget COLOR="#4482cb" DESTINATION="ID_1131035647" ENDARROW="Default" ENDINCLINATION="1109;-797;" ID="Arrow_ID_860130995" SOURCE="ID_1102642211" STARTARROW="None" STARTINCLINATION="394;586;"/>
+</node>
+<node CREATED="1664669415850" ID="ID_550535214" MODIFIED="1664669442209">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      f&#252;r <i>wirklich generische </i>Styles sollte man generische Klassen schaffen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1664669349154" ID="ID_1203947734" MODIFIED="1664669365231" TEXT="anwenden f&#xfc;r frei kombinierbare Bausteine">
+<icon BUILTIN="idea"/>
+<node CREATED="1664669376402" ID="ID_1053064636" MODIFIED="1664669383965" TEXT="Ziel: flache Regels&#xe4;tze"/>
+<node CREATED="1664669384622" ID="ID_1136788054" MODIFIED="1664669404794" TEXT="Gefahr: nicht zu sehr mit Hierarchie mischen"/>
+</node>
+</node>
+<node CREATED="1664669483004" ID="ID_67069452" MODIFIED="1664669501696" TEXT="Element-IDs zur Erg&#xe4;nzung der (Widget)-Klassen">
+<node CREATED="1664669510416" ID="ID_407846931" MODIFIED="1664669525650" TEXT="da wir nicht ohne Weiteres custom-Widget-Klassen schaffen k&#xf6;nnen"/>
+<node CREATED="1664669526998" ID="ID_692508044" MODIFIED="1664669597733">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      dann immer besser noch ein: <font face="Monospaced" color="#3006cf">frame#element</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -61655,12 +61781,12 @@
 </node>
 <node CREATED="1664058062651" ID="ID_1510416990" MODIFIED="1664058067537" TEXT="abgschlossen"/>
 </node>
-<node CREATED="1664630921300" HGAP="183" ID="ID_1033335255" MODIFIED="1664631913787" TEXT="Dokumentation" VSHIFT="40">
+<node CREATED="1664630921300" FOLDED="true" HGAP="183" ID="ID_1033335255" MODIFIED="1664669142761" TEXT="Dokumentation" VSHIFT="40">
 <edge COLOR="#815b70"/>
 <cloud COLOR="#d7c3a8"/>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="list"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1664630997672" ID="ID_237099051" MODIFIED="1664631563829" STYLE="bubble" TEXT="mitf&#xfc;hren">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1664630997672" FOLDED="true" ID="ID_237099051" MODIFIED="1664669129454" STYLE="bubble" TEXT="mitf&#xfc;hren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -61763,8 +61889,64 @@
 <node CREATED="1664631960544" ID="ID_366289631" MODIFIED="1664631964860" TEXT="Layout"/>
 <node CREATED="1664631965465" ID="ID_417783849" LINK="http://localhost:8888/documentation/technical/stage/style/index.html" MODIFIED="1664658971571" TEXT="Styling">
 <linktarget COLOR="#684e97" DESTINATION="ID_417783849" ENDARROW="Default" ENDINCLINATION="-182;50;" ID="Arrow_ID_321858822" SOURCE="ID_782976986" STARTARROW="None" STARTINCLINATION="143;23;"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664664177964" ID="ID_1856995238" LINK="http://localhost:8888/documentation/technical/stage/style/Navigation.html" MODIFIED="1664664211512" TEXT="Navigation">
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#2f37ba" CREATED="1664664350429" ID="ID_24552371" MODIFIED="1664664420238" TEXT="(wartet auf Implementierung)">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#2f37ba" CREATED="1664664350429" ID="ID_1684238945" MODIFIED="1664664439785" TEXT="(und ausgearbeitetes Konzept)">
+<font NAME="SansSerif" SIZE="10"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664664188674" ID="ID_1825141058" LINK="http://localhost:8888/documentation/technical/stage/style/PropEditor.html" MODIFIED="1664664220307" TEXT="Property Edit">
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#2f37ba" CREATED="1664664350429" ID="ID_1138451370" MODIFIED="1664664381842" TEXT="(wartet auf Konzept)">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664664224732" ID="ID_1724606978" LINK="http://localhost:8888/documentation/technical/stage/style/Timeline.html" MODIFIED="1664664245948" TEXT="Timeline">
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664664261120" ID="ID_1963212373" MODIFIED="1664664268953" TEXT="synthetische Elemente dokumentieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1664664271055" ID="ID_1800483629" MODIFIED="1664664332854">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Beispiele zur Verwendung
+    </p>
+    <p>
+      der Styles dokumentieren
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="bell"/>
+</node>
+</node>
+<node COLOR="#690f14" CREATED="1664664482451" ID="ID_1140150901" MODIFIED="1664664499990" TEXT="allgemein">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1664664505903" ID="ID_998661397" MODIFIED="1664664592880" TEXT="Info zu &quot;binary Themes&quot; woanders hin">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Diese Info hatte ich vor l&#228;ngerer Zeit mal &quot;aufgegabelt&quot; und sie wer der erste Content auf dieser Styling-Doku-Seite. Inzwischen hat sich der Scope verschoben, und sowas geh&#246;rt ehr in die CodeBase-Sektion
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1664664649375" ID="ID_1486988234" MODIFIED="1664664658299" TEXT="Details zum ElementBoxWidget">
+<icon BUILTIN="pencil"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1664664602615" HGAP="51" ID="ID_1014621671" MODIFIED="1664664615430" TEXT="Code Base" VSHIFT="7"/>
 </node>
 </node>
 </node>

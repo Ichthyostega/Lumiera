@@ -144,8 +144,12 @@ namespace widget {
       this->add(icon_);
       this->add(menu_);
       this->add(name_);
-      this->set_name(ID_caption);
+      this->set_name(ID_idlabel);
       this->get_style_context()->add_class(CLASS_background);
+      this->get_style_context()->add_class(CLASS_idlabel);
+      icon_.get_style_context()->add_class(CLASS_idlabel_icon);
+      menu_.get_style_context()->add_class(CLASS_idlabel_menu);
+      name_.get_style_context()->add_class(CLASS_idlabel_name);
       name_.set_hexpand(true);
     }
   
@@ -173,10 +177,12 @@ namespace widget {
     {
       set_name(ID_element);
       get_style_context()->add_class(CLASS_background);     // Style to ensure an opaque backdrop
+      get_style_context()->add_class(CLASS_elementbox);
       set_label_align(0.0, 0.0);
       
       set_label_widget(label_);
       label_.setCaption(config.getName());
+      label_.get_style_context()->add_class(CLASS_elementbox_idlabel);
       
       this->show_all();
     }

@@ -49,7 +49,25 @@ namespace stage {
   const Symbol NODE_frame{"frame"};
   
   cuString ID_element{"element"};
-  cuString ID_caption{"caption"};
+  cuString ID_idlabel{"idlabel"};
+  
+  cuString CLASS_idlabel       {"idlabel"};
+  cuString CLASS_idlabel_icon  {"idlabel__icon"};
+  cuString CLASS_idlabel_menu  {"idlabel__menu"};
+  cuString CLASS_idlabel_name  {"idlabel__name"};
+  cuString CLASS_elementbox    {"elementbox"};
+  cuString CLASS_elementbox_idlabel {"elementbox__idlabel"};  ///< only present on IDLabel widget within ElementBoxWidget
+  
+  cuString CLASS_elementbox_video   {"elementbox--video"};
+  cuString CLASS_elementbox_audio   {"elementbox--audio"};
+  cuString CLASS_elementbox_text    {"elementbox--text"};
+  cuString CLASS_elementbox_auto    {"elementbox--auto"};
+  cuString CLASS_elementbox_event   {"elementbox--event"};
+  cuString CLASS_elementbox_effect  {"elementbox--effect"};
+  cuString CLASS_elementbox_label   {"elementbox--label"};
+  cuString CLASS_elementbox_ruler   {"elementbox--ruler"};
+  cuString CLASS_elementbox_group   {"elementbox--group"};
+  cuString CLASS_elementbox_meta    {"elementbox--meta"};
   
   cuString CLASS_timeline      {"timeline"};
   cuString CLASS_timeline_page {"timeline__page"};
