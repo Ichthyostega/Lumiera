@@ -1,0 +1,51 @@
+GUI style: Property Editor
+==========================
+
+.Styling of property editor tiles
+The process of editing film leads to an usage pattern, where a lot of _components_ or _nodes_
+are intervened, each exposing some parameters to control and to tweak. The allocation and management
+of these property editors within the UI space is tantamount for a productive and satisfying workflow.
+
+Vision
+------
+[red]#As of 2022, not even detailed concepts have been created to address these needs.#
+However, the outline of our vision can be explained...
+
+- the necessity to access or expose an UI is expressed as _presentation request_
+- there will be a routing of presentation requests to a suitable location in the UI
+- each location has an _allocation scheme:_
+
+  * in the simplest case, an existing location is re-used
+  * another strategy might be to create a new view for each entity/request
+  * or a fixed number of ``slots'' may be allocated in a round-robin or LRU pattern
+
+- views allocated this way are non-modal by default
+- a view can thus be re-bound or it may reflect state changes of a selected object
+- some _gestures_ may cause a new _presentation request_ and thus lead to _revealing_
+  an existing view
+- there can be several _spots of work_ -- the user may navigate to a different _spot,_
+  causing some views to be hidden and others to be revealed
+- the user can apply _navigation gestures_ to return to a previous _spot_ and view / zoom level.
+
+Lumiera is built around the abstracted notion of an _interface system_ and _gestures_ within that
+system. The most relevant interfaces we want to support are
+
+- Mouse
+- Keyboard
+- Pen / Tablet
+- Hardware controllers
+
+Consequences for Styling
+~~~~~~~~~~~~~~~~~~~~~~~~
+- Styles must be anchored semantically rather than based on a concrete widget hierarchy
+- Property Editors are built from some ubiquitous building blocks
+- Styling for several dynamic, transitory handling patterns are required
+
+  * focusing
+  * number tweaking modes
+  * linked properties
+  * cues for navigation
+
+- many UI elements can be collapsed and expanded and we need an _abridged display_ of elements
+- we need a concept of layering generic states on top of pretty much every element, without
+  producing a combinatoric explosion of actual styles.

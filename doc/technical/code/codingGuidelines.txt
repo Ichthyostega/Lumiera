@@ -10,7 +10,9 @@ Style Guide
 The Lumiera project uses GNU indentation style with slight adaptations.
 
 - *no tabs* please. The typical ``semi indent'' of GNU style thus becomes 2 spaces.
-- maximum line length is rather around *110 characters*.
+- maximum line length is rather around *110 characters*.footnote:[This is not a hard
+  limit, rather a guideline -- however, you should never try to stuff several distinct
+  topics into a single line...]
 - originally, GNU style focused on plain-C code. +
   We thus apply some relaxations and clarifications ...
   
@@ -101,14 +103,14 @@ General Code Arrangement and Layout
   import individually, and we'll all be better off...]
 - the includes for our own dependencies shall be given relative to source-root (or test root). Don't use
   relative includes for headers located in the same directory, or -- worse still -- in the parent directory.
-- sometimes, the actual translation units will combine several facilities for technical reasons.footnote:
-  [this means, there can be ``headers'', which are actually only be intended for inclusion on one or two
-  distinct places. This should be mentioned in the file-level comment, but generally is an acceptable
-  practice, and better then lumping everything into a 1000 lines header. As a guideline, if you expect
-  a rather technical concern not to be of much interest for most readers of a header, then better
-  extract it into a separate self-contained header and include it. E.g., you might be sharing an
-  an implementation-level class or even singleton instance and some constant definitions. Just
-  be sure not to include definitions several times.]
+- sometimes, the actual translation units will combine several facilities for technical reasons.footnote:[to
+  elaborate, there can be ``headers'', which are in fact only be intended for inclusion at one or two distinct
+  places. This should be mentioned in the file-level comment, but generally is an acceptable practice,
+  and better then lumping everything into a 1000 lines header. As a guideline, if you expect a rather
+  technical concern not to be of much interest for most readers of a header, then better extract it into
+  a separate self-contained header and include it. E.g., you might be sharing an implementation-level
+  class or even singleton instance and some constant definitions.
+  Just be sure not to include definitions several times.]
   Anonymous namespaces should be used liberally to avoid unnecessary exports.
 - template code mostly needs to reside in headers. (same for metaprogramming code).
   We employ the simple inclusion model (``Borland model'') for template instantiation.
@@ -117,10 +119,13 @@ General Code Arrangement and Layout
   Such explicit instantiations should be limited to just a view obvious places. They should be
   written into a block at the end of some central implementation file. See +assetmanager.cpp+
   for an example.
-- deliberately there is _no single top-level namespace._ The +namespace lumiera+ is the root of
-  our _exported interfaces_ -- intended for use by external scripts and libraries. Everything
-  implementation related is arranged in per-subsystem trees of namespaces. The APIs of the
-  subsystems are exported explicitly into the +lumiera+ namespace.
+- deliberately there is __no single top-level namespace.__footnote:[We do not want to encourage
+  the emergence of _central locations,_ where global definitions for each and everyone might be
+  stuffed and buried. If you want to share something, then please create an interface and expose
+  a service, together with definitions for your clients to use.]
+  The +namespace lumiera+ is the root of our _exported interfaces_ -- intended for use by external
+  scripts and libraries. Everything implementation related is arranged in per-subsystem trees of
+  namespaces. The APIs of the subsystems are exported explicitly into the +lumiera+ namespace.
 
 
 Design Guidelines and Values

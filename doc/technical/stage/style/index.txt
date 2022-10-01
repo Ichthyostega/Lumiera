@@ -3,7 +3,14 @@ Lumiera GUI style and theming
 
 //Menu: label Theme/Style
 
-_this page collects some pieces of information regarding the visual appearance of the Lumiera GTK UI_
+.a guide towards styling
+This page is a place _to collect pieces of information_ regarding the visual appearance of the Lumiera GTK UI.
+Further (more technical) aspects regarding the inner workings of the toolkit can be found
+link:{ldoc}/technical/code/gtk/[in the »Code Base« section regarding GTK]. Details about the concrete
+arrangement and conventions within some parts of the UI are given on the sub pages +
+link:Timeline.html[Timeline]
+&middot; link:Navigation.html[Navigation]
+&middot; link:PropEditor.html[Property Editors]
 
 
 GTK-3 styles

@@ -31902,7 +31902,7 @@
 <icon BUILTIN="yes"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504201029004" ID="ID_1898190659" MODIFIED="1538838744207" TEXT="als SVG machen...">
-<arrowlink COLOR="#8697d2" DESTINATION="ID_1569870904" ENDARROW="Default" ENDINCLINATION="-459;-144;" ID="Arrow_ID_421953450" STARTARROW="None" STARTINCLINATION="-861;94;"/>
+<arrowlink COLOR="#8697d2" DESTINATION="ID_1569870904" ENDARROW="Default" ENDINCLINATION="-935;-133;" ID="Arrow_ID_421953450" STARTARROW="None" STARTINCLINATION="-861;94;"/>
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
@@ -61449,7 +61449,7 @@
 <node CREATED="1538838573613" ID="ID_1610361741" MODIFIED="1557498707241" TEXT="Graphic">
 <node CREATED="1538838576956" ID="ID_1174319279" MODIFIED="1557498707241" TEXT="SVG-Icons">
 <node CREATED="1504201038435" ID="ID_1569870904" MODIFIED="1557498707241" TEXT="Anleitung">
-<linktarget COLOR="#8697d2" DESTINATION="ID_1569870904" ENDARROW="Default" ENDINCLINATION="-459;-144;" ID="Arrow_ID_421953450" SOURCE="ID_1898190659" STARTARROW="None" STARTINCLINATION="-861;94;"/>
+<linktarget COLOR="#8697d2" DESTINATION="ID_1569870904" ENDARROW="Default" ENDINCLINATION="-935;-133;" ID="Arrow_ID_421953450" SOURCE="ID_1898190659" STARTARROW="None" STARTINCLINATION="-861;94;"/>
 <node CREATED="1504201044122" ID="ID_612955500" MODIFIED="1557498707241" TEXT="SVG in data/icons/svg"/>
 <node CREATED="1504201192870" ID="ID_823572488" MODIFIED="1576282357932" TEXT="Dokument-Gr&#xf6;&#xdf;e anscheinend egal">
 <richcontent TYPE="NOTE"><html>
@@ -61654,6 +61654,141 @@
 </node>
 </node>
 <node CREATED="1664058062651" ID="ID_1510416990" MODIFIED="1664058067537" TEXT="abgschlossen"/>
+</node>
+<node CREATED="1664630921300" HGAP="183" ID="ID_1033335255" MODIFIED="1664631913787" TEXT="Dokumentation" VSHIFT="40">
+<edge COLOR="#815b70"/>
+<cloud COLOR="#d7c3a8"/>
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="list"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1664630997672" ID="ID_237099051" MODIFIED="1664631563829" STYLE="bubble" TEXT="mitf&#xfc;hren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>Leitlinie</u>: so viel tun, da&#223; uns das Thema nicht &#252;ber den Kopf w&#228;chst
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="back"/>
+<node CREATED="1664631055889" ID="ID_1519064192" MODIFIED="1664631546287" STYLE="fork" TEXT="TiddlyWiki">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1664631069343" ID="ID_905113359" LINK="file:///Lager/heim/devel/lumi/wiki/renderengine.html#GuiTopLevel%20GuiTimelineView%20TimelineDisplayManager%20TrackPresenter%20ClipPresenter%20GuiTimelineDraw%20GuiClipWidget%20GuiElementBoxWidget" MODIFIED="1664631546287" TEXT="Themenkomplex: GuiConnection">
+<icon BUILTIN="pencil"/>
+<node COLOR="#5b166e" CREATED="1611035931543" HGAP="77" ID="ID_936662203" MODIFIED="1664631233866" STYLE="bubble" TEXT="2022-10 aktiv" VSHIFT="-3">
+<edge COLOR="#eb1854" STYLE="sharp_linear" WIDTH="2"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664631256231" ID="ID_967028256" MODIFIED="1664631546288" TEXT="Session: aktualisieren!">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hier stammt die Darstellung im Wesentlichen aus den ersten Jahren, ist aber mit dem teilweisen Re-Design verflochten &#10233; verwirrende Mix aus &#252;berholten Ansichten und Konzepten f&#252;r die <i>ferne Zukunft</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+<node CREATED="1664631363943" ID="ID_879637950" MODIFIED="1664631546287" STYLE="fork" TEXT="Doxygen">
+<node CREATED="1664631381728" ID="ID_479695439" MODIFIED="1664631546287" TEXT="&#xdc;bersichten"/>
+</node>
+<node CREATED="1664631398891" ID="ID_1010017470" MODIFIED="1664631559120" STYLE="fork" TEXT="LumiDok">
+<edge COLOR="#8e6074" STYLE="linear" WIDTH="thin"/>
+<node CREATED="1664631418128" ID="ID_1118945815" MODIFIED="1664631559116" TEXT="Stand">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664632273717" ID="ID_546161915" MODIFIED="1664633302811" TEXT="10/22: master/online deutlich zur&#xfc;ckgefallen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Aber es gibt auch stellenweise &#220;berarbeitungen (von Benny) auf der offizielen Linie
+    </p>
+    <p>
+      Im Zuge der laufenden Entwicklung wurden...
+    </p>
+    <ul>
+      <li>
+        Seiten umbenannt
+      </li>
+      <li>
+        neue Bereiche begonnen
+      </li>
+    </ul>
+    <p>
+      <i><font color="#4a025e">alles dies ist noch nicht auf dem offiziellen &quot;dok&quot;-Branch und deshalb noch nicht publiziert! </font></i>
+    </p>
+    <p>
+      <font color="#b81d10" size="2">&#10233; lokal/gui auschecken und Dok-Site auf localhost verwenden</font>
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664632408539" ID="ID_5303509" MODIFIED="1664632540359" TEXT="Link-Generator notwendig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        das ist das gr&#246;&#223;te Impediment, weshalb Informationen nicht aus dem TidlyWiki migrieren k&#246;nnen
+      </li>
+      <li>
+        wir hatten das vor Jahren bereits besprochen, und Christian hat eine &#187;Link-Farm&#171; vorgeschlagen
+      </li>
+      <li>
+        Benny wollte sich darum k&#252;mmern, hat das aber<i>&#160;&#160;vergessen/verdr&#228;ngt</i>
+      </li>
+      <li>
+        ich selber k&#246;nnte das in ca. 4 Tagen auf die Beine stellen
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+<node CREATED="1664631424771" ID="ID_30685930" MODIFIED="1664631559117" TEXT="User"/>
+<node CREATED="1664631468424" ID="ID_206416201" MODIFIED="1664631559117" TEXT="Design"/>
+<node CREATED="1664631471329" ID="ID_1395212182" MODIFIED="1664631559117" TEXT="Technical">
+<node CREATED="1664631954289" ID="ID_20498937" MODIFIED="1664631956996" TEXT="GTK">
+<node CREATED="1664631960544" ID="ID_366289631" MODIFIED="1664631964860" TEXT="Layout"/>
+<node CREATED="1664631965465" ID="ID_417783849" LINK="http://localhost:8888/documentation/technical/stage/style/index.html" MODIFIED="1664658971571" TEXT="Styling">
+<linktarget COLOR="#684e97" DESTINATION="ID_417783849" ENDARROW="Default" ENDINCLINATION="-182;50;" ID="Arrow_ID_321858822" SOURCE="ID_782976986" STARTARROW="None" STARTINCLINATION="143;23;"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1664631634178" ID="ID_679126801" MODIFIED="1664631636964" TEXT="Themen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664631986708" ID="ID_1854898414" MODIFIED="1664632010768" TEXT="coding news">
+<icon BUILTIN="bell"/>
+</node>
+<node CREATED="1664632012297" ID="ID_241631213" MODIFIED="1664632016491" TEXT="Interaction Design"/>
+<node CREATED="1664632040517" ID="ID_143213655" MODIFIED="1664632043864" TEXT="Interface Layout">
+<node CREATED="1664632066418" ID="ID_782976986" MODIFIED="1664632244719" TEXT="style scheme">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      TODO: dokumentieren, wie das Lumiera-Interface ausgelegt und angeordnet wird, bis hinab zu den Details der Widget-Anordnung, damit ein Au&#223;enstehender im Stande ist, am Styling mitzuarbeiten...
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#684e97" DESTINATION="ID_417783849" ENDARROW="Default" ENDINCLINATION="-182;50;" ID="Arrow_ID_321858822" STARTARROW="None" STARTINCLINATION="143;23;"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1522933444542" ID="ID_1027224176" MODIFIED="1557498707241" TEXT="Themen">
 <node CREATED="1522933640027" ID="ID_191198072" MODIFIED="1557498707241" TEXT="UI-Connection">

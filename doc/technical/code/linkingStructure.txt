@@ -351,7 +351,7 @@ actively step by step
   Gui.resourcepath:: the place where the GTK-UI looks for further resources, most notably...
 
   Gui.stylesheet:: the name of the CSS-stylesheet for GTK-3, which defines the
-    application specific look, link:{ldoc}/technical/stage/guiTheme.html[skinning and theme].
+    application specific look, link:{ldoc}/technical/stage/style[styling and theme].
 
 While the first two steps, the relative locations `$ORIGIN/modules` and `$ORIGIN/setup.ini`
 are hard-wired, the further resolution steps rely on the contents of 'setup.ini' and are

@@ -1,0 +1,15 @@
+GUI style: Navigation
+=====================
+
+.UI Navigation and global styling conventions
+This page explains some conventions and generic patterns used within the Lumiera UI,
+especially with respect to navigation, toolbars and menus.
+
+The Lumiera UI is deliberately prepared to live within multiple top-level windows,
+which are typically placed into different desktop views or located on several monitors
+at the editing desk. The views within these top-level windows are arranged each in accordance
+to a specific _perspective_ -- and a rules-based system is used to _route_ a request for
+presentation to an appropriate location, where it finds an existing view or creates a
+new one to serve the need for presentation.
+
+[red]#As of 2022, only some internal foundation is implemented for this concept#
