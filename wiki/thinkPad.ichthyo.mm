@@ -19269,21 +19269,302 @@
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1664313319325" ID="ID_1660318028" MODIFIED="1664313502546" TEXT="aber: nach dem hide() liefert die umschlie&#xdf;ende Box sofort angepa&#xdf;te preferred_size">
-<arrowlink COLOR="#fcf2bc" DESTINATION="ID_611179505" ENDARROW="Default" ENDINCLINATION="88;-31;" ID="Arrow_ID_96952850" STARTARROW="None" STARTINCLINATION="76;2;"/>
+<arrowlink COLOR="#fcf2bc" DESTINATION="ID_611179505" ENDARROW="Default" ENDINCLINATION="-47;-40;" ID="Arrow_ID_96952850" STARTARROW="None" STARTINCLINATION="36;39;"/>
 <icon BUILTIN="idea"/>
+<node CREATED="1664721403567" ID="ID_1984818373" MODIFIED="1664721416232" TEXT="das w&#xe4;re ein weiterer Ansatzpunkt"/>
+<node CREATED="1664721417261" ID="ID_264816651" MODIFIED="1664721437070" TEXT="das Widget k&#xf6;nnen die Situation &quot;proben&quot;"/>
 </node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664033098675" ID="ID_617752641" MODIFIED="1664033125288" TEXT="differenziertere L&#xf6;sung evaluieren">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1664033207476" ID="ID_1973707010" MODIFIED="1664033231388" TEXT="Idee: Label dynamisch k&#xfc;rzen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664721239543" ID="ID_958938237" MODIFIED="1664721462737" TEXT="Ansatz: Komponenten schritweise verbergen">
+<arrowlink COLOR="#f8fecd" DESTINATION="ID_611179505" ENDARROW="None" ENDINCLINATION="-198;-9;" ID="Arrow_ID_990474269" STARTARROW="Default" STARTINCLINATION="202;13;"/>
 <icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1664721613355" HGAP="38" ID="ID_100250479" MODIFIED="1664723295433" TEXT="L&#xf6;sungs-Mechanik?" VSHIFT="-26">
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#0d5b57" COLOR="#63cb95" CREATED="1664723304392" ID="ID_351577212" MODIFIED="1664723403946" STYLE="bubble" TEXT="Logik">
+<edge COLOR="#52c44c" STYLE="linear"/>
+<font BOLD="true" NAME="SansSerif" SIZE="15"/>
+<node COLOR="#33565a" CREATED="1664723420339" HGAP="38" ID="ID_1605718107" MODIFIED="1664727861369" TEXT="Handlungsbedarf?" VSHIFT="39">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      BEDINGUNG: Constraint &lt; Vollgr&#246;&#223;e
+    </p>
+    <ul>
+      <li>
+        Vollgr&#246;&#223;e ist im Widget gespeichert und wird nach Text&#228;nderung ermittelt (&#8227;damit implizit auch initial)
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#76fe43" DESTINATION="ID_793769798" ENDARROW="Default" ENDINCLINATION="15;-39;" ID="Arrow_ID_1548203404" STARTARROW="None" STARTINCLINATION="-3;6;"/>
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node COLOR="#33565a" CREATED="1664723834064" HGAP="35" ID="ID_793769798" MODIFIED="1664727861369" TEXT="erf&#xfc;llt(cH)?" VSHIFT="26">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      BEDINUNG: cH&#160;&gt; aktuelleH&#246;he
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#76fe43" DESTINATION="ID_793769798" ENDARROW="Default" ENDINCLINATION="15;-39;" ID="Arrow_ID_1548203404" SOURCE="ID_1605718107" STARTARROW="None" STARTINCLINATION="-3;6;"/>
+<font NAME="SansSerif" SIZE="10"/>
+<node COLOR="#33565a" CREATED="1664724142663" ID="ID_212862875" MODIFIED="1664727540444" TEXT="Nein &#x27f9; alles ausblenden &#x25a3;">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node COLOR="#33565a" CREATED="1664725209295" ID="ID_657215999" MODIFIED="1664727540444" TEXT="Ja &#x27f9;  pr&#xfc;fen...">
+<arrowlink COLOR="#76fe43" DESTINATION="ID_1918462068" ENDARROW="Default" ENDINCLINATION="5;-16;" ID="Arrow_ID_1055241213" STARTARROW="None" STARTINCLINATION="-45;7;"/>
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node COLOR="#33565a" CREATED="1664725271351" HGAP="38" ID="ID_1918462068" MODIFIED="1664727540441" TEXT="erf&#xfc;llt(cW)?" VSHIFT="-10">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      BEDINUNG: cW&#160;&gt; aktuelleWeite
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#76fe43" DESTINATION="ID_1918462068" ENDARROW="Default" ENDINCLINATION="5;-16;" ID="Arrow_ID_1055241213" SOURCE="ID_657215999" STARTARROW="None" STARTINCLINATION="-45;7;"/>
+<font NAME="SansSerif" SIZE="10"/>
+<node COLOR="#33565a" CREATED="1664725445271" ID="ID_1506234286" MODIFIED="1664727540444" TEXT="Nein &#x27f9; reduzieren!">
+<font NAME="SansSerif" SIZE="10"/>
+<node COLOR="#33565a" CREATED="1664725557464" ID="ID_1964737255" MODIFIED="1664727540443" TEXT="reduce(Name)? &#x27f9; &#x25a3;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      BEDINGUNG: &#916;Name &gt; goal
+    </p>
+    <ul>
+      <li>
+        Hilfsfunktion reduce(Name) : kann im Extremfall den Namen ausblenden
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node COLOR="#33565a" CREATED="1664725557464" ID="ID_827509447" MODIFIED="1664727540443" TEXT="reduce(Menu)? &#x27f9; &#x25a3;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      BEDINGUNG: &#916;Menu &gt; goal
+    </p>
+    <ul>
+      <li>
+        Hilfsfunktion reduce(Menu) : kann das Men&#252; ggfs ausblenden und liefert das dadurch erzielte Delta
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node COLOR="#33565a" CREATED="1664725557464" ID="ID_76551672" MODIFIED="1664727540443" TEXT="reduce(Icon) &#x25a3;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Hier kein Test mehr notwendig; mehr als alles ausblenden k&#246;nnen wir nicht
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node COLOR="#33565a" CREATED="1664725508319" ID="ID_348137834" MODIFIED="1664727540442" TEXT="Ja &#x27f9; einblenden?">
+<font NAME="SansSerif" SIZE="10"/>
+<node COLOR="#33565a" CREATED="1664726003283" ID="ID_991077863" MODIFIED="1664727540443" TEXT="show(Icon)?  Nein &#x27f9; &#x25a3;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Mehrstufige Pr&#252;fung mit Hysterese (um Flackern zu vermeiden)...
+    </p>
+    <ul>
+      <li>
+        rechnerische Pr&#252;fung: Nominalgr&#246;&#223;e Icon + Hysterese &lt; cW <i>und ebenso </i>&lt; cH
+      </li>
+      <li>
+        danach: Icon einblenden und reale Gr&#246;&#223;e ermitteln und gegen Constraint checken
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node COLOR="#33565a" CREATED="1664726003283" ID="ID_1754814316" MODIFIED="1664727540443" TEXT="show(Menu)?  Nein &#x27f9; &#x25a3;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      auch hier mehrstufige Pr&#252;fung mit Hysterese...
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node COLOR="#33565a" CREATED="1664726003283" ID="ID_249986815" MODIFIED="1664727540442" TEXT="show(Name)?  &#x25a3;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      auch hier mehrstufige Pr&#252;fung...
+    </p>
+    <ul>
+      <li>
+        zun&#228;chst rechnerisch...
+      </li>
+      <ul>
+        <li>
+          in der ersten (einfachen) Version wird gegen die nominelle Gesamtgr&#246;&#223;e gepr&#252;ft + Hysterese
+        </li>
+        <li>
+          in der (geplanten) Vollversion pr&#252;fen wir gegen die Icon-Gr&#246;&#223;e + Hysterese, und unterstellen, da&#223; sich der Name dann hinreichend k&#252;rzen kann
+        </li>
+      </ul>
+      <li>
+        danach wird der Name eingeblendet und reduce(Name) aufgerufen; sollte dies scheitern, mu&#223; eine Warnung und Assertion-Failure erfolgen, da die Logik sonst zwangsl&#228;ufig in ein Schleife mit permanentem Flackern l&#228;uft!
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664727903654" HGAP="47" ID="ID_479783297" MODIFIED="1664727915770" TEXT="Implementierung" VSHIFT="-4">
+<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1664766812799" ID="ID_806792302" MODIFIED="1664767612419" TEXT="weitgehend in lokalen Funktionen implementierbar">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1664766835991" ID="ID_325959824" MODIFIED="1664767606249" TEXT="redundante Gr&#xf6;&#xdf;en-Ermittlung in der Kette">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1664766851269" ID="ID_1929258813" MODIFIED="1664767130682" TEXT="habe hier Bedenken wegen der Performance">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font color="#b1058d"><i>premature optimisation</i></font>??
+    </p>
+    <p>
+      Normalwerweise funktionieren alle unsere GUIs trotzdem schnell genug.<br />Aber hier wollen wir diese Sequenz hunderte Mal f&#252;r jeden Fokus-Wechsel machen...
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <b>Problematisch</b>&#160;ist, da&#223; hier &#252;ber zwei Ebenen hinweg und &#252;ber zwei mal zwei virtuelle Calls gegangen wird
+    </p>
+    <ul>
+      <li>
+        wir springen jeweils in eine non-inline-Funktion auf Gtkmm
+      </li>
+      <li>
+        diese delegiert auf eine non-inline-Funktion in Gtk+
+      </li>
+      <li>
+        und diese nutzt u.U zwei drei virtuelle Callbacks (Layout-Trend, Haupt-Dimension, sekund&#228;re Dimension)
+      </li>
+      <li>
+        und jeder dieser Callbacks wir ein weiteres Mal von Gtkmm durch eine vtable dispatched
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1664767140485" ID="ID_428399436" MODIFIED="1664767217656" TEXT="vor allem die wieder-einblenden-Sequenz ist gef&#xe4;hrlich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn sie wird f&#252;r jeden Fokuswechsel und f&#252;r jeden erfolglosen Versuch erneut durchlaufen, und zwar in den meisten F&#228;llen (Label) bis zum 3.Schritt, nur um dann zu merken, da&#223; eben doch nichts mehr rauszuholen ist.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1664767237232" ID="ID_871917652" MODIFIED="1664767375307" TEXT="leider arbeiten hier die mog&#xf6;ichen Paddings gegen uns">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn das Stylesheet eben doch zus&#228;tzliche Paddings definiert, dann geht die Rechnung nicht auf, da sie auf den required-sizes der Kind-Widgets beruht, und daher (mit Paddings) zu optimistisch ist. Daher <i>m&#252;ssen wir zwingend</i>&#160;nach einem versuchten wieder-Einblenden die <i>reale Ausdehnung des ganzen IDLabel </i>ermitteln und gegen die Constraints pr&#252;fen. Bei der Verkleinerung ist das nicht der Fall, denn da wirken die wegfallenden Paddings als zus&#228;tzlicher &quot;Bonus&quot;.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1664767377647" ID="ID_482878586" MODIFIED="1664767538685" TEXT="Verwende ein &#x3bb; mit Seiteneffekt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Damit mu&#223; ich nach jedem Schritt nur einmal die Gr&#246;&#223;e neu ermitteln; diese Werte schlagen dann aus dem &#955; per Seiteneffekt auf die Variablen des umschlie&#223;enden Scope durch. Das &#955; selber ist &quot;scheinbar&quot; nur eine Pr&#252;f-Funktion, und wird als Solche an die Hilfsfunktionen gegeben. Nicht sch&#246;n, aber auch nicht wirklich gef&#228;hrlich, da sich alles in einem lokalen Namespace abspielt. Habe eine Warnung im Code hinterlassen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1664767619949" ID="ID_1351254549" MODIFIED="1664767684028" TEXT="Test">
+<icon BUILTIN="pencil"/>
+<node CREATED="1664767649344" ID="ID_408352584" MODIFIED="1664767655318" TEXT="kein Crash">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1664767638298" ID="ID_212652160" MODIFIED="1664767648612" TEXT="Ausblenden des Label funktioniert"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1664767657871" ID="ID_599051282" MODIFIED="1664768828505" TEXT="Ausblenden der Icons funktioniert nicht">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664033207476" ID="ID_1973707010" MODIFIED="1664721283088" TEXT="Weiterf&#xfc;hrende Idee: Label dynamisch k&#xfc;rzen">
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664769914851" ID="ID_816204048" MODIFIED="1664769938381" TEXT="#1242 shorten ID-Label text to fit into size constraints">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1664027420141" ID="ID_891209068" MODIFIED="1664033227851" TEXT="kann man den Label-Text &#xe4;ndern und sieht sofort eine &#xc4;nderung auf dem Layout-Callback?">
 <linktarget COLOR="#bf4283" DESTINATION="ID_891209068" ENDARROW="Default" ENDINCLINATION="-836;28;" ID="Arrow_ID_120092077" SOURCE="ID_945958753" STARTARROW="None" STARTINCLINATION="260;-42;"/>
 <icon BUILTIN="help"/>
 <node CREATED="1664313375789" ID="ID_611179505" MODIFIED="1664313504665" TEXT="zumindest nach hide() ist sofort die prefered_size angepa&#xdf;t">
-<linktarget COLOR="#fcf2bc" DESTINATION="ID_611179505" ENDARROW="Default" ENDINCLINATION="88;-31;" ID="Arrow_ID_96952850" SOURCE="ID_1660318028" STARTARROW="None" STARTINCLINATION="76;2;"/>
+<linktarget COLOR="#fcf2bc" DESTINATION="ID_611179505" ENDARROW="Default" ENDINCLINATION="-47;-40;" ID="Arrow_ID_96952850" SOURCE="ID_1660318028" STARTARROW="None" STARTINCLINATION="36;39;"/>
+<linktarget COLOR="#f8fecd" DESTINATION="ID_611179505" ENDARROW="None" ENDINCLINATION="-198;-9;" ID="Arrow_ID_990474269" SOURCE="ID_958938237" STARTARROW="Default" STARTINCLINATION="202;13;"/>
 <icon BUILTIN="idea"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664543738587" ID="ID_418832883" MODIFIED="1664543749125" TEXT="Experiment durchf&#xfc;hren">
@@ -19320,6 +19601,10 @@
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664033233729" ID="ID_73562728" MODIFIED="1664033252543" TEXT="ggfs &#xdc;bersetzungs-Faktor im Advice-System ablegen">
 <icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1664728069849" ID="ID_458393482" MODIFIED="1664728428510" TEXT="Performance der Anzeigelogik beobachten">
+<arrowlink COLOR="#675f90" DESTINATION="ID_1113493685" ENDARROW="Default" ENDINCLINATION="144;-94;" ID="Arrow_ID_314973122" STARTARROW="None" STARTINCLINATION="-577;39;"/>
+<icon BUILTIN="bell"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1664033337194" ID="ID_142928718" MODIFIED="1664674849781" TEXT="Label-Komponente anlegen">
@@ -19711,6 +19996,25 @@
 <arrowlink COLOR="#4272bf" DESTINATION="ID_969143327" ENDARROW="Default" ENDINCLINATION="-1003;96;" ID="Arrow_ID_190980327" STARTARROW="None" STARTINCLINATION="260;-42;"/>
 <arrowlink COLOR="#bf4283" DESTINATION="ID_891209068" ENDARROW="Default" ENDINCLINATION="-836;28;" ID="Arrow_ID_120092077" STARTARROW="None" STARTINCLINATION="260;-42;"/>
 <icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#793f70" CREATED="1664728013606" ID="ID_1113493685" MODIFIED="1664730778937" TEXT="Performance-on-scale">
+<linktarget COLOR="#675f90" DESTINATION="ID_1113493685" ENDARROW="Default" ENDINCLINATION="144;-94;" ID="Arrow_ID_314973122" SOURCE="ID_458393482" STARTARROW="None" STARTINCLINATION="-577;39;"/>
+<linktarget COLOR="#652a49" DESTINATION="ID_1113493685" ENDARROW="Default" ENDINCLINATION="-1026;116;" ID="Arrow_ID_977109999" SOURCE="ID_46750178" STARTARROW="None" STARTINCLINATION="-985;55;"/>
+<linktarget COLOR="#652a49" DESTINATION="ID_1113493685" ENDARROW="Default" ENDINCLINATION="-1026;116;" ID="Arrow_ID_1663742451" SOURCE="ID_499807590" STARTARROW="None" STARTINCLINATION="-985;55;"/>
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664730454742" ID="ID_898331208" MODIFIED="1664730461480" TEXT="#1240 evaluate performance of ElementBoxWidget">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1664728161348" ID="ID_541577601" MODIFIED="1664728171859" TEXT="Speicherbedarf">
+<node CREATED="1664728182417" ID="ID_787168469" MODIFIED="1664728197093" TEXT="Speichern der Maximalgr&#xf6;&#xdf;e"/>
+<node CREATED="1664728197911" ID="ID_238915264" MODIFIED="1664728205283" TEXT="Speichern des vollst&#xe4;ndigen Label-Textes"/>
+<node CREATED="1664728207952" ID="ID_1837798110" MODIFIED="1664728236438" TEXT="Speichern des vorhergehenden Constraints"/>
+</node>
+<node CREATED="1664728246927" ID="ID_502396500" MODIFIED="1664728250323" TEXT="Laufzeit">
+<node CREATED="1664728261343" ID="ID_1345184412" MODIFIED="1664728285571" TEXT="Laufzeit incl Ein/Ausblenden (aller Widgets)"/>
+<node CREATED="1664728287779" ID="ID_382936001" MODIFIED="1664728325578" TEXT="Laufzeit mit/ohne Pr&#xfc;fung redundanter Constraints"/>
+<node CREATED="1664728326686" ID="ID_724874601" MODIFIED="1664728340360" TEXT="Laufzeit mit/ohne Pr&#xfc;fung der Maximalausdehnung"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1654445541606" ID="ID_520455096" MODIFIED="1654445545420" TEXT="Integrieren">
@@ -36088,6 +36392,17 @@
 <node CREATED="1541861069577" ID="ID_1233713010" MODIFIED="1557498707234" TEXT="wird stets atomar angewendet"/>
 <node CREATED="1541861281854" ID="ID_1332627357" MODIFIED="1557498707234" TEXT="wird vom LayoutManager auf Widgets &#xfc;bersetzt"/>
 </node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664730879582" FOLDED="true" ID="ID_580266574" MODIFIED="1664731036535" TEXT="Performance-Aspekte">
+<linktarget COLOR="#6e6b89" DESTINATION="ID_580266574" ENDARROW="Default" ENDINCLINATION="-1072;126;" ID="Arrow_ID_1760515184" SOURCE="ID_1774914566" STARTARROW="None" STARTINCLINATION="-1832;638;"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1664730914274" ID="ID_352020246" MODIFIED="1664730918069" TEXT="Architektur"/>
+<node CREATED="1664730918937" ID="ID_524082357" MODIFIED="1664730921221" TEXT="Empirie">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664728069849" ID="ID_46750178" MODIFIED="1664730924226" TEXT="#1240 evaluate performance of ElementBoxWidget">
+<arrowlink COLOR="#652a49" DESTINATION="ID_1113493685" ENDARROW="Default" ENDINCLINATION="-1026;116;" ID="Arrow_ID_977109999" STARTARROW="None" STARTINCLINATION="-985;55;"/>
+<icon BUILTIN="bell"/>
 </node>
 </node>
 </node>
@@ -64124,6 +64439,23 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664730709910" FOLDED="true" ID="ID_532850171" MODIFIED="1664731043947" TEXT="Performance">
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664730715885" ID="ID_1774914566" MODIFIED="1664731036535" TEXT="GUI">
+<arrowlink COLOR="#6e6b89" DESTINATION="ID_580266574" ENDARROW="Default" ENDINCLINATION="-1072;126;" ID="Arrow_ID_1760515184" STARTARROW="None" STARTINCLINATION="-1832;638;"/>
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664728069849" ID="ID_499807590" MODIFIED="1664730778937" TEXT="#1240 evaluate performance of ElementBoxWidget">
+<arrowlink COLOR="#652a49" DESTINATION="ID_1113493685" ENDARROW="Default" ENDINCLINATION="-1026;116;" ID="Arrow_ID_1663742451" STARTARROW="None" STARTINCLINATION="-985;55;"/>
+<icon BUILTIN="bell"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664730718511" ID="ID_1773381955" MODIFIED="1664730727367" TEXT="Engine">
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664730722868" ID="ID_1536097796" MODIFIED="1664730727368" TEXT="Session">
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 <node CREATED="1561238618311" ID="ID_1197206022" MODIFIED="1561311521089" TEXT="Plattform-Evolution">

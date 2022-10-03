@@ -125,6 +125,7 @@ namespace widget {
       
     private:
       Gtk::Requisition labelFullSize_{};
+      void adaptSize (int, int);
     };
   
   

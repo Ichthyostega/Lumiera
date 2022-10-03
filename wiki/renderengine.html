@@ -3217,7 +3217,7 @@ In accordance with this structure, we introduce a central component, the {{{Pane
 
 </pre>
 </div>
-<div title="GuiElementBoxWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201811011919" modified="202209301654" tags="GuiPattern spec draft" changecount="18">
+<div title="GuiElementBoxWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201811011919" modified="202210030338" tags="GuiPattern spec draft" changecount="21">
 <pre>//A building block used pervasively throughout the Lumiera UI  to represent a named entity.//
 This widget presents a horizontally extended body, which holds a characteristic ''Head-Triplet'' of visual Elements:
 * an //Icon// to create the visual anchor point. In many cases, this will be ''the Placment Icon'' (a hallmark of Lumiera's UI)
@@ -3302,7 +3302,7 @@ Especially when the component determines a placement of the //window// within it
 
 !!!constrained Widget size
 When used as Clip display on a timeline canvas with calibrated time axis, the requirement arises to confine a GTK widget to a pre established size constraint. This requirement is problematic, as it stands in ''direct contradiction'' to ''GTK's fundamental design'': Elements are never to be positioned explicitly, but rather the layout will flow into balance, factoring in the specific font, language support and interface styling and theming. GTK does not provide any API to set layout explicitly — not even for special corner cases.
-Thus, if we intend to bring a custom widget into compliance with our contextual size constraints, the only solution is to //make the GTK layout engine turn out the desired extension allocation// for this custom widget. An detailed survey of the GTK implementation reveals the possible extension points, were such a layout manipulation could be injected.
+Thus, if we intend to bring a custom widget into compliance with our contextual size constraints, the only solution is to //make the GTK layout engine turn out the desired extension allocation in accordance to our constraints// for this custom widget. An detailed survey of the GTK implementation reveals the possible extension points, were such a layout manipulation could be injected.
 * some amount of screen extension is allocated by the framework or by a container widget for its children
 * this happens on first &quot;realisation&quot; of the Widget, or later, when a resize request is processed and the layout cache invalidated
 * the entry point is {{{Gtk::Widget::size_allocate()}}}  (possibly with an additional &quot;baseline&quot; value)
@@ -3316,6 +3316,10 @@ It turns out that the GTK layout management implementation always observes the w
 So the seemingly ''optimal leverage point'' is to ''return our pre established size constraint as result'' from these query functions — which can be overridden in the Gtkmm C++ implementation through the {{{Gtk::Widget::get_preferred_width_vfunc()}}} and {{{Gtk::Widget::get_preferred_height_for_width_vfunc()}}}. However, since GTK assumes these values to be sane and sufficient for a proper realisation of any embedded content, at this point it becomes our responsibility to control and reduce the embedded child widget's extension to bring them into compliance. Failing to do so will lead to garbled drawing on screen.
 
 Our solution approach is to watch the results returned by the default implementation and possibly to hide content until the remaining content conforms to the size constraint; after that, we can return //exactly our calibrated size// and expect GTK to observe this request, passing it down to embedded widgets reduced by style decorations.
+
+{{red{🛆 ''Warning'':}}} the code to perform these successive layout adjustments is //potentially performance critical.//
+This code is called //for each focus change// and might have to treat //hundreds of widgets// in a typical film edit timeline.
+Further empiric survey of memory footprint and invocation times seems indicated &amp;rArr; [[Ticket #1240|https://issues.lumiera.org/ticket/1240]]
 </pre>
 </div>
 <div title="GuiFacade" modifier="Ichthyostega" created="200902080719" modified="201708041501" tags="def spec" changecount="1">
@@ -3658,7 +3662,7 @@ Now, since we build our UI on the notion of mapping session contents via a messa
 
 In any case, this is an advanced topic, and nowhere near trivial. It seems reasonable to reject opening duplicate timeline presentations as a first step, and then address this topic way later, when we've gained sufficient knowledge regarding all the subtleties of timeline presentation and editing.</pre>
 </div>
-<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="201907192238" tags="GuiPattern design decision draft img" changecount="62">
+<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="202210012303" tags="GuiPattern design decision draft img" changecount="64">
 <pre>Within the Lumieara GUI, the [[Timeline]] structure(s) from the HighLevelModel are arranged and presented according to the following principles and conventions.
 Several timeline views may be present at the same time -- and there is not necessarily a relation between them, since »a Timeline« is the top-level concept within the [[Session]]. Obviously, there can also be several //views// based on the same »Timeline« model element, and in this latter case, these //coupled views// behave according to a linked common state. An entity »Timeline« as represented through the GUI, emerges from the combination of several model elements
 * a root level [[Binding|BindingMO]] acts as framework
@@ -3703,7 +3707,8 @@ As indicated in the drawing above, pretty much every UI element exposes a button
 
 !!!slave Timelines
 It is reasonable to expect the ability to have multiple [[slave timeline presentations|GuiTimelineSlave]] to access the same underlying timeline structure.
-Currently {{red{as of 10/2018}}} there is a preference to deal with that problem on session level -- but for now we decide to postpone this topic &amp;rarr; [[#1083|http://issues.lumiera.org/ticket/1083]]
+Currently {{red{as of 10/2018}}} there is a preference to deal with that problem on session level -- but for now we decide to postpone this topic &amp;rarr; [[#1083|https://issues.lumiera.org/ticket/1083]]
+{{red{should also reconsider the term »slave«}}}
 
 !!!nesting
 By principle, this workspace structure is //not a list of &quot;Tracks&quot;// -- it is a system of ''nested scopes''. The nesting emerges on demand.

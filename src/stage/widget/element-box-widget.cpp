@@ -88,9 +88,41 @@ namespace widget {
     inline void
     queryNaturalSize (Gtk::Widget const& widget, Gtk::Requisition& natSize)
     {
-      Gtk::Requisition minimumDummy;
-      widget.get_preferred_size (minimumDummy, natSize);
+      Gtk::Requisition minDummy;
+      widget.get_preferred_size (minDummy, natSize);
     }
+    
+    inline int
+    queryNaturalHeight (Gtk::Widget const& widget)
+    {
+      int minDummy{0}, natHeight{0};
+      widget.get_preferred_height(minDummy, natHeight);
+      return natHeight;
+    }
+    
+    inline int
+    queryNaturalWidth (Gtk::Widget const& widget)
+    {
+      int minDummy{0}, natWidth{0};
+      widget.get_preferred_width(minDummy, natWidth);
+      return natWidth;
+    }
+
+    /** point of reference for layout computations */
+    Gtk::Requisition ICON_SIZ{};
+    
+    /** excess factor used to prevent "layout flickering"
+     * @remark once hidden, an element will only be re-shown
+     *         when some excess headroom is available */
+    const double HYSTERESIS = 1.6;
+    
+    inline void
+    initIconSizeHeuristic (Gtk::Widget const& icon)
+    {
+      if (ICON_SIZ.width > 0) return;
+      queryNaturalSize (icon, ICON_SIZ);
+    }
+    
   }//(End)helpers
   
   
@@ -151,6 +183,9 @@ namespace widget {
       menu_.get_style_context()->add_class(CLASS_idlabel_menu);
       name_.get_style_context()->add_class(CLASS_idlabel_name);
       name_.set_hexpand(true);
+      
+      this->show_all();
+      initIconSizeHeuristic (icon_);
     }
   
   
@@ -164,6 +199,8 @@ namespace widget {
   IDLabel::setCaption(cuString& idCaption)
   {
     name_.set_text(idCaption);
+    // cache required full display size (for size constrained layout)
+    queryNaturalSize (*this, labelFullSize_);
   }
   
   
@@ -287,28 +324,158 @@ namespace widget {
   
   /**
    * Ensure the IDLabel stays within a given size constraint.
-   * In case the standard rendering of with icon and name caption exceeds
-   * the given screen space, this simplified initial implementation just
-   * hides the name caption, assuming without further check that the two
-   * icons will fit into the constrained space.
-   * @todo as of 9/22, a planned full implementation will eventually
-   *       shorten the caption text and possibly also combine both
-   *       Icons into a single button when necessary...     ///////////////////TICKET #1238 : adjust size of the ID caption
+   * In case the standard rendering complete with icon and name caption
+   * exceeds the given screen space, try to bring this widget into imposed
+   * limits by reducing or hiding some parts.
    */
   void
   IDLabel::imposeSizeConstraint (int widthC, int heightC)
   {
-    if (name_.get_visible())
-      { // detect if label box fits within given size constraint
-        queryNaturalSize (*this, labelFullSize_);
-        
-        if (labelFullSize_.width > widthC or labelFullSize_.height > heightC)
-          name_.hide();
+    // short circuit: need to perform precise checks?
+    if (  labelFullSize_.width >  widthC
+       or labelFullSize_.height > heightC
+       )
+      this->adaptSize(widthC, heightC);
+  }
+  
+  
+  namespace {//IDLabel layout management internals....
+    
+    /** attempt to reduce space consumption
+     * @return achieved width reduction in pixels
+     */
+    inline int
+    reduce(Gtk::Button& icon)
+    {
+      int widthReduction{0};
+      if (icon.get_visible())
+        {
+          widthReduction = queryNaturalWidth (icon);
+          icon.hide();
+        }
+      return widthReduction;
+    }
+
+    /// @todo 10/22 also attempt to shorten the label...    ///////////////////TICKET #1242 : adjust size of the ID caption
+    inline int
+    reduce(Gtk::Label& label, int goal)
+    {
+      ASSERT (goal >=0);
+      int reduction{0};
+      if (label.get_visible())
+        {
+          int width = queryNaturalWidth (label);
+///////////////TODO do something to shorten the label /////////////////////////TICKET #1242 : adjust size of the ID caption
+///////   int after = queryNaturalWidth (label);
+///////   reduction = width - after;
+          if (reduction < goal)
+            {//shortening alone does not suffice
+              label.hide();
+              reduction = width;
+            }
+        }
+      return reduction;
+    }
+    
+    /** attempt to use available space to show more content
+     * @param icon widget to possibly expand
+     * @param w additional width available
+     * @param h vertical headroom available
+     * @param reCheck function to update and verify success
+     * @return if additional content could successfully be expanded
+     */
+    template<class FUN>
+    inline bool
+    maybeShow(Gtk::Button& icon, int w, int h, FUN& reCheck)
+    {
+      bool success{false};
+      if (w >= ICON_SIZ.width * HYSTERESIS and h >= ICON_SIZ.height)
+        {
+          icon.show();
+          if (not (success=reCheck()))
+            icon.hide();
+        }
+      return success;
+    }
+    
+    template<class FUN>
+    inline bool
+    maybeShow(Gtk::Label& label, int w, int h, FUN& reCheck)
+    {
+      bool success{false};
+      // use icon dimensions as as heuristics to determine
+      // if attempting to show the label is worth trying...
+      if (w >= ICON_SIZ.width * HYSTERESIS and h >= ICON_SIZ.height)
+        {
+          label.show();
+          int width = queryNaturalWidth (label);
+          int goal = width - w;
+          if (goal > 0) // too large, yet might fit if shortened
+            reduce (label, goal);
+          if (not (success=reCheck()))
+            label.hide();
+        }
+      return success;
+    }
+    
+
+  }//(End)Layout helpers
+  
+
+  /**
+   * Multi-step procedure to keep this IDLabel widget within the given
+   * screen size constraints. In case the extension needs to be reduced,
+   * the name label and both icons are probed and possibly reduced.
+   * Otherwise, if there is sufficient headroom, an attempt is made
+   * possibly to show parts again, albeit with some hysteresis.
+   * @todo as of 10/22, a planned full implementation will eventually
+   *       shorten the caption text and possibly also combine both
+   *       Icons into a single button when necessary...     ///////////////////TICKET #1242 : adjust size of the ID caption
+   */
+  void
+  IDLabel::adaptSize (int widthC, int heightC)
+  {
+    // first determine if vertical extension is problematic
+    int currH = queryNaturalHeight (*this);
+    if (currH > heightC)
+      {//hide all child widgets,
+      // not much options left...
+        name_.hide();
+        menu_.hide();
+        icon_.hide();
+        return;
+      }
+    
+    // now test if we need to reduce or can expand
+    int currW = queryNaturalWidth (*this);
+    if  (currW > widthC)
+      {//reduce to comply
+        int goal = currW - widthC;
+        ASSERT (goal > 0);
+        if (goal -= reduce(name_, goal) <= 0) return;
+        if (goal -= reduce(menu_)       <= 0) return;
+        if (goal -= reduce(icon_)       <= 0) return;
+        currW = queryNaturalWidth(*this);
+        goal = currW - widthC;
+        ENSURE (goal <= 0, "IDLabel layout management floundered. "
+                           "Removed all content, yet remaining width %d > %d"
+                         ,                                         currW, widthC);
       }
     else
-      {
-        if (labelFullSize_.width <= widthC and labelFullSize_.height <= heightC)
-          name_.show();
+      {//maybe some headroom left to show more?
+        int headroom = widthC - currW;
+        auto reCheck = [&]() -> bool
+                          {// WARNING: side effect assignment
+                            currW = queryNaturalWidth (*this);
+                            currH = queryNaturalHeight(*this);
+                            headroom = widthC - currW;
+                            return currH <= heightC
+                               and currW <= widthC;
+                          };
+        
+        if (not maybeShow (icon_, headroom, heightC, reCheck)) return;
+        if (not maybeShow (menu_, headroom, heightC, reCheck)) return;
+        if (not maybeShow (name_, headroom, heightC, reCheck)) return;
       }
   }
   
