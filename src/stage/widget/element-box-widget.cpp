@@ -199,6 +199,7 @@ namespace widget {
   IDLabel::setCaption(cuString& idCaption)
   {
     name_.set_text(idCaption);
+    show_all();
     // cache required full display size (for size constrained layout)
     queryNaturalSize (*this, labelFullSize_);
   }
@@ -224,6 +225,12 @@ namespace widget {
       this->show_all();
     }
   
+  
+  void
+  ElementBoxWidget::setName (cuString& nameID)
+  {
+    label_.setCaption (nameID);
+  }
   
   /**
    * Layout trend for ElementBoxWidget is nailed down (`final`) to "height-for-width".
@@ -382,12 +389,13 @@ namespace widget {
      * @param w additional width available
      * @param h vertical headroom available
      * @param reCheck function to update and verify success
-     * @return if additional content could successfully be expanded
+     * @return if hidden content could successfully be expanded
      */
     template<class FUN>
     inline bool
     maybeShow(Gtk::Button& icon, int w, int h, FUN& reCheck)
     {
+      if (icon.is_visible()) return true; // nothing can be done here
       bool success{false};
       if (w >= ICON_SIZ.width * HYSTERESIS and h >= ICON_SIZ.height)
         {
@@ -452,9 +460,9 @@ namespace widget {
       {//reduce to comply
         int goal = currW - widthC;
         ASSERT (goal > 0);
-        if (goal -= reduce(name_, goal) <= 0) return;
-        if (goal -= reduce(menu_)       <= 0) return;
-        if (goal -= reduce(icon_)       <= 0) return;
+        if ((goal -= reduce(name_, goal)) <= 0) return;
+        if ((goal -= reduce(menu_)      ) <= 0) return;
+        if ((goal -= reduce(icon_)      ) <= 0) return;
         currW = queryNaturalWidth(*this);
         goal = currW - widthC;
         ENSURE (goal <= 0, "IDLabel layout management floundered. "

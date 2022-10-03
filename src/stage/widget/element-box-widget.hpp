@@ -168,6 +168,8 @@ namespace widget {
       
       // default copy acceptable
       
+      void setName(cuString&);
+      
     private:/* ===== Internals ===== */
       
       Gtk::SizeRequestMode get_request_mode_vfunc()              const final;

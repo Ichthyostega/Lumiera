@@ -110,6 +110,10 @@ namespace timeline {
       {
         this->fork_->attachElementBox();
       }
+    if (mark.idi.getSym() == "manip" && this->fork_)
+      {
+        this->fork_->manipulateBox();
+      }
     else // forward to default handler
       model::Controller::doMark (mark);
   }

@@ -96,6 +96,7 @@
 #include "lib/util-coll.hpp"
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
 #include "lib/format-cout.hpp"
+#include "lib/test/test-helper.hpp"
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
 
 #include "lib/nocopy.hpp"
@@ -217,9 +218,11 @@ namespace timeline {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
       void injectDebugTrackLabels();
       void attachElementBox();
+      void manipulateBox();
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
       uString TODO_trackName_;
+      widget::ElementBoxWidget* theBox_{nullptr};
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
       
     protected: /* ==== Interface: LayoutElement ===== */
@@ -263,7 +266,7 @@ namespace timeline {
   {
     uint x = rand() % 200;
     uint y = 0;
-    widget::ElementBoxWidget* box = Gtk::manage (
+    theBox_ = Gtk::manage (
         new model::CanvasHooked<widget::ElementBoxWidget, Gtk::Widget>{display_.hookedAt(x,y)
                                                                       , widget::Kind::MARK
                                                                       , widget::Type::LABEL
@@ -275,6 +278,14 @@ namespace timeline {
                                                                               return arbitrarySiz;
                                                                             })
                                                                       });
+  }
+  inline void
+  TrackPresenter::manipulateBox()
+  {
+    if (not theBox_) return;
+    string rands = lib::test::randStr(rand() % 40);
+    cout << _Fmt{"maniRandS(%d):%s"} % rands.length() % rands <<endl;
+    theBox_->setName (rands);
   }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
   /**
