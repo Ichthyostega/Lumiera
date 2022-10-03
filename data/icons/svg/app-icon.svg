@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -11,14 +12,16 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="150"
    height="100"
-   id="svg2"
+   id="icon"
    sodipodi:version="0.32"
-   inkscape:version="0.46"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    version="1.0"
    sodipodi:docname="app-icon.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <title
+     id="doctitle">App-icon</title>
   <defs
-     id="defs4">
+     id="defsz">
     <linearGradient
        inkscape:collect="always"
        id="linearGradient10047">
@@ -186,139 +189,6 @@
        y1="-129.52815"
        x2="252.00447"
        y2="-135.47408" />
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       id="perspective16719" />
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       id="perspective16407" />
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       id="perspective16265" />
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       id="perspective16186" />
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       id="perspective11296-84" />
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       id="perspective11296-0" />
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       id="perspective11296-6" />
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       id="perspective11296-9" />
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       id="perspective11296-87" />
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       id="perspective11296-1" />
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       id="perspective11296-8" />
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       id="perspective11296" />
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       id="perspective11217" />
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       id="perspective11140" />
-    <inkscape:perspective
-       id="perspective8731"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_x="0 : 0.5 : 1"
-       sodipodi:type="inkscape:persp3d" />
-    <inkscape:perspective
-       id="perspective8641"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_x="0 : 0.5 : 1"
-       sodipodi:type="inkscape:persp3d" />
-    <inkscape:perspective
-       id="perspective8229"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_x="0 : 0.5 : 1"
-       sodipodi:type="inkscape:persp3d" />
-    <inkscape:perspective
-       id="perspective8322"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_x="0 : 0.5 : 1"
-       sodipodi:type="inkscape:persp3d" />
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 526.18109 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="744.09448 : 526.18109 : 1"
-       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
-       id="perspective9" />
     <inkscape:path-effect
        vertical="false"
        scale_y_rel="false"
@@ -373,43 +243,79 @@
      inkscape:cx="-40.901668"
      inkscape:cy="27.979682"
      inkscape:document-units="px"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="artwork"
      showgrid="false"
      inkscape:snap-nodes="false"
      inkscape:snap-bbox="false"
      inkscape:snap-global="true"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:window-width="1407"
-     inkscape:window-height="895"
-     inkscape:window-x="1545"
-     inkscape:window-y="63"
+     inkscape:window-width="1680"
+     inkscape:window-height="1031"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:snap-intersection-line-segments="true"
      inkscape:object-paths="true"
-     inkscape:object-nodes="true">
+     inkscape:object-nodes="true"
+     inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
        id="grid13478"
        visible="true"
        enabled="true"
-       spacingx="0.5px"
-       spacingy="0.5px"
-       empspacing="2" />
+       spacingx="0.5"
+       spacingy="0.5"
+       empspacing="2"
+       originx="0"
+       originy="0" />
   </sodipodi:namedview>
   <metadata
-     id="metadata7">
+     id="metadead">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>App-icon</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Joel Holdsworth</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:publisher>
+          <cc:Agent>
+            <dc:title>Lumiera.org</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:description>The Lumiera Application Logo
+
+prepared for Lumiera build :: Icon rendering</dc:description>
+        <dc:date>2008</dc:date>
+        <dc:identifier>app-icon</dc:identifier>
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g
      inkscape:groupmode="layer"
-     id="layer3"
+     id="artwork"
      inkscape:label="artwork:app-icon"
      style="display:inline">
     <path
@@ -467,7 +373,7 @@
     </g>
     <g
        inkscape:groupmode="layer"
-       id="layer4"
+       id="layerp"
        inkscape:label="plate#1"
        style="display:none">
       <rect
@@ -580,57 +486,57 @@
       <path
          inkscape:original-d="M 580.38105,116.25308 L 686.6293,116.25308"
          style="fill:none;stroke:#009fda;stroke-width:0.13353233;stroke-linecap:butt;stroke-linejoin:miter;marker:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-         d="M 580.38105,116.25308 L 686.6293,116.25308"
+         d="m 573.04054,118.33954 c 15.0983,5.2199 29.61826,12.08333 44.82595,17.1163 19.51078,6.45667 40.01704,10.07666 60.57469,9.8702"
          id="path16060" />
       <path
          inkscape:original-d="M 580.57076,114.35579 L 580.57076,117.58119"
          style="fill:none;stroke:#009fda;stroke-width:0.13353233;stroke-linecap:butt;stroke-linejoin:miter;marker:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-         d="M 580.57076,114.35579 L 580.57076,117.58119"
+         d="m 573.84672,116.61089 -1.05666,3.04738"
          id="path16062" />
       <path
          inkscape:original-d="M 591.88662,114.35579 L 591.88662,117.58119"
          id="path16064"
-         d="M 591.88662,114.35579 L 591.88662,117.58119"
+         d="m 584.84276,120.69281 -1.17428,3.00425"
          style="fill:none;stroke:#009fda;stroke-width:0.13353233;stroke-linecap:butt;stroke-linejoin:miter;marker:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
       <path
          inkscape:original-d="M 603.91289,114.35579 L 603.91289,117.58119"
          style="fill:none;stroke:#009fda;stroke-width:0.13353233;stroke-linecap:butt;stroke-linejoin:miter;marker:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-         d="M 603.91289,114.35579 L 603.91289,117.58119"
+         d="m 596.37505,125.30977 -1.20849,2.9915"
          id="path16066" />
       <path
          inkscape:original-d="M 614.85501,114.35579 L 614.85501,117.58119"
          id="path16068"
-         d="M 614.85501,114.35579 L 614.85501,117.58119"
+         d="m 606.83802,129.46311 -1.15833,3.00952"
          style="fill:none;stroke:#009fda;stroke-width:0.13353233;stroke-linecap:butt;stroke-linejoin:miter;marker:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
       <path
          inkscape:original-d="M 626.47471,114.35579 L 626.47471,117.58119"
          style="fill:none;stroke:#009fda;stroke-width:0.13353233;stroke-linecap:butt;stroke-linejoin:miter;marker:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-         d="M 626.47471,114.35579 L 626.47471,117.58119"
+         d="m 618.03182,133.51163 -1.02027,3.05957"
          id="path16070" />
       <path
          inkscape:original-d="M 637.44964,114.35579 L 637.44964,117.58119"
          id="path16072"
-         d="M 637.44964,114.35579 L 637.44964,117.58119"
+         d="m 628.77838,136.77115 -0.85141,3.11242"
          style="fill:none;stroke:#009fda;stroke-width:0.13353233;stroke-linecap:butt;stroke-linejoin:miter;marker:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
       <path
          inkscape:original-d="M 649.61143,114.35579 L 649.61143,117.58119"
          style="fill:none;stroke:#009fda;stroke-width:0.13353233;stroke-linecap:butt;stroke-linejoin:miter;marker:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-         d="M 649.61143,114.35579 L 649.61143,117.58119"
+         d="m 640.87492,139.67562 -0.65247,3.15905"
          id="path16074" />
       <path
          inkscape:original-d="M 660.82458,114.35579 L 660.82458,117.58119"
          id="path16076"
-         d="M 660.82458,114.35579 L 660.82458,117.58119"
+         d="m 652.16269,141.65255 -0.4576,3.19112"
          style="fill:none;stroke:#009fda;stroke-width:0.13353233;stroke-linecap:butt;stroke-linejoin:miter;marker:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
       <path
          inkscape:original-d="M 684.57101,114.35579 L 684.57101,117.58119"
          id="path16078"
-         d="M 684.57101,114.35579 L 684.57101,117.58119"
+         d="m 676.3206,143.43703 -0.009,3.22451"
          style="fill:none;stroke:#009fda;stroke-width:0.13353233;stroke-linecap:butt;stroke-linejoin:miter;marker:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
       <path
          inkscape:original-d="M 673.6289,114.35579 L 673.6289,117.58119"
          style="fill:none;stroke:#009fda;stroke-width:0.13353233;stroke-linecap:butt;stroke-linejoin:miter;marker:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-         d="M 673.6289,114.35579 L 673.6289,117.58119"
+         d="m 665.16103,143.03581 -0.22166,3.21495"
          id="path16080" />
     </g>
     <path
