@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="150"
+   height="100"
+   id="icon"
+   sodipodi:version="0.32"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   version="1.0"
+   sodipodi:docname="__Icon_TEMPLATE.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <title
+     id="doctitle">Icon: TEMPLATE</title>
+  <defs
+     id="defsz" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="8"
+     inkscape:cx="75"
+     inkscape:cy="50"
+     inkscape:document-units="px"
+     inkscape:current-layer="aardvark"
+     showgrid="false"
+     inkscape:snap-nodes="true"
+     inkscape:snap-bbox="true"
+     inkscape:snap-global="true"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:window-width="1680"
+     inkscape:window-height="1031"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid13478"
+       visible="true"
+       enabled="true"
+       spacingx="0.5"
+       spacingy="0.5"
+       empspacing="2"
+       originx="0"
+       originy="0" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadead">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Icon: TEMPLATE</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Ichthyostega</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:publisher>
+          <cc:Agent>
+            <dc:title>Lumiera.org</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:description>TEMPLATE for new SVG Icons
+
+prepared for Lumiera build :: Icon rendering</dc:description>
+        <dc:date>never</dc:date>
+        <dc:identifier>icon:template</dc:identifier>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     inkscape:label="artwork:placement"
+     id="aardvark"
+     style="display:inline">
+    <g
+       inkscape:groupmode="layer"
+       id="layerp"
+       inkscape:label="plate#1"
+       style="display:none"
+       sodipodi:insensitive="true">
+      <rect
+         id="bbox48"
+         x="8"
+         y="44"
+         width="48"
+         height="48"
+         style="fill:black;fill-opacity:0.5;stroke:#5a8fb2;stroke-opacity:1;stroke-width:0.1"
+         sodipodi:insensitive="true" />
+      <rect
+         id="bbox32"
+         x="60"
+         y="60"
+         width="32"
+         height="32"
+         style="fill:black;fill-opacity:0.5;stroke:#5a8fb2;stroke-opacity:1;stroke-width:0.1"
+         sodipodi:insensitive="true" />
+      <rect
+         id="bbox24"
+         x="96"
+         y="68"
+         width="24"
+         height="24"
+         style="fill:black;fill-opacity:0.5;stroke:#5a8fb2;stroke-opacity:1;stroke-width:0.1"
+         sodipodi:insensitive="true" />
+      <rect
+         id="bbox22"
+         x="97"
+         y="69"
+         width="22"
+         height="22"
+         style="fill:black;fill-opacity:0.5;stroke:#5a8fb2;stroke-opacity:1;stroke-width:0.1"
+         sodipodi:insensitive="true" />
+      <rect
+         id="bbox16"
+         x="124"
+         y="76"
+         width="16"
+         height="16"
+         style="fill:black;fill-opacity:0.5;stroke:#5a8fb2;stroke-opacity:1;stroke-width:0.1"
+         sodipodi:insensitive="true" />
+    </g>
+    <g
+       id="gicon48">
+      <rect
+         id="dummy48"
+         x="8.5"
+         y="44.5"
+         width="47"
+         height="47"
+         rx="0"
+         ry="0"
+         style="fill:none;fill-opacity:0.5;stroke:black;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:2;stroke-dasharray:1, 1;stroke-dashoffset:0.5;stroke-opacity:1;marker:none" />
+    </g>
+    <g
+       id="gicon32">
+      <rect
+         id="dummy32"
+         x="60.5"
+         y="60.5"
+         width="31"
+         height="31"
+         rx="0"
+         ry="0"
+         style="fill:none;fill-opacity:0.5;stroke:black;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:2;stroke-dasharray:1, 1;stroke-dashoffset:0.5;stroke-opacity:1;marker:none" />
+    </g>
+    <g
+       id="gicon24">
+      <rect
+         id="dummy24"
+         x="97.5"
+         y="69.5"
+         width="21"
+         height="21"
+         rx="0"
+         ry="0"
+         style="fill:none;fill-opacity:0.5;stroke:black;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:2;stroke-dasharray:1, 1;stroke-dashoffset:0.5;stroke-opacity:1;marker:none" />
+    </g>
+    <g
+       id="gicon16">
+      <rect
+         id="dummy16"
+         x="124.5"
+         y="76.5"
+         width="15"
+         height="15"
+         rx="0"
+         ry="0"
+         style="fill:none;fill-opacity:0.5;stroke:black;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:2;stroke-dasharray:1, 1;stroke-dashoffset:0.5;stroke-opacity:1;marker:none" />
+    </g>
+  </g>
+</svg>
