@@ -16,7 +16,6 @@
    id="svg8"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    sodipodi:docname="Lumi.Architecture-2.svg"
-   inkscape:export-filename="/home/hiv/Desktop/DRAFT-Lumi.Architecture.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <title
@@ -2394,15 +2393,15 @@ envisioned Lumiera Architecture 2022
            sodipodi:role="line"
            id="tspan4811"
            x="44.248707"
-           y="135.74843">Eventloop</tspan></text>
+           y="135.74843">event-loop</tspan></text>
       <rect
          style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#999999;stroke-width:0.238125;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;marker-start:none;marker-mid:none;marker-end:none;enable-background:accumulate"
          id="rect4805"
-         width="16.829708"
+         width="17.868351"
          height="4.927865"
-         x="35.90284"
+         x="35.383518"
          y="132.29166"
-         rx="1.653646"
+         rx="1.6536459"
          ry="1.6536459" />
     </g>
   </g>
