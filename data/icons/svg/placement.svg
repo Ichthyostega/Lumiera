@@ -15,10 +15,10 @@
    sodipodi:version="0.32"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    version="1.0"
-   sodipodi:docname="__Icon_TEMPLATE.svg"
+   sodipodi:docname="placement.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <title
-     id="doctitle">Icon: TEMPLATE</title>
+     id="doctitle">Icon: placement</title>
   <defs
      id="defsz" />
   <sodipodi:namedview
@@ -43,7 +43,7 @@
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:window-width="1680"
-     inkscape:window-height="1050"
+     inkscape:window-height="1030"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1">
@@ -66,7 +66,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>Icon: TEMPLATE</dc:title>
+        <dc:title>Icon: placement</dc:title>
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
         <dc:creator>
@@ -79,11 +79,9 @@
             <dc:title>Lumiera.org</dc:title>
           </cc:Agent>
         </dc:publisher>
-        <dc:description>TEMPLATE for new SVG Icons
-
-prepared for Lumiera build :: Icon rendering</dc:description>
-        <dc:date>never</dc:date>
-        <dc:identifier>icon:template</dc:identifier>
+        <dc:description>prepared for Lumiera build :: Icon rendering</dc:description>
+        <dc:date>2022</dc:date>
+        <dc:identifier>icon:placement</dc:identifier>
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
