@@ -5626,6 +5626,66 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665346287044" ID="ID_748668128" MODIFIED="1665346295810" TEXT="Expander und Men&#xfc;">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1665348077444" ID="ID_488652048" MODIFIED="1665348090551" TEXT="Idee">
+<node CREATED="1665348091322" ID="ID_1073825658" MODIFIED="1665348096120" TEXT="Dreieck als Pfeil"/>
+<node CREATED="1665348096802" ID="ID_1569524261" MODIFIED="1665348109205" TEXT="wahlweise aufw&#xe4;rts, abw&#xe4;rts oder rechts gedreht"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1665348136916" ID="ID_759870258" MODIFIED="1665363839356" TEXT="Ausf&#xfc;hrung">
+<icon BUILTIN="pencil"/>
+<node CREATED="1665348145307" ID="ID_102563036" MODIFIED="1665348150902" TEXT="erhaben ohne Rahmen">
+<node CREATED="1665348443628" ID="ID_1447716255" MODIFIED="1665348455285" TEXT="2px Kontur abgedunkelt"/>
+<node CREATED="1665348457668" ID="ID_48846452" MODIFIED="1665348470750" TEXT="Glanzlicht aufgehellt im Inneren"/>
+<node CREATED="1665348472343" ID="ID_1076446520" MODIFIED="1665348498629" TEXT="Inset-Kontur sub-Pixel"/>
+</node>
+<node CREATED="1665348212810" ID="ID_373482856" MODIFIED="1665348225676" TEXT="Rahmen symmetrisch f&#xfc;llen">
+<node CREATED="1665348226825" ID="ID_1659240915" MODIFIED="1665349953403" TEXT="+3px Gehrung"/>
+<node CREATED="1665348267595" ID="ID_1466240766" MODIFIED="1665348436848" TEXT="+2px Schatten"/>
+</node>
+<node CREATED="1665350012213" ID="ID_1923573190" MODIFIED="1665363524296" TEXT="m&#xf6;glichst nur mit Transparenz arbeiten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...damit das Icon in verschiedenstem Kontext gleicherma&#223;en funktioniert
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1665363525484" ID="ID_1637269112" MODIFIED="1665363834236" TEXT="m&#xfc;hsam... will nicht recht">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1665363537099" ID="ID_1774949023" MODIFIED="1665363547270" TEXT="das Icon ist mi 16x16px verdammt klein"/>
+<node CREATED="1665363548141" ID="ID_1303573631" MODIFIED="1665363566155" TEXT="vermutlich wollte ich viel zu viel">
+<icon BUILTIN="smiley-oh"/>
+<node CREATED="1665363577646" ID="ID_1126441793" MODIFIED="1665363583905" TEXT="sowohl Rahmen"/>
+<node CREATED="1665363584493" ID="ID_1440525144" MODIFIED="1665363588024" TEXT="alsauch Glanzlicht"/>
+<node CREATED="1665363588708" ID="ID_195148225" MODIFIED="1665363595255" TEXT="und ein Inset"/>
+</node>
+<node COLOR="#435e98" CREATED="1665363605996" ID="ID_491620065" MODIFIED="1665363830324" TEXT="vereinfachen....?">
+<icon BUILTIN="yes"/>
+<node CREATED="1665363705644" ID="ID_1138426529" MODIFIED="1665363714032" TEXT="gro&#xdf;z&#xfc;gige Fl&#xe4;che"/>
+<node CREATED="1665363714710" ID="ID_938502860" MODIFIED="1665363752976" TEXT="alle zus&#xe4;tzlichen Tricks weglassen...">
+<arrowlink COLOR="#406f78" DESTINATION="ID_1971428167" ENDARROW="Default" ENDINCLINATION="27;-48;" ID="Arrow_ID_1069676467" STARTARROW="None" STARTINCLINATION="-197;15;"/>
+</node>
+</node>
+</node>
+<node CREATED="1665363649940" ID="ID_1971428167" MODIFIED="1665363746082" TEXT="in der Applikation gar nicht so schlecht">
+<linktarget COLOR="#406f78" DESTINATION="ID_1971428167" ENDARROW="Default" ENDINCLINATION="27;-48;" ID="Arrow_ID_1069676467" SOURCE="ID_938502860" STARTARROW="None" STARTINCLINATION="-197;15;"/>
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665363758814" ID="ID_1752890921" MODIFIED="1665363824440" TEXT="jetzt mal nur ein einfaches Innen-Symbol (Dreieck) versuchen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665363793568" ID="ID_34619055" MODIFIED="1665363824441" TEXT="und die Schatten auf den Gehrungen zur&#xfc;cknehmen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665363810022" ID="ID_816374371" MODIFIED="1665363824442" TEXT="und daf&#xfc;r noch einen drop-Shadow dazubauen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
