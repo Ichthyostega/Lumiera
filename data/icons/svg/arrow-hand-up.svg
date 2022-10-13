@@ -16,10 +16,10 @@
    sodipodi:version="0.32"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    version="1.0"
-   sodipodi:docname="arrow-hand.svg"
+   sodipodi:docname="arrow-hand-up.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <title
-     id="doctitle">Icon: arrow-hand</title>
+     id="doctitle">Icon: arrow-hand-up</title>
   <defs
      id="defsz">
     <linearGradient
@@ -55,29 +55,6 @@
          inkscape:collect="always"
          stdDeviation="0.39128906"
          id="feGaussianBlur963" />
-    </filter>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#Gloss"
-       id="linearGradient885"
-       gradientUnits="userSpaceOnUse"
-       x1="128.4325"
-       y1="82.56572"
-       x2="132.28908"
-       y2="86.347733"
-       gradientTransform="matrix(1.5,0,0,1.5008815,-90.500002,-46.074046)" />
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter864"
-       x="-0.070129702"
-       width="1.1402594"
-       y="-0.15211347"
-       height="1.3042269">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.68075106"
-         id="feGaussianBlur866" />
     </filter>
   </defs>
   <sodipodi:namedview
@@ -125,7 +102,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>Icon: arrow-hand</dc:title>
+        <dc:title>Icon: arrow-hand-up</dc:title>
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
         <dc:creator>
@@ -142,7 +119,7 @@
 
 prepared for Lumiera build :: Icon rendering</dc:description>
         <dc:date>2022</dc:date>
-        <dc:identifier>icon:arrow-hand</dc:identifier>
+        <dc:identifier>icon:arrow-hand-up</dc:identifier>
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
@@ -163,7 +140,7 @@ prepared for Lumiera build :: Icon rendering</dc:description>
   </metadata>
   <g
      inkscape:groupmode="layer"
-     inkscape:label="artwork:arrow-hand"
+     inkscape:label="artwork:arrow-hand-up"
      id="aardvark"
      style="display:inline">
     <g
@@ -188,69 +165,6 @@ prepared for Lumiera build :: Icon rendering</dc:description>
          height="16"
          style="fill:black;fill-opacity:0.5;stroke:#5a8fb2;stroke-opacity:1;stroke-width:0.1"
          sodipodi:insensitive="true" />
-    </g>
-    <g
-       id="ghand24">
-      <g
-         id="bevel24">
-        <path
-           id="path861"
-           style="fill:black;fill-opacity:0.31372549;stroke:none;stroke-width:0.05"
-           d="m 119.5,80 h -3 l -18,7.5 -1.5,3 z"
-           sodipodi:nodetypes="ccccc"
-           inkscape:connector-curvature="0" />
-        <path
-           id="path863"
-           style="fill:#ffffff;fill-opacity:0.74509804;stroke:none;stroke-width:0.05"
-           d="M 97,90.5 V 69.49383 l 1.5,3.001763 v 15.008815 z"
-           sodipodi:nodetypes="ccccc"
-           inkscape:connector-curvature="0" />
-        <path
-           id="path865"
-           style="fill:#f2f2f2;fill-opacity:0.66666667;stroke:none;stroke-width:0.05"
-           d="m 119.5,80 -3,0.0062 -18,-7.5062 -1.5,-3 z"
-           sodipodi:nodetypes="ccccc"
-           inkscape:connector-curvature="0" />
-      </g>
-      <g
-         id="counter24">
-        <path
-           id="path869"
-           style="fill:#c8c8c8;fill-opacity:0.62745098;stroke:none;stroke-width:0.05"
-           d="m 99,73 17,7 h 0.5 l -18,-7.504407 z"
-           sodipodi:nodetypes="ccccc"
-           inkscape:connector-curvature="0" />
-        <path
-           id="path871"
-           style="fill:#646464;fill-opacity:0.19607843;stroke:none;stroke-width:0.05"
-           d="m 99,73 v 14 l -0.5,0.504408 V 72.495593 Z"
-           sodipodi:nodetypes="ccccc"
-           inkscape:connector-curvature="0" />
-        <path
-           id="path873"
-           style="fill:#ffffff;fill-opacity:0.70588235;stroke:none;stroke-width:0.05"
-           d="M 98.5,87.504408 116.5,80 H 116 l -17,7 z"
-           sodipodi:nodetypes="ccccc"
-           inkscape:connector-curvature="0" />
-      </g>
-      <path
-         id="gloss32"
-         style="fill:url(#linearGradient885);fill-opacity:1;stroke:none;stroke-width:0.05"
-         d="M 98.5,72.495593 116.5,80 l -18,7.5 z"
-         sodipodi:nodetypes="cccc"
-         inkscape:connector-curvature="0" />
-      <path
-         id="contour24"
-         style="fill:none;fill-opacity:0.75;stroke:black;stroke-opacity:1;stroke-width:0.07;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-         d="M 119.15899,79.779553 96.95312,69.41175 v 20.813006"
-         sodipodi:nodetypes="ccc"
-         inkscape:connector-curvature="0" />
-      <path
-         id="shadow24"
-         style="fill:#43434b;fill-opacity:0.5098038;stroke:none;stroke-width:0.30000001;filter:url(#filter864)"
-         d="m 96.10078,90.632603 3.657302,-2.050299 17.191748,-7.944762 3.01993,-1.021416 -2.25683,2.152288 -17.45154,8.219648 z"
-         sodipodi:nodetypes="ccccccc"
-         inkscape:connector-curvature="0" />
     </g>
     <g
        id="ghand16">
