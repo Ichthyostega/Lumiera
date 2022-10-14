@@ -5580,8 +5580,8 @@
 </node>
 </node>
 <node CREATED="1665345726447" ID="ID_1745324854" MODIFIED="1665345733936" TEXT="Grafik-Elemente">
-<node CREATED="1665345734862" ID="ID_1876392387" MODIFIED="1665346985369" TEXT="Basis-Icons">
-<arrowlink COLOR="#8487c2" DESTINATION="ID_1034074054" ENDARROW="Default" ENDINCLINATION="-757;-939;" ID="Arrow_ID_186260230" STARTARROW="None" STARTINCLINATION="-247;59;"/>
+<node CREATED="1665345734862" ID="ID_1876392387" MODIFIED="1665802081759" TEXT="Basis-Icons">
+<arrowlink COLOR="#8487c2" DESTINATION="ID_1034074054" ENDARROW="Default" ENDINCLINATION="-757;-939;" ID="Arrow_ID_186260230" STARTARROW="None" STARTINCLINATION="-258;57;"/>
 <node CREATED="1665345747229" ID="ID_354372547" MODIFIED="1665345789624" TEXT="m&#xf6;glichst eigenen Basis-Satz verwenden">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -5602,20 +5602,21 @@
 <node COLOR="#338800" CREATED="1665346240663" ID="ID_1763162264" MODIFIED="1665346249075" TEXT="Lumiera-Logo">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1665345876873" ID="ID_1015286402" MODIFIED="1665345927393" TEXT="Placement-Icon">
+<node COLOR="#338800" CREATED="1665345876873" FOLDED="true" ID="ID_1015286402" MODIFIED="1665802131501" TEXT="Placement-Icon">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="forward"/>
-<node CREATED="1665345929580" ID="ID_60603155" MODIFIED="1665345966291" TEXT="unterstreicht den Grundcharakter von Lumiera"/>
-<node CREATED="1665345968399" ID="ID_540465051" MODIFIED="1665345977849" TEXT="soll pervasiv verwendet werden">
-<node CREATED="1665346130257" ID="ID_858257568" MODIFIED="1665346146776" TEXT="f&#xfc;r alle &quot;strukturellen&quot; Verwendungen"/>
-<node COLOR="#435e98" CREATED="1665345985124" ID="ID_1904965684" MODIFIED="1665346107506" TEXT="&#x27f9; integriert in ElementBoxWidget">
+<node CREATED="1665345929580" ID="ID_60603155" MODIFIED="1665802111894" TEXT="unterstreicht den Grundcharakter von Lumiera"/>
+<node CREATED="1665345968399" ID="ID_540465051" MODIFIED="1665802111894" TEXT="soll pervasiv verwendet werden">
+<node CREATED="1665346130257" ID="ID_858257568" MODIFIED="1665802111894" TEXT="f&#xfc;r alle &quot;strukturellen&quot; Verwendungen"/>
+<node COLOR="#435e98" CREATED="1665345985124" ID="ID_1904965684" MODIFIED="1665802111894" TEXT="&#x27f9; integriert in ElementBoxWidget">
 <arrowlink COLOR="#6681be" DESTINATION="ID_178231784" ENDARROW="Default" ENDINCLINATION="-1422;-171;" ID="Arrow_ID_287037902" STARTARROW="None" STARTINCLINATION="626;53;"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1665346164380" ID="ID_219154210" MODIFIED="1665346173763" TEXT="Gestaltung als Emblem">
+<node COLOR="#338800" CREATED="1665346164380" ID="ID_219154210" MODIFIED="1665802111894" TEXT="Gestaltung als Emblem">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1665346202240" ID="ID_417992919" MODIFIED="1665346206478" TEXT="mehrdeutig"/>
-<node CREATED="1665346191201" ID="ID_341321105" MODIFIED="1665346195920" TEXT="pr&#xe4;gnant"/>
-<node CREATED="1665346199033" ID="ID_437888137" MODIFIED="1665346201369" TEXT="abstrakt"/>
+<node CREATED="1665346202240" ID="ID_417992919" MODIFIED="1665802111894" TEXT="mehrdeutig"/>
+<node CREATED="1665346191201" ID="ID_341321105" MODIFIED="1665802111894" TEXT="pr&#xe4;gnant"/>
+<node CREATED="1665346199033" ID="ID_437888137" MODIFIED="1665802111894" TEXT="abstrakt"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1665346273206" ID="ID_947650361" MODIFIED="1665346298608" TEXT="Aktivit&#xe4;ts-Anzeige">
@@ -5624,14 +5625,15 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665346287044" ID="ID_748668128" MODIFIED="1665346295810" TEXT="Expander und Men&#xfc;">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1665348077444" ID="ID_488652048" MODIFIED="1665348090551" TEXT="Idee">
+<node COLOR="#338800" CREATED="1665346287044" FOLDED="true" ID="ID_748668128" MODIFIED="1665802062166" TEXT="Expander und Men&#xfc;">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1665348077444" ID="ID_488652048" MODIFIED="1665801857144" TEXT="Idee">
+<icon BUILTIN="idea"/>
 <node CREATED="1665348091322" ID="ID_1073825658" MODIFIED="1665348096120" TEXT="Dreieck als Pfeil"/>
 <node CREATED="1665348096802" ID="ID_1569524261" MODIFIED="1665348109205" TEXT="wahlweise aufw&#xe4;rts, abw&#xe4;rts oder rechts gedreht"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1665348136916" ID="ID_759870258" MODIFIED="1665363839356" TEXT="Ausf&#xfc;hrung">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1665348136916" FOLDED="true" ID="ID_759870258" MODIFIED="1665802054607" TEXT="Ausf&#xfc;hrung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1665348145307" ID="ID_102563036" MODIFIED="1665348150902" TEXT="erhaben ohne Rahmen">
 <node CREATED="1665348443628" ID="ID_1447716255" MODIFIED="1665348455285" TEXT="2px Kontur abgedunkelt"/>
 <node CREATED="1665348457668" ID="ID_48846452" MODIFIED="1665348470750" TEXT="Glanzlicht aufgehellt im Inneren"/>
@@ -5651,8 +5653,7 @@
       ...damit das Icon in verschiedenstem Kontext gleicherma&#223;en funktioniert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1665363525484" ID="ID_1637269112" MODIFIED="1665363834236" TEXT="m&#xfc;hsam... will nicht recht">
@@ -5672,20 +5673,165 @@
 </node>
 </node>
 </node>
-<node CREATED="1665363649940" ID="ID_1971428167" MODIFIED="1665363746082" TEXT="in der Applikation gar nicht so schlecht">
+<node COLOR="#435e98" CREATED="1665363649940" ID="ID_1971428167" MODIFIED="1665799112395" TEXT="in der Applikation gar nicht so schlecht">
 <linktarget COLOR="#406f78" DESTINATION="ID_1971428167" ENDARROW="Default" ENDINCLINATION="27;-48;" ID="Arrow_ID_1069676467" SOURCE="ID_938502860" STARTARROW="None" STARTINCLINATION="-197;15;"/>
 <icon BUILTIN="idea"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665363758814" ID="ID_1752890921" MODIFIED="1665363824440" TEXT="jetzt mal nur ein einfaches Innen-Symbol (Dreieck) versuchen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1665363758814" ID="ID_1752890921" MODIFIED="1665799109913" TEXT="jetzt mal nur ein einfaches Innen-Symbol (Dreieck) versuchen">
+<icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665363793568" ID="ID_34619055" MODIFIED="1665363824441" TEXT="und die Schatten auf den Gehrungen zur&#xfc;cknehmen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1665363793568" ID="ID_34619055" MODIFIED="1665799109920" TEXT="und die Schatten auf den Gehrungen zur&#xfc;cknehmen">
+<icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665363810022" ID="ID_816374371" MODIFIED="1665363824442" TEXT="und daf&#xfc;r noch einen drop-Shadow dazubauen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1665363810022" ID="ID_816374371" MODIFIED="1665799109920" TEXT="und daf&#xfc;r noch einen drop-Shadow dazubauen">
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
+<node COLOR="#435e98" CREATED="1665801881413" ID="ID_856020386" MODIFIED="1665802051522" TEXT="Ergebnis: rein plastisch, gl&#xe4;nzend, scharf">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      letztlich bin ich davon abgekommen, einen <i>gezeichneten </i>Pfeil zu integrieren; auch die Insets habe ich aufgegeben, dadurch wird das Design stringenter. Die Hervorhebung erfolgt nur durch ein Glanzlicht oben links, im Zusammenspiel mit den 2px Gehrungen und einem zus&#228;tzlichen Schatten an der Kehle der Gehrung
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1665800212205" ID="ID_726081290" MODIFIED="1665800217512" TEXT="Richtlinien">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1665800359809" FOLDED="true" ID="ID_1618186555" MODIFIED="1665801587336" TEXT="SVG sauber halten">
+<icon BUILTIN="yes"/>
+<node CREATED="1665800366152" ID="ID_1831328523" MODIFIED="1665800384165" TEXT="__Icon_TEMPLATE verwenden"/>
+<node CREATED="1665800390503" ID="ID_465047171" MODIFIED="1665800417246" TEXT="Stacking-Order stets gleich (kleiner &#x2023;&#x2023; gr&#xf6;&#xdf;er)"/>
+<node CREATED="1665800464019" ID="ID_1053244575" MODIFIED="1665800476310" TEXT="stets gruppieren und sinnvoll gliedern"/>
+<node CREATED="1665800420413" ID="ID_1816161542" MODIFIED="1665800429423" TEXT="IDs der Hauptgruppen benennen"/>
+<node CREATED="1665800481228" ID="ID_1358268582" MODIFIED="1665800494158" TEXT="Transformationen anwenden">
+<node CREATED="1665800496063" ID="ID_547172174" MODIFIED="1665801184257" TEXT="Problem: Gruppen und Filter">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Inkscape wendet Transformationen normalerweise nur auf Blatt-Elemente direkt an; sonst f&#252;gt es ein &quot;transform&quot;-Element ein; dieses ist eine Matrix f&#252;r homogene Koordinaten.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1665800514028" ID="ID_1925132136" MODIFIED="1665801292480" TEXT="Filter deaktivieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn man den Filter entfernt / auf Null dreht (Blur), dann wendet Inkscape die Transformation
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1665800503910" ID="ID_1120591972" MODIFIED="1665801294931" TEXT="Gruppen aufl&#xf6;sen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn man die Gruppe aufl&#246;st, wendet Inkscape die Transformation auf jedes Einzelelement an, und schiebt eine inverse Transformation in alle referenzierten Gradienten
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1665801312049" ID="ID_904420529" MODIFIED="1665801548562" TEXT="Styles kann man bisweilen vereinfachen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und Inkscape wird das erhalten, solange man die betr. Features nicht wieder aktiviert. Im Besonderen kann man
+    </p>
+    <ul>
+      <li>
+        alle &quot;Stroke&quot;-Features entfernen, wenn der Stroke deaktiviert ist
+      </li>
+      <li>
+        opacity:1 weglassen
+      </li>
+      <li>
+        diverse Vector-Filter und display-styles weglassen (wenn sie auf dem default-Wert stehen)
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1665801453869" ID="ID_416037424" MODIFIED="1665801551225" TEXT="numerisch vers&#xe4;ubern">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1665801466126" ID="ID_1192263503" MODIFIED="1665801482470" TEXT="bedingt durch Transformationen werden Kreise oft zu Ellipsen"/>
+<node CREATED="1665801487210" ID="ID_991962556" MODIFIED="1665801525411" TEXT="Transparenzen, Opacity und Graustufen driften auch bisweilen weg"/>
+</node>
+<node CREATED="1665801531178" ID="ID_704543645" MODIFIED="1665801537800" TEXT="nicht &#xfc;bertreiben">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1665800221636" ID="ID_1388153957" MODIFIED="1665801591668" TEXT="plastische Modellierung nur mit Transparenz">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1665800287403" ID="ID_1441434972" MODIFIED="1665800301597" TEXT="Farben">
+<node CREATED="1665800302682" ID="ID_1441318458" MODIFIED="1665800316090" TEXT="als Schmuck-Farben"/>
+<node CREATED="1665800316735" ID="ID_337763174" MODIFIED="1665800336568" TEXT="als subtile T&#xf6;nung"/>
+</node>
+<node CREATED="1665801624247" ID="ID_738176993" MODIFIED="1665801755873" TEXT="Hinting und Scharfzeichnen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist Handarbeit und erfordert Erfahrung
+    </p>
+    <ul>
+      <li>
+        wichtige Formen auf eine Grid-Linie verschieben
+      </li>
+      <li>
+        Gewicht exakt vertikaler/horizontaler Linien beachten
+      </li>
+      <li>
+        scharfzeichnen mit einer sub-Pixel-Linie mit komplement&#228;rem Helligkeitswert
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1665801812606" ID="ID_437217153" MODIFIED="1665801844475" TEXT="1-2 Pixel &#xbb;Luft&#xab; lassen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      notwendig, damit Hinting, Scharfzeichnen und drop-Shaddows funktionieren
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
 </node>
 </node>
@@ -6179,8 +6325,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1665346468548" ID="ID_1034074054" MODIFIED="1665346971704" TEXT="Icon-Management">
-<linktarget COLOR="#8487c2" DESTINATION="ID_1034074054" ENDARROW="Default" ENDINCLINATION="-757;-939;" ID="Arrow_ID_186260230" SOURCE="ID_1876392387" STARTARROW="None" STARTINCLINATION="-247;59;"/>
+<node CREATED="1665346468548" ID="ID_1034074054" MODIFIED="1665802081759" TEXT="Icon-Management">
+<linktarget COLOR="#8487c2" DESTINATION="ID_1034074054" ENDARROW="Default" ENDINCLINATION="-757;-939;" ID="Arrow_ID_186260230" SOURCE="ID_1876392387" STARTARROW="None" STARTINCLINATION="-258;57;"/>
 <node CREATED="1665346474211" ID="ID_465159869" MODIFIED="1665346622225" TEXT="Icon-Designs per Inkscape">
 <richcontent TYPE="NOTE"><html>
   <head>
