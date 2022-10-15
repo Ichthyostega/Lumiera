@@ -93,5 +93,11 @@ namespace stage {
   extern cuString CLASS_background;
   
   
+  extern Literal ICON_placement;
+  extern Literal ICON_arrow_hand_menu;
+  extern Literal ICON_arrow_hand_down;
+  extern Literal ICON_arrow_hand_up;
+  
+  
 }// namespace stage
 #endif /*STAGE_STYLE_SCHEME_H*/

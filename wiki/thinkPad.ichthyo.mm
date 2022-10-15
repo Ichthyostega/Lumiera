@@ -5608,7 +5608,7 @@
 <node CREATED="1665345929580" ID="ID_60603155" MODIFIED="1665802111894" TEXT="unterstreicht den Grundcharakter von Lumiera"/>
 <node CREATED="1665345968399" ID="ID_540465051" MODIFIED="1665802111894" TEXT="soll pervasiv verwendet werden">
 <node CREATED="1665346130257" ID="ID_858257568" MODIFIED="1665802111894" TEXT="f&#xfc;r alle &quot;strukturellen&quot; Verwendungen"/>
-<node COLOR="#435e98" CREATED="1665345985124" ID="ID_1904965684" MODIFIED="1665802111894" TEXT="&#x27f9; integriert in ElementBoxWidget">
+<node COLOR="#435e98" CREATED="1665345985124" ID="ID_1904965684" MODIFIED="1665855410112" TEXT="&#x27f9; integriert in ElementBoxWidget">
 <arrowlink COLOR="#6681be" DESTINATION="ID_178231784" ENDARROW="Default" ENDINCLINATION="-1422;-171;" ID="Arrow_ID_287037902" STARTARROW="None" STARTINCLINATION="626;53;"/>
 </node>
 </node>
@@ -5625,7 +5625,7 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1665346287044" FOLDED="true" ID="ID_748668128" MODIFIED="1665802062166" TEXT="Expander und Men&#xfc;">
+<node COLOR="#338800" CREATED="1665346287044" FOLDED="true" ID="ID_748668128" MODIFIED="1665855636691" TEXT="Expander und Men&#xfc;">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1665348077444" ID="ID_488652048" MODIFIED="1665801857144" TEXT="Idee">
 <icon BUILTIN="idea"/>
@@ -5687,7 +5687,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1665801881413" ID="ID_856020386" MODIFIED="1665802051522" TEXT="Ergebnis: rein plastisch, gl&#xe4;nzend, scharf">
+<node COLOR="#435e98" CREATED="1665801881413" ID="ID_856020386" MODIFIED="1665855536788" TEXT="Ergebnis: rein plastisch, gl&#xe4;nzend, scharf">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -5699,6 +5699,10 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="forward"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665855301858" ID="ID_446507732" MODIFIED="1665855630056" TEXT="vielleicht etwas zu hell geraten?">
+<linktarget COLOR="#f27d99" DESTINATION="ID_446507732" ENDARROW="Default" ENDINCLINATION="356;501;" ID="Arrow_ID_1734621230" SOURCE="ID_1045883941" STARTARROW="None" STARTINCLINATION="225;17;"/>
+<icon BUILTIN="help"/>
 </node>
 </node>
 </node>
@@ -5722,8 +5726,7 @@
       Inkscape wendet Transformationen normalerweise nur auf Blatt-Elemente direkt an; sonst f&#252;gt es ein &quot;transform&quot;-Element ein; dieses ist eine Matrix f&#252;r homogene Koordinaten.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1665800514028" ID="ID_1925132136" MODIFIED="1665801292480" TEXT="Filter deaktivieren">
 <richcontent TYPE="NOTE"><html>
@@ -5735,8 +5738,7 @@
       wenn man den Filter entfernt / auf Null dreht (Blur), dann wendet Inkscape die Transformation
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1665800503910" ID="ID_1120591972" MODIFIED="1665801294931" TEXT="Gruppen aufl&#xf6;sen">
@@ -5749,8 +5751,7 @@
       wenn man die Gruppe aufl&#246;st, wendet Inkscape die Transformation auf jedes Einzelelement an, und schiebt eine inverse Transformation in alle referenzierten Gradienten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -5775,8 +5776,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1665801453869" ID="ID_416037424" MODIFIED="1665801551225" TEXT="numerisch vers&#xe4;ubern">
@@ -5817,8 +5817,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1665801812606" ID="ID_437217153" MODIFIED="1665801844475" TEXT="1-2 Pixel &#xbb;Luft&#xab; lassen">
 <richcontent TYPE="NOTE"><html>
@@ -5830,8 +5829,7 @@
       notwendig, damit Hinting, Scharfzeichnen und drop-Shaddows funktionieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -19043,12 +19041,17 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1662241779699" ID="ID_178231784" MODIFIED="1665346065467" TEXT="#1236 Placement-Icon">
+<node COLOR="#338800" CREATED="1662241779699" ID="ID_178231784" MODIFIED="1665855497333" TEXT="#1236 Placement-Icon">
 <linktarget COLOR="#6681be" DESTINATION="ID_178231784" ENDARROW="Default" ENDINCLINATION="-1422;-171;" ID="Arrow_ID_287037902" SOURCE="ID_1904965684" STARTARROW="None" STARTINCLINATION="626;53;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1662241785372" ID="ID_1501125340" MODIFIED="1662241797229" TEXT="Expander-Icon">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1662241785372" ID="ID_1501125340" MODIFIED="1665855504959" TEXT="Men&#xfc;/Expander-Icon">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1665855546746" ID="ID_1649379892" MODIFIED="1665855568834" TEXT="sieht vorerst ordentlich aus"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1665855569555" ID="ID_1045883941" MODIFIED="1665855630056" TEXT="ist aber vielleicht etwas zu hell geraten">
+<arrowlink COLOR="#f27d99" DESTINATION="ID_446507732" ENDARROW="Default" ENDINCLINATION="356;501;" ID="Arrow_ID_1734621230" STARTARROW="None" STARTINCLINATION="225;17;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1662241925929" ID="ID_217944947" MODIFIED="1664136727535" TEXT="horizontale Ausdehnung">

@@ -213,7 +213,12 @@ namespace workspace {
     addStockIconSet(factory, "panel-timeline", "panel_timeline",_("_Timeline"));
     addStockIconSet(factory, "panel-timeline", "panel_timeline_obsolete",_("_ZombieTimeline"));
     
-    addStockIconSet(factory, "window-new",     "new_window",    _("New _Window"));
+    addStockIconSet(factory, "window-new"     ,"new_window"             ,_("New _Window"));
+    
+    addStockIconSet(factory, "placement"      ,ICON_placement           ,_("_Placement"));
+    addStockIconSet(factory, "arrow-hand"     ,ICON_arrow_hand_menu     ,_("_Menu"));
+    addStockIconSet(factory, "arrow-hand"     ,ICON_arrow_hand_down     ,_("_Expand"));
+    addStockIconSet(factory, "arrow-hand"     ,ICON_arrow_hand_up       ,_("_Collapse"));
     
     addStockIconSet(factory, "tool-arrow",     "tool_arrow",    _("_Arrow"));
     addStockIconSet(factory, "tool-i-beam",    "tool_i_beam",   _("_I-Beam"));
@@ -229,36 +234,33 @@ namespace workspace {
   
   bool
   UiStyle::addStockIconSet (Glib::RefPtr<IconFactory> const& factory
-                           ,cuString& icon_name
-                           ,cuString& id
-                           ,cuString& label)
+                           ,Literal iconName
+                           ,Literal id
+                           ,Literal label)
   {
     Glib::RefPtr<Gtk::IconSet> icon_set = Gtk::IconSet::create();
+    cuString uIconName{iconName}, uLabel{label}; // even while we're just passing through a C-string to GTK,
+                                                //  unfortunately Glib::ustring wraps a std::string
     
-    // Load all the sizes, wildcarding the first, largest icon to be loaded
-    bool no_icons = true;
-    no_icons &= !addStockIcon(
-      icon_set, icon_name, GiantIconSize, no_icons);
-    no_icons &= !addStockIcon(
-      icon_set, icon_name, Gtk::ICON_SIZE_BUTTON, no_icons);
-    no_icons &= !addStockIcon(
-      icon_set, icon_name, Gtk::ICON_SIZE_MENU, no_icons);
-    no_icons &= !addStockIcon(
-      icon_set, icon_name, Gtk::ICON_SIZE_LARGE_TOOLBAR, no_icons);
-    no_icons &= !addStockIcon(
-      icon_set, icon_name, MenuIconSize, no_icons);
+    // Load all the sizes, wildcarding the largest icon to be loaded
+    bool found{false};
+    found |= addStockIcon (icon_set, uIconName, GiantIconSize, not found);
+    found |= addStockIcon (icon_set, uIconName, Gtk::ICON_SIZE_BUTTON, not found);
+    found |= addStockIcon (icon_set, uIconName, Gtk::ICON_SIZE_MENU,   not found);
+    found |= addStockIcon (icon_set, uIconName, Gtk::ICON_SIZE_LARGE_TOOLBAR, not found);
+    found |= addStockIcon (icon_set, uIconName, MenuIconSize, not found);
     
-    if(no_icons)
+    if (not found)
       {
         // No icons were loaded
-        ERROR (stage, "Unable to load icon '%s'", cStr(icon_name));
+        ERROR (stage, "Unable to load icon '%s'", iconName);
         return false;
       }
     
     // Add the icon set to the icon factory
     const Gtk::StockID stock_id(id);
     factory->add(stock_id, icon_set);
-    Gtk::Stock::add(Gtk::StockItem(stock_id, label));              //////////////////////TICKET #1030 : use "icon names" instead of Gtk::StockItem
+    Gtk::Stock::add(Gtk::StockItem(stock_id, uLabel));             //////////////////////TICKET #1030 : use "icon names" instead of Gtk::StockItem
     return true;
   }
   

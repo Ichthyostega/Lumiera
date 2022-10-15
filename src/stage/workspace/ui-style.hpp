@@ -38,6 +38,7 @@
 
 #include "stage/gtk-base.hpp"
 #include "common/advice.hpp"
+#include "lib/symbol.hpp"
 #include "lib/nocopy.hpp"
 
 #include <cairomm/cairomm.h>
@@ -53,7 +54,8 @@ namespace stage {
   class UiBus;
 
 namespace workspace {
-  
+
+  using lib::Literal;
   using std::string;
   
   using StyleAdvice = lumiera::advice::Provision<PStyleContext>;
@@ -155,9 +157,9 @@ namespace workspace {
        */
       bool
       addStockIconSet (Glib::RefPtr<Gtk::IconFactory> const& factory
-                      ,cuString& icon_name
-                      ,cuString& id
-                      ,cuString& label);
+                      ,Literal iconName
+                      ,Literal id
+                      ,Literal label);
       
       /**
        * Loads an icon, searching standard icon locations,

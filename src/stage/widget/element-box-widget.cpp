@@ -136,14 +136,14 @@ namespace widget {
   ElementBoxWidget::Config::getIconID()  const
   {
     ///////////////////////////////////////////////////////////////////////////TICKET #1185 : implement logic to pick suitable icon...
-    return "track_enabled";      //////////////////////////////////////////////TICKET #1219 : maybe at least a better generic placeholder icon...?
+    return ICON_placement;
   }
   
   Literal
   ElementBoxWidget::Config::getMenuSymb()  const
   {
     ///////////////////////////////////////////////////////////////////////////TICKET #1185 : implement logic to pick suitable icon...
-    return "gtk-go-down";        //////////////////////////////////////////////TICKET #1219 : maybe at least a better generic placeholder icon...?
+    return ICON_arrow_hand_menu;
   }
   
   Gtk::IconSize

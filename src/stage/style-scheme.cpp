@@ -83,4 +83,10 @@ namespace stage {
   cuString CLASS_background    {"background"};            ///< opaque backdrop
   
   
+  Literal ICON_placement       {"placement"};
+  Literal ICON_arrow_hand_menu {"arrow_hand"};
+  Literal ICON_arrow_hand_down {"arrow_hand_down"};
+  Literal ICON_arrow_hand_up   {"arrow_hand_up"};
+  
+  
 }// namespace stage
