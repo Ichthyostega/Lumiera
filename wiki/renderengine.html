@@ -3070,6 +3070,20 @@ The general plan to trigger content population thus boils down to
 * execution of aforementioned command activates sending of population / diff messages
 * on shutdown of the top-level, send the corresponding deactivation command </pre>
 </div>
+<div title="GuiContentRender" creator="Ichthyostega" modifier="Ichthyostega" created="202210152349" modified="202210152353" tags="GuiPattern design spec draft" changecount="2">
+<pre>//Generate a visual representation of content manipulated through the Lumiera UI.//
+The topic of content rendering is closely related to the generic UI pattern of the [[»Element Box«|GuiElementBoxWidget]], which was introduced to establish some degree of uniformity throughout the GUI. Other than that, content is obviously also displayed in the ''Video viewers'' -- and special content like automation curves or [[Placements|Placement]] are handled in dedicated UI components.
+
+Yet in the generic case, content is shown within a Box with well defined extension; moreover, a //content type// has been established. A specialised ''Content Renderer'' is then installed, with the help of a configuration strategy. For this generic case, the interior of the Element Box can be assumed to be a ''Canvas'' (&amp;rarr; see also GtkCustomDrawing) -- which is used as &quot;stage&quot; by the content renderer...
+* to provide a generic //indication of content type// 🠲 e.g. a film-strip or audio wave symbol
+* to fill in a concrete //rendering// based on actual content 🠲 e.g. movie frames or wave form display
+* alternatively to present a //pivotal content// indicator 🠲 e.g. a key image frame characterising the clip as a whole
+* or to present an extended UI to interact with the content 🠲 e.g. expanded Clip display with individual media tracks
+
+!Architecture
+These disparate usage patterns impose the challenge to avoid architectural tangling: The [[Element Box Witget|GuiElementBoxWidget]] must be confined to be //merely a container,// and remain agnostic with respect to the inner structure of the content; it is instructed only insofar a specific //content type// is indicated, as foundation for picking a suitable //rendering strategy.//
+</pre>
+</div>
 <div title="GuiCustomWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201611182349" tags="GuiPattern discuss decision draft" changecount="64">
 <pre>Inevitably, the UI of an advanced application like Lumiera needs some parts beyond the scope of what can be achieved by combining standard widgets. Typically, an UI toolkit (GTK is no exception here) offers some extension mechanism to integrate such more elaborate, application specific behaviour. Within Lumiera, the Timeline is probably the most prominent place where we need to come up with our own handling solution -- which also means to rely on such extension mechanisms and to integrate well with the more conventional parts of the UI. Since the core concept of typical UI toolkit sets is that of a //widget,// we end up with writing some kind of customised or completely custom defined widget. 
 
@@ -3217,7 +3231,7 @@ In accordance with this structure, we introduce a central component, the {{{Pane
 
 </pre>
 </div>
-<div title="GuiElementBoxWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201811011919" modified="202210030338" tags="GuiPattern spec draft" changecount="21">
+<div title="GuiElementBoxWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201811011919" modified="202210152335" tags="GuiPattern spec draft" changecount="22">
 <pre>//A building block used pervasively throughout the Lumiera UI  to represent a named entity.//
 This widget presents a horizontally extended body, which holds a characteristic ''Head-Triplet'' of visual Elements:
 * an //Icon// to create the visual anchor point. In many cases, this will be ''the Placment Icon'' (a hallmark of Lumiera's UI)
@@ -3243,6 +3257,9 @@ This characteristic cadence of elements gives us a horizontal box with distinct 
 ** set a fixed length-limit, causing the text label to be abridged eventually
 ** proportional head-placement
 * the body may optionally hold another GTK widget, in which case the head-triplet aligns to the upper side
+** this child widget is what //represents the content// of the element box
+** typically this //content area// is a canvas with an associated &amp;rarr; [[content rendering mechanism|GuiContentRender]]
+** often the content area is empty though, and serves only to indicate the content type through appropriate styling
 
 We offer pre-arranged options for standard wiring of interaction response
 * when the Icon is a Placement, it will launch the [[Placement-Pop-up|GuiPlacementDisplay]] -- which in turn can be de-modalised, thereby allocating a place in the [[Property grid pane|GuiPropertyPane]]. When such a placement control already is open and allocated, the click to the placement icon will lead there.
@@ -3320,6 +3337,9 @@ Our solution approach is to watch the results returned by the default implementa
 {{red{🛆 ''Warning'':}}} the code to perform these successive layout adjustments is //potentially performance critical.//
 This code is called //for each focus change// and might have to treat //hundreds of widgets// in a typical film edit timeline.
 Further empiric survey of memory footprint and invocation times seems indicated &amp;rArr; [[Ticket #1240|https://issues.lumiera.org/ticket/1240]]
+
+!!!Content display
+the Element Box is a container, enclosing a //content area// -- content is either represented by the extension of the box, or it is actively rendered within Element Box' perimeter. This raises several structural questions, which are addressed using a //Strategy// -- notably the cases need to be distinguished, where either no content is actively presented (only CSS is applied), or otherwise where there is a canvas, and a dedicated [[content renderer|GuiContentRender]] is employed
 </pre>
 </div>
 <div title="GuiFacade" modifier="Ichthyostega" created="200902080719" modified="201708041501" tags="def spec" changecount="1">

@@ -20255,10 +20255,267 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664036078380" ID="ID_750958309" MODIFIED="1664036087161" TEXT="#1237 Design for Content Renderer framework">
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665870246870" ID="ID_1369666337" MODIFIED="1665870264462" TEXT="Anforderungs-Analyse">
+<icon BUILTIN="info"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1665870269397" ID="ID_184617933" MODIFIED="1665870282612" TEXT="was braucht ElementBoxWidget?">
+<icon BUILTIN="help"/>
+<node CREATED="1665870390267" ID="ID_1292247563" MODIFIED="1665870468628" TEXT="&#xbb;die Box&#xab; : Container">
+<node CREATED="1665870476554" ID="ID_567789239" MODIFIED="1665870487537" TEXT="&#xfc;berspannt eine Hintergrund-Fl&#xe4;che"/>
+<node CREATED="1665870488690" ID="ID_610765229" MODIFIED="1665870505519" TEXT="ben&#xf6;tigt generelles Styling">
+<node CREATED="1665870540741" ID="ID_596126312" MODIFIED="1665870553794" TEXT="Ankerpunkt: Klasse auf dem Haupt-Widget"/>
+<node CREATED="1665870613181" ID="ID_1999333910" MODIFIED="1665870634461" TEXT="+eine bekannte Tag-ID zum Binden der CSS-Regelnl"/>
+</node>
+</node>
+<node CREATED="1665870683123" ID="ID_334958667" MODIFIED="1665870691416" TEXT="(optional) ein Kind-Widget">
+<node CREATED="1665870701225" ID="ID_1109457189" MODIFIED="1665870734944">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      default == keines &#10233; <i><font color="#501f7e">leer</font></i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1665870805291" ID="ID_1283442162" MODIFIED="1665870815346" TEXT="ein Canvas">
+<node CREATED="1665870818719" ID="ID_1999412105" MODIFIED="1665870828436" TEXT="kann darauf symbolischen Platzhalter zeichnen"/>
+<node CREATED="1665870829902" ID="ID_1414104811" MODIFIED="1665870843608" TEXT="kann darauf &#xbb;Content&#xab; darstellen"/>
+<node CREATED="1665870844007" ID="ID_1925501138" MODIFIED="1665871130732" TEXT="kann daran weitere Widgets anh&#xe4;ngen">
+<linktarget COLOR="#3d3c58" DESTINATION="ID_1925501138" ENDARROW="Default" ENDINCLINATION="2;45;" ID="Arrow_ID_1045895165" SOURCE="ID_1660585525" STARTARROW="None" STARTINCLINATION="-7;-30;"/>
+<node CREATED="1665870898550" ID="ID_264682173" MODIFIED="1665870903026" TEXT="Icon(s)"/>
+<node CREATED="1665870903899" ID="ID_75342195" MODIFIED="1665870929870" TEXT="Text-Labels und Text-Felder"/>
+<node CREATED="1665870930770" ID="ID_749692462" MODIFIED="1665870936278" TEXT="Steuerelemente"/>
+<node CREATED="1665870937525" ID="ID_378196536" MODIFIED="1665870954394" TEXT="ElementBoxWidget(s)"/>
+<node CREATED="1665870956006" ID="ID_1051993844" MODIFIED="1665871003940" TEXT="Timeline-artiger nested Content"/>
+</node>
+</node>
+<node CREATED="1665871022157" ID="ID_178239069" MODIFIED="1665871030472" TEXT="weitere Alternativen?">
+<node CREATED="1665871047978" ID="ID_1660585525" MODIFIED="1665871130732" TEXT="k&#xf6;nnte Widgets direkt einbinden">
+<arrowlink COLOR="#3d3c58" DESTINATION="ID_1925501138" ENDARROW="Default" ENDINCLINATION="2;45;" ID="Arrow_ID_1045895165" STARTARROW="None" STARTINCLINATION="-7;-30;"/>
+</node>
+<node CREATED="1665871160235" ID="ID_247576641" MODIFIED="1665871348368" TEXT="derzeit nur hypothetischer Nutzen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...es w&#252;rde sich um irgendwelche ausgefallenen Use-Cases handeln, und das direkte Anheften der Kind-Widgets w&#252;rde dann Overhead sparen, gegen&#252;ber einem Canvas; weiterer Vorteil w&#228;re der direkte <i>push-back </i>f&#252;r die Allokation von Screen-Extension (was allerdings im Falle eines size-constrained Widget dann wieder ein Nachteil w&#228;re)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1665871377691" ID="ID_1824259652" MODIFIED="1665871382745" TEXT="ein Inhalts-Handle">
+<node CREATED="1665871386532" ID="ID_647005980" MODIFIED="1665871407866">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil ElementBoxWidget selbst keine <i>&quot;business logic&quot; </i>bereitstellt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1665871536271" ID="ID_1978073457" MODIFIED="1665871567831" TEXT="dieses Handle wird aber nur an den Content-Renderer durchgereicht"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1665871606904" ID="ID_1501688207" MODIFIED="1665871618313" TEXT="was ist f&#xfc;r bestimmten Content bereitzustellen?">
+<icon BUILTIN="help"/>
+<node CREATED="1665871626252" ID="ID_251889202" MODIFIED="1665871631909" TEXT="eine Strategy"/>
+<node CREATED="1665871737765" ID="ID_1798687465" MODIFIED="1665871745120" TEXT="(optional) ein Kind-Widget">
+<node CREATED="1665871862769" ID="ID_442590072" MODIFIED="1665871886917" TEXT="Modell-A">
+<node CREATED="1665871888408" ID="ID_752938606" MODIFIED="1665871897155" TEXT="Kind-Widget ist immer ein Canvas"/>
+<node CREATED="1665871898095" ID="ID_51898797" MODIFIED="1665871912673" TEXT="dieser wird direkt von ElementBox kontrolliert"/>
+<node CREATED="1665871949152" ID="ID_1240018305" MODIFIED="1665871982138" TEXT="ein zus&#xe4;tzlicher &quot;Renderer&quot; operiert auf diesem Canvas"/>
+</node>
+<node CREATED="1665871984835" ID="ID_1759333514" MODIFIED="1665874483095" TEXT="Modell-B">
+<linktarget COLOR="#90c8e3" DESTINATION="ID_1759333514" ENDARROW="Default" ENDINCLINATION="44;114;" ID="Arrow_ID_1003572490" SOURCE="ID_1156085708" STARTARROW="None" STARTINCLINATION="-104;-18;"/>
+<node CREATED="1665871991892" ID="ID_104574738" MODIFIED="1665872003189" TEXT="das Kind-Widget ist eigenst&#xe4;ndig"/>
+<node CREATED="1665872106235" ID="ID_1051979214" MODIFIED="1665872117349" TEXT="es bietet Hooks an...">
+<node CREATED="1665872129240" ID="ID_1784194423" MODIFIED="1665872322049" TEXT="f&#xfc;r die Layout-Steuerung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        Aushandeln der ben&#246;tigten Extension
+      </li>
+      <li>
+        &#196;ndern der Detailtiefe (expand / collapse)
+      </li>
+      <li>
+        Setzen einer Ausdehnungs-Vorgabe
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1665872631421" ID="ID_102284502" MODIFIED="1665872716207" TEXT="f&#xfc;r das lokale pop-up-Men&#xfc;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...welches u.U. zwar vom ElementBoxWidget aus eingebunden wird, aber eigentlich auf die Inhalts-Ebene delegiert
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1665873885491" ID="ID_131672642" MODIFIED="1665873982614" TEXT="f&#xfc;r Pivot-Content">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wobei das eigentlich nur f&#252;r den <i>einfachen Use-Case </i>relevant ist; denn im Falle eines komplexen Content-Containers wird die Steuerung, in welche der Container ohnehin eingebunden sein mu&#223; (z.B. der Clip-Controller) wohl auf direktem Wege agieren, ohne durch das ElementBox-Widget zu gehen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1665872518404" ID="ID_536642669" MODIFIED="1665872555004" TEXT="Struktur-Enscheidungen">
+<icon BUILTIN="yes"/>
+<node CREATED="1665872959841" ID="ID_1538590156" MODIFIED="1665874432390" TEXT="ElementBoxWidget nur als Container anlegen">
+<arrowlink COLOR="#4664b9" DESTINATION="ID_482907124" ENDARROW="Default" ENDINCLINATION="-136;-5;" ID="Arrow_ID_1958020561" STARTARROW="None" STARTINCLINATION="183;12;"/>
+<arrowlink COLOR="#4664b9" DESTINATION="ID_637712334" ENDARROW="Default" ENDINCLINATION="17;-78;" ID="Arrow_ID_1498361777" STARTARROW="None" STARTINCLINATION="188;12;"/>
+</node>
+<node CREATED="1665872986764" ID="ID_1471519235" MODIFIED="1665873002758" TEXT="es gibt zwei grundverschiedene usage-Patterns">
+<node CREATED="1665873005177" ID="ID_1711206809" MODIFIED="1665873013892" TEXT="Labels und einfacher Content">
+<node CREATED="1665873056661" ID="ID_1303900519" MODIFIED="1665873075779" TEXT="hier weitgehende Standardisierung und Automatisierung gew&#xfc;nscht"/>
+<node CREATED="1665873092646" ID="ID_764903267" MODIFIED="1665873111767" TEXT="reduziert sich auf ein Label + einen pop-up-Menu-Provider"/>
+<node CREATED="1665873149175" ID="ID_329681558" MODIFIED="1665873228305" TEXT="(optional) Pivot-Content">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ein Stichwort, eine (ggfs. dynamische) Kurzinformation, ein pivot-Frame als Erkennungszeichen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1665873014720" ID="ID_321549471" MODIFIED="1665873024963" TEXT="Clips bzw. Content-Container">
+<node CREATED="1665873235907" ID="ID_438342430" MODIFIED="1665873254132" TEXT="hier soll sich das ElementBoxWidget m&#xf6;glichst passiv verhalten"/>
+<node CREATED="1665873270653" ID="ID_340799218" MODIFIED="1665873303819">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es gibt <i>anderswo </i>einen dedizierten &quot;Content Controller&quot;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1665873423045" ID="ID_615133783" MODIFIED="1665873440786" TEXT="das Thema &#xbb;temporale Extension&#xab; ist (nat&#xfc;rlich) problematisch">
+<node CREATED="1665873457525" ID="ID_482907124" MODIFIED="1665873562628" TEXT="denn das ElementBoxWidget soll selber in die Zeit-Umrechnung nicht involviert sein">
+<linktarget COLOR="#4664b9" DESTINATION="ID_482907124" ENDARROW="Default" ENDINCLINATION="-136;-5;" ID="Arrow_ID_1958020561" SOURCE="ID_1538590156" STARTARROW="None" STARTINCLINATION="183;12;"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1665873578728" ID="ID_1319825496" MODIFIED="1665873612116" TEXT="folglich pollt es eine Pixel-Ausdehnung und dr&#xfc;ckt die an den Content-Provider weiter"/>
+<node CREATED="1665873632653" ID="ID_1586810839" MODIFIED="1665873651822" TEXT="ohne an diesen auch einen inhaltlichen Link oder eine Layout-Strategie weiterzureichen"/>
+</node>
+<node CREATED="1665873457525" ID="ID_637712334" MODIFIED="1665874432391" TEXT="aufgrund der disparaten Use-Cases....">
+<linktarget COLOR="#4664b9" DESTINATION="ID_637712334" ENDARROW="Default" ENDINCLINATION="17;-78;" ID="Arrow_ID_1498361777" SOURCE="ID_1538590156" STARTARROW="None" STARTINCLINATION="188;12;"/>
+<node CREATED="1665874438345" ID="ID_1156085708" MODIFIED="1665874490650" TEXT="kommt nur Modell-B f&#xfc;r das Kind-Widget in Frage">
+<arrowlink COLOR="#90c8e3" DESTINATION="ID_1759333514" ENDARROW="Default" ENDINCLINATION="44;114;" ID="Arrow_ID_1003572490" STARTARROW="None" STARTINCLINATION="-104;-18;"/>
+<node CREATED="1665874929814" ID="ID_103158499" MODIFIED="1665874947504">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und zwar wegen der <i>Separation of Concerns</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1665874948313" ID="ID_293802012" MODIFIED="1665874962785" TEXT="(leider spricht n&#xe4;mlich alles Andere ehr f&#xfc;r Modell-A....)"/>
+</node>
+<node CREATED="1665874513335" ID="ID_284819629" MODIFIED="1665874526768" TEXT="Modell-A l&#xe4;&#xdf;t sich wohl als ein Spezialfall deuten">
+<node CREATED="1665874544130" ID="ID_1578446031" MODIFIED="1665874578715">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und <i><u>das</u></i>&#160;w&#228;re der <i>eigentliche Fall </i>f&#252;r einen <b>Content-Renderer</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1665874586541" ID="ID_1266044104" MODIFIED="1665874598322" TEXT="dieser ist demnach immer ein spezielles Canvas-Widget"/>
+</node>
+</node>
+<node CREATED="1665874965521" ID="ID_1819243067" MODIFIED="1665874975801" TEXT="Allokation">
+<node CREATED="1665875003260" ID="ID_1160344881" MODIFIED="1665875034082" TEXT="Modell-A : ElementBox enth&#xe4;lt immer ein Canvas-Widget"/>
+<node CREATED="1665874978212" ID="ID_1828608585" MODIFIED="1665875001778" TEXT="Modell-B : Allokation des Kind-Widget mu&#xdf; woanders erfolgen">
+<node CREATED="1665875077974" ID="ID_1931734833" MODIFIED="1665875087061" TEXT="ElementBox &#xfc;bernimmt keine Ownership"/>
+<node CREATED="1665875088220" ID="ID_734939153" MODIFIED="1665875237420" TEXT="Lifecycle ist zu gew&#xe4;hrleisten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das Kind-Widget mu&#223; ElementBox &#252;berleben; und das bedeutet, es mu&#223; ein Sibling sein... (problematisch f&#252;r die Struktur vom ClipWidget, es sei denn, man macht ElementBox dort zu einem Member &#8212; was allerdings wiederum der Anforderung widerspricht, da&#223; das Clip-Delegate direkt ein Widget ist und sich darstellen kann)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1665875444841" ID="ID_544669077" MODIFIED="1665875454532" TEXT="Kompromi&#xdf;...">
+<node CREATED="1665875461707" ID="ID_194337480" MODIFIED="1665875478696" TEXT="Allokation InPlaceBuffer"/>
+<node CREATED="1665875492299" ID="ID_629065329" MODIFIED="1665875511676" TEXT="aber die Strategy definiert die konkrete Widget-Klasse"/>
+</node>
+<node CREATED="1665875537501" ID="ID_1656529505" MODIFIED="1665875748844" TEXT="der &#xbb;Renderer&#xab; dagegen w&#xe4;re stets eine globale Komponente">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...w&#252;rde also z.B. als Meyer's Singleton bereitgestellt, und m&#252;&#223;te den konkreten Kontext f&#252;r jeden Aufruf zugereicht bekommen; auch die <i>Render-Vorg&#228;nge </i>k&#246;nnte man als Pool darstellen, denn es macht ohnehin keinen Sinn, alle Clips auf einmal zu rendern; wenn ein Render-Vorgang beendet ist, bleibt nur noch ein Buffer-Handle &#252;brig f&#252;r das resultierende Pixmap
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1665875357440" ID="ID_320528707" MODIFIED="1665875382101" TEXT="&#x27f9; Zwischenfazit: neige nun doch wieder Modell-A zu">
+<node CREATED="1665875384897" ID="ID_132968061" MODIFIED="1665875408194" TEXT="aber sollte die Encapsulation aus Modell-B &#xfc;bernehmen"/>
+<node CREATED="1665875408990" ID="ID_1304861189" MODIFIED="1665875430814" TEXT="d.h. ElementBox kontrolliert eben diesen Canvas doch nicht direkt"/>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664030163430" ID="ID_1789916626" MODIFIED="1664030172407" TEXT="Design: Interface-Komponente">
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664030181011" ID="ID_741977554" MODIFIED="1664030201167" TEXT="Steuerung via ctor-DSL pr&#xfc;fen">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1665868480820" ID="ID_954980728" MODIFIED="1665868517693" TEXT="Typ + Presentation Intent &#x27f9; Content renderer(Strategy) installieren"/>
+<node CREATED="1665868541647" ID="ID_761057997" MODIFIED="1665874907453" TEXT="+ zus&#xe4;tzlich konkrete Name-ID &#x27f9; Aufrufkontext f&#xfc;r konkreten Render-Vorgang"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664030206720" ID="ID_1572928176" MODIFIED="1664031781637" TEXT="Analyse zum Thema: Zeit/Ausdehnung">
 <linktarget COLOR="#5d8bc2" DESTINATION="ID_1572928176" ENDARROW="Default" ENDINCLINATION="74;-5;" ID="Arrow_ID_1521837627" SOURCE="ID_1680520179" STARTARROW="None" STARTINCLINATION="15;42;"/>
