@@ -120,7 +120,7 @@ namespace timeline {
   
   
   
-  /* ==== Interface: DisplayManager===== */
+  /* ==== Interface: DisplayMetric ===== */
   
   TimeSpan
   TimelineLayout::coveredTime() const

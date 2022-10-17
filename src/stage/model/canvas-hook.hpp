@@ -102,7 +102,7 @@ namespace model {
   /**
    * Interface to represent _"some presentation layout entity",_
    * with the ability to _place_ widgets (managed elsewhere) onto it,
-   * to relocate those widgets to another position.
+   * as well as to relocate those widgets to another position.
    * @remark the canonical example is a _canvas widget,_ (e.g. `Gtk::Layout`),
    *    allowing to attach child widgets at specific positions, together with
    *    custom drawing.
@@ -142,7 +142,7 @@ namespace model {
           return Pos{this, x,y};
         }
       
-      /** build the "construction hook" for a \ref ViewHooked element,
+      /** build the "construction hook" for a \ref CanvasHooked element,
        *  which is to be attached to some timeline canvas view.
        * @param start anchor point / nominal start point of the element
        * @param downshift (optional) vertical shift down from the baseline
@@ -172,6 +172,7 @@ namespace model {
    * stage::timeline::BodyCanvasWidget to each and every Clip or Label widget.
    * 
    * @tparam WID type of the embedded widget, which is to be hooked-up into the view/canvas.
+   * @tparam BASE generic widget base type, to be used on the associated `CanvasHook<BASE>`
    * @remark since CanvasHooked represents one distinct attachment to some view or canvas,
    *         is has a clear-cut identity and and will be identified by its allocation address.
    * @warning since ViewHooked entities call back into the ViewHook on destruction,

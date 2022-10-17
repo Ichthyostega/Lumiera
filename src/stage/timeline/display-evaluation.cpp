@@ -79,7 +79,7 @@ namespace timeline {
    *           and the global profile of tracks is reconstructed
    *         - the second pass verifies and possibly reflows
    *           to achieve consistency, possibly triggering
-   *           recursing through additional size adjustments.
+   *           recursively through additional size adjustments.
    */
   void
   DisplayEvaluation::perform()

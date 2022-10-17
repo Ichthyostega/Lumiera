@@ -39,27 +39,28 @@
  ** record, which is passed to the involved layout elements within the timeline. Each element in turn
  ** has the liability to walk its children and recursively initiate a nested evaluation. During that
  ** pass, we are able to transport and aggregate information necessary to give each element the
- ** necessary amount of screen real estate.
+ ** adequate required amount of screen real estate.
  ** 
  ** ## Abstracted relative coordinate system
  ** 
- ** There is real danger for the DisplayManager to turn into some kind of GUI God class, which
- ** hooks deep into the innards of various widgets to effect some coordinated UI response. To
- ** defeat this threat, we are rather reluctant to expose the DisplayManager itself. Rather,
- ** essential functionality is decomposed into self contained sub interfaces targeted at
- ** some specific aspect of drawing or layout management. Especially, there is the
- ** system of interwoven DisplayHook / CanvasHook incantations
+ ** When treated naively, there would be serious risk for the DisplayManager to turn into some kind
+ ** of GUI God class, which hooks deep into the innards of various widgets to effect a coordinated
+ ** UI response. To defeat this threat, we are rather reluctant to expose the DisplayManager itself.
+ ** Rather, essential functionality is decomposed into self contained sub interfaces, each targeted
+ ** at some specific aspect of drawing or layout management. Especially, there is the system of
+ ** interwoven DisplayHook / CanvasHook incantations.
  ** 
- ** Widgets are wrapped and decorated as ViewHookable, which is tightly linked to the corresponding
- ** ViewHook interface. This collaboration allows to attach or "hook" the widget into some display
- ** and layout management framework, without exposing the internals of said layout management to
- ** the widget, allowing just do detach or to re-hook those widgets in a different order. And
+ ** Widgets are wrapped and decorated as \ref ViewHooked, which is tightly linked to the corresponding
+ ** ViewHook interface. This collaboration allows to attach or "hook" the widget into some abstracted
+ ** display and layout management framework, without exposing the internals of said layout management
+ ** to the widget, allowing just do detach or to re-hook those widgets in a different order. And
  ** in a similar vein, the sub-interfaces CanvasHooked / CanvasHook expand the same principle
  ** to an attachment at some coordinate point `(x,y)`. In fact, CanvasHook allows to introduce
  ** a [relative coordinate system](\ref stage::timeline::RelativeCanvasHook), without the necessity
  ** for the actual widgets and their managing entities to be aware of these coordinate adjustments.
- ** This builds the foundation for implementing UI structures recursively, leading to somewhat
- ** simplified code, which hopefully is also easier to maintain and extend in the long run.
+ ** This patterning serves as foundation for implementing UI structures recursively, leading to code
+ ** based on local structural relations, which hopefully is easier to understand and maintain and
+ ** extend in the long run.
  ** 
  ** \par Avoiding the double-indirect calls?
  ** In theory, it would be possible to avoid the double forwarding indirect calls in all the
@@ -100,7 +101,7 @@ namespace timeline {
   
   
   /**
-   * Special ViewHook decorator to apply a (dynamic) offset
+   * Special CanvasHook decorator to apply a (dynamic) offset
    * when attaching or moving Widgets on the shared canvas.
    * @note the ctor uses #getAnchorHook, thus effectively,
    *       for a chain of RelativeCanvasHook instances,
@@ -135,14 +136,14 @@ namespace timeline {
           refHook_.remove (widget);
         }
       
-      /** allow to build a derived ViewRefHook with different offset */
+      /** allow to build a derived relative hook with different offset */
       model::CanvasHook<WID>&
       getAnchorHook()  noexcept override
         {
           return this->refHook_;
         }
       
-    protected: /* === extended Interface for relative view hook === */
+    protected: /* === extended Interface for relative canvas hook === */
       virtual int hookAdjX (int xPos)  =0;
       virtual int hookAdjY (int yPos)  =0;
       

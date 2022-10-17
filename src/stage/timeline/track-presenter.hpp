@@ -329,7 +329,7 @@ namespace timeline {
                   {
                     std::optional<TimeSpan> timing = spec.retrieveAttribute<TimeSpan> (string{ATTR_timing});
                     return make_unique<ClipPresenter> (spec.idi, this->uiBus_, display_.getClipHook(), timing);
-                  }))
+                  }))                                                                              //////////TICKET #1251 : how to specify media type for the Clip
         .attach (collection(subFork_)
                .isApplicableIf ([&](GenNode const& spec) -> bool
                   {                                            // »Selector« : require object-like sub scope with type-field "Fork"

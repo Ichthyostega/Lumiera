@@ -18675,7 +18675,7 @@
 </node>
 </node>
 <node COLOR="#338800" CREATED="1612620568330" ID="ID_1826613475" MODIFIED="1664494458140" TEXT="Problem: feste Gr&#xf6;&#xdf;en-Vorgabe">
-<linktarget COLOR="#f17881" DESTINATION="ID_1826613475" ENDARROW="Default" ENDINCLINATION="1266;110;" ID="Arrow_ID_1550601686" SOURCE="ID_351516626" STARTARROW="None" STARTINCLINATION="2103;126;"/>
+<linktarget COLOR="#6fb9c8" DESTINATION="ID_1826613475" ENDARROW="Default" ENDINCLINATION="1266;110;" ID="Arrow_ID_1550601686" SOURCE="ID_351516626" STARTARROW="None" STARTINCLINATION="2230;117;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1625072904888" ID="ID_373040535" MODIFIED="1625072974106" TEXT="pa&#xdf;t nicht recht in den Gtk-Standard">
 <richcontent TYPE="NOTE"><html>
@@ -20368,8 +20368,7 @@
       ...welches u.U. zwar vom ElementBoxWidget aus eingebunden wird, aber eigentlich auf die Inhalts-Ebene delegiert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1665873885491" ID="ID_131672642" MODIFIED="1665873982614" TEXT="f&#xfc;r Pivot-Content">
 <richcontent TYPE="NOTE"><html>
@@ -20530,6 +20529,11 @@
 <arrowlink COLOR="#fde2be" DESTINATION="ID_74006008" ENDARROW="Default" ENDINCLINATION="6;128;" ID="Arrow_ID_1045794051" STARTARROW="None" STARTINCLINATION="-266;36;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665969213838" ID="ID_405495257" MODIFIED="1665969529899" TEXT="Anzeige-Strategy konfigurieren f&#xfc;r Medien-Typ">
+<linktarget COLOR="#e36874" DESTINATION="ID_405495257" ENDARROW="Default" ENDINCLINATION="-2110;121;" ID="Arrow_ID_127305949" SOURCE="ID_207274074" STARTARROW="None" STARTINCLINATION="928;-50;"/>
+<linktarget COLOR="#f76d6f" DESTINATION="ID_405495257" ENDARROW="Default" ENDINCLINATION="-268;17;" ID="Arrow_ID_1695054562" SOURCE="ID_1851529218" STARTARROW="None" STARTINCLINATION="-225;-219;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664030240987" ID="ID_1818560319" MODIFIED="1664030267363" TEXT="Verwendung ohne Content-Renderer">
@@ -20716,8 +20720,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1654445541606" ID="ID_520455096" MODIFIED="1654445545420" TEXT="Integrieren">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1654445541606" ID="ID_520455096" MODIFIED="1665972223918" TEXT="Integrieren">
+<icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1654445546655" ID="ID_1539832096" MODIFIED="1654445562461" TEXT="einfaches ElementBoxWidget...">
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1654445564395" ID="ID_1890406032" MODIFIED="1654445592486" TEXT="testhalber in der HeaderPane unterbringen">
@@ -20738,8 +20742,119 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1654445594924" ID="ID_1266679575" MODIFIED="1654445604128" TEXT="Clip auf ElementBoxWidget umstellen">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1654445594924" ID="ID_1266679575" MODIFIED="1665972215583" TEXT="Clip auf ElementBoxWidget umstellen">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665969365831" ID="ID_149648314" MODIFIED="1665971950293" TEXT="Design-Probleme">
+<linktarget COLOR="#ff5268" DESTINATION="ID_149648314" ENDARROW="Default" ENDINCLINATION="2;21;" ID="Arrow_ID_441789889" SOURCE="ID_500624074" STARTARROW="None" STARTINCLINATION="-196;23;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1665969380429" ID="ID_438117560" MODIFIED="1665969431276" TEXT="ElementBoxWidget ist &quot;ctor-zentrisch&quot;">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1665969406938" ID="ID_964851207" MODIFIED="1665969425517" TEXT="aber Diff liefert viele Aspekte erst sp&#xe4;ter">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1665969444163" ID="ID_1678945295" MODIFIED="1665969448288" TEXT="betrifft...">
+<node CREATED="1665969449092" ID="ID_1852745838" MODIFIED="1665969452839" TEXT="den Clip-Namen">
+<node CREATED="1665969454987" ID="ID_1388522515" MODIFIED="1665969456935" TEXT="die ID"/>
+<node CREATED="1665969457547" ID="ID_1136164363" MODIFIED="1665969461166" TEXT="den lesbaren Namen"/>
+</node>
+<node CREATED="1665969462522" ID="ID_1851529218" MODIFIED="1665969529899">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      den <i>Medien-Typ</i>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#f76d6f" DESTINATION="ID_405495257" ENDARROW="Default" ENDINCLINATION="-268;17;" ID="Arrow_ID_1695054562" STARTARROW="None" STARTINCLINATION="-225;-219;"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1665971884155" ID="ID_1832121467" MODIFIED="1665971971444" TEXT="ansonsten &quot;fast&quot; nichts zu tun">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1665971894646" ID="ID_1038999615" MODIFIED="1665971943555" TEXT="ElementBoxWidget als Basisklasse">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1665971906399" ID="ID_500624074" MODIFIED="1665971950292" TEXT="die ctor-DSL einbinden">
+<arrowlink COLOR="#ff5268" DESTINATION="ID_149648314" ENDARROW="Default" ENDINCLINATION="2;21;" ID="Arrow_ID_441789889" STARTARROW="None" STARTINCLINATION="-196;23;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1665971952866" ID="ID_953567994" MODIFIED="1665971966677" TEXT="f&#xfc;r den size-constraint: von push auf pull umstellen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1665971975191" ID="ID_1645965443" MODIFIED="1665971998035" TEXT="size-constraint-Code wird zu fr&#xfc;h aufgerufen">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1665972027480" ID="ID_1481599747" MODIFIED="1665972094845">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font color="#f12b4f"><b>ASSERTION</b></font>&#160;: widget mu&#223; bereits realized sein
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      0000001052: INFO: steam-dispatcher.cpp:301: worker_2: processCommands: +++ dispatch Command(&quot;test_fake_injectSequence_1&quot;) {exec}
+    </p>
+    <p>
+      0000001053: INFO: steam-dispatcher.cpp:306: worker_2: processCommands: +++ --------&gt;&gt;&gt; bang!
+    </p>
+    <p>
+      0000001055: TODO: dummy-session-connection.cpp:259: worker_2: applyCopy: build internal diagnostic data structure, apply a copy of the message
+    </p>
+    <p>
+      0000001060: TODO: track-body.cpp:93: worker_3: setTrackName: is the track name of any relevance for the TrackBody widget?
+    </p>
+    <p>
+      0000001061: INFO: ui-style.cpp:145: worker_3: prepareStyleContext: Body-CSS: path=window.background box.vertical box[2/3].horizontal widget[2/2] widget paned.vertical widget box.vertical notebook[1/1].frame paned.horizontal.timeline__page.timeline box.vertical.timeline__body.timeline fork.timeline__fork
+    </p>
+    <p>
+      0000001062: INFO: ui-style.cpp:154: worker_3: prepareStyleContext: RulerCSS: path=window.background box.vertical box[2/3].horizontal widget[2/2] widget paned.vertical widget box.vertical notebook[1/1].frame paned.horizontal.timeline__page.timeline box.vertical.timeline__body.timeline fork.timeline__fork frame.timeline__ruler
+    </p>
+    <p>
+      Clip:: hsize=25
+    </p>
+    <p>
+      Clip:: hsize=50
+    </p>
+    <p>
+      Clip:: hsize=25
+    </p>
+    <p>
+      0000001085: ASSERTION: element-box-widget.cpp:327: worker_3: imposeSizeConstraint: (label_.get_realized()) ElementBoxWidget layout constraint imposed on widget not yet realized by GTK
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1665972100310" ID="ID_1747925228" MODIFIED="1665972179452" TEXT="seltsam? in den bisherigen Experimenten war das nie ein Problem">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn ich ging von der Annahme aus, da&#223; dieser Code erst im nachfolgenden draw()-Event aufgerufen wird; und diese Annahme hatte sich bisher stets best&#228;tigt, obwohl im ctor von ElementBox direkt ein show_all() aufgerufen wird
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665972186386" ID="ID_1077613088" MODIFIED="1665972204670" TEXT="per Debugger zu untersuchen">
+<icon BUILTIN="yes"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1661695361415" ID="ID_1615822639" MODIFIED="1661695374805" TEXT="Integration mit Pop-up-Men&#xfc;/Framework">
 <icon BUILTIN="hourglass"/>
@@ -29451,6 +29566,19 @@
 <node CREATED="1563043748625" ID="ID_1963576119" MODIFIED="1563043767189" TEXT="C++ Custom-Widgets k&#xf6;nnen nicht ihren CSS-Node-Namen &#xe4;ndern">
 <icon BUILTIN="smily_bad"/>
 </node>
+<node CREATED="1665955930245" ID="ID_886604417" MODIFIED="1665956909622" TEXT="zumindest Glib::ObjectBase-ctor kann man setzen...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      damit kann man zwar einen Klassennamen f&#252;r ein Custom-Widget setzen, also z.B.&#160;&#160;'gtkmm__CustomObject_xyz' (wobei man xyz an den ctor &#252;bergeben hat). Aber das hat keinen Einflu&#223; auf den Tag-Namen, wie er f&#252;r den CSS-Selector relevant ist
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1563117424492" ID="ID_356525175" MODIFIED="1564954670831" TEXT="Anwendung">
@@ -32317,7 +32445,7 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node COLOR="#338800" CREATED="1611954240824" ID="ID_1048238324" MODIFIED="1611957379318" TEXT="1.Entwurf: Datencontainer als Basisklasse">
-<linktarget COLOR="#82b7c6" DESTINATION="ID_1048238324" ENDARROW="Default" ENDINCLINATION="-451;461;" ID="Arrow_ID_22542364" SOURCE="ID_1850041925" STARTARROW="None" STARTINCLINATION="-197;-5;"/>
+<linktarget COLOR="#82b7c6" DESTINATION="ID_1048238324" ENDARROW="Default" ENDINCLINATION="-451;461;" ID="Arrow_ID_22542364" SOURCE="ID_1850041925" STARTARROW="None" STARTINCLINATION="-209;-7;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1611954259205" ID="ID_596924875" MODIFIED="1611954280703" TEXT="damit gibt es dann immer nur eine Allokation"/>
 <node COLOR="#338800" CREATED="1611954666544" ID="ID_1268124709" MODIFIED="1611957366432" TEXT="Datencontainer-Klasse moveable machen">
@@ -32337,6 +32465,10 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665969027570" ID="ID_508866033" MODIFIED="1665969148445" TEXT="Medien-Typ &#xfc;ber ctor entgegennehmen">
+<linktarget COLOR="#a55386" DESTINATION="ID_508866033" ENDARROW="Default" ENDINCLINATION="270;19;" ID="Arrow_ID_591115346" SOURCE="ID_1751225815" STARTARROW="None" STARTINCLINATION="294;-18;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1480694550601" ID="ID_1240926804" MODIFIED="1557498707230" TEXT="Clip-Anzeige">
 <linktarget COLOR="#fec680" DESTINATION="ID_1240926804" ENDARROW="Default" ENDINCLINATION="-1142;35;" ID="Arrow_ID_435369727" SOURCE="ID_1131206858" STARTARROW="None" STARTINCLINATION="394;108;"/>
@@ -32354,9 +32486,10 @@
 <arrowlink COLOR="#f6cca4" DESTINATION="ID_368245484" ENDARROW="Default" ENDINCLINATION="-599;39;" ID="Arrow_ID_703893400" STARTARROW="None" STARTINCLINATION="42;-316;"/>
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584229399430" ID="ID_1431813131" MODIFIED="1584229407583" TEXT="Logik zur Auswahl des Anzeigestils">
+<node COLOR="#338800" CREATED="1584229399430" ID="ID_1431813131" MODIFIED="1665962034569" TEXT="Logik zur Auswahl des Anzeigestils">
 <linktarget COLOR="#772c4f" DESTINATION="ID_1431813131" ENDARROW="Default" ENDINCLINATION="-428;-554;" ID="Arrow_ID_144365857" SOURCE="ID_1275311433" STARTARROW="None" STARTINCLINATION="298;32;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
+<icon BUILTIN="hourglass"/>
 <node CREATED="1584229415906" ID="ID_153053846" MODIFIED="1584229421096" TEXT="ist teilweise generisch">
 <node CREATED="1584229508960" ID="ID_1415254796" MODIFIED="1584229544527" TEXT="ausreichend spezifiziert f&#xfc;r eine Anzeige"/>
 <node CREATED="1584229545211" ID="ID_1361609374" MODIFIED="1584229556397" TEXT="zumindest die Zeitspanne mu&#xdf; feststellbar sein">
@@ -32381,7 +32514,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1584229422204" ID="ID_184368820" MODIFIED="1584229433862" TEXT="teilweise abh&#xe4;ngig von &#xe4;u&#xdf;eren Vorgaben">
+<node CREATED="1584229422204" ID="ID_184368820" MODIFIED="1665962050770" TEXT="teilweise abh&#xe4;ngig von &#xe4;u&#xdf;eren Vorgaben">
+<icon BUILTIN="bell"/>
 <node CREATED="1584229436514" ID="ID_973243748" MODIFIED="1584229447389" TEXT="Zoom und Anzeimodus global"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584229448099" ID="ID_63120870" MODIFIED="1584229493037" TEXT="Fallunterscheidung">
 <linktarget COLOR="#a92d35" DESTINATION="ID_63120870" ENDARROW="Default" ENDINCLINATION="246;-353;" ID="Arrow_ID_973658371" SOURCE="ID_1146096669" STARTARROW="None" STARTINCLINATION="392;20;"/>
@@ -32412,9 +32546,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584319635024" ID="ID_1833569495" MODIFIED="1584932955050" TEXT="Logik im Detail ausimplementieren">
+<node COLOR="#338800" CREATED="1584319635024" ID="ID_1833569495" MODIFIED="1665960817265" TEXT="Logik im Detail ausimplementieren">
 <linktarget COLOR="#4768d0" DESTINATION="ID_1833569495" ENDARROW="Default" ENDINCLINATION="943;-75;" ID="Arrow_ID_416244548" SOURCE="ID_1737560927" STARTARROW="None" STARTINCLINATION="207;23;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1585012756014" HGAP="67" ID="ID_1256841575" MODIFIED="1585012768478" TEXT="konzeptionell...." VSHIFT="-6">
 <node CREATED="1585012775180" HGAP="101" ID="ID_1578039290" MODIFIED="1585012804301" TEXT="Modus vs Stil" VSHIFT="13">
 <node CREATED="1585012812495" ID="ID_112398937" MODIFIED="1585012828657" TEXT="Modus ist die grundlegende Form">
@@ -32435,7 +32569,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1585010903183" ID="ID_1658829752" MODIFIED="1585010924829" TEXT="Kernfragen">
+<node COLOR="#435e98" CREATED="1585010903183" FOLDED="true" ID="ID_1658829752" MODIFIED="1665960800978" TEXT="Kernfragen">
 <icon BUILTIN="help"/>
 <node CREATED="1585010871688" ID="ID_1289641734" MODIFIED="1585010901339" TEXT="wer entscheidet &#xfc;ber den m&#xf6;glichen Stil?">
 <node CREATED="1585011007329" ID="ID_1945212792" MODIFIED="1585928197710" TEXT="die Factory">
@@ -32491,6 +32625,27 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1665960687878" ID="ID_1888787380" MODIFIED="1665960788984">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>Stand 10/22</u>&#160;: Fragen grunds&#228;tzlich gekl&#228;rt
+    </p>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1665960703226" ID="ID_1725010150" MODIFIED="1665960713388" TEXT="Implementierungs-Logik ist gut lesbar"/>
+<node CREATED="1665960749212" ID="ID_1674197078" MODIFIED="1665960776942" TEXT="noch fehlende Strukturen wird die Praxis aufzeigen">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1665960714097" ID="ID_1314523478" MODIFIED="1665960733439" TEXT="der Fall der &#xdc;bersichts-Anzeige ist auf sp&#xe4;ter vertagt">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
 </node>
 <node CREATED="1585924331517" HGAP="27" ID="ID_1558559501" MODIFIED="1585924351368" TEXT="state pattern" VSHIFT="26">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -32508,12 +32663,27 @@
 <icon BUILTIN="info"/>
 <node CREATED="1612028439450" ID="ID_1104410954" MODIFIED="1612028458261" TEXT="die Entscheidungslogik wird in der generischen ClipDelegate-Implementierung untergebracht"/>
 <node CREATED="1612028459191" ID="ID_1113891567" MODIFIED="1612028476585" TEXT="auf absehbare Zeit ist diese Logik recht einfach"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1665960835432" ID="ID_687668284" MODIFIED="1665960869210" TEXT="komplexere Themen vertagt (Medienspuren, Effekte, &#xdc;bersicht)">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="hourglass"/>
+</node>
 <node COLOR="#435e98" CREATED="1612028487004" ID="ID_619535893" MODIFIED="1612030600973" TEXT="spezielle Konvention: start == Time::NEVER &#x27f9; Appearance::PENDING">
 <linktarget COLOR="#4663c4" DESTINATION="ID_619535893" ENDARROW="Default" ENDINCLINATION="-1983;81;" ID="Arrow_ID_309098301" SOURCE="ID_592528621" STARTARROW="None" STARTINCLINATION="631;32;"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665969056112" ID="ID_993785590" MODIFIED="1665969090871" TEXT="Umgang mit dem Medien-Typ (#1251)">
+<linktarget COLOR="#d7407e" DESTINATION="ID_993785590" ENDARROW="Default" ENDINCLINATION="-434;31;" ID="Arrow_ID_699706289" SOURCE="ID_1632230778" STARTARROW="None" STARTINCLINATION="137;-25;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665969172803" ID="ID_1892015467" MODIFIED="1665969185904" TEXT="&#xdc;bersetung in Typ-Parameter f&#xfc;r ElementBoxWidget">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665969187006" ID="ID_207274074" MODIFIED="1665969332390" TEXT="aber auch: Auswahl der Anzeige-Strategy im Detail">
+<arrowlink COLOR="#e36874" DESTINATION="ID_405495257" ENDARROW="Default" ENDINCLINATION="-2110;121;" ID="Arrow_ID_127305949" STARTARROW="None" STARTINCLINATION="928;-50;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1584319522106" ID="ID_600779996" MODIFIED="1584319541312" TEXT="Vorsicht Falle: Kopieren beim Wechsel des Anzeigestils">
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1584319522106" ID="ID_600779996" MODIFIED="1665962000322" TEXT="Vorsicht Falle: Kopieren beim Wechsel des Anzeigestils">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1584319543957" ID="ID_615255607" MODIFIED="1584319606901" TEXT="erst den alten ClipDelegate vom smart-Ptr abkoppeln">
 <icon BUILTIN="full-1"/>
@@ -32524,7 +32694,7 @@
 <node CREATED="1584319578712" ID="ID_1036218022" MODIFIED="1584319612171" TEXT="dann den alten ClipDelegate verwerfen">
 <icon BUILTIN="full-3"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1584319587975" ID="ID_609955363" MODIFIED="1584319603776" TEXT="und das alles am Besten per smart-Ptr abgesichert">
+<node COLOR="#435e98" CREATED="1584319587975" ID="ID_609955363" MODIFIED="1665962012480" TEXT="und das alles per smart-Ptr abgesichert">
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -32604,6 +32774,18 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665968722004" ID="ID_1632230778" MODIFIED="1665969102137" TEXT="#1251 specify Clip media type for the UI">
+<arrowlink COLOR="#d7407e" DESTINATION="ID_993785590" ENDARROW="Default" ENDINCLINATION="-434;31;" ID="Arrow_ID_699706289" STARTARROW="None" STARTINCLINATION="137;-25;"/>
+<linktarget COLOR="#bb4f76" DESTINATION="ID_1632230778" ENDARROW="Default" ENDINCLINATION="-986;67;" ID="Arrow_ID_1432405411" SOURCE="ID_865599543" STARTARROW="None" STARTINCLINATION="-1713;-126;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665968963166" ID="ID_1751225815" MODIFIED="1665969148445" TEXT="sollte schon sofort &#xfc;ber den ctor m&#xf6;glich sein">
+<arrowlink COLOR="#a55386" DESTINATION="ID_508866033" ENDARROW="Default" ENDINCLINATION="270;19;" ID="Arrow_ID_591115346" STARTARROW="None" STARTINCLINATION="294;-18;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665968975867" ID="ID_1127286532" MODIFIED="1665968988821" TEXT="sollte aber auch sp&#xe4;ter noch &#xe4;nderbar sein">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1661694782421" ID="ID_1828319625" MODIFIED="1661694793230" TEXT="Strategy-Pattern verwenden!">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
@@ -32618,8 +32800,8 @@
 <arrowlink COLOR="#541915" DESTINATION="ID_96949358" ENDARROW="Default" ENDINCLINATION="-1458;130;" ID="Arrow_ID_1319876475" STARTARROW="None" STARTINCLINATION="818;-68;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node CREATED="1583678069596" ID="ID_749021089" MODIFIED="1583678189115" TEXT="Stufe-1">
-<icon BUILTIN="forward"/>
+<node COLOR="#435e98" CREATED="1583678069596" ID="ID_749021089" MODIFIED="1665962512413" TEXT="Stufe-1">
+<icon BUILTIN="licq"/>
 <node COLOR="#338800" CREATED="1583678075045" ID="ID_1071916226" MODIFIED="1612439673716" TEXT="erst mal &#xfc;berhaupt einen Block belegen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1584318751425" ID="ID_1908104469" MODIFIED="1584318760838" TEXT="nehme mal einen Gtk::Button...">
@@ -32653,11 +32835,11 @@
 <node COLOR="#338800" CREATED="1583678122516" ID="ID_73602256" MODIFIED="1612439671575" TEXT="...und dessen vertikale Ausdehnung ermitteln und zur&#xfc;ckmelden">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612439704954" ID="ID_102633650" MODIFIED="1612480364697" TEXT="Clip-Parameter &#x2192; horizontale Ausdehnung">
-<icon BUILTIN="pencil"/>
-<node CREATED="1612471194589" ID="ID_1485158816" MODIFIED="1612471203240" TEXT="mehrere Probleme zu &#xfc;berwinden">
+<node COLOR="#338800" CREATED="1612439704954" FOLDED="true" ID="ID_102633650" MODIFIED="1665962687088" TEXT="Clip-Parameter &#x2192; horizontale Ausdehnung">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1612471194589" ID="ID_1485158816" MODIFIED="1665962268509" TEXT="mehrere Probleme zu &#xfc;berwinden">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1612471205161" ID="ID_544296566" MODIFIED="1612471456398" TEXT="GTK erlaubt keine explizite Gr&#xf6;&#xdf;e">
+<node COLOR="#435e98" CREATED="1612471205161" ID="ID_544296566" MODIFIED="1665962213180" TEXT="GTK erlaubt keine explizite Gr&#xf6;&#xdf;e">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -32669,14 +32851,14 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#a09aae" DESTINATION="ID_1508852681" ENDARROW="Default" ENDINCLINATION="-2048;204;" ID="Arrow_ID_1446927054" STARTARROW="None" STARTINCLINATION="-3602;0;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="messagebox_warning"/>
 <node COLOR="#990000" CREATED="1612471458578" ID="ID_611633103" MODIFIED="1612480292438" TEXT="Experiment: gen&#xfc;gt der size_request?">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1612480298341" ID="ID_1348090876" MODIFIED="1612480308730" TEXT="funktioniert nur zur Vergr&#xf6;&#xdf;erung"/>
 <node CREATED="1612480309646" ID="ID_1463447127" MODIFIED="1612480315253" TEXT="aber beschneidet nicht"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612527452448" ID="ID_1007765197" MODIFIED="1663946037264" TEXT="gen&#xfc;gt noch nicht: kann nicht beschneiden">
-<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1612527452448" ID="ID_1007765197" MODIFIED="1665962447036" TEXT="gen&#xfc;gt noch nicht: kann nicht beschneiden">
+<icon BUILTIN="broken-line"/>
 <node CREATED="1612527477300" ID="ID_734302531" MODIFIED="1612527498185" TEXT="es funktioniert so bereits, das Widget zu vergr&#xf6;&#xdf;ern">
 <icon BUILTIN="idea"/>
 </node>
@@ -32684,7 +32866,7 @@
 <arrowlink COLOR="#364ec7" DESTINATION="ID_615948747" ENDARROW="Default" ENDINCLINATION="-1440;0;" ID="Arrow_ID_866144981" STARTARROW="None" STARTINCLINATION="-1942;189;"/>
 <icon BUILTIN="info"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612613065268" FOLDED="true" ID="ID_700841626" LINK="https://stackoverflow.com/q/66076682/444796" MODIFIED="1663962502206" TEXT="Frage auf Stackoverflow gestellt">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612613065268" FOLDED="true" ID="ID_700841626" LINK="https://stackoverflow.com/q/66076682/444796" MODIFIED="1665962160061" TEXT="Frage auf Stackoverflow gestellt">
 <icon BUILTIN="hourglass"/>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1663957087480" ID="ID_9335539" MODIFIED="1663957260417" TEXT="Frage wurde automatisch gel&#xf6;scht">
@@ -32732,12 +32914,12 @@
 <node CREATED="1612619418068" ID="ID_506962706" MODIFIED="1612619499778" TEXT="auf dem Clip-Widget selber &#xfc;berschrieben"/>
 <node CREATED="1612619434154" ID="ID_1820519135" MODIFIED="1612619499778" TEXT="ignoriert das Kind und liefert den nominellen Wert zur&#xfc;ck"/>
 <node CREATED="1612619448816" ID="ID_616104406" MODIFIED="1612620546458" TEXT="funktioniert, aber es gibt eine Menge von Warnungen">
-<linktarget COLOR="#67384d" DESTINATION="ID_616104406" ENDARROW="Default" ENDINCLINATION="-856;39;" ID="Arrow_ID_349418044" SOURCE="ID_548348096" STARTARROW="None" STARTINCLINATION="241;19;"/>
+<linktarget COLOR="#67384d" DESTINATION="ID_616104406" ENDARROW="Default" ENDINCLINATION="-605;33;" ID="Arrow_ID_349418044" SOURCE="ID_548348096" STARTARROW="None" STARTINCLINATION="241;19;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1663955680592" HGAP="19" ID="ID_1517213874" MODIFIED="1663955701843" TEXT="trotzdem: das ist vermutlich der einzige gangbare Weg" VSHIFT="5">
 <icon BUILTIN="yes"/>
-<node CREATED="1663955710647" ID="ID_1436931569" MODIFIED="1663955749454">
+<node CREATED="1663955710647" HGAP="23" ID="ID_1436931569" MODIFIED="1663955749454" VSHIFT="17">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -32755,6 +32937,9 @@
   </body>
 </html></richcontent>
 </node>
+<node COLOR="#435e98" CREATED="1665962384509" ID="ID_1318638341" MODIFIED="1665962423510" TEXT="Ansatz best&#xe4;tigt &#x2192; ElementBoxWidget">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 </node>
@@ -32762,7 +32947,8 @@
 <node CREATED="1612471500084" ID="ID_269480980" MODIFIED="1612474845425" TEXT="eigentlich Aufgabe der Zoom-Steuerung">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1612471511450" ID="ID_116082667" MODIFIED="1612471518541" TEXT="Problematisch ist der Zugang">
+<node COLOR="#435e98" CREATED="1612471511450" ID="ID_116082667" MODIFIED="1665962257879" TEXT="Problematisch ist der Zugang">
+<icon BUILTIN="messagebox_warning"/>
 <node CREATED="1612471524505" ID="ID_1226213044" MODIFIED="1612471811699" TEXT="Widgets sollen nicht direkt mit dem Layout-Manager reden">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -32829,43 +33015,34 @@
 </node>
 </node>
 </node>
-<node CREATED="1612619529157" ID="ID_1950608874" MODIFIED="1612619546767" TEXT="vorl&#xe4;ufiger Entwurf: mit einem Button">
+<node COLOR="#338800" CREATED="1612619529157" ID="ID_1950608874" MODIFIED="1665962365176" TEXT="vorl&#xe4;ufiger Entwurf: mit einem Button">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1612619554554" ID="ID_548348096" MODIFIED="1612620546458" TEXT="funktioniert erst mal so halbwegs">
-<arrowlink COLOR="#67384d" DESTINATION="ID_616104406" ENDARROW="Default" ENDINCLINATION="-856;39;" ID="Arrow_ID_349418044" STARTARROW="None" STARTINCLINATION="241;19;"/>
+<arrowlink COLOR="#67384d" DESTINATION="ID_616104406" ENDARROW="Default" ENDINCLINATION="-605;33;" ID="Arrow_ID_349418044" STARTARROW="None" STARTINCLINATION="241;19;"/>
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612620549021" ID="ID_351516626" MODIFIED="1612620738928" TEXT="mu&#xdf; sp&#xe4;ter noch genauer untersucht werden">
-<arrowlink COLOR="#f17881" DESTINATION="ID_1826613475" ENDARROW="Default" ENDINCLINATION="1266;110;" ID="Arrow_ID_1550601686" STARTARROW="None" STARTINCLINATION="2103;126;"/>
-<icon BUILTIN="bell"/>
+<node COLOR="#338800" CREATED="1612620549021" ID="ID_351516626" MODIFIED="1665962352755" TEXT="inzwischen im Detail aufgekl&#xe4;rt (&#x2023;ElementBoxWidget)">
+<arrowlink COLOR="#6fb9c8" DESTINATION="ID_1826613475" ENDARROW="Default" ENDINCLINATION="1266;110;" ID="Arrow_ID_1550601686" STARTARROW="None" STARTINCLINATION="2230;117;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611539501493" ID="ID_1849626018" MODIFIED="1611539513626" TEXT="TODO: &#xdc;berlegungen zur Daten-Storage">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611539517985" ID="ID_1850041925" MODIFIED="1611539580594" TEXT="macht es Sinn, f&#xfc;r alle Clip-Anzeigeformen einen gemeinsamen Daten-Record zu verwenden?">
-<arrowlink COLOR="#82b7c6" DESTINATION="ID_1048238324" ENDARROW="Default" ENDINCLINATION="-451;461;" ID="Arrow_ID_22542364" STARTARROW="None" STARTINCLINATION="-197;-5;"/>
-<icon BUILTIN="help"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611539550821" ID="ID_219259739" MODIFIED="1611539584717" TEXT="und: diesen einbetten, oder per Pointer halten und weitergeben?">
-<icon BUILTIN="help"/>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617888163319" ID="ID_1711872430" MODIFIED="1617888189172" TEXT="vorl&#xe4;ufige Impl. f&#xfc;r Clip-dragging versuchen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1617888163319" ID="ID_1711872430" MODIFIED="1665962559005" TEXT="vorl&#xe4;ufige Impl. f&#xfc;r Clip-dragging versuchen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1617888201086" ID="ID_1199769870" MODIFIED="1617888281168" TEXT="das schafft schon mal einen Entwurf f&#xfc;r das Framework">
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1617888226463" ID="ID_650089378" MODIFIED="1617888281168" TEXT="und erlaubt zugleich, die Struktur des Designs zu &#xfc;berpr&#xfc;fen">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1617888246955" ID="ID_719593541" MODIFIED="1617888390837" TEXT="zun&#xe4;chst einmal: neuer Anlauf f&#xfc;r kontext-bezogene Commands">
-<arrowlink COLOR="#684254" DESTINATION="ID_1624270915" ENDARROW="Default" ENDINCLINATION="-809;-2134;" ID="Arrow_ID_1181760372" STARTARROW="None" STARTINCLINATION="-299;13;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1617888246955" ID="ID_719593541" MODIFIED="1665962556416" TEXT="zun&#xe4;chst einmal: neuer Anlauf f&#xfc;r kontext-bezogene Commands">
+<arrowlink COLOR="#425c68" DESTINATION="ID_1624270915" ENDARROW="Default" ENDINCLINATION="-809;-2134;" ID="Arrow_ID_1181760372" STARTARROW="None" STARTINCLINATION="-299;13;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
-<node CREATED="1583678162183" ID="ID_798000610" MODIFIED="1583678185165" TEXT="Stufe-2">
-<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1583678162183" ID="ID_798000610" MODIFIED="1665962495818" TEXT="Stufe-2">
+<icon BUILTIN="pencil"/>
 <node CREATED="1583678167438" ID="ID_342453194" MODIFIED="1583678173531" TEXT="vereinfachte Darstellung"/>
 <node CREATED="1583678176917" ID="ID_1637892152" MODIFIED="1583678182657" TEXT="Vorstufe f&#xfc;r &quot;abridged&quot;"/>
 <node CREATED="1612620756065" ID="ID_485594461" MODIFIED="1612621029065" TEXT="ElementBoxWidget verwenden....">
@@ -32881,6 +33058,16 @@
 </html></richcontent>
 <arrowlink COLOR="#844764" DESTINATION="ID_368245484" ENDARROW="Default" ENDINCLINATION="-469;652;" ID="Arrow_ID_264431308" STARTARROW="None" STARTINCLINATION="-1673;136;"/>
 <linktarget COLOR="#5a3557" DESTINATION="ID_485594461" ENDARROW="Default" ENDINCLINATION="872;71;" ID="Arrow_ID_1204090343" SOURCE="ID_474563596" STARTARROW="None" STARTINCLINATION="2244;96;"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611539501493" HGAP="38" ID="ID_1849626018" MODIFIED="1665962611640" TEXT="TODO: &#xdc;berlegungen zur Daten-Storage" VSHIFT="18">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611539517985" ID="ID_1850041925" MODIFIED="1665962618399" TEXT="macht es Sinn, f&#xfc;r alle Clip-Anzeigeformen einen gemeinsamen Daten-Record zu verwenden?">
+<arrowlink COLOR="#82b7c6" DESTINATION="ID_1048238324" ENDARROW="Default" ENDINCLINATION="-451;461;" ID="Arrow_ID_22542364" STARTARROW="None" STARTINCLINATION="-209;-7;"/>
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611539550821" ID="ID_219259739" MODIFIED="1611539584717" TEXT="und: diesen einbetten, oder per Pointer halten und weitergeben?">
+<icon BUILTIN="help"/>
+</node>
 </node>
 </node>
 <node CREATED="1583678206105" ID="ID_1843404430" MODIFIED="1583678219642" TEXT="Stufe-3">
@@ -34477,9 +34664,9 @@
 <node CREATED="1613948811142" ID="ID_1149934346" MODIFIED="1613948873809" TEXT="Verkn&#xfc;pfung  von Widgets und InteractionState erfordert einen generischen Adapter"/>
 <node CREATED="1613949125310" ID="ID_1021022187" MODIFIED="1613949147008" TEXT="die Zustands-Aktualisierungen laufen &#xfc;ber direkte Referenzen (nicht den UI-Bus)"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614379765040" ID="ID_1624270915" MODIFIED="1614380579512" TEXT="neuer Anlauf f&#xfc;r Kontext-bezogene Commands">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614379765040" ID="ID_1624270915" MODIFIED="1665962528052" TEXT="neuer Anlauf f&#xfc;r Kontext-bezogene Commands">
 <arrowlink COLOR="#5b4964" DESTINATION="ID_1221036425" ENDARROW="Default" ENDINCLINATION="717;-46;" ID="Arrow_ID_1875882072" STARTARROW="None" STARTINCLINATION="586;34;"/>
-<linktarget COLOR="#684254" DESTINATION="ID_1624270915" ENDARROW="Default" ENDINCLINATION="-809;-2134;" ID="Arrow_ID_1181760372" SOURCE="ID_719593541" STARTARROW="None" STARTINCLINATION="-299;13;"/>
+<linktarget COLOR="#425c68" DESTINATION="ID_1624270915" ENDARROW="Default" ENDINCLINATION="-809;-2134;" ID="Arrow_ID_1181760372" SOURCE="ID_719593541" STARTARROW="None" STARTINCLINATION="-299;13;"/>
 <icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1614380675501" ID="ID_163523275" MODIFIED="1614380716283" TEXT="Leitfrage: was mu&#xdf; ich jetzt konkret anlegen, damit &#xbb;drag Clip&#xab; in dieses Schema pa&#xdf;t?">
 <icon BUILTIN="help"/>
@@ -37425,6 +37612,26 @@
 </node>
 <node CREATED="1612027485908" ID="ID_592528621" MODIFIED="1612029020769" TEXT="start == Time::NEVER &#x27f9; Clip im Anzeige-Modus &quot;Pending&quot;">
 <arrowlink COLOR="#4663c4" DESTINATION="ID_619535893" ENDARROW="Default" ENDINCLINATION="-1983;81;" ID="Arrow_ID_309098301" STARTARROW="None" STARTINCLINATION="631;32;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665966764677" ID="ID_865599543" MODIFIED="1665968944066" TEXT="L&#xf6;sung gesucht: (Medien)Typ des Clip">
+<arrowlink COLOR="#bb4f76" DESTINATION="ID_1632230778" ENDARROW="Default" ENDINCLINATION="-986;67;" ID="Arrow_ID_1432405411" STARTARROW="None" STARTINCLINATION="-1713;-126;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1665968738638" ID="ID_1311831391" MODIFIED="1665968767871" TEXT="Problem: Abweichung vom generischen diff-Format">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      schon analog zu dem, was wir hier mit dem &quot;timing&quot; machen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1665968772935" ID="ID_1301845480" MODIFIED="1665968805850" TEXT="andererseits: ohne diese Info k&#xf6;nnen wir das Widget gar nicht richtig konstruieren">
+<icon BUILTIN="broken-line"/>
 </node>
 </node>
 <node CREATED="1612027454614" ID="ID_210949800" MODIFIED="1612027457315" TEXT="&quot;name&quot;"/>
@@ -58647,6 +58854,32 @@
 </html></richcontent>
 </node>
 <node CREATED="1563042287071" ID="ID_1579813090" MODIFIED="1563042298109" TEXT="aber das kommt zu sp&#xe4;t und bleibt wirkungslos f&#xfc;r das CSS"/>
+</node>
+<node COLOR="#435e98" CREATED="1665955382455" ID="ID_1117299084" MODIFIED="1665956972844" TEXT="man kann aber den Glib::ObjectBase-ctor explizit aufrufen">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1665955404437" ID="ID_865788176" MODIFIED="1665955416055" TEXT="das mu&#xdf; dann vor allen Vaterklassen-Konstruktoren passieren"/>
+<node CREATED="1665955418797" ID="ID_157490279" MODIFIED="1665957004676" TEXT="damit kann man den Namen in der Klassenhierarchie &#xe4;ndern"/>
+<node CREATED="1665955450339" ID="ID_1763041463" MODIFIED="1665955488686" TEXT="Glib::ObjectBase(&quot;body&quot;)    &#x27f9; CSS properties (on &apos;gtkmm__CustomObject_body&apos;)">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1665955490424" ID="ID_1309061874" MODIFIED="1665955496915" TEXT="Beispiel: BodyCanvasWidget">
+<node COLOR="#523db7" CREATED="1665955761332" ID="ID_1043823112" MODIFIED="1665955780159" TEXT="verifiziert: funktioniert in der Tat">
+<font ITALIC="true" NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node CREATED="1665957010202" ID="ID_230342068" MODIFIED="1665957038452">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aber der Tag-Name f&#252;r den CSS-Selector wird dadurch <b>nicht</b>&#160; ge&#228;ndert
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
 </node>
 </node>
 <node CREATED="1537577364840" ID="ID_927285198" MODIFIED="1537577379929" TEXT="k&#xf6;nnen custom-Properties haben">

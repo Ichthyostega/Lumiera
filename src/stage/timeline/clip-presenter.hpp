@@ -118,6 +118,7 @@ namespace timeline {
        * @param view (abstracted) canvas or display framework to attach this clip to
        * @param timing (optional) start time point and duration of the clip.
        * @note Clip can not be displayed unless #timing is given
+       * @todo 2022 should provide a way to specify a _media type_ immediately at construction //////////////TICKET #1251 : how to specify media type for the Clip
        */
       ClipPresenter (ID identity, ctrl::BusTerm& nexus, WidgetHook& view, optional<TimeSpan> const& timing)
         : Controller{identity, nexus}

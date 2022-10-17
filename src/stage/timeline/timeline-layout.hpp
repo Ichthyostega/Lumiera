@@ -125,7 +125,7 @@ namespace timeline {
       HeaderPaneWidget headerPane_;
       
       DisplayEvaluation displayEvaluation_;
-      /////////////////////////////////////////////////////////////////////////////////////////////TICKET 1019 : need a "ZoomWindow" here to manage the visible area
+      /////////////////////////////////////////////////////////////////////////////////////////////TICKET #1019 : need a "ZoomWindow" here to manage the visible area
       
     public:
       TimelineLayout (Gtk::Paned&);
@@ -142,11 +142,11 @@ namespace timeline {
       
       void triggerDisplayEvaluation()  override;
       
-      /////////////////////////////////////////////////////////////////////////////////////////////TICKET 1218 : better extract into a sub component when providing a non-dummy implementation
+      /////////////////////////////////////////////////////////////////////////////////////////////TICKET #1218 : better extract into a sub component when providing a non-dummy implementation
       virtual lib::time::TimeSpan coveredTime()         const override;
       virtual int translateTimeToPixels (TimeValue)     const override;
       virtual TimeValue applyScreenDelta(Time, double)  const override;
-      /////////////////////////////////////////////////////////////////////////////////////////////TICKET 1218 : better extract into a sub component when providing a non-dummy implementation
+      /////////////////////////////////////////////////////////////////////////////////////////////TICKET #1218 : better extract into a sub component when providing a non-dummy implementation
       
       
     protected: /* ==== Interface: DisplayViewHooks===== */

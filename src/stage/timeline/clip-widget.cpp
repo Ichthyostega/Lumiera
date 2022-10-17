@@ -92,10 +92,11 @@
 
 #include "stage/gtk-base.hpp"
 #include "stage/timeline/clip-widget.hpp"
+#include "stage/widget/element-box-widget.hpp"
 
 //#include "stage/ui-bus.hpp"
 #include "lib/format-string.hpp"
-//#include "lib/format-cout.hpp"
+#include "lib/format-cout.hpp"  ///////////////////TODO debugging
 
 #include "lib/util.hpp"
 
@@ -132,7 +133,7 @@ namespace timeline {
   namespace {// details of concrete clip appearance styles...
    
     using WidgetHook   = model::CanvasHook<Gtk::Widget>;
-    using HookedWidget = model::CanvasHooked<Gtk::Button, Gtk::Widget>;   ///////////////////////////////////////////TICKET #1211 : need preliminary placeholder clip widget for timeline layout
+    using HookedWidget = model::CanvasHooked<widget::ElementBoxWidget, Gtk::Widget>;
     
     
     class ClipData
@@ -310,40 +311,26 @@ namespace timeline {
         
         /* ==== Size and Layout handling ==== */
         
-        /** */
-        void
+        /** use underlying canvas metric to derive a size constraint,
+         *  taking into account the duration of the clip and the zoom level.
+         */
+        int
         establishHorizontalExtension()
           {
-            int hSize = getCanvas().getMetric().translateTimeToPixels (accessDuration());
-            set_size_request (hSize, -1);
-//            queue_resize();
-          }
-        
-        /** @todo preliminary / draft of a clip widget, just using a Gtk::Button.
-         *  @note Gtk assumes no fixed size, but a size negotiation.
-         */
-        Gtk::SizeRequestMode
-        get_request_mode_vfunc()  const override
-          {
-            return Gtk::SizeRequestMode::SIZE_REQUEST_HEIGHT_FOR_WIDTH;
-          }
-        
-        /**
-         * the default implementation would ask the embedded child widgets;
-         * however we just force the given size confinement onto them
-         * @todo 1/21 this kindof works, but produces lots of layout warnings
-         */
-        void
-        get_preferred_width_vfunc(int& minimum_width, int& natural_width)  const override
-          {
-            minimum_width = natural_width =
-                getCanvas().getMetric().translateTimeToPixels (unConst(this)->accessDuration());
+            int hsiz = getCanvas().getMetric().translateTimeToPixels (accessDuration());
+            cout << "Clip:: hsize="<<hsiz<<endl;
+            return hsiz;
           }
         
         
       public:
         ClipWidget(WidgetHook& displayAnchor, TimeSpan const& timings)
-          : HookedWidget{displayAnchor.hookedAt(timings, defaultOffsetY), defaultName}
+          : HookedWidget{displayAnchor.hookedAt(timings, defaultOffsetY), widget::Kind::CONTENT
+                                                                        , widget::Type::VIDEO    ////////////TICKET #1251 : how to specify media type for the Clip
+                                                                        , widget::name(defaultName)
+                                                                        , widget::constrained(
+                                                                            [this]() { return establishHorizontalExtension(); }
+                                                                        )}
           , ClipData{timings}
           {
             establishHorizontalExtension();
@@ -352,7 +339,12 @@ namespace timeline {
         
         /** state switch ctor */
         ClipWidget(ClipData&& existing, WidgetHook* newView =nullptr)
-          : HookedWidget{existing.establishHookPoint(newView), existing.getClipName()}
+          : HookedWidget{existing.establishHookPoint(newView)           , widget::Kind::CONTENT
+                                                                        , widget::Type::VIDEO    ////////////TICKET #1251 : how to specify media type for the Clip
+                                                                        , widget::name(existing.getClipName())
+                                                                        , widget::constrained(
+                                                                            [this]() { return establishHorizontalExtension(); }
+                                                                        )}
           , ClipData{std::move (existing)}
           {
             establishHorizontalExtension();
@@ -388,7 +380,11 @@ namespace timeline {
     }
     
     
-    /** @internal either build a new delegate from scratch or build it based on the `existingDelegate` */
+    /** @internal either build a new delegate from scratch or build it based on the `existingDelegate`
+     *  @remark this function unifies two quite distinct use cases
+     *          - either we have mutated an existing clip delegate, and want to reflect the changes in clipData
+     *          - or we just inserted a new clip, and have to build the delegate for the given timing
+     */
     inline ClipDelegate*
     buildDelegateFor (Mode newMode, PDelegate& existingDelegate, WidgetHook* newView, optional<TimeSpan> const& timing)
     {
@@ -422,6 +418,7 @@ namespace timeline {
                 UNIMPLEMENTED ("Summary/Overview presentation style");
             }
         }
+      NOTREACHED("unsupported clip display mode.");
     }
   }//(End)clip appearance details.
   
