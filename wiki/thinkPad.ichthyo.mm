@@ -20531,8 +20531,8 @@
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665969213838" ID="ID_405495257" MODIFIED="1665969529899" TEXT="Anzeige-Strategy konfigurieren f&#xfc;r Medien-Typ">
-<linktarget COLOR="#e36874" DESTINATION="ID_405495257" ENDARROW="Default" ENDINCLINATION="-2110;121;" ID="Arrow_ID_127305949" SOURCE="ID_207274074" STARTARROW="None" STARTINCLINATION="928;-50;"/>
 <linktarget COLOR="#f76d6f" DESTINATION="ID_405495257" ENDARROW="Default" ENDINCLINATION="-268;17;" ID="Arrow_ID_1695054562" SOURCE="ID_1851529218" STARTARROW="None" STARTINCLINATION="-225;-219;"/>
+<linktarget COLOR="#e36874" DESTINATION="ID_405495257" ENDARROW="Default" ENDINCLINATION="-2110;121;" ID="Arrow_ID_127305949" SOURCE="ID_207274074" STARTARROW="None" STARTINCLINATION="928;-50;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -20786,7 +20786,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1665971975191" ID="ID_1645965443" MODIFIED="1665971998035" TEXT="size-constraint-Code wird zu fr&#xfc;h aufgerufen">
+<node COLOR="#435e98" CREATED="1665971975191" ID="ID_1645965443" MODIFIED="1666286274777" TEXT="size-constraint-Code wird zu fr&#xfc;h aufgerufen">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1665972027480" ID="ID_1481599747" MODIFIED="1665972094845">
 <richcontent TYPE="NODE"><html>
@@ -20838,7 +20838,7 @@
 </html></richcontent>
 <icon BUILTIN="info"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1665972100310" ID="ID_1747925228" MODIFIED="1665972179452" TEXT="seltsam? in den bisherigen Experimenten war das nie ein Problem">
+<node COLOR="#435e98" CREATED="1665972100310" ID="ID_1747925228" MODIFIED="1666285341589" TEXT="seltsam? in den bisherigen Experimenten war das nie ein Problem">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20850,9 +20850,137 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="help"/>
+<node CREATED="1666285192130" ID="ID_1871565379" MODIFIED="1666285218266" TEXT="diese Experimente haben nur ein freistehendes Widget erstellt"/>
+<node CREATED="1666285219022" ID="ID_302141230" MODIFIED="1666285226609" TEXT="und dann sofort angezeigt"/>
+<node CREATED="1666285228583" ID="ID_1205342322" MODIFIED="1666285243030" TEXT="und dann erst durch das n&#xe4;chste Experiment vergr&#xf6;&#xdf;ert oder verkleinert"/>
+<node CREATED="1666285244355" ID="ID_1478837494" MODIFIED="1666285373268" TEXT="insofern waren diese Experimente noch zu vereinfacht...">
+<arrowlink COLOR="#bc8db2" DESTINATION="ID_616953706" ENDARROW="Default" ENDINCLINATION="109;-4;" ID="Arrow_ID_1798465605" STARTARROW="None" STARTINCLINATION="269;13;"/>
+<icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665972186386" ID="ID_1077613088" MODIFIED="1665972204670" TEXT="per Debugger zu untersuchen">
+</node>
+<node COLOR="#435e98" CREATED="1665972186386" ID="ID_1077613088" MODIFIED="1666286272226" TEXT="per Debugger zu untersuchen">
 <icon BUILTIN="yes"/>
+<node CREATED="1666053399781" ID="ID_1669190642" MODIFIED="1666053539901" TEXT="schwierig....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...kann nicht recht erkennen, woher der call kommt.
+    </p>
+    <p>
+      Klar ist nur, die Objekte sind schon konstruiert aber die neue Timeline noch nicht angezeigt; genauer kann man sogar sagen, der Fehler tritt erst auf, wenn das GUI sichtbar werden soll, denn wenn ich sofort in den Konstruktoren Breakpoints setze, und damit dann zum Eclipse-Fenster wechsle, tritt die AssertionFailure nicht auf, solange bis man dem Lumiera-Fenster wieder den Fokus gibt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1666284884372" ID="ID_1055383793" MODIFIED="1666285096886">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      liegt an der <i>inkrementellen Natur</i>&#160;der Layout-Zuteilung
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1666284904368" ID="ID_1996100999" MODIFIED="1666284943639" TEXT="nach Erstellen der Clips liegen mehrere Events in der Queue"/>
+<node CREATED="1666284945010" ID="ID_1390825899" MODIFIED="1666285354320" TEXT="das folgt aus dem schrittweisen Aufspielen des Diff...">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1666284979905" ID="ID_435939391" MODIFIED="1666284988311" TEXT="der Diff wird auf Einmal gesendet"/>
+<node CREATED="1666284988711" ID="ID_1944889144" MODIFIED="1666284996640" TEXT="und auch auf Einmal in den UI-Thread zugestellt"/>
+<node CREATED="1666284997558" ID="ID_929855789" MODIFIED="1666285046065" TEXT="aber das Anwenden estellt erst halb-leere Container"/>
+<node CREATED="1666285046869" ID="ID_925433658" MODIFIED="1666285057773" TEXT="setzt dann Zeiten und Namen"/>
+<node CREATED="1666285058499" ID="ID_1175866676" MODIFIED="1666285084060">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und danach feuert der <i>StructuralChange</i>-Listener
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1666285269465" ID="ID_616953706" MODIFIED="1666285373268" TEXT="&#x27f9; Konsequenz: draw-Events gefolgt von mehreren resize-Events">
+<linktarget COLOR="#bc8db2" DESTINATION="ID_616953706" ENDARROW="Default" ENDINCLINATION="109;-4;" ID="Arrow_ID_1798465605" SOURCE="ID_1478837494" STARTARROW="None" STARTINCLINATION="269;13;"/>
+</node>
+</node>
+<node CREATED="1666286169242" ID="ID_1143284469" MODIFIED="1666286222589" TEXT="Einschr&#xe4;nkung kann wegfallen">
+<icon BUILTIN="yes"/>
+<node CREATED="1666286191972" ID="ID_616576732" MODIFIED="1666286216556" TEXT="ASSERTION gar nicht notwendig">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1666286198651" ID="ID_513481742" MODIFIED="1666286219025" TEXT="der Code funktioniert n&#xe4;mlich auch im halb-realisierten Zustand">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1666286233294" ID="ID_1774329269" MODIFIED="1666286266184" TEXT="visible &#x27f9; liefert Gr&#xf6;&#xdf;e | not visible &#x27f9; Gr&#xf6;&#xdf;e = 0">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1666286511402" ID="ID_901100748" MODIFIED="1666286681653" TEXT="Constraint-handling versagt u.U f&#xfc;r das Label">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666286569009" ID="ID_571211770" MODIFIED="1666286670640" TEXT="Beispiel: Clip-1 : Duration 1s">
+<icon BUILTIN="forward"/>
+<node CREATED="1666286612844" ID="ID_1960027917" MODIFIED="1666286659485" TEXT="die Icons werden ausgeblendet">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1666286619572" ID="ID_111104208" MODIFIED="1666286649529" TEXT="aber das Text-Label ist sichtbar">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1666286629675" ID="ID_178314716" MODIFIED="1666286646133" TEXT="und der Text schreibt &#xfc;ber das Ende hinaus">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1666286588511" ID="ID_1014622465" MODIFIED="1666286603787" TEXT="Untersuchung">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666286684491" ID="ID_825575865" MODIFIED="1666286709542" TEXT="Clip-Dragging funktioniert nur eingeschr&#xe4;nkt">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1666286711357" ID="ID_118648001" MODIFIED="1666286724325" TEXT="wohl ein Event-Handling-Problem">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666286731340" ID="ID_306299052" MODIFIED="1666286810542" TEXT="Dragging auf den Container spricht &#xfc;berhaupt nicht an">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666286814794" ID="ID_507527806" MODIFIED="1666286973216" TEXT="anscheinend wird der Event-Handler gar nicht aufgerufen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...den eingebauten Debug-Meldungen zufolge zu urteilen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1666286786740" ID="ID_100457080" MODIFIED="1666286890547" TEXT="Dragging auf die Buttons nur mit mittlerer/rechter Maustaste">
+<icon BUILTIN="idea"/>
+<node CREATED="1666286833126" ID="ID_645351939" MODIFIED="1666286935400" TEXT="bei Links-Klick spricht der Event-Handler gar nicht an">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1666286902148" ID="ID_716610692" MODIFIED="1666286932721" TEXT="das ist aber genau so korrekt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      per default greift sich ein Button ja den links-Klick, und das soll auch so sein!
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 </node>

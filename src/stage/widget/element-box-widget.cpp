@@ -320,12 +320,14 @@ namespace widget {
   /**
    * Ensure the child widgets can be represented and possibly adjust or hide content,
    * in case the extension of ElementBoxWidget is explicitly constrained in size.
+   * @note
+   *  - this code works even when the widget is not(yet) realized;
+   *  - 💡 as soon as a GTK widget is marked `visible` it will respond properly
+   *    to queries regarding the required extension
    */
   void
   ElementBoxWidget::imposeSizeConstraint (int widthC, int heightC)
   {
-    ASSERT (label_.get_realized(), "ElementBoxWidget layout constraint imposed "
-                                   "on widget not yet realized by GTK");
     label_.imposeSizeConstraint (widthC, heightC);
   }
   

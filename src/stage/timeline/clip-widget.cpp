@@ -333,7 +333,6 @@ namespace timeline {
                                                                         )}
           , ClipData{timings}
           {
-            establishHorizontalExtension();
             show_all();
           }
         
@@ -347,7 +346,6 @@ namespace timeline {
                                                                         )}
           , ClipData{std::move (existing)}
           {
-            establishHorizontalExtension();
             show_all();
           }
       };
