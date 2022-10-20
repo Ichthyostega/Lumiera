@@ -180,7 +180,7 @@ namespace timeline {
       
       /** human readable rendering of the clip's name or identity */
       virtual cuString getClipName()    const =0;
-      virtual void setClipName (cuString)     =0;
+      virtual void setClipName (cuString&)    =0;
       
       virtual TimeVar& accessStartTime()      =0;
       virtual TimeVar& accessDuration()       =0;

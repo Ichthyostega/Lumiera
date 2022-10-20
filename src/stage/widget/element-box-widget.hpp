@@ -169,6 +169,11 @@ namespace widget {
       // default copy acceptable
       
       void setName(cuString&);
+      cuString getName()  const;
+      
+      ///  redirect Gtk::Frame setters to ElementBoxWidget
+      void set_label(cuString& s) { setName(s); }
+      cuString get_label()  const { return getName(); }
       
     private:/* ===== Internals ===== */
       

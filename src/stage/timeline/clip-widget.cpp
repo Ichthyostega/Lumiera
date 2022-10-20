@@ -199,7 +199,7 @@ namespace timeline {
           }
         
         void
-        setClipName(cuString newName)  override
+        setClipName(cuString& newName)  override
           {
             clipName_ = newName;
           }
@@ -274,13 +274,13 @@ namespace timeline {
         cuString
         getClipName()  const override
           {
-            return this->get_label();
+            return widget::ElementBoxWidget::getName();
           }
         
         void
-        setClipName(cuString newName)  override
+        setClipName(cuString& newName)  override
           {
-            this->set_label (newName);
+            widget::ElementBoxWidget::setName (newName);
           }
         
         uint
@@ -318,7 +318,7 @@ namespace timeline {
         establishHorizontalExtension()
           {
             int hsiz = getCanvas().getMetric().translateTimeToPixels (accessDuration());
-            cout << "Clip:: hsize="<<hsiz<<endl;
+            cout << "Clip:: hsize="<<hsiz<<endl;     ////////////////////////////////////////////////////////TICKET #1038 : tracing -- remove this
             return hsiz;
           }
         

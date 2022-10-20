@@ -20924,7 +20924,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1666286511402" ID="ID_901100748" MODIFIED="1666286681653" TEXT="Constraint-handling versagt u.U f&#xfc;r das Label">
+<node COLOR="#435e98" CREATED="1666286511402" ID="ID_901100748" MODIFIED="1666308082637" TEXT="Constraint-handling versagt u.U f&#xfc;r das Label">
 <icon BUILTIN="broken-line"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666286569009" ID="ID_571211770" MODIFIED="1666286670640" TEXT="Beispiel: Clip-1 : Duration 1s">
 <icon BUILTIN="forward"/>
@@ -20938,8 +20938,70 @@
 <icon BUILTIN="broken-line"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1666286588511" ID="ID_1014622465" MODIFIED="1666286603787" TEXT="Untersuchung">
+<node COLOR="#435e98" CREATED="1666286588511" ID="ID_1014622465" MODIFIED="1666308061322" TEXT="Untersuchung">
 <icon BUILTIN="yes"/>
+<node CREATED="1666307200947" ID="ID_712219112" MODIFIED="1666307460841" TEXT="Verdacht: setCaption() manipuliert visibility">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1666307233042" ID="ID_1411306141" MODIFIED="1666307262873" TEXT="...und w&#xfc;rde dadurch das differenzierte, partielle Verbergen st&#xf6;ren"/>
+<node CREATED="1666307264414" ID="ID_594632089" MODIFIED="1666307445275" TEXT="&#x27f9; sollte den tats&#xe4;chlichen visibility-Status wiederherstellen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      nach dem Setzen eines neuen Label-Texts m&#252;ssen wir die L&#228;nge des IDLabel erneut ausmessen, und dazu m&#252;ssen alle seine Komponenten vorr&#252;bergehend visible() gesetzt werden; hatte bisher darauf gesetzt, da&#223; der size-constraint-Algo dann von selber wieder auf den richtigen Status kommt...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1666307446440" ID="ID_165108662" MODIFIED="1666307458008" TEXT="aber das bewirkt rein gar nix">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1666307466288" ID="ID_1621773970" MODIFIED="1666307492593" TEXT="Hilfe... was passiert hier &#x2014; Kontrollverlust">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1666307500030" ID="ID_999771663" MODIFIED="1666307518501" TEXT="alle Caption-Setter auskommentiert"/>
+<node CREATED="1666307519219" ID="ID_757987414" MODIFIED="1666307528695" TEXT="der komische Text ist immer noch da"/>
+<node CREATED="1666307529508" ID="ID_990701944" MODIFIED="1666307578878" TEXT="und auch der Size-Constraint ist sonderbar(falsch)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      H&#246;he nur 16px, obwohl doch das Icon mindestens 18px braucht (incl.Border), und das get_required_height() diesen Wert eigentlich liefern sollte
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#db10ad" CREATED="1666307585634" ID="ID_1666781450" MODIFIED="1666307620469" TEXT="AUA!!">
+<icon BUILTIN="smiley-oh"/>
+<node CREATED="1666307623237" ID="ID_1740179483" MODIFIED="1666307643118" TEXT="ClipWidget ruft immer noch Frame::set_label() auf"/>
+<node CREATED="1666307644363" ID="ID_1158991887" MODIFIED="1666307653429" TEXT="ja in der Tat, die Funktion ist noch sichtbar"/>
+<node CREATED="1666307654257" ID="ID_662041930" MODIFIED="1666307709729" TEXT="sie schie&#xdf;t unser tolles Custom IDLabel ins Nirvana">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und schaltet den Frame wieder zur&#252;ck auf ein Text-Label, das nat&#252;rlich dann in keinster Weise der size-Constraint-Kontrolle unterliegt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1666308020848" ID="ID_1559858341" MODIFIED="1666308033677" TEXT="puh das war aber gut versteckt">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node COLOR="#338800" CREATED="1666308048044" ID="ID_1668793880" MODIFIED="1666308056987" TEXT="dann besser diese Setter &#xfc;berdecken">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1666308065995" ID="ID_1843697802" MODIFIED="1666308081223" TEXT="Fazit: hat gar nicht versagt...">
+<icon BUILTIN="idea"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666286684491" ID="ID_825575865" MODIFIED="1666286709542" TEXT="Clip-Dragging funktioniert nur eingeschr&#xe4;nkt">
