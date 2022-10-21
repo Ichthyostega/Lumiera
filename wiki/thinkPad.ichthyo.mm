@@ -18248,10 +18248,10 @@
 <node CREATED="1480639254498" ID="ID_601165955" MODIFIED="1557498707223" TEXT="Placement"/>
 <node CREATED="1480639279591" ID="ID_887618627" MODIFIED="1557498707223" TEXT="Timecode"/>
 <node CREATED="1480639276064" ID="ID_1418536459" MODIFIED="1557498707223" TEXT="Fader"/>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1541089187808" ID="ID_368245484" MODIFIED="1612621029065" TEXT="ElementBoxWidget">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1541089187808" ID="ID_368245484" MODIFIED="1666368514934" TEXT="ElementBoxWidget">
 <linktarget COLOR="#f6cca4" DESTINATION="ID_368245484" ENDARROW="Default" ENDINCLINATION="-599;39;" ID="Arrow_ID_1199047781" SOURCE="ID_1032237384" STARTARROW="None" STARTINCLINATION="-698;-271;"/>
 <linktarget COLOR="#f6cca4" DESTINATION="ID_368245484" ENDARROW="Default" ENDINCLINATION="-599;39;" ID="Arrow_ID_703893400" SOURCE="ID_1437927701" STARTARROW="None" STARTINCLINATION="42;-316;"/>
-<linktarget COLOR="#844764" DESTINATION="ID_368245484" ENDARROW="Default" ENDINCLINATION="-469;652;" ID="Arrow_ID_264431308" SOURCE="ID_485594461" STARTARROW="None" STARTINCLINATION="-1673;136;"/>
+<linktarget COLOR="#406d5c" DESTINATION="ID_368245484" ENDARROW="Default" ENDINCLINATION="-469;652;" ID="Arrow_ID_264431308" SOURCE="ID_485594461" STARTARROW="None" STARTINCLINATION="-1674;133;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1541095743511" ID="ID_96949358" MODIFIED="1661616404971" TEXT="#1185 ElementBoxWidget">
@@ -18260,8 +18260,8 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1661616390134" ID="ID_416292634" MODIFIED="1661616398305" TEXT="#1219 draft framework for ElementBoxWidget">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664029665088" ID="ID_1662487522" MODIFIED="1664029676728" TEXT="grunds&#xe4;tzlich verwendbar als Custom-Widget-Basisklasse">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1664029665088" ID="ID_1662487522" MODIFIED="1666316031015" TEXT="grunds&#xe4;tzlich verwendbar als Custom-Widget-Basisklasse">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664029678375" ID="ID_653676253" MODIFIED="1664029703892" TEXT="Erweiterungspunkt f&#xfc;r nach Zeit geeichter Ausdehnung vorhanden">
 <icon BUILTIN="flag-yellow"/>
@@ -18501,19 +18501,19 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625072797631" ID="ID_841790569" MODIFIED="1625072818628" TEXT="Basis-Eigenschaften">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625072797631" ID="ID_841790569" MODIFIED="1666367871002" TEXT="Basis-Eigenschaften">
+<icon BUILTIN="yes"/>
 <node CREATED="1625072864330" ID="ID_438468634" MODIFIED="1625072878647" TEXT="Ausdehnung fest vorgebbar">
 <node CREATED="1625072881602" ID="ID_1324969264" MODIFIED="1625072892300" TEXT="mu&#xdf; sich dieser Vorgabe flexibel anpassen k&#xf6;nnen"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625073121818" ID="ID_1588690810" MODIFIED="1625073648828" TEXT="Baukasten-System">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625073160693" ID="ID_741459865" MODIFIED="1625073652499" TEXT="Icon">
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="info"/>
+<node COLOR="#338800" CREATED="1625073160693" ID="ID_741459865" MODIFIED="1666367854233" TEXT="Icon">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1625073209509" ID="ID_1647215892" MODIFIED="1625073216705" TEXT="Knopf mit Ein/Aus-Funktion"/>
 <node CREATED="1625073252395" ID="ID_1887674930" MODIFIED="1625073270866" TEXT="Placement mit Placement-Properties"/>
 <node CREATED="1625073397733" ID="ID_252893466" MODIFIED="1625073403209" TEXT="Typ-Icon"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664546626719" ID="ID_482244613" MODIFIED="1664548727113" TEXT="Varianten">
+<node COLOR="#435e98" CREATED="1664546626719" ID="ID_482244613" MODIFIED="1666367845862" TEXT="Varianten">
 <linktarget COLOR="#5559e6" DESTINATION="ID_482244613" ENDARROW="Default" ENDINCLINATION="-920;179;" ID="Arrow_ID_1621895884" SOURCE="ID_303509395" STARTARROW="None" STARTINCLINATION="226;27;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1664546651860" ID="ID_54475262" MODIFIED="1664546667097" TEXT="das Grundmuster ist unver&#xe4;nderbar fixiert"/>
@@ -18627,8 +18627,8 @@
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1612620683850" ID="ID_1290975013" MODIFIED="1664548424931" TEXT="auszuarbeiten....">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075258497" ID="ID_1793264120" MODIFIED="1625075268568" TEXT="Steuerung des Darstellungs-Verhaltens">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1625075258497" ID="ID_1793264120" MODIFIED="1666367882488" TEXT="Steuerung des Darstellungs-Verhaltens">
+<icon BUILTIN="hourglass"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075337795" ID="ID_873107891" MODIFIED="1625075355499" TEXT="Analyse">
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1625075422300" ID="ID_1618347962" MODIFIED="1625075428886" TEXT="was ist flexibel?">
@@ -18718,20 +18718,35 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1661557586218" ID="ID_859822896" MODIFIED="1661620110453" TEXT="Zeitangabe in Ausdehnung umsetzen">
+<node COLOR="#338800" CREATED="1661557586218" FOLDED="true" ID="ID_859822896" MODIFIED="1666367808161" TEXT="Zeitangabe in Ausdehnung umsetzen">
 <arrowlink COLOR="#7479c0" DESTINATION="ID_1343110314" ENDARROW="Default" ENDINCLINATION="-815;-1702;" ID="Arrow_ID_712594873" STARTARROW="None" STARTINCLINATION="471;32;"/>
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1661557875471" ID="ID_339780782" MODIFIED="1661557937884" TEXT="API im CanvasHook">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1661557875471" ID="ID_339780782" MODIFIED="1666367752575" TEXT="API im CanvasHook">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1661557894284" ID="ID_58216896" MODIFIED="1661557909598" TEXT="&#x27f9; dann m&#xfc;&#xdf;te es hookable sein..."/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1661557910685" ID="ID_709773431" MODIFIED="1661557921585" TEXT="Alternativen?">
+<node COLOR="#435e98" CREATED="1661557910685" ID="ID_709773431" MODIFIED="1666367524129" TEXT="Alternativen?">
 <icon BUILTIN="help"/>
+<node CREATED="1666367514311" ID="ID_1178111441" MODIFIED="1666367521823" TEXT="generisches API einf&#xfc;hren">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1666367490994" ID="ID_636187892" MODIFIED="1666367724504" TEXT="Pull per &#x3bb;">
+<linktarget COLOR="#4e4fc1" DESTINATION="ID_636187892" ENDARROW="Default" ENDINCLINATION="-34;579;" ID="Arrow_ID_1572846735" SOURCE="ID_1159408504" STARTARROW="None" STARTINCLINATION="61;-374;"/>
+<icon BUILTIN="forward"/>
+<node COLOR="#338800" CREATED="1666367543907" ID="ID_859364136" LINK="#ID_953567994" MODIFIED="1666367732555" TEXT="proof-of-Concept: ClipWidget"/>
+<node COLOR="#435e98" CREATED="1666367735326" ID="ID_148248231" MODIFIED="1666367745247" TEXT="L&#xf6;sung sieht sauber aus">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1661557959964" HGAP="149" ID="ID_1683748982" MODIFIED="1661557987514" TEXT="Wann/wozu?" VSHIFT="2">
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1661557959964" HGAP="149" ID="ID_1683748982" MODIFIED="1666367798594" TEXT="Wann/wozu?" VSHIFT="2">
 <icon BUILTIN="help"/>
 <node CREATED="1661558025450" ID="ID_153982067" MODIFIED="1661558059696" TEXT="im Modus &quot;feste L&#xe4;ngenvorgabe&quot;">
 <arrowlink DESTINATION="ID_857510555" ENDARROW="Default" ENDINCLINATION="390;43;" ID="Arrow_ID_817703923" STARTARROW="None" STARTINCLINATION="474;-38;"/>
+</node>
+<node CREATED="1666367765333" ID="ID_1429653928" MODIFIED="1666367779043" TEXT="anpassen nach jeder Zoom-&#xc4;nderung"/>
+<node CREATED="1666367783710" ID="ID_1991615628" MODIFIED="1666367796499" TEXT="ggfs auch Vorgaben zur H&#xf6;he vorsehen">
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
@@ -18992,6 +19007,61 @@
 </node>
 </node>
 </node>
+<node CREATED="1666316047026" ID="ID_1796374049" MODIFIED="1666316054938" TEXT="Widget-Struktur">
+<node CREATED="1666316060213" ID="ID_1152183779" MODIFIED="1666316068920" TEXT="verwendet ein Sub-Widget als Label">
+<node CREATED="1666316070268" ID="ID_695985659" MODIFIED="1666316075503" TEXT="class IDLabel"/>
+<node CREATED="1666316078131" ID="ID_1171906205" MODIFIED="1666316092903" TEXT="dieses bildet die charakteristische Triple-Struktur">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1666316099067" ID="ID_781968330" MODIFIED="1666316117414" TEXT="Funktionalit&#xe4;t zur Anpassung an size-constraint">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1666316122109" ID="ID_1084456020" MODIFIED="1666366890443" TEXT="erzeugt einen undurchsichtigen Hintergrund">
+<icon BUILTIN="button_ok"/>
+<icon BUILTIN="hourglass"/>
+<node COLOR="#338800" CREATED="1666316168044" ID="ID_875996468" MODIFIED="1666366863733" TEXT="L&#xf6;sung: CSS-Klasse .background">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1666317118953" ID="ID_204505026" MODIFIED="1666366866847" TEXT="L&#xf6;sung: Styling auf der (sichtbaren) EventBox">
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1665969462522" ID="ID_1425589285" MODIFIED="1666368691150" TEXT="Medien-Typ in CSS-Styles umsetzen">
+<arrowlink COLOR="#b46465" DESTINATION="ID_405495257" ENDARROW="Default" ENDINCLINATION="-539;-35;" ID="Arrow_ID_742470916" STARTARROW="None" STARTINCLINATION="-274;362;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1666316190604" ID="ID_519294969" MODIFIED="1666366924396" TEXT="packt Content in eine Gtk::EventBox">
+<linktarget COLOR="#526674" DESTINATION="ID_519294969" ENDARROW="Default" ENDINCLINATION="1268;576;" ID="Arrow_ID_860609088" SOURCE="ID_387720838" STARTARROW="None" STARTINCLINATION="-1409;-62;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1666316757672" ID="ID_869966472" MODIFIED="1666366920557" TEXT="verwendet ein sichtbares GdkWindow behind_child">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1666316737650" ID="ID_354756036" MODIFIED="1666366917942" TEXT="schafft M&#xf6;glichkeit, den Hintergrund einzuf&#xe4;rben">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1666316803445" ID="ID_431972258" MODIFIED="1666366907656" TEXT="dient als Parent-Window f&#xfc;r Widgets mit eigenem Window">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1666316815184" ID="ID_1495596367" MODIFIED="1666366904297" TEXT="damit normale Event-Propagierung m&#xf6;glich">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1666316924338" ID="ID_492711320" MODIFIED="1666316935588" TEXT="Anordnung">
+<node COLOR="#338800" CREATED="1666316936962" ID="ID_1057903927" MODIFIED="1666366928981" TEXT="erbt direkt von Gtk::EventBox">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1666316958230" ID="ID_1048866675" MODIFIED="1666316981759" TEXT="damit ist die Event-Verdrahtung f&#xfc;r abgeleitete Klassen sichtbar"/>
+</node>
+<node COLOR="#338800" CREATED="1666316984594" ID="ID_1504629263" MODIFIED="1666366930475" TEXT="verwendet Gtk::Frame als Kind">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666316993672" ID="ID_827533347" MODIFIED="1666317106925" TEXT="Child-handling-API weiterleiten">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1666317058231" ID="ID_217426878" MODIFIED="1666317080067" TEXT="damit es sich wie ein Container verh&#xe4;lt..."/>
+<node CREATED="1666317080989" ID="ID_1257628334" MODIFIED="1666317104078" TEXT="dieses Verhalten aber an den Inhalt vom Gtk::Frame weitergibt"/>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1662051984940" ID="ID_974876977" MODIFIED="1662051988957" TEXT="Icon verwalten">
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1662051990492" ID="ID_264004203" MODIFIED="1662052527424" TEXT="Verwaltung vordefinierter Icons">
@@ -19052,6 +19122,19 @@
 <arrowlink COLOR="#f27d99" DESTINATION="ID_446507732" ENDARROW="Default" ENDINCLINATION="356;501;" ID="Arrow_ID_1734621230" STARTARROW="None" STARTINCLINATION="225;17;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
+<node CREATED="1666367000884" ID="ID_1552390941" MODIFIED="1666367099475" TEXT="sieht mehr wie ein &quot;play&quot;-Button aus...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und das ist vielleicht sogar eine gute Idee: Lumiera k&#246;nnte die M&#246;glichkeit bieten, jedwedes Element eigens f&#252;r sich darzustellen oder zu inspizieren, transient und ohne Seiteneffekte
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1662241925929" ID="ID_217944947" MODIFIED="1664136727535" TEXT="horizontale Ausdehnung">
@@ -19087,13 +19170,13 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1663977435805" ID="ID_763928282" MODIFIED="1664836878051" TEXT="L&#xf6;sungs-Mechanismus GTK+CSS">
+<node COLOR="#338800" CREATED="1663977435805" FOLDED="true" ID="ID_763928282" MODIFIED="1666370194656" TEXT="L&#xf6;sungs-Mechanismus GTK+CSS">
 <linktarget COLOR="#505398" DESTINATION="ID_763928282" ENDARROW="Default" ENDINCLINATION="-708;-358;" ID="Arrow_ID_1762163985" SOURCE="ID_1501027418" STARTARROW="None" STARTINCLINATION="-29;281;"/>
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664036044208" ID="ID_1165985409" MODIFIED="1664036049568" TEXT="#1235 draft solution for size-constrained widgets">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1664036044208" ID="ID_1165985409" MODIFIED="1666369956106" TEXT="#1235 draft solution for size-constrained widgets">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1664486479334" ID="ID_1175352945" MODIFIED="1664486498010" TEXT="Fazit: Widget liefert den Constraint als minimal und als natural request">
+<node COLOR="#435e98" CREATED="1664486479334" ID="ID_1175352945" MODIFIED="1666369958878" TEXT="Fazit: Widget liefert den Constraint als minimal und als natural request">
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1664486499547" ID="ID_1517909946" MODIFIED="1664486599158" TEXT="CSS mu&#xdf; daf&#xfc;r sorgen, da&#xdf; dem nichts hinzugef&#xfc;gt wird">
@@ -19111,31 +19194,14 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="yes"/>
-<node COLOR="#338800" CREATED="1664668298178" ID="ID_1102642211" MODIFIED="1664674552382" TEXT="geeignete Selektoren vorsehen">
+<node COLOR="#338800" CREATED="1664668298178" ID="ID_1102642211" LINK="#ID_1853406335" MODIFIED="1664674552382" TEXT="geeignete Selektoren vorsehen">
 <arrowlink COLOR="#543f8c" DESTINATION="ID_696787535" ENDARROW="Default" ENDINCLINATION="-344;-15;" ID="Arrow_ID_1626542451" STARTARROW="None" STARTINCLINATION="560;45;"/>
 <arrowlink COLOR="#4482cb" DESTINATION="ID_1131035647" ENDARROW="Default" ENDINCLINATION="1109;-797;" ID="Arrow_ID_860130995" STARTARROW="None" STARTINCLINATION="394;586;"/>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1664669909170" HGAP="54" ID="ID_353257786" MODIFIED="1664670075595" TEXT="frame#element.elementbox" VSHIFT="-10">
-<edge COLOR="#493d57" STYLE="linear"/>
-<node CREATED="1664670077106" ID="ID_23637100" MODIFIED="1664670080590" TEXT="box#idlabel">
-<node CREATED="1664670436370" ID="ID_169682858" MODIFIED="1664670440905" TEXT=".idlabel"/>
-<node CREATED="1664671305061" ID="ID_1650353361" MODIFIED="1664671309328" TEXT="Kinder...">
-<node CREATED="1664671310329" ID="ID_96245401" MODIFIED="1664671312682" TEXT=".idlabel__icon"/>
-<node CREATED="1664671313875" ID="ID_858160172" MODIFIED="1664671319782" TEXT=".idlabel__menu"/>
-<node CREATED="1664671320674" ID="ID_19239170" MODIFIED="1664671325085" TEXT=".idlabel__name"/>
-</node>
-<node CREATED="1664670133617" ID="ID_1907146399" MODIFIED="1664670140958" TEXT=".elementbox__idlabel">
-<node CREATED="1664670252291" ID="ID_423384579" MODIFIED="1664670271427" TEXT="Achtung: nur wenn in einer ElementBox">
-<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-</node>
-<node CREATED="1664670174435" ID="ID_54680565" MODIFIED="1664670179225" TEXT="zus&#xe4;tzlich...">
-<node CREATED="1664670194762" ID="ID_1459999893" MODIFIED="1664670202630" TEXT=".elementbox--video"/>
-<node CREATED="1664670203554" ID="ID_471735544" MODIFIED="1664670210996" TEXT=".elementbox--audio"/>
-</node>
-</node>
-</node>
+<node COLOR="#4f4398" CREATED="1666370148380" ID="ID_910686792" LINK="#ID_1266679575" MODIFIED="1666370185149" TEXT="L&#xf6;sung funktioniert im Prototyp">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1664027101386" FOLDED="true" ID="ID_325165287" MODIFIED="1664494902370" TEXT="erforderliche Ausdehnung feststellen">
@@ -19298,6 +19364,7 @@
     </ul>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#4e4fc1" DESTINATION="ID_636187892" ENDARROW="Default" ENDINCLINATION="-34;579;" ID="Arrow_ID_1572846735" STARTARROW="None" STARTINCLINATION="61;-374;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -20533,6 +20600,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665969213838" ID="ID_405495257" MODIFIED="1665969529899" TEXT="Anzeige-Strategy konfigurieren f&#xfc;r Medien-Typ">
 <linktarget COLOR="#f76d6f" DESTINATION="ID_405495257" ENDARROW="Default" ENDINCLINATION="-268;17;" ID="Arrow_ID_1695054562" SOURCE="ID_1851529218" STARTARROW="None" STARTINCLINATION="-225;-219;"/>
 <linktarget COLOR="#e36874" DESTINATION="ID_405495257" ENDARROW="Default" ENDINCLINATION="-2110;121;" ID="Arrow_ID_127305949" SOURCE="ID_207274074" STARTARROW="None" STARTINCLINATION="928;-50;"/>
+<linktarget COLOR="#b46465" DESTINATION="ID_405495257" ENDARROW="Default" ENDINCLINATION="-539;-35;" ID="Arrow_ID_742470916" SOURCE="ID_1425589285" STARTARROW="None" STARTINCLINATION="-274;362;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -20741,9 +20809,13 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666370244648" ID="ID_306927735" MODIFIED="1666371577138" TEXT="testhalber als Effekt in Ruler legen">
+<arrowlink COLOR="#b12c6e" DESTINATION="ID_613160281" ENDARROW="Default" ENDINCLINATION="-819;-31;" ID="Arrow_ID_1531249433" STARTARROW="None" STARTINCLINATION="-322;25;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1654445594924" ID="ID_1266679575" MODIFIED="1665972215583" TEXT="Clip auf ElementBoxWidget umstellen">
-<icon BUILTIN="pencil"/>
+</node>
+<node COLOR="#338800" CREATED="1654445594924" ID="ID_1266679575" MODIFIED="1666367207990" TEXT="Clip auf ElementBoxWidget umstellen">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1665969365831" ID="ID_149648314" MODIFIED="1665971950293" TEXT="Design-Probleme">
 <linktarget COLOR="#ff5268" DESTINATION="ID_149648314" ENDARROW="Default" ENDINCLINATION="2;21;" ID="Arrow_ID_441789889" SOURCE="ID_500624074" STARTARROW="None" STARTINCLINATION="-196;23;"/>
 <icon BUILTIN="messagebox_warning"/>
@@ -20773,7 +20845,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1665971884155" ID="ID_1832121467" MODIFIED="1665971971444" TEXT="ansonsten &quot;fast&quot; nichts zu tun">
+<node COLOR="#338800" CREATED="1665971884155" FOLDED="true" ID="ID_1832121467" MODIFIED="1665971971444" TEXT="ansonsten &quot;fast&quot; nichts zu tun">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1665971894646" ID="ID_1038999615" MODIFIED="1665971943555" TEXT="ElementBoxWidget als Basisklasse">
 <icon BUILTIN="button_ok"/>
@@ -20786,7 +20858,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1665971975191" ID="ID_1645965443" MODIFIED="1666286274777" TEXT="size-constraint-Code wird zu fr&#xfc;h aufgerufen">
+<node COLOR="#435e98" CREATED="1665971975191" FOLDED="true" ID="ID_1645965443" MODIFIED="1666286274777" TEXT="size-constraint-Code wird zu fr&#xfc;h aufgerufen">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1665972027480" ID="ID_1481599747" MODIFIED="1665972094845">
 <richcontent TYPE="NODE"><html>
@@ -20924,9 +20996,9 @@
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1666286511402" ID="ID_901100748" MODIFIED="1666308082637" TEXT="Constraint-handling versagt u.U f&#xfc;r das Label">
+<node COLOR="#435e98" CREATED="1666286511402" FOLDED="true" ID="ID_901100748" MODIFIED="1666308082637" TEXT="Constraint-handling versagt u.U f&#xfc;r das Label">
 <icon BUILTIN="broken-line"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666286569009" ID="ID_571211770" MODIFIED="1666286670640" TEXT="Beispiel: Clip-1 : Duration 1s">
+<node COLOR="#435e98" CREATED="1666286569009" ID="ID_571211770" MODIFIED="1666367130923" TEXT="Beispiel: Clip-1 : Duration 1s">
 <icon BUILTIN="forward"/>
 <node CREATED="1666286612844" ID="ID_1960027917" MODIFIED="1666286659485" TEXT="die Icons werden ausgeblendet">
 <icon BUILTIN="broken-line"/>
@@ -21004,14 +21076,14 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666286684491" ID="ID_825575865" MODIFIED="1666286709542" TEXT="Clip-Dragging funktioniert nur eingeschr&#xe4;nkt">
+<node COLOR="#435e98" CREATED="1666286684491" FOLDED="true" ID="ID_825575865" MODIFIED="1666367282400" TEXT="Clip-Dragging funktioniert nur eingeschr&#xe4;nkt">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1666286711357" ID="ID_118648001" MODIFIED="1666286724325" TEXT="wohl ein Event-Handling-Problem">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666286731340" ID="ID_306299052" MODIFIED="1666286810542" TEXT="Dragging auf den Container spricht &#xfc;berhaupt nicht an">
+<node COLOR="#435e98" CREATED="1666286731340" ID="ID_306299052" MODIFIED="1666367153546" TEXT="Dragging auf den Container spricht &#xfc;berhaupt nicht an">
 <icon BUILTIN="broken-line"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666286814794" ID="ID_507527806" MODIFIED="1666286973216" TEXT="anscheinend wird der Event-Handler gar nicht aufgerufen">
+<node COLOR="#435e98" CREATED="1666286814794" ID="ID_507527806" MODIFIED="1666367151520" TEXT="anscheinend wird der Event-Handler gar nicht aufgerufen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -21023,6 +21095,25 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1666313907945" ID="ID_2075291" MODIFIED="1666314192593" TEXT="man mu&#xdf; da wohl erst etwas einrichten">
+<arrowlink COLOR="#7788e0" DESTINATION="ID_775914278" ENDARROW="Default" ENDINCLINATION="-1021;-87;" ID="Arrow_ID_632223489" STARTARROW="None" STARTINCLINATION="-1049;77;"/>
+<node CREATED="1666315741368" ID="ID_581715301" MODIFIED="1666315759423" TEXT="und die Voraussetzung: man braucht ein zugeordnetes GdkWindow"/>
+<node CREATED="1666315760552" ID="ID_491760379" MODIFIED="1666315831393" TEXT="Diagnose: Gtk::Frame hat kein Window">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      get_has_window()&#160;&#160;&#10132; <font face="Monospaced" color="#6c13de">false</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1666316633184" ID="ID_387720838" MODIFIED="1666367275837" TEXT="&#x27f9; Konsequenz: EventBox im ElementBoxWidget fest einrichten">
+<arrowlink COLOR="#526674" DESTINATION="ID_519294969" ENDARROW="Default" ENDINCLINATION="1268;576;" ID="Arrow_ID_860609088" STARTARROW="None" STARTINCLINATION="-1409;-62;"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1666286786740" ID="ID_100457080" MODIFIED="1666286890547" TEXT="Dragging auf die Buttons nur mit mittlerer/rechter Maustaste">
@@ -21044,10 +21135,47 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1666367167006" ID="ID_314408274" MODIFIED="1666367197804" TEXT="allein das Einf&#xfc;hren der Gtk::EventBox hat dieses Problem komplett und sauber gel&#xf6;st">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1666367210627" ID="ID_922603771" MODIFIED="1666367245412" TEXT="Umstellung erfolgreich">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1666367222167" ID="ID_130129636" MODIFIED="1666367225553" TEXT="sieht sauber aus"/>
+<node CREATED="1666367226358" ID="ID_967912847" MODIFIED="1666367235416" TEXT="reagiert korrekt auf L&#xe4;ngenbeschr&#xe4;nkung"/>
+<node CREATED="1666367236236" ID="ID_1153020202" MODIFIED="1666367243679" TEXT="erzeugt keinerlei Assertions mehr"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1661695361415" ID="ID_1615822639" MODIFIED="1661695374805" TEXT="Integration mit Pop-up-Men&#xfc;/Framework">
 <icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1666369999741" ID="ID_1289871763" MODIFIED="1666370009341" TEXT="weiter ausbauen...">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1666370017462" ID="ID_1120283579" MODIFIED="1666370022975" TEXT="CSS-Styles steuern">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1666370024371" ID="ID_1853406335" MODIFIED="1666370067320" TEXT="definierte CSS-Selektoren">
+<icon BUILTIN="info"/>
+<node CREATED="1664669909170" HGAP="54" ID="ID_353257786" MODIFIED="1664670075595" TEXT="frame#element.elementbox" VSHIFT="-10">
+<edge COLOR="#493d57" STYLE="linear"/>
+<node CREATED="1664670077106" ID="ID_23637100" MODIFIED="1664670080590" TEXT="box#idlabel">
+<node CREATED="1664670436370" ID="ID_169682858" MODIFIED="1664670440905" TEXT=".idlabel"/>
+<node CREATED="1664671305061" ID="ID_1650353361" MODIFIED="1664671309328" TEXT="Kinder...">
+<node CREATED="1664671310329" ID="ID_96245401" MODIFIED="1664671312682" TEXT=".idlabel__icon"/>
+<node CREATED="1664671313875" ID="ID_858160172" MODIFIED="1664671319782" TEXT=".idlabel__menu"/>
+<node CREATED="1664671320674" ID="ID_19239170" MODIFIED="1664671325085" TEXT=".idlabel__name"/>
+</node>
+<node CREATED="1664670133617" ID="ID_1907146399" MODIFIED="1664670140958" TEXT=".elementbox__idlabel">
+<node CREATED="1664670252291" ID="ID_423384579" MODIFIED="1664670271427" TEXT="Achtung: nur wenn in einer ElementBox">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node CREATED="1664670174435" ID="ID_54680565" MODIFIED="1664670179225" TEXT="zus&#xe4;tzlich...">
+<node CREATED="1664670194762" ID="ID_1459999893" MODIFIED="1664670202630" TEXT=".elementbox--video"/>
+<node CREATED="1664670203554" ID="ID_471735544" MODIFIED="1664670210996" TEXT=".elementbox--audio"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -22342,6 +22470,10 @@
 <node CREATED="1575580975033" ID="ID_1555659203" MODIFIED="1575580996268" TEXT="d.h. als ein Implementierungsdetail f&#xfc;r einen speziellen Typ"/>
 <node CREATED="1575580999173" ID="ID_1385039665" MODIFIED="1575581013895" TEXT="das ist dann eine dekorierende/delegierende Implementierung"/>
 <node CREATED="1575581015219" ID="ID_1015965713" MODIFIED="1575581026974" TEXT="f&#xfc;r den Widget -&gt; Canvas - Fall"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666371419810" ID="ID_613160281" MODIFIED="1666371577138" TEXT="sicherstellen da&#xdf; dieses Konzept auch in den Overview-Rulern funktioniert">
+<linktarget COLOR="#b12c6e" DESTINATION="ID_613160281" ENDARROW="Default" ENDINCLINATION="-819;-31;" ID="Arrow_ID_1531249433" SOURCE="ID_306927735" STARTARROW="None" STARTINCLINATION="-322;25;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1576757730509" FOLDED="true" ID="ID_1949130658" MODIFIED="1612002019554" TEXT="&#xbb;Widget-Position&#xab; heraus-abstrahieren">
@@ -26173,7 +26305,7 @@
   </head>
   <body>
     <p>
-      weil nur sie sowohl durch ihren Display-Frame die beiden Kind-Widgets kennen
+      weil <i>nur sie </i>durch ihren Display-Frame die beiden Kind-Widgets kennen
     </p>
   </body>
 </html></richcontent>
@@ -32990,7 +33122,7 @@
 <arrowlink COLOR="#541915" DESTINATION="ID_96949358" ENDARROW="Default" ENDINCLINATION="-1458;130;" ID="Arrow_ID_1319876475" STARTARROW="None" STARTINCLINATION="818;-68;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node COLOR="#435e98" CREATED="1583678069596" ID="ID_749021089" MODIFIED="1665962512413" TEXT="Stufe-1">
+<node COLOR="#435e98" CREATED="1583678069596" FOLDED="true" ID="ID_749021089" MODIFIED="1665962512413" TEXT="Stufe-1">
 <icon BUILTIN="licq"/>
 <node COLOR="#338800" CREATED="1583678075045" ID="ID_1071916226" MODIFIED="1612439673716" TEXT="erst mal &#xfc;berhaupt einen Block belegen">
 <icon BUILTIN="button_ok"/>
@@ -33231,23 +33363,26 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1583678162183" ID="ID_798000610" MODIFIED="1665962495818" TEXT="Stufe-2">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1583678162183" ID="ID_798000610" MODIFIED="1666368507250" TEXT="Stufe-2">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1583678167438" ID="ID_342453194" MODIFIED="1583678173531" TEXT="vereinfachte Darstellung"/>
 <node CREATED="1583678176917" ID="ID_1637892152" MODIFIED="1583678182657" TEXT="Vorstufe f&#xfc;r &quot;abridged&quot;"/>
-<node CREATED="1612620756065" ID="ID_485594461" MODIFIED="1612621029065" TEXT="ElementBoxWidget verwenden....">
+<node COLOR="#435e98" CREATED="1612620756065" ID="ID_485594461" MODIFIED="1666368525693" STYLE="fork" TEXT="ElementBoxWidget verwenden....">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      Das EventBoxWidget mu&#223; dazu nat&#252;rlich erst einmal gebaut werden; dieses ist n&#228;mlich im Grunde genommen genau die Abstraktion eines <i>abridged clip...</i>
+      Das EventBoxWidget mu&#223;te dazu nat&#252;rlich erst einmal gebaut werden; dieses ist n&#228;mlich im Grunde genommen genau die Abstraktion eines <i>abridged clip... </i>
+    </p>
+    <p>
+      <u>Stand 10/2022</u>: Basis-Implementierung geschaffen <font color="#25d56b">#1219</font>&#160;und sieht soweit gut aus...
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#844764" DESTINATION="ID_368245484" ENDARROW="Default" ENDINCLINATION="-469;652;" ID="Arrow_ID_264431308" STARTARROW="None" STARTINCLINATION="-1673;136;"/>
-<linktarget COLOR="#5a3557" DESTINATION="ID_485594461" ENDARROW="Default" ENDINCLINATION="872;71;" ID="Arrow_ID_1204090343" SOURCE="ID_474563596" STARTARROW="None" STARTINCLINATION="2244;96;"/>
+<arrowlink COLOR="#406d5c" DESTINATION="ID_368245484" ENDARROW="Default" ENDINCLINATION="-469;652;" ID="Arrow_ID_264431308" STARTARROW="None" STARTINCLINATION="-1674;133;"/>
+<linktarget COLOR="#2082a9" DESTINATION="ID_485594461" ENDARROW="Default" ENDINCLINATION="872;71;" ID="Arrow_ID_1204090343" SOURCE="ID_474563596" STARTARROW="None" STARTINCLINATION="2306;92;"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611539501493" HGAP="38" ID="ID_1849626018" MODIFIED="1665962611640" TEXT="TODO: &#xdc;berlegungen zur Daten-Storage" VSHIFT="18">
 <icon BUILTIN="flag-yellow"/>
@@ -36986,7 +37121,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1621096649593" ID="ID_316242168" MODIFIED="1621096653418" TEXT="Erg&#xe4;nzungen">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1621096654578" ID="ID_95750773" MODIFIED="1621097327222" TEXT="geht das mit allen Maus-Buttons?">
+<node COLOR="#435e98" CREATED="1621096654578" FOLDED="true" ID="ID_95750773" MODIFIED="1666368478091" TEXT="geht das mit allen Maus-Buttons?">
 <icon BUILTIN="help"/>
 <node CREATED="1621096664860" ID="ID_957867261" MODIFIED="1624106696252" TEXT="verwende einen GTK::Button">
 <icon BUILTIN="button_cancel"/>
@@ -37002,9 +37137,12 @@
 </node>
 <node CREATED="1624106236054" ID="ID_859963027" MODIFIED="1624106261516" TEXT="ich glaube ehr, es liegt an dem Button, der bereits die linke Taste &quot;greift&quot;"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1624106269815" ID="ID_474563596" MODIFIED="1624115572971" TEXT="stattdessen k&#xf6;nnte man schon mal das ElementBoxWidget anlegen">
-<arrowlink COLOR="#5a3557" DESTINATION="ID_485594461" ENDARROW="Default" ENDINCLINATION="872;71;" ID="Arrow_ID_1204090343" STARTARROW="None" STARTINCLINATION="2244;96;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1624106269815" ID="ID_474563596" MODIFIED="1666368403135" TEXT="stattdessen k&#xf6;nnte man schon mal das ElementBoxWidget anlegen">
+<arrowlink COLOR="#2082a9" DESTINATION="ID_485594461" ENDARROW="Default" ENDINCLINATION="872;71;" ID="Arrow_ID_1204090343" STARTARROW="None" STARTINCLINATION="2306;92;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1666368351190" ID="ID_231206120" MODIFIED="1666368387117" TEXT="ElementBoxWidget erbt von Gtk::EventBox &#x27f9; Events funktionieren nun wie erwartet">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1621097334389" ID="ID_37937061" MODIFIED="1624113776851" TEXT="k&#xe4;ren: woher kommt die blaue Linie im Canvas, die mit Clip-2 mitwandert?">
@@ -59990,8 +60128,78 @@
 <node CREATED="1617578520434" ID="ID_1901070467" MODIFIED="1617578522333" TEXT="Quellen">
 <node CREATED="1617578526137" ID="ID_1073829112" MODIFIED="1617578530459" TEXT="gdkevents.h"/>
 </node>
+<node CREATED="1666314102389" ID="ID_775914278" MODIFIED="1666314192593" TEXT="Empfang von Events einrichten">
+<linktarget COLOR="#7788e0" DESTINATION="ID_775914278" ENDARROW="Default" ENDINCLINATION="-1021;-87;" ID="Arrow_ID_632223489" SOURCE="ID_2075291" STARTARROW="None" STARTINCLINATION="-1049;77;"/>
+<node CREATED="1666313931612" ID="ID_1877761104" LINK="https://developer-old.gnome.org/gtkmm/3.20/classGtk_1_1Widget.html#adeb38a3d5988a0e31055bbd2edb2e954" MODIFIED="1666314244599" TEXT="siehe Beschreibung zu Gtk::Widget::set_events(Gdk::EventMask)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    The event mask determines which events a widget will receive. Keep in mind that different widgets have different default event masks, and by changing the event mask you may disrupt a widget&#8217;s functionality, so be careful. This function must be called while a widget is unrealized. Consider
+
+    <p>
+      <a http-equiv="content-type" content="text/html; charset=utf-8" class="el" href="https://developer-old.gnome.org/gtkmm/3.20/classGtk_1_1Widget.html#a1af589cb1d8764be5abf5579ffb69bec" title="Adds the events in the bitfield events to the event mask for widget. ">add_events()</a>&#160;for widgets that are already realized, or if you want to preserve the existing event mask. This function can&#8217;t be used with widgets that have no window. (See <a class="el" href="https://developer-old.gnome.org/gtkmm/3.20/classGtk_1_1Widget.html#a00d5da71916c20935fa7b9d856b248c2" title="Determines whether widget has a Gdk::Window of its own. ">get_has_window()</a>). To get events on those widgets, place them inside a <a class="el" href="https://developer-old.gnome.org/gtkmm/3.20/classGtk_1_1EventBox.html" title="Event capturing box. ">Gtk::EventBox</a>&#160;and receive events on the event box.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1666314867550" ID="ID_1764116146" MODIFIED="1666314878146" TEXT="Voraussetzung: Widget mu&#xdf; ein GdkWindow haben">
+<node CREATED="1666315602187" ID="ID_1896183986" MODIFIED="1666315703501" TEXT="nur einige Widgets haben ein Window">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1666315623272" ID="ID_1662006698" MODIFIED="1666315697281" TEXT="das sind auch diejenigen, die spezivische Event-Funktionalit&#xe4;t bieten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Beispiel:
+    </p>
+    <ul>
+      <li>
+        Button hat ein Window, denn er m&#246;chte button_pressed-Events empfangen
+      </li>
+      <li>
+        Frame dagegen hat kein Window, Icon auch nicht
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1666315712676" ID="ID_702286995" MODIFIED="1666315725520" TEXT="Tip: get_has_window() zur Diagnose">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1666314914943" ID="ID_264147295" MODIFIED="1666314936815" TEXT="Gtk::EventBox : Container zum Empfangen von Events">
+<node CREATED="1666315152544" ID="ID_658878845" MODIFIED="1666315166554" TEXT="visible_window">
+<node CREATED="1666315167614" ID="ID_247667753" MODIFIED="1666315176186" TEXT="ja: Hintergrund-Fenster"/>
+<node CREATED="1666315176870" ID="ID_736709885" MODIFIED="1666315182856" TEXT="nein: reiner Event-F&#xe4;nger">
+<node CREATED="1666315189291" ID="ID_1252686683" MODIFIED="1666315277488" TEXT="vorsicht Falle">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn ein Kind-Widget sein eigenes Fenster aufmacht, dann ist ein unsichtbares EventBox-GdkWindow <i>nicht ein Parent-Window</i>&#160;von dem Kind-Widget-Window. Das kann das Propagieren von Events verhindern
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node CREATED="1666315289541" ID="ID_1282030961" MODIFIED="1666315295520" TEXT="above/below child">
+<node CREATED="1666315298266" ID="ID_968292588" MODIFIED="1666315309926" TEXT="wer empf&#xe4;ngt die Events zuerst?"/>
+<node CREATED="1666315310777" ID="ID_1344206532" MODIFIED="1666315324021" TEXT="above: EventBox &#xfc;berdeckt und greift alle Events ab"/>
+<node CREATED="1666315325549" ID="ID_1209236546" MODIFIED="1666315333027" TEXT="below: erst das Kind, dann Propagation"/>
+</node>
+</node>
+</node>
 <node CREATED="1617576420772" ID="ID_1731089051" MODIFIED="1617578512853" TEXT="F&#xe4;lle">
-<node CREATED="1617578538614" MODIFIED="1617578538614" TEXT="_GdkEventMotion"/>
+<node CREATED="1617578538614" ID="ID_312257050" MODIFIED="1617578538614" TEXT="_GdkEventMotion"/>
 <node CREATED="1617578546055" MODIFIED="1617578546055" TEXT="_GdkEventButton"/>
 </node>
 </node>

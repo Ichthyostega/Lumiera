@@ -318,7 +318,6 @@ namespace timeline {
         establishHorizontalExtension()
           {
             int hsiz = getCanvas().getMetric().translateTimeToPixels (accessDuration());
-            cout << "Clip:: hsize="<<hsiz<<endl;     ////////////////////////////////////////////////////////TICKET #1038 : tracing -- remove this
             return hsiz;
           }
         

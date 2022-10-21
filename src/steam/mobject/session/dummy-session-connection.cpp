@@ -182,7 +182,7 @@ namespace session {
                               , emu (clip1)
                               , mut (clip2)
                                 , ins (makeName(clip2))
-                                , ins (defineTiming(Time{FSecs{5}}, Duration{FSecs{2}}))
+                                , ins (defineTiming(Time{FSecs{5}}, Duration{FSecs{4}}))
                               , emu (clip2)
                             , emu (forkRoot)
                           , emu (timeline)

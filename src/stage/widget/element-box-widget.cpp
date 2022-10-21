@@ -189,41 +189,14 @@ namespace widget {
     }
   
   
-  namespace {
-    inline bool
-    tmpUnhide (Gtk::Widget& w)
-      {
-        bool was_hidden = not w.is_visible();
-        w.show();
-        return was_hidden;
-      }
-    inline void
-    restoreHide (Gtk::Widget& w, bool was_hidden)
-      {
-        if (was_hidden)
-          w.hide();
-        else
-          w.show();
-      }
-  }
-  
   void
   IDLabel::setCaption(cuString& idCaption)
   {
-    // can not retrieve size information from hidden widgets...
-    bool hideIcon = tmpUnhide (icon_);
-    bool hideMenu = tmpUnhide (menu_);
-    bool hideName = tmpUnhide (name_);
-    bool hideThis = tmpUnhide (*this);
-    
     name_.set_text(idCaption);
+    // can not retrieve size information from hidden widgets...
+    this->show_all();     // Note: size constraint handling will trigger again
     // cache required full display size (for size constrained layout)
     queryNaturalSize (*this, labelFullSize_);
-    
-    restoreHide (icon_, hideThis);
-    restoreHide (menu_, hideName);
-    restoreHide (name_, hideMenu);
-    restoreHide (*this, hideIcon);
   }
   
   cuString
@@ -235,22 +208,24 @@ namespace widget {
   
   
   ElementBoxWidget::ElementBoxWidget (Config config)
-    : Frame{}
+    : EventBox{}
     , strategy_{config.buildLayoutStrategy(*this)}
     , label_{config.getIconID()
             ,config.getMenuSymb()
             ,config.getIconSize()}
+    , frame_{}
     {
-      set_name(ID_element);
-      get_style_context()->add_class(CLASS_background);     // Style to ensure an opaque backdrop
-      get_style_context()->add_class(CLASS_elementbox);
-      set_label_align(0.0, 0.0);
+      set_name (ID_element);
+      get_style_context()->add_class (CLASS_background);     // Style to ensure an opaque backdrop
+      get_style_context()->add_class (CLASS_elementbox);
+      label_.get_style_context()->add_class (CLASS_elementbox_idlabel);
       
-      set_label_widget(label_);
-      label_.get_style_context()->add_class(CLASS_elementbox_idlabel);
+      frame_.set_label_align (0.0, 0.0);
+      frame_.set_label_widget(label_);
+      this->add (frame_);
       
       this->show_all();
-      label_.setCaption(config.getName());
+      label_.setCaption (config.getName());
     }
   
   
@@ -480,8 +455,6 @@ namespace widget {
   IDLabel::adaptSize (int widthC, int heightC)
   {
     // first determine if vertical extension is problematic
-///////////////////////////////////////////////////////////////////////////////TICKET #1038 : tracing -- remove this
-    cout << _Fmt{"IDLb:: adaptSize(%d,%d) i:%b m:%b l:%b"} % widthC % heightC % icon_.is_visible() % menu_.is_visible() % name_.is_visible() <<endl;
     int currH = queryNaturalHeight (*this);
     if (currH > heightC)
       {//hide all child widgets,

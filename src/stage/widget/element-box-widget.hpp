@@ -141,9 +141,9 @@ namespace widget {
    *       but need more exposure and real world usage as of 9/22
    */
   class ElementBoxWidget
-    : public Gtk::Frame
+    : public Gtk::EventBox
     {
-      using _Base = Gtk::Frame;
+      using _Base = Gtk::EventBox;
       struct Strategy
         {
           SizeGetter getWidth{};
@@ -155,7 +155,9 @@ namespace widget {
       
       /** actual layout strategy binding for this widget */
       Strategy strategy_;
+      
       IDLabel label_;
+      Gtk::Frame frame_;
       
     public:
       class Config;
