@@ -1,8 +1,8 @@
 /*
-  ZOOM-WINDOW.hpp  -  generic translation from domain to screen coordinates
+  ZOOM-METRIC.hpp  -  mix-in to provide a DisplayMetric based on a ZoomWindow
 
   Copyright (C)         Lumiera.org
-    2018,               Hermann Vosseler <Ichthyostega@web.de>
+    2022,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,12 +21,9 @@
 */
 
 
-/** @file zoom-window.hpp
- ** Abstraction: a multi-dimensional extract from model space into screen coordinates.
- ** This is a generic component to represent and handle the zooming and positioning of
- ** views within an underlying model space. This model space is conceived to be two fold:
- ** - it is a place or excerpt within the model topology (e.g. the n-th track in the fork)
- ** - it has a temporal extension within a larger temporal frame (e.g. some seconds within the timeline)
+/** @file zoom-metric.hpp
+ ** Implementation building block to get the \ref DisplayMetric as defined through a
+ ** \ref ZoomWindow
  ** 
  ** # rationale
  ** 
@@ -40,21 +37,20 @@
  ** [MVC-Pattern]: http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller
  ** [sigc-track]: http://issues.lumiera.org/ticket/940#comment:3 "Ticket #940"
  ** 
- ** @todo WIP-WIP as of 10/2022 the usage is just emerging, while the actual meaning
- **               of this interface still remains somewhat nebulous...
  ** @see \ref ZoomWindow_test
  ** 
  */
 
 
-#ifndef STAGE_MODEL_ZOOM_WINDOW_H
-#define STAGE_MODEL_ZOOM_WINDOW_H
+#ifndef STAGE_MODEL_ZOOM_METRIC_H
+#define STAGE_MODEL_ZOOM_METRIC_H
 
 
 #include "lib/error.hpp"
 //#include "lib/nocopy.hpp"
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/symbol.hpp"
+#include "stage/model/canvas-hook.hpp"
 
 //#include <utility>
 //#include <string>
@@ -69,13 +65,14 @@ namespace model {
   
   /**
    */
-  struct ZoomWindow
+  template<class I>
+  class ZoomMetric
+    : public I
     {
       
-      ZoomWindow()
+      ZoomMetric()
         { }
       
-      void reset();
       
     protected:
       
@@ -91,4 +88,4 @@ namespace model {
   
   
 }} // namespace stage::model
-#endif /*STAGE_MODEL_ZOOM_WINDOW_H*/
+#endif /*STAGE_MODEL_ZOOM_METRIC_H*/

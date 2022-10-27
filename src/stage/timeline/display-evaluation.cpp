@@ -97,6 +97,7 @@ namespace timeline {
   void
   DisplayEvaluation::reset()
   {
+    ASSERT (forkRoot_ and canvas_);
     collectLayout_ = true;
   }
 

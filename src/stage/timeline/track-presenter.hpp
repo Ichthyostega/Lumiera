@@ -29,7 +29,7 @@
  ** UI elements, their state and immediate feedback to user interactions. The _Presenter_ --
  ** as known from the [MVP pattern](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) --
  ** serves as link between both levels. For the global angle of view, it is a model::Tangible and thus
- ** plays the role of the _View_, while the _Model_ and _Controler_ roles are mediated through the
+ ** plays the role of the _View_, while the _Model_ and _Controller_ roles are mediated through the
  ** stage::UiBus, exchanging command, state and mutation messages. On the other hand, for the local
  ** angle of view, the _Presenter_ is a structural model element, kind of a _view model_, and corresponds
  ** to the respective element within the session. In addition, it manages actively the collaborative
@@ -72,6 +72,20 @@
  ** of actual track spaces running alongside the time axis. This is accomplished through a global
  ** timeline::DisplayEvaluation pass, recursively visiting all the involved parts to perform
  ** size adjustments, until the layout is globally balanced.
+ ** 
+ ** # Relative Coordinate System
+ ** 
+ ** With respect to the TrackBody, the DisplayFrame within each Track acts as a relative attachment
+ ** point and relative coordinate system; this is implemented as stage::model::RelativeCanvasHook.
+ ** The top-level anchor point is established in the ctor of timeline::TimelineController, where
+ ** the actual TimelineLayout is passed as parent CanvasHook; from this point below, each parent
+ ** track acts as reference CanvasHook for the child tracks.
+ ** 
+ ** \par Impact of indirections: to keep matters simple for the initial implementation, these
+ **      relationships were modelled as layered interfaces / overridden virtual methods. This
+ **      leads to a chain of calls through several VTables; the practical impact of this scheme
+ **      on the performance of the timeline GUI will be investigated when there is a sufficiently
+ **      complete implementation available -- see #1254
  ** 
  ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
  ** @todo still WIP as of 3/2020 -- yet the basic structure is settled by now.
@@ -122,11 +136,76 @@ namespace timeline {
   using lib::explore;
   using util::max;
   
+  
+  
+  /**
+   * Special CanvasHook decorator to apply a (dynamic) offset
+   * when attaching or moving Widgets on the shared canvas.
+   * @note the ctor uses #getAnchorHook, thus effectively,
+   *       for a chain of RelativeCanvasHook instances,
+   *       the #refHook_ holds the top level anchor.
+   * @remark avoiding this 2-step indirect dispatch is possibly,
+   *       bug likely not of any significance, given the overhead
+   *       of drawing.
+   * @todo investigate real-live performance ////////////////////////////////////////////////////////////////TICKET #1254 : investigate impact of indirection 
+   */
+  template<class WID>
+  class RelativeCanvasHook
+    : public model::CanvasHook<WID>
+    {
+      model::CanvasHook<WID>& refHook_;
+      
+      
+      /* ==== Interface: ViewHook ===== */
+      
+      void
+      hook (WID& widget, int xPos=0, int yPos=0) override
+        {
+          refHook_.hook (widget, hookAdjX (xPos), hookAdjY (yPos));
+        }
+      
+      void
+      move (WID& widget, int xPos, int yPos)  override
+        {
+          refHook_.move (widget, hookAdjX (xPos), hookAdjY (yPos));
+        }
+
+      void
+      remove (WID& widget)  override
+        {
+          refHook_.remove (widget);
+        }
+      
+      /** allow to build a derived relative hook with different offset */
+      model::CanvasHook<WID>&
+      getAnchorHook()  noexcept override
+        {
+          return this->refHook_;
+        }
+      
+    protected: /* === extended Interface for relative canvas hook === */
+      virtual int hookAdjX (int xPos)  =0;
+      virtual int hookAdjY (int yPos)  =0;
+      
+      /** delegating layout metric to the root canvas */
+      model::DisplayMetric&
+      getMetric()  const override
+        {
+          return refHook_.getMetric();
+        }
+      
+    public:
+      RelativeCanvasHook(model::CanvasHook<WID>& baseHook)
+        : refHook_{baseHook.getAnchorHook()}
+        { }
+    };
+  
+  
+  
   using PFork  = unique_ptr<TrackPresenter>;
   using PClip  = unique_ptr<ClipPresenter>;
   using PMark  = unique_ptr<MarkerWidget>;
   using PRuler = unique_ptr<RulerTrack>;
-  
   
   /**
    * Reference frame to organise the presentation related to a specific Track in the Timeline-GUI.

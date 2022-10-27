@@ -101,67 +101,6 @@ namespace timeline {
   
   
   /**
-   * Special CanvasHook decorator to apply a (dynamic) offset
-   * when attaching or moving Widgets on the shared canvas.
-   * @note the ctor uses #getAnchorHook, thus effectively,
-   *       for a chain of RelativeCanvasHook instances,
-   *       the #refHook_ holds the top level anchor.
-   * @remark avoiding this 2-step indirect dispatch is not
-   *       justified here, given the overhead of drawing.
-   */
-  template<class WID>
-  class RelativeCanvasHook
-    : public model::CanvasHook<WID>
-    {
-      model::CanvasHook<WID>& refHook_;
-      
-      
-      /* ==== Interface: ViewHook ===== */
-      
-      void
-      hook (WID& widget, int xPos=0, int yPos=0) override
-        {
-          refHook_.hook (widget, hookAdjX (xPos), hookAdjY (yPos));
-        }
-      
-      void
-      move (WID& widget, int xPos, int yPos)  override
-        {
-          refHook_.move (widget, hookAdjX (xPos), hookAdjY (yPos));
-        }
-
-      void
-      remove (WID& widget)  override
-        {
-          refHook_.remove (widget);
-        }
-      
-      /** allow to build a derived relative hook with different offset */
-      model::CanvasHook<WID>&
-      getAnchorHook()  noexcept override
-        {
-          return this->refHook_;
-        }
-      
-    protected: /* === extended Interface for relative canvas hook === */
-      virtual int hookAdjX (int xPos)  =0;
-      virtual int hookAdjY (int yPos)  =0;
-      
-      /** delegating layout metric to the root canvas */
-      model::DisplayMetric&
-      getMetric()  const override
-        {
-          return refHook_.getMetric();
-        }
-      
-    public:
-      RelativeCanvasHook(model::CanvasHook<WID>& baseHook)
-        : refHook_{baseHook.getAnchorHook()}
-        { }
-    };
-  
-  
-  /**
    * Interface: a compound of anchoring facilities.
    * With the help of view-hooking, some detail presentation component
    * or widget can attach itself into the overarching view context or canvas
