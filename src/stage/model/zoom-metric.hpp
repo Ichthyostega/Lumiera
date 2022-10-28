@@ -23,21 +23,22 @@
 
 /** @file zoom-metric.hpp
  ** Implementation building block to get the \ref DisplayMetric as defined through a
- ** \ref ZoomWindow
+ ** \ref ZoomWindow. The latter is used as mediator to receive the various view manipulation
+ ** signals from widgets, window decoration, zoom slider, navigator and zoom gestures, thereby
+ ** ensuring consistent behaviour and capturing a history of zoom states. A current display metric
+ ** can be derived directly from ZoomWindow settings, and is used by Clip Widgets and similar
+ ** ElementBox entities attached to the canvas, to provide a time calibrated display and
+ ** to control the visible extension of elements with distinct duration.
  ** 
- ** # rationale
+ ** \par usage
+ ** ZoomMetric should be mixed-into an implementation class and on top of some interface
+ ** which derives from stage::model::DisplayMetric; a ZoomWindow instance is directly
+ ** embedded and should be wired and controlled by the implementation class accordingly.
  ** 
- ** TBW
- ** 
- ** # Interactions
- ** 
- ** - *bla*: connect to blubb
- ** see [sigc-track] for an explanation.
- ** 
- ** [MVC-Pattern]: http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller
- ** [sigc-track]: http://issues.lumiera.org/ticket/940#comment:3 "Ticket #940"
- ** 
- ** @see \ref ZoomWindow_test
+ ** @see \ref ZoomWindow
+ ** @see \ref DisplayMetric
+ ** @see stage::timeline::TimelineLayout usage example
+ ** @see ClipWidget::establishHorizontalExtension()
  ** 
  */
 
@@ -46,45 +47,61 @@
 #define STAGE_MODEL_ZOOM_METRIC_H
 
 
-#include "lib/error.hpp"
-//#include "lib/nocopy.hpp"
-//#include "lib/idi/entry-id.hpp"
-//#include "lib/symbol.hpp"
+#include "lib/time/timevalue.hpp"
+#include "lib/meta/trait.hpp"
 #include "stage/model/canvas-hook.hpp"
+#include "stage/model/zoom-window.hpp"
 
-//#include <utility>
-//#include <string>
 
 
 namespace stage {
 namespace model {
   
-//  using std::string;
-//  using lib::Symbol;
+  using lib::time::TimeValue;
+  using lib::time::TimeSpan;
+  using lib::time::Time;
   
   
   /**
+   * Mix-In to implement the DisplayMetric interface on top of
+   * a ZoomWindow component, directly embedded here and thus
+   * also accessible downstream.
    */
   template<class I>
   class ZoomMetric
     : public I
     {
+      static_assert(lib::meta::is_Subclass<I, DisplayMetric>());
+      
+    protected:
+      ZoomWindow zoomWindow_;
       
       ZoomMetric()
+        : zoomWindow_{}
         { }
       
       
-    protected:
+    public:
+      /* ==== Interface : DisplayMetric ==== */
       
-    private:
+      TimeSpan
+      coveredTime() const override
+        {
+          return zoomWindow_.overallSpan;
+        }
+      
+      int
+      translateTimeToPixels (TimeValue startTimePoint)  const override
+        {
+          return _raw(startTimePoint) * zoomWindow_.px_per_sec / Time::SCALE;
+        }
+      
+      TimeValue
+      applyScreenDelta(Time anchor, double deltaPx)  const override
+        {
+          return anchor + TimeValue{gavl_time_t(Time::SCALE * deltaPx / zoomWindow_.px_per_sec)};
+        }
     };
-  
-  
-  
-  
-  /** */
-
-  
   
   
 }} // namespace stage::model

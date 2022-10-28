@@ -81,11 +81,11 @@
  ** the actual TimelineLayout is passed as parent CanvasHook; from this point below, each parent
  ** track acts as reference CanvasHook for the child tracks.
  ** 
- ** \par Impact of indirections: to keep matters simple for the initial implementation, these
- **      relationships were modelled as layered interfaces / overridden virtual methods. This
- **      leads to a chain of calls through several VTables; the practical impact of this scheme
- **      on the performance of the timeline GUI will be investigated when there is a sufficiently
- **      complete implementation available -- see #1254
+ ** \par Impact of indirections:
+ ** to keep matters simple for the initial implementation, these relationships were modelled as
+ ** layered interfaces / overridden virtual methods. This leads to a chain of calls through several
+ ** VTables; the practical impact of this scheme on the performance of the timeline GUI will be
+ ** investigated when there is a sufficiently complete implementation available -- see #1254
  ** 
  ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
  ** @todo still WIP as of 3/2020 -- yet the basic structure is settled by now.

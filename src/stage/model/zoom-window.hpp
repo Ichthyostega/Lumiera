@@ -52,6 +52,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/time/timevalue.hpp"
 //#include "lib/nocopy.hpp"
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/symbol.hpp"
@@ -65,12 +66,21 @@ namespace model {
   
 //  using std::string;
 //  using lib::Symbol;
+  using lib::time::TimeValue;
+  using lib::time::TimeSpan;
+  using lib::time::TimeVar;
+  using lib::time::FSecs;
+  using lib::time::Time;
   
   
   /**
    */
   struct ZoomWindow
     {
+      TimeSpan overallSpan{Time::ZERO, FSecs{23}}; ////////////////Lalala Lalü
+      TimeSpan visible  = overallSpan;
+      
+      uint px_per_sec = 25;
       
       ZoomWindow()
         { }

@@ -31,7 +31,7 @@
  ** - the actual Mutator to apply the changes to the target entity
  ** - a Propagator to register listeners and forward the changes.
  ** 
- ** \par implementation technique
+ ** # implementation technique
  ** 
  ** The Mutator uses functor objects to encapsulate the actual modification
  ** operations. When attaching to a target time entity to be manipulated, these

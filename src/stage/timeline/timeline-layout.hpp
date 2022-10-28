@@ -87,6 +87,7 @@
 #include "stage/timeline/display-evaluation.hpp"
 #include "stage/timeline/header-pane-widget.hpp"
 #include "stage/timeline/body-canvas-widget.hpp"
+#include "stage/model/zoom-metric.hpp"
 #include "stage/model/canvas-hook.hpp"
 #include "stage/model/view-hook.hpp"
 #include "lib/time/timevalue.hpp"
@@ -115,7 +116,7 @@ namespace timeline {
    * @todo WIP-WIP as of 10/2018
    */
   class TimelineLayout
-    : public DisplayManager
+    : public model::ZoomMetric<DisplayManager>
     , protected model::ViewHook<TrackHeadWidget>
     , protected model::ViewHook<TrackBody>
     {
@@ -141,12 +142,6 @@ namespace timeline {
     protected: /* ==== Interface: LayoutManager===== */
       
       void triggerDisplayEvaluation()  override;
-      
-      /////////////////////////////////////////////////////////////////////////////////////////////TICKET #1218 : better extract into a sub component when providing a non-dummy implementation
-      virtual lib::time::TimeSpan coveredTime()         const override;
-      virtual int translateTimeToPixels (TimeValue)     const override;
-      virtual TimeValue applyScreenDelta(Time, double)  const override;
-      /////////////////////////////////////////////////////////////////////////////////////////////TICKET #1218 : better extract into a sub component when providing a non-dummy implementation
       
       
     protected: /* ==== Interface: DisplayViewHooks===== */

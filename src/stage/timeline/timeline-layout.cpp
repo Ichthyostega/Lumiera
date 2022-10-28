@@ -66,9 +66,6 @@ using lib::time::TimeSpan;
 namespace stage {
 namespace timeline {
   
-  namespace {   /////////////////////////////////////////////////////TICKET #1213 : use proper zoom handling instead of dummy constants!!
-    const int TODO_px_per_second = 25;
-  }             /////////////////////////////////////////////////////TICKET #1213 : (END) get rid of these dummy constants!!
   
   
   
@@ -119,28 +116,6 @@ namespace timeline {
   }
   
   
-  
-  /* ==== Interface: DisplayMetric ===== */
-  
-  TimeSpan
-  TimelineLayout::coveredTime() const
-  {                                        /////////////////////////////////////TICKET #1019 : need a "ZoomWindow" here to manage the visible area
-                                           /////////////////////////////////////TICKET #1039 : "somehow" wire with the TimelineController to find out the covered span
-    return TimeSpan {Time::ZERO, FSecs{23}}; ////////////////Lalala Lalü
-  }
-  
-  int
-  TimelineLayout::translateTimeToPixels (TimeValue startTimePoint)  const
-  {
-    return _raw(startTimePoint) * TODO_px_per_second / Time::SCALE;   //////////TICKET #1213 : use a mix-in component, which in turn relies on the "ZoomWindow" !!
-  }
-  
-  TimeValue
-  TimelineLayout::applyScreenDelta(Time anchor, double deltaPx)  const
-  {                                                                   //////////TICKET #1213 : use a mix-in component, which in turn relies on the "ZoomWindow" !!
-    return anchor + TimeValue{gavl_time_t(Time::SCALE * deltaPx / TODO_px_per_second)};
-  }
-
   
   
   /**
