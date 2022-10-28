@@ -2705,7 +2705,7 @@ Typically, when starting the draw operation, we retrieve our //allocation.// Thi
 Thus, if we want to use absolute canvas coordinates for our drawing, we need to adjust the cairo context prior to any drawing operations: we translate it in the opposite direction of the values retrieved from the scrollbar {{{Gtk::Adjustment}}}s. This causes the //user coordinates// to coincede with the absolute canvas coordinates.
 </pre>
 </div>
-<div title="GtkLayoutWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201610141819" modified="201808301543" tags="GuiPattern impl" changecount="6">
+<div title="GtkLayoutWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201610141819" modified="202210281459" tags="GuiPattern impl" changecount="8">
 <pre>//This is the canvas widget of ~GTK-3//
 It allows not only custom drawing, but also to embed other widgets at defined coordinates.
 
@@ -2722,12 +2722,31 @@ we need a test setup for this investigation.
 * easy to launch
 * don't waste much time, it is disposable
 * realistic: shall reflect the situation in our actual UI
-As starting point, {{red{in winter 2016/17}}} the old (broken) timeline panel was moved aside and a new panel was attached for GTK experiments. These basically confirmed the envisioned approach; it is possible to place widgets freely onto the canvas; they are drawn in insert order, which allows for overlapped widgets (and mouse events are dispatched properly, as you'd expect). Moreover, it is also possible to draw directly onto the canvas, by overriding the {{{on_draw()}}}-function. However, some (rather trivial) adjustments need to be done to get a virtual canvas, which moves along with the placed widgets. That is, GtkLayoutWidget handles scrolling of embedded widgets automatically, but you need to adjust the Cairo drawing context manually to move along. The aforementioned experimental code shows how.
+As starting point, in winter 2016/17 the old (broken) timeline panel was moved aside and a new panel was attached for GTK experiments. These basically confirmed the envisioned approach; it is possible to place widgets freely onto the canvas; they are drawn in insert order, which allows for overlapped widgets (and mouse events are dispatched properly, as you'd expect). Moreover, it is also possible to draw directly onto the canvas, by overriding the {{{on_draw()}}}-function. However, some (rather trivial) adjustments need to be done to get a virtual canvas, which moves along with the placed widgets. That is, GtkLayoutWidget handles scrolling of embedded widgets automatically, but you need to adjust the Cairo drawing context manually to move along. The aforementioned experimental code shows how.
 
-After that initial experiments, my focus shifted to the still unsatisfactory top-level UI structure, and I am working towards an initial integration with Steam-Layer since then.
+After that initial experiments, the focus of development shifted to the top-level UI structure, still unsatisfactory at that time, and integration with the message based communication via UI-Bus and the propagation of changes in the form of [[Diff messages|MutationMessage]] has been achieved. Following this ground work, the [[timeline UI|GuiTimelineView]] has been successfully implemented, using [[custom drawing|GuiTimelineDraw]] on a {{{Gtk::Layout}}} based »timeline body canvas« — thereby fully validating the feasibility of this approach.
 </pre>
 </div>
-<div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="202208282100" tags="GuiPattern design draft" changecount="31">
+<div title="GuiCanvasInterface" creator="Ichthyostega" modifier="Ichthyostega" created="202210281527" modified="202210282005" tags="spec GuiPattern draft" changecount="3">
+<pre>//Interface to handle widgets on a timeline canvas without tight coupling to a central [[Layout Manager|TimelineDisplayManager]].//
+Instead of actively installing and handling widgets from a central controlling entity, rather we allow the widgets to //attach// to an existing UI context, which beyond that remains unspecified. Widgets attached this way are required to implement a handling interface. Based on this general scheme, two kinds of attachments are modelled, each through a distinct set of interfaces
+;~ViewHook
+:Widgets of type {{{ViewHooked}}} are placed into an existing layout framework, like e.g. a grid control;
+:those widgets maintain an //order of attachment// (which also translates into an order of appearance in the GUI.
+;~CanvasHook
+:Widgets of type {{{CanvasHooked}}} are attached with relative coordinates onto a [[Canvas widget|GtkLayoutWidget]] combined with custom drawing
+In both cases, the interface on the widget side is modelled as //smart-handle// -- the widget detaches automatically at end-of-life.
+Similarly, widgets can be re-attached, retaining the order -- or (in case of ~CanvasHook) -- maintaining or possibly adjusting the relative coordinates of attachment. And, also in both cases, the attachment can be repeated recursively, allowing to build nested UI structures.
+
+This interconnected structure allows //another entity// (not the hook or canvas) to control and rearrange the widgets, and also to some degree it allows the widgets to adjust themselves, in response to local interactions like dragging
+
+!Time calibrated display
+The arrangement of media elements onto a timeline display imposes another constraint: the position of elements directly relates to their properties, especially a start and end time. Such a requirement is in conflict with the usual arrangement of UI elements, which largely is governed by considerations of layout and style and UI space necessary for proper presentation. When attaching a widget to the Canvas, the //canvas coordinates// of the attachment point need to be specified -- yet the widget knows its own properties rather in terms of time and duration. A //calibration// thus needs to be maintained, in close relation to global layout properties like the zoom scale or the scrolling position of the data section currently visible.
+
+To bridge this discrepancy, the ~CanvasHook interface exposes a ''~DisplayMetric'' component, with operations to convert time to pixel offsets and vice versa. Internally, this ~DisplayMetric is passed through and actually attached to the ZoomWindow component, which is maintained within the {{{TimelineLayout}}} to coordinate all scrolling and zooming activities
+</pre>
+</div>
+<div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="202210281442" tags="GuiPattern design draft" changecount="32">
 <pre>//The representation of a [[media clip|Clip]] for manipulation by the user within the UI.//
 Within Lumiera, a clip is conceived as a //chunk of media,// which can be handled in compound. Clip as such is an abstract concept, which is treated with minimal assumptions...
 * we know that a clip has //media content,// which need not be uniform and can be inherently structured (e.g. several media, several channels, a processing function)
@@ -2742,7 +2761,7 @@ The next step in a series of progressively more detailed clip representations is
 
 A yet more detailed display of the clip's internals is exposed in the ''expanded form.'' Here, the clip is displayed as a window pane holding nested clip displays, which in turn might again be abridged, compact or ({{red{maybe 11/16}}}) even expanded. This enclosing clip window pane should be rendered semi transparent, just to indicate the enclosing whole. The individual clip displays embedded therein serve to represent individual media parts or channels, or individual attached effects. Due to the recursive nature of Lumiera's HighLevelModel, each of these parts exposes essentially the same controls, allowing to control the respective aspects of the part in question. We may even consider ({{red{unclear as of 11/16}}}) to allow accessing the parts of a VirtualClip, this way turning the enclosing clip into a lightweight container ({{red{11/2016 give proper credit for this concept! Who proposed this initially in 2008? was this Thosten Wilms?}}}
 
-Finally, there can be a situation where it is just not possible to render any of the aforementioned display styles properly, due to size constraints. Especially, this happens when zooming out such as to show a whole sequence or even timeline in overview. We need to come up with a scheme of ''graceful display degradation'' to deal with this situation -- just naively attempting to render any form might easily send our UI thread into a minute long blocking render state, for no good reason. Instead, in such cases display should fall back to a ''degraded form''
+Finally, there can be a situation where it is just not possible to render any of the aforementioned display styles properly, due to size constraints. Especially, this happens when [[zooming|ZoomWindow]] out such as to show a whole sequence or even timeline in overview. We need to come up with a scheme of ''graceful display degradation'' to deal with this situation -- just naively attempting to render any form might easily send our UI thread into a minute long blocking render state, for no good reason. Instead, in such cases display should fall back to a ''degraded form''
 * showing just a placeholder rectangle, when the clip (or any other media element) will cover a temporal span relating to at least 1 pixel width (configurable trigger condition)
 * even further collapsing several entities into a strike of elements,to indicate at least  that some content is present in this part of the timeline.
 Together this shows we have to decide on a ''display strategy'' //before we even consider to add// a specific widget to the enclosing GTK container....
@@ -3084,7 +3103,7 @@ Yet in the generic case, content is shown within a Box with well defined extensi
 These disparate usage patterns impose the challenge to avoid architectural tangling: The [[Element Box Witget|GuiElementBoxWidget]] must be confined to be //merely a container,// and remain agnostic with respect to the inner structure of the content; it is instructed only insofar a specific //content type// is indicated, as foundation for picking a suitable //rendering strategy.//
 </pre>
 </div>
-<div title="GuiCustomWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201611182349" tags="GuiPattern discuss decision draft" changecount="64">
+<div title="GuiCustomWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="202210281453" tags="GuiPattern discuss decision draft" changecount="65">
 <pre>Inevitably, the UI of an advanced application like Lumiera needs some parts beyond the scope of what can be achieved by combining standard widgets. Typically, an UI toolkit (GTK is no exception here) offers some extension mechanism to integrate such more elaborate, application specific behaviour. Within Lumiera, the Timeline is probably the most prominent place where we need to come up with our own handling solution -- which also means to rely on such extension mechanisms and to integrate well with the more conventional parts of the UI. Since the core concept of typical UI toolkit sets is that of a //widget,// we end up with writing some kind of customised or completely custom defined widget. 
 
 !two fundamental models
@@ -3115,15 +3134,15 @@ All of the above is a serious concern. There is no easy way out, since, for the 
 * in the past, this functionality was pioneered by several extension libraries, for example by the [[GooCanvas|https://developer.gnome.org/goocanvas/stable/GooCanvas.html]] library for ~GTK-2
 * meanwhile, ~GTK-3 features several special layout managers, one of which is the [[GtkLayout|https://developer.gnome.org/gtk3/stable/GtkLayout.html]] widget, which incorporates this concept of //widgets placed on a canvas.//
 
-!Investigation: ~GtkLayout {{red{WIP 10/2016}}}
-In order to build a sensible plan for our timeline structure, we need to investigate and clarify some fundamental properties of the GtkLayoutWidget
+!Investigation: ~GtkLayout
+In order to build a sensible plan for our timeline structure, an investigation has been carried out in 2016 to clarify some fundamental properties of the GtkLayoutWidget
 * how are overlapping widgets handled?
 * how is resizing of widgets handled, esp. when they need to grow due to content changes?
 * how does the event dispatching deal with partially covered widgets?
 * how can embedded widgets be integrated into a tabbing / focus order?
 * how is custom drawing and widget drawing interwoven?
 
-!!!Plan of investigation
+!!!Topics for investigation
 # place some simple widgets (Buttons)
 # learn how to draw
 # place a huge number of widgets, to scrutinise scrolling and performance
@@ -3682,7 +3701,7 @@ Now, since we build our UI on the notion of mapping session contents via a messa
 
 In any case, this is an advanced topic, and nowhere near trivial. It seems reasonable to reject opening duplicate timeline presentations as a first step, and then address this topic way later, when we've gained sufficient knowledge regarding all the subtleties of timeline presentation and editing.</pre>
 </div>
-<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="202210012303" tags="GuiPattern design decision draft img" changecount="64">
+<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="202210281524" tags="GuiPattern design decision draft img" changecount="66">
 <pre>Within the Lumieara GUI, the [[Timeline]] structure(s) from the HighLevelModel are arranged and presented according to the following principles and conventions.
 Several timeline views may be present at the same time -- and there is not necessarily a relation between them, since »a Timeline« is the top-level concept within the [[Session]]. Obviously, there can also be several //views// based on the same »Timeline« model element, and in this latter case, these //coupled views// behave according to a linked common state. An entity »Timeline« as represented through the GUI, emerges from the combination of several model elements
 * a root level [[Binding|BindingMO]] acts as framework
@@ -3697,7 +3716,7 @@ Session, Binding and Sequence are the mandatory ingredients.
 !Basic layout
 [&gt;img[Clip presentation control|draw/UI-TimelineLayout-1.png]]The representation is split into a ''Header pane'' exposing structure and configuration, and a ''Content pane'' extending in time. The ''Time ruler'' ( &amp;rarr; [[Rulers|TrackRuler]]) running alongside the top of the content pane represents the //position in time.// Beyond this temporal dimension, the content area is conceived as a flexible working space. This working space //can// be structured hierarchically -- when interacting with the GUI, hierarchical nesting will be created and collapsed on demand. Contrast this with conventional editing applications which are built upon the rigid notion of &quot;Tracks&quot;: Lumiera is based on //Pipes// and //Scopes// rather than Tracks.
 
-In the temporal dimension, there is the usual scrolling and zooming of content, and possibly a selected time range, and after establishing a ViewerPlayConnection, there is an effective playback location featured as a &quot;Playhead&quot;
+In the temporal dimension, there is the usual [[scrolling and zooming|ZoomWindow]] of content, and possibly a selected time range, and after establishing a ViewerPlayConnection, there is an effective playback location featured as a &quot;Playhead&quot;
 The workspace dimension (vertical layout) is more like a ''Fork'', which can be expanded recursively. More specifically, each strip or layer or &quot;track&quot; can be featured in //collapsed// or //expanded state.//
 * the collapsed state features a condensed representation (&quot;the tip of the iceberg&quot;). It exposes just the topmost entity, and might show a rendered (pre)view. Elements might be stacked on top, but any element visible here //is still accessible.//
 * when expanding, the content unfolds into...
@@ -3721,9 +3740,11 @@ The dockable ''timeline pannel'' holds onto the existing {{{TimelineWidget}}} in
 
 In case the UI starts with no session present in the core, an //empty timeline placeholder// will be displayed, which provides UI for creating a new session...
 
+!!!The Canvas
+At least the track body area of the timeline display needs to be implemented in parts by //custom drawing// onto a [[»Canvas widget«|GtkLayoutWidget]] -- meaning that we have both to coordinate explicit graphic operations using the »Cairo« library, and child widgets attached at explicit positions on top of this canvas. These nested widgets in turn need to know about the calibration of the canvas in terms of time and pixels, to be able to adjust their display to fit into the established metric. As the first implementation attempt for the timeline highlighted, at this point there is a lurking danger to slide into the usage of one central „God class“ -- in this case a //Layout Manager// -- which has to actuate and coordinate any related interplay by „pulling the strings“ like a puppeteer. To forego that threat, we introduce yet another abstraction: a [[»Canvas Interface«|GuiCanvasInterface]] to support attachment of widgets and handle the translation of logical (time based) coordinates into pixel values.
+
 !!!Placements
 As indicated in the drawing above, pretty much every UI element exposes a button to //edit its placement.// &amp;rarr; GuiPlacementDisplay
-
 
 !!!slave Timelines
 It is reasonable to expect the ability to have multiple [[slave timeline presentations|GuiTimelineSlave]] to access the same underlying timeline structure.
@@ -3739,7 +3760,7 @@ In the most general case, there can be per-track content and nested content at t
 
 </pre>
 </div>
-<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="201904052200" tags="GuiPattern discuss decision impl" changecount="106">
+<div title="GuiTimelineWidgetStructure" creator="Ichthyostega" modifier="Ichthyostega" created="201410250002" modified="202210281525" tags="GuiPattern discuss decision impl" changecount="110">
 <pre>The Timeline is probably the most prominent place in the GUI where we need to come up with a custom UI design.
 Instead of combining standard components in one of the well-known ways, here we need to come up with our own handling solution -- which also involves to build several custom GTK widgets. Thus the question of layout and screen space division and organisation becomes a crucial design decision. The ~GTK-2 UI, as implemented during the initial years of the Lumiera project, did already take some steps along this route, which was was valuable as foundation for assessment and further planning.
 
@@ -3765,7 +3786,10 @@ While the special setup for scrolling doesn't really count (since it is necessar
 !!!follow-up to the obvious choices
 We came to this point of re-considering the overall organisation of widgets, after having to re-write the initial version of our timeline widget. This initial version was developed until 2011 by Joel Holdsworth, and it followed a similar reasoning, involving a global timeline layout manager. The distinction between the two panes was not so clear though, and the access to the model code was awkward at places, so the necessity to re-write the timeline widget due to the transition to ~GTK-3 looks like a good opportunity to re-do the same basic reasoning a second time, verify decisions taken and improve matters turning out as difficult on first attempt.
 
-So we get a timeline custom widget, which at top level establishes this two-part layout, provides the global scrollbars and integrates custom widget components for both parts. And this top-level timeline widget owns a layout manager, plus it exposes a common view management interface, to be used both from internal components (e.g. zoom widgets within the UI) and from external actors controlling the timeline display from a global level. Also at this global level, we get to define a layout control interface, the TimelineDisplayManager, which has to be implemented within the recursively structured parts of the timeline display, and which is used by the top-level structure to exert control over the layout as a whole. {{red{Note (11/2016)}}}: if this layout control interface works push or pull style is a decision yet to be worked out during the course of the implementation.
+So we get a timeline custom widget, which at top level establishes this two-part layout, provides the global scrollbars and integrates custom widget components for both parts. And this top-level timeline widget owns a layout manager, plus it exposes a common view management interface, to be used both from internal components (e.g. zoom widgets within the UI) and from external actors controlling the timeline display from a global level. Also at this global level, we get to define a layout control interface, the [[»Timeline Display Manager«|TimelineDisplayManager]] -- which is conceived as an interface and has to be implemented within the recursively structured parts of the timeline display. This layout control interface will be used by the top-level structure to exert control over the layout as a whole. Any change will work by...
+# setting global parameters, like e.g. the ZoomWindow
+# triggering a »''display evaluation pass''« 
+# have the individual widgets in turn //pull// the local relevant metric parameters from some abstracted [[»Canvas«|GuiCanvasInterface]] interface.
 
 
 !dealing with nested structures
@@ -9248,15 +9272,20 @@ Besides building on the asset management, implementing Timeline (and Sequence) a
 This topic is {{red{postponed as of 10/2018}}} &amp;rarr; [[#1083|http://issues.lumiera.org/ticket/1083]]
 </pre>
 </div>
-<div title="TimelineDisplayManager" creator="Ichthyostega" modifier="Ichthyostega" created="201611280235" modified="202003062036" tags="spec GuiPattern img" changecount="22">
+<div title="TimelineDisplayManager" creator="Ichthyostega" modifier="Ichthyostega" created="201611280235" modified="202210281503" tags="spec GuiPattern img" changecount="24">
 <pre>//guide and control the concrete display properties of the various sub components (tracks, clips) comprising a timeline display.//
 
-The TimelineDisplayManager actually is an abstraction, a control interface, revolving around the guidance individual components need in order to settle on a proper display. Those components themselves are represented as mediating entities, the TrackPresenter and the ClipPresenter, each of which controls and manages a mostly passive GTK widget. To this end, the presenters need to know at which virtual coordinates their display widgets would show up, and they should be aware if these corresponding widgets need actually to be visible at the moment. Moreover, especially the ClipPresenter has to choose the appropriate  &amp;rarr;[[»appearance style«|GuiClipWidget]] for the corresponding slave widget.
+The »Display Manager« of the timeline actually is an abstraction, a control interface, revolving around the guidance individual components need in order to settle on a proper display. Those components themselves are represented as mediating entities, the TrackPresenter and the ClipPresenter, each of which controls and manages a mostly passive GTK widget. To this end, the presenters need to know at which virtual coordinates their display widgets would show up, and they should be aware if these corresponding widgets need actually to be visible at the moment. Moreover, especially the ClipPresenter has to choose the appropriate  &amp;rarr;[[»appearance style«|GuiClipWidget]] for the corresponding slave widget.
 
 !display evaluation pass
 [&gt;img[Clip presentation control|uml/Timeline-display-evaluation.png]]Since the timeline display is formed by several nested collections of elements, a proper display layout must incorporate information from all those parts. A naive approach likely would just iterate over them and reach into their innards in order to extract the necessary data -- or even worse, build a separate display data store, which then must be //kept in sync// with the component hierarchy proper. Any of these naive coding approaches would lead to high coupling and turns later adjustments and necessary changes into a liability, due to evolution of requirements. On the long run, such a dangerous situation can only be mitigated by a collaboration of self contained local structures. And, to get there, we need to distil the common ground shared between the global and the local concerns, and reshape it into some kind of invariant -- allowing a common pattern to re-emerge at several levels of locality.
 
 The purpose of the display evaluation pass is to make the timeline display globally coherent. Parts of our display are implemented as GTK compound widgets -- and GTK ensures a proper layout within these parts. However, our layout creates interconnections and dependencies beyond what can be expressed with GTK building blocks. Most notably, the track space must be aligned horizontally, both in header and track body display, while each individual track has to accommodate to its various content's extension. And since clips might in turn contain nested structures, we can not hope to achieve a finished layout just in one pass, since some of our local adjustments in turn need to be re-evaluated by the GTK space allocation mechanism. So we end up with several sweeping passes over our timeline control structure, each collecting data and //gradually increasing the allocated space.// This kind of //monotonous adjustment// is key for avoiding oscillations and to guarantee a quick convergence of this iterative space allocation process. Each pass visits the timeline UI components in //strict layout order// (from top down and from left to right), causing a strike of size adjustments to embedded widgets, which, after being accommodated by GTK into appropriate local layout, will in turn trigger our custom drawing code eventually -- at which point the next display evaluation pass is hooked in, continuing this cycle until convergence is achieved.
+!!!Trigger
+The //Display Evaluation Pass// is triggered by various events from different sources
+* after any //structural change// by MutationMessage
+* when any Widget within the [[nested timeline display|GuiTimelineView]] detects the necessity of resizing
+* after notification from the ZoomWindow control to indicate a change for any of the //display metric parameters//
 
 !mapping service for the widgets
 Another, closely related topic, handled within this context, is the mapping from model structures and units into display layout coordinates. Within the model, we can distinguish several dimensions (degrees of freedom). For one, there is the topology, the ''location or part'' of the model to expose through the UI. Moreover, there is the ''degree of detail'' for this UI representation. And then, there is the ''temporal position and extension'' to represent.
@@ -10474,6 +10503,108 @@ Wiring requests rather belong to the realm of the high-level model, but play an 
 Wiring requests are small stateful value objects. They will be collected, sorted and processed ordered, such as to finish the building and get a completely wired network of processing nodes. Obviously, there needs to be some reference or smart pointer to the objects to be wired, but this information remains opaque.
 
 &amp;rarr; ConManager
+</pre>
+</div>
+<div title="ZoomWindow" creator="Ichthyostega" modifier="Ichthyostega" created="202210281528" modified="202210282204" tags="spec GuiPattern draft" changecount="16">
+<pre>//A component  for uniform handling of zoom scale and visible interval on the timeline.//
+Working with and arranging media requires a lot of //navigation// and changes of //zoom detail level.// More specifically, the editor is required to repeatedly return //to the same locations// and show arrangements at the same alternating scale levels. Most existing editing applications approach this topic naïvely, by just responding to some coarse grained interaction controls -- thereby creating the need for a lot of superfluous and tedious search and navigation activities, causing constant grind for the user. And resolving these obnoxious shortcomings turns out as a never ending task, precisely due to the naïve and ad hoc approach initially taken.
+
+Based on these observations, the design of the Lumiera UI calls for centralisation of all zoom- and navigation handling into a single component, instantiated once for every visible context, outfitted with the ability to capture and maintain a //history of zoom and navigation activities.// This component is called »''Zoom Window''«, since it represents a window-like local visible interval, embedded into a larger time span covering the whole timeline. The //current zoom state// is thus defined by
+* the overall {{{TimeSpan}}} of the timeline, including a start time (inclusive) and an end time (exclusive)
+* the //visible interval// („window“), likewise modelled as {{{time::TimeSpan}}}
+* the //scale// defined as pixels per second {{red{10/2022 -- imposing a hard limit at 1px / sec ≙ 20min per screen page}}}
+
+!Requirement Analysis
+The Timeline UI is {{red{as of 10/2022}}} specified sufficiently to serve as framework to determine the requirements of a zoom handling component
+!!!User
+;~CanvasHook + ~DisplayMetric
+:info | pull
+:*Pixel / sec
+:*Time ⟼ Pixel
+:*Pixel ⟼ ~Time-Offset
+;~BodyCanvas
+:info | pull
+:*window offset
+:*Time ⟼ Pixel
+:*overall range
+;~TimelineLayout
+:info | push
+:*change to scale factor ⟶ zoom slider
+:*any change ⟹ trigger ~DisplayEvaluation
+:**visible window
+:**scale factor
+:**overall range
+:mutate
+:*in response to scrollbar
+:**nudge
+:**move window
+:*in response to zoom slider
+:**change scale
+;~TimelineController
+:mutate
+:*overall range
+:*window parameters (persistent UI state)
+;Menu + Actions + ~SpotLocator
+:mutate
+:*zoom factor explicit
+:*zoom in / out
+:*Zoom history
+:*goto
+;Gestures~~(Controller)~~
+:mutate
+:*move window
+:*set window new
+:*nudge / navigate scale
+!!!~Use-Cases
+;initial setup
+:preparation
+:*~UI-state ➩ set metric
+:initial content population received...
+:#~TimelineController ➩ set overall range
+:#~DisplayEvaluation prompts timeline elements to reflow
+:#~BodyCanvas ⟵ window params
+:#~DisplayMetric ⟵ metric params
+;reposition
+:UI interaction received...
+:*~TimelineLayout ⟵ scrollbar
+:*~TimelineLayout ⟵ zoom slider
+:*Menu/Locator ⟵ intentional settings
+:*Gestures ⟵ move
+:*Gestures ⟵ select
+:*Gestures ⟵ nudge
+:handling sequence...
+:#push ⟶ ~TimelineLayout
+:#~DisplayEvaluation ⟹ reflow
+:#*~BodyCanvas ⟵ window params
+:#*~DisplayMetric ⟵ metric params
+;model content
+:changes received per MutationMessage
+:#~TimelineController ➩ set overall range
+:#push ⟶ ~TimelineLayout
+:#~DisplayEvaluation ⟹ reflow
+:#*~BodyCanvas ⟵ window params
+:#*~DisplayMetric ⟵ metric params
+!!!Interaction Procedure
+#mutators
+#*set metric
+#*nudge metric
+#*set overall range
+#*set position visible
+#*offset position
+#*nudge position
+#*select/set window
+#*nav History
+#coordinated adjustment
+#*any change ⟹ trigger ~TimelineLayout ⟶ ~DisplayEvaluation
+#read state
+#*metric
+#*translations
+#*window offset
+#*overall range
+
+
+!Implementation
+The above requirement analysis reveals a common handling scheme, which is best served by a conventional design with an object, mutator and getter methods and encapsulated state. Moreover, a single client for push notification can be identified: the ~TimelineLayout (implementation of the [[DisplayManager interface|TimelineDisplayManager]]; it suffices to notify this collaboration partner; since at implementation level the ZoomWindow is itself embedded by mix-in into the ~TimelineLayout, the latter can easily read the resulting zoom parameters and react accordingly.
 </pre>
 </div>
 <div title="automation" modifier="Ichthyostega" created="200805300057" modified="200805300125" tags="overview">

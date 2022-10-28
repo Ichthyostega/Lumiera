@@ -26,19 +26,43 @@
  ** This is a generic component to represent and handle the zooming and positioning of
  ** views within an underlying model space. This model space is conceived to be two fold:
  ** - it is a place or excerpt within the model topology (e.g. the n-th track in the fork)
- ** - it has a temporal extension within a larger temporal frame (e.g. some seconds within the timeline)
+ ** - it has a temporal extension within a larger temporal frame (e.g. some seconds within
+ **   the timeline)
+ ** This component is called »Zoom Window«, since it represents a window-like local visible
+ ** interval, embedded into a larger time span covering the whole timeline.
  ** 
- ** # rationale
+ ** # Rationale
  ** 
- ** TBW
+ ** Working with and arranging media requires a lot of navigation and changes of zoom detail level.
+ ** More specifically, the editor is required to repeatedly return to the same locations and show
+ ** arrangements at the same alternating scale levels. Most existing editing applications approach
+ ** this topic naively, by just responding to some coarse grained interaction controls — thereby
+ ** creating the need for a lot of superfluous and tedious search and navigation activities,
+ ** causing constant grind for the user. And resolving these obnoxious shortcomings turns out
+ ** as a never ending task, precisely due to the naive and ad-hoc approach initially taken.
+ ** Based on these observations, the design of the Lumiera UI calls for centralisation of
+ ** all zoom- and navigation handling into a single component, instantiated once for every
+ ** visible context, outfitted with the ability to capture and maintain a history of zoom
+ ** and navigation activities. The current zoom state is thus defined by
+ ** - the overall TimeSpan of the timeline, defining a start and end time
+ ** - the visible interval („window“), likewise modelled as time::TimeSpan
+ ** - the scale defined as pixels per second
  ** 
  ** # Interactions
  ** 
- ** - *bla*: connect to blubb
- ** see [sigc-track] for an explanation.
+ ** The basic parameters can be changed and adjusted through various setters, dedicated
+ ** to specific usage scenarios. After invoking any setter, one of the mutating functions
+ ** is invoked to adjust the base parameters and then re-establish the *invariant*
+ ** - visible window lies completely within the overall range
+ ** - scale factor and visible window line up logically
+ ** - scale factor produces precise reproducible values
  ** 
- ** [MVC-Pattern]: http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller
- ** [sigc-track]: http://issues.lumiera.org/ticket/940#comment:3 "Ticket #940"
+ ** ## Change listener
+ ** 
+ ** A single change listener lambda can be installed (as of 10/2022 this is considered sufficient,
+ ** since only the TimelineLayout was identified as collaborator requiring push notification).
+ ** This callback will be invoked after any effective change and serves as notification; the
+ ** receiver is expected to read the current settings by invoking the getters.
  ** 
  ** @todo WIP-WIP as of 10/2022 the usage is just emerging, while the actual meaning
  **               of this interface still remains somewhat nebulous...
@@ -53,7 +77,7 @@
 
 #include "lib/error.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/nocopy.hpp"
+#include "lib/nocopy.hpp"
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/symbol.hpp"
 
@@ -68,28 +92,161 @@ namespace model {
 //  using lib::Symbol;
   using lib::time::TimeValue;
   using lib::time::TimeSpan;
+  using lib::time::Duration;
   using lib::time::TimeVar;
+  using lib::time::Offset;
   using lib::time::FSecs;
   using lib::time::Time;
   
   
   /**
+   * A component to ensure uniform handling of zoom scale
+   * and visible interval on the timeline. Changes through
+   * the mutator functions are validated and harmonised to
+   * meet the internal invariants; a change listener is
+   * possibly notified to pick up the new settings.
    */
-  struct ZoomWindow
+  class ZoomWindow
+    : util::NonCopyable
     {
-      TimeSpan overallSpan{Time::ZERO, FSecs{23}}; ////////////////Lalala Lalü
-      TimeSpan visible  = overallSpan;
+      TimeVar startAll_, afterAll_,
+              startWin_, afterWin_;
+      uint px_per_sec_;
       
-      uint px_per_sec = 25;
-      
+    public:
       ZoomWindow()
+        : startAll_{Time::ZERO}
+        , afterAll_{Time(0,23)}
+        , startWin_{startAll_}
+        , afterWin_{afterAll_}
+        , px_per_sec_{25}
         { }
       
-      void reset();
+      TimeSpan
+      overallSpan()  const
+        {
+          return TimeSpan{startAll_, afterAll_};
+        }
       
-    protected:
+      TimeSpan
+      visible()  const
+        {
+          return TimeSpan{startWin_, afterWin_};
+        }
+      
+      uint
+      px_per_sec()  const
+        {
+          return px_per_sec_;
+        }
+      
+      
+      /* === Mutators === */
+      
+      void
+      setMetric (uint px_per_sec)
+        {
+          UNIMPLEMENTED ("setMetric");
+        }
+      
+      void
+      nudgeMetric (int steps)
+        {
+          UNIMPLEMENTED ("nudgeMetric");
+        }
+      
+      void
+      setRanges (TimeSpan overall, TimeSpan visible)
+        {
+          UNIMPLEMENTED ("setOverallRange");
+        }
+      
+      void
+      setOverallRange (TimeSpan range)
+        {
+          UNIMPLEMENTED ("setOverallRange");
+        }
+      
+      void
+      setOverallStart (TimeValue start)
+        {
+          UNIMPLEMENTED ("setOverallStart");
+        }
+      
+      void
+      setOverallDuration (Duration duration)
+        {
+          UNIMPLEMENTED ("setOverallDuration");
+        }
+      
+      void
+      setVisibleRange (TimeSpan newWindow)
+        {
+          UNIMPLEMENTED ("setVisibleRange");
+        }
+      
+      void
+      expandVisibleRange (TimeSpan target)
+        {
+          UNIMPLEMENTED ("zoom out to bring the current window at the designated time span");
+        }
+      
+      void
+      setVisibleDuration (Duration duration)
+        {
+          UNIMPLEMENTED ("setVisibleDuration");
+        }
+      
+      void
+      setVisiblePos (TimeValue posToShow)
+        {
+          UNIMPLEMENTED ("setVisiblePos");
+        }
+      
+      void
+      setVisiblePos (float percentage)
+        {
+          UNIMPLEMENTED ("setVisiblePos");
+        }
+      
+      void
+      offsetVisiblePos (Offset offset)
+        {
+          UNIMPLEMENTED ("offsetVisiblePos");
+        }
+      
+      void
+      nudgeVisiblePos (int steps)
+        {
+          UNIMPLEMENTED ("nudgeVisiblePos");
+        }
+      
+      void
+      navHistory()
+        {
+          UNIMPLEMENTED ("navigate Zoom History");
+        }
       
     private:
+      /* === adjust and coordinate === */
+      
+      void
+      mutateWindow (TimeValue start, TimeValue after)
+        {
+          UNIMPLEMENTED ("change Window TimeSpan, validate and adjust all params");
+        }
+      
+      void
+      mutateScale (uint px_per_sec)
+        {
+          UNIMPLEMENTED ("change scale factor, validate and adjust all params");
+        }
+      
+      void
+      mutateDuration (Duration duration)
+        {
+          UNIMPLEMENTED ("change visible duration, validate and adjust all params");
+        }
     };
   
   

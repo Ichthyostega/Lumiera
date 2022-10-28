@@ -87,19 +87,19 @@ namespace model {
       TimeSpan
       coveredTime() const override
         {
-          return zoomWindow_.overallSpan;
+          return zoomWindow_.overallSpan();
         }
       
       int
       translateTimeToPixels (TimeValue startTimePoint)  const override
         {
-          return _raw(startTimePoint) * zoomWindow_.px_per_sec / Time::SCALE;
+          return _raw(startTimePoint) * zoomWindow_.px_per_sec() / Time::SCALE;
         }
       
       TimeValue
       applyScreenDelta(Time anchor, double deltaPx)  const override
         {
-          return anchor + TimeValue{gavl_time_t(Time::SCALE * deltaPx / zoomWindow_.px_per_sec)};
+          return anchor + TimeValue{gavl_time_t(Time::SCALE * deltaPx / zoomWindow_.px_per_sec())};
         }
     };
   

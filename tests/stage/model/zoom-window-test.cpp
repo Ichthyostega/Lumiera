@@ -58,10 +58,13 @@ namespace test {
   
   
   /*************************************************************************************//**
-   * @test verify technicalities regarding the translation between domain model coordinates
-   *       and screen layout coordinates.
-   *       - bla
-   *       - blubb
+   * @test verify consistent handling of scrolling and zoom settings for the timeline.
+   *       - setting the overall range
+   *       - setting the visible range
+   *       - adjusting the scale factor
+   *       - setting a visible position
+   *       - nudging the position
+   *       - nudging the scale factor
    * @see zoom-window.hpp
    */
   class ZoomWindow_test : public Test
@@ -70,15 +73,24 @@ namespace test {
       virtual void
       run (Arg)
         {
-          verify_standardUsage();
+          verify_simpleUsage();
         }
       
       
       /** @test the standard use case is to.... TBW
        */
       void
-      verify_standardUsage()
+      verify_simpleUsage()
         {
+          ZoomWindow zoomWin;
+          CHECK (zoomWin.overallSpan() == TimeSpan(Time::ZERO, Time(FSecs(23))));
+          CHECK (zoomWin.visible()     == TimeSpan(Time::ZERO, Time(FSecs(23))));
+          CHECK (zoomWin.px_per_sec()  == 25);
+          
+          zoomWin.nudgeMetric(+1);
+          CHECK (zoomWin.px_per_sec()  == 50);
+          CHECK (zoomWin.visible()     == TimeSpan(Time(FSecs(23,4)), Time(FSecs(23,2))));
+          CHECK (zoomWin.overallSpan() == TimeSpan(Time::ZERO, Time(FSecs(23))));
         }
       
       
