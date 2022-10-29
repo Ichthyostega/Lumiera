@@ -22,14 +22,17 @@
 
 
 /** @file zoom-window.hpp
- ** Abstraction: a multi-dimensional extract from model space into screen coordinates.
- ** This is a generic component to represent and handle the zooming and positioning of
- ** views within an underlying model space. This model space is conceived to be two fold:
+ ** Abstraction: the current zoom- and navigation state of a view, possibly in multiple
+ ** dimensions. This is a generic component to represent and handle the zooming and
+ ** positioning of views within an underlying model space. This model space is conceived
+ ** to be two fold:
  ** - it is a place or excerpt within the model topology (e.g. the n-th track in the fork)
  ** - it has a temporal extension within a larger temporal frame (e.g. some seconds within
  **   the timeline)
  ** This component is called »Zoom Window«, since it represents a window-like local visible
- ** interval, embedded into a larger time span covering the whole timeline.
+ ** interval, embedded into a larger time span covering a complete timeline.
+ ** @note as of 10/2022 this component is in an early stage of development and just used
+ **       to coordinate the horizontal extension of the timeline view.
  ** 
  ** # Rationale
  ** 
@@ -98,6 +101,10 @@ namespace model {
   using lib::time::FSecs;
   using lib::time::Time;
   
+  namespace {
+    /** the deepest zoom is to use 2px per micro-tick */
+    const uint ZOOM_MAX_RESOLUTION = 2 * TimeValue::SCALE;
+  }
   
   /**
    * A component to ensure uniform handling of zoom scale
@@ -105,6 +112,13 @@ namespace model {
    * the mutator functions are validated and harmonised to
    * meet the internal invariants; a change listener is
    * possibly notified to pick up the new settings.
+   * 
+   * A ZoomWindow...
+   * - is a #visible TimeSpan
+   * - which is completely inside an #overalSpan
+   * - and is rendered at a scale factor #px_per_sec
+   * - 0 < px_per_sec <= ZOOM_MAX_RESOLUTION
+   * - zoom operations are applied around an #anchorPoint
    */
   class ZoomWindow
     : util::NonCopyable
@@ -152,7 +166,12 @@ namespace model {
       void
       nudgeMetric (int steps)
         {
-          UNIMPLEMENTED ("nudgeMetric");
+          uint changedScale =
+              steps > 0 ? px_per_sec_ << steps
+                        : px_per_sec_ >> -steps;
+          if (0 < changedScale
+              and changedScale <= ZOOM_MAX_RESOLUTION)
+            mutateScale (changedScale);
         }
       
       void
@@ -239,13 +258,107 @@ namespace model {
       void
       mutateScale (uint px_per_sec)
         {
-          UNIMPLEMENTED ("change scale factor, validate and adjust all params");
+          if (px_per_sec == 0) px_per_sec = 1;
+          if (px_per_sec == px_per_sec_) return;
+          
+          FSecs changeFactor{px_per_sec, px_per_sec_};
+          FSecs dur{afterWin_ - startWin_};
+          dur /= changeFactor;
+          if (dur > FSecs{afterAll_ - startAll_})
+            {// limit to the overall timespan...
+              px_per_sec_  = adjustedScale (startAll_,afterAll_, startWin_,afterWin_);
+              startWin_ = startAll_;
+              afterWin_ = afterAll_;
+            }
+          else
+            {
+              TimeVar start{anchorPoint() - dur*relativeAnchor()};
+              if (start < startAll_)
+                start = startAll_;
+              TimeVar after{start + dur};
+              if (after > afterAll_)
+                {
+                  after = afterAll_;
+                  start = afterAll_ - dur;
+                }
+              ASSERT (after-start <= afterAll_-startAll_);
+              
+              if (start == startWin_ and after == afterWin_)
+                return; // nothing changed effectively
+              
+              px_per_sec_ = adjustedScale (start,after, startWin_,afterWin_);
+              startWin_ = start;
+              afterWin_ = after;
+            }
+          fireChangeNotification();
         }
       
       void
       mutateDuration (Duration duration)
         {
           UNIMPLEMENTED ("change visible duration, validate and adjust all params");
+        }
+      
+      
+      /**
+       * Adjust the display scale such as to match the given changed time interval
+       * @param startNew changed start point
+       * @param afterNew changed end point
+       * @param startOld previous start point
+       * @param afterOld previous end point
+       * @return adapted scale factor in pixel per second, rounded half up to the next pixel.
+       */
+      uint
+      adjustedScale (TimeVar startNew, TimeVar afterNew, TimeVar startOld, TimeVar afterOld)
+        {
+          REQUIRE (startOld < afterOld);
+          FSecs factor = FSecs{afterNew - startNew} / FSecs{afterOld - startOld};
+          return boost::rational_cast<uint>(px_per_sec_ / factor + 1/2); // rounding half pixels
+        }
+      
+      /**
+       * The anchor point or centre for zooming operations applied to the visible window
+       * @return where the visible window should currently be anchored
+       * @remark this point can sometimes be outside the current visible window,
+       *         but any further zooming/scaling/scrolling operation should bring it back
+       *         into sight. Moreover, the function #relativeAnchor() defines the position
+       *         where this anchor point _should_ be placed relative to the visible window.
+       * @todo 10/2022 we use a numerical rule currently, but that could be contextual state,
+       *       like e.g. the current position of the play head or edit cursor or mouse.
+       */
+      FSecs
+      anchorPoint()  const
+        {
+          return startWin_ + FSecs{afterWin_-startWin_} * relativeAnchor(); 
+        }
+      
+      /**
+       * define at which proportion to the visible window's duration the anchor should be placed
+       * @return a fraction 0 ... 1, where 0 means at start and 1 means after end.
+       * @note as of 10/2022 we use a numerical rule to place the anchor point in accordance
+       *       to the current visible window's position within the overall timeline; if it's
+       *       close to the beginning, the anchor point is also rather to the beginning...
+       */
+      FSecs
+      relativeAnchor()  const
+        {
+          // the visible window itself has to fit in, which reduces the action range
+          FSecs possibleRange = (afterAll_-startAll_) - (afterWin_-startWin_);
+          if (possibleRange == 0) // if there is no room for scrolling...
+            return FSecs{1,2};   //  then anchor zooming in the middle
+          
+          // use a 3rd degree parabola to favour positions in the middle
+          FSecs posFactor = FSecs{startWin_-startAll_} / possibleRange;
+          posFactor = (2*posFactor - 1);              // -1 ... +1
+          posFactor = posFactor*posFactor*posFactor;  // -1 ... +1 but accelerating towards boundraries
+          posFactor = (posFactor + 1) / 2;            //  0 ... 1
+          return posFactor;
+        }
+      
+      void
+      fireChangeNotification()
+        {
+          TODO("really fire...");
         }
     };
   

@@ -102,7 +102,7 @@ extern "C" {    /* ===================== C interface ======================== */
  * as zero. Each interval includes its lower bound, but excludes its upper bound.
  * @param grid spacing of the grid intervals, measured in GAVL_TIME_SCALE
  * @return number of the grid interval containing the given time.
- * @warning the resulting value is limited to (Time::Min, Time::MAX) 
+ * @warning the resulting value is limited to (Time::Min, Time::MAX)
  */
 int64_t
 lumiera_quantise_frames (gavl_time_t time, gavl_time_t origin, gavl_time_t grid);
@@ -112,12 +112,12 @@ lumiera_quantise_frames_fps (gavl_time_t time, gavl_time_t origin, uint framerat
 
 /**
  * Similar to #lumiera_quantise_frames, but returns a grid aligned \em time value
- * @return time of start of the grid interval containing the given time, 
+ * @return time of start of the grid interval containing the given time,
  *         but measured relative to the origin
  * @warning because the resulting value needs to be limited to fit into a 64bit long,
  *         the addressable time range can be considerably reduced. For example, if
  *         origin = Time::MIN, then all original time values above zero will be
- *         clipped, because the result, relative to origin, needs to be <= Time::MAX 
+ *         clipped, because the result, relative to origin, needs to be <= Time::MAX
  */
 gavl_time_t
 lumiera_quantise_time (gavl_time_t time, gavl_time_t origin, gavl_time_t grid);

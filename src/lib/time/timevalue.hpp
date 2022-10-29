@@ -23,13 +23,46 @@
 /** @file timevalue.hpp
  ** a family of time value like entities and their relationships.
  ** This is the foundation for the Lumiera time handling framework. On the implementation
- ** level, time values are represented as 64bit integer values \c gavl_time_t. But for the
+ ** level, time values are represented as 64bit integer values `gavl_time_t`. But for the
  ** actual use, we create several kinds of time "values", based on their logical properties.
  ** These time values are considered to be fixed (immutable) values, which may only be
- ** created through some well defined construction paths, and any time based calculation
+ ** created through some limited construction paths, and any time based calculation
  ** is forced to go through our time calculation library. This is prerequisite for
- ** the definition of <i>frame aligned</i> time values and time code representation
+ ** the definition of _frame aligned_ time values and time code representation
  ** implemented as display format based on these frame quantised time values.
+ ** 
+ ** # Time entities
+ ** 
+ ** The value types defined in this header represent time points and time intervals
+ ** based on an internal time scale (µs ticks) and not related to any known fixed time
+ ** zone or time base; rather they are interpreted in usage context, and the only way
+ ** to retrieve such a value is by formatting it into a time code format.
+ ** 
+ ** The lib::time::TimeValue serves as foundation for all further time calculations;
+ ** in fact it is implemented as a single 64bit µ-tick value (`gavl_time_t`). The
+ ** further time entities are implemented as value objects (without virtual functions):
+ ** - lib::time::Time represents a time instant and is the reference for any usage
+ ** - lib::time::TimeVar is a mutable time variable and can be used for calculations
+ ** - lib::time::Offset can be used to express a positive or negative shift on time scale
+ ** - lib::time::Duration represents the extension or an amount of time
+ ** - lib::time::TimeSpan represents a distinct interval, with start time and duration
+ ** - lib::time::FrameRate can be used to mark a number to denote a frames-per-second spec
+ ** - lib::time::FSecs is a rational number to represent seconds or fractions thereof
+ ** 
+ ** # Manipulating time values
+ ** 
+ ** Time values are conceived as fixed, immutable entities, similar to numbers; you can't
+ ** just change the number two, and likewise, two seconds are two seconds. However, for
+ ** many use cases we have to combine time values to perform calculations
+ ** - Time entities can be combined with operators, to form new time entities
+ ** - the TimeVar can be used as accumulator or variable for ongoing calculations
+ ** - since TimeSpan, Duration (and the grid-aligned, "quantised" flavours) will often
+ **   represent some time-like property or entity, e.g. the temporal specification of
+ **   a media Clip with start and duration, there is the concept of an explicit *mutation*,
+ **   which is _accepted_ by these entities. Notably the lib::time::Control can be attached
+ **   to these entities, and can then receive manipulations (nudging, offset); moreover it
+ **   is possible to attach as listener to such a "controller" and be notified by any
+ **   manipulation; this setup is the base for running time display, playback cursors etc.
  ** 
  ** @see time.h basic time calculation library functions
  ** @see timequant.hpp
@@ -75,7 +108,7 @@ namespace time {
    * @note clients should prefer to use Time instances,
    *       which explicitly denote an Lumiera internal
    *       time value and are easier to use.
-   * @see TimeVar when full arithmetics are required 
+   * @see TimeVar when full arithmetics are required
    */
   class TimeValue
     : boost::totally_ordered<TimeValue,
@@ -107,7 +140,7 @@ namespace time {
       static gavl_time_t limited (gavl_time_t raw);
       
       
-      explicit 
+      explicit
       TimeValue (gavl_time_t val=0)       ///< time given in µ ticks here
         : t_(limited (val))
         { }
@@ -134,58 +167,6 @@ namespace time {
   
   
   
-  /** a mutable time value,
-   *  behaving like a plain number,
-   *  allowing copy and re-accessing
-   * @note supports scaling by a factor,
-   *       which \em deliberately is chosen 
-   *       as int, not gavl_time_t, because the
-   *       multiplying of times is meaningless.
-   */
-  class TimeVar
-    : public TimeValue
-    , boost::additive<TimeVar,
-      boost::additive<TimeVar, TimeValue,
-      boost::multipliable<TimeVar, int>
-      > >
-    {
-    public:
-      TimeVar (TimeValue const& time = TimeValue())
-        : TimeValue(time)
-        { }
-      
-      // Allowing copy and assignment
-      TimeVar (TimeVar const& o)
-        : TimeValue(o)
-        { }
-      
-      TimeVar&
-      operator= (TimeValue const& o)
-        {
-          t_ = TimeVar(o);
-          return *this;
-        }
-      
-      // Support mixing with plain long int arithmetics
-      operator gavl_time_t ()  const { return t_; }
-      
-      // Supporting additive
-      TimeVar& operator+= (TimeVar const& tx)  { t_ += tx.t_; return *this; }
-      TimeVar& operator-= (TimeVar const& tx)  { t_ -= tx.t_; return *this; }
-      
-      // Supporting multiplication with integral factor
-      TimeVar& operator*= (int64_t fact)       { t_ *= fact;  return *this; }
-      
-      // Supporting sign flip
-      TimeVar  operator-  ()         const     { return TimeVar(*this)*=-1; }
-       
-      // baseclass TimeValue is already totally_ordered 
-    };
-  
-  
-  
-  
-  
   
   
   
@@ -208,7 +189,65 @@ namespace time {
   typedef boost::rational<int64_t> FSecs;
   
   
-  /**
+  
+  /** a mutable time value,
+   *  behaving like a plain number,
+   *  allowing copy and re-accessing
+   * @note supports scaling by a factor,
+   *       which _deliberately_ is chosen
+   *       as int, not gavl_time_t, because the
+   *       multiplying of times is meaningless.
+   */
+  class TimeVar
+    : public TimeValue
+    , boost::additive<TimeVar,
+      boost::additive<TimeVar, TimeValue,
+      boost::multipliable<TimeVar, int>
+      > >
+    {
+    public:
+      TimeVar (TimeValue const& time = TimeValue())
+        : TimeValue(time)
+        { }
+      
+      /** Allow to pick up precise fractional seconds
+       * @warning truncating fractional µ-ticks  */
+      TimeVar (FSecs const&);
+      
+      /// Allowing copy and assignment
+      TimeVar (TimeVar const& o)
+        : TimeValue(o)
+        { }
+      
+      TimeVar&
+      operator= (TimeValue const& o)
+        {
+          t_ = TimeVar(o);
+          return *this;
+        }
+      
+      /// Support mixing with plain long int arithmetics
+      operator gavl_time_t()  const { return t_; }
+      /// Support for micro-tick precise time arithmetics
+      operator FSecs()  const { return FSecs{t_, TimeValue::SCALE}; }
+      
+      /// Supporting additive
+      TimeVar& operator+= (TimeVar const& tx)  { t_ += tx.t_; return *this; }
+      TimeVar& operator-= (TimeVar const& tx)  { t_ -= tx.t_; return *this; }
+      
+      /// Supporting multiplication with integral factor
+      TimeVar& operator*= (int64_t fact)       { t_ *= fact;  return *this; }
+      
+      /// Supporting sign flip
+      TimeVar  operator-  ()         const     { return TimeVar(*this)*=-1; }
+       
+      // baseclass TimeValue is already totally_ordered
+    };
+  
+  
+  
+  
+  /**********************************************************//**
    * Lumiera's internal time value datatype.
    * This is a TimeValue, but now more specifically denoting
    * a point in time, measured in reference to an internal
@@ -216,7 +255,7 @@ namespace time {
    * 
    * Lumiera Time provides some limited capabilities for
    * direct manipulation; Time values can be created directly
-   * from \c (ms,sec,min,hour) specification and there is an
+   * from `(ms,sec,min,hour)` specification and there is an
    * string representation intended for internal use (reporting
    * and debugging). Any real output, formatting and persistent
    * storage should be based on the (quantised) timecode
@@ -291,14 +330,14 @@ namespace time {
        *  but derived classes allow some limited mutation
        *  through special API calls */
       Offset&
-      operator= (Offset const& o) 
+      operator= (Offset const& o)
         {
           TimeValue::operator= (o);
           return *this;
         }
       
     public:
-      explicit 
+      explicit
       Offset (TimeValue const& distance =Time::ZERO)
         : TimeValue(distance)
         { }
@@ -367,7 +406,7 @@ namespace time {
   inline Offset
   Offset::operator- ()  const
   {
-    return -1 * (*this); 
+    return -1 * (*this);
   }
   
   
@@ -377,8 +416,8 @@ namespace time {
    * Duration is the internal Lumiera time metric.
    * It is an absolute (positive) value, but can be
    * promoted from an offset. While Duration generally
-   * is treated as immutable value, there is the 
-   * possibility to send a \em Mutation message.
+   * is treated as immutable value, there is the
+   * possibility to send a _Mutation message_.
    */
   class Duration
     : public TimeValue
@@ -446,7 +485,7 @@ namespace time {
   inline Offset
   Duration::operator- ()  const
   {
-    return -1 * (*this); 
+    return -1 * (*this);
   }
   
   
@@ -500,13 +539,13 @@ namespace time {
       
       
       Duration&
-      duration() 
+      duration()
         {
           return dur_;
         }
       
       Duration
-      duration()  const 
+      duration()  const
         {
           return dur_;
         }
@@ -607,10 +646,15 @@ namespace time {
   inline gavl_time_t
   TimeValue::limited (gavl_time_t raw)
   {
-    return raw > Time::MAX? Time::MAX.t_ 
-         : raw < Time::MIN? Time::MIN.t_ 
+    return raw > Time::MAX? Time::MAX.t_
+         : raw < Time::MIN? Time::MIN.t_
          :                  raw;
   }
+  
+  inline
+  TimeVar::TimeVar (FSecs const& fractionalSeconds)
+    : TimeVar{Time(fractionalSeconds)}
+    { }
   
   inline
   Duration::Duration (TimeSpan const& interval)
@@ -645,7 +689,7 @@ namespace time {
 
 
 namespace util {
-    
+  
   inline bool
   isnil (lib::time::Duration const& dur)
   {

@@ -23,7 +23,7 @@
 * *****************************************************/
 
 
-/** @file time.cpp 
+/** @file time.cpp
  ** Lumiera time handling core implementation unit.
  ** This translation unit generates code for the Lumiera internal time wrapper,
  ** based on gavl_time_t, associated constants, marker classes for the derived
@@ -32,7 +32,7 @@
  ** 
  ** Client code includes either time.h (for basics and conversion functions)
  ** or timevalue.hpp (for the time entities), timequant.hpp for grid aligned
- ** time values or timecode.hpp 
+ ** time values or timecode.hpp
  ** 
  ** @see Time
  ** @see TimeValue
@@ -301,7 +301,7 @@ lumiera_tmpbuf_print_time (gavl_time_t time)
   
   char *buffer = lumiera_tmpbuf_snprintf(64, "%s%01d:%02d:%02d.%03d",
     negative ? "-" : "", hours, minutes, seconds, milliseconds);
-    
+  
   ENSURE(buffer != NULL);
   return buffer;
 }
@@ -352,7 +352,7 @@ namespace { // implementation: basic frame quantisation....
     const int64_t limit_den = std::numeric_limits<gavl_time_t>::max() / framerate_divisor;
     const int64_t microScale {lib::time::TimeValue::SCALE};
     
-    // protect against numeric overflow 
+    // protect against numeric overflow
     if (abs(time) < limit_num && microScale < limit_den)
       {
         // safe to calculate "time * framerate"
@@ -393,7 +393,7 @@ lumiera_quantise_time (gavl_time_t time, gavl_time_t origin, gavl_time_t grid)
 gavl_time_t
 lumiera_time_of_gridpoint (int64_t nr, gavl_time_t origin, gavl_time_t grid)
 {
-  gavl_time_t offset = nr * grid;    
+  gavl_time_t offset = nr * grid;
   return origin + offset;
 }
 
@@ -462,12 +462,12 @@ namespace { // implementation helper
   const uint FRAMES_PER_10min = 10*60 * 30000/1001;
   const uint FRAMES_PER_1min  =  1*60 * 30000/1001;
   const uint DISCREPANCY      = (1*60 * 30) - FRAMES_PER_1min;
-   
+  
   
   /** reverse the drop-frame calculation
-   * @param  time absolute time value in micro ticks 
+   * @param  time absolute time value in micro ticks
    * @return the absolute frame number using NTSC drop-frame encoding
-   * @todo I doubt this works correct for negative times!! 
+   * @todo I doubt this works correct for negative times!!
    */
   inline int64_t
   calculate_drop_frame_number (gavl_time_t time)
@@ -479,7 +479,7 @@ namespace { // implementation helper
     
     // ensure the drop-frame incidents happen at full minutes;
     // at start of each 10-minute segment *no* drop incident happens,
-    // thus we need to correct discrepancy between nominal/real framerate once: 
+    // thus we need to correct discrepancy between nominal/real framerate once:
     int64_t remainingMinutes = (tenMinFrames.rem - DISCREPANCY) / FRAMES_PER_1min;
     
     int64_t dropIncidents = (10-1) * tenMinFrames.quot + remainingMinutes;
@@ -523,6 +523,6 @@ lumiera_build_time_ntsc_drop (uint frames, uint secs, uint mins, uint hours)
   gavl_time_t result = lumiera_framecount_to_time (total_frames, FrameRate::NTSC);
   
   if (0 != result) // compensate for truncating down on conversion
-    result += 1;  //  without this adjustment the frame number  
+    result += 1;  //  without this adjustment the frame number
   return result; //   would turn out off by -1 on back conversion
 }

@@ -38379,8 +38379,14 @@
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666966669487" ID="ID_1477573565" MODIFIED="1666967820569" TEXT="testgetrieben entwickelt">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1666966669487" ID="ID_1477573565" MODIFIED="1667093086439" TEXT="testgetrieben entwickelt">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1667093097050" ID="ID_1662709264" MODIFIED="1667093103756" TEXT="verify_simpleUsage">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1667093106907" ID="ID_1255657275" MODIFIED="1667093118644" TEXT="nudge Zoom-Faktor"/>
+<node CREATED="1667093120846" ID="ID_1405458968" MODIFIED="1667093134771" TEXT="&#x27f9; doppelte Aufl&#xf6;sung"/>
+<node CREATED="1667093136007" ID="ID_1309995367" MODIFIED="1667093153233" TEXT="&#x27f9; visible Window liegt in der Mitte und hat hable L&#xe4;nge"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1666913274942" ID="ID_4743528" MODIFIED="1666913286194" TEXT="Design &#xfc;berpr&#xfc;fen">
