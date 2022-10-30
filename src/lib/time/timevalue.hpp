@@ -35,8 +35,8 @@
  ** 
  ** The value types defined in this header represent time points and time intervals
  ** based on an internal time scale (µs ticks) and not related to any known fixed time
- ** zone or time base; rather they are interpreted in usage context, and the only way
- ** to retrieve such a value is by formatting it into a time code format.
+ ** zone or time base; rather they are interpreted in usage context, and the intended
+ ** way to retrieve such a value is by formatting it into a time code format.
  ** 
  ** The lib::time::TimeValue serves as foundation for all further time calculations;
  ** in fact it is implemented as a single 64bit µ-tick value (`gavl_time_t`). The
@@ -63,6 +63,34 @@
  **   to these entities, and can then receive manipulations (nudging, offset); moreover it
  **   is possible to attach as listener to such a "controller" and be notified by any
  **   manipulation; this setup is the base for running time display, playback cursors etc.
+ ** 
+ ** # Quantised time
+ ** 
+ ** While these _internal time values_ can be considered _sufficiently precise,_ in practice
+ ** any time specifications in the context of media handling will be aligned to some grid,
+ ** and expressed in a _time code format._ Typically, we want to know the number of frames
+ ** since playback started at the beginning of the timeline, and such a specification also
+ ** relies on some implicitly known _frame rate_ (24fps for film in US, 25fps for film and
+ ** TV in Europe, ...). By _deliberate choice,_ in Lumiera we *do not incorporate* such
+ ** implicit assumptions into the actual time values. Rather, they need to be made explicitly
+ ** in the relevant usage context. This is also the reason why the time entities defined in
+ ** this header _do not offer an API_ to get the "real" time (whatever this means). Rather,
+ ** the user of these time entities should get used to the concept that these abstract
+ ** opaque values are the real thing, and a concrete, human readable time code is only
+ ** a derivation, and any such derivation also incurs information loss. To reiterate that,
+ ** _any time quantisation is a lossy information;_ grid aligned values are not "cleaner",
+ ** they are just easier to handle for humans.
+ ** 
+ ** \par how can I extract a time value?
+ ** Taking the aforementioned into account, it depends on the context what to expect and to get
+ ** - the standard path is to create a lib::time::QuTime by associating the internal time value
+ **   with a pre-defined _time grid._ From there you can call QuTime::formatAs() to build an
+ **   actual timecode instance, which can then be investigated or just printed.
+ ** - for debugging purpose, lib::time::Time defines an `operator string()`, which breaks down
+ **   the internal values into the format `-hh:mm:ss.mss`
+ ** - advanced calculations with the need to access the implementation data in full precision
+ **   should go through lib::time::TimeVar, which offers conversions to raw `int64_t` and the
+ **   even more fine grained `FSec`, which is a rational (fraction) `boost::rational<int64_t>`
  ** 
  ** @see time.h basic time calculation library functions
  ** @see timequant.hpp
@@ -178,15 +206,15 @@ namespace time {
    *  grid and origin is obvious from the call context.
    * @warning do not mix up gavl_time_t and FrameCnt.
    * @warning use 64bit consistently.
-   *          beware: \c long is 32bit on i386
+   *          beware: `long` is 32bit on i386
    * @note any conversion to frame numbers should go through
    *       time quantisation followed by conversion to FrameNr
    */
-  typedef int64_t FrameCnt;
+  using FrameCnt = int64_t;
   
   /** rational representation of fractional seconds
    * @warning do not mix up gavl_time_t and FSecs */
-  typedef boost::rational<int64_t> FSecs;
+  using FSecs = boost::rational<int64_t>;
   
   
   
@@ -319,7 +347,7 @@ namespace time {
    * Similar to (basic) time values, offsets can be compared,
    * but are otherwise opaque and immutable. Yet they allow
    * to build derived values, including
-   * - the \em absolute (positive) distance for this offset
+   * - the _absolute (positive) distance_ for this offset: #abs
    * - a combined offset by chaining another offset
    */
   class Offset
@@ -500,7 +528,7 @@ namespace time {
    * 
    * As an exception to the generally immutable Time
    * entities, a non constant TimeSpan may receive
-   * \em mutation messages, both for the start point
+   * _mutation messages_, both for the start point
    * and the duration. This allows for changing
    * position and length of objects in the timeline.
    * 

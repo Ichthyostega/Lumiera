@@ -77,8 +77,7 @@ namespace test {
         }
       
       
-      /** @test the standard use case is to.... TBW
-       */
+      /** @test simple usage example: double the zoom level, then scroll to the left */
       void
       verify_simpleUsage()
         {
@@ -90,6 +89,11 @@ namespace test {
           zoomWin.nudgeMetric(+1);
           CHECK (zoomWin.px_per_sec()  == 50);
           CHECK (zoomWin.visible()     == TimeSpan(Time(FSecs(23,4)), FSecs(23,2)));
+          CHECK (zoomWin.overallSpan() == TimeSpan(Time::ZERO, Time(FSecs(23))));
+          
+          zoomWin.nudgeVisiblePos(-1);
+          CHECK (zoomWin.px_per_sec()  == 50);
+          CHECK (zoomWin.visible()     == TimeSpan(Time::ZERO, FSecs(23,2)));
           CHECK (zoomWin.overallSpan() == TimeSpan(Time::ZERO, Time(FSecs(23))));
         }
       

@@ -101,6 +101,11 @@
 <arrowlink COLOR="#fee998" DESTINATION="ID_176564515" ENDARROW="Default" ENDINCLINATION="-1211;-7367;" ID="Arrow_ID_157207334" STARTARROW="None" STARTINCLINATION="-617;103;"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1523746656723" ID="ID_1022913151" MODIFIED="1667166830055" TEXT="#1140 UI Integration Testing">
+<arrowlink COLOR="#eff1e5" DESTINATION="ID_435582808" ENDARROW="Default" ENDINCLINATION="-1920;189;" ID="Arrow_ID_1348453991" STARTARROW="None" STARTINCLINATION="498;45;"/>
+<arrowlink COLOR="#eff1e5" DESTINATION="ID_406286329" ENDARROW="Default" ENDINCLINATION="-2304;344;" ID="Arrow_ID_1832343822" STARTARROW="None" STARTINCLINATION="498;45;"/>
+<icon BUILTIN="hourglass"/>
+</node>
 </node>
 <node CREATED="1538938685096" HGAP="138" ID="ID_511824194" MODIFIED="1557498707215" TEXT="gr&#xfc;nden" VSHIFT="42">
 <node CREATED="1477784793993" ID="ID_1868522177" MODIFIED="1566487594554" TEXT="Umbau">
@@ -16184,6 +16189,7 @@
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#eff1e5" DESTINATION="ID_435582808" ENDARROW="Default" ENDINCLINATION="-1920;189;" ID="Arrow_ID_1348453991" SOURCE="ID_1022913151" STARTARROW="None" STARTINCLINATION="498;45;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1523746659654" ID="ID_1299891788" MODIFIED="1523746698882" TEXT="Das Ziel war: alle konkreten Standard-F&#xe4;lle durchspielen">
@@ -16207,10 +16213,13 @@
 <node COLOR="#435e98" CREATED="1523748895111" ID="ID_613307109" MODIFIED="1523748953311" TEXT="sp&#xe4;ter mal....">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="idea"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523748900655" ID="ID_1768095597" MODIFIED="1523748939872" TEXT="#1140 UI integration tests">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1523748900655" ID="ID_1768095597" MODIFIED="1667166529999" TEXT="#1140 UI integration tests">
 <icon BUILTIN="hourglass"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1523748905725" ID="ID_748849132" MODIFIED="1523748935631" TEXT="#1141 verify UI default view allocation">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1523748905725" ID="ID_748849132" MODIFIED="1667166529999" TEXT="#1141 verify UI default view allocation">
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1667166492738" ID="ID_1938503803" MODIFIED="1667166529999" TEXT="#1257 provide test-session for GUI">
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
@@ -17118,7 +17127,10 @@
 </node>
 </node>
 </node>
-<node CREATED="1523055378032" ID="ID_1727349685" MODIFIED="1525124215035" TEXT="Test-Hilfsmittel">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1523055378032" ID="ID_406286329" MODIFIED="1525124215035" TEXT="Test-Hilfsmittel">
+<linktarget COLOR="#eff1e5" DESTINATION="ID_406286329" ENDARROW="Default" ENDINCLINATION="-2304;344;" ID="Arrow_ID_1832343822" SOURCE="ID_1022913151" STARTARROW="None" STARTINCLINATION="498;45;"/>
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="hourglass"/>
 <node CREATED="1523055393950" ID="ID_62932320" MODIFIED="1523055412955" TEXT="TestElementAccess">
 <icon BUILTIN="forward"/>
 </node>
@@ -38358,7 +38370,7 @@
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1666913370781" ID="ID_1691713188" MODIFIED="1666966354349" TEXT="klassisches Klassen-Design">
 <icon BUILTIN="yes"/>
-<node CREATED="1666913375117" ID="ID_1377108042" MODIFIED="1666966405674" TEXT="ZoomWindow ist kopierbare Klasse mit internem State"/>
+<node CREATED="1666913375117" ID="ID_1377108042" MODIFIED="1667158257168" TEXT="ZoomWindow ist unkopierbare Klasse mit internem State"/>
 <node CREATED="1666913471725" ID="ID_1373767277" MODIFIED="1666966473259" TEXT="Master-Setter f&#xfc;hren die Range-Chacks durch"/>
 <node CREATED="1666966477745" ID="ID_1255941758" MODIFIED="1666966489636" TEXT="sekund&#xe4;re / convenience-Setter bieten"/>
 <node CREATED="1666966493207" ID="ID_872298278" MODIFIED="1666966503634" TEXT="interner State in 4 TimeVar"/>
@@ -38386,6 +38398,85 @@
 <node CREATED="1667093106907" ID="ID_1255657275" MODIFIED="1667093118644" TEXT="nudge Zoom-Faktor"/>
 <node CREATED="1667093120846" ID="ID_1405458968" MODIFIED="1667093134771" TEXT="&#x27f9; doppelte Aufl&#xf6;sung"/>
 <node CREATED="1667093136007" ID="ID_1309995367" MODIFIED="1667093153233" TEXT="&#x27f9; visible Window liegt in der Mitte und hat hable L&#xe4;nge"/>
+<node CREATED="1667163315776" ID="ID_1054488196" MODIFIED="1667163336658" TEXT="nudge Position &#x27f5;"/>
+<node CREATED="1667093136007" ID="ID_1861991162" MODIFIED="1667163359264" TEXT="&#x27f9; visible Window liegt nun genau am Anfang"/>
+</node>
+<node COLOR="#435e98" CREATED="1667155790783" ID="ID_1921165636" MODIFIED="1667155805398" TEXT="Frage: Basis f&#xfc;r Rechnungen?">
+<icon BUILTIN="help"/>
+<node CREATED="1667155806980" ID="ID_250578278" MODIFIED="1667156041888">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>FSecs</b>&#160;&#8793; <font face="Monospaced">boost::rational&lt;int64_t&gt;</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1667156043109" ID="ID_234377752" MODIFIED="1667156067733" TEXT="ist sogar noch pr&#xe4;ziser als &#xb5;s &#x2014; und exakt"/>
+<node COLOR="#338800" CREATED="1667156072512" ID="ID_951906064" MODIFIED="1667156093493" TEXT="TimeVar f&#xfc;r Konversionen &quot;aufbohren&quot;">
+<icon BUILTIN="yes"/>
+<node CREATED="1667156098084" ID="ID_1341404738" MODIFIED="1667156104554" TEXT="potentiell gef&#xe4;hrlich">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1667156192072" ID="ID_957228038" MODIFIED="1667156232815" TEXT="es gibt implizit int64_t &#x27f6; rational">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1667156246932" ID="ID_306732730" MODIFIED="1667156379883" TEXT="int64_t kann aus TimeVar &quot;entkommen&quot; und in FSecs &quot;reingeraten&quot;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>Resultat</u>:
+    </p>
+    <ul>
+      <li>
+        man hat einen Faktor 1e+6 im Ergebnis
+      </li>
+      <li>
+        ist mir tats&#228;chlich passiert, und zwar ziemlich &#252;berraschend
+      </li>
+      <li>
+        Abhilfe: FSecs-ctor explizit anschreiben
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1667156105827" ID="ID_142853354" MODIFIED="1667156141584" TEXT="durch explicit-conversions sch&#xfc;tzen">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1667156117746" ID="ID_748178975" MODIFIED="1667156124357" TEXT="geht nicht wie gew&#xfc;nscht"/>
+<node CREATED="1667156125589" ID="ID_1640624377" MODIFIED="1667156139947" TEXT="weil wir nicht &#xfc;ber den FSecs-ctor verf&#xfc;gen"/>
+<node CREATED="1667156145590" ID="ID_1139847097" MODIFIED="1667156168191" TEXT="und explicit-conversion-operator &#x27f9; static_cast"/>
+<node CREATED="1667156173714" ID="ID_1596347322" MODIFIED="1667156188388" TEXT="das w&#xfc;rde der fluiden Verwendung schaden"/>
+<node CREATED="1667156513645" ID="ID_1002330972" MODIFIED="1667156696839" TEXT="m&#xe4;&#xdf;ig gef&#xe4;hrlich, solange TimeVar ehr selten und lokal begrenzt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und so ist es auch gedacht: TimeVar sollte nicht auf APIs auftauchen!
+    </p>
+    <p>
+      Wenn man sich daran h&#228;lt, tritt TimeVar immer nur in einem lokalen Universum auf, wie hier im ZoomWindow, und man wei&#223; genau, wo und warum man dem eine <i>reine Zahl </i>zuweist
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#ec2dc2" DESTINATION="ID_1002330972" ENDARROW="Default" ENDINCLINATION="-1;56;" ID="Arrow_ID_116751884" SOURCE="ID_907527366" STARTARROW="None" STARTINCLINATION="65;4;"/>
+</node>
+</node>
+<node COLOR="#d132ba" CREATED="1667156391029" ID="ID_907527366" MODIFIED="1667156702025" TEXT="nicht gl&#xfc;cklich &#x2014; aber geht wohl nicht besser">
+<arrowlink COLOR="#ec2dc2" DESTINATION="ID_1002330972" ENDARROW="Default" ENDINCLINATION="-1;56;" ID="Arrow_ID_116751884" STARTARROW="None" STARTINCLINATION="65;4;"/>
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
 </node>
 </node>
 </node>

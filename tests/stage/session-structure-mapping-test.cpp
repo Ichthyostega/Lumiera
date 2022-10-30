@@ -43,6 +43,9 @@
  ** @see DiffTreeApplication_test
  ** @see DiffComplexApplication_test
  ** 
+ ** @todo as of 11/2022 this is still a mere placeholder; we need a test setup for
+ **       proper UI integration testing (without actually launching the UI) ////////////////////////////////TICKET #1257 : provide test-session for GUI
+ ** 
  */
 
 
@@ -83,6 +86,8 @@ namespace test {
    *       - it is the responsibility of the "Gui Model" (#SessionFacade)
    *         to ensure a read barrier, so the retrieved data can not be
    *         corrupted by concurrent session mutation operations.
+   * @todo 11/2022 this was an early draft, we need a way to inject
+   *       standard test session content                /////////////////////////////////////////////////////TICKET #1257 : provide test-session for GUI
    *       
    * @see SessionElementQuery_test
    * @see stage::model::SessionFacade
@@ -104,7 +109,7 @@ namespace test {
       void
       retrieveSessionStructure ()
         {
-          
+          TODO ("Ticket #1257");                        /////////////////////////////////////////////////////TICKET #1257 : provide test-session for GUI
         }
       
     };

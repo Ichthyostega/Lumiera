@@ -58,8 +58,8 @@ namespace time {
   
   
   class Quantiser; // API for grid aligning
-  typedef Quantiser const& QuantR;
-  typedef std::shared_ptr<const Quantiser> PQuant;
+  using QuantR = Quantiser const&;
+  using PQuant = std::shared_ptr<const Quantiser>;
   
   
   namespace format {
@@ -147,25 +147,25 @@ namespace time {
     template<>
     struct Traits<Frames>
       {
-        typedef FrameNr TimeCode;
+        using TimeCode = FrameNr;
       };
     
     template<>
     struct Traits<Smpte>
       {
-        typedef SmpteTC TimeCode;
+        using TimeCode = SmpteTC;
       };
     
     template<>
     struct Traits<Hms>
       {
-        typedef HmsTC TimeCode;
+        using TimeCode = HmsTC;
       };
     
     template<>
     struct Traits<Seconds>
       {
-        typedef Secs TimeCode;
+        using TimeCode = Secs;
       };
     
     

@@ -26,10 +26,7 @@
  ** This header defines the basics of...
  ** 
  ** @note as of X/2014 this is complete bs
- ** @todo WIP  ///////////////////////TICKET #
- ** 
- ** @see ////TODO_test usage example
- ** @see diagnostics.cpp implementation
+ ** @todo planned as of 11/2022  ////////////////////////////////////////////////////////////////////////////TICKET #1257 : provide test-session for GUI
  ** 
  */
 
@@ -78,42 +75,7 @@ namespace model {
         {
           
         }
-      
-      
-      /* == Adapter interface for == */
-      
-      void
-      setSolution (string const& solution ="")
-        {
-          UNIMPLEMENTED ("tbw");
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
-          if (isDeaf())
-            this->transmogrify (solution);
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #888
-        }
-      
-      
-    protected:
-      void maybe ()  const;
-      
-      
     };
-  
-  
-  
-  
-  
-  
-  /** @internal in case
-   */
-  inline void
-  Diagnostics::maybe ()  const
-  {
-    UNIMPLEMENTED ("tbw");
-  }
-  
-  
-  
   
   
 }} // namespace stage::model

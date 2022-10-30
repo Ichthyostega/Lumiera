@@ -47,6 +47,7 @@
 #include "lib/time.h"
 #include "lib/time/timevalue.hpp"
 #include "lib/util-quant.hpp"
+#include "lib/format-string.hpp"
 
 extern "C" {
 #include "lib/tmpbuf.h"
@@ -66,11 +67,9 @@ using lib::time::FrameRate;
 using boost::rational_cast;
 using boost::lexical_cast;
 
+
+
 namespace error = lumiera::error;
-
-
-
-
 
 
 namespace lib {
@@ -92,11 +91,13 @@ namespace time {
   const Time Time::NEVER  (Time::MAX);
   
   const Offset Offset::ZERO (Time::ZERO);
+  
+  Literal DIAGNOSTIC_FORMAT{"%s%01d:%02d:%02d.%03d"};
 
   
 /** scale factor _used locally within this implementation header_.
- *  GAVL_TIME_SCALE rsp. TimeValue::SCALE is the correct factor or dividend when using gavl_time_t
- *  for units of whole seconds from gavl_time_t.  Since we want to use milliseconds,
+ *  GAVL_TIME_SCALE rsp. TimeValue::SCALE is the correct factor or dividend when using
+ *  gavl_time_t for display on a scale with seconds. Since we want to use milliseconds,
  *  we need to multiply or divide by 1000 to get correct results. */
 #define TIME_SCALE_MS (lib::time::TimeValue::SCALE / 1000)
   
@@ -112,7 +113,7 @@ namespace time {
    *         any further adjustments.
    */
   Time::Time ( long millis
-             , uint secs 
+             , uint secs
              , uint mins
              , uint hours
              )
@@ -128,18 +129,6 @@ namespace time {
     : TimeValue(lumiera_rational_to_time (fractionalSeconds))
     { }
   
-  
-  /** display an internal Lumiera Time value
-   *  for diagnostic purposes or internal reporting.
-   * @warning internal Lumiera time values refer to an
-   *         implementation dependent time origin/scale.
-   * @return string rendering of the actual, underlying
-   *         implementation value, as `h:m:s:ms`
-   */
-  Time::operator string()  const
-  {
-    return string (lumiera_tmpbuf_print_time (t_));
-  }
   
   /** @note recommendation is to use TCode for external representation
    *  @remarks this is the most prevalent internal diagnostics display
@@ -161,6 +150,41 @@ namespace time {
          ;
   }
   
+  /** display an internal Lumiera Time value
+   *  for diagnostic purposes or internal reporting.
+   *  Format is `-hh:mm:ss.mss`
+   * @warning internal Lumiera time values refer to an
+   *         implementation dependent time origin/scale.
+   * @return string rendering of the actual, underlying
+   *         implementation value, as `h:m:s:ms`
+   */
+  Time::operator string()  const
+  {
+    gavl_time_t time = t_;
+    int millis, seconds, minutes, hours;
+    bool negative = (time < 0);
+    
+    if (negative)
+        time = -time;
+    
+    time /= TIME_SCALE_MS;
+    millis = time % 1000;
+    time /= 1000;
+    seconds = time % 60;
+    time /= 60;
+    minutes = time % 60;
+    time /= 60;
+    hours = time;
+    
+    return util::_Fmt{string(DIAGNOSTIC_FORMAT)}
+                     % (negative? "-":"")
+                     % hours
+                     % minutes
+                     % seconds
+                     % millis;
+  }
+  
+  
   Offset::operator string()  const
   {
     return (t_< 0? "" : "∆")
@@ -174,15 +198,15 @@ namespace time {
   
   TimeSpan::operator string()  const
   {
-    return string (lumiera_tmpbuf_print_time (t_))
-         + string (dur_);
+    return string (start())
+         + string (duration());
   }
   
   
   namespace {
-    template<typename INT>
+    template<typename RAT>
     string
-    renderFraction (INT const& frac, Literal postfx) noexcept
+    renderFraction (RAT const& frac, Literal postfx) noexcept
     try {
       std::ostringstream buffer;
       if (1 == frac.denominator() or 0 == frac.numerator())
@@ -299,7 +323,7 @@ lumiera_tmpbuf_print_time (gavl_time_t time)
   time /= 60;
   hours = time;
   
-  char *buffer = lumiera_tmpbuf_snprintf(64, "%s%01d:%02d:%02d.%03d",
+  char *buffer = lumiera_tmpbuf_snprintf(64, lib::time::DIAGNOSTIC_FORMAT,
     negative ? "-" : "", hours, minutes, seconds, milliseconds);
   
   ENSURE(buffer != NULL);

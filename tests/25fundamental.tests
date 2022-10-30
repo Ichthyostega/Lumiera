@@ -206,7 +206,7 @@ return: 0
 END
 
 
-TEST "Suppport for specific timecode formats" FormatSupport_test  <<END
+TEST "Support for specific timecode formats" FormatSupport_test  <<END
 return: 0
 END
 

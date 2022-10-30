@@ -32,6 +32,34 @@
  ** And it offers a dedicated API to "materialise" this (still complete and
  ** precise) time value into an external representation.
  ** 
+ ** # Collaborations
+ ** 
+ ** lib::time::Time is the ubiquitous yet opaque internal time "instant" used
+ ** in Lumiera to designate time points (and by extension also a TimeSpan).
+ ** What such an _internal time instant_ actually means, depends on the context,
+ ** yet it is the implementation's (not the user's) responsibility to keep that
+ ** meaning straight.
+ ** 
+ ** However, by creating a [Quantised Time](\ref lib::time::QuTime), the association
+ ** to some time scale or time grid is made explicit; the time value within QuTime
+ ** is stored in full precision though, without performing any "rounding" yet.
+ ** 
+ ** Only by building or casting into a _time code,_ the actual quantisation is
+ ** performed, which means to align the time value to the next grid point and
+ ** discard excess timing information. There are several [time formats](\ref formats.hpp)
+ ** available to choose from, like Hour-Minute-Second, or SMPTE (h-m-s + frame) or
+ ** fractional seconds or just a frame count with implicit frame rate.
+ ** 
+ ** How the _quantisation_ or _grid alignment_ is actually performed is up to the
+ ** discretion of the lib::time::Quantiser; an actually Quantiser instance also
+ ** represents a common notion of some specific time grid, together with a usage
+ ** context. Notably, a "25 fps grid" means to start timing when the playback
+ ** starts, and to proceed in steps of 1/25sec. Conceptually (not-yet-implemented
+ ** as of 11/2022) a frame grid could also imply to anchor the time at some global
+ ** time zone, allowing to integrate _live content_ into the timeline -- and the
+ ** actual link to wall-clock time would be made explicit by some _placement_
+ ** somewhere on the actual timeline.
+ ** 
  */
 
 
@@ -60,13 +88,13 @@ namespace time {
    * relative to the defined time scale. Usually this time scale
    * exists already in the Lumiera session and is referred simply
    * by symbolic ID, it will be fetched on demand through the
-   * \link advice.hpp advice system.\endlink
+   * [advice system](\ref advice.hpp).
    * 
    * By creating a QuTime value, the relation to such a predefined
    * time scale is made explicit. This doesn't change the internal
    * time value, but the actual creation of a timecode formatted
    * value (#formatAs) usually implies to quantise or grid align
-   * the time to the frame grid specific to this time scale.  
+   * the time to the frame grid specific to this time scale.
    */
   class QuTime
     : public Time
@@ -74,21 +102,21 @@ namespace time {
       PQuant quantiser_;
       
     public:
-      QuTime (TimeValue raw, Symbol gridID);                ///< @note defined in common-services.cpp
+      QuTime (TimeValue raw, Symbol gridID);               ///< @note defined in common-services.cpp
       QuTime (TimeValue raw, PQuant quantisation_to_use);
       
-      operator PQuant()  const;
-          
+      operator PQuant()  const;                            ///< @return `shared-ptr` to the associated time grid (or time scale)
+      
       template<class FMT>
-      bool supports()  const;
+      bool supports()  const;                              ///< does our implicit time grid support building that timecode format?
       
       template<class FMT>
       typename format::Traits<FMT>::TimeCode
-      formatAs()  const;
+      formatAs()  const;                                   ///< create new time code instance, then #castInto
       
       template<class TC>
       void
-      castInto (TC& timecode)  const;
+      castInto (TC& timecode)  const;                      ///< quantise into implicit grid, then rebuild the timecode
       
       /** receive change message, which
           might cause re-quantisation */
@@ -118,16 +146,25 @@ namespace time {
   inline typename format::Traits<FMT>::TimeCode
   QuTime::formatAs()  const
   {
-    typedef typename format::Traits<FMT>::TimeCode TC; 
+    using TC = typename format::Traits<FMT>::TimeCode;
     return TC(*this);
   }
   
   
+  /**
+   * @tparam TC the kind of time code to use as target
+   * @param  timecode existing instance of that timecode, to be overwritten
+   * @remark this is the basic operation to convert an (internal) time value
+   *         into a time code format. QuTime is already associated with some
+   *         _time grid_ for quantisation, but the internal value is precise.
+   *         This operation creates a quantised (frame aligned) transient copy,
+   *         and uses this to adjust/modify the fields in the given timecode.
+   */
   template<class TC>
   inline void
   QuTime::castInto (TC& timecode)  const
   {
-    typedef typename TC::Format Format;
+    using Format = typename TC::Format;
     REQUIRE (supports<Format>());
     
     Format::rebuild (timecode, *quantiser_, TimeValue(*this));

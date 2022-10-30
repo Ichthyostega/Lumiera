@@ -28,9 +28,9 @@
  ** 
  ** Built on top of that, the actual time handling in the GUI and within the Lumiera
  ** session is mostly confined to use the opaque lib::time::Time wrapper objects.
- ** When time values actually need to be \em quantised (aligned to a frame grid),
+ ** When time values actually need to be _quantised_ (aligned to a frame grid),
  ** this is expressed at the API through using the lib::time::QuTime type, which
- ** then in turn can be materialised into a number of \em timecode formats.
+ ** then in turn can be materialised into a number of _timecode formats_.
  ** These definitions ensure that whenever an actual quantisation (rounding)
  ** operation is performed, the link to the appropriate time grid is available,
  ** so that multiple output or rendering operations can use differing time origins

@@ -128,9 +128,9 @@ namespace model {
       uint px_per_sec_;
       
     public:
-      ZoomWindow()
-        : startAll_{Time::ZERO}
-        , afterAll_{Time(0,23)}
+      ZoomWindow (TimeSpan timeline =TimeSpan{Time::ZERO, FSecs(23)})
+        : startAll_{timeline.start()}
+        , afterAll_{nonEmpty(timeline.end())}
         , startWin_{startAll_}
         , afterWin_{afterAll_}
         , px_per_sec_{25}
@@ -163,6 +163,16 @@ namespace model {
           UNIMPLEMENTED ("setMetric");
         }
       
+      /**
+       * scale up or down on a 2-logarithmic scale.
+       * Each step either doubles or halves the zoom level,
+       * and the visible window is adjusted accordingly, using
+       * the current #anchorPoint as centre for scaling.
+       * @note the zoom factor is limited to be between
+       *       2px per µ-tick and 1px per second (~20min
+       *       on a typical 1280 monitor)
+       * @todo support for overview mode ////////////////////////////////////////////////////////////////////TICKET #1255 : implement overview mode
+       */
       void
       nudgeMetric (int steps)
         {
@@ -201,7 +211,7 @@ namespace model {
       void
       setVisibleRange (TimeSpan newWindow)
         {
-          UNIMPLEMENTED ("setVisibleRange");
+          mutateWindow (newWindow.start(), newWindow.end());
         }
       
       void
@@ -237,7 +247,9 @@ namespace model {
       void
       nudgeVisiblePos (int steps)
         {
-          UNIMPLEMENTED ("nudgeVisiblePos");
+          FSecs dur{afterWin_-startWin_};      //    navigate half window steps
+          setVisibleRange (TimeSpan{Time{startWin_ + dur*steps/2}
+                                   , dur});
         }
       
       void
@@ -249,12 +261,59 @@ namespace model {
     private:
       /* === adjust and coordinate === */
       
-      void
-      mutateWindow (TimeValue start, TimeValue after)
+      TimeValue
+      nonEmpty (TimeValue endPoint)
         {
-          UNIMPLEMENTED ("change Window TimeSpan, validate and adjust all params");
+          if (startAll_ < endPoint)
+            return endPoint;
+          if (startAll_ < Time::MAX)
+            return TimeValue{startAll_ + 1}; 
+          startAll_ = Time::MAX - TimeValue(1);
+          return Time::MAX;
         }
       
+      
+      /** @internal change Window TimeSpan, validate and adjust all params */
+      void
+      mutateWindow (TimeVar start, TimeVar after)
+        {
+          if (not (start < after))
+            {
+              if (after == Time::MAX)
+                start = Time::MAX - TimeValue(1);
+              else
+                after = start + TimeValue(1);
+            }
+          
+          FSecs dur{after - start};
+          if (dur > FSecs{afterAll_ - startAll_})
+            {
+              start = startAll_;
+              after = afterAll_;
+            }
+          else
+          if (start < startAll_)
+            {
+              start = startAll_;
+              after = start + dur;
+            }
+          else
+          if (after > afterAll_)
+            {
+              after = afterAll_;
+              start = after - dur;
+            }
+          ASSERT (after-start <= afterAll_-startAll_);
+          
+          px_per_sec_  = adjustedScale (start,after, startWin_,afterWin_);
+          startWin_ = start;
+          afterWin_ = after;
+          fireChangeNotification();
+        }
+      
+      /** 
+       * @internal adjust Window to match given scale,
+       *           validate and adjust all params */
       void
       mutateScale (uint px_per_sec)
         {

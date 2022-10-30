@@ -41,6 +41,8 @@ namespace test{
    *       of the UI, not perform a remote controlled execution of the UI. Thus we
    *       still create a commandline executable, but for this code to work, it
    *       needs to be _linked against the GUI plugin_ (which is in fact a shared library)
+   * @todo as of 11/2022 this is still a mere placeholder; we need a test setup for
+   *       proper UI integration testing (without actually launching the UI) ////////////////////////////////TICKET #1257 : provide test-session for GUI
    */
   class TestGui_test : public Test
     {
