@@ -79,6 +79,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/rational.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/nocopy.hpp"
 //#include "lib/idi/entry-id.hpp"
@@ -100,6 +101,9 @@ namespace model {
   using lib::time::Offset;
   using lib::time::FSecs;
   using lib::time::Time;
+  
+  using util::Rat;
+  using util::rational_cast;
   
   namespace {
     /** the deepest zoom is to use 2px per micro-tick */
@@ -125,10 +129,18 @@ namespace model {
     {
       TimeVar startAll_, afterAll_,
               startWin_, afterWin_;
-      uint px_per_sec_;
+      uint px_per_sec_; ///////////////////TODO use rational
       
     public:
       ZoomWindow (TimeSpan timeline =TimeSpan{Time::ZERO, FSecs(23)})
+        : startAll_{timeline.start()}
+        , afterAll_{nonEmpty(timeline.end())}
+        , startWin_{startAll_}
+        , afterWin_{afterAll_}
+        , px_per_sec_{25}
+        { }
+      
+      ZoomWindow (uint pxWidth, TimeSpan timeline =TimeSpan{Time::ZERO, FSecs(23)})
         : startAll_{timeline.start()}
         , afterAll_{nonEmpty(timeline.end())}
         , startWin_{startAll_}
@@ -148,17 +160,30 @@ namespace model {
           return TimeSpan{startWin_, afterWin_};
         }
       
-      uint
+      Rat
       px_per_sec()  const
         {
           return px_per_sec_;
+        }
+      
+      uint
+      pxWidth()  const
+        {
+          REQUIRE (0 < _raw(afterWin_ - startWin_));
+          return rational_cast<uint> (px_per_sec() / FSecs(afterWin_-startWin_));
         }
       
       
       /* === Mutators === */
       
       void
-      setMetric (uint px_per_sec)
+      calibrateExtension (uint pxWidth)
+        {
+          UNIMPLEMENTED ("calibrateExtension");
+        }
+      
+      void
+      setMetric (Rat px_per_sec)
         {
           UNIMPLEMENTED ("setMetric");
         }

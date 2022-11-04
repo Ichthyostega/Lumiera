@@ -10505,18 +10505,20 @@ Wiring requests are small stateful value objects. They will be collected, sorted
 &amp;rarr; ConManager
 </pre>
 </div>
-<div title="ZoomWindow" creator="Ichthyostega" modifier="Ichthyostega" created="202210281528" modified="202210282204" tags="spec GuiPattern draft" changecount="16">
+<div title="ZoomWindow" creator="Ichthyostega" modifier="Ichthyostega" created="202210281528" modified="202211040231" tags="spec GuiPattern draft" changecount="18">
 <pre>//A component  for uniform handling of zoom scale and visible interval on the timeline.//
 Working with and arranging media requires a lot of //navigation// and changes of //zoom detail level.// More specifically, the editor is required to repeatedly return //to the same locations// and show arrangements at the same alternating scale levels. Most existing editing applications approach this topic naïvely, by just responding to some coarse grained interaction controls -- thereby creating the need for a lot of superfluous and tedious search and navigation activities, causing constant grind for the user. And resolving these obnoxious shortcomings turns out as a never ending task, precisely due to the naïve and ad hoc approach initially taken.
 
 Based on these observations, the design of the Lumiera UI calls for centralisation of all zoom- and navigation handling into a single component, instantiated once for every visible context, outfitted with the ability to capture and maintain a //history of zoom and navigation activities.// This component is called »''Zoom Window''«, since it represents a window-like local visible interval, embedded into a larger time span covering the whole timeline. The //current zoom state// is thus defined by
-* the overall {{{TimeSpan}}} of the timeline, including a start time (inclusive) and an end time (exclusive)
+* the overall {{{TimeSpan}}} of the timeline canvas, including a start time (inclusive) and an end time (exclusive)
 * the //visible interval// („window“), likewise modelled as {{{time::TimeSpan}}}
-* the //scale// defined as pixels per second {{red{10/2022 -- imposing a hard limit at 1px / sec ≙ 20min per screen page}}}
+* the //scale// defined as pixels per second
+** this is a //fractional value// -- allowing to specify multiples of frame sizes or sound sample durations
+** maximum scale limited to 2px per µ-tick; widest zoom limited to overall canvas duration
 
 !Requirement Analysis
 The Timeline UI is {{red{as of 10/2022}}} specified sufficiently to serve as framework to determine the requirements of a zoom handling component
-!!!User
+!!!Usages
 ;~CanvasHook + ~DisplayMetric
 :info | pull
 :*Pixel / sec
@@ -10601,10 +10603,18 @@ The Timeline UI is {{red{as of 10/2022}}} specified sufficiently to serve as fra
 #*translations
 #*window offset
 #*overall range
+#*resulting window extension in pixels
+
+!!!Semantics
+The {{{overallSpan}}} corresponds to the whole canvas extension
+The {{{visibleWindow}}} corresponds to the actually visible part, and the //metric// needs to be calibrated, to make the window's extension in pixel match the actual size in the UI. All further manipulations are assumed to keep that pixel extension constant. The actual duration of the timeline is in no way limited, but usually you'd expect the timeline to fit onto the canvas -- the canvas may even be extended when the user wants to extend the timeline beyond existing bounds.
 
 
 !Implementation
 The above requirement analysis reveals a common handling scheme, which is best served by a conventional design with an object, mutator and getter methods and encapsulated state. Moreover, a single client for push notification can be identified: the ~TimelineLayout (implementation of the [[DisplayManager interface|TimelineDisplayManager]]; it suffices to notify this collaboration partner; since at implementation level the ZoomWindow is itself embedded by mix-in into the ~TimelineLayout, the latter can easily read the resulting zoom parameters and react accordingly.
+
+Lumiera uses a µs-grid as base for the internal time representation {{red{11/2022 might revisit this decision, see #1258}}}, which generally is a good balance between performance and the addressable value range. However, for these calculations aimed at pixel precise drawing, this even this micro grid turns out to be not precise enough, especially for sample accurate sound automation. To work around this limitation, the ~ZoomWindow //metric// (scale factor) is represented as fractional number (implemented as {{{boost::rational&lt;int64_t&gt;}}}. This allows to carry out internal calculations involving scale factors with lossless integral arithmetics, and thus precisely to retain a given window extension in screen pixels.
+
 </pre>
 </div>
 <div title="automation" modifier="Ichthyostega" created="200805300057" modified="200805300125" tags="overview">

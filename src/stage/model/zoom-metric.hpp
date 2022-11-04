@@ -93,13 +93,13 @@ namespace model {
       int
       translateTimeToPixels (TimeValue startTimePoint)  const override
         {
-          return _raw(startTimePoint) * zoomWindow_.px_per_sec() / Time::SCALE;
+          return rational_cast<int> (_raw(startTimePoint) * zoomWindow_.px_per_sec() / Time::SCALE);  ////////////////////TICKET #1196 : support canvas origin offset
         }
       
       TimeValue
       applyScreenDelta(Time anchor, double deltaPx)  const override
         {
-          return anchor + TimeValue{gavl_time_t(Time::SCALE * deltaPx / zoomWindow_.px_per_sec())};
+          return anchor + TimeValue{rational_cast<gavl_time_t> (int64_t(Time::SCALE * deltaPx) / zoomWindow_.px_per_sec())};   //////TODO correct yet confusingly written
         }
     };
   

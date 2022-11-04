@@ -24268,7 +24268,7 @@
 <node CREATED="1541857252860" ID="ID_298952812" MODIFIED="1557498707226" TEXT="Zeit-Rasterung (Time-Grid)"/>
 <node CREATED="1541857273978" ID="ID_10543409" MODIFIED="1557498707226" TEXT="managing the Zoom-Window"/>
 </node>
-<node CREATED="1541857340976" ID="ID_433103364" MODIFIED="1557498707226" TEXT="Lumiera Time Framework">
+<node CREATED="1541857340976" ID="ID_433103364" LINK="#ID_1054510557" MODIFIED="1667337152477" TEXT="Lumiera Time Framework">
 <node CREATED="1541857349526" ID="ID_1259099260" MODIFIED="1557498707226" TEXT="bietet Konzept &quot;Grid&quot;"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666452057169" ID="ID_1202075896" MODIFIED="1666452205554" TEXT="Aufgabe: DisplayMetric bereitstellen">
@@ -38244,6 +38244,48 @@
 <node CREATED="1666965749637" ID="ID_1024412644" MODIFIED="1666965752128" TEXT="overall range"/>
 </node>
 </node>
+<node CREATED="1667253467195" ID="ID_583983335" MODIFIED="1667253470876" TEXT="Semantics">
+<node CREATED="1667254016236" ID="ID_1599338404" MODIFIED="1667260350202" TEXT="zwei m&#xf6;gliche Auslegungen">
+<linktarget COLOR="#5cbca7" DESTINATION="ID_1599338404" ENDARROW="Default" ENDINCLINATION="-266;683;" ID="Arrow_ID_1992699101" SOURCE="ID_1789035337" STARTARROW="None" STARTINCLINATION="-195;-13;"/>
+<node CREATED="1667254281663" ID="ID_931025074" MODIFIED="1667254961650" TEXT="overallSpan &#x2259; Timeline">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1667254042344" ID="ID_1886040600" MODIFIED="1667254193233" TEXT="visualWindow &#x2259; was sichtbar ist"/>
+<node CREATED="1667254330394" ID="ID_192603163" MODIFIED="1667254344380" TEXT="&#x27f9; visualWindow kann dar&#xfc;ber hinausreichen"/>
+<node CREATED="1667254349351" ID="ID_1260830853" MODIFIED="1667254356411" TEXT="Canvas ergibt sich implizit"/>
+</node>
+<node CREATED="1667253493640" ID="ID_29660572" MODIFIED="1667254964809" TEXT="overallSpan &#x2259; Canvas">
+<icon BUILTIN="forward"/>
+<node CREATED="1667254042344" ID="ID_6801078" MODIFIED="1667254193233" TEXT="visualWindow &#x2259; was sichtbar ist"/>
+<node CREATED="1667254132888" ID="ID_907807797" MODIFIED="1667254189985" TEXT="&#x27f9; visualWindow &#x2208; Canvas"/>
+<node CREATED="1667254209434" ID="ID_1299162840" MODIFIED="1667254216213" TEXT="st&#xf6;&#xdf;t am Rand des Canvas an"/>
+</node>
+</node>
+<node CREATED="1667254983055" ID="ID_1939856323" MODIFIED="1667254987549" TEXT="Eichung der Metrik">
+<node CREATED="1667254988850" ID="ID_627529918" MODIFIED="1667255165088" TEXT="mu&#xdf; (initial) explizit gesezt werden">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1667255003826" ID="ID_457439715" MODIFIED="1667255160405" TEXT="soll der Ausdehnung im Interface entsprechen">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667255062416" ID="ID_888315158" MODIFIED="1667255155045" TEXT="Erwartung: erh&#xe4;lt sich von selbst numerisch konstant">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1667255198638" ID="ID_1458374199" MODIFIED="1667255216695" TEXT="da wir Integer-Arithmetik machen"/>
+<node CREATED="1667255218491" ID="ID_1646057612" MODIFIED="1667255227637" TEXT="und stets logisch-konsistent vorgehen"/>
+</node>
+<node CREATED="1667255234369" ID="ID_713280456" MODIFIED="1667255281215" TEXT="falls das nicht klappt....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...dann m&#252;ssen wir die Vorgabe speichern, und in jedem Schritt korrigierend eingreifen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1541860963705" ID="ID_13414263" MODIFIED="1557498707234" TEXT="Design">
 <node CREATED="1541860967281" ID="ID_1676646773" MODIFIED="1557498707234" TEXT="manipulativ - mutable">
@@ -38478,7 +38520,202 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667260101665" ID="ID_1250580560" MODIFIED="1667260118385" TEXT="mu&#xdf; die Ausdehnung in Pixel beachten">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667260119686" ID="ID_1154266769" MODIFIED="1667260272187" TEXT="neuer Getter daf&#xfc;r">
+<icon BUILTIN="flag-yellow"/>
 </node>
+<node COLOR="#435e98" CREATED="1667260284128" ID="ID_1789035337" MODIFIED="1667260350202" TEXT="Frage nach der Semantik?">
+<arrowlink COLOR="#5cbca7" DESTINATION="ID_1599338404" ENDARROW="Default" ENDINCLINATION="-266;683;" ID="Arrow_ID_1992699101" STARTARROW="None" STARTINCLINATION="-195;-13;"/>
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667260130116" ID="ID_299421938" MODIFIED="1667260272189" TEXT="sollte stets konstant bleiben &#x27f9; im Test beobachten">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1667349674019" ID="ID_723979887" MODIFIED="1667349702385" TEXT="Problem: Rechnung geht nicht auf">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1667349751008" ID="ID_952333352" MODIFIED="1667349762431" TEXT="runde auf n&#xe4;chsten Pixel">
+<node CREATED="1667349764204" ID="ID_1815738825" MODIFIED="1667349818467" TEXT="Konsequenz &#x27f9; visible Window anpassen"/>
+<node CREATED="1667349788035" ID="ID_281010107" MODIFIED="1667349803183" TEXT="Problem: Window kann gr&#xf6;&#xdf;er werden als Canvas">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1667349853811" ID="ID_1951953580" MODIFIED="1667350032602" TEXT="Canvas vergr&#xf6;&#xdf;ern? oder visible Window verkleinern?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        Canvas vergr&#246;&#223;ern &#10233; f&#252;hrt zu kontinuierliecher Drift; der Canvas wird fortlaufend gr&#246;&#223;er
+      </li>
+      <li>
+        Window verkleinern &#10233; hei&#223;t da&#223; man u.U den ganzen Canvas nicht ohne Rest darstellen kann
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1667350040338" ID="ID_1862995353" MODIFIED="1667350064695" TEXT="eigentliches Problem: diese Effekte sind relativ stark">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667349713685" ID="ID_47270921" MODIFIED="1667349842399" TEXT="Metrik-Definition ist zu grobgranular">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1667350180367" ID="ID_494068879" MODIFIED="1667350205920" TEXT="Sekunden sind eine ziemlich beliebige Basiseinheit"/>
+<node COLOR="#990033" CREATED="1667350206652" ID="ID_918270163" MODIFIED="1667528235333" TEXT="stattdessen: &#xb5;-Tick pro Pixel?">
+<icon BUILTIN="help"/>
+<node CREATED="1667350440373" ID="ID_1896628944" MODIFIED="1667350460022" TEXT="Vorsicht... Minimum w&#xe4;re dann 1&#xb5;T/px"/>
+<node CREATED="1667350475136" ID="ID_1672716361" MODIFIED="1667350817413" TEXT="&#x27f9; Sound-Samples lassen sich nicht sauber darstellen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      alle 20 Schritte ein Sprung, bzw. sogar nur alle 10 Schritte bei 96kHz, denn 1/96000 = 10.41666666 &#181;Tick
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1667350536992" ID="ID_1838246834" MODIFIED="1667476855366" TEXT="das stellt die Implementierungs-Basis in Frage">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Die &#181;-Ticks hatten wir seinerzeit gew&#228;hlt, weil sie einerseits hinreichend genau sind, andererseits sehr einfach zu implementieren, und dennoch die Darstellung extrem gro&#223;er Zeitspannen erm&#246;glichen
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#af1a4c" DESTINATION="ID_767502481" ENDARROW="Default" ENDINCLINATION="96;-430;" ID="Arrow_ID_1672039685" STARTARROW="None" STARTINCLINATION="-670;38;"/>
+<icon BUILTIN="stop-sign"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1667487735017" ID="ID_67642064" MODIFIED="1667487922535" TEXT="schwerwiegende Diskusison auf sp&#xe4;ter verschoben (#1258)">
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1667487765399" ID="ID_1902275269" MODIFIED="1667487918703" TEXT="denn das Problem tritt nur stellenweise auf und ist halb-theoretisch">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Tats&#228;chlich kann ein &#181;Tick-Grid auch Sound-Samples korrekt addressieren &#8212; man darf dann nur nicht diese Zeit-Werte f&#252;r weitere Berechnungen verwenden (denn sonst sammeln sich Rundungsfehler an). Es k&#246;nnte also eine Implementierung eben <i>wissen, </i>da&#223; hier Sound-Samples dargestellt/verarbeitet werden, und intern mit der exakten Skala arbeiten. Im Grunde ist das ein L&#246;sungsvorgriff auf die 3.L&#246;sungsvariante (Problem ignorieren und per Metadaten tunneln)... siehe Diskussion in #1258
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1667487705856" ID="ID_1110286196" MODIFIED="1667487720215" TEXT="fraktionale &#xb5;-Tick pro Pixel">
+<icon BUILTIN="help"/>
+<node CREATED="1667487984471" ID="ID_1826402546" MODIFIED="1667487992109" TEXT="intern also eine Bruchzahl speichern"/>
+<node CREATED="1667487993113" ID="ID_452961268" MODIFIED="1667488005420" TEXT="Zahlen w&#xe4;ren auch numerisch viel gutm&#xfc;tiger"/>
+<node CREATED="1667488026717" ID="ID_267648014" MODIFIED="1667488073400" TEXT="man k&#xf6;nnte dennoch den grobgranularen Getter bestehen lassen">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1667488090679" ID="ID_829965437" MODIFIED="1667488105799" TEXT="Gefahr: die Werte sind nur nahezu exakt">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1667488074367" ID="ID_710829210" MODIFIED="1667488114221" TEXT="Nein! das verlockt gradezu zu falscher Verwendung">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1667489964330" ID="ID_15160345" MODIFIED="1667491231003" TEXT="wenn schon: dann mu&#xdf; er einen Bruch liefern">
+<arrowlink COLOR="#685b9d" DESTINATION="ID_1961281272" ENDARROW="Default" ENDINCLINATION="48;-77;" ID="Arrow_ID_1581272535" STARTARROW="None" STARTINCLINATION="-422;27;"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1667491005864" ID="ID_822261439" MODIFIED="1667528245728" TEXT="Metrik als Bruch behaldeln">
+<icon BUILTIN="pencil"/>
+<node CREATED="1667491014630" ID="ID_1961281272" MODIFIED="1667491231004" TEXT="bleibe aber beim Schema px_per_sec">
+<linktarget COLOR="#685b9d" DESTINATION="ID_1961281272" ENDARROW="Default" ENDINCLINATION="48;-77;" ID="Arrow_ID_1581272535" SOURCE="ID_15160345" STARTARROW="None" STARTINCLINATION="-422;27;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1667491099595" ID="ID_1763425828" MODIFIED="1667491114813" TEXT="konkret erwarte ich da handliche Werte"/>
+<node CREATED="1667491115829" ID="ID_650357166" MODIFIED="1667491143008" TEXT="&#xb5;-Ticks sind immer ziemlich gro&#xdf;e Zahlen"/>
+<node CREATED="1667491149381" ID="ID_1912148103" MODIFIED="1667491191987" TEXT="besser: Kurz-Notation einf&#xfc;hren (user-defined-literal)">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1667488158059" ID="ID_898168096" MODIFIED="1667491200716" TEXT="neue Zielvorgabe: Pixel-Angaben sind stets pr&#xe4;zise">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1667517436741" ID="ID_1018648571" MODIFIED="1667528257052" TEXT="Bruch-Notation einf&#xfc;hren">
+<icon BUILTIN="pencil"/>
+<node CREATED="1667517450483" ID="ID_854101466" MODIFIED="1667517461957" TEXT="Rat = boost::rational&lt;int64_t&gt;"/>
+<node CREATED="1667517463369" ID="ID_1946096292" MODIFIED="1667517490241">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      user-defined Literal: <font face="Monospaced" color="#5618bd">_r</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1667260366701" ID="ID_1895903283" MODIFIED="1667528268261" TEXT="n&#xe4;chste F&#xe4;lle">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667260373164" ID="ID_1630007510" MODIFIED="1667260483982" TEXT="Konstruktor">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667260420318" ID="ID_477529431" MODIFIED="1667260481687" TEXT="komplett default">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667260430580" ID="ID_750011979" MODIFIED="1667260481689" TEXT="partielle Angaben">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667260502770" ID="ID_723001683" MODIFIED="1667260512843" TEXT="Metrik kalibrieren">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1667517362063" ID="ID_692971631" MODIFIED="1667517374025" TEXT="Metrik-&#xc4;nderung wird auf das aktuelle window angewendet"/>
+<node CREATED="1667517374757" ID="ID_1436498397" MODIFIED="1667517393335" TEXT="danach aber shift/scoll, damit das Window im Canvas bleibt"/>
+<node CREATED="1667517394850" ID="ID_360062482" MODIFIED="1667517421035" TEXT="Beschnitt, wenn das Window zu gro&#xdf; wird &#x27f9; Metrik dann angepa&#xdf;t"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667318608370" ID="ID_888607544" MODIFIED="1667318613506" TEXT="Metrik manipulieren">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1667318655807" ID="ID_1664936439" MODIFIED="1667318699099" TEXT="starke Einschr&#xe4;nkung der Testbarkeit hier">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1667318668477" ID="ID_841988354" MODIFIED="1667318701059" TEXT="Regel f&#xfc;r AnchorPoint sollte offen bleiben">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667260470855" ID="ID_1346204475" MODIFIED="1667260481690" TEXT="Grenzf&#xe4;lle / Fehlerbehandlung ausleuchten">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1667517252905" ID="ID_335958554" MODIFIED="1667517293430" TEXT="gr&#xf6;&#xdf;tm&#xf6;glicher Zoom &#x2259; 2px / &#xb5;-Tick"/>
+<node CREATED="1667517299247" ID="ID_1450395718" MODIFIED="1667517317049" TEXT="kleinstm&#xf6;gliches window &#x2259; 1 &#xb5;-Tick"/>
+<node CREATED="1667517317821" ID="ID_1713703867" MODIFIED="1667517344899" TEXT="weitest m&#xf6;glicher zoom-out &#x2259; Canvas-size"/>
+<node CREATED="1667517346296" ID="ID_1169099153" MODIFIED="1667517356781" TEXT="aber: kann Canvas per reverse-Zoom expandieren"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667318726445" ID="ID_1535955412" MODIFIED="1667318747575" TEXT="visibleRange setzen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1667528162442" ID="ID_1415942522" MODIFIED="1667528170526" TEXT="setzten einer Anker-Position"/>
+<node CREATED="1667528171215" ID="ID_1526154403" MODIFIED="1667528175965" TEXT="relativ positionieren"/>
+<node CREATED="1667528176866" ID="ID_1620735407" MODIFIED="1667528184219" TEXT="Canvas explizit erweitern"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667318713048" ID="ID_1238239373" MODIFIED="1667318718031" TEXT="scrollen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1667528185832" ID="ID_1091652690" MODIFIED="1667528199122" TEXT="schrittweise incl Canvas erweitern"/>
+<node CREATED="1667528199785" ID="ID_1692959674" MODIFIED="1667528207840" TEXT="limits bei relativem positionieren"/>
+<node CREATED="1667528209948" ID="ID_914020436" MODIFIED="1667528219542" TEXT="explizit setzen und Canvas erweitern"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667488193842" ID="ID_1347640673" MODIFIED="1667488208549" TEXT="Invarianten">
+<font BOLD="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1667488212533" ID="ID_553762141" MODIFIED="1667488247411" TEXT="overall Span ist stets der gesamte Canvas"/>
+<node CREATED="1667488258934" ID="ID_1924856810" MODIFIED="1667488270574" TEXT="visible Span ist ausnahmslos stets darin enthalten"/>
+<node CREATED="1667488271316" ID="ID_1005066146" MODIFIED="1667488283070" TEXT="visible Span in Pixel umgerechnet bleibt absolut konstant"/>
+<node CREATED="1667488303192" ID="ID_486782619" MODIFIED="1667488317608" TEXT="pr&#xe4;zise Pixel-Werte sind Pr&#xe4;ferenz"/>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1666913274942" ID="ID_4743528" MODIFIED="1666913286194" TEXT="Design &#xfc;berpr&#xfc;fen">
 <icon BUILTIN="hourglass"/>
@@ -55313,7 +55550,106 @@
 </node>
 </node>
 </node>
+<node CREATED="1667336713909" ID="ID_259014029" MODIFIED="1667336726184" TEXT="Framework">
+<font NAME="SansSerif" SIZE="14"/>
+<node CREATED="1667336734205" ID="ID_1054510557" MODIFIED="1667336746223" TEXT="Lumiera Time">
+<node CREATED="1667336756809" ID="ID_286019153" MODIFIED="1667336765133" TEXT="lib::time::Time ist ein Zeitpunkt"/>
+<node CREATED="1667336768112" ID="ID_120722451" MODIFIED="1667336788066" TEXT="lib::time::TimeValue ist ein interne Zeit-Implementierung"/>
+<node CREATED="1667336795340" ID="ID_1772915486" MODIFIED="1667336809222" TEXT="lib::time::TimeSpan ist ein Intervall mit Start und Dauer"/>
+<node CREATED="1667336814578" ID="ID_443069684" MODIFIED="1667337242282" TEXT="Quantisierung">
+<node CREATED="1667336818154" ID="ID_228764070" MODIFIED="1667336839107" TEXT="TimeValue + symbolische Grid-Referenz"/>
+<node CREATED="1667336841967" ID="ID_1852849270" MODIFIED="1667336856426" TEXT="Grid &#xfc;ber das Advice-System publiziert"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1667476797049" FOLDED="true" ID="ID_767502481" MODIFIED="1667487664229" TEXT="Diskussion: interne Zeitbasis">
+<linktarget COLOR="#af1a4c" DESTINATION="ID_767502481" ENDARROW="Default" ENDINCLINATION="96;-430;" ID="Arrow_ID_1672039685" SOURCE="ID_1838246834" STARTARROW="None" STARTINCLINATION="-670;38;"/>
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667486621881" ID="ID_566152244" MODIFIED="1667486629636" TEXT="#1258 clarify internal time base">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1667486644110" ID="ID_1984451593" MODIFIED="1667486648120" TEXT="Problem">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1667486649845" ID="ID_93808620" MODIFIED="1667486680650" TEXT="grid-based Time-Scale kann niemals alle relevanten Werte exakt repr&#xe4;sentieren"/>
+<node CREATED="1667486681289" ID="ID_1245609548" MODIFIED="1667486715504" TEXT="egal ob man nun floating-point nimmt, oder eine feste integrale Basis (&#xb5;-Ticks)"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1667486847011" ID="ID_1394182591" MODIFIED="1667486860346" TEXT="sehe folgende L&#xf6;sungen">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1667486862210" ID="ID_860525476" MODIFIED="1667487583167" TEXT="Umstellen auf Bruch-Darstellung">
+<icon BUILTIN="full-1"/>
+<node CREATED="1667487232831" ID="ID_1006730826" MODIFIED="1667487247673" TEXT="rein auf logischer Basis w&#xe4;re das die 1.Wahl"/>
+<node CREATED="1667487249733" ID="ID_344272813" MODIFIED="1667487263783" TEXT="hat aber m&#xf6;glicherweise einen starken Performance-Impact">
+<node CREATED="1667487265203" ID="ID_1416124429" MODIFIED="1667487277405" TEXT="doppelt so viel Daten pro Zeitpunk"/>
+<node CREATED="1667487277956" ID="ID_1373749694" MODIFIED="1667487299330" TEXT="gcd-Normalisierung nach jeder Multiplikation"/>
+</node>
+</node>
+<node CREATED="1667486880606" ID="ID_293148639" MODIFIED="1667487585840" TEXT="mehrere Basis-Zeitformate erlauben">
+<icon BUILTIN="full-2"/>
+<node CREATED="1667486901227" ID="ID_869733709" MODIFIED="1667486908494" TEXT="eines davon w&#xe4;re dann FSecs"/>
+<node CREATED="1667486909138" ID="ID_1371778930" MODIFIED="1667486921835" TEXT="ein anderes das &#xb5;-Grid"/>
+<node CREATED="1667486924968" ID="ID_1851075217" MODIFIED="1667486937530" TEXT="Integration problematisch">
+<node CREATED="1667486951149" ID="ID_1186754865" MODIFIED="1667486966790" TEXT="std::chrono macht genau dies">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1667486938994" ID="ID_1194275689" MODIFIED="1667486950390" TEXT="erfordert Metaprogrammierung"/>
+<node CREATED="1667486968874" ID="ID_782557379" MODIFIED="1667487226117" TEXT="Alternative: breite APIs">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Man w&#252;rde also neben das Standard-Format ein toleriertes zweites Format stellen, welches dann ein B&#252;rger zweiter Klasse w&#228;re, aber auf allen wichtien APIs als 2.Alternative mit auftaucht. Zudem w&#252;rde man gewisse Abk&#252;rzungs-Pfade schaffen, auf denen die alternative Spec dann <i>verlustfrei durchgereicht </i>werden kann.
+    </p>
+    <ul>
+      <li>
+        es ist &#252;berhaupt nicht klar, welches Format dann der Standardfall sein sollte
+      </li>
+      <li>
+        das l&#228;uft vor allem auf eine Performance-Betrachtung hinaus, und einen trade-off, wo man ggfs Fehler durch&#160;andere Programmierer akzeptiert
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1667487313780" ID="ID_605045817" MODIFIED="1667487588066" TEXT="Problem nur umgehen">
+<icon BUILTIN="full-3"/>
+<node CREATED="1667487323563" ID="ID_255906636" MODIFIED="1667487341802" TEXT="es sind ja nur ganz wenige Stellen, die mit einem &#xb5;-Grid wirklich Probleme haben"/>
+<node CREATED="1667487342753" ID="ID_463347104" MODIFIED="1667487469159">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn man zum &#181;-Grid eine eindeutige Rundungs-Regel hinzuf&#252;gt,
+    </p>
+    <p>
+      kann es praktisch auch Sound-Samples korrekt addressieren:<br /><br />1/96000 &#8793; 10,41666666666666666667 <i>&#181;Ticks</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1667487486510" ID="ID_1354208250" MODIFIED="1667487501583" TEXT="Notwendigkeit einer genaueren Behandlung per Metadaten durchreichen">
+<node CREATED="1667487512650" ID="ID_968209763" MODIFIED="1667487526228" TEXT="&quot;dies sind 96kHz-Samples&quot;"/>
+<node CREATED="1667487528568" ID="ID_745033416" MODIFIED="1667487546865" TEXT="dann kann eine Implementierung &quot;downstream&quot; mit Divisor arbeiten"/>
+<node CREATED="1667487547957" ID="ID_1232559601" MODIFIED="1667487568454" TEXT="und Output geht an die Soundkarte mit 96kHz"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1667336859796" ID="ID_1810244902" MODIFIED="1667337099718" TEXT="Timecode">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1667336865688" ID="ID_1539710424" MODIFIED="1667336875998" TEXT="kann aus einer lib::time::QuTime erzeugt werden"/>
+<node CREATED="1667336880473" ID="ID_789960595" MODIFIED="1667337093278" TEXT="Stand 2011... (2022) nur SMPTE-Format implementiert">
+<icon BUILTIN="flag-orange"/>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1482524641484" ID="ID_1651495185" MODIFIED="1557498707236" TEXT="Architektur">
+<font NAME="SansSerif" SIZE="14"/>
 <node CREATED="1544199543455" ID="ID_970297070" MODIFIED="1557498707236" TEXT="Struktur">
 <node CREATED="1544199550166" ID="ID_16943853" MODIFIED="1557498707236" TEXT="Layer">
 <node CREATED="1544199559524" ID="ID_1685135526" MODIFIED="1557498707236" TEXT="rein gedankliche Gliederung"/>
@@ -65576,9 +65912,16 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1581902038450" ID="ID_676891454" MODIFIED="1581902066045" TEXT="nicht einfach realisierbar">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1581902038450" ID="ID_676891454" MODIFIED="1667336289185" TEXT="nicht einfach realisierbar">
 <icon BUILTIN="stop-sign"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1667336290112" ID="ID_166419409" LINK="https://issues.lumiera.org/ticket/1055#comment:3" MODIFIED="1667336380910" TEXT="siehe Kommentar zu #1055">
+<icon BUILTIN="idea"/>
+<node CREATED="1667336386235" ID="ID_1595778098" MODIFIED="1667336411267" TEXT="Vorsicht: soll nicht zur Denkfaulheit verleiten">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1667336412887" ID="ID_1127777473" MODIFIED="1667336438440" TEXT="std::chrono::duration vs Time als Zeit-Punkt"/>
 </node>
 </node>
 <node CREATED="1581834456924" ID="ID_515357939" MODIFIED="1581834461008" TEXT="Typ-Fragen">
