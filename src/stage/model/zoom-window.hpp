@@ -82,9 +82,11 @@
 #include "lib/rational.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/nocopy.hpp"
+#include "lib/util.hpp"
 //#include "lib/idi/entry-id.hpp"
 //#include "lib/symbol.hpp"
 
+#include <limits>
 //#include <utility>
 //#include <string>
 
@@ -105,10 +107,38 @@ namespace model {
   using util::Rat;
   using util::rational_cast;
   
-  namespace {
-    /** the deepest zoom is to use 2px per micro-tick */
-    const uint ZOOM_MAX_RESOLUTION = 2 * TimeValue::SCALE;
+  using util::min;
+  using util::max;
+  
+  namespace { ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #1259 : reorganise raw time base datatypes : need conversion path into FSecs
+    /**
+     * @todo preliminary helper to enter into fractional integer calculations
+     *       - FSecs (maybe better called `RSec`) should be a light-weight wrapper
+     *         on top of util::Rat = `boost::rational<int64_t>`
+     *       - a conversion function like in TimeVar should be in the base type
+     *       - however, cross conversion from raw int64_t should be prohibited
+     *         to avoid ill-guided automatic conversions from µ-tick to seconds
+     */
+    inline FSecs
+    _FSecs (TimeValue const& timeVal)
+    {
+      return FSecs{_raw(timeVal), TimeValue::SCALE};
+    }
   }
+  
+  
+  /** the deepest zoom is to use 2px per micro-tick */
+  const uint ZOOM_MAX_RESOLUTION = 2 * TimeValue::SCALE;
+  
+  namespace {// initial values (rather arbitrary)
+    const FSecs DEFAULT_CANVAS{23};
+    const Rat   DEFAULT_METRIC{25};
+    const uint  MAX_PX_WIDTH{1000000};
+    const FSecs MAX_TIMESPAN{_FSecs(Time::MAX-Time::MIN)};
+    const FSecs MICRO_TICK{1_r/Time::SCALE};
+    const Rat   FRACT_ULP{1_r/std::numeric_limits<int64_t>::max()};
+  }
+  
   
   /**
    * A component to ensure uniform handling of zoom scale
@@ -129,23 +159,21 @@ namespace model {
     {
       TimeVar startAll_, afterAll_,
               startWin_, afterWin_;
-      uint px_per_sec_; ///////////////////TODO use rational
+      Rat px_per_sec_;
       
     public:
-      ZoomWindow (TimeSpan timeline =TimeSpan{Time::ZERO, FSecs(23)})
+      ZoomWindow (uint pxWidth, TimeSpan timeline =TimeSpan{Time::ZERO, DEFAULT_CANVAS})
         : startAll_{timeline.start()}
-        , afterAll_{nonEmpty(timeline.end())}
+        , afterAll_{ensureNonEmpty(startAll_, timeline.end())}
         , startWin_{startAll_}
         , afterWin_{afterAll_}
-        , px_per_sec_{25}
-        { }
+        , px_per_sec_{establishMetric (pxWidth, startWin_, afterWin_)}
+        {
+          ensureInvariants();
+        }
       
-      ZoomWindow (uint pxWidth, TimeSpan timeline =TimeSpan{Time::ZERO, FSecs(23)})
-        : startAll_{timeline.start()}
-        , afterAll_{nonEmpty(timeline.end())}
-        , startWin_{startAll_}
-        , afterWin_{afterAll_}
-        , px_per_sec_{25}
+      ZoomWindow (TimeSpan timeline =TimeSpan{Time::ZERO, DEFAULT_CANVAS})
+        : ZoomWindow{0, timeline}  //see ensureConsistent()
         { }
       
       TimeSpan
@@ -169,9 +197,10 @@ namespace model {
       uint
       pxWidth()  const
         {
-          REQUIRE (0 < _raw(afterWin_ - startWin_));
-          return rational_cast<uint> (px_per_sec() / FSecs(afterWin_-startWin_));
+          REQUIRE (startWin_  < afterWin_);
+          return rational_cast<uint> (px_per_sec() * FSecs(afterWin_-startWin_));
         }
+      
       
       
       /* === Mutators === */
@@ -185,7 +214,7 @@ namespace model {
       void
       setMetric (Rat px_per_sec)
         {
-          UNIMPLEMENTED ("setMetric");
+          mutateScale (px_per_sec);
         }
       
       /**
@@ -201,12 +230,11 @@ namespace model {
       void
       nudgeMetric (int steps)
         {
-          uint changedScale =
-              steps > 0 ? px_per_sec_ << steps
-                        : px_per_sec_ >> -steps;
-          if (0 < changedScale
-              and changedScale <= ZOOM_MAX_RESOLUTION)
-            mutateScale (changedScale);
+          mutateScale(
+              steps > 0 ? Rat{px_per_sec_.numerator() << steps
+                             ,px_per_sec_.denominator()}
+                        : Rat{px_per_sec_.numerator()
+                             ,px_per_sec_.denominator() << -steps});
         }
       
       void
@@ -283,104 +311,203 @@ namespace model {
           UNIMPLEMENTED ("navigate Zoom History");
         }
       
-    private:
-      /* === adjust and coordinate === */
       
-      TimeValue
-      nonEmpty (TimeValue endPoint)
+    private:
+      /* === establish and maintain invariants === */
+      /*
+       * - oriented and non-empty windows
+       * - never alter given pxWidth
+       * - zoom metric factor < max zoom
+       * - visibleWindow ⊂ Canvas
+       */
+      
+      static TimeValue
+      ensureNonEmpty (TimeVar& startRef, TimeValue endPoint)
         {
-          if (startAll_ < endPoint)
+          if (startRef < endPoint)
             return endPoint;
-          if (startAll_ < Time::MAX)
-            return TimeValue{startAll_ + 1}; 
-          startAll_ = Time::MAX - TimeValue(1);
+          if (startRef <= Time::MAX - Time{DEFAULT_CANVAS})
+            return startRef + Time{DEFAULT_CANVAS};
+          startRef = Time::MAX - Time{DEFAULT_CANVAS};
           return Time::MAX;
         }
       
+      static Rat
+      establishMetric (uint pxWidth, Time startWin, Time afterWin)
+        {
+          REQUIRE (startWin < afterWin);
+          FSecs dur = _FSecs(afterWin-startWin);
+          if (pxWidth == 0 or pxWidth > MAX_PX_WIDTH) // default to sane pixel width
+              pxWidth = max<uint> (1, rational_cast<uint> (DEFAULT_METRIC * dur));
+          Rat metric = Rat(pxWidth) / dur;
+          // rational arithmetic ensures we can always reproduce the pxWidth
+          ENSURE (pxWidth == rational_cast<uint> (metric*dur));
+          ENSURE (0 < metric);
+          return metric;
+        }
+      
+      Rat
+      conformMetricToWindow (uint pxWidth)
+        {
+          REQUIRE (pxWidth > 0);
+          REQUIRE (afterWin_> startWin_);
+          FSecs dur{afterWin_-startWin_};
+          Rat adjMetric = Rat(pxWidth) / dur;
+          ENSURE (pxWidth == rational_cast<uint> (adjMetric*dur));
+          return adjMetric;
+        }
+      
+      void
+      conformWindowToMetric (Rat changedMetric)
+        {
+          REQUIRE (changedMetric > 0);
+          REQUIRE (afterWin_> startWin_);
+          FSecs dur{afterWin_-startWin_};
+          uint pxWidth = rational_cast<uint> (px_per_sec_*dur);
+          dur = Rat(pxWidth) / changedMetric;
+          dur += MICRO_TICK - FRACT_ULP; // prefer bias towards increased window instead of increased metric
+          dur = min (dur, MAX_TIMESPAN);
+          dur = max (dur, MICRO_TICK); //   prevent window going void
+          if (startWin_<= Time::MAX - Time{dur})
+              afterWin_ = startWin_ + Time{dur};
+          else
+            {
+              startWin_ = Time::MAX - Time{dur};
+              afterWin_ = Time::MAX;
+            }
+          // re-check metric to maintain precise pxWidth
+          px_per_sec_ = conformMetricToWindow (pxWidth);
+          ENSURE (_FSecs(afterWin_-startWin_) < MAX_TIMESPAN);
+          ENSURE (px_per_sec_<= changedMetric); // bias towards increased window
+        }
+      
+      void
+      conformWindowToCanvas()
+        {
+          FSecs dur{afterWin_-startWin_};
+          REQUIRE (dur < MAX_TIMESPAN);
+          REQUIRE (Time::MIN <= startWin_);
+          REQUIRE (afterWin_ <= Time::MAX);
+          if (dur <= _FSecs(afterAll_-startAll_))
+            {//possibly shift into current canvas
+              if (afterWin_ > afterAll_)
+                {
+                  Offset shift{afterWin_ - afterAll_};
+                  startWin_ -= shift;
+                  afterWin_ -= shift;
+                }
+              else
+              if (startWin_ < startAll_)
+                {
+                  Offset shift{startAll_ - startWin_};
+                  startWin_ += shift;
+                  afterWin_ += shift;
+                }
+            }
+          else
+            {//need to cap window to fit into canvas
+              startWin_ = startAll_;
+              afterWin_ = afterAll_;
+            }
+          ENSURE (startAll_ <= startWin_);
+          ENSURE (afterWin_ <= afterAll_);
+        }
+      
+      void
+      conformToBounds (Rat changedMetric)
+        {
+          if (changedMetric > ZOOM_MAX_RESOLUTION)
+            {
+              changedMetric = ZOOM_MAX_RESOLUTION;
+              conformWindowToMetric (changedMetric);
+            }
+          startAll_ = min (startAll_, startWin_);
+          afterAll_ = max (afterAll_, afterWin_);
+          ENSURE (Time::MIN <= startWin_);
+          ENSURE (afterWin_ <= Time::MAX);
+          ENSURE (startAll_ <= startWin_);
+          ENSURE (afterWin_ <= afterAll_);
+          ENSURE (px_per_sec_ <= ZOOM_MAX_RESOLUTION);
+          ENSURE (px_per_sec_ <= changedMetric); // bias
+        }
+      
+      /**
+       * Procedure to (re)establish the invariants.
+       * Adjustments should be done first to windows,
+       * then to the metric, using #conformWindowToMetric().
+       * Then this function shall be called and will first
+       * shift and possibly cap the window, then reestablish
+       * the metric and possibly increase the canvas to keep
+       * ensure the ZOOM_MAX_RESOLUTION is not exceeded.
+       * These steps ensure overall pixel size remains stable.
+       */
+      void
+      ensureInvariants(uint px =0)
+        {
+          if (px==0) px = pxWidth();
+          conformWindowToCanvas();
+          px_per_sec_ = conformMetricToWindow (px);
+          conformToBounds (px_per_sec_);
+        }
+      
+      
+      
+      /* === adjust and coordinate window parameters === */
       
       /** @internal change Window TimeSpan, validate and adjust all params */
       void
       mutateWindow (TimeVar start, TimeVar after)
         {
-          if (not (start < after))
-            {
-              if (after == Time::MAX)
-                start = Time::MAX - TimeValue(1);
-              else
-                after = start + TimeValue(1);
-            }
-          
-          FSecs dur{after - start};
-          if (dur > FSecs{afterAll_ - startAll_})
-            {
-              start = startAll_;
-              after = afterAll_;
-            }
-          else
-          if (start < startAll_)
-            {
-              start = startAll_;
-              after = start + dur;
-            }
-          else
-          if (after > afterAll_)
-            {
-              after = afterAll_;
-              start = after - dur;
-            }
-          ASSERT (after-start <= afterAll_-startAll_);
-          
-          px_per_sec_  = adjustedScale (start,after, startWin_,afterWin_);
+          uint px{pxWidth()};
           startWin_ = start;
-          afterWin_ = after;
+          afterWin_ = ensureNonEmpty (startWin_, after);
+          px_per_sec_ = conformMetricToWindow (px);
+          ensureInvariants (px);
           fireChangeNotification();
         }
       
-      /** 
+      /**
        * @internal adjust Window to match given scale,
        *           validate and adjust all params */
       void
-      mutateScale (uint px_per_sec)
+      mutateScale (Rat changedMetric)
         {
-          if (px_per_sec == 0) px_per_sec = 1;
-          if (px_per_sec == px_per_sec_) return;
+          changedMetric = min (changedMetric, ZOOM_MAX_RESOLUTION);
+          if (changedMetric == px_per_sec_) return;
           
-          FSecs changeFactor{px_per_sec, px_per_sec_};
+          Rat changeFactor{changedMetric / px_per_sec_};
           FSecs dur{afterWin_ - startWin_};
           dur /= changeFactor;
           if (dur > FSecs{afterAll_ - startAll_})
             {// limit to the overall timespan...
-              px_per_sec_  = adjustedScale (startAll_,afterAll_, startWin_,afterWin_);
+              uint px{pxWidth()};
               startWin_ = startAll_;
               afterWin_ = afterAll_;
+              px_per_sec_ = conformMetricToWindow(px);
+              ensureInvariants (px);
+              fireChangeNotification();
             }
           else
-            {
-              TimeVar start{anchorPoint() - dur*relativeAnchor()};
-              if (start < startAll_)
-                start = startAll_;
-              TimeVar after{start + dur};
-              if (after > afterAll_)
-                {
-                  after = afterAll_;
-                  start = afterAll_ - dur;
-                }
-              ASSERT (after-start <= afterAll_-startAll_);
-              
-              if (start == startWin_ and after == afterWin_)
-                return; // nothing changed effectively
-              
-              px_per_sec_ = adjustedScale (start,after, startWin_,afterWin_);
-              startWin_ = start;
-              afterWin_ = after;
-            }
-          fireChangeNotification();
+            mutateDuration (dur);
         }
       
+      /** @internal change visible duration centred around anchor point,
+       *            validate and adjust all params */
       void
-      mutateDuration (Duration duration)
+      mutateDuration (FSecs duration)
         {
-          UNIMPLEMENTED ("change visible duration, validate and adjust all params");
+          if (duration <= 0)
+            duration = DEFAULT_CANVAS;
+          uint px{pxWidth()};
+          TimeVar start{anchorPoint() - duration*relativeAnchor()};
+          TimeVar after{start + duration};
+          if (start == startWin_ and after == afterWin_)
+            return; // nothing changed effectively
+          
+          Rat changedMetric = adjustedScale (start,after, startWin_,afterWin_);
+          conformWindowToMetric (changedMetric);
+          ensureInvariants(px);
+          fireChangeNotification();
         }
       
       
@@ -392,12 +519,12 @@ namespace model {
        * @param afterOld previous end point
        * @return adapted scale factor in pixel per second, rounded half up to the next pixel.
        */
-      uint
+      Rat
       adjustedScale (TimeVar startNew, TimeVar afterNew, TimeVar startOld, TimeVar afterOld)
         {
-          REQUIRE (startOld < afterOld);
-          FSecs factor = FSecs{afterNew - startNew} / FSecs{afterOld - startOld};
-          return boost::rational_cast<uint>(px_per_sec_ / factor + 1/2); // rounding half pixels
+          REQUIRE (startNew < afterNew and startOld < afterOld);
+          Rat change{_raw(afterNew - startNew), _raw(afterOld - startOld)};
+          return px_per_sec_ / change;
         }
       
       /**
@@ -413,7 +540,7 @@ namespace model {
       FSecs
       anchorPoint()  const
         {
-          return startWin_ + FSecs{afterWin_-startWin_} * relativeAnchor(); 
+          return startWin_ + FSecs{afterWin_-startWin_} * relativeAnchor();
         }
       
       /**
@@ -423,13 +550,13 @@ namespace model {
        *       to the current visible window's position within the overall timeline; if it's
        *       close to the beginning, the anchor point is also rather to the beginning...
        */
-      FSecs
+      Rat
       relativeAnchor()  const
         {
           // the visible window itself has to fit in, which reduces the action range
           FSecs possibleRange = (afterAll_-startAll_) - (afterWin_-startWin_);
-          if (possibleRange == 0) // if there is no room for scrolling...
-            return FSecs{1,2};   //  then anchor zooming in the middle
+          if (possibleRange <= 0) // if there is no room for scrolling...
+            return 1_r/2;        //  then anchor zooming in the middle
           
           // use a 3rd degree parabola to favour positions in the middle
           FSecs posFactor = FSecs{startWin_-startAll_} / possibleRange;

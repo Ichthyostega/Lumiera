@@ -66,9 +66,9 @@ namespace test {
           CHECK (_t(10,3) == Time{FSecs(10,3)});                                 // Time point at t = 10/3sec (fractional number)
           CHECK (FSecs(10,3) == FSecs(10)/3);                                    // fractional number arithmetics
           CHECK (FSecs(10)/3 == 10_r/3);                                         // _r is a user defined literal to denote 64-bit fractional
-          CHECK (10_r/3 == Rat(10,3));
-          CHECK (Rat(10/3) == boost::rational<int64_t>(10,3));                   // using Rat = boost::rational<int64_t>
-          CHECK (rational_cast<float> (10_r/3) == 3.33333f);                     // rational_cast performs the division with indicated type
+          CHECK (Rat(10,3) == 10_r/3);
+          CHECK (Rat(10,3) == boost::rational<int64_t>(10,3));                   // using Rat = boost::rational<int64_t>
+          CHECK (rational_cast<float> (10_r/3) == 3.33333f);                     // rational_cast calculates division after type conversion
           
           verify_simpleUsage();
           verify_setup();
@@ -101,10 +101,11 @@ namespace test {
       
       
       /** @test verify the possible variations for initial setup of the zoom window
-       *        - can be defined either the canvas duration, or an explicit extension
-       *          given in pixels, or both
-       *        - window extension, when given, defines the visible span
-       *        - otherwise the whole canvas is visible, thereby defining the metric
+       *        - can be defined either the canvas duration,
+       *          or an explicit extension given in pixels, or both
+       *        - after construction, visible window always covers whole canvas
+       *        - window extension, when given, defines the initial metric
+       *        - otherwise pixel extension is derived from default metric
        */
       void
       verify_setup()
@@ -112,26 +113,26 @@ namespace test {
           ZoomWindow win1;
           CHECK (win1.overallSpan() == TimeSpan(_t(0), FSecs(23)));
           CHECK (win1.visible()     == win1.overallSpan());
+          CHECK (win1.pxWidth()     == 25*23);
           CHECK (win1.px_per_sec()  == 25);
-          CHECK (win1.pxWidth()  == 23*25);
           
           ZoomWindow win2{TimeSpan{_t(-1), _t(+1)}};
           CHECK (win2.overallSpan() == TimeSpan(_t(-1), FSecs(2)));
           CHECK (win2.visible()     == win2.overallSpan());
+          CHECK (win2.pxWidth()     == 25*2);
           CHECK (win2.px_per_sec()  == 25);
-          CHECK (win2.pxWidth()  ==  2*25);
           
           ZoomWindow win3{555};
           CHECK (win3.overallSpan() == TimeSpan(_t(0), FSecs(23)));
+          CHECK (win3.visible()     == win3.overallSpan());
           CHECK (win3.pxWidth()     == 555);
           CHECK (win3.px_per_sec()  == 555_r/23);
-          CHECK (win3.visible()     == win3.overallSpan());
           
           ZoomWindow win4{555, TimeSpan{_t(-10), _t(-5)}};
           CHECK (win4.overallSpan() == TimeSpan(_t(10), FSecs(5)));
+          CHECK (win4.visible()     == win4.overallSpan());
           CHECK (win4.pxWidth()     == 555);
           CHECK (win4.px_per_sec()  == 111);
-          CHECK (win4.visible()     == win4.overallSpan());
         }
       
       

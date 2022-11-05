@@ -38638,9 +38638,24 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667592413859" ID="ID_745987096" MODIFIED="1667592507648" TEXT="brauche dazu einen offiziellen Zugang zu einer fraktionalen Repr&#xe4;sentation">
+<icon BUILTIN="yes"/>
+<node CREATED="1667592510702" ID="ID_669892678" MODIFIED="1667592532079" TEXT="Duration &#x27f6; FSec"/>
+<node CREATED="1667592539018" ID="ID_1283310585" MODIFIED="1667592544568" TEXT="Offset &#x27f6; FSec"/>
+<node CREATED="1667592532973" ID="ID_31952265" MODIFIED="1667592538214" TEXT="Time &#x27f6; FSec"/>
+</node>
+<node COLOR="#338800" CREATED="1667593654463" ID="ID_1694088540" MODIFIED="1667593677324" TEXT="vorl&#xe4;ufige Zwischenl&#xf6;sung: _FSecs() direkt in ZoomWindow-Header">
+<icon BUILTIN="button_ok"/>
+</node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1667488158059" ID="ID_898168096" MODIFIED="1667491200716" TEXT="neue Zielvorgabe: Pixel-Angaben sind stets pr&#xe4;zise">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667593710047" ID="ID_920638973" MODIFIED="1667593745244" TEXT="kein Runden mehr, sondern nur noch truncate">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667593719313" ID="ID_317494909" MODIFIED="1667593745245" TEXT="daf&#xfc;r die Toleranz senken auf der Metrik">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 </node>
@@ -38658,6 +38673,378 @@
     </p>
   </body>
 </html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1667603662334" ID="ID_162164091" MODIFIED="1667603891148" TEXT="drehe mich mit den geforderten Randbedingungen im Kreis">
+<arrowlink COLOR="#ec1941" DESTINATION="ID_1507636517" ENDARROW="Default" ENDINCLINATION="27;-47;" ID="Arrow_ID_49426086" STARTARROW="None" STARTINCLINATION="-122;6;"/>
+<icon BUILTIN="stop-sign"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1667603756089" ID="ID_1802881683" MODIFIED="1667603844726" TEXT="m&#xf6;chte einen maximal-Zoom-Faktor vorgeben">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1667603784445" ID="ID_1006588421" MODIFIED="1667603844726" TEXT="Fenster soll immer im Canvas bleiben">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1667603813378" ID="ID_1979403390" MODIFIED="1667603844727" TEXT="Pixel-Vorgaben stets einzuhalten">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667603646312" ID="ID_1507636517" MODIFIED="1667603891148" TEXT="mu&#xdf; Invarianten sicherstellen">
+<linktarget COLOR="#ec1941" DESTINATION="ID_1507636517" ENDARROW="Default" ENDINCLINATION="27;-47;" ID="Arrow_ID_49426086" SOURCE="ID_162164091" STARTARROW="None" STARTINCLINATION="-122;6;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1667603900358" ID="ID_353785530" MODIFIED="1667603950298" TEXT="das gew&#xe4;hlte Implementierungs-Schema ist nicht beherrschbar">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1667603974758" ID="ID_1895105732" MODIFIED="1667603997149" TEXT="Konstuktor legt sichere Startwerte fest"/>
+<node CREATED="1667603997785" ID="ID_1559828104" MODIFIED="1667604014827" TEXT="von dort weiter, mit Einzelfall-bezogenen Regeln"/>
+</node>
+<node CREATED="1667604115641" ID="ID_340228791" MODIFIED="1667604155428">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      mein Anspruch ist, hier eine <b>absolut fehlerfrei</b>&#160;arbeitende Komponente zu schreiben
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1667604025125" ID="ID_573471794" MODIFIED="1667604225117" TEXT="die Korrektur-Regeln zum Einhalten der Constraints sind komplex (im Allgemeinen)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und zwar, wenn man <i>wirklich alle</i>&#160;Eingangswerte zul&#228;&#223;t, und sich eben nicht nur auf <i>vern&#252;nftige </i>Eingaben <i>verl&#228;&#223;t.</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1667604082603" ID="ID_1966401065" MODIFIED="1667604109981" TEXT="ich mu&#xdf; letztlich Verg&#xf6;&#xdf;erung des Canvas zulassen (oder beliebig starken Zoom)">
+<node CREATED="1667604258315" ID="ID_539837281" MODIFIED="1667604273064" TEXT="Canvas-Vergr&#xf6;&#xdf;erung erscheint mir pragmatischer"/>
+<node CREATED="1667604319406" ID="ID_169844915" MODIFIED="1667604346784" TEXT="ich m&#xf6;chte den Zoom-Faktor auf eine technisch realisierbare Spanne beschr&#xe4;nken"/>
+<node CREATED="1667604407474" ID="ID_1964908869" MODIFIED="1667609918926" TEXT="diese Spanne kann in der logarithmischen Skala vergleichsweise rasch durchschritten werden.">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      so &#177;15 2er-Potenz-Schritte gen&#252;gen, um von der maximalen Aufl&#246;sung in den Minuten-Bereich zu kommen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1667610042409" ID="ID_1645790878" MODIFIED="1667610212422" TEXT="es kann nicht die Aufgabe des ZoomWindow sein, sinnvolle Speicher-Limits einzuhalten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      insofern mu&#223; es dann aber auch mit maximal gro&#223;en Integer-Zahlen noch sauber funktionieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1667610216018" ID="ID_399148751" MODIFIED="1667610253025" TEXT="insofern ist das hier auch eine sportliche Herausforderung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...einmal wirklich sicheren Code schreiben...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1667610259517" ID="ID_738196107" MODIFIED="1667610281605" TEXT="andere Code-Struktur als L&#xf6;sung?">
+<node CREATED="1667610283233" ID="ID_1965026515" MODIFIED="1667610294374" TEXT="Konstruktur initialisiert nur"/>
+<node CREATED="1667610295059" ID="ID_15303386" MODIFIED="1667610302622" TEXT="es gibt eine Invarianten-Funktion"/>
+<node CREATED="1667610303406" ID="ID_268951847" MODIFIED="1667610331180" TEXT="diese f&#xfc;hrt eine feste Folge von Pr&#xfc;f- und Korrekturschritten aus"/>
+<node CREATED="1667610416991" ID="ID_1022295277" MODIFIED="1667610430339" TEXT="und die gleiche Funktion wird nach jeder &#xc4;nderung gleicherma&#xdf;en angewendet"/>
+</node>
+<node CREATED="1667610443917" ID="ID_156996069" MODIFIED="1667610464053" TEXT="Invariante(n)">
+<node CREATED="1667610465437" ID="ID_1890704401" MODIFIED="1667660026181" TEXT="pxWidth konstant erhalten">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1667610496460" ID="ID_1598935964" MODIFIED="1667660029149" TEXT="Metrik &lt; Maximal-Faktor">
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1667610522737" ID="ID_870501024" MODIFIED="1667660034107" TEXT="visibleWindow &#x2282; Canvas">
+<icon BUILTIN="full-3"/>
+</node>
+</node>
+<node CREATED="1667610617421" ID="ID_1255567216" MODIFIED="1667659859838" TEXT="Ausgleichs-Regeln">
+<icon BUILTIN="idea"/>
+<node COLOR="#338800" CREATED="1667610965654" ID="ID_1822123568" MODIFIED="1667667095016" TEXT="Canvas und Fenster orientieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1667667099807" ID="ID_313293093" MODIFIED="1667667110754" TEXT="kann relativ brachial erfolgen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1667667111845" ID="ID_240814651" MODIFIED="1667667131096" TEXT="Input kann nur leer sein, nicht negativ"/>
+<node CREATED="1667667143969" ID="ID_971076298" MODIFIED="1667667564598" TEXT="falls leer, weite aus auf DEFAULT_CANVAS (&#x2259; 23sec)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...zun&#228;chst habe ich hier immer nur das Minimale getan, n&#228;mlich 1 &#181;Tick aufgeweitet; dies w&#252;rde zwar funktionieren, aber in der Regel nicht zu einem praktikablen Verhalten f&#252;hren &#8212; wohingegen der <i>DEFAULT_CANVAS</i>&#160; so gew&#228;hlt ist, da&#223; er klein und handlich ist
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1667667185251" ID="ID_396603353" MODIFIED="1667667316295" TEXT="extrem gro&#xdf;e Canvas oder Fenster sind nicht gef&#xe4;hrlich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sofern wir den Speicher haben...
+    </p>
+    <p>
+      Will sagen, sie sind nicht gef&#228;hrlich f&#252;r den Invarianten-Mechanismus, denn f&#252;r diesen wird es ehr bei sehr kleinen Zeitspannen kniffelig; wohingegen beliebig starkes zoom-out stets repr&#228;sentierbar ist als fraktionaler Integer
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1667611339595" ID="ID_1035209313" MODIFIED="1667668297039" TEXT="pxWidth errechnen / festsetzen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1667667900172" ID="ID_638983817" MODIFIED="1667667999509" TEXT="hier nun doch eine Maximal-Pixelzahl eingef&#xfc;hrt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...auch das basiert auf einer pragmatischen &#220;berlegung; theoretisch k&#246;nnten wir beliebig gro&#223;e Pixelanzahl unterst&#252;tzen, dies w&#252;rde aber auf allen Ebenen zu unerwartetem Verhalten f&#252;hren, dessen Konsequenzen ich nicht &#252;berblicke &#10233; dann besser eine willk&#252;rliche und hinreichend gro&#223;e Grenze
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1667668184215" ID="ID_364715169" MODIFIED="1667668292358" TEXT="und fall-back auf das visibleWin in default-Metrik">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      dies ist ein reiner Platzhalter f&#252;r Tests, denn in der Praxis erwarte ich stets da&#223; sofort zu Beginn eine Breite in Pixeln gesetzt wird &#8212; kann ja gar nicht anders sein...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1667610653277" ID="ID_1224205751" MODIFIED="1667611359311" TEXT="neue Metrik &#x27f6; visibleWin">
+<node CREATED="1667659377837" ID="ID_634768326" MODIFIED="1667659613008" TEXT="&#xbb;conformWindowToMetric&#xab;"/>
+</node>
+<node CREATED="1667610682228" ID="ID_154285310" MODIFIED="1667610688031" TEXT="Fenster in Canvas schieben">
+<node CREATED="1667659486321" ID="ID_897577157" MODIFIED="1667659616368" TEXT="&#xbb;conformWindowToCanvas&#xab;"/>
+</node>
+<node CREATED="1667610688715" ID="ID_11883276" MODIFIED="1667610699053" TEXT="Fenster auf Canvas beschneiden"/>
+<node CREATED="1667610653277" ID="ID_831514693" MODIFIED="1667611449269" TEXT="neue Metrik &#x27f5; visibleWin">
+<node CREATED="1667659622859" ID="ID_828891167" MODIFIED="1667659633949" TEXT="&#xbb;conformMetricToWindow&#xab;"/>
+</node>
+<node CREATED="1667611135215" ID="ID_1783825207" MODIFIED="1667611444146" TEXT="neue Metrik beschneiden">
+<node CREATED="1667659689795" ID="ID_1515577475" MODIFIED="1667659703886" TEXT="&#xbb;conformBounds&#xab;"/>
+<node CREATED="1667672310513" ID="ID_1440027403" MODIFIED="1667672328162" TEXT="Metric &lt; MAX_ZOOM"/>
+<node CREATED="1667610653277" ID="ID_761246682" MODIFIED="1667682138815" TEXT="Metrik &#x27f6; visibleWin">
+<linktarget COLOR="#9e7367" DESTINATION="ID_761246682" ENDARROW="Default" ENDINCLINATION="145;-11;" ID="Arrow_ID_702546557" SOURCE="ID_1067254564" STARTARROW="None" STARTINCLINATION="-54;-36;"/>
+</node>
+<node CREATED="1667611247456" ID="ID_1658100193" MODIFIED="1667611265274" TEXT="visibleWin &#x27f6; Canvas"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1667673574471" ID="ID_1973274504" MODIFIED="1667673591693" TEXT="neue Metrik &lt; MAX_ZOOM">
+<icon BUILTIN="help"/>
+<node CREATED="1667673606578" ID="ID_1067254564" MODIFIED="1667682151865" TEXT="potentiell gef&#xe4;hrlich: Metrik &#x27f6; visibleWin">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn dabei wird gerundet, um die exakte Pixel-Zahl zu erhalten
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#9e7367" DESTINATION="ID_761246682" ENDARROW="Default" ENDINCLINATION="145;-11;" ID="Arrow_ID_702546557" STARTARROW="None" STARTINCLINATION="-54;-36;"/>
+</node>
+<node CREATED="1667682713949" ID="ID_425310807" MODIFIED="1667682719231" TEXT="Grenzfall-Analyse">
+<node CREATED="1667682721338" ID="ID_842333816" MODIFIED="1667682794317" TEXT="Fenster kann verk&#xfc;rzt werden durch Rundung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font face="Monospaced">afterWin_ = startWin_ + Time{dur};</font>
+    </p>
+    <p>
+      wobei dur einen fraktionalen Anteil &lt; 1 &#181;Tick enthalten k&#246;nnte
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1667683782783" ID="ID_1842670966" MODIFIED="1667683907910" TEXT="MAX_TIMESPAN: Begrenzung hier nicht relevant">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Der Grenzfall ist ja changedMetric = MAX_ZOOM
+    </p>
+    <p>
+      Wenn ich das durch eine irgendwie geartete pxWidth teile, wird es niemals gr&#246;&#223;er, und zudem ist MAX_ZOOM &lt; MAX_TIMESPAN
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1667683116532" ID="ID_895916326" MODIFIED="1667683126786" TEXT="ruft auf: conformMetricToWindow">
+<node COLOR="#435e98" CREATED="1667683149810" ID="ID_872183002" MODIFIED="1667683633595" TEXT="Bug: errechnet pxWidth neu mit schon ge&#xe4;nderter L&#xe4;nge">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das bedeutet: genau durch diese Abrundung auf den n&#228;chst kleineren &#181;Tick k&#246;nnten wir u.U einen Pixel verlieren
+    </p>
+    <p>
+      &#10233; Abhilfe: originale pxWidth als Paremeter mitgeben
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1667683634701" ID="ID_1449451873" MODIFIED="1667685735423" TEXT="Metrik kann minimal gr&#xf6;&#xdf;er geworden sein (durch Rundung)">
+<richcontent TYPE="NOTE">&lt;html&gt;
+  &lt;head&gt;
+    
+    
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;p&gt;
+      &lt;u&gt;Konkretes Rechenbeispiel:&lt;/u&gt;
+    &lt;/p&gt;
+    &lt;p&gt;
+      pxWidth = 99999&amp;#160;&amp;#160;(ein Pixel weniger als maximal m&amp;#246;glich)
+    &lt;/p&gt;
+    &lt;p&gt;
+      changedMetric = MAX_ZOOM = 2000000
+    &lt;/p&gt;
+    &lt;p&gt;
+      &amp;#10233; conformWindowToMetric() errechnet
+    &lt;/p&gt;
+    &lt;p&gt;
+      dur = 49999+1/2 &amp;#181;Tick
+    &lt;/p&gt;
+    &lt;p style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px&quot;&gt;
+      &amp;#55358;&amp;#56370; das wird abgerundet auf 49999 &amp;#181;Tick
+    &lt;/p&gt;
+    &lt;p&gt;
+      &amp;#10233; conformMetricToWindow() errechnet
+    &lt;/p&gt;
+    &lt;p&gt;
+      adjMetric = 99999 / (49999/1000000) = 2000020,0004000080001600032
+    &lt;/p&gt;
+    &lt;p style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px&quot;&gt;
+      &amp;#10233; das ist &lt;b&gt;definitiv gr&amp;#246;&amp;#223;er&lt;/b&gt;&amp;#160;als MAX_ZOOM
+    &lt;/p&gt;
+    &lt;p&gt;
+      
+    &lt;/p&gt;
+    &lt;p&gt;
+      
+    &lt;/p&gt;
+    &lt;p&gt;
+      
+    &lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1667688476525" ID="ID_226096711" MODIFIED="1667688576067" TEXT="&#x27f9; Konsequenz: Bias in Richtung vergr&#xf6;&#xdf;erter Zoom / verkleinertes Fenster">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1667688579306" ID="ID_486622183" MODIFIED="1667688586268" TEXT="allerdings ein sehr kleiner Effekt"/>
+<node CREATED="1667688595090" ID="ID_1458378798" MODIFIED="1667688601683" TEXT="&#xe4;quivalent +1 &#xb5;Tick"/>
+<node CREATED="1667688946763" ID="ID_376119418" MODIFIED="1667689144112" TEXT="trotzdem unerw&#xfc;nscht &#x27f9; man kommt nicht zum Anfrang zur&#xfc;ck">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      einmal stark reinzoomen, und dann wieder zur&#252;ck &#10233; Bereich ist beschnitten und kleiner geworden; das ist l&#228;stig, weil die n&#228;chst gr&#246;&#223;ere Stufe deutlich gr&#246;&#223;er ist; meiner Einsch&#228;tzung nach w&#228;re es weniger l&#228;stig, wenn man ein kleines bischen zu viel sieht, zumal sich das auf der n&#228;chsten Zweierpotenz einpendeln d&#252;rfte
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1667687800139" ID="ID_1785911993" MODIFIED="1667687809137" TEXT="Abhilfe">
+<node CREATED="1667687810116" ID="ID_1519072103" MODIFIED="1667689196961" TEXT="L&#xf6;sung-1">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1667688228377" ID="ID_1083352192" MODIFIED="1667688446311" TEXT="den Fall MAX_ZOOM + Rundungsfehler explizit abtesten"/>
+<node CREATED="1667688234896" ID="ID_1025502092" MODIFIED="1667688423306" TEXT="und dann das visibleWin um 1 &#xb5;Tick vergr&#xf6;&#xdf;ern">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...vergr&#246;&#223;ern, weil damit die Metrik kleiner wird und unter der Schwelle MAX_ZOOM gehalten wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1667688257381" ID="ID_1551466069" MODIFIED="1667689187817" TEXT="L&#xf6;sung-2">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1667688279379" ID="ID_873793356" MODIFIED="1667688288165" TEXT="stets pauschal 1&#xb5;Tick aufschlagen"/>
+<node CREATED="1667688305031" ID="ID_950638301" MODIFIED="1667688330439" TEXT="keine gute Idee: behandelt exakte Verh&#xe4;ltnisse falsch"/>
+</node>
+<node CREATED="1667688337402" ID="ID_124934014" MODIFIED="1667689201165" TEXT="L&#xf6;sung-3">
+<icon BUILTIN="forward"/>
+<node CREATED="1667688343137" ID="ID_1666323585" MODIFIED="1667688353420" TEXT="explizit auf Rundungsfehler testen"/>
+<node CREATED="1667688354104" ID="ID_1203966035" MODIFIED="1667688377833" TEXT="und in diesem Fall visibleWin um 1 &#xb5;Tick vergr&#xf6;&#xdf;ern"/>
+<node CREATED="1667689836161" ID="ID_1356615492" MODIFIED="1667690176127" TEXT="besser: Aufrundungs-Konstante addieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...nach grober Absch&#228;tzung sind das weniger Operationen, als die Konvertierung auszuf&#252;hren und zur&#252;ck zu konvertieren und dann zu testen; zwar k&#246;nnte der Optimiser den Test per common subexpression noch vereinfachen &#8212; aber letztlich empfinde ich das Addieren einer ULP-Konstante als deklarativer
+    </p>
+  </body>
+</html></richcontent>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667690184889" ID="ID_1410341897" MODIFIED="1667690193752" TEXT="Vorsicht: experimentell pr&#xfc;fen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1667659852956" ID="ID_1802836695" MODIFIED="1667659962798" TEXT="Implementierung">
+<icon BUILTIN="pencil"/>
+<node CREATED="1667659867147" ID="ID_1797487380" MODIFIED="1667659882100" TEXT="jeweils den beweglichen Teil als Argument"/>
+<node CREATED="1667659890055" ID="ID_1728452596" MODIFIED="1667659897292" TEXT="immer nur einen Aspekt justieren"/>
+<node CREATED="1667659931146" ID="ID_1567516385" MODIFIED="1667659944676" TEXT="die jeweilige Ziel-Invariante per Assertion dokumentieren"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1667698387387" ID="ID_1173911153" MODIFIED="1667698425495" TEXT="Normalisierungs-Sequenz auf Basis der einzel-Normalisierungen definieren">
+<icon BUILTIN="pencil"/>
 </node>
 </node>
 </node>
@@ -55560,7 +55947,7 @@
 <node CREATED="1667336818154" ID="ID_228764070" MODIFIED="1667336839107" TEXT="TimeValue + symbolische Grid-Referenz"/>
 <node CREATED="1667336841967" ID="ID_1852849270" MODIFIED="1667336856426" TEXT="Grid &#xfc;ber das Advice-System publiziert"/>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1667476797049" FOLDED="true" ID="ID_767502481" MODIFIED="1667487664229" TEXT="Diskussion: interne Zeitbasis">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1667476797049" FOLDED="true" ID="ID_767502481" MODIFIED="1667593632385" TEXT="Diskussion: interne Zeitbasis">
 <linktarget COLOR="#af1a4c" DESTINATION="ID_767502481" ENDARROW="Default" ENDINCLINATION="96;-430;" ID="Arrow_ID_1672039685" SOURCE="ID_1838246834" STARTARROW="None" STARTINCLINATION="-670;38;"/>
 <icon BUILTIN="hourglass"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667486621881" ID="ID_566152244" MODIFIED="1667486629636" TEXT="#1258 clarify internal time base">
@@ -55572,6 +55959,7 @@
 <node CREATED="1667486681289" ID="ID_1245609548" MODIFIED="1667486715504" TEXT="egal ob man nun floating-point nimmt, oder eine feste integrale Basis (&#xb5;-Ticks)"/>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1667486847011" ID="ID_1394182591" MODIFIED="1667486860346" TEXT="sehe folgende L&#xf6;sungen">
+<linktarget COLOR="#b3a5d6" DESTINATION="ID_1394182591" ENDARROW="Default" ENDINCLINATION="-42;135;" ID="Arrow_ID_1017363931" SOURCE="ID_945218071" STARTARROW="None" STARTINCLINATION="-118;6;"/>
 <icon BUILTIN="hourglass"/>
 <node CREATED="1667486862210" ID="ID_860525476" MODIFIED="1667487583167" TEXT="Umstellen auf Bruch-Darstellung">
 <icon BUILTIN="full-1"/>
@@ -55635,6 +56023,144 @@
 <node CREATED="1667487512650" ID="ID_968209763" MODIFIED="1667487526228" TEXT="&quot;dies sind 96kHz-Samples&quot;"/>
 <node CREATED="1667487528568" ID="ID_745033416" MODIFIED="1667487546865" TEXT="dann kann eine Implementierung &quot;downstream&quot; mit Divisor arbeiten"/>
 <node CREATED="1667487547957" ID="ID_1232559601" MODIFIED="1667487568454" TEXT="und Output geht an die Soundkarte mit 96kHz"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667592184752" ID="ID_1933332619" MODIFIED="1667592189752" TEXT="Aufr&#xe4;um-Arbeiten">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667592193783" ID="ID_1808934689" MODIFIED="1667592204255" TEXT="#1259 organise raw time base implementation">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1667592218952" ID="ID_1463501252" MODIFIED="1667592230199" TEXT="Einsichten">
+<icon BUILTIN="idea"/>
+<node CREATED="1667592232354" ID="ID_1809679126" MODIFIED="1667592268849" TEXT="die unterliegende Roh-Implementierung wird stets &#x201e;durchscheinen&#x201c;"/>
+<node CREATED="1667592285128" ID="ID_945218071" MODIFIED="1667592349554">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      im Besonderen bei den <i>pragmatischen L&#246;sungen</i>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#b3a5d6" DESTINATION="ID_1394182591" ENDARROW="Default" ENDINCLINATION="-42;135;" ID="Arrow_ID_1017363931" STARTARROW="None" STARTINCLINATION="-118;6;"/>
+<icon BUILTIN="full-2"/>
+<icon BUILTIN="full-3"/>
+</node>
+<node CREATED="1667592366001" ID="ID_170684768" LINK="#ID_745987096" MODIFIED="1667592483713" TEXT="Zeit-Berechnungen brauchen einen validen Zugang">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1667592593027" ID="ID_1398816169" MODIFIED="1667592611842" TEXT="Aufgaben">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667592613824" ID="ID_1877249067" MODIFIED="1667593560997" TEXT="keine externen Library-Typen mehr im normalen Implementierungs code">
+<icon BUILTIN="yes"/>
+<node CREATED="1667592632302" ID="ID_1344505411" MODIFIED="1667592635745" TEXT="boost::rational"/>
+<node CREATED="1667592636666" ID="ID_392219650" MODIFIED="1667592641529" TEXT="gavl_time_t"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667592643724" ID="ID_504422240" MODIFIED="1667592665218" TEXT="LibGavl-Dependency hier entfernen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1667592666825" ID="ID_1632149108" MODIFIED="1667592677380" TEXT="so sehr ich Gavl im allgemeinen gut finde"/>
+<node CREATED="1667592677944" ID="ID_130946855" MODIFIED="1667592698682" TEXT="wir brauchen keine Lib um einen int64_t zu deklarieren">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1667592700101" ID="ID_942374659" MODIFIED="1667592737240" TEXT="ansonsten wird Gavl nicht / noch nicht verwendet">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und ganz im Besonderen: wir st&#252;tzen uns f&#252;r die Zeitbehandlung nicht auf libGavl ab
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667593471839" ID="ID_1651396499" MODIFIED="1667593549109" TEXT="gavl_time_t ersetzen durch einen Typedef RawTicks">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667593606149" ID="ID_1259605001" MODIFIED="1667593625459" TEXT="_raw() &#x27f6; _rawTicks()">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667592743130" ID="ID_675688540" MODIFIED="1667593547383">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      FSecs durch einen neuen Wrapper <font face="Monospaced" color="#1e178c"><b>RSec</b></font>&#160;ersetzen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1667592790281" ID="ID_1680785799" MODIFIED="1667592800092" TEXT="au&#xdf;erdem den neuen lib/rational.hpp hier einbinden"/>
+<node CREATED="1667592805748" ID="ID_290360900" MODIFIED="1667592820329" TEXT="explizit als Typ RSec verwenden f&#xfc;r alle Konvertierungen"/>
+<node CREATED="1667592821013" ID="ID_289952678" MODIFIED="1667592916791" TEXT="RSec">
+<icon BUILTIN="info"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667592825916" ID="ID_66335543" MODIFIED="1667592941549" TEXT="implizit konstruierbar aus Rat">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667592930415" ID="ID_569654636" MODIFIED="1667592944318" TEXT="implizit konstruierbar aus TimeVal">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667592835795" ID="ID_1955597942" MODIFIED="1667592942626">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>nicht</b>&#160;implizit konstruierbar aus int64_t
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1667592866911" ID="ID_416309268" MODIFIED="1667592869523" TEXT="ganz wichtig"/>
+<node CREATED="1667592870151" ID="ID_1316405427" MODIFIED="1667592884425" TEXT="denn int64_t impliziert &#xb5;-Ticks"/>
+<node CREATED="1667592895059" ID="ID_556517411" MODIFIED="1667592912143" TEXT="sollte explizit konstruierbar sein, mit Skalen-Transformation"/>
+</node>
+<node CREATED="1667592989079" ID="ID_531764150" MODIFIED="1667593020006" TEXT="minimale Arithmetik-Integration mit Time und Duration"/>
+<node CREATED="1667593029266" ID="ID_1518807557" MODIFIED="1667593045317" TEXT="aber Zeit-Gr&#xf6;&#xdf;en nur explizit konstruierbar (= Status quo)"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667593084541" ID="ID_737389227" MODIFIED="1667593105376" TEXT="C-Library effektiv entfernen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1667593106935" ID="ID_1453484901" MODIFIED="1667593139782" TEXT="ich will keine C-Implementierungen mehr">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1667593146938" ID="ID_572582896" MODIFIED="1667593420308" TEXT="die C-Library verf&#xfc;hrt dazu, das Time-Framework zu umgehen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...seinerzeit fand ich diese Art &#187;Offenheit&#171; noch gut; auch weil ich mir erhoffte, damit mehr Contributors zu bekommen. Die Erfahrungen sprechen dagegen; klar, die Leute m&#246;gen erst einmal gerne &#8222;move fast and break things&#8220; &#8212; aber wenn dann Aufr&#228;umen oder anstrengende Konzeptions-Arbeit notwendig w&#252;rde, bleibt alles liegen und man verschwindet aus dem Projekt.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667593164461" ID="ID_1585303440" MODIFIED="1667593241126" TEXT="Umbau">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667593169047" ID="ID_377190169" MODIFIED="1667593239462" TEXT="Header umbenennen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667593179870" ID="ID_1823116307" MODIFIED="1667593239462" TEXT="Header und Implementierung in C++">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667593196675" ID="ID_530670970" MODIFIED="1667593239463" TEXT="plain-C-Tests in C++-Tests umziehen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667593209815" ID="ID_1675418151" MODIFIED="1667593239463" TEXT="Hinweise aus Dokumentation entfernen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 </node>
 </node>
