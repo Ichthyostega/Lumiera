@@ -38861,7 +38861,7 @@
 <linktarget COLOR="#9e7367" DESTINATION="ID_761246682" ENDARROW="Default" ENDINCLINATION="145;-11;" ID="Arrow_ID_702546557" SOURCE="ID_1067254564" STARTARROW="None" STARTINCLINATION="-54;-36;"/>
 </node>
 <node CREATED="1667611247456" ID="ID_1658100193" MODIFIED="1667611265274" TEXT="visibleWin &#x27f6; Canvas"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1667673574471" ID="ID_1973274504" MODIFIED="1667673591693" TEXT="neue Metrik &lt; MAX_ZOOM">
+<node COLOR="#435e98" CREATED="1667673574471" ID="ID_1973274504" MODIFIED="1667774166875" TEXT="neue Metrik &lt; MAX_ZOOM">
 <icon BUILTIN="help"/>
 <node CREATED="1667673606578" ID="ID_1067254564" MODIFIED="1667682151865" TEXT="potentiell gef&#xe4;hrlich: Metrik &#x27f6; visibleWin">
 <richcontent TYPE="NOTE"><html>
@@ -38926,51 +38926,46 @@
 <icon BUILTIN="broken-line"/>
 </node>
 <node CREATED="1667683634701" ID="ID_1449451873" MODIFIED="1667685735423" TEXT="Metrik kann minimal gr&#xf6;&#xdf;er geworden sein (durch Rundung)">
-<richcontent TYPE="NOTE">&lt;html&gt;
-  &lt;head&gt;
+<richcontent TYPE="NOTE"><html>
+  <head>
     
-    
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;p&gt;
-      &lt;u&gt;Konkretes Rechenbeispiel:&lt;/u&gt;
-    &lt;/p&gt;
-    &lt;p&gt;
-      pxWidth = 99999&amp;#160;&amp;#160;(ein Pixel weniger als maximal m&amp;#246;glich)
-    &lt;/p&gt;
-    &lt;p&gt;
+  </head>
+  <body>
+    <p>
+      <u>Konkretes Rechenbeispiel:</u>
+    </p>
+    <p>
+      pxWidth = 99999&#160;&#160;(ein Pixel weniger als maximal m&#246;glich)
+    </p>
+    <p>
       changedMetric = MAX_ZOOM = 2000000
-    &lt;/p&gt;
-    &lt;p&gt;
-      &amp;#10233; conformWindowToMetric() errechnet
-    &lt;/p&gt;
-    &lt;p&gt;
-      dur = 49999+1/2 &amp;#181;Tick
-    &lt;/p&gt;
-    &lt;p style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px&quot;&gt;
-      &amp;#55358;&amp;#56370; das wird abgerundet auf 49999 &amp;#181;Tick
-    &lt;/p&gt;
-    &lt;p&gt;
-      &amp;#10233; conformMetricToWindow() errechnet
-    &lt;/p&gt;
-    &lt;p&gt;
+    </p>
+    <p>
+      &#10233; conformWindowToMetric() errechnet
+    </p>
+    <p>
+      dur = 49999+1/2 &#181;Tick
+    </p>
+    <p>
+      &#55358;&#56370; das wird abgerundet auf 49999 &#181;Tick
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#10233; conformMetricToWindow() errechnet
+    </p>
+    <p>
       adjMetric = 99999 / (49999/1000000) = 2000020,0004000080001600032
-    &lt;/p&gt;
-    &lt;p style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px&quot;&gt;
-      &amp;#10233; das ist &lt;b&gt;definitiv gr&amp;#246;&amp;#223;er&lt;/b&gt;&amp;#160;als MAX_ZOOM
-    &lt;/p&gt;
-    &lt;p&gt;
+    </p>
+    <p>
       
-    &lt;/p&gt;
-    &lt;p&gt;
-      
-    &lt;/p&gt;
-    &lt;p&gt;
-      
-    &lt;/p&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
-</richcontent>
+    </p>
+    <p>
+      &#10233; das ist <b>definitiv gr&#246;&#223;er</b>&#160;als MAX_ZOOM
+    </p>
+  </body>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -38992,7 +38987,8 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1667687800139" ID="ID_1785911993" MODIFIED="1667687809137" TEXT="Abhilfe">
+<node COLOR="#338800" CREATED="1667687800139" ID="ID_1785911993" MODIFIED="1667774152727" TEXT="Abhilfe">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1667687810116" ID="ID_1519072103" MODIFIED="1667689196961" TEXT="L&#xf6;sung-1">
 <icon BUILTIN="smily_bad"/>
 <node CREATED="1667688228377" ID="ID_1083352192" MODIFIED="1667688446311" TEXT="den Fall MAX_ZOOM + Rundungsfehler explizit abtesten"/>
@@ -39014,11 +39010,16 @@
 <node CREATED="1667688279379" ID="ID_873793356" MODIFIED="1667688288165" TEXT="stets pauschal 1&#xb5;Tick aufschlagen"/>
 <node CREATED="1667688305031" ID="ID_950638301" MODIFIED="1667688330439" TEXT="keine gute Idee: behandelt exakte Verh&#xe4;ltnisse falsch"/>
 </node>
-<node CREATED="1667688337402" ID="ID_124934014" MODIFIED="1667689201165" TEXT="L&#xf6;sung-3">
+<node COLOR="#435e98" CREATED="1667688337402" ID="ID_124934014" MODIFIED="1667774147291" TEXT="L&#xf6;sung-3">
 <icon BUILTIN="forward"/>
-<node CREATED="1667688343137" ID="ID_1666323585" MODIFIED="1667688353420" TEXT="explizit auf Rundungsfehler testen"/>
-<node CREATED="1667688354104" ID="ID_1203966035" MODIFIED="1667688377833" TEXT="und in diesem Fall visibleWin um 1 &#xb5;Tick vergr&#xf6;&#xdf;ern"/>
-<node CREATED="1667689836161" ID="ID_1356615492" MODIFIED="1667690176127" TEXT="besser: Aufrundungs-Konstante addieren">
+<node COLOR="#338800" CREATED="1667688343137" ID="ID_1666323585" MODIFIED="1667774142887" TEXT="explizit auf Rundungsfehler testen">
+<arrowlink COLOR="#16967b" DESTINATION="ID_395273674" ENDARROW="Default" ENDINCLINATION="-430;-19;" ID="Arrow_ID_1396048890" STARTARROW="None" STARTINCLINATION="308;26;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1667688354104" ID="ID_1203966035" MODIFIED="1667774073074" TEXT="und in diesem Fall visibleWin um 1 &#xb5;Tick vergr&#xf6;&#xdf;ern">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#990000" CREATED="1667689836161" ID="ID_1356615492" MODIFIED="1667760039819" TEXT="besser: Aufrundungs-Konstante addieren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -39029,8 +39030,288 @@
     </p>
   </body>
 </html></richcontent>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667690184889" ID="ID_1410341897" MODIFIED="1667690193752" TEXT="Vorsicht: experimentell pr&#xfc;fen">
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#338800" CREATED="1667690184889" ID="ID_1410341897" MODIFIED="1667753830123" TEXT="Vorsicht: experimentell pr&#xfc;fen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1667747398556" ID="ID_952719507" MODIFIED="1667747493566" TEXT="wie schon vermutet">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es kommt eine negative Zahl heraus: IntMax * Scale &#10236; -Scale&#160;&#160;(im Nenner)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1667747411897" ID="ID_767311084" MODIFIED="1667747502782" TEXT="Fract-Arithmetik kann entgleisen">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1667757234228" ID="ID_1561483253" MODIFIED="1667757240865" TEXT="gef&#xe4;hrlich sind die Nenner">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1667757241668" ID="ID_149215399" MODIFIED="1667757383608" TEXT="zu jedem gegebenen Nenner &gt; 1..."/>
+<node CREATED="1667757251446" ID="ID_1048380323" MODIFIED="1667759097045">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      l&#228;&#223;t sich ein &#187;<b>unbeherrschbarer Summand</b>&#171; konstruieren
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#7e4c66" DESTINATION="ID_1048380323" ENDARROW="Default" ENDINCLINATION="411;20;" ID="Arrow_ID_1424188982" SOURCE="ID_1576668072" STARTARROW="None" STARTINCLINATION="450;-29;"/>
+</node>
+<node CREATED="1667757360499" ID="ID_1110013809" MODIFIED="1667757378957" TEXT="im Zweifelsfall 1/IntMax"/>
+</node>
+</node>
+<node CREATED="1667747515038" ID="ID_1929663553" MODIFIED="1667753823728" TEXT="gesucht: Rational-Konstante">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#990000" CREATED="1667747539288" ID="ID_1951969589" MODIFIED="1667754024155" TEXT="naiver-Ansatz: ein ULP abziehen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      da wird die Rechnung schwierig, denn ich kann es nicht ohne Weiteres mathematisch greifen....
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#fd2a6a" DESTINATION="ID_1951969589" ENDARROW="Default" ENDINCLINATION="228;179;" ID="Arrow_ID_1471419287" SOURCE="ID_219818450" STARTARROW="None" STARTINCLINATION="-119;-5;"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1667748952764" ID="ID_1863452609" MODIFIED="1667751189345">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ansatz mit Unbekannten
+    </p>
+    <p style="text-align: center">
+      1/S - 1/M = x / I&#160;&#160;&lt; 1/S
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+    
+  </head>
+  <body>
+    <p>
+      Ansatz mit Unbekannten f&#252;hrt auf eine nicht-lineare Gleichung, welche 
+      die beiden Unbekannten verkn&#252;pft....
+    </p>
+    <p>
+      mit ULP = 1/M&#160;&#160;und I (IntMax) und S (&#181;Tick Scale) setze ich an:
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#55358;&#56370; 1/s - 1/M = x / I
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      denn einen Ausdruck x/I kann man grade noch repr&#228;sentieren in 
+      fraktionaler Arithmetik.
+    </p>
+    <p>
+      Das f&#252;rhrt dann leider zu einger Gleichung, die nicht besonders <i>sexy</i>&#160;daherkommt
+    </p>
+    <p>
+      <br>
+      &#55358;&#56370; I&#183;S = I&#183;M - x&#183;M&#183;S
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      also
+    </p>
+    <ul>
+      <li>
+        &#160;x = (I&#183;M - I&#183;S ) / (M&#183;S) = (M - S) / (M&#183;S/I) = I &#183; (M - S)/(M&#183;S)
+      </li>
+      <li>
+        &#160;M = I&#183;S / (I - x&#183;S) = S / (1 - x&#183;S/I)
+      </li>
+    </ul>
+    <p>
+      
+    </p>
+    <p>
+      
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1667749206392" ID="ID_1460373483" MODIFIED="1667751173463" TEXT="suche das gr&#xf6;&#xdf;tm&#xf6;gliche repr&#xe4;sentierbare x">
+<icon BUILTIN="yes"/>
+<node CREATED="1667751592378" ID="ID_18326921" MODIFIED="1667751601497" TEXT="mu&#xdf; eine Ganzzahl sein"/>
+<node CREATED="1667751607890" ID="ID_132312569" MODIFIED="1667752562566" TEXT="mu&#xdf; kleiner sein als I/S">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn f&#252;r x &#8788; I/S&#160;&#160;ergibt sich x/I = 1/s
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#fdf78d" DESTINATION="ID_1095374074" ENDARROW="Default" ENDINCLINATION="26;-56;" ID="Arrow_ID_747520692" STARTARROW="None" STARTINCLINATION="-198;19;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1667749438203" ID="ID_161790566" MODIFIED="1667749475409" TEXT="&#x27f9; Diskussion von f(M) = 1/S - 1/M">
+<node CREATED="1667750115800" ID="ID_56326642" MODIFIED="1667750136091" TEXT="(M - S) / (M&#xb7;S)"/>
+<node CREATED="1667749568601" ID="ID_471212878" MODIFIED="1667749579627" TEXT="Funktion hat kein lokales Minimum"/>
+<node CREATED="1667749580760" ID="ID_324213979" MODIFIED="1667749608656" TEXT="Funktion ist f&#xfc;r positive M monoton wachesnd mit Grenzwert 1/S"/>
+<node CREATED="1667751717132" ID="ID_340559314" MODIFIED="1667751723817" TEXT="Sackgasse">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1667752512074" ID="ID_1095374074" MODIFIED="1667752569851" TEXT="Problem emprisch/numerisch l&#xf6;sbar">
+<linktarget COLOR="#fdf78d" DESTINATION="ID_1095374074" ENDARROW="Default" ENDINCLINATION="26;-56;" ID="Arrow_ID_747520692" SOURCE="ID_132312569" STARTARROW="None" STARTINCLINATION="-198;19;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1667752577050" ID="ID_1732134433" MODIFIED="1667752586180" TEXT="I/S ist selber keine Ganzzahl"/>
+<node CREATED="1667752586960" ID="ID_1690080736" MODIFIED="1667752609545" TEXT="also kann man ausrechnen rational_cast&lt;int64_t&gt; (I/S)"/>
+<node CREATED="1667752612145" ID="ID_895088673" MODIFIED="1667752625679" TEXT="und wegen der Truncation ist das dann unser gesuchtes x"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1667752642697" ID="ID_1015534138" MODIFIED="1667752662085" TEXT=" x = 9223372036854">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1667752695274" ID="ID_1446953820" MODIFIED="1667752882367">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>empirsche Kontrolle</u>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;const Rat UU = Rat(X/I); </font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;SHOW_EXPR (UU); </font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;SHOW_EXPR ((UU &lt; MICRO_TICK)); </font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;SHOW_EXPR ((Rat(X+1)/I &lt; MICRO_TICK)); </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <u>Ausgabe...</u>
+    </p>
+    <p>
+      <font color="#2d158d" face="Monospaced" size="2">Probe rational_cast&lt;int64_t&gt;(LIM) ? = 9223372036854 </font>
+    </p>
+    <p>
+      <font color="#2d158d" face="Monospaced" size="2">Probe UU ? = 9223372036854/9223372036854775807 </font>
+    </p>
+    <p>
+      <font color="#2d158d" face="Monospaced" size="2">Probe (UU &lt; MICRO_TICK) ? = </font><font color="#fe0d1e" face="Monospaced" size="2">true</font>
+    </p>
+    <p>
+      <font color="#2d158d" face="Monospaced" size="2">Probe (Rat(X+1)/I &lt; MICRO_TICK) ? = </font><font color="#f44d8f" face="Monospaced" size="2">false</font>
+    </p>
+    <p>
+      
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1667753664696" ID="ID_324128019" MODIFIED="1667753836503" TEXT="praktisch aber nicht brauchbar">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1667753679862" ID="ID_114001625" MODIFIED="1667753691100" TEXT="weil unser ULP im Nenner IntMax enth&#xe4;lt"/>
+<node CREATED="1667753692252" ID="ID_1791487346" MODIFIED="1667753710406" TEXT="wird jede Fractional-Rechnung mit einer teilerfremden Zahl entgleisen"/>
+<node CREATED="1667753910591" ID="ID_219818450" MODIFIED="1667754029902" TEXT="&#x27f9; es gibt repre&#xe4;sentierbare Zahlen, die nicht mit ULP beaufschlagt werden k&#xf6;nnen">
+<arrowlink COLOR="#fd2a6a" DESTINATION="ID_1951969589" ENDARROW="Default" ENDINCLINATION="228;179;" ID="Arrow_ID_1471419287" STARTARROW="None" STARTINCLINATION="-119;-5;"/>
+<icon BUILTIN="closed"/>
+</node>
+<node CREATED="1667754041750" ID="ID_680571899" MODIFIED="1667754051627" TEXT="damit bricht der ganze Ansatz zusammen">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1667754062939" ID="ID_415976096" MODIFIED="1667774059912" TEXT="pragmatischer Ansatz: Rechnung analysieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1667754986080" ID="ID_569618069" MODIFIED="1667754991939" TEXT="was wird gerechnet?">
+<node CREATED="1667755010501" ID="ID_452896877" MODIFIED="1667755012696" TEXT="dur = Rat(pxWidth) / changedMetric;"/>
+<node CREATED="1667760086102" ID="ID_1300680991" MODIFIED="1667760242140" TEXT="S &#xb7; dur mu&#xdf; Ganzzahl werden"/>
+<node CREATED="1667760247368" ID="ID_1551257128" MODIFIED="1667770564715" TEXT="lieder gibt es daf&#xfc;r viele M&#xf6;glichkeiten...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        Wenn der Nenner selbst S ist
+      </li>
+      <li>
+        Wenn der Nenner ein Teiler von S ist
+      </li>
+      <li>
+        wenn der Nenner ein Teiler von S &#183; pxWidth ist
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1667755619878" ID="ID_52791788" MODIFIED="1667755640606" TEXT="Problem: Metrik ist eingabe-Parameter, also beliebig">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1667755644345" ID="ID_834430909" MODIFIED="1667755652835" TEXT="ohne eine Gesamtanalyse komme ich hier nicht weiter"/>
+<node CREATED="1667757006642" ID="ID_1683391428" MODIFIED="1667757022260" TEXT="l&#xe4;uft auf ein &#xe4;hnliges Argument wie oben hinaus...?"/>
+<node CREATED="1667757079456" ID="ID_1233477394" MODIFIED="1667757139221" TEXT="metric.numerator() kann im Extremfall IntMax sein"/>
+<node CREATED="1667757144904" ID="ID_1576668072" MODIFIED="1667759201511" TEXT="und keine Addition damit w&#xe4;re beherrschbar">
+<arrowlink COLOR="#7e4c66" DESTINATION="ID_1048380323" ENDARROW="Default" ENDINCLINATION="411;20;" ID="Arrow_ID_1424188982" STARTARROW="None" STARTINCLINATION="450;-29;"/>
+<arrowlink COLOR="#fd3f58" DESTINATION="ID_87489281" ENDARROW="Default" ENDINCLINATION="95;0;" ID="Arrow_ID_1297278568" STARTARROW="None" STARTINCLINATION="-251;16;"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1667759132638" ID="ID_87489281" MODIFIED="1667759196400" TEXT="Fazit: additive Konstante f&#xfc;hrt eine unn&#xf6;tige Gefahr ein">
+<linktarget COLOR="#fd3f58" DESTINATION="ID_87489281" ENDARROW="Default" ENDINCLINATION="95;0;" ID="Arrow_ID_1297278568" SOURCE="ID_1576668072" STARTARROW="None" STARTINCLINATION="-251;16;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1667770583325" ID="ID_1376383397" MODIFIED="1667774045227" TEXT="Test und Anpassung sicher implementieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1667770594084" ID="ID_986392174" MODIFIED="1667770606454" TEXT="stellt sich als &#xfc;berraschend kniffelig heraus"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1667770659811" ID="ID_1409927740" LINK="#ID_1236820860" MODIFIED="1667770728339" TEXT="besonders l&#xe4;stig: die einseitigen Einschr&#xe4;nkungen mit TimeVar">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1667770746680" ID="ID_811746832" MODIFIED="1667770768217" TEXT="wenn TIme, TimeVal und TimeVar das Gleiche w&#xe4;ren..."/>
+<node CREATED="1667770768901" ID="ID_1155429207" MODIFIED="1667770782222" TEXT="dann lie&#xdf;e sich sowas wie hier viel einfacher implementieren"/>
+<node COLOR="#435e98" CREATED="1667770804751" ID="ID_999676314" MODIFIED="1667770824136" TEXT="habe deshalb Ticket #1261 angelegt">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1667774098939" ID="ID_395273674" MODIFIED="1667774133273" TEXT="der Test selber l&#xe4;&#xdf;t sich auf einen Modulo-Check reduzieren">
+<linktarget COLOR="#16967b" DESTINATION="ID_395273674" ENDARROW="Default" ENDINCLINATION="-430;-19;" ID="Arrow_ID_1396048890" SOURCE="ID_1666323585" STARTARROW="None" STARTINCLINATION="308;26;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1667773768899" ID="ID_1573161089" MODIFIED="1667773780121" TEXT="verwende nun zus&#xe4;tzliche lokal definierte Operatoren"/>
+<node CREATED="1667773780950" ID="ID_1691901384" MODIFIED="1667773787049" TEXT="Thma auf sp&#xe4;ter vertagt">
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
@@ -39044,6 +39325,9 @@
 <node CREATED="1667659890055" ID="ID_1728452596" MODIFIED="1667659897292" TEXT="immer nur einen Aspekt justieren"/>
 <node CREATED="1667659931146" ID="ID_1567516385" MODIFIED="1667659944676" TEXT="die jeweilige Ziel-Invariante per Assertion dokumentieren"/>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1667698387387" ID="ID_1173911153" MODIFIED="1667698425495" TEXT="Normalisierungs-Sequenz auf Basis der einzel-Normalisierungen definieren">
+<icon BUILTIN="pencil"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1667774188104" ID="ID_377878203" MODIFIED="1667774207918" TEXT="alle externen Manipulationen darauf aufsetzen (und erfolgreich testen)">
 <icon BUILTIN="pencil"/>
 </node>
 </node>
@@ -55947,7 +56231,7 @@
 <node CREATED="1667336818154" ID="ID_228764070" MODIFIED="1667336839107" TEXT="TimeValue + symbolische Grid-Referenz"/>
 <node CREATED="1667336841967" ID="ID_1852849270" MODIFIED="1667336856426" TEXT="Grid &#xfc;ber das Advice-System publiziert"/>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1667476797049" FOLDED="true" ID="ID_767502481" MODIFIED="1667593632385" TEXT="Diskussion: interne Zeitbasis">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1667476797049" FOLDED="true" ID="ID_767502481" MODIFIED="1667770624162" TEXT="Diskussion: interne Zeitbasis">
 <linktarget COLOR="#af1a4c" DESTINATION="ID_767502481" ENDARROW="Default" ENDINCLINATION="96;-430;" ID="Arrow_ID_1672039685" SOURCE="ID_1838246834" STARTARROW="None" STARTINCLINATION="-670;38;"/>
 <icon BUILTIN="hourglass"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667486621881" ID="ID_566152244" MODIFIED="1667486629636" TEXT="#1258 clarify internal time base">
@@ -56029,6 +56313,9 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667592184752" ID="ID_1933332619" MODIFIED="1667592189752" TEXT="Aufr&#xe4;um-Arbeiten">
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667592193783" ID="ID_1808934689" MODIFIED="1667592204255" TEXT="#1259 organise raw time base implementation">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667770629647" ID="ID_1236820860" MODIFIED="1667770635263" TEXT="#1261 reconsider (im)mutability of time entities">
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node CREATED="1667592218952" ID="ID_1463501252" MODIFIED="1667592230199" TEXT="Einsichten">

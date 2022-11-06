@@ -28,6 +28,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "stage/model/zoom-window.hpp"
+#include "lib/format-cout.hpp"//////////////TODO
 
 
 
@@ -68,7 +69,7 @@ namespace test {
           CHECK (FSecs(10)/3 == 10_r/3);                                         // _r is a user defined literal to denote 64-bit fractional
           CHECK (Rat(10,3) == 10_r/3);
           CHECK (Rat(10,3) == boost::rational<int64_t>(10,3));                   // using Rat = boost::rational<int64_t>
-          CHECK (rational_cast<float> (10_r/3) == 3.33333f);                     // rational_cast calculates division after type conversion
+          CHECK (rational_cast<float> (10_r/3) == 3.3333333f);                   // rational_cast calculates division after type conversion
           
           verify_simpleUsage();
           verify_setup();

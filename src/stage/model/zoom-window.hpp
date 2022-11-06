@@ -124,6 +124,33 @@ namespace model {
     {
       return FSecs{_raw(timeVal), TimeValue::SCALE};
     }
+    
+    /**
+     * @return `true` if the given duration can be represented cleanly as µ-ticks.
+     * @todo should likewise be member of a FSecs wrapper type...
+     */
+    inline bool
+    isMicroGridAligned (FSecs duration)
+    {
+      return 0 == (duration.numerator() * Time::SCALE)
+                  % duration.denominator();
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1261 : why the hell did I define time entities to be immutable. Looks like a "functional programming" fad in hindsight
+    /** @todo we need these only because the blurry distinction between
+     *        lib::time::TimeValue and lib::time::Time, which in turn is caused
+     *        by a lack of clarity in the fundamental conception (see #1261)
+     */
+    inline TimeVar
+    operator+ (Time const& tval, TimeVar const& tvar)
+    {
+      return TimeVar(tval) += tvar;
+    }
+    inline TimeVar
+    operator- (Time const& tval, TimeVar const& tvar)
+    {
+      return TimeVar(tval) -= tvar;
+    }
   }
   
   
@@ -136,7 +163,6 @@ namespace model {
     const uint  MAX_PX_WIDTH{1000000};
     const FSecs MAX_TIMESPAN{_FSecs(Time::MAX-Time::MIN)};
     const FSecs MICRO_TICK{1_r/Time::SCALE};
-    const Rat   FRACT_ULP{1_r/std::numeric_limits<int64_t>::max()};
   }
   
   
@@ -365,14 +391,17 @@ namespace model {
           FSecs dur{afterWin_-startWin_};
           uint pxWidth = rational_cast<uint> (px_per_sec_*dur);
           dur = Rat(pxWidth) / changedMetric;
-          dur += MICRO_TICK - FRACT_ULP; // prefer bias towards increased window instead of increased metric
           dur = min (dur, MAX_TIMESPAN);
           dur = max (dur, MICRO_TICK); //   prevent window going void
-          if (startWin_<= Time::MAX - Time{dur})
-              afterWin_ = startWin_ + Time{dur};
+          TimeVar timeDur{dur};
+          // prefer bias towards increased window instead of increased metric
+          if (not isMicroGridAligned (dur))
+            timeDur = timeDur + TimeValue(1);
+          if (startWin_<= Time::MAX - timeDur)
+              afterWin_ = startWin_ + timeDur;
           else
             {
-              startWin_ = Time::MAX - Time{dur};
+              startWin_ = Time::MAX - timeDur;
               afterWin_ = Time::MAX;
             }
           // re-check metric to maintain precise pxWidth
@@ -559,10 +588,10 @@ namespace model {
             return 1_r/2;        //  then anchor zooming in the middle
           
           // use a 3rd degree parabola to favour positions in the middle
-          FSecs posFactor = FSecs{startWin_-startAll_} / possibleRange;
-          posFactor = (2*posFactor - 1);              // -1 ... +1
-          posFactor = posFactor*posFactor*posFactor;  // -1 ... +1 but accelerating towards boundraries
-          posFactor = (posFactor + 1) / 2;            //  0 ... 1
+          Rat posFactor = FSecs{startWin_-startAll_} / possibleRange;
+          posFactor = (2*posFactor - 1);             // -1 ... +1
+          posFactor = posFactor*posFactor*posFactor; // -1 ... +1 but accelerating towards boundaries
+          posFactor = (posFactor + 1) / 2;           //  0 ... 1
           return posFactor;
         }
       

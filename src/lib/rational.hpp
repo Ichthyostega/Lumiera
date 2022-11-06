@@ -42,6 +42,22 @@
  **       conversion using `rational_cast<NUM> (fraction)` is necessary, which
  **       performs the division of `numerator/denominator` in the target value domain.
  ** 
+ ** # Perils of fractional arithmetics
+ ** 
+ ** While the always precise results of integral numbers might seem compelling, the
+ ** danger of _numeric overflow_ is significantly increased by fractional computations.
+ ** Most notably, this danger is *not limited to large numbers*. Adding two fractional
+ ** number requires multiplications with both denominators, which can overflow easily.
+ ** Thus, for every given fractional number, there is a class of »dangerous counterparts«
+ ** which can not be added without derailing the computation, leading to arbitrary wrong
+ ** results without detectable failure. And these problematic counterparts are distributed
+ ** _over the whole valid numeric range._ To give an extreme example, any numbers of the
+ ** form `n / INT_MAX` can not be added or subtracted with any other rational number > 1,
+ ** while being themselves perfectly valid and representable.
+ ** \par rule of thumb
+ ** Use fractional arithmetics only where it is possible to control the denominators involved.
+ ** Never use them for computations drawing from arbitrary (external) input.
+ ** 
  ** @see zoom-window.hpp
  ** @see timevalue.hpp
  */
@@ -64,11 +80,11 @@ namespace util {
 } // namespace util
 
 
-/** 
+/**
  * user defined literal for constant rational numbers.
  * \code
  * Rat twoThirds = 2_r/3;
- * \endcode 
+ * \endcode
  */
 inline util::Rat
 operator""_r (unsigned long long num)
