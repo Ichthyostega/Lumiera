@@ -397,6 +397,8 @@ namespace model {
           // prefer bias towards increased window instead of increased metric
           if (not isMicroGridAligned (dur))
             timeDur = timeDur + TimeValue(1);
+          // resize window relative to anchor point
+          startWin_ = Time{anchorPoint()} - Time{dur*relativeAnchor()};
           if (startWin_<= Time::MAX - timeDur)
               afterWin_ = startWin_ + timeDur;
           else
@@ -528,33 +530,14 @@ namespace model {
           if (duration <= 0)
             duration = DEFAULT_CANVAS;
           uint px{pxWidth()};
-          TimeVar start{anchorPoint() - duration*relativeAnchor()};
-          TimeVar after{start + duration};
-          if (start == startWin_ and after == afterWin_)
-            return; // nothing changed effectively
+          Rat changedMetric = Rat(px) / duration;
           
-          Rat changedMetric = adjustedScale (start,after, startWin_,afterWin_);
           conformWindowToMetric (changedMetric);
           ensureInvariants(px);
           fireChangeNotification();
         }
       
       
-      /**
-       * Adjust the display scale such as to match the given changed time interval
-       * @param startNew changed start point
-       * @param afterNew changed end point
-       * @param startOld previous start point
-       * @param afterOld previous end point
-       * @return adapted scale factor in pixel per second, rounded half up to the next pixel.
-       */
-      Rat
-      adjustedScale (TimeVar startNew, TimeVar afterNew, TimeVar startOld, TimeVar afterOld)
-        {
-          REQUIRE (startNew < afterNew and startOld < afterOld);
-          Rat change{_raw(afterNew - startNew), _raw(afterOld - startOld)};
-          return px_per_sec_ / change;
-        }
       
       /**
        * The anchor point or centre for zooming operations applied to the visible window
