@@ -38363,7 +38363,7 @@
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1666913256394" ID="ID_562681542" MODIFIED="1666913269396" TEXT="erster Entwurf 10/2022">
 <icon BUILTIN="pencil"/>
-<node COLOR="#690f14" CREATED="1666913293560" ID="ID_1249096607" MODIFIED="1666966326093" TEXT="das time::Control verwenden">
+<node COLOR="#690f14" CREATED="1666913293560" FOLDED="true" ID="ID_1249096607" MODIFIED="1666966326093" TEXT="das time::Control verwenden">
 <icon BUILTIN="idea"/>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1666913316709" ID="ID_134581234" MODIFIED="1666913343061" TEXT="Kenn-Parameter w&#xe4;ren damit zwei TimeSpan"/>
@@ -38410,7 +38410,7 @@
 <node CREATED="1666966304273" ID="ID_1096389407" MODIFIED="1666966312732" TEXT="API-Nutzung insgesamt nicht selbsterkl&#xe4;rend"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1666913370781" ID="ID_1691713188" MODIFIED="1666966354349" TEXT="klassisches Klassen-Design">
+<node COLOR="#435e98" CREATED="1666913370781" ID="ID_1691713188" MODIFIED="1667787385844" TEXT="klassisches Klassen-Design">
 <icon BUILTIN="yes"/>
 <node CREATED="1666913375117" ID="ID_1377108042" MODIFIED="1667158257168" TEXT="ZoomWindow ist unkopierbare Klasse mit internem State"/>
 <node CREATED="1666913471725" ID="ID_1373767277" MODIFIED="1666966473259" TEXT="Master-Setter f&#xfc;hren die Range-Chacks durch"/>
@@ -38459,7 +38459,7 @@
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1667156043109" ID="ID_234377752" MODIFIED="1667156067733" TEXT="ist sogar noch pr&#xe4;ziser als &#xb5;s &#x2014; und exakt"/>
-<node COLOR="#338800" CREATED="1667156072512" ID="ID_951906064" MODIFIED="1667156093493" TEXT="TimeVar f&#xfc;r Konversionen &quot;aufbohren&quot;">
+<node COLOR="#338800" CREATED="1667156072512" FOLDED="true" ID="ID_951906064" MODIFIED="1667787375816" TEXT="TimeVar f&#xfc;r Konversionen &quot;aufbohren&quot;">
 <icon BUILTIN="yes"/>
 <node CREATED="1667156098084" ID="ID_1341404738" MODIFIED="1667156104554" TEXT="potentiell gef&#xe4;hrlich">
 <icon BUILTIN="messagebox_warning"/>
@@ -38520,8 +38520,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667260101665" ID="ID_1250580560" MODIFIED="1667260118385" TEXT="mu&#xdf; die Ausdehnung in Pixel beachten">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1667260101665" ID="ID_1250580560" MODIFIED="1667787352264" TEXT="mu&#xdf; die Ausdehnung in Pixel beachten">
+<icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1667260119686" ID="ID_1154266769" MODIFIED="1667780434377" TEXT="neuer Getter daf&#xfc;r">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -38692,9 +38692,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667603646312" ID="ID_1507636517" MODIFIED="1667603891148" TEXT="mu&#xdf; Invarianten sicherstellen">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1667603646312" ID="ID_1507636517" MODIFIED="1667787352264" TEXT="mu&#xdf; Invarianten sicherstellen">
 <linktarget COLOR="#ec1941" DESTINATION="ID_1507636517" ENDARROW="Default" ENDINCLINATION="27;-47;" ID="Arrow_ID_49426086" SOURCE="ID_162164091" STARTARROW="None" STARTINCLINATION="-122;6;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="pencil"/>
 <node COLOR="#6a1790" CREATED="1667603900358" ID="ID_353785530" MODIFIED="1667780480867" TEXT="das gew&#xe4;hlte Implementierungs-Schema ist nicht beherrschbar">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1667603974758" ID="ID_1895105732" MODIFIED="1667603997149" TEXT="Konstuktor legt sichere Startwerte fest"/>
@@ -39336,8 +39336,8 @@
 <node CREATED="1667659867147" ID="ID_1797487380" MODIFIED="1667659882100" TEXT="jeweils den beweglichen Teil als Argument"/>
 <node CREATED="1667659890055" ID="ID_1728452596" MODIFIED="1667659897292" TEXT="immer nur einen Aspekt justieren"/>
 <node CREATED="1667659931146" ID="ID_1567516385" MODIFIED="1667659944676" TEXT="die jeweilige Ziel-Invariante per Assertion dokumentieren"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1667698387387" ID="ID_1173911153" MODIFIED="1667698425495" TEXT="Normalisierungs-Sequenz auf Basis der einzel-Normalisierungen definieren">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1667698387387" ID="ID_1173911153" MODIFIED="1667787327395" TEXT="Normalisierungs-Sequenz auf Basis der einzel-Normalisierungen definieren">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1667774188104" ID="ID_377878203" MODIFIED="1667774207918" TEXT="alle externen Manipulationen darauf aufsetzen (und erfolgreich testen)">
 <icon BUILTIN="pencil"/>
@@ -39389,7 +39389,18 @@
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1667528185832" ID="ID_1091652690" MODIFIED="1667528199122" TEXT="schrittweise incl Canvas erweitern"/>
 <node CREATED="1667528199785" ID="ID_1692959674" MODIFIED="1667528207840" TEXT="limits bei relativem positionieren"/>
-<node CREATED="1667528209948" ID="ID_914020436" MODIFIED="1667528219542" TEXT="explizit setzen und Canvas erweitern"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667787116332" ID="ID_538942533" MODIFIED="1667787124519" TEXT="relativ nach Position und Prozentsatz">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667528209948" ID="ID_914020436" MODIFIED="1667787027641" TEXT="explizit setzen und Canvas erweitern">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1667787036706" ID="ID_192598582" MODIFIED="1667787077769" TEXT="mu&#xdf; hierf&#xfc;r die Limitierung explizit aufheben">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1667787054759" ID="ID_280714694" MODIFIED="1667787063999" TEXT="auf welcher Ebene am Besten einbauen?">
+<icon BUILTIN="help"/>
+</node>
+</node>
 </node>
 </node>
 </node>

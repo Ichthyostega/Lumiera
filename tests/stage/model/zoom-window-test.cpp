@@ -130,7 +130,7 @@ namespace test {
           CHECK (win3.px_per_sec()  == 555_r/23);
           
           ZoomWindow win4{555, TimeSpan{_t(-10), _t(-5)}};
-          CHECK (win4.overallSpan() == TimeSpan(_t(10), FSecs(5)));
+          CHECK (win4.overallSpan() == TimeSpan(-Time(0,10), FSecs(5)));
           CHECK (win4.visible()     == win4.overallSpan());
           CHECK (win4.pxWidth()     == 555);
           CHECK (win4.px_per_sec()  == 111);
@@ -211,7 +211,7 @@ namespace test {
           
           win.nudgeMetric(+1);
           CHECK (win.overallSpan() == TimeSpan(_t(0), _t(64)));
-          CHECK (win.visible()     == TimeSpan(_t(-32,2), FSecs(32)));
+          CHECK (win.visible()     == TimeSpan(_t(32,2), FSecs(32)));
           CHECK (win.px_per_sec()  == 40);
           CHECK (win.pxWidth()     == 1280);
           

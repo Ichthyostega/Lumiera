@@ -231,16 +231,28 @@ namespace model {
       
       /* === Mutators === */
       
+      /**
+       * define the extension of the window in pixels.
+       * @note all other manipulations will always retain this value
+       */
       void
       calibrateExtension (uint pxWidth)
         {
-          UNIMPLEMENTED ("calibrateExtension");
+          adaptWindowToPixels (pxWidth);
+          fireChangeNotification();
         }
       
+      /**
+       * explicitly set the zoom factor, defined as pixel per second
+       * @note the given factor will be capped to remain below a maximal
+       *       zoom of 2px per µ-tick; also the window may not be expanded
+       *       beyond the current overall canvas size
+       */
       void
       setMetric (Rat px_per_sec)
         {
           mutateScale (px_per_sec);
+          fireChangeNotification();
         }
       
       /**
@@ -249,48 +261,68 @@ namespace model {
        * and the visible window is adjusted accordingly, using
        * the current #anchorPoint as centre for scaling.
        * @note the zoom factor is limited to be between
-       *       2px per µ-tick and 1px per second (~20min
-       *       on a typical 1280 monitor)
-       * @todo support for overview mode ////////////////////////////////////////////////////////////////////TICKET #1255 : implement overview mode
+       *       2px per µ-tick and showing the full canvas
        */
       void
       nudgeMetric (int steps)
         {
-          mutateScale(
+          setMetric(
               steps > 0 ? Rat{px_per_sec_.numerator() << steps
                              ,px_per_sec_.denominator()}
                         : Rat{px_per_sec_.numerator()
                              ,px_per_sec_.denominator() << -steps});
         }
       
+      /**
+       * Set both the overall canvas, as well as the visible part
+       * within that canvas. Given values will possibly be adjusted
+       * to retain overall consistency, according to the following rules:
+       * - all ranges are non empty and properly oriented
+       * - the extension in pixels will always be retained
+       * - zoom factor is only allowed to range between showing
+       *   the full canvas and a maximum factor (2 pixel per µ-tick)
+       * - the visible window will always be within the canvas area
+       */
       void
       setRanges (TimeSpan overall, TimeSpan visible)
         {
-          UNIMPLEMENTED ("setOverallRange");
+          mutateRanges (overall, visible);
+          fireChangeNotification();
         }
       
+      /**
+       * redefine the overall canvas range.
+       * @note the currently visible window may be shifted or
+       *       capped to fit within the new range, which may also
+       *       change the zoom factor, while the overall pixel width
+       *       is always retained unaltered
+       */
       void
       setOverallRange (TimeSpan range)
         {
-          UNIMPLEMENTED ("setOverallRange");
+          mutateCanvas (range);
+          fireChangeNotification();
         }
       
       void
       setOverallStart (TimeValue start)
         {
-          UNIMPLEMENTED ("setOverallStart");
+          mutateCanvas (TimeSpan{start, Duration(afterAll_-startAll_)});
+          fireChangeNotification();
         }
       
       void
       setOverallDuration (Duration duration)
         {
-          UNIMPLEMENTED ("setOverallDuration");
+          mutateCanvas (TimeSpan{startAll_, duration});
+          fireChangeNotification();
         }
       
       void
       setVisibleRange (TimeSpan newWindow)
         {
-          mutateWindow (newWindow.start(), newWindow.end());
+          mutateWindow (newWindow);
+          fireChangeNotification();
         }
       
       void
@@ -302,7 +334,8 @@ namespace model {
       void
       setVisibleDuration (Duration duration)
         {
-          UNIMPLEMENTED ("setVisibleDuration");
+          mutateWindow (TimeSpan{startWin_, duration});
+          fireChangeNotification();
         }
       
       void
@@ -398,14 +431,8 @@ namespace model {
           if (not isMicroGridAligned (dur))
             timeDur = timeDur + TimeValue(1);
           // resize window relative to anchor point
-          startWin_ = Time{anchorPoint()} - Time{dur*relativeAnchor()};
-          if (startWin_<= Time::MAX - timeDur)
-              afterWin_ = startWin_ + timeDur;
-          else
-            {
-              startWin_ = Time::MAX - timeDur;
-              afterWin_ = Time::MAX;
-            }
+          placeWindowRelativeToAnchor (dur);
+          changeWindowDuration (timeDur);
           // re-check metric to maintain precise pxWidth
           px_per_sec_ = conformMetricToWindow (pxWidth);
           ENSURE (_FSecs(afterWin_-startWin_) < MAX_TIMESPAN);
@@ -485,16 +512,39 @@ namespace model {
       
       /* === adjust and coordinate window parameters === */
       
+      /** @internal set a different overall canvas range,
+       *            possibly set window and metrics to fit */
+      void
+      mutateCanvas (TimeSpan canvas)
+        {
+          startAll_ = canvas.start();
+          afterAll_ = ensureNonEmpty (startAll_, canvas.end());
+          ensureInvariants();
+        }
+      
       /** @internal change Window TimeSpan, validate and adjust all params */
       void
-      mutateWindow (TimeVar start, TimeVar after)
+      mutateWindow (TimeSpan window)
         {
           uint px{pxWidth()};
-          startWin_ = start;
-          afterWin_ = ensureNonEmpty (startWin_, after);
+          startWin_ = window.start();
+          afterWin_ = ensureNonEmpty (startWin_, window.end());
           px_per_sec_ = conformMetricToWindow (px);
           ensureInvariants (px);
-          fireChangeNotification();
+        }
+      
+      /** @internal change canvas and window position in one call,
+       *            then validate and adjust to maintain invariants */
+      void
+      mutateRanges (TimeSpan canvas, TimeSpan window)
+        {
+          uint px{pxWidth()};
+          startAll_ = canvas.start();
+          afterAll_ = ensureNonEmpty (startAll_, canvas.end());
+          startWin_ = window.start();
+          afterWin_ = ensureNonEmpty (startWin_, window.end());
+          px_per_sec_ = conformMetricToWindow (px);
+          ensureInvariants (px);
         }
       
       /**
@@ -516,7 +566,6 @@ namespace model {
               afterWin_ = afterAll_;
               px_per_sec_ = conformMetricToWindow(px);
               ensureInvariants (px);
-              fireChangeNotification();
             }
           else
             mutateDuration (dur);
@@ -534,7 +583,37 @@ namespace model {
           
           conformWindowToMetric (changedMetric);
           ensureInvariants(px);
-          fireChangeNotification();
+        }
+      
+      /** @internal resize window to span the given pixel with,
+       *            validate and adjust all other params */
+      void
+      adaptWindowToPixels (uint pxWidth)
+        {
+          pxWidth = util::limited (1u, pxWidth, MAX_PX_WIDTH);
+          FSecs adaptedWindow{Rat{pxWidth} / px_per_sec_};
+          changeWindowDuration (adaptedWindow);
+          px_per_sec_ = conformMetricToWindow (pxWidth);
+          ensureInvariants (pxWidth);
+        }
+      
+      void
+      placeWindowRelativeToAnchor (FSecs duration)
+        {
+          FSecs partBeforeAnchor = relativeAnchor() * duration;
+          startWin_ = Time{anchorPoint()} - Time{partBeforeAnchor};
+        }
+      
+      void
+      changeWindowDuration (TimeVar duration)
+        {
+          if (startWin_<= Time::MAX - duration)
+              afterWin_ = startWin_ + duration;
+          else
+            {
+              startWin_ = Time::MAX - duration;
+              afterWin_ = Time::MAX;
+            }
         }
       
       
