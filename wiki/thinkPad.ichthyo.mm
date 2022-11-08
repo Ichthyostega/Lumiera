@@ -39389,16 +39389,46 @@
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1667528185832" ID="ID_1091652690" MODIFIED="1667528199122" TEXT="schrittweise incl Canvas erweitern"/>
 <node CREATED="1667528199785" ID="ID_1692959674" MODIFIED="1667528207840" TEXT="limits bei relativem positionieren"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667787116332" ID="ID_538942533" MODIFIED="1667787124519" TEXT="relativ nach Position und Prozentsatz">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1667787116332" ID="ID_538942533" MODIFIED="1667871911986" TEXT="relativ nach Position und Prozentsatz">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1667871912848" ID="ID_28548966" MODIFIED="1667871963481" TEXT="das l&#xe4;uft auf eine Variange des relativen-Ankers hinaus">
+<icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667528209948" ID="ID_914020436" MODIFIED="1667787027641" TEXT="explizit setzen und Canvas erweitern">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1667787036706" ID="ID_192598582" MODIFIED="1667787077769" TEXT="mu&#xdf; hierf&#xfc;r die Limitierung explizit aufheben">
+<node CREATED="1667871926941" ID="ID_56646265" MODIFIED="1667872010814" TEXT="kann aber nur die kubische Positions-Regel wiederverwenden...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      alles Andere ist in diesem Fall eben doch speziell; wir kommen bereits mit einer relativen Angabe, und die aktuelle Fensterposition spielt keine Rolle
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1667528209948" ID="ID_914020436" MODIFIED="1667871908657" TEXT="explizit setzen und Canvas erweitern">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1667787036706" ID="ID_192598582" MODIFIED="1667871690775" TEXT="mu&#xdf; hierf&#xfc;r die Limitierung explizit aufheben">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1667787054759" ID="ID_280714694" MODIFIED="1667787063999" TEXT="auf welcher Ebene am Besten einbauen?">
-<icon BUILTIN="help"/>
+<node CREATED="1667787054759" ID="ID_280714694" MODIFIED="1667871751969" TEXT="neue Festlegung: alle mutateWindow()-Aufrufe k&#xf6;nnen Canvas erweitern">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1667871761244" ID="ID_550353046" MODIFIED="1667871901718" TEXT="hierzu &#xe4;ndere ich die Spezifikation: auch relatives Zoomen kann nun Canvas erweitern">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      warum auch nicht?
+    </p>
+    <p>
+      Das ist dann so viel konsistenter, insofern nun n&#228;mlich genau die Funktionen, die die visible-Window-Position setzen, auch den Canvas erweitern d&#252;rfen &#8212; aber alle anderen Funktionen sto&#223;en an der Canvas-Grenze an
+    </p>
+  </body>
+</html></richcontent>
 </node>
 </node>
 </node>

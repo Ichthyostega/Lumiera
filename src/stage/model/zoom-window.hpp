@@ -318,19 +318,35 @@ namespace model {
           fireChangeNotification();
         }
       
+      /**
+       * explicitly set the visible window,
+       * possibly expanding the canvas to fit.
+       * Typically used to zoom into a user selected range.
+       */
       void
       setVisibleRange (TimeSpan newWindow)
         {
           mutateWindow (newWindow);
           fireChangeNotification();
         }
-      
+
+      /**
+       * the »reverse zoom operation«: zoom out such as to
+       * bring the current window at the designated time span.
+       * Typically the user selects a sub-range, and the current
+       * view is then collapsed accordingly to fit into that range.
+       * As a side effect, the canvas may be expanded significantly.
+       */
       void
       expandVisibleRange (TimeSpan target)
         {
           UNIMPLEMENTED ("zoom out to bring the current window at the designated time span");
         }
       
+      /**
+       * explicitly set the duration of the visible window range,
+       * while keeping the start position; possibly expand canvas.
+       */
       void
       setVisibleDuration (Duration duration)
         {
@@ -338,30 +354,50 @@ namespace model {
           fireChangeNotification();
         }
       
-      void
-      setVisiblePos (TimeValue posToShow)
-        {
-          UNIMPLEMENTED ("setVisiblePos");
-        }
-      
-      void
-      setVisiblePos (float percentage)
-        {
-          UNIMPLEMENTED ("setVisiblePos");
-        }
-      
+      /** scroll by arbitrary offset, possibly expanding canvas. */
       void
       offsetVisiblePos (Offset offset)
         {
-          UNIMPLEMENTED ("offsetVisiblePos");
+          mutateWindow (TimeSpan{startWin_+offset, Duration{afterWin_-startWin_}});
+          fireChangeNotification();
         }
       
+      /** scroll by increments of half window size, possibly expanding. */
       void
       nudgeVisiblePos (int steps)
         {
           FSecs dur{afterWin_-startWin_};      //    navigate half window steps
           setVisibleRange (TimeSpan{Time{startWin_ + dur*steps/2}
                                    , dur});
+        }
+      
+      /**
+       * scroll the window to bring the denoted position in sight,
+       * retaining the current zoom factor, possibly expanding canvas.
+       */
+      void
+      setVisiblePos (Time posToShow)
+        {
+          FSecs canvasOffset{posToShow - startAll_};
+          anchorWindowAtPosition (canvasOffset);
+          fireChangeNotification();
+        }
+
+      /** scroll to reveal position designated relative to overall canvas */
+      void
+      setVisiblePos (Rat percentage)
+        {
+          FSecs canvasDuration{afterAll_-startAll_};
+          anchorWindowAtPosition (canvasDuration*percentage);
+          fireChangeNotification();
+        }
+      
+      void
+      setVisiblePos (double percentage)
+        { // use some arbitrary yet significantly large work scale
+          int64_t scale = max (_raw(afterAll_-startAll_), MAX_PX_WIDTH);
+          Rat factor{int64_t(scale*percentage), scale};
+          setVisiblePos (factor);
         }
       
       void
@@ -432,7 +468,7 @@ namespace model {
             timeDur = timeDur + TimeValue(1);
           // resize window relative to anchor point
           placeWindowRelativeToAnchor (dur);
-          changeWindowDuration (timeDur);
+          establishWindowDuration (timeDur);
           // re-check metric to maintain precise pxWidth
           px_per_sec_ = conformMetricToWindow (pxWidth);
           ENSURE (_FSecs(afterWin_-startWin_) < MAX_TIMESPAN);
@@ -522,13 +558,17 @@ namespace model {
           ensureInvariants();
         }
       
-      /** @internal change Window TimeSpan, validate and adjust all params */
+      /** @internal change Window TimeSpan, possibly also outside
+       *            of the current canvas, which is then expanded;
+       *            validate and adjust all params accordingly */
       void
       mutateWindow (TimeSpan window)
         {
           uint px{pxWidth()};
           startWin_ = window.start();
           afterWin_ = ensureNonEmpty (startWin_, window.end());
+          startAll_ = min (startAll_, startWin_);
+          afterAll_ = max (afterAll_, afterWin_);
           px_per_sec_ = conformMetricToWindow (px);
           ensureInvariants (px);
         }
@@ -592,11 +632,38 @@ namespace model {
         {
           pxWidth = util::limited (1u, pxWidth, MAX_PX_WIDTH);
           FSecs adaptedWindow{Rat{pxWidth} / px_per_sec_};
-          changeWindowDuration (adaptedWindow);
+          establishWindowDuration (adaptedWindow);
           px_per_sec_ = conformMetricToWindow (pxWidth);
           ensureInvariants (pxWidth);
         }
       
+      /** @internal relocate window anchored at a position relative to canvas,
+       *            also placing the anchor position relative within the window
+       *            in accordance with the position relative to canvas.
+       *            Window will enclose the given position, possibly extending
+       *            canvas to fit, afterwards reestablishing all invariants. */
+      void
+      anchorWindowAtPosition (FSecs canvasOffset)
+        {
+          REQUIRE (afterWin_ > startWin_);
+          REQUIRE (afterAll_ > startAll_);
+          uint px{pxWidth()};
+          FSecs duration{afterWin_-startWin_};
+          Rat posFactor = canvasOffset / FSecs{afterAll_-startAll_};
+          posFactor = parabolicAnchorRule (posFactor); // also limited 0...1
+          FSecs partBeforeAnchor = posFactor * duration;
+          startWin_ = startAll_ + (canvasOffset - partBeforeAnchor);
+          establishWindowDuration (duration);
+          startAll_ = min (startAll_, startWin_);
+          afterAll_ = max (afterAll_, afterWin_);
+          px_per_sec_ = conformMetricToWindow (px);
+          ensureInvariants (px);
+        }
+      
+      
+      /** @internal similar operation as #anchorWindowAtPosition(),
+       *            but based on the current window position and without
+       *            relocation, rather intended for changing the scale */
       void
       placeWindowRelativeToAnchor (FSecs duration)
         {
@@ -605,7 +672,7 @@ namespace model {
         }
       
       void
-      changeWindowDuration (TimeVar duration)
+      establishWindowDuration (TimeVar duration)
         {
           if (startWin_<= Time::MAX - duration)
               afterWin_ = startWin_ + duration;
@@ -651,11 +718,27 @@ namespace model {
           
           // use a 3rd degree parabola to favour positions in the middle
           Rat posFactor = FSecs{startWin_-startAll_} / possibleRange;
+          return parabolicAnchorRule (posFactor);
+        }
+      
+      /**
+       * A counter movement rule to place an anchor point, based on a percentage factor.
+       * Used to define the anchor point within the window, depending on the window's position
+       * relative to the overall canvas. Implemented using a cubic parabola, which moves quick
+       * away from the boundaries, while hovering most of the time in the middle area.
+       * @return factor effectively between 0 ... 1 (inclusive)
+       */
+      static Rat
+      parabolicAnchorRule (Rat posFactor)
+        {
+          posFactor = util::limited (0, posFactor, 1);
           posFactor = (2*posFactor - 1);             // -1 ... +1
           posFactor = posFactor*posFactor*posFactor; // -1 ... +1 but accelerating towards boundaries
           posFactor = (posFactor + 1) / 2;           //  0 ... 1
           return posFactor;
         }
+      
+      
       
       void
       fireChangeNotification()
