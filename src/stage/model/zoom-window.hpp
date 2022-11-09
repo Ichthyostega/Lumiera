@@ -632,6 +632,7 @@ namespace model {
         {
           pxWidth = util::limited (1u, pxWidth, MAX_PX_WIDTH);
           FSecs adaptedWindow{Rat{pxWidth} / px_per_sec_};
+          adaptedWindow = max (adaptedWindow, MICRO_TICK); // prevent void window
           establishWindowDuration (adaptedWindow);
           px_per_sec_ = conformMetricToWindow (pxWidth);
           ensureInvariants (pxWidth);

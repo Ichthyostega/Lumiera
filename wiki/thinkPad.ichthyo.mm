@@ -39346,34 +39346,40 @@
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1667260366701" ID="ID_1895903283" MODIFIED="1667528268261" TEXT="n&#xe4;chste F&#xe4;lle">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667260373164" ID="ID_1630007510" MODIFIED="1667260483982" TEXT="Konstruktor">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667260420318" ID="ID_477529431" MODIFIED="1667260481687" TEXT="komplett default">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1667260373164" ID="ID_1630007510" MODIFIED="1667960414569" TEXT="Konstruktor">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1667260420318" ID="ID_477529431" MODIFIED="1667960405494" TEXT="komplett default">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667260430580" ID="ID_750011979" MODIFIED="1667260481689" TEXT="partielle Angaben">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1667260430580" ID="ID_750011979" MODIFIED="1667960406446" TEXT="partielle Angaben">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667260502770" ID="ID_723001683" MODIFIED="1667260512843" TEXT="Metrik kalibrieren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1667260502770" ID="ID_723001683" MODIFIED="1667960415708" TEXT="Metrik kalibrieren">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1667517362063" ID="ID_692971631" MODIFIED="1667517374025" TEXT="Metrik-&#xc4;nderung wird auf das aktuelle window angewendet"/>
-<node CREATED="1667517374757" ID="ID_1436498397" MODIFIED="1667517393335" TEXT="danach aber shift/scoll, damit das Window im Canvas bleibt"/>
+<node CREATED="1667517374757" ID="ID_1436498397" MODIFIED="1667960401094" TEXT="danach aber shift/scroll, damit das Window im Canvas bleibt"/>
 <node CREATED="1667517394850" ID="ID_360062482" MODIFIED="1667517421035" TEXT="Beschnitt, wenn das Window zu gro&#xdf; wird &#x27f9; Metrik dann angepa&#xdf;t"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667318608370" ID="ID_888607544" MODIFIED="1667318613506" TEXT="Metrik manipulieren">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1667318655807" ID="ID_1664936439" MODIFIED="1667318699099" TEXT="starke Einschr&#xe4;nkung der Testbarkeit hier">
+<node CREATED="1667318655807" ID="ID_1664936439" MODIFIED="1667960424344" TEXT="Einschr&#xe4;nkung der Testbarkeit hier">
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1667318668477" ID="ID_841988354" MODIFIED="1667318701059" TEXT="Regel f&#xfc;r AnchorPoint sollte offen bleiben">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667260470855" ID="ID_1346204475" MODIFIED="1667260481690" TEXT="Grenzf&#xe4;lle / Fehlerbehandlung ausleuchten">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1667517252905" ID="ID_335958554" MODIFIED="1667517293430" TEXT="gr&#xf6;&#xdf;tm&#xf6;glicher Zoom &#x2259; 2px / &#xb5;-Tick"/>
-<node CREATED="1667517299247" ID="ID_1450395718" MODIFIED="1667517317049" TEXT="kleinstm&#xf6;gliches window &#x2259; 1 &#xb5;-Tick"/>
-<node CREATED="1667517317821" ID="ID_1713703867" MODIFIED="1667517344899" TEXT="weitest m&#xf6;glicher zoom-out &#x2259; Canvas-size"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1667260470855" ID="ID_1346204475" MODIFIED="1667960478294" TEXT="Grenzf&#xe4;lle / Fehlerbehandlung ausleuchten">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1667517252905" ID="ID_335958554" MODIFIED="1667960483441" TEXT="gr&#xf6;&#xdf;tm&#xf6;glicher Zoom &#x2259; 2px / &#xb5;-Tick">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1667517299247" ID="ID_1450395718" MODIFIED="1667960483442" TEXT="kleinstm&#xf6;gliches window &#x2259; 1 &#xb5;-Tick">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1667517317821" ID="ID_1713703867" MODIFIED="1667960499368" TEXT="weitest m&#xf6;glicher zoom-out &#x2259; Canvas-size">
+<icon BUILTIN="broken-line"/>
+</node>
 <node CREATED="1667517346296" ID="ID_1169099153" MODIFIED="1667517356781" TEXT="aber: kann Canvas per reverse-Zoom expandieren"/>
 </node>
 </node>

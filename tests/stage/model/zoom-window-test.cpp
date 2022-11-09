@@ -220,11 +220,15 @@ namespace test {
           
           win.nudgeMetric(+15);
           CHECK (win.overallSpan() == TimeSpan(_t(0), _t(64)));
-          CHECK (win.visible()     == TimeSpan(_t(0), FSecs(32,32768)));         // now anchor position is at left bound
-          CHECK (win.px_per_sec()  == 40*32768);
-          CHECK (win.pxWidth()     == 1200);
+          CHECK (win.visible()     == TimeSpan(_t(0), FSecs(32,32768) +MICRO_TICK));
+          CHECK (win.visible().start() == _t(0));                                // now anchor position is at left bound
+          CHECK (win.visible().end()              == TimeValue(977));            // length was rounded up to the next grid position
+          CHECK (Time{FSecs(32,32768)+MICRO_TICK} == TimeValue(977));            // (preferring slightly larger window unless perfect fit)
+          CHECK (Time{FSecs(32,32768)           } == TimeValue(976));
+          // scale factor calculated back from actual window width
+          CHECK (win.px_per_sec()  == 1280_r/977 * Time::SCALE);
+          CHECK (win.pxWidth()     == 1280);
           // Note: already getting close to the time grid...
-          CHECK (win.visible().end() == TimeValue(976));
           CHECK (Time(FSecs(32,32768)) == TimeValue(976));
           CHECK (rational_cast<double> (32_r/32768 * Time::SCALE) == 976.5625);
           
