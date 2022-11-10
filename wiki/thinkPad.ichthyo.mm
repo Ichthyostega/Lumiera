@@ -39377,10 +39377,12 @@
 <node COLOR="#338800" CREATED="1667517299247" ID="ID_1450395718" MODIFIED="1667960483442" TEXT="kleinstm&#xf6;gliches window &#x2259; 1 &#xb5;-Tick">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1667517317821" ID="ID_1713703867" MODIFIED="1667960499368" TEXT="weitest m&#xf6;glicher zoom-out &#x2259; Canvas-size">
-<icon BUILTIN="broken-line"/>
+<node COLOR="#338800" CREATED="1667517317821" ID="ID_1713703867" MODIFIED="1668110364974" TEXT="weitest m&#xf6;glicher zoom-out &#x2259; Canvas-size">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1667517346296" ID="ID_1169099153" MODIFIED="1667517356781" TEXT="aber: kann Canvas per reverse-Zoom expandieren"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667517346296" ID="ID_1169099153" MODIFIED="1668110372098" TEXT="aber: kann Canvas per reverse-Zoom expandieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667318726445" ID="ID_1535955412" MODIFIED="1667318747575" TEXT="visibleRange setzen">

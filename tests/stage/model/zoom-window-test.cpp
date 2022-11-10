@@ -29,7 +29,11 @@
 #include "lib/test/test-helper.hpp"
 #include "stage/model/zoom-window.hpp"
 #include "lib/format-cout.hpp"//////////////TODO
-
+#define SHOW_TYPE(_TY_) \
+    cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
+#define SHOW_EXPR(_XX_) \
+    cout << "#Probe# " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
+//////////////////////////////////////////////////////////////////////////////TODO
 
 
 namespace stage{
@@ -261,12 +265,13 @@ namespace test {
 
           win.calibrateExtension(1280);
           CHECK (win.visible().duration() == TimeValue(1280));
+          CHECK (win.visible().duration() == Duration{1280*MICRO_TICK});
           CHECK (win.px_per_sec()  == ZOOM_MAX_RESOLUTION / 2);
           CHECK (win.pxWidth()     == 1280);
           CHECK (win.overallSpan() == TimeSpan(_t(0), _t(64)));
           
           win.nudgeMetric(-5);
-          CHECK (win.visible().duration() == Duration{32 * FSecs(1280/Time::SCALE)});
+          CHECK (win.visible().duration() == Duration{32 * 1280*MICRO_TICK});
           CHECK (win.px_per_sec()  == ZOOM_MAX_RESOLUTION / 64);
           CHECK (win.pxWidth()     == 1280);
           CHECK (win.overallSpan() == TimeSpan(_t(0), _t(64)));
