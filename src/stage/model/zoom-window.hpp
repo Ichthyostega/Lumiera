@@ -83,19 +83,14 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
-//#include "lib/idi/entry-id.hpp"
-//#include "lib/symbol.hpp"
 
 #include <limits>
-//#include <utility>
-//#include <string>
+#include <functional>
 
 
 namespace stage {
 namespace model {
   
-//  using std::string;
-//  using lib::Symbol;
   using lib::time::TimeValue;
   using lib::time::TimeSpan;
   using lib::time::Duration;
@@ -186,6 +181,8 @@ namespace model {
       TimeVar startAll_, afterAll_,
               startWin_, afterWin_;
       Rat px_per_sec_;
+      
+      std::function<void()> changeSignal_{};
       
     public:
       ZoomWindow (uint pxWidth, TimeSpan timeline =TimeSpan{Time::ZERO, DEFAULT_CANVAS})
@@ -422,7 +419,29 @@ namespace model {
         }
       
       
+      /** Attach a λ or functor to be triggered on each actual change. */
+      template<class FUN>
+      void
+      attachChangeNotification (FUN&& trigger)
+        {
+          changeSignal_ = std::forward<FUN> (trigger);
+        }
+      
+      void
+      detachChangeNotification()
+        {
+          changeSignal_ = std::function<void()>();
+        }
+      
+      
     private:
+      void
+      fireChangeNotification()
+        {
+          if (changeSignal_) changeSignal_();
+        }
+      
+      
       /* === establish and maintain invariants === */
       /*
        * - oriented and non-empty windows
@@ -752,21 +771,7 @@ namespace model {
           posFactor = (posFactor + 1) / 2;           //  0 ... 1
           return posFactor;
         }
-      
-      
-      
-      void
-      fireChangeNotification()
-        {
-          TODO("really fire...");
-        }
     };
-  
-  
-  
-  
-  /** */
-
   
   
   

@@ -22,6 +22,9 @@
 
 /** @file zoom-window-test.cpp
  ** unit test \ref ZoomWindow_test
+ ** The timeline uses the abstraction of an »Zoom Window«
+ ** to define the scrolling and temporal scaling behaviour uniformly.
+ ** This unit test verifies this abstracted behaviour against the spec.
  */
 
 
@@ -81,6 +84,8 @@ namespace test {
           verify_metric();
           verify_window();
           verify_scroll();
+          
+          verify_changeNotification();
         }
       
       
@@ -379,7 +384,7 @@ namespace test {
           CHECK (win.pxWidth()     == 1280);
           
           win.nudgeVisiblePos(-3);
-          CHECK (win.visible()     == TimeSpan(_t(-16), FSecs(16)));             // window shifted backwards by three times half window sizes
+          CHECK (win.visible()     == TimeSpan(_t(-16), FSecs(16)));             // window shifted backwards by three times half window size
           CHECK (win.overallSpan() == TimeSpan(_t(-16), FSecs(16+8+16)));        // canvas is always expanded accordingly, never shrinked
           CHECK (win.px_per_sec()  == 80);                                       // metric is retained
           CHECK (win.pxWidth()     == 1280);
@@ -399,6 +404,83 @@ namespace test {
           CHECK (win.visible()     == TimeSpan(_t(-200), FSecs(32)));
           CHECK (win.px_per_sec()  == 40);
           CHECK (win.pxWidth()     == 1280);
+        }
+      
+      
+      /** @test a notification-λ can be attached and will be triggered on each change */
+      void
+      verify_changeNotification()
+        {
+          ZoomWindow win{100, TimeSpan{_t(0), FSecs(4)}};
+          CHECK (win.overallSpan() == TimeSpan(_t(0), _t(4)));
+          CHECK (win.visible()     == TimeSpan(_t(0), _t(4)));
+          CHECK (win.px_per_sec()  == 25);
+          CHECK (win.pxWidth()     == 100);
+          
+          bool notified{false};
+          win.nudgeMetric(+1);
+          CHECK (not notified);
+          CHECK (win.px_per_sec()  == 50);
+          CHECK (win.visible().duration() == _t(2));
+          
+          win.attachChangeNotification([&](){ notified = true; });
+          CHECK (not notified);
+          CHECK (win.px_per_sec()  == 50);
+          win.nudgeMetric(+1);
+          CHECK (win.px_per_sec()  == 100);
+          CHECK (notified);
+          
+          notified = false;
+          CHECK (win.visible().start() == _t(3,2));
+          win.nudgeVisiblePos(+1);
+          CHECK (win.visible().start() == _t(2));
+          CHECK (notified);
+
+          notified = false;
+          CHECK (win.overallSpan() == TimeSpan(_t(0), _t(4)));
+          win.setOverallRange(TimeSpan(_t(-4), _t(4)));
+          CHECK (win.overallSpan() == TimeSpan(_t(-4), _t(4)));
+          CHECK (notified);
+          
+          notified = false;
+          CHECK (win.pxWidth()     == 100);
+          win.calibrateExtension(200);
+          CHECK (win.pxWidth()     == 200);
+          CHECK (win.px_per_sec()  == 100);
+          CHECK (notified);
+          
+          notified = false;
+          bool otherTriger{false};
+          ZoomWindow wuz{10, TimeSpan{_t(0), FSecs(1)}};
+          wuz.attachChangeNotification([&](){ otherTriger = true; });
+          CHECK (wuz.visible().start() == _t(0));
+          CHECK (not notified);
+          CHECK (not otherTriger);
+          wuz.nudgeVisiblePos(-1);
+          CHECK (not notified);
+          CHECK (otherTriger);
+          CHECK (wuz.visible().start() == _t(-1,2));
+          
+          otherTriger = false;
+          CHECK (not notified);
+          win.nudgeMetric(+1);
+          CHECK (not otherTriger);
+          CHECK (notified);
+          CHECK (win.px_per_sec()  == 200);
+          CHECK (wuz.px_per_sec()  == 10);
+          
+          notified = false;
+          otherTriger = false;
+          win.detachChangeNotification();
+          win.nudgeMetric(+1);
+          CHECK (not notified);
+          CHECK (win.px_per_sec()  == 400);
+          
+          wuz.nudgeMetric(+1);
+          CHECK (not notified);
+          CHECK (otherTriger);
+          CHECK (win.px_per_sec()  == 400);
+          CHECK (wuz.px_per_sec()  == 20);
         }
     };
   

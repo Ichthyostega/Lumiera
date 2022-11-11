@@ -38260,14 +38260,15 @@
 <node CREATED="1667254209434" ID="ID_1299162840" MODIFIED="1667254216213" TEXT="st&#xf6;&#xdf;t am Rand des Canvas an"/>
 </node>
 </node>
-<node CREATED="1667254983055" ID="ID_1939856323" MODIFIED="1667254987549" TEXT="Eichung der Metrik">
+<node COLOR="#338800" CREATED="1667254983055" FOLDED="true" ID="ID_1939856323" MODIFIED="1668176401891" TEXT="Eichung der Metrik">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1667254988850" ID="ID_627529918" MODIFIED="1667255165088" TEXT="mu&#xdf; (initial) explizit gesezt werden">
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1667255003826" ID="ID_457439715" MODIFIED="1667255160405" TEXT="soll der Ausdehnung im Interface entsprechen">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667255062416" ID="ID_888315158" MODIFIED="1667255155045" TEXT="Erwartung: erh&#xe4;lt sich von selbst numerisch konstant">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1667255062416" ID="ID_888315158" MODIFIED="1668176391632" TEXT="Erwartung: erh&#xe4;lt sich von selbst numerisch konstant">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1667255198638" ID="ID_1458374199" MODIFIED="1667255216695" TEXT="da wir Integer-Arithmetik machen"/>
 <node CREATED="1667255218491" ID="ID_1646057612" MODIFIED="1667255227637" TEXT="und stets logisch-konsistent vorgehen"/>
@@ -38283,6 +38284,38 @@
     </p>
   </body>
 </html></richcontent>
+<node CREATED="1668176223375" ID="ID_386415995" MODIFIED="1668176380384" TEXT="...habe es gar nicht darauf ankommen lassen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1668176234367" ID="ID_762072729" MODIFIED="1668176354941" TEXT="...sondern an allen potentiell gef&#xe4;hrlichen Rechenschritten explizit auf Wert-Erhalt abgestellt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das hei&#223;t...
+    </p>
+    <ul>
+      <li>
+        alten Pixel-Wert berechnet
+      </li>
+      <li>
+        Neue Metrik draus per fractional-Integer-Arithmetik errechnet
+      </li>
+      <li>
+        Assertion da&#223; sich daraus wieder die gleiche Pixel-Zahl ergibt
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1668176355944" ID="ID_421203855" MODIFIED="1668176376274" TEXT="Pixel-Wert selber mu&#xdf; nicht persistent gespeichert werden">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1668176368364" ID="ID_1536037495" MODIFIED="1668176373232" TEXT="im Test best&#xe4;tigt">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>
@@ -38343,7 +38376,11 @@
 <node COLOR="#435e98" CREATED="1666912636672" ID="ID_693136797" MODIFIED="1666966124725" TEXT="wie kann man ZoomWindow nutzen?">
 <icon BUILTIN="help"/>
 <node CREATED="1666912660076" ID="ID_1930000724" MODIFIED="1666912681102" TEXT="dynamische &#xc4;nderungen vornehmen"/>
-<node CREATED="1666912682282" ID="ID_1683687274" MODIFIED="1666966070412" TEXT="&#xc4;nderungs-Benachrichtigung (Listener)"/>
+<node CREATED="1666912682282" ID="ID_1683687274" MODIFIED="1666966070412" TEXT="&#xc4;nderungs-Benachrichtigung (Listener)">
+<node CREATED="1668176481848" ID="ID_1029152707" MODIFIED="1668176485296" TEXT="einfacher Trigger"/>
+<node CREATED="1668176485655" ID="ID_1241434698" MODIFIED="1668176499366" TEXT="Empf&#xe4;nger zieht sich selber die aktuellen Werte"/>
+<node CREATED="1668176501266" ID="ID_1187154193" MODIFIED="1668176520856" TEXT="vorerst nur ein Empf&#xe4;nger (=TimelineLayout)"/>
+</node>
 </node>
 <node COLOR="#435e98" CREATED="1666913019821" ID="ID_1177711704" MODIFIED="1666966123770" TEXT="Art der Anbindung?">
 <icon BUILTIN="help"/>
@@ -38520,7 +38557,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1667260101665" ID="ID_1250580560" MODIFIED="1668132037114" TEXT="mu&#xdf; die Ausdehnung in Pixel beachten">
+<node COLOR="#338800" CREATED="1667260101665" FOLDED="true" ID="ID_1250580560" MODIFIED="1668132037114" TEXT="mu&#xdf; die Ausdehnung in Pixel beachten">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1667260119686" ID="ID_1154266769" MODIFIED="1667780434377" TEXT="neuer Getter daf&#xfc;r">
 <icon BUILTIN="button_ok"/>
@@ -38692,7 +38729,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1667603646312" ID="ID_1507636517" MODIFIED="1668132008216" TEXT="mu&#xdf; Invarianten sicherstellen">
+<node COLOR="#338800" CREATED="1667603646312" FOLDED="true" ID="ID_1507636517" MODIFIED="1668132008216" TEXT="mu&#xdf; Invarianten sicherstellen">
 <linktarget COLOR="#5c3488" DESTINATION="ID_1507636517" ENDARROW="Default" ENDINCLINATION="27;-47;" ID="Arrow_ID_49426086" SOURCE="ID_162164091" STARTARROW="None" STARTINCLINATION="-122;6;"/>
 <icon BUILTIN="yes"/>
 <node COLOR="#6a1790" CREATED="1667603900358" ID="ID_353785530" MODIFIED="1667780480867" TEXT="das gew&#xe4;hlte Implementierungs-Schema ist nicht beherrschbar">
@@ -39477,6 +39514,39 @@
 </html></richcontent>
 </node>
 </node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1668176529007" ID="ID_1000385499" MODIFIED="1668178932385" TEXT="changeNotification">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1668176558035" ID="ID_389422615" MODIFIED="1668176565812" TEXT="es ist ein reiner Trigger">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1668176566961" ID="ID_1163344157" MODIFIED="1668178900570" TEXT="also gen&#xfc;gt es, zu beweisen, da&#xdf; er ausgel&#xf6;st wird">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1668178902040" ID="ID_1008564979" MODIFIED="1668178918007" TEXT="au&#xdf;erdem: Notification ist pro Instanz gesondert">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1668178918696" ID="ID_958127282" MODIFIED="1668178931317" TEXT="und man kann sie auch wieder abkoppeln">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668180004015" ID="ID_1355163433" MODIFIED="1668180133079" TEXT="extreme Grenzf&#xe4;lle abtesten">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668180016155" ID="ID_506165727" MODIFIED="1668180136076" TEXT="leere Intervalle">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668180071412" ID="ID_1188877277" MODIFIED="1668180136076" TEXT="falsch orientierte Intervalle">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668180030777" ID="ID_1319796356" MODIFIED="1668180136077" TEXT="1 &#xb5;-Tick">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668180054302" ID="ID_1604190635" MODIFIED="1668180136078" TEXT="1 Pixel">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668180120032" ID="ID_346213896" MODIFIED="1668180136079" TEXT="Grenzen des Zeitformats">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
