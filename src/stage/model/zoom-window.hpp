@@ -340,17 +340,32 @@ namespace model {
       void
       expandVisibleRange (TimeSpan target)
         {
-          UNIMPLEMENTED ("zoom out to bring the current window at the designated time span");
+          // Formulation: Assuming the current window was generated from TimeSpan
+          //              by applying an affine-linear transformation f = a·x + b
+          FSecs tarDur = _FSecs(target.end()-target.start());
+          Rat a = FSecs{afterWin_-startWin_};
+          Rat b = FSecs{startWin_}*_FSecs(target.end()) - FSecs{afterWin_}*_FSecs((target.start()));
+          a /= tarDur;
+          b /= tarDur;
+          Time startNew {a * FSecs{startWin_} + b};
+          Time afterNew {a * FSecs{afterWin_} + b};
+          
+          mutateWindow(TimeSpan{startNew, afterNew});
+          fireChangeNotification();
         }
       
       /**
        * explicitly set the duration of the visible window range,
-       * while keeping the start position; possibly expand canvas.
-       */
+       * working around the relative anchor point; possibly expand canvas.
+       * @remark the anchor point is based on the relative position of the
+       *         window within canvas — however, other than for [scaling](\ref setMetric()),
+       *         the canvas will possibly be expanded and the given duration will thus
+       *         always be realised. */
       void
       setVisibleDuration (Duration duration)
         {
-          mutateWindow (TimeSpan{startWin_, duration});
+          mutateDuration (_FSecs(duration));
+          mutateWindow (TimeSpan{startWin_, afterWin_});
           fireChangeNotification();
         }
       
@@ -596,33 +611,32 @@ namespace model {
           changedMetric = min (changedMetric, ZOOM_MAX_RESOLUTION);
           if (changedMetric == px_per_sec_) return;
           
+          uint px{pxWidth()};
           Rat changeFactor{changedMetric / px_per_sec_};
           FSecs dur{afterWin_ - startWin_};
           dur /= changeFactor;
           if (dur > FSecs{afterAll_ - startAll_})
             {// limit to the overall timespan...
-              uint px{pxWidth()};
               startWin_ = startAll_;
               afterWin_ = afterAll_;
               px_per_sec_ = conformMetricToWindow(px);
-              ensureInvariants (px);
             }
           else
             mutateDuration (dur);
+          ensureInvariants (px);
         }
       
       /** @internal change visible duration centred around anchor point,
        *            validate and adjust all params */
       void
-      mutateDuration (FSecs duration)
+      mutateDuration (FSecs duration, uint px =0)
         {
           if (duration <= 0)
             duration = DEFAULT_CANVAS;
-          uint px{pxWidth()};
+          if (px==0)
+            px = pxWidth();
           Rat changedMetric = Rat(px) / duration;
-          
           conformWindowToMetric (changedMetric);
-          ensureInvariants(px);
         }
       
       /** @internal resize window to span the given pixel with,

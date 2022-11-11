@@ -291,9 +291,12 @@ namespace test {
           CHECK (win.overallSpan().duration() == _t(2048));                      // ... at indicated relative position (2sec ⟼ 64sec, one window size before end)
           
           // metric can be explicitly set (e.g. 5px per sound sample)
-          win.setMetric (5 * 1_r/44100);
+          win.setMetric (5 / (1_r/44100));
           CHECK (win.pxWidth() == 1280);
-          CHECK (win.visible().duration() == Duration{FSecs(5,44100)*1280});
+          CHECK (win.px_per_sec() <= 5*44100);                                   // zoom scale was slightly reduced to match exact pixel width
+          CHECK (win.px_per_sec() >= 5*44100 - 1);
+          CHECK (win.visible().duration() == Duration{1280_r/(5*44100) +MICRO_TICK});
+          CHECK (win.visible().duration() == Duration{1280_r/win.px_per_sec()});
           CHECK (win.overallSpan().duration() == _t(2048));
         }
       
@@ -308,8 +311,8 @@ namespace test {
           
           win.setVisibleDuration (Duration{FSecs(23,30)});
           CHECK (win.visible().duration() == _t(23,30));
-          CHECK (win.visible().start() == Time(FSecs(64)/2 - FSecs(23/30)/2));   // when zooming down from full range, zoom anchor is window centre
-          CHECK (win.px_per_sec()  == 1280_r/23*30);
+          CHECK (win.visible().start() == _t(64,2) - _t(23,30*2));               // when zooming down from full range, zoom anchor is window centre
+          CHECK (win.px_per_sec()  == 1280_r/_FSecs(_t(23,30)));                 // scale factor slightly adjusted to match exact pixel width
           CHECK (win.pxWidth()     == 1280);
           
           win.setVisibleRange (TimeSpan{_t(12), FSecs(16)});
@@ -353,8 +356,8 @@ namespace test {
           CHECK (win.px_per_sec()  == 1280_r/16);                                // metric is retained
           
           win.setOverallRange (TimeSpan{_t(50), _t(52)});
-          CHECK (win.overallSpan() == TimeSpan(_t(100), FSecs(2)));
-          CHECK (win.visible()     == TimeSpan(_t(100), FSecs(16)));             // window truncated to fit into canvas
+          CHECK (win.overallSpan() == TimeSpan(_t(50), FSecs(2)));
+          CHECK (win.visible()     == TimeSpan(_t(50), FSecs(2)));               // window truncated to fit into canvas
           CHECK (win.px_per_sec()  == 1280_r/2);                                 // metric need to be adjusted
           CHECK (win.pxWidth()     == 1280);
         }
@@ -365,7 +368,7 @@ namespace test {
       verify_scroll()
         {
           ZoomWindow win{1280, TimeSpan{_t(0), FSecs(16)}};
-          CHECK (win.visible() == win.overallSpan());
+          CHECK (win.visible()     == win.overallSpan());
           CHECK (win.visible()     == TimeSpan(_t(0), FSecs(16)));
           CHECK (win.px_per_sec()  == 80);
           
@@ -377,26 +380,22 @@ namespace test {
           
           win.nudgeVisiblePos(-3);
           CHECK (win.visible()     == TimeSpan(_t(-16), FSecs(16)));             // window shifted backwards by three times half window sizes
-          CHECK (win.overallSpan() == TimeSpan(_t(-16), FSecs(16+8+32)));        // canvas is always expanded accordingly, never shrinked
+          CHECK (win.overallSpan() == TimeSpan(_t(-16), FSecs(16+8+16)));        // canvas is always expanded accordingly, never shrinked
           CHECK (win.px_per_sec()  == 80);                                       // metric is retained
           CHECK (win.pxWidth()     == 1280);
           
           win.setVisiblePos(0.50);
-          CHECK (win.visible()     == TimeSpan(_t((56/2-16) -8), FSecs(16)));    // window positioned to centre of canvas
+          CHECK (win.visible()     == TimeSpan(_t((40/2-16) -8), FSecs(16)));    // window positioned to centre of canvas
           
           win.setVisiblePos(-0.50);
-          CHECK (win.visible()     == TimeSpan(_t(-16), FSecs(16)));             // relative positioning limited at lower bound
-          win.setVisiblePos(2.34);
-          CHECK (win.visible()     == TimeSpan(_t(56-16-16), FSecs(16)));        // relative positioning limited at upper bound
-          win.setVisiblePos(_t(200));
-          CHECK (win.visible()     == TimeSpan(_t(56-16-16), FSecs(16)));        // absolute positioning limited likewise
-          win.setVisiblePos(_t(-200));
-          CHECK (win.visible()     == TimeSpan(_t(-16), FSecs(16)));
+          CHECK (win.visible()     == TimeSpan(_t(-16-40/2), FSecs(16)));        // relative positioning not limited at lower bound
+          win.setVisiblePos(_t(200));                                            // absolute positioning likewise not limited
+          CHECK (win.visible()     == TimeSpan(_t(200-16), FSecs(16)));          // but anchored according to relative anchor pos
           CHECK (win.px_per_sec()  == 80);                                       // metric retained
           CHECK (win.pxWidth()     == 1280);
           
           win.setVisibleRange(TimeSpan{_t(-200), FSecs(32)});                    // but explicit positioning outside of canvas is possible
-          CHECK (win.overallSpan() == TimeSpan(_t(-200), _t(16+8)));             // ...and will expand canvas
+          CHECK (win.overallSpan() == TimeSpan(_t(-200), _t(200)));              // ...and will expand canvas
           CHECK (win.visible()     == TimeSpan(_t(-200), FSecs(32)));
           CHECK (win.px_per_sec()  == 40);
           CHECK (win.pxWidth()     == 1280);
