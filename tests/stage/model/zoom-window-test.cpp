@@ -86,6 +86,8 @@ namespace test {
           verify_scroll();
           
           verify_changeNotification();
+          
+          toxic_corner_cases();
         }
       
       
@@ -481,6 +483,53 @@ namespace test {
           CHECK (otherTriger);
           CHECK (win.px_per_sec()  == 400);
           CHECK (wuz.px_per_sec()  == 20);
+        }
+      
+      
+      /** @test verify safeguards when used in extreme corner cases */
+      void
+      toxic_corner_cases()
+        {
+          {
+            ZoomWindow win{0, TimeSpan{_t(0), FSecs(0)}};
+            CHECK (win.visible()     == TimeSpan(_t(0), _t(23)));                // uses DEFAULT_CANVAS instead of empty TimeSpan
+            CHECK (win.px_per_sec()  == 25);                                     // falls back on default initial zoom factor
+            CHECK (win.pxWidth()     == 575);                                    // allocates pixels in accordance to default
+            
+            win.setOverallDuration(Duration{FSecs(50)});
+            win.setVisibleDuration(Duration{FSecs(0)});
+            CHECK (win.overallSpan() == TimeSpan(_t(0), _t(50)));
+            CHECK (win.visible()     == TimeSpan(_t(0), _t(23)));                // falls back to DEFAULT_CANVAS size
+            CHECK (win.pxWidth()     == 575);                                    // allocates pixels in accordance to default
+            
+            win.calibrateExtension(0);
+            CHECK (win.px_per_sec()  == 25);                                     // stays at default zoom factor
+            CHECK (win.pxWidth()     == 1);                                      // retains 1px window size
+            CHECK (win.visible().duration() == _t(1,25));                        // visible window has thus 1/25s duration
+            
+            win.setOverallRange(TimeSpan(_t(10), _t(0)));
+            SHOW_EXPR (win.overallSpan());
+            SHOW_EXPR (win.visible());
+            SHOW_EXPR (_raw(win.visible().duration()));
+            SHOW_EXPR (win.px_per_sec());
+            SHOW_EXPR (win.pxWidth());
+            
+            CHECK (TimeSpan(_t(10), _t(0)).duration() == Duration(FSecs(10)));    // TimeSpan is always properly oriented by construction
+            Duration evilReversed = static_cast<Duration> (_t(-10));
+            SHOW_EXPR (evilReversed);
+            SHOW_EXPR (TimeSpan(_t(20), evilReversed));
+
+          }
+          {
+            ZoomWindow win{};
+//            SHOW_EXPR(win.overallSpan());
+//            SHOW_EXPR(_raw(win.visible().duration()));
+//            SHOW_EXPR(win.px_per_sec());
+//            SHOW_EXPR(win.pxWidth());
+//            CHECK (win.visible()     == TimeSpan(_t(0), _t(23)));
+//            CHECK (win.px_per_sec()  == 25);
+//            CHECK (win.pxWidth()     == 575);
+          }
         }
     };
   

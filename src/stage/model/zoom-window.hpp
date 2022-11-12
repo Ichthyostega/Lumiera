@@ -60,6 +60,16 @@
  ** - scale factor and visible window line up logically
  ** - scale factor produces precise reproducible values
  ** 
+ ** ## Safety Guards
+ ** 
+ ** Most setters require lib::time::TimeSpan or lib::time::Duration as _value arguments;_
+ ** based on those entities internal definition, they can be assumed to be sanitised,
+ ** within TimeValue bounds and properly oriented. Other setters taking possibly negative
+ ** numbers are prepared to handle these (e.g. as offset). Range checks are in place to
+ ** prevent possibly dangerous numbers from infesting the calculations.
+ ** @note rational integral arithmetics can be insidious, since normalisation requires
+ **       frequent multiplications, and large denominators might cause numeric overflow.
+ ** 
  ** ## Change listener
  ** 
  ** A single change listener lambda can be installed (as of 10/2022 this is considered sufficient,
@@ -379,7 +389,7 @@ namespace model {
       nudgeVisiblePos (int steps)
         {
           FSecs dur{afterWin_-startWin_};      //    navigate half window steps
-          setVisibleRange (TimeSpan{Time{startWin_ + dur*steps/2}
+          setVisibleRange (TimeSpan{Time{startWin_ + (dur*steps)/2}
                                    , dur});
         }
       
@@ -761,6 +771,8 @@ namespace model {
        * relative to the overall canvas. Implemented using a cubic parabola, which moves quick
        * away from the boundaries, while hovering most of the time in the middle area.
        * @return factor effectively between 0 ... 1 (inclusive)
+       * @warning in case of a "poisonous" input the calculation may go astray;
+       *          yet results are limited at least...
        */
       static Rat
       parabolicAnchorRule (Rat posFactor)
@@ -769,6 +781,7 @@ namespace model {
           posFactor = (2*posFactor - 1);             // -1 ... +1
           posFactor = posFactor*posFactor*posFactor; // -1 ... +1 but accelerating towards boundaries
           posFactor = (posFactor + 1) / 2;           //  0 ... 1
+          posFactor = util::limited (0, posFactor, 1);
           return posFactor;
         }
     };
