@@ -333,7 +333,7 @@ lumiera_tmpbuf_print_time (gavl_time_t time)
 gavl_time_t
 lumiera_rational_to_time (FSecs const& fractionalSeconds)
 {
-  return rational_cast<gavl_time_t> (fractionalSeconds * int{lib::time::TimeValue::SCALE});
+  return rational_cast<gavl_time_t> (fractionalSeconds * lib::time::TimeValue::SCALE);
 }
 
 gavl_time_t

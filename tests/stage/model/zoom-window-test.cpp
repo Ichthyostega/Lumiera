@@ -521,6 +521,12 @@ namespace test {
 
           }
           {
+            Rat poison{_raw(Time::MAX)-101010101010101010, _raw(Time::MAX)+23};
+            SHOW_EXPR(poison);
+            Rat sane = util::reQuant (poison, _raw(Time::MAX) / Time::SCALE);
+            SHOW_EXPR(sane);
+            SHOW_EXPR(rational_cast<double>(poison));
+            SHOW_EXPR(rational_cast<double>(sane));
             ZoomWindow win{};
 //            SHOW_EXPR(win.overallSpan());
 //            SHOW_EXPR(_raw(win.visible().duration()));

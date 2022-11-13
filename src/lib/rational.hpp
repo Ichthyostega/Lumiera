@@ -67,6 +67,8 @@
 #define LIB_RATIONAL_H
 
 
+#include <cmath>
+#include <limits>
 #include <stdint.h>
 #include <boost/rational.hpp>
 
@@ -76,8 +78,85 @@ namespace util {
   
   using Rat = boost::rational<int64_t>;
   using boost::rational_cast;
+  using std::abs;
   
+  
+  /**
+   * Integral binary logarithm (disregarding fractional part)
+   * @return index of the largest bit set in `num`; -1 for `num==0`
+   * @todo C++20 will provide `std::bit_width(i)` — run a microbenchmark!
+   * @remark The implementation uses an unrolled loop to break down the given number
+   *         in a logarithmic search, subtracting away the larger powers of 2 first.
+   *         Explained 10/2021 by user «[ToddLehman]» in this [stackoverflow].
+   * @see ZoomWindow_test
+   * 
+   * [ToddLehman]: https://stackoverflow.com/users/267551/todd-lehman
+   * [stackoverflow]: https://stackoverflow.com/a/24748637 "How to do an integer log2()"
+   */
+  inline int
+  uint64_log2 (uint64_t num)
+  {
+    if (num == 0) return -1;
+    int logB{0};
+    auto remove_power = [&](uint64_t pow)
+                          {
+                            if (num >= uint64_t(1) << pow)
+                              {
+                                logB += pow;
+                                num >>= pow;
+                              }
+                          };
+    remove_power(32);
+    remove_power(16);
+    remove_power (8);
+    remove_power (4);
+    remove_power (2);
+    remove_power (1);
+    
+    return logB;
+  }
+  
+  
+  inline bool
+  can_represent_Product (int64_t a, int64_t b)
+  {
+    return uint64_log2(abs(a))+1
+         + uint64_log2(abs(b))+1
+         < 63;
+  }
+  
+  inline bool
+  can_represent_Sum (Rat a, Rat b)
+  {
+    return can_represent_Product(a.numerator(), b.denominator())
+       and can_represent_Product(b.numerator(), a.denominator());
+  }
+  
+  
+  /**
+   * re-Quantise a rational number to a (typically smaller) denominator.
+   * @param u the new denominator to use
+   * @warning this is a lossy operation and possibly introduces an error
+   *          of up to 1/u
+   * @remark  Rational numbers with large numerators can be »poisonous«,
+   *          causing numeric overflow when used, even just additively.
+   *          This function can thus be used to _"sanitise"_ a number,
+   *          and thus accept a small error while preventing overflow.
+   */
+  inline Rat
+  reQuant (Rat src, int64_t u)
+  {
+    int64_t d = rational_cast<int64_t> (src);
+    int64_t r = src.numerator() % src.denominator();
+    
+    // construct approximation quantised to 1/u
+    double frac = rational_cast<double> (Rat{r, src.denominator()});
+    Rat res = d + int64_t(frac*u) / Rat(u);
+    ENSURE (abs (rational_cast<double>(src) - rational_cast<double>(res)) < 1.0/abs(u));
+    return res;
+  }
 } // namespace util
+
 
 
 /**
