@@ -39897,12 +39897,104 @@
 <icon BUILTIN="button_ok"/>
 <node CREATED="1668353668892" ID="ID_259284183" MODIFIED="1668353679884" TEXT="ja... die banale L&#xf6;sung mit der Bitshift-Schleife"/>
 <node CREATED="1668353680848" ID="ID_152151776" MODIFIED="1668353792957" TEXT="Geht das auch besser? vielleicht logarithmisch?">
-<node CREATED="1668353698198" ID="ID_394250867" MODIFIED="1668353709760" TEXT="sowiso..."/>
-<node CREATED="1668353710492" ID="ID_275694038" LINK="http://graphics.stanford.edu/~seander/bithacks.html#IntegerLogObvious" MODIFIED="1668353726453" TEXT="aber klar doch..."/>
+<node CREATED="1668353698198" ID="ID_394250867" LINK="https://stackoverflow.com/a/24748637" MODIFIED="1668353698198" TEXT="sowiso..."/>
+<node CREATED="1668353698198" ID="ID_275694038" LINK="http://graphics.stanford.edu/~seander/bithacks.html#IntegerLogObvious" MODIFIED="1668353698198" TEXT="aber klar doch..."/>
 </node>
 <node COLOR="#338800" CREATED="1668353793968" ID="ID_9788121" MODIFIED="1668353882082" TEXT="eine Adaption dieser Methode mal als Utility formuliert">
 <arrowlink COLOR="#07a5b2" DESTINATION="ID_1509712772" ENDARROW="Default" ENDINCLINATION="96;-4;" ID="Arrow_ID_1066574831" STARTARROW="None" STARTINCLINATION="-282;15;"/>
 <icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1668393503545" ID="ID_1760600173" MODIFIED="1668395451097" TEXT="Microbenchmarks durchgef&#xfc;hrt">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1668394019882" ID="ID_599742848" MODIFIED="1668394142917" TEXT="Benchmark-Setup">
+<icon BUILTIN="info"/>
+<node CREATED="1668394043359" ID="ID_1124273723" MODIFIED="1668394063335" TEXT="gebaut per -O3"/>
+<node CREATED="1668394064034" ID="ID_235157501" MODIFIED="1668395296511" TEXT="Impl-Funktion per Lambda &#xfc;bergeben">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Habe dies explizit verifiziert und vergliechen mit komplett ausformulierten inline-Funktionen; wie erwartet: mit -O3 werden Lambdas komplett transparent geinlined.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1668394082290" ID="ID_342146050" MODIFIED="1668394093332" TEXT="Array mit 1000 Zufallszahlen"/>
+<node CREATED="1668394096760" ID="ID_1339569720" MODIFIED="1668394109114" TEXT="1000 Durchl&#xe4;ufe &#xfc;ber dieses Array"/>
+<node CREATED="1668394109774" ID="ID_552943244" MODIFIED="1668395370694" TEXT="Ergebnis in Akkumulator summiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Extrem wichtig. Und auch wichtig: mit diesem Akkumulator nachher noch etwas machen (z.B. ausgeben). Sonst merkt der Compiler da&#223; das kein beobachtbarer Effekt ist, und entfernt die Addition, und dann in einigen F&#228;llen auch den eigentlichen Funktionsaufruf
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1668394121117" ID="ID_169752249" MODIFIED="1668394135936" TEXT="Zeitmessung per system_clock"/>
+</node>
+<node CREATED="1668396009603" ID="ID_1438298126" MODIFIED="1668396019050" TEXT="f&#xfc;r int64_t">
+<node CREATED="1668393519910" ID="ID_219605808" MODIFIED="1668397317940" TEXT="mein ilog2: 5.6ns"/>
+<node CREATED="1668393672305" ID="ID_812438903" MODIFIED="1668393802739" TEXT="Vorlage SO: 7.6ns">
+<node CREATED="1668395067578" ID="ID_386803191" MODIFIED="1668395176399" TEXT="das liegt aber nur am fehlenden -1 Branch">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Die Vorlage auf Stackoverflow initialisiert auf 0 oder -1, l&#228;uft dann aber f&#252;r Input==0 leer durch die Checks durch. Meine Variante testet auf 0 und returnt sofort.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1668393804032" ID="ID_21424194" MODIFIED="1668393908928" TEXT="std::ilogb: 5ns">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1668395186709" ID="ID_1211843890" MODIFIED="1668395210813" TEXT="tja..">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1668395190925" ID="ID_1430564827" MODIFIED="1668395202091" TEXT="soviel zu mikro-Optimierungen">
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+<node CREATED="1668393917856" ID="ID_1019010591" MODIFIED="1668398463666" TEXT="bitshift: 44.5ns"/>
+<node CREATED="1668393950108" ID="ID_1616300073" MODIFIED="1668398506957" TEXT="identity: 0.6ns"/>
+</node>
+<node CREATED="1668396029490" ID="ID_1564618644" MODIFIED="1668396033408" TEXT="f&#xfc;r int8_t">
+<node CREATED="1668396057054" ID="ID_1071094861" MODIFIED="1668396063236" TEXT="mein ilog2: 5.2ns">
+<node CREATED="1668397327959" ID="ID_837112422" MODIFIED="1668397363382" TEXT="beachte: profitiert von dem kleineren Zahlenraum"/>
+</node>
+<node CREATED="1668396069719" ID="ID_22228342" MODIFIED="1668396092527" TEXT="std::ilogb: 5.8ns"/>
+<node CREATED="1668396123864" ID="ID_442684506" MODIFIED="1668396149609" TEXT="bitshift: 8.2ns">
+<node CREATED="1668397368169" ID="ID_1133087044" MODIFIED="1668397386347" TEXT="beachte: der Unterschied zum log-Test ist nicht mehr gro&#xdf;"/>
+</node>
+<node CREATED="1668396166545" ID="ID_1651198717" MODIFIED="1668396174213" TEXT="identity: 0.3ns"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1668399037176" ID="ID_436989865" MODIFIED="1668399206026" TEXT="Frage: std::ilogb verwenden?">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1668399055151" ID="ID_1320606425" MODIFIED="1668399066085" TEXT="sind beide in der gleichen Gr&#xf6;&#xdf;enordnung"/>
+<node CREATED="1668399066733" ID="ID_833533643" MODIFIED="1668399154910" TEXT="was dagegen spricht: ich kenne nicht den Grund warum std::ilogb so schnell ist">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      eine andere Standard-Library, und ilogb() k&#246;nnte deutlich langsamer sein.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1668399085818" ID="ID_342245470" MODIFIED="1668399114059" TEXT="wohingegen die Performance dieser funktion hier rational nachvollziehbar ist"/>
+<node CREATED="1668399157625" ID="ID_702521964" MODIFIED="1668399194000" TEXT="weiteres Argument: diese Funktion wird minimal schneller f&#xfc;r kleinere Datentypen"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1668399211706" ID="ID_738941814" MODIFIED="1668399256636" TEXT="mit C++20 kommt std::bit_width(i) &#x27f9; Benchmark wiederholen">
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1668353594476" ID="ID_75685604" MODIFIED="1668353613457" TEXT="hier k&#xf6;nnte man u.U. sogar erkennen, ob exakte Rechnung m&#xf6;glich ist">

@@ -74,7 +74,7 @@ namespace test{
    * and invokes the given test subject repeatedly.
    * @tparam number of threads to run in parallel
    * @param subject `void(void)` function to be timed
-   * @return the averaged invocation time in _mircroseconds_
+   * @return the averaged invocation time in _microseconds_
    * @remarks - the subject function will be _copied_ into each thread
    *          - so `nThreads` copies of this function will run in parallel
    *          - consider locking if this function accesses a shared closure.

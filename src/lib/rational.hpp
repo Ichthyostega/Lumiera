@@ -58,6 +58,7 @@
  ** Use fractional arithmetics only where it is possible to control the denominators involved.
  ** Never use them for computations drawing from arbitrary (external) input.
  ** 
+ ** @see Rational_test
  ** @see zoom-window.hpp
  ** @see timevalue.hpp
  */
@@ -80,6 +81,10 @@ namespace util {
   using boost::rational_cast;
   using std::abs;
   
+  // these are neither standard C++ nor POSIX, yet pretty much common place...
+  using uchar = unsigned char;
+  using uint  = unsigned int;
+  
   
   /**
    * Integral binary logarithm (disregarding fractional part)
@@ -88,19 +93,27 @@ namespace util {
    * @remark The implementation uses an unrolled loop to break down the given number
    *         in a logarithmic search, subtracting away the larger powers of 2 first.
    *         Explained 10/2021 by user «[ToddLehman]» in this [stackoverflow].
+   * @note Microbenchmarks indicate that this function and `std::ilogb(double)` perform
+   *         in the same order of magnitude (which is surprising). This function gets
+   *         slightly faster for smaller data types. The naive bitshift-count implementation
+   *         is always significantly slower (8 times for int64_t, 1.6 times for int8_t)
    * @see ZoomWindow_test
    * 
    * [ToddLehman]: https://stackoverflow.com/users/267551/todd-lehman
    * [stackoverflow]: https://stackoverflow.com/a/24748637 "How to do an integer log2()"
    */
+  template<typename I>
   inline int
-  uint64_log2 (uint64_t num)
+  ilog2 (I num)
   {
-    if (num == 0) return -1;
+    if (num <= 0)
+      return -1;
+    const I MAX_POW = sizeof(I)*CHAR_BIT - 1;
     int logB{0};
-    auto remove_power = [&](uint64_t pow)
+    auto remove_power = [&](I pow)
                           {
-                            if (num >= uint64_t(1) << pow)
+                            if (pow > MAX_POW) return;
+                            if (num >= I{1} << pow)
                               {
                                 logB += pow;
                                 num >>= pow;
@@ -120,8 +133,8 @@ namespace util {
   inline bool
   can_represent_Product (int64_t a, int64_t b)
   {
-    return uint64_log2(abs(a))+1
-         + uint64_log2(abs(b))+1
+    return ilog2(abs(a))+1
+         + ilog2(abs(b))+1
          < 63;
   }
   
