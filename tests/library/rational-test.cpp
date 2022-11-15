@@ -28,15 +28,9 @@
 
 #include "lib/error.hpp"
 #include "lib/test/run.hpp"
-#include "lib/format-obj.hpp"
+#include "lib/format-cout.hpp"
 
 #include "lib/rational.hpp"
-#include "lib/format-cout.hpp"//////////////TODO
-#define SHOW_TYPE(_TY_) \
-    cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
-#define SHOW_EXPR(_XX_) \
-    cout << "#--◆--# " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
-//////////////////////////////////////////////////////////////////////////////TODO
 
 #include <chrono>
 #include <array>
@@ -194,7 +188,7 @@ namespace test {
       
       
       /**
-       * @test a slightly optimised implementation of integer binary logarithm
+       * @test an optimised implementation of integer binary logarithm
        *       - basically finds the highest bit which is set
        *       - can be used with various integral types
        *       - performs better than using the floating-point solution
@@ -269,7 +263,7 @@ namespace test {
           array<uint64_t, 1000> numz;
           for (auto& n : numz)
             {
-              n = rand() * uint64_t(2147483648);
+              n = rand() * uint64_t(1 << 31);
               CHECK (ilog2(n) == floatLog(n));
               CHECK (ilog2(n) == bitshift(n));
             }
@@ -301,8 +295,8 @@ namespace test {
                << "std::ilogb  :"<<time_float<<"ns"<<endl
                << "bit-shift   :"<<time_shift<<"ns"<<endl
                << "identity    :"<<time_ident<<"ns"<<endl
-               << "(checksum="<<dump<<")"          <<endl; // Warning: without outputting `dump`, compiler would optimise away most calls
-          
+               << "(checksum="<<dump<<")"          <<endl; // Warning: without outputting `dump`,
+                                                          //  the optimiser would eliminate most calls
           // the following holds both with -O0 and -O3
           CHECK (time_ilog2 < time_shift);
           CHECK (time_ident < time_ilog2);
@@ -335,7 +329,42 @@ namespace test {
       void
       verify_requant()
         {
+          const int64_t MAX{std::numeric_limits<int64_t>::max()};
+          const Rat MAXI = Rat{MAX};
           
+          Rat poison = (MAXI-88)/(MAXI/7);
+          
+          auto approx = [](Rat rat){ return rational_cast<float> (rat); };
+          CHECK (poison   > 0);
+          CHECK (poison+1 < 0);                                                  // wrap around!
+          CHECK (approx (poison  ) ==  6.99999952f);                             // wildly wrong results...
+          CHECK (approx (poison+1) == -6);
+          CHECK (approx (poison+7) == -6.83047369e-17f);
+          CHECK (approx (poison+9_r/5) == 0.400000006f);
+          
+          Rat sleazy = reQuant (poison,  1 << 24);                               // recast into multiples of an arbitrary other divisor,
+          CHECK (sleazy.denominator() == 1 << 24);                               // (here using a power of two as example)
+          // and now we can do all the slick stuff...
+          CHECK (sleazy   > 0);
+          CHECK (sleazy+1 > 0);
+          CHECK (sleazy+7 > 0);
+          CHECK (approx (sleazy)   == 7);
+          CHECK (approx (sleazy+1) == 8);
+          CHECK (approx (sleazy+7) == 14);
+          CHECK (approx (sleazy+9_r/5) == 8.80000019f);
+          
+          CHECK (util::toString (poison)   == "9223372036854775719/1317624576693539401sec");
+          CHECK (util::toString (poison+1) =="-7905747460161236496/1317624576693539401sec");
+          CHECK (util::toString (sleazy)   == "117440511/16777216sec");
+          CHECK (util::toString (sleazy+1) == "134217727/16777216sec");
+          
+          // also works towards larger denominator, or with negative numbers...
+          CHECK (reQuant (poison, MAX-7) == 104811045873349724_r/14973006553335675);
+          CHECK (reQuant (-poison, 7777) == -54438_r/ 7777);
+          CHECK (reQuant (poison, -7777) == -54438_r/-7777);
+          
+          CHECK (approx (reQuant (poison, MAX-7)) == 7);
+          CHECK (approx (reQuant (poison,  7777)) == 6.99987125f);
         }
     };
   

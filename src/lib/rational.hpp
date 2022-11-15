@@ -97,6 +97,7 @@ namespace util {
    *         in the same order of magnitude (which is surprising). This function gets
    *         slightly faster for smaller data types. The naive bitshift-count implementation
    *         is always significantly slower (8 times for int64_t, 1.6 times for int8_t)
+   * @see Rational_test::verify_intLog2()
    * @see ZoomWindow_test
    * 
    * [ToddLehman]: https://stackoverflow.com/users/267551/todd-lehman
@@ -155,17 +156,21 @@ namespace util {
    *          causing numeric overflow when used, even just additively.
    *          This function can thus be used to _"sanitise"_ a number,
    *          and thus accept a small error while preventing overflow.
+   * @note using extended-precision floating point to get close to the
+   *          quantiser even for large denominator. Some platforms
+   *          fall back to double, leading to extended error bounds
    */
   inline Rat
   reQuant (Rat src, int64_t u)
   {
     int64_t d = rational_cast<int64_t> (src);
     int64_t r = src.numerator() % src.denominator();
+    using f128 = long double;
     
     // construct approximation quantised to 1/u
-    double frac = rational_cast<double> (Rat{r, src.denominator()});
+    f128 frac = rational_cast<f128> (Rat{r, src.denominator()});
     Rat res = d + int64_t(frac*u) / Rat(u);
-    ENSURE (abs (rational_cast<double>(src) - rational_cast<double>(res)) < 1.0/abs(u));
+    ENSURE (abs (rational_cast<f128>(src) - rational_cast<f128>(res)) <= 1.0/abs(u));
     return res;
   }
 } // namespace util

@@ -39874,9 +39874,9 @@
 <linktarget COLOR="#784489" DESTINATION="ID_1438689210" ENDARROW="Default" ENDINCLINATION="202;-30;" ID="Arrow_ID_1396674797" SOURCE="ID_159285221" STARTARROW="None" STARTINCLINATION="-243;119;"/>
 <icon BUILTIN="info"/>
 <node CREATED="1668295785449" ID="ID_248479209" MODIFIED="1668295794255" TEXT="Nenner gegen Limit pr&#xfc;fen"/>
-<node COLOR="#338800" CREATED="1668295795329" ID="ID_1179855526" MODIFIED="1668353517806" TEXT="Requantisieren">
+<node COLOR="#338800" CREATED="1668295795329" FOLDED="true" ID="ID_1179855526" MODIFIED="1668474431508" TEXT="Requantisieren">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1668353519645" ID="ID_1709187608" MODIFIED="1668353551219" TEXT="so exakt wie m&#xf6;glich">
+<node CREATED="1668353519645" ID="ID_1709187608" MODIFIED="1668474384018" TEXT="so exakt wie m&#xf6;glich">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -39887,17 +39887,20 @@
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#f2fbd7" DESTINATION="ID_1709187608" ENDARROW="Default" ENDINCLINATION="113;234;" ID="Arrow_ID_229027216" SOURCE="ID_505458679" STARTARROW="Default" STARTINCLINATION="-412;-14;"/>
 <icon BUILTIN="stop-sign"/>
 </node>
-<node CREATED="1668353552561" ID="ID_1127388689" MODIFIED="1668353567293" TEXT="n&#xe4;herungsweise per double">
+<node COLOR="#435e98" CREATED="1668353552561" ID="ID_1127388689" MODIFIED="1668474254609" TEXT="n&#xe4;herungsweise per long double">
 <icon BUILTIN="idea"/>
 <node CREATED="1668353569055" ID="ID_1784438485" MODIFIED="1668353581617" TEXT="aufteilen in Ganzzahl und Modulus"/>
 <node CREATED="1668353584405" ID="ID_1181209360" MODIFIED="1668353593384" TEXT="dann den Modulus n&#xe4;herungsweise requantifizieren"/>
-<node COLOR="#338800" CREATED="1668353653955" ID="ID_1020200002" MODIFIED="1668353816582" TEXT="Neben-Untersuchung: Ganzzahl-Zweierlogarithmus">
+<node COLOR="#338800" CREATED="1668353653955" FOLDED="true" ID="ID_1020200002" MODIFIED="1668353816582" TEXT="Neben-Untersuchung: Ganzzahl-Zweierlogarithmus">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1668353668892" ID="ID_259284183" MODIFIED="1668353679884" TEXT="ja... die banale L&#xf6;sung mit der Bitshift-Schleife"/>
 <node CREATED="1668353680848" ID="ID_152151776" MODIFIED="1668353792957" TEXT="Geht das auch besser? vielleicht logarithmisch?">
-<node CREATED="1668353698198" ID="ID_394250867" LINK="https://stackoverflow.com/a/24748637" MODIFIED="1668353698198" TEXT="sowiso..."/>
+<node CREATED="1668353698198" ID="ID_394250867" LINK="https://stackoverflow.com/a/24748637" MODIFIED="1668353698198" TEXT="sowiso...">
+<linktarget COLOR="#ffe1c1" DESTINATION="ID_394250867" ENDARROW="Default" ENDINCLINATION="-128;27;" ID="Arrow_ID_791821354" SOURCE="ID_812438903" STARTARROW="None" STARTINCLINATION="-142;-24;"/>
+</node>
 <node CREATED="1668353698198" ID="ID_275694038" LINK="http://graphics.stanford.edu/~seander/bithacks.html#IntegerLogObvious" MODIFIED="1668353698198" TEXT="aber klar doch..."/>
 </node>
 <node COLOR="#338800" CREATED="1668353793968" ID="ID_9788121" MODIFIED="1668353882082" TEXT="eine Adaption dieser Methode mal als Utility formuliert">
@@ -39940,6 +39943,7 @@
 <node CREATED="1668396009603" ID="ID_1438298126" MODIFIED="1668396019050" TEXT="f&#xfc;r int64_t">
 <node CREATED="1668393519910" ID="ID_219605808" MODIFIED="1668397317940" TEXT="mein ilog2: 5.6ns"/>
 <node CREATED="1668393672305" ID="ID_812438903" MODIFIED="1668393802739" TEXT="Vorlage SO: 7.6ns">
+<arrowlink COLOR="#ffe1c1" DESTINATION="ID_394250867" ENDARROW="Default" ENDINCLINATION="-128;27;" ID="Arrow_ID_791821354" STARTARROW="None" STARTINCLINATION="-142;-24;"/>
 <node CREATED="1668395067578" ID="ID_386803191" MODIFIED="1668395176399" TEXT="das liegt aber nur am fehlenden -1 Branch">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -40003,23 +40007,69 @@
 <node CREATED="1668353619784" ID="ID_395391770" MODIFIED="1668353624739" TEXT="nicht klar ob relevant"/>
 <node CREATED="1668353625375" ID="ID_27295187" MODIFIED="1668353643696" TEXT="dann auch Micro-Benchmark notwendig"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1668353892092" ID="ID_1654551581" MODIFIED="1668353948869" TEXT="Direkte L&#xf6;sung + Fehler-Assert">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1668353892092" ID="ID_1654551581" MODIFIED="1668474307633" TEXT="Direkte L&#xf6;sung + Fehler-Assert">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1668353919128" ID="ID_1237619949" MODIFIED="1668353937498" TEXT="ohne weitere Sanity-Checks"/>
 <node COLOR="#338800" CREATED="1668353938677" ID="ID_278768234" MODIFIED="1668353944961" TEXT="funktioniert im Smoke-Test">
 <icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1668474259440" ID="ID_1390713963" MODIFIED="1668474302021" TEXT="verwende long double">
+<icon BUILTIN="idea"/>
+<node CREATED="1668474283161" ID="ID_505458679" MODIFIED="1668474406928">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      damit kann ich stets so genau wie m&#246;glich rechnen
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#f2fbd7" DESTINATION="ID_1709187608" ENDARROW="Default" ENDINCLINATION="113;234;" ID="Arrow_ID_229027216" STARTARROW="Default" STARTINCLINATION="-412;-14;"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1668474285441" ID="ID_318301259" MODIFIED="1668474305669" TEXT="Risiko: manche Plattformen definieren long double == double">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1668474317488" ID="ID_1121607924" MODIFIED="1668474342956" TEXT="erh&#xf6;he deshalb den Fehler-Assert auf einschli&#xdf;lich Grenze">
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1668353832314" ID="ID_1509712772" MODIFIED="1668353882082" TEXT="Test-Methoden ob ein Bruch &#xbb;giftig&#xab; ist">
 <linktarget COLOR="#07a5b2" DESTINATION="ID_1509712772" ENDARROW="Default" ENDINCLINATION="96;-4;" ID="Arrow_ID_1066574831" SOURCE="ID_9788121" STARTARROW="None" STARTINCLINATION="-282;15;"/>
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1668354018194" HGAP="39" ID="ID_1484604434" MODIFIED="1668354032742" TEXT="Testabdeckung..." VSHIFT="14">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1668354018194" HGAP="39" ID="ID_1484604434" MODIFIED="1668474197855" TEXT="Testabdeckung..." VSHIFT="14">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1668474155145" ID="ID_132764069" MODIFIED="1668474234849" TEXT="ein Beispiel mit Nenner nahe INT_MAX">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Rat poison = (MAXI-88)/(MAXI/7);
+    </p>
+    <p>
+      ...das ist n&#228;herungsweise Sieben...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1668474201756" ID="ID_1997612449" MODIFIED="1668474234849" TEXT="Quantisieren auf feineren Divisor">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1668474224181" ID="ID_721417455" MODIFIED="1668474234849" TEXT="negative Zahlen">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
-<node CREATED="1668295799991" ID="ID_192811111" MODIFIED="1668295828000" TEXT="Z&#xe4;hler gegen Limit pr&#xfc;fen und ggfs kappen"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668295799991" ID="ID_192811111" MODIFIED="1668474435369" TEXT="Z&#xe4;hler gegen Limit pr&#xfc;fen und ggfs kappen">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 </node>
