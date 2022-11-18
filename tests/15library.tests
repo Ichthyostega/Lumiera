@@ -508,6 +508,11 @@ return: 0
 END
 
 
+TEST "fractional arithmetics" Rational_test  <<END
+return: 0
+END
+
+
 TEST "RefArray_test" RefArray_test  <<END
 return: 0
 END

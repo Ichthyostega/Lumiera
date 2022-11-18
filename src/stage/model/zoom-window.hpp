@@ -168,6 +168,22 @@ namespace model {
     const uint  MAX_PX_WIDTH{1000000};
     const FSecs MAX_TIMESPAN{_FSecs(Time::MAX-Time::MIN)};
     const FSecs MICRO_TICK{1_r/Time::SCALE};
+    
+    /** Maximum quantiser to be handled in fractional arithmetics without hazard.
+     * @remark due to the common divisor normalisation, and the typical time computations,
+     *         DENOMINATOR * Time::Scale has to stay below INT_MAX, with some safety margin 
+     */
+    const int64_t LIM_HAZARD{int64_t{1} << 40 };
+    
+    inline int
+    toxicDegree (Rat poison)
+    {
+      const int64_t HAZARD_DEGREE{util::ilog2(LIM_HAZARD)};
+      int64_t magNum = util::ilog2(abs(poison.numerator()));
+      int64_t magDen = util::ilog2(abs(poison.denominator()));
+      int64_t degree = max (magNum, magDen);
+      return max (0, degree - HAZARD_DEGREE);
+    }
   }
   
   
@@ -461,14 +477,34 @@ namespace model {
        */
       
       static TimeValue
-      ensureNonEmpty (TimeVar& startRef, TimeValue endPoint)
+      ensureNonEmpty (Time start, TimeValue endPoint)
         {
-          if (startRef < endPoint)
-            return endPoint;
-          if (startRef <= Time::MAX - Time{DEFAULT_CANVAS})
-            return startRef + Time{DEFAULT_CANVAS};
-          startRef = Time::MAX - Time{DEFAULT_CANVAS};
-          return Time::MAX;
+          return (start < endPoint)? endPoint
+                                   : start + Time{DEFAULT_CANVAS};
+        }
+      
+      /**
+       * Check and possibly sanitise a rational number to avoid internal numeric overflow.
+       * Fractional arithmetics can be insidious, due to the frequent re-normalisation;
+       * seemingly "harmless" numbers with a large denominator can cause numeric wrap-around.
+       * As safeguard, by introducing a tiny error, problematic numbers can be re-quantised
+       * to smaller denominators; moreover, large numbers must be limit checked.
+       * @remark Both the denominator and the numerator must be kept below a toxic limit,
+       *         which is defined by the ability to multiply with Time::Scale without wrap-around.
+       *         This heuristic is based on the actual computations done with the zoom factor and
+       *         is thus specific to the ZoomWindow implementation. To sanitise, the denominator
+       *         is reduced logarithmically (bit-shift) sufficiently and then used as new quantiser,
+       *         thus ensuring that both denominator (=quantiser) and numerator are below limit.
+       * @note the check is based on the 2-logarithm of numerator and denominator, which is
+       *         pretty much the fastest possibility (even a simple comparison would have
+       *         to do the same). Values below threshold are simply passed-through. 
+       */
+      static Rat
+      detox (Rat poison)
+        {
+          int toxicity = toxicDegree (poison);
+          return toxicity ? util::reQuant(poison, poison.denominator() >> toxicity)
+                          : poison;
         }
       
       static Rat
@@ -493,7 +529,7 @@ namespace model {
           FSecs dur{afterWin_-startWin_};
           Rat adjMetric = Rat(pxWidth) / dur;
           ENSURE (pxWidth == rational_cast<uint> (adjMetric*dur));
-          return adjMetric;
+          return detox (adjMetric);
         }
       
       void
@@ -503,7 +539,7 @@ namespace model {
           REQUIRE (afterWin_> startWin_);
           FSecs dur{afterWin_-startWin_};
           uint pxWidth = rational_cast<uint> (px_per_sec_*dur);
-          dur = Rat(pxWidth) / changedMetric;
+          dur = Rat(pxWidth) / detox (changedMetric);
           dur = min (dur, MAX_TIMESPAN);
           dur = max (dur, MICRO_TICK); //   prevent window going void
           TimeVar timeDur{dur};
@@ -782,7 +818,7 @@ namespace model {
           posFactor = posFactor*posFactor*posFactor; // -1 ... +1 but accelerating towards boundaries
           posFactor = (posFactor + 1) / 2;           //  0 ... 1
           posFactor = util::limited (0, posFactor, 1);
-          return posFactor;
+          return detox (posFactor);
         }
     };
   

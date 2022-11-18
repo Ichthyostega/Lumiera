@@ -40,3 +40,8 @@ END
 PLANNED "Concept demonstration: retrieve session contents" SessionStructureMapping_test <<END
 return: 0
 END
+
+
+TEST "zoom timespan handling" ZoomWindow_test <<END
+return: 0
+END

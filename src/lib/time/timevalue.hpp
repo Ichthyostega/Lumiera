@@ -475,6 +475,10 @@ namespace time {
       Duration (TimeSpan const& interval);
       Duration (FrameCnt count, FrameRate const& fps);
       
+      Duration (Duration const& o)
+        : Duration{Offset(o)}
+        { }
+      
       static const Duration NIL;
       
       void accept (Mutation const&);

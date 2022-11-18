@@ -35,7 +35,7 @@
 #define SHOW_TYPE(_TY_) \
     cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
 #define SHOW_EXPR(_XX_) \
-    cout << "#Probe# " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
+    cout << "#--◆--# " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
 //////////////////////////////////////////////////////////////////////////////TODO
 
 
@@ -87,7 +87,9 @@ namespace test {
           
           verify_changeNotification();
           
-          toxic_corner_cases();
+          safeguard_zero_init();
+          safeguard_reversed_intervals();
+          safeguard_toxic_zoomFactor();
         }
       
       
@@ -486,47 +488,91 @@ namespace test {
         }
       
       
-      /** @test verify safeguards when used in extreme corner cases */
+      /** @test verify safeguards against empty initialisation interval */
       void
-      toxic_corner_cases()
+      safeguard_zero_init()
         {
-          {
-            ZoomWindow win{0, TimeSpan{_t(0), FSecs(0)}};
-            CHECK (win.visible()     == TimeSpan(_t(0), _t(23)));                // uses DEFAULT_CANVAS instead of empty TimeSpan
-            CHECK (win.px_per_sec()  == 25);                                     // falls back on default initial zoom factor
-            CHECK (win.pxWidth()     == 575);                                    // allocates pixels in accordance to default
-            
-            win.setOverallDuration(Duration{FSecs(50)});
-            win.setVisibleDuration(Duration{FSecs(0)});
-            CHECK (win.overallSpan() == TimeSpan(_t(0), _t(50)));
-            CHECK (win.visible()     == TimeSpan(_t(0), _t(23)));                // falls back to DEFAULT_CANVAS size
-            CHECK (win.pxWidth()     == 575);                                    // allocates pixels in accordance to default
-            
-            win.calibrateExtension(0);
-            CHECK (win.px_per_sec()  == 25);                                     // stays at default zoom factor
-            CHECK (win.pxWidth()     == 1);                                      // retains 1px window size
-            CHECK (win.visible().duration() == _t(1,25));                        // visible window has thus 1/25s duration
-            
-            win.setOverallRange(TimeSpan(_t(10), _t(0)));
-            SHOW_EXPR (win.overallSpan());
-            SHOW_EXPR (win.visible());
-            SHOW_EXPR (_raw(win.visible().duration()));
-            SHOW_EXPR (win.px_per_sec());
-            SHOW_EXPR (win.pxWidth());
-            
-            CHECK (TimeSpan(_t(10), _t(0)).duration() == Duration(FSecs(10)));    // TimeSpan is always properly oriented by construction
-            Duration evilReversed = static_cast<Duration> (_t(-10));
-            SHOW_EXPR (evilReversed);
-            SHOW_EXPR (TimeSpan(_t(20), evilReversed));
-
-          }
-          {
-            Rat poison{_raw(Time::MAX)-101010101010101010, _raw(Time::MAX)+23};
-            SHOW_EXPR(poison);
-            Rat sane = util::reQuant (poison, _raw(Time::MAX) / Time::SCALE);
-            SHOW_EXPR(sane);
-            SHOW_EXPR(rational_cast<double>(poison));
-            SHOW_EXPR(rational_cast<double>(sane));
+          ZoomWindow win{0, TimeSpan{_t(0), FSecs(0)}};
+          CHECK (win.visible()     == TimeSpan(_t(0), _t(23)));                  // uses DEFAULT_CANVAS instead of empty TimeSpan
+          CHECK (win.px_per_sec()  == 25);                                       // falls back on default initial zoom factor
+          CHECK (win.pxWidth()     == 575);                                      // allocates pixels in accordance to default
+          
+          win.setOverallDuration(Duration{FSecs(50)});
+          win.setVisibleDuration(Duration{FSecs(0)});
+          CHECK (win.overallSpan() == TimeSpan(_t(0), _t(50)));
+          CHECK (win.visible()     == TimeSpan(_t(0), _t(23)));                  // falls back to DEFAULT_CANVAS size
+          CHECK (win.pxWidth()     == 575);                                      // allocates pixels in accordance to default
+          
+          win.calibrateExtension(0);
+          CHECK (win.px_per_sec()  == 25);                                       // stays at default zoom factor
+          CHECK (win.pxWidth()     == 1);                                        // retains 1px window size
+          CHECK (win.visible().duration() == _t(1,25));                          // visible window has thus 1/25s duration
+        }
+      
+      
+      /** @test verify safeguards against reversed time intervals */
+      void
+      safeguard_reversed_intervals()
+        {
+          ZoomWindow win{1};
+          win.setVisibleDuration(Duration{FSecs(1,25)});
+          win.setOverallRange(TimeSpan(_t(10), _t(0)));                          // set an "reversed" overall time range
+          CHECK (win.overallSpan() == TimeSpan(_t(10), _t(20)));                 // range has been flipped forward
+          CHECK (win.visible().duration() == Time(40,0));
+          CHECK (win.px_per_sec() == 25);
+          CHECK (win.pxWidth() == 1);
+          
+          CHECK (TimeSpan(_t(10), _t(0)).duration() == Duration(FSecs(10)));     // TimeSpan is always properly oriented by construction
+          Time negaTime = _t(-10);
+          CHECK (negaTime < Time::ZERO);
+          Duration& evilDuration = reinterpret_cast<Duration&> (negaTime);       // attempt fabricate a subverted TimeSpan
+          CHECK (evilDuration < Time::ZERO);                                     // ...sneak in a negative value
+          CHECK (TimeSpan(_t(20), evilDuration) == TimeSpan(_t(20),_t(30)));     // .....yet won't make it get past Duration copy ctor!
+        }
+      
+      
+      /** @test demonstrate sanitising of "poisonous" fractional zoom factor
+       *        - construct an example factor of roughly 2/3, but using extremely large
+       *          numerator and denominator close to total time axis dimensions.
+       *        - even simple calculations with this poison value will fail
+       *        - construct a new quantiser, based on the number to be sanitised
+       *        - re-quantise the toxic number into this new quantiser
+       *        - the sanitised number is almost identical to the toxic original
+       *        - yet all the simple calculations can be carried out flawlessly
+       *        - both toxic and sanitised number lead to the same zoom timespan
+       */
+      void
+      safeguard_toxic_zoomFactor()
+        {
+          Rat poison{_raw(Time::MAX)-101010101010101010, _raw(Time::MAX)+23};
+          CHECK (poison == 206435633551724850_r/307445734561825883);
+          CHECK (poison + Time::SCALE < 0);                                      // simple calculations fail due to numeric overflow
+          CHECK (Time(FSecs(poison)) < Time::ZERO);                              // conversion to µ-ticks also leads to overflow
+          CHECK (-6 == _raw(Time(FSecs(poison))));
+          
+          using util::ilog2;
+          CHECK (40 == ilog2 (LIM_HAZARD));                                      // LIM_HAZARD is based on MAX_INT / Time::Scale
+          CHECK (57 == ilog2 (poison.numerator()));                              // use the leading bit position as size indicator
+          CHECK (58 == ilog2 (poison.denominator()));                            // use the maximum of numerator or denominator bit position
+          CHECK (58-40 == 18);                                                   // everything beyond LIM_HAZARD counts as "toxic"
+          
+          int toxicity = toxicDegree (poison);
+          CHECK (toxicity == 18);
+          int64_t quant = poison.denominator() >> toxicity;                      // shift away the excess toxic LSB
+          CHECK (quant == 1172812402961);
+          CHECK (ilog2 (quant) == ilog2 (LIM_HAZARD));
+          Rat detoxed = util::reQuant(poison, quant);                            // and use this "shortened" denominator for re-quantisation
+          CHECK (detoxed == 787489446837_r/1172812402961);                       // the resulting fraction uses way smaller numbers
+          CHECK (0.671453834f == rational_cast<float> (poison));                 // but yields approximately the same effective value
+          CHECK (0.671453834f == rational_cast<float> (detoxed));
+          
+          CHECK (detoxed+Time::SCALE == 1172813190450446837_r/1172812402961);    // result: we can calculate without failure
+          CHECK (Time(FSecs(detoxed)) > Time::ZERO);                             // can convert re-quantised number to µ-ticks
+          CHECK (671453 == _raw(Time(FSecs(detoxed))));
+                                                                                 // and resulting µ-ticks will be effectively the same
+          CHECK (1906 == _raw(TimeValue(1280 / rational_cast<long double>(poison))));
+          CHECK (1906 == _raw(TimeValue(1280 / rational_cast<long double>(detoxed))));
+          
             ZoomWindow win{};
 //            SHOW_EXPR(win.overallSpan());
 //            SHOW_EXPR(_raw(win.visible().duration()));
@@ -535,7 +581,6 @@ namespace test {
 //            CHECK (win.visible()     == TimeSpan(_t(0), _t(23)));
 //            CHECK (win.px_per_sec()  == 25);
 //            CHECK (win.pxWidth()     == 575);
-          }
         }
     };
   
