@@ -39653,14 +39653,23 @@
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1668703282413" HGAP="-88" ID="ID_1113812536" MODIFIED="1668703442612" TEXT="Input (changedMetric) mu&#xdf; entgiftet werden" VSHIFT="23">
 <edge COLOR="#f74141" STYLE="linear"/>
 <icon BUILTIN="clanbomber"/>
+<node COLOR="#338800" CREATED="1669473799874" ID="ID_1081409038" MODIFIED="1669473855697" TEXT="detox">
+<edge COLOR="#5e51c9"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668703200176" ID="ID_1915595988" MODIFIED="1668703230862" TEXT="conformMetricToWindow()">
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668703200176" ID="ID_1915595988" MODIFIED="1669479310199" TEXT="conformMetricToWindow()">
 <linktarget COLOR="#65253d" DESTINATION="ID_1915595988" ENDARROW="Default" ENDINCLINATION="9;-40;" ID="Arrow_ID_382076752" SOURCE="ID_1175951405" STARTARROW="None" STARTINCLINATION="-11;29;"/>
+<linktarget COLOR="#6a6a92" DESTINATION="ID_1915595988" ENDARROW="Default" ENDINCLINATION="37;170;" ID="Arrow_ID_1959668732" SOURCE="ID_4317582" STARTARROW="None" STARTINCLINATION="-243;-9;"/>
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1668703282413" ID="ID_1976673029" MODIFIED="1668703442613" TEXT="Output mu&#xdf; entgiftet werden">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1668703282413" ID="ID_1976673029" MODIFIED="1669473783896" TEXT="Output mu&#xdf; entgiftet werden">
 <edge COLOR="#f74141" STYLE="linear"/>
 <icon BUILTIN="clanbomber"/>
+<node COLOR="#338800" CREATED="1669473816376" HGAP="129" ID="ID_1549431699" MODIFIED="1669473872429" TEXT="detox" VSHIFT="4">
+<edge COLOR="#5e51c9"/>
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node CREATED="1668703253721" ID="ID_562775888" MODIFIED="1668703454748" TEXT="output &#x27f6; finaler Metrik-Faktor">
 <icon BUILTIN="messagebox_warning"/>
@@ -39694,6 +39703,7 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668263629246" ID="ID_1257614207" MODIFIED="1668265511791" TEXT="mutateScale (Rat changedMetric)">
 <arrowlink COLOR="#e62f5c" DESTINATION="ID_651838862" ENDARROW="Default" ENDINCLINATION="115;-4;" ID="Arrow_ID_1930230162" STARTARROW="None" STARTINCLINATION="-189;14;"/>
+<arrowlink COLOR="#6568c0" DESTINATION="ID_909162669" ENDARROW="Default" ENDINCLINATION="-5;-8;" ID="Arrow_ID_1791222915" STARTARROW="None" STARTINCLINATION="-21;18;"/>
 <linktarget COLOR="#aa6877" DESTINATION="ID_1257614207" ENDARROW="Default" ENDINCLINATION="271;-11;" ID="Arrow_ID_292335664" SOURCE="ID_1173749705" STARTARROW="None" STARTINCLINATION="314;29;"/>
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668265021139" HGAP="52" ID="ID_1943948610" MODIFIED="1668265531172" TEXT="pr&#xfc;fen: sehr kleine Metrik" VSHIFT="-2">
@@ -39706,11 +39716,42 @@
 <icon BUILTIN="clanbomber"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668784031268" ID="ID_1513611206" MODIFIED="1668784041478" TEXT="die bestehende Duration k&#xf6;nnte sehr gro&#xdf; sein">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1668784196906" ID="ID_1074723893" MODIFIED="1668784217911" TEXT="mit dem Nenner des changeFactor bereis &#xdc;berlauf m&#xf6;glich"/>
+<node CREATED="1668784229969" ID="ID_1956828761" MODIFIED="1668784257285" TEXT="neu errechnete Duration k&#xf6;nnte toxisch sein"/>
+<node CREATED="1668784295985" ID="ID_1396219141" MODIFIED="1668784307787" TEXT="Rechnung in mutateDuration() k&#xf6;nnte entgleisen"/>
+<node CREATED="1668784318075" ID="ID_901869945" MODIFIED="1668784338191" TEXT="wird alles zwar in conformWindowToMetric(changed) aufgefangen..."/>
+<node CREATED="1668784339323" ID="ID_1591426559" MODIFIED="1668784345302" TEXT="..is aber trotzdem falsch"/>
 </node>
-<node COLOR="#435e98" CREATED="1668263638141" ID="ID_909162669" MODIFIED="1668270369633" TEXT="mutateDuration (FSecs duration, uint px =0)">
+</node>
+<node COLOR="#435e98" CREATED="1668263638141" ID="ID_909162669" MODIFIED="1669477898780" TEXT="mutateDuration (FSecs duration, uint px =0)">
 <arrowlink COLOR="#965e8b" DESTINATION="ID_1175951405" ENDARROW="Default" ENDINCLINATION="253;-8;" ID="Arrow_ID_354964355" STARTARROW="None" STARTINCLINATION="302;-12;"/>
+<linktarget COLOR="#6568c0" DESTINATION="ID_909162669" ENDARROW="Default" ENDINCLINATION="-5;-8;" ID="Arrow_ID_1791222915" SOURCE="ID_1257614207" STARTARROW="None" STARTINCLINATION="-21;18;"/>
 <node CREATED="1668270374842" HGAP="21" ID="ID_1976979366" MODIFIED="1668270395644" TEXT="delegiert an conformWindowToMetric(Rat)" VSHIFT="9">
 <icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1669479155534" ID="ID_620129730" MODIFIED="1669479162094" TEXT="adaptWindowToPixels(px)">
+<node COLOR="#435e98" CREATED="1669479175476" ID="ID_590715378" MODIFIED="1669479353924" TEXT="Arithmetik erscheint ungef&#xe4;hrlich">
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1669479204552" ID="ID_29297928" MODIFIED="1669479365083" TEXT="unter der Annahme da&#xdf; bestehende Metrik sauber ist">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#435e98" CREATED="1669479223678" ID="ID_4317582" MODIFIED="1669479361432" TEXT="au&#xdf;erdem: Ausgang durch conformMetricToWindow">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und das betrachte ich als gutm&#252;tig und hinreichend abgesichert...
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#6a6a92" DESTINATION="ID_1915595988" ENDARROW="Default" ENDINCLINATION="37;170;" ID="Arrow_ID_1959668732" STARTARROW="None" STARTINCLINATION="-243;-9;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668263652677" ID="ID_759637608" MODIFIED="1668265848826" TEXT="anchorWindowAtPosition (FSecs canvasOffset)">
@@ -39819,11 +39860,36 @@
 </node>
 </node>
 </node>
-<node CREATED="1668554900067" ID="ID_1302892550" MODIFIED="1668554974542" TEXT="kritische Wirkpfade">
-<node CREATED="1668555028046" ID="ID_660534369" MODIFIED="1668555056498" TEXT="sehr kleine Metrix (&#x2259; exterm zoom-out)"/>
-<node CREATED="1668555072594" ID="ID_742229180" MODIFIED="1668555089126" TEXT="Ansteuern exterm gro&#xdf;er Zeit-Positionen"/>
-<node CREATED="1668555157385" ID="ID_1157546672" MODIFIED="1668555164702" TEXT="Time-wrap nach extremem Offset"/>
-<node CREATED="1668555183502" ID="ID_1287974241" MODIFIED="1668555191961" TEXT="Einspeisen giftiger Metrik"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1668554900067" HGAP="80" ID="ID_1302892550" MODIFIED="1669473989333" TEXT="kritische Wirkpfade abtesten" VSHIFT="9">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668555028046" ID="ID_660534369" MODIFIED="1669473993482" TEXT="sehr kleine Metrix (&#x2259; exterm zoom-out)">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1669475559599" ID="ID_460741178" MODIFIED="1669475567282" TEXT="setVisiblePos mit giftigem Faktor"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668555072594" ID="ID_742229180" MODIFIED="1669473993488" TEXT="Ansteuern exterm gro&#xdf;er Zeit-Positionen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1669475536331" ID="ID_486161883" MODIFIED="1669475548565" TEXT="setVisiblePos mit extremer Time"/>
+<node CREATED="1669475549345" ID="ID_234786683" MODIFIED="1669475556499" TEXT="setVisiblePos mit extremem Faktor"/>
+<node CREATED="1669479474484" ID="ID_1657847338" MODIFIED="1669479489366" TEXT="alle Mutatoren, die conformWindowToMetric() verwenden"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668555157385" ID="ID_1157546672" MODIFIED="1669473993486" TEXT="Time-wrap nach extremem Offset">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1668555183502" ID="ID_1287974241" MODIFIED="1669488176332" TEXT="Einspeisen giftiger Metrik">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1669478124298" ID="ID_1987069808" MODIFIED="1669488168358" TEXT="Fall-1 : kappen auf Canvas-Grenzen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1669478154709" ID="ID_499422673" MODIFIED="1669488173372" TEXT="Fall-2 : hinreichend gro&#xdf;er Canvas">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669479930775" ID="ID_196873456" MODIFIED="1669480034941" TEXT="Fall-3 : setVisiblePos mit giftigem faktor">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669480019215" ID="ID_930072077" MODIFIED="1669480034942" TEXT="Fall-4 : setVisiblePos mit extrem entfernter Position">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668180030777" ID="ID_1319796356" MODIFIED="1668180136077" TEXT="1 &#xb5;-Tick">

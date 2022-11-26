@@ -171,7 +171,7 @@ namespace model {
     
     /** Maximum quantiser to be handled in fractional arithmetics without hazard.
      * @remark due to the common divisor normalisation, and the typical time computations,
-     *         DENOMINATOR * Time::Scale has to stay below INT_MAX, with some safety margin 
+     *         DENOMINATOR * Time::Scale has to stay below INT_MAX, with some safety margin
      */
     const int64_t LIM_HAZARD{int64_t{1} << 40 };
     
@@ -527,9 +527,9 @@ namespace model {
           REQUIRE (pxWidth > 0);
           REQUIRE (afterWin_> startWin_);
           FSecs dur{afterWin_-startWin_};
-          Rat adjMetric = Rat(pxWidth) / dur;
+          Rat adjMetric = detox (Rat(pxWidth) / dur);
           ENSURE (pxWidth == rational_cast<uint> (adjMetric*dur));
-          return detox (adjMetric);
+          return adjMetric;
         }
       
       void
@@ -541,7 +541,8 @@ namespace model {
           uint pxWidth = rational_cast<uint> (px_per_sec_*dur);
           dur = Rat(pxWidth) / detox (changedMetric);
           dur = min (dur, MAX_TIMESPAN);
-          dur = max (dur, MICRO_TICK); //   prevent window going void
+          dur = max (dur, MICRO_TICK); // prevent window going void
+          dur = detox (dur);          //  prevent integer wrap in time conversion   
           TimeVar timeDur{dur};
           // prefer bias towards increased window instead of increased metric
           if (not isMicroGridAligned (dur))
@@ -673,7 +674,7 @@ namespace model {
       void
       mutateScale (Rat changedMetric)
         {
-          changedMetric = min (changedMetric, ZOOM_MAX_RESOLUTION);
+          changedMetric = min (detox(changedMetric), ZOOM_MAX_RESOLUTION);
           if (changedMetric == px_per_sec_) return;
           
           uint px{pxWidth()};
@@ -687,7 +688,7 @@ namespace model {
               px_per_sec_ = conformMetricToWindow(px);
             }
           else
-            mutateDuration (dur);
+            mutateDuration (dur, px);
           ensureInvariants (px);
         }
       

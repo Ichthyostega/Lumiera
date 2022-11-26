@@ -90,6 +90,10 @@ namespace test {
           safeguard_zero_init();
           safeguard_reversed_intervals();
           safeguard_toxic_zoomFactor();
+          safeguard_poisonousMetric();
+          safeguard_extremeZoomOut();
+          safeguard_extremeTimePos();
+          safeguard_extremeOffset();
         }
       
       
@@ -546,6 +550,7 @@ namespace test {
         {
           Rat poison{_raw(Time::MAX)-101010101010101010, _raw(Time::MAX)+23};
           CHECK (poison == 206435633551724850_r/307445734561825883);
+          CHECK (2_r/3 < poison and poison < 1);                                 // looks innocuous...
           CHECK (poison + Time::SCALE < 0);                                      // simple calculations fail due to numeric overflow
           CHECK (Time(FSecs(poison)) < Time::ZERO);                              // conversion to µ-ticks also leads to overflow
           CHECK (-6 == _raw(Time(FSecs(poison))));
@@ -566,14 +571,68 @@ namespace test {
           CHECK (0.671453834f == rational_cast<float> (poison));                 // but yields approximately the same effective value
           CHECK (0.671453834f == rational_cast<float> (detoxed));
           
-          CHECK (detoxed+Time::SCALE == 1172813190450446837_r/1172812402961);    // result: we can calculate without failure
+          CHECK (detoxed+Time::SCALE == 1172813190450446837_r/1172812402961);    // result: usual calculations without failure
           CHECK (Time(FSecs(detoxed)) > Time::ZERO);                             // can convert re-quantised number to µ-ticks
           CHECK (671453 == _raw(Time(FSecs(detoxed))));
                                                                                  // and resulting µ-ticks will be effectively the same
           CHECK (1906 == _raw(TimeValue(1280 / rational_cast<long double>(poison))));
           CHECK (1906 == _raw(TimeValue(1280 / rational_cast<long double>(detoxed))));
+        }
+      
+      
+      /** @test verify ZoomWindow code can handle "poisonous" Zoom-Factor parameters
+       */
+      void
+      safeguard_poisonousMetric()
+        {
           
             ZoomWindow win{};
+          CHECK (win.visible() == win.overallSpan());                            // by default window spans complete canvas
+          CHECK (win.visible().duration() == _t(23));                            // ...and has just some handsome extension
+          CHECK (win.px_per_sec() == 25);
+          CHECK (win.pxWidth() == 575);
+
+          Rat poison{_raw(Time::MAX)-101010101010101010, _raw(Time::MAX)+23};
+          CHECK (0 < poison and poison < 1);
+          win.setMetric (poison);                                                // inject an evil new value for the metric
+          CHECK (win.visible() == win.overallSpan());                            // however, nothing happens
+          CHECK (win.visible().duration() == _t(23));                            // since the window is confined to overall canvas size
+          CHECK (win.visible() == TimeSpan(_t(0), _t(23)));                      // Note: this calculation is fail-safe
+          CHECK (win.px_per_sec() == 25);
+          CHECK (win.pxWidth() == 575);
+
+          win.setOverallDuration(Duration(Time::MAX));                           // second test: expand canvas to allow for actual adjustment
+          CHECK (win.overallSpan().duration() == TimeValue{307445734561825860}); // now canvas has ample size (half the possible maximum size)
+          CHECK (win.overallSpan().duration() == Time::MAX);
+          CHECK (win.visible().duration() == _t(23));                            // while the visible part remains unaltered
+
+          win.setMetric (poison);                                                // Now attempt again to poison the zoom calculations...
+          CHECK (win.overallSpan().duration() == Time::MAX);                     // overall canvas unchanged
+          CHECK (win.visible().duration() == TimeValue{856350691});              // visible window expanded (a zoom-out, as required)
+          CHECK (win.px_per_sec() == Rat{win.pxWidth()} / _FSecs(win.visible().duration()));
+          float approxPoison = rational_cast<float> (poison);                    // the provided (poisonous) metric factor...
+          CHECK (approxPoison == 0.671453834f);                                  // ...is approximately the same...
+          float approxNewMetric = rational_cast<float> (win.px_per_sec());       // ...as the actual new metric factor we got
+          CHECK (approxNewMetric == 0.671453893f);
+          CHECK (win.px_per_sec() != poison);                                    // but it is not exactly the same
+          CHECK (win.px_per_sec()  < poison);                                    // rather, it is biased towards slightly smaller values
+          
+          Rat poisonousDuration = win.pxWidth() / poison;                        // Now, to demonstrate this "poison" was actually dangerous
+          CHECK (poisonousDuration == 7071251894921995309_r/8257425342068994);   // ...when we attempt to calculate the new duration directly....
+          CHECK (Time(poisonousDuration) < Time::ZERO);                          // ...then a conversion to TimeValue will cause integer wrap
+          CHECK(856.350708f == rational_cast<float> (poisonousDuration));        // yet numerically the duration actually established is almost the same
+          CHECK(856.350708f == rational_cast<float> (_FSecs(win.visible().duration())));
+          CHECK (win.px_per_sec() == 575000000_r/856350691);                     // the new metric however is comprised of sanitised fractional numbers
+          CHECK (win.pxWidth() == 575);                                          // and the existing pixel width was not changed
+        }
+      
+      
+      /** @test verify ZoomWindow code can handle extreme zoom-out
+       *        to reveal a timeline of epic dimensions....
+       */
+      void
+      safeguard_extremeZoomOut()
+        {
 //            SHOW_EXPR(win.overallSpan());
 //            SHOW_EXPR(_raw(win.visible().duration()));
 //            SHOW_EXPR(win.px_per_sec());
@@ -581,6 +640,22 @@ namespace test {
 //            CHECK (win.visible()     == TimeSpan(_t(0), _t(23)));
 //            CHECK (win.px_per_sec()  == 25);
 //            CHECK (win.pxWidth()     == 575);
+        }
+      
+      
+      /** @test verify ZoomWindow code can navigate extremal time positions.
+       */
+      void
+      safeguard_extremeTimePos()
+        {
+        }
+      
+      
+      /** @test verify ZoomWindow code is protected against excess scrolling.
+       */
+      void
+      safeguard_extremeOffset()
+        {
         }
     };
   
