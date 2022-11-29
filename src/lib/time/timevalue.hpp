@@ -480,6 +480,7 @@ namespace time {
         { }
       
       static const Duration NIL;
+      static const Duration MAX ;
       
       void accept (Mutation const&);
       

@@ -140,6 +140,13 @@ namespace util {
   }
   
   inline bool
+  can_represent_Product (Rat a, Rat b)
+  {
+    return can_represent_Product(a.numerator(), b.numerator())
+       and can_represent_Product(a.denominator(), b.denominator());
+  }
+  
+  inline bool
   can_represent_Sum (Rat a, Rat b)
   {
     return can_represent_Product(a.numerator(), b.denominator())

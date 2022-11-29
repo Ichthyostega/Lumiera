@@ -399,9 +399,11 @@ namespace test {
           
           win.setVisiblePos(0.50);
           CHECK (win.visible()     == TimeSpan(_t((40/2-16) -8), FSecs(16)));    // window positioned to centre of canvas
+          CHECK (win.visible().start() ==      _t(-4));                          // (canvas was already positioned asymmetrically)
           
           win.setVisiblePos(-0.50);
           CHECK (win.visible()     == TimeSpan(_t(-16-40/2), FSecs(16)));        // relative positioning not limited at lower bound
+          CHECK (win.visible().start() ==      _t(-36));                         //   (causing also further expansion of canvas) 
           win.setVisiblePos(_t(200));                                            // absolute positioning likewise not limited
           CHECK (win.visible()     == TimeSpan(_t(200-16), FSecs(16)));          // but anchored according to relative anchor pos
           CHECK (win.px_per_sec()  == 80);                                       // metric retained
@@ -580,13 +582,16 @@ namespace test {
         }
       
       
-      /** @test verify ZoomWindow code can handle "poisonous" Zoom-Factor parameters
+      /** @test verify ZoomWindow code can handle "poisonous" fractional number parameters
+       *        - toxic zoom factor passed through ZoomWindow::setMetric(Rat)
+       *        - toxic proportion factor passed to ZoomWindow::setVisiblePos(Rat)
+       *        - indirectly cause toxic posFactor in ZoomWindow::anchorWindowAtPosition(FSecs)
+       *          by providing a target position very far off current window location
        */
       void
       safeguard_poisonousMetric()
         {
-          
-            ZoomWindow win{};
+          ZoomWindow win{};
           CHECK (win.visible() == win.overallSpan());                            // by default window spans complete canvas
           CHECK (win.visible().duration() == _t(23));                            // ...and has just some handsome extension
           CHECK (win.px_per_sec() == 25);
@@ -624,6 +629,26 @@ namespace test {
           CHECK(856.350708f == rational_cast<float> (_FSecs(win.visible().duration())));
           CHECK (win.px_per_sec() == 575000000_r/856350691);                     // the new metric however is comprised of sanitised fractional numbers
           CHECK (win.pxWidth() == 575);                                          // and the existing pixel width was not changed
+          
+            SHOW_EXPR(win.overallSpan());
+            SHOW_EXPR(_raw(win.visible().duration()));
+            SHOW_EXPR(win.px_per_sec());
+            SHOW_EXPR(win.pxWidth());
+          win.setVisiblePos (poison);                                            // Yet another way to sneak in our toxic value...
+            SHOW_EXPR(win.overallSpan());
+            SHOW_EXPR(_raw(win.overallSpan()));
+            SHOW_EXPR(_raw(win.overallSpan().duration()));
+            SHOW_EXPR(_raw(win.visible().duration()));
+            SHOW_EXPR(win.px_per_sec());
+            SHOW_EXPR(win.pxWidth());
+            SHOW_EXPR(_raw(win.overallSpan().duration()) * rational_cast<double> (poison))
+          Time targetPos{TimeValue{gavl_time_t(_raw(win.overallSpan().duration()) * rational_cast<double> (poison))}};
+            SHOW_EXPR(targetPos);
+            SHOW_EXPR(_raw(targetPos));
+            SHOW_EXPR(_raw(win.visible().start()))
+            SHOW_EXPR(_raw(win.visible().end()))
+            SHOW_EXPR(bool(win.visible().start() < targetPos))
+            SHOW_EXPR(bool(win.visible().end() > targetPos))
         }
       
       

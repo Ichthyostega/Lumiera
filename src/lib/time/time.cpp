@@ -283,8 +283,11 @@ namespace time {
   
   
   /** constant to indicate "no duration" */
-  const Duration Duration::NIL (Time::ZERO);
+  const Duration Duration::NIL {Time::ZERO};
   
+  /** maximum possible temporal extension */
+  const Duration Duration::MAX {Offset{Time::MIN, Time::MAX}};
+
   
 }} // namespace lib::Time
 

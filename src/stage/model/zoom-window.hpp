@@ -111,6 +111,8 @@ namespace model {
   
   using util::Rat;
   using util::rational_cast;
+  using util::can_represent_Product;
+  using util::reQuant;
   
   using util::min;
   using util::max;
@@ -166,7 +168,7 @@ namespace model {
     const FSecs DEFAULT_CANVAS{23};
     const Rat   DEFAULT_METRIC{25};
     const uint  MAX_PX_WIDTH{1000000};
-    const FSecs MAX_TIMESPAN{_FSecs(Time::MAX-Time::MIN)};
+    const FSecs MAX_TIMESPAN{_FSecs(Duration::MAX)};
     const FSecs MICRO_TICK{1_r/Time::SCALE};
     
     /** Maximum quantiser to be handled in fractional arithmetics without hazard.
@@ -174,15 +176,15 @@ namespace model {
      *         DENOMINATOR * Time::Scale has to stay below INT_MAX, with some safety margin
      */
     const int64_t LIM_HAZARD{int64_t{1} << 40 };
+    const int64_t HAZARD_DEGREE{util::ilog2(LIM_HAZARD)};
     
     inline int
-    toxicDegree (Rat poison)
+    toxicDegree (Rat poison, const int64_t THRESHOLD =HAZARD_DEGREE)
     {
-      const int64_t HAZARD_DEGREE{util::ilog2(LIM_HAZARD)};
       int64_t magNum = util::ilog2(abs(poison.numerator()));
       int64_t magDen = util::ilog2(abs(poison.denominator()));
       int64_t degree = max (magNum, magDen);
-      return max (0, degree - HAZARD_DEGREE);
+      return max (0, degree - THRESHOLD);
     }
   }
   
@@ -426,7 +428,7 @@ namespace model {
       setVisiblePos (Rat percentage)
         {
           FSecs canvasDuration{afterAll_-startAll_};
-          anchorWindowAtPosition (canvasDuration*percentage);
+          anchorWindowAtPosition (scaleSafe (canvasDuration, percentage));
           fireChangeNotification();
         }
       
@@ -495,17 +497,47 @@ namespace model {
        *         is thus specific to the ZoomWindow implementation. To sanitise, the denominator
        *         is reduced logarithmically (bit-shift) sufficiently and then used as new quantiser,
        *         thus ensuring that both denominator (=quantiser) and numerator are below limit.
+       * @warning the rational number must not be to large overall; this heuristic will fail
+       *         on fractions with very large numerator and small denominator — however, for
+       *         the ZoomWindow, this case is not relevant, since the zoom factor is limited,
+       *         and other usages of rational numbers can be range checked explicitly.
        * @note the check is based on the 2-logarithm of numerator and denominator, which is
        *         pretty much the fastest possibility (even a simple comparison would have
-       *         to do the same). Values below threshold are simply passed-through. 
+       *         to do the same). Values below threshold are simply passed-through.
        */
       static Rat
       detox (Rat poison)
         {
           int toxicity = toxicDegree (poison);
-          return toxicity ? util::reQuant(poison, poison.denominator() >> toxicity)
+          return toxicity ? reQuant (poison, max (poison.denominator() >> toxicity, 64))
                           : poison;
         }
+      
+      /**
+       * Scale a possibly large time duration by a rational factor, while attempting to avoid
+       * integer wrap-around. Obviously this is only a heuristic, yet adequate within the
+       * framework of ZoomWindow, where the end result is pixel aligned anyway.
+       */
+      static FSecs
+      scaleSafe (FSecs duration, Rat factor)
+        {
+          auto approx = [](Rat r){ return rational_cast<double> (r); };
+          
+          if (not util::can_represent_Product(duration, factor))
+            {
+              if (approx(MAX_TIMESPAN) < approx(duration) * approx (factor))
+                return MAX_TIMESPAN;  // exceeds limits of time representation => cap the result
+              
+              // slightly adjust the factor so that the time-base denominator cancels out,
+              // allowing to calculate the product without dangerous multiplication of large numbers
+              factor = 1_r / reQuant (1_r/factor, duration.denominator());
+              return detox (duration * factor);
+            }
+          else
+            // just calculate ordinary numbers...
+            return duration * factor;
+        }
+      
       
       static Rat
       establishMetric (uint pxWidth, Time startWin, Time afterWin)
@@ -732,7 +764,7 @@ namespace model {
           FSecs duration{afterWin_-startWin_};
           Rat posFactor = canvasOffset / FSecs{afterAll_-startAll_};
           posFactor = parabolicAnchorRule (posFactor); // also limited 0...1
-          FSecs partBeforeAnchor = posFactor * duration;
+          FSecs partBeforeAnchor = scaleSafe (duration, posFactor);
           startWin_ = startAll_ + (canvasOffset - partBeforeAnchor);
           establishWindowDuration (duration);
           startAll_ = min (startAll_, startWin_);
@@ -815,6 +847,8 @@ namespace model {
       parabolicAnchorRule (Rat posFactor)
         {
           posFactor = util::limited (0, posFactor, 1);
+          if (toxicDegree(posFactor, 20))      //  prevent integer wrap
+            posFactor = util::reQuant(posFactor, 1 << 20);
           posFactor = (2*posFactor - 1);             // -1 ... +1
           posFactor = posFactor*posFactor*posFactor; // -1 ... +1 but accelerating towards boundaries
           posFactor = (posFactor + 1) / 2;           //  0 ... 1
