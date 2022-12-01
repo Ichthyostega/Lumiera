@@ -46,6 +46,7 @@
 #include "lib/error.hpp"
 #include "lib/time.h"
 #include "lib/time/timevalue.hpp"
+#include "lib/rational.hpp"
 #include "lib/util-quant.hpp"
 #include "lib/format-string.hpp"
 
@@ -336,7 +337,10 @@ lumiera_tmpbuf_print_time (gavl_time_t time)
 gavl_time_t
 lumiera_rational_to_time (FSecs const& fractionalSeconds)
 {
-  return rational_cast<gavl_time_t> (fractionalSeconds * lib::time::TimeValue::SCALE);
+  return gavl_time_t(util::reQuant (fractionalSeconds.numerator()
+                                   ,fractionalSeconds.denominator()
+                                   ,lib::time::TimeValue::SCALE
+                                   ));
 }
 
 gavl_time_t

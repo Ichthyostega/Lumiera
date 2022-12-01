@@ -116,6 +116,7 @@ namespace model {
   
   using util::min;
   using util::max;
+  using util::sgn;
   
   namespace { ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #1259 : reorganise raw time base datatypes : need conversion path into FSecs
     /**
@@ -142,6 +143,12 @@ namespace model {
       return 0 == (duration.numerator() * Time::SCALE)
                   % duration.denominator();
     }
+    
+    inline double
+    approx (Rat r)
+      {
+        return util::rational_cast<double> (r);
+      }
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1261 : why the hell did I define time entities to be immutable. Looks like a "functional programming" fad in hindsight
     /** @todo we need these only because the blurry distinction between
@@ -521,12 +528,13 @@ namespace model {
       static FSecs
       scaleSafe (FSecs duration, Rat factor)
         {
-          auto approx = [](Rat r){ return rational_cast<double> (r); };
-          
           if (not util::can_represent_Product(duration, factor))
             {
-              if (approx(MAX_TIMESPAN) < approx(duration) * approx (factor))
-                return MAX_TIMESPAN;  // exceeds limits of time representation => cap the result
+              auto guess{approx(duration) * approx (factor)};
+              if (approx(MAX_TIMESPAN) < abs(guess))
+                return MAX_TIMESPAN * sgn(guess); // exceeds limits of time representation => cap the result
+              if (0 == guess)
+                return 0;
               
               // slightly adjust the factor so that the time-base denominator cancels out,
               // allowing to calculate the product without dangerous multiplication of large numbers
@@ -536,6 +544,52 @@ namespace model {
           else
             // just calculate ordinary numbers...
             return duration * factor;
+        }
+      
+      /**
+       * Calculate sum (or difference) of possibly large time durations, avoiding integer wrap-around.
+       * Again, this is a heuristics, based on re-quantisation to a smaller common denominator.
+       * @return exact result if representable, otherwise approximation
+       * @note result is capped to MAX_TIMESPAN when exceeding domain
+       */
+      static FSecs
+      addSafe (FSecs t1, FSecs t2)
+        {
+          if (not util::can_represent_Sum (t1,t2))
+            {
+              auto guess{approx(t1) + approx(t2)};
+              if (approx(MAX_TIMESPAN) < abs(guess))
+                return MAX_TIMESPAN * sgn(guess); // exceeds limits => cap the result
+              
+              // re-Quantise numbers to achieve a common denominator,
+              // thus avoiding to multiply numerators for normalisation
+              int64_t n1 = t1.numerator();
+              int64_t d1 = t1.denominator();
+              int s1 = sgn(n1)*sgn(d1);
+              n1 = abs(n1); d1 = abs(d1);
+              int64_t n2 = t2.numerator();
+              int64_t d2 = t2.denominator();
+              int s2 = sgn(n2)*sgn(d2);
+              n2 = abs(n2); d2 = abs(d2);
+              // quantise to smaller denominator to avoid increasing any numerator
+              int64_t u = d1<d2? d1:d2;
+              if (u < Time::SCALE)
+                // regarding precision, quantising to µ-grid is the better solution 
+                u = Time::SCALE;
+              else //re-quantise to common denominator more fine-grained than µ-grid
+                if (s1*s2 > 0  // check numerators to detect danger of wrap-around
+                    and (62<util::ilog2(n1) or 62<util::ilog2(n2)))
+                  u >>= 1;   // danger zone! wrap-around imminent
+              
+              n1 = d1==u? n1 : reQuant (n1,d1, u);  
+              n2 = d2==u? n2 : reQuant (n2,d2, u);
+              FSecs res{s1*n1 + s2*n2, u};
+              ENSURE (abs (guess - approx(res)) < 1.0/u);
+              return detox (res);
+            }
+          else
+            // directly calculate ordinary numbers...
+            return t1 + t2;
         }
       
       
@@ -765,7 +819,7 @@ namespace model {
           Rat posFactor = canvasOffset / FSecs{afterAll_-startAll_};
           posFactor = parabolicAnchorRule (posFactor); // also limited 0...1
           FSecs partBeforeAnchor = scaleSafe (duration, posFactor);
-          startWin_ = startAll_ + (canvasOffset - partBeforeAnchor);
+          startWin_ = startAll_ + addSafe (canvasOffset, -partBeforeAnchor);
           establishWindowDuration (duration);
           startAll_ = min (startAll_, startWin_);
           afterAll_ = max (afterAll_, afterWin_);

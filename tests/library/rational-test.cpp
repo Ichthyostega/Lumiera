@@ -359,11 +359,12 @@ namespace test {
           CHECK (util::toString (sleazy+1) == "134217727/16777216sec");
           
           // also works towards larger denominator, or with negative numbers...
-          CHECK (reQuant (poison, MAX-7) == 104811045873349724_r/14973006553335675);
+          CHECK (reQuant (1/poison, MAX) == 1317624576693539413_r/9223372036854775807);
           CHECK (reQuant (-poison, 7777) == -54438_r/ 7777);
           CHECK (reQuant (poison, -7777) == -54438_r/-7777);
           
-          CHECK (approx (reQuant (poison, MAX-7)) == 7);
+          CHECK (approx (         1/poison      ) == 0.142857149f);
+          CHECK (approx (reQuant (1/poison, MAX)) == 0.142857149f);
           CHECK (approx (reQuant (poison,  7777)) == 6.99987125f);
         }
     };

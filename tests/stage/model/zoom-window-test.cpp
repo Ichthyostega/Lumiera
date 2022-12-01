@@ -554,8 +554,10 @@ namespace test {
           CHECK (poison == 206435633551724850_r/307445734561825883);
           CHECK (2_r/3 < poison and poison < 1);                                 // looks innocuous...
           CHECK (poison + Time::SCALE < 0);                                      // simple calculations fail due to numeric overflow
-          CHECK (Time(FSecs(poison)) < Time::ZERO);                              // conversion to µ-ticks also leads to overflow
-          CHECK (-6 == _raw(Time(FSecs(poison))));
+          CHECK (poison * Time::SCALE < 0);
+          CHECK (-6 == rational_cast<gavl_time_t>(poison * Time::SCALE));        // naive conversion to µ-ticks would leads to overflow
+          CHECK (671453 == _raw(Time(FSecs(poison))));                           // however the actual conversion routine is safeguarded
+          CHECK (671453.812f == rational_cast<float>(poison)*Time::SCALE);
           
           using util::ilog2;
           CHECK (40 == ilog2 (LIM_HAZARD));                                      // LIM_HAZARD is based on MAX_INT / Time::Scale
@@ -624,7 +626,7 @@ namespace test {
           
           Rat poisonousDuration = win.pxWidth() / poison;                        // Now, to demonstrate this "poison" was actually dangerous
           CHECK (poisonousDuration == 7071251894921995309_r/8257425342068994);   // ...when we attempt to calculate the new duration directly....
-          CHECK (Time(poisonousDuration) < Time::ZERO);                          // ...then a conversion to TimeValue will cause integer wrap
+          CHECK (poisonousDuration * Time::SCALE < 0);                           // ...then a conversion to TimeValue will cause integer wrap
           CHECK(856.350708f == rational_cast<float> (poisonousDuration));        // yet numerically the duration actually established is almost the same
           CHECK(856.350708f == rational_cast<float> (_FSecs(win.visible().duration())));
           CHECK (win.px_per_sec() == 575000000_r/856350691);                     // the new metric however is comprised of sanitised fractional numbers
@@ -642,7 +644,8 @@ namespace test {
             SHOW_EXPR(win.px_per_sec());
             SHOW_EXPR(win.pxWidth());
             SHOW_EXPR(_raw(win.overallSpan().duration()) * rational_cast<double> (poison))
-          Time targetPos{TimeValue{gavl_time_t(_raw(win.overallSpan().duration()) * rational_cast<double> (poison))}};
+          TimeValue targetPos{gavl_time_t(_raw(win.overallSpan().duration())
+                                          * rational_cast<double> (poison))};
             SHOW_EXPR(targetPos);
             SHOW_EXPR(_raw(targetPos));
             SHOW_EXPR(_raw(win.visible().start()))

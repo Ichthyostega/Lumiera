@@ -40386,6 +40386,122 @@
 <node COLOR="#338800" CREATED="1669682825470" ID="ID_906501375" MODIFIED="1669682838860" TEXT="verallgemeinert: scaleSafe()">
 <icon BUILTIN="button_ok"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669911724009" ID="ID_289279043" MODIFIED="1669911765633" TEXT="verallgemeinert: addSafe()">
+<linktarget COLOR="#a32f55" DESTINATION="ID_289279043" ENDARROW="Default" ENDINCLINATION="167;16;" ID="Arrow_ID_333407901" SOURCE="ID_797370792" STARTARROW="None" STARTINCLINATION="-174;-8;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669932544504" ID="ID_750418137" MODIFIED="1669932569275" TEXT="FSecs &#x27fc; &#xb5;-Tick absichern">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1669932578600" ID="ID_974803158" MODIFIED="1669932591544" TEXT="das erweist sich als h&#xe4;ufige Quelle von wrap-arounds">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1669932596081" ID="ID_1661291024" MODIFIED="1669932618249" TEXT="dabei ist es einfach blo&#xdf; naiv gecodet">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1669932620086" ID="ID_673992117" MODIFIED="1669932631571" TEXT="stattdessen die re-Quantisierung nutzen">
+<icon BUILTIN="idea"/>
+<node CREATED="1669932632788" ID="ID_831065868" MODIFIED="1669932761462" TEXT="nur dann hier auf 1/1000000">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1669932640820" ID="ID_1387350127" MODIFIED="1669932675887" TEXT="dazu eine Variante f&#xfc;r den Z&#xe4;hler allein schaffen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1669932653473" ID="ID_120882361" MODIFIED="1669932684292" TEXT="kann sogar den Rat-Fall hierauf zur&#xfc;ckf&#xfc;hren">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1669932686823" ID="ID_1630699394" MODIFIED="1669932696052" TEXT="Numerik-Probleme">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1669932700323" ID="ID_1606021601" MODIFIED="1669932716796" TEXT="tja... Float bleibt Float selbst bei 128bit">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1669932728399" ID="ID_20790978" MODIFIED="1669932757508">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      man <b>mu&#223;</b>&#160;Floating-point runden wenn man glatte Werte will
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#435e98" CREATED="1669932772210" ID="ID_787506618" MODIFIED="1669933074821" TEXT="Runden oder Tuncate?">
+<icon BUILTIN="help"/>
+<node CREATED="1669932795247" ID="ID_258240741" MODIFIED="1669932979085" TEXT="Zeit in Lumiera stets left-Truncate">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist essentiell wichtig. &quot;Negative&quot; Zeiten d&#252;rfen sich <i>keinesfalls</i>&#160; anders verhalten. Eine andere Quantsierungs-Regel kann man dann ggfs. high-level auf ein left-Truncate aufsetzen (z.B. Mitte Frame-Intervall)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1669932981526" ID="ID_837170036" MODIFIED="1669933009189">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#10233; also mu&#223; man hier <i>technisch runden</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1669933011434" ID="ID_1937730928" MODIFIED="1669933021860" TEXT="das bedeutet: auf 1/INT_MAX"/>
+<node CREATED="1669933027664" ID="ID_1390211698" MODIFIED="1669933038658" TEXT="weil ein Bruch hier interpretiert wird als Quantisierung"/>
+<node CREATED="1669933049926" ID="ID_1930108218" MODIFIED="1669933071839" TEXT="und wir daher auf die kleinstm&#xf6;glich darstellbare rationale Zahl runden"/>
+</node>
+<node COLOR="#435e98" CREATED="1669933076257" ID="ID_68878490" MODIFIED="1669933203590" TEXT="geht das &#xfc;berhaupt?">
+<icon BUILTIN="help"/>
+<node CREATED="1669933097062" ID="ID_1298571080" MODIFIED="1669933101833" TEXT="mit double nicht...."/>
+<node CREATED="1669933102558" ID="ID_561202442" MODIFIED="1669933112105" TEXT="aber ich arbeite hier ja bewu&#xdf;t mit long double"/>
+<node CREATED="1669933113580" ID="ID_1052633426" MODIFIED="1669933130786" TEXT="aber selbst da sprengt ein absolutes ULP den Wertebereich"/>
+<node CREATED="1669933140405" ID="ID_672266484" MODIFIED="1669933163530" TEXT="&#x27f9; also relative ULP nehmen: *(1+ULP)"/>
+<node CREATED="1669933167811" ID="ID_1558282411" MODIFIED="1669933183695" TEXT="das geht grade noch auf"/>
+<node CREATED="1669933185842" ID="ID_1427917386" MODIFIED="1669933196158" TEXT="Schwein gehabt">
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1669933204808" ID="ID_1033893690" MODIFIED="1669933252753" TEXT="WARNUNG: falls long double == double dann ist diese Rundung unwirksam">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#338800" CREATED="1669933257385" ID="ID_1774777202" MODIFIED="1669933428563" TEXT="Testfall: TimeParsing_test">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1669933273591" ID="ID_1754745072" MODIFIED="1669933393067" TEXT="Darstellung von 1/250s">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das sind 4ms
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1669933281232" ID="ID_542233825" MODIFIED="1669933418231" TEXT="ohne Rundung: 3999&#xb5;s">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      parsing '1/250sec' resulted in 0:00:00.003 instead of 0:00:00.004
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668707398858" ID="ID_1529383789" MODIFIED="1668707464339" TEXT="Test">
@@ -40433,6 +40549,100 @@
 <icon BUILTIN="broken-line"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669683157298" ID="ID_710000990" MODIFIED="1669683199793" TEXT="Fenster liegt verd&#xe4;chtig weit daneben">
 <icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1669911421774" ID="ID_1721803067" MODIFIED="1669911465062" TEXT="Umwandlung FSecs &#x27fc; &#xb5;-ticks entgleist">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1669911515423" ID="ID_245485754" MODIFIED="1669911569313" TEXT="detox() vorher">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1669911534853" ID="ID_1958976369" MODIFIED="1669911684935" TEXT="die Summe selber k&#xf6;nnte auch wrappen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...tut sie zwar nicht in dem Beispiel hier, aber mit gen&#252;gend krimineller Energie lie&#223;e sich ein valides Beispiel konstruieren, wobei
+    </p>
+    <ul>
+      <li>
+        die Ziel-Position dann au&#223;erhalb des legalen Bereichs liegen w&#252;rde
+      </li>
+      <li>
+        bei korrekter Behandlung daher das Ergebnis-Fenster in den legalen Bereich geschoben werden m&#252;&#223;te
+      </li>
+      <li>
+        aber ohne weitere Schutzma&#223;name hier die Berechnung der Zielposition entgleist
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1669911687704" ID="ID_797370792" MODIFIED="1669911771424" TEXT="k&#xf6;nnte man im nun etablierten Schema auch ein addSafe() definieren">
+<arrowlink COLOR="#a32f55" DESTINATION="ID_289279043" ENDARROW="Default" ENDINCLINATION="167;16;" ID="Arrow_ID_333407901" STARTARROW="None" STARTINCLINATION="-174;-8;"/>
+<icon BUILTIN="help"/>
+<node COLOR="#338800" CREATED="1669911787964" ID="ID_147783330" MODIFIED="1669911798248" TEXT="Erkennung und Behandlung der Grenzbedingungen analog">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669911817888" ID="ID_493362427" MODIFIED="1669911841073" TEXT="Problem: Summe k&#xf6;nnte trotzdem entgleisen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1669912456275" ID="ID_661856327" MODIFIED="1669912464070" TEXT="nur bei Addition / gleicher Richtung"/>
+<node CREATED="1669912668224" ID="ID_1384499593" MODIFIED="1669914705545" TEXT="nur wenn bei mindestens einem Summanden das h&#xf6;chste Bit gesetzt ist">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      0111 + 0111 = 1110
+    </p>
+    <p>
+      0011 + 0101 = 1000
+    </p>
+    <p>
+      aber...
+    </p>
+    <p>
+      0010 + 0101 = 0111
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#644f94" DESTINATION="ID_1384499593" ENDARROW="Default" ENDINCLINATION="-195;8;" ID="Arrow_ID_899257928" SOURCE="ID_41244947" STARTARROW="None" STARTINCLINATION="-101;-8;"/>
+</node>
+<node CREATED="1669913417600" ID="ID_175910999" MODIFIED="1669913524753" TEXT="&#x27f9; re-Quantisierung mu&#xdf; au&#xdf;erdem beide Summanden aus der Gefahrenzone bringen"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669913560481" ID="ID_756192644" MODIFIED="1669913569368" TEXT="konkretes Rechenschema">
+<icon BUILTIN="info"/>
+<node CREATED="1669913571311" ID="ID_1313345585" MODIFIED="1669914699511" TEXT="verwende den (absolut) kleineren der beiden Nenner"/>
+<node CREATED="1669914430412" ID="ID_41244947" MODIFIED="1669914714600" TEXT="&#xfc;berpr&#xfc;fe die Gefahrenzone f&#xfc;r die Z&#xe4;hler">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Gefahr besteht...
+    </p>
+    <ul>
+      <li>
+        wenn beide Vorzeichen gleichgerichtet sind
+      </li>
+      <li>
+        wenn mindestens einer der Z&#228;hler das 63te Bit gesetzt hat (2^62)
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#644f94" DESTINATION="ID_1384499593" ENDARROW="Default" ENDINCLINATION="-195;8;" ID="Arrow_ID_899257928" STARTARROW="None" STARTINCLINATION="-101;-8;"/>
+<node CREATED="1669914775664" ID="ID_1885451601" MODIFIED="1669914823442" TEXT="wenn ungef&#xe4;hrlich, dann nur gr&#xf6;&#xdf;eren Nenner requantisieren"/>
+<node CREATED="1669914824383" ID="ID_999893302" MODIFIED="1669914845448" TEXT="wenn gef&#xe4;hrlich, Nenner um ein Bit shiften und beide requantisieren"/>
+</node>
+<node CREATED="1669914866913" ID="ID_1877357496" MODIFIED="1669914878786" TEXT="Summation der angepa&#xdf;ten Z&#xe4;hler ausf&#xfc;hren"/>
+<node CREATED="1669914880928" ID="ID_1472462771" MODIFIED="1669914895257" TEXT="Ergebnis mit gemeinsamem Nenner konstruieren"/>
+<node CREATED="1669914896208" ID="ID_370915623" MODIFIED="1669914901963" TEXT="Ergebnis entgiften"/>
+</node>
 </node>
 </node>
 </node>

@@ -78,6 +78,13 @@ namespace util {
         { }
     };
   
+  template<typename I>
+  inline IDiv<I>
+  iDiv (I num, I den)  ///< support type inference and auto typing...
+  {
+    return IDiv<I>{num,den};
+  }
+  
   
   /** floor function for integer arithmetics.
    *  Unlike the built-in integer division, this function

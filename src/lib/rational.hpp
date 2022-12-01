@@ -73,6 +73,7 @@
 #include <stdint.h>
 #include <boost/rational.hpp>
 
+#include "lib/util-quant.hpp"
 
 
 namespace util {
@@ -155,6 +156,39 @@ namespace util {
   
   
   /**
+   * Re-Quantise a number into a new grid, truncating to the next lower grid point.
+   * @remark Grid-aligned values can be interpreted as rational numbers (integer fractions),
+   *         where the quantiser corresponds to the denominator and the numerator counts
+   *         the number of grid steps. To work both around precision problems and the
+   *         danger of integer wrap-around, the integer division is performed on the
+   *         old value and then the re-quantisation done on the remainder, using
+   *         128bit floating point for maximum precision. This operation can
+   *         also be used to re-form a fraction to be cast in terms of the
+   *         new quantiser; this introduces a tiny error, but typically
+   *         allows for safe or simplified calculations.
+   * @param  num the count in old grid-steps (#den) or the numerator
+   * @param  den the old quantiser or the denominator of a fraction
+   * @param  u   the new quantiser or the new denominator to use
+   * @return the adjusted numerator, so that the fraction with u
+   *         will be almost the same than dividing #num by #den
+   */
+  inline int64_t
+  reQuant (int64_t num, int64_t den, int64_t u)
+  {
+    u = 0!=u? u:1;
+    auto [d,r] = util::iDiv (num, den);
+    using f128 = long double;
+    // round to smallest integer fraction, to shake off "number dust" 
+    f128 const ROUND_ULP = 1 + 1/(f128(std::numeric_limits<int64_t>::max()) * 2);
+    
+    // construct approximation quantised to 1/u
+    f128 frac = f128(r) / den;
+    int64_t res = d*u + int64_t(frac*u * ROUND_ULP);
+    ENSURE (abs (f128(res)/u - rational_cast<f128>(Rat{num,den})) <= 1.0/abs(u));
+    return res;
+  }
+  
+  /**
    * re-Quantise a rational number to a (typically smaller) denominator.
    * @param u the new denominator to use
    * @warning this is a lossy operation and possibly introduces an error
@@ -170,15 +204,7 @@ namespace util {
   inline Rat
   reQuant (Rat src, int64_t u)
   {
-    int64_t d = rational_cast<int64_t> (src);
-    int64_t r = src.numerator() % src.denominator();
-    using f128 = long double;
-    
-    // construct approximation quantised to 1/u
-    f128 frac = rational_cast<f128> (Rat{r, src.denominator()});
-    Rat res = d + int64_t(frac*u) / Rat(u);
-    ENSURE (abs (rational_cast<f128>(src) - rational_cast<f128>(res)) <= 1.0/abs(u));
-    return res;
+    return Rat{reQuant (src.numerator(), src.denominator(), u), u};
   }
 } // namespace util
 
