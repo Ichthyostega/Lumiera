@@ -40520,7 +40520,7 @@
 <node COLOR="#338800" CREATED="1669683004871" ID="ID_1503834170" MODIFIED="1669683025116" TEXT="wrap-around bekomme ich mit detox() und scaleSafe() in den Griff">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1669683026004" ID="ID_1867241917" MODIFIED="1669683139814" TEXT="Ergebnis ist aber noch nicht plausibel">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669683026004" ID="ID_1867241917" MODIFIED="1669943704863" TEXT="Ergebnis ist aber noch nicht plausibel">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -40547,15 +40547,15 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="broken-line"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669683157298" ID="ID_710000990" MODIFIED="1669683199793" TEXT="Fenster liegt verd&#xe4;chtig weit daneben">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669683157298" ID="ID_710000990" MODIFIED="1669943698789" TEXT="Fenster liegt verd&#xe4;chtig weit daneben">
 <icon BUILTIN="stop-sign"/>
 </node>
-<node CREATED="1669911421774" ID="ID_1721803067" MODIFIED="1669911465062" TEXT="Umwandlung FSecs &#x27fc; &#xb5;-ticks entgleist">
+<node CREATED="1669911421774" ID="ID_1721803067" MODIFIED="1669943698789" TEXT="Umwandlung FSecs &#x27fc; &#xb5;-ticks entgleist">
 <icon BUILTIN="broken-line"/>
-<node CREATED="1669911515423" ID="ID_245485754" MODIFIED="1669911569313" TEXT="detox() vorher">
+<node CREATED="1669911515423" ID="ID_245485754" MODIFIED="1669943698789" TEXT="detox() vorher">
 <icon BUILTIN="stop-sign"/>
 </node>
-<node CREATED="1669911534853" ID="ID_1958976369" MODIFIED="1669911684935" TEXT="die Summe selber k&#xf6;nnte auch wrappen">
+<node CREATED="1669911534853" ID="ID_1958976369" MODIFIED="1669943698789" TEXT="die Summe selber k&#xf6;nnte auch wrappen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -40580,13 +40580,13 @@
 <icon BUILTIN="clanbomber"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1669911687704" ID="ID_797370792" MODIFIED="1669911771424" TEXT="k&#xf6;nnte man im nun etablierten Schema auch ein addSafe() definieren">
+<node COLOR="#435e98" CREATED="1669911687704" ID="ID_797370792" MODIFIED="1669943698789" TEXT="k&#xf6;nnte man im nun etablierten Schema auch ein addSafe() definieren">
 <arrowlink COLOR="#a32f55" DESTINATION="ID_289279043" ENDARROW="Default" ENDINCLINATION="167;16;" ID="Arrow_ID_333407901" STARTARROW="None" STARTINCLINATION="-174;-8;"/>
 <icon BUILTIN="help"/>
 <node COLOR="#338800" CREATED="1669911787964" ID="ID_147783330" MODIFIED="1669911798248" TEXT="Erkennung und Behandlung der Grenzbedingungen analog">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669911817888" ID="ID_493362427" MODIFIED="1669911841073" TEXT="Problem: Summe k&#xf6;nnte trotzdem entgleisen">
+<node COLOR="#435e98" CREATED="1669911817888" ID="ID_493362427" MODIFIED="1669943698789" TEXT="Problem: Summe k&#xf6;nnte trotzdem entgleisen">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1669912456275" ID="ID_661856327" MODIFIED="1669912464070" TEXT="nur bei Addition / gleicher Richtung"/>
 <node CREATED="1669912668224" ID="ID_1384499593" MODIFIED="1669914705545" TEXT="nur wenn bei mindestens einem Summanden das h&#xf6;chste Bit gesetzt ist">
@@ -40611,12 +40611,12 @@
 </html></richcontent>
 <linktarget COLOR="#644f94" DESTINATION="ID_1384499593" ENDARROW="Default" ENDINCLINATION="-195;8;" ID="Arrow_ID_899257928" SOURCE="ID_41244947" STARTARROW="None" STARTINCLINATION="-101;-8;"/>
 </node>
-<node CREATED="1669913417600" ID="ID_175910999" MODIFIED="1669913524753" TEXT="&#x27f9; re-Quantisierung mu&#xdf; au&#xdf;erdem beide Summanden aus der Gefahrenzone bringen"/>
+<node CREATED="1669913417600" ID="ID_175910999" MODIFIED="1669943698789" TEXT="&#x27f9; re-Quantisierung mu&#xdf; au&#xdf;erdem beide Summanden aus der Gefahrenzone bringen"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669913560481" ID="ID_756192644" MODIFIED="1669913569368" TEXT="konkretes Rechenschema">
+<node COLOR="#435e98" CREATED="1669913560481" ID="ID_756192644" MODIFIED="1669943698789" TEXT="konkretes Rechenschema">
 <icon BUILTIN="info"/>
-<node CREATED="1669913571311" ID="ID_1313345585" MODIFIED="1669914699511" TEXT="verwende den (absolut) kleineren der beiden Nenner"/>
-<node CREATED="1669914430412" ID="ID_41244947" MODIFIED="1669914714600" TEXT="&#xfc;berpr&#xfc;fe die Gefahrenzone f&#xfc;r die Z&#xe4;hler">
+<node CREATED="1669913571311" ID="ID_1313345585" MODIFIED="1669943698789" TEXT="verwende den (absolut) kleineren der beiden Nenner"/>
+<node COLOR="#435e98" CREATED="1669914430412" ID="ID_41244947" MODIFIED="1669943698789" TEXT="&#xfc;berpr&#xfc;fe die Gefahrenzone f&#xfc;r die Z&#xe4;hler">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -40636,12 +40636,93 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#644f94" DESTINATION="ID_1384499593" ENDARROW="Default" ENDINCLINATION="-195;8;" ID="Arrow_ID_899257928" STARTARROW="None" STARTINCLINATION="-101;-8;"/>
-<node CREATED="1669914775664" ID="ID_1885451601" MODIFIED="1669914823442" TEXT="wenn ungef&#xe4;hrlich, dann nur gr&#xf6;&#xdf;eren Nenner requantisieren"/>
-<node CREATED="1669914824383" ID="ID_999893302" MODIFIED="1669914845448" TEXT="wenn gef&#xe4;hrlich, Nenner um ein Bit shiften und beide requantisieren"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1669914775664" ID="ID_1885451601" MODIFIED="1669943698789" TEXT="wenn ungef&#xe4;hrlich, dann nur gr&#xf6;&#xdf;eren Nenner requantisieren"/>
+<node CREATED="1669914824383" ID="ID_999893302" MODIFIED="1669943698789" TEXT="wenn gef&#xe4;hrlich, Nenner um ein Bit shiften und beide requantisieren"/>
 </node>
-<node CREATED="1669914866913" ID="ID_1877357496" MODIFIED="1669914878786" TEXT="Summation der angepa&#xdf;ten Z&#xe4;hler ausf&#xfc;hren"/>
-<node CREATED="1669914880928" ID="ID_1472462771" MODIFIED="1669914895257" TEXT="Ergebnis mit gemeinsamem Nenner konstruieren"/>
-<node CREATED="1669914896208" ID="ID_370915623" MODIFIED="1669914901963" TEXT="Ergebnis entgiften"/>
+<node COLOR="#338800" CREATED="1669914866913" ID="ID_1877357496" MODIFIED="1669943698789" TEXT="Summation der angepa&#xdf;ten Z&#xe4;hler ausf&#xfc;hren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1669914880928" ID="ID_1472462771" MODIFIED="1669943698789" TEXT="Ergebnis mit gemeinsamem Nenner konstruieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1669914896208" ID="ID_370915623" MODIFIED="1669943698789" TEXT="Ergebnis entgiften">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1669941951462" ID="ID_793235597" MODIFIED="1669943698789" TEXT="Problem: Fehler zu gro&#xdf;">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1669941967260" ID="ID_54342145" MODIFIED="1669943698789" TEXT="Faktor 10 im Beispiel">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
+      206435709205.57568 - 206435709205575697/1e6&#160; = abs(-0,000017) &gt; 1e-6
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#435e98" CREATED="1669942746884" ID="ID_1339303586" MODIFIED="1669943698789" TEXT="Ha! der guess ist zu ungenau">
+<icon BUILTIN="idea"/>
+<node CREATED="1669942758191" ID="ID_1779789843" MODIFIED="1669943698789" TEXT="double precision reicht definitiv nicht hier"/>
+<node CREATED="1669942769413" ID="ID_592526352" MODIFIED="1669943698789" TEXT="genauer gerechnete Ergebnisse erf&#xfc;llen die Fehlerschwelle">
+<arrowlink COLOR="#3f6fd5" DESTINATION="ID_198719131" ENDARROW="Default" ENDINCLINATION="58;4;" ID="Arrow_ID_802871126" STARTARROW="None" STARTINCLINATION="-13;48;"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1669942791302" ID="ID_198719131" MODIFIED="1669943698789" TEXT="&#x27f9; mu&#xdf; Assertinon mit long double rechnen">
+<linktarget COLOR="#3f6fd5" DESTINATION="ID_198719131" ENDARROW="Default" ENDINCLINATION="58;4;" ID="Arrow_ID_802871126" SOURCE="ID_592526352" STARTARROW="None" STARTINCLINATION="-13;48;"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669943663699" ID="ID_693461392" MODIFIED="1669943718965" TEXT="Ergebnis nun im Fehlerband &#x2014; aber leider immer noch daneben">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1669943776106" ID="ID_1895721471" MODIFIED="1669943795208" TEXT="bei re-Quantisierung auf &#xb5;-Tick kann ich nicht genauer sein als 1e-6"/>
+<node CREATED="1669943801006" ID="ID_1524475083" MODIFIED="1669943916288" TEXT="trotzdem will mir dieser Befund irgendwie logisch nicht in den Kopf">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...ich hab doch ohnehin Zeiten, die sind &#181;-Grid quantisiert; also m&#252;&#223;te der Fehler einer einfachen Addition auf &#181;-Grid genau sein
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1669943918742" ID="ID_1902626416" MODIFIED="1669943941550" TEXT="der Fehler wird relativ zur Ergebnishzahl wirksam &#x2014; warum?">
+<icon BUILTIN="help"/>
+<node CREATED="1669948612766" ID="ID_773874014" MODIFIED="1669948622948" TEXT="der Fehler tritt nicht in der Subtraktion auf"/>
+<node CREATED="1669948623670" ID="ID_549263730" MODIFIED="1669948642617" TEXT="sondern bereits beim Berechnen der Bezugs-Position"/>
+<node CREATED="1669948657379" ID="ID_765957465" MODIFIED="1669949047942" TEXT="dort re-Quantisieren wir auf 1e-6 weil das der einzige sichere Faktor ist">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...da wir wissen, da&#223; einer der Multiplikatoren eine bereits quantifizierte Zeit ist, k&#246;nnen wir von einem Nenner 1e+6 ausgehen (ggfs noch reduziert um einen gek&#252;rzten Faktor). Das andere Argument, der Anteil-Faktor, stammt von au&#223;en und ist daher beliebig. Der einzige sichere Weg, den K&#252;rzungs-Trick anzuwenden, ist daher, den Kehrwert des Anteil-Faktors zu re-Quantisieren, so da&#223; sich dieses 1e+6 wegk&#252;rzt, und wir dann keine gef&#228;hrliche Multiplikation mehr haben.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1669949048959" ID="ID_595183859" MODIFIED="1669949241962" TEXT="im konkreten Einzelfall k&#xf6;nnte man auch einen gr&#xf6;&#xdf;eren Faktor nehmen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...aber nur nach Ma&#223;gabe der tats&#228;chlichen Dimension der eingehenden Zahlen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1669949243427" ID="ID_1428834110" MODIFIED="1669949269501" TEXT="eine solcherma&#xdf;en erh&#xf6;hte Komplexit&#xe4;t erscheint nicht gerechtfertigt"/>
+<node CREATED="1669949275009" ID="ID_276477045" MODIFIED="1669949305433" TEXT="letztlich geht es num darum, Funktionsf&#xe4;higkeit in seltenen Randf&#xe4;llen zu erhalten"/>
 </node>
 </node>
 </node>

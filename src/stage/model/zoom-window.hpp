@@ -528,7 +528,10 @@ namespace model {
       static FSecs
       scaleSafe (FSecs duration, Rat factor)
         {
-          if (not util::can_represent_Product(duration, factor))
+          if (util::can_represent_Product(duration, factor))
+            // just calculate ordinary numbers...
+            return duration * factor;
+          else
             {
               auto guess{approx(duration) * approx (factor)};
               if (approx(MAX_TIMESPAN) < abs(guess))
@@ -538,12 +541,14 @@ namespace model {
               
               // slightly adjust the factor so that the time-base denominator cancels out,
               // allowing to calculate the product without dangerous multiplication of large numbers
-              factor = 1_r / reQuant (1_r/factor, duration.denominator());
-              return detox (duration * factor);
+              // Note: we normalise 1/factor, i.e. we normalise the numerator to be equal to duration.denominator()
+              int64_t inverseFactor = reQuant (factor.denominator(), factor.numerator(), Time::SCALE);
+              // some common factors might have been cancelled out, but we know these are integral
+              int64_t reduction = Time::SCALE / duration.denominator();
+              int64_t durationTicks = duration.numerator()*reduction;
+              // result can be constructed without calculation, due to shared common factors
+              return detox (Rat{durationTicks, inverseFactor});
             }
-          else
-            // just calculate ordinary numbers...
-            return duration * factor;
         }
       
       /**
@@ -555,7 +560,10 @@ namespace model {
       static FSecs
       addSafe (FSecs t1, FSecs t2)
         {
-          if (not util::can_represent_Sum (t1,t2))
+          if (util::can_represent_Sum (t1,t2))
+            // directly calculate ordinary numbers...
+            return t1 + t2;
+          else
             {
               auto guess{approx(t1) + approx(t2)};
               if (approx(MAX_TIMESPAN) < abs(guess))
@@ -574,22 +582,21 @@ namespace model {
               // quantise to smaller denominator to avoid increasing any numerator
               int64_t u = d1<d2? d1:d2;
               if (u < Time::SCALE)
-                // regarding precision, quantising to µ-grid is the better solution 
+                // regarding precision, quantising to µ-grid is the better solution
                 u = Time::SCALE;
               else //re-quantise to common denominator more fine-grained than µ-grid
                 if (s1*s2 > 0  // check numerators to detect danger of wrap-around
                     and (62<util::ilog2(n1) or 62<util::ilog2(n2)))
                   u >>= 1;   // danger zone! wrap-around imminent
               
-              n1 = d1==u? n1 : reQuant (n1,d1, u);  
+              n1 = d1==u? n1 : reQuant (n1,d1, u);
               n2 = d2==u? n2 : reQuant (n2,d2, u);
               FSecs res{s1*n1 + s2*n2, u};
-              ENSURE (abs (guess - approx(res)) < 1.0/u);
+              
+              auto f128 = [](Rat n){ return rational_cast<long double>(n); }; // can't use the guess from above,
+              ENSURE (abs (f128(res) - (f128(t1)+f128(t2))) < 1.0/u);        //  double precision is not sufficient
               return detox (res);
             }
-          else
-            // directly calculate ordinary numbers...
-            return t1 + t2;
         }
       
       
