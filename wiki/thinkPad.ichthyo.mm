@@ -39762,17 +39762,20 @@
 <node CREATED="1668267238564" ID="ID_1057480192" MODIFIED="1668267248362" TEXT="startWin_ = startAll_ + (canvasOffset - partBeforeAnchor);">
 <icon BUILTIN="info"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668267251650" ID="ID_1280626173" MODIFIED="1668267290312" TEXT="potentieller TimeValue-wrap">
+<node COLOR="#435e98" CREATED="1668267251650" ID="ID_1280626173" MODIFIED="1670016135487" TEXT="potentieller TimeValue-wrap">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1669507976363" ID="ID_1360914257" MODIFIED="1669508005798" TEXT="Duration und Canvas-size k&#xf6;nnen gro&#xdf; sein">
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1669507940458" ID="ID_355998747" MODIFIED="1669507940458" TEXT="Rat posFactor = canvasOffset / FSecs{afterAll_-startAll_};"/>
 <node CREATED="1669507965470" ID="ID_1858701509" MODIFIED="1669507965470" TEXT="FSecs partBeforeAnchor = posFactor * duration;"/>
+<node COLOR="#338800" CREATED="1670016112689" ID="ID_1869447563" LINK="#ID_289279043" MODIFIED="1670016131455" TEXT="hierf&#xfc;r eigene Hilfsfunktion geschaffen">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node CREATED="1668267393360" ID="ID_1700728412" MODIFIED="1668267398176" TEXT="giftige Br&#xfc;che">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669508070174" ID="ID_171647736" MODIFIED="1669508178509" TEXT="Aua: so ziemlich alles kann hier giftig sein">
+<node COLOR="#435e98" CREATED="1669508070174" ID="ID_171647736" MODIFIED="1670016138169" TEXT="Aua: so ziemlich alles kann hier giftig sein">
 <linktarget COLOR="#e32c65" DESTINATION="ID_171647736" ENDARROW="Default" ENDINCLINATION="8;76;" ID="Arrow_ID_1341085031" SOURCE="ID_196873456" STARTARROW="None" STARTINCLINATION="577;-36;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1669508081900" ID="ID_1740115162" MODIFIED="1669508382889" TEXT="zwar kann das Ergebnis nicht grob entgleisen">
@@ -39922,11 +39925,15 @@
 <node COLOR="#338800" CREATED="1669478154709" ID="ID_499422673" MODIFIED="1669488173372" TEXT="Fall-2 : hinreichend gro&#xdf;er Canvas">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669479930775" ID="ID_196873456" MODIFIED="1669508183093" TEXT="Fall-3 : setVisiblePos mit giftigem faktor">
+<node COLOR="#338800" CREATED="1669479930775" ID="ID_196873456" MODIFIED="1670016092876" TEXT="Fall-3 : setVisiblePos mit giftigem faktor">
 <arrowlink COLOR="#e32c65" DESTINATION="ID_171647736" ENDARROW="Default" ENDINCLINATION="8;76;" ID="Arrow_ID_1341085031" STARTARROW="None" STARTINCLINATION="577;-36;"/>
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1669682888293" HGAP="67" ID="ID_1431682003" MODIFIED="1669682917272" TEXT="erweist sich als ziemlich schwer unter Kontrolle zu bekommen" VSHIFT="-1">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1669682888293" HGAP="67" ID="ID_1431682003" MODIFIED="1670016089041" TEXT="erweist sich als ziemlich schwer unter Kontrolle zu bekommen" VSHIFT="-1">
+<edge COLOR="#01a450"/>
 <icon BUILTIN="broken-line"/>
+<node COLOR="#338800" CREATED="1670016009463" HGAP="38" ID="ID_413813658" LINK="#ID_264195573" MODIFIED="1670016072649" TEXT="daraus sind nun Support-Funktionen entstanden" VSHIFT="7">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669480019215" ID="ID_930072077" MODIFIED="1669480034942" TEXT="Fall-4 : setVisiblePos mit extrem entfernter Position">
@@ -40377,7 +40384,7 @@
 </node>
 <node CREATED="1669680416417" ID="ID_264195573" MODIFIED="1669680423082" TEXT="L&#xf6;sungs-Techniken">
 <icon BUILTIN="idea"/>
-<node CREATED="1669680424602" ID="ID_267834802" MODIFIED="1669682824592" TEXT="K&#xfc;rzungs-Trick">
+<node COLOR="#435e98" CREATED="1669680424602" ID="ID_267834802" MODIFIED="1670015986498" TEXT="K&#xfc;rzungs-Trick">
 <linktarget COLOR="#fbf8c7" DESTINATION="ID_267834802" ENDARROW="Default" ENDINCLINATION="538;-591;" ID="Arrow_ID_1957682133" SOURCE="ID_1644190283" STARTARROW="None" STARTINCLINATION="668;44;"/>
 <node CREATED="1669680431912" ID="ID_180315930" MODIFIED="1669680447650" TEXT="einen Partner re-Quantisieren"/>
 <node CREATED="1669680448333" ID="ID_969768863" MODIFIED="1669680473406" TEXT="so da&#xdf; sich dann kreuzweise ein Z&#xe4;hler/Nenner wegk&#xfc;rzen"/>
@@ -40386,19 +40393,19 @@
 <node COLOR="#338800" CREATED="1669682825470" ID="ID_906501375" MODIFIED="1669682838860" TEXT="verallgemeinert: scaleSafe()">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669911724009" ID="ID_289279043" MODIFIED="1669911765633" TEXT="verallgemeinert: addSafe()">
-<linktarget COLOR="#a32f55" DESTINATION="ID_289279043" ENDARROW="Default" ENDINCLINATION="167;16;" ID="Arrow_ID_333407901" SOURCE="ID_797370792" STARTARROW="None" STARTINCLINATION="-174;-8;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1669911724009" ID="ID_289279043" MODIFIED="1670015959526" TEXT="verallgemeinert: addSafe()">
+<linktarget COLOR="#2f7ca3" DESTINATION="ID_289279043" ENDARROW="Default" ENDINCLINATION="167;16;" ID="Arrow_ID_333407901" SOURCE="ID_797370792" STARTARROW="None" STARTINCLINATION="-174;-8;"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669932544504" ID="ID_750418137" MODIFIED="1669932569275" TEXT="FSecs &#x27fc; &#xb5;-Tick absichern">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1669932544504" ID="ID_750418137" MODIFIED="1670015851933" TEXT="FSecs &#x27fc; &#xb5;-Tick absichern">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1669932578600" ID="ID_974803158" MODIFIED="1669932591544" TEXT="das erweist sich als h&#xe4;ufige Quelle von wrap-arounds">
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1669932596081" ID="ID_1661291024" MODIFIED="1669932618249" TEXT="dabei ist es einfach blo&#xdf; naiv gecodet">
 <icon BUILTIN="smiley-oh"/>
 </node>
-<node CREATED="1669932620086" ID="ID_673992117" MODIFIED="1669932631571" TEXT="stattdessen die re-Quantisierung nutzen">
+<node COLOR="#435e98" CREATED="1669932620086" ID="ID_673992117" MODIFIED="1670015849357" TEXT="stattdessen die re-Quantisierung nutzen">
 <icon BUILTIN="idea"/>
 <node CREATED="1669932632788" ID="ID_831065868" MODIFIED="1669932761462" TEXT="nur dann hier auf 1/1000000">
 <icon BUILTIN="yes"/>
@@ -40409,7 +40416,7 @@
 <node COLOR="#338800" CREATED="1669932653473" ID="ID_120882361" MODIFIED="1669932684292" TEXT="kann sogar den Rat-Fall hierauf zur&#xfc;ckf&#xfc;hren">
 <icon BUILTIN="idea"/>
 </node>
-<node COLOR="#435e98" CREATED="1669932686823" ID="ID_1630699394" MODIFIED="1669932696052" TEXT="Numerik-Probleme">
+<node COLOR="#435e98" CREATED="1669932686823" FOLDED="true" ID="ID_1630699394" MODIFIED="1669932696052" TEXT="Numerik-Probleme">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1669932700323" ID="ID_1606021601" MODIFIED="1669932716796" TEXT="tja... Float bleibt Float selbst bei 128bit">
 <icon BUILTIN="clanbomber"/>
@@ -40501,6 +40508,9 @@
 </node>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1670015941129" ID="ID_1262505892" MODIFIED="1670015955338" TEXT="kann nun (wohl) nicht mehr entgleisen">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>
@@ -40511,8 +40521,8 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668707479892" ID="ID_1964644327" MODIFIED="1668707490200" TEXT="ansonsten durch Ausreizen der Extremwerte testen">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1669682928809" ID="ID_499417740" MODIFIED="1669682938471" TEXT="setVisiblePos(gift)">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1669682928809" ID="ID_499417740" MODIFIED="1670015827119" TEXT="setVisiblePos(gift)">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1669682950712" ID="ID_1730356591" MODIFIED="1669682974366" TEXT="macht was Anderes als nur die Zoom-Metrik anpassen"/>
 <node CREATED="1669682975415" ID="ID_1386857509" MODIFIED="1669682993901" TEXT="die Verbindung mit L&#xe4;ngen/Positions-Kalkulationen ist gef&#xe4;hrlich">
 <icon BUILTIN="messagebox_warning"/>
@@ -40520,7 +40530,7 @@
 <node COLOR="#338800" CREATED="1669683004871" ID="ID_1503834170" MODIFIED="1669683025116" TEXT="wrap-around bekomme ich mit detox() und scaleSafe() in den Griff">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669683026004" ID="ID_1867241917" MODIFIED="1669943704863" TEXT="Ergebnis ist aber noch nicht plausibel">
+<node COLOR="#435e98" CREATED="1669683026004" ID="ID_1867241917" MODIFIED="1670015746454" TEXT="Ergebnis ist aber noch nicht plausibel">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -40581,7 +40591,7 @@
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1669911687704" ID="ID_797370792" MODIFIED="1669943698789" TEXT="k&#xf6;nnte man im nun etablierten Schema auch ein addSafe() definieren">
-<arrowlink COLOR="#a32f55" DESTINATION="ID_289279043" ENDARROW="Default" ENDINCLINATION="167;16;" ID="Arrow_ID_333407901" STARTARROW="None" STARTINCLINATION="-174;-8;"/>
+<arrowlink COLOR="#2f7ca3" DESTINATION="ID_289279043" ENDARROW="Default" ENDINCLINATION="167;16;" ID="Arrow_ID_333407901" STARTARROW="None" STARTINCLINATION="-174;-8;"/>
 <icon BUILTIN="help"/>
 <node COLOR="#338800" CREATED="1669911787964" ID="ID_147783330" MODIFIED="1669911798248" TEXT="Erkennung und Behandlung der Grenzbedingungen analog">
 <icon BUILTIN="button_ok"/>
@@ -40677,7 +40687,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669943663699" ID="ID_693461392" MODIFIED="1669943718965" TEXT="Ergebnis nun im Fehlerband &#x2014; aber leider immer noch daneben">
+<node COLOR="#435e98" CREATED="1669943663699" ID="ID_693461392" MODIFIED="1670015348017" TEXT="Ergebnis nun im Fehlerband &#x2014; aber leider immer noch daneben">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1669943776106" ID="ID_1895721471" MODIFIED="1669943795208" TEXT="bei re-Quantisierung auf &#xb5;-Tick kann ich nicht genauer sein als 1e-6"/>
 <node CREATED="1669943801006" ID="ID_1524475083" MODIFIED="1669943916288" TEXT="trotzdem will mir dieser Befund irgendwie logisch nicht in den Kopf">
@@ -40693,7 +40703,7 @@
 </html></richcontent>
 <icon BUILTIN="smiley-angry"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1669943918742" ID="ID_1902626416" MODIFIED="1669943941550" TEXT="der Fehler wird relativ zur Ergebnishzahl wirksam &#x2014; warum?">
+<node COLOR="#435e98" CREATED="1669943918742" ID="ID_1902626416" MODIFIED="1669994406710" TEXT="der Fehler wird relativ zur Ergebnishzahl wirksam &#x2014; warum?">
 <icon BUILTIN="help"/>
 <node CREATED="1669948612766" ID="ID_773874014" MODIFIED="1669948622948" TEXT="der Fehler tritt nicht in der Subtraktion auf"/>
 <node CREATED="1669948623670" ID="ID_549263730" MODIFIED="1669948642617" TEXT="sondern bereits beim Berechnen der Bezugs-Position"/>
@@ -40708,6 +40718,41 @@
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="forward"/>
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1669949275009" ID="ID_276477045" MODIFIED="1670015719974" TEXT="letztlich geht es num darum, Funktionsf&#xe4;higkeit in seltenen Randf&#xe4;llen zu erhalten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und damit die rationale Arithmetik als M&#246;glichkeit zu erhalten; sie w&#228;re nicht sinnvoll nutzbar, wenn man st&#228;ndig die Sorge haben m&#252;&#223;te, da&#223; einem die Zahlen &#187;explodieren&#171; k&#246;nnen. So ist es nun schon besser, im Regelfall eine hochpr&#228;zise Berechnung zu haben (pr&#228;ziser als floating-point), die in Grenzf&#228;llen ungenau wird, mit letztlich kontrollierbarem Fehler-Level
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+<node CREATED="1670015358471" ID="ID_1559004584" MODIFIED="1670015734747" TEXT="hatte erst so meine Zweifel">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1670015367683" ID="ID_1687855073" MODIFIED="1670015724868" TEXT="jetzt bin ich froh, da&#xdf; ich&apos;s gemacht hab">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Es f&#252;hlt sich gut an, das Problem nun doch befriedigend bezwungen zu haben; ich hatte immer das Bauchgef&#252;hl, da&#223; da mehr Genauigkeit m&#246;glich sein sollte. Allerdings &#8212; wie sich zeigte &#8212; nur in g&#252;nstigen F&#228;llen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1670015379779" ID="ID_636584956" MODIFIED="1670015481254" TEXT="...nun sind es eigentlich schon generische Library-Funktionen">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_636584956" ENDARROW="Default" ENDINCLINATION="-1629;69;" ID="Arrow_ID_1114152599" SOURCE="ID_1681510241" STARTARROW="None" STARTINCLINATION="3618;0;"/>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node CREATED="1669949048959" ID="ID_595183859" MODIFIED="1669949241962" TEXT="im konkreten Einzelfall k&#xf6;nnte man auch einen gr&#xf6;&#xdf;eren Faktor nehmen">
 <richcontent TYPE="NOTE"><html>
@@ -40720,12 +40765,134 @@
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#fdf7a3" DESTINATION="ID_868173654" ENDARROW="Default" ENDINCLINATION="25;-20;" ID="Arrow_ID_190773880" STARTARROW="None" STARTINCLINATION="-207;8;"/>
 </node>
-<node CREATED="1669949243427" ID="ID_1428834110" MODIFIED="1669949269501" TEXT="eine solcherma&#xdf;en erh&#xf6;hte Komplexit&#xe4;t erscheint nicht gerechtfertigt"/>
-<node CREATED="1669949275009" ID="ID_276477045" MODIFIED="1669949305433" TEXT="letztlich geht es num darum, Funktionsf&#xe4;higkeit in seltenen Randf&#xe4;llen zu erhalten"/>
+<node COLOR="#435e98" CREATED="1669994369691" ID="ID_1448820193" MODIFIED="1669994388355">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Fazit: es ist das <b>gesicherte Minimum</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1669994408813" ID="ID_868173654" MODIFIED="1670015809272" TEXT="Fehlergrenze im Einzelfall besser aussch&#xf6;pfen">
+<arrowlink COLOR="#2ddb4d" DESTINATION="ID_1865531371" ENDARROW="Default" ENDINCLINATION="381;70;" ID="Arrow_ID_1328969482" STARTARROW="None" STARTINCLINATION="-58;116;"/>
+<linktarget COLOR="#fdf7a3" DESTINATION="ID_868173654" ENDARROW="Default" ENDINCLINATION="25;-20;" ID="Arrow_ID_190773880" SOURCE="ID_595183859" STARTARROW="None" STARTINCLINATION="-207;8;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1669994491114" ID="ID_301367323" MODIFIED="1669994520455" TEXT="Idee: gr&#xf6;&#xdf;t m&#xf6;glichen Faktor k&#xfc;rzen">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1669994521693" ID="ID_983699676" MODIFIED="1670000518187" TEXT="mu&#xdf; dazu jeweils die Machbarkeit pr&#xfc;fen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1669994530717" ID="ID_246811570" MODIFIED="1670000510847" TEXT="vier symmetrische F&#xe4;lle">
+<icon BUILTIN="info"/>
+<node COLOR="#338800" CREATED="1669994696676" ID="ID_507544701" MODIFIED="1669997264882" TEXT="alle vier F&#xe4;lle initial prarametrisieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1669994676320" ID="ID_277762782" MODIFIED="1669997271457" TEXT="der Fall mit Time::SCALE ist speziell">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hier wissen wir, da&#223; wir den Quantiser ggfs hochskalieren k&#246;nnen auf 1e6 (er hat sich u.u mit der &#181;-Tick-Zahl gek&#252;rzt). Da es sich um eine valide Duration handelt, ist dieses Hochskalieren stets garantiert. Mithin ist dieser Faktor das garantierte Minimum (die schlechtest m&#246;gliche Genauigkeit &#8793; 1e-6
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1669994539603" ID="ID_429120779" MODIFIED="1670000489650" TEXT="als Klasse formulieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1669994561425" ID="ID_1491074333" MODIFIED="1669994574324" TEXT="Eingaben">
+<icon BUILTIN="info"/>
+<node CREATED="1669994578390" ID="ID_1554716694" MODIFIED="1669994592848" TEXT="f1 : der sichere Faktor"/>
+<node CREATED="1669994594196" ID="ID_520285185" MODIFIED="1669994602847" TEXT="u : der zu k&#xfc;rzende Quantisierer"/>
+<node CREATED="1669994606018" ID="ID_140283418" MODIFIED="1669994641085" TEXT="req: requantisation-Target &#x27fc; wird zu u"/>
+<node CREATED="1669994645898" ID="ID_448193400" MODIFIED="1669994655184" TEXT="f2 : der limitierende Gegen-Faktor"/>
+<node CREATED="1669995461568" ID="ID_1761342962" MODIFIED="1669995622760" TEXT="ist ein Kehrwert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aus Gr&#252;nden der Symmetrie kann man das gleiche Argument jeweils auch auf den Kehrwert anwenden, deshalb haben wir ja 4 F&#228;lle (bei zwei Eingangs-Faktoren). Man mu&#223; nur ggfs. dann den Kehrwert vom Ergebnis ausgeben. Beispiel: wir nehmen den Z&#228;hler vom ersten Faktor als Quantisierer. Dann ist f1 der Nenner vom ersten Faktor, und mu&#223; daher auch im Ergebnis im Nenner landen, nicht im Z&#228;hler wie beim regul&#228;ren Schema
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#6e8ddb" DESTINATION="ID_1560238867" ENDARROW="Default" ENDINCLINATION="-180;-19;" ID="Arrow_ID_1642921638" STARTARROW="None" STARTINCLINATION="-64;9;"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1669994839828" ID="ID_418503319" MODIFIED="1670000487125" TEXT="Machbarkeits-Check">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1669994865016" ID="ID_361530418" MODIFIED="1670000482856" TEXT="Dimensions-Differenz von req auf u ermitteln">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1669994886342" ID="ID_1735969091" MODIFIED="1670000480941" TEXT="pr&#xfc;fen ob eine Vergr&#xf6;&#xdf;erung">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1669994898347" ID="ID_494553186" MODIFIED="1670000484810" TEXT="pr&#xfc;fen ob diese Vergr&#xf6;&#xdf;erung auf f2 angewendet werden kann">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1669995258396" ID="ID_93063502" MODIFIED="1669997787709" TEXT="angebotene Genauigkeit">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1669995272224" ID="ID_1288818816" MODIFIED="1669997793129" TEXT="u"/>
+<node COLOR="#435e98" CREATED="1669995281664" ID="ID_879911679" MODIFIED="1669997792445" TEXT="auf 0 setzen wenn nicht machbar"/>
+<node COLOR="#338800" CREATED="1669997435820" ID="ID_841478882" MODIFIED="1669997789720" TEXT="Aufruf l&#xf6;st Machbarkeits-Check aus">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1669995329084" ID="ID_1546053278" MODIFIED="1669997783595" TEXT="Resultat berechnen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1669995234367" ID="ID_1696175264" MODIFIED="1669997781377" STYLE="fork" TEXT="f2 requantisieren auf u"/>
+<node COLOR="#435e98" CREATED="1669995424654" ID="ID_363188688" MODIFIED="1669997781377" STYLE="fork" TEXT="neuer Rat{f2,u}"/>
+<node COLOR="#435e98" CREATED="1669995396649" ID="ID_1560238867" MODIFIED="1669997781378" STYLE="fork" TEXT="ggfs Kehrwert bilden">
+<linktarget COLOR="#6e8ddb" DESTINATION="ID_1560238867" ENDARROW="Default" ENDINCLINATION="-180;-19;" ID="Arrow_ID_1642921638" SOURCE="ID_1761342962" STARTARROW="None" STARTINCLINATION="-64;9;"/>
 </node>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1669994546102" ID="ID_1814759469" MODIFIED="1670000491434" TEXT="Maximum-Suche">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1670000524698" ID="ID_229993223" MODIFIED="1670000571148" TEXT="...und damit ist das Ergebnis nun hinreichend genau f&#xfc;r diesen Testfall">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      #--&#9670;--# _raw(targetPos) ?&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;= 206435633551724864
+    </p>
+    <p>
+      #--&#9670;--# _raw(win.visible().start()) ? = 206435633106265625
+    </p>
+    <p>
+      #--&#9670;--# _raw(win.visible().end()) ?&#160;&#160;&#160;= 206435633962616316
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1670015761936" ID="ID_1865531371" MODIFIED="1670015802640" TEXT="Test GR&#xdc;N">
+<linktarget COLOR="#2ddb4d" DESTINATION="ID_1865531371" ENDARROW="Default" ENDINCLINATION="381;70;" ID="Arrow_ID_1328969482" SOURCE="ID_868173654" STARTARROW="None" STARTINCLINATION="-58;116;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670016158206" ID="ID_1376502254" MODIFIED="1670016169130" TEXT="setVisiblePos(weit-weg)">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
@@ -40748,6 +40915,10 @@
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1666913274942" ID="ID_4743528" MODIFIED="1666913286194" TEXT="Design &#xfc;berpr&#xfc;fen">
 <icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670015422301" ID="ID_1681510241" MODIFIED="1670015457619" TEXT="#1262 extract helpers for handling problematic factions">
+<arrowlink DESTINATION="ID_636584956" ENDARROW="Default" ENDINCLINATION="-1629;69;" ID="Arrow_ID_1114152599" STARTARROW="None" STARTINCLINATION="3618;0;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 </node>

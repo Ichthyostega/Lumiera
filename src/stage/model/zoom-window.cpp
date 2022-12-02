@@ -24,6 +24,10 @@
 /** @file zoom-window.cpp
  ** Common implementation details related to zoom handling and
  ** transformation into screen coordinates.
+ ** @todo do we need this dedicated translation unit?
+ **       As of 11/2022, the ZoomWindow component was developed header-only...
+ **       However the amount of code is significant and the details are complex,
+ **       and there is indeed a major implementation-only block with private functions.
  ** 
  */
 

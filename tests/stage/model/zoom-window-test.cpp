@@ -632,26 +632,26 @@ namespace test {
           CHECK (win.px_per_sec() == 575000000_r/856350691);                     // the new metric however is comprised of sanitised fractional numbers
           CHECK (win.pxWidth() == 575);                                          // and the existing pixel width was not changed
           
-            SHOW_EXPR(win.overallSpan());
-            SHOW_EXPR(_raw(win.visible().duration()));
-            SHOW_EXPR(win.px_per_sec());
-            SHOW_EXPR(win.pxWidth());
+          CHECK (win.overallSpan().start()    == Time::ZERO);
+          CHECK (win.overallSpan().duration() == TimeValue{307445734561825860});
+          CHECK (win.visible().duration()     == TimeValue{856350691});
+
           win.setVisiblePos (poison);                                            // Yet another way to sneak in our toxic value...
-            SHOW_EXPR(win.overallSpan());
-            SHOW_EXPR(_raw(win.overallSpan()));
-            SHOW_EXPR(_raw(win.overallSpan().duration()));
-            SHOW_EXPR(_raw(win.visible().duration()));
-            SHOW_EXPR(win.px_per_sec());
-            SHOW_EXPR(win.pxWidth());
-            SHOW_EXPR(_raw(win.overallSpan().duration()) * rational_cast<double> (poison))
-          TimeValue targetPos{gavl_time_t(_raw(win.overallSpan().duration())
-                                          * rational_cast<double> (poison))};
-            SHOW_EXPR(targetPos);
-            SHOW_EXPR(_raw(targetPos));
-            SHOW_EXPR(_raw(win.visible().start()))
-            SHOW_EXPR(_raw(win.visible().end()))
-            SHOW_EXPR(bool(win.visible().start() < targetPos))
-            SHOW_EXPR(bool(win.visible().end() > targetPos))
+          CHECK (win.overallSpan().start()    == Time::ZERO);
+          CHECK (win.overallSpan().duration() == TimeValue{307445734561825860}); // However, all base values turn out unaffected
+          CHECK (win.visible().duration()     == TimeValue{856350691});
+          
+          TimeValue targetPos{gavl_time_t(_raw(win.overallSpan().duration())     // based on the overall span...
+                                          * rational_cast<double> (poison))};    // the given toxic factor would point at that target position
+          
+          CHECK (targetPos             == TimeValue{206435633551724864});
+          CHECK (win.visible().start() == TimeValue{206435633106265625});        // the visible window has been moved to enclose this target
+          CHECK (win.visible().end()   == TimeValue{206435633962616316});
+          CHECK (win.visible().start() < targetPos);
+          CHECK (win.visible().end()   > targetPos);
+          
+          CHECK (win.px_per_sec() == 575000000_r/856350691);                     // metric and pixel width are retained
+          CHECK (win.pxWidth() == 575);
         }
       
       

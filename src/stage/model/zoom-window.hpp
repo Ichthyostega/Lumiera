@@ -96,6 +96,7 @@
 
 #include <limits>
 #include <functional>
+#include <array>
 
 
 namespace stage {
@@ -182,8 +183,9 @@ namespace model {
      * @remark due to the common divisor normalisation, and the typical time computations,
      *         DENOMINATOR * Time::Scale has to stay below INT_MAX, with some safety margin
      */
-    const int64_t LIM_HAZARD{int64_t{1} << 40 };
+    const int64_t LIM_HAZARD   {int64_t{1} << 40 };
     const int64_t HAZARD_DEGREE{util::ilog2(LIM_HAZARD)};
+    const int64_t MAXDIM       {util::ilog2 (std::numeric_limits<int64_t>::max())};
     
     inline int
     toxicDegree (Rat poison, const int64_t THRESHOLD =HAZARD_DEGREE)
@@ -477,20 +479,7 @@ namespace model {
         }
       
       
-      /* === establish and maintain invariants === */
-      /*
-       * - oriented and non-empty windows
-       * - never alter given pxWidth
-       * - zoom metric factor < max zoom
-       * - visibleWindow ⊂ Canvas
-       */
-      
-      static TimeValue
-      ensureNonEmpty (Time start, TimeValue endPoint)
-        {
-          return (start < endPoint)? endPoint
-                                   : start + Time{DEFAULT_CANVAS};
-        }
+      /* === utility functions to handle dangerous fractional values === */
       
       /**
        * Check and possibly sanitise a rational number to avoid internal numeric overflow.
@@ -511,6 +500,7 @@ namespace model {
        * @note the check is based on the 2-logarithm of numerator and denominator, which is
        *         pretty much the fastest possibility (even a simple comparison would have
        *         to do the same). Values below threshold are simply passed-through.
+       * @todo this utility function could be factored out into a `FSecs` or `RSec` class  //////////////////TICKET #1262
        */
       static Rat
       detox (Rat poison)
@@ -522,8 +512,13 @@ namespace model {
       
       /**
        * Scale a possibly large time duration by a rational factor, while attempting to avoid
-       * integer wrap-around. Obviously this is only a heuristic, yet adequate within the
-       * framework of ZoomWindow, where the end result is pixel aligned anyway.
+       * integer wrap-around. In the typical use-case, the multiplication can be just computed
+       * precisely and safe, but at least we check the limits. In the danger and boundary zone,
+       * a slight error is introduced to allow cancelling out a common factor, so that the result
+       * can be just constructed without any further dangerous computation. Obviously this is only
+       * a heuristic, yet adequate within the framework of ZoomWindow, where the end result is
+       * pixel aligned anyway.
+       * @todo this utility function could be factored out into a `FSecs` or `RSec` class  //////////////////TICKET #1262
        */
       static FSecs
       scaleSafe (FSecs duration, Rat factor)
@@ -538,16 +533,79 @@ namespace model {
                 return MAX_TIMESPAN * sgn(guess); // exceeds limits of time representation => cap the result
               if (0 == guess)
                 return 0;
-              
-              // slightly adjust the factor so that the time-base denominator cancels out,
-              // allowing to calculate the product without dangerous multiplication of large numbers
-              // Note: we normalise 1/factor, i.e. we normalise the numerator to be equal to duration.denominator()
-              int64_t inverseFactor = reQuant (factor.denominator(), factor.numerator(), Time::SCALE);
-              // some common factors might have been cancelled out, but we know these are integral
+                        /**
+                         * Descriptor for a Strategy to reduce the numbers to keep them in domain.
+                         * After cross-wise cancelling out one part in each factor, the result can be
+                         * constructed without any further multiplication. To achieve that, a slight
+                         * error is introduced into one of the four participating numbers
+                         */
+                        struct ReductionStrategy
+                          {
+                            int64_t f1;  ///< factor one is safe and will not be changed
+                            int64_t u;   ///< the counterpart of f1 is used as quantiser and cancelled out
+                            int64_t q;   ///< the diagonal counterpart of u is scaled to u and cancelled
+                            int64_t f2;  ///< the counterpart of #q is re-quantised to u; it acts as limit
+                            bool invert; ///< Strategy will be applied to the inverse 1/x
+                            
+                            int64_t
+                            determineLimit()
+                              {
+                                REQUIRE (u != 0);
+                                return isFeasible()? u : 0;
+                              }
+                            
+                            Rat
+                            calculateResult()
+                              {
+                                REQUIRE (isFeasible());
+                                f2 = reQuant (f2, q, u);
+                                return invert? Rat{f2, f1}
+                                             : Rat{f1, f2};
+                              }
+                            
+                            bool
+                            isFeasible()
+                              {                           // Note: factors are nonzero,
+                                REQUIRE (u and q and f2);//        otherwise exit after pre-check above
+                                int dim_u = util::ilog2 (abs (u));
+                                int dim_q = util::ilog2 (abs (q));
+                                if (dim_q > dim_u) return true; // requantisation will reduce size and thus no danger
+                                int dim_f = util::ilog2 (abs (f2));
+                                int deltaQ = dim_u - dim_q;     // how much q must be increased to match u
+                                int headroom = MAXDIM - dim_f;  // how much the counter factor f2 can be increased
+                                return headroom > deltaQ;
+                              }
+                          };
+              using Cases = std::array<ReductionStrategy, 4>;
+              // There are four possible strategy configurations.
+              // One case stands out, insofar this factor is guaranteed to be present:
+              // because one of the numbers is a quantised Time, it has Time::SCALE as denominator,
+              // maybe after cancelling out some further common integral factors
               int64_t reduction = Time::SCALE / duration.denominator();
               int64_t durationTicks = duration.numerator()*reduction;
-              // result can be constructed without calculation, due to shared common factors
-              return detox (Rat{durationTicks, inverseFactor});
+              
+                         //-f1--------------------+-u-------------------+-q---------------------+-f2--------------------+-invert--
+              Cases cases{{{durationTicks         , Time::SCALE         , factor.numerator()    , factor.denominator()  , false}
+                          ,{factor.numerator()    , factor.denominator(), duration.numerator()  , duration.denominator(), false}
+                          ,{duration.denominator(), duration.numerator(), factor.denominator()  , factor.numerator()    , true}
+                          ,{factor.denominator()  , factor.numerator()  , duration.denominator(), duration.numerator()  , true}
+                         }};
+              // However, some of the other cases may yield a larger denominator to be cancelled out,
+              // and thus lead to a smaller error margin. Attempt thus to find the best strategy...
+              ReductionStrategy* solution{nullptr};
+              int64_t maxLimit = 0;
+              for (auto& candidate: cases)
+                {
+                  int64_t limit = candidate.determineLimit();
+                  if (limit > maxLimit)
+                    {
+                      maxLimit = limit;
+                      solution = &candidate;
+                    }
+                }
+              
+              ASSERT (solution and maxLimit > 0);
+              return detox (solution->calculateResult());
             }
         }
       
@@ -556,6 +614,7 @@ namespace model {
        * Again, this is a heuristics, based on re-quantisation to a smaller common denominator.
        * @return exact result if representable, otherwise approximation
        * @note result is capped to MAX_TIMESPAN when exceeding domain
+       * @todo this utility function could be factored out into a `FSecs` or `RSec` class  //////////////////TICKET #1262
        */
       static FSecs
       addSafe (FSecs t1, FSecs t2)
@@ -586,7 +645,7 @@ namespace model {
                 u = Time::SCALE;
               else //re-quantise to common denominator more fine-grained than µ-grid
                 if (s1*s2 > 0  // check numerators to detect danger of wrap-around
-                    and (62<util::ilog2(n1) or 62<util::ilog2(n2)))
+                    and (MAXDIM<=util::ilog2(n1) or MAXDIM<=util::ilog2(n2)))
                   u >>= 1;   // danger zone! wrap-around imminent
               
               n1 = d1==u? n1 : reQuant (n1,d1, u);
@@ -599,6 +658,23 @@ namespace model {
             }
         }
       
+      
+      
+      
+      /* === establish and maintain invariants === */
+      /*
+       * - oriented and non-empty windows
+       * - never alter given pxWidth
+       * - zoom metric factor < max zoom
+       * - visibleWindow ⊂ Canvas
+       */
+      
+      static TimeValue
+      ensureNonEmpty (Time start, TimeValue endPoint)
+        {
+          return (start < endPoint)? endPoint
+                                   : start + Time{DEFAULT_CANVAS};
+        }
       
       static Rat
       establishMetric (uint pxWidth, Time startWin, Time afterWin)
