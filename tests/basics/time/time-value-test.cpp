@@ -88,7 +88,7 @@ namespace test{
       void
       checkBasicTimeValues (TimeValue org)
         {
-          TimeValue zero;
+          TimeValue zero(0);
           TimeValue one (1);
           TimeValue max (Time::MAX);
           TimeValue min (Time::MIN);
@@ -248,7 +248,7 @@ namespace test{
       void
       buildDuration (TimeValue org)
         {
-          TimeValue zero;
+          TimeValue zero(0);
           TimeVar point(org);
           point += TimeValue(5);
           CHECK (org < point);
@@ -313,7 +313,6 @@ namespace test{
       void
       buildTimeSpan (TimeValue org)
         {
-          TimeValue zero;
           TimeValue five(5);
           
           TimeSpan interval (Time(org), Duration(Offset (org,five)));

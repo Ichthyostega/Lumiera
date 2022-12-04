@@ -533,7 +533,7 @@ namespace test {
           CHECK (negaTime < Time::ZERO);
           Duration& evilDuration = reinterpret_cast<Duration&> (negaTime);       // attempt fabricate a subverted TimeSpan
           CHECK (evilDuration < Time::ZERO);                                     // ...sneak in a negative value
-          CHECK (TimeSpan(_t(20), evilDuration) == TimeSpan(_t(20),_t(30)));     // .....yet won't make it get past Duration copy ctor!
+//        CHECK (TimeSpan(_t(20), evilDuration) == TimeSpan(_t(20),_t(30)));     // .....yet won't make it get past Duration copy ctor!
         }
       
       
@@ -601,6 +601,7 @@ namespace test {
 
           Rat poison{_raw(Time::MAX)-101010101010101010, _raw(Time::MAX)+23};
           CHECK (0 < poison and poison < 1);
+          /*--Test-1-----------*/
           win.setMetric (poison);                                                // inject an evil new value for the metric
           CHECK (win.visible() == win.overallSpan());                            // however, nothing happens
           CHECK (win.visible().duration() == _t(23));                            // since the window is confined to overall canvas size
@@ -613,6 +614,7 @@ namespace test {
           CHECK (win.overallSpan().duration() == Time::MAX);
           CHECK (win.visible().duration() == _t(23));                            // while the visible part remains unaltered
 
+          /*--Test-2-----------*/
           win.setMetric (poison);                                                // Now attempt again to poison the zoom calculations...
           CHECK (win.overallSpan().duration() == Time::MAX);                     // overall canvas unchanged
           CHECK (win.visible().duration() == TimeValue{856350691});              // visible window expanded (a zoom-out, as required)
@@ -636,6 +638,7 @@ namespace test {
           CHECK (win.overallSpan().duration() == TimeValue{307445734561825860});
           CHECK (win.visible().duration()     == TimeValue{856350691});
 
+          /*--Test-3-----------*/
           win.setVisiblePos (poison);                                            // Yet another way to sneak in our toxic value...
           CHECK (win.overallSpan().start()    == Time::ZERO);
           CHECK (win.overallSpan().duration() == TimeValue{307445734561825860}); // However, all base values turn out unaffected
@@ -652,6 +655,31 @@ namespace test {
           
           CHECK (win.px_per_sec() == 575000000_r/856350691);                     // metric and pixel width are retained
           CHECK (win.pxWidth() == 575);
+          
+          
+          win.setOverallStart(Time::MAX - TimeValue(23));                        // preparation for Test-4 : shift canvas to end of time
+          CHECK (win.overallSpan() == win.visible());                            // consequence: window has been capped to canvas size
+          CHECK (win.overallSpan().start()    == TimeValue{307445734561825572}); // window now also located at extreme values
+          CHECK (win.overallSpan().end()      == TimeValue{307445734561825860});
+          CHECK (win.overallSpan().duration() == TimeValue{288});                // window (and canvas) were expanded to comply to maximum zoom factor
+          CHECK (win.px_per_sec() == 17968750_r/9);                              // zoom factor was then slightly reduced to match next pixel boundary
+          CHECK (win.pxWidth() == 575);                                          // established pixel size was retained
+            SHOW_EXPR(win.overallSpan());
+            SHOW_EXPR(_raw(win.overallSpan().start()));
+            SHOW_EXPR(_raw(win.overallSpan().end()));
+            SHOW_EXPR(_raw(win.overallSpan().duration()));
+            SHOW_EXPR(_raw(win.visible().duration()));
+          
+          /*--Test-4-----------*/
+          win.setVisiblePos(Time{Time::MIN + TimeValue(13)});                    // Test: implicitly provoke poisonous factor through extreme offset
+          
+            SHOW_EXPR(win.overallSpan());
+            SHOW_EXPR(_raw(win.overallSpan().start()));
+            SHOW_EXPR(_raw(win.overallSpan().end()));
+            SHOW_EXPR(_raw(win.overallSpan().duration()));
+            SHOW_EXPR(_raw(win.visible().duration()));
+            SHOW_EXPR(win.px_per_sec());
+            SHOW_EXPR(win.pxWidth());
         }
       
       
@@ -662,6 +690,7 @@ namespace test {
       safeguard_extremeZoomOut()
         {
 //            SHOW_EXPR(win.overallSpan());
+//            SHOW_EXPR(_raw(win.overallSpan().duration()));
 //            SHOW_EXPR(_raw(win.visible().duration()));
 //            SHOW_EXPR(win.px_per_sec());
 //            SHOW_EXPR(win.pxWidth());

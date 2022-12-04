@@ -122,6 +122,7 @@ namespace time {
   
   // forwards...
   class FrameRate;
+  class Duration;
   class TimeSpan;
   class Mutation;
   
@@ -160,17 +161,24 @@ namespace time {
       /** some subclasses may receive modification messages */
       friend class Mutation;
       
+      /** explicit limit of allowed time range */
+      static gavl_time_t limitedTime (gavl_time_t raw);
+      /** safe calculation of explicitly limited time offset */
+      static gavl_time_t limitedDelta (gavl_time_t origin, gavl_time_t target);
+      
+      /** @internal for Offset and Duration entities built on top */
+      TimeValue (TimeValue const& origin, TimeValue const& target)
+        : t_{limitedDelta (origin.t_, target.t_)}
+        { }
+      
     public:
       /** Number of micro ticks (µs) per second as basic time scale */
       static const gavl_time_t SCALE;
       
-      /** explicit limit of allowed time range */
-      static gavl_time_t limited (gavl_time_t raw);
-      
       
       explicit
-      TimeValue (gavl_time_t val=0)       ///< time given in µ ticks here
-        : t_(limited (val))
+      TimeValue (gavl_time_t val)         ///< time given in µ ticks here
+        : t_{limitedTime (val)}
         { }
       
       /** copy initialisation allowed */
@@ -234,7 +242,7 @@ namespace time {
       > >
     {
     public:
-      TimeVar (TimeValue const& time = TimeValue())
+      TimeVar (TimeValue const& time = TimeValue(0))
         : TimeValue(time)
         { }
       
@@ -349,6 +357,8 @@ namespace time {
    * to build derived values, including
    * - the _absolute (positive) distance_ for this offset: #abs
    * - a combined offset by chaining another offset
+   * @note on construction, Offset values are checked and limited
+   *       to be within [-Duration::MAX ... +Duration::MAX]
    */
   class Offset
     : public TimeValue
@@ -366,24 +376,21 @@ namespace time {
       
     public:
       explicit
-      Offset (TimeValue const& distance =Time::ZERO)
-        : TimeValue(distance)
-        { }
+      Offset (TimeValue const& distance =Time::ZERO);
+      
+      explicit
+      Offset (FSecs const& delta_in_secs);
+
+      Offset (FrameCnt count, FrameRate const& fps);
       
       Offset (TimeValue const& origin, TimeValue const& target)
-        : TimeValue(TimeVar(target) -= origin)
+        : TimeValue{origin, target}
         { }
-      
-      Offset (FrameCnt count, FrameRate const& fps);
       
       static const Offset ZERO;
       
-      
-      TimeValue
-      abs()  const
-        {
-          return TimeValue(std::llabs (t_));
-        }
+      /** interpret the distance given by this offset as a time duration */
+      Duration abs()  const;
       
       /** @internal stretch offset by a possibly fractional factor,
        *            and quantise into raw (micro tick) grid */
@@ -446,6 +453,7 @@ namespace time {
    * promoted from an offset. While Duration generally
    * is treated as immutable value, there is the
    * possibility to send a _Mutation message_.
+   * @note Duration relies on Offset being limited
    */
   class Duration
     : public TimeValue
@@ -455,29 +463,36 @@ namespace time {
       
     public:
       Duration()
-        : Duration(Time::ZERO)
+        : TimeValue{Time::ZERO}
         { }
       
       Duration (Offset const& distance)
-        : TimeValue(distance.abs())
+        : TimeValue{buildRaw_(llabs (_raw(distance)))}
         { }
       
       explicit
       Duration (TimeValue const& timeSpec)
-        : TimeValue(Offset(timeSpec).abs())
+        : Duration{Offset{timeSpec}}
         { }
       
       explicit
       Duration (FSecs const& timeSpan_in_secs)
-        : TimeValue(Offset(Time(timeSpan_in_secs)).abs())
+        : Duration{Offset{timeSpan_in_secs}}
+        { }
+      
+      /** duration of the given number of frames.
+       * @note always positive; count used absolute */
+      Duration (FrameCnt count, FrameRate const& fps)
+        : Duration{Offset{count,fps}}
         { }
       
       Duration (TimeSpan const& interval);
-      Duration (FrameCnt count, FrameRate const& fps);
       
       Duration (Duration const& o)
-        : Duration{Offset(o)}
-        { }
+        : TimeValue{o}
+        {// assuming that negative Duration can not be constructed....
+          REQUIRE (t_ >= 0, "Copy rejected: negative Duration %lu", o.t_);
+        }
       
       static const Duration NIL;
       static const Duration MAX ;
@@ -665,6 +680,14 @@ namespace time {
                            , error::LERR_(BOTTOM_VALUE));
       return n;
     }
+    
+    inline gavl_time_t
+    symmetricLimit (gavl_time_t raw, TimeValue lim)
+    {
+      return  raw > lim?  _raw(lim)
+           : -raw > lim? -_raw(lim)
+           :               raw;
+    }
   }//(End) implementation helpers
   
   
@@ -673,16 +696,26 @@ namespace time {
    * raw time value to keep it within the arbitrary
    * boundaries defined by (Time::MAX, Time::MIN).
    * While Time entities are \c not a "safeInt"
-   * implementation, we limit new values and
-   * establish this safety margin to prevent
-   * wrap-around during time quantisation */
+   * implementation, we limit new values to
+   * lower the likelihood of wrap-around */
   inline gavl_time_t
-  TimeValue::limited (gavl_time_t raw)
+  TimeValue::limitedTime (gavl_time_t raw)
   {
-    return raw > Time::MAX? Time::MAX.t_
-         : raw < Time::MIN? Time::MIN.t_
-         :                  raw;
+    return symmetricLimit (raw, Time::MAX);
   }
+  
+  inline gavl_time_t
+  TimeValue::limitedDelta (gavl_time_t origin, gavl_time_t target)
+  {
+    if (0 > (origin^target))
+      {// prevent possible numeric wrap
+        origin = symmetricLimit (origin, Duration::MAX);
+        target = symmetricLimit (target, Duration::MAX);
+      }
+    gavl_time_t res = target - origin;
+    return symmetricLimit (res, Duration::MAX);
+  }
+  
   
   inline
   TimeVar::TimeVar (FSecs const& fractionalSeconds)
@@ -690,8 +723,14 @@ namespace time {
     { }
   
   inline
+  Offset::Offset (TimeValue const& distance)
+    : TimeValue{buildRaw_(symmetricLimit(_raw(distance)
+                                        , Duration::MAX))}
+    { }
+  
+  inline
   Duration::Duration (TimeSpan const& interval)
-    : TimeValue(interval.duration())
+    : Duration{interval.duration()}
     { }
   
   inline
@@ -715,6 +754,11 @@ namespace time {
     return boost::rational_cast<double> (*this);
   }
   
+  inline Duration
+  Offset::abs()  const
+  {
+    return Duration{*this};
+  }
   
   
   

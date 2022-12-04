@@ -183,7 +183,7 @@ namespace test{
           CHECK (Time::MIN          == case2.gridAlign( secs(-1)  ));         //             resulting values will already exceed
           CHECK (Time::MIN          == case2.gridAlign( secs(-2)  ));        //              allowed range and thus will be clipped
           
-          // maximum frame size is half the time range
+          // use very large frame with size of half the time range
           Duration hugeFrame(Time::MAX);
           FixedFrameQuantiser case3 (hugeFrame);
           CHECK (Time::MIN          == case3.gridAlign(Time::MIN  ));
@@ -205,9 +205,45 @@ namespace test{
           CHECK (TimeValue(0)       == case4.gridAlign(Time::MAX -TimeValue(1) ));
           CHECK (TimeValue(0)       == case4.gridAlign(Time::MAX  ));         //.......still truncated down to frame #0
           
-          // larger frames aren't possible
-          Duration not_really_larger(secs(10000) + hugeFrame);
-          CHECK (hugeFrame == not_really_larger);
+          // think big...
+          Duration superHuge{secs(12345) + hugeFrame};
+          Duration extraHuge{2*hugeFrame};
+          CHECK (extraHuge == Duration::MAX);
+          
+          // Time::MAX < superHuge < Duration::Max is possible, but we can accommodate only one
+          FixedFrameQuantiser case5 (superHuge);
+          CHECK (TimeValue(0)       == case5.gridAlign(Time::MAX  ));
+          CHECK (TimeValue(0)       == case5.gridAlign(Time::MAX -TimeValue(1) ));
+          CHECK (TimeValue(0)       == case5.gridAlign( secs( 1)  ));
+          CHECK (TimeValue(0)       == case5.gridAlign( secs( 0)  ));
+          CHECK (Time::MIN          == case5.gridAlign( secs(-1)  ));
+          CHECK (Time::MIN          == case5.gridAlign(Time::MIN +TimeValue(1) ));
+          CHECK (Time::MIN          == case5.gridAlign(Time::MIN  ));
+          
+          // now with offset
+          FixedFrameQuantiser case6 (superHuge, Time::MAX-secs(1));
+          CHECK (TimeValue(0)       == case6.gridAlign(Time::MAX  ));
+          CHECK (TimeValue(0)       == case6.gridAlign(Time::MAX -TimeValue(1) ));
+          CHECK (TimeValue(0)       == case6.gridAlign(Time::MAX -secs(1) ));
+          CHECK (Time::MIN          == case6.gridAlign(Time::MAX -secs(2) ));
+          CHECK (Time::MIN          == case6.gridAlign( secs( 1)          ));
+          CHECK (Time::MIN          == case6.gridAlign( secs(-12345)      ));
+          CHECK (Time::MIN          == case6.gridAlign( secs(-12345-1)    ));
+          CHECK (Time::MIN          == case6.gridAlign( secs(-12345-2)    ));  // this would be one frame lower, but is clipped
+          CHECK (Time::MIN          == case6.gridAlign(Time::MIN +TimeValue(1) ));
+          CHECK (Time::MIN          == case6.gridAlign(Time::MIN  ));          // same... unable to represent time points before Time::MIN
+
+          // maximum frame size is spanning the full time range
+          FixedFrameQuantiser case7 (extraHuge, Time::MIN+secs(1));
+          CHECK (TimeValue(0)       == case7.gridAlign(Time::MAX  ));          // rounded down one frame, i.e. to origin
+          CHECK (TimeValue(0)       == case7.gridAlign( secs( 0)  ));
+          CHECK (TimeValue(0)       == case7.gridAlign(Time::MIN+secs(2) ));
+          CHECK (TimeValue(0)       == case7.gridAlign(Time::MIN+secs(1) ));   // exactly at origin
+          CHECK (Time::MIN          == case7.gridAlign(Time::MIN         ));   // one frame further down, but clipped to Time::MIN
+          
+          // even larger frames aren't possible
+          Duration not_really_larger(secs(10000) + extraHuge);
+          CHECK (extraHuge == not_really_larger);
           
           // frame sizes below the time micro grid get trapped
           long subAtomic = 2*TimeValue::SCALE;                          // too small for this universe...

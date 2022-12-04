@@ -54,7 +54,7 @@ namespace vault {
     gavl_time_t ticksSince1970 = now.tv_sec * TimeValue::SCALE
                                + now.tv_nsec / MICRO_TICS_PER_NANOSECOND; 
     
-    ENSURE (ticksSince1970 == Time::limited (ticksSince1970));
+    ENSURE (ticksSince1970 == _raw(TimeValue{ticksSince1970}));
     return TimeValue::buildRaw_(ticksSince1970);  // bypassing the limit check
   }
   

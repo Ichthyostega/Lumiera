@@ -40893,6 +40893,286 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670016158206" ID="ID_1376502254" MODIFIED="1670016169130" TEXT="setVisiblePos(weit-weg)">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1670017946731" ID="ID_410930969" MODIFIED="1670017960838" TEXT="erst mal das visibleWin nahe an Time::MAX"/>
+<node CREATED="1670017961849" ID="ID_1322153373" MODIFIED="1670017996849" TEXT="dann als gew&#xfc;nschte Position Time::MIN"/>
+<node CREATED="1670024841228" ID="ID_327609209" MODIFIED="1670024849028" TEXT="ist gar nicht so wirklich toxisch">
+<node CREATED="1670024857602" ID="ID_10543296" MODIFIED="1670024880586" TEXT="oder meine Funktionen sind inzwischen hinreichend abgesichert">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1670024990169" ID="ID_737996846" MODIFIED="1670025107388" TEXT="die Division f&#xfc;r den posFactor funktioniert (&#xfc;berraschenderweise)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      also offensichtlich erkennt boost::rational die M&#246;glichkeit, den gemeinsamen Faktor 1e6 aus Z&#228;hler und Nenner wegzuk&#252;rzen. Da wir aber hier einen FSec-Wert als Offset zugeben, haben wir wenig M&#246;glichkeiten, das zu <i>vergiften</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1670024963460" ID="ID_16615073" MODIFIED="1670024981796" TEXT="parabolicAnchorRule kappt den Wert (da au&#xdf;erhalb 0...1)">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#435e98" CREATED="1670025133845" ID="ID_1582569279" MODIFIED="1670025153962" TEXT="infolgedessen sind alle weiteren Berechnungen trivial / no-op"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1670025155874" ID="ID_725576556" MODIFIED="1670025170589" TEXT="aber: der Offset wird gekappt">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1670025172247" ID="ID_962949808" MODIFIED="1670025190742" TEXT="konzeptionelles Problem im Time-handling-Framework">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1670025194925" ID="ID_674387327" MODIFIED="1670025296382" TEXT="Offsets und Durations k&#xf6;nnten 2*Time::MAX (bzw MIN) akzeptieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      rein numerisch w&#252;rde das gehen, da ich Time::MAX | MIN sinnigerweise auf INT_MAX / 30 gesetzt habe. Das war vorausschauend....
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1670025229777" ID="ID_1471304702" MODIFIED="1670025251370" TEXT="aber sie gehen alle stur durch TimeValue, und der kappt auf 1*Time::MAX (bzw MIN)"/>
+<node CREATED="1670025302707" ID="ID_408211429" MODIFIED="1670025314899" TEXT="L&#xf6;sung: Loch bohren">
+<icon BUILTIN="yes"/>
+<node CREATED="1670025330923" ID="ID_664088863" MODIFIED="1670025372823" TEXT="das aktuelle Verhalten ist widersinnig und &#xfc;berraschend">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es untergr&#228;bt gradezu den Sinn dedizierter Zeit-Entit&#228;ten
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1670025386651" ID="ID_1227027753" MODIFIED="1670025402822" TEXT="Idee: der copy-ctor ist nicht limitiert">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670025414136" ID="ID_1966020819" MODIFIED="1670027497697" TEXT="Probleme und Aufgaben">
+<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1670025543263" ID="ID_528446508" MODIFIED="1670120677591" TEXT="neue Limitierungs-Funktion schaffen (&#xb1; Duration::MAX)">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1670025513339" ID="ID_1622564783" MODIFIED="1670120675981" TEXT="der Differenz-ctor mu&#xdf; gr&#xf6;&#xdf;ere Offsets konstruieren k&#xf6;nnen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1670025579708" ID="ID_967783770" MODIFIED="1670120673953" TEXT="neuer ctor f&#xfc;r FSecs">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1670025655456" ID="ID_79471093" MODIFIED="1670120670775" TEXT="die Funktion Offset::abs() neu definieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1670025671469" ID="ID_807444515" MODIFIED="1670025688298" TEXT="bisher konstruiert sie einen TimeValue, und kappt deshalb">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1670025690862" ID="ID_1913450557" MODIFIED="1670080620421" TEXT="Idee: sie konstruiert eine Duration">
+<arrowlink COLOR="#fefdb9" DESTINATION="ID_482497794" ENDARROW="Default" ENDINCLINATION="-192;-7;" ID="Arrow_ID_1014085079" STARTARROW="None" STARTINCLINATION="-207;16;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1670025987045" ID="ID_1491328900" MODIFIED="1670120834295" TEXT="Duration braucht eine &#xbb;Hintert&#xfc;r&#xab;">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1670026021871" ID="ID_1872786617" MODIFIED="1670026051423" TEXT="....durch welche man explizit einen Wert einbringen kann"/>
+<node CREATED="1670026054003" ID="ID_873519529" MODIFIED="1670026069149" TEXT="und der nicht durch die Limitierung der Basis-Klasse TimeValue l&#xe4;uft"/>
+<node CREATED="1670026074664" ID="ID_1460012408" MODIFIED="1670027376431" TEXT="diese Hintert&#xfc;r darf nicht offensichtlich sein">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        auf den ersten Blick darf es nicht aussehen wie &quot;aha, und hier kann ich alles machen&quot;
+      </li>
+      <li>
+        so wie der Zugang beschrieben ist, ist er v&#246;llig logisch und konsistent
+      </li>
+      <li>
+        die erweiterte M&#246;glichkeit erschlie&#223;t sich erst dem aufmerksamen Leser
+      </li>
+      <li>
+        diese erweiterte M&#246;glichkeit erweist sich aber letztlich als nichts anderes als die Konsequenz der formalen Definition
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1670026089995" ID="ID_5043644" MODIFIED="1670026098048" TEXT="und sie darf keinen Mi&#xdf;brauch gestatten">
+<node CREATED="1670026101388" ID="ID_848547621" MODIFIED="1670026120917" TEXT="also die &#xb5;-Ticks m&#xfc;ssen nachher positiv sein"/>
+<node CREATED="1670026121626" ID="ID_1970749903" MODIFIED="1670026130300" TEXT="und limitiert auf Duration::MAX"/>
+</node>
+<node COLOR="#690f14" CREATED="1670026155933" ID="ID_1357490453" MODIFIED="1670079761362" TEXT="Idee: die Limitierung auf TimeValue per ctor-Parameter steuerbar machen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        das w&#228;re dann ein ctor mit einem 2. Argument
+      </li>
+      <li>
+        wer so einen ctor aufruft, wei&#223; was er tut
+      </li>
+      <li>
+        das k&#246;nnte auch sp&#228;ter in eine MicroTic-Basisklasse &#252;bernommen werden
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1670027393582" ID="ID_630920961" MODIFIED="1670027410287" TEXT="damit w&#xfc;rden wir &#xfc;ber den normalen Basis-ctor eintreten"/>
+<node CREATED="1670027412179" ID="ID_558474187" MODIFIED="1670027420848" TEXT="und Werte &#xfc;ber den copy-ctor &#xfc;bernehmen k&#xf6;nnen"/>
+<node CREATED="1670027457629" ID="ID_730521318" MODIFIED="1670027484830" TEXT="der TimeValue-ctor k&#xf6;nnte dann sogar tats&#xe4;chlich die Limitierung enforcen"/>
+<node CREATED="1670079580092" ID="ID_1783175998" MODIFIED="1670079740173" TEXT="Idee verworfen! das wird zu explizit und zu offen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das versaut den bisher sehr sauberen Code von TimeValue, und l&#228;d gradezu dazu ein, hier beliebige Werte zu konstruieren. Im Hinblick darauf, da&#223; ich umgestalten m&#246;chte TimeValue &#10230; MicroTicks, w&#252;rde damit die Daseinsberechtigung untergraben, denn man kann nun nicht mehr sicher sein, da&#223; MicroTicks ein <i>sicherer Wert </i>ist.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1670079773858" ID="ID_1230606534" MODIFIED="1670120643313" TEXT="protected Delta-Konstruktur">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1670079791241" ID="ID_1046215971" MODIFIED="1670079812814" TEXT="wasseridcht, da nur von abgeleiteten Klassen aufgerufen"/>
+<node CREATED="1670079817657" ID="ID_1263461807" MODIFIED="1670079837199" TEXT="nimmt zwei Argumente und macht unmittelbar die limitierte Offset-Berechnung"/>
+</node>
+<node COLOR="#435e98" CREATED="1670079953176" ID="ID_482497794" MODIFIED="1670120655974" TEXT="Duration mu&#xdf; selber f&#xfc;r die Implementierung des Absolutbetrages sorgen">
+<linktarget COLOR="#fefdb9" DESTINATION="ID_482497794" ENDARROW="Default" ENDINCLINATION="-192;-7;" ID="Arrow_ID_1014085079" SOURCE="ID_1913450557" STARTARROW="None" STARTINCLINATION="-207;16;"/>
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1670080498535" ID="ID_1961138610" MODIFIED="1670120658621" TEXT="der ctor Duration(Offset) macht diese Umwandlung">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1670080522251" ID="ID_1399417381" MODIFIED="1670120660266" TEXT="alle anderen Konstruktoren werden darauf aufgebaut">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node CREATED="1670120920391" ID="ID_1544328925" MODIFIED="1670120940299" TEXT="bin nicht wirklich gl&#xfc;cklich mit dem Ergebnis">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1670120943775" ID="ID_1968873669" MODIFIED="1670120966072" TEXT="wir verwenden nun doch an einigen Stellen buildRaw_() und _raw()"/>
+<node CREATED="1670120968395" ID="ID_189852460" MODIFIED="1670121014289" TEXT="noch schlimmer: ich mu&#xdf; jetzt Duration::MAX explizit per reinterpret_cast konstruieren"/>
+<node CREATED="1670121025020" ID="ID_1030076787" MODIFIED="1670121088591" TEXT="&#x27f9; abgeleitete Klassen haben nicht wirklich den Zugangs-Weg, den sie brauchen"/>
+<node CREATED="1670121089738" ID="ID_1726489244" MODIFIED="1670121157461" TEXT="und der Umweg &#xfc;ber Raw ist notwendig, die Zeit-Rechenfunktionen reichen nicht"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1670121166296" ID="ID_1078651329" MODIFIED="1670121217977" TEXT="hei&#xdf;t: die Limitierung sitzt an der falschen Stelle">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1670120849448" ID="ID_633048851" MODIFIED="1670197941515" TEXT="QuantiserBasics_test scheitert">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1670120873385" ID="ID_1718461090" MODIFIED="1670120892890" TEXT="er hat die bisher bestehende Limitierung von Duration explizit abgetestet"/>
+<node CREATED="1670120893850" ID="ID_788600909" MODIFIED="1670120906512" TEXT="gut so, aber jetzt mu&#xdf; ich diesen Test wieder verstehen....">
+<icon BUILTIN="smiley-neutral"/>
+<node CREATED="1670191477920" ID="ID_1536550302" MODIFIED="1670191505143" TEXT="der Test ist ja wirklich sch&#xf6;n &#x201e;basic&#x201c;">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1670191507368" ID="ID_1611277271" MODIFIED="1670191525161" TEXT="was hier scheitert ist eine Nebensache"/>
+<node CREATED="1670191526749" ID="ID_1074184920" MODIFIED="1670191648400" TEXT="dokumentiert lediglich diese unsinnige Limitierung von Offset | Duration">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...ganz dunkel kommt mir die Erinnerung an eine &#8222;kognitive Dissonanz&#8220; &#8212; die ich dann schell unter den Teppich gekehrt hatte, indem ich sie mit einem Assert dokumentierte....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1670191650385" ID="ID_1618349097" MODIFIED="1670191678988" TEXT="mu&#xdf; also eigentlich nur diese nebenbei-Assertion der besseren L&#xf6;sung anpassen"/>
+</node>
+<node COLOR="#338800" CREATED="1670191680385" ID="ID_1961622718" MODIFIED="1670197933608" TEXT="sollte bei der Gelegenheit den Test erweitern und die Grenzen ausreizen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1670191697554" ID="ID_1632102794" MODIFIED="1670191731569" TEXT="zwei weitere Test-Intervalle">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1670191712394" ID="ID_1670947823" MODIFIED="1670191745192" TEXT="gr&#xf6;&#xdf;er als Time::MAX aber kleiner als Duration::MAX">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1670191723322" ID="ID_299394278" MODIFIED="1670191744039" TEXT="exakt Duration::MAX">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1670191732657" ID="ID_1301403557" MODIFIED="1670191739848" TEXT="kombinieren mit Offset">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670191753771" ID="ID_838942043" MODIFIED="1670191797559" TEXT="Nebenbei bemerkt: das Grid::gridAligned() - API ist &#x201e;&#xfc;berraschend&#x201c;">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1670191803951" ID="ID_62422663" MODIFIED="1670191874006" TEXT="das Ergebnis ist relativ zum Grid-Origin">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1670191815870" ID="ID_1441457979" MODIFIED="1670191824182" TEXT="tats&#xe4;chlich so, ist auch so dokumentiert"/>
+<node CREATED="1670191825469" ID="ID_64245414" MODIFIED="1670191888904" TEXT="trotzdem schr&#xe4;g &#x2014; Input absolut, output relativ zum Origin">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node COLOR="#435e98" CREATED="1670191890964" ID="ID_77008687" MODIFIED="1670192169799" TEXT="gibts daf&#xfc;r einen Grund?">
+<icon BUILTIN="help"/>
+<node CREATED="1670191912001" ID="ID_1930426088" MODIFIED="1670191918387" TEXT="Verwendungen: nur Tests">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1670191945933" ID="ID_838705253" MODIFIED="1670192032827" TEXT="Grid::timeOf() funktioniert andres (und wie erwartet)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und die unterliegende lumiera_time_of_gridpoint weicht da ebenfalls auff&#228;llig ab...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1670192005076" ID="ID_1578782665" MODIFIED="1670192067197" TEXT="Grid::timeOf() hat reale Verwendung in der Timecode-Handhabung"/>
+<node CREATED="1670192068956" ID="ID_1880098778" MODIFIED="1670192159480" TEXT="Fazit: das ist ein &#xbb;hexagonales Rad&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....also ein Feature, das zwar auf theoretischer Basis entwickelt wurde, aber nur im testgetriebenen Kontext; hier wohl entstanden aus der implementierungsm&#228;&#223;igen Symmetrie zu Grid::gridPoint(n)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1670192170956" ID="ID_1026606570" MODIFIED="1670192201815" TEXT="API &#xe4;ndern: gridAligned() soll den Origin mit einschlie&#xdf;en">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670192209793" ID="ID_1904533160" MODIFIED="1670192229367" TEXT="Limitierung bedenken">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670192204551" ID="ID_1757335290" MODIFIED="1670192230352" TEXT="Implementierung anpassen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670192239363" ID="ID_968994817" MODIFIED="1670192243152" TEXT="dokumentieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670192231262" ID="ID_185488622" MODIFIED="1670192236941" TEXT="Test anpassen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670027504991" ID="ID_824635341" MODIFIED="1670027509353" TEXT="Tests erg&#xe4;nzen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>

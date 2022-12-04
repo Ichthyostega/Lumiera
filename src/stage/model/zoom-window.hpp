@@ -732,6 +732,8 @@ namespace model {
           REQUIRE (dur < MAX_TIMESPAN);
           REQUIRE (Time::MIN <= startWin_);
           REQUIRE (afterWin_ <= Time::MAX);
+          startAll_ = max (startAll_, Time::MIN);
+          afterAll_ = min (afterAll_, Time::MAX);
           if (dur <= _FSecs(afterAll_-startAll_))
             {//possibly shift into current canvas
               if (afterWin_ > afterAll_)

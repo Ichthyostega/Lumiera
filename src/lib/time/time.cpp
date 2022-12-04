@@ -130,6 +130,11 @@ namespace time {
     : TimeValue(lumiera_rational_to_time (fractionalSeconds))
     { }
   
+  Offset::Offset (FSecs const& delta_in_secs)
+    : TimeValue{buildRaw_(symmetricLimit (lumiera_rational_to_time (delta_in_secs)
+                                         ,Duration::MAX))}
+    { }
+  
   
   /** @note recommendation is to use TCode for external representation
    *  @remarks this is the most prevalent internal diagnostics display
@@ -266,29 +271,29 @@ namespace time {
     boost::rational<int64_t> distance (this->t_);
     distance *= factor;
     gavl_time_t microTicks = floordiv (distance.numerator(), distance.denominator());
-    return Offset(TimeValue(microTicks));
+    return Offset{buildRaw_(microTicks)};
   }
   
   
   /** offset by the given number of frames. */
   Offset::Offset (FrameCnt count, FrameRate const& fps)
-    : TimeValue (count?  (count<0? -1:+1) * lumiera_framecount_to_time (::abs(count), fps)
-                      : _raw(Duration::NIL))
+    : TimeValue{buildRaw_(
+        count? (count<0? -1:+1) * lumiera_framecount_to_time (::abs(count), fps)
+             :_raw(Duration::NIL))}
     { }
   
-  /** duration of the given number of frames.
-   * @note always positive; count used absolute */
-  Duration::Duration (FrameCnt count, FrameRate const& fps)
-    : TimeValue (count? lumiera_framecount_to_time (abs(count), fps) : _raw(Duration::NIL))
-    { }
   
   
   /** constant to indicate "no duration" */
   const Duration Duration::NIL {Time::ZERO};
   
   /** maximum possible temporal extension */
-  const Duration Duration::MAX {Offset{Time::MIN, Time::MAX}};
-
+  const Duration Duration::MAX = []{
+                                     auto maxDelta {Time::MAX - Time::MIN};
+                                     // bypass limit check, which requires Duration::MAX
+                                     return reinterpret_cast<Duration const&> (maxDelta);
+                                   }();
+  
   
 }} // namespace lib::Time
 
