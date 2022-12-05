@@ -40891,8 +40891,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670016158206" ID="ID_1376502254" MODIFIED="1670016169130" TEXT="setVisiblePos(weit-weg)">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1670016158206" ID="ID_1376502254" MODIFIED="1670207142038" TEXT="setVisiblePos(weit-weg)">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1670017946731" ID="ID_410930969" MODIFIED="1670017960838" TEXT="erst mal das visibleWin nahe an Time::MAX"/>
 <node CREATED="1670017961849" ID="ID_1322153373" MODIFIED="1670017996849" TEXT="dann als gew&#xfc;nschte Position Time::MIN"/>
 <node CREATED="1670024841228" ID="ID_327609209" MODIFIED="1670024849028" TEXT="ist gar nicht so wirklich toxisch">
@@ -40917,7 +40917,7 @@
 </node>
 <node COLOR="#435e98" CREATED="1670025133845" ID="ID_1582569279" MODIFIED="1670025153962" TEXT="infolgedessen sind alle weiteren Berechnungen trivial / no-op"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1670025155874" ID="ID_725576556" MODIFIED="1670025170589" TEXT="aber: der Offset wird gekappt">
+<node COLOR="#435e98" CREATED="1670025155874" ID="ID_725576556" MODIFIED="1670205093181" TEXT="aber: der Offset wird gekappt">
 <icon BUILTIN="broken-line"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1670025172247" ID="ID_962949808" MODIFIED="1670025190742" TEXT="konzeptionelles Problem im Time-handling-Framework">
 <icon BUILTIN="messagebox_warning"/>
@@ -40960,6 +40960,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1670025513339" ID="ID_1622564783" MODIFIED="1670120675981" TEXT="der Differenz-ctor mu&#xdf; gr&#xf6;&#xdf;ere Offsets konstruieren k&#xf6;nnen">
+<arrowlink COLOR="#1bb78b" DESTINATION="ID_806986637" ENDARROW="Default" ENDINCLINATION="230;-11;" ID="Arrow_ID_613938878" STARTARROW="None" STARTINCLINATION="-266;12;"/>
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1670025579708" ID="ID_967783770" MODIFIED="1670120673953" TEXT="neuer ctor f&#xfc;r FSecs">
@@ -40976,6 +40977,7 @@
 </node>
 </node>
 <node COLOR="#338800" CREATED="1670025987045" ID="ID_1491328900" MODIFIED="1670120834295" TEXT="Duration braucht eine &#xbb;Hintert&#xfc;r&#xab;">
+<arrowlink COLOR="#26b81b" DESTINATION="ID_1754685572" ENDARROW="Default" ENDINCLINATION="331;-981;" ID="Arrow_ID_636518434" STARTARROW="None" STARTINCLINATION="-1095;84;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1670026021871" ID="ID_1872786617" MODIFIED="1670026051423" TEXT="....durch welche man explizit einen Wert einbringen kann"/>
 <node CREATED="1670026054003" ID="ID_873519529" MODIFIED="1670026069149" TEXT="und der nicht durch die Limitierung der Basis-Klasse TimeValue l&#xe4;uft"/>
@@ -41195,10 +41197,32 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670027504991" ID="ID_824635341" MODIFIED="1670027509353" TEXT="Tests erg&#xe4;nzen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1670027504991" ID="ID_824635341" MODIFIED="1670207132035" TEXT="Tests erg&#xe4;nzen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1670207096977" ID="ID_1058283055" MODIFIED="1670207102076" TEXT="nicht mehr viel zu tun"/>
+<node CREATED="1670207102815" ID="ID_379496016" MODIFIED="1670207118027" TEXT="f&#xfc;ge ein paar Extremwerte f&#xfc;r TimeValule_test hinzu"/>
 </node>
 </node>
+<node COLOR="#435e98" CREATED="1670201406958" ID="ID_622847359" MODIFIED="1670205084655" TEXT="leider wird er aber immer noch gekappt....">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1670201771912" ID="ID_1540566423" MODIFIED="1670201786749" TEXT="das liegt nun daran, da&#xdf; wir automatisch in eine TimeVar umrechnen"/>
+<node COLOR="#338800" CREATED="1670204890068" ID="ID_671165920" MODIFIED="1670207195581" TEXT="als Offset markieren gen&#xfc;gt">
+<arrowlink COLOR="#46c71d" DESTINATION="ID_806986637" ENDARROW="Default" ENDINCLINATION="96;5;" ID="Arrow_ID_1094641771" STARTARROW="None" STARTINCLINATION="-3;83;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1670204908278" ID="ID_947864676" MODIFIED="1670204917446" TEXT="einserseits sch&#xf6;n..."/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1670204918941" ID="ID_1258511726" LINK="#ID_1144294293" MODIFIED="1670204991899" TEXT="andererseits irritierend und &#xe4;rgerlich">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1670205019071" ID="ID_699039716" MODIFIED="1670205030858" TEXT="nach logischen Prinzipien nicht wirklich nachvollziehbar"/>
+<node CREATED="1670205031566" ID="ID_1841899173" MODIFIED="1670205041041" TEXT="liegt an der konkreten Definition der Operatoren"/>
+<node CREATED="1670205042401" ID="ID_754662783" MODIFIED="1670205067436" TEXT="wenn Offset rechts &#x27f9; keine Limitierung"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1670207153549" ID="ID_806986637" MODIFIED="1670207252721" TEXT="mit diesem Fix im Time-Framework funktioniert der Test">
+<linktarget COLOR="#46c71d" DESTINATION="ID_806986637" ENDARROW="Default" ENDINCLINATION="96;5;" ID="Arrow_ID_1094641771" SOURCE="ID_671165920" STARTARROW="None" STARTINCLINATION="-3;83;"/>
+<linktarget COLOR="#1bb78b" DESTINATION="ID_806986637" ENDARROW="Default" ENDINCLINATION="230;-11;" ID="Arrow_ID_613938878" SOURCE="ID_1622564783" STARTARROW="None" STARTINCLINATION="-266;12;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -58067,7 +58091,7 @@
 <node CREATED="1667336818154" ID="ID_228764070" MODIFIED="1667336839107" TEXT="TimeValue + symbolische Grid-Referenz"/>
 <node CREATED="1667336841967" ID="ID_1852849270" MODIFIED="1667336856426" TEXT="Grid &#xfc;ber das Advice-System publiziert"/>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1667476797049" FOLDED="true" ID="ID_767502481" MODIFIED="1667770624162" TEXT="Diskussion: interne Zeitbasis">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1667476797049" FOLDED="true" ID="ID_767502481" MODIFIED="1670204015059" TEXT="Diskussion: interne Zeitbasis">
 <linktarget COLOR="#af1a4c" DESTINATION="ID_767502481" ENDARROW="Default" ENDINCLINATION="96;-430;" ID="Arrow_ID_1672039685" SOURCE="ID_1838246834" STARTARROW="None" STARTINCLINATION="-670;38;"/>
 <linktarget COLOR="#535cb5" DESTINATION="ID_767502481" ENDARROW="Default" ENDINCLINATION="-9;23;" ID="Arrow_ID_1371034703" SOURCE="ID_368365221" STARTARROW="None" STARTINCLINATION="-97;6;"/>
 <icon BUILTIN="hourglass"/>
@@ -58148,11 +58172,9 @@
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667592184752" ID="ID_1933332619" MODIFIED="1667592189752" TEXT="Aufr&#xe4;um-Arbeiten">
+<linktarget COLOR="#d42360" DESTINATION="ID_1933332619" ENDARROW="Default" ENDINCLINATION="120;134;" ID="Arrow_ID_1382957344" SOURCE="ID_1052463489" STARTARROW="None" STARTINCLINATION="-43;-56;"/>
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667592193783" ID="ID_1808934689" MODIFIED="1667592204255" TEXT="#1259 organise raw time base implementation">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667770629647" ID="ID_1236820860" MODIFIED="1667770635263" TEXT="#1261 reconsider (im)mutability of time entities">
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node CREATED="1667592218952" ID="ID_1463501252" MODIFIED="1667592230199" TEXT="Einsichten">
@@ -58204,9 +58226,15 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667593471839" ID="ID_1651396499" MODIFIED="1667593549109" TEXT="gavl_time_t ersetzen durch einen Typedef RawTicks">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667593471839" ID="ID_1651396499" MODIFIED="1670203676799" TEXT="gavl_time_t ersetzen durch Wrapper MicroTicks">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667593606149" ID="ID_1259605001" MODIFIED="1667593625459" TEXT="_raw() &#x27f6; _rawTicks()">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667593606149" ID="ID_1259605001" MODIFIED="1670203652106" TEXT="_raw() &#x27f6; _microTicks()">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670203683451" ID="ID_937451574" MODIFIED="1670203743053" TEXT="direkt konvertierbar auf int64_t">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670203743874" ID="ID_1876693617" MODIFIED="1670203758849" TEXT="nicht direkt konvertierbar aus time::Time">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -58229,7 +58257,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667592825916" ID="ID_66335543" MODIFIED="1667592941549" TEXT="implizit konstruierbar aus Rat">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667592930415" ID="ID_569654636" MODIFIED="1667592944318" TEXT="implizit konstruierbar aus TimeVal">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667592930415" ID="ID_569654636" MODIFIED="1670203770202" TEXT="implizit konstruierbar aus time::Time">
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667592835795" ID="ID_1955597942" MODIFIED="1667592942626">
@@ -58294,6 +58322,113 @@
 <node CREATED="1667336865688" ID="ID_1539710424" MODIFIED="1667336875998" TEXT="kann aus einer lib::time::QuTime erzeugt werden"/>
 <node CREATED="1667336880473" ID="ID_789960595" MODIFIED="1667337093278" TEXT="Stand 2011... (2022) nur SMPTE-Format implementiert">
 <icon BUILTIN="flag-orange"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1670203198923" FOLDED="true" ID="ID_195957857" MODIFIED="1670204958743" TEXT="Design-Kritik">
+<font NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="bell"/>
+<node CREATED="1670203232878" ID="ID_368365221" MODIFIED="1670204032769" TEXT="Verh&#xe4;ltnis zur Implementierungs-Basis unklar">
+<arrowlink COLOR="#535cb5" DESTINATION="ID_767502481" ENDARROW="Default" ENDINCLINATION="-9;23;" ID="Arrow_ID_1371034703" STARTARROW="None" STARTINCLINATION="-97;6;"/>
+</node>
+<node CREATED="1670203264566" ID="ID_428273621" MODIFIED="1670203286172" TEXT="Debugging und Testcode schafft doch literale Zug&#xe4;nge"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670203289398" ID="ID_809304620" MODIFIED="1670203870830" TEXT="Immutabilit&#xe4;t erscheint fragw&#xfc;rdig">
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667770629647" ID="ID_1236820860" MODIFIED="1670203851793" TEXT="#1261 reconsider (im)mutability of time entities">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670204619655" ID="ID_1759515738" MODIFIED="1670204679042" TEXT="TimeVar f&#xfc;r Berechnungen niveliert semantische Markierung">
+<linktarget COLOR="#f2343e" DESTINATION="ID_1759515738" ENDARROW="Default" ENDINCLINATION="166;8;" ID="Arrow_ID_1959295757" SOURCE="ID_1588461392" STARTARROW="None" STARTINCLINATION="-129;-5;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670204052113" ID="ID_1534149938" MODIFIED="1670204073846" TEXT="Problem mit der Werte-Limitierung">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670204087132" ID="ID_1403269339" MODIFIED="1670204092980" TEXT="#1263 consistent clipping of time duration">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1670204097323" ID="ID_1011988316" MODIFIED="1670204161413" TEXT="Offset und Duration braucht eine andere (gr&#xf6;&#xdf;ere) Dom&#xe4;ne">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Begr&#252;ndung: sie entstehen als Delta aus validen Zeitpunkten
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#338800" CREATED="1670204169634" ID="ID_1754685572" MODIFIED="1670204363701" TEXT="Refactoring Offset-Konstruktion">
+<linktarget COLOR="#26b81b" DESTINATION="ID_1754685572" ENDARROW="Default" ENDINCLINATION="331;-981;" ID="Arrow_ID_636518434" SOURCE="ID_1491328900" STARTARROW="None" STARTINCLINATION="-1095;84;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1670204184655" ID="ID_1092716549" MODIFIED="1670204199898" TEXT="Offset macht nun die Limitierungen"/>
+<node CREATED="1670204200509" ID="ID_699139338" MODIFIED="1670204213099" TEXT="delegiert dazu an einen protected-ctor auf TimeValue"/>
+<node CREATED="1670204214419" ID="ID_1562184209" MODIFIED="1670204223542" TEXT="Duration macht nur noch den Absoutbetrag"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1670204367479" ID="ID_600631420" MODIFIED="1670204378958" TEXT="Design noch nicht optimal">
+<icon BUILTIN="bell"/>
+<node CREATED="1670204381408" ID="ID_12412150" MODIFIED="1670204393672" TEXT="Zugang zur Limitierungsfunktion problematisch">
+<node CREATED="1670204394437" ID="ID_328468461" MODIFIED="1670204422149" TEXT="sollte protected sein">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1670204407834" ID="ID_1521072795" MODIFIED="1670204413020" TEXT="kein general-purpose Util"/>
+<node CREATED="1670204413617" ID="ID_1825520187" MODIFIED="1670204420067" TEXT="Limitierung sollte nicht wahlfrei sein"/>
+</node>
+<node CREATED="1670204429399" ID="ID_256174974" MODIFIED="1670204448043" TEXT="braucht damit aber unterscheidbare ctor-Signatur">
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1670204461587" ID="ID_1011570785" MODIFIED="1670204488608" TEXT="Limitierung auf dem Basis-ctor kommt in die Quere">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1670204449421" ID="ID_788489713" MODIFIED="1670204497787" TEXT="mu&#xdf; deshalb x-fach ein/auspacken">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node CREATED="1670204511138" ID="ID_1144294293" MODIFIED="1670204539603" TEXT="Limitierung tritt in Arrithmetik ehr zuf&#xe4;llig auf">
+<node CREATED="1670204540718" ID="ID_1255308536" MODIFIED="1670204561965" TEXT="es ist praktisch nicht vorhersagbar, wann limitiert wird"/>
+<node CREATED="1670204592570" ID="ID_1588461392" MODIFIED="1670204684420" TEXT="das liegt an dem transparenten &#xdc;bergang in TimeVar">
+<arrowlink COLOR="#f2343e" DESTINATION="ID_1759515738" ENDARROW="Default" ENDINCLINATION="166;8;" ID="Arrow_ID_1959295757" STARTARROW="None" STARTINCLINATION="-129;-5;"/>
+</node>
+<node CREATED="1670204715456" ID="ID_647133339" MODIFIED="1670204719419" TEXT="Wunsch">
+<node CREATED="1670204720743" ID="ID_87999446" MODIFIED="1670204735721" TEXT="LImitieren bei expliziten Konstruktoren (semantische Markierung)"/>
+<node CREATED="1670204736590" ID="ID_1752769748" MODIFIED="1670204759294" TEXT="nahtloser Einstieg in Arithmetik aus allen Typen"/>
+<node CREATED="1670204764337" ID="ID_591425903" MODIFIED="1670204776244" TEXT="Ergebnis-Typ nach inhaltlicher Logik">
+<node CREATED="1670204803999" ID="ID_1882907381" MODIFIED="1670204814909" TEXT="Differenz &#x27f9; Offset"/>
+<node CREATED="1670204815956" ID="ID_672733611" MODIFIED="1670204833364" TEXT="Linearkombination: Zeitpunkte bzw. Offsets"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1670203323167" ID="ID_1083592054" MODIFIED="1670203328942" TEXT="Refactoring">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670203333148" ID="ID_1052463489" MODIFIED="1670203824726" TEXT="Wrapper f&#xfc;r die Implementierungs-Basis">
+<arrowlink COLOR="#d42360" DESTINATION="ID_1933332619" ENDARROW="Default" ENDINCLINATION="120;134;" ID="Arrow_ID_1382957344" STARTARROW="None" STARTINCLINATION="-43;-56;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670203448666" ID="ID_1420123614" MODIFIED="1670203482999" TEXT="MicroTick ersetzt gavl_time_t">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670203464680" ID="ID_349050555" MODIFIED="1670203482999" TEXT="RSec ersetzt FSecs">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670203472359" ID="ID_1087095065" MODIFIED="1670203483000" TEXT="bisherige C-Library aufl&#xf6;sen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670203346727" ID="ID_1489900097" MODIFIED="1670203553277" TEXT="time::Time als Basis">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1670203370236" ID="ID_974452608" MODIFIED="1670203375393" TEXT="algebraisch und mutable"/>
+<node CREATED="1670203376013" ID="ID_72780058" MODIFIED="1670203381494" TEXT="TimeVar komplett entfernen"/>
+<node CREATED="1670203387130" ID="ID_1357163033" MODIFIED="1670203395404" TEXT="time::Mutation komplett entfernen"/>
+</node>
+<node CREATED="1670203401635" ID="ID_135612509" MODIFIED="1670203425528" TEXT="Design der Zeit-Enit&#xe4;ten verifizieren"/>
+<node CREATED="1670203429905" ID="ID_1045402545" MODIFIED="1670203445062" TEXT="Algebra / Operatoren konsolidieren"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1670203488757" ID="ID_1532708654" MODIFIED="1670203541963" TEXT="time::Control anpassen und vereinfachen">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1670203509562" ID="ID_1543321531" MODIFIED="1670203517718" TEXT="soll weiterhin">
+<node CREATED="1670203518560" ID="ID_1636215930" MODIFIED="1670203523492" TEXT="als Mediator fungieren"/>
+<node CREATED="1670203524072" ID="ID_758755449" MODIFIED="1670203535578" TEXT="die verschiedenen Ziel-Typen nivellieren"/>
+</node>
+</node>
 </node>
 </node>
 </node>

@@ -77,6 +77,7 @@ namespace test{
           buildTimeSpan (ref);
           compareTimeSpan (Time(ref));
           relateTimeIntervals (ref);
+          verify_extremeValues();
           verify_fractionalOffset();
         } 
       
@@ -289,7 +290,33 @@ namespace test{
       
       
       void
-      verify_fractionalOffset ()
+      verify_extremeValues()
+        {
+          CHECK (Time::MIN < Time::MAX);
+          CHECK (_raw(Time::MAX) < std::numeric_limits<int64_t>::max());
+          CHECK (_raw(Time::MIN) > std::numeric_limits<int64_t>::min());
+          
+          // Values are limited at construction, but not in calculations
+          CHECK (Time::MAX - Time(0,1) < Time::MAX);
+          CHECK (Time::MAX - Time(0,1) + Time(0,3) > Time::MAX);
+          CHECK (TimeValue{_raw(Time::MAX-Time(0,1)+Time(0,3))} == Time::MAX);  // clipped at max
+          CHECK (TimeValue{_raw(Time::MIN+Time(0,5)-Time(0,9))} == Time::MIN);  // clipped at min
+          
+          CHECK (Duration::MAX > Time::MAX);
+          CHECK (_raw(Duration::MAX) < std::numeric_limits<int64_t>::max());
+          CHECK (Duration::MAX == Time::MAX - Time::MIN);
+          CHECK (-Duration::MAX == Offset{Time::MIN - Time::MAX});
+          
+          CHECK (                Time::MAX + Duration::MAX    >  Duration::MAX);
+          CHECK (                Time::MIN - Duration::MAX    < -Duration::MAX);
+          CHECK (         Offset{Time::MAX + Duration::MAX}  ==  Duration::MAX); // clipped at max
+          CHECK (         Offset{Time::MIN - Duration::MAX}  == -Duration::MAX); // clipped at min
+          CHECK (Duration{Offset{Time::MIN - Duration::MAX}} ==  Duration::MAX); // duration is absolute
+        }
+      
+      
+      void
+      verify_fractionalOffset()
         {
           typedef boost::rational<FrameCnt> Frac;
           

@@ -664,22 +664,18 @@ namespace test {
           CHECK (win.overallSpan().duration() == TimeValue{288});                // window (and canvas) were expanded to comply to maximum zoom factor
           CHECK (win.px_per_sec() == 17968750_r/9);                              // zoom factor was then slightly reduced to match next pixel boundary
           CHECK (win.pxWidth() == 575);                                          // established pixel size was retained
-            SHOW_EXPR(win.overallSpan());
-            SHOW_EXPR(_raw(win.overallSpan().start()));
-            SHOW_EXPR(_raw(win.overallSpan().end()));
-            SHOW_EXPR(_raw(win.overallSpan().duration()));
-            SHOW_EXPR(_raw(win.visible().duration()));
           
           /*--Test-4-----------*/
           win.setVisiblePos(Time{Time::MIN + TimeValue(13)});                    // Test: implicitly provoke poisonous factor through extreme offset
+          CHECK (win.visible().start() == Time::MIN + TimeValue(13));            // even while this position is far off, window start was alinget to it
+          CHECK (win.visible().end()   == win.visible().start() + TimeValue{288});
+          CHECK (win.visible().duration() == TimeValue{288});
           
-            SHOW_EXPR(win.overallSpan());
-            SHOW_EXPR(_raw(win.overallSpan().start()));
-            SHOW_EXPR(_raw(win.overallSpan().end()));
-            SHOW_EXPR(_raw(win.overallSpan().duration()));
-            SHOW_EXPR(_raw(win.visible().duration()));
-            SHOW_EXPR(win.px_per_sec());
-            SHOW_EXPR(win.pxWidth());
+          CHECK (win.overallSpan().start() == win.visible().start());            // canvas start at window start
+          CHECK (win.overallSpan().end()   == TimeValue{307445734561825860});    // canvas end not changed
+          CHECK (_raw(win.overallSpan().duration()) == 614891469123651707);      // canvas size was expanded to encompass changed window position
+          CHECK (win.px_per_sec() == 17968750_r/9);                              // zoom factor not changed
+          CHECK (win.pxWidth() == 575);                                          // established pixel size retained
         }
       
       

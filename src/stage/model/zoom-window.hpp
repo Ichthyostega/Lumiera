@@ -904,7 +904,7 @@ namespace model {
           Rat posFactor = canvasOffset / FSecs{afterAll_-startAll_};
           posFactor = parabolicAnchorRule (posFactor); // also limited 0...1
           FSecs partBeforeAnchor = scaleSafe (duration, posFactor);
-          startWin_ = startAll_ + addSafe (canvasOffset, -partBeforeAnchor);
+          startWin_ = startAll_ + Offset{addSafe (canvasOffset, -partBeforeAnchor)};
           establishWindowDuration (duration);
           startAll_ = min (startAll_, startWin_);
           afterAll_ = max (afterAll_, afterWin_);
