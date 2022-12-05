@@ -99,7 +99,7 @@ namespace test{
           CHECK (Time( frames   *F25) <= rawTime);
           CHECK (Time((frames+1)*F25) >  rawTime);
           
-          Time quantTime (fixQ.gridAlign (rawTime));
+          Time quantTime (fixQ.gridLocal (rawTime));
           
           CHECK (Time(frames*F25) == quantTime);
         }
@@ -118,7 +118,7 @@ namespace test{
           int
           quant (int testPoint)
             {
-              TimeVar quantised = this->gridAlign(TimeValue(testPoint));
+              TimeVar quantised = this->gridLocal(TimeValue(testPoint));
               return int(quantised);
             }
         };
@@ -162,48 +162,48 @@ namespace test{
         {
           // origin at lower end of the time range
           FixedFrameQuantiser case1 (1, Time::MIN);
-          CHECK (secs(0)            == case1.gridAlign(Time::MIN  ));
-          CHECK (secs(0)            == case1.gridAlign(Time::MIN +TimeValue(1) ));
-          CHECK (secs(1)            == case1.gridAlign(Time::MIN +secs(1) ));
-          CHECK (Time::MAX -secs(1) >  case1.gridAlign( secs(-1)  ));
-          CHECK (Time::MAX -secs(1) <= case1.gridAlign( secs (0)  ));
-          CHECK (Time::MAX          >  case1.gridAlign( secs (0)  ));
-          CHECK (Time::MAX          == case1.gridAlign( secs(+1)  ));
-          CHECK (Time::MAX          == case1.gridAlign( secs(+2)  ));
+          CHECK (secs(0)            == case1.gridLocal(Time::MIN  ));
+          CHECK (secs(0)            == case1.gridLocal(Time::MIN +TimeValue(1) ));
+          CHECK (secs(1)            == case1.gridLocal(Time::MIN +secs(1) ));
+          CHECK (Time::MAX -secs(1) >  case1.gridLocal( secs(-1)  ));
+          CHECK (Time::MAX -secs(1) <= case1.gridLocal( secs (0)  ));
+          CHECK (Time::MAX          >  case1.gridLocal( secs (0)  ));
+          CHECK (Time::MAX          == case1.gridLocal( secs(+1)  ));
+          CHECK (Time::MAX          == case1.gridLocal( secs(+2)  ));
           
           // origin at upper end of the time range
           FixedFrameQuantiser case2 (1, Time::MAX);
-          CHECK (secs( 0)           == case2.gridAlign(Time::MAX  ));
-          CHECK (secs(-1)           == case2.gridAlign(Time::MAX -TimeValue(1) ));  // note: next lower frame
-          CHECK (secs(-1)           == case2.gridAlign(Time::MAX -secs(1) ));      //        i.e. the same as a whole frame down
-          CHECK (Time::MIN +secs(1) <  case2.gridAlign( secs(+2)  ));
-          CHECK (Time::MIN +secs(1) >= case2.gridAlign( secs(+1)  ));
-          CHECK (Time::MIN          <  case2.gridAlign( secs(+1)  ));
-          CHECK (Time::MIN          == case2.gridAlign( secs( 0)  ));          //      note: because of downward truncating,
-          CHECK (Time::MIN          == case2.gridAlign( secs(-1)  ));         //             resulting values will already exceed
-          CHECK (Time::MIN          == case2.gridAlign( secs(-2)  ));        //              allowed range and thus will be clipped
+          CHECK (secs( 0)           == case2.gridLocal(Time::MAX  ));
+          CHECK (secs(-1)           == case2.gridLocal(Time::MAX -TimeValue(1) ));  // note: next lower frame
+          CHECK (secs(-1)           == case2.gridLocal(Time::MAX -secs(1) ));      //        i.e. the same as a whole frame down
+          CHECK (Time::MIN +secs(1) <  case2.gridLocal( secs(+2)  ));
+          CHECK (Time::MIN +secs(1) >= case2.gridLocal( secs(+1)  ));
+          CHECK (Time::MIN          <  case2.gridLocal( secs(+1)  ));
+          CHECK (Time::MIN          == case2.gridLocal( secs( 0)  ));          //      note: because of downward truncating,
+          CHECK (Time::MIN          == case2.gridLocal( secs(-1)  ));         //             resulting values will already exceed
+          CHECK (Time::MIN          == case2.gridLocal( secs(-2)  ));        //              allowed range and thus will be clipped
           
           // use very large frame with size of half the time range
           Duration hugeFrame(Time::MAX);
           FixedFrameQuantiser case3 (hugeFrame);
-          CHECK (Time::MIN          == case3.gridAlign(Time::MIN  ));
-          CHECK (Time::MIN          == case3.gridAlign(Time::MIN +TimeValue(1) ));
-          CHECK (Time::MIN          == case3.gridAlign( secs(-1)  ));
-          CHECK (TimeValue(0)       == case3.gridAlign( secs( 0)  ));
-          CHECK (TimeValue(0)       == case3.gridAlign( secs(+1)  ));
-          CHECK (TimeValue(0)       == case3.gridAlign(Time::MAX -TimeValue(1) ));
-          CHECK (Time::MAX          == case3.gridAlign(Time::MAX  ));
+          CHECK (Time::MIN          == case3.gridLocal(Time::MIN  ));
+          CHECK (Time::MIN          == case3.gridLocal(Time::MIN +TimeValue(1) ));
+          CHECK (Time::MIN          == case3.gridLocal( secs(-1)  ));
+          CHECK (TimeValue(0)       == case3.gridLocal( secs( 0)  ));
+          CHECK (TimeValue(0)       == case3.gridLocal( secs(+1)  ));
+          CHECK (TimeValue(0)       == case3.gridLocal(Time::MAX -TimeValue(1) ));
+          CHECK (Time::MAX          == case3.gridLocal(Time::MAX  ));
           
           // now displacing this grid by +1sec....
           FixedFrameQuantiser case4 (hugeFrame, secs(1));
-          CHECK (Time::MIN          == case4.gridAlign(Time::MIN  ));
-          CHECK (Time::MIN          == case4.gridAlign(Time::MIN +TimeValue(1) ));  // clipped...
-          CHECK (Time::MIN          == case4.gridAlign(Time::MIN +secs(1) ));      //  but now exact (unclipped)
-          CHECK (Time::MIN          == case4.gridAlign( secs(-1)  ));
-          CHECK (Time::MIN          == case4.gridAlign( secs( 0)  ));
-          CHECK (TimeValue(0)       == case4.gridAlign( secs(+1)  ));           //.....now exactly the frame number zero
-          CHECK (TimeValue(0)       == case4.gridAlign(Time::MAX -TimeValue(1) ));
-          CHECK (TimeValue(0)       == case4.gridAlign(Time::MAX  ));         //.......still truncated down to frame #0
+          CHECK (Time::MIN          == case4.gridLocal(Time::MIN  ));
+          CHECK (Time::MIN          == case4.gridLocal(Time::MIN +TimeValue(1) ));  // clipped...
+          CHECK (Time::MIN          == case4.gridLocal(Time::MIN +secs(1) ));      //  but now exact (unclipped)
+          CHECK (Time::MIN          == case4.gridLocal( secs(-1)  ));
+          CHECK (Time::MIN          == case4.gridLocal( secs( 0)  ));
+          CHECK (TimeValue(0)       == case4.gridLocal( secs(+1)  ));           //.....now exactly the frame number zero
+          CHECK (TimeValue(0)       == case4.gridLocal(Time::MAX -TimeValue(1) ));
+          CHECK (TimeValue(0)       == case4.gridLocal(Time::MAX  ));         //.......still truncated down to frame #0
           
           // think big...
           Duration superHuge{secs(12345) + hugeFrame};
@@ -212,34 +212,34 @@ namespace test{
           
           // Time::MAX < superHuge < Duration::Max is possible, but we can accommodate only one
           FixedFrameQuantiser case5 (superHuge);
-          CHECK (TimeValue(0)       == case5.gridAlign(Time::MAX  ));
-          CHECK (TimeValue(0)       == case5.gridAlign(Time::MAX -TimeValue(1) ));
-          CHECK (TimeValue(0)       == case5.gridAlign( secs( 1)  ));
-          CHECK (TimeValue(0)       == case5.gridAlign( secs( 0)  ));
-          CHECK (Time::MIN          == case5.gridAlign( secs(-1)  ));
-          CHECK (Time::MIN          == case5.gridAlign(Time::MIN +TimeValue(1) ));
-          CHECK (Time::MIN          == case5.gridAlign(Time::MIN  ));
+          CHECK (TimeValue(0)       == case5.gridLocal(Time::MAX  ));
+          CHECK (TimeValue(0)       == case5.gridLocal(Time::MAX -TimeValue(1) ));
+          CHECK (TimeValue(0)       == case5.gridLocal( secs( 1)  ));
+          CHECK (TimeValue(0)       == case5.gridLocal( secs( 0)  ));
+          CHECK (Time::MIN          == case5.gridLocal( secs(-1)  ));
+          CHECK (Time::MIN          == case5.gridLocal(Time::MIN +TimeValue(1) ));
+          CHECK (Time::MIN          == case5.gridLocal(Time::MIN  ));
           
           // now with offset
           FixedFrameQuantiser case6 (superHuge, Time::MAX-secs(1));
-          CHECK (TimeValue(0)       == case6.gridAlign(Time::MAX  ));
-          CHECK (TimeValue(0)       == case6.gridAlign(Time::MAX -TimeValue(1) ));
-          CHECK (TimeValue(0)       == case6.gridAlign(Time::MAX -secs(1) ));
-          CHECK (Time::MIN          == case6.gridAlign(Time::MAX -secs(2) ));
-          CHECK (Time::MIN          == case6.gridAlign( secs( 1)          ));
-          CHECK (Time::MIN          == case6.gridAlign( secs(-12345)      ));
-          CHECK (Time::MIN          == case6.gridAlign( secs(-12345-1)    ));
-          CHECK (Time::MIN          == case6.gridAlign( secs(-12345-2)    ));  // this would be one frame lower, but is clipped
-          CHECK (Time::MIN          == case6.gridAlign(Time::MIN +TimeValue(1) ));
-          CHECK (Time::MIN          == case6.gridAlign(Time::MIN  ));          // same... unable to represent time points before Time::MIN
+          CHECK (TimeValue(0)       == case6.gridLocal(Time::MAX  ));
+          CHECK (TimeValue(0)       == case6.gridLocal(Time::MAX -TimeValue(1) ));
+          CHECK (TimeValue(0)       == case6.gridLocal(Time::MAX -secs(1) ));
+          CHECK (Time::MIN          == case6.gridLocal(Time::MAX -secs(2) ));
+          CHECK (Time::MIN          == case6.gridLocal( secs( 1)          ));
+          CHECK (Time::MIN          == case6.gridLocal( secs(-12345)      ));
+          CHECK (Time::MIN          == case6.gridLocal( secs(-12345-1)    ));
+          CHECK (Time::MIN          == case6.gridLocal( secs(-12345-2)    ));  // this would be one frame lower, but is clipped
+          CHECK (Time::MIN          == case6.gridLocal(Time::MIN +TimeValue(1) ));
+          CHECK (Time::MIN          == case6.gridLocal(Time::MIN  ));          // same... unable to represent time points before Time::MIN
 
           // maximum frame size is spanning the full time range
           FixedFrameQuantiser case7 (extraHuge, Time::MIN+secs(1));
-          CHECK (TimeValue(0)       == case7.gridAlign(Time::MAX  ));          // rounded down one frame, i.e. to origin
-          CHECK (TimeValue(0)       == case7.gridAlign( secs( 0)  ));
-          CHECK (TimeValue(0)       == case7.gridAlign(Time::MIN+secs(2) ));
-          CHECK (TimeValue(0)       == case7.gridAlign(Time::MIN+secs(1) ));   // exactly at origin
-          CHECK (Time::MIN          == case7.gridAlign(Time::MIN         ));   // one frame further down, but clipped to Time::MIN
+          CHECK (TimeValue(0)       == case7.gridLocal(Time::MAX  ));          // rounded down one frame, i.e. to origin
+          CHECK (TimeValue(0)       == case7.gridLocal( secs( 0)  ));
+          CHECK (TimeValue(0)       == case7.gridLocal(Time::MIN+secs(2) ));
+          CHECK (TimeValue(0)       == case7.gridLocal(Time::MIN+secs(1) ));   // exactly at origin
+          CHECK (Time::MIN          == case7.gridLocal(Time::MIN         ));   // one frame further down, but clipped to Time::MIN
           
           // even larger frames aren't possible
           Duration not_really_larger(secs(10000) + extraHuge);

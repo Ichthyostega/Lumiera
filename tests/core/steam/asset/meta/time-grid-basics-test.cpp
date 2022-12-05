@@ -109,7 +109,7 @@ namespace test {
           ASSERT (0 < dirt);
           
           Time dirty(point + Time(dirt));
-          CHECK (point == TEST_ORIGIN + myGrid->gridAlign(dirty));
+          CHECK (point == TEST_ORIGIN + myGrid->gridLocal(dirty));
         }
       
       

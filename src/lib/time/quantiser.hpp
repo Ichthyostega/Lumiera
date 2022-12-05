@@ -123,7 +123,7 @@ namespace time {
       
       //------Grid-API----------------------------------------------
       virtual FrameCnt  gridPoint (TimeValue const& raw)  const   =0;
-      virtual TimeValue gridAlign (TimeValue const& raw)  const   =0;
+      virtual TimeValue gridLocal (TimeValue const& raw)  const   =0;
       virtual TimeValue timeOf    (FrameCnt gridPoint)    const   =0;
       virtual TimeValue timeOf    (FSecs, int =0)         const   =0;
     };
@@ -152,7 +152,7 @@ namespace time {
       FixedFrameQuantiser (Duration const& frame_duration,     TimeValue referencePoint  =TimeValue(0));
       
       FrameCnt  gridPoint (TimeValue const&)   const;
-      TimeValue gridAlign (TimeValue const&)   const;
+      TimeValue gridLocal (TimeValue const&)   const;
       TimeValue timeOf    (FrameCnt gridPoint) const;
       TimeValue timeOf    (FSecs, int =0)      const;
       

@@ -114,25 +114,6 @@ namespace time {
   
   
   
-  /** alignment to a simple fixed size grid.
-   *  The actual calculation first determines the number
-   *  of the grid interval containing the given rawTime,
-   *  then followed by multiplying this interval number
-   *  with the grid spacing.
-   * @return time of the start point of the grid interval
-   *      containing the rawTime, relative to the origin
-   *      of the time scale used by this quantiser.
-   * @warning returned time values are limited by the
-   *      valid range of lumiera::Time  
-   * @see #lumiera_quantise_time
-   */
-  TimeValue
-  FixedFrameQuantiser::gridAlign (TimeValue const& rawTime)  const
-  {
-    return TimeValue (lumiera_quantise_time (_raw(rawTime), _raw(origin_), _raw(raster_)));
-  }
-  
-  
   /** grid quantisation (alignment).
    *  Determine the next lower grid interval start point,
    *  using a simple constant spaced time grid defined by
@@ -145,6 +126,25 @@ namespace time {
   FixedFrameQuantiser::gridPoint (TimeValue const& rawTime)  const
   {
     return lumiera_quantise_frames (_raw(rawTime), _raw(origin_), _raw(raster_));
+  }
+  
+  
+  /** transform into the local time scale grid aligned.
+   *  The actual calculation first determines the number
+   *  of the grid interval containing the given rawTime,
+   *  then followed by multiplying this interval number
+   *  with the grid spacing.
+   * @return time of the start point of the grid interval
+   *      containing the rawTime, _relative to the origin_
+   *      of the time scale used by this quantiser.
+   * @warning returned time values are limited by the
+   *      valid range of lumiera::Time  
+   * @see #lumiera_quantise_time
+   */
+  TimeValue
+  FixedFrameQuantiser::gridLocal (TimeValue const& rawTime)  const
+  {
+    return TimeValue (lumiera_quantise_time (_raw(rawTime), _raw(origin_), _raw(raster_)));
   }
   
   

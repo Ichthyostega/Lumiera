@@ -41108,7 +41108,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670191753771" ID="ID_838942043" MODIFIED="1670191797559" TEXT="Nebenbei bemerkt: das Grid::gridAligned() - API ist &#x201e;&#xfc;berraschend&#x201c;">
+<node COLOR="#435e98" CREATED="1670191753771" ID="ID_838942043" MODIFIED="1670197700477" TEXT="Nebenbei bemerkt: das Grid::gridAligned() - API ist &#x201e;&#xfc;berraschend&#x201c;">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1670191803951" ID="ID_62422663" MODIFIED="1670191874006" TEXT="das Ergebnis ist relativ zum Grid-Origin">
 <icon BUILTIN="info"/>
@@ -41150,19 +41150,46 @@
 <icon BUILTIN="forward"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1670192170956" ID="ID_1026606570" MODIFIED="1670192201815" TEXT="API &#xe4;ndern: gridAligned() soll den Origin mit einschlie&#xdf;en">
+<node COLOR="#690f14" CREATED="1670192170956" ID="ID_1026606570" MODIFIED="1670201051650" TEXT="API &#xe4;ndern: gridAlign() soll den Origin mit einschlie&#xdf;en">
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670192209793" ID="ID_1904533160" MODIFIED="1670192229367" TEXT="Limitierung bedenken">
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1670200909516" ID="ID_1643706345" MODIFIED="1670200945558" TEXT="besser doch nicht: die Funtion w&#xe4;re dann n&#xe4;mlich komplett redundant"/>
+<node CREATED="1670200914583" ID="ID_316481460" MODIFIED="1670201239789" TEXT="die gew&#xfc;nschte Funktion gibt es bereits auf dem Quantiser-API">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">TimeValue Quantiser::materialise(TimeValue const&amp; raw) { return timeOf (gridPoint (raw)); }</font>
+    </p>
+  </body>
+</html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670192204551" ID="ID_1757335290" MODIFIED="1670192230352" TEXT="Implementierung anpassen">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1670201304802" ID="ID_1724553119" MODIFIED="1670201393006" TEXT="und letztere hat zudem den Vorteil, da&#xdf; sie nicht clippt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        weil die Rechnung komplett auf Implementierungs-Ebene passiert, mit int64_t
+      </li>
+      <li>
+        unter der Ma&#223;gabe da&#223; die auftretenden Werte dahingehend limititert sind, und daher auch noch die Summe zum Origin ohne wrap-around berechnet werden kann
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670192239363" ID="ID_968994817" MODIFIED="1670192243152" TEXT="dokumentieren">
-<icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670192231262" ID="ID_185488622" MODIFIED="1670192236941" TEXT="Test anpassen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1670200952970" ID="ID_2558241" MODIFIED="1670197706677" TEXT="API-Funtkion umbenennen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1670200964176" ID="ID_795458621" MODIFIED="1670201044967" TEXT="gridAlign() &#x27fc; gridLocal()"/>
+<node CREATED="1670201059514" ID="ID_489288280" MODIFIED="1670201082523" TEXT="das macht dann wenigstens den Unterschied klar">
+<node CREATED="1670201083498" ID="ID_1913733433" MODIFIED="1670201094684" TEXT="Input: eine globale freie Zeit"/>
+<node CREATED="1670201095403" ID="ID_1247848116" MODIFIED="1670201105896" TEXT="Output: eine grit-relative, quantisierte Zeit"/>
 </node>
 </node>
 </node>
@@ -58042,6 +58069,7 @@
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1667476797049" FOLDED="true" ID="ID_767502481" MODIFIED="1667770624162" TEXT="Diskussion: interne Zeitbasis">
 <linktarget COLOR="#af1a4c" DESTINATION="ID_767502481" ENDARROW="Default" ENDINCLINATION="96;-430;" ID="Arrow_ID_1672039685" SOURCE="ID_1838246834" STARTARROW="None" STARTINCLINATION="-670;38;"/>
+<linktarget COLOR="#535cb5" DESTINATION="ID_767502481" ENDARROW="Default" ENDINCLINATION="-9;23;" ID="Arrow_ID_1371034703" SOURCE="ID_368365221" STARTARROW="None" STARTINCLINATION="-97;6;"/>
 <icon BUILTIN="hourglass"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667486621881" ID="ID_566152244" MODIFIED="1667486629636" TEXT="#1258 clarify internal time base">
 <icon BUILTIN="flag-yellow"/>
