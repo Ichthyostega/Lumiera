@@ -529,11 +529,6 @@ namespace test {
           CHECK (win.pxWidth() == 1);
           
           CHECK (TimeSpan(_t(10), _t(0)).duration() == Duration(FSecs(10)));     // TimeSpan is always properly oriented by construction
-          Time negaTime = _t(-10);
-          CHECK (negaTime < Time::ZERO);
-          Duration& evilDuration = reinterpret_cast<Duration&> (negaTime);       // attempt fabricate a subverted TimeSpan
-          CHECK (evilDuration < Time::ZERO);                                     // ...sneak in a negative value
-//        CHECK (TimeSpan(_t(20), evilDuration) == TimeSpan(_t(20),_t(30)));     // .....yet won't make it get past Duration copy ctor!
         }
       
       
@@ -685,14 +680,44 @@ namespace test {
       void
       safeguard_extremeZoomOut()
         {
-//            SHOW_EXPR(win.overallSpan());
-//            SHOW_EXPR(_raw(win.overallSpan().duration()));
-//            SHOW_EXPR(_raw(win.visible().duration()));
-//            SHOW_EXPR(win.px_per_sec());
-//            SHOW_EXPR(win.pxWidth());
-//            CHECK (win.visible()     == TimeSpan(_t(0), _t(23)));
-//            CHECK (win.px_per_sec()  == 25);
-//            CHECK (win.pxWidth()     == 575);
+          ZoomWindow win{3, TimeSpan{_t(-1,2), _t(1,2)}};                        // setup ZoomWindow to very small pixel size (3px)
+          CHECK (win.overallSpan().duration() == _t(1));
+          CHECK (win.px_per_sec() == 3_r/1);
+          CHECK (win.pxWidth() == 3);
+          win.setOverallRange(TimeSpan{Time::MIN, Time::MAX});                   // ...and then also expand canvas to maximal size
+          CHECK (_raw(win.overallSpan().duration()) == 614891469123651720);
+          CHECK (_raw(win.visible().duration())     ==            1000000);
+          CHECK (win.px_per_sec() == 3_r/1);
+          CHECK (win.pxWidth() == 3);
+          
+          Rat bruteZoom{3_r/(int64_t{1}<<60)};
+          win.setMetric (bruteZoom);                                             // zoom out beyond what is possible and to a toxic factor
+          
+          CHECK (_raw(win.overallSpan().duration()) == 614891469123651720);      // canvas size not changed
+          CHECK (_raw(win.visible().duration())     ==      3298534883328);      // window was expanded,
+          CHECK (_raw(win.visible().duration())     <     int64_t{1}<<60 );      // ...but not as much as demanded
+          CHECK (_raw(win.visible().duration())     ==     3 * LIM_HAZARD);      // In fact it was capped at a built-in limit based on pixel size,
+                                                                                 // to prevent formation of dangerous numbers within metric calculations
+          CHECK (win.visible().start() == - win.visible().end());                // window has been expanded symmetrically to existing position
+          CHECK (win.px_per_sec()  > bruteZoom);                                 // the actual zoom factor also reflects the applied limitation,
+          CHECK (win.px_per_sec() == 15625_r/17179869184);                       // to ensure the denominator does not exceed LIM_HAZARD
+          CHECK (win.px_per_sec() == 1000000_r/LIM_HAZARD);
+          CHECK (win.px_per_sec() == 3 / _FSecs(win.visible().duration()));      // and this value also conforms with the pixel size and window duration
+          CHECK (win.pxWidth() == 3);
+          
+          win.setMetric (5_r/std::numeric_limits<int64_t>::max());               // same limiting applies to even more nasty values
+          CHECK (_raw(win.visible().duration()) == 3298534883328);               // still unchanged at limit
+          CHECK (win.px_per_sec() == 15625_r/17179869184);
+          CHECK (win.pxWidth() == 3);
+          
+          win.setMetric (1000001_r/LIM_HAZARD);                                  // but zooming in more than that limit will be honored
+          CHECK (_raw(win.visible().duration()) == 3298531584796);               // ...window now slightly reduced in size
+          CHECK (_raw(win.visible().duration())  < 3 * LIM_HAZARD);
+          CHECK (win.px_per_sec() = 750000_r/824632896199);                      // ...yet effective zoom factor was still marginally adjusted for safety
+          CHECK (win.px_per_sec() > 1000000_r/LIM_HAZARD);
+          CHECK (win.px_per_sec() > 1000001_r/LIM_HAZARD);                       // (this is what was requested)
+          CHECK (win.px_per_sec() < 1000002_r/LIM_HAZARD);                       // (thus result was slightly adjusted upwards)
+          CHECK (win.pxWidth() == 3);
         }
       
       
@@ -701,6 +726,14 @@ namespace test {
       void
       safeguard_extremeTimePos()
         {
+//            SHOW_EXPR(win.overallSpan());
+//            SHOW_EXPR(_raw(win.overallSpan().duration()));
+//            SHOW_EXPR(_raw(win.visible().duration()));
+//            SHOW_EXPR(win.px_per_sec());
+//            SHOW_EXPR(win.pxWidth());
+//            CHECK (win.visible()     == TimeSpan(_t(0), _t(23)));
+//            CHECK (win.px_per_sec()  == 25);
+//            CHECK (win.pxWidth()     == 575);
         }
       
       

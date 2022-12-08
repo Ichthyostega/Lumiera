@@ -229,6 +229,7 @@ namespace model {
         , afterWin_{afterAll_}
         , px_per_sec_{establishMetric (pxWidth, startWin_, afterWin_)}
         {
+          conformWindowToMetricLimits (this->pxWidth());
           ensureInvariants();
         }
       
@@ -676,6 +677,14 @@ namespace model {
                                    : start + Time{DEFAULT_CANVAS};
         }
       
+      /** window size beyond that limit would yield
+       *  numerically dangerous zoom factors */
+      static FSecs
+      maxSaneWinExtension (uint pxWidth)
+        {
+          return FSecs{LIM_HAZARD * pxWidth, Time::SCALE};
+        }
+      
       static Rat
       establishMetric (uint pxWidth, Time startWin, Time afterWin)
         {
@@ -711,7 +720,7 @@ namespace model {
           dur = Rat(pxWidth) / detox (changedMetric);
           dur = min (dur, MAX_TIMESPAN);
           dur = max (dur, MICRO_TICK); // prevent window going void
-          dur = detox (dur);          //  prevent integer wrap in time conversion   
+          dur = detox (dur);          //  prevent integer wrap in time conversion
           TimeVar timeDur{dur};
           // prefer bias towards increased window instead of increased metric
           if (not isMicroGridAligned (dur))
@@ -722,7 +731,27 @@ namespace model {
           // re-check metric to maintain precise pxWidth
           px_per_sec_ = conformMetricToWindow (pxWidth);
           ENSURE (_FSecs(afterWin_-startWin_) < MAX_TIMESPAN);
-          ENSURE (px_per_sec_<= changedMetric); // bias towards increased window
+          auto sizeAtRequestedScale = approx(changedMetric)*approx(dur);
+          ENSURE (abs(pxWidth - sizeAtRequestedScale) <= 1);
+        }
+      
+      /**
+       * The zoom metric factor must not become "poisonous".
+       * This leads to a minimum possible zoom factor for a given pixWidth,
+       * thereby effectively limiting the maximum window extension. This
+       * constraint is enforced by reducing the current window size.
+       */
+      void
+      conformWindowToMetricLimits (uint pxWidth)
+        {
+          REQUIRE (pxWidth > 0);
+          FSecs dur{afterWin_-startWin_};
+          if (dur > maxSaneWinExtension (pxWidth))
+            {
+              dur = maxSaneWinExtension (pxWidth);
+              placeWindowRelativeToAnchor (dur);
+              establishWindowDuration (dur);
+            }
         }
       
       void
@@ -819,6 +848,7 @@ namespace model {
           uint px{pxWidth()};
           startWin_ = window.start();
           afterWin_ = ensureNonEmpty (startWin_, window.end());
+          conformWindowToMetricLimits (px);
           startAll_ = min (startAll_, startWin_);
           afterAll_ = max (afterAll_, afterWin_);
           px_per_sec_ = conformMetricToWindow (px);
@@ -835,6 +865,7 @@ namespace model {
           afterAll_ = ensureNonEmpty (startAll_, canvas.end());
           startWin_ = window.start();
           afterWin_ = ensureNonEmpty (startWin_, window.end());
+          conformWindowToMetricLimits (px);
           px_per_sec_ = conformMetricToWindow (px);
           ensureInvariants (px);
         }
@@ -845,10 +876,11 @@ namespace model {
       void
       mutateScale (Rat changedMetric)
         {
+          uint px{pxWidth()};
+          changedMetric = max (changedMetric, px / maxSaneWinExtension(px));
           changedMetric = min (detox(changedMetric), ZOOM_MAX_RESOLUTION);
           if (changedMetric == px_per_sec_) return;
           
-          uint px{pxWidth()};
           Rat changeFactor{changedMetric / px_per_sec_};
           FSecs dur{afterWin_ - startWin_};
           dur /= changeFactor;
@@ -868,10 +900,12 @@ namespace model {
       void
       mutateDuration (FSecs duration, uint px =0)
         {
-          if (duration <= 0)
-            duration = DEFAULT_CANVAS;
           if (px==0)
             px = pxWidth();
+          if (duration <= 0)
+            duration = DEFAULT_CANVAS;
+          else if (duration > maxSaneWinExtension (px))
+            duration = maxSaneWinExtension (px);
           Rat changedMetric = Rat(px) / duration;
           conformWindowToMetric (changedMetric);
         }
@@ -884,6 +918,7 @@ namespace model {
           pxWidth = util::limited (1u, pxWidth, MAX_PX_WIDTH);
           FSecs adaptedWindow{Rat{pxWidth} / px_per_sec_};
           adaptedWindow = max (adaptedWindow, MICRO_TICK); // prevent void window
+          adaptedWindow = min (adaptedWindow, maxSaneWinExtension (pxWidth));
           establishWindowDuration (adaptedWindow);
           px_per_sec_ = conformMetricToWindow (pxWidth);
           ensureInvariants (pxWidth);
