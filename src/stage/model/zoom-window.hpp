@@ -679,39 +679,21 @@ namespace model {
       
       /** Assertion helper: resulting pxWidth matches expectations */
       static void
-      __assertMatchesExpectedPixWidth (Rat zoomFactor, FSecs duration, uint pxWidth)
+      ENSURE_matchesExpectedPixWidth (Rat zoomFactor, FSecs duration, uint pxWidth)
         {
-          auto sizeAtRequestedScale = calcPixelsForDurationAtScale (zoomFactor, duration);
+          auto sizeAtRequestedScale = approx(zoomFactor) * approx(duration);
           ENSURE (abs(pxWidth - sizeAtRequestedScale) <= 1
                  ,"ZoomWindow: established size or metric misses expectation "
                   "by more than 1px. %upx != %1.6f expected pixel."
                  , pxWidth, sizeAtRequestedScale);
         }
       
-      static void
-      __assertMetricConforms2pxWidth (Rat zoomFactor, FSecs duration, uint pxWidth)
-        {
-          if (util::can_represent_Product(zoomFactor, duration))
-            {
-              ENSURE (pxWidth == rational_cast<uint> (zoomFactor*duration)
-                     ,"ZoomWindow: established zoom factor misses expected "
-                      "width in pixels: %upx != %upx (resulting)"
-                     , pxWidth, rational_cast<uint> (zoomFactor*duration));
-            }
-          else
-            {
-              auto sizeAtRequestedScale = approx(zoomFactor) * approx(duration);
-              ENSURE (pxWidth == uint(sizeAtRequestedScale + 0.5)
-                     ,"ZoomWindow: established zoom factor misses expected "
-                      "width in pixels: %upx != %1.8f px (resulting)"
-                     , pxWidth, sizeAtRequestedScale);
-            }
-        }
-      
-      /** @remark indirect calculation path to avoid overflow on large durations */
+      /** calculate `rational_cast<uint> (zoomFactor * duration)`
+       * @remark indirect calculation path to avoid overflow on large durations
+       */
       static int64_t
       calcPixelsForDurationAtScale (Rat zoomFactor, FSecs duration)
-        {// calculate rational_cast<uint> (zoomFactor * duration)
+        {// break down the integer division into several steps...
           auto zn = zoomFactor.numerator();
           auto zd = zoomFactor.denominator();
           auto dn = duration.numerator();
@@ -776,7 +758,7 @@ namespace model {
           REQUIRE (changedMetric > 0);
           REQUIRE (afterWin_> startWin_);
           FSecs dur{afterWin_-startWin_};
-          uint pxWidth = rational_cast<uint> (px_per_sec_*dur);
+          uint pxWidth = calcPixelsForDurationAtScale (px_per_sec_, dur);
           dur = Rat(pxWidth) / detox (changedMetric);
           dur = min (dur, MAX_TIMESPAN);
           dur = max (dur, MICRO_TICK); // prevent window going void
@@ -791,7 +773,7 @@ namespace model {
           // re-check metric to maintain precise pxWidth
           px_per_sec_ = conformMetricToWindow (pxWidth);
           ENSURE (_FSecs(afterWin_-startWin_) < MAX_TIMESPAN);
-          __assertMatchesExpectedPixWidth (changedMetric, dur, pxWidth);
+          ENSURE_matchesExpectedPixWidth (changedMetric, afterWin_-startWin_, pxWidth);
         }
       
       /**
@@ -939,18 +921,7 @@ namespace model {
           changedMetric = max (changedMetric, px / maxSaneWinExtension(px));
           changedMetric = min (detox(changedMetric), ZOOM_MAX_RESOLUTION);
           if (changedMetric == px_per_sec_) return;
-          
-          Rat changeFactor{changedMetric / px_per_sec_};
-          FSecs dur{afterWin_ - startWin_};
-          dur /= changeFactor;
-          if (dur > FSecs{afterAll_ - startAll_})
-            {// limit to the overall timespan...
-              startWin_ = startAll_;
-              afterWin_ = afterAll_;
-              px_per_sec_ = conformMetricToWindow(px);
-            }
-          else
-            mutateDuration (dur, px);
+          conformWindowToMetric (changedMetric);
           ensureInvariants (px);
         }
       

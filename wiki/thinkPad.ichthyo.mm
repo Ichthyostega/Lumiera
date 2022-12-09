@@ -40057,7 +40057,9 @@
 <linktarget COLOR="#4660c4" DESTINATION="ID_979012602" ENDARROW="Default" ENDINCLINATION="-136;-164;" ID="Arrow_ID_456720693" SOURCE="ID_999425219" STARTARROW="None" STARTINCLINATION="115;6;"/>
 <node CREATED="1670285974347" ID="ID_1007233105" MODIFIED="1670286288243" TEXT="pixel/maxExtension &gt; 1/ LIM_HAZARD"/>
 <node CREATED="1670285726380" ID="ID_1300128015" MODIFIED="1670286035624" TEXT="&#x27f9; maxExtension &lt; pxWidth * (1&lt;&lt;40)"/>
-<node CREATED="1670286048745" ID="ID_735928158" MODIFIED="1670286420499" TEXT="und zwar in &#xb5;-Ticks gemessen!"/>
+<node CREATED="1670286048745" ID="ID_735928158" MODIFIED="1670286420499" TEXT="und zwar in &#xb5;-Ticks gemessen!">
+<linktarget COLOR="#6ca8d7" DESTINATION="ID_735928158" ENDARROW="Default" ENDINCLINATION="-761;71;" ID="Arrow_ID_907454112" SOURCE="ID_804263127" STARTARROW="None" STARTINCLINATION="1521;-73;"/>
+</node>
 <node CREATED="1670286453362" ID="ID_1224708034" MODIFIED="1670286466277" TEXT="das sind etwa 35 Jahre pro Pixel">
 <icon BUILTIN="idea"/>
 </node>
@@ -40227,17 +40229,18 @@
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#c23775" DESTINATION="ID_1337555507" ENDARROW="Default" ENDINCLINATION="-42;54;" ID="Arrow_ID_222968818" SOURCE="ID_619135931" STARTARROW="None" STARTINCLINATION="-229;-15;"/>
 <icon BUILTIN="clanbomber"/>
 <node CREATED="1670533870555" ID="ID_649716018" MODIFIED="1670533882170" TEXT="nach meinem Verst&#xe4;ndnis ist aber die Duration stets berechnet"/>
 <node CREATED="1670533882974" ID="ID_1544775451" MODIFIED="1670533906598" TEXT="und daher kann der Z&#xe4;hler nicht &gt; LIM_HAZARD sein"/>
 </node>
 </node>
 </node>
-<node CREATED="1670533969244" ID="ID_509879073" MODIFIED="1670534000608" TEXT="Problem: detox verf&#xe4;lscht die pxWidth">
+<node COLOR="#435e98" CREATED="1670533969244" ID="ID_509879073" MODIFIED="1670620313585" TEXT="Problem: detox verf&#xe4;lscht die pxWidth">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1670534010893" ID="ID_719080732" MODIFIED="1670534023047" TEXT="in conformMetricToWindow(pxWidth)"/>
 <node CREATED="1670534028996" ID="ID_218226232" MODIFIED="1670534040364" TEXT="detox(metric) ist unverzichtbar"/>
-<node COLOR="#338800" CREATED="1670534041313" ID="ID_1590617796" MODIFIED="1670608092950" TEXT="mu&#xdf; dann aber korrigieren">
+<node COLOR="#338800" CREATED="1670534041313" FOLDED="true" ID="ID_1590617796" MODIFIED="1670608092950" TEXT="mu&#xdf; dann aber korrigieren">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1670535342258" ID="ID_1603322916" MODIFIED="1670535392115" TEXT="kann nun erst mal ein Delta (zuverl&#xe4;ssig) ausrechnen">
 <arrowlink COLOR="#984981" DESTINATION="ID_1459847631" ENDARROW="Default" ENDINCLINATION="37;46;" ID="Arrow_ID_1118525297" STARTARROW="None" STARTINCLINATION="-82;-3;"/>
@@ -40362,6 +40365,181 @@
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1670520779106" ID="ID_442688956" MODIFIED="1670608133729" TEXT="dann nochmal giftigen maximal-Zoom-out">
 <icon BUILTIN="pencil"/>
+<node CREATED="1670615758976" ID="ID_1452400924" MODIFIED="1670615767846" TEXT="erst mal bruteZoom verwenden">
+<node COLOR="#435e98" CREATED="1670615776976" ID="ID_1512494689" MODIFIED="1670615803740" TEXT="Fehler im abschli&#xdf;enden Plausibilit&#xe4;tscheck">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1670615806180" ID="ID_619135931" MODIFIED="1670620369556" TEXT="in der Tat: die schrittweise Integer-Division kann auch wrappen">
+<arrowlink COLOR="#c23775" DESTINATION="ID_1337555507" ENDARROW="Default" ENDINCLINATION="-42;54;" ID="Arrow_ID_222968818" STARTARROW="None" STARTINCLINATION="-229;-15;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#435e98" CREATED="1670615839039" ID="ID_1944815131" MODIFIED="1670615993483" TEXT="dieser Gebrauch hier ist aber klar au&#xdf;erhalb der definierten Grenzen">
+<icon BUILTIN="yes"/>
+<node CREATED="1670615926323" ID="ID_1960899448" MODIFIED="1670615939582" TEXT="Duration mu&#xdf; aus time::Duration errechnet sein"/>
+<node CREATED="1670615942711" ID="ID_255892393" MODIFIED="1670615951220" TEXT="der ZoomFaktor mu&#xdf; entgiftet sein"/>
+<node CREATED="1670615952000" ID="ID_1758205571" MODIFIED="1670615971194" TEXT="dadurch ist zd*dd handhabbar"/>
+<node CREATED="1670615972022" ID="ID_1327396184" MODIFIED="1670615981992" TEXT="genau das (und Weiteres) ist hier nicht gegeben"/>
+</node>
+<node CREATED="1670615994715" ID="ID_193734845" MODIFIED="1670616015887" TEXT="die vorherige L&#xf6;sung war besser: n&#xe4;herungsweise Rechnung per floating-point">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1670616019359" ID="ID_1695051977" MODIFIED="1670616022048" TEXT="revert">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1670616045807" ID="ID_1657986247" MODIFIED="1670616133443" TEXT="au&#xdf;erdem: das ist gar nicht was ich testen wollte">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1670616061533" ID="ID_1889255548" MODIFIED="1670616137418" TEXT="das w&#xe4;re ein weiterer guter Testfall">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1670616069498" ID="ID_1354086365" MODIFIED="1670616142124" TEXT="aber es ist ein extremes zoom-in">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1670616082383" ID="ID_156266762" MODIFIED="1670620297299" TEXT="die berechneten Zoom-Faktoren und Durations &#xe4;ndern sich unterwegs ganz kra&#xdf;">
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#435e98" CREATED="1670616117714" ID="ID_309015495" MODIFIED="1670617416589" TEXT="korrekt oder Fehlverhalten?">
+<icon BUILTIN="help"/>
+<node COLOR="#435e98" CREATED="1670616704876" ID="ID_1622141133" MODIFIED="1670617395856" TEXT="Untersuchung">
+<node CREATED="1670616712931" ID="ID_1501827077" MODIFIED="1670616746582" TEXT="metricVorher: 0,00000090950401180624"/>
+<node CREATED="1670616748326" ID="ID_367770862" MODIFIED="1670616775054" TEXT="metricGesetzt: 0,00000090949470177293"/>
+<node CREATED="1670616817724" ID="ID_1415764699" MODIFIED="1670616822521" TEXT="changeFactor">
+<node CREATED="1670616823604" ID="ID_1357255245" MODIFIED="1670616824954" TEXT="8738124595203125/8738214042927104"/>
+<node CREATED="1670616832746" ID="ID_1244959877" MODIFIED="1670616837612" TEXT="= 0.99998976361490579406"/>
+</node>
+<node CREATED="1670617088809" ID="ID_1991508385" MODIFIED="1670617093931" TEXT="durVorher: 109951052826,533333"/>
+<node CREATED="1670617154682" ID="ID_225306013" MODIFIED="1670617200454" TEXT="durModifiziert">
+<node CREATED="1670617174581" ID="ID_969572944" MODIFIED="1670617177190" TEXT="2054375346307858432/7405988284081966813"/>
+<node CREATED="1670617161148" ID="ID_1958223126" MODIFIED="1670617162826" TEXT="= 0,27739381531610337409"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#cd158d" CREATED="1670617179460" ID="ID_1631410208" MODIFIED="1670617208435" TEXT="tja">
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+<node CREATED="1670617402798" ID="ID_30984099" MODIFIED="1670618258486">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      eindeutig: <b>wrap-around</b>&#160;in der relativen &#196;nderung
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1670617418716" ID="ID_520825252" MODIFIED="1670617441582" TEXT="relative Anwendung des Zoom-Faktors scheitert">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1670617477125" ID="ID_1008445724" MODIFIED="1670617487798" TEXT="auch detox() hie und da hilft nix"/>
+<node CREATED="1670617500514" ID="ID_42571289" MODIFIED="1670617536811" TEXT="grade wenn Duration gro&#xdf; ist reicht detox() nicht"/>
+<node CREATED="1670617542996" ID="ID_890256504" MODIFIED="1670617548121" TEXT="...und ist au&#xdf;erdem ungenau"/>
+</node>
+<node COLOR="#435e98" CREATED="1670617465750" ID="ID_1125263407" MODIFIED="1670618244591" TEXT="ist dieser Ansatz &#xfc;berhaupt sinnvoll">
+<icon BUILTIN="help"/>
+<node CREATED="1670617550570" ID="ID_794382292" MODIFIED="1670617586580" TEXT="dieser Rechenweg stammt noch aus der initialien Implementierung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...welche ich inzwischen nahezu komplett einmal umgepfl&#252;gt habe...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1670617587918" ID="ID_1941807837" MODIFIED="1670617700006" TEXT="auf den ersten Blick cool...">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1670617617322" ID="ID_154517336" MODIFIED="1670617693674" TEXT="aber numerisch ein Albtraum!">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil hier...
+    </p>
+    <ul>
+      <li>
+        zum Einen eine sehr gro&#223;e Zahl auf einen beliebigen Bruchfaktor trifft
+      </li>
+      <li>
+        und au&#223;erdem als Resultat eine Beliebige Zahl entsteht, die nicht auf Time::SCALE quantisiert ist
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1670617722212" ID="ID_552344182" MODIFIED="1670618342028">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>und <b>redundant</b></u>: macht nicht <font face="Monospaced" color="#461bac">conformWindowToMetric()</font>&#160; inzwischen genau dassselbe??
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#3489d0" DESTINATION="ID_1728003116" ENDARROW="Default" ENDINCLINATION="7;-26;" ID="Arrow_ID_32836248" STARTARROW="None" STARTINCLINATION="-90;3;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1670617949506" ID="ID_1728003116" MODIFIED="1670618335701" TEXT="implementieren ohne R&#xfc;ckgrif auf mutatDuration()">
+<linktarget COLOR="#3489d0" DESTINATION="ID_1728003116" ENDARROW="Default" ENDINCLINATION="7;-26;" ID="Arrow_ID_32836248" SOURCE="ID_552344182" STARTARROW="None" STARTINCLINATION="-90;3;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1670618047801" ID="ID_981414972" MODIFIED="1670618077348" TEXT="puh... da f&#xe4;llt ja fast alles weg">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1670618058280" ID="ID_1146416916" MODIFIED="1670618073226" TEXT="und die ganzen Fallen, um die ich mich so geplagt habe">
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1670618082836" ID="ID_958310234" MODIFIED="1670618112665" TEXT="was zus&#xe4;tzlich bleibt, ist nur die Limitierung der Metrik">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1670618093994" ID="ID_833295341" MODIFIED="1670618108468" TEXT="die allerdings ist eine Errungenschaft!">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1670618161449" ID="ID_676303735" MODIFIED="1670618174884" TEXT="kaum macht ma&apos;s richtig, schon funktioniert&apos;s">
+<icon BUILTIN="ksmiletris"/>
+<node CREATED="1670618176639" ID="ID_393011013" MODIFIED="1670618207065">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und die Testsuite ist auf Anhieb <b><font color="#0ba911">GR&#220;N</font></b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1670618211155" ID="ID_1878857756" MODIFIED="1670618231508" TEXT="wie gut, da&#xdf; ich betreits so viele penible Tests gebaut habe">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670620383399" ID="ID_674544235" MODIFIED="1670620401994" TEXT="h&#xe4;tte Zoom auf gesamten Canvas erwartet">
+<icon BUILTIN="yes"/>
+<node CREATED="1670620405080" ID="ID_1202192964" MODIFIED="1670620418967" TEXT="...nachdem jetzt die Zahl der Pixel so drastisch erh&#xf6;ht wurde"/>
+<node CREATED="1670621505792" ID="ID_645635162" MODIFIED="1670621528305" TEXT="aber der definierte Grenzfaktor verhindert das">
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1670621532941" ID="ID_1641685049" MODIFIED="1670621550148" TEXT="ist der Grenzfaktor korrekt berechnet?">
+<icon BUILTIN="help"/>
+<node CREATED="1670621551706" ID="ID_804263127" MODIFIED="1670621631745" TEXT="konzeptionell hatte ich etwas Anderes in Erinnerung">
+<arrowlink COLOR="#6ca8d7" DESTINATION="ID_735928158" ENDARROW="Default" ENDINCLINATION="-761;71;" ID="Arrow_ID_907454112" STARTARROW="None" STARTINCLINATION="1521;-73;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670623877667" ID="ID_1836625419" MODIFIED="1670623900060" TEXT="m&#xf6;glicherweise genau um Time::SCALE zu klein?">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>

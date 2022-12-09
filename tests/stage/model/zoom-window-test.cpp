@@ -743,6 +743,14 @@ namespace test {
           CHECK (rational_cast<float>(100000000000_r/109951052826533333) == 9.09495611e-07f);  // theoretical value
           CHECK (rational_cast<float>(win.px_per_sec())                  == 9.09503967e-07f);  // value actually chosen
           CHECK (win.px_per_sec() == 508631_r/559239974093);
+          
+          /*--Test-6-----------*/
+          win.setMetric (bruteZoom);                                             // And now put one on top by requesting excessive zoom-out:
+          CHECK (_raw(win.overallSpan().duration()) == 614891469123651720);      // overall canvas duration not changed
+          CHECK (_raw(win.visible().duration())     == 109951162777600000);      // window duration only slightly increased
+          CHECK (508631_r/559239974093 > 15625_r/17179869184);                   // zoom factor slightly reduced
+          CHECK (win.px_per_sec() == 15625_r/17179869184);                       // and now hitting again the minimum limit
+          CHECK (win.pxWidth() == MAX_PX_WIDTH);                                 // pixel count unchanged at maximum
         }
       
       
