@@ -175,7 +175,7 @@ namespace model {
   namespace {// initial values (rather arbitrary)
     const FSecs DEFAULT_CANVAS{23};
     const Rat   DEFAULT_METRIC{25};
-    const uint  MAX_PX_WIDTH{1000000};
+    const uint  MAX_PX_WIDTH{100000};
     const FSecs MAX_TIMESPAN{_FSecs(Duration::MAX)};
     const FSecs MICRO_TICK{1_r/Time::SCALE};
     
@@ -259,7 +259,7 @@ namespace model {
       pxWidth()  const
         {
           REQUIRE (startWin_  < afterWin_);
-          return rational_cast<uint> (px_per_sec() * FSecs(afterWin_-startWin_));
+          return calcPixelsForDurationAtScale (px_per_sec(), afterWin_-startWin_);
         }
       
       
@@ -677,6 +677,53 @@ namespace model {
                                    : start + Time{DEFAULT_CANVAS};
         }
       
+      /** Assertion helper: resulting pxWidth matches expectations */
+      static void
+      __assertMatchesExpectedPixWidth (Rat zoomFactor, FSecs duration, uint pxWidth)
+        {
+          auto sizeAtRequestedScale = calcPixelsForDurationAtScale (zoomFactor, duration);
+          ENSURE (abs(pxWidth - sizeAtRequestedScale) <= 1
+                 ,"ZoomWindow: established size or metric misses expectation "
+                  "by more than 1px. %upx != %1.6f expected pixel."
+                 , pxWidth, sizeAtRequestedScale);
+        }
+      
+      static void
+      __assertMetricConforms2pxWidth (Rat zoomFactor, FSecs duration, uint pxWidth)
+        {
+          if (util::can_represent_Product(zoomFactor, duration))
+            {
+              ENSURE (pxWidth == rational_cast<uint> (zoomFactor*duration)
+                     ,"ZoomWindow: established zoom factor misses expected "
+                      "width in pixels: %upx != %upx (resulting)"
+                     , pxWidth, rational_cast<uint> (zoomFactor*duration));
+            }
+          else
+            {
+              auto sizeAtRequestedScale = approx(zoomFactor) * approx(duration);
+              ENSURE (pxWidth == uint(sizeAtRequestedScale + 0.5)
+                     ,"ZoomWindow: established zoom factor misses expected "
+                      "width in pixels: %upx != %1.8f px (resulting)"
+                     , pxWidth, sizeAtRequestedScale);
+            }
+        }
+      
+      /** @remark indirect calculation path to avoid overflow on large durations */
+      static int64_t
+      calcPixelsForDurationAtScale (Rat zoomFactor, FSecs duration)
+        {// calculate rational_cast<uint> (zoomFactor * duration)
+          auto zn = zoomFactor.numerator();
+          auto zd = zoomFactor.denominator();
+          auto dn = duration.numerator();
+          auto dd = duration.denominator();
+          auto [secs,r] = util::iDiv (dn, dd);        // split duration in full seconds and rest
+          auto [px1,r1] = util::iDiv (secs*zn, zd);   // calc pixels required for full seconds
+          auto [px2,r2] = util::iDiv (r*zn, dd*zd);   // calc pixels required for rest duration
+          auto pxr      = (r1*dd +r2) /(dd*zd);       // and calculate integer div for combined remainders
+          ENSURE (0 <= px1 and 0 <= px2 and 0<= pxr);
+          return px1 + px2 + pxr;
+        }
+      
       /** window size beyond that limit would yield
        *  numerically dangerous zoom factors */
       static FSecs
@@ -706,7 +753,20 @@ namespace model {
           REQUIRE (afterWin_> startWin_);
           FSecs dur{afterWin_-startWin_};
           Rat adjMetric = detox (Rat(pxWidth) / dur);
-          ENSURE (pxWidth == rational_cast<uint> (adjMetric*dur));
+          //  check if new metric reproduces expected pxWidth...
+          for (uint resPx
+              ;pxWidth != (resPx = calcPixelsForDurationAtScale (adjMetric, dur))  // calculate trunc {adjMetric*dur}
+              ;                                                                   //  but calculate cleverly to avoid numeric wrap
+              ) // Problem: detox() introduced too much error
+            {  //  need to adjust metric to match expected pxWidth
+              //   Using Newton-Raphson; can't just calculate fix due to numeric-wraparound
+              auto delta = double(resPx) - pxWidth;                           // note: approximation calculated in double
+              int64_t mn{adjMetric.numerator()},  dn{dur.numerator()},
+                      md{adjMetric.denominator()}, dd{dur.denominator()};
+              //assuming: f(xₙ) ≔ Δₙ = resPx-pxWidth = trunc{ xₙ * dn/(md*dd) } - pxWidth
+              mn -= int64_t(delta * md*dd  / dn);   // xₙ₁ ≔ xₙ - f(xₙ)/f'(xₙ)
+              adjMetric = Rat{mn, md};
+            }
           return adjMetric;
         }
       
@@ -731,8 +791,7 @@ namespace model {
           // re-check metric to maintain precise pxWidth
           px_per_sec_ = conformMetricToWindow (pxWidth);
           ENSURE (_FSecs(afterWin_-startWin_) < MAX_TIMESPAN);
-          auto sizeAtRequestedScale = approx(changedMetric)*approx(dur);
-          ENSURE (abs(pxWidth - sizeAtRequestedScale) <= 1);
+          __assertMatchesExpectedPixWidth (changedMetric, dur, pxWidth);
         }
       
       /**

@@ -680,6 +680,7 @@ namespace test {
       void
       safeguard_extremeZoomOut()
         {
+          /*--Test-1-----------*/
           ZoomWindow win{3, TimeSpan{_t(-1,2), _t(1,2)}};                        // setup ZoomWindow to very small pixel size (3px)
           CHECK (win.overallSpan().duration() == _t(1));
           CHECK (win.px_per_sec() == 3_r/1);
@@ -690,6 +691,7 @@ namespace test {
           CHECK (win.px_per_sec() == 3_r/1);
           CHECK (win.pxWidth() == 3);
           
+          /*--Test-2-----------*/
           Rat bruteZoom{3_r/(int64_t{1}<<60)};
           win.setMetric (bruteZoom);                                             // zoom out beyond what is possible and to a toxic factor
           
@@ -705,11 +707,13 @@ namespace test {
           CHECK (win.px_per_sec() == 3 / _FSecs(win.visible().duration()));      // and this value also conforms with the pixel size and window duration
           CHECK (win.pxWidth() == 3);
           
+          /*--Test-3-----------*/
           win.setMetric (5_r/std::numeric_limits<int64_t>::max());               // same limiting applies to even more nasty values
           CHECK (_raw(win.visible().duration()) == 3298534883328);               // still unchanged at limit
           CHECK (win.px_per_sec() == 15625_r/17179869184);
           CHECK (win.pxWidth() == 3);
           
+          /*--Test-4-----------*/
           win.setMetric (1000001_r/LIM_HAZARD);                                  // but zooming in more than that limit will be honored
           CHECK (_raw(win.visible().duration()) == 3298531584796);               // ...window now slightly reduced in size
           CHECK (_raw(win.visible().duration())  < 3 * LIM_HAZARD);
@@ -718,6 +722,27 @@ namespace test {
           CHECK (win.px_per_sec() > 1000001_r/LIM_HAZARD);                       // (this is what was requested)
           CHECK (win.px_per_sec() < 1000002_r/LIM_HAZARD);                       // (thus result was slightly adjusted upwards)
           CHECK (win.pxWidth() == 3);
+          
+          /*--Test-5-----------*/
+          win.calibrateExtension (1'000'000'000);                                // implicit drastic zoom-out by increasing the number of pixels
+          CHECK (win.pxWidth()  < 1'000'000'000);                                // however: this number is capped at a fixed maximum
+          CHECK (win.pxWidth() == MAX_PX_WIDTH);                                 // (which „should be enough“ for the time being...)
+          CHECK (win.px_per_sec() == 508631_r/559239974093);                     // the zoom metric has been adapted, but to a sanitised value
+          
+          CHECK (_raw(win.overallSpan().duration()) == 614891469123651720);      // overall canvas duration not changed
+          CHECK (_raw(win.visible().duration())     == 109951052826533333);      // window duration now drastically increased
+          CHECK (win.overallSpan().end()  == TimeValue{307445734561825860});     // window is somewhere within canvas
+          CHECK (win.visible().end()      == TimeValue{109949403560740935});     // but was expanded to the right,
+          CHECK (win.visible().start()    == TimeValue{    -1649265792398});     // ... retaining the start value
+
+                                                                                 // Note: these parameters build up to really »poisonous« values....
+          CHECK (MAX_PX_WIDTH / _FSecs(win.visible().duration()) == 100000000000_r/109951052826533333);
+          CHECK (win.px_per_sec() * _FSecs(win.visible().duration()) < 0);       // we can't even calculate the resulting pxWidth() naively
+          CHECK (rational_cast<float>(win.px_per_sec())                          // ...while effectively these values are still correct
+                * rational_cast<float>(_FSecs(win.visible().duration())) == 100000.914f);
+          CHECK (rational_cast<float>(100000000000_r/109951052826533333) == 9.09495611e-07f);  // theoretical value
+          CHECK (rational_cast<float>(win.px_per_sec())                  == 9.09503967e-07f);  // value actually chosen
+          CHECK (win.px_per_sec() == 508631_r/559239974093);
         }
       
       
