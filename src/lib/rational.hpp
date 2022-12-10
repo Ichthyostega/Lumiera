@@ -185,7 +185,7 @@ namespace util {
     f128 frac = f128(r) / den;
     int64_t res = d*u + int64_t(frac*u * ROUND_ULP);
     ENSURE (abs (f128(res)/u - rational_cast<f128>(Rat{num,den})) <= 1.0/abs(u)
-           ,"Requantisation error exceeded num=%lu / den=%lu -> res=%lu / quant=%lu"
+           ,"Requantisation error exceeded num=%li / den=%li -> res=%li / quant=%li"
            ,                                   num,       den,       res,        u);
     return res;
   }

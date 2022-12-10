@@ -706,13 +706,14 @@ namespace model {
           return px1 + px2 + pxr;
         }
       
-      /** window size beyond that limit would yield
-       *  numerically dangerous zoom factors */
+      /** window size beyond that limit would lead to
+       *  numerically dangerous zoom factors (pixel/duration) */
       static FSecs
       maxSaneWinExtension (uint pxWidth)
         {
-          return FSecs{LIM_HAZARD * pxWidth, Time::SCALE};
-        }
+          return min (FSecs{LIM_HAZARD * pxWidth, 1000}, MAX_TIMESPAN);
+        }     // Note: denominator 1000 is additional safety margin
+             //        wouldn't be necessary, but makes detox(largeTime) more precise
       
       static Rat
       establishMetric (uint pxWidth, Time startWin, Time afterWin)
@@ -763,13 +764,13 @@ namespace model {
           dur = min (dur, MAX_TIMESPAN);
           dur = max (dur, MICRO_TICK); // prevent window going void
           dur = detox (dur);          //  prevent integer wrap in time conversion
-          TimeVar timeDur{dur};
+          TimeVar timeDur{Duration{dur}};
           // prefer bias towards increased window instead of increased metric
           if (not isMicroGridAligned (dur))
             timeDur = timeDur + TimeValue(1);
           // resize window relative to anchor point
           placeWindowRelativeToAnchor (dur);
-          establishWindowDuration (timeDur);
+          establishWindowDuration (Duration{timeDur});
           // re-check metric to maintain precise pxWidth
           px_per_sec_ = conformMetricToWindow (pxWidth);
           ENSURE (_FSecs(afterWin_-startWin_) < MAX_TIMESPAN);
@@ -799,7 +800,7 @@ namespace model {
       conformWindowToCanvas()
         {
           FSecs dur{afterWin_-startWin_};
-          REQUIRE (dur < MAX_TIMESPAN);
+          REQUIRE (dur <= MAX_TIMESPAN);
           REQUIRE (Time::MIN <= startWin_);
           REQUIRE (afterWin_ <= Time::MAX);
           startAll_ = max (startAll_, Time::MIN);
@@ -989,7 +990,7 @@ namespace model {
         }
       
       void
-      establishWindowDuration (TimeVar duration)
+      establishWindowDuration (Duration duration)
         {
           if (startWin_<= Time::MAX - duration)
               afterWin_ = startWin_ + duration;

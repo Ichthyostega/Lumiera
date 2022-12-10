@@ -475,7 +475,6 @@ namespace time {
         : Duration{Offset{timeSpec}}
         { }
       
-      explicit
       Duration (FSecs const& timeSpan_in_secs)
         : Duration{Offset{timeSpan_in_secs}}
         { }
