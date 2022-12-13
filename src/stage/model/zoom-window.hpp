@@ -136,13 +136,14 @@ namespace model {
     
     /**
      * @return `true` if the given duration can be represented cleanly as µ-ticks.
+     * @remark decision can be broken down to the remainder term: `n/d = i + r/d`;
+     *         when expanding with `*u/u`, result is clean if `u/d` is non-fractional.
      * @todo should likewise be member of a FSecs wrapper type...
      */
     inline bool
     isMicroGridAligned (FSecs duration)
     {
-      return 0 == (duration.numerator() * Time::SCALE)
-                  % duration.denominator();
+      return 0 == Time::SCALE % duration.denominator();
     }
     
     inline double
@@ -582,11 +583,13 @@ namespace model {
               // One case stands out, insofar this factor is guaranteed to be present:
               // because one of the numbers is a quantised Time, it has Time::SCALE as denominator,
               // maybe after cancelling out some further common integral factors
-              int64_t reduction = Time::SCALE / duration.denominator();
+              auto [reduction,rem] = util::iDiv (Time::SCALE, duration.denominator());
+              if (rem != 0) reduction = 1;  // when duration is not µ-Tick quantised
+              int64_t durationQuant = duration.denominator()*reduction;
               int64_t durationTicks = duration.numerator()*reduction;
               
                          //-f1--------------------+-u-------------------+-q---------------------+-f2--------------------+-invert--
-              Cases cases{{{durationTicks         , Time::SCALE         , factor.numerator()    , factor.denominator()  , false}
+              Cases cases{{{durationTicks         , durationQuant       , factor.numerator()    , factor.denominator()  , false}
                           ,{factor.numerator()    , factor.denominator(), duration.numerator()  , duration.denominator(), false}
                           ,{duration.denominator(), duration.numerator(), factor.denominator()  , factor.numerator()    , true}
                           ,{factor.denominator()  , factor.numerator()  , duration.denominator(), duration.numerator()  , true}
@@ -689,7 +692,7 @@ namespace model {
         }
       
       /** calculate `rational_cast<uint> (zoomFactor * duration)`
-       * @remark indirect calculation path to avoid overflow on large durations
+       * @remark indirect calculation to avoid overflow on large durations
        */
       static int64_t
       calcPixelsForDurationAtScale (Rat zoomFactor, FSecs duration)
@@ -715,6 +718,58 @@ namespace model {
         }     // Note: denominator 1000 is additional safety margin
              //        wouldn't be necessary, but makes detox(largeTime) more precise
       
+      /**
+       * Reform the effective metric in all dangerous corner cases.
+       * Ensure the metric value is not »poisonous« and can be multiplied
+       * even with Time::SCALE without numeric wrap-around.
+       * @note this function introduces a slight error to simplify the numbers;
+       *       then the result is optimised to conform to pxWith and duration
+       */
+      Rat
+      optimiseMetric (uint pxWidth, FSecs dur, Rat rawMetric)
+        {
+          using util::ilog2;
+          REQUIRE (0 < pxWidth and 0 < dur and 0 < rawMetric);
+          REQUIRE (isMicroGridAligned (dur));
+          // circumvent numeric problems due to excessive large factors
+          int64_t magDen = ilog2(rawMetric.denominator());
+          int reduction = toxicDegree (rawMetric);
+          int quant     = max (magDen-reduction, 16);
+          //  re-quantise metric into power of two <= 2^40 (headroom 22 bit)
+          //  Known to work always, since 9e-10 < metric < 2e+6
+          Rat adjMetric = util::reQuant (rawMetric, int64_t(1) << quant);
+          
+            // Correct that metric to reproduce expected pxWidth...
+           //  Retain reduced denominator, but optimise the numerator
+          //   pixel = trunc{ metric*duration }
+          double epsilon = std::numeric_limits<double>::epsilon()
+               , dn = dur.numerator()
+               , dd = dur.denominator()
+               , md = adjMetric.denominator()
+               , mn = (pxWidth+epsilon)*md*dd/dn;
+          // construct optimised zoom metric result
+          int64_t num = mn, den = adjMetric.denominator();
+          if (epsilon < mn - num)
+            {// optimisation found inter-grid result -- increase precision
+              int headroom = max (1, HAZARD_DEGREE - max (ilog2(num), ilog2(den)));
+              int64_t scale = int64_t(1) << headroom;
+              num = scale*mn;                 // quantise again with increased resolution
+              den = scale*den;               //  at least factor 2 to get some improvement
+              if (pxWidth > dn/dd*num/den)  //   If still some remaining error....
+                ++num; // round up to be sure to hit the next higher pixel count
+            }
+          adjMetric = Rat{num, den};
+          ENSURE (pxWidth == calcPixelsForDurationAtScale (adjMetric, dur));
+          double impliedDur = double(pxWidth)*den/num;
+          double relError   = abs(dn/dd /impliedDur -1);
+          double quantErr   = 1.0/(num-1);
+          ENSURE (quantErr  > relError, "metric misses duration by "
+                  "%3.2f%% > %3.2f%% (=relative quantisation error)"
+                 ,100*relError, 100.0*quantErr);
+          return adjMetric;
+        }
+      
+      
       static Rat
       establishMetric (uint pxWidth, Time startWin, Time afterWin)
         {
@@ -724,35 +779,13 @@ namespace model {
               pxWidth = max<uint> (1, rational_cast<uint> (DEFAULT_METRIC * dur));
           Rat metric = Rat(pxWidth) / dur;
           // rational arithmetic ensures we can always reproduce the pxWidth
-          ENSURE (pxWidth == rational_cast<uint> (metric*dur));
+          ENSURE (pxWidth == calcPixelsForDurationAtScale (metric, dur));
           ENSURE (0 < metric);
           return metric;
         }
       
-      Rat
-      conformMetricToWindow (uint pxWidth)
-        {
-          REQUIRE (pxWidth > 0);
-          REQUIRE (afterWin_> startWin_);
-          FSecs dur{afterWin_-startWin_};
-          Rat adjMetric = detox (Rat(pxWidth) / dur);
-          //  check if new metric reproduces expected pxWidth...
-          for (uint resPx
-              ;pxWidth != (resPx = calcPixelsForDurationAtScale (adjMetric, dur))  // calculate trunc {adjMetric*dur}
-              ;                                                                   //  but calculate cleverly to avoid numeric wrap
-              ) // Problem: detox() introduced too much error
-            {  //  need to adjust metric to match expected pxWidth
-              //   Using Newton-Raphson; can't just calculate fix due to numeric-wraparound
-              auto delta = double(resPx) - pxWidth;                           // note: approximation calculated in double
-              int64_t mn{adjMetric.numerator()},  dn{dur.numerator()},
-                      md{adjMetric.denominator()}, dd{dur.denominator()};
-              //assuming: f(xₙ) ≔ Δₙ = resPx-pxWidth = trunc{ xₙ * dn/(md*dd) } - pxWidth
-              mn -= int64_t(delta * md*dd  / dn);   // xₙ₁ ≔ xₙ - f(xₙ)/f'(xₙ)
-              adjMetric = Rat{mn, md};
-            }
-          return adjMetric;
-        }
-      
+      /** this is the centrepiece of the whole zoom metric logic...
+       * @note control flow for every scale adjustment passes here */
       void
       conformWindowToMetric (Rat changedMetric)
         {
@@ -761,9 +794,8 @@ namespace model {
           FSecs dur{afterWin_-startWin_};
           uint pxWidth = calcPixelsForDurationAtScale (px_per_sec_, dur);
           dur = Rat(pxWidth) / detox (changedMetric);
-          dur = min (dur, MAX_TIMESPAN);
-          dur = max (dur, MICRO_TICK); // prevent window going void
-          dur = detox (dur);          //  prevent integer wrap in time conversion
+          dur = min (dur, MAX_TIMESPAN);// limit maximum window size
+          dur = max (dur, MICRO_TICK); //  prevent window going void
           TimeVar timeDur{Duration{dur}};
           // prefer bias towards increased window instead of increased metric
           if (not isMicroGridAligned (dur))
@@ -773,8 +805,22 @@ namespace model {
           establishWindowDuration (Duration{timeDur});
           // re-check metric to maintain precise pxWidth
           px_per_sec_ = conformMetricToWindow (pxWidth);
-          ENSURE (_FSecs(afterWin_-startWin_) < MAX_TIMESPAN);
+          ENSURE (_FSecs(afterWin_-startWin_) <= MAX_TIMESPAN);
           ENSURE_matchesExpectedPixWidth (changedMetric, afterWin_-startWin_, pxWidth);
+        }
+      
+      Rat
+      conformMetricToWindow (uint pxWidth)
+        {
+          REQUIRE (pxWidth > 0);
+          REQUIRE (afterWin_> startWin_);
+          FSecs dur{afterWin_-startWin_};
+          Rat adjMetric = Rat(pxWidth) / dur;
+          if (not toxicDegree(adjMetric)
+              and pxWidth == calcPixelsForDurationAtScale (adjMetric, dur))
+            return adjMetric;
+          else
+            return optimiseMetric(pxWidth, dur, adjMetric);
         }
       
       /**
@@ -985,7 +1031,7 @@ namespace model {
       void
       placeWindowRelativeToAnchor (FSecs duration)
         {
-          FSecs partBeforeAnchor = relativeAnchor() * duration;
+          FSecs partBeforeAnchor = scaleSafe(duration, relativeAnchor());
           startWin_ = Time{anchorPoint()} - Time{partBeforeAnchor};
         }
       
@@ -1016,7 +1062,7 @@ namespace model {
       FSecs
       anchorPoint()  const
         {
-          return startWin_ + FSecs{afterWin_-startWin_} * relativeAnchor();
+          return startWin_ + scaleSafe (afterWin_-startWin_, relativeAnchor());
         }
       
       /**

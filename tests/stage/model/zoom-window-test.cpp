@@ -715,19 +715,47 @@ namespace test {
           
           /*--Test-4-----------*/
           win.setMetric (1001_r/LIM_HAZARD);                                     // but zooming in more than that limit will be honored
-          CHECK (_raw(win.visible().duration()) == 3295239643684000);            // ...window now slightly reduced in size
+          CHECK (_raw(win.visible().duration()) == 3295239643684316);            // ...window now slightly reduced in size
           CHECK (_raw(win.visible().duration())  < 3 * LIM_HAZARD*1000);
-          CHECK (win.px_per_sec() == 750_r/823809910921);                        // ...yet effective zoom factor was still marginally adjusted for safety
-          CHECK (win.px_per_sec() > 1000_r/LIM_HAZARD);
-          CHECK (win.px_per_sec() > 1001_r/LIM_HAZARD);                          // (this is what was requested)
-          CHECK (win.px_per_sec() < 1002_r/LIM_HAZARD);                          // (thus result was slightly adjusted upwards)
+          CHECK (win.px_per_sec()  > 1000_r/LIM_HAZARD);
+          CHECK (win.px_per_sec() == 1001_r/LIM_HAZARD);                         // (this is what was requested)
+          CHECK (win.px_per_sec() == 1001_r/1099511627776);
           CHECK (win.pxWidth() == 3);
-          
+
           /*--Test-5-----------*/
+          win.setMetric (1000_r/LIM_HAZARD * 1024_r/1023);                       // likewise zooming back out slightly below limit is possible
+          CHECK (_raw(win.visible().duration()) == 3295313657856000);            // ...window now again slightly increased, but not at maximum size
+          CHECK (_raw(win.visible().duration())  < 3 * LIM_HAZARD*1000);
+          CHECK (win.px_per_sec() > 1000_r/LIM_HAZARD);
+          CHECK (win.px_per_sec() < 1001_r/LIM_HAZARD);
+          CHECK (win.px_per_sec() == 1000_r/LIM_HAZARD * 1024_r/1023);           // zoom factor precisely reproduced in this case
+          CHECK (win.px_per_sec() == 125_r/137304735744);
+          CHECK (win.pxWidth() == 3);
+
+          /*--Test-6-----------*/
+          win.setMetric (1001_r/(LIM_HAZARD-3));                                 // however, setting »poisonous« factors close below the limit...
+          CHECK (win.px_per_sec() > 1001_r/LIM_HAZARD);                          // results in a sanitised (simplified) zoom factor
+          CHECK (win.px_per_sec() < 1002_r/LIM_HAZARD);
+          CHECK (1001_r/(LIM_HAZARD-3) == 77_r/84577817521);                     // This case is especially interesting, since the initial factor isn't »toxic«,
+                                                                                 // but the resulting duration is not µ-grid aligned, and after fixing that,
+          CHECK (3_r/3295239643675325 * Time::SCALE == 120000_r/131809585747013);// the resulting zoom factor is comprised of very large numbers,
+          CHECK (win.px_per_sec() == 2003_r/2199023255552);                      // ...which are then simplified and adjusted...
+          CHECK (win.pxWidth() == 3);                                            // ... to match also the pixel size
+         
+          CHECK (_raw(Duration{3_r/(77_r/84577817521)}) == 3295239643675324);    // This is the duration we'd expect (truncated down)
+          CHECK (_raw(win.visible().duration())         == 3295239643675325);    // ...this is the duration we actually get
+          CHECK (_raw(Duration{3_r/win.px_per_sec()})   == 3293594491590614);    // Unfortunately, calculating back from the smoothed zoom-metric
+                                                                                 // .. would yield a duration way off, with an relative error < 1‰
+          CHECK (2003.0f/2002 - 1 == 0.000499486923f);                           // The reason for this relative error is the small numerator of 2002
+                                                                                 // (2002 is increased to 2003 to get above 3px)
+          
+          /*--Test-7-----------*/
           win.calibrateExtension (1'000'000'000);                                // implicit drastic zoom-out by increasing the number of pixels
           CHECK (win.pxWidth()  < 1'000'000'000);                                // however: this number is capped at a fixed maximum
           CHECK (win.pxWidth() == MAX_PX_WIDTH);                                 // (which „should be enough“ for the time being...)
-          CHECK (win.px_per_sec() == 16062_r/98763149723);                       // the zoom metric has been adapted, but to a sanitised value
+          CHECK (win.px_per_sec() == 89407_r/549755813888);                      // the zoom metric has been adapted, but to a sanitised value
+          CHECK (win.px_per_sec() > Rat{MAX_PX_WIDTH}  /MAX_TIMESPAN);
+          CHECK (win.px_per_sec() < Rat{MAX_PX_WIDTH+1}/MAX_TIMESPAN);
           
           CHECK (_raw(win.overallSpan().duration()) ==  614891469123651720);     // overall canvas duration not changed
           CHECK (_raw(win.visible().duration())     ==  614891469123651720);     // window duration now expanded to the maximum possible value
@@ -740,21 +768,18 @@ namespace test {
           CHECK (MAX_PX_WIDTH * 1000000_r/614891469123651720     == 2500000000_r/15372286728091293);
           CHECK (win.px_per_sec() * _FSecs(win.visible().duration()) < 0);       // we can't even calculate the resulting pxWidth() naively
           CHECK (rational_cast<float>(win.px_per_sec())                          // ...while effectively these values are still correct
-                * rational_cast<float>(_FSecs(win.visible().duration())) == 100000.727f);
+                * rational_cast<float>(_FSecs(win.visible().duration())) == 100000.031f);
           CHECK (rational_cast<float>(MAX_PX_WIDTH*1000000_r/614891469123651720) == 1.62630329e-07f);  // theoretical value
-          CHECK (rational_cast<float>(win.px_per_sec())                          == 1.62631508e-07f);  // value actually chosen
-          CHECK (win.px_per_sec() == 16062_r/98763149723);
+          CHECK (rational_cast<float>(win.px_per_sec())                          == 1.62630386e-07f);  // value actually chosen
+          CHECK (win.px_per_sec() == 89407_r/549755813888);
           
-          /*--Test-6-----------*/
-          win.setMetric (bruteZoom);                                             // And now put one on top by requesting excessive zoom-out:
+          /*--Test-8-----------*/
+          win.setMetric (bruteZoom);                                             // And now put one on top by requesting excessive zoom-out!
           CHECK (_raw(win.overallSpan().duration()) == 614891469123651720);      // overall canvas duration not changed
-            SHOW_EXPR(_raw(win.overallSpan().duration()))
-            SHOW_EXPR(_raw(win.visible().duration()))
-          CHECK (_raw(win.visible().duration())     == 614891469123640625);      // window duration was slightly decreased -- WHY??  (TODO)
-          CHECK (16062_r/98763149723 > 200000_r/1229782938247);                  // zoom factor numerically slightly reduced
-            SHOW_EXPR(win.px_per_sec())
-          CHECK (win.px_per_sec() == 200000_r/1229782938247);                    // and now hitting again the minimum limit
-            SHOW_EXPR(MAX_PX_WIDTH /(614891469123651720_r/1000000))
+          CHECK (_raw(win.visible().duration())     == 614891469123651720);      // window duration was capped precisely at DURATION_MAX
+          CHECK (win.px_per_sec() == 89407_r/549755813888);                      // zoom factor and now hitting again the minimum limit
+          CHECK (MAX_PX_WIDTH /(614891469123651720_r/Time::SCALE) == 2500000000_r/15372286728091293);   // (this would be the exact factor)
+          CHECK (2500000000_r/15372286728091293 < 89407_r/549755813888);         // zoom factor (again) numerically sanitised
           CHECK (win.pxWidth() == MAX_PX_WIDTH);                                 // pixel count unchanged at maximum
         }
       
