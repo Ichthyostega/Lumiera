@@ -224,8 +224,8 @@ namespace model {
       
     public:
       ZoomWindow (uint pxWidth, TimeSpan timeline =TimeSpan{Time::ZERO, DEFAULT_CANVAS})
-        : startAll_{timeline.start()}
-        , afterAll_{ensureNonEmpty(startAll_, timeline.end())}
+        : startAll_{ensureNonEmpty(timeline).start()}
+        , afterAll_{ensureNonEmpty(timeline).end()}
         , startWin_{startAll_}
         , afterWin_{afterAll_}
         , px_per_sec_{establishMetric (pxWidth, startWin_, afterWin_)}
@@ -673,11 +673,13 @@ namespace model {
        * - visibleWindow ⊂ Canvas
        */
       
-      static TimeValue
-      ensureNonEmpty (Time start, TimeValue endPoint)
+      static TimeSpan
+      ensureNonEmpty (TimeSpan const& span)
         {
-          return (start < endPoint)? endPoint
-                                   : start + Time{DEFAULT_CANVAS};
+          return TimeSpan{span.start()
+                         ,util::isnil(span.duration())? Duration{DEFAULT_CANVAS}
+                                                      : span.duration()
+                         }.conform();
         }
       
       /** Assertion helper: resulting pxWidth matches expectations */
@@ -847,8 +849,6 @@ namespace model {
         {
           FSecs dur{afterWin_-startWin_};
           REQUIRE (dur <= MAX_TIMESPAN);
-          REQUIRE (Time::MIN <= startWin_);
-          REQUIRE (afterWin_ <= Time::MAX);
           startAll_ = max (startAll_, Time::MIN);
           afterAll_ = min (afterAll_, Time::MAX);
           if (dur <= _FSecs(afterAll_-startAll_))
@@ -874,6 +874,8 @@ namespace model {
             }
           ENSURE (startAll_ <= startWin_);
           ENSURE (afterWin_ <= afterAll_);
+          ENSURE (Time::MIN <= startWin_);
+          ENSURE (afterWin_ <= Time::MAX);
         }
       
       void
@@ -922,8 +924,8 @@ namespace model {
       void
       mutateCanvas (TimeSpan canvas)
         {
-          startAll_ = canvas.start();
-          afterAll_ = ensureNonEmpty (startAll_, canvas.end());
+          startAll_ = ensureNonEmpty(canvas).start();
+          afterAll_ = ensureNonEmpty(canvas).end();
           ensureInvariants();
         }
       
@@ -934,12 +936,11 @@ namespace model {
       mutateWindow (TimeSpan window)
         {
           uint px{pxWidth()};
-          startWin_ = window.start();
-          afterWin_ = ensureNonEmpty (startWin_, window.end());
+          startWin_ = ensureNonEmpty(window).start();
+          afterWin_ = ensureNonEmpty(window).end();
           conformWindowToMetricLimits (px);
           startAll_ = min (startAll_, startWin_);
           afterAll_ = max (afterAll_, afterWin_);
-          px_per_sec_ = conformMetricToWindow (px);
           ensureInvariants (px);
         }
       
@@ -949,12 +950,11 @@ namespace model {
       mutateRanges (TimeSpan canvas, TimeSpan window)
         {
           uint px{pxWidth()};
-          startAll_ = canvas.start();
-          afterAll_ = ensureNonEmpty (startAll_, canvas.end());
-          startWin_ = window.start();
-          afterWin_ = ensureNonEmpty (startWin_, window.end());
+          startAll_ = ensureNonEmpty(canvas).start();
+          afterAll_ = ensureNonEmpty(canvas).end();
+          startWin_ = ensureNonEmpty(window).start();
+          afterWin_ = ensureNonEmpty(window).end();
           conformWindowToMetricLimits (px);
-          px_per_sec_ = conformMetricToWindow (px);
           ensureInvariants (px);
         }
       
@@ -997,7 +997,6 @@ namespace model {
           adaptedWindow = max (adaptedWindow, MICRO_TICK); // prevent void window
           adaptedWindow = min (adaptedWindow, maxSaneWinExtension (pxWidth));
           establishWindowDuration (adaptedWindow);
-          px_per_sec_ = conformMetricToWindow (pxWidth);
           ensureInvariants (pxWidth);
         }
       
@@ -1020,7 +1019,6 @@ namespace model {
           establishWindowDuration (duration);
           startAll_ = min (startAll_, startWin_);
           afterAll_ = max (afterAll_, afterWin_);
-          px_per_sec_ = conformMetricToWindow (px);
           ensureInvariants (px);
         }
       

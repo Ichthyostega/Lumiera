@@ -312,6 +312,16 @@ namespace test{
           CHECK (         Offset{Time::MAX + Duration::MAX}  ==  Duration::MAX); // clipped at max
           CHECK (         Offset{Time::MIN - Duration::MAX}  == -Duration::MAX); // clipped at min
           CHECK (Duration{Offset{Time::MIN - Duration::MAX}} ==  Duration::MAX); // duration is absolute
+          
+          CHECK (TimeSpan(Time::MIN, Time::MAX) == TimeSpan(Time::MAX, Time::MIN));
+          CHECK (TimeSpan(Time::MAX, Duration::MAX).start()    == Time::MAX);
+          CHECK (TimeSpan(Time::MAX, Duration::MAX).end()      == Time::MAX + Duration::MAX); // note: end() can yield value beyond [Time::MIN...Time::MAX]
+          CHECK (TimeSpan(Time::MAX, Duration::MAX).duration() == Duration::MAX);
+          CHECK (TimeSpan(Time::MAX, Duration::MAX).conform()  == TimeSpan(Time::MIN,Duration::MAX));
+          CHECK (TimeSpan(Time::MAX, Offset(FSecs(-1)))        == TimeSpan(Time::MAX-Offset(FSecs(1)), FSecs(1)));
+          CHECK (TimeSpan(Time::MAX, FSecs(5)).start()         == Time::MAX);
+          CHECK (TimeSpan(Time::MAX, FSecs(5)).duration()      == Duration(FSecs(5)));
+          CHECK (TimeSpan(Time::MAX, FSecs(5)).conform()       == TimeSpan(Time::MAX-Offset(FSecs(5)), FSecs(5)));
         }
       
       
@@ -368,9 +378,9 @@ namespace test{
       compareTimeSpan (Time const& org)
         {
           TimeSpan span1 (org, org+org);                  // using the distance between start and end point
-          TimeSpan span2 (org, Offset(org, Time::ZERO));  // note: the offset is taken absolute, as Duration
+          TimeSpan span2 (org+org, org);                  // note: TimeSpan is oriented automatically
           TimeSpan span3 (org, FSecs(5,2));               // Duration given explicitly, in seconds
-          TimeSpan span4 (org, FSecs(5,-2));              // again: the Duration is taken absolute
+          TimeSpan span4 (org, FSecs(5,-2));              // note: fractional seconds taken absolute, as Duration
           
           CHECK (span1 == span2);
           CHECK (span2 == span1);
@@ -386,8 +396,7 @@ namespace test{
           CHECK (span2 != span4);
           CHECK (span4 != span2);
           
-          // especially note that creating a TimeSpan
-          // based on offset will take the offset absolute
+          // note that TimeSpan is oriented at creation
           CHECK (span1.end() == span2.end());
           CHECK (span3.end() == span4.end());
           

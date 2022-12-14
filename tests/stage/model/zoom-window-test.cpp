@@ -94,6 +94,8 @@ namespace test {
           safeguard_extremeZoomOut();
           safeguard_extremeTimePos();
           safeguard_extremeOffset();
+          safeguard_verySmall();
+          safeguard_veryDeep();
         }
       
       
@@ -523,7 +525,7 @@ namespace test {
           ZoomWindow win{1};
           win.setVisibleDuration(Duration{FSecs(1,25)});
           win.setOverallRange(TimeSpan(_t(10), _t(0)));                          // set an "reversed" overall time range
-          CHECK (win.overallSpan() == TimeSpan(_t(10), _t(20)));                 // range has been flipped forward
+          CHECK (win.overallSpan() == TimeSpan(_t(0), _t(10)));                  // range has been oriented forward
           CHECK (win.visible().duration() == Time(40,0));
           CHECK (win.px_per_sec() == 25);
           CHECK (win.pxWidth() == 1);
@@ -652,7 +654,7 @@ namespace test {
           CHECK (win.pxWidth() == 575);
           
           
-          win.setOverallStart(Time::MAX - TimeValue(23));                        // preparation for Test-4 : shift canvas to end of time
+          win.setOverallRange(TimeSpan{Time::MAX, Offset{TimeValue(23)}});       // preparation for Test-4 : shift canvas to end of time
           CHECK (win.overallSpan() == win.visible());                            // consequence: window has been capped to canvas size
           CHECK (win.overallSpan().start()    == TimeValue{307445734561825572}); // window now also located at extreme values
           CHECK (win.overallSpan().end()      == TimeValue{307445734561825860});
@@ -784,19 +786,29 @@ namespace test {
         }
       
       
-      /** @test verify ZoomWindow code can navigate extremal time positions.
+      /** @test verify ZoomWindow code can navigate extremal time positions,
+       *        thereby observing domain bounds without numeric wrap.
        */
       void
       safeguard_extremeTimePos()
         {
+          ZoomWindow win{559, TimeSpan{Time::MAX, Duration{TimeValue(3)}}};      // setup a very small window clinging to Time::MAX
+          CHECK (win.visible().duration() == TimeValue(280));                    // duration expanded due to MAX_ZOOM limit
+          CHECK (win.visible().start() == TimeValue(307445734561825580));        // and properly oriented and aligned within domain
+          CHECK (win.visible().end()   == TimeValue(307445734561825860));
+          CHECK (win.visible().end()   == Time::MAX);
+          CHECK (win.visible() == win.overallSpan());
+          CHECK (win.px_per_sec() == 559_r/280*Time::SCALE);
+          CHECK (win.px_per_sec() == 13975000_r/7);
+          CHECK (win.pxWidth() == 559);
+          
 //            SHOW_EXPR(win.overallSpan());
 //            SHOW_EXPR(_raw(win.overallSpan().duration()));
 //            SHOW_EXPR(_raw(win.visible().duration()));
+//            SHOW_EXPR(_raw(win.visible().start()));
+//            SHOW_EXPR(_raw(win.visible().end()));
 //            SHOW_EXPR(win.px_per_sec());
 //            SHOW_EXPR(win.pxWidth());
-//            CHECK (win.visible()     == TimeSpan(_t(0), _t(23)));
-//            CHECK (win.px_per_sec()  == 25);
-//            CHECK (win.pxWidth()     == 575);
         }
       
       
@@ -805,6 +817,43 @@ namespace test {
       void
       safeguard_extremeOffset()
         {
+//            SHOW_EXPR(win.overallSpan());
+//            SHOW_EXPR(_raw(win.overallSpan().duration()));
+//            SHOW_EXPR(_raw(win.visible().duration()));
+//            SHOW_EXPR(_raw(win.visible().start()));
+//            SHOW_EXPR(_raw(win.visible().end()));
+//            SHOW_EXPR(win.px_per_sec());
+//            SHOW_EXPR(win.pxWidth());
+        }
+      
+      
+      /** @test verify ZoomWindow can handle excessively small windows.
+       */
+      void
+      safeguard_verySmall()
+        {
+//            SHOW_EXPR(win.overallSpan());
+//            SHOW_EXPR(_raw(win.overallSpan().duration()));
+//            SHOW_EXPR(_raw(win.visible().duration()));
+//            SHOW_EXPR(_raw(win.visible().start()));
+//            SHOW_EXPR(_raw(win.visible().end()));
+//            SHOW_EXPR(win.px_per_sec());
+//            SHOW_EXPR(win.pxWidth());
+        }
+      
+      
+      /** @test verify ZoomWindow and handle extreme zoom-in.
+       */
+      void
+      safeguard_veryDeep()
+        {
+//            SHOW_EXPR(win.overallSpan());
+//            SHOW_EXPR(_raw(win.overallSpan().duration()));
+//            SHOW_EXPR(_raw(win.visible().duration()));
+//            SHOW_EXPR(_raw(win.visible().start()));
+//            SHOW_EXPR(_raw(win.visible().end()));
+//            SHOW_EXPR(win.px_per_sec());
+//            SHOW_EXPR(win.pxWidth());
         }
     };
   

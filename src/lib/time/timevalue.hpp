@@ -565,25 +565,25 @@ namespace time {
         , dur_(length)
         { }
       
-      TimeSpan(TimeValue const& start, Offset const& reference_distance)
-        : Time(start)
-        , dur_(reference_distance)
-        { }
-      
-      TimeSpan(TimeValue const& start, TimeValue const& end)
-        : Time(start)
-        , dur_(Offset(start,end))
-        { }
-      
       TimeSpan(TimeValue const& start, FSecs(duration_in_secs))
         : Time(start)
         , dur_(duration_in_secs)
+        { }
+      
+      TimeSpan(TimeValue const& start, TimeValue const& end)
+        : Time(start<=end? start:end)
+        , dur_(Offset(start,end))
+        { }
+      
+      TimeSpan(TimeValue const& start, Offset const& reference_distance)
+        : TimeSpan{start, Time{start} + reference_distance}
         { }
       
       TimeSpan()
         : TimeSpan(Time::ZERO, Time::ZERO)
         { }
       
+      TimeSpan conform()  const;  ///< @return a copy conformed to time domain limits
       
       Duration&
       duration()
@@ -713,6 +713,13 @@ namespace time {
       }
     gavl_time_t res = target - origin;
     return symmetricLimit (res, Duration::MAX);
+  }
+  
+  inline TimeSpan
+  TimeSpan::conform()  const     ///<  @note: implicitly capped to Duration::MAX
+  {
+    return Offset{*this} + dur_ <= Time::MAX? TimeSpan{*this}
+                                            : TimeSpan{Time::MAX-dur_, Time::MAX};
   }
   
   
