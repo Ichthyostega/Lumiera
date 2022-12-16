@@ -264,7 +264,7 @@ namespace test {
           
           // so this is the deepest zoom possible....
           CHECK (win.visible().duration() == TimeValue(640));
-          CHECK (TimeValue(640) == _t(1280,ZOOM_MAX_RESOLUTION));
+          CHECK (TimeValue{640} == Time{Rat(1280)/ZOOM_MAX_RESOLUTION});
           
           // and this the absolutely smallest possible zoom window
           win.calibrateExtension(2);
@@ -818,26 +818,54 @@ namespace test {
           CHECK (win.overallSpan().end()   == Time::MAX);
           
           /*--Test-3-----------*/
-          win.setOverallDuration(Duration::MAX);                                 // now use maximally expanded canvas
-          Duration targetDur{99_r/100 * Duration::MAX};
-          win.setVisibleDuration(targetDur);                                     // and demand the duration be expanded to 99%
+          win.calibrateExtension(560);
+          CHECK (win.visible().duration() == TimeValue(280));                    // effective window dimensions unchanged
+          CHECK (win.px_per_sec() == 2000000_r/1);                               // but zoom metric slightly adapted
           
-          CHECK (win.visible().duration() > targetDur);                          // actual duration slightly more than requested,
-          CHECK (win.visible().duration() < Duration::MAX); 
+          win.setOverallDuration(Duration::MAX);                                 // now use maximally expanded canvas
+          Duration targetDur{Duration::MAX - FSecs(23)};
+          win.setVisibleDuration(targetDur);                                     // and demand the duration be expanded almost full size
+          
+          CHECK (win.visible().duration() == targetDur);                         // actual duration is the value requested
+          CHECK (win.visible().duration() < Duration::MAX);
           CHECK (win.visible().start() == Time::MIN);                            // expansion was anchored at previous position
           CHECK (win.visible().start() <  Time::MAX);                            // and thus the window now clings to the lower end
-          CHECK (win.visible().end()   == TimeValue(301415533658088775));
-          CHECK (win.px_per_sec() == 2019_r/2199023255552);                      // effective zoom metric has been sanitised numerically 
-          CHECK (win.pxWidth()    == 559);                                       // but pixel count is matched precisely
+          CHECK (win.visible().end()   == TimeValue(307445734538825860));
+          CHECK (Time::MAX - win.visible().end() == TimeValue(23*Time::SCALE));
+          CHECK (win.px_per_sec() == 2003_r/2199023255552);                      // effective zoom metric has been sanitised numerically
+          CHECK (win.pxWidth()    == 560);                                       // but pixel count is matched precisely
           
           /*--Test-4-----------*/
           win.setVisiblePos(Rat{std::numeric_limits<int64_t>::max()-23});
-            SHOW_EXPR(_raw(win.overallSpan().duration()));
-            SHOW_EXPR(_raw(win.visible().duration()));
-            SHOW_EXPR(_raw(win.visible().start()));
-            SHOW_EXPR(_raw(win.visible().end()));
-            SHOW_EXPR(win.px_per_sec());
-            SHOW_EXPR(win.pxWidth());
+          CHECK (win.visible().duration() == targetDur);                         // actual duration unchanged
+          CHECK (win.px_per_sec() == 2003_r/2199023255552);
+          CHECK (win.pxWidth()    == 560);
+          CHECK (win.visible().end()   == Time::MAX);                            // but window now slinged to the right extreme
+          CHECK (win.visible().start() >  Time::MIN);
+          CHECK (win.visible().start() == TimeValue(-307445734538825860));
+          
+          /*--Test-5-----------*/
+          win.calibrateExtension(561);                                           // expand by 1 pixel
+          CHECK (win.visible().duration() >  targetDur);                         // actual duration indeed increased
+          CHECK (win.visible().duration() == Duration::MAX);                     // and then capped at maximum
+          CHECK (win.visible().end()   == Time::MAX);                            // but while initially the upper bound is increased...
+          CHECK (win.visible().start() == Time::MIN);
+          CHECK (win.px_per_sec() == 2007_r/2199023255552);                      // the smoothed nominal metric was also increased slightly
+          CHECK (win.pxWidth()    == 561);
+          
+          /*--Test-6-----------*/
+          win.setVisibleDuration(Duration::MAX - Duration(TimeValue(1)));        // request slightly different window duration
+          CHECK (win.visible().end()   == Time::MAX);                            // by arbitrary choice, the single µ-tick was removed at start
+          CHECK (win.visible().start() == Time::MIN + TimeValue(1));
+          CHECK (win.px_per_sec() == 2007_r/2199023255552);                      // the smoothed nominal metric was also increased slightly
+          CHECK (win.pxWidth()    == 561);
+          
+          win.setVisibleDuration(Duration(TimeValue(1)));                        // drastically zoom-in
+          CHECK (win.visible().duration() == TimeValue(281));                    // ...but we get more than 1 µ-tick
+          CHECK (561_r/_FSecs(TimeValue(1)) > ZOOM_MAX_RESOLUTION);              // because the requested window would exceed maximum zoom
+          CHECK (win.px_per_sec() == 561000000_r/281);                           // and this conflict was resolved by increasing the window
+          CHECK (win.visible().end()   == Time::MAX);                            // while keeping it aligned to the end of the timeline
+          CHECK (win.pxWidth()    == 561);
         }
       
       

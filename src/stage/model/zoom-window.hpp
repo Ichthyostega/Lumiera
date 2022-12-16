@@ -171,7 +171,7 @@ namespace model {
   
   
   /** the deepest zoom is to use 2px per micro-tick */
-  const uint ZOOM_MAX_RESOLUTION = 2 * TimeValue::SCALE;
+  const Rat ZOOM_MAX_RESOLUTION = 2 * TimeValue::SCALE;
   
   namespace {// initial values (rather arbitrary)
     const FSecs DEFAULT_CANVAS{23};
@@ -982,8 +982,9 @@ namespace model {
             duration = DEFAULT_CANVAS;
           else if (duration > maxSaneWinExtension (px))
             duration = maxSaneWinExtension (px);
-          Rat changedMetric = Rat(px) / duration;
-          conformWindowToMetric (changedMetric);
+          placeWindowRelativeToAnchor (duration);
+          establishWindowDuration (duration);
+          px_per_sec_ = conformMetricToWindow (px);
           ensureInvariants (px);
         }
       
@@ -1060,7 +1061,7 @@ namespace model {
       FSecs
       anchorPoint()  const
         {
-          return startWin_ + scaleSafe (afterWin_-startWin_, relativeAnchor());
+          return startWin_ + Offset{scaleSafe (afterWin_-startWin_, relativeAnchor())};
         }
       
       /**
