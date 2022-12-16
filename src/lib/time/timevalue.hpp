@@ -413,6 +413,14 @@ namespace time {
     return Offset(distance);
   }
   
+  inline Offset
+  operator- (Offset const& start, Offset const& toSubtract)
+  {
+    TimeVar distance(start);
+    distance -= toSubtract;
+    return Offset(distance);
+  }
+  
   template<typename INT>
   inline Offset
   operator* (Offset const& distance, INT factor)
@@ -507,12 +515,19 @@ namespace time {
       
     };
     
-  //-- support using a Duration to build offsets ---------------
+  //-- support combining and Durations ---------------
   
   inline Duration
   operator+ (Duration const& base, Duration const& toAdd)
   {
     return Offset(base) + Offset(toAdd);
+  }
+  
+  inline Duration
+  operator- (Duration const& base, Duration const& toRemove)
+  {
+    return base > toRemove? Offset(base) - Offset(toRemove)
+                          : Duration::NIL;
   }
   
   template<typename INT>

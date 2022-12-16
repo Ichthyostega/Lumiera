@@ -401,7 +401,6 @@ namespace model {
       setVisibleDuration (Duration duration)
         {
           mutateDuration (_FSecs(duration));
-          mutateWindow (TimeSpan{startWin_, afterWin_});
           fireChangeNotification();
         }
       
@@ -985,6 +984,7 @@ namespace model {
             duration = maxSaneWinExtension (px);
           Rat changedMetric = Rat(px) / duration;
           conformWindowToMetric (changedMetric);
+          ensureInvariants (px);
         }
       
       /** @internal resize window to span the given pixel with,

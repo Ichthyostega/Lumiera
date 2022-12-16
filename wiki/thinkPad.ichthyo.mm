@@ -41249,11 +41249,22 @@
 <node COLOR="#338800" CREATED="1670982930768" ID="ID_1528129980" MODIFIED="1670982944610" TEXT="erzeugen mit Start-Pos == Time::MAX">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669475536331" ID="ID_486161883" MODIFIED="1670982947517" TEXT="setVisiblePos mit extremer Time">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1669475536331" ID="ID_486161883" MODIFIED="1671153173786" TEXT="setVisiblePos mit extremer Time">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1669475549345" ID="ID_234786683" MODIFIED="1670982949932" TEXT="setVisiblePos mit extremem Faktor">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1671153443706" ID="ID_43785368" MODIFIED="1671153469830" TEXT="Rechnung sieht plausibel aus, aber das Ergebnis ist falsch">
+<icon BUILTIN="flag-pink"/>
+<node CREATED="1671153472181" ID="ID_1963137458" MODIFIED="1671153492750" TEXT="Offset wird auf MAX_DURATION gekappt (korrekt)"/>
+<node CREATED="1671153500329" ID="ID_983458362" MODIFIED="1671153514062" TEXT="als relativer Pox-Faktor kommt 1 raus (korrekt)"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1671153518751" ID="ID_180845154" MODIFIED="1671153548737" TEXT="auch partBeforeAnchor wird anscheinend korrekt berechnet?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1671153550626" ID="ID_1354877877" MODIFIED="1671153588403" TEXT="aber visible().end() ist dann nicht Time::MAX">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
 </node>
 <node CREATED="1669479474484" ID="ID_1657847338" MODIFIED="1669479489366" TEXT="alle Mutatoren, die conformWindowToMetric() verwenden">
 <node CREATED="1670520100834" ID="ID_636101408" MODIFIED="1670520114018" TEXT="das sind nicht viele (&#xfc;berraschenderweise)">
@@ -41263,13 +41274,39 @@
 </node>
 <node CREATED="1670520153513" ID="ID_574049062" MODIFIED="1670520170810" TEXT="wozu? weil dort das Window anteilig neu positioniert wird"/>
 <node CREATED="1670520176781" ID="ID_171252675" MODIFIED="1670520196129" TEXT="&#x27f9; gef&#xe4;hrlich wenn die bestehende Window-Pos gef&#xe4;hrlich ist"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1670520232861" ID="ID_1248431637" MODIFIED="1670982957635" TEXT="Szenario">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1670520232861" ID="ID_1248431637" MODIFIED="1671153193486" TEXT="Szenario">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1670520238693" ID="ID_1734279608" MODIFIED="1670982961594" TEXT="sehr kleines Fenster">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1670520245444" ID="ID_428615363" MODIFIED="1670520257330" TEXT="fast aber nicht ganz an Time::MIN"/>
-<node CREATED="1670520259018" ID="ID_591142628" MODIFIED="1670520301032" TEXT="vergr&#xf6;&#xdf;ern auf Duration::MAX - aWeng"/>
+<node COLOR="#338800" CREATED="1670520245444" ID="ID_428615363" MODIFIED="1671153194914" TEXT="fast aber nicht ganz an Time::MIN">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1670520259018" ID="ID_591142628" MODIFIED="1671153197781" TEXT="vergr&#xf6;&#xdf;ern auf Duration::MAX - aWeng">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1671153207589" ID="ID_1801258827" MODIFIED="1671153210390" TEXT="so lala"/>
+<node CREATED="1671153211145" ID="ID_779131227" MODIFIED="1671153241103" TEXT="man bekommt nicht exakt die gesetzte Duration"/>
+<node CREATED="1671153242324" ID="ID_1578460487" MODIFIED="1671153708063" TEXT="geht aber nicht besser, da Zahlen maximal giftig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wir rechnen von der Duration auf eine Metrik um, weil wir den Mechanismus zur relativen Positionierung haben wollen. Dieser mu&#223; aber detox() verwenden, weil sonst die Division mit der Pixel-Zahl einen numeric-wrap machen w&#252;rde....
+    </p>
+  </body>
+</html></richcontent>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1671153715708" ID="ID_293245647" MODIFIED="1671153722052" TEXT="wirklich nicht?">
+<icon BUILTIN="help"/>
+<node CREATED="1671153746581" ID="ID_965916539" MODIFIED="1671153758123" TEXT="wir brauchen doch nur die relative Positionierung"/>
+<node CREATED="1671153758879" ID="ID_318897179" MODIFIED="1671153783226" TEXT="die trickreiche Limitierung und quantisierung ist &#xfc;berfl&#xfc;ssig..."/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1671153783923" ID="ID_1591963678" MODIFIED="1671153799214" TEXT="...weil wir ja schon eine Duration haben!">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>

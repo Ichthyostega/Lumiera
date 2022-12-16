@@ -664,7 +664,7 @@ namespace test {
           
           /*--Test-4-----------*/
           win.setVisiblePos(Time{Time::MIN + TimeValue(13)});                    // Test: implicitly provoke poisonous factor through extreme offset
-          CHECK (win.visible().start() == Time::MIN + TimeValue(13));            // even while this position is far off, window start was alinget to it
+          CHECK (win.visible().start() == Time::MIN + TimeValue(13));            // even while this position is far off, window start was aligned to it
           CHECK (win.visible().end()   == win.visible().start() + TimeValue{288});
           CHECK (win.visible().duration() == TimeValue{288});
           
@@ -792,6 +792,7 @@ namespace test {
       void
       safeguard_extremeTimePos()
         {
+          /*--Test-1-----------*/
           ZoomWindow win{559, TimeSpan{Time::MAX, Duration{TimeValue(3)}}};      // setup a very small window clinging to Time::MAX
           CHECK (win.visible().duration() == TimeValue(280));                    // duration expanded due to MAX_ZOOM limit
           CHECK (win.visible().start() == TimeValue(307445734561825580));        // and properly oriented and aligned within domain
@@ -800,15 +801,43 @@ namespace test {
           CHECK (win.visible() == win.overallSpan());
           CHECK (win.px_per_sec() == 559_r/280*Time::SCALE);
           CHECK (win.px_per_sec() == 13975000_r/7);
-          CHECK (win.pxWidth() == 559);
+          CHECK (win.pxWidth()    == 559);
           
-//            SHOW_EXPR(win.overallSpan());
-//            SHOW_EXPR(_raw(win.overallSpan().duration()));
-//            SHOW_EXPR(_raw(win.visible().duration()));
-//            SHOW_EXPR(_raw(win.visible().start()));
-//            SHOW_EXPR(_raw(win.visible().end()));
-//            SHOW_EXPR(win.px_per_sec());
-//            SHOW_EXPR(win.pxWidth());
+          /*--Test-2-----------*/
+          Time anchorPos{15_r/16 * Offset(Time::MIN)};
+          win.setVisiblePos (anchorPos);                                         // scroll to a target position extremely far off
+          CHECK (win.visible().duration() == TimeValue(280));                    // window dimensions retained
+          CHECK (win.px_per_sec() == 13975000_r/7);
+          CHECK (win.pxWidth()    == 559);
+          CHECK (win.visible().start() >  Time::MIN);
+          CHECK (win.visible().start() == anchorPos);                            // window now at desired position
+          CHECK (win.visible().end()   >  anchorPos);
+          CHECK (win.visible().start() == TimeValue(-288230376151711744));
+          CHECK (win.visible().end()   == TimeValue(-288230376151711464));
+          CHECK (win.overallSpan().start() == win.visible().start());            // canvas expanded accordingly
+          CHECK (win.overallSpan().end()   == Time::MAX);
+          
+          /*--Test-3-----------*/
+          win.setOverallDuration(Duration::MAX);                                 // now use maximally expanded canvas
+          Duration targetDur{99_r/100 * Duration::MAX};
+          win.setVisibleDuration(targetDur);                                     // and demand the duration be expanded to 99%
+          
+          CHECK (win.visible().duration() > targetDur);                          // actual duration slightly more than requested,
+          CHECK (win.visible().duration() < Duration::MAX); 
+          CHECK (win.visible().start() == Time::MIN);                            // expansion was anchored at previous position
+          CHECK (win.visible().start() <  Time::MAX);                            // and thus the window now clings to the lower end
+          CHECK (win.visible().end()   == TimeValue(301415533658088775));
+          CHECK (win.px_per_sec() == 2019_r/2199023255552);                      // effective zoom metric has been sanitised numerically 
+          CHECK (win.pxWidth()    == 559);                                       // but pixel count is matched precisely
+          
+          /*--Test-4-----------*/
+          win.setVisiblePos(Rat{std::numeric_limits<int64_t>::max()-23});
+            SHOW_EXPR(_raw(win.overallSpan().duration()));
+            SHOW_EXPR(_raw(win.visible().duration()));
+            SHOW_EXPR(_raw(win.visible().start()));
+            SHOW_EXPR(_raw(win.visible().end()));
+            SHOW_EXPR(win.px_per_sec());
+            SHOW_EXPR(win.pxWidth());
         }
       
       
