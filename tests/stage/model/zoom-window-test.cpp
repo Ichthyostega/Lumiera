@@ -934,17 +934,89 @@ namespace test {
       
       
       /** @test verify ZoomWindow and handle extreme zoom-in.
+       *        - scrolling has always an effect
+       *        - visible window is never void
        */
       void
       safeguard_veryDeep()
         {
-//            SHOW_EXPR(win.overallSpan());
-//            SHOW_EXPR(_raw(win.overallSpan().duration()));
-//            SHOW_EXPR(_raw(win.visible().duration()));
-//            SHOW_EXPR(_raw(win.visible().start()));
-//            SHOW_EXPR(_raw(win.visible().end()));
-//            SHOW_EXPR(win.px_per_sec());
-//            SHOW_EXPR(win.pxWidth());
+          ZoomWindow win{TimeSpan{Time::MIN, Duration{TimeValue(1)}}};           // just request a window spanning the minimally possible value
+          CHECK (win.overallSpan().duration() == win.visible().duration());
+          CHECK (win.visible().duration() == TimeValue(1));                      // as requested we get a window sized 1 µ-tick
+          CHECK (win.visible().start() == Time::MIN);                            // and aligned at the lower domain bound
+          CHECK (win.visible().end()   == Time::MIN + TimeValue(1));
+          CHECK (win.pxWidth() < ZOOM_MAX_RESOLUTION);                           // however, can't reach maximum zoom this way
+          CHECK (win.px_per_sec() == 1000000);
+          CHECK (win.pxWidth()    == 1);
+          
+          win.setOverallDuration (Duration{FSecs(1)});
+          win.calibrateExtension (2);                                            // so... get more pixels to work with
+          CHECK (win.visible().duration() == TimeValue(2));                      // ... they are used to expand the window
+          CHECK (win.px_per_sec() == 1000000);                                   // .. resting at exiting zoom level
+          
+          win.setMetric (ZOOM_MAX_RESOLUTION);
+          CHECK (win.px_per_sec() == ZOOM_MAX_RESOLUTION);                       // now able to reach the maximum zoom level
+          CHECK (win.px_per_sec() == 2000000);                                   // (which is more or less an arbitrary choice)
+          CHECK (win.visible().start() == Time::MIN);
+          CHECK (win.visible().end()   == Time::MIN + TimeValue(1));             // while the actual window size is µ-grid aligned
+          CHECK (win.pxWidth()    == 2);                                         // meaning we can not zoom in without limit
+          
+          win.nudgeVisiblePos (+1);                                              // scroll one »step« to the right
+          CHECK (win.visible().start() == Time::MIN + TimeValue(1));             // yet this step has been increased to a full window size,
+          CHECK (win.visible().end()   == Time::MIN + TimeValue(2));             // since a smaller scoll-step can not be represented in µ-ticks
+          CHECK (win.visible().duration() == TimeValue(1));
+          CHECK (win.px_per_sec() == ZOOM_MAX_RESOLUTION);
+          
+          win.calibrateExtension (3);                                            // add a third pixel
+          CHECK (win.visible().duration() == TimeValue(2));                      // window extension increased to the next full µ-tick
+          CHECK (win.px_per_sec() == 3_r/4 * ZOOM_MAX_RESOLUTION);               // and the rest was absorbed into the zoom scale
+          CHECK (win.visible().start() == Time::MIN + TimeValue(1));
+          CHECK (win.visible().end()   == Time::MIN + TimeValue(3));
+          CHECK (win.pxWidth() == 3);
+          
+          win.setVisibleDuration (Duration{TimeValue(17)});
+          CHECK (win.px_per_sec() == 3000000_r/17);
+          win.setVisibleDuration (Duration{TimeValue(16)});
+          CHECK (win.px_per_sec() == 187500);
+          win.setVisibleDuration (Duration{TimeValue(15)});
+          CHECK (win.px_per_sec() == 200000);
+          CHECK (win.visible().start() == Time::MIN + TimeValue(1));
+          CHECK (win.visible().end()   == Time::MIN + TimeValue(16));
+          
+          win.nudgeMetric (-1);
+          CHECK (win.px_per_sec() == 100000);
+          CHECK (win.visible().duration() == TimeValue(30));
+          win.nudgeMetric (+2);
+          CHECK (win.px_per_sec() == 375000);
+          CHECK (win.visible().duration() == TimeValue(8));
+          win.nudgeMetric (+1);
+          CHECK (win.px_per_sec() == 750000);
+          CHECK (win.visible().duration() == TimeValue(4));
+          
+          win.setMetric (2_r/3 * ZOOM_MAX_RESOLUTION);
+          CHECK (win.px_per_sec() == 1_r/2 * ZOOM_MAX_RESOLUTION);               // can't do that, Dave
+          CHECK (win.px_per_sec() == 1000000);
+          CHECK (win.visible().duration() == TimeValue(3));
+          CHECK (win.visible().start() == Time::MIN + TimeValue(1));
+          CHECK (win.visible().end()   == Time::MIN + TimeValue(4));
+          
+          win.nudgeVisiblePos (-5);
+          CHECK (win.visible().start() == Time::MIN + TimeValue(0));             // stopped at lower time domain limit
+          CHECK (win.visible().end()   == Time::MIN + TimeValue(3));
+          CHECK (win.visible().duration() == TimeValue(3));
+          
+          win.calibrateExtension (MAX_PX_WIDTH);                                 // similar logic applies when using much more pixels
+          CHECK (win.pxWidth() == 100000);
+          CHECK (win.visible().duration() == TimeValue(100000));
+          CHECK (win.px_per_sec() == 1_r/2 * ZOOM_MAX_RESOLUTION);
+          CHECK (win.visible().start() == Time::MIN + TimeValue(0));
+          CHECK (win.visible().end()   == Time::MIN + TimeValue(100000));
+          
+          win.setMetric (3_r/2 * ZOOM_MAX_RESOLUTION);
+          CHECK (win.px_per_sec() == ZOOM_MAX_RESOLUTION);                       // that's all we get
+          CHECK (win.visible().duration() == TimeValue(50000));                  // (until someone comes up with a good use case for showing more)
+          CHECK (win.visible().end()   == Time::MIN + TimeValue(50000));
+          CHECK (win.pxWidth() == 100000);
         }
     };
   

@@ -38729,10 +38729,10 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1667603646312" ID="ID_1507636517" MODIFIED="1668132008216" TEXT="mu&#xdf; Invarianten sicherstellen">
+<node COLOR="#338800" CREATED="1667603646312" FOLDED="true" ID="ID_1507636517" MODIFIED="1671237057680" TEXT="mu&#xdf; Invarianten sicherstellen">
 <linktarget COLOR="#5c3488" DESTINATION="ID_1507636517" ENDARROW="Default" ENDINCLINATION="27;-47;" ID="Arrow_ID_49426086" SOURCE="ID_162164091" STARTARROW="None" STARTINCLINATION="-122;6;"/>
 <icon BUILTIN="yes"/>
-<node COLOR="#6a1790" CREATED="1667603900358" ID="ID_353785530" MODIFIED="1667780480867" TEXT="das gew&#xe4;hlte Implementierungs-Schema ist nicht beherrschbar">
+<node COLOR="#6a1790" CREATED="1667603900358" FOLDED="true" ID="ID_353785530" MODIFIED="1667780480867" TEXT="das zun&#xe4;cht (naiv) gew&#xe4;hlte Implementierungs-Schema ist nicht beherrschbar">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1667603974758" ID="ID_1895105732" MODIFIED="1667603997149" TEXT="Konstuktor legt sichere Startwerte fest"/>
 <node CREATED="1667603997785" ID="ID_1559828104" MODIFIED="1667604014827" TEXT="von dort weiter, mit Einzelfall-bezogenen Regeln"/>
@@ -38884,6 +38884,16 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1671236494801" ID="ID_50154227" MODIFIED="1671236514711" TEXT="inh&#xe4;rente Grenzen der Zoom-Metrik">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1671236517973" ID="ID_1641527388" MODIFIED="1671236616158" TEXT="nachtr&#xe4;glich eingef&#xfc;hrt im Zuge der Stre&#xdf;-Tests">
+<arrowlink COLOR="#6499bb" DESTINATION="ID_78031576" ENDARROW="Default" ENDINCLINATION="-146;-1064;" ID="Arrow_ID_283548397" STARTARROW="None" STARTINCLINATION="967;54;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1671236771308" ID="ID_1634457986" MODIFIED="1671236783202" TEXT="zoom &lt; 2*Time::SCALE"/>
+<node COLOR="#435e98" CREATED="1671236757105" ID="ID_1364175921" MODIFIED="1671236783202" TEXT="zoom &gt; LIM_HAZARD/1000"/>
+<node CREATED="1671236506015" ID="ID_1832535054" MODIFIED="1671236795038" TEXT="&#xbb;conformWindowToMetricLimits&#xab;"/>
+</node>
 <node CREATED="1667610653277" ID="ID_1224205751" MODIFIED="1667611359311" TEXT="neue Metrik &#x27f6; visibleWin">
 <node CREATED="1667659377837" ID="ID_634768326" MODIFIED="1667659613008" TEXT="&#xbb;conformWindowToMetric&#xab;">
 <node CREATED="1667780062257" ID="ID_765381666" MODIFIED="1667780567605" TEXT="zentriert auch um Ankerpunkt">
@@ -38901,6 +38911,19 @@
 <node CREATED="1667610688715" ID="ID_11883276" MODIFIED="1667610699053" TEXT="Fenster auf Canvas beschneiden"/>
 <node CREATED="1667610653277" ID="ID_831514693" MODIFIED="1667611449269" TEXT="neue Metrik &#x27f5; visibleWin">
 <node CREATED="1667659622859" ID="ID_828891167" MODIFIED="1667659633949" TEXT="&#xbb;conformMetricToWindow&#xab;"/>
+<node COLOR="#435e98" CREATED="1671236817013" ID="ID_661439299" LINK="#ID_1175951405" MODIFIED="1671236839666">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist das <b>Kernst&#252;ck</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+</node>
 </node>
 <node CREATED="1667611135215" ID="ID_1783825207" MODIFIED="1667611444146" TEXT="neue Metrik beschneiden">
 <node CREATED="1667659689795" ID="ID_1515577475" MODIFIED="1667659703886" TEXT="&#xbb;conformBounds&#xab;"/>
@@ -38909,7 +38932,7 @@
 <linktarget COLOR="#9e7367" DESTINATION="ID_761246682" ENDARROW="Default" ENDINCLINATION="145;-11;" ID="Arrow_ID_702546557" SOURCE="ID_1067254564" STARTARROW="None" STARTINCLINATION="-54;-36;"/>
 </node>
 <node CREATED="1667611247456" ID="ID_1658100193" MODIFIED="1667611265274" TEXT="visibleWin &#x27f6; Canvas"/>
-<node COLOR="#435e98" CREATED="1667673574471" ID="ID_1973274504" MODIFIED="1667774166875" TEXT="neue Metrik &lt; MAX_ZOOM">
+<node COLOR="#435e98" CREATED="1667673574471" FOLDED="true" ID="ID_1973274504" MODIFIED="1667774166875" TEXT="neue Metrik &lt; MAX_ZOOM">
 <icon BUILTIN="help"/>
 <node CREATED="1667673606578" ID="ID_1067254564" MODIFIED="1667682151865" TEXT="potentiell gef&#xe4;hrlich: Metrik &#x27f6; visibleWin">
 <richcontent TYPE="NOTE"><html>
@@ -39068,7 +39091,7 @@
 <node COLOR="#338800" CREATED="1667688354104" ID="ID_1203966035" MODIFIED="1667774073074" TEXT="und in diesem Fall visibleWin um 1 &#xb5;Tick vergr&#xf6;&#xdf;ern">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#990000" CREATED="1667689836161" ID="ID_1356615492" MODIFIED="1667760039819" TEXT="besser: Aufrundungs-Konstante addieren">
+<node COLOR="#990000" CREATED="1667689836161" FOLDED="true" ID="ID_1356615492" MODIFIED="1667760039819" TEXT="besser: Aufrundungs-Konstante addieren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -39414,6 +39437,9 @@
 <node COLOR="#338800" CREATED="1667260470855" ID="ID_1346204475" MODIFIED="1668131895009" TEXT="Grenzf&#xe4;lle / Fehlerbehandlung ausleuchten">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1667517252905" ID="ID_335958554" MODIFIED="1667960483441" TEXT="gr&#xf6;&#xdf;tm&#xf6;glicher Zoom &#x2259; 2px / &#xb5;-Tick">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1671236879381" ID="ID_1741876890" LINK="#ID_368621922" MODIFIED="1671237047783" TEXT="kleinstm&#xf6;glicher Zoom &#x2259; ganze Time-Domain (erreichbar ab 560px Window)">
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1667517299247" ID="ID_1450395718" MODIFIED="1667960483442" TEXT="kleinstm&#xf6;gliches window &#x2259; 1 &#xb5;-Tick">
@@ -39813,6 +39839,7 @@
 </node>
 <node COLOR="#338800" CREATED="1670516822914" FOLDED="true" ID="ID_78031576" LINK="#ID_368621922" MODIFIED="1670517608517" TEXT="dynamische Untergrenze einf&#xfc;hren">
 <arrowlink COLOR="#64bc9c" DESTINATION="ID_660534369" ENDARROW="Default" ENDINCLINATION="227;-218;" ID="Arrow_ID_1983834485" STARTARROW="None" STARTINCLINATION="-503;36;"/>
+<linktarget COLOR="#6499bb" DESTINATION="ID_78031576" ENDARROW="Default" ENDINCLINATION="-146;-1064;" ID="Arrow_ID_283548397" SOURCE="ID_1641527388" STARTARROW="None" STARTINCLINATION="967;54;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1670516838244" ID="ID_479791948" MODIFIED="1670516852366" TEXT="in Abh&#xe4;ngigkeit von der Weite in Pixeln"/>
 <node CREATED="1670516854928" ID="ID_999425219" MODIFIED="1670516948570" TEXT="nach technischem Kriterium definiert (Berechenbarkeit)">
@@ -41391,8 +41418,53 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668180030777" ID="ID_1319796356" MODIFIED="1668180136077" TEXT="1 &#xb5;-Tick">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1668180030777" ID="ID_1319796356" MODIFIED="1671292315206" TEXT="1 &#xb5;-Tick">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1671287176378" ID="ID_1489554407" MODIFIED="1671287335758" TEXT="was soll ich hier noch testen?"/>
+<node COLOR="#338800" CREATED="1671287188300" ID="ID_1893630472" MODIFIED="1671287339424" TEXT="wenigstens dokumentieren k&#xf6;nnte man das Verhalten">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1671287208625" ID="ID_1782470121" MODIFIED="1671291588696" TEXT="Scroll-Step soll das Window stets um mindestens 1 &#xb5;-Tick bewegen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1671287247180" ID="ID_186248922" MODIFIED="1671287327391" TEXT="das ist eine neue Anforderung">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1671287277817" ID="ID_1856370622" MODIFIED="1671287319670" TEXT="aber offensichtlich in dieser Situation">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es w&#228;re schon &#252;berraschend, wenn der Scrollbalken pl&#246;tzlich nicht mehr reagiert....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1671287255254" ID="ID_1670104161" MODIFIED="1671287269034" TEXT="....wenn ich jetzt nicht getestet h&#xe4;tte....">
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1671291646626" ID="ID_1133219679" MODIFIED="1671291673767" TEXT="Zoom-Nudge nur im Rahmen der als &#xb5;-Tick darstellbaren Gr&#xf6;&#xdf;en m&#xf6;glich">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1671291593292" ID="ID_603523543" MODIFIED="1671292313793" TEXT="Begrenzung auf ZOOM_MAX_RESOLUTION auch bei sehr vielen Pixeln wirksam">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1671291612706" ID="ID_1061099064" MODIFIED="1671291623193" TEXT="obwohl wir da definitiv mehr darstellen k&#xf6;nnten"/>
+<node CREATED="1671292172775" ID="ID_778157874" MODIFIED="1671292310771" TEXT="ich sehe aber keinen Nutzen daf&#xfc;r">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      selbst Sound-Samples sind (absolut betrachet) noch 10.41ms auseinander; solange wir <i>das</i>&#160;komfortabel und sauber im GUI darstellen und handhaben k&#246;nnen, sind wir fein
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668180054302" ID="ID_1604190635" MODIFIED="1668180136078" TEXT="1 Pixel">
 <icon BUILTIN="flag-yellow"/>
@@ -41405,8 +41477,16 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1671294771824" ID="ID_115927706" MODIFIED="1671294789194" TEXT="numeric-wrap entdeckt">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1671295216805" ID="ID_987376979" MODIFIED="1671295239222" TEXT="In der conversion FSecs &#x27fc; &#xb5;-tick"/>
+<node CREATED="1671295240330" ID="ID_1742063347" MODIFIED="1671295249934" TEXT="bei &#xfc;bergro&#xdf;en Werten">
+<icon BUILTIN="info"/>
+</node>
+</node>
 </node>
 <node CREATED="1670719689323" ID="ID_794436463" MODIFIED="1670719702317" TEXT="mit m&#xf6;glichst gro&#xdf;en Zeiten kombinieren"/>
+<node CREATED="1671294759109" ID="ID_531574116" MODIFIED="1671294770708" TEXT="&#xe4;hnliche Operationen wie bereits f&#xfc;r die giftigen Faktoren"/>
 </node>
 <node COLOR="#338800" CREATED="1668264626100" ID="ID_45091906" MODIFIED="1671235896011" TEXT="giftige Br&#xfc;che">
 <icon BUILTIN="button_ok"/>

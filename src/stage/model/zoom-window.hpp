@@ -421,8 +421,9 @@ namespace model {
           FSecs dur{afterWin_-startWin_};
           int64_t limPages = 2 * rational_cast<int64_t> (MAX_TIMESPAN/dur);
           steps = util::limited(-limPages, steps, +limPages);
-          setVisibleRange (TimeSpan{Time{startWin_ + Offset{(dur*steps)/2}}
-                                   , dur});    //    navigate half window steps
+          FSecs scroll = steps * dur/2;  // move by half window sized steps
+          if (abs(scroll) < MICRO_TICK) scroll = sgn(steps) * MICRO_TICK;
+          setVisibleRange (TimeSpan{Time{startWin_+Offset(scroll)}, dur});
         }
       
       /**
