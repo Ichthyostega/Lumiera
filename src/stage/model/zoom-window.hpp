@@ -230,8 +230,10 @@ namespace model {
         , afterWin_{afterAll_}
         , px_per_sec_{establishMetric (pxWidth, startWin_, afterWin_)}
         {
-          conformWindowToMetricLimits (this->pxWidth());
-          ensureInvariants();
+          pxWidth = this->pxWidth();
+          ASSERT (0 < pxWidth);
+          conformWindowToMetricLimits (pxWidth);
+          ensureInvariants(pxWidth);
         }
       
       ZoomWindow (TimeSpan timeline =TimeSpan{Time::ZERO, DEFAULT_CANVAS})
@@ -414,11 +416,13 @@ namespace model {
       
       /** scroll by increments of half window size, possibly expanding. */
       void
-      nudgeVisiblePos (int steps)
+      nudgeVisiblePos (int64_t steps)
         {
-          FSecs dur{afterWin_-startWin_};      //    navigate half window steps
-          setVisibleRange (TimeSpan{Time{startWin_ + (dur*steps)/2}
-                                   , dur});
+          FSecs dur{afterWin_-startWin_};
+          int64_t limPages = 2 * rational_cast<int64_t> (MAX_TIMESPAN/dur);
+          steps = util::limited(-limPages, steps, +limPages);
+          setVisibleRange (TimeSpan{Time{startWin_ + Offset{(dur*steps)/2}}
+                                   , dur});    //    navigate half window steps
         }
       
       /**

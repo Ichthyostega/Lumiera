@@ -818,11 +818,11 @@ namespace test {
           CHECK (win.overallSpan().end()   == Time::MAX);
           
           /*--Test-3-----------*/
-          win.calibrateExtension(560);
+          win.calibrateExtension (560);
           CHECK (win.visible().duration() == TimeValue(280));                    // effective window dimensions unchanged
           CHECK (win.px_per_sec() == 2000000_r/1);                               // but zoom metric slightly adapted
           
-          win.setOverallDuration(Duration::MAX);                                 // now use maximally expanded canvas
+          win.setOverallDuration (Duration::MAX);                                // now use maximally expanded canvas
           Duration targetDur{Duration::MAX - FSecs(23)};
           win.setVisibleDuration(targetDur);                                     // and demand the duration be expanded almost full size
           
@@ -836,7 +836,7 @@ namespace test {
           CHECK (win.pxWidth()    == 560);                                       // but pixel count is matched precisely
           
           /*--Test-4-----------*/
-          win.setVisiblePos(Rat{std::numeric_limits<int64_t>::max()-23});
+          win.setVisiblePos (Rat{std::numeric_limits<int64_t>::max()-23});
           CHECK (win.visible().duration() == targetDur);                         // actual duration unchanged
           CHECK (win.px_per_sec() == 2003_r/2199023255552);
           CHECK (win.pxWidth()    == 560);
@@ -845,7 +845,7 @@ namespace test {
           CHECK (win.visible().start() == TimeValue(-307445734538825860));
           
           /*--Test-5-----------*/
-          win.calibrateExtension(561);                                           // expand by 1 pixel
+          win.calibrateExtension (561);                                          // expand by 1 pixel
           CHECK (win.visible().duration() >  targetDur);                         // actual duration indeed increased
           CHECK (win.visible().duration() == Duration::MAX);                     // and then capped at maximum
           CHECK (win.visible().end()   == Time::MAX);                            // but while initially the upper bound is increased...
@@ -854,13 +854,13 @@ namespace test {
           CHECK (win.pxWidth()    == 561);
           
           /*--Test-6-----------*/
-          win.setVisibleDuration(Duration::MAX - Duration(TimeValue(1)));        // request slightly different window duration
+          win.setVisibleDuration (Duration::MAX - Duration(TimeValue(1)));       // request slightly different window duration
           CHECK (win.visible().end()   == Time::MAX);                            // by arbitrary choice, the single µ-tick was removed at start
           CHECK (win.visible().start() == Time::MIN + TimeValue(1));
           CHECK (win.px_per_sec() == 2007_r/2199023255552);                      // the smoothed nominal metric was also increased slightly
           CHECK (win.pxWidth()    == 561);
           
-          win.setVisibleDuration(Duration(TimeValue(1)));                        // drastically zoom-in
+          win.setVisibleDuration (Duration(TimeValue(1)));                       // drastically zoom-in
           CHECK (win.visible().duration() == TimeValue(281));                    // ...but we get more than 1 µ-tick
           CHECK (561_r/_FSecs(TimeValue(1)) > ZOOM_MAX_RESOLUTION);              // because the requested window would exceed maximum zoom
           CHECK (win.px_per_sec() == 561000000_r/281);                           // and this conflict was resolved by increasing the window
@@ -874,13 +874,47 @@ namespace test {
       void
       safeguard_extremeOffset()
         {
-//            SHOW_EXPR(win.overallSpan());
-//            SHOW_EXPR(_raw(win.overallSpan().duration()));
-//            SHOW_EXPR(_raw(win.visible().duration()));
-//            SHOW_EXPR(_raw(win.visible().start()));
-//            SHOW_EXPR(_raw(win.visible().end()));
-//            SHOW_EXPR(win.px_per_sec());
-//            SHOW_EXPR(win.pxWidth());
+          ZoomWindow win{ 1, TimeSpan{Time::MAX, Duration{TimeValue(1)}}};       // use window of 1px size zoomed at 1 µ-tick
+          CHECK (win.visible().start() == Time::MAX - TimeValue(1));             // which is aligned to the end of the time domain
+          CHECK (win.visible().duration() == TimeValue(1));
+          
+          win.nudgeVisiblePos (-2);                                              // can be nudged by one window size to the left
+          CHECK (win.visible().start() == Time::MAX - TimeValue(2));
+          
+          win.offsetVisiblePos (Offset{Duration::MAX});                          // but excess offset is just absorbed
+          CHECK (win.visible().end()   == Time::MAX);                            // window again positioned at the limit
+          CHECK (win.visible().start() == Time::MAX - TimeValue(1));
+          CHECK (win.visible().duration() == TimeValue(1));
+          CHECK (win.overallSpan().duration() == TimeValue(2));
+          CHECK (win.px_per_sec() == 1000000);
+          CHECK (win.pxWidth()    == 1);
+          
+          win.nudgeVisiblePos (std::numeric_limits<int64_t>::min());             // excess nudging likewise absorbed
+          CHECK (win.overallSpan().duration() == Duration::MAX);
+          CHECK (win.visible().duration() == TimeValue(1));
+          CHECK (win.visible().start() == Time::MIN);                            // window now positioned at lower limit
+          CHECK (win.visible().end()   == Time::MIN + TimeValue(1));
+          CHECK (win.px_per_sec() == 1000000);
+          CHECK (win.pxWidth()    == 1);
+          
+          win.calibrateExtension (460);
+          win.setVisibleDuration (Duration{Time::MAX - TimeValue(1)});           // arrange window to be 1 µ-tick less than half
+          CHECK (win.visible().duration() == Time::MAX - TimeValue(1));
+          CHECK (win.visible().start() == Time::MIN);                            // ...so it spans [Time::MIN ... -1]
+          CHECK (win.visible().end()   == TimeValue(-1));
+          
+          win.nudgeVisiblePos (+2);                                              // thus nudging two times by half-window size...
+          CHECK (win.visible().end()   == Time::MAX - TimeValue(2));             // ...still fits into the time domain
+          CHECK (win.visible().start() == TimeValue(-1));
+          win.nudgeVisiblePos (-1);
+          CHECK (win.visible().start() == TimeValue(-153722867280912930));       // navigation within domain works as expected
+          CHECK (win.visible().end()   == TimeValue(+153722867280912929));
+          
+          win.nudgeVisiblePos (+1000);                                           // requesting an excessive nudge...
+          CHECK (ilogb(500.0 * _raw(Time::MAX)) == 67);                          // which — naively calculated — would overflow 64-bit
+          CHECK (win.visible().start() == TimeValue(+1));                        // but the window just stopped aligned to the upper limit
+          CHECK (win.visible().end()   == Time::MAX);
+          CHECK (win.pxWidth()         == 460);
         }
       
       

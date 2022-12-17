@@ -302,10 +302,14 @@ namespace test{
           CHECK (TimeValue{_raw(Time::MAX-Time(0,1)+Time(0,3))} == Time::MAX);  // clipped at max
           CHECK (TimeValue{_raw(Time::MIN+Time(0,5)-Time(0,9))} == Time::MIN);  // clipped at min
           
+          TimeValue outlier{Time::MIN - TimeValue(1)};
+          CHECK (outlier < Time::MIN);
+          
           CHECK (Duration::MAX > Time::MAX);
           CHECK (_raw(Duration::MAX) < std::numeric_limits<int64_t>::max());
           CHECK (Duration::MAX == Time::MAX - Time::MIN);
           CHECK (-Duration::MAX == Offset{Time::MIN - Time::MAX});
+          CHECK (Duration{3*Offset{Time::MAX}} == Duration::MAX);
           
           CHECK (                Time::MAX + Duration::MAX    >  Duration::MAX);
           CHECK (                Time::MIN - Duration::MAX    < -Duration::MAX);
@@ -318,6 +322,7 @@ namespace test{
           CHECK (TimeSpan(Time::MAX, Duration::MAX).end()      == Time::MAX + Duration::MAX); // note: end() can yield value beyond [Time::MIN...Time::MAX]
           CHECK (TimeSpan(Time::MAX, Duration::MAX).duration() == Duration::MAX);
           CHECK (TimeSpan(Time::MAX, Duration::MAX).conform()  == TimeSpan(Time::MIN,Duration::MAX));
+          CHECK (TimeSpan(outlier,   Duration::MAX).conform()  == TimeSpan(Time::MIN,Duration::MAX));
           CHECK (TimeSpan(Time::MAX, Offset(FSecs(-1)))        == TimeSpan(Time::MAX-Offset(FSecs(1)), FSecs(1)));
           CHECK (TimeSpan(Time::MAX, FSecs(5)).start()         == Time::MAX);
           CHECK (TimeSpan(Time::MAX, FSecs(5)).duration()      == Duration(FSecs(5)));

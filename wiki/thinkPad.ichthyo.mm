@@ -39536,8 +39536,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668180004015" ID="ID_1355163433" MODIFIED="1668180133079" TEXT="extreme Grenzf&#xe4;lle abtesten">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1668180004015" ID="ID_1355163433" MODIFIED="1671235929237" TEXT="extreme Grenzf&#xe4;lle abtesten">
+<icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1668212345981" ID="ID_1473341053" MODIFIED="1668212365788" TEXT="leer konstruiert &#x27f9; default-canvas">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -39577,10 +39577,10 @@
 </node>
 <node COLOR="#338800" CREATED="1668262940706" ID="ID_1639008148" MODIFIED="1670961054485" TEXT="&#x27f9; Eingangs-Checks vereinfachen"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668554856002" ID="ID_1728331882" MODIFIED="1668554864730" TEXT="potentiell sch&#xe4;dliche Eingabedaten">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1668262961151" ID="ID_1262854527" MODIFIED="1668270708694" TEXT="alle Eing&#xe4;nge daraufhin pr&#xfc;fen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1668554856002" FOLDED="true" ID="ID_1728331882" MODIFIED="1671235912681" TEXT="potentiell sch&#xe4;dliche Eingabedaten">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1668262961151" ID="ID_1262854527" MODIFIED="1671235655665" TEXT="alle Eing&#xe4;nge daraufhin pr&#xfc;fen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1668263281549" ID="ID_1653448250" MODIFIED="1668263292760" TEXT="potentiell gef&#xe4;hrlich">
 <node COLOR="#435e98" CREATED="1668263300631" ID="ID_1173749705" MODIFIED="1670960741915" TEXT="setMetric (Rat px_per_sec)">
 <arrowlink COLOR="#aa6877" DESTINATION="ID_1257614207" ENDARROW="Default" ENDINCLINATION="271;-11;" ID="Arrow_ID_292335664" STARTARROW="None" STARTINCLINATION="314;29;"/>
@@ -39600,8 +39600,31 @@
 </node>
 <node CREATED="1668263363873" ID="ID_1000302477" MODIFIED="1668267369598" TEXT="nudgeVisiblePos (int steps)">
 <icon BUILTIN="button_cancel"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668267251650" ID="ID_772154372" MODIFIED="1668267361180" TEXT="potentieller TimeValue-wrap">
+<node COLOR="#435e98" CREATED="1668267251650" ID="ID_772154372" MODIFIED="1671235578564" TEXT="potentieller TimeValue-wrap">
+<linktarget COLOR="#d37297" DESTINATION="ID_772154372" ENDARROW="Default" ENDINCLINATION="-1063;-32;" ID="Arrow_ID_1688376810" SOURCE="ID_407876103" STARTARROW="None" STARTINCLINATION="918;66;"/>
 <icon BUILTIN="broken-line"/>
+<node COLOR="#338800" CREATED="1671225675177" ID="ID_833984717" MODIFIED="1671235584467" TEXT="Parameter mu&#xdf; int64_t sein">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#10233; dann pa&#223;t der Wertebereich im Extremfall grade so rein (1px-Window mit 1&#181;-Tick, und das per halb-Steps von Time::MIN &#10236; Time::MAX bringen:&#160;&#160;lb &lt;= 62 )
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1671225805631" ID="ID_1037472560" MODIFIED="1671235592474" TEXT="jeweils konkreten Limit auf Maximal-Offset berechnen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1671225819397" ID="ID_1944515344" MODIFIED="1671235594489" TEXT="Time-Scale f&#xe4;ngt mehr als &#xb1; Duration::MAX ab">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1671225861224" ID="ID_1547165206" MODIFIED="1671235596761" TEXT="die neulich nachgesch&#xe4;rfte Limitierung von time::Offset erledigt den Rest...">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node COLOR="#435e98" CREATED="1668265476934" HGAP="22" ID="ID_1024656656" MODIFIED="1668265497115" TEXT="Offset &#x27f9; harmlos" VSHIFT="2">
 <icon BUILTIN="idea"/>
@@ -40030,8 +40053,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1668554900067" HGAP="80" ID="ID_1302892550" MODIFIED="1669473989333" TEXT="kritische Wirkpfade abtesten" VSHIFT="9">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1668554900067" HGAP="80" ID="ID_1302892550" MODIFIED="1671235664482" TEXT="kritische Wirkpfade abtesten" VSHIFT="9">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1668555028046" ID="ID_660534369" MODIFIED="1670517608516" TEXT="sehr kleine Metrix (&#x2259; exterm zoom-out)">
 <linktarget COLOR="#64bc9c" DESTINATION="ID_660534369" ENDARROW="Default" ENDINCLINATION="227;-218;" ID="Arrow_ID_1983834485" SOURCE="ID_78031576" STARTARROW="None" STARTINCLINATION="-503;36;"/>
 <icon BUILTIN="button_ok"/>
@@ -41332,8 +41355,16 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668555157385" ID="ID_1157546672" MODIFIED="1669473993486" TEXT="Time-wrap nach extremem Offset">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1668555157385" ID="ID_1157546672" MODIFIED="1671235570910" TEXT="Time-wrap nach extremem Offset">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1671224197185" ID="ID_1016259949" MODIFIED="1671235568010" TEXT="offsetVisiblePos wird bereits abgefangen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1671224211255" ID="ID_407876103" MODIFIED="1671235569554" TEXT="nudgeVisiblePos ist noch gef&#xe4;hrlich">
+<arrowlink COLOR="#d37297" DESTINATION="ID_772154372" ENDARROW="Default" ENDINCLINATION="-1063;-32;" ID="Arrow_ID_1688376810" STARTARROW="None" STARTINCLINATION="918;66;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1671225926047" HGAP="97" ID="ID_1143975886" MODIFIED="1671225950100" TEXT="Ansteuern mit Maximalwerten gen&#xfc;gt als Test" VSHIFT="19"/>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1668555183502" ID="ID_1287974241" MODIFIED="1670280063243" TEXT="Einspeisen giftiger Metrik">
 <icon BUILTIN="button_ok"/>
@@ -41377,17 +41408,17 @@
 </node>
 <node CREATED="1670719689323" ID="ID_794436463" MODIFIED="1670719702317" TEXT="mit m&#xf6;glichst gro&#xdf;en Zeiten kombinieren"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668264626100" ID="ID_45091906" MODIFIED="1668264632183" TEXT="giftige Br&#xfc;che">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668264634478" ID="ID_651838862" MODIFIED="1668264715601" TEXT="setMetric (Rat) &#x27f6; mutateScale (Rat changedMetric)">
+<node COLOR="#338800" CREATED="1668264626100" ID="ID_45091906" MODIFIED="1671235896011" TEXT="giftige Br&#xfc;che">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1668264634478" ID="ID_651838862" MODIFIED="1671235708969" TEXT="setMetric (Rat) &#x27f6; mutateScale (Rat changedMetric)">
 <linktarget COLOR="#e62f5c" DESTINATION="ID_651838862" ENDARROW="Default" ENDINCLINATION="115;-4;" ID="Arrow_ID_1930230162" SOURCE="ID_1257614207" STARTARROW="None" STARTINCLINATION="-189;14;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1668270062492" ID="ID_1671513743" MODIFIED="1669680251895" TEXT="entgiftungs-Methoden schaffen">
+<node COLOR="#338800" CREATED="1668270062492" FOLDED="true" ID="ID_1671513743" MODIFIED="1671235854348" TEXT="entgiftungs-Methoden schaffen">
 <linktarget COLOR="#bf0f5b" DESTINATION="ID_1671513743" ENDARROW="Default" ENDINCLINATION="297;-23;" ID="Arrow_ID_389982782" SOURCE="ID_1175951405" STARTARROW="None" STARTINCLINATION="-323;20;"/>
 <linktarget COLOR="#9a858e" DESTINATION="ID_1671513743" ENDARROW="Default" ENDINCLINATION="297;-23;" ID="Arrow_ID_1815772846" SOURCE="ID_148236436" STARTARROW="None" STARTINCLINATION="-292;20;"/>
 <linktarget COLOR="#b18586" DESTINATION="ID_1671513743" ENDARROW="Default" ENDINCLINATION="256;-19;" ID="Arrow_ID_882084800" SOURCE="ID_773636992" STARTARROW="None" STARTINCLINATION="-201;12;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1668292035888" HGAP="50" ID="ID_511660460" MODIFIED="1668295679206" TEXT="ist das &#xfc;berhaupt m&#xf6;glich" VSHIFT="9">
 <icon BUILTIN="help"/>
 <icon BUILTIN="button_cancel"/>
@@ -41502,7 +41533,7 @@
 </node>
 <node CREATED="1668295605833" ID="ID_1556461638" MODIFIED="1668295655639" TEXT="damit ist INT_MAX / (10*Time::SCALE) die Grenze des Handhabbaren"/>
 </node>
-<node CREATED="1668295661949" ID="ID_1727052645" MODIFIED="1668295710417" TEXT="es kann hier nur eine Heuristik geschaffen werden">
+<node COLOR="#435e98" CREATED="1668295661949" ID="ID_1727052645" MODIFIED="1671235817019" TEXT="es kann hier nur eine Heuristik geschaffen werden">
 <linktarget COLOR="#fe153e" DESTINATION="ID_1727052645" ENDARROW="Default" ENDINCLINATION="-220;-12;" ID="Arrow_ID_1068276160" SOURCE="ID_25938691" STARTARROW="None" STARTINCLINATION="-298;-17;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1668295744623" ID="ID_1438689210" MODIFIED="1668295768057" TEXT="Methode">
@@ -41804,8 +41835,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1669680303553" ID="ID_943604336" MODIFIED="1669680329806" TEXT="Handhabung extremer Zeitspannen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1669680303553" ID="ID_943604336" MODIFIED="1671235719664" TEXT="Handhabung extremer Zeitspannen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1669680334284" ID="ID_1144877898" MODIFIED="1669680352726" TEXT="Probleme">
 <node CREATED="1669680353674" ID="ID_380004829" MODIFIED="1669680374859" TEXT="Summen mit Br&#xfc;chen"/>
 <node CREATED="1669680375968" ID="ID_861847594" MODIFIED="1669680389409" TEXT="Verh&#xe4;ltnis-Berechnung"/>
@@ -42046,13 +42077,13 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668707398858" ID="ID_1529383789" MODIFIED="1668707464339" TEXT="Test">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1668707398858" ID="ID_1529383789" MODIFIED="1671235811403" TEXT="Test">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1668707465449" ID="ID_1678870601" MODIFIED="1668736173820" TEXT="toxicDegree mit einigen Beispielen demonstrieren">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668707479892" ID="ID_1964644327" MODIFIED="1668707490200" TEXT="ansonsten durch Ausreizen der Extremwerte testen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1668707479892" ID="ID_1964644327" MODIFIED="1671235788141" TEXT="ansonsten durch Ausreizen der Extremwerte testen">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1669682928809" ID="ID_499417740" MODIFIED="1670015827119" TEXT="setVisiblePos(gift)">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1669682950712" ID="ID_1730356591" MODIFIED="1669682974366" TEXT="macht was Anderes als nur die Zoom-Metrik anpassen"/>
@@ -42688,13 +42719,34 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1671235735966" ID="ID_1230717897" MODIFIED="1671235745618" TEXT="exzessives Expandieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1671235746837" ID="ID_1201391877" MODIFIED="1671235772450" TEXT="kombinieren sehr kleiner Pixelzahl mit sehr gro&#xdf;er Metrik">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1671235773464" ID="ID_266930117" MODIFIED="1671235786406" TEXT="relatives Ansteuern extremer Positionen">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1671235820835" ID="ID_963558104" MODIFIED="1671235836226" TEXT="aber dadurch k&#xf6;nnen wir nun bis an die Domain-Grenzen gehen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668180120032" ID="ID_346213896" MODIFIED="1668180136079" TEXT="Grenzen des Zeitformats">
-<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1668180120032" ID="ID_346213896" MODIFIED="1671235860671" TEXT="Grenzen des Zeitformats">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1671235864869" ID="ID_234220527" MODIFIED="1671235876420" TEXT="Time::MAX und Time::MIN">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1671235876916" ID="ID_1550686390" MODIFIED="1671235881443" TEXT="Duration::MAX">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1671235882256" ID="ID_1895654238" MODIFIED="1671235893107" TEXT="Einspeisen von Werten au&#xdf;erhalb der Domain">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>

@@ -731,10 +731,12 @@ namespace time {
   }
   
   inline TimeSpan
-  TimeSpan::conform()  const     ///<  @note: implicitly capped to Duration::MAX
+  TimeSpan::conform()  const          ///< @note: implicitly capped to Duration::MAX
   {
-    return Offset{*this} + dur_ <= Time::MAX? TimeSpan{*this}
-                                            : TimeSpan{Time::MAX-dur_, Time::MAX};
+    Offset extension{dur_};
+    TimeValue start{_raw(*this)};
+    return Offset{start} + extension > Time::MAX? TimeSpan{Time::MAX-extension, Time::MAX}
+                                                : TimeSpan{start, extension};
   }
   
   
