@@ -64,17 +64,12 @@ typedef unsigned int uint;
 
 #include "lib/format-cout.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/test/diagnostic-output.hpp"
 #include "lib/util.hpp"
 
 #include <functional>
-#include <string>
 
-using std::string;
 
-#define SHOW_TYPE(_TY_) \
-    cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
-#define SHOW_EXPR(_XX_) \
-    cout << "Probe " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
 
 
 template<class TAR>

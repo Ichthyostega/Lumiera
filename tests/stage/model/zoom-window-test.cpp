@@ -25,18 +25,51 @@
  ** The timeline uses the abstraction of an »Zoom Window«
  ** to define the scrolling and temporal scaling behaviour uniformly.
  ** This unit test verifies this abstracted behaviour against the spec.
+ ** 
+ ** # Fractional Seconds
+ ** 
+ ** A defining trait of the ZoomWindow implementation — as it stands 12/2022 — is the use
+ ** of integer fractions for most scale and time interval calculations. The typical media
+ ** handling operations often rely on denomination into a divisor defined scale — be it
+ ** seconds divided by frame count (25fps), or be it audio samples like 1/96000 sec.
+ ** And for presentation in the UI, these uneven fractions need to be broken down into
+ ** a fixed pixel count, while the zoom factor can vary over several orders of magnitude.
+ ** Integer fractions are a technically brilliant solution to cope with this challenge,
+ ** without rounding discrepancies and accumulation of errors.
+ ** 
+ ** However, there is a catch: The way fractional arithmetics are handled leads to lots
+ ** of multiplications, with the tendency to build up very large irreducible numbers, both in
+ ** numerator and denominator. In worst case, numeric wrap-around can happen even at seemingly
+ ** innocuous places. In an attempt to maintain the benefits of integer fraction arithmetics,
+ ** for ZoomWindow a set of »coping strategies« was developed, to detect and control the cases
+ ** when numbers „go south“. This approach is based on the observation that almost all
+ ** everyday time calculations happen within a rather limited domain, while the extended
+ ** time domain of years and centuries rather serves as a theoretical headroom. Thus it
+ ** seems reasonable to benefit from integer fractions within this everyday range, under
+ ** the condition that computations can be kept from derailing totally, when entering
+ ** the extended domain.
+ ** 
+ ** To this end, we use the trick of introducing a minute numeric error, by re-quantising
+ ** huge numbers into a scale with a smaller denominator. We introduce the notion of »toxic«
+ ** numbers, which are defined by figures above 2^40 — irrespective if in numerator or in
+ ** denominator. This rather arbitrary choice is based on the observation that most
+ ** computation paths require to multiply with Time::SCALE (the µ-tick scale of 10^6),
+ ** which together with 2^40 just fits into the value range of int64_t. Thus, into all
+ ** crucial computation paths, a function `detox()` is wired, which remains inactive for
+ ** regular values, but automatically _sanitises extreme values._ Together with the
+ ** safety headroom built into the limits of the Lumiera lib::time::Time domain,
+ ** this allows to handle all valid time points and represent even the largest
+ ** possible lib::time::Duration::MAX.
+ ** 
+ ** A major part of this test is dedicated to covering those hypothetical corner cases
+ ** and to ensure the defined behaviour can be maintained even under extreme conditions.
+ ** 
  */
 
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "stage/model/zoom-window.hpp"
-#include "lib/format-cout.hpp"//////////////TODO
-#define SHOW_TYPE(_TY_) \
-    cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::meta::typeStr<_TY_>() <<endl;
-#define SHOW_EXPR(_XX_) \
-    cout << "#--◆--# " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
-//////////////////////////////////////////////////////////////////////////////TODO
 
 
 namespace stage{
@@ -61,6 +94,7 @@ namespace test {
    *       - setting a visible position
    *       - nudging the position
    *       - nudging the scale factor
+   * @remark the `safeguard_*` tests focus on the boundary cases.
    * @see zoom-window.hpp
    */
   class ZoomWindow_test : public Test
@@ -121,7 +155,7 @@ namespace test {
       
       
       /** @test verify the possible variations for initial setup of the zoom window
-       *        - can be defined either the canvas duration,
+       *        - can be defined either with the canvas duration,
        *          or an explicit extension given in pixels, or both
        *        - after construction, visible window always covers whole canvas
        *        - window extension, when given, defines the initial metric
@@ -156,7 +190,7 @@ namespace test {
         }
       
       
-      /** @test verify defining and retaining of the effective extension in pixels
+      /** @test verify defining and retaining the effective extension in pixels
        *        - changes to the extension are applied by adjusting the visible window
        *        - visible window's start position is maintained
        *        - unless the resulting window would exceed the overall canvas,
@@ -525,7 +559,7 @@ namespace test {
           ZoomWindow win{1};
           win.setVisibleDuration(Duration{FSecs(1,25)});
           win.setOverallRange(TimeSpan(_t(10), _t(0)));                          // set an "reversed" overall time range
-          CHECK (win.overallSpan() == TimeSpan(_t(0), _t(10)));                  // range has been oriented forward
+          CHECK (win.overallSpan() == TimeSpan(_t(0), _t(10)));                  // range has been re-oriented forward
           CHECK (win.visible().duration() == Time(40,0));
           CHECK (win.px_per_sec() == 25);
           CHECK (win.pxWidth() == 1);
@@ -552,7 +586,7 @@ namespace test {
           CHECK (2_r/3 < poison and poison < 1);                                 // looks innocuous...
           CHECK (poison + Time::SCALE < 0);                                      // simple calculations fail due to numeric overflow
           CHECK (poison * Time::SCALE < 0);
-          CHECK (-6 == rational_cast<gavl_time_t>(poison * Time::SCALE));        // naive conversion to µ-ticks would leads to overflow
+          CHECK (-6 == rational_cast<gavl_time_t>(poison * Time::SCALE));        // naive conversion to µ-ticks would lead to overflow
           CHECK (671453 == _raw(Time(FSecs(poison))));                           // however the actual conversion routine is safeguarded
           CHECK (671453.812f == rational_cast<float>(poison)*Time::SCALE);
           
@@ -598,6 +632,7 @@ namespace test {
 
           Rat poison{_raw(Time::MAX)-101010101010101010, _raw(Time::MAX)+23};
           CHECK (0 < poison and poison < 1);
+          
           /*--Test-1-----------*/
           win.setMetric (poison);                                                // inject an evil new value for the metric
           CHECK (win.visible() == win.overallSpan());                            // however, nothing happens
@@ -922,14 +957,45 @@ namespace test {
        */
       void
       safeguard_verySmall()
-        {
-//            SHOW_EXPR(win.overallSpan());
-//            SHOW_EXPR(_raw(win.overallSpan().duration()));
-//            SHOW_EXPR(_raw(win.visible().duration()));
-//            SHOW_EXPR(_raw(win.visible().start()));
-//            SHOW_EXPR(_raw(win.visible().end()));
-//            SHOW_EXPR(win.px_per_sec());
-//            SHOW_EXPR(win.pxWidth());
+        {                                                                        // for setup, request a window crossing time domain bounds
+          ZoomWindow win{ 1, TimeSpan{Time::MAX - TimeValue(23), Duration::MAX}};
+          CHECK (win.overallSpan().duration() == Duration::MAX);                 // we get a canvas with the requested extension Duration::MAX
+          CHECK (win.overallSpan().end()      == Time::MAX);                     // but shifted into domain to fit
+          CHECK (win.visible().duration() == LIM_HAZARD * 1000);                 // the visible window however is limited to be smaller
+          CHECK (win.visible().start()+win.visible().end() == Time::ZERO);       // and (since this is a zoom-in) it is centred at origin
+          CHECK (win.px_per_sec() == 1_r/(LIM_HAZARD*1000)*Time::SCALE);         // Zoom metric is likewise limited, to keep the numbers manageable
+          CHECK (win.px_per_sec() == 125_r/137438953472);
+          CHECK (win.pxWidth()    == 1);
+          
+          win.nudgeVisiblePos (+1);                                              // can work with this tiny window as expected
+          CHECK (win.visible().start() == Time::ZERO);
+          CHECK (win.visible().end()   == LIM_HAZARD*1000);
+          CHECK (win.px_per_sec() == 125_r/137438953472);
+          CHECK (win.pxWidth()    == 1);
+          
+          win.nudgeMetric (-1);                                                  // can not zoom out further
+          CHECK (win.px_per_sec() == 125_r/137438953472);
+          win.nudgeMetric (+1);                                                  // but can zoom in
+          CHECK (win.px_per_sec() == 125_r/68719476736);
+          CHECK (win.visible().start() == TimeValue(274877908523000));
+          CHECK (win.visible().end()   == TimeValue(824633722411000));
+          CHECK (win.visible().duration() == LIM_HAZARD * 1000 / 2);
+          CHECK (win.pxWidth()    == 1);
+          
+          win.setVisiblePos (Time{Time::MAX - TimeValue(23)});
+          CHECK (win.visible().end()   == Time::MAX);
+          CHECK (win.visible().duration() == LIM_HAZARD * 1000 / 2);
+          CHECK (win.px_per_sec() == 2_r/(LIM_HAZARD*1000)*Time::SCALE);
+          CHECK (win.pxWidth()    == 1);
+          
+          win.setVisibleRange (TimeSpan{Time::MAX - TimeValue(23)                // request a window exceeding domain,
+                                       ,FSecs{LIM_HAZARD, 1001}});               // but with a zoom slightly above minimal-zoom
+          CHECK (win.visible().end()   == Time::MAX);                            // Resulting window is shifted into domain
+          CHECK (win.visible().duration() == Duration(FSecs{LIM_HAZARD, 1001})); // and has the requested extension
+          CHECK (win.visible().duration() == TimeValue(1098413214561438));
+          CHECK ( FSecs(LIM_HAZARD, 1000) >  FSecs(LIM_HAZARD, 1001));           // which is indeed smaller than the maximum duration
+          CHECK (win.px_per_sec() == 2003_r/2199023255552);
+          CHECK (win.pxWidth()    == 1);
         }
       
       

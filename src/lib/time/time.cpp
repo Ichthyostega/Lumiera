@@ -93,6 +93,8 @@ namespace time {
   
   const Offset Offset::ZERO (Time::ZERO);
   
+  const FSecs FSEC_MAX{std::numeric_limits<int64_t>::max() / lib::time::TimeValue::SCALE};
+  
   Literal DIAGNOSTIC_FORMAT{"%s%01d:%02d:%02d.%03d"};
 
   
@@ -339,9 +341,16 @@ lumiera_tmpbuf_print_time (gavl_time_t time)
   return buffer;
 }
 
+
+/// @todo this utility function could be factored out into a `FSecs` or `RSec` class  ///////////////////////TICKET #1262
 gavl_time_t
 lumiera_rational_to_time (FSecs const& fractionalSeconds)
 {
+  // avoid numeric wrap from values not representable as 64bit µ-ticks
+  if (abs(fractionalSeconds) > lib::time::FSEC_MAX)
+    return (fractionalSeconds < 0? -1:+1)
+         * std::numeric_limits<int64_t>::max();
+  
   return gavl_time_t(util::reQuant (fractionalSeconds.numerator()
                                    ,fractionalSeconds.denominator()
                                    ,lib::time::TimeValue::SCALE

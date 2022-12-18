@@ -50,6 +50,9 @@
  ** - the overall TimeSpan of the timeline, defining a start and end time
  ** - the visible interval („window“), likewise modelled as time::TimeSpan
  ** - the scale defined as pixels per second
+ ** @todo as of 12/2022 it rather seems the more general navigation should be abstracted
+ **       at a higher level, leaving ZoomWindow mostly focused on time scale handling. 
+ ** 
  ** 
  ** # Interactions
  ** 
@@ -199,7 +202,10 @@ namespace model {
   }
   
   
-  /**
+  
+  
+  
+  /******************************************************//**
    * A component to ensure uniform handling of zoom scale
    * and visible interval on the timeline. Changes through
    * the mutator functions are validated and harmonised to
@@ -237,7 +243,7 @@ namespace model {
         }
       
       ZoomWindow (TimeSpan timeline =TimeSpan{Time::ZERO, DEFAULT_CANVAS})
-        : ZoomWindow{0, timeline}  //see ensureConsistent()
+        : ZoomWindow{0, timeline}  //see establishMetric()
         { }
       
       TimeSpan
@@ -499,7 +505,7 @@ namespace model {
        *         is thus specific to the ZoomWindow implementation. To sanitise, the denominator
        *         is reduced logarithmically (bit-shift) sufficiently and then used as new quantiser,
        *         thus ensuring that both denominator (=quantiser) and numerator are below limit.
-       * @warning the rational number must not be to large overall; this heuristic will fail
+       * @warning the rational number must not be too large overall; this heuristic will fail
        *         on fractions with very large numerator and small denominator — however, for
        *         the ZoomWindow, this case is not relevant, since the zoom factor is limited,
        *         and other usages of rational numbers can be range checked explicitly.

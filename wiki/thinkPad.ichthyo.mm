@@ -38219,6 +38219,7 @@
 </node>
 </node>
 <node CREATED="1666965004641" ID="ID_748757781" MODIFIED="1666965813264" TEXT="Interaction Procedure">
+<linktarget COLOR="#955977" DESTINATION="ID_748757781" ENDARROW="Default" ENDINCLINATION="-318;688;" ID="Arrow_ID_1882192055" SOURCE="ID_867107887" STARTARROW="None" STARTINCLINATION="-49;-276;"/>
 <node CREATED="1666965028506" ID="ID_1718237033" MODIFIED="1666965700555" TEXT="mutators">
 <icon BUILTIN="full-1"/>
 <node CREATED="1666965070532" ID="ID_466715389" MODIFIED="1666965073074" TEXT="set metric"/>
@@ -38469,9 +38470,34 @@
   </body>
 </html></richcontent>
 </node>
+<node CREATED="1671324422426" ID="ID_1192793970" MODIFIED="1671324572988">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Zoom-Metrik verwendet <b>integer-Br&#252;che</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+<node COLOR="#435e98" CREATED="1671324446051" ID="ID_1112836860" MODIFIED="1671324565631" TEXT="kann damit auch unebene Teilungen der Zeitskala sauber handhaben">
+<icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1666966669487" ID="ID_1477573565" MODIFIED="1667093086439" TEXT="testgetrieben entwickelt">
-<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1671324465573" ID="ID_186471302" MODIFIED="1671324563688" TEXT="erfordert Sicherheitsma&#xdf;nahmen f&#xfc;r sehr gro&#xdf;e Zahlen">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1671324522229" ID="ID_1590349109" MODIFIED="1671324559550" TEXT="Gefahr von numeric-wrap">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node COLOR="#338800" CREATED="1671324535163" ID="ID_298282383" MODIFIED="1671324555746" TEXT="L&#xf6;sung: re-Quantisierung (minimalen Fehler einf&#xfc;hren)">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1666966669487" FOLDED="true" ID="ID_1477573565" MODIFIED="1671324271010" TEXT="testgetrieben entwickelt">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1667093097050" ID="ID_1662709264" MODIFIED="1667093103756" TEXT="verify_simpleUsage">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1667093106907" ID="ID_1255657275" MODIFIED="1667093118644" TEXT="nudge Zoom-Faktor"/>
@@ -39562,8 +39588,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1668180004015" ID="ID_1355163433" MODIFIED="1671235929237" TEXT="extreme Grenzf&#xe4;lle abtesten">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1668180004015" ID="ID_1355163433" MODIFIED="1671324161416" TEXT="extreme Grenzf&#xe4;lle abtesten">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1668212345981" ID="ID_1473341053" MODIFIED="1668212365788" TEXT="leer konstruiert &#x27f9; default-canvas">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -41466,8 +41492,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1668180054302" ID="ID_1604190635" MODIFIED="1668180136078" TEXT="1 Pixel">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1668180054302" ID="ID_1604190635" MODIFIED="1671324160042" TEXT="1 Pixel">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1670719662361" ID="ID_1680322812" MODIFIED="1670719685207" TEXT="maximal gef&#xe4;hrlich f&#xfc;r die Metrik-Berechnung">
 <node COLOR="#990000" CREATED="1670719706106" ID="ID_266339038" MODIFIED="1670889773325" TEXT="Newton-Optimierung m&#xf6;glicherweise &#x27d8;">
 <arrowlink COLOR="#7d5c62" DESTINATION="ID_1040949384" ENDARROW="Default" ENDINCLINATION="-541;29;" ID="Arrow_ID_1071041256" STARTARROW="None" STARTINCLINATION="1170;80;"/>
@@ -41477,16 +41503,27 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1671294771824" ID="ID_115927706" MODIFIED="1671294789194" TEXT="numeric-wrap entdeckt">
+<node COLOR="#435e98" CREATED="1671294771824" ID="ID_115927706" MODIFIED="1671322048434" TEXT="numeric-wrap entdeckt">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1671295216805" ID="ID_987376979" MODIFIED="1671295239222" TEXT="In der conversion FSecs &#x27fc; &#xb5;-tick"/>
 <node CREATED="1671295240330" ID="ID_1742063347" MODIFIED="1671295249934" TEXT="bei &#xfc;bergro&#xdf;en Werten">
 <icon BUILTIN="info"/>
 </node>
+<node COLOR="#338800" CREATED="1671322050278" ID="ID_1702542630" MODIFIED="1671322066067" TEXT="Limit in den Konverter">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node CREATED="1670719689323" ID="ID_794436463" MODIFIED="1670719702317" TEXT="mit m&#xf6;glichst gro&#xdf;en Zeiten kombinieren"/>
-<node CREATED="1671294759109" ID="ID_531574116" MODIFIED="1671294770708" TEXT="&#xe4;hnliche Operationen wie bereits f&#xfc;r die giftigen Faktoren"/>
+<node COLOR="#338800" CREATED="1671294759109" ID="ID_531574116" MODIFIED="1671324166659" TEXT="&#xe4;hnliche Operationen wie bereits f&#xfc;r die giftigen Faktoren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1671324210414" ID="ID_1973605620" MODIFIED="1671324233682" TEXT="sehr gro&#xdf; skalieren und Limit LIM_HAZARD*1000">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1671324243418" ID="ID_596210372" MODIFIED="1671324255033" TEXT="Scroll / Zoom-Nudge">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1668264626100" ID="ID_45091906" MODIFIED="1671235896011" TEXT="giftige Br&#xfc;che">
 <icon BUILTIN="button_ok"/>
@@ -42829,6 +42866,10 @@
 </node>
 </node>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1671324283797" ID="ID_867107887" MODIFIED="1671324383048" TEXT="gem&#xe4;&#xdf; Requirement-Konzept integrieren">
+<arrowlink COLOR="#955977" DESTINATION="ID_748757781" ENDARROW="Default" ENDINCLINATION="-318;688;" ID="Arrow_ID_1882192055" STARTARROW="None" STARTINCLINATION="-49;-276;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667488193842" ID="ID_1347640673" MODIFIED="1667488208549" TEXT="Invarianten">
