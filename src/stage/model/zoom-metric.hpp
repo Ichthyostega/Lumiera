@@ -59,6 +59,7 @@ namespace model {
   
   using lib::time::TimeValue;
   using lib::time::TimeSpan;
+  using lib::time::Offset;
   using lib::time::Time;
   
   
@@ -66,6 +67,7 @@ namespace model {
    * Mix-In to implement the DisplayMetric interface on top of
    * a ZoomWindow component, directly embedded here and thus
    * also accessible downstream.
+   * @remark intended to inherit from and implement \ref DisplayMetric
    */
   template<class I>
   class ZoomMetric
@@ -93,13 +95,19 @@ namespace model {
       int
       translateTimeToPixels (TimeValue startTimePoint)  const override
         {
-          return rational_cast<int> (_raw(startTimePoint) * zoomWindow_.px_per_sec() / Time::SCALE);  ////////////////////TICKET #1196 : support canvas origin offset
+          return ZoomMetric::translateScreenDelta (Offset{zoomWindow_.overallSpan().start(), startTimePoint});
+        }
+      
+      int
+      translateScreenDelta (Offset timeOffset)  const override
+        {
+          return rational_cast<int> (zoomWindow_.px_per_sec() * _FSecs(timeOffset));
         }
       
       TimeValue
       applyScreenDelta(Time anchor, double deltaPx)  const override
         {
-          return anchor + TimeValue{rational_cast<gavl_time_t> (int64_t(Time::SCALE * deltaPx) / zoomWindow_.px_per_sec())};   //////TODO correct yet confusingly written
+          return anchor + Offset{int64_t(deltaPx) / zoomWindow_.px_per_sec()};
         }
     };
   

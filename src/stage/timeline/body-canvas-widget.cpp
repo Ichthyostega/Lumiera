@@ -526,8 +526,8 @@ namespace timeline {
                       if (currWidth != newWidth or currHeight != newHeight)
                         {
                           canvas.set_size(newWidth, newHeight);
-                          canvas.set_size_request(newWidth, newHeight);  //////TODO the width might be more than actually is available. Better do this with precisely the dimensions we need, and do it for the rulerCanvas only!!
-                        }
+                          canvas.set_size_request(newWidth, newHeight);  //Note: might be more than actually is available.
+                        }                                               //       Assuming canvas is embedded into scrolled pane
                     };
     
     adjust (rulerCanvas_, canvasWidth, rulerHeight);

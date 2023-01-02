@@ -98,7 +98,7 @@ namespace time {
    *  based on this grid or time axis, but returning a raw time value. 
    *  Implemented as combination of the #gridAlign and #timeOf operations,
    *  i.e. we quantise into this scale, but transform the result back onto
-   *  the raw time value scale.
+   *  the global raw time value scale.
    * @warning this operation incurs information loss. Values may be rounded
    *          and / or clipped, according to the grid used. And, contrary to
    *          a QuTime value, the information about the actual grid is

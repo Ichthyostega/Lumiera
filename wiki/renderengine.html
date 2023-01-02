@@ -2727,7 +2727,7 @@ As starting point, in winter 2016/17 the old (broken) timeline panel was moved a
 After that initial experiments, the focus of development shifted to the top-level UI structure, still unsatisfactory at that time, and integration with the message based communication via UI-Bus and the propagation of changes in the form of [[Diff messages|MutationMessage]] has been achieved. Following this ground work, the [[timeline UI|GuiTimelineView]] has been successfully implemented, using [[custom drawing|GuiTimelineDraw]] on a {{{Gtk::Layout}}} based »timeline body canvas« — thereby fully validating the feasibility of this approach.
 </pre>
 </div>
-<div title="GuiCanvasInterface" creator="Ichthyostega" modifier="Ichthyostega" created="202210281527" modified="202210282005" tags="spec GuiPattern draft" changecount="3">
+<div title="GuiCanvasInterface" creator="Ichthyostega" modifier="Ichthyostega" created="202210281527" modified="202301022244" tags="spec GuiPattern draft" changecount="4">
 <pre>//Interface to handle widgets on a timeline canvas without tight coupling to a central [[Layout Manager|TimelineDisplayManager]].//
 Instead of actively installing and handling widgets from a central controlling entity, rather we allow the widgets to //attach// to an existing UI context, which beyond that remains unspecified. Widgets attached this way are required to implement a handling interface. Based on this general scheme, two kinds of attachments are modelled, each through a distinct set of interfaces
 ;~ViewHook
@@ -2743,7 +2743,7 @@ This interconnected structure allows //another entity// (not the hook or canvas)
 !Time calibrated display
 The arrangement of media elements onto a timeline display imposes another constraint: the position of elements directly relates to their properties, especially a start and end time. Such a requirement is in conflict with the usual arrangement of UI elements, which largely is governed by considerations of layout and style and UI space necessary for proper presentation. When attaching a widget to the Canvas, the //canvas coordinates// of the attachment point need to be specified -- yet the widget knows its own properties rather in terms of time and duration. A //calibration// thus needs to be maintained, in close relation to global layout properties like the zoom scale or the scrolling position of the data section currently visible.
 
-To bridge this discrepancy, the ~CanvasHook interface exposes a ''~DisplayMetric'' component, with operations to convert time to pixel offsets and vice versa. Internally, this ~DisplayMetric is passed through and actually attached to the ZoomWindow component, which is maintained within the {{{TimelineLayout}}} to coordinate all scrolling and zooming activities
+To bridge this discrepancy, the ~CanvasHook interface exposes a ''~DisplayMetric'' component, with operations to convert time to pixel offsets and vice versa. Internally, this ~DisplayMetric is passed through and actually attached to the ZoomWindow component, which is maintained within the {{{TimelineLayout}}} to coordinate all scrolling and zooming activities. Moreover, a //overall canvas extension// is maintained, by anchoring the origin in pixel coordinates at the begin of the {{{TimeSpan}}} defining this canvas range.
 </pre>
 </div>
 <div title="GuiClipWidget" creator="Ichthyostega" modifier="Ichthyostega" created="201611180114" modified="202210281442" tags="GuiPattern design draft" changecount="32">
@@ -9272,7 +9272,7 @@ Besides building on the asset management, implementing Timeline (and Sequence) a
 This topic is {{red{postponed as of 10/2018}}} &amp;rarr; [[#1083|http://issues.lumiera.org/ticket/1083]]
 </pre>
 </div>
-<div title="TimelineDisplayManager" creator="Ichthyostega" modifier="Ichthyostega" created="201611280235" modified="202210281503" tags="spec GuiPattern img" changecount="24">
+<div title="TimelineDisplayManager" creator="Ichthyostega" modifier="Ichthyostega" created="201611280235" modified="202301022249" tags="spec GuiPattern img" changecount="26">
 <pre>//guide and control the concrete display properties of the various sub components (tracks, clips) comprising a timeline display.//
 
 The »Display Manager« of the timeline actually is an abstraction, a control interface, revolving around the guidance individual components need in order to settle on a proper display. Those components themselves are represented as mediating entities, the TrackPresenter and the ClipPresenter, each of which controls and manages a mostly passive GTK widget. To this end, the presenters need to know at which virtual coordinates their display widgets would show up, and they should be aware if these corresponding widgets need actually to be visible at the moment. Moreover, especially the ClipPresenter has to choose the appropriate  &amp;rarr;[[»appearance style«|GuiClipWidget]] for the corresponding slave widget.
@@ -9290,7 +9290,7 @@ The //Display Evaluation Pass// is triggered by various events from different so
 !mapping service for the widgets
 Another, closely related topic, handled within this context, is the mapping from model structures and units into display layout coordinates. Within the model, we can distinguish several dimensions (degrees of freedom). For one, there is the topology, the ''location or part'' of the model to expose through the UI. Moreover, there is the ''degree of detail'' for this UI representation. And then, there is the ''temporal position and extension'' to represent.
 
-By principle, //widgets always work exclusively in pixel coordinates// -- thus we need the help of a coordinating entity to find out where some entity shall be located on the GTK drawing canvas. This becomes especially relevant for the timeline body, since there we're relying on a GuiCustomWidget to perform and control some of the UI drawing by specific custom rules and procedures. And to add to this complexity, several structures are //nested,// thus anchoring their coordinates relative to the parent entity.
+By principle, //widgets always work exclusively in pixel coordinates// -- thus we need the help of a coordinating entity to find out where some entity shall be located on the GTK drawing canvas. This becomes especially relevant for the timeline body, since there we're relying on a GuiCustomWidget to perform and control some of the UI drawing by specific custom rules and procedures. And to add to this complexity, several structures are //nested,// thus anchoring their coordinates relative to the parent entity. These challenges are resolved by the introduction of yet another abstraction, the [[»canvas interface«|GuiCanvasInterface]], allowing to attach widgets relative to a //reference canvas// and to maintain uniform coordinates and a [[zoom metric|ZoomWindow]] used for a properly calibrated timeline display.
 </pre>
 </div>
 <div title="TimelineSequences" modifier="Ichthyostega" created="200811011836" modified="201505310138" tags="design decision img" changecount="4">
@@ -10505,7 +10505,7 @@ Wiring requests are small stateful value objects. They will be collected, sorted
 &amp;rarr; ConManager
 </pre>
 </div>
-<div title="ZoomWindow" creator="Ichthyostega" modifier="Ichthyostega" created="202210281528" modified="202211111518" tags="spec GuiPattern" changecount="21">
+<div title="ZoomWindow" creator="Ichthyostega" modifier="Ichthyostega" created="202210281528" modified="202301022236" tags="spec GuiPattern" changecount="22">
 <pre>//A component  for uniform handling of zoom scale and visible interval on the timeline.//
 Working with and arranging media requires a lot of //navigation// and changes of //zoom detail level.// More specifically, the editor is required to repeatedly return //to the same locations// and show arrangements at the same alternating scale levels. Most existing editing applications approach this topic naïvely, by just responding to some coarse grained interaction controls -- thereby creating the need for a lot of superfluous and tedious search and navigation activities, causing constant grind for the user. And resolving these obnoxious shortcomings turns out as a never ending task, precisely due to the naïve and ad hoc approach initially taken.
 
@@ -10606,7 +10606,7 @@ The Timeline UI is {{red{as of 10/2022}}} specified sufficiently to serve as fra
 #*resulting window extension in pixels
 
 !!!Semantics
-The {{{overallSpan}}} corresponds to the whole canvas extension
+The {{{overallSpan}}} corresponds to the whole canvas extension, and it's location defines the origin in pixel coordinates.
 The {{{visibleWindow}}} corresponds to the actually visible part, and the //metric// needs to be calibrated, to make the window's extension in pixel match the actual size in the UI. All further manipulations are assumed to keep that pixel extension constant. The actual duration of the timeline is in no way limited, but usually you'd expect the timeline to fit onto the canvas -- the canvas may even be extended when the user wants to extend the timeline beyond existing bounds.
 ;Invariants
 :after each change, a normalisation sequence is performed to (re)establish the following guarantees

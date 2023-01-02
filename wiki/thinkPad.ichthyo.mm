@@ -24495,6 +24495,22 @@
 <node CREATED="1666901778191" ID="ID_1270254992" MODIFIED="1666901795372" TEXT="(&#xdc;bersetzungsfunktion vorw&#xe4;rts)">
 <font NAME="SansSerif" SIZE="11"/>
 </node>
+<node CREATED="1672694716089" ID="ID_1323685955" MODIFIED="1672695142709" TEXT="Problem: Canvas-Ursprung in Pixel">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1672695162345" ID="ID_624244605" MODIFIED="1672695183218" TEXT="sollte rein technisch &#x201e;links oben&#x201c; im Fenster liegen"/>
+<node CREATED="1672695187333" ID="ID_1273824912" MODIFIED="1672695197079" TEXT="mu&#xdf; f&#xfc;r alle Zeichen-Routinen konsistent sein"/>
+<node CREATED="1672695198068" ID="ID_1764927765" MODIFIED="1672695207622" TEXT="ist davon abgesehen aber opaque"/>
+<node CREATED="1672695222232" ID="ID_785032228" MODIFIED="1672695546890" TEXT="binde ihn an den Anfrang vom ZoomWindow-Canvas">
+<arrowlink COLOR="#868ca5" DESTINATION="ID_350857288" ENDARROW="Default" ENDINCLINATION="1491;0;" ID="Arrow_ID_265889059" STARTARROW="None" STARTINCLINATION="-1670;93;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1672694636798" ID="ID_1539523482" MODIFIED="1672694672146" TEXT="translateScreenDelta">
+<node CREATED="1672694688748" ID="ID_1632699702" MODIFIED="1672694704719" TEXT="Zeit-Offset &#x27fc; Pixel-&#x394;"/>
+<node CREATED="1666901778191" ID="ID_10531267" MODIFIED="1672700828681" TEXT="(implementiert Metrik-&#xdc;bersetzung)">
+<font NAME="SansSerif" SIZE="11"/>
 </node>
 </node>
 <node CREATED="1666901241839" ID="ID_1036232479" MODIFIED="1666901245317" TEXT="applyScreenDelta">
@@ -25000,11 +25016,11 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1565276582060" HGAP="244" ID="ID_1896159832" MODIFIED="1582994847668" TEXT="Display-Evaluation-Pass">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1565276582060" HGAP="244" ID="ID_1896159832" MODIFIED="1672673134068" TEXT="Display-Evaluation-Pass">
 <linktarget COLOR="#735667" DESTINATION="ID_1896159832" ENDARROW="Default" ENDINCLINATION="68;-547;" ID="Arrow_ID_672337506" SOURCE="ID_134472006" STARTARROW="None" STARTINCLINATION="1091;68;"/>
 <linktarget COLOR="#735667" DESTINATION="ID_1896159832" ENDARROW="Default" ENDINCLINATION="68;-547;" ID="Arrow_ID_1219011636" SOURCE="ID_1362490028" STARTARROW="None" STARTINCLINATION="1094;73;"/>
 <linktarget COLOR="#7b45d8" DESTINATION="ID_1896159832" ENDARROW="Default" ENDINCLINATION="-839;66;" ID="Arrow_ID_786196853" SOURCE="ID_1758019036" STARTARROW="None" STARTINCLINATION="667;67;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="forward"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666378011037" ID="ID_595193151" MODIFIED="1666378030994" TEXT="#1252 Timeline display-evaluation-pass">
 <icon BUILTIN="flag-yellow"/>
 </node>
@@ -25273,7 +25289,7 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1582994588889" ID="ID_1127174838" MODIFIED="1582994596164" TEXT="(idealer)Entpunkt">
+<node CREATED="1582994588889" ID="ID_1127174838" MODIFIED="1582994596164" TEXT="(idealer)Endpunkt">
 <node CREATED="1582994614549" ID="ID_436198586" MODIFIED="1582994630335" TEXT="die sub-Clip und Header-Allokationen passen bereits"/>
 <node CREATED="1582994631395" ID="ID_132052842" MODIFIED="1582994648575" TEXT="es mu&#xdf; alles nur noch einmal gezeichnet werden"/>
 </node>
@@ -33538,10 +33554,39 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="idea"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666451523988" ID="ID_244578537" MODIFIED="1666452387137" TEXT="Implementierung: liegt im TimelineLayout (opaque)">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666451523988" HGAP="57" ID="ID_244578537" MODIFIED="1666452387137" TEXT="Implementierung: liegt im TimelineLayout (opaque)" VSHIFT="-8">
 <arrowlink COLOR="#4c3c64" DESTINATION="ID_1202075896" ENDARROW="Default" ENDINCLINATION="-1351;104;" ID="Arrow_ID_1210722108" STARTARROW="None" STARTINCLINATION="-74;-277;"/>
-<linktarget COLOR="#644d8a" DESTINATION="ID_244578537" ENDARROW="Default" ENDINCLINATION="-380;20;" ID="Arrow_ID_7428365" SOURCE="ID_1827001710" STARTARROW="None" STARTINCLINATION="46;-587;"/>
+<linktarget COLOR="#644d8a" DESTINATION="ID_244578537" ENDARROW="Default" ENDINCLINATION="-220;12;" ID="Arrow_ID_7428365" SOURCE="ID_1827001710" STARTARROW="None" STARTINCLINATION="55;-63;"/>
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1672679706488" HGAP="34" ID="ID_824353880" MODIFIED="1672679719594" TEXT="Anforderungen" VSHIFT="1">
+<icon BUILTIN="info"/>
+<node CREATED="1672679774855" ID="ID_1101197260" MODIFIED="1672679787848" TEXT="beliebige Zeit in absolute Pixel-Pos &#xfc;bersetzen"/>
+<node CREATED="1672679806161" ID="ID_1865833486" MODIFIED="1672679824547" TEXT="relativen Offset / Ausdehnung in Pixel-Zahl &#xfc;bersetzen"/>
+<node CREATED="1672679826392" ID="ID_1729893363" MODIFIED="1672679848861" TEXT="explizit gegebenen Pixel-Offset in ein Zeit-&#x394; &#xfc;bersetzen"/>
+<node CREATED="1672680113722" ID="ID_411598486" MODIFIED="1672680137577" TEXT="Dom&#xe4;ne / Canvas-Bereich in Pixel-Koordinaten &#xfc;bersetzen">
+<node CREATED="1672680147413" ID="ID_1912182961" MODIFIED="1672680162863" TEXT="f&#xfc;r AbstractTrackRenderer::visible_"/>
+<node CREATED="1672680203512" ID="ID_1802952569" MODIFIED="1672680209657" TEXT="BodyCanvasWidget::establishLayout (DisplayEvaluation&amp;)">
+<node CREATED="1672680242305" ID="ID_1540246434" MODIFIED="1672680249988" TEXT="BodyCanvasWidget::adjustCanvasSize(int canvasWidth, int contentHeight, int rulerHeight)"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1672694819791" ID="ID_1304491361" MODIFIED="1672694834368" TEXT="Canvas-Ursprung bleibt implizit">
+<icon BUILTIN="yes"/>
+<node CREATED="1672694860846" ID="ID_1013198591" MODIFIED="1672694871984" TEXT="sollte negative Pixel-Werte vermeiden"/>
+<node CREATED="1672694872852" ID="ID_428750573" MODIFIED="1672694887285" TEXT="sollte dem (technischen) Ursprung entsprechen"/>
+<node CREATED="1672694948622" ID="ID_795049630" LINK="#ID_1323685955" MODIFIED="1672695119697" TEXT="rein interner Belang der Zeichen-Routinen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die Pixel-Koordinaten sind ein rein interner Belang f&#252;r die Zeichen-Routinen; insofern gen&#252;gt es, wenn die Umwandlungsfunktion stets einen konsistenten Ursprung liefert, sich aber auch sinngem&#228;&#223; an ver&#228;ndertetes Timeline-Layout anpa&#223;t
+    </p>
+  </body>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -33851,7 +33896,7 @@
 <arrowlink COLOR="#406d5c" DESTINATION="ID_368245484" ENDARROW="Default" ENDINCLINATION="-469;652;" ID="Arrow_ID_264431308" STARTARROW="None" STARTINCLINATION="-1674;133;"/>
 <linktarget COLOR="#2082a9" DESTINATION="ID_485594461" ENDARROW="Default" ENDINCLINATION="872;71;" ID="Arrow_ID_1204090343" SOURCE="ID_474563596" STARTARROW="None" STARTINCLINATION="2306;92;"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666452299624" HGAP="49" ID="ID_1827001710" MODIFIED="1666452531958" TEXT="Zeit &#x2192; Pixel &#xdc;bersetzung" VSHIFT="-13">
-<arrowlink COLOR="#644d8a" DESTINATION="ID_244578537" ENDARROW="Default" ENDINCLINATION="-380;20;" ID="Arrow_ID_7428365" STARTARROW="None" STARTINCLINATION="46;-587;"/>
+<arrowlink COLOR="#644d8a" DESTINATION="ID_244578537" ENDARROW="Default" ENDINCLINATION="-220;12;" ID="Arrow_ID_7428365" STARTARROW="None" STARTINCLINATION="55;-63;"/>
 <linktarget COLOR="#6e5293" DESTINATION="ID_1827001710" ENDARROW="Default" ENDINCLINATION="873;-869;" ID="Arrow_ID_892468806" SOURCE="ID_998825618" STARTARROW="None" STARTINCLINATION="-1738;113;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
@@ -37891,7 +37936,9 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1541858585095" ID="ID_1823259238" MODIFIED="1557498707233" TEXT="zwei strikt getrennte Dimensionen">
-<node CREATED="1541858615893" ID="ID_301185249" MODIFIED="1557498707233" TEXT="Struktur">
+<icon BUILTIN="info"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1541858615893" FOLDED="true" ID="ID_301185249" MODIFIED="1672672266675" TEXT="Struktur">
+<icon BUILTIN="hourglass"/>
 <node CREATED="1541858624972" ID="ID_342899879" MODIFIED="1557498707233" TEXT="Ort im Struktur-Graph">
 <node CREATED="1541860265441" ID="ID_969408137" MODIFIED="1557498707233" TEXT="topologisch"/>
 <node CREATED="1541860270378" ID="ID_927127002" MODIFIED="1557498707233" TEXT="im UI-window">
@@ -37906,6 +37953,10 @@
 <node CREATED="1541860508135" ID="ID_1006267067" MODIFIED="1557498707233" TEXT="Ausnahme: Kurven und Graphen"/>
 <node CREATED="1541860592548" ID="ID_1610724743" MODIFIED="1557498707233" TEXT="object coord &lt;-&gt; display coord"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1672672176925" ID="ID_738927743" MODIFIED="1672672262113" TEXT="noch nicht klar ob diese Dimensionen sinnvoll hier zu integrieren sind">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="bell"/>
 </node>
 </node>
 <node CREATED="1541858620165" ID="ID_946004941" MODIFIED="1557498707233" TEXT="Zeit">
@@ -37939,6 +37990,19 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1672672729523" ID="ID_204825395" MODIFIED="1672672853253" TEXT="vorerst durch generische Regel im Code festgelegt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...sp&#228;ter m&#246;chte ich diesen als eigenen zus&#228;tzlichen Freiheitsgrad einf&#252;hren; dazu mu&#223; aber bereits mehr &#252;ber den Verwendungszusammenhang bekannt sein; insofern habe ich vorerst eine generische Regel implementiert, die den Zoom-Anchor anhand der Position zum Gesamt-Canvas festlegt (ganz am Anfgang liegt er ganz links, am Ende ganz rechts)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 <node CREATED="1542384160498" ID="ID_1252241860" MODIFIED="1557498707233" TEXT="TimeWindow">
@@ -37994,6 +38058,30 @@
 <node CREATED="1542384636665" ID="ID_1760262238" MODIFIED="1542384648936" TEXT="Beschr&#xe4;nkungen realisiert Lumiera als Placement">
 <icon BUILTIN="idea"/>
 </node>
+<node CREATED="1672672309323" ID="ID_903266469" MODIFIED="1672672619791" TEXT="es gibt technische Beschr&#xe4;nkungen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      bedingt durch die interne Repr&#228;sesntation (als 64bit &#181;-Ticks bzw. signed fraction)...
+    </p>
+    <ul>
+      <li>
+        die absoluten internen Zeitwerte in &#181;-Ticks sind beschr&#228;nkt &#177;Time::MAX (=<font face="Monospaced">numeric_limits&lt;int64_t&gt;::max() / 30</font>)
+      </li>
+      <li>
+        die gr&#246;&#223;tm&#246;gliche Zoomstufe wurde (mehr oder weniger willk&#252;rlich) festgelegt auf 2px / &#181;-Tick
+      </li>
+      <li>
+        ein Fenster mit weniger als 560px kann nicht die gesamte Zeit-Dom&#228;ne darstellen (da sonst die rationale Arithmetik entgleist)
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 <node CREATED="1541859854902" ID="ID_614778835" MODIFIED="1557498707233" TEXT="display pixels per unit"/>
 </node>
@@ -38022,7 +38110,7 @@
 <node CREATED="1542385006024" ID="ID_58293224" MODIFIED="1557498707234" TEXT="breaking">
 <node CREATED="1542385016529" ID="ID_697267034" MODIFIED="1557498707234" TEXT="Pixel-Koordinaten aller Elemente &#xe4;ndern sich"/>
 <node CREATED="1542385445821" ID="ID_1078665627" MODIFIED="1557498707234" TEXT="au&#xdf;erdem kommen ggfs neue Elemente hinzu und Elemente fallen weg"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1542385042987" ID="ID_1543492584" MODIFIED="1557498707234" TEXT="Push oder Pull?">
+<node COLOR="#435e98" CREATED="1542385042987" ID="ID_1543492584" MODIFIED="1672671739825" TEXT="Push oder Pull?">
 <icon BUILTIN="help"/>
 <node CREATED="1542385063860" ID="ID_1262945101" MODIFIED="1557498707234" TEXT="Abw&#xe4;gung">
 <node CREATED="1542385081282" ID="ID_342384221" MODIFIED="1557498707234" TEXT="Push">
@@ -38048,7 +38136,7 @@
 </node>
 </node>
 <node CREATED="1542385008235" ID="ID_713582235" MODIFIED="1557498707234" TEXT="non-breaking">
-<node CREATED="1542385321347" ID="ID_1672263647" MODIFIED="1557498707234" TEXT="relevantTimeWindow wird erweitert"/>
+<node CREATED="1542385321347" ID="ID_1672263647" MODIFIED="1557498707234" TEXT="TimeWindow-&#xbb;Canvas&#xab; wird erweitert"/>
 <node CREATED="1542385335372" ID="ID_1139488626" MODIFIED="1557498707234" TEXT="aber Pixel-Nullpunkt bleibt gleich"/>
 <node CREATED="1542385350195" ID="ID_1892916657" MODIFIED="1557498707234" TEXT="alle Pixel-Koordinaten bleiben g&#xfc;ltig"/>
 <node CREATED="1542385433191" ID="ID_823514825" MODIFIED="1557498707234" TEXT="es kommen ggfs neue Elemente hinzu">
@@ -38072,10 +38160,46 @@
 </node>
 </node>
 </node>
+<node CREATED="1672695373913" ID="ID_601278848" MODIFIED="1672695382563" TEXT="&#xbb;Canvas&#xab;">
+<node CREATED="1672695388079" ID="ID_611481658" MODIFIED="1672695399833" TEXT="implizite Zeitchenfl&#xe4;che mit einheitlichen Koordinaten"/>
+<node CREATED="1672695405293" ID="ID_1476246688" MODIFIED="1672695425045" TEXT="der sichtbare Ausschnitt ist irgendwo darin enthalten"/>
+<node CREATED="1672695431696" ID="ID_1878306836" MODIFIED="1672695451577" TEXT="kann durch Zoom/Scroll-Aktionen implizit vergr&#xf6;&#xdf;ert werden"/>
+<node CREATED="1672695458020" ID="ID_350857288" MODIFIED="1672695546890" TEXT="verwaltet einen Pixel-Ursprung">
+<linktarget COLOR="#868ca5" DESTINATION="ID_350857288" ENDARROW="Default" ENDINCLINATION="1491;0;" ID="Arrow_ID_265889059" SOURCE="ID_785032228" STARTARROW="None" STARTINCLINATION="-1670;93;"/>
+<node CREATED="1672695565677" ID="ID_74750688" MODIFIED="1672695578855" TEXT="dieser gilt ausnahmslos f&#xfc;r alle Zeichen-Operationen"/>
+<node CREATED="1672695580626" ID="ID_1609686459" MODIFIED="1672695694973" TEXT="Lage kann sich durch &#xc4;nderungen im Zoom-Window verschieben">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      beispielsweise wenn nach links &#252;ber den bisherigen Ursprung hinaus gescrollt wird &#8212; dann wird (in Ma&#223;en) der Canvas vergr&#246;&#223;ert; dies invalidiert alle Koordinaten und das gesamte Layout, und anschlie&#223;end bekommen aber alle Widgets und Zeichen-Routinen konsistent eine neue Canvas-&#220;bersetzung
+    </p>
+  </body>
+</html></richcontent>
 </node>
 </node>
 </node>
-<node CREATED="1541859255448" ID="ID_1251550945" MODIFIED="1557498707234" TEXT="hat seine eigene Historie"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1541859255448" ID="ID_1251550945" MODIFIED="1672672870505" TEXT="hat seine eigene Historie">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1672672872277" ID="ID_1511854867" MODIFIED="1672672879900" TEXT="geplant..."/>
+<node CREATED="1672672880622" ID="ID_1994765001" MODIFIED="1672672913962" TEXT="wohl erst viel sp&#xe4;ter zu implementieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Gesamt-Integration der Applikation ist derzeit (2023) viel wichtiger
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1666961652530" ID="ID_1551608483" MODIFIED="1666961657079" TEXT="Anforderungen">
 <icon BUILTIN="pencil"/>
@@ -38125,7 +38249,7 @@
 <node CREATED="1666963076796" ID="ID_246937524" MODIFIED="1666963108407" TEXT="scale factor"/>
 <node CREATED="1666963936464" ID="ID_1932975512" MODIFIED="1666963939268" TEXT="overall range"/>
 </node>
-<node CREATED="1666963799466" ID="ID_647016441" MODIFIED="1666963854969" TEXT="&#x27f9; trigger DisplayEvaluation">
+<node CREATED="1666963799466" ID="ID_647016441" LINK="#ID_1896159832" MODIFIED="1666963854969" TEXT="&#x27f9; trigger DisplayEvaluation">
 <arrowlink COLOR="#845fa8" DESTINATION="ID_394919753" ENDARROW="Default" ENDINCLINATION="-2;42;" ID="Arrow_ID_803019531" STARTARROW="None" STARTINCLINATION="-87;9;"/>
 </node>
 </node>
@@ -38213,7 +38337,7 @@
 </node>
 <node CREATED="1666964906595" ID="ID_414880469" MODIFIED="1666964913822" TEXT="model/Content">
 <node CREATED="1666964550288" ID="ID_207665547" MODIFIED="1666964581818" TEXT="TimelineController &#x27a9; set overall range"/>
-<node CREATED="1666964837550" ID="ID_510736258" MODIFIED="1666964853954" TEXT="push &#x27f6; TimelineLayout"/>
+<node CREATED="1666964837550" ID="ID_510736258" MODIFIED="1672673922037" TEXT="push &#x27f6; TimelineLayout(&#x27f9;Display-Evaluation)"/>
 <node CREATED="1666964631061" ID="ID_1856222450" MODIFIED="1666964652646" TEXT="BodyCanvas &#x27f5; window params"/>
 <node CREATED="1666964657466" ID="ID_1703226781" MODIFIED="1666964672146" TEXT="DisplayMetric &#x27f5; metric params"/>
 </node>

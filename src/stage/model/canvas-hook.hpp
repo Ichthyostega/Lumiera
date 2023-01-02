@@ -63,6 +63,7 @@ namespace stage {
 namespace model {
   
   using lib::time::Time;
+  using lib::time::Offset;
   using lib::time::TimeValue;
   using lib::time::TimeSpan;
   
@@ -72,11 +73,11 @@ namespace model {
    * Mix-in interface to allow for concrete CanvasHooked widgets
    * to adapt themselves to the metric currently employed on the canvas.
    * In some cases, most notably when a timeline canvas is calibrated to
-   * represent temporal extension precisely, the widgets (clips, effects)
-   * within such a display need to adjust themselves. A relevant special
-   * case is when such a widget _is dragged_ -- receiving mouse move events
-   * in screen coordinates -- which need to be translated into a resulting
-   * temporal offset or change as a result of this _interaction gesture._
+   * precisely represent temporal extension, the widgets (clips, effects)
+   * within such a display need to adjust and adapt themselves. A relevant
+   * case is when such a widget _is dragged_ — receiving mouse move events
+   * in screen coordinates — which then should be translated into a resulting
+   * temporal offset or change command to reflect this _interaction gesture._
    */
   class DisplayMetric
     {
@@ -88,6 +89,9 @@ namespace model {
       
       /** extension point for time axis zoom management. */
       virtual int translateTimeToPixels (TimeValue)  const =0;
+      
+      /** translate a temporal offset into a pixel Δ */
+      virtual int translateScreenDelta (Offset)  const     =0;
       
       /** translate an offset in pixel coordinates into a temporal position
        * @param anchor the start point on the time axis where to apply the delta
