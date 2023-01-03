@@ -73,9 +73,6 @@
  ** view -- our solution in fact relies on some flavour of the
  ** [MVP pattern](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) here.
  ** 
- ** @todo WIP-WIP-WIP as of 12/2016
- ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
- ** 
  */
 
 
@@ -92,10 +89,6 @@
 #include "stage/model/view-hook.hpp"
 #include "lib/time/timevalue.hpp"
 
-//#include "lib/util.hpp"
-
-//#include <memory>
-//#include <vector>
 
 
 
@@ -113,7 +106,6 @@ namespace timeline {
    * Top-level anchor point for the timeline display (widgets).
    * The central entity to organise concerns relevant for the presentation of the
    * Timeline as a whole, as opposed to rendering individual tracks as part of the Timeline.
-   * @todo WIP-WIP as of 10/2018
    */
   class TimelineLayout
     : public model::ZoomMetric<DisplayManager>
@@ -126,7 +118,6 @@ namespace timeline {
       HeaderPaneWidget headerPane_;
       
       DisplayEvaluation displayEvaluation_;
-      /////////////////////////////////////////////////////////////////////////////////////////////TICKET #1019 : need a "ZoomWindow" here to manage the visible area
       
     public:
       TimelineLayout (Gtk::Paned&);

@@ -74,7 +74,7 @@ namespace timeline {
    * will cause adjustments and a re-evaluation.
    * @warning care has to be taken to not "overshoot" each adjustment, since this
    *          might lead to never ending re-invocations and "layout oscillation".
-   * @remark the Layout is established in two phases
+   * @remark the Layout is established proceeding in two phases
    *         - first the necessary screen extension is determined
    *           and the global profile of tracks is reconstructed
    *         - the second pass verifies and possibly reflows

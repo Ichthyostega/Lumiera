@@ -81,6 +81,8 @@ namespace timeline {
       topLevelContainer.add1 (headerPane_);
       topLevelContainer.add2 (bodyCanvas_);
       displayEvaluation_.wireCanvas (bodyCanvas_);
+      /////////////////////////////////////////////////////////////////////////////////////////////TICKET #1264 : how to pick up initial zoom settings
+      zoomWindow_.attachChangeNotification (signalStructureChange_);
     }
   
   
@@ -103,6 +105,7 @@ namespace timeline {
     signalStructureChange_(); // this _is_ such a change
   }
   
+  /// @remark wiring is established from TimelineCtonroller ctor
   void
   TimelineLayout::wireForkRoot (LayoutElement& forkRoot)
   {

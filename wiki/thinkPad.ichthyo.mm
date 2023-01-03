@@ -24594,6 +24594,66 @@
 <node CREATED="1666889377440" ID="ID_1707480753" MODIFIED="1666889383577" TEXT="Zoom-Gesten"/>
 </node>
 </node>
+<node CREATED="1672703576092" HGAP="227" ID="ID_253168595" MODIFIED="1672703593980" TEXT="Initialisierung" VSHIFT="25">
+<node CREATED="1672703613783" ID="ID_1111316685" MODIFIED="1672703625305" TEXT="anfangs undefiniert / default"/>
+<node COLOR="#338800" CREATED="1672706823302" ID="ID_445391760" MODIFIED="1672707119233" TEXT="changeNotification-Functor verdrahten">
+<linktarget COLOR="#34a5a4" DESTINATION="ID_445391760" ENDARROW="Default" ENDINCLINATION="108;96;" ID="Arrow_ID_1879633887" SOURCE="ID_394283688" STARTARROW="None" STARTINCLINATION="515;22;"/>
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1672706833208" ID="ID_1727841525" MODIFIED="1672706850875" TEXT="kann man direkt mit dem Signal initialisieren?">
+<icon BUILTIN="help"/>
+<node CREATED="1672706877415" ID="ID_1791069589" MODIFIED="1672706882814" TEXT="signalStructureChange_"/>
+<node CREATED="1672706902644" ID="ID_429923017" MODIFIED="1672706904037" TEXT="using SignalStructureChange = sigc::signal&lt;void&gt;;"/>
+<node CREATED="1672706906238" ID="ID_1588783616" MODIFIED="1672706918219">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sollte <i>callable</i>&#160;sein
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1672706942567" ID="ID_525512704" MODIFIED="1672707389514">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...damit w&#252;rde eine std::function konstruiert,
+    </p>
+    <p>
+      welche das Target (per Referenz / smart-ptr) aufruft.<br />
+    </p>
+    <p>
+      Der Change-Listener wird im ZoomWindow zugewiesen,
+    </p>
+    <p>
+      was <a href="https://en.cppreference.com/w/cpp/utility/functional/function/operator%3D">lt. C++-Referenz</a>&#160;den gleichen Effekt hat wie
+    </p>
+    <p>
+      &#160; <font face="Monospaced">function(<a href="http://en.cppreference.com/w/cpp/utility/forward">std::forward</a>&lt;F&gt;(f)).swap(*this);</font>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#8bbab7" DESTINATION="ID_281948392" ENDARROW="Default" ENDINCLINATION="824;0;" ID="Arrow_ID_1340083553" STARTARROW="None" STARTINCLINATION="-507;22;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1672706851970" ID="ID_1116087475" MODIFIED="1672707141049" TEXT="hab das jetzt einfach mal dreist so gemacht">
+<icon BUILTIN="bell"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1672703662072" ID="ID_1923088969" MODIFIED="1672703683678" TEXT="kl&#xe4;ren: wann wird die Pixel-Weite festgelegt?">
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1672708648699" ID="ID_1466789019" MODIFIED="1672708769250" TEXT="#1264 fully integrate ZoomWindow mutators into Timeline display">
+<arrowlink COLOR="#954368" DESTINATION="ID_1985216414" ENDARROW="Default" ENDINCLINATION="1507;68;" ID="Arrow_ID_1698932113" STARTARROW="None" STARTINCLINATION="-35;216;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1541857367446" ID="ID_34718193" MODIFIED="1557498707226" TEXT="Anfragen">
 <node CREATED="1541857411462" ID="ID_1874282992" MODIFIED="1557498707226" TEXT="Pixel-Intervall -&gt; TimeSpan">
@@ -24704,7 +24764,8 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1561036803347" ID="ID_281948392" MODIFIED="1561036824656" TEXT="Sigc-Signal ist ein (ref-counting) smart-ptr">
+<node CREATED="1561036803347" ID="ID_281948392" MODIFIED="1672707022158" TEXT="Sigc-Signal ist ein (ref-counting) smart-ptr">
+<linktarget COLOR="#8bbab7" DESTINATION="ID_281948392" ENDARROW="Default" ENDINCLINATION="824;0;" ID="Arrow_ID_1340083553" SOURCE="ID_525512704" STARTARROW="None" STARTINCLINATION="-507;22;"/>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -24728,6 +24789,10 @@
 <linktarget COLOR="#3a5fc7" DESTINATION="ID_830580579" ENDARROW="Default" ENDINCLINATION="22;64;" ID="Arrow_ID_820625489" SOURCE="ID_1083460430" STARTARROW="None" STARTINCLINATION="69;7;"/>
 <icon BUILTIN="info"/>
 </node>
+</node>
+<node COLOR="#338800" CREATED="1672707067098" ID="ID_394283688" MODIFIED="1672707125211" TEXT="Change-Listener vom ZoomWindow (TimelineLayout) angekoppelt">
+<arrowlink COLOR="#34a5a4" DESTINATION="ID_445391760" ENDARROW="Default" ENDINCLINATION="108;96;" ID="Arrow_ID_1879633887" STARTARROW="None" STARTINCLINATION="515;22;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#435e98" CREATED="1582987902149" ID="ID_1883527171" MODIFIED="1582988088360" TEXT="Details: Struktur&#xe4;nderung auf Timeline-Elemente &#xfc;bertragen">
 <arrowlink COLOR="#7aacc3" DESTINATION="ID_1537299376" ENDARROW="Default" ENDINCLINATION="-632;83;" ID="Arrow_ID_1708561781" STARTARROW="None" STARTINCLINATION="806;36;"/>
@@ -42991,10 +43056,20 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1671324283797" ID="ID_867107887" MODIFIED="1671324383048" TEXT="gem&#xe4;&#xdf; Requirement-Konzept integrieren">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1671324283797" ID="ID_867107887" MODIFIED="1672708773596" TEXT="gem&#xe4;&#xdf; Requirement-Konzept integrieren">
 <arrowlink COLOR="#955977" DESTINATION="ID_748757781" ENDARROW="Default" ENDINCLINATION="-318;688;" ID="Arrow_ID_1882192055" STARTARROW="None" STARTINCLINATION="-49;-276;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1672708781597" ID="ID_1653405728" MODIFIED="1672708797527" TEXT="Change-Listener verdrahtet mit TimelineLayout::signalStructureChange">
+<icon BUILTIN="button_ok"/>
 </node>
+<node COLOR="#338800" CREATED="1672708802759" ID="ID_412094029" MODIFIED="1672708819294" TEXT="Interface DisplayMetric implementiert durch R&#xfc;ckgriff auf das ZoomWindow">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1672708648699" ID="ID_1985216414" MODIFIED="1672708769250" TEXT="#1264 fully integrate ZoomWindow mutators into Timeline display">
+<linktarget COLOR="#954368" DESTINATION="ID_1985216414" ENDARROW="Default" ENDINCLINATION="1507;68;" ID="Arrow_ID_1698932113" SOURCE="ID_1466789019" STARTARROW="None" STARTINCLINATION="-35;216;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667488193842" ID="ID_1347640673" MODIFIED="1667488208549" TEXT="Invarianten">
 <font BOLD="true" NAME="SansSerif" SIZE="14"/>

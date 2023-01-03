@@ -119,12 +119,12 @@ namespace timeline {
        * @param nexus some established connection to the UI-Bus, will be used
        *          to register the embedded TimelineController as communication
        *          partner to respond under the given timeline ID.
-       * @remarks after creation, the widget can just be hooked up and wired like
-       *          any ordinary GTK element; it becomes passive and just responds to
+       * @remarks after creation, the widget can be hooked up and wired like any
+       *          ordinary GTK element; it becomes passive and ready to receive
        *          signals. The active role is played by the controller, which also
        *          responds to mutation messages; this is the only way to populate
        *          the timeline display. Likewise, a timeline shall be deleted by
-       *          sending an respective mutation message to its _parent element,_
+       *          sending a respective mutation message to its _parent element,_
        *          the one that created it, typically also in response to a message.
        *          Non the less it is possible just to delete a TimelineWidget, since
        *          it is a Gtk::Widget, and the controller is also `sigc::trackable`

@@ -171,6 +171,8 @@ namespace timeline {
        * signal to be invoked whenever the virtual structure of the
        * corresponding timeline changes, thus necessitating a new
        * arrangement of the timeline layout.
+       * @remark connected to BodyCanvasWidget::slotStructureChange,
+       *         which causes the drawing code to #triggerDisplayEvaluation()
        */
       SignalStructureChange signalStructureChange_;
 
