@@ -307,6 +307,7 @@ namespace timeline {
     protected: /* ==== Interface: LayoutElement ===== */
       
       void establishLayout (DisplayEvaluation&)  override;
+      void completeLayout (DisplayEvaluation&)   override;
       
     private:/* ===== Internals ===== */
       
@@ -426,27 +427,29 @@ namespace timeline {
   
   
   
-  /** handle the DisplayEvaluation pass for this track and its sub-tracks.
-   */
+  /** handle Phase-1 of the DisplayEvaluation pass for this track and its sub-tracks. */
   inline void
   TrackPresenter::establishLayout (DisplayEvaluation& displayEvaluation)
   {
-    if (displayEvaluation.isCollectPhase())
-      {
-        display_.establishExtension (clips_, markers_);
-        for (auto& subTrack: subFork_)
-          subTrack->establishLayout (displayEvaluation);
-      }
-    else
-      { // recursion first, so all sub-Tracks are already balanced
-        for (auto& subTrack: subFork_)
-          subTrack->establishLayout (displayEvaluation);
-        this->relinkContents();
-        // re-sync and match the header / body display
-        display_.sync_and_balance (displayEvaluation);
-      }
+    ASSERT (displayEvaluation.isCollectPhase());
+    display_.establishExtension (clips_, markers_);
+    for (auto& subTrack: subFork_)
+      subTrack->establishLayout (displayEvaluation);
   }
   
+  /** handle Phase-2 (collect/balancing phase) for this track and its sub-tracks. */
+  inline void
+  TrackPresenter::completeLayout (DisplayEvaluation& displayEvaluation)
+  {
+    ASSERT (not displayEvaluation.isCollectPhase());
+    // recursion first, so all sub-Tracks are already balanced
+    for (auto& subTrack: subFork_)
+      subTrack->completeLayout (displayEvaluation);
+    this->relinkContents();
+    // re-sync and match the header / body display
+    display_.sync_and_balance (displayEvaluation);
+  }
+
   /**
    * Find out about the vertical extension of a single track display.
    * @note will be invoked during the first recursive walk, at which point

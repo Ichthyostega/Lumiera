@@ -80,7 +80,6 @@ namespace timeline {
     {
       topLevelContainer.add1 (headerPane_);
       topLevelContainer.add2 (bodyCanvas_);
-      displayEvaluation_.wireCanvas (bodyCanvas_);
       /////////////////////////////////////////////////////////////////////////////////////////////TICKET #1264 : how to pick up initial zoom settings
       zoomWindow_.attachChangeNotification (signalStructureChange_);
     }
@@ -105,11 +104,16 @@ namespace timeline {
     signalStructureChange_(); // this _is_ such a change
   }
   
-  /// @remark wiring is established from TimelineCtonroller ctor
+  /**
+   * @remark wiring of the Layout/Control structure for DisplayEvaluation can be done
+   *         only after the TimelineCtonroller ctor also initialised the model root
+   */
   void
-  TimelineLayout::wireForkRoot (LayoutElement& forkRoot)
+  TimelineLayout::setupStructure (LayoutElement& forkRoot)
   {
-    displayEvaluation_.wireForkRoot (forkRoot);
+    displayEvaluation_.attach (*this);
+    displayEvaluation_.attach (forkRoot);
+    displayEvaluation_.attach (bodyCanvas_);
   }
 
   Gtk::WidgetPath
@@ -130,6 +134,24 @@ namespace timeline {
   TimelineLayout::triggerDisplayEvaluation()
   {
     displayEvaluation_.perform();
+  }
+  
+  /**
+   * TimelineLayout also participates itself in the DisplayEvaluation,
+   * notably to set up the basic parameters for Zoom management 
+   */
+  void
+  TimelineLayout::establishLayout (DisplayEvaluation&)
+  {
+    int contentWidthPx = bodyCanvas_.getEffectiveHorizontalSize();
+    if (contentWidthPx != zoomWindow_.pxWidth())
+      zoomWindow_.calibrateExtension (contentWidthPx);
+  }
+  
+  void
+  TimelineLayout::completeLayout (DisplayEvaluation&)
+  {
+    /* noting to do for the collect-phase */
   }
 
   

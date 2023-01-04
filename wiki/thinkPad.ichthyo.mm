@@ -19525,7 +19525,7 @@
 </node>
 <node COLOR="#435e98" CREATED="1664308707648" ID="ID_1988489591" MODIFIED="1664308984611" TEXT="Untersuchung mit Trace-Print">
 <icon BUILTIN="info"/>
-<node CREATED="1664308730228" ID="ID_964535587" MODIFIED="1664308762363" TEXT="zum Zeitpunkt der Alloc-Zuteilung haben die nexted-children noch keine Allokation"/>
+<node CREATED="1664308730228" ID="ID_964535587" MODIFIED="1664308762363" TEXT="zum Zeitpunkt der Alloc-Zuteilung haben die nested-children noch keine Allokation"/>
 <node CREATED="1664308866802" ID="ID_993068829" MODIFIED="1664308941471" TEXT="die Alloc-Zuteiltung f&#xfc;r die Kiner passiert irgendwann sp&#xe4;ter">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -19693,7 +19693,7 @@
 <arrowlink COLOR="#fcf2bc" DESTINATION="ID_611179505" ENDARROW="Default" ENDINCLINATION="-47;-40;" ID="Arrow_ID_96952850" STARTARROW="None" STARTINCLINATION="36;39;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1664721403567" ID="ID_1984818373" MODIFIED="1664721416232" TEXT="das w&#xe4;re ein weiterer Ansatzpunkt"/>
-<node CREATED="1664721417261" ID="ID_264816651" MODIFIED="1664721437070" TEXT="das Widget k&#xf6;nnen die Situation &quot;proben&quot;"/>
+<node CREATED="1664721417261" ID="ID_264816651" MODIFIED="1672763811783" TEXT="die Widgets k&#xf6;nnen die Situation &quot;proben&quot;"/>
 </node>
 </node>
 </node>
@@ -20098,7 +20098,12 @@
 <node CREATED="1664836489848" ID="ID_625722238" MODIFIED="1664836671391" TEXT="man mu&#xdf; also ggfs. show_all() aufrufen">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1664836501374" ID="ID_915287836" MODIFIED="1664836659380" TEXT="Kein Problem: Layout-Handling-Code l&#xe4;uft vor dem n&#xe4;chsten DRAW">
+<node CREATED="1672763989377" ID="ID_898557963" MODIFIED="1672764024762" TEXT="Layout-Anpassungen sollte man also machen...">
+<icon BUILTIN="yes"/>
+<node CREATED="1672764001658" ID="ID_1513659794" MODIFIED="1672764011021" TEXT="in den get_preferred_*-VFunks"/>
+<node CREATED="1672764011872" ID="ID_779540257" MODIFIED="1672764022227" TEXT="im on_size_allocate-Callback"/>
+</node>
+<node CREATED="1664836501374" ID="ID_915287836" MODIFIED="1672764716013" TEXT="Kein Problem: Layout-Handling-Code l&#xe4;uft vor dem n&#xe4;chsten DRAW">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20120,6 +20125,7 @@
     </ul>
   </body>
 </html></richcontent>
+<linktarget COLOR="#738fa6" DESTINATION="ID_915287836" ENDARROW="Default" ENDINCLINATION="-35;506;" ID="Arrow_ID_1564122490" SOURCE="ID_327539453" STARTARROW="None" STARTINCLINATION="1322;71;"/>
 <icon BUILTIN="forward"/>
 </node>
 </node>
@@ -24652,6 +24658,46 @@
 <arrowlink COLOR="#954368" DESTINATION="ID_1985216414" ENDARROW="Default" ENDINCLINATION="1507;68;" ID="Arrow_ID_1698932113" STARTARROW="None" STARTINCLINATION="-35;216;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node COLOR="#435e98" CREATED="1672764114942" ID="ID_327539453" MODIFIED="1672765461663" TEXT="Ansatzpunkt: Erfahrungen beim ElementBoxWidget">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+    
+  </head>
+  <body>
+    <p>
+      <u>Fazit</u>: man sollte also die Layout-Berechnungen machen in dem 
+      Zeitraum zwischen dem Aufruf der get_preferred_*-VFunks und dem 
+      on_size_allocate()-callback. Denn in dieser Phase sind die Widgets 
+      bereits gemapped (=einem GDK-Fenster mit Koordinaten zugeordnet) und der <i>visibility-</i>Status 
+      steht bereits fest, aber es wurde noch nichts <i>realized </i>und damit 
+      auch noch nichts (erneut) gezeichnet. Sofern kein &#187;fill-Layout&#171; 
+      verwendet wird, liefern die get_preferred_width|height()-Funktionen als 
+      Standard-Wert genau das, was GTK dann nachfolgend zuteilen wird (die 
+      MIN-Werte werden praktisch nicht verwendet). Sp&#228;ter k&#246;nnten Widgets sich 
+      noch verkleinern, und GTK k&#246;nnte eine gr&#246;&#223;ere Allokation zuteilen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#55358;&#56370; Es gibt <b>keine praktikable M&#246;glichkeit</b>, die 
+      aktuelle <b>reale Gr&#246;&#223;e </b>in Pixeln von Au&#223;en und generisch 
+      f&#252;r jedes Widget in Erfahrung zu bringen. Wenn man selber ein 
+      custom-Widget schreibt, kann man die reale size-Allocation wegspeichern 
+      und zug&#228;nglich machen; dann bleibt aber immer noch das Problem mit den 
+      Dekorationen und dem Padding per CSS
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#738fa6" DESTINATION="ID_915287836" ENDARROW="Default" ENDINCLINATION="-35;506;" ID="Arrow_ID_1564122490" STARTARROW="None" STARTINCLINATION="1322;71;"/>
+<linktarget COLOR="#6575b0" DESTINATION="ID_327539453" ENDARROW="Default" ENDINCLINATION="-654;33;" ID="Arrow_ID_47233640" SOURCE="ID_123234016" STARTARROW="None" STARTINCLINATION="-417;28;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1672787519757" ID="ID_650213030" MODIFIED="1672787861937" TEXT="Pixel-Weite kalibrieren: zu Beginn der Display-Evaluation einschleifen">
+<arrowlink COLOR="#4a449e" DESTINATION="ID_1189311522" ENDARROW="Default" ENDINCLINATION="785;29;" ID="Arrow_ID_1573433988" STARTARROW="None" STARTINCLINATION="241;10;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 </node>
@@ -25064,10 +25110,34 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611920958639" ID="ID_672952621" MODIFIED="1611920980292" TEXT="2/2021">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1611920958639" ID="ID_672952621" MODIFIED="1672787275660" TEXT="2/2021">
 <node COLOR="#338800" CREATED="1611920993410" ID="ID_73368483" MODIFIED="1612641365225" TEXT="Ziel: vorl&#xe4;ufige Clip-Anzeige an der richtigen Stelle">
 <icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1672787245084" ID="ID_981886029" MODIFIED="1672787302614" TEXT="(ist inzwischen der Fall)">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1672787253663" ID="ID_1729285584" MODIFIED="1672787282988" TEXT="Winter 2022/23">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1672787313919" ID="ID_1746559922" MODIFIED="1672797007708" TEXT="integriere ZoomWindow">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1672787325263" ID="ID_1202050801" MODIFIED="1672787341544" TEXT="Change-Listener dort kann ebenfalls Display-Evaluation ausl&#xf6;sen"/>
+<node CREATED="1672787342676" ID="ID_1189311522" MODIFIED="1672787960019" TEXT="aber auch: ZoomWindow selber mu&#xdf; von Geometrie-&#xc4;nderungen erfahren">
+<arrowlink COLOR="#4c7ef4" DESTINATION="ID_973993644" ENDARROW="Default" ENDINCLINATION="-1199;-155;" ID="Arrow_ID_1196387900" STARTARROW="None" STARTINCLINATION="2666;104;"/>
+<linktarget COLOR="#4a449e" DESTINATION="ID_1189311522" ENDARROW="Default" ENDINCLINATION="785;29;" ID="Arrow_ID_1573433988" SOURCE="ID_650213030" STARTARROW="None" STARTINCLINATION="241;10;"/>
+<linktarget COLOR="#4a449e" DESTINATION="ID_1189311522" ENDARROW="Default" ENDINCLINATION="1548;60;" ID="Arrow_ID_751989601" SOURCE="ID_37048779" STARTARROW="None" STARTINCLINATION="1439;55;"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1672787636743" ID="ID_1344084462" MODIFIED="1672797005517" TEXT="Flexibilisierung Display-Evaluation">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1672787680391" ID="ID_1852720730" MODIFIED="1672787701739" TEXT="ist bisher zu &#x201e;fest gedrahtet&#x201c;">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1672787656282" ID="ID_1938149016" MODIFIED="1672787679639" TEXT="mu&#xdf; weitere Komponenten integrieren k&#xf6;nnen">
+<node CREATED="1672787706195" ID="ID_1709964238" MODIFIED="1672787709536" TEXT="ZoomWindow"/>
+<node CREATED="1672787710007" ID="ID_894239833" MODIFIED="1672787717634" TEXT="Koordination im LayoutManager"/>
+</node>
 </node>
 </node>
 </node>
@@ -25559,6 +25629,12 @@
 <node CREATED="1583435618709" ID="ID_1501002443" MODIFIED="1583435629364" TEXT="es ist die DisplayEvaluation selber">
 <icon BUILTIN="idea"/>
 </node>
+<node CREATED="1672787134816" ID="ID_973993644" MODIFIED="1672787960019" TEXT="Evaluation-Protocol">
+<linktarget COLOR="#4c7ef4" DESTINATION="ID_973993644" ENDARROW="Default" ENDINCLINATION="-1199;-155;" ID="Arrow_ID_1196387900" SOURCE="ID_1189311522" STARTARROW="None" STARTINCLINATION="2666;104;"/>
+<icon BUILTIN="info"/>
+<node CREATED="1672787147372" ID="ID_434415256" MODIFIED="1672787159297" TEXT="es wird in zwei Phasen alles besucht"/>
+<node CREATED="1672787160077" ID="ID_1477021297" MODIFIED="1672787169815" TEXT="Besuch erfolgt jeweils in &#xbb;Layout-Ordnung&#xab;"/>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1582995826081" ID="ID_1814756232" MODIFIED="1583537369744" TEXT="Evaluation-Ctx?">
 <icon BUILTIN="button_ok"/>
@@ -25602,6 +25678,14 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583010104257" ID="ID_82409060" MODIFIED="1583537388690" TEXT="Evaluation-Pass">
 <linktarget COLOR="#f6e1c2" DESTINATION="ID_82409060" ENDARROW="Default" ENDINCLINATION="-366;30;" ID="Arrow_ID_1110289108" SOURCE="ID_430878592" STARTARROW="None" STARTINCLINATION="-2400;-277;"/>
 <icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1672796917244" ID="ID_1182384811" MODIFIED="1672796930646" TEXT="DisplayManager selber....">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1672796932502" ID="ID_503407567" MODIFIED="1672796982107" TEXT="Einrichtung des ZoomWindow pr&#xfc;fen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1672796940850" ID="ID_1966474939" MODIFIED="1672796954415" TEXT="hierf&#xfc;r vom BodyCanvas eine effektive Weite in Pixel beziehen"/>
+<node CREATED="1672796964890" ID="ID_1604594120" MODIFIED="1672796979603" TEXT="ggfs. die ZoomWindow::pxWidth() neu kalibrieren"/>
+</node>
+</node>
 <node COLOR="#338800" CREATED="1583010115679" ID="ID_181195318" MODIFIED="1583677222280" TEXT="alle Tracks">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583010186970" ID="ID_1754142891" MODIFIED="1583677227523" TEXT="Ping-Pong auf DisplayFrame ausl&#xf6;sen">
@@ -29216,6 +29300,15 @@
 </html></richcontent>
 <icon BUILTIN="flag-yellow"/>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1672798667029" ID="ID_1699842831" MODIFIED="1672799054739" TEXT="Integration ZoomWindow: funktioniert nicht (mehr)">
+<linktarget COLOR="#ac3f80" DESTINATION="ID_1699842831" ENDARROW="Default" ENDINCLINATION="-1384;79;" ID="Arrow_ID_927325344" SOURCE="ID_133007183" STARTARROW="None" STARTINCLINATION="-1848;-74;"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1672798696337" ID="ID_1553490887" MODIFIED="1672798742711" TEXT="greife jetzt ScrolledWindow::get_allocated_width() ab"/>
+<node CREATED="1672798745175" ID="ID_399045239" MODIFIED="1672798762372" TEXT="kalibriere damit das ZoomWindow, und beziehe davon dann die Canvas-Gr&#xf6;&#xdf;e"/>
+<node CREATED="1672798763432" ID="ID_485578749" MODIFIED="1672798787610" TEXT="horizontale Scrollbar blockt und wird nach rechts beschnitten">
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 </node>
@@ -43064,6 +43157,17 @@
 </node>
 <node COLOR="#338800" CREATED="1672708802759" ID="ID_412094029" MODIFIED="1672708819294" TEXT="Interface DisplayMetric implementiert durch R&#xfc;ckgriff auf das ZoomWindow">
 <icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1672787519757" ID="ID_37048779" MODIFIED="1672787852442" TEXT="Pixel-Weite kalibrieren: zu Beginn der Display-Evaluation einschleifen">
+<arrowlink COLOR="#4a449e" DESTINATION="ID_1189311522" ENDARROW="Default" ENDINCLINATION="1548;60;" ID="Arrow_ID_751989601" STARTARROW="None" STARTINCLINATION="1439;55;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1672798860387" ID="ID_981451006" MODIFIED="1672798872066" TEXT="Feedback auf Scrolling">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1672798873057" ID="ID_133007183" MODIFIED="1672799054739" TEXT="horizontale Canvas-Breite kommt nicht korrekt an">
+<arrowlink COLOR="#ac3f80" DESTINATION="ID_1699842831" ENDARROW="Default" ENDINCLINATION="-1384;79;" ID="Arrow_ID_927325344" STARTARROW="None" STARTINCLINATION="-1848;-74;"/>
+<icon BUILTIN="broken-line"/>
+</node>
 </node>
 </node>
 </node>
@@ -67440,6 +67544,55 @@
 </html></richcontent>
 </node>
 </node>
+</node>
+</node>
+<node CREATED="1672764993934" ID="ID_123234016" MODIFIED="1672765455562" TEXT="Erfahrungen: custom Layout-Management">
+<arrowlink COLOR="#6575b0" DESTINATION="ID_327539453" ENDARROW="Default" ENDINCLINATION="-654;33;" ID="Arrow_ID_47233640" STARTARROW="None" STARTINCLINATION="-417;28;"/>
+<node CREATED="1672765077242" ID="ID_925455980" MODIFIED="1672765379771" TEXT="stehen in Konkurrenz zu GTK&apos;s eigenen Management-Operationen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...per Design von GTK sind nur wenig Eingriffsm&#246;glichkeiten vorgesehen; stattdessen soll man die Layout-Manager nutzen, die das Layout-reflow automatisch erledigen. Was man definitiv tun kann ist, aus den get_preferred_*()-VFunks dynamisch angepa&#223;te Werte zu liefern
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1672765109492" ID="ID_1611765335" MODIFIED="1672765254689">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      man kann sich nur <i>dazwischen schalten</i>&#160;und auf Stabilisierung hoffen
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wenn man in der Phase der Layout-Steuerung eingreift, und einzelne Elemente ver&#228;ndert, mu&#223; man durch <i>&quot;invalidation&quot; </i>daf&#252;r sorgen, da&#223; GTK die Layout-Berechnung sp&#228;ter nochmal macht, und dann hoffen, da&#223; sich in diesem zweiten (oder N-ten) Durchgang keine &#196;nderung mehr ergibt.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1672765394824" ID="ID_1136392333" MODIFIED="1672765423034">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sofern in dieser Phase ein Widget <i>visible </i>ist, stimmen auch seine Layout-Antworten
+    </p>
+  </body>
+</html></richcontent>
 </node>
 </node>
 </node>

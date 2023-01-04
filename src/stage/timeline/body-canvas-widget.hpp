@@ -171,6 +171,8 @@ namespace timeline {
           return contentArea_.get_vadjustment();
         }
       
+      int getEffectiveHorizontalSize()  const;
+      
     protected: /* ==== Interface: CanvasHook ===== */
       
       void hook (Gtk::Widget&, int xPos=0, int yPos=0) override;
@@ -182,6 +184,7 @@ namespace timeline {
     protected: /* ==== Interface: LayoutElement ===== */
       
       void establishLayout (DisplayEvaluation&)        override;
+      void completeLayout (DisplayEvaluation&)         override;
       
     private:/* ===== Internals ===== */
       

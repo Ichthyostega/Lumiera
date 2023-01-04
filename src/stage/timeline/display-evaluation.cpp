@@ -36,7 +36,7 @@
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <algorithm>
 //#include <vector>
@@ -50,6 +50,7 @@
 //using sigc::ptr_fun;
 //using std::cout;
 //using std::endl;
+using util::isnil;
 
 
 namespace stage {
@@ -86,18 +87,19 @@ namespace timeline {
   {
     this->reset();
     // Phase-1 : collect Layout information
-    forkRoot_->establishLayout (*this);
-    canvas_->establishLayout (*this);
+    for (auto elm : elms_)
+      elm->establishLayout (*this);
     // Phase-2 : reflow and balance the Layout
     collectLayout_ = false;
-    forkRoot_->establishLayout (*this);
+    for (auto elm : elms_)
+      elm->completeLayout (*this);
   }
   
   /** pristine state for the next DisplayEvaluation pass */
   void
   DisplayEvaluation::reset()
   {
-    ASSERT (forkRoot_ and canvas_);
+    ASSERT (not isnil(elms_));
     collectLayout_ = true;
   }
 

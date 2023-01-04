@@ -57,6 +57,10 @@
  ** to some of the embedded GTK widgets being resized -- which typically will re-trigger our custom drawing
  ** code and consequently the DisplayEvaluation at a later time point in UI event processing. So the evaluation
  ** is triggered repeatedly, until the layout is _globally balanced_ and no further resizing is necessary.
+ ** The evaluation itself is carried out in _two phases:_ first we collect data and establish the layout
+ ** requirements, then, in a second pass, we finalise and round up the layout. Each phase calls its own
+ ** set of callback functions, and always in »layout order« (top-down and from left to right).
+ ** 
  ** 
  ** @todo WIP-WIP-WIP as of 3/2020
  ** 
@@ -72,6 +76,7 @@
 //#include "lib/util.hpp"
 
 //#include <sigc++/signal.h>
+#include <vector>
 
 
 
@@ -93,6 +98,7 @@ namespace timeline {
       virtual ~LayoutElement();        ///< this is an interface
       
       virtual void establishLayout (DisplayEvaluation&)  =0;
+      virtual void completeLayout (DisplayEvaluation&)   =0;
     };
   
   
@@ -103,18 +109,15 @@ namespace timeline {
   class DisplayEvaluation
     : util::NonCopyable
     {
-      LayoutElement* forkRoot_{nullptr};
-      LayoutElement* canvas_{nullptr};
+      std::vector<LayoutElement*> elms_;
       
       bool collectLayout_{true};
       
     public:
+      void attach(LayoutElement& e) { elms_.push_back(&e); }
       void perform();
       
-      void wireForkRoot (LayoutElement& r) { forkRoot_ = &r; }
-      void wireCanvas (LayoutElement& c)   { canvas_ = &c; }
-      
-      bool isCollectPhase()  const         { return this->collectLayout_; }
+      bool isCollectPhase()  const  { return this->collectLayout_; }
       
     private:/* ===== Internals ===== */
       void reset();

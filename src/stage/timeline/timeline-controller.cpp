@@ -88,7 +88,7 @@ namespace timeline {
     , markers_{}
     , fork_{new TrackPresenter{trackID, nexus, layoutManager}}
     {
-      layoutManager.wireForkRoot (*fork_);
+      layoutManager.setupStructure (*fork_);
     }
   
   

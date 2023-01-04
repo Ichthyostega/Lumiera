@@ -97,7 +97,6 @@ namespace timeline {
   
   using lib::time::Time;
   
-  class LayoutElement;
   class TrackHeadWidget;
   class TrackBody;
   
@@ -111,6 +110,7 @@ namespace timeline {
     : public model::ZoomMetric<DisplayManager>
     , protected model::ViewHook<TrackHeadWidget>
     , protected model::ViewHook<TrackBody>
+    , public LayoutElement
     {
       Glib::PropertyProxy<int> paneSplitPosition_;
       
@@ -125,14 +125,19 @@ namespace timeline {
       
       /** @internal anchor the display of the root track into the two display panes */
       void installRootTrack (TrackHeadWidget&,TrackBody&);
-      void wireForkRoot (LayoutElement&);
+      void setupStructure   (LayoutElement&);
       
       Gtk::WidgetPath getBodyWidgetPath()  const;
       
       
-    protected: /* ==== Interface: LayoutManager===== */
+    protected: /* ==== Interface: LayoutManager ===== */
       
       void triggerDisplayEvaluation()  override;
+
+    protected: /* ==== Interface: LayoutElement ===== */
+      
+      void establishLayout (DisplayEvaluation&)  override;
+      void completeLayout (DisplayEvaluation&)   override;
       
       
     protected: /* ==== Interface: DisplayViewHooks===== */

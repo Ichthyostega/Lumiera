@@ -510,6 +510,19 @@ namespace timeline {
   
   
   /**
+   * Find out the extension in pixels currently allocated for the content display.
+   * @return number of pixels reasonably representing the actual visible with in the window
+   */
+  int
+  BodyCanvasWidget::getEffectiveHorizontalSize()  const
+  {
+    int widthForDebug = contentArea_.get_allocated_width();
+    widthForDebug = util::max (widthForDebug - 100, 100);   ////////////////////////////////////////TODO: visual debugging
+    return widthForDebug;
+  }
+  
+  
+  /**
    * After the (recent) [display evaluation pass](\ref DisplayManager::triggerDisplayEvaluation() )
    * has negotiated the required space for the currently presented content, this function adjusts
    * the actual Gtk::Layout canvas extension to match. Note that we use two Gtk::Layout controls,
@@ -584,7 +597,7 @@ namespace timeline {
    * @todo 2/2020 WIP
    */
   void
-  BodyCanvasWidget::establishLayout (DisplayEvaluation& displayEvaluation)
+  BodyCanvasWidget::establishLayout (DisplayEvaluation&)
   {
     // Traverse TrackBody structure and populate the (track)profile
     uint contentHeight = rootBody_->establishTrackSpace (profile_);
@@ -593,7 +606,11 @@ namespace timeline {
     
     ///TODO: anything to publish into the DisplayEvaluation ??
   }
-
+  
+  void
+  BodyCanvasWidget::completeLayout (DisplayEvaluation&)
+  { /* nothing to do */ }
+  
   
   
   
@@ -608,7 +625,7 @@ namespace timeline {
   
   /**
    * Custom drawing of the timeline content area.
-   * The inherited `Gtk::Layout::on_raw(Context)` handles all drawing of child widgets placed onto the virtual canvas.
+   * The inherited `Gtk::Layout::on_draw(Context)` handles all drawing of child widgets placed onto the virtual canvas.
    * Thus we need to fill in the structure of the tracks in the timeline background, and any non-standard overlay elements,
    * including tags and markers, indicators, locators (edit point and playhead) and (semi-transparent) range selections.
    * @todo according to the documentation for `signal_draw()`, the framework passes the actually visible area as clipping
