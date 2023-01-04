@@ -25015,7 +25015,7 @@
 <arrowlink COLOR="#d44574" DESTINATION="ID_1758102270" ENDARROW="Default" ENDINCLINATION="161;13;" ID="Arrow_ID_533711629" STARTARROW="None" STARTINCLINATION="663;0;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node CREATED="1582988935367" ID="ID_829958563" MODIFIED="1582989184532" TEXT="Problem mit automatischer Scrollbar">
+<node CREATED="1582988935367" ID="ID_829958563" MODIFIED="1672875280897" TEXT="Problem mit automatischer Scrollbar">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28033,7 +28033,14 @@
 <node CREATED="1555082703199" ID="ID_81861736" MODIFIED="1557498707228" TEXT="oben f&#xfc;r den Time-Ruler"/>
 <node CREATED="1555082710728" ID="ID_676334326" MODIFIED="1557498707228" TEXT="unten f&#xfc;r die Track-Struktur"/>
 </node>
-<node CREATED="1672872295046" ID="ID_1036782095" MODIFIED="1672872302033" TEXT="srolled pane"/>
+<node CREATED="1672872295046" ID="ID_1036782095" MODIFIED="1672872302033" TEXT="srolled pane">
+<node CREATED="1672874821582" ID="ID_561243870" MODIFIED="1672874837608" TEXT="jeder Canvas sitzt in einem ScrolledWindow"/>
+<node CREATED="1672874838956" ID="ID_1009639331" MODIFIED="1672874865844" TEXT="aber nur f&#xfc;r die contentArea sind die Scrollbars sichtbar"/>
+<node CREATED="1672874867008" ID="ID_1904830870" MODIFIED="1672875337286" TEXT="der Ruler-Canvas l&#xe4;uft als Slave horizontal mit (und belegt stets/spreizend die volle H&#xf6;he)">
+<linktarget COLOR="#6bbdbc" DESTINATION="ID_1904830870" ENDARROW="Default" ENDINCLINATION="693;23;" ID="Arrow_ID_1587189163" SOURCE="ID_850567919" STARTARROW="None" STARTINCLINATION="39;-248;"/>
+</node>
+<node CREATED="1672874901515" ID="ID_607550188" MODIFIED="1672874927495" TEXT="das Track-Head Patchbay-Widget l&#xe4;uft als Slave beim vertikalen Scrolling mit"/>
+</node>
 </node>
 <node CREATED="1555198475915" ID="ID_216668392" MODIFIED="1557498707228" TEXT="Koordinieren der draw-Aktivit&#xe4;t">
 <node CREATED="1555198484257" ID="ID_447173098" MODIFIED="1557498707228" TEXT="Problem: Aufteilung">
@@ -29305,7 +29312,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1566487282848" ID="ID_771271362" MODIFIED="1672867836660" TEXT="Workaround: jeweils erneut set_size_request">
+<node COLOR="#435e98" CREATED="1566487282848" ID="ID_771271362" MODIFIED="1672875017148" TEXT="Workaround: jeweils explizit set_size_request">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -29407,28 +29414,19 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="idea"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566487379550" ID="ID_272047983" MODIFIED="1576282358055" TEXT="TODO: genauer machen, und nur f&#xfc;r den Ruler-Canvas">
+</node>
+<node COLOR="#338800" CREATED="1566487379550" ID="ID_272047983" MODIFIED="1672875229852" TEXT="aber horizontal nur eine Minimal-Weite (100px)">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      im Moment setze ich einen brachialen Size-Request auf die gesamte Canvas-Gr&#246;&#223;e.
-    </p>
-    <p>
-      Die umschlie&#223;ende Box handhabt das aber anscheinend korrekt, und kappt die &#252;berm&#228;&#223;ige Weite
-    </p>
-    <p>
-      auf den Platz, der ihr selber zugewiesen wurde. Aber das erscheint mir fragil;
-    </p>
-    <p>
-      ich sollte diese Logik besser selber explizit ausprogrammieren
+      Eigentlich ben&#246;tigt wird das &#187;Aufspreizen&#171; nur in der vertikalen Dimension, damit sich die umschlie&#223;ende Box sinngem&#228;&#223; anpa&#223;t; im Grunde w&#252;rde es sogar gen&#252;gen, nur das obere (Ruler)-ScrolledWindow zu dimensionieren, aber ich halte es f&#252;r sicherer, vom eigentlichen innen liegenden Canvas aus aufzuspreizen, schon wegen der ggfs. dynamischen Dekoration f&#252;r die Scrollbar. Als Kompromi&#223; setze ich jetzt horizontal eine Mindest-Ausdehnung von 100px (das erscheint ohnehin sinnvoll f&#252;r eine Timeline), aber in vertikaler Richtung setze ich einen size-Request auf die berechnete Canvas-H&#246;he
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="flag-yellow"/>
-</node>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1672798667029" ID="ID_1699842831" MODIFIED="1672799054739" TEXT="Integration ZoomWindow: funktioniert nicht (mehr)">
@@ -29525,13 +29523,22 @@
 </html></richcontent>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1672875251348" ID="ID_850567919" MODIFIED="1672875337286" TEXT="Umbau: auch Ruler-Canvas in ein ScrolledWindow legen; dieses arbeitet als &#xbb;Slave&#xab;">
+<arrowlink COLOR="#6bbdbc" DESTINATION="ID_1904830870" ENDARROW="Default" ENDINCLINATION="693;23;" ID="Arrow_ID_1587189163" STARTARROW="None" STARTINCLINATION="39;-248;"/>
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>
 <node CREATED="1672872402655" ID="ID_57784666" MODIFIED="1672872407100" TEXT="dynamische Anzeige">
 <node CREATED="1672872408415" ID="ID_1423497948" MODIFIED="1672872423235" TEXT="Zoom koordinieren"/>
 <node CREATED="1672872424309" ID="ID_1732041124" MODIFIED="1672872432016" TEXT="Scrolling koordinieren">
-<node CREATED="1672872433811" ID="ID_814093517" MODIFIED="1672872453293" TEXT="Header / Patchbay ist an VAdjustment vom Body angekoppelt"/>
+<node COLOR="#338800" CREATED="1672872433811" ID="ID_814093517" MODIFIED="1672874787868" TEXT="Header / Patchbay ist an VAdjustment vom Body angekoppelt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1672874789195" ID="ID_1285847360" MODIFIED="1672874812664" TEXT="Ruler-Canvas ist an HAdjustment vom Content-Canvas angekoppelt">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>
@@ -32680,7 +32687,7 @@
 <node CREATED="1567689612779" HGAP="9" ID="ID_1142611198" MODIFIED="1567689628166" TEXT="Probleme" VSHIFT="2">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1567689637751" ID="ID_1333933230" MODIFIED="1567689647034" TEXT="Scrollbar verschwindet nach Fokus-Verlust">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582988892133" ID="ID_483543888" MODIFIED="1582989024765" TEXT="#1208 automatic vertical scrollbar malfunctioning">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582988892133" ID="ID_483543888" MODIFIED="1582988892133" TEXT="#1208 automatic vertical scrollbar malfunctioning">
 <linktarget COLOR="#8c6572" DESTINATION="ID_483543888" ENDARROW="Default" ENDINCLINATION="544;-34;" ID="Arrow_ID_759404699" SOURCE="ID_829958563" STARTARROW="None" STARTINCLINATION="395;28;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>

@@ -92,6 +92,7 @@ namespace timeline {
   
   using lib::time::TimeValue;
   
+  using PAdjustment = Glib::RefPtr<Gtk::Adjustment>;
   using CairoC = Cairo::RefPtr<Cairo::Context> const&;
   
   class DisplayManager;
@@ -139,7 +140,7 @@ namespace timeline {
    * as often as necessary by "playback" of this profile.
    * On the other hand, for attachment of sub-widgets onto the canvas (Clips, Effects, Markers)
    * we use the Interface model::CanvasHook, which allows us to break down the access hierarchically.
-   * Each sub-Track can be outfitted with its own "virtual canvas", exposed as delegating CanvasHook. 
+   * Each sub-Track can be outfitted with its own "virtual canvas", exposed as delegating CanvasHook.
    * @todo WIP-WIP as of 6/2019
    */
   class BodyCanvasWidget
@@ -152,6 +153,7 @@ namespace timeline {
       TrackBody* rootBody_;
       
       Gtk::ScrolledWindow contentArea_;
+      Gtk::ScrolledWindow rulerArea_;
       TimelineCanvas rulerCanvas_;
       TimelineCanvas mainCanvas_;
       

@@ -427,6 +427,7 @@ namespace timeline {
     , profile_{}
     , rootBody_{nullptr}
     , contentArea_{}
+    , rulerArea_{contentArea_.get_hadjustment(), Gtk::Adjustment::create (0,0,0,0,0,0)}
     , rulerCanvas_{makeRenderer<Grounding,RULER>(layout_,getProfile), makeRenderer<Overlay,RULER>(layout_,getProfile)}
     , mainCanvas_ {makeRenderer<Grounding,BODY> (layout_,getProfile), makeRenderer<Overlay,BODY> (layout_,getProfile)}
     {
@@ -448,9 +449,13 @@ namespace timeline {
       
       this->set_border_width (0);
       this->property_expand() = true;   // dynamically grab any available additional space
-      this->pack_start (rulerCanvas_, Gtk::PACK_SHRINK);
+      this->pack_start (rulerArea_,   Gtk::PACK_SHRINK);
       this->pack_start (contentArea_, Gtk::PACK_EXPAND_WIDGET);
       
+      rulerArea_.set_shadow_type (Gtk::SHADOW_NONE);
+      rulerArea_.set_policy (Gtk::POLICY_NEVER, Gtk::POLICY_NEVER);
+      rulerArea_.property_expand() = false;
+      rulerArea_.add (rulerCanvas_);
       contentArea_.set_shadow_type (Gtk::SHADOW_NONE);
       contentArea_.set_policy (Gtk::POLICY_ALWAYS, Gtk::POLICY_ALWAYS);  // always use both scrollbars ////////////////TICKET #1208 : 2/2002 Gtk::POLICY_AUTOMATIC hides scrollbar after focus loss 
       contentArea_.property_expand() = true;                            //  dynamically grab additional space
