@@ -28028,10 +28028,12 @@
 </node>
 </node>
 <node CREATED="1555082672083" ID="ID_1185653910" MODIFIED="1557498707228" TEXT="BodyCanvasWidget">
-<node CREATED="1555082682753" ID="ID_1277383747" MODIFIED="1557498707228" TEXT="verwaltet und organisiert die Struktur"/>
+<node CREATED="1555082682753" ID="ID_1277383747" MODIFIED="1557498707228" TEXT="verwaltet und organisiert die Struktur">
 <node CREATED="1555082693273" ID="ID_723726755" MODIFIED="1557498707228" TEXT="hat zwei konkrete TimelineCanvas">
 <node CREATED="1555082703199" ID="ID_81861736" MODIFIED="1557498707228" TEXT="oben f&#xfc;r den Time-Ruler"/>
 <node CREATED="1555082710728" ID="ID_676334326" MODIFIED="1557498707228" TEXT="unten f&#xfc;r die Track-Struktur"/>
+</node>
+<node CREATED="1672872295046" ID="ID_1036782095" MODIFIED="1672872302033" TEXT="srolled pane"/>
 </node>
 <node CREATED="1555198475915" ID="ID_216668392" MODIFIED="1557498707228" TEXT="Koordinieren der draw-Aktivit&#xe4;t">
 <node CREATED="1555198484257" ID="ID_447173098" MODIFIED="1557498707228" TEXT="Problem: Aufteilung">
@@ -29110,6 +29112,21 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1565282669252" ID="ID_1077695296" MODIFIED="1565282697164" TEXT="horizontal zu zeichnende Spanne">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1672843594185" ID="ID_1806332659" MODIFIED="1672843600804" TEXT="Ausdehnung des Canvas">
+<node CREATED="1672843603784" ID="ID_547988829" MODIFIED="1672843680818" TEXT="initial festlegen">
+<arrowlink COLOR="#4b3d60" DESTINATION="ID_1283622298" ENDARROW="Default" ENDINCLINATION="-940;-885;" ID="Arrow_ID_425073157" STARTARROW="None" STARTINCLINATION="-693;122;"/>
+</node>
+<node CREATED="1672843689370" ID="ID_1279756396" MODIFIED="1672843707230" TEXT="reale Ausdehnung vom ScrolledWindow contentArea_">
+<node COLOR="#435e98" CREATED="1672843720006" ID="ID_1969670799" MODIFIED="1672843870753" TEXT="siehe: Size-Allokation auf GTK Widget">
+<arrowlink COLOR="#536cc0" DESTINATION="ID_1464608958" ENDARROW="Default" ENDINCLINATION="-1020;1248;" ID="Arrow_ID_1013900284" STARTARROW="None" STARTINCLINATION="-2004;139;"/>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1672843882154" ID="ID_1978068021" MODIFIED="1672845093813" TEXT="Widget::get_allocation|width|height (aktuell g&#xfc;ltiger Wert incl Alignment/Modifikationen)">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1978068021" ENDARROW="Default" ENDINCLINATION="323;11;" ID="Arrow_ID_920771700" SOURCE="ID_400583877" STARTARROW="None" STARTINCLINATION="462;0;"/>
+</node>
+<node CREATED="1672843927836" ID="ID_477932212" MODIFIED="1672844195140" TEXT="Widget::get_allocated_size  (was gesetzt wurde, aber bereits ohne Dekoration)"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1565282697992" ID="ID_1761874542" MODIFIED="1565282702979" TEXT="vertikal belegter Raum">
 <icon BUILTIN="flag-yellow"/>
@@ -29151,7 +29168,8 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566406980688" ID="ID_196847136" MODIFIED="1566406988165" TEXT="Layout-Anpsassungen">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566407065037" ID="ID_548414744" MODIFIED="1566487490014" TEXT="Scrollbar anpassen nach Gr&#xf6;&#xdf;en&#xe4;nderung">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566407065037" ID="ID_548414744" MODIFIED="1672842637926" TEXT="Scrollbar anpassen nach Gr&#xf6;&#xdf;en&#xe4;nderung">
+<linktarget COLOR="#795b80" DESTINATION="ID_548414744" ENDARROW="Default" ENDINCLINATION="-897;636;" ID="Arrow_ID_1661740759" SOURCE="ID_679418178" STARTARROW="Default" STARTINCLINATION="-286;-17;"/>
 <icon BUILTIN="pencil"/>
 <node COLOR="#435e98" CREATED="1566407096905" ID="ID_1463503563" MODIFIED="1566487536944" TEXT="reagiert noch nicht...">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -29264,19 +29282,130 @@
 <linktarget COLOR="#16d17f" DESTINATION="ID_489535600" ENDARROW="Default" ENDINCLINATION="-80;-272;" ID="Arrow_ID_1038229013" SOURCE="ID_832049284" STARTARROW="None" STARTINCLINATION="-102;166;"/>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1566487213692" ID="ID_617175720" MODIFIED="1576282358055" TEXT="sollte eigentlich automatisch funktionieren">
+<node CREATED="1566487213692" ID="ID_617175720" MODIFIED="1672867705882" TEXT="sollte eigentlich automatisch funktionieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        die Funktionen zum expliziten Setzen und re-Sizing sind deprecated.
+      </li>
+      <li>
+        eigentlich sollte die Box automatisch auf Gr&#246;&#223;en&#228;nderungen der Kind-Elemente reagieren gem&#228;&#223; Flow/Fill-Layout
+      </li>
+      <li>
+        f&#252;r klassische Widgets wie z.B. Button funktioniert das auch
+      </li>
+      <li>
+        aber auf ein set_size() auf dem Canvas reagiert das Layout anscheinend nicht
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1566487282848" ID="ID_771271362" MODIFIED="1672867836660" TEXT="Workaround: jeweils erneut set_size_request">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      die Funktionen zum expliziten Setzen und re-Sizing sind deprecated.
+      <u>Anmerkung 1/2023</u>: seinerzeit habe ich die Mechanik der Layout-Zuteilung noch nicht wirklich verstanden
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">commit fc5eaf857c687d769df22d6f98a25e8e359e7c49 </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">Author: Ichthyostega &lt;prg@ichthyostega.de&gt; </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">Date:&#160;&#160;&#160;Thu Aug 22 17:34:32 2019 +0200 </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160;&#160;Timeline: find a workaround to cause the Box to reflow the rulerCanvas </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160; </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160;&#160;seemingly, the Box with PACK_SHRINK allocates a zero height to the rulerCanvas initally, </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160;&#160;which is correct at that point, since the widgets are not yet realised. </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160;&#160;However, when we later set_size() on the rulerCanvas, the enclosing Box should reflow. </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160;&#160;It does indeed if the child widget is a button or something similar, however, </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160;&#160;somehow this reflowing does not work when we set_size on the canvas. </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160; </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160;&#160;A workaround is to place a new set_size_request(). </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160; </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160;&#160;TODO: do this more precisely, and only on the rulerCanvas. To the contrary, </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160;&#160;the mainCanvas is placed into a scolling-pane and thus does not need a size-Request. </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160;&#160;Moreover, the latter automatically communicates with the hadjustment() / vadjustment() of </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160;&#160;the enclosing scrollbars. </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">commit 2390385dc50a8504336f5e1fa1a5dc35eca58f2f </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">Author: Ichthyostega &lt;prg@ichthyostega.de&gt; </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">Date:&#160;&#160;&#160;Wed Aug 21 19:13:55 2019 +0200 </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160;&#160;Timeline: implement function to set the drawing canvas size </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160; </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160;&#160;as can be verified with the debugger, it sets the correct sizes now. </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160;&#160;And it is called only once (unless the content size actually changes). </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160; </font>
+    </p>
+    <p>
+      <font color="#4d2a27" face="Monospaced" size="2">&#160;&#160;&#160;&#160;TODO: however, the visible display of the GTK widgets is not adjusted </font>
     </p>
   </body>
 </html></richcontent>
-</node>
-<node CREATED="1566487282848" ID="ID_771271362" MODIFIED="1566487296971" TEXT="Workaround: jeweils erneut set_size_request">
 <icon BUILTIN="idea"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566487379550" ID="ID_272047983" MODIFIED="1576282358055" TEXT="TODO: genauer machen, und nur f&#xfc;r den Ruler-Canvas">
 <richcontent TYPE="NOTE"><html>
@@ -29305,11 +29434,104 @@
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1672798667029" ID="ID_1699842831" MODIFIED="1672799054739" TEXT="Integration ZoomWindow: funktioniert nicht (mehr)">
 <linktarget COLOR="#ac3f80" DESTINATION="ID_1699842831" ENDARROW="Default" ENDINCLINATION="-1384;79;" ID="Arrow_ID_927325344" SOURCE="ID_133007183" STARTARROW="None" STARTINCLINATION="-1848;-74;"/>
 <icon BUILTIN="broken-line"/>
-<node CREATED="1672798696337" ID="ID_1553490887" MODIFIED="1672798742711" TEXT="greife jetzt ScrolledWindow::get_allocated_width() ab"/>
+<node CREATED="1672798696337" ID="ID_1553490887" MODIFIED="1672798742711" TEXT="greife jetzt ScrolledWindow::get_allocated_width() ab">
+<node CREATED="1672845045702" ID="ID_400583877" MODIFIED="1672845097544" TEXT="das w&#xe4;re grunds&#xe4;tzlich korrekt">
+<arrowlink DESTINATION="ID_1978068021" ENDARROW="Default" ENDINCLINATION="323;11;" ID="Arrow_ID_920771700" STARTARROW="None" STARTINCLINATION="462;0;"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1672845054021" ID="ID_1400277326" MODIFIED="1672845155612" TEXT="und ist auch konsistent mit dem &#xbb;horizontal adjustment&#xab; des ScrolledWindow">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      per DUMP-Print verifiziert: Maximalwert der Scrollbar (=hadj) ist identisch mit get_allocated_width
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 <node CREATED="1672798745175" ID="ID_399045239" MODIFIED="1672798762372" TEXT="kalibriere damit das ZoomWindow, und beziehe davon dann die Canvas-Gr&#xf6;&#xdf;e"/>
 <node CREATED="1672798763432" ID="ID_485578749" MODIFIED="1672798787610" TEXT="horizontale Scrollbar blockt und wird nach rechts beschnitten">
 <icon BUILTIN="messagebox_warning"/>
 </node>
+<node CREATED="1672845159233" ID="ID_914079601" MODIFIED="1672867934061" TEXT="(1) Problem ist: keine Invalidierung &#x27f9; keine Display-Evaluation &#x27f9; Wert nicht abgerufen">
+<icon BUILTIN="idea"/>
+<node CREATED="1672847404194" ID="ID_1941365833" MODIFIED="1672847417490" TEXT="unser Layout-Code merkt daher gar nicht, wenn sich etwas &#xe4;ndert"/>
+<node CREATED="1672847418472" ID="ID_411937904" MODIFIED="1672867873212" TEXT="Beobachtung m&#xf6;gliche Aktivierungen">
+<icon BUILTIN="list"/>
+<node CREATED="1672847435934" ID="ID_204065179" MODIFIED="1672847440225" TEXT="on_draw()">
+<node CREATED="1672847448238" ID="ID_1819538437" MODIFIED="1672847457023" TEXT="wird wohl permanent aufgerufen"/>
+<node CREATED="1672847458467" ID="ID_1233413965" MODIFIED="1672847471149" TEXT="sehe jede &#xc4;nderung des Layout sofort"/>
+</node>
+<node CREATED="1672847440981" ID="ID_828221766" MODIFIED="1672847446416" TEXT="on_size_allocate()">
+<node CREATED="1672847675830" ID="ID_1048944592" MODIFIED="1672847684009" TEXT="nur bei Geometrie-&#xc4;nderungen"/>
+<node CREATED="1672847684840" ID="ID_272958565" MODIFIED="1672847693224" TEXT="und bei Focus gain/loss"/>
+</node>
+<node CREATED="1672847699754" ID="ID_921332802" MODIFIED="1672867412724" TEXT="Feststellung: Gr&#xf6;&#xdf;e &quot;st&#xf6;&#xdf;t an&quot; an gesetzter Canvas-Gr&#xf6;&#xdf;e">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Beispiel:
+    </p>
+    <ul>
+      <li>
+        initial wurde Canvas-Gr&#246;&#223;e auf 852px gesetzt (Debugging Code zieht 100px ab)
+      </li>
+      <li>
+        die Allocation f&#252;r das BodyCanvasWidget wird minimal 852
+      </li>
+      <li>
+        wenn man das Fenster (oder den Teiler der Pane) weiter verkleinert, wird trotzdem 852 geliefert &#10233; nach rechts beschnitten
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1672867905486" ID="ID_74954726" MODIFIED="1672867930798" TEXT="(2) Problem ist: Mindestgr&#xf6;&#xdf;e des Ruler-Canvas">
+<icon BUILTIN="idea"/>
+<node CREATED="1672867946048" ID="ID_303294117" MODIFIED="1672867967257" TEXT="das kommt von dem Workaround wegen Box-re-Pack"/>
+<node CREATED="1672867974932" ID="ID_1158620825" MODIFIED="1672868021465" TEXT="der Ruler-Canvas liegt nicht in einer scrolled pane und &#x201e;spreizt&#x201c; deshalb">
+<node CREATED="1672869698743" ID="ID_283208573" MODIFIED="1672869708010" TEXT="in vertikaler Richtung ist das ja auch korrekt"/>
+<node CREATED="1672869723476" ID="ID_401276544" MODIFIED="1672869749468" TEXT="Gtk::Layout hat selber  V/H-Adjustments und br&#xe4;uchte theoretisch kein Scrolled Window"/>
+<node CREATED="1672869752647" ID="ID_1600272917" MODIFIED="1672869783428" TEXT="aber in horizontaler Richtung wollen wir ein kleineres Minimum">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1672871169883" ID="ID_923032562" MODIFIED="1672871357241" TEXT="mit dieser Korrektur funktioniert die horizontale Scrollbar (halbwegs) wie erwartet">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        zumindest kann man nun das Fenster tats&#228;chlich verkleinern, und dann mit der Scrollbar horizontal den Haupt-Canvas bewegen.
+      </li>
+      <li>
+        aber der Ruler-Canvas scrollt nicht mit
+      </li>
+      <li>
+        und der Anzeige-Zustand der Scrollbar ist bei mouse-over(Scrollbar) nicht richtig synchronisiert; das wird erst korrekt nach einem Focus-loss/gain
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1672872402655" ID="ID_57784666" MODIFIED="1672872407100" TEXT="dynamische Anzeige">
+<node CREATED="1672872408415" ID="ID_1423497948" MODIFIED="1672872423235" TEXT="Zoom koordinieren"/>
+<node CREATED="1672872424309" ID="ID_1732041124" MODIFIED="1672872432016" TEXT="Scrolling koordinieren">
+<node CREATED="1672872433811" ID="ID_814093517" MODIFIED="1672872453293" TEXT="Header / Patchbay ist an VAdjustment vom Body angekoppelt"/>
 </node>
 </node>
 </node>
@@ -29745,7 +29967,8 @@
 <node CREATED="1542309666407" ID="ID_1721729181" MODIFIED="1557498707230" TEXT="initial....">
 <node CREATED="1542309671333" ID="ID_1283622298" MODIFIED="1557498707230" TEXT="Gr&#xf6;&#xdf;e des leeren Canvas">
 <arrowlink COLOR="#60749f" DESTINATION="ID_400560063" ENDARROW="Default" ENDINCLINATION="-46;0;" ID="Arrow_ID_449772156" STARTARROW="None" STARTINCLINATION="-13;18;"/>
-<node CREATED="1542309689328" ID="ID_679418178" MODIFIED="1576282358053" TEXT="verwende size-Allocation des ScrolledWindow">
+<linktarget COLOR="#4b3d60" DESTINATION="ID_1283622298" ENDARROW="Default" ENDINCLINATION="-940;-885;" ID="Arrow_ID_425073157" SOURCE="ID_547988829" STARTARROW="None" STARTINCLINATION="-693;122;"/>
+<node CREATED="1542309689328" ID="ID_679418178" MODIFIED="1672842637926" TEXT="verwende size-Allocation des ScrolledWindow">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -29756,6 +29979,7 @@
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#795b80" DESTINATION="ID_548414744" ENDARROW="Default" ENDINCLINATION="-897;636;" ID="Arrow_ID_1661740759" STARTARROW="Default" STARTINCLINATION="-286;-17;"/>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -66214,7 +66438,8 @@
 </node>
 </node>
 <node CREATED="1663946250024" ID="ID_1142643633" MODIFIED="1663946255308" TEXT="Layout management">
-<node CREATED="1663946256977" ID="ID_1464608958" MODIFIED="1663946261875" TEXT="Thema: Size-Handling">
+<node CREATED="1663946256977" ID="ID_1464608958" MODIFIED="1672843870753" TEXT="Thema: Size-Handling">
+<linktarget COLOR="#536cc0" DESTINATION="ID_1464608958" ENDARROW="Default" ENDINCLINATION="-1020;1248;" ID="Arrow_ID_1013900284" SOURCE="ID_1969670799" STARTARROW="None" STARTINCLINATION="-2004;139;"/>
 <node COLOR="#435e98" CREATED="1612527499386" HGAP="34" ID="ID_615948747" MODIFIED="1664401278771" TEXT="Untersuchung: size_request &#x2014; 2/21 + 9/22 f&#xfc;r Clip-Display" VSHIFT="-49">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -66843,6 +67068,32 @@
 </node>
 </node>
 </node>
+<node CREATED="1672842964141" ID="ID_215582571" MODIFIED="1672842976471" TEXT="relevante Gr&#xf6;&#xdf;en">
+<node CREATED="1672842978065" ID="ID_1344762228" MODIFIED="1672842981558" TEXT="size-request">
+<node CREATED="1672842982532" ID="ID_1586516076" MODIFIED="1672842995869" TEXT="das ist die nat&#xfc;rliche Minimal-Gr&#xf6;&#xdf;e des Widget"/>
+<node CREATED="1672842996488" ID="ID_1718515236" MODIFIED="1672843011334" TEXT="sie wird von GTK stets honoriert"/>
+<node CREATED="1672843017362" ID="ID_816898465" MODIFIED="1672843030912" TEXT="es gilt das &quot;natural*&quot;-Setting"/>
+<node CREATED="1672843033169" ID="ID_796485263" MODIFIED="1672843052405" TEXT="die &quot;minimal*&quot;-Werte werden aktuell (3.20) nicht verwendet"/>
+<node CREATED="1672843060904" ID="ID_1337685462" MODIFIED="1672843082281" TEXT="es gibt die zwei Varianten: hight-for-width | width-for-height"/>
+</node>
+<node CREATED="1672843085573" ID="ID_1497640739" MODIFIED="1672843330530" TEXT="size-allocation">
+<linktarget COLOR="#7995ad" DESTINATION="ID_1497640739" ENDARROW="Default" ENDINCLINATION="-562;363;" ID="Arrow_ID_1967894607" SOURCE="ID_1504859134" STARTARROW="None" STARTINCLINATION="346;-29;"/>
+<node CREATED="1672843091588" ID="ID_1908929596" MODIFIED="1672843108318" TEXT="die tats&#xe4;chlich von GTK zugeteilte Ausdehnung"/>
+<node CREATED="1672843109026" ID="ID_448128589" MODIFIED="1672843117060" TEXT="ist stets gr&#xf6;&#xdf;er als der size-request"/>
+<node CREATED="1672843122045" ID="ID_1297618005" MODIFIED="1672843134122" TEXT="wird vom Widget sofort um Dekoration reduziert"/>
+<node CREATED="1672843134710" ID="ID_1879903789" MODIFIED="1672843144008" TEXT="nur der reduzierte Wert wird gespeichert">
+<node CREATED="1672843145045" ID="ID_751859168" MODIFIED="1672843150136" TEXT="in der private-Struktur im Widget"/>
+<node CREATED="1672843167666" ID="ID_551602758" MODIFIED="1672843169069" TEXT="priv-&gt;allocation"/>
+<node CREATED="1672843251318" ID="ID_17591220" MODIFIED="1672843254290" TEXT="Getter: gtk_widget_get_allocation"/>
+</node>
+<node CREATED="1672843172626" ID="ID_1142235582" MODIFIED="1672843180449" TEXT="modifizierbar durch Alignment etc.">
+<node CREATED="1672843181936" ID="ID_139335819" MODIFIED="1672843188827" TEXT="ebenfalls in der private-Struktur"/>
+<node CREATED="1672843198774" ID="ID_1645020005" MODIFIED="1672843199936" TEXT="priv-&gt;allocated_size"/>
+<node CREATED="1672843208916" ID="ID_43084891" MODIFIED="1672843210008" TEXT="priv-&gt;allocated_size_baseline"/>
+<node CREATED="1672843223747" ID="ID_1074349241" MODIFIED="1672843229014" TEXT="Getter: gtk_widget_get_allocated_size"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1663975843179" ID="ID_1935747548" MODIFIED="1663976133002" TEXT="was ist ein CSS Gadget?">
 <richcontent TYPE="NOTE"><html>
@@ -67275,6 +67526,16 @@
 <arrowlink COLOR="#6396d3" DESTINATION="ID_1112354648" ENDARROW="Default" ENDINCLINATION="332;0;" ID="Arrow_ID_322983898" STARTARROW="None" STARTINCLINATION="130;7;"/>
 </node>
 </node>
+</node>
+<node CREATED="1672842863450" ID="ID_1781957682" MODIFIED="1672842867742" TEXT="mapping">
+<node CREATED="1672842868697" ID="ID_871975923" MODIFIED="1672842877133" TEXT="Widget wird einem GDK-Window zugeordnet"/>
+<node CREATED="1672842878351" ID="ID_1331083783" MODIFIED="1672842893254" TEXT="Widget wird nach seinem size_request gefragt"/>
+<node CREATED="1672842897112" ID="ID_1504859134" MODIFIED="1672843330529" TEXT="Widget bekommt size-Allocation">
+<arrowlink COLOR="#7995ad" DESTINATION="ID_1497640739" ENDARROW="Default" ENDINCLINATION="-562;363;" ID="Arrow_ID_1967894607" STARTARROW="None" STARTINCLINATION="346;-29;"/>
+<node CREATED="1672842907889" ID="ID_1244611946" MODIFIED="1672842923846" TEXT="diese wird sofort im Widget noch um Margin und Dekorationen reduziert"/>
+<node CREATED="1672842924490" ID="ID_1270863386" MODIFIED="1672842931688" TEXT="nur der effektive Wert wird gespeichert"/>
+</node>
+<node CREATED="1672842936499" ID="ID_493624501" MODIFIED="1672842951923" TEXT="Alignment und Fill-Layout kann das noch modifizieren"/>
 </node>
 </node>
 <node CREATED="1477526858307" ID="ID_676269117" MODIFIED="1557498707239" TEXT="custom widget">

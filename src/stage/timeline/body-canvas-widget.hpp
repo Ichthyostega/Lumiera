@@ -196,6 +196,7 @@ namespace timeline {
       void slotStructureChange()  noexcept;
       void maybeRebuildLayout();
       void adjustCanvasSize(int canvasWidth, int totalHeight, int rulerHeight);
+      void on_size_allocate(Gtk::Allocation& allocation)  override; /////////////////////////TODO
     };
   
   

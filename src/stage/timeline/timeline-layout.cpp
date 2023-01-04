@@ -39,7 +39,7 @@
 
 //#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
-//#include "lib/format-cout.hpp"
+#include "lib/format-cout.hpp"///////////////////////////TODO
 
 #include "common/advice.hpp"
 //#include "lib/util.hpp"
@@ -145,7 +145,10 @@ namespace timeline {
   {
     int contentWidthPx = bodyCanvas_.getEffectiveHorizontalSize();
     if (contentWidthPx != zoomWindow_.pxWidth())
+{////////////////////////////////////////////////////////////////TODO
+ cout<<"|!| zoom-calibrateExtension("<<zoomWindow_.pxWidth()<<" ⟶ "<<contentWidthPx<<")"<<endl;      
       zoomWindow_.calibrateExtension (contentWidthPx);
+}////////////////////////////////////////////////////////////////TODO      
   }
   
   void

@@ -52,7 +52,7 @@
 
 //#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
-//#include "lib/format-cout.hpp"
+#include "lib/format-cout.hpp"//////////////TODO
 
 #include "common/advice.hpp"
 #include "lib/util.hpp"
@@ -88,7 +88,7 @@ namespace timeline {
     
     const int INITIAL_TIMERULER_HEIGHT_px = 30;
     const int INITIAL_CONTENT_HEIGHT_px = 100;
-    const int INITIAL_CONTENT_WIDTH_px = 200;
+    const int MINIMAL_CONTENT_WIDTH_px = 100;
     
     /** request a pre-defined CSS style context for the track body */
     lumiera::advice::Request<PStyleContext> trackBodyStyle{"style(trackBody)"};
@@ -444,7 +444,7 @@ namespace timeline {
                         };
       
       // initially set up some dummy space. Will be updated to match on first draw() call...
-      adjustCanvasSize(INITIAL_CONTENT_WIDTH_px, INITIAL_CONTENT_HEIGHT_px, INITIAL_TIMERULER_HEIGHT_px);
+      adjustCanvasSize(MINIMAL_CONTENT_WIDTH_px, INITIAL_CONTENT_HEIGHT_px, INITIAL_TIMERULER_HEIGHT_px);
       
       this->set_border_width (0);
       this->property_expand() = true;   // dynamically grab any available additional space
@@ -517,9 +517,23 @@ namespace timeline {
   BodyCanvasWidget::getEffectiveHorizontalSize()  const
   {
     int widthForDebug = contentArea_.get_allocated_width();
+    Gtk::Allocation allo;
+    int basi{0};
+    contentArea_.get_allocated_size(allo,basi);
+    int alloW = allo.get_width();
+    auto hadj = contentArea_.get_hadjustment();
+cout<<"|?| win::width="<<widthForDebug<<"("<<alloW<<") hadj="<<hadj->get_value()<<"/"<<hadj->get_upper()<<endl;
     widthForDebug = util::max (widthForDebug - 100, 100);   ////////////////////////////////////////TODO: visual debugging
     return widthForDebug;
   }
+  void
+  BodyCanvasWidget::on_size_allocate(Gtk::Allocation& allocation)
+  {
+    int alloW = allocation.get_width();
+cout<<"|V| alloc::width="<<alloW<<endl;
+    Gtk::Box::on_size_allocate (allocation);
+  }
+  
   
   
   /**
@@ -539,10 +553,14 @@ namespace timeline {
                       if (currWidth != newWidth or currHeight != newHeight)
                         {
                           canvas.set_size(newWidth, newHeight);
-                          canvas.set_size_request(newWidth, newHeight);  //Note: might be more than actually is available.
-                        }                                               //       Assuming canvas is embedded into scrolled pane
+                            // Note: must force GTK at least to claim the necessary height,
+                           //        otherwise the enclosing Box won't reflow and adapt;
+                          //         implicitly this defines minimum timeline window width
+                          canvas.set_size_request(MINIMAL_CONTENT_WIDTH_px, newHeight);
+                        }
                     };
     
+cout<<"|!| adjustCanvasSize("<<canvasWidth<<", "<<rulerHeight<<"+"<<contentHeight<<")"<<endl;/////////////TODO
     adjust (rulerCanvas_, canvasWidth, rulerHeight);
     adjust (mainCanvas_, canvasWidth, contentHeight);
   }
@@ -669,6 +687,7 @@ namespace timeline {
     
     cox->save();
     cox->translate(-offH, -offV);
+cout<<"|.| trans->"<<adjH->get_lower()<<"·"<<offH<<"·"<<adjH->get_upper()<<"("<<adjH->get_page_size()<<"±"<<adjH->get_page_increment()<<")"<<endl;
   }
   
   
