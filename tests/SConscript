@@ -81,7 +81,7 @@ testSrcDirs = globRootdirs('*')
 
 testcases  = [testCases(env, dir)  for dir in testSrcDirs if not dir in specialDirs]
 testLibs   = sharedTestLibs.values()
-testrunner = envSuite.Program("test-suite", ["testrunner.cpp"]+testLibs+core_lib)
+testrunner = envSuite.Program("test-suite", ["testrunner.cpp"]+list(testLibs)+list(core_lib))
 
 
 testsuite = ( testcases
@@ -96,7 +96,7 @@ Export('testsuite')
 
 
 # for creating a Valgrind-Suppression file
-vgsuppression = envSuite.Program('vgsuppression',['tool/vgsuppression.c']+testLibs+core_lib)   ## for suppressing false valgrind alarms
+vgsuppression = envSuite.Program('vgsuppression',['tool/vgsuppression.c']+list(testLibs)+list(core_lib))   ## for suppressing false valgrind alarms
 tools  += [vgsuppression]
 
 
