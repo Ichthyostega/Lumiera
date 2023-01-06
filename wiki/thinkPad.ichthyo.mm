@@ -25126,7 +25126,7 @@
 <node CREATED="1672787342676" ID="ID_1189311522" MODIFIED="1672787960019" TEXT="aber auch: ZoomWindow selber mu&#xdf; von Geometrie-&#xc4;nderungen erfahren">
 <arrowlink COLOR="#4c7ef4" DESTINATION="ID_973993644" ENDARROW="Default" ENDINCLINATION="-1199;-155;" ID="Arrow_ID_1196387900" STARTARROW="None" STARTINCLINATION="2666;104;"/>
 <linktarget COLOR="#4a449e" DESTINATION="ID_1189311522" ENDARROW="Default" ENDINCLINATION="785;29;" ID="Arrow_ID_1573433988" SOURCE="ID_650213030" STARTARROW="None" STARTINCLINATION="241;10;"/>
-<linktarget COLOR="#4a449e" DESTINATION="ID_1189311522" ENDARROW="Default" ENDINCLINATION="1548;60;" ID="Arrow_ID_751989601" SOURCE="ID_37048779" STARTARROW="None" STARTINCLINATION="1439;55;"/>
+<linktarget COLOR="#4a449e" DESTINATION="ID_1189311522" ENDARROW="Default" ENDINCLINATION="1548;60;" ID="Arrow_ID_751989601" SOURCE="ID_37048779" STARTARROW="None" STARTINCLINATION="1439;57;"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1672787636743" ID="ID_1344084462" MODIFIED="1672797005517" TEXT="Flexibilisierung Display-Evaluation">
@@ -43389,8 +43389,112 @@
 <node COLOR="#338800" CREATED="1672708802759" ID="ID_412094029" MODIFIED="1672708819294" TEXT="Interface DisplayMetric implementiert durch R&#xfc;ckgriff auf das ZoomWindow">
 <icon BUILTIN="button_ok"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1672883648918" ID="ID_1140551016" MODIFIED="1672883762952" TEXT="Zugangsweg schaffen f&#xfc;r ZoomWindow-Aktuatoren">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1672883866721" ID="ID_265373712" MODIFIED="1672883891409" TEXT="jeweils anzubinden...">
+<node CREATED="1672883669691" ID="ID_233898229" MODIFIED="1672883705186" TEXT="horizontale Scrollbar"/>
+<node CREATED="1672883684145" ID="ID_1407291054" MODIFIED="1672883701874" TEXT="Ermittlung der realen Pixel-Weite"/>
+</node>
+<node CREATED="1672883854586" ID="ID_676447060" MODIFIED="1672952350546" TEXT="Interface/Architektur">
+<node CREATED="1672883916450" ID="ID_624038632" MODIFIED="1672883920077" TEXT="M&#xf6;glichkeiten">
+<node CREATED="1672883927393" ID="ID_137422584" MODIFIED="1672883937611" TEXT="ZoomWindow&amp; per DI">
+<node CREATED="1672884659498" ID="ID_183190051" MODIFIED="1672952301593" TEXT="konzeptionell sauber">
+<icon BUILTIN="up"/>
+</node>
+<node CREATED="1672884699265" ID="ID_1546365198" MODIFIED="1672884715498" TEXT="jeweils ein zus&#xe4;tzliches (Referenz)-Feld">
+<icon BUILTIN="down"/>
+</node>
+<node CREATED="1672942812195" ID="ID_113255429" MODIFIED="1672942843359" TEXT=" Zugang zu low-level-Funktionalit&#xe4;t (breites Interface)">
+<icon BUILTIN="down"/>
+</node>
+</node>
+<node CREATED="1672883940990" ID="ID_545229135" MODIFIED="1672883957585" TEXT="Proxy-Interface auf dem DisplayManager">
+<node CREATED="1672884731013" ID="ID_648800678" MODIFIED="1672942853799" TEXT="typischerweise genau da wo auch DisplayManager ohnehin verdrahtet ist">
+<icon BUILTIN="up"/>
+<node CREATED="1672884819665" ID="ID_593694932" MODIFIED="1672884824476" TEXT="BodyCanvasWidget"/>
+<node CREATED="1672884832528" ID="ID_202520630" MODIFIED="1672884839611" TEXT="AbstractTrackRenderer"/>
+<node CREATED="1672884991017" ID="ID_1411622586" MODIFIED="1672884996861" TEXT="CanvasHook::getMetric">
+<node CREATED="1672885022278" ID="ID_224159108" MODIFIED="1672885039960" TEXT="ClipPresenter::DragRelocateObserver"/>
+<node CREATED="1672885043371" ID="ID_419966736" MODIFIED="1672885045903" TEXT="ClipWidget"/>
+</node>
+</node>
+<node CREATED="1672942888477" ID="ID_344109754" MODIFIED="1672957304300" TEXT="notwendigerweise virtual calls (2 Indirektionen)">
+<icon BUILTIN="down"/>
+</node>
+<node CREATED="1672949981338" ID="ID_1962786517" MODIFIED="1672949994745" TEXT="&#xfc;berdehnt die Bedeutung des DisplayManager">
+<icon BUILTIN="down"/>
+</node>
+</node>
+<node CREATED="1672956771420" ID="ID_593557107" MODIFIED="1672956799788" TEXT="Update-Signal(s) auf dem DisplayManager">
+<node CREATED="1672957191000" ID="ID_76359433" MODIFIED="1672957382867" TEXT="explizit zweckgebunden">
+<linktarget COLOR="#485dbf" DESTINATION="ID_76359433" ENDARROW="Default" ENDINCLINATION="-176;17;" ID="Arrow_ID_167764533" SOURCE="ID_1233770503" STARTARROW="None" STARTINCLINATION="77;-6;"/>
+<icon BUILTIN="up"/>
+</node>
+<node CREATED="1672957201677" ID="ID_358714069" MODIFIED="1672957257339" TEXT="ZoomWindow selber bleibt Implementierungs-Detail">
+<icon BUILTIN="up"/>
+</node>
+<node CREATED="1672957271741" ID="ID_1521993338" MODIFIED="1672957286257" TEXT="nur ein einfach-indirekter (funtion-pointer) call">
+<icon BUILTIN="up"/>
+</node>
+<node CREATED="1672957315863" ID="ID_934216010" MODIFIED="1672957330972" TEXT="Komplexer und Gesamt-Funktion ist undurchsichtig">
+<icon BUILTIN="down"/>
+</node>
+</node>
+</node>
+<node CREATED="1672957336020" ID="ID_1233770503" MODIFIED="1672959113510" TEXT="Entscheidung: Signale!">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ja!!!<br />Hat lange gedauert, bis ich da drauf gekommen bin; aber das ist so eindeutig die richtige und angemessene L&#246;sung, da&#223; ich jetzt ausgesprochen erleichtert bin.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#485dbf" DESTINATION="ID_76359433" ENDARROW="Default" ENDINCLINATION="-176;17;" ID="Arrow_ID_167764533" STARTARROW="None" STARTINCLINATION="77;-6;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1672952339119" ID="ID_27417257" MODIFIED="1672952344269" TEXT="Art der Einbindung">
+<node CREATED="1672952358471" ID="ID_577116696" MODIFIED="1672952449076" TEXT="spezieller Twist hier: Aktuatoren arbeiten pixel-basiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      alle Steuersignale aus dem GUI kommen in Pixel-Einheiten, entweder absolut oder relativ; das ZoomWindow selber aber arbeitet in Zeit-Einheiten (und das ist auch seine Aufgabe).
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1672952474418" ID="ID_1703019039" MODIFIED="1672952486547" TEXT="unn&#xf6;tige Umwege &#xfc;ber Zeit-Werte m&#xf6;glichst vermeiden">
+<node CREATED="1672952510381" ID="ID_557400282" MODIFIED="1672952543555" TEXT="insofern die Rechnungen als pr&#xe4;zise gelten"/>
+<node CREATED="1672952549168" ID="ID_1479986541" MODIFIED="1672952631231" TEXT="aber die Werte-Begrenzungen ber&#xfc;cksichtigen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      in Grenzbereichen greift das ZoomWindow ein und begrenzt Ausschl&#228;ge; selbst wenn der angeschlossene Code direkt die Pixel-Werte verwendet, mu&#223; trotzdem auf solche Eingriffe gepr&#252;ft werden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1672952644887" ID="ID_393917969" MODIFIED="1672952661568" TEXT="ggfs aber Stellung der Scrollbars pr&#xfc;fen und rekalibrieren"/>
+<node CREATED="1672956427506" ID="ID_1572841890" MODIFIED="1672956430600" TEXT="Struktur">
+<node CREATED="1672956446738" ID="ID_419294832" MODIFIED="1672960594911" TEXT="Adjustment::valueChanged() &#x27fc; syncZoomWindow(Adjustment&amp;)"/>
+<node CREATED="1672956504172" ID="ID_1390665381" MODIFIED="1672960626188" TEXT="BodyCanvasWidget::on_size_allocate() &#x27fc; sizeZoomWindow()">
+<node CREATED="1672960628748" ID="ID_31432666" MODIFIED="1672960671941" TEXT="Display-Evaluation &#x27f6; update Adjustment based on ZoomWindow"/>
+</node>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1672787519757" ID="ID_37048779" MODIFIED="1672787852442" TEXT="Pixel-Weite kalibrieren: zu Beginn der Display-Evaluation einschleifen">
-<arrowlink COLOR="#4a449e" DESTINATION="ID_1189311522" ENDARROW="Default" ENDINCLINATION="1548;60;" ID="Arrow_ID_751989601" STARTARROW="None" STARTINCLINATION="1439;55;"/>
+<arrowlink COLOR="#4a449e" DESTINATION="ID_1189311522" ENDARROW="Default" ENDINCLINATION="1548;60;" ID="Arrow_ID_751989601" STARTARROW="None" STARTINCLINATION="1439;57;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1672798860387" ID="ID_981451006" MODIFIED="1672798872066" TEXT="Feedback auf Scrolling">
@@ -43398,6 +43502,21 @@
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1672798873057" ID="ID_133007183" MODIFIED="1672799054739" TEXT="horizontale Canvas-Breite kommt nicht korrekt an">
 <arrowlink COLOR="#ac3f80" DESTINATION="ID_1699842831" ENDARROW="Default" ENDINCLINATION="-1384;79;" ID="Arrow_ID_927325344" STARTARROW="None" STARTINCLINATION="-1848;-74;"/>
 <icon BUILTIN="broken-line"/>
+<node COLOR="#338800" CREATED="1672969399236" ID="ID_105188286" MODIFIED="1672969452360" TEXT="Logik &#xfc;berarbeitet: Werte kommmen jetzt an">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1672969412314" ID="ID_128441040" MODIFIED="1672969448542" TEXT="Fehler: horizontale Ausdehnung instabil">
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1672969457755" ID="ID_1145571154" MODIFIED="1672969483227" TEXT="Fehler: run-away in der H&#xf6;he bei wiederholter Display-Evaluation">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1672969484624" ID="ID_1370033195" MODIFIED="1672969500955" TEXT="die allozierte Content-H&#xf6;he w&#xe4;chst monoton">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1672969501989" ID="ID_1513242412" MODIFIED="1672969532573" TEXT="Verdacht: da nun erstmals re-Evaluationen stattfinden, wird ein Init-Fehler sichtbar">
+<icon BUILTIN="idea"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -43405,6 +43524,10 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1672708648699" ID="ID_1985216414" MODIFIED="1672708769250" TEXT="#1264 fully integrate ZoomWindow mutators into Timeline display">
 <linktarget COLOR="#954368" DESTINATION="ID_1985216414" ENDARROW="Default" ENDINCLINATION="1507;68;" ID="Arrow_ID_1698932113" SOURCE="ID_1466789019" STARTARROW="None" STARTINCLINATION="-35;216;"/>
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1672883774136" HGAP="85" ID="ID_135908111" MODIFIED="1672883794675" TEXT="anzubinden" VSHIFT="21">
+<edge COLOR="#976c6c"/>
+<node CREATED="1672883797610" ID="ID_1763437884" MODIFIED="1672883807253" TEXT="Canvas-Scrollbar"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667488193842" ID="ID_1347640673" MODIFIED="1667488208549" TEXT="Invarianten">
 <font BOLD="true" NAME="SansSerif" SIZE="14"/>

@@ -276,7 +276,11 @@ namespace model {
       /* === Mutators === */
       
       /**
-       * define the extension of the window in pixels.
+       * Define the extension of the window in pixels.
+       * The existing logical scale factor is retained, meaning that
+       * the logical duration of the actually visible window is adjusted
+       * alongside to match the new given pixel size, if necessary, also
+       * the canvas is expanded to fit.
        * @note all other manipulations will always retain this value
        */
       void
@@ -359,6 +363,13 @@ namespace model {
       setOverallDuration (Duration duration)
         {
           mutateCanvas (TimeSpan{startAll_, duration});
+          fireChangeNotification();
+        }
+      
+      void
+      setVisibleStart (TimeValue start)
+        {
+          mutateWindow (TimeSpan{start, Duration(afterWin_-startWin_)});
           fireChangeNotification();
         }
       

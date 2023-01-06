@@ -518,7 +518,7 @@ namespace timeline {
    * Find out the extension in pixels currently allocated for the content display.
    * @return number of pixels reasonably representing the actual visible with in the window
    */
-  int
+  uint
   BodyCanvasWidget::getEffectiveHorizontalSize()  const
   {
     int widthForDebug = contentArea_.get_allocated_width();
@@ -529,7 +529,7 @@ namespace timeline {
     auto hadj = contentArea_.get_hadjustment();
 cout<<"|?| win::width="<<widthForDebug<<"("<<alloW<<") hadj="<<hadj->get_value()<<"/"<<hadj->get_upper()<<endl;
     widthForDebug = util::max (widthForDebug - 100, 100);   ////////////////////////////////////////TODO: visual debugging
-    return widthForDebug;
+    return uint(widthForDebug);
   }
   void
   BodyCanvasWidget::on_size_allocate(Gtk::Allocation& allocation)

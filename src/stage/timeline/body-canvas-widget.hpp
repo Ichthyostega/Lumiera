@@ -167,13 +167,10 @@ namespace timeline {
       void disable();
       
       /** @internal allow the header pane to follow our vertical scrolling movement */
-      auto
-      get_vadjustment()
-        {
-          return contentArea_.get_vadjustment();
-        }
+      auto get_vadjustment()  { return contentArea_.get_vadjustment(); }
+      auto get_hadjustment()  { return contentArea_.get_hadjustment(); }
       
-      int getEffectiveHorizontalSize()  const;
+      uint getEffectiveHorizontalSize()  const;
       
     protected: /* ==== Interface: CanvasHook ===== */
       

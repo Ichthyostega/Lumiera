@@ -82,6 +82,13 @@ namespace timeline {
       topLevelContainer.add2 (bodyCanvas_);
       /////////////////////////////////////////////////////////////////////////////////////////////TICKET #1264 : how to pick up initial zoom settings
       zoomWindow_.attachChangeNotification (signalStructureChange_);
+      // make the ZoomWindow react on changes to the horizontal scrollbar pos
+      bodyCanvas_.get_hadjustment()->property_value().signal_changed().connect(
+          sigc::bind(sigc::mem_fun(*this, &TimelineLayout::syncZoomWindow)
+                    ,bodyCanvas_.get_focus_hadjustment()));
+      // make the ZoomWindow react on changes to the window geometry
+      bodyCanvas_.signal_size_allocate().connect(
+          sigc::mem_fun(*this, &TimelineLayout::sizeZoomWindow));
     }
   
   
@@ -143,18 +150,53 @@ namespace timeline {
   void
   TimelineLayout::establishLayout (DisplayEvaluation&)
   {
-    int contentWidthPx = bodyCanvas_.getEffectiveHorizontalSize();
-    if (contentWidthPx != zoomWindow_.pxWidth())
-{////////////////////////////////////////////////////////////////TODO
- cout<<"|!| zoom-calibrateExtension("<<zoomWindow_.pxWidth()<<" ⟶ "<<contentWidthPx<<")"<<endl;      
-      zoomWindow_.calibrateExtension (contentWidthPx);
-}////////////////////////////////////////////////////////////////TODO      
+      Time windowStart = zoomWindow_.visible().start();
+      int pxOffset = translateTimeToPixels (windowStart);
+cout<<"|↯| establishLayout time="<<windowStart<<" ->offset="<<pxOffset<<endl;
+      bodyCanvas_.get_hadjustment()->set_value(pxOffset);
   }
   
   void
   TimelineLayout::completeLayout (DisplayEvaluation&)
   {
-    /* noting to do for the collect-phase */
+    /* nothing to do for the collect-phase */
+  }
+  
+  /**
+   * Signal receiver (slot) to react on scrollbar changes.
+   * Changes the logical window position in the ZoomWindow to reflect
+   * the given #scrollPos, which is interpreted relative to the implicitly
+   * known size of the timeline canvas in pixels.
+   * @remark changes to ZoomWindow parameters cause notification of the listener,
+   *         thereby triggering a new DisplayEvaluation; this in turn will invoke
+   *         TimelineLayout::establishLayout() eventually, accommodating changes. 
+   */
+  void
+  TimelineLayout::syncZoomWindow (PAdjustment hadj)
+  {
+    double pos = hadj->get_value();
+    TimeValue windowStart = applyScreenDelta(zoomWindow_.overallSpan().start(), pos);
+cout<<"|!| zoom-scroll pos="<<pos<<" start="<<windowStart<<" zoomWin="<<zoomWindow_.visible()<<endl;
+    zoomWindow_.setVisibleStart (windowStart);
+  }
+  
+  /**
+   * Signal receiver (slot) to react on changes of the window screen space allocation.
+   * Whenever an actual change to the usable window width in pixels is detected,
+   * the ZoomWindow will be re-calibrated, in turn leading to a DisplayEvaluation. 
+   */
+  void
+  TimelineLayout::sizeZoomWindow (Gtk::Allocation& alloc)
+  {
+    int contentWidthPx = alloc.get_width();
+cout<<"|V| sigAlloc width="<<contentWidthPx<<endl;    
+    contentWidthPx = util::max (contentWidthPx - 100, 100);   ////////////////////////////////////////TODO: visual debugging
+    if (contentWidthPx != zoomWindow_.pxWidth())
+{////////////////////////////////////////////////////////////////TODO
+ cout<<"|!| zoom-calibrateExtension("<<zoomWindow_.pxWidth()<<" ⟶ "<<contentWidthPx<<")"<<endl;      
+      zoomWindow_.calibrateExtension (contentWidthPx);
+ cout<<"|=| zoom-calibrateExtension(canvas"<<zoomWindow_.overallSpan()<<" window="<<zoomWindow_.visible()<<" scale="<<zoomWindow_.px_per_sec()<<")"<<endl;      
+}////////////////////////////////////////////////////////////////TODO      
   }
 
   

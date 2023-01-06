@@ -157,7 +157,8 @@ namespace timeline {
       void rehook (TrackBody&) noexcept override;
 
     private:/* ===== Internals ===== */
-     
+      void syncZoomWindow (PAdjustment);
+      void sizeZoomWindow (Gtk::Allocation&);
     };
   
   
