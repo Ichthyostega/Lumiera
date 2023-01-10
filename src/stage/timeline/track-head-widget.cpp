@@ -82,63 +82,63 @@ namespace timeline {
   
   void
   TrackHeadWidget::setTrackName (cuString& trackName)
-    {
-      nameTODO_.set_label (trackName);
-    }
+  {
+    nameTODO_.set_label (trackName);
+  }
   
   uint
   TrackHeadWidget::getHeightAt (int left, int top)  const
-    {
-      auto* cell = this->get_child_at(left,top);
-      if (cell == nullptr) return 0;
-      int actual = cell->get_height();
-      int minimal=0, natural=0;
-      cell->get_preferred_height(minimal, natural);
-      return max (0, max (actual, natural));
-    }
+  {
+    auto* cell = this->get_child_at(left,top);
+    if (cell == nullptr) return 0;
+    int actual = cell->get_height();
+    int minimal=0, natural=0;
+    cell->get_preferred_height(minimal, natural);
+    return max (0, max (actual, natural));
+  }
 
   uint
   TrackHeadWidget::calcContentHeight() const
-    {
-      if (childCnt_ == 0) return calcOverallHeight();
-      
-      int h1 = getHeightAt (0,0);
-      int h2 = getHeightAt (1,0);
-      
-      return max (0, max (h1,h2));
-    }
+  {
+    if (childCnt_ == 0) return calcOverallHeight();
+    
+    int h1 = getHeightAt (0,0);
+    int h2 = getHeightAt (1,0);
+    
+    return max (0, max (h1,h2));
+  }
   
   uint
   TrackHeadWidget::calcOverallHeight()  const
-    {
-      uint heightSum = 0;
-      for (uint line=0; line <= max(1u, childCnt_); ++line)
-        {
-          int h1 = getHeightAt (0,line);
-          int h2 = getHeightAt (1,line);
-          
-          heightSum += max (0, max (h1,h2));
-        }
-      return heightSum;
-    }
+  {
+    uint heightSum = 0;
+    for (uint line=0; line <= max(1u, childCnt_); ++line)
+      {
+        int h1 = getHeightAt (0,line);
+        int h2 = getHeightAt (1,line);
+        
+        heightSum += max (0, max (h1,h2));
+      }
+    return heightSum;
+  }
   
   void
   TrackHeadWidget::accommodateContentHeight(uint contentHeight)
-    {
-      uint localHeight = calcContentHeight();
-      if (contentHeight > localHeight)
-        increaseContentHeight (contentHeight-localHeight);
-    }
+  {
+    uint localHeight = calcContentHeight();
+    if (contentHeight > localHeight)
+      increaseContentHeight (contentHeight-localHeight);
+  }
   
   /** apply the Δ to some child in first row */
   void
   TrackHeadWidget::increaseContentHeight(uint delta)
-    {
-      auto* cell = this->get_child_at(1,0);
-      REQUIRE (cell);
-      uint h = getHeightAt (1,0);
-      cell->set_size_request (-1, h+delta);
-    }
+  {
+    auto* cell = this->get_child_at(1,0);
+    REQUIRE (cell);
+    uint h = getHeightAt (1,0);
+    cell->set_size_request (-1, h+delta);
+  }
 
 
   
