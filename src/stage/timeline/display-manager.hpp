@@ -85,6 +85,7 @@
 #include "stage/model/view-hook.hpp"
 #include "stage/model/canvas-hook.hpp"
 #include "lib/util.hpp"
+#include "lib/format-cout.hpp"///////////////////////TODO: 4debug
 
 #include <sigc++/signal.h>
 
@@ -181,9 +182,22 @@ namespace timeline {
       PixSpan
       getPixSpan()
         {
-          return {translateTimeToPixels (coveredTime().start())
-                 ,translateTimeToPixels (coveredTime().end())
-                 };
+//////////////////////////////////////////////////////////////////////////////TODO: DUMP debug
+  auto covfefe1 = coveredTime();
+  auto start = covfefe1.start();
+  auto tranS = translateTimeToPixels(start);
+  auto covfefe2 = coveredTime();
+  auto end = covfefe2.end();
+  auto tranE = translateTimeToPixels(end);
+
+cout<<"|↯| pxSpan cov1="<<covfefe1<<"⟼"<<tranS<<" cov2="<<covfefe2<<"⟼"<<tranE<<endl;  
+  return {tranS
+         ,tranE
+  };
+//////////////////////////////////////////////////////////////////////////////TODO: DUMP debug
+//        return {translateTimeToPixels (coveredTime().start())
+//               ,translateTimeToPixels (coveredTime().end())
+//               };
         }
       
       

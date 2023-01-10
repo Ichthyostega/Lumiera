@@ -62,6 +62,16 @@ namespace timeline {
   
   using ID = ctrl::BusTerm::ID;
   
+  class HeadControlArea
+    : public Gtk::Grid
+    {
+      Gtk::Label ctrlTODO_;
+      
+    public:
+      HeadControlArea();
+     ~HeadControlArea();
+    };
+  
   /**
    * Header pane control area corresponding to a Track with nested child Tracks.
    * This structure is used recursively to build up the Fork of nested Tracks.
@@ -75,6 +85,7 @@ namespace timeline {
     {
       Gtk::Label nameTODO_;
       Gtk::Label treeTODO_;
+      HeadControlArea headCtrl_;
       
       uint childCnt_;
       
@@ -95,12 +106,18 @@ namespace timeline {
       
       void accommodateContentHeight(uint);
       void increaseContentHeight(uint delta);
+      void increaseExpansionHeight(uint delta);
+      void increaseHeightAt(int left, int top, uint delta);
 
     private:/* ===== Internals ===== */
       
       /** Integrate the control area for a nested sub track fork. */
       void attachSubFork (TrackHeadWidget& subForkHead);
       void detachSubFork (TrackHeadWidget& subForkHead);
+      
+      /** activate the direct patchbay control container */
+      void attachDirectContent();
+      void detachDirectContent();
       
       /** Discard all nested sub track display widgets. */
       void clearFork();

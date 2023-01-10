@@ -119,6 +119,7 @@ namespace timeline {
       uint calcRulerHeight();
       uint calcHeight();
       void accommodateContentHeight(uint contentExtension);
+uint DEBUGconH() const { return contentHeight_;}////////////////////////////////////TODO
       
       uint getContentOffsetY() { return startLine_ + contentOffset_; }
       

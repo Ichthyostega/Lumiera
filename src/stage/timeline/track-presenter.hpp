@@ -467,9 +467,14 @@ namespace timeline {
                                        {
                                          return clip->determineRequiredVerticalExtension();
                                        }));
-    maxVSize = max (maxVSize, head_.calcContentHeight());
+auto headH = head_.calcContentHeight();/////////////////////////////////////////////////////////////////////TODO
+auto bodyH = maxVSize;
+    maxVSize = max (maxVSize, headH);
     this->body_.accommodateContentHeight (maxVSize);
     this->head_.accommodateContentHeight (maxVSize);
+auto headN = head_.calcContentHeight();
+auto bodyN = body_.DEBUGconH();
+cout<<"|*| establishExtension(clipH="<<bodyH<<" headH="<<headH<<" max="<<maxVSize<<" hN="<<headN<<" bN="<<bodyN<<" this(track)="<<this<<")"<<endl;    
   }
   
   /** second pass of the DisplayEvaluation:
@@ -500,8 +505,8 @@ namespace timeline {
    *       is too small, we're out of luck, since the Profile is already calculated.
    *       However, since we accommodated the local extension within each content area
    *       prior to calculating the Profile, chances are that such a discrepancy is small.
-   * @remark we could also consider to transport a discrepancy downwards by using a
-   *       state variable in the DisplayEvaluation
+   * @remark we could also consider to transport a remaining discrepancy downwards by using
+   *       a state variable in the DisplayEvaluation
    */
   inline void
   DisplayFrame::sync_and_balance (DisplayEvaluation&)
@@ -509,7 +514,11 @@ namespace timeline {
     uint headSize = head_.calcOverallHeight();
     uint bodySize = body_.calcHeight();
     if (bodySize > headSize)
-      head_.increaseContentHeight (bodySize-headSize);
+{//////////////////////////////////////////////////////TODO
+      head_.increaseExpansionHeight (bodySize-headSize);
+ uint hN =    head_.calcOverallHeight();   
+ cout<<"|+| syncBal: head="<<headSize<<" body="<<bodySize<<" Δ="<<bodySize-headSize<<" hN="<<hN<<endl;      
+}//////////////////////////////////////////////////////TODO      
   }
 
 

@@ -38,6 +38,7 @@
 
 //#include "stage/ui-bus.hpp"
 //#include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"/////////////////////TODO debugging output
 
 #include "lib/util.hpp"
 
@@ -132,7 +133,10 @@ namespace timeline {
   TrackBody::accommodateContentHeight(uint contentExtension)
   {
     if (contentExtension > contentHeight_)
+{//////////////////////////////////////////////////////TODO
+ cout<<"|+| contentHeight("<<contentHeight_<<" ⟶ "<<contentExtension<<" this(body)="<<this<<")"<<endl;      
       contentHeight_ = contentExtension;
+}//////////////////////////////////////////////////////TODO      
   }
   
   /**
@@ -268,6 +272,7 @@ namespace timeline {
         profile.append_coda (TIMELINE_BOTTOM_PADDING_px);
       }
     
+cout<<"|*| establishTrackSpace(content="<<contentHeight_<<" res="<<line<<" this(body)="<<this<<")"<<endl;
     return line;
   }
   

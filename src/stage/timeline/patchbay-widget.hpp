@@ -57,7 +57,7 @@ namespace timeline {
 
   
   /**
-   * Header pane control area corresponding to fork of nested tracks.
+   * Header pane control area corresponding to a fork of nested tracks.
    * The structure of child tracks is built up recursively, starting with a single
    * top level TrackHeadWidget corresponding to the »fork root«. The actual controls
    * for the individual tracks are managed by those TrackHeadWidget elements, while
