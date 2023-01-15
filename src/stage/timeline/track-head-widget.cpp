@@ -72,13 +72,15 @@ namespace timeline {
     , childCnt_{0}
     {
       nameTODO_.set_xalign(0);
-      nameTODO_.set_yalign(0);
+      nameTODO_.set_yalign(1.0);
       treeTODO_.set_xalign(0);
       treeTODO_.set_yalign(0.5);
+      headCtrl_.set_valign(Gtk::Align::ALIGN_CENTER);
+      headCtrl_.set_halign(Gtk::Align::ALIGN_FILL);
       this->attach (nameTODO_, 0,0, 2,1);
       this->attach (treeTODO_, 0,1, 1,1);
       attachDirectContent();
-      
+      this->property_expand() = false; // do not expand to fill
       this->show_all();
     }
   
@@ -87,11 +89,9 @@ namespace timeline {
     : Gtk::Grid{}
     , ctrlTODO_{"💡"}
     {
-      ctrlTODO_.set_xalign (0.0);
+      ctrlTODO_.set_xalign (0.3);
       ctrlTODO_.set_yalign (0.5);
       this->attach (ctrlTODO_, 0,0, 1,1);
-      // dynamically grab any available additional space
-      ctrlTODO_.property_expand() = true;
       this->show_all();
     }
   

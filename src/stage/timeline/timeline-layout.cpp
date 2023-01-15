@@ -85,7 +85,7 @@ namespace timeline {
       // make the ZoomWindow react on changes to the horizontal scrollbar pos
       bodyCanvas_.get_hadjustment()->property_value().signal_changed().connect(
           sigc::bind(sigc::mem_fun(*this, &TimelineLayout::syncZoomWindow)
-                    ,bodyCanvas_.get_focus_hadjustment()));
+                    ,bodyCanvas_.get_hadjustment()));
       // make the ZoomWindow react on changes to the window geometry
       bodyCanvas_.signal_size_allocate().connect(
           sigc::mem_fun(*this, &TimelineLayout::sizeZoomWindow));
@@ -191,7 +191,7 @@ cout<<"|!| zoom-scroll pos="<<pos<<" start="<<windowStart<<" zoomWin="<<zoomWind
     int contentWidthPx = alloc.get_width();
 cout<<"|V| sigAlloc width="<<contentWidthPx<<endl;    
     contentWidthPx = util::max (contentWidthPx - 100, 100);   ////////////////////////////////////////TODO: visual debugging
-    if (contentWidthPx != zoomWindow_.pxWidth())
+    if (abs(contentWidthPx) != zoomWindow_.pxWidth())
 {////////////////////////////////////////////////////////////////TODO
  cout<<"|!| zoom-calibrateExtension("<<zoomWindow_.pxWidth()<<" ⟶ "<<contentWidthPx<<")"<<endl;      
       zoomWindow_.calibrateExtension (contentWidthPx);

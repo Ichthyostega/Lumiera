@@ -43497,8 +43497,8 @@
 <arrowlink COLOR="#4a449e" DESTINATION="ID_1189311522" ENDARROW="Default" ENDINCLINATION="1548;60;" ID="Arrow_ID_751989601" STARTARROW="None" STARTINCLINATION="1439;57;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1672798860387" ID="ID_981451006" MODIFIED="1672798872066" TEXT="Feedback auf Scrolling">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1672798860387" ID="ID_981451006" MODIFIED="1673747058376" TEXT="Feedback auf Scrolling">
+<icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1672798873057" ID="ID_133007183" MODIFIED="1672799054739" TEXT="horizontale Canvas-Breite kommt nicht korrekt an">
 <arrowlink COLOR="#ac3f80" DESTINATION="ID_1699842831" ENDARROW="Default" ENDINCLINATION="-1384;79;" ID="Arrow_ID_927325344" STARTARROW="None" STARTINCLINATION="-1848;-74;"/>
 <icon BUILTIN="broken-line"/>
@@ -43507,6 +43507,9 @@
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1672969412314" ID="ID_128441040" MODIFIED="1672969448542" TEXT="Fehler: horizontale Ausdehnung instabil">
 <icon BUILTIN="broken-line"/>
+<node CREATED="1673020358513" ID="ID_1745939268" MODIFIED="1673020364580" TEXT="Beobachtung(DUMP)">
+<node CREATED="1673020365563" ID="ID_1034029673" MODIFIED="1673020378010" TEXT="layout_.getPixSpan().delta() verh&#xe4;lt sich &quot;zyklisch&quot;"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1672969457755" ID="ID_1145571154" MODIFIED="1672969483227" TEXT="Fehler: run-away in der H&#xf6;he bei wiederholter Display-Evaluation">
 <icon BUILTIN="broken-line"/>
@@ -43516,6 +43519,196 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1672969501989" ID="ID_1513242412" MODIFIED="1672969532573" TEXT="Verdacht: da nun erstmals re-Evaluationen stattfinden, wird ein Init-Fehler sichtbar">
 <icon BUILTIN="idea"/>
 </node>
+<node CREATED="1673020204201" ID="ID_130901033" MODIFIED="1673020213759" TEXT="Beobachtung (DUMP)">
+<icon BUILTIN="info"/>
+<node CREATED="1673020215292" ID="ID_1472123011" MODIFIED="1673020256186" TEXT="in der Tat: accomodateContentHeight() f&#xfc;gt laufend hinzu"/>
+<node CREATED="1673020257307" ID="ID_1535375022" MODIFIED="1673020292144" TEXT="was allerdings w&#xe4;chst ist der Beitrag von head_.calcContentHeight()">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1673021362882" ID="ID_954750461" MODIFIED="1673021435861" TEXT="TrackHeadWidget::accommodateContentHeight -&gt; increaseContentHeight() ; size-request + &#x394;">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1673022453591" ID="ID_1189073820" MODIFIED="1673022471744" TEXT="der tats&#xe4;chliche Aufschlag stammt jeweils aus der 2.Phase: DisplayFrame::sync_and_balance"/>
+</node>
+<node CREATED="1673027617885" ID="ID_1539603067" MODIFIED="1673027627009" TEXT="Feststellungen">
+<icon BUILTIN="yes"/>
+<node CREATED="1673027738477" ID="ID_910627159" MODIFIED="1673027741960" TEXT="Problem-1">
+<node CREATED="1673027628894" ID="ID_642294954" MODIFIED="1673027656160" TEXT="sync_and_balance schl&#xe4;gt zus&#xe4;tzliches Padding auf"/>
+<node CREATED="1673027656904" ID="ID_748230993" MODIFIED="1673027704972">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      im n&#228;chsten Zyklus wird das aber als Head-<b>content</b>&#160;gewertet &#10233; body-content wird erh&#246;ht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1673027710473" ID="ID_1922165032" MODIFIED="1673027727174" TEXT="&#x27f9; sync_and_balance erkennt wieder eine Diskrepanz"/>
+<node CREATED="1673027813155" ID="ID_217654042" MODIFIED="1673027871603" TEXT="padding und content im Head werden vermischt">
+<icon BUILTIN="idea"/>
+<node CREATED="1673029325047" ID="ID_460101701" MODIFIED="1673029337394" TEXT="au weia: diese Berechnungen sind aber noch relativ &quot;vorl&#xe4;ufig&quot;"/>
+<node CREATED="1673029338126" ID="ID_1059214961" MODIFIED="1673029685791">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      damals war ich <i>zufrieden, </i>sobald es &#8222;halbwegs&#8220; funktioniert hat
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        erster Draft ab718ed6aa9d<br />hat nicht funktioniert, vmtl da ich letztlich auf widget.get_allocation().hight() aufgesetzt habe, und das kann initial noch null sein
+      </li>
+      <li>
+        &#252;berarbeitet ab718ed6aa9db<br />dann habe ich rein auf Basis der einzelnen Zellen einen denfensiven Berechnungsweg verwendet: nimm MAX(preferred_height, reale&#160;Allokation); habe dies aber nicht angepa&#223;t auf mehrere Kind-Tracks, oder vielleicht doch? oder die Logik verkehrt herum??
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1673029688327" ID="ID_1637216543" MODIFIED="1673029700984" TEXT="jedenfalls wurde nie klar definiert, was hier &quot;content&quot; sein soll">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1673303781860" ID="ID_1183053320" MODIFIED="1673303787059" TEXT="Belegung der Felder">
+<node CREATED="1673303792878" ID="ID_15099340" MODIFIED="1673303858649" TEXT="0.Zeile / span=2 : Name (ElementBox)"/>
+<node CREATED="1673303859525" ID="ID_1941277838" MODIFIED="1673303874479" TEXT="1.Zeile: Tree-Graph">
+<node CREATED="1673303876412" ID="ID_1855860657" MODIFIED="1673303929005" TEXT="&#xbb;Content&#xab; (falls leer)"/>
+<node CREATED="1673303930118" ID="ID_450860952" MODIFIED="1673303937582" TEXT="1. Kind"/>
+</node>
+</node>
+<node CREATED="1673031545264" ID="ID_52427355" MODIFIED="1673031561329" TEXT="das Padding wird aufgeschlagen auf (left=1, top=0)"/>
+<node CREATED="1673031562629" ID="ID_1138131947" MODIFIED="1673031633192" TEXT="die calcContentHeitght() wertet aus MAX( (0,0), (1,0))">
+<node CREATED="1673031610727" ID="ID_1604141819" MODIFIED="1673031618290" TEXT="also alle Zellen in der 1.Zeile"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1673312714420" ID="ID_152822454" MODIFIED="1673312733027" STYLE="fork" TEXT="das ist wohl die Inkonsistenz hier">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1673314655497" ID="ID_525789725" MODIFIED="1673314662292" TEXT="also beides getrennt handhaben">
+<node CREATED="1673314663880" ID="ID_935563695" MODIFIED="1673314699327" TEXT="die contentHeight wirklich im 4.Quadranten anwenden"/>
+<node CREATED="1673314701753" ID="ID_1401546681" MODIFIED="1673314779597" TEXT="zus&#xe4;tzlich eine Expansion einf&#xfc;hren, die aber nicht in die contentHeight eingeht!">
+<node CREATED="1673745725545" ID="ID_527844757" MODIFIED="1673745739164" TEXT="f&#xfc;r die &quot;content height&quot; wirklich nur die Content-Felder auswerten"/>
+<node CREATED="1673745740224" ID="ID_321245152" MODIFIED="1673745785441" TEXT="zus&#xe4;tzliche Expansion in einem anderen Feld machen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      z.B. in (0,1) = Struktur-Graph
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1673320252819" ID="ID_754862223" MODIFIED="1673747131064" TEXT="bricht noch nicht den Zyklus">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1673320275690" ID="ID_1903820221" MODIFIED="1673745681092" TEXT="jetzt ist der Head-content von Anfang an zu gro&#xdf;">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1673320299575" ID="ID_1836748064" MODIFIED="1673392645658" TEXT="aber warum stabilisiert sich dieser nicht?">
+<icon BUILTIN="help"/>
+<node CREATED="1673745636138" ID="ID_1839905420" MODIFIED="1673745695183" TEXT="Grund-1: weil der Head-content sich selbst&#xe4;ndig expandiert"/>
+</node>
+<node CREATED="1673705464388" ID="ID_1052559390" MODIFIED="1673705515338" TEXT="hilfreich ist: property_expand() = false  im Content-Bereich"/>
+<node COLOR="#338800" CREATED="1673747106233" ID="ID_830917303" MODIFIED="1673747119474" TEXT="damit ist das Problem f&#xfc;r Blatt-Tracks gel&#xf6;st">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1673747138573" ID="ID_1650195806" MODIFIED="1673747159901" TEXT="aber Tracks mit Content und Kind-Tracks wachsen weiterhin">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node CREATED="1673027746843" ID="ID_484113914" MODIFIED="1673027750543" TEXT="Problem-2">
+<node CREATED="1673027751867" ID="ID_1170742278" MODIFIED="1673027768260" TEXT="size-request im Head w&#xe4;chst monoton"/>
+<node CREATED="1673027770065" ID="ID_1809846655" MODIFIED="1673027783498" TEXT="body content-height w&#xe4;chst monoton"/>
+<node CREATED="1673027796693" ID="ID_162051390" MODIFIED="1673027805715" TEXT="es fehlt ein reset">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1673746034872" ID="ID_66895155" MODIFIED="1673747049281" TEXT="Segfault bei horizontalem Scroling">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1673746067311" ID="ID_154133331" MODIFIED="1673746074945" TEXT="Beobachtung">
+<icon BUILTIN="idea"/>
+<node CREATED="1673746076315" ID="ID_1475835480" MODIFIED="1673746096996" TEXT="TimelineLayout::syncZoomWindow(PAdjustment)"/>
+<node CREATED="1673746101072" ID="ID_1560542600" MODIFIED="1673746109872" TEXT="Argument ist ein Null-ptr"/>
+<node CREATED="1673746264291" ID="ID_920699526" MODIFIED="1673746274572" TEXT="Argument im Funktor gebunden auf: bodyCanvas_.get_focus_hadjustment()">
+<node CREATED="1673746420584" ID="ID_175121956" MODIFIED="1673746454675" TEXT="was ist ein &quot;focus_hadjustment&quot;???">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;/** Hooks up an adjustment to focus handling in a container, so when a child </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;* of the container is focused, the adjustment is scrolled to show that </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;* widget. This function sets the horizontal alignment. </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;* See Gtk::ScrolledWindow::get_hadjustment() for a typical way of obtaining </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;* the adjustment and set_focus_vadjustment() for setting </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;* the vertical adjustment. </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;* </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;* The adjustments have to be in pixel units and in the same coordinate </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;* system as the allocation for immediate children of the container. </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;* </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;* @param adjustment An adjustment which should be adjusted when the focus is </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;* moved among the descendents of @a container. </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;*/ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;void set_focus_hadjustment(const Glib::RefPtr&lt;Adjustment&gt;&amp; adjustment); </font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1673746457176" ID="ID_1981285766" MODIFIED="1673746728481" TEXT="da hab ich wohl die falsche Funktion erwischt???">
+<icon BUILTIN="smiley-oh"/>
+<node CREATED="1673746730444" ID="ID_582249986" MODIFIED="1673746734951" TEXT="auto-complete...."/>
+<node CREATED="1673746736759" ID="ID_893437203" MODIFIED="1673746739029" TEXT="bodyCanvas_.get_hadjustment()"/>
+<node CREATED="1673746741315" ID="ID_513265997" MODIFIED="1673746750093" TEXT="das geht dann auf die contentArea"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1673747021254" ID="ID_1805274819" MODIFIED="1673747047575" TEXT="richtig binden &#x27f9; Scrollbar reagiert">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

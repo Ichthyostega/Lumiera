@@ -62,7 +62,7 @@ namespace stage {
 namespace timeline {
   
   namespace {
-    const uint DEFAULT_CONTENT_HEIGHT_px = 80;
+    const uint DEFAULT_CONTENT_HEIGHT_px = 40;
     const uint TIMELINE_BOTTOM_PADDING_px = 5;
   }
   
