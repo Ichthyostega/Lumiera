@@ -117,6 +117,9 @@ namespace timeline {
     void
     setupAdditionalTrackPadding_fromCSS()
     {
+      static bool styleSetupDone{false};
+      if (styleSetupDone) return;
+      
       StyleC styleRuler{trackRulerStyle.getAdvice()};
       StyleC styleBody {trackBodyStyle.getAdvice()};
       
@@ -149,6 +152,7 @@ namespace timeline {
           styleBody->remove_class (slopeClassName(depth));
 //        styleBody->context_restore();             // <<<---does not work...
         }
+      styleSetupDone = true;
     }
     
     
@@ -505,12 +509,12 @@ namespace timeline {
   void
   BodyCanvasWidget::maybeRebuildLayout()
   {
-    if (rootBody_ and isnil (profile_))
+    while (rootBody_ and isnil (profile_))
       {
         setupAdditionalTrackPadding_fromCSS();
         layout_.triggerDisplayEvaluation();
-        ENSURE (not isnil (profile_), "DisplayEvaluation logic broken");
       }
+    ENSURE (not isnil (profile_), "DisplayEvaluation logic broken");
   }
   
   

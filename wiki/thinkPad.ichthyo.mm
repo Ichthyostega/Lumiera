@@ -43506,6 +43506,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1672969412314" ID="ID_128441040" MODIFIED="1672969448542" TEXT="Fehler: horizontale Ausdehnung instabil">
+<linktarget COLOR="#e91670" DESTINATION="ID_128441040" ENDARROW="Default" ENDINCLINATION="-511;34;" ID="Arrow_ID_1077460507" SOURCE="ID_637545532" STARTARROW="None" STARTINCLINATION="-190;-19;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1673020358513" ID="ID_1745939268" MODIFIED="1673020364580" TEXT="Beobachtung(DUMP)">
 <node CREATED="1673020365563" ID="ID_1034029673" MODIFIED="1673020378010" TEXT="layout_.getPixSpan().delta() verh&#xe4;lt sich &quot;zyklisch&quot;"/>
@@ -43709,6 +43710,170 @@
 </node>
 <node COLOR="#338800" CREATED="1673747021254" ID="ID_1805274819" MODIFIED="1673747047575" TEXT="richtig binden &#x27f9; Scrollbar reagiert">
 <icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1673807997325" ID="ID_1009074242" MODIFIED="1673808030377" TEXT="Assertion-fail">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      0000001086: POSTCONDITION: body-canvas-widget.cpp:512: worker_3: maybeRebuildLayout: (not isnil (profile_)) DisplayEvaluation logic broken
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1673808698810" ID="ID_825689705" MODIFIED="1673808714792" TEXT="wahrscheinlicher Grund: signalStruktureChange ausgel&#xf6;st"/>
+<node CREATED="1673809260386" ID="ID_1757495179" MODIFIED="1673809267628" TEXT="Beobachtung">
+<icon BUILTIN="info"/>
+<node CREATED="1673809555225" ID="ID_1752395100" MODIFIED="1673809557899" TEXT="stop-1">
+<node CREATED="1673809269809" ID="ID_1319270486" MODIFIED="1673809274764" TEXT="im GUI-Thread"/>
+<node CREATED="1673809352006" ID="ID_43730245" MODIFIED="1673809353849" TEXT="Gtk::Container_Class::check_resize_callback()"/>
+<node CREATED="1673809381811" ID="ID_337647284" MODIFIED="1673809391005" TEXT="gtk_widget_size_allocate_with_baseline()"/>
+<node CREATED="1673809276473" ID="ID_1203817142" MODIFIED="1673809295149" TEXT="bodyCanvas_.signal_size_allocate() ausgel&#xf6;st"/>
+<node CREATED="1673809430115" ID="ID_1967291627" MODIFIED="1673809442712" TEXT="&#x27fc; TimelineLayout::sizeZoomWindow (Gtk::Allocation&amp; alloc)"/>
+<node CREATED="1673809466480" ID="ID_1184190765" MODIFIED="1673809494768" TEXT="ZoomWindow::calibrateExtension() &#x27fc; fireChangeNotification()"/>
+<node CREATED="1673809517381" ID="ID_975841816" MODIFIED="1673809530033" TEXT="&#x27fc; BodyCanvasWidget::slotStructureChange()"/>
+</node>
+<node CREATED="1673809653325" ID="ID_960514018" MODIFIED="1673809659071" TEXT="stop-2">
+<node CREATED="1673809269809" ID="ID_963970163" MODIFIED="1673809274764" TEXT="im GUI-Thread"/>
+<node CREATED="1673809685665" ID="ID_1008125357" MODIFIED="1673809693963" TEXT="Gtk::Widget_Class::draw_callback()"/>
+<node CREATED="1673809708766" ID="ID_273943398" MODIFIED="1673809719360" TEXT="TimelineCanvas::on_draw()"/>
+<node CREATED="1673809744969" ID="ID_1591443219" MODIFIED="1673821398443" TEXT="BodyCanvasWidget::maybeRebuildLayout() &#x27fc; layout_.triggerDisplayEvaluation()">
+<arrowlink COLOR="#3c2f91" DESTINATION="ID_1442699048" ENDARROW="Default" ENDINCLINATION="95;12;" ID="Arrow_ID_1977514739" STARTARROW="None" STARTINCLINATION="-9;28;"/>
+<arrowlink COLOR="#3c2f91" DESTINATION="ID_719594409" ENDARROW="Default" ENDINCLINATION="95;12;" ID="Arrow_ID_852227304" STARTARROW="None" STARTINCLINATION="-9;28;"/>
+</node>
+</node>
+<node CREATED="1673809820526" ID="ID_1282555495" MODIFIED="1673809823250" TEXT="stop-3">
+<node CREATED="1673810027811" ID="ID_1442699048" MODIFIED="1673821392108" TEXT="im gleichen Callstack">
+<linktarget COLOR="#3c2f91" DESTINATION="ID_1442699048" ENDARROW="Default" ENDINCLINATION="95;12;" ID="Arrow_ID_1977514739" SOURCE="ID_1591443219" STARTARROW="None" STARTINCLINATION="-9;28;"/>
+</node>
+<node CREATED="1673811079973" ID="ID_1459771595" MODIFIED="1673811082177" TEXT="TimelineLayout::establishLayout (DisplayEvaluation&amp;)"/>
+<node CREATED="1673810070508" ID="ID_285758476" MODIFIED="1673810073328" TEXT="bodyCanvas_.get_hadjustment()-&gt;set_value(pxOffset)">
+<node CREATED="1673810084309" ID="ID_438775800" MODIFIED="1673810089799" TEXT="pxOffset=152"/>
+<node CREATED="1673810159367" ID="ID_869315491" MODIFIED="1673810171891" TEXT="vorher: 153 (beim letzten Scrolliing)"/>
+</node>
+<node CREATED="1673810802131" ID="ID_1513475551" MODIFIED="1673810856912" TEXT="bodyCanvas_::hadjustment.property_value().signal_changed()">
+<node CREATED="1673810863442" ID="ID_740887741" MODIFIED="1673810864566" TEXT="&#x27fc; TimelineLayout::syncZoomWindow (PAdjustment hadj)"/>
+<node CREATED="1673810881168" ID="ID_770428876" MODIFIED="1673810894275" TEXT="zoomWindow_.setVisibleStart (windowStart)  &#x27fc; fireChangeNotification()"/>
+<node CREATED="1673809517381" ID="ID_535606791" MODIFIED="1673812842543" TEXT="&#x27fc; BodyCanvasWidget::slotStructureChange()">
+<arrowlink COLOR="#4697c4" DESTINATION="ID_1775726398" ENDARROW="Default" ENDINCLINATION="80;-12;" ID="Arrow_ID_1301127863" STARTARROW="None" STARTINCLINATION="-284;18;"/>
+</node>
+</node>
+<node CREATED="1673812714835" ID="ID_1775726398" MODIFIED="1673812842543" TEXT="profile_.clear()">
+<linktarget COLOR="#4697c4" DESTINATION="ID_1775726398" ENDARROW="Default" ENDINCLINATION="80;-12;" ID="Arrow_ID_1301127863" SOURCE="ID_535606791" STARTARROW="None" STARTINCLINATION="-284;18;"/>
+</node>
+</node>
+<node CREATED="1673812775683" ID="ID_1800881693" MODIFIED="1673812777742" TEXT="stop-4">
+<node CREATED="1673810027811" ID="ID_719594409" MODIFIED="1673821395365" TEXT="im gleichen Callstack">
+<linktarget COLOR="#3c2f91" DESTINATION="ID_719594409" ENDARROW="Default" ENDINCLINATION="95;12;" ID="Arrow_ID_852227304" SOURCE="ID_1591443219" STARTARROW="None" STARTINCLINATION="-9;28;"/>
+</node>
+<node CREATED="1673809744969" ID="ID_686562400" MODIFIED="1673821439684" TEXT="BodyCanvasWidget::establishLayout()">
+<arrowlink COLOR="#3c2f91" DESTINATION="ID_1308718811" ENDARROW="Default" ENDINCLINATION="66;9;" ID="Arrow_ID_125967636" STARTARROW="None" STARTINCLINATION="32;22;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1673811186943" ID="ID_671439113" MODIFIED="1673811190535" TEXT="rootBody_-&gt;establishTrackSpace (profile_)"/>
+<node CREATED="1673811200349" ID="ID_1198425081" MODIFIED="1673811206428" TEXT="baut Profile neu auf">
+<icon BUILTIN="info"/>
+</node>
+</node>
+</node>
+<node CREATED="1673820672711" ID="ID_1084465097" MODIFIED="1673820675362" TEXT="stop-5">
+<node CREATED="1673810027811" ID="ID_1308718811" MODIFIED="1673821439684" TEXT="im gleichen Callstack">
+<linktarget COLOR="#3c2f91" DESTINATION="ID_1308718811" ENDARROW="Default" ENDINCLINATION="66;9;" ID="Arrow_ID_125967636" SOURCE="ID_686562400" STARTARROW="None" STARTINCLINATION="32;22;"/>
+</node>
+<node CREATED="1673820676440" ID="ID_1428838878" MODIFIED="1673821379859" TEXT="BodyCanvasWidget::establishLayout ()">
+<node CREATED="1673821503186" ID="ID_332793347" MODIFIED="1673821505330" TEXT="adjustCanvasSize(layout_.getPixSpan().delta(), contentHeight, rulerHeight)">
+<node CREATED="1673821691053" ID="ID_1561772925" MODIFIED="1673821692313" TEXT="layout_.getPixSpan()"/>
+<node CREATED="1673821707880" ID="ID_46999928" MODIFIED="1673821746745" TEXT="DUMP: &#x27ff; &#x394;(0, -476)"/>
+</node>
+<node CREATED="1673821574701" ID="ID_1681667823" MODIFIED="1673821855384">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      adjust (rulerCanvas_, canvasWidth <b><font color="#fc2020">&#8788;0</font></b>, rulerHeight &#8788;11<font color="#41d448">&#10004;</font>)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1673821774834" ID="ID_1418910368" MODIFIED="1673822078671" TEXT="rulerCanvas.set_size(0, 11);">
+<arrowlink COLOR="#bf0e70" DESTINATION="ID_1137713906" ENDARROW="Default" ENDINCLINATION="128;6;" ID="Arrow_ID_184403276" STARTARROW="None" STARTINCLINATION="49;5;"/>
+</node>
+</node>
+<node CREATED="1673821942380" ID="ID_1137713906" MODIFIED="1673822078671" TEXT="bodyCanvas_::hadjustment.property_value().signal_changed()">
+<linktarget COLOR="#bf0e70" DESTINATION="ID_1137713906" ENDARROW="Default" ENDINCLINATION="128;6;" ID="Arrow_ID_184403276" SOURCE="ID_1418910368" STARTARROW="None" STARTINCLINATION="49;5;"/>
+</node>
+<node CREATED="1673822109021" ID="ID_1969505468" MODIFIED="1673822114353" TEXT="TimelineLayout::syncZoomWindow(hadjustment)">
+<node CREATED="1673822205944" ID="ID_911661763" MODIFIED="1673822215169" TEXT="hadjustment wird nach pos gefract"/>
+<node COLOR="#a41765" CREATED="1673822215895" ID="ID_145619270" MODIFIED="1673822785272" TEXT="pos &#x2254; 0">
+<arrowlink COLOR="#ec5b91" DESTINATION="ID_847463371" ENDARROW="Default" ENDINCLINATION="151;-4;" ID="Arrow_ID_1064590055" STARTARROW="None" STARTINCLINATION="151;46;"/>
+</node>
+<node CREATED="1673822245795" ID="ID_1702472826" MODIFIED="1673822259565" TEXT="zoomWindow_.setVisibleStart (Time{0})"/>
+</node>
+<node CREATED="1673809517381" ID="ID_1945994324" MODIFIED="1673809530033" TEXT="&#x27fc; BodyCanvasWidget::slotStructureChange()"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1673822368235" ID="ID_37222453" MODIFIED="1673822393376" TEXT="profile_.clear()">
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1673822498449" ID="ID_969173291" MODIFIED="1673822509927" TEXT="Fazit: zwei Probleme">
+<icon BUILTIN="forward"/>
+<node CREATED="1673822512176" ID="ID_838311135" MODIFIED="1673822561177">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      scrollPos &#10239; zoomWindow ge&#228;ndert, <i>nachdem</i>&#160;das Profil aufgebaut wurde
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1673822842715" ID="ID_469521080" MODIFIED="1673822930226" TEXT="ohne den anderen Bug w&#xfc;rde das hier aber nicht auftreten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn den pixSpan sollte sich ja grade eben nicht &#228;ndern, sondern nur der sichtbare Fenster-Ausschnitt; die Implementierung mit dem ZoomWindow zielt ja genau darauf, die Metrik konstant zu halten, selbst wenn sich das sichtbare Fenster (wie hier) &#228;ndert
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1673822820583" ID="ID_1299254285" MODIFIED="1673822834376" TEXT="grunds&#xe4;tzilch kann man sowas nie ausschlie&#xdf;en">
+<node CREATED="1673822938342" ID="ID_62922350" MODIFIED="1673822959592" TEXT="es kann stets Dinge geben, die durch eine Layoutberechnung nachtr&#xe4;glich invalidiert werden"/>
+<node CREATED="1673822961603" ID="ID_1448263496" MODIFIED="1673822979878" TEXT="und deshalb m&#xfc;&#xdf;te die Berechnung dann lediglich invalidiert und wiederholt werden"/>
+<node CREATED="1673822981906" ID="ID_1546720017" MODIFIED="1673823013893" TEXT="...bis sie sich stabilisiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und <i>nur das </i>kann man vom Design her einfordern (da&#223; sie sich stabilisiert und nicht in Oszillationen ger&#228;t)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1673823198796" ID="ID_1795675893" MODIFIED="1673823218023" TEXT="while-Schleife und nochmal berechnen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1673822589957" ID="ID_637545532" MODIFIED="1673822645422" TEXT="layout_.getPixSpan() entgleist">
+<arrowlink COLOR="#e91670" DESTINATION="ID_128441040" ENDARROW="Default" ENDINCLINATION="-511;34;" ID="Arrow_ID_1077460507" STARTARROW="None" STARTINCLINATION="-190;-19;"/>
+<node CREATED="1673822656960" ID="ID_847463371" MODIFIED="1673822785272" TEXT="der End-Wert verh&#xe4;lt sich &#xbb;zyklisch&#xab; und wird bisweilen negativ">
+<linktarget COLOR="#ec5b91" DESTINATION="ID_847463371" ENDARROW="Default" ENDINCLINATION="151;-4;" ID="Arrow_ID_1064590055" SOURCE="ID_145619270" STARTARROW="None" STARTINCLINATION="151;46;"/>
+</node>
+<node CREATED="1673822724035" ID="ID_1257160861" MODIFIED="1673822739708" TEXT="nur deshalb wird hier die Scroll-Position signifikant verschoben">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
 </node>
 </node>
 </node>
