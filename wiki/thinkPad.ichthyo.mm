@@ -43505,11 +43505,33 @@
 <node COLOR="#338800" CREATED="1672969399236" ID="ID_105188286" MODIFIED="1672969452360" TEXT="Logik &#xfc;berarbeitet: Werte kommmen jetzt an">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1672969412314" ID="ID_128441040" MODIFIED="1672969448542" TEXT="Fehler: horizontale Ausdehnung instabil">
+<node COLOR="#435e98" CREATED="1672969412314" ID="ID_128441040" MODIFIED="1673917833235" TEXT="Fehler: horizontale Ausdehnung instabil">
 <linktarget COLOR="#e91670" DESTINATION="ID_128441040" ENDARROW="Default" ENDINCLINATION="-511;34;" ID="Arrow_ID_1077460507" SOURCE="ID_637545532" STARTARROW="None" STARTINCLINATION="-190;-19;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1673020358513" ID="ID_1745939268" MODIFIED="1673020364580" TEXT="Beobachtung(DUMP)">
 <node CREATED="1673020365563" ID="ID_1034029673" MODIFIED="1673020378010" TEXT="layout_.getPixSpan().delta() verh&#xe4;lt sich &quot;zyklisch&quot;"/>
+<node CREATED="1673824080045" ID="ID_1921636015" MODIFIED="1673824095119" TEXT="und zwar der End-Wert; dieser wird bisweilen negativ und w&#xe4;chst dann wieder"/>
+<node CREATED="1673824100547" ID="ID_1250952994" MODIFIED="1673824127603" TEXT="auff&#xe4;llig: es tritt h&#xe4;ufiger auf, wenn man die Allokation nach Verkleinerung wieder vergr&#xf6;&#xdf;ert..."/>
+</node>
+<node CREATED="1673917066250" ID="ID_275241960" MODIFIED="1673917076486" TEXT="Dump ausbauen">
+<node CREATED="1673917077557" ID="ID_50462687" MODIFIED="1673917088547" TEXT="die Berechneten (raw) Zeitwerte sind stabil"/>
+<node CREATED="1673917089296" ID="ID_1095682897" MODIFIED="1673917099017" TEXT="es mu&#xdf; in der Umwandlung in Pixel passieren"/>
+<node CREATED="1673917099760" ID="ID_1219466338" MODIFIED="1673917118899" TEXT="hier wird&apos;s m&#xfc;hsam (wir rufen mehrere virtuelle Funktionen auf)">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1673917123418" ID="ID_1029230100" MODIFIED="1673917129773" TEXT="Implementierung aufdoppeln"/>
+<node CREATED="1673917130673" ID="ID_346555789" MODIFIED="1673917143894" TEXT="aber einen Debugging-String zur&#xfc;ckgeben"/>
+<node CREATED="1673917144608" ID="ID_124621928" MODIFIED="1673917149465" TEXT="mit zwischenergebnissen"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1673917195121" ID="ID_1093667497" MODIFIED="1673917846467" TEXT="Integer-wrap-around">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1673917211656" ID="ID_564112023" MODIFIED="1673917230992" TEXT="4508000000/7282711sec kann nicht als 32-bit int dargestellt werden"/>
+<node CREATED="1673917231867" ID="ID_830241934" MODIFIED="1673917246230" TEXT="vor der Division in int64_t umwandeln!"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1673917712508" ID="ID_807239340" MODIFIED="1673917831460" TEXT="L&#xf6;sung: Division und trucate in 64-bit ausf&#xfc;hren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1673917753318" ID="ID_381118842" MODIFIED="1673917764871" TEXT="Downcast Ergebnis in 32-bit"/>
+<node CREATED="1673917765612" ID="ID_1287873753" MODIFIED="1673917780494" TEXT="Assertion da&#xdf; das Ergebnis in den Wertebereich pa&#xdf;t"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1672969457755" ID="ID_1145571154" MODIFIED="1672969483227" TEXT="Fehler: run-away in der H&#xf6;he bei wiederholter Display-Evaluation">
@@ -43712,7 +43734,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1673807997325" ID="ID_1009074242" MODIFIED="1673808030377" TEXT="Assertion-fail">
+<node COLOR="#435e98" CREATED="1673807997325" ID="ID_1009074242" MODIFIED="1673824061664" TEXT="Assertion-fail">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -43861,8 +43883,8 @@
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1673823198796" ID="ID_1795675893" MODIFIED="1673823218023" TEXT="while-Schleife und nochmal berechnen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1673823198796" ID="ID_1795675893" MODIFIED="1673824051687" TEXT="while-Schleife und nochmal berechnen">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1673822589957" ID="ID_637545532" MODIFIED="1673822645422" TEXT="layout_.getPixSpan() entgleist">

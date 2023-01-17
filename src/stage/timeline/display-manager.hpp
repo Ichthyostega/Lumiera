@@ -99,6 +99,7 @@ namespace timeline {
   using lib::time::TimeValue;
   class TrackHeadWidget;
   class TrackBody;
+  using std::string;///////////////////////////////TODO
   
   
   /**
@@ -189,8 +190,10 @@ namespace timeline {
   auto covfefe2 = coveredTime();
   auto end = covfefe2.end();
   auto tranE = translateTimeToPixels(end);
+  
+  string buggi = tranZ(end);
 
-cout<<"|↯| pxSpan cov1="<<covfefe1<<"⟼"<<tranS<<" cov2="<<covfefe2<<"⟼"<<tranE<<endl;  
+cout<<"|↯| "<<buggi<<"  ...pxSpan cov1={"<<_raw(start)<<","<<_raw(end)<<"}⟼("<<tranS<<","<<tranE<<")"<<endl;  
   return {tranS
          ,tranE
   };

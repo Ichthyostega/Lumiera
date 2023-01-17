@@ -57,6 +57,7 @@
 #include "lib/util.hpp"
 
 #include <utility>
+#include <string>///////////////TODO
 
 
 namespace stage {
@@ -66,6 +67,7 @@ namespace model {
   using lib::time::Offset;
   using lib::time::TimeValue;
   using lib::time::TimeSpan;
+  using std::string; //////////////////////////TODO
   
   
   
@@ -99,6 +101,9 @@ namespace model {
        * @return resulting TimeValue when applying the offset within current metric  
        */
       virtual TimeValue applyScreenDelta(Time anchor, double deltaPx)  const =0;
+//////////////////////////////////////////////////////////////TODO
+virtual string tranZ(TimeValue staTiPoi)  const =0;
+//////////////////////////////////////////////////////////////TODO
     };
   
   
