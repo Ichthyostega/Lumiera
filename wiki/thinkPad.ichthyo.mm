@@ -25126,7 +25126,7 @@
 <node CREATED="1672787342676" ID="ID_1189311522" MODIFIED="1672787960019" TEXT="aber auch: ZoomWindow selber mu&#xdf; von Geometrie-&#xc4;nderungen erfahren">
 <arrowlink COLOR="#4c7ef4" DESTINATION="ID_973993644" ENDARROW="Default" ENDINCLINATION="-1199;-155;" ID="Arrow_ID_1196387900" STARTARROW="None" STARTINCLINATION="2666;104;"/>
 <linktarget COLOR="#4a449e" DESTINATION="ID_1189311522" ENDARROW="Default" ENDINCLINATION="785;29;" ID="Arrow_ID_1573433988" SOURCE="ID_650213030" STARTARROW="None" STARTINCLINATION="241;10;"/>
-<linktarget COLOR="#4a449e" DESTINATION="ID_1189311522" ENDARROW="Default" ENDINCLINATION="1548;60;" ID="Arrow_ID_751989601" SOURCE="ID_37048779" STARTARROW="None" STARTINCLINATION="1439;57;"/>
+<linktarget COLOR="#4a759a" DESTINATION="ID_1189311522" ENDARROW="Default" ENDINCLINATION="1548;60;" ID="Arrow_ID_751989601" SOURCE="ID_37048779" STARTARROW="None" STARTINCLINATION="1439;57;"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1672787636743" ID="ID_1344084462" MODIFIED="1672797005517" TEXT="Flexibilisierung Display-Evaluation">
@@ -25721,7 +25721,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611486765168" ID="ID_62818590" MODIFIED="1611487348314" TEXT="Clip-Positionen und Ausdehnungen integrieren">
 <linktarget COLOR="#de4b7e" DESTINATION="ID_62818590" ENDARROW="Default" ENDINCLINATION="-1193;64;" ID="Arrow_ID_1779091384" SOURCE="ID_392294660" STARTARROW="None" STARTINCLINATION="817;64;"/>
 <icon BUILTIN="flag-yellow"/>
-<node COLOR="#435e98" CREATED="1617470705305" HGAP="40" ID="ID_644438911" MODIFIED="1617470805539" TEXT="Stand: vorl&#xe4;ufige Implementierung" VSHIFT="6">
+<node COLOR="#435e98" CREATED="1617470705305" HGAP="40" ID="ID_644438911" MODIFIED="1674161854370" TEXT="Stand: vorl&#xe4;ufige Implementierung" VSHIFT="6">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -25729,6 +25729,19 @@
   <body>
     <p>
       erst mal nur mit einem Button, und die Layout-Logik ehr &quot;gesch&#228;tzt&quot; den pr&#228;zise verstanden und umgesetzt. Immerhinn l&#228;uft der DisplayEvaluationPass nun, und auch die Buttons erscheinen an der Stelle, an der ich das erwarten w&#252;rde...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1674161820779" ID="ID_1877059709" MODIFIED="1674161920084" TEXT="Stand: ElementBoxWidget als Clip, aber leer">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ende 2022 habe ich dann doch noch das ElementBoxWidget gebaut. Nun verwenden Clips schon mal dieses, aber die ganze Logik der Clip-Anzeige <i>ist auf sp&#228;ter verschoben...</i>
     </p>
   </body>
 </html></richcontent>
@@ -26829,6 +26842,10 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563467424456" ID="ID_1723744174" MODIFIED="1563467445803" TEXT="collapsed/hidden ber&#xfc;cksichtigen">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1674160114980" ID="ID_852402445" MODIFIED="1674160219744" TEXT="1/2023 noch nicht ganz klar wie">
+<arrowlink COLOR="#c65e7c" DESTINATION="ID_1440303749" ENDARROW="Default" ENDINCLINATION="-1806;-99;" ID="Arrow_ID_537995229" STARTARROW="None" STARTINCLINATION="-421;38;"/>
+</node>
+<node CREATED="1674160134114" ID="ID_141550042" MODIFIED="1674160141660" TEXT="vermutich bereits beim Aufbau des Profils"/>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1563467451739" ID="ID_1414960950" MODIFIED="1575053380683" TEXT="(re)Konstruieren">
 <linktarget COLOR="#d73f41" DESTINATION="ID_1414960950" ENDARROW="Default" ENDINCLINATION="699;-94;" ID="Arrow_ID_1514395934" SOURCE="ID_283854399" STARTARROW="None" STARTINCLINATION="236;12;"/>
@@ -27744,8 +27761,14 @@
 </node>
 </node>
 <node CREATED="1563469593872" HGAP="84" ID="ID_1533093205" MODIFIED="1563469604196" TEXT="sub-Navigation" VSHIFT="1">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1674161525129" ID="ID_1762683235" MODIFIED="1674163468109" TEXT="Grid-Zelle f&#xfc;r die Placement-Controls vorsehen">
+<linktarget COLOR="#b1493c" DESTINATION="ID_1762683235" ENDARROW="Default" ENDINCLINATION="624;37;" ID="Arrow_ID_1560223761" SOURCE="ID_1332292119" STARTARROW="None" STARTINCLINATION="129;-6;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
 <node CREATED="1563469608318" ID="ID_174979019" MODIFIED="1563469619520" TEXT="zus&#xe4;tzliche sub-Tracks resultieren in zus&#xe4;tzlichen Zeilen">
-<node CREATED="1563469770472" ID="ID_1252550324" MODIFIED="1563469775934" TEXT="einf&#xfc;gen"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469770472" ID="ID_1252550324" MODIFIED="1674163220678" TEXT="einf&#xfc;gen gem&#xe4;&#xdf; Zahl der Kind-Tracks">
+<icon BUILTIN="flag-yellow"/>
+</node>
 <node CREATED="1563469790905" ID="ID_1917094772" MODIFIED="1563469795921" TEXT="re-Konstruieren">
 <node CREATED="1563469797573" ID="ID_615107402" MODIFIED="1563469801027" TEXT="platt machen"/>
 <node CREATED="1563469807081" ID="ID_1454613932" MODIFIED="1563469830842" TEXT="auf erneutes Einf&#xfc;gen warten"/>
@@ -27759,7 +27782,8 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469686644" ID="ID_467394520" MODIFIED="1563469732788" TEXT="gar nicht wenn es nur einen Kind-Track gibt">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469700651" ID="ID_478580800" MODIFIED="1563469729247" TEXT="auf die richtige H&#xf6;he zielen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469700651" ID="ID_478580800" MODIFIED="1674161457707" TEXT="auf die richtige H&#xf6;he zielen">
+<linktarget COLOR="#bf7897" DESTINATION="ID_478580800" ENDARROW="Default" ENDINCLINATION="451;41;" ID="Arrow_ID_513449931" SOURCE="ID_1311832889" STARTARROW="None" STARTINCLINATION="481;-27;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469735149" ID="ID_704791408" MODIFIED="1563469741153" TEXT="Selection-State zeigen">
@@ -27773,7 +27797,7 @@
 <arrowlink COLOR="#4b98e2" DESTINATION="ID_1754764132" ENDARROW="Default" ENDINCLINATION="-2912;207;" ID="Arrow_ID_468901844" STARTARROW="None" STARTINCLINATION="698;66;"/>
 </node>
 <node CREATED="1566955574281" ID="ID_1649819002" MODIFIED="1566955652259" TEXT="mu&#xdf; gemeinsam mit unterem Body-Canvas scrollen">
-<arrowlink COLOR="#327dd5" DESTINATION="ID_1718751102" ENDARROW="Default" ENDINCLINATION="-1329;-302;" ID="Arrow_ID_1962173714" STARTARROW="None" STARTINCLINATION="631;0;"/>
+<arrowlink COLOR="#327dd5" DESTINATION="ID_1718751102" ENDARROW="Default" ENDINCLINATION="-1329;-302;" ID="Arrow_ID_1962173714" STARTARROW="None" STARTINCLINATION="650;36;"/>
 </node>
 </node>
 </node>
@@ -29164,6 +29188,48 @@
 <linktarget COLOR="#ea7967" DESTINATION="ID_1623890878" ENDARROW="Default" ENDINCLINATION="24;-87;" ID="Arrow_ID_809556626" SOURCE="ID_142948287" STARTARROW="None" STARTINCLINATION="119;11;"/>
 <icon BUILTIN="flag-pink"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1674161380587" ID="ID_1311832889" MODIFIED="1674161457707" TEXT="Platz f&#xfc;r Placement-Controlls sinnvoll anordnen">
+<arrowlink COLOR="#bf7897" DESTINATION="ID_478580800" ENDARROW="Default" ENDINCLINATION="451;41;" ID="Arrow_ID_513449931" STARTARROW="None" STARTINCLINATION="481;-27;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1674163294922" ID="ID_1332292119" LINK="#ID_1650195806" MODIFIED="1674163468109" TEXT="Probleme mit der vertikalen Koordination bei nested Tracks">
+<arrowlink COLOR="#b1493c" DESTINATION="ID_1762683235" ENDARROW="Default" ENDINCLINATION="624;37;" ID="Arrow_ID_1560223761" STARTARROW="None" STARTINCLINATION="129;-6;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1674158539561" ID="ID_1440303749" MODIFIED="1674160219745" TEXT="#1265 define expanding/collapsing of tracks">
+<linktarget COLOR="#926b99" DESTINATION="ID_1440303749" ENDARROW="Default" ENDINCLINATION="-978;62;" ID="Arrow_ID_1979782904" SOURCE="ID_1119649795" STARTARROW="None" STARTINCLINATION="-281;21;"/>
+<linktarget COLOR="#c65e7c" DESTINATION="ID_1440303749" ENDARROW="Default" ENDINCLINATION="-1806;-99;" ID="Arrow_ID_537995229" SOURCE="ID_852402445" STARTARROW="None" STARTINCLINATION="-421;38;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1674160660563" ID="ID_1828648487" MODIFIED="1674161293621" TEXT="#1266 implement scope rulers and group tracks">
+<linktarget COLOR="#8a4d65" DESTINATION="ID_1828648487" ENDARROW="Default" ENDINCLINATION="-2734;159;" ID="Arrow_ID_502951484" SOURCE="ID_1409730860" STARTARROW="None" STARTINCLINATION="-1113;-73;"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1674160771852" ID="ID_459820507" MODIFIED="1674161151512" TEXT="Def &#xbb;scope ruler&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Jeder Track kann 0...N Ruler haben (Ruler = horizontale Scala);
+    </p>
+    <ul>
+      <li>
+        einer von diesen ist der &#187;scope ruler&#171;
+      </li>
+      <li>
+        er ersetzt den Track und den gesamten Scope der sub-Tracks in der Pr&#228;sentation
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1674161152794" ID="ID_1182180069" MODIFIED="1674161238640" TEXT="&#xd83e;&#xdc32; unklar: Model-Repr&#xe4;sentation der Ruler">
+<arrowlink COLOR="#af637b" DESTINATION="ID_1945074845" ENDARROW="Default" ENDINCLINATION="-348;-196;" ID="Arrow_ID_1261991748" STARTARROW="None" STARTINCLINATION="-383;24;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1555084648375" ID="ID_483631091" MODIFIED="1565283046031" TEXT="Thema: Struktur-Profil">
@@ -29811,9 +29877,11 @@
 <node CREATED="1554995813195" ID="ID_1158334025" MODIFIED="1557498707229" TEXT="sind Modell-Elemente"/>
 <node CREATED="1554995818270" ID="ID_753876518" MODIFIED="1557498707229" TEXT="werden in den Track injiziert"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1554995829834" ID="ID_1945074845" MODIFIED="1557498707229" TEXT="teilweise noch unklar">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1554995829834" ID="ID_1945074845" MODIFIED="1674161238640" TEXT="teilweise noch unklar">
+<linktarget COLOR="#af637b" DESTINATION="ID_1945074845" ENDARROW="Default" ENDINCLINATION="-348;-196;" ID="Arrow_ID_1261991748" SOURCE="ID_1182180069" STARTARROW="None" STARTINCLINATION="-383;24;"/>
 <icon BUILTIN="broken-line"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1554995834875" ID="ID_1119649795" MODIFIED="1557498707229" TEXT="Zusammenspiel mit Expand/Collapse">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1554995834875" ID="ID_1119649795" MODIFIED="1674159488258" TEXT="Zusammenspiel mit Expand/Collapse">
+<arrowlink COLOR="#926b99" DESTINATION="ID_1440303749" ENDARROW="Default" ENDINCLINATION="-978;62;" ID="Arrow_ID_1979782904" STARTARROW="None" STARTINCLINATION="-281;21;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1555020163776" ID="ID_1470546162" MODIFIED="1557498707229" TEXT="collapsed == Scope durch Ruler ersetzt"/>
 <node CREATED="1555020175102" ID="ID_1798602" MODIFIED="1557498707229">
@@ -29828,6 +29896,7 @@
   </body>
 </html></richcontent>
 </node>
+<node CREATED="1674159496551" ID="ID_1094568733" MODIFIED="1674159514737" TEXT="Trotzdem mu&#xdf; es in das Timeline-globale Layout einbezogen werden"/>
 </node>
 <node CREATED="1561151742029" ID="ID_857875045" MODIFIED="1561151755207" TEXT="repr&#xe4;sentiert als Ruler des top-level-Track"/>
 <node COLOR="#338800" CREATED="1561151772593" ID="ID_1142063549" MODIFIED="1566406715937" TEXT="aber die Zahl der Pr&#xe4;fix-Elemente mu&#xdf; korrekt eingesetzt werden">
@@ -29919,7 +29988,7 @@
 </node>
 <node CREATED="1566955479862" HGAP="37" ID="ID_933224238" MODIFIED="1566955502545" TEXT="Koordinaten &amp; Position" VSHIFT="-9">
 <node CREATED="1566955505470" ID="ID_1718751102" MODIFIED="1566955652259" TEXT="unterer Canvas mu&#xdf; zusammen mit Header-Pane scrollen">
-<linktarget COLOR="#327dd5" DESTINATION="ID_1718751102" ENDARROW="Default" ENDINCLINATION="-1329;-302;" ID="Arrow_ID_1962173714" SOURCE="ID_1649819002" STARTARROW="None" STARTINCLINATION="631;0;"/>
+<linktarget COLOR="#327dd5" DESTINATION="ID_1718751102" ENDARROW="Default" ENDINCLINATION="-1329;-302;" ID="Arrow_ID_1962173714" SOURCE="ID_1649819002" STARTARROW="None" STARTINCLINATION="650;36;"/>
 <node COLOR="#338800" CREATED="1566955655903" ID="ID_652481986" MODIFIED="1566955664590" TEXT="gemeinsames Adjustment verdrahten">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -31548,7 +31617,6 @@
 </node>
 <node CREATED="1564497891485" ID="ID_1183787016" MODIFIED="1564932176101" TEXT="Ha! man mu&#xdf; irgendwo eine Farbe angeben">
 <linktarget COLOR="#2ee773" DESTINATION="ID_1183787016" ENDARROW="Default" ENDINCLINATION="120;7;" ID="Arrow_ID_1051090636" SOURCE="ID_621726316" STARTARROW="None" STARTINCLINATION="-30;75;"/>
-<linktarget COLOR="#2ee773" DESTINATION="ID_1183787016" ENDARROW="Default" ENDINCLINATION="278;16;" ID="Arrow_ID_1462879108" SOURCE="ID_1801143265" STARTARROW="None" STARTINCLINATION="344;0;"/>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1564497939401" ID="ID_1944950668" MODIFIED="1564497957953" TEXT="...dann wird das outset/inset durchaus sichtbar"/>
@@ -31587,16 +31655,15 @@
 <icon BUILTIN="forward"/>
 <node CREATED="1563112482359" ID="ID_100127081" MODIFIED="1563112487856" TEXT="Rahmen mit Gap zeichnen"/>
 <node CREATED="1563112489001" ID="ID_1802227725" MODIFIED="1563112511333" TEXT="...und dadurch die Oberseite verdecken"/>
-<node CREATED="1563636755968" ID="ID_145032855" MODIFIED="1563636768594" TEXT="funktioniert... aber zwei Probleme">
-<icon BUILTIN="broken-line"/>
+<node COLOR="#435e98" CREATED="1563636755968" ID="ID_145032855" MODIFIED="1674159053972" TEXT="funktioniert... aber zwei Probleme">
+<icon BUILTIN="idea"/>
 <node COLOR="#435e98" CREATED="1563636787971" ID="ID_362681600" MODIFIED="1564932601661" TEXT="Rahmen wird solid gezeichnet, nicht outset">
 <arrowlink COLOR="#4daab7" DESTINATION="ID_391875364" ENDARROW="Default" ENDINCLINATION="-88;45;" ID="Arrow_ID_1840813206" STARTARROW="None" STARTINCLINATION="-335;-6;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1564498321121" ID="ID_277450056" MODIFIED="1564498326722" TEXT="stimmt gar nicht">
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node CREATED="1564498328208" ID="ID_1075781781" MODIFIED="1564498334513" TEXT="man mu&#xdf; nur eine Farbe setzen"/>
-<node CREATED="1564498560001" ID="ID_1801143265" MODIFIED="1564932176101" TEXT="man mu&#xdf; nur eine Farbe setzen">
+<node CREATED="1564498328208" ID="ID_1801143265" MODIFIED="1564932176101" TEXT="man mu&#xdf; nur eine Farbe setzen">
 <arrowlink COLOR="#2ee773" DESTINATION="ID_1183787016" ENDARROW="Default" ENDINCLINATION="278;16;" ID="Arrow_ID_1462879108" STARTARROW="None" STARTINCLINATION="344;0;"/>
 </node>
 </node>
@@ -43389,8 +43456,8 @@
 <node COLOR="#338800" CREATED="1672708802759" ID="ID_412094029" MODIFIED="1672708819294" TEXT="Interface DisplayMetric implementiert durch R&#xfc;ckgriff auf das ZoomWindow">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1672883648918" ID="ID_1140551016" MODIFIED="1672883762952" TEXT="Zugangsweg schaffen f&#xfc;r ZoomWindow-Aktuatoren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1672883648918" FOLDED="true" ID="ID_1140551016" MODIFIED="1673918644481" TEXT="Zugangsweg schaffen f&#xfc;r ZoomWindow-Aktuatoren">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1672883866721" ID="ID_265373712" MODIFIED="1672883891409" TEXT="jeweils anzubinden...">
 <node CREATED="1672883669691" ID="ID_233898229" MODIFIED="1672883705186" TEXT="horizontale Scrollbar"/>
 <node CREATED="1672883684145" ID="ID_1407291054" MODIFIED="1672883701874" TEXT="Ermittlung der realen Pixel-Weite"/>
@@ -43469,7 +43536,8 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1672952474418" ID="ID_1703019039" MODIFIED="1672952486547" TEXT="unn&#xf6;tige Umwege &#xfc;ber Zeit-Werte m&#xf6;glichst vermeiden">
+<node CREATED="1672952474418" ID="ID_1703019039" MODIFIED="1673918599660" TEXT="unn&#xf6;tige Umwege &#xfc;ber Zeit-Werte m&#xf6;glichst vermeiden">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1672952510381" ID="ID_557400282" MODIFIED="1672952543555" TEXT="insofern die Rechnungen als pr&#xe4;zise gelten"/>
 <node CREATED="1672952549168" ID="ID_1479986541" MODIFIED="1672952631231" TEXT="aber die Werte-Begrenzungen ber&#xfc;cksichtigen">
 <richcontent TYPE="NOTE"><html>
@@ -43483,9 +43551,13 @@
   </body>
 </html></richcontent>
 </node>
+<node COLOR="#435e98" CREATED="1673918575368" ID="ID_1602314348" MODIFIED="1673918594542" TEXT="aber zumindest die Ausdehnung mu&#xdf; ich &#xfc;ber die Zeit-Werte ausrechnen">
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node CREATED="1672952644887" ID="ID_393917969" MODIFIED="1672952661568" TEXT="ggfs aber Stellung der Scrollbars pr&#xfc;fen und rekalibrieren"/>
-<node CREATED="1672956427506" ID="ID_1572841890" MODIFIED="1672956430600" TEXT="Struktur">
+<node CREATED="1672956427506" ID="ID_1572841890" MODIFIED="1673918605435" TEXT="Struktur">
+<icon BUILTIN="forward"/>
 <node CREATED="1672956446738" ID="ID_419294832" MODIFIED="1672960594911" TEXT="Adjustment::valueChanged() &#x27fc; syncZoomWindow(Adjustment&amp;)"/>
 <node CREATED="1672956504172" ID="ID_1390665381" MODIFIED="1672960626188" TEXT="BodyCanvasWidget::on_size_allocate() &#x27fc; sizeZoomWindow()">
 <node CREATED="1672960628748" ID="ID_31432666" MODIFIED="1672960671941" TEXT="Display-Evaluation &#x27f6; update Adjustment based on ZoomWindow"/>
@@ -43493,9 +43565,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1672787519757" ID="ID_37048779" MODIFIED="1672787852442" TEXT="Pixel-Weite kalibrieren: zu Beginn der Display-Evaluation einschleifen">
-<arrowlink COLOR="#4a449e" DESTINATION="ID_1189311522" ENDARROW="Default" ENDINCLINATION="1548;60;" ID="Arrow_ID_751989601" STARTARROW="None" STARTINCLINATION="1439;57;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1672787519757" ID="ID_37048779" MODIFIED="1673918673633" TEXT="Pixel-Weite kalibrieren: zu Beginn der Display-Evaluation einschleifen">
+<arrowlink COLOR="#4a759a" DESTINATION="ID_1189311522" ENDARROW="Default" ENDINCLINATION="1548;60;" ID="Arrow_ID_751989601" STARTARROW="None" STARTINCLINATION="1439;57;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1672798860387" ID="ID_981451006" MODIFIED="1673747058376" TEXT="Feedback auf Scrolling">
 <icon BUILTIN="pencil"/>
@@ -43505,8 +43577,8 @@
 <node COLOR="#338800" CREATED="1672969399236" ID="ID_105188286" MODIFIED="1672969452360" TEXT="Logik &#xfc;berarbeitet: Werte kommmen jetzt an">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#435e98" CREATED="1672969412314" ID="ID_128441040" MODIFIED="1673917833235" TEXT="Fehler: horizontale Ausdehnung instabil">
-<linktarget COLOR="#e91670" DESTINATION="ID_128441040" ENDARROW="Default" ENDINCLINATION="-511;34;" ID="Arrow_ID_1077460507" SOURCE="ID_637545532" STARTARROW="None" STARTINCLINATION="-190;-19;"/>
+<node COLOR="#435e98" CREATED="1672969412314" FOLDED="true" ID="ID_128441040" MODIFIED="1673917833235" TEXT="Fehler: horizontale Ausdehnung instabil">
+<linktarget COLOR="#6a236e" DESTINATION="ID_128441040" ENDARROW="Default" ENDINCLINATION="-511;34;" ID="Arrow_ID_1077460507" SOURCE="ID_637545532" STARTARROW="None" STARTINCLINATION="-190;-19;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1673020358513" ID="ID_1745939268" MODIFIED="1673020364580" TEXT="Beobachtung(DUMP)">
 <node CREATED="1673020365563" ID="ID_1034029673" MODIFIED="1673020378010" TEXT="layout_.getPixSpan().delta() verh&#xe4;lt sich &quot;zyklisch&quot;"/>
@@ -43649,8 +43721,8 @@
 <node COLOR="#338800" CREATED="1673747106233" ID="ID_830917303" MODIFIED="1673747119474" TEXT="damit ist das Problem f&#xfc;r Blatt-Tracks gel&#xf6;st">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1673747138573" ID="ID_1650195806" MODIFIED="1673747159901" TEXT="aber Tracks mit Content und Kind-Tracks wachsen weiterhin">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1673747138573" ID="ID_1650195806" MODIFIED="1673918693551" TEXT="aber Tracks mit Content und Kind-Tracks wachsen weiterhin">
+<icon BUILTIN="broken-line"/>
 </node>
 </node>
 </node>
@@ -43664,7 +43736,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1673746034872" ID="ID_66895155" MODIFIED="1673747049281" TEXT="Segfault bei horizontalem Scroling">
+<node COLOR="#435e98" CREATED="1673746034872" FOLDED="true" ID="ID_66895155" MODIFIED="1673747049281" TEXT="Segfault bei horizontalem Scroling">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1673746067311" ID="ID_154133331" MODIFIED="1673746074945" TEXT="Beobachtung">
 <icon BUILTIN="idea"/>
@@ -43734,7 +43806,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1673807997325" ID="ID_1009074242" MODIFIED="1673824061664" TEXT="Assertion-fail">
+<node COLOR="#435e98" CREATED="1673807997325" FOLDED="true" ID="ID_1009074242" MODIFIED="1673824061664" TEXT="Assertion-fail">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -43747,7 +43819,7 @@
 </html></richcontent>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1673808698810" ID="ID_825689705" MODIFIED="1673808714792" TEXT="wahrscheinlicher Grund: signalStruktureChange ausgel&#xf6;st"/>
-<node CREATED="1673809260386" ID="ID_1757495179" MODIFIED="1673809267628" TEXT="Beobachtung">
+<node COLOR="#435e98" CREATED="1673809260386" FOLDED="true" ID="ID_1757495179" MODIFIED="1673918456525" TEXT="Beobachtung">
 <icon BUILTIN="info"/>
 <node CREATED="1673809555225" ID="ID_1752395100" MODIFIED="1673809557899" TEXT="stop-1">
 <node CREATED="1673809269809" ID="ID_1319270486" MODIFIED="1673809274764" TEXT="im GUI-Thread"/>
@@ -43841,7 +43913,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1673822498449" ID="ID_969173291" MODIFIED="1673822509927" TEXT="Fazit: zwei Probleme">
+<node COLOR="#435e98" CREATED="1673822498449" ID="ID_969173291" MODIFIED="1673918448602" TEXT="Fazit: zwei Probleme">
 <icon BUILTIN="forward"/>
 <node CREATED="1673822512176" ID="ID_838311135" MODIFIED="1673822561177">
 <richcontent TYPE="NODE"><html>
@@ -43888,8 +43960,8 @@
 </node>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1673822589957" ID="ID_637545532" MODIFIED="1673822645422" TEXT="layout_.getPixSpan() entgleist">
-<arrowlink COLOR="#e91670" DESTINATION="ID_128441040" ENDARROW="Default" ENDINCLINATION="-511;34;" ID="Arrow_ID_1077460507" STARTARROW="None" STARTINCLINATION="-190;-19;"/>
-<node CREATED="1673822656960" ID="ID_847463371" MODIFIED="1673822785272" TEXT="der End-Wert verh&#xe4;lt sich &#xbb;zyklisch&#xab; und wird bisweilen negativ">
+<arrowlink COLOR="#6a236e" DESTINATION="ID_128441040" ENDARROW="Default" ENDINCLINATION="-511;34;" ID="Arrow_ID_1077460507" STARTARROW="None" STARTINCLINATION="-190;-19;"/>
+<node COLOR="#435e98" CREATED="1673822656960" ID="ID_847463371" MODIFIED="1673918421685" TEXT="der End-Wert verh&#xe4;lt sich &#xbb;zyklisch&#xab; und wird bisweilen negativ">
 <linktarget COLOR="#ec5b91" DESTINATION="ID_847463371" ENDARROW="Default" ENDINCLINATION="151;-4;" ID="Arrow_ID_1064590055" SOURCE="ID_145619270" STARTARROW="None" STARTINCLINATION="151;46;"/>
 </node>
 <node CREATED="1673822724035" ID="ID_1257160861" MODIFIED="1673822739708" TEXT="nur deshalb wird hier die Scroll-Position signifikant verschoben">
@@ -64669,6 +64741,36 @@
 </node>
 </node>
 <node CREATED="1533918281880" ID="ID_1584868520" MODIFIED="1557498707237" TEXT="MObject"/>
+</node>
+<node CREATED="1674160453319" ID="ID_1069058254" MODIFIED="1674160457633" TEXT="Fragen der Anordnung">
+<node CREATED="1674160465628" ID="ID_1715063705" MODIFIED="1674160468831" TEXT="Konventionen"/>
+<node CREATED="1674160469453" ID="ID_299990959" MODIFIED="1674160474856" TEXT="m&#xf6;glicher Spielraum">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1674160530502" ID="ID_949776360" MODIFIED="1674160554933" TEXT="Thema: Content auf nested-Tracks">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1674160565696" ID="ID_915488068" MODIFIED="1674160570917" TEXT="typische Erwartung">
+<node CREATED="1674160572143" ID="ID_846540731" MODIFIED="1674160579754" TEXT="Content ist nur auf Leaf-Tracks"/>
+<node CREATED="1674160581694" ID="ID_1996064052" MODIFIED="1674160601189" TEXT="sobald sub-Tracks auftreten, wird Content auf diese nach unten verschoben"/>
+<node CREATED="1674160613610" ID="ID_1409730860" MODIFIED="1674161308527">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      1/2023: unklar &#8212; <i>wer macht das?</i>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#8a4d65" DESTINATION="ID_1828648487" ENDARROW="Default" ENDINCLINATION="-2734;159;" ID="Arrow_ID_502951484" STARTARROW="None" STARTINCLINATION="-1113;-73;"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1674160475478" ID="ID_1934740344" MODIFIED="1674160478839" TEXT="Wechselwirkungen">
+<node CREATED="1674160479667" ID="ID_1846459378" MODIFIED="1674160484151" TEXT="mit UI-Mechanik">
+<node CREATED="1674160486844" ID="ID_73340930" LINK="#ID_1440303749" MODIFIED="1674160516391" TEXT="Expand / Collapse"/>
+</node>
+</node>
 </node>
 <node CREATED="1533401497075" ID="ID_598742497" MODIFIED="1557498707237" TEXT="Struktur-&#xc4;nderungen">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1533401543765" ID="ID_1439915831" MODIFIED="1557498707237" TEXT="erkennen">

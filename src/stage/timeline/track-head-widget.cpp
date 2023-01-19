@@ -185,19 +185,22 @@ cout<<"|+| Head:inc ("<<left<<","<<top<<") h="<<h<<" Δ="<<delta<<" vor:"<<hvor<
    * This recursively nested structure is reflected in the patchbay area corresponding to
    * each track in the _header pane_ of the timeline display, located to the left. The
    * patchbay for each track is a grid with initially four quadrants, and the 4th quadrant
-   * corresponds to the _content area,_ in case this is a leaf track. Otherwise there would
-   * be nested sub-Tracks, and this lower right grid cell would then hold a TrackHeadWidget
-   * recursively. Additional sub-Tracks are added as additional lines to the grid, while
-   * deeper nested sub-Tracks will be handled by the corresponding nested TrackHeadWidget.
+   * corresponds to the _content area_ of the track itself, and will hold the controls for
+   * the scope, i.e. the track _together with all nested sub-tracks._ Additional sub-Tracks
+   * are added as additional lines to the grid, while deeper nested sub-Tracks will be
+   * handled by the corresponding nested TrackHeadWidget. The column to the left side
+   * will be increased accordingly to display the nested fork structure.
    * @note Child tracks are always appended. When tracks are reordered or deleted,
    *       the whole structure has to be re-built accordingly.
    */
   void
   TrackHeadWidget::attachSubFork (TrackHeadWidget& subForkHead)
   {
-    if (not childCnt_) detachDirectContent();
-    ++childCnt_;           //  left,top
-    this->attach (subForkHead, 1, childCnt_, 1,1);
+    ++childCnt_;                //  left,top
+    Gtk::Grid::attach (subForkHead, 1, 1+childCnt_, 1,1);
+    // expand the structure display column....
+    Gtk::Grid::remove (treeTODO_);   //  width,height
+    Gtk::Grid::attach (treeTODO_,   0,1, 1, 1+childCnt_);
   }
   
   /**
@@ -215,7 +218,9 @@ cout<<"|+| Head:inc ("<<left<<","<<top<<") h="<<h<<" Δ="<<delta<<" vor:"<<hvor<
   {
     --childCnt_;
     Gtk::Grid::remove (subForkHead);
-    if (not childCnt_) attachDirectContent();
+    // reduce the structure display column....
+    Gtk::Grid::remove (treeTODO_);   //  width,height
+    Gtk::Grid::attach (treeTODO_,   0,1, 1, 1+childCnt_);
   }
   
   
@@ -223,12 +228,13 @@ cout<<"|+| Head:inc ("<<left<<","<<top<<") h="<<h<<" Δ="<<delta<<" vor:"<<hvor<
   TrackHeadWidget::clearFork()
   {
     if (not childCnt_) return;
+    Gtk::Grid::remove (treeTODO_);
     while (childCnt_ > 0)
       {
-        this->remove_row (childCnt_);
+        Gtk::Grid::remove_row (childCnt_);
         --childCnt_;
       }
-    attachDirectContent();
+    Gtk::Grid::attach (treeTODO_, 0,1, 1,1);
   }
   
   

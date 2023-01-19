@@ -515,9 +515,11 @@ cout<<"|*| establishExtension(clipH="<<bodyH<<" headH="<<headH<<" max="<<maxVSiz
     uint bodySize = body_.calcHeight();
     if (bodySize > headSize)
 {//////////////////////////////////////////////////////TODO
+ uint hcV =   head_.calcContentHeight();   
       head_.increaseExpansionHeight (bodySize-headSize);
  uint hN =    head_.calcOverallHeight();   
- cout<<"|+| syncBal: head="<<headSize<<" body="<<bodySize<<" Δ="<<bodySize-headSize<<" hN="<<hN<<endl;      
+ uint hcN =   head_.calcContentHeight();   
+ cout<<"|+| syncBal: head="<<headSize<<" body="<<bodySize<<" Δ="<<bodySize-headSize<<" hN="<<hN<<"(c:"<<hcV<<"⟶"<<hcN<<")"<<endl;      
 }//////////////////////////////////////////////////////TODO      
   }
 
