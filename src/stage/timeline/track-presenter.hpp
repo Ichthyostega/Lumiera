@@ -467,12 +467,12 @@ namespace timeline {
                                        {
                                          return clip->determineRequiredVerticalExtension();
                                        }));
-auto headH = head_.calcContentHeight();/////////////////////////////////////////////////////////////////////TODO
+auto headH = head_.getContentHeight();/////////////////////////////////////////////////////////////////////TODO
 auto bodyH = maxVSize;
     maxVSize = max (maxVSize, headH);
     this->body_.accommodateContentHeight (maxVSize);
     this->head_.accommodateContentHeight (maxVSize);
-auto headN = head_.calcContentHeight();
+auto headN = head_.getContentHeight();
 auto bodyN = body_.DEBUGconH();
 cout<<"|*| establishExtension(clipH="<<bodyH<<" headH="<<headH<<" max="<<maxVSize<<" hN="<<headN<<" bN="<<bodyN<<" this(track)="<<this<<")"<<endl;    
   }
@@ -511,14 +511,14 @@ cout<<"|*| establishExtension(clipH="<<bodyH<<" headH="<<headH<<" max="<<maxVSiz
   inline void
   DisplayFrame::sync_and_balance (DisplayEvaluation&)
   {
-    uint headSize = head_.calcOverallHeight();
+    uint headSize = head_.getOverallHeight();
     uint bodySize = body_.calcHeight();
-    if (bodySize > headSize)
+if (bodySize > headSize)
 {//////////////////////////////////////////////////////TODO
- uint hcV =   head_.calcContentHeight();   
-      head_.increaseExpansionHeight (bodySize-headSize);
- uint hN =    head_.calcOverallHeight();   
- uint hcN =   head_.calcContentHeight();   
+ uint hcV =   head_.getContentHeight();   
+      head_.accommodateOverallHeight (bodySize);
+ uint hN =    head_.getOverallHeight();   
+ uint hcN =   head_.getContentHeight();   
  cout<<"|+| syncBal: head="<<headSize<<" body="<<bodySize<<" Δ="<<bodySize-headSize<<" hN="<<hN<<"(c:"<<hcV<<"⟶"<<hcN<<")"<<endl;      
 }//////////////////////////////////////////////////////TODO      
   }

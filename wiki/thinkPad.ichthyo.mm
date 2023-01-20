@@ -27764,10 +27764,33 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1674161525129" ID="ID_1762683235" MODIFIED="1674163468109" TEXT="Grid-Zelle f&#xfc;r die Placement-Controls vorsehen">
 <linktarget COLOR="#b1493c" DESTINATION="ID_1762683235" ENDARROW="Default" ENDINCLINATION="624;37;" ID="Arrow_ID_1560223761" SOURCE="ID_1332292119" STARTARROW="None" STARTINCLINATION="129;-6;"/>
 <icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1674170380401" HGAP="36" ID="ID_600466568" MODIFIED="1674170473951" TEXT="sollte dann doch besser in eine eigene Zeile" VSHIFT="-3">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wozu haben wir das Gtk::Grid
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#435e98" CREATED="1674170423490" HGAP="62" ID="ID_1552228594" MODIFIED="1674170479627" TEXT="ist immer Zelle (1,1)  &#x27f9; f&#xfc;r vertikale Content-Anpassung nutzen" VSHIFT="-9">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node CREATED="1563469608318" ID="ID_174979019" MODIFIED="1563469619520" TEXT="zus&#xe4;tzliche sub-Tracks resultieren in zus&#xe4;tzlichen Zeilen">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469770472" ID="ID_1252550324" MODIFIED="1674163220678" TEXT="einf&#xfc;gen gem&#xe4;&#xdf; Zahl der Kind-Tracks">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1563469770472" ID="ID_1252550324" MODIFIED="1674170526467" TEXT="einf&#xfc;gen gem&#xe4;&#xdf; Zahl der Kind-Tracks">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1674170489677" ID="ID_1683231262" MODIFIED="1674170519062" TEXT="ab Zeile 2">
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#338800" CREATED="1674170497184" ID="ID_904031404" MODIFIED="1674170560370" TEXT="jeweils auch den Platz f&#xfc;r das Struktur-Diagramm mit anpassen">
+<arrowlink COLOR="#5ba7d5" DESTINATION="ID_478580800" ENDARROW="Default" ENDINCLINATION="358;-30;" ID="Arrow_ID_776518349" STARTARROW="None" STARTINCLINATION="-77;131;"/>
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node CREATED="1563469790905" ID="ID_1917094772" MODIFIED="1563469795921" TEXT="re-Konstruieren">
 <node CREATED="1563469797573" ID="ID_615107402" MODIFIED="1563469801027" TEXT="platt machen"/>
@@ -27779,11 +27802,9 @@
 <linktarget COLOR="#b74f6e" DESTINATION="ID_530086217" ENDARROW="Default" ENDINCLINATION="276;749;" ID="Arrow_ID_614998223" SOURCE="ID_1366095324" STARTARROW="None" STARTINCLINATION="644;37;"/>
 <linktarget COLOR="#f6e1c2" DESTINATION="ID_530086217" ENDARROW="Default" ENDINCLINATION="-366;30;" ID="Arrow_ID_694017211" SOURCE="ID_1463490313" STARTARROW="None" STARTINCLINATION="-2163;252;"/>
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469686644" ID="ID_467394520" MODIFIED="1563469732788" TEXT="gar nicht wenn es nur einen Kind-Track gibt">
-<icon BUILTIN="flag-yellow"/>
-</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469700651" ID="ID_478580800" MODIFIED="1674161457707" TEXT="auf die richtige H&#xf6;he zielen">
 <linktarget COLOR="#bf7897" DESTINATION="ID_478580800" ENDARROW="Default" ENDINCLINATION="451;41;" ID="Arrow_ID_513449931" SOURCE="ID_1311832889" STARTARROW="None" STARTINCLINATION="481;-27;"/>
+<linktarget COLOR="#5ba7d5" DESTINATION="ID_478580800" ENDARROW="Default" ENDINCLINATION="358;-30;" ID="Arrow_ID_776518349" SOURCE="ID_904031404" STARTARROW="None" STARTINCLINATION="-77;131;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469735149" ID="ID_704791408" MODIFIED="1563469741153" TEXT="Selection-State zeigen">
@@ -29181,8 +29202,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582931260542" ID="ID_43972117" MODIFIED="1582931271486" TEXT="Thema: Koordinieren zwischen Header und Body">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1582931260542" ID="ID_43972117" MODIFIED="1674254416095" TEXT="Thema: Koordinieren zwischen Header und Body">
+<icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1582931486072" ID="ID_1623890878" MODIFIED="1582931599326" TEXT="Ausdehnung der Tracks">
 <arrowlink COLOR="#fe5b57" DESTINATION="ID_1920766923" ENDARROW="Default" ENDINCLINATION="595;0;" ID="Arrow_ID_1362710635" STARTARROW="Default" STARTINCLINATION="529;0;"/>
 <linktarget COLOR="#ea7967" DESTINATION="ID_1623890878" ENDARROW="Default" ENDINCLINATION="24;-87;" ID="Arrow_ID_809556626" SOURCE="ID_142948287" STARTARROW="None" STARTINCLINATION="119;11;"/>
@@ -29192,14 +29213,127 @@
 <arrowlink COLOR="#bf7897" DESTINATION="ID_478580800" ENDARROW="Default" ENDINCLINATION="451;41;" ID="Arrow_ID_513449931" STARTARROW="None" STARTINCLINATION="481;-27;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1674163294922" ID="ID_1332292119" LINK="#ID_1650195806" MODIFIED="1674163468109" TEXT="Probleme mit der vertikalen Koordination bei nested Tracks">
+<node COLOR="#435e98" CREATED="1674163294922" ID="ID_1332292119" LINK="#ID_1650195806" MODIFIED="1674254403617" TEXT="Probleme mit der vertikalen Koordination bei nested Tracks">
 <arrowlink COLOR="#b1493c" DESTINATION="ID_1762683235" ENDARROW="Default" ENDINCLINATION="624;37;" ID="Arrow_ID_1560223761" STARTARROW="None" STARTINCLINATION="129;-6;"/>
 <icon BUILTIN="messagebox_warning"/>
+<node COLOR="#435e98" CREATED="1674174926441" FOLDED="true" ID="ID_896721694" MODIFIED="1674254493101" TEXT="Zweifel an der berechneten H&#xf6;he">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1674175196891" ID="ID_390658088" MODIFIED="1674175199729" TEXT="Body?">
+<node CREATED="1674175200596" ID="ID_1235875992" MODIFIED="1674175204768" TEXT="nachmessen per GIMP"/>
+<node CREATED="1674175205694" ID="ID_1007099807" MODIFIED="1674175218093" TEXT="es fehlt der Ruler-Canvas">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1674175219297" ID="ID_873831776" MODIFIED="1674175224981" TEXT="ansonsten sind die Werte exakt">
+<node CREATED="1674175226593" ID="ID_891434672" MODIFIED="1674175293596" TEXT="82 px f&#xfc;r Root-Content + Slope-down"/>
+<node CREATED="1674175239335" ID="ID_108512900" MODIFIED="1674175288293" TEXT="164 f&#xfc;r Root-content + Child-content + slope down+up"/>
+</node>
+</node>
+<node CREATED="1674176070056" ID="ID_743840121" MODIFIED="1674176073188" TEXT="Head">
+<node CREATED="1674176074535" ID="ID_39929710" MODIFIED="1674176094582" TEXT="das Gesamt-Grid wird zu gro&#xdf; ermittelt">
+<node CREATED="1674176096077" ID="ID_583910543" MODIFIED="1674176120813" TEXT="angeblich 164">
+<node CREATED="1674176756797" ID="ID_1711694466" MODIFIED="1674176762735" TEXT="berechnet als 14+68+82"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1674177671455" ID="ID_200566627" MODIFIED="1674254483689" TEXT="m&#xf6;glicherweise ist die kombinierte Spalte das Problem">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      |o| cH(line=0) += (14,14)
+    </p>
+    <p>
+      |o| cH(line=1) += (68,12)
+    </p>
+    <p>
+      |o| cH(line=2) += (68,82)
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#2b91d0" DESTINATION="ID_1671254452" ENDARROW="Default" ENDINCLINATION="220;0;" ID="Arrow_ID_864210010" STARTARROW="None" STARTINCLINATION="-7;189;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1674177711595" ID="ID_926975812" MODIFIED="1674177719085" TEXT="14 = H&#xf6;he Label"/>
+<node CREATED="1674177720641" ID="ID_490298226" MODIFIED="1674177730988" TEXT="12 = H&#xf6;he Gl&#xfc;hbirne (control)"/>
+<node CREATED="1674177737457" ID="ID_467766336" MODIFIED="1674177745813" TEXT="82 = H&#xf6;he nested Track-Head"/>
+<node CREATED="1674177887491" ID="ID_1629142103" MODIFIED="1674177906308" TEXT="68 = 40 + &#x394;=28"/>
+</node>
+<node CREATED="1674247115438" ID="ID_1557269606" MODIFIED="1674247168418" TEXT="tats&#xe4;chlich z&#xe4;hlen die kombinierten Spalten nur einmal">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1674247332612" ID="ID_421176912" MODIFIED="1674247406408" TEXT="14+12+82 = 108 sieht viel realistischer aus....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und das w&#252;rde auch erkl&#228;ren, warum trotzdem die Zelle mit der Gl&#252;hbirne (=die direkten Controls) <i>&#252;berhaupt nicht aufgespreitzt </i>wird
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#dbc5b3" COLOR="#ff0000" CREATED="1674247147690" ID="ID_428940289" MODIFIED="1674247211671" TEXT="&#x27f9; der Ansatz mit dem Maximum pro Zeile ist nicht korrekt"/>
+</node>
+<node CREATED="1674176180377" ID="ID_154967424" MODIFIED="1674176210609" TEXT="visuell sehe ich nur 14+94 = 108"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1674247231512" ID="ID_704080657" MODIFIED="1674254386095" TEXT="H&#xf6;he im TrackHeadWidget korrekt messen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1674247251100" ID="ID_1501775447" MODIFIED="1674247278994" TEXT="nur die 2.Spalte insgesamt summieren">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1674247260807" ID="ID_1423273480" MODIFIED="1674247276378" TEXT="pa&#xdf;t gut zusammen mit dem End-Ausgleich in der 1.Spalte">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1674248099319" ID="ID_1685711239" MODIFIED="1674254383950" TEXT="aber zudem sicherstellen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1674248116285" ID="ID_1285555258" MODIFIED="1674254382320" TEXT="...da&#xdf; das wirkliche Maximum gemessen wird">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#10233; es mu&#223; das strukturell korrekte Maximum explizit berechnet werden; w&#252;rden wir nur die rechte Spalte summieren, bliebe eine bereits bestehende Spreizung in der linken Spalte unber&#252;cksichtigt
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1674248127199" ID="ID_991058401" MODIFIED="1674254380528" TEXT="...da&#xdf; die Struktur-Spalte auch wirklich auf Anschlag ist">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#10233; aber auch das umgekehrte Szenario mu&#223; ber&#252;cksichtigt werden: falls die Gesamth&#246;he von der Summe in der rechten Spalte dominiert wird, gen&#252;gt es nicht, blindlings nur eine eigentlich kleinere linke Strukturspalte mit dem &#916; zu beaufschlagen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1674254451385" ID="ID_1671254452" MODIFIED="1674254477841" TEXT="jetzt ist die Berechnung korrekt">
+<linktarget COLOR="#2b91d0" DESTINATION="ID_1671254452" ENDARROW="Default" ENDINCLINATION="220;0;" ID="Arrow_ID_864210010" SOURCE="ID_200566627" STARTARROW="None" STARTINCLINATION="-7;189;"/>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1674172473327" ID="ID_1376269414" MODIFIED="1674172528937" TEXT="Beginn der nested-Tracks koordinieren">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1674172530639" ID="ID_1531517037" MODIFIED="1674172537538" TEXT="sie beginnen typischerweise zu fr&#xfc;h"/>
+<node CREATED="1674172548813" ID="ID_53484260" MODIFIED="1674172558839" TEXT="Padding f&#xfc;r die Content-H&#xf6;he gen&#xfc;gt nicht"/>
+</node>
+<node CREATED="1674172566487" ID="ID_1608232649" MODIFIED="1674172575495" TEXT="Diskrepanz sinnvoll einbringen">
+<node COLOR="#435e98" CREATED="1674172577081" ID="ID_1556472546" MODIFIED="1674254503089" TEXT="H&#xf6;he insgesamt &#x27fc; Struktur-Spalte"/>
+<node CREATED="1674172577081" ID="ID_902379987" MODIFIED="1674247020264" TEXT="Synchronisation &#x27fc; padding nach direct content"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1674158539561" ID="ID_1440303749" MODIFIED="1674160219745" TEXT="#1265 define expanding/collapsing of tracks">
-<linktarget COLOR="#926b99" DESTINATION="ID_1440303749" ENDARROW="Default" ENDINCLINATION="-978;62;" ID="Arrow_ID_1979782904" SOURCE="ID_1119649795" STARTARROW="None" STARTINCLINATION="-281;21;"/>
 <linktarget COLOR="#c65e7c" DESTINATION="ID_1440303749" ENDARROW="Default" ENDINCLINATION="-1806;-99;" ID="Arrow_ID_537995229" SOURCE="ID_852402445" STARTARROW="None" STARTINCLINATION="-421;38;"/>
+<linktarget COLOR="#926b99" DESTINATION="ID_1440303749" ENDARROW="Default" ENDINCLINATION="-978;62;" ID="Arrow_ID_1979782904" SOURCE="ID_1119649795" STARTARROW="None" STARTINCLINATION="-281;21;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1674160660563" ID="ID_1828648487" MODIFIED="1674161293621" TEXT="#1266 implement scope rulers and group tracks">
@@ -31617,6 +31751,7 @@
 </node>
 <node CREATED="1564497891485" ID="ID_1183787016" MODIFIED="1564932176101" TEXT="Ha! man mu&#xdf; irgendwo eine Farbe angeben">
 <linktarget COLOR="#2ee773" DESTINATION="ID_1183787016" ENDARROW="Default" ENDINCLINATION="120;7;" ID="Arrow_ID_1051090636" SOURCE="ID_621726316" STARTARROW="None" STARTINCLINATION="-30;75;"/>
+<linktarget COLOR="#2ee773" DESTINATION="ID_1183787016" ENDARROW="Default" ENDINCLINATION="278;16;" ID="Arrow_ID_1462879108" SOURCE="ID_1801143265" STARTARROW="None" STARTINCLINATION="344;0;"/>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1564497939401" ID="ID_1944950668" MODIFIED="1564497957953" TEXT="...dann wird das outset/inset durchaus sichtbar"/>

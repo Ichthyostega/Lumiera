@@ -68,6 +68,7 @@ namespace timeline {
     : Gtk::Grid{}
     , nameTODO_{"?"}
     , treeTODO_{"↳"}
+    , padding_{}
     , headCtrl_{}
     , childCnt_{0}
     {
@@ -78,9 +79,10 @@ namespace timeline {
       headCtrl_.set_valign(Gtk::Align::ALIGN_CENTER);
       headCtrl_.set_halign(Gtk::Align::ALIGN_FILL);
       this->attach (nameTODO_, 0,0, 2,1);
-      this->attach (treeTODO_, 0,1, 1,1);
-      attachDirectContent();
-      this->property_expand() = false; // do not expand to fill
+      this->attach (treeTODO_, 0,1, 1,2);
+      this->attach (headCtrl_, 1,1, 1,1); // corresponds to direct content
+      this->attach (padding_,  1,2, 1,1);//  used to sync with sub-track display
+      this->property_expand() = false;  //   do not expand to fill
       this->show_all();
     }
   
@@ -113,68 +115,52 @@ namespace timeline {
     return max (0, max (actual, natural));
   }
 
-  /**
-   * @remark the cell(1,1) is guaranteed to exist;
-   *  if childCnt_ == 0, it holds the direct content control area
-   */
   uint
-  TrackHeadWidget::calcContentHeight() const
+  TrackHeadWidget::getOverallHeight()  const
   {
-    uint heightSum = 0;
-    for (uint line=1; line <= max(1u, childCnt_); ++line)
-      {
-        int h = getHeightAt (1,line);
-        heightSum += max (0,h);
-      }
-    return heightSum;
-  }
-  
-  uint
-  TrackHeadWidget::calcOverallHeight()  const
-  {
-    uint heightSum = 0;
-    for (uint line=0; line <= max(1u, childCnt_); ++line)
-      {
+    uint heightSum{0};
+    for (uint line=1; line <= 2u + childCnt_; ++line)
+      {/////////////////////////////////////////////TODO
         int h1 = getHeightAt (0,line);
         int h2 = getHeightAt (1,line);
-        
-        heightSum += max (0, max (h1,h2));
-      }
-    return heightSum;
+////////////////////////////////////////////////////TODO
+cout<<"|o| cH(line="<<line<<") += ("<<h1<<","<<h2<<")"<<endl;        
+////////////////////////////////////////////////////TODO        
+      heightSum += getHeightAt (1,line);
+      }/////////////////////////////////////////////TODO
+    heightSum = max (heightSum, getExpansionHeight());
+    return heightSum + getLabelHeight();
+  }
+  
+  void
+  TrackHeadWidget::enforceHeightAt(int left, int top, uint height)
+  {
+uint hvor = getOverallHeight();      
+uint h = getHeightAt (left,top);
+int reqW, reqH, reqHn;
+    auto* cell = this->get_child_at(left,top);
+    REQUIRE (cell);
+cell->get_size_request (reqW, reqH);
+    cell->set_size_request (-1, height);
+uint hnach = getOverallHeight();
+cell->get_size_request (reqW, reqHn);
+cout<<"|+| Head:inc ("<<left<<","<<top<<") h="<<h<<" ⟶ "<<height<<" vor:"<<hvor<<" nach:"<<hnach<<" (c:"<<reqH<<"⟶"<<reqHn<<")"<<endl;      
   }
   
   void
   TrackHeadWidget::accommodateContentHeight(uint contentHeight)
   {
-    uint localHeight = calcContentHeight();
+    uint localHeight = getContentHeight();
     if (contentHeight > localHeight)
-      increaseContentHeight (contentHeight-localHeight);
-  }
-  
-  /** apply the Δ to the »content area« (4th quadrant) */
-  void
-  TrackHeadWidget::increaseContentHeight(uint delta)
-  {
-    increaseHeightAt (1,1, delta);
-  }
-  
-  /** increase the general vertical spread by the given Δ  */
-  void
-  TrackHeadWidget::increaseExpansionHeight(uint delta)
-  {
-    increaseHeightAt (0,1, delta);
+      enforceContentHeight (contentHeight);
   }
   
   void
-  TrackHeadWidget::increaseHeightAt(int left, int top, uint delta)
+  TrackHeadWidget::accommodateOverallHeight(uint overallHeight)
   {
-uint hvor = calcOverallHeight();      
-    auto* cell = this->get_child_at(left,top);
-    REQUIRE (cell);
-    uint h = getHeightAt (left,top);
-    cell->set_size_request (-1, h+delta);
-uint hnach = calcOverallHeight();      
-cout<<"|+| Head:inc ("<<left<<","<<top<<") h="<<h<<" Δ="<<delta<<" vor:"<<hvor<<" nach:"<<hnach<<endl;      
+    uint localHeight = getOverallHeight();
+    if (overallHeight > localHeight)
+      enforceExpansionHeight (overallHeight - getLabelHeight());
   }
 
 
@@ -184,23 +170,26 @@ cout<<"|+| Head:inc ("<<left<<","<<top<<") h="<<h<<" Δ="<<delta<<" vor:"<<hvor<
    * video editing software does -- rather, each sequence holds a _fork of nested scopes._
    * This recursively nested structure is reflected in the patchbay area corresponding to
    * each track in the _header pane_ of the timeline display, located to the left. The
-   * patchbay for each track is a grid with initially four quadrants, and the 4th quadrant
-   * corresponds to the _content area_ of the track itself, and will hold the controls for
-   * the scope, i.e. the track _together with all nested sub-tracks._ Additional sub-Tracks
-   * are added as additional lines to the grid, while deeper nested sub-Tracks will be
-   * handled by the corresponding nested TrackHeadWidget. The column to the left side
-   * will be increased accordingly to display the nested fork structure.
+   * patchbay for each track is a grid with initially three rows:
+   * - a row holding the Track Header label and menu (actually an \ref ElementBoxWidget)
+   * - a row corresponding to the _content area_ of the track itself, to hold the controls
+   *   for this track's scope, i.e. the track _together with all nested sub-tracks._
+   * - a padding row to help synchronising track head and track body display. Additional
+   * sub-Tracks are added as additional lines to the grid, while deeper nested sub-Tracks
+   * will be handled by the corresponding nested TrackHeadWidget. The column to the
+   * left side will be increased accordingly to display the nested fork structure.
    * @note Child tracks are always appended. When tracks are reordered or deleted,
    *       the whole structure has to be re-built accordingly.
    */
   void
   TrackHeadWidget::attachSubFork (TrackHeadWidget& subForkHead)
   {
-    ++childCnt_;                //  left,top
-    Gtk::Grid::attach (subForkHead, 1, 1+childCnt_, 1,1);
+    ++childCnt_;
+    uint act = 2 + childCnt_;   //  left,top
+    Gtk::Grid::attach (subForkHead, 1, act, 1,1);
     // expand the structure display column....
-    Gtk::Grid::remove (treeTODO_);   //  width,height
-    Gtk::Grid::attach (treeTODO_,   0,1, 1, 1+childCnt_);
+    Gtk::Grid::remove (treeTODO_);   // width,height
+    Gtk::Grid::attach (treeTODO_,   0,1,    1, act);
   }
   
   /**
@@ -217,10 +206,11 @@ cout<<"|+| Head:inc ("<<left<<","<<top<<") h="<<h<<" Δ="<<delta<<" vor:"<<hvor<
   TrackHeadWidget::detachSubFork (TrackHeadWidget& subForkHead)
   {
     --childCnt_;
+    uint act = 2 + childCnt_;
     Gtk::Grid::remove (subForkHead);
     // reduce the structure display column....
-    Gtk::Grid::remove (treeTODO_);   //  width,height
-    Gtk::Grid::attach (treeTODO_,   0,1, 1, 1+childCnt_);
+    Gtk::Grid::remove (treeTODO_);
+    Gtk::Grid::attach (treeTODO_,   0,1, 1,act);
   }
   
   
@@ -234,28 +224,7 @@ cout<<"|+| Head:inc ("<<left<<","<<top<<") h="<<h<<" Δ="<<delta<<" vor:"<<hvor<
         Gtk::Grid::remove_row (childCnt_);
         --childCnt_;
       }
-    Gtk::Grid::attach (treeTODO_, 0,1, 1,1);
-  }
-  
-  
-  /**
-   * @remark a _leaf track_ holds content immediately, and thus also
-   *         provides a head area with placement controls directly attached.
-   *         In all other cases, a nested TrackHeadWidget for the sub-fork
-   *         is installed
-   */
-  void
-  TrackHeadWidget::attachDirectContent()
-  {
-    headCtrl_.show();
-    Gtk::Grid::attach(headCtrl_, 1,1, 1,1);
-  }
-  
-  void
-  TrackHeadWidget::detachDirectContent()
-  {
-    Gtk::Grid::remove (headCtrl_);
-    headCtrl_.hide();
+    Gtk::Grid::attach (treeTODO_, 0,1, 1,2);
   }
 
   

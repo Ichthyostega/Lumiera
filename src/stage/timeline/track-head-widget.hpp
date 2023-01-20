@@ -85,6 +85,7 @@ namespace timeline {
     {
       Gtk::Label nameTODO_;
       Gtk::Label treeTODO_;
+      Gtk::Box   padding_;
       HeadControlArea headCtrl_;
       
       uint childCnt_;
@@ -101,31 +102,41 @@ namespace timeline {
       
       void setTrackName (cuString&);
       
-      uint calcContentHeight() const;
-      uint calcOverallHeight()  const;
+      uint getContentHeight() const;
+      uint getOverallHeight() const;
       
       void accommodateContentHeight(uint);
-      void increaseContentHeight(uint delta);
-      void increaseExpansionHeight(uint delta);
-      void increaseHeightAt(int left, int top, uint delta);
+      void accommodateOverallHeight(uint);
 
     private:/* ===== Internals ===== */
       
       /** Integrate the control area for a nested sub track fork. */
       void attachSubFork (TrackHeadWidget& subForkHead);
       void detachSubFork (TrackHeadWidget& subForkHead);
-      
-      /** activate the direct patchbay control container */
-      void attachDirectContent();
-      void detachDirectContent();
-      
+
       /** Discard all nested sub track display widgets. */
       void clearFork();
       
       /** get the height allocated at cell(x,y) */
       uint getHeightAt (int left, int top)  const;
-     
+      void enforceHeightAt(int left, int top, uint height);
+
+      uint getExpansionHeight() const { return getHeightAt (0,1); };
+      uint getSyncPadHeight()   const { return getHeightAt (1,2); };
+      uint getLabelHeight()     const { return getHeightAt (0,0); };
+      
+      void enforceContentHeight  (uint h){ enforceHeightAt (1,1, h); }
+      void enforceExpansionHeight(uint h){ enforceHeightAt (0,1, h); }
     };
+
+  
+  /** @remark the cell(1,1) is guaranteed to exist; it may be empty,
+   *          or hold the placement controls for this track's scope. */
+  inline uint
+  TrackHeadWidget::getContentHeight() const
+  {
+    return getHeightAt (1,1);
+  }
   
   
 }}// namespace stage::timeline
