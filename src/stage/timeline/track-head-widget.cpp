@@ -163,6 +163,21 @@ cout<<"|+| Head:inc ("<<left<<","<<top<<") h="<<h<<" ⟶ "<<height<<" vor:"<<hvo
       enforceExpansionHeight (overallHeight - getLabelHeight());
   }
 
+  /**
+   * The first part of each track's display relates to the direct content;
+   * below that area, the content of sub-tracks may be added. This function
+   * possibly adds further padding to shift the sub-track headers down
+   * to correspond to the display of the sub track body content.
+   * @param directHeight the vertical space to use for direct content
+   */
+  void
+  TrackHeadWidget::syncSubtrackStartHeight (uint directHeight)
+  {
+    uint localHeight = getContentHeight() + getLabelHeight();
+    if (directHeight > localHeight)
+      enforceSyncPadHeight (directHeight - localHeight);
+  }
+
 
   
   /**

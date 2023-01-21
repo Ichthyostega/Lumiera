@@ -513,13 +513,15 @@ cout<<"|*| establishExtension(clipH="<<bodyH<<" headH="<<headH<<" max="<<maxVSiz
   {
     uint headSize = head_.getOverallHeight();
     uint bodySize = body_.calcHeight();
-if (bodySize > headSize)
+    uint directH = body_.getOwnContentHeight();
+//if (bodySize > headSize)
 {//////////////////////////////////////////////////////TODO
  uint hcV =   head_.getContentHeight();   
-      head_.accommodateOverallHeight (bodySize);
+    head_.syncSubtrackStartHeight (directH);
+    head_.accommodateOverallHeight (bodySize);
  uint hN =    head_.getOverallHeight();   
  uint hcN =   head_.getContentHeight();   
- cout<<"|+| syncBal: head="<<headSize<<" body="<<bodySize<<" Δ="<<bodySize-headSize<<" hN="<<hN<<"(c:"<<hcV<<"⟶"<<hcN<<")"<<endl;      
+ cout<<"|+| syncBal: head="<<headSize<<" body="<<bodySize<<"(dir:"<<directH<<") Δ="<<bodySize-headSize<<" hN="<<hN<<"(c:"<<hcV<<"⟶"<<hcN<<")"<<endl;      
 }//////////////////////////////////////////////////////TODO      
   }
 

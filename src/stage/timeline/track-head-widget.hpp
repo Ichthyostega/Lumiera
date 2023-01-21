@@ -107,6 +107,7 @@ namespace timeline {
       
       void accommodateContentHeight(uint);
       void accommodateOverallHeight(uint);
+      void syncSubtrackStartHeight (uint);
 
     private:/* ===== Internals ===== */
       
@@ -126,6 +127,7 @@ namespace timeline {
       uint getLabelHeight()     const { return getHeightAt (0,0); };
       
       void enforceContentHeight  (uint h){ enforceHeightAt (1,1, h); }
+      void enforceSyncPadHeight  (uint h){ enforceHeightAt (1,2, h); }
       void enforceExpansionHeight(uint h){ enforceHeightAt (0,1, h); }
     };
 

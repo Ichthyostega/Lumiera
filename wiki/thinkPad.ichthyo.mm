@@ -27803,8 +27803,8 @@
 <linktarget COLOR="#f6e1c2" DESTINATION="ID_530086217" ENDARROW="Default" ENDINCLINATION="-366;30;" ID="Arrow_ID_694017211" SOURCE="ID_1463490313" STARTARROW="None" STARTINCLINATION="-2163;252;"/>
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469700651" ID="ID_478580800" MODIFIED="1674161457707" TEXT="auf die richtige H&#xf6;he zielen">
-<linktarget COLOR="#bf7897" DESTINATION="ID_478580800" ENDARROW="Default" ENDINCLINATION="451;41;" ID="Arrow_ID_513449931" SOURCE="ID_1311832889" STARTARROW="None" STARTINCLINATION="481;-27;"/>
 <linktarget COLOR="#5ba7d5" DESTINATION="ID_478580800" ENDARROW="Default" ENDINCLINATION="358;-30;" ID="Arrow_ID_776518349" SOURCE="ID_904031404" STARTARROW="None" STARTINCLINATION="-77;131;"/>
+<linktarget COLOR="#bf7897" DESTINATION="ID_478580800" ENDARROW="Default" ENDINCLINATION="451;41;" ID="Arrow_ID_513449931" SOURCE="ID_1311832889" STARTARROW="None" STARTINCLINATION="481;-27;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469735149" ID="ID_704791408" MODIFIED="1563469741153" TEXT="Selection-State zeigen">
@@ -29320,14 +29320,137 @@
 <icon BUILTIN="forward"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1674172473327" ID="ID_1376269414" MODIFIED="1674172528937" TEXT="Beginn der nested-Tracks koordinieren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1674172473327" ID="ID_1376269414" MODIFIED="1674347900406" TEXT="Beginn der nested-Tracks koordinieren">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1674172530639" ID="ID_1531517037" MODIFIED="1674172537538" TEXT="sie beginnen typischerweise zu fr&#xfc;h"/>
 <node CREATED="1674172548813" ID="ID_53484260" MODIFIED="1674172558839" TEXT="Padding f&#xfc;r die Content-H&#xf6;he gen&#xfc;gt nicht"/>
+<node CREATED="1674345881143" ID="ID_1661063602" MODIFIED="1674345967809" TEXT="TrackBody kann das aber berechnen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und zwar &#252;ber den contentOffset, der relativ zur Start-Zeile gemessen wird, sowie der direkten ContentHeight, zuz&#252;glich Padding
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 <node CREATED="1674172566487" ID="ID_1608232649" MODIFIED="1674172575495" TEXT="Diskrepanz sinnvoll einbringen">
 <node COLOR="#435e98" CREATED="1674172577081" ID="ID_1556472546" MODIFIED="1674254503089" TEXT="H&#xf6;he insgesamt &#x27fc; Struktur-Spalte"/>
-<node CREATED="1674172577081" ID="ID_902379987" MODIFIED="1674247020264" TEXT="Synchronisation &#x27fc; padding nach direct content"/>
+<node COLOR="#435e98" CREATED="1674172577081" ID="ID_902379987" MODIFIED="1674347889053" TEXT="Synchronisation &#x27fc; padding nach direct content"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1674347903812" ID="ID_1742313131" MODIFIED="1674348450808" TEXT="H&#xf6;henberechnung im TrackBody unvollst&#xe4;ndig">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1674347924697" ID="ID_1440620020" MODIFIED="1674348439431" TEXT="Probleme">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1674347929637" ID="ID_1693517831" MODIFIED="1674347942830" TEXT="der separate Ruler-Canvas wird nicht ber&#xfc;cksichtigt">
+<node CREATED="1674350584579" ID="ID_1671695186" MODIFIED="1674350589304" TEXT="wie gro&#xdf;?">
+<node CREATED="1674350590559" ID="ID_1966298653" MODIFIED="1674351114799" TEXT="11px == decoration.topMar">
+<arrowlink COLOR="#a9b4c1" DESTINATION="ID_354285269" ENDARROW="Default" ENDINCLINATION="70;0;" ID="Arrow_ID_1818076269" STARTARROW="None" STARTINCLINATION="-79;8;"/>
+</node>
+</node>
+<node CREATED="1674354054786" ID="ID_1551678224" MODIFIED="1674354124203" TEXT="aber: er fehlt nur im contentOffset und im Gesamtergebnis (line = res)"/>
+<node CREATED="1674354075442" ID="ID_1951685087" MODIFIED="1674354088196" TEXT="in die Gr&#xf6;&#xdf;e werden zumindest die Ruler korrekt mit eingerechnet"/>
+</node>
+<node CREATED="1674347946242" ID="ID_1905901999" MODIFIED="1674347965339" TEXT="der Margin f&#xfc;r Prelude / Postlude wird nicht ber&#xfc;cksichtigt">
+<node CREATED="1674353995316" ID="ID_1351496959" MODIFIED="1674354004872" TEXT="das ist ein generelles Problem"/>
+<node CREATED="1674354005689" ID="ID_374452100" MODIFIED="1674354012709" TEXT="aber gewisserma&#xdf;en auch logisch"/>
+<node CREATED="1674354013794" ID="ID_26588386" MODIFIED="1674354028708" TEXT="Prelude wird eben nicht zur Gr&#xf6;&#xdf;e des Root-Track gerechnet"/>
+</node>
+<node CREATED="1674347969175" ID="ID_1910872157" MODIFIED="1674347994788" TEXT="die Slope-down/up wird nicht ber&#xfc;cksichtigt"/>
+</node>
+<node CREATED="1674351098493" ID="ID_894959453" MODIFIED="1674351101849" TEXT="Beobachtung">
+<node CREATED="1674350941467" ID="ID_1826693009" MODIFIED="1674350945974" TEXT="decoration">
+<icon BUILTIN="info"/>
+<node CREATED="1674350951914" ID="ID_106173502" MODIFIED="1674350955686" TEXT="content = 42"/>
+<node CREATED="1674350959876" ID="ID_1487607693" MODIFIED="1674350963292" TEXT="ruler = 28"/>
+<node CREATED="1674350967152" ID="ID_354285269" MODIFIED="1674351114799" TEXT="topMar = 11">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_354285269" ENDARROW="Default" ENDINCLINATION="70;0;" ID="Arrow_ID_1818076269" SOURCE="ID_1966298653" STARTARROW="None" STARTINCLINATION="-79;8;"/>
+</node>
+<node CREATED="1674350972480" ID="ID_1303308489" MODIFIED="1674350984992" TEXT="botMar = 11"/>
+<node CREATED="1674350985965" ID="ID_13244002" MODIFIED="1674351218230" TEXT="trackPad = 21">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_13244002" ENDARROW="Default" ENDINCLINATION="66;0;" ID="Arrow_ID_90576593" SOURCE="ID_1917807649" STARTARROW="None" STARTINCLINATION="66;0;"/>
+</node>
+<node CREATED="1674351003803" ID="ID_291429640" MODIFIED="1674351018789" TEXT="borders = [5,5,10,14,17,20]"/>
+</node>
+<node CREATED="1674351179091" ID="ID_1301058819" MODIFIED="1674351189821" TEXT="root-track">
+<node CREATED="1674351117941" ID="ID_546308961" MODIFIED="1674351196739" TEXT="Track content-height: contentHeight + decoration.content = 40+42 = 82"/>
+<node CREATED="1674351205888" ID="ID_1917807649" MODIFIED="1674351218230" TEXT="contentOffset = 21">
+<arrowlink DESTINATION="ID_13244002" ENDARROW="Default" ENDINCLINATION="66;0;" ID="Arrow_ID_90576593" STARTARROW="None" STARTINCLINATION="66;0;"/>
+</node>
+<node CREATED="1674352921149" ID="ID_1580223577" MODIFIED="1674352942925" TEXT="danach: line =169">
+<linktarget COLOR="#30a7c5" DESTINATION="ID_1580223577" ENDARROW="Default" ENDINCLINATION="138;4;" ID="Arrow_ID_352754066" SOURCE="ID_1287712179" STARTARROW="None" STARTINCLINATION="138;4;"/>
+</node>
+<node CREATED="1674353017672" ID="ID_1991251821" MODIFIED="1674353037386" TEXT="+slopeup &#x27fc; 174"/>
+<node CREATED="1674353017672" ID="ID_1761513033" MODIFIED="1674353075157" TEXT="+coda &#x27fc; 190"/>
+</node>
+<node CREATED="1674352771789" ID="ID_1103517565" MODIFIED="1674352775750" TEXT="sub-track">
+<node CREATED="1674352788969" ID="ID_961058180" MODIFIED="1674352794647" TEXT="startLine_ = 87"/>
+<node CREATED="1674352777377" ID="ID_1184947760" MODIFIED="1674352781866" TEXT="contentOffset = 21"/>
+<node CREATED="1674352814630" ID="ID_59687" MODIFIED="1674352825233" TEXT="content-heigt: ebenfalls 82"/>
+<node CREATED="1674352856355" ID="ID_1287712179" MODIFIED="1674352947649" TEXT="line (=res) : 82">
+<arrowlink COLOR="#30a7c5" DESTINATION="ID_1580223577" ENDARROW="Default" ENDINCLINATION="138;4;" ID="Arrow_ID_352754066" STARTARROW="None" STARTINCLINATION="138;4;"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1674348025640" ID="ID_565643095" MODIFIED="1674348439417" TEXT="Komplikationen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1674348030567" ID="ID_493716565" MODIFIED="1674348045940" TEXT="Prelude / Postlude und Ruler-Canvas treten nur beim Root-Track auf">
+<node CREATED="1674348203360" ID="ID_1395576616" MODIFIED="1674348210235" TEXT="aber ein Track wei&#xdf; nicht, da&#xdf; er Root ist"/>
+</node>
+<node CREATED="1674348164550" ID="ID_1253760936" MODIFIED="1674348183015" TEXT="Slope-down/up wird im Parent-Track gesteuert">
+<node CREATED="1674348231749" ID="ID_1598827658" MODIFIED="1674348251134" TEXT="dieser Offset kann daher nicht in der H&#xf6;he der Kind-Track(s) eingerechnet werden"/>
+<node CREATED="1674348290385" ID="ID_676814617" MODIFIED="1674348324132" TEXT="d.h. bei mehreren Sub-Tracks rutschen wir genau um diesen Betrag nach oben"/>
+<node CREATED="1674353927071" ID="ID_1407468447" MODIFIED="1674353940500" TEXT="und zwar einmal pro rekursiv verschachtelte Ebene">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1674354159742" ID="ID_1940678452" MODIFIED="1674354167495" TEXT="Korrekturen bewerkstelligen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1674354169058" ID="ID_533240449" MODIFIED="1674354177538" TEXT="brauche Spezialbehandlung f&#xfc;r den Root-Track">
+<node CREATED="1674354205168" ID="ID_85048363" MODIFIED="1674354255720" TEXT="Gesamtgr&#xf6;&#xdf;e mu&#xdf; Ruler + prelude ber&#xfc;cksichtigen"/>
+<node CREATED="1674354306149" ID="ID_633496997" MODIFIED="1674354320837" TEXT="sub-track-offset mu&#xdf; Ruler + prelude ber&#xfc;cksichtigen"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1674402568327" ID="ID_219579639" MODIFIED="1674402863060" TEXT="wo ist diese Korrektur logisch sinnvoll angesiedelt?">
+<icon BUILTIN="help"/>
+<node CREATED="1674402620527" ID="ID_1633544285" MODIFIED="1674402871728" TEXT="sie bricht den strikten Bezug auf Canvas-Koordinaten und jeweils einen Track">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das Pr&#228;ludium geh&#246;rt nicht zum Track, und f&#252;r alle sonstigen Gr&#246;&#223;enangaben gilt ein unmittelbarer Bezug auf die Canvas-Koordinaten; diese gelten <i>lokal f&#252;r den Canvas</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1674402875129" ID="ID_1857367288" MODIFIED="1674402942310" TEXT="allerdings: der einzelne Track sollte seine Position im Gesamtgef&#xfc;ge nicht kennen">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1674403069412" ID="ID_1314616447" MODIFIED="1674403080890" TEXT="was mu&#xdf; den genau korrigiert werden?">
+<icon BUILTIN="help"/>
+<node CREATED="1674403082049" ID="ID_1078734632" MODIFIED="1674403088307" TEXT="es ist mehrerlei...">
+<node CREATED="1674403090200" ID="ID_615803349" MODIFIED="1674403095202" TEXT="Prelude"/>
+<node CREATED="1674403096199" ID="ID_1911972979" MODIFIED="1674403209258" TEXT="Ruler">
+<arrowlink COLOR="#eb4c4e" DESTINATION="ID_515096270" ENDARROW="Default" ENDINCLINATION="-4;-9;" ID="Arrow_ID_1857436745" STARTARROW="None" STARTINCLINATION="9;-2;"/>
+</node>
+</node>
+<node CREATED="1674403142108" ID="ID_515096270" MODIFIED="1674403209258" TEXT="das Auslassen der Ruler stellt einen Bruch des Contract dar">
+<linktarget COLOR="#eb4c4e" DESTINATION="ID_515096270" ENDARROW="Default" ENDINCLINATION="-4;-9;" ID="Arrow_ID_1857436745" SOURCE="ID_1911972979" STARTARROW="None" STARTINCLINATION="9;-2;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1674354327207" ID="ID_1319790306" MODIFIED="1674354353280" TEXT="sub-track-offset mu&#xdf; slope-down mit einschlie&#xdf;en">
+<node CREATED="1674354364930" ID="ID_697232508" MODIFIED="1674354376797" TEXT="und zwar genau einmal, und nur wenn es nested Tracks gibt"/>
+<node CREATED="1674354383601" ID="ID_345455776" MODIFIED="1674354396562" TEXT="slope-up kann uns egal sein (ist in der Gesamtgr&#xf6;&#xdf;e mit dabei)"/>
+</node>
 </node>
 </node>
 </node>

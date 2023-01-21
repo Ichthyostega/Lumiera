@@ -121,7 +121,9 @@ namespace timeline {
       void accommodateContentHeight(uint contentExtension);
 uint DEBUGconH() const { return contentHeight_;}////////////////////////////////////TODO
       
-      uint getContentOffsetY() { return startLine_ + contentOffset_; }
+      uint getContentOffsetY()   const { return startLine_ + contentOffset_; }
+      uint getOwnContentHeight() const { return contentOffset_ + contentHeight_
+                                              + decoration.content - decoration.trackPad; }
       
       DisplayManager::SignalStructureChange signalStructureChange_;
       
