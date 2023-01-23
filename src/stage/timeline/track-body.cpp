@@ -142,25 +142,39 @@ namespace timeline {
   /**
    * recursively calculate the height in pixels to display this track,
    * including all nested sub-tracks and possibly decoration/padding from CSS
+   * @note height attempts to account for everything (to allow sync with header),
+   *       including the rulers and possibly padding on root track, which are
+   *       rendered onto a separate canvas, and additionally also nested slope.
    */
   uint
-  TrackBody::calcHeight()
+  TrackBody::calcHeight()  const
   {
-    uint heightSum = calcRulerHeight() + contentHeight_ + decoration.content;
-    for (TrackBody* subTrack : subTracks_)
-      heightSum += subTrack->calcHeight();
-    return heightSum;
+    return calcContentHeight()
+         + calcSubtrackHeight();
   }
   
+  /**
+   * @remark here _content_ means the direct content of this track,
+   *         plus its rulers and padding, but excluding nested tracks.
+   */
+  uint
+  TrackBody::calcContentHeight() const
+  {
+    return calcRulerHeight()
+         + contentHeight_ + decoration.content
+         + (isnil (subTracks_)? 0  //  slope down to nested scope
+                              : decoration.borders[0]);
+  }
   
   /**
    * sum up the vertical extension required by all overview rulers.
    * @return height in pixels, including all gap space
    */
   uint
-  TrackBody::calcRulerHeight()
-  {
-    uint overviewHeight = 0;
+  TrackBody::calcRulerHeight()  const
+  {                        // „insider trick“ to include prelude padding on root track...
+    uint overviewHeight{startLine_== 0?  // parent adds offset to startLine_ of any sub-track
+                        decoration.topMar : 0};
     for (auto& ruler : rulers_)
       {
         overviewHeight += ruler->calcHeight()
@@ -170,6 +184,16 @@ namespace timeline {
     return overviewHeight;
   }
   
+  uint
+  TrackBody::calcSubtrackHeight()  const
+  {
+    uint heightSum{isnil (subTracks_)? 0   // approximate slope up (possibly exaggerated)
+                                     : decoration.borders[0] };
+    for (TrackBody* subTrack : subTracks_)
+      heightSum += subTrack->calcHeight();
+    return heightSum;
+  }
+
   
   namespace {
     /** helper to get the width of combined slope borders.

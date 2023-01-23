@@ -116,14 +116,16 @@ namespace timeline {
       
       void setTrackName (cuString&);
       uint establishTrackSpace (TrackProfile&);
-      uint calcRulerHeight();
-      uint calcHeight();
       void accommodateContentHeight(uint contentExtension);
 uint DEBUGconH() const { return contentHeight_;}////////////////////////////////////TODO
+
+      /** @note relative to local canvas coordinates (body canvas */
+      uint getContentOffsetY()  const { return startLine_ + contentOffset_; }
       
-      uint getContentOffsetY()   const { return startLine_ + contentOffset_; }
-      uint getOwnContentHeight() const { return contentOffset_ + contentHeight_
-                                              + decoration.content - decoration.trackPad; }
+      uint calcHeight()         const;
+      uint calcRulerHeight()    const;
+      uint calcContentHeight()  const;
+      uint calcSubtrackHeight() const;
       
       DisplayManager::SignalStructureChange signalStructureChange_;
       

@@ -24,7 +24,23 @@
 /** @file track-head-widget.cpp
  ** Implementation details regarding display of the track heads within the timeline UI.
  ** 
- ** @todo WIP-WIP-WIP as of 12/2016
+ ** # Layout arrangement for the »Patchbay«
+ ** 
+ ** In Lumiera, »Tracks« are arranged as a system of nested scopes.
+ ** The TrackHeadWidget thus has to reflect this nested structure, which can be achieved
+ ** by recursively nesting further TrackHeadWidget instances. The header and »patchbay«
+ ** for each scope is implemented as a `Gtk::Grid` widget, with initially three rows:
+ ** - a row holding the Track Header label and menu (actually an \ref ElementBoxWidget)
+ ** - a row corresponding to the _content area_ of the track itself, to hold the controls
+ **   for this track's scope, i.e. the track _together with all nested sub-tracks._
+ ** - a padding row to help synchronising track head and track body display.
+ ** Additional sub-Tracks are added as additional lines to the grid, while deeper nested
+ ** sub-Tracks will be handled by the corresponding nested TrackHeadWidget. The column
+ ** to the left side will be increased accordingly to display the nested fork structure.
+ ** 
+ ** @todo as of 1/2023, the basic structure was (finally) settled and the painting
+ **       of vertical space allocation looks correct up to ± 1px, when testing with
+ **       various margin, border and padding settings in the CSS.
  ** 
  */
 
@@ -32,24 +48,10 @@
 #include "stage/gtk-base.hpp"
 #include "stage/timeline/track-head-widget.hpp"
 
-//#include "stage/ui-bus.hpp"
-//#include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"/////////////////////////////TODO 4dump
 
 #include "lib/util.hpp"
 
-//#include <algorithm>
-//#include <vector>
-
-
-
-//using util::_Fmt;
-//using util::contains;
-//using Gtk::Widget;
-//using sigc::mem_fun;
-//using sigc::ptr_fun;
-//using std::cout;
-//using std::endl;
 using util::max;
 
 

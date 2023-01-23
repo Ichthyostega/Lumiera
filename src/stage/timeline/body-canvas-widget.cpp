@@ -628,7 +628,7 @@ cout<<"|!| adjustCanvasSize("<<canvasWidth<<", "<<rulerHeight<<"+"<<contentHeigh
   {
     // Traverse TrackBody structure and populate the (track)profile
     uint contentHeight = rootBody_->establishTrackSpace (profile_);
-    uint rulerHeight = rootBody_->calcRulerHeight() + TrackBody::decoration.topMar;
+    uint rulerHeight = rootBody_->calcRulerHeight();
     adjustCanvasSize(layout_.getPixSpan().delta(), contentHeight, rulerHeight);
     
     ///TODO: anything to publish into the DisplayEvaluation ??
