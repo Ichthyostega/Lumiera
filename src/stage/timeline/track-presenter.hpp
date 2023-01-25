@@ -108,15 +108,9 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/iter-tree-explorer.hpp"
 #include "lib/util-coll.hpp"
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
-#include "lib/format-cout.hpp"
-#include "lib/test/test-helper.hpp"
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
 
 #include "lib/nocopy.hpp"
-//#include "lib/util.hpp"
 
-//#include <memory>
 #include <optional>
 #include <utility>
 #include <vector>
@@ -297,7 +291,6 @@ namespace timeline {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
       void injectDebugTrackLabels();
       void attachElementBox();
-      void manipulateBox();
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
       uString TODO_trackName_;
@@ -358,14 +351,6 @@ namespace timeline {
                                                                               return arbitrarySiz;
                                                                             })
                                                                       });
-  }
-  inline void
-  TrackPresenter::manipulateBox()
-  {
-    if (not theBox_) return;
-    string rands = lib::test::randStr(rand() % 40);
-    cout << _Fmt{"maniRandS(%d):%s"} % rands.length() % rands <<endl;
-    theBox_->setName (rands);
   }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
   /**
@@ -467,14 +452,9 @@ namespace timeline {
                                        {
                                          return clip->determineRequiredVerticalExtension();
                                        }));
-auto headH = head_.getContentHeight();/////////////////////////////////////////////////////////////////////TODO
-auto bodyH = maxVSize;
-    maxVSize = max (maxVSize, headH);
+    maxVSize = max (maxVSize, head_.getContentHeight());
     this->body_.accommodateContentHeight (maxVSize);
     this->head_.accommodateContentHeight (maxVSize);
-auto headN = head_.getContentHeight();
-auto bodyN = body_.DEBUGconH();
-cout<<"|*| establishExtension(clipH="<<bodyH<<" headH="<<headH<<" max="<<maxVSize<<" hN="<<headN<<" bN="<<bodyN<<" this(track)="<<this<<")"<<endl;    
   }
   
   /** second pass of the DisplayEvaluation:
@@ -511,18 +491,10 @@ cout<<"|*| establishExtension(clipH="<<bodyH<<" headH="<<headH<<" max="<<maxVSiz
   inline void
   DisplayFrame::sync_and_balance (DisplayEvaluation&)
   {
-    uint headSize = head_.getOverallHeight();
-    uint bodySize = body_.calcHeight();
-    uint directH = body_.calcContentHeight();
-//if (bodySize > headSize)
-//{//////////////////////////////////////////////////////TODO
- uint hcV =   head_.getContentHeight();   
-    head_.syncSubtrackStartHeight (directH);
-    head_.accommodateOverallHeight (bodySize);
- uint hN =    head_.getOverallHeight();   
- uint hcN =   head_.getContentHeight();   
- cout<<"|+| syncBal: head="<<headSize<<" body="<<bodySize<<"(dir:"<<directH<<") Δ="<<int(bodySize)-int(headSize)<<" hN="<<hN<<"(c:"<<hcV<<"⟶"<<hcN<<")"<<endl;      
-//}//////////////////////////////////////////////////////TODO      
+    uint contentHeight = body_.calcContentHeight();
+    uint overallHeight = contentHeight + body_.calcSubtrackHeight();
+    head_.syncSubtrackStartHeight (contentHeight);
+    head_.accommodateOverallHeight (overallHeight);
   }
 
 

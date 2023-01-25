@@ -48,8 +48,6 @@
 #include "stage/gtk-base.hpp"
 #include "stage/timeline/track-head-widget.hpp"
 
-#include "lib/format-cout.hpp"/////////////////////////////TODO 4dump
-
 #include "lib/util.hpp"
 
 using util::max;
@@ -122,14 +120,7 @@ namespace timeline {
   {
     uint heightSum{0};
     for (uint line=1; line <= 2u + childCnt_; ++line)
-      {/////////////////////////////////////////////TODO
-        int h1 = getHeightAt (0,line);
-        int h2 = getHeightAt (1,line);
-////////////////////////////////////////////////////TODO
-cout<<"|o| cH(line="<<line<<") += ("<<h1<<","<<h2<<")"<<endl;        
-////////////////////////////////////////////////////TODO        
       heightSum += getHeightAt (1,line);
-      }/////////////////////////////////////////////TODO
     heightSum = max (heightSum, getExpansionHeight());
     return heightSum + getLabelHeight();
   }
@@ -137,16 +128,9 @@ cout<<"|o| cH(line="<<line<<") += ("<<h1<<","<<h2<<")"<<endl;
   void
   TrackHeadWidget::enforceHeightAt(int left, int top, uint height)
   {
-uint hvor = getOverallHeight();      
-uint h = getHeightAt (left,top);
-int reqW, reqH, reqHn;
     auto* cell = this->get_child_at(left,top);
     REQUIRE (cell);
-cell->get_size_request (reqW, reqH);
     cell->set_size_request (-1, height);
-uint hnach = getOverallHeight();
-cell->get_size_request (reqW, reqHn);
-cout<<"|+| Head:inc ("<<left<<","<<top<<") h="<<h<<" ⟶ "<<height<<" vor:"<<hvor<<" nach:"<<hnach<<" (c:"<<reqH<<"⟶"<<reqHn<<")"<<endl;      
   }
   
   void

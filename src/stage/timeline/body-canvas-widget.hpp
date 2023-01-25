@@ -79,10 +79,6 @@
 #include "stage/timeline/display-evaluation.hpp"
 #include "stage/model/canvas-hook.hpp"
 
-//#include "lib/util.hpp"
-
-//#include <memory>
-//#include <vector>
 #include <functional>
 
 

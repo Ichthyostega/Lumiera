@@ -51,8 +51,6 @@
 #include "lib/meta/trait.hpp"
 #include "stage/model/canvas-hook.hpp"
 #include "stage/model/zoom-window.hpp"
-#include "lib/format-obj.hpp"////////////////////////////TODO
-#include "lib/format-string.hpp"/////////////////////////TODO
 
 
 
@@ -94,17 +92,6 @@ namespace model {
           return zoomWindow_.overallSpan();
         }
 
-//////////////////////////////////////////////////////////////TODO
-string tranZ(TimeValue staTiPoi)  const override
-  {
-    auto sta = zoomWindow_.overallSpan().start();
-    Offset offi{sta, staTiPoi};
-    Rat mulli = zoomWindow_.px_per_sec() * _FSecs(offi);
-    int64_t casti = rational_cast<int64_t> (mulli);
-    static util::_Fmt formi{"Offset(%d, %d) = %d ⟼ px = %s ⟼ %s"};
-    return formi % _raw(sta) % _raw(staTiPoi) % _raw(offi) % util::toString(mulli) % casti;
-  }
-//////////////////////////////////////////////////////////////TODO      
       int
       translateTimeToPixels (TimeValue startTimePoint)  const override
         {

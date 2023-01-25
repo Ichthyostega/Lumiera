@@ -50,10 +50,6 @@
 #include "stage/ctrl/bus-term.hpp"
 #include "stage/model/view-hook.hpp"
 
-//#include "lib/util.hpp"
-
-//#include <memory>
-//#include <vector>
 
 
 

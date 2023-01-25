@@ -94,27 +94,17 @@
 #include "stage/timeline/clip-widget.hpp"
 #include "stage/widget/element-box-widget.hpp"
 
-//#include "stage/ui-bus.hpp"
 #include "lib/format-string.hpp"
-#include "lib/format-cout.hpp"  ///////////////////TODO debugging
 
 #include "lib/util.hpp"
 
-//#include <algorithm>
-//#include <vector>
 #include <utility>
 
 
 
 using util::_Fmt;
-//using util::contains;
-//using Gtk::Widget;
-//using sigc::mem_fun;
-//using sigc::ptr_fun;
 using lib::time::TimeVar;
 using util::unConst;
-//using std::cout;
-//using std::endl;
 using std::optional;
 
 
@@ -305,7 +295,7 @@ namespace timeline {
         updatePosition()  override
           {
             WidgetHook::Pos nominalPos = establishHookPoint(nullptr);
-            this->moveTo (nominalPos.x, nominalPos.y);
+            this->moveTo (nominalPos.x, nominalPos.y);                    /////////////////////////TICKET #1267 : sometimes fails to cause re-draw (especially when dragging) but position calculated correctly
             establishHorizontalExtension();
           }
         

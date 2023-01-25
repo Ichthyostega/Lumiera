@@ -26369,16 +26369,34 @@
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612742429043" ID="ID_1739285791" MODIFIED="1612742461497" TEXT="die scroll-H&#xf6;he / Canvas-H&#xf6;he stimmt nicht">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1612742429043" ID="ID_1739285791" MODIFIED="1674603322918" TEXT="die scroll-H&#xf6;he / Canvas-H&#xf6;he stimmt nicht">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1612742467558" ID="ID_929888474" MODIFIED="1612742484264" TEXT="und zwar fehlt genau die zus&#xe4;tzliche H&#xf6;he der schlie&#xdf;enden Slope"/>
 <node CREATED="1612742484972" ID="ID_1291566735" MODIFIED="1612742498974" TEXT="nachdem man aber das Fenster einmal resized hat, stimmt es wieder"/>
+<node CREATED="1674603256346" ID="ID_1331516814" MODIFIED="1674603318681" TEXT="Problem behoben: f&#xfc;r das ZoomWindow eine exakte Layout-Berechnung implementiert">
+<arrowlink DESTINATION="ID_328296925" ENDARROW="Default" ENDINCLINATION="116;0;" ID="Arrow_ID_819469158" STARTARROW="None" STARTINCLINATION="116;0;"/>
+<icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612742527238" ID="ID_1543056669" MODIFIED="1612742537453" TEXT="die Header-Starts rutschen minimal nach oben">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#990000" CREATED="1612742527238" ID="ID_1543056669" MODIFIED="1674603224715" TEXT="die Header-Starts rutschen minimal nach oben">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1612742538724" ID="ID_1839437599" MODIFIED="1612742544871" TEXT="ein off-by-one?"/>
 <node CREATED="1612742545690" ID="ID_1735908408" MODIFIED="1612742563442" TEXT="sieht so aus, als w&#xfc;rden uns pro Zeile nur wenige Pixel fehlen"/>
 <node CREATED="1612742574675" ID="ID_20715943" MODIFIED="1612742616893" TEXT="d.h. der TrackBody ist minimal Gr&#xf6;&#xdf;er, als die H&#xf6;he, die wir als Delta anwenden"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1674603031791" ID="ID_328296925" LINK="#ID_1742313131" MODIFIED="1674603318681" TEXT="Nein: da war die Layout-Implementierung noch ziemlich &#x201e;daneben&#x201c;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...was bisher nur nicht aufgefallen war, weil die Display-Evaluation nur einmal lief;<br />Nachdem ich das ZoomWindow integriert hatte, zeigten sich diverse Defekte / run-away-Effekte, die erst beoben waren, nachdem ich die Layout-Berechnung im TrackHeadWidget komplett &#252;berarbeitet und systematisch ausgestaltet hatte
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_328296925" ENDARROW="Default" ENDINCLINATION="116;0;" ID="Arrow_ID_819469158" SOURCE="ID_1331516814" STARTARROW="None" STARTINCLINATION="116;0;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1612030881439" ID="ID_306268306" MODIFIED="1612030903673" TEXT="nach dem DisplayEvaluationPass: Zustand nicht vollst&#xe4;ndig realisiert">
 <icon BUILTIN="messagebox_warning"/>
@@ -26394,6 +26412,54 @@
 <node CREATED="1612031066295" ID="ID_445256100" MODIFIED="1612031108057" TEXT="Invalidieren des Widget hilft nicht">
 <arrowlink COLOR="#843f65" DESTINATION="ID_800250683" ENDARROW="Default" ENDINCLINATION="-296;33;" ID="Arrow_ID_1331047801" STARTARROW="None" STARTINCLINATION="797;63;"/>
 <icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1674603379625" ID="ID_22375243" MODIFIED="1674603406628">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Clip-Drag reagiert manchmal nicht <i>&#187;live&#171;</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1674606870062" ID="ID_1744725566" MODIFIED="1674606880174" TEXT="#1267 sometimes failure to re-draw">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1674603515247" ID="ID_145015079" MODIFIED="1674603519913" TEXT="Beobachtung...">
+<node CREATED="1674603521102" ID="ID_1576327891" MODIFIED="1674603531711" TEXT="Track-Pane-Splitter nach rechts bewegen"/>
+<node CREATED="1674603535772" ID="ID_1899820582" MODIFIED="1674603556532" TEXT="manchmal erfolgt dann kein Update / re-Draw beim Dragging"/>
+<node CREATED="1674603557497" ID="ID_1941260000" MODIFIED="1674603679778" TEXT="die Position wird aber korrekt berechnet und gesetzt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      nachweislich...
+    </p>
+    <ul>
+      <li>
+        die (x,y)-Koordinaten des Clip werden sinnvoll und korrekt aktualisiert
+      </li>
+      <li>
+        der Aufruf geht durch bis auf das Gtk::Layout
+      </li>
+      <li>
+        nach einer Invalidierung des ganzen Fensters springt der Clip pl&#246;tzlich an die neue Position
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1674603568776" ID="ID_1618676622" MODIFIED="1674603583681" TEXT="nach einem focus-loss / focus-gain funktioniert&apos;s wieder"/>
+<node CREATED="1674603584654" ID="ID_585485863" MODIFIED="1674603597876" TEXT="auch nach einem Verschieben des Pane-Splitters nach links"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#c7346a" CREATED="1674603681741" ID="ID_900437621" MODIFIED="1674603716830" TEXT="konnte kein Merkmal identifizieren, an dem sich das Fehlverhalten festmachen l&#xe4;&#xdf;t">
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 </node>
@@ -28091,16 +28157,20 @@
 <node CREATED="1555198484257" ID="ID_447173098" MODIFIED="1557498707228" TEXT="Problem: Aufteilung">
 <arrowlink DESTINATION="ID_577805455" ENDARROW="Default" ENDINCLINATION="146;-10;" ID="Arrow_ID_228489961" STARTARROW="Default" STARTINCLINATION="110;0;"/>
 <node CREATED="1555198495266" ID="ID_118142711" MODIFIED="1557498707228" TEXT="was kommt in den (immer sichtbaren) oberen Teil?"/>
-<node CREATED="1555198558887" ID="ID_1718337163" MODIFIED="1560442514142" TEXT="Beide Canvas-Instanzen verwenden das gleiche Koordinatensystem">
+<node CREATED="1555198558887" ID="ID_1718337163" MODIFIED="1674596977895" TEXT="Beide Canvas-Instanzen verwenden das gleiche Koordinatensystem">
 <arrowlink DESTINATION="ID_1220970686" ENDARROW="Default" ENDINCLINATION="-532;0;" ID="Arrow_ID_1730442283" STARTARROW="None" STARTINCLINATION="377;0;"/>
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563143974534" HGAP="122" ID="ID_130702763" MODIFIED="1576974756059" TEXT="TODO: wirklich?" VSHIFT="-39">
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#990000" CREATED="1563143974534" HGAP="122" ID="ID_130702763" MODIFIED="1674596984363" TEXT="wirklich?" VSHIFT="-39">
 <linktarget COLOR="#744479" DESTINATION="ID_130702763" ENDARROW="Default" ENDINCLINATION="687;939;" ID="Arrow_ID_32276313" SOURCE="ID_43945835" STARTARROW="Default" STARTINCLINATION="199;-719;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="stop-sign"/>
 <node CREATED="1563143996702" ID="ID_1893904282" MODIFIED="1563144019155" TEXT="im Momment (7/2019) verwende ich eine laufende (pixel)-Zeile"/>
 <node CREATED="1563144020688" ID="ID_1371868080" MODIFIED="1563144028227" TEXT="die startet jeweils bei 0"/>
 <node CREATED="1563144029219" ID="ID_738243832" MODIFIED="1563144048228" TEXT="und wird f&#xfc;r jedes Struktur-Element mit dem Offset beaufschlagt"/>
 <node CREATED="1563144049378" ID="ID_1567458686" MODIFIED="1563144067157" TEXT="Konsequenz: jeder Canvas hat seine eigenen Koordinaten"/>
+<node CREATED="1674596957963" ID="ID_1673725434" MODIFIED="1674596971193" TEXT="dieser Ansatz hat sich bew&#xe4;hrt">
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1555198633466" ID="ID_780787053" MODIFIED="1560442064470" TEXT="Auf Interpretieren des Struktur-Profils zur&#xfc;ckgef&#xfc;hrt">
@@ -29137,31 +29207,41 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560442383281" ID="ID_1448105245" MODIFIED="1575580703174" TEXT="Festlegen der vertikalen Ausdehnung der Teil-Widgets">
+<node COLOR="#338800" CREATED="1560442383281" ID="ID_1448105245" MODIFIED="1674596924446" TEXT="Festlegen der vertikalen Ausdehnung der Teil-Widgets">
 <arrowlink COLOR="#235691" DESTINATION="ID_585934033" ENDARROW="Default" ENDINCLINATION="-259;-8;" ID="Arrow_ID_975721855" STARTARROW="Default" STARTINCLINATION="168;-53;"/>
 <linktarget COLOR="#5f57ba" DESTINATION="ID_1448105245" ENDARROW="Default" ENDINCLINATION="-1587;-35;" ID="Arrow_ID_532403594" SOURCE="ID_1989047133" STARTARROW="None" STARTINCLINATION="1293;134;"/>
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1565281879855" ID="ID_386162681" MODIFIED="1565281891302" TEXT="Aufgabe: steuern">
-<icon BUILTIN="flag-pink"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1565281895004" ID="ID_1758019036" MODIFIED="1582931167056" TEXT="was ist der Trigger-Punkt?">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1565281879855" ID="ID_386162681" MODIFIED="1674596532559" TEXT="Aufgabe: steuern">
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1565281895004" ID="ID_1758019036" MODIFIED="1674596912874" TEXT="was ist der Trigger-Punkt?">
 <arrowlink COLOR="#7b45d8" DESTINATION="ID_1896159832" ENDARROW="Default" ENDINCLINATION="-839;66;" ID="Arrow_ID_786196853" STARTARROW="None" STARTINCLINATION="667;67;"/>
 <icon BUILTIN="help"/>
+<node CREATED="1674596555914" HGAP="39" ID="ID_878229637" MODIFIED="1674596749453" TEXT="signalStructureChange" VSHIFT="7">
+<icon BUILTIN="info"/>
+<node CREATED="1674596569943" ID="ID_151950407" MODIFIED="1674596795349" TEXT="&#xd83e;&#xdc32; im DisplayManager (ABC) angesiedelt"/>
+<node CREATED="1674596578990" ID="ID_1742690246" MODIFIED="1674596812667" TEXT="&#x27ff; direkt auch mit Change-Detector im ZoomWindow verdrahtet"/>
+<node CREATED="1674596753359" ID="ID_828853736" MODIFIED="1674596787193" TEXT="&#x27fc; BodyCanvasWidget::slotStructureChange"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1565281921697" ID="ID_459498695" MODIFIED="1565281934580" TEXT="wo wird ggfs diese Info gespeichert?">
+</node>
+<node COLOR="#435e98" CREATED="1565281921697" ID="ID_459498695" MODIFIED="1674596912874" TEXT="wo wird ggfs diese Info gespeichert?">
 <icon BUILTIN="help"/>
+<node CREATED="1674596821200" ID="ID_1373193265" MODIFIED="1674596840198" TEXT="durch Leeren des TrackProfile im BodyCanvasWidget"/>
+<node CREATED="1674596842899" ID="ID_1305988233" MODIFIED="1674596856843" TEXT="ist damit idempotent und auch re-entrant"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1565281938372" ID="ID_1188639528" MODIFIED="1565281966407" TEXT="wo/wann wird sie auf die zwei Canvas-Widgets &#xfc;bertragen?">
+<node COLOR="#435e98" CREATED="1565281938372" ID="ID_1188639528" MODIFIED="1674596912875" TEXT="wo/wann wird sie auf die zwei Canvas-Widgets &#xfc;bertragen?">
 <icon BUILTIN="help"/>
+<node CREATED="1674596865952" ID="ID_451984562" MODIFIED="1674596874746" TEXT="erst in dem Moment, wo tats&#xe4;chlich gezeichnet wird"/>
+<node CREATED="1674596876759" ID="ID_358515715" MODIFIED="1674596909486" TEXT="im Getter steckt der Aufruf der eigentlichen Neuberechnung"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611486660157" ID="ID_142948287" MODIFIED="1611486692832" TEXT="...und tats&#xe4;chlich berechnen">
-<arrowlink COLOR="#ea7967" DESTINATION="ID_1623890878" ENDARROW="Default" ENDINCLINATION="24;-87;" ID="Arrow_ID_809556626" STARTARROW="None" STARTINCLINATION="119;11;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1611486660157" ID="ID_142948287" MODIFIED="1674596527387" TEXT="...und tats&#xe4;chlich berechnen">
+<arrowlink COLOR="#67b4ea" DESTINATION="ID_1623890878" ENDARROW="Default" ENDINCLINATION="24;-87;" ID="Arrow_ID_809556626" STARTARROW="None" STARTINCLINATION="138;12;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560608579463" ID="ID_900869986" MODIFIED="1565282667873" TEXT="Layout etablieren">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1560608579463" ID="ID_900869986" MODIFIED="1674597032097" TEXT="Layout etablieren">
+<icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1565282669252" ID="ID_1077695296" MODIFIED="1565282697164" TEXT="horizontal zu zeichnende Spanne">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1672843594185" ID="ID_1806332659" MODIFIED="1672843600804" TEXT="Ausdehnung des Canvas">
@@ -29180,8 +29260,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1565282697992" ID="ID_1761874542" MODIFIED="1565282702979" TEXT="vertikal belegter Raum">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1565282697992" ID="ID_1761874542" MODIFIED="1674597012758" TEXT="vertikal belegter Raum">
+<icon BUILTIN="hourglass"/>
 <node COLOR="#338800" CREATED="1565283074170" ID="ID_1990551085" MODIFIED="1566407001705" TEXT="Trigger/Berechnungsfunktion">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -29203,17 +29283,18 @@
 </node>
 </node>
 <node COLOR="#338800" CREATED="1582931260542" ID="ID_43972117" MODIFIED="1674513272422" TEXT="Thema: Koordinieren zwischen Header und Body">
+<linktarget COLOR="#689ba2" DESTINATION="ID_43972117" ENDARROW="Default" ENDINCLINATION="198;928;" ID="Arrow_ID_1080676559" SOURCE="ID_1842930323" STARTARROW="None" STARTINCLINATION="-1589;-3311;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1582931486072" ID="ID_1623890878" MODIFIED="1674513437165" TEXT="Ausdehnung der Tracks">
 <arrowlink COLOR="#fe5b57" DESTINATION="ID_1920766923" ENDARROW="Default" ENDINCLINATION="595;0;" ID="Arrow_ID_1362710635" STARTARROW="Default" STARTINCLINATION="529;0;"/>
-<linktarget COLOR="#ea7967" DESTINATION="ID_1623890878" ENDARROW="Default" ENDINCLINATION="24;-87;" ID="Arrow_ID_809556626" SOURCE="ID_142948287" STARTARROW="None" STARTINCLINATION="119;11;"/>
+<linktarget COLOR="#67b4ea" DESTINATION="ID_1623890878" ENDARROW="Default" ENDINCLINATION="24;-87;" ID="Arrow_ID_809556626" SOURCE="ID_142948287" STARTARROW="None" STARTINCLINATION="138;12;"/>
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1674161380587" ID="ID_1311832889" MODIFIED="1674513429084" TEXT="Platz f&#xfc;r Placement-Controlls sinnvoll anordnen">
 <arrowlink COLOR="#5a7c92" DESTINATION="ID_478580800" ENDARROW="Default" ENDINCLINATION="451;41;" ID="Arrow_ID_513449931" STARTARROW="None" STARTINCLINATION="481;-27;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#435e98" CREATED="1674163294922" ID="ID_1332292119" LINK="#ID_1650195806" MODIFIED="1674254403617" TEXT="Probleme mit der vertikalen Koordination bei nested Tracks">
+<node COLOR="#435e98" CREATED="1674163294922" FOLDED="true" ID="ID_1332292119" LINK="#ID_1650195806" MODIFIED="1674254403617" TEXT="Probleme mit der vertikalen Koordination bei nested Tracks">
 <arrowlink COLOR="#b1493c" DESTINATION="ID_1762683235" ENDARROW="Default" ENDINCLINATION="624;37;" ID="Arrow_ID_1560223761" STARTARROW="None" STARTINCLINATION="129;-6;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node COLOR="#435e98" CREATED="1674174926441" FOLDED="true" ID="ID_896721694" MODIFIED="1674254493101" TEXT="Zweifel an der berechneten H&#xf6;he">
@@ -29343,7 +29424,7 @@
 <node COLOR="#435e98" CREATED="1674172577081" ID="ID_902379987" MODIFIED="1674347889053" TEXT="Synchronisation &#x27fc; padding nach direct content"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1674347903812" ID="ID_1742313131" MODIFIED="1674513236391" TEXT="H&#xf6;henberechnung im TrackBody unvollst&#xe4;ndig">
+<node COLOR="#435e98" CREATED="1674347903812" FOLDED="true" ID="ID_1742313131" MODIFIED="1674513236391" TEXT="H&#xf6;henberechnung im TrackBody unvollst&#xe4;ndig">
 <icon BUILTIN="broken-line"/>
 <node COLOR="#435e98" CREATED="1674347924697" FOLDED="true" ID="ID_1440620020" MODIFIED="1674513373146" TEXT="Probleme">
 <icon BUILTIN="broken-line"/>
@@ -29527,9 +29608,9 @@
 </node>
 </node>
 </node>
-</node>
 <node COLOR="#338800" CREATED="1674513248834" ID="ID_200252521" MODIFIED="1674513270937" TEXT="jetzt sieht das Resultat auf &#xb1;1px exakt aus">
 <icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1674158539561" ID="ID_1440303749" MODIFIED="1674160219745" TEXT="#1265 define expanding/collapsing of tracks">
@@ -29830,7 +29911,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1672798667029" ID="ID_1699842831" MODIFIED="1672799054739" TEXT="Integration ZoomWindow: funktioniert nicht (mehr)">
+<node COLOR="#435e98" CREATED="1672798667029" ID="ID_1699842831" MODIFIED="1674603499873" TEXT="Integration ZoomWindow: funktioniert nicht (mehr)">
 <linktarget COLOR="#ac3f80" DESTINATION="ID_1699842831" ENDARROW="Default" ENDINCLINATION="-1384;79;" ID="Arrow_ID_927325344" SOURCE="ID_133007183" STARTARROW="None" STARTINCLINATION="-1848;-74;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1672798696337" ID="ID_1553490887" MODIFIED="1672798742711" TEXT="greife jetzt ScrolledWindow::get_allocated_width() ab">
@@ -29855,7 +29936,7 @@
 <node CREATED="1672798763432" ID="ID_485578749" MODIFIED="1672798787610" TEXT="horizontale Scrollbar blockt und wird nach rechts beschnitten">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1672845159233" ID="ID_914079601" MODIFIED="1672867934061" TEXT="(1) Problem ist: keine Invalidierung &#x27f9; keine Display-Evaluation &#x27f9; Wert nicht abgerufen">
+<node COLOR="#435e98" CREATED="1672845159233" ID="ID_914079601" MODIFIED="1674597085411" TEXT="(1) Problem ist: keine Invalidierung &#x27f9; keine Display-Evaluation &#x27f9; Wert nicht abgerufen">
 <icon BUILTIN="idea"/>
 <node CREATED="1672847404194" ID="ID_1941365833" MODIFIED="1672847417490" TEXT="unser Layout-Code merkt daher gar nicht, wenn sich etwas &#xe4;ndert"/>
 <node CREATED="1672847418472" ID="ID_411937904" MODIFIED="1672867873212" TEXT="Beobachtung m&#xf6;gliche Aktivierungen">
@@ -29894,7 +29975,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1672867905486" ID="ID_74954726" MODIFIED="1672867930798" TEXT="(2) Problem ist: Mindestgr&#xf6;&#xdf;e des Ruler-Canvas">
+<node COLOR="#435e98" CREATED="1672867905486" ID="ID_74954726" MODIFIED="1674597085411" TEXT="(2) Problem ist: Mindestgr&#xf6;&#xdf;e des Ruler-Canvas">
 <icon BUILTIN="idea"/>
 <node CREATED="1672867946048" ID="ID_303294117" MODIFIED="1672867967257" TEXT="das kommt von dem Workaround wegen Box-re-Pack"/>
 <node CREATED="1672867974932" ID="ID_1158620825" MODIFIED="1672868021465" TEXT="der Ruler-Canvas liegt nicht in einer scrolled pane und &#x201e;spreizt&#x201c; deshalb">
@@ -29929,6 +30010,9 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1674603423931" ID="ID_623632021" LINK="#ID_22375243" MODIFIED="1674603474685" TEXT="Clip-Drag aktualisiert manchmal die Position nicht">
+<icon BUILTIN="broken-line"/>
 </node>
 </node>
 <node CREATED="1672872402655" ID="ID_57784666" MODIFIED="1672872407100" TEXT="dynamische Anzeige">
@@ -43942,12 +44026,12 @@
 <node CREATED="1673917765612" ID="ID_1287873753" MODIFIED="1673917780494" TEXT="Assertion da&#xdf; das Ergebnis in den Wertebereich pa&#xdf;t"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1672969457755" ID="ID_1145571154" MODIFIED="1672969483227" TEXT="Fehler: run-away in der H&#xf6;he bei wiederholter Display-Evaluation">
+<node COLOR="#435e98" CREATED="1672969457755" ID="ID_1145571154" MODIFIED="1674598990613" TEXT="Fehler: run-away in der H&#xf6;he bei wiederholter Display-Evaluation">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1672969484624" ID="ID_1370033195" MODIFIED="1672969500955" TEXT="die allozierte Content-H&#xf6;he w&#xe4;chst monoton">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1672969501989" ID="ID_1513242412" MODIFIED="1672969532573" TEXT="Verdacht: da nun erstmals re-Evaluationen stattfinden, wird ein Init-Fehler sichtbar">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1672969501989" ID="ID_1513242412" MODIFIED="1674599018497" TEXT="Verdacht: da nun erstmals re-Evaluationen stattfinden, wird ein Init-Fehler sichtbar">
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1673020204201" ID="ID_130901033" MODIFIED="1673020213759" TEXT="Beobachtung (DUMP)">
@@ -44044,21 +44128,29 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1673320252819" ID="ID_754862223" MODIFIED="1673747131064" TEXT="bricht noch nicht den Zyklus">
+<node COLOR="#435e98" CREATED="1673320252819" ID="ID_754862223" MODIFIED="1674598984710" TEXT="bricht noch nicht den Zyklus">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1673320275690" ID="ID_1903820221" MODIFIED="1673745681092" TEXT="jetzt ist der Head-content von Anfang an zu gro&#xdf;">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1673320299575" ID="ID_1836748064" MODIFIED="1673392645658" TEXT="aber warum stabilisiert sich dieser nicht?">
+<node COLOR="#435e98" CREATED="1673320299575" ID="ID_1836748064" MODIFIED="1674599062379" TEXT="aber warum stabilisiert sich dieser nicht?">
 <icon BUILTIN="help"/>
 <node CREATED="1673745636138" ID="ID_1839905420" MODIFIED="1673745695183" TEXT="Grund-1: weil der Head-content sich selbst&#xe4;ndig expandiert"/>
+<node CREATED="1674599035390" ID="ID_1364664491" MODIFIED="1674599060112" TEXT="Grund-2 : weil dann ein Feedback &#xfc;ber die Body-H&#xf6;he stattfindet"/>
 </node>
 <node CREATED="1673705464388" ID="ID_1052559390" MODIFIED="1673705515338" TEXT="hilfreich ist: property_expand() = false  im Content-Bereich"/>
 <node COLOR="#338800" CREATED="1673747106233" ID="ID_830917303" MODIFIED="1673747119474" TEXT="damit ist das Problem f&#xfc;r Blatt-Tracks gel&#xf6;st">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1673747138573" ID="ID_1650195806" MODIFIED="1673918693551" TEXT="aber Tracks mit Content und Kind-Tracks wachsen weiterhin">
-<icon BUILTIN="broken-line"/>
+<node COLOR="#338800" CREATED="1673747138573" ID="ID_1650195806" MODIFIED="1674598982406" TEXT="aber Tracks mit Content und Kind-Tracks wachsen weiterhin">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1674598748501" ID="ID_1842930323" MODIFIED="1674598977652" TEXT="die Berechnung im TrackHead ist insgesamt inkonsistent">
+<arrowlink COLOR="#689ba2" DESTINATION="ID_43972117" ENDARROW="Default" ENDINCLINATION="198;928;" ID="Arrow_ID_1080676559" STARTARROW="None" STARTINCLINATION="-1589;-3311;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1674598781624" ID="ID_1267230309" MODIFIED="1674598980470" TEXT="Size-Requests werden inkrementiert anstatt sie festzusetzen">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>

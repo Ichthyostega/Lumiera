@@ -531,7 +531,6 @@ namespace timeline {
     contentArea_.get_allocated_size(allo,basi);
     int alloW = allo.get_width();
     auto hadj = contentArea_.get_hadjustment();
-cout<<"|?| win::width="<<widthForDebug<<"("<<alloW<<") hadj="<<hadj->get_value()<<"/"<<hadj->get_upper()<<endl;
     widthForDebug = util::max (widthForDebug - 100, 100);   ////////////////////////////////////////TODO: visual debugging
     return uint(widthForDebug);
   }
@@ -539,7 +538,6 @@ cout<<"|?| win::width="<<widthForDebug<<"("<<alloW<<") hadj="<<hadj->get_value()
   BodyCanvasWidget::on_size_allocate(Gtk::Allocation& allocation)
   {
     int alloW = allocation.get_width();
-cout<<"|V| alloc::width="<<alloW<<endl;
     Gtk::Box::on_size_allocate (allocation);
   }
   
@@ -569,7 +567,6 @@ cout<<"|V| alloc::width="<<alloW<<endl;
                         }
                     };
     
-cout<<"|!| adjustCanvasSize("<<canvasWidth<<", "<<rulerHeight<<"+"<<contentHeight<<")"<<endl;/////////////TODO
     adjust (rulerCanvas_, canvasWidth, rulerHeight);
     adjust (mainCanvas_, canvasWidth, contentHeight);
   }
@@ -696,7 +693,6 @@ cout<<"|!| adjustCanvasSize("<<canvasWidth<<", "<<rulerHeight<<"+"<<contentHeigh
     
     cox->save();
     cox->translate(-offH, -offV);
-cout<<"|.| trans->"<<adjH->get_lower()<<"·"<<offH<<"·"<<adjH->get_upper()<<"("<<adjH->get_page_size()<<"±"<<adjH->get_page_increment()<<")"<<endl;
   }
   
   

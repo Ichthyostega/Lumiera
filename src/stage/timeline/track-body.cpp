@@ -36,26 +36,10 @@
 #include "stage/timeline/track-body.hpp"
 #include "stage/timeline/track-profile.hpp"
 
-//#include "stage/ui-bus.hpp"
-//#include "lib/format-string.hpp"
-#include "lib/format-cout.hpp"/////////////////////TODO debugging output
-
 #include "lib/util.hpp"
 
-//#include <algorithm>
-//#include <vector>
-
-
-
-//using util::_Fmt;
 using util::isnil;
 using util::min;
-//using util::contains;
-//using Gtk::Widget;
-//using sigc::mem_fun;
-//using sigc::ptr_fun;
-//using std::cout;
-//using std::endl;
 
 
 namespace stage {
@@ -133,10 +117,7 @@ namespace timeline {
   TrackBody::accommodateContentHeight(uint contentExtension)
   {
     if (contentExtension > contentHeight_)
-{//////////////////////////////////////////////////////TODO
- cout<<"|+| contentHeight("<<contentHeight_<<" ⟶ "<<contentExtension<<" this(body)="<<this<<")"<<endl;      
       contentHeight_ = contentExtension;
-}//////////////////////////////////////////////////////TODO      
   }
   
   /**
@@ -296,7 +277,6 @@ namespace timeline {
         profile.append_coda (TIMELINE_BOTTOM_PADDING_px);
       }
     
-cout<<"|*| establishTrackSpace(content="<<contentHeight_<<" res="<<line<<" this(body)="<<this<<")"<<endl;
     return line;
   }
   

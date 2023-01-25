@@ -45,7 +45,6 @@
 #include "stage/timeline/ruler-track.hpp"
 #include "stage/timeline/display-manager.hpp"
 
-//#include "lib/util.hpp"
 
 #include <memory>
 #include <vector>
@@ -117,7 +116,6 @@ namespace timeline {
       void setTrackName (cuString&);
       uint establishTrackSpace (TrackProfile&);
       void accommodateContentHeight(uint contentExtension);
-uint DEBUGconH() const { return contentHeight_;}////////////////////////////////////TODO
 
       /** @note relative to local canvas coordinates (body canvas */
       uint getContentOffsetY()  const { return startLine_ + contentOffset_; }
@@ -146,7 +144,7 @@ uint DEBUGconH() const { return contentHeight_;}////////////////////////////////
        * @note Ruler entries can be added and removed by diff message, but since
        *       the UI is performed single threaded, these mutations never interfere
        *       with display evaluation passes.
-       */ 
+       */
       Rulers&
       bindRulers()
         {

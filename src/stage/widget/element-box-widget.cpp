@@ -54,18 +54,8 @@
 #include "stage/widget/element-box-widget.hpp"
 #include "stage/style-scheme.hpp"
 
-//#include "lib/format-string.hpp" //////////////////TODO debugging
-#include "lib/format-cout.hpp" //////////////////////TODO debugging
-
 #include "lib/util.hpp"
 
-//#include <algorithm>
-//#include <vector>
-
-
-
-//using util::contains;
-//using Gtk::Widget;
 
 
 namespace stage {

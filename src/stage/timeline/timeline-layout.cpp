@@ -37,29 +37,11 @@
 #include "stage/timeline/timeline-layout.hpp"
 #include "stage/timeline/track-body.hpp"
 
-//#include "stage/ui-bus.hpp"
-//#include "lib/format-string.hpp"
-#include "lib/format-cout.hpp"///////////////////////////TODO
-
 #include "common/advice.hpp"
-//#include "lib/util.hpp"
 #include "lib/time/timevalue.hpp"
 
-//#include <algorithm>
-//#include <vector>
-
-
-
-//using util::_Fmt;
-//using util::contains;
-//using Gtk::Widget;
-//using sigc::mem_fun;
-//using sigc::ptr_fun;
-//using std::cout;
-//using std::endl;
 using lib::time::Time;
 using lib::time::FSecs;
-//using lib::time::Duration;
 using lib::time::TimeSpan;
 
 
@@ -152,7 +134,6 @@ namespace timeline {
   {
       Time windowStart = zoomWindow_.visible().start();
       int pxOffset = translateTimeToPixels (windowStart);
-cout<<"|↯| establishLayout time="<<windowStart<<" ->offset="<<pxOffset<<endl;
       bodyCanvas_.get_hadjustment()->set_value(pxOffset);
   }
   
@@ -176,7 +157,6 @@ cout<<"|↯| establishLayout time="<<windowStart<<" ->offset="<<pxOffset<<endl;
   {
     double pos = hadj->get_value();
     TimeValue windowStart = applyScreenDelta(zoomWindow_.overallSpan().start(), pos);
-cout<<"|!| zoom-scroll pos="<<pos<<" start="<<windowStart<<" zoomWin="<<zoomWindow_.visible()<<endl;
     zoomWindow_.setVisibleStart (windowStart);
   }
   
@@ -189,14 +169,9 @@ cout<<"|!| zoom-scroll pos="<<pos<<" start="<<windowStart<<" zoomWin="<<zoomWind
   TimelineLayout::sizeZoomWindow (Gtk::Allocation& alloc)
   {
     int contentWidthPx = alloc.get_width();
-cout<<"|V| sigAlloc width="<<contentWidthPx<<endl;    
     contentWidthPx = util::max (contentWidthPx - 100, 100);   ////////////////////////////////////////TODO: visual debugging
     if (abs(contentWidthPx) != zoomWindow_.pxWidth())
-{////////////////////////////////////////////////////////////////TODO
- cout<<"|!| zoom-calibrateExtension("<<zoomWindow_.pxWidth()<<" ⟶ "<<contentWidthPx<<")"<<endl;      
       zoomWindow_.calibrateExtension (contentWidthPx);
- cout<<"|=| zoom-calibrateExtension(canvas"<<zoomWindow_.overallSpan()<<" window="<<zoomWindow_.visible()<<" scale="<<zoomWindow_.px_per_sec()<<")"<<endl;      
-}////////////////////////////////////////////////////////////////TODO      
   }
 
   

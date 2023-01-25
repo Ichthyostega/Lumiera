@@ -32,24 +32,8 @@
 #include "stage/gtk-base.hpp"
 #include "stage/timeline/display-evaluation.hpp"
 
-//#include "gui/ui-bus.hpp"
-//#include "lib/format-string.hpp"
-//#include "lib/format-cout.hpp"
-
 #include "lib/util.hpp"
 
-//#include <algorithm>
-//#include <vector>
-
-
-
-//using util::_Fmt;
-//using util::contains;
-//using Gtk::Widget;
-//using sigc::mem_fun;
-//using sigc::ptr_fun;
-//using std::cout;
-//using std::endl;
 using util::isnil;
 
 
