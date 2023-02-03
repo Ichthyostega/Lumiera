@@ -78,8 +78,8 @@
  ** With respect to the TrackBody, the DisplayFrame within each Track acts as a relative attachment
  ** point and relative coordinate system; this is implemented as stage::model::RelativeCanvasHook.
  ** The top-level anchor point is established in the ctor of timeline::TimelineController, where
- ** the actual TimelineLayout is passed as parent CanvasHook; from this point below, each parent
- ** track acts as reference CanvasHook for the child tracks.
+ ** the actual TimelineLayout is passed as parent CanvasHook; hinged below this anchor, each
+ ** parent track acts as reference CanvasHook for the child tracks.
  ** 
  ** \par Impact of indirections:
  ** to keep matters simple for the initial implementation, these relationships were modelled as
@@ -231,7 +231,7 @@ namespace timeline {
       
     public:
       DisplayFrame (DisplayViewHooks& displayAnchor)
-        : RelativeCanvasHook{displayAnchor.getClipHook()}
+        : RelativeCanvasHook{displayAnchor.getClipHook()}     ///////////TICKET #1270 how to anchor a CanvasHook for the ruler tracks
         , head_{displayAnchor.getHeadHook()}
         , body_{displayAnchor.getBodyHook()}
         { }
@@ -374,7 +374,7 @@ namespace timeline {
                   })
                .constructFrom ([&](GenNode const& spec) -> PRuler
                   {                                            // »Constructor« : how to attach a new ruler track
-                    return make_unique<RulerTrack> (spec.idi, this->uiBus_, *this);
+                    return make_unique<RulerTrack> (spec.idi, this->uiBus_, *this);               ///////////TICKET #1270 how to access and pass CanvasHook for the ruler tracks
                   }))
         .attach (collection(markers_)
                .isApplicableIf ([&](GenNode const& spec) -> bool

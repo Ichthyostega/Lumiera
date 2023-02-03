@@ -79,7 +79,7 @@ namespace timeline {
       
       TrackPresenter& track_;
       Scales scales_;
-      
+                                         ////////////////////////////////////////////////////////////////////TICKET #1270 : store CanvasHook for ruler track
     public:
      ~RulerTrack();
       

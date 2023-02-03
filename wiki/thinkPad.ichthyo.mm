@@ -20348,11 +20348,11 @@
 <icon BUILTIN="info"/>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1665870269397" ID="ID_184617933" MODIFIED="1665870282612" TEXT="was braucht ElementBoxWidget?">
 <icon BUILTIN="help"/>
-<node CREATED="1665870390267" ID="ID_1292247563" MODIFIED="1665870468628" TEXT="&#xbb;die Box&#xab; : Container">
+<node CREATED="1665870390267" ID="ID_1292247563" MODIFIED="1665870468628" TEXT="&#xbb;die Box&#xab; : ein Container">
 <node CREATED="1665870476554" ID="ID_567789239" MODIFIED="1665870487537" TEXT="&#xfc;berspannt eine Hintergrund-Fl&#xe4;che"/>
 <node CREATED="1665870488690" ID="ID_610765229" MODIFIED="1665870505519" TEXT="ben&#xf6;tigt generelles Styling">
 <node CREATED="1665870540741" ID="ID_596126312" MODIFIED="1665870553794" TEXT="Ankerpunkt: Klasse auf dem Haupt-Widget"/>
-<node CREATED="1665870613181" ID="ID_1999333910" MODIFIED="1665870634461" TEXT="+eine bekannte Tag-ID zum Binden der CSS-Regelnl"/>
+<node CREATED="1665870613181" ID="ID_1999333910" MODIFIED="1665870634461" TEXT="+eine bekannte Tag-ID zum Binden der CSS-Regeln"/>
 </node>
 </node>
 <node CREATED="1665870683123" ID="ID_334958667" MODIFIED="1665870691416" TEXT="(optional) ein Kind-Widget">
@@ -20562,7 +20562,7 @@
 <node CREATED="1665875003260" ID="ID_1160344881" MODIFIED="1665875034082" TEXT="Modell-A : ElementBox enth&#xe4;lt immer ein Canvas-Widget"/>
 <node CREATED="1665874978212" ID="ID_1828608585" MODIFIED="1665875001778" TEXT="Modell-B : Allokation des Kind-Widget mu&#xdf; woanders erfolgen">
 <node CREATED="1665875077974" ID="ID_1931734833" MODIFIED="1665875087061" TEXT="ElementBox &#xfc;bernimmt keine Ownership"/>
-<node CREATED="1665875088220" ID="ID_734939153" MODIFIED="1665875237420" TEXT="Lifecycle ist zu gew&#xe4;hrleisten">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1665875088220" ID="ID_734939153" LINK="#ID_1042919827" MODIFIED="1675385118681" TEXT="Lifecycle ist zu gew&#xe4;hrleisten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -20573,6 +20573,7 @@
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 <node CREATED="1665875444841" ID="ID_544669077" MODIFIED="1665875454532" TEXT="Kompromi&#xdf;...">
@@ -20812,10 +20813,14 @@
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1654445541606" ID="ID_520455096" MODIFIED="1665972223918" TEXT="Integrieren">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1654445546655" ID="ID_1539832096" MODIFIED="1654445562461" TEXT="einfaches ElementBoxWidget...">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1654445564395" ID="ID_1890406032" MODIFIED="1654445592486" TEXT="testhalber in der HeaderPane unterbringen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1654445546655" ID="ID_1539832096" MODIFIED="1675394835906" TEXT="einfaches ElementBoxWidget...">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1654445564395" ID="ID_1890406032" MODIFIED="1675394803481" TEXT="testhalber in der HeaderPane unterbringen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1675394806931" ID="ID_1282996631" MODIFIED="1675394828787" TEXT="funktioniert auf Anhieb"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1675394821061" ID="ID_443844677" MODIFIED="1675394826892" TEXT="scheee....">
+<icon BUILTIN="ksmiletris"/>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1654445580312" ID="ID_271330163" MODIFIED="1662051966664" TEXT="testhalber an den Track-Canvas anheften">
 <icon BUILTIN="button_ok"/>
@@ -20831,9 +20836,10 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666370244648" ID="ID_306927735" MODIFIED="1666371577138" TEXT="testhalber als Effekt in Ruler legen">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1666370244648" ID="ID_306927735" MODIFIED="1675387511544" TEXT="testhalber als Effekt in Ruler legen">
 <arrowlink COLOR="#b12c6e" DESTINATION="ID_613160281" ENDARROW="Default" ENDINCLINATION="-858;-29;" ID="Arrow_ID_1531249433" STARTARROW="None" STARTINCLINATION="-361;27;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1675387513273" ID="ID_866696752" MODIFIED="1675387528379" TEXT="wartet auf: #1270 define CanvasHook for ruler tracks"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1654445594924" ID="ID_1266679575" MODIFIED="1666367207990" TEXT="Clip auf ElementBoxWidget umstellen">
@@ -22545,6 +22551,72 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666371419810" ID="ID_613160281" MODIFIED="1666371577138" TEXT="sicherstellen da&#xdf; dieses Konzept auch in den Overview-Rulern funktioniert">
 <linktarget COLOR="#b12c6e" DESTINATION="ID_613160281" ENDARROW="Default" ENDINCLINATION="-858;-29;" ID="Arrow_ID_1531249433" SOURCE="ID_306927735" STARTARROW="None" STARTINCLINATION="-361;27;"/>
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1675386676167" ID="ID_235963160" MODIFIED="1675387243008" TEXT="aktuell noch nicht klar welchen Content es hier geben wird">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      2/2023
+    </p>
+    <ul>
+      <li>
+        diff-Binding UNIMPLEMENTED
+      </li>
+      <li>
+        TrackBody hat eine Collection vector&lt;unique_ptr&lt;RulerTrack&gt;&gt;
+      </li>
+      <li>
+        er verwendet diesen bisher aber nur, um die vertikale Ausdehnung zu berechnen
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#e6345a" DESTINATION="ID_235963160" ENDARROW="Default" ENDINCLINATION="127;6;" ID="Arrow_ID_517947545" SOURCE="ID_284910451" STARTARROW="None" STARTINCLINATION="99;-7;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675386889583" ID="ID_842520211" MODIFIED="1675386896697" TEXT="#1270 CanvasHook f&#xfc;r Ruler">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1675387040398" ID="ID_184557686" MODIFIED="1675387059617" TEXT="DisplayFrame::getClipHook() &#x27fc; liefert DisplayFrame selber"/>
+<node CREATED="1675387061219" ID="ID_317712434" MODIFIED="1675387122437" TEXT="&#x27f9; DisplayFrame implementiert CanvasHook nur f&#xfc;r eigentlichen Track-Content">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font face="Monospaced" color="#312a7f">int hookAdjY (int yPos)&#160;&#160;override { return yPos + body_.getContentOffsetY(); };</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675387200347" ID="ID_284910451" MODIFIED="1675387251007" TEXT="TODO: Zugriffsweg f&#xfc;r Content definieren">
+<arrowlink COLOR="#e6345a" DESTINATION="ID_235963160" ENDARROW="Default" ENDINCLINATION="127;6;" ID="Arrow_ID_517947545" STARTARROW="None" STARTINCLINATION="99;-7;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1675387257113" ID="ID_324465991" MODIFIED="1675387413606" TEXT="Anhaltspunkt: TreeMutator f&#xfc;r Clips im TrackPresenter">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      dieser greift im &#187;Constructor&#171; binding...
+    </p>
+    <ul>
+      <li>
+        vom TrackPresenter auf den DisplayFrame zu, um sich dort den CanvasHook zu holen (das ist der DisplayFrame selber, was aber opaque bleibt)
+      </li>
+      <li>
+        und gibt eine Referenz auf diesen CanvasHook dann an den ClipPresenter-ctor weiter....
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1576757730509" FOLDED="true" ID="ID_1949130658" MODIFIED="1612002019554" TEXT="&#xbb;Widget-Position&#xab; heraus-abstrahieren">
@@ -25622,8 +25694,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582995724279" ID="ID_742111018" MODIFIED="1583537394329" TEXT="Steuer-Komponente">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1582995724279" ID="ID_742111018" MODIFIED="1675384156539" TEXT="Steuer-Komponente">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1582995734606" ID="ID_1813411794" MODIFIED="1582995739220" TEXT="lebt im Layout-Manager"/>
 <node CREATED="1582995740053" ID="ID_521808189" MODIFIED="1582995755383" TEXT="stateful (evaluationPhase)"/>
 <node CREATED="1583435618709" ID="ID_1501002443" MODIFIED="1583435629364" TEXT="es ist die DisplayEvaluation selber">
@@ -25688,10 +25760,10 @@
 </node>
 <node COLOR="#338800" CREATED="1583010115679" ID="ID_181195318" MODIFIED="1583677222280" TEXT="alle Tracks">
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583010186970" ID="ID_1754142891" MODIFIED="1583677227523" TEXT="Ping-Pong auf DisplayFrame ausl&#xf6;sen">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583010212766" ID="ID_1377321766" MODIFIED="1583677193614" TEXT="Gr&#xf6;&#xdf;e vom Header">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1583010186970" ID="ID_1754142891" MODIFIED="1675384010783" TEXT="Ping-Pong auf DisplayFrame ausl&#xf6;sen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1583010212766" ID="ID_1377321766" MODIFIED="1675384095983" TEXT="Gr&#xf6;&#xdf;e vom Header auslesen">
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1583010223312" ID="ID_929067099" MODIFIED="1583677196768" STYLE="fork" TEXT="damit die Maximums-Berechnung auf dem Track-Inhalt ausl&#xf6;sen">
 <icon BUILTIN="button_ok"/>
@@ -25714,13 +25786,13 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583677604571" ID="ID_214009767" MODIFIED="1583678064710" TEXT="brauche (vorl&#xe4;ufige) R&#xfc;ckmeldung vom Clip">
+<node COLOR="#338800" CREATED="1583677604571" ID="ID_214009767" MODIFIED="1675384124121" TEXT="brauche (vorl&#xe4;ufige) R&#xfc;ckmeldung vom Clip">
 <arrowlink COLOR="#ab415e" DESTINATION="ID_811510338" ENDARROW="Default" ENDINCLINATION="-975;-81;" ID="Arrow_ID_610185006" STARTARROW="None" STARTINCLINATION="744;47;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611486765168" ID="ID_62818590" MODIFIED="1611487348314" TEXT="Clip-Positionen und Ausdehnungen integrieren">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1611486765168" ID="ID_62818590" MODIFIED="1675384130360" TEXT="Clip-Positionen und Ausdehnungen integrieren">
 <linktarget COLOR="#de4b7e" DESTINATION="ID_62818590" ENDARROW="Default" ENDINCLINATION="-1193;64;" ID="Arrow_ID_1779091384" SOURCE="ID_392294660" STARTARROW="None" STARTINCLINATION="817;64;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="hourglass"/>
 <node COLOR="#435e98" CREATED="1617470705305" HGAP="40" ID="ID_644438911" MODIFIED="1674161854370" TEXT="Stand: vorl&#xe4;ufige Implementierung" VSHIFT="6">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -25749,8 +25821,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583010246034" ID="ID_113344286" MODIFIED="1611533767877" TEXT="Resultat mit Wert vom Header abgleichen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1583010246034" ID="ID_113344286" MODIFIED="1675384031717" TEXT="Resultat mit Wert vom Header abgleichen">
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1611527674130" ID="ID_1530876056" MODIFIED="1612030681158" TEXT="Ergebnis &#x2259; lokales Maximum &#x2192; TrackBody::contentHeight_">
 <linktarget COLOR="#3b4b73" DESTINATION="ID_1530876056" ENDARROW="Default" ENDINCLINATION="802;689;" ID="Arrow_ID_471691943" SOURCE="ID_1232626344" STARTARROW="None" STARTINCLINATION="700;24;"/>
@@ -25760,7 +25832,7 @@
 <node CREATED="1611533829992" ID="ID_1527761356" MODIFIED="1611533848566" TEXT="der Content mu&#xdf; in den Content-Bereich im Track passen"/>
 <node CREATED="1611533811939" ID="ID_254664541" MODIFIED="1611533828996" TEXT="Synchronisation zwischen Header und Body"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611533873746" ID="ID_1129757567" MODIFIED="1611533921023" TEXT="wo/wie werden die Sub-Tracks ber&#xfc;cksichtigt?">
+<node COLOR="#435e98" CREATED="1611533873746" ID="ID_1129757567" MODIFIED="1675384005462" TEXT="wo/wie werden die Sub-Tracks ber&#xfc;cksichtigt?">
 <icon BUILTIN="help"/>
 <node CREATED="1612645297486" ID="ID_847170359" MODIFIED="1612646097627" TEXT="ergibt sich aus der Struktur des Display-Frame">
 <arrowlink COLOR="#696fb6" DESTINATION="ID_535248075" ENDARROW="Default" ENDINCLINATION="696;-47;" ID="Arrow_ID_88289028" STARTARROW="None" STARTINCLINATION="-1205;73;"/>
@@ -25804,9 +25876,9 @@
 <arrowlink COLOR="#8b71ae" DESTINATION="ID_1925515175" ENDARROW="Default" ENDINCLINATION="259;-76;" ID="Arrow_ID_44202222" STARTARROW="None" STARTINCLINATION="-426;50;"/>
 <linktarget COLOR="#af5182" DESTINATION="ID_253184113" ENDARROW="Default" ENDINCLINATION="47;-31;" ID="Arrow_ID_116043165" SOURCE="ID_91413726" STARTARROW="None" STARTINCLINATION="-838;0;"/>
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611534925644" ID="ID_1754764132" MODIFIED="1611534940798" TEXT="#1211 coordinate track extension">
+<node COLOR="#338800" CREATED="1611534925644" ID="ID_1754764132" MODIFIED="1675384149246" TEXT="#1211 coordinate track extension">
 <linktarget COLOR="#4b98e2" DESTINATION="ID_1754764132" ENDARROW="Default" ENDINCLINATION="-2912;207;" ID="Arrow_ID_468901844" SOURCE="ID_1506262956" STARTARROW="None" STARTINCLINATION="698;66;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#435e98" CREATED="1583677270535" ID="ID_1729172771" MODIFIED="1612714274794" TEXT="wann genau mu&#xdf; der Header-Ausgleich laufen?">
 <icon BUILTIN="help"/>
@@ -25897,8 +25969,8 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583010796753" ID="ID_1055941815" MODIFIED="1583010929143" TEXT="Unit-Tests">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583010801657" ID="ID_794457070" MODIFIED="1583010926895" TEXT="empirischer Test (via TestControl)">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1583010801657" ID="ID_794457070" MODIFIED="1675382549124" TEXT="empirischer Test (via TestControl)">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583010827293" ID="ID_879314444" MODIFIED="1583010925312" TEXT="formalen Integrations-Test etablieren">
 <icon BUILTIN="flag-yellow"/>
@@ -25921,14 +25993,37 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1565276601866" ID="ID_1770751657" MODIFIED="1565276605281" TEXT="in den Clips">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1565276606260" ID="ID_123769598" MODIFIED="1565276615471" TEXT="in den Tracks">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1565276616439" ID="ID_1925515175" MODIFIED="1565276618601" TEXT="Head">
+<node COLOR="#338800" CREATED="1565276606260" ID="ID_123769598" MODIFIED="1675383961301" TEXT="in den Tracks">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1565276616439" ID="ID_1925515175" MODIFIED="1675383777147" TEXT="Head">
 <linktarget COLOR="#8b71ae" DESTINATION="ID_1925515175" ENDARROW="Default" ENDINCLINATION="259;-76;" ID="Arrow_ID_44202222" SOURCE="ID_253184113" STARTARROW="None" STARTINCLINATION="-426;50;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1675383567911" ID="ID_1478249525" MODIFIED="1675383577920" TEXT="implementiert als vertikaler GTK-size-request"/>
+<node COLOR="#435e98" CREATED="1675383579950" HGAP="26" ID="ID_1353501579" MODIFIED="1675383672047" TEXT="in drei Auspr&#xe4;gungen" VSHIFT="2">
+<edge COLOR="#7779b5" STYLE="linear"/>
+<icon BUILTIN="info"/>
+<node CREATED="1675383598939" ID="ID_191492412" MODIFIED="1675383618101" TEXT="contentHeight: cell (1,1)"/>
+<node CREATED="1675383598939" ID="ID_769571784" MODIFIED="1675383698919" TEXT="syncPadHeight: cell (1,2)"/>
+<node CREATED="1675383598939" ID="ID_1533042981" MODIFIED="1675383739149" TEXT="enforceExtent: cell (0,1)"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1565276619446" ID="ID_67786660" MODIFIED="1675383956988" TEXT="Body">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1675383833237" ID="ID_63682372" MODIFIED="1675383839039" TEXT="TrackBody::contentHeight_"/>
+<node CREATED="1675383853090" ID="ID_1092222582" MODIFIED="1675383860604" TEXT="wird direkt zum Zeichnen verwendet"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675383862097" ID="ID_93556948" MODIFIED="1675383920624" TEXT="TODO: w&#xe4;chst derzeit monoton">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...es sollte an geeigneter Stelle einen Reset geben, da jeder DisplayEvalutaionPass grunds&#228;tzlich das ganze Layout sauber ausrechnen kann
+    </p>
+  </body>
+</html></richcontent>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1565276619446" ID="ID_67786660" MODIFIED="1565276621820" TEXT="Body">
-<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1565276627006" ID="ID_1705597393" MODIFIED="1565276630975" TEXT="im TrackProfile">
@@ -34785,6 +34880,19 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611539550821" ID="ID_219259739" MODIFIED="1611539584717" TEXT="und: diesen einbetten, oder per Pointer halten und weitergeben?">
 <icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675384884653" ID="ID_1042919827" MODIFIED="1675385087573" TEXT="Lifecycle f&#xfc;r Content-Renderer potentiell problematisch">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...da das ElementBoxWidget nicht die ownership f&#252;r sein Kind-Widget (den ContentRenderer) &#252;bernimmt; daher mu&#223; das Kind l&#228;nger leben als das ElementBoxWidget, aber genau das ist <b>nicht gew&#228;hrleistet</b>, wenn das Clip-Delegate von ElementBoxWidget <b>erbt</b>.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 </node>

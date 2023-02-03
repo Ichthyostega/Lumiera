@@ -66,14 +66,12 @@ namespace timeline {
   
   TrackHeadWidget::TrackHeadWidget()
     : Gtk::Grid{}
-    , nameTODO_{"?"}
+    , nameTODO_{widget::Kind::ITEM, widget::Type::LABEL}
     , treeTODO_{"↳"}
     , padding_{}
     , headCtrl_{}
     , childCnt_{0}
     {
-      nameTODO_.set_xalign(0);
-      nameTODO_.set_yalign(1.0);
       treeTODO_.set_xalign(0);
       treeTODO_.set_yalign(0.5);
       headCtrl_.set_valign(Gtk::Align::ALIGN_CENTER);
@@ -101,7 +99,7 @@ namespace timeline {
   void
   TrackHeadWidget::setTrackName (cuString& trackName)
   {
-    nameTODO_.set_label (trackName);
+    nameTODO_.setName (trackName);
   }
   
   uint
@@ -169,16 +167,15 @@ namespace timeline {
   /**
    * @remark The Lumiera Timeline model does not rely on a list of tracks, as most conventional
    * video editing software does -- rather, each sequence holds a _fork of nested scopes._
-   * This recursively nested structure is reflected in the patchbay area corresponding to
-   * each track in the _header pane_ of the timeline display, located to the left. The
-   * patchbay for each track is a grid with initially three rows:
+   * In the _header pane,_ this recursively nested structure is reflected as nested Gtk::Grid
+   * widgets, populated for each track with initially three rows:
    * - a row holding the Track Header label and menu (actually an \ref ElementBoxWidget)
    * - a row corresponding to the _content area_ of the track itself, to hold the controls
-   *   for this track's scope, i.e. the track _together with all nested sub-tracks._
-   * - a padding row to help synchronising track head and track body display. Additional
-   * sub-Tracks are added as additional lines to the grid, while deeper nested sub-Tracks
-   * will be handled by the corresponding nested TrackHeadWidget. The column to the
-   * left side will be increased accordingly to display the nested fork structure.
+   *   to govern this track's scope, i.e. the track _together with all nested sub-tracks._
+   * - a padding row to help synchronising track head and track body display.
+   * - Additional sub-Tracks are added as additional lines to the grid, while deeper
+   *   nested sub-Tracks will be handled by the corresponding nested TrackHeadWidget.
+   * The column to the left side will be increased accordingly to display the nested fork structure.
    * @note Child tracks are always appended. When tracks are reordered or deleted,
    *       the whole structure has to be re-built accordingly.
    */

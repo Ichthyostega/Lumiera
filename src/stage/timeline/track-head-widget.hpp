@@ -49,6 +49,7 @@
 #include "stage/gtk-base.hpp"
 #include "stage/ctrl/bus-term.hpp"
 #include "stage/model/view-hook.hpp"
+#include "stage/widget/element-box-widget.hpp"
 
 
 
@@ -79,7 +80,7 @@ namespace timeline {
     : public Gtk::Grid
     , public model::ViewHook<TrackHeadWidget>
     {
-      Gtk::Label nameTODO_;
+      widget::ElementBoxWidget nameTODO_;
       Gtk::Label treeTODO_;
       Gtk::Box   padding_;
       HeadControlArea headCtrl_;

@@ -118,13 +118,14 @@ namespace timeline {
    * @internal this method is invoked by the UI-Bus when dispatching a MutationMessage...
    * @remarks this is likely the first occasion a casual reader sees such a binding function,
    * thus some explanations might be helpful. This is part of the »diff framework«: we use
-   * messages to _communicate changes on structured data._ We might as well just use a common
-   * object model, but we refrain from doing so, to avoid tight coupling, here between the
-   * core logic and the structures in the UI. Rather we assume that both sides share a
-   * roughly compatible understanding regarding the structure of the session model.
+   * messages to _communicate changes on structured data._ A allegedly more direct solution
+   * would be to dance on a shared data or object model in the Session — yet we refrain from
+   * this kind of naive implementation, to avoid tight coupling, here between the Session core
+   * logic and the structures in the UI. Rather we assume that both sides share a roughly
+   * compatible understanding regarding the structure of the session model.
    * Exchanging just diff messages allows us to use private implementation data structures
    * in the UI as we see fit, without the danger of breaking anything in the core. And vice
-   * versa. You may see this as yet another way of data binding between model and view.
+   * versa. You may see this as yet another way to build a data binding between model and view.
    * The TreeMutator helps to accomplish this binding between a generic structure description,
    * in our case based on GenNode elements, and the private data structure, here the private
    * object fields and the collection of child objects within TimelineController. To ease this

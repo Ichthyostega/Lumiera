@@ -27,6 +27,9 @@
  ** this code handles the structuring of vertical space, and the way
  ** this vertical extension maps to specific tracks.
  ** 
+ ** @see TrackBody::establishTrackSpace (TrackProfile&)
+ ** @see BodyCanvasWidget::maybeRebuildLayout() invocation
+ ** 
  ** @todo WIP-WIP-WIP as of 6/2019
  ** 
  */
