@@ -1,6 +1,6 @@
 [grid="all"]
 `------------`-----------------------
-*State*         _Final_
+*State*         _Pending_
 *Date*          _2008-07-26_
 *Proposed by*   link:ct[]
 -------------------------------------
@@ -125,21 +125,67 @@ it's your decision to make, all the best, we are looking forward to alphas and
 betas in the future
   -- mytwocents
 
-  This proposal is about the ''required'' scripting language, i.e. when
-  accepted, Lua will be a necessary prerequisite for running Lumiera. This
-  doesn't rule out the ''use'' of other scripting languages. We strive at
-  having clean interfaces, thus it shouldn't be much of a problem to create
-  Python bindings. And given the popularity of Python, I guess it won't be long
-  until we have some Python bindings. But ''requiring'' Python would mean
-  having a Python runtime in memory most of the time -- for such Lua obviously
-  is a better choice, because it's much more lightweight and minimalistic.
-    -- link:Ichthyostega[] [[DateTime(2008-09-30T02:17:08Z)]]
+This proposal is about the ''required'' scripting language, i.e. when
+accepted, Lua will be a necessary prerequisite for running Lumiera. This
+doesn't rule out the ''use'' of other scripting languages. We strive at
+having clean interfaces, thus it shouldn't be much of a problem to create
+Python bindings. And given the popularity of Python, I guess it won't be long
+until we have some Python bindings. But ''requiring'' Python would mean
+having a Python runtime in memory most of the time -- for such Lua obviously
+is a better choice, because it's much more lightweight and minimalistic.
+  -- link:Ichthyostega[] [[DateTime(2008-09-30T02:17:08Z)]]
 
+
+Many Years Later
+~~~~~~~~~~~~~~~~
+(See link:https://issues.lumiera.org/ticket/134[Ticket #134])
+Hereby I *overrule* and *reject* the decision to support Lua or any
+other scripting language directly; this topic shall be moved back into discussion later.
+
+After careful consideration, and weighting in my experience as professional developer,
+I came to the conclusion that we want _scriptability of the application,_ yet turning
+the application itself into a multi-language codebase, even more so using any kind of
+``easy going'' dynamically typed language, is detrimental to longevity.
+
+Developers, as non-developers alike, tend to foster the dream of a fluid limitless
+expression, a technology that just makes our intention flow into reality, be it through
+the promise of new fancy languages, the ability for ad hoc extensions, the reliance on
+almighty frameworks or even some kind of artificial entity able to guess what we want,
+or anything to relieve us from the pain of spelling out clearly what we aspire,
+with all the consequences and limitations of reality.
+
+Building a coherent architecture with clean and understandable interfaces is hard work.
+There is no shortcut around that, and the only path towards a scriptable application is:
+
+- build a coherent architecture with clean interfaces and _well defined functionality_
+- build a script-runner component with the ability to actuate and control the application
+- cast the abilities of this script-runner in terms of a clear self-explanatory interface
+- define a binding into the object model of one or several scripting languages.
+- build test coverage both for the interface and the language binding.
+
+This is damn hard work and the very opposite of the idea underlying the original proposal,
+which to my understanding was to open up internals of the application for easy prototyping,
+while just promising strict design work for later. To quote ``Things which usefulness is
+doubtful can be prototyped and tried out in a afternoon rather than a week''.
+
+Based on my experience, this is a common anti-pattern. If something is of doubtful usefullness,
+and requires a week to be built properly, you should rather spend some hours to write a clear
+specification in natural language, instead of sneaking in a half-baked prototype; chances
+are that this prototype will stick, since the inventor likes the basic idea, but wants
+to avoid the hard thought work to turn that idea into something solid; and because a clear
+specification is lacking, it is hard to test anything other than the happy path; rather
+the new feature will be amended and bashed into submission, and then further new and
+exciting additions will be based on it, progressively corroding the application. Any
+attempt to rework confused code into something coherent becomes exponentially expensive,
+the more it gets tangled with further immature code and ideas not spelled out well.
+  -- link:Ichthyostega[] [[DateTime(2023-02-04T01:07:51Z)]]
 
 
 Conclusion
 ----------
-Lua is '''accepted''' as the required scripting language by October.2008 dev
-meeting.
+Lua was _accepted_ as the required scripting language by October.2008 dev
+meeting. However, Ichthyo _questions and overrules_ this decision in Feb.2023
+and moves this proposal back into the inception stage.
 
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+
