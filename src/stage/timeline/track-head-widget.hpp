@@ -50,6 +50,7 @@
 #include "stage/ctrl/bus-term.hpp"
 #include "stage/model/view-hook.hpp"
 #include "stage/widget/element-box-widget.hpp"
+#include "stage/timeline/stave-bracket-widget.hpp"
 
 
 

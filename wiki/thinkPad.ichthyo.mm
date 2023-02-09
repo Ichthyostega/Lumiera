@@ -21167,9 +21167,9 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666452411624" ID="ID_998825618" MODIFIED="1666452531958" TEXT="Display-Metrik im TimelineLayout verankern">
-<arrowlink COLOR="#6e5293" DESTINATION="ID_1827001710" ENDARROW="Default" ENDINCLINATION="873;-869;" ID="Arrow_ID_892468806" STARTARROW="None" STARTINCLINATION="-1738;113;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1666452411624" ID="ID_998825618" MODIFIED="1675897301157" TEXT="Display-Metrik im TimelineLayout verankern">
+<arrowlink COLOR="#525d93" DESTINATION="ID_1827001710" ENDARROW="Default" ENDINCLINATION="873;-869;" ID="Arrow_ID_892468806" STARTARROW="None" STARTINCLINATION="-1738;113;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1666367210627" ID="ID_922603771" MODIFIED="1666367245412" TEXT="Umstellung erfolgreich">
 <icon BUILTIN="button_ok"/>
@@ -24677,7 +24677,7 @@
 <node COLOR="#338800" CREATED="1672706823302" ID="ID_445391760" MODIFIED="1672707119233" TEXT="changeNotification-Functor verdrahten">
 <linktarget COLOR="#34a5a4" DESTINATION="ID_445391760" ENDARROW="Default" ENDINCLINATION="108;96;" ID="Arrow_ID_1879633887" SOURCE="ID_394283688" STARTARROW="None" STARTINCLINATION="515;22;"/>
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1672706833208" ID="ID_1727841525" MODIFIED="1672706850875" TEXT="kann man direkt mit dem Signal initialisieren?">
+<node COLOR="#435e98" CREATED="1672706833208" ID="ID_1727841525" MODIFIED="1675897056715" TEXT="kann man direkt mit dem Signal initialisieren?">
 <icon BUILTIN="help"/>
 <node CREATED="1672706877415" ID="ID_1791069589" MODIFIED="1672706882814" TEXT="signalStructureChange_"/>
 <node CREATED="1672706902644" ID="ID_429923017" MODIFIED="1672706904037" TEXT="using SignalStructureChange = sigc::signal&lt;void&gt;;"/>
@@ -27835,20 +27835,22 @@
 </node>
 <node CREATED="1540683803329" ID="ID_290204038" MODIFIED="1557498707227" TEXT="rekursive Struktur">
 <icon BUILTIN="forward"/>
-<node CREATED="1540683824278" ID="ID_1473337838" MODIFIED="1557498707227" TEXT="ein Grid mit 4 Feldern">
+<node CREATED="1540683824278" ID="ID_1473337838" MODIFIED="1675897700431" TEXT="ein Grid anfangs 3 Zeilen">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1540683889813" ID="ID_1511067098" MODIFIED="1557498707227" TEXT="2.Quadrant == Placement-Symbol">
+<node CREATED="1540683889813" ID="ID_1511067098" MODIFIED="1675897738578" TEXT="1Zeile (komplett) : Placement-Men&#xfc;+Label">
 <node CREATED="1541095855984" ID="ID_1032237384" MODIFIED="1557498707227" TEXT="verwendet ElementBoxWidget">
 <arrowlink COLOR="#f6cca4" DESTINATION="ID_368245484" ENDARROW="Default" ENDINCLINATION="-599;39;" ID="Arrow_ID_1199047781" STARTARROW="None" STARTINCLINATION="-698;-271;"/>
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1540683900716" ID="ID_212914080" MODIFIED="1557498707227" TEXT="1.Quadrant == Controls"/>
-<node CREATED="1540683916490" ID="ID_191999039" MODIFIED="1557498707227" TEXT="3.Quadrant : leer (Fork)"/>
-<node CREATED="1540683829267" ID="ID_828415712" MODIFIED="1557498707227" TEXT="in 4.Quadrant kommt">
-<node CREATED="1540683879103" ID="ID_96481889" MODIFIED="1563469343918" TEXT="eine nested HeaderPane"/>
+<node CREATED="1540683900716" ID="ID_212914080" MODIFIED="1675897808377" TEXT="Zelle 2 | Spalte 2 : Controls"/>
+<node CREATED="1540683829267" ID="ID_828415712" MODIFIED="1675897854794" TEXT="Zeile 3++">
+<node CREATED="1675897911895" ID="ID_1127109872" MODIFIED="1675897937960" TEXT="leer auf Blatt-Ebene des Baumes"/>
+<node CREATED="1540683879103" ID="ID_96481889" MODIFIED="1675897894389" TEXT="Sub-Track &#x27f9; eine nested HeaderPane"/>
+<node CREATED="1675897858886" ID="ID_728481021" MODIFIED="1675897869225" TEXT="weitere Zeilen f&#xfc;r jeden weiteren Kind-Track"/>
 </node>
+<node CREATED="1540683916490" ID="ID_191999039" MODIFIED="1675897842188" TEXT="linke Spalte : Fork-Struktur zeichnen"/>
 <node CREATED="1563469351023" ID="ID_805950777" MODIFIED="1563469358660" TEXT="weitere Zeilen nach Bedarf....">
 <node CREATED="1563469368703" ID="ID_856512794" MODIFIED="1563469385040" TEXT="jeder weitere Sub-Track h&#xe4;ngt eine Zeile an"/>
 <node CREATED="1563469415896" ID="ID_307382994" MODIFIED="1563469442614">
@@ -27922,9 +27924,9 @@
 </node>
 </node>
 <node CREATED="1563469593872" HGAP="84" ID="ID_1533093205" MODIFIED="1563469604196" TEXT="sub-Navigation" VSHIFT="1">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1674161525129" ID="ID_1762683235" MODIFIED="1674163468109" TEXT="Grid-Zelle f&#xfc;r die Placement-Controls vorsehen">
-<linktarget COLOR="#b1493c" DESTINATION="ID_1762683235" ENDARROW="Default" ENDINCLINATION="624;37;" ID="Arrow_ID_1560223761" SOURCE="ID_1332292119" STARTARROW="None" STARTINCLINATION="129;-6;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1674161525129" ID="ID_1762683235" MODIFIED="1675897471975" TEXT="Grid-Zelle f&#xfc;r die Placement-Controls vorsehen">
+<linktarget COLOR="#463cb1" DESTINATION="ID_1762683235" ENDARROW="Default" ENDINCLINATION="624;37;" ID="Arrow_ID_1560223761" SOURCE="ID_1332292119" STARTARROW="None" STARTINCLINATION="129;-6;"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1674170380401" HGAP="36" ID="ID_600466568" MODIFIED="1674170473951" TEXT="sollte dann doch besser in eine eigene Zeile" VSHIFT="-3">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -27942,7 +27944,35 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1563469608318" ID="ID_174979019" MODIFIED="1563469619520" TEXT="zus&#xe4;tzliche sub-Tracks resultieren in zus&#xe4;tzlichen Zeilen">
+<node COLOR="#338800" CREATED="1675898002475" ID="ID_1561724587" MODIFIED="1675898068906" TEXT="verikalte Pos der sub-Tracks koordinieren">
+<linktarget COLOR="#6493a2" DESTINATION="ID_1561724587" ENDARROW="Default" ENDINCLINATION="7;82;" ID="Arrow_ID_1646540229" SOURCE="ID_478580800" STARTARROW="None" STARTINCLINATION="-16;-50;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1675898071801" ID="ID_813971014" MODIFIED="1675898089191" TEXT="steuern per zus&#xe4;tzlicher Leerzeile unter den Placement-Controls">
+<icon BUILTIN="idea"/>
+<node CREATED="1675898099757" ID="ID_1841035930" MODIFIED="1675898623818" TEXT="Konsequenz: Placement-Controls expandieren nie &#xfc;ber Content-H&#xf6;he">
+<richcontent TYPE="NOTE"><html>
+  <head></head>
+  <body>
+    <p>
+      &#55357;&#56481; das ist <i>kein Fehler...</i><br>Da sie zuerst eingef&#252;gt 
+      werden, und ohne vexpand() niemals zus&#228;tzlichen Platz aufgreifen, wird 
+      das Grid insgesamt nur so hoch wie minimal n&#246;tig, und jedwedes 
+      Alignment-Setting auf der Zelle mit den Placement-Controls bleibt 
+      wirkungslos; anschlie&#223;end wird die zus&#228;tzliche Zeile eingef&#252;gt und 
+      aufgespreitzt, um den Kind-Navigationsbereich auf den Level des ersten 
+      Kind-tracks runter zu dr&#252;cken
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1675898226900" ID="ID_1938543250" MODIFIED="1675898245198" TEXT="Pufferplatzt wird immer darunter einngebracht"/>
+</node>
+<node COLOR="#338800" CREATED="1675898265975" ID="ID_1633915372" LINK="#ID_1129757567" MODIFIED="1675898508287" TEXT="integriert in 2.Phase der DisplayEvaluation">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1563469608318" ID="ID_174979019" MODIFIED="1675897507574" TEXT="zus&#xe4;tzliche sub-Tracks resultieren in zus&#xe4;tzlichen Zeilen">
+<icon BUILTIN="yes"/>
 <node COLOR="#338800" CREATED="1563469770472" ID="ID_1252550324" MODIFIED="1674170526467" TEXT="einf&#xfc;gen gem&#xe4;&#xdf; Zahl der Kind-Tracks">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1674170489677" ID="ID_1683231262" MODIFIED="1674170519062" TEXT="ab Zeile 2">
@@ -27964,9 +27994,68 @@
 <linktarget COLOR="#f6e1c2" DESTINATION="ID_530086217" ENDARROW="Default" ENDINCLINATION="-366;30;" ID="Arrow_ID_694017211" SOURCE="ID_1463490313" STARTARROW="None" STARTINCLINATION="-2163;252;"/>
 <icon BUILTIN="flag-yellow"/>
 <node COLOR="#338800" CREATED="1563469700651" ID="ID_478580800" MODIFIED="1674513411592" TEXT="auf die richtige H&#xf6;he zielen">
+<arrowlink COLOR="#6493a2" DESTINATION="ID_1561724587" ENDARROW="Default" ENDINCLINATION="7;82;" ID="Arrow_ID_1646540229" STARTARROW="None" STARTINCLINATION="-16;-50;"/>
 <linktarget COLOR="#5ba7d5" DESTINATION="ID_478580800" ENDARROW="Default" ENDINCLINATION="358;-30;" ID="Arrow_ID_776518349" SOURCE="ID_904031404" STARTARROW="None" STARTINCLINATION="-77;131;"/>
 <linktarget COLOR="#5a7c92" DESTINATION="ID_478580800" ENDARROW="Default" ENDINCLINATION="451;41;" ID="Arrow_ID_513449931" SOURCE="ID_1311832889" STARTARROW="None" STARTINCLINATION="481;-27;"/>
 <icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675898638485" ID="ID_164545383" MODIFIED="1675898669530" TEXT="Strukturdiagramm rendern">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1675898729441" ID="ID_1183614893" MODIFIED="1675898736887" TEXT="verwende direkt eine DrawingArea">
+<node COLOR="#435e98" CREATED="1675898738064" ID="ID_736159731" LINK="https://developer-old.gnome.org/gtkmm-tutorial/stable/chapter-drawingarea.html.en" MODIFIED="1675898751929" TEXT="Tutorial">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675901157415" ID="ID_1671076758" MODIFIED="1675902471695" TEXT="aber als Komponente abstrahiert">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1675901877549" ID="ID_1912760164" MODIFIED="1675902223113" TEXT="Name: StaveBracket">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      In Anspielung auf
+    </p>
+    <ul>
+      <li>
+        eine Leiter
+      </li>
+      <li>
+        ein Notensystem (stave)
+      </li>
+    </ul>
+    <p>
+      <sup>(*)</sup>&#160;<i>stave</i>&#160;ist zwar selterner und ausgepr&#228;gt Brittisch, <i>staff</i>&#160; w&#228;re gel&#228;ufiger. Aber <i>staff</i>&#160;versteht man heutzutage als Personal, wohingegen <i>stave</i>&#160;auch die Leitersprosse sein k&#246;nnte (BE und AE)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1675902281219" ID="ID_562499167" MODIFIED="1675902293521" TEXT="Zweck: Auspr&#xe4;gungen abstrahieren">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1675902368504" ID="ID_239257634" MODIFIED="1675902380758" TEXT="ggfs expanded/collapsed">
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1675902382537" ID="ID_861207485" MODIFIED="1675902467097" TEXT="Ankn&#xfc;pfung f&#xfc;r Sub-Tracks"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675902513027" ID="ID_1162268597" MODIFIED="1675902517275" TEXT="Implementierung">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675902520928" ID="ID_468397914" MODIFIED="1675902527974" TEXT="Basisfunktionalit&#xe4;t">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675902529503" ID="ID_544667587" MODIFIED="1675902534696" TEXT="draw()-Funktion">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675902536517" ID="ID_827367364" MODIFIED="1675902552151" TEXT="Anpassung an Allocation">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675902610612" ID="ID_1308174165" MODIFIED="1675902619939" TEXT="Struktur-Schema">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1675902621506" ID="ID_916814047" MODIFIED="1675902629703" TEXT="Ankn&#xfc;pfungen">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469735149" ID="ID_704791408" MODIFIED="1563469741153" TEXT="Selection-State zeigen">
 <icon BUILTIN="flag-yellow"/>
@@ -29390,7 +29479,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#435e98" CREATED="1674163294922" FOLDED="true" ID="ID_1332292119" LINK="#ID_1650195806" MODIFIED="1674254403617" TEXT="Probleme mit der vertikalen Koordination bei nested Tracks">
-<arrowlink COLOR="#b1493c" DESTINATION="ID_1762683235" ENDARROW="Default" ENDINCLINATION="624;37;" ID="Arrow_ID_1560223761" STARTARROW="None" STARTINCLINATION="129;-6;"/>
+<arrowlink COLOR="#463cb1" DESTINATION="ID_1762683235" ENDARROW="Default" ENDINCLINATION="624;37;" ID="Arrow_ID_1560223761" STARTARROW="None" STARTINCLINATION="129;-6;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node COLOR="#435e98" CREATED="1674174926441" FOLDED="true" ID="ID_896721694" MODIFIED="1674254493101" TEXT="Zweifel an der berechneten H&#xf6;he">
 <icon BUILTIN="messagebox_warning"/>
@@ -34525,10 +34614,10 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="idea"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666451523988" HGAP="57" ID="ID_244578537" MODIFIED="1666452387137" TEXT="Implementierung: liegt im TimelineLayout (opaque)" VSHIFT="-8">
+<node COLOR="#338800" CREATED="1666451523988" HGAP="57" ID="ID_244578537" MODIFIED="1675897253036" TEXT="Implementierung: liegt im TimelineLayout (opaque)" VSHIFT="-8">
 <arrowlink COLOR="#4c3c64" DESTINATION="ID_1202075896" ENDARROW="Default" ENDINCLINATION="-1351;104;" ID="Arrow_ID_1210722108" STARTARROW="None" STARTINCLINATION="-74;-277;"/>
 <linktarget COLOR="#644d8a" DESTINATION="ID_244578537" ENDARROW="Default" ENDINCLINATION="-220;12;" ID="Arrow_ID_7428365" SOURCE="ID_1827001710" STARTARROW="None" STARTINCLINATION="55;-63;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1672679706488" HGAP="34" ID="ID_824353880" MODIFIED="1672679719594" TEXT="Anforderungen" VSHIFT="1">
 <icon BUILTIN="info"/>
@@ -34866,10 +34955,17 @@
 </html></richcontent>
 <arrowlink COLOR="#406d5c" DESTINATION="ID_368245484" ENDARROW="Default" ENDINCLINATION="-469;652;" ID="Arrow_ID_264431308" STARTARROW="None" STARTINCLINATION="-1674;133;"/>
 <linktarget COLOR="#2082a9" DESTINATION="ID_485594461" ENDARROW="Default" ENDINCLINATION="872;71;" ID="Arrow_ID_1204090343" SOURCE="ID_474563596" STARTARROW="None" STARTINCLINATION="2306;92;"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1666452299624" HGAP="49" ID="ID_1827001710" MODIFIED="1666452531958" TEXT="Zeit &#x2192; Pixel &#xdc;bersetzung" VSHIFT="-13">
+<node COLOR="#338800" CREATED="1666452299624" HGAP="49" ID="ID_1827001710" MODIFIED="1675897244770" TEXT="Zeit &#x2192; Pixel &#xdc;bersetzung" VSHIFT="-13">
 <arrowlink COLOR="#644d8a" DESTINATION="ID_244578537" ENDARROW="Default" ENDINCLINATION="-220;12;" ID="Arrow_ID_7428365" STARTARROW="None" STARTINCLINATION="55;-63;"/>
-<linktarget COLOR="#6e5293" DESTINATION="ID_1827001710" ENDARROW="Default" ENDINCLINATION="873;-869;" ID="Arrow_ID_892468806" SOURCE="ID_998825618" STARTARROW="None" STARTINCLINATION="-1738;113;"/>
-<icon BUILTIN="flag-yellow"/>
+<linktarget COLOR="#525d93" DESTINATION="ID_1827001710" ENDARROW="Default" ENDINCLINATION="873;-869;" ID="Arrow_ID_892468806" SOURCE="ID_998825618" STARTARROW="None" STARTINCLINATION="-1738;113;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1675896850015" ID="ID_145894801" MODIFIED="1675896902499" TEXT="indirekt per Interface CanvasHook"/>
+<node CREATED="1675896935547" ID="ID_1938738483" MODIFIED="1675897220295" TEXT="CanvasHook::getMetric()">
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#435e98" CREATED="1675896996419" ID="ID_1311118876" LINK="#ID_412094029" MODIFIED="1675897215015" TEXT="implementierung delegiert an ZoomWindow">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1611539501493" HGAP="38" ID="ID_1849626018" MODIFIED="1665962611640" TEXT="TODO: &#xdc;berlegungen zur Daten-Storage" VSHIFT="18">
