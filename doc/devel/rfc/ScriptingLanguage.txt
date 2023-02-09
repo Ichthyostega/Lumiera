@@ -8,14 +8,14 @@
 
 Scripting Language
 ------------------
-Add support for the 'Lua' scripting language in Lumiera.
+Add support for the *Lua* scripting language in Lumiera.
 
 
 Description
 ~~~~~~~~~~~
 We talked since the beginning about that we want to have scripting support
 within Lumiera. Some weeks ago we did a non formal decision on IRC to bless Lua
-as 'official' scripting language.
+as »official« scripting language.
 
 
 Tasks
@@ -60,21 +60,22 @@ Comments
 --------
 
 To make it more clear: the intention is to have the scripts call into well
-defined Intefaces / API functions, which are accessed via the plugin system. It
-is ''not'' intended to have just arbitrary scripts anywhere and everywhere, but
+defined Interfaces / API functions, which are accessed via the plugin system. It
+is _not_ intended to have just arbitrary scripts anywhere and everywhere, but
 -- on the other hand -- all important functionality which can be activated via
 the GUI should be similarly accessible via the scripting APIs without
 restrictions. So, as Python and Ruby and Perl are popular scripting language,
-we'll have the neccessary bindings sooner or later.
+we'll have the necessary bindings sooner or later.
 
-Beyond that, it is possible to have some ''extension points'' where
+Beyond that, it is possible to have some _extension points_ where
 configuration is added to the application in a well defined manner by scripts.
 These scripts provide for some basic customisation and can even add some of the
 important higher-level features. With respect to these, the idea of this
-proposal is to have one ''required scripting language'', so scripts in this
+proposal is to have one _required scripting language_, so scripts in this
 language are guaranteed to work and may be used to add essential features. I
 consider Lua to be an almost perfect fit for this purpose.
-  -- link:Ichthyostega[] [[DateTime(2008-07-27T22:36:52Z)]]
+
+Ichthyostega:: '2008-07-27T22:36:52Z'
 
 Well my intention is to make Lua a real first class binding where any internal
 interface gets exported and would be useable from scripting, that contradicts
@@ -95,17 +96,20 @@ your limitation to make is only an extension language; but hold on:
  * of course if this is used wrong it can really damage the health of the
    system, but I think this is oblivious and very explicit, there are easier
    ways to damage it, just whack your computer with a sledgehammer for example.
- * there might some lazyness to keep prototypes in Lua instead reimplement them
+ * there might some laziness to keep prototypes in Lua instead reimplement them
    properly in C/C++, well IMHO that's OK, at some point need will arise to
    make it proper, if the Lua implementation is insufficient, but that's
    arguable.
-  -- link:ct[] [[DateTime(2008-07-30T16:22:32Z)]]
+   
+ct:: '2008-07-30T16:22:32Z'
+
 
 I have no problems using Lua. It is proven in the industry, well supported,
 fast, efficient, high level and designed for this purpose. My only "complaint"
 is that Lua isn't my pet language (Scheme). And that really isn't a complaint
 at all.
-  -- link:PercivalTiglao[] [[DateTime(2008-07-28T19:56:25Z)]]
+
+PercivalTiglao:: '2008-07-28T19:56:25Z'
 
 
 I think Python should be reconsidered: it's given that all languages in this
@@ -122,18 +126,20 @@ get this into professional production houses, then I think having a single
 language from OS admin the whole way through the stack is a massive gain for
 the types of users who will be using it. I personally prefer Ruby. Naturally
 it's your decision to make, all the best, we are looking forward to alphas and
-betas in the future
-  -- mytwocents
+betas in the future +
+ -- *mytwocents*
 
-This proposal is about the ''required'' scripting language, i.e. when
+
+This proposal is about the _required_ scripting language, i.e. when
 accepted, Lua will be a necessary prerequisite for running Lumiera. This
-doesn't rule out the ''use'' of other scripting languages. We strive at
+doesn't rule out the _use_ of other scripting languages. We strive at
 having clean interfaces, thus it shouldn't be much of a problem to create
 Python bindings. And given the popularity of Python, I guess it won't be long
-until we have some Python bindings. But ''requiring'' Python would mean
+until we have some Python bindings. But _requiring_ Python would mean
 having a Python runtime in memory most of the time -- for such Lua obviously
 is a better choice, because it's much more lightweight and minimalistic.
-  -- link:Ichthyostega[] [[DateTime(2008-09-30T02:17:08Z)]]
+
+Ichthyostega:: '2008-09-30T02:17:08Z'
 
 
 Many Years Later
@@ -147,38 +153,46 @@ I came to the conclusion that we want _scriptability of the application,_ yet tu
 the application itself into a multi-language codebase, even more so using any kind of
 ``easy going'' dynamically typed language, is detrimental to longevity.
 
-Developers, as non-developers alike, tend to foster the dream of a fluid limitless
-expression, a technology that just makes our intention flow into reality, be it through
-the promise of new fancy languages, the ability for ad hoc extensions, the reliance on
-almighty frameworks or even some kind of artificial entity able to guess what we want,
-or anything to relieve us from the pain of spelling out clearly what we aspire,
-with all the consequences and limitations of reality.
+I can understand -- even sympathise with the original proposal. +
+Developers, as non-developers alike, tend to foster the dream of a fluid and limitless
+technology of expression, a technology that just makes our intention flow into reality,
+be it through the promise of new fancy languages, the ability for ad hoc extensions,
+the reliance on almighty frameworks or even some kind of artificial entity able to guess
+what we want -- anything to relieve us from the pain of writing down and spelling out
+clearly what we aspire, with all the consequences and limitations of reality.
 
 Building a coherent architecture with clean and understandable interfaces is hard work.
 There is no shortcut around that, and the only path towards a scriptable application is:
 
-- build a coherent architecture with clean interfaces and _well defined functionality_
+- build a coherent architecture first, with _well defined functionality..._
 - build a script-runner component with the ability to actuate and control the application
 - cast the abilities of this script-runner in terms of a clear self-explanatory interface
 - define a binding into the object model of one or several scripting languages.
 - build test coverage both for the interface and the language binding.
 
-This is damn hard work and the very opposite of the idea underlying the original proposal,
-which to my understanding was to open up internals of the application for easy prototyping,
-while just promising strict design work for later. To quote ``Things which usefulness is
-doubtful can be prototyped and tried out in a afternoon rather than a week''.
+Thus, as far as _scriptability_ is concerned, we have yet a long way to go indeed.
 
-Based on my experience, this is a common anti-pattern. If something is of doubtful usefullness,
-and requires a week to be built properly, you should rather spend some hours to write a clear
-specification in natural language, instead of sneaking in a half-baked prototype; chances
-are that this prototype will stick, since the inventor likes the basic idea, but wants
-to avoid the hard thought work to turn that idea into something solid; and because a clear
-specification is lacking, it is hard to test anything other than the happy path; rather
-the new feature will be amended and bashed into submission, and then further new and
-exciting additions will be based on it, progressively corroding the application. Any
-attempt to rework confused code into something coherent becomes exponentially expensive,
-the more it gets tangled with further immature code and ideas not spelled out well.
-  -- link:Ichthyostega[] [[DateTime(2023-02-04T01:07:51Z)]]
+However, this »scripting language« proposal seems to take quite a different, if not antithetical
+approach (as confirmed by the ensuing discussion and the tickets), namely to open up internals
+of the application for easy prototyping, while just promising strict design work for later.
+To quote ``Things which usefulness is doubtful can be prototyped and tried out in a afternoon
+rather than a week''.
+
+As compelling as it may sound -- based on my experience, this is a common anti-pattern:
+If something is of doubtful usefulness, and requires a week to be built properly, you should
+rather spend an afternoon to write a specification in plain natural language, instead of sneaking in
+a half-baked prototype; if you can not write down your intentions in clear terms, using simple language
+and coherent terminology, chances are that the code you write will be confused and tricky. And worse,
+this kind of sketchy code has the tendency to stick; the more it needs to be amended and bashed
+into submission, the higher the emotional investment. And soon further new and exciting additions
+will be based on it, progressively corroding the application.
+
+Adding _more_ technology, like adding _yet another_ language or library to the mix, can never
+be a means of simplification -- it is an investment rather, and has to pay off. When you
+``move fast and break things'', you end up with lots of broken stuff -- unless you have the
+actual capacity to clean up the mess and build everything from scratch, sound and solid.
+
+Ichthyostega:: '2023-02-04' ~<prg@ichthyostega.de>~
 
 
 Conclusion
