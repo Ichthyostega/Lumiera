@@ -66,18 +66,16 @@ namespace timeline {
   
   TrackHeadWidget::TrackHeadWidget()
     : Gtk::Grid{}
-    , nameTODO_{widget::Kind::ITEM, widget::Type::LABEL}
-    , treeTODO_{"↳"}
+    , trackName_{widget::Kind::ITEM, widget::Type::LABEL}
+    , structure_{}
     , padding_{}
     , headCtrl_{}
     , childCnt_{0}
     {
-      treeTODO_.set_xalign(0);
-      treeTODO_.set_yalign(0.5);
       headCtrl_.set_valign(Gtk::Align::ALIGN_CENTER);
       headCtrl_.set_halign(Gtk::Align::ALIGN_FILL);
-      this->attach (nameTODO_, 0,0, 2,1);
-      this->attach (treeTODO_, 0,1, 1,2);
+      this->attach (trackName_, 0,0, 2,1);
+      this->attach (structure_, 0,1, 1,2);
       this->attach (headCtrl_, 1,1, 1,1); // corresponds to direct content
       this->attach (padding_,  1,2, 1,1);//  used to sync with sub-track display
       this->property_expand() = false;  //   do not expand to fill
@@ -99,7 +97,7 @@ namespace timeline {
   void
   TrackHeadWidget::setTrackName (cuString& trackName)
   {
-    nameTODO_.setName (trackName);
+    trackName_.setName (trackName);
   }
   
   uint
@@ -186,8 +184,8 @@ namespace timeline {
     uint act = 2 + childCnt_;   //  left,top
     Gtk::Grid::attach (subForkHead, 1, act, 1,1);
     // expand the structure display column....
-    Gtk::Grid::remove (treeTODO_);   // width,height
-    Gtk::Grid::attach (treeTODO_,   0,1,    1, act);
+    Gtk::Grid::remove (structure_);   // width,height
+    Gtk::Grid::attach (structure_,   0,1,    1, act);
   }
   
   /**
@@ -207,8 +205,8 @@ namespace timeline {
     uint act = 2 + childCnt_;
     Gtk::Grid::remove (subForkHead);
     // reduce the structure display column....
-    Gtk::Grid::remove (treeTODO_);
-    Gtk::Grid::attach (treeTODO_,   0,1, 1,act);
+    Gtk::Grid::remove (structure_);
+    Gtk::Grid::attach (structure_,   0,1, 1,act);
   }
   
   
@@ -216,13 +214,13 @@ namespace timeline {
   TrackHeadWidget::clearFork()
   {
     if (not childCnt_) return;
-    Gtk::Grid::remove (treeTODO_);
+    Gtk::Grid::remove (structure_);
     while (childCnt_ > 0)
       {
         Gtk::Grid::remove_row (childCnt_);
         --childCnt_;
       }
-    Gtk::Grid::attach (treeTODO_, 0,1, 1,2);
+    Gtk::Grid::attach (structure_, 0,1, 1,2);
   }
 
   

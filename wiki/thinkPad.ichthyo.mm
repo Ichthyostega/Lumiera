@@ -27999,16 +27999,17 @@
 <linktarget COLOR="#5a7c92" DESTINATION="ID_478580800" ENDARROW="Default" ENDINCLINATION="451;41;" ID="Arrow_ID_513449931" SOURCE="ID_1311832889" STARTARROW="None" STARTINCLINATION="481;-27;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675898638485" ID="ID_164545383" MODIFIED="1675898669530" TEXT="Strukturdiagramm rendern">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1675898729441" ID="ID_1183614893" MODIFIED="1675898736887" TEXT="verwende direkt eine DrawingArea">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1675898638485" ID="ID_164545383" MODIFIED="1676047525964" TEXT="Strukturdiagramm rendern">
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1675898729441" ID="ID_1183614893" MODIFIED="1676047503876" TEXT="verwende direkt eine DrawingArea">
+<icon BUILTIN="idea"/>
 <node COLOR="#435e98" CREATED="1675898738064" ID="ID_736159731" LINK="https://developer-old.gnome.org/gtkmm-tutorial/stable/chapter-drawingarea.html.en" MODIFIED="1675898751929" TEXT="Tutorial">
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675901157415" ID="ID_1671076758" MODIFIED="1675902471695" TEXT="aber als Komponente abstrahiert">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1675901877549" ID="ID_1912760164" MODIFIED="1675902223113" TEXT="Name: StaveBracket">
+<node COLOR="#338800" CREATED="1675901157415" ID="ID_1671076758" MODIFIED="1676047495780" TEXT="aber als Komponente abstrahiert">
+<icon BUILTIN="yes"/>
+<node CREATED="1675901877549" ID="ID_1912760164" MODIFIED="1676042929930" TEXT="Name: StaveBracket">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28026,7 +28027,7 @@
       </li>
     </ul>
     <p>
-      <sup>(*)</sup>&#160;<i>stave</i>&#160;ist zwar selterner und ausgepr&#228;gt Brittisch, <i>staff</i>&#160; w&#228;re gel&#228;ufiger. Aber <i>staff</i>&#160;versteht man heutzutage als Personal, wohingegen <i>stave</i>&#160;auch die Leitersprosse sein k&#246;nnte (BE und AE)
+      <sup>(*)</sup>&#160;<i>stave</i>&#160;ist zwar selterner und ausgepr&#228;gt Brittisch, <i>staff</i>&#160; w&#228;re gel&#228;ufiger. Aber <i>staff</i>&#160;versteht man heutzutage als Personal, wohingegen <i>stave</i>&#160;auch die Leitersprosse oder ein Vers in einem Gedicht sein k&#246;nnte (BE und AE)
     </p>
   </body>
 </html></richcontent>
@@ -28038,15 +28039,62 @@
 <node CREATED="1675902382537" ID="ID_861207485" MODIFIED="1675902467097" TEXT="Ankn&#xfc;pfung f&#xfc;r Sub-Tracks"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675902513027" ID="ID_1162268597" MODIFIED="1675902517275" TEXT="Implementierung">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675902520928" ID="ID_468397914" MODIFIED="1675902527974" TEXT="Basisfunktionalit&#xe4;t">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675902529503" ID="ID_544667587" MODIFIED="1675902534696" TEXT="draw()-Funktion">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1675902513027" ID="ID_1162268597" MODIFIED="1676047476754" TEXT="Implementierung">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1675902520928" ID="ID_468397914" MODIFIED="1676047473663" TEXT="Basisfunktionalit&#xe4;t">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1675902529503" ID="ID_544667587" MODIFIED="1676047464745" TEXT="draw()-Funktion">
+<icon BUILTIN="pencil"/>
+<node CREATED="1676045132371" ID="ID_1480458495" MODIFIED="1676045152492" TEXT="Bezugspunkt: Tutorial + BodyCanvasWidget"/>
+<node COLOR="#338800" CREATED="1676045153720" ID="ID_1064401846" MODIFIED="1676047466829" TEXT="on_draw() &#xfc;berlagern">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1676045162558" ID="ID_1938495472" LINK="#ID_1978068021" MODIFIED="1676046631665" TEXT="brauche Ausdehnng des Widgets">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und zwar die konkret wirksame Ausdehnung &#10233; meiner Analyse zufolge ist das get_width|height()
+    </p>
+    <ul>
+      <li>
+        das ist die vom Framework gesetzte Allokation
+      </li>
+      <li>
+        aber vor dem Abspeichern bereits um Dekoration verringert
+      </li>
+      <li>
+        zuz&#252;glich aller Anpassungen f&#252;r das Flow-Layout
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1676046608013" ID="ID_1701009358" MODIFIED="1676047576094" TEXT="erst mal einfachen Platzhalter zeichnen">
+<linktarget COLOR="#60a5a0" DESTINATION="ID_1701009358" ENDARROW="Default" ENDINCLINATION="234;0;" ID="Arrow_ID_1201169468" SOURCE="ID_1689678210" STARTARROW="None" STARTINCLINATION="8;-5;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675902536517" ID="ID_827367364" MODIFIED="1675902552151" TEXT="Anpassung an Allocation">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1676046656020" ID="ID_739149798" MODIFIED="1676047456082" TEXT="horizontale Ausdehnung steuern">
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1676046671288" ID="ID_823909101" MODIFIED="1676047541409" TEXT="intrinsich feste Ausdehnung erforderlich, nun H&#xf6;he variabel">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#435e98" CREATED="1676046707056" ID="ID_1489341239" MODIFIED="1676047541408" TEXT="aber GTK weist ggfs auch gar keine Ausdehnung zu, oder teilt 50:50">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#338800" CREATED="1676047544344" ID="ID_1689678210" MODIFIED="1676047576094" TEXT="...jetzt wird schon mal grunds&#xe4;tzlich korrekt gezeichnet">
+<arrowlink COLOR="#60a5a0" DESTINATION="ID_1701009358" ENDARROW="Default" ENDINCLINATION="234;0;" ID="Arrow_ID_1201169468" STARTARROW="None" STARTINCLINATION="8;-5;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1676047436191" ID="ID_1883772058" MODIFIED="1676047452394" TEXT="Problem: GTK weist manchmal trotzdem mehr zu">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675902610612" ID="ID_1308174165" MODIFIED="1675902619939" TEXT="Struktur-Schema">
@@ -29437,10 +29485,26 @@
 <arrowlink COLOR="#536cc0" DESTINATION="ID_1464608958" ENDARROW="Default" ENDINCLINATION="-1020;1248;" ID="Arrow_ID_1013900284" STARTARROW="None" STARTINCLINATION="-2004;139;"/>
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1672843882154" ID="ID_1978068021" MODIFIED="1672845093813" TEXT="Widget::get_allocation|width|height (aktuell g&#xfc;ltiger Wert incl Alignment/Modifikationen)">
+<node BACKGROUND_COLOR="#c6ccd6" COLOR="#2c2a74" CREATED="1672843882154" ID="ID_1978068021" MODIFIED="1676045024820" TEXT="Beachte Unterschiede in der Bedeutung der Getter">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        get_allocation|width|height &#160;&#10236;&#160; aktuell g&#252;ltiger Wert incl Alignment/Modifikationen
+      </li>
+      <li>
+        get_allocated_size &#160;&#10236;&#160; was gesetzt wurde, aber bereits ohne Dekoration
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#727fbb" DESTINATION="ID_464303848" ENDARROW="Default" ENDINCLINATION="-1975;186;" ID="Arrow_ID_1946781864" STARTARROW="None" STARTINCLINATION="-1869;99;"/>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1978068021" ENDARROW="Default" ENDINCLINATION="323;11;" ID="Arrow_ID_920771700" SOURCE="ID_400583877" STARTARROW="None" STARTINCLINATION="462;0;"/>
+<icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1672843927836" ID="ID_477932212" MODIFIED="1672844195140" TEXT="Widget::get_allocated_size  (was gesetzt wurde, aber bereits ohne Dekoration)"/>
 </node>
 </node>
 </node>
@@ -67683,8 +67747,9 @@
 </node>
 <node CREATED="1663946250024" ID="ID_1142643633" MODIFIED="1663946255308" TEXT="Layout management">
 <node CREATED="1663946256977" ID="ID_1464608958" MODIFIED="1672843870753" TEXT="Thema: Size-Handling">
+<arrowlink COLOR="#7584a4" DESTINATION="ID_464303848" ENDARROW="Default" ENDINCLINATION="115;-178;" ID="Arrow_ID_1938018383" STARTARROW="None" STARTINCLINATION="328;-32;"/>
 <linktarget COLOR="#536cc0" DESTINATION="ID_1464608958" ENDARROW="Default" ENDINCLINATION="-1020;1248;" ID="Arrow_ID_1013900284" SOURCE="ID_1969670799" STARTARROW="None" STARTINCLINATION="-2004;139;"/>
-<node COLOR="#435e98" CREATED="1612527499386" HGAP="34" ID="ID_615948747" MODIFIED="1664401278771" TEXT="Untersuchung: size_request &#x2014; 2/21 + 9/22 f&#xfc;r Clip-Display" VSHIFT="-49">
+<node COLOR="#435e98" CREATED="1612527499386" FOLDED="true" HGAP="34" ID="ID_615948747" MODIFIED="1664401278771" TEXT="Untersuchung: size_request &#x2014; 2/21 + 9/22 f&#xfc;r Clip-Display" VSHIFT="-49">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -68770,6 +68835,13 @@
 <arrowlink COLOR="#6396d3" DESTINATION="ID_1112354648" ENDARROW="Default" ENDINCLINATION="332;0;" ID="Arrow_ID_322983898" STARTARROW="None" STARTINCLINATION="130;7;"/>
 </node>
 </node>
+<node CREATED="1676044302875" ID="ID_464303848" MODIFIED="1676044946926" TEXT="Bedeutung der Size-Getter">
+<linktarget COLOR="#727fbb" DESTINATION="ID_464303848" ENDARROW="Default" ENDINCLINATION="-1975;186;" ID="Arrow_ID_1946781864" SOURCE="ID_1978068021" STARTARROW="None" STARTINCLINATION="-1869;99;"/>
+<linktarget COLOR="#7584a4" DESTINATION="ID_464303848" ENDARROW="Default" ENDINCLINATION="115;-178;" ID="Arrow_ID_1938018383" SOURCE="ID_1464608958" STARTARROW="None" STARTINCLINATION="328;-32;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1676044329100" ID="ID_1232423582" MODIFIED="1676044983946" TEXT="Widget::get_allocation|width|height (aktuell g&#xfc;ltiger Wert incl Alignment/Modifikationen)"/>
+<node CREATED="1672843927836" ID="ID_477932212" MODIFIED="1672844195140" TEXT="Widget::get_allocated_size  (was gesetzt wurde, aber bereits ohne Dekoration)"/>
+</node>
 </node>
 <node CREATED="1672842863450" ID="ID_1781957682" MODIFIED="1672842867742" TEXT="mapping">
 <node CREATED="1672842868697" ID="ID_871975923" MODIFIED="1672842877133" TEXT="Widget wird einem GDK-Window zugeordnet"/>
@@ -68862,7 +68934,8 @@
 </node>
 <node CREATED="1663967697587" ID="ID_502729133" MODIFIED="1663967701287" TEXT="Platz-Zuteilung">
 <node CREATED="1663967702275" ID="ID_1441338062" MODIFIED="1663967710309" TEXT="macht normalerweise das Framework(GTK)"/>
-<node CREATED="1663967711002" ID="ID_1524127663" MODIFIED="1663967716503" TEXT="Container machen das f&#xfc;r ihre Kinder">
+<node CREATED="1663967711002" FOLDED="true" ID="ID_1524127663" MODIFIED="1663967716503" TEXT="Container machen das f&#xfc;r ihre Kinder">
+<icon BUILTIN="info"/>
 <node CREATED="1663967756387" ID="ID_1440467863" MODIFIED="1663967792184" TEXT="Einstieg: Gtk::Widget::size_allocate | ggfs. incl &#xbb;Baseline&#xab;">
 <node CREATED="1663967838832" ID="ID_930797784" MODIFIED="1663967902777" TEXT="void gtk_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)">
 <font NAME="Monospaced" SIZE="12"/>

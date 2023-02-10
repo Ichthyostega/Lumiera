@@ -81,8 +81,8 @@ namespace timeline {
     : public Gtk::Grid
     , public model::ViewHook<TrackHeadWidget>
     {
-      widget::ElementBoxWidget nameTODO_;
-      Gtk::Label treeTODO_;
+      widget::ElementBoxWidget trackName_;
+      StaveBracketWidget structure_;
       Gtk::Box   padding_;
       HeadControlArea headCtrl_;
       

@@ -52,6 +52,8 @@
 namespace stage  {
 namespace timeline {
   
+  using CairoC = Cairo::RefPtr<Cairo::Context> const&;
+
 //  class TrackPresenter;
   
   
@@ -64,13 +66,20 @@ namespace timeline {
   class StaveBracketWidget
     : public Gtk::DrawingArea
     {
+      using _Base = Gtk::DrawingArea;
+      
     public:
      ~StaveBracketWidget();
       
       StaveBracketWidget ();
       
     private:/* ===== Internals ===== */
-     
+      
+      bool on_draw(CairoC cox)  override;
+      
+      Gtk::SizeRequestMode get_request_mode_vfunc()              const final;
+      void get_preferred_width_vfunc (int&, int&)                const override;
+      void get_preferred_width_for_height_vfunc (int, int&,int&) const override;
     };
   
   

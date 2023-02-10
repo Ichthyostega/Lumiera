@@ -53,13 +53,14 @@ namespace stage {
 namespace timeline {
   
   namespace {
+    const uint REQUIRED_WIDTH_px = 30;
   }
   
   
   
   
   StaveBracketWidget::StaveBracketWidget ()
-    : DrawingArea{}
+    : _Base{}
     { }
   
   
@@ -67,6 +68,52 @@ namespace timeline {
 
   
   /** */
+  bool
+  StaveBracketWidget::on_draw (CairoC cox)
+  {
+    // invoke (presumably empty) base implementation....
+    bool event_is_handled = _Base::on_draw (cox);
+    
+    /////////////////////////////////////////////TICKET #1018 : placeholder drawing
+    //
+    int w = get_width();
+    int h = get_allocated_height();
+    cox->set_source_rgb(0.8, 0.0, 0.0);
+    cox->set_line_width (5.0);
+    cox->move_to(0, 0);
+    cox->line_to(w, h);
+    cox->move_to(w, 0);
+    cox->line_to(0, h);
+    cox->stroke();
+    /////////////////////////////////////////////TICKET #1018 : placeholder drawing
+    
+    return event_is_handled;
+  }
+  
+  
+  /** indicate layout oriented towards vertical extension */
+  Gtk::SizeRequestMode
+  StaveBracketWidget::get_request_mode_vfunc()  const
+  {
+    return Gtk::SizeRequestMode::SIZE_REQUEST_WIDTH_FOR_HEIGHT;
+  }
+  
+  /**
+   * The structural outline adapts flexible in vertical direction,
+   * but requires a fixed horizontal size for proper drawing.
+   */
+  void
+  StaveBracketWidget::get_preferred_width_vfunc (int& minimum_width, int& natural_width)  const
+  {
+    minimum_width = natural_width = REQUIRED_WIDTH_px;
+  }
+  
+  void
+  StaveBracketWidget::get_preferred_width_for_height_vfunc (int, int& minimum_width, int& natural_width)  const
+  {
+    get_preferred_width (minimum_width, natural_width);
+  }
+  
   
   
   
