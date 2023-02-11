@@ -90,6 +90,7 @@ namespace timeline {
       ctrlTODO_.set_xalign (0.3);
       ctrlTODO_.set_yalign (0.5);
       this->attach (ctrlTODO_, 0,0, 1,1);
+      this->property_expand() = true;
       this->show_all();
     }
   

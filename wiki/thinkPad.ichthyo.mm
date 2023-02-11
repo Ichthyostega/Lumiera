@@ -28079,8 +28079,8 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675902536517" ID="ID_827367364" MODIFIED="1675902552151" TEXT="Anpassung an Allocation">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1676046656020" ID="ID_739149798" MODIFIED="1676047456082" TEXT="horizontale Ausdehnung steuern">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1676046656020" ID="ID_739149798" MODIFIED="1676085956745" TEXT="horizontale Ausdehnung steuern">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1676046671288" ID="ID_823909101" MODIFIED="1676047541409" TEXT="intrinsich feste Ausdehnung erforderlich, nun H&#xf6;he variabel">
 <icon BUILTIN="yes"/>
 </node>
@@ -28091,8 +28091,47 @@
 <arrowlink COLOR="#60a5a0" DESTINATION="ID_1701009358" ENDARROW="Default" ENDINCLINATION="234;0;" ID="Arrow_ID_1201169468" STARTARROW="None" STARTINCLINATION="8;-5;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1676047436191" ID="ID_1883772058" MODIFIED="1676047452394" TEXT="Problem: GTK weist manchmal trotzdem mehr zu">
+<node COLOR="#435e98" CREATED="1676047436191" ID="ID_1883772058" MODIFIED="1676085951547" TEXT="Problem: GTK weist manchmal trotzdem mehr zu">
 <icon BUILTIN="broken-line"/>
+<node CREATED="1676085625293" ID="ID_1842723782" MODIFIED="1676085879659" TEXT="Uh-oh ... es ist kompliziert">
+<richcontent TYPE="NOTE"><html>
+  <head></head>
+  <body>
+    <ul>
+      <li>
+        das Problem tritt auf bei &#187;Leaf-Tracks&#171;
+      </li>
+      <li>
+        bei diesen liegen hier zwei Zellen nebeneinander, und sonst nichts, was eine Verankerung geben k&#246;nnte
+      </li>
+      <li>
+        zwar habe ich kein homogenous-spacing gesetzt (geht das &#252;berhaupt?)
+      </li>
+      <li>
+        aber die Zelle (0,1) enth&#228;lt ein weiteres Grid-Control
+      </li>
+      <li>
+        das aber seinerseits nur eine einzige Zelle mit einem Platzhalter beinhaltet
+      </li>
+      <li>
+        ...also selbst komplett unterf&#252;llt ist und keine signifikante Allokation erzeugt
+      </li>
+    </ul>
+    <p>
+      &#10233; l&#228;ngerfristig wird sich das sowiso regeln
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node COLOR="#435e98" CREATED="1676085882028" ID="ID_1638208695" MODIFIED="1676085948819" TEXT="Verhalten explizit anfordern">
+<icon BUILTIN="idea"/>
+<node CREATED="1676085910066" ID="ID_1461288066" MODIFIED="1676085927242" TEXT="das Stave-Bracked : expand = false"/>
+<node CREATED="1676085928118" ID="ID_1335925100" MODIFIED="1676085936857" TEXT="das Head-Control : expand= true"/>
+</node>
+<node COLOR="#338800" CREATED="1676085939157" ID="ID_1665806137" MODIFIED="1676085945174" TEXT="Problem gel&#xf6;st">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>

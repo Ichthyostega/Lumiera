@@ -59,13 +59,15 @@ namespace timeline {
   
   
   
+  StaveBracketWidget::~StaveBracketWidget() { }
+  
   StaveBracketWidget::StaveBracketWidget ()
     : _Base{}
-    { }
+    {
+      this->property_expand() = false;
+    }
   
   
-  StaveBracketWidget::~StaveBracketWidget() { }
-
   
   /** */
   bool
