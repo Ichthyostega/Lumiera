@@ -28399,8 +28399,7 @@
       Die Geometrie-Elemente in den Sketch-Objekten sind eine Spezial-Implementierung, und keine &#187;first class citizens&#171;. Es ist nicht klar, wie man sie aus Expressions referenzieren kann (kein sauberes DSL-Design). Das Dependency-Management ist viel zu naiv implementiert, und es wird empfohlen, mit Tricks und Kniffen zu arbeiten.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1677284865478" ID="ID_1467561719" MODIFIED="1677285153626" TEXT="Contstraints und Expressions sind noch nicht vollst&#xe4;ndig entwickelt">
 <richcontent TYPE="NOTE"><html>
@@ -28412,8 +28411,7 @@
       Eine Funktion, um eine Linie gem&#228;&#223; Proportion zu teilen, wird zwar oft gew&#252;nscht, ist aber derzeit (2022) noch in Entwicklung. Daher kann man im Moment nur eine feste Basisl&#228;nge als benannter Constraint vorgeben, und dann andere L&#228;ngen per Expression <font face="Monospaced" color="#1418c4">=Constraint.basis * (1+sqrt(5)/2</font>&#160;&#160;daran binden. Au&#223;erdem kann man solche Expressions zwar einmal initial eigeben, dann aber nur noch &#252;ber das XML editieren.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="broken-line"/>
 </node>
 <node CREATED="1677283111823" ID="ID_991289244" MODIFIED="1677283133867">
@@ -28475,16 +28473,33 @@
 </node>
 <node CREATED="1677284059069" ID="ID_239372381" MODIFIED="1677284076170" TEXT="in diesem konkreten Fall brauche ich nur ein paar numerische Koordinaten"/>
 <node CREATED="1677284078398" ID="ID_314954569" MODIFIED="1677284135625" TEXT="die habe ich jetzt (manuell aus dem XML entnehmen)">
+<arrowlink COLOR="#4e50ba" DESTINATION="ID_175092425" ENDARROW="Default" ENDINCLINATION="20;-39;" ID="Arrow_ID_1002715155" STARTARROW="None" STARTINCLINATION="-95;5;"/>
 <linktarget COLOR="#d93353" DESTINATION="ID_314954569" ENDARROW="Default" ENDINCLINATION="229;0;" ID="Arrow_ID_1387442926" SOURCE="ID_178736804" STARTARROW="None" STARTINCLINATION="-193;12;"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1677284093289" ID="ID_445049749" MODIFIED="1677284109270" TEXT="Fazit: keine generell brauchbare L&#xf6;sung">
 <icon BUILTIN="broken-line"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677284189119" ID="ID_848175311" MODIFIED="1677284204214" TEXT="Dokumentation im SVG darstellen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677331147847" ID="ID_175092425" MODIFIED="1677331206813" TEXT="ermittelte Koordinaten extrahieren">
+<linktarget COLOR="#4e50ba" DESTINATION="ID_175092425" ENDARROW="Default" ENDINCLINATION="20;-39;" ID="Arrow_ID_1002715155" SOURCE="ID_314954569" STARTARROW="None" STARTINCLINATION="-95;5;"/>
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677285339149" ID="ID_622350527" MODIFIED="1677285395543" TEXT="manuell die Koordinaten ins SVG reinschreiben">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1677331237859" ID="ID_437122420" MODIFIED="1677332146589" TEXT="bezogen auf Linienweite == 1mm"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1677284189119" ID="ID_848175311" MODIFIED="1677336300812" TEXT="Dokumentation im SVG darstellen">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1677285339149" ID="ID_622350527" MODIFIED="1677336296588" TEXT="manuell die Koordinaten ins SVG reinschreiben">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1677336149759" ID="ID_436410709" MODIFIED="1677336194334" TEXT="Konstruktion vollst&#xe4;ndig anlegen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1677336159392" ID="ID_721716534" MODIFIED="1677336193101" TEXT="Elemente im SVG konsistent reorganisieren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1677336199897" ID="ID_1876418381" MODIFIED="1677336290693" TEXT="Gruppe r_trans f&#xfc;r die Platzierung auf der Seite"/>
+<node COLOR="#435e98" CREATED="1677336215871" ID="ID_142480272" MODIFIED="1677336290694" TEXT="Gruppe_r_ref umfa&#xdf;t die Konstruktion und tr&#xe4;gt den Style"/>
+<node COLOR="#435e98" CREATED="1677336240060" ID="ID_1544427721" MODIFIED="1677336290694" TEXT="Gruppe r_rubline f&#xfc;r die vertikale Doppelline"/>
+<node COLOR="#435e98" CREATED="1677336251555" ID="ID_595975745" MODIFIED="1677336290694" TEXT="Gruppe r_mainsquare f&#xfc;r das die Klammer umschliepende Quadrat"/>
+<node COLOR="#435e98" CREATED="1677336274103" ID="ID_1407156022" MODIFIED="1677336290694" TEXT="Gruppe r_construct f&#xfc;r die Hilfskonstruktion"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677285356443" ID="ID_1264869426" MODIFIED="1677285395543" TEXT="von diesen Eckpunkten ausgehend die Konstruktion rekonstruieren">
 <icon BUILTIN="flag-yellow"/>

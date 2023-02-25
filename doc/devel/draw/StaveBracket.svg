@@ -27,9 +27,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4.4873333"
-     inkscape:cx="54.880443"
-     inkscape:cy="362.36907"
+     inkscape:zoom="2.2436667"
+     inkscape:cx="30.664941"
+     inkscape:cy="361.12572"
      inkscape:document-units="mm"
      inkscape:current-layer="svg8"
      showgrid="true"
@@ -94,100 +94,146 @@
   <g
      inkscape:label="Drawing:Bracket"
      inkscape:groupmode="layer"
-     id="layer1" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="Construction" />
-  <rect
-     style="fill:none;stroke:teal;stroke-width:0.1"
-     id="rect821"
-     width="10"
-     height="10"
-     x="77"
-     y="61" />
-  <g
-     id="phi_pos"
-     transform="translate(20,50)">
+     id="layer1">
+    <rect
+       style="fill:none;stroke:teal;stroke-width:0.1"
+       id="rect821"
+       width="10"
+       height="10"
+       x="77"
+       y="61" />
     <g
-       id="phi">
-      <rect
-         id="phiMaj"
-         y="0"
-         x="0"
-         height="10"
-         width="10"
-         style="fill:none;stroke:teal;stroke-width:0.1" />
-      <rect
-         id="phiMin"
-         y="0"
-         x="0"
-         height="6.1803398"
-         width="6.1803398"
-         style="fill:none;stroke:teal;stroke-width:0.1" />
-      <rect
-         id="phiMinI"
-         y="3.8196602"
-         x="3.8196602"
-         height="6.1803398"
-         width="6.1803398"
-         style="fill:none;stroke:teal;stroke-width:0.1" />
-      <text
-         id="phisym"
-         x="3.8193359"
-         y="6.0935059"
-         style="font-size:3px;font-family:Sans;fill:teal;stroke:none"
-         xml:space="preserve"><tspan
-           id="phispan"
-           sodipodi:role="line"
+       id="phi_pos"
+       transform="translate(20,50)">
+      <g
+         id="phi">
+        <rect
+           id="phiMaj"
+           y="0"
+           x="0"
+           height="10"
+           width="10"
+           style="fill:none;stroke:teal;stroke-width:0.1" />
+        <rect
+           id="phiMin"
+           y="0"
+           x="0"
+           height="6.1803398"
+           width="6.1803398"
+           style="fill:none;stroke:teal;stroke-width:0.1" />
+        <rect
+           id="phiMinI"
+           y="3.8196602"
+           x="3.8196602"
+           height="6.1803398"
+           width="6.1803398"
+           style="fill:none;stroke:teal;stroke-width:0.1" />
+        <text
+           id="phisym"
            x="3.8193359"
-           y="6.0935059">Φ</tspan></text>
+           y="6.0935059"
+           style="font-size:3px;font-family:Sans;fill:teal;stroke:none"
+           xml:space="preserve"><tspan
+             id="phispan"
+             sodipodi:role="line"
+             x="3.8193359"
+             y="6.0935059">Φ</tspan></text>
+      </g>
     </g>
   </g>
   <g
-     id="r_dubline">
-    <rect
-       style="fill:none;stroke:teal;stroke-width:0.1"
-       id="r_bar"
-       width="3.8196602"
-       height="30"
-       x="0"
-       y="0" />
-    <rect
-       style="fill:none;stroke:teal;stroke-width:0.1"
-       id="r_vline"
-       width="10"
-       height="30"
-       x="0"
-       y="0" />
-  </g>
-  <g
-     id="r_mainsquare"
-     transform="matrix(2.6180339,0,0,2.6180339,0,0)"
-     style="stroke-width:0.0381966">
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Construction" >
     <g
-       id="g847">
-      <rect
-         style="fill:none;stroke:teal"
-         width="10"
-         height="10"
-         x="0"
-         y="0"
-         id="rect837" />
-      <rect
-         style="fill:none;stroke:teal"
-         width="6.1803398"
-         height="6.1803398"
-         x="0"
-         y="0"
-         id="rect839" />
-      <rect
-         style="fill:none;stroke:teal"
-         width="6.1803398"
-         height="6.1803398"
-         x="3.8196602"
-         y="3.8196602"
-         id="rect841" />
+       id="r_trans">
+      <g
+         id="r_ref"
+         style="fill:none;stroke:teal;stroke-width:0.1">
+        <g
+           id="r_dubline">
+          <rect
+             style="fill:none;stroke:teal;stroke-width:0.1"
+             id="r_bar"
+             width="3.8196602"
+             height="30"
+             x="0"
+             y="0" />
+          <rect
+             style="fill:none;stroke:teal;stroke-width:0.1"
+             id="r_vline"
+             width="10"
+             height="30"
+             x="0"
+             y="0" />
+        </g>
+        <g
+           id="r_mainsquare"
+           transform="matrix(2.6180339,0,0,2.6180339,0,-26.180339)"
+           style="stroke-width:0.0381966">
+          <rect
+             id="r_square"
+             y="0"
+             x="0"
+             height="10"
+             width="10" />
+          <rect
+             id="r_sq_min_nw"
+             y="0"
+             x="0"
+             height="6.1803398"
+             width="6.1803398" />
+          <rect
+             id="r_sq_min_se"
+             y="3.8196602"
+             x="3.8196602"
+             height="6.1803398"
+             width="6.1803398" />
+        </g>
+        <g
+           id="r_construct">
+          <path
+             id="r_diagonal"
+             inkscape:connector-curvature="0"
+             d="M 0,0 26,-26" />
+          <path
+             id="r_dia_se"
+             inkscape:connector-curvature="0"
+             d="M 10,0 26,-26" />
+          <path
+             id="r_dia_nw"
+             inkscape:connector-curvature="0"
+             d="M 0,-10 26,-26" />
+          <path
+             id="r_bisec_in"
+             inkscape:connector-curvature="0"
+             d="M 13,-19 -9,-56" />
+          <path
+             id="r_bisec_out"
+             inkscape:connector-curvature="0"
+             d="M 13,-14 -20,-49" />
+          <path
+             id="r_arc_out"
+             sodipodi:type="arc"
+             sodipodi:cy="-49"
+             sodipodi:cx="-20"
+             sodipodi:ry="53"
+             sodipodi:rx="53"
+             sodipodi:start="0.44429177"
+             sodipodi:end="1.2085032"
+             d="M 27.854511,-26.219619 A 53,53 0 0 1 -1.2157699,0.55958737 L -20,-49 Z" />
+          <path
+             id="r_arc_in"
+             sodipodi:type="arc"
+             sodipodi:cy="-56"
+             sodipodi:cx="-9"
+             sodipodi:ry="48"
+             sodipodi:rx="48"
+             sodipodi:start="0.70190517"
+             sodipodi:end="1.3988087"
+             d="M 27.653446,-25.007664 A 48,48 0 0 1 -0.78523256,-8.7081657 L -9,-56 Z" />
+        </g>
+      </g>
     </g>
   </g>
 </svg>
