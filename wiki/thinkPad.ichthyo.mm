@@ -5715,6 +5715,7 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1665800359809" FOLDED="true" ID="ID_1618186555" MODIFIED="1665801587336" TEXT="SVG sauber halten">
+<arrowlink COLOR="#4660c4" DESTINATION="ID_1598706179" ENDARROW="Default" ENDINCLINATION="-1583;-200;" ID="Arrow_ID_1296361422" STARTARROW="Default" STARTINCLINATION="-2177;271;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1665800366152" ID="ID_1831328523" MODIFIED="1665800384165" TEXT="__Icon_TEMPLATE verwenden"/>
 <node CREATED="1665800390503" ID="ID_465047171" MODIFIED="1665800417246" TEXT="Stacking-Order stets gleich (kleiner &#x2023;&#x2023; gr&#xf6;&#xdf;er)"/>
@@ -5740,7 +5741,7 @@
   </head>
   <body>
     <p>
-      wenn man den Filter entfernt / auf Null dreht (Blur), dann wendet Inkscape die Transformation
+      wenn man den Filter entfernt / auf Null dreht (Blur), dann wendet Inkscape die Transformation an
     </p>
   </body>
 </html></richcontent>
@@ -28076,6 +28077,427 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node CREATED="1676156477801" ID="ID_772056246" MODIFIED="1676156487723" TEXT="Grundstruktur zeichnen: Klammer">
+<node CREATED="1676156693199" ID="ID_1410623513" MODIFIED="1676156728537" TEXT="geschwungene Kappen">
+<node COLOR="#435e98" CREATED="1676156831767" ID="ID_1352090582" MODIFIED="1677284185352" TEXT="Problem: wie konstruieren?">
+<icon BUILTIN="help"/>
+<node CREATED="1676156890344" ID="ID_324278944" MODIFIED="1676156912279" TEXT="Geheimwissen &#x2014; wie so oft in der Typographie"/>
+<node CREATED="1676156918897" ID="ID_489719344" LINK="https://en.wikipedia.org/wiki/List_of_musical_symbols" MODIFIED="1676156951217" TEXT="habe nur visuelle Beispiele &#x2014; z.B. Wikipedia"/>
+<node CREATED="1676164934114" ID="ID_1016418668" MODIFIED="1676164960121" TEXT="k&#xf6;nnte mir eine Konstruktion auf Basis &#x3a6; denken"/>
+<node CREATED="1676164971685" ID="ID_1507492450" MODIFIED="1677284035539" TEXT="Problem: das ist Geometrie &#x2014; in Formeln wird das ekelig komplex">
+<arrowlink COLOR="#5152b9" DESTINATION="ID_202336910" ENDARROW="Default" ENDINCLINATION="-527;-15;" ID="Arrow_ID_977343845" STARTARROW="None" STARTINCLINATION="-163;204;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#dcb49d" COLOR="#990033" CREATED="1676165456820" ID="ID_1427913040" MODIFIED="1677283981558" TEXT="Alternative? in SVG konstruieren...">
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1676165507261" ID="ID_562483038" MODIFIED="1677190170688" TEXT="vom Einheitsvektor ausgehen">
+<node CREATED="1677190210159" ID="ID_1346884569" MODIFIED="1677190317384" TEXT="Basiseinheit: Breite der Doppellinie"/>
+<node CREATED="1677191805647" ID="ID_1613786140" MODIFIED="1677191933161" TEXT="numerische Koordinaten in SVG">
+<arrowlink COLOR="#6f90b6" DESTINATION="ID_1597077699" ENDARROW="Default" ENDINCLINATION="-895;71;" ID="Arrow_ID_1698154465" STARTARROW="None" STARTINCLINATION="-1020;86;"/>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1677167813605" ID="ID_997308984" MODIFIED="1677167818070" TEXT="sauber eichen">
+<node CREATED="1677190330303" ID="ID_885253503" MODIFIED="1677190343796" TEXT="Zielwert &#x2254; 1mm"/>
+<node CREATED="1677205286217" ID="ID_1445174518" MODIFIED="1677205301480">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      nominell: <b>96</b>dpi
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1677167818898" ID="ID_1345692974" MODIFIED="1677190343808">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      mein Display: <b>90</b>dpi
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ich habe beim Upgrade auf Debian-Stretch mal nachgemessen: tats&#228;chlich hat mein Display 94dpi. Demnach w&#228;re der andere weithin &#252;bliche Wert von 96dpi pr&#228;ziser. Jedoch bin ich nach mehreren Experimenten bei 90dpi geblieben, da f&#252;r mich so die Schriftarten die &#8222;richtige Gr&#246;&#223;e&#8220; haben &#8212; das mag auch daran liegen, da&#223; ich leicht kurzsichtig bin und typischeweise etwas n&#228;her am Bildschirm sitze.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1677205326328" ID="ID_1478270063" MODIFIED="1677205332495" TEXT="Konstruktion ausf&#xfc;hren">
+<node CREATED="1677205470277" ID="ID_1204016759" MODIFIED="1677205474955" TEXT="Doppellinie"/>
+<node CREATED="1677205476133" ID="ID_451249239" MODIFIED="1677205482653" TEXT="Hauptquadrat">
+<node CREATED="1677205505659" ID="ID_1891862127" MODIFIED="1677205530156" TEXT="scale{ 1/(1-1/&#x3a6;) }"/>
+<node CREATED="1677205538913" ID="ID_1613242195" MODIFIED="1677205581045" TEXT="vertikaler Minor &#x27fc; Endpunkt vertikale Linie"/>
+</node>
+<node CREATED="1677205616988" ID="ID_470162114" MODIFIED="1677205624711" TEXT="Au&#xdf;enkurve">
+<node CREATED="1677205631010" ID="ID_1117749219" MODIFIED="1677205640109" TEXT="Sehne = Diagonale Hauptquadrat"/>
+<node CREATED="1677205650958" ID="ID_155372806" MODIFIED="1677205703445" TEXT="Tangente: Spize &#x27f6; horiz.Minor Hauptquadrat"/>
+<node CREATED="1677205740036" ID="ID_788217131" MODIFIED="1677205744782" TEXT="zentrum konstruieren">
+<node CREATED="1677205747920" ID="ID_1509790675" MODIFIED="1677205759434" TEXT="Lot auf Mitte der Diagonale"/>
+<node CREATED="1677205764916" ID="ID_30297184" MODIFIED="1677205777594" TEXT="Lot auf Tangente an der Spitze"/>
+</node>
+</node>
+<node CREATED="1677205625515" ID="ID_411317980" MODIFIED="1677205629214" TEXT="Innenkurve">
+<node CREATED="1677205631010" ID="ID_780001839" MODIFIED="1677205640109" TEXT="Sehne = Diagonale Hauptquadrat"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1677205333819" ID="ID_1685591638" MODIFIED="1677283853536" TEXT="m&#xfc;hsam ... Inkscape ist nicht das richtige Tool">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ich kann zwar einrasten, aber ich kann weder um einen definierten Punkt drehen, noch kann ich Schnittpunkte ermitteln
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e6ddbc" COLOR="#ff0000" CREATED="1677283856940" ID="ID_118538540" MODIFIED="1677283923821" TEXT="Abbruch : mein Design ist nicht mit ad&#xe4;quatem Aufwand umsetzbar">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1676165519603" ID="ID_376786419" MODIFIED="1676165525863" TEXT="an den Nullpunkt legen"/>
+<node CREATED="1676165528682" ID="ID_235151946" MODIFIED="1676165554904" TEXT="dann Koordinaten der Kreismittelpunkte abgreifen"/>
+<node CREATED="1676165556446" ID="ID_211841098" MODIFIED="1676165562730" TEXT="...und numerisch &#xfc;bernehmen"/>
+</node>
+<node CREATED="1677238756686" ID="ID_165173262" MODIFIED="1677283951972" TEXT="Alternative: CAD oder Geometrie-Software">
+<icon BUILTIN="forward"/>
+<node CREATED="1677238769330" ID="ID_617917879" MODIFIED="1677238790265" TEXT="Software">
+<node CREATED="1677238794907" FOLDED="true" ID="ID_1719994425" LINK="https://www.geogebra.org/" MODIFIED="1677244193493" TEXT="GeoGebra">
+<arrowlink COLOR="#da185e" DESTINATION="ID_1078055608" ENDARROW="Default" ENDINCLINATION="-64;0;" ID="Arrow_ID_1447934837" STARTARROW="None" STARTINCLINATION="9;138;"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1677238915023" ID="ID_953437888" MODIFIED="1677238928092" TEXT="Geometrie und Algebra Toolbox">
+<node CREATED="1677240624402" ID="ID_515446896" MODIFIED="1677240641754" TEXT="Fokus auf Lehre / Schule"/>
+<node CREATED="1677240642624" ID="ID_189832046" MODIFIED="1677240663713" TEXT="Aktivit&#xe4;t : eine schrittweise Konstruktion oder Probleml&#xf6;sung"/>
+<node CREATED="1677240664813" ID="ID_1212012977" MODIFIED="1677240675112" TEXT="viele Online-Ressourcen und Lehrmittel"/>
+<node CREATED="1677240745370" ID="ID_128860" MODIFIED="1677240758719" TEXT="SVG-Export (und PNG, EPS, ...)"/>
+</node>
+<node CREATED="1677239908146" ID="ID_1839763021" MODIFIED="1677239917765" TEXT="Java / Swing-Applikation">
+<node CREATED="1677242327780" ID="ID_1944426459" LINK="https://www.geogebra.org/classic" MODIFIED="1677242340669" TEXT="auch online als Web-Tool"/>
+</node>
+<node CREATED="1677239038943" ID="ID_1843905901" MODIFIED="1677239044954" TEXT="in Debian paketiert"/>
+<node CREATED="1677242504444" ID="ID_1552853335" MODIFIED="1677243232265" TEXT="Dokumentation problematisch">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1677242518868" ID="ID_361444559" MODIFIED="1677242527763" TEXT="es gibt eine Unmenge an Einzeltutorials"/>
+<node CREATED="1677242528649" ID="ID_1133975830" MODIFIED="1677242536188" TEXT="kein richties Handbuch">
+<node CREATED="1677242594624" ID="ID_741403940" MODIFIED="1677242644637" TEXT="nur sehr spezifische Lehrmaterialien">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &quot;Mathe f&#252;r 6-13 j&#228;rige&quot; etc
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1677242603776" ID="ID_56189532" MODIFIED="1677242615900" TEXT="und jede Menge online-Aktivit&#xe4;ten, aber ohne Erkl&#xe4;rung"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1677242537008" ID="ID_910645802" MODIFIED="1677242546207" TEXT="diverse Links sind obsolet">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1677243177482" ID="ID_705204121" LINK="https://wiki.geogebra.org/en/Manual" MODIFIED="1677243238963" TEXT="&#xbb;Geogebra Manual&#xab;">
+<icon BUILTIN="info"/>
+<node CREATED="1677243516505" ID="ID_953227506" MODIFIED="1677243647101" TEXT="grr... erkl&#xe4;rt zwar jeden Button, aber nicht wie man damit arbeitet"/>
+</node>
+</node>
+<node CREATED="1677241885336" ID="ID_922881345" MODIFIED="1677241917669" TEXT="verwirrend">
+<node CREATED="1677241919382" ID="ID_212507936" MODIFIED="1677241941020" TEXT="zwar numerische Anzeige, aber nicht editierbar"/>
+<node CREATED="1677242720631" ID="ID_1715446782" MODIFIED="1677242734352" TEXT="es gibt ein &quot;Konstruktionsprotokoll&quot;">
+<node CREATED="1677242735581" ID="ID_1534936589" MODIFIED="1677242750107" TEXT="Doppelklick &#xf6;ffnet einen Editor"/>
+<node CREATED="1677242750955" ID="ID_1710116847" MODIFIED="1677242765269" TEXT="der bietet eins symbolische Notation, aber nirgends die Zahlenwerte"/>
+<node CREATED="1677243712139" ID="ID_175318062" MODIFIED="1677243737909" TEXT="man kann einzelne Objekte per Zuweisung redefinieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      b = 0.6180339887498948482
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1677243789088" ID="ID_1550304217" MODIFIED="1677243866319" TEXT="aber man kann nicht einen Parameter &#xe4;ndern und die Konstruktion als Solche erhalten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn man nachtr&#228;glich einzelne Objekte modifiziert, &#228;ndern sicn nur diese, aber keine davon abh&#228;ngigen weiteren Schritte der Konstruktion
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1677243870078" ID="ID_1078055608" MODIFIED="1677244131861" TEXT="das hei&#xdf;t: man kann eine Konstruktion zwar machen, aber nicht korrigieren">
+<linktarget COLOR="#da185e" DESTINATION="ID_1078055608" ENDARROW="Default" ENDINCLINATION="-64;0;" ID="Arrow_ID_1447934837" SOURCE="ID_1719994425" STARTARROW="None" STARTINCLINATION="9;138;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+</node>
+<node CREATED="1677238808005" FOLDED="true" ID="ID_1447394424" LINK="http://car.rene-grothmann.de/doc_en/download.html" MODIFIED="1677244191316" TEXT="CaR / CaRMetal">
+<arrowlink COLOR="#d92b65" DESTINATION="ID_297781372" ENDARROW="Default" ENDINCLINATION="-296;0;" ID="Arrow_ID_1075588267" STARTARROW="None" STARTINCLINATION="40;58;"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1677238883419" ID="ID_996300782" MODIFIED="1677238894961" TEXT="&#xbb;Compass and Ruler&#xab;">
+<node CREATED="1677238901406" ID="ID_1722907500" MODIFIED="1677238907188" TEXT="in Java geschriebene Engine"/>
+<node CREATED="1677238907984" ID="ID_1026090446" MODIFIED="1677238912707" TEXT="einfache Konstruktionstool"/>
+</node>
+<node CREATED="1677238845913" ID="ID_843441309" MODIFIED="1677238866366" TEXT="CaR Metal : altenative Oberfl&#xe4;che">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1677238867829" ID="ID_943917483" MODIFIED="1677241856930" TEXT="keine Webseite / Doku mehr">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1677238875812" ID="ID_1852293959" MODIFIED="1677238881527" TEXT="aber paketiert in Debian"/>
+<node CREATED="1677241653479" ID="ID_1785287496" MODIFIED="1677241732497" TEXT="einfache Konstruktionsmittel">
+<node CREATED="1677241733629" ID="ID_71114216" MODIFIED="1677241738194" TEXT="Grade, Strecke, Winkel"/>
+<node CREATED="1677241738953" ID="ID_1098408302" MODIFIED="1677241773986" TEXT="&quot;point and shot&quot;-Interface">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Anweisungen in der Statuszeile: w&#228;hle ersten Punkt, setze zweiten Punkt....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1677241777330" ID="ID_424248281" MODIFIED="1677241786137" TEXT="Liste der Operationen, numerisch editierbar"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1677241862331" ID="ID_297781372" MODIFIED="1677244098449" TEXT="komme damit nicht zurecht">
+<linktarget COLOR="#d92b65" DESTINATION="ID_297781372" ENDARROW="Default" ENDINCLINATION="-296;0;" ID="Arrow_ID_1075588267" SOURCE="ID_1447394424" STARTARROW="None" STARTINCLINATION="40;58;"/>
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1677241973839" ID="ID_1096129274" MODIFIED="1677241987298" TEXT="kann zwar Punkte / Strecken numerisch definieren"/>
+<node CREATED="1677242051018" ID="ID_684143104" MODIFIED="1677242075172" TEXT="auf Strecke eingerasteter Punkt numerisch nicht editierbar"/>
+<node CREATED="1677241988241" ID="ID_1052932142" MODIFIED="1677241995958" TEXT="kann aber nicht eine Teilkonstruktion drehen"/>
+</node>
+</node>
+</node>
+<node CREATED="1677238791314" ID="ID_732751692" LINK="https://wiki.freecad.org/Getting_started" MODIFIED="1677282549626" TEXT="FreeCAD">
+<icon BUILTIN="forward"/>
+<node CREATED="1677238946963" ID="ID_872231218" MODIFIED="1677238966708" TEXT="3D-CAD Software f&#xfc;r Bauteil-Konstruktion">
+<node CREATED="1677238982982" ID="ID_778717508" MODIFIED="1677239008236" TEXT="Paradigma: dynamisch-funktional">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      man zeichnet nicht, sondern man stellt eine Liste von Operationen zusammen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1677244165006" ID="ID_726530336" MODIFIED="1677244170985" TEXT="sehr m&#xe4;chtig (und komplex)"/>
+</node>
+<node COLOR="#435e98" CREATED="1677244173653" ID="ID_1314330853" MODIFIED="1677282545474" TEXT="Versuch: Umgang lernen?">
+<icon BUILTIN="help"/>
+<node CREATED="1677244515831" ID="ID_475033609" MODIFIED="1677244547510" TEXT="Debian-oldstable &#x27f9; 0.18 / aktuell 0.20"/>
+<node CREATED="1677244552626" ID="ID_1256925438" MODIFIED="1677244574933" TEXT="Hilfe aus der Applikation heraus funktioniert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      embedded browser control
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1677246748493" ID="ID_764653557" MODIFIED="1677246767781" TEXT="siehe auch Notizen in Buster.mm">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1677244993104" ID="ID_1394628058" LINK="https://wiki.freecad.org/Workbenches" MODIFIED="1677246774020" TEXT="Konzept: Workbenches">
+<node CREATED="1677246775288" ID="ID_632741732" MODIFIED="1677279255738" TEXT="f&#xfc;r mich: Sketcher Workbench"/>
+<node CREATED="1677279264883" ID="ID_1434090599" LINK="https://wiki.freecad.org/Basic_Sketcher_Tutorial" MODIFIED="1677279278124" TEXT="Basic Sketcher Tutorial">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1677282525678" ID="ID_661917025" MODIFIED="1677282542592" TEXT="konnte meinen Design-Enwurf ohne Weiteres umsetzen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e2e4a6" COLOR="#338800" CREATED="1677283407557" ID="ID_1887076724" MODIFIED="1677283453893" TEXT="das Konzept mit den Constraints ist sehr intuitiv und elegant">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1677282565360" ID="ID_1318516899" MODIFIED="1677282579408" TEXT="Aber: Integration ist problematisch">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1677282651864" ID="ID_749202376" MODIFIED="1677282788849" TEXT="Applikation ist robust aber verh&#xe4;llt sich teilweise absonderlich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das liegt vielleicht auch an der etwas &#8222;alten&#8220; Version von ca. 2018.
+    </p>
+    <p>
+      K&#246;nnte aber auch auf grunds&#228;tzliche Limitierungen hinweisen; man hat eben vor allem an das Design von 3D-Bauteilen gedacht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1677282582168" ID="ID_1875937065" MODIFIED="1677283406645" TEXT="Das UI ist nicht ausreichend konfigurierbar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das UI-Design ist vom konkreten Einzelfall-Nutzen ausgegangen, nicht von einem stimmigen Gesamtentwurf. Alles ist auf das Konstruieren von 3D-Bauteilen in typischem handlichen Format ausgelegt: eine kleine Zahl an Einzelobjekten im cm-Bereich....
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Ich komme jetzt mit einer Konstruktion im Sub-Millimeter-Bereich, und ich br&#228;uchte sich &#252;berlappende Formen ....
+    </p>
+    <ul>
+      <li>
+        die Anzeige-Handhabung wird dann &quot;frickelig&quot;
+      </li>
+      <li>
+        die Beschriftungen sind viel zu gro&#223; und lassen sich nicht sinnvoll platzieren
+      </li>
+      <li>
+        es gibt nur die starre Unterscheidung in &#187;Hilfslinien&#171; (construction) und &#187;Geometrie&#171;
+      </li>
+      <li>
+        letztere mu&#223; &#252;berschneidungsfrei sein
+      </li>
+      <li>
+        f&#252;r mein Design habe ich dann ca 50 nummerierte Constraints, die anhand der Anzeige kaum mehr sinnvoll nachvollziehbar sind...
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1677285183885" ID="ID_1263712065" MODIFIED="1677285326059" TEXT="Expressions, Objektmodell und Rererenzen lassen zu w&#xfc;nschen &#xfc;brig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Die Geometrie-Elemente in den Sketch-Objekten sind eine Spezial-Implementierung, und keine &#187;first class citizens&#171;. Es ist nicht klar, wie man sie aus Expressions referenzieren kann (kein sauberes DSL-Design). Das Dependency-Management ist viel zu naiv implementiert, und es wird empfohlen, mit Tricks und Kniffen zu arbeiten.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1677284865478" ID="ID_1467561719" MODIFIED="1677285153626" TEXT="Contstraints und Expressions sind noch nicht vollst&#xe4;ndig entwickelt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Eine Funktion, um eine Linie gem&#228;&#223; Proportion zu teilen, wird zwar oft gew&#252;nscht, ist aber derzeit (2022) noch in Entwicklung. Daher kann man im Moment nur eine feste Basisl&#228;nge als benannter Constraint vorgeben, und dann andere L&#228;ngen per Expression <font face="Monospaced" color="#1418c4">=Constraint.basis * (1+sqrt(5)/2</font>&#160;&#160;daran binden. Au&#223;erdem kann man solche Expressions zwar einmal initial eigeben, dann aber nur noch &#252;ber das XML editieren.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1677283111823" ID="ID_991289244" MODIFIED="1677283133867">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#10233; ich kann das <b>Ergebnis nicht exportieren</b>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1677283135738" ID="ID_924427179" MODIFIED="1677283153136" TEXT="l&#xe4;&#xdf;t sich nicht in ein Bauteil &#xfc;bersetzen"/>
+<node CREATED="1677283209076" ID="ID_1767198864" MODIFIED="1677283225596" TEXT="l&#xe4;&#xdf;t sich nicht sinnvoll in eine technische Zeichnung integriern"/>
+<node CREATED="1677283226896" ID="ID_1105190200" MODIFIED="1677283257013" TEXT="als Skizze verwendet &#x27f9; die Hilfslinien fehlen"/>
+<node CREATED="1677283259677" ID="ID_1713241605" MODIFIED="1677283331779" TEXT="Export als &#xbb;Flat SVG&#xab; scheitert mit einem Logikfehler">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      a bytes-like object is required, not &quot;str&quot;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1677283465368" ID="ID_1881375763" MODIFIED="1677283523222" TEXT="mu&#xdf; mir die Geometrie aus dem XML per Hand extrahieren">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1677283530663" ID="ID_643259548" MODIFIED="1677284165733">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die konkrete Aufgabe ist mit FreeCAD elegant<br />&#8212; aber Resultate sind schwer zug&#228;nglich &#8212;
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-oh"/>
+<node COLOR="#435e98" CREATED="1677283735683" ID="ID_202336910" MODIFIED="1677284152469" TEXT="die Konstruktionsmittel sind ad&#xe4;quat">
+<linktarget COLOR="#5152b9" DESTINATION="ID_202336910" ENDARROW="Default" ENDINCLINATION="-527;-15;" ID="Arrow_ID_977343845" SOURCE="ID_1507492450" STARTARROW="None" STARTINCLINATION="-163;204;"/>
+</node>
+<node COLOR="#435e98" CREATED="1677283745698" ID="ID_1707816095" MODIFIED="1677284160611" TEXT="die Konstruktion l&#xe4;&#xdf;t sich leicht aufbauen"/>
+<node CREATED="1677283756954" ID="ID_550771506" MODIFIED="1677283773330" TEXT="das Resultat ist aber schwer nachvollziehbar"/>
+<node CREATED="1677283775971" ID="ID_906696321" MODIFIED="1677283797495" TEXT="die Konstruktion kann nicht exportiert oder sauber dargestellt werden"/>
+<node COLOR="#435e98" CREATED="1677283798612" ID="ID_178736804" MODIFIED="1677284158056" TEXT="letztlich habe ich nur die Koordinaten im XML">
+<arrowlink COLOR="#d93353" DESTINATION="ID_314954569" ENDARROW="Default" ENDINCLINATION="229;0;" ID="Arrow_ID_1387442926" STARTARROW="None" STARTINCLINATION="-193;12;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1677284059069" ID="ID_239372381" MODIFIED="1677284076170" TEXT="in diesem konkreten Fall brauche ich nur ein paar numerische Koordinaten"/>
+<node CREATED="1677284078398" ID="ID_314954569" MODIFIED="1677284135625" TEXT="die habe ich jetzt (manuell aus dem XML entnehmen)">
+<linktarget COLOR="#d93353" DESTINATION="ID_314954569" ENDARROW="Default" ENDINCLINATION="229;0;" ID="Arrow_ID_1387442926" SOURCE="ID_178736804" STARTARROW="None" STARTINCLINATION="-193;12;"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1677284093289" ID="ID_445049749" MODIFIED="1677284109270" TEXT="Fazit: keine generell brauchbare L&#xf6;sung">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677284189119" ID="ID_848175311" MODIFIED="1677284204214" TEXT="Dokumentation im SVG darstellen">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677285339149" ID="ID_622350527" MODIFIED="1677285395543" TEXT="manuell die Koordinaten ins SVG reinschreiben">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677285356443" ID="ID_1264869426" MODIFIED="1677285395543" TEXT="von diesen Eckpunkten ausgehend die Konstruktion rekonstruieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1677285374042" ID="ID_597185643" MODIFIED="1677285392527" TEXT="Ma&#xdf;gabe: jemand anders soll diese Konstruktion verstehen k&#xf6;nnen">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677285400989" ID="ID_771507385" MODIFIED="1677285419646" TEXT="Koordinaten direkt in den Cairo-Zeichencode &#xfc;bernehmen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675902536517" ID="ID_827367364" MODIFIED="1675902552151" TEXT="Anpassung an Allocation">
 <icon BUILTIN="flag-yellow"/>
@@ -28126,7 +28548,7 @@
 </node>
 <node COLOR="#435e98" CREATED="1676085882028" ID="ID_1638208695" MODIFIED="1676085948819" TEXT="Verhalten explizit anfordern">
 <icon BUILTIN="idea"/>
-<node CREATED="1676085910066" ID="ID_1461288066" MODIFIED="1676085927242" TEXT="das Stave-Bracked : expand = false"/>
+<node CREATED="1676085910066" ID="ID_1461288066" MODIFIED="1676085927242" TEXT="das Stave-Bracket : expand = false"/>
 <node CREATED="1676085928118" ID="ID_1335925100" MODIFIED="1676085936857" TEXT="das Head-Control : expand= true"/>
 </node>
 <node COLOR="#338800" CREATED="1676085939157" ID="ID_1665806137" MODIFIED="1676085945174" TEXT="Problem gel&#xf6;st">
@@ -69781,6 +70203,141 @@
 <node CREATED="1624113691812" ID="ID_1163351000" MODIFIED="1624113728401" TEXT="f&#xfc;r eine abgetrennte Form mu&#xdf; man den Startpunkt explizit per move_to(x,y) setzen">
 <icon BUILTIN="messagebox_warning"/>
 </node>
+</node>
+</node>
+</node>
+<node CREATED="1677191161908" HGAP="69" ID="ID_1598706179" MODIFIED="1677191736708" TEXT="Umgang mit SVG" VSHIFT="29">
+<linktarget COLOR="#4660c4" DESTINATION="ID_1598706179" ENDARROW="Default" ENDINCLINATION="-1583;-200;" ID="Arrow_ID_1296361422" SOURCE="ID_1618186555" STARTARROW="Default" STARTINCLINATION="-2177;271;"/>
+<node CREATED="1677191174685" ID="ID_1839405957" MODIFIED="1677191200069" TEXT="Basiswissen">
+<node CREATED="1677191211677" ID="ID_897956475" MODIFIED="1677191216323" TEXT="es ist ein XML-Standard"/>
+</node>
+<node CREATED="1677191231654" ID="ID_1597077699" MODIFIED="1677191933161" TEXT="Koordinaten und Transformationen">
+<linktarget COLOR="#6f90b6" DESTINATION="ID_1597077699" ENDARROW="Default" ENDINCLINATION="-895;71;" ID="Arrow_ID_1698154465" SOURCE="ID_1613786140" STARTARROW="None" STARTINCLINATION="-1020;86;"/>
+<node CREATED="1677191243092" ID="ID_1422042718" MODIFIED="1677191246287" TEXT="Bezugssystem">
+<node CREATED="1677191248717" ID="ID_1388848012" MODIFIED="1677198334322" TEXT="Ursprung: obere linke Ecke des Dokuments"/>
+<node CREATED="1677191272112" ID="ID_1654409714" MODIFIED="1677198338441" TEXT="positive Werte nach rechts und unten"/>
+<node CREATED="1677198686263" ID="ID_1665325090" MODIFIED="1677198773687" TEXT="UI-Anzeige: Lineal und Transformationen von unten nach oben">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      anscheinend gibt es eine Konvention, welche die im UI sichtbaren Koordinaten in vertikaler Richtung spiegelt; auch ist der auf dem Lineal angezeigte Ursprung unten links
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1677191323713" ID="ID_1754370087" MODIFIED="1677191337403" TEXT="Gruppen werden gemeinsam transformiert">
+<node CREATED="1677191339255" ID="ID_836434984" MODIFIED="1677191361440" TEXT="alle Gruppen aufl&#xf6;sen &#x27f9; Transformationen im Element angewendet"/>
+<node CREATED="1677191395503" ID="ID_890070784" MODIFIED="1677191443488">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Koordinaten<i>&#160;&#187;vers&#228;ubern&#171;</i>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1677191449424" ID="ID_732340507" MODIFIED="1677191541569" TEXT="Objekte in einer (flachen) Gruppe">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1677191477803" ID="ID_731083583" MODIFIED="1677191544059" TEXT="logischer Bezugspunkt &#x27fc; Dokument-Ursprung">
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1677191507606" ID="ID_509272377" MODIFIED="1677191546655" TEXT="Gruppierung aufl&#xf6;sen (&#x27f9; anwenden)">
+<icon BUILTIN="full-3"/>
+</node>
+<node CREATED="1677191525514" ID="ID_1625442685" MODIFIED="1677191549352" TEXT="erneut gruppieren und beliebig transformieren">
+<icon BUILTIN="full-4"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1677193200445" ID="ID_992404239" MODIFIED="1677193225288" TEXT="Konventionen: sauber f&#xfc;r Git">
+<node CREATED="1665801312049" ID="ID_987434179" MODIFIED="1677193745466" TEXT="Tip: Styles vereinfachen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und Inkscape wird das erhalten, solange man die betr. Features nicht wieder aktiviert. Im Besonderen kann man
+    </p>
+    <ul>
+      <li>
+        alle &quot;Stroke&quot;-Features entfernen, wenn der Stroke deaktiviert ist
+      </li>
+      <li>
+        opacity:1 weglassen
+      </li>
+      <li>
+        die Defaults &quot;color:#000000;display:inline;overflow:visible;visibility:visible;&quot;&#160;&#160;kann man meist weglassen
+      </li>
+      <li>
+        diverse Vector-Filter und display-styles weglassen (wenn sie auf dem default-Wert stehen)
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1677193557813" ID="ID_1283963549" MODIFIED="1677193576432" TEXT="Beispiel-1">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      style=&quot;fill:black;fill-opacity:0.5;stroke:#5a8fb2;stroke-opacity:1;stroke-width:0.1&quot;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1677193578234" ID="ID_1553838226" MODIFIED="1677193626515" TEXT="Beispiel-2">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      style=&quot;fill:#ffffff;fill-opacity:0.75;stroke:none;stroke-width:0.05&quot;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1677197293221" ID="ID_119422640" MODIFIED="1677197370570" TEXT="Verhalten stark konfigurierbar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aber leider nur als globales Verhalten der Inkscape-Installation
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1677197311790" ID="ID_680061629" MODIFIED="1677197317737" TEXT="Grad der XML-Vereinfachung"/>
+<node CREATED="1677197318326" ID="ID_237170915" MODIFIED="1677197322760" TEXT="numerische Pr&#xe4;zesion"/>
+<node CREATED="1677197324300" ID="ID_807721887" MODIFIED="1677197330719" TEXT="automatisches Reduzieren von Styles"/>
+<node CREATED="1677197342730" ID="ID_452445462" MODIFIED="1677197424732" TEXT="ob Transformationen angewendet werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Behaviour &gt; Transforms &gt; store optimised
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1677197426650" ID="ID_1370427344" MODIFIED="1677197447842" TEXT="ob Gradienten und Pattern transformiert werden"/>
 </node>
 </node>
 </node>

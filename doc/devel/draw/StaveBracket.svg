@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="100mm"
+   height="100mm"
+   viewBox="0 0 100 100"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="StaveBracket.svg">
+  <title
+     id="title815">StaveBracket</title>
+  <defs
+     id="defz" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="4.4873333"
+     inkscape:cx="54.880443"
+     inkscape:cy="362.36907"
+     inkscape:document-units="mm"
+     inkscape:current-layer="svg8"
+     showgrid="true"
+     width="100mm"
+     inkscape:window-width="1680"
+     inkscape:window-height="1031"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     scale-x="1"
+     viewbox-height="100"
+     showguides="true">
+    <inkscape:grid
+       type="xygrid"
+       id="snapgrid"
+       units="mm"
+       spacingx="1"
+       spacingy="1"
+       visible="true" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadatz">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>StaveBracket</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:date>Feb.2023</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Ichthyostega</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>Lumiera Documentation: CC by SA or GPL 2+</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:description>Design of the brackets to indicate a Track's scope in the Lumiera Timeline UI</dc:description>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Drawing:Bracket"
+     inkscape:groupmode="layer"
+     id="layer1" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Construction" />
+  <rect
+     style="fill:none;stroke:teal;stroke-width:0.1"
+     id="rect821"
+     width="10"
+     height="10"
+     x="77"
+     y="61" />
+  <g
+     id="phi_pos"
+     transform="translate(20,50)">
+    <g
+       id="phi">
+      <rect
+         id="phiMaj"
+         y="0"
+         x="0"
+         height="10"
+         width="10"
+         style="fill:none;stroke:teal;stroke-width:0.1" />
+      <rect
+         id="phiMin"
+         y="0"
+         x="0"
+         height="6.1803398"
+         width="6.1803398"
+         style="fill:none;stroke:teal;stroke-width:0.1" />
+      <rect
+         id="phiMinI"
+         y="3.8196602"
+         x="3.8196602"
+         height="6.1803398"
+         width="6.1803398"
+         style="fill:none;stroke:teal;stroke-width:0.1" />
+      <text
+         id="phisym"
+         x="3.8193359"
+         y="6.0935059"
+         style="font-size:3px;font-family:Sans;fill:teal;stroke:none"
+         xml:space="preserve"><tspan
+           id="phispan"
+           sodipodi:role="line"
+           x="3.8193359"
+           y="6.0935059">Φ</tspan></text>
+    </g>
+  </g>
+  <g
+     id="r_dubline">
+    <rect
+       style="fill:none;stroke:teal;stroke-width:0.1"
+       id="r_bar"
+       width="3.8196602"
+       height="30"
+       x="0"
+       y="0" />
+    <rect
+       style="fill:none;stroke:teal;stroke-width:0.1"
+       id="r_vline"
+       width="10"
+       height="30"
+       x="0"
+       y="0" />
+  </g>
+  <g
+     id="r_mainsquare"
+     transform="matrix(2.6180339,0,0,2.6180339,0,0)"
+     style="stroke-width:0.0381966">
+    <g
+       id="g847">
+      <rect
+         style="fill:none;stroke:teal"
+         width="10"
+         height="10"
+         x="0"
+         y="0"
+         id="rect837" />
+      <rect
+         style="fill:none;stroke:teal"
+         width="6.1803398"
+         height="6.1803398"
+         x="0"
+         y="0"
+         id="rect839" />
+      <rect
+         style="fill:none;stroke:teal"
+         width="6.1803398"
+         height="6.1803398"
+         x="3.8196602"
+         y="3.8196602"
+         id="rect841" />
+    </g>
+  </g>
+</svg>
