@@ -28,8 +28,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.2436667"
-     inkscape:cx="30.664941"
-     inkscape:cy="361.12572"
+     inkscape:cx="-134.23558"
+     inkscape:cy="420.39176"
      inkscape:document-units="mm"
      inkscape:current-layer="svg8"
      showgrid="true"
@@ -146,92 +146,176 @@
      id="layer2"
      inkscape:label="Construction" >
     <g
-       id="r_trans">
+       id="r_trans"
+       transform="scale(10)">
       <g
          id="r_ref"
-         style="fill:none;stroke:teal;stroke-width:0.1">
+         style="fill:none;stroke:teal;stroke-width:0.01">
         <g
            id="r_dubline">
           <rect
-             style="fill:none;stroke:teal;stroke-width:0.1"
              id="r_bar"
-             width="3.8196602"
-             height="30"
-             x="0"
-             y="0" />
+             y="-1"
+             x="-0.38196602"
+             height="11"
+             width="0.38196602" />
           <rect
-             style="fill:none;stroke:teal;stroke-width:0.1"
              id="r_vline"
-             width="10"
-             height="30"
-             x="0"
-             y="0" />
+             y="0"
+             x="0.47213596"
+             height="10"
+             width="0.14589803" />
         </g>
         <g
-           id="r_mainsquare"
-           transform="matrix(2.6180339,0,0,2.6180339,0,-26.180339)"
-           style="stroke-width:0.0381966">
+           id="r_mainsquare">
           <rect
              id="r_square"
-             y="0"
-             x="0"
-             height="10"
-             width="10" />
+             y="-2.6180339"
+             x="-0.38196602"
+             height="2.6180339"
+             width="2.6180339" />
           <rect
              id="r_sq_min_nw"
-             y="0"
-             x="0"
-             height="6.1803398"
-             width="6.1803398" />
+             y="-2.6180339"
+             x="-0.38196602"
+             height="1.618034"
+             width="1.618034" />
           <rect
              id="r_sq_min_se"
-             y="3.8196602"
-             x="3.8196602"
-             height="6.1803398"
-             width="6.1803398" />
+             y="-1.618034"
+             x="0.61803401"
+             height="1.618034"
+             width="1.618034" />
         </g>
         <g
            id="r_construct">
           <path
              id="r_diagonal"
              inkscape:connector-curvature="0"
-             d="M 0,0 26,-26" />
+             d="M -0.38196602,0 2.236068,-2.618034" />
           <path
              id="r_dia_se"
              inkscape:connector-curvature="0"
-             d="M 10,0 26,-26" />
+             d="M 0.61803399,0 2.236068,-2.618034" />
           <path
              id="r_dia_nw"
              inkscape:connector-curvature="0"
-             d="M 0,-10 26,-26" />
+             d="M -0.38196601,-1 2.236068,-2.618034" />
           <path
              id="r_bisec_in"
              inkscape:connector-curvature="0"
-             d="M 13,-19 -9,-56" />
+             d="M 0.92705098,-1.809017 -2.5,-7.354102" />
           <path
              id="r_bisec_out"
              inkscape:connector-curvature="0"
-             d="M 13,-14 -20,-49" />
+             d="M 0.92705098,-1.309017 -4.618034,-6.854102" />
           <path
              id="r_arc_out"
              sodipodi:type="arc"
-             sodipodi:cy="-49"
-             sodipodi:cx="-20"
-             sodipodi:ry="53"
-             sodipodi:rx="53"
-             sodipodi:start="0.44429177"
-             sodipodi:end="1.2085032"
-             d="M 27.854511,-26.219619 A 53,53 0 0 1 -1.2157699,0.55958737 L -20,-49 Z" />
+             sodipodi:cy="-6.8541021"
+             sodipodi:cx="-4.6180339"
+             sodipodi:ry="8.0574799"
+             sodipodi:rx="8.0574799"
+             sodipodi:start="0.55357436"
+             sodipodi:end="1.017222"
+             d="M 2.2360679,-2.6180343 A 8.0574799,8.0574799 0 0 1 -0.38196626,-2.438908e-7 L -4.6180339,-6.8541021 Z" />
           <path
              id="r_arc_in"
              sodipodi:type="arc"
-             sodipodi:cy="-56"
-             sodipodi:cx="-9"
-             sodipodi:ry="48"
-             sodipodi:rx="48"
-             sodipodi:start="0.70190517"
-             sodipodi:end="1.3988087"
-             d="M 27.653446,-25.007664 A 48,48 0 0 1 -0.78523256,-8.7081657 L -9,-56 Z" />
+             sodipodi:cy="-7.3541021"
+             sodipodi:cx="-2.5"
+             sodipodi:ry="6.6978116"
+             sodipodi:rx="6.6978116"
+             sodipodi:start="0.78539816"
+             sodipodi:end="1.2490458"
+             d="m 2.236068,-2.6180341 a 6.6978116,6.6978116 0 0 1 -2.61803417,1.618034 L -2.5,-7.3541021 Z" />
+        </g>
+        <g
+           id="marks">
+          <g
+             id="g_ra1">
+            <path
+               id="arc843"
+               sodipodi:type="arc"
+               sodipodi:open="true"
+               sodipodi:cx="0.92705095"
+               sodipodi:cy="-1.3090169"
+               sodipodi:rx="0.20210405"
+               sodipodi:ry="0.20210405"
+               sodipodi:start="2.4647705"
+               sodipodi:end="3.8323069"
+               d="m 0.7694973,-1.1824354 a 0.20210405,0.20210405 0 0 1 0.001774,-0.2553396"
+               style="stroke-width:0.005" />
+            <circle
+               id="dot845"
+               cx="0.81736434"
+               cy="-1.3015919"
+               r="0.0068929307"
+               style="fill:teal" />
+          </g>
+          <g
+             id="g_ra2">
+            <path
+               id="arc851"
+               sodipodi:type="arc"
+               sodipodi:open="true"
+               sodipodi:cy="-1.974557"
+               sodipodi:cx="0.48114821"
+               sodipodi:ry="0.20210405"
+               sodipodi:rx="0.20210405"
+               sodipodi:start="2.4647705"
+               sodipodi:end="3.8323069"
+               d="m 0.32359457,-1.8479755 a 0.20210405,0.20210405 0 0 1 0.001774,-0.2553396"
+               transform="rotate(13.424815)"
+               style="stroke-width:0.005" />
+            <circle
+               id="dot853"
+               cy="-1.967132"
+               cx="0.37146151"
+               r="0.0068929307"
+               transform="rotate(13.424815)"
+               style="fill:teal" />
+          </g>
+          <g
+             id="g_ra3">
+            <path
+               id="arc857"
+               sodipodi:type="arc"
+               sodipodi:open="true"
+               sodipodi:cx="2.7623603"
+               sodipodi:cy="-2.0568469"
+               sodipodi:rx="0.20210405"
+               sodipodi:ry="0.20210405"
+               sodipodi:start="2.4282964"
+               sodipodi:end="3.8449864"
+               d="m 2.6095274,-1.9246041 a 0.20210405,0.20210405 0 0 1 -0.0013,-0.2629656"
+               inkscape:transform-center-y="0.33749016"
+               inkscape:transform-center-x="0.98651359"
+               transform="rotate(-12.81723)"
+               style="stroke-width:0.005" />
+            <path
+               id="arc863"
+               sodipodi:type="arc"
+               sodipodi:open="true"
+               sodipodi:cy="-2.5990727"
+               sodipodi:cx="2.2625489"
+               sodipodi:ry="0.23583578"
+               sodipodi:rx="0.23620161"
+               sodipodi:start="2.4390107"
+               sodipodi:end="3.8717116"
+               d="m 2.0822854,-2.4466779 a 0.23620161,0.23583578 0 0 1 0.00427,-0.3096874"
+               transform="matrix(0.9999643,-0.00844977,0.00919355,0.99995774,0,0)"
+               inkscape:transform-center-x="1.1537383"
+               inkscape:transform-center-y="0.0093829878"
+               style="stroke-width:0.005" />
+            <circle
+               id="dot859"
+               cx="2.6526737"
+               cy="-2.0494218"
+               r="0.0068929307"
+               transform="rotate(-12.81723)"
+               style="fill:teal" />
+          </g>
         </g>
       </g>
     </g>
