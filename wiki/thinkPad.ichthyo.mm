@@ -28079,7 +28079,7 @@
 </node>
 <node CREATED="1676156477801" ID="ID_772056246" MODIFIED="1676156487723" TEXT="Grundstruktur zeichnen: Klammer">
 <node CREATED="1676156693199" ID="ID_1410623513" MODIFIED="1676156728537" TEXT="geschwungene Kappen">
-<node COLOR="#435e98" CREATED="1676156831767" ID="ID_1352090582" MODIFIED="1677284185352" TEXT="Problem: wie konstruieren?">
+<node COLOR="#435e98" CREATED="1676156831767" FOLDED="true" ID="ID_1352090582" MODIFIED="1677284185352" TEXT="Problem: wie konstruieren?">
 <icon BUILTIN="help"/>
 <node CREATED="1676156890344" ID="ID_324278944" MODIFIED="1676156912279" TEXT="Geheimwissen &#x2014; wie so oft in der Typographie"/>
 <node CREATED="1676156918897" ID="ID_489719344" LINK="https://en.wikipedia.org/wiki/List_of_musical_symbols" MODIFIED="1676156951217" TEXT="habe nur visuelle Beispiele &#x2014; z.B. Wikipedia"/>
@@ -28632,9 +28632,182 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677285400989" ID="ID_771507385" MODIFIED="1677285419646" TEXT="Koordinaten direkt in den Cairo-Zeichencode &#xfc;bernehmen">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1677285400989" ID="ID_771507385" MODIFIED="1677426096361" TEXT="Koordinaten direkt in den Cairo-Zeichencode &#xfc;bernehmen">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1677417336095" ID="ID_953306031" MODIFIED="1677425935036" TEXT="Einrichtung : Zeichnen gef&#xfc;llter Formen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1677417369338" ID="ID_711895669" LINK="https://www.cairographics.org/tutorial/" MODIFIED="1677417599360" TEXT="die Cairo Zeichen-Operationen sind modelliert als Druckvorgang">
+<node CREATED="1677417850939" ID="ID_1653836867" MODIFIED="1677418063370" TEXT="&#xbb;source&#xab; : eine Farbe, ein F&#xfc;llmuster, ein Bitmap oder eine bestehende Cairo-&#xbb;surface&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      der Druck-Metapher gem&#228;&#223; ist das die &#8222;Farbwalze&#8220; oder das &#8222;Stempelkissen&#8220;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1677417926098" ID="ID_142794869" MODIFIED="1677418000689" TEXT="&#xbb;surface&#xab; : die Zeichenfl&#xe4;che, auf der Cairo arbeitet.">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        Kann angezeigt werden
+      </li>
+      <li>
+        Kann in ein Bitmap gerendered werden
+      </li>
+      <li>
+        Kann als &#187;source&#171; f&#252;r weitere Zeichenvorg&#228;nge dienen
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1677418174529" ID="ID_546569349" MODIFIED="1677418227017" TEXT="&#xbb;path&#xab; : die aktive Kontur, welche die Maske definiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wird mit jeder stroke() oder fill()-Operation geleert. Ist Teil des Context, und weitere Zeichen-Operationen f&#252;gen zu dem Pfad hinzu
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1677417629676" ID="ID_1746207798" MODIFIED="1677417638096" TEXT="stroke() : Kontur zeichnen"/>
+<node CREATED="1677417639087" ID="ID_1449245923" MODIFIED="1677417654897" TEXT="fill() : Masken-Inneres f&#xfc;llen">
+<node CREATED="1677419615244" ID="ID_1306302451" MODIFIED="1677419618972" TEXT="Fill-Rule">
+<node CREATED="1677420366268" ID="ID_1749745867" LINK="https://www.cairographics.org/manual/cairo-cairo-t.html#cairo-set-fill-rule" MODIFIED="1677420398715" TEXT="cairo_set_fill_rule"/>
+<node CREATED="1677420412998" ID="ID_1655853556" LINK="https://www.cairographics.org/manual/cairo-cairo-t.html#cairo-fill-rule-t" MODIFIED="1677420423252" TEXT="cairo_fill_rule_t">
+<node CREATED="1677420567785" ID="ID_1786405165" MODIFIED="1677420597785" TEXT="WINDING : Drehsinn der Begrenzung z&#xe4;hlt"/>
+<node CREATED="1677420598805" ID="ID_709687384" MODIFIED="1677420627615" TEXT="EVENODD: Begrenzungen nach Au&#xdf;en werden gez&#xe4;hlt"/>
+</node>
+</node>
+</node>
+<node CREATED="1677417818031" ID="ID_469249374" MODIFIED="1677417837746" TEXT="paint() : &#xfc;bertr&#xe4;gt Quelle ohne Maske auf die Zeichenfl&#xe4;che"/>
+</node>
+<node CREATED="1677417491547" ID="ID_832294440" MODIFIED="1677417510732" TEXT="ein geschlossener Path erzeugt eine Maske, die gef&#xfc;llt wird">
+<icon BUILTIN="idea"/>
+<node CREATED="1677419117535" ID="ID_1895718071" MODIFIED="1677419158897" TEXT="close_path() : schlie&#xdf;t den Pfad durch eine Linie zum Startpunkt zur&#xfc;ck"/>
+<node CREATED="1677419358419" ID="ID_414920706" LINK="https://www.cairographics.org/manual/cairo-Transformations.html#cairo-translate" MODIFIED="1677419375859" TEXT="Koordinaten-Transformation">
+<node CREATED="1677419162869" ID="ID_305831750" MODIFIED="1677419232544" TEXT="translate(dx,dy)) : verschiebt den Ursprung der &#xbb;user space coordinates&#xab; um (dx,dy)"/>
+<node CREATED="1677419197776" ID="ID_1423561245" MODIFIED="1677419226680" TEXT="scale(sx,xy) : skaliert die aktuellen Achen der &#xbb;user space coordinates&#xab;"/>
+<node CREATED="1677419275529" ID="ID_572343688" MODIFIED="1677419324939" TEXT="rotate(rad) : dreht die Achsen der &#xbb;user space coordinates&#xab; um rad Radians"/>
+</node>
+<node CREATED="1677419509304" ID="ID_1727557351" MODIFIED="1677419543819" TEXT="Transformationen k&#xf6;nnen jederzeit gesetzt werden; auch zwischen Zeichnen und stroke()">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1677426171012" ID="ID_183450251" MODIFIED="1677426297532" TEXT="Benennung">
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1677426176707" ID="ID_1699845140" MODIFIED="1677426300779" TEXT="bleibe bei &#xbb;Au&#xdf;enbogen&#xab; und &#xbb;Innenbogen&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil ich diese Benennungen von Anfang an auch so in FreeCAD verwendet habe, und jetzt nicht alles umbenennen m&#246;chte
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1677426194737" ID="ID_465793703" MODIFIED="1677426300779" TEXT="mache aber die umgekehrte Ordnung im Kommentar klar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das ist n&#228;mlich potentiell verwirrend: der <i>Au&#223;enbogen</i>&#160; bildet die <i>Innenkontur<b>&#160;</b></i>der Klammer, weil der Schwung von der Klammer weg nach oben bzw. unten geht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1677425937349" ID="ID_368774299" MODIFIED="1677425952273" TEXT="Koordinaten als Konstanten &#xfc;bernehmen">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1677426110196" ID="ID_843421619" MODIFIED="1677426129464" TEXT="Erkennbare Basiseinheiten durch &#x3a6; ausdr&#xfc;cken">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1677426131233" ID="ID_231769096" MODIFIED="1677426872580" TEXT="BAR">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_231769096" ENDARROW="Default" ENDINCLINATION="-186;54;" ID="Arrow_ID_1647326271" SOURCE="ID_270081654" STARTARROW="None" STARTINCLINATION="120;19;"/>
+<icon BUILTIN="pencil"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426131233" ID="ID_1111801677" MODIFIED="1677426892883" TEXT="LINE">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1111801677" ENDARROW="Default" ENDINCLINATION="-186;54;" ID="Arrow_ID_1520723305" SOURCE="ID_1333503744" STARTARROW="None" STARTINCLINATION="71;13;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426140000" ID="ID_916071681" MODIFIED="1677426143648" TEXT="SQUARE">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1677426145410" ID="ID_1241973163" MODIFIED="1677426155118" TEXT="ARC_I">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1677426150023" ID="ID_1243678552" MODIFIED="1677426155119" TEXT="ARC_O">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1677425955233" ID="ID_898214588" MODIFIED="1677425968693" TEXT="Funktion zum Zeichnen der Kappe(n)">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1677425981509" ID="ID_63989852" MODIFIED="1677426000480" TEXT="wendet low-Level-Skalierung an">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1677426001458" ID="ID_1476057716" MODIFIED="1677426010466" TEXT="implementiert Bogensegmente">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1677426011889" ID="ID_106770327" MODIFIED="1677426024465" TEXT="Cairo bietet beide Drehrichtungen an">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1677426025872" ID="ID_217470533" MODIFIED="1677426037264" TEXT="aber wir m&#xfc;ssen einen geschlossenen Pfad zeichnen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#435e98" CREATED="1677426040749" ID="ID_1140979110" MODIFIED="1677426066194" TEXT="zeichne erst den &#xe4;u&#xdf;eren Bogen, dann den inneren Bogen zur&#xfc;ck">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1677426076977" ID="ID_22251519" MODIFIED="1677426088890" TEXT="visueller Test : Ergebnis plausibel">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426582635" ID="ID_78847857" MODIFIED="1677426587874" TEXT="Balken zeichnen">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426794738" ID="ID_270081654" MODIFIED="1677426873746" TEXT="dicker Balken">
+<arrowlink DESTINATION="ID_231769096" ENDARROW="Default" ENDINCLINATION="-186;54;" ID="Arrow_ID_1647326271" STARTARROW="None" STARTINCLINATION="120;19;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426794738" ID="ID_1333503744" MODIFIED="1677426884359" TEXT="d&#xfc;nne Linie">
+<arrowlink DESTINATION="ID_1111801677" ENDARROW="Default" ENDINCLINATION="-186;54;" ID="Arrow_ID_1520723305" STARTARROW="None" STARTINCLINATION="71;13;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426603105" ID="ID_243044944" MODIFIED="1677426609439" TEXT="Gesamtanordnung steuern">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426726852" ID="ID_1196135559" MODIFIED="1677426735981" TEXT="Klammer sinnvoll positionieren">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426763414" ID="ID_591151065" MODIFIED="1677426776590" TEXT="Balken-L&#xe4;nge">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426770828" ID="ID_515832295" MODIFIED="1677426776600" TEXT="Ober/Unterkappe">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426740361" ID="ID_1498455508" MODIFIED="1677426748306" TEXT="Ankerpunkt f&#xfc;r Sub-Scopes">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1677426668947" ID="ID_1313952369" MODIFIED="1677426704721" TEXT="Farbe setzen">
+<linktarget COLOR="#603482" DESTINATION="ID_1313952369" ENDARROW="Default" ENDINCLINATION="-273;44;" ID="Arrow_ID_1766960947" SOURCE="ID_1533322932" STARTARROW="None" STARTINCLINATION="102;9;"/>
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 </node>
@@ -28703,6 +28876,14 @@
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1677426647111" ID="ID_1384220998" MODIFIED="1677426654411" TEXT="Erg&#xe4;nzungen">
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1677426657149" ID="ID_1533322932" MODIFIED="1677426718528" TEXT="Farbe der Klammer aus CSS">
+<arrowlink COLOR="#603482" DESTINATION="ID_1313952369" ENDARROW="Default" ENDINCLINATION="-273;44;" ID="Arrow_ID_1766960947" STARTARROW="None" STARTINCLINATION="102;9;"/>
+<icon BUILTIN="bell"/>
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469735149" ID="ID_704791408" MODIFIED="1563469741153" TEXT="Selection-State zeigen">

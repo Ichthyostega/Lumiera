@@ -54,6 +54,58 @@ namespace timeline {
   
   namespace {
     const uint REQUIRED_WIDTH_px = 30;
+    
+    const double ORG       = 0.0;
+    const double PHI       = (1.0 + sqrt(5)) / 2.0; // Golden Ratio Φ = 1.6180339887498948482
+    const double PHI_MAJOR = PHI - 1.0;             // 1/Φ   = Φ-1
+    const double PHI_MINOR = 2.0 - PHI;             // 1-1/Φ = 2-Φ
+    const double PHISQUARE = 1.0 + PHI;             // Φ²    = 1+Φ
+    
+    const double BAR_LEFT = -PHI_MINOR;
+    
+    const double SQUARE_TIP_X = 2.2360679774997880;
+    const double SQUARE_TIP_Y = -PHISQUARE;
+    
+    const double ARC_O_XC  = -(3.0 + PHI);
+    const double ARC_O_YC  = -6.8541019662496847;   // +Y points downwards
+    const double ARC_O_R   =  8.0574801069408135;   // Radius of the arc segment
+    const double ARC_O_TIP =  0.5535743588970450;   // Radians ↻ clockwise from +X
+    const double ARC_O_END =  1.0172219678978512;
+    
+    const double ARC_I_XC  = -2.5;
+    const double ARC_I_YC  = -7.3541019662496883;
+    const double ARC_I_R   =  6.6978115661011230;
+    const double ARC_I_TIP =  0.7853981633974485;
+    const double ARC_I_END =  1.2490457723982538;
+    
+    /**
+     * Draw the curved end cap of the bracket, inspired by musical notation.
+     * @param ox horizontal offset of the anchor point in pixels
+     * @param oy vertical anchor point offset, downwards is positive
+     * @param scale stretch the design; default is bracket line width = 1.0
+     * @param upside whether to draw the upper cup (`true`) or the lower
+     * @remark See `doc/devel/draw/StaveBracket.svg` for explanation
+     */
+    void
+    drawCap (CairoC cox, double ox, double oy, double scale, bool upside=true)
+    {
+      cox->save();
+      cox->translate (ox,oy);
+      cox->scale (scale,scale); /////////////////TODO: flip unless upside
+      cox->set_source_rgb(0.0, 0.0, 0.8); ///////TICKET #1168 : retrieve colour from stylesheet
+      // draw the inner contour of the bracket cap,
+      // which is the outer arc from left top of the bar to the tip point
+      cox->move_to(BAR_LEFT, ORG);
+      cox->arc_negative(ARC_O_XC,ARC_O_YC,ARC_O_R, ARC_O_END, ARC_O_TIP);
+      // draw the outer contour of the bracket cap,
+      // which is the inner arc from tip point to Φ-minor of the enclosing square
+      cox->arc         (ARC_I_XC,ARC_I_YC,ARC_I_R, ARC_I_TIP, ARC_I_END);
+      cox->close_path();
+      //
+      cox->fill();
+      //
+      cox->restore();
+    }
   }
   
   
@@ -88,6 +140,8 @@ namespace timeline {
     cox->line_to(0, h);
     cox->stroke();
     /////////////////////////////////////////////TICKET #1018 : placeholder drawing
+    
+    drawCap (cox, w/2.0, h/2.0, 5.0);  //////////TODO proper scale and placement
     
     return event_is_handled;
   }
