@@ -28793,6 +28793,10 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426603105" ID="ID_243044944" MODIFIED="1677426609439" TEXT="Gesamtanordnung steuern">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677458294653" ID="ID_1105975491" MODIFIED="1677458327745" TEXT="brauche Zugriff auf Layout-Steuerung">
+<arrowlink COLOR="#8255b2" DESTINATION="ID_883997565" ENDARROW="Default" ENDINCLINATION="108;-242;" ID="Arrow_ID_1785981386" STARTARROW="None" STARTINCLINATION="-291;20;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426726852" ID="ID_1196135559" MODIFIED="1677426735981" TEXT="Klammer sinnvoll positionieren">
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426763414" ID="ID_591151065" MODIFIED="1677426776590" TEXT="Balken-L&#xe4;nge">
@@ -28811,9 +28815,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675902536517" ID="ID_827367364" MODIFIED="1675902552151" TEXT="Anpassung an Allocation">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677451594072" ID="ID_1658195962" MODIFIED="1677451603991" TEXT="Layout-Steuerung">
 <icon BUILTIN="flag-yellow"/>
-<node COLOR="#338800" CREATED="1676046656020" ID="ID_739149798" MODIFIED="1676085956745" TEXT="horizontale Ausdehnung steuern">
+<node COLOR="#338800" CREATED="1676046656020" ID="ID_739149798" MODIFIED="1677451623361" TEXT="horizontale Ausdehnung steuern">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1676046671288" ID="ID_823909101" MODIFIED="1676047541409" TEXT="intrinsich feste Ausdehnung erforderlich, nun H&#xf6;he variabel">
 <icon BUILTIN="yes"/>
@@ -28865,6 +28869,105 @@
 </node>
 <node COLOR="#338800" CREATED="1676085939157" ID="ID_1665806137" MODIFIED="1676085945174" TEXT="Problem gel&#xf6;st">
 <icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675902536517" ID="ID_827367364" MODIFIED="1677451616418" TEXT="Anpassung an Allocation">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677451786789" ID="ID_883997565" MODIFIED="1677458321599" TEXT="Styling per CSS">
+<linktarget COLOR="#8255b2" DESTINATION="ID_883997565" ENDARROW="Default" ENDINCLINATION="108;-242;" ID="Arrow_ID_1785981386" SOURCE="ID_1105975491" STARTARROW="None" STARTINCLINATION="-291;20;"/>
+<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1677451800420" ID="ID_1164109956" MODIFIED="1677457558599" TEXT="Entscheidung: Modell?">
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1677451818657" ID="ID_1508791771" MODIFIED="1677457503784" TEXT="global oder individuell?">
+<icon BUILTIN="help"/>
+<node CREATED="1677451850726" ID="ID_1657882401" MODIFIED="1677457383789" TEXT="global">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1677451889120" ID="ID_1375157373" MODIFIED="1677451890620" TEXT="alle StaveBracket-Instanzen teilen sich ein Setting"/>
+<node CREATED="1677457339549" ID="ID_1266593311" MODIFIED="1677457369607" TEXT="das w&#xe4;re der YAGNI-Ansatz: zeig mir da&#xdf; Du differenziertes Styling &#xfc;berhaupt brauchst">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1677451946578" ID="ID_256050915" MODIFIED="1677452020472" TEXT="hierf&#xfc;r w&#xe4;re eine non-Standard-Konvention notwendig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...um festzulegen, an welcher Stelle in der Hierarchie dieses Styling definiert ist; allerdings machen wir bereits genau dies f&#252;r die Timeline im Allgemeinen (und zwar genau wegen dem custom-drawing)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1677451877866" ID="ID_1658993921" MODIFIED="1677457386662" TEXT="individuell">
+<icon BUILTIN="forward"/>
+<node CREATED="1677451923027" ID="ID_1111541133" MODIFIED="1677451935717" TEXT="das w&#xe4;re das regul&#xe4;re Verhalten eines Widgets"/>
+<node CREATED="1677451894781" ID="ID_563371586" MODIFIED="1677451919408" TEXT="jedes StaveBracket ruft CSS-Style gem&#xe4;&#xdf; Widget-Path ab"/>
+<node CREATED="1677457154222" ID="ID_1190875296" MODIFIED="1677457162257" TEXT="Performance-Implikationen unklar">
+<node CREATED="1677457165969" ID="ID_906548629" MODIFIED="1677457196177" TEXT="API und Beispiele implizieren Zugriff auf einfache Settings"/>
+<node CREATED="1677457246159" ID="ID_974418122" MODIFIED="1677457264603" TEXT="rein praktisch wird aber der draw()-Code schon oft aufgerufen"/>
+<node CREATED="1677457197200" ID="ID_1837634552" MODIFIED="1677457215893" TEXT="vermutlich gibt es irgendwo im Framework ein Caching"/>
+<node CREATED="1677457217538" ID="ID_789755094" MODIFIED="1677457490369" TEXT="und der GTK-Drawing-Code macht &#xe4;hnliche Zugriffe">
+<arrowlink COLOR="#9e3662" DESTINATION="ID_1307381473" ENDARROW="Default" ENDINCLINATION="-2;-37;" ID="Arrow_ID_826896124" STARTARROW="None" STARTINCLINATION="-50;3;"/>
+</node>
+<node CREATED="1677457273534" ID="ID_617186212" MODIFIED="1677457320336" TEXT="letztlich haben wir hier keinen gef&#xe4;hrlichen Hebel">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...anders als bei den Einzel-Widgets im Timeline-Content, haben wir hier im Header nur ein StaveBracket-Widget pro Track
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1677457389357" ID="ID_1307381473" MODIFIED="1677457500256" TEXT="gem&#xe4;&#xdf; &quot;principle of least surprise&quot; ... erst mal an den Standard halten">
+<linktarget COLOR="#9e3662" DESTINATION="ID_1307381473" ENDARROW="Default" ENDINCLINATION="-2;-37;" ID="Arrow_ID_826896124" SOURCE="ID_789755094" STARTARROW="None" STARTINCLINATION="-50;3;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node CREATED="1677457522290" ID="ID_1098941719" MODIFIED="1677457553805" TEXT="Direktzugriff vom Widget &#x27f6; StyleContext">
+<node CREATED="1677457632425" ID="ID_1473941449" MODIFIED="1677457653079" TEXT="&#x27f9; Konsequenz: es mu&#xdf; eine Instanz-Methode sein"/>
+<node CREATED="1677457677976" ID="ID_1603877421" MODIFIED="1677457706351" TEXT="(inline)Accessor-Funktionen zur Vereinfachung der Notation"/>
+</node>
+</node>
+<node CREATED="1677457832609" ID="ID_1478500520" MODIFIED="1677457839466" TEXT="Festzulegende Eigenschaften">
+<node CREATED="1677457850153" ID="ID_1305504262" MODIFIED="1677457863755" TEXT="Bezugsachse horizontal">
+<node CREATED="1677458156264" ID="ID_857815456" MODIFIED="1677458189479" TEXT="ergbit sich aus Padding, Scale und dem Design selber (&#x3a6;-minor)"/>
+</node>
+<node CREATED="1677457867207" ID="ID_1126720758" MODIFIED="1677457876146" TEXT="Ankerpunkt obere/untere Kappe">
+<node CREATED="1677458198238" ID="ID_1920467800" MODIFIED="1677458213788" TEXT="ganz analog, Padding + Scale"/>
+</node>
+<node CREATED="1677458010560" ID="ID_1003264563" MODIFIED="1677458021502" TEXT="Basisgr&#xf6;&#xdf;e (=Linienbreite)">
+<node CREATED="1677458053102" ID="ID_1614036555" MODIFIED="1677458063936" TEXT="k&#xf6;nnte man erst mal am DPI-Wert festmachen"/>
+<node CREATED="1677458064756" ID="ID_1912408866" MODIFIED="1677458088765" TEXT="man k&#xf6;nnte es zus&#xe4;tzlich auch an einer default-Schriftgr&#xf6;&#xdf;e festmachen"/>
+<node CREATED="1677458115914" ID="ID_1725640561" MODIFIED="1677458124777" TEXT="alternativ w&#xe4;re ein spezial-Setting denkbar"/>
+<node CREATED="1677458246716" ID="ID_120680704" MODIFIED="1677458276253">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist der <b>Basiswert</b>&#160;f&#252;r weiteres Layout-Entscheidungen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node CREATED="1677457975185" ID="ID_1711981540" MODIFIED="1677457995178" TEXT="Farbe der Klammer">
+<node CREATED="1677458102355" ID="ID_1926644285" MODIFIED="1677458115114" TEXT="k&#xf6;nnte man an default-Schriftfarbe festmachen"/>
+<node CREATED="1677458115914" ID="ID_829449840" MODIFIED="1677458124777" TEXT="alternativ w&#xe4;re ein spezial-Setting denkbar"/>
+</node>
+<node CREATED="1677457971241" ID="ID_716437219" MODIFIED="1677458024907" TEXT="Padding">
+<node CREATED="1677458131835" ID="ID_1560054657" MODIFIED="1677458143628" TEXT="direkt aus CSS entnehmen"/>
 </node>
 </node>
 </node>

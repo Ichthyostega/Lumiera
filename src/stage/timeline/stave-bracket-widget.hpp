@@ -52,7 +52,8 @@
 namespace stage  {
 namespace timeline {
   
-  using CairoC = Cairo::RefPtr<Cairo::Context> const&;
+  using CairoC = PCairoContext const&;
+  using StyleC = PStyleContext const&;
 
 //  class TrackPresenter;
   

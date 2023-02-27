@@ -79,6 +79,37 @@ namespace timeline {
     const double ARC_I_END =  1.2490457723982538;
     
     /**
+     * Setup the base metric for this bracket drawing based on CSS styling.
+     * @remark the width of the double line is used as foundation to derive
+     *     further layout properties, based on the golden ratio.
+     * @return scale factor to apply to the base layout
+     */
+    double
+    determineScale (StyleC style)
+    {
+      UNIMPLEMENTED ("set base line width based on suitable CSS property");
+    }
+    
+    double
+    anchorLeft (double scale)
+    {
+      UNIMPLEMENTED ("place left anchor reference line");
+    }
+    
+    double
+    anchorUpper (double scale)
+    {
+      UNIMPLEMENTED ("place top cap vertical anchor");
+    }
+    
+    double
+    anchorLower (double scale, int canvasHeight)
+    {
+      UNIMPLEMENTED ("place bottom cap vertical anchor");
+    }
+    
+    
+    /**
      * Draw the curved end cap of the bracket, inspired by musical notation.
      * @param ox horizontal offset of the anchor point in pixels
      * @param oy vertical anchor point offset, downwards is positive
@@ -105,6 +136,12 @@ namespace timeline {
       cox->fill();
       //
       cox->restore();
+    }
+    
+    void
+    drawBar (CairoC cox, double leftX, double upperY, double lowerY, double scale)
+    {
+      UNIMPLEMENTED ("draw the double bar");
     }
   }
   
@@ -141,7 +178,15 @@ namespace timeline {
     cox->stroke();
     /////////////////////////////////////////////TICKET #1018 : placeholder drawing
     
-    drawCap (cox, w/2.0, h/2.0, 5.0);  //////////TODO proper scale and placement
+    StyleC style = this->get_style_context();
+    double scale = determineScale (style);
+    double left  = anchorLeft (scale);
+    double upper = anchorUpper (scale);
+    double lower = anchorLower (scale, h);
+    
+    drawCap (cox, left, upper, scale, true);  //////////TODO proper scale and placement
+    drawCap (cox, left, lower, scale, false);  //////////TODO proper scale and placement
+    drawBar (cox, left, upper, lower, scale);
     
     return event_is_handled;
   }
