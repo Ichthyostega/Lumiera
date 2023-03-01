@@ -28928,6 +28928,7 @@
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1677457389357" ID="ID_1307381473" MODIFIED="1677457500256" TEXT="gem&#xe4;&#xdf; &quot;principle of least surprise&quot; ... erst mal an den Standard halten">
 <linktarget COLOR="#9e3662" DESTINATION="ID_1307381473" ENDARROW="Default" ENDINCLINATION="-2;-37;" ID="Arrow_ID_826896124" SOURCE="ID_789755094" STARTARROW="None" STARTINCLINATION="-50;3;"/>
+<linktarget COLOR="#feebc6" DESTINATION="ID_1307381473" ENDARROW="Default" ENDINCLINATION="-168;7;" ID="Arrow_ID_1516635946" SOURCE="ID_1850988964" STARTARROW="None" STARTINCLINATION="-107;-380;"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -28937,14 +28938,202 @@
 <node CREATED="1677457677976" ID="ID_1603877421" MODIFIED="1677457706351" TEXT="(inline)Accessor-Funktionen zur Vereinfachung der Notation"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1677546010944" ID="ID_1646590066" MODIFIED="1677629771104" TEXT="Ermitteln des Skalenfaktors">
+<icon BUILTIN="pencil"/>
+<node CREATED="1677546026066" ID="ID_909459060" MODIFIED="1677546037940" TEXT="h&#xe4;ngt zusammen mit der Bildschirmaufl&#xf6;sung (dpi)">
+<node CREATED="1677546064069" ID="ID_1332973072" LINK="https://stackoverflow.com/a/446280" MODIFIED="1677546112075">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      dpi-Wert f&#252;r aktuellen <i>Screen</i>&#160;herausfinden GTK &#10229; GDK
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1677546237446" ID="ID_33898017" MODIFIED="1677546258583" TEXT="ein typographischer Punkt = 1/72 inch"/>
+<node CREATED="1677546270185" ID="ID_1566124944" LINK="#ID_1345692974" MODIFIED="1677546358775" TEXT="default-Aufl&#xf6;sung: 1px = 1/96 inch"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1677546376907" ID="ID_1490214511" MODIFIED="1677629745969" TEXT="ich m&#xf6;chte es aber am ex des Font festmachen">
+<icon BUILTIN="yes"/>
+<node CREATED="1677546452825" ID="ID_1035857158" LINK="https://developer-old.gnome.org/gtkmm/3.20/classGtk_1_1StyleContext.html#aa7152d36c584d7be8e3769fc8b865aaf" MODIFIED="1677546546279" TEXT="Gtk::StyleContext::get_font() &#x27fc; Pango::FontDescription"/>
+<node CREATED="1677547827538" ID="ID_205149789" MODIFIED="1677547884742" TEXT="in CSS ist &apos;em&apos; direkt an die Font-Size im Kontext gebunen"/>
+<node CREATED="1677624520830" ID="ID_1887034328" MODIFIED="1677624768305" TEXT="Vorsicht: &apos;ex&apos; ist unzuverl&#xe4;ssig implementiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Streng genommen sollte 'ex' die H&#246;he eines kleinen-x sein. Aber diese Information ist in vielen Fonts &#252;berhaupt nicht zuverl&#228;ssig feststellbar; die resultierende Angabe kann daher unzuverl&#228;ssig und fehlerhaft, oder gar nicht vorhanden sein, in welchem Fall es statthaft ist, auf ex &#8788; em/2 zur&#252;ckzufallen. Im Gegensatz dazu wei&#223; man bei 'em', was man bekommt, n&#228;mlich die nominelle Font-Size (auch hierin unterscheidet sich CSS von der klassischen typographischen Praxis, in der 'em' definiert ist als die H&#246;he des gro&#223;en-M)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1677548906490" ID="ID_1334871412" MODIFIED="1677548924251" TEXT="aber was genau ist dann &quot;font-size&quot;?">
+<node CREATED="1677549097512" ID="ID_1309259825" MODIFIED="1677549382705" TEXT="warum kann man das nicht einfach explizit und klar sagen, Leute?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Die ganze Doku, sowohl in GTK, alsauch die CSS Spec liest sich so, als wollte man sich vor einer Festlegung dr&#252;cken. M&#246;glicherweise hatte man Sorge, die dummen Leute w&#252;rden zu einfache Schlu&#223;folgerungen ziehen, und darob die Aufl&#246;sung des Bildschirms &#252;bersehen &#8212; 96dpi ist ja nur ein <i>Default, </i>und ob 1pt= 1/72 inch wirklich gilt, darauf m&#246;chte sich niemand festnageln lasse, vermute ich (es h&#228;ngt n&#228;mlich davon ab, da&#223; Monitor und Grafikkarte diesen Wert richtig reporten)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1677549011508" ID="ID_1030834105" LINK="https://docs.gtk.org/Pango/method.FontDescription.get_size.html" MODIFIED="1677549122645" TEXT="gint pango_font_description_get_size()">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <a http-equiv="content-type" content="text/html; charset=utf-8" href="javascript:void(0)" class="collapse-toggle">
+</a>    </p>
+    <h4 id="return-value">
+      Return value <a href="https://docs.gtk.org/Pango/method.FontDescription.get_size.html#return-value" class="anchor">
+</a>    </h4>
+    <div class="docblock">
+      <div class="returns">
+        <div class="arg-description">
+          <p>
+            <em>Type:</em>&#160;<code>gint</code>
+          </p>
+          <p>
+            
+          </p>
+          <p>
+            The size field for the font description in points or device units. You must call <a href="https://docs.gtk.org/Pango/method.FontDescription.get_size_is_absolute.html"><code>pango_font_description_get_size_is_absolute()</code></a>&#160; to find out which is the case. Returns 0 if the size field has not previously been set or it has been set to 0 explicitly. Use <a href="https://docs.gtk.org/Pango/method.FontDescription.get_set_fields.html"><code>pango_font_description_get_set_fields()</code></a>&#160; to find out if the field was explicitly set or&#160;not.
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1677549455712" ID="ID_1132983571" MODIFIED="1677549481974" TEXT="der CairoContext kann &#xfc;bersetzen user-coord &#x27fc; device-coord">
+<icon BUILTIN="idea"/>
+<node CREATED="1677549522584" ID="ID_1432682127" LINK="https://www.cairographics.org/documentation/cairomm/reference/classCairo_1_1Context.html#a30ee2fbeca1cb347548d5b9d186e38ea" MODIFIED="1677549542721" TEXT="void user_to_device(double &amp; x, double &amp; y)"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1677626008384" ID="ID_1276314266" MODIFIED="1677626017068" TEXT="was brauche ich konkret?">
+<icon BUILTIN="help"/>
+<node CREATED="1677626041993" ID="ID_1160252640" MODIFIED="1677626192299">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>gegeben...</u>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1677626051543" ID="ID_1734833636" MODIFIED="1677626061778" TEXT="ein Style(Context)">
+<node CREATED="1677626078788" ID="ID_371730038" MODIFIED="1677626088548" TEXT="implizit: ein Screen -&gt; DPI"/>
+<node CREATED="1677626089594" ID="ID_532854318" MODIFIED="1677626096373" TEXT="implizit: eine Font-Size"/>
+</node>
+<node CREATED="1677626064902" ID="ID_1611854152" MODIFIED="1677626073888" TEXT="ein CairoContext"/>
+</node>
+<node CREATED="1677626098881" ID="ID_656135180" MODIFIED="1677626201096">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>gesucht...</u>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1677626219156" ID="ID_751208280" MODIFIED="1677626226660" TEXT="Scale-Faktor f&#xfc;r den Canvas"/>
+<node CREATED="1677626293759" ID="ID_313668863" MODIFIED="1677626298635" TEXT="Rechenweg">
+<icon BUILTIN="idea"/>
+<node CREATED="1677626302701" ID="ID_613709734" MODIFIED="1677626717065">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u><font color="#8323d6">Fall-1</font></u>: Font-Size ist absolut gegeben &#10233;
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#5643b8" DESTINATION="ID_613709734" ENDARROW="Default" ENDINCLINATION="9;17;" ID="Arrow_ID_1640372143" SOURCE="ID_1985359358" STARTARROW="None" STARTINCLINATION="-136;-7;"/>
+<node CREATED="1677626356166" ID="ID_550116769" MODIFIED="1677626373368" TEXT="derzeitigen Scale-Faktor im CairoContext ermitteln"/>
+<node CREATED="1677626435688" ID="ID_1977307488" MODIFIED="1677626460277" TEXT="&#xd83e;&#xdc32; Verh&#xe4;ltnis zur Font-Size ist der gew&#xfc;nschte Faktor"/>
+</node>
+<node CREATED="1677626302701" ID="ID_940600114" MODIFIED="1677626530910">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u><font color="#8323d6">Fall-1</font></u>: Font-Size relativ (in Punkten) &#10233;
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1677626356166" ID="ID_62015779" MODIFIED="1677626373368" TEXT="derzeitigen Scale-Faktor im CairoContext ermitteln"/>
+<node CREATED="1677626550450" ID="ID_1022527690" MODIFIED="1677626559551" TEXT="1pt == 1/27 inch"/>
+<node CREATED="1677626560803" ID="ID_1545300397" MODIFIED="1677626590307" TEXT="DPI &#x27fc; Anzahl Pixel per inch"/>
+<node CREATED="1677626435688" ID="ID_1985359358" MODIFIED="1677626725417">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      daraus absolute Font-Size und weiter wie&#160;<font color="#8323d6">[Fall-1]</font>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#5643b8" DESTINATION="ID_613709734" ENDARROW="Default" ENDINCLINATION="9;17;" ID="Arrow_ID_1640372143" STARTARROW="None" STARTINCLINATION="-136;-7;"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1677626961166" ID="ID_70009085" MODIFIED="1677629751039" TEXT="Implementierung">
+<icon BUILTIN="pencil"/>
+<node CREATED="1677626967309" ID="ID_1850988964" MODIFIED="1677627034111" TEXT="erst mal kein Caching">
+<arrowlink COLOR="#feebc6" DESTINATION="ID_1307381473" ENDARROW="Default" ENDINCLINATION="-168;7;" ID="Arrow_ID_1516635946" STARTARROW="None" STARTINCLINATION="-107;-380;"/>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677627099341" ID="ID_1048657097" MODIFIED="1677627113235" TEXT="getAbsoluteFontSize(StyleContext)">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1677627125432" ID="ID_1830042591" MODIFIED="1677627137685" TEXT="Fallunterscheidung der Font-Size-Angabe"/>
+<node CREATED="1677627141566" ID="ID_1002293726" MODIFIED="1677627152304" TEXT="Zugriff auf die Screen-DPI"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1677630910874" ID="ID_1492154354" MODIFIED="1677630941839" TEXT="Problem: Pango liefert eine sonderbare Gr&#xf6;&#xdf;enangabe">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1677630976616" ID="ID_444564082" MODIFIED="1677631024852" TEXT="font.get_size() &#xd83e;&#xdc32; 9216 und font.get_size_is_absolute() &#xd83e;&#xdc32; false">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1677631757926" ID="ID_719052213" LINK="https://stackoverflow.com/a/48025455" MODIFIED="1677631787256" TEXT="Pango verwendet anscheined einenn internen Multiplikator">
+<icon BUILTIN="idea"/>
+<node CREATED="1677631794049" ID="ID_1699777639" LINK="https://docs.gtk.org/Pango/const.SCALE.html" MODIFIED="1677631879874" TEXT="#define PANGO_SCALE 1024"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677627185944" ID="ID_1669119375" MODIFIED="1677627240697" TEXT="determineFactor(CairoContext, FontSize)">
+<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1677627310903" ID="ID_1788648551" MODIFIED="1677630788961" TEXT="pr&#xfc;fen: k&#xf6;nnte verzichtbar sein....">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1677630791167" ID="ID_235578795" MODIFIED="1677630834401" TEXT="in der Tat: CairoContext::user_to_device_distance() &#xd83e;&#xdc32; 1"/>
+</node>
+</node>
+</node>
 <node CREATED="1677457832609" ID="ID_1478500520" MODIFIED="1677457839466" TEXT="Festzulegende Eigenschaften">
-<node CREATED="1677457850153" ID="ID_1305504262" MODIFIED="1677457863755" TEXT="Bezugsachse horizontal">
-<node CREATED="1677458156264" ID="ID_857815456" MODIFIED="1677458189479" TEXT="ergbit sich aus Padding, Scale und dem Design selber (&#x3a6;-minor)"/>
-</node>
-<node CREATED="1677457867207" ID="ID_1126720758" MODIFIED="1677457876146" TEXT="Ankerpunkt obere/untere Kappe">
-<node CREATED="1677458198238" ID="ID_1920467800" MODIFIED="1677458213788" TEXT="ganz analog, Padding + Scale"/>
-</node>
-<node CREATED="1677458010560" ID="ID_1003264563" MODIFIED="1677458021502" TEXT="Basisgr&#xf6;&#xdf;e (=Linienbreite)">
+<node CREATED="1677458010560" ID="ID_1003264563" MODIFIED="1677545992545" TEXT="Basisgr&#xf6;&#xdf;e (=Linienbreite)">
 <node CREATED="1677458053102" ID="ID_1614036555" MODIFIED="1677458063936" TEXT="k&#xf6;nnte man erst mal am DPI-Wert festmachen"/>
 <node CREATED="1677458064756" ID="ID_1912408866" MODIFIED="1677458088765" TEXT="man k&#xf6;nnte es zus&#xe4;tzlich auch an einer default-Schriftgr&#xf6;&#xdf;e festmachen"/>
 <node CREATED="1677458115914" ID="ID_1725640561" MODIFIED="1677458124777" TEXT="alternativ w&#xe4;re ein spezial-Setting denkbar"/>
@@ -28961,6 +29150,12 @@
 </html></richcontent>
 <icon BUILTIN="forward"/>
 </node>
+</node>
+<node CREATED="1677457850153" ID="ID_1305504262" MODIFIED="1677457863755" TEXT="Bezugsachse horizontal">
+<node CREATED="1677458156264" ID="ID_857815456" MODIFIED="1677458189479" TEXT="ergbit sich aus Padding, Scale und dem Design selber (&#x3a6;-minor)"/>
+</node>
+<node CREATED="1677457867207" ID="ID_1126720758" MODIFIED="1677457876146" TEXT="Ankerpunkt obere/untere Kappe">
+<node CREATED="1677458198238" ID="ID_1920467800" MODIFIED="1677458213788" TEXT="ganz analog, Padding + Scale"/>
 </node>
 <node CREATED="1677457975185" ID="ID_1711981540" MODIFIED="1677457995178" TEXT="Farbe der Klammer">
 <node CREATED="1677458102355" ID="ID_1926644285" MODIFIED="1677458115114" TEXT="k&#xf6;nnte man an default-Schriftfarbe festmachen"/>

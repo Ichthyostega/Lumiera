@@ -54,6 +54,10 @@ namespace timeline {
   
   namespace {
     const uint REQUIRED_WIDTH_px = 30;
+    const uint FALLBACK_FONT_SIZE_px = 12;
+    const uint POINT_PER_INCH = 72;          // typographic point ≔ 1/72 inch
+    
+    const double BASE_WIDTH_PER_EM = 0.5;    // scale factor: width of double line relative to font size
     
     const double ORG       = 0.0;
     const double PHI       = (1.0 + sqrt(5)) / 2.0; // Golden Ratio Φ = 1.6180339887498948482
@@ -79,6 +83,27 @@ namespace timeline {
     const double ARC_I_END =  1.2490457723982538;
     
     /**
+     * Use contextual CSS style information to find out about the _standard font size_
+     * @return absolute nominal size of the font in standard state, given in device units (px)
+     */
+    double
+    getAbsoluteFontSize(StyleC style)
+    {
+      Pango::FontDescription font = style->get_font (Gtk::STATE_FLAG_NORMAL);
+      auto sizeSpec = double(font.get_size()) / PANGO_SCALE;
+      // Note: size specs are given as integers with multiplier PANGO_SCALE (typically 1024) 
+      if (sizeSpec <=0) return FALLBACK_FONT_SIZE_px;
+      if (not font.get_size_is_absolute())
+        {// size is given relative (in points)
+          auto screen = style->get_screen();
+          if (not screen) return FALLBACK_FONT_SIZE_px;
+          double dpi = screen->get_resolution();
+          sizeSpec *= dpi / POINT_PER_INCH;
+        } // spec{points}/point_per_inch*pixel_per_inch ⟼ pixel
+      return sizeSpec;
+    }
+    
+    /**
      * Setup the base metric for this bracket drawing based on CSS styling.
      * @remark the width of the double line is used as foundation to derive
      *     further layout properties, based on the golden ratio.
@@ -87,7 +112,7 @@ namespace timeline {
     double
     determineScale (StyleC style)
     {
-      UNIMPLEMENTED ("set base line width based on suitable CSS property");
+      return BASE_WIDTH_PER_EM * getAbsoluteFontSize (style);
     }
     
     double
@@ -177,6 +202,9 @@ namespace timeline {
     cox->line_to(0, h);
     cox->stroke();
     /////////////////////////////////////////////TICKET #1018 : placeholder drawing
+    double x = 1.0;
+    double y = 0.0;
+    cox->user_to_device_distance (x,y);
     
     StyleC style = this->get_style_context();
     double scale = determineScale (style);
