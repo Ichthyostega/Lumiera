@@ -128,10 +128,9 @@ namespace timeline {
      * @return scale factor to apply to the base layout
      */
     double
-    determineScale (StyleC style, CairoC cox)
+    determineScale (StyleC style)
     {
-      return BASE_WIDTH_PER_EM * getAbsoluteFontSize (style)
-           / deviceUnitsPerUserUnit (cox);
+      return BASE_WIDTH_PER_EM * getAbsoluteFontSize (style);
     }
     
     /** place left anchor reference line to right side of bold bar.
@@ -164,14 +163,14 @@ namespace timeline {
          = canvasHeight
            - (style->get_padding().get_bottom()
               - scale * SQUARE_TIP_Y);
-      auto minHeight = 2*PHISQUARE*scale + style->get_padding().get_top();
-      return max (lowerAnchor, minHeight);
+      auto minHeight = PHISQUARE*scale + style->get_padding().get_top();
+      return max (lowerAnchor, minHeight);  // Fallback: both caps back to back
     }
     
     
     /**
      * Draw the curved end cap of the bracket, inspired by musical notation.
-     * @param ox horizontal offset of the anchor point in pixels
+     * @param ox horizontal offset of the anchor point; pixels in target device space
      * @param oy vertical anchor point offset, downwards is positive
      * @param scale stretch the design; default is bracket line width = 1.0
      * @param upside whether to draw the upper cup (`true`) or the lower
@@ -203,11 +202,11 @@ namespace timeline {
     drawBar (CairoC cox, double leftX, double upperY, double lowerY, double scale)
     {
       cox->save();
-      cox->translate (leftX,upperY);
+      cox->translate (leftX, upperY);
       cox->scale (scale, scale);
       cox->set_source_rgb(0.0, 0.0, 0.8); ///////TICKET #1168 : retrieve colour from stylesheet
       //
-      double height = max (0, (lowerY - upperY)/scale);
+      double height = max (0.0, (lowerY - upperY)/scale);
       cox->rectangle(BAR_LEFT, -SQUARE_MINOR, BAR_WIDTH, height + 2*SQUARE_MINOR);
       cox->rectangle(LIN_LEFT,           ORG, LIN_WIDTH, height);
       //
@@ -250,8 +249,11 @@ namespace timeline {
     cox->stroke();
     /////////////////////////////////////////////TICKET #1018 : placeholder drawing
     
+    REQUIRE (1.0 == deviceUnitsPerUserUnit (cox)
+            ,"Cairo surface in device coordinates assumed");
+    
     StyleC style = this->get_style_context();
-    double scale = determineScale (style, cox);
+    double scale = determineScale (style);
     double left  = anchorLeft (style, scale);
     double upper = anchorUpper (style,scale);
     double lower = anchorLower (style, scale, h);

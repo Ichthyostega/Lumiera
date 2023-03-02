@@ -28632,79 +28632,35 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1677285400989" ID="ID_771507385" MODIFIED="1677426096361" TEXT="Koordinaten direkt in den Cairo-Zeichencode &#xfc;bernehmen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1677285400989" ID="ID_771507385" MODIFIED="1677775780712" TEXT="Koordinaten direkt in den Cairo-Zeichencode &#xfc;bernehmen">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1677417336095" ID="ID_953306031" MODIFIED="1677425935036" TEXT="Einrichtung : Zeichnen gef&#xfc;llter Formen">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1677417369338" ID="ID_711895669" LINK="https://www.cairographics.org/tutorial/" MODIFIED="1677417599360" TEXT="die Cairo Zeichen-Operationen sind modelliert als Druckvorgang">
-<node CREATED="1677417850939" ID="ID_1653836867" MODIFIED="1677418063370" TEXT="&#xbb;source&#xab; : eine Farbe, ein F&#xfc;llmuster, ein Bitmap oder eine bestehende Cairo-&#xbb;surface&#xab;">
+<node CREATED="1677417369338" ID="ID_711895669" LINK="https://www.cairographics.org/tutorial/" MODIFIED="1677771883067" TEXT="siehe Zeichenkonzepte in Cairo">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      der Druck-Metapher gem&#228;&#223; ist das die &#8222;Farbwalze&#8220; oder das &#8222;Stempelkissen&#8220;
+      die Cairo Zeichen-Operationen sind modelliert als Druckvorgang
     </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1677417926098" ID="ID_142794869" MODIFIED="1677418000689" TEXT="&#xbb;surface&#xab; : die Zeichenfl&#xe4;che, auf der Cairo arbeitet.">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
     <ul>
       <li>
-        Kann angezeigt werden
+        ein Pfad definiert die Maske
       </li>
       <li>
-        Kann in ein Bitmap gerendered werden
-      </li>
-      <li>
-        Kann als &#187;source&#171; f&#252;r weitere Zeichenvorg&#228;nge dienen
+        durch diese hindurch wird die <i>Source</i>&#160;auf die <i>Surface</i>&#160; (Ausgabe) gestempelt
       </li>
     </ul>
   </body>
 </html></richcontent>
-</node>
-<node CREATED="1677418174529" ID="ID_546569349" MODIFIED="1677418227017" TEXT="&#xbb;path&#xab; : die aktive Kontur, welche die Maske definiert">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      wird mit jeder stroke() oder fill()-Operation geleert. Ist Teil des Context, und weitere Zeichen-Operationen f&#252;gen zu dem Pfad hinzu
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1677417629676" ID="ID_1746207798" MODIFIED="1677417638096" TEXT="stroke() : Kontur zeichnen"/>
-<node CREATED="1677417639087" ID="ID_1449245923" MODIFIED="1677417654897" TEXT="fill() : Masken-Inneres f&#xfc;llen">
-<node CREATED="1677419615244" ID="ID_1306302451" MODIFIED="1677419618972" TEXT="Fill-Rule">
-<node CREATED="1677420366268" ID="ID_1749745867" LINK="https://www.cairographics.org/manual/cairo-cairo-t.html#cairo-set-fill-rule" MODIFIED="1677420398715" TEXT="cairo_set_fill_rule"/>
-<node CREATED="1677420412998" ID="ID_1655853556" LINK="https://www.cairographics.org/manual/cairo-cairo-t.html#cairo-fill-rule-t" MODIFIED="1677420423252" TEXT="cairo_fill_rule_t">
-<node CREATED="1677420567785" ID="ID_1786405165" MODIFIED="1677420597785" TEXT="WINDING : Drehsinn der Begrenzung z&#xe4;hlt"/>
-<node CREATED="1677420598805" ID="ID_709687384" MODIFIED="1677420627615" TEXT="EVENODD: Begrenzungen nach Au&#xdf;en werden gez&#xe4;hlt"/>
-</node>
-</node>
-</node>
-<node CREATED="1677417818031" ID="ID_469249374" MODIFIED="1677417837746" TEXT="paint() : &#xfc;bertr&#xe4;gt Quelle ohne Maske auf die Zeichenfl&#xe4;che"/>
+<arrowlink COLOR="#6460c9" DESTINATION="ID_1173541827" ENDARROW="Default" ENDINCLINATION="-1791;132;" ID="Arrow_ID_1651743539" STARTARROW="None" STARTINCLINATION="-2602;211;"/>
 </node>
 <node CREATED="1677417491547" ID="ID_832294440" MODIFIED="1677417510732" TEXT="ein geschlossener Path erzeugt eine Maske, die gef&#xfc;llt wird">
 <icon BUILTIN="idea"/>
-<node CREATED="1677419117535" ID="ID_1895718071" MODIFIED="1677419158897" TEXT="close_path() : schlie&#xdf;t den Pfad durch eine Linie zum Startpunkt zur&#xfc;ck"/>
-<node CREATED="1677419358419" ID="ID_414920706" LINK="https://www.cairographics.org/manual/cairo-Transformations.html#cairo-translate" MODIFIED="1677419375859" TEXT="Koordinaten-Transformation">
-<node CREATED="1677419162869" ID="ID_305831750" MODIFIED="1677419232544" TEXT="translate(dx,dy)) : verschiebt den Ursprung der &#xbb;user space coordinates&#xab; um (dx,dy)"/>
-<node CREATED="1677419197776" ID="ID_1423561245" MODIFIED="1677419226680" TEXT="scale(sx,xy) : skaliert die aktuellen Achen der &#xbb;user space coordinates&#xab;"/>
-<node CREATED="1677419275529" ID="ID_572343688" MODIFIED="1677419324939" TEXT="rotate(rad) : dreht die Achsen der &#xbb;user space coordinates&#xab; um rad Radians"/>
 </node>
-<node CREATED="1677419509304" ID="ID_1727557351" MODIFIED="1677419543819" TEXT="Transformationen k&#xf6;nnen jederzeit gesetzt werden; auch zwischen Zeichnen und stroke()">
-<icon BUILTIN="idea"/>
-</node>
-</node>
+<node CREATED="1677771904411" ID="ID_1955328342" MODIFIED="1677771918204" TEXT="per Transformation kann ein virtuelles Koordinatensystem erzeugt werden"/>
 </node>
 <node COLOR="#338800" CREATED="1677426171012" ID="ID_183450251" MODIFIED="1677426297532" TEXT="Benennung">
 <icon BUILTIN="yes"/>
@@ -28799,9 +28755,9 @@
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1677426726852" ID="ID_1196135559" MODIFIED="1677718407222" TEXT="Klammer sinnvoll positionieren">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426763414" ID="ID_591151065" MODIFIED="1677426776590" TEXT="Balken-L&#xe4;nge">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1677718715763" ID="ID_354383908" MODIFIED="1677718844294" TEXT="Balken ist unten zu kurz">
+<node COLOR="#338800" CREATED="1677426763414" ID="ID_591151065" MODIFIED="1677775763826" TEXT="Balken-L&#xe4;nge">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1677718715763" ID="ID_354383908" MODIFIED="1677775372224" TEXT="Balken ist unten zu kurz">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -28813,6 +28769,60 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="broken-line"/>
+<node CREATED="1677773935683" ID="ID_962519428" MODIFIED="1677775318994" TEXT="Beobachtung">
+<icon BUILTIN="info"/>
+<node CREATED="1677773960728" ID="ID_212260747" MODIFIED="1677773975135" TEXT="(w,h) = (30,12)"/>
+<node CREATED="1677773939755" ID="ID_1896356153" MODIFIED="1677773951614" TEXT="scale=5.625"/>
+<node COLOR="#338800" CREATED="1677774010934" ID="ID_369296092" MODIFIED="1677774057367" TEXT="left=2.1485588132818414">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1677774080400" ID="ID_288963687" MODIFIED="1677774134353" TEXT="upper=14.726441186718159">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1677774169532" ID="ID_836073358" MODIFIED="1677774175875" TEXT="lower=29.452882373436317">
+<node CREATED="1677774513323" ID="ID_1581390277" MODIFIED="1677774963008" TEXT="das ist die Fallback-Min-Height">
+<linktarget COLOR="#e32757" DESTINATION="ID_1581390277" ENDARROW="Default" ENDINCLINATION="92;0;" ID="Arrow_ID_1988182153" SOURCE="ID_401418051" STARTARROW="None" STARTINCLINATION="92;0;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1677774822709" ID="ID_660710029" MODIFIED="1677774826026" TEXT="drawBar">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#a21b22" CREATED="1677774833327" ID="ID_1452011719" MODIFIED="1677775343109" TEXT="height=2">
+<icon BUILTIN="stop-sign"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1677774837611" ID="ID_1315743678" MODIFIED="1677774848361" TEXT="AUA: das ist ein Int">
+<icon BUILTIN="broken-line"/>
+<node COLOR="#435e98" CREATED="1677775070456" ID="ID_224207909" MODIFIED="1677775323625" TEXT="linkes Argument von min ist int{0}"/>
+<node CREATED="1677775094584" ID="ID_713816284" MODIFIED="1677775117646" TEXT="das ist mein util::min (implicit conversion)"/>
+</node>
+<node CREATED="1677774892926" ID="ID_1618649666" MODIFIED="1677774904662" TEXT="lower-upper == upper">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1677774946622" ID="ID_401418051" MODIFIED="1677774969807" TEXT="Denkfehler im Fallback">
+<arrowlink COLOR="#e32757" DESTINATION="ID_1581390277" ENDARROW="Default" ENDINCLINATION="92;0;" ID="Arrow_ID_1988182153" STARTARROW="None" STARTINCLINATION="92;0;"/>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node CREATED="1677774909790" ID="ID_1344204520" MODIFIED="1677774937023" TEXT="/ scale = &#x3a6;+1"/>
+</node>
+</node>
+</node>
+<node CREATED="1677775347540" ID="ID_483885409" MODIFIED="1677775363174" TEXT="Zeichenfehler damit behoben...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es war der int vs double
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1677775374922" ID="ID_758069702" MODIFIED="1677775760407" TEXT="Zweifel: verwenden Gtk und Cairo die gleichen &#xbb;device units&#xab;?">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1677775564913" ID="ID_933287576" MODIFIED="1677775585136" TEXT="Beobachte H&#xf6;he = 12, allerdings nur im ersten Durchlauf"/>
+<node CREATED="1677775586262" ID="ID_712638262" MODIFIED="1677775598515" TEXT="im zweiten Durchlauf ist die kleinste H&#xf6;he = 62"/>
+<node COLOR="#338800" CREATED="1677775730195" ID="ID_42889671" MODIFIED="1677775753486" TEXT="nachgemessen: 62px ist die kleinste H&#xf6;he im final sichtbaren GUI">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1677426770828" ID="ID_515832295" MODIFIED="1677718397562" TEXT="Ober/Unterkappe">
@@ -28893,7 +28903,7 @@
 <icon BUILTIN="flag-yellow"/>
 <node COLOR="#435e98" CREATED="1677451800420" ID="ID_1164109956" MODIFIED="1677457558599" TEXT="Entscheidung: Modell?">
 <icon BUILTIN="yes"/>
-<node COLOR="#435e98" CREATED="1677451818657" ID="ID_1508791771" MODIFIED="1677457503784" TEXT="global oder individuell?">
+<node COLOR="#435e98" CREATED="1677451818657" FOLDED="true" ID="ID_1508791771" MODIFIED="1677457503784" TEXT="global oder individuell?">
 <icon BUILTIN="help"/>
 <node CREATED="1677451850726" ID="ID_1657882401" MODIFIED="1677457383789" TEXT="global">
 <icon BUILTIN="stop-sign"/>
@@ -28946,13 +28956,14 @@
 </node>
 </node>
 </node>
-<node CREATED="1677457522290" ID="ID_1098941719" MODIFIED="1677457553805" TEXT="Direktzugriff vom Widget &#x27f6; StyleContext">
+<node COLOR="#435e98" CREATED="1677457522290" ID="ID_1098941719" MODIFIED="1677776070853" TEXT="Direktzugriff vom Widget &#x27f6; StyleContext">
+<icon BUILTIN="yes"/>
 <node CREATED="1677457632425" ID="ID_1473941449" MODIFIED="1677457653079" TEXT="&#x27f9; Konsequenz: es mu&#xdf; eine Instanz-Methode sein"/>
 <node CREATED="1677457677976" ID="ID_1603877421" MODIFIED="1677457706351" TEXT="(inline)Accessor-Funktionen zur Vereinfachung der Notation"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1677546010944" ID="ID_1646590066" MODIFIED="1677629771104" TEXT="Ermitteln des Skalenfaktors">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1677546010944" FOLDED="true" ID="ID_1646590066" MODIFIED="1677776043573" TEXT="Ermitteln des Skalenfaktors">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1677546026066" ID="ID_909459060" MODIFIED="1677546037940" TEXT="h&#xe4;ngt zusammen mit der Bildschirmaufl&#xf6;sung (dpi)">
 <node CREATED="1677546064069" ID="ID_1332973072" LINK="https://stackoverflow.com/a/446280" MODIFIED="1677546112075">
 <richcontent TYPE="NODE"><html>
@@ -29115,8 +29126,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1677626961166" ID="ID_70009085" MODIFIED="1677629751039" TEXT="Implementierung">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1677626961166" ID="ID_70009085" MODIFIED="1677776033894" TEXT="Implementierung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1677626967309" ID="ID_1850988964" MODIFIED="1677627034111" TEXT="erst mal kein Caching">
 <arrowlink COLOR="#feebc6" DESTINATION="ID_1307381473" ENDARROW="Default" ENDINCLINATION="-168;7;" ID="Arrow_ID_1516635946" STARTARROW="None" STARTINCLINATION="-107;-380;"/>
 <icon BUILTIN="yes"/>
@@ -29148,7 +29159,7 @@
 <icon BUILTIN="idea"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1677630791167" ID="ID_235578795" MODIFIED="1677630834401" TEXT="in der Tat: CairoContext::user_to_device_distance() &#xd83e;&#xdc32; 1"/>
-<node COLOR="#338800" CREATED="1677718481581" ID="ID_655908718" MODIFIED="1677718673771" TEXT="sicherheitshalber aber doch mit einarbeiten">
+<node COLOR="#5b280f" CREATED="1677718481581" ID="ID_655908718" MODIFIED="1677775837317" TEXT="sicherheitshalber aber doch mit einarbeiten">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -29156,6 +29167,25 @@
   <body>
     <p>
       ich wei&#223; einfach nicht, unter welchen Umst&#228;nden dann doch mal ein anderer Faktor als 1.0 im gegebenen CairoContext vorliegt; und wenn das dann passiert, w&#228;re das ein ziemlich obskures Fehlverhalten und man wird dann nicht ohne Weiteres die richtige Stelle finden, um diesen Korrekturfaktor einzubringen...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1677775842668" ID="ID_178604932" LINK="https://www.cairographics.org/tutorial/#L1transforms" MODIFIED="1677776018897" TEXT="Nein! Laut Doku ist initial der User-Space identisch mit dem Device-Space">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    The device-space coordinate system is tied to the surface, and cannot change. The user-space coordinate system
+
+    <p>
+      <b><font color="#a7273b">matches that space by default</font></b><font color="#a7273b">,</font>&#160;but can be changed for the above reasons. The helper functions
+    </p>
+    <p>
+      <a http-equiv="content-type" content="text/html; charset=utf-8" href="http://www.cairographics.org/manual/cairo-Transformations.html#cairo-user-to-device"><code>cairo_user_to_device()</code></a>&#160;and <a href="http://www.cairographics.org/manual/cairo-Transformations.html#cairo-user-to-device-distance"><code>cairo_user_to_device_distance()</code></a>&#160; tell you what the device-coordinates are for a user-coordinates position or distance.
     </p>
   </body>
 </html></richcontent>
@@ -32922,7 +32952,7 @@
 </node>
 </node>
 <node CREATED="1561412911257" FOLDED="true" ID="ID_1322665426" MODIFIED="1619107323206" TEXT="siehe Cairo-Konzepte">
-<arrowlink COLOR="#5579dd" DESTINATION="ID_1173541827" ENDARROW="Default" ENDINCLINATION="-2313;407;" ID="Arrow_ID_1216025940" STARTARROW="None" STARTINCLINATION="-2437;323;"/>
+<arrowlink COLOR="#5579dd" DESTINATION="ID_1173541827" ENDARROW="Default" ENDINCLINATION="-2465;188;" ID="Arrow_ID_1216025940" STARTARROW="None" STARTINCLINATION="-2437;323;"/>
 <node CREATED="1561412945044" FOLDED="true" ID="ID_475888521" MODIFIED="1561827469138" TEXT="Source">
 <node CREATED="1561412970112" ID="ID_1991984042" MODIFIED="1561412984826" TEXT="Colour"/>
 <node CREATED="1561412985423" ID="ID_108728469" MODIFIED="1561412991540" TEXT="Gradient"/>
@@ -70820,28 +70850,184 @@
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="info"/>
 <node CREATED="1619107266947" ID="ID_1506011612" MODIFIED="1619107277974" TEXT="Doku und Konzepte">
-<node CREATED="1561412911257" FOLDED="true" ID="ID_1173541827" LINK="https://www.cairographics.org/tutorial/#L1draw" MODIFIED="1619107323206" TEXT="Cairo-Konzepte">
-<linktarget COLOR="#5579dd" DESTINATION="ID_1173541827" ENDARROW="Default" ENDINCLINATION="-2313;407;" ID="Arrow_ID_1216025940" SOURCE="ID_1322665426" STARTARROW="None" STARTINCLINATION="-2437;323;"/>
-<node CREATED="1561412945044" FOLDED="true" ID="ID_1336013492" MODIFIED="1561827469138" TEXT="Source">
-<node CREATED="1561412970112" ID="ID_358371042" MODIFIED="1561412984826" TEXT="Colour"/>
-<node CREATED="1561412985423" ID="ID_761624981" MODIFIED="1561412991540" TEXT="Gradient"/>
-<node CREATED="1561412992114" ID="ID_457063785" MODIFIED="1561412994561" TEXT="Image"/>
-</node>
-<node CREATED="1561412948428" FOLDED="true" ID="ID_66649578" MODIFIED="1561827469138" TEXT="Mask">
-<node CREATED="1561412996428" ID="ID_621110720" MODIFIED="1561413006567" TEXT="stroke, fill, text, set_mask()"/>
-<node CREATED="1561413034863" ID="ID_1207183549" MODIFIED="1561413051569" TEXT="die Source wird durch die Mask durch &quot;gestempelt&quot;"/>
-</node>
-<node CREATED="1561412961226" FOLDED="true" ID="ID_670962008" MODIFIED="1561827469138" TEXT="Destination">
-<node CREATED="1561413010338" ID="ID_773980893" MODIFIED="1561413014990" TEXT="Ausgabeformat"/>
-<node CREATED="1561413017945" ID="ID_362589945" MODIFIED="1561413025642" TEXT="auf dieses wird &quot;gestempelt&quot;"/>
-</node>
-</node>
 <node CREATED="1554476592342" ID="ID_1236197922" LINK="https://developer.gnome.org/cairo/stable/cairo-cairo-t.html" MODIFIED="1619107409051" TEXT="Zeichnen: Cairo-Context">
 <linktarget COLOR="#4e97d4" DESTINATION="ID_1236197922" ENDARROW="Default" ENDINCLINATION="-654;81;" ID="Arrow_ID_1110216219" SOURCE="ID_21219709" STARTARROW="None" STARTINCLINATION="-308;527;"/>
 <icon BUILTIN="info"/>
 <node CREATED="1554476799366" ID="ID_977796922" LINK="https://www.cairographics.org/documentation/cairomm/reference/" MODIFIED="1557498707239" TEXT="Cairomm"/>
 <node CREATED="1554476906923" ID="ID_437420072" MODIFIED="1557498707239" TEXT="Cairo-Doku(allgemein)"/>
 <node CREATED="1554476956084" ID="ID_541824716" LINK="https://www.cairographics.org/documentation/cairomm/reference/classCairo_1_1Context.html" MODIFIED="1557498707239" TEXT="CairoContext(C++)"/>
+</node>
+<node CREATED="1561412911257" ID="ID_1173541827" LINK="https://www.cairographics.org/tutorial/" MODIFIED="1677771875029" TEXT="Zusammenfassung: Cairo-Konzepte">
+<linktarget COLOR="#5579dd" DESTINATION="ID_1173541827" ENDARROW="Default" ENDINCLINATION="-2465;188;" ID="Arrow_ID_1216025940" SOURCE="ID_1322665426" STARTARROW="None" STARTINCLINATION="-2437;323;"/>
+<linktarget COLOR="#6460c9" DESTINATION="ID_1173541827" ENDARROW="Default" ENDINCLINATION="-1791;132;" ID="Arrow_ID_1651743539" SOURCE="ID_711895669" STARTARROW="None" STARTINCLINATION="-2602;211;"/>
+<node CREATED="1561412945044" FOLDED="true" ID="ID_1336013492" MODIFIED="1677772243199" TEXT="&#xbb;Source&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      der Druck-Metapher gem&#228;&#223; ist das die &#8222;Farbwalze&#8220; oder das &#8222;Stempelkissen&#8220;
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1561412970112" ID="ID_358371042" MODIFIED="1561412984826" TEXT="Colour"/>
+<node CREATED="1561412985423" ID="ID_761624981" MODIFIED="1561412991540" TEXT="Gradient"/>
+<node CREATED="1561412992114" ID="ID_457063785" MODIFIED="1561412994561" TEXT="Image"/>
+<node CREATED="1677770744973" ID="ID_987770773" MODIFIED="1677770772509" TEXT="andere Cairo-Surface mit bereits bestehender Zeichnung"/>
+</node>
+<node CREATED="1677418174529" FOLDED="true" ID="ID_546569349" MODIFIED="1677772244319" TEXT="&#xbb;Path&#xab; ">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wird mit jeder stroke() oder fill()-Operation geleert. Ist Teil des Context, und weitere Zeichen-Operationen f&#252;gen zu dem Pfad hinzu
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1677771112172" ID="ID_1976690582" MODIFIED="1677771113744" TEXT="die aktive Kontur, welche die Maske definiert"/>
+<node CREATED="1677771139011" ID="ID_1072620989" MODIFIED="1677771161856" TEXT="wird durch die Zeichen-Operationen sukzessive aufgebaut"/>
+<node CREATED="1677771165277" ID="ID_166622924" MODIFIED="1677771182455" TEXT="kann aus offenen, geschlossenen und mehreren Pfaden bestehen, auch &#xfc;berlappend"/>
+<node CREATED="1677771190338" ID="ID_1049161431" MODIFIED="1677771299425" TEXT="Beim F&#xfc;llen bestimmt die Fill-Rule, wie mit Verschachtelung umgegangen wird">
+<arrowlink DESTINATION="ID_1306302451" ENDARROW="Default" ENDINCLINATION="218;-202;" ID="Arrow_ID_128834298" STARTARROW="None" STARTINCLINATION="216;8;"/>
+</node>
+<node CREATED="1677419117535" ID="ID_1895718071" MODIFIED="1677419158897" TEXT="close_path() : schlie&#xdf;t den Pfad durch eine Linie zum Startpunkt zur&#xfc;ck"/>
+</node>
+<node CREATED="1561412948428" FOLDED="true" ID="ID_66649578" MODIFIED="1677772245551" TEXT="&#xbb;Mask&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die Source wird durch die Mask hindurch &#8222;gestempelt&#8220;
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1561412996428" ID="ID_621110720" MODIFIED="1561413006567" TEXT="stroke, fill, text, set_mask()"/>
+<node CREATED="1561413034863" ID="ID_1207183549" MODIFIED="1677770935312" TEXT="je nach Druck-Operation wird die Maske genutzt als Kontur oder Inhaltsfl&#xe4;che"/>
+</node>
+<node CREATED="1561412961226" FOLDED="true" ID="ID_670962008" MODIFIED="1677772246591" TEXT="&#xbb;Surface&#xab; ">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        Kann angezeigt werden
+      </li>
+      <li>
+        Kann in ein Bitmap gerendered werden
+      </li>
+      <li>
+        Kann als &#187;source&#171; f&#252;r weitere Zeichenvorg&#228;nge dienen
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<node CREATED="1561413010338" ID="ID_773980893" MODIFIED="1677770961844" TEXT="Ausgabeformat / Destination"/>
+<node CREATED="1677771008070" ID="ID_538046316" MODIFIED="1677771016717" TEXT="die Zeichenfl&#xe4;che, auf der Cairo arbeitet."/>
+<node CREATED="1561413017945" ID="ID_362589945" MODIFIED="1677771022698" TEXT="...auf diese wird &quot;gestempelt&quot;"/>
+</node>
+<node CREATED="1677417850939" FOLDED="true" ID="ID_1653836867" MODIFIED="1677772254958" TEXT="Druck-Operationen">
+<icon BUILTIN="back"/>
+<node CREATED="1677417629676" ID="ID_1746207798" MODIFIED="1677417638096" TEXT="stroke() : Kontur zeichnen"/>
+<node CREATED="1677417639087" ID="ID_1449245923" MODIFIED="1677417654897" TEXT="fill() : Masken-Inneres f&#xfc;llen">
+<node CREATED="1677419615244" ID="ID_1306302451" MODIFIED="1677771301129" TEXT="Fill-Rule">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1306302451" ENDARROW="Default" ENDINCLINATION="218;-202;" ID="Arrow_ID_128834298" SOURCE="ID_1049161431" STARTARROW="None" STARTINCLINATION="216;8;"/>
+<node CREATED="1677420366268" ID="ID_1749745867" LINK="https://www.cairographics.org/manual/cairo-cairo-t.html#cairo-set-fill-rule" MODIFIED="1677420398715" TEXT="cairo_set_fill_rule"/>
+<node CREATED="1677420412998" ID="ID_1655853556" LINK="https://www.cairographics.org/manual/cairo-cairo-t.html#cairo-fill-rule-t" MODIFIED="1677420423252" TEXT="cairo_fill_rule_t">
+<node CREATED="1677420567785" ID="ID_1786405165" MODIFIED="1677420597785" TEXT="WINDING : Drehsinn der Begrenzung z&#xe4;hlt"/>
+<node CREATED="1677420598805" ID="ID_709687384" MODIFIED="1677420627615" TEXT="EVENODD: Begrenzungen nach Au&#xdf;en werden gez&#xe4;hlt"/>
+</node>
+</node>
+</node>
+<node CREATED="1677417818031" ID="ID_469249374" MODIFIED="1677417837746" TEXT="paint() : &#xfc;bertr&#xe4;gt Quelle ohne Maske auf die Zeichenfl&#xe4;che"/>
+<node CREATED="1677772081020" ID="ID_866086233" MODIFIED="1677772135873" TEXT="siehe auch save() / restore()">
+<arrowlink DESTINATION="ID_242254806" ENDARROW="Default" ENDINCLINATION="-114;-3;" ID="Arrow_ID_184125692" STARTARROW="None" STARTINCLINATION="-159;16;"/>
+</node>
+</node>
+<node CREATED="1677419358419" FOLDED="true" ID="ID_414920706" LINK="https://www.cairographics.org/manual/cairo-Transformations.html#cairo-translate" MODIFIED="1677772258018" TEXT="Koordinaten-Transformation">
+<node CREATED="1677419162869" ID="ID_305831750" MODIFIED="1677419232544" TEXT="translate(dx,dy)) : verschiebt den Ursprung der &#xbb;user space coordinates&#xab; um (dx,dy)"/>
+<node CREATED="1677419197776" ID="ID_1423561245" MODIFIED="1677419226680" TEXT="scale(sx,xy) : skaliert die aktuellen Achen der &#xbb;user space coordinates&#xab;"/>
+<node CREATED="1677419275529" ID="ID_572343688" MODIFIED="1677419324939" TEXT="rotate(rad) : dreht die Achsen der &#xbb;user space coordinates&#xab; um rad Radians"/>
+<node CREATED="1677771358116" HGAP="10" ID="ID_1729875163" MODIFIED="1677772189246" TEXT="Hinweise" VSHIFT="14">
+<edge COLOR="#4f4d8b" STYLE="linear"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1677771402302" ID="ID_1290869611" MODIFIED="1677771639221">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>current transformation matrix</b>&#160;(CTM) : User-Space &#10236; Device-Space
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1677419509304" ID="ID_1727557351" MODIFIED="1677419543819" TEXT="Transformationen k&#xf6;nnen jederzeit gesetzt werden; auch zwischen Zeichnen und stroke()">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1677771427923" ID="ID_1957253312" MODIFIED="1677771629176">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Transformations-Definition wird <i>eingangsseitig vor</i>&#160;die aktuelle CTM <b>vorgeschaltet</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1677771499633" ID="ID_1610038161" MODIFIED="1677771625408" TEXT="&#x27f9; Transformations-Definitionen mu&#xdf; man r&#xfc;ckw&#xe4;rts lesen">
+<icon BUILTIN="idea"/>
+<node CREATED="1677771522070" ID="ID_420870935" MODIFIED="1677771622365">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Beispiel:
+    </p>
+    <p>
+      <code http-equiv="content-type" content="text/html; charset=utf-8"><font color="#4c3acb">&#160;&#160;&#160;cairo_scale (cr, 100, 100); </font></code>
+    </p>
+    <p>
+      <code http-equiv="content-type" content="text/html; charset=utf-8"><font color="#4c3acb">&#160;&#160;&#160;cairo_translate (cr, 0.1, 0.1);</font></code>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+<node CREATED="1677771582158" ID="ID_1556298030" MODIFIED="1677771598223" TEXT="zuerst den Origin verschieben nach (0.1, 0.1)"/>
+<node CREATED="1677771599488" ID="ID_678482027" MODIFIED="1677771618101" TEXT="dann um diesen Origin homogen skalieren mit Faktor 100"/>
+</node>
+</node>
+</node>
+<node CREATED="1677771926848" HGAP="-16" ID="ID_242254806" MODIFIED="1677772189251" TEXT="save() / restore() : ein Stack f&#xfc;r aktuelle Zeichen/Druckeinstellungen" VSHIFT="4">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...die aktuellen Transformations-Einstellungen (current transformation matrix CTM)
+    </p>
+    <p>
+      ...und nicht nur das, auch die Source-Einstellungen wie Linienst&#228;rke und Zeichenfarben
+    </p>
+  </body>
+</html></richcontent>
+<edge COLOR="#4f4d8b" STYLE="linear"/>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_242254806" ENDARROW="Default" ENDINCLINATION="-114;-3;" ID="Arrow_ID_184125692" SOURCE="ID_866086233" STARTARROW="None" STARTINCLINATION="-159;16;"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1624113528316" ID="ID_727104900" MODIFIED="1624113773596" TEXT="Zeichnen in Cairo">
