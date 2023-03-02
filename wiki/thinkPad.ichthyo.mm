@@ -28733,21 +28733,21 @@
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1677425937349" ID="ID_368774299" MODIFIED="1677425952273" TEXT="Koordinaten als Konstanten &#xfc;bernehmen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1677425937349" ID="ID_368774299" MODIFIED="1677718382736" TEXT="Koordinaten als Konstanten &#xfc;bernehmen">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1677426110196" ID="ID_843421619" MODIFIED="1677426129464" TEXT="Erkennbare Basiseinheiten durch &#x3a6; ausdr&#xfc;cken">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1677426131233" ID="ID_231769096" MODIFIED="1677426872580" TEXT="BAR">
+<node COLOR="#338800" CREATED="1677426131233" ID="ID_231769096" MODIFIED="1677718377099" TEXT="BAR">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_231769096" ENDARROW="Default" ENDINCLINATION="-186;54;" ID="Arrow_ID_1647326271" SOURCE="ID_270081654" STARTARROW="None" STARTINCLINATION="120;19;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426131233" ID="ID_1111801677" MODIFIED="1677426892883" TEXT="LINE">
+<node COLOR="#338800" CREATED="1677426131233" ID="ID_1111801677" MODIFIED="1677718378915" TEXT="LINE">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1111801677" ENDARROW="Default" ENDINCLINATION="-186;54;" ID="Arrow_ID_1520723305" SOURCE="ID_1333503744" STARTARROW="None" STARTINCLINATION="71;13;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426140000" ID="ID_916071681" MODIFIED="1677426143648" TEXT="SQUARE">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1677426140000" ID="ID_916071681" MODIFIED="1677718380765" TEXT="SQUARE">
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1677426145410" ID="ID_1241973163" MODIFIED="1677426155118" TEXT="ARC_I">
 <icon BUILTIN="button_ok"/>
@@ -28779,8 +28779,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426582635" ID="ID_78847857" MODIFIED="1677426587874" TEXT="Balken zeichnen">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1677426582635" ID="ID_78847857" MODIFIED="1677718435058" TEXT="Balken zeichnen">
+<icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426794738" ID="ID_270081654" MODIFIED="1677426873746" TEXT="dicker Balken">
 <arrowlink DESTINATION="ID_231769096" ENDARROW="Default" ENDINCLINATION="-186;54;" ID="Arrow_ID_1647326271" STARTARROW="None" STARTINCLINATION="120;19;"/>
 <icon BUILTIN="flag-yellow"/>
@@ -28793,17 +28793,30 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426603105" ID="ID_243044944" MODIFIED="1677426609439" TEXT="Gesamtanordnung steuern">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677458294653" ID="ID_1105975491" MODIFIED="1677458327745" TEXT="brauche Zugriff auf Layout-Steuerung">
+<node COLOR="#338800" CREATED="1677458294653" ID="ID_1105975491" MODIFIED="1677718415331" TEXT="brauche Zugriff auf Layout-Steuerung">
 <arrowlink COLOR="#8255b2" DESTINATION="ID_883997565" ENDARROW="Default" ENDINCLINATION="108;-242;" ID="Arrow_ID_1785981386" STARTARROW="None" STARTINCLINATION="-291;20;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426726852" ID="ID_1196135559" MODIFIED="1677426735981" TEXT="Klammer sinnvoll positionieren">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1677426726852" ID="ID_1196135559" MODIFIED="1677718407222" TEXT="Klammer sinnvoll positionieren">
+<icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426763414" ID="ID_591151065" MODIFIED="1677426776590" TEXT="Balken-L&#xe4;nge">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1677718715763" ID="ID_354383908" MODIFIED="1677718844294" TEXT="Balken ist unten zu kurz">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...aber der Code schaut <i>komplett richtig</i>&#160;aus; man mu&#223; ja die Differenz zwischen oberem und unterem Anker als H&#246;he ansetzen, und man mu&#223; dabei bedenken, da&#223; die Zeichnung des Balkens dann skaliert wird, jedoch <i>nach Skalierung</i>&#160;genau bis zum unteren Anker reichen soll (und eben dieses funktioniert nicht)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426770828" ID="ID_515832295" MODIFIED="1677426776600" TEXT="Ober/Unterkappe">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1677426770828" ID="ID_515832295" MODIFIED="1677718397562" TEXT="Ober/Unterkappe">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426740361" ID="ID_1498455508" MODIFIED="1677426748306" TEXT="Ankerpunkt f&#xfc;r Sub-Scopes">
@@ -28956,7 +28969,7 @@
 <node CREATED="1677546237446" ID="ID_33898017" MODIFIED="1677546258583" TEXT="ein typographischer Punkt = 1/72 inch"/>
 <node CREATED="1677546270185" ID="ID_1566124944" LINK="#ID_1345692974" MODIFIED="1677546358775" TEXT="default-Aufl&#xf6;sung: 1px = 1/96 inch"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1677546376907" ID="ID_1490214511" MODIFIED="1677629745969" TEXT="ich m&#xf6;chte es aber am ex des Font festmachen">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1677546376907" ID="ID_1490214511" MODIFIED="1677718453503" TEXT="ich m&#xf6;chte es aber am ex des Font festmachen">
 <icon BUILTIN="yes"/>
 <node CREATED="1677546452825" ID="ID_1035857158" LINK="https://developer-old.gnome.org/gtkmm/3.20/classGtk_1_1StyleContext.html#aa7152d36c584d7be8e3769fc8b865aaf" MODIFIED="1677546546279" TEXT="Gtk::StyleContext::get_font() &#x27fc; Pango::FontDescription"/>
 <node CREATED="1677547827538" ID="ID_205149789" MODIFIED="1677547884742" TEXT="in CSS ist &apos;em&apos; direkt an die Font-Size im Kontext gebunen"/>
@@ -29022,7 +29035,7 @@
 <node CREATED="1677549522584" ID="ID_1432682127" LINK="https://www.cairographics.org/documentation/cairomm/reference/classCairo_1_1Context.html#a30ee2fbeca1cb347548d5b9d186e38ea" MODIFIED="1677549542721" TEXT="void user_to_device(double &amp; x, double &amp; y)"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1677626008384" ID="ID_1276314266" MODIFIED="1677626017068" TEXT="was brauche ich konkret?">
+<node COLOR="#435e98" CREATED="1677626008384" ID="ID_1276314266" MODIFIED="1677718443624" TEXT="was brauche ich konkret?">
 <icon BUILTIN="help"/>
 <node CREATED="1677626041993" ID="ID_1160252640" MODIFIED="1677626192299">
 <richcontent TYPE="NODE"><html>
@@ -29108,11 +29121,11 @@
 <arrowlink COLOR="#feebc6" DESTINATION="ID_1307381473" ENDARROW="Default" ENDINCLINATION="-168;7;" ID="Arrow_ID_1516635946" STARTARROW="None" STARTINCLINATION="-107;-380;"/>
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677627099341" ID="ID_1048657097" MODIFIED="1677627113235" TEXT="getAbsoluteFontSize(StyleContext)">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1677627099341" ID="ID_1048657097" MODIFIED="1677718685659" TEXT="getAbsoluteFontSize(StyleContext)">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1677627125432" ID="ID_1830042591" MODIFIED="1677627137685" TEXT="Fallunterscheidung der Font-Size-Angabe"/>
 <node CREATED="1677627141566" ID="ID_1002293726" MODIFIED="1677627152304" TEXT="Zugriff auf die Screen-DPI"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1677630910874" ID="ID_1492154354" MODIFIED="1677630941839" TEXT="Problem: Pango liefert eine sonderbare Gr&#xf6;&#xdf;enangabe">
+<node COLOR="#435e98" CREATED="1677630910874" ID="ID_1492154354" MODIFIED="1677632493748" TEXT="Problem: Pango liefert eine sonderbare Gr&#xf6;&#xdf;enangabe">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1677630976616" ID="ID_444564082" MODIFIED="1677631024852" TEXT="font.get_size() &#xd83e;&#xdc32; 9216 und font.get_size_is_absolute() &#xd83e;&#xdc32; false">
 <icon BUILTIN="info"/>
@@ -29120,15 +29133,34 @@
 <node CREATED="1677631757926" ID="ID_719052213" LINK="https://stackoverflow.com/a/48025455" MODIFIED="1677631787256" TEXT="Pango verwendet anscheined einenn internen Multiplikator">
 <icon BUILTIN="idea"/>
 <node CREATED="1677631794049" ID="ID_1699777639" LINK="https://docs.gtk.org/Pango/const.SCALE.html" MODIFIED="1677631879874" TEXT="#define PANGO_SCALE 1024"/>
+<node CREATED="1677632470180" ID="ID_1459376659" MODIFIED="1677632489741" TEXT="das gilt f&#xfc;r alle L&#xe4;ngenangaben in Pango (Integer-Arithmetik)">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1677632454793" ID="ID_283578241" MODIFIED="1677632491456" TEXT="damit ergeben sich plausible Werte">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677627185944" ID="ID_1669119375" MODIFIED="1677627240697" TEXT="determineFactor(CairoContext, FontSize)">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1677627185944" ID="ID_1669119375" MODIFIED="1677718531084" TEXT="deviceUnitsPerUserUnit(CairoContext)">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1677627310903" ID="ID_1788648551" MODIFIED="1677630788961" TEXT="pr&#xfc;fen: k&#xf6;nnte verzichtbar sein....">
 <icon BUILTIN="idea"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1677630791167" ID="ID_235578795" MODIFIED="1677630834401" TEXT="in der Tat: CairoContext::user_to_device_distance() &#xd83e;&#xdc32; 1"/>
+<node COLOR="#338800" CREATED="1677718481581" ID="ID_655908718" MODIFIED="1677718673771" TEXT="sicherheitshalber aber doch mit einarbeiten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ich wei&#223; einfach nicht, unter welchen Umst&#228;nden dann doch mal ein anderer Faktor als 1.0 im gegebenen CairoContext vorliegt; und wenn das dann passiert, w&#228;re das ein ziemlich obskures Fehlverhalten und man wird dann nicht ohne Weiteres die richtige Stelle finden, um diesen Korrekturfaktor einzubringen...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 </node>

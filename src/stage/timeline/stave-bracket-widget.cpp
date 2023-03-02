@@ -32,13 +32,14 @@
 
 #include "stage/timeline/stave-bracket-widget.hpp"
 //#include "stage/style-scheme.hpp"  /////////////////////TODO needed?
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <algorithm>
 //#include <vector>
 
 
 
+using util::max;
 //using util::_Fmt;
 //using util::isnil;
 //using util::contains;
@@ -54,7 +55,7 @@ namespace timeline {
   
   namespace {
     const uint REQUIRED_WIDTH_px = 30;
-    const uint FALLBACK_FONT_SIZE_px = 12;
+    const uint FALLBACK_FONT_SIZE_px = 12.5; // (assuming 96dpi and 10 Point font)
     const uint POINT_PER_INCH = 72;          // typographic point ≔ 1/72 inch
     
     const double BASE_WIDTH_PER_EM = 0.5;    // scale factor: width of double line relative to font size
@@ -64,11 +65,16 @@ namespace timeline {
     const double PHI_MAJOR = PHI - 1.0;             // 1/Φ   = Φ-1
     const double PHI_MINOR = 2.0 - PHI;             // 1-1/Φ = 2-Φ
     const double PHISQUARE = 1.0 + PHI;             // Φ²    = 1+Φ
+    const double PHI_MINSQ = 5.0 - 3*PHI;           // Φ-minor of Φ-minor : (2-Φ)²= 2 ²-4Φ + Φ²
     
-    const double BAR_LEFT = -PHI_MINOR;
+    const double BAR_WIDTH = PHI_MINOR;             // the main (bold) bar is right aligned to axis
+    const double BAR_LEFT  = -BAR_WIDTH;
+    const double LIN_WIDTH = PHI_MINSQ;             // thin line is Φ-minor or bold line (which itself is Φ-minor)
+    const double LIN_LEFT  = PHI_MAJOR - LIN_WIDTH; // main line and thin line create a Φ-division
     
     const double SQUARE_TIP_X = 2.2360679774997880;
     const double SQUARE_TIP_Y = -PHISQUARE;
+    const double SQUARE_MINOR = 1.0;
     
     const double ARC_O_XC  = -(3.0 + PHI);
     const double ARC_O_YC  = -6.8541019662496847;   // +Y points downwards
@@ -91,7 +97,7 @@ namespace timeline {
     {
       Pango::FontDescription font = style->get_font (Gtk::STATE_FLAG_NORMAL);
       auto sizeSpec = double(font.get_size()) / PANGO_SCALE;
-      // Note: size specs are given as integers with multiplier PANGO_SCALE (typically 1024) 
+      // Note: size specs are given as integers with multiplier PANGO_SCALE (typically 1024)
       if (sizeSpec <=0) return FALLBACK_FONT_SIZE_px;
       if (not font.get_size_is_absolute())
         {// size is given relative (in points)
@@ -104,33 +110,62 @@ namespace timeline {
     }
     
     /**
+     * Probe the CairoContext to determine scale factor already set.
+     * @return number of device units representing a single horizontal user unit
+     */
+    double
+    deviceUnitsPerUserUnit (CairoC cox)
+    {
+      auto dx = 1.0, dy = 0.0;
+      cox->user_to_device_distance (dx,dy);
+      return dx;
+    }
+    
+    /**
      * Setup the base metric for this bracket drawing based on CSS styling.
      * @remark the width of the double line is used as foundation to derive
      *     further layout properties, based on the golden ratio.
      * @return scale factor to apply to the base layout
      */
     double
-    determineScale (StyleC style)
+    determineScale (StyleC style, CairoC cox)
     {
-      return BASE_WIDTH_PER_EM * getAbsoluteFontSize (style);
+      return BASE_WIDTH_PER_EM * getAbsoluteFontSize (style)
+           / deviceUnitsPerUserUnit (cox);
     }
     
+    /** place left anchor reference line to right side of bold bar.
+     * @remark taking into account the scale and padding
+     */
     double
-    anchorLeft (double scale)
+    anchorLeft (StyleC style, double scale)
     {
-      UNIMPLEMENTED ("place left anchor reference line");
+      return style->get_padding().get_left()
+           + scale * BAR_WIDTH;
     }
     
+    /** place top cap vertical anchor, down from canvas upside.
+     * @remark anchored at lower side of enclosing Φ²-sized square.
+     */
     double
-    anchorUpper (double scale)
+    anchorUpper (StyleC style, double scale)
     {
-      UNIMPLEMENTED ("place top cap vertical anchor");
+      return style->get_padding().get_top()
+           - scale * SQUARE_TIP_Y;
     }
     
+    /** place bottom cap vertical anchor, mirroring top cap
+     * @remark also taking into account the overall canvas height
+     */
     double
-    anchorLower (double scale, int canvasHeight)
+    anchorLower (StyleC style, double scale, int canvasHeight)
     {
-      UNIMPLEMENTED ("place bottom cap vertical anchor");
+      auto lowerAnchor
+         = canvasHeight
+           - (style->get_padding().get_bottom()
+              - scale * SQUARE_TIP_Y);
+      auto minHeight = 2*PHISQUARE*scale + style->get_padding().get_top();
+      return max (lowerAnchor, minHeight);
     }
     
     
@@ -147,7 +182,7 @@ namespace timeline {
     {
       cox->save();
       cox->translate (ox,oy);
-      cox->scale (scale,scale); /////////////////TODO: flip unless upside
+      cox->scale (scale, upside? scale:-scale);
       cox->set_source_rgb(0.0, 0.0, 0.8); ///////TICKET #1168 : retrieve colour from stylesheet
       // draw the inner contour of the bracket cap,
       // which is the outer arc from left top of the bar to the tip point
@@ -163,10 +198,22 @@ namespace timeline {
       cox->restore();
     }
     
+    /** draw the double bar to fit between upper and lower cap */
     void
     drawBar (CairoC cox, double leftX, double upperY, double lowerY, double scale)
     {
-      UNIMPLEMENTED ("draw the double bar");
+      cox->save();
+      cox->translate (leftX,upperY);
+      cox->scale (scale, scale);
+      cox->set_source_rgb(0.0, 0.0, 0.8); ///////TICKET #1168 : retrieve colour from stylesheet
+      //
+      double height = max (0, (lowerY - upperY)/scale);
+      cox->rectangle(BAR_LEFT, -SQUARE_MINOR, BAR_WIDTH, height + 2*SQUARE_MINOR);
+      cox->rectangle(LIN_LEFT,           ORG, LIN_WIDTH, height);
+      //
+      cox->fill();
+      //
+      cox->restore();
     }
   }
   
@@ -202,18 +249,15 @@ namespace timeline {
     cox->line_to(0, h);
     cox->stroke();
     /////////////////////////////////////////////TICKET #1018 : placeholder drawing
-    double x = 1.0;
-    double y = 0.0;
-    cox->user_to_device_distance (x,y);
     
     StyleC style = this->get_style_context();
-    double scale = determineScale (style);
-    double left  = anchorLeft (scale);
-    double upper = anchorUpper (scale);
-    double lower = anchorLower (scale, h);
+    double scale = determineScale (style, cox);
+    double left  = anchorLeft (style, scale);
+    double upper = anchorUpper (style,scale);
+    double lower = anchorLower (style, scale, h);
     
-    drawCap (cox, left, upper, scale, true);  //////////TODO proper scale and placement
-    drawCap (cox, left, lower, scale, false);  //////////TODO proper scale and placement
+    drawCap (cox, left, upper, scale, true);
+    drawCap (cox, left, lower, scale, false);
     drawBar (cox, left, upper, lower, scale);
     
     return event_is_handled;
