@@ -81,3 +81,11 @@
   .track-slope--verydeep {
     border-width: 20px;
 }
+
+/* bracket structure to indicate track scopes
+ * - base width is derived from font 'em'
+ * - drawing is in (text) colour (TODO: selection state)
+ */
+  .fork__bracket {
+    padding-left: 2px;
+}

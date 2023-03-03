@@ -31,6 +31,7 @@
 
 
 #include "stage/gtk-base.hpp"
+#include "stage/style-scheme.hpp"
 #include "stage/timeline/navigator-widget.hpp"
 
 //#include "stage/ui-bus.hpp"
@@ -66,7 +67,9 @@ namespace timeline {
   
   NavigatorWidget::NavigatorWidget ()
     : Gtk::Grid{}
-    { }
+    {
+      get_style_context()->add_class (CLASS_timeline_navi);
+    }
   
   
   

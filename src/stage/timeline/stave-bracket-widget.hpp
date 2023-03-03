@@ -31,6 +31,9 @@
  ** of actual drawing this structure is abstracted into this custom widget — allowing the
  ** track head to indicate the necessary layout constraints generic and recursively.
  ** 
+ ** \par styling
+ ** - styling is controlled via CSS, using the marker class \ref CLASS_fork_bracket
+ ** 
  ** @todo WIP-WIP-WIP as of 2/2023
  ** 
  */

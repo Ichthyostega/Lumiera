@@ -224,6 +224,7 @@ namespace timeline {
   StaveBracketWidget::StaveBracketWidget ()
     : _Base{}
     {
+      get_style_context()->add_class (CLASS_fork_bracket);
       this->property_expand() = false;
     }
   

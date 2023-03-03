@@ -31,6 +31,7 @@
 
 
 #include "stage/gtk-base.hpp"
+#include "stage/style-scheme.hpp"
 #include "stage/timeline/patchbay-widget.hpp"
 #include "stage/timeline/track-head-widget.hpp"
 //#include "stage/ui-bus.hpp"
@@ -81,6 +82,7 @@ namespace timeline {
   PatchbayWidget::PatchbayWidget (PAdjustment const& vScroll)
     : Gtk::ScrolledWindow{Gtk::Adjustment::create (0,0,0,0,0,0), vScroll}
     {
+      get_style_context()->add_class (CLASS_timeline_pbay);
       set_shadow_type (Gtk::SHADOW_NONE);
       set_policy (Gtk::POLICY_NEVER, Gtk::POLICY_EXTERNAL); // horizontal extension is fixed, using the track body vertical scrollbar
       property_expand() = true;                            //  dynamically grab additional space

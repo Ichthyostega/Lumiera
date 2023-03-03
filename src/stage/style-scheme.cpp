@@ -80,6 +80,14 @@ namespace stage {
   cuString CLASS_slope_deep4   {"track-slope--deep4"};
   cuString CLASS_slope_verydeep{"track-slope--verydeep"};
   
+  cuString CLASS_timeline_head {"timeline__head"};
+  cuString CLASS_timeline_navi {"timeline__navi"};
+  cuString CLASS_timeline_pbay {"timeline__pbay"};
+  
+  cuString CLASS_fork_head     {"fork__head"};
+  cuString CLASS_fork_bracket  {"fork__bracket"};
+  cuString CLASS_fork_control  {"fork__control"};
+  
   cuString CLASS_background    {"background"};            ///< opaque backdrop
   
   

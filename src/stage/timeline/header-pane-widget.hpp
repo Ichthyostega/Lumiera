@@ -52,11 +52,7 @@
 #include "stage/gtk-base.hpp"
 #include "stage/timeline/navigator-widget.hpp"
 #include "stage/timeline/patchbay-widget.hpp"
-
-//#include "lib/util.hpp"
-
-//#include <memory>
-//#include <vector>
+#include "stage/style-scheme.hpp"
 
 
 
@@ -86,6 +82,7 @@ namespace timeline {
         , navigator_{}
         , patchbay_{vScroll}
         {
+          get_style_context()->add_class (CLASS_timeline_head);
           this->pack_start (navigator_, Gtk::PACK_SHRINK);
           this->pack_start (patchbay_, Gtk::PACK_EXPAND_WIDGET);
         }

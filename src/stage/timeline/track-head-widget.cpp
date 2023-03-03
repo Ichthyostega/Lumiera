@@ -46,6 +46,7 @@
 
 
 #include "stage/gtk-base.hpp"
+#include "stage/style-scheme.hpp"
 #include "stage/timeline/track-head-widget.hpp"
 
 #include "lib/util.hpp"
@@ -72,6 +73,7 @@ namespace timeline {
     , headCtrl_{}
     , childCnt_{0}
     {
+      get_style_context()->add_class (CLASS_fork_head);
       headCtrl_.set_valign(Gtk::Align::ALIGN_CENTER);
       headCtrl_.set_halign(Gtk::Align::ALIGN_FILL);
       this->attach (trackName_, 0,0, 2,1);
@@ -87,6 +89,7 @@ namespace timeline {
     : Gtk::Grid{}
     , ctrlTODO_{"💡"}
     {
+      get_style_context()->add_class (CLASS_fork_control);
       ctrlTODO_.set_xalign (0.3);
       ctrlTODO_.set_yalign (0.5);
       this->attach (ctrlTODO_, 0,0, 1,1);

@@ -90,6 +90,14 @@ namespace stage {
   extern cuString CLASS_slope_deep4;
   extern cuString CLASS_slope_verydeep;
   
+  extern cuString CLASS_timeline_head;
+  extern cuString CLASS_timeline_navi;
+  extern cuString CLASS_timeline_pbay;
+  
+  extern cuString CLASS_fork_head;
+  extern cuString CLASS_fork_bracket;
+  extern cuString CLASS_fork_control;
+  
   extern cuString CLASS_background;
   
   
