@@ -10,7 +10,7 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="100mm"
-   height="100mm"
+   height="120mm"
    viewBox="0 0 100 100"
    version="1.1"
    id="svg8"
@@ -19,7 +19,21 @@
   <title
      id="title815">StaveBracket</title>
   <defs
-     id="defz" />
+     id="defz">
+    <marker
+       inkscape:stockid="Arrow2Mend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow2Mend"
+       inkscape:isstock="true">
+      <path
+         id="path896"
+         style="fill:#004d83;stroke:#004d83;stroke-width:0.5;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         transform="scale(0.6) rotate(180) translate(0,0)" />
+    </marker>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -27,12 +41,12 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.2436667"
-     inkscape:cx="-134.23558"
-     inkscape:cy="420.39176"
+     inkscape:zoom="1.8697222"
+     inkscape:cx="188.97638"
+     inkscape:cy="226.77165"
      inkscape:document-units="mm"
      inkscape:current-layer="svg8"
-     showgrid="true"
+     showgrid="false"
      width="100mm"
      inkscape:window-width="1680"
      inkscape:window-height="1031"
@@ -47,7 +61,7 @@
        id="snapgrid"
        units="mm"
        spacingx="1"
-       spacingy="1"
+       spacingy="0.83333334"
        visible="true" />
   </sodipodi:namedview>
   <metadata
@@ -95,51 +109,96 @@
      inkscape:label="Drawing:Bracket"
      inkscape:groupmode="layer"
      id="layer1">
-    <rect
-       style="fill:none;stroke:teal;stroke-width:0.1"
-       id="rect821"
-       width="10"
-       height="10"
-       x="77"
-       y="61" />
-    <g
-       id="phi_pos"
-       transform="translate(20,50)">
-      <g
-         id="phi">
-        <rect
-           id="phiMaj"
-           y="0"
-           x="0"
-           height="10"
-           width="10"
-           style="fill:none;stroke:teal;stroke-width:0.1" />
-        <rect
-           id="phiMin"
-           y="0"
-           x="0"
-           height="6.1803398"
-           width="6.1803398"
-           style="fill:none;stroke:teal;stroke-width:0.1" />
-        <rect
-           id="phiMinI"
-           y="3.8196602"
-           x="3.8196602"
-           height="6.1803398"
-           width="6.1803398"
-           style="fill:none;stroke:teal;stroke-width:0.1" />
-        <text
-           id="phisym"
-           x="3.8193359"
-           y="6.0935059"
-           style="font-size:3px;font-family:Sans;fill:teal;stroke:none"
-           xml:space="preserve"><tspan
-             id="phispan"
-             sodipodi:role="line"
-             x="3.8193359"
-             y="6.0935059">Φ</tspan></text>
-      </g>
-    </g>
+    <path
+       id="cap_u"
+       transform="matrix(10,0,0,10,50,70)"
+       style="fill:#a0a0a0;stroke:none;stroke-width:0.01"
+       d="M 2.2360679,-2.6180343 C 1.5784391,-1.5539685 0.68209953,-0.65762901 -0.38196626,-2.438908e-7 l 9e-8,-0.9999998561092 C 0.60447706,-1.3288145 1.5008166,-1.8827827 2.236068,-2.6180341"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
+    <path
+       id="dubline"
+       transform="matrix(10,0,0,10,50,69.999999)"
+       style="fill:#787878;stroke:none;stroke-width:0.01"
+       d="M 0.47213596,0 H 0.61803399 V 3.9 H 0.47213596 Z M -0.38196602,-1 H 0 v 4.9000001 h -0.38196602 z"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccccc" />
+    <text
+       id="phisym"
+       x="73.087059"
+       y="55.067478"
+       style="font-size:3px;font-family:Sans;fill:#004d83;stroke:none"
+       xml:space="preserve"><tspan
+         id="phispan"
+         sodipodi:role="line"
+         x="73.087059"
+         y="55.067478">Φ</tspan></text>
+    <text
+       id="phisym2"
+       x="50.139442"
+       y="69.676567"
+       style="font-size:3px;font-family:Sans;fill:#004d83;stroke:none"
+       xml:space="preserve"><tspan
+         id="tspan9"
+         sodipodi:role="line"
+         x="50.139442"
+         y="69.676567">Φ</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3px;font-family:Sans;fill:#004d83;stroke:none"
+       y="44.16069"
+       x="73.087059"
+       id="text851"><tspan
+         sodipodi:role="line"
+         id="tspan853"
+         x="73.087059"
+         y="44.16069">Φ²</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:1.40999997px;font-family:Sans;fill:#004d83;stroke:none"
+       y="47.16256"
+       x="73.287186"
+       id="text857"><tspan
+         sodipodi:role="line"
+         id="tspan859"
+         x="73.287186"
+         y="47.16256">square_minor</tspan></text>
+    <text
+       id="text863"
+       x="36.264141"
+       y="61.371403"
+       style="font-size:1.40999997px;font-family:Sans;fill:#004d83;stroke:none"
+       xml:space="preserve"><tspan
+         y="61.371403"
+         x="36.264141"
+         id="tspan861"
+         sodipodi:role="line">square_minor</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:1.40999997px;font-family:Sans;fill:#004d83;stroke:none"
+       y="71.477699"
+       x="46.370426"
+       id="text867"><tspan
+         sodipodi:role="line"
+         id="tspan869"
+         x="46.370426"
+         y="71.477699">base width</tspan></text>
+    <text
+       id="text862"
+       x="39.266003"
+       y="67.275085"
+       style="font-size:1.40999997px;font-family:Sans;fill:#004d83;stroke:none"
+       xml:space="preserve"><tspan
+         sodipodi:role="line"
+         id="tspan864"
+         x="39.266003"
+         y="67.275085">origin</tspan></text>
+    <path
+       style="fill:none;stroke:#004d83;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;marker-end:url(#Arrow2Mend)"
+       d="m 42.251299,67.623625 c 0,0 4.62788,-0.12508 7.179468,1.951212"
+       id="orgptr"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
   </g>
   <g
      inkscape:groupmode="layer"
@@ -147,7 +206,7 @@
      inkscape:label="Construction" >
     <g
        id="r_trans"
-       transform="scale(10)">
+       transform="matrix(10,0,0,10,50,70)">
       <g
          id="r_ref"
          style="fill:none;stroke:teal;stroke-width:0.01">

@@ -33,8 +33,10 @@
  ** 
  ** \par styling
  ** - styling is controlled via CSS, using the marker class \ref CLASS_fork_bracket
+ ** - the »base width« of the vertical double line is based on the font's `em` setting
+ ** - padding and colour attributes from CSS are observed
  ** 
- ** @todo WIP-WIP-WIP as of 2/2023
+ ** @todo WIP as of 3/2023
  ** 
  */
 
@@ -43,13 +45,6 @@
 #define STAGE_TIMELINE_STAVE_BRACKET_WIDGET_H
 
 #include "stage/gtk-base.hpp"
-//#include "stage/model/controller.hpp"
-
-//#include "lib/util.hpp"
-
-//#include <memory>
-//#include <vector>
-
 
 
 namespace stage  {
@@ -57,8 +52,6 @@ namespace timeline {
   
   using CairoC = PCairoContext const&;
   using StyleC = PStyleContext const&;
-
-//  class TrackPresenter;
   
   
   /**

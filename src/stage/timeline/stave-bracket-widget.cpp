@@ -22,57 +22,69 @@
 
 
 /** @file stave-bracket-widget.cpp
- ** Implementation of drawing code to indicate the structure of nested tracks
- ** in the header area of the Timleline UI.
+ ** Implementation of drawing code to indicate the structure of nested tracks.
+ ** The design of the drawing is inspired by classical score notation, where braces
+ ** are used to group the staves (or stems) for one instrument (e.g. grand piano, organ),
+ ** while brackets are used to group the staves of an ensemble (e.g. string quartet, symphony orchestra)
+ ** The usual typesetting of musical notation relies much on classical design principles, based on the
+ ** golden ratio Φ, which is known to be perceived as _balanced, neutral and unobtrusive._
  ** 
- ** @todo WIP-WIP-WIP as of 2/2023
+ ** The design implemented here is built around a vertical double bar line, and the width of this line
+ ** is used as reference for size calculations; the curved top and bottom cap is enclosed within a
+ ** bounding box of size Φ², when defining the _base width_ to be 1. The inner tangent of the curved
+ ** cap will point towards the end of the smaller (inner) vertical line. While this design is quite
+ ** simple in structure, and rather easy to construct geometrically, deriving all necessary coordinates
+ ** numerically can be a challenge. To build this implementation, the constraint system of *FreeCAD*
+ ** was used to define the relations, and the resulting numbers were picked directly from the resulting
+ ** XML document, and used both to build a SVG for documentation, and for the constants in this source file.
+ ** Using the Gtk::StyleContext and the given Cairo::Context, the drawing code derives the size of the
+ ** defined standard font in device units, and uses this _em_ size as reference to derive a _scale_ factor,
+ ** which is then applied to the drawing as a whole — taking into account any given vertical size limitations
+ ** as imposed by the general nested trade head structure.
+ ** - the FreeCAD document can be found at `doc/devel/draw/StaveBracket.FCStd`
+ ** - see also the SVG image `doc/devel/draw/StaveBracket.svg` for explanation of geometry
+ ** 
+ ** @todo WIP as of 3/2023
  ** 
  */
 
 
 #include "stage/timeline/stave-bracket-widget.hpp"
-//#include "stage/style-scheme.hpp"  /////////////////////TODO needed?
+#include "stage/style-scheme.hpp"
 #include "lib/util.hpp"
 
-//#include <algorithm>
-//#include <vector>
+#include <cmath>
 
 
 
+using util::min;
 using util::max;
-//using util::_Fmt;
-//using util::isnil;
-//using util::contains;
-//using Gtk::Widget;
-//using sigc::mem_fun;
-//using sigc::ptr_fun;
-//using std::cout;
-//using std::endl;
+using std::ceil;
 
 
 namespace stage {
 namespace timeline {
   
-  namespace {
-    const uint REQUIRED_WIDTH_px = 30;
+  namespace {//---------Implementation-details--Stave-Bracket-design-----------------------
+    
     const uint FALLBACK_FONT_SIZE_px = 12.5; // (assuming 96dpi and 10 Point font)
     const uint POINT_PER_INCH = 72;          // typographic point ≔ 1/72 inch
     
     const double BASE_WIDTH_PER_EM = 0.5;    // scale factor: width of double line relative to font size
     
     const double ORG       = 0.0;
-    const double PHI       = (1.0 + sqrt(5)) / 2.0; // Golden Ratio Φ = 1.6180339887498948482
+    const double PHI       = (1.0 + sqrt(5)) / 2.0; // Golden Ratio Φ ≔ ½(1+√5) ≈ 1.6180339887498948482
     const double PHI_MAJOR = PHI - 1.0;             // 1/Φ   = Φ-1
     const double PHI_MINOR = 2.0 - PHI;             // 1-1/Φ = 2-Φ
-    const double PHISQUARE = 1.0 + PHI;             // Φ²    = 1+Φ
-    const double PHI_MINSQ = 5.0 - 3*PHI;           // Φ-minor of Φ-minor : (2-Φ)²= 2 ²-4Φ + Φ²
+    const double PHISQUARE = 1.0 + PHI;             // Φ²    = Φ+1
+    const double PHI_MINSQ = 5.0 - 3*PHI;           // Φ-minor of Φ-minor : (2-Φ)²= 2²-4Φ + Φ²
     
-    const double BAR_WIDTH = PHI_MINOR;             // the main (bold) bar is right aligned to axis
+    const double BAR_WIDTH = PHI_MINOR;             // the main (bold) vertical bar line is right aligned to axis
     const double BAR_LEFT  = -BAR_WIDTH;
-    const double LIN_WIDTH = PHI_MINSQ;             // thin line is Φ-minor or bold line (which itself is Φ-minor)
+    const double LIN_WIDTH = PHI_MINSQ;             // thin line is Φ-minor of bold line (which itself is Φ-minor)
     const double LIN_LEFT  = PHI_MAJOR - LIN_WIDTH; // main line and thin line create a Φ-division
     
-    const double SQUARE_TIP_X = 2.2360679774997880;
+    const double SQUARE_TIP_X = PHISQUARE - PHI_MINOR;
     const double SQUARE_TIP_Y = -PHISQUARE;
     const double SQUARE_MINOR = 1.0;
     
@@ -128,9 +140,48 @@ namespace timeline {
      * @return scale factor to apply to the base layout
      */
     double
-    determineScale (StyleC style)
+    baseWidth (StyleC style)
     {
       return BASE_WIDTH_PER_EM * getAbsoluteFontSize (style);
+    }
+    
+    /**
+     * determine the base metric, taking into account the available canvas size.
+     * @param style CSS style context where this calculation shall apply
+     * @param givenHeight the allocated vertical space for the drawing
+     * @return scale factor to apply to the design of the bracket
+     * @remark the design is anchored at the line width, and other parts
+     *         are related by golden ratio Φ. Notably the bounding box of the
+     *         top and bottom cap is defined as Φ² times the base width.
+     *         Consequently the drawing requires a minimum height of two times
+     *         this bounding box (for top and bottom cap); in case the given
+     *         height allocation is not sufficient, the whole design will be
+     *         scaled down to fit.
+     * @see #baseWidth(StyleC) the desired base width, as derived from font size
+     */
+    double
+    determineScale (StyleC style, int givenHeight)
+    {
+      auto maxScale = givenHeight / (2*PHISQUARE);
+      return min (maxScale, baseWidth (style));
+    }
+    
+    /** @return width in pixels required to realise the bracket construction,
+     *          taking into account the possible vertical limitation
+     * @param givenHeight vertical limitation in (device) pixels
+     * @remark  actually #determineScale is responsible to observe limitations
+     */
+    int
+    calcRequiredWidth (StyleC style, int givenHeight)
+    {
+      return ceil (PHISQUARE * determineScale (style,givenHeight));
+    }
+    
+    /** @return width for the drawing, without considering height limitation */
+    int
+    calcDesiredWidth (StyleC style)
+    {
+      return ceil (PHISQUARE * baseWidth (style));
     }
     
     /** place left anchor reference line to right side of bold bar.
@@ -177,12 +228,15 @@ namespace timeline {
      * @remark See `doc/devel/draw/StaveBracket.svg` for explanation
      */
     void
-    drawCap (CairoC cox, double ox, double oy, double scale, bool upside=true)
+    drawCap (CairoC cox, Gdk::RGBA colour, double ox, double oy, double scale, bool upside=true)
     {
       cox->save();
       cox->translate (ox,oy);
       cox->scale (scale, upside? scale:-scale);
-      cox->set_source_rgb(0.0, 0.0, 0.8); ///////TICKET #1168 : retrieve colour from stylesheet
+      cox->set_source_rgba(colour.get_red()
+                          ,colour.get_green()
+                          ,colour.get_blue()
+                          ,colour.get_alpha());
       // draw the inner contour of the bracket cap,
       // which is the outer arc from left top of the bar to the tip point
       cox->move_to(BAR_LEFT, ORG);
@@ -199,12 +253,15 @@ namespace timeline {
     
     /** draw the double bar to fit between upper and lower cap */
     void
-    drawBar (CairoC cox, double leftX, double upperY, double lowerY, double scale)
+    drawBar (CairoC cox, Gdk::RGBA colour, double leftX, double upperY, double lowerY, double scale)
     {
       cox->save();
       cox->translate (leftX, upperY);
       cox->scale (scale, scale);
-      cox->set_source_rgb(0.0, 0.0, 0.8); ///////TICKET #1168 : retrieve colour from stylesheet
+      cox->set_source_rgba(colour.get_red()
+                          ,colour.get_green()
+                          ,colour.get_blue()
+                          ,colour.get_alpha());
       //
       double height = max (0.0, (lowerY - upperY)/scale);
       cox->rectangle(BAR_LEFT, -SQUARE_MINOR, BAR_WIDTH, height + 2*SQUARE_MINOR);
@@ -214,7 +271,10 @@ namespace timeline {
       //
       cox->restore();
     }
-  }
+    
+  }//(End)Implementation details (drawing design)
+  
+  
   
   
   
@@ -229,39 +289,36 @@ namespace timeline {
     }
   
   
-  
-  /** */
+  /**
+   * Custom drawing: a »stave bracket« to indicate track scope.
+   * The layout is controlled by settings in the CSS style context
+   * - a _base width_ (which is the width of the vertical double bar)
+   *   is based on current font settings, with scale #BASE_WIDTH_PER_EM
+   * - this base width also defines the width requirement reported to
+   *   GTK through #get_preferred_width_for_height_vfunc
+   * - possible padding is picket up from CSS
+   * - current text colour is used for drawing
+   */
   bool
   StaveBracketWidget::on_draw (CairoC cox)
   {
     // invoke (presumably empty) base implementation....
     bool event_is_handled = _Base::on_draw (cox);
     
-    /////////////////////////////////////////////TICKET #1018 : placeholder drawing
-    //
-    int w = get_width();
-    int h = get_allocated_height();
-    cox->set_source_rgb(0.8, 0.0, 0.0);
-    cox->set_line_width (5.0);
-    cox->move_to(0, 0);
-    cox->line_to(w, h);
-    cox->move_to(w, 0);
-    cox->line_to(0, h);
-    cox->stroke();
-    /////////////////////////////////////////////TICKET #1018 : placeholder drawing
-    
     REQUIRE (1.0 == deviceUnitsPerUserUnit (cox)
             ,"Cairo surface in device coordinates assumed");
     
     StyleC style = this->get_style_context();
-    double scale = determineScale (style);
-    double left  = anchorLeft (style, scale);
+    auto  colour = style->get_color (Gtk::STATE_FLAG_NORMAL);
+    int   height = this->get_allocated_height();
+    double scale = determineScale (style, height);
+    double  left = anchorLeft (style, scale);
     double upper = anchorUpper (style,scale);
-    double lower = anchorLower (style, scale, h);
+    double lower = anchorLower (style, scale, height);
     
-    drawCap (cox, left, upper, scale, true);
-    drawCap (cox, left, lower, scale, false);
-    drawBar (cox, left, upper, lower, scale);
+    drawCap (cox, colour, left, upper, scale, true);
+    drawCap (cox, colour, left, lower, scale, false);
+    drawBar (cox, colour, left, upper, lower, scale);
     
     return event_is_handled;
   }
@@ -276,21 +333,22 @@ namespace timeline {
   
   /**
    * The structural outline adapts flexible in vertical direction,
-   * but requires a fixed horizontal size for proper drawing.
+   * but requires a proportional horizontal size for proper drawing.
+   * The horizontal requisition is based on the font in CSS style context.
    */
+  void
+  StaveBracketWidget::get_preferred_width_for_height_vfunc (int givenHeight, int& minimum_width, int& natural_width)  const
+  {
+    StyleC style = this->get_style_context();
+    minimum_width = natural_width = calcRequiredWidth (style, givenHeight);
+  }
+  
   void
   StaveBracketWidget::get_preferred_width_vfunc (int& minimum_width, int& natural_width)  const
   {
-    minimum_width = natural_width = REQUIRED_WIDTH_px;
+    StyleC style = this->get_style_context();
+    minimum_width = natural_width = calcDesiredWidth (style);
   }
-  
-  void
-  StaveBracketWidget::get_preferred_width_for_height_vfunc (int, int& minimum_width, int& natural_width)  const
-  {
-    get_preferred_width (minimum_width, natural_width);
-  }
-  
-  
   
   
 }}// namespace stage::timeline
