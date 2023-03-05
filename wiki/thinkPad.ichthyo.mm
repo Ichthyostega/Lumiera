@@ -29227,8 +29227,8 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1677627185944" ID="ID_1669119375" MODIFIED="1677718531084" TEXT="deviceUnitsPerUserUnit(CairoContext)">
-<icon BUILTIN="button_ok"/>
+<node COLOR="#5b280f" CREATED="1677627185944" ID="ID_1669119375" MODIFIED="1678032805070" TEXT="deviceUnitsPerUserUnit(CairoContext)">
+<icon BUILTIN="button_cancel"/>
 <node COLOR="#435e98" CREATED="1677627310903" ID="ID_1788648551" MODIFIED="1677630788961" TEXT="pr&#xfc;fen: k&#xf6;nnte verzichtbar sein....">
 <icon BUILTIN="idea"/>
 </node>
@@ -29264,6 +29264,16 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="yes"/>
+</node>
+<node COLOR="#c51645" CREATED="1678032808275" ID="ID_1635540981" MODIFIED="1678032853963" TEXT="man darf das nicht ausschlie&#xdf;en &#x2014; es ist ein Freiheitsgrad">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1678032857292" ID="ID_68799047" MODIFIED="1678032914626" TEXT="man sollte es auch nicht kompensieren">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1678032891507" ID="ID_699242092" MODIFIED="1678032911045" TEXT="denn &#xfc;ber diesen Faktor kommt ggfs. ein expliziter Skalierungs-Wunsch"/>
+<node CREATED="1678032867611" ID="ID_1608856160" MODIFIED="1678032888002" TEXT="beispielsweise: die &quot;Lupe&quot; vom GTK-Widget-Debugger">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 </node>

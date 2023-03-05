@@ -122,18 +122,6 @@ namespace timeline {
     }
     
     /**
-     * Probe the CairoContext to determine scale factor already set.
-     * @return number of device units representing a single horizontal user unit
-     */
-    double
-    deviceUnitsPerUserUnit (CairoC cox)
-    {
-      auto dx = 1.0, dy = 0.0;
-      cox->user_to_device_distance (dx,dy);
-      return dx;
-    }
-    
-    /**
      * Setup the base metric for this bracket drawing based on CSS styling.
      * @remark the width of the double line is used as foundation to derive
      *     further layout properties, based on the golden ratio.
@@ -304,9 +292,6 @@ namespace timeline {
   {
     // invoke (presumably empty) base implementation....
     bool event_is_handled = _Base::on_draw (cox);
-    
-    REQUIRE (1.0 == deviceUnitsPerUserUnit (cox)
-            ,"Cairo surface in device coordinates assumed");
     
     StyleC style = this->get_style_context();
     auto  colour = style->get_color (Gtk::STATE_FLAG_NORMAL);
