@@ -27227,7 +27227,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1575063986126" ID="ID_237283777" MODIFIED="1582930967369" TEXT="konkretisiert: als ViewHook-Mechanismus">
+<node COLOR="#338800" CREATED="1575063986126" FOLDED="true" ID="ID_237283777" MODIFIED="1582930967369" TEXT="konkretisiert: als ViewHook-Mechanismus">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -27872,7 +27872,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1540747470806" HGAP="97" ID="ID_831752558" MODIFIED="1557498707227" TEXT="Frage: Patchbay vs TrackHead?" VSHIFT="5">
+<node COLOR="#435e98" CREATED="1540747470806" FOLDED="true" HGAP="97" ID="ID_831752558" MODIFIED="1557498707227" TEXT="Frage: Patchbay vs TrackHead?" VSHIFT="5">
 <icon BUILTIN="help"/>
 <node CREATED="1540747516509" ID="ID_1965076800" MODIFIED="1557498707227" TEXT="ist TrackHeadWidget &#xfc;berfl&#xfc;ssig?">
 <arrowlink COLOR="#6ba7db" DESTINATION="ID_415092517" ENDARROW="Default" ENDINCLINATION="-390;0;" ID="Arrow_ID_1346421423" STARTARROW="None" STARTINCLINATION="445;0;"/>
@@ -27918,9 +27918,22 @@
 <linktarget COLOR="#6ba7db" DESTINATION="ID_415092517" ENDARROW="Default" ENDINCLINATION="-390;0;" ID="Arrow_ID_1346421423" SOURCE="ID_1965076800" STARTARROW="None" STARTINCLINATION="445;0;"/>
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1553907064499" HGAP="11" ID="ID_1688412302" MODIFIED="1557498707227" TEXT="Fazit" VSHIFT="5">
+<node CREATED="1553907064499" HGAP="11" ID="ID_1688412302" MODIFIED="1678026754379" TEXT="Fazit" VSHIFT="5">
+<icon BUILTIN="forward"/>
 <node CREATED="1553907073255" ID="ID_1710444282" MODIFIED="1557498707227" TEXT="Patchbay ist ein Container f&#xfc;r die Track Heads"/>
 <node CREATED="1553907087204" ID="ID_752287871" MODIFIED="1563469756375" TEXT="zust&#xe4;ndig f&#xfc;r das Einh&#xe4;ngen und das vertikale Scrolling"/>
+<node CREATED="1678026759149" ID="ID_1362126122" MODIFIED="1678026778735" TEXT="k&#xfc;nftig ggfs. auch f&#xfc;r globale Belange">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      z.B. Folding
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 </node>
@@ -27989,19 +28002,19 @@
 <node CREATED="1563469807081" ID="ID_1454613932" MODIFIED="1563469830842" TEXT="auf erneutes Einf&#xfc;gen warten"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469620357" ID="ID_530086217" MODIFIED="1566956124941" TEXT="Fork-Anzeige passend malen">
+<node COLOR="#338800" CREATED="1563469620357" ID="ID_530086217" MODIFIED="1678063278209" TEXT="Fork-Anzeige passend malen">
 <linktarget COLOR="#fec680" DESTINATION="ID_530086217" ENDARROW="Default" ENDINCLINATION="-1470;-163;" ID="Arrow_ID_1923188182" SOURCE="ID_1575894780" STARTARROW="None" STARTINCLINATION="1147;124;"/>
 <linktarget COLOR="#b74f6e" DESTINATION="ID_530086217" ENDARROW="Default" ENDINCLINATION="276;749;" ID="Arrow_ID_614998223" SOURCE="ID_1366095324" STARTARROW="None" STARTINCLINATION="644;37;"/>
 <linktarget COLOR="#f6e1c2" DESTINATION="ID_530086217" ENDARROW="Default" ENDINCLINATION="-366;30;" ID="Arrow_ID_694017211" SOURCE="ID_1463490313" STARTARROW="None" STARTINCLINATION="-2163;252;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1563469700651" ID="ID_478580800" MODIFIED="1674513411592" TEXT="auf die richtige H&#xf6;he zielen">
 <arrowlink COLOR="#6493a2" DESTINATION="ID_1561724587" ENDARROW="Default" ENDINCLINATION="7;82;" ID="Arrow_ID_1646540229" STARTARROW="None" STARTINCLINATION="-16;-50;"/>
 <linktarget COLOR="#5ba7d5" DESTINATION="ID_478580800" ENDARROW="Default" ENDINCLINATION="358;-30;" ID="Arrow_ID_776518349" SOURCE="ID_904031404" STARTARROW="None" STARTINCLINATION="-77;131;"/>
 <linktarget COLOR="#5a7c92" DESTINATION="ID_478580800" ENDARROW="Default" ENDINCLINATION="451;41;" ID="Arrow_ID_513449931" SOURCE="ID_1311832889" STARTARROW="None" STARTINCLINATION="481;-27;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1675898638485" ID="ID_164545383" MODIFIED="1676047525964" TEXT="Strukturdiagramm rendern">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1675898638485" ID="ID_164545383" MODIFIED="1678063046265" TEXT="Strukturdiagramm rendern">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1675898729441" ID="ID_1183614893" MODIFIED="1676047503876" TEXT="verwende direkt eine DrawingArea">
 <icon BUILTIN="idea"/>
 <node COLOR="#435e98" CREATED="1675898738064" ID="ID_736159731" LINK="https://developer-old.gnome.org/gtkmm-tutorial/stable/chapter-drawingarea.html.en" MODIFIED="1675898751929" TEXT="Tutorial">
@@ -28040,12 +28053,12 @@
 <node CREATED="1675902382537" ID="ID_861207485" MODIFIED="1675902467097" TEXT="Ankn&#xfc;pfung f&#xfc;r Sub-Tracks"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1675902513027" ID="ID_1162268597" MODIFIED="1676047476754" TEXT="Implementierung">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1675902520928" ID="ID_468397914" MODIFIED="1676047473663" TEXT="Basisfunktionalit&#xe4;t">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1675902529503" ID="ID_544667587" MODIFIED="1676047464745" TEXT="draw()-Funktion">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1675902513027" ID="ID_1162268597" MODIFIED="1678063043688" TEXT="Implementierung">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1675902520928" ID="ID_468397914" MODIFIED="1678063037542" TEXT="Basisfunktionalit&#xe4;t">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1675902529503" FOLDED="true" ID="ID_544667587" MODIFIED="1678063124524" TEXT="draw()-Funktion">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1676045132371" ID="ID_1480458495" MODIFIED="1676045152492" TEXT="Bezugspunkt: Tutorial + BodyCanvasWidget"/>
 <node COLOR="#338800" CREATED="1676045153720" ID="ID_1064401846" MODIFIED="1676047466829" TEXT="on_draw() &#xfc;berlagern">
 <icon BUILTIN="button_ok"/>
@@ -28786,8 +28799,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1677426603105" ID="ID_243044944" MODIFIED="1677861011227" TEXT="Gesamtanordnung steuern">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1677426603105" ID="ID_243044944" MODIFIED="1678054539122" TEXT="Gesamtanordnung steuern">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1677458294653" ID="ID_1105975491" MODIFIED="1677851113897" TEXT="brauche Zugriff auf Layout-Steuerung">
 <arrowlink COLOR="#5586b2" DESTINATION="ID_883997565" ENDARROW="Default" ENDINCLINATION="108;-242;" ID="Arrow_ID_1785981386" STARTARROW="None" STARTINCLINATION="-291;20;"/>
 <icon BUILTIN="button_ok"/>
@@ -28868,8 +28881,238 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677426740361" ID="ID_1498455508" MODIFIED="1677426748306" TEXT="Ankerpunkt f&#xfc;r Sub-Scopes">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1677426740361" FOLDED="true" ID="ID_1498455508" MODIFIED="1678063029999" TEXT="Ankerpunkt f&#xfc;r Sub-Scopes">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1678027707725" ID="ID_1088634692" MODIFIED="1678027911538" TEXT="Informationsflu&#xdf;?">
+<icon BUILTIN="help"/>
+<node CREATED="1678027725255" ID="ID_244001513" MODIFIED="1678027744477" TEXT="Ankerpunkt-H&#xf6;he zu setzen auf der aktuellen StaveBracket"/>
+<node CREATED="1678027785347" ID="ID_1776470057" MODIFIED="1678027806812" TEXT="Quelle ist der aktuelle relative Offset des Child-Track"/>
+<node CREATED="1678027811599" ID="ID_137446567" MODIFIED="1678027856711" TEXT="alle Info liegt lokal vor &#x27f9; im Display-Evaluation-Pass">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1678027913100" ID="ID_1469793297" MODIFIED="1678054528877" TEXT="Aktionen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#5b280f" CREATED="1678027923050" ID="ID_290002506" MODIFIED="1678028880024" TEXT="Ankerpunkt als Solchen vorsehen">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1678027936823" ID="ID_1498868700" MODIFIED="1678027946209" TEXT="attach|detach SubFork"/>
+<node CREATED="1678028843581" ID="ID_1168167530" MODIFIED="1678028951827" TEXT="&#xfc;berfl&#xfc;ssig: bringt eigentlich nix">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn wir m&#252;ssen sowiso einen globalen Pass machen, und zwar erst sp&#228;t, wenn das Layout bereits komplett geregelt ist
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#903134" DESTINATION="ID_1168167530" ENDARROW="Default" ENDINCLINATION="226;18;" ID="Arrow_ID_982689463" SOURCE="ID_1938349456" STARTARROW="None" STARTINCLINATION="81;0;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1678027951474" ID="ID_1668829531" MODIFIED="1678054530558" TEXT="Ankerpunkt-H&#xf6;he pr&#xe4;zise festsetzen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1678028166248" ID="ID_1827737851" MODIFIED="1678028674353">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">TrackHeadWidget::syncSubtrackStartHeight (uint directHeight)</font>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#bc2454" DESTINATION="ID_1938349456" ENDARROW="Default" ENDINCLINATION="-147;6;" ID="Arrow_ID_969124444" STARTARROW="None" STARTINCLINATION="-99;5;"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1678028227991" ID="ID_1354143607" MODIFIED="1678028733057">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#10551; <i>kommend von</i>&#160;<font face="Monospaced" size="2">DisplayFrame::sync_and_balance (DisplayEvaluation&amp;)</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1678028276056" ID="ID_641317895" MODIFIED="1678028291624" TEXT="2. Pass der DisplayEvaluation">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1678028495768" ID="ID_1391860613" MODIFIED="1678028514740" TEXT="Reihenfolge OK: depth-first-Postfix">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1678028348927" ID="ID_942182996" MODIFIED="1678028413547" TEXT="liefert aber nur den relativen Offset des sub-Track-Bereichs"/>
+<node CREATED="1678028377219" ID="ID_1791569099" MODIFIED="1678028406664" TEXT="mu&#xdf; zudem auch die konkrete H&#xf6;he der einzelnen sub-Tracks propagieren">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1678028613860" ID="ID_1938349456" MODIFIED="1678028956492" TEXT="also doch besser dann als Operation f&#xfc;r den ganzen Track-Head">
+<arrowlink COLOR="#903134" DESTINATION="ID_1168167530" ENDARROW="Default" ENDINCLINATION="226;18;" ID="Arrow_ID_982689463" STARTARROW="None" STARTINCLINATION="81;0;"/>
+<linktarget COLOR="#bc2454" DESTINATION="ID_1938349456" ENDARROW="Default" ENDINCLINATION="-147;6;" ID="Arrow_ID_969124444" SOURCE="ID_1827737851" STARTARROW="None" STARTINCLINATION="-99;5;"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1678028693313" ID="ID_1210494901" MODIFIED="1678028703577">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">TrackHeadWidget::accommodateOverallHeight(uint overallHeight)</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1678028969854" ID="ID_1010346697" MODIFIED="1678049461158" TEXT="neue Funktion f&#xfc;r TrackHeadWidget">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1678029068390" ID="ID_628565460" MODIFIED="1678029075809" TEXT="linkSubTrackPositions"/>
+<node CREATED="1678049436749" ID="ID_1061735805" MODIFIED="1678049447451" TEXT="rechnet den Offsett kumulativ..."/>
+<node CREATED="1678049449631" ID="ID_295850096" MODIFIED="1678049459298" TEXT="&#xfc;bergibt ihn &quot;schleppend&quot;"/>
+</node>
+<node COLOR="#435e98" CREATED="1678058911756" ID="ID_316615403" MODIFIED="1678062933937" TEXT="Position nicht akkurat ermittelt">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1678058927261" ID="ID_2489808" MODIFIED="1678058959142" TEXT="f&#xe4;llt zun&#xe4;chst fast nicht auf, aber der Pfeil ist um 1-2px zu hoch">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1678059097715" ID="ID_367366159" MODIFIED="1678059119084" TEXT="Experiment: alle gemessenen Offsets jeweils explizit mit einerm Connector markieren">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1678058960509" ID="ID_755126006" MODIFIED="1678059095895" TEXT="anscheinend eine Kombination mehrerer Fehler in der Layout-Logik">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        zum Einen habe ich unbemerkt die getLabelHeight() vom Parent zum Child verschleppt. Das ist aber unter dem Strich korrekt, weil jedes Kind wieder mit einem Label beginnt
+      </li>
+      <li>
+        au&#223;erdem gibt es da anscheinend im Grid ein zus&#228;tzliches Padding, was mir bisher entgangen war
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#5b280f" CREATED="1678061441159" ID="ID_1093502682" MODIFIED="1678061454811" TEXT="nein: es ist kein row_spacing gesetzt">
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#435e98" CREATED="1678061459565" HGAP="33" ID="ID_1977884766" MODIFIED="1678061483474" TEXT="sicherheitshalber das auch explizit = 0" VSHIFT="6">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node CREATED="1678061488359" ID="ID_1016675845" MODIFIED="1678061698397" TEXT="Ha! der Spreiz-Effekt der Expander-Spalte wird zwischen die Zeilen verteilt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      der Expander in der ersten Spalte dient dazu, das TrackHeadWidget auf eine geforderte Nenn-H&#246;he aufzuspannen. Anscheinend habe ich die Zellen so definiert, da&#223; diese Diskrepanz als spacing zwischen Label, Content und SyncPadding verteilt wird
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1678061699565" ID="ID_1726897504" MODIFIED="1678061716315" TEXT="diese Diskrepanz erfassen und zus&#xe4;tzlich als Offset einreichnen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1678049477756" ID="ID_341782472" MODIFIED="1678062950593" TEXT="Verbindung zeichnen">
+<linktarget COLOR="#74bc9c" DESTINATION="ID_341782472" ENDARROW="Default" ENDINCLINATION="-47;311;" ID="Arrow_ID_796598927" SOURCE="ID_916814047" STARTARROW="None" STARTINCLINATION="312;26;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1678049497561" ID="ID_1369706059" MODIFIED="1678049721195" TEXT="den Offset mit der Geometrie des StaveBracket verbinden">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1678049544501" ID="ID_1360937684" MODIFIED="1678049683125" TEXT="Offset der Kappe ber&#xfc;cksichtigen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1678049558487" ID="ID_1961258061" MODIFIED="1678049687672" TEXT="verwende Nullpunkt der oberen Kappe als Bezugssystem">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1678049569243" ID="ID_1792975653" MODIFIED="1678049691033" TEXT="nochmal die H&#xf6;he der Kappe als zus&#xe4;tzlicher Offset">
+<icon BUILTIN="idea"/>
+<node CREATED="1678049589007" ID="ID_114677730" MODIFIED="1678049717907" TEXT="damit die Verbindung am Nullpunkt der Kind-Klammer ansetzt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      mache hier die vereinfachtende Annahme, da&#223; alle Brackets die gleiche Metrik haben
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1678049635786" ID="ID_1684871223" MODIFIED="1678049681821" TEXT="sieht visuell korrekt aus">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gepr&#252;ft mit Screenshot in Gimp.
+    </p>
+    <p>
+      Unter der Einschr&#228;nkung, da&#223; hier viel Aliasing passiert und das Bild schon relativ klein ist
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1678049724136" ID="ID_895610001" MODIFIED="1678049829318" TEXT="Zweifel an der Genauigkeit der Zeichnung">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1678049738310" ID="ID_1123952666" MODIFIED="1678049749873" TEXT="das liegt vermutlich vor allem am Zeichnen eines Kreises"/>
+<node CREATED="1678049750825" ID="ID_1765806485" MODIFIED="1678049761575" TEXT="und au&#xdf;erdem f&#xfc;lle ich nur (ohne Stroke)"/>
+<node CREATED="1678049763211" ID="ID_53745567" MODIFIED="1678049778700" TEXT="mit einem Rechteck kommt die Breite ganz exakt raus"/>
+<node COLOR="#338800" CREATED="1678049788263" ID="ID_1352330785" MODIFIED="1678049835012" TEXT="&#x27f9; den Kreis auf Radius PHI_MAJOR vergr&#xf6;&#xdf;ern"/>
+<node COLOR="#338800" CREATED="1678049817972" ID="ID_167200594" MODIFIED="1678049835012" TEXT="&#x27f9; auch noch eine Kontur zeichnen"/>
+</node>
+<node COLOR="#338800" CREATED="1678054029564" ID="ID_386732686" MODIFIED="1678054319420" TEXT="Au&#xdf;erdem noch einen Pfeil as Verbindung">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1678054045057" ID="ID_374835137" MODIFIED="1678054054417" TEXT="brauche daf&#xfc;r die Gesamtbreite">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1678054055874" ID="ID_800035074" MODIFIED="1678054377273" TEXT="Bugfix: Breite mu&#xdf; padding-right einschlie&#xdf;en">
+<linktarget COLOR="#77a6bb" DESTINATION="ID_800035074" ENDARROW="Default" ENDINCLINATION="87;5;" ID="Arrow_ID_1851726914" SOURCE="ID_325851993" STARTARROW="None" STARTINCLINATION="129;-3;"/>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1678054322417" ID="ID_1962694218" MODIFIED="1678054509666" TEXT="Pfeile sehen unsauber aus">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1678054332187" ID="ID_1403282354" MODIFIED="1678054514935" TEXT="mehrere Probleme...">
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#435e98" CREATED="1678054338408" ID="ID_325851993" MODIFIED="1678054518906" TEXT="zu wenig Platz &#x27f9; auch noch das Padding nutzen">
+<arrowlink COLOR="#77a6bb" DESTINATION="ID_800035074" ENDARROW="Default" ENDINCLINATION="87;5;" ID="Arrow_ID_1851726914" STARTARROW="None" STARTINCLINATION="129;-3;"/>
+</node>
+<node COLOR="#435e98" CREATED="1678054386819" ID="ID_650165799" MODIFIED="1678054518906" TEXT="Pfeile d&#xfc;rfen nicht zu schlank sein"/>
+<node COLOR="#435e98" CREATED="1678054403496" ID="ID_910454360" MODIFIED="1678054518905" TEXT="Pfeil-Breite per &#x3a6; an joint-Durchmesser"/>
+<node COLOR="#435e98" CREATED="1678054437780" ID="ID_289152885" MODIFIED="1678054518905" TEXT="brauche eine scharfe Gehrung (&quot;miter&quot;)">
+<node CREATED="1678054454505" ID="ID_829025847" MODIFIED="1678054489675" TEXT="miter_limit auf 20 hochsetzen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...der default ist 10, und das erzeugt eine Gehrung nur bis ca 20&#176;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1678054491002" ID="ID_1642552980" MODIFIED="1678054506894" TEXT="zus&#xe4;tzlich 1 unit (px) Luft lassen">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1677426668947" ID="ID_1313952369" MODIFIED="1677867091124" TEXT="Farbe setzen">
 <linktarget COLOR="#346382" DESTINATION="ID_1313952369" ENDARROW="Default" ENDINCLINATION="-273;44;" ID="Arrow_ID_1766960947" SOURCE="ID_1533322932" STARTARROW="None" STARTINCLINATION="102;9;"/>
@@ -28877,9 +29120,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1677451594072" ID="ID_1658195962" MODIFIED="1677451603991" TEXT="Layout-Steuerung">
-<icon BUILTIN="flag-yellow"/>
-<node COLOR="#338800" CREATED="1676046656020" ID="ID_739149798" MODIFIED="1677451623361" TEXT="horizontale Ausdehnung steuern">
+<node COLOR="#338800" CREATED="1677451594072" FOLDED="true" ID="ID_1658195962" MODIFIED="1678063122123" TEXT="Layout-Steuerung">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1676046656020" FOLDED="true" ID="ID_739149798" MODIFIED="1677451623361" TEXT="horizontale Ausdehnung steuern">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1676046671288" ID="ID_823909101" MODIFIED="1676047541409" TEXT="intrinsich feste Ausdehnung erforderlich, nun H&#xf6;he variabel">
 <icon BUILTIN="yes"/>
@@ -28891,7 +29134,7 @@
 <arrowlink COLOR="#60a5a0" DESTINATION="ID_1701009358" ENDARROW="Default" ENDINCLINATION="234;0;" ID="Arrow_ID_1201169468" STARTARROW="None" STARTINCLINATION="8;-5;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#435e98" CREATED="1676047436191" ID="ID_1883772058" MODIFIED="1676085951547" TEXT="Problem: GTK weist manchmal trotzdem mehr zu">
+<node COLOR="#435e98" CREATED="1676047436191" FOLDED="true" ID="ID_1883772058" MODIFIED="1676085951547" TEXT="Problem: GTK weist manchmal trotzdem mehr zu">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1676085625293" ID="ID_1842723782" MODIFIED="1676085879659" TEXT="Uh-oh ... es ist kompliziert">
 <richcontent TYPE="NOTE"><html>
@@ -29036,7 +29279,7 @@
 <node CREATED="1677457677976" ID="ID_1603877421" MODIFIED="1677457706351" TEXT="(inline)Accessor-Funktionen zur Vereinfachung der Notation"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1677546010944" FOLDED="true" ID="ID_1646590066" MODIFIED="1677776043573" TEXT="Ermitteln des Skalenfaktors">
+<node COLOR="#338800" CREATED="1677546010944" FOLDED="true" ID="ID_1646590066" MODIFIED="1678032781761" TEXT="Ermitteln des Skalenfaktors">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1677546026066" ID="ID_909459060" MODIFIED="1677546037940" TEXT="h&#xe4;ngt zusammen mit der Bildschirmaufl&#xf6;sung (dpi)">
 <node CREATED="1677546064069" ID="ID_1332973072" LINK="https://stackoverflow.com/a/446280" MODIFIED="1677546112075">
@@ -29314,7 +29557,10 @@
 </node>
 <node COLOR="#338800" CREATED="1677457971241" ID="ID_716437219" MODIFIED="1677851087182" TEXT="Padding">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1677458131835" ID="ID_1560054657" MODIFIED="1677458143628" TEXT="direkt aus CSS entnehmen"/>
+<node COLOR="#435e98" CREATED="1677458131835" ID="ID_1560054657" MODIFIED="1678054570385" TEXT="direkt aus CSS entnehmen"/>
+<node COLOR="#435e98" CREATED="1678054549373" ID="ID_1191383987" MODIFIED="1678054569562" TEXT="auch oben/unten und rechts ber&#xfc;cksichtigen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1677864417723" ID="ID_692056392" MODIFIED="1677864442889">
@@ -29333,10 +29579,14 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1675902610612" ID="ID_1308174165" MODIFIED="1675902619939" TEXT="Struktur-Schema">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1675902621506" ID="ID_916814047" MODIFIED="1675902629703" TEXT="Ankn&#xfc;pfungen">
-<icon BUILTIN="hourglass"/>
+<node COLOR="#338800" CREATED="1675902610612" ID="ID_1308174165" MODIFIED="1678054628480" TEXT="Struktur-Schema">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1675902621506" ID="ID_916814047" MODIFIED="1678054663077" TEXT="Ankn&#xfc;pfungen an Sub-Scopes">
+<arrowlink COLOR="#74bc9c" DESTINATION="ID_341782472" ENDARROW="Default" ENDINCLINATION="-47;311;" ID="Arrow_ID_796598927" STARTARROW="None" STARTINCLINATION="312;26;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1678054620259" ID="ID_1530313574" MODIFIED="1678054627124" TEXT="Verbindungs-Elemente zeichnen">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -29347,9 +29597,9 @@
 <arrowlink COLOR="#346382" DESTINATION="ID_1313952369" ENDARROW="Default" ENDINCLINATION="-273;44;" ID="Arrow_ID_1766960947" STARTARROW="None" STARTINCLINATION="102;9;"/>
 <icon BUILTIN="button_ok"/>
 </node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1563469735149" ID="ID_704791408" MODIFIED="1678063062655" TEXT="Selection-State zeigen">
+<icon BUILTIN="hourglass"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1563469735149" ID="ID_704791408" MODIFIED="1563469741153" TEXT="Selection-State zeigen">
-<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
@@ -33977,8 +34227,34 @@
 <node CREATED="1566685563043" ID="ID_1475468086" MODIFIED="1566685580320" TEXT="(Anmerkung: das Diff ist anders als das Beispiel im TiddlyWiki)"/>
 <node COLOR="#338800" CREATED="1566689127609" ID="ID_479226069" MODIFIED="1566689147622" TEXT="Fehler in der Platzierung im Track-Head behoben">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1566689183161" ID="ID_1366095324" MODIFIED="1566956124941" TEXT="Layout im Track-Head immer noch etwas komisch">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1566689183161" ID="ID_1366095324" MODIFIED="1678063263325" TEXT="Layout im Track-Head immer noch etwas komisch">
 <arrowlink COLOR="#b74f6e" DESTINATION="ID_530086217" ENDARROW="Default" ENDINCLINATION="276;749;" ID="Arrow_ID_614998223" STARTARROW="None" STARTINCLINATION="644;37;"/>
+<icon BUILTIN="bell"/>
+</node>
+<node CREATED="1678063155834" ID="ID_774623134" MODIFIED="1678063196926" TEXT="ein Problem k&#xf6;nnte die Verteilung zus&#xe4;tzlcher vertikaler Ausdehnung sein">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...dar&#252;ber bin ich auch beim Zeichnen der Connector im StaveBracket gestolpert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1678063198596" ID="ID_1800094446" MODIFIED="1678063238335" TEXT="wenn man den Splitter zieht, springt die vertikale Platzverteilung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sichtbar an der H&#246;he der Sub-Scope-Verbindungen auf den StaveBrackets
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 </node>

@@ -81,13 +81,15 @@ namespace timeline {
       this->attach (headCtrl_, 1,1, 1,1); // corresponds to direct content
       this->attach (padding_,  1,2, 1,1);//  used to sync with sub-track display
       this->property_expand() = false;  //   do not expand to fill
+      this->set_column_spacing(0);
+      this->set_row_spacing(0);
       this->show_all();
     }
   
   
   HeadControlArea::HeadControlArea()
     : Gtk::Grid{}
-    , ctrlTODO_{"💡"}
+    , ctrlTODO_{"\n 💡"}
     {
       get_style_context()->add_class (CLASS_fork_control);
       ctrlTODO_.set_xalign (0.3);
@@ -144,9 +146,14 @@ namespace timeline {
   void
   TrackHeadWidget::accommodateOverallHeight(uint overallHeight)
   {
+    uint discrepancy{0};
     uint localHeight = getOverallHeight();
     if (overallHeight > localHeight)
-      enforceExpansionHeight (overallHeight - getLabelHeight());
+      {
+        enforceExpansionHeight (overallHeight - getLabelHeight());
+        discrepancy = overallHeight-localHeight;
+      }
+    linkSubTrackPositions (discrepancy);
   }
 
   /**
@@ -163,8 +170,29 @@ namespace timeline {
     if (directHeight > localHeight)
       enforceSyncPadHeight (directHeight - localHeight);
   }
-
-
+  
+  /**
+   * Coordinate the exact positions of sub-Track start during DisplayEvaluaton.
+   * @note assuming that layout for all sub-Tracks is already final when called
+   * @param discrepancy additional vertical offset incurred to reach a nominal height;
+   *        this value is interspersed between the content cells and above the Children
+   */
+  void
+  TrackHeadWidget::linkSubTrackPositions(uint discrepancy)
+  {
+    structure_.clearConnectors();
+    uint offset = getContentHeight()
+                + getSyncPadHeight()
+                + discrepancy
+                + getLabelHeight()  // offset by the label in the children
+                ;
+    for (uint child=0; child < childCnt_; ++child)
+      {
+        structure_.addConnector (offset);
+        offset += getHeightAt (1, child+3);
+      }
+  }
+  
   
   /**
    * @remark The Lumiera Timeline model does not rely on a list of tracks, as most conventional

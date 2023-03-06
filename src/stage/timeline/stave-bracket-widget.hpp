@@ -30,13 +30,15 @@
  ** the actual space allocation and positioning of sub-tracks in the layout; technicalities
  ** of actual drawing this structure is abstracted into this custom widget — allowing the
  ** track head to indicate the necessary layout constraints generic and recursively.
+ ** The relation to nested stave brackets for sub-Tracks can be indicated with a
+ ** connection joint and arrow; prerequisite is to provide the vertical offset.
  ** 
  ** \par styling
  ** - styling is controlled via CSS, using the marker class \ref CLASS_fork_bracket
  ** - the »base width« of the vertical double line is based on the font's `em` setting
  ** - padding and colour attributes from CSS are observed
  ** 
- ** @todo WIP as of 3/2023
+ ** @see TrackHeadWidget::structure_
  ** 
  */
 
@@ -45,6 +47,8 @@
 #define STAGE_TIMELINE_STAVE_BRACKET_WIDGET_H
 
 #include "stage/gtk-base.hpp"
+
+#include <vector>
 
 
 namespace stage  {
@@ -64,11 +68,14 @@ namespace timeline {
     : public Gtk::DrawingArea
     {
       using _Base = Gtk::DrawingArea;
+      std::vector<uint> connectors_;
       
     public:
      ~StaveBracketWidget();
+      StaveBracketWidget();
       
-      StaveBracketWidget ();
+      void clearConnectors();
+      void addConnector (uint offset);
       
     private:/* ===== Internals ===== */
       
@@ -78,6 +85,27 @@ namespace timeline {
       void get_preferred_width_vfunc (int&, int&)                const override;
       void get_preferred_width_for_height_vfunc (int, int&,int&) const override;
     };
+  
+  
+  
+  inline void
+  StaveBracketWidget::clearConnectors()
+  {
+    connectors_.clear();
+  }
+  
+  /**
+   * Request to draw a connector to the nested sub-Track's stave bracket.
+   * @param offset vertical location where the sub-Track starts, relative
+   *        to the start of this stave bracket's start
+   * @remark called from the 2nd DisplayEvaluation pass, when linking the layout
+   * @see TrackHeadWidget::linkSubTrackPositions
+   */
+  inline void
+  StaveBracketWidget::addConnector (uint offset)
+  {
+    connectors_.emplace_back (offset);
+  }
   
   
 }}// namespace stage::timeline

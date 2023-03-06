@@ -41,10 +41,9 @@
  ** defined standard font in device units, and uses this _em_ size as reference to derive a _scale_ factor,
  ** which is then applied to the drawing as a whole — taking into account any given vertical size limitations
  ** as imposed by the general nested trade head structure.
- ** - the FreeCAD document can be found at `doc/devel/draw/StaveBracket.FCStd`
- ** - see also the SVG image `doc/devel/draw/StaveBracket.svg` for explanation of geometry
- ** 
- ** @todo WIP as of 3/2023
+ ** @see the FreeCAD document can be found at `doc/devel/draw/StaveBracket.FCStd`
+ ** @see SVG image `doc/devel/draw/StaveBracket.svg` for explanation of geometry
+ ** @see explanation on page #TrackStaveBracket in the TiddlyWiki
  ** 
  */
 
@@ -73,7 +72,7 @@ namespace timeline {
     const double BASE_WIDTH_PER_EM = 0.5;    // scale factor: width of double line relative to font size
     
     const double ORG       = 0.0;
-    const double PHI       = (1.0 + sqrt(5)) / 2.0; // Golden Ratio Φ ≔ ½(1+√5) ≈ 1.6180339887498948482
+    const double PHI       = (1.0 + sqrt(5)) / 2.0; // Golden Ratio Φ ≔ ½·(1+√5) ≈ 1.6180339887498948482
     const double PHI_MAJOR = PHI - 1.0;             // 1/Φ   = Φ-1
     const double PHI_MINOR = 2.0 - PHI;             // 1-1/Φ = 2-Φ
     const double PHISQUARE = 1.0 + PHI;             // Φ²    = Φ+1
@@ -150,7 +149,9 @@ namespace timeline {
     double
     determineScale (StyleC style, int givenHeight)
     {
-      auto maxScale = givenHeight / (2*PHISQUARE);
+      auto required = 2*PHISQUARE + style->get_padding().get_top()
+                                  + style->get_padding().get_bottom();
+      auto maxScale = givenHeight / (required);
       return min (maxScale, baseWidth (style));
     }
     
@@ -162,14 +163,20 @@ namespace timeline {
     int
     calcRequiredWidth (StyleC style, int givenHeight)
     {
-      return ceil (PHISQUARE * determineScale (style,givenHeight));
+      return ceil (PHISQUARE * determineScale (style,givenHeight)
+                  +style->get_padding().get_right()
+                  +style->get_padding().get_left()
+                  );
     }
     
     /** @return width for the drawing, without considering height limitation */
     int
     calcDesiredWidth (StyleC style)
     {
-      return ceil (PHISQUARE * baseWidth (style));
+      return ceil (PHISQUARE * baseWidth (style)
+                  +style->get_padding().get_right()
+                  +style->get_padding().get_left()
+                  );
     }
     
     /** place left anchor reference line to right side of bold bar.
@@ -260,6 +267,70 @@ namespace timeline {
       cox->restore();
     }
     
+    /**
+     * Indicate connection to nested sub-Track scopes.
+     * Draw a connector dot at each joint, and a arrow
+     * pointing towards the nested StaveBracket top.
+     * @todo simplistic implementation as of 3/23;
+     *       could be made expandable /collapsable
+     */
+    void
+    connect (CairoC cox, Gdk::RGBA colour
+            ,double leftX, double upperY, double lowerY, double width, double scale
+            ,std::vector<uint> connectors)
+    {
+      double limit = lowerY - upperY;
+      double line = leftX + scale*(LIN_LEFT + LIN_WIDTH/2);
+      double rad = scale * PHI_MAJOR;
+      cox->save();
+      // shift connectors to join below top cap
+      cox->translate (line, upperY);
+      // fill circle with a lightened yellow hue
+      cox->set_source_rgb(1 - 0.2*(colour.get_red())
+                         ,1 - 0.2*(colour.get_green())
+                         ,1 - 0.5*(1 - colour.get_blue()) );
+      // draw a circle joint on top of the small vertical line
+      for (uint off : connectors)
+        if (off <= limit)
+          {
+            cox->move_to(rad,off);
+            cox->arc    (  0,off, rad, 0, 2 * M_PI);
+            cox->close_path();
+          }
+      //
+      cox->fill_preserve();
+      cox->set_source_rgba(colour.get_red()
+                          ,colour.get_green()
+                          ,colour.get_blue()
+                          ,colour.get_alpha());
+      cox->set_line_width(scale*LIN_WIDTH*PHI_MAJOR);
+      cox->stroke();
+      //
+      // draw connecting arrows...
+      cox->translate(rad,0);
+      // Note: arrow tip uses complete width, reaches into the padding-right
+      double len = width-line-rad-1; // -1 to create room for a sharp miter
+      ASSERT (len > 0);
+      double arr = len * PHI_MINOR;
+      double bas = scale * PHI_MINOR;
+      for (uint off : connectors)
+        if (off <= limit)
+          {
+            cox->move_to(ORG,off);
+            cox->line_to(arr,off);
+            // draw arrow head...
+            cox->move_to(arr,off-bas);
+            cox->line_to(len,off);
+            cox->line_to(arr,off+bas);
+            cox->close_path();
+          }
+      cox->set_miter_limit(20); // to create sharp arrow tip
+      cox->fill_preserve();
+      cox->stroke();
+      //
+      cox->restore();
+    }
+    
   }//(End)Implementation details (drawing design)
   
   
@@ -271,6 +342,7 @@ namespace timeline {
   
   StaveBracketWidget::StaveBracketWidget ()
     : _Base{}
+    , connectors_{}
     {
       get_style_context()->add_class (CLASS_fork_bracket);
       this->property_expand() = false;
@@ -296,6 +368,7 @@ namespace timeline {
     StyleC style = this->get_style_context();
     auto  colour = style->get_color (Gtk::STATE_FLAG_NORMAL);
     int   height = this->get_allocated_height();
+    int    width = this->get_width();
     double scale = determineScale (style, height);
     double  left = anchorLeft (style, scale);
     double upper = anchorUpper (style,scale);
@@ -304,6 +377,7 @@ namespace timeline {
     drawCap (cox, colour, left, upper, scale, true);
     drawCap (cox, colour, left, lower, scale, false);
     drawBar (cox, colour, left, upper, lower, scale);
+    connect (cox, colour, left, upper, lower, width, scale, connectors_);
     
     return event_is_handled;
   }
