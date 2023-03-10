@@ -97,23 +97,6 @@ namespace timeline {
   }
   
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
-  void
-  TimelineController::doMark (GenNode const& mark)
-  {
-    if (mark.idi.getSym() == "test" && this->fork_)
-      {
-        this->fork_->injectDebugTrackLabels();
-      }
-    else
-    if (mark.idi.getSym() == "box" && this->fork_)
-      {
-        this->fork_->attachElementBox();
-      }
-    else // forward to default handler
-      model::Controller::doMark (mark);
-  }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
   /**
    * @internal this method is invoked by the UI-Bus when dispatching a MutationMessage...
    * @remarks this is likely the first occasion a casual reader sees such a binding function,

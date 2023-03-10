@@ -284,19 +284,11 @@ namespace dialog {
       struct Page2 : Page
         {
           Gtk::Entry dummy_;
-          FrameBox part_1_{_("populate"), Gtk::ORIENTATION_HORIZONTAL},
-                   part_2_{_("modify content")},
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
-                   part_3_{_("send UI-Bus Mess"), Gtk::ORIENTATION_HORIZONTAL}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
-                   ;
+          FrameBox part_1_{_("populate"), Gtk::ORIENTATION_HORIZONTAL}
+                 , part_2_{_("modify content")}
+                 ;
           Gtk::Button seq_1_, seq_2_;
           Gtk::Button mut_1_;
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
-          Gtk::Button bus_1_;
-          Gtk::Entry bus_id_;
-          Gtk::Entry bus_msg_;
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
           
           string
           pickDummyID()
@@ -334,28 +326,6 @@ namespace dialog {
               
               pack_start (part_1_, Gtk::PACK_SHRINK);
               pack_start (part_2_, Gtk::PACK_SHRINK);
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
-              bus_1_.set_label("UIBus::mark");
-              bus_id_.set_tooltip_markup("<b>UI-Bus ID</b> of the receiver\n"
-                                         "Tip: the same ID as used when injecting the sequence...\n"
-                                         "(use the <i>dummy ID value</i> above!)");
-              bus_msg_.set_tooltip_markup("magic payload to deliver to this UI-Element....");
-              part_3_.pack_start (bus_1_, Gtk::PACK_SHRINK);
-              part_3_.pack_start (bus_id_, Gtk::PACK_SHRINK);
-              part_3_.pack_start (bus_msg_, Gtk::PACK_SHRINK);
-              pack_start (part_3_, Gtk::PACK_SHRINK);
-              // cast a UI-Bus message...
-              // also works from within the UI-Thread (which will perform this lambda when button is clicked)...
-              bus_1_.signal_clicked().connect(
-                          [&]{
-                                // since this is not a real timeline existing somewhere in the session
-                                // we use a cheesy way to fake a proper element-ID for addressing on the UI-Bus.
-                                auto dummyRecord = lib::diff::MakeRec().genNode(bus_id_.get_text());
-                                // now send a "mark" message. It is up to the receiver to interpret it's ID as action. Typically the payload is irrelevant.
-                                GuiNotification::facade().mark (dummyRecord.idi, GenNode{string{bus_msg_.get_text()}, 49 /*some irrelevant payload*/} );
-                             });
-              
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
               
               // define the action triggers...
               seq_1_.signal_clicked().connect(

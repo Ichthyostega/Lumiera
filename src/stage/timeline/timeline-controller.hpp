@@ -119,9 +119,6 @@ namespace timeline {
     public: /* ===== Signals ===== */
       
     private:/* ===== Events ===== */
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
-      virtual void doMark (GenNode const& mark)  override;
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
       
     private:/* ===== Internals ===== */
     };

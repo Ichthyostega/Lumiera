@@ -142,7 +142,6 @@ namespace workspace {
     style->set_screen(Gdk::Screen::get_default());
     style->set_path (path);
     styleAdviceTrackBody_.setAdvice (style);                             // publish as Advice "style(trackBody)"
-    INFO (stage, "Body-CSS: path=%s", util::cStr (path.to_string()));    ////////////////////////TICKET #1201 : this yields "paned:dir-ltr.horizontal box:dir-ltr.vertical TrackScope.timeline"
     
     pos = path.path_append_type (scopeNode);                             // append another nested "virtual" CSS node to represent the a ruler track
     gtk_widget_path_iter_set_object_name (path.gobj(), pos, NODE_frame); // ...but this time we explicitly use the conventional Name "frame" (hard wired default by GTK)
@@ -151,7 +150,6 @@ namespace workspace {
     style = Gtk::StyleContext::create();                                 // create another style context...
     style->set_path (path);                                              // ...for this nested path. (Note: Gtk takes a copy of the path, see gtk_style_context_set_path(), line 1120)
     styleAdviceTrackRuler_.setAdvice (style);                            // publish as Advice "style(trackRuler)"
-    INFO (stage, "RulerCSS: path=%s", util::cStr (path.to_string()));    ////////////////////////TICKET #1201 : this yields "paned:dir-ltr.horizontal box:dir-ltr.vertical TrackScope.timeline"
   }
   
   

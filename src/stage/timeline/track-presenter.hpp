@@ -288,14 +288,7 @@ namespace timeline {
       
       /** set up a binding to respond to mutation messages via UiBus */
       virtual void buildMutator (lib::diff::TreeMutator::Handle)  override;
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
-      void injectDebugTrackLabels();
-      void attachElementBox();
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
-      uString TODO_trackName_;
-      widget::ElementBoxWidget* theBox_{nullptr};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
+      
       
     protected: /* ==== Interface: LayoutElement ===== */
       
@@ -309,9 +302,6 @@ namespace timeline {
       setTrackName (string name)
         {
           display_.setTrackName (name);
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
-          TODO_trackName_ = name;
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
         }
       
       void relinkContents ();
@@ -320,39 +310,6 @@ namespace timeline {
   
   
   
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
-  inline void
-  TrackPresenter::injectDebugTrackLabels()
-  {
-    uint x = rand() % 50;
-    uint y = 0;
-    Gtk::Button* butt = Gtk::manage (new model::CanvasHooked<Gtk::Button, Gtk::Widget>{display_.hookedAt(x,y), TODO_trackName_});
-    butt->signal_clicked().connect(
-          [butt]{ cout << "|=="<<butt->get_label()<<endl; });
-    butt->show();
-    
-    for (auto& subTrack : subFork_)
-      subTrack->injectDebugTrackLabels();
-  }
-  inline void
-  TrackPresenter::attachElementBox()
-  {
-    uint x = rand() % 200;
-    uint y = 0;
-    theBox_ = Gtk::manage (
-        new model::CanvasHooked<widget::ElementBoxWidget, Gtk::Widget>{display_.hookedAt(x,y)
-                                                                      , widget::Kind::MARK
-                                                                      , widget::Type::LABEL
-                                                                      , widget::name("ΩΩΩ")
-                                                                      , widget::constrained(
-                                                                          [arbitrarySiz = 10 + rand() % 80]() -> int
-                                                                            {
-                                                                              cout << "PPPP:: arbitrary="<<arbitrarySiz<<endl;
-                                                                              return arbitrarySiz;
-                                                                            })
-                                                                      });
-  }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1201 : test/code... remove this
   /**
    * @note we distinguish between the contents of our four nested child collections
    *       based on the symbolic type field sent in the Record type within the diff representation
