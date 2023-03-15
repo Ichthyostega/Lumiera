@@ -24877,6 +24877,10 @@
 <arrowlink COLOR="#444b9e" DESTINATION="ID_1189311522" ENDARROW="Default" ENDINCLINATION="785;29;" ID="Arrow_ID_1573433988" STARTARROW="None" STARTINCLINATION="241;10;"/>
 <linktarget COLOR="#517488" DESTINATION="ID_650213030" ENDARROW="Default" ENDINCLINATION="515;561;" ID="Arrow_ID_113145433" SOURCE="ID_1514900067" STARTARROW="None" STARTINCLINATION="754;37;"/>
 <icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1678840536481" HGAP="35" ID="ID_1658816102" MODIFIED="1678840689222" TEXT="wird aber ausgel&#xf6;st durch bodyCanvas_.signal_size_allocate()">
+<arrowlink COLOR="#5978c6" DESTINATION="ID_1655268668" ENDARROW="Default" ENDINCLINATION="1204;-55;" ID="Arrow_ID_470073487" STARTARROW="None" STARTINCLINATION="506;642;"/>
+<icon BUILTIN="info"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1678405393907" ID="ID_988091406" MODIFIED="1678405414087" TEXT="scheint zu funktionieren">
 <icon BUILTIN="idea"/>
@@ -31166,6 +31170,84 @@
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1978068021" ENDARROW="Default" ENDINCLINATION="323;11;" ID="Arrow_ID_920771700" SOURCE="ID_400583877" STARTARROW="None" STARTINCLINATION="462;0;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
+</node>
+</node>
+<node CREATED="1678840039597" ID="ID_1655268668" MODIFIED="1678840689222" TEXT="wird festelegt durch &#xd83e;&#xdc46; bodyCanvas_.signal_size_allocate()">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
+      Empf&#228;nger(&#187;Slot&#171;): <font face="Monospaced" color="#552694">TimelineLayout::sizeZoomWindow (Gtk::Allocation&amp;)</font>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#5978c6" DESTINATION="ID_1655268668" ENDARROW="Default" ENDINCLINATION="1204;-55;" ID="Arrow_ID_470073487" SOURCE="ID_1658816102" STARTARROW="None" STARTINCLINATION="506;642;"/>
+<icon BUILTIN="info"/>
+<node CREATED="1678840184103" ID="ID_1797129143" MODIFIED="1678840379017" TEXT="siehe 09714cfe">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font color="#912929" face="Monospaced">commit 09714cfe28739ceff0b5693447be41166c1cc8d6</font>
+    </p>
+    <p>
+      <font face="Monospaced">Author: Ichthyostega &lt;prg@ichthyostega.de&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced">Date:&#160;&#160;&#160;Fri Jan 6 03:09:28 2023 +0100 </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <b>Timeline: draft solution to interconnect ZoomWindow and scrollbar</b>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      After quite some tinkering, instead of extending the DisplayManager interface,
+    </p>
+    <p>
+      I now prefer to treat this connection rather as an intricate implementation detail:
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      The TimelineLayout implementation now provides two translation functions,
+    </p>
+    <p>
+      which are directly wired as slots from the Signals emitted by moving the
+    </p>
+    <p>
+      hand of the scrollbar; the idea is that these functions mutate the ZoomWindow,
+    </p>
+    <p>
+      which then triggers a DisplayEvaltuation, which in turn causes the
+    </p>
+    <p>
+      drawing code to pick up and translate back the new metric and position.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Results look promising, insofar the DisplayEvaluation is now triggered
+    </p>
+    <p>
+      repeatedly, and the actual window width in pixel is propagated;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1678841423804" ID="ID_81531339" MODIFIED="1678841644379" TEXT="Initiale Festlegung sicherstellen">
+<arrowlink COLOR="#748598" DESTINATION="ID_833023922" ENDARROW="Default" ENDINCLINATION="-1609;-94;" ID="Arrow_ID_1971623817" STARTARROW="None" STARTINCLINATION="-140;338;"/>
+<icon BUILTIN="flag-pink"/>
 </node>
 </node>
 </node>
@@ -45966,8 +46048,8 @@
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1672798860387" ID="ID_981451006" MODIFIED="1673747058376" TEXT="Feedback auf Scrolling">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1672798873057" ID="ID_133007183" MODIFIED="1672799054739" TEXT="horizontale Canvas-Breite kommt nicht korrekt an">
-<arrowlink COLOR="#ac3f80" DESTINATION="ID_1699842831" ENDARROW="Default" ENDINCLINATION="-1384;79;" ID="Arrow_ID_927325344" STARTARROW="None" STARTINCLINATION="-1848;-74;"/>
+<node COLOR="#435e98" CREATED="1672798873057" ID="ID_133007183" MODIFIED="1678839568091" TEXT="horizontale Canvas-Breite kommt nicht korrekt an">
+<arrowlink COLOR="#503fac" DESTINATION="ID_1699842831" ENDARROW="Default" ENDINCLINATION="-1384;79;" ID="Arrow_ID_927325344" STARTARROW="None" STARTINCLINATION="-1848;-74;"/>
 <icon BUILTIN="broken-line"/>
 <node COLOR="#338800" CREATED="1672969399236" ID="ID_105188286" MODIFIED="1672969452360" TEXT="Logik &#xfc;berarbeitet: Werte kommmen jetzt an">
 <icon BUILTIN="button_ok"/>
@@ -46020,9 +46102,9 @@
 </node>
 <node CREATED="1673022453591" ID="ID_1189073820" MODIFIED="1673022471744" TEXT="der tats&#xe4;chliche Aufschlag stammt jeweils aus der 2.Phase: DisplayFrame::sync_and_balance"/>
 </node>
-<node CREATED="1673027617885" ID="ID_1539603067" MODIFIED="1673027627009" TEXT="Feststellungen">
+<node COLOR="#435e98" CREATED="1673027617885" ID="ID_1539603067" MODIFIED="1678839452688" TEXT="Feststellungen">
 <icon BUILTIN="yes"/>
-<node CREATED="1673027738477" ID="ID_910627159" MODIFIED="1673027741960" TEXT="Problem-1">
+<node CREATED="1673027738477" FOLDED="true" ID="ID_910627159" MODIFIED="1673027741960" TEXT="Problem-1">
 <node CREATED="1673027628894" ID="ID_642294954" MODIFIED="1673027656160" TEXT="sync_and_balance schl&#xe4;gt zus&#xe4;tzliches Padding auf"/>
 <node CREATED="1673027656904" ID="ID_748230993" MODIFIED="1673027704972">
 <richcontent TYPE="NODE"><html>
@@ -46129,13 +46211,40 @@
 </node>
 </node>
 </node>
-<node CREATED="1673027746843" ID="ID_484113914" MODIFIED="1673027750543" TEXT="Problem-2">
+<node CREATED="1673027746843" FOLDED="true" ID="ID_484113914" MODIFIED="1673027750543" TEXT="Problem-2">
 <node CREATED="1673027751867" ID="ID_1170742278" MODIFIED="1673027768260" TEXT="size-request im Head w&#xe4;chst monoton"/>
 <node CREATED="1673027770065" ID="ID_1809846655" MODIFIED="1673027783498" TEXT="body content-height w&#xe4;chst monoton"/>
 <node CREATED="1673027796693" ID="ID_162051390" MODIFIED="1673027805715" TEXT="es fehlt ein reset">
 <icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1678839045859" ID="ID_641819217" MODIFIED="1678839055425" TEXT="3/23: das gilt weiterhin">
+<icon BUILTIN="hourglass"/>
+</node>
+<node COLOR="#435e98" CREATED="1678839056977" ID="ID_1367619034" MODIFIED="1678839515363" TEXT="Problem vorl&#xe4;ufig entsch&#xe4;rft durch konsistente Handhabung im Track-Head">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>Zwischenfazit</u>: das Problem wurde erst dadurch sichtbar, da&#223; in der Logik im Track-Head innere Widerspr&#252;che bestanden; nach Durchlaufen eines Abstimmungszyklus bestand sofort wieder eine Diskrepanz, und das Layout konnte sich folglich nicht stabilisieren. <i><font color="#2e3084">Dies habe ich inzwischen behoben, </font></i>insofern nun das TrackHeadWidget grunds&#228;tzlich komplett ausformuliert ist, und alle Zust&#228;ndigkeiten dort klar verteilt sind. Nach Durchlaufen einer Display-Evaluation ergibt sich nun in Summe genau der Wert, der der mit dem TrackBody abgestimmten H&#246;he entspricht.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dennoch besteht das grunds&#228;tzliche Problem weiterhin, und wird in dem Moment doch noch zu betrachten sein, wenn das Layout dynamisch auf Inhalte reagieren soll; denn immer noch <i>wachsen</i>&#160;die ermittelten H&#246;hen <i>monoton an,</i>&#160;und es gibt keinen <i>Reset.</i>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#57689a" DESTINATION="ID_1367619034" ENDARROW="Default" ENDINCLINATION="-147;128;" ID="Arrow_ID_50799002" SOURCE="ID_1930750315" STARTARROW="None" STARTINCLINATION="119;8;"/>
+<icon BUILTIN="idea"/>
 </node>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1678839454033" ID="ID_1930750315" MODIFIED="1678839515363" TEXT="Problem vorl&#xe4;ufig entsch&#xe4;rft (und vertagt)">
+<arrowlink COLOR="#57689a" DESTINATION="ID_1367619034" ENDARROW="Default" ENDINCLINATION="-147;128;" ID="Arrow_ID_50799002" STARTARROW="None" STARTINCLINATION="119;8;"/>
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 </node>
@@ -46372,6 +46481,22 @@
 </node>
 </node>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1678841457381" ID="ID_833023922" MODIFIED="1678841649108" TEXT="Breite an vorhandene Fensterbreite anmessen">
+<linktarget COLOR="#748598" DESTINATION="ID_833023922" ENDARROW="Default" ENDINCLINATION="-1609;-94;" ID="Arrow_ID_1971623817" SOURCE="ID_81531339" STARTARROW="None" STARTINCLINATION="-140;338;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1678841652042" ID="ID_344873865" MODIFIED="1678841678052" TEXT="bezweifle ob das korrekt ankommt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Beispiel: Fenster vorher sehr schmal machen...
+    </p>
+  </body>
+</html></richcontent>
 </node>
 </node>
 </node>

@@ -166,7 +166,6 @@ namespace timeline {
       auto get_vadjustment()  { return contentArea_.get_vadjustment(); }
       auto get_hadjustment()  { return contentArea_.get_hadjustment(); }
       
-      uint getEffectiveHorizontalSize()  const;
       
     protected: /* ==== Interface: CanvasHook ===== */
       
@@ -191,7 +190,6 @@ namespace timeline {
       void slotStructureChange()  noexcept;
       void maybeRebuildLayout();
       void adjustCanvasSize(int canvasWidth, int totalHeight, int rulerHeight);
-      void on_size_allocate(Gtk::Allocation& allocation)  override; /////////////////////////TODO
     };
   
   

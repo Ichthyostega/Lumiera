@@ -518,30 +518,6 @@ namespace timeline {
   }
   
   
-  /**
-   * Find out the extension in pixels currently allocated for the content display.
-   * @return number of pixels reasonably representing the actual visible with in the window
-   */
-  uint
-  BodyCanvasWidget::getEffectiveHorizontalSize()  const
-  {
-    int widthForDebug = contentArea_.get_allocated_width();
-    Gtk::Allocation allo;
-    int basi{0};
-    contentArea_.get_allocated_size(allo,basi);
-    int alloW = allo.get_width();
-    auto hadj = contentArea_.get_hadjustment();
-    widthForDebug = util::max (widthForDebug - 100, 100);   ////////////////////////////////////////TODO: visual debugging
-    return uint(widthForDebug);
-  }
-  void
-  BodyCanvasWidget::on_size_allocate(Gtk::Allocation& allocation)
-  {
-    int alloW = allocation.get_width();
-    Gtk::Box::on_size_allocate (allocation);
-  }
-  
-  
   
   /**
    * After the (recent) [display evaluation pass](\ref DisplayManager::triggerDisplayEvaluation() )
