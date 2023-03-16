@@ -50,19 +50,19 @@ This leads to the following structure of selectors to attach the actual styling 
 track fork::
   attach rules to the selector `.timeline__page > .timeline__body fork.timeline__fork`
   +
-  - the `border top` and `border bottom` rules will be used to _draw the nested inset._
+  - the `border-top` and `border-bottom` rules will be used to _draw the nested inset._
   - a `margin` at top will add additional space between consecutive tracks
   - while the `padding` will be used within the track content area --
     +
     of course only in vertical direction, since the horizontal extension is ruled by the time position of elements within the track
   - please also note that `background` stylings apply to the _content area_ and not the track space at a whole.
-  - especially a `box shadow` will be drawn when filling the background of the content area -- however,
+  - especially a `box-shadow` will be drawn when filling the background of the content area -- however,
     only an `inset` makes sense here, since a regular (outer) box shadow will be obscured and covered up
     by consecutive drawing actions...
 track ruler::
   use a **`frame`** element and attach rules to the selector `fork.timeline__fork frame.timeline__ruler`
   +
-  - again the `border top` and `border bottom` settings will delimit the ruler form the other track content
+  - again the `border` `top` and `bottom` settings will delimit the ruler form the other track content
   - while `margin` and `padding` apply as usual outside and within the border
   - here the `box shadow` will be drawn with the background and aligned with the frame --
     and again, only an `inset` really makes sense, while a regular (outer) box shadow must be
@@ -85,18 +85,53 @@ header::
 fork head::
   Located within the PatchbayWidget resides a nested structure of fork head controls
   - each such TrackHeadWidget is derived from Gtk::Grid and marked with class `.fork__head`
-  - the first row in the grid holds a Track Header label and menu,an ElementBoxWidget with class `.elementbox`
-  - the second row corresponds to the _content area_ of the track itself,
-    and hold the controls for this track's scope, i.e. the track _together with all nested sub-tracks._
-  - in the second cell in this row resides the HeadControlArea with class `.fork__control`
+  - the first row in the grid holds a Track Header label and menu, an ElementBoxWidget with class `.elementbox`
+  - the second row corresponds to the _content area_ of the track itself
+  - in the second cell in this row resides the HeadControlArea with class `.fork__control` -- which
+    houses the controls for this track's scope, i.e. the track _together with all nested sub-tracks._
   - next comes a padding row to help synchronising track head and track body display
   - Additional sub-Tracks are added as additional lines to the grid, and each such line
     will hold a nested TrackHeadWidget in the second cell; this also implies that this
-    nested sub-Track head can again hold deeper nested sub-Tracks....
-  - The first column to the left side, starting from the second row will be increased accordingly to indicate
+    nested sub-Track head can again hold deeper nested sub-Tracks recursively....
+  - The first column to the left side, starting from the second row, will be increased accordingly to indicate
     the nested fork structure, rendered as a nested set of »stave brackets« with class `.fork__bracket`
 
-[red]##TODO 10/2022:##
 
- - [red]##give an example what our custom drawing code actually extracts and uses##
- - [red]##also document a resulting selector for an actual Clip element in a concrete timeline##
+Demonstration of CSS for custom drawing
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The example below demonstrates how CSS rules are picked up and used for custom drawing of the fork structure
+onto the Timeline body canvas. For sake of demonstration, the drawing code was manipulated slightly, by shifting
+borders to reveal the box shadow effect, and to show canvas content beyond the timeline end.
+
+Lumiera used the »light theme complement« stylesheet for this demonstration -- thus most of the styles are derived
+from the custom desktop theme. A few additional class definitions were added for styling of the timeline body display,
+using rather distinct colours and excessive padding and margins to emphasise their effect on the drawing routine
+
+[source,css]
+--------------------------------------------------------------------------
+  .timeline__page > .timeline__body fork.timeline__fork {
+    margin: 2ex;
+    padding: 10px;
+    border-style: inset;
+    border-color: IndianRed;
+    background-color: Lime;
+    box-shadow: inset 2px 2px 5px 1px DeepSkyBlue,
+                      5px 5px 2px 1px ForestGreen;
+}
+  fork.timeline__fork frame.timeline__ruler {
+    margin: 1ex;
+    padding: 5px;
+    border: 3px outset DarkGoldenRod;
+    background-color: SandyBrown;
+    box-shadow: inset 2px 2px 5px 1px RosyBrown,
+                      5px 3px 6px 4px Sienna;
+}
+--------------------------------------------------------------------------
+
+image:{imgd}/TimelineCSS.png["Demonstration of CSS for custom drawing"]
+
+
+[red]##TODO 3/2023:##
+
+ - [red]##should also document the selector for an actual Clip element in a concrete timeline##
+ 

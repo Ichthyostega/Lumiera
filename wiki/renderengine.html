@@ -3629,7 +3629,7 @@ In accordance with the Lumiera application architecture in general, the UI is no
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
-<div title="GuiTimelineDraw" creator="Ichthyostega" modifier="Ichthyostega" created="201904052156" modified="201912061632" tags="GuiPattern spec impl img draft" changecount="107">
+<div title="GuiTimelineDraw" creator="Ichthyostega" modifier="Ichthyostega" created="201904052156" modified="202303120009" tags="GuiPattern spec impl img draft" changecount="112">
 <pre>The presentation of the track body area relies on the [[Gtk::Layout &quot;canvas widget&quot;|GtkLayoutWidget]], thus allowing for a mixture of custom drawing with embedded custom Gtk widgets. The actual drawing routine is activated in response to the {{{on_draw}}} signal -- and invoking the inherited handler function will initiate the standard drawing for the embedded child widgets. This partitions the additional, specific drawing activities into a pre-widget drawing phase to prepare the background and framework structure of the track area, and a post-widget drawing phase to show all kinds of overlays, markers cursors and similar UI indicators. A nested structure of {{{TrackBody}}} objects serves as organisational device to structure these custom drawing activities in accordance with the nested structure of the track fork.
 
 !Building a nested 3D structure
@@ -3658,23 +3658,23 @@ Once the fundamental decision towards a 3D structure is taken, there still is so
 * shading can indicate a //slope// up or down.
 An immediate consequence to draw from this observation is that ~CSS3 effects are only of limited use for this purpose. They are more helpful to highlight compact and local structures, like a menu button, or some element or handle on the clips. We can (and likely will) use CSS shading for the [[track overview rulers|TrackRuler]] though. We possibly could use a slight inset box shadow within the actual track content area. However, it is rather pointless to use a box shadow to paint the nested track scope insets -- we rather need to rely on gradients and direct colour shading for that purpose.
 
-Another consequence  is that we do not need to apply an overall &quot;stacked boxes&quot; approach -- there is not much to gain from doing so (and we would do a lot of unnecessary filling operations, most of which will actually be clipped away). For that reason, we define our ''track profile'' to represent a vertical //top-down drawing sweep.// Non the less, the actual colours and shades can be defined completely through CSS rules. To achieve this, we apply some tricks
+Another consequence  is that we do not need to apply an overall &quot;stacked boxes&quot; approach -- there is not much to gain from doing so (and we would do a lot of unnecessary filling operations, most of which will actually be clipped away). For that reason, we define our ''track profile'' to represent a vertical //top-down drawing sweep.// Non the less, the actual colours and shades can be defined completely through [[CSS rules|GuiTimelineStyle]]. To achieve this, we apply some tricks
 * we define //virtual widgets,// which are only used to match against selectors and pick up the attached CSS styles
 ** the virtual element {{{fork}}} represents &quot;a timeline track&quot;
 ** and a virtual {{{frame}}} element nested therein represents &quot;a ruler on top of a timeline track&quot;
-* this leads to the following selectors to attach the actual styling rules
+* this leads to the following selectors to attach the &amp;rarr; [[actual styling rules|GuiTimelineStyle]]
 *;track fork
 *:attach rules to the selector {{{.timeline__page &gt; .timeline__body fork.timeline__fork}}}
-*:* the {{{border top}}} and {{{border bottom}}} rules will be used to //draw the nested inset.//
+*:* the {{{border-top}}} and {{{border-bottom}}} rules will be used to //draw the nested inset.//
 *:* a {{{margin}}} at top will add additional space between consecutive tracks
 *:* while the {{{padding}}} will be used within the track content area -- &lt;br/&gt; of course only in vertical direction, since the horizontal extension is ruled by the time position of elements within the track
 *:* please note that {{{background}}} stylings apply to the //content area// and not the track space at a whole.
-*:* especially a {{{box shadow}}} will be drawn when filling the background of the content area -- however, only an {{{inset}}} makes sense here,&lt;br/&gt;since a regular (outer) box shadow will be covered by consecutive drawing actions...
+*:* especially a {{{box-shadow}}} will be drawn when filling the background of the content area -- however, only an {{{inset}}} makes sense here,&lt;br/&gt;since a regular (outer) box shadow will be covered by consecutive drawing actions...
 *;track ruler
 *:attach rules to the selector{{{fork.timeline__fork frame.timeline__ruler}}}
-*:* again the {{{border top}}} and {{{border bottom}}} settings will delimit the ruler form the other track content
+*:* again the {{{border}}} ({{{top}}} and {{{bottom}}}) settings will delimit the ruler form the other track content
 *:* while {{{margin}}} and {{{padding}}} apply as usual outside and within the border
-*:* here the {{{box shadow}}} will be drawn with the background and aligned with the frame -- and again, only an {{{inset}}} really makes sense,&lt;br/&gt;while a regular (outer) box shadow must be small enough to stick within the limits of the {{{margin}}}
+*:* here the {{{box-shadow}}} will be drawn with the background and aligned with the frame -- and again, only an {{{inset}}} really makes sense,&lt;br/&gt;while a regular (outer) box shadow must be small enough to stick within the limits of the {{{margin}}}
 *;slopes
 *:we use several classes to define the effect of consecutive nested frames forming a common slope; however,
 *:we perform this combination effect only with a limit of 5 steps depth. Only closing (upward) slopes can be combined.
@@ -3701,7 +3701,57 @@ Now, since we build our UI on the notion of mapping session contents via a messa
 
 In any case, this is an advanced topic, and nowhere near trivial. It seems reasonable to reject opening duplicate timeline presentations as a first step, and then address this topic way later, when we've gained sufficient knowledge regarding all the subtleties of timeline presentation and editing.</pre>
 </div>
-<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="202303042311" tags="GuiPattern design decision draft img" changecount="68">
+<div title="GuiTimelineStyle" creator="Ichthyostega" modifier="Ichthyostega" created="202303112351" modified="202303162330" tags="GuiPattern spec impl img draft" changecount="14">
+<pre>In parts, the Lumiera Timeline UI will be implemented by custom drawing onto a //Canvas Control,// using libCairo for the actual drawing operations. Beyond the challenge of coordinating an elaborated and nested layout, a special twist arises from the ability for custom styling, present in most contemporary desktop environments -- without special precautions, our custom drawing runs danger of creating a visual style separate and in contradiction to the common style set by the chosen desktop theme. This challenge can be resolved, at least in part, by tapping into the existing CSS definitions, to retrieve the necessary settings and adapt them to our special needs.
+
+To this end, a hierarchy of virtual placeholder widgets is used by the »~StyleManager« in {{{stage::workspace::UiStyle::prepareStyleContext()}}} -- these will represent the structures actually created by custom drawing, and allow to retrieve any CSS definitions applicable at that point in the style class hierarchy.
+As outlined in the [[explanation of the actual drawing code|GuiTimelineDraw]], this virtual style hierarchy is comprised of several selectors...
+* the virtual element {{{fork}}} represents &quot;a timeline track&quot;
+** the selector {{{.timeline__page &gt; .timeline__body fork.timeline__fork}}} will pick up definitions
+*** to define the //appearance of the nested inset// based on {{{border}}} settings ({{{top}}} and {{{bottom}}})
+*** a {{{margin}}} at top will add additional space between consecutive tracks
+*** while the {{{padding}}} in vertical direction will be used within the track content area
+*** please note that {{{background}}} stylings apply to the //content area// and not the track space at a whole.
+*** especially a {{{box-shadow}}} will be drawn when filling the background of the content area -- however, only an {{{inset}}} makes sense here,&lt;br/&gt;since a regular (outer) box shadow will be covered by consecutive drawing actions...
+* a virtual {{{frame}}} element nested within the {{{fork}}} represents &quot;a ruler on top of a timeline track&quot;
+** here the selector{{{fork.timeline__fork frame.timeline__ruler}}} will pick up appropriate definitions
+*** again the {{{border-top}}} and {{{border-bottom}}} settings will delimit the ruler form the other track content
+*** while {{{margin}}} and {{{padding}}} apply as usual outside and within the border
+*** here the {{{box-shadow}}} will be drawn with the background and aligned with the frame -- and again, only an {{{inset}}} really makes sense,&lt;br/&gt;while a regular (outer) {{{box-shadow}}} must be small enough to stick within the limits of the {{{margin}}}
+* Slopes connecting nested sub-Tracks will be governed by styles...
+** we use class {{{.track-slope--deep1}}} for a simple slope (inset by one nested level)
+** class {{{.track-slope--deep2}}} for two consecutive nested steps combined.
+** likewise class {{{.track-slope--deep3}}} for three and class {{{.track-slope--deep4}}} for four combined slopes
+** finally, class {{{.track-slope--verydeep}}} is used for five and more combined upward (closing) slopes
+
+!Demonstration of CSS for custom drawing
+The example below demonstrates how CSS rules are picked up and used for custom drawing of the fork structure on the Timeline body canvas.
+For sake of demonstration, the drawing code was slightly manipulated, so to shift borders and show canvas content beyond the timeline end.
+
+Lumiera used the »light theme complement« stylesheet -- thus most of the styles are drawn from the desktop theme.
+A few additional class definitions were added for styling of the timeline body display
+{{{
+  .timeline__page &gt; .timeline__body fork.timeline__fork {
+    margin: 2ex;
+    padding: 10px;
+    border-style: inset;
+    border-color: IndianRed;
+    background-color: Lime;
+    box-shadow: inset 2px 2px 5px 1px DeepSkyBlue,
+                      5px 5px 2px 1px ForestGreen;
+}
+  fork.timeline__fork frame.timeline__ruler {
+    margin: 1ex;
+    padding: 5px;
+    border: 3px outset DarkGoldenRod;
+    background-color: SandyBrown;
+    box-shadow: inset 2px 2px 5px 1px RosyBrown,
+                      5px 3px 6px 4px Sienna;
+}
+}}}
+[&gt;img[Demonstration of CSS for custom drawing|draw/TimelineCSS.png]]</pre>
+</div>
+<div title="GuiTimelineView" creator="Ichthyostega" modifier="Ichthyostega" created="201410160100" modified="202303112339" tags="GuiPattern design decision draft img" changecount="70">
 <pre>Within the Lumieara GUI, the [[Timeline]] structure(s) from the HighLevelModel are arranged and presented according to the following principles and conventions.
 Several timeline views may be present at the same time -- and there is not necessarily a relation between them, since »a Timeline« is the top-level concept within the [[Session]]. Obviously, there can also be several //views// based on the same »Timeline« model element, and in this latter case, these //coupled views// behave according to a linked common state. An entity »Timeline« as represented through the GUI, emerges from the combination of several model elements
 * a root level [[Binding|BindingMO]] acts as framework
@@ -3742,7 +3792,11 @@ The dockable ''timeline pannel'' holds onto the existing {{{TimelineWidget}}} in
 In case the UI starts with no session present in the core, an //empty timeline placeholder// will be displayed, which provides UI for creating a new session...
 
 !!!The Canvas
-At least the track body area of the timeline display needs to be implemented in parts by //custom drawing// onto a [[»Canvas widget«|GtkLayoutWidget]] -- meaning that we have both to coordinate explicit graphic operations using the »Cairo« library, and child widgets attached at explicit positions on top of this canvas. These nested widgets in turn need to know about the calibration of the canvas in terms of time and pixels, to be able to adjust their display to fit into the established metric. As the first implementation attempt for the timeline highlighted, at this point there is a lurking danger to slide into the usage of one central „God class“ -- in this case a //Layout Manager// -- which has to actuate and coordinate any related interplay by „pulling the strings“ like a puppeteer. To forego that threat, we introduce yet another abstraction: a [[»Canvas Interface«|GuiCanvasInterface]] to support attachment of widgets and handle the translation of logical (time based) coordinates into pixel values.
+At least the track body area of the timeline display needs to be implemented in parts by //custom drawing// onto a [[»Canvas widget«|GtkLayoutWidget]] -- meaning that we have both to coordinate explicit graphic operations using the »Cairo« library, and child widgets attached at explicit positions on top of this canvas. These nested widgets in turn need to know about the calibration of the canvas in terms of time and pixels, to be able to adjust their display to fit into the established metric. As the first implementation attempt for the timeline highlighted, at this point there is a lurking danger to slide into the usage of one central „God class“ -- in this case a //Layout Manager// -- which has to actuate and coordinate any related interplay by „pulling the strings“ like a puppeteer. To forego that contraption, we introduce yet another abstraction: a [[»Canvas Interface«|GuiCanvasInterface]] to support attachment of widgets and handle the translation of logical (time based) coordinates into pixel values.
+
+Another difficulty arises from the ability for custom styling, present in most contemporary desktop environments -- which is typically implemented within the UI toolkit, thereby more or less relying on a fixed set of standard widgets known in advance to the designer. Once we start implementing the visual representation based on custom drawing code, we are bound to define colours and other drawing properties, and while doing so, we are in danger of creating our own visual style separate and in contradiction to the common style set by the chosen desktop theme. This challenge can be resolved, at least in part, by tapping into the existing CSS definitions, to retrieve the necessary settings and adapt them to our special needs. A way to accomplish this, is to build a virtual hierarchy of placeholder widgets -- these will represent the structures actually created by custom drawing, while retrieving any CSS definitions applicable at that point in the style class hierarchy.
+&amp;rarr; see details of [[styling the Timeline|GuiTimelineStyle]]
+
 
 !!!Placements
 As indicated in the drawing above, pretty much every UI element exposes a button to //edit its placement.// &amp;rarr; GuiPlacementDisplay
@@ -9452,7 +9506,7 @@ The actual presentation of ruler elements is a fusion of parametrisation, track 
 ** the ruler of an //expanded fork// (a track with nested child tracks) will typically give a summary of effective content, but can also be hidden, or feature other content
 ** the ruler of an //expanded leaf track// (no child tracks) will typically be hidden, but can likewise be configured to show specific data</pre>
 </div>
-<div title="TrackStaveBracket" creator="Ichthyostega" modifier="Ichthyostega" created="202303050037" modified="202303050303" tags="def GuiPattern img" changecount="39">
+<div title="TrackStaveBracket" creator="Ichthyostega" modifier="Ichthyostega" created="202303050037" modified="202303060035" tags="def GuiPattern img" changecount="41">
 <pre>//Graphical representation of the nested Track scopes as part of the TrackHead display.//
 The design (and the name) of this graphical display is inspired by musical notation, where it is customary to indicate with a bracket the grouping of stems (or staves) forming an ensemble, while a brace typically groups the staves to be played on a single instrument, e.g. a grand piano or organ.
 

@@ -306,9 +306,9 @@ mutation. Some typical ``degenerated'' patterns of spelling out a diff are as fo
   position or the identity of the element.
 
 
-representation of objects
+Representation of objects
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-While we are talking about _structured data,_ in fact the entities we are about to handle are *objects*, understood in
+While we are talking about _structured data,_ in fact the entities we are about to handle are *objects*, conceived in
 the standard flavour of object orientation, where an object is the instance of a type and offers a contract. Incidentally,
 this is not the original, ``pure'' meaning of object orientation, but the one that became prolific to bring our daily
 practice closer to the inherent structuring of modern human organisation. And in dealing with this kind of object, we
@@ -323,23 +323,23 @@ and if not, we'll get what we deserve.footnote:[This gives rise to a tricky disc
 and the costs incurred by that happening. We should not treat this topic in isolation; we should recall that
 loose coupling was chosen to avoid far more serious problems caused by tight coupling, and especially the
 deteriorating and poisoning effect on architecture and the further dire consequences of a global fixed common
-data model -- which become prdominant when used in a large, not homogeneous system.
+data model -- which prevail when used in large, not heterogenous systems.
 And _when a system indeed is not homogeneous,_ we better try to make each part open-closed, open for change
 but closed against extension. This is especially true in the case of the UI.]
 
 
 object representation protocol
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-A diff is created to tell some partner about our data, and the »protocol to describe an object« is as follows
+A diff is created to tell some partner about our data, and the »protocol to describe an object« is defined as follows...
 
-- the ID is the object's identity and is once given, right at start, and never changed
-- we spell out any metadata (esp. a type information) first, followed by all attributes,
+- the ID is the object's identity and is given once, right at start, and never changed
+- we spell out any metadata first (esp. type information), followed by all attributes,
   and then followed by contents of the object's scope (children).
-- attributes are to be given in a way not in contradiction to the more stringent semantics
+- attributes are to be given such as not to counter the more stringent semantics
   of an object field or property
 
   * never attempt to re-order or delete such attributes, since their presence is fixed in the class definition
-  * when a field is mandatory _by its nature,_ it shall be required in construction, and the corresponding data
+  * when a field is mandatory _by its nature,_ it shall be required at construction, and the corresponding data
     is to be given with the `ins` verb causing the constructor call
   * on the other hand, the data for an optional field, when present, shall be spelled out by `ins` verb
     after construction, with the first _population diff._

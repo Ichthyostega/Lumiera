@@ -104,7 +104,7 @@ General Code Arrangement and Layout
 - the includes for our own dependencies shall be given relative to source-root (or test root). Don't use
   relative includes for headers located in the same directory, or -- worse still -- in the parent directory.
 - sometimes, the actual translation units will combine several facilities for technical reasons.footnote:[to
-  elaborate, there can be ``headers'', which are in fact only be intended for inclusion at one or two distinct
+  elaborate, there can be ``headers'', which are in fact only intended for inclusion at one or two distinct
   places. This should be mentioned in the file-level comment, but generally is an acceptable practice,
   and better then lumping everything into a 1000 lines header. As a guideline, if you expect a rather
   technical concern not to be of much interest for most readers of a header, then better extract it into

@@ -6160,6 +6160,49 @@
 <node CREATED="1537661322914" ID="ID_165076190" MODIFIED="1557498707219" TEXT="per synthetisiertem Widget-Path"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1678573145778" ID="ID_529832770" MODIFIED="1678576114059">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font size="5">Style-Scheme</font>&#160;for Lumiera
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#8b1d60" DESTINATION="ID_281557130" ENDARROW="Default" ENDINCLINATION="-1401;-108;" ID="Arrow_ID_1840161927" STARTARROW="None" STARTINCLINATION="-625;67;"/>
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1678573175156" ID="ID_1210386404" MODIFIED="1678573180188" TEXT="entwickeln...">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538588393995" ID="ID_1149076483" MODIFIED="1678573209829">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      #1168 : find a way to manage style of
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;custom extended UI elements
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1678575013546" HGAP="59" ID="ID_1275966904" MODIFIED="1678575229481" TEXT="L&#xf6;sungsansatz per Prototyp best&#xe4;tigt" VSHIFT="21">
+<arrowlink COLOR="#40a5bc" DESTINATION="ID_1949200690" ENDARROW="Default" ENDINCLINATION="-2003;-104;" ID="Arrow_ID_398104912" STARTARROW="None" STARTINCLINATION="2327;166;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node CREATED="1678576263610" ID="ID_1861505787" MODIFIED="1678576267709" TEXT="Spezialit&#xe4;ten">
+<node COLOR="#435e98" CREATED="1678576309372" ID="ID_650016552" MODIFIED="1678576514278" TEXT="CSS-Styling der Timeline">
+<arrowlink COLOR="#5f7783" DESTINATION="ID_1232986902" ENDARROW="Default" ENDINCLINATION="2218;-176;" ID="Arrow_ID_691307229" STARTARROW="None" STARTINCLINATION="7697;843;"/>
+<icon BUILTIN="info"/>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561898940013" ID="ID_1812249534" MODIFIED="1561898964578" TEXT="Aufgabe: globaler Layout-Manager">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1561898713460" ID="ID_44229333" MODIFIED="1561899095357" TEXT="Aufgabe: Theming/Styling unserer speziellen UI-Elemente">
@@ -6170,9 +6213,6 @@
 <arrowlink COLOR="#735667" DESTINATION="ID_1896159832" ENDARROW="Default" ENDINCLINATION="68;-547;" ID="Arrow_ID_672337506" STARTARROW="None" STARTINCLINATION="1091;68;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1538588393995" ID="ID_1149076483" MODIFIED="1557498707219" TEXT="#1168 : find a way to manage style of custom extended UI elements">
-<icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1538695838262" ID="ID_407627538" MODIFIED="1557498707219" TEXT="lumiera-(light|dark)-theme-complement.css">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
@@ -31143,7 +31183,7 @@
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1672843594185" ID="ID_1806332659" MODIFIED="1672843600804" TEXT="Ausdehnung des Canvas">
 <node CREATED="1672843603784" ID="ID_547988829" MODIFIED="1672843680818" TEXT="initial festlegen">
-<arrowlink COLOR="#4b3d60" DESTINATION="ID_1283622298" ENDARROW="Default" ENDINCLINATION="-940;-885;" ID="Arrow_ID_425073157" STARTARROW="None" STARTINCLINATION="-693;122;"/>
+<arrowlink COLOR="#4b3d60" DESTINATION="ID_1283622298" ENDARROW="Default" ENDINCLINATION="-940;-885;" ID="Arrow_ID_425073157" STARTARROW="None" STARTINCLINATION="-915;160;"/>
 </node>
 <node CREATED="1672843689370" ID="ID_1279756396" MODIFIED="1672843707230" TEXT="reale Ausdehnung vom ScrolledWindow contentArea_">
 <node COLOR="#435e98" CREATED="1672843720006" ID="ID_1969670799" MODIFIED="1672843870753" TEXT="siehe: Size-Allokation auf GTK Widget">
@@ -31245,9 +31285,21 @@
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1678841423804" ID="ID_81531339" MODIFIED="1678841644379" TEXT="Initiale Festlegung sicherstellen">
+<node COLOR="#435e98" CREATED="1678841423804" ID="ID_81531339" MODIFIED="1678916678040" TEXT="&#x27f9; f&#xfc;hrt sofort zur Kalibrierung des ZoomWindow">
 <arrowlink COLOR="#748598" DESTINATION="ID_833023922" ENDARROW="Default" ENDINCLINATION="-1609;-94;" ID="Arrow_ID_1971623817" STARTARROW="None" STARTINCLINATION="-140;338;"/>
-<icon BUILTIN="flag-pink"/>
+</node>
+<node COLOR="#435e98" CREATED="1678916699994" ID="ID_868064127" MODIFIED="1678916785049" TEXT="(derzeit bleibt die Timeline auf dem Default von 23sec)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...es kommt halt nix Spezifisches aus dem Model, aber es g&#228;be auch bisher gar keine entsprechenden Diff-Bindings und Model-Properties im GUI
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="10"/>
 </node>
 </node>
 </node>
@@ -31903,7 +31955,7 @@
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1672798667029" FOLDED="true" ID="ID_1699842831" MODIFIED="1674603499873" TEXT="Integration ZoomWindow: funktioniert nicht (mehr)">
-<linktarget COLOR="#ac3f80" DESTINATION="ID_1699842831" ENDARROW="Default" ENDINCLINATION="-1384;79;" ID="Arrow_ID_927325344" SOURCE="ID_133007183" STARTARROW="None" STARTINCLINATION="-1848;-74;"/>
+<linktarget COLOR="#503fac" DESTINATION="ID_1699842831" ENDARROW="Default" ENDINCLINATION="-1384;79;" ID="Arrow_ID_927325344" SOURCE="ID_133007183" STARTARROW="None" STARTINCLINATION="-1848;-74;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1672798696337" ID="ID_1553490887" MODIFIED="1672798742711" TEXT="greife jetzt ScrolledWindow::get_allocated_width() ab">
 <node CREATED="1672845045702" ID="ID_400583877" MODIFIED="1672845097544" TEXT="das w&#xe4;re grunds&#xe4;tzlich korrekt">
@@ -32454,7 +32506,7 @@
 <node CREATED="1542309666407" ID="ID_1721729181" MODIFIED="1557498707230" TEXT="initial....">
 <node CREATED="1542309671333" ID="ID_1283622298" MODIFIED="1557498707230" TEXT="Gr&#xf6;&#xdf;e des leeren Canvas">
 <arrowlink COLOR="#60749f" DESTINATION="ID_400560063" ENDARROW="Default" ENDINCLINATION="-46;0;" ID="Arrow_ID_449772156" STARTARROW="None" STARTINCLINATION="-13;18;"/>
-<linktarget COLOR="#4b3d60" DESTINATION="ID_1283622298" ENDARROW="Default" ENDINCLINATION="-940;-885;" ID="Arrow_ID_425073157" SOURCE="ID_547988829" STARTARROW="None" STARTINCLINATION="-693;122;"/>
+<linktarget COLOR="#4b3d60" DESTINATION="ID_1283622298" ENDARROW="Default" ENDINCLINATION="-940;-885;" ID="Arrow_ID_425073157" SOURCE="ID_547988829" STARTARROW="None" STARTINCLINATION="-915;160;"/>
 <node CREATED="1542309689328" ID="ID_679418178" MODIFIED="1672842637926" TEXT="verwende size-Allocation des ScrolledWindow">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -32469,6 +32521,7 @@
 <arrowlink COLOR="#795b80" DESTINATION="ID_548414744" ENDARROW="Default" ENDINCLINATION="-897;636;" ID="Arrow_ID_1661740759" STARTARROW="Default" STARTINCLINATION="-286;-17;"/>
 <icon BUILTIN="idea"/>
 </node>
+<node CREATED="1678924505204" ID="ID_25210334" MODIFIED="1678924536707" TEXT="Pixel-Breite daraus &#x27f9; Kalibrieren des ZoomWindow"/>
 </node>
 </node>
 <node CREATED="1541861481967" ID="ID_1316730142" MODIFIED="1566955904369" TEXT="Feststellen der Canvas-Position">
@@ -32881,6 +32934,7 @@
 <node COLOR="#338800" CREATED="1562237357741" FOLDED="true" ID="ID_836338266" MODIFIED="1564954730183" TEXT="Prototyp / Evaluierung">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1562238962640" ID="ID_1949200690" MODIFIED="1678462240856" TEXT="#1201 Prototype: custom styled timeline profile">
+<linktarget COLOR="#40a5bc" DESTINATION="ID_1949200690" ENDARROW="Default" ENDINCLINATION="-2003;-104;" ID="Arrow_ID_398104912" SOURCE="ID_1275966904" STARTARROW="None" STARTINCLINATION="2327;166;"/>
 <linktarget COLOR="#3a84dd" DESTINATION="ID_1949200690" ENDARROW="Default" ENDINCLINATION="-483;0;" ID="Arrow_ID_16837481" SOURCE="ID_424517976" STARTARROW="None" STARTINCLINATION="615;0;"/>
 <icon BUILTIN="button_ok"/>
 </node>
@@ -33688,6 +33742,23 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1678576309372" ID="ID_1568473205" MODIFIED="1678925367556" TEXT="konkrete CSS-Styles dokumentieren">
+<arrowlink COLOR="#5f7783" DESTINATION="ID_1232986902" ENDARROW="Default" ENDINCLINATION="2218;-176;" ID="Arrow_ID_1708948555" STARTARROW="None" STARTINCLINATION="4285;319;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1678925372624" ID="ID_348250165" MODIFIED="1678925428123">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      TiddlyWiki + <font face="Monospaced" color="#a63077">doc/technical/stage/style/Timeline.txt</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 </node>
 <node CREATED="1561743807830" ID="ID_593477946" MODIFIED="1561898346705" TEXT="L&#xf6;sungsans&#xe4;tze">
@@ -46486,7 +46557,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1678841457381" ID="ID_833023922" MODIFIED="1678841649108" TEXT="Breite an vorhandene Fensterbreite anmessen">
 <linktarget COLOR="#748598" DESTINATION="ID_833023922" ENDARROW="Default" ENDINCLINATION="-1609;-94;" ID="Arrow_ID_1971623817" SOURCE="ID_81531339" STARTARROW="None" STARTINCLINATION="-140;338;"/>
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1678841652042" ID="ID_344873865" MODIFIED="1678841678052" TEXT="bezweifle ob das korrekt ankommt">
+<node COLOR="#435e98" CREATED="1678841652042" ID="ID_344873865" MODIFIED="1678916366193" TEXT="bezweifle ob das korrekt ankommt">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -46497,6 +46568,20 @@
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="help"/>
+</node>
+<node COLOR="#338800" CREATED="1678916371168" ID="ID_1956699133" MODIFIED="1678916621731" TEXT="doch.... &#x27f6; works as designed">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      per Trace-Meldung &#252;berpr&#252;ft: calibrateExtension() ist so programmiert, da&#223; es die bestehende Metrik erh&#228;lt, sondern das ZoomWindow entsprechend verkleinert. Der Code verwendet bisher nur default-Werte f&#252;r die Timeline &#10233; die Metrik bleibt auf 25px/sec stehen, und damit wird die Gesamtl&#228;nge stets mindestens 575px sein; Ausnahme: wenn das Fenster ohnehin gr&#246;&#223;er ist...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
 </node>
 </node>
 </node>
@@ -47053,6 +47138,7 @@
 </node>
 </node>
 <node CREATED="1664668670633" ID="ID_281557130" MODIFIED="1664668687274" TEXT="CSS-Schema f&#xfc;r das Lumiera-GTK-UI">
+<linktarget COLOR="#8b1d60" DESTINATION="ID_281557130" ENDARROW="Default" ENDINCLINATION="-1401;-108;" ID="Arrow_ID_1840161927" SOURCE="ID_529832770" STARTARROW="None" STARTINCLINATION="-625;67;"/>
 <node CREATED="1664668701652" ID="ID_1339380234" MODIFIED="1664668992057" TEXT="Einrichtung durch den UI-Manager">
 <arrowlink COLOR="#4369a6" DESTINATION="ID_280366952" ENDARROW="Default" ENDINCLINATION="-1736;397;" ID="Arrow_ID_1332353653" STARTARROW="None" STARTINCLINATION="-2101;-134;"/>
 <icon BUILTIN="info"/>
@@ -47121,6 +47207,12 @@
   </body>
 </html></richcontent>
 </node>
+</node>
+</node>
+<node CREATED="1678576343977" ID="ID_943672117" MODIFIED="1678576356597" TEXT="Konkret / speziell">
+<node CREATED="1678576366604" ID="ID_1232986902" MODIFIED="1678576571070" TEXT="CSS-Schema zum Styling der Timeline">
+<linktarget COLOR="#5f7783" DESTINATION="ID_1232986902" ENDARROW="Default" ENDINCLINATION="2218;-176;" ID="Arrow_ID_691307229" SOURCE="ID_650016552" STARTARROW="None" STARTINCLINATION="7697;843;"/>
+<linktarget COLOR="#5f7783" DESTINATION="ID_1232986902" ENDARROW="Default" ENDINCLINATION="2218;-176;" ID="Arrow_ID_1708948555" SOURCE="ID_1568473205" STARTARROW="None" STARTINCLINATION="4285;319;"/>
 </node>
 </node>
 </node>

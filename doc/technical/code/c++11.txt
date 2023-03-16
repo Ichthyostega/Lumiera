@@ -189,7 +189,7 @@ construction objects, when _it is important to avoid spurious copying,_ it is be
 helper function do the actual ctor invocation.
 
 WARNING: One insidious point to note is the rule that _explicitly defining a destructor_ will automatically
-         _suppress an otherwise automatically defined, implicit move constructor._ Move ctors really behave
+         _suppress an otherwise automatically defined, implicit move constructor._ In this respect, move constructors behave
          different than implicitly defined copy constructors; this was an often criticised, unfortunate
          design decision for C++. So the common advice is to observe the »**rule of five**«: ``whenever you
          define one of them, then define all of them''.footnote:[And it is sufficient to use `=default`
@@ -315,7 +315,7 @@ impose some challenging effort to retrofit existing structures.
   to what we've done for C++11 to use our iterators and pipelines with the new standard ``for each'' loops.
 
 - *Modules* do not solve any real problems for the code base in its current shape. A migration to modules is
-  mostly a rather mechanical task, while requiring a fairly good understanding of the ``dark corners'' in the
+  a rather mechanical task largely, while requiring a fairly good understanding of the ``dark corners'' in the
   code base, like e.g. the size and build time for test code. Such a transition will also raise again the topic
   of the buildsystem. Unfortunately, what we've built on top of Scons with a little bit of python scripting is
   much cleaner and high-level than most ``mainstream'' usage of other common build systems out there.footnote:[
