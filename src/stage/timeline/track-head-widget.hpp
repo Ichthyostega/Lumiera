@@ -38,7 +38,7 @@
  ** which serves to control such aspects relevant for all content contained within the scope
  ** of this track, including the sub-tracks nested therein.
  ** 
- ** @todo WIP-WIP-WIP as of 10/2018
+ ** @todo as of 3/2023 the reworked Timeline-UI is basically complete
  ** 
  */
 

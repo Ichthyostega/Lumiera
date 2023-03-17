@@ -27,7 +27,7 @@
  ** implemented with automatic layout by the UI toolkit set. Rather, we need to
  ** control a precise temporal display grid, and we need to limit the actual widgets
  ** added for display, since a given timeline may easily hold several hundred up to
- ** thousands of elements. To ease such tasks, a _canvas control_ -- here implemented
+ ** thousands of elements. To ease such tasks, a _canvas control_ — here implemented
  ** on top of Gtk::Layout, allows to combine _custom drawing_ with the placement of
  ** embedded child widgets, where the latter's layout is again managed automatically
  ** by the toolkit set. This approach allows us to circumvent some of the perils of
@@ -51,7 +51,7 @@
  ** 
  ** ## Coordinate systems
  ** When drawing onto a canvas, we need to define the coordinate system. This task is
- ** complicated here, since -- on implementation level -- we end up with several `Gtk::Layout`
+ ** complicated here, since — on implementation level — we end up with several `Gtk::Layout`
  ** elements (the actual canvas widget). This is necessary to accommodate for the display
  ** "mechanics": part of the timeline has to stay "pinned" on top, including the time
  ** overview ruler and possible further marker displays. Based on practical considerations
@@ -65,8 +65,6 @@
  **   model::ViewHook. This allows to place sub-widgets _relative_ to each track locally.
  **   So effectively, from the view point of (sub)widget management, we thus get virtual
  **   canvas coordinates per (sub)track.
- ** 
- ** @todo WIP-WIP-WIP as of 6/2019
  ** 
  */
 
@@ -137,7 +135,6 @@ namespace timeline {
    * On the other hand, for attachment of sub-widgets onto the canvas (Clips, Effects, Markers)
    * we use the Interface model::CanvasHook, which allows us to break down the access hierarchically.
    * Each sub-Track can be outfitted with its own "virtual canvas", exposed as delegating CanvasHook.
-   * @todo WIP-WIP as of 6/2019
    */
   class BodyCanvasWidget
     : public Gtk::Box

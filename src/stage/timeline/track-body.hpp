@@ -32,7 +32,7 @@
  ** in the [header pane](\ref timeline::HeaderPaneWidget) and the display of the
  ** timeline body; the latter is actually a canvas for custom drawing.
  ** 
- ** @todo WIP-WIP-WIP as of 12/2016
+ ** @todo as of 3/2023 the reworked Timeline-UI is basically complete
  ** 
  */
 

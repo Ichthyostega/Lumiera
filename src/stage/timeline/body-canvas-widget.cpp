@@ -36,10 +36,12 @@
  ** timeline::TrackBody::establishTrackSpace(), based on specifications drawn from the real
  ** CSS layout definitions. Here, within this translation unit, we define the corresponding
  ** timeline::ProfileInterpreter implementations; these are the concrete visitors and are
- ** invoked repeatedly to carry out the actual drawing requests. 
+ ** invoked repeatedly to carry out the actual drawing requests.
  ** 
- ** @todo WIP-WIP-WIP as of 6/2019
- ** 
+ ** @todo as of 3/2023 the foundation of this rewritten, highly flexible drawing code established,
+ **       and the layout seemingly behaves reasonably stable and visually as expected, yet with
+ **       some minor glitches. Any kind of dynamic adjustment in response to expanding/collapsing
+ **       or the content representation of clips is *not yet implemented*
  */
 
 
@@ -50,32 +52,20 @@
 #include "stage/timeline/track-body.hpp"
 #include "stage/style-scheme.hpp"
 
-//#include "stage/ui-bus.hpp"
-//#include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"//////////////TODO
-
 #include "common/advice.hpp"
 #include "lib/util.hpp"
 
-//#include <algorithm>
-//#include <vector>
 #include <utility>
 
 
-
-//using util::_Fmt;
 using lib::time::Time;
 using util::max;
 using util::isnil;
-//using util::contains;
-//using Gtk::Widget;
 using Gdk::Rectangle;
-//using sigc::mem_fun;
-//using sigc::ptr_fun;
-//using std::cout;
-//using std::endl;
 using std::string;
 using std::move;
+
 
 
 namespace stage {
@@ -147,7 +137,7 @@ namespace timeline {
           styleBody->add_class (slopeClassName(depth));
           
           TrackBody::decoration.borders[depth] = styleBody->get_border().get_bottom();
-          TrackBody::decoration.borders[0]     = styleBody->get_border().get_top();   // Note: we use a common size for all opening borders  
+          TrackBody::decoration.borders[0]     = styleBody->get_border().get_top();   // Note: we use a common size for all opening borders
           
           styleBody->remove_class (slopeClassName(depth));
 //        styleBody->context_restore();             // <<<---does not work...
@@ -167,15 +157,17 @@ namespace timeline {
      *  mechanism to invoke a set of (virtual) drawing primitives, the
      *  actual drawing code is in the two following subclasses,
      *  separate for the background and for drawing overlays.
+     * @note the *invariant* is: after processing a _verb_ from the profile,
+     *  all drawing including the current "water level" #line_ is complete.
      */
     class AbstractTrackRenderer
       : public ProfileInterpreter
       {
       protected:
         CairoC cox_;
-        StyleC style_;
-        StyleC styleR_;
-        PixSpan visible_;
+        StyleC style_;             // CSS style for the main track body
+        StyleC styleR_;            // CSS style for the an overview ruler
+        PixSpan visible_;          // vertical extension of the timeline
         
         /** the current painting "water level".
          *  To be updated while drawing top-down */
@@ -195,10 +187,18 @@ namespace timeline {
       public:
         AbstractTrackRenderer (CairoC currentDrawContext, DisplayManager& layout)
           : cox_{currentDrawContext}
-          , style_{trackBodyStyle.getAdvice()}                                 // storing a const& to the advice is potentially dangerous, but safe here, since it is not long-lived
+          , style_{trackBodyStyle.getAdvice()}
           , styleR_{trackRulerStyle.getAdvice()}
           , visible_{layout.getPixSpan()}
           { }
+       /*
+        * Note: we store a const& to the advice in the member fields.
+        * This is potentially dangerous, but seems adequate here, since
+        * the renderer instance does not outlive the BodyCanvasWidget,
+        * and the style context accessed through the advice is created
+        * once, at application startup. Please take into account that
+        * this drawing code is invoked very frequently from GUI thread.
+        */
       };
     
     
@@ -299,14 +299,18 @@ namespace timeline {
           }
         
         /** paint closing slope to finish nested sub tracks
-         * @param n number of nested levels to close */
+         * @param n number of nested levels to close
+         * @note to get drawing of the border corners right,
+         *       we "set back" by the border width and draw some spurious
+         *       vertical part, hidden outside of the visible canvas area.
+         */
         void
         close (uint n)  override
           {
 //          style_->context_save();                // <<<---does not work. Asked on SO: https://stackoverflow.com/q/57342478
             style_->add_class (slopeClassName(n));
             int slopeWidth = style_->get_border().get_bottom();
-            line_ -= slopeWidth;  // set back to create room for the (invisible) top side of the frame 
+            line_ -= slopeWidth;  // set back to create room for the (invisible) top side of the frame
             style_->render_frame_gap(cox_
                                  ,visible_.b
                                             +30   ////////////////////////////////////////TODO: visual debugging
@@ -351,35 +355,60 @@ namespace timeline {
           }
         
         /** draw overlays on top of overview/ruler track
-         * @param h ruler track height */
+         * @param contentHeight ruler track height */
         void
-        ruler (uint h)  override
+        ruler (uint contentHeight)  override
           {
-            line_ += h;
+            int marTop = styleR_->get_margin().get_top();
+            int marBot = styleR_->get_margin().get_bottom();
+            int padTop = styleR_->get_padding().get_top();
+            int padBot = styleR_->get_padding().get_bottom();
+            int frameT = styleR_->get_border().get_top();
+            int frameB = styleR_->get_border().get_bottom();
+            
+            int heightWithFrame = contentHeight + padTop+padBot + frameT+frameB;
+            
+            /* nothing to paint */
+            line_ += marTop
+                   + heightWithFrame
+                   + marBot;
           }
         
         /** render overlays on top of padding/gap */
         void
         gap (uint h)  override
           {
-            UNIMPLEMENTED ("overlays for gap");
+            /* nothing to paint */
+            line_ += h;
           }
         
         /** place overlays on top of of track content area,
          * @remark anything to show semi-transparent
          *         on top of the content clips */
         void
-        content (uint h)  override
+        content (uint contentHeight)  override
           {
+            int marTop = style_->get_margin().get_top();
+            int marBot = style_->get_margin().get_bottom();
+            int padTop = style_->get_padding().get_top();
+            int padBot = style_->get_padding().get_bottom();
+            int heightWithPadding = contentHeight + padTop+padBot;
+            
             /* nothing to paint */
-            line_ += h;
+            line_ += marTop
+                   + heightWithPadding
+                   + marBot;
           }
         
         /** render overlays covering the opening slope towards nested tracks */
         void
         open()  override
           {
+//          style_->context_save();                // <<<---does not work. Asked on SO: https://stackoverflow.com/q/57342478
+            style_->add_class (slopeClassName (1));
             int slopeWidth = style_->get_border().get_top();
+//          style_->context_restore();             // <<<---does not work...
+            style_->remove_class (slopeClassName(1));
             line_ += slopeWidth;
           }
         
@@ -387,11 +416,12 @@ namespace timeline {
         void
         close (uint n)  override
           {
-            style_->context_save();
-            style_->add_class(slopeClassName(n));
+//          style_->context_save();                // <<<---does not work. Asked on SO: https://stackoverflow.com/q/57342478
+            style_->add_class (slopeClassName(n));
             int slopeWidth = style_->get_border().get_bottom();
+//          style_->context_restore();             // <<<---does not work...
+            style_->remove_class (slopeClassName(n));
             line_ += slopeWidth;
-            style_->context_restore();
           }
         
       public:

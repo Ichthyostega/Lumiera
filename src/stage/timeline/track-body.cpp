@@ -30,8 +30,6 @@
  ** @see TrackBody::establishTrackSpace (TrackProfile&)
  ** @see BodyCanvasWidget::maybeRebuildLayout() invocation
  ** 
- ** @todo WIP-WIP-WIP as of 6/2019
- ** 
  */
 
 

@@ -88,7 +88,7 @@
  ** investigated when there is a sufficiently complete implementation available -- see #1254
  ** 
  ** @todo as of 10/2018 timeline display in the UI is rebuilt to match the architecture
- ** @todo still WIP as of 3/2020 -- yet the basic structure is settled by now.
+ ** @todo as of 3/2023, the basic structure is settled and the design validated
  ** 
  */
 
