@@ -47458,6 +47458,25 @@
 <node CREATED="1678576366604" ID="ID_1232986902" MODIFIED="1678576571070" TEXT="CSS-Schema zum Styling der Timeline">
 <linktarget COLOR="#5f7783" DESTINATION="ID_1232986902" ENDARROW="Default" ENDINCLINATION="2218;-176;" ID="Arrow_ID_691307229" SOURCE="ID_650016552" STARTARROW="None" STARTINCLINATION="7697;843;"/>
 <linktarget COLOR="#5f7783" DESTINATION="ID_1232986902" ENDARROW="Default" ENDINCLINATION="2218;-176;" ID="Arrow_ID_1708948555" SOURCE="ID_1568473205" STARTARROW="None" STARTINCLINATION="4285;319;"/>
+<node CREATED="1679153039883" ID="ID_1200037530" MODIFIED="1679153044485" TEXT="light-theme-complement">
+<node CREATED="1679153131574" ID="ID_94246546" MODIFIED="1679153138259" TEXT="@define-color">
+<node CREATED="1679153145084" ID="ID_1658648144" MODIFIED="1679153149322" TEXT="lum_light">
+<node CREATED="1679153164528" ID="ID_989833472" MODIFIED="1679153174252" TEXT="ivory + 0.2 alpha"/>
+</node>
+<node CREATED="1679153150171" ID="ID_746267827" MODIFIED="1679153154086" TEXT="lum_shade">
+<node CREATED="1679153186788" ID="ID_660192995" MODIFIED="1679153194978" TEXT="conrsilk abgedunkelt + 0.15 alpha"/>
+</node>
+</node>
+<node CREATED="1679153046735" ID="ID_210074374" MODIFIED="1679153052066" TEXT="Fork">
+<node CREATED="1679153200733" ID="ID_333838761" MODIFIED="1679153213700" TEXT="nur inset box-shadow, als Alpha-overlay"/>
+</node>
+<node CREATED="1679153052705" ID="ID_1740941248" MODIFIED="1679153054572" TEXT="Ruler">
+<node CREATED="1679153061488" ID="ID_233346374" LINK="#ID_555799552" MODIFIED="1679153102530" TEXT="verwende die @theme_bg_color"/>
+</node>
+<node CREATED="1679153055256" ID="ID_1629759220" MODIFIED="1679153056748" TEXT="Slope">
+<node CREATED="1679153216817" ID="ID_1774634395" MODIFIED="1679153229573" TEXT="baut ebenfalls auf @lum_light | @lum_shade auf"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -68474,6 +68493,338 @@
   </body>
 </html></richcontent>
 <linktarget COLOR="#8aafdb" DESTINATION="ID_422408673" ENDARROW="Default" ENDINCLINATION="-430;209;" ID="Arrow_ID_384398411" SOURCE="ID_1747578312" STARTARROW="None" STARTINCLINATION="-1700;-117;"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1679146582785" ID="ID_62393759" LINK="https://docs.gtk.org/gtk3/css-overview.html#colors" MODIFIED="1679146753812" TEXT="Farben">
+<icon BUILTIN="info"/>
+<node CREATED="1679146772278" ID="ID_93147070" MODIFIED="1679146786718" TEXT="regul&#xe4;re CSS-Angaben">
+<node CREATED="1679146852459" ID="ID_893843079" MODIFIED="1679146855190" TEXT="#hex"/>
+<node CREATED="1679146856131" ID="ID_661866874" MODIFIED="1679146858935" TEXT="rgb()">
+<node CREATED="1679146881816" ID="ID_590080260" MODIFIED="1679146905864" TEXT="Zahl (0..255)"/>
+<node CREATED="1679146906452" ID="ID_1648565700" MODIFIED="1679146919750" TEXT="Prozentzahl 0%..100%"/>
+</node>
+<node CREATED="1679146859528" ID="ID_1780347020" MODIFIED="1679146862390" TEXT="rgba()">
+<node CREATED="1679146920978" ID="ID_593670937" MODIFIED="1679146931669" TEXT="zus&#xe4;tzlich Alpha 0.0 .. 1.0"/>
+</node>
+<node CREATED="1679146945760" ID="ID_1337294797" MODIFIED="1679146952186" TEXT="standard color name">
+<node CREATED="1679147071758" ID="ID_1977091316" LINK="https://www.w3schools.com/colors/colors_names.asp" MODIFIED="1679147080648" TEXT="die bekannten HTML-Farben"/>
+<node CREATED="1679147109899" ID="ID_434533083" LINK="https://www.w3.org/TR/css-color-3/#svg-color" MODIFIED="1679147119718" TEXT="formale Spec(w3c)"/>
+</node>
+<node CREATED="1679146863199" ID="ID_658577497" MODIFIED="1679146870941" TEXT="currentColor"/>
+<node CREATED="1679146871649" ID="ID_224240207" MODIFIED="1679146873653" TEXT="transparent"/>
+</node>
+<node CREATED="1679147135733" ID="ID_254968681" MODIFIED="1679147146400" TEXT="GTK-extended-spec">
+<node CREATED="1679147159139" ID="ID_1704222116" MODIFIED="1679147162102" TEXT="color expression">
+<node CREATED="1679147200986" ID="ID_85459751" MODIFIED="1679147206624" TEXT="lighter(color)"/>
+<node CREATED="1679147207259" ID="ID_1837545759" MODIFIED="1679147210199" TEXT="darker(color)"/>
+<node CREATED="1679147211053" ID="ID_1973625685" MODIFIED="1679147234195" TEXT="shade(color, degree)">
+<node CREATED="1679147235421" ID="ID_138843695" MODIFIED="1679147265504" TEXT="degree &#x2254;0.0 &#x27f9; black"/>
+<node CREATED="1679147235421" ID="ID_1081933251" MODIFIED="1679147278062" TEXT="degree &#x2254;1.0 &#x27f9; color"/>
+<node CREATED="1679147235421" ID="ID_1278348110" MODIFIED="1679147285213" TEXT="degree &#x2254;2.0 &#x27f9; white"/>
+</node>
+<node CREATED="1679147297672" ID="ID_801922011" MODIFIED="1679147332825" TEXT="alpha(color, opacity)">
+<node CREATED="1679147235421" ID="ID_1252329160" MODIFIED="1679147352292" TEXT="opacity &#x2254;0.0 &#x27f9; transparent"/>
+<node CREATED="1679147235421" ID="ID_245757625" MODIFIED="1679147364543" TEXT="opacity &#x2254;1.0 &#x27f9; opaque"/>
+</node>
+<node CREATED="1679147374558" ID="ID_620059171" MODIFIED="1679147385248" TEXT="mix(color1, color2, fade)"/>
+</node>
+<node CREATED="1679147153411" ID="ID_1245707107" MODIFIED="1679147392492" TEXT="symbolic color">
+<node CREATED="1679147419260" ID="ID_431721011" MODIFIED="1679147420560" TEXT="@define-color &#x2329;name&#x232a; &#x2329;color&#x232a;"/>
+<node CREATED="1679147423037" ID="ID_1801725279" MODIFIED="1679147432737" TEXT="use: @colorname"/>
+<node CREATED="1679147401874" ID="ID_609120791" MODIFIED="1679147442412" TEXT="defined in the theme">
+<node CREATED="1679147447011" ID="ID_1878670506" LINK="https://gitlab.gnome.org/GNOME/gtk/-/tree/d930c4a4d12e730a2d1711f865754315006506ff/gtk/theme/Adwaita" MODIFIED="1679147554401" TEXT="in Adwaitha">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Adwaita ist leider direkt in GTK integriert und ist ein aufgebl&#228;hter Wust an SCSS-generierten Regeln, die dann aus &#187;performance-Gr&#252;nden&#171; (d.h. aus Dummheit und Arroganz) bin&#228;r compiliert und eingebettet werden m&#252;ssen.
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1679147881250" ID="ID_365618706" MODIFIED="1679148018580" TEXT="definitionen sichtbar via _colors-public.scss"/>
+<node CREATED="1679147918675" ID="ID_10101800" MODIFIED="1679147928687" TEXT="Farbwerte definiert in colors.scss">
+<node CREATED="1679147938898" ID="ID_1015338145" MODIFIED="1679147948757" TEXT="Achtung: Switch light/dark"/>
+</node>
+<node CREATED="1679147982325" ID="ID_943402704" MODIFIED="1679148013300" TEXT="eingebunden via gtk-contained.scss"/>
+</node>
+<node CREATED="1679147578310" ID="ID_602384838" LINK="https://stackoverflow.com/a/64613523" MODIFIED="1679147798973">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gel&#228;ufiges<br />Farbschema
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Es war und ist immer noch &#252;blich, da&#223; jedes <i>Theme</i>&#160;einen Satz von Basis-Farben definiert. Auch Adwaita macht das aktuell so (wenngleich es den Gnome-Leuten l&#228;stig ist, und sie immer wieder darauf hinweisen, da&#223; das alles &quot;difficult&quot; und &quot;challenging&quot; ist. Sprich, man will raus aus der Nummer, aber der Widerstand der Nutzer ist zu stark)
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1679148565999" ID="ID_303603967" MODIFIED="1679148582976" TEXT="Layout">
+<node CREATED="1679148586102" ID="ID_745102737" MODIFIED="1679148602308" TEXT="theme_fg_color">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      widget text/foreground color
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1679148586103" ID="ID_408960995" MODIFIED="1679148614603" TEXT="theme_text_color">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      text color for entries, views and content in general
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1679148586103" ID="ID_555799552" MODIFIED="1679148628299" TEXT="theme_bg_color">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      widget base background color
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1679148586104" ID="ID_1295740691" MODIFIED="1679148642821" TEXT="theme_base_color">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      text widgets and the like base background color
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1679148586104" ID="ID_1732797987" MODIFIED="1679148655331" TEXT="theme_selected_bg_color">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      base background color of selections
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1679148586105" ID="ID_1199469015" MODIFIED="1679148665685" TEXT="theme_selected_fg_color">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      text/foreground color of selections
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1679148586106" ID="ID_999836079" MODIFIED="1679148677841" TEXT="insensitive_bg_color">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      base background color of insensitive widgets
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1679148586106" ID="ID_416797432" MODIFIED="1679148686769" TEXT="insensitive_fg_color">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      text foreground color of insensitive widgets
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1679148586107" ID="ID_1094511289" MODIFIED="1679148704615" TEXT="insensitive_base_color">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      insensitive text widgets and the like base background color
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1679148586107" ID="ID_705496778" MODIFIED="1679148713000" TEXT="theme_unfocused_fg_color">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      widget text/foreground color on backdrop windows
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1679148586108" ID="ID_1355753292" MODIFIED="1679148722532" TEXT="theme_unfocused_text_color">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      text color for entries, views and content in general on backdrop windows
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1679148586108" ID="ID_461157644" MODIFIED="1679148732329" TEXT="theme_unfocused_bg_color">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      widget base background color on backdrop windows
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1679148586109" ID="ID_49882093" MODIFIED="1679148742267" TEXT="theme_unfocused_base_color">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      text widgets and the like base background color on backdrop windows
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1679148586110" ID="ID_349036672" MODIFIED="1679148751759" TEXT="theme_unfocused_selected_bg_color">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      base background color of selections on backdrop windows
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1679148586110" ID="ID_626976605" MODIFIED="1679148764268" TEXT="theme_unfocused_selected_fg_color">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      text/foreground color of selections on backdrop windows
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1679148586111" ID="ID_537990754" MODIFIED="1679148776699" TEXT="unfocused_insensitive_color">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      insensitive color on backdrop windows
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1679148586111" ID="ID_1700746299" MODIFIED="1679148785292" TEXT="borders">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      widgets main borders color
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1679148586111" ID="ID_1698242897" MODIFIED="1679148794104" TEXT="unfocused_borders">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      widgets main borders color on backdrop windows
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1679148569038" ID="ID_1622259143" MODIFIED="1679148580505" TEXT="Status">
+<node CREATED="1679148586111" ID="ID_1392247646" MODIFIED="1679148586111" TEXT="warning_color"/>
+<node CREATED="1679148586111" ID="ID_1621214244" MODIFIED="1679148586111" TEXT="error_color"/>
+<node CREATED="1679148586111" ID="ID_619365964" MODIFIED="1679148586111" TEXT="success_color"/>
+</node>
+<node CREATED="1679148572758" ID="ID_1709733815" MODIFIED="1679148850295" TEXT="Window">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      these colors are exported for the window manager and shouldn't be used in applications,
+    </p>
+    <p>
+      read if you used those and something break with a version upgrade you're on your own...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1679148881944" MODIFIED="1679148881944" TEXT="wm_title"/>
+<node CREATED="1679148881945" MODIFIED="1679148881945" TEXT="wm_unfocused_title"/>
+<node CREATED="1679148881945" MODIFIED="1679148881945" TEXT="wm_highlight"/>
+<node CREATED="1679148881945" MODIFIED="1679148881945" TEXT="wm_borders_edge"/>
+<node CREATED="1679148881946" MODIFIED="1679148881946" TEXT="wm_bg_a"/>
+<node CREATED="1679148881946" MODIFIED="1679148881946" TEXT="wm_bg_b"/>
+<node CREATED="1679148881946" MODIFIED="1679148881946" TEXT="wm_shadow"/>
+<node CREATED="1679148881946" MODIFIED="1679148881946" TEXT="wm_border"/>
+<node CREATED="1679148881947" MODIFIED="1679148881947" TEXT="wm_button_hover_color_a"/>
+<node CREATED="1679148881947" MODIFIED="1679148881947" TEXT="wm_button_hover_color_b"/>
+<node CREATED="1679148881947" MODIFIED="1679148881947" TEXT="wm_button_active_color_a"/>
+<node CREATED="1679148881948" MODIFIED="1679148881948" TEXT="wm_button_active_color_b"/>
+<node CREATED="1679148881948" MODIFIED="1679148881948" TEXT="wm_button_active_color_c"/>
+</node>
+</node>
 </node>
 </node>
 </node>

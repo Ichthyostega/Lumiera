@@ -52,7 +52,6 @@
 #include "stage/timeline/track-body.hpp"
 #include "stage/style-scheme.hpp"
 
-#include "lib/format-cout.hpp"//////////////TODO
 #include "common/advice.hpp"
 #include "lib/util.hpp"
 
@@ -241,7 +240,6 @@ namespace timeline {
             fillBackground(styleR_, heightWithFrame);
             styleR_->render_frame (cox_
                                   ,visible_.b
-                                            +20   ////////////////////////////////////////TODO: visual debugging
                                   ,line_
                                   ,visible_.delta()
                                   ,heightWithFrame
@@ -283,15 +281,14 @@ namespace timeline {
             style_->add_class (slopeClassName (1));
             int slopeWidth = style_->get_border().get_top();
             style_->render_frame_gap(cox_
-                                 ,visible_.b
-                                            +25   ////////////////////////////////////////TODO: visual debugging
+                                 ,visible_.b       - slopeWidth
                                  ,line_
-                                 ,visible_.delta()
+                                 ,visible_.delta() + 2*slopeWidth
                                  ,2*slopeWidth
                                  //_______________________________we only need the top side of the frame
                                  ,Gtk::PositionType::POS_BOTTOM
                                  ,visible_.b
-                                 ,visible_.e
+                                 ,visible_.e       + 2*slopeWidth
                                  );
 //          style_->context_restore();             // <<<---does not work...
             style_->remove_class (slopeClassName(1));
@@ -312,15 +309,14 @@ namespace timeline {
             int slopeWidth = style_->get_border().get_bottom();
             line_ -= slopeWidth;  // set back to create room for the (invisible) top side of the frame
             style_->render_frame_gap(cox_
-                                 ,visible_.b
-                                            +30   ////////////////////////////////////////TODO: visual debugging
+                                 ,visible_.b       - slopeWidth
                                  ,line_
-                                 ,visible_.delta()
+                                 ,visible_.delta() + 2*slopeWidth
                                  ,2*slopeWidth
                                  //_______________________________we only need the bottom side of the frame
                                  ,Gtk::PositionType::POS_TOP
                                  ,visible_.b
-                                 ,visible_.e
+                                 ,visible_.e       + 2*slopeWidth
                                  );
 //          style_->context_restore();             // <<<---does not work...
             style_->remove_class (slopeClassName(n));
@@ -721,16 +717,6 @@ namespace timeline {
   TimelineCanvas::drawGrounding (CairoC cox)
   {
     renderGrounding_(cox);
-    /////////////////////////////////////////////TICKET #1039 : placeholder drawing
-    //
-    guint w, h;
-    this->get_size(w, h); // mark the currently configured canvas size
-    cox->set_source_rgb(0.8, 0.0, 0.0);
-    cox->set_line_width (5.0);
-    cox->move_to(0, 0);
-    cox->line_to(w, h);
-    cox->stroke();
-    /////////////////////////////////////////////TICKET #1039 : placeholder drawing
   }
   
   
@@ -742,19 +728,6 @@ namespace timeline {
   TimelineCanvas::drawOverlays (CairoC cox)
   {
     renderOverlay_(cox);
-    /////////////////////////////////////////////TICKET #1039 : placeholder drawing
-    //
-    auto alloc = get_allocation(); // mark the current space allocation by GTK
-    int w = alloc.get_width();
-    int h = alloc.get_height();
-    int rad = MIN (w,h) / 2;
-    
-    cox->set_source_rgb(0.2, 0.4, 0.9);     // blue
-    cox->set_line_width (2.0);
-    cox->move_to(w, 0);
-    cox->arc(rad, rad, rad, 0.0, 2.0*M_PI); // full circle
-    cox->stroke();
-    /////////////////////////////////////////////TICKET #1039 : placeholder drawing
   }
   
   

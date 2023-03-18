@@ -49,37 +49,46 @@
  *  border is used to paint the slopes to nested scopes
  *  background is used within the track scopes
  */
+@define-color lum_light alpha(shade(ivory,    1.1), 0.2);
+@define-color lum_shade alpha(shade(cornsilk, 0.4), 0.2);
+
   .timeline__page > .timeline__body fork.timeline__fork {
-    margin: 2ex;
+    margin: 0px;
     padding: 10px;
-    border-style: inset;
-    border-color: IndianRed;
-    background-color: Lime;
-    box-shadow: inset 2px 2px 5px 1px DeepSkyBlue,
-                      5px 5px 2px 1px ForestGreen;
+    /* background-color: inherited */
+    border-style: solid;
+    box-shadow: inset 1px 2px 5px 1px @lum_shade;
+    border-bottom-color: @lum_light;
+    border-top-color:    alpha(shade(mix(@theme_bg_color, steelblue, 0.07),0.85), 0.4);
 }
   fork.timeline__fork frame.timeline__ruler {
-    margin: 1ex;
+    margin-top: 5px;
+    margin-bottom: 1.2ex;
     padding: 5px;
-    border: 3px outset DarkGoldenRod;
-    background-color: SandyBrown;
-    box-shadow: inset 2px 2px 5px 1px RosyBrown,
-                      5px 3px 6px 4px Sienna;
+    background-color: @theme_bg_color;
+    border-width: 2px;
+    border-style: solid;
+    border-top-color:    shade(@theme_bg_color, 1.2);
+    border-left-color:   shade(@theme_bg_color, 1.1);
+    border-bottom-color: shade(mix(@theme_bg_color, steelblue, 0.1), 0.8);
+    border-right-color:  shade(mix(@theme_bg_color, steelblue, 0.1), 0.9);
+    box-shadow: inset 2px 2px 5px 1px shade(@theme_bg_color, 1.2),
+                      1px 2px 4px 2px shade(@theme_bg_color, 0.8);
 }
   .track-slope--deep1 {
-    border-width: 5px;
+    border-width: 3px;
 }
   .track-slope--deep2 {
-    border-width: 10px;
+    border-width: 5px;
 }
   .track-slope--deep3 {
-    border-width: 14px;
+    border-width: 7px;
 }
   .track-slope--deep4 {
-    border-width: 17px;
+    border-width: 8px;
 }
   .track-slope--verydeep {
-    border-width: 20px;
+    border-width: 9px;
 }
 
 /* bracket structure to indicate track scopes

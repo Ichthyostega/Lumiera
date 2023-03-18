@@ -166,7 +166,6 @@ namespace timeline {
   TimelineLayout::sizeZoomWindow (Gtk::Allocation& alloc)
   {
     int contentWidthPx = alloc.get_width();
-    contentWidthPx = util::max (contentWidthPx - 100, 100);   ////////////////////////////////////////TODO: visual debugging
     if (abs(contentWidthPx) != zoomWindow_.pxWidth())
       zoomWindow_.calibrateExtension (contentWidthPx);
   }
