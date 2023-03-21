@@ -25,6 +25,9 @@
  ** Presentation state for the first draft of the timeline display. Very likely
  ** to be replaced by a complete rewrite.
  ** @warning as of 2016 the entire timeline display is planned to be reworked
+ ** @deprecated this is defunct code, left over from the old GTK-2 GUI of Lumiera.
+ **    Deactivated since 2016 and no longer included since 3/23 but left in tree
+ **    for later reference
  */
 
 
@@ -32,8 +35,10 @@
 #ifndef STAGE_WIDGET_TIMELINE_STATE_H
 #define STAGE_WIDGET_TIMELINE_STATE_H
 
-#include "stage/widget/timeline/timeline-view-window.hpp"
+#include "stage/gtk-base.hpp"
+//#include "stage/widget/timeline/timeline-view-window.hpp"////////////////////////////TODO : obsolete and removed 3/23
 
+#include "lib/time/timevalue.hpp"
 #include "lib/time/mutation.hpp"
 #include "lib/time/control.hpp"
 
@@ -47,13 +52,28 @@ namespace stage {
   namespace widget { 
   namespace timeline {
   
-  using lib::time::Control;
+  using lib::time::Time;
+  using lib::time::Offset;
+  using lib::time::TimeVar;
+  using lib::time::TimeSpan;
+  using lib::time::TimeValue;
   using lib::time::Mutation;
+  using lib::time::Control;
   
   using std::shared_ptr;
   
   typedef Control<TimeSpan> SelectionControl;
-  
+
+///////////////////////////////////////////////////////////////////////////////////////TODO : dummy placeholder to keep the code in-tree (for later reference)
+  class TimelineViewWindow
+    {
+    public:
+      TimelineViewWindow (Offset offset, int64_t scale)
+        {
+          NOTREACHED ("3/23: this code is dead and left in-tree for later reference only");
+        }
+    };
+///////////////////////////////////////////////////////////////////////////////////////TODO : dummy placeholder to keep the code in-tree (for later reference)
   
   
   /**

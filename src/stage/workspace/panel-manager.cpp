@@ -34,7 +34,6 @@
 #include "stage/panel/viewer-panel.hpp"
 #include "stage/panel/infobox-panel.hpp"
 #include "stage/panel/timeline-panel.hpp"
-#include "stage/panel/timeline-panel-obsolete.hpp"
 
 #include "include/logging.h"
 #include "lib/util-foreach.hpp"
@@ -49,7 +48,6 @@ namespace workspace {
   const PanelManager::PanelDescription
     PanelManager::panelDescriptionList[] = {
       PanelManager::Panel<TimelinePanel>(),
-      PanelManager::Panel<TimelinePanelObsolete>(),
       PanelManager::Panel<InfoBoxPanel>(),
       PanelManager::Panel<ViewerPanel>(),
       PanelManager::Panel<AssetsPanel>()

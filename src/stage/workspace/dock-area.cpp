@@ -39,7 +39,6 @@
 #include "stage/panel/viewer-panel.hpp"
 #include "stage/panel/infobox-panel.hpp"
 #include "stage/panel/timeline-panel.hpp"
-#include "stage/panel/timeline-panel-obsolete.hpp"
 
 #include "include/logging.h"
 #include "lib/util-foreach.hpp"
@@ -55,7 +54,6 @@ namespace workspace {
     DockArea::panelDescriptionList[] = {
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1144
       DockArea::Panel<TimelinePanel>(),
-      DockArea::Panel<TimelinePanelObsolete>(),
       DockArea::Panel<InfoBoxPanel>(),
       DockArea::Panel<ViewerPanel>(),
       DockArea::Panel<AssetsPanel>()

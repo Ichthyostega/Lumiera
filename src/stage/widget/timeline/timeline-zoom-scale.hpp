@@ -24,6 +24,11 @@
 /** @file timeline-zoom-scale.hpp
  ** Widget to control timeline zoom scale
  ** @warning as of 2016 the entire timeline display is planned to be reworked
+ ** @todo this was the »zoom slider« implementation from the old GTK-2 GUI of Lumiera.
+ **       Since 2016, this was deactivated and since 3/23 it is no longer included anywhere,
+ **       just left in tree to be re-integrated into the reworked GKT-3 Timeline UI
+ **                               ///////////////////////////////////////////////////////////////////////////TICKET #74   : Zoom Slider
+ **                               ///////////////////////////////////////////////////////////////////////////TICKET #1196 : draft zoom handling
  */
 
 
@@ -33,11 +38,11 @@
 
 #include "stage/gtk-base.hpp"
 #include "stage/widget/mini-button.hpp"
-#include "stage/widget/timeline-widget.hpp"
+//#include "stage/widget/timeline-widget.hpp"  //////////////////////////////////////////////////////////////TODO old GTK-2 UI is defunct (3/23)
 #include "stage/widget/timeline/timeline-state.hpp"
 
-using namespace Gtk;         ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-using namespace stage::widget;    ////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace Gtk;         ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+using namespace stage::widget;    ///////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 namespace stage {
 namespace widget {
@@ -53,8 +58,9 @@ namespace timeline {
       
       void set_value(double val) { adjustment->set_value(val); }
       
-      void wireTimelineState (shared_ptr<TimelineState> currentState,
-                              TimelineWidget::TimelineStateChangeSignal);
+      void wireTimelineState (shared_ptr<TimelineState> currentState
+//                           ,TimelineWidget::TimelineStateChangeSignal /////////////////////////////////////TODO old GTK-2 UI is defunct (3/23)
+                             );
       
       
       

@@ -23,6 +23,8 @@
 
 /** @file rectangle.cpp
  ** Implementation of functions to work with rectangular screen ranges
+ ** @todo 3/23 this is leftover code from the old GKT-2 Lumiera GUI.
+ **       This code should be consolidated into some kind of Cairo drawing utils!
  */
 
 #include "stage/draw/rectangle.hpp"

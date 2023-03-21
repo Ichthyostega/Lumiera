@@ -1,0 +1,3 @@
+WARNING: this package is an obsolete leftover from the old GTK-2 UI.
+While some code is retained here for future reference at the moment,
+the actual Timeline-UI now resides in stage::timeline (as of 2/23)

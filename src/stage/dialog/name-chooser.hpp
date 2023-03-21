@@ -23,6 +23,9 @@
 
 /** @file name-chooser.hpp
  ** Dialog to enter a string name.
+ ** @todo this widget is not currently used, as of 3/23;
+ **    it is a leftover from the old GTK-2 GUI of Lumiera,
+ **    but was retained since it might be useful in future...
  */
 
 

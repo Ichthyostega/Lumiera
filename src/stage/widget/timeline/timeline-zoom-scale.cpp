@@ -24,10 +24,13 @@
 /** @file timeline-zoom-scale.cpp
  ** Widget to control timeline zoom scale
  ** @warning as of 2016 the entire timeline display is planned to be reworked
+ ** @todo this was the »zoom slider« implementation from the old GTK-2 GUI of Lumiera.
+ **       Since 2016, this was deactivated and since 3/23 it is no longer included anywhere,
+ **       just left in tree to be re-integrated into the reworked GKT-3 Timeline UI
  */
 
 
-#include "stage/widget/timeline-widget.hpp"
+//#include "stage/widget/timeline-widget.hpp"  /////////////////////////////////////////////////////////////TODO old GTK-2 UI is defunct (3/23)
 #include "stage/widget/timeline/timeline-zoom-scale.hpp"
 
 using namespace Gtk;         ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
@@ -99,12 +102,13 @@ namespace timeline {
   
   
   void
-  TimelineZoomScale::wireTimelineState (shared_ptr<TimelineState> currentState,
-                                        TimelineWidget::TimelineStateChangeSignal stateChangeSignal)
+  TimelineZoomScale::wireTimelineState (shared_ptr<TimelineState> currentState
+//                                      TimelineWidget::TimelineStateChangeSignal stateChangeSignal          ////////////TODO defunct
+                                       )
   {
     on_timeline_state_changed (currentState);
-    stateChangeSignal.connect (
-        sigc::mem_fun(this, &TimelineZoomScale::on_timeline_state_changed));
+//  stateChangeSignal.connect (
+//      sigc::mem_fun(this, &TimelineZoomScale::on_timeline_state_changed));
   }
   
   
@@ -114,7 +118,7 @@ namespace timeline {
     REQUIRE (newState);
     timelineState = newState;
     
-    adjustment->set_value (getViewWindow().get_smoothed_time_scale());
+//  adjustment->set_value (getViewWindow().get_smoothed_time_scale());
   }
   
   

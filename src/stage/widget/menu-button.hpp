@@ -23,6 +23,8 @@
 
 /** @file menu-button.hpp
  ** A button widget that displays a menu when clicked.
+ ** @todo leftover from the old GTK-2 Lumiera UI as of 3/23,
+ **       but should be retained and integrated into the reworked GTK-3 UI 
  */
 
 

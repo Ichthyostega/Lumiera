@@ -24,6 +24,9 @@
 /** @file timeline-state.cpp
  ** Implementation of presentation state for the first draft of the timeline display.
  ** @warning as of 2016 the entire timeline display is planned to be reworked
+ ** @deprecated this is defunct code, left over from the old GTK-2 GUI of Lumiera.
+ **    Deactivated since 2016 and no longer included since 3/23 but left in tree
+ **    for later reference
  */
 
 
@@ -65,8 +68,9 @@ namespace timeline {
       
       ////////////////////////////////////////////////////////////TICKET #798: how to handle GUI default state
       const int64_t DEFAULT_TIMELINE_SCALE =6400;
-      
-      viewWindow_.set_time_scale(DEFAULT_TIMELINE_SCALE);
+  
+      NOTREACHED ("3/23: this code is dead and left in-tree for later reference only");
+//    viewWindow_.set_time_scale(DEFAULT_TIMELINE_SCALE);
       
       setSelection (Mutation::changeTime (Time(FSecs(2))));
       setSelection (Mutation::changeDuration (Duration(FSecs(2))));
