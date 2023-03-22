@@ -1,7 +1,7 @@
 /*
   SAFECLIB.h  -  Portable and safe wrappers around some clib functions and some tools
 
-  Copyright (C)         CinelerraCV
+  Copyright (C)
     2008,               Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or

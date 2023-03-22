@@ -3,7 +3,7 @@
 
   Copyright (C)
     2004, 2005, 2006,   Christian Thaeter <chth@gmx.net>
-  Copyright (C)         CinelerraCV
+  Copyright (C)         (contributed to CinelerraCV)
     2007, 2008,         Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
