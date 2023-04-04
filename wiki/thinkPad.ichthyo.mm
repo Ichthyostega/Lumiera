@@ -1,6 +1,6 @@
 <map version="1.0.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node BACKGROUND_COLOR="#6666ff" CREATED="1434127882200" ID="ID_1452170048" MODIFIED="1582498450512" STYLE="fork" TEXT="Lumi">
+<node BACKGROUND_COLOR="#6666ff" CREATED="1434127882200" ID="ID_1452170048" MODIFIED="1680365898333" STYLE="fork" TEXT="Lumi">
 <font NAME="SansSerif" SIZE="25"/>
 <node CREATED="1434128046296" FOLDED="true" ID="ID_1900827283" MODIFIED="1679363052358" POSITION="right" TEXT="GUI">
 <font BOLD="true" NAME="SansSerif" SIZE="14"/>
@@ -37213,11 +37213,40 @@
 </node>
 <node CREATED="1476376943985" HGAP="52" ID="ID_1422206856" MODIFIED="1557498707231" TEXT="Viewer" VSHIFT="10">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680567087657" ID="ID_621933360" MODIFIED="1680567105120" TEXT="entwickeln">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680564423273" ID="ID_7752918" MODIFIED="1680567145813" TEXT="Video-Display-GUI">
+<linktarget COLOR="#f6e1c2" DESTINATION="ID_7752918" ENDARROW="Default" ENDINCLINATION="-612;79;" ID="Arrow_ID_1986887171" SOURCE="ID_1435039515" STARTARROW="None" STARTINCLINATION="-2008;-180;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680567169798" ID="ID_1105975184" MODIFIED="1680567175175" TEXT="Play-control">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1680567033328" ID="ID_60631732" MODIFIED="1680567036668" TEXT="Infrastruktur">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680565198929" ID="ID_1636806116" MODIFIED="1680567189686" TEXT="Video-Widget">
+<linktarget COLOR="#fec499" DESTINATION="ID_1636806116" ENDARROW="Default" ENDINCLINATION="-757;117;" ID="Arrow_ID_820803219" SOURCE="ID_961883511" STARTARROW="None" STARTINCLINATION="-239;41;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680565204949" ID="ID_754563967" MODIFIED="1680567194869" TEXT="OutputManager f&#xfc;r Video-Display">
+<linktarget COLOR="#fec499" DESTINATION="ID_754563967" ENDARROW="Default" ENDINCLINATION="-691;58;" ID="Arrow_ID_1893379752" SOURCE="ID_962521952" STARTARROW="None" STARTINCLINATION="-230;29;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680567197898" ID="ID_73360951" MODIFIED="1680567628091" TEXT="Integration mit Output-Management (allgemein)">
+<arrowlink COLOR="#fe756b" DESTINATION="ID_1644608240" ENDARROW="Default" ENDINCLINATION="-1507;-562;" ID="Arrow_ID_246148002" STARTARROW="None" STARTINCLINATION="-591;33;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680567513016" ID="ID_1328492043" MODIFIED="1680567618172" TEXT="Grundlage f&#xfc;r Medien-Verbindungs-Framework">
+<arrowlink COLOR="#ba4677" DESTINATION="ID_212457558" ENDARROW="Default" ENDINCLINATION="-1225;-80;" ID="Arrow_ID_1272242151" STARTARROW="None" STARTINCLINATION="360;22;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1480639186172" HGAP="45" ID="ID_838667304" MODIFIED="1557498707231" TEXT="Mixer" VSHIFT="28">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 </node>
-<node CREATED="1476376927660" HGAP="35" ID="ID_688318446" MODIFIED="1557498707231" TEXT="Docks" VSHIFT="12">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1476376927660" FOLDED="true" HGAP="35" ID="ID_688318446" MODIFIED="1680569140448" TEXT="Docks" VSHIFT="12">
+<icon BUILTIN="hourglass"/>
 <node CREATED="1504200504235" ID="ID_125942292" MODIFIED="1557498707231" TEXT="PanelManager mu&#xdf; umgebaut werden">
 <arrowlink COLOR="#e1a169" DESTINATION="ID_1249897876" ENDARROW="Default" ENDINCLINATION="-636;0;" ID="Arrow_ID_446871395" STARTARROW="None" STARTINCLINATION="-311;562;"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504193029907" ID="ID_945788817" MODIFIED="1557498707231" TEXT="#1104 how to instruct actions through panels">
@@ -37237,7 +37266,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1504200512737" ID="ID_320931452" MODIFIED="1557498707232" TEXT="M&#xfc;llhaufen">
 <icon BUILTIN="clanbomber"/>
 </node>
-<node CREATED="1504200743610" ID="ID_1973994759" MODIFIED="1679362063119" TEXT="&#220;bergangsweise....">
+<node CREATED="1504200743610" ID="ID_1973994759" MODIFIED="1679362063119" TEXT="&#xdc;bergangsweise....">
 <node CREATED="1504200750905" ID="ID_1728645080" MODIFIED="1679359485827" TEXT="gab es noch eine ZombieTimeline">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -47749,7 +47778,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1448658633478" HGAP="99" ID="ID_314439240" MODIFIED="1582388681066" TEXT="Design" VSHIFT="13">
+<node CREATED="1448658633478" FOLDED="true" HGAP="99" ID="ID_314439240" MODIFIED="1582388681066" TEXT="Design" VSHIFT="13">
 <font NAME="SansSerif" SIZE="13"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1448658692023" FOLDED="true" ID="ID_339186676" MODIFIED="1582388523994">
@@ -53992,6 +54021,12 @@
 <node CREATED="1544839813006" ID="ID_790942961" MODIFIED="1557498707235" TEXT="Ruler-Configs f&#xfc;r jeden Track"/>
 <node CREATED="1544839819212" ID="ID_685715164" MODIFIED="1557498707235" TEXT="Steuer-Elemente gem&#xe4;&#xdf; Placement"/>
 </node>
+</node>
+</node>
+<node CREATED="1680567463215" ID="ID_1184528519" MODIFIED="1680567476289" TEXT="Datenstrom-Routing">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680567534405" ID="ID_212457558" MODIFIED="1680567618172" TEXT="Medien-Datenverbindung: Grundlagen definieren">
+<linktarget COLOR="#ba4677" DESTINATION="ID_212457558" ENDARROW="Default" ENDINCLINATION="-1225;-80;" ID="Arrow_ID_1272242151" SOURCE="ID_1328492043" STARTARROW="None" STARTINCLINATION="360;22;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
@@ -61338,7 +61373,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1535890757430" FOLDED="true" ID="ID_3793753" MODIFIED="1557498707235" TEXT="Iterator">
+<node CREATED="1535890757430" ID="ID_3793753" MODIFIED="1557498707235" TEXT="Iterator">
 <node CREATED="1535890775651" ID="ID_333704322" MODIFIED="1573230435834" TEXT="Lumiera Forward Iterator">
 <linktarget COLOR="#3f76e9" DESTINATION="ID_333704322" ENDARROW="Default" ENDINCLINATION="-542;0;" ID="Arrow_ID_1390962202" SOURCE="ID_1939609996" STARTARROW="None" STARTINCLINATION="183;24;"/>
 <node CREATED="1535890788898" ID="ID_474606436" MODIFIED="1557498707235" TEXT="IterAdapter"/>
@@ -61377,7 +61412,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1535891065189" FOLDED="true" ID="ID_1233342893" MODIFIED="1576282357969" TEXT="Iterator-Monade">
+<node CREATED="1535891065189" ID="ID_1233342893" MODIFIED="1576282357969" TEXT="Iterator-Monade">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -61507,6 +61542,9 @@
 <node CREATED="1512928322567" ID="ID_462235185" MODIFIED="1518487921098" TEXT="Builder ist ein wirkliches Pattern">
 <icon BUILTIN="idea"/>
 </node>
+<node COLOR="#338800" CREATED="1680567921049" ID="ID_1270335704" MODIFIED="1680567930279" TEXT="Pipeline-Builder-Framework entwickelt">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>
@@ -61525,7 +61563,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1512925334501" FOLDED="true" ID="ID_409327286" MODIFIED="1573229967374" TEXT="IterExplorer-Design">
+<node CREATED="1512925334501" ID="ID_409327286" MODIFIED="1573229967374" TEXT="IterExplorer-Design">
 <linktarget COLOR="#625975" DESTINATION="ID_409327286" ENDARROW="Default" ENDINCLINATION="-843;1771;" ID="Arrow_ID_86323098" SOURCE="ID_185594200" STARTARROW="None" STARTINCLINATION="-493;-1123;"/>
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1512925397741" ID="ID_1352590559" MODIFIED="1518487921098" TEXT="Design">
@@ -61603,7 +61641,14 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512925959074" ID="ID_30857289" MODIFIED="1518487921098" TEXT="TODO: abl&#xf6;sen durch IterTreeExplorer">
 <arrowlink COLOR="#83dfc7" DESTINATION="ID_845080696" ENDARROW="Default" ENDINCLINATION="-1109;3887;" ID="Arrow_ID_1645152965" STARTARROW="None" STARTINCLINATION="2051;-176;"/>
+<arrowlink COLOR="#bf3473" DESTINATION="ID_896127270" ENDARROW="Default" ENDINCLINATION="-1310;-138;" ID="Arrow_ID_1052952035" STARTARROW="None" STARTINCLINATION="-424;31;"/>
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680568272530" ID="ID_265531291" LINK="https://issues.lumiera.org/ticket/1276" MODIFIED="1680569227880" TEXT="#1276: Wiederaufnahme des Themas im Rahmen von &#xbb;PlaybackVerticalSlice&#xab;">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1680568313565" ID="ID_1547861521" MODIFIED="1680568337979" TEXT="Ziel: komplett ersetzen durch das neue TreeExplorer-Design">
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 </node>
@@ -61617,13 +61662,19 @@
 <icon BUILTIN="smiley-neutral"/>
 <node CREATED="1535939100410" ID="ID_1893557511" MODIFIED="1535939107373" TEXT="aber von einer Art, die mir gef&#xe4;llt"/>
 <node CREATED="1535939111640" ID="ID_1649632412" MODIFIED="1535939115932" TEXT="war bisher gut wartbar">
-<node CREATED="1537050257419" HGAP="27" ID="ID_1397772054" MODIFIED="1537050286364" TEXT="naja...." VSHIFT="5">
-<arrowlink DESTINATION="ID_913930564" ENDARROW="Default" ENDINCLINATION="-274;-41;" ID="Arrow_ID_1572610374" STARTARROW="None" STARTINCLINATION="-127;28;"/>
+<node COLOR="#435e98" CREATED="1537050257419" FOLDED="true" HGAP="27" ID="ID_1397772054" MODIFIED="1573229603386" TEXT="naja...." VSHIFT="5">
+<arrowlink DESTINATION="ID_913930564" ENDARROW="Default" ENDINCLINATION="-286;-25;" ID="Arrow_ID_1572610374" STARTARROW="None" STARTINCLINATION="-132;45;"/>
+<node COLOR="#435e98" CREATED="1680568048455" ID="ID_1704957291" MODIFIED="1680568076524" TEXT="Komplexit&#xe4;t der Typsignaturen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#338800" CREATED="1680568063106" ID="ID_1678633435" MODIFIED="1680568073558" TEXT="Framework erfolgreich &#xfc;berarbeitet">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1514328717684" FOLDED="true" ID="ID_137835978" MODIFIED="1573229989029" TEXT="neuer Anlauf IterExplorer II">
+</node>
+<node COLOR="#338800" CREATED="1514328717684" ID="ID_137835978" MODIFIED="1573229989029" TEXT="neuer Anlauf IterExplorer II">
 <arrowlink COLOR="#8ad3a5" DESTINATION="ID_845080696" ENDARROW="Default" ENDINCLINATION="-230;134;" ID="Arrow_ID_253437970" STARTARROW="None" STARTINCLINATION="-387;0;"/>
 <linktarget COLOR="#27998e" DESTINATION="ID_137835978" ENDARROW="Default" ENDINCLINATION="-521;-801;" ID="Arrow_ID_1873000120" SOURCE="ID_1860662881" STARTARROW="None" STARTINCLINATION="-1866;98;"/>
 <icon BUILTIN="button_ok"/>
@@ -62115,7 +62166,7 @@
 </node>
 </node>
 <node COLOR="#338800" CREATED="1536409302285" FOLDED="true" ID="ID_913930564" MODIFIED="1573229616333" TEXT="extrem komplexe Typen">
-<linktarget COLOR="#a9b4c1" DESTINATION="ID_913930564" ENDARROW="Default" ENDINCLINATION="-274;-41;" ID="Arrow_ID_1572610374" SOURCE="ID_1397772054" STARTARROW="None" STARTINCLINATION="-127;28;"/>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_913930564" ENDARROW="Default" ENDINCLINATION="-286;-25;" ID="Arrow_ID_1572610374" SOURCE="ID_1397772054" STARTARROW="None" STARTINCLINATION="-132;45;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1536409316172" ID="ID_1468538186" MODIFIED="1536409340127" TEXT="Call-Traces sind nahezu unlesbar">
 <richcontent TYPE="NOTE"><html>
@@ -64324,7 +64375,23 @@
 </node>
 </node>
 </node>
-<node CREATED="1482524498822" ID="ID_431883229" MODIFIED="1557498707236" TEXT="Datenstrom"/>
+<node CREATED="1482524498822" ID="ID_431883229" MODIFIED="1557498707236" TEXT="Datenstrom">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680567302856" ID="ID_599503027" MODIFIED="1680567686765" TEXT="Output-Management">
+<icon BUILTIN="stop"/>
+<node CREATED="1680567318639" ID="ID_1726615423" MODIFIED="1680567321766" TEXT="Verdrahtung">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680567648993" ID="ID_1721405470" MODIFIED="1680567663524" TEXT="Grundkonzept">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1680567322328" ID="ID_1487342906" MODIFIED="1680567331604" TEXT="externe Schnittstellen"/>
+<node CREATED="1680567342943" ID="ID_1794041409" MODIFIED="1680567346762" TEXT="Video-Widergabe">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680567215056" ID="ID_1644608240" MODIFIED="1680567628091" TEXT="Einbinden: GUI-Output-Manager">
+<linktarget COLOR="#fe756b" DESTINATION="ID_1644608240" ENDARROW="Default" ENDINCLINATION="-1507;-562;" ID="Arrow_ID_246148002" SOURCE="ID_73360951" STARTARROW="None" STARTINCLINATION="-591;33;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1482524516371" ID="ID_396707258" MODIFIED="1557498707236" TEXT="Event-Sourcing">
 <node CREATED="1539135156755" ID="ID_1302245670" MODIFIED="1557498707236" TEXT="vermittelnder Tr&#xe4;ger">
 <node CREATED="1539134733747" ID="ID_1189184036" MODIFIED="1557498707236" TEXT="DiffConstituent">
@@ -68275,6 +68342,11 @@
 <node COLOR="#435e98" CREATED="1533401646479" ID="ID_305001887" MODIFIED="1557498707237" TEXT="das gro&#xdf;e wartende MEGA-Integrations-Thema">
 <font NAME="SansSerif" SIZE="12"/>
 </node>
+<node CREATED="1680563617807" ID="ID_1592313170" MODIFIED="1680563626215" TEXT="vorl&#xe4;ufig...">
+<node CREATED="1680563627851" ID="ID_804147257" MODIFIED="1680563627851" TEXT="Fake-build: einfacher Clip">
+<linktarget COLOR="#fec499" DESTINATION="ID_804147257" ENDARROW="Default" ENDINCLINATION="-696;77;" ID="Arrow_ID_521000760" SOURCE="ID_573821275" STARTARROW="None" STARTINCLINATION="-206;21;"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1448314932726" ID="ID_669869188" MODIFIED="1557498707237" POSITION="right" TEXT="Render">
@@ -68297,14 +68369,78 @@
 </node>
 <node CREATED="1535891554587" ID="ID_185594200" MODIFIED="1535891663091" TEXT="entwerfe einen IterExplorer">
 <arrowlink COLOR="#625975" DESTINATION="ID_409327286" ENDARROW="Default" ENDINCLINATION="-843;1771;" ID="Arrow_ID_86323098" STARTARROW="None" STARTINCLINATION="-493;-1123;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680567733451" ID="ID_896127270" MODIFIED="1680568264374" TEXT="Kritik / Refactoring Monaden">
+<linktarget COLOR="#bf3473" DESTINATION="ID_896127270" ENDARROW="Default" ENDINCLINATION="-1310;-138;" ID="Arrow_ID_1052952035" SOURCE="ID_30857289" STARTARROW="None" STARTINCLINATION="-424;31;"/>
+<linktarget COLOR="#f42f34" DESTINATION="ID_896127270" ENDARROW="Default" ENDINCLINATION="-1096;-80;" ID="Arrow_ID_1764912075" SOURCE="ID_1805461369" STARTARROW="None" STARTINCLINATION="-511;24;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#a51558" CREATED="1680568362230" ID="ID_1855480415" MODIFIED="1680568445542" TEXT="Problem: Code selbst f&#xfc;r micht nicht mehr verst&#xe4;ndlich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und das liegt genau daran, da&#223; die Monaten auf eine rein-abstrakte strukturelle Eigenschaft hin abstrahieren, welche nicht in der Natur der verhandelten Dinge verwurzelt ist
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1680568453218" ID="ID_1951039343" MODIFIED="1680568466316" TEXT="was passiert in job-planning.hpp?">
+<icon BUILTIN="help"/>
 </node>
 </node>
 </node>
 </node>
 </node>
-<node CREATED="1512923592590" ID="ID_540019681" MODIFIED="1557498707237" TEXT="Engine"/>
-<node CREATED="1512923605740" ID="ID_319280946" MODIFIED="1557498707237" TEXT="Fixture"/>
-<node CREATED="1512923629577" ID="ID_617347424" MODIFIED="1557498707237" TEXT="Backend"/>
+</node>
+</node>
+<node CREATED="1512923605740" ID="ID_319280946" MODIFIED="1679783009427" TEXT="Fixture">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1679783052390" ID="ID_176106926" MODIFIED="1679783057287" TEXT="gr&#xfc;nden">
+<linktarget COLOR="#fec499" DESTINATION="ID_176106926" ENDARROW="Default" ENDINCLINATION="-584;114;" ID="Arrow_ID_1229368159" SOURCE="ID_51005656" STARTARROW="None" STARTINCLINATION="-150;36;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680563536655" ID="ID_1180632123" MODIFIED="1680565151548" TEXT="Fixture: einfacher Clip">
+<linktarget COLOR="#f6e1c2" DESTINATION="ID_1180632123" ENDARROW="Default" ENDINCLINATION="-985;-61;" ID="Arrow_ID_1052251062" SOURCE="ID_1704865245" STARTARROW="None" STARTINCLINATION="-2243;270;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1680563454868" ID="ID_1187556686" MODIFIED="1680563459014" TEXT="Backbone"/>
+<node CREATED="1680563460649" ID="ID_127710483" MODIFIED="1680563474067" TEXT="MemManagement"/>
+</node>
+<node CREATED="1512923592590" ID="ID_540019681" MODIFIED="1557498707237" TEXT="Engine">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1679783052390" ID="ID_1851394144" MODIFIED="1679783057287" TEXT="gr&#xfc;nden">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1680563559852" ID="ID_580288207" MODIFIED="1680563577773" TEXT="plainPlay">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680563595176" ID="ID_773353840" MODIFIED="1680563601552" TEXT="Aufruf/Verdrahtung im Player">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680564304940" ID="ID_1657236591" MODIFIED="1680565125463" TEXT="Scheduler entwerfen">
+<linktarget COLOR="#f6e1c2" DESTINATION="ID_1657236591" ENDARROW="Default" ENDINCLINATION="-1219;85;" ID="Arrow_ID_49470357" SOURCE="ID_59027079" STARTARROW="None" STARTINCLINATION="-2189;368;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1680565469342" ID="ID_250843894" MODIFIED="1680566937368" TEXT="Priority-Scheduling">
+<linktarget COLOR="#fec499" DESTINATION="ID_250843894" ENDARROW="Default" ENDINCLINATION="-644;84;" ID="Arrow_ID_1702721830" SOURCE="ID_12567096" STARTARROW="None" STARTINCLINATION="-233;30;"/>
+</node>
+<node CREATED="1680565476652" ID="ID_1218283238" MODIFIED="1680566934008" TEXT="Dependency-Notification">
+<linktarget COLOR="#fec499" DESTINATION="ID_1218283238" ENDARROW="Default" ENDINCLINATION="-664;74;" ID="Arrow_ID_443600884" SOURCE="ID_695181807" STARTARROW="None" STARTINCLINATION="-240;29;"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1680563506475" ID="ID_53985081" MODIFIED="1680563509211" TEXT="Interface"/>
+<node CREATED="1680563509728" ID="ID_1883500842" MODIFIED="1680563511567" TEXT="Scheduler">
+<node CREATED="1680563512563" ID="ID_960191744" MODIFIED="1680563516470" TEXT="Layer-2"/>
+<node CREATED="1680563517255" ID="ID_1104189783" MODIFIED="1680563519264" TEXT="Layer-1"/>
+</node>
+</node>
+<node CREATED="1512923629577" ID="ID_617347424" MODIFIED="1557498707237" TEXT="Backend">
+<node CREATED="1680565608115" ID="ID_1114884704" MODIFIED="1680565612050" TEXT="Hilfsmittel">
+<node CREATED="1680565613038" ID="ID_1202060017" MODIFIED="1680565616857" TEXT="Content-Generator">
+<node CREATED="1680565626147" ID="ID_460039330" MODIFIED="1680566930977" TEXT="Test-Content f&#xfc;r Playback">
+<linktarget COLOR="#fec499" DESTINATION="ID_460039330" ENDARROW="Default" ENDINCLINATION="-632;68;" ID="Arrow_ID_1437229627" SOURCE="ID_988488968" STARTARROW="None" STARTINCLINATION="-241;31;"/>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1512923647255" ID="ID_1800845122" MODIFIED="1557498707237" TEXT="Plug-in"/>
 </node>
 <node COLOR="#435e98" CREATED="1670599468591" HGAP="175" ID="ID_1144378342" MODIFIED="1670599561156" POSITION="left" TEXT="Methoden" VSHIFT="-32">
@@ -73920,14 +74056,437 @@
 <node CREATED="1664058018889" HGAP="70" ID="ID_1933523990" MODIFIED="1664058038958" TEXT="Leit-Aufgaben" VSHIFT="13">
 <font NAME="SansSerif" SIZE="14"/>
 <node CREATED="1664058052677" ID="ID_671587918" MODIFIED="1664058055024" TEXT="aktiv">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1664059317203" ID="ID_995858352" MODIFIED="1664059342161" TEXT="#1221 Playback Vertical Slice">
-<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1664059317203" ID="ID_995858352" MODIFIED="1679784026877" TEXT="#1221 Playback Vertical Slice">
+<icon BUILTIN="back"/>
 <node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1679082378934" HGAP="90" ID="ID_1513396947" MODIFIED="1679082411019" TEXT="hier spielt die Musik" VSHIFT="-28">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="knotify"/>
 <node BACKGROUND_COLOR="#e2ce95" COLOR="#ec6b17" CREATED="1654441361325" ID="ID_596408518" MODIFIED="1679084719279" STYLE="bubble" TEXT="ElementBox-Content-Renderer">
 <arrowlink COLOR="#f6e1c2" DESTINATION="ID_1938112956" ENDARROW="Default" ENDINCLINATION="-1219;85;" ID="Arrow_ID_1826503668" STARTARROW="None" STARTINCLINATION="-2360;-214;"/>
 </node>
+<node BACKGROUND_COLOR="#e2ce95" COLOR="#ec6b17" CREATED="1654441361325" ID="ID_1435039515" MODIFIED="1680567145813" STYLE="bubble" TEXT="GUI: Video Viewer">
+<arrowlink COLOR="#f6e1c2" DESTINATION="ID_7752918" ENDARROW="Default" ENDINCLINATION="-612;79;" ID="Arrow_ID_1986887171" STARTARROW="None" STARTINCLINATION="-2008;-180;"/>
+</node>
+<node BACKGROUND_COLOR="#e2ce95" COLOR="#ec6b17" CREATED="1654441361325" ID="ID_1704865245" MODIFIED="1680565151548" STYLE="bubble" TEXT="Fixture-Backbone">
+<arrowlink COLOR="#f6e1c2" DESTINATION="ID_1180632123" ENDARROW="Default" ENDINCLINATION="-985;-61;" ID="Arrow_ID_1052251062" STARTARROW="None" STARTINCLINATION="-2243;270;"/>
+</node>
+<node BACKGROUND_COLOR="#e2ce95" COLOR="#ec6b17" CREATED="1654441361325" ID="ID_59027079" MODIFIED="1680565125463" STYLE="bubble" TEXT="Scheduler">
+<arrowlink COLOR="#f6e1c2" DESTINATION="ID_1657236591" ENDARROW="Default" ENDINCLINATION="-1219;85;" ID="Arrow_ID_49470357" STARTARROW="None" STARTINCLINATION="-2189;368;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1679783158745" HGAP="36" ID="ID_25937632" MODIFIED="1679783197261" TEXT="Definition" VSHIFT="11">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1679783214377" ID="ID_749983123" MODIFIED="1679783224010" TEXT="Leitbild">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1679783225727" ID="ID_539130765" MODIFIED="1679783303320" TEXT="die Engine l&#xe4;uft und liefert"/>
+<node CREATED="1679783250652" ID="ID_1689653343" MODIFIED="1679783285911" TEXT="Laufende Wiedergabe im GUI"/>
+<node CREATED="1679783329217" ID="ID_435773138" MODIFIED="1679783336173" TEXT="Interaktivit&#xe4;t: Start/Stop"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#a31e84" CREATED="1679783338080" ID="ID_413822351" MODIFIED="1679783359057" TEXT="nicht eingeschlossen">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1679783372811" ID="ID_176708253" MODIFIED="1679783377199" TEXT="beliebige Medien"/>
+<node CREATED="1679783377787" ID="ID_409466607" MODIFIED="1679783383022" TEXT="Effekt-Berechnung"/>
+<node CREATED="1679783460711" ID="ID_829148645" MODIFIED="1679783508686" TEXT="spezielle Wiedergabe-Modi">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      kein Vorw&#228;rts/R&#252;ckw&#228;rts spulen, kein Springen, kein Looping, keine variable Geschwindigkeit
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1679783404111" ID="ID_683032118" MODIFIED="1679783410154" TEXT="Editieren der Session"/>
+<node CREATED="1679783416477" ID="ID_42041000" MODIFIED="1679783430320" TEXT="keinerlei Persistenz"/>
+</node>
+</node>
+<node CREATED="1679783620138" HGAP="84" ID="ID_670198616" MODIFIED="1679924451225" TEXT="Themen" VSHIFT="4">
+<icon BUILTIN="info"/>
+<node CREATED="1679783781677" ID="ID_1639721271" MODIFIED="1679783785761" TEXT="Video-Widergabe"/>
+<node CREATED="1679783808329" ID="ID_1106262034" MODIFIED="1679783853111" TEXT="Timings und Zeitma&#xdf;e"/>
+<node CREATED="1679783813232" ID="ID_1304310724" MODIFIED="1679783838969" TEXT="asynchrone Steuerung"/>
+<node CREATED="1679784101725" ID="ID_460682594" MODIFIED="1679784117473" TEXT="Komponenten-Verdrahtung"/>
+<node CREATED="1679783876975" ID="ID_925510369" MODIFIED="1679783885196" TEXT="iterativ-rekursive Planung"/>
+<node CREATED="1679783903431" ID="ID_1108872846" MODIFIED="1679783909684" TEXT="Processing-Pipeline"/>
+<node CREATED="1679783913523" ID="ID_547371323" MODIFIED="1679783916474" TEXT="Buffer-Handling"/>
+<node CREATED="1679869882217" ID="ID_174091758" MODIFIED="1679869884609" TEXT="Scheduling"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1679783728675" HGAP="44" ID="ID_1018746279" MODIFIED="1679924444960" TEXT="Probleme" VSHIFT="-2">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1679784197692" ID="ID_985663123" MODIFIED="1679784238682" TEXT="Abgrenzung: Event &#x2194; Command &#x2194; Signal">
+<node CREATED="1679924510213" ID="ID_1130144074" MODIFIED="1679924512729" TEXT="Fragen">
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1679924515877" ID="ID_1035252569" MODIFIED="1679924552673" TEXT="Was ist kein Event?">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1679924571653" ID="ID_372899682" MODIFIED="1679924593451" TEXT="sind direkte Signale sinnvoll/nachteilig?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1679924622686" ID="ID_305707096" MODIFIED="1679924634055" TEXT="Rolle des persistenten UI-State? ">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+<node CREATED="1679787873721" ID="ID_1605476827" MODIFIED="1679787888964" TEXT="Konzept der &#xbb;ViewConnection&#xab; kl&#xe4;ren">
+<node CREATED="1679925014948" ID="ID_456112267" MODIFIED="1679925034602" TEXT="Bez&#xfc;ge">
+<icon BUILTIN="info"/>
+<node CREATED="1679925037278" ID="ID_905293925" MODIFIED="1679963467821" TEXT="es gibt einen alten Entwurf ~2011"/>
+<node CREATED="1679925063849" ID="ID_1319708934" MODIFIED="1679925074861" TEXT="h&#xe4;ngt stark mit dem OutputManagement zusammen"/>
+<node CREATED="1679925075665" ID="ID_559486706" MODIFIED="1679925094037">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      involviert Problem des <i>Output Network</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1679925104405" ID="ID_1189292722" MODIFIED="1679925111124" TEXT="wird als persistent verstanden"/>
+<node CREATED="1679925122459" ID="ID_1652087608" MODIFIED="1679925135682" TEXT="Abgrenzung zum UI-State notwendig">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1679963672551" ID="ID_1017171402" MODIFIED="1679963682838" TEXT="Verh&#xe4;ltnis zur Timeline zu kl&#xe4;ren">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1679963688093" ID="ID_173898614" MODIFIED="1679963694758" TEXT="fest steht">
+<node CREATED="1679963695915" ID="ID_1244552807" MODIFIED="1679963703686" TEXT="die Timeline ist selber nur eine Facade"/>
+<node CREATED="1679963704322" ID="ID_1295833791" MODIFIED="1679963710038" TEXT="dahinter steht ein Binding"/>
+<node CREATED="1679963710674" ID="ID_793156306" MODIFIED="1679963727259" TEXT="es stellt die Verbindung her zu Globalen Pipes"/>
+<node CREATED="1679963736854" ID="ID_1450985814" MODIFIED="1679963770909" TEXT="aber eine ViewConnection ist essentiell das Gleiche">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      nur eben dahinter geschaltet, und flexibler
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1679925023776" ID="ID_1511633470" MODIFIED="1679925030816" TEXT="Konzept">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1679963537217" ID="ID_817658978" MODIFIED="1679963543971" TEXT="beteiligte Entit&#xe4;ten"/>
+<node CREATED="1679963562358" ID="ID_1884557779" MODIFIED="1679963566721" TEXT="Eigenschaften"/>
+</node>
+</node>
+<node CREATED="1679788319094" ID="ID_1132613527" MODIFIED="1679788340040" TEXT="wo kann die Fixture geFAKEd werden?">
+<node CREATED="1679924699883" ID="ID_769718712" MODIFIED="1679924704744" TEXT="Wechselwirkungen">
+<node CREATED="1679924721585" ID="ID_218030921" MODIFIED="1679924760967" TEXT="braucht Setup-Operatoin im Player"/>
+<node CREATED="1679924766987" ID="ID_549141712" MODIFIED="1679924776557" TEXT="kann Weiterentwicklung behindern"/>
+<node CREATED="1679924804534" ID="ID_412706766" MODIFIED="1679924817096" TEXT="Fixture mu&#xdf; tats&#xe4;chlich nutzbar sein"/>
+<node CREATED="1679924820196" ID="ID_1070429445" MODIFIED="1679924930483" TEXT="braucht (ggfs) minimale Steuerbarkeit durch das UI">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        zumindest die Clip-ID mu&#223; irgendwie auf high-level-Ebene repr&#228;sentiert werden
+      </li>
+      <li>
+        <i>sofern die Timeline involviert ist:<b>&#160;</b></i>es k&#246;nnte &#196;nderungen der Start/Stopzeit geben
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1679924931277" ID="ID_488176513" MODIFIED="1679924942537">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Entscheidung: im <b>Builder</b>
+    </p>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1679924946698" ID="ID_39408058" MODIFIED="1679924960325" TEXT="dort eine magische Abzweigung schaffen"/>
+<node CREATED="1679924961345" ID="ID_1283747458" MODIFIED="1679924988809" TEXT="kann damit ersten Entwurf der Fixture-Konstruktion implementieren"/>
+</node>
+</node>
+<node CREATED="1679924399181" ID="ID_1247355489" MODIFIED="1679924407085" TEXT="minimale high-level-Repr&#xe4;sentation">
+<node CREATED="1679945280469" ID="ID_1179888739" MODIFIED="1679945299793" TEXT="Problematik: high-level-Modell ist noch unreif">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1679945481691" ID="ID_1023272842" MODIFIED="1679945493995" TEXT="Repr&#xe4;sentation von Assets?"/>
+<node CREATED="1679945449876" ID="ID_159098137" MODIFIED="1679945458718" TEXT="ID-Management ungekl&#xe4;rt"/>
+</node>
+<node CREATED="1679924423491" ID="ID_1610214036" MODIFIED="1679924428565" TEXT="Datenquelle f&#xfc;r die Frames">
+<node CREATED="1679925151984" ID="ID_1439861274" MODIFIED="1679925153595" TEXT="Belange">
+<node CREATED="1679925154520" ID="ID_1163621279" MODIFIED="1679925180679" TEXT="bedingt Abh&#xe4;ngigkeit auf Medien-Library"/>
+<node CREATED="1679925181243" ID="ID_8108243" MODIFIED="1679925197333" TEXT="involviert das Plugin-System (unreif)"/>
+<node CREATED="1679925213967" ID="ID_1795291263" MODIFIED="1679925224985" TEXT="Stream-Type-Repr&#xe4;sentation"/>
+<node CREATED="1679925236433" ID="ID_315993169" MODIFIED="1679925251724" TEXT="Auslieferung (Storage)">
+<node CREATED="1679925263816" ID="ID_757916379" MODIFIED="1679925275741" TEXT="Keine Mediendaten im Git"/>
+<node CREATED="1679925276494" ID="ID_133458520" MODIFIED="1679925290712" TEXT="ben&#xf6;tigt zus&#xe4;tzliche Infrastruktur"/>
+</node>
+</node>
+<node CREATED="1679925300587" ID="ID_415001259" MODIFIED="1679925303534" TEXT="L&#xf6;sungen">
+<node CREATED="1679925304930" ID="ID_57552007" MODIFIED="1679925377305" TEXT="FFMpeg vorl&#xe4;ufig integrieren">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1679925323303" ID="ID_510463166" MODIFIED="1679925379903" TEXT="RGB8-Raw-Video verwenden">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1679925355633" ID="ID_1778236782" MODIFIED="1679925382868" TEXT="Video-Generator implementieren">
+<icon BUILTIN="back"/>
+</node>
+</node>
+</node>
+<node CREATED="1680396222047" ID="ID_1641749969" MODIFIED="1680396278980">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="text-align: center">
+      Baum-Monaden-Framework f&#252;r Job-Planung<br /><font size="4" color="#cc1342">fragw&#252;rdiges Design</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1680396285443" ID="ID_285930244" MODIFIED="1680396457815" TEXT="der Code ist (selbst f&#xfc;r mich) nahezu unverst&#xe4;ndlich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      habe das wohl schon damals gemerkt... der Quelltext ist voller &quot;entschuldigender Kommentare&quot;
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1680396300209" ID="ID_1838580113" MODIFIED="1680396410375" TEXT="das best&#xe4;tigt alle meine Zweifel am Monaden-Konzept aus der funktionalen Programmierung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das prim&#228;re Problem ist hier nicht C++, oder eine ungeschickte Implementierung meinerseits, sondern das brennende Problem ist, da&#223; die Monaden-Struktur nichts zum Verst&#228;ndnis der Verwendung beitr&#228;gt, sondern diese durch eine <i>rein-mathematische</i>&#160;Symmetrie <b>verstellt und verschleiert</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1680396464104" ID="ID_216719314" MODIFIED="1680396585105" TEXT="Beschlu&#xdf;: weg damit">
+<arrowlink COLOR="#963345" DESTINATION="ID_1805461369" ENDARROW="Default" ENDINCLINATION="367;0;" ID="Arrow_ID_271837208" STARTARROW="None" STARTINCLINATION="175;160;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680396470946" ID="ID_970682100" MODIFIED="1680396490033" TEXT="Aufgabe: noch ein letztes Mal verstehen, was das sollte">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680396490895" ID="ID_1991292419" MODIFIED="1680396509638" TEXT="Umbauen auf das Pipeline / TreeExplorer-Framework">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1680396521021" ID="ID_1520286749" MODIFIED="1680396527735" TEXT="das hat sich inzwischen viel besser bew&#xe4;hrt"/>
+<node CREATED="1680396528171" ID="ID_1369183009" MODIFIED="1680396546921">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und bietet monadische-Expansion als <i>Spezialfall</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1679783751608" ID="ID_1207767119" MODIFIED="1679924460221" TEXT="Struktur">
+<icon BUILTIN="pencil"/>
+<node CREATED="1679788541561" ID="ID_246646204" MODIFIED="1679788547296" TEXT="Setup im GUI bereitstellen"/>
+<node CREATED="1679784183070" ID="ID_392713581" MODIFIED="1679784192104" TEXT="Player-Steuerung"/>
+<node CREATED="1679788559094" ID="ID_1138489245" MODIFIED="1679788569544" TEXT="Play-Process erzeugen"/>
+<node CREATED="1679788574372" ID="ID_1504364531" MODIFIED="1679788584308" TEXT="Dispatcher fertigstellen"/>
+<node CREATED="1679788589727" ID="ID_1461146166" MODIFIED="1679788603056" TEXT="Scheduler">
+<node CREATED="1679788604226" ID="ID_671337380" MODIFIED="1679788608411" TEXT="Basis-Implementierung"/>
+<node CREATED="1679788608984" ID="ID_1995627934" MODIFIED="1679788618138" TEXT="Grundlagen Dependency-Management"/>
+</node>
+<node CREATED="1679788636636" ID="ID_1242125154" MODIFIED="1679788644742" TEXT="Technologie: Video-Ausgabe im GUI"/>
+<node CREATED="1679788655473" ID="ID_1037767417" MODIFIED="1679788661748" TEXT="running Time-display"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1679783177087" HGAP="29" ID="ID_1020455743" MODIFIED="1679783192799" TEXT="vorantreiben" VSHIFT="3">
+<icon BUILTIN="pencil"/>
+<node CREATED="1679783641511" ID="ID_212214057" MODIFIED="1679783643195" TEXT="Tickets">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680141126520" ID="ID_1147697662" LINK="https://issues.lumiera.org/ticket/1273" MODIFIED="1680141154614" TEXT="#1273 Viewer-Connection Concept">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1680141166647" ID="ID_1634794257" MODIFIED="1680141390579" TEXT="Das Wiring-Konzept von 2015 ist in dieser Hinsicht noch nicht fertig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Es ist zwar schon klar, da&#223; ein separates Output-Network gebaut werden mu&#223;, um die generierten Frames f&#252;r den konkreten Viewer in der GUI aufzubereiten. Aber es ist noch nicht wirklich gekl&#228;rt, wie dieses in das generelle Design mit High-Level-Model, Builder und Low-Level-Model zu integrieren ist. Bisher hatte ich immer nur den Begriff &quot;ViewConnection&quot; verwendet (Siehe TiddlyWiki) und dazu festgehalten, da&#223; es sich um ein &#187;Binding&#171; handeln soll. Unklar ist aber die genaue Verh&#228;ltnisbestimmung zu dem Binding, das f&#252;r Timeline und VirtualClip zum Tragen kommen wird.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680195770073" ID="ID_1611142501" LINK="https://issues.lumiera.org/ticket/1274" MODIFIED="1680219860901" TEXT="#1274 rigged setup for clip playback">
+<linktarget COLOR="#5297c3" DESTINATION="ID_1611142501" ENDARROW="Default" ENDINCLINATION="51;3;" ID="Arrow_ID_1273706751" SOURCE="ID_1946005498" STARTARROW="None" STARTINCLINATION="62;-3;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680193604370" ID="ID_1946005498" LINK="https://issues.lumiera.org/ticket/1231" MODIFIED="1680219871020" TEXT="#1231 trigger clip playback on the GUI">
+<arrowlink COLOR="#5297c3" DESTINATION="ID_1611142501" ENDARROW="Default" ENDINCLINATION="51;3;" ID="Arrow_ID_1273706751" STARTARROW="None" STARTINCLINATION="62;-3;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680193640309" ID="ID_1108084572" LINK="https://issues.lumiera.org/ticket/1232" MODIFIED="1680193652395" TEXT=" #1232 Process request for playback command in SteamDispatcher ">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680193667730" ID="ID_1957971901" LINK="https://issues.lumiera.org/ticket/1233" MODIFIED="1680193682441" TEXT="#1233 Activate playback mode on a Player instance ">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680193712051" ID="ID_409993593" LINK="https://issues.lumiera.org/ticket/1243" MODIFIED="1680222976872" TEXT="#1243 Build low-level model from high-level model (mocked) of a clip">
+<linktarget COLOR="#5fa6c1" DESTINATION="ID_409993593" ENDARROW="Default" ENDINCLINATION="199;8;" ID="Arrow_ID_222915618" SOURCE="ID_699634936" STARTARROW="None" STARTINCLINATION="167;-10;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680195883938" ID="ID_699634936" LINK="https://issues.lumiera.org/ticket/1275" MODIFIED="1680562039055" TEXT="#1275 dispatch simple calculation stream">
+<arrowlink COLOR="#5fa6c1" DESTINATION="ID_409993593" ENDARROW="Default" ENDINCLINATION="199;8;" ID="Arrow_ID_222915618" STARTARROW="None" STARTINCLINATION="167;-10;"/>
+<arrowlink COLOR="#6a92a9" DESTINATION="ID_1805461369" ENDARROW="Default" ENDINCLINATION="190;-8;" ID="Arrow_ID_1209058185" STARTARROW="None" STARTINCLINATION="61;-2;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680305211903" ID="ID_1805461369" LINK="https://issues.lumiera.org/ticket/1276" MODIFIED="1680562039055" TEXT="#1276 reassess design of render job deadline planning">
+<arrowlink COLOR="#f42f34" DESTINATION="ID_896127270" ENDARROW="Default" ENDINCLINATION="-1096;-80;" ID="Arrow_ID_1764912075" STARTARROW="None" STARTINCLINATION="-511;24;"/>
+<linktarget COLOR="#963345" DESTINATION="ID_1805461369" ENDARROW="Default" ENDINCLINATION="367;0;" ID="Arrow_ID_271837208" SOURCE="ID_216719314" STARTARROW="None" STARTINCLINATION="175;160;"/>
+<linktarget COLOR="#6a92a9" DESTINATION="ID_1805461369" ENDARROW="Default" ENDINCLINATION="190;-8;" ID="Arrow_ID_1209058185" SOURCE="ID_699634936" STARTARROW="None" STARTINCLINATION="61;-2;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680316647510" ID="ID_1793327086" LINK="https://issues.lumiera.org/ticket/1277" MODIFIED="1680316670021" TEXT="#1277 implement Timings descriptor for simple playback">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680316684910" ID="ID_908207982" MODIFIED="1680316774339" TEXT="woot: aus dem Code wird nicht ganz klar was ein Timings descriptor leistet">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...dieser Monaden-Code ist undurchdringlich (selbst f&#252;r micht, und ich kann mich noch gut daran erinnern, was er leisten soll)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680195925069" ID="ID_1715377601" LINK="https://issues.lumiera.org/ticket/1278" MODIFIED="1680317916818" TEXT="#1278 Schedule simple sequence of render jobs">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680380228657" ID="ID_14638704" LINK="https://issues.lumiera.org/ticket/1279" MODIFIED="1680382013522" TEXT="#1279 provide technology for worker threads">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680381903590" ID="ID_833824994" LINK="https://issues.lumiera.org/ticket/1280" MODIFIED="1680382032313" TEXT="#1280 build Scheduler implementation">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680383011232" ID="ID_1091550126" LINK="https://issues.lumiera.org/ticket/1281" MODIFIED="1680383105154" TEXT="#1281 build deadline-bound scheduler for worker pool">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680384502979" ID="ID_1328538589" LINK="https://issues.lumiera.org/ticket/1282" MODIFIED="1680384525394" TEXT="#1282 build dependency tracking and notification framework for jobs">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680387404540" ID="ID_1470255504" LINK="https://issues.lumiera.org/ticket/1283" MODIFIED="1680387428043" TEXT="#1283 draft observation of calculation times">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680389032371" ID="ID_663979640" LINK="https://issues.lumiera.org/ticket/1285" MODIFIED="1680389054385" TEXT="#1285 draft integration of asynchronous IO with rendering">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680388296693" ID="ID_283603911" LINK="https://issues.lumiera.org/ticket/1284" MODIFIED="1680388318115" TEXT="#1284 Render Engine operational control">
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680389959705" ID="ID_1139462793" LINK="https://issues.lumiera.org/ticket/1286" MODIFIED="1680389986151" TEXT="#1286 Timing Observable">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680196018888" ID="ID_874815999" LINK="https://issues.lumiera.org/ticket/1287" MODIFIED="1680391903482" TEXT="#1287 invoke simple render job">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680196129567" ID="ID_988036389" LINK="https://issues.lumiera.org/ticket/1288" MODIFIED="1680392639594" TEXT="#1288 simple video display widget">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680394326847" ID="ID_1990423949" LINK="https://issues.lumiera.org/ticket/950" MODIFIED="1680394346975" TEXT="#950 GTK-3: Video display in the GUI">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680196149518" ID="ID_525567081" LINK="https://issues.lumiera.org/ticket/1289" MODIFIED="1680393497536" TEXT="#1289 output manager for GUI video display">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680196059211" ID="ID_672047126" LINK="https://issues.lumiera.org/ticket/1290" MODIFIED="1680394137011" TEXT="#1290 exchange buffers between GUI and Engine">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1679783648215" ID="ID_1843221543" MODIFIED="1680561728507" TEXT="Diskussion/Entscheidungen">
+<node CREATED="1680561739893" ID="ID_1277050322" MODIFIED="1680561744515" TEXT="Technologie">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680561745270" ID="ID_264248978" MODIFIED="1680561760037" TEXT="Video-Display-UI">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680561751261" ID="ID_1799759884" MODIFIED="1680561760040" TEXT="Worker-Thradpool">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node CREATED="1679783675979" ID="ID_312162112" MODIFIED="1679783688045" TEXT="neu bauen">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680561793925" ID="ID_961883511" MODIFIED="1680567189685" TEXT="Video-Widget">
+<arrowlink COLOR="#fec499" DESTINATION="ID_1636806116" ENDARROW="Default" ENDINCLINATION="-757;117;" ID="Arrow_ID_820803219" STARTARROW="None" STARTINCLINATION="-239;41;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680561798377" ID="ID_962521952" MODIFIED="1680567194869" TEXT="GUI-OutputManager">
+<arrowlink COLOR="#fec499" DESTINATION="ID_754563967" ENDARROW="Default" ENDINCLINATION="-691;58;" ID="Arrow_ID_1893379752" STARTARROW="None" STARTINCLINATION="-230;29;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680561843520" ID="ID_51005656" MODIFIED="1680566910795" TEXT="Fixture">
+<arrowlink COLOR="#fec499" DESTINATION="ID_176106926" ENDARROW="Default" ENDINCLINATION="-584;114;" ID="Arrow_ID_1229368159" STARTARROW="None" STARTINCLINATION="-150;36;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680561847832" ID="ID_988488968" MODIFIED="1680566930976" TEXT="Content/Generator">
+<arrowlink COLOR="#fec499" DESTINATION="ID_460039330" ENDARROW="Default" ENDINCLINATION="-632;68;" ID="Arrow_ID_1437229627" STARTARROW="None" STARTINCLINATION="-241;31;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680561888985" ID="ID_1736473881" MODIFIED="1680563326133" TEXT="Scheduler">
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680561892270" ID="ID_12567096" MODIFIED="1680566937368" TEXT="Layer-1 : PriQueue">
+<arrowlink COLOR="#fec499" DESTINATION="ID_250843894" ENDARROW="Default" ENDINCLINATION="-644;84;" ID="Arrow_ID_1702721830" STARTARROW="None" STARTINCLINATION="-233;30;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680561901447" ID="ID_695181807" MODIFIED="1680566934008" TEXT="Layer-2 : Notification">
+<arrowlink COLOR="#fec499" DESTINATION="ID_1218283238" ENDARROW="Default" ENDINCLINATION="-664;74;" ID="Arrow_ID_443600884" STARTARROW="None" STARTINCLINATION="-240;29;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
+<node CREATED="1679783678682" ID="ID_136895805" MODIFIED="1679783681526" TEXT="integrieren">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680562222631" ID="ID_1661673229" MODIFIED="1680563316834" TEXT="GUI &#x27f7; Player">
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680562222631" ID="ID_573821275" MODIFIED="1680562222631" TEXT="Mock &#x27f7; Builder &#x2023;&#x2023; Fixture">
+<arrowlink COLOR="#fec499" DESTINATION="ID_804147257" ENDARROW="Default" ENDINCLINATION="-696;77;" ID="Arrow_ID_521000760" STARTARROW="None" STARTINCLINATION="-206;21;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680562222631" ID="ID_1899779347" MODIFIED="1680563316835" TEXT="Node-Invocation &#x27f7; Generator">
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680562698618" ID="ID_722733788" MODIFIED="1680563316836" TEXT="Buffer-Management">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+<node CREATED="1679783694673" ID="ID_455505067" MODIFIED="1679783698044" TEXT="dokumentieren"/>
 </node>
 </node>
 </node>
@@ -74272,7 +74831,7 @@
 <node CREATED="1439176872457" HGAP="15" ID="ID_355008543" MODIFIED="1557498707241" POSITION="left" TEXT="Plattform" VSHIFT="41">
 <icon BUILTIN="go"/>
 <node CREATED="1561736857971" ID="ID_662811521" MODIFIED="1561736871424" TEXT="Dependencies">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561736649007" ID="ID_1295139073" MODIFIED="1583523610926" TEXT="GTK in Debian">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561736649007" FOLDED="true" ID="ID_1295139073" MODIFIED="1583523610926" TEXT="GTK in Debian">
 <linktarget COLOR="#355ad5" DESTINATION="ID_1295139073" ENDARROW="Default" ENDINCLINATION="-816;0;" ID="Arrow_ID_1376879556" SOURCE="ID_1920301340" STARTARROW="None" STARTINCLINATION="-753;0;"/>
 <icon BUILTIN="info"/>
 <icon BUILTIN="flag-yellow"/>
@@ -76102,7 +76661,7 @@
 <node CREATED="1570812024592" ID="ID_1371102521" MODIFIED="1570812029189" TEXT="immerwieder...">
 <icon BUILTIN="bell"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1570815474222" ID="ID_678448874" MODIFIED="1570815485479" TEXT="#1204 Alignment issues">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1570817474883" ID="ID_1779912405" MODIFIED="1570817537392" TEXT="#1205 Advice data possibly misaligned">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1570817474883" FOLDED="true" ID="ID_1779912405" MODIFIED="1570817537392" TEXT="#1205 Advice data possibly misaligned">
 <linktarget COLOR="#cd4467" DESTINATION="ID_1779912405" ENDARROW="Default" ENDINCLINATION="296;20;" ID="Arrow_ID_1125835000" SOURCE="ID_711013238" STARTARROW="None" STARTINCLINATION="462;0;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1570817544291" ID="ID_1212317534" MODIFIED="1570817544291" TEXT="try { return new char[siz]; }"/>
@@ -76110,7 +76669,7 @@
 <node CREATED="1570817572097" ID="ID_942342414" MODIFIED="1570817577917" TEXT="aber nicht portabel"/>
 </node>
 </node>
-<node CREATED="1570812031118" ID="ID_1018321072" MODIFIED="1570812037369" TEXT="Alignment bei placement-new">
+<node CREATED="1570812031118" FOLDED="true" ID="ID_1018321072" MODIFIED="1570812037369" TEXT="Alignment bei placement-new">
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1570812038974" ID="ID_716754107" MODIFIED="1570812068335" TEXT="der Buffer mu&#xdf; passendes Alignment f&#xfc;r das Target aufweisen">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1570812070369" ID="ID_490799733" MODIFIED="1570812089910" TEXT="der Compiler kann das (meist/immer) nicht verifizieren">
@@ -76118,7 +76677,7 @@
 </node>
 <node CREATED="1570812097734" ID="ID_649573793" MODIFIED="1570812117119" TEXT="da man die Storage oft weit durchreicht, ist das eine potentielle Falle"/>
 </node>
-<node CREATED="1570812123998" ID="ID_1852853548" MODIFIED="1570812393065" TEXT="2019-10 Codebasis durchgepr&#xfc;ft">
+<node CREATED="1570812123998" FOLDED="true" ID="ID_1852853548" MODIFIED="1570812393065" TEXT="2019-10 Codebasis durchgepr&#xfc;ft">
 <node CREATED="1570812138224" ID="ID_499341259" MODIFIED="1570812146355" TEXT="alle Placement-New-Aufrufe"/>
 <node CREATED="1570812148917" ID="ID_1136640650" MODIFIED="1570812152826" TEXT="einzeln abgekl&#xe4;rt"/>
 <node CREATED="1570812156154" ID="ID_1286349242" MODIFIED="1570812160201" TEXT="potentiell gef&#xe4;hrlich">

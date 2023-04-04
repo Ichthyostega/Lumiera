@@ -1,0 +1,15 @@
+Governance Documents
+====================
+:Date: April 2023
+
+Lumiera is developed as Free/OpenSource project under the GNU General Public License.
+Source code is shared via Git, and ongoing development is publicly visible.
+Discussions and contributions are welcome.
+
+The vision and goals for the Lumiera application are far reaching and ambitious;
+in the current phase the project has started to integrate concepts, structures
+and subsystems developed over the course of several years, to create a coherent
+architecture, able to support the vision.
+-> link:integration.html[Integration effort]
+
+

@@ -9,6 +9,7 @@ Lumiera Design Documents
 
 // Menu :  append child plugins
 // Menu :  append child workflow
+// Menu :  append child governance
 
 Lumiera is to be a professional tool for video editing on
 GNU/Linux systems.  The vision of the development team defines a modern design

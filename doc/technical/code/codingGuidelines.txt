@@ -1,6 +1,7 @@
 Coding Guidelines
 =================
-:Date: Autumn 2011
+:Date: Spring 2023
+:toc:
 
 
 _this page summarises some style and coding guidelines for the Lumiera code base_
@@ -87,7 +88,7 @@ General Code Arrangement and Layout
 - Each header should be focused on a specific purpose. Preferably it starts with a file-level
   doxygen comment explaining the intention and anything not obvious from reading the code.
   At lest a `@file` tag with one line of classification in a doxygen comment at the top of every
-  file is mandatory.footnote:[this rule stands simply because, without such a file-level doxygen
+  file is mandatory.footnote:[This rule stands simply because, without such a file-level doxygen
   comment, doxygen will _ignore all contents_ of this file (really, might be surprising, yet it is
   the way it is...)]
 - when arranging headers and compilation units, please take care of the compilation times and the
@@ -97,13 +98,13 @@ General Code Arrangement and Layout
   link:{ldoc}/technical/code/linkingStructure.html#_imports_and_import_order[issues of code organisation]
 - The include block starts with our own dependencies, followed by a second block with the library
   dependencies. After that, optionally some symbols may be brought into scope (through +using+ clauses).
-  Avoid cluttering top-level namespaces. Never import full namespaces.footnote:[no `using namespace gtk;`
+  Avoid cluttering top-level namespaces. Never import full namespaces.footnote:[No `using namespace gtk;`
   or `using namespace boost` please! Experience shows, in the end you'll be using 5 names or so, but
   pull in all the others just for sake of laziness. Just type the f**g `using` clause for every
   import individually, and we'll all be better off...]
 - the includes for our own dependencies shall be given relative to source-root (or test root). Don't use
   relative includes for headers located in the same directory, or -- worse still -- in the parent directory.
-- sometimes, the actual translation units will combine several facilities for technical reasons.footnote:[to
+- sometimes, the actual translation units will combine several facilities for technical reasons.footnote:[To
   elaborate, there can be ``headers'', which are in fact only intended for inclusion at one or two distinct
   places. This should be mentioned in the file-level comment, but generally is an acceptable practice,
   and better then lumping everything into a 1000 lines header. As a guideline, if you expect a rather
@@ -138,4 +139,72 @@ Black magic and all kinds of surprise trickery and cleverness are nothing to be 
 
 -> please have a look at the link:/project/background/CleanCodeDevelopment.html[Clean Code] page
 for a coherent system of design principles
+
+Recommendations at code level
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- *Inversion of Control* is the leading design principle
+  +
+  * ``don't call us, we call you...''
+  * avoid lumping everything into a single point-and-shot action
+  * decompose into _Services_ meaningful as such, which are self-contained and can be tested;
+    _ask_ for services instead of fumbling with other part's innards.
+  * avoid _shared data models_ and _coordination via flags_ -- prefer messaging
+    and represent processes and interactions as first-class entities.
+  +
+- clearly distinguish between *value semantics* and *reference semantics*
+  +
+  * if something can be distinguished as an entity, has a distinct identity, needs to be built,
+    managed and tracked, then treat it with reference semantics.
+  * always consider the _ownership_ and _lifecycle_ -- value objects can not have any, should
+    ideally be immutable, and stored inline or avoid heap allocation. If in doubt, decompose
+    and turn unclear and changing parts into a service / dependency, attached by (value) handle
+  * objects with reference semantics should be made _noncopyable_, while value objects should use
+    default copy semantics. Use 'lib/nocopy.hpp' to express the flavours of move only / no copy.
+  * equality comparisons of ref objects are to be based on their identity solely, while for
+    value objects, all properties must be included which are tangible and independently variable.
+  +
+- make liberal use of interfaces and abstractions; provide points of access
+  +
+  * if implementation instances with reference semantics need to be obtained or registered,
+    then create a static factory function called `create` or `register` or `attach`
+  * if some dependency is ``just required'', then use a static accessor `instance`, which
+    can be implemented with Lumiera's dependency helper 'lib/depend.hpp'
+  +
+- avoid implicit assumptions -- better express them as type
+  +
+  * if is something is ``just a number'' yet has some specific meaning,
+    better use a lightweight wrapper object to tag it with semantics
+  * if a common pattern works involving distinct, unrelated entities,
+    then better use generic programming or even higher-kinded types,
+    instead of forcing unrelated types to inherit from some supertype.
+  * avoid downcasts, `void*` and switch-on-type programming; this
+    programming style bears an attitude of carelessness and tends to produce
+    highly tangled, scattered code hard to maintain over time.footnote:[There
+    are valid exceptions to that rule though; in some parts, Lumiera has to deal
+    with low-level and high-performance computing where every extra byte needs
+    to be justified. However, in such cases it is always possible to _encapsulate_
+    the performance critical parts into _opaque types,_ which are clearly fenced
+    by visibility rules and thus recognisable as highly coupled implementation details.]
+  +
+- care for lifecycle issues
+  +
+  * avoid performing anything non-local during the startup- or shutdown phase
+  * especially avoid as much as possible to do anything substantial in destructors
+  * if something depends on contextual state, better make that explicit
+  * however -- even better to avoid state at all: prefer a builder or use a new type
+    at the point of state transition
+  +
+- be precise and consider error situations at every point
+  +
+  * if you feel like assuming something, document this through assertions
+  * if you can not be sure, then better check and abort by throwing
+  * be prepared for exceptions to be thrown everywhere -- embrace RAII
+  * exceptions are fine, but never build logic on top of exceptions or depend
+    on them: the so called ``checked exceptions'' tend to create unnecessary coupling.
+  * use exceptions only for exceptional situations, never for signalling something.
+  * only _handle_ errors which you _really can handle right here and now_
+  * avoid to ``fix'' or ``amend'' a situation by assumptions -- _let it crash_
+  * however -- ``crash'' always means a clean wind-down -- never leak anything
+
 
