@@ -52,6 +52,7 @@
  **   - by invoking `iterNext()` (when processing a sequence of sibling job prerequisites)
  **   - by invoking `integrate()` (when starting to explore the next level of children) 
  ** 
+ ** @warning as of 4/2023 a complete rework of the Dispatcher is underway ///////////////////////////////////////////TICKET #1275
  ** 
  ** @see DispatcherInterface_test simplified usage examples
  ** @see JobTicket

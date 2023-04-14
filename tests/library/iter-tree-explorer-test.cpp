@@ -49,6 +49,10 @@
  ** Often, the very reason we're using such a setup is the ability to represent
  ** infinite structures. Like e.g. the evaluation graph of video passed through
  ** a complex processing pipeline.
+ ** 
+ ** @warning as of 4/2023 the alternative Monad-style iterator framework "iter-explorer" will be retracted
+ **      and replaced by this design here, which will then be renamed into IterExplorer  //////////////////////////////TICKET #1276
+ ** 
  */
 
 

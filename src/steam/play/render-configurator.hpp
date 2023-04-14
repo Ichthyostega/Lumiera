@@ -24,6 +24,8 @@
  ** Strategy to hold all the detail knowledge necessary to establish
  ** a running render CalculationStream. 
  ** 
+ ** @warning as of 4/2023 Render-Engine integration work is underway ////////////////////////////////////////TICKET #1280
+ ** 
  ** @see engine::EngineService
  ** @see engine::Feed
  ** @see engine::PlayService

@@ -26,6 +26,9 @@
  ** A JobTicket is a preconfigured generator for render jobs, which in turn
  ** are functors to perform the calculations for a specific data frame.
  ** @see job.hpp
+ ** 
+ ** @warning as of 4/2023 a complete rework of the Dispatcher is underway ///////////////////////////////////////////TICKET #1275
+ ** 
  */
 
 

@@ -101,6 +101,9 @@
  ** @see iter-adapter.hpp
  ** @see itertools.hpp
  ** @see IterSource (completely opaque iterator)
+ ** 
+ ** @warning as of 4/2023 the alternative Monad-style iterator framework "iter-explorer" will be retracted
+ **      and replaced by this design here, which will then be renamed into IterExplorer  //////////////////////////////TICKET #1276
  **
  */
 

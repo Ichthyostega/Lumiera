@@ -22,6 +22,8 @@
 
 /** @file dispatcher-interface-test.cpp
  ** unit test \ref DispatcherInterface_test
+ ** 
+ ** @warning as of 4/2023 a complete rework of the Dispatcher is underway ///////////////////////////////////////////TICKET #1275
  */
 
 
@@ -183,8 +185,8 @@ namespace test  {
           
           Job frameJob = executionPlan.createJobFor (coordinates);
           CHECK (frameJob.getNominalTime() == coordinates.absoluteNominalTime);
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1275
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1275
         }
       
       
@@ -218,7 +220,7 @@ namespace test  {
           ///TODO definieren, wie das scheduler-interface angesprochen wird
           ///TODO dann stub dafür bauen
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #903
           TimeVar frameStart (refPoint);
           InvocationInstanceID prevInvocationID(0);  ///////////////////////////////////////////////////////TICKET #1138 : C++17 requires explicit ctor for initialisation of union
           Offset expectedTimeIncrement (1, FrameRate::PAL);
@@ -238,7 +240,7 @@ namespace test  {
           CHECK (frameStart                        == Time(refPoint) + coveredTime);
           CHECK (frameStart                        >= Time(refPoint) + timings.getPlanningChunkDuration());
           CHECK (frameStart + expectedTimeIncrement > Time(refPoint) + timings.getPlanningChunkDuration());
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #903
         }
       
       
@@ -254,7 +256,7 @@ namespace test  {
       void
       check_ContinuationBuilder()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #903
           Dispatcher& dispatcher = mockDispatcher();
           ModelPort modelPort (getTestPort());
           Timings timings (FrameRate::PAL);
@@ -281,7 +283,7 @@ namespace test  {
           
           continuation.triggerJob();
           CHECK (continuation_has_been_triggered);
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #903
         }
       
       /** action used as "continuation" in #check_ContinuationBuilder

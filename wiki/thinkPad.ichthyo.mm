@@ -61476,6 +61476,19 @@
 <node CREATED="1510446371480" ID="ID_247739078" MODIFIED="1510446394065" TEXT="Klarheit"/>
 <node CREATED="1510446394965" ID="ID_1458617201" MODIFIED="1510446398689" TEXT="Trennung"/>
 </node>
+<node CREATED="1681004167322" ID="ID_187683678" LINK="#ID_641232618" MODIFIED="1681004305936" TEXT="siehe ausgearbeitete theoretische Darstellung im TiddlyWiki">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#187;AboutMonads&#171; : das k&#246;nnte mal eine Seite im Theorieteil werden (&quot;more about...&quot;)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node COLOR="#435e98" CREATED="1512927162098" HGAP="93" ID="ID_1774532014" MODIFIED="1561827465901" TEXT="Einsichten" VSHIFT="37">
 <icon BUILTIN="idea"/>
@@ -64381,6 +64394,24 @@
 <node CREATED="1680567318639" ID="ID_1726615423" MODIFIED="1680567321766" TEXT="Verdrahtung">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680567648993" ID="ID_1721405470" MODIFIED="1680567663524" TEXT="Grundkonzept">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1681340561579" ID="ID_852560386" MODIFIED="1681340580970" TEXT="Output-Protokoll">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681340585412" ID="ID_1620112929" MODIFIED="1681340749166" TEXT="TODO: ownership + Fehlerbehandlung f&#xfc;r &#xbb;Allocation&#xab; nochmal &#xfc;berdenken">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Es f&#228;llt auf, da&#223; ich in dem Entwurf von 2011 die Allocation selber nur als Referenz rausgegeben habe, und dann f&#252;r jeden darauf er&#246;ffneten Slot ein smart-Handle. Zun&#228;chst einmal sieht das <i>vern&#252;nftig</i>&#160; aus, weil die Slots typischerweise sofort noch im gleichen Thread belegt werden. Was ist aber wenn...&#8623; &#8212; kann sich dann die belegte Allocation <i>verklemmen?</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681340821574" ID="ID_91498886" LINK="https://issues.lumiera.org/ticket/878" MODIFIED="1681340858985" TEXT="#878 OutputSlot lifecycle and re-entrance">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1680567322328" ID="ID_1487342906" MODIFIED="1680567331604" TEXT="externe Schnittstellen"/>
@@ -68360,7 +68391,47 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512925217693" ID="ID_704714253" MODIFIED="1557498707237" TEXT="steckengeblieben">
 <icon BUILTIN="smily_bad"/>
 </node>
-<node CREATED="1512925253328" ID="ID_922277724" MODIFIED="1557498707237" TEXT="JobTicket"/>
+<node CREATED="1512925253328" HGAP="42" ID="ID_946385163" MODIFIED="1681168718652" TEXT="JobTicket" VSHIFT="-4">
+<arrowlink COLOR="#82597c" DESTINATION="ID_922277724" ENDARROW="Default" ENDINCLINATION="43;-81;" ID="Arrow_ID_941233317" STARTARROW="None" STARTINCLINATION="-124;34;"/>
+<node CREATED="1681166276225" ID="ID_1126956080" MODIFIED="1681168794426" TEXT="Konzept: Execution-Plan f&#xfc;r ein (Segment, ModelPort)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      gedacht als ein strukturelles Verzeichnis oder eine Facade, die gleicherma&#223;en f&#252;r die Planung und die Ausf&#252;hrung nutzbar ist; dadurch sind beide Belange von der Struktur des low-level-Model entkoppelt
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1681167308878" ID="ID_43374924" MODIFIED="1681167532633" TEXT="Entwicklungs-Stand">
+<icon BUILTIN="info"/>
+<node COLOR="#435e98" CREATED="1681167354768" ID="ID_728804120" MODIFIED="1681167483523" TEXT="seit 2012">
+<icon BUILTIN="forward"/>
+<node CREATED="1681167362351" ID="ID_1740546811" MODIFIED="1681167371954" TEXT="Konzept und Struktur definiert"/>
+<node CREATED="1681167383228" ID="ID_1536175314" MODIFIED="1681167401168" TEXT="noch g&#xe4;nzlich unklar wie die Auswertung / Job-Konstruktion funktionieren soll"/>
+<node CREATED="1681167406089" ID="ID_1405586078" MODIFIED="1681167443145" TEXT="begr&#xfc;ndet durch die ebenfalls seinerzeit nur skizzierte Arbeitsweise der ProcNode"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1681167868332" ID="ID_1179827139" MODIFIED="1681167938418">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>unklar</u>: <font face="Monospaced" color="#43226f">JobTicket::startExploration()</font>&#160;&#8212; wie wird die eigentliche Planung eingef&#228;delt?
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681167470153" ID="ID_1806361283" MODIFIED="1681167480840" TEXT="PlaybackVerticalSlice">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
 <node CREATED="1512925246057" ID="ID_181262071" MODIFIED="1561827466200" TEXT="JobPlanning">
 <linktarget COLOR="#5379b5" DESTINATION="ID_181262071" ENDARROW="Default" ENDINCLINATION="-150;-386;" ID="Arrow_ID_1786254694" SOURCE="ID_1543264108" STARTARROW="Default" STARTINCLINATION="-1298;0;"/>
 <node CREATED="1535892806131" ID="ID_513357674" MODIFIED="1535892890103" TEXT="k&#xf6;nnte eine Monade sein.....?">
@@ -68388,9 +68459,840 @@
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1680568453218" ID="ID_1951039343" MODIFIED="1680568466316" TEXT="was passiert in job-planning.hpp?">
 <icon BUILTIN="help"/>
+<node CREATED="1681007533926" ID="ID_282014609" MODIFIED="1681007543121" TEXT="der schrittweise Planungsmechanismus">
+<node CREATED="1681007545653" ID="ID_1444648679" MODIFIED="1681007547984" TEXT="gegeben....">
+<node CREATED="1681076758382" ID="ID_1270706413" MODIFIED="1681076762624" TEXT="ein JobTicket"/>
+<node CREATED="1681076774890" ID="ID_402478510" MODIFIED="1681076778189" TEXT="Timings"/>
+<node CREATED="1681076778945" ID="ID_460925627" MODIFIED="1681076788146" TEXT="ein TimeAnchor"/>
+</node>
+<node CREATED="1681077108429" ID="ID_176137428" MODIFIED="1681077120991" TEXT="f&#xfc;r jeden Chunk...">
+<node CREATED="1681077129282" ID="ID_1894061712" MODIFIED="1681086711663" TEXT="erzeuge JobPlanningSequence">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font face="Monospaced" size="2" color="#431818">&#160;&#160;void </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2" color="#431818">&#160;&#160;CalcPlanContinuation::performJobPlanningChunk(FrameCnt nextStartFrame) </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2" color="#431818">&#160;&#160;{ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2" color="#431818">&#160;&#160;&#160;&#160;TimeAnchor refPoint(timings_, nextStartFrame); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2" color="#431818">&#160;&#160;&#160;&#160;JobPlanningSequence jobs = dispatcher_.onCalcStream(modelPort_, channel_) </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2" color="#431818">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;.establishNextJobs(refPoint); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2" color="#431818">&#160;&#160;&#160; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2" color="#431818">&#160;&#160;&#160;&#160;Job nextChunkOfPlanning = buildFollowUpJobFrom (refPoint); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2" color="#431818">&#160;&#160;&#160; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2" color="#431818">&#160;&#160;&#160;&#160;UNIMPLEMENTED (&quot;the actual meat: access the scheduler and fed those jobs&quot;); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2" color="#431818">&#160;&#160;} </font>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#5478ca" DESTINATION="ID_1894061712" ENDARROW="Default" ENDINCLINATION="252;-178;" ID="Arrow_ID_1478605615" SOURCE="ID_789025207" STARTARROW="None" STARTINCLINATION="312;-20;"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1681077176827" ID="ID_728712867" MODIFIED="1681077182993" TEXT="FrameCoord des Ankerpunktes"/>
+<node CREATED="1681077183565" ID="ID_96294471" MODIFIED="1681077188182" TEXT="Referenz auf den Dispatcher"/>
+</node>
+<node CREATED="1681089094840" ID="ID_573422091" MODIFIED="1681089145775" TEXT="hier steigen wir direkt in die Monaden-Kacke ein">
+<arrowlink COLOR="#b03a63" DESTINATION="ID_256520127" ENDARROW="Default" ENDINCLINATION="34;-147;" ID="Arrow_ID_1652427615" STARTARROW="None" STARTINCLINATION="-162;10;"/>
+</node>
+</node>
+<node CREATED="1681076854338" ID="ID_137032068" MODIFIED="1681076861563" TEXT="f&#xfc;r jeden Schritt...">
+<node CREATED="1681076862694" ID="ID_474923430" MODIFIED="1681076918874" TEXT="baue aus TimeAnchor + offset &#x27fc; FrameCoord"/>
+<node CREATED="1681076958274" ID="ID_1344252073" MODIFIED="1681076960709" TEXT="FrameCoord">
+<node CREATED="1681076962646" MODIFIED="1681076962646" TEXT="TimeVar  absoluteNominalTime;"/>
+<node CREATED="1681076962646" MODIFIED="1681076962646" TEXT="FrameCnt absoluteFrameNumber;"/>
+<node CREATED="1681076962646" ID="ID_1729128720" MODIFIED="1681076962646" TEXT="TimeVar absoluteRealDeadline;"/>
+<node CREATED="1681076962646" ID="ID_1261272955" MODIFIED="1681076962646" TEXT="ModelPort modelPort;"/>
+<node CREATED="1681076962646" ID="ID_1120839302" MODIFIED="1681076962646" TEXT="uint      channelNr;"/>
+</node>
+</node>
+<node CREATED="1681079892096" ID="ID_1253755992" MODIFIED="1681079896243" TEXT="Fortsetzung">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1681082667504" ID="ID_547789227" MODIFIED="1681082717761" TEXT="CalcPlanContinuation">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1681086511956" ID="ID_456223503" MODIFIED="1681086520396" TEXT="ist selber eine JobClosure"/>
+<node CREATED="1681086553182" ID="ID_789025207" MODIFIED="1681086615083" TEXT="invokeJobOperation() &#x27f9; performJobPlanningChunk">
+<arrowlink COLOR="#5478ca" DESTINATION="ID_1894061712" ENDARROW="Default" ENDINCLINATION="252;-178;" ID="Arrow_ID_1478605615" STARTARROW="None" STARTINCLINATION="312;-20;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1681082677502" ID="ID_1891825875" MODIFIED="1681082693386" TEXT="hier steckt die Planungs-Logik">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681089112917" ID="ID_256520127" MODIFIED="1681089910511" TEXT="was machen die Monaden hier?">
+<linktarget COLOR="#b03a63" DESTINATION="ID_256520127" ENDARROW="Default" ENDINCLINATION="34;-147;" ID="Arrow_ID_1652427615" SOURCE="ID_573422091" STARTARROW="None" STARTINCLINATION="-162;10;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1681089212896" ID="ID_337268997" MODIFIED="1681170523138" TEXT="JobPlanningSequence">
+<linktarget COLOR="#b4597c" DESTINATION="ID_337268997" ENDARROW="Default" ENDINCLINATION="18;60;" ID="Arrow_ID_311262374" SOURCE="ID_1034254567" STARTARROW="None" STARTINCLINATION="-177;-12;"/>
+<node CREATED="1681089218823" ID="ID_1821180666" MODIFIED="1681089224250" TEXT="ist eine Monade"/>
+<node CREATED="1681089225590" ID="ID_871607291" MODIFIED="1681089236449" TEXT="stellt eine Sequenz geplanter Jobs dar"/>
+</node>
+<node CREATED="1681089479948" ID="ID_1765132212" MODIFIED="1681089502583" TEXT="der Typ-Kommentar &#xfc;ber JobPlanningSequence ist aufschlu&#xdf;reich">
+<icon BUILTIN="forward"/>
+<node CREATED="1681089505401" ID="ID_462054221" MODIFIED="1681089555850" TEXT="so gut es sein kann">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Hier zeigt sich das ganze Elend mit den Monaden: man mu&#223; dazu einen Leitfaden schreiben, anstatt da&#223; sie sich selber erkl&#228;ren w&#252;rden....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1681089566409" ID="ID_1085499553" MODIFIED="1681089893458" TEXT="zweifelhaft dicht gepackter &#xbb;Twist&#xab;">
+<node CREATED="1681089582543" ID="ID_965789758" MODIFIED="1681089609623" TEXT="einerseits eine Sequenz von JobPlanning-elementen"/>
+<node CREATED="1681089611728" ID="ID_601644157" MODIFIED="1681089620757" TEXT="die dann aber wohl direkt konvertibel sind als Jobs"/>
+<node CREATED="1681089660421" ID="ID_1491590859" MODIFIED="1681089670283" TEXT="aber die partielle Auswertung ist zugleich ein Planungs-Zustand"/>
+<node CREATED="1681089690115" ID="ID_815917928" MODIFIED="1681089727285">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font face="Monospaced" color="#d93278">expandPrerequisites</font>&#160;ist die Planungs-Operation und wird monadisch gebunden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1681089744497" ID="ID_745863442" MODIFIED="1681089764956" TEXT="die Auswertung wird ge-seeded mit dem PlanningStepGenerator">
+<node CREATED="1681089768902" ID="ID_1690425506" MODIFIED="1681089775563" TEXT="dieser erzeugt die Chunk-Struktur"/>
+</node>
+</node>
+</node>
+<node CREATED="1681089920298" ID="ID_923180973" MODIFIED="1681089925797" TEXT="unklare Nomenklatur">
+<node CREATED="1681089943279" ID="ID_1215377203" MODIFIED="1681089946735" TEXT="Job"/>
+<node CREATED="1681089940175" ID="ID_1162115878" MODIFIED="1681089942779" TEXT="JobPlanning">
+<node CREATED="1681166025286" ID="ID_253282433" MODIFIED="1681166036328" TEXT="zentrale Status-View"/>
+<node CREATED="1681166037181" ID="ID_1967937878" MODIFIED="1681166042520" TEXT="referenziert ">
+<node CREATED="1681166052921" ID="ID_877761223" MODIFIED="1681166053958" TEXT="JobTicket::ExplorationState"/>
+<node CREATED="1681166054906" ID="ID_112460186" MODIFIED="1681166060733" TEXT="FrameCoord"/>
+</node>
+<node CREATED="1681166081679" ID="ID_81862434" MODIFIED="1681166129475">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ist eine <b>State-Core</b>&#160;( IterStateWrapper)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1681166151117" ID="ID_1918457721" MODIFIED="1681166159224" TEXT="reduziertbar in einen Job"/>
+</node>
+<node CREATED="1681090084033" ID="ID_1968751118" MODIFIED="1681090086992" TEXT="PlanningState">
+<node CREATED="1681170422864" ID="ID_1201866301" MODIFIED="1681170455125" TEXT="State-core-Iterator &#xfc;ber JobPlanning"/>
+<node CREATED="1681170485540" ID="ID_1034254567" MODIFIED="1681170530962" TEXT="Verh&#xe4;ltnis zu JobPlanningSequence ist verwirrend">
+<arrowlink COLOR="#b4597c" DESTINATION="ID_337268997" ENDARROW="Default" ENDINCLINATION="18;60;" ID="Arrow_ID_311262374" STARTARROW="None" STARTINCLINATION="-177;-12;"/>
+<node CREATED="1681170600989" ID="ID_1127702818" MODIFIED="1681170615896" TEXT="es ist das Gleiche (nur nicht explizit dargestellt)"/>
+<node CREATED="1681170616675" ID="ID_1213917365" MODIFIED="1681170632880" TEXT="liegt daran, da&#xdf; wir hier &#xbb;Monaden&#xab; nicht als Typklassen darstellen k&#xf6;nnen"/>
+<node CREATED="1681170713246" ID="ID_678111828" MODIFIED="1681170747342" TEXT="C++ kennt keine partiell ausgewerteten rekursiven Typen"/>
+<node CREATED="1681170750345" ID="ID_1806882257" MODIFIED="1681170768613" TEXT="JobPlanningSequence ist die fertig entfaltete Monade">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1681170811599" ID="ID_1363589659" MODIFIED="1681171010232">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font color="#8d2828" face="Monospaced">SIG_expandPrerequisites</font>
+    </p>
+    <p>
+      &#160;&#160;&#10233; per flatMap wird daraus ein <font face="Monospaced">PlanningState</font>&#160;&#8788; <font face="Monospaced">IterStateWrapper&lt;JobPlanning&gt;</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1681171032503" ID="ID_1088269383" MODIFIED="1681171110306" TEXT="Kritik: unklar was hier &#x201e;state&#x201c; meint">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1681171111745" ID="ID_261557469" MODIFIED="1681171124803" TEXT="state: die StateCore, also JobPlanning"/>
+<node COLOR="#d62a6d" CREATED="1681171170505" HGAP="29" ID="ID_519174430" MODIFIED="1681171183560" TEXT="&#x2260;" VSHIFT="1">
+<font NAME="SansSerif" SIZE="13"/>
+</node>
+<node CREATED="1681171125559" ID="ID_150888686" MODIFIED="1681171143401" TEXT="state: die partielle Auswertung des Iterators, also PlanningState"/>
+</node>
+</node>
+<node CREATED="1681090089907" ID="ID_1553722580" MODIFIED="1681090094599" TEXT="PlanningStepGenerator"/>
+<node CREATED="1681090112749" ID="ID_528965729" MODIFIED="1681090113644" TEXT="ExpandedPlanningSequence">
+<node CREATED="1681090118071" ID="ID_600100783" MODIFIED="1681090127602" TEXT="Ergebnistyp der FlatMap-Operation"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681171685380" ID="ID_1860128661" MODIFIED="1681171722392" TEXT="wann / wie findet die eigentliche Planung(Auswertung) statt?">
+<icon BUILTIN="help"/>
+<node CREATED="1681171733502" ID="ID_433565768" MODIFIED="1681171751420" TEXT="expandPrerequisites(JobPlanning) wird monadisch gebunden (flatMap)"/>
+<node CREATED="1681171757291" ID="ID_1142053734" MODIFIED="1681171885232">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Strategy:&#160;<font face="Monospaced" color="#3c41a3">lib::iter_explorer::RecursiveSelfIntegration</font>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1681172265271" ID="ID_770724358" MODIFIED="1681172273681" TEXT="zOMG">
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1681172281924" ID="ID_687991393" MODIFIED="1681179573174" TEXT="wertet depth-first aus bis zur H&#xfc;lle (Blatt-Ebene)"/>
+<node CREATED="1681229060538" ID="ID_1426518727" MODIFIED="1681229100966" TEXT="verlagert Memory-Management per Extension-Point in den Payload-Typ"/>
+<node CREATED="1681229106153" ID="ID_1596284582" MODIFIED="1681229132603" TEXT="tats&#xe4;chlich durchgereicht bis JobTicket::ExecutionState::push(subExploration)"/>
+</node>
+<node CREATED="1681229139349" ID="ID_149981075" MODIFIED="1681229216355">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#10233; die Auswertung und Organisation findet in <font color="#3f2257" face="Monospaced"><b>JobTicket::ExecutionState</b></font>&#160; statt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1681249113814" HGAP="12" ID="ID_1134987645" MODIFIED="1681249480677" VSHIFT="4">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Monaden allein <b>leisten nicht</b>&#160;was hier ben&#246;tigt wird
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1681249199658" ID="ID_1832498470" MODIFIED="1681249214440">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wir brauchen n&#228;mlich <b>rekursive Entfaltung</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1681249215248" ID="ID_515933435" MODIFIED="1681249303525">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Monad-bind <i>transformiert</i>&#160;und <i>expandiert</i>&#160;&#8212; jeweils nur einmal
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1681249520544" ID="ID_1957142208" MODIFIED="1681249556650">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      man <i>kann </i>die Tiefensuche extra noch hinzuf&#252;gen &#8212; als <b>Komplikation</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1681250256733" ID="ID_591477947" MODIFIED="1681250471971">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      dagegen das TreeExplorer::expand() ist <i><b>keine</b>&#160;monadische Operation</i>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....und zwar in mehrerlei Hinsicht....
+    </p>
+    <ul>
+      <li>
+        es wird in der Grundform nur explizit ausgel&#246;st
+      </li>
+      <li>
+        expandierte und nicht expandierte Werte k&#246;nnen sich mischen
+      </li>
+      <li>
+        Quell- und Ausgabe-Werte der Expander-Funktion m&#252;ssen kompatibel sein
+      </li>
+      <li>
+        expandAll() bietet Auswertung-bis-zur-Ersch&#246;pfung, exponiert aber auch <b>alle Zwischenwerte</b>
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1681179592836" ID="ID_1534441402" MODIFIED="1681179596322" TEXT="Umbau-Planung">
+<node CREATED="1681179609394" ID="ID_655076663" MODIFIED="1681184137895" TEXT="Idee: JobPlanning direkt als StateCore nutzen">
+<icon BUILTIN="idea"/>
+<node CREATED="1681183957626" ID="ID_1460327799" MODIFIED="1681183981602" TEXT="Layer-1: Startpunkte f&#xfc;r Planning-Chunk"/>
+<node CREATED="1681183982950" ID="ID_1134560942" MODIFIED="1681184074926" TEXT="Layer-2: Startpunkte in JobTickets &#xfc;bersetzen"/>
+<node CREATED="1681184077058" ID="ID_1263780584" MODIFIED="1681184086844" TEXT="--Expander--"/>
+<node CREATED="1681184116172" ID="ID_1292319298" MODIFIED="1681184131382" TEXT="Layer-3: Leaf-Tickets in Jobs &#xfc;bersetzen"/>
+</node>
+<node CREATED="1681179675524" ID="ID_1631190283" MODIFIED="1681179928963" TEXT="Custom-Allokator m&#xf6;glich: IterStack&lt;ResIter&gt; spezialisieren!">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font face="Monospaced" color="#5b232b">&#160;&#160;&#160;&#160;template&lt;class SRC&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" color="#5b232b">&#160;&#160;&#160;&#160;struct _DecoratorTraits&lt;SRC,&#160;&#160;&#160;enable_if&lt;is_StateCore&lt;SRC&gt;&gt;&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" color="#5b232b">&#160;&#160;&#160;&#160;&#160;&#160;{ </font>
+    </p>
+    <p>
+      <font face="Monospaced" color="#5b232b">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;using SrcVal&#160;&#160;= typename CoreYield&lt;SRC&gt;::value_type; </font>
+    </p>
+    <p>
+      <font face="Monospaced" color="#5b232b">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;using SrcIter = iter_explorer::IterableDecorator&lt;SrcVal, SRC&gt;; </font>
+    </p>
+    <p>
+      <font face="Monospaced" color="#5b232b">&#160;&#160;&#160;&#160;&#160;&#160;}; </font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681181487438" ID="ID_1162267066" MODIFIED="1681250532522" TEXT="Frage: Memory-Footprint?">
+<icon BUILTIN="help"/>
+<node CREATED="1681229228809" ID="ID_208607615" MODIFIED="1681229238435" TEXT="auch die bestehende L&#xf6;sung braucht einen Stack"/>
+<node CREATED="1681229243414" ID="ID_1553851683" MODIFIED="1681229405236" TEXT="dieser ist aber &#x201e;pfiffig&#x201c; in der Linked-List-Datenstruktur versteckt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und die Auswirkungen k&#246;nnen kaum sinnvoll vorhergesagt oder bewertet werden
+    </p>
+    <ul>
+      <li>
+        da wir die Datenstruktur nicht beliebig austauschen k&#246;nnen
+      </li>
+      <li>
+        da sie mit dem Allokations-Schema verwoben ist
+      </li>
+      <li>
+        da die erziehlbare Cache-Locality von den Anforderungen der <i>konkreten Render-Pipeline</i>&#160;abh&#228;ngt
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1681238369393" ID="ID_423908789" MODIFIED="1681238451197" TEXT="Ma&#xdf;gabe: Job-Planung mu&#xdf; lediglich &#xbb;abgespielt&#xab; werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      initial gibt es eine Allokation im AllocationCluster &#8212; ab diesem Teil soll die Planung weitgehend ohne &#8222;bewegliche Teile&#8220; ablaufen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681250556444" ID="ID_1991482624" MODIFIED="1681250575871" TEXT="Grundlegendes Auswertungs-Schema">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681250582708" ID="ID_1884826569" MODIFIED="1681250667138" TEXT="auf welcher Ebene wird die fortschreitende Planung angesetzt?">
+<icon BUILTIN="help"/>
+<node CREATED="1681250669452" ID="ID_1404510345" MODIFIED="1681424264776" TEXT="dar&#xfc;ber">
+<arrowlink COLOR="#68678a" DESTINATION="ID_1399425577" ENDARROW="Default" ENDINCLINATION="-321;0;" ID="Arrow_ID_26789445" STARTARROW="None" STARTINCLINATION="-353;107;"/>
+<node CREATED="1681250697202" ID="ID_591609787" MODIFIED="1681250718160" TEXT="die Pipeline beschreibt die fortlaufende Job-Planung l&#xfc;ckenlos"/>
+<node CREATED="1681250769368" ID="ID_772063728" MODIFIED="1681250784298" TEXT="ein separater Taktgeber ist dar&#xfc;ber gesetzt..."/>
+<node CREATED="1681250785294" ID="ID_1717449216" MODIFIED="1681250805743" TEXT="...und entnimmt jeweils einen &#xbb;chunk&#xab; an Planung"/>
+</node>
+<node CREATED="1681250684195" ID="ID_1446227888" MODIFIED="1681250686359" TEXT="darunter">
+<node CREATED="1681250819275" ID="ID_92926923" MODIFIED="1681250835367" TEXT="der &#xbb;chunk&#xab;-Taktgeber ist die Basis der Pipeline"/>
+<node CREATED="1681250837199" ID="ID_947581885" MODIFIED="1681250885117" TEXT="jeder Schritt wird einmal monadisch entfaltet &#x27f6; Jobs f&#xfc;r einen &#xbb;chunk&#xab;"/>
+<node CREATED="1681250898279" ID="ID_1453593011" MODIFIED="1681250924584" TEXT="der Konsument erkennt das Ende eines Chunk &#x2014; und pflanzt sich dann fort"/>
+</node>
+<node CREATED="1681250688531" ID="ID_1904669959" MODIFIED="1681250693486" TEXT="separat">
+<node CREATED="1681250972125" ID="ID_492221110" MODIFIED="1681250991302" TEXT="ein separater Dispatcher-Mechanismus konstruiert f&#xfc;r jeden &#xbb;chunk&#xab; eine Pipeline"/>
+<node CREATED="1681251006417" ID="ID_115424466" MODIFIED="1681251032211" TEXT="der Planungs-Job konsumiert und wertet diese aus und generiert Jobs"/>
+<node CREATED="1681251047923" ID="ID_1020628588" MODIFIED="1681251058990" TEXT="die Limitierung auf einen Chunk steckt in der Pipeline selber"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1681344133719" ID="ID_642967019" MODIFIED="1681424266741" TEXT="Diskussion">
+<icon BUILTIN="info"/>
+<node CREATED="1681344155430" ID="ID_1775975727" MODIFIED="1681344193644" TEXT="Separation of Concerns &#x27f9; spricht f&#xfc;r die reine l&#xfc;ckenlose Job-Planung"/>
+<node CREATED="1681344197504" ID="ID_1110233377" MODIFIED="1681344469258" TEXT="das wirft das Problem auf: Invariante Time-Anchor &#x2261; alles bis dahin geregelt">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1681344478491" ID="ID_159991195" MODIFIED="1681344551872">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wie erkennt man dies&#160;<i>von &#8222;oben&#8220; ?</i>
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1681344561975" ID="ID_658725827" MODIFIED="1681344574018" TEXT="was hei&#xdf;t &#x201e;vollst&#xe4;ndig geregelt&#x201c;?"/>
+<node CREATED="1681346552301" ID="ID_322305817" MODIFIED="1681346617402" TEXT="zun&#xe4;chst nur aus dem Planning-Chunk heraus explizit klar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn es hei&#223;t, da&#223; die top-level-Jobs bis &lt;= der n&#228;chsten Deadline komplett entfaltet wurden
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node CREATED="1681346714903" ID="ID_1742816164" MODIFIED="1681346731768" TEXT="w&#xfc;rde bevorzugen, wenn die Deadline-Bestimmung ein lokales Detail bleibt">
+<node CREATED="1681346762329" ID="ID_1402655083" MODIFIED="1681424061932" TEXT="Deadlines kann man nur mit Kenntnis der Dependencies festsetzen">
+<arrowlink COLOR="#544b67" DESTINATION="ID_1191577011" ENDARROW="Default" ENDINCLINATION="22;-64;" ID="Arrow_ID_370847933" STARTARROW="None" STARTINCLINATION="-378;15;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1681347374347" ID="ID_594073373" MODIFIED="1681347486789" TEXT="&#x27f9; wirft die Frage auf, wie Dependencies fesgesetzt und aktualisiert werden">
+<arrowlink COLOR="#9c738a" DESTINATION="ID_444443795" ENDARROW="Default" ENDINCLINATION="-1256;-1009;" ID="Arrow_ID_1047384894" STARTARROW="None" STARTINCLINATION="-902;35;"/>
+<node CREATED="1681347495927" ID="ID_972266761" MODIFIED="1681347856721" TEXT="Modell-1: beim Planen vorsortieren">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1681347551175" ID="ID_875180659" MODIFIED="1681347563377" TEXT="bereits beim Planen wird ein Dependency-Graph aufgebaut"/>
+<node CREATED="1681347564398" ID="ID_131120619" MODIFIED="1681347579368" TEXT="dieser wird dann traversiert, und die Deadlines werden r&#xfc;ckw&#xe4;rts festgesetzt"/>
+</node>
+<node CREATED="1681347514525" ID="ID_80362345" MODIFIED="1681347859365" TEXT="Modell-2: dynamisch konstituieren">
+<icon BUILTIN="forward"/>
+<node CREATED="1681347582164" ID="ID_278867248" MODIFIED="1681347600077" TEXT="den Jobs werden nur lokale Dependency-Beziehungen mitgegeben"/>
+<node CREATED="1681347600785" ID="ID_48999687" MODIFIED="1681347611164" TEXT="au&#xdf;erdem bekommt jeder Job ein zun&#xe4;chst grobes Zeitfenster mit"/>
+<node CREATED="1681347612232" ID="ID_1374144549" MODIFIED="1681347633816" TEXT="der Scheduler justiert die Zeitfenster dynamisch nach"/>
+<node CREATED="1681347634500" ID="ID_1442392443" MODIFIED="1681347652126" TEXT="erst dadurch ergibt sich der globale Dependency-Graph als transitive H&#xfc;lle der Zeit-Sequenz"/>
+</node>
+</node>
+<node CREATED="1681347681541" ID="ID_488964253" MODIFIED="1681396325874" TEXT="Modell-2 sieht richtig aus (ist aber auch anspruchsvoller)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Es sieht f&#252;r mich dennoch nach dem erstrebenswerten Ansatz aus, da der Scheduler ja dynamisch nachjustieren soll, und daher ohnehin so eine Aktuaisierung der Zeitfenster machen mu&#223;; zudem w&#252;rde diese Berechnung und Steuerung nur intern im Scheduler stattfinden, und auch der Dispatch-Schritt w&#228;re noch im Wesentlichen deklarativ &#8212; er w&#252;rde nur eine heuristische Grob-Bestimmung der Zeitfenster vornehmen
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1681398912107" ID="ID_845962402" MODIFIED="1681399086045" TEXT="Dependencies m&#xfc;ssen eigens repr&#xe4;sentiert werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn im JobTicket sind sie zwar explizit vorhanden, dieses ist aber nicht konkret instantiiert und gilt f&#252;r ein ganze Segment; mithin fehlt die Verbindung von einer Dependency zu dem konkreten Job, welcher diese Dependency realisiert. Im Gegensatz dazu ist <i>w&#228;hrend dem Dispatch-Schritt</i>&#160;diese Information implizit vorhanden, denn f&#252;r den Dispatch wird genau das JobTicket interpretiert, und die konkreten Jobs werden von diesem abgeleitet
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1681399099426" ID="ID_932754835" MODIFIED="1681399195400" TEXT="Diesem Dilemma kann man aber grunds&#xe4;tzlich nicht entgehen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Entweder, man verzichtet auf ein dynamisches Nachjustieren und l&#228;&#223;t die einmal eingef&#228;delten Berechnungen <i>einfach laufen</i>&#160;&#8212; oder man mu&#223; f&#252;r jede einzelne Berechnungkette die gesamte Dependency-Struktur <i>duplizieren und im Speicher halten.</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1681399845455" ID="ID_688481230" MODIFIED="1681399868776" TEXT="man kann aber limitieren, was &#xfc;berhaupt repr&#xe4;sentiert wird">
+<icon BUILTIN="yes"/>
+<node CREATED="1681399885521" ID="ID_1877681787" MODIFIED="1681399906234" TEXT="nur was einen tangiblen Effekt auf eine konkrete Berechnung hat"/>
+<node CREATED="1681399906895" ID="ID_772103901" MODIFIED="1681399920265" TEXT="denn dieses mu&#xdf; ohnehin mit dieser konkreten Berechnung verlinkt sein"/>
+<node CREATED="1681399949945" ID="ID_1604564614" MODIFIED="1681422135919">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und man kann Nachfolger <i>benachrichtigen, </i>statt Vorg&#228;nger zu&#160;<i>suchen</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1681422192014" ID="ID_686946668" MODIFIED="1681422278056" TEXT="&#x27f9; Verhalten und Benachrichtigungen planen &#x2014; ohne Dependencies explizit zu repr&#xe4;sentieren">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+<node CREATED="1681422781457" ID="ID_1191577011" MODIFIED="1681424052805" TEXT="1-step lookahead ausnutzen">
+<linktarget COLOR="#544b67" DESTINATION="ID_1191577011" ENDARROW="Default" ENDINCLINATION="22;-64;" ID="Arrow_ID_370847933" SOURCE="ID_1402655083" STARTARROW="None" STARTINCLINATION="-378;15;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1681422798726" ID="ID_679404345" MODIFIED="1681422879620" TEXT="das bekommen wir durch den Iterator &#x201e;for free&#x201c;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...da man einen Lumiera-Forward-Iterator aktiv weiterschalten mu&#223;, aber stets auf das <i>aktuelle Element</i>&#160;zugreifen kann...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1681422914837" ID="ID_709137224" MODIFIED="1681423016221" TEXT="ein &#xbb;Chunk&#xab; wird beendet wenn ein Job mit sp&#xe4;terer Deadline auftaucht"/>
+<node CREATED="1681423023681" ID="ID_618849588" MODIFIED="1681423071566" TEXT="&#x27f9; das JobPlanning-Element mu&#xdf; ein Zeitfenster offenlegen">
+<node CREATED="1681423079642" ID="ID_1790757865" MODIFIED="1681423118955" TEXT="Zeitpunkt der Planungs-Wiedervorlage &#x2260; Deadline"/>
+<node CREATED="1681423128755" ID="ID_1032383879" MODIFIED="1681423175009" TEXT="Jeder Planungs-&#xbb;Chunk&#xab; hat eine abgedeckte Zeitspanne"/>
+<node CREATED="1681423190299" ID="ID_1808919355" MODIFIED="1681423731839" TEXT="Prinzipiell ist die &#xbb;Chunk&#xab;-Einteilung beliebig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...solange ein Planungs-&#187;Chunk&#171; hinreichend weit vor dem Ende seiner abgedeckten Zeitspanne aufgebaut wird; das Planungsintervall k&#246;nnte sogar dynamisch reguliert werden, wichtig ist nur, einen Mindest-Vorlauf vor der tats&#228;chlich abgedeckten Zeitspanne einzuhalten, so da&#223; idealerweise der n&#228;chste Planungs-&#187;Chunk&#171; bereits stattfindet, noch bevor die Deadlines f&#252;r den Vorg&#228;nger ganz abgelaufen sind. Denn unter diesen Umst&#228;nden m&#252;&#223;te nicht einmal ein vollst&#228;ndiger Dependency-Tree in einem Chunk abgearbeitet werden, solange nur die geplanten Jobs rechtzeitig in der Scheduler-Queue sind. Tats&#228;chlich aber tritt in unserem Iterator-Mechanismus der top-level Planungsschritt als erstes auf, und damit springt jeweils die Deadline um eine ganze Frame-Dauer in die Zukunft &#8212; dies w&#228;re dann in jedem Fall ein ganz klares Signal, um das &#220;berschreiten des zu planenden Zeitspanne zu erkennen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1681423752401" ID="ID_1703609923" MODIFIED="1681423762827" TEXT="Fazit">
+<icon BUILTIN="forward"/>
+<node CREATED="1681423765518" ID="ID_1399425577" MODIFIED="1681424264776" TEXT="wir k&#xf6;nnen komplett trennen und die Pipeline ist nur noch die reine Planung">
+<linktarget COLOR="#68678a" DESTINATION="ID_1399425577" ENDARROW="Default" ENDINCLINATION="-321;0;" ID="Arrow_ID_26789445" SOURCE="ID_1404510345" STARTARROW="None" STARTINCLINATION="-353;107;"/>
+</node>
+<node CREATED="1681423785083" ID="ID_83395390" MODIFIED="1681423811754" TEXT="das JobPlanning mu&#xdf; ein Zeitfenster sichtbar machen; das gen&#xfc;gt zur Planungs-Steuerung"/>
+<node CREATED="1681423881164" ID="ID_947885657" MODIFIED="1681423903640" TEXT="die Job-Deskriptor-Datenstruktur wird erweitert, so da&#xdf; sie Scheduler-Actions beinhaltet"/>
+<node CREATED="1681423904443" ID="ID_1758639000" MODIFIED="1681423917165" TEXT="&#xfc;ber diese Actions werden Dependency-Checks vorgeplant"/>
+<node CREATED="1681423933821" ID="ID_1904536434" MODIFIED="1681423983716" TEXT="der Dispatcher sitzt dar&#xfc;ber und dient nur als &#xbb;Chunk&#xab;-Taktgeber"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1681424304209" HGAP="-38" ID="ID_722224370" MODIFIED="1681424867599" TEXT="Umbau-Schritte" VSHIFT="21">
+<edge STYLE="linear"/>
+<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681424329079" ID="ID_292995208" MODIFIED="1681424826118" STYLE="bubble" TEXT="die Monaden enthalten keine substantielle Logik und k&#xf6;nnen einfach weggeworfen werden">
+<edge COLOR="#725330"/>
+<icon BUILTIN="full-1"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681424351736" ID="ID_141256625" MODIFIED="1681424826119" STYLE="bubble" TEXT="JobPlanning bleibt als Front-End/Strategy/StateCore erhalten (sp&#xe4;ter zu pr&#xfc;fen)">
+<edge COLOR="#725330"/>
+<icon BUILTIN="full-2"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681424610628" ID="ID_1888344503" MODIFIED="1681426106281" STYLE="bubble" TEXT="Dispatcher so umschreiben, da&#xdf; er einen CalcDriver verwendet">
+<edge COLOR="#725330"/>
+<arrowlink COLOR="#f4fec9" DESTINATION="ID_1928295133" ENDARROW="Default" ENDINCLINATION="-1068;-69;" ID="Arrow_ID_362199078" STARTARROW="None" STARTINCLINATION="1381;58;"/>
+<icon BUILTIN="full-3"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681424692274" ID="ID_1926192234" MODIFIED="1681425384986" STYLE="bubble" TEXT="Setup f&#xfc;r scheduler::Action anlegen">
+<edge COLOR="#725330"/>
+<arrowlink COLOR="#f4fec9" DESTINATION="ID_688439359" ENDARROW="Default" ENDINCLINATION="-522;-149;" ID="Arrow_ID_1352278228" STARTARROW="None" STARTINCLINATION="1598;114;"/>
+<icon BUILTIN="full-4"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681424715326" ID="ID_566775911" MODIFIED="1681425341556" STYLE="bubble" TEXT="Job-Datenstruktur neu konzipieren">
+<edge COLOR="#725330"/>
+<arrowlink COLOR="#f4fec9" DESTINATION="ID_274575596" ENDARROW="Default" ENDINCLINATION="-522;-149;" ID="Arrow_ID_1673610733" STARTARROW="None" STARTINCLINATION="1598;114;"/>
+<icon BUILTIN="full-5"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681424909356" ID="ID_1912461724" MODIFIED="1681424960719" TEXT="Monaden-basierten IterExplorer zur&#xfc;ckbauen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681424933809" ID="ID_377619970" MODIFIED="1681424958374" TEXT="Umbenennen: TreeExplorer &#x27fc; IterExplorer">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681082793383" ID="ID_1314381934" MODIFIED="1681082807141" TEXT="Kritik Scheduler-Interface">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1681082814380" ID="ID_1475292843" MODIFIED="1681082839540" TEXT="wir dachten damals...">
+<node CREATED="1681082840320" ID="ID_1603095908" MODIFIED="1681082845676" TEXT="C ist einfach"/>
+<node CREATED="1681082846479" ID="ID_1336295362" MODIFIED="1681082850571" TEXT="deshalb ist es schnell"/>
+<node CREATED="1681082851148" ID="ID_563185801" MODIFIED="1681082863297" TEXT="deshalb ist es gut f&#xfc;r die Aufgabe"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1681082876300" ID="ID_743791679" MODIFIED="1681082888427" TEXT="das ist eine Mystifikation">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1681082889754" ID="ID_1911631905" MODIFIED="1681082903428" TEXT="tats&#xe4;chlich gibt es performante Verarbeitungsmuster"/>
+<node CREATED="1681082905864" ID="ID_1034659086" MODIFIED="1681082913243" TEXT="genauso wichtig ist aber klarer Code">
+<node CREATED="1681082918734" ID="ID_1433754376" MODIFIED="1681082946174" TEXT="f&#xfc;r den Menschen"/>
+<node CREATED="1681082932051" ID="ID_545301338" MODIFIED="1681082936956" TEXT="f&#xfc;r den Optimizer"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1681082963560" ID="ID_1172337937" MODIFIED="1681083058271" TEXT="nicht eine Sprache (C) oder eine Datenstruktur (LinkedList) ist substantiell &#x201e;performant&#x201c;">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990061" CREATED="1681083085671" ID="ID_670283864" MODIFIED="1681083328001" TEXT="Convey&apos;s Law">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1681083093846" ID="ID_1045820854" MODIFIED="1681083294169" TEXT="der Scheduler ist eine denkbar ung&#xfc;nstige Schnittstelle zwischen verschiedenen Design-Stilen">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1681083159662" ID="ID_860686341" MODIFIED="1681083294170" TEXT="die Aufteilung in Session und Engine &#x27f9; zu einfaches mentales Modell">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1681083267223" ID="ID_1330479674" MODIFIED="1681083294171" TEXT="die Schnittstelle liegt an einer Grenze der Kopetenzen &#x2014; nicht einer Grenze der Dom&#xe4;nen">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1681083619609" ID="ID_1647785356" MODIFIED="1681083636070" TEXT="Bessere L&#xf6;sung">
+<icon BUILTIN="forward"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681083639877" ID="ID_358030802" MODIFIED="1681084305066" TEXT="klare performance-orientierte Datenstrukturen schaffen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1681083683663" ID="ID_135955742" MODIFIED="1681084106386" TEXT="Job &#x27fc; Deskriptor(value, stateful)"/>
+<node CREATED="1681083725400" ID="ID_201198910" MODIFIED="1681084115121" TEXT="JobFunktor &#x27fc; Strategy(reference, shared)"/>
+<node CREATED="1681083935037" ID="ID_951868878" MODIFIED="1681084147700" TEXT="Activity &#x27fc; Verb(symbolic, algebraic)"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681083656587" ID="ID_994543902" MODIFIED="1681084305066" TEXT="diese durchg&#xe4;ngig im gesamten Scheduler verwenden">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681084260162" ID="ID_1346463753" MODIFIED="1681084305067">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Scheduler-Interface ist ein <b>Gefahren&#252;bergang</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681084307651" ID="ID_876302640" MODIFIED="1681084319241" TEXT="Scheduler in zwei Layer zerlegen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681084330224" ID="ID_799114403" MODIFIED="1681084338824" TEXT="Eigentliche Schnittstellen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1681084340127" ID="ID_396373123" LINK="#ID_1855109590" MODIFIED="1681085948888" TEXT="Interface: Player">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1681085755729" ID="ID_859410938" LINK="#ID_667166448" MODIFIED="1681085948889" TEXT="Interface: Render Toolkit">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1681168811429" ID="ID_72728251" MODIFIED="1681168821401" TEXT="Aufr&#xe4;um-Arbeiten">
+<icon BUILTIN="bell"/>
+<node CREATED="1681168823213" ID="ID_70139544" MODIFIED="1681168829891" TEXT="LinkedElements">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681168834655" ID="ID_775810104" MODIFIED="1681168886034" TEXT="Kompatibilit&#xe4;t mit STL verifizieren">
+<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1681168847009" ID="ID_394142249" MODIFIED="1681168879417" TEXT="sehe schon: man kann es als std::stack nutzen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681168860231" ID="ID_1896352742" MODIFIED="1681168874166" TEXT="was ist mit dem Allocator? ist der Standard-konform?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681168890963" ID="ID_734971500" MODIFIED="1681168935363" TEXT="varargs durch variadic-templates ersetzen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      verwendet noch den pre-C++11-Stil mit explizit ausgewalzten Template-Spezialisierungen f&#252;r 1...5 Argumente
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681168945643" ID="ID_927049684" MODIFIED="1681168962346" TEXT="Verh&#xe4;ltnis zum AllocationCluster kl&#xe4;ren">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681168963297" ID="ID_16461379" MODIFIED="1681168972656" TEXT="warum wird der hier explizit referenziert?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+<node CREATED="1681169265752" ID="ID_388188594" MODIFIED="1681169268100" TEXT="JobTicket">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681169270184" ID="ID_778864690" MODIFIED="1681169283728" TEXT="die schon gecodete Logik sieht sehr nach Skizze aus">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681169286078" ID="ID_514995150" MODIFIED="1681169634256" TEXT="Datenstrukturen konsistent?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        requirement_ als (single)linked-List <i>RLY?</i>
+      </li>
+      <li>
+        SubTicketStack wirklich schon gut durchdacht? Funktionsweise?
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681169607062" ID="ID_62995786" MODIFIED="1681169631536" TEXT="Auswertungs-Logik mit pullNext() / push()">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681425106274" ID="ID_897788253" LINK="#ID_274575596" MODIFIED="1681425285122" TEXT="engine::Job und engine::Activity neu konzipieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node CREATED="1681007001033" ID="ID_777825192" MODIFIED="1681007003617" TEXT="Dispatcher">
+<node CREATED="1681007004517" ID="ID_1144293741" MODIFIED="1681007079690" TEXT="Interface ist skizziert">
+<icon BUILTIN="idea"/>
+<node CREATED="1681007017379" ID="ID_1043419721" MODIFIED="1681007024046" TEXT="zwei von drei Operationen sind klar">
+<node CREATED="1681007281927" ID="ID_1103925874" MODIFIED="1681007293626" TEXT="JobBuilder konstruieren (Innere Klasse mit R&#xfc;ckreferenz)"/>
+<node CREATED="1681007297495" ID="ID_839377934" MODIFIED="1681007348145">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Impl: <font face="Monospaced" color="#232d7c">JobBuilder::relativeFrameLocation (TimeAnchor&amp;, FrameCnt)</font>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1681007367996" ID="ID_443275992" MODIFIED="1681007420359" TEXT="callback in Dispatcher::locateRelative()">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;/** core dispatcher operation: based on the coordinates of a reference point, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;*&#160;&#160;establish binding frame number, nominal time and real (wall clock) deadline. </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;* @return new FrameCoord record (copy), with the nominal time, frame number </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;*&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;and deadline adjusted in accordance to the given frame offset. </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;*/ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;virtual FrameCoord locateRelative (FrameCoord const&amp;, FrameCnt frameOffset)&#160;&#160;=0; </font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681007375147" ID="ID_78887544" MODIFIED="1681007379315" TEXT="konkrete Impl fehlt">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node CREATED="1681007024520" ID="ID_387260351" MODIFIED="1681007033261" TEXT="es gibt dispatcher-interface-test.cpp">
+<node CREATED="1681007105255" ID="ID_1477266939" MODIFIED="1681007112555" TEXT="compiliert"/>
+<node CREATED="1681007136643" ID="ID_1804418785" MODIFIED="1681007149302" TEXT="halbfertig und partiell auskommentiert"/>
+<node CREATED="1681007112998" ID="ID_534129946" MODIFIED="1681007156292" TEXT="l&#xe4;uft (vermutlich) noch &#xfc;berhaupt nicht"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1681007034731" ID="ID_380471864" MODIFIED="1681007071540" TEXT="Implementierung (dispatcher-table) nur gestubbed">
+<icon BUILTIN="bell"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681425423695" ID="ID_1928295133" MODIFIED="1681426106281" TEXT="Reorganisation : CalcDriver verwenden">
+<linktarget COLOR="#f4fec9" DESTINATION="ID_1928295133" ENDARROW="Default" ENDINCLINATION="-1068;-69;" ID="Arrow_ID_362199078" SOURCE="ID_1888344503" STARTARROW="None" STARTINCLINATION="1381;58;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node CREATED="1512925253328" ID="ID_922277724" MODIFIED="1681168670386" TEXT="JobTicket">
+<linktarget COLOR="#82597c" DESTINATION="ID_922277724" ENDARROW="Default" ENDINCLINATION="43;-81;" ID="Arrow_ID_941233317" SOURCE="ID_946385163" STARTARROW="None" STARTINCLINATION="-124;34;"/>
+<node CREATED="1681166276225" ID="ID_877524227" MODIFIED="1681166317636" TEXT="ein Execution-Plan g&#xfc;litg f&#xfc;r ein Segment + ModelPort"/>
+<node CREATED="1681167533752" ID="ID_1794156121" MODIFIED="1681167538096" TEXT="Anforderungen">
+<node CREATED="1681167546919" ID="ID_1656777068" MODIFIED="1681239514849" TEXT="startExploration()">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1681239526094" ID="ID_1262163051" MODIFIED="1681239557592" TEXT="redundant">
+<icon BUILTIN="closed"/>
+</node>
+<node CREATED="1681239544411" ID="ID_294349606" MODIFIED="1681239552793" TEXT="nur den Monaden geschuldet">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1681167559614" ID="ID_1796690712" MODIFIED="1681167566611" TEXT="discoverPrerequisites()">
+<node CREATED="1681239648250" ID="ID_543821327" MODIFIED="1681239654691" TEXT="lazy-on-demand gestartet"/>
+<node CREATED="1681239661863" ID="ID_893985229" MODIFIED="1681239699686" TEXT="liefert Iterator &#xfc;ber alle Voraussetzungen"/>
+<node CREATED="1681239735718" ID="ID_464013545" MODIFIED="1681239741761" TEXT="rekursive Tiefensuche"/>
+</node>
+<node CREATED="1681167579899" ID="ID_428564529" MODIFIED="1681167585941" TEXT="createJobFor(FrameCoord)"/>
+<node CREATED="1681167633659" ID="ID_374689298" MODIFIED="1681167759825" TEXT="abstrakt-referentiell">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es wird das Vorhandensein abstrakt definierter Zustands-Deskriptoren impliziert, deren Sinn der Implementierung vorbehalten bleibt
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1681167647585" ID="ID_1721954285" MODIFIED="1681167652349" TEXT="Prerequisite(s)"/>
+<node CREATED="1681167653769" ID="ID_1301968397" MODIFIED="1681167655572" TEXT="Provision"/>
+<node CREATED="1681167667360" ID="ID_1056088464" MODIFIED="1681167828900" TEXT="(nested) ExplorationState">
+<arrowlink COLOR="#5c74b4" DESTINATION="ID_247185233" ENDARROW="Default" ENDINCLINATION="28;-86;" ID="Arrow_ID_1572923842" STARTARROW="None" STARTINCLINATION="-77;9;"/>
+</node>
+</node>
+</node>
+<node CREATED="1681167767260" ID="ID_247185233" MODIFIED="1681167820893" TEXT="JobTicket::ExplorationState">
+<linktarget COLOR="#5c74b4" DESTINATION="ID_247185233" ENDARROW="Default" ENDINCLINATION="28;-86;" ID="Arrow_ID_1572923842" SOURCE="ID_1056088464" STARTARROW="None" STARTINCLINATION="-77;9;"/>
 </node>
 </node>
 </node>
@@ -68411,6 +69313,56 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1679783052390" ID="ID_1851394144" MODIFIED="1679783057287" TEXT="gr&#xfc;nden">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1680563559852" ID="ID_580288207" MODIFIED="1680563577773" TEXT="plainPlay">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681086194343" ID="ID_1293419166" MODIFIED="1681086200999" TEXT="gemeinsame Datenstrukturen">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681086202821" ID="ID_274575596" MODIFIED="1681425341555" TEXT="Job">
+<linktarget COLOR="#f4fec9" DESTINATION="ID_274575596" ENDARROW="Default" ENDINCLINATION="-522;-149;" ID="Arrow_ID_1673610733" SOURCE="ID_566775911" STARTARROW="None" STARTINCLINATION="1598;114;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681086220019" ID="ID_1372752844" MODIFIED="1681086232986" TEXT="Umbau: C-Struct - Layer zur&#xfc;ckbauen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1681086385917" ID="ID_1193213661" MODIFIED="1681086416077" TEXT="leichtgewichtig, kopierbar, stateful, Scheduler-impl-owned"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681425144493" ID="ID_1404753000" MODIFIED="1681425214239" TEXT="Support f&#xfc;r engine::Activity">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681086210548" ID="ID_290412713" MODIFIED="1681086213533" TEXT="JobFunktor">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681086238169" ID="ID_1303340014" MODIFIED="1681086253543" TEXT="Umbenennen: JobClosure &#x27fc; JobFunctor">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681086255534" ID="ID_1953726127" MODIFIED="1681086266246" TEXT="Umbau: C-Struct - Layer zur&#xfc;ckbauen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681086215092" ID="ID_688439359" MODIFIED="1681425384986" TEXT="Activity">
+<linktarget COLOR="#f4fec9" DESTINATION="ID_688439359" ENDARROW="Default" ENDINCLINATION="-522;-149;" ID="Arrow_ID_1352278228" SOURCE="ID_1926192234" STARTARROW="None" STARTINCLINATION="1598;114;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681086269493" ID="ID_305659400" MODIFIED="1681086275809" TEXT="Entwurf : neues Konzept">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1681086278139" ID="ID_1476636286" MODIFIED="1681086349598" TEXT="Idee">
+<icon BUILTIN="idea"/>
+<node CREATED="1681086280251" ID="ID_110027513" MODIFIED="1681086287093" TEXT="es handelt sich um Verben"/>
+<node CREATED="1681086289650" ID="ID_1565054848" MODIFIED="1681086305807" TEXT="es sind kompakt codierte algebraische Datenstrukturen"/>
+<node CREATED="1681086332556" ID="ID_48127986" MODIFIED="1681086343867" TEXT="immutable, mit jeweils Referenz-Parametern"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1681086352417" ID="ID_28342864" MODIFIED="1681086366888" TEXT="der Scheduler arbeitet nur mit Activities">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1681396805942" ID="ID_1886457526" MODIFIED="1681396815850" TEXT="Architektur festlegen">
+<icon BUILTIN="yes"/>
+<node CREATED="1681397127019" ID="ID_683727165" MODIFIED="1681397136243" TEXT="separation of concerns">
+<icon BUILTIN="yes"/>
+<node CREATED="1681398162521" ID="ID_1550060591" MODIFIED="1681398225579" TEXT="CalcStream &#x2261; Dispatch repetitiv vorantreiben"/>
+<node CREATED="1681397144793" ID="ID_439031406" MODIFIED="1681397236218" TEXT="Dispatch &#x2261; Festsetzen der Zeitpunkte und Beziehungen"/>
+<node CREATED="1681397308511" ID="ID_1748761928" MODIFIED="1681397340043" TEXT="Planning &#x2261; Ermitteln der Vorrausetzungen und Beziehungen"/>
+<node CREATED="1681398712198" ID="ID_1529988864" MODIFIED="1681398770503" TEXT="Schedule &#x2261; Priorisierung und Verteilung an die Worker"/>
+<node CREATED="1681398678151" ID="ID_1921320233" MODIFIED="1681398704971" TEXT="Control &#x2261; Beobachtung und Zustands-Aktualisierung"/>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680563595176" ID="ID_773353840" MODIFIED="1680563601552" TEXT="Aufruf/Verdrahtung im Player">
 <icon BUILTIN="flag-yellow"/>
 </node>
@@ -68424,9 +69376,65 @@
 <linktarget COLOR="#fec499" DESTINATION="ID_1218283238" ENDARROW="Default" ENDINCLINATION="-664;74;" ID="Arrow_ID_443600884" SOURCE="ID_695181807" STARTARROW="None" STARTINCLINATION="-240;29;"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681347244544" ID="ID_444443795" MODIFIED="1681347486789" TEXT="Basis: Operational Control">
+<linktarget COLOR="#9c738a" DESTINATION="ID_444443795" ENDARROW="Default" ENDINCLINATION="-1256;-1009;" ID="Arrow_ID_1047384894" SOURCE="ID_594073373" STARTARROW="None" STARTINCLINATION="-902;35;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681347258814" ID="ID_1046752034" MODIFIED="1681347345729" TEXT="TimingObservable">
+<linktarget COLOR="#a54e77" DESTINATION="ID_1046752034" ENDARROW="Default" ENDINCLINATION="-1519;212;" ID="Arrow_ID_1830118942" SOURCE="ID_1139462793" STARTARROW="None" STARTINCLINATION="836;79;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node CREATED="1680563506475" ID="ID_53985081" MODIFIED="1680563509211" TEXT="Interface"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681396857183" ID="ID_1618297513" MODIFIED="1681396863069" TEXT="Test/Integration">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+<node CREATED="1680563506475" ID="ID_53985081" MODIFIED="1680563509211" TEXT="Interface">
+<node CREATED="1681341888374" ID="ID_1288070081" MODIFIED="1681341890674" TEXT="Konzepte">
+<node CREATED="1681341891551" ID="ID_1494961491" MODIFIED="1681341894065" TEXT="CalcStream">
+<node CREATED="1681341919130" ID="ID_979269608" MODIFIED="1681341943300">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b>symbolische Repr&#228;sentation</b>&#160;eines dynamisch laufenden Berechnungsprozesses
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1681341944072" ID="ID_126625217" MODIFIED="1681342028220" TEXT="selber ein opaques Value-Objekt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es enth&#228;lt keine relevanten Informationen und dient auch nicht dem Tracking; vielmehr ist es ein Schl&#252;ssel, mit dessen Hilfe der PlayProcess sp&#228;ter mit der Render-Engine reden kann
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1681342047137" ID="ID_629527239" MODIFIED="1681342196215" TEXT="Aber: enth&#xe4;lt die Implementierung des &#xbb;Render-Start&#xab; Setups">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Es ist im Entwurf von 2011 noch nicht festgelegt, ob diese Implementierung konkret ist (d.h. direkt Elemente aus dem Play-Service verbindet), oder nur abstrakt, durch Aufruf der RenderEnvironmentClosure. Letzteres w&#228;re ad&#228;quat im sinne von <i>Inversion of Control</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1681341894866" ID="ID_94172116" MODIFIED="1681341900624" TEXT="RenderEnvironmentClosure">
+<node CREATED="1681341905668" ID="ID_432577558" MODIFIED="1681341915150" TEXT="das ist die &#xbb;abstrahierte Render-Engine&#xab;"/>
+</node>
+</node>
+</node>
 <node CREATED="1680563509728" ID="ID_1883500842" MODIFIED="1680563511567" TEXT="Scheduler">
 <node CREATED="1680563512563" ID="ID_960191744" MODIFIED="1680563516470" TEXT="Layer-2"/>
 <node CREATED="1680563517255" ID="ID_1104189783" MODIFIED="1680563519264" TEXT="Layer-1"/>
@@ -68439,6 +69447,10 @@
 <linktarget COLOR="#fec499" DESTINATION="ID_460039330" ENDARROW="Default" ENDINCLINATION="-632;68;" ID="Arrow_ID_1437229627" SOURCE="ID_988488968" STARTARROW="None" STARTINCLINATION="-241;31;"/>
 </node>
 </node>
+</node>
+<node CREATED="1681085780230" ID="ID_667166448" MODIFIED="1681085784377" TEXT="Render Toolkit">
+<node CREATED="1681085789797" ID="ID_435519695" MODIFIED="1681085821901" TEXT="Abstraktionsschicht &#xfc;ber Low-Level-Funktionalit&#xe4;t"/>
+<node CREATED="1681085863204" ID="ID_136936235" MODIFIED="1681085881132" TEXT="isoliert system-Level Services und externe Library-Erweiterungen"/>
 </node>
 </node>
 <node CREATED="1512923647255" ID="ID_1800845122" MODIFIED="1557498707237" TEXT="Plug-in"/>
@@ -74367,11 +75379,11 @@
 <arrowlink COLOR="#6a92a9" DESTINATION="ID_1805461369" ENDARROW="Default" ENDINCLINATION="190;-8;" ID="Arrow_ID_1209058185" STARTARROW="None" STARTINCLINATION="61;-2;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680305211903" ID="ID_1805461369" LINK="https://issues.lumiera.org/ticket/1276" MODIFIED="1680562039055" TEXT="#1276 reassess design of render job deadline planning">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680305211903" ID="ID_1805461369" LINK="https://issues.lumiera.org/ticket/1276" MODIFIED="1681165797441" TEXT="#1276 reassess design of render job deadline planning">
 <arrowlink COLOR="#f42f34" DESTINATION="ID_896127270" ENDARROW="Default" ENDINCLINATION="-1096;-80;" ID="Arrow_ID_1764912075" STARTARROW="None" STARTINCLINATION="-511;24;"/>
 <linktarget COLOR="#963345" DESTINATION="ID_1805461369" ENDARROW="Default" ENDINCLINATION="367;0;" ID="Arrow_ID_271837208" SOURCE="ID_216719314" STARTARROW="None" STARTINCLINATION="175;160;"/>
 <linktarget COLOR="#6a92a9" DESTINATION="ID_1805461369" ENDARROW="Default" ENDINCLINATION="190;-8;" ID="Arrow_ID_1209058185" SOURCE="ID_699634936" STARTARROW="None" STARTINCLINATION="61;-2;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="pencil"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680316647510" ID="ID_1793327086" LINK="https://issues.lumiera.org/ticket/1277" MODIFIED="1680316670021" TEXT="#1277 implement Timings descriptor for simple playback">
 <icon BUILTIN="flag-yellow"/>
@@ -74413,6 +75425,7 @@
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680388296693" ID="ID_283603911" LINK="https://issues.lumiera.org/ticket/1284" MODIFIED="1680388318115" TEXT="#1284 Render Engine operational control">
 <icon BUILTIN="hourglass"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680389959705" ID="ID_1139462793" LINK="https://issues.lumiera.org/ticket/1286" MODIFIED="1680389986151" TEXT="#1286 Timing Observable">
+<arrowlink COLOR="#a54e77" DESTINATION="ID_1046752034" ENDARROW="Default" ENDINCLINATION="-1519;212;" ID="Arrow_ID_1830118942" STARTARROW="None" STARTINCLINATION="836;79;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -74567,12 +75580,12 @@
 </node>
 </node>
 </node>
-<node CREATED="1664630921300" FOLDED="true" HGAP="183" ID="ID_1033335255" MODIFIED="1679088795397" TEXT="Dokumentation" VSHIFT="40">
+<node CREATED="1664630921300" FOLDED="true" HGAP="183" ID="ID_1033335255" MODIFIED="1681004514646" TEXT="Dokumentation" VSHIFT="40">
 <edge COLOR="#815b70"/>
 <cloud COLOR="#d7c3a8"/>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="list"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1664630997672" FOLDED="true" ID="ID_237099051" MODIFIED="1679088793825" STYLE="bubble" TEXT="mitf&#xfc;hren">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1664630997672" FOLDED="true" ID="ID_237099051" MODIFIED="1681004517180" STYLE="bubble" TEXT="mitf&#xfc;hren">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -74612,7 +75625,7 @@
 <node CREATED="1664631398891" ID="ID_1010017470" MODIFIED="1664631559120" STYLE="fork" TEXT="LumiDok">
 <edge COLOR="#8e6074" STYLE="linear" WIDTH="thin"/>
 <node CREATED="1664631418128" ID="ID_1118945815" MODIFIED="1664631559116" TEXT="Stand">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664632273717" ID="ID_546161915" MODIFIED="1664633302811" TEXT="10/22: master/online deutlich zur&#xfc;ckgefallen">
+<node COLOR="#435e98" CREATED="1664632273717" ID="ID_546161915" MODIFIED="1681004578460" TEXT="10/22: master/online deutlich zur&#xfc;ckgefallen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -74642,6 +75655,22 @@
 </html></richcontent>
 <font NAME="SansSerif" SIZE="11"/>
 <icon BUILTIN="messagebox_warning"/>
+<node COLOR="#338800" CREATED="1681004586743" ID="ID_1584303708" MODIFIED="1681006360117" TEXT="Merge 4.4.23 (automatisch)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...ging v&#246;llig problemlos, und das Resultat/Changeset sieht plausibel aus...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681006362667" ID="ID_1972975901" MODIFIED="1681006379321" TEXT="nochmal pr&#xfc;fen ob es &#xc4;nderungen von Benny gab...?">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664632408539" ID="ID_5303509" MODIFIED="1664632540359" TEXT="Link-Generator notwendig">
 <richcontent TYPE="NOTE"><html>
@@ -74754,6 +75783,36 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#684e97" DESTINATION="ID_417783849" ENDARROW="Default" ENDINCLINATION="-182;50;" ID="Arrow_ID_321858822" STARTARROW="None" STARTINCLINATION="143;23;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681004448374" FOLDED="true" HGAP="14" ID="ID_1536537244" MODIFIED="1681004503408" TEXT="Theorie / allgemein" VSHIFT="5">
+<edge COLOR="#5e537f"/>
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681004288570" ID="ID_641232618" MODIFIED="1681004362635">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Darstellung: <i>about Monads</i>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Dezember 2017 ausgearbeitet und im TiddlyWiki vergraben.
+    </p>
+    <p>
+      <i>bin baff... das hatte ich v&#246;llig vergessen</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 </node>

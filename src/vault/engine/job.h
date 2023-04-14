@@ -40,6 +40,8 @@
  ** each job descriptor with the correct pointer to a concrete closure prior to handing
  ** the job over to the scheduler.
  ** 
+ ** @warning as of 4/2023 the Job datastructure will be remoulded ///////////////////////////////////////////TICKET #1280
+ ** 
  ** @see SchedulerFrontend
  ** @see JobTicket
  **

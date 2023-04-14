@@ -23,6 +23,8 @@
 
 /** @file scheduler-frontend.cpp
  ** Scheduler service implementation
+ ** @warning as of 4/2023 Render-Engine integration work is underway ////////////////////////////////////////TICKET #1280
+ ** 
  */
 
 

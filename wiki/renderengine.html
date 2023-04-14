@@ -521,20 +521,19 @@ noscript {display:none;} /* Fixes a feature in Firefox 1.5.0.2 where print previ
 </div>
 <!--POST-SHADOWAREA-->
 <div id="storeArea">
-<div title="AboutMonads" creator="Ichthyostega" modifier="Ichthyostega" created="201712101925" modified="201712102348" tags="Concepts discuss" changecount="71">
-<pre>//Monads are of questionable usefullness//
+<div title="AboutMonads" creator="Ichthyostega" modifier="Ichthyostega" created="201712101925" modified="202304132305" tags="Concepts discuss" changecount="72">
+<pre>//Monads are of questionable usefulness//
 
 Monads are a concept and theoretical framework from category theory.
-But the use of Monads as a programming construct is much touted in the realm of functional programming -- which unfortunately is riddled with some kind of phobia towards ''State''.
-And this in itself is ill-guided, since //not State is the problem,// ''Complexity'' is. Complexity arises from far reaching non local interdependencies and coupling. Some complexity is essential.
+But the use of Monads as a programming construct is much touted in the realm of functional programming -- which unfortunately is riddled with some kind of phobia towards ''State''. And this is ill-guided in itself, since //not State is the problem,// ''Complexity'' is. Complexity arises from far reaching non local interdependencies and coupling. Some complexity is essential.
 
 A telltale sign is that people constantly ask »What is a Monad?«
 And they don't get an answer, rather they get a thousand answers.
-The term //&quot;Monad&quot; fails to evoke an image// once mentioned.
+The term //»Monad« fails to evoke an image// once mentioned.
 
 What remains is a set of clever technicalities. Such can be applied and executed without understanding. The same technicality can be made to work on vastly distinct subjects. And a way to organise such technicalities can be a way to rule and control subjects. The exertion of control is not in need of invoking images, once its applicability is ensured. //That// state is indifferent towards complexity, at least.
 
-When we care for complexity, we do so while we care for matters tangible to humans. Related to software, this is the need to maintain it, to adjust it, to adapt and remould it, to keep it relevant. At the bottom of all of these is the need to understand software. And this mandates to use terms and notions, even patterns, which evoke meaning -- even to the uninitiated. How can Monads even be helpful with that?
+When we care for complexity, we do so while we care for matters tangible to humans. Related to software, this is the need to maintain it, to adjust it, to adapt and remould it, to keep it relevant. At the bottom of all of these lies the need to understand software. And this Understanding mandates to use terms and notions, even patterns, which evoke meaning -- even to the uninitiated. How can „Monads“ even be helpful with that?
 
 !To make sensible usage of Monads
 Foremost, they should be kept as what they are: technicalities. For the understanding, they must be subordinate to a real concept or pattern. One with the power to reorient our view of matters at hand.
@@ -546,7 +545,7 @@ Regarding the formalism, it should be mentioned
 * and assuming such an instance, there is a //constructor// &lt;br&gt;{{{
    unit: A → M&lt;A&gt;
    }}}
-* and once we've optained a concrete entity of type {{{M&lt;A&gt;}}}, we can //bind a function// to transform it in another monadic entity&lt;br/&gt;{{{
+* and once we've obtained a concrete entity of type {{{M&lt;A&gt;}}}, we can //bind a function// to transform it in another monadic entity&lt;br/&gt;{{{
    M&lt;A&gt;::bind( A → M&lt;B&gt; ) → M&lt;B&gt;
    }}}
 At this point, also the ''Monad Axioms'' should be mentioned
@@ -566,10 +565,10 @@ M::bind(unit)  ≡  M
 !!!Distinct properties
 The obvious first observation is that a Monad must be some kind of //container// -- or //object,// for that.
 
-The next observation to spring into mind is the fact that the {{{bind}}}-operation is notoriously hard to understand.
+The next observation to note is the fact that the {{{bind}}}-operation is notoriously hard to understand.
 Why is this so? Because it //intermingles// the world of monads with the things from the value domain. You can not just write a monadic function for use with {{{bind}}}, without being aware of the world of monads. It is not possible to &quot;lift&quot; an operation from the world of values automatically into the world of monads. Please contrast this to the ''map operation'', which is easy to understand for that very reason: if you map an operation onto a container of values, the operation itself does not need to be aware of the existence of containers as such. It just operates on values.
 
-This observation can be turned into a positive use-case for monadic structures -- whenever there is an ''additional cross-cutting concern'' within the world of values, to necessitate our constant concern all over the place. The Monad technique can then be used to re-shuffle this concern in such a way that it becomes possible to keep it //mentally separate.// Thus, while it is not possible to //remove// that concern, re-casting it as Monad creates a more regular structure, which is easier to cope with. A Monad can thus be seen as an ''augmented or &quot;amplified&quot; value''. A value outfitted with additional capabilities. This view might be illustrated by looking at some of the most prominent applications
+This observation can be turned into a positive use-case for monadic structures -- whenever there is an ''additional cross-cutting concern'' within the world of values, to necessitate our constant concern all over the place. The Monad technique can then be used to re-shuffle this concern in such a way that it becomes possible to keep it //mentally separate.// Thus, while it is not possible to //remove// that concern, re-casting it as Monad creates a more regular structure, which is easier to cope with. A Monad can thus be seen as an ''augmented or „amplified“ value''. A value outfitted with additional capabilities. This view might be illustrated by looking at some of the most prominent applications
 ;failure handling
 :when we mark an expression as prone to failure by wrapping it into some //exception handling monad,//
 :it becomes easy to combine several such unreliable operations into a single program unit with just one failure handler
@@ -587,7 +586,7 @@ This observation can be turned into a positive use-case for monadic structures -
 :a monad can be used to encapsulate those details and expose only abstracted higher-level //operation primitives//
 
 !!!Building with monads
-As pointed out above, while all those disparate usages might share some abstract structural similarities, no overarching theme can be found to span them all. If we tend to distil an essence from all those usages, we're bound to end up with nothing. The reason is, //we do apply// monadic techniques while coping with the problem, but there is //nothing inherent &quot;monadic&quot; in the nature// of things at hand.
+As pointed out above, while all those disparate usages might share some abstract structural similarities, no overarching theme can be found to span them all. If we tend to distil an essence from all those usages, we're bound to end up with nothing. The reason is, //we do apply// monadic techniques while coping with the problem, but there is //nothing inherent „monadic“ in the nature// of things at hand.
 
 Yet to guide our thinking and doing, when we deal with matters, other concepts, notions and patterns are better suited to guide our actions, because they concur with the inherent nature of things:
 ;builder
@@ -928,7 +927,7 @@ Conceptually, assets belong to the [[global or root scope|ModelRootMO]] of the s
 <pre>Conceptually, Assets and ~MObjects represent different views onto the same entities. Assets focus on bookkeeping of the contents, while the media objects allow manipulation and EditingOperations. Usually, on the implementation side, such closely linked dual views require careful consideration.
 
 !redundancy
-Obviously there is the danger of getting each entity twice, as Asset and as ~MObject. While such dual entities could be OK in conjunction with much specialised processing, in the case of Lumiera's SteamLayer most of the functionality is shifted to naming schemes, configuration and generic processing, leaving the actual objects almost empty and deprived of distinguishing properties. Thus, starting out from the required concepts, an attempt was made to join, reduce and straighten the design.
+Obviously there is the danger of getting each entity twice, as Asset and as ~MObject. While such dual entities could be OK in conjunction with much specialised processing, in the case of Lumiera's Steam-Layer most of the functionality is shifted to naming schemes, configuration and generic processing, leaving the actual objects almost empty and deprived of distinguishing properties. Thus, starting out from the required concepts, an attempt was made to join, reduce and straighten the design.
 * type and channel configuration is concentrated to MediaAsset
 * the accounting of structural elements in the model is done through StructAsset
 * the object instance handling is done in a generic fashion by using placements and object references
@@ -1347,7 +1346,7 @@ Its a good idea to distinguish clearly between those concepts. A plugin is a pie
 !!!node interfaces
 As a consequence of this distinctions, in conjunction with a processing node, we have to deal with three different interfaces
 * the __build interface__ is used by the builder to set up and wire the nodes. It can be full blown C++ (including templates)
-* the __operation interface__ is used to run the calculations, which happens in cooperation of SteamLayer and VaultLayer. So a function-style interface is preferable.
+* the __operation interface__ is used to run the calculations, which happens in cooperation of Steam-Layer and Vault-Layer. So a function-style interface is preferable.
 * the __inward interface__ is accessed by the processing function in the course of the calculations to get at the necessary context, including in/out buffers and param values.
 
 !!!wiring data connections
@@ -1561,7 +1560,7 @@ TertiaryDark: #667
 Error: #f88</pre>
 </div>
 <div title="Command" modifier="Ichthyostega" created="200906072020" modified="200907212316" tags="def SessionLogic draft">
-<pre>Within SteamLayer, a Command is the abstract representation of a single operation or a compound of operations mutating the HighLevelModel.
+<pre>Within Steam-Layer, a Command is the abstract representation of a single operation or a compound of operations mutating the HighLevelModel.
 Thus, each command is a ''Functor'' and a ''Closure'' ([[command pattern|http://en.wikipedia.org/wiki/Command_pattern]]), allowing commands to be treated uniformly, enqueued in a [[dispatcher|SteamDispatcher]], logged to the SessionStorage and registered with the UndoManager.
 
 Commands are //defined// using a [[fluent API|http://en.wikipedia.org/wiki/Fluent_interface]], just by providing apropriate functions. Additionally, the Closure necessary for executing a command is built by binding to a set of concrete parameters. After reaching this point, the state of the internal representation could be serialised by plain-C function calls, which is important for integration with the SessionStorage.
@@ -1679,7 +1678,7 @@ The latter will probably be used within a context menu, but don't forget that ac
 * it will fabricate a new BindingMO as a prototype copy from the currently active one, and likewise root-attach it, which magically creates a new [[Timeline]] asset
 * it will create a new ''focus goal'' ({{red{TODO new term coined 2/2017}}}), which should lead to activating the corresponding tab in the timeline pane, once this exists...
 
-Now, while all of this means a lot of functionality and complexity down in SteamLayer, regarding the UI this action is quite simple: it is offered as an operation on the InteractionDirector, which most conveniently also corresponds to &quot;the session as such&quot; and thus can fire off the corresponding command without much further ado. On a technical level we just somehow need to know the corresponding command ID in Steam, which is not subject to configuration, but rather requires some kind of well behaved hard-wiring. And, additionally, we need to build something like the aforementioned //focus goal...// {{red{TODO}}}
+Now, while all of this means a lot of functionality and complexity down in Steam-Layer, regarding the UI this action is quite simple: it is offered as an operation on the InteractionDirector, which most conveniently also corresponds to &quot;the session as such&quot; and thus can fire off the corresponding command without much further ado. On a technical level we just somehow need to know the corresponding command ID in Steam, which is not subject to configuration, but rather requires some kind of well behaved hard-wiring. And, additionally, we need to build something like the aforementioned //focus goal...// {{red{TODO}}}
 
 !Add Track
 Here the intention is to add a new scope //close to where we &quot;are&quot; currently.//
@@ -1687,7 +1686,7 @@ If the currently active element is something within a scope, we want the new sco
 So, for the purpose of this analysis, the &quot;add Track&quot; action serves as an example where we need to pick up the subject of the change from context...
 * the fact there is always a timeline and a sequence, also implies there is always a fork root (track)
 * so this operation basically adds to a //&quot;current scope&quot;// -- or next to it, as sibling
-* this means, the UI logic has to provide a //current model element,// while the details of actually selecting a parent are decided elsewhere (in SteamLayer, in rules)
+* this means, the UI logic has to provide a //current model element,// while the details of actually selecting a parent are decided elsewhere (in Steam-Layer, in rules)
 </pre>
 </div>
 <div title="CommandLifecycle" modifier="Ichthyostega" created="200907210135" modified="201601162035" tags="SessionLogic spec draft design img" changecount="1">
@@ -1776,7 +1775,7 @@ Connecting data streams of differing type involves a StreamConversion. Mostly, t
 </pre>
 </div>
 <div title="Concepts" modifier="Ichthyostega" created="200910311729" modified="200910312026" tags="overview">
-<pre>This index refers to the conceptual, more abstract and formally specified aspects of the SteamLayer and Lumiera in general.
+<pre>This index refers to the conceptual, more abstract and formally specified aspects of the Steam-Layer and Lumiera in general.
 More often than not, these emerge from immediate solutions, being percieved as especially expressive, when taken on, yielding guidance by themselves. Some others, [[Placements|Placement]] and [[Advice]] to mention here, immediately substantiate the original vision.</pre>
 </div>
 <div title="ConfigQuery" modifier="Ichthyostega" created="200801181308" modified="200804110335" tags="def">
@@ -1873,8 +1872,8 @@ The fake implementation should follow the general pattern planned for the Prolog
 
 </pre>
 </div>
-<div title="CoreDevelopment" modifier="Ichthyostega" created="200706190056" modified="202303271938" tags="overview" changecount="13">
-<pre>The Render Engine is the part of the application doing the actual video calculations. Built on top of system level services and retrieving raw audio and video data through [[Lumiera's Vault Layer|VaultLayer]], its operations are guided by the objects and parameters edited by the user in [[the session|Session]]. The //middle layer// of the Lumiera architecture, known as the SteamLayer, spans the area between these two extremes, providing the the (abstract) edit operations available to the user, the representation of [[&quot;editable things&quot;|MObjects]] and the translation of those into structures and facilities allowing to [[drive the rendering|Rendering]].
+<div title="CoreDevelopment" modifier="Ichthyostega" created="200706190056" modified="202304132321" tags="overview" changecount="14">
+<pre>The Render Engine is the part of the application doing the actual video calculations. Built on top of system level services and retrieving raw audio and video data through [[Lumiera's Vault Layer|Vault-Layer]], its operations are guided by the objects and parameters edited by the user in [[the session|Session]]. The //middle layer// of the Lumiera architecture, known as the Steam-Layer, spans the area between these two extremes, providing the the (abstract) edit operations available to the user, the representation of [[&quot;editable things&quot;|MObjects]] and the translation of those into structures and facilities allowing to [[drive the rendering|Rendering]].
 
 !About this wiki page
 |background-color:#e3f3f1;width:96ex;padding:2ex; This TiddlyWiki is the central location for design, planning and documentation of the Core. Some parts are used as //extended brain// &amp;mdash; collecting ideas, considerations and conclusions &amp;mdash; while other tiddlers contain the decisions and document the planned or implemented facilities. The intention is to move over the more mature parts into the emerging technical documentation section on the [[Lumiera website|http://www.lumiera.org]] eventually. &lt;br/&gt;&lt;br/&gt;Besides cross-references, content is largely organised through [[Tags|TabTags]], most notably &lt;br/&gt;&lt;&lt;tag overview&gt;&gt; &amp;middot; &lt;&lt;tag def&gt;&gt; &amp;middot; &lt;&lt;tag decision&gt;&gt; &amp;middot; &lt;&lt;tag spec&gt;&gt; &amp;middot; &lt;&lt;tag Concepts&gt;&gt; &amp;middot; &lt;&lt;tag Architecture&gt;&gt; &amp;middot; &lt;&lt;tag GuiPattern&gt;&gt; &lt;br/&gt; &lt;&lt;tag Model&gt;&gt; &amp;middot; &lt;&lt;tag SessionLogic&gt;&gt; &amp;middot; &lt;&lt;tag GuiIntegration&gt;&gt; &amp;middot; &lt;&lt;tag Builder&gt;&gt; &amp;middot; &lt;&lt;tag Rendering&gt;&gt; &amp;middot; &lt;&lt;tag Player&gt;&gt; &amp;middot; &lt;&lt;tag Rules&gt;&gt; &amp;middot; &lt;&lt;tag Types&gt;&gt; |
@@ -1893,7 +1892,6 @@ The system is ''open'' inasmuch every part mirrors the structure of correspondin
 &amp;rarr; [[Overview Session (high level model)|SessionOverview]]
 &amp;rarr; [[Overview Render Engine (low level model)|OverviewRenderEngine]]
 &amp;rarr; BuildProcess and RenderProcess
-&amp;rarr; [[Two Examples|Examples]] (Object diagrams) 
 &amp;rarr; how [[Automation]] works
 &amp;rarr; [[Problems|ProblemsTodo]] to be solved and notable [[design decisions|DesignDecisions]]
 &amp;rarr; [[Concepts, Abstractions and Formalities|Concepts]]
@@ -2044,7 +2042,7 @@ We ''separate'' processing (rendering) and configuration (building). The [[Build
 ''Objects are [[placed|Placement]] rather'' than assembled, connected, wired, attached. This is more of a rule-based approach and gives us one central metaphor and abstraction, allowing us to treat everything in an uniform manner. You can place it as you like, and the builder tries to make sense out of it, silently disabling what doesn't make sense.
 An [[Sequence]] is just a collection of configured and placed objects (and has no additional, fixed structure). [[&quot;Tracks&quot; (forks)|Fork]] form a mere organisational grid, they are grouping devices not first-class entities (a track doesn't &quot;have&quot; a pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements though). [[Pipes|Pipe]] are hooks for making connections and are the only facility to build processing chains. We have global pipes, and each clip is built around a lokal [[source port|ClipSourcePort]] &amp;mdash; and that's all. No special &quot;media viewer&quot; and &quot;arranger&quot;, no special role for media sources, no commitment to some fixed media stream types (video and audio). All of this is sort of pushed down to be configuration, represented as asset of some kind. For example, we have [[processing pattern|ProcPatt]] assets to represent the way of building the source network for reading from some media file (including codecs treated like effect plugin nodes)
 
-The model in SteamLayer is rather an //internal model.// What is exposed globally, is a structural understanding of this model. In this structural understanding, there are Assets and ~MObjects, which both represent the flip side of the same coin: Assets relate to bookkeeping, while ~MObjects relate to building and manipulation of the model. In the actual data represntation within the HighLevelModel, we settled upon some internal reductions, preferring either the //Asset side// or the //~MObject side// to represent some relevant entities. See &amp;rarr; AssetModelConnection.
+The model in Steam-Layer is rather an //internal model.// What is exposed globally, is a structural understanding of this model. In this structural understanding, there are Assets and ~MObjects, which both represent the flip side of the same coin: Assets relate to bookkeeping, while ~MObjects relate to building and manipulation of the model. In the actual data represntation within the HighLevelModel, we settled upon some internal reductions, preferring either the //Asset side// or the //~MObject side// to represent some relevant entities. See &amp;rarr; AssetModelConnection.
 
 Actual ''media data and handling'' is abstracted rigorously. Media is conceived as being stream-like data of distinct StreamType. When it comes to more low-level media handling, we build on the DataFrame abstraction. Media processing isn't the focus of Lumiera; we organise the processing but otherwise ''rely on media handling libraries.'' In a similar vein, multiplicity is understood as type variation. Consequently, we don't build an audio and video &quot;section&quot; and we don't even have audio tracks and video tracks. Lumiera uses tracks and clips, and clips build on media, but we're able to deal with [[multichannel|MultichannelMedia]] mixed-typed media natively.
 
@@ -2088,7 +2086,7 @@ Another pertinent theme is to make the basic building blocks simpler, while on t
 
 !Starting point
 The intention is to start out with the design of the PlayerDummy and to //transform//&amp;nbsp; it into the full player subsystem.
-* the ~DisplayService in that dummy player design moves down into SteamLayer and becomes the OutputManager
+* the ~DisplayService in that dummy player design moves down into Steam-Layer and becomes the OutputManager
 * likewise, the ~DisplayerSlot is transformed into the interface OutputSlot, with various implementations to be registered with the OutputManager
 * the core idea of having a play controler act as the frontend and handle to an PlayProcess is retained.
 
@@ -2152,7 +2150,7 @@ In this usage, the EDL in most cases will be almost synonymous to &amp;raquo;the
 </pre>
 </div>
 <div title="EditingOperations" modifier="Ichthyostega" created="200709251610" modified="201112222244" tags="design decision">
-<pre>These are the tools provided to any client of the SteamLayer for handling and manipulating the entities in the Session. When defining such operations, //the goal should be to arrive at some uniformity in the way things are done.// Ideally, when writing client code, one should be able to guess how to achieve some desired result.
+<pre>These are the tools provided to any client of the Steam-Layer for handling and manipulating the entities in the Session. When defining such operations, //the goal should be to arrive at some uniformity in the way things are done.// Ideally, when writing client code, one should be able to guess how to achieve some desired result.
 
 !guiding principle
 The approach taken to define any operation is based primarily on the ''~OO-way of doing things'': entities operate themselfs. You don't advise some manager, session or other &amp;raquo;god class&amp;laquo; to manipulate them. And, secondly, the scope of each operation will be as large as possible, but not larger. This often means performing quite some elementary operations &amp;mdash; sometimes a convenience shortcut provided by the higher levels of the application may come in handy &amp;mdash; and basically this gives rise to several different paths of doing the same thing, all of which need to be equivalent.
@@ -2211,37 +2209,6 @@ Similar to an Asset, an identification tuple is available (generated on the fly)
 &amp;rarr; TypedLookup
 &amp;rarr; TypeHandler
 &amp;rarr; MetaAsset
-</pre>
-</div>
-<div title="Example1" modifier="Ichthyostega" created="200706220239" modified="200906071812" tags="example img">
-<pre>The &amp;raquo;Timeline&amp;laquo; is a sequence of ~MObjects -- here clips -- together with an ExplicitPlacement, locating each clip at a given time and track. (Note: I simplified the time format and wrote frame numbers to make it more clear)
-[img[Example1: Objects in the Session/Fixture|uml/fig128773.png]]
-
-----
-After beeing processed by the Builder, we get the following Render Engine configuration
-{{red{note: please take this only as a &quot;big picture&quot;, the implementation details got a lot more complicated as of 6/08}}}
-[img[Example1: generated Render Engine|uml/fig129029.png]]
-</pre>
-</div>
-<div title="Example2" modifier="Ichthyostega" created="200706220251" modified="200906071812" tags="example img">
-<pre>{{red{TODO: seemingly this example is slightly outdated, as the implementation of placements is now indirect via LocatingPin objects}}}
-This Example showes the //high level// Sequence as well. This needs to be transformed into a Fixture by some facility still to be designed. Basically, each [[Placement]] needs to be queried for this to get the corresponding ExplicitPlacement. The difficult part is to handle possible Placement constraints, e.g. one clip can't be placed at a timespan covered by another clip on the same track. In the current Cinelerra2, all of this is done directly by the GUI actions.
-
-The &amp;raquo;Timeline&amp;laquo; is a sequence of ~MObjects -- note: using the same Object instances -- but now with the calculated ExplicitPlacement, locating the clip at a given time and track. The effect is located absolutely in time as well, but because it is the same Instance, it has the pointer to the ~RelativePlacement, wich basically attaches the effect to the clip. This structure may look complicated, but is easy to process if we go &quot;backward&quot; and just rely on the information contained in the ExplicitPlacement.
-[img[Example2: Clip with Effect and generated Fixture for this Sequence|uml/fig128901.png]]
-
-----
-After beeing processed by the Builder, we get a Render Engine configuration.&lt;br&gt;
-It has to be segmented at least at every point with changes in the configuration, but some variations are possible, e.g. we could create a Render Engine for every Frame (as Cinelerra2 does) or we could optimize out some configurations (for example the effect extended beyond the end of the clip)
-{{red{note: as of 6/08 this can be taken only as the &quot;big picture&quot;. Implementation will differ in details, and is more complicated than showed here}}}
-[img[Example2: generated Render Engine|uml/fig129157.png]]
-</pre>
-</div>
-<div title="Examples" modifier="MichaelPloujnikov" created="200706220233" modified="200706271425" tags="example">
-<pre>!MObject assembly
-To make the intended use of the classes more clear, consider the following two example Object graphs:
-* a video clip and a audio clip placed (explicitly) on two tracks &amp;rarr;[[Example1]]
-* a video clip placed relatively, with an attached HUE effect &amp;rarr;[[Example2]]
 </pre>
 </div>
 <div title="ExitNode" modifier="Ichthyostega" created="200706220322" modified="201202032306" tags="def">
@@ -2345,7 +2312,7 @@ The Fixture acts as //isolation layer// between the two models, and as //backbon
 * these ~ExplicitPlacements are contained immediately within the Fixture, ordered by time
 * besides, there is a collection of all effective, possibly externally visible [[model ports|ModelPortRegistry]]
 
-As the builder and thus render engine //only consults the fixture,// while all editing operations finally propagate to the fixture as well, we get an isolation layer between the high level part of the SteamLayer (editing, object manipulation) and the render engine. [[Creating the Fixture|BuildFixture]] is an important first step and sideeffect of running the [[Builder]] when createing the [[render engine network|LowLevelModel]].
+As the builder and thus render engine //only consults the fixture,// while all editing operations finally propagate to the fixture as well, we get an isolation layer between the high level part of the Steam-Layer (editing, object manipulation) and the render engine. [[Creating the Fixture|BuildFixture]] is an important first step and sideeffect of running the [[Builder]] when createing the [[render engine network|LowLevelModel]].
 ''Note'': all of the especially managed storage of the LowLevelModel is hooked up behind the Fixture
 &amp;rarr; FixtureStorage
 &amp;rarr; FixtureDatastructure
@@ -2804,7 +2771,7 @@ Typically, those elaborate interactions can be modelled as [[generalised Gesture
 <div title="GuiCommandBinding" creator="Ichthyostega" modifier="Ichthyostega" created="201704140008" modified="201704140029" tags="design GuiPattern GuiIntegration discuss" changecount="8">
 <pre>The topic of command binding addresses the way to access, parametrise and issue [[»Steam-Layer Commands«|CommandHandling]] from within the UI structures.
 Basically, commands are addressed by-name -- yet the fact that there is a huge number of commands, which moreover need to be provided with actual arguments, which are to be picked up from some kind of //current context// -- this all together turns this seemingly simply function invocation into a challenging task.
-The organisation of the Lumiera UI calls for a separation between immediate low-level UI element reactions, and anything related to the user's actions when working with the elements in the [[Session]] or project. The immediate low-level UI mechanics is implemented directly within the widget code, whereas to //&quot;work on elements in the session&quot;,// we'd need a collaboration spanning UI-Layer and SteamLayer. Reactions within the UI mechanics (like e.g. dragging a clip) need to be interconnected and translated into &quot;sentences of operation&quot;, which can be sent in the form of a fully parametrised command instance towards the SteamDispatcher
+The organisation of the Lumiera UI calls for a separation between immediate low-level UI element reactions, and anything related to the user's actions when working with the elements in the [[Session]] or project. The immediate low-level UI mechanics is implemented directly within the widget code, whereas to //&quot;work on elements in the session&quot;,// we'd need a collaboration spanning UI-Layer and Steam-Layer. Reactions within the UI mechanics (like e.g. dragging a clip) need to be interconnected and translated into &quot;sentences of operation&quot;, which can be sent in the form of a fully parametrised command instance towards the SteamDispatcher
 * questions of architecture related to command binding &amp;rarr; GuiCommandBindingConcept
 * study of pivotal action invocation situations &amp;rarr; CommandInvocationAnalysis
 * actual design of command invocation in the UI &amp;rarr; GuiCommandCycle
@@ -2888,7 +2855,7 @@ from these use cases, we can derive the //crucial activities for command handlin
 *;fire and forget
 *:a known command is triggered with likewise known arguments
 *:* just the global ~Command-ID (ID of the prototype) is sent over the UI-Bus, together with the arguments
-*:* the {{{CmdInstanceManager}}} in SteamLayer creates an anonymous clone copy instance from the prototype
+*:* the {{{CmdInstanceManager}}} in Steam-Layer creates an anonymous clone copy instance from the prototype
 *:* arguments are bound and the instance is handed over into the SteamDispatcher, without any further registration
 *;context bound
 *:invocation of a command is formed within a context, typically through a //interaction gesture.//
@@ -2944,7 +2911,7 @@ The global access point to component views is the ViewLocator within Interaction
 * destroy a specific view
 For all these direct access operations, elements are designated by a private name-ID, which is actually more like a type-~IDs, and just serves to distinguish the element from its siblings. The same ~IDs are used for the components in [[UI coordinate specifications|UICoord]]; both usages are closely interconnected, because view access is accomplished by forming an UI coordinate path to the element, which is then in turn used to navigate the internal UI widget structure to reach out for the actual implementation element.
 
-While these aforementioned access operations expose a strictly typed direct reference to the respective view component and thus allow to //manage them like child objects,// in many cases we are more interested in UI elements representing tangible elements from the session. In those cases,  it is sufficient to address the desired component view just via the UI-Bus. This is possible since component ~IDs of such globally relevant elements are formed systematically and thus always predictable: it is the same ID as used within SteamLayer, which basically is an {{{EntryID&lt;TYPE&gt;}}}, where {{{TYPE}}} denotes the corresponding model type in the [[Session model|HighLevelModel]].
+While these aforementioned access operations expose a strictly typed direct reference to the respective view component and thus allow to //manage them like child objects,// in many cases we are more interested in UI elements representing tangible elements from the session. In those cases,  it is sufficient to address the desired component view just via the UI-Bus. This is possible since component ~IDs of such globally relevant elements are formed systematically and thus always predictable: it is the same ID as used within Steam-Layer, which basically is an {{{EntryID&lt;TYPE&gt;}}}, where {{{TYPE}}} denotes the corresponding model type in the [[Session model|HighLevelModel]].
 
 !!!Configuration of view allocation
 Since view allocation offers a choice amongst several complex patterns of behaviour, it seems adequate to offer at least some central configuration site with a DSL for readability. That being said -- it is conceivable that we'll have to open this topic altogether for general configuration by the user. For this reason, the configuration site and DSL are designed in a way to foster further evolution of possibilites...
@@ -3055,7 +3022,7 @@ While the process of probing and matching the location specification finally yie
 </pre>
 </div>
 <div title="GuiConnection" modifier="Ichthyostega" created="200812050543" modified="201705192329" tags="GuiIntegration overview" changecount="11">
-<pre>All communication between SteamLayer and GUI has to be routed through the respective LayerSeparationInterfaces. Following a fundamental design decision within Lumiera, these interface are //intended to be language agnostic// &amp;mdash; forcing them to stick to the least common denominator. Which creates the additional problem of how to create a smooth integration without forcing the architecture into functional decomposition style. To solve this problem, we rely on ''messaging'' rather than on a //business facade// -- our facade interfaces are rather narrow and limited to lifecycle management. In addition, the UI exposes a [[notification facade|GuiNotificationFacade]] for pushing back status information created as result of the edit operations, the build process and the render tasks.
+<pre>All communication between Steam-Layer and GUI has to be routed through the respective LayerSeparationInterfaces. Following a fundamental design decision within Lumiera, these interface are //intended to be language agnostic// &amp;mdash; forcing them to stick to the least common denominator. Which creates the additional problem of how to create a smooth integration without forcing the architecture into functional decomposition style. To solve this problem, we rely on ''messaging'' rather than on a //business facade// -- our facade interfaces are rather narrow and limited to lifecycle management. In addition, the UI exposes a [[notification facade|GuiNotificationFacade]] for pushing back status information created as result of the edit operations, the build process and the render tasks.
 
 !anatomy of the Steam/GUI interface
 * the GuiFacade is used as a general lifecycle facade to start up the GUI and to set up the LayerSeparationInterfaces.&lt;br/&gt;It is implemented by a class //in core// and loads the Lumiera ~GTK-UI as a plug-in.
@@ -3079,7 +3046,7 @@ To establish this interaction pattern, a listener gets installed into the sessio
 !Trigger
 It is clear that content population can commence only when the GTK event loop is already running and the application frame is visible and active. For starters, this sequence avoids all kinds of nasty race conditions. And, in addition, it ensures a reactive UI; if populating content takes some time, the user may watch this process through the visible clues given just by changing the window contents and layout in live state.
 
-And since we are talking about a generic facility, the framework of content population has to be established in the GuiTopLevel. Now, the top-level in turn //starts the event loop// -- thus we need to //schedule// the trigger for content population. The existing mechanisms are not of much help here, since in our case we //really need a fully operative application// once the results start bubbling up from SteamLayer. The {{{Gio::Application}}} offers an &quot;activation signal&quot; -- yet in fact this is only necessary due to the internals of {{{Gio::Application}}}, with all this ~D-Bus registration stuff. Just showing a GTK window widget in itself does not require a running event loop (although one does not make much sense without the other). The mentioned {{{signal_activation()}}} is emitted from {{{g_application_run()}}} (actually the invocation of {{{g_application_activate()}}} is burried within {{{g_application_real_local_command_line()}}}, which means, the activation happens //immediately before// entering the event loop. Which pretty much rules out this approach in our case, since Lumiera doesn't use a {{{Gtk::Application}}}, and moreover the signal would still induce the (small) possibility of a race between the actual opening of the GuiNotificationFacade and the start of content population from the [[Steam-Layer thread|SessionSubsystem]].
+And since we are talking about a generic facility, the framework of content population has to be established in the GuiTopLevel. Now, the top-level in turn //starts the event loop// -- thus we need to //schedule// the trigger for content population. The existing mechanisms are not of much help here, since in our case we //really need a fully operative application// once the results start bubbling up from Steam-Layer. The {{{Gio::Application}}} offers an &quot;activation signal&quot; -- yet in fact this is only necessary due to the internals of {{{Gio::Application}}}, with all this ~D-Bus registration stuff. Just showing a GTK window widget in itself does not require a running event loop (although one does not make much sense without the other). The mentioned {{{signal_activation()}}} is emitted from {{{g_application_run()}}} (actually the invocation of {{{g_application_activate()}}} is burried within {{{g_application_real_local_command_line()}}}, which means, the activation happens //immediately before// entering the event loop. Which pretty much rules out this approach in our case, since Lumiera doesn't use a {{{Gtk::Application}}}, and moreover the signal would still induce the (small) possibility of a race between the actual opening of the GuiNotificationFacade and the start of content population from the [[Steam-Layer thread|SessionSubsystem]].
 
 The general plan to trigger content population thus boils down to
 * have the InteractionDirector inject the population trigger with the help of {{{Glib::signal_timeout()}}}
@@ -3385,9 +3352,9 @@ In a preliminary attempt to establish an integration between the GUI and the low
 <pre>Building a layered architecture is a challenge, since the lower layer //really// needs to be self-contained, while prepared for usage by the higher layer.
 A major fraction of all desktop applications is written in a way where operational logic is built around the invocation from UI events -- what should be a shell turns into a backbone. One possible way to escape from this common anti pattern is to introduce a mediating entity, to translate between two partially incompatible demands and concerns: Sure, the &quot;tangible stuff&quot; is what matters, but you can not build any significant piece of technology if all you want is to &quot;serve&quot; the user.
 
-Within the Lumiera GTK UI, we use a proxying model as a mediating entity. It is based upon the ''generic aspect'' of the SessionInterface, but packaged and conditioned in a way to allow a direct mapping of GUI entities on top. The widgets in the UI can be conceived as decorating this model. Callbacks can be wired back, so to transform user interface events into a stream of commands for the SteamLayer sitting below.
+Within the Lumiera GTK UI, we use a proxying model as a mediating entity. It is based upon the ''generic aspect'' of the SessionInterface, but packaged and conditioned in a way to allow a direct mapping of GUI entities on top. The widgets in the UI can be conceived as decorating this model. Callbacks can be wired back, so to transform user interface events into a stream of commands for the Steam-Layer sitting below.
 
-The GUI model is largely comprised of immutable ID elements, which can be treated as values. A mutated model configuration in SteamLayer is pushed upwards as a new structure and translated into a ''diff'' against the previous structure -- ready to be consumed by the GUI widgets; this diff can be broken down into parts and consumed recursively -- leaving it to the leaf widgets to adapt themselves to reflect the new situation.
+The GUI model is largely comprised of immutable ID elements, which can be treated as values. A mutated model configuration in Steam-Layer is pushed upwards as a new structure and translated into a ''diff'' against the previous structure -- ready to be consumed by the GUI widgets; this diff can be broken down into parts and consumed recursively -- leaving it to the leaf widgets to adapt themselves to reflect the new situation.
 &amp;rarr; [[Building blocks of the GUI model|GuiModelElements]]
 &amp;rarr; [[GUI update mechanics|GuiModelUpdate]]
 
@@ -3402,7 +3369,7 @@ A fundamental decision within the Lumiera UI is to build every model-like struct
 * or a whole subtree of elements is built up step wise in response to a ''population diff''. This is an systematic description of a complete sub-structure in current shape, and is produced as emanation from a DiffConstituent.
 
 !synchronisation guarantees
-We acknowledge that the gui model is typically used from within the GUI event dispatch thread. This is //not// the thread where any session state is mutated. Thus it is the responsibility of this proxying model within the GUI to ensure that the retrieved structure is a coherent snapshot of the session state. Especially the {{{gui::model::SessionFacade}}} ensures that there was a read barrier between the state retrieval and any preceding mutation command. Actually, this is implemented down in SteamLayer, with the help of the SteamDispatcher.
+We acknowledge that the gui model is typically used from within the GUI event dispatch thread. This is //not// the thread where any session state is mutated. Thus it is the responsibility of this proxying model within the GUI to ensure that the retrieved structure is a coherent snapshot of the session state. Especially the {{{gui::model::SessionFacade}}} ensures that there was a read barrier between the state retrieval and any preceding mutation command. Actually, this is implemented down in Steam-Layer, with the help of the SteamDispatcher.
 
 The forwarding of model changes to the GUI widgets is another concern, since notifications from session mutations arrive asynchronous after each [[Builder]] run. In this case, we send a notification to the widgets registered as listeners, but wait for //them// to call back and fetch the [[diffed state|TreeDiffModel]]. The notification will be dispatched into the GUI event thread (by the {{{GuiNotification}}} façade), which implies that also the callback embedded within the notification will be invoked by the  widgets to perform within the GUI  thread.
 
@@ -3432,7 +3399,7 @@ The fundamental pattern for building graphical user interfaces is to segregate i
 
 
 The Lumiera GTK UI is built around a distinct backbone, separate from the structures required and provided by GTK.
-While GTK -- especially in the object oriented incantation given by Gtkmm -- hooks up a hierarchy of widgets into a UI workspace, each of these widgets can and should incorporate the necessary control and data elements. But actually, these elements are local access points to our backbone structure, which we define as the UI-Bus. So, in fact, the local widgets and controllers wired into the interface are turned into ''Decorators'' of a backbone structure. This backbone is a ''messaging system'' (hence the name &quot;Bus&quot;). The terminal points of this messaging system allow for direct wiring of GTK signals. Operations triggered by UI interactions are transformed into [[Command]] invocations into the SteamLayer, while the model data elements remain abstract and generic. The entities in our UI model are not directly connected to the actual model, but they are in correspondence to such actual model elements within the [[Session]]. Moreover, there is an uniform [[identification scheme|GenNode]].
+While GTK -- especially in the object oriented incantation given by Gtkmm -- hooks up a hierarchy of widgets into a UI workspace, each of these widgets can and should incorporate the necessary control and data elements. But actually, these elements are local access points to our backbone structure, which we define as the UI-Bus. So, in fact, the local widgets and controllers wired into the interface are turned into ''Decorators'' of a backbone structure. This backbone is a ''messaging system'' (hence the name &quot;Bus&quot;). The terminal points of this messaging system allow for direct wiring of GTK signals. Operations triggered by UI interactions are transformed into [[Command]] invocations into the Steam-Layer, while the model data elements remain abstract and generic. The entities in our UI model are not directly connected to the actual model, but they are in correspondence to such actual model elements within the [[Session]]. Moreover, there is an uniform [[identification scheme|GenNode]].
 
 ;connections
 :all connections are defined to be strictly //optional.//
@@ -3458,7 +3425,7 @@ Speaking of implementation, this state and update mechanics relies on two crucia
 * we need recursive programming, since this is the only sane way to deal with tree like nested structures.
 * we need specifically typed contexts, driven by the type demands on the consumer side. What doesn't make sense at a given scope needs to be silently ignored
 * we need a separation of model-structure code and UI widgets. The GUI has to capture event and intent and trigger signals, nothing else.
-* we need a naming and identification scheme. SteamLayer must be able to &quot;cast&quot; callback state and information //somehow towards the GUI// -- without having to handle the specifics.
+* we need a naming and identification scheme. Steam-Layer must be able to &quot;cast&quot; callback state and information //somehow towards the GUI// -- without having to handle the specifics.
 
 !the UI bus
 Hereby we introduce a new in-layer abstraction: The UI-Bus.
@@ -3485,8 +3452,8 @@ Model updates are always pushed up from ~Steam-Layer, coordinated by the SteamDi
 
 !!!timing and layering intricacies
 A relevant question to be settled is as to where the core of each change is constituted. This is relevant due to the intricacies of multithreading: Since the change originates in the build process, but the effect of the change is //pulled// later from within the GUI event thread, it might well happen that at this point, meanwhile further changes entered the model. As such, this is not problematic, as long as taking the diff remains atomic. This leads to quite different solution approaches:
-* we might, at the moment of performing the update, acquire a lock from the SteamDispatcher. The update process may then effectively query down into the session datastructure proper, even through the proxy of a diffing process. The obvious downside is that GUI response might block waiting on an extended operation in SteamLayer, especially when a new build process was started meanwhile. A remedy might be to abort the update in such cases, since its effects will be obsoleted by the build process anyway.
-* alternatively, we might incorporate a complete snapshot of all information relevant for the GUI into the GuiModel. Update messages from SteamLayer must be complete and self contained in this case, since our goal is to avoid callbacks. Following this scheme, the first stage of any update would be a push from Steam to the GuiModel, followed by a callback pull from within the individual widgets receiving the notification later. This is the approach we choose for the Lumiera GUI.
+* we might, at the moment of performing the update, acquire a lock from the SteamDispatcher. The update process may then effectively query down into the session datastructure proper, even through the proxy of a diffing process. The obvious downside is that GUI response might block waiting on an extended operation in Steam-Layer, especially when a new build process was started meanwhile. A remedy might be to abort the update in such cases, since its effects will be obsoleted by the build process anyway.
+* alternatively, we might incorporate a complete snapshot of all information relevant for the GUI into the GuiModel. Update messages from Steam-Layer must be complete and self contained in this case, since our goal is to avoid callbacks. Following this scheme, the first stage of any update would be a push from Steam to the GuiModel, followed by a callback pull from within the individual widgets receiving the notification later. This is the approach we choose for the Lumiera GUI.
 
 !!!information to represent and to derive
 The purpose of the GuiModel is to represent an anchor point for the structures //actually relevant for the UI.// To put that into context, the model in the session is not bound to represent matters exactly the way they are rendered within the GUI. All we can expect is for the //build process// -- upon completion -- to generate a view of the actually altered parts, detailing the information relevant for presentation. Thus we do retain an ExternalTreeDescription, holding all the information received this way within the GuiModel. Whenever a completed build process sends an updated state, we use the diff framework to determine the actually relevant differences -- both for triggering the corresponding UI widgets, and for forwarding focussed diff information to these widgets when they call back later from the UI event thread to pull actual changes.
@@ -4168,7 +4135,7 @@ The InstanceHandle is created by the service implementation and will automatical
 &amp;rarr; see [[detailed description here|LayerSeparationInterfaces]]
 </pre>
 </div>
-<div title="IntegrationSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272321" modified="202304040407" tags="overview def" changecount="10">
+<div title="IntegrationSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272321" modified="202304140106" tags="overview def" changecount="11">
 <pre>A »[[vertical slice|https://en.wikipedia.org/wiki/Vertical_slice]]« is an //integration effort that engages all major software components of a software system.//
 It is defined and used as a tool to further and focus the development activity towards large scale integration goals.
 
@@ -4181,7 +4148,7 @@ Send a description of the model structure in the form of a population diff from 
 Set up a test dialog in the UI, which issues test/dummy commands. These are [[propagated|GuiModelElements]] through the SteamDispatcher and by special rigging reflected back as //State Mark Messages// over the UI-Bus, causing a visible state change in the //Error Log View// in the UI.
 
 !play a clip
-🗘 [[#1221|https://issues.lumiera.org/ticket/1221]]: The »PlaybackVerticalSlice« drives integration of [[Playback|PlayProcess]] and [[Rendering|RenderProcess]]. While the actual media content is still mocked and hard wired, we get a simple [[playback control|GuiPlayControl]] in the GUI and some [[display of video|GuiVideoDisplay]]. When activated, an existing ViewConnection is used to initiate a PlayProcess; the [[Fixture]] between HighLevelModel and LowLevelModel will back a FrameDispatcher to generate [[Render Jobs|RenderJob]], which are then digested and activated by the [[Scheduler]] in the VaultLayer, thereby [[operating|NodeOperationProtocol]] the [[render nodes|ProcNode]] to generate video data for display.
+🗘 [[#1221|https://issues.lumiera.org/ticket/1221]]: The »PlaybackVerticalSlice« drives integration of [[Playback|Player]] and [[Rendering|RenderEngine]]. While the actual media content is still mocked and hard wired, we get a simple [[playback control|GuiPlayControl]] in the GUI and some [[display of video|GuiVideoDisplay]]. When activated, an existing ViewConnection is used to initiate a PlayProcess; the [[Fixture]] between HighLevelModel and LowLevelModel will back a FrameDispatcher to generate [[Render Jobs|RenderJob]], which are then digested and activated by the [[Scheduler]] in the Vault-Layer, thereby [[operating|NodeOperationProtocol]] the [[render nodes|ProcNode]] to generate video data for display.
 </pre>
 </div>
 <div title="InteractionControl" creator="Ichthyostega" modifier="Ichthyostega" created="201511272315" modified="201710082338" tags="design decision Concepts GuiPattern draft discuss" changecount="36">
@@ -4529,7 +4496,7 @@ __10/2008__: the allocation mechanism can surely be improved later, but for now 
 <div title="MediaImplLib" modifier="Ichthyostega" created="200809220304" modified="200809251942" tags="def spec">
 <pre>The ~Steam-Layer is designed such as to avoid unnecessary assumptions regarding the properties of the media data and streams. Thus, for anything which is not completely generic, we rely on an abstract [[type description|StreamTypeDescriptor]], which provides a ''Facade'' to an actual library implementation. This way, the fundamental operations can be invoked, like allocating a buffer to hold media data.
 
-In the context of Lumiera and especially in the SteamLayer, __media implementation library__ means
+In the context of Lumiera and especially in the Steam-Layer, __media implementation library__ means
 * a subsystem which allows to work with media data of a specific kind
 * such as to provide the minimal set of operations
 ** allocating a frame buffer
@@ -4597,7 +4564,7 @@ For each meta asset instance, initially a //builder// is created for setting up 
 </pre>
 </div>
 <div title="Model" modifier="Ichthyostega" created="201003210020" modified="201003210021" tags="overview">
-<pre>Lumiera's SteamLayer is built around //two interconnected models,// mediated by the [[Builder]]. Basically, the &amp;rarr;[[Session]] is an external interface to the HighLevelModel, while the &amp;rarr;RenderEngine operates the structures of the LowLevelModel.</pre>
+<pre>Lumiera's Steam-Layer is built around //two interconnected models,// mediated by the [[Builder]]. Basically, the &amp;rarr;[[Session]] is an external interface to the HighLevelModel, while the &amp;rarr;RenderEngine operates the structures of the LowLevelModel.</pre>
 </div>
 <div title="ModelDependencies" modifier="Ichthyostega" created="201003020150" modified="201702142325" tags="SessionLogic Model operational spec draft img" changecount="6">
 <pre>Our design of the models (both [[high-level|HighLevelModel]] and [[low-level|LowLevelModel]]) relies partially on dependent objects being kept consistently in sync. Currently (2/2010), __ichthyo__'s assessment is to consider this topic not important and pervasive enough to justify building a dedicated solution, like e.g. a central tracking and registration service. An important point to consider with this assessment is the fact that the session implementation is deliberately kept single-threaded. While this simplifies reasoning, we also lack one central place to handle this issue, and thus care has to be taken to capture and treat all the relevant individual dependencies properly at the implementation level.
@@ -4744,7 +4711,7 @@ __Note__: nothing within the PlacementIndex requires the root object to be of a 
 * inability to edit stereoscopic (3D) video in a natural fashion
 
 !Compound Media
-Basically, each [[media asset|MediaAsset]] is considered to be a compound of several elementary media (tracks), possibly of various different media kinds. Adding support for placeholders (''proxy clips'') at some point in future will add still more complexity (because then there will be even dependencies between some of these elementary media). To handle, edit and render compound media, we need to impose some structural limitations. But anyhow, we try to configure as much as possible already at the &quot;asset level&quot; and make the rest of the SteamLayer behave just according to the configuration given with each asset.
+Basically, each [[media asset|MediaAsset]] is considered to be a compound of several elementary media (tracks), possibly of various different media kinds. Adding support for placeholders (''proxy clips'') at some point in future will add still more complexity (because then there will be even dependencies between some of these elementary media). To handle, edit and render compound media, we need to impose some structural limitations. But anyhow, we try to configure as much as possible already at the &quot;asset level&quot; and make the rest of the Steam-Layer behave just according to the configuration given with each asset.
 {{red{Note 1/2015}}}: various details regarding the model representation of multichannel media aren't fully settled yet. There is a placeholder in the source, which can be considered more or less obsolete
 
 !!Handling within the Model
@@ -5281,7 +5248,7 @@ where · means no operation, ✔ marks the standard cases (OK response to caller
 The rationale is for all states out-of-order to transition into the {{{BLOCKED}}}-state eventually, which, when hit by the next operation, will request playback stop.
 </pre>
 </div>
-<div title="Overview" modifier="Ichthyostega" created="200706190300" modified="202303272315" tags="overview Architecture img" changecount="3">
+<div title="Overview" modifier="Ichthyostega" created="200706190300" modified="202304100014" tags="overview Architecture img" changecount="7">
 <pre>Right from start, it was clear that //processing// in the Lumiera application need to be decomposed into various subsystems and can be separated into a low-level and a high-level part. At the low-level end is the [[Render Engine|OverviewRenderEngine]] which basically is a network of render nodes, whereas on the high-level side we find several different [[Media Objects|MObjects]] that can be placed into the session, edited and manipulated. This is complemented by the [[Asset Management|Asset]], which is the &quot;bookkeeping view&quot; of all the different &quot;things&quot; within each [[Session|SessionOverview]].
 
 In our early design drafts, we envisioned //all processing// to happen within a middle Layer known as ProcLayer at that time, complemented by a »Backend« as adaptation layer to system-level processing. Over time, with more mature understanding of the Architecture, the purpose and also the names have been adjusted
@@ -5296,20 +5263,31 @@ Throughout the Architecture, there is rather strong separation between high-leve
 * it is the job of the [[Builder]] create and wire up this render nodes network when provided with a given hig-level-model. So, actually the builder (together with the so called [[Fixture]]) form an isolation layer in the middle, separating the //editing part&amp;nbsp;// from the //processing part.//
 
 ! Architecture Overview
-{{red{TODO the following image reflects the initial design}}} -- it remains largely valid, but has been refined and reworked {{red{as of 2023}}}
-[img[Block Diagram|uml/fig128005.png]]
+Arrangement and interaction of components in the three Layers — {{red{envisioned as of 4/2023}}}
+ &amp;rarr; IntegrationSlice
+&lt;html&gt;
+&lt;img title=&quot;Lumiera Architecture&quot; src=&quot;draw/Lumi.Architecture-2.svg&quot; style=&quot;width:90%;&quot;/&gt;
+&lt;/html&gt;
 </pre>
 </div>
-<div title="OverviewRenderEngine" modifier="Ichthyostega" created="200706190647" modified="201812092256" tags="Rendering overview img" changecount="2">
-<pre>Render Engine, [[Builder]] and [[Dispatcher(Controller)|SteamDispatcher]] are closely related components. Actually, the [[Builder]] //creates// a newly configured Render Engine //for every// RenderProcess. Before doing so, it queries from the Session (or, to be more precise, from the [[Fixture]] within the current Session) all necessary Media Object Placement information. The [[Builder]] then derives from this information the actual assembly of [[Processing Nodes|ProcNode]] comprising the Render Engine. Thus:
- * the source of the build process is a sequence of absolute (explicit) [[Placements|Placement]] called the [[Playlist]]
- * the [[build process|BuildProcess]] is driven, configured and controlled by [[a controller|SteamDispatcher]] subsystem component. It encompasses the actual playback configuration and State of the System.
- * the resulting Render Engine is a list of [[Processors]], each configured to calculate a segment of the timeline with uniform properties. Each of these Processors in turn is a graph of interconnected ProcNode.s.
+<div title="OverviewRenderEngine" modifier="Ichthyostega" created="200706190647" modified="202304140057" tags="Rendering overview" changecount="17">
+<pre>As can be seen on the [[Architecture Overview|Overview]], the functionality of the »[[Render Engine|RenderEngine]]« is implemented through the collaboration of various components, spanning the Steam-Layer and the Vault-Layer. The rendering is orchestrated by „performing“ the LowLevelModel, which is a //node graph//. This render node graph has been prepared by the [[Builder]] -- thereby reading and interpreting the HighLevelModel, which is maintained and edited as part of the [[Session]]. The actual rendering happens when the [[Scheduler]] invokes individual [[render jobs|RenderJob]] to invoke media processing functions configured and wired as [[Processing Nodes|ProcNode]], thus generating new media data into the [[processing buffers|BufferProvider]] for [[output|OutputManagement]].
 
-see also: RenderEntities, [[two Examples (Object diagrams)|Examples]] 
+Any kind of rendering or playback requires a RenderProcess, which is initiated and controlled by the [[Player]].
 
-{{red{TODO: adjust terminology in this drawing: &quot;Playlist&quot; &amp;rarr; &quot;Fixture&quot; and &quot;Graph&quot; &amp;rarr; &quot;Segment&quot;}}}
-[img[Overview: Components of the Renderengine|uml/fig128261.png]]
+see also &amp;rarr; [[Fixture]] &amp;rarr; [[Player]] &amp;rarr; EngineFaçade &amp;rarr; [[Dispatcher|FrameDispatcher]] &amp;rarr; [[Scheduler]] &amp;rarr; RenderToolkit
+
+{{red{TODO 4/23: create a new drawing to reflect current state of the design}}}
+
+!Render Engine Integration
+The Engine is unfinished and not in any usable shape {{red{as of 4/2023}}} -- currently an [[»integration slice«|PlaybackVerticalSlice]] is pursued, in an effort to complete foundation work done over the course of several years and achieve the first preliminary integration of rendering functionality.
+
+Why is ''all of this so complicated''?
+* the Lumiera application is envisioned as a very flexible setup
+* we try to avoid //naive assumptions// -- e.g. that each video is comprised of a single video stream and two audio streams
+* the actual rendering is delegated to existing libraries and frameworks, thereby remaining open for future developments
+* we avoid hard wired decisions in favour of configuration by rules and default settings
+* the application works asynchronous, and all functionality shall be invokable by scripting, without GUI.
 </pre>
 </div>
 <div title="PageTemplate" modifier="Ichthyostega" created="200701131624" modified="200706260500" tags="MPTWTheme excludeMissing">
@@ -5868,7 +5846,7 @@ DAMAGE.
 <pre>Facility guiding decisions regarding the strategy to employ for rendering or wiring up connections. The PathManager is querried through the OperationPoint, when executing the connection steps within the Build process.</pre>
 </div>
 <div title="Pipe" modifier="Ichthyostega" created="200801062110" modified="201611180016" tags="def decision Model" changecount="1">
-<pre>Pipes play an central role within the SteamLayer, because for everything placed and handled within the session, the final goal is to get it transformed into data which can be retrieved at some pipe's exit port. Pipes are special facilities, rather like inventory, separate and not treated like all the other objects.
+<pre>Pipes play an central role within the Steam-Layer, because for everything placed and handled within the session, the final goal is to get it transformed into data which can be retrieved at some pipe's exit port. Pipes are special facilities, rather like inventory, separate and not treated like all the other objects.
 We don't distinguish between &quot;input&quot; and &quot;output&quot; ports &amp;mdash; rather, pipes are thought to be ''hooks for making connections to''. By following this line of thought, each pipe has an input side and an output side and is in itself something like a ''Bus'' or ''processing chain''. Other processing entities like effects and transitions can be placed (attached) at the pipe, resulting them to be appended to form this chain. Likewise, we can place [[wiring requests|WiringRequest]] to the pipe, meaning we want it connected so to send it's output to another destination pipe. The [[Builder]] may generate further wiring requests to fulfil the placement of other entities.
 Thus //Pipes are the basic building blocks// of the whole render network. We distinguish ''global available'' Pipes, which are like the sum groups of a mixing console, and the ''lokal pipe'' or [[source ports|ClipSourcePort]] of the individual clips, which exist only within the duration of the corresponding clip. The design //limits the possible kinds of pipes // to these two types &amp;mdash; thus we can build local processing chains at clips and global processing chains at the global pipes of the session and that's all we can do. (because of the flexibility which comes with the concept of [[placements|Placement]], this is no real limitation)
 
@@ -5914,7 +5892,7 @@ So basically placements represent a query interface: you can allways ask the pla
 The fact of being placed in the [[Session|SessionOverview]] is constitutive for all sorts of [[MObject]]s, without Placement they make no sense. Thus &amp;mdash; technically &amp;mdash; Placements act as ''smart pointers''. Of course, there are several kinds of Placements and they are templated on the type of MObject they are refering to. Placements can be //aggregated// to increasingly constrain the resulting &quot;location&quot; of the refered ~MObject. See &amp;rarr; [[handling of Placements|PlacementHandling]] for more details
 
 !Placements as instance
-Effectively, the placement of a given MObject into the Session acts as setting up an concrete instance of this object. This way, placements exhibit a dual nature. When viewed on themselves, like any reference or smart-pointer they behave like values. But, by adding a placement to the session, we again create a unique distinguishable entity with reference semantics: there could be multiple placements of the same object but with varying placement properties. Such a placement-bound-into-the-session is denoted by an generic placement-ID or (as we call it) &amp;rarr; PlacementRef; behind the scenes there is a PlacementIndex keeping track of those &quot;instances&quot; &amp;mdash; allowing us to hand out the PlacementRef (which is just an opaque id) to client code outside the SteamLayer and generally use it as an shorthand, behaving as if it was an MObject instance
+Effectively, the placement of a given MObject into the Session acts as setting up an concrete instance of this object. This way, placements exhibit a dual nature. When viewed on themselves, like any reference or smart-pointer they behave like values. But, by adding a placement to the session, we again create a unique distinguishable entity with reference semantics: there could be multiple placements of the same object but with varying placement properties. Such a placement-bound-into-the-session is denoted by an generic placement-ID or (as we call it) &amp;rarr; PlacementRef; behind the scenes there is a PlacementIndex keeping track of those &quot;instances&quot; &amp;mdash; allowing us to hand out the PlacementRef (which is just an opaque id) to client code outside the Steam-Layer and generally use it as an shorthand, behaving as if it was an MObject instance
 </pre>
 </div>
 <div title="PlacementDerivedDimension" modifier="Ichthyostega" created="200805260219" modified="200805260223" tags="def spec">
@@ -6159,7 +6137,7 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 </div>
 <div title="PlayProcess" modifier="Ichthyostega" created="201012181714" modified="201812071822" tags="def spec Player img" changecount="3">
 <pre>With //play process//&amp;nbsp; we denote an ongoing effort to calculate a stream of frames for playback or rendering.
-The play process is an conceptual entity linking together several activities in the VaultLayer and the RenderEngine. Creating a play process is the central service provided by the [[player subsystem|Player]]: it maintains a registration entry for the process to keep track of associated entities, resources allocated and calls [[planned|FrameDispatcher]] and [[invoked|RenderJob]] as a consequence, and it wires and exposes a PlayController to serve as an interface and information hub.
+The play process is an conceptual entity linking together several activities in the Vault-Layer and the RenderEngine. Creating a play process is the central service provided by the [[player subsystem|Player]]: it maintains a registration entry for the process to keep track of associated entities, resources allocated and calls [[planned|FrameDispatcher]] and [[invoked|RenderJob]] as a consequence, and it wires and exposes a PlayController to serve as an interface and information hub.
 
 ''Note'': the player is in no way engaged in any of the actual calculation and management tasks necessary to make this [[stream of calculations|CalcStream]] happen. The play process code contained within the player subsystem is largely comprised of organisational concerns and not especially performance critical.
 * the [[engine backbone|RenderBackbone]] is responsible for [[dispatching|FrameDispatcher]] the [[calculation stream|CalcStream]] and preparing individual calculation jobs
@@ -6176,7 +6154,7 @@ Right within the play process, there is a separation into two realms, relying on
 </pre>
 </div>
 <div title="PlayService" modifier="Ichthyostega" created="201105221900" modified="201812092306" tags="Player spec draft" changecount="2">
-<pre>The [[Player]] is an independent [[Subsystem]] within Lumiera, located at SteamLayer level. A more precise term would be &quot;rendering and playback coordination subsystem&quot;. It provides the capability to generate media data, based on a high-level model object, and send this generated data to an OutputDesignation, creating an continuous and timing controlled output stream. Clients may utilise these functionality through the ''play service'' interface.
+<pre>The [[Player]] is an independent [[Subsystem]] within Lumiera, located at Steam-Layer level. A more precise term would be &quot;rendering and playback coordination subsystem&quot;. It provides the capability to generate media data, based on a high-level model object, and send this generated data to an OutputDesignation, creating an continuous and timing controlled output stream. Clients may utilise these functionality through the ''play service'' interface.
 
 !subject of performance
 Every play or render process will perfrom a part of the session. This part can be specified in varios ways, but in the end, every playback or render boils down to //performing some model ports.// While the individual model port as such is just an identifier (actually implemented as ''pipe-ID''), it serves as a common identifier used at various levels and tied into several related contexts. For one, by querying the [[Fixture]], the ModelPort leads to the actual ExitNode -- the stuff actually producing data when being pulled. Besides that, the OutputManager used for establishing the play process is able to resolve onto a real OutputSlot -- which, as a side effect, also yields the final data format and data implementation type to use for rendering or playback.
@@ -6198,15 +6176,34 @@ This is the core service provided by the player subsystem. The purpose is to cre
 :when provided with these two prerequisites, the play service is able to build a PlayProcess.
 :for clients, this process can be accessed and maintained through a PlayController, which acts as (copyable) handle and front-end.
 ;engine
-:the actual processing is done by the RenderEngine, which in itself is a compound of several services within VaultLayer and SteamLayer
+:the actual processing is done by the RenderEngine, which in itself is a compound of several services within Vault-Layer and Steam-Layer
 :any details of this processing remain opaque for the clients; even the player subsystem just accesses the EngineFaçade
 </pre>
 </div>
-<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" tags="overview impl discuss draft" changecount="1">
+<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202304132132" tags="overview impl discuss draft" changecount="20">
 <pre>//Integration effort to promote the development of rendering, playback and video display in the GUI//
-This IntegrationSlice was started in {{red{2023}}} as [[Ticket #1221|https://issues.lumiera.org/ticket/1221]] to coordinate the completion and integration of various implementation facilities, planned, drafted and built during the last years; this effort marks the return of development focus to the lower layers (after years of focussed UI development) and will implement the asynchronous and time-bound rendering coordinated by the [[Scheduler]] in the [[Vault|VaultLayer]]</pre>
+This IntegrationSlice was started in {{red{2023}}} as [[Ticket #1221|https://issues.lumiera.org/ticket/1221]] to coordinate the completion and integration of various implementation facilities, planned, drafted and built during the last years; this effort marks the return of development focus to the lower layers (after years of focussed UI development) and will implement the asynchronous and time-bound rendering coordinated by the [[Scheduler]] in the [[Vault|Vault-Layer]]
+
+&lt;html&gt;
+&lt;img title=&quot;Components participating in the »Playback Vertical Slice«&quot; src=&quot;draw/VerticalSlice.Playback.svg&quot; style=&quot;width:90%;&quot;/&gt;
+&lt;/html&gt;
+
+
+!Ascent
+__12.Apr.23__: At start, this is a dauntingly complex effort, prompting to reconcile several unfinished design drafts from years ago, unsuccessful attempts at that time towards a first »breakthrough«. Including a first run-up towards node invocation, the drafts regarding BuilderMechanics and FixtureDatastructure, a complete but never actually implemented OutputManagement concept and the groundwork pertaining to the [[Player]].  At that time, it occurred to me that the planning of render jobs exhibits structures akin to the //Monads// known from functional programming -- seemingly a trending topic. Following this blueprint, it was indeed straight forward to hook up all functional dependencies into a working piece of code -- a piece of code however, that turns out almost impenetrable after completion, since while it can be //verified// step by step, it does not support understanding and convey meaning. This experience (and a lot of similar ones) make me increasingly wary towards the self-proclaimed superiority of functional programming. Especially the Monads might be considered an Anti-pattern, something superficially compelling that lures into fostering unhealthy structures.
+&amp;rarr; see the critical review in AboutMonads
+
+So the difficulties to understand my own (finished, working) code after several years compelled me to attempt a [[#1276|https://issues.lumiera.org/ticket/1276#comment:1]] refactoring of the FrameDispatcher, which I use as entrance point into the implementation of this //vertical slice//. This time I will approach the task as //on-demand processing pipeline// with //recursive expansion// -- attempting to segregate better what the monadic approach tended to interweave.
+
+!Decisions
+;Scheduler
+:is understood as a high-level Service, not a bare bone implementation mechanism
+:* shall support concerns of process- and memory management
+:* thus needs to //understand Job dependencies//
+:* will be decomposed into several implementation layers
+</pre>
 </div>
-<div title="Player" modifier="Ichthyostega" created="201012181700" modified="201812071821" tags="def overview" changecount="1">
+<div title="Player" modifier="Ichthyostega" created="201012181700" modified="202304140114" tags="def overview" changecount="4">
 <pre>Within Lumiera, &amp;raquo;Player&amp;laquo; is the name for a [[Subsystem]] responsible for organising and tracking //ongoing playback and render processes.// &amp;rarr; [[PlayProcess]]
 The player subsystem does not perform or even manage any render operations, nor does it handle the outputs directly.
 Yet it addresses some central concerns:
@@ -6215,13 +6212,15 @@ Yet it addresses some central concerns:
 :all playback and render processes are on equal footing, handled in a similar way.
 ;integration
 :the player cares for the necessary integration with the other subsystems
-:it consults the OutputManagement, retrieves the necessary information from the [[Session]] and coordinates the forwarding of VaultLayer calls.
+:it consults the OutputManagement, retrieves the necessary information from the [[Session]] and coordinates the forwarding of Vault-Layer calls.
 ;time quantisation
 :the player translates continuous time values into discrete frame counts.
 :to perform this [[quantisation|TimeQuant]], the help of the session for building a TimeGrid for each output channel is required.
 
-!{{red{WIP 5/2011}}} under construction
-The player subsystem is currently about to be designed and built up; some time ago, __Joel Holdsworth__ and __Ichthyo__ did a design study with a PlayerDummy, which is currently hooked up with the TransportControl in the Lumiera GUI. Starting from these experiences, and the general requirements of an NLE, the [[design of the Player subsystem|DesignPlayerSubsystem]] is being worked out.
+
+!{{red{WIP 4/2023}}} still not finished
+The design of the Player subsystem was settled several years ago, together with a draft implementation of the FrameDispatcher and some details regarding [[render jobs|RenderJob]] and [[processing nodes|ProcNode]]. The implementation could not be finished at that time, since too much further details in other parts of the engine were not quite settled yet. After focussing on the GUI for several years, a new effort towards [[integration of rendering|PlaybackVerticalSlice]] has been started...
+&amp;rarr; [[Rendering]]
 </pre>
 </div>
 <div title="PlayerDummy" modifier="Ichthyostega" created="200901300209" modified="201402162032" tags="GuiIntegration operational img" changecount="2">
@@ -6247,12 +6246,6 @@ All the other play control operations are simply forwarded via the handle and th
 
 !rationale
 There can be multiple viewer widgets, to be connected dynamically to multiple play-controllers. (the latter are associated with the timeline(s)). Any playback can require multiple playback processes to work in parallel. The playback controller(s) should not be concerned with managing the play processes, which in turn should neither care for the actual rendering, nor manage the display frequency and synchronisation issues. Moreover, the mentioned parts live in different layers and especially the GUI needs to remain separated from the core. And finally, in case of a problem within one play process, it should be able to unwind automatically, without interfering with other ongoing play processes.
-</pre>
-</div>
-<div title="Playlist" modifier="Ichthyostega" created="200706220456" modified="200706250727" tags="def">
-<pre>Playlist is a sequence of individual Render Engine Processors able to render a segment of the timeline. So, together these Processors are able to render the whole timeline (or part of the timeline if only a part has to be rendered).
-
-//Note, we have yet to specify how exactly the building and rendering will work together with the Vault. There are several possibilities how to structure the Playlist//
 </pre>
 </div>
 <div title="PresentationState" creator="Ichthyostega" modifier="Ichthyostega" created="201602121500" modified="201602121511" tags="GuiPattern Concepts def design draft" changecount="3">
@@ -6335,7 +6328,7 @@ Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling th
 <div title="ProcLayer" modifier="Ichthyostega" created="200708100333" modified="202303272246" tags="def" changecount="1">
 <pre>The middle Layer in the Lumiera Architecture plan was initially called »Proc Layer«, since it was conceived to perform //the processing.// Over time, while elaborating the Architecture, the components and roles were clarified step by step. It became apparent that Lumiera is not so much centred around //media processing.// The focus is rather about building and organising the film edit -- which largely is a task of organising and transforming symbolic representations and meta information.
 
-In 2018, the middle Layer was renamed into &amp;rarr; SteamLayer
+In 2018, the middle Layer was renamed into &amp;rarr; Steam-Layer
 
 </pre>
 </div>
@@ -6569,7 +6562,7 @@ But for now the decision is to proceed with isolated and specialised QueryResolv
 </pre>
 </div>
 <div title="QueryResolver" modifier="Ichthyostega" created="200910210300" modified="201212292057" tags="Rules spec draft img">
-<pre>Within the Lumiera SteamLayer, there is a general preference for issuing [[queries|Query]] over hard wired configuration (or even mere table based configuration). This leads to the demand of exposing a //possibility to issue queries// &amp;mdash; without actually disclosing much details of the facility implementing this service. For example, for shaping the general session interface (in 10/09), we need a means of exposing a hook to discover HighLevelModel contents, without disclosing how the model is actually organised internally (namely by using an PlacementIndex).
+<pre>Within the Lumiera Steam-Layer, there is a general preference for issuing [[queries|Query]] over hard wired configuration (or even mere table based configuration). This leads to the demand of exposing a //possibility to issue queries// &amp;mdash; without actually disclosing much details of the facility implementing this service. For example, for shaping the general session interface (in 10/09), we need a means of exposing a hook to discover HighLevelModel contents, without disclosing how the model is actually organised internally (namely by using an PlacementIndex).
 
 !Analysis of the problem
 The situation can be decomposed as follows.[&gt;img[QueryResolver|uml/fig137733.png]]
@@ -6830,10 +6823,34 @@ At first sight the link between asset and clip-MO is a simple logical relation b
 
 {{red{Note 1/2015}}} several aspects regarding the relation of clips and single/multichannel media are not yet settled. There is a preliminary implementation in the code base, but it is not sure yet how multichnnel media will actually be modelled. Currently, we tend to treat the channel multiplicity rather as a property of the involved media, i.e we have //one// clip object.</pre>
 </div>
-<div title="RenderEngine" modifier="Ichthyostega" created="200802031820" modified="201812071823" tags="def" changecount="1">
-<pre>Conceptually, the Render Engine is the core of the application. But &amp;mdash; surprisingly &amp;mdash; we don't even have a distinct »~RenderEngine« component in our design. Rather, the engine is formed by the cooperation of several components spread out over two layers (Vault and ~Steam-Layer): The [[Builder]] creates a network of [[render nodes|ProcNode]], the [[Scheduler]] triggers individual [[calculation jobs|RenderJob]], which in turn pull data from the render nodes, thereby relying on the [[Vault services|VaultLayer]] for data access and using plug-ins for the actual media calculations.
+<div title="RenderActivity" creator="Ichthyostega" modifier="Ichthyostega" created="202304140145" modified="202304140215" tags="Rendering spec draft" changecount="2">
+<pre>//Render Activities define the execution language of the render engine.//
+The [[Scheduler]] maintains the ability to perform these Activities, in a time-bound fashion, observing dependency relations; activities allow for notification of completed work, tracking of dependencies, timing measurements, re-scheduling of other activities -- and last but not least the dispatch of actual [[render jobs|RenderJob]]. Activities are what is actually enqueued with priority in the scheduler implementation, they are planned for a »µ-tick slot«, activated once when the activation time is reached, and then forgotten. Each Activity is a //verb//, but can be inhibited by conditions and carry operation object data. Formally, activating an Activity equates to a predication, and the subject of that utterance is »the render process«.
+
+!catalogue of Activities
+;invoke
+:dispatches a JobFunctor into an appropriate worker thread, based on the job definition's execution spec
+:no further dependency checks; Activities attached to the job are re-dispatched after the job function's completion
+;depend
+:verify a given number of dependencies has been satisfied, otherwise inhibit the indicated target Activity
+;starttime
+:signal start of some processing -- for the purpose of timing measurement, but also to detect crashed tasks
+;stoptime
+:correspondingly signal end of some processing
+;notify
+:push a message to another Activity or process record
+;check
+:invoke a closure within engine context; inhibit another target Activity, depending on the result.
+;tick
+:internal engine »heart beat« -- invoke internal maintenance hook(s)
+ </pre>
+</div>
+<div title="RenderEngine" modifier="Ichthyostega" created="200802031820" modified="202304140113" tags="def" changecount="3">
+<pre>Conceptually, the Render Engine is the core of the application. But &amp;mdash; surprisingly &amp;mdash; we don't even have a distinct »~RenderEngine« component in our design. Rather, the engine is formed by the cooperation of several components spread out over two layers (Vault and ~Steam-Layer): The [[Builder]] creates a network of [[render nodes|ProcNode]], the [[Scheduler]] triggers individual [[calculation jobs|RenderJob]], which in turn pull data from the render nodes, thereby relying on the [[Vault services|Vault-Layer]] for data access and using plug-ins for the actual media calculations.
 &amp;rarr; OverviewRenderEngine
 &amp;rarr; EngineFaçade 
+&amp;rarr; [[Rendering]]
+&amp;rarr; [[Player]]
 </pre>
 </div>
 <div title="RenderEntities" modifier="Ichthyostega" created="200706190715" modified="201812092257" tags="Rendering classes img" changecount="2">
@@ -6994,12 +7011,22 @@ For now, the above remains in the status of a general concept and typical soluti
 Later on we expect a distinct __query subsystem__ to emerge, presumably embedding a YAP Prolog interpreter.</pre>
 </div>
 <div title="STypeManager" modifier="Ichthyostega" created="200809220230">
-<pre>A facility allowing the SteamLayer to work with abstracted [[media stream types|StreamType]], linking (abstract or opaque) [[type tags|StreamTypeDescriptor]] to an [[library|MediaImplLib]], which provides functionality for acutally dealing with data of this media stream type. Thus, the stream type manager is a kind of registry of all the external libraries which can be bridged and accessed by Lumiera (for working with media data, that is). The most basic set of libraries is instelled here automatically at application start, most notably the [[GAVL]] library for working with uncompressed video and audio data. //Later on, when plugins will introduce further external libraries, these need to be registered here too.//</pre>
+<pre>A facility allowing the Steam-Layer to work with abstracted [[media stream types|StreamType]], linking (abstract or opaque) [[type tags|StreamTypeDescriptor]] to an [[library|MediaImplLib]], which provides functionality for acutally dealing with data of this media stream type. Thus, the stream type manager is a kind of registry of all the external libraries which can be bridged and accessed by Lumiera (for working with media data, that is). The most basic set of libraries is instelled here automatically at application start, most notably the [[GAVL]] library for working with uncompressed video and audio data. //Later on, when plugins will introduce further external libraries, these need to be registered here too.//</pre>
 </div>
 <div title="ScaleGrid" modifier="Ichthyostega" created="201012290325" modified="201101061209" tags="def">
 <pre>A scale grid controls the way of measuring and aligining a quantity the application has to deal with. The most prominent example is the way to handle time in fixed atomic chunks (''frames'') addressed through a fixed format (''timecode''): while internally the application uses time values of sufficiently fine grained resolution, the acutally visible timing coordinates of objects within the session are ''quantised'' to some predefined and fixed time grid.
 
 &amp;rarr; QuantiserImpl</pre>
+</div>
+<div title="Scheduler" creator="Ichthyostega" modifier="Ichthyostega" created="202304140131" tags="Rendering spec draft" changecount="1">
+<pre>//Invoke and control the time based execution of  [[render jobs|RenderJob]]//
+The Scheduler acts as the central hub in the implementation of the RenderEngine and coordinates the //processing resources// of the application. Regarding architecture, the Scheduler is located in the Vault-Layer and //running// the Scheduler is equivalent to activating the »Vault Subsystem«. An EngineFaçade acts as entrance point, providing high-level render services to other parts of the application: [[render jobs|RenderJob]] can be activated under various timing and dependency constraints. Internally, the implementation is segregated into two layers
+;Layer-2: Control
+:maintains a network of interconnected [[activities|RenderActivity]], tracks dependencies and observes timing constraints
+;Layer-1: Invocation
+:operates a low-level priority scheduling mechanism for time-bound execution of [[activities|RenderActivity]]
+:coordinates a ThreadPool and dispatches the execution of individual jobs into apropriate worker threads.
+</pre>
 </div>
 <div title="SchedulerRequirements" modifier="Ichthyostega" created="201107080145" modified="201112171835" tags="Rendering spec draft discuss">
 <pre>The [[Scheduler]] is responsible for geting the individual [[render jobs|RenderJob]] to run. The basic idea is that individual render jobs //should never block// -- and thus the calculation of a single frame might be split into several jobs, including resource fetching. This, together with the data exchange protocol defined for the OutputSlot, and the requirements of storage management (especially releasing of superseded render nodes &amp;rarr; FixtureStorage), leads to certain requirements to be ensured by the scheduler:
@@ -7170,7 +7197,7 @@ The session lifecycle need to be distinguished from the state of the [[session s
 </pre>
 </div>
 <div title="SessionCommandFacade" creator="Ichthyostega" modifier="Ichthyostega" created="201701140732" modified="201701140736" tags="spec" changecount="4">
-<pre>LayerSeparationInterface, provided by the SteamLayer.
+<pre>LayerSeparationInterface, provided by the Steam-Layer.
 The {{{SessionCommand}}} façade and the corresponding {{{steam::control::SessionCommandService}}} can be considered //the public interface to the session://
 They allow to send [[commands|CommandHandling]] to work on the session data structure. All these commands, as well as the [[Builder]], are performed in a dedicated thread, the »session loop thread«, which is operated by the SteamDispatcher. As a direct consequence, all mutations of the session data, as well as all logical consequences determined by the builder, are performed single-threaded, without the need to care for synchronisation issues. Another consequence of this design is the fact that running the builder disables session command processing, causing further commands to be queued up in the SteamDispatcher. Any structural changes resulting from builder runs will finally be pushed back up into the UI, asynchronously.</pre>
 </div>
@@ -7234,7 +7261,7 @@ The session and the models rely on dependent objects beeing kept updated and con
 :** Automation
 :* the [[command handling framework|CommandHandling]], including the [[UNDO|UndoManager]] facility
 
-__Note__: the SessionInterface as such is //not a [[external public interface|LayerSeparationInterfaces]].// Clients from outside SteamLayer can talk to the session by issuing commands through the {{{SessionCommandFacade}}}. Processing of commands is coordinated by the SteamDispatcher, which also is responsible for starting the [[Builder]].
+__Note__: the SessionInterface as such is //not a [[external public interface|LayerSeparationInterfaces]].// Clients from outside Steam-Layer can talk to the session by issuing commands through the {{{SessionCommandFacade}}}. Processing of commands is coordinated by the SteamDispatcher, which also is responsible for starting the [[Builder]].
 
 
 !generic and explicit API
@@ -7303,7 +7330,7 @@ Currently, I'm planning to modify MObjectRef to return only a const ref to the u
 </pre>
 </div>
 <div title="SessionLifecycle" modifier="Ichthyostega" created="200911070329" modified="201112222248" tags="SessionLogic spec">
-<pre>The current [[Session]] is the root of any state found within SteamLayer. Thus, events defining the session's lifecycle influence and synchronise the cooperative behaviour of the entities within the model, the SteamDispatcher, [[Fixture]] and any facility below.
+<pre>The current [[Session]] is the root of any state found within Steam-Layer. Thus, events defining the session's lifecycle influence and synchronise the cooperative behaviour of the entities within the model, the SteamDispatcher, [[Fixture]] and any facility below.
 * when ''starting'', on first access an empty session is created, which puts any related facility into a defined initial state.
 * when ''closing'' the session, any dependent facilities are disabled, disconnected, halted or closed
 * ''loading'' an existing session &amp;mdash; after closing the previous session &amp;mdash; sets up an empty (default) session and populates it with de-serialised content.
@@ -7349,13 +7376,13 @@ As detailed above, {{{Session::current}}} exposes the management / lifecycle API
 </div>
 <div title="SessionLogic" modifier="Ichthyostega" created="200904242110" modified="201402162038" tags="overview" changecount="1">
 <pre>The Session contains all information, state and objects to be edited by the User (&amp;rarr;[[def|Session]]).
-As such, the SessionInterface is the main entrance point to SteamLayer functionality, both for the primary EditingOperations and for playback/rendering processes. ~Steam-Layer state is rooted within the session and guided by the [[session's lifecycle events|SessionLifecycle]].
+As such, the SessionInterface is the main entrance point to Steam-Layer functionality, both for the primary EditingOperations and for playback/rendering processes. ~Steam-Layer state is rooted within the session and guided by the [[session's lifecycle events|SessionLifecycle]].
 Implementation facilities within the ~Steam-Layer may access a somewhat richer [[session service API|SessionServices]].
 
 Currently (as of 3/10), Ichthyo is working on getting a preliminary implementation of the [[Session in Memory|SessionDataMem]] settled.
 
 !Session, Model and Engine
-The session is a [[Subsystem]] and acts as a frontend to most of the SteamLayer. But it doesn't contain much operational logic; its primary contents are the [[model|Model]], which is closely [[interconnected to the assets|AssetModelConnection]].
+The session is a [[Subsystem]] and acts as a frontend to most of the Steam-Layer. But it doesn't contain much operational logic; its primary contents are the [[model|Model]], which is closely [[interconnected to the assets|AssetModelConnection]].
 
 !Design and handling of Objects within the Session
 Objects are attached and manipulated by [[placements|Placement]]; thus the organisation of these placements is part of the session data layout. Effectively, such a placement within the session behaves like an //instances// of a given object, and at the same time it defines the &quot;non-substantial&quot; properties of the object, e.g. its positions and relations. [[References|MObjectRef]] to these placement entries are handed out as parameters, both down to the [[Builder]] and from there to the render processes within the engine, but also to external parts within the GUI and in plugins. The actual implementation of these object references is built on top of the PlacementRef tags, thus relying on the PlacementIndex the session maintains to keep track of all placements and their relations. While &amp;mdash; using these references &amp;mdash; an external client can access the objects and structures within the session, any actual ''mutations'' should be done based on the CommandHandling: a single operation of a sequence of operations is defined as [[Command]], to be [[dispatched|SteamDispatcher]] as [[mutation operation|SessionMutation]]. Following this policy ensures integration with the&amp;nbsp;SessionStorage and provides (unlimited) [[UNDO|UndoManager]].
@@ -7390,7 +7417,7 @@ Interestingly, there seems to be an alternative answer to this question. We coul
 * [[Session]] is largely synonymous to ''Project''
 * there seems to be a new entity called [[Timeline]] which holds the global Pipes
 &lt;&lt;&lt;
-The [[Session]] (sometimes also called //Project// ) contains all information and objects to be edited by the User. Any state within the SteamLayer is directly or indirectly rooted in the session. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one or multiple collections within the Session, which we call [[sequence(s)|Sequence]]. Moreover, the sesion contains references to all the Media files used, and it contains various default or user defined configuration, all being represented as [[Asset]]. At any given time, there is //only one current session// opened within the application. The [[lifecycle events|SessionLifecycle]] of the session define the lifecycle of ~Steam-Layer as a whole.
+The [[Session]] (sometimes also called //Project// ) contains all information and objects to be edited by the User. Any state within the Steam-Layer is directly or indirectly rooted in the session. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one or multiple collections within the Session, which we call [[sequence(s)|Sequence]]. Moreover, the sesion contains references to all the Media files used, and it contains various default or user defined configuration, all being represented as [[Asset]]. At any given time, there is //only one current session// opened within the application. The [[lifecycle events|SessionLifecycle]] of the session define the lifecycle of ~Steam-Layer as a whole.
 
 The Session is close to what is visible in the GUI. From a user's perspective, you'll find a [[Timeline]]-like structure, containing an [[Sequence]], where various Media Objects are arranged and placed. The available building blocks and the rules how they can be combined together form Lumiera's [[high-level data model|HighLevelModel]]. Basically, besides the [[media objects|MObjects]] there are data connections and all processing is organized around processing chains or [[pipes|Pipe]], which can be either global (in the Session) or local (in real or virtual clips).
 
@@ -7421,7 +7448,7 @@ It will contain a global video and audio out pipe, just one timeline holding a s
 </pre>
 </div>
 <div title="SessionServices" modifier="Ichthyostega" created="200911071825" modified="200911090107" tags="SessionLogic impl">
-<pre>Within Lumiera's SteamLayer, there are some implementation facilities and subsystems needing more specialised access to implementation services provided by the session. Thus, besides the public SessionInterface and the [[lifecycle and state management API|SessionManager]], there are some additional service interfaces exposed by the session through a special access mechanism. This mechanism needs to be special in order to assure clean transactional behaviour when the session is opened, closed, cleared or loaded. Of course, there is the additional requirement to avoid direct dependencies of the mentioned ~Steam-Layer internals on session implementation details.
+<pre>Within Lumiera's Steam-Layer, there are some implementation facilities and subsystems needing more specialised access to implementation services provided by the session. Thus, besides the public SessionInterface and the [[lifecycle and state management API|SessionManager]], there are some additional service interfaces exposed by the session through a special access mechanism. This mechanism needs to be special in order to assure clean transactional behaviour when the session is opened, closed, cleared or loaded. Of course, there is the additional requirement to avoid direct dependencies of the mentioned ~Steam-Layer internals on session implementation details.
 
 !Accessing session services
 For each of these services, there is an access interface, usually through an class with only static methods. Basically this means access //by name.//
@@ -7463,7 +7490,7 @@ And last but not least: the difficult part of this whole concept is encapsulated
 {{red{WIP ... draft}}}</pre>
 </div>
 <div title="SessionSubsystem" creator="Ichthyostega" modifier="Ichthyostega" created="201612150347" modified="201708101334" tags="def impl SessionLogic img" changecount="13">
-<pre>//A subsystem within SteamLayer, responsible for lifecycle and access to the editing [[Session]].//
+<pre>//A subsystem within Steam-Layer, responsible for lifecycle and access to the editing [[Session]].//
 [img[Structure of the Session Subsystem|uml/Session-subsystem.png]]
 
 !Structure
@@ -7507,11 +7534,11 @@ Shutdown is initiated by sending a message to the dispatcher loop. This causes t
 <div title="Steam-Layer" creator="Ichthyostega" modifier="Ichthyostega" created="201812092252" modified="201812092305" tags="def" changecount="3">
 <pre>The architecture of the Lumiera application separates functionality into three Layers: __Stage__, __Steam__ and __Vault__.
 
-The ~Steam-Layer as the middle layer transforms the structures of the usage domain into structures of the technical implementation domain, which can be processed efficiently with contemporary media processing frameworks. While the VaultLayer is responsible for Data access and management and for carrying out the computation intensive media opterations, the ~Steam-Layer contains [[assets|Asset]] and [[Session]], i.e. the user-visible data model and provides configuration and behaviour for these entities. Besides, he is responsible for [[building and configuring|Builder]] the [[render engine|RenderEngine]] based on the current Session state. Furthermore, the [[Player]] subsystem, which coordinates render and playback operations, can be seen to reside at the lower boundary of ~Steam-Layer.
+The ~Steam-Layer as the middle layer transforms the structures of the usage domain into structures of the technical implementation domain, which can be processed efficiently with contemporary media processing frameworks. While the Vault-Layer is responsible for Data access and management and for carrying out the computation intensive media opterations, the ~Steam-Layer contains [[assets|Asset]] and [[Session]], i.e. the user-visible data model and provides configuration and behaviour for these entities. Besides, he is responsible for [[building and configuring|Builder]] the [[render engine|RenderEngine]] based on the current Session state. Furthermore, the [[Player]] subsystem, which coordinates render and playback operations, can be seen to reside at the lower boundary of ~Steam-Layer.
 &amp;rarr; [[Session]]
 &amp;rarr; [[Player]]
 &amp;rarr; UI-Layer
-&amp;rarr; VaultLayer
+&amp;rarr; Vault-Layer
 </pre>
 </div>
 <div title="SteamDispatcher" creator="Ichthyostega" modifier="Ichthyostega" created="201612140406" modified="201701140727" tags="def spec SessionLogic draft" changecount="12">
@@ -7602,7 +7629,7 @@ Media types vary largely and exhibit a large number of different properties, whi
 A stream type is denoted by a StreamTypeID, which is an identifier, acting as an unique key for accessing information related to the stream type. It corresponds to an StreamTypeDescriptor record, containing an &amp;mdash; //not necessarily complete// &amp;mdash; specification of the stream type, according to the classification detailed below.
 
 !! Classification
-Within the SteamLayer, media streams are treated largely in a similar manner. But, looking closer, not everything can be connected together, while on the other hand there may be some classes of media streams which can be considered //equivalent// in most respects. Thus separating the distinction between various media streams into several levels seems reasonable...
+Within the Steam-Layer, media streams are treated largely in a similar manner. But, looking closer, not everything can be connected together, while on the other hand there may be some classes of media streams which can be considered //equivalent// in most respects. Thus separating the distinction between various media streams into several levels seems reasonable...
 * Each media belongs to a fundamental ''kind'' of media, examples being __Video__, __Image__, __Audio__, __MIDI__, __Text__,... &lt;br/&gt;Media streams of different kind can be considered somewhat &quot;completely separate&quot; &amp;mdash; just the handling of each of those media kinds follows a common //generic pattern// augmented with specialisations. Basically, it is //impossible to connect// media streams of different kind. Under some circumstances there may be the possibility of a //transformation// though. For example, a still image can be incorporated into video, sound may be visualized, MIDI may control a sound synthesizer.
 * Below the level of distinct kinds of media streams, within every kind we have an open ended collection of ''prototypes'', which, when compared directly, may each be quite distinct and different, but which may be //rendered//&amp;nbsp; into each other. For example, we have stereoscopic (3D) video and we have the common flat video lacking depth information, we have several spatial audio systems (Ambisonics, Wave Field Synthesis), we have panorama simulating sound systems (5.1, 7.1,...), we have common stereophonic and monaural audio. It is considered important to retain some openness and configurability within this level of distinction, which means this classification should better be done by rules then by setting up a fixed property table. For example, it may be desirable for some production to distinguish between digitized film and video NTSC and PAL, while in another production everything is just &quot;video&quot; and can be converted automatically. The most noticeable consequence of such a distinction is that any Bus or [[Pipe]] is always limited to a media stream of a single prototype. (&amp;rarr; [[more|StreamPrototype]])
 * Besides the distinction by prototypes, there are the various media ''implementation types''. This classification is not necessarily hierarchically related to the prototype classification, while in practice commonly there will be some sort of dependency. For example, both stereophonic and monaural audio may be implemented as 96kHz 24bit PCM with just a different number of channel streams, but we may as well get a dedicated stereo audio stream with two channels multiplexed into a single stream. For dealing with media streams of various implementation type, we need //library// routines, which also yield a //type classification system.// Most notably, for raw sound and video data we use the [[GAVL]] library, which defines a classification system for buffers and streams.
@@ -7694,7 +7721,7 @@ Independent from these is __another Situation__ where we query for a type ''by I
 </pre>
 </div>
 <div title="StreamTypeUse" modifier="Ichthyostega" created="200809130312" modified="201002010151" tags="draft operational discuss">
-<pre>Questions regarding the use of StreamType within the SteamLayer.
+<pre>Questions regarding the use of StreamType within the Steam-Layer.
 * what is the relation between Buffer and Frame?
 * how to get the required size of a Buffer?
 * who does buffer allocations and how?
@@ -7745,21 +7772,21 @@ When deciding if a connection can be made, we can build up the type information 
 My Idea was to use [[type implementation constraints|StreamTypeImplConstraint]] for this, which are a special kind of ~ImplType
 </pre>
 </div>
-<div title="StrongSeparation" modifier="Ichthyostega" created="200706220452" modified="200907220311" tags="design">
+<div title="StrongSeparation" modifier="Ichthyostega" created="200706220452" modified="202304140027" tags="design" changecount="1">
 <pre>This design lays great emphasis on separating all those components and subsystems, which are considered not to have a //natural link// of their underlying concepts. This often means putting some additional constraints on the implementation, so basically we need to rely on the actual implementation to live up to this goal. In many cases it may seem to be more natural to &quot;just access the necessary information&quot;. But on the long run this coupling of not-directly related components makes the whole codebase monolithic and introduces lots of //accidental complexity.//
 
 Instead, we should try to just connect the various subsystems via Interfaces and &amp;mdash; instead of just using some information, rather use some service to be located on an Interface to query other components for this information. The best approach of course is always to avoid the dependency altogether.
 
 !Examples
 * There is a separation between the __high level [[Session]] view__ and the [[Fixture]]: the latter only accesses the MObjects and the Placement Interfaces.
-* same holds true for the Builder: it just uses the same Interfaces. The actual coupling is done rather //by type//, i.e. the Builder relies on several types of MObjects to exist and treats them via overloaded methods. He doesn't rely on a actual object structure layout in the session besides the requirement of having a [[Playlist]]
-* the Builder itself is a separation layer. Neither do the Objects in the sessionL access directly [[Render Nodes|ProcNode]], nor do the latter call back into the session. Both connections seem to be necessary at first sight, but both can be avoided by using the Builder Pattern
+* same holds true for the Builder: it just uses the same Interfaces. The actual coupling is done rather //by type//, i.e. the Builder relies on an arrangement of MObjects to exist and picks up their properties through a small number of generic overloaded methods -- the session is interpreted and translated.
+* the Builder itself is a separation layer. Neither do the Objects in the session access directly [[Render Nodes|ProcNode]], nor do the latter call back into the session. Both connections seem to be necessary at first sight, but both can be avoided by using the Builder Pattern
 * another separation exists between the Render Engine and the individual Nodes: The Render Engine doesn't need to know the details of the data types processed by the Nodes. It relies on the Builder having done the correct connections and just pulls out the calculated results. If there needs to be additional control information to be passed, then I would prefer to do a direct wiring of separate control connections to specialized components, which in turn could instruct the controller to change the rendering process.
 * to shield the rendering code of all complexities of thread communication and synchronization, we use the StateProxy
 </pre>
 </div>
 <div title="StructAsset" modifier="Ichthyostega" created="200709221353" modified="201505310120" tags="def classes img" changecount="5">
-<pre>Structural Assets are intended mainly for internal use, but the user should be able to see and query them. They are not &quot;loaded&quot; or &quot;created&quot; directly, rather they //leap into existence // by creating or extending some other structures in the session, hence the name. Some of the structural Asset parametrisation can be modified to exert control on some aspects of the SteamLayer's (default) behaviour.
+<pre>Structural Assets are intended mainly for internal use, but the user should be able to see and query them. They are not &quot;loaded&quot; or &quot;created&quot; directly, rather they //leap into existence // by creating or extending some other structures in the session, hence the name. Some of the structural Asset parametrisation can be modified to exert control on some aspects of the Steam-Layer's (default) behaviour.
 * [[Processing Patterns|ProcPatt]] encode information how to set up some parts of the render network to be created automatically: for example, when building a clip, we use the processing pattern how to decode and pre-process the actual media data.
 * [[Forks (&quot;tracks&quot;)|Fork]] are one of the dimensions used for organizing the session data. They serve as an Anchor to attach parametrisation of output pipe, overlay mode etc. By [[placing|Placement]] to a track, a media object inherits placement properties from this track.
 * [[Pipes|Pipe]] form &amp;mdash; at least as visible to the user &amp;mdash; the basic building block of the render network, because the latter appears to be a collection of interconnected processing pipelines. This is the //outward view; // in fact the render network consists of [[nodes|ProcNode]] and is [[built|Builder]] from the Pipes, clips, effects...[&gt;img[Asset Classess|uml/fig131205.png]]&lt;br/&gt;Yet these //inner workings// of the render proces are implementation detail we tend to conceal.
@@ -9328,7 +9355,7 @@ As stated in the [[definition|Timeline]], a timeline refers to exactly one seque
 This is because the top-level entities (Timelines) are not permitted to be combined further. You may play or render a given timeline, you may even play several timelines simultaneously in different monitor windows, and these different timelines may incorporate the same sequence in a different way. The Sequence just defines the relations between some objects and may be placed relatively to another object (clip, label,...) or similar reference point, or even anchored at an absolute time if desired. In a similar open fashion, within the track-tree of a sequence, we may define a specific signal routing, or we may just fall back to automatic output wiring.
 
 !Attaching output
-The Timeline owns a list of global [[pipes (busses)|Pipe]] which are used to collect output. If the track tree of a sequence doesn't contain specific routing advice, then connections will be done directly to these global pipes in order and by matching StreamType (i.e. typically video to video master, audio to stereo audio master). When a monitor (viewer window) is attached to this timeline, similar output connections are made from those global pipes, i.e. the video display will take the contents of the first video (master) bus, and the first stereo audio pipe will be pulled and sent to system audio out. The timeline owns a ''play control'' shared by all attached viewers and coordinating the rendering-for-viewing. Similarly, a render task may be attached to the timeline to pull the pipes needed for a given kind of generated output. The actual implementation of the play controller and the coordination of render tasks is located in the Vault, which uses the service of the SteamLayer to pull the respective exit nodes of the render engine network.
+The Timeline owns a list of global [[pipes (busses)|Pipe]] which are used to collect output. If the track tree of a sequence doesn't contain specific routing advice, then connections will be done directly to these global pipes in order and by matching StreamType (i.e. typically video to video master, audio to stereo audio master). When a monitor (viewer window) is attached to this timeline, similar output connections are made from those global pipes, i.e. the video display will take the contents of the first video (master) bus, and the first stereo audio pipe will be pulled and sent to system audio out. The timeline owns a ''play control'' shared by all attached viewers and coordinating the rendering-for-viewing. Similarly, a render task may be attached to the timeline to pull the pipes needed for a given kind of generated output. The actual implementation of the play controller and the coordination of render tasks is located in the Vault, which uses the service of the Steam-Layer to pull the respective exit nodes of the render engine network.
 
 !Timeline versus Timeline View
 Actually, what the [[GUI creates and uses|GuiTimelineView]] is the //view// of a given timeline. This makes no difference to start with, as the view is modelled to be a sub-concept of &quot;timeline&quot; and thus can stand-in. All different views of the //same// timeline also share one single play control instance, i.e. they all have one single playhead position. Doing it this way should be the default, because it's the least confusing. Anyway, it's also possible to create multiple //independent timelines// &amp;mdash; in an extreme case even so when referring to the same top-level sequence. This configuration gives the ability to play the same arrangement in parallel with multiple independent play controllers (and thus independent playhead positions)
@@ -10197,7 +10224,7 @@ As a starting point, we know
 * the latter is somehow related to the [[UI-model|GuiModel]] (one impersonates or represents the other)
 * each {{{gui::model::Tangible}}} has a ''bus-terminal'', which is linked to the former's identity
 * it is possible to wire ~SigC signals so to send messages via this terminal into the UI-Bus
-* these messages translate into command invocations towards the SteamLayer
+* these messages translate into command invocations towards the Steam-Layer
 * ~Steam-Layer responds asynchroneously with a diff message
 * the GuiModel translates this into notifications of the top level changed elements
 * these in turn request a diff and then update themselves into compliance.
@@ -10272,7 +10299,7 @@ The dispatch of //diff messages// is directly integrated into the UI-Bus -- whic
 <div title="UI-Layer" creator="Ichthyostega" modifier="Ichthyostega" created="201702102005" tags="def" changecount="1">
 <pre>The architecture of the Lumiera application separates functionality into three Layers: __Stage__, __Steam__ and __Vault__.
 
-The Graphical User interface, the upper layer in this hierarchy, embodies everything of tangible relevance to the user working with the application. The interplay with SteamLayer, the middle layer below the UI, is organised along the distinction between two realms of equal importance: on one side, there is the immediate //mechanics of the interface,// which is implemented directly within the ~UI-Layer, based on the Graphical User Interface Toolkit. And, on the other side, there are those //core concerns of working with media,// which are cast into the HighLevelModel at the heart of the middle layer.</pre>
+The Graphical User interface, the upper layer in this hierarchy, embodies everything of tangible relevance to the user working with the application. The interplay with Steam-Layer, the middle layer below the UI, is organised along the distinction between two realms of equal importance: on one side, there is the immediate //mechanics of the interface,// which is implemented directly within the ~UI-Layer, based on the Graphical User Interface Toolkit. And, on the other side, there are those //core concerns of working with media,// which are cast into the HighLevelModel at the heart of the middle layer.</pre>
 </div>
 <div title="UICoord" creator="Ichthyostega" modifier="Ichthyostega" created="201709222300" modified="201804150100" tags="def draft spec Concepts GuiPattern" changecount="29">
 <pre>//A topological addressing scheme to designate structural locations within the UI.//
@@ -10361,7 +10388,7 @@ At the time of this writing, it is not really clear if we need such a facility a
 This is a possible different turn in the design, considered as an option {{red{as of 6/2018}}}. Such would complement a symbolic coordinate specification with an opaque handle pointing to an actually existing UI widget. Access to this widget requires knowledge about its actual type -- basically a variant record tacked onto the UICoord representation, packaged into a subclass of the latter. The obvious benefit would be to avoid drilling down into the UI widget tree repeatedly, since there is now a way to pass along hidden //insider information// regarding actual UI elements. However, such a design bears a &quot;smell&quot; of being implementation driven, and undercuts the whole idea of a entirely symbolic layer of location specifications. Building such an extension can be considered sensible only under the additional assumption that this kind of //location token// is to be passed over various interfaces and indeed becomes a generic token of exchange and interaction within the UI layer implementation -- which, right now is not a given.
 </pre>
 </div>
-<div title="VaultLayer" creator="Ichthyostega" modifier="Ichthyostega" created="201812071818" modified="201812071821" tags="overview draft" changecount="4">
+<div title="Vault-Layer" creator="Ichthyostega" modifier="Ichthyostega" created="201812071818" modified="201812071821" tags="overview draft" changecount="4">
 <pre>//Placeholder for now....//</pre>
 </div>
 <div title="ViewConnection" modifier="Ichthyostega" created="201105221854" modified="202303300058" tags="def Model SessionLogic" changecount="6">
@@ -10448,7 +10475,7 @@ A good starting point to understand our library implementation of the visitor pa
 &amp;rarr; [[implementation deatails|VisitingToolImpl]]
 
 !why bothering with visitor?
-In the Lumiera SteamLayer, the visitor pattern is used to overcome another notorious problem when dealing with more complex class hierarchies: either, the //interface// (root class) is so unspecific to be almost useless, or, in spite of having a useful contract, this contract will effectively be broken by some subclasses (&quot;problem of elliptical circles&quot;). Initially, when designing the classes, the problems aren't there (obviously, because they could be taken as design flaws). But then, under the pressure of real features, new types are added later on, which //need to be in this hierarchy// and at the same time //need to have this and that special behaviour// and here we go ...
+In the Lumiera Steam-Layer, the visitor pattern is used to overcome another notorious problem when dealing with more complex class hierarchies: either, the //interface// (root class) is so unspecific to be almost useless, or, in spite of having a useful contract, this contract will effectively be broken by some subclasses (&quot;problem of elliptical circles&quot;). Initially, when designing the classes, the problems aren't there (obviously, because they could be taken as design flaws). But then, under the pressure of real features, new types are added later on, which //need to be in this hierarchy// and at the same time //need to have this and that special behaviour// and here we go ...
 Visitor helps us to circumvent this trap: the basic operations can be written against the top level interface, such as to include visiting some object collection internally. Now, on a case-by-case base, local operations can utilise a more specific sub interface or the given concrete type's public interface. So visitor helps to encapsulate specific technical details of cooperating objects within the concrete visiting tool implementation, while still forcing them to be implemented against some interface or sub-interface of the target objects.
 
 !!well suited for using visitors

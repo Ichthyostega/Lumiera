@@ -26,6 +26,7 @@
  ** The render engine, as implemented in an combined effort by the
  ** Lumiera Vault-Layer and some parts of Steam-Layer, can be started and
  ** stopped as a [Subsystem](\ref subsys.hpp) of the whole application.
+ ** @warning as of 4/2023 Render-Engine integration work is underway ////////////////////////////////////////TICKET #1280
  */
 
 

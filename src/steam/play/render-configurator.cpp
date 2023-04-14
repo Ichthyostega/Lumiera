@@ -77,7 +77,7 @@ namespace play {
             REQUIRE (outputResolver_);
             OutputSlot& slot = outputResolver_->getOutputFor (port);
             if (!slot.isFree())
-              throw error::State("unable to acquire a suitable output slot"   /////////////////////TICKET #197 #816
+              throw error::State("unable to acquire a suitable output slot"   /////////////////////TICKET #197 #816   --- could use util::_Fmt here
                                 , LERR_(CANT_PLAY));
             return slot;
           }

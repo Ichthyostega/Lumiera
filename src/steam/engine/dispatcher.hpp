@@ -29,6 +29,7 @@
  ** into a sequence of concrete jobs, anchored at some distinct point in time.
  ** 
  ** @todo valid draft, unfortunately stalled in 2013
+ ** @todo as of 4/2023 a complete rework of the Dispatcher is underway //////////////////////////////////////TICKET #1275
  */
 
 

@@ -74,6 +74,7 @@
  ** and verify this implementation technique as such.
  ** 
  ** @todo as of 2017, this framework is deemed incomplete and requires more design work. ////////////////////TICKET #1116
+ ** @deprecated Monads considered harmful -- as of 4/2023 this framework is about to be abandoned
  ** 
  ** @warning preferably use value semantics for the elements to be processed. Recall, C++ is not
  **      really a functional programming language, and there is no garbage collector. It might be

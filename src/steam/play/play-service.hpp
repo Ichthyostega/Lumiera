@@ -48,6 +48,7 @@
  ** @see engine::EngineService
  ** @todo started as draft in 11/2011
  ** @todo as of 2016 development in this area is stalled, but the design done thus far valid
+ ** @warning as of 4/2023 Render-Engine integration work is underway ////////////////////////////////////////TICKET #1233
  ** 
  */
 

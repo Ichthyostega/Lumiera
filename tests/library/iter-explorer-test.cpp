@@ -49,6 +49,7 @@
  ** a complex processing pipeline.
  ** 
  ** @todo as of 2017, this framework is deemed incomplete and requires more design work. ////////////////////TICKET #1116
+ ** @deprecated Monads considered harmful -- as of 4/2023 this framework is about to be abandoned
  */
 
 
