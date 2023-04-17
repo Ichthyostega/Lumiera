@@ -53,10 +53,10 @@ with the *ASCIIDOC* tool and published at the [Lumiera website](http://Lumiera.o
 
 /* ==== Layers ==== */
 
-/** @defgroup backend Backend-Layer
+/** @defgroup vault Vault-Layer
 */
 
-/** @defgroup proc Proc-Layer
+/** @defgroup steam Steam-Layer
 */
 
 /** @defgroup gui Graphical User Interface
@@ -65,23 +65,23 @@ with the *ASCIIDOC* tool and published at the [Lumiera website](http://Lumiera.o
 /* ==== Subsystems ==== */
 
 /** @defgroup asset Asset Management
-    @ingroup proc
+    @ingroup steam
 */
 
 /** @defgroup session Session
-    @ingroup proc
+    @ingroup steam
 */
 
 /** @defgroup player Playback and Render Control
-    @ingroup proc
+    @ingroup steam
 */
 
 /** @defgroup engine Render Engine
-    @ingroup proc
+    @ingroup vault
 */
 
 /** @defgroup scheduler Scheduler
-    @ingroup backend
+    @ingroup vault
 */
 
 

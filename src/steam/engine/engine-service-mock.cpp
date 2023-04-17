@@ -66,11 +66,11 @@ namespace engine{
   
   /** special engine configuration for mock/testing operation.
    */
-  RenderEnvironmentClosure&
+  RenderEnvironment&
   EngineServiceMock::configureCalculation (ModelPort,Timings,Quality)
   {
-    UNIMPLEMENTED ("represent *this as RenderEnvironmentClosure)");
-    RenderEnvironmentClosure* todo_fake(0);  ////KABOOOM
+    UNIMPLEMENTED ("represent *this as RenderEnvironment Closure)");
+    RenderEnvironment* todo_fake(0);  ////KABOOOM
     
     return *todo_fake; 
   }

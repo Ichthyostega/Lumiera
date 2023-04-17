@@ -157,6 +157,8 @@ namespace engine {
                                ,this->point_to_calculate_);
         }
       
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
       /** integrate another chain of prerequisites into the current evaluation line.
        *  Further evaluation will start to visit prerequisites from the new starting point,
        *  and return to the current evaluation chain later on exhaustion of the side chain.
@@ -200,6 +202,8 @@ namespace engine {
   
   
   
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
   /**
    * iterator, exposing a sequence of JobPlanning elements
    */
@@ -314,6 +318,8 @@ namespace engine {
   
   
   
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
   /**
    * Generate a sequence of starting points for Job planning,
    * based on the underlying frame grid. This sequence will be

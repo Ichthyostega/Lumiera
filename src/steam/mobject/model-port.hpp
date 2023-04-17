@@ -80,7 +80,7 @@ namespace mobject {
   
   
   /**
-   * Handle denoting a point within the model,
+   * Handle designating a point within the model,
    * where actually output data can be pulled.
    * ModelPort is a frontend to be used by clients.
    * These ModelPort handle objects may be copied and stored

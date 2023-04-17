@@ -1,8 +1,8 @@
 /*
-  CALC-PLAN-CONTINUATION.hpp  -  closure for planning a chunk of jobs
+  RENDER-DRIVE.hpp  -  repetitively advancing a render calculation stream
 
   Copyright (C)         Lumiera.org
-    2013,               Hermann Vosseler <Ichthyostega@web.de>
+    2023,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,20 +21,23 @@
 */
 
 
-/** @file calc-plan-continuation.hpp
- ** A specialised render job to care for the planning of the calculation process itself.
+/** @file render-drive.hpp
+ ** The active core within a CalcStream, causing the render mechanism to re-trigger repeatedly.
  ** Rendering is seen as an open-ended, ongoing process, and thus the management and planning
  ** of the render process itself is performed chunk wise and embedded into the other rendering
  ** calculations. The _"rendering-as-it-is-planned-right-now"_ can be represented as a closure
  ** to the jobs, which perform and update this plan on the go. And in fact, the head of the
- ** calculation process, the CalcStream, holds onto such a closure to access current planning.
+ ** calculation process, the CalcStream, maintains this closure instance, as parametrised
+ ** with the appropriate configuration for the specific playback/render process underway.
+ ** Enclosed into this instance lives the actual job planning pipeline, connected at the
+ ** rear to the dispatcher and thus to the fixture and the low-level model 
  ** 
- ** @deprecated 4/2023 »Playback Vertical Slice« -- reworked into the RenderDrive   /////////////////////////TICKET #1221
+ ** @todo 4/2023 »Playback Vertical Slice« -- effort towards first integration of render process ////////////TICKET #1221
  */
 
 
-#ifndef STEAM_ENGINE_CALC_PLAN_CONTINUATION_H
-#define STEAM_ENGINE_CALC_PLAN_CONTINUATION_H
+#ifndef STEAM_ENGINE_RENDER_DRIVE_H
+#define STEAM_ENGINE_RENDER_DRIVE_H
 
 #include "steam/common.hpp"
 #include "steam/mobject/model-port.hpp"
@@ -42,6 +45,7 @@
 #include "steam/engine/dispatcher.hpp"
 #include "steam/play/timings.hpp"
 #include "vault/engine/job.h"
+#include "lib/nocopy.hpp"
 
 
 namespace steam {
@@ -58,23 +62,41 @@ namespace engine {
   
   
   /**
-   * Special job to perform the job planning.
-   * This closure extends the existing planning of frame jobs to add a chunk
-   * of additional future jobs. Included with this chunk will be a recursive
-   * self re-invocation to trigger planning of the next chunk. Overall, this
-   * planning process is determined and controlled by the CalcStream owning
-   * this closure.
-   * 
-   * @deprecated 4/2023 »Playback Vertical Slice« -- reworked into the RenderDrive //////////////////////////TICKET #1221
+   * Abstract definition of the environment
+   * hosting a given render activity (CalcStream).
+   * Exposes all the operations necessary to adjust the
+   * runtime behaviour of the render activity, like e.g.
+   * re-scheduling with modified playback speed. Since the
+   * CalcStream is an conceptual representation of "the rendering",
+   * the actual engine implementation is kept opaque this way. 
    */
-  class CalcPlanContinuation
+  class RenderEnvironment
+    {
+    public:
+      virtual ~RenderEnvironment() { }   ///< this is an interface
+      
+      virtual play::Timings& effectiveTimings()   =0;
+      virtual Dispatcher&    getDispatcher()      =0;
+    };
+  
+  
+  /**
+   * The active drive to keep the render process going -- implemented as a
+   * job planning job, that repeatedly triggers itself again for the next
+   * planning chunk. The RenderDrive is created and owned by the corresponding
+   * CalcStream, and operates the job planning pipeline, backed by the dispatcher.
+   * 
+   * @todo 4/23 early DRAFT -- find out what this does and write type comment
+   */
+  class RenderDrive
     : public JobClosure
+    , util::NonCopyable
     {
       
-      play::Timings const& timings_;
-      Dispatcher& dispatcher_;
-      const ModelPort modelPort_;
-      const uint channel_;
+      RenderEnvironment& engine_;
+      
+//    const ModelPort modelPort_;
+//    const uint channel_;
       
       
       /* === JobClosure Interface === */
@@ -98,15 +120,17 @@ namespace engine {
       /**
        * @todo
        */
-      CalcPlanContinuation(play::Timings const& timings
-                          ,Dispatcher& dispatcher
-                          ,ModelPort modelPort
-                          ,uint channel)
-        : timings_(timings) 
-        , dispatcher_(dispatcher)
-        , modelPort_(modelPort)
-        , channel_(channel)
+      RenderDrive (RenderEnvironment& renderEnvironment
+                  ,ModelPort port, uint chan)
+        : engine_{renderEnvironment} 
         { }
+      
+      
+      play::Timings const&
+      getTimings()  const
+        {
+          return engine_.effectiveTimings();
+        }
       
       /** create the "start trigger job"
        *  Scheduling this job will effectively get a calculation stream
@@ -128,4 +152,4 @@ namespace engine {
   
   
 }} // namespace steam::engine
-#endif
+#endif /*STEAM_ENGINE_RENDER_DRIVE_H*/

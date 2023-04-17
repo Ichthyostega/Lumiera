@@ -40,6 +40,8 @@
  ** 
  ** @ingroup engine
  ** @todo draft from 2013, stalled, but still relevant and to be continued eventually
+ ** @warning as of 4/2023 Render-Engine integration work is underway ////////////////////////////////////////TICKET #1233
+ ** 
  ** @see EngineInterface_test
  ** @see CalcStream_test
  ** @see steam::play::PlayerService
@@ -69,7 +71,7 @@
 //#include <string>
 
 
-namespace steam  {
+namespace steam {
 namespace engine{
 
 //    using std::string;
@@ -158,7 +160,7 @@ namespace engine{
       
       
     protected:
-      virtual RenderEnvironmentClosure& configureCalculation (ModelPort,Timings,Quality);
+      virtual RenderEnvironment& configureCalculation (ModelPort,Timings,Quality);
       
       void activateTracing();
       void disableTracing(); ///< EX_FREE
@@ -166,7 +168,7 @@ namespace engine{
       friend class EngineDiagnostics;
       
     private:
-      static CalcStream activateCalculation (play::DataSink, RenderEnvironmentClosure&);
+      static CalcStream activateCalculation (play::DataSink, RenderEnvironment&);
     };
   
   

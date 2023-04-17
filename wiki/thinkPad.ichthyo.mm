@@ -68383,8 +68383,39 @@
 <node CREATED="1448314932726" ID="ID_669869188" MODIFIED="1557498707237" POSITION="right" TEXT="Render">
 <icon BUILTIN="stop"/>
 <node CREATED="1512923568305" ID="ID_1329323311" MODIFIED="1557498707237" TEXT="Player">
-<node CREATED="1512923658341" ID="ID_1855109590" MODIFIED="1557498707237" TEXT="Interface"/>
-<node CREATED="1512923661892" ID="ID_1580804608" MODIFIED="1557498707237" TEXT="Control"/>
+<node CREATED="1512923658341" ID="ID_1855109590" MODIFIED="1557498707237" TEXT="Interface">
+<node CREATED="1681597122589" ID="ID_1328094537" MODIFIED="1681597126593" TEXT="Spec">
+<node CREATED="1681597127282" ID="ID_761595186" MODIFIED="1681597130528" TEXT="Timings">
+<node CREATED="1681597133168" ID="ID_1308926052" MODIFIED="1681597148947">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Zeitma&#223; f&#252;r <i>diesen </i>Wiedergabevorgang
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1681597167602" ID="ID_205208976" MODIFIED="1681597182099" TEXT="playbackUrgency = {ASAP,NICE,TIMEBOUND}"/>
+<node CREATED="1681597212993" ID="ID_615732474" MODIFIED="1681597273762" TEXT="scheduledDelivery(nur TIMEBOUND) &#x2254; &#xbb;wall clock time&#xab; des Grid-Ursprungs"/>
+</node>
+</node>
+</node>
+<node CREATED="1512923661892" ID="ID_1580804608" MODIFIED="1557498707237" TEXT="Control">
+<node CREATED="1681685173232" ID="ID_1497274477" MODIFIED="1681685179516" TEXT="Play-controller"/>
+<node CREATED="1681685180222" ID="ID_1922002466" MODIFIED="1681685183138" TEXT="Play-Process"/>
+<node CREATED="1681685183696" ID="ID_453528685" MODIFIED="1681685186032" TEXT="CalcStream">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681685187803" ID="ID_1654025761" MODIFIED="1681685196333" TEXT="Umbau 4/23">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681685197444" ID="ID_1313231227" MODIFIED="1681685335962" TEXT="kann man CalcStream move-only machen?">
+<linktarget COLOR="#e0804f" DESTINATION="ID_1313231227" ENDARROW="Default" ENDINCLINATION="2513;164;" ID="Arrow_ID_861540006" SOURCE="ID_439004499" STARTARROW="None" STARTINCLINATION="676;-84;"/>
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1512923672275" ID="ID_1369059082" MODIFIED="1557498707237" TEXT="Wiring"/>
 <node CREATED="1512923682530" ID="ID_1204903801" MODIFIED="1557498707237" TEXT="Planning">
 <node CREATED="1512925214070" ID="ID_491842947" MODIFIED="1557498707237" TEXT="1.Entwurf">
@@ -68457,7 +68488,7 @@
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1680568453218" ID="ID_1951039343" MODIFIED="1680568466316" TEXT="was passiert in job-planning.hpp?">
+<node COLOR="#435e98" CREATED="1680568453218" FOLDED="true" ID="ID_1951039343" MODIFIED="1681511763512" TEXT="was passiert in job-planning.hpp?">
 <icon BUILTIN="help"/>
 <node CREATED="1681007533926" ID="ID_282014609" MODIFIED="1681007543121" TEXT="der schrittweise Planungsmechanismus">
 <node CREATED="1681007545653" ID="ID_1444648679" MODIFIED="1681007547984" TEXT="gegeben....">
@@ -68513,7 +68544,7 @@
 <node CREATED="1681077183565" ID="ID_96294471" MODIFIED="1681077188182" TEXT="Referenz auf den Dispatcher"/>
 </node>
 <node CREATED="1681089094840" ID="ID_573422091" MODIFIED="1681089145775" TEXT="hier steigen wir direkt in die Monaden-Kacke ein">
-<arrowlink COLOR="#b03a63" DESTINATION="ID_256520127" ENDARROW="Default" ENDINCLINATION="34;-147;" ID="Arrow_ID_1652427615" STARTARROW="None" STARTINCLINATION="-162;10;"/>
+<arrowlink COLOR="#983ab0" DESTINATION="ID_256520127" ENDARROW="Default" ENDINCLINATION="34;-147;" ID="Arrow_ID_1652427615" STARTARROW="None" STARTINCLINATION="-162;10;"/>
 </node>
 </node>
 <node CREATED="1681076854338" ID="ID_137032068" MODIFIED="1681076861563" TEXT="f&#xfc;r jeden Schritt...">
@@ -68540,8 +68571,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681089112917" ID="ID_256520127" MODIFIED="1681089910511" TEXT="was machen die Monaden hier?">
-<linktarget COLOR="#b03a63" DESTINATION="ID_256520127" ENDARROW="Default" ENDINCLINATION="34;-147;" ID="Arrow_ID_1652427615" SOURCE="ID_573422091" STARTARROW="None" STARTINCLINATION="-162;10;"/>
+<node COLOR="#435e98" CREATED="1681089112917" ID="ID_256520127" MODIFIED="1681511734896" TEXT="was machen die Monaden hier?">
+<linktarget COLOR="#983ab0" DESTINATION="ID_256520127" ENDARROW="Default" ENDINCLINATION="34;-147;" ID="Arrow_ID_1652427615" SOURCE="ID_573422091" STARTARROW="None" STARTINCLINATION="-162;10;"/>
 <icon BUILTIN="help"/>
 <node CREATED="1681089212896" ID="ID_337268997" MODIFIED="1681170523138" TEXT="JobPlanningSequence">
 <linktarget COLOR="#b4597c" DESTINATION="ID_337268997" ENDARROW="Default" ENDINCLINATION="18;60;" ID="Arrow_ID_311262374" SOURCE="ID_1034254567" STARTARROW="None" STARTINCLINATION="-177;-12;"/>
@@ -68645,7 +68676,7 @@
 <node CREATED="1681090118071" ID="ID_600100783" MODIFIED="1681090127602" TEXT="Ergebnistyp der FlatMap-Operation"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681171685380" ID="ID_1860128661" MODIFIED="1681171722392" TEXT="wann / wie findet die eigentliche Planung(Auswertung) statt?">
+<node COLOR="#435e98" CREATED="1681171685380" ID="ID_1860128661" MODIFIED="1681511730984" TEXT="wann / wie findet die eigentliche Planung(Auswertung) statt?">
 <icon BUILTIN="help"/>
 <node CREATED="1681171733502" ID="ID_433565768" MODIFIED="1681171751420" TEXT="expandPrerequisites(JobPlanning) wird monadisch gebunden (flatMap)"/>
 <node CREATED="1681171757291" ID="ID_1142053734" MODIFIED="1681171885232">
@@ -68844,28 +68875,31 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681250556444" ID="ID_1991482624" MODIFIED="1681250575871" TEXT="Grundlegendes Auswertungs-Schema">
+<node COLOR="#435e98" CREATED="1681250556444" ID="ID_1991482624" MODIFIED="1681511717857" TEXT="Grundlegendes Auswertungs-Schema">
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681250582708" ID="ID_1884826569" MODIFIED="1681250667138" TEXT="auf welcher Ebene wird die fortschreitende Planung angesetzt?">
+<node COLOR="#435e98" CREATED="1681250582708" ID="ID_1884826569" MODIFIED="1681511406548" TEXT="auf welcher Ebene wird die fortschreitende Planung angesetzt?">
 <icon BUILTIN="help"/>
-<node CREATED="1681250669452" ID="ID_1404510345" MODIFIED="1681424264776" TEXT="dar&#xfc;ber">
-<arrowlink COLOR="#68678a" DESTINATION="ID_1399425577" ENDARROW="Default" ENDINCLINATION="-321;0;" ID="Arrow_ID_26789445" STARTARROW="None" STARTINCLINATION="-353;107;"/>
+<node CREATED="1681250669452" ID="ID_1404510345" MODIFIED="1681511443549" TEXT="dar&#xfc;ber">
+<arrowlink COLOR="#68678a" DESTINATION="ID_1399425577" ENDARROW="Default" ENDINCLINATION="-321;0;" ID="Arrow_ID_26789445" STARTARROW="None" STARTINCLINATION="-435;100;"/>
+<icon BUILTIN="forward"/>
 <node CREATED="1681250697202" ID="ID_591609787" MODIFIED="1681250718160" TEXT="die Pipeline beschreibt die fortlaufende Job-Planung l&#xfc;ckenlos"/>
 <node CREATED="1681250769368" ID="ID_772063728" MODIFIED="1681250784298" TEXT="ein separater Taktgeber ist dar&#xfc;ber gesetzt..."/>
 <node CREATED="1681250785294" ID="ID_1717449216" MODIFIED="1681250805743" TEXT="...und entnimmt jeweils einen &#xbb;chunk&#xab; an Planung"/>
 </node>
-<node CREATED="1681250684195" ID="ID_1446227888" MODIFIED="1681250686359" TEXT="darunter">
+<node CREATED="1681250684195" ID="ID_1446227888" MODIFIED="1681511427222" TEXT="darunter">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1681250819275" ID="ID_92926923" MODIFIED="1681250835367" TEXT="der &#xbb;chunk&#xab;-Taktgeber ist die Basis der Pipeline"/>
 <node CREATED="1681250837199" ID="ID_947581885" MODIFIED="1681250885117" TEXT="jeder Schritt wird einmal monadisch entfaltet &#x27f6; Jobs f&#xfc;r einen &#xbb;chunk&#xab;"/>
 <node CREATED="1681250898279" ID="ID_1453593011" MODIFIED="1681250924584" TEXT="der Konsument erkennt das Ende eines Chunk &#x2014; und pflanzt sich dann fort"/>
 </node>
-<node CREATED="1681250688531" ID="ID_1904669959" MODIFIED="1681250693486" TEXT="separat">
+<node CREATED="1681250688531" ID="ID_1904669959" MODIFIED="1681511427227" TEXT="separat">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1681250972125" ID="ID_492221110" MODIFIED="1681250991302" TEXT="ein separater Dispatcher-Mechanismus konstruiert f&#xfc;r jeden &#xbb;chunk&#xab; eine Pipeline"/>
 <node CREATED="1681251006417" ID="ID_115424466" MODIFIED="1681251032211" TEXT="der Planungs-Job konsumiert und wertet diese aus und generiert Jobs"/>
 <node CREATED="1681251047923" ID="ID_1020628588" MODIFIED="1681251058990" TEXT="die Limitierung auf einen Chunk steckt in der Pipeline selber"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1681344133719" ID="ID_642967019" MODIFIED="1681424266741" TEXT="Diskussion">
+<node COLOR="#435e98" CREATED="1681344133719" FOLDED="true" ID="ID_642967019" MODIFIED="1681424266741" TEXT="Diskussion">
 <icon BUILTIN="info"/>
 <node CREATED="1681344155430" ID="ID_1775975727" MODIFIED="1681344193644" TEXT="Separation of Concerns &#x27f9; spricht f&#xfc;r die reine l&#xfc;ckenlose Job-Planung"/>
 <node CREATED="1681344197504" ID="ID_1110233377" MODIFIED="1681344469258" TEXT="das wirft das Problem auf: Invariante Time-Anchor &#x2261; alles bis dahin geregelt">
@@ -68972,6 +69006,7 @@
 </node>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1681422192014" ID="ID_686946668" MODIFIED="1681422278056" TEXT="&#x27f9; Verhalten und Benachrichtigungen planen &#x2014; ohne Dependencies explizit zu repr&#xe4;sentieren">
+<arrowlink COLOR="#7c2e36" DESTINATION="ID_964028347" ENDARROW="Default" ENDINCLINATION="1221;-42;" ID="Arrow_ID_727391713" STARTARROW="None" STARTINCLINATION="-29;337;"/>
 <font NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
@@ -69013,7 +69048,7 @@
 <node CREATED="1681423752401" ID="ID_1703609923" MODIFIED="1681423762827" TEXT="Fazit">
 <icon BUILTIN="forward"/>
 <node CREATED="1681423765518" ID="ID_1399425577" MODIFIED="1681424264776" TEXT="wir k&#xf6;nnen komplett trennen und die Pipeline ist nur noch die reine Planung">
-<linktarget COLOR="#68678a" DESTINATION="ID_1399425577" ENDARROW="Default" ENDINCLINATION="-321;0;" ID="Arrow_ID_26789445" SOURCE="ID_1404510345" STARTARROW="None" STARTINCLINATION="-353;107;"/>
+<linktarget COLOR="#68678a" DESTINATION="ID_1399425577" ENDARROW="Default" ENDINCLINATION="-321;0;" ID="Arrow_ID_26789445" SOURCE="ID_1404510345" STARTARROW="None" STARTINCLINATION="-435;100;"/>
 </node>
 <node CREATED="1681423785083" ID="ID_83395390" MODIFIED="1681423811754" TEXT="das JobPlanning mu&#xdf; ein Zeitfenster sichtbar machen; das gen&#xfc;gt zur Planungs-Steuerung"/>
 <node CREATED="1681423881164" ID="ID_947885657" MODIFIED="1681423903640" TEXT="die Job-Deskriptor-Datenstruktur wird erweitert, so da&#xdf; sie Scheduler-Actions beinhaltet"/>
@@ -69126,8 +69161,83 @@
 </node>
 </node>
 </node>
+<node CREATED="1681511517424" ID="ID_1109133019" MODIFIED="1681511570233" TEXT="Aufteilung des eigentlichen Planungsvorgangs">
+<node CREATED="1681511579310" ID="ID_1531444492" MODIFIED="1681511599329" TEXT="JobTicket stellt on-demand die Dependencies bereit"/>
+<node CREATED="1681511631477" ID="ID_972174517" MODIFIED="1681511657301" TEXT="die Planungs-&#xbb;Mechanik&#xab; wird in JobPlanning &#xfc;bersetzt"/>
+<node CREATED="1681511601097" ID="ID_964028347" MODIFIED="1681511694671" TEXT="daraus werden aber direkt einzel-Beziehungen f&#xfc;r den Scheduler gebaut">
+<linktarget COLOR="#7c2e36" DESTINATION="ID_964028347" ENDARROW="Default" ENDINCLINATION="1221;-42;" ID="Arrow_ID_727391713" SOURCE="ID_686946668" STARTARROW="None" STARTINCLINATION="-29;337;"/>
+</node>
+<node CREATED="1681513765614" ID="ID_1274319760" MODIFIED="1681515077439" TEXT="Aufbau">
+<icon BUILTIN="info"/>
+<node CREATED="1681513770238" HGAP="30" ID="ID_1755305963" MODIFIED="1681514318606" TEXT="Play-Service">
+<arrowlink COLOR="#5e5972" DESTINATION="ID_80916607" ENDARROW="Default" ENDINCLINATION="-60;-5;" ID="Arrow_ID_1602613098" STARTARROW="None" STARTINCLINATION="-23;5;"/>
+<node CREATED="1681520404028" ID="ID_139747553" MODIFIED="1681520414735" TEXT="konfiguriert Modus und Timings"/>
+<node CREATED="1681520421034" ID="ID_1253264357" MODIFIED="1681520442787" TEXT="verbindet ModelPorts &#x27fc; output-connection"/>
+<node CREATED="1681520449253" ID="ID_616433102" MODIFIED="1681520472992" TEXT="resultierende RenderConfig &#x27f9; PlayProcess"/>
+</node>
+<node CREATED="1681513866097" HGAP="30" ID="ID_80916607" MODIFIED="1681514389653" TEXT="PlayProcess" VSHIFT="-1">
+<arrowlink COLOR="#5e5972" DESTINATION="ID_1732223894" ENDARROW="Default" ENDINCLINATION="-60;-5;" ID="Arrow_ID_1129120203" STARTARROW="None" STARTINCLINATION="-23;5;"/>
+<linktarget COLOR="#5e5972" DESTINATION="ID_80916607" ENDARROW="Default" ENDINCLINATION="-60;-5;" ID="Arrow_ID_1602613098" SOURCE="ID_1755305963" STARTARROW="None" STARTINCLINATION="-23;5;"/>
+<node CREATED="1681520521181" ID="ID_127137475" MODIFIED="1681520530807" TEXT="verwendet gegebenen Render-Configurator"/>
+<node CREATED="1681520531323" ID="ID_741530178" MODIFIED="1681520580039" TEXT="erstellt daraus die Feeds + CalcStreams"/>
+</node>
+<node CREATED="1681513775661" HGAP="30" ID="ID_1732223894" MODIFIED="1681515122691" TEXT="Engine-Service">
+<arrowlink COLOR="#5e5972" DESTINATION="ID_1709285340" ENDARROW="Default" ENDINCLINATION="-55;-7;" ID="Arrow_ID_1166695691" STARTARROW="None" STARTINCLINATION="-42;8;"/>
+<linktarget COLOR="#5e5972" DESTINATION="ID_1732223894" ENDARROW="Default" ENDINCLINATION="-60;-5;" ID="Arrow_ID_1129120203" SOURCE="ID_80916607" STARTARROW="None" STARTINCLINATION="-23;5;"/>
+<node CREATED="1681520606402" ID="ID_833200775" MODIFIED="1681520624991" TEXT="Initiiert CalcStream(s)"/>
+<node CREATED="1681520779187" ID="ID_809350382" MODIFIED="1681520811410" TEXT="verdrahtet dazu einen Dispatcher"/>
+<node CREATED="1681520822876" ID="ID_4022163" MODIFIED="1681521853518" TEXT="erstellt ein RenderDrive mit Output"/>
+</node>
+<node CREATED="1681513782908" HGAP="30" ID="ID_1709285340" MODIFIED="1681515121003" TEXT="CalcStream">
+<arrowlink COLOR="#5e5972" DESTINATION="ID_1418303343" ENDARROW="Default" ENDINCLINATION="-60;-5;" ID="Arrow_ID_1246156345" STARTARROW="None" STARTINCLINATION="-23;5;"/>
+<linktarget COLOR="#5e5972" DESTINATION="ID_1709285340" ENDARROW="Default" ENDINCLINATION="-55;-7;" ID="Arrow_ID_1166695691" SOURCE="ID_1732223894" STARTARROW="None" STARTINCLINATION="-42;8;"/>
+<node CREATED="1681520869358" ID="ID_248036437" MODIFIED="1681521862197" TEXT="betreibt den RenderDrive"/>
+<node CREATED="1681520874613" ID="ID_1197599470" MODIFIED="1681520883624" TEXT="dieser ist intern mit dem Dispatcher verdrahtet"/>
+</node>
+<node CREATED="1681513790253" HGAP="30" ID="ID_1418303343" MODIFIED="1681515151463" TEXT="Dispatcher">
+<arrowlink COLOR="#5e5972" DESTINATION="ID_786643460" ENDARROW="Default" ENDINCLINATION="-60;-5;" ID="Arrow_ID_876462297" STARTARROW="None" STARTINCLINATION="-29;7;"/>
+<linktarget COLOR="#5e5972" DESTINATION="ID_1418303343" ENDARROW="Default" ENDINCLINATION="-60;-5;" ID="Arrow_ID_1246156345" SOURCE="ID_1709285340" STARTARROW="None" STARTINCLINATION="-23;5;"/>
+<node CREATED="1681520888910" ID="ID_1891724948" MODIFIED="1681520896702" TEXT="ist angesiedelt in der Fixture"/>
+<node CREATED="1681520912952" ID="ID_1717997829" MODIFIED="1681520920398" TEXT="bietet Anbindung an ein Frame-Grid"/>
+<node CREATED="1681520921575" ID="ID_1652151815" MODIFIED="1681520933542" TEXT="bietet Anbindung an die JobTicket(s)"/>
+</node>
+<node CREATED="1681513796795" HGAP="30" ID="ID_786643460" MODIFIED="1681521871090" TEXT="RenderDrive">
+<arrowlink COLOR="#5e5972" DESTINATION="ID_947997771" ENDARROW="Default" ENDINCLINATION="-60;-5;" ID="Arrow_ID_364168275" STARTARROW="None" STARTINCLINATION="-24;5;"/>
+<linktarget COLOR="#5e5972" DESTINATION="ID_786643460" ENDARROW="Default" ENDINCLINATION="-60;-5;" ID="Arrow_ID_876462297" SOURCE="ID_1418303343" STARTARROW="None" STARTINCLINATION="-29;7;"/>
+<node CREATED="1681520948109" ID="ID_1974741811" MODIFIED="1681520958397" TEXT="der aktive Nutzer des Dispatcher-Interfaces"/>
+<node CREATED="1681520997813" ID="ID_1498779054" MODIFIED="1681521034522" TEXT="re-aktiviert sich fortlaufend selbst"/>
+<node CREATED="1681521035833" ID="ID_744901458" MODIFIED="1681521051722" TEXT="ist verdrahtet mit der EngineFacade"/>
+<node CREATED="1681521090001" ID="ID_1206046554" MODIFIED="1681521101922" TEXT="erstellt und betreibt die JobPlanning-Pipeline"/>
+</node>
+<node CREATED="1681513815536" HGAP="30" ID="ID_947997771" MODIFIED="1681515143216" TEXT="JobPlanning">
+<arrowlink COLOR="#5e5972" DESTINATION="ID_839385817" ENDARROW="Default" ENDINCLINATION="-60;-5;" ID="Arrow_ID_1889540359" STARTARROW="None" STARTINCLINATION="-23;5;"/>
+<linktarget COLOR="#5e5972" DESTINATION="ID_947997771" ENDARROW="Default" ENDINCLINATION="-60;-5;" ID="Arrow_ID_364168275" SOURCE="ID_786643460" STARTARROW="None" STARTINCLINATION="-24;5;"/>
+<node CREATED="1681521107332" ID="ID_764418758" MODIFIED="1681521118625" TEXT="konkrete StateCore mit allen aktiven Verdrahtungen"/>
+<node CREATED="1681521122833" ID="ID_479512654" MODIFIED="1681521129047" TEXT="wird wie ein Cursor navigiert"/>
+<node CREATED="1681521246771" ID="ID_1361044565" MODIFIED="1681521267392" TEXT="bewegt sich auf Basis von JobTicket-Konfigurationen"/>
+<node CREATED="1681521294153" ID="ID_718588107" MODIFIED="1681521306565" TEXT="Mittel der Bewegung ist der JobTIcket::ExplorationState"/>
+</node>
+<node CREATED="1681513818806" HGAP="30" ID="ID_839385817" MODIFIED="1681514365078" TEXT="JobTicket">
+<linktarget COLOR="#5e5972" DESTINATION="ID_839385817" ENDARROW="Default" ENDINCLINATION="-60;-5;" ID="Arrow_ID_1889540359" SOURCE="ID_947997771" STARTARROW="None" STARTINCLINATION="-23;5;"/>
+<node CREATED="1681521333950" ID="ID_1882410873" MODIFIED="1681521341316" TEXT="ist ein passiver Bauplan"/>
+<node CREATED="1681521341799" ID="ID_1831867258" MODIFIED="1681521349882" TEXT="wird on-demand konkretisiert"/>
+<node CREATED="1681521357484" ID="ID_633522131" MODIFIED="1681521366470" TEXT="kolaboriert mit einem aktiven ExplorationState"/>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1681168811429" ID="ID_72728251" MODIFIED="1681168821401" TEXT="Aufr&#xe4;um-Arbeiten">
 <icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681519830697" ID="ID_1168919012" MODIFIED="1681519846021" TEXT="Nomenklatur unscharf">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1681519851664" ID="ID_1426982855" MODIFIED="1681519854742" TEXT="Engine-Service">
+<node CREATED="1681519855695" ID="ID_1479404578" MODIFIED="1681519922674" TEXT="&#x201e;die Renderengine&#x201c; &#x27f7; &#xbb;renderConfig&#xab;"/>
+<node CREATED="1681519892562" ID="ID_1833190140" MODIFIED="1681519916866" TEXT="die gleiche Closure hei&#xdf;t aber auch &#xbb;engineCallback&#xab;"/>
+</node>
+<node CREATED="1681596404095" ID="ID_582234271" MODIFIED="1681596416421" TEXT="&#x201e;nominal time&#x201c;">
+<node CREATED="1681596418090" ID="ID_1704128775" MODIFIED="1681596439782" TEXT="die Bedeutung von &#x201e;nominal&#x201c; ist zweifelhaft"/>
+<node CREATED="1681596470078" ID="ID_184267509" MODIFIED="1681596498936" TEXT="es ist nicht &#xbb;wall clock time&#xab; &#x2014; aber welche Zeitachse ist es dann?"/>
+</node>
+</node>
 <node CREATED="1681168823213" ID="ID_70139544" MODIFIED="1681168829891" TEXT="LinkedElements">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681168834655" ID="ID_775810104" MODIFIED="1681168886034" TEXT="Kompatibilit&#xe4;t mit STL verifizieren">
 <icon BUILTIN="flag-yellow"/>
@@ -69247,9 +69357,183 @@
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1681007034731" ID="ID_380471864" MODIFIED="1681007071540" TEXT="Implementierung (dispatcher-table) nur gestubbed">
 <icon BUILTIN="bell"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681425423695" ID="ID_1928295133" MODIFIED="1681426106281" TEXT="Reorganisation : CalcDriver verwenden">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681425423695" ID="ID_1928295133" MODIFIED="1681685384037" TEXT="Reorganisation : RenderDrive verwenden">
 <linktarget COLOR="#f4fec9" DESTINATION="ID_1928295133" ENDARROW="Default" ENDINCLINATION="-1068;-69;" ID="Arrow_ID_362199078" SOURCE="ID_1888344503" STARTARROW="None" STARTINCLINATION="1381;58;"/>
+<linktarget COLOR="#ffe4c9" DESTINATION="ID_1928295133" ENDARROW="Default" ENDINCLINATION="-724;353;" ID="Arrow_ID_1773297165" SOURCE="ID_845968912" STARTARROW="None" STARTINCLINATION="-257;23;"/>
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1681597653622" ID="ID_1608883275" MODIFIED="1681597683317" TEXT="Eigenschaften">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...erschlossen aus den bestehenden Strukturen + der neuen Intention
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node COLOR="#5b280f" CREATED="1681597684802" ID="ID_1406063015" MODIFIED="1681683228188" TEXT="kleines Value-Parameter-Objekt">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1681598452915" ID="ID_573477354" MODIFIED="1681598473868" TEXT="ist der aktive Kern im Calcstream"/>
+<node CREATED="1681598513826" ID="ID_1817819165" MODIFIED="1681598599379" TEXT="konstituiert eine Proze&#xdf;-Instanz-Identit&#xe4;t"/>
+<node CREATED="1681683275337" ID="ID_1515003010" MODIFIED="1681683297990" TEXT="berwirkt repetitive Selbst-Aktivierung"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681598877348" ID="ID_789757597" MODIFIED="1681683172391" TEXT="zu kl&#xe4;ren">
+<icon BUILTIN="yes"/>
+<node CREATED="1681598885498" ID="ID_1614960356" MODIFIED="1681598899763" TEXT="Redundanz / &#xdc;berschneidung mit dem CalcStream">
+<node CREATED="1681598901535" ID="ID_1286823970" MODIFIED="1681599043639" TEXT="beide haben auff&#xe4;llig &#xe4;hnliche Eigenschaften">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        repr&#228;sentieren eine parameter-basierte Instanz-Identit&#228;t
+      </li>
+      <li>
+        sind jeweils voll kopierbare Wertobjekte
+      </li>
+      <li>
+        ben&#246;tigen zudem eine Dependency-Injection
+      </li>
+      <li>
+        gespeichert im Play-Process und damit in der &#187;Prozess-Tafel&#171;
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1681599056122" ID="ID_458680948" MODIFIED="1681646642507" TEXT="Unterscheidung aus logischen/semantsichen Gr&#xfc;nden eingef&#xfc;hrt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        Der CalcStream ist eben das, also ein Organisationsmerkmal bzw. die Identit&#228;t eines Teilprozesses
+      </li>
+      <li>
+        Der RenderDrive soll ein zyklischer Mechanismus sein, und als JobFunctor genutzt werden
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1681599191305" ID="ID_1167449829" MODIFIED="1681599208482" TEXT="ben&#xf6;tigte Dependency-Injection ">
+<node CREATED="1681599223716" ID="ID_86738790" MODIFIED="1681599346318" TEXT="Timings (impliziert Frame-Grid)"/>
+<node CREATED="1681599210089" ID="ID_684433972" MODIFIED="1681599218026" TEXT="Zugang zum Dispatcher"/>
+<node CREATED="1681599257945" ID="ID_733064533" MODIFIED="1681599268652" TEXT="Zugang zum Scheduler"/>
+</node>
+<node CREATED="1681646460442" ID="ID_866977884" MODIFIED="1681646477449" TEXT="multiplicity and usage structure">
+<node CREATED="1681646502158" ID="ID_1554914113" MODIFIED="1681646512969" TEXT="die Planungs-Pipeline wird strikt sequentiell bespielt"/>
+<node CREATED="1681646532062" ID="ID_1383559792" MODIFIED="1681646551375" TEXT="es gibt nur einen Drive pro CalcStream"/>
+<node CREATED="1681646829918" ID="ID_284324155" MODIFIED="1681646835657" TEXT="nur minimlae bewegliche Teile"/>
+<node CREATED="1681646836533" ID="ID_1000053188" MODIFIED="1681646846261" TEXT="k&#xf6;nnte im Heap sitzen">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1681646866174" ID="ID_246853832" MODIFIED="1681646885323" TEXT="&#x27f9; Struktur">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681646891090" ID="ID_1766076946" MODIFIED="1681683127682" TEXT="non-copyable Heap-alloziert">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681646907319" ID="ID_682236351" MODIFIED="1681683367234" TEXT="wird per smart-ptr gemanaged">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681683094086" ID="ID_1384696790" MODIFIED="1681690034337" TEXT="beherbergt die Planungs-Pipeline">
+<arrowlink COLOR="#fd4259" DESTINATION="ID_1735556854" ENDARROW="Default" ENDINCLINATION="20;-71;" ID="Arrow_ID_91051045" STARTARROW="None" STARTINCLINATION="-206;16;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681646916186" ID="ID_806901618" MODIFIED="1681683127683" TEXT="wird erstellt aus">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1681646926897" ID="ID_1301053260" MODIFIED="1681646934364" TEXT="CalcStream-Kenndaten">
+<node CREATED="1681646935872" ID="ID_1191393929" MODIFIED="1681646959241" TEXT="Timings&amp;"/>
+<node CREATED="1681646946919" ID="ID_1576152420" MODIFIED="1681646966921" TEXT="ModelPort + channel"/>
+</node>
+<node CREATED="1681646971664" ID="ID_524941672" MODIFIED="1681646985378" TEXT="Environment-Resourcen">
+<node CREATED="1681646987124" ID="ID_147954437" MODIFIED="1681647202903" TEXT="bereitgestellt f&#xfc;r Render-Quality">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ein Play/Renderproze&#223; wird mit einer definiten Quality-of-Service-Strategie aufgebaut; daraus ergibt sich implizit, was ben&#246;tigt wird &#8212; und das ist ein sehr erweiterungsf&#228;higes Konzept: beispielsweise k&#246;nnte man das auf die Verf&#252;gbarkeit gewisser Klassen von Mediendaten erweitern, und es m&#252;&#223;ten somit nicht alle Daten immer direkt greifbar sein
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1681646998860" ID="ID_375377074" MODIFIED="1681647365953" TEXT="garantiert Verf&#xfc;gbarkeit der Ressourcen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      mit der Erstellung eines CalcStream geht die Zusage einher, alle ben&#246;tigten Resourcen tats&#228;chlich im geforderten Ma&#223; verf&#252;gbar zu haben; diese Zusage m&#252;ndet in die &#220;bersetzung in eine abstrahierte RenderEnvironmentClosure; dahinter k&#246;nnen sehr weitreichende Dispositionen verborgen sein, z.B. verteilte Resourcen in einem Render-Cluster/Netwerk-Setup, oder spezielle Hardware
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1681647059168" ID="ID_403042221" MODIFIED="1681647527409" TEXT="steteless + fail-Fast">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die Zusage ist verbindlich und ohne zeitliche Parametrisierung; sollte eine Resource wegbrechen, so l&#228;&#223;t man sofort den btr. Renderproze&#223; zusammenbrechen und markiert ihn als schadhaft
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681647531976" ID="ID_438278550" MODIFIED="1681683133041" TEXT="ist selber ein JobFunktor">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1681647578298" ID="ID_328838794" MODIFIED="1681647594158" TEXT="usage-constraints werden grunds&#xe4;tzlich implizit gehandhabt">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1681647609917" ID="ID_1941277429" MODIFIED="1681647652741" TEXT="hat bereits alle operativen Dependencies fertig injiziert"/>
+<node CREATED="1681647654353" ID="ID_1685443734" MODIFIED="1681647671007" TEXT="einziger beweglicher Parameter: die Start-Framenummer"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681689961426" ID="ID_1735556854" MODIFIED="1681690034338" TEXT="was wird dann aber aus dem Dispatcher?">
+<linktarget COLOR="#fd4259" DESTINATION="ID_1735556854" ENDARROW="Default" ENDINCLINATION="20;-71;" ID="Arrow_ID_91051045" SOURCE="ID_1384696790" STARTARROW="None" STARTINCLINATION="-206;16;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1681689971576" ID="ID_497495407" MODIFIED="1681690040742">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      dieser wird nun mehr und mehr <i>entkernt....</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1681690048013" ID="ID_800389319" MODIFIED="1681690224577" TEXT="sieht aktuell mehr aus wie eine Facade zur Fixture">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und das kommt nicht von ungef&#228;hr; schon im Entwurf von 2012 sollte ja&#160;<font color="#331eb5" face="Monospaced">Dispatcher</font>&#160; ein Interface sein, und die aktuelle Implementierung w&#228;re eine&#160; <font color="#331eb5" face="Monospaced">DispatchTable</font>, die direkt in der Fixture angesiedelt und gemanaged w&#252;rde
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1681690087200" ID="ID_14312341" MODIFIED="1681690107889" TEXT="folglich wird dieser Teil komplett entkoppelt von &#xbb;der Engine&#xab;"/>
+<node CREATED="1681690260176" ID="ID_1829278703" MODIFIED="1681690292694" TEXT="aber er sollte per DependencyInjection eingebracht werden (&#x2023; EngineService)"/>
 </node>
 </node>
 </node>
@@ -69429,9 +69713,24 @@
 </html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
+<node CREATED="1681685256388" ID="ID_845968912" MODIFIED="1681685407179" TEXT="besitzt/verwaltet den RenderDrive">
+<arrowlink COLOR="#ffe4c9" DESTINATION="ID_1928295133" ENDARROW="Default" ENDINCLINATION="-724;353;" ID="Arrow_ID_1773297165" STARTARROW="None" STARTINCLINATION="-257;23;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681685287808" ID="ID_439004499" MODIFIED="1681685335962" TEXT="TODO: non-copyable?">
+<arrowlink COLOR="#e0804f" DESTINATION="ID_1313231227" ENDARROW="Default" ENDINCLINATION="2513;164;" ID="Arrow_ID_861540006" STARTARROW="None" STARTINCLINATION="676;-84;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 <node CREATED="1681341894866" ID="ID_94172116" MODIFIED="1681341900624" TEXT="RenderEnvironmentClosure">
 <node CREATED="1681341905668" ID="ID_432577558" MODIFIED="1681341915150" TEXT="das ist die &#xbb;abstrahierte Render-Engine&#xab;"/>
+</node>
+<node CREATED="1681594252245" ID="ID_1719102613" MODIFIED="1681594256245" TEXT="InvocationInstanceID">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681594257143" ID="ID_689625560" MODIFIED="1681594270271" TEXT="Bedeutung kl&#xe4;ren">
+<icon BUILTIN="bell"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681594271596" ID="ID_963803611" MODIFIED="1681594283643" TEXT="in welchem Scope ist sie eindeutig?">
+<icon BUILTIN="help"/>
+</node>
 </node>
 </node>
 </node>

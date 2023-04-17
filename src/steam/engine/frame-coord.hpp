@@ -61,6 +61,7 @@ namespace engine {
    *          There is no reference to any kind of time grid (or similar session internals).
    * 
    * @todo 1/12 WIP-WIP-WIP defining the invocation sequence and render jobs
+   * @todo 4/23 WIP-WIP-WIP recast the dispatch- and job invocation sequence
    */
   struct FrameCoord
     {

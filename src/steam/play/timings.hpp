@@ -99,7 +99,7 @@ namespace play {
     public:
       PlaybackUrgency playbackUrgency;
       boost::rational<FrameCnt> playbackSpeed;                     /////////////TICKET #902 we need a more generic representation for variable speed playback
-      Time scheduledDelivery;
+      Time scheduledDelivery;                           ///< a wall clock time corresponding to the Grid's origin. Can be Time::Never (=not time bound)
       Duration outputLatency;
       
       explicit

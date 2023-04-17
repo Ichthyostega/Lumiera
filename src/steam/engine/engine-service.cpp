@@ -23,6 +23,7 @@
 
 /** @file engine-service.cpp
  ** Implementation parts related to the engine service abstraction
+ ** @warning as of 4/2023 Render-Engine integration work is underway ////////////////////////////////////////TICKET #1233
  */
 
 
@@ -81,7 +82,7 @@ namespace engine{
                            OutputConnection& output,
                            Quality serviceQuality)
   {
-    RenderEnvironmentClosure& renderConfig = configureCalculation (mPort,nominalTimings,serviceQuality);
+    RenderEnvironment& renderConfig = configureCalculation (mPort,nominalTimings,serviceQuality);
     function<CalcStream(play::DataSink)> triggerRenderStart = bind (activateCalculation, _1, ref(renderConfig));
 
     CalcStreams runningCalculations;
@@ -111,11 +112,11 @@ namespace engine{
   /** @internal build a representation of a single, ongoing calculation effort.
    * This "CalcStream" is tied to the actual engine implementation, but only
    * through an opaque link, representing this concrete engine as an
-   * RenderEnvironmentClosure. This enables the created CalcStream to be
-   * re-configured and adjusted while running.
+   * engine::RenderEnvironment closure. This enables the created CalcStream
+   * to be re-configured and adjusted while running.
    */
   CalcStream
-  EngineService::activateCalculation (play::DataSink sink, RenderEnvironmentClosure& engineCallback)
+  EngineService::activateCalculation (play::DataSink sink, RenderEnvironment& engineCallback)
   {
     CalcStream calcStream(engineCallback);
     calcStream.sendToOutput (sink);
@@ -132,18 +133,18 @@ namespace engine{
    * the individual channel streams linked together for playback or rendering;
    * they all share the same media type and quality settings.
    * @return an abstracted representation of the specific setup for this render;
-   *         from this point on, this RenderEnvironmentClosure will be the only way
+   *         from this point on, this RenderEnvironment closure will be the only way
    *         for client code to talk to "the engine". The actual instance of this
    *         closure is just a handle and can be copied; any CalcStream created
    *         off this closure will be linked to the same "environment" and be
    *         tracked and managed for resource usage automatically.
    * @note variations and especially mock implementations of the render engine
    *       might choose to configure internals differently. As long as the 
-   *       CalcStream and the embedded RenderEnvironmentClosure are consistent,
-   *       such a specific configuration remains opaque for the user of the
-   *       created render activity
+   *       CalcStream and the embedded RenderEnvironment are consistent,
+   *       such a specific configuration remains opaque for the user of
+   *       the created render activity
    */
-  RenderEnvironmentClosure&
+  RenderEnvironment&
   EngineService::configureCalculation (ModelPort mPort,
                                        Timings nominalTimings,
                                        Quality serviceQuality)
@@ -151,7 +152,7 @@ namespace engine{
     UNIMPLEMENTED ("Access and wire to the Scheduler-frontend. "
                    "Then access the Segmentation and invoke a builder function for a suitable dispatcher table. "
                    "Package all of this into a suitable RenderEnvironementClosure subclass.");
-    RenderEnvironmentClosure* todo_fake(0);  ////KABOOOM
+    RenderEnvironment* todo_fake(0);  ////KABOOOM
     
     return *todo_fake; 
   }

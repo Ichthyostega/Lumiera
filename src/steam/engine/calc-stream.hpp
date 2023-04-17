@@ -48,7 +48,7 @@
 #include "lib/error.hpp"
 #include "steam/play/timings.hpp"
 #include "steam/play/output-slot.hpp"
-#include "steam/engine/calc-plan-continuation.hpp"
+#include "steam/engine/render-drive.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
 //#include "common/instancehandle.hpp"
@@ -56,9 +56,10 @@
 //
 //#include <string>
 #include <vector>
+#include <memory>
 
 
-namespace steam  {
+namespace steam {
 namespace engine{
   
   namespace error = lumiera::error;
@@ -67,24 +68,10 @@ namespace engine{
 //    using lumiera::Subsys;
 //    using lumiera::Display;
 //    using lumiera::DummyPlayer;
+
+  class RenderEnvironment;
+
   
-  
-  /**
-   * Abstract definition of the environment
-   * hosting a given render activity (CalcStream).
-   * Exposes all the operations necessary to adjust the
-   * runtime behaviour of the render activity, like e.g.
-   * re-scheduling with modified playback speed. Since the
-   * CalcStream is an conceptual representation of "the rendering",
-   * the actual engine implementation is kept opaque this way. 
-   */
-  class RenderEnvironmentClosure
-    {
-    public:
-      virtual ~RenderEnvironmentClosure() { }   ///< this is an interface
-      
-      virtual play::Timings& effectiveTimings()   =0;
-    };
   
   
   
@@ -108,29 +95,26 @@ namespace engine{
    */
   class CalcStream
     {
-      RenderEnvironmentClosure* eng_;
-      engine::CalcPlanContinuation* plan_;
+      std::shared_ptr<RenderDrive> drive_;
       
     protected:
-      CalcStream (RenderEnvironmentClosure& abstractEngine)
-        : eng_(&abstractEngine)
+      CalcStream (RenderEnvironment& abstractEngine)
+        : drive_{}/////////////////////////////////////////////////TODO
         { }
       
       friend class EngineService;
       
      
-      CalcStream
+      void
       sendToOutput (play::DataSink)
         {
           UNIMPLEMENTED ("set up dispatcher to start calculating and feeding to the given output sink");
-          return *this;
         }
       
       
     public:
       CalcStream()
-        : eng_(0)
-        , plan_(0)
+        : drive_{}
         { }
       
      ~CalcStream() { }
@@ -138,15 +122,6 @@ namespace engine{
       // using standard copy operations
      
      
-      play::Timings const&
-      getTimings()
-        {
-          if (!eng_)
-            throw error::State ("attempt to get the playback timings "
-                                "of an unconfigured, disabled or halted calculation stream"
-                               ,error::LUMIERA_ERROR_LIFECYCLE);
-          return eng_->effectiveTimings();
-        }
       
     };
   

@@ -1,8 +1,8 @@
 /*
-  CalcPlanContinuation  -  closure for planning a chunk of jobs
+  RenderDrive  -  repetitively advancing a render calculation stream
 
   Copyright (C)         Lumiera.org
-    2013,               Hermann Vosseler <Ichthyostega@web.de>
+    2023,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,13 +21,13 @@
 * *****************************************************/
 
 
-/** @file calc-plan-continuation.cpp
+/** @file render-drive.cpp
  ** Implementation elements of render process planning.
- ** @deprecated 4/2023 »Playback Vertical Slice« -- reworked into the RenderDrive   /////////////////////////TICKET #1221
+ ** @todo 4/2023 »Playback Vertical Slice« -- effort towards first integration of render process ////////////TICKET #1221
  */
 
 
-#include "steam/engine/calc-plan-continuation.hpp"
+#include "steam/engine/render-drive.hpp"
 #include "steam/engine/frame-coord.hpp"
 #include "steam/engine/job-ticket.hpp"
 #include "lib/time/timevalue.hpp"
@@ -46,33 +46,35 @@ namespace engine {
    *  In this case, the job operation is responsible for planning a chunk of actual render jobs.
    */
   void
-  CalcPlanContinuation::invokeJobOperation (JobParameter parameter)
+  RenderDrive::invokeJobOperation (JobParameter parameter)
   {
-    ASSERT (parameter.nominalTime == timings_.getFrameStartAt (parameter.invoKey.frameNumber));
+    ASSERT (parameter.nominalTime == getTimings().getFrameStartAt (parameter.invoKey.frameNumber));
     
     this->performJobPlanningChunk (parameter.invoKey.frameNumber);
   }
   
   
   void
-  CalcPlanContinuation::signalFailure (JobParameter parameter, JobFailureReason reason)
+  RenderDrive::signalFailure (JobParameter parameter, JobFailureReason reason)
   {
     UNIMPLEMENTED ("what needs to be done when a planning continuation cant be invoked?");
   }
   
   
   bool
-  CalcPlanContinuation::verify (Time nominalTime, InvocationInstanceID invoKey)  const
+  RenderDrive::verify (Time nominalTime, InvocationInstanceID invoKey)  const
   {
-    return timings_.isValid()
+    UNIMPLEMENTED ("the actual meat: advance the render process");
+    return getTimings().isValid()
         && Time::MIN < nominalTime && nominalTime < Time::MAX
-        && nominalTime == timings_.getFrameStartAt (invoKey.frameNumber);
+        && nominalTime == getTimings().getFrameStartAt (invoKey.frameNumber);
   }
   
   
   size_t
-  CalcPlanContinuation::hashOfInstance (InvocationInstanceID invoKey) const
+  RenderDrive::hashOfInstance (InvocationInstanceID invoKey) const
   {
+    UNIMPLEMENTED ("the actual meat: advance the render process");
     return boost::hash_value (invoKey.frameNumber);
   }
   
@@ -81,31 +83,25 @@ namespace engine {
   
   
   Job
-  CalcPlanContinuation::prepareRenderPlanningFrom (FrameCnt startFrame)
+  RenderDrive::prepareRenderPlanningFrom (FrameCnt startFrame)
   {
     InvocationInstanceID invoKey;
     invoKey.frameNumber = startFrame;
-    Time nominalPlanningStartTime = timings_.getFrameStartAt (startFrame);
+    Time nominalPlanningStartTime = getTimings().getFrameStartAt (startFrame);
     
     return Job(*this, invoKey, nominalPlanningStartTime);
   }
   
   
   void
-  CalcPlanContinuation::performJobPlanningChunk(FrameCnt nextStartFrame)
+  RenderDrive::performJobPlanningChunk(FrameCnt nextStartFrame)
   {
-    TimeAnchor refPoint(timings_, nextStartFrame);
-    JobPlanningSequence jobs = dispatcher_.onCalcStream(modelPort_, channel_)
-                                          .establishNextJobs(refPoint);
-    
-    Job nextChunkOfPlanning = buildFollowUpJobFrom (refPoint);
-    
-    UNIMPLEMENTED ("the actual meat: access the scheduler and fed those jobs");
+    UNIMPLEMENTED ("the actual meat: advance the render process");
   }
   
   
   Job
-  CalcPlanContinuation::buildFollowUpJobFrom (TimeAnchor const& refPoint)
+  RenderDrive::buildFollowUpJobFrom (TimeAnchor const& refPoint)
   {
     return this->prepareRenderPlanningFrom(
                    refPoint.getNextAnchorPoint());
