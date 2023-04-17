@@ -96,6 +96,7 @@ namespace engine {
   void
   RenderDrive::performJobPlanningChunk(FrameCnt nextStartFrame)
   {
+    TimeAnchor refPoint(getTimings(), nextStartFrame);
     UNIMPLEMENTED ("the actual meat: advance the render process");
   }
   

@@ -69535,6 +69535,73 @@
 <node CREATED="1681690087200" ID="ID_14312341" MODIFIED="1681690107889" TEXT="folglich wird dieser Teil komplett entkoppelt von &#xbb;der Engine&#xab;"/>
 <node CREATED="1681690260176" ID="ID_1829278703" MODIFIED="1681690292694" TEXT="aber er sollte per DependencyInjection eingebracht werden (&#x2023; EngineService)"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681741481500" ID="ID_384450703" MODIFIED="1681741489593" TEXT="Dispatcher-Interface neu definieren">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681741493272" ID="ID_1834962194" MODIFIED="1681741499888" TEXT="der Builder f&#xe4;llt weg">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681741503343" ID="ID_852301467" MODIFIED="1681741508391" TEXT="Services">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681741523181" ID="ID_1358920776" MODIFIED="1681741643557" TEXT="FrameCoord locateRelative (FrameCoord, frameOffset)">
+<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1681741644460" ID="ID_498811202" MODIFIED="1681741652180" TEXT="schon implementiert">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681741652742" ID="ID_615819221" MODIFIED="1681741657891" TEXT="&#xfc;berpr&#xfc;fen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681741589427" ID="ID_1281351405" MODIFIED="1681741634102" TEXT="bool isEndOfChunk (frame, ModelPort)">
+<icon BUILTIN="help"/>
+<node CREATED="1681741635654" ID="ID_1118664905" MODIFIED="1681741641217" TEXT="fraglich ob noch ben&#xf6;tigt"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681741688503" ID="ID_1430371522" MODIFIED="1681741803819" TEXT="JobTicket&amp; accessJobTicket (TimeValue nominalTime, ModelPort, channel)">
+<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1681741883229" ID="ID_15002134" MODIFIED="1681741890812" TEXT="Front-End: getJobTicketFor (FrameCoord)">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681741893771" ID="ID_1417028935" MODIFIED="1681741951224" TEXT="eigentliche Impl fehlt">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742238869" ID="ID_1876795011" MODIFIED="1681742244980" TEXT="Planungs-Pipeline aufbauen">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1681742255171" ID="ID_1531898349" MODIFIED="1681744077783" TEXT="Draft im Test-Setup">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742836996" ID="ID_1978512771" MODIFIED="1681742860339" TEXT="scaffolding and mocking used for this test">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1681742863121" ID="ID_101929835" MODIFIED="1681742878203" TEXT="ben&#xf6;tigte Mocks">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742879175" ID="ID_1375353236" MODIFIED="1681742901348" TEXT="Dispatcher">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1681743458393" ID="ID_891681445" MODIFIED="1681743469323" TEXT="extrahieren aus DispatcherInterface_test"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742890385" ID="ID_1681918468" MODIFIED="1681742901349" TEXT="JobTicket">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742895901" ID="ID_594113874" MODIFIED="1681742901350" TEXT="Test-Job">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742836995" ID="ID_456677168" MODIFIED="1681742856094" TEXT="using a frame step as base tick">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742836996" ID="ID_1790705283" MODIFIED="1681742856095" TEXT="invoke the dispatcher to retrieve the top-level JobTicket">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742836996" ID="ID_1224963303" MODIFIED="1681742856095" TEXT="expander function to explore prerequisite JobTickets">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742836996" ID="ID_1332543018" MODIFIED="1681742856096" TEXT="integration: generate a complete sequence of (dummy)Jobs">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742264338" ID="ID_627755845" MODIFIED="1681742273104" TEXT="in RenderDrive &#xfc;berf&#xfc;hren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1512925253328" ID="ID_922277724" MODIFIED="1681168670386" TEXT="JobTicket">
@@ -69587,6 +69654,49 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680563536655" ID="ID_1180632123" MODIFIED="1680565151548" TEXT="Fixture: einfacher Clip">
 <linktarget COLOR="#f6e1c2" DESTINATION="ID_1180632123" ENDARROW="Default" ENDINCLINATION="-985;-61;" ID="Arrow_ID_1052251062" SOURCE="ID_1704865245" STARTARROW="None" STARTINCLINATION="-2243;270;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742004652" ID="ID_806189817" MODIFIED="1681742017755" TEXT="Addressierung ModelPort / ExitNode">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681742024628" ID="ID_1133872595" MODIFIED="1681742050101" TEXT="bis auf welchen Level wird differenziert?">
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742053502" ID="ID_122410804" MODIFIED="1681742065769" TEXT="Idee: auch noch Channel aufl&#xf6;sen">
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681742068918" ID="ID_1859739609" MODIFIED="1681742080663" TEXT="Frage: sinnvoll f&#xfc;r den ModelPort?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742084938" ID="ID_202138467" MODIFIED="1681742119293" TEXT="ExitNode k&#xf6;nnte nach Bedarf differenziert sein">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742124316" ID="ID_1362949228" MODIFIED="1681742128580" TEXT="Diskussion">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742129796" ID="ID_189050777" MODIFIED="1681742134141" TEXT="pro">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742131726" ID="ID_1521704856" MODIFIED="1681742134141" TEXT="contra">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681742137539" ID="ID_1756656706" MODIFIED="1681742142187" TEXT="Entscheidung">
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742149953" ID="ID_1733561384" MODIFIED="1681742202136" TEXT="erst mal andere Teile bauen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      den Channel-Parameter kann man leichter wegfallen lassen, als ihn nachtr&#228;glich durchzuf&#228;deln; die Entscheidung selber wird erst relevant, wenn wir das low-Level-Model konkretisieren
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742018442" ID="ID_596503548" MODIFIED="1681742022940" TEXT="Addressierung JobTicket">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
