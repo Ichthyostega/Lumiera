@@ -68,10 +68,10 @@ namespace test  {
   
   namespace { // used internally
     
-    using play::PlayTestFrames_Strategy;
-    using play::ModelPorts;
+    using play::test::PlayTestFrames_Strategy;
+    using play::test::ModelPorts;
     
-    typedef play::DummyPlayConnection<play::PlayTestFrames_Strategy> DummyPlaybackSetup;
+    using DummyPlaybackSetup = play::test::DummyPlayConnection<PlayTestFrames_Strategy>;
     
     
     class MockDispatcherTable

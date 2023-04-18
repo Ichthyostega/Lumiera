@@ -98,8 +98,9 @@
 #include <vector>
 
 
-namespace steam {
+namespace steam{
 namespace play {
+namespace test {
 
 //    using std::string;
 //    using lumiera::Subsys;
@@ -275,5 +276,5 @@ namespace play {
   
   
   
-}} // namespace steam::play
+}}} // namespace steam::play::test
 #endif /*STEAM_PLAY_DUMMY_PLAY_CONNECTION_H*/

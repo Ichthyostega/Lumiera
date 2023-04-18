@@ -33,6 +33,7 @@
 //#include "steam/play/dummy-play-connection.hpp"
 #include "steam/mobject/model-port.hpp"
 #include "steam/engine/dispatcher.hpp"
+#include "steam/engine/job-ticket.hpp"
 //#include "steam/play/timings.hpp"
 //#include "lib/time/timevalue.hpp"
 ////#include "lib/time/timequant.hpp"
@@ -118,21 +119,22 @@ namespace test   {
     
   }//(End)internal test helpers....
     
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #890
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1221
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1221
   
   /**
    * Mock for...
    * 
-   * @see JobPlanningsetup_test
+   * @see JobPlanningSetup_test
    * @see DispatcherInterface_test
    * 
    */
   class MockJobTicket
+    : public JobTicket
     {
       
     public:
-     ~MockJobTicket();
+      MockJobTicket() { };
       
     private:
     };

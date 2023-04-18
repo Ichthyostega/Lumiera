@@ -68419,7 +68419,7 @@
 <node CREATED="1512923672275" ID="ID_1369059082" MODIFIED="1557498707237" TEXT="Wiring"/>
 <node CREATED="1512923682530" ID="ID_1204903801" MODIFIED="1557498707237" TEXT="Planning">
 <node CREATED="1512925214070" ID="ID_491842947" MODIFIED="1557498707237" TEXT="1.Entwurf">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1512925217693" ID="ID_704714253" MODIFIED="1557498707237" TEXT="steckengeblieben">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1512925217693" ID="ID_704714253" MODIFIED="1681837087287" TEXT="war seit 2012 steckengeblieben...">
 <icon BUILTIN="smily_bad"/>
 </node>
 <node CREATED="1512925253328" HGAP="42" ID="ID_946385163" MODIFIED="1681168718652" TEXT="JobTicket" VSHIFT="-4">
@@ -68460,6 +68460,10 @@
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681167470153" ID="ID_1806361283" MODIFIED="1681167480840" TEXT="PlaybackVerticalSlice">
 <icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681839381459" ID="ID_697548050" MODIFIED="1681839536316" TEXT="im ersten Schritt: mit der neuen Struktur ohne Monaden nutzbar machen">
+<arrowlink COLOR="#fe80b2" DESTINATION="ID_310889374" ENDARROW="Default" ENDINCLINATION="-503;-32;" ID="Arrow_ID_1927639949" STARTARROW="None" STARTINCLINATION="230;9;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 </node>
@@ -69116,10 +69120,10 @@
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1681083093846" ID="ID_1045820854" MODIFIED="1681083294169" TEXT="der Scheduler ist eine denkbar ung&#xfc;nstige Schnittstelle zwischen verschiedenen Design-Stilen">
 <icon BUILTIN="stop-sign"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1681083159662" ID="ID_860686341" MODIFIED="1681083294170" TEXT="die Aufteilung in Session und Engine &#x27f9; zu einfaches mentales Modell">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1681083267223" ID="ID_1330479674" MODIFIED="1681083294171" TEXT="die Schnittstelle liegt an einer Grenze der Kopetenzen &#x2014; nicht einer Grenze der Dom&#xe4;nen">
 <icon BUILTIN="stop-sign"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1681083267223" ID="ID_1330479674" MODIFIED="1681083294171" TEXT="die Schnittstelle liegt an einer Grenze der Kopetenzen &#x2014; nicht einer Grenze der Dom&#xe4;nen">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1681083159662" ID="ID_860686341" MODIFIED="1681083294170" TEXT="die Aufteilung in Session und Engine &#x27f9; zu einfaches mentales Modell">
 <icon BUILTIN="stop-sign"/>
 </node>
 </node>
@@ -69579,9 +69583,133 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742890385" ID="ID_1681918468" MODIFIED="1681742901349" TEXT="JobTicket">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1681775901704" ID="ID_1011961716" MODIFIED="1681775914876" TEXT="mu&#xdf; Prerequisite-Struktur von weiteren JobTIckets bieten"/>
+<node CREATED="1681775915726" ID="ID_723266604" MODIFIED="1681775925599" TEXT="diese m&#xfc;ssen irgendwo in Storage gehalten werden"/>
+<node CREATED="1681775956207" ID="ID_403116999" MODIFIED="1681775974479" TEXT="idealerweise kann der Test diese Stuktur in Grenzen selber vorgeben">
+<node CREATED="1681776011645" ID="ID_398083887" MODIFIED="1681776024883" TEXT="das w&#xe4;re eine DSL...">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1681776041364" ID="ID_581175494" MODIFIED="1681832931895" TEXT="man k&#xf6;nnte GenNode nutzen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...bevor ich jetzt anfange, eine symbolische Notation und einen Parser zu erfinden, w&#228;re ein einfache Konvetion f&#252;r <i>structured data</i>&#160; wohl sinnvoller; dann k&#246;nnte man die Builder-Notation f&#252;r GenNode nutzen
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#fef7d1" DESTINATION="ID_1664606019" ENDARROW="Default" ENDINCLINATION="139;-4;" ID="Arrow_ID_1184218305" STARTARROW="None" STARTINCLINATION="13;150;"/>
+</node>
+</node>
+<node CREATED="1681776275452" ID="ID_952967108" MODIFIED="1681776292134" TEXT="damit w&#xfc;rde hier sogar eine Art Mock-Fixture gebaut">
+<node CREATED="1681776316175" ID="ID_814536760" MODIFIED="1681776323218" TEXT="1.Ebene: Segmentation"/>
+<node CREATED="1681776335491" ID="ID_1866146614" MODIFIED="1681776353238" TEXT="jedes Element: ein JobTicket"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742895901" ID="ID_594113874" MODIFIED="1681742901350" TEXT="Test-Job">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1681777299523" ID="ID_252686764" MODIFIED="1681777342528" TEXT="alle Test-Jobs verwenden einen einzigen Funktor"/>
+<node CREATED="1681777343685" ID="ID_572811753" MODIFIED="1681777357938" TEXT="dieser beherbergt ein TestLog"/>
+<node CREATED="1681777358683" ID="ID_768023482" MODIFIED="1681777393914" TEXT="er kann aber mit einem Adapter speziell markiert werden"/>
+<node CREATED="1681777394886" ID="ID_1582494030" MODIFIED="1681777440923" TEXT="bei Aufruf loggt der Job diese spezilel Marke + gegebene Frame-Koord"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681831353728" ID="ID_1982624809" MODIFIED="1681831371808" TEXT="l&#xe4;ngerfristig: DummyPlayConnection ausbauen">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1681831376448" ID="ID_1561067125" MODIFIED="1681831389254" TEXT="dort soll eine integrierte Dummy-Fixture entstehen">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1681832399136" ID="ID_1606283048" MODIFIED="1681832419154" TEXT="diese baut auf den Test-Hilfsmitteln auf (die wir hier entwickeln)"/>
+<node CREATED="1681832422005" ID="ID_1203832652" MODIFIED="1681832531957" TEXT="aber: das ist mehr ein Konfigurations Front-end">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      den skizzierten, wie &#252;blich weitreichenden Pl&#228;nen gem&#228;&#223; kann mit erheblicher Komplexit&#228;t gerechnet werden; es erscheint daher angemessen, die eigentlichen Mock-Bausteine separat nutzbar zu halten und die DummyPlayConnection zur Orchestrierung des jeweiligen Test-Setup zu verwenden
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1681832844221" ID="ID_826966768" MODIFIED="1681832848268" TEXT="Aufbau">
+<icon BUILTIN="pencil"/>
+<node CREATED="1681832851795" ID="ID_1453467501" MODIFIED="1681832896408" TEXT="vom MockJobTicket aus beginnen...">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681832899812" ID="ID_1664606019" MODIFIED="1681832943961" TEXT="GenNode-basierter Implementierungs-Kern">
+<linktarget COLOR="#fef7d1" DESTINATION="ID_1664606019" ENDARROW="Default" ENDINCLINATION="139;-4;" ID="Arrow_ID_1184218305" SOURCE="ID_581175494" STARTARROW="None" STARTINCLINATION="13;150;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681833031252" HGAP="29" ID="ID_1232985944" MODIFIED="1681833059957" TEXT="leer" VSHIFT="14">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681833034545" ID="ID_1378629902" MODIFIED="1681833049605" TEXT="rekursiv mit Prerequisite">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681833071385" ID="ID_1107925235" MODIFIED="1681833077742" TEXT="MockJob hinterlegen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1681839415291" ID="ID_310889374" MODIFIED="1681839523165" TEXT="bestehenden Code nutzbar machen">
+<linktarget COLOR="#fe80b2" DESTINATION="ID_310889374" ENDARROW="Default" ENDINCLINATION="-503;-32;" ID="Arrow_ID_1927639949" SOURCE="ID_697548050" STARTARROW="None" STARTINCLINATION="230;9;"/>
+<icon BUILTIN="pencil"/>
+<node CREATED="1681839541902" ID="ID_147064800" MODIFIED="1681839551928" TEXT="die Datenstrukturen im JobTicket sind m&#xfc;hsam">
+<node CREATED="1681839553444" ID="ID_1298986941" MODIFIED="1681839563846" TEXT="die intrusive Linked-List ist fragw&#xfc;rdig"/>
+<node CREATED="1681839564362" ID="ID_1371203216" MODIFIED="1681839580980" TEXT="aber Storage mu&#xdf; zwingend l&#xfc;ckenlos sein"/>
+<node CREATED="1681839581752" ID="ID_643256358" MODIFIED="1681839603985" TEXT="alternativ w&#xe4;re daher ein Builder / Subtyp-Ansatz notwendig"/>
+<node CREATED="1681839605783" ID="ID_133261971" MODIFIED="1681839717383" TEXT="dieser wirft auch so seine Probleme auf">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ... vor allem eine zus&#228;tzliche Indirektion, deren Wirkung nicht einfach abzusch&#228;tzen ist. Die tats&#228;chliche Listenl&#228;nge mu&#223; letztlich immer irgendwo explizit repr&#228;sentiert werden, und wenn man dies in einem Subtyp verbirgt, mu&#223; jeder Datenzugriff zwingend einmal durch eine Indirektion laufen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681839722781" ID="ID_1259093394" MODIFIED="1681839753677" TEXT="also erst mal so belassen">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681839729932" ID="ID_734404270" MODIFIED="1681839744054" TEXT="sp&#xe4;ter nochmal analysieren">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681839764807" ID="ID_817794853" MODIFIED="1681839788158" TEXT="der mit eingebaute Stack mu&#xdf; jetzt irgendwie brach liegen bleiben">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1681839799283" ID="ID_830915873" MODIFIED="1681839807269" TEXT="selbst einfachste Tests brauchen...">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681839808074" ID="ID_389152221" MODIFIED="1681839820464" TEXT="Einstiegspunkt">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1681839824481" ID="ID_1782808621" LINK="#ID_1656777068" MODIFIED="1681839924803" TEXT="HA! startExploration k&#xf6;nnte &#xfc;berfl&#xfc;ssig sein">
+<icon BUILTIN="idea"/>
+<node CREATED="1681839942912" ID="ID_1045793970" MODIFIED="1681839954754" TEXT="an der Stelle zeigten sich deutlich die inneren Widerspr&#xfc;che"/>
+<node CREATED="1681839958747" ID="ID_506200323" MODIFIED="1681839992513" TEXT="kann mich erinnern, da&#xdf; ich damals mich dort massiv festgefahren habe">
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1681839975059" ID="ID_1105715936" MODIFIED="1681839987192" TEXT="und auch jetzt hab ich schon wieder ein paar Stunden gegr&#xfc;belt">
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681839812280" ID="ID_525360569" MODIFIED="1681839820465" TEXT="Iteration">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1681840007512" ID="ID_1951568685" MODIFIED="1681840020471" TEXT="ist f&#xfc;r LinkedElements bereits fertig implementiert">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681839815223" ID="ID_864479514" MODIFIED="1681839820465" TEXT="Verifikation">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681840026883" ID="ID_43381502" MODIFIED="1681840070423" TEXT="es gibt eine empty()-Funktion &#x2014; brauchbar?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -69671,9 +69799,40 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742129796" ID="ID_189050777" MODIFIED="1681742134141" TEXT="pro">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1681838331575" ID="ID_239877433" MODIFIED="1681838347337" TEXT="einfachere Primitive im eigentlichen Render-Netzwerk"/>
+<node CREATED="1681838400094" ID="ID_1608524064" MODIFIED="1681838415480" TEXT="ein pervasives, fast &#xfc;berall irrelevantes Meta-Datum f&#xe4;llt weg"/>
+<node CREATED="1681838767717" ID="ID_1175513068" MODIFIED="1681838892572" TEXT="potentielle Komplexit&#xe4;ten der Channel-Selektion werden in den Build-Proze&#xdf; verlagert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...es ist keineswegs sicher, da&#223; wir mit einer blo&#223;en Addressierung per Channel-Nummer auskommen; es k&#246;nnte durchaus passieren, da&#223; Erweiterung auf eine generische Selektions-Sprache notwendig wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742131726" ID="ID_1521704856" MODIFIED="1681742134141" TEXT="contra">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1681838010874" ID="ID_646358803" MODIFIED="1681838019972" TEXT="identisch pro channel aufgedoppelte Pipelines">
+<node CREATED="1681838041838" ID="ID_1433619565" MODIFIED="1681838054376" TEXT="...m&#xfc;&#xdf;ten tats&#xe4;chlich nur einmal geplant und realisiert werden"/>
+<node CREATED="1681838058588" ID="ID_1606171759" MODIFIED="1681838075957" TEXT="sie werden dann lediglich mehrfach mit anderer Parametrisierung bespielt"/>
+<node CREATED="1681838082068" ID="ID_262950828" MODIFIED="1681838121263" TEXT="die Parametrisierung wird typischerweise lediglich zur Quelle/Mediencontainer druchgereicht"/>
+</node>
+<node CREATED="1681838495277" ID="ID_314464979" MODIFIED="1681838672355" TEXT="f&#xfc;hrt zumindest zu massiver Duplikation von Deskriptoren und Metadaten zur Steuerung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      man denke nur an higher-order Ambisonics...
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681742137539" ID="ID_1756656706" MODIFIED="1681742142187" TEXT="Entscheidung">

@@ -68,8 +68,8 @@ namespace test  {
       virtual void
       run (Arg) 
         {
-          UNIMPLEMENTED ("shape the interface of the job-planning pipeline");
           demonstrateScaffolding();
+          UNIMPLEMENTED ("shape the interface of the job-planning pipeline");
           buildBaseTickGenerator();
           accessTopLevelJobTicket();
           exploreJobTickets();
@@ -81,6 +81,8 @@ namespace test  {
       void
       demonstrateScaffolding()
         {
+          MockJobTicket mockTick;
+          CHECK (mockTick.discoverPrerequisites().empty());
           UNIMPLEMENTED ("how to mock and fake");
           /////////////////////////////////////////////////////////////////////////////TODO: extract from DispatcherInterface_test
           /////////////////////////////////////////////////////////////////////////////TODO: design a job-ticket-mock

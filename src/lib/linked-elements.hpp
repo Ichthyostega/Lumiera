@@ -323,13 +323,13 @@ namespace lib {
       
     public:
       
-     ~LinkedElements ()
+     ~LinkedElements()
         { 
           clear();
         }
       
-      LinkedElements ()
-        : head_(0)
+      LinkedElements()
+        : head_{nullptr}
         { }
       
       /** @param allo custom allocator or memory manager
@@ -338,8 +338,8 @@ namespace lib {
        */
       explicit
       LinkedElements (typename ALO::CustomAllocator allo)
-        : ALO(allo)
-        , head_(0)
+        : ALO{allo}
+        , head_{nullptr}
         { }
       
       /** creating a LinkedElements list in RAII-style:
@@ -350,10 +350,10 @@ namespace lib {
        */
       template<class IT>
       LinkedElements (IT elements)
-        : head_(0)
+        : head_{nullptr}
         {
         try {
-            pushAll(elements);
+            pushAll (elements);
           }
         catch(...)
           {
@@ -533,8 +533,8 @@ namespace lib {
         {
           N* node;
           
-          IterationState(N* p=0)
-            : node(p)
+          IterationState (N* p =nullptr)
+            : node{p}
             { }
           
           /* ==== internal callback API for the iterator ==== */
@@ -572,8 +572,8 @@ namespace lib {
         };
       
     public:
-      typedef IterStateWrapper<      N, IterationState> iterator;
-      typedef IterStateWrapper<const N, IterationState> const_iterator;
+      using       iterator = IterStateWrapper<      N, IterationState>;
+      using const_iterator = IterStateWrapper<const N, IterationState>;
       
       
       iterator       begin()       { return iterator       (head_); }
@@ -581,12 +581,10 @@ namespace lib {
       iterator       end ()        { return iterator();       }
       const_iterator end ()  const { return const_iterator(); }
       
-      
-      
     };
   
   
   
   
 } // namespace lib
-#endif
+#endif /*LIB_LINKED_ELEMENTS_H*/

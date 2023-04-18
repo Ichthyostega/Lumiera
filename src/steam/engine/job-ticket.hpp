@@ -82,11 +82,13 @@ using util::isnil;
    * This way, the JobTicket acts as _higher order function:_ a function
    * generating on invocation another, specific function (= the job).
    * 
-   * @todo 1/12 WIP-WIP-WIP defining the invocation sequence and render jobs
+   * @todo 4/23 WIP-WIP-WIP defining the invocation sequence and render jobs
+   * @todo maybe the per-channel specialisation can be elided altogether...?
    */
   class JobTicket
     : util::NonCopyable
     {
+      /** what handling this task entails */
       struct Provision
         {
           Provision* next;
@@ -118,12 +120,12 @@ using util::isnil;
       
       JobTicket()
         {
-          UNIMPLEMENTED ("job representation, planning and scheduling");
+          TODO ("job representation, planning and scheduling");
         }
       
       
-      ExplorationState startExploration()                      const;
-      ExplorationState discoverPrerequisites (uint channelNr)  const;
+      ExplorationState startExploration()                        const;
+      ExplorationState discoverPrerequisites (uint channelNr =0) const;
       
       Job createJobFor (FrameCoord coordinates);
       
@@ -134,7 +136,7 @@ using util::isnil;
           if (channelConfig_.size() != requirement_.size())
             return false;
           
-          UNIMPLEMENTED ("validity self check");
+          TODO ("validity self check");
         }
     };
   
@@ -152,7 +154,7 @@ using util::isnil;
       
       ExplorationState (Prerequisites& prerequisites)
         {
-          if (!isnil (prerequisites.requiredJobs_))
+          if (not isnil (prerequisites.requiredJobs_))
             toExplore_.push (prerequisites.requiredJobs_.begin());
         }
       
@@ -237,6 +239,7 @@ using util::isnil;
   
   
   
+  /// @deprecated : could be expendable ... likely incurred solely by the use of Monads as design pattern 
   inline JobTicket::ExplorationState
   JobTicket::startExploration()  const
   {
