@@ -69,15 +69,15 @@ namespace test{
       {
         Nummy* next;
         
-        Nummy() 
+        Nummy()
           : Dummy()
-          , next(0)
+          , next{0}
           { }
         
         explicit
         Nummy (int i)
-          : Dummy(i)
-          , next(0)
+          : Dummy{i}
+          , next{0}
           {
             if (i == exception_trigger)
               throw error::Fatal("simulated error", LERR_(PROVOKED_FAILURE));
@@ -102,7 +102,7 @@ namespace test{
     
     
     /**
-     * Helper to produce a pre-determined series 
+     * Helper to produce a pre-determined series
      * of objects to populate a LinkedElements list.
      * @note just happily heap allocating new instances
      *       and handing them out. The LinkedElements list
@@ -140,7 +140,6 @@ namespace test{
     class Populator
       : public NummyGenerator::iterator
       {
-        
       public:
         explicit
         Populator (uint numElms)
@@ -165,13 +164,13 @@ namespace test{
   
   
   /// default case: ownership for heap allocated nodes
-  typedef LinkedElements<Nummy> List;
+  using List = LinkedElements<Nummy>;
   
   /// managing existing node elements without taking ownership
-  typedef LinkedElements<Nummy, linked_elements::NoOwnership> ListNotOwner;
+  using ListNotOwner = LinkedElements<Nummy, linked_elements::NoOwnership>;
   
   /// creating nodes in-place, using a custom allocator for creation and disposal
-  typedef LinkedElements<Nummy, linked_elements::UseAllocationCluster> ListCustomAllocated;
+  using ListCustomAllocated = LinkedElements<Nummy, linked_elements::UseAllocationCluster>;
   
   
   
@@ -188,6 +187,7 @@ namespace test{
         {
           simpleUsage();
           iterating();
+          reverseList();
           
           verify_nonOwnership();
           verify_ExceptionSafety();
@@ -207,11 +207,11 @@ namespace test{
             CHECK (0 == elements.size());
             CHECK (0 == Dummy::checksum());
             
-            elements.pushNew<Nummy>(1);
-            elements.pushNew<Nummy>(2);
-            elements.pushNew<Nummy>(3);
-            elements.pushNew<Nummy>(4);
-            elements.pushNew<Nummy>(5);
+            elements.emplace<Nummy>(1);
+            elements.emplace<Nummy>(2);
+            elements.emplace<Nummy>(3);
+            elements.emplace<Nummy>(4);
+            elements.emplace<Nummy>(5);
             CHECK (!isnil (elements));
             CHECK (5 == elements.size());
             CHECK (0 != Dummy::checksum());
@@ -227,9 +227,9 @@ namespace test{
             CHECK (0 == elements.size());
             CHECK (0 == Dummy::checksum());
             
-            elements.pushNew<Nummy>();
-            elements.pushNew<Nummy>();
-            elements.pushNew<Nummy>();
+            elements.emplace<Nummy>();
+            elements.emplace<Nummy>();
+            elements.emplace<Nummy>();
             
             CHECK (3 == elements.size());
             CHECK (0 != Dummy::checksum());
@@ -245,9 +245,9 @@ namespace test{
           {
             List elements;
             for (uint i=1; i<=NUM_ELEMENTS; ++i)
-              elements.pushNew<Nummy>(i);
+              elements.emplace<Nummy>(i);
             
-            // since elements where pushed, 
+            // since elements where pushed,
             // they should appear in reversed order
             int check=NUM_ELEMENTS;
             List::iterator ii = elements.begin();
@@ -288,6 +288,68 @@ namespace test{
             VERIFY_ERROR (ITER_EXHAUST, ++ii );
             VERIFY_ERROR (ITER_EXHAUST, ++cii );
             
+          }
+          CHECK (0 == Dummy::checksum());
+        }
+      
+      
+      void
+      reverseList()
+        {
+          CHECK (0 == Dummy::checksum());
+          {
+            List list;
+            CHECK (isnil (list));
+            list.reverse();
+            CHECK (isnil (list));
+            CHECK (0 == Dummy::checksum());
+            
+            list.emplace<Nummy>(1);
+            CHECK (not isnil (list));
+            CHECK (1 == list[0].getVal());
+            CHECK (1 == Dummy::checksum());
+            list.reverse();
+            CHECK (1 == Dummy::checksum());
+            CHECK (1 == list[0].getVal());
+            CHECK (not isnil (list));
+            
+            list.emplace<Nummy>(2);
+            CHECK (not isnil (list));
+            CHECK (2 == list.size());
+            CHECK (2 == list[0].getVal());
+            CHECK (2+1 == Dummy::checksum());
+            list.reverse();
+            CHECK (1+2 == Dummy::checksum());
+            CHECK (1 == list[0].getVal());
+            CHECK (2 == list.size());
+            
+            list.emplace<Nummy>(3);
+            CHECK (3 == list.size());
+            CHECK (3 == list.top().getVal());
+            CHECK (3+1+2 == Dummy::checksum());
+            list.reverse();
+            CHECK (2 == list[0].getVal());
+            CHECK (1 == list[1].getVal());
+            CHECK (3 == list[2].getVal());
+            List::iterator ii = list.begin();
+            CHECK (2 == ii->getVal());
+            ++ii;
+            CHECK (1 == ii->getVal());
+            ++ii;
+            CHECK (3 == ii->getVal());
+            ++ii;
+            CHECK (isnil (ii));
+            CHECK (2+1+3 == Dummy::checksum());
+
+            list.emplace<Nummy>(4);
+            CHECK (4 == list.top().getVal());
+            CHECK (3 == list[3].getVal());
+            list.reverse();
+            CHECK (3 == list[0].getVal());
+            CHECK (1 == list[1].getVal());
+            CHECK (2 == list[2].getVal());
+            CHECK (4 == list[3].getVal());
+            CHECK (3+1+2+4 == Dummy::checksum());
           }
           CHECK (0 == Dummy::checksum());
         }
@@ -346,11 +408,11 @@ namespace test{
             
             __triggerErrorAt(3);
             
-            elements.pushNew<Nummy>(1);
-            elements.pushNew<Nummy>(2);
+            elements.emplace<Nummy>(1);
+            elements.emplace<Nummy>(2);
             CHECK (1+2 == Dummy::checksum());
             
-            VERIFY_ERROR (PROVOKED_FAILURE, elements.pushNew<Nummy>(3) );
+            VERIFY_ERROR (PROVOKED_FAILURE, elements.emplace<Nummy>(3) );
             CHECK (1+2 == Dummy::checksum());
             CHECK (2 == elements.size());
             
@@ -420,9 +482,9 @@ namespace test{
             
             ListCustomAllocated elements(allocator);
             
-            elements.pushNew<Num<1>> (2);
-            elements.pushNew<Num<3>> (4,5);
-            elements.pushNew<Num<6>> (7,8,9);
+            elements.emplace<Num<1>> (2);
+            elements.emplace<Num<3>> (4,5);
+            elements.emplace<Num<6>> (7,8,9);
             
             CHECK (sum(9) == Dummy::checksum());
             CHECK (3 == allocator.size());

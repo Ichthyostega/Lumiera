@@ -39,7 +39,7 @@
 ////#include "lib/time/timequant.hpp"
 ////#include "lib/format-cout.hpp"
 #include "lib/depend.hpp"
-//#include "lib/itertools.hpp"
+#include "lib/itertools.hpp"
 //#include "lib/util-coll.hpp"
 #include "lib/test/test-helper.hpp"
 //#include "lib/util.hpp"
@@ -115,7 +115,18 @@ namespace test   {
           }
       };
     
+    /// @deprecated this setup is confusing and dangerous (instance identity is ambiguous)
     lib::Depend<MockDispatcherTable> mockDispatcher;
+    
+    
+    
+    inline auto
+    defineBottomProvision()
+    {
+//      return lib::singleValIterator(
+//                 JobTicket::buildProvision (
+//                                           ));
+    }
     
   }//(End)internal test helpers....
     
@@ -134,7 +145,9 @@ namespace test   {
     {
       
     public:
-      MockJobTicket() { };
+//      MockJobTicket()
+//        : JobTicket{JobTicket::Provisions{defineBottomProvision()}}
+//        { };
       
     private:
     };

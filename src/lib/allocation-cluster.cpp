@@ -73,7 +73,7 @@ namespace lib {
       
     public:
       MemoryManager(TypeInfo info) : top_(0) { reset(info); }
-      ~MemoryManager()                       { purge(); }
+     ~MemoryManager()                        { purge(); }
       
       size_t size()  const;
       
@@ -224,8 +224,8 @@ namespace lib {
   void*
   AllocationCluster::initiateAlloc (size_t& slot)
   {
-    if (!slot || slot > typeHandlers_.size() || !handler(slot) )
-      return 0; // Memory manager not yet initialised
+    if (!slot or slot > typeHandlers_.size() or !handler(slot) )
+      return nullptr;  // Memory manager not yet initialised
     else
       return handler(slot)->allocate();
   }
@@ -241,7 +241,7 @@ namespace lib {
         
         if (slot > typeHandlers_.size())
           typeHandlers_.resize(slot);
-        if (!handler(slot))
+        if (not handler(slot))
           handler(slot).reset (new MemoryManager (type));
         
       }
@@ -287,9 +287,6 @@ namespace lib {
     else
       return 0;
   }
-  
-  
-  
   
   
   

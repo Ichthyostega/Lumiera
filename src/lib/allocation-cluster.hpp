@@ -53,6 +53,7 @@
 #include "lib/scoped-holder.hpp"
 #include "lib/scoped-holder-transfer.hpp"
 
+#include <utility>
 #include <vector>
 
 
@@ -93,46 +94,14 @@ namespace lib {
       
     public:
       AllocationCluster ();
-      ~AllocationCluster ()  noexcept;
+     ~AllocationCluster ()  noexcept;
       
       
-      template<class TY>
+      template<class TY, typename...ARGS>
       TY&
-      create ()
+      create (ARGS&& ...args)
         {
-          TY* obj = new(allocation<TY>()) TY();
-          return commit(obj);
-        }
-      
-      template<class TY, typename P0>
-      TY&
-      create (P0& p0)
-        {
-          TY* obj = new(allocation<TY>()) TY (p0);
-          return commit(obj);
-        }
-      
-      template<class TY, typename P0, typename P1>
-      TY&
-      create (P0& p0, P1& p1)
-        {
-          TY* obj = new(allocation<TY>()) TY (p0,p1);
-          return commit(obj);
-        }
-      
-      template<class TY, typename P0, typename P1, typename P2>
-      TY&
-      create (P0& p0, P1& p1, P2& p2)
-        {
-          TY* obj = new(allocation<TY>()) TY (p0,p1,p2);
-          return commit(obj);
-        }
-      
-      template<class TY, typename P0, typename P1, typename P2, typename P3>
-      TY&
-      create (P0& p0, P1& p1, P2& p2, P3& p3)
-        {
-          TY* obj = new(allocation<TY>()) TY (p0,p1,p2,p3);
+          TY* obj = new(allocation<TY>()) TY (std::forward<ARGS> (args)...);
           return commit(obj);
         }
       
@@ -178,9 +147,9 @@ namespace lib {
       static size_t maxTypeIDs;
       
       
-      typedef ScopedPtrHolder<MemoryManager> HMemManager;
-      typedef Allocator_TransferNoncopyable<HMemManager> Allo;
-      typedef std::vector<HMemManager,Allo> ManagerTable;
+      using HMemManager  = ScopedPtrHolder<MemoryManager>;
+      using Allo         = Allocator_TransferNoncopyable<HMemManager>;
+      using ManagerTable = std::vector<HMemManager,Allo>;
       
       ManagerTable typeHandlers_;  ///< table of active MemoryManager instances
       
@@ -253,7 +222,7 @@ namespace lib {
       setup()
         {
           ClassLock<AllocationCluster> guard;
-          if (!id_)
+          if (0 == id_)
             id_= ++maxTypeIDs;
           
           return TypeInfo ((TY*) 0 );
@@ -282,7 +251,7 @@ namespace lib {
   AllocationCluster::allocation()
   {
     void *mem = initiateAlloc (TypeSlot<TY>::get());
-    if (!mem)
+    if (not mem)
       mem = initiateAlloc (TypeSlot<TY>::setup(),TypeSlot<TY>::get());
     ENSURE (mem);
     return mem;
@@ -311,7 +280,5 @@ namespace lib {
   
   
   
-  
-  
 } // namespace lib
-#endif
+#endif /*LIB_ALLOCATION_CLUSTER_H*/

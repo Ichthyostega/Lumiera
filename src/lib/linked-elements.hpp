@@ -24,7 +24,7 @@
  ** Intrusive single linked list with optional ownership.
  ** This helper template allows to attach a number of tightly integrated
  ** elements with low overhead. Typically, these elements are to be attached
- ** once and never changed. Optionally, elements can be created  using a
+ ** once and never changed. Optionally, elements can be created using a
  ** custom allocation scheme; the holder might also take ownership. These
  ** variations in functionality are controlled by policy templates.
  ** 
@@ -37,8 +37,8 @@
  ** - convenient access through Lumiera Forward Iterators
  ** - the need to integrate tightly with a custom allocator
  ** 
- ** @note this linked list container is \em intrusive and thus needs the help
- **       of the element type, which must provide a pointer member \c next.
+ ** @note this linked list container is _intrusive_ and thus needs the help
+ **       of the element type, which must *provide a pointer member* `next`.
  **       Consequently, each such node element can't be member in
  **       multiple collections at the same time
  ** @note as usual, any iterator relies on the continued existence and
@@ -65,8 +65,7 @@
 #include "lib/iter-adapter.hpp"
 #include "lib/util.hpp"
 
-#include <boost/static_assert.hpp>
-
+#include <utility>
 
 
 namespace lib {
@@ -81,8 +80,11 @@ namespace lib {
     /**
      * Policy for LinkedElements: taking ownership
      * and possibly creating heap allocated Nodes
+     * @note is util::MoveOnly to enforce ownership
+     *       on behalf of LinkedElements
      */
     struct OwningHeapAllocated
+      : util::MoveOnly
       {
         typedef void* CustomAllocator;
         
@@ -99,69 +101,11 @@ namespace lib {
         
         /** this policy creates new elements
          *  simply by heap allocation */
-        template<class TY>
+        template<class TY, typename...ARGS>
         TY&
-        create ()
+        create (ARGS&& ...args)
           {
-            return *new TY();
-          }
-        
-        
-        template<class TY, typename A1>
-        TY&                                               //____________________________________________
-        create (A1 a1)                                   ///< create object of type TY, using 1-arg ctor
-          {
-            return *new TY(a1);
-          }
-        
-        
-        template< class TY
-                , typename A1
-                , typename A2
-                >
-        TY&                                               //____________________________________________
-        create (A1 a1, A2 a2)                            ///< create object of type TY, using 2-arg ctor
-          {
-            return *new TY(a1,a2);
-          }
-        
-        
-        template< class TY
-                , typename A1
-                , typename A2
-                , typename A3
-                >
-        TY&                                               //____________________________________________
-        create (A1 a1, A2 a2, A3 a3)                     ///< create object of type TY, using 3-arg ctor
-          {
-            return *new TY(a1,a2,a3);
-          }
-        
-        
-        template< class TY
-                , typename A1
-                , typename A2
-                , typename A3
-                , typename A4
-                >
-        TY&                                               //____________________________________________
-        create (A1 a1, A2 a2, A3 a3, A4 a4)              ///< create object of type TY, using 4-arg ctor
-          {
-            return *new TY(a1,a2,a3,a4);
-          }
-        
-        
-        template< class TY
-                , typename A1
-                , typename A2
-                , typename A3
-                , typename A4
-                , typename A5
-                >
-        TY&                                               //____________________________________________
-        create (A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)       ///< create object of type TY, using 5-arg ctor
-          {
-            return *new TY(a1,a2,a3,a4,a5);
+            return *new TY (std::forward<ARGS> (args)...);
           }
       };
     
@@ -191,6 +135,13 @@ namespace lib {
           {
             /* does nothing */
           }
+        
+        template<class TY, typename...ARGS>
+        TY&
+        create (ARGS&&...)
+          {
+            static_assert ("NoOwnership allocation strategy can not allocate elements");
+          } //          ... you'll have to do that yourself (that's the whole point of using this strategy)
       };
     
     
@@ -234,55 +185,11 @@ namespace lib {
           }
         
         
-        template<class TY>
-        TY&                                               //__________________________________________
-        create ()                                        ///< place object of type TY, by default ctor
+        template<class TY, typename...ARGS>
+        TY&
+        create (ARGS&& ...args)
           {
-            return cluster_.create<TY>();
-          }
-        
-        
-        template<class TY, typename A1>
-        TY&                                               //___________________________________________
-        create (A1 a1)                                   ///< place object of type TY, using 1-arg ctor
-          {
-            return cluster_.create<TY> (a1);
-          }
-        
-        
-        template< class TY
-                , typename A1
-                , typename A2
-                >
-        TY&                                               //___________________________________________
-        create (A1 a1, A2 a2)                            ///< place object of type TY, using 2-arg ctor
-          {
-            return cluster_.create<TY> (a1,a2);
-          }
-        
-        
-        template< class TY
-                , typename A1
-                , typename A2
-                , typename A3
-                >
-        TY&                                               //___________________________________________
-        create (A1 a1, A2 a2, A3 a3)                     ///< place object of type TY, using 3-arg ctor
-          {
-            return cluster_.create<TY> (a1,a2,a3);
-          }
-        
-        
-        template< class TY
-                , typename A1
-                , typename A2
-                , typename A3
-                , typename A4
-                >
-        TY&                                               //___________________________________________
-        create (A1 a1, A2 a2, A3 a3, A4 a4)              ///< place object of type TY, using 4-arg ctor
-          {
-            return cluster_.create<TY> (a1,a2,a3,a4);
+            return cluster_.create<TY> (std::forward<ARGS> (args)...);
           }
       };
     
@@ -315,8 +222,7 @@ namespace lib {
     , class ALO = linked_elements::OwningHeapAllocated
     >
   class LinkedElements
-    : util::NonCopyable
-    , ALO
+    : ALO
     {
       N* head_;
       
@@ -331,6 +237,13 @@ namespace lib {
       LinkedElements()
         : head_{nullptr}
         { }
+      
+      LinkedElements (LinkedElements const&) = default;
+      LinkedElements (LinkedElements&& rr)
+        : head_{rr.head_}
+        { // possibly transfer ownership
+          rr.head_ = nullptr;
+        }
       
       /** @param allo custom allocator or memory manager
        *         to be used by the policy for creating and
@@ -349,11 +262,11 @@ namespace lib {
        *        causes already created elements to be destroyed
        */
       template<class IT>
-      LinkedElements (IT elements)
+      LinkedElements (IT&& elements)
         : head_{nullptr}
         {
         try {
-            pushAll (elements);
+            pushAll (std::forward<IT> (elements));
           }
         catch(...)
           {
@@ -410,73 +323,44 @@ namespace lib {
         }
       
       
-      template< class TY >
-      TY&                                                  //_________________________________________
-      pushNew ()                                          ///< add object of type TY, using 0-arg ctor
+//      template< class TY =N>
+//      TY&                                                  //_________________________________________
+//      emplace ()                                          ///< add object of type TY, using 0-arg ctor
+//        {
+//          return push (ALO::template create<TY>());
+//        }
+      
+      /** prepend object of type TY, forwarding ctor args */
+      template<class TY =N, typename...ARGS>
+      TY&
+      emplace (ARGS&& ...args)
         {
-          return push (ALO::template create<TY>());
+          return push (ALO::template create<TY> (std::forward<ARGS> (args)...));
         }
       
       
-      template< class TY
-              , typename A1
-              >
-      TY&                                                  //_________________________________________
-      pushNew (A1 a1)                                     ///< add object of type TY, using 1-arg ctor
+      
+      /**
+       * Mutate the complete list to change the order of elements.
+       * @remark since pushing prepends, elements are initially in reverse order
+       * @warning this operation invalidates iterators and has O(n) cost;
+       *          ownership and elements themselves are not affected.
+       */
+      LinkedElements&
+      reverse()
         {
-          return push (ALO::template create<TY>(a1));
+          if (not empty())
+            {
+              N* p = head_->next;
+              head_->next = nullptr;
+              while (p)
+                {
+                  N& n = *p;
+                  p = p->next;
+                  push (n);
+            }   }
+          return *this;
         }
-      
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              >
-      TY&                                                  //_________________________________________
-      pushNew (A1 a1, A2 a2)                              ///< add object of type TY, using 2-arg ctor
-        {
-          return push (ALO::template create<TY>(a1,a2));
-        }
-      
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              , typename A3
-              >
-      TY&                                                  //_________________________________________
-      pushNew (A1 a1, A2 a2, A3 a3)                       ///< add object of type TY, using 3-arg ctor
-        {
-          return push (ALO::template create<TY>(a1,a2,a3));
-        }
-      
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              , typename A3
-              , typename A4
-              >
-      TY&                                                  //_________________________________________
-      pushNew (A1 a1, A2 a2, A3 a3, A4 a4)                ///< add object of type TY, using 4-arg ctor
-        {
-          return push (ALO::template create<TY>(a1,a2,a3,a4));
-        }
-      
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              , typename A3
-              , typename A4
-              , typename A5
-              >
-      TY&                                                  //_________________________________________
-      pushNew (A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)         ///< add object of type TY, using 5-arg ctor
-        {
-          return push (ALO::template create<TY>(a1,a2,a3,a4,a5));
-        }
-      
       
       
       
@@ -487,13 +371,13 @@ namespace lib {
       operator[] (size_t index)  const
         {
           N* p = head_;
-          while (p && index)
+          while (p and index)
             {
               p = p->next;
               --index;
             }
           
-          if (!p || index)
+          if (!p or index)
             throw error::Logic ("Attempt to access element beyond the end of LinkedElements list"
                                , LERR_(INDEX_BOUNDS));
           else
@@ -501,9 +385,18 @@ namespace lib {
         }
       
       
+      /** @warning unchecked */
+      N&
+      top()  const
+        {
+          REQUIRE (head_, "NIL");
+          return *(unConst(this)->head_);
+        }
+      
+      
       /** @warning traverses to count the elements */
       size_t
-      size ()  const
+      size()  const
         {
           uint count=0;
           N* p = head_;
@@ -517,7 +410,7 @@ namespace lib {
       
       
       bool
-      empty () const
+      empty() const
         {
           return !head_;
         }
