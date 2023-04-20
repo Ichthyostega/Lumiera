@@ -45,7 +45,7 @@
 #include "steam/engine/dispatcher.hpp"
 #include "steam/play/timings.hpp"
 #include "vault/engine/job.h"
-#include "lib/nocopy.hpp"
+//#include "lib/nocopy.hpp"
 
 
 namespace steam {
@@ -90,7 +90,6 @@ namespace engine {
    */
   class RenderDrive
     : public JobClosure
-    , util::NonCopyable
     {
       
       RenderEnvironment& engine_;

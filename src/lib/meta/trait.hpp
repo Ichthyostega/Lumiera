@@ -474,9 +474,9 @@ namespace meta {
       
     public:
       enum{ value = std::is_constructible<bool, Type>::value
-                 && HasNested_value_type<Type>::value
-                 && HasOperator_deref<Type>::value
-                 && HasOperator_inc<Type>::value
+                and HasNested_value_type<Type>::value
+                and HasOperator_deref<Type>::value
+                and HasOperator_inc<Type>::value
           };
     };
   
@@ -497,8 +497,8 @@ namespace meta {
           META_DETECT_FUNCTION(typename X::iterator, end  ,(void));
           
           enum { value = HasNested_iterator<Type>::value
-                      && HasFunSig_begin<Type>::value
-                      && HasFunSig_end<Type>::value
+                     and HasFunSig_begin<Type>::value
+                     and HasFunSig_end<Type>::value
            };
         };
       
@@ -509,8 +509,8 @@ namespace meta {
           META_DETECT_FUNCTION(typename X::iterator, end  ,(void) noexcept);
           
           enum { value = HasNested_iterator<Type>::value
-                      && HasFunSig_begin<Type>::value
-                      && HasFunSig_end<Type>::value
+                     and HasFunSig_begin<Type>::value
+                     and HasFunSig_end<Type>::value
            };
         };
       
@@ -521,8 +521,8 @@ namespace meta {
           META_DETECT_FUNCTION(typename X::const_iterator, end  ,(void) const);
           
           enum { value = HasNested_const_iterator<Type>::value
-                      && HasFunSig_begin<Type>::value
-                      && HasFunSig_end<Type>::value
+                     and HasFunSig_begin<Type>::value
+                     and HasFunSig_end<Type>::value
            };
         };
       
@@ -533,8 +533,8 @@ namespace meta {
           META_DETECT_FUNCTION(typename X::const_iterator, end  ,(void) const noexcept);
           
           enum { value = HasNested_const_iterator<Type>::value
-                      && HasFunSig_begin<Type>::value
-                      && HasFunSig_end<Type>::value
+                     and HasFunSig_begin<Type>::value
+                     and HasFunSig_end<Type>::value
            };
         };
       
@@ -561,8 +561,8 @@ namespace meta {
           META_DETECT_FUNCTION(typename X::reverse_iterator, rend  ,(void));
           
           enum { value = HasNested_reverse_iterator<Type>::value
-                      && HasFunSig_rbegin<Type>::value
-                      && HasFunSig_rend<Type>::value
+                     and HasFunSig_rbegin<Type>::value
+                     and HasFunSig_rend<Type>::value
            };
         };
       
@@ -573,8 +573,8 @@ namespace meta {
           META_DETECT_FUNCTION(typename X::reverse_iterator, rend  ,(void) noexcept);
           
           enum { value = HasNested_reverse_iterator<Type>::value
-                      && HasFunSig_rbegin<Type>::value
-                      && HasFunSig_rend<Type>::value
+                     and HasFunSig_rbegin<Type>::value
+                     and HasFunSig_rend<Type>::value
            };
         };
       
@@ -585,8 +585,8 @@ namespace meta {
           META_DETECT_FUNCTION(typename X::const_reverse_iterator, rend  ,(void) const);
           
           enum { value = HasNested_const_reverse_iterator<Type>::value
-                      && HasFunSig_rbegin<Type>::value
-                      && HasFunSig_rend<Type>::value
+                     and HasFunSig_rbegin<Type>::value
+                     and HasFunSig_rend<Type>::value
            };
         };
       
@@ -597,8 +597,8 @@ namespace meta {
           META_DETECT_FUNCTION(typename X::const_reverse_iterator, rend  ,(void) const noexcept);
           
           enum { value = HasNested_const_reverse_iterator<Type>::value
-                      && HasFunSig_rbegin<Type>::value
-                      && HasFunSig_rend<Type>::value
+                     and HasFunSig_rbegin<Type>::value
+                     and HasFunSig_rend<Type>::value
            };
         };
       

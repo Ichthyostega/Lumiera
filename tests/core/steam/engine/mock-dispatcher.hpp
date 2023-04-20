@@ -35,17 +35,21 @@
 #include "steam/engine/dispatcher.hpp"
 #include "steam/engine/job-ticket.hpp"
 //#include "steam/play/timings.hpp"
-//#include "lib/time/timevalue.hpp"
+#include "lib/time/timevalue.hpp"
 ////#include "lib/time/timequant.hpp"
 ////#include "lib/format-cout.hpp"
 #include "lib/depend.hpp"
 #include "lib/itertools.hpp"
 //#include "lib/util-coll.hpp"
+#include "vault/real-clock.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/test/event-log.hpp"
+#include "vault/engine/job.h"
 //#include "lib/util.hpp"
 
 //#include <functional>
 //#include <vector>
+#include <tuple>
 
 //using test::Test;
 //using util::isnil;
@@ -66,14 +70,18 @@ namespace test   {
 //  using lib::time::Duration;
 //  using lib::time::Offset;
 //  using lib::time::TimeVar;
+  using lib::time::TimeValue;
 //  using lib::time::Time;
 //  using mobject::ModelPort;
 //  using play::Timings;
+  using std::make_tuple;
   
   namespace { // used internally
     
 //    using play::PlayTestFrames_Strategy;
 //    using play::ModelPorts;
+    using vault::engine::JobClosure;
+    using vault::engine::JobParameter;
     
 //    typedef play::DummyPlayConnection<play::PlayTestFrames_Strategy> DummyPlaybackSetup;
     
@@ -118,14 +126,74 @@ namespace test   {
     /// @deprecated this setup is confusing and dangerous (instance identity is ambiguous)
     lib::Depend<MockDispatcherTable> mockDispatcher;
     
+    class MockInvocationLog
+      : public lib::test::EventLog
+      {
+      public:
+        MockInvocationLog()
+          : EventLog{"MockInvocation"}
+        { }
+      };
+    
+    lib::Depend<MockInvocationLog> mockInvocation;
+    
+    
+    
+    
+    class DummyJobFunctor
+      : public vault::engine::JobClosure
+      {
+        void
+        invokeJobOperation (JobParameter param)
+          {
+            mockInvocation().call(this, "DummyJob", TimeValue(param.nominalTime)
+                                                  , RealClock::now()
+                                                  , param.invoKey.metaInfo.a
+                                                  , param.invoKey.metaInfo.b
+                                                  );
+          }
+        
+        void
+        signalFailure (JobParameter,JobFailureReason)
+          {
+            NOTREACHED ("Job failure is not subject of this test");
+          }
+        
+        JobKind
+        getJobKind()  const
+          {
+            return META_JOB;
+          }
+        
+        bool
+        verify (Time nominalJobTime, InvocationInstanceID invoKey)  const
+          {
+            return Time::ANYTIME < nominalJobTime
+               and 0 <= invoKey.metaInfo.a
+                   ;
+          }
+        
+        size_t
+        hashOfInstance(InvocationInstanceID invoKey) const
+          {
+            return boost::hash_value (invoKey.metaInfo.a);
+          }
+        
+      public:
+        
+      };
+    lib::Depend<DummyJobFunctor> dummyJobFunctor;
     
     
     inline auto
-    defineBottomProvision()
+    defineBottomSpec()
     {
-//      return lib::singleValIterator(
-//                 JobTicket::buildProvision (
-//                                           ));
+      auto emptyPrereq = lib::nilIterator<JobTicket&>();
+      using Iter = decltype(emptyPrereq);
+      return lib::singleValIterator(
+                 std::tuple<JobFunctor&, Iter>(dummyJobFunctor()
+                                              ,emptyPrereq
+                                              ));
     }
     
   }//(End)internal test helpers....
@@ -145,9 +213,9 @@ namespace test   {
     {
       
     public:
-//      MockJobTicket()
-//        : JobTicket{JobTicket::Provisions{defineBottomProvision()}}
-//        { };
+      MockJobTicket()
+        : JobTicket{defineBottomSpec()}
+        { };
       
     private:
     };

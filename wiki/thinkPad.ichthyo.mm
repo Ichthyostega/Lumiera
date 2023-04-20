@@ -69129,7 +69129,7 @@
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1681083619609" ID="ID_1647785356" MODIFIED="1681083636070" TEXT="Bessere L&#xf6;sung">
 <icon BUILTIN="forward"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681083639877" ID="ID_358030802" MODIFIED="1681084305066" TEXT="klare performance-orientierte Datenstrukturen schaffen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681083639877" ID="ID_358030802" LINK="#ID_1372752844" MODIFIED="1681951396709" TEXT="klare performance-orientierte Datenstrukturen schaffen">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1681083683663" ID="ID_135955742" MODIFIED="1681084106386" TEXT="Job &#x27fc; Deskriptor(value, stateful)"/>
 <node CREATED="1681083725400" ID="ID_201198910" MODIFIED="1681084115121" TEXT="JobFunktor &#x27fc; Strategy(reference, shared)"/>
@@ -69696,6 +69696,214 @@
 <icon BUILTIN="smiley-oh"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1681860325369" ID="ID_328096563" MODIFIED="1681860348325" TEXT="mu&#xdf; nun aber JobTicket-Ctor bereitstellen">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681860349394" ID="ID_1525241951" MODIFIED="1681860363389" TEXT="wie definiert man ein JobTicket?">
+<icon BUILTIN="help"/>
+<node CREATED="1681860366713" ID="ID_161470410" MODIFIED="1681860416753" TEXT="erste N&#xe4;herung: eine Spec abliefern">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1681860397581" ID="ID_676680756" MODIFIED="1681860411652" TEXT="man kann Provision und Requirements zusammenlegen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681860421530" ID="ID_1550922413" MODIFIED="1681860445550" TEXT="JobTicket braucht aber LinkedElements&lt;Provision&gt;">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1681860473137" ID="ID_1498832886" MODIFIED="1681860486556" TEXT="den RAII-Populations-ctor nutzen">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1681860490289" ID="ID_118026994" MODIFIED="1681860510052" TEXT="erst mal f&#xfc;r den Test definieren">
+<icon BUILTIN="yes"/>
+<node CREATED="1681860520930" ID="ID_770893349" MODIFIED="1681860570905" TEXT="Provision-Record anlegen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      geht nicht: ist privat (und das ist sinnvoll so!)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="closed"/>
+</node>
+<node CREATED="1681860530027" ID="ID_1039467630" MODIFIED="1681860537190" TEXT="Provision-Record irgendwie bauen"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1681860641938" ID="ID_1900625689" MODIFIED="1681860659290" TEXT="AUA! JobTicket &#xfc;bernimmt Ownership">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1681860661257" ID="ID_1274485445" MODIFIED="1681860705389" TEXT="zwar nur ein vorl&#xe4;ufiges Problem (OwningHeapAllocated)">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1681860689006" ID="ID_160492283" MODIFIED="1681861171511" TEXT="aber dahinter steckt ein konzeptionelles Problem">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und zwar ist die JobTicket-Struktur explizit darauf angelegt, anderweitig erstellte Deskriptoren zu verlinken; das soll so sein aus Performance-Gr&#252;nden (Cache Locality &#10233; AllocationCluster)
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#df2b36" DESTINATION="ID_1071396002" ENDARROW="Default" ENDINCLINATION="317;-20;" ID="Arrow_ID_375386930" STARTARROW="None" STARTINCLINATION="-437;23;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681864684118" ID="ID_1606009220" MODIFIED="1681864991481" TEXT="Spezifikation">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1681864799687" ID="ID_1244549458" MODIFIED="1681864834215" TEXT="Aufz&#xe4;hlung Prerequisites"/>
+<node CREATED="1681864758749" ID="ID_941507735" MODIFIED="1681864762804" TEXT="JobFunktor"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1681860589211" ID="ID_1071396002" MODIFIED="1681861171511" TEXT="Problem: Allokation f&#xfc;r die Provision-Records">
+<linktarget COLOR="#df2b36" DESTINATION="ID_1071396002" ENDARROW="Default" ENDINCLINATION="317;-20;" ID="Arrow_ID_375386930" SOURCE="ID_160492283" STARTARROW="None" STARTINCLINATION="-437;23;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1681860891883" HGAP="24" ID="ID_1751384108" MODIFIED="1681861186918" VSHIFT="7">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die mu&#223; definitiv <i>von &#8222;wo anders&#8220;</i>&#160;kommen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681861077210" ID="ID_506364370" MODIFIED="1682027051753" TEXT="sollte die Deskriptoren per pushNew() erzeugen (also emplace...)">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1681861418620" ID="ID_1440642182" MODIFIED="1682027038910" TEXT="Spezifikations-Schnittstelle schaffen">
+<icon BUILTIN="pencil"/>
+<node CREATED="1681861430131" ID="ID_38853136" MODIFIED="1681861501198" TEXT="dort k&#xf6;nnte auch das ganze Problem Allokation mit verborgen werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ziel sollte tats&#228;chlich sein, die Komplexit&#228;ten mit der Allokation aus dem funktionalen Code heraus zu verbergen; denn dies dient nur dem separaten Belang der Performance
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1681946822662" ID="ID_527151044" MODIFIED="1681946836012" TEXT="Form der Schnittstelle noch unklar">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1681946837591" ID="ID_1753359630" MODIFIED="1681947351700" TEXT="zun&#xe4;chst einmal nur getrieben vom Test">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1681946849061" ID="ID_1328735668" LINK="#ID_122410804" MODIFIED="1681947238611" TEXT="die ungekl&#xe4;rte Frage bez&#xfc;glich Aufteilung pro Medien-Channel">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...ist hier relevant, denn dies scheidet eine einfache Funktions/Konstruktor-Schnittstelle aus; wir m&#252;ssen einen strukturierten Datensatz bereitstellen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1681946946288" ID="ID_735321008" LINK="#ID_514995150" MODIFIED="1681947691935" TEXT="&#xfc;berdies ist die interne Repr&#xe4;sentation des top-level fragw&#xfc;rdig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Zun&#228;chst wurden LinkedElements lediglich aus Gr&#252;nden der Konsistenz auch hierf&#252;r verwendet. Eine intrusive-single-linked-List mag f&#252;r die Vernetzung der Prerequisites sinnvoll sein, aber f&#252;r eine Sprungtafel nach Channel-Nr lie&#223;e sich genauso gut eine Array-backed-Implementation konstruieren (vielleicht dann ein neuer Anlauf anstelle der alten Idee des &#187;RefArray&#171; ?)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1681947254466" ID="ID_114148381" MODIFIED="1681947340793" TEXT="noch l&#xe4;ngerfristig unklar wie die Schnittstelle tats&#xe4;chlich produkiv genutzt werden wird">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn es wird noch deutlich &#252;ber dieses PlaybackVerticalSlice hinaus dauern, bis die erste rudiment&#228;re Implementierung des Builders am Start ist &#8212; und <i>erst dann gibt es eine praktischen Bezugspunkt f&#252;r das Design</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1681948120763" ID="ID_750154353" MODIFIED="1681948327526" TEXT="denkbar da&#xdf; sich das sp&#xe4;ter stets auf eine ProcNode-Referenz reduzieren l&#xe4;&#xdf;t">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...m&#246;glicherweise k&#246;nnte zumindest so der wichtigste Standardfall komplett ohne einen eigens allozierten JobFunktor dargestellt werden &#8212; einfach indem alle notwendigen Parameter direkt aus der referenzierten ProcNode gezogen werden. Um diese M&#246;glichkeit abzusch&#228;tzen, m&#252;&#223;te aber zuerst definiert werden, wie der &#220;bergang zu den Prerequisites konkret im Proc-Node-Graph dargestellt werden: durch spezielle Metadaten? oder durch eine besondere Marker-Node, die wie eine Quelle fungiert?
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1681947704128" ID="ID_1307528426" MODIFIED="1682027027824" TEXT="vorl&#xe4;ufige L&#xf6;sung: Iterator &#xfc;ber std::tuple">
+<icon BUILTIN="pencil"/>
+<node CREATED="1681947910447" ID="ID_1183443190" MODIFIED="1681947934893" TEXT="Begr&#xfc;ndung">
+<node CREATED="1681947935610" ID="ID_218509707" MODIFIED="1681947935610" TEXT="sonst m&#xfc;&#xdf;ten wir hier doch einen Deskriptor-Record-Typ einf&#xfc;hren"/>
+<node CREATED="1681947938444" ID="ID_1201610351" MODIFIED="1681947959060" TEXT="und damit einer sp&#xe4;teren ausgebauten Builder-Syntax vorgreifen"/>
+<node CREATED="1681947964857" ID="ID_733464382" MODIFIED="1681947997559" TEXT="besser w&#xe4;re es, das in eine Subklasse zu verschieben"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681948003825" ID="ID_1586450204" MODIFIED="1681948029740" TEXT="Hilfsfunktion: Transformator mit Allokation">
+<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1681961414575" ID="ID_648708446" MODIFIED="1681961436412" TEXT="Argument-Typ validieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1681961449442" ID="ID_1664168385" MODIFIED="1681961462617" TEXT="Provision und Prerequisite per Allokator erzeugen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1681961464064" ID="ID_647784147" MODIFIED="1682026936579" TEXT="mu&#xdf; Reihenfolge der Linked-List umkehren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1681961488869" ID="ID_1984454996" MODIFIED="1682026941393" TEXT="Hilfsfunktion in LinkedElements implementieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1681961499158" ID="ID_1061765881" MODIFIED="1682026940080" TEXT="Unit-Test hierf&#xfc;r">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1681948057567" ID="ID_923881429" MODIFIED="1682027001897" TEXT="mu&#xdf; zun&#xe4;chst den empty()-Testcase erf&#xfc;llen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1681948087120" ID="ID_555715675" MODIFIED="1682026994517" TEXT="brauche dazu einen NOP-JobFunktor">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1682026957482" ID="ID_637833464" MODIFIED="1682026990813" TEXT="schreibe den bestehenden dummy-job.cpp um">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1682026969063" ID="ID_32615180" MODIFIED="1682026989799" TEXT="verwende eine TestLog-Instanz">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1682026978301" ID="ID_347272426" MODIFIED="1682027065816" TEXT="als Singleton per lib::Depend">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#df2bbd" CREATED="1682027074106" ID="ID_1659411020" MODIFIED="1682027096603" TEXT="tut">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...nach zwei Tagen Gew&#252;rge....
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681948045301" ID="ID_1777275098" MODIFIED="1681948056012" TEXT="dann Beispiel-Impl f&#xfc;r Mock">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681839812280" ID="ID_525360569" MODIFIED="1681839820465" TEXT="Iteration">
 <icon BUILTIN="flag-yellow"/>
@@ -69751,6 +69959,9 @@
 <node CREATED="1681239735718" ID="ID_464013545" MODIFIED="1681239741761" TEXT="rekursive Tiefensuche"/>
 </node>
 <node CREATED="1681167579899" ID="ID_428564529" MODIFIED="1681167585941" TEXT="createJobFor(FrameCoord)"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681861351924" ID="ID_446140172" MODIFIED="1681861366116" TEXT="Builder-Mechanismus bereitstellen">
+<icon BUILTIN="flag-yellow"/>
+</node>
 <node CREATED="1681167633659" ID="ID_374689298" MODIFIED="1681167759825" TEXT="abstrakt-referentiell">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -69873,6 +70084,22 @@
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681086220019" ID="ID_1372752844" MODIFIED="1681086232986" TEXT="Umbau: C-Struct - Layer zur&#xfc;ckbauen">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681951421768" ID="ID_283868393" MODIFIED="1681951528212" TEXT="Schrittweiser Umbau: alte C-Struct vorw&#xe4;rts-kompatibel machen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das bedeutet: die alten Interfaces m&#252;ssen von den neuen Interfaces erben, dann kann schon st&#252;ckweise Code geschrieben werden, der die neuen Interfaces vorraussetzt...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1681951529483" ID="ID_737477406" MODIFIED="1681951551777" TEXT="JobFunctor &#x2023; JobClosure">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
 </node>
 <node CREATED="1681086385917" ID="ID_1193213661" MODIFIED="1681086416077" TEXT="leichtgewichtig, kopierbar, stateful, Scheduler-impl-owned"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681425144493" ID="ID_1404753000" MODIFIED="1681425214239" TEXT="Support f&#xfc;r engine::Activity">

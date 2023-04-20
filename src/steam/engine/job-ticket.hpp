@@ -44,8 +44,11 @@
 #include "lib/hierarchy-orientation-indicator.hpp"
 #include "lib/linked-elements.hpp"
 #include "lib/iter-adapter.hpp"
+#include "lib/meta/tuple-helper.hpp"
+#include "lib/meta/trait.hpp"
 #include "lib/util.hpp"
 
+#include <utility>
 #include <stack>
 
 
@@ -57,6 +60,7 @@ namespace engine {
 //using lib::time::FSecs;
 //using lib::time::Time;
 using vault::engine::Job;
+using vault::engine::JobFunctor;
 using lib::LinkedElements;
 using lib::OrientationIndicator;
 using util::isnil;
@@ -88,40 +92,47 @@ using util::isnil;
   class JobTicket
     : util::NonCopyable
     {
+      struct Prerequisite
+        {
+          Prerequisite* next{nullptr};
+          JobTicket& descriptor;
+          
+          Prerequisite (JobTicket& ticket)
+            : descriptor{ticket}
+          { }
+        };
+      using Prerequisites = LinkedElements<Prerequisite>;
+      
       /** what handling this task entails */
       struct Provision
         {
-          Provision* next;
+          Provision* next{nullptr};
+          JobFunctor&   jobFunctor;
+          Prerequisites requirements{};
           ////////////////////TODO some channel or format descriptor here
-        };
-      
-      struct Prerequisite
-        {
-          Prerequisite* next;
-          JobTicket* descriptor;
-        };
-      
-      struct Prerequisites ///< per channel
-        {
-          Prerequisites* next;
-          LinkedElements<Prerequisite> requiredJobs_;
+          Provision (JobFunctor& func)
+            : jobFunctor{func}
+          { }
         };
       
       
-      
-      LinkedElements<Provision>   channelConfig_;
-      LinkedElements<Prerequisites> requirement_;
+      LinkedElements<Provision> provision_;
       
       
+      template<class IT>
+      static LinkedElements<Provision> buildProvisionSpec (IT);
+      
+    protected:
+      template<class IT>
+      JobTicket(IT featureSpec_perChannel)
+        : provision_{buildProvisionSpec (featureSpec_perChannel)}
+        { }
+
     public:
       class ExplorationState;
       friend class ExplorationState;
       
-      
-      JobTicket()
-        {
-          TODO ("job representation, planning and scheduling");
-        }
+
       
       
       ExplorationState startExploration()                        const;
@@ -133,17 +144,18 @@ using util::isnil;
       bool
       isValid()  const
         {
-          if (channelConfig_.size() != requirement_.size())
+          if (isnil (provision_))
             return false;
           
           TODO ("validity self check");
+          return true;
         }
     };
   
   
   class JobTicket::ExplorationState
     {
-      typedef LinkedElements<Prerequisite>::iterator SubTicketSeq;
+      typedef Prerequisites::iterator SubTicketSeq;
       typedef std::stack<SubTicketSeq> SubTicketStack;               //////////////////////////TODO use a custom container to avoid heap allocations
       
       SubTicketStack toExplore_;
@@ -154,8 +166,8 @@ using util::isnil;
       
       ExplorationState (Prerequisites& prerequisites)
         {
-          if (not isnil (prerequisites.requiredJobs_))
-            toExplore_.push (prerequisites.requiredJobs_.begin());
+          if (not isnil (prerequisites))
+            toExplore_.push (prerequisites.begin());
         }
       
       // using default copy operations
@@ -208,10 +220,9 @@ using util::isnil;
       operator->() const
         {
           REQUIRE (!empty() && toExplore_.top().isValid());
-          REQUIRE (toExplore_.top()->descriptor);
-          REQUIRE (toExplore_.top()->descriptor->isValid());
+          REQUIRE (toExplore_.top()->descriptor.isValid());
           
-          return toExplore_.top()->descriptor;
+          return & toExplore_.top()->descriptor;
         }
       
       
@@ -238,6 +249,50 @@ using util::isnil;
   
   
   
+
+  /** @internal prepare and assemble the working data structure to build a JobTicket.
+   * @tparam IT iterator to yield a sequence of specifications for each channel,
+   *            given as `std::pair` of a JobFunctor and a further Sequence of
+   *            JobTicket prerequisites. 
+   * @return the final wired instance of the data structure to back the new JobTicket
+   * @remark Note especially that those data structures linked together for use by the
+   *         JobTicket are themselves allocated "elsewhere", and need to be attached
+   *         to a memory management scheme (typically an AllocationCluster for some
+   *         Segment of the Fixture datastructure). This data layout can be tricky
+   *         to get right, and is chosen here for performance reasons, assuming
+   *         that there is a huge number of segments, and these are updated
+   *         frequently after each strike of edit operations, yet traversed
+   *         and evaluated on a sub-second scale for ongoing playback.
+   */
+  template<class IT>
+  inline LinkedElements<JobTicket::Provision>
+  JobTicket::buildProvisionSpec (IT featureSpec)
+  {                                                                       /* ---- validate parameter type ---- */
+    static_assert (lib::meta::can_IterForEach<IT>::value);                // -- can be iterated
+    using Spec = typename IT::value_type;
+    static_assert (lib::meta::is_Tuple<Spec>());                          // -- payload of iterator is a tuple
+    using Func = typename std::tuple_element<0, Spec>::type;
+    using Preq = typename std::tuple_element<1, Spec>::type;
+    static_assert (lib::meta::is_basically<Func, JobFunctor>());          // -- first component specifies the JobFunctor to use
+    static_assert (lib::meta::can_IterForEach<Preq>::value);              // -- second component is again an iterable sequence
+    static_assert (std::is_same<typename Preq::value_type, JobTicket>()); // -- which yields JobTicket prerequisites
+    REQUIRE (not isnil (featureSpec)
+            ,"require at least specification for one channel");
+    
+    LinkedElements<Provision> provisionSpec;    //////////////////////////////////////////////////TICKET #1292 : need to pass in Allocator as argument
+    for ( ; featureSpec; ++featureSpec)
+      {
+        JobFunctor& func = std::get<0> (*featureSpec);
+        auto& provision = provisionSpec.emplace<Provision> (func);
+        for (Preq pre = std::get<1> (*featureSpec); pre; ++pre)
+            provision.requirements.emplace<Prerequisite> (*pre);
+      }
+    provisionSpec.reverse();        // retain order of given definitions per channel
+    ENSURE (not isnil (provisionSpec));
+    return provisionSpec;
+  }
+  
+  
   
   /// @deprecated : could be expendable ... likely incurred solely by the use of Monads as design pattern 
   inline JobTicket::ExplorationState
@@ -257,9 +312,9 @@ using util::isnil;
   inline JobTicket::ExplorationState
   JobTicket::discoverPrerequisites (uint channelNr)  const
   {
-    REQUIRE (channelNr < requirement_.size());
+    REQUIRE (channelNr < provision_.size());
     
-    return ExplorationState (requirement_[channelNr]);
+    return ExplorationState (provision_[channelNr].requirements);
   }
 
   

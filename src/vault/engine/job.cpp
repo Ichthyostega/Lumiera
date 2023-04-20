@@ -62,11 +62,12 @@ namespace engine {
   
   
   /**
-   * emit the VTable for JobClosure within this compilation unit,
+   * emit the VTable for JobFunctor within this compilation unit,
    * which is still part of the Vault. The actual job implementation
    * classes are defined in the Steam-Layer
    */
-  JobClosure::~JobClosure() { }
+  JobFunctor::~JobFunctor() { }
+  JobClosure::~JobClosure() { } ///< @deprecated 4/23 refactoring to retract C-structs from the Scheduler interface
   
   
   

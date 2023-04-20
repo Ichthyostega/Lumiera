@@ -27,7 +27,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/error.hpp"
-#include "steam/engine/dispatcher-mock.hpp"
+#include "steam/engine/mock-dispatcher.hpp"
 
 //#include "steam/engine/job-planning.hpp"
 

@@ -672,6 +672,14 @@ namespace lib {
     return SingleValIter<VAL>{ref};
   }
   
+  /** not-anything-at-all iterator */
+  template<class VAL>
+  inline auto
+  nilIterator()
+  {
+    return SingleValIter<VAL>();
+  }
+  
 
   
   

@@ -199,6 +199,14 @@ namespace engine {
   
   typedef lumiera_jobParameter const& JobParameter;
   
+  
+  /** @todo refactoring 4/23 -- will replace JobClosure */
+  class JobFunctor                                      /////////////////////////////////////////////////////TICKET #1287 : rework Job representation
+    : util::NonCopyable            // ....has distinct identity and stable address
+    {
+    public:
+      virtual ~JobFunctor();     ///< this is an interface
+    };
   /**
    * Interface of the closure for frame rendering jobs.
    * Hidden behind this interface resides all of the context re-building
@@ -212,10 +220,11 @@ namespace engine {
    * By virtue of the JobClosure-pointer, embedded into #lumiera_jobDefinition,
    * the invocation of such a job may re-gain the full context, including the
    * actual ProcNode to pull and further specifics, like the media channel.
-   */
+   * @deprecated 4/23 plain-C data structures are removed from the Scheduler interface; transition to JobFunctor
+   */                                                   /////////////////////////////////////////////////////TICKET #1287 : rework Job representation
   class JobClosure
     : public lumiera_jobClosure
-    , util::NonCopyable            // ....has distinct identity and stable address
+    , public JobFunctor                                 /////////////////////////////////////////////////////TICKET #1287 : rework Job representation
     {
     public:
       virtual ~JobClosure();     ///< this is an interface
