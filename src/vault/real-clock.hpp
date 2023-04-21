@@ -24,9 +24,9 @@
  ** Front-end for simplified access to the current wall clock time.
  ** The implementation relies on Lumiera vault functions to access the
  ** system clock with a sufficient level of precision. The result is
- ** delivered in lumiera's internal \link lib::time::Time time format \endlink
- **   
- ** @todo WIP-WIP-WIP 3/2012
+ ** delivered in lumiera's [internal time format](\ref lib::time::Time)
+ ** 
+ ** @todo As of 4/23, still just a draft, but considered an established feature
  ** @todo this might be a good candidate also to provide some kind of
  **       translation service, i.e. a grid to anchor a logical time value
  **       with actual running wall clock time.
@@ -42,31 +42,13 @@
 
 
 #include "lib/error.hpp"
-//#include "lib/handle.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/depend.hpp"
-//#include "steam/engine/buffer-provider.hpp"
-//#include "lib/iter-source.hpp"
-//#include "lib/sync.hpp"
-
-//#include <string>
-//#include <vector>
-//#include <memory>
-
-//namespace lib {
-//namespace time{
-//  class Quantiser;
-//  typedef std::shared_ptr<const Quantiser> PQuant;
-//}}
 
 namespace vault {
 
   using lib::time::Time;
   using lib::time::TimeValue;
-//using std::string;
-
-//using std::vector;
-//using std::shared_ptr;
+  using lib::time::Offset;
   
   
   /**
@@ -84,9 +66,18 @@ namespace vault {
           return Time(_readSystemTime());
         }
       
+      static bool
+      wasRecently (Time event)
+        {
+          Offset past{event, now()};
+          return Time::ZERO <= past
+             and past < CONSIDERED_RECENT;
+        }
+      
       
     private:
       static TimeValue _readSystemTime();
+      static const Offset CONSIDERED_RECENT;
     };
   
   

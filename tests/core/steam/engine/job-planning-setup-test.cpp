@@ -28,6 +28,9 @@
 #include "lib/test/run.hpp"
 #include "lib/error.hpp"
 #include "steam/engine/mock-dispatcher.hpp"
+#include "vault/engine/dummy-job.hpp"
+
+#include "lib/format-cout.hpp"///////////////////////TODO
 
 //#include "steam/engine/job-planning.hpp"
 
@@ -40,6 +43,8 @@ using test::Test;
 namespace steam {
 namespace engine{
 namespace test  {
+  
+  using vault::engine::DummyJob;
 
   namespace { // test fixture...
     
@@ -81,6 +86,24 @@ namespace test  {
       void
       demonstrateScaffolding()
         {
+          Time nominalTime = lib::test::randTime();
+          int additionalKey = rand() % 5000;
+          Job mockJob = DummyJob::build (nominalTime, additionalKey);
+          CHECK (mockJob.getNominalTime() == nominalTime);
+          CHECK (not DummyJob::was_invoked (mockJob));
+          
+          mockJob.triggerJob();
+          CHECK (    DummyJob::was_invoked (mockJob));
+          CHECK (RealClock::wasRecently (DummyJob::invocationTime (mockJob)));
+          CHECK (nominalTime   == DummyJob::invocationNominalTime (mockJob) );
+          CHECK (additionalKey == DummyJob::invocationAdditionalKey(mockJob));
+          
+          Time prevInvocation = DummyJob::invocationTime (mockJob);
+          mockJob.triggerJob();
+          CHECK (prevInvocation < DummyJob::invocationTime (mockJob));                 // invoked again, recorded new invocation time
+          CHECK (nominalTime   == DummyJob::invocationNominalTime (mockJob) );         // all other Job parameter recorded again unaltered
+          CHECK (additionalKey == DummyJob::invocationAdditionalKey(mockJob));
+          
           MockJobTicket mockTick;
           CHECK (mockTick.discoverPrerequisites().empty());
           UNIMPLEMENTED ("how to mock and fake");

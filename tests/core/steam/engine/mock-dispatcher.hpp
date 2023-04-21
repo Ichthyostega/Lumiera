@@ -43,8 +43,8 @@
 //#include "lib/util-coll.hpp"
 #include "vault/real-clock.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/test/event-log.hpp"
 #include "vault/engine/job.h"
+#include "vault/engine/dummy-job.hpp"
 //#include "lib/util.hpp"
 
 //#include <functional>
@@ -82,6 +82,7 @@ namespace test   {
 //    using play::ModelPorts;
     using vault::engine::JobClosure;
     using vault::engine::JobParameter;
+    using vault::engine::DummyJob;
     
 //    typedef play::DummyPlayConnection<play::PlayTestFrames_Strategy> DummyPlaybackSetup;
     
@@ -126,63 +127,8 @@ namespace test   {
     /// @deprecated this setup is confusing and dangerous (instance identity is ambiguous)
     lib::Depend<MockDispatcherTable> mockDispatcher;
     
-    class MockInvocationLog
-      : public lib::test::EventLog
-      {
-      public:
-        MockInvocationLog()
-          : EventLog{"MockInvocation"}
-        { }
-      };
-    
-    lib::Depend<MockInvocationLog> mockInvocation;
     
     
-    
-    
-    class DummyJobFunctor
-      : public vault::engine::JobClosure
-      {
-        void
-        invokeJobOperation (JobParameter param)
-          {
-            mockInvocation().call(this, "DummyJob", TimeValue(param.nominalTime)
-                                                  , RealClock::now()
-                                                  , param.invoKey.metaInfo.a
-                                                  , param.invoKey.metaInfo.b
-                                                  );
-          }
-        
-        void
-        signalFailure (JobParameter,JobFailureReason)
-          {
-            NOTREACHED ("Job failure is not subject of this test");
-          }
-        
-        JobKind
-        getJobKind()  const
-          {
-            return META_JOB;
-          }
-        
-        bool
-        verify (Time nominalJobTime, InvocationInstanceID invoKey)  const
-          {
-            return Time::ANYTIME < nominalJobTime
-               and 0 <= invoKey.metaInfo.a
-                   ;
-          }
-        
-        size_t
-        hashOfInstance(InvocationInstanceID invoKey) const
-          {
-            return boost::hash_value (invoKey.metaInfo.a);
-          }
-        
-      public:
-        
-      };
-    lib::Depend<DummyJobFunctor> dummyJobFunctor;
     
     
     inline auto
@@ -191,7 +137,7 @@ namespace test   {
       auto emptyPrereq = lib::nilIterator<JobTicket&>();
       using Iter = decltype(emptyPrereq);
       return lib::singleValIterator(
-                 std::tuple<JobFunctor&, Iter>(dummyJobFunctor()
+                 std::tuple<JobFunctor&, Iter>(DummyJob::getFunctor()
                                               ,emptyPrereq
                                               ));
     }

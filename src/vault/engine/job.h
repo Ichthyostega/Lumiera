@@ -111,14 +111,18 @@ typedef struct lumiera_jobClosure* LumieraJobClosure;
 /** opaque ID attached to each individual job invocation.
  *  Used by the implementation of the Jobs (i.e. the JobClosure)
  *  for internal organisation; will be fed back on job activation.
+ *  @todo 4/2023 this is meant as marker or placeholder; the idea is
+ *        to generate a unique reproducible hash key for each invocation,
+ *        which can be used for caching; obviously this hash need to be
+ *        built from the JobTicket (based on ProcNode structure + Time)
  */
 union InvocationInstanceID
   {
-    FrameCnt frameNumber;
-    lumiera_uid    luid;
+    lumiera_uid luid{0};
     
-    struct {int a,b;}
-               metaInfo;
+    /* ----- alternative accessors for test code ---- */
+    FrameCnt          frameNumber;
+    struct {int a,b;} metaInfo;
   };
 
 

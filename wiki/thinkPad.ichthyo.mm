@@ -69613,7 +69613,7 @@
 <node CREATED="1681777299523" ID="ID_252686764" MODIFIED="1681777342528" TEXT="alle Test-Jobs verwenden einen einzigen Funktor"/>
 <node CREATED="1681777343685" ID="ID_572811753" MODIFIED="1681777357938" TEXT="dieser beherbergt ein TestLog"/>
 <node CREATED="1681777358683" ID="ID_768023482" MODIFIED="1681777393914" TEXT="er kann aber mit einem Adapter speziell markiert werden"/>
-<node CREATED="1681777394886" ID="ID_1582494030" MODIFIED="1681777440923" TEXT="bei Aufruf loggt der Job diese spezilel Marke + gegebene Frame-Koord"/>
+<node CREATED="1681777394886" ID="ID_1582494030" MODIFIED="1681777440923" TEXT="bei Aufruf loggt der Job diese spezilelle Marke + gegebene Frame-Koord"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681831353728" ID="ID_1982624809" MODIFIED="1681831371808" TEXT="l&#xe4;ngerfristig: DummyPlayConnection ausbauen">
@@ -69651,6 +69651,46 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681833071385" ID="ID_1107925235" MODIFIED="1681833077742" TEXT="MockJob hinterlegen">
 <icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1682036849793" ID="ID_1932533229" MODIFIED="1682047342244" TEXT="MockJob aufrufen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1682041035913" ID="ID_755113791" MODIFIED="1682047265222" TEXT="dann doch vielleicht besser den bestehenden DummyJob nehmen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1682047266117" ID="ID_435343452" MODIFIED="1682047333709" TEXT="zus&#xe4;tzliche Accessoren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1682047285995" ID="ID_1230929061" MODIFIED="1682047293130" TEXT="den JobFunktor">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1682047278699" ID="ID_1344827300" MODIFIED="1682047293960" TEXT="die weiteren Invocation-Parameter">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1682047294527" ID="ID_180549719" LINK="#ID_689625560" MODIFIED="1682047331605" TEXT="dabei nochmal &#xfc;ber den Sinn der InvocationInstanceID nachgedacht">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1682036866495" ID="ID_901931862" MODIFIED="1682047344590" TEXT="MockJob verifizieren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1682047349883" ID="ID_840362221" MODIFIED="1682047412550" TEXT="neues Feature: Systemzeit &#x201e;grad eben&#x201c;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      definiert als: weniger als 1ms in der Vergangenheit
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1682047394076" ID="ID_1279848807" MODIFIED="1682047409293" TEXT="RealClock::wasRecently()">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1682047415969" ID="ID_1003810847" MODIFIED="1682047424039" TEXT="die anderen Parameter mit Zufallswerten">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1681839415291" ID="ID_310889374" MODIFIED="1681839523165" TEXT="bestehenden Code nutzbar machen">
@@ -69682,6 +69722,8 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681839764807" ID="ID_817794853" MODIFIED="1681839788158" TEXT="der mit eingebaute Stack mu&#xdf; jetzt irgendwie brach liegen bleiben">
 <icon BUILTIN="messagebox_warning"/>
+<node CREATED="1682034742882" ID="ID_944887323" MODIFIED="1682034750820" TEXT="ist kein Problem und st&#xf6;rt nicht"/>
+<node CREATED="1682034751416" ID="ID_1279546753" MODIFIED="1682034762907" TEXT="da liegen nur Iterator (Value-Objekte) drauf"/>
 </node>
 <node CREATED="1681839799283" ID="ID_830915873" MODIFIED="1681839807269" TEXT="selbst einfachste Tests brauchen...">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681839808074" ID="ID_389152221" MODIFIED="1681839820464" TEXT="Einstiegspunkt">
@@ -69706,10 +69748,10 @@
 <node COLOR="#338800" CREATED="1681860397581" ID="ID_676680756" MODIFIED="1681860411652" TEXT="man kann Provision und Requirements zusammenlegen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681860421530" ID="ID_1550922413" MODIFIED="1681860445550" TEXT="JobTicket braucht aber LinkedElements&lt;Provision&gt;">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1681860473137" ID="ID_1498832886" MODIFIED="1681860486556" TEXT="den RAII-Populations-ctor nutzen">
-<icon BUILTIN="idea"/>
+<node COLOR="#435e98" CREATED="1681860421530" ID="ID_1550922413" MODIFIED="1682034579135" TEXT="JobTicket braucht aber LinkedElements&lt;Provision&gt;">
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#690f14" CREATED="1681860473137" ID="ID_1498832886" MODIFIED="1682034500105" TEXT="den RAII-Populations-ctor nutzen">
+<icon BUILTIN="button_cancel"/>
 </node>
 <node CREATED="1681860490289" ID="ID_118026994" MODIFIED="1681860510052" TEXT="erst mal f&#xfc;r den Test definieren">
 <icon BUILTIN="yes"/>
@@ -69749,8 +69791,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681864684118" ID="ID_1606009220" MODIFIED="1681864991481" TEXT="Spezifikation">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681864684118" ID="ID_1606009220" MODIFIED="1682034587669" TEXT="Spezifikation">
+<icon BUILTIN="info"/>
 <node CREATED="1681864799687" ID="ID_1244549458" MODIFIED="1681864834215" TEXT="Aufz&#xe4;hlung Prerequisites"/>
 <node CREATED="1681864758749" ID="ID_941507735" MODIFIED="1681864762804" TEXT="JobFunktor"/>
 </node>
@@ -69771,7 +69813,7 @@
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681861077210" ID="ID_506364370" MODIFIED="1682027051753" TEXT="sollte die Deskriptoren per pushNew() erzeugen (also emplace...)">
+<node COLOR="#435e98" CREATED="1681861077210" ID="ID_506364370" MODIFIED="1682034446522" TEXT="sollte die Deskriptoren per pushNew() erzeugen (also emplace...)">
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -69852,8 +69894,8 @@
 <node CREATED="1681947938444" ID="ID_1201610351" MODIFIED="1681947959060" TEXT="und damit einer sp&#xe4;teren ausgebauten Builder-Syntax vorgreifen"/>
 <node CREATED="1681947964857" ID="ID_733464382" MODIFIED="1681947997559" TEXT="besser w&#xe4;re es, das in eine Subklasse zu verschieben"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681948003825" ID="ID_1586450204" MODIFIED="1681948029740" TEXT="Hilfsfunktion: Transformator mit Allokation">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1681948003825" ID="ID_1586450204" MODIFIED="1682034453286" TEXT="Hilfsfunktion: Transformator mit Allokation">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1681961414575" ID="ID_648708446" MODIFIED="1681961436412" TEXT="Argument-Typ validieren">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -70221,11 +70263,145 @@
 <node CREATED="1681341905668" ID="ID_432577558" MODIFIED="1681341915150" TEXT="das ist die &#xbb;abstrahierte Render-Engine&#xab;"/>
 </node>
 <node CREATED="1681594252245" ID="ID_1719102613" MODIFIED="1681594256245" TEXT="InvocationInstanceID">
+<linktarget COLOR="#677097" DESTINATION="ID_1719102613" ENDARROW="Default" ENDINCLINATION="20;85;" ID="Arrow_ID_470615287" SOURCE="ID_465090802" STARTARROW="None" STARTINCLINATION="-167;-25;"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681594257143" ID="ID_689625560" MODIFIED="1681594270271" TEXT="Bedeutung kl&#xe4;ren">
 <icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1682039643804" ID="ID_1788184151" MODIFIED="1682040050470" TEXT="2012&#x2026;2023+ ist das lediglich ein Platzhalter">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1682040059096" ID="ID_1654338206" MODIFIED="1682040070726" TEXT="wartet auf einen real nutzbaren Render-Graphen"/>
+<node CREATED="1682040071416" ID="ID_137672818" MODIFIED="1682040086633" TEXT="und auf eine Basis-Implementierung des Frame-Cache"/>
+</node>
+<node CREATED="1682039675903" ID="ID_1413652743" MODIFIED="1682039709619" TEXT="Geplant: reproduzierbare Hash-Verkettung des Berechnungsweges">
+<icon BUILTIN="idea"/>
+<node CREATED="1682039718122" ID="ID_1143247890" MODIFIED="1682039877063">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      soll genau dann reproduzierbar sein,
+    </p>
+    <p>
+      wenn das Resultat ebenfalls quasi-reproduzierbar(*) ist
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font size="1" color="#393297">(*) bedeutet </font>
+    </p>
+    <ul>
+      <li>
+        <font size="1" color="#393297">effektiv gleiche Wirkung </font>
+      </li>
+      <li>
+        <font size="1" color="#393297">bis auf Rechenfehler identisch</font>
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1682039901233" ID="ID_373686563" MODIFIED="1682039956586" TEXT="Hash-Verkettung Merkle-Tree oder &#xe4;hnlich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#196;nderung auch nur eines Teils des Render-Graphen: Hash &#228;ndert sich &#10233; Cache invalidiert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1682039960965" ID="ID_205623629" MODIFIED="1682039976626" TEXT="Problem: mu&#xdf; Parameter-Automation mit erfassen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681594271596" ID="ID_963803611" MODIFIED="1681594283643" TEXT="in welchem Scope ist sie eindeutig?">
 <icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1682039636789" ID="ID_986989156" MODIFIED="1682039638216" TEXT="Job">
+<node CREATED="1682040113581" ID="ID_226959477" MODIFIED="1682040120147" TEXT="Bestandteile">
+<node CREATED="1682040128483" ID="ID_1479051411" MODIFIED="1682040135022" TEXT="Job-Deskriptor"/>
+<node CREATED="1682040135826" ID="ID_1456180976" MODIFIED="1682040139389" TEXT="Job-Parameter">
+<node CREATED="1682040150126" ID="ID_1607794832" MODIFIED="1682040158098" TEXT="nomineller Zeitpunt"/>
+<node CREATED="1682040159275" ID="ID_465090802" MODIFIED="1682040208269" TEXT="InvocationInstanceID">
+<arrowlink COLOR="#677097" DESTINATION="ID_1719102613" ENDARROW="Default" ENDINCLINATION="20;85;" ID="Arrow_ID_470615287" STARTARROW="None" STARTINCLINATION="-167;-25;"/>
+</node>
+</node>
+<node CREATED="1682040140026" ID="ID_606595034" MODIFIED="1682040142533" TEXT="Job-Funktor">
+<node CREATED="1682040662634" ID="ID_1775269495" MODIFIED="1682040670827" TEXT="definiert die eigentliche Nutzfunktion"/>
+<node CREATED="1682040649447" ID="ID_1318983077" MODIFIED="1682040753078">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hier ist <i>mindestens eine </i>Indirektion notwendig
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aktuell passieren sogar zwei Indirektionen
+    </p>
+    <ul>
+      <li>
+        Job-Deskriptor &#10236; JobFunctor-Objekt
+      </li>
+      <li>
+        JobFunctor vtable &#10236; Nutzfunktion
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1682040770119" ID="ID_840369063" MODIFIED="1682041006808" TEXT="JobFunktor selber ist generisch und wird m&#xf6;glichst weithin geteilt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wie generisch, ist eine offene Frage, die eing damit zusammenh&#228;ngt, was tats&#228;chlich durch die PriorityQueue l&#228;uft: Wenn n&#228;mlich auch schon der Job-Parameter in separater Storage liegt, dann k&#246;nnte bereits dieser eine Vorstufe zum Funktor sein, und bsp. auch den Einsprung f&#252;r die passende ProcNode transportieren; in diesem Fall g&#228;be es dann nur noch ganz wenige, prototypische Basis-Funktoren (Render aufrufen, Daten laden, Netzkommunikation, Verwaltungsaufgaben), und der konkrete Aufrufkontext w&#252;rde im Parameter stecken &#8212; wir h&#228;tten dann wieder zwei Indirektionen (Job&#10236;Parameter und Parameter&#10236;Nutzfunktion)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1682040531781" ID="ID_913436563" MODIFIED="1682040539889" TEXT="offene Fragen">
+<icon BUILTIN="help"/>
+<node CREATED="1682040544603" ID="ID_1221736313" MODIFIED="1682040594240" TEXT="was steht tats&#xe4;chlich in der PriQueue? Job-Deskriptor oder nur eine Activity?"/>
+<node CREATED="1682040603211" ID="ID_1088917301" MODIFIED="1682040621149" TEXT="wenn nicht in der Queue, wo werden Jobs dann gespeichert? und wieder freigegeben?"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1682040285134" ID="ID_1653553289" MODIFIED="1682040299541" TEXT="Performance-Belange">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1682040301305" ID="ID_1810860564" MODIFIED="1682040325124" TEXT="der Job-Descriptor wird ggfs durch die Priority-Queue geschoben"/>
+<node CREATED="1682040325953" ID="ID_1613526709" MODIFIED="1682040363310" TEXT="Jobs k&#xf6;nnen einen permanenten Allokations-Druck erzeugen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1682040431970" ID="ID_895676940" MODIFIED="1682040530953" TEXT="Gefahr der contention und multi-Core-Synchronisation">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      da Jobs massiv &#252;ber mehrere Threads hinweg gereicht werden, k&#246;nnte der blo&#223;e Umstand einer Datenaktualisierung bereits zu Cache-Coherency-Overheads f&#252;hren
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 </node>

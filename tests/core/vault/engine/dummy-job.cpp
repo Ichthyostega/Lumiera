@@ -36,7 +36,7 @@
 
 #include <cstdlib>
 #include <unordered_map>
-#include <boost/functional/hash.hpp>
+#include <functional>
 
 
 namespace vault{
@@ -96,8 +96,8 @@ namespace engine {
         size_t
         hashOfInstance(InvocationInstanceID invoKey) const
           {
-            return boost::hash_value (invoKey.metaInfo.a);
-          }
+            return std::hash<int>{} (invoKey.metaInfo.a);
+          }                          ////////////////////////////////////////////////////////////////////////TICKET #1293 : this is dangerous and could lead to clashes
         
         
         /* === Logging/Reporting of job invocation === */
@@ -189,6 +189,33 @@ namespace engine {
     
     return dummyClosure.queryInvocation(job.parameter).real;
   }
+  
+  
+  Time
+  DummyJob::invocationNominalTime (Job const& job)
+  {
+    REQUIRE (job.usesClosure (dummyClosure));
+    
+    return dummyClosure.queryInvocation(job.parameter).nominal;
+  }
+  
+  
+  int
+  DummyJob::invocationAdditionalKey (Job const& job)
+  {
+    REQUIRE (job.usesClosure (dummyClosure));
+    
+    return dummyClosure.queryInvocation(job.parameter).a;
+  }
+  
+  
+  /** @internal for collaboration with other Mock/Dummy facilities */
+  JobClosure&
+  DummyJob::getFunctor()
+  {
+    return dummyClosure;
+  }
+
   
   
 }} // namespace vault::engine

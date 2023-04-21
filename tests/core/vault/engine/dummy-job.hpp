@@ -52,7 +52,10 @@ namespace engine {
       
       static bool was_invoked (Job const& job);
       static Time invocationTime (Job const& job);
+      static Time invocationNominalTime (Job const& job);
+      static int  invocationAdditionalKey (Job const& job);
       
+      static JobClosure& getFunctor();
     };
   
 
