@@ -1,5 +1,5 @@
 /*
-  Segementation  -  Partitioning of a timeline for organising the render graph.
+  Segmentation  -  Partitioning of a timeline for organising the render graph.
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -27,14 +27,13 @@
  */
 
 #include "lib/error.hpp"
-#include "steam/mobject/session/segmentation.hpp"
-#include "steam/mobject/builder/fixture-change-detector.hpp"
+#include "steam/fixture/segmentation.hpp"
+//#include "steam/mobject/builder/fixture-change-detector.hpp"  ///////////TODO
 
 
 
 namespace steam {
-namespace mobject {
-namespace session {
+namespace fixture {
   
   namespace error = lumiera::error;
   
@@ -79,4 +78,4 @@ namespace session {
   
   
   
-}}} // namespace steam::mobject::session
+}} // namespace steam::fixture

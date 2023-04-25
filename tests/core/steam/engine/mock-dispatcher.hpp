@@ -31,7 +31,7 @@
 
 ////#include "steam/engine/procnode.hpp"
 //#include "steam/play/dummy-play-connection.hpp"
-#include "steam/mobject/session/segmentation.hpp"
+#include "steam/fixture/segmentation.hpp"
 #include "steam/mobject/model-port.hpp"
 #include "steam/engine/dispatcher.hpp"
 #include "steam/engine/job-ticket.hpp"
@@ -82,7 +82,7 @@ namespace test   {
   using std::make_tuple;
   using std::deque;
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1294 : organisation of namespaces / includes??
-  using steam::mobject::session::Segmentation;
+  using fixture::Segmentation;
   
   namespace { // used internally
     

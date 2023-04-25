@@ -43,21 +43,21 @@ namespace builder {
   struct BuildProcessState
     {
       
-      session::Fixture & fixedTimeline_;
+      fixture::Fixture & fixedTimeline_;
       unique_ptr<engine::RenderGraph> procSegment_;
       
       unique_ptr<SegmentationTool> segmentation_;
       unique_ptr<NodeCreatorTool> fabrication_;
       
       
-      BuildProcessState (session::Fixture& theTimeline)
+      BuildProcessState (fixture::Fixture& theTimeline)
         : fixedTimeline_(theTimeline),
           procSegment_(new engine::RenderGraph())
         { }
       
     };
   
-  ToolFactory::ToolFactory (session::Fixture& theFixture)
+  ToolFactory::ToolFactory (fixture::Fixture& theFixture)
     : state_(new BuildProcessState (theFixture))
   {
     ENSURE (state_->fixedTimeline_.isValid());

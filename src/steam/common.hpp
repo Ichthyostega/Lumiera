@@ -126,6 +126,19 @@ namespace steam {
   
   
   }//(End)namespace mobject
+  
+  
+  /**
+   * Fixture and low-level-Model.
+   * The shared data structure used as render nodes network.
+   * It is created or updated by the [Builder](\ref session::builder)
+   * after any relevant change of \ref Session contents, while used
+   * by the engine as work data structure for the render jobs.
+   */
+  namespace fixture {
+    
+  }
+  
 } //(End)namespace steam
 
 #endif /*STEAM_COMMON_H*/

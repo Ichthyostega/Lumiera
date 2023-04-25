@@ -28,12 +28,11 @@
  */
 
 
-#include "steam/mobject/session/fixture.hpp"
+#include "steam/fixture/fixture.hpp"
 #include "include/logging.h"
 
 namespace steam {
-namespace mobject {
-namespace session {
+namespace fixture {
   
   
   
@@ -66,4 +65,4 @@ namespace session {
   
   
   
-}}} // namespace steam::mobject::session
+}} // namespace steam::fixture

@@ -26,17 +26,16 @@
  ** @todo 2016 likely to stay, but expect some extensive rework
  */
 
-#include "steam/mobject/session/segment.hpp"
+#include "steam/fixture/segment.hpp"
 #include "steam/mobject/explicitplacement.hpp"
 
 
 
 namespace steam {
-namespace mobject {
-namespace session {
+namespace fixture {
   
   /** */
   
   
   
-}}} // namespace steam::mobject::session
+}} // namespace steam::fixture

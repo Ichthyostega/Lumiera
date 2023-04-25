@@ -28,7 +28,7 @@
 
 #include "steam/mobject/builder/common.hpp"
 #include "steam/mobject/builderfacade.hpp"
-#include "steam/mobject/session/fixture.hpp"
+#include "steam/fixture/fixture.hpp"
 
 namespace steam {
 namespace mobject {

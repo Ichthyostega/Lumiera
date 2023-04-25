@@ -37,8 +37,8 @@
 
 #include "steam/mobject/builder/applicable-builder-target-types.hpp"
 
-#include "steam/mobject/session/segmentation.hpp"
-#include "steam/mobject/session/fixture.hpp"   //////TODO really on the header??
+#include "steam/fixture/segmentation.hpp"
+#include "steam/fixture/fixture.hpp"   //////TODO really on the header??
 
 
 #include <list>
@@ -63,7 +63,7 @@ namespace builder {
     {
       
     public:
-      SegmentationTool (session::Fixture &) ;
+      SegmentationTool (fixture::Fixture &) ;
       
       void treat (mobject::session::Clip& clip) ;
       void treat (mobject::session::Effect& effect) ;
@@ -75,7 +75,7 @@ namespace builder {
       bool empty()  const;
       
     private:
-      typedef mobject::session::Segment Segment;
+      using Segment = fixture::Segment;
       
       /** Partitioning of the Timeline to be created by this tool. */
       //session::Segmentation& segments_;

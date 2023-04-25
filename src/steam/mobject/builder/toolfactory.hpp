@@ -33,7 +33,7 @@
 #ifndef MOBJECT_BUILDER_TOOLFACTORY_H
 #define MOBJECT_BUILDER_TOOLFACTORY_H
 
-#include "steam/mobject/session/fixture.hpp"
+#include "steam/fixture/fixture.hpp"
 #include "steam/mobject/builder/segmentation-tool.hpp"
 #include "steam/mobject/builder/nodecreatortool.hpp"
 #include "steam/mobject/builder/mould.hpp"
@@ -63,7 +63,7 @@ namespace builder {
     public:
       /** prepare a builder tool kit for dealing with the given Fixture,
        *  which is a snapshot of some timeline made explicit. */
-      ToolFactory (session::Fixture&);
+      ToolFactory (fixture::Fixture&);
       
       /** prepare a tool for properly segmenting the Fixture */
       SegmentationTool &  configureSegmentation ();

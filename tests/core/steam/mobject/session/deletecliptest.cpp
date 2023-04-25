@@ -35,15 +35,15 @@
 
 
 //using std::string;
+using std::dynamic_pointer_cast;     //////////////////// TODO only temp
 
 using proc_interface::AssetManager;
 using proc_interface::PAsset;
 using proc_interface::IDA;
 
-using std::dynamic_pointer_cast;        /// TODO only temp
 
 
-namespace steam    {
+namespace steam   {
 namespace mobject {
 namespace session {
 namespace test    {

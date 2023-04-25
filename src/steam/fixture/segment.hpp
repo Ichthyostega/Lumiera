@@ -28,8 +28,8 @@
  */
 
 
-#ifndef MOBJECT_SESSION_SEGMENT_H
-#define MOBJECT_SESSION_SEGMENT_H
+#ifndef STEAM_FIXTURE_SEGMENT_H
+#define STEAM_FIXTURE_SEGMENT_H
 
 #include <list>
 
@@ -40,9 +40,9 @@
 using std::list;
 
 namespace steam {
-namespace mobject {
-namespace session {
+namespace fixture {
   
+  using mobject::ExplicitPlacement;
   
   /**
    * For the purpose of building and rendering, the fixture (for each timeline)
@@ -50,6 +50,7 @@ namespace session {
    * For each segment there is a RenderGraph (unit of the render engine) which
    * is able to render all ExitNodes for this segment.
    * 
+   * @ingroup fixture
    * @todo 1/2012 Just a Placeholder. The real thing is not yet implemented.
    * @see http://lumiera.org/wiki/renderengine.html#Fixture
    */
@@ -71,5 +72,5 @@ namespace session {
   
   
   
-}}} // namespace steam::mobject::session
-#endif
+}} // namespace steam::fixture
+#endif /*STEAM_FIXTURE_SEGMENT_H*/

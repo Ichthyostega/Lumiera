@@ -43,11 +43,11 @@
  */
 
 
-#ifndef MOBJECT_SESSION_SEGMENTATION_H
-#define MOBJECT_SESSION_SEGMENTATION_H
+#ifndef STEAM_FIXTURE_SEGMENTATION_H
+#define STEAM_FIXTURE_SEGMENTATION_H
 
 
-#include "steam/mobject/session/segment.hpp"
+#include "steam/fixture/segment.hpp"
 
 #include <list>
 
@@ -55,8 +55,7 @@ using std::list;
 
 
 namespace steam {
-namespace mobject {
-namespace session {
+namespace fixture {
   
   
   /**
@@ -65,6 +64,7 @@ namespace session {
    * The Segmentation defines and maintains this partitioning. Furthermore,
    * it is the general entry point for accessing the correct part of the engine
    * responsible for a given timeline time point.
+   * @ingroup fixture
    * @see SegmentationTool actually calculating the Segmentation
    * 
    * @todo 1/2012 Just a Placeholder. The real thing is not yet implemented.
@@ -84,5 +84,5 @@ namespace session {
   
   
   
-}}} // namespace steam::mobject::session
-#endif
+}} // namespace steam::fixture
+#endif /*STEAM_FIXTURE_SEGMENTATION_H*/

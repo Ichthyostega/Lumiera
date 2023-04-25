@@ -54,7 +54,7 @@ namespace session {
              , timelineRegistry_
              , sequenceRegistry_ )
     , contents_( MObject::create (defaultsManager_))
-    , fixture_(new Fixture)
+    , fixture_(new fixture::Fixture)
     {
       INFO (session, "new Session created.");
     }
@@ -141,7 +141,7 @@ namespace session {
 
   
   
-  PFix&
+  PFixture&
   SessionImpl::getFixture ()
   {
     return fixture_;

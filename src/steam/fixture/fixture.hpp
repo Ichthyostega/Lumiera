@@ -35,15 +35,17 @@
  ** of a more recent builder run. Ongoing render processes are also tracked per segment,
  ** which allows the individual calculation steps just to assume the data is "there".
  ** 
+ ** @ingroup fixture
+ ** 
  ** @todo WIP implementation of session core from 2010
  ** @todo as of 2016, this effort is considered stalled but basically valid
  */
 
 
-#ifndef MOBJECT_SESSION_FIXTURE_H
-#define MOBJECT_SESSION_FIXTURE_H
+#ifndef STEAM_FIXTURE_FIXTURE_H
+#define STEAM_FIXTURE_FIXTURE_H
 
-#include "steam/mobject/session/segmentation.hpp"
+#include "steam/fixture/segmentation.hpp"
 #include "steam/mobject/session/fork.hpp"
 #include "steam/mobject/explicitplacement.hpp"
 #include "steam/mobject/session/auto.hpp"
@@ -60,12 +62,14 @@ using std::unique_ptr;
 
 
 namespace steam {
-namespace mobject {
-namespace session {
+namespace fixture {
   
+  using mobject::session::Auto;
+  using mobject::ExplicitPlacement;
   
   
   /**
+   * @ingroup fixture
    * @todo 1/2012 Just a Placeholder. The real thing is not yet implemented.
    * @see http://lumiera.org/wiki/renderengine.html#Fixture
    */
@@ -86,7 +90,7 @@ namespace session {
       bool isValid()  const;
       
     private:
-      virtual bool validate() 
+      virtual bool validate()
         {
           TODO ("how to validate a Fixture?");
           return false;
@@ -94,11 +98,9 @@ namespace session {
       
     };
   
-  
-  
-  typedef shared_ptr<Fixture> PFix;
+  using PFixture = shared_ptr<Fixture>;
   
   
   
-}}} // namespace steam::mobject::session
-#endif
+}} // namespace steam::fixture
+#endif /*STEAM_FIXTURE_FIXTURE_H*/

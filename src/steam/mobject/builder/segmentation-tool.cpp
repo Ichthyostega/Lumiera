@@ -37,7 +37,7 @@ namespace builder {
   using mobject::Buildable;
   using session::Clip;
   using session::Effect;
-  using session::Fixture;
+  using fixture::Fixture;
   
                                       /////////////////////////////////TICKET #414
   

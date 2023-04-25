@@ -67,14 +67,16 @@ namespace asset {
   class Timeline;    typedef lib::P<Timeline> PTimeline;
   class Sequence;    typedef lib::P<Sequence> PSequence;
 }
+namespace fixture {
+    class Fixture;
+    using PFixture = std::shared_ptr<Fixture>;
+}
 
 namespace mobject {
   
   namespace session { 
     class SessManager;
     class ElementQuery;
-    class Fixture;
-    typedef std::shared_ptr<Fixture> PFix;
   }
   
   typedef session::SessManager& PSess;  ///< acts as a "PImpl" smart ptr
@@ -137,7 +139,7 @@ namespace mobject {
       
       virtual MObjectRef getRoot()                     = 0;
       
-      virtual session::PFix& getFixture ()             = 0;
+      virtual fixture::PFixture& getFixture ()         = 0;
       virtual void rebuildFixture ()                   = 0;
       
     };

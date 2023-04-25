@@ -57,6 +57,7 @@ namespace mobject {
    * contains only ExplicitPlacement objects and is processed
    * by the Builder to create the render engine  node network.
    *
+   * @ingroup fixture
    * @see Placement#resolve factory method for deriving an ExplicitPlacement 
    */
   class ExplicitPlacement : public Placement<MObject>

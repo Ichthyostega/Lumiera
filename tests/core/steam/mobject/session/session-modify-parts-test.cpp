@@ -27,7 +27,7 @@
 
 #include "lib/test/run.hpp"
 #include "steam/mobject/session.hpp"
-#include "steam/mobject/session/fixture.hpp"             // TODO only temporarily needed
+#include "steam/fixture/fixture.hpp"             // TODO only temporarily needed
 //#include "steam/assetmanager.hpp"          //////??
 //#include "steam/asset/timeline.hpp"
 #include "steam/asset/sequence.hpp"

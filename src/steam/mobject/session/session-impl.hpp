@@ -47,7 +47,7 @@
 #define STEAM_MOBJECT_SESSION_SESSIONIMPL_H
 
 #include "steam/mobject/session.hpp"
-#include "steam/mobject/session/fixture.hpp"
+#include "steam/fixture/fixture.hpp"
 #include "steam/mobject/session/placement-index.hpp"
 #include "steam/mobject/session/session-services.hpp"
 #include "steam/mobject/session/session-interface-modules.hpp"
@@ -67,6 +67,7 @@ namespace steam {
 namespace mobject {
 namespace session {
   
+  using fixture::PFixture;
   
   
   /**
@@ -78,7 +79,7 @@ namespace session {
     {
       PlacementIndex contents_;
       
-      PFix fixture_;
+      PFixture fixture_;
       
       
       
@@ -88,10 +89,10 @@ namespace session {
       virtual MObjectRef attach (PMO const& placement)  override;
       virtual bool       detach (PMO const& placement)  override;
       
-      virtual MObjectRef getRoot()  override;
+      virtual MObjectRef getRoot()   override;
 
-      virtual PFix& getFixture()    override;
-      virtual void rebuildFixture() override;
+      virtual PFixture& getFixture() override;
+      virtual void rebuildFixture()  override;
       
     protected: /* == management API === */
       SessionImpl ();
