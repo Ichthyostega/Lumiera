@@ -31,6 +31,7 @@
 
 ////#include "steam/engine/procnode.hpp"
 //#include "steam/play/dummy-play-connection.hpp"
+#include "steam/mobject/session/segmentation.hpp"
 #include "steam/mobject/model-port.hpp"
 #include "steam/engine/dispatcher.hpp"
 #include "steam/engine/job-ticket.hpp"
@@ -38,6 +39,7 @@
 #include "lib/time/timevalue.hpp"
 ////#include "lib/time/timequant.hpp"
 ////#include "lib/format-cout.hpp"
+#include "lib/diff/gen-node.hpp"
 #include "lib/depend.hpp"
 #include "lib/itertools.hpp"
 //#include "lib/util-coll.hpp"
@@ -50,6 +52,7 @@
 //#include <functional>
 //#include <vector>
 #include <tuple>
+#include <deque>
 
 //using test::Test;
 //using util::isnil;
@@ -66,6 +69,8 @@ namespace steam  {
 namespace engine {
 namespace test   {
   
+  using lib::diff::GenNode;
+  using lib::diff::MakeRec;
 //  using lib::time::FrameRate;
 //  using lib::time::Duration;
 //  using lib::time::Offset;
@@ -75,6 +80,9 @@ namespace test   {
 //  using mobject::ModelPort;
 //  using play::Timings;
   using std::make_tuple;
+  using std::deque;
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1294 : organisation of namespaces / includes??
+  using steam::mobject::session::Segmentation;
   
   namespace { // used internally
     
@@ -164,6 +172,24 @@ namespace test   {
         { };
       
     private:
+    };
+  
+  
+  class MockSegmentation
+    : public Segmentation
+    {
+      std::deque<MockJobTicket> tickets_;
+      
+    public:
+      MockSegmentation()
+        : MockSegmentation{MakeRec().genNode()}
+      { }
+      
+      MockSegmentation (std::initializer_list<GenNode> specs)
+        : tickets_{}
+        {
+          UNIMPLEMENTED ("populate mock sequence structure");
+        }
     };
   
   

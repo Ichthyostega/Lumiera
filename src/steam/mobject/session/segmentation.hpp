@@ -60,14 +60,15 @@ namespace session {
   
   
   /**
-   * For the purpose of building and rendering, the fixture (for each timeline) 
-   * is partitioned such that each segment is <i>structurally constant</i>. 
-   * The Segmentation defines and maintains this partitioning. Further,
+   * For the purpose of building and rendering, the fixture (for each timeline)
+   * is partitioned such that each segment is _structurally constant._
+   * The Segmentation defines and maintains this partitioning. Furthermore,
    * it is the general entry point for accessing the correct part of the engine
    * responsible for a given timeline time point.
    * @see SegmentationTool actually calculating the Segmentation
    * 
    * @todo 1/2012 Just a Placeholder. The real thing is not yet implemented.
+   * @todo 4/2023 now about to bootstrap into the implementation structure step by step (WIP)
    * @see http://lumiera.org/wiki/renderengine.html#Fixture
    */
   class Segmentation
@@ -77,6 +78,8 @@ namespace session {
       /** segments of the engine in ordered sequence. */
       list<Segment> segments_;
       
+    public:
+      virtual ~Segmentation();      ///< this is an interface
     };
   
   

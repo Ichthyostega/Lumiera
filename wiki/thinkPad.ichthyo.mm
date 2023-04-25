@@ -69639,14 +69639,103 @@
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1681832844221" ID="ID_826966768" MODIFIED="1681832848268" TEXT="Aufbau">
 <icon BUILTIN="pencil"/>
 <node CREATED="1681832851795" ID="ID_1453467501" MODIFIED="1681832896408" TEXT="vom MockJobTicket aus beginnen...">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681832899812" ID="ID_1664606019" MODIFIED="1681832943961" TEXT="GenNode-basierter Implementierungs-Kern">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1681832899812" ID="ID_1664606019" MODIFIED="1682047865205" TEXT="GenNode-basierter Implementierungs-Kern">
 <linktarget COLOR="#fef7d1" DESTINATION="ID_1664606019" ENDARROW="Default" ENDINCLINATION="139;-4;" ID="Arrow_ID_1184218305" SOURCE="ID_581175494" STARTARROW="None" STARTINCLINATION="13;150;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681833031252" HGAP="29" ID="ID_1232985944" MODIFIED="1681833059957" TEXT="leer" VSHIFT="14">
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681833034545" ID="ID_1378629902" MODIFIED="1681833049605" TEXT="rekursiv mit Prerequisite">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682205060282" ID="ID_290012620" MODIFIED="1682205066370" TEXT="mehrere Segmente">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682419270798" ID="ID_1327152864" MODIFIED="1682419278493" TEXT="#1294 prototype / mock fixture components">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682419302874" ID="ID_1541946258" MODIFIED="1682419591486" TEXT="Den Knoten aufl&#xf6;sen &#x27f9; Prototyping">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ich steck mit dem Entwurf fest,
+    </p>
+    <ul>
+      <li>
+        weil ein deduktives Interface-Design gef&#228;hrlich w&#228;re
+      </li>
+      <li>
+        aber ich keine ausgearbeiteten Details f&#252;r einen induktiven Zugang habe
+      </li>
+    </ul>
+    <p>
+      Daher gehe ich von der bis jetzt entwickelten Architekturskizze aus, und baue zun&#228;chst ein System von Mock-Implementierungen bottom-up; auf dieser Basis kann ich dann (hoffentlich) in die Konstruktion der Engine eindringen, um so erst die Basis zu schaffen f&#252;r eine realistische Beurteilung der M&#246;glichkeiten und Anforderungen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+<node CREATED="1682419339405" ID="ID_1304787492" MODIFIED="1682419598749" TEXT="erst mal sch&#xf6;n &#x201e;hexagonale&#x201c; Mocks aufbauen">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1682419357534" ID="ID_784932569" MODIFIED="1682419600859" TEXT="aus diesen die Interfaces gewinnen">
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1682419367267" ID="ID_426837392" MODIFIED="1682419603503" TEXT="dann die &#x201e;hexagonalen R&#xe4;der&#x201c; rund schleifen">
+<icon BUILTIN="full-3"/>
+</node>
+</node>
+<node CREATED="1682384630010" ID="ID_1719484347" MODIFIED="1682385357439" TEXT="Struktur">
+<icon BUILTIN="info"/>
+<node CREATED="1682384645189" ID="ID_384048903" MODIFIED="1682384657607" TEXT="1 Record pro Segment">
+<node CREATED="1682384866271" ID="ID_1100765917" MODIFIED="1682384873170" TEXT="start=Time"/>
+<node CREATED="1682384873831" ID="ID_11801580" MODIFIED="1682384878098" TEXT="after=Time"/>
+</node>
+<node CREATED="1682384687176" ID="ID_610330883" MODIFIED="1682385008647" TEXT="das Haupt-Job-Ticket wird damit identifiziert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das mache ich ganz bewu&#223;t, um die Notation intuitiver lesbar zu machen. Tats&#228;chlich ist der Unterschied zwischen Segment und zugeh&#246;rigem JobTicket nur formaler oder systematischer Natur; es sind eben zwei verschiedene Entit&#228;ten, aber sie korrelieren 1:1 und repr&#228;sentieren lediglich eine unterschiedliche Sicht auf die gleiche Sache &#8212; denn ein Segmeint ist genau dadurch definiert, da&#223; die Verarbeitungs-Pipeline konstant ist
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1682385755668" ID="ID_192114797" MODIFIED="1682385838716" TEXT="ein leerer Record definiert bereits ein JobTicket">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...die Sache so einfach wie m&#246;glich halten, und keine spezielle ID-Logik nur f&#252;r die Tests erfinden!
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1682385844965" ID="ID_1297348837" MODIFIED="1682385858720" TEXT="mark=&lt;int&gt;"/>
+<node CREATED="1682385860578" ID="ID_1867818480" MODIFIED="1682385868229" TEXT="optional, sonst was Zuf&#xe4;lliges"/>
+</node>
+<node CREATED="1682384701245" ID="ID_621302512" MODIFIED="1682384816595" TEXT="nested Records f&#xfc;r Prerequisites">
+<node CREATED="1682385047640" ID="ID_1371682614" MODIFIED="1682385052546" TEXT="sie liegen im Scope"/>
+<node CREATED="1682385053111" ID="ID_285349039" MODIFIED="1682385061769" TEXT="Reihenfolge ist zu erhalten"/>
+<node CREATED="1682385069872" ID="ID_1300373934" MODIFIED="1682385080052" TEXT="dabei aber noch sortiert nach Channel"/>
+</node>
+<node CREATED="1682384817342" ID="ID_1041945883" MODIFIED="1682385604629" TEXT="Channel-Zuordnung nur per Filter/Marker">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ich bin weiterhin noch nicht davon &#252;berzeugt, da&#223; die Differenzierung in Channel &#252;berhaupt notwendig und hilfreich ist; aber ich kann das derzeit nicht belegen &#10233; daher spiele ich das Thema erst mal herunter
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681833071385" ID="ID_1107925235" MODIFIED="1681833077742" TEXT="MockJob hinterlegen">
@@ -69689,6 +69778,66 @@
 </node>
 <node COLOR="#338800" CREATED="1682047415969" ID="ID_1003810847" MODIFIED="1682047424039" TEXT="die anderen Parameter mit Zufallswerten">
 <icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682204997554" ID="ID_599701197" MODIFIED="1682205023588" TEXT="Prerequisites hinzuf&#xfc;gen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1682205189643" ID="ID_897564380" MODIFIED="1682205211467" TEXT="Problem: Umbau in JobTicket selber blockt">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1682205214637" ID="ID_451342844" MODIFIED="1682205353004" TEXT="kann nicht klar sehen, wie ich einen Marker im MockJob hinterlegen kann">
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1682205234442" ID="ID_1168362425" MODIFIED="1682205344594" TEXT="Grund ist...">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1682205280447" ID="ID_1890320289" MODIFIED="1682205280447" TEXT="derzeit reflektiert das JobTicket noch die Monaden-Struktur"/>
+<node CREATED="1682205282092" ID="ID_577681512" MODIFIED="1682205305621" TEXT="und die Abl&#xe4;ufe sind daher ziemlich undurchsichtig"/>
+<node CREATED="1682205306451" ID="ID_936014701" MODIFIED="1682205328540" TEXT="die eigentliche Ergebnis/Job-Erzeugung ist das halb mit eingewoben"/>
+<node CREATED="1682205329192" ID="ID_1591053369" MODIFIED="1682205341296" TEXT="schwer f&#xfc;r einen Test/Mock zu isolieren"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1682205419719" ID="ID_806137309" MODIFIED="1682212328035" TEXT="Job createJobFor (FrameCoord) ist noch gar nicht implementiert">
+<icon BUILTIN="messagebox_warning"/>
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682385376739" ID="ID_576604811" MODIFIED="1682385391451" TEXT="Mock-Implementierung">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1682385392969" ID="ID_1317765253" MODIFIED="1682385456612" TEXT="Storage">
+<node CREATED="1682385491724" ID="ID_1049416610" MODIFIED="1682385544239" TEXT="JobTickets in eine Deque allozieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das erlaubt flexibles Hinzuf&#252;gen, ohne da&#223; Addressen invalidiert werden. Die Tickets selber m&#252;ssen NonCopyable sein
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1682385911140" ID="ID_310070879" MODIFIED="1682385934313" TEXT="move-only Mock-Objekt herausgeben">
+<node CREATED="1682385936418" ID="ID_755704146" MODIFIED="1682385951914" TEXT="das ist aber &#x201e;das Ding selber&#x201c;"/>
+<node CREATED="1682385963140" ID="ID_1239158970" MODIFIED="1682385993315" TEXT="also MockSegmentation, MockJobTicket,..."/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682385895644" ID="ID_89969390" MODIFIED="1682385902557" TEXT="Verifikation im Test unterst&#xfc;tzen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1682386003212" ID="ID_930954734" MODIFIED="1682386014176" TEXT="gibt die &quot;Mock&quot;-Variante der jeweiligen Objekte heraus"/>
+<node CREATED="1682386015054" ID="ID_1516142014" MODIFIED="1682386033703" TEXT="darauf kann man z.B. die Marker-ID abfragen"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1682386040786" ID="ID_99654376" MODIFIED="1682386162332" TEXT="das ist explizit erst mal eine Skizze">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ich kann an dieser Stelle noch nicht auf die tats&#228;chiche Implementierung vorgreifen, sonst wird das alles ein undurchdringbares Kn&#228;uel. Die eigentliche Implementierung mu&#223; stark auf Performance optimiert sein, und daher ist die Datenstruktur vermutlich schwierig zu navigieren. Also baue ich hier ganz bewu&#223;t erst mal eine Fake-Variante auf, mit einer anderen Implementierung und einer bequemen Datenstruktur
+    </p>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
@@ -70317,6 +70466,9 @@
 </node>
 <node CREATED="1682039960965" ID="ID_205623629" MODIFIED="1682039976626" TEXT="Problem: mu&#xdf; Parameter-Automation mit erfassen">
 <icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1682047799390" ID="ID_1327852689" MODIFIED="1682047826186" TEXT="#1293 job invocation identity">
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 </node>

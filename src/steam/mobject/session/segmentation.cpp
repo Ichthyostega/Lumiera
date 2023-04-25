@@ -47,6 +47,8 @@ namespace session {
 //  lib::OptionalRef<ModelPortRegistry> ModelPortRegistry::theGlobalRegistry;
   
   
+  Segmentation::~Segmentation() { }   // emit VTable here...
+  
   /** access the globally valid registry instance.
    *  @throw error::State if this global registry is
    *         already closed or not yet initialised. */
@@ -58,7 +60,7 @@ namespace session {
 //    return theGlobalRegistry();
 //  
 //  throw error::State ("global model port registry is not accessible"
-//                     , LERR_(BUILDER_LIFECYCLE)); 
+//                     , LERR_(BUILDER_LIFECYCLE));
 //}
   
   
@@ -68,7 +70,7 @@ namespace session {
 //  ModelPortRegistry::contains (ID<Pipe> key)  const
 //  {
 //    return bool(key)
-//        && util::contains (transaction_, key); 
+//        && util::contains (transaction_, key);
 //  }
   
   

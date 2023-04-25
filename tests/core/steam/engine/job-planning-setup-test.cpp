@@ -106,6 +106,8 @@ namespace test  {
           
           MockJobTicket mockTick;
           CHECK (mockTick.discoverPrerequisites().empty());
+          
+          MockSegmentation mockSeg;
           UNIMPLEMENTED ("how to mock and fake");
           /////////////////////////////////////////////////////////////////////////////TODO: extract from DispatcherInterface_test
           /////////////////////////////////////////////////////////////////////////////TODO: design a job-ticket-mock
