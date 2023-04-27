@@ -36,13 +36,6 @@ namespace fixture {
   
   
   
-  list<ExplicitPlacement> &
-  Fixture::getPlaylistForRender ()
-  {
-    UNIMPLEMENTED ("get Playlist For Render");
-  }
-  
-  
   /** TODO: a placeholder for the Operation needed for
    *  wiring the Automation providers in the Build process
    */

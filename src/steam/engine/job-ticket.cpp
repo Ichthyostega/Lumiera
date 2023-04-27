@@ -94,11 +94,15 @@ using vault::engine::JobClosure;
     };
   
   
+  /** special »do nothing« JobTicket marker */
+  const JobTicket JobTicket::NOP{};            //////////////////////////////////////////////////////////////TICKET #725 : do we actually need that for the final data structure?
+
   
   /**  */
   Job
   JobTicket::createJobFor (FrameCoord coordinates)
   {
+    REQUIRE (this->isValid(), "Attempt to generate render job for incomplete or unspecified render plan.");
     UNIMPLEMENTED ("job planning and generation");
   }
   

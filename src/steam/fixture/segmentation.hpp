@@ -48,16 +48,21 @@
 
 
 #include "steam/fixture/segment.hpp"
+#include "lib/time/timevalue.hpp"
+#include "lib/format-string.hpp"
 #include "lib/nocopy.hpp"
 
 #include <list>
-
-using std::list;
 
 
 namespace steam {
 namespace fixture {
   
+  namespace error = lumiera::error;
+  
+  using std::list;
+  using lib::time::TimeValue;
+  using util::_Fmt;
   
   /**
    * For the purpose of building and rendering, the fixture (for each timeline)
@@ -95,6 +100,14 @@ namespace fixture {
           return segments_.size();
         }
       
+      Segment const&
+      operator[] (TimeValue time)  const
+        {
+          for (auto& seg : segments_)
+            if (seg.end() > time)
+              return seg;
+          throw error::State (_Fmt{"Fixture datastructure corrupted: Time %s not covered"} % time);
+        }
     };
   
   

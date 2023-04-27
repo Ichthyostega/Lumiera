@@ -84,7 +84,6 @@ namespace fixture {
       ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #573  who creates the fixture?
       
     public:
-      list<ExplicitPlacement> & getPlaylistForRender () ;
       Auto<double>* getAutomation () ; ///< @todo: just a placeholder at the moment!!!
       
       bool isValid()  const;

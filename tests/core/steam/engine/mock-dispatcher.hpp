@@ -182,7 +182,8 @@ namespace test   {
       
     public:
       MockSegmentation()
-        : tickets_{}
+        : Segmentation{}
+        , tickets_{}
       { }
       
       MockSegmentation (std::initializer_list<GenNode> specs)

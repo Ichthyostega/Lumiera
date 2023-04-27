@@ -122,6 +122,9 @@ using util::isnil;
       template<class IT>
       static LinkedElements<Provision> buildProvisionSpec (IT);
       
+    private:
+      JobTicket() { }   ///< @internal as NIL marker, a JobTicket can be empty
+      
     protected:
       template<class IT>
       JobTicket(IT featureSpec_perChannel)
@@ -132,6 +135,7 @@ using util::isnil;
       class ExplorationState;
       friend class ExplorationState;
       
+      static const JobTicket NOP;
 
       
       
@@ -312,9 +316,10 @@ using util::isnil;
   inline JobTicket::ExplorationState
   JobTicket::discoverPrerequisites (uint channelNr)  const
   {
-    REQUIRE (channelNr < provision_.size());
+    REQUIRE (channelNr < provision_.size() or not isValid());
     
-    return ExplorationState (provision_[channelNr].requirements);
+    return isnil (provision_)? ExplorationState()
+                             : ExplorationState (provision_[channelNr].requirements);
   }
 
   

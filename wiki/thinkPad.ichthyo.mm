@@ -69867,6 +69867,9 @@
 <node CREATED="1682614092900" ID="ID_1252815318" MODIFIED="1682614105470" TEXT="Basis-Impl: ein Segment gibt es immer"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682614117409" ID="ID_1176991982" MODIFIED="1682614138327" TEXT="splitSplice() implementieren">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1682627110771" ID="ID_183754275" MODIFIED="1682627133820" TEXT="Invariante: l&#xfc;ckenlose Abdeckung">
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682385895644" ID="ID_89969390" MODIFIED="1682385902557" TEXT="Verifikation im Test unterst&#xfc;tzen">
@@ -69923,6 +69926,12 @@
 <node CREATED="1682034751416" ID="ID_1279546753" MODIFIED="1682034762907" TEXT="da liegen nur Iterator (Value-Objekte) drauf"/>
 </node>
 <node CREATED="1681839799283" ID="ID_830915873" MODIFIED="1681839807269" TEXT="selbst einfachste Tests brauchen...">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682622337048" ID="ID_1026907820" MODIFIED="1682622340207" TEXT="Storage">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1682622347831" ID="ID_1252057037" MODIFIED="1682622360738" TEXT="f&#xfc;r Tests: im MockSegment unterbringen">
+<icon BUILTIN="idea"/>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681839808074" ID="ID_389152221" MODIFIED="1681839820464" TEXT="Einstiegspunkt">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1681839824481" ID="ID_1782808621" LINK="#ID_1656777068" MODIFIED="1681839924803" TEXT="HA! startExploration k&#xf6;nnte &#xfc;berfl&#xfc;ssig sein">
@@ -70220,6 +70229,34 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1682622153437" ID="ID_524720976" MODIFIED="1682622219250" TEXT="zu kl&#xe4;ren...">
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1682622220974" ID="ID_136220191" MODIFIED="1682622223749" TEXT="NIL-Ticket?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1682626547198" ID="ID_1401129193" MODIFIED="1682626582171" TEXT=" macht ein const JobTicket Sinn?">
+<icon BUILTIN="help"/>
+<node CREATED="1682626583859" ID="ID_959446855" MODIFIED="1682626669241" TEXT="zun&#xe4;chst nur aus Gr&#xfc;nden der Interface-Logik eingef&#xfc;hrt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil Segment inh&#228;rent ein mutabler Typ ist (ich denke an das Umbauen und Modifizieren), gibt der reine Access nur ein Segment const&amp; raus
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1682626596442" ID="ID_627099643" MODIFIED="1682626614602" TEXT="w&#xfc;rde darauf hinauslaufen, da&#xdf; man auf einem const JobTicket keine Planung machen kann"/>
+<node CREATED="1682626675632" ID="ID_1360253646" MODIFIED="1682626692994" TEXT="Alternative: komplett eine Builder-Notation f&#xfc;r die Segmentation">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1682622228183" ID="ID_1660287725" MODIFIED="1682622235360" TEXT="Redundanz in der Storage?">
+<icon BUILTIN="help"/>
+</node>
+</node>
 <node CREATED="1681167767260" ID="ID_247185233" MODIFIED="1681167820893" TEXT="JobTicket::ExplorationState">
 <linktarget COLOR="#5c74b4" DESTINATION="ID_247185233" ENDARROW="Default" ENDINCLINATION="28;-86;" ID="Arrow_ID_1572923842" SOURCE="ID_1056088464" STARTARROW="None" STARTINCLINATION="-77;9;"/>
 </node>
@@ -70307,6 +70344,18 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742018442" ID="ID_596503548" MODIFIED="1681742022940" TEXT="Addressierung JobTicket">
 <icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1682626961915" ID="ID_1266598906" MODIFIED="1682626982746" TEXT="direkter Zugriff auf das Segment nach Zeit-Partitionierung">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682626986572" ID="ID_785390936" MODIFIED="1682627018574" TEXT="hierzu stets komplett ersch&#xf6;pfende Partitionierung notwendig">
+<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1682627019680" ID="ID_1706448688" MODIFIED="1682627042580" TEXT="Segmentation mit TimeSpan::ALL initialisiert">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1682627043510" ID="ID_1053406793" LINK="#ID_1176991982" MODIFIED="1682627105439" TEXT="Implementierung von splitSplice() mu&#xdf; Konsistenz sicherstellen">
+<icon BUILTIN="bell"/>
+</node>
+</node>
 </node>
 <node CREATED="1682611423253" ID="ID_1136070257" MODIFIED="1682611949376" TEXT="Vorschau: Datenstruktur">
 <linktarget COLOR="#735061" DESTINATION="ID_1136070257" ENDARROW="Default" ENDINCLINATION="-651;-968;" ID="Arrow_ID_1804652676" SOURCE="ID_296140708" STARTARROW="None" STARTINCLINATION="-518;37;"/>

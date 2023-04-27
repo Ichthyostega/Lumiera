@@ -35,6 +35,7 @@
 
 #include "steam/common.hpp"
 #include "steam/mobject/explicitplacement.hpp"
+#include "steam/engine/job-ticket.hpp"
 #include "lib/time/timevalue.hpp"
 
 using std::list;
@@ -44,6 +45,7 @@ namespace fixture {
   
   using mobject::ExplicitPlacement;
   using lib::time::TimeSpan;
+  using lib::time::Time;
   
   /**
    * For the purpose of building and rendering, the fixture (for each timeline)
@@ -63,6 +65,9 @@ namespace fixture {
       /** begin of this timeline segment. */
       TimeSpan span_;
       
+      /** render plan / blueprint to use for this segment */
+      const engine::JobTicket* jobTicket_;
+      
       ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #725 : placeholder code
       /** relevant MObjects comprising this segment. */
       list<ExplicitPlacement> elements;
@@ -72,9 +77,20 @@ namespace fixture {
     public:
       Segment (TimeSpan covered =TimeSpan::ALL)
         : span_{covered}
+        , jobTicket_{&engine::JobTicket::NOP}
       { }
       
       // default copy acceptable
+      
+      Time start() const { return span_.start(); }
+      Time end()   const { return span_.end(); }
+      
+      engine::JobTicket const&
+      jobTicket()  const
+        {
+          REQUIRE (jobTicket_);
+          return *jobTicket_;
+        }
     };
   
   

@@ -29,6 +29,7 @@
 #include "lib/error.hpp"
 #include "steam/engine/mock-dispatcher.hpp"
 #include "vault/engine/dummy-job.hpp"
+#include "lib/util.hpp"
 
 #include "lib/format-cout.hpp"///////////////////////TODO
 
@@ -126,6 +127,9 @@ namespace test  {
         {
           MockSegmentation mockSeg;
           CHECK (1 == mockSeg.size());
+          Time arbitraryTime = lib::test::randTime();
+          JobTicket const& ticket = mockSeg[arbitraryTime].jobTicket();
+          CHECK (util::isSameObject (ticket, JobTicket::NOP));
           TODO ("cover details of MockSegmentation");
         }
     };
