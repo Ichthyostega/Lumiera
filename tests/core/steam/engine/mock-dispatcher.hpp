@@ -182,11 +182,11 @@ namespace test   {
       
     public:
       MockSegmentation()
-        : MockSegmentation{MakeRec().genNode()}
+        : tickets_{}
       { }
       
       MockSegmentation (std::initializer_list<GenNode> specs)
-        : tickets_{}
+        : MockSegmentation{}
         {
           UNIMPLEMENTED ("populate mock sequence structure");
         }

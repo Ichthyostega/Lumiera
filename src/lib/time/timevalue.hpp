@@ -600,6 +600,8 @@ namespace time {
       
       TimeSpan conform()  const;  ///< @return a copy conformed to time domain limits
       
+      static const TimeSpan ALL;
+      
       Duration&
       duration()
         {

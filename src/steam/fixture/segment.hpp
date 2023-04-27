@@ -43,31 +43,38 @@ namespace steam {
 namespace fixture {
   
   using mobject::ExplicitPlacement;
+  using lib::time::TimeSpan;
   
   /**
    * For the purpose of building and rendering, the fixture (for each timeline)
-   * is partitioned such that each segment is <i>structurally constant</i>.
-   * For each segment there is a RenderGraph (unit of the render engine) which
-   * is able to render all ExitNodes for this segment.
+   * is partitioned such that each segment is _structurally constant._
+   * For each segment there is a RenderGraph (unit of the render engine)
+   * which is able to render all ExitNodes for this segment.
    * 
    * @ingroup fixture
    * @todo 1/2012 Just a Placeholder. The real thing is not yet implemented.
+   * @todo WIP-WIP as of 4/2023 -- about to pull up the engine backbone
    * @see http://lumiera.org/wiki/renderengine.html#Fixture
    */
   class Segment
     {
     protected:
-      typedef lib::time::TimeSpan Span;
       
       /** begin of this timeline segment. */
-      Span span_;
+      TimeSpan span_;
       
+      ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #725 : placeholder code
       /** relevant MObjects comprising this segment. */
       list<ExplicitPlacement> elements;
       // TODO: actually necessary??
       // TODO: ownership??
+      ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #725 : placeholder code
+    public:
+      Segment (TimeSpan covered =TimeSpan::ALL)
+        : span_{covered}
+      { }
       
-      /////////////////////////////////////////////////TODO: placeholder code
+      // default copy acceptable
     };
   
   

@@ -48,6 +48,7 @@
 
 
 #include "steam/fixture/segment.hpp"
+#include "lib/nocopy.hpp"
 
 #include <list>
 
@@ -72,14 +73,28 @@ namespace fixture {
    * @see http://lumiera.org/wiki/renderengine.html#Fixture
    */
   class Segmentation
+    : util::NonCopyable
     {
-      /////////////////////////////////////////////////TODO: placeholder code
+      ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1243 : preliminary implementation
       
       /** segments of the engine in ordered sequence. */
       list<Segment> segments_;
       
     public:
       virtual ~Segmentation();      ///< this is an interface
+      
+    protected:
+      Segmentation()                ///< there is always a single cover-all Segment initially
+        : segments_{1}
+      { }
+      
+    public:
+      size_t
+      size()  const
+        {
+          return segments_.size();
+        }
+      
     };
   
   

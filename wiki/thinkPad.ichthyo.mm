@@ -69577,6 +69577,9 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742836996" ID="ID_1978512771" MODIFIED="1681742860339" TEXT="scaffolding and mocking used for this test">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1681742863121" ID="ID_101929835" MODIFIED="1681742878203" TEXT="ben&#xf6;tigte Mocks">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682611217967" ID="ID_792021380" MODIFIED="1682611222829" TEXT="Segmentation">
+<icon BUILTIN="flag-yellow"/>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742879175" ID="ID_1375353236" MODIFIED="1681742901348" TEXT="Dispatcher">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1681743458393" ID="ID_891681445" MODIFIED="1681743469323" TEXT="extrahieren aus DispatcherInterface_test"/>
@@ -69685,6 +69688,44 @@
 </node>
 <node CREATED="1682419367267" ID="ID_426837392" MODIFIED="1682419603503" TEXT="dann die &#x201e;hexagonalen R&#xe4;der&#x201c; rund schleifen">
 <icon BUILTIN="full-3"/>
+</node>
+</node>
+<node CREATED="1682611316697" ID="ID_296140708" MODIFIED="1682614014464" TEXT="Vorschau auf die Fixture-Datenstruktur">
+<arrowlink COLOR="#735061" DESTINATION="ID_1136070257" ENDARROW="Default" ENDINCLINATION="-651;-968;" ID="Arrow_ID_1804652676" STARTARROW="None" STARTINCLINATION="-518;37;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1682613713646" ID="ID_1897977418" MODIFIED="1682613726321" TEXT="l&#xe4;uft auf eine Doppel-H&#xfc;lle hinaus"/>
+<node CREATED="1682613727302" ID="ID_1816573739" MODIFIED="1682613737271" TEXT="wir implementieren im Moment nur einen Level"/>
+<node CREATED="1682613738020" ID="ID_3577348" MODIFIED="1682613823627" TEXT="&#x27f9; Konsequenzen">
+<node CREATED="1682613762760" ID="ID_970667296" MODIFIED="1682613815597" TEXT="Datenstruktur kann (bedenkenlos) direkt manipuliert werden">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682613782480" ID="ID_178794461" MODIFIED="1682614001907" TEXT="Split-and-Splice-Operation implementieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das wird dann sp&#228;ter die Basis f&#252;r die Implementierung des Change-Builders
+    </p>
+    <ul>
+      <li>
+        diese Operation untersucht die bestehende Segmentation
+      </li>
+      <li>
+        und spaltet bestehende Segmente auf
+      </li>
+      <li>
+        sie kann unterscheiden zwischen Umbau(=replacement) und K&#252;rzen bzw. Klonen eines Segments
+      </li>
+      <li>
+        Schlu&#223;folgerung: ein Segment selbst darf nichts &#252;ber seine Zeitspanne wissen
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 <node CREATED="1682384630010" ID="ID_1719484347" MODIFIED="1682385357439" TEXT="Struktur">
@@ -69819,6 +69860,13 @@
 <node CREATED="1682385911140" ID="ID_310070879" MODIFIED="1682385934313" TEXT="move-only Mock-Objekt herausgeben">
 <node CREATED="1682385936418" ID="ID_755704146" MODIFIED="1682385951914" TEXT="das ist aber &#x201e;das Ding selber&#x201c;"/>
 <node CREATED="1682385963140" ID="ID_1239158970" MODIFIED="1682385993315" TEXT="also MockSegmentation, MockJobTicket,..."/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682614081119" ID="ID_57760675" MODIFIED="1682614090109" TEXT="Interpretieren der jeweilgen Spec">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1682614092900" ID="ID_1252815318" MODIFIED="1682614105470" TEXT="Basis-Impl: ein Segment gibt es immer"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682614117409" ID="ID_1176991982" MODIFIED="1682614138327" TEXT="splitSplice() implementieren">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682385895644" ID="ID_89969390" MODIFIED="1682385902557" TEXT="Verifikation im Test unterst&#xfc;tzen">
@@ -70260,7 +70308,43 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742018442" ID="ID_596503548" MODIFIED="1681742022940" TEXT="Addressierung JobTicket">
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node CREATED="1682611423253" ID="ID_1136070257" MODIFIED="1682611949376" TEXT="Vorschau: Datenstruktur">
+<linktarget COLOR="#735061" DESTINATION="ID_1136070257" ENDARROW="Default" ENDINCLINATION="-651;-968;" ID="Arrow_ID_1804652676" SOURCE="ID_296140708" STARTARROW="None" STARTINCLINATION="-518;37;"/>
+<node CREATED="1682611979955" ID="ID_853916933" MODIFIED="1682611992260">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es gibt einen <b>commit</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
 </node>
+<node CREATED="1682612009427" ID="ID_1994458742" MODIFIED="1682612053494" TEXT="vermutlich eine referentielle nicht-intrusive Linked-List">
+<node CREATED="1682612056884" ID="ID_303611553" MODIFIED="1682612072158">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Eintr&#228;ge sind <i>woanders </i>alloziert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1682612075770" ID="ID_1368353614" MODIFIED="1682612084845" TEXT="ein Eintrag kann in mehreren Instanzen der Liste liegen"/>
+<node CREATED="1682612094504" ID="ID_250365879" MODIFIED="1682612109226" TEXT="&#x27f9; die umgebaute Liste kann auf einen Schlag aktualisiert werden"/>
+</node>
+<node CREATED="1682612125996" ID="ID_34027511" MODIFIED="1682612133736" TEXT="re-Partitionierung per Builder">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1682611408260" ID="ID_408388335" MODIFIED="1682611410703" TEXT="Interface"/>
 <node CREATED="1680563454868" ID="ID_1187556686" MODIFIED="1680563459014" TEXT="Backbone"/>
 <node CREATED="1680563460649" ID="ID_127710483" MODIFIED="1680563474067" TEXT="MemManagement"/>
 </node>

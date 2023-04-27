@@ -2303,7 +2303,7 @@ Any feed corresponds to a specific ModelPort, which in turn typically correspond
 When starting playback or render, a play process (with a PlayController front-end for client code) is established to coordinate the processing. This ongoing data production might encompass multiple media streams, i.e. multiple feeds pulled from several model ports and delivered into several [[output slots|OutputSlot]]. Each feed in turn might carry structured MultichannelMedia, and is thus further structured into individual [[streams of calculation|CalcStream]]. Since the latter are //stateless descriptors,// while the player and play process obviously is stateful, it's the feed's role to mediate between a state-based (procedural) and a stateless (functional and parallelised) organisation model -- ensuring a seamless data feed even during modification of the playback parameters.
 </pre>
 </div>
-<div title="Fixture" modifier="Ichthyostega" created="200706220324" modified="201201281945" tags="def spec Builder Model">
+<div title="Fixture" modifier="Ichthyostega" created="200706220324" modified="202304271631" tags="def spec Builder Model" changecount="2">
 <pre>a specially configured view -- joining together high-level and low-level model.
 The Fixture acts as //isolation layer// between the two models, and as //backbone to attach the render nodes.//
 * all MObjects have their position, length and configuration set up ready for rendering.
@@ -2335,9 +2335,13 @@ The fixture is like a grid, where one dimension is given by the [[model ports|Mo
 ;Exit Nodes
 :Each segment holds an ExitNode for each relevant ModelPort of the corresponding timeline.
 :Thus the exit nodes are keyed by ~Pipe-ID as well (and consequently have a distinct [[stream type|StreamType]]) -- each model port coresponds to {{{&lt;number_of_segments&gt;}}} separate exit nodes, but of course an exit node may be //mute//&amp;nbsp; in some segmehts.
+
+!!!Dependencies
+At architecture level, the Fixture is seen as //interface// between Steam-Layer and Vault-Layer.
+This raises the question: {{red{(WIP 4/23) where is the fixture data structure defined, in terms of code dependencies?}}}
 </pre>
 </div>
-<div title="FixtureDatastructure" modifier="Ichthyostega" created="201012162304" modified="201112171816" tags="spec Builder">
+<div title="FixtureDatastructure" modifier="Ichthyostega" created="201012162304" modified="202304271626" tags="spec Builder" changecount="4">
 <pre>Generally speaking, the datastructure to implement the ''Fixture'' (&amp;rarr; see a more general description [[here|Fixture]]) is comprised of a ModelPortRegistry and a set of [[segmentations|Segmentation]] per Timeline.
 This page focusses on the actual data structure and usage details on that level. See also &amp;rarr; [[storage|FixtureStorage]] considerations.
 
@@ -2345,6 +2349,7 @@ This page focusses on the actual data structure and usage details on that level.
 A key point to note is the fact that the fixture is frequently [[re-built|BuildFixture]] by the [[Builder]], while render processes may be going on in parallel. Thus, when a build process is finished, a transactional ''commit'' happens to ''hot swap'' the new parts of the model. This is complemented by a clean-up of tainted render processes; finally, storage can be reclaimed.
 
 To support this usage pattern, the Fixture implementation makes use of the [[PImpl pattern|http://c2.com/cgi/wiki?PimplIdiom]]
+Ongoing [[Builder]] activity especially can remould the Segmentation on a copy of the implementation structure, which is then swapped as a whole.
 
 !Collecting usage scenarios {{red{WIP 12/10}}}
 * ModelPort access
@@ -2362,9 +2367,10 @@ To support this usage pattern, the Fixture implementation makes use of the [[PIm
 ** commit a transaction
  
 
-!Conclusions about the structure {{red{WIP 12/10}}}
-* the ~PImpl needs to be a single (language) pointer. This necessitates having a monolithic Fixture implementation holder
-* moreover, this necessitates a tight integration down to implementation level, both with the clean-up and the render processes themselves
+!Conclusions about the structure {{red{WIP 12/10 … update 4/23}}}
+* the ~PImpl needs to be a single ''atomic pointer''. This necessitates having a monolithic Fixture implementation holder
+* consequently we need a tailored memory management -- requiring some (limited) knowledge about the usage pattern
+* this kind of information is available within the scheduling process ⟹ the [[Scheduler]] must support triggering on dependency events
 </pre>
 </div>
 <div title="FixtureStorage" modifier="Ichthyostega" created="201012140231" modified="201403071814" tags="Builder impl operational draft" changecount="22">

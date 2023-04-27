@@ -296,6 +296,7 @@ namespace time {
                                      return reinterpret_cast<Duration const&> (maxDelta);
                                    }();
   
+  const TimeSpan TimeSpan::ALL {Time::MIN, Duration::MAX};
   
 }} // namespace lib::Time
 

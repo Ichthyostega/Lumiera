@@ -49,6 +49,16 @@ return: 0
 END
 
 
+PLANNED "Setup for render job planning" JobPlanningSetup_test <<END
+return: 0
+END
+
+
+PLANNED "Mock support for render job planning" MockSupport_test <<END
+return: 0
+END
+
+
 PLANNED "Proc Node basics" NodeBasic_test <<END
 END
 
