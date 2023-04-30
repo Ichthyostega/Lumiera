@@ -70,6 +70,7 @@ namespace test{
           
           checkBasicTimeValues (ref);
           checkMutableTime (ref);
+          checkTimeHash (ref);
           checkTimeConvenience (ref);
           verify_invalidFramerateProtection();
           createOffsets (ref);
@@ -198,6 +199,25 @@ namespace test{
           // that was indeed a temporary and didn't affect the originals
           CHECK (t1 == TimeValue(TimeValue::SCALE));
           CHECK (th == TimeValue(TimeValue::SCALE/2));
+        }
+      
+      
+      /** @test calculate a generic hash value from a time spec*/
+      void
+      checkTimeHash (TimeValue org)
+        {
+          std::hash<TimeValue> hashFunc;
+          CHECK (0 == hashFunc (Time::ZERO));
+          size_t hh = sizeof(size_t)*CHAR_BIT/2;
+          CHECK (size_t(1)<<hh == hashFunc (TimeValue{1}));
+          CHECK (size_t(1)     == hashFunc (TimeValue(size_t(1)<<hh)));
+          
+          size_t h1 = hashFunc (org);
+          size_t h2 = hashFunc (Time{org} + TimeValue{1});
+          size_t h3 = hashFunc (TimeValue(h1));
+          CHECK (h1 > 0 || org == Time::ZERO);
+          CHECK (h2 - h1 == size_t(1)<<hh);
+          CHECK (h3 == size_t(_raw(org)));
         }
       
       

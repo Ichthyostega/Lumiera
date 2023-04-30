@@ -61,10 +61,12 @@ namespace engine {
 //using lib::time::Time;
 using vault::engine::Job;
 using vault::engine::JobFunctor;
+using vault::engine::JobClosure;        /////////////////////////////////////////////////////////////////////TICKET #1295 : fix actual interface down to JobFunctor (after removing C structs)
 using lib::LinkedElements;
 using lib::OrientationIndicator;
 using util::isnil;
 using lib::HashVal;
+using lib::LUID;
 //  
 //class ExitNode;
   
@@ -109,12 +111,12 @@ using lib::HashVal;
         {
           Provision* next{nullptr};
           JobFunctor&   jobFunctor;
-          HashVal       invocationSeed;
+          InvocationInstanceID invocationSeed;
           Prerequisites requirements{};
           ////////////////////TODO some channel or format descriptor here
           Provision (JobFunctor& func, HashVal seed =0)
             : jobFunctor{func}
-            , invocationSeed{seed}
+            , invocationSeed(static_cast<JobClosure&>(func).buildInstanceID(seed))      ////////////////TICKET #1295 : fix actual interface down to JobFunctor (after removing C structs)
           { }
         };
       
@@ -159,6 +161,7 @@ using lib::HashVal;
         }
       
     protected:
+      static InvocationInstanceID timeHash (Time, InvocationInstanceID const&);
       bool verifyInstance (JobFunctor&, Time)  const;
 
     };

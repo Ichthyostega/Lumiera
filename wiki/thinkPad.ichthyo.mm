@@ -69824,6 +69824,42 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682204997554" ID="ID_599701197" MODIFIED="1682205023588" TEXT="Prerequisites hinzuf&#xfc;gen">
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682868258074" ID="ID_1743148920" MODIFIED="1682868285655" TEXT="Job aus Ticket erstellen und ausf&#xfc;hrbar machen">
+<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1682885817579" ID="ID_1080671855" MODIFIED="1682886037986" TEXT="Hash f&#xfc;r Zeitwerte definieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Verwende eine halb-Rotation &#252;ber size_t &#10233;
+    </p>
+    <ul>
+      <li>
+        die beiden H&#228;lften des Bitstring der &#181;-ticks werden vertauscht
+      </li>
+      <li>
+        damit erheblicher Abstand zwischen konsekutiven Werten
+      </li>
+      <li>
+        hash&#178; &#8801; id
+      </li>
+      <li>
+        impl sollte i.d.R. nach inlining eine einzige Assembler-Instruktion sein &#10230; https://stackoverflow.com/a/31488147
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1682885599653" ID="ID_1110668206" LINK="#ID_444576509" MODIFIED="1682885796274" TEXT="erster Entwurf der Hash-Verkettung">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1682885673339" ID="ID_1525753166" MODIFIED="1682885692857" TEXT="Instance-Hash: hier den Seed einfach durchreichen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682627654491" ID="ID_1371147624" MODIFIED="1682627673234" TEXT="Marker definieren und sichtbar machen">
 <linktarget COLOR="#48417c" DESTINATION="ID_1371147624" ENDARROW="Default" ENDINCLINATION="-48;56;" ID="Arrow_ID_1753796050" SOURCE="ID_1110039315" STARTARROW="None" STARTINCLINATION="-284;-8;"/>
 <icon BUILTIN="flag-yellow"/>
@@ -70695,6 +70731,11 @@
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681594271596" ID="ID_963803611" MODIFIED="1681594283643" TEXT="in welchem Scope ist sie eindeutig?">
 <icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1682885727188" ID="ID_444576509" MODIFIED="1682885734939" TEXT="vorl&#xe4;ufige Impl">
+<icon BUILTIN="forward"/>
+<node CREATED="1682885740362" ID="ID_362133279" MODIFIED="1682885761537" TEXT="untere H&#xe4;lfte: Seed bzw. zuf&#xe4;llig"/>
+<node CREATED="1682885762190" ID="ID_1713133015" MODIFIED="1682885777729" TEXT="obere H&#xe4;lfte: Hash aus der nominellen Zeit"/>
 </node>
 </node>
 <node CREATED="1682039636789" ID="ID_986989156" MODIFIED="1682039638216" TEXT="Job">

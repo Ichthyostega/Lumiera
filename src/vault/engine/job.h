@@ -122,8 +122,10 @@ union InvocationInstanceID
     lumiera_uid luid{0};
     
     /* ----- alternative accessors for test code ---- */
-    FrameCnt          frameNumber;
-    struct {int a,b;} metaInfo;
+    FrameCnt frameNumber;
+    struct { int32_t a,b;
+             int64_t t;
+           } part;
   };
 
 

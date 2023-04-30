@@ -188,6 +188,7 @@ namespace time {
       
       /** @internal to pass Time values to C functions */
       friend gavl_time_t _raw (TimeValue const& time) { return time.t_; }
+      friend HashVal hash_value (TimeValue const&);
       static TimeValue buildRaw_(gavl_time_t);
       
       /** @internal diagnostics */
@@ -706,6 +707,25 @@ namespace time {
     }
   }//(End) implementation helpers
   
+  
+  
+  
+  /** derive a hash from the µ-tick value
+   * @return rotation of the raw value to produce a suitable spacing for consecutive time
+   * @remark picked up by Boost-hash, or std. hashtables with the help of `hash-standard.h`
+   * @see https://stackoverflow.com/a/31488147
+   */
+  inline HashVal
+  hash_value (TimeValue const& time)
+  {
+    HashVal x = _raw(time);                 // possibly cap to size of hash
+    const uint width = sizeof(HashVal) * CHAR_BIT;
+    const uint mask = width-1;
+    const uint n = width / 2;
+    
+    static_assert (0 < n  and n <= mask);
+    return (x<<n) | (x>>((-n)&mask ));
+  }
   
   
   /** @internal applies a limiter on the provided

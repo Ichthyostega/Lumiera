@@ -108,8 +108,34 @@ using lib::HashVal;
   Job
   JobTicket::createJobFor (FrameCoord coordinates)
   {
-    REQUIRE (this->isValid(), "Attempt to generate render job for incomplete or unspecified render plan.");
-    UNIMPLEMENTED ("job planning and generation");
+    if (isnil (provision_))
+      {
+        
+      }
+    else
+      {
+        REQUIRE (this->isValid(), "Attempt to generate render job for incomplete or unspecified render plan.");
+        REQUIRE (coordinates.channelNr < provision_.size(), "Inconsistent Job planning; channel beyond provision");
+        Provision& provision = provision_[coordinates.channelNr];
+        JobClosure& functor = static_cast<JobClosure&> (provision.jobFunctor);      /////////////////////////TICKET #1295 : fix actual interface down to JobFunctor (after removing C structs)
+        Time nominalTime = coordinates.absoluteNominalTime;
+        InvocationInstanceID invoKey{timeHash (nominalTime, provision.invocationSeed)};
+        
+        return Job(functor, invoKey, nominalTime);
+      }
+  }
+  
+  /**
+   * Tag the precomputed invocation ID with the nominal frame time
+   */
+  InvocationInstanceID
+  JobTicket::timeHash (Time nominalTime, InvocationInstanceID const& seed)
+  {
+    InvocationInstanceID res{seed};
+    HashVal timeMark = res.part.t;
+    lib::hash::combine (timeMark, hash_value (nominalTime));
+    res.part.t = timeMark;
+    return res;
   }
   
   

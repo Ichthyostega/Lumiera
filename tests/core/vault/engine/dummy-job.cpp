@@ -87,23 +87,38 @@ namespace engine {
         verify (Time nominalJobTime, InvocationInstanceID invoKey)  const override
           {
             return Time::ANYTIME < nominalJobTime
-                && 0 <= invoKey.metaInfo.a
-                && invoKey.metaInfo.a < MAX_PARAM_A
-                && -MAX_PARAM_B <= invoKey.metaInfo.b
-                && invoKey.metaInfo.b < MAX_PARAM_B;
+                && 0 <= invoKey.part.a
+                && invoKey.part.a < MAX_PARAM_A
+                && -MAX_PARAM_B <= invoKey.part.b
+                && invoKey.part.b < MAX_PARAM_B;
           }
         
+        /**
+         * Generate a specifically marked invocationKey for use in unit-tests.
+         * @remark in the actual implementation, this function generates a distinct
+         *         base hash do tag specific processing provided by this JobFunctor;
+         *         the seed usually factors in the media stream format; on invocation
+         *         the nominal frame time will additionally be hashed in. Yet for
+         *         unit testing, we typically use this dummy JobFunctor and it is
+         *         expedient if this hash-chaining calculation is easy predictable;
+         * @return a zero-initialised invocationKey, assigning seed to the lower part
+         */
         InvocationInstanceID
         buildInstanceID (HashVal seed)  const override
           {
-            UNIMPLEMENTED ("systematically generate an invoKey, distinct for the nominal time");
+            InvocationInstanceID res;
+            res.part.a = seed;
+            return res;
           }
         
         size_t
-        hashOfInstance(InvocationInstanceID invoKey) const override
+        hashOfInstance (InvocationInstanceID invoKey) const override
           {
-            return std::hash<int>{} (invoKey.metaInfo.a);
-          }                          ////////////////////////////////////////////////////////////////////////TICKET #1293 : this is dangerous and could lead to clashes
+            std::hash<size_t> hashr;
+            HashVal res = hashr (invoKey.frameNumber);
+            lib::hash::combine (res, hashr (invoKey.part.t));
+            return res;
+          }
         
         
         /* === Logging/Reporting of job invocation === */
@@ -114,17 +129,17 @@ namespace engine {
             TimeVar real;
             int a,b;
             
-            Invocation(JobParameter param)
-              : nominal(TimeValue(param.nominalTime))
-              , real(RealClock::now())
-              , a(param.invoKey.metaInfo.a)
-              , b(param.invoKey.metaInfo.b)
+            Invocation (JobParameter param)
+              : nominal{TimeValue(param.nominalTime)}
+              , real{RealClock::now()}
+              , a{param.invoKey.part.a}
+              , b{param.invoKey.part.b}
               { }
             
             Invocation()
-              : nominal(Time::ANYTIME)
-              , real(Time::NEVER)
-              , a(MAX_PARAM_A), b(0)
+              : nominal{Time::ANYTIME}
+              , real{Time::NEVER}
+              , a{MAX_PARAM_A}, b{0}
               { }
           };
         
@@ -165,8 +180,8 @@ namespace engine {
   DummyJob::build()
   {
     InvocationInstanceID invoKey;
-    invoKey.metaInfo.a = rand() % MAX_PARAM_A;
-    invoKey.metaInfo.b = rand() % (2*MAX_PARAM_B)  - MAX_PARAM_B;
+    invoKey.part.a = rand() % MAX_PARAM_A;
+    invoKey.part.b = rand() % (2*MAX_PARAM_B)  - MAX_PARAM_B;
     
     Time nominalTime = lib::test::randTime();
     
@@ -178,8 +193,8 @@ namespace engine {
   DummyJob::build (Time nominalTime, int additionalKey)
   {
     InvocationInstanceID invoKey;
-    invoKey.metaInfo.a = additionalKey;
-    invoKey.metaInfo.b = rand() % (2*MAX_PARAM_B)  - MAX_PARAM_B;
+    invoKey.part.a = additionalKey;
+    invoKey.part.b = rand() % (2*MAX_PARAM_B)  - MAX_PARAM_B;
     
     return Job(dummyClosure, invoKey, nominalTime);
   }

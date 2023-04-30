@@ -99,7 +99,7 @@ namespace test {
           CHECK (hash_value(job1) != hash_value(copy));  // hash value depends on the concrete nominal job time
           
           copy = job1;
-          copy.parameter.invoKey.metaInfo.a++;
+          copy.parameter.invoKey.part.a++;
           CHECK (hash_value(job1) != hash_value(copy));  // hash value depends on the internal interpretation of the invocation key
           
           
@@ -115,7 +115,7 @@ namespace test {
                           size_t
                           hashOfInstance(InvocationInstanceID invoKey) const
                             {
-                              return boost::hash_value (invoKey.metaInfo.a);
+                              return boost::hash_value (invoKey.part.a);
                             }
                         };
           OtherClosure someOtherClosure;
