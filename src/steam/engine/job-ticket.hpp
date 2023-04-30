@@ -147,7 +147,7 @@ using lib::LUID;
       ExplorationState startExploration()                        const;
       ExplorationState discoverPrerequisites (uint channelNr =0) const;
       
-      Job createJobFor (FrameCoord coordinates);
+      Job createJobFor (FrameCoord coordinates)  const;
       
       
       bool

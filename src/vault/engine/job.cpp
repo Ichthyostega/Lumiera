@@ -34,6 +34,7 @@
 
 
 #include "vault/engine/job.h"
+#include "vault/engine/nop-job-functor.hpp"
 #include "lib/util.hpp"
 
 #include <boost/functional/hash.hpp>
@@ -69,6 +70,7 @@ namespace engine {
   JobFunctor::~JobFunctor() { }
   JobClosure::~JobClosure() { } ///< @deprecated 4/23 refactoring to retract C-structs from the Scheduler interface
   
+  NopJobFunctor::NopJobFunctor() { }
   
   
   

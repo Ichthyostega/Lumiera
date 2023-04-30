@@ -69824,8 +69824,8 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682204997554" ID="ID_599701197" MODIFIED="1682205023588" TEXT="Prerequisites hinzuf&#xfc;gen">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682868258074" ID="ID_1743148920" MODIFIED="1682868285655" TEXT="Job aus Ticket erstellen und ausf&#xfc;hrbar machen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1682868258074" ID="ID_1743148920" MODIFIED="1682898174253" TEXT="Job aus Ticket erstellen und ausf&#xfc;hrbar machen">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1682885817579" ID="ID_1080671855" MODIFIED="1682886037986" TEXT="Hash f&#xfc;r Zeitwerte definieren">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -69858,6 +69858,17 @@
 </node>
 <node COLOR="#338800" CREATED="1682885673339" ID="ID_1525753166" MODIFIED="1682885692857" TEXT="Instance-Hash: hier den Seed einfach durchreichen">
 <icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1682890776694" ID="ID_1533405151" MODIFIED="1682898136722" TEXT="NOP-Job Stub">
+<linktarget COLOR="#7b88b2" DESTINATION="ID_1533405151" ENDARROW="Default" ENDINCLINATION="-1179;197;" ID="Arrow_ID_1853160081" SOURCE="ID_10757245" STARTARROW="None" STARTINCLINATION="445;-24;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1682890841485" ID="ID_774211693" MODIFIED="1682890856303" TEXT="f&#xfc;r den Fall JobTicket::NIL"/>
+<node COLOR="#338800" CREATED="1682898128631" ID="ID_1765265251" MODIFIED="1682898138153" TEXT="per lib::Depend einbinden">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1682898161611" ID="ID_98710848" MODIFIED="1682898165898" TEXT="im Test verifiziert">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682627654491" ID="ID_1371147624" MODIFIED="1682627673234" TEXT="Marker definieren und sichtbar machen">
@@ -70357,6 +70368,19 @@
 <icon BUILTIN="help"/>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1682622220974" ID="ID_136220191" MODIFIED="1682622223749" TEXT="NIL-Ticket?">
 <icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682887222315" ID="ID_786532593" MODIFIED="1682887238132" TEXT="brauche generischen NOP-Job">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1682890662127" ID="ID_952568490" MODIFIED="1682890669817" TEXT="#1296 NOP job">
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682890725729" ID="ID_10757245" MODIFIED="1682898144599" TEXT="vorerst mal als JobFunctor-Stub implementieren">
+<arrowlink COLOR="#7b88b2" DESTINATION="ID_1533405151" ENDARROW="Default" ENDINCLINATION="-1179;197;" ID="Arrow_ID_1853160081" STARTARROW="None" STARTINCLINATION="445;-24;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1682890675172" ID="ID_1935070165" MODIFIED="1682890762548" TEXT="nicht klar ob das Output-Protokoll einfach &quot;leer&quot; laufen kann">
+<icon BUILTIN="bell"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1682626547198" ID="ID_1401129193" MODIFIED="1682626582171" TEXT=" macht ein const JobTicket Sinn?">
 <icon BUILTIN="help"/>
@@ -70791,6 +70815,59 @@
   </body>
 </html></richcontent>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682892551985" ID="ID_479084448" MODIFIED="1682892564322" TEXT="Interface">
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1682892569091" ID="ID_506216512" MODIFIED="1682892588596">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      welcher Teil mu&#223; wirklich<i>&#160;flexibel</i>&#160;sein?
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682892594378" ID="ID_470552795" MODIFIED="1682892605477" TEXT="fragw&#xfc;rdig">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1682892640709" ID="ID_587647024" MODIFIED="1682892640709" TEXT="HashVal hashOfInstance(InvocationInstanceID)"/>
+<node CREATED="1682892668386" ID="ID_893041429" MODIFIED="1682892668386" TEXT="bool verify (Time, InvocationInstanceID)">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682892726514" ID="ID_231285908" MODIFIED="1682892847128" TEXT="f&#xfc;hrt das nicht zu einer gef&#xe4;hlichen zyklischen Verkopplung?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn von den grunds&#228;tzlichen Abh&#228;ngigkeiten her wei&#223; nicht einmal ein JobTicket, in welchem Segment es h&#228;ngt; auch ProcNodes k&#246;nnten theoretisch sogar in mehreren Segmenten h&#228;ngen &#10233; es schreint mehr als fragw&#252;rdig, ob ein JobFunktor &#252;berhaupt im Stande ist, eine inhaltlich sinnvolle verifikation zu machen (&#252;ber das Pr&#252;fen auf null-Pointer hinaus)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1682892700196" ID="ID_113377758" MODIFIED="1682892700196" TEXT="void signalFailure (JobParameter,JobFailureReason)">
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1682892704686" ID="ID_1226594521" MODIFIED="1682892718331" TEXT="macht das nicht beser Layer-2 im Scheduler?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+<node CREATED="1682892868892" ID="ID_1825787555" MODIFIED="1682892871994" TEXT="void invokeJobOperation (JobParameter parameter)">
+<icon BUILTIN="forward"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1682892874899" ID="ID_1605821761" MODIFIED="1682892883021" TEXT="k&#xf6;nnte man die generisch implementieren?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1682892899276" ID="ID_1612087262" MODIFIED="1682892909242" TEXT="JobKind getJobKind()">
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1682892925095" ID="ID_1576147260" MODIFIED="1682892975170" TEXT="InvocationInstanceID buildInstanceID(HashVal)">
+<arrowlink COLOR="#4d4eb0" DESTINATION="ID_1493396541" ENDARROW="Default" ENDINCLINATION="-46;-58;" ID="Arrow_ID_1838720811" STARTARROW="None" STARTINCLINATION="148;9;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1682040531781" ID="ID_913436563" MODIFIED="1682040539889" TEXT="offene Fragen">
@@ -70801,6 +70878,7 @@
 <linktarget COLOR="#b75269" DESTINATION="ID_1713196934" ENDARROW="Default" ENDINCLINATION="-871;-27;" ID="Arrow_ID_865176706" SOURCE="ID_782813898" STARTARROW="None" STARTINCLINATION="-1263;70;"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682810738487" ID="ID_1493396541" MODIFIED="1682810875535" TEXT="#1295 draft job invocation parameter representation">
 <linktarget COLOR="#b22e63" DESTINATION="ID_1493396541" ENDARROW="Default" ENDINCLINATION="-1383;-51;" ID="Arrow_ID_847435526" SOURCE="ID_48632766" STARTARROW="None" STARTINCLINATION="-753;40;"/>
+<linktarget COLOR="#4d4eb0" DESTINATION="ID_1493396541" ENDARROW="Default" ENDINCLINATION="-46;-58;" ID="Arrow_ID_1838720811" SOURCE="ID_1576147260" STARTARROW="None" STARTINCLINATION="148;9;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>

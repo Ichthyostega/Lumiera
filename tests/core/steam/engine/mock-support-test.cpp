@@ -30,6 +30,7 @@
 #include "steam/engine/mock-dispatcher.hpp"
 #include "vault/engine/dummy-job.hpp"
 #include "lib/util.hpp"
+#include "vault/engine/nop-job-functor.hpp"
 
 #include "lib/format-cout.hpp"///////////////////////TODO
 
@@ -115,9 +116,18 @@ namespace test  {
       void
       verify_MockJobTicket()
         {
+          FrameCoord coord;
+          coord.absoluteNominalTime = lib::test::randTime();
+          
+          // build a render job to do nothing....
+          Job nopJob = JobTicket::NOP.createJobFor(coord);
+          CHECK (INSTANCEOF (vault::engine::NopJobFunctor, static_cast<JobClosure*> (nopJob.jobClosure)));   //////////TICKET #1295 : fix actual interface down to JobFunctor (after removing C structs)
+          CHECK (nopJob.parameter.nominalTime == coord.absoluteNominalTime);
+          CHECK (nopJob.parameter.invoKey == InvocationInstanceID());
+          
           MockJobTicket mockTicket;
           CHECK (mockTicket.discoverPrerequisites().empty());
-          Job mockJob = mockTicket.createJobFor (FrameCoord{});
+          Job mockJob = mockTicket.createJobFor (coord);
           CHECK (mockTicket.verify_associated (mockJob));
           TODO ("cover details of MockJobTicket");
         }

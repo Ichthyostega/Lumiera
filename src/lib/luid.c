@@ -47,7 +47,7 @@ lumiera_uid_set_ptr (lumiera_uid* luid, void* ptr)
 
 
 void*
-lumiera_uid_ptr_get (lumiera_uid* luid)
+lumiera_uid_ptr_get (const lumiera_uid* luid)
 {
   return *(void**)luid;
 }
@@ -103,13 +103,13 @@ lumiera_uid_copy (lumiera_uid* dest, lumiera_uid* src)
 
 
 int
-lumiera_uid_eq (lumiera_uid* luida, lumiera_uid* luidb)
+lumiera_uid_eq (const lumiera_uid* luida, const lumiera_uid* luidb)
 {
   return !memcmp (luida, luidb, 16);
 }
 
 size_t
-lumiera_uid_hash (lumiera_uid* luid)
+lumiera_uid_hash (const lumiera_uid* luid)
 {
   return *(size_t*)luid;
 }

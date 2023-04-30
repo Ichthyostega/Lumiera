@@ -100,7 +100,7 @@
  * Retrieve a generic pointer stored in a luid
  */
 void*
-lumiera_uid_ptr_get (lumiera_uid* luid);
+lumiera_uid_ptr_get (const lumiera_uid* luid);
 
 /**
  * Generate a new luid
@@ -126,13 +126,13 @@ lumiera_uid_copy (lumiera_uid* dest, lumiera_uid* src);
  * Test 2 luid's for equality
  */
 int
-lumiera_uid_eq (lumiera_uid* luida, lumiera_uid* luidb);
+lumiera_uid_eq (const lumiera_uid* luida, const lumiera_uid* luidb);
 
 
 /**
  * Generate a hash sum over an luid
  */
 size_t
-lumiera_uid_hash (lumiera_uid* luid);
+lumiera_uid_hash (const lumiera_uid* luid);
 
 #endif /*LIB_LUID_H*/
