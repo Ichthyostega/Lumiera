@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file job-ticket.cpp 
+/** @file job-ticket.cpp
  ** Implementation details of preparing and performing job invocations.
  ** 
  ** @todo WIP-WIP-WIP 3/2012
@@ -46,7 +46,7 @@ namespace engine {
 using vault::engine::JobParameter;
 using vault::engine::JobClosure;
   
-  
+using lib::HashVal;
   
   
   class FrameJobClosure
@@ -69,21 +69,27 @@ using vault::engine::JobClosure;
           return false;
         }
       
+      InvocationInstanceID
+      buildInstanceID (HashVal seed)  const override
+        {
+          UNIMPLEMENTED ("systematically generate an invoKey, distinct for the nominal time");
+        }
+      
       size_t
-      hashOfInstance (InvocationInstanceID invoKey) const
+      hashOfInstance (InvocationInstanceID invoKey)  const override
         {
           UNIMPLEMENTED ("interpret the invoKey and create a suitable hash");
         }
       
       void
-      invokeJobOperation (JobParameter parameter)
+      invokeJobOperation (JobParameter parameter)  override
         {
           UNIMPLEMENTED ("representation of the job functor");
         }
       
       
       void
-      signalFailure (JobParameter parameter, JobFailureReason reason)
+      signalFailure (JobParameter parameter, JobFailureReason reason)  override
         {
           UNIMPLEMENTED ("what needs to be done when a job cant be invoked?");
         }
@@ -105,6 +111,23 @@ using vault::engine::JobClosure;
     REQUIRE (this->isValid(), "Attempt to generate render job for incomplete or unspecified render plan.");
     UNIMPLEMENTED ("job planning and generation");
   }
+  
+  
+  /**
+   * Helper for tests: verify the given invocation parameters match this JobTicket.
+   */
+  bool
+  JobTicket::verifyInstance (JobFunctor& functor, Time nominalTime)  const
+  {
+    for (Provision const& p : provision_)
+      if (util::isSameObject (p.jobFunctor, functor))
+        {
+          TODO ("actually re-compute the invocation ID !!!!!!!!!!!!");
+          return true;
+        }
+    return false;
+  }
+
   
   
   

@@ -70,6 +70,12 @@ namespace engine {
   }
   
   
+  InvocationInstanceID
+  CalcPlanContinuation::buildInstanceID (HashVal seed)  const
+  {
+    UNIMPLEMENTED ("systematically generate an invoKey, distinct for the nominal time");
+  }
+  
   size_t
   CalcPlanContinuation::hashOfInstance (InvocationInstanceID invoKey) const
   {

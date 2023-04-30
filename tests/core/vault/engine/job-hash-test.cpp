@@ -106,10 +106,11 @@ namespace test {
                       class OtherClosure
                         : public JobClosure
                         {
-                          void invokeJobOperation (JobParameter)             { /* irrelevant */ }
-                          void signalFailure (JobParameter,JobFailureReason) { /* irrelevant */ }
-                          JobKind getJobKind()  const                        { return META_JOB; }
-                          bool verify (Time, InvocationInstanceID)  const    { return false; }
+                          void invokeJobOperation (JobParameter)              { /* irrelevant */ }
+                          void signalFailure (JobParameter,JobFailureReason)  { /* irrelevant */ }
+                          JobKind getJobKind()  const                         { return META_JOB; }
+                          bool verify (Time, InvocationInstanceID)      const { return false; }
+                          InvocationInstanceID buildInstanceID(HashVal) const { return InvocationInstanceID(); }
                           
                           size_t
                           hashOfInstance(InvocationInstanceID invoKey) const

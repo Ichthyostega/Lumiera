@@ -71,6 +71,8 @@
 #endif
 
 
+#include "lib/hash-value.h"
+
 #include <cstddef>
 #include <utility>
 

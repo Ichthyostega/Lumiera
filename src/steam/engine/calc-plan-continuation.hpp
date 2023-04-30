@@ -55,6 +55,7 @@ namespace engine {
 //  using lib::time::FSecs;
 //  using lib::time::Time;
   using lib::time::FrameCnt;
+  using lib::HashVal;
   
   
   /**
@@ -80,16 +81,16 @@ namespace engine {
       /* === JobClosure Interface === */
       
       JobKind
-      getJobKind()  const
+      getJobKind()  const override
         {
           return META_JOB;
         }
       
-      bool verify (Time, InvocationInstanceID)     const;
-      size_t hashOfInstance (InvocationInstanceID) const;
-      
-      void invokeJobOperation (JobParameter);
-      void signalFailure (JobParameter, JobFailureReason);
+      bool verify (Time, InvocationInstanceID)       const override;
+      size_t hashOfInstance (InvocationInstanceID)   const override;
+      InvocationInstanceID buildInstanceID (HashVal) const override;
+      void invokeJobOperation (JobParameter)               override;
+      void signalFailure (JobParameter, JobFailureReason)  override;
       
       
       
@@ -102,7 +103,7 @@ namespace engine {
                           ,Dispatcher& dispatcher
                           ,ModelPort modelPort
                           ,uint channel)
-        : timings_(timings) 
+        : timings_(timings)
         , dispatcher_(dispatcher)
         , modelPort_(modelPort)
         , channel_(channel)

@@ -69824,6 +69824,90 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682204997554" ID="ID_599701197" MODIFIED="1682205023588" TEXT="Prerequisites hinzuf&#xfc;gen">
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682627654491" ID="ID_1371147624" MODIFIED="1682627673234" TEXT="Marker definieren und sichtbar machen">
+<linktarget COLOR="#48417c" DESTINATION="ID_1371147624" ENDARROW="Default" ENDINCLINATION="-48;56;" ID="Arrow_ID_1753796050" SOURCE="ID_1110039315" STARTARROW="None" STARTINCLINATION="-284;-8;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1682641810117" ID="ID_596391717" MODIFIED="1682641823784" TEXT="Problem: wie integieren?">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1682641827594" ID="ID_361324923" MODIFIED="1682641841154" TEXT="JobTicket selber hat keine VTable">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und das ist gut so
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1682641932932" ID="ID_554797446" MODIFIED="1682642480303" TEXT="das geh&#xf6;rt damit eigentlich in den JobFunktor">
+<node CREATED="1682641950985" ID="ID_775736069" MODIFIED="1682641959993" TEXT="denn der wird vermutlich ein generischer Baustein"/>
+<node CREATED="1682641960512" ID="ID_1052805185" MODIFIED="1682641969181" TEXT="und k&#xf6;nnte dann auf die ProcNode delegieren"/>
+</node>
+<node CREATED="1682642490281" ID="ID_1787652965" MODIFIED="1682642992889">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font color="#e62222">&#228;rgerliche Konsequenz</font>: bekomme <b>viele Instanzen</b>&#160;vom JobFunktor
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1682691820105" ID="ID_405339335" MODIFIED="1682691853870" TEXT="stattdessen: vom JobFunktor den konstanten Teil berechnen lassen">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1682718443540" ID="ID_116215580" MODIFIED="1682718589879" TEXT="es gen&#xfc;gt, den Marker/Seed zu best&#xe4;tigen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...ich darf nicht daran h&#228;ngenbleiben, da&#223; der Marker literal in der InvocationInstanceID steckt; das mit der Uniton ist ohnehin nur ein tempor&#228;rer Trick und kann nicht dauerhaft so bleiben &#8212; vielmehr ist die L&#246;sung, den chained-Hash-Mechanismus f&#252;r den Test so umzufunktionieren, da&#223; man mit ihm beweisen kann, da&#223; ein ganz bestimmter Job auch aufgerufen wurde.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1682805859751" ID="ID_1020214107" MODIFIED="1682805886125" TEXT="es gibt zwei Implementierungen">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1682805888320" ID="ID_1779572309" MODIFIED="1682805905593" TEXT="und es ist derzeit unklar, ob das so bleibt...."/>
+<node CREATED="1682805906307" ID="ID_308580099" MODIFIED="1682806098603" TEXT="bisher gibt es schon den DummyJob">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...mit dem man zuf&#228;llige pseudo-Invocations erzeugen kann und diese auch sp&#228;ter mithilfe eines statischen Invocation-Log verifizieren.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1682807066972" ID="ID_1766437793" MODIFIED="1682808824748" TEXT="nun kommt die Konstruktion mit dem MockTicket dazu">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und die setzt auf die f&#252;r sp&#228;ter tats&#228;chlich vorgesehene Hash-Verkn&#252;pfung auf, welche <i>in diesem Fall auch die nominelle Zeit </i>in die InvocationInstanceID mit einrechnet &#8212; nicht jedoch die reale Deadline (die in der Job-Instanz explizit vermerkt ist)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1682808327555" ID="ID_782813898" MODIFIED="1682808633170" TEXT="Job-Invocation ist derzeit noch weitgehend ungekl&#xe4;rt">
+<arrowlink COLOR="#b75269" DESTINATION="ID_1713196934" ENDARROW="Default" ENDINCLINATION="-871;-27;" ID="Arrow_ID_865176706" STARTARROW="None" STARTINCLINATION="-1263;70;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1682205189643" ID="ID_897564380" MODIFIED="1682205211467" TEXT="Problem: Umbau in JobTicket selber blockt">
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1682205214637" ID="ID_451342844" MODIFIED="1682205353004" TEXT="kann nicht klar sehen, wie ich einen Marker im MockJob hinterlegen kann">
@@ -69833,7 +69917,7 @@
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1682205280447" ID="ID_1890320289" MODIFIED="1682205280447" TEXT="derzeit reflektiert das JobTicket noch die Monaden-Struktur"/>
 <node CREATED="1682205282092" ID="ID_577681512" MODIFIED="1682205305621" TEXT="und die Abl&#xe4;ufe sind daher ziemlich undurchsichtig"/>
-<node CREATED="1682205306451" ID="ID_936014701" MODIFIED="1682205328540" TEXT="die eigentliche Ergebnis/Job-Erzeugung ist das halb mit eingewoben"/>
+<node CREATED="1682205306451" ID="ID_936014701" MODIFIED="1682715333366" TEXT="die eigentliche Ergebnis/Job-Erzeugung ist dabei halb mit eingewoben"/>
 <node CREATED="1682205329192" ID="ID_1591053369" MODIFIED="1682205341296" TEXT="schwer f&#xfc;r einen Test/Mock zu isolieren"/>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1682205419719" ID="ID_806137309" MODIFIED="1682212328035" TEXT="Job createJobFor (FrameCoord) ist noch gar nicht implementiert">
@@ -69870,6 +69954,10 @@
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1682627110771" ID="ID_183754275" MODIFIED="1682627133820" TEXT="Invariante: l&#xfc;ckenlose Abdeckung">
 <icon BUILTIN="messagebox_warning"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682627621082" ID="ID_1110039315" MODIFIED="1682627678946" TEXT="ein Segment hinzuf&#xfc;gen">
+<arrowlink COLOR="#48417c" DESTINATION="ID_1371147624" ENDARROW="Default" ENDINCLINATION="-48;56;" ID="Arrow_ID_1753796050" STARTARROW="None" STARTINCLINATION="-284;-8;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682385895644" ID="ID_89969390" MODIFIED="1682385902557" TEXT="Verifikation im Test unterst&#xfc;tzen">
@@ -70668,6 +70756,13 @@
 <icon BUILTIN="help"/>
 <node CREATED="1682040544603" ID="ID_1221736313" MODIFIED="1682040594240" TEXT="was steht tats&#xe4;chlich in der PriQueue? Job-Deskriptor oder nur eine Activity?"/>
 <node CREATED="1682040603211" ID="ID_1088917301" MODIFIED="1682040621149" TEXT="wenn nicht in der Queue, wo werden Jobs dann gespeichert? und wieder freigegeben?"/>
+<node CREATED="1682808411785" ID="ID_1713196934" MODIFIED="1682808633170" TEXT="welche Parameter m&#xfc;ssen einer Invocation im allgemeinen mitgegeben werden">
+<linktarget COLOR="#b75269" DESTINATION="ID_1713196934" ENDARROW="Default" ENDINCLINATION="-871;-27;" ID="Arrow_ID_865176706" SOURCE="ID_782813898" STARTARROW="None" STARTINCLINATION="-1263;70;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682810738487" ID="ID_1493396541" MODIFIED="1682810875535" TEXT="#1295 draft job invocation parameter representation">
+<linktarget COLOR="#b22e63" DESTINATION="ID_1493396541" ENDARROW="Default" ENDINCLINATION="-1383;-51;" ID="Arrow_ID_847435526" SOURCE="ID_48632766" STARTARROW="None" STARTINCLINATION="-753;40;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1682040285134" ID="ID_1653553289" MODIFIED="1682040299541" TEXT="Performance-Belange">
 <icon BUILTIN="hourglass"/>
@@ -76687,6 +76782,10 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680196018888" ID="ID_874815999" LINK="https://issues.lumiera.org/ticket/1287" MODIFIED="1680391903482" TEXT="#1287 invoke simple render job">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682810738487" ID="ID_48632766" MODIFIED="1682810875535" TEXT="#1295 draft job invocation parameter representation">
+<arrowlink COLOR="#b22e63" DESTINATION="ID_1493396541" ENDARROW="Default" ENDINCLINATION="-1383;-51;" ID="Arrow_ID_847435526" STARTARROW="None" STARTINCLINATION="-753;40;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680196129567" ID="ID_988036389" LINK="https://issues.lumiera.org/ticket/1288" MODIFIED="1680392639594" TEXT="#1288 simple video display widget">
 <icon BUILTIN="flag-yellow"/>

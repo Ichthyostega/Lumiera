@@ -111,10 +111,11 @@ typedef struct lumiera_jobClosure* LumieraJobClosure;
 /** opaque ID attached to each individual job invocation.
  *  Used by the implementation of the Jobs (i.e. the JobClosure)
  *  for internal organisation; will be fed back on job activation.
- *  @todo 4/2023 this is meant as marker or placeholder; the idea is
- *        to generate a unique reproducible hash key for each invocation,
- *        which can be used for caching; obviously this hash need to be
- *        built from the JobTicket (based on ProcNode structure + Time)
+ *  @todo 4/2023 for the time being, this is a mere marker for test code;
+ *        for the real engine it is planned to generate a unique reproducible
+ *        hash key for each invocation, which can be used for caching; obviously
+ *        this hash need to be built from the JobTicket, based on ProcNode structure
+ *        and the nominal Time. ///////////////////////////////////TICKET #1293
  */
 union InvocationInstanceID
   {
@@ -134,9 +135,10 @@ union InvocationInstanceID
  */
 struct lumiera_jobParameter_struct
   {
-    gavl_time_t nominalTime;
+    gavl_time_t nominalTime;        /////////////////////////////////////////////////////////////////////////TICKET #1295 job invocation parameter: framework to interpret this time
     InvocationInstanceID invoKey;
-    //////////////////////////////////////////////////////////////TODO: place an additional parameter value here, or make the instanceID globally unique?
+                         //////////////////////////////////////////////////////////////TODO: place an additional parameter value here, or make the instanceID globally unique?
+                         ////////////////////////////////////////////////////////////////////////////////////TICKET #1293 job invocation identity
   };
 typedef struct lumiera_jobParameter_struct lumiera_jobParameter;
 typedef lumiera_jobParameter* LumieraJobParameter;
@@ -200,6 +202,7 @@ namespace engine {
   
   using lib::time::TimeValue;
   using lib::time::Time;
+  using lib::HashVal;
   
   typedef lumiera_jobParameter const& JobParameter;
   
@@ -237,9 +240,10 @@ namespace engine {
       virtual void invokeJobOperation (JobParameter parameter)   =0;
       virtual void signalFailure (JobParameter,JobFailureReason) =0;
       
-      virtual JobKind getJobKind()                        const  =0;
-      virtual bool verify (Time, InvocationInstanceID)    const  =0;
-      virtual size_t hashOfInstance(InvocationInstanceID) const  =0;
+      virtual JobKind getJobKind()                         const =0;
+      virtual bool verify (Time, InvocationInstanceID)     const =0;
+      virtual HashVal hashOfInstance(InvocationInstanceID) const =0;
+      virtual InvocationInstanceID buildInstanceID(HashVal)const =0;
       
       lib::HashVal hash_value (JobParameter)  const;
     };

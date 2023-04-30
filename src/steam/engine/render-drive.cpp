@@ -71,6 +71,12 @@ namespace engine {
   }
   
   
+  InvocationInstanceID
+  RenderDrive::buildInstanceID (HashVal seed)  const
+  {
+    UNIMPLEMENTED ("systematically generate an invoKey, distinct for the nominal time");
+  }
+  
   size_t
   RenderDrive::hashOfInstance (InvocationInstanceID invoKey) const
   {

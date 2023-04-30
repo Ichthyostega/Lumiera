@@ -30,7 +30,7 @@
  ** calculation process, the CalcStream, maintains this closure instance, as parametrised
  ** with the appropriate configuration for the specific playback/render process underway.
  ** Enclosed into this instance lives the actual job planning pipeline, connected at the
- ** rear to the dispatcher and thus to the fixture and the low-level model 
+ ** rear to the dispatcher and thus to the fixture and the low-level model
  ** 
  ** @todo 4/2023 »Playback Vertical Slice« -- effort towards first integration of render process ////////////TICKET #1221
  */
@@ -59,6 +59,7 @@ namespace engine {
 //  using lib::time::FSecs;
 //  using lib::time::Time;
   using lib::time::FrameCnt;
+  using lib::HashVal;
   
   
   /**
@@ -68,7 +69,7 @@ namespace engine {
    * runtime behaviour of the render activity, like e.g.
    * re-scheduling with modified playback speed. Since the
    * CalcStream is an conceptual representation of "the rendering",
-   * the actual engine implementation is kept opaque this way. 
+   * the actual engine implementation is kept opaque this way.
    */
   class RenderEnvironment
     {
@@ -106,11 +107,12 @@ namespace engine {
           return META_JOB;
         }
       
-      bool verify (Time, InvocationInstanceID)     const;
-      size_t hashOfInstance (InvocationInstanceID) const;
+      bool verify (Time, InvocationInstanceID)      const override;
+      size_t hashOfInstance (InvocationInstanceID)  const override;
+      InvocationInstanceID buildInstanceID(HashVal) const override;
       
-      void invokeJobOperation (JobParameter);
-      void signalFailure (JobParameter, JobFailureReason);
+      void invokeJobOperation (JobParameter)              override;
+      void signalFailure (JobParameter, JobFailureReason) override;
       
       
       
@@ -121,7 +123,7 @@ namespace engine {
        */
       RenderDrive (RenderEnvironment& renderEnvironment
                   ,ModelPort port, uint chan)
-        : engine_{renderEnvironment} 
+        : engine_{renderEnvironment}
         { }
       
       

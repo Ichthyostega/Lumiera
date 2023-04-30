@@ -64,6 +64,7 @@ using vault::engine::JobFunctor;
 using lib::LinkedElements;
 using lib::OrientationIndicator;
 using util::isnil;
+using lib::HashVal;
 //  
 //class ExitNode;
   
@@ -108,10 +109,12 @@ using util::isnil;
         {
           Provision* next{nullptr};
           JobFunctor&   jobFunctor;
+          HashVal       invocationSeed;
           Prerequisites requirements{};
           ////////////////////TODO some channel or format descriptor here
-          Provision (JobFunctor& func)
+          Provision (JobFunctor& func, HashVal seed =0)
             : jobFunctor{func}
+            , invocationSeed{seed}
           { }
         };
       
@@ -154,6 +157,10 @@ using util::isnil;
           TODO ("validity self check");
           return true;
         }
+      
+    protected:
+      bool verifyInstance (JobFunctor&, Time)  const;
+
     };
   
   
@@ -276,9 +283,11 @@ using util::isnil;
     using Spec = typename IT::value_type;
     static_assert (lib::meta::is_Tuple<Spec>());                          // -- payload of iterator is a tuple
     using Func = typename std::tuple_element<0, Spec>::type;
-    using Preq = typename std::tuple_element<1, Spec>::type;
+    using Seed = typename std::tuple_element<1, Spec>::type;
+    using Preq = typename std::tuple_element<2, Spec>::type;
     static_assert (lib::meta::is_basically<Func, JobFunctor>());          // -- first component specifies the JobFunctor to use
-    static_assert (lib::meta::can_IterForEach<Preq>::value);              // -- second component is again an iterable sequence
+    static_assert (lib::meta::is_basically<Seed, HashVal>());             // -- second component provides a specific seed for Invocation-IDs
+    static_assert (lib::meta::can_IterForEach<Preq>::value);              // -- third component is again an iterable sequence
     static_assert (std::is_same<typename Preq::value_type, JobTicket>()); // -- which yields JobTicket prerequisites
     REQUIRE (not isnil (featureSpec)
             ,"require at least specification for one channel");
@@ -287,8 +296,9 @@ using util::isnil;
     for ( ; featureSpec; ++featureSpec)
       {
         JobFunctor& func = std::get<0> (*featureSpec);
-        auto& provision = provisionSpec.emplace<Provision> (func);
-        for (Preq pre = std::get<1> (*featureSpec); pre; ++pre)
+        HashVal invoSeed = std::get<1> (*featureSpec);
+        auto& provision  = provisionSpec.emplace<Provision> (func, invoSeed);
+        for (Preq pre = std::get<2> (*featureSpec); pre; ++pre)
             provision.requirements.emplace<Prerequisite> (*pre);
       }
     provisionSpec.reverse();        // retain order of given definitions per channel

@@ -47,7 +47,7 @@
 #include "lib/test/test-helper.hpp"
 #include "vault/engine/job.h"
 #include "vault/engine/dummy-job.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <functional>
 //#include <vector>
@@ -79,6 +79,7 @@ namespace test   {
 //  using lib::time::Time;
 //  using mobject::ModelPort;
 //  using play::Timings;
+  using lib::HashVal;
   using std::make_tuple;
   using std::deque;
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1294 : organisation of namespaces / includes??
@@ -144,10 +145,9 @@ namespace test   {
     {
       auto emptyPrereq = lib::nilIterator<JobTicket&>();
       using Iter = decltype(emptyPrereq);
+      using SpecTuple = std::tuple<JobFunctor&, HashVal, Iter>;
       return lib::singleValIterator(
-                 std::tuple<JobFunctor&, Iter>(DummyJob::getFunctor()
-                                              ,emptyPrereq
-                                              ));
+                 SpecTuple(DummyJob::getFunctor(), 0, emptyPrereq));
     }
     
   }//(End)internal test helpers....
@@ -171,6 +171,7 @@ namespace test   {
         : JobTicket{defineBottomSpec()}
         { };
       
+      bool verify_associated (Job const&) const;
     private:
     };
   
@@ -195,7 +196,19 @@ namespace test   {
   
   
   
-  /**  */
+  /**
+   * verify the given job instance was actually generated from this JobTicket.
+   * @remark this test support function actually relies on some specific rigging,
+   *         which typically is prepared by setup of a MockJobTicket.
+   */
+  inline bool
+  MockJobTicket::verify_associated (Job const& job)  const
+  {
+    JobFunctor& functor = dynamic_cast<JobFunctor&> (static_cast<JobClosure&> (*job.jobClosure));
+    Time nominalTime {TimeValue{job.parameter.nominalTime}};
+    return this->isValid()
+       and this->verifyInstance(functor, nominalTime);
+  }
   
   
   

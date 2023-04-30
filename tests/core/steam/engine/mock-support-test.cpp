@@ -98,12 +98,12 @@ namespace test  {
           CHECK (not DummyJob::was_invoked (mockJob));
           
           mockJob.triggerJob();
-          CHECK (    DummyJob::was_invoked (mockJob));
+          CHECK (DummyJob::was_invoked (mockJob));
           CHECK (RealClock::wasRecently (DummyJob::invocationTime (mockJob)));
           CHECK (nominalTime   == DummyJob::invocationNominalTime (mockJob) );
           CHECK (additionalKey == DummyJob::invocationAdditionalKey(mockJob));
           
-          Time prevInvocation = DummyJob::invocationTime (mockJob);
+          Time prevInvocation   = DummyJob::invocationTime (mockJob);
           mockJob.triggerJob();
           CHECK (prevInvocation < DummyJob::invocationTime (mockJob));                 // invoked again, recorded new invocation time
           CHECK (nominalTime   == DummyJob::invocationNominalTime (mockJob) );         // all other Job parameter recorded again unaltered
@@ -115,8 +115,10 @@ namespace test  {
       void
       verify_MockJobTicket()
         {
-          MockJobTicket mockTick;
-          CHECK (mockTick.discoverPrerequisites().empty());
+          MockJobTicket mockTicket;
+          CHECK (mockTicket.discoverPrerequisites().empty());
+          Job mockJob = mockTicket.createJobFor (FrameCoord{});
+          CHECK (mockTicket.verify_associated (mockJob));
           TODO ("cover details of MockJobTicket");
         }
       

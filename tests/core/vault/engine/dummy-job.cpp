@@ -66,25 +66,25 @@ namespace engine {
       : public JobClosure
       {
         void
-        invokeJobOperation (JobParameter parameter)
+        invokeJobOperation (JobParameter parameter)  override
           {
             invocationLog_[hash_value (parameter)] = Invocation(parameter);
           }
         
         void
-        signalFailure (JobParameter,JobFailureReason)
+        signalFailure (JobParameter,JobFailureReason)  override
           {
             NOTREACHED ("Job failure is not subject of this test");
           }
         
         JobKind
-        getJobKind()  const
+        getJobKind()  const override
           {
             return META_JOB;
           }
         
         bool
-        verify (Time nominalJobTime, InvocationInstanceID invoKey)  const
+        verify (Time nominalJobTime, InvocationInstanceID invoKey)  const override
           {
             return Time::ANYTIME < nominalJobTime
                 && 0 <= invoKey.metaInfo.a
@@ -93,8 +93,14 @@ namespace engine {
                 && invoKey.metaInfo.b < MAX_PARAM_B;
           }
         
+        InvocationInstanceID
+        buildInstanceID (HashVal seed)  const override
+          {
+            UNIMPLEMENTED ("systematically generate an invoKey, distinct for the nominal time");
+          }
+        
         size_t
-        hashOfInstance(InvocationInstanceID invoKey) const
+        hashOfInstance(InvocationInstanceID invoKey) const override
           {
             return std::hash<int>{} (invoKey.metaInfo.a);
           }                          ////////////////////////////////////////////////////////////////////////TICKET #1293 : this is dangerous and could lead to clashes
@@ -132,6 +138,12 @@ namespace engine {
           {
             return access_or_default (invocationLog_, hash_value(param)
                                      ,NullValue<Invocation>::get());
+          }
+        
+        void
+        clearLog()
+          {
+            invocationLog_.clear();
           }
       };
     
