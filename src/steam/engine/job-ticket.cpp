@@ -131,7 +131,7 @@ namespace engine {
         REQUIRE (this->isValid(), "Attempt to generate render job for incomplete or unspecified render plan.");
         REQUIRE (coordinates.channelNr < provision_.size(), "Inconsistent Job planning; channel beyond provision");
         Provision const& provision = provision_[coordinates.channelNr];
-        JobClosure& functor = static_cast<JobClosure&> (unConst(provision.jobFunctor));      ////////////////TICKET #1295 : fix actual interface down to JobFunctor (after removing C structs)
+        JobClosure& functor = static_cast<JobClosure&> (unConst(provision.jobFunctor));      ////////////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
         InvocationInstanceID invoKey{timeHash (nominalTime, provision.invocationSeed)};
         
         return Job(functor, invoKey, nominalTime);
@@ -152,18 +152,25 @@ namespace engine {
   }
   
   
+  namespace {     ///////////////////////////////////////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
+    inline bool
+    operator== (InvocationInstanceID const& l, InvocationInstanceID const& r)
+    {
+      return lumiera_invokey_eq (unConst(&l), unConst(&r));
+    }
+  }
+  
   /**
    * Helper for tests: verify the given invocation parameters match this JobTicket.
    */
   bool
-  JobTicket::verifyInstance (JobFunctor& functor, Time nominalTime)  const
+  JobTicket::verifyInstance (JobFunctor& functor, InvocationInstanceID const& invoKey, Time nominalTime)  const
   {
     for (Provision const& p : provision_)
-      if (util::isSameObject (p.jobFunctor, functor))
-        {
-          TODO ("actually re-compute the invocation ID !!!!!!!!!!!!");
-          return true;
-        }
+      if (util::isSameObject (p.jobFunctor, functor)
+          and invoKey == timeHash (nominalTime, p.invocationSeed)
+         )
+        return true;
     return false;
   }
 

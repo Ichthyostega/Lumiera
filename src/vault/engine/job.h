@@ -53,7 +53,7 @@
 
 
 #include "lib/llist.h"
-#include "lib/luid.h"
+#include "lib/hash-value.h"
 #include "lib/time.h"
 
 
@@ -126,18 +126,6 @@ union InvocationInstanceID
     struct { int32_t a,b;
              int64_t t;
            } part;
-    
-    friend bool
-    operator== (InvocationInstanceID const& l, InvocationInstanceID const& r)
-    {
-      return lumiera_uid_eq (&l.luid, &r.luid);
-    }
-    
-    friend bool
-    operator!= (InvocationInstanceID const& l, InvocationInstanceID const& r)
-    {
-      return not (l == r);
-    }
   };
 
 
@@ -360,6 +348,7 @@ void lumiera_job_failure (LumieraJobDefinition, JobFailureReason);
 /** calculate a hash value based on the Job's \em identity. */
 size_t lumiera_job_get_hash (LumieraJobDefinition);
 
+int lumiera_invokey_eq (void* l, void* r);
 
 
 #ifdef __cplusplus

@@ -185,4 +185,13 @@ lumiera_job_get_hash (LumieraJobDefinition jobDef)
   REQUIRE (jobDef);
   return hash_value (forwardInvocation (*jobDef));
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
+#include "lib/luid.h"
+
+int
+lumiera_invokey_eq (void* l, void* r)
+{
+  return lumiera_uid_eq ((LumieraUid)l, (LumieraUid)r);
+}
 }

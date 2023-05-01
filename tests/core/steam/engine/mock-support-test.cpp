@@ -121,14 +121,16 @@ namespace test  {
           
           // build a render job to do nothing....
           Job nopJob = JobTicket::NOP.createJobFor(coord);
-          CHECK (INSTANCEOF (vault::engine::NopJobFunctor, static_cast<JobClosure*> (nopJob.jobClosure)));   //////////TICKET #1295 : fix actual interface down to JobFunctor (after removing C structs)
+          CHECK (INSTANCEOF (vault::engine::NopJobFunctor, static_cast<JobClosure*> (nopJob.jobClosure)));   //////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
           CHECK (nopJob.parameter.nominalTime == coord.absoluteNominalTime);
-          CHECK (nopJob.parameter.invoKey == InvocationInstanceID());
+          InvocationInstanceID empty; ///////////////////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
+          CHECK (lumiera_invokey_eq (&nopJob.parameter.invoKey, &empty));
           
           MockJobTicket mockTicket;
           CHECK (mockTicket.discoverPrerequisites().empty());
           Job mockJob = mockTicket.createJobFor (coord);
-          CHECK (mockTicket.verify_associated (mockJob));
+          CHECK (    mockTicket.verify_associated (mockJob));                          // proof by invocation hash : is indeed backed by this JobTicket
+          CHECK (not mockTicket.verify_associated (nopJob));                           // ...while some random other job is not related
           TODO ("cover details of MockJobTicket");
         }
       

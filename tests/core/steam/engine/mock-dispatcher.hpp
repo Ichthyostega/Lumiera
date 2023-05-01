@@ -206,8 +206,9 @@ namespace test   {
   {
     JobFunctor& functor = dynamic_cast<JobFunctor&> (static_cast<JobClosure&> (*job.jobClosure));
     Time nominalTime {TimeValue{job.parameter.nominalTime}};
+    InvocationInstanceID const& invoKey = job.parameter.invoKey;
     return this->isValid()
-       and this->verifyInstance(functor, nominalTime);
+       and this->verifyInstance(functor, invoKey, nominalTime);
   }
   
   

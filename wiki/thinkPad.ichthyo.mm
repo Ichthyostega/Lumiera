@@ -69953,6 +69953,23 @@
 <arrowlink COLOR="#b75269" DESTINATION="ID_1713196934" ENDARROW="Default" ENDINCLINATION="-871;-27;" ID="Arrow_ID_865176706" STARTARROW="None" STARTINCLINATION="-1263;70;"/>
 <icon BUILTIN="stop-sign"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682941524301" ID="ID_1050000340" MODIFIED="1682942127658" TEXT="die C-ismen sind problematisch und m&#xfc;ssen weg">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Bisher wird noch die Fiktion aufrecht erhalten, da&#223; die Basis-Schnittstelle zum Scheduler in reinem C geschrieben ist; tats&#228;chlich ist dadurch so mancher Teil der implementierung grenzwertig bzw. w&#252;rde tats&#228;chlich mit reinem C nicht (mehr) funktionieren; au&#223;erdem bekommen wir mehfrach geschichtete Vererbungen und m&#252;ssen regelm&#228;&#223;ig casten und implizite ungepr&#252;fte Annahmen machen.
+    </p>
+    <br/>
+    <p>
+      <i><font color="#f83434">Und das gemischte Setup ist t&#252;ckisch:</font></i>&#160;habe gestern Nacht und heute ein paar Stunden einen Link-Fehler gesucht, der auf ein fehlendes <font face="Monospaced" size="2" color="#1b1981">extern &quot;C&quot; { }</font>&#160;zur&#252;ckging, aber nicht aufgefallen war, solange C++ die Definitionen inlinen konnte...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1682205189643" ID="ID_897564380" MODIFIED="1682205211467" TEXT="Problem: Umbau in JobTicket selber blockt">
@@ -70760,6 +70777,9 @@
 <icon BUILTIN="forward"/>
 <node CREATED="1682885740362" ID="ID_362133279" MODIFIED="1682885761537" TEXT="untere H&#xe4;lfte: Seed bzw. zuf&#xe4;llig"/>
 <node CREATED="1682885762190" ID="ID_1713133015" MODIFIED="1682885777729" TEXT="obere H&#xe4;lfte: Hash aus der nominellen Zeit"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682941259374" ID="ID_1987226609" MODIFIED="1682941345993" TEXT="auf C++ umstellen (#1295 bzw. #1287)">
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 <node CREATED="1682039636789" ID="ID_986989156" MODIFIED="1682039638216" TEXT="Job">
@@ -70877,8 +70897,8 @@
 <node CREATED="1682808411785" ID="ID_1713196934" MODIFIED="1682808633170" TEXT="welche Parameter m&#xfc;ssen einer Invocation im allgemeinen mitgegeben werden">
 <linktarget COLOR="#b75269" DESTINATION="ID_1713196934" ENDARROW="Default" ENDINCLINATION="-871;-27;" ID="Arrow_ID_865176706" SOURCE="ID_782813898" STARTARROW="None" STARTINCLINATION="-1263;70;"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682810738487" ID="ID_1493396541" MODIFIED="1682810875535" TEXT="#1295 draft job invocation parameter representation">
-<linktarget COLOR="#b22e63" DESTINATION="ID_1493396541" ENDARROW="Default" ENDINCLINATION="-1383;-51;" ID="Arrow_ID_847435526" SOURCE="ID_48632766" STARTARROW="None" STARTINCLINATION="-753;40;"/>
 <linktarget COLOR="#4d4eb0" DESTINATION="ID_1493396541" ENDARROW="Default" ENDINCLINATION="-46;-58;" ID="Arrow_ID_1838720811" SOURCE="ID_1576147260" STARTARROW="None" STARTINCLINATION="148;9;"/>
+<linktarget COLOR="#b22e63" DESTINATION="ID_1493396541" ENDARROW="Default" ENDINCLINATION="-1383;-51;" ID="Arrow_ID_847435526" SOURCE="ID_48632766" STARTARROW="None" STARTINCLINATION="-753;40;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
