@@ -156,7 +156,7 @@ namespace test{
           auto o0 = MakeRec().genNode();
           auto o1 = MakeRec().genNode("νόμος");
           auto o2 = MakeRec().type("spam").genNode();
-          auto o3 = MakeRec().attrib("Ψ", int64_t(42), "π", 3.14159265358979323846264338328).genNode("λόγος");
+          auto o3 = MakeRec().attrib("Ψ", int64_t(42), "π", 3.14159265358979323846264338328).genNode("μάθησις");
           
           CHECK (!o0.isNamed());
           CHECK (isnil(o0.data.get<Rec>()));
@@ -171,7 +171,7 @@ namespace test{
           CHECK (isnil(o2.data.get<Rec>()));
           
           CHECK (o3.isNamed());
-          CHECK ("λόγος" == o3.idi.getSym());
+          CHECK ("μάθησις" == o3.idi.getSym());
           CHECK ("NIL" == o3.data.get<Rec>().getType());
           CHECK (GenNode("Ψ", int64_t(42)) == o3.data.get<Rec>().get("Ψ"));
           CHECK (42L == o3.data.get<Rec>().get("Ψ").data.get<int64_t>());

@@ -150,6 +150,16 @@ namespace test   {
                  SpecTuple(DummyJob::getFunctor(), 0, emptyPrereq));
     }
     
+    inline auto
+    defineSimpleSpec (HashVal seed)                             /////////////////TODO collapse with defineBottomSpec() ??
+    {
+      auto emptyPrereq = lib::nilIterator<JobTicket&>();
+      using Iter = decltype(emptyPrereq);
+      using SpecTuple = std::tuple<JobFunctor&, HashVal, Iter>;
+      return lib::singleValIterator(
+                 SpecTuple(DummyJob::getFunctor(), seed, emptyPrereq));
+    }
+    
   }//(End)internal test helpers....
     
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1221
@@ -169,9 +179,14 @@ namespace test   {
     public:
       MockJobTicket()
         : JobTicket{defineBottomSpec()}
-        { };
+      { }
+      
+      MockJobTicket (HashVal seed)
+        : JobTicket{defineSimpleSpec (seed)}
+      { }
       
       bool verify_associated (Job const&) const;
+      static bool isAssociated (Job const&, JobTicket const&);
     private:
     };
   
@@ -190,7 +205,11 @@ namespace test   {
       MockSegmentation (std::initializer_list<GenNode> specs)
         : MockSegmentation{}
         {
-          UNIMPLEMENTED ("populate mock sequence structure");
+          for (auto& spec : specs)
+            {
+              auto seed = spec.retrieveAttribute<HashVal>("mark");
+              tickets_.emplace_back (seed? *seed : HashVal(rand() % 1000));
+            }
         }
     };
   
@@ -209,6 +228,19 @@ namespace test   {
     InvocationInstanceID const& invoKey = job.parameter.invoKey;
     return this->isValid()
        and this->verifyInstance(functor, invoKey, nominalTime);
+  }
+  
+  /**
+   * convenience shortcut to perform [this test](\ref MockJobTicket::verify_associated)
+   * on arbitrary JobTicket and Job instances.
+   * @warning a positive test result however relies on some casting trickery and there is no
+   *    guarantee this test works if the JobTicket was not created from this mock framework.
+   */
+  inline bool
+  MockJobTicket::isAssociated (Job const& job, JobTicket const& ticket)
+  {                                 // should work always, since storage is the same
+    MockJobTicket const& backdoor = static_cast<MockJobTicket const&> (ticket);
+    return backdoor.verify_associated (job);
   }
   
   

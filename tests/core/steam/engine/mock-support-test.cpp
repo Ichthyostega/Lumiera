@@ -139,11 +139,32 @@ namespace test  {
       void
       verify_MockSegmentation()
         {
-          MockSegmentation mockSeg;
-          CHECK (1 == mockSeg.size());
-          Time arbitraryTime = lib::test::randTime();
-          JobTicket const& ticket = mockSeg[arbitraryTime].jobTicket();
-          CHECK (util::isSameObject (ticket, JobTicket::NOP));
+          FrameCoord coord;
+          Time someTime = lib::test::randTime();
+          coord.absoluteNominalTime = someTime;
+          {
+            MockSegmentation mockSeg;
+            CHECK (1 == mockSeg.size());
+            JobTicket const& ticket = mockSeg[someTime].jobTicket();
+            CHECK (util::isSameObject (ticket, JobTicket::NOP));
+          }
+          {
+            MockSegmentation mockSeg{MakeRec().genNode()};
+            CHECK (1 == mockSeg.size());
+            JobTicket const& ticket = mockSeg[someTime].jobTicket();
+            CHECK (not util::isSameObject (ticket, JobTicket::NOP));
+            
+            Job someJob = ticket.createJobFor(coord);
+            CHECK (MockJobTicket::isAssociated (someJob, ticket));
+            CHECK (not DummyJob::was_invoked (someJob));
+            
+            someJob.triggerJob();
+            CHECK (DummyJob::was_invoked (someJob));
+            CHECK (RealClock::wasRecently (DummyJob::invocationTime (someJob)));
+            CHECK (someTime == DummyJob::invocationNominalTime (someJob));
+          }
+          
+          
           TODO ("cover details of MockSegmentation");
         }
     };
