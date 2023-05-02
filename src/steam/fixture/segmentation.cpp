@@ -64,13 +64,31 @@ namespace fixture {
   
   
   
-  /** */
-//  bool
-//  ModelPortRegistry::contains (ID<Pipe> key)  const
-//  {
-//    return bool(key)
-//        && util::contains (transaction_, key);
-//  }
+  /**
+   * @param start (optional) definition of the new Segment's start point (inclusive)
+   * @param after (optional) definition of the end point (exclusive)
+   * @param jobTicket specification of provided render functionality for the new Segment
+   * @remarks missing definitions will be derived or interpolated according to context
+   *   - if start point is omitted, the new Segment will start seamlessly after
+   *     any preceding Segment's end, in case this preceding Segment ends earlier
+   *   - otherwise the preceding Segment's start point will be used, thereby effectively
+   *     replacing and expanding or trimming or inserting into the preceding Segment
+   *   - similar for the end point: if the definition is omitted, the new Segment
+   *     will cover the time range until the next Segmen's start
+   *   - if upper/lower boundaries can not be established, the covered range will be
+   *     expanded from Time::ANYTIME up to Time::ANYTIME in as fitting current context
+   *   - after start and end point have been established by the above rules, the actual
+   *     splicing operation will be determined; either an existing Segment is replaced
+   *     altogether, or it is trimmed to fit, or the new Segment is inserted, thereby
+   *     creating a second (copied) part of the encompassing old Segment.
+   *   - in case the JobTicket is omitted, the new Segment will be marked as _passive_
+   *     and any job created from such a Segment will then be a »NOP-job«
+   */
+  Segment const&
+  Segmentation::splitSplice (OptTime start, OptTime after, const engine::JobTicket* jobTicket)
+  {
+    UNIMPLEMENTED ("determine predecessor, successor and orientation and perform del/trunc/split/swap/insert");
+  }
   
   
   

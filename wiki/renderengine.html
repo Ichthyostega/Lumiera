@@ -7101,7 +7101,7 @@ We need to detect attaching and detaching of
 * root &amp;harr; [[Fork]]
 </pre>
 </div>
-<div title="Segmentation" modifier="Ichthyostega" created="201012121901" modified="202304162242" tags="def spec Builder" changecount="4">
+<div title="Segmentation" modifier="Ichthyostega" created="201012121901" modified="202305020219" tags="def spec Builder" changecount="5">
 <pre>//Segmentation of timeline// denotes a data structure and a step in the BuildProcess.
 When [[building the fixture|BuildFixture]], ~MObjects -- as handled by their Placements -- are grouped below each timeline using them; Placements are then to be resolved into [[explicit Placements|ExplicitPlacement]], resulting in a single well defined time interval for each object. This allows to cut this effective timeline into slices of constant wiring structure, which are represented through the ''Segmentation Datastructure'', a time axis with segments holding object placements and [[exit nodes|ExitNode]]. &amp;nbsp;&amp;rarr; see [[structure of the Fixture|Fixture]]
 * for each Timeline we get a Segmentation
@@ -7116,7 +7116,7 @@ When [[building the fixture|BuildFixture]], ~MObjects -- as handled by their Pla
 :&amp;rarr; after //sorting,// the segmentation can be established, thereby copying placements spanning multiple segments
 :&amp;rarr; only //after running the complete build process for each segment,// the list of model ports and exit nodes can be established
 ;(2) commit stage
-: -- after the build process(es) are completed, the new fixture gets ''committed'', thus becoming the officially valid state to be rendered. As render processes might be going on in parallel, some kind of locking or barrier is required. It seems advisable to make the change into a single atomic hot-swap. Meaning we'd get a single access point to be protected. But there is another twist: We need to find out which render processes to cancel and restart, to pick up the changes introduced by this build process -- which might include adding and deleting of timelines as a whole, and any conceivable change to the segmentation grid. Because of the highly dynamic nature of the placements, on the other hand it isn't viable to expect the high-level model to provide this information. Thus we need to find out about a ''change coverage'' at this point. We might expand on that idea to //prune any new segments which aren't changed.// This way, only a write barrier would be necessary on switching the actually changed segments, and any render processes touching these would be //tainted.// Old allocations could be released after all tainted processes are known to be terminated.
+: -- after the build process(es) are completed, the new fixture gets ''committed'', thus becoming the officially valid state to be rendered. As render processes might be going on in parallel, some kind of locking or barrier is required. It seems advisable to make the change into a single atomic hot-swap. Meaning we'd get a single access point to be protected. But there is another twist: We need to find out which render processes to cancel and restart, to pick up the changes introduced by this build process -- which might include adding and deleting of timelines as a whole, and any conceivable change to the segmentation grid. Because of the highly dynamic nature of the placements, on the other hand it isn't viable to expect the high-level model to provide this information. Thus we need to find out about a ''change coverage'' at this point. We might expand on that idea to //prune any new segments which aren't changed.// This way, only a write barrier would be necessary on switching the actually changed segments, and any render processes touching these would be //tainted.// Old allocations could be released after all tainted processes are known to be terminated. &amp;rarr; SegmentationChange
 ;(3) rendering use
 :Each play/render process employs a ''frame dispatch step'' to get the right exit node for pulling a given frame (&amp;rarr; [[Dispatcher|FrameDispatcher]]). Planning appropriate [[render jobs|RenderJob]] involves support by the JobTicket for each Segment and port, which provides //a blueprint for rendering and connectivity.// From there on, the calculation process -- transmitted through [[Scheduler activity|RenderActivity]]  -- proceeds into the [[processing nodes|ProcNode]]. The storage of these processing nodes and accompanying wiring descriptors is hooked up behind the individual segments, by sharing a common {{{AllocationCluster}}}. Yet the calculation of individual frames also depends on ''parameters'' and especially ''automation'' linked with objects in the high-level model. It is likely that there might be some sharing or some kind of additional communication interface, as the intention was to allow ''live changes'' to automated values. &lt;br/&gt;{{red{WIP 4/2023}}} details about to be elaborated &amp;rarr; PlaybackVerticalSlice
 !!!observations
@@ -7140,6 +7140,82 @@ The Fixture is mostly comprised of the Segementation datastructure, but some oth
 
 Largely the storage of the render nodes network is hooked up behind the Fixture &amp;rarr; [[storage considerations|FixtureStorage]]
 </pre>
+</div>
+<div title="SegmentationChange" creator="Ichthyostega" modifier="Ichthyostega" created="202305020227" modified="202305020228" tags="spec operational Builder draft" changecount="3">
+<pre>At the end of the build process, the existing [[Segmentation]] possibly needs to be changed, extended or adapted.
+This change must be performed as a //transactional switch,// since render or playback processes might be performed concurrently. All Fixture and low-level-Model datastructures are //immutable// -- thus for any changes, suitably adapted structures will be built as a replacement.
+
+!Adapting the Segmentation by »split splice«
+This is an implementation level operation, which analyses the existing Segmentation and determines the changes necessary to introduce a new or altered Segment. This operation has to retain the Segmentation ''Invariant'': it is a seamless sequence of Time intervals covering the complete time axis.
+
+!!!Structure of the split-splice operation
+{{red{1.5.2023 : Analysis and implementation draft}}}
+{{{
+Algorithmus
+    Invariante
+        vollständige lückenlose Abdeckung der gesamten Zeitachse
+        alle Einträge sind aufsteigend sortiert
+    Vorgänger und Nachfolger finden
+        Predecessor
+            sep ≔ start oder after (wenn start fehlt)
+            Pstart &gt;= sep ⟹ ↯ Predecessor
+            suche größten mit Pstart &lt; sep
+        Succsessor ist erster, der diese Bedingung verletzt
+        andernfalls: Successor == Predecessor (split)
+    Start- und Endpunkt festsetzen
+        definerter start/after-Punkt ist stets verbindlich
+        fehlernder start
+            sep ≡ after
+            Pend &lt; sep ⟹ start ≔ Pend
+            sonst ⟹ start ≔ Pstart (replace or trunc)
+        fehlender after
+            sep ≡ start ∧ Sstart &gt;= sep 
+            Sstart &gt; sep ⟹ after ≔ Sstart
+            sonst ⟹ after ≔ Send (replace or trunc)
+        POST
+            start &lt; after
+                sonst ⟹ REJECT
+            Pstart &lt;= start
+            Pstart == Sstart ∨ start &lt;= Sstart
+    Relation zum Vor/Nachfolger bestimmen
+        Pstart &lt; start
+            Pend &lt; start ⟹ ins NOP-Predecessor
+            Pend == start ⟹ seamless
+            Pend &lt;= after ⟹ truc(Predecessor)
+            Pend &gt; after ⟹ split(Predecessor)
+        Pstart == start
+            Pend &lt;= after ⟹ del(Predecessor)
+            Pend &gt; after ⟹ swap_trunc(Predecessor)
+        Predecessor == Successor
+            Pend == after == Time::NEVER ⟹ trunc(Predecessor)
+            Pend &gt; after ⟹ split(Predecessor)
+        Sstart &lt; after
+            Send &lt; after ⟹ del(Successor) and ++Successor and recurse (same base case)
+            Send == after ⟹ del(Successor)
+            Send &gt; after ⟹ trunc(Successor)
+        Sstart == after ⟹ seamless
+        after &lt; Sstart ⟹ ins NOP-Successor
+    einfügen und löschen
+        Predecessor
+            trunc ⟹ del
+            split ⟹ del
+            del ⟹ del
+            swap_trunc ⟹ del
+        Successor
+            de++ ⟹ del
+            trunc ⟹ del
+        insert
+            before
+                ins NOP-Predecessor
+                trunc(Predecessor) ⟹ ins copy Predecessor-shortened-end
+                split(Predecessor) ⟹ ins copy Predecessor shortened-end
+            new Segment
+            after
+                split(Predecessor) ⟹ ins copy Predecessor shortened-start
+                swap_trunc(Predecessor) ⟹ ins copy Predecessor shortened-start
+                trunc(Successor) ⟹ ins copy Successor shortened-start
+                ins NOP-Successor
+}}}</pre>
 </div>
 <div title="Sequence" modifier="Ichthyostega" created="201001252327" modified="201505310118" tags="def" changecount="2">
 <pre>A sequence is a collection of media objects, arranged onto a fork (&quot;track tree&quot;). Sequences are the building blocks within the session. To be visible and editable, a session needs to be bound into a top-level [[Timeline]]. Alternatively, it may be used as a VirtualClip nested within another sequence.

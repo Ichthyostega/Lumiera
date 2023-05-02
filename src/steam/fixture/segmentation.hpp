@@ -53,6 +53,7 @@
 #include "lib/nocopy.hpp"
 
 #include <list>
+#include <optional>
 
 
 namespace steam {
@@ -63,6 +64,8 @@ namespace fixture {
   using std::list;
   using lib::time::TimeValue;
   using util::_Fmt;
+  
+  using OptTime = std::optional<lib::time::Time>;
   
   /**
    * For the purpose of building and rendering, the fixture (for each timeline)
@@ -108,6 +111,10 @@ namespace fixture {
               return seg;
           throw error::State (_Fmt{"Fixture datastructure corrupted: Time %s not covered"} % time);
         }
+      
+      /** rework the existing Segmentation to include a new Segment as specified */
+      Segment const&
+      splitSplice (OptTime start, OptTime after, const engine::JobTicket* =nullptr);
     };
   
   

@@ -115,13 +115,10 @@
 #include <string>
 #include <deque>
 
-
 namespace lib {
 namespace diff{
   
   namespace error = lumiera::error;
-  
-  using std::string;
   
   struct GenNode;
   struct Ref;
@@ -474,6 +471,7 @@ namespace diff{
       
       bool hasAttribute (string key)  const;
       bool isNested()                 const;
+      bool hasChildren()              const;
       
       
     protected:
@@ -590,7 +588,7 @@ namespace diff{
   /**
    * Building block for monad-like depth-first expansion of a GenNode.
    * When used within lib::IterStateWrapper, the result is an Iterator
-   * to visit the contents of a GenNodet tree recursively depth-fist.
+   * to visit the contents of a GenNode tree recursively depth-fist.
    */
   class GenNode::ScopeExplorer
     {
@@ -813,6 +811,13 @@ namespace diff{
   {
     return data.isNested();
   }
+  
+  inline bool
+  GenNode::hasChildren()  const
+  {
+    return not isnil (data.childIter());
+  }
+
   
   
   

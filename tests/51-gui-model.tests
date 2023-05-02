@@ -2,7 +2,7 @@ TESTING "Component Test Suite: GUI Model Parts" ./test-suite --group=stage
 
 
 
-TEST "Self-check: testing GUI backbone parts" TestGui_test <<END
+PLANNED "Self-check: testing GUI backbone parts" TestGui_test <<END
 return: 0
 END
 

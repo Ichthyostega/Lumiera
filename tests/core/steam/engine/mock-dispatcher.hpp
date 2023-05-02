@@ -76,7 +76,7 @@ namespace test   {
 //  using lib::time::Offset;
 //  using lib::time::TimeVar;
   using lib::time::TimeValue;
-//  using lib::time::Time;
+  using lib::time::Time;
 //  using mobject::ModelPort;
 //  using play::Timings;
   using lib::HashVal;
@@ -207,8 +207,14 @@ namespace test   {
         {
           for (auto& spec : specs)
             {
-              auto seed = spec.retrieveAttribute<HashVal>("mark");
+              JobTicket* newTicket = nullptr;
+              auto seed = spec.retrieveAttribute<HashVal> ("mark");
               tickets_.emplace_back (seed? *seed : HashVal(rand() % 1000));
+              newTicket = & tickets_.back();
+              
+              auto start = spec.retrieveAttribute<Time> ("start");
+              auto after = spec.retrieveAttribute<Time> ("after");
+              Segmentation::splitSplice (start, after, newTicket);
             }
         }
     };

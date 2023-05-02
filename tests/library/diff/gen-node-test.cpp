@@ -368,6 +368,9 @@ namespace test{
           
           ++child;
           CHECK (isnil (child));
+          
+          CHECK (n.hasChildren());
+          CHECK (not GenNode{42}.hasChildren());
         }
       
       
@@ -993,6 +996,10 @@ namespace test{
           
           CHECK (Time(3,2,1) == *n3.retrieveAttribute<Time>("Ψ"));
           CHECK (std::nullopt == n2.retrieveAttribute<Time>("Ψ"));
+          
+          CHECK (not n1.hasChildren());   // a simple value GenNode is not nested and thus can not have children
+          CHECK (not n2.hasChildren());   // n2 is nested (holds a Rec), but has an empty scope
+          CHECK (not n3.hasChildren());   // n3 is likewise nested, but holds only attributes, no children
         }
     };
   
