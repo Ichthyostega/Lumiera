@@ -7141,7 +7141,7 @@ The Fixture is mostly comprised of the Segementation datastructure, but some oth
 Largely the storage of the render nodes network is hooked up behind the Fixture &amp;rarr; [[storage considerations|FixtureStorage]]
 </pre>
 </div>
-<div title="SegmentationChange" creator="Ichthyostega" modifier="Ichthyostega" created="202305020227" modified="202305020228" tags="spec operational Builder draft" changecount="3">
+<div title="SegmentationChange" creator="Ichthyostega" modifier="Ichthyostega" created="202305020227" modified="202305021819" tags="spec operational Builder draft" changecount="28">
 <pre>At the end of the build process, the existing [[Segmentation]] possibly needs to be changed, extended or adapted.
 This change must be performed as a //transactional switch,// since render or playback processes might be performed concurrently. All Fixture and low-level-Model datastructures are //immutable// -- thus for any changes, suitably adapted structures will be built as a replacement.
 
@@ -7150,72 +7150,76 @@ This is an implementation level operation, which analyses the existing Segmentat
 
 !!!Structure of the split-splice operation
 {{red{1.5.2023 : Analysis and implementation draft}}}
-{{{
-Algorithmus
-    Invariante
-        vollständige lückenlose Abdeckung der gesamten Zeitachse
-        alle Einträge sind aufsteigend sortiert
-    Vorgänger und Nachfolger finden
-        Predecessor
-            sep ≔ start oder after (wenn start fehlt)
-            Pstart &gt;= sep ⟹ ↯ Predecessor
-            suche größten mit Pstart &lt; sep
-        Succsessor ist erster, der diese Bedingung verletzt
-        andernfalls: Successor == Predecessor (split)
-    Start- und Endpunkt festsetzen
-        definerter start/after-Punkt ist stets verbindlich
-        fehlernder start
-            sep ≡ after
-            Pend &lt; sep ⟹ start ≔ Pend
-            sonst ⟹ start ≔ Pstart (replace or trunc)
-        fehlender after
-            sep ≡ start ∧ Sstart &gt;= sep 
-            Sstart &gt; sep ⟹ after ≔ Sstart
-            sonst ⟹ after ≔ Send (replace or trunc)
-        POST
-            start &lt; after
-                sonst ⟹ REJECT
-            Pstart &lt;= start
-            Pstart == Sstart ∨ start &lt;= Sstart
-    Relation zum Vor/Nachfolger bestimmen
-        Pstart &lt; start
-            Pend &lt; start ⟹ ins NOP-Predecessor
-            Pend == start ⟹ seamless
-            Pend &lt;= after ⟹ truc(Predecessor)
-            Pend &gt; after ⟹ split(Predecessor)
-        Pstart == start
-            Pend &lt;= after ⟹ del(Predecessor)
-            Pend &gt; after ⟹ swap_trunc(Predecessor)
-        Predecessor == Successor
-            Pend == after == Time::NEVER ⟹ trunc(Predecessor)
-            Pend &gt; after ⟹ split(Predecessor)
-        Sstart &lt; after
-            Send &lt; after ⟹ del(Successor) and ++Successor and recurse (same base case)
-            Send == after ⟹ del(Successor)
-            Send &gt; after ⟹ trunc(Successor)
-        Sstart == after ⟹ seamless
-        after &lt; Sstart ⟹ ins NOP-Successor
-    einfügen und löschen
-        Predecessor
-            trunc ⟹ del
-            split ⟹ del
-            del ⟹ del
-            swap_trunc ⟹ del
-        Successor
-            de++ ⟹ del
-            trunc ⟹ del
-        insert
-            before
-                ins NOP-Predecessor
-                trunc(Predecessor) ⟹ ins copy Predecessor-shortened-end
-                split(Predecessor) ⟹ ins copy Predecessor shortened-end
-            new Segment
-            after
-                split(Predecessor) ⟹ ins copy Predecessor shortened-start
-                swap_trunc(Predecessor) ⟹ ins copy Predecessor shortened-start
-                trunc(Successor) ⟹ ins copy Successor shortened-start
-                ins NOP-Successor
-}}}</pre>
+;Invariant
+:complete and valid [[Segmentation]] always retained
+:* seamless coverage the complete time axis [-∞ .. +∞]
+:* all entries ordered ascending (in time)
+;Stage-1
+:determine Predecessor and Successor
+:* //Predecessor//&lt;br&gt;   {{{sep}}} ≔ {{{start}}} or {{{after}}} (if missing {{{start}}})&lt;br&gt;   P~~start~~ &gt;= {{{sep}}} ⟹ ↯ Predecessor
+:** &amp;rarr; find largest Predecessor with P~~start~~ &lt; {{{sep}}}
+:* //Successor// is the first one to violate this condition
+:* //otherwise// Successor == Predecessor (split)
+;Stage-2
+:establish {{{start}}} and end point of new segment
+:* explicitly given {{{start}}}/{{{after}}}-points are binding
+:** missing {{{start}}}&lt;br&gt;   {{{sep}}} ≡ {{{after}}}
+:*** P~~after~~ &lt; {{{sep}}} ⟹ {{{start}}} ≔ P~~after~~
+:*** //else// ⟹ {{{start}}} ≔ P~~start~~ (replace or trunc)
+:** missing {{{after}}}&lt;br&gt;   {{{sep}}} ≡ {{{start}}} ∧ S~~start~~ &gt;= {{{sep}}} 
+:*** S~~start~~ &gt; {{{sep}}} ⟹ {{{after}}} ≔ S~~start~~
+:*** //else// ⟹ {{{after}}} ≔ S~~after~~ (replace or trunc)
+:''POST''
+:* {{{start}}} &lt; {{{after}}}
+:** //else// ⟹ REJECT
+:* P~~start~~ &lt;= {{{start}}}
+:* P~~start~~ == S~~start~~ ∨ {{{start}}} &lt;= S~~start~~
+;Stage-3
+:determine relation to //Predecessor// and //Successor//
+:* //case// P~~start~~ &lt; {{{start}}}
+:** P~~after~~ &lt; {{{start}}} ⟹ ins ~NOP-Predecessor
+:** P~~after~~ == {{{start}}} ⟹ seamless
+:** P~~after~~ &lt;= {{{after}}} ⟹ truc(Predecessor)
+:** P~~after~~ &gt; {{{after}}} ⟹ split(Predecessor)
+:* //case// P~~start~~ == {{{start}}}
+:** P~~after~~ &lt;= {{{after}}} ⟹ drop(Predecessor)
+:** P~~after~~ &gt; {{{after}}} ⟹ swap_trunc(Predecessor)
+:* //case// Predecessor == Successor&lt;br&gt;   //this case has already been completely covered by the preceding cases//
+:** P~~after~~ == {{{after}}} == Time::NEVER ⟹ trunc(Predecessor)
+:** P~~after~~ &gt; {{{after}}} ⟹ split(Predecessor)
+:* //case// S~~start~~ &lt; {{{after}}}
+:** S~~after~~ &lt; {{{after}}} ⟹ drop(Successor) and ++Successor and recurse (same base case)
+:** S~~after~~ == {{{after}}} ⟹ drop(Successor)
+:** S~~after~~ &gt; {{{after}}} ⟹ trunc(Successor)
+:** S~~start~~ == {{{after}}} ⟹ seamless
+:** {{{after}}} &lt; S~~start~~ ⟹ ins ~NOP-Successor
+;Stage-4
+:perform element insertion and replacement
+:* for the //Predecessor//
+:** trunc ⟹ del
+:** split ⟹ del
+:** drop ⟹ del
+:** swap_trunc ⟹ del
+:** ins_nop | seamless ⟹ retain
+:* for the //Successor//
+:** drop++ ⟹ del
+:** trunc ⟹ del
+:** ins_nop | seamless ⟹ retain
+:* for //insertion of new elements//
+:** &amp;rarr;''before''&lt;br&gt;   //cases//
+:*** ins ~NOP-Predecessor
+:*** trunc(Predecessor) ⟹ ins copy Predecessor-shortened-end
+:*** split(Predecessor) ⟹ ins copy Predecessor shortened-end
+:** &amp;rarr;''new Segment''
+:** &amp;rarr;''after''&lt;br&gt;   //cases//
+:*** split(Predecessor) ⟹ ins copy Predecessor shortened-{{{start}}}
+:*** swap_trunc(Predecessor) ⟹ ins copy Predecessor shortened-{{{start}}}
+:*** trunc(Successor) ⟹ ins copy Successor shortened-{{{start}}}
+:*** ins ~NOP-Successor
+
+!!!Implementation techique
+The split-splice operation is performed always for a single segment in the context of an existing segmentation; the covered range can be defined explicitly, or by partial spec. For each application of this algorithm, an instance of a //working context// is created (on stack) and initialised by scanning the existing segmentation to establish the insert point. The four stages are then performed on this working data, thereby determining the handling cases -- and in the last stage, new elements are inserted and existing elements are deleted (assuming immutable segment data, any changes and adaptations are done by inserting a modified clone copy).
+</pre>
 </div>
 <div title="Sequence" modifier="Ichthyostega" created="201001252327" modified="201505310118" tags="def" changecount="2">
 <pre>A sequence is a collection of media objects, arranged onto a fork (&quot;track tree&quot;). Sequences are the building blocks within the session. To be visible and editable, a session needs to be bound into a top-level [[Timeline]]. Alternatively, it may be used as a VirtualClip nested within another sequence.

@@ -107,7 +107,7 @@ namespace fixture {
       operator[] (TimeValue time)  const
         {
           for (auto& seg : segments_)
-            if (seg.end() > time)
+            if (seg.after() > time)
               return seg;
           throw error::State (_Fmt{"Fixture datastructure corrupted: Time %s not covered"} % time);
         }

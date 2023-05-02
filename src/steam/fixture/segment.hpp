@@ -83,7 +83,7 @@ namespace fixture {
       // default copy acceptable
       
       Time start() const { return span_.start(); }
-      Time end()   const { return span_.end(); }
+      Time after() const { return span_.end(); }
       
       engine::JobTicket const&
       jobTicket()  const

@@ -29,7 +29,9 @@
 #include "lib/error.hpp"
 #include "steam/fixture/segmentation.hpp"
 //#include "steam/mobject/builder/fixture-change-detector.hpp"  ///////////TODO
+#include "lib/time/timevalue.hpp"
 
+#include <tuple>
 
 
 namespace steam {
@@ -48,20 +50,79 @@ namespace fixture {
   
   Segmentation::~Segmentation() { }   // emit VTable here...
   
-  /** access the globally valid registry instance.
-   *  @throw error::State if this global registry is
-   *         already closed or not yet initialised. */
-//ModelPortRegistry&
-//ModelPortRegistry::globalInstance()
-//{
-//  LockRegistry global_lock;
-//  if (theGlobalRegistry.isValid())
-//    return theGlobalRegistry();
-//  
-//  throw error::State ("global model port registry is not accessible"
-//                     , LERR_(BUILDER_LIFECYCLE));
-//}
-  
+  namespace {// Implementation of Split-Splice algorithm
+    
+    using lib::time::Time;
+    using OptTime = std::optional<Time>;
+    using Iter = typename list<Segment>::iterator;
+    
+    
+    /**
+     * Descriptor and working context to split/splice in a new Interval.
+     * The »Split-Splice« algorithm works on a seamless segmentation of
+     * an ordered working axis, represented as sequence of intervals.
+     * The purpose is to integrate a new Segment / interval, thereby
+     * truncating / splitting / filling adjacent intervals to fit
+     */
+    class SplitSpliceAlgo
+      : util::NonCopyable
+      {
+        enum Verb { NIL
+                  , DROP
+                  , TRUNC
+                  , INS_NOP
+                  , SEAMLESS
+                  };
+        
+        Verb opPred = NIL,
+             opSucc = NIL;
+        
+        Iter pred{};
+        Iter succ{};
+        
+        Time start = Time::NEVER,
+             after = Time::NEVER;
+        
+        /* ======= elementary operations ======= */
+        
+        Time getStart (Iter elm) { return elm->start(); }
+        Time getAfter (Iter elm) { return elm->after(); }
+        
+        Iter
+        createElm (Time start, Time after)
+          {
+            UNIMPLEMENTED ("create new Segment");
+          }
+        
+        Iter
+        cloneElm (Iter elm, Time start, Time after)
+          {
+            UNIMPLEMENTED ("clone Segment and modify time");
+          }
+        
+      public:
+        void
+        establishSplitPoint (Iter startAll, Iter afterAll
+                            ,OptTime start, OptTime after)
+          {
+            UNIMPLEMENTED ("Stage-1 and Stage-2");
+          }
+        
+        void
+        determineRelations()
+          {
+            UNIMPLEMENTED ("Stage-3");
+          }
+        
+        std::pair<Iter, Iter>
+        performSplitSplice()
+          {
+            UNIMPLEMENTED ("Stage-4 - doIT");
+          }
+        
+      };
+    
+  }//(End)SlitSplice impl
   
   
   /**
@@ -87,7 +148,10 @@ namespace fixture {
   Segment const&
   Segmentation::splitSplice (OptTime start, OptTime after, const engine::JobTicket* jobTicket)
   {
-    UNIMPLEMENTED ("determine predecessor, successor and orientation and perform del/trunc/split/swap/insert");
+    SplitSpliceAlgo splicr;
+    splicr.establishSplitPoint (segments_.begin(),segments_.end(), start,after);
+    splicr.determineRelations();
+    splicr.performSplitSplice();
   }
   
   
