@@ -70022,7 +70022,7 @@
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1682627110771" ID="ID_183754275" MODIFIED="1682627133820" TEXT="Invariante: l&#xfc;ckenlose Abdeckung">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1682985654543" ID="ID_433290925" MODIFIED="1682993072525" TEXT="Algorithmus">
+<node COLOR="#435e98" CREATED="1682985654543" ID="ID_433290925" MODIFIED="1683076777480" TEXT="Algorithmus">
 <icon BUILTIN="info"/>
 <node CREATED="1682987424458" ID="ID_419424512" MODIFIED="1682987433683" TEXT="Invariante">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
@@ -70145,11 +70145,11 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682993086565" ID="ID_469257294" MODIFIED="1682993090645" TEXT="Implementierung">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683042576253" ID="ID_1878728765" MODIFIED="1683042587092" TEXT="Konzept">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1682993086565" ID="ID_469257294" MODIFIED="1683076810216" TEXT="Implementierung">
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1683042576253" ID="ID_1878728765" MODIFIED="1683076796339" TEXT="Konzept">
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683042638127" ID="ID_1570983964" MODIFIED="1683042656744" TEXT="Deskriptor SpliceAct">
+<node COLOR="#435e98" CREATED="1683042638127" ID="ID_1570983964" MODIFIED="1683076788355" TEXT="Deskriptor SpliceAct">
 <icon BUILTIN="idea"/>
 </node>
 <node COLOR="#5b280f" CREATED="1683042697806" ID="ID_1462476322" MODIFIED="1683043770315" TEXT="Task-Record">
@@ -70164,7 +70164,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1683043806248" ID="ID_358437836" MODIFIED="1683043811748" TEXT="Enum als verb">
+<node COLOR="#435e98" CREATED="1683043806248" ID="ID_358437836" MODIFIED="1683076789875" TEXT="Enum als verb">
 <node CREATED="1683043814387" ID="ID_312010971" MODIFIED="1683043834772" TEXT="jeweils separat f&#xfc;r pred und succ"/>
 <node CREATED="1683043835634" ID="ID_1729162283" MODIFIED="1683043837062" TEXT="F&#xe4;lle">
 <node CREATED="1683043887635" ID="ID_1329437740" MODIFIED="1683043891434" TEXT="SEAMLESS"/>
@@ -70183,14 +70183,58 @@
 </node>
 </node>
 </node>
-<node CREATED="1683045976036" ID="ID_1600965970" MODIFIED="1683045990086" TEXT="Predecessor und Successor per Iterator referenzieren"/>
+<node COLOR="#338800" CREATED="1683045976036" ID="ID_1600965970" MODIFIED="1683076793754" TEXT="Predecessor und Successor per Iterator referenzieren">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683046583116" ID="ID_133574091" MODIFIED="1683046722114" TEXT="lokale Umsetzung">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1683046583116" ID="ID_133574091" MODIFIED="1683076802821" TEXT="lokale Umsetzung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1683046618535" ID="ID_545931815" MODIFIED="1683046633053" TEXT="den Deskriptor als lokale/anonyme Klasse"/>
 <node CREATED="1683046633701" ID="ID_1909003590" MODIFIED="1683046644503" TEXT="die Schritte des Algo als Methoden"/>
 <node CREATED="1683046648011" ID="ID_884620601" MODIFIED="1683046664621" TEXT="Arbeitsdaten als Member"/>
 <node CREATED="1683046711054" ID="ID_815326523" MODIFIED="1683046719941" TEXT="Integration als statische Funktion"/>
+<node COLOR="#435e98" CREATED="1683076903128" ID="ID_1277889001" MODIFIED="1683077356643" TEXT="einige Vereinfachungen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Nach logischer Analyse der spezifiziereten F&#228;lle lassen sich einige Verzweigungen verk&#252;rzen
+    </p>
+    <ul>
+      <li>
+        die Suche nach dem Split-Punkt und das Festsetzen der Start/Endpunkte fasse ich zusammen in den Konstruktor; danach sind Start/Endzeit <i>immutable</i>
+      </li>
+      <li>
+        sichere die Verk&#252;rzungen m&#246;glichst durch Assertions ab
+      </li>
+      <li>
+        der SPLIT und SWAP-Fall wird dargestellt, indem ich den Predecessor auch als Successor verwende, und lediglich f&#252;r beide verschiedene Operationen codiere
+      </li>
+      <li>
+        sofern f&#252;r beide bereits eine Operation definiert wurde, kann man die gesamte Untersuchung des Successors &#252;berspringen
+      </li>
+      <li>
+        in dem Fall, in dem ggfs. mehrere &#252;berdeckte Successoren &#252;bersprungen werden, schiebe ich lediglich die Variablen
+      </li>
+      <li>
+        den Umstand, da&#223; Predecessor/Successor verworfen werden, oder eben nicht, setze ich direkt durch Justieren des Iterator-Bereichs um
+      </li>
+      <li>
+        anschlie&#223;end werden <i>zuerst</i>&#160;die neuen Elemente <i>davorgeh&#228;ngt</i>&#160;und dann der zu verwerfende Bereich gel&#246;scht
+      </li>
+      <li>
+        als Ergebnis gebe ich die bezeichneten Iterator-Positionen zur&#252;ck
+      </li>
+      <li>
+        alle Mutator-Operationen arbeiten auf Iteratoren (d.h. setzen eine nicht-invalidierende random-access-Liste vorraus)
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683046722945" ID="ID_113209914" MODIFIED="1683046727395" TEXT="Generalisierung">
 <icon BUILTIN="flag-yellow"/>

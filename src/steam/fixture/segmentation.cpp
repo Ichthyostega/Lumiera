@@ -31,7 +31,7 @@
 //#include "steam/mobject/builder/fixture-change-detector.hpp"  ///////////TODO
 #include "lib/time/timevalue.hpp"
 
-#include <tuple>
+#include <array>
 
 
 namespace steam {
@@ -53,6 +53,7 @@ namespace fixture {
   namespace {// Implementation of Split-Splice algorithm
     
     using lib::time::Time;
+    using lib::time::TimeVar;
     using OptTime = std::optional<Time>;
     using Iter = typename list<Segment>::iterator;
     
@@ -74,14 +75,11 @@ namespace fixture {
                   , SEAMLESS
                   };
         
-        Verb opPred = NIL,
-             opSucc = NIL;
+        Verb opPred_ = NIL,
+             opSucc_ = NIL;
         
-        Iter pred{};
-        Iter succ{};
-        
-        Time start = Time::NEVER,
-             after = Time::NEVER;
+        Iter pred_,  succ_;
+        Time start_, after_;
         
         /* ======= elementary operations ======= */
         
@@ -89,37 +87,197 @@ namespace fixture {
         Time getAfter (Iter elm) { return elm->after(); }
         
         Iter
-        createElm (Time start, Time after)
+        createSeg (Iter pos, Time start, Time after)
           {
             UNIMPLEMENTED ("create new Segment");
           }
         
         Iter
-        cloneElm (Iter elm, Time start, Time after)
+        emptySeg (Iter pos, Time start, Time after)
+          {
+            UNIMPLEMENTED ("create new Segment");
+          }
+        
+        Iter
+        cloneSeg (Iter pos, Time start, Time after, Iter src)
           {
             UNIMPLEMENTED ("clone Segment and modify time");
           }
         
-      public:
-        void
-        establishSplitPoint (Iter startAll, Iter afterAll
-                            ,OptTime start, OptTime after)
+        Iter
+        discard (Iter start, Iter after)
           {
-            UNIMPLEMENTED ("Stage-1 and Stage-2");
+            UNIMPLEMENTED ("discard Segments");
           }
         
+        
+      public:
+        /**
+         * @param startAll (forward) iterator pointing at the overall Segmentation begin
+         * @param afterAll (forward) iterator indicating point-after-end of Segmentation
+         * @param start (optional) specification of new segment's start point
+         * @param after (optional) specification of new segment's end point
+         */
+        SplitSpliceAlgo (Iter startAll, Iter afterAll
+                        ,OptTime start, OptTime after)
+          {
+            auto [start_,after_] = establishSplitPoint (startAll,afterAll, start,after);
+            
+            // Postcondition: ordered start and end times
+            ENSURE (pred_ != afterAll);
+            ENSURE (succ_ != afterAll);
+            ENSURE (start_ < after_);
+            ENSURE (getStart(pred_) <= start_);
+            ENSURE (start_ <= getStart(succ_) or pred_ == succ_);
+          }
+        
+        /**
+         * Stage-1 and Stage-2 of the algorithm determine the insert point
+         * and establish the actual start and end point of the new segment
+         * @return
+         */
+        std::pair<Time,Time>
+        establishSplitPoint (Iter startAll, Iter afterAll
+                            ,OptTime start, OptTime after)
+          { // nominal break point  
+            Time sep = start? *start
+                            : after? *after
+                                   : Time::NEVER;
+            
+            // find largest Predecessor with start before separator
+            for (succ_ = startAll, pred_ = afterAll
+                ;succ_ != afterAll and getStart(succ_) < sep
+                ;++succ_)
+              {
+                pred_ = succ_;
+              }
+            REQUIRE (pred_ != succ_, "non-empty segmentation required");
+            if (succ_ == afterAll) succ_=pred_;
+            if (pred_ == afterAll) pred_=succ_; // separator touches bounds
+            
+            // Stage-2 : establish start and end point of new segment
+            
+            Time startSeg = start? *start
+                                 : getAfter(pred_) < sep? getAfter(pred_)
+                                                        : getStart(pred_);
+            Time afterSeg = after? *after
+                                 : getStart(succ_) > sep? getStart(succ_)
+                                                        : getAfter(succ_);
+            ENSURE (startSeg != afterSeg);
+            if (startSeg < afterSeg)
+              return {startSeg,afterSeg};
+            else        
+              return {afterSeg,startSeg};
+          }
+        
+        
+        /**
+         * Stage-3 of the algorithm works out the precise relation of the
+         * predecessor and successor segments to determine necessary adjustments
+         */
         void
         determineRelations()
           {
-            UNIMPLEMENTED ("Stage-3");
+            Time startPred = getStart (pred_),
+                 afterPred = getAfter (pred_);
+            
+            if (startPred < start_)
+              {
+                if (afterPred <  start_) opPred_ = INS_NOP;
+                else
+                if (afterPred == start_) opPred_ = SEAMLESS;
+                else
+                  {
+                    opPred_ = TRUNC;
+                    if (afterPred  > after_)
+                      { // predecessor actually spans the new segment
+                        // thus use it also as successor and truncate both (=SPLIT)
+                        succ_ = pred_;
+                        opSucc_ = TRUNC;
+                        return;
+              }   }   }
+            else
+              {
+                REQUIRE (startPred == start_, "predecessor does not precede start point");
+                opPred_ = DROP;
+                if (after_ < afterPred )
+                  { // predecessor coincides with start of new segment
+                    // thus use it rather as successor and truncate at start
+                    succ_ = pred_;
+                    opSucc_ = TRUNC;
+                    return;
+              }   }
+            
+            TimeVar startSucc = getStart (succ_),
+                    afterSucc = getAfter (succ_);
+            
+            if (startSucc <  after_)
+              {
+                while (afterSucc < after_)
+                  {
+                    ++succ_;
+                    startSucc = getStart (succ_);
+                    afterSucc = getAfter (succ_);
+                  }
+                ASSERT (startSucc < after_          // in case we dropped a successor completely spanned,
+                       ,"seamless segmentation");  //  even the next one must start within the new segment
+                
+                if (after_ == afterSucc) opSucc_ = DROP;
+                else
+                if (after_ <  afterSucc) opSucc_ = TRUNC;
+              }
+            else
+              {
+                if (after_ == startSucc) opSucc_ = SEAMLESS;
+                else                     opSucc_ = INS_NOP;
+              }
           }
         
-        std::pair<Iter, Iter>
+        
+        /**
+         * Stage-4 of the algorithm performs the actual insert and deleting of segments
+         * @return `(s,n,e)` to indicate where changes happened
+         *   - s the first changed element
+         *   - n the new main segment (may be identical to s)
+         *   - e the first unaltered element after the changed range (may be `end()`)
+         */
+        std::array<Iter, 3>
         performSplitSplice()
           {
-            UNIMPLEMENTED ("Stage-4 - doIT");
+            Iter refPred = pred_, refSucc = succ_;
+            REQUIRE (opPred_ != NIL and opSucc_ != NIL);
+            
+            // deletions are done by skipping the complete range around the insertion point;
+            // thus to retain a predecessor or successor, this range has to be reduced
+            if (opPred_ == INS_NOP or opPred_ == SEAMLESS)
+              ++pred_;
+            if (opSucc_ == DROP or opSucc_ == TRUNC)
+              ++succ_;
+            
+            // insert the new elements /before/ the range to be dropped, i.e. at pred_
+            Iter n = createSeg (pred_, start_, after_);
+            Iter s = n;
+            //
+            // possibly adapt the predecessor
+            if (opPred_ == INS_NOP)
+              s = emptySeg (n, getAfter(refPred), start_);
+            else
+            if (opPred_ == TRUNC)
+              s = cloneSeg (n, getStart(refPred), start_, refPred);
+            //
+            // possibly adapt the successor
+            if (opSucc_ == INS_NOP)
+              emptySeg (pred_, after_, getStart(refSucc));
+            else
+            if (opPred_ == TRUNC)
+              cloneSeg (pred_, after_, getAfter(refSucc), refSucc);
+            
+            // finally discard superseded segments
+            Iter e = discard (pred_, succ_);
+            
+            // indicate the range where changes happened
+            return {s,n,e};
           }
-        
       };
     
   }//(End)SlitSplice impl
@@ -148,10 +306,10 @@ namespace fixture {
   Segment const&
   Segmentation::splitSplice (OptTime start, OptTime after, const engine::JobTicket* jobTicket)
   {
-    SplitSpliceAlgo splicr;
-    splicr.establishSplitPoint (segments_.begin(),segments_.end(), start,after);
+    SplitSpliceAlgo splicr{segments_.begin(),segments_.end(), start,after};
     splicr.determineRelations();
-    splicr.performSplitSplice();
+    auto [s,n,e] = splicr.performSplitSplice();
+    return *n;
   }
   
   
