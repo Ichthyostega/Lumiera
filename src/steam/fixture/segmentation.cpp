@@ -2,7 +2,7 @@
   Segmentation  -  Partitioning of a timeline for organising the render graph.
 
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2023,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -30,6 +30,7 @@
 #include "steam/fixture/segmentation.hpp"
 //#include "steam/mobject/builder/fixture-change-detector.hpp"  ///////////TODO
 #include "lib/time/timevalue.hpp"
+#include "lib/meta/function.hpp"
 
 #include <array>
 
@@ -40,22 +41,22 @@ namespace fixture {
   namespace error = lumiera::error;
   
   
-//  typedef ModelPortRegistry::ModelPortDescriptor const& MPDescriptor;
-  
-  
-  /** storage for the link to the global
-      Registry instance currently in charge  */
-//  lib::OptionalRef<ModelPortRegistry> ModelPortRegistry::theGlobalRegistry;
-  
-  
   Segmentation::~Segmentation() { }   // emit VTable here...
+  
   
   namespace {// Implementation of Split-Splice algorithm
     
-    using lib::time::Time;
-    using lib::time::TimeVar;
-    using OptTime = std::optional<Time>;
-    using Iter = typename list<Segment>::iterator;
+    using lib::meta::_Fun;
+    
+    template<typename FUN, typename SIG>
+    struct has_Sig
+      : std::is_same<SIG, typename _Fun<FUN>::Sig>
+      { };
+    
+    /** verify the installed functors or lambdas expose the expected signature */
+#define ASSERT_VALID_SIGNATURE(_FUN_, _SIG_) \
+        static_assert (has_Sig<_FUN_, _SIG_>::value, "Function " STRINGIFY(_FUN_) " unsuitable, expected signature: " STRINGIFY(_SIG_));
+    
     
     
     /**
@@ -65,6 +66,15 @@ namespace fixture {
      * The purpose is to integrate a new Segment / interval, thereby
      * truncating / splitting / filling adjacent intervals to fit
      */
+    template<class ORD        ///< order value for the segmentation
+            ,class POS        ///< iterator to work with elements of the segmentation
+            ,class START      ///< function to access the start value for a segment
+            ,class AFTER      ///< function to access the after-end value for a segment
+            ,class CREATE     ///< function to create a new segment: `createSeg(pos, start,after)`
+            ,class EMPTY      ///< function to create empty segment: `emptySeg (pos, start,after)`
+            ,class CLONE      ///< function to clone/modify segment: `cloneSeg (pos, start,after, src)`
+            ,class DELETE     ///< function to discard a segment:    `discard  (start,after)`
+            >
     class SplitSpliceAlgo
       : util::NonCopyable
       {
@@ -78,38 +88,29 @@ namespace fixture {
         Verb opPred_ = NIL,
              opSucc_ = NIL;
         
-        Iter pred_,  succ_;
-        Time start_, after_;
+        POS pred_,  succ_;
+        ORD start_, after_;
+
+        using OptORD = std::optional<ORD>;
+        
         
         /* ======= elementary operations ======= */
         
-        Time getStart (Iter elm) { return elm->start(); }
-        Time getAfter (Iter elm) { return elm->after(); }
+        ASSERT_VALID_SIGNATURE (START,  ORD(POS))
+        ASSERT_VALID_SIGNATURE (AFTER,  ORD(POS))
+        ASSERT_VALID_SIGNATURE (CREATE, POS(POS,ORD,ORD))
+        ASSERT_VALID_SIGNATURE (EMPTY,  POS(POS,ORD,ORD))
+        ASSERT_VALID_SIGNATURE (CLONE,  POS(POS,ORD,ORD,POS))
+        ASSERT_VALID_SIGNATURE (DELETE, POS(POS,POS))
         
-        Iter
-        createSeg (Iter pos, Time start, Time after)
-          {
-            UNIMPLEMENTED ("create new Segment");
-          }
+        START  getStart;
+        AFTER  getAfter;
+        CREATE createSeg;
+        EMPTY  emptySeg;
+        CLONE  cloneSeg;
+        DELETE discard;
         
-        Iter
-        emptySeg (Iter pos, Time start, Time after)
-          {
-            UNIMPLEMENTED ("create new Segment");
-          }
-        
-        Iter
-        cloneSeg (Iter pos, Time start, Time after, Iter src)
-          {
-            UNIMPLEMENTED ("clone Segment and modify time");
-          }
-        
-        Iter
-        discard (Iter start, Iter after)
-          {
-            UNIMPLEMENTED ("discard Segments");
-          }
-        
+        const ORD AXIS_END;
         
       public:
         /**
@@ -118,8 +119,22 @@ namespace fixture {
          * @param start (optional) specification of new segment's start point
          * @param after (optional) specification of new segment's end point
          */
-        SplitSpliceAlgo (Iter startAll, Iter afterAll
-                        ,OptTime start, OptTime after)
+        SplitSpliceAlgo (START  fun_getStart
+                        ,AFTER  fun_getAfter
+                        ,CREATE fun_createSeg
+                        ,EMPTY  fun_emptySeg
+                        ,CLONE  fun_cloneSeg
+                        ,DELETE fun_discard
+                        ,const ORD axisEnd
+                        ,POS startAll, POS afterAll
+                        ,OptORD start, OptORD after)
+          : getStart{fun_getStart}
+          , getAfter{fun_getAfter}
+          , createSeg{fun_createSeg}
+          , emptySeg{fun_emptySeg}
+          , cloneSeg{fun_cloneSeg}
+          , discard {fun_discard}
+          , AXIS_END{axisEnd}
           {
             auto [start_,after_] = establishSplitPoint (startAll,afterAll, start,after);
             
@@ -136,13 +151,13 @@ namespace fixture {
          * and establish the actual start and end point of the new segment
          * @return
          */
-        std::pair<Time,Time>
-        establishSplitPoint (Iter startAll, Iter afterAll
-                            ,OptTime start, OptTime after)
-          { // nominal break point  
-            Time sep = start? *start
-                            : after? *after
-                                   : Time::NEVER;
+        std::pair<ORD,ORD>
+        establishSplitPoint (POS startAll, POS afterAll
+                            ,OptORD start, OptORD after)
+          { // nominal break point
+            ORD sep = start? *start
+                           : after? *after
+                                  : AXIS_END;
             
             // find largest Predecessor with start before separator
             for (succ_ = startAll, pred_ = afterAll
@@ -157,16 +172,16 @@ namespace fixture {
             
             // Stage-2 : establish start and end point of new segment
             
-            Time startSeg = start? *start
-                                 : getAfter(pred_) < sep? getAfter(pred_)
-                                                        : getStart(pred_);
-            Time afterSeg = after? *after
-                                 : getStart(succ_) > sep? getStart(succ_)
-                                                        : getAfter(succ_);
+            ORD startSeg = start? *start
+                                : getAfter(pred_) < sep? getAfter(pred_)
+                                                       : getStart(pred_);
+            ORD afterSeg = after? *after
+                                : getStart(succ_) > sep? getStart(succ_)
+                                                       : getAfter(succ_);
             ENSURE (startSeg != afterSeg);
             if (startSeg < afterSeg)
               return {startSeg,afterSeg};
-            else        
+            else
               return {afterSeg,startSeg};
           }
         
@@ -178,8 +193,8 @@ namespace fixture {
         void
         determineRelations()
           {
-            Time startPred = getStart (pred_),
-                 afterPred = getAfter (pred_);
+            ORD startPred = getStart (pred_),
+                afterPred = getAfter (pred_);
             
             if (startPred < start_)
               {
@@ -208,23 +223,17 @@ namespace fixture {
                     return;
               }   }
             
-            TimeVar startSucc = getStart (succ_),
-                    afterSucc = getAfter (succ_);
-            
+            ORD startSucc = getStart (succ_);
             if (startSucc <  after_)
               {
-                while (afterSucc < after_)
-                  {
-                    ++succ_;
-                    startSucc = getStart (succ_);
-                    afterSucc = getAfter (succ_);
-                  }
-                ASSERT (startSucc < after_          // in case we dropped a successor completely spanned,
+                while (getAfter(succ_) < after_)
+                  ++succ_;
+                ASSERT (getStart(succ_) < after_    // in case we dropped a successor completely spanned,
                        ,"seamless segmentation");  //  even the next one must start within the new segment
                 
-                if (after_ == afterSucc) opSucc_ = DROP;
+                if (after_ == getAfter(succ_)) opSucc_ = DROP;
                 else
-                if (after_ <  afterSucc) opSucc_ = TRUNC;
+                if (after_ <  getAfter(succ_)) opSucc_ = TRUNC;
               }
             else
               {
@@ -241,10 +250,10 @@ namespace fixture {
          *   - n the new main segment (may be identical to s)
          *   - e the first unaltered element after the changed range (may be `end()`)
          */
-        std::array<Iter, 3>
+        std::array<POS, 3>
         performSplitSplice()
           {
-            Iter refPred = pred_, refSucc = succ_;
+            POS refPred = pred_, refSucc = succ_;
             REQUIRE (opPred_ != NIL and opSucc_ != NIL);
             
             // deletions are done by skipping the complete range around the insertion point;
@@ -255,8 +264,8 @@ namespace fixture {
               ++succ_;
             
             // insert the new elements /before/ the range to be dropped, i.e. at pred_
-            Iter n = createSeg (pred_, start_, after_);
-            Iter s = n;
+            POS n = createSeg (pred_, start_, after_);
+            POS s = n;
             //
             // possibly adapt the predecessor
             if (opPred_ == INS_NOP)
@@ -273,7 +282,7 @@ namespace fixture {
               cloneSeg (pred_, after_, getAfter(refSucc), refSucc);
             
             // finally discard superseded segments
-            Iter e = discard (pred_, succ_);
+            POS e = discard (pred_, succ_);
             
             // indicate the range where changes happened
             return {s,n,e};
@@ -306,15 +315,30 @@ namespace fixture {
   Segment const&
   Segmentation::splitSplice (OptTime start, OptTime after, const engine::JobTicket* jobTicket)
   {
-    SplitSpliceAlgo splicr{segments_.begin(),segments_.end(), start,after};
+    using Iter = typename list<Segment>::iterator;
+    
+    auto getStart = [](Iter elm)                                   -> Time { return elm->start(); };
+    auto getAfter = [](Iter elm)                                   -> Time { return elm->after(); };
+    auto createSeg= [](Iter pos, Time start, Time after)           -> Iter { UNIMPLEMENTED ("create new Segment"); };
+    auto emptySeg = [](Iter pos, Time start, Time after)           -> Iter { UNIMPLEMENTED ("create empty Segment");};
+    auto cloneSeg = [](Iter pos, Time start, Time after, Iter src) -> Iter { UNIMPLEMENTED ("clone Segment and modify time"); };
+    auto discard  = [](Iter pos, Iter after)                       -> Iter { UNIMPLEMENTED ("discard Segments"); };
+    
+    
+    SplitSpliceAlgo splicr{ getStart
+                          , getAfter
+                          , createSeg
+                          , emptySeg
+                          , cloneSeg
+                          , discard
+                          , Time::NEVER
+                          , segments_.begin(),segments_.end()
+                          , start,after
+                          };
     splicr.determineRelations();
     auto [s,n,e] = splicr.performSplitSplice();
     return *n;
   }
-  
-  
-  
-//LUMIERA_ERROR_DEFINE (DUPLICATE_MODEL_PORT, "Attempt to define a new model port with an pipe-ID already denoting an existing port");
   
   
   
