@@ -33,6 +33,7 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/test/testdummy.hpp"
 #include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/unique-malloc-owner.hpp"
 
 #include <string>
@@ -42,6 +43,12 @@ using std::string;
 
 namespace lib {
 namespace test{
+
+  
+  /** storage for test-dummy flags */
+  long Dummy::_local_checksum = 0;
+  bool Dummy::_throw_in_ctor = false;
+  
   
   
   string
@@ -50,7 +57,6 @@ namespace test{
     static _Fmt fmt{"sizeof( %s ) %|40t|= %3d"};
     return fmt % name % siz;
   }
-  
   
   
   
@@ -72,9 +78,24 @@ namespace test{
   
   
   
-  /** storage for test-dummy flags */
-  long Dummy::_local_checksum = 0;
-  bool Dummy::_throw_in_ctor = false;
+  /**
+   * @internal check equality and print difference
+   * @remark defined here to avoid inclusion of `<iostream>` in header
+   */
+  bool
+  ExpectString::verify (std::string const& actual)  const
+  {
+    std::string const& expected{*this}; // to avoid endless recursion
+    bool expectationMatch {actual == expected};
+    if (not expectationMatch)
+      {
+        cerr << "FAIL___expectation___________"
+             << "\nexpect:"<<expected
+             << "\nactual:"<<actual
+             << endl;
+      }
+    return expectationMatch;
+  }
   
   
 }} // namespace lib::test

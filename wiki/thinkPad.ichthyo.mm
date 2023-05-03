@@ -70302,6 +70302,28 @@
 <node COLOR="#338800" CREATED="1683120165480" ID="ID_1260440964" MODIFIED="1683120205165" TEXT="Diagnose-Setup f&#xfc;r Memory-Management">
 <icon BUILTIN="button_ok"/>
 </node>
+<node COLOR="#338800" CREATED="1683153490521" ID="ID_855593043" MODIFIED="1683153582188" TEXT="Diagnose-Helper zum Vergleichen mit erwartetem Inhalt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      tja...
+    </p>
+    <p>
+      das h&#228;tte ich schon seit JAHREN machen k&#246;nnen....
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      (aber auf den Kniff mit dem Marker-Typ bin ich erst gekommen, seitdem ich mich neulich nochmal mit user-defined-Literals besch&#228;ftigt habe)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047015402" ID="ID_1729864005" MODIFIED="1683120259296" TEXT="M&#xf6;gliche Intervall-Anordnungen">
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047146727" ID="ID_1666065871" MODIFIED="1683047163542" TEXT="Seg in leer">

@@ -26,8 +26,8 @@
 
 
 
-#include "lib/error.hpp"
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
 #include "lib/format-string.hpp"
@@ -47,9 +47,15 @@ namespace test {
   using util::isnil;
   using std::string;
   using std::move;
-  
+
   namespace  {// Test Fixture....
     
+    /**
+     * Test Dummy: a "segment" representing an integer interval.
+     * Memory management can be tracked since each instance gets a
+     * distinct ID number. Moreover, a Seg can be marked as "empty",
+     * which is visible on the `string` conversion
+     */
     struct Seg
       : util::MoveOnly
       {
@@ -63,12 +69,14 @@ namespace test {
           , empty{nil}
           , id{++idGen}
           {
+            ++cnt;
             check += id;
           }
-          
+        
        ~Seg()
           {
             check -= id;
+            if (id) --cnt;
           }
         
         Seg (Seg&& rr)
@@ -89,23 +97,30 @@ namespace test {
                        ;
           }
         
-        static size_t check;
         
-      private:
         //-- Diagnostics --
         uint id;
         static uint idGen;
+        static size_t cnt;
+        static size_t check;
       };
       
     // Storage for static ID-Generator
     size_t Seg::check{0};
+    size_t Seg::cnt{0};
     uint Seg::idGen{0};
     
     const int SMIN = -100;
     const int SMAX = +100;
     
     /**
-     * Test-Segmentation comprised of a sequence of Seg entries
+     * Test-Segmentation comprised of a sequence of Seg entries.
+     * It can be checked for _validity_ according to the following conditions
+     * - the segmentation spans the complete range -100 ... +100
+     * - segments follow each other _seamlessly_
+     * - the bounds within each segment are ordered ascending
+     * - segments are not empty (i.e. start differs from end)
+     * The assessment of this validity conditions is appended on the string conversion.
      */
     struct SegL
       : std::list<Seg>
@@ -130,6 +145,18 @@ namespace test {
         // using standard copy
         
         operator string()  const
+          {
+            return renderContent() + assess();
+          }
+        
+        bool
+        isValid()  const
+          {
+            return isnil (this->assess());
+          }
+        
+        string
+        renderContent()  const
           {
             return "├"+util::join(*this,"")+"┤";
           }
@@ -160,16 +187,10 @@ namespace test {
               }
             return diagnosis;
           }
-        
-        bool
-        isValid()  const
-          {
-            return isnil (this->assess());
-          }
       };
     
-    
   }//(End)Test Fixture
+  
   
   
   
@@ -210,29 +231,54 @@ namespace test {
       verify_testFixture()
         {
           {
-            Seg x{1,3}, u{2,4,true};
-            cout << x << u << Seg::check<<endl;
-            Seg z{move(u)};
-            cout <<u<<z<< Seg::check<<endl;
+            Seg x{1,3};                          // a segment 1 (inclusive) to 3 (exclusive)
+            Seg u{2,4,true};                     // an "empty" segment  2 (incl) to 4 (excl)
+            CHECK (x == "[1_3["_expect);
+            CHECK (u == "[2~4["_expect);         // "empty" interval is marked with '~' in string stylisation
+            CHECK (3 == Seg::check);
+            CHECK (2 == Seg::cnt);
             
-            SegL l1;
+            Seg z{move(u)};
+            CHECK (z == "[2~4["_expect);
+            CHECK (3 == Seg::check);
+            CHECK (2 == Seg::cnt);               // the "dead" instance u is not counted
+            CHECK (0 == u.id);                   // (its ID has been reset to zero in move-ctor)
+            CHECK (2 == z.id);
+            
+            SegL l1;                             // default ctor always adds an empty base segment -100 ... +100
             SegL l2{3};
             SegL l3{5,-5,10};
+            CHECK (l1 == "├[-100~100[┤"_expect);
+            CHECK (l2 == "├[-100~3[[3~100[┤"_expect);
+            CHECK (l3 == "├[-100~5[[5_-5[[-5_10[[10~100[┤!order_5>-5_!"_expect);
             
-            cout <<"l1:"<<l1<<l1.assess()<<endl;
-            cout <<"l2:"<<l2<<l2.assess()<<endl;
-            cout <<"l3:"<<l3<<l3.assess()<<endl;
+            CHECK (l1.isValid());
+            CHECK (l2.isValid());
+            CHECK (not l3.isValid());            // l3 violates validity condition, because segment [5 ... -5[ is reversed
+            CHECK (l3.assess() == "!order_5>-5_!"_expect);
+            
+            CHECK ( 9 == Seg::cnt  );            // 9 objects are alive
+            CHECK ( 9 == Seg::idGen);            // ID generator sticks at 9
+            CHECK (45 == Seg::check);            // checksum 1+..+9
             
             l3.erase(l3.begin());
-            cout <<"l3x:"<<l3<<l3.assess()<<endl;
-            l3.begin()->after = 5;
-            cout <<"l3x:"<<l3<<l3.assess()<<endl;
-            l3.clear();
-            cout <<"l3x:"<<l3<<l3.assess()<<endl;
+            CHECK (l3.assess() == "missing-lower-bound!!gap_-100<>5_!!order_5>-5_!"_expect);
+            CHECK ( 8 == Seg::cnt  );            // also one object less alive
             
-            cout << Seg::check<<endl;
+            l3.begin()->after = 5;               // manipulate first segment to make it degenerate (empty
+            CHECK (l3.renderContent() == "├[5_5[[-5_10[[10~100[┤"_expect);
+            CHECK (l3.assess()        == "missing-lower-bound!!gap_-100<>5_!!degen_5_!!gap_5<>-5_!"_expect);
+            l3.clear();
+            CHECK (l3.assess() == "!empty!"_expect);
+            
+            CHECK ( 5 == Seg::cnt  );
+            CHECK ( 9 == Seg::idGen);
+            CHECK (15 == Seg::check);
           }
-          cout << Seg::check<<endl;
+          // all objects go out of scope
+          CHECK (0 == Seg::cnt  );
+          CHECK (0 == Seg::check);
+          CHECK (9 == Seg::idGen);
         }
       
       

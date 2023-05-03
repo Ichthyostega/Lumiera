@@ -585,6 +585,11 @@ return: 0
 END
 
 
+PLANNED "Split/Splice segmentation" SplitSplice_test  <<END
+return: 0
+END
+
+
 TEST "Symbol_test" Symbol_test  <<END
 out: one
 out: sizeof. Literal.+  =   (4|8)

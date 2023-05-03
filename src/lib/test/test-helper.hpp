@@ -253,7 +253,6 @@ namespace test{
   
   
   
-  
   /** create a random but not insane Time value */
   inline lib::time::Time
   randTime ()
@@ -267,8 +266,57 @@ namespace test{
   string randStr (size_t len);
   
   
+  /**
+   * Helper to produce better diagnostic messages when comparing
+   * to an expected result string. This type can be used to mark a
+   * `std::string` in order to invoke a special rigged equality test.
+   * The counterpart for equality conversion can be any arbitrary type,
+   * on which some kind of _string conversion_ can be performed
+   * @see format-obj.hpp
+   */
+  class ExpectString
+    : public std::string
+    {
+      using std::string::string;
+      
+      template<typename X>
+      friend bool
+      operator== (X const& x, ExpectString const& expected)
+      {
+        std::string actual{util::StringConv<X>::invoke (x)};
+        return expected.verify (actual);
+      }
+      
+      template<typename X>
+      friend bool
+      operator== (ExpectString const& expected, X const& x)
+      {
+        std::string actual{util::StringConv<X>::invoke (x)};
+        return expected.verify (actual);
+      }
+      
+      bool verify (std::string const& actual)  const;
+    };
+  
 }} // namespace lib::test
 
+
+
+/**
+ * user defined literal for expected result strings.
+ * On equality comparison to any other string convertible object,
+ * the difference to this expected string is printed to STDERR
+ * 
+ * @example
+ * \code
+ * CHECK (result23 == "[-100..100]"_expect);
+ * \endcode
+ */
+inline lib::test::ExpectString
+operator""_expect (const char* lit, size_t siz)
+{
+  return lib::test::ExpectString{lit, siz};
+}
 
 
 
