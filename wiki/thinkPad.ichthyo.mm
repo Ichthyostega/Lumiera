@@ -70265,8 +70265,18 @@
 <node COLOR="#338800" CREATED="1683046873340" ID="ID_347563039" MODIFIED="1683081262904" TEXT="Template Parameter deduction einrichten">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1683081281809" ID="ID_805607489" MODIFIED="1683081290257" TEXT="in dedizierten Header extrahieren">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1683081281809" ID="ID_805607489" MODIFIED="1683082821201" TEXT="in dedizierten Header extrahiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      lib/split-splice.hpp
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683046958233" ID="ID_226373762" MODIFIED="1683047000567" TEXT="isoliert testbar machen">
 <arrowlink COLOR="#e31dc4" DESTINATION="ID_1714211009" ENDARROW="Default" ENDINCLINATION="-141;9;" ID="Arrow_ID_816334190" STARTARROW="None" STARTINCLINATION="-192;20;"/>

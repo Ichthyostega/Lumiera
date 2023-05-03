@@ -2,7 +2,7 @@
   SEGMENTATION.hpp  -  Partitioning of a timeline for organising the render graph.
 
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2023,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -35,8 +35,7 @@
  ** index and access datastructure to get at any point of the render node network.
  ** Moreover, the segments are used as foundation for render node memory management
  ** 
- ** @todo stalled effort towards a session implementation from 2008
- ** @todo 2016 likely to stay, but expect some extensive rework
+ ** @todo 5/2023 now actually started with the implementation for the »Playback Vertical Slice«
  ** 
  ** @see Fixture
  ** @see ModelPort
