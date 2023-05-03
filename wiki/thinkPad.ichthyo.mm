@@ -70290,11 +70290,19 @@
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1682993108314" ID="ID_317827435" MODIFIED="1682993122827" TEXT="hinzu kommt die Variante, da&#xdf; leere Intervalle zusammengef&#xfc;hrt werden"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683046966788" ID="ID_1714211009" MODIFIED="1683046994438" TEXT="splitSplice-Algo isoliert testen">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1683046966788" ID="ID_1714211009" MODIFIED="1683120265331" TEXT="splitSplice-Algo isoliert testen">
 <linktarget COLOR="#e31dc4" DESTINATION="ID_1714211009" ENDARROW="Default" ENDINCLINATION="-141;9;" ID="Arrow_ID_816334190" SOURCE="ID_226373762" STARTARROW="None" STARTINCLINATION="-192;20;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1683120139366" ID="ID_255513798" MODIFIED="1683120148509" TEXT="Test-Setup mit einfachen int-Intevallen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047015402" ID="ID_1729864005" MODIFIED="1683047024304" TEXT="Segmentation-F&#xe4;lle">
+<node COLOR="#338800" CREATED="1683120149579" ID="ID_523859522" MODIFIED="1683120164828" TEXT="Diagnose-setup f&#xfc;r valide Segmentation">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1683120165480" ID="ID_1260440964" MODIFIED="1683120205165" TEXT="Diagnose-Setup f&#xfc;r Memory-Management">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047015402" ID="ID_1729864005" MODIFIED="1683120259296" TEXT="M&#xf6;gliche Intervall-Anordnungen">
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047146727" ID="ID_1666065871" MODIFIED="1683047163542" TEXT="Seg in leer">
 <icon BUILTIN="flag-yellow"/>
@@ -70352,6 +70360,10 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683120235864" ID="ID_1312143276" MODIFIED="1683120244568" TEXT="Segmentation-Standardf&#xe4;lle">
+<icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047063010" ID="ID_1521759912" MODIFIED="1683047144754" TEXT="degenerierte F&#xe4;lle">
 <icon BUILTIN="flag-yellow"/>

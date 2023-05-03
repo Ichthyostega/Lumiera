@@ -1,0 +1,262 @@
+/*
+  SplitSplice(Test)  -  verify interval splicing
+
+  Copyright (C)         Lumiera.org
+    2023,               Hermann Vosseler <Ichthyostega@web.de>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+* *****************************************************/
+
+/** @file split-splice-test.cpp
+ ** unit test \ref SplitSplice_test
+ */
+
+
+
+#include "lib/error.hpp"
+#include "lib/test/run.hpp"
+#include "lib/format-cout.hpp"
+#include "lib/format-util.hpp"
+#include "lib/format-string.hpp"
+#include "lib/split-splice.hpp"
+#include "lib/nocopy.hpp"
+#include "lib/util.hpp"
+
+#include <utility>
+#include <string>
+#include <list>
+
+
+namespace lib {
+namespace test {
+  
+  using util::_Fmt;
+  using util::isnil;
+  using std::string;
+  using std::move;
+  
+  namespace  {// Test Fixture....
+    
+    struct Seg
+      : util::MoveOnly
+      {
+        int start;
+        int after;
+        bool empty;
+        
+        Seg (int s, int a, bool nil=false)
+          : start{s}
+          , after{a}
+          , empty{nil}
+          , id{++idGen}
+          {
+            check += id;
+          }
+          
+       ~Seg()
+          {
+            check -= id;
+          }
+        
+        Seg (Seg&& rr)
+          : start{rr.start}
+          , after{rr.after}
+          , empty{rr.empty}
+          , id{0}
+          {
+            std::swap (id, rr.id);
+          }//transfer identity
+        
+        operator string()  const
+          {
+            return _Fmt{"[%i%s%i["}
+                       % start
+                       % (empty? "~":"_")
+                       % after
+                       ;
+          }
+        
+        static size_t check;
+        
+      private:
+        //-- Diagnostics --
+        uint id;
+        static uint idGen;
+      };
+      
+    // Storage for static ID-Generator
+    size_t Seg::check{0};
+    uint Seg::idGen{0};
+    
+    const int SMIN = -100;
+    const int SMAX = +100;
+    
+    /**
+     * Test-Segmentation comprised of a sequence of Seg entries
+     */
+    struct SegL
+      : std::list<Seg>
+      {
+        SegL (std::initializer_list<int> breaks)
+          {
+            int p = SMIN;
+            bool bound = true;
+            for (int b : breaks)
+              {
+                emplace_back (p,b, bound);
+                bound = false;
+                p = b;
+              }
+            emplace_back(p,SMAX, true);
+          }
+        
+        SegL()
+          : SegL({})
+        { }
+        
+        // using standard copy
+        
+        operator string()  const
+          {
+            return "├"+util::join(*this,"")+"┤";
+          }
+        
+        string
+        assess()  const
+          {
+            string diagnosis;
+            if (empty())
+              diagnosis = "!empty!";
+            else
+              {
+                if (front().start != SMIN)
+                  diagnosis += "missing-lower-bound!";
+                if (back().after != SMAX)
+                  diagnosis += "missing-upper-bound!";
+                int p = SMIN;
+                for (auto const& s : *this)
+                  {
+                    if (s.start != p)
+                      diagnosis += _Fmt{"!gap_%i<>%i_!"} % p % s.start;
+                    if (s.start == s.after)
+                      diagnosis += _Fmt{"!degen_%i_!"} % s.start;
+                    if (s.start > s.after)
+                      diagnosis += _Fmt{"!order_%i>%i_!"} % s.start % s.after;
+                    p = s.after;
+                  }
+              }
+            return diagnosis;
+          }
+        
+        bool
+        isValid()  const
+          {
+            return isnil (this->assess());
+          }
+      };
+    
+    
+  }//(End)Test Fixture
+  
+  
+  
+  /****************************************************************************//**
+   * @test verify proper working of a generic procedure to splice an interval
+   *       into a complete segmentation of an ordered axis into seamless intervals.
+   *       - demonstrate how to setup the invocation with custom data types
+   *       - systematic coverage of all possible arrangements of intervals
+   *       - handling of irregular cases
+   * @see  split-splice.hpp
+   * @see  steam::fixture::Segmentation::splitSplice
+   */
+  class SplitSplice_test : public Test
+    {
+      
+      virtual void
+      run (Arg)
+        {
+          demonstrate_usage();
+          verify_testFixture();
+          verify_standardCases();
+          verify_cornerCases();
+        }
+      
+      
+      /**
+       * @test demonstrate how to use the »Split-Splice« algorithm with custom data
+       */
+      void
+      demonstrate_usage()
+        {
+          TODO ("simple usage example");
+        }
+      
+      
+      /** @test verify the fixture and self-diagnostics for this test */
+      void
+      verify_testFixture()
+        {
+          {
+            Seg x{1,3}, u{2,4,true};
+            cout << x << u << Seg::check<<endl;
+            Seg z{move(u)};
+            cout <<u<<z<< Seg::check<<endl;
+            
+            SegL l1;
+            SegL l2{3};
+            SegL l3{5,-5,10};
+            
+            cout <<"l1:"<<l1<<l1.assess()<<endl;
+            cout <<"l2:"<<l2<<l2.assess()<<endl;
+            cout <<"l3:"<<l3<<l3.assess()<<endl;
+            
+            l3.erase(l3.begin());
+            cout <<"l3x:"<<l3<<l3.assess()<<endl;
+            l3.begin()->after = 5;
+            cout <<"l3x:"<<l3<<l3.assess()<<endl;
+            l3.clear();
+            cout <<"l3x:"<<l3<<l3.assess()<<endl;
+            
+            cout << Seg::check<<endl;
+          }
+          cout << Seg::check<<endl;
+        }
+      
+      
+      /**
+       * @test cover all possible cases of splicing an interval
+       */
+      void
+      verify_standardCases()
+        {
+          UNIMPLEMENTED ("standard cases");
+        }
+      
+      
+      /**
+       * @test cover special and boundary cases
+       */
+      void
+      verify_cornerCases()
+        {
+          UNIMPLEMENTED ("corner cases");
+        }
+    };
+  
+  LAUNCHER (SplitSplice_test, "unit common");
+  
+  
+}} // namespace lib::test
