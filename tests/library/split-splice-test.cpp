@@ -63,6 +63,12 @@ namespace test {
         int after;
         bool empty;
         
+       ~Seg()
+          {
+            check -= id;
+            if (id) --cnt;
+          }
+        
         Seg (int s, int a, bool nil=false)
           : start{s}
           , after{a}
@@ -73,12 +79,18 @@ namespace test {
             check += id;
           }
         
-       ~Seg()
+        /** create a clone, but modify bounds */
+        Seg (Seg const& ref, int s, int a)
+          : start{s}
+          , after{a}
+          , empty{ref.empty}
+          , id{ref.id}
           {
-            check -= id;
-            if (id) --cnt;
+            ++cnt;
+            check += id;
           }
         
+        /** move-init: causes source-ref to be invalidated */
         Seg (Seg&& rr)
           : start{rr.start}
           , after{rr.after}
@@ -222,7 +234,37 @@ namespace test {
       void
       demonstrate_usage()
         {
-          TODO ("simple usage example");
+          SegL segments;
+          cout << segments <<endl;
+          
+          using OInt = std::optional<int>;
+          using Iter = typename SegL::iterator;
+          
+          auto getStart =  [](Iter elm)                                 -> int  { return elm->start; };
+          auto getAfter =  [](Iter elm)                                 -> int  { return elm->after; };
+          auto createSeg= [&](Iter pos, int start, int after)           -> Iter { return segments.emplace (pos, start, after); };
+          auto emptySeg = [&](Iter pos, int start, int after)           -> Iter { return segments.emplace (pos, start, after, true); };
+          auto cloneSeg = [&](Iter pos, int start, int after, Iter src) -> Iter { return segments.emplace (pos, *src, start, after); };
+          auto discard  = [&](Iter pos, Iter after)                     -> Iter { return segments.erase (pos,after); };
+          
+          
+          lib::splitsplice::Algo splicer{ getStart
+                                        , getAfter
+                                        , createSeg
+                                        , emptySeg
+                                        , cloneSeg
+                                        , discard
+                                        , SMAX
+                                        , segments.begin(),segments.end()
+                                        , OInt{5}, OInt{23}
+                                        };
+          splicer.determineRelations();
+          auto [s,n,e] = splicer.performSplitSplice();
+          
+          cout << segments <<endl;
+          cout << "s:"<<*s <<endl;
+          cout << "n:"<<*n <<endl;
+          cout << "e:"<<*e <<endl;
         }
       
       
@@ -230,6 +272,8 @@ namespace test {
       void
       verify_testFixture()
         {
+          CHECK (0 == Seg::check);
+          Seg::idGen = 0;
           {
             Seg x{1,3};                          // a segment 1 (inclusive) to 3 (exclusive)
             Seg u{2,4,true};                     // an "empty" segment  2 (incl) to 4 (excl)

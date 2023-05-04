@@ -79,22 +79,6 @@ namespace lib {
     class Algo
       : util::NonCopyable
       {
-        enum Verb { NIL
-                  , DROP
-                  , TRUNC
-                  , INS_NOP
-                  , SEAMLESS
-                  };
-        
-        Verb opPred_ = NIL,
-             opSucc_ = NIL;
-        
-        POS pred_,  succ_;
-        ORD start_, after_;
-
-        using OptORD = std::optional<ORD>;
-        
-        
         /* ======= elementary operations ======= */
         
         ASSERT_VALID_SIGNATURE (START,  ORD(POS))
@@ -111,7 +95,29 @@ namespace lib {
         CLONE  cloneSeg;
         DELETE discard;
         
+        using OptORD = std::optional<ORD>;
         const ORD AXIS_END;
+        
+        
+        /* ======= working state ======= */
+        
+        POS pred_, succ_;
+        
+        struct SegBounds
+          {                            // can be assigned in one step (ORD may be immutable)
+            ORD start,
+                after;
+          } b_;
+        
+        enum Verb { NIL
+                  , DROP
+                  , TRUNC
+                  , INS_NOP
+                  , SEAMLESS
+                  };
+        
+        Verb opPred_ = NIL,
+             opSucc_ = NIL;
         
       public:
         /**
@@ -136,15 +142,16 @@ namespace lib {
           , cloneSeg{fun_cloneSeg}
           , discard {fun_discard}
           , AXIS_END{axisEnd}
+          , pred_{}
+          , succ_{}
+          , b_{establishSplitPoint (startAll,afterAll, start,after)}
           {
-            auto [start_,after_] = establishSplitPoint (startAll,afterAll, start,after);
-            
             // Postcondition: ordered start and end times
             ENSURE (pred_ != afterAll);
             ENSURE (succ_ != afterAll);
-            ENSURE (start_ < after_);
-            ENSURE (getStart(pred_) <= start_);
-            ENSURE (start_ <= getStart(succ_) or pred_ == succ_);
+            ENSURE (b_.start < b_.after);
+            ENSURE (getStart(pred_) <= b_.start);
+            ENSURE (b_.start <= getStart(succ_) or pred_ == succ_);
           }
         
         /**
@@ -152,7 +159,7 @@ namespace lib {
          * and establish the actual start and end point of the new segment
          * @return
          */
-        std::pair<ORD,ORD>
+        SegBounds
         establishSplitPoint (POS startAll, POS afterAll
                             ,OptORD start, OptORD after)
           { // nominal break point
@@ -197,15 +204,15 @@ namespace lib {
             ORD startPred = getStart (pred_),
                 afterPred = getAfter (pred_);
             
-            if (startPred < start_)
+            if (startPred < b_.start)
               {
-                if (afterPred <  start_) opPred_ = INS_NOP;
+                if (afterPred <  b_.start) opPred_ = INS_NOP;
                 else
-                if (afterPred == start_) opPred_ = SEAMLESS;
+                if (afterPred == b_.start) opPred_ = SEAMLESS;
                 else
                   {
                     opPred_ = TRUNC;
-                    if (afterPred  > after_)
+                    if (afterPred  > b_.after)
                       { // predecessor actually spans the new segment
                         // thus use it also as successor and truncate both (=SPLIT)
                         succ_ = pred_;
@@ -214,9 +221,9 @@ namespace lib {
               }   }   }
             else
               {
-                REQUIRE (startPred == start_, "predecessor does not precede start point");
+                REQUIRE (startPred == b_.start, "predecessor does not precede start point");
                 opPred_ = DROP;
-                if (after_ < afterPred )
+                if (b_.after < afterPred )
                   { // predecessor coincides with start of new segment
                     // thus use it rather as successor and truncate at start
                     succ_ = pred_;
@@ -225,21 +232,21 @@ namespace lib {
               }   }
             
             ORD startSucc = getStart (succ_);
-            if (startSucc <  after_)
+            if (startSucc <  b_.after)
               {
-                while (getAfter(succ_) < after_)
+                while (getAfter(succ_) < b_.after)
                   ++succ_;
-                ASSERT (getStart(succ_) < after_    // in case we dropped a successor completely spanned,
+                ASSERT (getStart(succ_) < b_.after  // in case we dropped a successor completely spanned,
                        ,"seamless segmentation");  //  even the next one must start within the new segment
                 
-                if (after_ == getAfter(succ_)) opSucc_ = DROP;
+                if (b_.after == getAfter(succ_)) opSucc_ = DROP;
                 else
-                if (after_ <  getAfter(succ_)) opSucc_ = TRUNC;
+                if (b_.after <  getAfter(succ_)) opSucc_ = TRUNC;
               }
             else
               {
-                if (after_ == startSucc) opSucc_ = SEAMLESS;
-                else                     opSucc_ = INS_NOP;
+                if (b_.after == startSucc) opSucc_ = SEAMLESS;
+                else                       opSucc_ = INS_NOP;
               }
           }
         
@@ -265,22 +272,22 @@ namespace lib {
               ++succ_;
             
             // insert the new elements /before/ the range to be dropped, i.e. at pred_
-            POS n = createSeg (pred_, start_, after_);
+            POS n = createSeg (pred_, b_.start, b_.after);
             POS s = n;
             //
             // possibly adapt the predecessor
             if (opPred_ == INS_NOP)
-              s = emptySeg (n, getAfter(refPred), start_);
+              s = emptySeg (n, getAfter(refPred), b_.start);
             else
             if (opPred_ == TRUNC)
-              s = cloneSeg (n, getStart(refPred), start_, refPred);
+              s = cloneSeg (n, getStart(refPred), b_.start, refPred);
             //
             // possibly adapt the successor
             if (opSucc_ == INS_NOP)
-              emptySeg (pred_, after_, getStart(refSucc));
+              emptySeg (pred_, b_.after, getStart(refSucc));
             else
             if (opPred_ == TRUNC)
-              cloneSeg (pred_, after_, getAfter(refSucc), refSucc);
+              cloneSeg (pred_, b_.after, getAfter(refSucc), refSucc);
             
             // finally discard superseded segments
             POS e = discard (pred_, succ_);

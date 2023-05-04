@@ -70281,25 +70281,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683046958233" ID="ID_226373762" MODIFIED="1683047000567" TEXT="isoliert testbar machen">
 <arrowlink COLOR="#e31dc4" DESTINATION="ID_1714211009" ENDARROW="Default" ENDINCLINATION="-141;9;" ID="Arrow_ID_816334190" STARTARROW="None" STARTINCLINATION="-192;20;"/>
 <icon BUILTIN="flag-yellow"/>
-</node>
-</node>
-</node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1682993091685" ID="ID_988617455" MODIFIED="1682993099148" TEXT="systematische Testabdeckung">
-<icon BUILTIN="hourglass"/>
-<node CREATED="1682993100755" ID="ID_1651031348" MODIFIED="1682993128370" TEXT="es sind 12 Basis-F&#xe4;lle">
-<icon BUILTIN="info"/>
-</node>
-<node CREATED="1682993108314" ID="ID_317827435" MODIFIED="1682993122827" TEXT="hinzu kommt die Variante, da&#xdf; leere Intervalle zusammengef&#xfc;hrt werden"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1683046966788" ID="ID_1714211009" MODIFIED="1683120265331" TEXT="splitSplice-Algo isoliert testen">
-<linktarget COLOR="#e31dc4" DESTINATION="ID_1714211009" ENDARROW="Default" ENDINCLINATION="-141;9;" ID="Arrow_ID_816334190" SOURCE="ID_226373762" STARTARROW="None" STARTINCLINATION="-192;20;"/>
-<icon BUILTIN="pencil"/>
-<node COLOR="#338800" CREATED="1683120139366" ID="ID_255513798" MODIFIED="1683120148509" TEXT="Test-Setup mit einfachen int-Intevallen">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1683120149579" ID="ID_523859522" MODIFIED="1683120164828" TEXT="Diagnose-setup f&#xfc;r valide Segmentation">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1683120165480" ID="ID_1260440964" MODIFIED="1683120205165" TEXT="Diagnose-Setup f&#xfc;r Memory-Management">
+<node COLOR="#338800" CREATED="1683158281268" ID="ID_1471352554" MODIFIED="1683158303513" TEXT="Verdrahtung f&#xfc;r Dummy-Integer-Segmente">
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1683153490521" ID="ID_855593043" MODIFIED="1683153582188" TEXT="Diagnose-Helper zum Vergleichen mit erwartetem Inhalt">
@@ -70323,6 +70305,49 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1682993091685" ID="ID_988617455" MODIFIED="1682993099148" TEXT="systematische Testabdeckung">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1682993100755" ID="ID_1651031348" MODIFIED="1682993128370" TEXT="es sind 12 Basis-F&#xe4;lle">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1682993108314" ID="ID_317827435" MODIFIED="1682993122827" TEXT="hinzu kommt die Variante, da&#xdf; leere Intervalle zusammengef&#xfc;hrt werden"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1683046966788" ID="ID_1714211009" MODIFIED="1683120265331" TEXT="splitSplice-Algo isoliert testen">
+<linktarget COLOR="#e31dc4" DESTINATION="ID_1714211009" ENDARROW="Default" ENDINCLINATION="-141;9;" ID="Arrow_ID_816334190" SOURCE="ID_226373762" STARTARROW="None" STARTINCLINATION="-192;20;"/>
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1683120139366" ID="ID_255513798" MODIFIED="1683120148509" TEXT="Test-Setup mit einfachen int-Intevallen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1683120149579" ID="ID_523859522" MODIFIED="1683120164828" TEXT="Diagnose-setup f&#xfc;r valide Segmentation">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1683120165480" ID="ID_1260440964" MODIFIED="1683120205165" TEXT="Diagnose-Setup f&#xfc;r Memory-Management">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1683158346179" ID="ID_1729448638" MODIFIED="1683158373910" TEXT="Demonstration: einfache Anwendung">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1683158410507" ID="ID_1394829232" MODIFIED="1683158528764">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font face="Monospaced" color="#2d258b">[-100~100[&#9508; </font>
+    </p>
+    <p>
+      <font face="Monospaced" color="#2d258b">[-100~5[[5_23[[23~100[&#9508;</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683158382175" ID="ID_1213737514" MODIFIED="1683158390534" TEXT="Setup f&#xfc;r Einzelfall-Tests">
+<icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047015402" ID="ID_1729864005" MODIFIED="1683120259296" TEXT="M&#xf6;gliche Intervall-Anordnungen">
 <icon BUILTIN="flag-yellow"/>
