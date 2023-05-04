@@ -23,8 +23,56 @@
 
 /** @file splite-splice.cpp
  ** Generic algorithm to splice a new segment into a seamless segmentation of intervals.
+ ** Here _"segmentation"_ denotes a partitioning of an ordered axis into a seamless sequence
+ ** of intervals (here called "segment"). The axis is based on some _ordering type,_ like e.g.
+ ** int (natural numbers) or lib::time::Time values, and the axis is assumed cover a complete
+ ** domain. The intervals / segments are defined by start and end point, where the start point
+ ** is inclusive, yet the end point is exclusive (the next ordered point after the interval).
  ** 
- ** @todo 2023 WIP-WIP
+ ** The purpose of the algorithm is to splice in a new segment (interval) at the proper location,
+ ** based on the ordering, such as to retain the ordering and the seamless coverage of the complete
+ ** axis domain. Since there are a lot of possible arrangements of intervals relative to one another,
+ ** this splicing operation may necessitate to adjust _predecessor_ or _successor_ segments, and
+ ** possibly even to insert additional segments to fill a gap, thereby effectively _splitting_
+ ** some segment existing on the axis.
+ ** 
+ ** # Specification
+ ** 
+ ** The implementation relies upon the following assumptions:
+ ** \par assumptions
+ **   - there is an ordering type `ORD`, which is totally ordered,
+ **     has value semantics and can be clone-initialised (can be immutable)
+ **   - Segments are represented as custom data type and the Segmentation (axis)
+ **     is implemented as a random-access list-like datatype with the ability to insert
+ **     and delete ranges of elements, defined as pairs of _iterators_
+ **   - the algorithm works solely on this _iterator type_ `POS`, which must be assignable,
+ **     can be compared for equality (especially with the "end" iterator) and can be _incremented._
+ ** 
+ ** All further bindings to the actual implementation are abstracted as _binding functors_
+ ** - `START`: when invoked on a POS (iterator), get the ORD value of the segment's start point
+ ** - `AFTER`: likewise get the end point (exclusive) of the given segment
+ ** - `CREATE`: create the representation of the desired new segment (which is the purpose
+ **     of invoking this algorithm) and insert it _before_ the given insert POS,
+ **     return an iterator (POS) pointing at the newly created segment
+ ** - `EMPTY`: similarly create a new segment, which however is classified as _empty_
+ **     and serves to fill a gap, notably towards the end of the axis.
+ ** - `CLONE`: insert a _clone_ of an existing segment but adapt it's start and after POS;
+ **     this operation effectively allows to _adapt_ adjacent segments, by also deleting
+ **     the original version after the new elements have been inserted. Return POS of clone
+ ** - `DELETE`: delete all segments between the given start (incl) and end (excl) POS
+ ** 
+ ** Moreover, POS (iterators) to indicate the complete domain are required, and a specification
+ ** of the ORD values of the new segmen's _start_ and _after_ points -- which however can also
+ ** be defined only partially (as optional values), to use contextual information...
+ ** - if only the start point is given, then the existing segment containing this point
+ **   will be shortened, and the new segment will cover the span until the existing segment's end
+ ** - likewise an omitted start point will cause the new segment to be expanded towards lower ORD
+ **   values until matching the end of the preceding segment
+ ** - if both values are omitted, the new segment will replace the last segment of the given axis.
+ ** The new segment may span an arbitrary range within the domain and may thus possibly supersede
+ ** several existing segments, which are then removed by the `DELETE` operation.  
+ ** 
+ ** @todo 2023 WIP
  */
 
 
@@ -108,6 +156,7 @@ namespace lib {
         
       public:
         /**
+         * Setup for a single SplitSplice-operation to insert a new segment \a start to \a after.
          * @param startAll (forward) iterator pointing at the overall Segmentation begin
          * @param afterAll (forward) iterator indicating point-after-end of Segmentation
          * @param start (optional) specification of new segment's start point
@@ -144,7 +193,7 @@ namespace lib {
         /**
          * Stage-1 and Stage-2 of the algorithm determine the insert point
          * and establish the actual start and end point of the new segment
-         * @return
+         * @return the definitive start and after ORD values, based on context
          */
         SegBounds
         establishSplitPoint (POS startAll, POS afterAll
@@ -184,6 +233,7 @@ namespace lib {
         /**
          * Stage-3 of the algorithm works out the precise relation of the
          * predecessor and successor segments to determine necessary adjustments
+         * @remark results in definition of operation verbs #opPred_ and #opSucc_.
          */
         void
         determineRelations()
@@ -259,7 +309,8 @@ namespace lib {
               ++succ_;
             
             // insert the new elements /before/ the range to be dropped, i.e. at pred_
-            POS n = createSeg (pred_, b_.start, b_.after);
+            POS insPos = pred_;
+            POS n = createSeg (insPos, b_.start, b_.after);
             POS s = n;
             //
             // possibly adapt the predecessor
@@ -271,13 +322,13 @@ namespace lib {
             //
             // possibly adapt the successor
             if (opSucc_ == INS_NOP)
-              emptySeg (pred_, b_.after, getStart(refSucc));
+              emptySeg (insPos, b_.after, getStart(refSucc));
             else
-            if (opPred_ == TRUNC)
-              cloneSeg (pred_, b_.after, getAfter(refSucc), refSucc);
+            if (opSucc_ == TRUNC)
+              cloneSeg (insPos, b_.after, getAfter(refSucc), refSucc);
             
             // finally discard superseded segments
-            POS e = discard (pred_, succ_);
+            POS e = discard (insPos, succ_);
             
             // indicate the range where changes happened
             return {s,n,e};

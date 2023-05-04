@@ -70346,77 +70346,115 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683158382175" ID="ID_1213737514" MODIFIED="1683158390534" TEXT="Setup f&#xfc;r Einzelfall-Tests">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1683158382175" ID="ID_1213737514" MODIFIED="1683199886418" TEXT="Setup f&#xfc;r Einzelfall-Tests">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1683199848866" ID="ID_890601228" MODIFIED="1683199875667" TEXT="voll definierte Bouds">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047015402" ID="ID_1729864005" MODIFIED="1683120259296" TEXT="M&#xf6;gliche Intervall-Anordnungen">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047146727" ID="ID_1666065871" MODIFIED="1683047163542" TEXT="Seg in leer">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1683047015402" ID="ID_1729864005" MODIFIED="1683203798608" TEXT="M&#xf6;gliche Intervall-Anordnungen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1683047146727" ID="ID_1666065871" MODIFIED="1683199892426" TEXT="Seg in leer">
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#5b280f" CREATED="1683047212062" ID="ID_378627927" MODIFIED="1683047503858" TEXT="Seg in Seg">
 <arrowlink COLOR="#eee6fe" DESTINATION="ID_1715234114" ENDARROW="Default" ENDINCLINATION="-40;-6;" ID="Arrow_ID_821049970" STARTARROW="None" STARTINCLINATION="24;45;"/>
 <icon BUILTIN="button_cancel"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047231372" ID="ID_393126179" MODIFIED="1683047261696" TEXT="SegN &lt; Seg">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047290932" ID="ID_1714332119" MODIFIED="1683047352056" TEXT="links disjunkt">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1683047231372" ID="ID_393126179" MODIFIED="1683203790082" TEXT="SegN &lt; Seg">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1683047290932" ID="ID_1714332119" MODIFIED="1683200066870" TEXT="links disjunkt">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047302426" ID="ID_255724966" MODIFIED="1683047352062" TEXT="links b&#xfc;ndig">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1683047302426" ID="ID_255724966" MODIFIED="1683203758077" TEXT="links b&#xfc;ndig">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1683200290376" FOLDED="true" HGAP="33" ID="ID_230997836" MODIFIED="1683203752499" TEXT="bestehendes Segment dupliziert" VSHIFT="2">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font face="Monospaced">expect:&#9500;[-100~2[[4_5[[5_10[[10~100[&#9508; </font>
+    </p>
+    <p>
+      <font face="Monospaced">actual:&#9500;[-100~4[[4_5[[5_10[[5_10[[10~100[&#9508;!gap_10&lt;&gt;5_! </font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+<node COLOR="#435e98" CREATED="1683203453122" ID="ID_1856169568" MODIFIED="1683203627745" TEXT="copy-n-paste-Fehler">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      bei der Verarbeitung des Successors hat einer der F&#228;lle auf die Operation opPred_ f&#252;r den Predecessor gepr&#252;ft; im konkreten Fall war das TRUNC, wohingegen f&#252;r den Successor SEAMLESS vorgesehen war. Daher wurde dann an dieser Stelle eine Trucated-copy dies Successors eingef&#252;gt, wobei in diesem Fall das Trucate gar nicht verk&#252;rzt hat, da der Anfangspunkt des Successors b&#252;ndig liegt; so kommt es, da&#223; der Successor komplett aufgedoppelt wurde
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047312185" ID="ID_361978590" MODIFIED="1683047352063" TEXT="links &#xfc;berlapp">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1683203473903" ID="ID_1971966278" MODIFIED="1683203739112" TEXT="bei der Gelegenheit gleich noch Variable f&#xfc;r insert-Position eingef&#xfc;hrt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...habe im Debugger verifiziert, da&#223; das mit den Interatoren-Positionen wirklich klappt: sie bleiben stabil. Trotzdem wird der Code lesbarer, wenn man nur in diesem St&#252;ck pred_ explizit bezeichnet als &quot;insPos&quot; (und pred_ nicht weiter verwendet).
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047321800" ID="ID_750704841" MODIFIED="1683047352063" TEXT="links in-b&#xfc;ndig">
-<icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047329359" ID="ID_1715234114" MODIFIED="1683047482325" TEXT="komplett in">
+</node>
+<node COLOR="#338800" CREATED="1683047312185" ID="ID_361978590" MODIFIED="1683203771932" TEXT="links &#xfc;berlapp">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1683047321800" ID="ID_750704841" MODIFIED="1683203771935" TEXT="links in-b&#xfc;ndig">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1683047329359" ID="ID_1715234114" MODIFIED="1683203771935" TEXT="komplett in">
 <linktarget COLOR="#eee6fe" DESTINATION="ID_1715234114" ENDARROW="Default" ENDINCLINATION="-40;-6;" ID="Arrow_ID_821049970" SOURCE="ID_378627927" STARTARROW="None" STARTINCLINATION="24;45;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047333150" ID="ID_1160806927" MODIFIED="1683047352064" TEXT="rechts in-b&#xfc;ndig">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1683047333150" ID="ID_1160806927" MODIFIED="1683203771934" TEXT="rechts in-b&#xfc;ndig">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047338246" ID="ID_74223802" MODIFIED="1683047352064" TEXT="rechts &#xfc;berlapp">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1683047338246" ID="ID_74223802" MODIFIED="1683203771934" TEXT="rechts &#xfc;berlapp">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047342461" ID="ID_70002710" MODIFIED="1683047352065" TEXT="rechts b&#xfc;ndig">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1683047342461" ID="ID_70002710" MODIFIED="1683203771933" TEXT="rechts b&#xfc;ndig">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047345829" ID="ID_115418057" MODIFIED="1683047352065" TEXT="rechts disjunkt">
-<icon BUILTIN="flag-yellow"/>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047262589" ID="ID_1007407171" MODIFIED="1683047281376" TEXT="SegN &#x2259; Seg">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047391246" ID="ID_79897442" MODIFIED="1683047397776" TEXT="komplett ersetzend">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1683047345829" ID="ID_115418057" MODIFIED="1683203771933" TEXT="rechts disjunkt">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047282261" ID="ID_972492925" MODIFIED="1683047287612" TEXT="SegN &gt; Seg">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047421234" ID="ID_34267753" MODIFIED="1683047448083" TEXT="links &#xfc;berlapp rechts in-b&#xfc;ndig">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047431779" ID="ID_867118469" MODIFIED="1683047448083" TEXT="komplett &#xfc;berdeckend">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047436312" ID="ID_178416593" MODIFIED="1683047448084" TEXT="links in-b&#xfc;ndig rechts &#xfc;berlapp">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1683047262589" ID="ID_1007407171" MODIFIED="1683203788677" TEXT="SegN &#x2259; Seg">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1683047391246" ID="ID_79897442" MODIFIED="1683203780180" TEXT="komplett ersetzend">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1683047282261" ID="ID_972492925" MODIFIED="1683203787431" TEXT="SegN &gt; Seg">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1683047421234" ID="ID_34267753" MODIFIED="1683203780179" TEXT="links &#xfc;berlapp rechts in-b&#xfc;ndig">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1683047431779" ID="ID_867118469" MODIFIED="1683203780179" TEXT="komplett &#xfc;berdeckend">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1683047436312" ID="ID_178416593" MODIFIED="1683203780179" TEXT="links in-b&#xfc;ndig rechts &#xfc;berlapp">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683120235864" ID="ID_1312143276" MODIFIED="1683120244568" TEXT="Segmentation-Standardf&#xe4;lle">
-<icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047063010" ID="ID_1521759912" MODIFIED="1683047144754" TEXT="degenerierte F&#xe4;lle">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047076545" ID="ID_1043278799" MODIFIED="1683047109765" TEXT="weder Start noch Ende &#x27f9; NOP">
-<icon BUILTIN="flag-yellow"/>
-</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047111300" ID="ID_592313563" MODIFIED="1683047141649" TEXT="Ende vor Start &#x27f9; flip">
 <icon BUILTIN="flag-yellow"/>
 </node>
@@ -70442,6 +70480,43 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047704284" ID="ID_695991119" MODIFIED="1683047708975" TEXT="nur Ende nach Seg">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683120235864" ID="ID_1312143276" MODIFIED="1683120244568" TEXT="Segmentation-Standardf&#xe4;lle">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047063010" ID="ID_1142231389" MODIFIED="1683047144754" TEXT="degenerierte F&#xe4;lle">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047076545" ID="ID_1966654915" MODIFIED="1683047109765" TEXT="weder Start noch Ende &#x27f9; NOP">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047111300" ID="ID_1355900780" MODIFIED="1683047141649" TEXT="Ende vor Start &#x27f9; flip">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047568998" ID="ID_1848070219" MODIFIED="1683047593595" TEXT="nur Start in leer">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047600842" ID="ID_1424605879" MODIFIED="1683047604778" TEXT="nur Ende in leer">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047624559" ID="ID_710124982" MODIFIED="1683047708973" TEXT="nur Start in Seg">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047654979" ID="ID_233751772" MODIFIED="1683047708973" TEXT="nur Ende in Seg">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047688030" ID="ID_879752507" MODIFIED="1683047708974" TEXT="nur Start vor Seg">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047693102" ID="ID_49056874" MODIFIED="1683047708974" TEXT="nur Ende vor Seg">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047697837" ID="ID_1083499752" MODIFIED="1683047708975" TEXT="nur Start nach Seg">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047704284" ID="ID_981222550" MODIFIED="1683047708975" TEXT="nur Ende nach Seg">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>

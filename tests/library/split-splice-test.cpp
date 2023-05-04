@@ -22,6 +22,18 @@
 
 /** @file split-splice-test.cpp
  ** unit test \ref SplitSplice_test
+ ** to verify proper working of the »SplitSplice« algorithm.
+ ** This is a generic setup to modify a segmentation (partitioning)
+ ** of an ordered axis; the axis is represented as a collection of _segments,_
+ ** which are assumed to be ordered and seamless, with the start point inclusive
+ ** and the end point exclusive (thus the start of the next segment is identical
+ ** with the end point of the current segment).
+ ** 
+ ** This test uses the natural number axis between -100 ... +100
+ ** and establishes a binding for the generic algorithm with suitably rigged
+ ** test data, to verify the algorithm properly inserts a new segment under all
+ ** conceivable circumstances, since there are many possibilities of arrangement
+ ** for two ordered segments of arbitrary length.
  */
 
 
@@ -298,6 +310,7 @@ namespace test {
         }
       
       
+      
       /** @test verify the fixture and self-diagnostics for this test */
       void
       verify_testFixture()
@@ -356,13 +369,43 @@ namespace test {
         }
       
       
+      
       /**
        * @test cover all possible cases of splicing an interval
        */
       void
       verify_standardCases()
         {
-          UNIMPLEMENTED ("standard cases");
+          auto testCase = [](SegL segmentation
+                            ,int startNew
+                            ,int afterNew
+                            ,ExpectString expectedResult)
+                            {
+                              OptInt startSpec{startNew},
+                                     afterSpec{afterNew};
+                              
+                              invokeSplitSplice (segmentation, startSpec, afterSpec);
+                              CHECK (segmentation == expectedResult);
+                              CHECK (segmentation.isValid());
+                            };
+          
+          testCase (SegL{}, -23,24,              "├[-100~-23[[-23_24[[24~100[┤"_expect);            // simple segment into empty axis
+          
+          testCase (SegL{5,10},  2,3,                 "├[-100~2[[2_3[[3~5[[5_10[[10~100[┤"_expect); // smaller segment left spaced off
+          testCase (SegL{5,10},  4,5,                 "├[-100~4[[4_5[[5_10[[10~100[┤"_expect);      // left adjacent
+          testCase (SegL{5,10},  4,8,                 "├[-100~4[[4_8[[8_10[[10~100[┤"_expect);      // left overlapping
+          testCase (SegL{5,10},  5,8,                 "├[-100~5[[5_8[[8_10[[10~100[┤"_expect);      // left inside justified
+          testCase (SegL{5,10},  6,8,            "├[-100~5[[5_6[[6_8[[8_10[[10~100[┤"_expect);      // smaller segment complete inside
+          testCase (SegL{5,10},  7,10,          "├[-100~5[[5_7[[7_10[[10~100[┤"_expect);            // right inside justified
+          testCase (SegL{5,10},  9,13,          "├[-100~5[[5_9[[9_13[[13~100[┤"_expect);            // right overlapping
+          testCase (SegL{5,10}, 10,13,        "├[-100~5[[5_10[[10_13[[13~100[┤"_expect);            // right adjacent
+          testCase (SegL{5,10}, 13,23, "├[-100~5[[5_10[[10~13[[13_23[[23~100[┤"_expect);            // right spaced off
+          
+          testCase (SegL{5,10},  5,10,               "├[-100~5[[5_10[[10~100[┤"_expect);            // identical size replacement
+          
+          testCase (SegL{5,10},  3,10,               "├[-100~3[[3_10[[10~100[┤"_expect);            // larger segment right aligned
+          testCase (SegL{5,10},  3,23,               "├[-100~3[[3_23[[23~100[┤"_expect);            // larger segment overarching
+          testCase (SegL{5,10},  5,23,               "├[-100~5[[5_23[[23~100[┤"_expect);            // larger segment left aligned
         }
       
       
