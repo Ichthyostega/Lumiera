@@ -57,6 +57,8 @@ namespace test {
   
   using util::_Fmt;
   using util::isnil;
+  using util::getAddr;
+  using util::isSameObject;
   using std::string;
   using std::move;
 
@@ -283,6 +285,11 @@ namespace test {
           verify_testFixture();
           verify_standardCases();
           verify_cornerCases();
+          verify_integrity();
+          
+          // no memory leaked
+          CHECK (0 == Seg::check);
+          CHECK (0 == Seg::cnt);
         }
       
       
@@ -463,6 +470,82 @@ namespace test {
           testCase (SegL{4,5,6,8}, 5,x,  "├[-100~4[[4_5[[5_6[[6_8[[8~100[┤"_expect);
           testCase (SegL{4,5,7,8}, x,6,  "├[-100~4[[4_5[[5_6[[6_7[[7_8[[8~100[┤"_expect);
         }                                               /////
+      
+      
+      
+      /**
+       * @test verify instance data is properly handled on _split operation_
+       *       - segments not touched will stay at same memory location
+       *       - any adapted segments will be new allocated objects
+       *       - yet segments cloned / split will carry on all data
+       */
+      void
+      verify_integrity()
+        {
+          SegL segs{2,6};
+          CHECK (segs == "├[-100~2[[2_6[[6~100[┤"_expect);
+          
+          Iter s = segs.begin();
+          CHECK (s->start == -100);
+          CHECK (s->after == 2);
+          uint  id1 = s->id;
+          void* adr1 = &(*s);
+          ++s;
+          CHECK (s->start == 2);
+          CHECK (s->after == 6);
+          uint  id2 = s->id;
+          void* adr2 = &(*s);
+          ++s;
+          CHECK (s->start == 6);
+          CHECK (s->after == 100);
+          uint  id3 = s->id;
+          void* adr3 = &(*s);
+          
+          auto [p,n,a] = invokeSplitSplice (segs, 3,4);
+          CHECK (5 == segs.size());
+          CHECK (segs == "├[-100~2[[2_3[[3_4[[4_6[[6~100[┤"_expect);
+          
+          s = segs.begin();
+          CHECK (s->start == -100);
+          CHECK (s->after == 2);
+          CHECK (s->id == id1);
+          CHECK (adr1 == getAddr(*s));
+          CHECK (s != p);
+          ++s;
+          CHECK (s == p);
+          CHECK (s->start == 2);
+          CHECK (s->after == 3);
+          CHECK (s->id == id2);
+          CHECK (adr2 != getAddr(*s));  // this is the first part of the split segment (new allocation)
+          ++s;
+          CHECK (s != p);
+          CHECK (s == n);
+          CHECK (s->start == 3);
+          CHECK (s->after == 4);
+          CHECK (s->id != id1);
+          CHECK (s->id != id2);
+          CHECK (s->id != id3);
+          CHECK (adr2 != getAddr(*s));
+          ++s;
+          CHECK (s != n);
+          CHECK (s != a);
+          CHECK (s->start == 4);
+          CHECK (s->after == 6);
+          CHECK (s->id != id1);
+          CHECK (s->id == id2);
+          CHECK (s->id != id3);
+          CHECK (adr2 != getAddr(*s));  // this is the second part of the split segment (new allocation)
+          ++s;
+          CHECK (s == a);
+          CHECK (s->start == 6);
+          CHECK (s->after == 100);
+          CHECK (s->id != id1);
+          CHECK (s->id != id2);
+          CHECK (s->id == id3);
+          CHECK (adr3 == getAddr(*s));
+          ++s;
+          CHECK (s == segs.end());
+        }
     };
   
   LAUNCHER (SplitSplice_test, "unit common");

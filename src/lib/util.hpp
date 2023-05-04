@@ -350,6 +350,22 @@ namespace util {
         == static_cast<const void*> (std::addressof(b));
   }
   
+  /** extract address but strip any type info */
+  template<class X>
+  inline const void*
+  getAddr (X& x)
+  {
+    return static_cast<const void*> (std::addressof(x));
+  }
+  
+  template<class X>
+  inline const void*
+  getAddr (X* x)
+  {
+    return static_cast<const void*> (x);
+  }
+  
+  
   
   
   

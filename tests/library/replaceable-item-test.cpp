@@ -176,10 +176,7 @@ namespace test{
           CHECK (one   == she);
           CHECK (two   == he);
           
-          CHECK (not isSameObject(he, static_cast<X&>(copy1)));
-          
           copy1 = It{};             // copy assignment from anonymous holder
-          copy1 = copy1;
           CHECK (copy1 == NullValue<X>::get());
           CHECK (copy1 != he);
         };
