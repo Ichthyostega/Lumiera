@@ -225,7 +225,7 @@ namespace test {
      * Perform the »SplitSplice« Algorithm to splice a new Segment
      * into the given [segmentation of the integer-axis](\ref SegL).
      * A local λ-binding is setup to define the basic operations
-     * required by the Algo implementation to work with this
+     * required by the algorithm implementation to work with this
      * specific kind of data.
      * @return Tuple `(s,n,e)` to indicate where changes happened
      *   - s the first changed element
@@ -388,9 +388,10 @@ namespace test {
                               CHECK (segmentation == expectedResult);
                               CHECK (segmentation.isValid());
                             };
-          
+                                                             ////////
           testCase (SegL{}, -23,24,              "├[-100~-23[[-23_24[[24~100[┤"_expect);            // simple segment into empty axis
           
+          // insert smaller segment
           testCase (SegL{5,10},  2,3,                 "├[-100~2[[2_3[[3~5[[5_10[[10~100[┤"_expect); // smaller segment left spaced off
           testCase (SegL{5,10},  4,5,                 "├[-100~4[[4_5[[5_10[[10~100[┤"_expect);      // left adjacent
           testCase (SegL{5,10},  4,8,                 "├[-100~4[[4_8[[8_10[[10~100[┤"_expect);      // left overlapping
@@ -401,12 +402,15 @@ namespace test {
           testCase (SegL{5,10}, 10,13,        "├[-100~5[[5_10[[10_13[[13~100[┤"_expect);            // right adjacent
           testCase (SegL{5,10}, 13,23, "├[-100~5[[5_10[[10~13[[13_23[[23~100[┤"_expect);            // right spaced off
           
+          // insert identical segment
           testCase (SegL{5,10},  5,10,               "├[-100~5[[5_10[[10~100[┤"_expect);            // identical size replacement
           
+          // insert larger segment
           testCase (SegL{5,10},  3,10,               "├[-100~3[[3_10[[10~100[┤"_expect);            // larger segment right aligned
           testCase (SegL{5,10},  3,23,               "├[-100~3[[3_23[[23~100[┤"_expect);            // larger segment overarching
           testCase (SegL{5,10},  5,23,               "├[-100~5[[5_23[[23~100[┤"_expect);            // larger segment left aligned
-        }
+        }                                                      //////
+      
       
       
       /**
@@ -415,8 +419,50 @@ namespace test {
       void
       verify_cornerCases()
         {
-          UNIMPLEMENTED ("corner cases");
-        }
+          auto testCase = [](SegL segmentation
+                            ,OptInt startNew           // Note: these are optional...
+                            ,OptInt afterNew
+                            ,ExpectString expectedResult)
+                            {
+                              invokeSplitSplice (segmentation, startNew, afterNew);
+                              CHECK (segmentation == expectedResult);
+                              CHECK (segmentation.isValid());
+                            };
+          auto x = std::nullopt;
+                                                       //////
+          testCase (SegL{}, 3,2,              "├[-100~2[[2_3[[3~100[┤"_expect);           // flipped interval spec is reoriented
+                                                       //////
+          testCase (SegL{}, 3,x,            "├[-100~3[[3_100[┤"_expect);                  // expanded until domain end
+          testCase (SegL{}, x,5,                   "├[-100_5[[5~100[┤"_expect);           // expanded to start of domain
+                                                        /////
+          testCase (SegL{4,6}, 5,x,      "├[-100~4[[4_5[[5_6[[6~100[┤"_expect);           // expanded until end of enclosing segment
+          testCase (SegL{4,6}, x,5,           "├[-100~4[[4_5[[5_6[[6~100[┤"_expect);      // expanded to start of enclosing segment
+                                                        /////
+          testCase (SegL{4,6}, 3,x,           "├[-100~3[[3_4[[4_6[[6~100[┤"_expect);      // expanded to fill gap to next segment
+          testCase (SegL{4,6}, x,3,                "├[-100_3[[3~4[[4_6[[6~100[┤"_expect); // expanded to cover predecessor completely
+          testCase (SegL{4,6}, 4,x,           "├[-100~4[[4_6[[6~100[┤"_expect);           // expanded to cover (replace) successor
+          testCase (SegL{4,6}, x,4,           "├[-100_4[[4_6[[6~100[┤"_expect);           // expanded to cover (replace) predecessor
+                                                        /////
+          testCase (SegL{4,6}, 7,x, "├[-100~4[[4_6[[6~7[[7_100[┤"_expect);                // shorten successor and expand new segment to end of successor (=domain end)
+          testCase (SegL{4,6}, x,7,      "├[-100~4[[4_6[[6_7[[7~100[┤"_expect);           // fill gap between predecessor and given new segment end
+          testCase (SegL{4,6}, 6,x,      "├[-100~4[[4_6[[6_100[┤"_expect);                // expand to cover (replace) the following segment until domain end
+          testCase (SegL{4,6}, x,6,           "├[-100~4[[4_6[[6~100[┤"_expect);           // expanded to cover (replace) the preceding segment
+                                                        /////
+          testCase (SegL{},    x,x,                "├[-100_100[┤"_expect);                // without any specification, the whole domain is covered
+          testCase (SegL{4},   x,x,           "├[-100~4[[4_100[┤"_expect);                // otherwise, without any spec the last segment is replaced
+          testCase (SegL{4,6}, x,x,      "├[-100~4[[4_6[[6_100[┤"_expect);
+                                                        /////
+          testCase (SegL{4,5,6,8}, 3,6,       "├[-100~3[[3_6[[6_8[[8~100[┤"_expect);      // spanning and thus replacing multiple segments
+          testCase (SegL{4,5,6,8}, 4,6,       "├[-100~4[[4_6[[6_8[[8~100[┤"_expect);
+          testCase (SegL{4,5,6,8}, 4,7,       "├[-100~4[[4_7[[7_8[[8~100[┤"_expect);
+          testCase (SegL{4,5,6,8}, 3,7,       "├[-100~3[[3_7[[7_8[[8~100[┤"_expect);
+          testCase (SegL{4,5,6,8}, 3,8,       "├[-100~3[[3_8[[8~100[┤"_expect);
+          testCase (SegL{4,5,6,8}, 4,8,       "├[-100~4[[4_8[[8~100[┤"_expect);
+          testCase (SegL{4,5,6,8}, 4,9,       "├[-100~4[[4_9[[9~100[┤"_expect);
+          testCase (SegL{4,5,6,8}, 5,9,  "├[-100~4[[4_5[[5_9[[9~100[┤"_expect);
+          testCase (SegL{4,5,6,8}, 5,x,  "├[-100~4[[4_5[[5_6[[6_8[[8~100[┤"_expect);
+          testCase (SegL{4,5,7,8}, x,6,  "├[-100~4[[4_5[[5_6[[6_7[[7_8[[8~100[┤"_expect);
+        }                                               /////
     };
   
   LAUNCHER (SplitSplice_test, "unit common");

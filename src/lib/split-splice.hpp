@@ -70,9 +70,10 @@
  **   values until matching the end of the preceding segment
  ** - if both values are omitted, the new segment will replace the last segment of the given axis.
  ** The new segment may span an arbitrary range within the domain and may thus possibly supersede
- ** several existing segments, which are then removed by the `DELETE` operation.  
+ ** several existing segments, which are then removed by the `DELETE` operation.
  ** 
- ** @todo 2023 WIP
+ ** @see SplitSplice_test
+ ** @see steam::fixture::Segmentation::splitSplice
  */
 
 
@@ -335,9 +336,6 @@ namespace lib {
           }
       };
     
-  }//(End) namespace splitsplace
-  
-  
-  
+  }//namespace splitsplace
 } // namespace lib
 #endif /*LIB_SPLIT_SPLICE_H*/
