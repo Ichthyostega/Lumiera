@@ -32,9 +32,8 @@
 #define LIB_SPLIT_SPLICE_H
 
 #include "lib/error.hpp"
-//#include "steam/mobject/builder/fixture-change-detector.hpp"  ///////////TODO
-#include "lib/time/timevalue.hpp"
 #include "lib/meta/function.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/nocopy.hpp"
 
 #include <array>
@@ -45,19 +44,7 @@ namespace lib {
   namespace error = lumiera::error;
   
   
-  namespace splitsplice {// Implementation of Split-Splice algorithm
-    
-    using lib::meta::_Fun;
-    
-    template<typename FUN, typename SIG>
-    struct has_Sig
-      : std::is_same<SIG, typename _Fun<FUN>::Sig>
-      { };
-    
-    /** verify the installed functors or lambdas expose the expected signature */
-#define ASSERT_VALID_SIGNATURE(_FUN_, _SIG_) \
-        static_assert (has_Sig<_FUN_, _SIG_>::value, "Function " STRINGIFY(_FUN_) " unsuitable, expected signature: " STRINGIFY(_SIG_));
-    
+  namespace splitsplice {/// Implementation of [»SplitSplice« algorithm](\ref splite-splice.cpp)
     
     
     /**

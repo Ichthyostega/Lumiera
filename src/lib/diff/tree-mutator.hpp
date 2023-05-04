@@ -285,25 +285,8 @@ namespace diff{
   
   namespace { // Mutator-Builder decorator components...
     
-    using lib::meta::_Fun;
     using std::forward;
     using std::move;
-    
-    
-    template<typename FUN, typename SIG>
-    struct has_Sig
-      : std::is_same<SIG, typename _Fun<FUN>::Sig>
-      { };
-    
-    /** verify the installed functors or lambdas expose the expected signature */
-#define ASSERT_VALID_SIGNATURE(_FUN_, _SIG_) \
-        static_assert (has_Sig<_FUN_, _SIG_>::value, "Function " STRINGIFY(_FUN_) " unsuitable, expected signature: " STRINGIFY(_SIG_));
-    
-    
-    
-    
-    
-    
     
     
     /**

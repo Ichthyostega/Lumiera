@@ -178,6 +178,31 @@ namespace meta{
   
   
   
+  /**
+   * Meta-function to check that some _function like_ entity
+   * offers the expected signature
+   * @tparam SIG signature type (e.g. `float(int, bool)`)
+   * @tparam FUN anything _function like_ (class with function call operator
+   *             or std::function instance, or λ instance or language function
+   *             reference or function pointer
+   */
+  template<typename FUN, typename SIG>
+  struct has_Sig
+    : std::is_same<SIG, typename _Fun<FUN>::Sig>
+    { };
+  
+  /**
+   * Macro for a compile-time check to verify the given
+   * generic functors or lambdas expose some expected signature.
+   * @remark typically used when configuring a template with custom adapters.
+   */
+#define ASSERT_VALID_SIGNATURE(_FUN_, _SIG_) \
+        static_assert (lib::meta::has_Sig<_FUN_, _SIG_>::value, \
+                       "Function " STRINGIFY(_FUN_) " unsuitable, expected signature: " STRINGIFY(_SIG_));
+  
+  
+  
+  
   
   
   
