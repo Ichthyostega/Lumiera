@@ -201,6 +201,52 @@ namespace test {
           }
       };
     
+    
+    
+    
+    /* ======= Split/Splice-Algo Setup ======= */
+    
+    using OptInt = std::optional<int>;
+    using Iter = typename SegL::iterator;
+    
+    /**
+     * Perform the »SplitSplice« Algorithm to splice a new Segment
+     * into the given [segmentation of the integer-axis](\ref SegL).
+     * A local λ-binding is setup to define the basic operations
+     * required by the Algo implementation to work with this
+     * specific kind of data.
+     * @return Tuple `(s,n,e)` to indicate where changes happened
+     *   - s the first changed element
+     *   - n the new main segment (may be identical to s)
+     *   - e the first unaltered element after the changed range (may be `end()`)
+     * @see lib::splitsplice::Algo
+     * @see [setup for the Fixture-Segmentation](\ref steam::fixture::Segmentation::splitSplice)
+     */
+    auto
+    invokeSplitSplice (SegL& segs, OptInt startNew, OptInt afterNew)
+    {
+      /*---configure-contextually-bound-Functors--------------------*/
+      auto getStart =  [](Iter elm)                                 -> int  { return elm->start; };
+      auto getAfter =  [](Iter elm)                                 -> int  { return elm->after; };
+      auto createSeg= [&](Iter pos, int start, int after)           -> Iter { return segs.emplace (pos, start, after); };
+      auto emptySeg = [&](Iter pos, int start, int after)           -> Iter { return segs.emplace (pos, start, after, true); };
+      auto cloneSeg = [&](Iter pos, int start, int after, Iter src) -> Iter { return segs.emplace (pos, *src, start, after); };
+      auto discard  = [&](Iter pos, Iter after)                     -> Iter { return segs.erase (pos,after); };
+      
+      
+      lib::splitsplice::Algo splicer{ getStart
+                                    , getAfter
+                                    , createSeg
+                                    , emptySeg
+                                    , cloneSeg
+                                    , discard
+                                    , SMAX
+                                    , segs.begin(),segs.end()
+                                    , startNew, afterNew
+                                    };
+      splicer.determineRelations();
+      return splicer.performSplitSplice();
+    }
   }//(End)Test Fixture
   
   
@@ -234,37 +280,21 @@ namespace test {
       void
       demonstrate_usage()
         {
-          SegL segments;
-          cout << segments <<endl;
+          SegL segmentation;
+          CHECK (segmentation == "├[-100~100[┤"_expect);
           
-          using OInt = std::optional<int>;
-          using Iter = typename SegL::iterator;
+          OptInt startNew{5},
+                 afterNew{23};
           
-          auto getStart =  [](Iter elm)                                 -> int  { return elm->start; };
-          auto getAfter =  [](Iter elm)                                 -> int  { return elm->after; };
-          auto createSeg= [&](Iter pos, int start, int after)           -> Iter { return segments.emplace (pos, start, after); };
-          auto emptySeg = [&](Iter pos, int start, int after)           -> Iter { return segments.emplace (pos, start, after, true); };
-          auto cloneSeg = [&](Iter pos, int start, int after, Iter src) -> Iter { return segments.emplace (pos, *src, start, after); };
-          auto discard  = [&](Iter pos, Iter after)                     -> Iter { return segments.erase (pos,after); };
+          invokeSplitSplice (segmentation, startNew, afterNew);
+
+          // The given segmentation was modified by side-effect
+          // - a new segment [5...23[ has been inserted in the middle
+          // - suitably adapted empty predecessor and successor segments
+          CHECK (segmentation == "├[-100~5[[5_23[[23~100[┤"_expect);
           
-          
-          lib::splitsplice::Algo splicer{ getStart
-                                        , getAfter
-                                        , createSeg
-                                        , emptySeg
-                                        , cloneSeg
-                                        , discard
-                                        , SMAX
-                                        , segments.begin(),segments.end()
-                                        , OInt{5}, OInt{23}
-                                        };
-          splicer.determineRelations();
-          auto [s,n,e] = splicer.performSplitSplice();
-          
-          cout << segments <<endl;
-          cout << "s:"<<*s <<endl;
-          cout << "n:"<<*n <<endl;
-          cout << "e:"<<*e <<endl;
+          // The modified segmentation still seamlessly covers the whole axis
+          CHECK (segmentation.isValid());
         }
       
       
