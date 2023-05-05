@@ -33,6 +33,9 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/split-splice.hpp"
 
+using lib::time::Time;
+using lib::time::TimeSpan;
+
 
 namespace steam {
 namespace fixture {
@@ -73,14 +76,15 @@ namespace fixture {
   Segment const&
   Segmentation::splitSplice (OptTime start, OptTime after, const engine::JobTicket* jobTicket)
   {
+    ASSERT (!start or !after or start != after);
     using Iter = typename list<Segment>::iterator;
     
-    auto getStart = [](Iter elm)                                   -> Time { return elm->start(); };
-    auto getAfter = [](Iter elm)                                   -> Time { return elm->after(); };
-    auto createSeg= [](Iter pos, Time start, Time after)           -> Iter { UNIMPLEMENTED ("create new Segment"); };
-    auto emptySeg = [](Iter pos, Time start, Time after)           -> Iter { UNIMPLEMENTED ("create empty Segment");};
-    auto cloneSeg = [](Iter pos, Time start, Time after, Iter src) -> Iter { UNIMPLEMENTED ("clone Segment and modify time"); };
-    auto discard  = [](Iter pos, Iter after)                       -> Iter { UNIMPLEMENTED ("discard Segments"); };
+    auto getStart =  [](Iter elm)                                   -> Time { return elm->start(); };
+    auto getAfter =  [](Iter elm)                                   -> Time { return elm->after(); };
+    auto createSeg= [&](Iter pos, Time start, Time after)           -> Iter { return segments_.emplace (pos, TimeSpan{start, after}, jobTicket); };
+    auto emptySeg = [&](Iter pos, Time start, Time after)           -> Iter { return segments_.emplace (pos, TimeSpan{start, after}); };
+    auto cloneSeg = [&](Iter pos, Time start, Time after, Iter src) -> Iter { return segments_.emplace (pos, *src, TimeSpan{start, after}); };
+    auto discard  = [&](Iter pos, Iter after)                       -> Iter { return segments_.erase (pos,after); };
     
     
     lib::splitsplice::Algo splicer{ getStart

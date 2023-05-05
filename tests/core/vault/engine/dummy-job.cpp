@@ -106,9 +106,9 @@ namespace engine {
         InvocationInstanceID
         buildInstanceID (HashVal seed)  const override
           {
-            InvocationInstanceID res;
-            res.part.a = seed;
-            return res;
+            InvocationInstanceID instance;
+            instance.part.a = seed;
+            return instance;
           }
         
         size_t

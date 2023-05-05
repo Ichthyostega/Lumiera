@@ -75,9 +75,15 @@ namespace fixture {
       // TODO: ownership??
       ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #725 : placeholder code
     public:
-      Segment (TimeSpan covered =TimeSpan::ALL)
+      Segment (TimeSpan covered =TimeSpan::ALL
+              ,const engine::JobTicket* ticket =nullptr)
         : span_{covered}
-        , jobTicket_{&engine::JobTicket::NOP}
+        , jobTicket_{ticket? ticket : &engine::JobTicket::NOP}
+      { }
+      
+      Segment (Segment const& original, TimeSpan changed)
+        : span_{changed}
+        , jobTicket_{original.jobTicket_}
       { }
       
       // default copy acceptable

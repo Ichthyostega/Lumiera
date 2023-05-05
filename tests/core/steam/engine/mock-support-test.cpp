@@ -149,9 +149,11 @@ namespace test  {
             CHECK (util::isSameObject (ticket, JobTicket::NOP));
           }
           {
-            MockSegmentation mockSeg{MakeRec().genNode()};
-            CHECK (1 == mockSeg.size());
-            JobTicket const& ticket = mockSeg[someTime].jobTicket();
+            MockSegmentation mockSegs{MakeRec().genNode()};
+            CHECK (1 == mockSegs.size());
+            CHECK (Time::MIN == mockSegs[someTime].start());
+            CHECK (Time::MAX == mockSegs[someTime].after());
+            JobTicket const& ticket = mockSegs[someTime].jobTicket();
             CHECK (not util::isSameObject (ticket, JobTicket::NOP));
             
             Job someJob = ticket.createJobFor(coord);
@@ -163,9 +165,41 @@ namespace test  {
             CHECK (RealClock::wasRecently (DummyJob::invocationTime (someJob)));
             CHECK (someTime == DummyJob::invocationNominalTime (someJob));
           }
+          {
+             // Marker to verify the job calls back into the right segment
+            int marker = rand() % 1000;
+            //  Build a Segmentation partitioned at 10s
+            MockSegmentation mockSegs{MakeRec()
+                                     .attrib ("start", Time{0,10}
+                                             ,"mark",  marker)
+                                     .genNode()};
+            CHECK (2 == mockSegs.size());
+            // since only start-time was given, the SplitSplice-Algo will attach
+            // the new Segment starting at 10s and expand towards +∞,
+            // while the left part of the axis is marked as NOP / empty
+            fixture::Segment const& seg1 = mockSegs[Time::ZERO];              // access anywhere < 10s
+            fixture::Segment const& seg2 = mockSegs[Time{0,20}];              // access anywhere >= 10s
+            CHECK (    util::isSameObject (seg1.jobTicket(), JobTicket::NOP));
+            CHECK (not util::isSameObject (seg2.jobTicket(), JobTicket::NOP));// this one is the active segment
+            
+            Job job = seg2.jobTicket().createJobFor(coord);
+            CHECK (not MockJobTicket::isAssociated (job, seg1.jobTicket()));
+            CHECK (    MockJobTicket::isAssociated (job, seg2.jobTicket()));
+            CHECK (marker == job.parameter.invoKey.part.a);
+            
+            job.triggerJob();
+            CHECK (DummyJob::was_invoked (job));
+            CHECK (RealClock::wasRecently (DummyJob::invocationTime (job)));
+            CHECK (marker == DummyJob::invocationAdditionalKey (job));        // DummyClosure is rigged such as to feed back the seed in `part.a`
+                                                                              // and thus we can prove this job really belongs to the marked segment
+            // create another job from the (empty) seg1
+            job = seg1.jobTicket().createJobFor (coord);
+            InvocationInstanceID empty; /////////////////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
+            CHECK (lumiera_invokey_eq (&job.parameter.invoKey, &empty));      // indiate that it's just a placeholder to mark a "NOP"-Job
+          }
           
           
-          TODO ("cover details of MockSegmentation");
+          TODO ("cover more details of MockSegmentation");
         }
     };
   

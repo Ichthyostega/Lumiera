@@ -208,8 +208,8 @@ namespace test   {
           for (auto& spec : specs)
             {
               JobTicket* newTicket = nullptr;
-              auto seed = spec.retrieveAttribute<HashVal> ("mark");
-              tickets_.emplace_back (seed? *seed : HashVal(rand() % 1000));
+              auto seed = spec.retrieveAttribute<int> ("mark");
+              tickets_.emplace_back (seed? HashVal(*seed) : HashVal(rand() % 1000));
               newTicket = & tickets_.back();
               
               auto start = spec.retrieveAttribute<Time> ("start");

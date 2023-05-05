@@ -70145,8 +70145,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1682993086565" ID="ID_469257294" MODIFIED="1683076810216" TEXT="Implementierung">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1682993086565" FOLDED="true" ID="ID_469257294" MODIFIED="1683250875747" TEXT="Implementierung">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1683042576253" ID="ID_1878728765" MODIFIED="1683076796339" TEXT="Konzept">
 <icon BUILTIN="yes"/>
 <node COLOR="#435e98" CREATED="1683042638127" ID="ID_1570983964" MODIFIED="1683076788355" TEXT="Deskriptor SpliceAct">
@@ -70236,8 +70236,8 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1683046722945" ID="ID_113209914" MODIFIED="1683081268947" TEXT="Generalisierung">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1683046722945" ID="ID_113209914" MODIFIED="1683245591577" TEXT="Generalisierung">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1683046728800" ID="ID_1510597200" MODIFIED="1683081137760" STYLE="fork" TEXT="pr&#xfc;fen ob machbar">
 <icon BUILTIN="help"/>
 </node>
@@ -70249,17 +70249,23 @@
 <node COLOR="#338800" CREATED="1683046786608" ID="ID_106487591" MODIFIED="1683081327011" TEXT="getEnd(elm)">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683081197660" ID="ID_357336924" MODIFIED="1683081311584" TEXT="createSeg(pos, start,after)">
-<icon BUILTIN="bell"/>
+<node COLOR="#338800" CREATED="1683081197660" ID="ID_357336924" MODIFIED="1683245525718" TEXT="createSeg(pos, start,after)">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1683245530718" HGAP="29" ID="ID_1771563243" MODIFIED="1683245560983" TEXT="hierf&#xfc;r einfach das JobTicket per &#x3bb;-closure durchbeben" VSHIFT="3">
+<font NAME="SansSerif" SIZE="11"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683081213154" ID="ID_180921781" MODIFIED="1683081311584" TEXT="emptySeg(pos, start,after)">
-<icon BUILTIN="bell"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683081224201" ID="ID_886281397" MODIFIED="1683081311584" TEXT="cloneSeg(pos, start,after, src)">
-<icon BUILTIN="bell"/>
+<node COLOR="#338800" CREATED="1683081213154" ID="ID_180921781" MODIFIED="1683245525719" TEXT="emptySeg(pos, start,after)">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683081234023" ID="ID_263936802" MODIFIED="1683081311584" TEXT="discard(start,after)">
-<icon BUILTIN="bell"/>
+<node COLOR="#338800" CREATED="1683081224201" ID="ID_886281397" MODIFIED="1683245525718" TEXT="cloneSeg(pos, start,after, src)">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1683245530718" HGAP="29" ID="ID_883714171" MODIFIED="1683245584960" TEXT="hierf&#xfc;r neue Segment-ctor Variante" VSHIFT="3">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1683081234023" ID="ID_263936802" MODIFIED="1683245525718" TEXT="discard(start,after)">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1683046873340" ID="ID_347563039" MODIFIED="1683081262904" TEXT="Template Parameter deduction einrichten">
@@ -70315,7 +70321,7 @@
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1682993108314" ID="ID_317827435" MODIFIED="1682993122827" TEXT="hinzu kommt die Variante, da&#xdf; leere Intervalle zusammengef&#xfc;hrt werden"/>
-<node COLOR="#338800" CREATED="1683046966788" ID="ID_1714211009" MODIFIED="1683208598606" TEXT="splitSplice-Algo isoliert testen">
+<node COLOR="#338800" CREATED="1683046966788" FOLDED="true" ID="ID_1714211009" MODIFIED="1683208598606" TEXT="splitSplice-Algo isoliert testen">
 <linktarget COLOR="#2ec3d8" DESTINATION="ID_1714211009" ENDARROW="Default" ENDINCLINATION="-141;9;" ID="Arrow_ID_816334190" SOURCE="ID_226373762" STARTARROW="None" STARTINCLINATION="-192;20;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1683120139366" ID="ID_255513798" MODIFIED="1683120148509" TEXT="Test-Setup mit einfachen int-Intevallen">
@@ -70508,8 +70514,11 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683120235864" ID="ID_1312143276" MODIFIED="1683120244568" TEXT="Segmentation-Standardf&#xe4;lle">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1683120235864" ID="ID_1312143276" MODIFIED="1683250859522" TEXT="Segmentation-Standardf&#xe4;lle">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1683250843877" ID="ID_608613083" MODIFIED="1683250856171" TEXT="einfache Segmentation mit einem Segment ab 10s">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047063010" ID="ID_1142231389" MODIFIED="1683047144754" TEXT="degenerierte F&#xe4;lle">
 <icon BUILTIN="flag-yellow"/>
