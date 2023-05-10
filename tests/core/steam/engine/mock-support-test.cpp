@@ -26,36 +26,23 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/error.hpp"
 #include "steam/engine/mock-dispatcher.hpp"
+#include "vault/engine/nop-job-functor.hpp"
 #include "vault/engine/dummy-job.hpp"
 #include "lib/util-tuple.hpp"
 #include "lib/util.hpp"
-#include "vault/engine/nop-job-functor.hpp"
-
-#include "lib/format-cout.hpp"///////////////////////TODO
-
-//#include "steam/engine/job-planning.hpp"
-
-//#include <ctime>
 
 using test::Test;
-
-using util::isSameObject;
-using util::seqTuple;
-//using std::rand;
 
 
 namespace steam {
 namespace engine{
 namespace test  {
   
+  using steam::fixture::Segment;
   using vault::engine::DummyJob;
-
-  namespace { // test fixture...
-    
-  } // (End) test fixture
-  
+  using util::isSameObject;
+  using util::seqTuple;
 
   
   
@@ -64,9 +51,6 @@ namespace test  {
    *       - creating and invoking mock render jobs
    *       - a mocked JobTicket, generating mock render jobs
    *       - configurable test setup for a mocked Segmentation datastructure
-   * 
-   * @todo WIP-WIP-WIP 4/2023
-   * 
    * @see JobPlanningSetup_test
    * @see Dispatcher
    * @see vault::engine::Job
@@ -76,7 +60,7 @@ namespace test  {
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           simpleUsage();
           verify_MockJob();
@@ -89,8 +73,26 @@ namespace test  {
       void
       simpleUsage()
         {
-          TODO ("simple usage example");
+            //  Build a simple Segment at [10s ... 20s[
+            MockSegmentation mockSegs{MakeRec()
+                                     .attrib ("start", Time{0,10}
+                                             ,"after", Time{0,20})
+                                     .genNode()};
+            CHECK (3 == mockSegs.size());
+            fixture::Segment const& seg = mockSegs[Time{0,15}];              // access anywhere 10s <= t < 20s
+            
+            JobTicket const& ticket = seg.jobTicket();
+            
+            FrameCoord coord;
+            coord.absoluteNominalTime = Time(0,15);
+            Job job = ticket.createJobFor(coord);
+            CHECK (MockJobTicket::isAssociated (job, ticket));
+            
+            job.triggerJob();
+            CHECK (DummyJob::was_invoked (job));
         }
+      
+      
       
       
       /** @test document and verify usage of a mock render job */
@@ -136,11 +138,12 @@ namespace test  {
           Job mockJob = mockTicket.createJobFor (coord);
           CHECK (    mockTicket.verify_associated (mockJob));                          // proof by invocation hash : is indeed backed by this JobTicket
           CHECK (not mockTicket.verify_associated (nopJob));                           // ...while some random other job is not related
-          TODO ("cover details of MockJobTicket");
         }
       
       
-      /** @test document and verify usage of a complete mocked Segmentation to back frame dispatch */
+      /** @test document and verify usage of a complete mocked Segmentation
+       *        to back frame dispatch
+       */
       void
       verify_MockSegmentation()
         {
@@ -235,9 +238,58 @@ namespace test  {
             job.triggerJob();
             CHECK (marker == DummyJob::invocationAdditionalKey (job));
           }
-          
-          
-          TODO ("cover more details of MockSegmentation");
+          //-----------------------------------------------------------------/// Segmentation with several segments built in specific order
+          {
+            //  Build Segmentation by partitioning in several steps
+            MockSegmentation mockSegs{MakeRec()
+                                     .attrib ("start", Time{0,20}             // note: inverted segment definition is rectified automatically
+                                             ,"after", Time{0,10}
+                                             ,"mark",  1)
+                                     .genNode()
+                                     ,MakeRec()
+                                     .attrib ("after", Time::ZERO
+                                             ,"mark",  2)
+                                     .genNode()
+                                     ,MakeRec()
+                                     .attrib ("start", Time{FSecs{-5}}
+                                             ,"mark",  3)
+                                     .genNode()};
+
+            CHECK (5 == mockSegs.size());
+            auto const& [s1,s2,s3,s4,s5] = seqTuple<5> (mockSegs.eachSeg());
+            CHECK (not s1.empty());
+            CHECK (not s2.empty());
+            CHECK (    s3.empty());
+            CHECK (not s4.empty());
+            CHECK (    s5.empty());
+            CHECK (Time::MIN  == s1.start());                                 // the second added segment has covered the whole negative axis
+            CHECK (-Time(0,5) == s1.after());                                 // ..up to the partitioning point -5
+            CHECK (-Time(0,5) == s2.start());                                 // ...while the rest was taken up by the third added segment
+            CHECK (Time(0, 0) == s2.after());
+            CHECK (Time(0, 0) == s3.start());                                 // an empty gap remains between [0 ... 10[
+            CHECK (Time(0,10) == s3.after());
+            CHECK (Time(0,10) == s4.start());                                 // here is the first added segment
+            CHECK (Time(0,20) == s4.after());
+            CHECK (Time(0,20) == s5.start());                                 // and the remaining part of the positive axis is empty
+            CHECK (Time::MAX  == s5.after());
+            
+            auto probeKey = [&](Segment const& segment)
+                              {
+                                if (segment.empty()) return 0;
+                                
+                                Job job = segment.jobTicket().createJobFor(coord);
+                                job.triggerJob();
+                                CHECK (DummyJob::was_invoked (job));
+                                CHECK (RealClock::wasRecently (DummyJob::invocationTime (job)));
+                                
+                                return DummyJob::invocationAdditionalKey (job);
+                              };
+            CHECK (2 == probeKey(s1));                                        // verify all generated jobs are wired back to the correct segment
+            CHECK (3 == probeKey(s2));
+            CHECK (0 == probeKey(s3));
+            CHECK (1 == probeKey(s4));
+            CHECK (0 == probeKey(s5));
+          }
         }
     };
   

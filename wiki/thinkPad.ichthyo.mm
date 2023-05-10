@@ -69779,8 +69779,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681833071385" ID="ID_1107925235" MODIFIED="1681833077742" TEXT="MockJob hinterlegen">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1681833071385" ID="ID_1107925235" MODIFIED="1683722704189" TEXT="MockJob hinterlegen">
+<icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1682036849793" ID="ID_1932533229" MODIFIED="1682047342244" TEXT="MockJob aufrufen">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1682041035913" ID="ID_755113791" MODIFIED="1682047265222" TEXT="dann doch vielleicht besser den bestehenden DummyJob nehmen">
@@ -69871,10 +69871,10 @@
 </node>
 </node>
 </node>
-<node COLOR="#5b280f" CREATED="1682627654491" ID="ID_1371147624" MODIFIED="1682948581383" TEXT="Marker definieren und sichtbar machen">
+<node COLOR="#5b280f" CREATED="1682627654491" ID="ID_1371147624" MODIFIED="1683722703271" TEXT="Marker definieren und sichtbar machen">
 <linktarget COLOR="#48417c" DESTINATION="ID_1371147624" ENDARROW="Default" ENDINCLINATION="-48;56;" ID="Arrow_ID_1753796050" SOURCE="ID_1110039315" STARTARROW="None" STARTINCLINATION="-284;-8;"/>
 <icon BUILTIN="button_cancel"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1682641810117" ID="ID_596391717" MODIFIED="1682641823784" TEXT="Problem: wie integieren?">
+<node COLOR="#435e98" CREATED="1682641810117" ID="ID_596391717" MODIFIED="1683722703271" TEXT="Problem: wie integieren?">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1682641827594" ID="ID_361324923" MODIFIED="1682641841154" TEXT="JobTicket selber hat keine VTable">
 <richcontent TYPE="NOTE"><html>
@@ -69908,7 +69908,7 @@
 <node CREATED="1682691820105" ID="ID_405339335" MODIFIED="1682691853870" TEXT="stattdessen: vom JobFunktor den konstanten Teil berechnen lassen">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1682718443540" ID="ID_116215580" MODIFIED="1682718589879" TEXT="es gen&#xfc;gt, den Marker/Seed zu best&#xe4;tigen">
+<node COLOR="#435e98" CREATED="1682718443540" ID="ID_116215580" MODIFIED="1683722703271" TEXT="es gen&#xfc;gt, den Marker/Seed zu best&#xe4;tigen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -69919,6 +69919,7 @@
     </p>
   </body>
 </html></richcontent>
+<arrowlink DESTINATION="ID_924000740" ENDARROW="Default" ENDINCLINATION="30;-95;" ID="Arrow_ID_1779817566" STARTARROW="None" STARTINCLINATION="-98;6;"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -69971,12 +69972,13 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682948593099" HGAP="-167" ID="ID_924000740" MODIFIED="1682948640643" STYLE="bubble" TEXT="stattdessen: verifizieren" VSHIFT="-5">
+<node BACKGROUND_COLOR="#b8c9da" COLOR="#435e98" CREATED="1682948593099" HGAP="-167" ID="ID_924000740" MODIFIED="1683722703272" STYLE="bubble" TEXT="stattdessen: verifizieren" VSHIFT="-5">
 <edge COLOR="#1d699e"/>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_924000740" ENDARROW="Default" ENDINCLINATION="30;-95;" ID="Arrow_ID_1779817566" SOURCE="ID_116215580" STARTARROW="None" STARTINCLINATION="-98;6;"/>
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1682205189643" ID="ID_897564380" MODIFIED="1682205211467" TEXT="Problem: Umbau in JobTicket selber blockt">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1682205189643" ID="ID_897564380" MODIFIED="1683722703272" TEXT="Problem: Umbau in JobTicket selber blockt">
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1682205214637" ID="ID_451342844" MODIFIED="1682205353004" TEXT="kann nicht klar sehen, wie ich einen Marker im MockJob hinterlegen kann">
 <icon BUILTIN="smiley-angry"/>
@@ -69994,8 +69996,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1682385376739" ID="ID_576604811" MODIFIED="1682948833179" TEXT="Mock-Implementierung">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1682385376739" ID="ID_576604811" MODIFIED="1683722549420" TEXT="Mock-Implementierung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1682385392969" ID="ID_1317765253" MODIFIED="1682385456612" TEXT="Storage">
 <node CREATED="1682385491724" ID="ID_1049416610" MODIFIED="1682385544239" TEXT="JobTickets in eine Deque allozieren">
 <richcontent TYPE="NOTE"><html>
@@ -70014,11 +70016,13 @@
 <node CREATED="1682385963140" ID="ID_1239158970" MODIFIED="1682385993315" TEXT="also MockSegmentation, MockJobTicket,..."/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1682614081119" ID="ID_57760675" MODIFIED="1682948825902" TEXT="Interpretieren der jeweilgen Spec">
-<icon BUILTIN="pencil"/>
-<node CREATED="1682614092900" ID="ID_1252815318" MODIFIED="1682614105470" TEXT="Basis-Impl: ein Segment gibt es immer"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682614117409" ID="ID_1176991982" MODIFIED="1682614138327" TEXT="splitSplice() implementieren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1682614081119" ID="ID_57760675" MODIFIED="1683722491527" TEXT="Interpretieren der jeweilgen Spec">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1682614092900" ID="ID_1252815318" MODIFIED="1683722500983" TEXT="Basis-Impl: ein Segment gibt es immer">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1682614117409" FOLDED="true" ID="ID_1176991982" MODIFIED="1683722521413" TEXT="splitSplice() implementieren">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1682627110771" ID="ID_183754275" MODIFIED="1682627133820" TEXT="Invariante: l&#xfc;ckenlose Abdeckung">
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -70315,8 +70319,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1682993091685" ID="ID_988617455" MODIFIED="1683208612560" TEXT="systematische Testabdeckung">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1682993091685" FOLDED="true" ID="ID_988617455" MODIFIED="1683722512659" TEXT="systematische Testabdeckung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1682993100755" ID="ID_1651031348" MODIFIED="1682993128370" TEXT="es sind 12 Basis-F&#xe4;lle">
 <icon BUILTIN="info"/>
 </node>
@@ -70514,75 +70518,66 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1683120235864" ID="ID_1312143276" MODIFIED="1683250859522" TEXT="Segmentation-Standardf&#xe4;lle">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1683120235864" ID="ID_1312143276" MODIFIED="1683722433263" TEXT="Segmentation-Standardf&#xe4;lle">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1683250843877" ID="ID_608613083" MODIFIED="1683250856171" TEXT="einfache Segmentation mit einem Segment ab 10s">
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1683671441771" ID="ID_514353615" MODIFIED="1683683643566" TEXT="ein begrenztes Segment in ansonsten leerer Timeline">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683683705942" ID="ID_1879543257" MODIFIED="1683683724904" TEXT="drei Segmente mit L&#xfc;cke und partieller &#xdc;berlappunt">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1683683705942" ID="ID_1879543257" MODIFIED="1683720596444" TEXT="drei Segmente mit L&#xfc;cke und partieller &#xdc;berlappung">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047063010" ID="ID_1142231389" MODIFIED="1683047144754" TEXT="degenerierte F&#xe4;lle">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047076545" ID="ID_1966654915" MODIFIED="1683671312706" TEXT="weder Start noch Ende &#x27f9; ein einziges Segment &#xfc;berspannt ganze Timeline">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1683047063010" ID="ID_1142231389" MODIFIED="1683722432346" TEXT="degenerierte F&#xe4;lle">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1683047076545" ID="ID_1966654915" MODIFIED="1683722393255" TEXT="weder Start noch Ende &#x27f9; ein einziges Segment &#xfc;berspannt ganze Timeline">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047111300" ID="ID_1355900780" MODIFIED="1683047141649" TEXT="Ende vor Start &#x27f9; flip">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1683047111300" ID="ID_1355900780" MODIFIED="1683722394371" TEXT="Ende vor Start &#x27f9; flip">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047568998" ID="ID_1848070219" MODIFIED="1683047593595" TEXT="nur Start in leer">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1683047624559" ID="ID_710124982" MODIFIED="1683722431469" TEXT="nur Start in Seg">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047600842" ID="ID_1424605879" MODIFIED="1683047604778" TEXT="nur Ende in leer">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047624559" ID="ID_710124982" MODIFIED="1683047708973" TEXT="nur Start in Seg">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047654979" ID="ID_233751772" MODIFIED="1683047708973" TEXT="nur Ende in Seg">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047688030" ID="ID_879752507" MODIFIED="1683047708974" TEXT="nur Start vor Seg">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047693102" ID="ID_49056874" MODIFIED="1683047708974" TEXT="nur Ende vor Seg">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047697837" ID="ID_1083499752" MODIFIED="1683047708975" TEXT="nur Start nach Seg">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047704284" ID="ID_981222550" MODIFIED="1683047708975" TEXT="nur Ende nach Seg">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1683047693102" ID="ID_49056874" MODIFIED="1683722430578" TEXT="nur Ende vor Seg">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1682627621082" ID="ID_1110039315" MODIFIED="1682948822157" TEXT="ein Segment hinzuf&#xfc;gen">
+<node COLOR="#338800" CREATED="1682627621082" ID="ID_1110039315" MODIFIED="1683722471063" TEXT="ein Segment hinzuf&#xfc;gen">
 <arrowlink COLOR="#48417c" DESTINATION="ID_1371147624" ENDARROW="Default" ENDINCLINATION="-48;56;" ID="Arrow_ID_1753796050" STARTARROW="None" STARTINCLINATION="-284;-8;"/>
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682948783048" ID="ID_1811722913" MODIFIED="1682948817094" TEXT="leere Spec">
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1682948783048" ID="ID_1811722913" MODIFIED="1683722468966" TEXT="leere Spec">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682948658996" ID="ID_1655049197" MODIFIED="1682948817094" TEXT="einfachste Spec">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1682948658996" ID="ID_1655049197" MODIFIED="1683722468542" TEXT="einfachste Spec">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682948807668" ID="ID_343017535" MODIFIED="1682948817095" TEXT="zus&#xe4;tzlich mit Marker">
-<icon BUILTIN="flag-yellow"/>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682948677800" ID="ID_1669789277" MODIFIED="1682948685167" TEXT="zwei Segmente">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1682948692446" ID="ID_1376099012" MODIFIED="1682948701915" TEXT="disjunkt"/>
-<node CREATED="1682948687990" ID="ID_691398450" MODIFIED="1682948721008" TEXT="&#xfc;berlappend"/>
-<node CREATED="1682948709980" ID="ID_1056091678" MODIFIED="1682948718791" TEXT="verschachtelt"/>
+<node COLOR="#338800" CREATED="1682948807668" ID="ID_343017535" MODIFIED="1683722468048" TEXT="zus&#xe4;tzlich mit Marker">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1682385895644" ID="ID_89969390" MODIFIED="1682385902557" TEXT="Verifikation im Test unterst&#xfc;tzen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1682948677800" ID="ID_1669789277" MODIFIED="1683722486461" TEXT="zwei Segmente">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1682948692446" ID="ID_1376099012" MODIFIED="1683722483002" TEXT="disjunkt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1682948687990" ID="ID_691398450" MODIFIED="1683722483752" TEXT="&#xfc;berlappend">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1682948709980" ID="ID_1056091678" MODIFIED="1683722484290" TEXT="verschachtelt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1683722454141" ID="ID_895795487" MODIFIED="1683722467292" TEXT="sukzessiv weiter partitionieren">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1682385895644" ID="ID_89969390" MODIFIED="1683722539629" TEXT="Verifikation im Test unterst&#xfc;tzen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1682386003212" ID="ID_930954734" MODIFIED="1682386014176" TEXT="gibt die &quot;Mock&quot;-Variante der jeweiligen Objekte heraus"/>
 <node CREATED="1682386015054" ID="ID_1516142014" MODIFIED="1682386033703" TEXT="darauf kann man z.B. die Marker-ID abfragen"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1682386040786" ID="ID_99654376" MODIFIED="1682386162332" TEXT="das ist explizit erst mal eine Skizze">

@@ -54,7 +54,7 @@ return: 0
 END
 
 
-PLANNED "Mock support for render job planning" MockSupport_test <<END
+TEST "Mock support for render job planning" MockSupport_test <<END
 return: 0
 END
 
