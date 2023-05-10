@@ -762,6 +762,11 @@ return: 0
 END
 
 
+TEST "tuple sequence utils" UtilTuple_test <<END
+return: 0
+END
+
+
 TEST "typesafe Variant record" Variant_test <<END
 out: Variant.«bool».false
 out: Variant.«int».11

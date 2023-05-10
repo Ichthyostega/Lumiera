@@ -29,6 +29,7 @@
 #include "lib/error.hpp"
 #include "steam/engine/mock-dispatcher.hpp"
 #include "vault/engine/dummy-job.hpp"
+#include "lib/util-tuple.hpp"
 #include "lib/util.hpp"
 #include "vault/engine/nop-job-functor.hpp"
 
@@ -39,7 +40,9 @@
 //#include <ctime>
 
 using test::Test;
+
 using util::isSameObject;
+using util::seqTuple;
 //using std::rand;
 
 
@@ -54,33 +57,6 @@ namespace test  {
   } // (End) test fixture
   
 
-  namespace {
-    template<size_t N>
-    using cnt_ = std::integral_constant<size_t, N>;
-    
-    template<class SEQ>
-    auto
-    _buildSeqTuple (cnt_<0>, SEQ&&)
-    {
-      return std::tuple<>{};
-    }
-    
-    template<size_t N, class SEQ>
-    auto
-    _buildSeqTuple (cnt_<N>, SEQ&& iter)
-    {
-      auto tPre = std::tie (*iter);
-      ++iter;
-      return std::tuple_cat (tPre, _buildSeqTuple (cnt_<N-1>{}, std::forward<SEQ> (iter)));
-    }
-  }
-  
-  template<size_t N, class SEQ>
-  auto
-  seqTuple (SEQ&& iter)
-  {
-    return _buildSeqTuple (cnt_<N>{}, std::forward<SEQ> (iter));
-  }
   
   
   /**********************************************************************//**
