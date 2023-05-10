@@ -151,10 +151,15 @@ using lib::LUID;
       
       
       bool
+      empty()  const
+        {
+          return isnil (provision_);
+        }
+      
+      bool
       isValid()  const
         {
-          if (isnil (provision_))
-            return false;
+          if (empty()) return false;
           
           TODO ("validity self check");
           return true;

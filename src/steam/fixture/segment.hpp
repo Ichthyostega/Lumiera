@@ -97,6 +97,12 @@ namespace fixture {
           REQUIRE (jobTicket_);
           return *jobTicket_;
         }
+      
+      bool
+      empty() const
+        {
+          return jobTicket().empty();
+        }
     };
   
   

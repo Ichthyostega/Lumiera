@@ -39,6 +39,7 @@
 //#include <ctime>
 
 using test::Test;
+using util::isSameObject;
 //using std::rand;
 
 
@@ -52,6 +53,34 @@ namespace test  {
     
   } // (End) test fixture
   
+
+  namespace {
+    template<size_t N>
+    using cnt_ = std::integral_constant<size_t, N>;
+    
+    template<class SEQ>
+    auto
+    _buildSeqTuple (cnt_<0>, SEQ&&)
+    {
+      return std::tuple<>{};
+    }
+    
+    template<size_t N, class SEQ>
+    auto
+    _buildSeqTuple (cnt_<N>, SEQ&& iter)
+    {
+      auto tPre = std::tie (*iter);
+      ++iter;
+      return std::tuple_cat (tPre, _buildSeqTuple (cnt_<N-1>{}, std::forward<SEQ> (iter)));
+    }
+  }
+  
+  template<size_t N, class SEQ>
+  auto
+  seqTuple (SEQ&& iter)
+  {
+    return _buildSeqTuple (cnt_<N>{}, std::forward<SEQ> (iter));
+  }
   
   
   /**********************************************************************//**
@@ -142,12 +171,14 @@ namespace test  {
           FrameCoord coord;
           Time someTime = lib::test::randTime();
           coord.absoluteNominalTime = someTime;
+          //-----------------------------------------------------------------/// Empty default Segmentation
           {
             MockSegmentation mockSeg;
             CHECK (1 == mockSeg.size());
             JobTicket const& ticket = mockSeg[someTime].jobTicket();
             CHECK (util::isSameObject (ticket, JobTicket::NOP));
           }
+          //-----------------------------------------------------------------/// Segmentation with one default segment spanning complete timeline
           {
             MockSegmentation mockSegs{MakeRec().genNode()};
             CHECK (1 == mockSegs.size());
@@ -156,8 +187,9 @@ namespace test  {
             JobTicket const& ticket = mockSegs[someTime].jobTicket();
             CHECK (not util::isSameObject (ticket, JobTicket::NOP));
             
-            Job someJob = ticket.createJobFor(coord);
-            CHECK (MockJobTicket::isAssociated (someJob, ticket));
+            Job someJob = ticket.createJobFor(coord);                         // JobTicket uses, but does not check the time given in FrameCoord
+            CHECK (someJob.parameter.nominalTime == _raw(coord.absoluteNominalTime));
+            CHECK (MockJobTicket::isAssociated (someJob, ticket));            // but the generated Job is linked to the Closure backed by the JobTicket
             CHECK (not DummyJob::was_invoked (someJob));
             
             someJob.triggerJob();
@@ -165,6 +197,7 @@ namespace test  {
             CHECK (RealClock::wasRecently (DummyJob::invocationTime (someJob)));
             CHECK (someTime == DummyJob::invocationNominalTime (someJob));
           }
+          //-----------------------------------------------------------------/// Segmentation with a segment spanning part of the timeline > 10s
           {
              // Marker to verify the job calls back into the right segment
             int marker = rand() % 1000;
@@ -195,7 +228,36 @@ namespace test  {
             // create another job from the (empty) seg1
             job = seg1.jobTicket().createJobFor (coord);
             InvocationInstanceID empty; /////////////////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
-            CHECK (lumiera_invokey_eq (&job.parameter.invoKey, &empty));      // indiate that it's just a placeholder to mark a "NOP"-Job
+            CHECK (lumiera_invokey_eq (&job.parameter.invoKey, &empty));      // indicates that it's just a placeholder to mark a "NOP"-Job
+            CHECK (seg1.jobTicket().empty());
+            CHECK (seg1.empty());
+            CHECK (not seg2.empty());
+          }
+          //-----------------------------------------------------------------/// Segmentation with one delineated segment, and otherwise empty
+          {
+            int marker = rand() % 1000;
+            //  Build Segmentation with one fully defined segment
+            MockSegmentation mockSegs{MakeRec()
+                                     .attrib ("start", Time{0,10}
+                                             ,"after", Time{0,20}
+                                             ,"mark",  marker)
+                                     .genNode()};
+            CHECK (3 == mockSegs.size());
+            auto const& [s1,s2,s3] = seqTuple<3> (mockSegs.eachSeg());
+            CHECK (s1.empty());
+            CHECK (not s2.empty());
+            CHECK (s3.empty());
+            CHECK (isSameObject (s2, mockSegs[Time{0,10}]));
+            CHECK (Time::MIN  == s1.start());
+            CHECK (Time(0,10) == s1.after());
+            CHECK (Time(0,10) == s2.start());
+            CHECK (Time(0,20) == s2.after());
+            CHECK (Time(0,20) == s3.start());
+            CHECK (Time::MAX  == s3.after());
+            
+            Job job = s2.jobTicket().createJobFor(coord);
+            job.triggerJob();
+            CHECK (marker == DummyJob::invocationAdditionalKey (job));
           }
           
           

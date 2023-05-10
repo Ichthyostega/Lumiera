@@ -70519,10 +70519,16 @@
 <node COLOR="#338800" CREATED="1683250843877" ID="ID_608613083" MODIFIED="1683250856171" TEXT="einfache Segmentation mit einem Segment ab 10s">
 <icon BUILTIN="button_ok"/>
 </node>
+<node COLOR="#338800" CREATED="1683671441771" ID="ID_514353615" MODIFIED="1683683643566" TEXT="ein begrenztes Segment in ansonsten leerer Timeline">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683683705942" ID="ID_1879543257" MODIFIED="1683683724904" TEXT="drei Segmente mit L&#xfc;cke und partieller &#xdc;berlappunt">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047063010" ID="ID_1142231389" MODIFIED="1683047144754" TEXT="degenerierte F&#xe4;lle">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047076545" ID="ID_1966654915" MODIFIED="1683047109765" TEXT="weder Start noch Ende &#x27f9; NOP">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047076545" ID="ID_1966654915" MODIFIED="1683671312706" TEXT="weder Start noch Ende &#x27f9; ein einziges Segment &#xfc;berspannt ganze Timeline">
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1683047111300" ID="ID_1355900780" MODIFIED="1683047141649" TEXT="Ende vor Start &#x27f9; flip">

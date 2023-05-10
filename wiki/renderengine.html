@@ -7141,7 +7141,7 @@ The Fixture is mostly comprised of the Segementation datastructure, but some oth
 Largely the storage of the render nodes network is hooked up behind the Fixture &amp;rarr; [[storage considerations|FixtureStorage]]
 </pre>
 </div>
-<div title="SegmentationChange" creator="Ichthyostega" modifier="Ichthyostega" created="202305020227" modified="202305021819" tags="spec operational Builder draft" changecount="28">
+<div title="SegmentationChange" creator="Ichthyostega" modifier="Ichthyostega" created="202305020227" modified="202305022134" tags="spec operational Builder draft" changecount="29">
 <pre>At the end of the build process, the existing [[Segmentation]] possibly needs to be changed, extended or adapted.
 This change must be performed as a //transactional switch,// since render or playback processes might be performed concurrently. All Fixture and low-level-Model datastructures are //immutable// -- thus for any changes, suitably adapted structures will be built as a replacement.
 
@@ -7161,7 +7161,7 @@ This is an implementation level operation, which analyses the existing Segmentat
 :* //Successor// is the first one to violate this condition
 :* //otherwise// Successor == Predecessor (split)
 ;Stage-2
-:establish {{{start}}} and end point of new segment
+:establish start and end point of new segment
 :* explicitly given {{{start}}}/{{{after}}}-points are binding
 :** missing {{{start}}}&lt;br&gt;   {{{sep}}} ≡ {{{after}}}
 :*** P~~after~~ &lt; {{{sep}}} ⟹ {{{start}}} ≔ P~~after~~

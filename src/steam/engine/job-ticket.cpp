@@ -122,7 +122,7 @@ namespace engine {
   JobTicket::createJobFor (FrameCoord coordinates)  const
   {
     Time nominalTime = coordinates.absoluteNominalTime;
-    if (isnil (provision_))
+    if (this->empty())
       {                    //////////////////////////////////////////////////////////////////////////////////TICKET #1296 : can we get away just with a do-nothing functor?
         return Job(nopFunctor(), InvocationInstanceID(), nominalTime);
       }

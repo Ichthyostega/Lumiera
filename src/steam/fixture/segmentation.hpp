@@ -48,6 +48,7 @@
 
 #include "steam/fixture/segment.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/iter-adapter-stl.hpp"
 #include "lib/format-string.hpp"
 #include "lib/nocopy.hpp"
 
@@ -110,6 +111,13 @@ namespace fixture {
               return seg;
           throw error::State (_Fmt{"Fixture datastructure corrupted: Time %s not covered"} % time);
         }
+      
+      auto
+      eachSeg()  const              ///< @return iterator to enumerate each segment in ascending time order
+        {
+          return lib::iter_stl::eachElm (segments_);
+        }
+      
       
       /** rework the existing Segmentation to include a new Segment as specified */
       Segment const&
