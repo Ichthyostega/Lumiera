@@ -42,6 +42,7 @@
 #include "lib/diff/gen-node.hpp"
 #include "lib/depend.hpp"
 #include "lib/itertools.hpp"
+//#include "lib/iter-tree-explorer.hpp"
 //#include "lib/util-coll.hpp"
 #include "vault/real-clock.hpp"
 #include "lib/test/test-helper.hpp"
@@ -140,24 +141,21 @@ namespace test   {
     
     
     
+    template<class IT>
     inline auto
-    defineBottomSpec()
+    defineSpec (HashVal seed, IT&& prereq)
     {
-      auto emptyPrereq = lib::nilIterator<JobTicket&>();
-      using Iter = decltype(emptyPrereq);
-      using SpecTuple = std::tuple<JobFunctor&, HashVal, Iter>;
-      return lib::singleValIterator(
-                 SpecTuple(DummyJob::getFunctor(), 0, emptyPrereq));
+      using SpecTuple = std::tuple<JobFunctor&, HashVal, IT>;
+      return lib::singleValIterator(                            /////////////////////////////////////////////TICKET #1297 : multiplicity per channel will be removed here
+                 SpecTuple(DummyJob::getFunctor()
+                          , seed
+                          , std::forward<IT> (prereq)));
     }
     
     inline auto
-    defineSimpleSpec (HashVal seed)                             /////////////////TODO collapse with defineBottomSpec() ??
+    defineSimpleSpec (HashVal seed =0)
     {
-      auto emptyPrereq = lib::nilIterator<JobTicket&>();
-      using Iter = decltype(emptyPrereq);
-      using SpecTuple = std::tuple<JobFunctor&, HashVal, Iter>;
-      return lib::singleValIterator(
-                 SpecTuple(DummyJob::getFunctor(), seed, emptyPrereq));
+      return defineSpec (seed, lib::nilIterator<JobTicket&>());
     }
     
   }//(End)internal test helpers....
@@ -178,11 +176,16 @@ namespace test   {
       
     public:
       MockJobTicket()
-        : JobTicket{defineBottomSpec()}
+        : JobTicket{defineSimpleSpec()}
       { }
       
       MockJobTicket (HashVal seed)
         : JobTicket{defineSimpleSpec (seed)}
+      { }
+      
+      template<class IT>
+      MockJobTicket (HashVal seed, IT&& prereq)
+        : JobTicket{defineSpec (seed, std::forward<IT> (prereq))}
       { }
       
       bool verify_associated (Job const&) const;
@@ -207,15 +210,37 @@ namespace test   {
         {
           for (auto& spec : specs)
             {
-              JobTicket* newTicket = nullptr;
-              auto seed = spec.retrieveAttribute<int> ("mark");
-              tickets_.emplace_back (seed? HashVal(*seed) : HashVal(rand() % 1000));
-              newTicket = & tickets_.back();
+              JobTicket& newTicket = buildTicketFromSpec (spec);
               
               auto start = spec.retrieveAttribute<Time> ("start");
               auto after = spec.retrieveAttribute<Time> ("after");
-              Segmentation::splitSplice (start, after, newTicket);
+              Segmentation::splitSplice (start, after, &newTicket);
             }
+        }
+      
+    private:
+      HashVal
+      buildSeed (GenNode const& spec)
+        {
+          auto seed = spec.retrieveAttribute<int> ("mark");
+          return seed? HashVal(*seed) : HashVal(rand() % 1000);
+        }
+      
+      auto
+      buildPrerequisites (GenNode const& spec)
+        {
+          return lib::transformIterator (spec.getChildren()
+                                        ,[this](GenNode const& childSpec) -> JobTicket&
+                                              {
+                                                return buildTicketFromSpec (childSpec); 
+                                              });
+        }
+      
+      JobTicket&
+      buildTicketFromSpec (GenNode const& spec)
+        {
+          return tickets_.emplace_back (buildSeed(spec)
+                                       ,buildPrerequisites(spec));
         }
     };
   

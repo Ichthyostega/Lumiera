@@ -44,6 +44,7 @@
 #include "lib/hierarchy-orientation-indicator.hpp"
 #include "lib/linked-elements.hpp"
 #include "lib/iter-adapter.hpp"
+#include "lib/itertools.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/util.hpp"
@@ -121,7 +122,7 @@ using lib::LUID;
         };
       
       
-      LinkedElements<Provision> provision_;
+      LinkedElements<Provision> provision_;           //////////////////////////////////////////////////TICKET #1297 : retract differentiation into channels here (instead use ModelPorts in the Segment)
       
       
       template<class IT>
@@ -144,8 +145,18 @@ using lib::LUID;
 
       
       
-      ExplorationState startExploration()                        const;
-      ExplorationState discoverPrerequisites (uint channelNr =0) const;
+      ExplorationState startExploration()                        const;     ////////////////////////////TICKET #1276 : likely to become obsolete
+      ExplorationState discoverPrerequisites (uint channelNr =0) const;     ////////////////////////////TICKET #1276 : likely to become obsolete
+      
+      auto
+      getPrerequisites (uint slotNr =0)  const
+        {
+          return lib::transformIterator (provision_[slotNr].requirements.begin()
+                                        ,[](Prerequisite& prq) -> JobTicket&
+                                           {
+                                             return prq.descriptor;
+                                           });
+        }
       
       Job createJobFor (FrameCoord coordinates)  const;
       
@@ -301,7 +312,7 @@ using lib::LUID;
             ,"require at least specification for one channel");
     
     LinkedElements<Provision> provisionSpec;    //////////////////////////////////////////////////TICKET #1292 : need to pass in Allocator as argument
-    for ( ; featureSpec; ++featureSpec)
+    for ( ; featureSpec; ++featureSpec)        ///////////////////////////////////////////////////TICKET #1297 : this additional iteration over channels will go away
       {
         JobFunctor& func = std::get<0> (*featureSpec);
         HashVal invoSeed = std::get<1> (*featureSpec);
@@ -309,7 +320,7 @@ using lib::LUID;
         for (Preq pre = std::get<2> (*featureSpec); pre; ++pre)
             provision.requirements.emplace<Prerequisite> (*pre);
       }
-    provisionSpec.reverse();        // retain order of given definitions per channel
+    provisionSpec.reverse();        // retain order of given definitions per channel  ////////////TICKET #1297 : obsolete; instead we differentiate by OutputSlot in the Segment
     ENSURE (not isnil (provisionSpec));
     return provisionSpec;
   }

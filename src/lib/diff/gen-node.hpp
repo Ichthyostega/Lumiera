@@ -472,6 +472,8 @@ namespace diff{
       bool hasAttribute (string key)  const;
       bool isNested()                 const;
       bool hasChildren()              const;
+      Rec::scopeIter getChildren()    const;
+
       
       
     protected:
@@ -816,6 +818,12 @@ namespace diff{
   GenNode::hasChildren()  const
   {
     return not isnil (data.childIter());
+  }
+  
+  inline Rec::scopeIter
+  GenNode::getChildren()  const
+  {
+    return data.childIter();
   }
 
   

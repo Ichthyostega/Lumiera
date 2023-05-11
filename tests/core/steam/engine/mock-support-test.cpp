@@ -66,6 +66,7 @@ namespace test  {
           verify_MockJob();
           verify_MockJobTicket();
           verify_MockSegmentation();
+          verify_MockPrerequisites();
         }
       
       
@@ -81,7 +82,7 @@ namespace test  {
             CHECK (3 == mockSegs.size());
             fixture::Segment const& seg = mockSegs[Time{0,15}];              // access anywhere 10s <= t < 20s
             
-            JobTicket const& ticket = seg.jobTicket();
+            JobTicket const& ticket = seg.jobTicket();    ///////////////////////////////////////////////////TICKET #1297 : will need to pass a ModelPort number here (use the first one, i.e. 0)
             
             FrameCoord coord;
             coord.absoluteNominalTime = Time(0,15);
@@ -289,6 +290,44 @@ namespace test  {
             CHECK (0 == probeKey(s3));
             CHECK (1 == probeKey(s4));
             CHECK (0 == probeKey(s5));
+          }
+        }
+      
+      
+      
+      /**
+       * @test build a Segment with additional prerequisites,
+       *       resulting in additional JobTickets to explore and
+       *       additional prerequisite Jobs to build for each frame.
+       */
+      void
+      verify_MockPrerequisites()
+        {
+          FrameCoord coord;
+          //-----------------------------------------------------------------/// one Segment with one additional prerequisite
+          {
+            MockSegmentation mockSegs{MakeRec()
+                                     .attrib("mark", 11)
+                                     .scope(MakeRec()
+                                           .attrib("mark",23)
+                                           .genNode())
+                                     .genNode()};
+            CHECK (1 == mockSegs.size());
+            JobTicket const& ticket = mockSegs[Time::ZERO].jobTicket();
+            auto prereq = ticket.getPrerequisites();
+            CHECK (not isnil (prereq));
+            
+            JobTicket const& preTicket = *prereq;
+            ++prereq;
+            CHECK (isnil (prereq));
+            
+            Job job1 = preTicket.createJobFor (coord);
+            Job job2 = ticket.createJobFor (coord);
+            
+            job1.triggerJob();
+            job2.triggerJob();
+            CHECK (23 == DummyJob::invocationAdditionalKey (job1));
+            CHECK (11 == DummyJob::invocationAdditionalKey (job2));
           }
         }
     };

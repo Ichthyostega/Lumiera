@@ -2303,7 +2303,7 @@ Any feed corresponds to a specific ModelPort, which in turn typically correspond
 When starting playback or render, a play process (with a PlayController front-end for client code) is established to coordinate the processing. This ongoing data production might encompass multiple media streams, i.e. multiple feeds pulled from several model ports and delivered into several [[output slots|OutputSlot]]. Each feed in turn might carry structured MultichannelMedia, and is thus further structured into individual [[streams of calculation|CalcStream]]. Since the latter are //stateless descriptors,// while the player and play process obviously is stateful, it's the feed's role to mediate between a state-based (procedural) and a stateless (functional and parallelised) organisation model -- ensuring a seamless data feed even during modification of the playback parameters.
 </pre>
 </div>
-<div title="Fixture" modifier="Ichthyostega" created="200706220324" modified="202304271631" tags="def spec Builder Model" changecount="2">
+<div title="Fixture" modifier="Ichthyostega" created="200706220324" modified="202305111228" tags="def spec Builder Model" changecount="7">
 <pre>a specially configured view -- joining together high-level and low-level model.
 The Fixture acts as //isolation layer// between the two models, and as //backbone to attach the render nodes.//
 * all MObjects have their position, length and configuration set up ready for rendering.
@@ -2325,11 +2325,10 @@ The fixture is like a grid, where one dimension is given by the [[model ports|Mo
 ;Model Ports
 :The model ports share a single uniform and global name space: actually they're keyed by ~Pipe-ID
 :Model ports are derived as a result of the build process, as the //residuum// of all nodes not connected any further
-:Each port belongs to a specific Timeline and is associated with the [[Segmentation]] of that timeline.
+:Each port belongs to a specific Timeline and is associated with the [[Segmentation]] of that timeline, yet this partitioning of the time axis is relevant for all the model ports //of this timeline// -- while //segment// is defined as a time interval with an uniform (non-changing) calculation scheme.
 
 ;Segmentation
-:The segmentation partitiones the time axis of a single timeline into segments of constant (wiring) configuration
-:Together, the segments form a seamless sequence of time intervals. They contain a copy of each (explicit) placement of a visible object touching that time interval. Besides that, segments are the top level grouping device of the render engine node graph; individual segments are immutable, they are built and discarded as a whole chunk.
+:The segmentation partitiones the time axis of a single timeline into segments of constant (wiring) configuration. Together, the segments form a seamless sequence of time intervals. They expose an API (»JobTicket«) for generating render jobs for each port -- and they contain a copy of each (explicit) placement of a visible object touching that time interval. Besides that, segments are the top level grouping device of the render engine node graph; individual segments are immutable, they are built and discarded as a whole chunk.
 :Segments (and even a different Segmentation) may be //hot swapped// into an ongoing render.
 
 ;Exit Nodes
@@ -2531,7 +2530,7 @@ Additionally, they may be used for resource management purposes by embedding a r
 #* one OpenGL Dataframe could contain raw texture data (but I am lacking expertise for this topic)
 </pre>
 </div>
-<div title="FrameDispatcher" modifier="Ichthyostega" created="201105222330" modified="202304170244" tags="def Rendering" changecount="18">
+<div title="FrameDispatcher" modifier="Ichthyostega" created="201105222330" modified="202305111243" tags="def Rendering" changecount="20">
 <pre>An entity within the RenderEngine, responsible for translating a logical [[calculation stream|CalcStream]] (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames.
 
 The dispatcher works together with the job ticket(s) and the scheduler; actually these are the //core abstractions//&amp;nbsp; the process of ''job planning'' relies on. While the actual scheduler implementation lives within the Vault, the job tickets and the dispatcher are located within the [[Segmentation]], which is the backbone of the [[low-level model|LowLevelModel]]. More specifically, the dispatcher interface is //implemented//&amp;nbsp; by a set of &amp;rarr; [[dispatcher tables|DispatcherTables]] within the segmentation.
@@ -2566,7 +2565,7 @@ These complex relationships are reflected in the invocation structure leading to
 While the sequence of frame jobs to be planned is possibly infinite, the actual evaluation is confined to the current planning chunk. When done with planning such a chunk of jobs, an additional ''continuation job'' is included to prepare a re-invocation of the planning function for preparation of the next chunk. Terminating playback is equivalent to not including or not invoking this continuation job. Please note that planning proceeds independently for each [[Feed]] -- in Lumiera the //current playback position//&amp;nbsp; is just a conceptual projection of wall clock time to nominal time, yet there is no such thing like a synchronously proceeding &quot;Playhead&quot; 
 
 !!!producing actual jobs
-The JobTicket is created on demand, specialised for a single [[segment|Segmentation]] of the timeline and a single [[feed|Feed]] of data frames to be pulled from a ModelPort. Consequently this means that all frames and all channels within that realm will rely on the same job ticket -- which is a //higher order function,// a function producing another function: when provided with the actual channel number and the specific frame coordinates, the job ticket produces a [[concrete job definition|RenderJob]], which itself is a function to be invoked by the [[scheduler|Scheduler]] just in time.
+The JobTicket is created on demand, specialised for a single [[segment|Segmentation]] of the timeline and a single [[feed|Feed]] of data frames to be pulled from a ModelPort. Consequently this means that all frames and all channels within that realm will rely on the same job ticket -- which is a //higher order function,// a function producing another function: when provided with the specific frame coordinates (frame number and time point), the job ticket produces a [[concrete job definition|RenderJob]], which itself is a function to be invoked by the [[scheduler|Scheduler]] to carry out the necessary calculations just in time.
 </pre>
 </div>
 <div title="GAVL" modifier="Ichthyostega" created="200809220251" tags="def">
@@ -4290,13 +4289,13 @@ Thus an invocation trail represents one specific path leading to the invocation 
 ''Note'': {{red{future plans and visions -- no clear and distinct meaning -- as of 4/21}}}
 </pre>
 </div>
-<div title="JobTicket" modifier="Ichthyostega" created="201202120018" modified="201208311625" tags="spec Rendering draft">
+<div title="JobTicket" modifier="Ichthyostega" created="201202120018" modified="202305111241" tags="spec Rendering draft" changecount="4">
 <pre>The actual media data is rendered by [[individually scheduled render jobs|RenderJob]]. All these calculations together implement a [[stream of calculations|CalcStream]], as demanded and directed by the PlayProcess. During the preparation of playback, a ''node planning phase'' is performed, to arrange for [[dispatching|FrameDispatcher]] the individual calculations per frame.  The goal of these //preparations//&amp;nbsp; is to find out
-* what channel(s) to pull
-* what prerequisites to prepare
+* which [[model ports|ModelPort]] can be processed independently
+* what prerequisites to prepare beforehand
 * what parameters to provide
 The result of this planning phase is the {{{JobTicket}}}, a complete ''execution plan''.
-This planning is uniform for each [[segment|Segmentation]] and treated for all channels together, resulting in a nested tree structure of sub job tickets, allocated and stored alongside with the processing nodes and wiring descriptors to form the segment's data and descriptor network. Job tickets are //higher order functions:// entering a concrete frame number and channel into a given job ticket will produce an actual job descriptor, which in itself is again a function, to be invoked through the scheduler when it's time to trigger the actual calculations.
+This planning is uniform for each [[segment|Segmentation]] and treated for all channels together, resulting in a nested tree structure of sub job tickets, allocated and stored alongside with the processing nodes and wiring descriptors to form the segment's data and descriptor network. Job tickets are //higher order functions:// entering a concrete frame number and //absolute nominal time point// of that frame into a given job ticket will produce an actual job descriptor, which in itself is again a function, to be invoked through the scheduler when it's time to trigger the actual calculations.
 
 !Structure of the Render Jobs created
 To be more precise: in the general case, invoking the ~JobTicket with a given frame number will produce //multiple jobs//  -- typically each frame rendering will require at least one further source media frame; and because Lumiera render jobs will //never block waiting on IO,// this source media access will be packaged as a separate [[resource retrieving job|ResourceJob]], to be treated specifically by the scheduler.
@@ -4663,15 +4662,15 @@ These are used as token for dealing with other objects and have no identity of t
 
 </pre>
 </div>
-<div title="ModelPort" modifier="Ichthyostega" created="201011100234" modified="201204150027" tags="def spec Model">
-<pre>Any point where output possibly might be produced. Model port entities are located within the [[Fixture]] &amp;mdash; model port as a concept spans the high-level and low-level view. A model port can be associated both to a pipe in the HighLevelModel but at the same time denotes a set of corresponding [[exit nodes|ExitNode]] within the [[segments|Segmentation]] of the render nodes network.
+<div title="ModelPort" modifier="Ichthyostega" created="201011100234" modified="202305111238" tags="def spec Model" changecount="1">
+<pre>Any point where output possibly might be produced. Model port entities are located within the [[Fixture]] &amp;mdash; model port as a concept spans the high-level and low-level view. A model port can be associated both to a pipe in the HighLevelModel but at the same time denotes a set of corresponding [[exit nodes|ExitNode]] within the [[segments|Segmentation]] of the render nodes network. As far as rendering is concerned, a port corresponds to a [[stream of calculations|CalcStream]] to produce a distinct output data stream, generated time-bound yet asynchronously.
 
 A model port is rather derived than configured; it emerges when a pipe [[claims|WiringClaim]] an output destination, while some other entity at the same time actually //uses this designation as a target,// either directly or indirectly. This match of provision and usage is detected during the build process and produces an entry in the fixture's model port table. These model ports in the fixture are keyed by ~Pipe-ID, thus each model port has an associated StreamType.
 
-Model ports are the effective, resulting outputs of each timeline; additional ports result from [[connecting a viewer|ViewConnection]]. Any render or display process happens at a model port.
+Model ports are the effective, resulting outputs of each timeline; additional ports result from [[connecting a viewer|ViewConnection]]. Any render or display process happens at a model port. The //granularity// of the ports is defined by what data has to be delivered time-bound and together for any conceivable output activity.
 
 !formal specification
-Model port is a //conceptual entity,// denoting the possibility to pull generated data of a distinct (stream)type from a specific bus within the model -- any possible output produced or provided by Lumiera is bound to appear at a model port. The namespace of model ports is global, each being associated with a ~Pipe-ID.
+Model port is a //conceptual entity,// denoting the possibility to pull generated data of a distinct (stream)type from a specific bus within the model -- any possible output produced or provided by Lumiera is bound to appear at a model port. The namespace of model ports is global, each being associated with a ~Pipe-ID. Media can be inherently multi-channel, and when it is delivered as a whole (with multiplexed or planar channels), then such a possible media output stream is represented by a single model port.
 
 Model ports are represented by small non-copyable descriptor objects with distinct identity, which are owned and managed by the [[Fixture]]. Clients are mandated to resolve a model port on each usage, as configuration changes within the model might cause ports to appear and decease. To stress this usage pattern, actually {{{ModelPort}}} instances are small copyable value objects (smart handles), which can be used to access data within an opaque registry. Each model port belongs to a specific Timeline and is aware of this association, as is the timeline, allowing to get the collection of all ports of a given timeline. Besides, within the Fixture each model port refers to a specific [[segmentation of the time axis|Segmentation]] (relevant for this special timeline actually). Thus, with the help of this segmentation, a model port can yield an ExitNode to pull frames for a given time.
 
@@ -6186,7 +6185,7 @@ This is the core service provided by the player subsystem. The purpose is to cre
 :any details of this processing remain opaque for the clients; even the player subsystem just accesses the EngineFaçade
 </pre>
 </div>
-<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202304132132" tags="overview impl discuss draft" changecount="20">
+<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202305100203" tags="overview impl discuss draft" changecount="21">
 <pre>//Integration effort to promote the development of rendering, playback and video display in the GUI//
 This IntegrationSlice was started in {{red{2023}}} as [[Ticket #1221|https://issues.lumiera.org/ticket/1221]] to coordinate the completion and integration of various implementation facilities, planned, drafted and built during the last years; this effort marks the return of development focus to the lower layers (after years of focussed UI development) and will implement the asynchronous and time-bound rendering coordinated by the [[Scheduler]] in the [[Vault|Vault-Layer]]
 
@@ -6196,7 +6195,7 @@ This IntegrationSlice was started in {{red{2023}}} as [[Ticket #1221|https://iss
 
 
 !Ascent
-__12.Apr.23__: At start, this is a dauntingly complex effort, prompting to reconcile several unfinished design drafts from years ago, unsuccessful attempts at that time towards a first »breakthrough«. Including a first run-up towards node invocation, the drafts regarding BuilderMechanics and FixtureDatastructure, a complete but never actually implemented OutputManagement concept and the groundwork pertaining to the [[Player]].  At that time, it occurred to me that the planning of render jobs exhibits structures akin to the //Monads// known from functional programming -- seemingly a trending topic. Following this blueprint, it was indeed straight forward to hook up all functional dependencies into a working piece of code -- a piece of code however, that turns out almost impenetrable after completion, since while it can be //verified// step by step, it does not support understanding and convey meaning. This experience (and a lot of similar ones) make me increasingly wary towards the self-proclaimed superiority of functional programming. Especially the Monads might be considered an Anti-pattern, something superficially compelling that lures into fostering unhealthy structures.
+__12.Apr.23__: At start, this is a dauntingly complex effort, demanding to reconcile several unfinished design drafts from years ago, unsuccessful attempts at that time towards a first »breakthrough«. Including a first run-up towards node invocation, the drafts regarding BuilderMechanics and FixtureDatastructure, a complete but never actually implemented OutputManagement concept and the groundwork pertaining to the [[Player]].  At that time, it occurred to me that the planning of render jobs exhibits structures akin to the //Monads// known from functional programming -- seemingly a trending topic. Following this blueprint, it was indeed straight forward to hook up all functional dependencies into a working piece of code -- a piece of code however, that turns out almost impenetrable after completion, since while it can be //verified// step by step, it does not support understanding and convey meaning. This experience (and a lot of similar ones) make me increasingly wary towards the self-proclaimed superiority of functional programming. Especially the Monads might be considered an Anti-pattern, something superficially compelling that lures into fostering unhealthy structures.
 &amp;rarr; see the critical review in AboutMonads
 
 So the difficulties to understand my own (finished, working) code after several years compelled me to attempt a [[#1276|https://issues.lumiera.org/ticket/1276#comment:1]] refactoring of the FrameDispatcher, which I use as entrance point into the implementation of this //vertical slice//. This time I will approach the task as //on-demand processing pipeline// with //recursive expansion// -- attempting to segregate better what the monadic approach tended to interweave.
@@ -7101,7 +7100,7 @@ We need to detect attaching and detaching of
 * root &amp;harr; [[Fork]]
 </pre>
 </div>
-<div title="Segmentation" modifier="Ichthyostega" created="201012121901" modified="202305020219" tags="def spec Builder" changecount="5">
+<div title="Segmentation" modifier="Ichthyostega" created="201012121901" modified="202305111222" tags="def spec Builder" changecount="6">
 <pre>//Segmentation of timeline// denotes a data structure and a step in the BuildProcess.
 When [[building the fixture|BuildFixture]], ~MObjects -- as handled by their Placements -- are grouped below each timeline using them; Placements are then to be resolved into [[explicit Placements|ExplicitPlacement]], resulting in a single well defined time interval for each object. This allows to cut this effective timeline into slices of constant wiring structure, which are represented through the ''Segmentation Datastructure'', a time axis with segments holding object placements and [[exit nodes|ExitNode]]. &amp;nbsp;&amp;rarr; see [[structure of the Fixture|Fixture]]
 * for each Timeline we get a Segmentation
@@ -7109,6 +7108,7 @@ When [[building the fixture|BuildFixture]], ~MObjects -- as handled by their Pla
 *** each holding
 **** an ExplicitPlacement for each object touching that time interval
 **** an ExitNode for each ModelPort of the corresponding timeline
+**** a JobTicket as blueprint for [[frame Job|RenderJob]] generation corresponding to each ModelPort
 
 !Usage pattern
 ;(1) build process

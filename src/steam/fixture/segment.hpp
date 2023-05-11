@@ -66,7 +66,7 @@ namespace fixture {
       TimeSpan span_;
       
       /** render plan / blueprint to use for this segment */
-      const engine::JobTicket* jobTicket_;
+      const engine::JobTicket* jobTicket_;               ////////////////////////////////////////////////////TICKET #1297 : probably we'll get an array per ModelPort here
       
       ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #725 : placeholder code
       /** relevant MObjects comprising this segment. */
@@ -78,7 +78,7 @@ namespace fixture {
       Segment (TimeSpan covered =TimeSpan::ALL
               ,const engine::JobTicket* ticket =nullptr)
         : span_{covered}
-        , jobTicket_{ticket? ticket : &engine::JobTicket::NOP}
+        , jobTicket_{ticket? ticket : &engine::JobTicket::NOP}     //////////////////////////////////////////TICKET #1297 : ensure to provide a JobTicket for each ModelPort in initialisation
       { }
       
       Segment (Segment const& original, TimeSpan changed)
@@ -92,7 +92,7 @@ namespace fixture {
       Time after() const { return span_.end(); }
       
       engine::JobTicket const&
-      jobTicket()  const
+      jobTicket()  const                    /////////////////////////////////////////////////////////////////TICKET #1297 : introduce additional key per ModelPort here
         {
           REQUIRE (jobTicket_);
           return *jobTicket_;
