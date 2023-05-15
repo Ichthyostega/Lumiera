@@ -29,18 +29,29 @@
 #include "steam/engine/mock-dispatcher.hpp"
 #include "vault/engine/nop-job-functor.hpp"
 #include "vault/engine/dummy-job.hpp"
+#include "lib/iter-tree-explorer.hpp"
 #include "lib/util-tuple.hpp"
 #include "lib/util.hpp"
+#include "lib/format-cout.hpp"
+#include "lib/test/test-helper.hpp"
 
 using test::Test;
 
 
+///////////////////////////////////////////////////////TODO WIP for investigation
+namespace lib {
+namespace iter_explorer {
+  template<class RES>
+  using DecoTraits = _DecoratorTraits<RES>;
+}}
+///////////////////////////////////////////////////////TODO WIP for investigation
 namespace steam {
 namespace engine{
 namespace test  {
   
   using steam::fixture::Segment;
   using vault::engine::DummyJob;
+  using lib::singleValIterator;
   using util::isSameObject;
   using util::seqTuple;
 
@@ -328,6 +339,59 @@ namespace test  {
             job2.triggerJob();
             CHECK (23 == DummyJob::invocationAdditionalKey (job1));
             CHECK (11 == DummyJob::invocationAdditionalKey (job2));
+          }
+          //-----------------------------------------------------------------/// deep nested prerequisite
+          {
+            MockSegmentation mockSegs{MakeRec()
+                                     .attrib("mark", 11)
+                                     .scope(MakeRec()
+                                           .attrib("mark",23)
+                                           .genNode())
+                                     .genNode()};
+            
+            using RTick = std::reference_wrapper<JobTicket>;
+            auto start = singleValIterator (& util::unConst(mockSegs[Time::ZERO].jobTicket()));
+            
+            using SrC = lib::iter_explorer::BaseAdapter<lib::SingleValIter<engine::JobTicket*> >;
+            
+            auto bunny = [](JobTicket* ticket)
+                                        {
+                                          return lib::transformIterator(ticket->getPrerequisites()
+                                                                       ,[](JobTicket const& preq) -> JobTicket*
+                                                                          { return unConst(&preq); }
+                                                                       );
+                                        };
+            using ExIt = decltype(bunny(std::declval<JobTicket*>()));
+            // ergibt: lib::TransformIter<lib::TransformIter<lib::IterStateWrapper<steam::engine::JobTicket::Prerequisite, lib::LinkedElements<steam::engine::JobTicket::Prerequisite>::IterationState>, const steam::engine::JobTicket&>, steam::engine::JobTicket*>
+            
+            using Funny = std::function<ExIt(JobTicket*)>;
+            Funny funny = bunny;
+            
+            using ExpandedChildren = typename lib::iter_explorer::_FunTraits<Funny,SrC>::Res;
+
+//            using ResCore = lib::iter_explorer::Expander<SrC, ExpandedChildren>;
+            
+            using ResIter = typename lib::iter_explorer::DecoTraits<ExpandedChildren>::SrcIter;
+            using ResIterVal = typename ResIter::value_type;
+            using SrcIterVal = typename SrC::value_type;
+//            lib::test::TypeDebugger<SrcIterVal> buggy;
+//            lib::test::TypeDebugger<ExIt> bugggy;
+            
+            
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1294
+            auto it = lib::explore(start)
+//                          .transform ([](RTick t) -> JobTicket const&
+//                                        {
+//                                          return t.get();
+//                                        })
+                          .expand (funny)
+                          .expandAll()
+                          .transform ([&](JobTicket const& ticket)
+                                        {
+                                          return ticket.createJobFor(coord).parameter.invoKey.part.a;
+                                        });
+            cout << util::join(it,"-") <<endl;
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1294
           }
         }
     };

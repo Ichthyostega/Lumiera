@@ -282,6 +282,14 @@ namespace meta {
       typedef TY  value_type;
     };
   
+  template<typename TY>
+  struct RefTraits<TY &&>
+    {
+      typedef TY* pointer;
+      typedef TY& reference;
+      typedef TY  value_type;
+    };
+  
   
   
   
