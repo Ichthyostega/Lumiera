@@ -78,6 +78,7 @@
 
 
 #include "lib/iter-adapter.hpp"
+#include "lib/meta/value-type-binding.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/wrapper.hpp"
@@ -94,7 +95,7 @@ namespace lib {
   using std::function;
   using util::unConst;
   
-  using lib::meta::RefTraits;
+  using lib::meta::TypeBinding;
   
   
   
@@ -753,9 +754,9 @@ namespace lib {
           return bool(source_);
         }
       
-      typedef typename RefTraits<VAL>::pointer pointer;
-      typedef typename RefTraits<VAL>::reference reference;
-      typedef typename RefTraits<VAL>::value_type value_type;
+      typedef typename TypeBinding<VAL>::pointer pointer;
+      typedef typename TypeBinding<VAL>::reference reference;
+      typedef typename TypeBinding<VAL>::value_type value_type;
     };
   
   
