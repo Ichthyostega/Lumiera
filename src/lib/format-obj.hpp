@@ -168,12 +168,15 @@ namespace util {
    * by boost::lexical_cast. For double or float values, hard wired
    * rounding to a fixed number of digits will be performed, to yield
    * a predictable display of printed unit-test results.
+   * @remark while the actual parameter is passed by const-ref,
+   *         cv-qualifiactions and references are stripped from the type
    */
   template<typename TY>
   inline std::string
   toString (TY const& val)  noexcept
   {
-    return StringConv<TY>::invoke (val);
+    using PlainVal = typename lib::meta::Strip<TY>::TypeReferred;
+    return StringConv<PlainVal>::invoke (val);
   }
   
   

@@ -347,8 +347,11 @@ namespace util {
    *    the danger of creating much header inclusion and code size bloat. A more
    *    elaborate, [extended solution](\ref lib::toString), including _lexical conversions
    *    for numbers,_ is defined in format-obj.hpp
+   * @tparam X the nominal type to base the string conversion on; should be
+   *     a plain type (class or value) without CV-qualification and references
    * @note any exceptions during string conversion are caught and silently ignored;
    *    the returned string indicates "↯" in this case.
+   * @see util::toString() a user friendly front-end
    */
   template<typename X, typename COND =void>
   struct StringConv

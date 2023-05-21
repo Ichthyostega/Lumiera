@@ -29,6 +29,7 @@
 #include "lib/format-util.hpp"
 #include "lib/format-string.hpp"
 #include "lib/iter-adapter-stl.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/error.hpp"
 
 #include <vector>
@@ -215,7 +216,7 @@ namespace test {
                     "6.6--+--"
                     "7.7--+--"
                     "8.8--+--"
-                    "9.9");
+                    "9.9"_expect);
           CHECK (join (transformIterator(eachElm(dubious), justCount))
                  == "Nr.01(0.0), "
                     "Nr.02(2.2), "
@@ -226,7 +227,7 @@ namespace test {
                     "Nr.07(13.2), "
                     "Nr.08(15.4), "
                     "Nr.09(17.6), "
-                    "Nr.10(19.8)" );
+                    "Nr.10(19.8)"_expect);
         }
       
       

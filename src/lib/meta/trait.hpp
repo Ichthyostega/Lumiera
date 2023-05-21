@@ -146,7 +146,7 @@ namespace meta {
   struct Unwrap<X*>
     : std::true_type
     {
-      using Type = typename std::remove_cv<X>::type;
+      using Type = remove_cv_t<X>;
       
       static Type&
       extract (const X* ptr)
@@ -246,10 +246,10 @@ namespace meta {
   template<typename X>
   struct Strip
     {
-      using TypeUnconst  = typename std::remove_cv<X>                 ::type;
-      using TypeReferred = typename std::remove_reference<TypeUnconst>::type;
-      using TypePointee  = typename std::remove_pointer<TypeReferred> ::type;
-      using TypePlain    = typename std::remove_cv<TypePointee>       ::type;
+      using TypeUnconst  = remove_cv_t<X>;
+      using TypeReferred = remove_reference_t<TypeUnconst>;
+      using TypePointee  = remove_pointer_t<TypeReferred>;
+      using TypePlain    = remove_cv_t<TypePointee>;
       
       using Type         = typename Unwrap<TypePlain>::Type;
     };
