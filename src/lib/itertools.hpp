@@ -616,9 +616,9 @@ namespace lib {
           return theValue_.isValid();
         }
       
-      typedef typename std::remove_reference<VAL>::type * pointer;
-      typedef typename std::remove_reference<VAL>::type & reference;
-      typedef typename std::remove_reference<VAL>::type   value_type;
+      typedef std::remove_reference_t<VAL> * pointer;
+      typedef std::remove_reference_t<VAL> & reference;
+      typedef std::remove_reference_t<VAL>   value_type;
     };
   
   

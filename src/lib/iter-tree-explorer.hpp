@@ -522,7 +522,7 @@ namespace lib {
         
         /** adapt to a functor, which accepts the value type of the source sequence ("monadic" usage pattern) */
         template<class IT>
-        struct ArgAdapter<IT,   enable_if<__and_<is_convertible<typename IT::value_type, Arg>
+        struct ArgAdapter<IT,   enable_if<__and_<is_convertible<typename IT::reference, Arg>
                                                  ,__not_<is_convertible<IT, Arg>>>>>        // need to exclude the latter, since IterableDecorator
           {                                                                                //  often seems to accept IT::value_type (while in fact it doesn't)
             static auto

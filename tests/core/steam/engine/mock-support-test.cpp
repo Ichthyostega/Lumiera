@@ -369,16 +369,22 @@ namespace test  {
             
             using ExpandedChildren = typename lib::iter_explorer::_FunTraits<Funny,SrC>::Res;
 
-//            using ResCore = lib::iter_explorer::Expander<SrC, ExpandedChildren>;
             
             using ResIter = typename lib::iter_explorer::DecoTraits<ExpandedChildren>::SrcIter;
             using ResIterVal = typename ResIter::value_type;
             using SrcIterVal = typename SrC::value_type;
-//            lib::test::TypeDebugger<SrcIterVal> buggy;
+            //lib::test::TypeDebugger<ResIterVal> buggy;
 //            lib::test::TypeDebugger<ExIt> bugggy;
             
+            using FunResTrait = lib::iter_explorer::_FunTraits<Funny,ResIter>;
+            using FunArg = typename FunResTrait::Arg;
+            using ArgAdaptRes = typename FunResTrait::ArgAdapter<ResIter>;
+            static_assert(std::is_convertible<typename ResIter::reference, FunArg>());
+//            lib::test::TypeDebugger<decltype(ArgAdaptRes::wrap(bunny))> buggy;
+
+            using ResCore = lib::iter_explorer::Expander<SrC, ExpandedChildren>;
             
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1294
+            
             auto it = lib::explore(start)
 //                          .transform ([](RTick t) -> JobTicket const&
 //                                        {
@@ -386,11 +392,12 @@ namespace test  {
 //                                        })
                           .expand (funny)
                           .expandAll()
-                          .transform ([&](JobTicket const& ticket)
+                          .transform ([&](JobTicket * ticket)
                                         {
-                                          return ticket.createJobFor(coord).parameter.invoKey.part.a;
+                                          return ticket->createJobFor(coord).parameter.invoKey.part.a;
                                         });
             cout << util::join(it,"-") <<endl;
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1294
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1294
           }
         }
