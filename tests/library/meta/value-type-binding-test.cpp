@@ -84,103 +84,103 @@ namespace test{
       run (Arg)
         {
           // verify the type diagnostics helper...
-          CHECK ("int"               == showType<int               >() );
-          CHECK ("int&"              == showType<int&              >() );
-          CHECK ("int &&"            == showType<int&&             >() );
-          CHECK ("int const&"        == showType<int const&        >() );
-          CHECK ("const int &&"      == showType<int const&&       >() );
-          CHECK ("int *"             == showType<int       *       >() );
-          CHECK ("const int *"       == showType<int const *       >() );
-          CHECK ("const int * const" == showType<int const * const >() );
-          CHECK ("int const*&"       == showType<int const *      &>() );
-          CHECK ("int const* const&" == showType<int const * const&>() );
+          CHECK (showType<int               >() == "int"_expect               );
+          CHECK (showType<int&              >() == "int&"_expect              );
+          CHECK (showType<int&&             >() == "int &&"_expect            );
+          CHECK (showType<int const&        >() == "int const&"_expect        );
+          CHECK (showType<int const&&       >() == "const int &&"_expect      );
+          CHECK (showType<int       *       >() == "int *"_expect             );
+          CHECK (showType<int const *       >() == "const int *"_expect       );
+          CHECK (showType<int const * const >() == "const int * const"_expect );
+          CHECK (showType<int const *      &>() == "int const*&"_expect       );
+          CHECK (showType<int const * const&>() == "int const* const&"_expect );
           
           
           // Test fixture: the template Outer<T> provides nested value type bindings
-          using OuterSpace = Outer<Space>;
-          using Join = ulong;
+          CHECK (showType<Outer<Space>::value_type>() == "Space"_expect                );
+          CHECK (showType<Outer<Space>::reference>()  == "Outer<Space>::Inner&"_expect );
+          CHECK (showType<Outer<Space>::pointer>()    == "shared_ptr<Space>"_expect    );
           
-          CHECK ("Space"                == showType<OuterSpace::value_type>() );
-          CHECK ("Outer<Space>::Inner&" == showType<OuterSpace::reference>() );
-          CHECK ("shared_ptr<Space>"    == showType<OuterSpace::pointer>() );
           
           // ...such nested type bindings will be picked up
-          CHECK ("Space"                == showType<TypeBinding<OuterSpace>::value_type>() );
-          CHECK ("Outer<Space>::Inner&" == showType<TypeBinding<OuterSpace>::reference>() );
-          CHECK ("shared_ptr<Space>"    == showType<TypeBinding<OuterSpace>::pointer>() );
+          CHECK (showType<ValueTypeBinding<Outer<Space>>::value_type>() == "Space"_expect                );
+          CHECK (showType<ValueTypeBinding<Outer<Space>>::reference>()  == "Outer<Space>::Inner&"_expect );
+          CHECK (showType<ValueTypeBinding<Outer<Space>>::pointer>()    == "shared_ptr<Space>"_expect    );
           
-          CHECK ("unsigned long"                == showType<TypeBinding<Outer<Join>>::value_type>() );
-          CHECK ("Outer<unsigned long>::Inner&" == showType<TypeBinding<Outer<Join>>::reference>() );
-          CHECK ("shared_ptr<unsigned long>"    == showType<TypeBinding<Outer<Join>>::pointer>() );
+          CHECK (showType<ValueTypeBinding<Outer<short>>::value_type>() == "short"_expect                );
+          CHECK (showType<ValueTypeBinding<Outer<short>>::reference>()  == "Outer<short>::Inner&"_expect );
+          CHECK (showType<ValueTypeBinding<Outer<short>>::pointer>()    == "shared_ptr<short>"_expect    );
           
           // contrast this to a type without such nested bindings
-          CHECK ("Space"   == showType<TypeBinding<Space>::value_type>() );
-          CHECK ("Space&"  == showType<TypeBinding<Space>::reference>()  );
-          CHECK ("Space *" == showType<TypeBinding<Space>::pointer>()    );
+          CHECK (showType<ValueTypeBinding<Space>::value_type>() == "Space"_expect   );
+          CHECK (showType<ValueTypeBinding<Space>::reference>()  == "Space&"_expect  );
+          CHECK (showType<ValueTypeBinding<Space>::pointer>()    == "Space *"_expect );
           
-          // reference types will be levelled (reference stripped)
-          CHECK ("Space"                == showType<TypeBinding<OuterSpace&>::value_type>() );
-          CHECK ("Outer<Space>::Inner&" == showType<TypeBinding<OuterSpace&>::reference>()  );
-          CHECK ("shared_ptr<Space>"    == showType<TypeBinding<OuterSpace&>::pointer>()    );
+          // when checking for nested bindings, reference will be stripped and just the binding returned as-is
+          CHECK (showType<ValueTypeBinding<Outer<Space>&>::_SrcType>()         == "Outer<Space>"_expect         );   // internal: this is the type probed for nested bindings
+          CHECK (showType<ValueTypeBinding<Outer<Space>&>::value_type>()       == "Space"_expect                );
+          CHECK (showType<ValueTypeBinding<Outer<Space>&>::reference>()        == "Outer<Space>::Inner&"_expect );
+          CHECK (showType<ValueTypeBinding<Outer<Space>&>::pointer>()          == "shared_ptr<Space>"_expect    );
           
-          CHECK ("Space"                == showType<TypeBinding<OuterSpace&&>::value_type>() );
-          CHECK ("Outer<Space>::Inner&" == showType<TypeBinding<OuterSpace&&>::reference>()  );
-          CHECK ("shared_ptr<Space>"    == showType<TypeBinding<OuterSpace&&>::pointer>()    );
+          CHECK (showType<ValueTypeBinding<Outer<Space>&&>::_SrcType>()        == "Outer<Space>"_expect         );   // likewise for &&
+          CHECK (showType<ValueTypeBinding<Outer<Space>&&>::value_type>()      == "Space"_expect                );
+          CHECK (showType<ValueTypeBinding<Outer<Space>&&>::reference>()       == "Outer<Space>::Inner&"_expect );
+          CHECK (showType<ValueTypeBinding<Outer<Space>&&>::pointer>()         == "shared_ptr<Space>"_expect    );
           
-          CHECK ("Space"                == showType<TypeBinding<OuterSpace const&>::value_type>() );
-          CHECK ("Outer<Space>::Inner&" == showType<TypeBinding<OuterSpace const&>::reference>()  );
-          CHECK ("shared_ptr<Space>"    == showType<TypeBinding<OuterSpace const&>::pointer>()    );
+          CHECK (showType<ValueTypeBinding<Outer<Space> const&>::value_type>() == "Space"_expect                );
+          CHECK (showType<ValueTypeBinding<Outer<Space> const&>::reference>()  == "Outer<Space>::Inner&"_expect );
+          CHECK (showType<ValueTypeBinding<Outer<Space> const&>::pointer>()    == "shared_ptr<Space>"_expect    );
           
-          // but a pointer counts as a different, primitive type. No magic here
-          CHECK ("Outer<Space> *"  == showType<TypeBinding<OuterSpace*>::value_type>() );
-          CHECK ("Outer<Space>*&"  == showType<TypeBinding<OuterSpace*>::reference>()  );
-          CHECK ("Outer<Space>* *" == showType<TypeBinding<OuterSpace*>::pointer>()    );
+          // but a pointer counts as different, primitive type. No magic here
+          CHECK (showType<ValueTypeBinding<      Outer<Space> *      >::value_type>() == "Outer<Space> *"_expect  );
+          CHECK (showType<ValueTypeBinding<      Outer<Space> *      >::reference>()  == "Outer<Space>*&"_expect  );
+          CHECK (showType<ValueTypeBinding<      Outer<Space> *      >::pointer>()    == "Outer<Space>* *"_expect );
           
-          CHECK ("const Outer<Space> *"  == showType<TypeBinding<const OuterSpace*>::value_type>() );
-          CHECK ("Outer<Space> const*&"  == showType<TypeBinding<const OuterSpace*>::reference>()  );
-          CHECK ("Outer<Space> const* *" == showType<TypeBinding<const OuterSpace*>::pointer>()    );
+          CHECK (showType<ValueTypeBinding<const Outer<Space> *      >::value_type>() == "const Outer<Space> *"_expect  );
+          CHECK (showType<ValueTypeBinding<const Outer<Space> *      >::reference>()  == "Outer<Space> const*&"_expect  );
+          CHECK (showType<ValueTypeBinding<const Outer<Space> *      >::pointer>()    == "Outer<Space> const* *"_expect );
           
-          CHECK ("const Outer<Space> * const" == showType<TypeBinding<const OuterSpace * const>::value_type>() );
-          CHECK ("Outer<Space> const* const&" == showType<TypeBinding<const OuterSpace * const>::reference>()  );
-          CHECK ("Outer<Space> * const *"     == showType<TypeBinding<const OuterSpace * const>::pointer>()    );
+          CHECK (showType<ValueTypeBinding<const Outer<Space> * const>::value_type>() == "const Outer<Space> * const"_expect );
+          CHECK (showType<ValueTypeBinding<const Outer<Space> * const>::reference>()  == "Outer<Space> const* const&"_expect );
+          CHECK (showType<ValueTypeBinding<const Outer<Space> * const>::pointer>()    == "Outer<Space> * const *"_expect     );
           
-          CHECK ("Outer<Space> * const"   == showType<TypeBinding<OuterSpace * const>::value_type>() );
-          CHECK ("Outer<Space>* const&"   == showType<TypeBinding<OuterSpace * const>::reference>()  );
-          CHECK ("Outer<Space> * const *" == showType<TypeBinding<OuterSpace * const>::pointer>()    );
+          CHECK (showType<ValueTypeBinding<      Outer<Space> * const>::value_type>() == "Outer<Space> * const"_expect   );
+          CHECK (showType<ValueTypeBinding<      Outer<Space> * const>::reference>()  == "Outer<Space>* const&"_expect   );
+          CHECK (showType<ValueTypeBinding<      Outer<Space> * const>::pointer>()    == "Outer<Space> * const *"_expect );
           
-          // similar for a type without nested type bindings: references are levelled
-          CHECK ("unsigned long"   == showType<TypeBinding<Join>::value_type>() );
-          CHECK ("unsigned long&"  == showType<TypeBinding<Join>::reference>()  );
-          CHECK ("unsigned long *" == showType<TypeBinding<Join>::pointer>()    );
+          // yet for a type without nested type bindings: references are levelled
+          CHECK (showType<ValueTypeBinding<short>::value_type>()        == "short"_expect   );
+          CHECK (showType<ValueTypeBinding<short>::reference>()         == "short&"_expect  );
+          CHECK (showType<ValueTypeBinding<short>::pointer>()           == "short *"_expect );
           
-          CHECK ("unsigned long"   == showType<TypeBinding<Join&>::value_type>() );
-          CHECK ("unsigned long&"  == showType<TypeBinding<Join&>::reference>()  );
-          CHECK ("unsigned long *" == showType<TypeBinding<Join&>::pointer>()    );
+          CHECK (showType<ValueTypeBinding<short&>::value_type>()       == "short"_expect   );
+          CHECK (showType<ValueTypeBinding<short&>::reference>()        == "short&"_expect  );
+          CHECK (showType<ValueTypeBinding<short&>::pointer>()          == "short *"_expect );
           
-          CHECK ("unsigned long"   == showType<TypeBinding<Join&&>::value_type>() );
-          CHECK ("unsigned long&"  == showType<TypeBinding<Join&&>::reference>()  );
-          CHECK ("unsigned long *" == showType<TypeBinding<Join&&>::pointer>()    );
-          
-          CHECK ("unsigned long"         == showType<TypeBinding<Join const&>::value_type>() );
-          CHECK ("unsigned long const&"  == showType<TypeBinding<Join const&>::reference>()  );
-          CHECK ("const unsigned long *" == showType<TypeBinding<Join const&>::pointer>()    );
+          CHECK (showType<ValueTypeBinding<short&&>::value_type>()      == "short"_expect   );
+          CHECK (showType<ValueTypeBinding<short&&>::reference>()       == "short&"_expect  );
+          CHECK (showType<ValueTypeBinding<short&&>::pointer>()         == "short *"_expect );
+
+          CHECK (showType<ValueTypeBinding<short const&>::value_type>() == "const short"_expect  );
+          CHECK (showType<ValueTypeBinding<short const&>::reference>()  == "short const&"_expect  );
+          CHECK (showType<ValueTypeBinding<short const&>::pointer>()    == "const short *"_expect );
           
           //... but pointer types are not treated special in any way
-          CHECK ("unsigned long *"  == showType<TypeBinding<Join *>::value_type>() );
-          CHECK ("unsigned long*&"  == showType<TypeBinding<Join *>::reference>()  );
-          CHECK ("unsigned long* *" == showType<TypeBinding<Join *>::pointer>()    );
+          CHECK (showType<ValueTypeBinding<      short *      >::value_type>() == "short *"_expect  );
+          CHECK (showType<ValueTypeBinding<      short *      >::reference>()  == "short*&"_expect  );
+          CHECK (showType<ValueTypeBinding<      short *      >::pointer>()    == "short* *"_expect );
           
-          CHECK ("const unsigned long *"  == showType<TypeBinding<const Join *>::value_type>() );
-          CHECK ("unsigned long const*&"  == showType<TypeBinding<const Join *>::reference>()  );
-          CHECK ("unsigned long const* *" == showType<TypeBinding<const Join *>::pointer>()    );
+          CHECK (showType<ValueTypeBinding<const short *      >::value_type>() == "const short *"_expect  );
+          CHECK (showType<ValueTypeBinding<const short *      >::reference>()  == "short const*&"_expect  );
+          CHECK (showType<ValueTypeBinding<const short *      >::pointer>()    == "short const* *"_expect );
           
-          CHECK ("const unsigned long * const" == showType<TypeBinding<const Join * const>::value_type>() );
-          CHECK ("unsigned long const* const&" == showType<TypeBinding<const Join * const>::reference>()  );
-          CHECK ("unsigned long * const *"     == showType<TypeBinding<const Join * const>::pointer>()    );
+          CHECK (showType<ValueTypeBinding<const short * const>::value_type>() == "const short * const"_expect );
+          CHECK (showType<ValueTypeBinding<const short * const>::reference>()  == "short const* const&"_expect );
+          CHECK (showType<ValueTypeBinding<const short * const>::pointer>()    == "short * const *"_expect     );
           
-          CHECK ("unsigned long * const"   == showType<TypeBinding<Join * const>::value_type>() );
-          CHECK ("unsigned long* const&"   == showType<TypeBinding<Join * const>::reference>()  );
-          CHECK ("unsigned long * const *" == showType<TypeBinding<Join * const>::pointer>()    );
+          CHECK (showType<ValueTypeBinding<      short * const>::value_type>() == "short * const"_expect   );
+          CHECK (showType<ValueTypeBinding<      short * const>::reference>()  == "short* const&"_expect   );
+          CHECK (showType<ValueTypeBinding<      short * const>::pointer>()    == "short * const *"_expect );
         }
     };
   

@@ -36,7 +36,7 @@
  ** Within the STL, there is a convention to provide nested typedefs to indicate
  ** type variations in relation to the basic payload type of the container. We
  ** follow this convention and support especially the
- ** - `value_type`
+ ** - `value_type` (what is conceived to be "in" the container or iterator)
  ** - a simple (LValue) reference to the payload
  ** - a pointer at the payload.
  ** 
@@ -47,6 +47,7 @@
  ** treatment, an explicit specialisation to this rebinding trait may be
  ** injected alongside with the definition of the payload type.
  ** 
+ ** @see ValueTypeBinding_test
  ** @see iter-adapter.hpp
  ** @see scope-path.hpp usage example (explicit specialisation)
  */
@@ -88,8 +89,8 @@ namespace meta {
     
     template<class X>
     struct use_ValueTypebindings
-      : __and_<has_nested_ValueTypeBindings<X>
-              ,__not_<is_StringLike<X>
+      : __and_<has_nested_ValueTypeBindings< remove_reference_t<X> >
+              ,__not_<is_StringLike< remove_reference_t<X> >
                      >
               >
       { };
@@ -97,30 +98,8 @@ namespace meta {
   
   
   /**
-   * @internal helper template to pick up nested value type definitions
-   */
-  template<typename TY, typename SEL =void>
-  struct ValueTypeBinding
-    {
-      typedef TY value_type;
-      typedef TY& reference;
-      typedef TY* pointer;
-    };
-  
-  /** specialisation for classes providing STL style type binding definitions */
-  template<typename TY>
-  struct ValueTypeBinding<TY,      enable_if<use_ValueTypebindings<TY>> >
-    {
-      typedef typename TY::value_type value_type;
-      typedef typename TY::reference reference;
-      typedef typename TY::pointer pointer;
-    };
-  
-  
-  
-  /**
    * Type re-binding helper template for creating nested typedefs
-   * for use by custom containers and iterator adapters or similar.
+   * usable by custom containers and iterator adapters or similar.
    * - this trait provides a value-, reference- and pointer type,
    *   similar to what the STL does.
    * - references are stripped, otherwise the base type is passed through
@@ -129,20 +108,24 @@ namespace meta {
    * @note client code might define specialisations
    *       to handle tricky situations (like e.g. const_reverse_iter)
    */
-  template<typename TY>
-  struct TypeBinding
-    : ValueTypeBinding<TY>
-    { };
+  template<typename TY, typename SEL =void>
+  struct ValueTypeBinding
+    {
+      using value_type = typename RefTraits<TY>::Value;
+      using reference  = typename RefTraits<TY>::Reference;
+      using pointer    = typename RefTraits<TY>::Pointer;
+    };
   
+  /** specialisation for classes providing STL style type binding definitions */
   template<typename TY>
-  struct TypeBinding<TY &>
-    : TypeBinding<TY>
-    { };
-  
-  template<typename TY>
-  struct TypeBinding<TY &&>
-    : TypeBinding<TY>
-    { };
+  struct ValueTypeBinding<TY,      enable_if<use_ValueTypebindings<TY>> >
+    {
+      using _SrcType = typename RefTraits<TY>::Value;
+      
+      using value_type = typename _SrcType::value_type;
+      using reference  = typename _SrcType::reference;
+      using pointer    = typename _SrcType::pointer;
+    };
   
   
   

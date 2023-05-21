@@ -133,7 +133,7 @@ namespace util {
   inline auto
   stringify (IT&& src)
   {
-    using Val = typename std::remove_reference<IT>::type::value_type;
+    using Val = typename lib::meta::ValueTypeBinding<IT>::value_type;
     
     return lib::transformIterator(forward<IT>(src), util::toString<Val>);
   }

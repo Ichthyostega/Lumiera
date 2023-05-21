@@ -388,9 +388,9 @@ namespace lib {
       {
         using Res = remove_reference_t<decltype(std::declval<COR>().yield())>;
         
-        using value_type = typename meta::TypeBinding<Res>::value_type;
-        using reference  = typename meta::TypeBinding<Res>::reference;
-        using pointer    = typename meta::TypeBinding<Res>::pointer;
+        using value_type = typename meta::ValueTypeBinding<Res>::value_type;
+        using reference  = typename meta::ValueTypeBinding<Res>::reference;
+        using pointer    = typename meta::ValueTypeBinding<Res>::pointer;
       };
     
     
@@ -846,9 +846,9 @@ namespace lib {
         TransformedItem treated_;
         
       public:
-        using value_type = typename meta::TypeBinding<RES>::value_type;
-        using reference  = typename meta::TypeBinding<RES>::reference;
-        using pointer    = typename meta::TypeBinding<RES>::pointer;
+        using value_type = typename meta::ValueTypeBinding<RES>::value_type;
+        using reference  = typename meta::ValueTypeBinding<RES>::reference;
+        using pointer    = typename meta::ValueTypeBinding<RES>::pointer;
         
         
         Transformer() =default;
@@ -1347,9 +1347,9 @@ namespace lib {
       
       
     public:
-      using value_type = typename meta::TypeBinding<SRC>::value_type;
-      using reference  = typename meta::TypeBinding<SRC>::reference;
-      using pointer    = typename meta::TypeBinding<SRC>::pointer;
+      using value_type = typename meta::ValueTypeBinding<SRC>::value_type;
+      using reference  = typename meta::ValueTypeBinding<SRC>::reference;
+      using pointer    = typename meta::ValueTypeBinding<SRC>::pointer;
       
       /** pass-through ctor */
       using SRC::SRC;

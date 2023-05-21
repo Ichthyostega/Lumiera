@@ -185,18 +185,18 @@ namespace session {
       unique_ptr<Table> pTab_;
       
       
-      typedef PlacementMO::ID _PID;
-      typedef std::unordered_multimap<_PID,_PID>::const_iterator  ScopeIter;
-      typedef lib::RangeIter<ScopeIter>                           ScopeRangeIter;
-      typedef lib::TransformIter<ScopeRangeIter, PlacementMO&> _ID_TableIterator;
+      using              _PID = PlacementMO::ID;
+      using         ScopeIter = std::unordered_multimap<_PID,_PID>::const_iterator;
+      using    ScopeRangeIter = lib::RangeIter<ScopeIter>;
+      using _ID_TableIterator = lib::TransformIter<ScopeRangeIter, PlacementMO&>;
       
       
       
     public:
-      typedef PlacementRef<MObject> PRef;
-      typedef PlacementMO::ID const& ID;
+      using PRef = PlacementRef<MObject>;
+      using ID = PlacementMO::ID const&;
       
-      typedef _ID_TableIterator iterator;
+      using iterator = _ID_TableIterator;
       
       
       /* == query operations == */

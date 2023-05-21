@@ -166,6 +166,13 @@ namespace test{
         static constexpr auto postfix = "";
       };
     template<typename X>
+    struct TypeDiagnostics<const X>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "const ";
+        static constexpr auto postfix = "";
+      };
+    template<typename X>
     struct TypeDiagnostics<X&>
       {
         using Type = X;

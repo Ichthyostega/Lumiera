@@ -95,7 +95,7 @@ namespace lib {
   using std::function;
   using util::unConst;
   
-  using lib::meta::TypeBinding;
+  using lib::meta::ValueTypeBinding;
   
   
   
@@ -754,9 +754,9 @@ namespace lib {
           return bool(source_);
         }
       
-      typedef typename TypeBinding<VAL>::pointer pointer;
-      typedef typename TypeBinding<VAL>::reference reference;
-      typedef typename TypeBinding<VAL>::value_type value_type;
+      using pointer =  typename ValueTypeBinding<VAL>::pointer;
+      using reference = typename ValueTypeBinding<VAL>::reference;
+      using value_type = typename ValueTypeBinding<VAL>::value_type;
     };
   
   
@@ -833,8 +833,8 @@ namespace lib {
   inline typename IT::value_type
   pull_last (IT iter)
     {
-      typedef typename IT::value_type Val;
-      typedef wrapper::ItemWrapper<Val> Item;
+      using Val = typename IT::value_type;
+      using Item = wrapper::ItemWrapper<Val>;
       
       Item lastElm;
       
@@ -860,7 +860,7 @@ namespace lib {
   inline auto
   filterRepetitions (IT const& source)
   {
-    using Val   = typename IT::value_type;
+    using Val   = typename meta::ValueTypeBinding<IT>::value_type;
     return filterIterator (source, SkipRepetition<Val>());
   }
   
@@ -868,8 +868,7 @@ namespace lib {
   inline auto
   filterRepetitions (IT&& source)
   {
-    using SrcIT = typename std::remove_reference<IT>::type;
-    using Val   = typename SrcIT::value_type;
+    using Val   = typename meta::ValueTypeBinding<IT>::value_type;
     return filterIterator (forward<IT>(source), SkipRepetition<Val>() );
   }
   

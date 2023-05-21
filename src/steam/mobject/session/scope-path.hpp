@@ -109,7 +109,7 @@ namespace meta{
    * @see iter-adapter.hpp
    */
   template<>
-  struct TypeBinding<vector<Scope>::const_reverse_iterator>
+  struct ValueTypeBinding<vector<Scope>::const_reverse_iterator>
     {
       typedef const Scope   value_type;
       typedef Scope const&  reference;

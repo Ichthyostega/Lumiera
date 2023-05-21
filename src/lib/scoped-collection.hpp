@@ -452,7 +452,7 @@ namespace lib {
    * This variant allows to "pull" elements from an iterator.
    * Actually, the collection will try to create each element right away,
    * by invoking the copy ctor and passing the value yielded by the iterator.
-   * @note anything in accordance to the Lumera Forward Iterator pattern is OK.
+   * @note anything in accordance to the Lumiera Forward Iterator pattern is OK.
    *       This rules out just passing a plain STL iterator (because these can't
    *       tell for themselves when they're exhausted). Use an suitable iter-adapter
    *       instead, e.g. by invoking lib::iter_stl::eachElm(stl_container) 
@@ -463,7 +463,7 @@ namespace lib {
     {
       IT iter_;
       
-      typedef typename meta::TypeBinding<IT>::value_type ElementType;
+      using ElementType = typename meta::ValueTypeBinding<IT>::value_type;
       
     public:
       PullFrom (IT source)

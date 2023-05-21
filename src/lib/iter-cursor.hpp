@@ -65,9 +65,9 @@ namespace lib {
         
         
       public:
-        typedef typename meta::TypeBinding<IT>::pointer pointer;
-        typedef typename meta::TypeBinding<IT>::reference reference;
-        typedef typename std::remove_reference<reference>::type value_type; ///< @note will be const for const iterators
+        using pointer    = typename meta::ValueTypeBinding<IT>::pointer;
+        using reference  = typename meta::ValueTypeBinding<IT>::reference;
+        using value_type = typename std::remove_reference<reference>::type;   ///< @note will be const for const iterators (while const_iterator::value_type isn't)
         
         
         CursorGear()

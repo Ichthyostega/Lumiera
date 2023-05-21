@@ -174,7 +174,7 @@ namespace lib {
       CON source_;
       mutable POS pos_;
       
-      using _ValTrait = meta::TypeBinding<std::remove_pointer_t<POS>>;
+      using _ValTrait = meta::ValueTypeBinding<std::remove_pointer_t<POS>>;
       
     public:
       using value_type = typename _ValTrait::value_type;
@@ -267,7 +267,7 @@ namespace lib {
       
       
     protected:
-      using ConRef = typename meta::TypeBinding<CON>::reference;
+      using ConRef = typename meta::RefTraits<CON>::Reference;
       
       /** allow derived classes to access backing container */
       ConRef       source()       { return                source_; }
@@ -471,12 +471,14 @@ namespace lib {
       IT p_;
       IT e_;
       
-      using _ValTrait = meta::TypeBinding<std::remove_pointer_t<IT>>;
+      using _ValTrait = meta::ValueTypeBinding<meta::remove_pointer_t<IT>>;
       
     public:
-      using value_type = typename _ValTrait::value_type;
-      using reference  = typename _ValTrait::reference;
       using pointer    = typename _ValTrait::pointer;
+      using reference  = typename _ValTrait::reference;
+      
+      /// @note special twist, since a STL const_iterator would yield a non-const `value_type`
+      using value_type = typename std::remove_reference<reference>::type;
       
       
       RangeIter (IT const& start, IT const& end)

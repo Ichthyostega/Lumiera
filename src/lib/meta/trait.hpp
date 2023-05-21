@@ -94,8 +94,11 @@ namespace lib {
 namespace meta {
   
   using std::remove_cv;
+  using std::remove_cv_t;
   using std::remove_pointer;
+  using std::remove_pointer_t;
   using std::remove_reference;
+  using std::remove_reference_t;
   using std::is_pointer;
   using std::is_base_of;
   using std::is_convertible;
@@ -257,37 +260,40 @@ namespace meta {
   /** Type definition helper for pointer and reference types.
    *  Allows to create a member field and to get the basic type
    *  irrespective if the given type is plain, pointer or reference
+   * @note we _do treat pointers specific_ though; a pointer is itself
+   *       a value and the pointer-indirection is _not_ stripped.
+   *       (use meta::Strip to radically strip all adornments)
    */
   template<typename TY>
   struct RefTraits
     {
-      typedef TY* pointer;
-      typedef TY& reference;
-      typedef TY  value_type;
+      typedef TY  Value;
+      typedef TY* Pointer;
+      typedef TY& Reference;
     };
   
   template<typename TY>
   struct RefTraits<TY *>
     {
-      typedef TY* pointer;
-      typedef TY& reference;
-      typedef TY  value_type;
+      typedef TY*  Value;
+      typedef TY** Pointer;
+      typedef TY*& Reference;
     };
   
   template<typename TY>
   struct RefTraits<TY &>
     {
-      typedef TY* pointer;
-      typedef TY& reference;
-      typedef TY  value_type;
+      typedef TY  Value;
+      typedef TY* Pointer;
+      typedef TY& Reference;
     };
   
   template<typename TY>
   struct RefTraits<TY &&>
     {
-      typedef TY* pointer;
-      typedef TY& reference;
-      typedef TY  value_type;
+      typedef TY  Value;
+      typedef TY* Pointer;
+      typedef TY& Reference;
     };
   
   
@@ -474,7 +480,7 @@ namespace meta {
   template<typename T>
   class can_IterForEach
     {
-      typedef typename Strip<T>::Type Type;
+      using  Type = typename Strip<T>::Type;
        
       META_DETECT_NESTED(value_type);
       META_DETECT_OPERATOR_DEREF();
@@ -496,7 +502,7 @@ namespace meta {
   template<typename T>
   class can_STL_ForEach
     {
-      typedef typename Strip<T>::Type Type;
+      using Type = typename Strip<T>::Type;
       
       struct is_iterable
         {
@@ -560,7 +566,7 @@ namespace meta {
   template<typename T>
   class can_STL_backIteration
     {
-      typedef typename Strip<T>::Type Type;
+      using Type = typename Strip<T>::Type;
       
       struct is_backIterable
         {

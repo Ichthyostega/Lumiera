@@ -303,7 +303,7 @@ namespace wrapper {
   /**
    * Specialisation of the ItemWrapper to deal with references,
    * as if they were pointer values. Allows the reference value
-   * to be default constructed to `NULL` and to be re-assigned.
+   * to be default constructed to ⟂ (invalid) and to be re-assigned.
    */
   template<typename TY>
   class ItemWrapper<TY &>

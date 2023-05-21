@@ -58,9 +58,9 @@ namespace iter_stl {
   class DistinctIter
     {
     public:
-      typedef typename IT::value_type value_type;
-      typedef typename IT::reference reference;
-      typedef typename IT::pointer  pointer;
+      using value_type = typename IT::value_type;
+      using reference  = typename IT::reference;
+      using pointer    = typename IT::pointer;
       
     private:
       IT      i_;
@@ -135,10 +135,10 @@ namespace iter_stl {
   template<typename IT>
   struct Wrapped_Identity
     {
-      typedef IT Iter;
-      typedef typename IT::value_type value_type;
-      typedef typename IT::reference reference;
-      typedef typename IT::pointer  pointer;
+      using Iter = IT;
+      using value_type = typename IT::value_type;
+      using reference  = typename IT::reference;
+      using pointer    = typename IT::pointer;
       
       static Iter get (Iter& it) { return & (*it); }
     };
@@ -150,10 +150,10 @@ namespace iter_stl {
   template<typename IT>
   struct Wrapped_PickKey
     {
-      typedef IT Iter;
-      typedef typename IT::value_type::first_type value_type;
-      typedef value_type & reference;
-      typedef value_type * pointer;
+      using Iter = IT;
+      using value_type = typename IT::value_type::first_type;
+      using reference  = value_type &;
+      using pointer    = value_type *;
       
       static pointer get (Iter& it) { return & (it->first); }
     };
@@ -165,10 +165,10 @@ namespace iter_stl {
   template<typename IT>
   struct Wrapped_PickVal
     {
-      typedef IT Iter;
-      typedef typename IT::value_type::second_type value_type;
-      typedef value_type & reference;
-      typedef value_type * pointer;
+      using Iter = IT;
+      using value_type = typename IT::value_type::second_type;
+      using reference  = value_type &;
+      using pointer    = value_type *;
       
       static pointer get (Iter& it) { return & (it->second); }
     };
@@ -176,10 +176,10 @@ namespace iter_stl {
   template<typename IT>
   struct Wrapped_PickConstVal
     {
-      typedef IT Iter;
-      typedef typename IT::value_type::second_type value_type;
-      typedef value_type const& reference;
-      typedef value_type const* pointer;
+      using Iter = IT;
+      using value_type = const typename IT::value_type::second_type;
+      using reference  = const value_type &;
+      using pointer    = const value_type *;
       
       static pointer get (Iter& it) { return & (it->second); }
     };
