@@ -322,6 +322,14 @@ namespace meta {
            >
     { };
   
+  /** verify the first (special) type can stand-in for the second */
+  template<typename S, typename G>
+  struct can_StandIn
+    : std::is_convertible<typename RefTraits<S>::Reference
+                         ,typename RefTraits<G>::Reference
+                         >
+    { };
+  
   /** detect various flavours of string / text data */
   template<typename X>
   struct is_StringLike

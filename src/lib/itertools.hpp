@@ -666,12 +666,6 @@ namespace lib {
     return SingleValIter<VAL>{forward<VAL>(something)};
   }
   
-  template<class VAL>
-  inline auto
-  singleValIterator (VAL const& ref)
-  {
-    return SingleValIter<VAL>{ref};
-  }
   
   /** not-anything-at-all iterator */
   template<class VAL>

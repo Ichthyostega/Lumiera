@@ -1,5 +1,5 @@
 /*
-  FormatString  -  string template formatting based on boost::format 
+  FormatString  -  string template formatting based on boost::format
 
   Copyright (C)         Lumiera.org
     2011,               Hermann Vosseler <Ichthyostega@web.de>
@@ -76,7 +76,7 @@ namespace util {
     inline void
     destroyImpl (char* buffer)
     {
-      accessImpl(buffer).~format(); 
+      accessImpl(buffer).~format();
     }
     
     
@@ -101,7 +101,7 @@ namespace util {
     suppressInsufficientArgumentErrors (char* formatter)
     {
       using namespace boost::io;
-      accessImpl(formatter).exceptions (all_error_bits ^ too_few_args_bit); 
+      accessImpl(formatter).exceptions (all_error_bits ^ too_few_args_bit);
     }
     
     

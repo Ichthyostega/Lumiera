@@ -106,6 +106,35 @@ namespace meta {
   
   
   
+  namespace {
+    /**
+     * @internal helper to detect a nested field `TY::type` or `TY::Type.
+     * @remark need to use this indirect detection method, since some of the
+     *         type traits from the standard library (notably `std::common_type`)
+     *         use a multiple layer deep indirect definition, which fails to be selected
+     *         on a simple direct template specialisation.
+     */
+    template<typename TY>
+    class _DetectNested_TypeResult
+      {
+        template<class ZZ>
+        static Yes_t check(typename ZZ::type *);
+        template<class X>
+        static Yes_t check(typename X::Type *);
+        template<class>
+        static No_t  check(...);
+        
+      public:
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));
+      };
+    
+  }
+  /** helper to check if another metafunction produced a result type */
+  template<typename X>
+  struct has_TypeResult : std::bool_constant<_DetectNested_TypeResult<X>::value> { };
+  
+  
+  
   /** detect possibility of a conversion to string.
    *  Naive implementation, which first attempts to build a string instance by
    *  implicit conversion, and then tries to invoke an explicit string conversion.
@@ -139,35 +168,6 @@ namespace meta {
   template<typename X>
   using enable_CustomStringConversion = enable_if<can_convertToString<X>>;
   
-  
-  
-  /** strip const from type: naive implementation */
-  template<typename T>
-  struct UnConst
-    {
-      typedef T Type;
-    };
-  
-  template<typename T>
-  struct UnConst<const T>
-    {
-      typedef T Type;
-    };
-  template<typename T>
-  struct UnConst<const T *>
-    {
-      typedef T* Type;
-    };
-  template<typename T>
-  struct UnConst<T * const>
-    {
-      typedef T* Type;
-    };
-  template<typename T>
-  struct UnConst<const T * const>
-    {
-      typedef T* Type;
-    };
   
   
   

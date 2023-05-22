@@ -144,7 +144,7 @@ namespace wrapper {
   class ItemWrapper
     {
       
-      using TY_unconst = typename meta::UnConst<TY>::Type ;
+      using TY_unconst = std::remove_const_t<TY>;
       
       
       mutable

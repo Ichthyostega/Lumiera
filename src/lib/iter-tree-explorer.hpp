@@ -342,11 +342,18 @@ namespace lib {
     using meta::_Fun;
     using std::__and_;
     using std::__not_;
+    using std::is_const_v;
     using std::is_base_of;
+    using std::common_type;
+    using std::common_type_t;
+    using std::conditional_t;
     using std::is_convertible;
     using std::remove_reference_t;
     using meta::can_IterForEach;
     using meta::can_STL_ForEach;
+    using meta::ValueTypeBinding;
+    using meta::has_TypeResult;
+    
     
     META_DETECT_FUNCTION_ARGLESS(checkPoint);
     META_DETECT_FUNCTION_ARGLESS(iterNext);
@@ -440,6 +447,38 @@ namespace lib {
     struct _DecoratorTraits<ISO&,  enable_if<is_base_of<IterSource<typename ISO::value_type>, ISO>>>
       : _DecoratorTraits<ISO*>
       { };
+    
+    
+    
+    /**
+     * helper to derive a suitable common type when expanding children
+     * @tparam SRC source iterator fed into the Expander
+     * @tparam RES result type of the expansion function
+     */
+    template<class SRC, class RES>
+    struct _ExpanderTraits
+      {
+        using ResIter = typename _DecoratorTraits<RES>::SrcIter;
+        using SrcYield = typename ValueTypeBinding<SRC>::value_type;
+        using ResYield = typename ValueTypeBinding<ResIter>::value_type;
+        static constexpr bool can_reconcile =
+           has_TypeResult<common_type<SrcYield,ResYield>>();
+        
+        static_assert (can_reconcile,
+                       "source iterator and result from the expansion must yield compatible values");
+        static_assert (is_const_v<SrcYield> == is_const_v<ResYield>,
+                       "source and expanded types differ in const-ness");
+        
+        // NOTE: unfortunately std::common_type decays (strips cv and reference)
+        //       in C++20, there would be std::common_reference; for now we have to work around that
+        using CommonType = conditional_t<is_const_v<SrcYield> or is_const_v<ResYield>
+                                        , const common_type_t<SrcYield,ResYield>
+                                        ,       common_type_t<SrcYield,ResYield>
+                                        >;
+        using value_type = typename ValueTypeBinding<CommonType>::value_type;
+        using reference  = typename ValueTypeBinding<CommonType>::reference;
+        using pointer    = typename ValueTypeBinding<CommonType>::pointer;
+      };
     
   }//(End) TreeExplorer traits
   
@@ -628,10 +667,8 @@ namespace lib {
       {
         static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
         
-        using ResIter = typename _DecoratorTraits<RES>::SrcIter;
-        static_assert (std::is_convertible<typename ResIter::value_type, typename SRC::value_type>(),
-                       "the iterator from the expansion must yield compatible values");
-        
+        using _Trait = _ExpanderTraits<SRC,RES>;
+        using ResIter = typename _Trait::ResIter;
         using RootExpandFunctor = function<RES(SRC&)>;
         using ChldExpandFunctor = function<RES(ResIter&)>;
         
@@ -694,6 +731,12 @@ namespace lib {
         
       public: /* === Iteration control API for IterableDecorator === */
         
+        /** @note result type bindings based on a common type of source and expanded result */
+        using value_type = typename _Trait::value_type;
+        using reference = typename _Trait::reference;
+        using pointer = typename _Trait::pointer;
+        
+        
         bool
         checkPoint()  const
           {
@@ -703,7 +746,7 @@ namespace lib {
                 or SRC::isValid();
           }
         
-        typename SRC::reference
+        reference
         yield()  const
           {
             return hasChildren()? **expansions_

@@ -34,6 +34,7 @@
 #include "lib/util.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/meta/duck-detector.hpp"///////////////TODO WIP
 
 using test::Test;
 
@@ -43,6 +44,8 @@ namespace lib {
 namespace iter_explorer {
   template<class RES>
   using DecoTraits = _DecoratorTraits<RES>;
+  template<class SRC, class RES>
+  using ExpoTraits = _ExpanderTraits<SRC,RES>;
 }}
 ///////////////////////////////////////////////////////TODO WIP for investigation
 namespace steam {
@@ -55,6 +58,41 @@ namespace test  {
   using util::isSameObject;
   using util::seqTuple;
 
+///////////////////////////////////////////////////////TODO WIP for investigation
+  template<class U>
+  struct ReBind
+    {
+      using type = typename U::type;
+    };
+//  template<typename X, typename SEL = void>
+//  struct has_TypeResult : std::false_type { };
+//  
+//  template<typename X>
+//  struct has_TypeResult<X, typename ReBind<X>::type> : std::true_type { };
+//  
+//  template<typename X>
+//  struct has_TypeResult<X, typename X::Type> : std::true_type { };
+  
+//  using lib::meta::Yes_t;
+//  using lib::meta::No_t;
+//  
+//  template<typename TY>
+//  class HasNested_type
+//    {
+//      template<class X>
+//      static Yes_t check(typename X::type *);
+//      template<class X>
+//      static Yes_t check(typename X::Type *);
+//      template<class>
+//      static No_t  check(...);
+//
+//    public:
+//      static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));
+//    };
+//  
+//  template<typename X>
+//  struct has_TypeResult : std::bool_constant<HasNested_type<X>::value> { };
+///////////////////////////////////////////////////////TODO WIP for investigation
   
   
   /**********************************************************************//**
@@ -350,30 +388,31 @@ namespace test  {
                                      .genNode()};
             
             using RTick = std::reference_wrapper<JobTicket>;
-            auto start = singleValIterator (& util::unConst(mockSegs[Time::ZERO].jobTicket()));
+            auto start = singleValIterator (mockSegs[Time::ZERO].jobTicket());
             
-            using SrC = lib::iter_explorer::BaseAdapter<lib::SingleValIter<engine::JobTicket*> >;
+            using SrC = lib::iter_explorer::BaseAdapter<lib::SingleValIter<engine::JobTicket const&> >;
             
-            auto bunny = [](JobTicket* ticket)
+            auto bunny = [](JobTicket const& ticket)
                                         {
-                                          return lib::transformIterator(ticket->getPrerequisites()
-                                                                       ,[](JobTicket const& preq) -> JobTicket*
-                                                                          { return unConst(&preq); }
-                                                                       );
+                                          return ticket.getPrerequisites();
+//                                          return lib::transformIterator(ticket.getPrerequisites()
+//                                                                       ,[](JobTicket const& preq) -> JobTicket*
+//                                                                          { return unConst(&preq); }
+//                                                                       );
                                         };
-            using ExIt = decltype(bunny(std::declval<JobTicket*>()));
-            // ergibt: lib::TransformIter<lib::TransformIter<lib::IterStateWrapper<steam::engine::JobTicket::Prerequisite, lib::LinkedElements<steam::engine::JobTicket::Prerequisite>::IterationState>, const steam::engine::JobTicket&>, steam::engine::JobTicket*>
+            using ExIt = decltype(bunny(std::declval<JobTicket const&>()));
             
-            using Funny = std::function<ExIt(JobTicket*)>;
+            using Funny = std::function<ExIt(JobTicket const&)>;
             Funny funny = bunny;
             
             using ExpandedChildren = typename lib::iter_explorer::_FunTraits<Funny,SrC>::Res;
 
             
             using ResIter = typename lib::iter_explorer::DecoTraits<ExpandedChildren>::SrcIter;
+//            lib::test::TypeDebugger<ResIter> buggy;
             using ResIterVal = typename ResIter::value_type;
             using SrcIterVal = typename SrC::value_type;
-            //lib::test::TypeDebugger<ResIterVal> buggy;
+//            lib::test::TypeDebugger<ResIterVal> buggy;
 //            lib::test::TypeDebugger<ExIt> bugggy;
             
             using FunResTrait = lib::iter_explorer::_FunTraits<Funny,ResIter>;
@@ -382,7 +421,37 @@ namespace test  {
             static_assert(std::is_convertible<typename ResIter::reference, FunArg>());
 //            lib::test::TypeDebugger<decltype(ArgAdaptRes::wrap(bunny))> buggy;
 
+//          using ResCore = iter_explorer::Expander<SRC, ExpandedChildren>;
             using ResCore = lib::iter_explorer::Expander<SrC, ExpandedChildren>;
+            
+//            using ExResIter = typename lib::iter_explorer::DecoTraits<ResCore>::SrcIter;
+//            static_assert(lib::meta::can_IterForEach<ResCore>::value);
+//            static_assert(lib::meta::can_STL_ForEach<ResCore>::value);
+            struct Murks
+              {
+                using type = void;
+              };
+            struct Gurks : Murks { };
+            static_assert(lib::meta::has_TypeResult<Gurks>());
+            using Wootz = std::common_type<JobTicket&, JobTicket const&>;
+            using Wauzz = typename Wootz::type;
+//            lib::test::TypeDebugger<Wauzz> bully;
+            
+            static_assert(lib::meta::has_TypeResult<std::common_type<JobTicket*, void*>>());
+//            static_assert(HasNested_type<Gurks>::value);
+//            static_assert(HasNested_type<Wootz>::value);
+//            static_assert(has_TypeResult<Wootz>());
+            
+            using ExiTrait = lib::iter_explorer::ExpoTraits<SrC, ExpandedChildren>;
+            using WrapIter = typename lib::iter_explorer::DecoTraits<ResCore>::SrcIter;
+//            lib::test::TypeDebugger<typename lib::meta::ValueTypeBinding<WrapIter>::reference> bully;
+//            static_assert(std::is_const_v<JobTicket const&>);
+//            static_assert(std::is_const_v<JobTicket const>);
+//            static_assert(std::is_const_v<JobTicket&&>);
+//            lib::test::TypeDebugger<std::common_type_t<JobTicket const, JobTicket const>> bully;
+//            lib::test::TypeDebugger<typename ExiTrait::CommonType> bully;
+//            lib::test::TypeDebugger<typename ExiTrait::reference> bully;
+//            lib::test::TypeDebugger<ResCore::reference> bully;
             
             
             auto it = lib::explore(start)
@@ -392,9 +461,9 @@ namespace test  {
 //                                        })
                           .expand (funny)
                           .expandAll()
-                          .transform ([&](JobTicket * ticket)
+                          .transform ([&](JobTicket const& ticket)
                                         {
-                                          return ticket->createJobFor(coord).parameter.invoKey.part.a;
+                                          return ticket.createJobFor(coord).parameter.invoKey.part.a;
                                         });
             cout << util::join(it,"-") <<endl;
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1294

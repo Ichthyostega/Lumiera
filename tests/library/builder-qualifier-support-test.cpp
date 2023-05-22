@@ -29,6 +29,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/builder-qualifier-support.hpp"
+#include "lib/test/test-helper.hpp"
 
 #include <string>
 
@@ -117,19 +118,19 @@ namespace test{
       run (Arg)
         {
           ExampleStrategy f0;
-          CHECK ("Strategy{∅}" == string(f0));
+          CHECK (f0 == "Strategy{∅}"_expect);
           
           ExampleStrategy f1(one());
-          CHECK ("Strategy{!one!}" == string(f1));
+          CHECK (f1 == "Strategy{!one!}"_expect);
           
           ExampleStrategy f2(two("Ψ"));
-          CHECK ("Strategy{∅.two(Ψ)}" == string(f2));
+          CHECK (f2 == "Strategy{∅.two(Ψ)}"_expect);
           
           ExampleStrategy f3(one(), two("↯"));
-          CHECK ("Strategy{!one!.two(↯)}" == string(f3));
+          CHECK (f3 == "Strategy{!one!.two(↯)}"_expect);
           
           ExampleStrategy f4(two("☭"), one());
-          CHECK ("Strategy{!one!}" == string(f4));   // Note: evaluated from left to right, one() overwrites prop_
+          CHECK (f4 == "Strategy{!one!}"_expect);   // Note: evaluated from left to right, one() overwrites prop_
         }
     };
   

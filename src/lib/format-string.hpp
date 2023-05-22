@@ -129,8 +129,8 @@ namespace std { // forward declaration to avoid including <iostream>
 
 
 namespace lib {
-  class Literal; 
-  class Symbol; 
+  class Literal;
+  class Symbol;
 }
 
 
@@ -144,7 +144,7 @@ namespace util {
   
   
   
-  /** 
+  /**
    * A front-end for using printf-style formatting.
    * Values to be formatted can be supplied through the
    * operator%. Custom defined string conversions on objects
@@ -180,7 +180,7 @@ namespace util {
      ~_Fmt ();
       _Fmt (string formatString);
       
-      operator string()  const;  ///< get the formatted result 
+      operator string()  const;  ///< get the formatted result
       
       template<typename VAL>
       _Fmt&
@@ -209,8 +209,8 @@ namespace util {
   /* ===== forwarding into the implementation ====== */
   
   /** The percent operator (\c '%' ) is used do feed parameter values
-   *  to be included into the formatted result, at the positions marked 
-   *  by printf-style placeholders within the format string.   
+   *  to be included into the formatted result, at the positions marked
+   *  by printf-style placeholders within the format string.
    * 
    * \par type specific treatment
    * Basic types (numbers, chars, strings) are passed to the implementation
@@ -236,49 +236,47 @@ namespace util {
   
   namespace { // helpers to pick a suitable specialisation....
     
-    /** 
-     * by default we don't allow to 
+    using std::__and_;
+    using std::__not_;
+    
+    /**
+     * by default we don't allow to
      * treat any types directly by boost::format.
      * As fallback we rather just produce a type-ID
      */
     template<typename X>
-    struct _allow_call                     { enum{ value = false };};
+    struct _allow_call : std::false_type {};
     
     /* the following definitions enable some primitive types
      * to be handed over to the boost::format implementation */
-    template<> struct _allow_call<string>  { enum{ value = true }; };
-    template<> struct _allow_call<char>    { enum{ value = true }; };
-    template<> struct _allow_call<uchar>   { enum{ value = true }; };
-    template<> struct _allow_call<int16_t> { enum{ value = true }; };
-    template<> struct _allow_call<uint16_t>{ enum{ value = true }; };
-    template<> struct _allow_call<int32_t> { enum{ value = true }; };
-    template<> struct _allow_call<uint32_t>{ enum{ value = true }; };
-    template<> struct _allow_call<int64_t> { enum{ value = true }; };
-    template<> struct _allow_call<uint64_t>{ enum{ value = true }; };
-    template<> struct _allow_call<float>   { enum{ value = true }; };
-    template<> struct _allow_call<double>  { enum{ value = true }; };
+    template<> struct _allow_call<string>  : std::true_type { };
+    template<> struct _allow_call<char>    : std::true_type { };
+    template<> struct _allow_call<uchar>   : std::true_type { };
+    template<> struct _allow_call<int16_t> : std::true_type { };
+    template<> struct _allow_call<uint16_t>: std::true_type { };
+    template<> struct _allow_call<int32_t> : std::true_type { };
+    template<> struct _allow_call<uint32_t>: std::true_type { };
+    template<> struct _allow_call<int64_t> : std::true_type { };
+    template<> struct _allow_call<uint64_t>: std::true_type { };
+    template<> struct _allow_call<float>   : std::true_type { };
+    template<> struct _allow_call<double>  : std::true_type { };
 #ifndef __x86_64__
-    template<> struct _allow_call<long>    { enum{ value = true }; };
-    template<> struct _allow_call<ulong>   { enum{ value = true }; };
+    template<> struct _allow_call<long>    : std::true_type { };
+    template<> struct _allow_call<ulong>   : std::true_type { };
 #endif
     
     template<typename X>
     struct _shall_format_directly
-      {
-        typedef typename lib::meta::UnConst<X>::Type BaseType;
-        
-        enum{ value = _allow_call<BaseType>::value };
-      };
-    
-    
+      : _allow_call<std::remove_cv_t<X>>
+      { };
     
     template<typename X>
     struct _shall_convert_toString
-      {
-        enum{ value = not _shall_format_directly<X>::value
-                      and lib::meta::can_convertToString<X>::value
-            };
-      };
+      : __and_<__not_<_shall_format_directly<X>>
+              , std::bool_constant<lib::meta::can_convertToString<X>::value>
+              >
+      { };
+    
     
     template<typename SP>
     struct _is_smart_wrapper
@@ -297,12 +295,10 @@ namespace util {
     
     template<typename SP>
     struct _shall_show_smartWrapper
-      {
-        enum{ value = not _shall_convert_toString<SP>::value
-                      and _is_smart_wrapper<typename std::remove_reference<
-                                            typename std::remove_cv<SP>::type>::type>::value
-            };
-      };
+      : __and_<__not_<_shall_convert_toString<SP>>
+              ,_is_smart_wrapper<std::remove_reference_t<std::remove_cv_t<SP>>>
+              >
+      { };
     
     
     
@@ -426,7 +422,7 @@ namespace util {
       static void
       dump (VAL const& val, Implementation& impl)
         try {
-            format (string(val), impl); 
+            format (string(val), impl);
           }
         catch(std::exception const& ex)
           {
