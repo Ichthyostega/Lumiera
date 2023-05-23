@@ -151,7 +151,8 @@ using lib::LUID;
       auto
       getPrerequisites (uint slotNr =0)  const
         {
-          return lib::transformIterator (provision_[slotNr].requirements.begin()
+          return lib::transformIterator (this->empty()? Prerequisites::iterator()
+                                                      : provision_[slotNr].requirements.begin()
                                         ,[](Prerequisite& prq) -> JobTicket const&
                                            {
                                              return prq.descriptor;

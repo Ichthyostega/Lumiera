@@ -41,6 +41,7 @@
 ////#include "lib/format-cout.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/depend.hpp"
+#include "lib/linked-elements.hpp"
 #include "lib/itertools.hpp"
 //#include "lib/iter-tree-explorer.hpp"
 //#include "lib/util-coll.hpp"
@@ -53,7 +54,8 @@
 //#include <functional>
 //#include <vector>
 #include <tuple>
-#include <deque>
+#include <list>
+//#include <deque>
 
 //using test::Test;
 //using util::isnil;
@@ -82,7 +84,7 @@ namespace test   {
 //  using play::Timings;
   using lib::HashVal;
   using std::make_tuple;
-  using std::deque;
+//  using std::deque;
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1294 : organisation of namespaces / includes??
   using fixture::Segmentation;
   
@@ -197,7 +199,9 @@ namespace test   {
   class MockSegmentation
     : public Segmentation
     {
-      std::deque<MockJobTicket> tickets_;
+      // simulated allocator;
+      // must be able to handle re-entrant allocations
+      std::list<MockJobTicket> tickets_;
       
     public:
       MockSegmentation()
@@ -241,7 +245,7 @@ namespace test   {
         {
           return tickets_.emplace_back (buildSeed(spec)
                                        ,buildPrerequisites(spec));
-        }
+        }                              // Warning: re-entrant invocation of emplace_back
     };
   
   
