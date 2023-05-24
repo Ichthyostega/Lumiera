@@ -78,7 +78,7 @@ namespace fixture {
    * 
    * @todo 1/2012 Just a Placeholder. The real thing is not yet implemented.
    * @todo 4/2023 now about to bootstrap into the implementation structure step by step (WIP)
-   * @see http://lumiera.org/wiki/renderengine.html#Fixture
+   * @see https://lumiera.org/wiki/renderengine.html#Fixture
    */
   class Segmentation
     : util::NonCopyable

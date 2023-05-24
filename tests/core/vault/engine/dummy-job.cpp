@@ -21,7 +21,20 @@
 * *****************************************************/
 
 /** @file dummy-job.cpp
- ** Implementation of a dummy render job for unit tests
+ ** Implementation of a dummy render job for unit tests.
+ ** Based on using a specifically rigged DummyClosure as JobFunctor,
+ ** where the actual Job invocation does nothing other than storing
+ ** the invocation mark and parameters into a invocationLog_ table.
+ ** Together with the likewise specifically rigged steam::engine::test::MockJobTicket,
+ ** the invocation hash can be marked, which allows to prove after the invocation
+ ** that a given Segment or JobTicket actually generated a specific Job, which was
+ ** then invoked with specific parameters.
+ ** 
+ ** # Usage front-end
+ ** 
+ ** The static functions in vault::engine::DummyJob allow to
+ ** - build such a mock job, possibly with random (or well defined) parameters
+ ** - when passing back this job instance, verify invocation and extract data
  */
 
 
@@ -58,9 +71,9 @@ namespace engine {
     /**
      * test dummy jobs are backed by this closure.
      * DummyJob invocations are recorded in a hashtable
-     * @note as of 9/2013, we use a very simplistic implementation,
+     * @note as of 5/2023, we use a simplistic map-based implementation,
      *       causing a consecutive invocation of the same job instance
-     *       to overwrite the previous log entry.
+     *       with identical JobParameter to overwrite the previous log entry.
      */
     class DummyClosure
       : public JobClosure
@@ -96,7 +109,7 @@ namespace engine {
         /**
          * Generate a specifically marked invocationKey for use in unit-tests.
          * @remark in the actual implementation, this function generates a distinct
-         *         base hash do tag specific processing provided by this JobFunctor;
+         *         base hash to tag specific processing provided by this JobFunctor;
          *         the seed usually factors in the media stream format; on invocation
          *         the nominal frame time will additionally be hashed in. Yet for
          *         unit testing, we typically use this dummy JobFunctor and it is
@@ -164,7 +177,7 @@ namespace engine {
     
     
     
-    /** actual instance of the test dummy job operation */
+    /** actual instance of the test dummy job functor */
     DummyClosure dummyClosure;
     
   }// (End)Implementation details
@@ -242,7 +255,6 @@ namespace engine {
   {
     return dummyClosure;
   }
-
   
   
 }} // namespace vault::engine

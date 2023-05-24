@@ -63,6 +63,7 @@ namespace test  {
    * @todo WIP-WIP-WIP 4/2023
    * 
    * @see DispatcherInterface_test
+   * @see MockSupport_test
    * @see Dispatcher
    * @see CalcStream
    * @see RenderDriveS
@@ -71,7 +72,7 @@ namespace test  {
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           demonstrateScaffolding();
           UNIMPLEMENTED ("shape the interface of the job-planning pipeline");
@@ -88,31 +89,44 @@ namespace test  {
         {
           Time nominalTime = lib::test::randTime();
           int additionalKey = rand() % 5000;
-          Job mockJob = DummyJob::build (nominalTime, additionalKey);
-          CHECK (mockJob.getNominalTime() == nominalTime);
-          CHECK (not DummyJob::was_invoked (mockJob));
           
+          Job mockJob = DummyJob::build (nominalTime, additionalKey);
           mockJob.triggerJob();
-          CHECK (    DummyJob::was_invoked (mockJob));
+          CHECK (DummyJob::was_invoked (mockJob));
           CHECK (RealClock::wasRecently (DummyJob::invocationTime (mockJob)));
           CHECK (nominalTime   == DummyJob::invocationNominalTime (mockJob) );
           CHECK (additionalKey == DummyJob::invocationAdditionalKey(mockJob));
           
-          Time prevInvocation = DummyJob::invocationTime (mockJob);
-          mockJob.triggerJob();
-          CHECK (prevInvocation < DummyJob::invocationTime (mockJob));                 // invoked again, recorded new invocation time
-          CHECK (nominalTime   == DummyJob::invocationNominalTime (mockJob) );         // all other Job parameter recorded again unaltered
-          CHECK (additionalKey == DummyJob::invocationAdditionalKey(mockJob));
+          //  Build a simple Segment at [10s ... 20s[
+          MockSegmentation mockSegs{MakeRec()
+                                     .attrib ("start", Time{0,10}          // start time (inclusive) of the Segment at 10sec
+                                             ,"after", Time{0,20}          // the Segment ends *before* 20sec
+                                             ,"mark",  123)                // marker-ID 123 (can be verified from Job invocation)
+                                     .scope(MakeRec()                      // this JobTicket also defines a prerequisite ticket
+                                             .attrib("mark",555)           // using a differen marker-ID 555
+                                           .genNode()
+                                           )
+                                   .genNode()};
+          fixture::Segment const& seg = mockSegs[Time{0,15}];              // access anywhere 10s <= t < 20s
+          JobTicket const& ticket = seg.jobTicket();                       // get the master-JobTicket from this segment
+          JobTicket const& prereq = *(ticket.getPrerequisites());          // pull a prerequisite JobTicket
           
-          MockJobTicket mockTick;
-          CHECK (mockTick.discoverPrerequisites().empty());
+          FrameCoord coord;                                                // Frame coordinates for invocation (placeholder)
+          Job jobP = prereq.createJobFor(coord);                           // create an instance of the prerequisites for this coordinates
+          Job jobM = ticket.createJobFor(coord);                           // ...and an instance of the master job for the same coordinates
+          CHECK (MockJobTicket::isAssociated (jobP, prereq));
+          CHECK (MockJobTicket::isAssociated (jobM, ticket));
+          CHECK (not MockJobTicket::isAssociated (jobP, ticket));
+          CHECK (not MockJobTicket::isAssociated (jobM, prereq));
           
-          MockSegmentation mockSeg;
-          UNIMPLEMENTED ("how to mock and fake");
-          /////////////////////////////////////////////////////////////////////////////TODO: extract from DispatcherInterface_test
-          /////////////////////////////////////////////////////////////////////////////TODO: design a job-ticket-mock
-          /////////////////////////////////////////////////////////////////////////////TODO: create a scheme for mock-jobs
+          jobP.triggerJob();
+          jobM.triggerJob();
+          CHECK (123 == DummyJob::invocationAdditionalKey (jobM));         // verify each job was invoked and linked to the correct spec,
+          CHECK (555 == DummyJob::invocationAdditionalKey (jobP));         // indicating that in practice it will activate the proper render node
+          //
+          ////////////////////////////////////////////////////////////////////TODO: extract Dispatcher-Mock from DispatcherInterface_test
         }
+      
       
       
       /** @test use the Dispatcher interface (mocked) to generate a frame »beat«

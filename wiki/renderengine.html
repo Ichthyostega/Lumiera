@@ -2530,10 +2530,10 @@ Additionally, they may be used for resource management purposes by embedding a r
 #* one OpenGL Dataframe could contain raw texture data (but I am lacking expertise for this topic)
 </pre>
 </div>
-<div title="FrameDispatcher" modifier="Ichthyostega" created="201105222330" modified="202305111243" tags="def Rendering" changecount="20">
+<div title="FrameDispatcher" modifier="Ichthyostega" created="201105222330" modified="202305231941" tags="def Rendering" changecount="21">
 <pre>An entity within the RenderEngine, responsible for translating a logical [[calculation stream|CalcStream]] (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames.
 
-The dispatcher works together with the job ticket(s) and the scheduler; actually these are the //core abstractions//&amp;nbsp; the process of ''job planning'' relies on. While the actual scheduler implementation lives within the Vault, the job tickets and the dispatcher are located within the [[Segmentation]], which is the backbone of the [[low-level model|LowLevelModel]]. More specifically, the dispatcher interface is //implemented//&amp;nbsp; by a set of &amp;rarr; [[dispatcher tables|DispatcherTables]] within the segmentation.
+The dispatcher works together with the [[job ticket(s)|JobTicket]] and the scheduler; actually these are the //core abstractions//&amp;nbsp; the process of ''job planning'' relies on. While the actual scheduler implementation lives within the Vault, the job tickets and the dispatcher are located within the [[Segmentation]], which is the backbone of the [[low-level model|LowLevelModel]]. More specifically, the dispatcher interface is //implemented//&amp;nbsp; by a set of &amp;rarr; [[dispatcher tables|DispatcherTables]] within the segmentation.
 
 {{red{stalled since 2014}}} -- development on this (important) topic has been postponed. Moreover, some rough edges remain within the Design &amp;rarr; see [[some notes...|AboutMonads]]
 
@@ -6185,7 +6185,7 @@ This is the core service provided by the player subsystem. The purpose is to cre
 :any details of this processing remain opaque for the clients; even the player subsystem just accesses the EngineFaçade
 </pre>
 </div>
-<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202305100203" tags="overview impl discuss draft" changecount="21">
+<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202305232230" tags="overview impl discuss draft" changecount="26">
 <pre>//Integration effort to promote the development of rendering, playback and video display in the GUI//
 This IntegrationSlice was started in {{red{2023}}} as [[Ticket #1221|https://issues.lumiera.org/ticket/1221]] to coordinate the completion and integration of various implementation facilities, planned, drafted and built during the last years; this effort marks the return of development focus to the lower layers (after years of focussed UI development) and will implement the asynchronous and time-bound rendering coordinated by the [[Scheduler]] in the [[Vault|Vault-Layer]]
 
@@ -6199,6 +6199,14 @@ __12.Apr.23__: At start, this is a dauntingly complex effort, demanding to recon
 &amp;rarr; see the critical review in AboutMonads
 
 So the difficulties to understand my own (finished, working) code after several years compelled me to attempt a [[#1276|https://issues.lumiera.org/ticket/1276#comment:1]] refactoring of the FrameDispatcher, which I use as entrance point into the implementation of this //vertical slice//. This time I will approach the task as //on-demand processing pipeline// with //recursive expansion// -- attempting to segregate better what the monadic approach tended to interweave.
+
+__May.23__: taking a //prototyping approach// now, since further development was hampered by incomplete requirements analysis interlocked with incomplete implementation drafts. Based on a rough preconception (drafted &amp;rarr; [[here|FrameDispatcher]] and in my //Mindmap//), a hierarchy of mocked data structures will be built up, which can then support erecting the remoulded internals of the dispatcher. After these are back to working state, the focus will move downwards, thereby step by step replacing the mocked structures by real structures -- only then will it be possibly to assess the new design. So presumably the next steps will be
+* ✔ augment the {{{DummyJob}}} to allow tracing Job invocations in tests
+* ✔ build a {{{MockJobTicket}}} on top, implemented as subclass of the actual JobTicket
+* ✔ build a {{{MockSegmentation}}} to hold onto ~JobTickets, which can be created as Mock
+* ✔define a simple specification language (based on the existing {{{GenNode}}}-DSL to define segments, tickets and prerequisite jobs
+* ✔ implement a »~Split-Splice« algorithm for &amp;rarr; SegmentationChange, rigged accordingly to generate a mocked Segementation for now
+* 🗘 create a testbed to assemble a DispatcherPipeline step by step (&amp;rarr; [[#920|https://issues.lumiera.org/ticket/920]] and [[#1275|https://issues.lumiera.org/ticket/1275|]])
 
 !Decisions
 ;Scheduler
@@ -7141,7 +7149,7 @@ The Fixture is mostly comprised of the Segementation datastructure, but some oth
 Largely the storage of the render nodes network is hooked up behind the Fixture &amp;rarr; [[storage considerations|FixtureStorage]]
 </pre>
 </div>
-<div title="SegmentationChange" creator="Ichthyostega" modifier="Ichthyostega" created="202305020227" modified="202305022134" tags="spec operational Builder draft" changecount="29">
+<div title="SegmentationChange" creator="Ichthyostega" modifier="Ichthyostega" created="202305020227" modified="202305232241" tags="spec operational Builder draft" changecount="30">
 <pre>At the end of the build process, the existing [[Segmentation]] possibly needs to be changed, extended or adapted.
 This change must be performed as a //transactional switch,// since render or playback processes might be performed concurrently. All Fixture and low-level-Model datastructures are //immutable// -- thus for any changes, suitably adapted structures will be built as a replacement.
 
@@ -7149,7 +7157,6 @@ This change must be performed as a //transactional switch,// since render or pla
 This is an implementation level operation, which analyses the existing Segmentation and determines the changes necessary to introduce a new or altered Segment. This operation has to retain the Segmentation ''Invariant'': it is a seamless sequence of Time intervals covering the complete time axis.
 
 !!!Structure of the split-splice operation
-{{red{1.5.2023 : Analysis and implementation draft}}}
 ;Invariant
 :complete and valid [[Segmentation]] always retained
 :* seamless coverage the complete time axis [-∞ .. +∞]
@@ -7219,6 +7226,9 @@ This is an implementation level operation, which analyses the existing Segmentat
 
 !!!Implementation techique
 The split-splice operation is performed always for a single segment in the context of an existing segmentation; the covered range can be defined explicitly, or by partial spec. For each application of this algorithm, an instance of a //working context// is created (on stack) and initialised by scanning the existing segmentation to establish the insert point. The four stages are then performed on this working data, thereby determining the handling cases -- and in the last stage, new elements are inserted and existing elements are deleted (assuming immutable segment data, any changes and adaptations are done by inserting a modified clone copy).
+
+!!!Generalisation
+The first implementation drafts furthered the observation that this decision scheme is actually not dependent on the specifics of the segmentation data structure; it can be generalised rather easily to to work on //any ordered discrete axis// and to handle generic intervals covering this axis in part or complete. The implementation can thus be turned into a ''template'', which is then instantiated with a ''binding'' to a concrete data structure, providing a few generic operation as λ-Functions. This allows to use a dedicated test binding for intervals over natural numbers -- used for exhaustive test coverage by systematically probing all logically possible invocation situations. This helped to spot some obscured bugs and fill-in some details of the implementation, notably the behaviour on incomplete specification of the new interval to splice in.
 </pre>
 </div>
 <div title="Sequence" modifier="Ichthyostega" created="201001252327" modified="201505310118" tags="def" changecount="2">

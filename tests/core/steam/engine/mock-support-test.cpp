@@ -146,8 +146,14 @@ namespace test  {
         }
       
       
+      
       /** @test document and verify usage of a complete mocked Segmentation
        *        to back frame dispatch
+       *        - default constructed: empty Segmentation
+       *        - cover the whole axis with one segment
+       *        - partition axis and verify the association of generated jobs
+       *        - a fully defined segment within an otherwise empty axis
+       *        - complex partitioning (using the »split-splice« mechanism
        */
       void
       verify_MockSegmentation()
@@ -155,6 +161,7 @@ namespace test  {
           FrameCoord coord;
           Time someTime = lib::test::randTime();
           coord.absoluteNominalTime = someTime;
+          //
           //-----------------------------------------------------------------/// Empty default Segmentation
           {
             MockSegmentation mockSeg;
@@ -185,6 +192,7 @@ namespace test  {
           {
              // Marker to verify the job calls back into the right segment
             int marker = rand() % 1000;
+            //
             //  Build a Segmentation partitioned at 10s
             MockSegmentation mockSegs{MakeRec()
                                      .attrib ("start", Time{0,10}

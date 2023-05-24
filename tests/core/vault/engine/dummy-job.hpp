@@ -21,7 +21,19 @@
 */
 
 /** @file dummy-job.hpp
- ** Unit test helper to generate dummy render jobs
+ ** Unit test helper to generate dummy render jobs.
+ ** Render Jobs generated from this setup will not actually perform
+ ** any action, other than recording this invocation and the used
+ ** parameters into a map table managed behind the scenes. Using
+ ** the provided query function, it is possible to probe for such
+ ** an invocation and to extract the recorded parameter data.
+ ** 
+ ** This setup is used both for stand-alone tests, which just require
+ ** "some job", but also as part of a complete hierarchy of mocked
+ ** data structures related to frame job dispatch and invocation
+ ** @see mock-dispatcher.hpp
+ ** @see MockSupport_test
+ **
  */
 
 
@@ -58,6 +70,5 @@ namespace engine {
       static JobClosure& getFunctor();
     };
   
-
 }} // namespace vault::engine
 #endif

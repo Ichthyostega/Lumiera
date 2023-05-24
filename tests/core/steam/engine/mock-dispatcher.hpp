@@ -1,5 +1,5 @@
 /*
-  DISPATCHER-MOCK.hpp  -  test scaffolding to verify render job planning and dispatch
+  MOCK-DISPATCHER.hpp  -  test scaffolding to verify render job planning and dispatch
 
   Copyright (C)         Lumiera.org
     2023,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,71 +20,59 @@
 
 */
 
-/** @file testframe.hpp
- ** Unit test helper to generate fake test data frames
+/** @file mock-dispatcher.hpp
+ ** Mock data structures to support implementation testing of render job
+ ** planning and frame dispatch. Together with dummy-job.hpp, this provides
+ ** a specifically rigged test setup, allowing to investigate and verify
+ ** designated functionality in isolation, without backing by the actual
+ ** render engine implementation.
+ ** - the MockDispatcherTable emulates the frame dispatch from the Fixture
+ ** - MockSegmentation is a mocked variant of the »Segmentation« datastructure,
+ **   which forms the backbone of the Fixture and is the top-level attachment
+ **   point for the »low-level-Model« (the render nodes network)
+ ** - MockJobTicket is a builder / adapter on top of the actual steam::engine::JobTicket,
+ **   allowing to generate a complete rigged MockSegmentation setup from a generic
+ **   test specification written as nested lib::diff::GenNode elements. From this
+ **   setup, »mock jobs« can be generated, which use the DummyJob functor and
+ **   just record any invocation without performing actual work.
+ ** @remark in spring 2023, this setup was created as a means to define and
+ **   then build the actual implementation of frame dispatch and scheduling.
+ ** @see MockSupport_test
  */
 
 
-#ifndef STEAM_ENGINE_TEST_DISPATCHER_MOCK_H
-#define STEAM_ENGINE_TEST_DISPATCHER_MOCK_H
+#ifndef STEAM_ENGINE_TEST_MOCK_DISPATCHER_H
+#define STEAM_ENGINE_TEST_MOCK_DISPATCHER_H
 
 
-////#include "steam/engine/procnode.hpp"
-//#include "steam/play/dummy-play-connection.hpp"
+#include "lib/test/test-helper.hpp"
 #include "steam/fixture/segmentation.hpp"
 #include "steam/mobject/model-port.hpp"
 #include "steam/engine/dispatcher.hpp"
 #include "steam/engine/job-ticket.hpp"
-//#include "steam/play/timings.hpp"
-#include "lib/time/timevalue.hpp"
-////#include "lib/time/timequant.hpp"
-////#include "lib/format-cout.hpp"
-#include "lib/diff/gen-node.hpp"
-#include "lib/depend.hpp"
-#include "lib/linked-elements.hpp"
-#include "lib/itertools.hpp"
-//#include "lib/iter-tree-explorer.hpp"
-//#include "lib/util-coll.hpp"
-#include "vault/real-clock.hpp"
-#include "lib/test/test-helper.hpp"
 #include "vault/engine/job.h"
 #include "vault/engine/dummy-job.hpp"
-#include "lib/util.hpp"
+#include "vault/real-clock.hpp"
+#include "lib/time/timevalue.hpp"
+#include "lib/diff/gen-node.hpp"
+#include "lib/linked-elements.hpp"
+#include "lib/itertools.hpp"
+#include "lib/depend.hpp"
 
-//#include <functional>
-//#include <vector>
 #include <tuple>
 #include <list>
-//#include <deque>
-
-//using test::Test;
-//using util::isnil;
-//using util::last;
-//using std::vector;
-//using std::function;
-//using std::rand;
-
-//#include <cstdlib>
-//#include <stdint.h>
 
 
 namespace steam  {
 namespace engine {
 namespace test   {
   
+  using std::make_tuple;
   using lib::diff::GenNode;
   using lib::diff::MakeRec;
-//  using lib::time::FrameRate;
-//  using lib::time::Duration;
-//  using lib::time::Offset;
-//  using lib::time::TimeVar;
   using lib::time::TimeValue;
   using lib::time::Time;
-//  using mobject::ModelPort;
-//  using play::Timings;
   using lib::HashVal;
-  using std::make_tuple;
-//  using std::deque;
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1294 : organisation of namespaces / includes??
   using fixture::Segmentation;
   
@@ -138,10 +126,13 @@ namespace test   {
     
     /// @deprecated this setup is confusing and dangerous (instance identity is ambiguous)
     lib::Depend<MockDispatcherTable> mockDispatcher;
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1221
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1221
     
     
     
     
+    /* ===== specify a mock JobTicket setup for tests ===== */
     
     template<class IT>
     inline auto
@@ -162,20 +153,24 @@ namespace test   {
     
   }//(End)internal test helpers....
     
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1221
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1221
+  
+  
   
   /**
-   * Mock for...
-   * 
+   * Mock setup for a JobTicket to generate DummyJob invocations.
+   * Implemented as subclass, it provides a specification DSL for tests,
+   * and is able to probe some otherwise opaque internals of JobTicket.
+   * Beyond that, MockJobTicket has the same storage size; and behaves
+   * like the regular JobTicket after construction -- but any Job
+   * created by JobTicket::createJobFor(FrameCoord) will be wired
+   * with the DummyJob functor and can thus be related back to
+   * the test specification setup.
    * @see JobPlanningSetup_test
    * @see DispatcherInterface_test
-   * 
    */
   class MockJobTicket
     : public JobTicket
     {
-      
     public:
       MockJobTicket()
         : JobTicket{defineSimpleSpec()}
@@ -190,12 +185,34 @@ namespace test   {
         : JobTicket{defineSpec (seed, std::forward<IT> (prereq))}
       { }
       
+      /* ===== Diagnostics ===== */
+      
       bool verify_associated (Job const&) const;
       static bool isAssociated (Job const&, JobTicket const&);
-    private:
     };
   
   
+  
+  /**
+   * Mock setup for a complete Segmentation to emulate the structure
+   * of the actual fixture, without the need of building a low-level Model.
+   * MockSegmentation instances can be instantiated directly within the
+   * test, by passing a test specification in »GenNode« notation to the
+   * constructor. This specification defines the segments to create
+   * and allows to associate a marker number, which can later be
+   * verified from the actual DummyJob invocation.
+   * - the ctor accepts a sequence of GenNode elements,
+   *   each corresponding to a segment to created
+   * - optionally, attributes "start" and "after" can be defined
+   *   to provide the lib::time::Time values of segment start/end
+   * - in addition, optionally a "mark" attribute can be defined;
+   *   the given integer number will be "hidden" in the job instance
+   *   hash, and can be [verified](\ref DummyJob::invocationAdditionalKey)
+   * - the _scope_ of each top-level GenNode may hold a sequence of
+   *   nested nodes corresponding to _prerequisite_ JobTicket instances
+   * - these can in turn hold further nested prerequisites, and so on
+   * @see MockSetup_test::verify_MockSegmentation
+   */
   class MockSegmentation
     : public Segmentation
     {
@@ -222,7 +239,9 @@ namespace test   {
             }
         }
       
-    private:
+      
+    private: /* ======== Implementation: build mock JobTickes from test specification ==== */
+      
       HashVal
       buildSeed (GenNode const& spec)
         {
@@ -236,7 +255,7 @@ namespace test   {
           return lib::transformIterator (spec.getChildren()
                                         ,[this](GenNode const& childSpec) -> JobTicket&
                                               {
-                                                return buildTicketFromSpec (childSpec); 
+                                                return buildTicketFromSpec (childSpec);
                                               });
         }
       
@@ -250,9 +269,10 @@ namespace test   {
   
   
   
+  
   /**
    * verify the given job instance was actually generated from this JobTicket.
-   * @remark this test support function actually relies on some specific rigging,
+   * @remark this test support function relies on some specific rigging,
    *         which typically is prepared by setup of a MockJobTicket.
    */
   inline bool
@@ -273,12 +293,11 @@ namespace test   {
    */
   inline bool
   MockJobTicket::isAssociated (Job const& job, JobTicket const& ticket)
-  {                                 // should work always, since storage is the same
+  {                                    // should work always, since storage is the same
     MockJobTicket const& backdoor = static_cast<MockJobTicket const&> (ticket);
     return backdoor.verify_associated (job);
   }
   
   
-  
 }}} // namespace steam::engine::test
-#endif /*STEAM_ENGINE_TEST_DISPATCHER_MOCK_H*/
+#endif /*STEAM_ENGINE_TEST_MOCK_DISPATCHER_H*/

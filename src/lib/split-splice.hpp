@@ -21,11 +21,11 @@
 */
 
 
-/** @file splite-splice.cpp
+/** @file splite-splice.hpp
  ** Generic algorithm to splice a new segment into a seamless segmentation of intervals.
  ** Here _"segmentation"_ denotes a partitioning of an ordered axis into a seamless sequence
  ** of intervals (here called "segment"). The axis is based on some _ordering type,_ like e.g.
- ** int (natural numbers) or lib::time::Time values, and the axis is assumed cover a complete
+ ** `int` (natural numbers) or lib::time::Time values, and the axis is assumed to cover a complete
  ** domain. The intervals / segments are defined by start and end point, where the start point
  ** is inclusive, yet the end point is exclusive (the next ordered point after the interval).
  ** 
@@ -93,7 +93,7 @@ namespace lib {
   namespace error = lumiera::error;
   
   
-  namespace splitsplice {/// Implementation of [»SplitSplice« algorithm](\ref splite-splice.cpp)
+  namespace splitsplice {/// Implementation of [»SplitSplice« algorithm](\ref splite-splice.hpp)
     
     
     /**
