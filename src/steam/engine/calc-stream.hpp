@@ -96,6 +96,7 @@ namespace engine{
   class CalcStream
     {
       std::shared_ptr<RenderDrive> drive_;
+                                       //////////////////////////////////////////////////////////////////////TICKET #1301 : need to pass-on the output sink association (and the ModelPort)
       
     protected:
       CalcStream (RenderEnvironment& abstractEngine)
@@ -125,7 +126,7 @@ namespace engine{
       
     };
   
-  typedef std::vector<CalcStream> CalcStreams;
+  typedef std::vector<CalcStream> CalcStreams;         //////////////////////////////////////////////////////TICKET #1297 : probably unnecessary, since we intend to connect always one Feed per ModelPort (and handle multiple channels internally, in the processing nodes)
       
 
   

@@ -92,7 +92,7 @@ namespace engine {
   RenderDrive::prepareRenderPlanningFrom (FrameCnt startFrame)
   {
     InvocationInstanceID invoKey;
-    invoKey.frameNumber = startFrame;
+    invoKey.frameNumber = startFrame;/////////////////////////////////////////////////////////TICKET #1301 : Job should be created similar to what JobTicket does
     Time nominalPlanningStartTime = getTimings().getFrameStartAt (startFrame);
     
     return Job(*this, invoKey, nominalPlanningStartTime);

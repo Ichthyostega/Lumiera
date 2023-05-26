@@ -27,7 +27,7 @@
  ** of the render process itself is performed chunk wise and embedded into the other rendering
  ** calculations. The _"rendering-as-it-is-planned-right-now"_ can be represented as a closure
  ** to the jobs, which perform and update this plan on the go. And in fact, the head of the
- ** calculation process, the CalcStream, maintains this closure instance, as parametrised
+ ** planning process, the CalcStream, maintains this closure instance, as parametrised
  ** with the appropriate configuration for the specific playback/render process underway.
  ** Enclosed into this instance lives the actual job planning pipeline, connected at the
  ** rear to the dispatcher and thus to the fixture and the low-level model

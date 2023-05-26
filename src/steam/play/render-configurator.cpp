@@ -160,9 +160,12 @@ namespace play {
   RenderConfigurator::ConnectFunction
   buildRenderConfiguration (POutputManager outputPossibilities, Timings playTimings)
   {
-    shared_ptr<RenderConfigurator> specialConfig (how_to_render (outputPossibilities,playTimings));
+    shared_ptr<RenderConfigurator> specialConfig{how_to_render (outputPossibilities,playTimings)};
     
-    return bind (&RenderConfigurator::buildActiveFeed, specialConfig, _1 );
+    return [specialConfig](ModelPort port)
+                          {
+                            return specialConfig->buildActiveFeed(port);
+                          };
   }
   
  

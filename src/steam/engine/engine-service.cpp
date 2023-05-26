@@ -119,7 +119,7 @@ namespace engine{
   EngineService::activateCalculation (play::DataSink sink, RenderEnvironment& engineCallback)
   {
     CalcStream calcStream(engineCallback);
-    calcStream.sendToOutput (sink);
+    calcStream.sendToOutput (sink);      ////////////////////////////////////////////////////TICKET #1297 : need to re-think the association ModelPort ⟷ output sink
     return calcStream;
   }
     

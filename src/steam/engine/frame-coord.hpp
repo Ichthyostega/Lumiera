@@ -72,7 +72,7 @@ namespace engine {
       TimeVar absoluteRealDeadline;
       
       ModelPort modelPort;
-      uint      channelNr;
+      uint      channelNr;        ///////////////////////////////////////////////////////////////////////////TICKET #1297 : retract differentiation into channels here (instead use ModelPorts in the Segment)
       
       
       /** build an \em undefined frame location */

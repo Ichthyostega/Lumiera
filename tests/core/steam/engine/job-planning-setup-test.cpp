@@ -103,7 +103,7 @@ namespace test  {
                                              ,"after", Time{0,20}          // the Segment ends *before* 20sec
                                              ,"mark",  123)                // marker-ID 123 (can be verified from Job invocation)
                                      .scope(MakeRec()                      // this JobTicket also defines a prerequisite ticket
-                                             .attrib("mark",555)           // using a differen marker-ID 555
+                                             .attrib("mark",555)           // using a different marker-ID 555
                                            .genNode()
                                            )
                                    .genNode()};

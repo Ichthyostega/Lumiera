@@ -1495,9 +1495,9 @@ at the lowest level within the builder there is the step of building a //connect
 * by default, a timeline is outfitted with one video and one sound master bus
 </pre>
 </div>
-<div title="CalcStream" modifier="Ichthyostega" created="201112162053" modified="201202120003" tags="spec Rendering">
+<div title="CalcStream" modifier="Ichthyostega" created="201112162053" modified="202305252135" tags="spec Rendering" changecount="2">
 <pre>Calculation stream is an organisational unit used at the interface level of the Lumiera engine.
-Representing a //stream of calculations,// delivering generated data within //timing constraints,// it is used
+Representing a //stream of calculations,// to deliver generated data within //timing constraints,// it is used
 *by the [[play process(es)|PlayProcess]] to define and control properties of the output generation
 *at the engine backbone to feed the [[Scheduler]] with individual [[render jobs|RenderJob]] to implement this stream of calculations
 Calculation stream objects are stateless, constant chunks of definition -- any altering of playback or rendering parameters just causes the respective descriptors to be superseeded. The presence of a CalcStream (being alive within the denoted time span) implies that using any of the associated jobs, dispatcher tables, node and wiring descriptors is safe
@@ -1509,7 +1509,7 @@ Any really interesting calculation stream needs to be retrieved from the EngineF
 !purpose
 When a calculation stream is retrieved from the EngineFaçade it is already registered and attached there and represents an ongoing activity. Under the hood, several further collaborators will hold a copy of that calculation stream descriptor. While, as such, a CalcStream has no explicit state, at any time it //represents a current state.// In case the running time span of that stream is limited, it becomes superseded automatically, just by the passing of time.
 
-Each calculation stream refers a relevant [[frame dispatcher table|FrameDispatcher]]. Thus, for the engine (interface level), the calculation stream allows to produce the individual [[render jobs|RenderJob]] to enqueue with the [[Scheduler]]. This translation step is what links and relates nominal time with running wall clock time, thereby obeying the [[timing constraints|Timings]] given when initially defining the calculation stream.
+Each calculation stream refers a relevant [[frame dispatcher table|FrameDispatcher]]. Thus, for the engine (interface level), the calculation stream allows to produce the individual [[render jobs|RenderJob]] to enqueue with the [[Scheduler]]. This translation step is what links and relates nominal time with running wall clock time, thereby obeying the [[timing constraints|Timings]] established initially together with the calculation stream.
 
 Additionally, each calculation stream knows how to access a //render environment closure,// allowing to re-schedule and re-adjust the setup of this stream. Basically, this closure is comprised of several functors (callbacks), which could be invoked to perform management tasks later on. Amongst others, this allows the calculation stream to redefine, supersede or &quot;cancel itself&quot;, without the need to access a central registration table at the engine interface level.
 
@@ -2530,7 +2530,7 @@ Additionally, they may be used for resource management purposes by embedding a r
 #* one OpenGL Dataframe could contain raw texture data (but I am lacking expertise for this topic)
 </pre>
 </div>
-<div title="FrameDispatcher" modifier="Ichthyostega" created="201105222330" modified="202305231941" tags="def Rendering" changecount="21">
+<div title="FrameDispatcher" modifier="Ichthyostega" created="201105222330" modified="202305260210" tags="def Player Rendering" changecount="23">
 <pre>An entity within the RenderEngine, responsible for translating a logical [[calculation stream|CalcStream]] (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames.
 
 The dispatcher works together with the [[job ticket(s)|JobTicket]] and the scheduler; actually these are the //core abstractions//&amp;nbsp; the process of ''job planning'' relies on. While the actual scheduler implementation lives within the Vault, the job tickets and the dispatcher are located within the [[Segmentation]], which is the backbone of the [[low-level model|LowLevelModel]]. More specifically, the dispatcher interface is //implemented//&amp;nbsp; by a set of &amp;rarr; [[dispatcher tables|DispatcherTables]] within the segmentation.
@@ -2566,6 +2566,7 @@ While the sequence of frame jobs to be planned is possibly infinite, the actual 
 
 !!!producing actual jobs
 The JobTicket is created on demand, specialised for a single [[segment|Segmentation]] of the timeline and a single [[feed|Feed]] of data frames to be pulled from a ModelPort. Consequently this means that all frames and all channels within that realm will rely on the same job ticket -- which is a //higher order function,// a function producing another function: when provided with the specific frame coordinates (frame number and time point), the job ticket produces a [[concrete job definition|RenderJob]], which itself is a function to be invoked by the [[scheduler|Scheduler]] to carry out the necessary calculations just in time.
+&amp;rarr; JobPlanningPipeline
 </pre>
 </div>
 <div title="GAVL" modifier="Ichthyostega" created="200809220251" tags="def">
@@ -4288,6 +4289,9 @@ Thus an invocation trail represents one specific path leading to the invocation 
 * //it is conceivable// that the idea of an InvocationTrail might be reinstated as a //generalised hierarchical gesture controller.//
 ''Note'': {{red{future plans and visions -- no clear and distinct meaning -- as of 4/21}}}
 </pre>
+</div>
+<div title="JobPlanningPipeline" creator="Ichthyostega" modifier="Ichthyostega" created="202305260209" tags="operational Rendering draft" changecount="1">
+<pre>//Depth-first evaluation pipeline used in the FrameDispatcher to generate the next chunk of [[render jobs|RenderJob]]//</pre>
 </div>
 <div title="JobTicket" modifier="Ichthyostega" created="201202120018" modified="202305111241" tags="spec Rendering draft" changecount="4">
 <pre>The actual media data is rendered by [[individually scheduled render jobs|RenderJob]]. All these calculations together implement a [[stream of calculations|CalcStream]], as demanded and directed by the PlayProcess. During the preparation of playback, a ''node planning phase'' is performed, to arrange for [[dispatching|FrameDispatcher]] the individual calculations per frame.  The goal of these //preparations//&amp;nbsp; is to find out
@@ -6185,7 +6189,7 @@ This is the core service provided by the player subsystem. The purpose is to cre
 :any details of this processing remain opaque for the clients; even the player subsystem just accesses the EngineFaçade
 </pre>
 </div>
-<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202305232230" tags="overview impl discuss draft" changecount="26">
+<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202305260205" tags="overview impl discuss draft" changecount="27">
 <pre>//Integration effort to promote the development of rendering, playback and video display in the GUI//
 This IntegrationSlice was started in {{red{2023}}} as [[Ticket #1221|https://issues.lumiera.org/ticket/1221]] to coordinate the completion and integration of various implementation facilities, planned, drafted and built during the last years; this effort marks the return of development focus to the lower layers (after years of focussed UI development) and will implement the asynchronous and time-bound rendering coordinated by the [[Scheduler]] in the [[Vault|Vault-Layer]]
 
@@ -6206,7 +6210,7 @@ __May.23__: taking a //prototyping approach// now, since further development was
 * ✔ build a {{{MockSegmentation}}} to hold onto ~JobTickets, which can be created as Mock
 * ✔define a simple specification language (based on the existing {{{GenNode}}}-DSL to define segments, tickets and prerequisite jobs
 * ✔ implement a »~Split-Splice« algorithm for &amp;rarr; SegmentationChange, rigged accordingly to generate a mocked Segementation for now
-* 🗘 create a testbed to assemble a DispatcherPipeline step by step (&amp;rarr; [[#920|https://issues.lumiera.org/ticket/920]] and [[#1275|https://issues.lumiera.org/ticket/1275|]])
+* 🗘 create a testbed to assemble a JobPlanningPipeline step by step (&amp;rarr; [[#920|https://issues.lumiera.org/ticket/920]] and [[#1275|https://issues.lumiera.org/ticket/1275|]])
 
 !Decisions
 ;Scheduler

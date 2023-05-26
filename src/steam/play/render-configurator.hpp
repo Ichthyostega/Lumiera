@@ -82,7 +82,7 @@ namespace play {
       
       Feed buildActiveFeed (ModelPort);
       
-      typedef function<Feed(ModelPort)> ConnectFunction;
+      using ConnectFunction = function<Feed(ModelPort)>;
       
     protected:
       /** retrieve a suitable output sink for the data
@@ -103,6 +103,7 @@ namespace play {
        *         with the EngineFacade, one for each channel connection.
        * @note   when this strategy function returns, the corresponding
        *         render activities are already up and running.
+       * @todo get rid of the multiple channel connections          /////////////////////////////////////////TICKET #1297 : retract differentiation into channels here (instead use ModelPorts in the Segment)
        */
       virtual engine::CalcStreams buildCalculationStreams (ModelPort, OutputSlot&)  =0;
       
