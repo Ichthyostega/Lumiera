@@ -26,7 +26,7 @@
  */
 
 
-#include "vault/engine/engine-config.h"
+#include "vault/engine/engine-config.hpp"
 #include "lib/time/timevalue.hpp"
 
 #include <boost/rational.hpp>
@@ -83,23 +83,3 @@ namespace engine {
   }
   
 }} // namespace vault::engine
-
-namespace {
-  using vault::engine::EngineConfig;
-  
-  // any C adapter functions go here...
-  
-}
-
-
-
-
-extern "C" { /* ==== implementation C interface for engine configuration ======= */
-  
-gavl_time_t
-lumiera_engine_get_latency  ()
-{
-  return _raw (EngineConfig::get().currentEngineLatency());
-}
-
-}//extern "C"

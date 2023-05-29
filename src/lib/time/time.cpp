@@ -399,7 +399,7 @@ namespace { // implementation: basic frame quantisation....
     const int64_t microScale {lib::time::TimeValue::SCALE};
     
     // protect against numeric overflow
-    if (abs(time) < limit_num && microScale < limit_den)
+    if (abs(time) < limit_num and microScale < limit_den)
       {
         // safe to calculate "time * framerate"
         time -= origin;
@@ -425,7 +425,7 @@ lumiera_quantise_frames (gavl_time_t time, gavl_time_t origin, gavl_time_t grid)
 int64_t
 lumiera_quantise_frames_fps (gavl_time_t time, gavl_time_t origin, uint framerate)
 {
-  return calculate_quantisation (time,origin,framerate);
+  return calculate_quantisation (time, origin, framerate);
 }
 
 gavl_time_t

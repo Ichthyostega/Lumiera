@@ -31,7 +31,7 @@
 
 
 #include "steam/play/timings.hpp"
-#include "vault/engine/engine-config.h"
+#include "vault/engine/engine-config.hpp"
 #include "lib/time/formats.hpp"
 #include "lib/time/timequant.hpp"
 
@@ -66,7 +66,7 @@ namespace play {
    * in any way to the current session.
    * @remarks this ctor is intended rather for testing purposes!
    *          Usually, when creating a play/render process,
-   *          the actual timings \em are related to the timeline
+   *          the actual timings _are related to the timeline_
    *          and the latency/speed requirements of the output.
    */
   Timings::Timings (FrameRate fps)
@@ -112,13 +112,6 @@ namespace play {
   Timings::getFrameStartAt (FrameCnt frameNr)  const
   {
     return Time(grid_->timeOf(frameNr));
-  }
-  
-  
-  Offset
-  Timings::getFrameOffsetAt (TimeValue refPoint)  const
-  {
-    return 1 * getFrameDurationAt (refPoint);      /////////////////TODO implement a speed factor here
   }
   
   
@@ -183,9 +176,9 @@ namespace play {
   
   
   FrameCnt
-  Timings::establishNextPlanningChunkStart(FrameCnt currentAnchorFrame)  const
+  Timings::establishNextPlanningChunkStart(FrameCnt anchorFrame)  const
   {
-    TimeVar breakingPoint = grid_->timeOf(currentAnchorFrame);
+    TimeVar breakingPoint = grid_->timeOf(anchorFrame);
     breakingPoint += getPlanningChunkDuration();
     FrameCnt nextFrame = grid_->gridPoint (breakingPoint);
     

@@ -96,7 +96,7 @@ namespace time {
   
   /** convenience shortcut: \em materialise a raw time value
    *  based on this grid or time axis, but returning a raw time value. 
-   *  Implemented as combination of the #gridAlign and #timeOf operations,
+   *  Implemented as combination of the #gridPoint and #timeOf operations,
    *  i.e. we quantise into this scale, but transform the result back onto
    *  the global raw time value scale.
    * @warning this operation incurs information loss. Values may be rounded

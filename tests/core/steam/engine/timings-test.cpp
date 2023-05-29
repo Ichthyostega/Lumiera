@@ -98,12 +98,10 @@ namespace test  {
   
   
   /***************************************************************//**
-   * @test document and verify the engine::Dispatcher interface, used
-   *       to translate a CalcStream into individual node jobs.
-   *       This test covers the definition of the interface itself,
-   *       together with the supporting types and the default
-   *       implementation of the basic operations.
-   *       It creates and uses  a mock Dispatcher implementation.
+   * @test document and verify frame timing calculations, which are
+   *       used in the Player / engine::Dispatcher, to translate a CalcStream
+   *       into individual node jobs.
+   * @see TimingConstraints_test
    */
   class Timings_test : public Test
     {

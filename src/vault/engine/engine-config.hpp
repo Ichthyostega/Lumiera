@@ -21,7 +21,7 @@
 */
 
 
-/** @file engine-config.h
+/** @file engine-config.hpp
  ** access point to configuration of engine parameters
  */
 
@@ -30,11 +30,6 @@
 #define VAULT_ENGINE_ENGINE_CONFIG_H
 
 
-
-#include "lib/time.h"
-
-
-#ifdef __cplusplus  /* ============== C++ Interface ================= */
 
 #include "lib/time/timevalue.hpp"
 #include "lib/depend.hpp"
@@ -63,6 +58,8 @@ namespace engine {
    *       is no locking and all values are hard coded. It is conceivable to implement
    *       the \em access in a lock-free manner (by loosening any guarantee regarding
    *       the actual time point when a changed setting becomes visible)
+   * 
+   * @deprecated 5/23 singleton access looks questionable; should be part of RenderEnvironmentClosure rather
    */
   class EngineConfig
     {
@@ -101,21 +98,4 @@ namespace engine {
     };
 
 }} // namespace vault::engine
-
-
-
-
-
-extern "C" {
-#endif /* =========================== CL Interface ===================== */
-
-
-/** guess of the current effective engine calculation delay */
-gavl_time_t lumiera_engine_get_latency  ();
-
-
-
-#ifdef __cplusplus
-}
-#endif
 #endif/*VAULT_ENGINE_ENGINE_CONFIG_H*/

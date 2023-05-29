@@ -114,7 +114,6 @@ namespace play {
       Time     getOrigin()  const;
       
       Time     getFrameStartAt    (FrameCnt frameNr)    const;
-      Offset   getFrameOffsetAt   (TimeValue refPoint)  const;
       Duration getFrameDurationAt (TimeValue refPoint)  const;
       Duration getFrameDurationAt (FrameCnt refFrameNr) const;
       
@@ -141,8 +140,8 @@ namespace play {
        *  which is signalled  by `playbackUrgency == TIMEBOUND`
        * @return wall clock time to expect delivery of data
        *         corresponding to a frame specified relative
-       *         to \link #getOrigin time axis origin \endlink
-       * @note for other playback urgencies \c Time::NEVER
+       *         to [time axis origin](\ref #getOrigin)
+       * @note for other playback urgencies `Time::NEVER` is returned
        * 
        * @warning not clear as of 1/13 if it is even possible to have such a function
        *          on the Timings record. 
@@ -161,16 +160,16 @@ namespace play {
       
       /** establish the time point to anchor the next planning chunk,
        *  in accordance with #getPlanningChunkDuration
-       * @param currentAnchorFrame frame number where the current planning started
+       * @param anchorFrame frame number where the current planning chunk started
        * @return number of the first frame, which is located strictly more than
        *         the planning chunk duration into the future
        * @remarks this value is used by the frame dispatcher to create a
        *          follow-up planning job */
-      FrameCnt establishNextPlanningChunkStart(FrameCnt currentAnchorFrame)  const;
+      FrameCnt establishNextPlanningChunkStart(FrameCnt anchorFrame)  const;
       
       /** reasonable guess of the current engine working delay.
        *  Frame calculation deadlines will be readjusted by that value,
-       *  to be able to deliver in time with sufficient probability. */
+       *  to be able to deliver in time with sufficient likeliness. */
       Duration currentEngineLatency()  const;
       
       
