@@ -69,7 +69,7 @@ namespace engine {
       TimeVar  absoluteNominalTime;
       FrameCnt absoluteFrameNumber;
       
-      TimeVar absoluteRealDeadline;
+      TimeVar realTimeDeadline;
       
       ModelPort modelPort;
       uint      channelNr;        ///////////////////////////////////////////////////////////////////////////TICKET #1297 : retract differentiation into channels here (instead use ModelPorts in the Segment)
@@ -79,7 +79,7 @@ namespace engine {
       FrameCoord()
         : absoluteNominalTime(Time::NEVER)
         , absoluteFrameNumber(std::numeric_limits<FrameCnt>::max())
-        , absoluteRealDeadline(Time::NEVER)
+        , realTimeDeadline(Time::NEVER)
         , modelPort() // unconnected
         , channelNr(0)
         { }
@@ -91,7 +91,7 @@ namespace engine {
       bool
       isDefined()  const
         {
-          return absoluteRealDeadline != Time::NEVER;
+          return realTimeDeadline != Time::NEVER;
         }
     };
   

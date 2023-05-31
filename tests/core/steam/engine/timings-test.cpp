@@ -28,7 +28,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/error.hpp"
+#include "lib/test/test-helper.hpp"
 
 //#include "steam/engine/procnode.hpp"
 #include "steam/play/dummy-play-connection.hpp"
@@ -61,7 +61,7 @@ namespace test  {
   using lib::time::FrameRate;
   using lib::time::Duration;
   using lib::time::Offset;
-  using lib::time::TimeVar;
+  using lib::time::TimeValue;
   using lib::time::Time;
   using mobject::ModelPort;
   using play::Timings;
@@ -75,16 +75,23 @@ namespace test  {
     const uint DUMMY_CHANNEL(0); /////////////////////////////////////////////////////////////TICKET #1297 : get rid of the channels (use different ModelPort)
     
     
-    ModelPort
-    getTestPort()
+//  ModelPort
+//  getTestPort()
+//  {
+//    using play::test::ModelPorts;
+//    using play::test::PlayTestFrames_Strategy;
+//    using DummyPlaybackSetup = play::test::DummyPlayConnection<PlayTestFrames_Strategy>;
+//    
+//    DummyPlaybackSetup dummySetup;
+//    ModelPorts mockModelPorts = dummySetup.provide_testModelPorts();
+//    return *mockModelPorts;  // using just the first dummy port
+//  }
+    
+    
+    FSecs
+    randTicks()
     {
-      using play::test::ModelPorts;
-      using play::test::PlayTestFrames_Strategy;
-      using DummyPlaybackSetup = play::test::DummyPlayConnection<PlayTestFrames_Strategy>;
-      
-      DummyPlaybackSetup dummySetup;
-      ModelPorts mockModelPorts = dummySetup.provide_testModelPorts();
-      return *mockModelPorts;  // using just the first dummy port
+      return FSecs{1 + rand() % 600, 1 + rand() % 600};
     }
 
   } // (End) Test fixture
@@ -120,53 +127,32 @@ namespace test  {
       void
       verify_simpleFrameStep()
         {
-          ModelPort modelPort (getTestPort());
           Timings timings (FrameRate::PAL);
+          CHECK (timings.getOrigin() == Time::ZERO);
+          
           ENSURE (START_FRAME == 10);
-          
-          TimeAnchor refPoint(timings, START_FRAME);
-          CHECK (refPoint == Time::ZERO + Duration(10, FrameRate::PAL));
-          
-          FrameCoord frame; /////////////////TODO get / implement offset-by-#-Frames
-          FrameCnt frameOffset = 15;
-          
-          frame.absoluteNominalTime = refPoint;
-          frame.absoluteFrameNumber = refPoint.getStartFrame();
-          frame.absoluteRealDeadline = refPoint.establishDeadlineFor (frameOffset);
-          frame.modelPort = modelPort;
-          frame.channelNr = DUMMY_CHANNEL;
-          
-          ENSURE (frame.isDefined());
-//        frame = dispatcher_->locateRelative (frame, frameOffset); /////////////////////////////OOO MAGIC FAIRY DUST HERE
-          
-          CHECK (frame.absoluteNominalTime == Time(0,1));     ///////////////////////////////////OOO Boooooom
-          CHECK (frame.absoluteFrameNumber == 25);
-          CHECK (refPoint.remainingRealTimeFor(frame) <  Time(FSecs(25,25)));
-          CHECK (refPoint.remainingRealTimeFor(frame) >= Time(FSecs(24,25)));
-          CHECK (frame.modelPort == modelPort);
-          
+          CHECK (timings.getFrameStartAt(START_FRAME)   == Time::ZERO + Duration(10, FrameRate::PAL));
+          CHECK (timings.getFrameStartAt(START_FRAME+1) == Time::ZERO + Duration(11, FrameRate::PAL));
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
         }
       
       
-      /** action used as "continuation" in #check_ContinuationBuilder
-       *  This function expects to be invoked with a time anchor bumped up
-       *  to point exactly behind the end of the previously planned chunk of Jobs
+      /** @test detect boundaries of frame planning chunks for arbitrary chunk duration.
        */
       void
       verify_next_startPoint()
         {
           Timings timings (FrameRate::PAL);
-          TimeAnchor nextRefPoint(timings, START_FRAME);  //////////////////////////////////////OOO : how is this actually determined (not yet implemented....)
-          UNIMPLEMENTED ("How to determine the start point of the next planning chunk");
+          Time refPoint{randTicks()};
+          
+          FrameCnt startFrame = timings.getBreakPointAfter (refPoint);
+          Time frameStart = timings.getFrameStartAt(startFrame);
           
           Duration frameDuration (1, FrameRate::PAL);
-          Time startAnchor = Time::ZERO + START_FRAME*frameDuration;
-          Duration time_to_cover = timings.getPlanningChunkDuration();
           
-          CHECK (Time(nextRefPoint) >= startAnchor + time_to_cover);
-          CHECK (Time(nextRefPoint) <  startAnchor + time_to_cover + 1*frameDuration);
+          CHECK (frameStart >= refPoint);
+          CHECK (frameStart <  refPoint + frameDuration);
         }
     };
   

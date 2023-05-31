@@ -77,7 +77,6 @@ namespace test {
           
           CHECK (timings.getOrigin() == Time::ZERO);
           CHECK (timings.getFrameDurationAt(t) == lengthPAL);
-          CHECK (timings.getFrameOffsetAt(t)   == lengthPAL);
           CHECK (ASAP == timings.playbackUrgency);
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #831
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #831

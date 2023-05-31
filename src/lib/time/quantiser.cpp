@@ -102,9 +102,9 @@ namespace time {
    * @warning this operation incurs information loss. Values may be rounded
    *          and / or clipped, according to the grid used. And, contrary to
    *          a QuTime value, the information about the actual grid is
-   *          discarded. Please don't use this operation if you just
-   *          "want a number" but feel to too lazy to understand
-   *          properly what quantisation means!
+   *          discarded. Please resist the temptation to abuse this
+   *          operation to "just get a simple number", without
+   *          understanding what quantisation means!
    */
   TimeValue
   Quantiser::materialise  (TimeValue const& raw)  const

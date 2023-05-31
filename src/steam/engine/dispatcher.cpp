@@ -56,7 +56,7 @@ namespace engine {
     FrameCoord frame;
     frame.absoluteNominalTime = refPoint;
     frame.absoluteFrameNumber = refPoint.getStartFrame();
-    frame.absoluteRealDeadline = refPoint.establishDeadlineFor (frameOffset);
+    frame.realTimeDeadline = refPoint.establishDeadlineFor (frameOffset);
     frame.modelPort = this->modelPort_;
     frame.channelNr = this->channel_;
     

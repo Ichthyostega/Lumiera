@@ -128,14 +128,23 @@ namespace play {
   {
     return Offset (grid_->timeOf(refFrameNr), grid_->timeOf(refFrameNr + 1));
   }
-
+  
+  
+  FrameCnt
+  Timings::getBreakPointAfter (TimeValue refPoint)  const
+  {
+    FrameCnt frameNr = grid_->gridPoint (refPoint);
+    return grid_->timeOf(frameNr) == refPoint? frameNr
+                                             : frameNr+1;
+  }
+  
   
   
   /** @remarks the purpose of this function is to support scheduling
    *           and frame handling even in case the frame rate isn't constant.
    *           To indicate the case the frame rate is changing right now,
    *           this function might return Duration::NIL
-   *  @todo implement real support for variable frame rates      
+   *  @todo implement real support for variable frame rates
    */                                  ////////////////////////////////////////////////////////TICKET #236
   Duration
   Timings::constantFrameTimingsInterval (TimeValue)  const

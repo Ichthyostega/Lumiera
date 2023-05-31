@@ -100,7 +100,7 @@ namespace play {
       PlaybackUrgency playbackUrgency;
       boost::rational<FrameCnt> playbackSpeed;                     /////////////TICKET #902 we need a more generic representation for variable speed playback
       Time scheduledDelivery;                           ///< a wall clock time corresponding to the Grid's origin. Can be Time::Never (=not time bound)
-      Duration outputLatency;
+      Duration outputLatency;                                    ///////////////TICKET #1301 do we even need this information here (-> rather on some Engine state)
       
       explicit
       Timings (FrameRate fps);
@@ -116,6 +116,9 @@ namespace play {
       Time     getFrameStartAt    (FrameCnt frameNr)    const;
       Duration getFrameDurationAt (TimeValue refPoint)  const;
       Duration getFrameDurationAt (FrameCnt refFrameNr) const;
+      
+      /** the next grid point at or after the given reference time */
+      FrameCnt getBreakPointAfter (TimeValue refPoint)  const;
       
       /** the frame spacing and duration remains constant for some time...
        * @param startPoint looking from that time point into future
@@ -174,6 +177,7 @@ namespace play {
       
       
       bool isOriginalSpeed()  const;
+      bool isTimebound()      const;
       
       
       /** Consistency self-check */
@@ -194,6 +198,12 @@ namespace play {
   Timings::isOriginalSpeed()  const
   {
     return 1 == playbackSpeed;
+  }
+  
+  inline bool
+  Timings::isTimebound()  const
+  {
+    return play::TIMEBOUND == playbackUrgency;
   }
   
   

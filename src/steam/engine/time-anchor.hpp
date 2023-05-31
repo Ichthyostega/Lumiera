@@ -30,6 +30,8 @@
  ** @todo this is part of an implementation draft from 2013,
  **       to create a complete outline of player and render job generation.
  ** @todo as of 2016 this effort is stalled, but remains valid
+ ** 
+ ** @deprecated 5/23 during rework of Playback / Rendering the concept TimeAnchor lost its substance
  */
 
 
@@ -89,6 +91,9 @@ namespace engine {
    *          adjustments to the engine latency will be reflected in the planned job's
    *          deadlines. Actually, the embedded Timings record is responsible for this
    *          timing calculation and for fetching the current EngineConfig.
+   *
+   * @deprecated 5/23 during rework of Playback / Rendering it turns out that TimeAnchor
+   *          is completely redundant and void of substantial meaning
    * 
    * @see Dispatcher
    * @see DispatcherInterface_test
@@ -100,6 +105,8 @@ namespace engine {
       FrameCnt anchorPoint_;
       Time relatedRealTime_;
       
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
+ ////////////////////////////////////////////////////////////////////////////////////////////////OOO sensible calculation, but pointless in TimeAnchor
       static Time
       expectedTimeofArival (play::Timings const& timings, FrameCnt startFrame, Offset startDelay)
         {
@@ -119,6 +126,14 @@ namespace engine {
               break;
             }
           return deadline;
+        }
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
+      static Time
+      expectedTimeofArival (play::Timings const& timings, FrameCnt startFrame, Offset startDelay)
+        {
+          TimeVar deadline = timings.isTimebound()? timings.getTimeDue(startFrame)
+                                                  : RealClock::now();
+          return deadline + startDelay;
         }
       
       

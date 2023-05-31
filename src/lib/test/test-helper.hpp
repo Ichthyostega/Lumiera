@@ -260,7 +260,7 @@ namespace test{
   
   
   
-  /** create a random but not insane Time value */
+  /** create a random but not insane Time value between 1s ... 10min + 500ms */
   inline lib::time::Time
   randTime ()
   {
