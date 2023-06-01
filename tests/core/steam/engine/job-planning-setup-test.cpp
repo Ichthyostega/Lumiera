@@ -26,11 +26,13 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/error.hpp"
+#include "lib/test/test-helper.hpp"
 #include "steam/engine/mock-dispatcher.hpp"
 #include "vault/engine/dummy-job.hpp"
 
 #include "lib/format-cout.hpp"///////////////////////TODO
+#include "lib/iter-tree-explorer.hpp"
+#include "lib/format-util.hpp"
 
 //#include "steam/engine/job-planning.hpp"
 
@@ -38,6 +40,10 @@
 
 using test::Test;
 //using std::rand;
+using lib::eachNum;
+using lib::treeExplore;
+using lib::time::PQuant;
+using lib::time::FrameRate;
 
 
 namespace steam {
@@ -45,8 +51,23 @@ namespace engine{
 namespace test  {
   
   using vault::engine::DummyJob;
+  using lib::time::FixedFrameQuantiser;
 
   namespace { // test fixture...
+    
+    /** Diagnostic helper: join all the elements from some given container or iterable */
+    template<class II>
+    inline string
+    materialise (II&& ii)
+    {
+      return util::join (std::forward<II> (ii), "-");
+    }
+    
+    inline PQuant
+    frameGrid (FrameRate fps)
+    {
+      return PQuant (new FixedFrameQuantiser (fps));
+    }
     
   } // (End) test fixture
   
@@ -75,7 +96,6 @@ namespace test  {
       run (Arg)
         {
           demonstrateScaffolding();
-          UNIMPLEMENTED ("shape the interface of the job-planning pipeline");
           buildBaseTickGenerator();
           accessTopLevelJobTicket();
           exploreJobTickets();
@@ -130,11 +150,24 @@ namespace test  {
       
       
       /** @test use the Dispatcher interface (mocked) to generate a frame »beat«
+       *        - demonstrate explicitly the mapping of a (frame) number sequence
+       *          onto a sequence of time points with the help of time quantisation
        *  @remark this is the foundation to generate top-level frame render jobs
        */
       void
       buildBaseTickGenerator()
         {
+          auto grid = frameGrid(FrameRate::PAL);
+          
+          CHECK (materialise (
+                    treeExplore (eachNum(5,13))
+                      .transform([&](FrameCnt frameNr) -> TimeVar
+                                     {
+                                       return grid->timeOf (frameNr);
+                                     })
+                    )
+                 == "200ms-240ms-280ms-320ms-360ms-400ms-440ms-480ms"_expect);
+          
           UNIMPLEMENTED ("foundation of state core");
         }
       
