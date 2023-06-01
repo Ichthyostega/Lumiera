@@ -1213,6 +1213,51 @@ namespace lib {
                                                       );                   //   wrap the extension predicate in a similar way
             _Filter::pullFilter();                                        //    then pull to re-establish the Invariant
           }
+      };                                                                /////////////////////////////////////TICKET #1305 shouldn't we use std::move(_Filter::predicate_) ???
+    
+    
+    
+    /**
+     * @internal Decorator for TreeExplorer to cut iteration once a predicate ceases to be true.
+     * Similar to Filter, the given functor is adapted as appropriate, yet is required to yield
+     * a bool convertible result. The functor will be evaluated whenever the »exhausted« state
+     * of the resulting iterator is checked, on each access and before iteration; this evaluation
+     * is not cached (and thus could also detect ongoing state changes by side-effect).
+     * @note usually an _exhausted iterator will be abandoned_ — however, since the test is
+     *       not cached, the iterator might become active again, if for some reason the
+     *       condition becomes true again (e.g. as result of `expandChildern()`)
+     */
+    template<class SRC>
+    class StopTrigger
+      : public IterStateCore<SRC>
+      {
+        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        
+        using Core = IterStateCore<SRC>;
+        using Cond = function<bool(SRC&)>;
+        
+        Cond whileCondition_;
+        
+      public:
+        
+        StopTrigger() =default;
+        // inherited default copy operations
+        
+        template<typename FUN>
+        StopTrigger (SRC&& dataSrc, FUN&& condition)
+          : Core{move (dataSrc)}
+          , whileCondition_{_FunTraits<FUN,SRC>::adaptFunctor (forward<FUN> (condition))}
+          { }
+        
+        
+        /** adapt the iteration control API for IterableDecorator:
+         *  check the stop condition first and block eventually */
+        bool
+        checkPoint()  const
+          {
+            return Core::checkPoint()
+               and whileCondition_(Core::srcIter());
+          }
       };
     
     
@@ -1508,6 +1553,44 @@ namespace lib {
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
           return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(transformFunctor)});
+        }
+      
+      
+      /** adapt this TreeExplorer to iterate only as long as a condition holds true.
+       * @return processing pipeline with attached [stop condition](\ref iter_explorer::StopTrigger)
+       */
+      template<class FUN>
+      auto
+      iterWhile (FUN&& whileCond)
+        {
+          iter_explorer::static_assert_isPredicate<FUN,SRC>();
+          
+          using ResCore = iter_explorer::StopTrigger<SRC>;
+          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          
+          return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(whileCond)});
+        }
+      
+      
+      /** adapt this TreeExplorer to iterate until a condition becomes first true.
+       * @return processing pipeline with attached [stop condition](\ref iter_explorer::StopTrigger)
+       */
+      template<class FUN>
+      auto
+      iterUntil (FUN&& untilCond)
+        {
+          iter_explorer::static_assert_isPredicate<FUN,SRC>();
+          
+          using ResCore = iter_explorer::StopTrigger<SRC>;
+          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          using ArgType = typename iter_explorer::_FunTraits<FUN,SRC>::Arg;
+          
+          return TreeExplorer<ResIter> (ResCore { move(*this)
+                                                ,[whileCond = forward<FUN>(untilCond)](ArgType val)
+                                                  {
+                                                    return not whileCond(val);
+                                                  }
+                                                });
         }
       
       

@@ -281,6 +281,7 @@ namespace test{
           verify_combinedExpandTransform();
           verify_customProcessingLayer();
           verify_scheduledExpansion();
+          verify_untilStopTrigger();
           verify_FilterIterator();
           verify_FilterChanges();
           verify_asIterSource();
@@ -829,6 +830,42 @@ namespace test{
       
       
       
+      /** @test control end of iteration by a stop condition predicate.
+       * When decorating the pipeline with this adapter, iteration end depends not only on
+       * the source iterator, but also on the end condition; once the condition flips, the
+       * overall pipeline iterator is exhausted and can never be re-activated again (unless
+       * some special trickery is done by conspiring with the data source)
+       */
+      void
+      verify_untilStopTrigger()
+        {
+          CHECK (materialise (
+                    treeExplore(CountDown{10})
+                      .iterUntil([](uint j){ return j < 5; })
+                    )
+                 == "10-9-8-7-6-5"_expect);
+          
+          CHECK (materialise (
+                    treeExplore(CountDown{10})
+                      .iterWhile([](uint j){ return j > 5; })
+                    )
+                 == "10-9-8-7-6"_expect);
+          
+          CHECK (materialise (
+                    treeExplore(CountDown{10})
+                      .iterWhile([](int j){ return j > -5; })
+                    )
+                 == "10-9-8-7-6-5-4-3-2-1"_expect);
+          
+          CHECK (materialise (
+                    treeExplore(CountDown{10})
+                      .iterWhile([](uint j){ return j > 25; })
+                    )
+                 == ""_expect);
+        }
+      
+      
+      
       /** @test add a filtering predicate into the pipeline.
        * As in all the previously demonstrated cases, also the _filtering_ is added as decorator,
        * wrapping the source and all previously attached decoration layers. And in a similar way,
@@ -843,7 +880,7 @@ namespace test{
                     treeExplore(CountDown{10})
                       .filter([](uint j){ return j % 2; })
                     )
-                 == "9-7-5-3-1");
+                 == "9-7-5-3-1"_expect);
           
           
           // Filter may lead to consuming util exhaustion...
@@ -875,7 +912,7 @@ namespace test{
                       .transform([](float f){ return 0.55 + 2*f; })
                       .filter([](CountDown& core){ return core.p % 2; })
                     )
-                 == "18.55-14.55-10.55");
+                 == "18.55-14.55-10.55"_expect);
           
           
           
@@ -887,7 +924,7 @@ namespace test{
                       .filter([](uint i){ return i%2 == 0; })
                       .expandAll()                                                   // Note: sends the expandChildren down through the filter
                     )
-                 == "10-8-6-4-2-2-6-4-2-2");
+                 == "10-8-6-4-2-2-6-4-2-2"_expect);
           
           
           
@@ -911,7 +948,7 @@ namespace test{
                                    });
           
           CHECK (materialise(kk)
-                 == "14-12-10-8-6-4-2-14-12");
+                 == "14-12-10-8-6-4-2-14-12"_expect);
                  // Explanation:
                  // The source starts at 10, but since the toggle is false,
                  // none of the initial values makes it though to the result.
@@ -923,7 +960,7 @@ namespace test{
                  // the rest of the original sequence, 7,6 (which stops above 5).
           
           CHECK (materialise(kk.filter([](long i){ return i % 7; }))
-                 == "12-10-8-6-4-2-12");
+                 == "12-10-8-6-4-2-12"_expect);
                  // Explanation:
                  // Since the original TreeExplorer was assigned to variable kk,
                  // the materialise()-Function got a lvalue-ref and thus made a copy

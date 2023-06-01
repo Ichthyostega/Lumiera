@@ -326,7 +326,7 @@ namespace lib {
    *   -# \c yield realises the given state, yielding an element of result type `T&`
    * @tparam T nominal result type (maybe const, but without reference).
    *         The resulting iterator will yield a reference to this type T
-   * @tparam ST type of the "state core", defaults to T.
+   * @tparam ST type of the »state core«, defaults to T.
    *         The resulting iterator will hold an instance of ST, which thus
    *         needs to be copyable and default constructible to the extent
    *         this is required for the iterator as such.
@@ -444,6 +444,53 @@ namespace lib {
     return not (il == ir);
   }
   
+  
+  
+  
+  /**
+   * Adapter to dress up an existing »Lumiera Forward Iterator« as »state core«.
+   * This building block achieves the complement of \ref IterStateWrapper by providing
+   * the API functions expected by the latter's _state protocol;_ a combination of
+   * IterStateCore and IterStateWrapper layered on top behaves identical to the
+   * original iterator. This can be used to change some aspects of the behaviour.
+   * @remark directly layered by inheritance, thus public functions of the
+   *         wrapped iterator remain visible (contrary to IterStateWrapper)
+   */
+  template<class IT>
+  class IterStateCore
+      : public IT
+      {
+        static_assert (lib::meta::can_IterForEach<IT>::value
+                      ,"Lumiera Iterator required as source");
+      protected:
+        IT&
+        srcIter()  const
+          {
+            return unConst(*this);
+          }
+        
+      public:
+        using IT::IT;
+        
+      /* === state protocol API for IterStateWrapper === */
+        bool
+        checkPoint()  const
+          {
+            return bool(srcIter());
+          }
+        
+        typename IT::reference
+        yield()  const
+          {
+            return *srcIter();
+          }
+        
+        void
+        iterNext()
+          {
+            ++ srcIter();
+          }
+      };
   
   
   
