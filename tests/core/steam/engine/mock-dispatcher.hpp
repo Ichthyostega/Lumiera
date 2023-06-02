@@ -46,6 +46,7 @@
 
 
 #include "lib/test/test-helper.hpp"
+#include "steam/play/dummy-play-connection.hpp"
 #include "steam/fixture/segmentation.hpp"
 #include "steam/mobject/model-port.hpp"
 #include "steam/engine/dispatcher.hpp"
@@ -78,56 +79,13 @@ namespace test   {
   
   namespace { // used internally
     
-//    using play::PlayTestFrames_Strategy;
-//    using play::ModelPorts;
+    using play::test::ModelPorts;
+    using play::test::PlayTestFrames_Strategy;
     using vault::engine::JobClosure;
     using vault::engine::JobParameter;
     using vault::engine::DummyJob;
     
-//    typedef play::DummyPlayConnection<play::PlayTestFrames_Strategy> DummyPlaybackSetup;
-    
-    
-    class MockDispatcherTable
-      : public Dispatcher
-      {
-        
-//        DummyPlaybackSetup dummySetup_;
-        
-        
-        /* == mock Dispatcher implementation == */
-        
-        FrameCoord
-        locateRelative (FrameCoord const&, FrameCnt frameOffset)
-          {
-            UNIMPLEMENTED ("dummy implementation of the core dispatch operation");
-          }
-        
-        bool
-        isEndOfChunk (FrameCnt, ModelPort port)
-          {
-            UNIMPLEMENTED ("determine when to finish a planning chunk");
-          }
-
-        JobTicket&
-        accessJobTicket (ModelPort, TimeValue nominalTime)
-          {
-            UNIMPLEMENTED ("dummy implementation of the model backbone / segmentation");
-          }
-        
-      public:
-        
-        ModelPort
-        provideMockModelPort()
-          {
-//            ModelPorts mockModelPorts = dummySetup_.provide_testModelPorts();
-//            return *mockModelPorts;  // using just the first dummy port
-          }
-      };
-    
-    /// @deprecated this setup is confusing and dangerous (instance identity is ambiguous)
-    lib::Depend<MockDispatcherTable> mockDispatcher;
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1221
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1221
+    using DummyPlaybackSetup = play::test::DummyPlayConnection<PlayTestFrames_Strategy>;
     
     
     
@@ -297,6 +255,71 @@ namespace test   {
     MockJobTicket const& backdoor = static_cast<MockJobTicket const&> (ticket);
     return backdoor.verify_associated (job);
   }
+  
+  
+  
+  class MockDispatcher
+    : public Dispatcher
+    {
+      
+      DummyPlaybackSetup dummySetup_;
+      MockSegmentation mockSeg_;
+      
+      
+      /* == mock Dispatcher implementation == */
+      
+      FrameCoord
+      locateRelative (FrameCoord const&, FrameCnt frameOffset)
+        {
+          UNIMPLEMENTED ("dummy implementation of the core dispatch operation");
+        }
+      
+      bool
+      isEndOfChunk (FrameCnt, ModelPort port)
+        {
+          UNIMPLEMENTED ("determine when to finish a planning chunk");
+        }
+
+      JobTicket&
+      accessJobTicket (ModelPort, TimeValue nominalTime)
+        {
+          UNIMPLEMENTED ("dummy implementation of the model backbone / segmentation");
+        }
+      
+    public:
+      
+      MockDispatcher()   = default;
+      
+      MockDispatcher (std::initializer_list<GenNode> specs)
+        : mockSeg_(specs)
+        { }
+      
+        
+      ModelPort
+      provideMockModelPort()
+        {
+          ModelPorts mockModelPorts = dummySetup_.getAllModelPorts();
+          return *mockModelPorts;  // using just the first dummy port
+        }
+      
+      /**
+       * The faked builder/playback setup provides some preconfigured ModelPort and
+       * corresponding DataSink handles. These are stored into a dummy registry and only available
+       * during the lifetime of the DummyPlaybackSetup instance.
+       * @param index number of the distinct port / connection
+       * @return a `std::pair<ModelPort,DataSink>`
+       * @warning as of 5/2023, there are two preconfigured "slots",
+       *          and they are not usable in any way other then refering to their identity
+       */
+      play::test::DummyOutputLink
+      getDummyConnection(uint index)
+        {
+          return dummySetup_.getModelPort (index);
+        }
+    };
+  
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1221
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1221
   
   
 }}} // namespace steam::engine::test

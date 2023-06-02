@@ -42,6 +42,7 @@
 #include "steam/engine/frame-coord.hpp"
 #include "steam/engine/job-ticket.hpp"
 #include "steam/engine/job-planning.hpp"
+#include "steam/play/output-slot.hpp"
 #include "lib/time/timevalue.hpp"
 
 #include <functional>
@@ -52,6 +53,8 @@ namespace engine {
   
   using std::function;
   using mobject::ModelPort;
+  using play::Timings;
+  using play::DataSink;
   using lib::time::FrameCnt;
   using lib::time::TimeSpan;
   using lib::time::FSecs;
@@ -84,6 +87,7 @@ namespace engine {
   class Dispatcher
     : public FrameLocator
     {
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
       struct JobBuilder
         {
           Dispatcher* dispatcher_;
@@ -100,12 +104,30 @@ namespace engine {
                   *dispatcher_);
             }
         };
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
+      
+      struct PipelineBuilder
+        : lib::SingleValIter<TimeVar>   ////////////////////////////////////////OOO placeholder type; should rather be a TreeExplorer!
+        {
+          PipelineBuilder&
+          timeRange (Time start, Time after)
+            {
+              UNIMPLEMENTED ("setup dispatch time range");
+            }
+        };
       
       
     public:
       virtual ~Dispatcher();  ///< this is an interface
       
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
       JobBuilder onCalcStream (ModelPort modelPort, uint channel);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
+      
+      PipelineBuilder forCalcStream(Timings timings, ModelPort port, DataSink sink)
+        {
+          UNIMPLEMENTED ("create Pipeline builder");
+        }
       
       
     protected:

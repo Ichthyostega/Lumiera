@@ -157,18 +157,27 @@ namespace test  {
       void
       buildBaseTickGenerator()
         {
-          auto grid = frameGrid(FrameRate::PAL);
+          auto grid = frameGrid(FrameRate::PAL);   // one frame ≙ 40ms
           
           CHECK (materialise (
                     treeExplore (eachNum(5,13))
-                      .transform([&](FrameCnt frameNr) -> TimeVar
+                      .transform([&](FrameCnt frameNr) -> TimeVar          //////////////////////////////////TICKET #1261 : transform-iterator unable to handle immutable time
                                      {
                                        return grid->timeOf (frameNr);
                                      })
                     )
                  == "200ms-240ms-280ms-320ms-360ms-400ms-440ms-480ms"_expect);
           
-          UNIMPLEMENTED ("foundation of state core");
+          
+          MockDispatcher dispatcher;
+          play::Timings timings (FrameRate::PAL);
+          auto [port,sink] = dispatcher.getDummyConnection(0);
+          
+          auto pipeline = dispatcher.forCalcStream(timings, port, sink)
+                                    .timeRange(Time{200,0}, Time{480,0});
+          
+          CHECK (materialise (pipeline)
+                 == "200ms-240ms-280ms-320ms-360ms-400ms-440ms-480ms"_expect);
         }
       
       

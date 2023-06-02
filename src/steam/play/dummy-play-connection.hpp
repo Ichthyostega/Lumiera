@@ -82,6 +82,7 @@
 //#include "include/display-facade.h"
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
+#include "steam/play/output-slot-connection.hpp"
 #include "steam/play/output-manager.hpp"
 #include "steam/mobject/model-port.hpp"
 #include "lib/time/timequant.hpp"
@@ -108,7 +109,29 @@ namespace test {
 //    using lumiera::DummyPlayer;
   using lib::time::Duration;
   
-  typedef lib::IterSource<mobject::ModelPort>::iterator ModelPorts;
+  using ModelPorts = lib::IterSource<mobject::ModelPort>::iterator;
+  
+  using DummyOutputLink = std::pair<mobject::ModelPort, play::DataSink>;
+  
+  /**
+   * @todo 5/2023 quick-n-dirty placeholder to be able to fabricate fake DataSink handles (`Handle<Connection>`)
+   */
+  class UnimplementedConnection
+    : public play::OutputSlot::Connection
+    {
+      BuffHandle claimBufferFor(FrameID) override { UNIMPLEMENTED ("claimBufferFor(FrameID)");      }
+      bool isTimely (FrameID, TimeValue) override { return true;                                    }
+      void transfer (BuffHandle const&)  override { UNIMPLEMENTED ("transfer (BuffHandle const&)"); }
+      void pushout  (BuffHandle const&)  override { UNIMPLEMENTED ("pushout  (BuffHandle const&)"); }
+      void discard  (BuffHandle const&)  override { UNIMPLEMENTED ("discard  (BuffHandle const&)"); }
+      void shutDown ()                   override { UNIMPLEMENTED ("shutDown() Connection");        }
+      
+    public:
+     ~UnimplementedConnection();
+      UnimplementedConnection()  = default;
+    };
+  
+  
   
   
   struct PlayTestFrames_Strategy
@@ -153,7 +176,7 @@ namespace test {
     const string namePortA("bus-A");
     const string namePortB("bus-B");
     
-    /** 
+    /**
      * helper for dummy render engine:
      * Simulate the result of a build process,
      * without actually running the builder.
@@ -165,6 +188,7 @@ namespace test {
         ModelPortRegistry* existingRegistry_;
         
         std::vector<ModelPort> modelPorts_;
+        std::vector<DataSink>  dataSinks_;
         
         /** setup */
         SimulatedBuilderContext()
@@ -199,6 +223,10 @@ namespace test {
             // now "bus-A" and "bus-B" are known as model ports
             modelPorts_.push_back (ModelPort(pipeA));
             modelPorts_.push_back (ModelPort(pipeB));
+            
+            // prepare corresponding placeholder DataSink (a fake active output connection)
+            dataSinks_.emplace_back().activate(std::make_shared<UnimplementedConnection>());
+            dataSinks_.emplace_back().activate(std::make_shared<UnimplementedConnection>());
           }
         
         
@@ -206,6 +234,15 @@ namespace test {
         getAllModelPorts()
           {
             return lib::iter_source::eachEntry (modelPorts_.begin(), modelPorts_.end());
+          }
+        
+        DummyOutputLink
+        getModelPort (uint index)
+          {
+            REQUIRE (index < modelPorts_.size());
+            return {modelPorts_[index]
+                   ,dataSinks_[index]
+                   };
           }
       };
   }
@@ -230,9 +267,15 @@ namespace test {
     public:
       
       ModelPorts
-      provide_testModelPorts()
+      getAllModelPorts()
         {
           return mockBuilder_.getAllModelPorts();
+        }
+      
+      DummyOutputLink
+      getModelPort (uint index)
+        {
+          return mockBuilder_.getModelPort (index);
         }
       
       POutputManager

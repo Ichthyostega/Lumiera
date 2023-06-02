@@ -375,13 +375,6 @@ namespace lib {
       { };
     
     template<class SRC>
-    struct shall_use_StateCore
-      : __and_<__not_<can_IterForEach<SRC>>
-              ,is_StateCore<SRC>
-              >
-      { };
-    
-    template<class SRC>
     struct shall_use_Lumiera_Iter
       : __and_<can_IterForEach<SRC>
               ,__not_<is_StateCore<SRC>>

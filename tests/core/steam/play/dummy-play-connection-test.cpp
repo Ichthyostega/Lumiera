@@ -75,7 +75,7 @@ namespace test {
           CHECK (!dummy.isWired());
           
           Play::Controller player
-            = Play::facade().perform ( dummy.provide_testModelPorts()
+            = Play::facade().perform ( dummy.getAllModelPorts()
                                      , dummy.provide_testOutputSlot());
           CHECK ( dummy.isWired());
           

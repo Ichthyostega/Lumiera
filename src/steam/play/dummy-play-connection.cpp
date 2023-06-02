@@ -37,18 +37,21 @@
 
 
 
-namespace steam {
+namespace steam{
 namespace play {
+namespace test {
   
   
   namespace { // hidden local details of the service implementation....
     
+    
   } // (End) hidden service impl details
   
+  UnimplementedConnection::~UnimplementedConnection() { } ///< emit VTable here...
   
   
   
-  /** */  
+  /** */
   
   
-}} // namespace steam::play
+}}} // namespace steam::play

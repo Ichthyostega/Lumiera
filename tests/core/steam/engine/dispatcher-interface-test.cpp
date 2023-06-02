@@ -107,7 +107,7 @@ namespace test  {
         ModelPort
         provideMockModelPort()
           {
-            ModelPorts mockModelPorts = dummySetup_.provide_testModelPorts();
+            ModelPorts mockModelPorts = dummySetup_.getAllModelPorts();
             return *mockModelPorts;  // using just the first dummy port
           }
       };
