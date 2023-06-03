@@ -100,11 +100,12 @@ namespace engine {
   void
   CalcPlanContinuation::performJobPlanningChunk(FrameCnt nextStartFrame)
   {
-    TimeAnchor refPoint(timings_, nextStartFrame);
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301      
     JobPlanningSequence jobs = dispatcher_.onCalcStream(modelPort_, channel_)
                                           .establishNextJobs(refPoint);
     
     Job nextChunkOfPlanning = buildFollowUpJobFrom (refPoint);
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301    TimeAnchor refPoint(timings_, nextStartFrame);
     
     UNIMPLEMENTED ("the actual meat: access the scheduler and fed those jobs");
   }

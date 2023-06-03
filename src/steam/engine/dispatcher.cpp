@@ -40,14 +40,6 @@ namespace engine {
   FrameSequencer::~FrameSequencer() { }
   
   
-  /** @todo WIP */
-  Dispatcher::JobBuilder
-  Dispatcher::onCalcStream (ModelPort modelPort, uint channel)
-  {
-    JobBuilder builder = {this, modelPort,channel};
-    return builder;
-  }
-  
   
   /** @todo WIP */
   FrameCoord

@@ -173,6 +173,7 @@ namespace test  {
           TimeAnchor refPoint(timings, START_FRAME);
           CHECK (refPoint == Time::ZERO + Duration(10, FrameRate::PAL));
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
           FrameCoord coordinates = dispatcher.onCalcStream (modelPort,CHANNEL)
                                              .relativeFrameLocation (refPoint, 15);
           CHECK (coordinates.absoluteNominalTime == Time(0,1));
@@ -187,8 +188,7 @@ namespace test  {
           
           Job frameJob = executionPlan.createJobFor (coordinates);
           CHECK (frameJob.getNominalTime() == coordinates.absoluteNominalTime);
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1275
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1275
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
         }
       
       
@@ -200,6 +200,7 @@ namespace test  {
       void
       verify_standardDispatcherUsage()
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
           Dispatcher& dispatcher = mockDispatcher();
           ModelPort modelPort (getTestPort());
           Timings timings (FrameRate::PAL);
@@ -217,6 +218,7 @@ namespace test  {
           
           Duration coveredTime (Offset(refPoint, last(plannedChunk).getNominalTime()));
           CHECK (coveredTime >= timings.getPlanningChunkDuration());
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
           
           ///TODO nachfolgendes muß komplett umgeschrieben werden
           ///TODO definieren, wie das scheduler-interface angesprochen wird

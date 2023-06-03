@@ -152,6 +152,7 @@ namespace test  {
       /** @test use the Dispatcher interface (mocked) to generate a frame »beat«
        *        - demonstrate explicitly the mapping of a (frame) number sequence
        *          onto a sequence of time points with the help of time quantisation
+       *        - use the Dispatcher API to produce the same frame time sequence
        *  @remark this is the foundation to generate top-level frame render jobs
        */
       void
@@ -171,12 +172,12 @@ namespace test  {
           
           MockDispatcher dispatcher;
           play::Timings timings (FrameRate::PAL);
-          auto [port,sink] = dispatcher.getDummyConnection(0);
           
-          auto pipeline = dispatcher.forCalcStream(timings)
-                                    .timeRange(Time{200,0}, Time{FSecs{1,2}});
-          
-          CHECK (materialise (pipeline)
+          CHECK (materialise (
+                    treeExplore (
+                      dispatcher.forCalcStream(timings)
+                                .timeRange(Time{200,0}, Time{500,0})       // Note: end point is exclusive
+                    ))
                  == "200ms-240ms-280ms-320ms-360ms-400ms-440ms-480ms"_expect);
         }
       
@@ -187,6 +188,8 @@ namespace test  {
       void
       accessTopLevelJobTicket()
         {
+          MockDispatcher dispatcher;
+          auto [port,sink] = dispatcher.getDummyConnection(0);
           UNIMPLEMENTED ("transform into job ticket access");
         }
       

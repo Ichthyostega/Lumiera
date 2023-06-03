@@ -110,53 +110,24 @@ namespace engine {
             }
         };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
-    public: //////////////////////////////////////////////////////////////////OOO TODO not public; need a way to pick up the result type
       struct PipeFrameTick;
       struct PipeSelector;
       struct PipeExpander;
       struct PipePlanner;
       
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
-      using FrameNrIter = lib::NumIter<FrameCnt>;
-      
-      struct PipelineBuilder
-        : FrameNrIter
-        {
-          Dispatcher* dispatcher;
-          Timings timings;
-          ModelPort port;
-          DataSink sink;
-          
-          auto
-          timeRange (Time start, Time after)
-            {
-              auto frame = [&](Time t){ return timings.getBreakPointAfter(t); };
-              auto reset = [&](auto i){ static_cast<FrameNrIter&>(*this) = i; };
-              
-              reset (lib::eachNum (frame(start), frame(after)));
-              return lib::treeExplore (move(*this))
-                         .transform ([&](FrameCnt frameNr) -> TimeVar          //////////////////////////////TICKET #1261 : transform-iterator unable to handle immutable time
-                                     {
-                                       return timings.getFrameStartAt (frameNr);
-                                     });
-            }
-        };
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
       
       
     public:
       virtual ~Dispatcher();  ///< this is an interface
       
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
-      JobBuilder onCalcStream (ModelPort modelPort, uint channel);
+      PipeSelector forCalcStream (Timings timings);
       
-      PipelineBuilder forCalcStream(Timings timings, ModelPort port, DataSink sink)
+      template<class IT>
+      class PlanningPipeline
+        : public IT
         {
-          return PipelineBuilder{FrameNrIter(), this, timings, port, sink};
-        }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
-      PipeFrameTick forCalcStream (Timings timings);
-      
+          
+        };
       
     protected:
       /** core dispatcher operation: based on the coordinates of a reference point,
@@ -226,42 +197,56 @@ namespace engine {
           ++frameNr;
           currPoint = timings.getFrameStartAt (frameNr);
         }
-      
-      
-      /** Builder Function: start frame sequence */
-      auto
-      timeRange (Time start, Time after)
-        {
-          stopPoint = after;
-          frameNr = timings.getBreakPointAfter(start);
-          currPoint = timings.getFrameStartAt (frameNr);
-          
-          // start iterator pipeline based on this as »state core«
-          return lib::treeExplore (move(*this));
-        }
-      
     };
 
     
-  inline Dispatcher::PipeFrameTick
-  Dispatcher::forCalcStream(Timings timings)
-  {
-    return PipeFrameTick{this, timings};
-  }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////OOO need better solution for type rebinding
-  using Builder = decltype( declval<Dispatcher::PipeFrameTick>().timeRange (declval<Time>(), declval<Time>()));
+  template<class FUN>
+  using FunRes_t = typename lib::meta::_Fun<FUN>::Ret;
+  //using Builder = decltype( declval<Dispatcher::PipeFrameTick>().timeRange (declval<Time>(), declval<Time>()));
+  
   
   /**
    * Job-planning Step-2: select data feed connection between ModelPort
    * and DataSink; this entails to select the actually active Node pipeline
    */
   struct Dispatcher::PipeSelector
-    : Builder
+    : Dispatcher::PipeFrameTick
     {
+      
+      /** Builder Function: start frame sequence */
+      PipeSelector
+      timeRange (Time start, Time after)
+        {
+          stopPoint = after;
+          frameNr = timings.getBreakPointAfter(start);
+          currPoint = timings.getFrameStartAt (frameNr);
+          
+          return move(*this);  // expected to invoke buildFeed(port,sink)
+        }
+      
+      /** Builder Function: setup processing feed ModelPort -> DataSink */
+      auto
+      buildFeed (mobject::ModelPort port, play::DataSink sink)
+        {
+          
+          // start iterator pipeline based on this as »state core«
+          auto pipeline = lib::treeExplore (move(*this));
+          
+          using PipeIter = decltype(pipeline);
+          return PlanningPipeline<PipeIter>{move (pipeline)};
+        }
+      
       
     };
   
+    
+  inline Dispatcher::PipeSelector
+  Dispatcher::forCalcStream(Timings timings)
+  {
+    return PipeSelector{this, timings};
+  }
   
   /**
    * Job-planning Step-3: monadic depth-first exploration of Prerequisites
