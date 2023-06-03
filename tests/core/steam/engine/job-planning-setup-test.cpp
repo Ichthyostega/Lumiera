@@ -173,8 +173,8 @@ namespace test  {
           play::Timings timings (FrameRate::PAL);
           auto [port,sink] = dispatcher.getDummyConnection(0);
           
-          auto pipeline = dispatcher.forCalcStream(timings, port, sink)
-                                    .timeRange(Time{200,0}, Time{480,0});
+          auto pipeline = dispatcher.forCalcStream(timings)
+                                    .timeRange(Time{200,0}, Time{FSecs{1,2}});
           
           CHECK (materialise (pipeline)
                  == "200ms-240ms-280ms-320ms-360ms-400ms-440ms-480ms"_expect);

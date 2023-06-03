@@ -86,179 +86,109 @@ namespace test {
     };
   
   
-    using asset::Pipe;
-    using asset::PPipe;
-    using asset::Struct;
-    using asset::Timeline;
-    using asset::PTimeline;
-    using mobject::ModelPort;
-    using mobject::builder::ModelPortRegistry;
-    using util::contains;
-    using lumiera::Query;
-    
-    
-    using PID = asset::ID<Pipe>;
-    using TID = asset::ID<Struct>;
-    
-    using ModelPorts = lib::IterSource<mobject::ModelPort>::iterator;
-    using DummyOutputLink = std::pair<mobject::ModelPort, play::DataSink>;
-    
-    
-    inline PID
-    getPipe (string id)
-    {
-      return Pipe::query ("id("+id+")");
-    }
-    
-    inline TID
-    getTimeline (string id)
-    {
-      return asset::Struct::retrieve (Query<Timeline> ("id("+id+")"))->getID();
-    }
-    
-    const uint NUMBER_OF_PORTS = 2;
-    const string namePortA("bus-A");
-    const string namePortB("bus-B");
-    
-    /**
-     * helper for dummy render engine:
-     * Simulate the result of a build process,
-     * without actually running the builder.
-     * Produces some mock pipes, model ports etc.
-     */
-    struct SimulatedBuilderContext
-      {
-        ModelPortRegistry registry_;
-        ModelPortRegistry* existingRegistry_;
-        
-        std::vector<ModelPort> modelPorts_;
-        std::vector<DataSink>  dataSinks_;
-        
-        /** setup */
-        SimulatedBuilderContext()
-          : registry_()
-          , existingRegistry_(ModelPortRegistry::setActiveInstance (registry_))
-          {
-            performMockBuild();
-          }
-        
-        /** tear-down */
-       ~SimulatedBuilderContext()
-          {
-            if (existingRegistry_)
-              ModelPortRegistry::setActiveInstance (*existingRegistry_);
-            else
-              ModelPortRegistry::shutdown();
-          }
-        
-        void
-        performMockBuild()
-          {
-            PID pipeA        = getPipe (namePortA);
-            PID pipeB        = getPipe (namePortB);
-            TID someTimeline = getTimeline ("dummy_Timeline");
-            
-            // start out with defining some new model ports......
-            registry_.definePort (pipeA, someTimeline);
-            registry_.definePort (pipeB, someTimeline);
-            
-            registry_.commit();
-            
-            // now "bus-A" and "bus-B" are known as model ports
-            modelPorts_.push_back (ModelPort(pipeA));
-            modelPorts_.push_back (ModelPort(pipeB));
-            
-            // prepare corresponding placeholder DataSink (a fake active output connection)
-            dataSinks_.emplace_back().activate(std::make_shared<UnimplementedConnection>());
-            dataSinks_.emplace_back().activate(std::make_shared<UnimplementedConnection>());
-          }
-        
-        
-        ModelPorts
-        getAllModelPorts()
-          {
-            return lib::iter_source::eachEntry (modelPorts_.begin(), modelPorts_.end());
-          }
-        
-        DummyOutputLink
-        getModelPort (uint index)
-          {
-            REQUIRE (index < modelPorts_.size());
-            return {modelPorts_[index]
-                   ,dataSinks_[index]
-                   };
-          }
-      };
+  using asset::Pipe;
+  using asset::PPipe;
+  using asset::Struct;
+  using asset::Timeline;
+  using asset::PTimeline;
+  using mobject::ModelPort;
+  using mobject::builder::ModelPortRegistry;
+  using util::contains;
+  using lumiera::Query;
   
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
-  /****************************************************************//**
-   * Framework for dummy playback and rendering.
-   * A DummyPlayConnection provides a coherent set of placeholders,
-   * allowing to start a data producing process while leaving out
-   * various parts of the real engine implementation. The specific
-   * mode of operation, suitable for various test scenarios, may be
-   * fine tuned by the strategy object defined as template parameter.
-   * 
-   * @todo not-yet-implemented as of 2016 -- but the design can be considered valid.
+  
+  using PID = asset::ID<Pipe>;
+  using TID = asset::ID<Struct>;
+  
+  using ModelPorts = lib::IterSource<mobject::ModelPort>::iterator;
+  using DummyOutputLink = std::pair<mobject::ModelPort, play::DataSink>;
+  
+  
+  inline PID
+  getPipe (string id)
+  {
+    return Pipe::query ("id("+id+")");
+  }
+  
+  inline TID
+  getTimeline (string id)
+  {
+    return asset::Struct::retrieve (Query<Timeline> ("id("+id+")"))->getID();
+  }
+  
+  const uint NUMBER_OF_PORTS = 2;
+  const string namePortA("bus-A");
+  const string namePortB("bus-B");
+  
+  /**
+   * helper for dummy render engine:
+   * Simulate the result of a build process,
+   * without actually running the builder.
+   * Produces some mock pipes, model ports etc.
    */
-  template<class DEF>
-  class DummyPlayConnection
-    : util::NonCopyable
+  struct SimulatedBuilderContext
     {
-      SimulatedBuilderContext mockBuilder_;
+      ModelPortRegistry registry_;
+      ModelPortRegistry* existingRegistry_;
       
-    public:
+      std::vector<ModelPort> modelPorts_;
+      std::vector<DataSink>  dataSinks_;
+      
+      /** setup */
+      SimulatedBuilderContext()
+        : registry_()
+        , existingRegistry_(ModelPortRegistry::setActiveInstance (registry_))
+        {
+          performMockBuild();
+        }
+      
+      /** tear-down */
+     ~SimulatedBuilderContext()
+        {
+          if (existingRegistry_)
+            ModelPortRegistry::setActiveInstance (*existingRegistry_);
+          else
+            ModelPortRegistry::shutdown();
+        }
+      
+      void
+      performMockBuild()
+        {
+          PID pipeA        = getPipe (namePortA);
+          PID pipeB        = getPipe (namePortB);
+          TID someTimeline = getTimeline ("dummy_Timeline");
+          
+          // start out with defining some new model ports......
+          registry_.definePort (pipeA, someTimeline);
+          registry_.definePort (pipeB, someTimeline);
+          
+          registry_.commit();
+          
+          // now "bus-A" and "bus-B" are known as model ports
+          modelPorts_.push_back (ModelPort(pipeA));
+          modelPorts_.push_back (ModelPort(pipeB));
+          
+          // prepare corresponding placeholder DataSink (a fake active output connection)
+          dataSinks_.emplace_back().activate(std::make_shared<UnimplementedConnection>());
+          dataSinks_.emplace_back().activate(std::make_shared<UnimplementedConnection>());
+        }
+      
       
       ModelPorts
       getAllModelPorts()
         {
-          return mockBuilder_.getAllModelPorts();
+          return lib::iter_source::eachEntry (modelPorts_.begin(), modelPorts_.end());
         }
       
       DummyOutputLink
       getModelPort (uint index)
         {
-          return mockBuilder_.getModelPort (index);
-        }
-      
-      POutputManager
-      provide_testOutputSlot()
-        {
-          UNIMPLEMENTED ("provide a suitable output sink simulation");
-        }
-      
-      
-      /* === Test Support API === */
-      
-      bool
-      isWired()
-        {
-          UNIMPLEMENTED ("is this dummy in activated state?");
-        }
-      
-      Duration
-      getPlannedTestDuration()
-        {
-          UNIMPLEMENTED ("manage the a planned test duration");
-        }
-      
-      /** test helper: blocking wait during an output test.
-       *  The waiting time should be in accordance with the
-       *  \link #getPlannedTestduration planned value \endlink,
-       */
-      void
-      waitUntilDue()
-        {
-          UNIMPLEMENTED ("do a blocking wait, while an output test is performed in other threads");
-        }
-      
-      bool
-      gotCorrectOutput()
-        {
-          UNIMPLEMENTED ("verify proper operation by inspecting the provided test dummy components");
+          REQUIRE (index < modelPorts_.size());
+          return {modelPorts_[index]
+                 ,dataSinks_[index]
+                 };
         }
     };
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
   
   
 }}} // namespace steam::play::test

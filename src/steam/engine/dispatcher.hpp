@@ -48,11 +48,14 @@
 //#include "lib/nocopy.hpp"
 
 #include <functional>
+#include <utility>
 
 
 namespace steam {
 namespace engine {
   
+  using std::move;
+  using std::declval;
   using std::function;
   using mobject::ModelPort;
   using play::Timings;
@@ -107,7 +110,13 @@ namespace engine {
             }
         };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
+    public: //////////////////////////////////////////////////////////////////OOO TODO not public; need a way to pick up the result type
+      struct PipeFrameTick;
+      struct PipeSelector;
+      struct PipeExpander;
+      struct PipePlanner;
       
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
       using FrameNrIter = lib::NumIter<FrameCnt>;
       
       struct PipelineBuilder
@@ -132,6 +141,7 @@ namespace engine {
                                      });
             }
         };
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
       
       
     public:
@@ -139,12 +149,13 @@ namespace engine {
       
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
       JobBuilder onCalcStream (ModelPort modelPort, uint channel);
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
       
       PipelineBuilder forCalcStream(Timings timings, ModelPort port, DataSink sink)
         {
           return PipelineBuilder{FrameNrIter(), this, timings, port, sink};
         }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
+      PipeFrameTick forCalcStream (Timings timings);
       
       
     protected:
@@ -179,6 +190,95 @@ namespace engine {
     };
   
   
+  
+  
+  /* ======== Steps of the Job-planning Pipeline ======== */
+  
+  /**
+   * Job-planning Step-1: establish a sequence of frame start times
+   */
+  struct Dispatcher::PipeFrameTick
+    {
+      Dispatcher * const dispatcher;
+      const Timings      timings;
+      
+      TimeVar currPoint{Time::NEVER};
+      TimeVar stopPoint{Time::NEVER};
+      FrameCnt frameNr{0};
+      
+      
+      /* === state protocol API for IterStateWrapper === */
+      bool
+      checkPoint()  const
+        {
+          return currPoint < stopPoint;
+        }
+      
+      TimeVar const&
+      yield()  const
+        {
+          return currPoint;
+        }
+      
+      void
+      iterNext()
+        {
+          ++frameNr;
+          currPoint = timings.getFrameStartAt (frameNr);
+        }
+      
+      
+      /** Builder Function: start frame sequence */
+      auto
+      timeRange (Time start, Time after)
+        {
+          stopPoint = after;
+          frameNr = timings.getBreakPointAfter(start);
+          currPoint = timings.getFrameStartAt (frameNr);
+          
+          // start iterator pipeline based on this as »state core«
+          return lib::treeExplore (move(*this));
+        }
+      
+    };
+
+    
+  inline Dispatcher::PipeFrameTick
+  Dispatcher::forCalcStream(Timings timings)
+  {
+    return PipeFrameTick{this, timings};
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////OOO need better solution for type rebinding
+  using Builder = decltype( declval<Dispatcher::PipeFrameTick>().timeRange (declval<Time>(), declval<Time>()));
+  
+  /**
+   * Job-planning Step-2: select data feed connection between ModelPort
+   * and DataSink; this entails to select the actually active Node pipeline
+   */
+  struct Dispatcher::PipeSelector
+    : Builder
+    {
+      
+    };
+  
+  
+  /**
+   * Job-planning Step-3: monadic depth-first exploration of Prerequisites
+   */
+  struct Dispatcher::PipeExpander
+    {};
+  
+  
+  /**
+   * Job-planning Step-4: collect the complete planning context and determine time frame
+   */
+  struct Dispatcher::PipePlanner
+    {};
+  
+  
+
+
   
 }} // namespace steam::engine
 #endif

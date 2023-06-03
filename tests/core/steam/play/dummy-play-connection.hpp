@@ -97,138 +97,13 @@ namespace test {
   using lib::time::Duration;
   
   
-  /*
-   * @todo 5/2023 quick-n-dirty placeholder to be able to fabricate fake DataSink handles (`Handle<Connection>`)
-   * /
-  class UnimplementedConnection
-    : public play::OutputSlot::Connection
-    {
-      BuffHandle claimBufferFor(FrameID) override { UNIMPLEMENTED ("claimBufferFor(FrameID)");      }
-      bool isTimely (FrameID, TimeValue) override { return true;                                    }
-      void transfer (BuffHandle const&)  override { UNIMPLEMENTED ("transfer (BuffHandle const&)"); }
-      void pushout  (BuffHandle const&)  override { UNIMPLEMENTED ("pushout  (BuffHandle const&)"); }
-      void discard  (BuffHandle const&)  override { UNIMPLEMENTED ("discard  (BuffHandle const&)"); }
-      void shutDown ()                   override { UNIMPLEMENTED ("shutDown() Connection");        }
-      
-    public:
-     ~UnimplementedConnection();
-      UnimplementedConnection()  = default;
-    };
-*/
   
-  
-  
+  /// @todo placeholder as of 6/23
   struct PlayTestFrames_Strategy
     {
       
     };
   
-/*  
-  namespace { // simulated builder environment
-    
-    using asset::Pipe;
-    using asset::PPipe;
-    using asset::Struct;
-    using asset::Timeline;
-    using asset::PTimeline;
-    using mobject::ModelPort;
-    using mobject::builder::ModelPortRegistry;
-    using util::contains;
-    using lumiera::Query;
-//  using lib::ScopedCollection;
-//  using lib::Literal;
-    
-    typedef asset::ID<Pipe> PID;
-    typedef asset::ID<Struct> TID;
-    
-//  typedef ModelPortRegistry::ModelPortDescriptor const& MPDescriptor;
-    
-    
-    inline PID
-    getPipe (string id)
-    {
-      return Pipe::query ("id("+id+")");
-    }
-    
-    inline TID
-    getTimeline (string id)
-    {
-      return asset::Struct::retrieve (Query<Timeline> ("id("+id+")"))->getID();
-    }
-    
-    const uint NUMBER_OF_PORTS = 2;
-    const string namePortA("bus-A");
-    const string namePortB("bus-B");
-    
-    / **
-     * helper for dummy render engine:
-     * Simulate the result of a build process,
-     * without actually running the builder.
-     * Produces some mock pipes, model ports etc.
-     * /
-    struct SimulatedBuilderContext
-      {
-        ModelPortRegistry registry_;
-        ModelPortRegistry* existingRegistry_;
-        
-        std::vector<ModelPort> modelPorts_;
-        std::vector<DataSink>  dataSinks_;
-        
-        SimulatedBuilderContext()
-          : registry_()
-          , existingRegistry_(ModelPortRegistry::setActiveInstance (registry_))
-          {
-            performMockBuild();
-          }
-        
-       ~SimulatedBuilderContext()
-          {
-            if (existingRegistry_)
-              ModelPortRegistry::setActiveInstance (*existingRegistry_);
-            else
-              ModelPortRegistry::shutdown();
-          }
-        
-        void
-        performMockBuild()
-          {
-            PID pipeA        = getPipe (namePortA);
-            PID pipeB        = getPipe (namePortB);
-            TID someTimeline = getTimeline ("dummy_Timeline");
-            
-            // start out with defining some new model ports......
-            registry_.definePort (pipeA, someTimeline);
-            registry_.definePort (pipeB, someTimeline);
-            
-            registry_.commit();
-            
-            // now "bus-A" and "bus-B" are known as model ports
-            modelPorts_.push_back (ModelPort(pipeA));
-            modelPorts_.push_back (ModelPort(pipeB));
-            
-            // prepare corresponding placeholder DataSink (a fake active output connection)
-            dataSinks_.emplace_back().activate(std::make_shared<UnimplementedConnection>());
-            dataSinks_.emplace_back().activate(std::make_shared<UnimplementedConnection>());
-          }
-        
-        
-        ModelPorts
-        getAllModelPorts()
-          {
-            return lib::iter_source::eachEntry (modelPorts_.begin(), modelPorts_.end());
-          }
-        
-        DummyOutputLink
-        getModelPort (uint index)
-          {
-            REQUIRE (index < modelPorts_.size());
-            return {modelPorts_[index]
-                   ,dataSinks_[index]
-                   };
-          }
-      };
-  }
-*/  
   
   /****************************************************************//**
    * Framework for dummy playback and rendering.
@@ -239,6 +114,7 @@ namespace test {
    * fine tuned by the strategy object defined as template parameter.
    * 
    * @todo not-yet-implemented as of 2016 -- but the design can be considered valid.
+   * @todo 6/23 still largely unimplemented, but used as generator for mock ModelPort 
    */
   template<class DEF>
   class DummyPlayConnection
