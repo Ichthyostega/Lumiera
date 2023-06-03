@@ -30,40 +30,33 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 
-//#include "steam/engine/procnode.hpp"
-#include "steam/play/dummy-play-connection.hpp"
-#include "steam/mobject/model-port.hpp"
-#include "steam/engine/dispatcher.hpp"
 #include "steam/play/timings.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"
 //#include "lib/format-cout.hpp"
-#include "lib/depend.hpp"
-#include "lib/itertools.hpp"
-#include "lib/util-coll.hpp"
+//#include "lib/util-coll.hpp"
 #include "lib/util.hpp"
 
-#include <functional>
-#include <vector>
+//#include <functional>
+//#include <vector>
 
 using test::Test;
 using util::isnil;
-using util::last;
-using std::vector;
-using std::function;
-//using std::rand;
+//using std::vector;
+//using std::function;
+using std::rand;
 
 
 namespace steam {
 namespace engine{
 namespace test  {
   
+  using lib::time::FSecs;
+  using lib::time::FrameCnt;
   using lib::time::FrameRate;
   using lib::time::Duration;
   using lib::time::Offset;
-  using lib::time::TimeValue;
   using lib::time::Time;
-  using mobject::ModelPort;
   using play::Timings;
   
   namespace { // Test fixture...
@@ -75,17 +68,6 @@ namespace test  {
     const uint DUMMY_CHANNEL(0); /////////////////////////////////////////////////////////////TICKET #1297 : get rid of the channels (use different ModelPort)
     
     
-//  ModelPort
-//  getTestPort()
-//  {
-//    using play::test::ModelPorts;
-//    using play::test::PlayTestFrames_Strategy;
-//    using DummyPlaybackSetup = play::test::DummyPlayConnection<PlayTestFrames_Strategy>;
-//    
-//    DummyPlaybackSetup dummySetup;
-//    ModelPorts mockModelPorts = dummySetup.provide_testModelPorts();
-//    return *mockModelPorts;  // using just the first dummy port
-//  }
     
     
     FSecs

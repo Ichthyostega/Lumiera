@@ -1704,13 +1704,13 @@ namespace lib {
   /** start building a TreeExplorer
    * by suitably wrapping the given iterable source.
    * @return a TreeEplorer, which is an Iterator to yield all the source elements,
-   *         but may also be used to build an processing pipeline.
+   *         but may also be used to build up a complex processing pipeline.
    * @warning if you capture the result of this call by an auto variable,
    *         be sure to understand that invoking any further builder operation on
    *         TreeExplorer will invalidate that variable (by moving it into the
    *         augmented iterator returned from such builder call).
    * 
-   * # usage
+   * # Usage
    * 
    * This function starts a *Builder* expression. It picks up the given source,
    * which can be something "sequence-like" or "iterable", and will automatically

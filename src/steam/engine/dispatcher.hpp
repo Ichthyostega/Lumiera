@@ -43,7 +43,9 @@
 #include "steam/engine/job-ticket.hpp"
 #include "steam/engine/job-planning.hpp"
 #include "steam/play/output-slot.hpp"
+#include "lib/iter-tree-explorer.hpp"
 #include "lib/time/timevalue.hpp"
+//#include "lib/nocopy.hpp"
 
 #include <functional>
 
@@ -82,7 +84,7 @@ namespace engine {
    * which, for the purpose of dispatching a series of jobs just looks
    * like a sequence of job descriptors
    * 
-   * @todo 10/12 still WIP, but conceptually settled by now
+   * @todo 6/23 API is remoulded from ground up (»Playback Vertical Slice« integration effort)
    */
   class Dispatcher
     : public FrameLocator
@@ -106,13 +108,28 @@ namespace engine {
         };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
       
+      using FrameNrIter = lib::NumIter<FrameCnt>;
+      
       struct PipelineBuilder
-        : lib::SingleValIter<TimeVar>   ////////////////////////////////////////OOO placeholder type; should rather be a TreeExplorer!
+        : FrameNrIter
         {
-          PipelineBuilder&
+          Dispatcher* dispatcher;
+          Timings timings;
+          ModelPort port;
+          DataSink sink;
+          
+          auto
           timeRange (Time start, Time after)
             {
-              UNIMPLEMENTED ("setup dispatch time range");
+              auto frame = [&](Time t){ return timings.getBreakPointAfter(t); };
+              auto reset = [&](auto i){ static_cast<FrameNrIter&>(*this) = i; };
+              
+              reset (lib::eachNum (frame(start), frame(after)));
+              return lib::treeExplore (move(*this))
+                         .transform ([&](FrameCnt frameNr) -> TimeVar          //////////////////////////////TICKET #1261 : transform-iterator unable to handle immutable time
+                                     {
+                                       return timings.getFrameStartAt (frameNr);
+                                     });
             }
         };
       
@@ -126,7 +143,7 @@ namespace engine {
       
       PipelineBuilder forCalcStream(Timings timings, ModelPort port, DataSink sink)
         {
-          UNIMPLEMENTED ("create Pipeline builder");
+          return PipelineBuilder{FrameNrIter(), this, timings, port, sink};
         }
       
       

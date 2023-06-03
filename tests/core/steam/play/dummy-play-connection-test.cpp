@@ -28,8 +28,6 @@
 #include "lib/test/run.hpp"
 
 #include "steam/play/dummy-play-connection.hpp"
-//#include "steam/engine/buffhandle.hpp"
-//#include "steam/engine/testframe.hpp"
 #include "include/play-facade.hpp"
 #include "lib/time/control.hpp"
 
