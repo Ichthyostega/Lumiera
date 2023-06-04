@@ -49,14 +49,14 @@
 
 #include <functional>
 #include <utility>
+#include <tuple>
 
 
 namespace steam {
 namespace engine {
   
   using std::move;
-  using std::declval;
-  using std::function;
+  using std::make_pair;
   using mobject::ModelPort;
   using play::Timings;
   using play::DataSink;
@@ -111,16 +111,16 @@ namespace engine {
         };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
       struct PipeFrameTick;
-      struct PipeSelector;
       struct PipeExpander;
-      struct PipePlanner;
+      
+      struct PipelineBuilder;
       
       
       
     public:
       virtual ~Dispatcher();  ///< this is an interface
       
-      PipeSelector forCalcStream (Timings timings);
+      PipelineBuilder forCalcStream (Timings timings);
       
       template<class IT>
       class PlanningPipeline
@@ -128,6 +128,17 @@ namespace engine {
         {
           
         };
+      
+      /**
+       * access a special JobTicket to build a »FrameDropper« Job.
+       * @todo 6/2023 WIP and totally unclear if this is even a good idea to start with....
+       */
+      JobTicket&
+      getSinkTicketFor (play::DataSink sink)
+        {
+          UNIMPLEMENTED ("WTF is a SinkTicket???");
+        }
+
       
     protected:
       /** core dispatcher operation: based on the coordinates of a reference point,
@@ -200,23 +211,25 @@ namespace engine {
     };
 
     
+  
+  /**
+   * Job-planning Step-3: monadic depth-first exploration of Prerequisites
+   */
+  struct Dispatcher::PipeExpander
+    {};
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////OOO need better solution for type rebinding
-  template<class FUN>
-  using FunRes_t = typename lib::meta::_Fun<FUN>::Ret;
-  //using Builder = decltype( declval<Dispatcher::PipeFrameTick>().timeRange (declval<Time>(), declval<Time>()));
   
   
   /**
    * Job-planning Step-2: select data feed connection between ModelPort
    * and DataSink; this entails to select the actually active Node pipeline
    */
-  struct Dispatcher::PipeSelector
-    : Dispatcher::PipeFrameTick
+  struct Dispatcher::PipelineBuilder
+    : PipeFrameTick
     {
       
-      /** Builder Function: start frame sequence */
-      PipeSelector
+      /** Builder: start frame sequence */
+      PipelineBuilder
       timeRange (Time start, Time after)
         {
           stopPoint = after;
@@ -226,40 +239,55 @@ namespace engine {
           return move(*this);  // expected to invoke buildFeed(port,sink)
         }
       
-      /** Builder Function: setup processing feed ModelPort -> DataSink */
+      /** Terminal builder: setup processing feed ModelPort -> DataSink */
       auto
       buildFeed (mobject::ModelPort port, play::DataSink sink)
         {
+          using TicketDepend = std::pair<JobTicket const*, JobTicket const*>;
           
           // start iterator pipeline based on this as »state core«
-          auto pipeline = lib::treeExplore (move(*this));
+          auto pipeline = lib::treeExplore (frameTickCore())
+                              .transform([port,sink](PipeFrameTick& core) -> TicketDepend
+                                            {
+                                              FrameCoord frame; ///////////////////////////////////////////OOO need a better ctor for FrameCoord
+                                              frame.absoluteNominalTime = core.currPoint;
+                                              frame.modelPort = port;
+                                              return {& core.dispatcher->getSinkTicketFor(sink)
+                                                     ,& core.dispatcher->getJobTicketFor(frame)
+                                                     };
+                                            })
+                              .expand([](TicketDepend& currentLevel)
+                                            {
+                                              JobTicket const* parent = currentLevel.second;
+                                              return lib::transformIterator (parent->getPrerequisites(0)
+                                                                            ,[&parent](JobTicket const& prereqTicket)
+                                                                                {
+                                                                                  return TicketDepend{parent, &prereqTicket};
+                                                                                }
+                                                                            );
+                                            })
+                              .expandAll()
+                              /////////////////////////////////////////////////////////////////////////////OOO do Step-4 here: build JobPlanning
+                              ;
           
           using PipeIter = decltype(pipeline);
           return PlanningPipeline<PipeIter>{move (pipeline)};
         }
       
-      
+    protected:
+      PipeFrameTick&&
+      frameTickCore()
+        {
+          return move (static_cast<PipeFrameTick>(*this));
+        }
     };
   
     
-  inline Dispatcher::PipeSelector
+  inline Dispatcher::PipelineBuilder
   Dispatcher::forCalcStream(Timings timings)
   {
-    return PipeSelector{this, timings};
+    return PipelineBuilder{this, timings};
   }
-  
-  /**
-   * Job-planning Step-3: monadic depth-first exploration of Prerequisites
-   */
-  struct Dispatcher::PipeExpander
-    {};
-  
-  
-  /**
-   * Job-planning Step-4: collect the complete planning context and determine time frame
-   */
-  struct Dispatcher::PipePlanner
-    {};
   
   
 

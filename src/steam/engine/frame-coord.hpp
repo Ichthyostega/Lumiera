@@ -105,6 +105,7 @@ namespace engine {
    * kind of [frame grid](\ref lib::time::Quantiser) is
    * necessary -- in practice we use a Dispatcher, which is
    * backed by the Segmentation (i.e. the render nodes network).
+   * @deprecated 6/2023 obsolete and replaced by the pipeline builder API in Dispatcher
    */
   class FrameSequencer
     : util::NonCopyable
