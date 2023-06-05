@@ -4291,7 +4291,7 @@ Thus an invocation trail represents one specific path leading to the invocation 
 ''Note'': {{red{future plans and visions -- no clear and distinct meaning -- as of 4/21}}}
 </pre>
 </div>
-<div title="JobPlanningPipeline" creator="Ichthyostega" modifier="Ichthyostega" created="202305260209" modified="202306031539" tags="operational Rendering draft" changecount="6">
+<div title="JobPlanningPipeline" creator="Ichthyostega" modifier="Ichthyostega" created="202305260209" modified="202306050043" tags="operational Rendering draft" changecount="7">
 <pre>//Depth-first evaluation pipeline used in the FrameDispatcher to generate the next chunk of [[render jobs|RenderJob]]//
 This is an implementation structure backed and established by the [[Dispatcher|FrameDispatcher]] and operated by the {{{RenderDrive}}} core of each CalcStream, where it is assembled by a //builder notation// -- backed by the {{{TreeExplorer}}} iterator pipeline framework; besides the typical filter and transform operations, the latter offers an »expansion« mechanism to integrate a //monadic exhaustive depth-first search,// allowing to pick up all prerequisites of a given calculation step by step within a local planning context.
 
@@ -4299,12 +4299,14 @@ This is an implementation structure backed and established by the [[Dispatcher|F
 ;frame-tick
 :establish a sequence of frame start times
 ;selector
-:choose suitable data feed connection between ModelPort and {{{DataSink}}};
+:choose a suitable ModelPort and associated JobTicket;
 :this entails to select the actually active ProcNode pipeline
 ;expander
 :monadic depth-first exploration of calculation prerequisites
 ;job-planning
 :collect the complete planning context and determine time frame
+:*especially add a {{{DataSink}}} specification to the JobFunctor closure
+:*and evaluate the dependency structure from the //exploration step// to establish Job deadlines
 </pre>
 </div>
 <div title="JobTicket" modifier="Ichthyostega" created="201202120018" modified="202305111241" tags="spec Rendering draft" changecount="4">

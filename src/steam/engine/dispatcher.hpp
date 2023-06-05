@@ -113,6 +113,7 @@ namespace engine {
       struct PipeFrameTick;
       struct PipeExpander;
       
+      template<class IT>
       struct PipelineBuilder;
       
       
@@ -120,7 +121,7 @@ namespace engine {
     public:
       virtual ~Dispatcher();  ///< this is an interface
       
-      PipelineBuilder forCalcStream (Timings timings);
+      PipelineBuilder<PipeFrameTick> forCalcStream (Timings timings);
       
       template<class IT>
       class PlanningPipeline
@@ -189,6 +190,7 @@ namespace engine {
       FrameCnt frameNr{0};
       
       
+      
       /* === state protocol API for IterStateWrapper === */
       bool
       checkPoint()  const
@@ -208,55 +210,80 @@ namespace engine {
           ++frameNr;
           currPoint = timings.getFrameStartAt (frameNr);
         }
-    };
-
-    
-  
-  /**
-   * Job-planning Step-3: monadic depth-first exploration of Prerequisites
-   */
-  struct Dispatcher::PipeExpander
-    {};
-
-  
-  
-  /**
-   * Job-planning Step-2: select data feed connection between ModelPort
-   * and DataSink; this entails to select the actually active Node pipeline
-   */
-  struct Dispatcher::PipelineBuilder
-    : PipeFrameTick
-    {
       
-      /** Builder: start frame sequence */
-      PipelineBuilder
-      timeRange (Time start, Time after)
+    protected:
+      void
+      activate (Time start, Time after)
         {
           stopPoint = after;
           frameNr = timings.getBreakPointAfter(start);
           currPoint = timings.getFrameStartAt (frameNr);
-          
-          return move(*this);  // expected to invoke buildFeed(port,sink)
         }
+    };
+  
+  
+  
+  
+  /**
+   * A Builder wrapper, allowing to build a Job-planning pipeline
+   * step by step, while supplying contextual information from the CalcStream.
+   * @remark This builder is created from \ref Dispatcher::forCalcStream, and thus
+   *         internally wired back to the `Dispatcher` implementation, to access the
+   *         Fixture and low-level-Model data-structures to back generated render Jobs.
+   *         Client code is expected to invoke all builder functions consecutively,
+   *         and then place the result into the CalcStream for generating render Jobs.
+   */
+  template<class SRC>
+  struct Dispatcher::PipelineBuilder
+    : SRC
+    {
       
-      /** Terminal builder: setup processing feed ModelPort -> DataSink */
+      /**
+       * Builder: start frame sequence
+       */
       auto
-      buildFeed (mobject::ModelPort port, play::DataSink sink)
+      timeRange (Time start, Time after)
         {
-          using TicketDepend = std::pair<JobTicket const*, JobTicket const*>;
-          
-          // start iterator pipeline based on this as »state core«
-          auto pipeline = lib::treeExplore (frameTickCore())
-                              .transform([port,sink](PipeFrameTick& core) -> TicketDepend
+          PipelineBuilder::activate (start,after);
+          return buildPipeline (lib::treeExplore (move(*this)));
+        }                      // expected next to invoke pullFrom(port,sink)
+      
+
+      /** Package a Ticket together with a direct dependency,
+       *  to allow setup of schedule times in downstream processing */
+      using TicketDepend = std::pair<JobTicket const*, JobTicket const*>;
+      
+      
+      /**
+       *  Builder: connect to the JobTicket defining the actual processing
+       *  for the nominal time of this frame and the given ModelPort
+       */
+      auto
+      pullFrom (mobject::ModelPort port)
+        {
+          return buildPipeline (
+                   this->transform([port](PipeFrameTick& core) -> TicketDepend
                                             {
                                               FrameCoord frame; ///////////////////////////////////////////OOO need a better ctor for FrameCoord
                                               frame.absoluteNominalTime = core.currPoint;
                                               frame.modelPort = port;
-                                              return {& core.dispatcher->getSinkTicketFor(sink)
+                                              return {nullptr
                                                      ,& core.dispatcher->getJobTicketFor(frame)
                                                      };
-                                            })
-                              .expand([](TicketDepend& currentLevel)
+                                            }));
+        }
+      
+      
+      /**
+       * Builder: cause a exhaustive depth-first search
+       * to recursively discover all prerequisites of each
+       * top-level JobTicket
+       */
+      auto
+      expandPrerequisites()
+        {
+          return buildPipeline (
+                   this->expand([](TicketDepend& currentLevel)
                                             {
                                               JobTicket const* parent = currentLevel.second;
                                               return lib::transformIterator (parent->getPrerequisites(0)
@@ -266,27 +293,50 @@ namespace engine {
                                                                                 }
                                                                             );
                                             })
-                              .expandAll()
-                              /////////////////////////////////////////////////////////////////////////////OOO do Step-4 here: build JobPlanning
-                              ;
-          
+                        .expandAll());
+        }
+      
+      /**
+       * Terminal builder: setup processing feed to the given DataSink.
+       * @return Iterator to pull a sequence of render jobs, ready for processing
+       */
+      auto
+      feedTo (play::DataSink sink)
+        {
+          auto pipeline = this->transform([sink](TicketDepend& currentLevel)
+                                            {
+                                              return currentLevel.second;   ///////////////////////////////OOO construct a JobPlanning here
+                                            });
           using PipeIter = decltype(pipeline);
           return PlanningPipeline<PipeIter>{move (pipeline)};
         }
       
+      
     protected:
-      PipeFrameTick&&
-      frameTickCore()
+      /** @internal type rebinding helper to move the given tree-Explorer pipeline
+       *            and layer a new PipelineBuilder subclass on top.
+       *  @note TreeExplorer itself is defined in a way to always strip away any existing
+       *            top-level TreeExplorer, then add a new processing layer and finally
+       *            place a new TreeExplorer layer on top. Taken together, this setup will
+       *            *slice away* the actual PipelineBuilder layer, move the resulting pipeline
+       *            into the next building step and finally produce a cleanly linked processing
+       *            pipeline without any interspersed builders. Yet still, partially constructed
+       *            pipelines are valid iterators and can be unit tested in isolation.
+       */
+      template<class PIP>
+      PipelineBuilder<PIP>
+      buildPipeline(PIP&& treeExplorer)
         {
-          return move (static_cast<PipeFrameTick>(*this));
+          return PipelineBuilder<PIP> {move (treeExplorer)};
         }
     };
   
-    
-  inline Dispatcher::PipelineBuilder
+  
+  
+  inline Dispatcher::PipelineBuilder<Dispatcher::PipeFrameTick>
   Dispatcher::forCalcStream(Timings timings)
   {
-    return PipelineBuilder{this, timings};
+    return PipelineBuilder<PipeFrameTick> {this, timings};
   }
   
   
