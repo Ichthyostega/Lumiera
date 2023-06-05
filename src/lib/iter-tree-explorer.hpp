@@ -1506,6 +1506,15 @@ namespace lib {
           return TreeExplorer<ResIter> (ResCore {move(*this)});
         }
       
+      /** shortcut notation to invoke \ref expand(expandFunctor) followed by \ref expandAll() */
+      template<class FUN>
+      auto
+      expandAll (FUN&& expandFunctor)
+        {
+          return this->expand (forward<FUN> (expandFunctor))
+                      .expandAll();
+        }
+      
       
       /** extension functionality to be used on top of expand(), to perform expansion on next iteration.
        * When configured, an expandChildren() call will not happen immediately, but rather in place of

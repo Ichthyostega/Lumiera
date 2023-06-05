@@ -33,6 +33,7 @@
 #include "lib/format-cout.hpp"///////////////////////TODO
 #include "lib/iter-tree-explorer.hpp"
 #include "lib/format-util.hpp"
+#include "lib/util.hpp"
 
 //#include "steam/engine/job-planning.hpp"
 
@@ -44,6 +45,7 @@ using lib::eachNum;
 using lib::treeExplore;
 using lib::time::PQuant;
 using lib::time::FrameRate;
+using util::isnil;
 
 
 namespace steam {
@@ -188,9 +190,21 @@ namespace test  {
       void
       accessTopLevelJobTicket()
         {
+          play::Timings timings (FrameRate::PAL);
           MockDispatcher dispatcher;
           auto [port,sink] = dispatcher.getDummyConnection(0);
-          UNIMPLEMENTED ("transform into job ticket access");
+          
+          auto pipeline = dispatcher.forCalcStream (timings)
+                                    .timeRange(Time{200,0}, Time{300,0})
+                                    .pullFrom (port);
+          
+          CHECK (not isnil (pipeline));
+          CHECK (nullptr == pipeline->first);
+          JobTicket const& ticket = *pipeline->second;
+          
+          FrameCoord dummy;
+          Job job = ticket.createJobFor(dummy);
+          CHECK (MockJobTicket::isAssociated (job, ticket));
         }
       
       

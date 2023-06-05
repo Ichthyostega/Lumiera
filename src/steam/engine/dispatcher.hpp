@@ -81,11 +81,10 @@ namespace engine {
    * instance for operating this planning process. Instead, together with each chunk of
    * planned jobs we generate a continuation job, which -- on activation -- will pick up
    * the planning of the next chunk. The Dispatcher interface was shaped especially to
-   * support this process, with a local JobBuilder for use within the continuation job,
-   * and a TimeAnchor to represent the continuation point. All the complexities of
-   * actually planning the jobs are hidden within the JobPlanningSequence,
-   * which, for the purpose of dispatching a series of jobs just looks
-   * like a sequence of job descriptors
+   * support this process, with a local PlanningPipeline for use within the RenderDrive
+   * incorporated into each CalcStream. All the complexities of actually planning the
+   * jobs are hidden within this pipeline, which, for the purpose of dispatching a
+   * series of jobs just looks like a sequence of job descriptors
    * 
    * @todo 6/23 API is remoulded from ground up (»Playback Vertical Slice« integration effort)
    */
@@ -111,7 +110,6 @@ namespace engine {
         };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
       struct PipeFrameTick;
-      struct PipeExpander;
       
       template<class IT>
       struct PipelineBuilder;
@@ -121,25 +119,33 @@ namespace engine {
     public:
       virtual ~Dispatcher();  ///< this is an interface
       
+      
+      /**
+       * Start a builder sequence to assemble a job-planning pipeline, backed by this Dispatcher.
+       * @param timings the frame-grid and further specs to use for a specific CalcStream
+       * @remark the given #PipelineBuilder object shall be used to supply the further parameters,
+       *         thereby qualifying the actual planning steps necessary to arrive at a sequence
+       *         of Jobs; these can be retrieved from the resulting iterator, ready for dispatch.
+       */
       PipelineBuilder<PipeFrameTick> forCalcStream (Timings timings);
       
+      /**
+       * A complete job-planning pipeline: this »Lumiera Forward Iterator« drives the actual
+       * job-planning process on-demand. At the end of the pipeline, a sequence of render Jobs
+       * appears, ready for hand-over to the Scheduler. The PlanningPipeline itself wraps a
+       * »state-core« holding the current planning state; for operation it should be placed
+       * at a fixed location (typically in the CalcStream) and not duplicated, since this
+       * internal state ensures the generation of a distinct and unique sequence of Jobs
+       * for one specific data feed. During the lifetime of this iterator, the backing
+       * data structures in the Fixture must be kept alive and fixed in memory.
+       */
       template<class IT>
       class PlanningPipeline
         : public IT
         {
-          
+                 ////////////////////////////////////////////////////////////////////////////////////////////TICKET #1275 : what further API-functions are necessary to control a running CalcStream?   
         };
       
-      /**
-       * access a special JobTicket to build a »FrameDropper« Job.
-       * @todo 6/2023 WIP and totally unclear if this is even a good idea to start with....
-       */
-      JobTicket&
-      getSinkTicketFor (play::DataSink sink)
-        {
-          UNIMPLEMENTED ("WTF is a SinkTicket???");
-        }
-
       
     protected:
       /** core dispatcher operation: based on the coordinates of a reference point,
@@ -244,7 +250,7 @@ namespace engine {
       auto
       timeRange (Time start, Time after)
         {
-          PipelineBuilder::activate (start,after);
+          SRC::activate (start,after);
           return buildPipeline (lib::treeExplore (move(*this)));
         }                      // expected next to invoke pullFrom(port,sink)
       
@@ -283,17 +289,16 @@ namespace engine {
       expandPrerequisites()
         {
           return buildPipeline (
-                   this->expand([](TicketDepend& currentLevel)
+                   this->expandAll([](TicketDepend& currentLevel)
                                             {
                                               JobTicket const* parent = currentLevel.second;
                                               return lib::transformIterator (parent->getPrerequisites(0)
                                                                             ,[&parent](JobTicket const& prereqTicket)
-                                                                                {
+                                                                                {                  // parent shifted up to first pos
                                                                                   return TicketDepend{parent, &prereqTicket};
                                                                                 }
                                                                             );
-                                            })
-                        .expandAll());
+                                            }));
         }
       
       /**
@@ -303,12 +308,11 @@ namespace engine {
       auto
       feedTo (play::DataSink sink)
         {
-          auto pipeline = this->transform([sink](TicketDepend& currentLevel)
+          return terminatePipeline (
+                   this->transform([sink](TicketDepend& currentLevel)
                                             {
                                               return currentLevel.second;   ///////////////////////////////OOO construct a JobPlanning here
-                                            });
-          using PipeIter = decltype(pipeline);
-          return PlanningPipeline<PipeIter>{move (pipeline)};
+                                            }));
         }
       
       
@@ -328,6 +332,13 @@ namespace engine {
       buildPipeline(PIP&& treeExplorer)
         {
           return PipelineBuilder<PIP> {move (treeExplorer)};
+        }
+      
+      template<class PIP>
+      PlanningPipeline<PIP>
+      terminatePipeline(PIP&& treeExplorer)
+        {
+          return PlanningPipeline<PIP> {move (treeExplorer)};
         }
     };
   
