@@ -199,12 +199,12 @@ namespace test  {
                                     .pullFrom (port);
           
           CHECK (not isnil (pipeline));
-          CHECK (nullptr == pipeline->first);
+          CHECK (nullptr == pipeline->first);       // is a top-level ticket
           JobTicket const& ticket = *pipeline->second;
           
           FrameCoord dummy;
           Job job = ticket.createJobFor(dummy);
-          CHECK (MockJobTicket::isAssociated (job, ticket));
+          CHECK (dispatcher.verify(job, port, sink));
         }
       
       

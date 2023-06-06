@@ -38,8 +38,6 @@
 #include "lib/util.hpp"
 
 
-using lib::HashIndexed;
-
 
 namespace steam    {
 namespace mobject {

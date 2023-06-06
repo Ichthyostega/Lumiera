@@ -316,6 +316,14 @@ namespace test   {
         {
           return dummySetup_.getModelPort (index);
         }
+      
+      /**
+       * Test support: verify the given Job is consistent with this Dispatcher.
+       */
+      bool verify(Job const& job, ModelPort const& port, play::DataSink const& sink)
+        {
+          UNIMPLEMENTED ("verify the job was plausibly created from this dispatcher");
+        }
     };
   
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1221

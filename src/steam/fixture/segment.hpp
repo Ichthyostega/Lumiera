@@ -31,14 +31,14 @@
 #ifndef STEAM_FIXTURE_SEGMENT_H
 #define STEAM_FIXTURE_SEGMENT_H
 
-#include <list>
 
 #include "steam/common.hpp"
 #include "steam/mobject/explicitplacement.hpp"
 #include "steam/engine/job-ticket.hpp"
 #include "lib/time/timevalue.hpp"
 
-using std::list;
+#include <list>
+
 
 namespace steam {
 namespace fixture {
@@ -46,6 +46,7 @@ namespace fixture {
   using mobject::ExplicitPlacement;
   using lib::time::TimeSpan;
   using lib::time::Time;
+  using std::list;
   
   /**
    * For the purpose of building and rendering, the fixture (for each timeline)

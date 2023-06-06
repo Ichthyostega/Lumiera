@@ -29,6 +29,7 @@
  */
 
 
+#include "steam/engine/exit-node.hpp"
 #include "steam/engine/nodefactory.hpp"
 #include "steam/mobject/session/effect.hpp"
 #include "lib/allocation-cluster.hpp"
@@ -37,6 +38,10 @@
 
 namespace steam {
 namespace engine {
+  
+  /// storage for the »inactive« ExitNode marker
+  ExitNode ExitNode::NIL{};
+  
   
   namespace { // Details of node fabrication
 

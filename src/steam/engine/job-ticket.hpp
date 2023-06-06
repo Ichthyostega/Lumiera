@@ -118,7 +118,7 @@ using lib::LUID;
           Provision (JobFunctor& func, HashVal seed =0)
             : jobFunctor{func}
             , invocationSeed(static_cast<JobClosure&>(func).buildInstanceID(seed))      ////////////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
-          { }
+          { }                                                                          /////////////////TICKET #1293 : Hash-Chaining for invocation-ID... size_t hash? or a LUID?
         };
       
       

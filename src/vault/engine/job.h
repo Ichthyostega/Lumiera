@@ -245,7 +245,7 @@ namespace engine {
       virtual JobKind getJobKind()                         const =0;
       virtual bool verify (Time, InvocationInstanceID)     const =0;
       virtual HashVal hashOfInstance(InvocationInstanceID) const =0;
-      virtual InvocationInstanceID buildInstanceID(HashVal)const =0;
+      virtual InvocationInstanceID buildInstanceID(HashVal)const =0;             ////////////////////////////TICKET #1293 : a size_t hash? or a LUID?
       
       lib::HashVal hash_value (JobParameter)  const;
     };
