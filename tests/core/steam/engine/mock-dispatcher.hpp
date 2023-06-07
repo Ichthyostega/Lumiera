@@ -47,6 +47,7 @@
 
 #include "lib/test/test-helper.hpp"
 #include "steam/play/dummy-play-connection.hpp"
+#include "steam/fixture/node-graph-attachment.hpp"
 #include "steam/fixture/segmentation.hpp"
 #include "steam/mobject/model-port.hpp"
 #include "steam/engine/dispatcher.hpp"
@@ -195,6 +196,13 @@ namespace test   {
               auto after = spec.retrieveAttribute<Time> ("after");
               Segmentation::splitSplice (start, after, &newTicket);
             }
+        }
+      
+      
+      ExitNode
+      buildExitNodeFromSpec (GenNode const& spec)
+        {
+          UNIMPLEMENTED ("rewrite the mock builder code to generate a network of ExitNodes instead of JobTickets");
         }
       
       

@@ -33,8 +33,9 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/hash-value.h"
+#include "lib/iter-adapter-stl.hpp"
 
-#include <vector>
+#include <deque>
 
 using lib::HashVal;
 
@@ -43,7 +44,7 @@ namespace steam {
 namespace engine {
 
   class ExitNode;
-  using ExitNodes = std::vector<engine::ExitNode>;
+  using ExitNodes = std::deque<engine::ExitNode>;
   
   
   
@@ -55,7 +56,7 @@ namespace engine {
    *       remains still to be settled. So this is a placeholder to support mock testing for now.
    */
   class ExitNode
-    : util::NonCopyable
+    : util::MoveOnly
     {
       HashVal   pipelineIdentity_;                 //////////////////////////////////////////////////////////TICKET #1293 : Hash-Chaining for invocation-ID... derive from ProcNode wiring
       ExitNodes prerequisites_;                   ///////////////////////////////////////////////////////////TICKET #1306 : actual access to low-level-Model (ProcNode)
@@ -66,7 +67,25 @@ namespace engine {
         , prerequisites_{}
       { }
       
+      ExitNode (HashVal id, ExitNodes&& prereq =ExitNodes{})
+        : pipelineIdentity_{id}
+        , prerequisites_{std::move (prereq)}
+      { }
+      
       static ExitNode NIL;
+      
+      
+      HashVal
+      getPipelineIdentity()  const
+        {
+          return pipelineIdentity_;
+        }
+      
+      auto
+      getPrerequisites()  const
+        {
+          return lib::iter_stl::eachElm (prerequisites_);
+        }
     };
   
   

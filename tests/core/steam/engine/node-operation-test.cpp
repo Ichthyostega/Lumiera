@@ -52,7 +52,7 @@ namespace test  {
   
   
   /** Register this test class... */
-  LAUNCHER (NodeOperation_test, "unit engine");
+  LAUNCHER (NodeOperation_test, "unit node");
   
   
   

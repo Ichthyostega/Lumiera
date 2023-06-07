@@ -88,7 +88,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (MediaAccessMock_test, "unit operate");
+  LAUNCHER (MediaAccessMock_test, "unit integration");
   
   
   

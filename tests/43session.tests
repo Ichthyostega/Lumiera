@@ -33,6 +33,11 @@ return: 0
 END
 
 
+TEST "Output pipe mapping" OutputMapping_test <<END
+return: 0
+END
+
+
 TEST "SessionElementTracker_test" SessionElementTracker_test <<END
 return: 0
 END

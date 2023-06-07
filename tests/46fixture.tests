@@ -1,0 +1,22 @@
+TESTING "Component Test Suite: Fixture" ./test-suite --group=fixture
+
+
+PLANNED "detecting Fixture changes" FixtureChangeDetector_test <<END
+return: 0
+END
+
+
+TEST "ModelPort registry" ModelPortRegistry_test <<END
+return: 0
+END
+
+
+PLANNED "Fixture Node-Graph connection" NodeGraphAttachment_test <<END
+return: 0
+END
+
+
+PLANNED "Segmentation datastructure" SegmentationDatastructure_test <<END
+return: 0
+END
+

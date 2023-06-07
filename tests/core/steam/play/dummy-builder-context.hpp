@@ -48,7 +48,7 @@
 
 
 #include "steam/mobject/model-port.hpp"
-#include "steam/mobject/builder/model-port-registry.hpp"
+#include "steam/fixture/model-port-registry.hpp"
 #include "steam/play/output-slot-connection.hpp"
 #include "steam/play/output-manager.hpp"
 #include "steam/asset/timeline.hpp"
@@ -65,6 +65,8 @@
 namespace steam{
 namespace play {
 namespace test {
+  
+  using fixture::ModelPortRegistry;
   
   
   /**
@@ -92,7 +94,7 @@ namespace test {
   using asset::Timeline;
   using asset::PTimeline;
   using mobject::ModelPort;
-  using mobject::builder::ModelPortRegistry;
+  using fixture::ModelPortRegistry;
   using util::contains;
   using lumiera::Query;
   

@@ -44,7 +44,8 @@
 namespace steam {
 namespace fixture {
   
-  using ExitNodes = engine::ExitNodes;
+  using engine::ExitNode;
+  using engine::ExitNodes;
   
   
   /**
@@ -69,6 +70,13 @@ namespace fixture {
       { }
       
       // default copy acceptable
+      
+      ExitNode const&
+      operator[] (size_t idx)  const
+        {
+          return idx < exitNodes_.size()? exitNodes_[idx]
+                                        : ExitNode::NIL;
+        }
     };
   
   

@@ -103,7 +103,7 @@ namespace test  {
   
   
   /** Register this test class... */
-  LAUNCHER (NodeBasic_test, "unit engine");
+  LAUNCHER (NodeBasic_test, "unit node");
   
   
   

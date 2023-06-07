@@ -85,7 +85,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (TimingConstraints_test, "unit player");
+  LAUNCHER (TimingConstraints_test, "unit play");
   
   
   

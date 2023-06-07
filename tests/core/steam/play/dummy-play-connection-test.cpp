@@ -101,7 +101,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (DummyPlayConnection_test, "unit player");
+  LAUNCHER (DummyPlayConnection_test, "unit play");
   
   
   

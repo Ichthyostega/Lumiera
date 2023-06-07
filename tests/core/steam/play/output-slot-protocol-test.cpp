@@ -132,7 +132,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (OutputSlotProtocol_test, "unit player");
+  LAUNCHER (OutputSlotProtocol_test, "unit play");
   
   
   
