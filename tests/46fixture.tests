@@ -11,7 +11,7 @@ return: 0
 END
 
 
-PLANNED "Fixture Node-Graph connection" NodeGraphAttachment_test <<END
+TEST "Fixture Node-Graph connection" NodeGraphAttachment_test <<END
 return: 0
 END
 

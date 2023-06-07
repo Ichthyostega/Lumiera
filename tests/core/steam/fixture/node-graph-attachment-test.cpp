@@ -116,6 +116,7 @@ namespace test  {
       
       /** @test setup a properly structured ExitNode graph using the
        *        specification scheme supported by MockSegmentation
+       *  @see MockSupport_test::verify_MockSegmentation
        */
       void
       fabricate_MockExitNode()
@@ -123,7 +124,7 @@ namespace test  {
           using lib::diff::MakeRec;
           
           engine::test::MockSegmentation builder;
-          ExitNode incubus =
+          ExitNode node =
             builder.buildExitNodeFromSpec(MakeRec()
                                            .attrib("mark", 13)
                                            .scope(MakeRec()
@@ -135,8 +136,8 @@ namespace test  {
                                                  )
                                          .genNode());
           
-          CHECK (13 == incubus.getPipelineIdentity());
-          auto feed = incubus.getPrerequisites();
+          CHECK (13 == node.getPipelineIdentity());
+          auto feed = node.getPrerequisites();
           CHECK (not isnil (feed));
           CHECK (23 == feed->getPipelineIdentity());
           ++feed;

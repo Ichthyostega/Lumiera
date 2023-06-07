@@ -202,11 +202,12 @@ namespace test   {
       ExitNode
       buildExitNodeFromSpec (GenNode const& spec)
         {
-          UNIMPLEMENTED ("rewrite the mock builder code to generate a network of ExitNodes instead of JobTickets");
-        }
+          return ExitNode{buildSeed (spec)
+                         ,buildPrerequisites (spec)};
+        }              // Warning: re-entrant invocation of emplace_back
       
       
-    private: /* ======== Implementation: build mock JobTickes from test specification ==== */
+    private: /* ======== Implementation: build fake ExitNodes from test specification ==== */
       
       HashVal
       buildSeed (GenNode const& spec)
@@ -215,21 +216,26 @@ namespace test   {
           return seed? HashVal(*seed) : HashVal(rand() % 1000);
         }
       
-      auto
+      ExitNodes
       buildPrerequisites (GenNode const& spec)
         {
-          return lib::transformIterator (spec.getChildren()
-                                        ,[this](GenNode const& childSpec) -> JobTicket&
-                                              {
-                                                return buildTicketFromSpec (childSpec);
-                                              });
+//        return lib::transformIterator (spec.getChildren()
+//                                      ,[this](GenNode const& childSpec) -> JobTicket&
+//                                            {
+//                                              return buildTicketFromSpec (childSpec);
+//                                            });
+          ExitNodes prerequisites;
+          for (auto& child : spec.getChildren())
+            prerequisites.emplace_back (
+              buildExitNodeFromSpec (child));
+          return prerequisites;
         }
       
       JobTicket&
       buildTicketFromSpec (GenNode const& spec)
         {
-          return tickets_.emplace_back (buildSeed(spec)
-                                       ,buildPrerequisites(spec));
+//        return tickets_.emplace_back (buildSeed(spec)
+//                                     ,buildPrerequisites(spec));
         }                              // Warning: re-entrant invocation of emplace_back
     };
   
