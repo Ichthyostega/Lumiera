@@ -54,9 +54,13 @@ namespace engine {
    * @todo 6/2023 for the »Playback Vertical Slice« we need somehow to represent "the nodes",
    *       while the final solution how to hook up ProcNode and how to represent prerequisites
    *       remains still to be settled. So this is a placeholder to support mock testing for now.
+   * @warning ExitNode should ideally be NonCopyable, since it is referred by the JobTicket
+   *          However, we need to clone-and-remould Segments (Split-Splice-Algo), and this implies
+   *          that the render nodes can be shared among multiple Segments. If all these assessments
+   *          are correct an only be decided when the actual memory management is settled.
    */
   class ExitNode
-    : util::MoveOnly
+    : util::Cloneable
     {
       HashVal   pipelineIdentity_;                 //////////////////////////////////////////////////////////TICKET #1293 : Hash-Chaining for invocation-ID... derive from ProcNode wiring
       ExitNodes prerequisites_;                   ///////////////////////////////////////////////////////////TICKET #1306 : actual access to low-level-Model (ProcNode)

@@ -72,6 +72,7 @@ namespace fixture {
    *     creating a second (copied) part of the encompassing old Segment.
    *   - in case the JobTicket is omitted, the new Segment will be marked as _passive_
    *     and any job created from such a Segment will then be a »NOP-job«
+   * @see SplitSplice_test
    */
   Segment const&
   Segmentation::splitSplice (OptTime start, OptTime after, const engine::JobTicket* jobTicket)

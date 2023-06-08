@@ -26,10 +26,9 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/test/test-helper.hpp"
 #include "steam/fixture/node-graph-attachment.hpp"
-#include "steam/engine/exit-node.hpp"
 #include "steam/engine/mock-dispatcher.hpp"
+#include "steam/engine/exit-node.hpp"
 #include "lib/util.hpp"
 
 #include <utility>
@@ -39,35 +38,21 @@ namespace steam {
 namespace fixture {
 namespace test  {
   
-//  using util::isSameObject;
   using std::move;
   using util::isnil;
-//  
-//  using asset::Pipe;
-//  using asset::PPipe;
-//  using asset::Struct;
-//  using asset::Timeline;
-//  using asset::PTimeline;
-//  using lumiera::Query;
+  using util::isSameObject;
   using engine::ExitNode;
-//  
-//  typedef asset::ID<Pipe> PID;
-//  typedef asset::ID<Struct> TID;
-//    
-//  typedef ModelPortRegistry::ModelPortDescriptor const& MPDescriptor;
-  
-  
-  namespace { // test environment
-    
-  }
-  
-  
   
   
   /*****************************************************************************//**
    * @test Verify the facade object used to connect from the Segments in the Fixture
    *       into the actual render nodes network
-   * @see  mobject::builder::FixtureChangeDetector
+   *       - construction of ExitNode
+   *       - composition of the NodeGraphAttachment including prerequisites
+   *       - generation of a complete setup of fake ExitNodes from a test spec.
+   * @see steam::fixture::Segment
+   * @see JobPlanningSetup_test
+   * @see MockSupport_test
    */
   class NodeGraphAttachment_test : public Test
     {
@@ -75,7 +60,7 @@ namespace test  {
       virtual void
       run (Arg)
         {
-          access_ExitNode();
+          access_ExitNodeTree();
           fabricate_MockExitNode();
         }
       
@@ -89,7 +74,7 @@ namespace test  {
        *        - access existing and non-existing index positions
        */
       void
-      access_ExitNode()
+      access_ExitNodeTree()
         {
           CHECK (0 == ExitNode::NIL.getPipelineIdentity());
           CHECK (isnil (ExitNode::NIL.getPrerequisites()));
@@ -111,6 +96,8 @@ namespace test  {
           CHECK (13 == succubus[0].getPipelineIdentity());
           CHECK (23 == succubus[1].getPipelineIdentity());
           CHECK (55 == succubus[1].getPrerequisites()->getPipelineIdentity());
+          
+          CHECK (isSameObject (succubus[5], ExitNode::NIL));           // out-of-index access falls back to ExitNode::NIL
         }
       
       
@@ -126,16 +113,17 @@ namespace test  {
           engine::test::MockSegmentation builder;
           ExitNode node =
             builder.buildExitNodeFromSpec(MakeRec()
-                                           .attrib("mark", 13)
-                                           .scope(MakeRec()
-                                                   .attrib("mark",23)
+                                           .attrib("mark", 13)         // top-level: marked with hash/id = 13
+                                           .scope(MakeRec()            //        ... defines two nested prerequisites
+                                                   .attrib("mark",23)  //          + Prerequisite-1 hash/id = 23
                                                  .genNode()
                                                  ,MakeRec()
-                                                   .attrib("mark",55)
+                                                   .attrib("mark",55)  //          + Prerequisite-2 hash/id = 55
                                                  .genNode()
                                                  )
                                          .genNode());
           
+          // verify generated Node is assembled according to above spec...
           CHECK (13 == node.getPipelineIdentity());
           auto feed = node.getPrerequisites();
           CHECK (not isnil (feed));

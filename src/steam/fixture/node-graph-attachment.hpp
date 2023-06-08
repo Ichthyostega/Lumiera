@@ -53,6 +53,9 @@ namespace fixture {
    * For each ModelPort, we can expect to get an ExitNode (the number of ports is fixed
    * for the complete Timeline). However, this ExitNode does not need to be active, since
    * parts of the timeline can be empty, or partially empty for some ModelPort.
+   * @warning while this descriptor object is freely copyable, the referred ExitNode(s) are
+   *          move-only, and will be referred by the JobTicket. Thus a Segment in the Fixture
+   *          must remain fixed in memory as long as any derived render jobs are alive.
    * 
    * @todo WIP-WIP as of 4/2023 -- starting with a fake implementation                  /////////////////////TICKET #1306 : create an actual link to the low-level Model
    */

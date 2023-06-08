@@ -33,10 +33,12 @@
 
 
 #include "steam/common.hpp"
+#include "steam/fixture/node-graph-attachment.hpp"
 #include "steam/mobject/explicitplacement.hpp"
 #include "steam/engine/job-ticket.hpp"
 #include "lib/time/timevalue.hpp"
 
+#include <utility>
 #include <list>
 
 
@@ -47,6 +49,7 @@ namespace fixture {
   using lib::time::TimeSpan;
   using lib::time::Time;
   using std::list;
+  using std::move;
   
   /**
    * For the purpose of building and rendering, the fixture (for each timeline)
@@ -56,7 +59,7 @@ namespace fixture {
    * 
    * @ingroup fixture
    * @todo 1/2012 Just a Placeholder. The real thing is not yet implemented.
-   * @todo WIP-WIP as of 4/2023 -- about to pull up the engine backbone
+   * @todo WIP-WIP as of 6/2023 -- about to establish the engine backbone
    * @see http://lumiera.org/wiki/renderengine.html#Fixture
    */
   class Segment
@@ -76,21 +79,33 @@ namespace fixture {
       // TODO: ownership??
       ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #725 : placeholder code
     public:
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////OOO : Obsolet ... nur für Umbau erhalten!!
       Segment (TimeSpan covered =TimeSpan::ALL
               ,const engine::JobTicket* ticket =nullptr)
         : span_{covered}
         , jobTicket_{ticket? ticket : &engine::JobTicket::NOP}     //////////////////////////////////////////TICKET #1297 : ensure to provide a JobTicket for each ModelPort in initialisation
       { }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TODO Obsolet ... nur für Umbau erhalten!!
+      Segment (TimeSpan covered
+              ,NodeGraphAttachment&& modelLink)
+        : span_{covered}
+        , exitNode{move (modelLink)}
+      { }
       
       Segment (Segment const& original, TimeSpan changed)
         : span_{changed}
         , jobTicket_{original.jobTicket_}
+        , exitNode{original.exitNode}   /////////////////////////////////////////////////////////////////////OOO really? cloning ExitNodes? 
       { }
       
       // default copy acceptable
       
       Time start() const { return span_.start(); }
       Time after() const { return span_.end(); }
+      
+      /** connection to the render nodes network */
+      NodeGraphAttachment exitNode;
+      
       
       engine::JobTicket const&
       jobTicket()  const                    /////////////////////////////////////////////////////////////////TICKET #1297 : introduce additional key per ModelPort here
