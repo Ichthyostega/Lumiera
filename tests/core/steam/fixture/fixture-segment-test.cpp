@@ -43,6 +43,9 @@ namespace test  {
   using util::isSameObject;
   using engine::ExitNode;
   using lib::diff::MakeRec;
+  
+  using engine::Job;
+  using engine::JobTicket;
   using engine::test::MockSegmentation;
   
   
@@ -101,16 +104,26 @@ namespace test  {
                                                .genNode()
                                                )
                                        .genNode()};
-          UNIMPLEMENTED("fabricate JobTicket from ExitNode-Graph");
-//        // verify generated Node is assembled according to above spec...
-//        CHECK (13 == node.getPipelineIdentity());
-//        auto feed = node.getPrerequisites();
-//        CHECK (not isnil (feed));
-//        CHECK (23 == feed->getPipelineIdentity());
-//        ++feed;
-//        CHECK (55 == feed->getPipelineIdentity());
-//        ++feed;
-//        CHECK (isnil (feed));
+          CHECK (1 == segmentation.size());                      // whole time axis covered by one segment
+          Segment const& seg = segmentation[Time::ANYTIME];     //  thus accessed time point is irrelevant
+          
+          // verify mapped JobTicket is assembled according to above spec...
+          auto getMarker = [](JobTicket const& ticket)
+                              {
+                                FrameCoord dummyFrame;
+                                Job job = ticket.createJobFor(dummyFrame);
+                                return job.parameter.invoKey.part.a;
+                              };
+          
+          JobTicket const& ticket = seg.jobTicket(0);
+          CHECK (13 == getMarker (ticket));
+          auto prereq = ticket.getPrerequisites();
+          CHECK (not isnil(prereq));
+          CHECK (23 == getMarker (*prereq));
+          ++prereq;
+          CHECK (55 == getMarker (*prereq));
+          ++prereq;
+          CHECK (isnil(prereq));
         }
     };
   

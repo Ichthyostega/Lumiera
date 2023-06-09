@@ -37,9 +37,12 @@
 #include "steam/mobject/explicitplacement.hpp"
 #include "steam/engine/job-ticket.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/itertools.hpp"
+#include "lib/util.hpp"
 
 #include <utility>
-#include <list>
+#include <deque>
+#include <tuple>
 
 
 namespace steam {
@@ -48,7 +51,7 @@ namespace fixture {
   using mobject::ExplicitPlacement;
   using lib::time::TimeSpan;
   using lib::time::Time;
-  using std::list;
+  using util::unConst;
   using std::move;
   
   /**
@@ -64,17 +67,21 @@ namespace fixture {
    */
   class Segment
     {
+      using TicketAlloc = std::deque<engine::JobTicket>;
+      using PortTable   = std::deque<std::reference_wrapper<engine::JobTicket>>;
+      
     protected:
       
       /** begin of this timeline segment. */
       TimeSpan span_;
       
       /** render plan / blueprint to use for this segment */
-      const engine::JobTicket* jobTicket_;               ////////////////////////////////////////////////////TICKET #1297 : probably we'll get an array per ModelPort here
+      TicketAlloc  tickets_;
+      PortTable    portTab_;
       
       ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #725 : placeholder code
       /** relevant MObjects comprising this segment. */
-      list<ExplicitPlacement> elements;
+      std::deque<ExplicitPlacement> elements;
       // TODO: actually necessary??
       // TODO: ownership??
       ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #725 : placeholder code
@@ -83,18 +90,21 @@ namespace fixture {
       Segment (TimeSpan covered =TimeSpan::ALL
               ,const engine::JobTicket* ticket =nullptr)
         : span_{covered}
-        , jobTicket_{ticket? ticket : &engine::JobTicket::NOP}     //////////////////////////////////////////TICKET #1297 : ensure to provide a JobTicket for each ModelPort in initialisation
+//      , tickets_{ticket? ticket : &engine::JobTicket::NOP}     //////////////////////////////////////////TICKET #1297 : ensure to provide a JobTicket for each ModelPort in initialisation
       { }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TODO Obsolet ... nur für Umbau erhalten!!
       Segment (TimeSpan covered
               ,NodeGraphAttachment&& modelLink)
         : span_{covered}
+        , tickets_{}
+        , portTab_{}
         , exitNode{move (modelLink)}
       { }
       
       Segment (Segment const& original, TimeSpan changed)
         : span_{changed}
-        , jobTicket_{original.jobTicket_}
+        , tickets_{} // Note: not cloning tickets owned by Segment
+        , portTab_{}
         , exitNode{original.exitNode}   /////////////////////////////////////////////////////////////////////OOO really? cloning ExitNodes? 
       { }
       
@@ -108,16 +118,63 @@ namespace fixture {
       
       
       engine::JobTicket const&
-      jobTicket()  const                    /////////////////////////////////////////////////////////////////TICKET #1297 : introduce additional key per ModelPort here
+      jobTicket (size_t portNr)  const
         {
-          REQUIRE (jobTicket_);
-          return *jobTicket_;
+          if (portNr >= portTab_.size())
+            unConst(this)->generateTickets_onDemand (portNr);
+          ASSERT (portNr < portTab_.size());
+          return portTab_[portNr];
         }
       
       bool
       empty() const
         {
-          return jobTicket().empty();
+          return exitNode.empty();
+        }
+      
+      
+    private:
+      /** @internal Generate sequence of prerequisite JobTicket */
+      auto
+      assemblePrerequisites (ExitNode const& exitNode)
+        {
+          return lib::transformIterator (exitNode.getPrerequisites()
+                                        ,[this](ExitNode const& prereq) -> engine::JobTicket&
+                                                {
+                                                  tickets_.emplace_back(
+                                                    assembleTicketSpec (prereq));
+                                                  return tickets_.back();
+                                                });
+        }
+      
+      
+      /** @internal Traverse ExitNode structure and prepare JobTicket */
+      auto
+      assembleTicketSpec (ExitNode const& exitNode)
+        {
+          REQUIRE (not isnil (exitNode));  // has valid functor
+          using vault::engine::JobFunctor;
+          using Prereqs = decltype(assemblePrerequisites (exitNode));
+          using SpecTuple = std::tuple<ExitNode const&, HashVal, JobFunctor&, Prereqs>;
+          return lib::singleValIterator(                            /////////////////////////////////////////TICKET #1297 : multiplicity per channel will be removed here
+                     SpecTuple(exitNode
+                              ,exitNode.getPipelineIdentity()
+                              ,exitNode.getInvocationFunctor()
+                              ,assemblePrerequisites (exitNode)
+                              ));
+        }
+      
+      void
+      generateTickets_onDemand (size_t portNr)
+        {
+          for (size_t i = portTab_.size(); i <= portNr; ++i)
+            if (isnil (exitNode[portNr]))
+                portTab_.emplace_back (engine::JobTicket::NOP); // disable this slot 
+            else
+              {// Ticket was not generated yet...
+                tickets_.emplace_back (assembleTicketSpec (exitNode[portNr]));
+                portTab_.emplace_back (tickets_.back()); // ref to new ticket ‣ slot 
+              }
         }
     };
   

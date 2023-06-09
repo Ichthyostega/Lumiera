@@ -130,7 +130,7 @@ namespace test  {
                                            )
                                    .genNode()};
           fixture::Segment const& seg = mockSegs[Time{0,15}];              // access anywhere 10s <= t < 20s
-          JobTicket const& ticket = seg.jobTicket();                       // get the master-JobTicket from this segment
+          JobTicket const& ticket = seg.jobTicket(0);                      // get the master-JobTicket from this segment
           JobTicket const& prereq = *(ticket.getPrerequisites());          // pull a prerequisite JobTicket
           
           FrameCoord coord;                                                // Frame coordinates for invocation (placeholder)

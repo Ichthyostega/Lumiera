@@ -86,7 +86,7 @@ namespace test  {
             CHECK (3 == mockSegs.size());
             fixture::Segment const& seg = mockSegs[Time{0,15}];              // access anywhere 10s <= t < 20s
             
-            JobTicket const& ticket = seg.jobTicket();    ///////////////////////////////////////////////////TICKET #1297 : will need to pass a ModelPort number here (use the first one, i.e. 0)
+            JobTicket const& ticket = seg.jobTicket(0);
             
             FrameCoord coord;
             coord.absoluteNominalTime = Time(0,15);
@@ -166,7 +166,7 @@ namespace test  {
           {
             MockSegmentation mockSeg;
             CHECK (1 == mockSeg.size());
-            JobTicket const& ticket = mockSeg[someTime].jobTicket();
+            JobTicket const& ticket = mockSeg[someTime].jobTicket(0);         // just probe JobTicket generated for Model-Port-Nr.0
             CHECK (util::isSameObject (ticket, JobTicket::NOP));
           }
           //-----------------------------------------------------------------/// Segmentation with one default segment spanning complete timeline
@@ -175,7 +175,7 @@ namespace test  {
             CHECK (1 == mockSegs.size());
             CHECK (Time::MIN == mockSegs[someTime].start());
             CHECK (Time::MAX == mockSegs[someTime].after());
-            JobTicket const& ticket = mockSegs[someTime].jobTicket();
+            JobTicket const& ticket = mockSegs[someTime].jobTicket(0);
             CHECK (not util::isSameObject (ticket, JobTicket::NOP));
             
             Job someJob = ticket.createJobFor(coord);                         // JobTicket uses, but does not check the time given in FrameCoord
@@ -204,12 +204,12 @@ namespace test  {
             // while the left part of the axis is marked as NOP / empty
             fixture::Segment const& seg1 = mockSegs[Time::ZERO];              // access anywhere < 10s
             fixture::Segment const& seg2 = mockSegs[Time{0,20}];              // access anywhere >= 10s
-            CHECK (    util::isSameObject (seg1.jobTicket(), JobTicket::NOP));
-            CHECK (not util::isSameObject (seg2.jobTicket(), JobTicket::NOP));// this one is the active segment
+            CHECK (    util::isSameObject (seg1.jobTicket(0),JobTicket::NOP));
+            CHECK (not util::isSameObject (seg2.jobTicket(0),JobTicket::NOP));// this one is the active segment
             
-            Job job = seg2.jobTicket().createJobFor(coord);
-            CHECK (not MockJobTicket::isAssociated (job, seg1.jobTicket()));
-            CHECK (    MockJobTicket::isAssociated (job, seg2.jobTicket()));
+            Job job = seg2.jobTicket(0).createJobFor(coord);
+            CHECK (not MockJobTicket::isAssociated (job, seg1.jobTicket(0)));
+            CHECK (    MockJobTicket::isAssociated (job, seg2.jobTicket(0)));
             CHECK (marker == job.parameter.invoKey.part.a);
             
             job.triggerJob();
@@ -218,10 +218,10 @@ namespace test  {
             CHECK (marker == DummyJob::invocationAdditionalKey (job));        // DummyClosure is rigged such as to feed back the seed in `part.a`
                                                                               // and thus we can prove this job really belongs to the marked segment
             // create another job from the (empty) seg1
-            job = seg1.jobTicket().createJobFor (coord);
+            job = seg1.jobTicket(0).createJobFor (coord);
             InvocationInstanceID empty; /////////////////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
             CHECK (lumiera_invokey_eq (&job.parameter.invoKey, &empty));      // indicates that it's just a placeholder to mark a "NOP"-Job
-            CHECK (seg1.jobTicket().empty());
+            CHECK (seg1.jobTicket(0).empty());
             CHECK (seg1.empty());
             CHECK (not seg2.empty());
           }
@@ -290,7 +290,7 @@ namespace test  {
                               {
                                 if (segment.empty()) return 0;
                                 
-                                Job job = segment.jobTicket().createJobFor(coord);
+                                Job job = segment.jobTicket(0).createJobFor(coord);
                                 job.triggerJob();
                                 CHECK (DummyJob::was_invoked (job));
                                 CHECK (RealClock::wasRecently (DummyJob::invocationTime (job)));
@@ -325,7 +325,7 @@ namespace test  {
                                            .genNode())
                                      .genNode()};
             CHECK (1 == mockSegs.size());
-            JobTicket const& ticket = mockSegs[Time::ZERO].jobTicket();
+            JobTicket const& ticket = mockSegs[Time::ZERO].jobTicket(0); // Model-PortNr.0
             auto prereq = ticket.getPrerequisites();
             CHECK (not isnil (prereq));
             
@@ -360,7 +360,7 @@ namespace test  {
                                              .genNode())
                                      .genNode()};
             
-            auto start = singleValIterator (mockSegs[Time::ZERO].jobTicket());
+            auto start = singleValIterator (mockSegs[Time::ZERO].jobTicket(0));
             
             auto it = lib::explore(start)
                           .expand ([](JobTicket const& ticket)

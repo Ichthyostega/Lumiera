@@ -97,9 +97,10 @@ namespace test   {
     inline auto
     defineSpec (HashVal seed, IT&& prereq)
     {
-      using SpecTuple = std::tuple<JobFunctor&, HashVal, IT>;
+      using SpecTuple = std::tuple<ExitNode const&, JobFunctor&, HashVal, IT>;
       return lib::singleValIterator(                            /////////////////////////////////////////////TICKET #1297 : multiplicity per channel will be removed here
-                 SpecTuple(DummyJob::getFunctor()
+                 SpecTuple(ExitNode::NIL
+                          ,DummyJob::getFunctor()
                           , seed
                           , std::forward<IT> (prereq)));
     }

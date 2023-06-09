@@ -34,6 +34,7 @@
 #include "lib/nocopy.hpp"
 #include "lib/hash-value.h"
 #include "lib/iter-adapter-stl.hpp"
+#include "vault/engine/job.h"              //////////////////////////////////////////////////////////////////TICKET #1295 : rather need a way to retrieve a real JobFunctor building block from the ProcNode
 
 #include <deque>
 
@@ -46,6 +47,7 @@ namespace engine {
   class ExitNode;
   using ExitNodes = std::deque<engine::ExitNode>;
   
+  using vault::engine::JobFunctor;
   
   
   /**
@@ -64,6 +66,7 @@ namespace engine {
     {
       HashVal   pipelineIdentity_;                 //////////////////////////////////////////////////////////TICKET #1293 : Hash-Chaining for invocation-ID... derive from ProcNode wiring
       ExitNodes prerequisites_;                   ///////////////////////////////////////////////////////////TICKET #1306 : actual access to low-level-Model (ProcNode)
+      JobFunctor* action_{nullptr};              ////////////////////////////////////////////////////////////TICKET #1295 : link to actual implementation action in low-level-Model
       
     public:
       ExitNode()
@@ -71,13 +74,23 @@ namespace engine {
         , prerequisites_{}
       { }
       
-      ExitNode (HashVal id, ExitNodes&& prereq =ExitNodes{})
+      ExitNode (HashVal id
+               ,ExitNodes&& prereq =ExitNodes{}
+               ,JobFunctor* functor =nullptr)
         : pipelineIdentity_{id}
         , prerequisites_{std::move (prereq)}
+        , action_{functor}
       { }
       
       static ExitNode NIL;
       
+      
+      bool
+      empty()  const
+        {
+          return 0 == pipelineIdentity_
+              or not action_;
+        }
       
       HashVal
       getPipelineIdentity()  const
@@ -89,6 +102,13 @@ namespace engine {
       getPrerequisites()  const
         {
           return lib::iter_stl::eachElm (prerequisites_);
+        }
+      
+      JobFunctor&
+      getInvocationFunctor()  const
+        {
+          REQUIRE (action_);
+          return *action_;            ///////////////////////////////////////////////////////////////////////TICKET #1295 : decision on actual JobFunctor and invocation parameters
         }
     };
   

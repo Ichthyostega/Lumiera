@@ -39,6 +39,7 @@
 //#include "steam/state.hpp"
 #include "vault/engine/job.h"
 #include "steam/engine/frame-coord.hpp"
+#include "steam/engine/exit-node.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"
 #include "lib/hierarchy-orientation-indicator.hpp"
@@ -111,12 +112,14 @@ using lib::LUID;
       struct Provision
         {
           Provision* next{nullptr};
-          JobFunctor&   jobFunctor;
+          JobFunctor&     jobFunctor;
+          ExitNode const& exitNode;
           InvocationInstanceID invocationSeed;
-          Prerequisites requirements{};
-          ////////////////////TODO some channel or format descriptor here
-          Provision (JobFunctor& func, HashVal seed =0)
+          Prerequisites   requirements{};
+          
+          Provision (JobFunctor& func, ExitNode const& node, HashVal seed =0)
             : jobFunctor{func}
+            , exitNode{node}
             , invocationSeed(static_cast<JobClosure&>(func).buildInstanceID(seed))      ////////////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
           { }                                                                          /////////////////TICKET #1293 : Hash-Chaining for invocation-ID... size_t hash? or a LUID?
         };
@@ -302,12 +305,14 @@ using lib::LUID;
     static_assert (lib::meta::can_IterForEach<IT>::value);                // -- can be iterated
     using Spec = typename IT::value_type;
     static_assert (lib::meta::is_Tuple<Spec>());                          // -- payload of iterator is a tuple
-    using Func = typename std::tuple_element<0, Spec>::type;
+    using Node = typename std::tuple_element<0, Spec>::type;
     using Seed = typename std::tuple_element<1, Spec>::type;
-    using Preq = typename std::tuple_element<2, Spec>::type;
-    static_assert (lib::meta::is_basically<Func, JobFunctor>());          // -- first component specifies the JobFunctor to use
+    using Func = typename std::tuple_element<2, Spec>::type;
+    using Preq = typename std::tuple_element<3, Spec>::type;
+    static_assert (lib::meta::is_basically<Node, ExitNode>());            // -- first component refers to the ExitNode in the model
     static_assert (lib::meta::is_basically<Seed, HashVal>());             // -- second component provides a specific seed for Invocation-IDs
-    static_assert (lib::meta::can_IterForEach<Preq>::value);              // -- third component is again an iterable sequence
+    static_assert (lib::meta::is_basically<Func, JobFunctor>());          // -- third component specifies the JobFunctor to use
+    static_assert (lib::meta::can_IterForEach<Preq>::value);              // -- fourth component is again an iterable sequence
     static_assert (std::is_same<typename Preq::value_type, JobTicket>()); // -- which yields JobTicket prerequisites
     REQUIRE (not isnil (featureSpec)
             ,"require at least specification for one channel");
@@ -315,10 +320,11 @@ using lib::LUID;
     LinkedElements<Provision> provisionSpec;    //////////////////////////////////////////////////TICKET #1292 : need to pass in Allocator as argument
     for ( ; featureSpec; ++featureSpec)        ///////////////////////////////////////////////////TICKET #1297 : this additional iteration over channels will go away
       {
-        JobFunctor& func = std::get<0> (*featureSpec);
+        ExitNode&   node = std::get<0> (*featureSpec);
         HashVal invoSeed = std::get<1> (*featureSpec);
-        auto& provision  = provisionSpec.emplace<Provision> (func, invoSeed);
-        for (Preq pre = std::get<2> (*featureSpec); pre; ++pre)
+        JobFunctor& func = std::get<2> (*featureSpec);
+        auto& provision  = provisionSpec.emplace<Provision> (func, node, invoSeed);
+        for (Preq pre = std::get<3> (*featureSpec); pre; ++pre)
             provision.requirements.emplace<Prerequisite> (*pre);
       }
     provisionSpec.reverse();        // retain order of given definitions per channel  ////////////TICKET #1297 : obsolete; instead we differentiate by OutputSlot in the Segment

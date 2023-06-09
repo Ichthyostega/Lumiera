@@ -38,6 +38,7 @@
 
 #include "steam/engine/exit-node.hpp"
 //#include "lib/time/timevalue.hpp"
+#include "lib/util.hpp"
 
 #include <utility>
 
@@ -79,6 +80,12 @@ namespace fixture {
         {
           return idx < exitNodes_.size()? exitNodes_[idx]
                                         : ExitNode::NIL;
+        }
+      
+      bool
+      empty()  const
+        {
+          return util::isnil (exitNodes_);
         }
     };
   
