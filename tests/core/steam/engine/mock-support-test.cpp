@@ -247,7 +247,7 @@ namespace test  {
             CHECK (Time(0,20) == s3.start());
             CHECK (Time::MAX  == s3.after());
             
-            Job job = s2.jobTicket().createJobFor(coord);
+            Job job = s2.jobTicket(0).createJobFor(coord);
             job.triggerJob();
             CHECK (marker == DummyJob::invocationAdditionalKey (job));
           }

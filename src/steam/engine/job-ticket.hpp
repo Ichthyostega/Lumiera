@@ -100,9 +100,9 @@ using lib::LUID;
       struct Prerequisite
         {
           Prerequisite* next{nullptr};
-          JobTicket& descriptor;
+          JobTicket const& descriptor;
           
-          Prerequisite (JobTicket& ticket)
+          Prerequisite (JobTicket const& ticket)
             : descriptor{ticket}
           { }
         };
@@ -131,6 +131,8 @@ using lib::LUID;
       template<class IT>
       static LinkedElements<Provision> buildProvisionSpec (IT);
       
+      static LinkedElements<Provision> buildProvisionSpec (ExitNode const&);
+      
     private:
       JobTicket() { }   ///< @internal as NIL marker, a JobTicket can be empty
       
@@ -141,13 +143,16 @@ using lib::LUID;
         { }
 
     public:
-      class ExplorationState;
-      friend class ExplorationState;
+      JobTicket (ExitNode const& exitNode)
+        : provision_{buildProvisionSpec (exitNode)}
+        { }
       
       static const JobTicket NOP;
 
       
       
+      class ExplorationState;
+      friend class ExplorationState;
       ExplorationState startExploration()                        const;     ////////////////////////////TICKET #1276 : likely to become obsolete
       ExplorationState discoverPrerequisites (uint channelNr =0) const;     ////////////////////////////TICKET #1276 : likely to become obsolete
       
@@ -250,7 +255,7 @@ using lib::LUID;
         }
       
       
-      JobTicket*
+      JobTicket const *
       operator->() const
         {
           REQUIRE (!empty() && toExplore_.top().isValid());
@@ -329,6 +334,19 @@ using lib::LUID;
       }
     provisionSpec.reverse();        // retain order of given definitions per channel  ////////////TICKET #1297 : obsolete; instead we differentiate by OutputSlot in the Segment
     ENSURE (not isnil (provisionSpec));
+    return provisionSpec;
+  }
+  inline LinkedElements<JobTicket::Provision>
+  JobTicket::buildProvisionSpec (ExitNode const& exitNode)
+  {
+    REQUIRE (not isnil (exitNode));  // has valid functor
+    LinkedElements<Provision> provisionSpec;
+    HashVal invoSeed = exitNode.getPipelineIdentity();
+    JobFunctor& func = exitNode.getInvocationFunctor();
+    auto& provision  = provisionSpec.emplace<Provision> (func, exitNode, invoSeed);
+    for (ExitNode const& preNode: exitNode.getPrerequisites())
+      provision.requirements.emplace(preNode);       /////////////////////////////////////////////TICKET #1292 : need to pass in Allocator as argument
+                            //////////////////////////////////////////////////////////////////////OOO : where to ALLOCATE the prerequisite JobTickets ??!!
     return provisionSpec;
   }
   

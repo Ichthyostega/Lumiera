@@ -68,7 +68,7 @@ namespace fixture {
   class Segment
     {
       using TicketAlloc = std::deque<engine::JobTicket>;
-      using PortTable   = std::deque<std::reference_wrapper<engine::JobTicket>>;
+      using PortTable   = std::deque<std::reference_wrapper<const engine::JobTicket>>;
       
     protected:
       
@@ -134,36 +134,6 @@ namespace fixture {
       
       
     private:
-      /** @internal Generate sequence of prerequisite JobTicket */
-      auto
-      assemblePrerequisites (ExitNode const& exitNode)
-        {
-          return lib::transformIterator (exitNode.getPrerequisites()
-                                        ,[this](ExitNode const& prereq) -> engine::JobTicket&
-                                                {
-                                                  tickets_.emplace_back(
-                                                    assembleTicketSpec (prereq));
-                                                  return tickets_.back();
-                                                });
-        }
-      
-      
-      /** @internal Traverse ExitNode structure and prepare JobTicket */
-      auto
-      assembleTicketSpec (ExitNode const& exitNode)
-        {
-          REQUIRE (not isnil (exitNode));  // has valid functor
-          using vault::engine::JobFunctor;
-          using Prereqs = decltype(assemblePrerequisites (exitNode));
-          using SpecTuple = std::tuple<ExitNode const&, HashVal, JobFunctor&, Prereqs>;
-          return lib::singleValIterator(                            /////////////////////////////////////////TICKET #1297 : multiplicity per channel will be removed here
-                     SpecTuple(exitNode
-                              ,exitNode.getPipelineIdentity()
-                              ,exitNode.getInvocationFunctor()
-                              ,assemblePrerequisites (exitNode)
-                              ));
-        }
-      
       void
       generateTickets_onDemand (size_t portNr)
         {
@@ -172,8 +142,8 @@ namespace fixture {
                 portTab_.emplace_back (engine::JobTicket::NOP); // disable this slot 
             else
               {// Ticket was not generated yet...
-                tickets_.emplace_back (assembleTicketSpec (exitNode[portNr]));
-                portTab_.emplace_back (tickets_.back()); // ref to new ticket ‣ slot 
+                tickets_.emplace_back (exitNode[portNr]);
+                portTab_.emplace_back (tickets_.back());    // ref to new ticket ‣ slot 
               }
         }
     };

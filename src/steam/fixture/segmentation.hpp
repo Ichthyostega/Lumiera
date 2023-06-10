@@ -121,7 +121,7 @@ namespace fixture {
       
       /** rework the existing Segmentation to include a new Segment as specified */
       Segment const&
-      splitSplice (OptTime start, OptTime after, const engine::JobTicket* =nullptr);
+      splitSplice (OptTime start, OptTime after, engine::ExitNodes&& modelLink  =ExitNodes{});
     };
   
   

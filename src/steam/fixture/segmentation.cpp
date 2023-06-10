@@ -29,7 +29,6 @@
 
 #include "lib/error.hpp"
 #include "steam/fixture/segmentation.hpp"
-//#include "steam/mobject/builder/fixture-change-detector.hpp"  ///////////TODO
 #include "lib/time/timevalue.hpp"
 #include "lib/split-splice.hpp"
 
@@ -75,14 +74,14 @@ namespace fixture {
    * @see SplitSplice_test
    */
   Segment const&
-  Segmentation::splitSplice (OptTime start, OptTime after, const engine::JobTicket* jobTicket)
+  Segmentation::splitSplice (OptTime start, OptTime after, engine::ExitNodes&& modelLink)
   {
     ASSERT (!start or !after or start != after);
     using Iter = typename list<Segment>::iterator;
     
     auto getStart =  [](Iter elm)                                   -> Time { return elm->start(); };
     auto getAfter =  [](Iter elm)                                   -> Time { return elm->after(); };
-    auto createSeg= [&](Iter pos, Time start, Time after)           -> Iter { return segments_.emplace (pos, TimeSpan{start, after}, jobTicket); };
+    auto createSeg= [&](Iter pos, Time start, Time after)           -> Iter { return segments_.emplace (pos, TimeSpan{start, after}, move(modelLink)); };
     auto emptySeg = [&](Iter pos, Time start, Time after)           -> Iter { return segments_.emplace (pos, TimeSpan{start, after}); };
     auto cloneSeg = [&](Iter pos, Time start, Time after, Iter src) -> Iter { return segments_.emplace (pos, *src, TimeSpan{start, after}); };
     auto discard  = [&](Iter pos, Iter after)                       -> Iter { return segments_.erase (pos,after); };

@@ -93,22 +93,12 @@ namespace test   {
     
     /* ===== specify a mock JobTicket setup for tests ===== */
     
-    template<class IT>
-    inline auto
-    defineSpec (HashVal seed, IT&& prereq)
-    {
-      using SpecTuple = std::tuple<ExitNode const&, JobFunctor&, HashVal, IT>;
-      return lib::singleValIterator(                            /////////////////////////////////////////////TICKET #1297 : multiplicity per channel will be removed here
-                 SpecTuple(ExitNode::NIL
-                          ,DummyJob::getFunctor()
-                          , seed
-                          , std::forward<IT> (prereq)));
-    }
-    
-    inline auto
+    inline ExitNode
     defineSimpleSpec (HashVal seed =0)
     {
-      return defineSpec (seed, lib::nilIterator<JobTicket&>());
+      return ExitNode{seed
+                     ,ExitNodes{}
+                     ,& DummyJob::getFunctor()};
     }
     
   }//(End)internal test helpers....
@@ -140,10 +130,10 @@ namespace test   {
         : JobTicket{defineSimpleSpec (seed)}
       { }
       
-      template<class IT>
-      MockJobTicket (HashVal seed, IT&& prereq)
-        : JobTicket{defineSpec (seed, std::forward<IT> (prereq))}
-      { }
+//    template<class IT>
+//    MockJobTicket (HashVal seed, IT&& prereq)
+//      : JobTicket{defineSpec (seed, std::forward<IT> (prereq))}
+//    { }
       
       /* ===== Diagnostics ===== */
       
@@ -191,11 +181,11 @@ namespace test   {
         {
           for (auto& spec : specs)
             {
-              JobTicket& newTicket = buildTicketFromSpec (spec);
-              
               auto start = spec.retrieveAttribute<Time> ("start");
               auto after = spec.retrieveAttribute<Time> ("after");
-              Segmentation::splitSplice (start, after, &newTicket);
+              Segmentation::splitSplice (start, after
+                                        ,ExitNodes{buildExitNodeFromSpec (spec)}
+                                        );
             }
         }
       
@@ -204,8 +194,9 @@ namespace test   {
       buildExitNodeFromSpec (GenNode const& spec)
         {
           return ExitNode{buildSeed (spec)
-                         ,buildPrerequisites (spec)};
-        }              // Warning: re-entrant invocation of emplace_back
+                         ,buildPrerequisites (spec)
+                         ,& DummyJob::getFunctor()};
+        }
       
       
     private: /* ======== Implementation: build fake ExitNodes from test specification ==== */
@@ -220,24 +211,12 @@ namespace test   {
       ExitNodes
       buildPrerequisites (GenNode const& spec)
         {
-//        return lib::transformIterator (spec.getChildren()
-//                                      ,[this](GenNode const& childSpec) -> JobTicket&
-//                                            {
-//                                              return buildTicketFromSpec (childSpec);
-//                                            });
           ExitNodes prerequisites;
           for (auto& child : spec.getChildren())
             prerequisites.emplace_back (
               buildExitNodeFromSpec (child));
           return prerequisites;
         }
-      
-      JobTicket&
-      buildTicketFromSpec (GenNode const& spec)
-        {
-//        return tickets_.emplace_back (buildSeed(spec)
-//                                     ,buildPrerequisites(spec));
-        }                              // Warning: re-entrant invocation of emplace_back
     };
   
   
