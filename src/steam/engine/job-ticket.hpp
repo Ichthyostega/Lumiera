@@ -46,6 +46,7 @@
 #include "lib/linked-elements.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/itertools.hpp"
+#include "lib/util-foreach.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/util.hpp"
@@ -113,7 +114,7 @@ using lib::LUID;
           JobFunctor&          jobFunctor;
           ExitNode const&      exitNode;
           InvocationInstanceID invocationSeed;
-          Prerequisites        requirements{};
+          Prerequisites        prerequisites{};
           
           Provision (JobFunctor& func, ExitNode const& node, HashVal seed =0)
             : jobFunctor{func}
@@ -153,7 +154,7 @@ using lib::LUID;
       getPrerequisites ()  const
         {
           return lib::transformIterator (this->empty()? Prerequisites::const_iterator()
-                                                      : provision_.requirements.begin()
+                                                      : provision_.prerequisites.begin()
                                         ,[](Prerequisite const& prq) -> JobTicket const&
                                            {
                                              return prq.prereqTicket;
@@ -172,8 +173,11 @@ using lib::LUID;
         {
           if (empty()) return false;
           
-          TODO ("validity self check");
-          return true;
+            InvocationInstanceID empty; /////////////////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
+          return not lumiera_invokey_eq (&util::unConst(provision_).invocationSeed, &empty)
+             and provision_.exitNode.isValid()
+             and util::and_all (provision_.prerequisites
+                               ,[](auto& pq){ return pq.prereqTicket.isValid(); });
         }
       
     protected:
@@ -307,7 +311,7 @@ using lib::LUID;
     JobFunctor& func = exitNode.getInvocationFunctor();
     Provision provisionSpec{func, exitNode, invoSeed};
     for (ExitNode const& preNode: exitNode.getPrerequisites())
-      provisionSpec.requirements.emplace(preNode, allocTicket);    //////////////////////////////////////////TICKET #1292 : need to pass in generic Allocator as argument
+      provisionSpec.prerequisites.emplace(preNode, allocTicket);    //////////////////////////////////////////TICKET #1292 : need to pass in generic Allocator as argument
     return provisionSpec;
   }
   
@@ -333,7 +337,7 @@ using lib::LUID;
   JobTicket::discoverPrerequisites (uint channelNr)  const
   {
     return empty()? ExplorationState()
-                  : ExplorationState (util::unConst(provision_).requirements);
+                  : ExplorationState (util::unConst(provision_).prerequisites);
   }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 : likely to become obsolete
   

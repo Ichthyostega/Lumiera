@@ -6,7 +6,7 @@ return: 0
 END
 
 
-PLANNED "A Segment in the Fixture" FixtureSegment_test <<END
+TEST "A Segment in the Fixture" FixtureSegment_test <<END
 return: 0
 END
 

@@ -92,6 +92,13 @@ namespace engine {
               or not action_;
         }
       
+      bool
+      isValid()  const
+        {
+          return true;                ///////////////////////////////////////////////////////////////////////TICKET #826 : ProcNode groundwork; integrate self-validation of render network
+        }
+      
+      
       HashVal
       getPipelineIdentity()  const
         {

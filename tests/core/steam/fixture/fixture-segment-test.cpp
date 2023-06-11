@@ -54,7 +54,6 @@ namespace test  {
    * @test Verify properties and behaviour of a single Segment in the Segmentation
    *       - construction of a mocked Segment
    *       - on-demand allocation of a JobTicket for a ModelPort(index)
-   *       - TODO
    * @see steam::fixture::Segment
    * @see JobPlanningSetup_test
    * @see MockSupport_test
