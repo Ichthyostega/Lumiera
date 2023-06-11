@@ -69,8 +69,6 @@ using lib::OrientationIndicator;
 using util::isnil;
 using lib::HashVal;
 using lib::LUID;
-//  
-//class ExitNode;
   
   
   /**
@@ -86,20 +84,19 @@ using lib::LUID;
    * Job tickets are created by a classical recursive descent call on the exit node,
    * which figures out everything to be done for generating data from this node.
    * To turn a JobTicket into an actual job, we need the additional information
-   * regarding the precise frame number (=nominal time) and the channel number
-   * to calculate (in case the actual feed is multichannel, which is the default).
-   * This way, the JobTicket acts as _higher order function:_ a function
-   * generating on invocation another, specific function (= the job).
+   * regarding the precise frame number (=nominal time) and a handle for the
+   * DataSink exposing buffers to output generated data. Thus effectively
+   * the JobTicket acts as _higher order function:_ a function generating
+   * on invocation another, specific function (= the job).
    * 
    * @todo 4/23 WIP-WIP-WIP defining the invocation sequence and render jobs
-   * @todo maybe the per-channel specialisation can be elided altogether...?
    */
   class JobTicket
     : util::NonCopyable
     {
       struct Prerequisite
         {
-          Prerequisite* next{nullptr};
+          Prerequisite* next{nullptr};  // for intrusive list
           JobTicket const& prereqTicket;
           
           template<class ALO>
@@ -109,14 +106,14 @@ using lib::LUID;
         };
       using Prerequisites = LinkedElements<Prerequisite>;
       
+      
       /** what handling this task entails */
       struct Provision
         {
-          Provision* next{nullptr};
-          JobFunctor&     jobFunctor;
-          ExitNode const& exitNode;
+          JobFunctor&          jobFunctor;
+          ExitNode const&      exitNode;
           InvocationInstanceID invocationSeed;
-          Prerequisites   requirements{};
+          Prerequisites        requirements{};
           
           Provision (JobFunctor& func, ExitNode const& node, HashVal seed =0)
             : jobFunctor{func}
@@ -125,25 +122,15 @@ using lib::LUID;
           { }                                                                          /////////////////TICKET #1293 : Hash-Chaining for invocation-ID... size_t hash? or a LUID?
         };
       
+      /// @internal reference to all information required for actual Job creation
+      Provision provision_;
       
-      LinkedElements<Provision> provision_;           //////////////////////////////////////////////////TICKET #1297 : retract differentiation into channels here (instead use ModelPorts in the Segment)
       
-      
-      template<class IT>
-      static LinkedElements<Provision> buildProvisionSpec (IT);
+      JobTicket();      ///< @internal as NIL marker, a JobTicket can be empty
       
       template<class ALO>
-      static LinkedElements<Provision> buildProvisionSpec (ExitNode const&, ALO&);
+      static Provision buildProvisionSpec (ExitNode const&, ALO&);
       
-    private:
-      JobTicket() { }   ///< @internal as NIL marker, a JobTicket can be empty
-      
-    protected:
-      template<class IT>
-      JobTicket(IT featureSpec_perChannel)
-        : provision_{buildProvisionSpec (featureSpec_perChannel)}
-        { }
-
     public:
       template<class ALO>
       JobTicket (ExitNode const& exitNode, ALO& allocator)
@@ -151,32 +138,33 @@ using lib::LUID;
         { }
       
       static const JobTicket NOP;
-
       
       
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 : likely to become obsolete
       class ExplorationState;
       friend class ExplorationState;
       ExplorationState startExploration()                        const;     ////////////////////////////TICKET #1276 : likely to become obsolete
       ExplorationState discoverPrerequisites (uint channelNr =0) const;     ////////////////////////////TICKET #1276 : likely to become obsolete
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 : likely to become obsolete
+      
+      Job createJobFor (FrameCoord coordinates)  const;
       
       auto
-      getPrerequisites (uint slotNr =0)  const
+      getPrerequisites ()  const
         {
-          return lib::transformIterator (this->empty()? Prerequisites::iterator()
-                                                      : provision_[slotNr].requirements.begin()
-                                        ,[](Prerequisite& prq) -> JobTicket const&
+          return lib::transformIterator (this->empty()? Prerequisites::const_iterator()
+                                                      : provision_.requirements.begin()
+                                        ,[](Prerequisite const& prq) -> JobTicket const&
                                            {
                                              return prq.prereqTicket;
                                            });
         }
       
-      Job createJobFor (FrameCoord coordinates)  const;
-      
       
       bool
       empty()  const
         {
-          return isnil (provision_);
+          return isnil (provision_.exitNode);
         }
       
       bool
@@ -195,6 +183,7 @@ using lib::LUID;
     };
   
   
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 : likely to become obsolete
   class JobTicket::ExplorationState
     {
       typedef Prerequisites::iterator SubTicketSeq;
@@ -288,14 +277,17 @@ using lib::LUID;
             }
         }
     };
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 : likely to become obsolete
   
   
   
 
   /** @internal prepare and assemble the working data structure to build a JobTicket.
-   * @tparam IT iterator to yield a sequence of specifications for each channel,
-   *            given as `std::pair` of a JobFunctor and a further Sequence of
-   *            JobTicket prerequisites. 
+   * @tparam ALO type of an allocator front-end for generating prerequisite JobTicket(s)
+   * @param  exitNode a (possibly recursive) tree of ExitNode, detailing points where to
+   *                  pull and process data from the render nodes network; these can refer
+   *                  to nested ExitNodes(s), which need to be processed beforehand, as
+   *                  prerequisite for invoking the given (dependent) ExitNode.
    * @return the final wired instance of the data structure to back the new JobTicket
    * @remark Note especially that those data structures linked together for use by the
    *         JobTicket are themselves allocated "elsewhere", and need to be attached
@@ -306,55 +298,22 @@ using lib::LUID;
    *         frequently after each strike of edit operations, yet traversed
    *         and evaluated on a sub-second scale for ongoing playback.
    */
-  template<class IT>
-  inline LinkedElements<JobTicket::Provision>
-  JobTicket::buildProvisionSpec (IT featureSpec)
-  {                                                                       /* ---- validate parameter type ---- */
-    static_assert (lib::meta::can_IterForEach<IT>::value);                // -- can be iterated
-    using Spec = typename IT::value_type;
-    static_assert (lib::meta::is_Tuple<Spec>());                          // -- payload of iterator is a tuple
-    using Node = typename std::tuple_element<0, Spec>::type;
-    using Seed = typename std::tuple_element<1, Spec>::type;
-    using Func = typename std::tuple_element<2, Spec>::type;
-    using Preq = typename std::tuple_element<3, Spec>::type;
-    static_assert (lib::meta::is_basically<Node, ExitNode>());            // -- first component refers to the ExitNode in the model
-    static_assert (lib::meta::is_basically<Seed, HashVal>());             // -- second component provides a specific seed for Invocation-IDs
-    static_assert (lib::meta::is_basically<Func, JobFunctor>());          // -- third component specifies the JobFunctor to use
-    static_assert (lib::meta::can_IterForEach<Preq>::value);              // -- fourth component is again an iterable sequence
-    static_assert (std::is_same<typename Preq::value_type, JobTicket>()); // -- which yields JobTicket prerequisites
-    REQUIRE (not isnil (featureSpec)
-            ,"require at least specification for one channel");
-    
-    LinkedElements<Provision> provisionSpec;    //////////////////////////////////////////////////TICKET #1292 : need to pass in Allocator as argument
-    for ( ; featureSpec; ++featureSpec)        ///////////////////////////////////////////////////TICKET #1297 : this additional iteration over channels will go away
-      {
-        ExitNode&   node = std::get<0> (*featureSpec);
-        HashVal invoSeed = std::get<1> (*featureSpec);
-        JobFunctor& func = std::get<2> (*featureSpec);
-        auto& provision  = provisionSpec.emplace<Provision> (func, node, invoSeed);
-        for (Preq pre = std::get<3> (*featureSpec); pre; ++pre)
-            provision.requirements.emplace<Prerequisite> (*pre);
-      }
-    provisionSpec.reverse();        // retain order of given definitions per channel  ////////////TICKET #1297 : obsolete; instead we differentiate by OutputSlot in the Segment
-    ENSURE (not isnil (provisionSpec));
-    return provisionSpec;
-  }
   template<class ALO>
-  inline LinkedElements<JobTicket::Provision>
+  inline JobTicket::Provision
   JobTicket::buildProvisionSpec (ExitNode const& exitNode, ALO& allocTicket)
   {
     REQUIRE (not isnil (exitNode));  // has valid functor
-    LinkedElements<Provision> provisionSpec;
     HashVal invoSeed = exitNode.getPipelineIdentity();
     JobFunctor& func = exitNode.getInvocationFunctor();
-    auto& provision  = provisionSpec.emplace<Provision> (func, exitNode, invoSeed);
+    Provision provisionSpec{func, exitNode, invoSeed};
     for (ExitNode const& preNode: exitNode.getPrerequisites())
-      provision.requirements.emplace(preNode, allocTicket);   ////////////////////////////////////TICKET #1292 : need to pass in generic Allocator as argument
+      provisionSpec.requirements.emplace(preNode, allocTicket);    //////////////////////////////////////////TICKET #1292 : need to pass in generic Allocator as argument
     return provisionSpec;
   }
   
   
-  
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 : likely to become obsolete
   /// @deprecated : could be expendable ... likely incurred solely by the use of Monads as design pattern 
   inline JobTicket::ExplorationState
   JobTicket::startExploration()  const
@@ -373,13 +332,10 @@ using lib::LUID;
   inline JobTicket::ExplorationState
   JobTicket::discoverPrerequisites (uint channelNr)  const
   {
-    REQUIRE (channelNr < provision_.size() or not isValid());
-    
-    return isnil (provision_)? ExplorationState()
-                             : ExplorationState (provision_[channelNr].requirements);
+    return empty()? ExplorationState()
+                  : ExplorationState (util::unConst(provision_).requirements);
   }
-
-  
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 : likely to become obsolete
   
   
 }} // namespace steam::engine

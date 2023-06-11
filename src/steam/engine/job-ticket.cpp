@@ -44,69 +44,19 @@ namespace engine {
   } // (END) Details...
   
   
-//  using mobject::Placement;
-//  using mobject::session::Effect;
-  using vault::engine::JobParameter;
   using vault::engine::JobClosure;
-  
   using lib::HashVal;
-  
   using lib::unConst;
   
   
-  class FrameJobClosure
-    : public JobClosure
-    {
-      // data members?
-      
-    private: /* === JobClosure Interface === */
-      
-      JobKind
-      getJobKind()  const
-        {
-          return CALC_JOB;
-        }
-      
-      bool
-      verify (Time nominalTime, InvocationInstanceID invoKey)  const
-        {
-          UNIMPLEMENTED ("access the underlying JobTicket and verify the given job time is within the relevant timeline segment");
-          return false;
-        }
-      
-      InvocationInstanceID
-      buildInstanceID (HashVal seed)  const override
-        {
-          UNIMPLEMENTED ("systematically generate an invoKey, distinct for the nominal time");
-        }
-      
-      size_t
-      hashOfInstance (InvocationInstanceID invoKey)  const override
-        {
-          UNIMPLEMENTED ("interpret the invoKey and create a suitable hash");
-        }
-      
-      void
-      invokeJobOperation (JobParameter parameter)  override
-        {
-          UNIMPLEMENTED ("representation of the job functor");
-        }
-      
-      
-      void
-      signalFailure (JobParameter parameter, JobFailureReason reason)  override
-        {
-          UNIMPLEMENTED ("what needs to be done when a job cant be invoked?");
-        }
-      
-    public:
-      
-      
-    };
   
   
   /** special »do nothing« JobTicket marker */
   const JobTicket JobTicket::NOP{};            //////////////////////////////////////////////////////////////TICKET #725 : do we actually need that for the final data structure?
+  
+  JobTicket::JobTicket()
+    : provision_{nopFunctor(), ExitNode::NIL}
+  { }
 
   
   /**
@@ -129,10 +79,8 @@ namespace engine {
     else
       {
         REQUIRE (this->isValid(), "Attempt to generate render job for incomplete or unspecified render plan.");
-        REQUIRE (coordinates.channelNr < provision_.size(), "Inconsistent Job planning; channel beyond provision");
-        Provision const& provision = provision_[coordinates.channelNr];
-        JobClosure& functor = static_cast<JobClosure&> (unConst(provision.jobFunctor));      ////////////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
-        InvocationInstanceID invoKey{timeHash (nominalTime, provision.invocationSeed)};
+        JobClosure& functor = static_cast<JobClosure&> (unConst(provision_.jobFunctor));      ////////////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
+        InvocationInstanceID invoKey{timeHash (nominalTime, provision_.invocationSeed)};
         
         return Job(functor, invoKey, nominalTime);
       }
@@ -166,12 +114,8 @@ namespace engine {
   bool
   JobTicket::verifyInstance (JobFunctor& functor, InvocationInstanceID const& invoKey, Time nominalTime)  const
   {
-    for (Provision const& p : provision_)
-      if (util::isSameObject (p.jobFunctor, functor)
-          and invoKey == timeHash (nominalTime, p.invocationSeed)
-         )
-        return true;
-    return false;
+    return util::isSameObject (provision_.jobFunctor, functor)
+       and invoKey == timeHash (nominalTime, provision_.invocationSeed);
   }
 
   

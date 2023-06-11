@@ -292,7 +292,7 @@ namespace engine {
                    this->expandAll([](TicketDepend& currentLevel)
                                             {
                                               JobTicket const* parent = currentLevel.second;
-                                              return lib::transformIterator (parent->getPrerequisites(0)
+                                              return lib::transformIterator (parent->getPrerequisites()
                                                                             ,[&parent](JobTicket const& prereqTicket)
                                                                                 {                  // parent shifted up to first pos
                                                                                   return TicketDepend{parent, &prereqTicket};

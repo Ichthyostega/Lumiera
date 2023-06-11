@@ -138,10 +138,6 @@ namespace test   {
         : JobTicket{defineSimpleSpec (seed), allocator()}
       { }
       
-//    template<class IT>
-//    MockJobTicket (HashVal seed, IT&& prereq)
-//      : JobTicket{defineSpec (seed, std::forward<IT> (prereq))}
-//    { }
       
       /* ===== Diagnostics ===== */
       
