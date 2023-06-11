@@ -120,9 +120,9 @@ namespace test  {
           CHECK (13 == getMarker (ticket));
           auto prereq = ticket.getPrerequisites();
           CHECK (not isnil(prereq));
-          CHECK (23 == getMarker (*prereq));
+          CHECK (55 == getMarker (*prereq));      // Note: order of prerequisites is flipped (by LinkedElements)
           ++prereq;
-          CHECK (55 == getMarker (*prereq));
+          CHECK (23 == getMarker (*prereq));
           ++prereq;
           CHECK (isnil(prereq));
         }

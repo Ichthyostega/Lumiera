@@ -34,6 +34,8 @@
 #include "lib/util.hpp"
 #include "lib/sync.hpp"
 
+#include <deque>
+
 using util::isnil;
 
 
@@ -66,7 +68,7 @@ namespace lib {
   class AllocationCluster::MemoryManager
     : public Sync<RecursiveLock_NoWait>
     {
-      typedef std::vector<char*> MemTable;
+      typedef std::deque<char*> MemTable;
       TypeInfo type_;
       MemTable mem_;
       size_t top_;   ///< index of the next slot available for allocation

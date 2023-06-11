@@ -36,6 +36,7 @@
 #include "steam/fixture/node-graph-attachment.hpp"
 #include "steam/mobject/explicitplacement.hpp"
 #include "steam/engine/job-ticket.hpp"
+#include "lib/allocator-handle.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/itertools.hpp"
 #include "lib/util.hpp"
@@ -67,8 +68,9 @@ namespace fixture {
    */
   class Segment
     {
-      using TicketAlloc = std::deque<engine::JobTicket>;
-      using PortTable   = std::deque<std::reference_wrapper<const engine::JobTicket>>;
+      using JobTicket   = engine::JobTicket;
+      using TicketAlloc = lib::AllocatorHandle<JobTicket>;
+      using PortTable   = std::deque<std::reference_wrapper<const JobTicket>>;
       
     protected:
       
@@ -76,8 +78,8 @@ namespace fixture {
       TimeSpan span_;
       
       /** render plan / blueprint to use for this segment */
-      TicketAlloc  tickets_;
-      PortTable    portTab_;
+      TicketAlloc ticketAlloc_;
+      PortTable   portTable_;
       
       ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #725 : placeholder code
       /** relevant MObjects comprising this segment. */
@@ -96,15 +98,15 @@ namespace fixture {
       Segment (TimeSpan covered
               ,NodeGraphAttachment&& modelLink)
         : span_{covered}
-        , tickets_{}
-        , portTab_{}
+        , ticketAlloc_{}
+        , portTable_{}
         , exitNode{move (modelLink)}
       { }
       
       Segment (Segment const& original, TimeSpan changed)
         : span_{changed}
-        , tickets_{} // Note: not cloning tickets owned by Segment
-        , portTab_{}
+        , ticketAlloc_{} // Note: not cloning tickets owned by Segment
+        , portTable_{}
         , exitNode{original.exitNode}   /////////////////////////////////////////////////////////////////////OOO really? cloning ExitNodes? 
       { }
       
@@ -120,10 +122,10 @@ namespace fixture {
       engine::JobTicket const&
       jobTicket (size_t portNr)  const
         {
-          if (portNr >= portTab_.size())
+          if (portNr >= portTable_.size())
             unConst(this)->generateTickets_onDemand (portNr);
-          ASSERT (portNr < portTab_.size());
-          return portTab_[portNr];
+          ASSERT (portNr < portTable_.size());
+          return portTable_[portNr];
         }
       
       bool
@@ -137,13 +139,13 @@ namespace fixture {
       void
       generateTickets_onDemand (size_t portNr)
         {
-          for (size_t i = portTab_.size(); i <= portNr; ++i)
+          for (size_t i = portTable_.size(); i <= portNr; ++i)
             if (isnil (exitNode[portNr]))
-                portTab_.emplace_back (engine::JobTicket::NOP); // disable this slot 
+                portTable_.emplace_back (engine::JobTicket::NOP); // disable this slot 
             else
               {// Ticket was not generated yet...
-                tickets_.emplace_back (exitNode[portNr]);
-                portTab_.emplace_back (tickets_.back());    // ref to new ticket ‣ slot 
+                ticketAlloc_(exitNode[portNr], ticketAlloc_);
+                portTable_.emplace_back (ticketAlloc_.back());    // ref to new ticket ‣ slot 
               }
         }
     };

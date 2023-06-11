@@ -100,10 +100,11 @@ using lib::LUID;
       struct Prerequisite
         {
           Prerequisite* next{nullptr};
-          JobTicket const& descriptor;
+          JobTicket const& prereqTicket;
           
-          Prerequisite (JobTicket const& ticket)
-            : descriptor{ticket}
+          template<class ALO>
+          Prerequisite (ExitNode const& node, ALO& allocateTicket)
+            : prereqTicket{allocateTicket (node, allocateTicket)}
           { }
         };
       using Prerequisites = LinkedElements<Prerequisite>;
@@ -131,7 +132,8 @@ using lib::LUID;
       template<class IT>
       static LinkedElements<Provision> buildProvisionSpec (IT);
       
-      static LinkedElements<Provision> buildProvisionSpec (ExitNode const&);
+      template<class ALO>
+      static LinkedElements<Provision> buildProvisionSpec (ExitNode const&, ALO&);
       
     private:
       JobTicket() { }   ///< @internal as NIL marker, a JobTicket can be empty
@@ -143,8 +145,9 @@ using lib::LUID;
         { }
 
     public:
-      JobTicket (ExitNode const& exitNode)
-        : provision_{buildProvisionSpec (exitNode)}
+      template<class ALO>
+      JobTicket (ExitNode const& exitNode, ALO& allocator)
+        : provision_{buildProvisionSpec (exitNode, allocator)}
         { }
       
       static const JobTicket NOP;
@@ -163,7 +166,7 @@ using lib::LUID;
                                                       : provision_[slotNr].requirements.begin()
                                         ,[](Prerequisite& prq) -> JobTicket const&
                                            {
-                                             return prq.descriptor;
+                                             return prq.prereqTicket;
                                            });
         }
       
@@ -259,9 +262,9 @@ using lib::LUID;
       operator->() const
         {
           REQUIRE (!empty() && toExplore_.top().isValid());
-          REQUIRE (toExplore_.top()->descriptor.isValid());
+          REQUIRE (toExplore_.top()->prereqTicket.isValid());
           
-          return & toExplore_.top()->descriptor;
+          return & toExplore_.top()->prereqTicket;
         }
       
       
@@ -336,8 +339,9 @@ using lib::LUID;
     ENSURE (not isnil (provisionSpec));
     return provisionSpec;
   }
+  template<class ALO>
   inline LinkedElements<JobTicket::Provision>
-  JobTicket::buildProvisionSpec (ExitNode const& exitNode)
+  JobTicket::buildProvisionSpec (ExitNode const& exitNode, ALO& allocTicket)
   {
     REQUIRE (not isnil (exitNode));  // has valid functor
     LinkedElements<Provision> provisionSpec;
@@ -345,8 +349,7 @@ using lib::LUID;
     JobFunctor& func = exitNode.getInvocationFunctor();
     auto& provision  = provisionSpec.emplace<Provision> (func, exitNode, invoSeed);
     for (ExitNode const& preNode: exitNode.getPrerequisites())
-      provision.requirements.emplace(preNode);       /////////////////////////////////////////////TICKET #1292 : need to pass in Allocator as argument
-                            //////////////////////////////////////////////////////////////////////OOO : where to ALLOCATE the prerequisite JobTickets ??!!
+      provision.requirements.emplace(preNode, allocTicket);   ////////////////////////////////////TICKET #1292 : need to pass in generic Allocator as argument
     return provisionSpec;
   }
   

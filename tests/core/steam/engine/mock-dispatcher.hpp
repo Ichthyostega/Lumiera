@@ -55,6 +55,7 @@
 #include "vault/engine/job.h"
 #include "vault/engine/dummy-job.hpp"
 #include "vault/real-clock.hpp"
+#include "lib/allocator-handle.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/linked-elements.hpp"
@@ -119,15 +120,22 @@ namespace test   {
    * @see DispatcherInterface_test
    */
   class MockJobTicket
-    : public JobTicket
+    : private lib::AllocatorHandle<JobTicket>
+    , public JobTicket
     {
+      auto&
+      allocator()
+        {
+          return static_cast<lib::AllocatorHandle<JobTicket>&> (*this);
+        }
+      
     public:
       MockJobTicket()
-        : JobTicket{defineSimpleSpec()}
+        : JobTicket{defineSimpleSpec(), allocator()}
       { }
       
       MockJobTicket (HashVal seed)
-        : JobTicket{defineSimpleSpec (seed)}
+        : JobTicket{defineSimpleSpec (seed), allocator()}
       { }
       
 //    template<class IT>
