@@ -146,6 +146,19 @@ namespace engine {
                  ////////////////////////////////////////////////////////////////////////////////////////////TICKET #1275 : what further API-functions are necessary to control a running CalcStream?   
         };
       
+      /** translate a generic ModelPort spec into the specific index number
+       *  applicable at the Timeline referred-to by this Dispatcher
+       * @throws error::Logic if the given ModelPort is not associated
+       * @remark assuming that any Play-Process about to be started is always
+       *         built on top of an established OutputConnection, and thus relies
+       *         on a model link predetermined by the Builder. In other words,
+       *         when a Timeline can be performed to this output, then a suitable
+       *         ModelPort was derived on the Builder run triggered by preparing
+       *         this specific output possibility. Thus it's an application logic
+       *         error if attempting to dispatch on a unknown ModelPort.
+       */
+      virtual size_t resolveModelPort (ModelPort)                                  =0;
+      
       
     protected:
       /** core dispatcher operation: based on the coordinates of a reference point,
@@ -175,7 +188,7 @@ namespace engine {
       ////////////    - the TimeAnchor needs to be created directly from the JobParameter. No mutable state!
       ////////////    - but this leads to a lot of duplicated Timings records, unless we rewrite the TimeAnchor to be noncopyable and use a Timings const&
       
-      virtual JobTicket& accessJobTicket (ModelPort, TimeValue nominalTime)   =0;
+      virtual JobTicket& accessJobTicket (size_t, TimeValue nominalTime)   =0;
     };
   
   
@@ -267,12 +280,13 @@ namespace engine {
       auto
       pullFrom (mobject::ModelPort port)
         {
+          size_t portIDX = SRC::dispatcher->resolveModelPort(port);
           return buildPipeline (
-                   this->transform([port](PipeFrameTick& core) -> TicketDepend
+                   this->transform([portIDX](PipeFrameTick& core) -> TicketDepend
                                             {
                                               FrameCoord frame; ///////////////////////////////////////////OOO need a better ctor for FrameCoord
                                               frame.absoluteNominalTime = core.currPoint;
-                                              frame.modelPort = port;
+                                              frame.modelPortIDX = portIDX;
                                               return {nullptr
                                                      ,& core.dispatcher->getJobTicketFor(frame)
                                                      };

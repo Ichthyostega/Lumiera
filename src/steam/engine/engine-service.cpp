@@ -61,7 +61,7 @@ namespace engine{
   
   
   
-  /** */  
+  /** */
   EngineService::EngineService()
     { }
   
@@ -81,7 +81,7 @@ namespace engine{
                            Timings nominalTimings,
                            OutputConnection& output,
                            Quality serviceQuality)
-  {
+  {                                        //////////////////////////////////////////////////TICKET #1301 : prepare proper Dispatcher here, including translation ModelPort -> portIDX
     RenderEnvironment& renderConfig = configureCalculation (mPort,nominalTimings,serviceQuality);
     function<CalcStream(play::DataSink)> triggerRenderStart = bind (activateCalculation, _1, ref(renderConfig));
 
@@ -122,8 +122,8 @@ namespace engine{
     calcStream.sendToOutput (sink);      ////////////////////////////////////////////////////TICKET #1297 : need to re-think the association ModelPort ⟷ output sink
     return calcStream;
   }
-    
-
+  
+  
   
   /** @internal extension point
    * Create the environment for rendering a connected and related set of output streams.
@@ -139,7 +139,7 @@ namespace engine{
    *         off this closure will be linked to the same "environment" and be
    *         tracked and managed for resource usage automatically.
    * @note variations and especially mock implementations of the render engine
-   *       might choose to configure internals differently. As long as the 
+   *       might choose to configure internals differently. As long as the
    *       CalcStream and the embedded RenderEnvironment are consistent,
    *       such a specific configuration remains opaque for the user of
    *       the created render activity
@@ -226,7 +226,7 @@ namespace engine{
   
   EngineService::QoS_Definition  EngineService::QoS_DEFAULT         = QoS_Definition::build<DefaultQoS> (PLAYBACK);
   EngineService::QoS_Definition  EngineService::QoS_BACKGROUND      = QoS_Definition::build<DefaultQoS> (BACKGROUND);
-  EngineService::QoS_Definition  EngineService::QoS_COMPROMISE      = QoS_Definition::build<Compromise> (PLAYBACK); 
+  EngineService::QoS_Definition  EngineService::QoS_COMPROMISE      = QoS_Definition::build<Compromise> (PLAYBACK);
   EngineService::QoS_Definition  EngineService::QoS_PERFECT_RESULT  = QoS_Definition::build<DefaultQoS> (RENDER);
   EngineService::QoS_Definition  EngineService::QoS_SYNC_PRIORITY   = QoS_Definition::build<PriorityQoS>();
   

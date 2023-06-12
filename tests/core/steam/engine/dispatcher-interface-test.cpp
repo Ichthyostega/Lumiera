@@ -85,19 +85,25 @@ namespace test  {
         /* == mock Dispatcher implementation == */
         
         FrameCoord
-        locateRelative (FrameCoord const&, FrameCnt frameOffset)
+        locateRelative (FrameCoord const&, FrameCnt frameOffset)  override
           {
             UNIMPLEMENTED ("dummy implementation of the core dispatch operation");
           }
         
         bool
-        isEndOfChunk (FrameCnt, ModelPort port)
+        isEndOfChunk (FrameCnt, ModelPort port)  override
           {
             UNIMPLEMENTED ("determine when to finish a planning chunk");
           }
+  
+        size_t
+        resolveModelPort (ModelPort modelPort)  override
+          {
+            UNIMPLEMENTED ("some Map lookup in a prepared table to find out the actual slot number");
+          }
 
         JobTicket&
-        accessJobTicket (ModelPort, TimeValue nominalTime)
+        accessJobTicket (size_t, TimeValue nominalTime)  override
           {
             UNIMPLEMENTED ("dummy implementation of the model backbone / segmentation");
           }

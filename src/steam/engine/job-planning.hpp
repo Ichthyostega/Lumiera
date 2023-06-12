@@ -143,6 +143,7 @@ namespace engine {
         }
       
       
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : likely to become obsolete  
       /** build a new JobPlanning object,
        * set to explore the prerequisites
        * at the given planning situation
@@ -153,9 +154,10 @@ namespace engine {
           if (isnil (plannedOperations_))
             return JobPlanning();
           else
-            return JobPlanning (plannedOperations_->discoverPrerequisites (point_to_calculate_.channelNr)
+            return JobPlanning (plannedOperations_->discoverPrerequisites (0)  //////////////////////////////TICKET #1301 : was: point_to_calculate_.channelNr)
                                ,this->point_to_calculate_);
         }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : likely to become obsolete  
       
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
@@ -302,18 +304,20 @@ namespace engine {
       JobTicket&
       getJobTicketFor (FrameCoord const& location)
         {
-          return accessJobTicket (location.modelPort, location.absoluteNominalTime);
+          return accessJobTicket (location.modelPortIDX, location.absoluteNominalTime);
         }
       
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : likely to become obsolete  
       bool canContinue (FrameCoord const& location)
         {
-          return not isEndOfChunk (location.absoluteFrameNumber,
-                                   location.modelPort);
+//        return not isEndOfChunk (location.absoluteFrameNumber,
+//                                 location.modelPort);
         }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : likely to become obsolete  
       
     protected:
-      virtual JobTicket& accessJobTicket (ModelPort, TimeValue nominalTime)  =0;
-      virtual bool       isEndOfChunk    (FrameCnt, ModelPort port)          =0;
+      virtual JobTicket& accessJobTicket (size_t, TimeValue nominalTime)  =0;
+      virtual bool       isEndOfChunk    (FrameCnt, ModelPort port)       =0;
     };
   
   

@@ -53,10 +53,10 @@ namespace engine {
       
       /* ==== Dispatcher interface ==== */
       
-      FrameCoord locateRelative (FrameCoord const&, FrameCnt frameOffset);
-      bool       isEndOfChunk    (FrameCnt, ModelPort port);
-      JobTicket& accessJobTicket (ModelPort, TimeValue nominalTime);
-      
+      FrameCoord locateRelative (FrameCoord const&, FrameCnt frameOffset) override;
+      bool       isEndOfChunk    (FrameCnt, ModelPort port)               override;
+      size_t     resolveModelPort (ModelPort)                      override;
+      JobTicket& accessJobTicket  (size_t, TimeValue nominalTime)  override;
       
     protected:
       /** timerange covered by this RenderGraph */

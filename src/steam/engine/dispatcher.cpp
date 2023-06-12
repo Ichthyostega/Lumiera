@@ -40,7 +40,7 @@ namespace engine {
   FrameSequencer::~FrameSequencer() { }
   
   
-  
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : likely to become obsolete  
   /** @todo WIP */
   FrameCoord
   Dispatcher::JobBuilder::relativeFrameLocation (TimeAnchor& refPoint, FrameCnt frameOffset)
@@ -49,12 +49,13 @@ namespace engine {
     frame.absoluteNominalTime = refPoint;
     frame.absoluteFrameNumber = refPoint.getStartFrame();
     frame.realTimeDeadline = refPoint.establishDeadlineFor (frameOffset);
-    frame.modelPort = this->modelPort_;
-    frame.channelNr = this->channel_;
+//  frame.modelPort = this->modelPort_;          ////////////////////////////TICKET #1301 : translation to model-port-ID now when Dispatcher-Pipeline is built
+//  frame.channelNr = this->channel_;
     
     ENSURE (frame.isDefined());
     return dispatcher_->locateRelative (frame, frameOffset);
   }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : likely to become obsolete  
   
   
   

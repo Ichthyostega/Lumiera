@@ -48,12 +48,19 @@ namespace engine {
   {
     UNIMPLEMENTED ("determine when to finish a planning chunk");
   }
-
+  
   JobTicket&
-  DispatchTable::accessJobTicket (ModelPort, TimeValue nominalTime)
+  DispatchTable::accessJobTicket (size_t, TimeValue nominalTime)
   {
     UNIMPLEMENTED ("hook into the real implementation of the model backbone / segmentation");
   }
+  
+  size_t
+  DispatchTable::resolveModelPort (ModelPort modelPort)
+  {
+    UNIMPLEMENTED ("some Map lookup in a prepared table to find out the actual slot number");
+  }
+
   
   
   
