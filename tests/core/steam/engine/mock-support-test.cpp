@@ -71,6 +71,7 @@ namespace test  {
           verify_MockJobTicket();
           verify_MockSegmentation();
           verify_MockPrerequisites();
+          verify_MockDispatcherSetup();
         }
       
       
@@ -377,6 +378,66 @@ namespace test  {
             CHECK (util::join(it,"-") == "11-22-33-44-55"_expect);
           }                           //  Note: Prerequisites are prepended (LinkedElements)
         }                            //         thus at each level the last ones appear first
+      
+      
+      
+      /** @test verify setup of a mocked Dispatcher instance
+       *        - by default, MockDispatcher generates a single segment
+       *          to span the whole Time-axis and with some random yet valid pipeline-ID,
+       *          so that a single job ticket can be generated for each port everywhere
+       *        - in addition, it is possible to use the same specification language
+       *          as for Segmentation to define a more complex (mock)processing graph
+       *  @note lacklustre ModelPort handling: processing graph is just duplicated for
+       *        each valid model port — not clear yet if we ever need something better...
+       */
+      void
+      verify_MockDispatcherSetup()
+        {
+          FrameCoord frame;
+          {
+            MockDispatcher dispatcher;
+            // automatically generates some fake connection points...
+            auto [port0,sink0] = dispatcher.getDummyConnection(0);
+            auto [port1,sink1] = dispatcher.getDummyConnection(1);
+            CHECK (port0 != port1);
+            CHECK (sink0 != sink1);
+            CHECK (port0.isValid());
+            CHECK (port1.isValid());
+            CHECK (sink0.isValid());
+            CHECK (sink1.isValid());
+            CHECK (not ModelPort().isValid());
+            CHECK (not DataSink().isValid());
+            
+            CHECK (0 == dispatcher.resolveModelPort(port0));
+            CHECK (1 == dispatcher.resolveModelPort(port1));
+            
+            frame.modelPortIDX = 0;
+            Job job0 = dispatcher.getJobTicketFor(frame).createJobFor(frame);
+            frame.modelPortIDX = 1;
+            Job job1 = dispatcher.getJobTicketFor(frame).createJobFor(frame);
+            CHECK (dispatcher.verify(job0, port0, sink0));
+            CHECK (dispatcher.verify(job1, port1, sink1));
+          }
+          //-----------------------------------------------------------------/// can define multiple Segments
+          {
+            MockDispatcher dispatcher{MakeRec()
+                                       .attrib("mark", 11)
+                                     .genNode()
+                                     ,MakeRec()
+                                       .attrib("mark", 22)
+                                       .attrib("start", Time{0,10})           // second segment covers 10s … +Time::MAX
+                                     .genNode()};
+            
+            frame.modelPortIDX = 1;
+            frame.absoluteNominalTime = Time{0,5};
+            Job job0 = dispatcher.getJobTicketFor(frame).createJobFor(frame);
+            frame.absoluteNominalTime = Time{0,25};
+            Job job1 = dispatcher.getJobTicketFor(frame).createJobFor(frame);
+            
+            CHECK (11 == job0.parameter.invoKey.part.a);
+            CHECK (22 == job1.parameter.invoKey.part.a);
+          }
+        }
     };
   
   

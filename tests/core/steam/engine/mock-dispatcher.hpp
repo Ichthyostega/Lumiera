@@ -264,6 +264,7 @@ namespace test   {
       MockSegmentation mockSeg_;
       
       
+    public:
       /* == mock Dispatcher implementation == */
       
       FrameCoord
@@ -290,7 +291,6 @@ namespace test   {
           UNIMPLEMENTED ("dummy implementation of the model backbone / segmentation");
         }
       
-    public:
       
       MockDispatcher()   = default;
       

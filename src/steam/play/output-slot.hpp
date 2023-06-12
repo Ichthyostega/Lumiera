@@ -36,7 +36,7 @@
  ** of the output capability (render a file, display video in a GUI widget, send video to some
  ** full screen display, establish a Jack port, just use some kind of "sound out"). An output
  ** slot is always limited to a single kind of media, and to a single connection unit, but
- ** this connection may still be comprised of multiple channels 
+ ** this connection may still be comprised of multiple channels
  ** (e.g. stereoscopic video, multichannel sound).
  ** 
  ** In order to be usable as output sink, an output slot needs to be \em allocated: At any time,
@@ -138,7 +138,7 @@ namespace play {
           virtual Timings getTimingConstraints() =0;
           
         protected:
-         ~Allocation(); ///< never to be managed by clients directly 
+         ~Allocation(); ///< never to be managed by clients directly
         };
       
       /** established output channel */
@@ -154,19 +154,16 @@ namespace play {
       /** disconnect from this OutputSlot
        * @warning may block until DataSinks are gone */
       void disconnect();
-      
-    private:
-      
     };
   
   
   
-  /** 
+  /**
    * denotes an opened connection ready to receive media data for output.
    * Each DataSink (handle) corresponds to an OutputSlot::Connection entry.
    * Data is handed over frame wise in a two-phase protocol: first, the client
    * gets exclusive access to an output buffer, and then, when done, the buffer
-   * is handed over by an #emit call. 
+   * is handed over by an #emit call.
    */
   class DataSink
     : public lib::Handle<OutputSlot::Connection>
@@ -174,7 +171,19 @@ namespace play {
       
     public:
       BuffHandle lockBufferFor(FrameID);
-      void emit(FrameID, BuffHandle const&, TimeValue currentTime = Time::ANYTIME); 
+      void emit(FrameID, BuffHandle const&, TimeValue currentTime = Time::ANYTIME);
+      
+      
+      friend bool operator== (DataSink const& sink1, DataSink const& sink2)
+      {
+        return not (sink1 and sink2)
+            or (sink1 and sink2
+                and & sink1.impl() == & sink2.impl());
+      }
+      friend bool operator!= (DataSink const& sink1, DataSink const& sink2)
+      {
+        return not (sink1 == sink2);
+      }
     };
   
   

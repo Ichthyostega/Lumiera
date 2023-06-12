@@ -2081,38 +2081,6 @@ The main tool used to implement this separation is the [[Builder Pattern|http://
 Another pertinent theme is to make the basic building blocks simpler, while on the other hand gaining much more flexibility for combining these building blocks. For example we try to unfold any &quot;internal-multi&quot; effects into separate instances (e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks. Similarly, we treat the Objects in the Session in a more uniform manner and gain the possibility to [[place|Placement]] them in various ways.
 </pre>
 </div>
-<div title="DesignPlayerSubsystem" modifier="Ichthyostega" created="201105220216" modified="201305220140" tags="Player design draft" changecount="1">
-<pre>//Currently (5/2011) this page is used to collect and build up a coherent design for the player subsystem of Lumiera..//
-
-!Starting point
-The intention is to start out with the design of the PlayerDummy and to //transform//&amp;nbsp; it into the full player subsystem.
-* the ~DisplayService in that dummy player design moves down into Steam-Layer and becomes the OutputManager
-* likewise, the ~DisplayerSlot is transformed into the interface OutputSlot, with various implementations to be registered with the OutputManager
-* the core idea of having a play controler act as the frontend and handle to an PlayProcess is retained.
-
-!!Idea
-Introduce a new kind of MObject, a GeneratorMO, to represent what the current dummy player does: generate some kind of test data. As a first step, we might retro-fit the existing dummy player to this structure, and then expand it to have a minimal render engine setup for tests and diagnostics. That is, there will be some kind of GeneratorNode to produce test data.
-
-!!Stages of transition
-Reworking the dummy player into the [[Player subsystem|PlayService]] is a larger undertaking, and best broken up into several //stages.//
-# just moving the existing entities into the final location (typically down in the layer hierarchy)
-# introduce a GeneratorMO and a GeneratorNode, while providing a shortcut to get the GeneratorNode without requiring the (not yet implemented) Builder.
-# rework the ~ProcessImpl and the ~TickService to become the [[calculation stream|CalcStream]] and use the real Engine Interface, but still with an mock implementation hooked up behind
-# extend and elaborate the handling of output, build the foundation of the real OutputManager
-# switch to the real Scheduler and Engine implementation
-
-!!!!new entities to build {{red{#805}}}
-* the ~DisplayService needs to be generalised into an OutputManager interface
-* we need to introduce a new kind of StructAsset, the ViewerAsset.
-* then, of course, the PlayService interface needs to be created
-* several interfaces need to be shaped: the ''engine façade'' and a ''scheduler frontend''.
-* the realms of player and rendering are interconnected within the [[dispatch operation|FrameDispatcher]]
-* as a temporary soltion, a ''~DummyPlayConnection'' will be created hard-wired, within the ~DummyPlayer service. This dumy container is a test setup, explicitly creating a OutputManager implementation, a GeneratorMO, a GeneratorNode (thus omitting the not-yet-implemented Builder) and the corresponding ModelPort. This way, the ~DummyPlayer service can be changed to use the real PlayService for creating the dummy generated output data. It will then pass back the resulting PlayController to the existing GUI setup.
-
-The Method of pushing frames to the Viewer widget is changed fundamentally during that transition: while previously, in the PlayerDummy design study, the GUI opened a Display-façade interface -- now rather the GUI has to register an OutputSlot implementation with the global OutputManager. Such a registration requires an explicit deregistration on shutdown, and this can be made to block, until no further data will be delivered. Using this approach we hope to circumvent problems with occasional crashes on closing the application, due to dispatching frame output signals in the event thread while shutdown is already in progress.
-
-</pre>
-</div>
 <div title="DiffConstituent" creator="Ichthyostega" modifier="Ichthyostega" created="201810100342" tags="Model Concepts design draft" changecount="1">
 <pre>//A self referential intermediary, used to collect and consolidate structural information about some element.//
 This structural information can then be emanated as ''population diff'' and is thus the foundation to build a further representation of the same structure //&quot;elsewhere&quot;.// This //further representation// could be a model entity within the session's HighLevelModel, or it could be a widget tree in the UI. And, to close the circle, this other representation resulting from that diff could in turn again be a DiffConstituent.</pre>
@@ -2530,10 +2498,10 @@ Additionally, they may be used for resource management purposes by embedding a r
 #* one OpenGL Dataframe could contain raw texture data (but I am lacking expertise for this topic)
 </pre>
 </div>
-<div title="FrameDispatcher" modifier="Ichthyostega" created="201105222330" modified="202306031535" tags="def Player Rendering" changecount="25">
-<pre>An entity within the RenderEngine, responsible for translating a logical [[calculation stream|CalcStream]] (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames.
+<div title="FrameDispatcher" modifier="Ichthyostega" created="201105222330" modified="202306122204" tags="def Player Rendering img" changecount="34">
+<pre>An entity within the RenderEngine, responsible for translating a logical [[calculation stream|CalcStream]] (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames. As a //service// the Dispatcher acts as //bridge// between [[»playback«|Player]] and the [[render nodes network|Rendering]].
 
-The dispatcher works together with the [[job ticket(s)|JobTicket]] and the scheduler; actually these are the //core abstractions//&amp;nbsp; the process of ''job planning'' relies on. While the actual scheduler implementation lives within the Vault, the job tickets and the dispatcher are located within the [[Segmentation]], which is the backbone of the [[low-level model|LowLevelModel]]. More specifically, the dispatcher interface is //implemented//&amp;nbsp; by a set of &amp;rarr; [[dispatcher tables|DispatcherTables]] within the segmentation.
+The Dispatcher works together with the [[job ticket(s)|JobTicket]] and the [[Scheduler]]; actually these are the //core abstractions//&amp;nbsp; the process of ''job planning'' relies on. While the actual scheduler implementation lives within the Vault, the job tickets and the dispatcher are located within the [[Segmentation]], which is the backbone of the [[low-level model|LowLevelModel]]. More specifically, the dispatcher interface is //implemented//&amp;nbsp; by a set of &amp;rarr; [[dispatcher tables|DispatcherTables]] within the segmentation.
 
 {{red{stalled since 2014}}} -- development on this (important) topic has been postponed. Moreover, some rough edges remain within the Design &amp;rarr; see [[some notes...|AboutMonads]]
 
@@ -2541,28 +2509,30 @@ The dispatcher works together with the [[job ticket(s)|JobTicket]] and the sched
 The purpose of this interface is to support the planning of new jobs, for a given CalcStream. From time to time, a chunk of new RenderJob entries will be prepared for the [[Scheduler]]. Each job knows his frame number and the actual ProcNode to operate. So, to start planning jobs, we need to translate time &amp;rarr; frame number &amp;rarr; segment &amp;rarr; real exit node.
 
 !!!Invocation situation
-* our //current starting point//&amp;nbsp; is given as ''time anchor'' closure
-* we want to address a specific frame, offset by a given number of frames relative to the current position
-* &amp;rArr; the dispatcher returns the //fundamental coordinates// of that frame (''frame coordinates''), comprised of
+* our //current starting point//&amp;nbsp; is given as ''anchor frame'', related to the [[Timings]] of a [[render/playback process|PlayProcess]]
+* we want to address a specific frame, addressed by an //absolute frame-number// -- interpreted relative to the //frame grid// of these //playback {{{Timings}}}//
+* &amp;rArr; the dispatcher establishes the //fundamental coordinates// of that frame (''frame coordinates''), comprised of
 ** the absolute nominal time
 ** the absolute frame number
-** a concrete ExitNode to pull for this frame
+** the ModelPort to draw data from
 ** focussed context information:
 *** the relevant [[segment|Segmentation]] responsible for producing this frame
 *** the corresponding JobTicket to use at this point
+*** a concrete ExitNode to pull for this frame
+*** possibly a real-time ''deadline''
 
 !!!Planning Chunks
 In fact, the whole process of playback or rendering is a continued series of exploration and evaluation. The outline of what needs to be calculated is determined continuously, proceeding in chunks of evaluation. The evaluation structure of the render engine is quite similar to the //fork-join//-pattern, just with the addition of timing constraints. This leads to an invocation pattern, where a partial evaluation happens from time to time. Each of those evaluations establishes a breaking point in time: everything //before// this point is settled and planned thus far. So, this point is an ''anchor'' and starting point for the next partial evaluation. On the implementation level, each CalcStream maintains a {{{RenderDrive}}} (see below), which acts both as //planning pipeline// and JobFunctor for the next planning chunk to come. Moreover, the associated [[Timings]] record establishes a definitive binding between the abstract logical time of the session timeline, and the real wall-clock time forming the deadline for render evaluation.
 
 !!!related timelines and the frame grid
-The frame dispatch step joins and combines multiple time axes. Through the process of //scheduling,// the output generation is linked to real ''wall clock time'' and the dispatch step establishes the deadlines, taking the ''engine latency'' into account. As such, any render or playback process establishes an ''output time grid'', linking frame numbers to nominal output time or timecode, based on the ''output frame rate'' -- and both the framerate and the actual progression (speed) might be changed dynamically. But beyond all of this there is a third, basically independent temporal structure involved: the actual content to render, the ''effective session timeline''. While encoded in nominal, absolute, internal time values not necessarily grid aligned, in practice at least the //breaking points,// the temporal location where the content or structure of the pipeline changes, are aligned //to a grid used while creating the edit.// Yet this session timing structure need not be related in any way to the playback grid, nor is it necessarily the same as the ''source grid'' defined by the media data used to feed the pipeline.
+The frame dispatch step joins and combines multiple time axes. Through the process of //scheduling,// the output generation is linked to real ''wall clock time'' and the dispatch step establishes the deadlines, taking the ''engine latency'' into account. As such, any render or playback process establishes an ''output time grid'', linking frame numbers to nominal output time or timecode, based on the ''output frame rate'' -- where both the framerate and the actual progression (speed) might be changed dynamically. But beyond all of this there is a third, basically independent temporal structure involved: the actual content to render, the ''effective session timeline''. While encoded in nominal, absolute, internal time values not necessarily grid aligned, in practice at least the //breaking points,// the temporal location where the content or structure of the pipeline changes, are aligned //to a grid used while creating the edit.// Yet this session timing structure need not be related in any way to the playback grid, nor is it necessarily the same as the ''source grid'' defined by the media data used to feed the pipeline.
 
 These complex relationships are reflected in the invocation structure leading to an individual frame job. The [[calculation stream|CalcStream]] provides the [[render/playback timings|Timings]], while the actual implementation of the dispatcher, backed by the [[Fixture]] and thus linked to the session models, gets to relate the effective nominal time, the frame number, the exit node and the //processing function.//
 
 !!!controlling the planning process
-[&gt;img[Structure of the Fixture|draw/Play.Dispatch.png]]New render jobs are planned as an ongoing process, proceeding in chunks of evaluation. Typically, to calculate a single frame, several jobs are necessary -- to find out which and how, we'll have to investigate the model structures corresponding to this frame, resulting in a tree of prerequisites. Basically, the planning for each frame is seeded by establishing the nominal time position, in accordance to the current [[mode of playback|NonLinearPlayback]]. Conducted by the [[play controller|PlayController]], there is a strategy to define the precise way of spacing and sequence of frames to be calculated -- yet for the actual process of evaluating the prerequisites and planning the jobs, those details are irrelevant and hidden behind the dispatcher interface, as is most of the model and context information. The planning operation just produces a sequence of job definitions, which can then be associated with real time (wall clock) deadlines for delivery. The relation between the spacing and progression of the nominal frame time (as controlled by the playback mode) and the actual sequence of deadlines (which is more or less dictated by the output device) is rather loose and established anew for each planning chunk, relying on the ''time anchor''. The latter in turn uses the [[timings record|Timings]] of the [[calculation stream|CalcStream]] currently being planned, and these timings act as a strategy to represent the underlying timing grid and playback modalities.
+[&gt;img[Structure of the Fixture|draw/Play.Dispatch.png]]New render jobs are planned as an ongoing process, proceeding in chunks of evaluation. Typically, to calculate a single frame, several jobs are necessary -- to find out which and how, we'll have to investigate the model structures corresponding to this frame, resulting in a tree of prerequisites. Basically, the planning for each frame is seeded by establishing the nominal time position, in accordance to the current [[mode of playback|NonLinearPlayback]]. Conducted by the [[play controller|PlayController]], there is a strategy to define the precise way of spacing and sequence of frames to be calculated -- yet for the actual process of evaluating the prerequisites and planning the jobs, those details are irrelevant and hidden behind the dispatcher interface, as is most of the model and context information. The planning operation just produces a sequence of job definitions, which can then be associated with real time (wall clock) deadlines for delivery. The relation between the spacing and progression of the nominal frame time (as controlled by the playback mode) and the actual sequence of deadlines (which is more or less dictated by the output device) is rather loose and established anew for each planning chunk, coordinated by the RenderDrive. The latter in turn uses the [[Timings]] of the [[calculation stream|CalcStream]] currently being planned, and these timings act as a strategy to represent the underlying timing grid and playback modalities.
 
-While the sequence of frame jobs to be planned is possibly infinite, the actual evaluation is confined to the current planning chunk. When done with planning such a chunk of jobs, an additional ''continuation job'' is included to prepare a re-invocation of the planning function for preparation of the next chunk. Terminating playback is equivalent to not including or not invoking this continuation job. Please note that planning proceeds independently for each [[Feed]] -- in Lumiera the //current playback position//&amp;nbsp; is just a conceptual projection of wall clock time to nominal time, yet there is no such thing like a synchronously proceeding &quot;Playhead&quot;
+And while the sequence of frame jobs to be planned is possibly infinite, the actual evaluation is confined to the current planning chunk. When done with planning such a chunk of jobs, the RenderDrive adds itself as additional ''continuation job'' to prepare a re-invocation of the planning operation for the next chunk at some point in the future. Terminating playback is equivalent to not including or not invoking this continuation job. Please note that planning proceeds independently for each [[Feed]] -- in Lumiera the //current playback position//&amp;nbsp; is just a conceptual projection of wall clock time to nominal time, yet there is no such thing like a synchronously proceeding &quot;Playhead&quot;
 &amp;rarr; [[relation of models|BuildFixture]]
 
 !!!producing actual jobs
@@ -4291,9 +4261,9 @@ Thus an invocation trail represents one specific path leading to the invocation 
 ''Note'': {{red{future plans and visions -- no clear and distinct meaning -- as of 4/21}}}
 </pre>
 </div>
-<div title="JobPlanningPipeline" creator="Ichthyostega" modifier="Ichthyostega" created="202305260209" modified="202306050043" tags="operational Rendering draft" changecount="7">
+<div title="JobPlanningPipeline" creator="Ichthyostega" modifier="Ichthyostega" created="202305260209" modified="202306122212" tags="operational Rendering draft" changecount="8">
 <pre>//Depth-first evaluation pipeline used in the FrameDispatcher to generate the next chunk of [[render jobs|RenderJob]]//
-This is an implementation structure backed and established by the [[Dispatcher|FrameDispatcher]] and operated by the {{{RenderDrive}}} core of each CalcStream, where it is assembled by a //builder notation// -- backed by the {{{TreeExplorer}}} iterator pipeline framework; besides the typical filter and transform operations, the latter offers an »expansion« mechanism to integrate a //monadic exhaustive depth-first search,// allowing to pick up all prerequisites of a given calculation step by step within a local planning context.
+This is an implementation structure backed and established by the [[Dispatcher|FrameDispatcher]] and operated by the RenderDrive core of each CalcStream, where it is assembled by a //builder notation// -- backed by the {{{TreeExplorer}}} iterator pipeline framework; besides the typical filter and transform operations, the latter offers an »expansion« mechanism to integrate a //monadic exhaustive depth-first search,// allowing to pick up all prerequisites of a given calculation step by step within a local planning context.
 
 !Stages of the Job-planning pipeline
 ;frame-tick
@@ -6256,7 +6226,7 @@ The design of the Player subsystem was settled several years ago, together with 
 &amp;rarr; [[Rendering]]
 </pre>
 </div>
-<div title="PlayerDummy" modifier="Ichthyostega" created="200901300209" modified="201402162032" tags="GuiIntegration operational img" changecount="2">
+<div title="PlayerDummy" modifier="Ichthyostega" created="200901300209" modified="202306122152" tags="GuiIntegration operational img" changecount="4">
 <pre>__Joelholdsworth__ and __Ichthyo__ created this player mockup in 1/2009 to find out about the implementation details regarding integration and colaboration between the layers. There is no working render engine yet, thus we use a ~DummyImageGenerator for creating faked yuv frames to display. Within the GUI, there is a ~PlaybackController hooked up with the transport controls on the timeline pane. 
 # first everything was contained within ~PlaybackController, which spawns a thread for periodically creating those dummy frames
 # then, a ~PlayerService was factored out, now implemented within ~Steam-Layer (later to delegate to the emerging real render engine implementation).&lt;br/&gt;A new LayerSeparationInterface called ''~DummyPlayer'' was created and set up as a [[Subsystem]] within main().
@@ -6279,6 +6249,19 @@ All the other play control operations are simply forwarded via the handle and th
 
 !rationale
 There can be multiple viewer widgets, to be connected dynamically to multiple play-controllers. (the latter are associated with the timeline(s)). Any playback can require multiple playback processes to work in parallel. The playback controller(s) should not be concerned with managing the play processes, which in turn should neither care for the actual rendering, nor manage the display frequency and synchronisation issues. Moreover, the mentioned parts live in different layers and especially the GUI needs to remain separated from the core. And finally, in case of a problem within one play process, it should be able to unwind automatically, without interfering with other ongoing play processes.
+!!!follw-up work
+This architecture experiment highlighted various problematic aspects, which became the starting point for the actual [[Player]] design
+* the activity of //rendering// and //delivering frames// will be at the centre of a new //player subsystem//
+* the ~DisplayService from the dummy player design moves down into Steam-Layer and becomes the OutputManager
+* likewise, the ~DisplayerSlot is transformed into the interface OutputSlot, with various implementations to be registered with the OutputManager
+* one core idea is retained: a play controler acts as the frontend and handle connected to a autonomous PlayProcess.
+!!!!new entities to build {{red{#805}}}
+* the ~DisplayService needs to be generalised into an OutputManager interface
+* we need to introduce a new kind of StructAsset, the ViewerAsset.
+* then, of course, the PlayService interface needs to be created
+* several interfaces need to be shaped: the ''engine façade'' and a ''scheduler frontend''.
+* the realms of player and rendering are interconnected within the [[dispatch operation|FrameDispatcher]]
+* as a temporary soltion, a ''~DummyPlayConnection'' will be created hard-wired, within the ~DummyPlayer service. This dumy container is a test setup, explicitly creating a OutputManager implementation, possibly a data generator (thus omitting the not-yet-implemented Builder) and the corresponding ModelPort. This way, the ~DummyPlayer service can be evolved gradually to use the real PlayService for creating the dummy generated output data. It will then pass back the resulting PlayController to the existing GUI setup.
 </pre>
 </div>
 <div title="PresentationState" creator="Ichthyostega" modifier="Ichthyostega" created="201602121500" modified="201602121511" tags="GuiPattern Concepts def design draft" changecount="3">
@@ -6403,10 +6386,6 @@ Any processing pattern needs the help of a passive holder tool suited for a spec
 Viewed as a micro program, the processing patterns are ''weak typed'' &amp;mdash; thus providing the necessary flexibility within an otherwise strong typed system. Consequently, the builder assumes they are configured //the right way// &amp;mdash; and will just bail out when this isn't the case, marking the related part of the high-level model as erroneous.
 &amp;rarr; see BuilderErrorHandling for details
 
-</pre>
-</div>
-<div title="Processors" modifier="Ichthyostega" created="200706220412" tags="def">
-<pre>a given Render Engine configuration is a list of Processors. Each Processor in turn contains a Graph of ProcNode.s to do the acutal data processing. In order to cary out any calculations, the Processor needs to be called with a StateProxy containing the state information for this RenderProcess
 </pre>
 </div>
 <div title="QuantiserImpl" modifier="Ichthyostega" created="201101061212" modified="201402162035" tags="impl spec" changecount="1">
@@ -6877,6 +6856,12 @@ The [[Scheduler]] maintains the ability to perform these Activities, in a time-b
 ;tick
 :internal engine »heart beat« -- invoke internal maintenance hook(s)
  </pre>
+</div>
+<div title="RenderDrive" creator="Ichthyostega" modifier="Ichthyostega" created="202306122212" tags="spec Player draft" changecount="1">
+<pre>//the active core of each [[calculation stream|CalcStream]]//
+When establishing a CalcStream, a suitable {{{Dispatcher}}} implementation is retrieved (indirectly) from the from the EngineFaçade -- behind the scenes this Dispatcher is wired to the [[Segmentation]] data structure in the [[Fixture]] and thus allows to '''build'' the JobPlanningPipeline. The latter is an iterator and allows to pull a sequence of [[frame render jobs|RenderJob]], ready for hand-over to the [[Scheduler]]
+
+Besides housing the planning pipeline, the RenderDrive is also a JobFunctor for (re)invocation of //the next job planning chunk// -- it re-activates itself repeatedly and thereby drives the stream of calculation and thus the rendering ahead.</pre>
 </div>
 <div title="RenderEngine" modifier="Ichthyostega" created="200802031820" modified="202304140113" tags="def" changecount="3">
 <pre>Conceptually, the Render Engine is the core of the application. But &amp;mdash; surprisingly &amp;mdash; we don't even have a distinct »~RenderEngine« component in our design. Rather, the engine is formed by the cooperation of several components spread out over two layers (Vault and ~Steam-Layer): The [[Builder]] creates a network of [[render nodes|ProcNode]], the [[Scheduler]] triggers individual [[calculation jobs|RenderJob]], which in turn pull data from the render nodes, thereby relying on the [[Vault services|Vault-Layer]] for data access and using plug-ins for the actual media calculations.

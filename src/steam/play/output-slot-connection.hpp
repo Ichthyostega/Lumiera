@@ -78,18 +78,18 @@ namespace play {
    *   point in each of the per-channel connections
    *   used when this OutputSlot is operational.
    *   
-   * \par OutputSlot Core API
+   * # OutputSlot Core API
    *   
    * Actually, this extension point towards the implementation
    * of the actual output handling carries the core API of OutputSlot.
    * Thus, the task of actually implementing an OutputSlot boils down
    * to implementing this interface and providing a ConnectionState.
-   * - \c lock() announces this FrameID and the corresponding buffer
+   * - `lock()` announces this FrameID and the corresponding buffer
    *   to be in exclusive use by the client from now on
-   * - \c transfer() ends the client sided processing and initiates
+   * - `transfer()` ends the client sided processing and initiates
    *   the outputting of the data found in the corresponding buffer.
-   * - \c pushout() actually pushes the denoted buffer to the output.
-   *   Typically, \c pushout() is called from the \c transfer()
+   * - `pushout()` actually pushes the denoted buffer to the output.
+   *   Typically, `pushout()` is called from the `transfer()`
    *   implementation; yet it may as well be called from a separate
    *   service thread or some kind of callback.
    * @note the meaning of FrameID is implementation defined.
