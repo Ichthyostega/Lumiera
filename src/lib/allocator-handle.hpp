@@ -56,7 +56,6 @@
 #define LIB_ALLOCATOR_HANDLE_H
 
 #include "lib/error.hpp"
-#include "lib/nocopy.hpp"
 
 #include <utility>
 #include <list>
@@ -69,23 +68,71 @@ namespace lib {
   /**
    * Placeholder implementation for a custom allocator
    * @todo shall be replaced by an AllocationCluster eventually
-   * @note conforming to a prospective C++20 Concept `Allo<JobTicket>`
+   * @note conforming to a prospective C++20 Concept `Allo<TYPE>`
    * @remark using `std::list` container, since re-entrant allocation calls are possible,
-   *         meaning that `emplace_front` will be called recursively from another ctor
-   *         call invoked from `emplace_front`. Vector or Deque would be corrupted
-   *         by such re-entrant calls, since both would alias the same entry....
+   *         meaning that further allocations will be requested recursively from a ctor.
+   *         Moreover, for the same reason we separate the allocation from the ctor call,
+   *         so we can capture the address of the new allocation prior to any possible
+   *         re-entrant call, and handle clean-up of allocation without requiring any
+   *         additional state flags.....
    */
-  template<typename T>
+  template<typename TY>
   class AllocatorHandle
-    : public std::list<T>
     {
+      struct Allocation
+        {
+          char buf_[sizeof(TY)];
+          
+          template<typename...ARGS>
+          TY&
+          create (ARGS&& ...args)
+            {
+              return *new(&buf_) TY {std::forward<ARGS> (args)...};
+            }
+          
+          TY&
+          access()
+            {
+              return reinterpret_cast<TY&> (buf_);
+            }
+          void
+          discard() /// @warning strong assumption made here: Payload was created 
+            {
+              access().~TY();
+            }
+        };
+      
+      std::list<Allocation> storage_;
+      
     public:
       template<typename...ARGS>
-      T&
+      TY&
       operator() (ARGS&& ...args)
-        {
-          return this->emplace_front (std::forward<ARGS> (args)...);
+        {                  // EX_STRONG
+          auto pos = storage_.emplace (storage_.end());  ////////////////////////////////////////////////////TICKET #230 : real implementation should care for concurrency here
+          try {
+              return pos->create (std::forward<ARGS> (args)...);
+            }
+          catch(...)
+            {
+              storage_.erase (pos); // EX_FREE
+              
+              const char* errID = lumiera_error();
+              ERROR (memory, "Allocation failed with unknown exception. "
+                             "Lumiera errorID=%s", errID?errID:"??");
+              throw;
+            }
         }
+      
+      /** @note need to do explicit clean-up, since a ctor-call might have been failed,
+       *        and we have no simple way to record this fact internally in Allocation,
+       *        short of wasting additional memory for a flag to mark this situation */
+     ~AllocatorHandle()
+        try {
+            for (auto& alloc : storage_)
+              alloc.discard();
+          }
+        ERROR_LOG_AND_IGNORE (memory, "clean-up of custom AllocatorHandle")
     };
   
   

@@ -281,7 +281,7 @@ namespace lumiera {
       const char* errID = lumiera_error();               \
       ERROR (_FLAG_, "%s failed with unknown exception; " \
                      "error flag is: %s"                   \
-                   , _OP_DESCR_, errID);                    \
+                   , _OP_DESCR_, errID?errID:"??");         \
     }
 
 /******************************************************//**
@@ -304,7 +304,7 @@ namespace lumiera {
       const char* errID = lumiera_error();                 \
       ERROR (stage, "(Signal Handler) %s failed with "      \
                     "unknown exception; error flag is: %s"   \
-                   , _OP_DESCR_, errID);                      \
+                   , _OP_DESCR_, errID?errID:"??");           \
       return (_VAL_);                                          \
     }
 

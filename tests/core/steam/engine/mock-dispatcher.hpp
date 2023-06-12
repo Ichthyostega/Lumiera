@@ -95,7 +95,7 @@ namespace test   {
     /* ===== specify a mock JobTicket setup for tests ===== */
     
     inline ExitNode
-    defineSimpleSpec (HashVal seed =0)
+    defineSimpleSpec (HashVal seed = 1+rand())
     {
       return ExitNode{seed
                      ,ExitNodes{}

@@ -23,8 +23,9 @@
 
 /** @file segment.hpp
  ** Building block of the backbone of the low-level (render node) model
- ** @todo stalled effort towards a session implementation from 2008
- ** @todo 2016 likely to stay, but expect some extensive rework
+ ** @todo WIP 6/2023 now actually in implementation due to »Playback Vertical Slice«
+ ** @todo Datastructure as such is settled; memory allocation and remoulding of an
+ **       existing Segmentation remains future work as of 6/2023
  */
 
 
@@ -59,10 +60,9 @@ namespace fixture {
    * For the purpose of building and rendering, the fixture (for each timeline)
    * is partitioned such that each segment is _structurally constant._
    * For each segment there is a RenderGraph (unit of the render engine)
-   * which is able to render all ExitNodes for this segment.
+   * which is able to render all ExitNode(s) for this segment.
    * 
    * @ingroup fixture
-   * @todo 1/2012 Just a Placeholder. The real thing is not yet implemented.
    * @todo WIP-WIP as of 6/2023 -- about to establish the engine backbone
    * @see http://lumiera.org/wiki/renderengine.html#Fixture
    */
@@ -77,7 +77,7 @@ namespace fixture {
       /** begin of this timeline segment. */
       TimeSpan span_;
       
-      /** render plan / blueprint to use for this segment */
+      /** manage JobTicket: render plan / blueprint to use for this segment */
       TicketAlloc ticketAlloc_;
       PortTable   portTable_;
       
@@ -88,13 +88,15 @@ namespace fixture {
       // TODO: ownership??
       ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #725 : placeholder code
     public:
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////OOO : Obsolet ... nur für Umbau erhalten!!
-      Segment (TimeSpan covered =TimeSpan::ALL
-              ,const engine::JobTicket* ticket =nullptr)
-        : span_{covered}
-//      , tickets_{ticket? ticket : &engine::JobTicket::NOP}     //////////////////////////////////////////TICKET #1297 : ensure to provide a JobTicket for each ModelPort in initialisation
+      explicit
+      Segment (TimeSpan span =TimeSpan::ALL) /// create empty Segment
+        : Segment{span, NodeGraphAttachment{}}
       { }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TODO Obsolet ... nur für Umbau erhalten!!
+      
+      /**
+       * create a new Segment to cover the given TimeSpan
+       * and to offer the rendering capabilities exposed by \a modelLink
+       */
       Segment (TimeSpan covered
               ,NodeGraphAttachment&& modelLink)
         : span_{covered}
@@ -103,11 +105,14 @@ namespace fixture {
         , exitNode{move (modelLink)}
       { }
       
+      /** copy-and-remould an existing Segment to sit at another time span
+       * @see Segmentation::splitSplice
+       */
       Segment (Segment const& original, TimeSpan changed)
         : span_{changed}
         , ticketAlloc_{} // Note: not cloning tickets owned by Segment
         , portTable_{}
-        , exitNode{original.exitNode}   /////////////////////////////////////////////////////////////////////OOO really? cloning ExitNodes? 
+        , exitNode{original.exitNode}   /////////////////////////////////////////////////////////////////////OOO really? cloning ExitNodes?
       { }
       
       // default copy acceptable
@@ -119,6 +124,10 @@ namespace fixture {
       NodeGraphAttachment exitNode;
       
       
+      /**
+       * Access the JobTicket for this segment and the given \a portNr
+       * @remark will be created on-demand and remain stable thereafter.
+       */
       engine::JobTicket const&
       jobTicket (size_t portNr)  const
         {
@@ -140,12 +149,12 @@ namespace fixture {
       generateTickets_onDemand (size_t portNr)
         {
           for (size_t i = portTable_.size(); i <= portNr; ++i)
-            if (isnil (exitNode[portNr]))
-                portTable_.emplace_back (engine::JobTicket::NOP); // disable this slot 
+            if (isnil (exitNode[portNr]))                      // ‣ disable this slot
+                portTable_.emplace_back (engine::JobTicket::NOP);
             else
               {// Ticket was not generated yet...
-                ticketAlloc_(exitNode[portNr], ticketAlloc_);
-                portTable_.emplace_back (ticketAlloc_.back());    // ref to new ticket ‣ slot 
+                JobTicket& newTicket = ticketAlloc_(exitNode[portNr], ticketAlloc_);
+                portTable_.emplace_back (newTicket);      // ref to new ticket ‣ slot
               }
         }
     };
