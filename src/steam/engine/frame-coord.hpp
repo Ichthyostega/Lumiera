@@ -32,7 +32,6 @@
 #include "steam/common.hpp"
 #include "steam/mobject/model-port.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/time/timequant.hpp"
 
 #include <limits>
 

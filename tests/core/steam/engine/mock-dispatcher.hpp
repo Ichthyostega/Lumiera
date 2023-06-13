@@ -22,19 +22,25 @@
 
 /** @file mock-dispatcher.hpp
  ** Mock data structures to support implementation testing of render job
- ** planning and frame dispatch. Together with dummy-job.hpp, this provides
- ** a specifically rigged test setup, allowing to investigate and verify
- ** designated functionality in isolation, without backing by the actual
- ** render engine implementation.
- ** - the MockDispatcherTable emulates the frame dispatch from the Fixture
+ ** planning and frame dispatch. This specifically rigged test setup allows to
+ ** investigate and verify designated functionality in isolation, without backing
+ ** by the actual render engine and low-level-Model implementation.
+ ** - a MockJob is a render Job, wired to a DummyFunctor, which does nothing,
+ **   but records any invocation into an internal diagnostics Map.
+ ** - MockJobTicket is a builder / adapter on top of the actual steam::engine::JobTicket,
+ **   allowing to generate simple JobTicket instances with an embedded ExitNode and
+ **   a (configurable) pipelineID. From this setup, »mock jobs« can be generated,
+ **   which use the MockJob functor and thus record any invocation without performing
+ **   actual work. The internal connection to the MockJobTicket can then be verified.
  ** - MockSegmentation is a mocked variant of the »Segmentation« datastructure,
  **   which forms the backbone of the Fixture and is the top-level attachment
- **   point for the »low-level-Model« (the render nodes network)
- ** - MockJobTicket is a builder / adapter on top of the actual steam::engine::JobTicket,
- **   allowing to generate a complete rigged MockSegmentation setup from a generic
- **   test specification written as nested lib::diff::GenNode elements. From this
- **   setup, »mock jobs« can be generated, which use the DummyJob functor and
- **   just record any invocation without performing actual work.
+ **   point for the »low-level-Model« (the render nodes network). It can be
+ **   configured with a test specification of ExitNode(s) defined by a
+ **   GenNode tree, and defining Segments of the timeline and prerequisites.
+ ** - finally, the MockDispatcher combines all these facilities to emulate
+ **   frame dispatch from the Fixture without actually using any data model.
+ **   Similar to MockSegmentation, a GenNode-based specification is used.
+ **
  ** @remark in spring 2023, this setup was created as a means to define and
  **   then build the actual implementation of frame dispatch and scheduling.
  ** @see MockSupport_test
@@ -53,7 +59,6 @@
 #include "steam/engine/dispatcher.hpp"
 #include "steam/engine/job-ticket.hpp"
 #include "vault/engine/job.h"
-#include "vault/engine/dummy-job.hpp"
 #include "vault/real-clock.hpp"
 #include "lib/allocator-handle.hpp"
 #include "lib/time/timevalue.hpp"
@@ -79,45 +84,57 @@ namespace test   {
   using lib::HashVal;
   using util::isnil;
   using util::isSameObject;
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1294 : organisation of namespaces / includes??
   using fixture::Segmentation;
+  using vault::engine::Job;
+  using vault::engine::JobClosure;
   
-  namespace { // used internally
-    
-    using play::test::ModelPorts;
-    using play::test::PlayTestFrames_Strategy;
-    using vault::engine::JobClosure;
-    using vault::engine::JobParameter;
-    using vault::engine::DummyJob;
-    
-    using DummyPlaybackSetup = play::test::DummyPlayConnection<PlayTestFrames_Strategy>;
-    
-    
-    
-    
-    /* ===== specify a mock JobTicket setup for tests ===== */
-    
-    inline ExitNode
-    defineSimpleSpec (HashVal seed = 1+rand())
-    {
-      return ExitNode{seed
-                     ,ExitNodes{}
-                     ,& DummyJob::getFunctor()};
-    }
-    
-  }//(End)internal test helpers....
   
   
   
   
   /**
-   * Mock setup for a JobTicket to generate DummyJob invocations.
+   * Mock setup for a render Job with NO action but built-in diagnostics.
+   * Each invocation of such a MockJob will be logged internally
+   * and can be investigated and verified afterwards.
+   */
+  class MockJob
+    : public Job
+    {
+      static Job build(); ///< uses random job definition values
+      static Job build (Time nominalTime, int additionalKey);
+      
+    public:
+      MockJob()
+        : Job{build()}
+        { }
+      
+      MockJob (Time nominalTime, int additionalKey)
+        : Job{build (nominalTime,additionalKey)}
+        { }
+      
+      
+      static bool was_invoked (Job const& job);
+      static Time invocationTime (Job const& job);
+      static Time invocationNominalTime (Job const& job);
+      static int  invocationAdditionalKey (Job const& job);
+      
+      static bool isNopJob (Job const&);
+      static JobClosure& getFunctor();
+    };
+  
+
+  
+  
+  
+  
+  /**
+   * Mock setup for a JobTicket to generate dummy render Job invocations.
    * Implemented as subclass, it provides a specification DSL for tests,
    * and is able to probe some otherwise opaque internals of JobTicket.
    * Beyond that, MockJobTicket has the same storage size; and behaves
    * like the regular JobTicket after construction -- but any Job
    * created by JobTicket::createJobFor(FrameCoord) will be wired
-   * with the DummyJob functor and can thus be related back to
+   * with the MockJob functor and can thus be related back to
    * the test specification setup.
    * @see JobPlanningSetup_test
    * @see DispatcherInterface_test
@@ -130,6 +147,15 @@ namespace test   {
       allocator()
         {
           return static_cast<lib::AllocatorHandle<JobTicket>&> (*this);
+        }
+      
+      /** provide a test specification wired to MockJob */
+      static ExitNode
+      defineSimpleSpec (HashVal seed = 1+rand())
+        {
+          return ExitNode{seed
+                         ,ExitNodes{}
+                         ,& MockJob::getFunctor()};
         }
       
     public:
@@ -157,14 +183,14 @@ namespace test   {
    * test, by passing a test specification in »GenNode« notation to the
    * constructor. This specification defines the segments to create
    * and allows to associate a marker number, which can later be
-   * verified from the actual DummyJob invocation.
+   * verified from the actual DummyClosure invocation.
    * - the ctor accepts a sequence of GenNode elements,
    *   each corresponding to a segment to created
    * - optionally, attributes "start" and "after" can be defined
    *   to provide the lib::time::Time values of segment start/end
    * - in addition, optionally a "mark" attribute can be defined;
    *   the given integer number will be "hidden" in the job instance
-   *   hash, and can be [verified](\ref DummyJob::invocationAdditionalKey)
+   *   hash, and can be [verified](\ref MockJob::invocationAdditionalKey)
    * - the _scope_ of each top-level GenNode may hold a sequence of
    *   nested nodes corresponding to _prerequisite_ JobTicket instances
    * - these can in turn hold further nested prerequisites, and so on
@@ -198,7 +224,7 @@ namespace test   {
         {
           return ExitNode{buildSeed (spec)
                          ,buildPrerequisites (spec)
-                         ,& DummyJob::getFunctor()};
+                         ,& MockJob::getFunctor()};
         }
       
       /** @internal helper for MockDispatcher */
@@ -238,8 +264,12 @@ namespace test   {
   inline void
   MockSegmentation::duplicateExitNodeSpec (uint times)
     {
-      for (fixture::Segment& seg : segments_)
-          seg.exitNode = move(fixture::NodeGraphAttachment{ExitNodes{times, seg.exitNode[0]}});
+      using Spec = fixture::NodeGraphAttachment;
+      
+      Segmentation::adaptSpecification ([times](Spec const& spec)
+                                                {
+                                                  return Spec{ExitNodes{times, spec[0]}};
+                                                });
     }
   
   
@@ -273,6 +303,28 @@ namespace test   {
   
   
   
+  namespace { // used internally by MockDispatcher....
+    using play::test::ModelPorts;
+    using play::test::PlayTestFrames_Strategy;
+    
+    using DummyPlaybackSetup = play::test::DummyPlayConnection<PlayTestFrames_Strategy>;
+  }
+  
+  
+  
+  /**
+   * A mocked frame Dispatcher setup without any backing model.
+   * Instantiating such a MockDispatcher will automatically create some fake
+   * model structures and some ModelPort and DisplaySink handles (and thereby
+   * push aside and shadow any existing ModelPort registry).
+   * 
+   * The configuration is similar to MockSegmentation, using a test spec
+   * given as GenNode-tree to define Segments of the timeline and possibly
+   * pipeline-IDs and prerequisites. One notable difference is that here
+   * the default ctor always creates a single Segment covering the whole
+   * time axis, and that the ExitNode specification is automatically
+   * duplicated for all faked ModelPort(s).
+   */
   class MockDispatcher
     : public Dispatcher
     {
@@ -285,8 +337,9 @@ namespace test   {
       const PortIdxMap portIdx_;
       
     public:
-      /* == mock Dispatcher implementation == */
+      /* == mock implementation of the Dispatcher interface == */
       
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 : likely to become obsolete
       FrameCoord
       locateRelative (FrameCoord const&, FrameCnt frameOffset)  override
         {
@@ -298,7 +351,7 @@ namespace test   {
         {
           UNIMPLEMENTED ("determine when to finish a planning chunk");
         }
-      
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 : likely to become obsolete
       
       size_t
       resolveModelPort (ModelPort modelPort)  override
@@ -319,6 +372,7 @@ namespace test   {
         }
       
       
+    public:
       MockDispatcher()
         : dummySetup_{}
         , mockSeg_{MakeRec().genNode()}                 // Node: generate a single active Segment to cover all
@@ -368,7 +422,7 @@ namespace test   {
           TimeValue nominalTime{job.parameter.nominalTime};
           size_t portIDX = resolveModelPort (port);
           JobTicket& ticket = accessJobTicket (portIDX, nominalTime);
-          return isnil (ticket)? DummyJob::isNopJob (job)
+          return isnil (ticket)? MockJob::isNopJob (job)
                                : MockJobTicket::isAssociated (job, ticket);
         }
       
@@ -387,9 +441,6 @@ namespace test   {
           return newIndex;
         }
     };
-  
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1221
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1221
   
   
 }}} // namespace steam::engine::test

@@ -54,6 +54,7 @@
 
 #include <list>
 #include <optional>
+#include <functional>
 
 
 namespace steam {
@@ -83,12 +84,8 @@ namespace fixture {
   class Segmentation
     : util::NonCopyable
     {
-    protected:
       /** segments of the engine in ordered sequence. */
       list<Segment> segments_;
-      
-    public:
-      virtual ~Segmentation();      ///< this is an interface
       
     protected:
       Segmentation()                ///< there is always a single cover-all Segment initially
@@ -96,6 +93,8 @@ namespace fixture {
       { }
       
     public:
+      virtual ~Segmentation();      ///< this is an interface
+      
       size_t
       size()  const
         {
@@ -121,6 +120,16 @@ namespace fixture {
       /** rework the existing Segmentation to include a new Segment as specified */
       Segment const&
       splitSplice (OptTime start, OptTime after, engine::ExitNodes&& modelLink  =ExitNodes{});
+      
+      
+    protected:
+      /** @internal rewrite the NodeGraphAttachment in each Segment */
+      void
+      adaptSpecification (std::function<NodeGraphAttachment(NodeGraphAttachment const&)> rewrite)
+        {
+          for (fixture::Segment& seg : segments_)
+              seg.exitNode = move(rewrite (seg.exitNode));
+        }
     };
   
   

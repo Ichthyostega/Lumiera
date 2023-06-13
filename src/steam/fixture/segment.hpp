@@ -39,7 +39,6 @@
 #include "steam/engine/job-ticket.hpp"
 #include "lib/allocator-handle.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/itertools.hpp"
 #include "lib/util.hpp"
 
 #include <utility>

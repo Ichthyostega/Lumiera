@@ -48,40 +48,10 @@
 
 #include "lib/iter-adapter.hpp"
 
-#include <boost/type_traits/remove_const.hpp>
+#include <type_traits>
 
-
-namespace std {
-  template <typename _Tp, typename _Dp>
-  class unique_ptr;
-}
 
 namespace lib {
-  
-  namespace {
-    
-    /** helper to remove pointer,
-     *  while retaining const */
-    template<typename T>
-    struct RemovePtr  { typedef T Type; };
-    
-    template<typename T>
-    struct RemovePtr<T*> { typedef T Type; };
-    
-    template<typename T>
-    struct RemovePtr<const T*> { typedef const T Type; };
-    
-    template<typename T>
-    struct RemovePtr<T* const> { typedef const T Type; };
-    
-    template<typename T>
-    struct RemovePtr<const T* const> { typedef const T Type; };
-    
-    /** allow automatic dereferencing of std::unique_ptr */
-    template<typename T, typename D>
-    struct RemovePtr<std::unique_ptr<T,D>> { typedef T Type; };
-  }
-  
   
   
   /**
@@ -98,26 +68,30 @@ namespace lib {
       
       
     public:
-      typedef typename IT::value_type           pointer;
-      typedef typename RemovePtr<pointer>::Type value_type;
-      typedef value_type&                       reference;
+      /** this iterator adapter is meant to wrap an iterator yielding pointer values */
+      using pointer    = typename meta::ValueTypeBinding<IT>::value_type;
+      static_assert(std::is_pointer_v<pointer>);
+      
+      using value_type = typename std::remove_pointer_t<pointer>;
+      using reference  = value_type&;
+      
       
       ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (PtrDerefIter);
       
       
-      // the purpose of the following typedefs is to ease building a correct "const iterator"
+      // the purpose of the following typedefs is to support building a correct "const iterator"
       
-      typedef typename boost::remove_const<value_type>::type ValueTypeBase; // value_type without const
+      using ValueTypeBase = typename std::remove_const_t<value_type>; // value_type without const
       
-      typedef typename IterType<IT>::template SimilarIter<      ValueTypeBase* * >::Type WrappedIterType;
-      typedef typename IterType<IT>::template SimilarIter<const ValueTypeBase* * >::Type WrappedConstIterType;
+      using WrappedIterType      = typename IterType<IT>::template SimilarIter<      ValueTypeBase* * >::Type;
+      using WrappedConstIterType = typename IterType<IT>::template SimilarIter<const ValueTypeBase* * >::Type;
       
-      typedef PtrDerefIter<WrappedIterType>      IterType;
-      typedef PtrDerefIter<WrappedConstIterType> ConstIterType;
+      using IterType      = PtrDerefIter<WrappedIterType>;
+      using ConstIterType = PtrDerefIter<WrappedConstIterType>;
       
       
       
-      /** PtrDerefIter is always created 
+      /** PtrDerefIter is always created
        *  by wrapping an existing iterator.
        */
       explicit
@@ -244,7 +218,7 @@ namespace lib {
   
   
   
-  /** 
+  /**
    * wrapper for an existing Iterator type to expose the address of each value yielded.
    * Typically this can be used to build visitation sequences based on values living
    * within a stable data structure (e.g. unmodifiable STL vector)
@@ -280,7 +254,7 @@ namespace lib {
       ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (AddressExposingIter);
       
       
-      /** AddressExposingIter is always created 
+      /** AddressExposingIter is always created
        *  by wrapping an existing iterator.
        */
       explicit
@@ -304,7 +278,7 @@ namespace lib {
       /** @return address of the source iteraor's current result
        * @warning exposing a reference to an internal pointer for sake of compatibility.
        *          Clients must not store that reference, but rather use it to initialise
-       *          a copy. The internal pointer exposed here will be changed on increment.  
+       *          a copy. The internal pointer exposed here will be changed on increment.
        */
       reference
       operator*() const

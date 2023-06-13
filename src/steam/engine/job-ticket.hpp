@@ -36,19 +36,14 @@
 #define STEAM_ENGINE_JOB_TICKET_H
 
 #include "steam/common.hpp"
-//#include "steam/state.hpp"
 #include "vault/engine/job.h"
 #include "steam/engine/frame-coord.hpp"
 #include "steam/engine/exit-node.hpp"
-//#include "lib/time/timevalue.hpp"
-//#include "lib/time/timequant.hpp"
 #include "lib/hierarchy-orientation-indicator.hpp"
 #include "lib/linked-elements.hpp"
+#include "lib/util-foreach.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/itertools.hpp"
-#include "lib/util-foreach.hpp"
-#include "lib/meta/tuple-helper.hpp"
-#include "lib/meta/trait.hpp"
 #include "lib/util.hpp"
 
 #include <utility>
@@ -58,10 +53,6 @@
 namespace steam {
 namespace engine {
   
-//using lib::time::TimeSpan;
-//using lib::time::Duration;
-//using lib::time::FSecs;
-//using lib::time::Time;
 using vault::engine::Job;
 using vault::engine::JobFunctor;
 using vault::engine::JobClosure;        /////////////////////////////////////////////////////////////////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)

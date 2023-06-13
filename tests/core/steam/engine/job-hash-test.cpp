@@ -29,16 +29,18 @@
 #include "lib/util.hpp"
 
 #include "vault/real-clock.hpp"
-#include "vault/engine/dummy-job.hpp"
+#include "steam/engine/mock-dispatcher.hpp"
 
 #include <boost/functional/hash.hpp>
 
 
-namespace vault {
-namespace engine {
-namespace test {
+namespace steam {
+namespace engine{
+namespace test  {
   
   using util::isSameObject;
+  using vault::engine::Job;
+  using vault::engine::JobParameter;
   
   
   
@@ -67,23 +69,23 @@ namespace test {
       void
       verify_simple_job_properties()
         {
-          Job job = DummyJob::build();
+          MockJob job;
           CHECK (job.isValid());
           
           Time beforeInvocation = RealClock::now();
           job.triggerJob();
           
-          CHECK (DummyJob::was_invoked (job));
-          CHECK (RealClock::now() > DummyJob::invocationTime (job));
-          CHECK (beforeInvocation < DummyJob::invocationTime (job));
+          CHECK (MockJob::was_invoked (job));
+          CHECK (RealClock::now() > MockJob::invocationTime (job));
+          CHECK (beforeInvocation < MockJob::invocationTime (job));
         }
       
       
       void
       verify_job_identity()
         {
-          Job job1 = DummyJob::build();
-          Job job2 = DummyJob::build();
+          MockJob job1;
+          MockJob job2;
           
           CHECK (job1 != job2, "random test data clash");
           
@@ -130,4 +132,4 @@ namespace test {
   /** Register this test class... */
   LAUNCHER(JobHash_test, "unit engine");
   
-}}} // namespace vault::engine::test
+}}} // namespace steam::engine::test

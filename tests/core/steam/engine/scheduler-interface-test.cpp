@@ -31,7 +31,7 @@
 #include "vault/real-clock.hpp"
 #include "vault/engine/scheduler-frontend.hpp"
 #include "vault/engine/scheduler-diagnostics.hpp"
-#include "vault/engine/dummy-job.hpp"
+#include "steam/engine/mock-dispatcher.hpp"
 
 
 namespace vault {
@@ -43,6 +43,8 @@ namespace test {
   using lib::time::Duration;
   using lib::time::Offset;
   using lib::time::FSecs;
+  
+  using steam::engine::test::MockJob;
   
   
   namespace { // test fixture: scheduling a dummy job operation...
@@ -92,7 +94,7 @@ namespace test {
         {
           SchedulerDiagnostics monitor(scheduler);
           
-          Job job = DummyJob::build();
+          MockJob job;
           Time deadline(TEST_START_TIME);
           
           scheduler.startJobTransaction()
@@ -112,8 +114,8 @@ namespace test {
           
           JobTransaction tx = scheduler.startJobTransaction();
           
-          Job job1 = DummyJob::build();
-          Job job2 = DummyJob::build();
+          MockJob job1;
+          MockJob job2;
           
           tx.addFreewheeling(job1);
           tx.addBackground (job2);
@@ -178,7 +180,7 @@ namespace test {
           Time nominalTime(dummyFrameStart(frameNr));
           Time deadline(TEST_START_TIME + nominalTime);
           
-          Job job = DummyJob::build(nominalTime, frameNr);
+          MockJob job{nominalTime, frameNr};
           
           currentTx.addJob (deadline, job);
           

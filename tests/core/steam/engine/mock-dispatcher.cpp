@@ -1,5 +1,5 @@
 /*
-    DummyJob  -  diagnostic job for unit tests
+    MockDispatcher  -  diagnostic render job and frame dispatcher
 
   Copyright (C)         Lumiera.org
     2013,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-/** @file dummy-job.cpp
+/** @file mock-dispatcher.cpp
  ** Implementation of a dummy render job for unit tests.
  ** Based on using a specifically rigged DummyClosure as JobFunctor,
  ** where the actual Job invocation does nothing other than storing
@@ -32,14 +32,14 @@
  ** 
  ** # Usage front-end
  ** 
- ** The static functions in vault::engine::DummyJob allow to
- ** - build such a mock job, possibly with random (or well defined) parameters
- ** - when passing back this job instance, verify invocation and extract data
+ ** A MockJob can directly created, and then sliced down to the Job baseclass,
+ ** since it has no additional data fields. The static functions in MockJob allow
+ ** to verify that a given job instance was created from this setup, that it was
+ ** invoked, and verify invocation time and extract data
  */
 
 
-#include "vault/engine/dummy-job.hpp"
-
+#include "steam/engine/mock-dispatcher.hpp"
 #include "vault/engine/nop-job-functor.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
@@ -50,14 +50,15 @@
 #include "lib/util.hpp"
 
 #include <cstdlib>
-#include <unordered_map>
 #include <functional>
+#include <unordered_map>
 
 
-namespace vault{
-namespace engine {
+namespace steam {
+namespace engine{
+namespace test  {
   
-  namespace { // DummyJob implementation details...
+  namespace { // MockJob and DummyClosure implementation details...
     
     using lib::HashVal;
     using lib::NullValue;
@@ -65,14 +66,16 @@ namespace engine {
     using std::unordered_map;
     using util::access_or_default;
     
+    using vault::engine::JobParameter;
+    
     
     const int MAX_PARAM_A(1000);   ///< random test values 0...1000
     const int MAX_PARAM_B(10);     ///< random test values -10...+10
     
     
     /**
-     * test dummy jobs are backed by this closure.
-     * DummyJob invocations are recorded in a hashtable
+     * MockJob objects are backed by this closure.
+     * Invocations of this job functor are recorded in a hashtable
      * @note as of 5/2023, we use a simplistic map-based implementation,
      *       causing a consecutive invocation of the same job instance
      *       with identical JobParameter to overwrite the previous log entry.
@@ -158,7 +161,7 @@ namespace engine {
               { }
           };
         
-        /** recording DummyJob invocations */
+        /** recording MockJob invocations */
         unordered_map<HashVal,Invocation> invocationLog_;
         
         
@@ -195,7 +198,7 @@ namespace engine {
   
   
   Job
-  DummyJob::build()
+  MockJob::build()
   {
     InvocationInstanceID invoKey;
     invoKey.part.a = rand() % MAX_PARAM_A;
@@ -208,7 +211,7 @@ namespace engine {
   
   
   Job
-  DummyJob::build (Time nominalTime, int additionalKey)
+  MockJob::build (Time nominalTime, int additionalKey)
   {
     InvocationInstanceID invoKey;
     invoKey.part.a = additionalKey;
@@ -219,7 +222,7 @@ namespace engine {
   
   
   bool
-  DummyJob::was_invoked (Job const& job)
+  MockJob::was_invoked (Job const& job)
   {
     REQUIRE (job.usesClosure (dummyClosure));
     
@@ -228,7 +231,7 @@ namespace engine {
   
   
   Time
-  DummyJob::invocationTime (Job const& job)
+  MockJob::invocationTime (Job const& job)
   {
     REQUIRE (job.usesClosure (dummyClosure));
     
@@ -237,7 +240,7 @@ namespace engine {
   
   
   Time
-  DummyJob::invocationNominalTime (Job const& job)
+  MockJob::invocationNominalTime (Job const& job)
   {
     REQUIRE (job.usesClosure (dummyClosure));
     
@@ -246,7 +249,7 @@ namespace engine {
   
   
   int
-  DummyJob::invocationAdditionalKey (Job const& job)
+  MockJob::invocationAdditionalKey (Job const& job)
   {
     REQUIRE (job.usesClosure (dummyClosure));
     
@@ -256,7 +259,7 @@ namespace engine {
   
   /** @internal for collaboration with other Mock/Dummy facilities */
   JobClosure&
-  DummyJob::getFunctor()
+  MockJob::getFunctor()
   {
     return dummyClosure;
   }
@@ -268,7 +271,7 @@ namespace engine {
    * @see JobTicket::JobTicket::createJobFor(FrameCoord)
    */
   bool
-  DummyJob::isNopJob (Job const& job)
+  MockJob::isNopJob (Job const& job)
   {
     InvocationInstanceID empty; ///////////////////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
     JobClosure& jobFunctor = static_cast<JobClosure&> (*job.jobClosure);     //////////////////////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
@@ -278,4 +281,4 @@ namespace engine {
 
   
   
-}} // namespace vault::engine
+}}} // namespace steam::engine::test

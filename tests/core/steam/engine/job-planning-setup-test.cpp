@@ -28,19 +28,14 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "steam/engine/mock-dispatcher.hpp"
-#include "vault/engine/dummy-job.hpp"
 
 #include "lib/format-cout.hpp"///////////////////////TODO
 #include "lib/iter-tree-explorer.hpp"
 #include "lib/format-util.hpp"
 #include "lib/util.hpp"
 
-//#include "steam/engine/job-planning.hpp"
-
-//#include <ctime>
 
 using test::Test;
-//using std::rand;
 using lib::eachNum;
 using lib::treeExplore;
 using lib::time::PQuant;
@@ -52,7 +47,6 @@ namespace steam {
 namespace engine{
 namespace test  {
   
-  using vault::engine::DummyJob;
   using lib::time::FixedFrameQuantiser;
 
   namespace { // test fixture...
@@ -83,7 +77,7 @@ namespace test  {
    *       - integration: generate a complete sequence of (dummy)Jobs
    *       - scaffolding and mocking used for this test 
    * 
-   * @todo WIP-WIP-WIP 4/2023
+   * @todo WIP-WIP 4/2023
    * 
    * @see DispatcherInterface_test
    * @see MockSupport_test
@@ -112,12 +106,12 @@ namespace test  {
           Time nominalTime = lib::test::randTime();
           int additionalKey = rand() % 5000;
           
-          Job mockJob = DummyJob::build (nominalTime, additionalKey);
+          MockJob mockJob{nominalTime, additionalKey};
           mockJob.triggerJob();
-          CHECK (DummyJob::was_invoked (mockJob));
-          CHECK (RealClock::wasRecently (DummyJob::invocationTime (mockJob)));
-          CHECK (nominalTime   == DummyJob::invocationNominalTime (mockJob) );
-          CHECK (additionalKey == DummyJob::invocationAdditionalKey(mockJob));
+          CHECK (MockJob::was_invoked (mockJob));
+          CHECK (RealClock::wasRecently (MockJob::invocationTime (mockJob)));
+          CHECK (nominalTime   == MockJob::invocationNominalTime (mockJob) );
+          CHECK (additionalKey == MockJob::invocationAdditionalKey(mockJob));
           
           //  Build a simple Segment at [10s ... 20s[
           MockSegmentation mockSegs{MakeRec()
@@ -143,10 +137,15 @@ namespace test  {
           
           jobP.triggerJob();
           jobM.triggerJob();
-          CHECK (123 == DummyJob::invocationAdditionalKey (jobM));         // verify each job was invoked and linked to the correct spec,
-          CHECK (555 == DummyJob::invocationAdditionalKey (jobP));         // indicating that in practice it will activate the proper render node
-          //
-          ////////////////////////////////////////////////////////////////////TODO: extract Dispatcher-Mock from DispatcherInterface_test
+          CHECK (123 == MockJob::invocationAdditionalKey (jobM));          // verify each job was invoked and linked to the correct spec,
+          CHECK (555 == MockJob::invocationAdditionalKey (jobP));          // indicating that in practice it will activate the proper render node
+          
+          coord.modelPortIDX = 1;
+          coord.absoluteNominalTime = Time{0,30};
+          MockDispatcher dispatcher;                                       // a complete dispatcher backed by a mock Segment for the whole timeline
+          auto [port1,sink1] = dispatcher.getDummyConnection(1);           // also some fake ModelPort and DataSink entries are registered
+          Job jobD = dispatcher.getJobTicketFor(coord).createJobFor(coord);
+          CHECK (dispatcher.verify(jobD, port1, sink1));                   // the generated job uses the associated ModelPort and DataSink and JobTicket
         }
       
       

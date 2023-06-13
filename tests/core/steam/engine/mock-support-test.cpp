@@ -29,7 +29,6 @@
 #include "lib/test/test-helper.hpp"
 #include "steam/engine/mock-dispatcher.hpp"
 #include "vault/engine/nop-job-functor.hpp"
-#include "vault/engine/dummy-job.hpp"
 #include "lib/iter-tree-explorer.hpp"
 #include "lib/util-tuple.hpp"
 #include "lib/util.hpp"
@@ -43,7 +42,6 @@ namespace engine{
 namespace test  {
   
   using steam::fixture::Segment;
-  using vault::engine::DummyJob;
   using lib::singleValIterator;
   using util::isSameObject;
   using util::seqTuple;
@@ -55,6 +53,7 @@ namespace test  {
    *       - creating and invoking mock render jobs
    *       - a mocked JobTicket, generating mock render jobs
    *       - configurable test setup for a mocked Segmentation datastructure
+   *       - configurable setup of a complete frame Dispatcher
    * @see JobPlanningSetup_test
    * @see Dispatcher
    * @see vault::engine::Job
@@ -95,7 +94,7 @@ namespace test  {
             CHECK (MockJobTicket::isAssociated (job, ticket));
             
             job.triggerJob();
-            CHECK (DummyJob::was_invoked (job));
+            CHECK (MockJob::was_invoked (job));
         }
       
       
@@ -107,21 +106,21 @@ namespace test  {
         {
           Time nominalTime = lib::test::randTime();
           int additionalKey = rand() % 5000;
-          Job mockJob = DummyJob::build (nominalTime, additionalKey);
+          MockJob mockJob{nominalTime, additionalKey};
           CHECK (mockJob.getNominalTime() == nominalTime);
-          CHECK (not DummyJob::was_invoked (mockJob));
+          CHECK (not MockJob::was_invoked (mockJob));
           
           mockJob.triggerJob();
-          CHECK (DummyJob::was_invoked (mockJob));
-          CHECK (RealClock::wasRecently (DummyJob::invocationTime (mockJob)));
-          CHECK (nominalTime   == DummyJob::invocationNominalTime (mockJob) );
-          CHECK (additionalKey == DummyJob::invocationAdditionalKey(mockJob));
+          CHECK (MockJob::was_invoked (mockJob));
+          CHECK (RealClock::wasRecently (MockJob::invocationTime (mockJob)));
+          CHECK (nominalTime   == MockJob::invocationNominalTime (mockJob) );
+          CHECK (additionalKey == MockJob::invocationAdditionalKey(mockJob));
           
-          Time prevInvocation   = DummyJob::invocationTime (mockJob);
+          Time prevInvocation   = MockJob::invocationTime (mockJob);
           mockJob.triggerJob();
-          CHECK (prevInvocation < DummyJob::invocationTime (mockJob));                 // invoked again, recorded new invocation time
-          CHECK (nominalTime   == DummyJob::invocationNominalTime (mockJob) );         // all other Job parameter recorded again unaltered
-          CHECK (additionalKey == DummyJob::invocationAdditionalKey(mockJob));
+          CHECK (prevInvocation < MockJob::invocationTime (mockJob));                  // invoked again, recorded new invocation time
+          CHECK (nominalTime   == MockJob::invocationNominalTime (mockJob) );          // all other Job parameter recorded again unaltered
+          CHECK (additionalKey == MockJob::invocationAdditionalKey(mockJob));
         }
       
       
@@ -182,12 +181,12 @@ namespace test  {
             Job someJob = ticket.createJobFor(coord);                         // JobTicket uses, but does not check the time given in FrameCoord
             CHECK (someJob.parameter.nominalTime == _raw(coord.absoluteNominalTime));
             CHECK (MockJobTicket::isAssociated (someJob, ticket));            // but the generated Job is linked to the Closure backed by the JobTicket
-            CHECK (not DummyJob::was_invoked (someJob));
+            CHECK (not MockJob::was_invoked (someJob));
             
             someJob.triggerJob();
-            CHECK (DummyJob::was_invoked (someJob));
-            CHECK (RealClock::wasRecently (DummyJob::invocationTime (someJob)));
-            CHECK (someTime == DummyJob::invocationNominalTime (someJob));
+            CHECK (MockJob::was_invoked (someJob));
+            CHECK (RealClock::wasRecently (MockJob::invocationTime (someJob)));
+            CHECK (someTime == MockJob::invocationNominalTime (someJob));
           }
           //-----------------------------------------------------------------/// Segmentation with a segment spanning part of the timeline > 10s
           {
@@ -214,9 +213,9 @@ namespace test  {
             CHECK (marker == job.parameter.invoKey.part.a);
             
             job.triggerJob();
-            CHECK (DummyJob::was_invoked (job));
-            CHECK (RealClock::wasRecently (DummyJob::invocationTime (job)));
-            CHECK (marker == DummyJob::invocationAdditionalKey (job));        // DummyClosure is rigged such as to feed back the seed in `part.a`
+            CHECK (MockJob::was_invoked (job));
+            CHECK (RealClock::wasRecently (MockJob::invocationTime (job)));
+            CHECK (marker == MockJob::invocationAdditionalKey (job));         // DummyClosure is rigged such as to feed back the seed in `part.a`
                                                                               // and thus we can prove this job really belongs to the marked segment
             // create another job from the (empty) seg1
             job = seg1.jobTicket(0).createJobFor (coord);
@@ -250,7 +249,7 @@ namespace test  {
             
             Job job = s2.jobTicket(0).createJobFor(coord);
             job.triggerJob();
-            CHECK (marker == DummyJob::invocationAdditionalKey (job));
+            CHECK (marker == MockJob::invocationAdditionalKey (job));
           }
           //-----------------------------------------------------------------/// Segmentation with several segments built in specific order
           {
@@ -293,10 +292,10 @@ namespace test  {
                                 
                                 Job job = segment.jobTicket(0).createJobFor(coord);
                                 job.triggerJob();
-                                CHECK (DummyJob::was_invoked (job));
-                                CHECK (RealClock::wasRecently (DummyJob::invocationTime (job)));
+                                CHECK (MockJob::was_invoked (job));
+                                CHECK (RealClock::wasRecently (MockJob::invocationTime (job)));
                                 
-                                return DummyJob::invocationAdditionalKey (job);
+                                return MockJob::invocationAdditionalKey (job);
                               };
             CHECK (2 == probeKey(s1));                                        // verify all generated jobs are wired back to the correct segment
             CHECK (3 == probeKey(s2));
@@ -339,8 +338,8 @@ namespace test  {
             
             job1.triggerJob();
             job2.triggerJob();
-            CHECK (23 == DummyJob::invocationAdditionalKey (job1));
-            CHECK (11 == DummyJob::invocationAdditionalKey (job2));
+            CHECK (23 == MockJob::invocationAdditionalKey (job1));
+            CHECK (11 == MockJob::invocationAdditionalKey (job2));
           }
           //-----------------------------------------------------------------/// a tree of deep nested prerequisites
           {
