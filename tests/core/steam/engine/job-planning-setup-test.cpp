@@ -130,8 +130,8 @@ namespace test  {
                                            )
                                    .genNode()};
           fixture::Segment const& seg = mockSegs[Time{0,15}];              // access anywhere 10s <= t < 20s
-          JobTicket const& ticket = seg.jobTicket(0);                      // get the master-JobTicket from this segment
-          JobTicket const& prereq = *(ticket.getPrerequisites());          // pull a prerequisite JobTicket
+          JobTicket& ticket = seg.jobTicket(0);                            // get the master-JobTicket from this segment
+          JobTicket& prereq = *(ticket.getPrerequisites());                // pull a prerequisite JobTicket
           
           FrameCoord coord;                                                // Frame coordinates for invocation (placeholder)
           Job jobP = prereq.createJobFor(coord);                           // create an instance of the prerequisites for this coordinates
@@ -203,6 +203,7 @@ namespace test  {
           JobTicket const& ticket = *pipeline->second;
           
           FrameCoord dummy;
+          dummy.absoluteNominalTime = Time::ZERO;   // actual time point is irrelevant here
           Job job = ticket.createJobFor(dummy);
           CHECK (dispatcher.verify(job, port, sink));
         }

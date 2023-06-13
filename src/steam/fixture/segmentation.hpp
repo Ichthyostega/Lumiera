@@ -83,8 +83,7 @@ namespace fixture {
   class Segmentation
     : util::NonCopyable
     {
-      ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1243 : preliminary implementation
-      
+    protected:
       /** segments of the engine in ordered sequence. */
       list<Segment> segments_;
       

@@ -326,7 +326,7 @@ namespace test  {
                                            .genNode())
                                      .genNode()};
             CHECK (1 == mockSegs.size());
-            JobTicket const& ticket = mockSegs[Time::ZERO].jobTicket(0); // Model-PortNr.0
+            JobTicket& ticket = mockSegs[Time::ZERO].jobTicket(0);            // Model-PortNr.0
             auto prereq = ticket.getPrerequisites();
             CHECK (not isnil (prereq));
             
@@ -364,7 +364,7 @@ namespace test  {
             auto start = singleValIterator (mockSegs[Time::ZERO].jobTicket(0));
             
             auto it = lib::explore(start)
-                          .expand ([](JobTicket const& ticket)
+                          .expand ([](JobTicket& ticket)
                                         {
                                           return ticket.getPrerequisites();
                                         })
@@ -394,6 +394,7 @@ namespace test  {
       verify_MockDispatcherSetup()
         {
           FrameCoord frame;
+          frame.absoluteNominalTime = Time{0,30};
           {
             MockDispatcher dispatcher;
             // automatically generates some fake connection points...

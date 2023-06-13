@@ -52,7 +52,7 @@ namespace engine {
   
   
   /** special »do nothing« JobTicket marker */
-  const JobTicket JobTicket::NOP{};            //////////////////////////////////////////////////////////////TICKET #725 : do we actually need that for the final data structure?
+  JobTicket JobTicket::NOP{};            ////////////////////////////////////////////////////////////////////TICKET #725 : do we actually need that for the final data structure?
   
   JobTicket::JobTicket()
     : provision_{nopFunctor(), ExitNode::NIL}

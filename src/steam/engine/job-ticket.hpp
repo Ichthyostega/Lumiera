@@ -90,6 +90,7 @@ using lib::LUID;
    * the JobTicket acts as _higher order function:_ a function generating
    * on invocation another, specific function (= the job).
    * 
+   * @note JobTicket is effectively immutable after construction
    * @todo 4/23 WIP-WIP-WIP defining the invocation sequence and render jobs
    */
   class JobTicket
@@ -98,7 +99,7 @@ using lib::LUID;
       struct Prerequisite
         {
           Prerequisite* next{nullptr};  // for intrusive list
-          JobTicket const& prereqTicket;
+          JobTicket&    prereqTicket;
           
           template<class ALO>
           Prerequisite (ExitNode const& node, ALO& allocateTicket)
@@ -138,7 +139,7 @@ using lib::LUID;
         : provision_{buildProvisionSpec (exitNode, allocator)}
         { }
       
-      static const JobTicket NOP;
+      static JobTicket NOP;
       
       
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 : likely to become obsolete
@@ -151,11 +152,11 @@ using lib::LUID;
       Job createJobFor (FrameCoord coordinates)  const;
       
       auto
-      getPrerequisites ()  const
+      getPrerequisites ()
         {
-          return lib::transformIterator (this->empty()? Prerequisites::const_iterator()
+          return lib::transformIterator (this->empty()? Prerequisites::iterator()
                                                       : provision_.prerequisites.begin()
-                                        ,[](Prerequisite const& prq) -> JobTicket const&
+                                        ,[](Prerequisite& prq) -> JobTicket&
                                            {
                                              return prq.prereqTicket;
                                            });

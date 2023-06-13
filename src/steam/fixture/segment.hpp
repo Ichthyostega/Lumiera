@@ -70,7 +70,7 @@ namespace fixture {
     {
       using JobTicket   = engine::JobTicket;
       using TicketAlloc = lib::AllocatorHandle<JobTicket>;
-      using PortTable   = std::deque<std::reference_wrapper<const JobTicket>>;
+      using PortTable   = std::deque<std::reference_wrapper<JobTicket>>;
       
     protected:
       
@@ -128,7 +128,7 @@ namespace fixture {
        * Access the JobTicket for this segment and the given \a portNr
        * @remark will be created on-demand and remain stable thereafter.
        */
-      engine::JobTicket const&
+      engine::JobTicket&
       jobTicket (size_t portNr)  const
         {
           if (portNr >= portTable_.size())

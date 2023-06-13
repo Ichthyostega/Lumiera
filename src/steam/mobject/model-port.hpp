@@ -146,6 +146,12 @@ namespace mobject {
         return mp1.id_ != mp2.id_;
       }
       
+      friend bool
+      operator< (ModelPort const& mp1, ModelPort const& mp2)
+      {
+        return lib::HashVal(mp1.id_) < lib::HashVal(mp2.id_);
+      }
+      
     private:
       
     };

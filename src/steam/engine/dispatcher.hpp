@@ -270,7 +270,7 @@ namespace engine {
 
       /** Package a Ticket together with a direct dependency,
        *  to allow setup of schedule times in downstream processing */
-      using TicketDepend = std::pair<JobTicket const*, JobTicket const*>;
+      using TicketDepend = std::pair<JobTicket*, JobTicket*>;
       
       
       /**
@@ -305,9 +305,9 @@ namespace engine {
           return buildPipeline (
                    this->expandAll([](TicketDepend& currentLevel)
                                             {
-                                              JobTicket const* parent = currentLevel.second;
+                                              JobTicket* parent = currentLevel.second;
                                               return lib::transformIterator (parent->getPrerequisites()
-                                                                            ,[&parent](JobTicket const& prereqTicket)
+                                                                            ,[&parent](JobTicket& prereqTicket)
                                                                                 {                  // parent shifted up to first pos
                                                                                   return TicketDepend{parent, &prereqTicket};
                                                                                 }

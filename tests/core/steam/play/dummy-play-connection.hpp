@@ -136,6 +136,24 @@ namespace test {
           return mockBuilder_.getModelPort (index);
         }
       
+      /** search through all port <-> sink connections
+       *  supported by this DummyPlayConnection
+       * @return `true` if found both a math on port an sink.
+       */
+      bool
+      isSupported (ModelPort port, DataSink sink)
+        {
+          uint i{0};
+          for (auto it=getAllModelPorts(); bool{it}; ++it, ++i)
+            if (port == *it)
+              {
+                auto [refPort, refSink] = getModelPort(i);
+                if (refSink == sink)
+                  return true;
+              }
+          return false;
+        }
+      
       POutputManager
       provide_testOutputSlot()
         {

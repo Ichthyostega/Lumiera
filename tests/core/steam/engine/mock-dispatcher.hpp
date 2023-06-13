@@ -61,9 +61,10 @@
 #include "lib/linked-elements.hpp"
 #include "lib/itertools.hpp"
 #include "lib/depend.hpp"
+#include "lib/util.hpp"
 
 #include <tuple>
-#include <list>
+#include <map>
 
 
 namespace steam  {
@@ -76,6 +77,8 @@ namespace test   {
   using lib::time::TimeValue;
   using lib::time::Time;
   using lib::HashVal;
+  using util::isnil;
+  using util::isSameObject;
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1294 : organisation of namespaces / includes??
   using fixture::Segmentation;
   
@@ -170,14 +173,10 @@ namespace test   {
   class MockSegmentation
     : public Segmentation
     {
-      // simulated allocator;
-      // must be able to handle re-entrant allocations
-      std::list<MockJobTicket> tickets_;
       
     public:
       MockSegmentation()
         : Segmentation{}
-        , tickets_{}
       { }
       
       MockSegmentation (std::initializer_list<GenNode> specs)
@@ -202,6 +201,9 @@ namespace test   {
                          ,& DummyJob::getFunctor()};
         }
       
+      /** @internal helper for MockDispatcher */
+      void duplicateExitNodeSpec (uint times);
+      
       
     private: /* ======== Implementation: build fake ExitNodes from test specification ==== */
       
@@ -224,6 +226,21 @@ namespace test   {
     };
   
   
+  
+  
+  /**
+   * This is some trickery to allow handling of multiple ModelPort(s) in MockDispatcher;
+   * actually the code using this mock setup does not need any elaborate differentiation
+   * of the ExitNodes structure per port, thus the first entry of the existing configuration
+   * is just duplicated for the given number of further ModelPorts.
+   * @warning this manipulation must be done prior to generating any JobTicket
+   */
+  inline void
+  MockSegmentation::duplicateExitNodeSpec (uint times)
+    {
+      for (fixture::Segment& seg : segments_)
+          seg.exitNode = move(fixture::NodeGraphAttachment{ExitNodes{times, seg.exitNode[0]}});
+    }
   
   
   /**
@@ -263,6 +280,9 @@ namespace test   {
       DummyPlaybackSetup dummySetup_;
       MockSegmentation mockSeg_;
       
+      using PortIdxMap = std::map<ModelPort, size_t>;
+      
+      const PortIdxMap portIdx_;
       
     public:
       /* == mock Dispatcher implementation == */
@@ -279,24 +299,41 @@ namespace test   {
           UNIMPLEMENTED ("determine when to finish a planning chunk");
         }
       
+      
       size_t
       resolveModelPort (ModelPort modelPort)  override
         {
-          UNIMPLEMENTED ("some Map lookup in a prepared table to find out the actual slot number");
+          auto entry = portIdx_.find(modelPort);
+          if (entry == portIdx_.end())
+            throw error::Logic{"Invalid ModelPort for this Dispatcher"};
+          else
+            return entry->second;
         }
-
+      
+      
       JobTicket&
-      accessJobTicket (size_t, TimeValue nominalTime)  override
+      accessJobTicket (size_t portIDX, TimeValue nominalTime)  override
         {
-          UNIMPLEMENTED ("dummy implementation of the model backbone / segmentation");
+          auto& seg = mockSeg_[nominalTime];
+          return seg.jobTicket(portIDX);
         }
       
       
-      MockDispatcher()   = default;
+      MockDispatcher()
+        : dummySetup_{}
+        , mockSeg_{MakeRec().genNode()}                 // Node: generate a single active Segment to cover all
+        , portIdx_{buildPortIndex()}
+        {
+          mockSeg_.duplicateExitNodeSpec(portIdx_.size());
+        }
       
       MockDispatcher (std::initializer_list<GenNode> specs)
-        : mockSeg_(specs)
-        { }
+        : dummySetup_{}
+        , mockSeg_(specs)
+        , portIdx_{buildPortIndex()}
+        {
+          mockSeg_.duplicateExitNodeSpec(portIdx_.size());
+        }
       
       
       ModelPort
@@ -313,7 +350,7 @@ namespace test   {
        * @param index number of the distinct port / connection
        * @return a `std::pair<ModelPort,DataSink>`
        * @warning as of 5/2023, there are two preconfigured "slots",
-       *          and they are not usable in any way other then refering to their identity
+       *          and they are not usable in any way other then referring to their identity
        */
       play::test::DummyOutputLink
       getDummyConnection(uint index)
@@ -326,7 +363,28 @@ namespace test   {
        */
       bool verify(Job const& job, ModelPort const& port, play::DataSink const& sink)
         {
-          UNIMPLEMENTED ("verify the job was plausibly created from this dispatcher");
+          if (not dummySetup_.isSupported (port, sink)) return false;
+          
+          TimeValue nominalTime{job.parameter.nominalTime};
+          size_t portIDX = resolveModelPort (port);
+          JobTicket& ticket = accessJobTicket (portIDX, nominalTime);
+          return isnil (ticket)? DummyJob::isNopJob (job)
+                               : MockJobTicket::isAssociated (job, ticket);
+        }
+      
+    private:
+      PortIdxMap
+      buildPortIndex()
+        {
+          PortIdxMap newIndex;
+          uint i{0};
+          for (auto it=dummySetup_.getAllModelPorts()
+              ; bool{it}
+              ; ++it, ++i
+              )
+            newIndex[*it] = i;
+          
+          return newIndex;
         }
     };
   

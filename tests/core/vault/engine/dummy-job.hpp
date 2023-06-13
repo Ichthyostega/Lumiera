@@ -68,6 +68,7 @@ namespace engine {
       static int  invocationAdditionalKey (Job const& job);
       
       static JobClosure& getFunctor();
+      static bool isNopJob (Job const&);
     };
   
 }} // namespace vault::engine

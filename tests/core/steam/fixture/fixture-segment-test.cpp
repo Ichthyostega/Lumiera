@@ -115,7 +115,7 @@ namespace test  {
                                 return job.parameter.invoKey.part.a;
                               };
           
-          JobTicket const& ticket = seg.jobTicket(0);
+          JobTicket& ticket = seg.jobTicket(0);
           CHECK (13 == getMarker (ticket));
           auto prereq = ticket.getPrerequisites();
           CHECK (not isnil(prereq));

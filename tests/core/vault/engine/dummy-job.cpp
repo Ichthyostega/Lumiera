@@ -40,11 +40,13 @@
 
 #include "vault/engine/dummy-job.hpp"
 
+#include "vault/engine/nop-job-functor.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
 #include "vault/real-clock.hpp"
 #include "lib/null-value.hpp"
 #include "lib/hash-value.h"
+#include "lib/depend.hpp"
 #include "lib/util.hpp"
 
 #include <cstdlib>
@@ -180,6 +182,9 @@ namespace engine {
     /** actual instance of the test dummy job functor */
     DummyClosure dummyClosure;
     
+    /** access to the fallback-implementation for empty segments */
+    lib::Depend<vault::engine::NopJobFunctor> nopFunctor;
+    
   }// (End)Implementation details
   
   
@@ -255,6 +260,22 @@ namespace engine {
   {
     return dummyClosure;
   }
+
+  /** @internal likewise to support the MockDispatcher diagnostics;
+   *            locate here since this is a dedicated translation unit
+   * @return `true` iff the job was defined in the typical way used by
+   *         JobTicket to generate fill jobs for empty segments.
+   * @see JobTicket::JobTicket::createJobFor(FrameCoord)
+   */
+  bool
+  DummyJob::isNopJob (Job const& job)
+  {
+    InvocationInstanceID empty; ///////////////////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
+    JobClosure& jobFunctor = static_cast<JobClosure&> (*job.jobClosure);     //////////////////////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
+    return lumiera_invokey_eq (&util::unConst(job).parameter.invoKey, &empty)
+       and util::isSameObject (jobFunctor, nopFunctor());
+  }
+
   
   
 }} // namespace vault::engine
