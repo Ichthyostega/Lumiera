@@ -41,6 +41,7 @@ namespace engine {
   
   using mobject::ModelPort;
   using lib::time::FrameCnt;
+  using lib::time::TimeValue;
   using lib::time::TimeVar;
   using lib::time::Time;
   
@@ -79,6 +80,14 @@ namespace engine {
         , absoluteFrameNumber{std::numeric_limits<FrameCnt>::max()}
         , realTimeDeadline{Time::NEVER}
         , modelPortIDX{0}
+        { }
+      
+      explicit
+      FrameCoord (TimeValue nominalTime, size_t portIDX =0)
+        : absoluteNominalTime{nominalTime}
+        , absoluteFrameNumber{std::numeric_limits<FrameCnt>::max()}
+        , realTimeDeadline{Time::NEVER}
+        , modelPortIDX{portIDX}
         { }
       
       // using default copy operations

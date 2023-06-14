@@ -282,15 +282,14 @@ namespace engine {
         {
           size_t portIDX = SRC::dispatcher->resolveModelPort(port);
           return buildPipeline (
-                   this->transform([portIDX](PipeFrameTick& core) -> TicketDepend
-                                            {
-                                              FrameCoord frame; ///////////////////////////////////////////OOO need a better ctor for FrameCoord
-                                              frame.absoluteNominalTime = core.currPoint;
-                                              frame.modelPortIDX = portIDX;
-                                              return {nullptr
-                                                     ,& core.dispatcher->getJobTicketFor(frame)
-                                                     };
-                                            }));
+                   SRC::transform(
+                     [portIDX](PipeFrameTick& core) -> TicketDepend
+                      {
+                        FrameCoord frame{core.currPoint, portIDX};
+                        return {nullptr
+                               ,& core.dispatcher->getJobTicketFor(frame)
+                               };
+                      }));
         }
       
       
@@ -303,16 +302,17 @@ namespace engine {
       expandPrerequisites()
         {
           return buildPipeline (
-                   this->expandAll([](TicketDepend& currentLevel)
-                                            {
-                                              JobTicket* parent = currentLevel.second;
-                                              return lib::transformIterator (parent->getPrerequisites()
-                                                                            ,[&parent](JobTicket& prereqTicket)
-                                                                                {                  // parent shifted up to first pos
-                                                                                  return TicketDepend{parent, &prereqTicket};
-                                                                                }
-                                                                            );
-                                            }));
+                   SRC::expandAll(
+                     [](TicketDepend& currentLevel)
+                      {
+                        JobTicket* parent = currentLevel.second;
+                        return lib::transformIterator (parent->getPrerequisites()
+                                                      ,[&parent](JobTicket& prereqTicket)
+                                                          {                  // parent shifted up to first pos
+                                                            return TicketDepend{parent, &prereqTicket};
+                                                          }
+                                                      );
+                      }));
         }
       
       /**
@@ -323,10 +323,11 @@ namespace engine {
       feedTo (play::DataSink sink)
         {
           return terminatePipeline (
-                   this->transform([sink](TicketDepend& currentLevel)
-                                            {
-                                              return currentLevel.second;   ///////////////////////////////OOO construct a JobPlanning here
-                                            }));
+                   SRC::transform(
+                     [sink](TicketDepend& currentLevel)
+                      {
+                        return currentLevel.second;   ///////////////////////////////OOO construct a JobPlanning here
+                      }));
         }
       
       

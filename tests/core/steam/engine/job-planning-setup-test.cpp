@@ -31,6 +31,7 @@
 
 #include "lib/format-cout.hpp"///////////////////////TODO
 #include "lib/iter-tree-explorer.hpp"
+#include "lib/format-string.hpp"
 #include "lib/format-util.hpp"
 #include "lib/util.hpp"
 
@@ -41,6 +42,7 @@ using lib::treeExplore;
 using lib::time::PQuant;
 using lib::time::FrameRate;
 using util::isnil;
+using util::_Fmt;
 
 
 namespace steam {
@@ -75,8 +77,10 @@ namespace test  {
    *       - invoke the dispatcher to retrieve the top-level JobTicket
    *       - expander function to explore prerequisite JobTickets
    *       - integration: generate a complete sequence of (dummy)Jobs
-   *       - scaffolding and mocking used for this test 
-   * 
+   *       - scaffolding and mocking used for this test
+   * @remark the »pipeline« is implemented as »Lumiera Forward Iterator«
+   *       and thus forms a chain of on-demand processing. At the output side,
+   *       fully defined render Jobs can be retrieved, ready for scheduling.
    * @todo WIP-WIP 4/2023
    * 
    * @see DispatcherInterface_test
@@ -106,6 +110,7 @@ namespace test  {
           Time nominalTime = lib::test::randTime();
           int additionalKey = rand() % 5000;
           
+          // (1) mocked render Job
           MockJob mockJob{nominalTime, additionalKey};
           mockJob.triggerJob();
           CHECK (MockJob::was_invoked (mockJob));
@@ -113,7 +118,7 @@ namespace test  {
           CHECK (nominalTime   == MockJob::invocationNominalTime (mockJob) );
           CHECK (additionalKey == MockJob::invocationAdditionalKey(mockJob));
           
-          //  Build a simple Segment at [10s ... 20s[
+          // (2) Build a mocked Segment at [10s ... 20s[
           MockSegmentation mockSegs{MakeRec()
                                      .attrib ("start", Time{0,10}          // start time (inclusive) of the Segment at 10sec
                                              ,"after", Time{0,20}          // the Segment ends *before* 20sec
@@ -140,6 +145,7 @@ namespace test  {
           CHECK (123 == MockJob::invocationAdditionalKey (jobM));          // verify each job was invoked and linked to the correct spec,
           CHECK (555 == MockJob::invocationAdditionalKey (jobP));          // indicating that in practice it will activate the proper render node
           
+          // (3) demonstrate mocked frame dispatcher...
           coord.modelPortIDX = 1;
           coord.absoluteNominalTime = Time{0,30};
           MockDispatcher dispatcher;                                       // a complete dispatcher backed by a mock Segment for the whole timeline
@@ -189,10 +195,10 @@ namespace test  {
       void
       accessTopLevelJobTicket()
         {
-          play::Timings timings (FrameRate::PAL);
           MockDispatcher dispatcher;
-          auto [port,sink] = dispatcher.getDummyConnection(0);
           
+          play::Timings timings (FrameRate::PAL);
+          auto [port,sink] = dispatcher.getDummyConnection(0);
           auto pipeline = dispatcher.forCalcStream (timings)
                                     .timeRange(Time{200,0}, Time{300,0})
                                     .pullFrom (port);
@@ -201,8 +207,7 @@ namespace test  {
           CHECK (nullptr == pipeline->first);       // is a top-level ticket
           JobTicket const& ticket = *pipeline->second;
           
-          FrameCoord dummy;
-          dummy.absoluteNominalTime = Time::ZERO;   // actual time point is irrelevant here
+          FrameCoord dummy{Time::ZERO};          // actual time point is irrelevant here
           Job job = ticket.createJobFor(dummy);
           CHECK (dispatcher.verify(job, port, sink));
         }
@@ -212,7 +217,38 @@ namespace test  {
       void
       exploreJobTickets()
         {
-          UNIMPLEMENTED ("exploration function");
+          MockDispatcher dispatcher{MakeRec()                                       // define a single segment for the complete time axis
+                                     .attrib("mark", 11)                            // the »master job« for each frame has pipeline-ID ≔ 11
+                                     .scope(MakeRec()
+                                             .attrib("mark",22)                     // add a »prerequisite job« with pipeline-ID ≔ 22
+                                           .genNode())
+                                   .genNode()};
+          
+          play::Timings timings (FrameRate::PAL);
+          auto [port,sink] = dispatcher.getDummyConnection(0);
+          auto pipeline = dispatcher.forCalcStream (timings)
+                                    .timeRange(Time{200,0}, Time{300,0})
+                                    .pullFrom (port)
+                                    .expandPrerequisites();
+          
+          // the first element is identical to previous test
+          CHECK (not isnil (pipeline));
+          CHECK (nullptr == pipeline->first);
+          Job job = pipeline->second->createJobFor(FrameCoord{});
+          CHECK (11 == job.parameter.invoKey.part.a);
+          
+          auto visualise = [](auto& pipeline) -> string
+                              {
+                                FrameCoord frame{pipeline.currPoint};               // can access the embedded PipeFrameTick core to get "currPoint" (nominal time)
+                                Job job = pipeline->second->createJobFor(frame);    // looking always at the second element, which is the current JobTicket
+                                TimeValue nominalTime{job.parameter.nominalTime};   // job parameter holds the microseconds (gavl_time_t)
+                                int32_t mark = job.parameter.invoKey.part.a;        // the MockDispatcher places the given "mark" here
+                                return _Fmt{"J(%d|%s)"} % mark % nominalTime;
+                              };
+          CHECK (visualise(pipeline) == "J(11|200ms)"_expect);                      // first job in pipeline is at t=200ms and has mark=11 (it's the master Job for this frame)
+          
+          CHECK (materialise (pipeline.transform (visualise))
+                 == "J(11|200ms)-J(22|200ms)-J(11|240ms)-J(22|240ms)-J(11|280ms)-J(22|280ms)"_expect);
         }
       
       

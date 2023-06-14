@@ -268,9 +268,9 @@ namespace test   {
       
       Segmentation::adaptSpecification ([times](Spec const& spec)
                                                 {
-                                                  return Spec{ExitNodes{times, spec[0]}};
-                                                });
-    }
+                                                  return Spec{ExitNodes(times, spec[0])};
+                                                });        // vector with <times> copies of spec[0]
+    }                                                     //  (Warning: use parens, not braces for this ctor...)
   
   
   /**

@@ -88,8 +88,7 @@ namespace test  {
             
             JobTicket const& ticket = seg.jobTicket(0);
             
-            FrameCoord coord;
-            coord.absoluteNominalTime = Time(0,15);
+            FrameCoord coord{Time(0,15)};
             Job job = ticket.createJobFor(coord);
             CHECK (MockJobTicket::isAssociated (job, ticket));
             
@@ -128,8 +127,7 @@ namespace test  {
       void
       verify_MockJobTicket()
         {
-          FrameCoord coord;
-          coord.absoluteNominalTime = lib::test::randTime();
+          FrameCoord coord{lib::test::randTime()};
           
           // build a render job to do nothing....
           Job nopJob = JobTicket::NOP.createJobFor(coord);
@@ -158,9 +156,8 @@ namespace test  {
       void
       verify_MockSegmentation()
         {
-          FrameCoord coord;
           Time someTime = lib::test::randTime();
-          coord.absoluteNominalTime = someTime;
+          FrameCoord coord{someTime};
           //
           //-----------------------------------------------------------------/// Empty default Segmentation
           {
@@ -392,8 +389,7 @@ namespace test  {
       void
       verify_MockDispatcherSetup()
         {
-          FrameCoord frame;
-          frame.absoluteNominalTime = Time{0,30};
+          FrameCoord frame{Time{0,30}};
           {
             MockDispatcher dispatcher;
             // automatically generates some fake connection points...
