@@ -1148,7 +1148,7 @@ namespace test{
       
       
       /** @test ability to wrap and handle IterSource based iteration.
-       * Contrary to the preceding test case, here the point is to _base the whole pipleine_
+       * Contrary to the preceding test case, here the point is to _base the whole pipeline_
        * on a data source accessible through the IterSource (VTable based) interface. The notable
        * point with this technique is the ability to use some _extended sub interface of IterSource_
        * and to rely on this interface to implement some functor bound into the TreeExplorer pipeline.
@@ -1168,19 +1168,19 @@ namespace test{
               virtual PrivateSource* expandChildren()  const  =0;
             };
           
-          class VerySpecivicIter
+          class VerySpecificIter
             : public WrappedLumieraIter<NumberSequence
             ,        PrivateSource     >
             {
             public:
-              VerySpecivicIter(uint start)
+              VerySpecificIter(uint start)
                 : WrappedLumieraIter(NumberSequence{start})
                 { }
               
               virtual PrivateSource*
               expandChildren()  const override
                 {
-                  return new VerySpecivicIter{*wrappedIter() - 2};
+                  return new VerySpecificIter{*wrappedIter() - 2};
                 }
               
               uint
@@ -1194,7 +1194,7 @@ namespace test{
           // simple standard case: create a new heap allocated IterSource implementation.
           // TreeExplorer will take ownership (by smart-ptr) and build a Lumiera Iterator front-End
           CHECK ("7-6-5-4-3-2-1" == materialise (
-                                      treeExplore(new VerySpecivicIter{7})));
+                                      treeExplore(new VerySpecificIter{7})));
           
           
           // missing source detected
@@ -1203,7 +1203,7 @@ namespace test{
           
           
           // attach to an IterSource living here in local scope...
-          VerySpecivicIter vsit{5};
+          VerySpecificIter vsit{5};
           
           // ...and build a child expansion on top, which calls through the PrivateSource-API
           // Effectively this means we do not know the concrete type of the "expanded children" iterator,
@@ -1219,17 +1219,17 @@ namespace test{
           CHECK (4 == vsit.currentVal());
           
           CHECK (0 == ii.depth());
-          ii.expandChildren();           // note: calls through source's VTable to invoke VerySpecificIter::expandChildren()
+          ii.expandChildren();             // note: calls through source's VTable to invoke VerySpecificIter::expandChildren()
           CHECK (1 == ii.depth());
           
           CHECK (2 == *ii);
           ++ii;
           CHECK (1 == *ii);
           
-          CHECK (3 == vsit.currentVal());
+          CHECK (4 == vsit.currentVal());  // note: as long as expanded children are alive, the source pipeline is not pulled further
           CHECK (1 == ii.depth());
           ++ii;
-          CHECK (0 == ii.depth());
+          CHECK (0 == ii.depth());         //   ... but now the children were exhausted and thus also the source advanced
           CHECK (3 == *ii);
           CHECK (3 == vsit.currentVal());
           ++ii;

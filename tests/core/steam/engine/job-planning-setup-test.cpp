@@ -213,14 +213,24 @@ namespace test  {
         }
       
       
-      /** @test build and verify the exploration function to discover job prerequisites */
+      /** @test build and verify the exploration function to discover job prerequisites
+       *        - use a setup where the master ExitNode requires a prerequisite ExitNode to be pulled
+       *        - mark the pipeline-IDs, so that both nodes can be distinguished in the resulting Jobs
+       *        - the `expandPrerequisites()` builder function uses JobTicket::getPrerequisites()
+       *        - and this »expander« function is unfolded recursively such that first the source
+       *          appears in the iterator, and as next step the child prerequisites, possibly to
+       *          be unfolded further recursively
+       *        - by design of the iterator pipeline, it is always possible to access the `PipeFrameTick`
+       *        - this corresponds to the top-level JobTicket, which will produce the final frame
+       *        - putting all these information together, proper working can be visualised.
+       */
       void
       exploreJobTickets()
         {
           MockDispatcher dispatcher{MakeRec()                                       // define a single segment for the complete time axis
                                      .attrib("mark", 11)                            // the »master job« for each frame has pipeline-ID ≔ 11
                                      .scope(MakeRec()
-                                             .attrib("mark",22)                     // add a »prerequisite job« with pipeline-ID ≔ 22
+                                             .attrib("mark",22)                     // add a »prerequisite job« marked with pipeline-ID ≔ 22
                                            .genNode())
                                    .genNode()};
           

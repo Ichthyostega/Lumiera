@@ -644,7 +644,8 @@ namespace lib {
      * of this Expander (decorator) is to integrate those "nested child iterators" seamlessly
      * into the overall iteration process; once a child iterator is exhausted, it will be
      * popped and iteration continues with the previous child iterator or finally with
-     * the source iterator wrapped by this decorator.
+     * the source iterator wrapped by this decorator. The source pipeline is only pulled
+     * once the expanded children are exhausted.
      * @remark since we allow a lot of leeway regarding the actual form and definition of the
      *         _expansion functor_, there is a lot of minute technical details, mostly confined
      *         within the _FunTraits traits. For the same reason, we need to prepare two different
@@ -689,14 +690,14 @@ namespace lib {
         expandChildren()
           {
             REQUIRE (this->checkPoint(), "attempt to expand an empty explorer");
+            REQUIRE (invariant());
             
             ResIter expanded{ hasChildren()? expandChild_(*expansions_)
                                            : expandRoot_(*this)};
-            incrementCurrent();   // consume current head element (but don't clean-up)
             if (not isnil(expanded))
-              expansions_.push (move(expanded));
+              expansions_.push (move(expanded)); // note: source of expansion retained
             else
-              dropExhaustedChildren(); // clean-up only here to preserve the logical depth
+              iterNext();  // expansion unsuccessful, thus consume source immediately
             
             ENSURE (invariant());
           }
@@ -773,6 +774,12 @@ namespace lib {
         
         
       protected:
+        bool
+        hasChildren()  const
+          {
+            return 0 < depth();
+          }
+        
         /** @internal accessor for downstream layers to allow close collaboration */
         ResIter&
         accessCurrentChildIter()
@@ -785,13 +792,10 @@ namespace lib {
         dropExhaustedChildren()
           {
             while (not invariant())
-              ++expansions_;
-          }
-        
-        bool
-        hasChildren()  const
-          {
-            return 0 < depth();
+              {
+                ++expansions_;      // pop expansion stack (to reinstate invariant)
+                incrementCurrent(); // consume source of innermost expansion
+              }
           }
       };
     
