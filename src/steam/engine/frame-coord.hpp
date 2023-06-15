@@ -69,8 +69,6 @@ namespace engine {
       TimeVar  absoluteNominalTime;
       FrameCnt absoluteFrameNumber;
       
-      TimeVar realTimeDeadline;
-      
       size_t  modelPortIDX;
       
       
@@ -78,7 +76,6 @@ namespace engine {
       FrameCoord()
         : absoluteNominalTime{Time::NEVER}
         , absoluteFrameNumber{std::numeric_limits<FrameCnt>::max()}
-        , realTimeDeadline{Time::NEVER}
         , modelPortIDX{0}
         { }
       
@@ -86,19 +83,11 @@ namespace engine {
       FrameCoord (TimeValue nominalTime, size_t portIDX =0)
         : absoluteNominalTime{nominalTime}
         , absoluteFrameNumber{std::numeric_limits<FrameCnt>::max()}
-        , realTimeDeadline{Time::NEVER}
         , modelPortIDX{portIDX}
         { }
       
       // using default copy operations
       
-      /** @remarks sometimes we use NIL frame coordinate records
-       *  to mark an exceptional condition, e.g. playback stop */
-      bool
-      isDefined()  const
-        {
-          return realTimeDeadline != Time::NEVER;
-        }
     };
   
   
