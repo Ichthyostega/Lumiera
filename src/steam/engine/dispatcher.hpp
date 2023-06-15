@@ -324,7 +324,7 @@ namespace engine {
        * @return Iterator to pull a sequence of render jobs, ready for processing
        */
       auto
-      feedTo (play::DataSink sink)
+      feedTo (play::DataSink& sink)
         {
           return terminatePipeline (
                    SRC::transform(

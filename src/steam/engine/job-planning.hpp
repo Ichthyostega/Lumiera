@@ -49,6 +49,7 @@
 #include "vault/engine/job.h"
 #include "steam/engine/job-ticket.hpp"
 #include "steam/engine/frame-coord.hpp"
+#include "steam/play/output-slot.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "lib/iter-explorer.hpp"
 //#include "lib/iter-adapter.hpp"
@@ -60,7 +61,8 @@ namespace steam {
 namespace engine {
   
   namespace error = lumiera::error;
-  
+
+  using play::DataSink;
   using lib::time::TimeValue;
   using util::unConst;
   using util::isnil;
@@ -84,15 +86,15 @@ namespace engine {
    */
   class JobPlanning
     {
-//    JobTicket::ExplorationState plannedOperations_;
-      FrameCoord                 point_to_calculate_;
+      FrameCoord frameCoord_;
+      JobTicket& jobTicket_;
+      DataSink&  outputSink_;
      
     public:
-      /** by default create the bottom element of job planning,
-       *  which happens to to plan no job at all. It is represented
-       *  using an inactive state core (default constructed)
-       */
-      JobPlanning()
+      JobPlanning(FrameCoord frame, JobTicket& ticket, DataSink& sink)
+        : frameCoord_{frame}
+        , jobTicket_{ticket}
+        , outputSink_{sink}
         { }
       
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
@@ -109,19 +111,16 @@ namespace engine {
       // using the standard copy operations
       
       
-      /** cast and explicate this job planning information
-       *  to create a frame job descriptor, ready to be scheduled
+      /**
+       * Connect and complete the planning information assembled thus far
+       * to create a frame job descriptor, ready to be scheduled.
        */
-      operator Job()
+      Job
+      buildJob()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
-          if (isnil (plannedOperations_))
-            throw error::Logic("Attempt to plan a frame-Job based on a missing, "
-                               "unspecified, exhausted or superseded job description"
-                              ,error::LUMIERA_ERROR_BOTTOM_VALUE);
-          
-          return plannedOperations_->createJobFor (point_to_calculate_);
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
+          Job job = jobTicket_.createJobFor (frameCoord_);
+                                                       //////////////////////////////////////////////////////TICKET #1295 : somehow package and communicate the DataSink info
+          return job;
         }
       
       

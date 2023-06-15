@@ -33,7 +33,7 @@
 //#include "steam/engine/procnode.hpp"
 //#include "steam/play/dummy-play-connection.hpp"
 //#include "steam/mobject/model-port.hpp"
-//#include "steam/engine/dispatcher.hpp"
+#include "steam/engine/mock-dispatcher.hpp"
 #include "steam/play/timings.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"
@@ -58,7 +58,7 @@ namespace steam {
 namespace engine{
 namespace test  {
   
-//  using lib::time::FrameRate;
+  using lib::time::FrameRate;
 //  using lib::time::Duration;
 //  using lib::time::Offset;
 //  using lib::time::TimeVar;
@@ -108,6 +108,19 @@ namespace test  {
       void
       simpleUsage()
         {
+          MockDispatcher dispatcher;
+          play::Timings timings (FrameRate::PAL);
+          auto [port,sink] = dispatcher.getDummyConnection(1);
+          
+          Time nominalTime{200,0};
+          size_t portIDX = dispatcher.resolveModelPort (port);
+          FrameCoord frame{nominalTime, portIDX};
+          JobTicket& ticket = dispatcher.getJobTicketFor(frame);
+          
+          JobPlanning plan{frame,ticket,sink};
+          Job job = plan.buildJob();
+          
+          CHECK (dispatcher.verify (job, port, sink));
         }
       
       
