@@ -21,40 +21,20 @@
 */
 
 /** @file job-planning.hpp
- ** The "mechanics" of discovering and planning frame calculation jobs.
- ** This is a rather abstract chunk of code, to deal especially with the technicalities
- ** of \em organising the discovery of prerequisites and of joining all the discovered operations
- ** into a sequence of planning steps. The net result is to present a <i>sequence of job planing</i>
- ** to the user, while actually encapsulating a depth-first tree exploration, which proceeds on demand.
- ** 
- ** # participating elements
- ** All of these job planning operations are implemented on top of the JobTicket. This is where to look
- ** for "actual" implementation code. Here, within this header, the following entities cooperate to
- ** create a simple sequence out of this implementation level tasks:
- ** - JobPlanningSequence is the entry point for client code: it allows to generate a sequence of jobs
- ** - JobPlanning is a view on top of all the collected planning information for a single job
- ** - PlanningState is an iterator, successively exposing a sequence of JobPlanning views
- ** - steam::engine::expandPrerequisites(JobPlanning const&) is the operation to explore further prerequisite Jobs recursively
- ** - PlanningStepGenerator yields the underlying "master beat": a sequence of frame locations to be planned
- ** 
- ** # how the PlanningState (sequence) is advanced
- ** PlanningState is an iterator to expose a sequence of JobPlanning elements. On the implementation level,
- ** there is always just a single JobPlanning element, which represents the \em current element; this element
- ** lives as "state core" within the PlanningState object. Advancing to the next JobPlanning element (i.e. to
- ** consider the next job or prerequisite job to be planned for scheduling) is performed through the iteration
- ** control API exposed by JobPlanning (the functions `checkPoint()`, `yield()` and `iterNext()`. Actually,
- ** these functions are invoked through the depth-first tree exploration performed by JobPlaningSequence.
- ** The implementation of these invocations can be found within the IterExplorer strategy
- ** lib::iter_explorer::RecursiveSelfIntegration. The net result is
- ** - the current element is always accessed through `yield()`
- ** - advancing to the next element happens \em either
- **   
- **   - by invoking `iterNext()` (when processing a sequence of sibling job prerequisites)
- **   - by invoking `integrate()` (when starting to explore the next level of children) 
+ ** Aggregation of planning data to generate actual frame calculation jobs.
+ ** These render jobs are generated periodically by an ongoing process while rendering is underway.
+ ** For this purpose, each CalcStream of the play/render process operates a RenderDrive with a
+ ** _job-planning pipeline_, rooted at the »master beat« as defined by the frame grid from the
+ ** Timings spec of the current render process. This pipeline will assemble the specifications
+ ** for the render jobs and thereby possibly discover prerequisites, which must be calculated first.
+ ** From a usage point of view, the _job-planning pipeline_ is an _iterator:_ for each independent
+ ** calculation step a new JobPlanning record appears at the output side of the pipeline, holding
+ ** all collected data, sufficient to generate the actual job definition, which can then be
+ ** handed over to the Scheduler.  
  ** 
  ** @warning as of 4/2023 a complete rework of the Dispatcher is underway ///////////////////////////////////////////TICKET #1275
  ** 
- ** @see DispatcherInterface_test simplified usage examples
+ ** @see JobPlanning_test
  ** @see JobTicket
  ** @see Dispatcher
  ** @see EngineService
@@ -70,8 +50,8 @@
 #include "steam/engine/job-ticket.hpp"
 #include "steam/engine/frame-coord.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/iter-explorer.hpp"
-#include "lib/iter-adapter.hpp"
+//#include "lib/iter-explorer.hpp"
+//#include "lib/iter-adapter.hpp"
 #include "lib/util.hpp"
 
 
@@ -100,13 +80,11 @@ namespace engine {
    * on a recursive exploration of the corresponding JobTicket, which acts as
    * a general blueprint for creating jobs within this segment of the timeline.
    * 
-   * @remarks on the implementation level, JobPlanning is used as "state core"
-   *          for a PlanningState iterator, to visit and plan subsequently all
-   *          the individual operations necessary to render a timeline chunk.
+   * @todo WIP-WIP 6/2023 reworking the job-planning pipeline for »PlaybackVerticalSlice«
    */
   class JobPlanning
     {
-      JobTicket::ExplorationState plannedOperations_;
+//    JobTicket::ExplorationState plannedOperations_;
       FrameCoord                 point_to_calculate_;
      
     public:
@@ -117,6 +95,7 @@ namespace engine {
       JobPlanning()
         { }
       
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
       /** further job planning can be initiated by continuing off a given previous planning state.
        *  This is how the forks are created, expanding into a multitude of prerequisites for
        *  the job in question.
@@ -125,6 +104,7 @@ namespace engine {
         : plannedOperations_(startingPoint)
         , point_to_calculate_(requestedFrame)
         { }
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
       
       // using the standard copy operations
       
@@ -134,15 +114,18 @@ namespace engine {
        */
       operator Job()
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
           if (isnil (plannedOperations_))
             throw error::Logic("Attempt to plan a frame-Job based on a missing, "
                                "unspecified, exhausted or superseded job description"
                               ,error::LUMIERA_ERROR_BOTTOM_VALUE);
           
           return plannedOperations_->createJobFor (point_to_calculate_);
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
         }
       
       
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : likely to become obsolete  
       /** build a new JobPlanning object,
        * set to explore the prerequisites
@@ -159,8 +142,6 @@ namespace engine {
         }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : likely to become obsolete  
       
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
       /** integrate another chain of prerequisites into the current evaluation line.
        *  Further evaluation will start to visit prerequisites from the new starting point,
        *  and return to the current evaluation chain later on exhaustion of the side chain.
@@ -199,13 +180,13 @@ namespace engine {
           plannedOperations_.pullNext();
           plannedOperations_.markTreeLocation();
         }
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
     };
   
   
   
   
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
   /**
    * iterator, exposing a sequence of JobPlanning elements
    */
@@ -286,6 +267,7 @@ namespace engine {
                     calculationStep.discoverPrerequisites());
     return newSubEvaluation;
   }
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
   
   
   
@@ -323,7 +305,6 @@ namespace engine {
   
   
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
   /**
    * Generate a sequence of starting points for Job planning,
    * based on the underlying frame grid. This sequence will be
@@ -457,6 +438,7 @@ namespace engine {
             >>= expandPrerequisites)                    // "flat map" (monad operation)
         { }
     };
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
   
   
   

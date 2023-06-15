@@ -91,6 +91,7 @@ namespace engine {
   class Dispatcher
     : public FrameLocator
     {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
       struct JobBuilder
         {
@@ -109,6 +110,7 @@ namespace engine {
             }
         };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
       struct PipeFrameTick;
       
       template<class IT>
@@ -161,6 +163,7 @@ namespace engine {
       
       
     protected:
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
       /** core dispatcher operation: based on the coordinates of a reference point,
        *  establish binding frame number, nominal time and real (wall clock) deadline.
        * @return new FrameCoord record (copy), with the nominal time, frame number
@@ -187,6 +190,7 @@ namespace engine {
       ////////////TODO: remaining issues
       ////////////    - the TimeAnchor needs to be created directly from the JobParameter. No mutable state!
       ////////////    - but this leads to a lot of duplicated Timings records, unless we rewrite the TimeAnchor to be noncopyable and use a Timings const&
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
       
       virtual JobTicket& accessJobTicket (size_t, TimeValue nominalTime)   =0;
     };

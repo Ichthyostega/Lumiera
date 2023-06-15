@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file node-graph-attachment-test.cpp
- ** unit test \ref NodeGraphAttachment_test
+/** @file fixture-segment-test.cpp
+ ** unit test \ref FixtureSegment_test
  */
 
 

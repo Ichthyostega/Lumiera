@@ -135,12 +135,14 @@ namespace test  {
           CHECK (nopJob.parameter.nominalTime == coord.absoluteNominalTime);
           InvocationInstanceID empty; ///////////////////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
           CHECK (lumiera_invokey_eq (&nopJob.parameter.invoKey, &empty));
+          CHECK (MockJob::isNopJob(nopJob));                                           // this diagnostic helper checks the same conditions as done here explicitly
           
           MockJobTicket mockTicket;
-          CHECK (mockTicket.discoverPrerequisites().empty());
+          CHECK (not mockTicket.empty());
           Job mockJob = mockTicket.createJobFor (coord);
           CHECK (    mockTicket.verify_associated (mockJob));                          // proof by invocation hash : is indeed backed by this JobTicket
           CHECK (not mockTicket.verify_associated (nopJob));                           // ...while some random other job is not related
+          CHECK (not MockJob::isNopJob(mockJob));
         }
       
       
