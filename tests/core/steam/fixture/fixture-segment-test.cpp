@@ -108,7 +108,7 @@ namespace test  {
           Segment const& seg = segmentation[Time::ANYTIME];     //  thus accessed time point is irrelevant
           
           // verify mapped JobTicket is assembled according to above spec...
-          auto getMarker = [](JobTicket const& ticket)
+          auto getMarker = [](JobTicket& ticket)
                               {
                                 engine::FrameCoord dummyFrame;
                                 Job job = ticket.createJobFor(dummyFrame);

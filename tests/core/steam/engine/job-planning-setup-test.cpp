@@ -205,7 +205,7 @@ namespace test  {
           
           CHECK (not isnil (pipeline));
           CHECK (nullptr == pipeline->first);       // is a top-level ticket
-          JobTicket const& ticket = *pipeline->second;
+          JobTicket& ticket = *pipeline->second;
           
           FrameCoord dummy{Time::ZERO};          // actual time point is irrelevant here
           Job job = ticket.createJobFor(dummy);

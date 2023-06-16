@@ -70,12 +70,22 @@ namespace play {
    *          and the latency/speed requirements of the output.
    */
   Timings::Timings (FrameRate fps)
-    : grid_(buildStandardGridForFramerate(fps))
-    , playbackUrgency (ASAP)
-    , playbackSpeed (1)
-    , scheduledDelivery(Time::NEVER)
-    , outputLatency (Duration::NIL)
+    : grid_{buildStandardGridForFramerate(fps)}
+    , playbackUrgency {ASAP}
+    , playbackSpeed {1}
+    , scheduledDelivery{Time::NEVER}
+    , outputLatency {Duration::NIL}
     { 
+      ENSURE (grid_);
+    }
+  
+  Timings::Timings (FrameRate fps, Time realTimeAnchor)
+    : grid_{buildStandardGridForFramerate(fps)}
+    , playbackUrgency {TIMEBOUND}
+    , playbackSpeed {1}
+    , scheduledDelivery{realTimeAnchor}
+    , outputLatency {Duration::NIL}
+    {
       ENSURE (grid_);
     }
   

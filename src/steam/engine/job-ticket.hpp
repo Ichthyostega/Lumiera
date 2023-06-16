@@ -39,7 +39,7 @@
 #include "vault/engine/job.h"
 #include "steam/engine/frame-coord.hpp"
 #include "steam/engine/exit-node.hpp"
-#include "lib/hierarchy-orientation-indicator.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/linked-elements.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/iter-adapter.hpp"
@@ -56,8 +56,8 @@ namespace engine {
 using vault::engine::Job;
 using vault::engine::JobFunctor;
 using vault::engine::JobClosure;        /////////////////////////////////////////////////////////////////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
+using lib::time::Duration;
 using lib::LinkedElements;
-using lib::OrientationIndicator;
 using util::isnil;
 using lib::HashVal;
 using lib::LUID;
@@ -142,7 +142,9 @@ using lib::LUID;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 : likely to become obsolete
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
       
-      Job createJobFor (FrameCoord coordinates)  const;
+      Job createJobFor (FrameCoord coordinates);
+      
+      Duration getExpectedRuntime();
       
       auto
       getPrerequisites ()

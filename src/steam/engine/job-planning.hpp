@@ -50,6 +50,7 @@
 #include "steam/engine/job-ticket.hpp"
 #include "steam/engine/frame-coord.hpp"
 #include "steam/play/output-slot.hpp"
+#include "steam/play/timings.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "lib/iter-explorer.hpp"
 //#include "lib/iter-adapter.hpp"
@@ -63,7 +64,10 @@ namespace engine {
   namespace error = lumiera::error;
 
   using play::DataSink;
-  using lib::time::TimeValue;
+  using play::Timings;
+  using lib::time::Time;
+  using lib::time::Duration;
+  using lib::time::TimeValue;    ////////TODO for FrameLocator, could be obsolete
   using util::unConst;
   using util::isnil;
   
@@ -97,16 +101,6 @@ namespace engine {
         , outputSink_{sink}
         { }
       
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
-      /** further job planning can be initiated by continuing off a given previous planning state.
-       *  This is how the forks are created, expanding into a multitude of prerequisites for
-       *  the job in question.
-       */
-      JobPlanning (JobTicket::ExplorationState const& startingPoint, FrameCoord requestedFrame)
-        : plannedOperations_(startingPoint)
-        , point_to_calculate_(requestedFrame)
-        { }
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
       
       // using the standard copy operations
       
@@ -121,6 +115,52 @@ namespace engine {
           Job job = jobTicket_.createJobFor (frameCoord_);
                                                        //////////////////////////////////////////////////////TICKET #1295 : somehow package and communicate the DataSink info
           return job;
+        }
+      
+      /**
+       * Calculate the latest time point when to _start_ the job,
+       * so it can still possibly reach the timing goal.
+       * @return time point in wall-clock-time, or Time::ANYTIME if unconstrained
+       */
+      Time
+      determineDeadline(Timings const& timings)
+        {
+          switch (timings.playbackUrgency)
+            {
+            case play::ASAP:
+            case play::NICE:
+              return Time::ANYTIME;
+            
+            case play::TIMEBOUND:
+              return timings.getTimeDue(frameCoord_.absoluteFrameNumber)
+                   - totalLatency(timings);
+            }
+          NOTREACHED ("unexpected playbackUrgency");
+        }
+      
+      /**
+       * Determine a timing buffer for flexibility to allow starting the job
+       * already before its deadline; especially for real-time playback this leeway
+       * is rather limited, and constrained by the earliest time the target buffer
+       * is already allotted and ready to receive data.
+       * @return tolerance duration
+       *         - Duration::NIL if deadline has to be matched with maximum precision
+       *         - Duration::MAX for unlimited leeway to start anytime before the deadline
+       */
+      Duration
+      determineLeeway(Timings const&)
+        {
+          UNIMPLEMENTED ("Job planning logic to establish Leeway for scheduling");
+        }
+      
+      
+    private:
+      Duration
+      totalLatency (Timings const& timings)
+        {
+          return jobTicket_.getExpectedRuntime()
+               + timings.currentEngineLatency()
+               + timings.outputLatency;
         }
       
       
@@ -288,13 +328,13 @@ namespace engine {
           return accessJobTicket (location.modelPortIDX, location.absoluteNominalTime);
         }
       
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : likely to become obsolete  
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : likely to become obsolete  
       bool canContinue (FrameCoord const& location)
         {
 //        return not isEndOfChunk (location.absoluteFrameNumber,
 //                                 location.modelPort);
         }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : likely to become obsolete  
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : likely to become obsolete  
       
     protected:
       virtual JobTicket& accessJobTicket (size_t, TimeValue nominalTime)  =0;

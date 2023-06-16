@@ -34,11 +34,14 @@
 #include "lib/nocopy.hpp"
 #include "lib/hash-value.h"
 #include "lib/iter-adapter-stl.hpp"
+#include "lib/time/timevalue.hpp"
 #include "vault/engine/job.h"              //////////////////////////////////////////////////////////////////TICKET #1295 : rather need a way to retrieve a real JobFunctor building block from the ProcNode
 
 #include <deque>
 
 using lib::HashVal;
+using lib::time::FSecs;        ////TODO using hard wired value
+using lib::time::Duration;
 
 
 namespace steam {
@@ -116,6 +119,13 @@ namespace engine {
         {
           REQUIRE (action_);
           return *action_;            ///////////////////////////////////////////////////////////////////////TICKET #1295 : decision on actual JobFunctor and invocation parameters
+        }
+      
+      Duration
+      getUpperBoundRuntime()  const
+        {
+                                  ///////////////////////////////////////////////////////////////////////////TICKET #1283 : lay foundation how to observe timing behaviour for a render pipeline
+          return Duration{FSecs{1,50}};  // Uh-Oh booo
         }
     };
   

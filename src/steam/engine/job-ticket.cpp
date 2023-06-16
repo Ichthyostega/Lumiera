@@ -39,14 +39,20 @@
 namespace steam {
 namespace engine {
   
-  namespace { // Details...
-    lib::Depend<vault::engine::NopJobFunctor> nopFunctor;
-  } // (END) Details...
-  
-  
   using vault::engine::JobClosure;
   using lib::HashVal;
   using lib::unConst;
+  using lib::time::FSecs;
+  
+  
+  namespace { // Details...
+    lib::Depend<vault::engine::NopJobFunctor> nopFunctor;
+    
+    /* ======== hard wired =================*/
+    const FSecs JOB_MINIMUM_RUNTIME{1,1000};
+    
+  } // (END) Details...
+  
   
   
   
@@ -69,7 +75,7 @@ namespace engine {
    * after the last Builder run created this part of the render network.
    */
   Job
-  JobTicket::createJobFor (FrameCoord coordinates)  const
+  JobTicket::createJobFor (FrameCoord coordinates)
   {
     Time nominalTime = coordinates.absoluteNominalTime;
     if (this->empty())
@@ -85,6 +91,25 @@ namespace engine {
         return Job(functor, invoKey, nominalTime);
       }
   }
+  
+  
+  /**
+   * Use observed runtime values of past job invocations to guess a sensible bound
+   * for the calculation time to expect for next invocation.
+   * @todo 6/2023 placeholder implementation with hard wired values in ExitNode
+   */
+  Duration
+  JobTicket::getExpectedRuntime()
+  {
+    if (this->empty())
+      return Duration{JOB_MINIMUM_RUNTIME};
+    else
+      {
+        REQUIRE (isValid(), "Attempt to determine timings for incomplete or unspecified render plan.");
+        return provision_.exitNode.getUpperBoundRuntime();
+      }
+  }
+  
   
   /**
    * Tag the precomputed invocation ID with the nominal frame time

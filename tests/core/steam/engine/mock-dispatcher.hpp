@@ -85,6 +85,7 @@ namespace test   {
   using util::isnil;
   using util::isSameObject;
   using fixture::Segmentation;
+  using vault::RealClock;
   using vault::engine::Job;
   using vault::engine::JobClosure;
   

@@ -34,6 +34,7 @@
 #include "steam/play/dummy-play-connection.hpp"
 #include "steam/mobject/model-port.hpp"
 #include "steam/engine/dispatcher.hpp"
+#include "steam/engine/time-anchor.hpp"
 #include "steam/play/timings.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"

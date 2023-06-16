@@ -105,6 +105,8 @@ namespace play {
       explicit
       Timings (FrameRate fps);
       
+      Timings (FrameRate fps, Time realTimeAnchor);
+      
       // default copy acceptable
       
       

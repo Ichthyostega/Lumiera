@@ -105,29 +105,6 @@ namespace engine {
       FrameCnt anchorPoint_;
       Time relatedRealTime_;
       
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
- ////////////////////////////////////////////////////////////////////////////////////////////////OOO sensible calculation, but pointless in TimeAnchor
-      static Time
-      expectedTimeofArival (play::Timings const& timings, FrameCnt startFrame, Offset startDelay)
-        {
-          Duration totalLatency = startDelay
-                                + timings.currentEngineLatency()
-                                + timings.outputLatency;
-          TimeVar deadline;
-          switch (timings.playbackUrgency)
-            {
-            case play::ASAP:
-            case play::NICE:
-              deadline = RealClock::now() + totalLatency;
-              break;
-            
-            case play::TIMEBOUND:
-              deadline = timings.getTimeDue(startFrame) - totalLatency;
-              break;
-            }
-          return deadline;
-        }
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
       static Time
       expectedTimeofArival (play::Timings const& timings, FrameCnt startFrame, Offset startDelay)
         {

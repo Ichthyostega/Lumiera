@@ -28,13 +28,13 @@
 
 #include "vault/engine/engine-config.hpp"
 #include "lib/time/timevalue.hpp"
-
-#include <boost/rational.hpp>
+#include "lib/rational.hpp"
 
 
 using boost::rational;
 using lib::time::FrameRate;
 using lib::time::FSecs;
+using util::Rat;
 
 
 namespace vault{
@@ -42,8 +42,7 @@ namespace engine {
   
   namespace { // Hard wired placeholder settings...
     
-    const rational<uint> ONE_THIRD(1,3);
-    const rational<uint> EIGHTY_PERCENT(8,10);
+    const auto EIGHTY_PERCENT = 8_r/10;
     
     const Duration DEFAULT_ENGINE_LATENCY  = EIGHTY_PERCENT * Duration(1, FrameRate{25}); ///////TODO: shouldn't be hard wired and shouldn't be calculated in static/global init
     const Duration DEFAULT_JOB_PLANNING_TURNOVER(FSecs(3,2));

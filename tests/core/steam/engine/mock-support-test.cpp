@@ -86,7 +86,7 @@ namespace test  {
             CHECK (3 == mockSegs.size());
             fixture::Segment const& seg = mockSegs[Time{0,15}];              // access anywhere 10s <= t < 20s
             
-            JobTicket const& ticket = seg.jobTicket(0);
+            JobTicket& ticket = seg.jobTicket(0);
             
             FrameCoord coord{Time(0,15)};
             Job job = ticket.createJobFor(coord);
@@ -174,7 +174,7 @@ namespace test  {
             CHECK (1 == mockSegs.size());
             CHECK (Time::MIN == mockSegs[someTime].start());
             CHECK (Time::MAX == mockSegs[someTime].after());
-            JobTicket const& ticket = mockSegs[someTime].jobTicket(0);
+            JobTicket& ticket = mockSegs[someTime].jobTicket(0);
             CHECK (not util::isSameObject (ticket, JobTicket::NOP));
             
             Job someJob = ticket.createJobFor(coord);                         // JobTicket uses, but does not check the time given in FrameCoord
@@ -328,7 +328,7 @@ namespace test  {
             auto prereq = ticket.getPrerequisites();
             CHECK (not isnil (prereq));
             
-            JobTicket const& preTicket = *prereq;
+            JobTicket& preTicket = *prereq;
             ++prereq;
             CHECK (isnil (prereq));
             
@@ -367,7 +367,7 @@ namespace test  {
                                           return ticket.getPrerequisites();
                                         })
                           .expandAll()
-                          .transform ([&](JobTicket const& ticket)
+                          .transform ([&](JobTicket& ticket)
                                         {
                                           return ticket.createJobFor(coord).parameter.invoKey.part.a;
                                         });

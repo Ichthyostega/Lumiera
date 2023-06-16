@@ -37,7 +37,7 @@
 #include "steam/play/timings.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"
-//#include "lib/format-cout.hpp"
+#include "lib/format-cout.hpp" ///////////////TODO
 //#include "lib/depend.hpp"
 //#include "lib/itertools.hpp"
 //#include "lib/util-coll.hpp"
@@ -131,6 +131,24 @@ namespace test  {
       void
       calculateDeadline()
         {
+          MockDispatcher dispatcher;
+          play::Timings timings (FrameRate::PAL, Time{0,0,5});
+          auto [port,sink] = dispatcher.getDummyConnection(1);
+          
+          Time nominalTime{200,0};
+          size_t portIDX = dispatcher.resolveModelPort (port);
+          FrameCoord frame{nominalTime, portIDX};
+          JobTicket& ticket = dispatcher.getJobTicketFor(frame);
+          
+          JobPlanning plan{frame,ticket,sink};
+          
+          timings.playbackUrgency = play::ASAP;
+          cout << plan.determineDeadline(timings) <<endl;
+          CHECK (Time::ANYTIME == plan.determineDeadline (timings));
+          
+          timings.playbackUrgency = play::TIMEBOUND;
+          ////////TODO where to set the anchor point realTime <-> nominalTime ??
+          cout << plan.determineDeadline(timings) <<endl;
         }
       
       
@@ -141,6 +159,7 @@ namespace test  {
       void
       setupDependentJob()
         {
+          UNIMPLEMENTED ("chained deadlines");
         }
     };
   
