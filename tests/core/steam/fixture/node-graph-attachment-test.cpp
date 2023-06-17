@@ -51,7 +51,7 @@ namespace test  {
    *       - composition of the NodeGraphAttachment including prerequisites
    *       - generation of a complete setup of fake ExitNodes from a test spec.
    * @see steam::fixture::Segment
-   * @see JobPlanningSetup_test
+   * @see JobPlanningPipeline_test
    * @see MockSupport_test
    */
   class NodeGraphAttachment_test : public Test

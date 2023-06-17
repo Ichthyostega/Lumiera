@@ -1,5 +1,5 @@
 /*
-  JobPlanningSetup(Test)  -  structure and setup of the job-planning pipeline
+  JobPlanningPipeline(Test)  -  structure and setup of the job-planning pipeline
 
   Copyright (C)         Lumiera.org
     2023,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file job-planning-setup-test.cpp
- ** unit test \ref CalcStream_test
+/** @file job-planning-pipeline-test.cpp
+ ** unit test \ref JobPlanningPipeline_test
  */
 
 
@@ -89,7 +89,7 @@ namespace test  {
    * @see CalcStream
    * @see RenderDriveS
    */
-  class JobPlanningSetup_test : public Test
+  class JobPlanningPipeline_test : public Test
     {
       
       virtual void
@@ -274,7 +274,7 @@ namespace test  {
   
   
   /** Register this test class... */
-  LAUNCHER (JobPlanningSetup_test, "unit engine");
+  LAUNCHER (JobPlanningPipeline_test, "unit engine");
   
   
   

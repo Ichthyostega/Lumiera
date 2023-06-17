@@ -137,7 +137,7 @@ namespace test   {
    * created by JobTicket::createJobFor(FrameCoord) will be wired
    * with the MockJob functor and can thus be related back to
    * the test specification setup.
-   * @see JobPlanningSetup_test
+   * @see JobPlanningPipeline_test
    * @see DispatcherInterface_test
    */
   class MockJobTicket

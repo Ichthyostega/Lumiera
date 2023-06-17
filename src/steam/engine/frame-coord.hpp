@@ -86,6 +86,12 @@ namespace engine {
         , modelPortIDX{portIDX}
         { }
       
+      FrameCoord (TimeValue nominalTime, FrameCnt frameNr, size_t portIDX =0)
+        : absoluteNominalTime{nominalTime}
+        , absoluteFrameNumber{frameNr}
+        , modelPortIDX{portIDX}
+        { }
+      
       // using default copy operations
       
     };

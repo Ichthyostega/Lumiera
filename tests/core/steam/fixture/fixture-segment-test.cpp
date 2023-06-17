@@ -55,7 +55,7 @@ namespace test  {
    *       - construction of a mocked Segment
    *       - on-demand allocation of a JobTicket for a ModelPort(index)
    * @see steam::fixture::Segment
-   * @see JobPlanningSetup_test
+   * @see JobPlanningPipeline_test
    * @see MockSupport_test
    */
   class FixtureSegment_test : public Test

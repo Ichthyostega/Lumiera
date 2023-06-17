@@ -49,12 +49,16 @@ return: 0
 END
 
 
-PLANNED "Setup for render job planning" JobPlanningSetup_test <<END
+PLANNED "Render job planning calculation" JobPlanning_test <<END
+out-lit: Frame #5 @ ∆200ms
+out-lit: real-time-origin : 0:05:00.000
+out-lit: total latency    : ≺52ms≻
+out-lit: deadline         : 0:05:00.148
 return: 0
 END
 
 
-PLANNED "Render job planning calculation" JobPlanning_test <<END
+PLANNED "Render job planning pipeline setup" JobPlanningPipeline_test <<END
 return: 0
 END
 

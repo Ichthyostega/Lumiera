@@ -60,11 +60,11 @@ namespace test  {
   
   using lib::time::FrameRate;
 //  using lib::time::Duration;
-//  using lib::time::Offset;
+  using lib::time::Offset;
 //  using lib::time::TimeVar;
-//  using lib::time::Time;
+  using lib::time::Time;
 //  using mobject::ModelPort;
-//  using play::Timings;
+  using play::Timings;
   
   namespace { // used internally
     
@@ -95,7 +95,7 @@ namespace test  {
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
            simpleUsage();
            calculateDeadline();
@@ -135,20 +135,39 @@ namespace test  {
           play::Timings timings (FrameRate::PAL, Time{0,0,5});
           auto [port,sink] = dispatcher.getDummyConnection(1);
           
+          FrameCnt frameNr{5};
           Time nominalTime{200,0};
           size_t portIDX = dispatcher.resolveModelPort (port);
-          FrameCoord frame{nominalTime, portIDX};
+          FrameCoord frame{nominalTime, frameNr, portIDX};
           JobTicket& ticket = dispatcher.getJobTicketFor(frame);
           
           JobPlanning plan{frame,ticket,sink};
+
+          // the following calculations are expected to happen....
+          Duration latency = ticket.getExpectedRuntime()
+                           + timings.currentEngineLatency()
+                           + timings.outputLatency;
           
+          Offset nominalOffset (timings.getFrameStartAt(0), timings.getFrameStartAt(frameNr));
+          Time expectedDeadline{timings.scheduledDelivery + nominalOffset - latency};
+          
+          cout << util::_Fmt{"Frame #%d @ %s\n"
+                             "real-time-origin : %s\n"
+                             "total latency    : %s\n"
+                             "deadline         : %s"}
+                            % frameNr % nominalOffset
+                            % timings.scheduledDelivery
+                            % latency
+                            % plan.determineDeadline(timings)
+               << endl;
+          CHECK (plan.determineDeadline(timings) == expectedDeadline);
+          CHECK (timings.scheduledDelivery == Time(0,0,5)  );
+          CHECK (timings.playbackUrgency == play::TIMEBOUND);
+          
+          // But when switching form "timebound" to "best effort"...
           timings.playbackUrgency = play::ASAP;
-          cout << plan.determineDeadline(timings) <<endl;
           CHECK (Time::ANYTIME == plan.determineDeadline (timings));
-          
-          timings.playbackUrgency = play::TIMEBOUND;
-          ////////TODO where to set the anchor point realTime <-> nominalTime ??
-          cout << plan.determineDeadline(timings) <<endl;
+          // ... no deadline is calculated at all
         }
       
       

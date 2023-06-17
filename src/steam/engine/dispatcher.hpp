@@ -289,7 +289,7 @@ namespace engine {
                    SRC::transform(
                      [portIDX](PipeFrameTick& core) -> TicketDepend
                       {
-                        FrameCoord frame{core.currPoint, portIDX};
+                        FrameCoord frame{core.currPoint, core.frameNr, portIDX};
                         return {nullptr
                                ,& core.dispatcher->getJobTicketFor(frame)
                                };

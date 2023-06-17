@@ -155,16 +155,16 @@ namespace time {
      *  by quantising the given time value 
      */
     void
-    Frames::rebuild (FrameNr& framecnt, QuantR quantiser, TimeValue const& rawTime)
+    Frames::rebuild (FrameNr& frameNr, QuantR quantiser, TimeValue const& rawTime)
     {
-      framecnt.setValueRaw (quantiser.gridPoint (rawTime));
+      frameNr.setValueRaw (quantiser.gridPoint (rawTime));
     }
     
     /** calculate the time point denoted by this frame count */
     TimeValue 
-    Frames::evaluate (FrameNr const& framecnt, QuantR quantiser)
+    Frames::evaluate (FrameNr const& frameNr, QuantR quantiser)
     {
-      return quantiser.timeOf (framecnt);
+      return quantiser.timeOf (frameNr);
     }
 
     

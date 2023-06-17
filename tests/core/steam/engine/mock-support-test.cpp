@@ -54,7 +54,7 @@ namespace test  {
    *       - a mocked JobTicket, generating mock render jobs
    *       - configurable test setup for a mocked Segmentation datastructure
    *       - configurable setup of a complete frame Dispatcher
-   * @see JobPlanningSetup_test
+   * @see JobPlanningPipeline_test
    * @see Dispatcher
    * @see vault::engine::Job
    * @see steam::fixture::Segmentation

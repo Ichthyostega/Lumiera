@@ -39,7 +39,7 @@
  ** @todo this was invented in 2012 -- but development of the player subsystem stalled thereafter.
  ** 
  ** @see mock-dispatcher.hpp
- ** @see JobPlanningSetup_test
+ ** @see JobPlanningPipeline_test
  */
 
 
