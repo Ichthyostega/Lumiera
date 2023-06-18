@@ -54,6 +54,7 @@
 #include "lib/time/timevalue.hpp"
 //#include "lib/iter-explorer.hpp"
 //#include "lib/iter-adapter.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
 
@@ -89,16 +90,17 @@ namespace engine {
    * @todo WIP-WIP 6/2023 reworking the job-planning pipeline for »PlaybackVerticalSlice«
    */
   class JobPlanning
+    : util::MoveOnly
     {
-      FrameCoord frameCoord_;
-      JobTicket& jobTicket_;
-      DataSink&  outputSink_;
+      JobTicket&      jobTicket_;
+      Time     const& nominalTime_;
+      FrameCnt const& frameNr_;
      
     public:
-      JobPlanning(FrameCoord frame, JobTicket& ticket, DataSink& sink)
-        : frameCoord_{frame}
-        , jobTicket_{ticket}
-        , outputSink_{sink}
+      JobPlanning(JobTicket& ticket, Time const& nominalTime, FrameCnt const& frameNr)
+        : jobTicket_{ticket}
+        , nominalTime_{nominalTime}
+        , frameNr_{frameNr}
         { }
       
       
@@ -112,7 +114,7 @@ namespace engine {
       Job
       buildJob()
         {
-          Job job = jobTicket_.createJobFor (frameCoord_.absoluteNominalTime);
+          Job job = jobTicket_.createJobFor (Time{nominalTime_});
                                                        //////////////////////////////////////////////////////TICKET #1295 : somehow package and communicate the DataSink info
           return job;
         }
@@ -132,7 +134,7 @@ namespace engine {
               return Time::ANYTIME;
             
             case play::TIMEBOUND:
-              return timings.getTimeDue(frameCoord_.absoluteFrameNumber)
+              return timings.getTimeDue(frameNr_)
                    - totalLatency(timings);
             }
           NOTREACHED ("unexpected playbackUrgency");

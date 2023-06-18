@@ -112,12 +112,12 @@ namespace test  {
           play::Timings timings (FrameRate::PAL);
           auto [port,sink] = dispatcher.getDummyConnection(1);
           
-          Time nominalTime{200,0};
+          FrameCnt frameNr{5};
+          TimeVar nominalTime{Time{200,0}};
           size_t portIDX = dispatcher.resolveModelPort (port);
           JobTicket& ticket = dispatcher.getJobTicketFor(portIDX, nominalTime);
           
-          FrameCoord frame{nominalTime, portIDX}; /////////////////////////////OOO replace FrameCoord
-          JobPlanning plan{frame,ticket,sink};
+          JobPlanning plan{ticket,nominalTime,frameNr};
           Job job = plan.buildJob();
           
           CHECK (dispatcher.verify (job, port, sink));
@@ -140,8 +140,7 @@ namespace test  {
           size_t portIDX = dispatcher.resolveModelPort (port);
           JobTicket& ticket = dispatcher.getJobTicketFor(portIDX, nominalTime);
           
-          FrameCoord frame{nominalTime, frameNr, portIDX}; /////////////////////////////OOO replace FrameCoord
-          JobPlanning plan{frame,ticket,sink};
+          JobPlanning plan{ticket,nominalTime,frameNr};
 
           // the following calculations are expected to happen....
           Duration latency = ticket.getExpectedRuntime()
