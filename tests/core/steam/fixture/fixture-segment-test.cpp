@@ -110,8 +110,7 @@ namespace test  {
           // verify mapped JobTicket is assembled according to above spec...
           auto getMarker = [](JobTicket& ticket)
                               {
-                                engine::FrameCoord dummyFrame;
-                                Job job = ticket.createJobFor(dummyFrame);
+                                Job job = ticket.createJobFor(Time::ANYTIME);
                                 return job.parameter.invoKey.part.a;
                               };
           

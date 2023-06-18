@@ -53,10 +53,12 @@ namespace engine {
       
       /* ==== Dispatcher interface ==== */
       
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
       FrameCoord locateRelative (FrameCoord const&, FrameCnt frameOffset) override;
       bool       isEndOfChunk    (FrameCnt, ModelPort port)               override;
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
       size_t     resolveModelPort (ModelPort)                      override;
-      JobTicket& accessJobTicket  (size_t, TimeValue nominalTime)  override;
+      JobTicket& getJobTicketFor  (size_t, TimeValue nominalTime)  override;
       
     protected:
       /** timerange covered by this RenderGraph */

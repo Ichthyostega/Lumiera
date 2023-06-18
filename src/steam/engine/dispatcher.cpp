@@ -37,7 +37,6 @@ namespace steam {
 namespace engine {
 
   Dispatcher::~Dispatcher() { }  // emit VTables and Typeinfo here....
-  FrameSequencer::~FrameSequencer() { }
   
   
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...

@@ -36,6 +36,7 @@
 namespace steam {
 namespace engine {
   
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
   /** */
   FrameCoord
   DispatchTable::locateRelative (FrameCoord const&, FrameCnt frameOffset)
@@ -48,9 +49,10 @@ namespace engine {
   {
     UNIMPLEMENTED ("determine when to finish a planning chunk");
   }
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
   
   JobTicket&
-  DispatchTable::accessJobTicket (size_t, TimeValue nominalTime)
+  DispatchTable::getJobTicketFor (size_t, TimeValue nominalTime)
   {
     UNIMPLEMENTED ("hook into the real implementation of the model backbone / segmentation");
   }

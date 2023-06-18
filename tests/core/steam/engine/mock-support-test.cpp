@@ -88,8 +88,7 @@ namespace test  {
             
             JobTicket& ticket = seg.jobTicket(0);
             
-            FrameCoord coord{Time(0,15)};
-            Job job = ticket.createJobFor(coord);
+            Job job = ticket.createJobFor (Time{0,15});
             CHECK (MockJobTicket::isAssociated (job, ticket));
             
             job.triggerJob();
@@ -127,19 +126,19 @@ namespace test  {
       void
       verify_MockJobTicket()
         {
-          FrameCoord coord{lib::test::randTime()};
+          auto frameTime = lib::test::randTime();
           
           // build a render job to do nothing....
-          Job nopJob = JobTicket::NOP.createJobFor(coord);
+          Job nopJob = JobTicket::NOP.createJobFor (frameTime);
           CHECK (INSTANCEOF (vault::engine::NopJobFunctor, static_cast<JobClosure*> (nopJob.jobClosure)));   //////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
-          CHECK (nopJob.parameter.nominalTime == coord.absoluteNominalTime);
+          CHECK (nopJob.parameter.nominalTime == frameTime);
           InvocationInstanceID empty; ///////////////////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
           CHECK (lumiera_invokey_eq (&nopJob.parameter.invoKey, &empty));
           CHECK (MockJob::isNopJob(nopJob));                                           // this diagnostic helper checks the same conditions as done here explicitly
           
           MockJobTicket mockTicket;
           CHECK (not mockTicket.empty());
-          Job mockJob = mockTicket.createJobFor (coord);
+          Job mockJob = mockTicket.createJobFor (frameTime);
           CHECK (    mockTicket.verify_associated (mockJob));                          // proof by invocation hash : is indeed backed by this JobTicket
           CHECK (not mockTicket.verify_associated (nopJob));                           // ...while some random other job is not related
           CHECK (not MockJob::isNopJob(mockJob));
@@ -159,7 +158,6 @@ namespace test  {
       verify_MockSegmentation()
         {
           Time someTime = lib::test::randTime();
-          FrameCoord coord{someTime};
           //
           //-----------------------------------------------------------------/// Empty default Segmentation
           {
@@ -177,8 +175,8 @@ namespace test  {
             JobTicket& ticket = mockSegs[someTime].jobTicket(0);
             CHECK (not util::isSameObject (ticket, JobTicket::NOP));
             
-            Job someJob = ticket.createJobFor(coord);                         // JobTicket uses, but does not check the time given in FrameCoord
-            CHECK (someJob.parameter.nominalTime == _raw(coord.absoluteNominalTime));
+            Job someJob = ticket.createJobFor(someTime);                       // JobTicket uses, but does not check the time given
+            CHECK (someJob.parameter.nominalTime == someTime);
             CHECK (MockJobTicket::isAssociated (someJob, ticket));            // but the generated Job is linked to the Closure backed by the JobTicket
             CHECK (not MockJob::was_invoked (someJob));
             
@@ -206,7 +204,7 @@ namespace test  {
             CHECK (    util::isSameObject (seg1.jobTicket(0),JobTicket::NOP));
             CHECK (not util::isSameObject (seg2.jobTicket(0),JobTicket::NOP));// this one is the active segment
             
-            Job job = seg2.jobTicket(0).createJobFor(coord);
+            Job job = seg2.jobTicket(0).createJobFor(someTime);
             CHECK (not MockJobTicket::isAssociated (job, seg1.jobTicket(0)));
             CHECK (    MockJobTicket::isAssociated (job, seg2.jobTicket(0)));
             CHECK (marker == job.parameter.invoKey.part.a);
@@ -217,7 +215,7 @@ namespace test  {
             CHECK (marker == MockJob::invocationAdditionalKey (job));         // DummyClosure is rigged such as to feed back the seed in `part.a`
                                                                               // and thus we can prove this job really belongs to the marked segment
             // create another job from the (empty) seg1
-            job = seg1.jobTicket(0).createJobFor (coord);
+            job = seg1.jobTicket(0).createJobFor (someTime);
             InvocationInstanceID empty; /////////////////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
             CHECK (lumiera_invokey_eq (&job.parameter.invoKey, &empty));      // indicates that it's just a placeholder to mark a "NOP"-Job
             CHECK (seg1.jobTicket(0).empty());
@@ -246,7 +244,7 @@ namespace test  {
             CHECK (Time(0,20) == s3.start());
             CHECK (Time::MAX  == s3.after());
             
-            Job job = s2.jobTicket(0).createJobFor(coord);
+            Job job = s2.jobTicket(0).createJobFor(someTime);
             job.triggerJob();
             CHECK (marker == MockJob::invocationAdditionalKey (job));
           }
@@ -289,7 +287,7 @@ namespace test  {
                               {
                                 if (segment.empty()) return 0;
                                 
-                                Job job = segment.jobTicket(0).createJobFor(coord);
+                                Job job = segment.jobTicket(0).createJobFor(someTime);
                                 job.triggerJob();
                                 CHECK (MockJob::was_invoked (job));
                                 CHECK (RealClock::wasRecently (MockJob::invocationTime (job)));
@@ -314,7 +312,7 @@ namespace test  {
       void
       verify_MockPrerequisites()
         {
-          FrameCoord coord;
+          Time someTime = lib::test::randTime();
           //-----------------------------------------------------------------/// one Segment with one additional prerequisite
           {
             MockSegmentation mockSegs{MakeRec()
@@ -332,8 +330,8 @@ namespace test  {
             ++prereq;
             CHECK (isnil (prereq));
             
-            Job job1 = preTicket.createJobFor (coord);
-            Job job2 = ticket.createJobFor (coord);
+            Job job1 = preTicket.createJobFor (someTime);
+            Job job2 = ticket.createJobFor (someTime);
             
             job1.triggerJob();
             job2.triggerJob();
@@ -369,7 +367,7 @@ namespace test  {
                           .expandAll()
                           .transform ([&](JobTicket& ticket)
                                         {
-                                          return ticket.createJobFor(coord).parameter.invoKey.part.a;
+                                          return ticket.createJobFor(someTime).parameter.invoKey.part.a;
                                         });
             
             
@@ -391,7 +389,6 @@ namespace test  {
       void
       verify_MockDispatcherSetup()
         {
-          FrameCoord frame{Time{0,30}};
           {
             MockDispatcher dispatcher;
             // automatically generates some fake connection points...
@@ -409,10 +406,11 @@ namespace test  {
             CHECK (0 == dispatcher.resolveModelPort(port0));
             CHECK (1 == dispatcher.resolveModelPort(port1));
             
-            frame.modelPortIDX = 0;
-            Job job0 = dispatcher.getJobTicketFor(frame).createJobFor(frame);
-            frame.modelPortIDX = 1;
-            Job job1 = dispatcher.getJobTicketFor(frame).createJobFor(frame);
+            Time frameTime{0,30};
+            size_t modelPortIDX = 0;
+            Job job0 = dispatcher.createJobFor (modelPortIDX, frameTime);
+            modelPortIDX = 1;
+            Job job1 = dispatcher.createJobFor (modelPortIDX, frameTime);
             CHECK (dispatcher.verify(job0, port0, sink0));
             CHECK (dispatcher.verify(job1, port1, sink1));
           }
@@ -426,11 +424,9 @@ namespace test  {
                                        .attrib("start", Time{0,10})           // second segment covers 10s … +Time::MAX
                                      .genNode()};
             
-            frame.modelPortIDX = 1;
-            frame.absoluteNominalTime = Time{0,5};
-            Job job0 = dispatcher.getJobTicketFor(frame).createJobFor(frame);
-            frame.absoluteNominalTime = Time{0,25};
-            Job job1 = dispatcher.getJobTicketFor(frame).createJobFor(frame);
+            size_t modelPortIDX = 1;
+            Job job0 = dispatcher.createJobFor (modelPortIDX, Time{0,5});
+            Job job1 = dispatcher.createJobFor (modelPortIDX, Time{0,25});
             
             CHECK (11 == job0.parameter.invoKey.part.a);
             CHECK (22 == job1.parameter.invoKey.part.a);

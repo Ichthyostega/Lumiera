@@ -114,9 +114,9 @@ namespace test  {
           
           Time nominalTime{200,0};
           size_t portIDX = dispatcher.resolveModelPort (port);
-          FrameCoord frame{nominalTime, portIDX};
-          JobTicket& ticket = dispatcher.getJobTicketFor(frame);
+          JobTicket& ticket = dispatcher.getJobTicketFor(portIDX, nominalTime);
           
+          FrameCoord frame{nominalTime, portIDX}; /////////////////////////////OOO replace FrameCoord
           JobPlanning plan{frame,ticket,sink};
           Job job = plan.buildJob();
           
@@ -138,9 +138,9 @@ namespace test  {
           FrameCnt frameNr{5};
           Time nominalTime{200,0};
           size_t portIDX = dispatcher.resolveModelPort (port);
-          FrameCoord frame{nominalTime, frameNr, portIDX};
-          JobTicket& ticket = dispatcher.getJobTicketFor(frame);
+          JobTicket& ticket = dispatcher.getJobTicketFor(portIDX, nominalTime);
           
+          FrameCoord frame{nominalTime, frameNr, portIDX}; /////////////////////////////OOO replace FrameCoord
           JobPlanning plan{frame,ticket,sink};
 
           // the following calculations are expected to happen....

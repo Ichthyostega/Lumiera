@@ -45,7 +45,7 @@
 #include "steam/play/output-slot.hpp"
 #include "lib/iter-tree-explorer.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/nocopy.hpp"
+#include "lib/nocopy.hpp"
 
 #include <functional>
 #include <utility>
@@ -89,7 +89,7 @@ namespace engine {
    * @todo 6/23 API is remoulded from ground up (»Playback Vertical Slice« integration effort)
    */
   class Dispatcher
-    : public FrameLocator
+    : util::NonCopyable
     {
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
@@ -162,7 +162,6 @@ namespace engine {
       virtual size_t resolveModelPort (ModelPort)                                  =0;
       
       
-    protected:
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
       /** core dispatcher operation: based on the coordinates of a reference point,
        *  establish binding frame number, nominal time and real (wall clock) deadline.
@@ -192,7 +191,16 @@ namespace engine {
       ////////////    - but this leads to a lot of duplicated Timings records, unless we rewrite the TimeAnchor to be noncopyable and use a Timings const&
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
       
-      virtual JobTicket& accessJobTicket (size_t, TimeValue nominalTime)   =0;
+      /**
+       * Core Dispatcher operation: locate the appropriate Segment and
+       * retrieve/derive  a »blueprint« for render job generation. 
+       * @param portIDX index-number for a ModelPort [as resolved](\ref #resolveModelPort)
+       * @param nominalTime time of the frame to calculate, relative to Timeline origin
+       */
+      virtual JobTicket& getJobTicketFor (size_t portIDX, TimeValue nominalTime)   =0;
+      
+      /** Convenience shortcut for tests: JobTicket ⟼ Job */
+      Job createJobFor (size_t portIDX, TimeValue nominalTime);
     };
   
   
@@ -289,9 +297,8 @@ namespace engine {
                    SRC::transform(
                      [portIDX](PipeFrameTick& core) -> TicketDepend
                       {
-                        FrameCoord frame{core.currPoint, core.frameNr, portIDX};
                         return {nullptr
-                               ,& core.dispatcher->getJobTicketFor(frame)
+                               ,& core.dispatcher->getJobTicketFor(portIDX, core.currPoint)
                                };
                       }));
         }
@@ -364,12 +371,17 @@ namespace engine {
   
   
   inline Dispatcher::PipelineBuilder<Dispatcher::PipeFrameTick>
-  Dispatcher::forCalcStream(Timings timings)
+  Dispatcher::forCalcStream (Timings timings)
   {
     return PipelineBuilder<PipeFrameTick> {this, timings};
   }
   
-  
+  inline Job
+  Dispatcher::createJobFor (size_t portIDX, TimeValue nominalTime)
+  {
+    return getJobTicketFor (portIDX, nominalTime)
+             .createJobFor (Time{nominalTime});
+  }
 
 
   

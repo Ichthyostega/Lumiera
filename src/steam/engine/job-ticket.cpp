@@ -75,9 +75,8 @@ namespace engine {
    * after the last Builder run created this part of the render network.
    */
   Job
-  JobTicket::createJobFor (FrameCoord coordinates)
+  JobTicket::createJobFor (Time nominalTime)
   {
-    Time nominalTime = coordinates.absoluteNominalTime;
     if (this->empty())
       {                    //////////////////////////////////////////////////////////////////////////////////TICKET #1296 : can we get away just with a do-nothing functor?
         return Job(nopFunctor(), InvocationInstanceID(), nominalTime);

@@ -132,9 +132,8 @@ namespace test  {
           JobTicket& ticket = seg.jobTicket(0);                            // get the master-JobTicket from this segment
           JobTicket& prereq = *(ticket.getPrerequisites());                // pull a prerequisite JobTicket
           
-          FrameCoord coord;                                                // Frame coordinates for invocation (placeholder)
-          Job jobP = prereq.createJobFor(coord);                           // create an instance of the prerequisites for this coordinates
-          Job jobM = ticket.createJobFor(coord);                           // ...and an instance of the master job for the same coordinates
+          Job jobP = prereq.createJobFor(Time{0,15});                      // create an instance of the prerequisites for some time(irrelevant)
+          Job jobM = ticket.createJobFor(Time{0,15});                      // ...and an instance of the master job for the same time
           CHECK (MockJobTicket::isAssociated (jobP, prereq));
           CHECK (MockJobTicket::isAssociated (jobM, ticket));
           CHECK (not MockJobTicket::isAssociated (jobP, ticket));
@@ -146,11 +145,9 @@ namespace test  {
           CHECK (555 == MockJob::invocationAdditionalKey (jobP));          // indicating that in practice it will activate the proper render node
           
           // (3) demonstrate mocked frame dispatcher...
-          coord.modelPortIDX = 1;
-          coord.absoluteNominalTime = Time{0,30};
           MockDispatcher dispatcher;                                       // a complete dispatcher backed by a mock Segment for the whole timeline
           auto [port1,sink1] = dispatcher.getDummyConnection(1);           // also some fake ModelPort and DataSink entries are registered
-          Job jobD = dispatcher.getJobTicketFor(coord).createJobFor(coord);
+          Job jobD = dispatcher.createJobFor (1, Time{0,30});
           CHECK (dispatcher.verify(jobD, port1, sink1));                   // the generated job uses the associated ModelPort and DataSink and JobTicket
         }
       
@@ -204,11 +201,10 @@ namespace test  {
                                     .pullFrom (port);
           
           CHECK (not isnil (pipeline));
-          CHECK (nullptr == pipeline->first);       // is a top-level ticket
+          CHECK (nullptr == pipeline->first);        // is a top-level ticket
           JobTicket& ticket = *pipeline->second;
           
-          FrameCoord dummy{Time::ZERO};          // actual time point is irrelevant here
-          Job job = ticket.createJobFor(dummy);
+          Job job = ticket.createJobFor(Time::ZERO); // actual time point is irrelevant here
           CHECK (dispatcher.verify(job, port, sink));
         }
       
@@ -244,12 +240,12 @@ namespace test  {
           // the first element is identical to previous test
           CHECK (not isnil (pipeline));
           CHECK (nullptr == pipeline->first);
-          Job job = pipeline->second->createJobFor(FrameCoord{});
+          Job job = pipeline->second->createJobFor (Time::ZERO);
           CHECK (11 == job.parameter.invoKey.part.a);
           
           auto visualise = [](auto& pipeline) -> string
                               {
-                                FrameCoord frame{pipeline.currPoint};               // can access the embedded PipeFrameTick core to get "currPoint" (nominal time)
+                                Time frame{pipeline.currPoint};                     // can access the embedded PipeFrameTick core to get "currPoint" (nominal time)
                                 Job job = pipeline->second->createJobFor(frame);    // looking always at the second element, which is the current JobTicket
                                 TimeValue nominalTime{job.parameter.nominalTime};   // job parameter holds the microseconds (gavl_time_t)
                                 int32_t mark = job.parameter.invoKey.part.a;        // the MockDispatcher places the given "mark" here

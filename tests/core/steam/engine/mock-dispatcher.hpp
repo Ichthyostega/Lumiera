@@ -340,7 +340,7 @@ namespace test   {
     public:
       /* == mock implementation of the Dispatcher interface == */
       
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 : likely to become obsolete
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
       FrameCoord
       locateRelative (FrameCoord const&, FrameCnt frameOffset)  override
         {
@@ -352,7 +352,7 @@ namespace test   {
         {
           UNIMPLEMENTED ("determine when to finish a planning chunk");
         }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 : likely to become obsolete
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
       
       size_t
       resolveModelPort (ModelPort modelPort)  override
@@ -366,7 +366,7 @@ namespace test   {
       
       
       JobTicket&
-      accessJobTicket (size_t portIDX, TimeValue nominalTime)  override
+      getJobTicketFor (size_t portIDX, TimeValue nominalTime)  override
         {
           auto& seg = mockSeg_[nominalTime];
           return seg.jobTicket(portIDX);
@@ -422,7 +422,7 @@ namespace test   {
           
           TimeValue nominalTime{job.parameter.nominalTime};
           size_t portIDX = resolveModelPort (port);
-          JobTicket& ticket = accessJobTicket (portIDX, nominalTime);
+          JobTicket& ticket = getJobTicketFor (portIDX, nominalTime);
           return isnil (ticket)? MockJob::isNopJob (job)
                                : MockJobTicket::isAssociated (job, ticket);
         }

@@ -112,7 +112,7 @@ namespace engine {
       Job
       buildJob()
         {
-          Job job = jobTicket_.createJobFor (frameCoord_);
+          Job job = jobTicket_.createJobFor (frameCoord_.absoluteNominalTime);
                                                        //////////////////////////////////////////////////////TICKET #1295 : somehow package and communicate the DataSink info
           return job;
         }
@@ -312,6 +312,7 @@ namespace engine {
   
   
   
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
   /**
    * Abstraction: a Facility to establish frame coordinates
    * and identify and access the execution plan for this frame.
@@ -340,6 +341,7 @@ namespace engine {
       virtual JobTicket& accessJobTicket (size_t, TimeValue nominalTime)  =0;
       virtual bool       isEndOfChunk    (FrameCnt, ModelPort port)       =0;
     };
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
   
   
   

@@ -85,6 +85,7 @@ namespace test  {
         
         /* == mock Dispatcher implementation == */
         
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
         FrameCoord
         locateRelative (FrameCoord const&, FrameCnt frameOffset)  override
           {
@@ -96,6 +97,7 @@ namespace test  {
           {
             UNIMPLEMENTED ("determine when to finish a planning chunk");
           }
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
   
         size_t
         resolveModelPort (ModelPort modelPort)  override
@@ -104,7 +106,7 @@ namespace test  {
           }
 
         JobTicket&
-        accessJobTicket (size_t, TimeValue nominalTime)  override
+        getJobTicketFor (size_t, TimeValue nominalTime)  override
           {
             UNIMPLEMENTED ("dummy implementation of the model backbone / segmentation");
           }

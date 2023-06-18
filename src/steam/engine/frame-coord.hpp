@@ -98,6 +98,7 @@ namespace engine {
   
   
   
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
   /**
    * Facility for producing a sequence of FrameCoord.
    * This interface describes the essence of generating
@@ -124,6 +125,7 @@ namespace engine {
     protected:
       virtual FrameCoord locateRelative (FrameCoord const&, FrameCnt frameOffset)   =0;
     };
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
   
   
   

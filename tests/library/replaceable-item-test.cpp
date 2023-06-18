@@ -101,8 +101,8 @@ namespace test{
       virtual void
       run (Arg)
         {
-          ulong l1 (rand() % 1000);
-          ulong l2 (rand() % 1000);
+          ulong l1 (1 + rand() % 1000);
+          ulong l2 (1 + rand() % 1000);
           string s1 (randStr(50));
           string s2 (randStr(50));
           const char* cp (s1.c_str());
