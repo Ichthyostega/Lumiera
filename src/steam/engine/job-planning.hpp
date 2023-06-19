@@ -30,7 +30,31 @@
  ** From a usage point of view, the _job-planning pipeline_ is an _iterator:_ for each independent
  ** calculation step a new JobPlanning record appears at the output side of the pipeline, holding
  ** all collected data, sufficient to generate the actual job definition, which can then be
- ** handed over to the Scheduler.  
+ ** handed over to the Scheduler.
+ ** 
+ ** # Implementation of the Job-Planning pipeline
+ ** 
+ ** JobPlanning acts as _working data aggregator_ within the Job-Planning pipeline; for this reason
+ ** all data fields are references, and the optimiser is expected to elide them, since after template
+ ** instantiation, JobPlanning becomes part of the overall assembled pipeline object, stacked on top
+ ** of the Dispatcher::PipeFrameTick, which holds and increments the current frame number. The
+ ** underlying play::Timings will provide a _frame grid_ to translate these frame numbers into
+ ** the _nominal time values_ used throughout the rest of the render calculations.
+ ** 
+ ** There is one tricky detail to note regarding the handling of calculation prerequisites. The
+ ** typical example would be the loading and decoding of media data, which is an IO-bound task and
+ ** must be complete before the main frame job can be started. Since the Job-Planning pipeline is
+ ** generic, this kind of detail dependency is modelled as _prerequisite JobTicket,_ leading to
+ ** an possibly extended depth-first tree expansion, starting from the »master frame ticket« at
+ ** the root. This _tree exploration_ is implemented by the TreeExplorer::Expander building block,
+ ** which obviously has to maintain a stack of expanded child dependencies. This leads to the
+ ** observation, that at any point of this dependency processing, for the complete path from the
+ ** child prerequisite up to the root tick there is a sequence of JobPlanning instances placed
+ ** into this stack in the Explorer object (each level in this stack is actually an iterator
+ ** and handles one level of child prerequisites). The deadline calculation directly exploits
+ ** this known arrangement, insofar each JobPlanning has a pointer to its parent (sitting in
+ ** the stack level above). See the [IterExplorer unit test](\ref lib::IterTreeExplorer_test::verify_expandOperation)
+ ** to understand this recursive on-demand processing in greater detail.
  ** 
  ** @warning as of 4/2023 a complete rework of the Dispatcher is underway ///////////////////////////////////////////TICKET #1275
  ** 
@@ -52,8 +76,7 @@
 #include "steam/play/output-slot.hpp"
 #include "steam/play/timings.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/iter-explorer.hpp"
-//#include "lib/iter-adapter.hpp"
+#include "lib/itertools.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
@@ -68,7 +91,6 @@ namespace engine {
   using play::Timings;
   using lib::time::Time;
   using lib::time::Duration;
-  using lib::time::TimeValue;    ////////TODO for FrameLocator, could be obsolete
   using util::unConst;
   using util::isnil;
   
@@ -95,16 +117,19 @@ namespace engine {
       JobTicket&      jobTicket_;
       Time     const& nominalTime_;
       FrameCnt const& frameNr_;
-     
+
     public:
-      JobPlanning(JobTicket& ticket, Time const& nominalTime, FrameCnt const& frameNr)
+      JobPlanning (JobTicket& ticket, Time const& nominalTime, FrameCnt const& frameNr)
         : jobTicket_{ticket}
         , nominalTime_{nominalTime}
         , frameNr_{frameNr}
         { }
       
+      // move construction is possible
       
-      // using the standard copy operations
+      
+      JobTicket& ticket()     { return jobTicket_; }
+      bool isTopLevel() const { return not dependentPlan_; }
       
       
       /**
@@ -156,7 +181,46 @@ namespace engine {
         }
       
       
+      /**
+       * Build a sequence of dependent JobPlanning scopes for all prerequisites
+       * of this current JobPlanning, and internally linked back to `*this`
+       * @return an iterator which explores the prerequisites of the JobTicket.
+       * @remark typical example would be to load data from file, or to require
+       *         the results from some other extended media calculation.
+       * @see Dispatcher::PipelineBuilder::expandPrerequisites()
+       */
+      auto
+      buildDependencyPlanning()
+        {
+          return lib::transformIterator (jobTicket_.getPrerequisites()
+                                        ,[this](JobTicket& prereqTicket)
+                                                {
+                                                  return JobPlanning{*this, prereqTicket};
+                                                });
+        }
+
     private:
+      /** link to a dependent JobPlanning, for planning of prerequisites */
+      JobPlanning* dependentPlan_{nullptr};
+      
+      /**
+       * @internal construct a chained prerequisite JobPlanning,
+       *  attached to the dependent »parent« JobPlanning, using the same
+       *  frame data, but chaining up the deadlines, so that a Job created
+       *  from this JobPlanning needs to be completed before the »parent«
+       *  Job (which uses the generated data) can start
+       * @see #buildDependencyPlanning()
+       * @see JobPlanning_test::setupDependentJob()
+       */
+      JobPlanning (JobPlanning& parent, JobTicket& prerequisite)
+        : jobTicket_{prerequisite}
+        , nominalTime_{parent.nominalTime_}
+        , frameNr_{parent.frameNr_}
+        , dependentPlan_{&parent}
+        { }
+      
+      
+      
       Duration
       totalLatency (Timings const& timings)
         {

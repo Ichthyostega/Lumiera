@@ -280,10 +280,6 @@ namespace engine {
         }                      // expected next to invoke pullFrom(port,sink)
       
 
-      /** Package a Ticket together with a direct dependency,
-       *  to allow setup of schedule times in downstream processing */
-      using TicketDepend = std::pair<JobTicket*, JobTicket*>;
-      
       
       /**
        *  Builder: connect to the JobTicket defining the actual processing
@@ -295,11 +291,11 @@ namespace engine {
           size_t portIDX = SRC::dispatcher->resolveModelPort(port);
           return buildPipeline (
                    SRC::transform(
-                     [portIDX](PipeFrameTick& core) -> TicketDepend
+                     [portIDX](PipeFrameTick& core)
                       {
-                        return {nullptr
-                               ,& core.dispatcher->getJobTicketFor(portIDX, core.currPoint)
-                               };
+                        return JobPlanning{core.dispatcher->getJobTicketFor(portIDX, core.currPoint)
+                                          ,core.currPoint
+                                          ,core.frameNr};
                       }));
         }
       
@@ -314,15 +310,9 @@ namespace engine {
         {
           return buildPipeline (
                    SRC::expandAll(
-                     [](TicketDepend& currentLevel)
+                     [](JobPlanning& currentLevel)
                       {
-                        JobTicket* parent = currentLevel.second;
-                        return lib::transformIterator (parent->getPrerequisites()
-                                                      ,[&parent](JobTicket& prereqTicket)
-                                                          {                  // parent shifted up to first pos
-                                                            return TicketDepend{parent, &prereqTicket};
-                                                          }
-                                                      );
+                        return currentLevel.buildDependencyPlanning();
                       }));
         }
       
@@ -335,9 +325,9 @@ namespace engine {
         {
           return terminatePipeline (
                    SRC::transform(
-                     [sink](TicketDepend& currentLevel)
+                     [sink](JobPlanning& currentLevel) -> JobPlanning&
                       {
-                        return currentLevel.second;   ///////////////////////////////OOO construct a JobPlanning here
+                        return currentLevel;   ///////////////////////////////OOO the purpose of this function is no longer clear
                       }));
         }
       

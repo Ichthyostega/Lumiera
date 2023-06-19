@@ -201,8 +201,8 @@ namespace test  {
                                     .pullFrom (port);
           
           CHECK (not isnil (pipeline));
-          CHECK (nullptr == pipeline->first);        // is a top-level ticket
-          JobTicket& ticket = *pipeline->second;
+          CHECK (pipeline->isTopLevel());            // is a top-level ticket
+          JobTicket& ticket = pipeline->ticket();
           
           Job job = ticket.createJobFor(Time::ZERO); // actual time point is irrelevant here
           CHECK (dispatcher.verify(job, port, sink));
@@ -239,14 +239,14 @@ namespace test  {
           
           // the first element is identical to previous test
           CHECK (not isnil (pipeline));
-          CHECK (nullptr == pipeline->first);
-          Job job = pipeline->second->createJobFor (Time::ZERO);
+          CHECK (pipeline->isTopLevel());
+          Job job = pipeline->ticket().createJobFor (Time::ZERO);
           CHECK (11 == job.parameter.invoKey.part.a);
           
           auto visualise = [](auto& pipeline) -> string
                               {
                                 Time frame{pipeline.currPoint};                     // can access the embedded PipeFrameTick core to get "currPoint" (nominal time)
-                                Job job = pipeline->second->createJobFor(frame);    // looking always at the second element, which is the current JobTicket
+                                Job job = pipeline->ticket().createJobFor(frame);   // looking always at the second element, which is the current JobTicket
                                 TimeValue nominalTime{job.parameter.nominalTime};   // job parameter holds the microseconds (gavl_time_t)
                                 int32_t mark = job.parameter.invoKey.part.a;        // the MockDispatcher places the given "mark" here
                                 return _Fmt{"J(%d|%s)"} % mark % nominalTime;
