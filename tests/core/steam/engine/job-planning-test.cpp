@@ -22,38 +22,21 @@
 
 /** @file job-planning-test.cpp
  ** unit test \ref JobPlanning_test
- ** 
- ** @warning as of 4/2023 a complete rework of the Dispatcher is underway ///////////////////////////////////////////TICKET #1275
  */
 
 
 #include "lib/test/run.hpp"
-#include "lib/error.hpp"
-
-//#include "steam/engine/procnode.hpp"
-//#include "steam/play/dummy-play-connection.hpp"
-//#include "steam/mobject/model-port.hpp"
 #include "steam/engine/mock-dispatcher.hpp"
 #include "steam/play/timings.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/time/timequant.hpp"
-#include "lib/format-cout.hpp" ///////////////TODO
-//#include "lib/depend.hpp"
-//#include "lib/itertools.hpp"
-//#include "lib/util-coll.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
-//#include <functional>
-//#include <vector>
 #include <utility>
 
 using test::Test;
-//using util::isnil;
-//using util::last;
-//using std::vector;
-//using std::function;
-//using std::rand;
 using std::move;
+using util::isSameObject;
 
 
 namespace steam {
@@ -61,29 +44,9 @@ namespace engine{
 namespace test  {
   
   using lib::time::FrameRate;
-//  using lib::time::Duration;
   using lib::time::Offset;
-//  using lib::time::TimeVar;
   using lib::time::Time;
-//  using mobject::ModelPort;
   using play::Timings;
-  using util::isSameObject;
-  
-  namespace { // used internally
-    
-    
-//    ModelPort
-//    getTestPort()
-//    {
-//      return mockDispatcher().provideMockModelPort();
-//    }
-    
-    
-  } // (End) internal defs
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
-  
-  
   
   
   
@@ -92,7 +55,6 @@ namespace test  {
   /***************************************************************//**
    * @test document and verify the data aggregation and the calculations
    *       necessary to prepare render jobs for scheduling.
-   * @todo WIP-WIP 6/2023
    */
   class JobPlanning_test : public Test
     {
@@ -194,7 +156,7 @@ namespace test  {
           JobTicket& ticket = dispatcher.getJobTicketFor(portIDX, nominalTime);
           JobTicket& prereq = *(ticket.getPrerequisites());                         // pick up the (only) prerequisite
           
-          JobPlanning masterPlan{ticket,nominalTime,frameNr};
+          JobPlanning masterPlan{ticket,nominalTime,frameNr};                       // the job plan for the master frame calculation
           JobPlanning prereqPlan{move(*(masterPlan.buildDependencyPlanning() ))};   // build a plan for calculating the prerequisite
           
           CHECK (isSameObject(ticket, masterPlan.ticket()));

@@ -56,8 +56,6 @@
  ** the stack level above). See the [IterExplorer unit test](\ref lib::IterTreeExplorer_test::verify_expandOperation)
  ** to understand this recursive on-demand processing in greater detail.
  ** 
- ** @warning as of 4/2023 a complete rework of the Dispatcher is underway ///////////////////////////////////////////TICKET #1275
- ** 
  ** @see JobPlanning_test
  ** @see JobTicket
  ** @see Dispatcher
@@ -78,7 +76,6 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/itertools.hpp"
 #include "lib/nocopy.hpp"
-#include "lib/util.hpp"
 
 
 
@@ -91,8 +88,6 @@ namespace engine {
   using play::Timings;
   using lib::time::Time;
   using lib::time::Duration;
-  using util::unConst;
-  using util::isnil;
   
   
   
@@ -108,8 +103,6 @@ namespace engine {
    * persisted (other then in the job to be created). The implementation draws
    * on a recursive exploration of the corresponding JobTicket, which acts as
    * a general blueprint for creating jobs within this segment of the timeline.
-   * 
-   * @todo WIP-WIP 6/2023 reworking the job-planning pipeline for »PlaybackVerticalSlice«
    */
   class JobPlanning
     : util::MoveOnly
@@ -159,8 +152,7 @@ namespace engine {
               return Time::ANYTIME;
             
             case play::TIMEBOUND:
-              return timings.getTimeDue(frameNr_)
-                   - totalLatency(timings);
+              return doCalcDeadline (timings);
             }
           NOTREACHED ("unexpected playbackUrgency");
         }
@@ -229,6 +221,14 @@ namespace engine {
                + timings.outputLatency;
         }
       
+      Time
+      doCalcDeadline(Timings const& timings)
+        {
+          Time anchor = isTopLevel()? timings.getTimeDue(frameNr_)
+                                    : dependentPlan_->determineDeadline (timings);       ////////////////////TICKET #1310 : quadratic in the depth of the dependency chain
+          return anchor
+               - totalLatency(timings);
+        }
       
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : likely to become obsolete  
