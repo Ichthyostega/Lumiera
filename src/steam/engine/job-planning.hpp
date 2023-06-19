@@ -108,11 +108,11 @@ namespace engine {
     : util::MoveOnly
     {
       JobTicket&      jobTicket_;
-      Time     const& nominalTime_;
+      TimeVar  const& nominalTime_;
       FrameCnt const& frameNr_;
 
     public:
-      JobPlanning (JobTicket& ticket, Time const& nominalTime, FrameCnt const& frameNr)
+      JobPlanning (JobTicket& ticket, TimeVar const& nominalTime, FrameCnt const& frameNr)
         : jobTicket_{ticket}
         , nominalTime_{nominalTime}
         , frameNr_{frameNr}

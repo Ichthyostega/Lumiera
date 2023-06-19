@@ -142,11 +142,7 @@ namespace engine {
        * data structures in the Fixture must be kept alive and fixed in memory.
        */
       template<class IT>
-      class PlanningPipeline
-        : public IT
-        {
-                 ////////////////////////////////////////////////////////////////////////////////////////////TICKET #1275 : what further API-functions are necessary to control a running CalcStream?   
-        };
+      class PlanningPipeline;
       
       /** translate a generic ModelPort spec into the specific index number
        *  applicable at the Timeline referred-to by this Dispatcher
@@ -319,6 +315,13 @@ namespace engine {
       /**
        * Terminal builder: setup processing feed to the given DataSink.
        * @return Iterator to pull a sequence of render jobs, ready for processing
+       * @todo 6/2023 more akin to a place holder, since it is not clear what must
+       *       be done with the sink handle(s). Moreover, a Transformer returning
+       *       a reference to the JobPlanning (deeper down in the pipeline) causes
+       *       yet another unnecessary indirection; if the Transformer wasn't there,
+       *       the resulting iterator would directly expose the result of the expander,
+       *       which is the actual JobPlanning (but then we'd need another way how to
+       *       wire in the DataSink...)
        */
       auto
       feedTo (play::DataSink& sink)
@@ -327,8 +330,10 @@ namespace engine {
                    SRC::transform(
                      [sink](JobPlanning& currentLevel) -> JobPlanning&
                       {
-                        return currentLevel;   ///////////////////////////////OOO the purpose of this function is no longer clear
-                      }));
+                                                /////////////////////////////////////////////////////////////TICKET #1308 : something must be done with SinkHandle here, but it is not clear yet, what
+                        return currentLevel;
+                      })
+                   .asIterator());
         }
       
       
@@ -352,9 +357,44 @@ namespace engine {
       
       template<class PIP>
       PlanningPipeline<PIP>
-      terminatePipeline(PIP&& treeExplorer)
+      terminatePipeline(PIP&& pipelineIterator)
         {
-          return PlanningPipeline<PIP> {move (treeExplorer)};
+          return PlanningPipeline<PIP> {move (pipelineIterator)};
+        }
+    };
+  
+  
+    /**
+     * @remark this is a convenience front-end layered on top of the job-planning pipeline
+     *         - is a »Lumiera Forward Iterator« (bool-check, increment by `++`)
+     *         - exposes the JobPlanning for the current Job when dereferenced
+     */
+  template<class PIP>
+  struct Dispatcher::PlanningPipeline
+    : PIP
+    {
+      FrameCnt
+      currFrameNr()  const
+        {
+          return PIP::frameNr;
+        }
+      
+      bool
+      isBefore (Time breakPoint)  const
+        {
+          return currFrameNr() < PIP::timings.getBreakPointAfter(breakPoint);
+        }
+      
+      Job
+      buildJob()
+        {
+          return PIP::operator->()->buildJob();
+        }
+      
+      Time
+      determineDeadline()
+        {
+          return PIP::operator->()->determineDeadline (PIP::timings);
         }
     };
   

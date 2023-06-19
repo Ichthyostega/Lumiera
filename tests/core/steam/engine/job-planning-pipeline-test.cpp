@@ -29,7 +29,6 @@
 #include "lib/test/test-helper.hpp"
 #include "steam/engine/mock-dispatcher.hpp"
 
-#include "lib/format-cout.hpp"///////////////////////TODO
 #include "lib/iter-tree-explorer.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-util.hpp"
@@ -81,8 +80,6 @@ namespace test  {
    * @remark the »pipeline« is implemented as »Lumiera Forward Iterator«
    *       and thus forms a chain of on-demand processing. At the output side,
    *       fully defined render Jobs can be retrieved, ready for scheduling.
-   * @todo WIP-WIP 4/2023
-   * 
    * @see DispatcherInterface_test
    * @see MockSupport_test
    * @see Dispatcher
@@ -258,8 +255,13 @@ namespace test  {
         }
       
       
+      
       /** @test Job-planning pipeline integration test
-       *  @remark generating dummy jobs for verification
+       *        - use the MockDispatcher to define a fake model setup
+       *        - define three levels of prerequisites
+       *        - build a complete Job-Planning pipeline
+       *        - define a visualisation to expose generated job parameters
+       *        - iterate the Job-Planning pipeline and apply the visualisation
        */
       void
       integration()
@@ -269,12 +271,51 @@ namespace test  {
                                      .scope(MakeRec()
                                              .attrib("mark",22)                     // a »prerequisite job« marked with pipeline-ID ≔ 22
                                              .scope(MakeRec()
-                                                     .attrib("mark",33)             // further »recursive prerequisite« 
+                                                     .attrib("mark",33)             // further »recursive prerequisite«
                                                    .genNode())
                                            .genNode())
                                    .genNode()};
           
-          UNIMPLEMENTED ("integration incl. generation of dummy jobs");
+          
+          play::Timings timings (FrameRate::PAL, Time{0,1});                        // Timings anchored at wall-clock-time ≙ 1s
+          auto [port,sink] = dispatcher.getDummyConnection(0);
+          auto pipeline = dispatcher.forCalcStream (timings)
+                                    .timeRange(Time{200,0}, Time{300,0})
+                                    .pullFrom (port)
+                                    .expandPrerequisites()
+                                    .feedTo (sink);
+          
+          // this is the complete job-planning pipeline now
+          // and it is wrapped into a Dispatcher::PlanningPipeline front-end
+          CHECK (not isnil (pipeline));
+          CHECK (pipeline->isTopLevel());
+          // Invoking convenience functions on the PlanningPipeline front-end...
+          CHECK (5 == pipeline.currFrameNr());
+          CHECK (not pipeline.isBefore (Time{200,0}));
+          CHECK (    pipeline.isBefore (Time{220,0}));
+          
+          Job job = pipeline.buildJob();                                            // invoke the JobPlanning to build a Job for the first frame
+          CHECK (Time(200,0) == job.parameter.nominalTime);
+          CHECK (11 == job.parameter.invoKey.part.a);
+          
+          auto visualise = [](auto& pipeline) -> string
+                              {
+                                Job job = pipeline.buildJob();                      // let the JobPlanning construct the »current job«
+                                TimeValue nominalTime{job.parameter.nominalTime};   // job parameter holds the microseconds (gavl_time_t)
+                                int32_t mark = job.parameter.invoKey.part.a;        // the MockDispatcher places the given "mark" here
+                                TimeValue deadline{pipeline.determineDeadline()};
+                                return _Fmt{"J(%d|%s⧐%s)"}
+                                           % mark % nominalTime % deadline;
+                              };
+          CHECK (visualise(pipeline) == "J(11|200ms⧐1s148ms)"_expect);              // first job in pipeline: nominal t=200ms, deadline 1s148ms
+          
+          CHECK (materialise(
+                   treeExplore(move(pipeline))
+                     .transform(visualise)
+                 )
+                 == "J(11|200ms⧐1s148ms)-J(22|200ms⧐1s96ms)-J(33|200ms⧐1s44ms)-"
+                    "J(11|240ms⧐1s188ms)-J(22|240ms⧐1s136ms)-J(33|240ms⧐1s84ms)-"
+                    "J(11|280ms⧐1s228ms)-J(22|280ms⧐1s176ms)-J(33|280ms⧐1s124ms)"_expect);
         }
     };
   
