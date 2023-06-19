@@ -25,7 +25,6 @@
  ** This is (intended to become) a loose collection of the various small helper templates
  ** for wrapping, containing, placing or handling a somewhat \em problematic other object.
  ** Mostly these are implemented to suit a specific need and then factored out later on.
- ** - AssignableRefWrapper is not used anymore as of 12/09
  ** - ItemWrapper is a similar concept, but more like a smart-ptr. Moreover,
  **   it can be instantiated with a value type, a pointer or a reference type,
  **   yielding the same behaviour in all cases (useful for building templates)
@@ -63,39 +62,6 @@ namespace wrapper {
   using std::function;
   
   
-  /**
-   * Extension to std::reference_wrapper:
-   * Allows additionally to re-bind to another reference,
-   * almost like a pointer. Helpful for building templates.
-   * @warning potentially dangerous
-   */
-  template<typename TY>
-  class AssignableRefWrapper
-    : public std::reference_wrapper<TY>
-    {
-      typedef std::reference_wrapper<TY> RefWrapper;
-    public:
-      
-      explicit AssignableRefWrapper(TY& ref)
-        : RefWrapper(ref)
-        { }
-      
-      AssignableRefWrapper&
-      operator= (RefWrapper const& o)
-        {
-          RefWrapper::operator= (o);
-          return *this;
-        }
-      
-      AssignableRefWrapper&
-      operator= (TY& newRef)
-        {
-          (*this) = RefWrapper(newRef);
-          return *this;
-        }
-    };
-  
-  
   
   /**
    * Reference wrapper implemented as constant function,
@@ -128,7 +94,7 @@ namespace wrapper {
    * A copyable, assignable value object to hold a given value within
    * an embedded inline buffer. It can be default constructed and `bool`
    * evaluated to detect an empty holder. The value is retrieved through
-   * a pointer-like interface, by  explicit dereferentiation. (Contrast this
+   * a pointer-like interface, by explicit dereferentiation. (Contrast this
    * to std::ref, where the original reference is retrieved by conversion).
    * @note when the embedded value is a pointer, ItemWrapper does _not_ take
    *       ownership of and manage data the pointer is pointing to.
@@ -249,18 +215,23 @@ namespace wrapper {
           return *this;
         }
       
+      /**
+       * Emulate »assignment« by discarding and then construction of a new payload
+       * @param something from which TY can be (copy/move)constructed
+       * @remark allows handling »move-only« types; for the typical use case, something
+       *         new is fabricated in a lambda and then moved into the ItemWrapper; thus
+       *         the performance overhead of destroy/re-created is not deemed relevant.
+       *         SFINAE tricks on hidden/deleted assignment operator can be unreliable.
+       */
       template<typename X>
       ItemWrapper&
-      operator= (X&& something) ///< accept anything assignable to TY
+      operator= (X&& something)
         {
           if (!isSameObject (something, access() ))
             {
-              if (created_)
-                access() = std::forward<X>(something);
-              else
-                build (std::forward<X>(something));
+              discard();
+              build (std::forward<X>(something));
             }
-          
           return *this;
         }
       
