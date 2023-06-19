@@ -41,10 +41,11 @@
 //#include "lib/depend.hpp"
 //#include "lib/itertools.hpp"
 //#include "lib/util-coll.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <functional>
 //#include <vector>
+#include <utility>
 
 using test::Test;
 //using util::isnil;
@@ -52,6 +53,7 @@ using test::Test;
 //using std::vector;
 //using std::function;
 //using std::rand;
+using std::move;
 
 
 namespace steam {
@@ -65,6 +67,7 @@ namespace test  {
   using lib::time::Time;
 //  using mobject::ModelPort;
   using play::Timings;
+  using util::isSameObject;
   
   namespace { // used internally
     
@@ -177,7 +180,50 @@ namespace test  {
       void
       setupDependentJob()
         {
-          UNIMPLEMENTED ("chained deadlines");
+          MockDispatcher dispatcher{MakeRec()                                       // »master job« for each frame
+                                     .scope(MakeRec()                               // a »prerequisite job« on which the »master job« depends
+                                           .genNode())
+                                   .genNode()};
+          
+          play::Timings timings (FrameRate::PAL, Time{0,0,5});
+          auto [port,sink] = dispatcher.getDummyConnection(1);
+          
+          FrameCnt frameNr{5};
+          Time nominalTime{200,0};
+          size_t portIDX = dispatcher.resolveModelPort (port);
+          JobTicket& ticket = dispatcher.getJobTicketFor(portIDX, nominalTime);
+          JobTicket& prereq = *(ticket.getPrerequisites());                         // pick up the (only) prerequisite
+          
+          JobPlanning masterPlan{ticket,nominalTime,frameNr};
+          JobPlanning prereqPlan{move(*(masterPlan.buildDependencyPlanning() ))};   // build a plan for calculating the prerequisite
+          
+          CHECK (isSameObject(ticket, masterPlan.ticket()));
+          CHECK (isSameObject(prereq, prereqPlan.ticket()));
+          CHECK (    masterPlan.isTopLevel());
+          CHECK (not prereqPlan.isTopLevel());
+          
+          Time masterDeadline = masterPlan.determineDeadline (timings);
+          Time prereqDeadline = prereqPlan.determineDeadline (timings);
+
+          // the following relations are expected to hold for the prerequisite....
+          Duration latency = prereq.getExpectedRuntime()
+                           + timings.currentEngineLatency()
+                           + timings.outputLatency;
+          
+          Time expectedDeadline{masterDeadline - latency};
+          
+          cout << util::_Fmt{"Prerequisite......\n"
+                             "latency          : %s\n"
+                             "deadline         : %s"}
+                            % latency
+                            % prereqDeadline
+               << endl;
+          CHECK (prereqDeadline == expectedDeadline);
+          
+          // However, no deadline established for "best effort" rendering...
+          timings.playbackUrgency = play::ASAP;
+          CHECK (Time::ANYTIME == masterPlan.determineDeadline (timings));
+          CHECK (Time::ANYTIME == prereqPlan.determineDeadline (timings));
         }
     };
   

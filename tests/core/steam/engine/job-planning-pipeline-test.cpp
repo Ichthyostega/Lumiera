@@ -264,6 +264,16 @@ namespace test  {
       void
       integration()
         {
+          MockDispatcher dispatcher{MakeRec()                                       // define a single segment for the complete time axis
+                                     .attrib("mark", 11)                            // the »master job« for each frame has pipeline-ID ≔ 11
+                                     .scope(MakeRec()
+                                             .attrib("mark",22)                     // a »prerequisite job« marked with pipeline-ID ≔ 22
+                                             .scope(MakeRec()
+                                                     .attrib("mark",33)             // further »recursive prerequisite« 
+                                                   .genNode())
+                                           .genNode())
+                                   .genNode()};
+          
           UNIMPLEMENTED ("integration incl. generation of dummy jobs");
         }
     };
