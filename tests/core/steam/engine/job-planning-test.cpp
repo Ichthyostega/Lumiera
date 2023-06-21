@@ -109,7 +109,7 @@ namespace test  {
 
           // the following calculations are expected to happen....
           Duration latency = ticket.getExpectedRuntime()
-                           + timings.currentEngineLatency()
+                           + timings.engineLatency
                            + timings.outputLatency;
           
           Offset nominalOffset (timings.getFrameStartAt(0), timings.getFrameStartAt(frameNr));
@@ -143,7 +143,9 @@ namespace test  {
       setupDependentJob()
         {
           MockDispatcher dispatcher{MakeRec()                                       // »master job« for each frame
+                                       .attrib("runtime", Duration{Time{30,0}})
                                      .scope(MakeRec()                               // a »prerequisite job« on which the »master job« depends
+                                             .attrib("runtime", Duration{Time{50,0}})
                                            .genNode())
                                    .genNode()};
           
@@ -169,14 +171,15 @@ namespace test  {
 
           // the following relations are expected to hold for the prerequisite....
           Duration latency = prereq.getExpectedRuntime()
-                           + timings.currentEngineLatency()
-                           + timings.outputLatency;
+                           + timings.engineLatency;                                 // Note: here only the engine, not the output latency
           
           Time expectedDeadline{masterDeadline - latency};
           
           cout << util::_Fmt{"Prerequisite......\n"
+                             "master deadline  : %s\n"
                              "latency          : %s\n"
-                             "deadline         : %s"}
+                             "prereq deadline  : %s"}
+                            % masterDeadline
                             % latency
                             % prereqDeadline
                << endl;

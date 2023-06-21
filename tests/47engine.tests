@@ -52,11 +52,12 @@ END
 TEST "Render job planning calculation" JobPlanning_test <<END
 out-lit: Frame #5 @ ∆200ms
 out-lit: real-time-origin : 0:05:00.000
-out-lit: total latency    : ≺52ms≻
-out-lit: deadline         : 0:05:00.148
+out-lit: total latency    : ≺30ms≻
+out-lit: deadline         : 0:05:00.170
 out-lit: Prerequisite......
-out-lit: latency          : ≺52ms≻
-out-lit: deadline         : 0:05:00.096
+out-lit: master deadline  : 0:05:00.160
+out-lit: latency          : ≺60ms≻
+out-lit: prereq deadline  : 0:05:00.100
 return: 0
 END
 

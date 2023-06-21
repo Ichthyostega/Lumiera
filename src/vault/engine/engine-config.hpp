@@ -23,6 +23,9 @@
 
 /** @file engine-config.hpp
  ** access point to configuration of engine parameters
+ ** @todo 6/2023 not clear if this is placeholder code or something substantial;
+ **       however, it seems not plausible; rather I'd expect some data collection
+ **       and information service to be connected with the RenderEnvironmentClosure
  */
 
 

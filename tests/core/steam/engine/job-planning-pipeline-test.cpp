@@ -163,7 +163,7 @@ namespace test  {
           
           CHECK (materialise (
                     treeExplore (eachNum(5,13))
-                      .transform([&](FrameCnt frameNr) -> TimeVar          //////////////////////////////////TICKET #1261 : transform-iterator unable to handle immutable time
+                      .transform([&](FrameCnt frameNr)
                                      {
                                        return grid->timeOf (frameNr);
                                      })
@@ -175,10 +175,9 @@ namespace test  {
           play::Timings timings (FrameRate::PAL);
           
           CHECK (materialise (
-                    treeExplore (
-                      dispatcher.forCalcStream(timings)
-                                .timeRange(Time{200,0}, Time{500,0})       // Note: end point is exclusive
-                    ))
+                    dispatcher.forCalcStream(timings)
+                              .timeRange(Time{200,0}, Time{500,0})         // Note: end point is exclusive
+                 )
                  == "200ms-240ms-280ms-320ms-360ms-400ms-440ms-480ms"_expect);
         }
       
@@ -268,10 +267,13 @@ namespace test  {
         {
           MockDispatcher dispatcher{MakeRec()                                       // define a single segment for the complete time axis
                                      .attrib("mark", 11)                            // the »master job« for each frame has pipeline-ID ≔ 11
+                                     .attrib("runtime", Duration{Time{10,0}})
                                      .scope(MakeRec()
                                              .attrib("mark",22)                     // a »prerequisite job« marked with pipeline-ID ≔ 22
+                                             .attrib("runtime", Duration{Time{20,0}})
                                              .scope(MakeRec()
                                                      .attrib("mark",33)             // further »recursive prerequisite«
+                                                     .attrib("runtime", Duration{Time{30,0}})
                                                    .genNode())
                                            .genNode())
                                    .genNode()};
@@ -307,15 +309,15 @@ namespace test  {
                                 return _Fmt{"J(%d|%s⧐%s)"}
                                            % mark % nominalTime % deadline;
                               };
-          CHECK (visualise(pipeline) == "J(11|200ms⧐1s148ms)"_expect);              // first job in pipeline: nominal t=200ms, deadline 1s148ms
-          
+          CHECK (visualise(pipeline) == "J(11|200ms⧐1s180ms)"_expect);              // first job in pipeline: nominal t=200ms,
+                                                                                    //  .... 10ms engine latency + 10ms job runtime ⟶ deadline 1s180ms
           CHECK (materialise(
                    treeExplore(move(pipeline))
                      .transform(visualise)
                  )
-                 == "J(11|200ms⧐1s148ms)-J(22|200ms⧐1s96ms)-J(33|200ms⧐1s44ms)-"
-                    "J(11|240ms⧐1s188ms)-J(22|240ms⧐1s136ms)-J(33|240ms⧐1s84ms)-"
-                    "J(11|280ms⧐1s228ms)-J(22|280ms⧐1s176ms)-J(33|280ms⧐1s124ms)"_expect);
+                 == "J(11|200ms⧐1s180ms)-J(22|200ms⧐1s150ms)-J(33|200ms⧐1s110ms)-"        // ... -(10+10) | -(10+10)-(10+20) | -(10+10)-(10+20)-(10+30) 
+                    "J(11|240ms⧐1s220ms)-J(22|240ms⧐1s190ms)-J(33|240ms⧐1s150ms)-"
+                    "J(11|280ms⧐1s260ms)-J(22|280ms⧐1s230ms)-J(33|280ms⧐1s190ms)"_expect);
         }
     };
   

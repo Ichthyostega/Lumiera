@@ -154,7 +154,7 @@ namespace test   {
       static ExitNode
       defineSimpleSpec (HashVal seed = 1+rand())
         {
-          return ExitNode{seed
+          return ExitNode{seed, DUMMY_JOB_RUNTIME
                          ,ExitNodes{}
                          ,& MockJob::getFunctor()};
         }
@@ -224,6 +224,7 @@ namespace test   {
       buildExitNodeFromSpec (GenNode const& spec)
         {
           return ExitNode{buildSeed (spec)
+                         ,buildRuntime (spec)
                          ,buildPrerequisites (spec)
                          ,& MockJob::getFunctor()};
         }
@@ -239,6 +240,13 @@ namespace test   {
         {
           auto seed = spec.retrieveAttribute<int> ("mark");
           return seed? HashVal(*seed) : HashVal(rand() % 1000);
+        }
+      
+      Duration
+      buildRuntime (GenNode const& spec)
+        {
+          auto runtime = spec.retrieveAttribute<Duration> ("runtime");
+          return runtime? *runtime : DUMMY_JOB_RUNTIME;
         }
       
       ExitNodes

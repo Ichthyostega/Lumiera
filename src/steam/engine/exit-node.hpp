@@ -37,6 +37,7 @@
 #include "lib/time/timevalue.hpp"
 #include "vault/engine/job.h"              //////////////////////////////////////////////////////////////////TICKET #1295 : rather need a way to retrieve a real JobFunctor building block from the ProcNode
 
+#include <utility>
 #include <deque>
 
 using lib::HashVal;
@@ -51,6 +52,10 @@ namespace engine {
   using ExitNodes = std::deque<engine::ExitNode>;
   
   using vault::engine::JobFunctor;
+  
+  namespace {// hard wired placeholder config....
+    const Duration DUMMY_JOB_RUNTIME{FSecs{1,50}};
+  }
   
   
   /**
@@ -68,21 +73,31 @@ namespace engine {
     : util::Cloneable
     {
       HashVal   pipelineIdentity_;                 //////////////////////////////////////////////////////////TICKET #1293 : Hash-Chaining for invocation-ID... derive from ProcNode wiring
-      ExitNodes prerequisites_;                   ///////////////////////////////////////////////////////////TICKET #1306 : actual access to low-level-Model (ProcNode)
-      JobFunctor* action_{nullptr};              ////////////////////////////////////////////////////////////TICKET #1295 : link to actual implementation action in low-level-Model
+      Duration  runtimeBound_;                    ///////////////////////////////////////////////////////////TICKET #1283 : integrate with dynamic runtime observation
+      ExitNodes prerequisites_;                  ////////////////////////////////////////////////////////////TICKET #1306 : actual access to low-level-Model (ProcNode)
+      JobFunctor* action_{nullptr};             /////////////////////////////////////////////////////////////TICKET #1295 : link to actual implementation action in low-level-Model
       
     public:
       ExitNode()
         : pipelineIdentity_{0}
+        , runtimeBound_{DUMMY_JOB_RUNTIME}
         , prerequisites_{}
       { }
       
       ExitNode (HashVal id
-               ,ExitNodes&& prereq =ExitNodes{}
+               ,Duration jobRuntime
+               ,ExitNodes&& prereq  =ExitNodes{}
                ,JobFunctor* functor =nullptr)
         : pipelineIdentity_{id}
+        , runtimeBound_{jobRuntime}
         , prerequisites_{std::move (prereq)}
         , action_{functor}
+      { }
+      
+      explicit
+      ExitNode (HashVal id
+               ,ExitNodes&& prereq  =ExitNodes{})
+        : ExitNode{id, DUMMY_JOB_RUNTIME, std::move(prereq)}
       { }
       
       static ExitNode NIL;
@@ -125,7 +140,7 @@ namespace engine {
       getUpperBoundRuntime()  const
         {
                                   ///////////////////////////////////////////////////////////////////////////TICKET #1283 : lay foundation how to observe timing behaviour for a render pipeline
-          return Duration{FSecs{1,50}};  // Uh-Oh booo
+          return runtimeBound_;
         }
     };
   

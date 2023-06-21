@@ -213,21 +213,18 @@ namespace engine {
       
       
       
-      Duration
-      totalLatency (Timings const& timings)
-        {
-          return jobTicket_.getExpectedRuntime()
-               + timings.currentEngineLatency()
-               + timings.outputLatency;
-        }
-      
       Time
       doCalcDeadline(Timings const& timings)
         {
-          Time anchor = isTopLevel()? timings.getTimeDue(frameNr_)
-                                    : dependentPlan_->determineDeadline (timings);       ////////////////////TICKET #1310 : quadratic in the depth of the dependency chain
-          return anchor
-               - totalLatency(timings);
+          if (isTopLevel())
+            return timings.getTimeDue(frameNr_)                  // anchor at timing grid
+                 - jobTicket_.getExpectedRuntime()               // deduce the presumably runtime
+                 - timings.engineLatency                         // and the generic engine overhead
+                 - timings.outputLatency;                        // Note: output latency only on top-level job
+          else
+            return dependentPlan_->determineDeadline (timings)   ////////////////////////////////////////////TICKET #1310 : WARNING - quadratic in the depth of the dependency chain
+                 - jobTicket_.getExpectedRuntime()
+                 - timings.engineLatency;
         }
       
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...

@@ -31,20 +31,26 @@
 
 
 #include "steam/play/timings.hpp"
-#include "vault/engine/engine-config.hpp"
 #include "lib/time/formats.hpp"
 #include "lib/time/timequant.hpp"
-
+#include "lib/rational.hpp"
 
 
 namespace steam {
 namespace play {
   
-  using vault::engine::EngineConfig;
   using lib::time::PQuant;
   using lib::time::Time;
   using lib::time::TimeVar;
   using lib::time::FrameCnt;
+  using lib::time::FSecs;
+  
+  namespace { // Hard wired placeholder settings...
+    
+    const Duration DEFAULT_ENGINE_LATENCY  = Duration{Time{10,0}};    ///////////////////////////////////////TICKET #802 : shouldn't be hard wired
+    const Duration DEFAULT_JOB_PLANNING_TURNOVER(FSecs(3,2));
+    
+  }//(End)hard wired settings
   
   
   namespace { // hidden local details of the service implementation....
@@ -74,7 +80,8 @@ namespace play {
     , playbackUrgency {ASAP}
     , playbackSpeed {1}
     , scheduledDelivery{Time::NEVER}
-    , outputLatency {Duration::NIL}
+    , outputLatency{Duration::NIL}
+    , engineLatency{DEFAULT_ENGINE_LATENCY}    //////////////////////////////////////////////////////////////TICKET #802 : derive from engine state -- but make it adjustable for unit tests!!!
     { 
       ENSURE (grid_);
     }
@@ -85,6 +92,7 @@ namespace play {
     , playbackSpeed {1}
     , scheduledDelivery{realTimeAnchor}
     , outputLatency {Duration::NIL}
+    , engineLatency{DEFAULT_ENGINE_LATENCY}
     {
       ENSURE (grid_);
     }
@@ -190,7 +198,7 @@ namespace play {
   Duration
   Timings::getPlanningChunkDuration()  const
   {
-    return EngineConfig::get().currentJobPlanningRhythm();
+    UNIMPLEMENTED ("controlling the job planning rhythm");
   }
   
   
@@ -208,13 +216,6 @@ namespace play {
       return nextFrame;
     else
       return nextFrame+1;
-  }
-  
-  
-  Duration
-  Timings::currentEngineLatency()  const
-  {
-    return EngineConfig::get().currentEngineLatency();
   }
   
   

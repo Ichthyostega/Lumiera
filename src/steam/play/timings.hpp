@@ -100,7 +100,8 @@ namespace play {
       PlaybackUrgency playbackUrgency;
       boost::rational<FrameCnt> playbackSpeed;                     /////////////TICKET #902 we need a more generic representation for variable speed playback
       Time scheduledDelivery;                           ///< a wall clock time corresponding to the Grid's origin. Can be Time::Never (=not time bound)
-      Duration outputLatency;                                    ///////////////TICKET #1301 do we even need this information here (-> rather on some Engine state)
+      Duration outputLatency;                                    ///////////////TICKET #802 this information is necessary, but it is not clear who maintains and updates the latency
+      Duration engineLatency;                           ///< reasonable guess at the scheduling and dispatch-delay of the render engine
       
       explicit
       Timings (FrameRate fps);
@@ -171,11 +172,6 @@ namespace play {
        * @remarks this value is used by the frame dispatcher to create a
        *          follow-up planning job */
       FrameCnt establishNextPlanningChunkStart(FrameCnt anchorFrame)  const;
-      
-      /** reasonable guess of the current engine working delay.
-       *  Frame calculation deadlines will be readjusted by that value,
-       *  to be able to deliver in time with sufficient likeliness. */
-      Duration currentEngineLatency()  const;
       
       
       bool isOriginalSpeed()  const;
