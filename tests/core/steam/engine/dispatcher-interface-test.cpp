@@ -22,37 +22,18 @@
 
 /** @file dispatcher-interface-test.cpp
  ** unit test \ref DispatcherInterface_test
- ** 
- ** @warning as of 4/2023 a complete rework of the Dispatcher is underway ///////////////////////////////////////////TICKET #1275
  */
 
 
 #include "lib/test/run.hpp"
-#include "lib/error.hpp"
-
-//#include "steam/engine/procnode.hpp"
-#include "steam/play/dummy-play-connection.hpp"
-#include "steam/mobject/model-port.hpp"
-#include "steam/engine/dispatcher.hpp"
-#include "steam/engine/time-anchor.hpp"
+#include "steam/engine/mock-dispatcher.hpp"
 #include "steam/play/timings.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/time/timequant.hpp"
-//#include "lib/format-cout.hpp"
-#include "lib/depend.hpp"
-#include "lib/itertools.hpp"
-#include "lib/util-coll.hpp"
 #include "lib/util.hpp"
 
-#include <functional>
-#include <vector>
+#include <utility>
 
 using test::Test;
-using util::isnil;
-using util::last;
-using std::vector;
-using std::function;
-//using std::rand;
 
 
 namespace steam {
@@ -60,89 +41,15 @@ namespace engine{
 namespace test  {
   
   using lib::time::FrameRate;
-  using lib::time::Duration;
   using lib::time::Offset;
-  using lib::time::TimeVar;
   using lib::time::Time;
-  using mobject::ModelPort;
   using play::Timings;
   
-  namespace { // used internally
-    
-    using play::test::PlayTestFrames_Strategy;
-    using play::test::ModelPorts;
-    
-    using DummyPlaybackSetup = play::test::DummyPlayConnection<PlayTestFrames_Strategy>;
-    
-    
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1274 replace by MockDispatcher !!!!
-    class MockDispatcherTable
-      : public Dispatcher
-      {
-        
-        DummyPlaybackSetup dummySetup_;
-        
-        
-        /* == mock Dispatcher implementation == */
-        
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
-        FrameCoord
-        locateRelative (FrameCoord const&, FrameCnt frameOffset)  override
-          {
-            UNIMPLEMENTED ("dummy implementation of the core dispatch operation");
-          }
-        
-        bool
-        isEndOfChunk (FrameCnt, ModelPort port)  override
-          {
-            UNIMPLEMENTED ("determine when to finish a planning chunk");
-          }
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
-  
-        size_t
-        resolveModelPort (ModelPort modelPort)  override
-          {
-            UNIMPLEMENTED ("some Map lookup in a prepared table to find out the actual slot number");
-          }
+  using asset::Pipe;
+  using PID = asset::ID<Pipe>;
+  using mobject::ModelPort;
+  using lumiera::error::LUMIERA_ERROR_LOGIC;
 
-        JobTicket&
-        getJobTicketFor (size_t, TimeValue nominalTime)  override
-          {
-            UNIMPLEMENTED ("dummy implementation of the model backbone / segmentation");
-          }
-        
-      public:
-        
-        ModelPort
-        provideMockModelPort()
-          {
-            ModelPorts mockModelPorts = dummySetup_.getAllModelPorts();
-            return *mockModelPorts;  // using just the first dummy port
-          }
-      };
-    
-    lib::Depend<MockDispatcherTable> mockDispatcher;
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1274 replace by MockDispatcher !!!!
-    
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #890
-    ModelPort
-    getTestPort()
-    {
-      return mockDispatcher().provideMockModelPort();
-    }
-    
-    
-    /* == test parameters == */
-    
-    const uint START_FRAME(10);
-    const uint CHANNEL(0);
-    
-    bool continuation_has_been_triggered = false;
-    
-  } // (End) internal defs
-  
-  
   
   
   
@@ -154,166 +61,124 @@ namespace test  {
    *       This test covers the definition of the interface itself,
    *       together with the supporting types and the default
    *       implementation of the basic operations.
-   *       It creates and uses  a mock Dispatcher implementation.
+   *       It uses a mock Dispatcher implementation.
+   * @see JobPlanningPipeline_test
    */
   class DispatcherInterface_test : public Test
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
-           verify_basicDispatch();
-           verify_standardDispatcherUsage();
-           check_ContinuationBuilder();
+           resolveModelPort();
+           accessJobTicket();
+           pipelineBuilder();
         }
       
       
-      /** @test perform the basic dispatch step
-       *  and verify the generated frame coordinates
+      /** @test the dispatcher can resolve a known ModelPort
+       *        into the internal index number used on the Segmentation
+       *        for the corresponding timeline (which exposes this ModelPort)
        */
       void
-      verify_basicDispatch()
+      resolveModelPort()
         {
-          Dispatcher& dispatcher = mockDispatcher();
-          ModelPort modelPort (getTestPort());
-          Timings timings (FrameRate::PAL);
-          ENSURE (START_FRAME == 10);
+          MockDispatcher dispatcher;
+          auto [port,sink] = dispatcher.getDummyConnection(1);
+          CHECK (1 == dispatcher.resolveModelPort (port));
           
-          TimeAnchor refPoint(timings, START_FRAME);
-          CHECK (refPoint == Time::ZERO + Duration(10, FrameRate::PAL));
-          
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
-          FrameCoord coordinates = dispatcher.onCalcStream (modelPort,CHANNEL)
-                                             .relativeFrameLocation (refPoint, 15);
-          CHECK (coordinates.absoluteNominalTime == Time(0,1));
-          CHECK (coordinates.absoluteFrameNumber == 25);
-          CHECK (refPoint.remainingRealTimeFor(coordinates) <  Time(FSecs(25,25)));
-          CHECK (refPoint.remainingRealTimeFor(coordinates) >= Time(FSecs(24,25)));
-          CHECK (coordinates.modelPort == modelPort);
-          CHECK (coordinates.channelNr == CHANNEL);
-          
-          JobTicket& executionPlan = dispatcher.getJobTicketFor (coordinates);
-          CHECK (executionPlan.isValid());
-          
-          Job frameJob = executionPlan.createJobFor (coordinates);
-          CHECK (frameJob.getNominalTime() == coordinates.absoluteNominalTime);
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
+          // but when using some arbitrary unrelated ModelPort...
+          PID dazedPipe = Pipe::query ("id(dazed)");
+          ModelPort evil = reinterpret_cast<ModelPort&> (dazedPipe);
+          VERIFY_ERROR (LOGIC, dispatcher.resolveModelPort(evil));
         }
       
       
       
-      /** @test the standard invocation sequence
-       * used within the engine for planning new jobs.
-       * The actual implementation is mocked.
+      /** @test the dispatcher knows how to pick the right JobTicket
+       *        for each point on the timeline, and thus how to access
+       *        the proper part of the render nodes responsible for
+       *        rendering this part of the timeline
        */
       void
-      verify_standardDispatcherUsage()
+      accessJobTicket()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
-          Dispatcher& dispatcher = mockDispatcher();
-          ModelPort modelPort (getTestPort());
-          Timings timings (FrameRate::PAL);
+          MockDispatcher dispatcher{MakeRec()                                       // a first active segment
+                                     .attrib("start", Time{0,10})                   // covering the time [10s ... 20s[
+                                     .attrib("after", Time{0,20})
+                                     .attrib("mark", 23)                            // pipeline-Hash used as marker to verify proper access
+                                   .genNode()
+                                   ,MakeRec()                                       // add a second Segment
+                                     .attrib("start", Time{0,20})                   // covering the rest of the timeline from 20s on
+                                     .attrib("mark", 45)
+                                   .genNode()};
+          size_t portIDX = 1;
+          // Dispatcher-Interface: access JobTicket
+          JobTicket& ticket0 = dispatcher.getJobTicketFor (portIDX, -Time{0,5});
+          JobTicket& ticket1 = dispatcher.getJobTicketFor (portIDX, Time{0,15});
+          JobTicket& ticket2 = dispatcher.getJobTicketFor (portIDX, Time{0,25});
           
-          TimeAnchor refPoint = TimeAnchor(timings, START_FRAME);
+          CHECK (    ticket0.empty());                                              // this ticket was drawn from an undefined part of the timeline
+          CHECK (not ticket1.empty());                                              // while this ticket belongs to the first segment
+          CHECK (not ticket2.empty());                                              // and this to the second segment
+
+          Job job0 = ticket0.createJobFor(-Time{0,5});
+          Job job1 = ticket1.createJobFor(Time{0,15});
+          Job job2 = ticket2.createJobFor(Time{0,25});
           
-          JobPlanningSequence jobs = dispatcher.onCalcStream(modelPort,CHANNEL)
-                                               .establishNextJobs(refPoint);
+          CHECK (MockJob::isNopJob(job0));
           
-          // Verify the planned Jobs
+          CHECK (Time(0,15) == job1.parameter.nominalTime);
+          CHECK (23 == job1.parameter.invoKey.part.a);                              // proof that this job is connected to segment #1
           
-          CHECK (!isnil (jobs));
-          vector<Job> plannedChunk;
-          lib::append_all (jobs, plannedChunk);
-          
-          Duration coveredTime (Offset(refPoint, last(plannedChunk).getNominalTime()));
-          CHECK (coveredTime >= timings.getPlanningChunkDuration());
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
-          
-          ///TODO nachfolgendes muß komplett umgeschrieben werden
-          ///TODO definieren, wie das scheduler-interface angesprochen wird
-          ///TODO dann stub dafür bauen
-          
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #903
-          TimeVar frameStart (refPoint);
-          InvocationInstanceID prevInvocationID(0);  ///////////////////////////////////////////////////////TICKET #1138 : C++17 requires explicit ctor for initialisation of union
-          Offset expectedTimeIncrement (1, FrameRate::PAL);
-          for (uint i=0; i < plannedChunk.size(); ++i )
-            {
-              Job& thisJob = plannedChunk[i];
-              CHECK (prevInvocationID < thisJob.getInvocationInstanceID());
-              prevInvocationID = thisJob.getInvocationInstanceID();
-              
-              if (frameStart != thisJob.getNominalTime())
-                {
-                  frameStart += expectedTimeIncrement;
-                  CHECK (frameStart == thisJob.getNominalTime());
-                }
-            }
-          // now, after having passed over the whole planned chunk
-          CHECK (frameStart                        == Time(refPoint) + coveredTime);
-          CHECK (frameStart                        >= Time(refPoint) + timings.getPlanningChunkDuration());
-          CHECK (frameStart + expectedTimeIncrement > Time(refPoint) + timings.getPlanningChunkDuration());
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #903
+          CHECK (Time(0,25) == job2.parameter.nominalTime);
+          CHECK (45 == job2.parameter.invoKey.part.a);                              // and this one to segment #2
         }
       
       
       
-      /** @test usually at the end of each standard invocation,
-       * after scheduling a chunk of new Jobs, an additional
-       * continuation job is created to re-invoke this
-       * scheduling step.
-       * - the refPoint gets bumped beyond the planned segment
-       * - the continuation job embodies a suitable closure,
-       *   usable for self-re-invocation
+      /** @test for the actual use case, the dispatcher acts as entrance point
+       *        to a job-planning pipeline builder, which in the end is an iterator
+       *        to pull render jobs from
+       *  @see JobPlanningPipeline_test for in-depth coverage of this complex topic
        */
       void
-      check_ContinuationBuilder()
+      pipelineBuilder()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #903
-          Dispatcher& dispatcher = mockDispatcher();
-          ModelPort modelPort (getTestPort());
-          Timings timings (FrameRate::PAL);
+          MockDispatcher dispatcher{MakeRec()                                       // a single segment covering the complete time-axis
+                                     .attrib("mark", 555)                           // marker to demonstrate proper connectivity
+                                   .genNode()};
           
-          // prepare the rest of this test to be invoked as "continuation"
-          function<void(TimeAnchor)> testFunc = verify_invocation_of_Continuation;
+          play::Timings timings (FrameRate::PAL);
+          auto [port,sink] = dispatcher.getDummyConnection(1);
           
-          TimeAnchor refPoint = TimeAnchor::build (timings, START_FRAME);
-          JobPlanningSequence jobs = dispatcher.onCalcStream(modelPort,CHANNEL)
-                                               .establishNextJobs(refPoint)
-                                               .prepareContinuation(testFunc);
+          // Dispatcher-Interface: pipeline builder...
+          auto pipeline = dispatcher.forCalcStream (timings)
+                                    .timeRange(Time{200,0}, Time{300,0})
+                                    .pullFrom (port)
+                                    .feedTo (sink);
           
-          // an additional "continuation" Job has been prepared....
-          Job continuation = lib::pull_last(jobs);
-          CHECK (META_JOB == continuation.getKind());
+          CHECK (not isnil (pipeline));
+          CHECK (5 == pipeline.currFrameNr());                                      // 5 * 1/25sec = 200ms
           
-          // the Continuation will be scheduled sufficiently ahead of the currently planned chunk's end
-          CHECK (continuation.getNominalTime() < Time(refPoint) + timings.getPlanningChunkDuration());
+          Job job = pipeline.buildJob();                                            // invoke the JobPlanning to build a Job for the first frame
+          CHECK (Time(200,0) == job.parameter.nominalTime);
+          CHECK (555 == job.parameter.invoKey.part.a);                              // the marker shows that this job is connected properly
           
-          // now invoke the rest of this test, which has been embedded into the continuation job.
-          // Since we passed testFunc as action for the continuation, we expect the invocation
-          // of the function verify_invocation_of_Continuation()
-          continuation_has_been_triggered = false;
+          ++pipeline;                                                               // iterate to advance to the next frame
+          CHECK (not isnil (pipeline));
+          CHECK (6 == pipeline.currFrameNr());
+          job = pipeline.buildJob();                                                // build job for the next frame
+          CHECK (Time(240,0) == job.parameter.nominalTime);
+          CHECK (555 == job.parameter.invoKey.part.a);
           
-          continuation.triggerJob();
-          CHECK (continuation_has_been_triggered);
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #903
-        }
-      
-      /** action used as "continuation" in #check_ContinuationBuilder
-       *  This function expects to be invoked with a time anchor bumped up
-       *  to point exactly behind the end of the previously planned chunk of Jobs
-       */
-      static void
-      verify_invocation_of_Continuation (TimeAnchor nextRefPoint)
-        {
-          Timings timings (FrameRate::PAL);
-          Duration frameDuration (1, FrameRate::PAL);
-          Time startAnchor = Time::ZERO + START_FRAME*frameDuration;
-          Duration time_to_cover = timings.getPlanningChunkDuration();
+          ++pipeline;
+          CHECK (7 == pipeline.currFrameNr());
+          job = pipeline.buildJob();
+          CHECK (Time(280,0) == job.parameter.nominalTime);
           
-          CHECK (Time(nextRefPoint) >= startAnchor + time_to_cover);
-          CHECK (Time(nextRefPoint) <  startAnchor + time_to_cover + 1*frameDuration);
-          continuation_has_been_triggered = true;
+          ++pipeline;                                                               // iterate beyond end point
+          CHECK (isnil (pipeline));                                                 // pipeline exhausted
         }
     };
   

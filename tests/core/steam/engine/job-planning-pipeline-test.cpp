@@ -258,6 +258,7 @@ namespace test  {
       /** @test Job-planning pipeline integration test
        *        - use the MockDispatcher to define a fake model setup
        *        - define three levels of prerequisites
+       *        - also define a second segment with different structure
        *        - build a complete Job-Planning pipeline
        *        - define a visualisation to expose generated job parameters
        *        - iterate the Job-Planning pipeline and apply the visualisation
@@ -265,7 +266,7 @@ namespace test  {
       void
       integration()
         {
-          MockDispatcher dispatcher{MakeRec()                                       // define a single segment for the complete time axis
+          MockDispatcher dispatcher{MakeRec()                                       // start with defining a first segment...
                                      .attrib("mark", 11)                            // the »master job« for each frame has pipeline-ID ≔ 11
                                      .attrib("runtime", Duration{Time{10,0}})
                                      .scope(MakeRec()
@@ -275,6 +276,19 @@ namespace test  {
                                                      .attrib("mark",33)             // further »recursive prerequisite«
                                                      .attrib("runtime", Duration{Time{30,0}})
                                                    .genNode())
+                                           .genNode())
+                                   .genNode()
+                                   ,MakeRec()                                       // add a second Segment with different calculation structure
+                                     .attrib("start", Time{250,0})                  // partitioning the timeline at 250ms
+                                     .attrib("mark", 44)
+                                     .attrib("runtime", Duration{Time{70,0}})
+                                     .scope(MakeRec()                               // on 2nd level we have two independent prerequisites here
+                                             .attrib("mark", 55)                    // ...both will line up before the deadline of ticket No.44
+                                             .attrib("runtime", Duration{Time{60,0}})
+                                           .genNode()
+                                           ,MakeRec()
+                                             .attrib("mark", 66)
+                                             .attrib("runtime", Duration{Time{50,0}})
                                            .genNode())
                                    .genNode()};
           
@@ -315,9 +329,9 @@ namespace test  {
                    treeExplore(move(pipeline))
                      .transform(visualise)
                  )
-                 == "J(11|200ms⧐1s180ms)-J(22|200ms⧐1s150ms)-J(33|200ms⧐1s110ms)-"        // ... -(10+10) | -(10+10)-(10+20) | -(10+10)-(10+20)-(10+30) 
+                 == "J(11|200ms⧐1s180ms)-J(22|200ms⧐1s150ms)-J(33|200ms⧐1s110ms)-"         // ... -(10+10) | -(10+10)-(10+20) | -(10+10)-(10+20)-(10+30)
                     "J(11|240ms⧐1s220ms)-J(22|240ms⧐1s190ms)-J(33|240ms⧐1s150ms)-"
-                    "J(11|280ms⧐1s260ms)-J(22|280ms⧐1s230ms)-J(33|280ms⧐1s190ms)"_expect);
+                    "J(44|280ms⧐1s200ms)-J(66|280ms⧐1s140ms)-J(55|280ms⧐1s130ms)"_expect); // ... these call into the 2nd Segment
         }
     };
   

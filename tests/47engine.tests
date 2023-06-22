@@ -40,7 +40,7 @@ PLANNED "Engine calculation streams" CalcStream_test <<END
 END
 
 
-PLANNED "Frame Dispatcher Interface" DispatcherInterface_test <<END
+TEST "Frame Dispatcher Interface" DispatcherInterface_test <<END
 END
 
 
