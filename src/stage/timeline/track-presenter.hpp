@@ -106,7 +106,7 @@
 #include "stage/timeline/track-head-widget.hpp"
 #include "stage/timeline/track-body.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/iter-tree-explorer.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/util-coll.hpp"
 
 #include "lib/nocopy.hpp"

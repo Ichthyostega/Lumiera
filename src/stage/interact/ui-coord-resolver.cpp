@@ -33,7 +33,6 @@
 
 using util::isnil;
 using lib::Symbol;
-using lib::treeExplore;
 
 
 namespace stage {

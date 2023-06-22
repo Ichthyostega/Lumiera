@@ -145,7 +145,7 @@ namespace test {
        *            UI this would of course not be a configurable property of the
        *            LocationQuery, but rather just reflect the transient window
        *            state and return the currently activated window
-       * @see IterTreeExplorer_test::verify_IterSource() regarding "child exploration"...
+       * @see IterExplorer_test::verify_IterSource() regarding "child exploration"...
        */
       void
       verify_backingQuery()

@@ -32,7 +32,7 @@
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
 #include "lib/meta/tuple-helper.hpp"
-#include "lib/iter-tree-explorer.hpp"
+#include "lib/iter-explorer.hpp"
 
 #include <string>
 #include <vector>
@@ -200,7 +200,7 @@ namespace test{
           DiagnosticRenderer diagnostic;
           auto render = [&](Receiver& renderer)
                           {
-                            return join (lib::treeExplore(tokens)
+                            return join (lib::explore(tokens)
                                              .transform ([&](Token tok)
                                                            {
                                                              return tok.applyTo (renderer);

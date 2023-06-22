@@ -1,5 +1,5 @@
 /*
-  IterTreeExplorer(Test)  -  verify tree expanding and backtracking iterator
+  IterExplorer(Test)  -  verify tree expanding and backtracking iterator
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>
@@ -59,7 +59,7 @@
 #include "lib/itertools.hpp"
 #include "lib/util.hpp"
 
-#include "lib/iter-tree-explorer.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/meta/trait.hpp"
 
 #include <utility>
@@ -216,11 +216,11 @@ namespace test{
   /*******************************************************************//**
    * @test use a simple source iterator yielding numbers
    *       to build various functional evaluation pipelines,
-   *       based on the \ref TreeExplorer template.
+   *       based on the \ref IterExplorer template.
    *       - the adapter to wrap the source, which can either
    *         [be a state core](\ref verify_wrappedState() ), or can
    *         [be a Lumiera Forward Iterator](\ref verify_wrappedIterator() )
-   *       - the defining use case for TreeExplorer is to build a
+   *       - the defining use case for IterExplorer is to build a
    *         [pipeline for depth-first exploration](\ref verify_expandOperation() )
    *         of a (functional) tree structure. This "tree" is  created by invoking
    *         a "expand functor", which can be defined in various ways.
@@ -256,10 +256,10 @@ namespace test{
    * It is up to the monad to decide if, and when those processing steps are applied to the
    * embedded values and how to combine the results into a new monad.
    * 
-   * @see TreeExplorer
+   * @see IterExplorer
    * @see IterAdapter
    */
-  class IterTreeExplorer_test : public Test
+  class IterExplorer_test : public Test
     {
       
       virtual void
@@ -287,12 +287,12 @@ namespace test{
       
       
       /** @test without using any extra functionality,
-       *        TreeExplorer just wraps an iterable state.
+       *        IterExplorer just wraps an iterable state.
        */
       void
       verify_wrappedState()
         {
-          auto ii = treeExplore (CountDown{5,0});
+          auto ii = explore (CountDown{5,0});
           CHECK (!isnil (ii));
           CHECK (5 == *ii);
           ++ii;
@@ -304,17 +304,17 @@ namespace test{
           VERIFY_ERROR (ITER_EXHAUST, *ii );
           VERIFY_ERROR (ITER_EXHAUST, ++ii );
           
-          ii = treeExplore (CountDown{5});
+          ii = explore (CountDown{5});
           CHECK (materialise(ii) == "5-4-3-2-1");
-          ii = treeExplore (CountDown{7,4});
+          ii = explore (CountDown{7,4});
           CHECK (materialise(ii) == "7-6-5");
-          ii = treeExplore (CountDown{});
+          ii = explore (CountDown{});
           CHECK ( isnil (ii));
           CHECK (!ii);
         }
       
       
-      /** @test TreeExplorer is able to wrap any _Lumiera Forward Iterator_ */
+      /** @test IterExplorer is able to wrap any _Lumiera Forward Iterator_ */
       void
       verify_wrappedIterator()
         {
@@ -325,7 +325,7 @@ namespace test{
           ++ii;
           CHECK (-2 == *ii);
           
-          auto jj = treeExplore(ii);
+          auto jj = explore(ii);
           CHECK (!isnil (jj));
           CHECK (-2 == *jj);
           ++jj;
@@ -338,7 +338,7 @@ namespace test{
           CHECK (materialise(jj) ==    "3--5-8--13");
           
           // can even adapt STL container automatically
-          auto kk = treeExplore(numz);
+          auto kk = explore(numz);
           CHECK (!isnil (kk));
           CHECK (1 == *kk);
           CHECK (materialise(kk) == "1--2-3--5-8--13");
@@ -368,7 +368,7 @@ namespace test{
        *   which will then be iterated to yield the child elements
        * - and, quite distinct to the aforementioned "monadic" usage, the expansion functor
        *   may alternatively be written in a way as to collaborate with the "state core" used
-       *   when building the TreeExplorer. In this case, the functor typically takes a _reference_
+       *   when building the IterExplorer. In this case, the functor typically takes a _reference_
        *   to this underlying state core or iterator. The purpose for this definition variant is
        *   to allow exploring a tree-like evaluation, without the need to disclose anything about
        *   the backing implementation; the expansion functor just happens to know the implementation
@@ -386,12 +386,12 @@ namespace test{
           /* == "monadic flatMap" == */
           
           verify_treeExpandingIterator(
-                    treeExplore(CountDown{5})
+                    explore(CountDown{5})
                       .expand([](uint j){ return CountDown{j-1}; })                                   // expand-functor: Val > StateCore
                       );
           
           verify_treeExpandingIterator(
-                    treeExplore(CountDown{5})
+                    explore(CountDown{5})
                       .expand([](uint j){ return NumberSequence{j-1}; })                              // expand-functor: Val > Iter
                       );                // NOTE: different Iterator type than the source!
           
@@ -407,7 +407,7 @@ namespace test{
                                           };
           
           verify_treeExpandingIterator(
-                    treeExplore(CountDown{5})
+                    explore(CountDown{5})
                       .expand(expandIntoChildBuffer)                                                  // expand-functor: Val > STL-container&
                       );
           
@@ -419,22 +419,22 @@ namespace test{
           /* == "state manipulation" use cases == */
           
           verify_treeExpandingIterator(
-                    treeExplore(CountDown{5})
+                    explore(CountDown{5})
                       .expand([](CountDown const& core){ return CountDown{ core.yield() - 1}; })      // expand-functor: StateCore const& -> StateCore
                       );
           
           verify_treeExpandingIterator(
-                    treeExplore(CountDown{5})
+                    explore(CountDown{5})
                       .expand([](CountDown core){ return NumberSequence{ core.yield() - 1}; })        // expand-functor: StateCore -> Iter
                       );
           
           verify_treeExpandingIterator(
-                    treeExplore(CountDown{5})
+                    explore(CountDown{5})
                       .expand([](auto & it){ return CountDown{ *it - 1}; })                           // generic Lambda: Iter& -> StateCore
                       );
           
           verify_treeExpandingIterator(
-                    treeExplore(CountDown{5})
+                    explore(CountDown{5})
                       .expand([](auto it){ return decltype(it){ *it - 1}; })                          // generic Lambda: Iter -> Iter
                       );
         }
@@ -496,7 +496,7 @@ namespace test{
       void
       verify_expand_rootCurrent()
         {
-          auto tree = treeExplore(CountDown{25})
+          auto tree = explore(CountDown{25})
                         .expand([](uint j){ return CountDown{j-1}; });
           
           CHECK (materialise(tree) == "25-24-23-22-21-20-19-18-17-16-15-14-13-12-11-10-9-8-7-6-5-4-3-2-1");
@@ -557,7 +557,7 @@ namespace test{
           auto formatify = [&](auto it){ return string{embrace % *it}; };        // generic lambda: assumed to take an Iterator&
           
           
-          auto ii = treeExplore (CountDown{7,4})
+          auto ii = explore(CountDown{7,4})
                       .transform(multiply)
                       ;
           
@@ -577,14 +577,14 @@ namespace test{
           // demonstrate chaining of several transformation layers
           vector<int64_t> numz{1,-2,3,-5,8,-13};
           
-          CHECK ("≺1≻-≺-2≻-≺3≻-≺-5≻-≺8≻-≺-13≻"                == materialise (treeExplore(numz)
+          CHECK ("≺1≻-≺-2≻-≺3≻-≺-5≻-≺8≻-≺-13≻"                == materialise (explore(numz)
                                                                                 .transform(formatify)) );
           
-          CHECK ("≺2≻-≺-4≻-≺6≻-≺-10≻-≺16≻-≺-26≻"              == materialise (treeExplore(numz)
+          CHECK ("≺2≻-≺-4≻-≺6≻-≺-10≻-≺16≻-≺-26≻"              == materialise (explore(numz)
                                                                                 .transform(multiply)
                                                                                 .transform(formatify)) );
           
-          CHECK ("≺≺4≻≻-≺≺-8≻≻-≺≺12≻≻-≺≺-20≻≻-≺≺32≻≻-≺≺-52≻≻" == materialise (treeExplore(numz)
+          CHECK ("≺≺4≻≻-≺≺-8≻≻-≺≺12≻≻-≺≺-20≻≻-≺≺32≻≻-≺≺-52≻≻" == materialise (explore(numz)
                                                                                 .transform(multiply)
                                                                                 .transform(multiply)
                                                                                 .transform(formatify)
@@ -594,7 +594,7 @@ namespace test{
           // demonstrate the functor is evaluated only once per step
           int fact = 3;
           
-          auto jj = treeExplore (CountDown{4})
+          auto jj = explore (CountDown{4})
                       .transform([&](int v)
                                     {
                                       v *=fact;
@@ -638,7 +638,7 @@ namespace test{
           
           // demonstrate a transformer accessing the source state core...
           // should not be relevant in practice, but works due to the generic adapters
-          auto kk = treeExplore(CountDown{9,4})
+          auto kk = explore (CountDown{9,4})
                       .transform([](CountDown& core)
                                    {
                                      uint delta = core.p - core.e;
@@ -659,7 +659,7 @@ namespace test{
       
       
       /** @test combine the recursion into children with a tail mapping operation.
-       * Wile basically this is just the layering structure of TreeExplorer put into action,
+       * Wile basically this is just the layering structure of IterExplorer put into action,
        * you should note one specific twist: the iter_explorer::Expander::expandChildren() call
        * is meant to be issued from ``downstream'', from the consumer side. Yet the consumer at
        * that point might well see the items as processed by a transforming step layered on top.
@@ -683,7 +683,7 @@ namespace test{
       void
       verify_combinedExpandTransform()
         {
-          auto ii = treeExplore(CountDown{5})
+          auto ii = explore(CountDown{5})
                       .expand([](uint j){ return CountDown{j-1}; })
                       .transform([](int v){ return 2*v; })
                       ;
@@ -700,7 +700,7 @@ namespace test{
           // how intermediary processing steps may interact
           
           CHECK (materialise (
-                    treeExplore(CountDown{5})
+                    explore(CountDown{5})
                       .expand([](uint j){ return CountDown{j-1}; })
                       .transform([](int v){ return 2*v; })
                       .transform([](auto& it)
@@ -748,13 +748,13 @@ namespace test{
       verify_customProcessingLayer()
         {
           CHECK (materialise(
-                    treeExplore(CountDown{7})
+                    explore(CountDown{7})
                       .processingLayer<MagicTestRubbish>()
                 )
                 == "7-5-3-1");
           
           CHECK (materialise(
-                    treeExplore(CountDown{7})
+                    explore(CountDown{7})
                       .transform([](uint v){ return 2*v; })
                       .processingLayer<MagicTestRubbish>()
                       .filter([](int v){ return v % 3; })
@@ -771,12 +771,12 @@ namespace test{
        * Such is especially relevant when searching for a locally or global maximal solution, which
        * is rather simple to implement with an additional filtering layer -- and this approach requires
        * us to deliver all partial solutions for the filter layer to act on. Obviously this functionality
-       * leads to additional state and thus is provided as optional layer in the TreeExplorer builder.
+       * leads to additional state and thus is provided as optional layer in the IterExplorer builder.
        */
       void
       verify_scheduledExpansion()
         {
-          auto ii = treeExplore(CountDown{6})
+          auto ii = explore(CountDown{6})
                       .expand([](uint j){ return CountDown{j-2}; })
                       .expandOnIteration();
           
@@ -833,25 +833,25 @@ namespace test{
       verify_untilStopTrigger()
         {
           CHECK (materialise (
-                    treeExplore(CountDown{10})
+                    explore (CountDown{10})
                       .iterUntil([](uint j){ return j < 5; })
                     )
                  == "10-9-8-7-6-5"_expect);
           
           CHECK (materialise (
-                    treeExplore(CountDown{10})
+                    explore (CountDown{10})
                       .iterWhile([](uint j){ return j > 5; })
                     )
                  == "10-9-8-7-6"_expect);
           
           CHECK (materialise (
-                    treeExplore(CountDown{10})
+                    explore (CountDown{10})
                       .iterWhile([](int j){ return j > -5; })
                     )
                  == "10-9-8-7-6-5-4-3-2-1"_expect);
           
           CHECK (materialise (
-                    treeExplore(CountDown{10})
+                    explore (CountDown{10})
                       .iterWhile([](uint j){ return j > 25; })
                     )
                  == ""_expect);
@@ -870,14 +870,14 @@ namespace test{
         {
           // canonical example, using a clean side-effect free predicate based on element values
           CHECK (materialise (
-                    treeExplore(CountDown{10})
+                    explore(CountDown{10})
                       .filter([](uint j){ return j % 2; })
                     )
                  == "9-7-5-3-1"_expect);
           
           
           // Filter may lead to consuming util exhaustion...
-          auto ii = treeExplore(CountDown{10})
+          auto ii = explore(CountDown{10})
                       .filter([](int j){ return j > 9; });
           
           CHECK (not isnil (ii));
@@ -888,7 +888,7 @@ namespace test{
           
           
           // none of the source elements can be approved here...
-          auto jj = treeExplore(CountDown{5})
+          auto jj = explore(CountDown{5})
                       .filter([](int j){ return j > 9; });
           
           CHECK (isnil (jj));
@@ -901,7 +901,7 @@ namespace test{
           // uint to float, but the filter interacts directly with the core and thus
           // judges based on the original values
           CHECK (materialise (
-                    treeExplore(CountDown{10,4})
+                    explore(CountDown{10,4})
                       .transform([](float f){ return 0.55 + 2*f; })
                       .filter([](CountDown& core){ return core.p % 2; })
                     )
@@ -912,7 +912,7 @@ namespace test{
           // contrived example to verify interplay of filtering and child expansion;
           // especially note that the filter is re-evaluated after expansion happened.
           CHECK (materialise (
-                    treeExplore(CountDown{10})
+                    explore(CountDown{10})
                       .expand([](uint i){ return CountDown{i%4==0? i-1 : 0}; })      // generate subtree at 8 and 4 ==> 10-9-8-7-6-5-4-3-2-1-3-2-1-7-6-5-4-3-2-1-3-2-1
                       .filter([](uint i){ return i%2 == 0; })
                       .expandAll()                                                   // Note: sends the expandChildren down through the filter
@@ -927,7 +927,7 @@ namespace test{
           // - accepting the iterator to trigger child expansion
           // - which also causes re-evaluation of the preceding transformer
           bool toggle = false;
-          auto kk = treeExplore(CountDown{10,5})
+          auto kk = explore(CountDown{10,5})
                       .expand([](uint j){ return CountDown{j-1}; })
                       .transform([](int v){ return 2*v; })
                       .filter([&](auto& it)
@@ -955,7 +955,7 @@ namespace test{
           CHECK (materialise(kk.filter([](long i){ return i % 7; }))
                  == "12-10-8-6-4-2-12"_expect);
                  // Explanation:
-                 // Since the original TreeExplorer was assigned to variable kk,
+                 // Since the original IterExplorer was assigned to variable kk,
                  // the materialise()-Function got a lvalue-ref and thus made a copy
                  // of the whole compound. For that reason, the original state within
                  // kk still rests at 7 -- because the filter evaluates eagerly, the
@@ -977,7 +977,7 @@ namespace test{
       void
       verify_FilterChanges()
         {
-          auto seq = treeExplore(CountDown{20})
+          auto seq = explore(CountDown{20})
                        .mutableFilter();
           
           auto takeEve = [](uint i){ return i%2 == 0; };
@@ -1036,7 +1036,7 @@ namespace test{
           
           
           // verify enabling and disabling...
-          seq = treeExplore(CountDown{10})
+          seq = explore(CountDown{10})
                   .mutableFilter(takeTrd);
           
           CHECK (9 == *seq);
@@ -1063,7 +1063,7 @@ namespace test{
       
       /** @test package the resulting Iterator as automatically managed,
        *        polymorphic opaque entity implementing the IterSource interface.
-       * The builder operations on TreeExplorer each generate a distinct, implementation
+       * The builder operations on IterExplorer each generate a distinct, implementation
        * defined type, which is meant to be captured by `auto`. However, the terminal builder
        * function `asIterSource()` moves the whole compound iterator object, as generated by
        * preceding builder steps, into a heap allocation and exposes a simplified front-end,
@@ -1088,7 +1088,7 @@ namespace test{
           IterSource<uint>::iterator sequence;     // note `sequence` is polymorphic
           CHECK (isnil (sequence));
           
-          sequence = treeExplore(CountDown{20,10})
+          sequence = explore(CountDown{20,10})
                         .filter([](uint i){ return i % 2; })
                         .asIterSource();           // note this terminal builder function
                                                    // moves the whole pipeline onto the heap
@@ -1097,7 +1097,7 @@ namespace test{
           
           
           // use one sequence as source to build another one
-          sequence = treeExplore(sequence)
+          sequence = explore(sequence)
                         .transform([](uint i){ return i*2; })
                         .asIterSource();
           
@@ -1117,7 +1117,7 @@ namespace test{
           IterExploreSource<char> exploreIter;
           CHECK (isnil (exploreIter));
           
-          exploreIter = treeExplore(CountDown{20,10})
+          exploreIter = explore(CountDown{20,10})
                           .filter([](uint i){ return i % 2; })
                           .transform([](uint i){ return i*2; })
                           .filter([](int i){ return i>25; })
@@ -1144,7 +1144,7 @@ namespace test{
        * Contrary to the preceding test case, here the point is to _base the whole pipeline_
        * on a data source accessible through the IterSource (VTable based) interface. The notable
        * point with this technique is the ability to use some _extended sub interface of IterSource_
-       * and to rely on this interface to implement some functor bound into the TreeExplorer pipeline.
+       * and to rely on this interface to implement some functor bound into the IterExplorer pipeline.
        * Especially this allows to delegate the "child expansion" through such an interface and just
        * return a compatible IterSource as result. This way, the opaque implementation gains total
        * freedom regarding the concrete implementation of the "child series" iterator. In fact,
@@ -1185,14 +1185,14 @@ namespace test{
           
           
           // simple standard case: create a new heap allocated IterSource implementation.
-          // TreeExplorer will take ownership (by smart-ptr) and build a Lumiera Iterator front-End
+          // IterExplorer will take ownership (by smart-ptr) and build a Lumiera Iterator front-End
           CHECK ("7-6-5-4-3-2-1" == materialise (
-                                      treeExplore(new VerySpecificIter{7})));
+                                      explore (new VerySpecificIter{7})));
           
           
           // missing source detected
           PrivateSource* niente = nullptr;
-          CHECK (isnil (treeExplore(niente)));
+          CHECK (isnil (explore (niente)));
           
           
           // attach to an IterSource living here in local scope...
@@ -1201,7 +1201,7 @@ namespace test{
           // ...and build a child expansion on top, which calls through the PrivateSource-API
           // Effectively this means we do not know the concrete type of the "expanded children" iterator,
           // only that it adheres to the same IterSource sub-interface as used on the base iterator.
-          auto ii = treeExplore(vsit)
+          auto ii = explore(vsit)
                       .expand ([](PrivateSource& source){ return source.expandChildren(); });
           
           CHECK (not isnil (ii));
@@ -1258,7 +1258,7 @@ namespace test{
       verify_depthFirstExploration()
         {
           CHECK (materialise(
-                    treeExplore(CountDown{4})
+                    explore(CountDown{4})
                       .expand([](uint j){ return CountDown{j-1}; })
                       .expandAll()
                       .transform([](int i){ return i*10; })
@@ -1277,7 +1277,7 @@ namespace test{
                                   };
           
           CHECK (materialise(
-                    treeExplore(CountDown{4})
+                    explore(CountDown{4})
                       .transform([](uint i){ return Tu2{i,0}; })
                       .expand(summingExpander)
                       .expandAll()
@@ -1289,7 +1289,7 @@ namespace test{
       
       
       /** @test Demonstration how to build complex algorithms by layered tree expanding iteration
-       * @remarks this is the actual use case which inspired the design of TreeExplorer:
+       * @remarks this is the actual use case which inspired the design of IterExplorer:
        *  Search with backtracking over an opaque (abstracted), tree-shaped search space.
        *  - the first point to note is that the search algorithm knows nothing about its
        *    data source, beyond its ability to delve down (expand) into child nodes
@@ -1316,7 +1316,7 @@ namespace test{
         {
           // Layer-1: the search space with "hidden" implementation
           using DataSrc = IterExploreSource<char>;
-          DataSrc searchSpace = treeExplore(RandomSeq{-1})
+          DataSrc searchSpace = explore(RandomSeq{-1})
                                   .expand([](char){ return RandomSeq{15}; })
                                   .asIterSource();
           
@@ -1370,10 +1370,10 @@ namespace test{
           
           
           // Layer-3: Evaluation pipeline to drive search
-          string toFind = util::join (treeExplore (RandomSeq{5}), "");
+          string toFind = util::join (explore (RandomSeq{5}), "");
           cout << "Search in random tree: toFind = "<<toFind<<endl;
           
-          auto theSearch = treeExplore(State{searchSpace, toFind})
+          auto theSearch = explore (State{searchSpace, toFind})
                              .filter([](auto& it)
                                        {
                                          while (it->src.depth() < it->toFind.size() - 1
@@ -1392,7 +1392,7 @@ namespace test{
   
   
   
-  LAUNCHER (IterTreeExplorer_test, "unit common");
+  LAUNCHER (IterExplorer_test, "unit common");
   
   
 }} // namespace lib::test

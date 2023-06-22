@@ -29,7 +29,7 @@
 #include "lib/test/test-helper.hpp"
 #include "stage/model/canvas-hook.hpp"
 #include "lib/scoped-collection.hpp"
-#include "lib/iter-tree-explorer.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/util.hpp"
 
@@ -84,7 +84,7 @@ namespace test {
         auto
         allWidgetIDs()  const
           {
-            return lib::treeExplore(widgets_)
+            return lib::explore(widgets_)
                        .transform([](Attachment const& entry)
                                     {
                                       return entry.widget.i;

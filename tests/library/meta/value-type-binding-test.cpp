@@ -75,7 +75,7 @@ namespace test{
    * 
    * @see value-type-binding.hpp
    * @see lib::RangeIter
-   * @see lib::TreeExplorer::transform()
+   * @see lib::IterExplorer::transform()
    */
   class ValueTypeBinding_test
     : public Test

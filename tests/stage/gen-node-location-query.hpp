@@ -52,7 +52,7 @@
  **       if this implementation can be used beyond this limited purpose
  ** 
  ** @see UICoordResolver_test
- ** @see IterTreeExplorer_test
+ ** @see IterExplorer_test
  ** @see ui-coord-resolver.hpp
  ** @see navigator.hpp
  */
@@ -66,7 +66,7 @@
 #include "stage/interact/ui-coord-resolver.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/format-string.hpp"
-#include "lib/iter-tree-explorer.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/iter-source.hpp"
 #include "lib/itertools.hpp"
 #include "lib/util.hpp"

@@ -119,7 +119,7 @@
 #include "lib/symbol.hpp"
 #include "lib/format-string.hpp"
 #include "stage/interact/ui-coord.hpp"
-#include "lib/iter-tree-explorer.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/iter-source.hpp"
 #include "lib/depend.hpp"
 #include "lib/util.hpp"
@@ -177,7 +177,7 @@ namespace interact {
       static auto
       buildIterator (TreeStructureNavigator* source)
         {
-          return lib::treeExplore (source)
+          return lib::explore (source)
                         .expand([](TreeStructureNavigator& parent){ return parent.expandChildren(); });
         }
     };

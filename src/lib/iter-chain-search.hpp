@@ -59,7 +59,7 @@
  **   capture extended facilities within the scope _enclosing_ the pipeline, as long
  **   as this scope remains intact during the whole usage time of the pipeline.
  ** - the resulting entity, an instantiation of the IterChainSearch template, is
- **   not a generic TreeExplorer (builder). Be careful when using any builder
+ **   not a generic IterExplorer (builder). Be careful when using any builder
  **   functions still accessible. The only functions meant to be used in
  **   builder style are the IterChainSearch::search() variations.
  ** - if you copy, the embedded state is copied alongside, but not
@@ -78,7 +78,7 @@
 
 
 #include "lib/error.hpp"
-#include "lib/iter-tree-explorer.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/meta/util.hpp"
 
 #include <utility>
@@ -102,7 +102,7 @@ namespace iter {
     auto
     buildSearchFilter (SRC&& dataSource)
     {
-      return treeExplore (forward<SRC> (dataSource))
+      return explore (forward<SRC> (dataSource))
                 .mutableFilter();
     }
     
@@ -116,7 +116,7 @@ namespace iter {
     
     /**
      * @internal helper to rebind on inferred types.
-     * @remark we use the TreeExplorer framework to assemble the processing pipeline
+     * @remark we use the IterExplorer framework to assemble the processing pipeline
      *         from suitable building blocks configured with some lambdas. However, we
      *         also want to _inherit_ from this filter pipeline, so to expose the typical
      *         iterator operations without much ado. Thus we use some (static) helper function
@@ -304,7 +304,7 @@ namespace iter {
    *         container, or a [»State Core«](\ref lib::IterStateWrapper) object.
    * @warning if you capture the result of this call by an auto variable,
    *         be sure to understand that invoking any further builder operation on
-   *         TreeExplorer will invalidate that variable (by moving it into the
+   *         IterExplorer will invalidate that variable (by moving it into the
    *         augmented iterator returned from such builder call).
    */
   template<class SRC>

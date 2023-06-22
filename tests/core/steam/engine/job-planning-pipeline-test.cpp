@@ -29,7 +29,7 @@
 #include "lib/test/test-helper.hpp"
 #include "steam/engine/mock-dispatcher.hpp"
 
-#include "lib/iter-tree-explorer.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-util.hpp"
 #include "lib/util.hpp"
@@ -37,7 +37,7 @@
 
 using test::Test;
 using lib::eachNum;
-using lib::treeExplore;
+using lib::explore;
 using lib::time::PQuant;
 using lib::time::FrameRate;
 using util::isnil;
@@ -161,13 +161,13 @@ namespace test  {
         {
           auto grid = frameGrid(FrameRate::PAL);   // one frame ≙ 40ms
           
-          CHECK (materialise (
-                    treeExplore (eachNum(5,13))
+          CHECK (materialise(
+                    explore (eachNum(5,13))
                       .transform([&](FrameCnt frameNr)
                                      {
                                        return grid->timeOf (frameNr);
                                      })
-                    )
+                 )
                  == "200ms-240ms-280ms-320ms-360ms-400ms-440ms-480ms"_expect);
           
           
@@ -326,7 +326,7 @@ namespace test  {
           CHECK (visualise(pipeline) == "J(11|200ms⧐1s180ms)"_expect);              // first job in pipeline: nominal t=200ms,
                                                                                     //  .... 10ms engine latency + 10ms job runtime ⟶ deadline 1s180ms
           CHECK (materialise(
-                   treeExplore(move(pipeline))
+                   explore(move(pipeline))
                      .transform(visualise)
                  )
                  == "J(11|200ms⧐1s180ms)-J(22|200ms⧐1s150ms)-J(33|200ms⧐1s110ms)-"         // ... -(10+10) | -(10+10)-(10+20) | -(10+10)-(10+20)-(10+30)

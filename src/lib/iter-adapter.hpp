@@ -330,7 +330,7 @@ namespace lib {
    *         The resulting iterator will hold an instance of ST, which thus
    *         needs to be copyable and default constructible to the extent
    *         this is required for the iterator as such.
-   * @see IterExplorer an iterator monad built on top of IterStateWrapper
+   * @see IterExplorer a pipeline builder framework on top of IterStateWrapper
    * @see iter-explorer-test.hpp
    * @see iter-adaptor-test.cpp
    */

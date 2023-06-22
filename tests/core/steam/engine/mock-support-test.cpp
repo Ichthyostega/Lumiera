@@ -29,7 +29,7 @@
 #include "lib/test/test-helper.hpp"
 #include "steam/engine/mock-dispatcher.hpp"
 #include "vault/engine/nop-job-functor.hpp"
-#include "lib/iter-tree-explorer.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/util-tuple.hpp"
 #include "lib/util.hpp"
 

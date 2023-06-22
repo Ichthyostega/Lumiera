@@ -41,7 +41,7 @@
 #include "stage/gtk-base.hpp"
 #include "lib/verb-visitor.hpp"
 
-#include "lib/iter-tree-explorer.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
@@ -207,8 +207,8 @@ namespace timeline {
                   };
           
           
-          return lib::treeExplore(elements)
-                     .filter(CountingFilter{pinnedPrefixCnt, selectPrefixPart});
+          return lib::explore (elements)
+                     .filter (CountingFilter{pinnedPrefixCnt, selectPrefixPart});
         }
     };
   

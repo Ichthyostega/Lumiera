@@ -46,14 +46,14 @@
  ** must be complete before the main frame job can be started. Since the Job-Planning pipeline is
  ** generic, this kind of detail dependency is modelled as _prerequisite JobTicket,_ leading to
  ** an possibly extended depth-first tree expansion, starting from the »master frame ticket« at
- ** the root. This _tree exploration_ is implemented by the TreeExplorer::Expander building block,
+ ** the root. This _tree exploration_ is implemented by the IterExplorer::Expander building block,
  ** which obviously has to maintain a stack of expanded child dependencies. This leads to the
  ** observation, that at any point of this dependency processing, for the complete path from the
  ** child prerequisite up to the root tick there is a sequence of JobPlanning instances placed
  ** into this stack in the Explorer object (each level in this stack is actually an iterator
  ** and handles one level of child prerequisites). The deadline calculation directly exploits
  ** this known arrangement, insofar each JobPlanning has a pointer to its parent (sitting in
- ** the stack level above). See the [IterExplorer unit test](\ref lib::IterTreeExplorer_test::verify_expandOperation)
+ ** the stack level above). See the [IterExplorer unit test](\ref lib::IterExplorer_test::verify_expandOperation)
  ** to understand this recursive on-demand processing in greater detail.
  ** 
  ** @see JobPlanning_test

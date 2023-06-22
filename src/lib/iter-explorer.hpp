@@ -1,5 +1,5 @@
 /*
-  ITER-TREE-EXPLORER.hpp  -  building blocks for iterator evaluation strategies
+  ITER-EXPLORER.hpp  -  building blocks for iterator evaluation strategies
 
   Copyright (C)         Lumiera.org
     2017,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,9 +20,9 @@
 
 */
 
-/** @file iter-tree-explorer.hpp
+/** @file iter-explorer.hpp
  ** Building tree expanding and backtracking evaluations within hierarchical scopes.
- ** Based on the *Lumiera Forward Iterator* concept and using the basic IterAdaptor templates,
+ ** Based on the *Lumiera Forward Iterator* concept and using the basic IterAdapter templates,
  ** these components allow to implement typical evaluation strategies, like conditional expanding
  ** or depth-first exploration of a hierarchical structure. Since the access to this structure is
  ** abstracted through the underlying iterator, what we effectively get is a functional datastructure.
@@ -30,39 +30,26 @@
  ** itself (value semantics) -- similar to the IterStateWrapper, which is one of the basic helper templates
  ** provided by iter-adapter.hpp.
  ** 
- ** @remark as of 2017, this template, as well as the initial IterExplorer (draft from 2012) can be
- **         seen as steps towards designing a framework of building blocks for tree expanding and
- **         backtracking algorithms. Due to the nature of Lumiera's design, we repeatedly encounter
- **         this kind of computation pattern, when it comes to matching flexible configuration against
- **         a likewise hierarchical and rules based model. To keep the code base maintainable,
- **         we deem it crucial to reduce the inherent complexity in such algorithms by clearly
- **         separate the _mechanics of evaluation_ from the actual logic of the target domain.
+ ** @remark historically, this template, as well as the initial IterExplorer (draft from 2012) can be
+ **         seen as steps towards a framework of building blocks for tree expanding and backtracking
+ **         algorithms — driven by a persistent need for this computation pattern, which lies in the
+ **         nature of Lumiera's design: matching flexible configuration against a likewise hierarchical
+ **         and rules based model.
  ** 
- ** # Iterators as Monad
+ ** # Background: Iterators as Monad
  ** The fundamental idea behind the implementation technique used here is the _Monad pattern_
  ** known from functional programming. A Monad is a container holding some arbitrarily typed base value; the monad can
- ** be seen as "amplifying" and enhancing the contained base value by attaching additional properties or capabilities
+ ** be seen as „amplifying“ and enhancing the contained base value by attaching additional properties or capabilities
  ** This is a rather detached concept with a wide variety of applications (things like IO state, parsers, combinators,
  ** calculations with exception handling but also simple data structures like lists or trees). The key point with any
  ** monad is the ability to _bind a function_ into the monad; this function will work on the _contained base values_
  ** and produce a modified new monad instance. In the simple case of a list, "binding" a function basically means
- ** to _map the function onto_ the elements in the list. (actually it means the `flatMap` operation)
- ** 
- ** ## Rationale
- ** The primary benefit of using the monad pattern is to separate the transforming operation completely from
- ** the mechanics of applying that operation and combining the results. More specifically, we rely on an iterator
- ** to represent an abstracted source of data and we expose the combined and transformed results again as such
- ** an abstracted data sequence. While the transformation to apply can be selected at runtime (as a functor),
- ** the monad pattern defines a sane way to represent partial evaluation state without requiring a container
- ** for intermediary results. This is especially helpful when
- ** - a flexible and unspecific source data structure needs to be processed
- ** - and this evaluation needs to be done asynchronously and in parallel (no locking, immutable data)
- ** - and a partial evaluation needs to be stored as continuation (not relying on the stack for partial results)
+ ** to _map the function onto_ the elements in the list. (strictly speaking, it means the `flatMap` operation)
  ** 
  ** # A Pipeline builder
- ** Based on such concepts, structures and evaluation patterns, the TreeExplorer serves the purpose to provide
+ ** Based on such concepts, structures and evaluation patterns, the IterExplorer serves the purpose to provide
  ** building blocks to assemble a _processing pipeline_, where processing will happen _on demand,_ while iterating.
- ** TreeExplorer itself is both a Lumiera Forward Iterator based on some wrapped data source, and at the same time
+ ** IterExplorer itself is both a Lumiera Forward Iterator based on some wrapped data source, and at the same time
  ** it is a builder to chain up processing steps to work on the data pulled from that source. These processing steps
  ** are attached as _decorators_ wrapping the source, in the order the corresponding builder functions were invoked.
  ** - the *expand operation* installs a function to consume one element and replace it by the sequence of elements
@@ -75,11 +62,19 @@
  ** - in concert, expand- and transform operation allow to build hierarchy evaluation algorithms without exposing
  **   any knowledge regarding the concrete hierarchy used and explored as data source.
  ** 
- ** In itself, the TreeExplorer is an iterator with implementation defined type (all operations being inlined).
+ ** In itself, the IterExplorer is an iterator with implementation defined type (all operations being inlined).
  ** But it is possible to package this structure behind a conventional iteration interface with virtual functions.
- ** By invoking the terminal builder function TreeExplorer::asIterSource(), the iterator compound type, as created
+ ** By invoking the terminal builder function IterExplorer::asIterSource(), the iterator compound type, as created
  ** thus far, will be moved into a heap allocation, returning a front-end based on IterSource. In addition, the
  ** actually returned type, IterExplorerSource, exposes the `expandChildren()` operation as discussed above.
+ ** 
+ ** ## Rationale
+ ** This design leads to a complete separation of the transforming operation from the mechanics how to apply that
+ ** operation and combine the results. More specifically, we rely on an iterator to represent an abstracted source
+ ** of data and we expose the combined and transformed results again as such an abstracted data sequence. Thereby,
+ ** a trend towards separation of concerns is introduced; the data source remains opaque, while the manipulation
+ ** to apply can be selected at runtime or written inline as Lambda. The iterator itself is a self-contained
+ ** value and represents partial evaluation state without requiring a container for intermediary results.
  ** 
  ** ## some implementation details
  ** The builder operations assemble a heavily nested type, each builder call thereby adding yet another layer of
@@ -94,22 +89,19 @@
  **          of the newly built subclass object. The previously existing pipeline is defunct after that
  **          move; if you captured it into a variable, be sure to capture the _result_ of the new
  **          builder operation as well and don't use the old variable anymore. Moreover, it should
- **          be ensured that any "state core" used within TreeExplorer has an efficient move ctor;
+ **          be ensured that any "state core" used within IterExplorer has an efficient move ctor;
  **          including RVO, the compiler is typically able to optimise such move calls away altogether.
  ** 
- ** @see IterTreeExplorer_test
+ ** @see IterExplorer_test
  ** @see iter-adapter.hpp
  ** @see itertools.hpp
  ** @see IterSource (completely opaque iterator)
- ** 
- ** @warning as of 4/2023 the alternative Monad-style iterator framework "iter-explorer" will be retracted
- **      and replaced by this design here, which will then be renamed into IterExplorer  //////////////////////////////TICKET #1276
  **
  */
 
 
-#ifndef LIB_ITER_TREE_EXPLORER_H
-#define LIB_ITER_TREE_EXPLORER_H
+#ifndef LIB_ITER_EXPLORER_H
+#define LIB_ITER_EXPLORER_H
 
 
 #include "lib/error.hpp"
@@ -333,7 +325,7 @@ namespace lib {
   
   
   
-  namespace { // TreeExplorer traits
+  namespace { // IterExplorer traits
     
     using meta::enable_if;
     using meta::disable_if;
@@ -394,11 +386,11 @@ namespace lib {
       };
     
     
-    /** decide how to adapt and embed the source sequence into the resulting TreeExplorer */
+    /** decide how to adapt and embed the source sequence into the resulting IterExplorer */
     template<class SRC, typename SEL=void>
     struct _DecoratorTraits
       {
-        static_assert (!sizeof(SRC), "Can not build TreeExplorer: Unable to figure out how to iterate the given SRC type.");
+        static_assert (!sizeof(SRC), "Can not build IterExplorer: Unable to figure out how to iterate the given SRC type.");
       };
     
     template<class SRC>
@@ -473,7 +465,7 @@ namespace lib {
         using pointer    = typename ValueTypeBinding<CommonType>::pointer;
       };
     
-  }//(End) TreeExplorer traits
+  }//(End) IterExplorer traits
   
   
   
@@ -484,12 +476,12 @@ namespace lib {
     constexpr auto ACCEPT_ALL = [](auto){return true;};
     
     /**
-     * @internal technical details of binding a functor into the TreeExplorer.
+     * @internal technical details of binding a functor into the IterExplorer.
      * Notably, this happens when adapting an _"expansion functor"_ to allow expanding a given element
      * from the TreeExploer (iterator) into a sequence of child elements. A quite similar situation
      * arises when binding a _transformation function_ to be mapped onto each result element.
      * 
-     * The TreeExplorer::expand() operation accepts various flavours of functors, and depending on
+     * The IterExplorer::expand() operation accepts various flavours of functors, and depending on
      * the signature of such a functor, an appropriate adapter will be constructed here, allowing to
      * write a generic Expander::expandChildren() operation. The following details are handled here:
      * - detect if the passed functor is generic, or a regular "function-like" entity.
@@ -602,7 +594,7 @@ namespace lib {
     
     /**
      * @internal Base of pipe processing decorator chain.
-     * TreeExplorer allows to create a stack out of various decorating processors
+     * IterExplorer allows to create a stack out of various decorating processors
      * - each decorator is itself a _"state core"_, adding some on-demand processing
      * - each wraps and adapts a source iterator, attaching to and passing-on the iteration logic
      * Typically each such layer is configured with actual functionality provided as lambda or functor.
@@ -611,7 +603,7 @@ namespace lib {
      * call, where some "expansion layer" consumes the current element and replaces it by an expanded
      * series of new elements. Other layers might need to sync to this operation, and thus it is passed
      * down the chain. For that reason, we need a dedicated BaseAdapter to adsorb such chained calls.
-     * @remark when building the TreeExplorer, the to-be-wrapped source is fed down into its place
+     * @remark when building the IterExplorer, the to-be-wrapped source is fed down into its place
      *         within BaseAdapter. For that reason, it is not sufficient just to lift the copy ctors
      *         of the base (as inheriting the base class ctors would do). Rather, we need dedicated
      *         further copy ctors to clone and move from the _undecorated base type._
@@ -630,7 +622,7 @@ namespace lib {
     
     
     /**
-     * @internal Decorator for TreeExplorer adding the ability to "expand children".
+     * @internal Decorator for IterExplorer adding the ability to "expand children".
      * The expandChildren() operation is the key element of a depth-first evaluation: it consumes
      * one element and performs a preconfigured _expansion functor_ on that element to yield
      * its "children". These are given in the form of another iterator, which needs to be
@@ -652,7 +644,7 @@ namespace lib {
      *         bindings of the passed raw functor, one to work on the source sequence, and the other
      *         one to work on the result sequence of a recursive child expansions; these two sequences
      *         need not be implemented in the same way, which simplifies the definition of algorithms.
-     * @tparam SRC the wrapped source iterator, typically a TreeExplorer or nested decorator.
+     * @tparam SRC the wrapped source iterator, typically a IterExplorer or nested decorator.
      * @tparam FUN the concrete type of the functor passed. Will be dissected to find the signature
      */
     template<class SRC, class RES>
@@ -677,7 +669,7 @@ namespace lib {
         
         template<typename FUN>
         Expander (SRC&& parentExplorer, FUN&& expandFunctor)
-          : SRC{move (parentExplorer)}                   // NOTE: slicing move to strip TreeExplorer (Builder)
+          : SRC{move (parentExplorer)}                   // NOTE: slicing move to strip IterExplorer (Builder)
           , expandRoot_ {_FunTraits<FUN,SRC>    ::adaptFunctor (forward<FUN> (expandFunctor))}  // adapt to accept SRC&
           , expandChild_{_FunTraits<FUN,ResIter>::adaptFunctor (forward<FUN> (expandFunctor))}  // adapt to accept RES&
           , expansions_{}
@@ -867,7 +859,7 @@ namespace lib {
     
     
     /**
-     * @internal Decorator for TreeExplorer to map a transformation function on all results.
+     * @internal Decorator for IterExplorer to map a transformation function on all results.
      * The transformation function is invoked on demand, and only once per item to be treated,
      * storing the treated result into an universal value holder buffer. The given functor
      * is adapted in a similar way as the "expand functor", so to detect and convert the
@@ -896,7 +888,7 @@ namespace lib {
         
         template<typename FUN>
         Transformer (SRC&& dataSrc, FUN&& transformFunctor)
-          : SRC{move (dataSrc)}                            // NOTE: slicing move to strip TreeExplorer (Builder)
+          : SRC{move (dataSrc)}                            // NOTE: slicing move to strip IterExplorer (Builder)
           , trafo_{_FunTraits<FUN,SRC>::adaptFunctor (forward<FUN> (transformFunctor))}
           { }
         
@@ -953,7 +945,7 @@ namespace lib {
     
     
     /**
-     * @internal Decorator for TreeExplorer to filter elements based on a predicate.
+     * @internal Decorator for IterExplorer to filter elements based on a predicate.
      * Similar to the Transformer, the given functor is adapted as appropriate. However,
      * we require the functor's result type to be convertible to bool, to serve as approval test.
      * The filter predicate and thus the source iterator is evaluated _eagerly_, to establish the
@@ -1215,7 +1207,7 @@ namespace lib {
     
     
     /**
-     * @internal Decorator for TreeExplorer to cut iteration once a predicate ceases to be true.
+     * @internal Decorator for IterExplorer to cut iteration once a predicate ceases to be true.
      * Similar to Filter, the given functor is adapted as appropriate, yet is required to yield
      * a bool convertible result. The functor will be evaluated whenever the »exhausted« state
      * of the resulting iterator is checked, on each access and before iteration; this evaluation
@@ -1262,7 +1254,7 @@ namespace lib {
     
     /**
      * Interface to indicate and expose the ability for _child expansion_.
-     * This interface is used when packaging a TreeExplorer pipeline opaquely into IterSource.
+     * This interface is used when packaging a IterExplorer pipeline opaquely into IterSource.
      * @remark the depth() call indicates the depth of the child expansion tree. This information
      *       can be used by a "downstream" consumer to react according to a nested scope structure.
      * @todo expandChildren() should not return the value pointer.
@@ -1282,22 +1274,22 @@ namespace lib {
       };
     
     /**
-     * @internal Decorator to package a whole TreeExplorer pipeline suitably to be handled through
-     * an IterSource based front-end. Such packaging is performed by the TreeExplorer::asIterSource()
+     * @internal Decorator to package a whole IterExplorer pipeline suitably to be handled through
+     * an IterSource based front-end. Such packaging is performed by the IterExplorer::asIterSource()
      * terminal builder function. In addition to [wrapping the iterator](\ref WrappedLumieraIter),
      * the `expandChildren()` operation is exposed as virtual function, to allow invocation through
      * the type-erased front-end, without any knowledge about the concrete implementation type
      * of the wrapped TreeIterator pipeline.
      */
     template<class SRC>
-    class PackagedTreeExplorerSource
+    class PackagedIterExplorerSource
       : public WrappedLumieraIter<SRC>
       , public ChildExpandableSource<typename SRC::value_type>
       {
         using Parent = WrappedLumieraIter<SRC>;
         using Val = typename SRC::value_type;                             ///////////////////////////////////TICKET #1125 : get rid of Val
         
-       ~PackagedTreeExplorerSource() { }
+       ~PackagedIterExplorerSource() { }
       public:
         using Parent::Parent;
         
@@ -1323,12 +1315,12 @@ namespace lib {
   
   
   /**
-   * Iterator front-end to manage and operate a TreeExplorer pipeline opaquely.
+   * Iterator front-end to manage and operate a IterExplorer pipeline opaquely.
    * In addition to the usual iterator functions, this front-end also exposes an
    * `expandChildren()`-function, to activate the _expansion functor_ installed
-   * through TreeExplorer::expand().
+   * through IterExplorer::expand().
    * @remarks A iterator pipeline is assembled through invocation of the builder functions
-   *    on TreeExplorer -- this way creating a complex implementation defined iterator type.
+   *    on IterExplorer — thereby creating a complex implementation defined iterator type.
    *    This front-end manages such a pipeline in heap allocated storage (by shared_ptr), while
    *    exposing only a simple conventional interface (templated to the resulting value type `VAL`).
    *    This allows to pass it over interfaces as "unspecified data source", without disclosing
@@ -1366,13 +1358,13 @@ namespace lib {
       
     private:
       template<class SRC>
-      friend class TreeExplorer;
+      friend class IterExplorer;
       
       template<class IT>
       IterExploreSource (IT&& opaqueSrcPipeline)
         : IterSource<VAL>::iterator {
             IterSource<VAL>::build (
-              new iter_explorer::PackagedTreeExplorerSource<IT> {
+              new iter_explorer::PackagedIterExplorerSource<IT> {
                 move (opaqueSrcPipeline)})}
       { }
       
@@ -1380,7 +1372,7 @@ namespace lib {
       expandableSource()  const
         {
           if (not this->source())
-            throw error::State ("operating on a disabled default constructed TreeExplorer"
+            throw error::State ("operating on a disabled default constructed IterExplorer"
                                ,error::LUMIERA_ERROR_BOTTOM_VALUE);
           
           auto source = unConst(this)->source().get();
@@ -1392,7 +1384,7 @@ namespace lib {
   
   
   
-  /* ======= TreeExplorer pipeline builder and iterator ======= */
+  /* ======= IterExplorer pipeline builder and iterator ======= */
   
   /**
    * Adapter to build a demand-driven tree expanding and exploring computation
@@ -1406,16 +1398,16 @@ namespace lib {
    *             into an instance of the iter_explorer::BaseAdapter template
    * 
    * \par usage
-   * TreeExplorer is meant to be used as *Builder* for a processing pipeline.
+   * IterExplorer is meant to be used as *Builder* for a processing pipeline.
    * For this to work, it is essential to pick the `SRC` baseclass properly.
-   *        - to build a TreeExplorer, use the treeExplore() free function,
+   *        - to build a IterExplorer, use the \ref explore() free function,
    *          which cares to pick up and possibly adapt the given iteration source
-   *        - to add processing layers, invoke the builder operations on TreeExplorer
+   *        - to add processing layers, invoke the builder operations on IterExplorer
    *          in a chained fashion, thereby binding functors or lambdas. Capture the
    *          final result with an auto variable.
    *        - the result is iterable in accordance to »Lumiera Forward Iterator«
    * 
-   * @warning deliberately, the builder functions exposed on TreeExplorer will
+   * @warning deliberately, the builder functions exposed on IterExplorer will
    *          _move_ the old object into the new, augmented iterator. This is
    *          possibly dangerous, since one might be tempted to invoke such a
    *          builder function on an existing iterator variable captured by auto.
@@ -1425,7 +1417,7 @@ namespace lib {
    *          builder API and unleashes or slices down to the iterator instead.
    */
   template<class SRC>
-  class TreeExplorer
+  class IterExplorer
     : public SRC
     {
       static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
@@ -1443,7 +1435,7 @@ namespace lib {
       
       /* ==== Builder functions ==== */
       
-      /** preconfigure this TreeExplorer to allow for _"expansion of children"_.
+      /** preconfigure this IterExplorer to allow for _"expansion of children"_.
        * The resulting iterator exposes an `expandChildren()` function, which consumes
        * the current head element of this iterator and feeds it through the
        * _expansion functor_, which was provided to this builder function here.
@@ -1466,10 +1458,10 @@ namespace lib {
        *          reason, the functor may take its argument by reference, and a produced
        *          new "child state core" may likewise collaborate with that original
        *          data source or state core behind the scenes; the latter is guaranteed
-       *          to exist during the whole lifetime of this TreeExplorer.
+       *          to exist during the whole lifetime of this IterExplorer.
        * @note there is limited support for generic lambdas, but only for the second case.
        *       The reason is, we can not "probe" a template or generic lambda for possible
-       *       argument and result types. Thus, if you provide a generic lambda, TreeExplorer
+       *       argument and result types. Thus, if you provide a generic lambda, IterExplorer
        *       tries to pass it a `SrcIter &` (reference to the embedded original iterator).
        *       For any other cases, please provide a lambda or functor with a single, explicitly
        *       typed argument. Obviously, argument and result type should also make sense for
@@ -1486,7 +1478,7 @@ namespace lib {
           using ResCore = iter_explorer::Expander<SRC, ExpandedChildren>;
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
-          return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(expandFunctor)});
+          return IterExplorer<ResIter> (ResCore {move(*this), forward<FUN>(expandFunctor)});
         }
       
       
@@ -1507,7 +1499,7 @@ namespace lib {
           using ResCore = iter_explorer::AutoExpander<SRC>;
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
-          return TreeExplorer<ResIter> (ResCore {move(*this)});
+          return IterExplorer<ResIter> (ResCore {move(*this)});
         }
       
       /** shortcut notation to invoke \ref expand(expandFunctor) followed by \ref expandAll() */
@@ -1535,11 +1527,11 @@ namespace lib {
           using ResCore = iter_explorer::ScheduledExpander<SRC>;
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
-          return TreeExplorer<ResIter> (ResCore {move(*this)});
+          return IterExplorer<ResIter> (ResCore {move(*this)});
         }
       
       
-      /** adapt this TreeExplorer to pipe each result value through a transformation function.
+      /** adapt this IterExplorer to pipe each result value through a transformation function.
        * Several "layers" of mapping can be piled on top of each other, possibly mixed with the
        * other types of adaptation, like the child-expanding operation, or a filter. Obviously,
        * when building such processing pipelines, the input and output types of the functors
@@ -1558,11 +1550,11 @@ namespace lib {
           using ResCore = iter_explorer::Transformer<SRC, Product>;
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
-          return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(transformFunctor)});
+          return IterExplorer<ResIter> (ResCore {move(*this), forward<FUN>(transformFunctor)});
         }
       
       
-      /** adapt this TreeExplorer to iterate only as long as a condition holds true.
+      /** adapt this IterExplorer to iterate only as long as a condition holds true.
        * @return processing pipeline with attached [stop condition](\ref iter_explorer::StopTrigger)
        */
       template<class FUN>
@@ -1574,11 +1566,11 @@ namespace lib {
           using ResCore = iter_explorer::StopTrigger<SRC>;
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
-          return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(whileCond)});
+          return IterExplorer<ResIter> (ResCore {move(*this), forward<FUN>(whileCond)});
         }
       
       
-      /** adapt this TreeExplorer to iterate until a condition becomes first true.
+      /** adapt this IterExplorer to iterate until a condition becomes first true.
        * @return processing pipeline with attached [stop condition](\ref iter_explorer::StopTrigger)
        */
       template<class FUN>
@@ -1591,7 +1583,7 @@ namespace lib {
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           using ArgType = typename iter_explorer::_FunTraits<FUN,SRC>::Arg;
           
-          return TreeExplorer<ResIter> (ResCore { move(*this)
+          return IterExplorer<ResIter> (ResCore { move(*this)
                                                 ,[whileCond = forward<FUN>(untilCond)](ArgType val)
                                                   {
                                                     return not whileCond(val);
@@ -1600,7 +1592,7 @@ namespace lib {
         }
       
       
-      /** adapt this TreeExplorer to filter results, by invoking the given functor to approve them.
+      /** adapt this IterExplorer to filter results, by invoking the given functor to approve them.
        * The previously created source layers will be "pulled" to fast-forward immediately to the
        * next element confirmed this way by the bound functor. If none of the source elements
        * is acceptable, the iterator will transition to exhausted state immediately.
@@ -1615,7 +1607,7 @@ namespace lib {
           using ResCore = iter_explorer::Filter<SRC>;
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
-          return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(filterPredicate)});
+          return IterExplorer<ResIter> (ResCore {move(*this), forward<FUN>(filterPredicate)});
         }
       
       
@@ -1628,7 +1620,7 @@ namespace lib {
        * possibly causing the underlying iterator to be pulled until an element matching the condition
        * is found.
        * @return processing pipeline with attached [special MutableFilter](\ref iter_explorer::MutableFilter) decorator
-       * @see \ref IterTreeExplorer_test::verify_FilterChanges()
+       * @see \ref IterIterExplorer_test::verify_FilterChanges()
        * @see \ref iter_explorer::MutableFilter::andFilter()
        * @see \ref iter_explorer::MutableFilter::andNotFilter()
        * @see \ref iter_explorer::MutableFilter::orFilter()
@@ -1645,7 +1637,7 @@ namespace lib {
           using ResCore = iter_explorer::MutableFilter<SRC>;
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
-          return TreeExplorer<ResIter> (ResCore {move(*this), forward<FUN>(filterPredicate)});
+          return IterExplorer<ResIter> (ResCore {move(*this), forward<FUN>(filterPredicate)});
         }
       
       
@@ -1666,7 +1658,7 @@ namespace lib {
        *   which for the consumer side behave like `iterNext()` calls. If a layer needs to do something special for
        *   `iterNext()`, it needs to perform a similar action for `expandChildren()`.
        * - it must be behave like a default-constructible, copyable value object
-       * @return augmented TreeExplorer, incorporating and adapting the injected layer
+       * @return augmented IterExplorer, incorporating and adapting the injected layer
        */
       template<template<class> class LAY>
       auto
@@ -1675,7 +1667,7 @@ namespace lib {
           using ResCore = LAY<SRC>;
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
-          return TreeExplorer<ResIter> (ResCore {move(*this)});
+          return IterExplorer<ResIter> (ResCore {move(*this)});
         }
       
       
@@ -1695,7 +1687,7 @@ namespace lib {
         }
       
       
-      /** _terminal builder_ to strip the TreeExplorer and expose the built Pipeline.
+      /** _terminal builder_ to strip the IterExplorer and expose the built Pipeline.
        * @return a »Lumiera Forward iterator« incorporating the complete pipeline logic.
        */
       SRC
@@ -1714,14 +1706,15 @@ namespace lib {
   
   /* ==== convenient builder free functions ==== */
   
-  /** start building a TreeExplorer
+  /** start building a IterExplorer
    * by suitably wrapping the given iterable source.
    * @return a TreeEplorer, which is an Iterator to yield all the source elements,
    *         but may also be used to build up a complex processing pipeline.
    * @warning if you capture the result of this call by an auto variable,
    *         be sure to understand that invoking any further builder operation on
-   *         TreeExplorer will invalidate that variable (by moving it into the
+   *         IterExplorer will invalidate that variable (by moving it into the
    *         augmented iterator returned from such builder call).
+   * @todo this framework should be retrofitted to fit in with C++20 pipelines
    * 
    * # Usage
    * 
@@ -1735,23 +1728,23 @@ namespace lib {
    *   be iterated as "Lumiera Forward Iterator". Any object with suitable extension
    *   points and behaviour can be used, as explained [here](\ref lib::IterStateWrapper).
    * 
-   * The resulting TreeExplorer instance can directly be used as "Lumiera Forward Iterator".
+   * The resulting IterExplorer instance can directly be used as "Lumiera Forward Iterator".
    * However, typically you might want to invoke the builder functions to configure further
    * processing steps in a processing pipeline...
-   * - to [filter](\ref TreeExplorer::filter) the results with a predicate (functor)
-   * - to [transform](\ref TreeExplorer::transform) the yielded results
-   * - to bind and configure a [child expansion operation](\ref TreeExplorer::expand), which
+   * - to [filter](\ref IterExplorer::filter) the results with a predicate (functor)
+   * - to [transform](\ref IterExplorer::transform) the yielded results
+   * - to bind and configure a [child expansion operation](\ref IterExplorer::expand), which
    *   can then be triggered by explicitly invoking [.expandChildren()](\ref iter_explorer::Expander::expandChildren)
    *   on the resulting pipeline; the generated child sequence is "flat mapped" into the results
    *   (a *Monad* style usage).
-   * - to [package](\ref TreeExplorer::asIterSource) the pipeline built thus far behind an opaque
+   * - to [package](\ref IterExplorer::asIterSource) the pipeline built thus far behind an opaque
    *   interface and move the implementation into heap memory.
    * 
    * A typical usage might be...
    * \code
    * auto multiply  = [](int v){ return 2*v; };
    * 
-   * auto ii = treeExplore (CountDown{7,4})
+   * auto ii = explore (CountDown{7,4})
    *             .transform(multiply);
    * 
    * CHECK (14 == *ii);
@@ -1763,24 +1756,14 @@ namespace lib {
    */
   template<class IT>
   inline auto
-  treeExplore (IT&& srcSeq)
+  explore (IT&& srcSeq)
   {
     using SrcIter = typename _DecoratorTraits<IT>::SrcIter;
     using Base = iter_explorer::BaseAdapter<SrcIter>;
     
-    return TreeExplorer<Base> (std::forward<IT> (srcSeq));
-  }
-  
-  /** synonym for #treeExplore.
-   * @remark this might become an extension to C++20 pipelines
-   */
-  template<class IT>
-  inline auto
-  explore (IT&& srcSeq)
-  {
-    return treeExplore (std::forward<IT> (srcSeq));
+    return IterExplorer<Base> (std::forward<IT> (srcSeq));
   }
   
   
 } // namespace lib
-#endif /* LIB_ITER_TREE_EXPLORER_H */
+#endif /* LIB_ITER_EXPLORER_H */
