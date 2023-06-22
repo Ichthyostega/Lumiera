@@ -419,11 +419,6 @@ return: 0
 END
 
 
-TEST "Hierarchy rebuilding" HierarchyOrientationIndicator_test <<END
-return: 0
-END
-
-
 TEST "IOS restore format" IosSavepoint_test <<END
 out-lit: 0x2a
 out-lit:         42

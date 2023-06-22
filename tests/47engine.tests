@@ -76,5 +76,5 @@ PLANNED "scheduler interface" SchedulerInterface_test <<END
 END
 
 
-PLANNED "Step timing basics" Timings_test <<END
+TEST "Step timing basics" Timings_test <<END
 END

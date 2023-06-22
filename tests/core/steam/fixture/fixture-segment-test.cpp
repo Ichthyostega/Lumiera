@@ -28,7 +28,6 @@
 #include "lib/test/run.hpp"
 #include "steam/fixture/node-graph-attachment.hpp"
 #include "steam/engine/mock-dispatcher.hpp"
-#include "steam/engine/frame-coord.hpp"
 #include "steam/engine/exit-node.hpp"
 #include "lib/util.hpp"
 

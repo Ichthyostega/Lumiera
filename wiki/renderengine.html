@@ -521,7 +521,7 @@ noscript {display:none;} /* Fixes a feature in Firefox 1.5.0.2 where print previ
 </div>
 <!--POST-SHADOWAREA-->
 <div id="storeArea">
-<div title="AboutMonads" creator="Ichthyostega" modifier="Ichthyostega" created="201712101925" modified="202304132305" tags="Concepts discuss" changecount="72">
+<div title="AboutMonads" creator="Ichthyostega" modifier="Ichthyostega" created="201712101925" modified="202306221801" tags="Concepts discuss" changecount="74">
 <pre>//Monads are of questionable usefulness//
 
 Monads are a concept and theoretical framework from category theory.
@@ -536,9 +536,7 @@ What remains is a set of clever technicalities. Such can be applied and executed
 When we care for complexity, we do so while we care for matters tangible to humans. Related to software, this is the need to maintain it, to adjust it, to adapt and remould it, to keep it relevant. At the bottom of all of these lies the need to understand software. And this Understanding mandates to use terms and notions, even patterns, which evoke meaning -- even to the uninitiated. How can „Monads“ even be helpful with that?
 
 !To make sensible usage of Monads
-Foremost, they should be kept as what they are: technicalities. For the understanding, they must be subordinate to a real concept or pattern. One with the power to reorient our view of matters at hand.
-Thus we ask: what can be said about Monads?
-
+Foremost, they should be kept as what they are: technicalities. For the understanding, they must be subordinate to a real concept or pattern. One with the power to reorient our view of matters at hand. Thus we ask: //what can be said about Monads?//
 !!!Formalism
 Regarding the formalism, it should be mentioned
 * that a Monad is a //type constructor// -- it takes a type parameter and generates a new instant of monadic kind.
@@ -4271,9 +4269,9 @@ Most calculations are not monolithic and can not be performed in-memory in a sin
 Pre-planning this chain of schedules is only necessary for {{{TIMEBOUND}}} playback -- in the other cases, for //best effort// or //background// computations, just the sequence of dependencies must be observed, starting the next step only after all prerequisites are ready. And while the [[Scheduler]] actually has the capability to react on such logical dependencies, for precise timing the schedule deadlines will be prepared in the JobPlanningPipeline. Working backwards from the »top-level« frame job, prerequisites will be discovered incrementally by a recursive depth-first »tree exploration«. Defined by a //exploration function// within an iterator-pipeline construct, further layers of child dependencies are discovered and pushed onto a stack. At some point, a »leaf prerequisite« is discovered -- and at that point the complete chain of dependencies resides within this stack, each represented as a {{{JobPlanning}}} data record. The computation is arranges in a way to link these dependent planning contexts together, allowing to determine the dependent scheduling deadlines by recurring to the parent {{{JobPlanning}}} record, all the way up to the root record, which aligns to an time gird point externally set by the playback timings.
 </pre>
 </div>
-<div title="JobPlanningPipeline" creator="Ichthyostega" modifier="Ichthyostega" created="202305260209" modified="202306202218" tags="operational Rendering draft" changecount="10">
+<div title="JobPlanningPipeline" creator="Ichthyostega" modifier="Ichthyostega" created="202305260209" modified="202306221803" tags="operational Rendering draft" changecount="11">
 <pre>//Depth-first evaluation pipeline used in the FrameDispatcher to generate the next chunk of [[render jobs|RenderJob]]//
-This is an implementation structure backed and established by the [[Dispatcher|FrameDispatcher]] and operated by the RenderDrive core of each CalcStream, where it is assembled by a //builder notation// -- backed by the {{{TreeExplorer}}} iterator pipeline framework; besides the typical filter and transform operations, the latter offers an »expansion« mechanism to integrate a //monadic exhaustive depth-first search,// allowing to pick up all prerequisites of a given calculation, proceeding step by step within a local planning context.
+This is an implementation structure backed and established by the [[Dispatcher|FrameDispatcher]] and operated by the RenderDrive core of each CalcStream, where it is assembled by a //builder notation// -- backed by the {{{IterExplorer}}} iterator pipeline framework; besides the typical filter and transform operations, the latter offers an »expansion« mechanism to integrate a //monadic exhaustive depth-first search,// allowing to pick up all prerequisites of a given calculation, proceeding step by step within a local planning context.
 
 !Stages of the Job-planning pipeline
 ;frame-tick

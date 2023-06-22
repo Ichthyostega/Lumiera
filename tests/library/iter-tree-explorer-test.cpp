@@ -20,39 +20,32 @@
 
 * *****************************************************/
 
-/** @file iter-tree-explorer-test.cpp
- ** The \ref IterTreeExplorer_test covers and demonstrates a generic mechanism
- ** to expand and evaluate tree like structures. In its current shape (as of 2017),
- ** it can be seen as an preliminary step towards retrofitting IterExplorer into
- ** a framework of building blocks for tree expanding and backtracking evaluations.
+/** @file iter-explorer-test.cpp
+ ** The \ref IterExplorer_test covers and demonstrates a generic mechanism
+ ** to expand and evaluate tree like structures. It was created in response to
+ ** a recurring need for configurable tree expanding and backtracking evaluations.
  ** Due to the nature of Lumiera's design, we repeatedly encounter this kind of
  ** algorithms, when it comes to matching configuration and parametrisation against
  ** a likewise hierarchical and rules based model. To keep the code base maintainable,
  ** we deem it crucial to reduce the inherent complexity in such algorithms by clearly
  ** separate the _mechanics of evaluation_ from the actual logic of the target domain.
  ** 
- ** Similar to IterExplorer_test, this test relies on a demonstration setup featuring
- ** a custom encapsulated state type: we rely on a counter with start and end value,
- ** embedded into an iterator. Basically, this running counter, when iterated, generates
- ** a descending sequence of numbers start ... end.
- ** So -- conceptually -- this counting iterator can be thought to represent this
- ** sequence of numbers. Note that this is a kind of abstract or conceptual
- ** representation, not a factual representation of the sequence in memory.
- ** The whole point is _not to represent_ this sequence in runtime state at once,
- ** rather to pull and expand it on demand.
+ ** This test relies on a demonstration setup featuring a custom encapsulated state type:
+ ** we rely on a counter with start and end value, embedded into an iterator as »state core«.
+ ** This running counter, when iterated, generates a descending sequence of numbers start ... end.
+ ** So -- conceptually -- this counting iterator can be conceived as _representing_ this sequence 
+ ** of numbers, while not actually representing all these numbers as data in memory. And this is
+ ** the whole point of the exercise: _not to represent_ this sequence in runtime state at once,
+ ** rather to __pull and expand it on demand._
  ** 
  ** All these tests work by first defining these _functional structures_, which just
  ** yields an iterator entity. We get the whole structure it conceptually defines
- ** only if we "pull" this iterator until exhaustion -- which is precisely what
- ** the test does to verify proper operation. Real world code of course would
- ** just not proceed in this way, like pulling everything from such an iterator.
- ** Often, the very reason we're using such a setup is the ability to represent
- ** infinite structures. Like e.g. the evaluation graph of video passed through
- ** a complex processing pipeline.
- ** 
- ** @warning as of 4/2023 the alternative Monad-style iterator framework "iter-explorer" will be retracted
- **      and replaced by this design here, which will then be renamed into IterExplorer  //////////////////////////////TICKET #1276
- ** 
+ ** only if we »pull« and »materialise« this iterator until exhaustion — which essentially
+ ** is what the test does to verify proper operation. In contrast, _Real World Code_ of course
+ ** would not proceed in this way, like pulling everything from such an iterator. Since often
+ ** the very reason we're using such a setup is the ability to represent infinite structures.
+ ** Like e.g. the evaluation graph of video passed through a complex processing pipeline.
+ **
  */
 
 

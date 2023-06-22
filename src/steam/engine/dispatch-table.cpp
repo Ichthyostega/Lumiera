@@ -24,32 +24,16 @@
 /** @file dispatch-table.cpp
  ** Implementation details of render job generation.
  ** @todo draft from 2011, stalled, relevance not yet clear
+ ** @todo 6/2023 still unimplemented, as is the Fixture, which needs to back the Dispatcher
  */
 
 
 #include "steam/engine/dispatch-table.hpp"
-//#include "lib/frameid.hpp"
-//#include "steam/state.hpp"
 
 
 
 namespace steam {
 namespace engine {
-  
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
-  /** */
-  FrameCoord
-  DispatchTable::locateRelative (FrameCoord const&, FrameCnt frameOffset)
-  {
-    UNIMPLEMENTED ("real implementation of the core dispatch operation");
-  }
-  
-  bool
-  DispatchTable::isEndOfChunk (FrameCnt, ModelPort port)
-  {
-    UNIMPLEMENTED ("determine when to finish a planning chunk");
-  }
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
   
   JobTicket&
   DispatchTable::getJobTicketFor (size_t, TimeValue nominalTime)

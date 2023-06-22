@@ -65,9 +65,6 @@ namespace test  {
     
     const uint START_FRAME(10);
     
-    const uint DUMMY_CHANNEL(0); /////////////////////////////////////////////////////////////TICKET #1297 : get rid of the channels (use different ModelPort)
-    
-    
     
     
     FSecs
@@ -77,11 +74,6 @@ namespace test  {
     }
 
   } // (End) Test fixture
-  
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
-  
-  
   
   
   
@@ -115,8 +107,6 @@ namespace test  {
           ENSURE (START_FRAME == 10);
           CHECK (timings.getFrameStartAt(START_FRAME)   == Time::ZERO + Duration(10, FrameRate::PAL));
           CHECK (timings.getFrameStartAt(START_FRAME+1) == Time::ZERO + Duration(11, FrameRate::PAL));
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1301
         }
       
       

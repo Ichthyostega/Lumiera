@@ -28,11 +28,8 @@
 
 
 #include "steam/engine/render-drive.hpp"
-#include "steam/engine/frame-coord.hpp"
 #include "steam/engine/job-ticket.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/frameid.hpp"
-//#include "steam/state.hpp"
 
 #include <boost/functional/hash.hpp>
 
@@ -102,16 +99,14 @@ namespace engine {
   void
   RenderDrive::performJobPlanningChunk(FrameCnt nextStartFrame)
   {
-    TimeAnchor refPoint(getTimings(), nextStartFrame);
     UNIMPLEMENTED ("the actual meat: advance the render process");
   }
   
   
   Job
-  RenderDrive::buildFollowUpJobFrom (TimeAnchor const& refPoint)
+  RenderDrive::buildFollowUpJobFrom (Time refPoint)
   {
-    return this->prepareRenderPlanningFrom(
-                   refPoint.getNextAnchorPoint());
+    UNIMPLEMENTED ("create a follow-up job to pick up job-planning at or after the refPoint");
   }
   
   

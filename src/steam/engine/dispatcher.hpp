@@ -28,7 +28,6 @@
  ** the Dispatcher is responsible for transforming the generic setup of such a calculation stream
  ** into a sequence of concrete jobs, anchored at some distinct point in time.
  ** 
- ** @todo valid draft, unfortunately stalled in 2013
  ** @todo as of 4/2023 a complete rework of the Dispatcher is underway //////////////////////////////////////TICKET #1275
  */
 
@@ -38,12 +37,11 @@
 
 #include "steam/common.hpp"
 #include "steam/mobject/model-port.hpp"
-#include "steam/engine/frame-coord.hpp"
 #include "steam/engine/job-ticket.hpp"
 #include "steam/engine/job-planning.hpp"
 #include "steam/play/timings.hpp"
 #include "steam/play/output-slot.hpp"
-#include "lib/iter-tree-explorer.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/nocopy.hpp"
 
@@ -60,8 +58,9 @@ namespace engine {
   using mobject::ModelPort;
   using play::Timings;
   using play::DataSink;
-  using lib::time::FrameCnt;
+  using lib::time::TimeValue;
   using lib::time::TimeSpan;
+  using lib::time::FrameCnt;
   using lib::time::FSecs;
   using lib::time::Time;
   
@@ -91,31 +90,11 @@ namespace engine {
   class Dispatcher
     : util::NonCopyable
     {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
-      struct JobBuilder
-        {
-          Dispatcher* dispatcher_;
-          ModelPort modelPort_;
-          uint channel_;
-          
-          FrameCoord relativeFrameLocation (TimeAnchor& refPoint, FrameCnt frameCountOffset =0);
-          
-          JobPlanningSequence
-          establishNextJobs (TimeAnchor& refPoint)
-            {
-              return JobPlanningSequence(
-                  relativeFrameLocation(refPoint),
-                  *dispatcher_);
-            }
-        };
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsolete      
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
+      
       struct PipeFrameTick;
       
       template<class IT>
       struct PipelineBuilder;
-      
       
       
     public:
@@ -156,36 +135,6 @@ namespace engine {
        *         error if attempting to dispatch on a unknown ModelPort.
        */
       virtual size_t resolveModelPort (ModelPort)                                  =0;
-      
-      
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
-      /** core dispatcher operation: based on the coordinates of a reference point,
-       *  establish binding frame number, nominal time and real (wall clock) deadline.
-       * @return new FrameCoord record (copy), with the nominal time, frame number
-       *         and deadline adjusted in accordance to the given frame offset.
-       */
-      virtual FrameCoord locateRelative (FrameCoord const&, FrameCnt frameOffset)  =0;
-      
-      virtual bool       isEndOfChunk   (FrameCnt, ModelPort port)                 =0;
-
-      ////////TODO: API-1 = just get next frame, without limitations  .... CHECK
-      ////////TODO: API-2 = query limitation of planning chunk        .... CHECK
-      ////////TODO: API-3 = establish next chunk                      .... still WIP
-      
-      ////////TODO: Question: why not embedding the time anchor directly within the location generator??
-      ////////      Answer: no this would lead to a huge blob called "the dispatcher"
-      
-      ////////TODO: immediate point to consider:  the time anchor is responsible for the real timing calculations. But how to introduce the play strategy *here* ?
-      
-      ////////////TODO: the solution is simple: get rid of the additional job placed magically into the chunk
-      ////////////      instead, provide a dedicated API function to create exactly that job
-      ////////////      and *enclosed* into a specialised JobClosure subclass, embody the code for the follow-up
-      ////////////      As a corollary: the scheduling deadline should be defined right *within* the job!
-      
-      ////////////TODO: remaining issues
-      ////////////    - the TimeAnchor needs to be created directly from the JobParameter. No mutable state!
-      ////////////    - but this leads to a lot of duplicated Timings records, unless we rewrite the TimeAnchor to be noncopyable and use a Timings const&
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
       
       /**
        * Core Dispatcher operation: locate the appropriate Segment and
@@ -272,7 +221,7 @@ namespace engine {
       timeRange (Time start, Time after)
         {
           SRC::activate (start,after);
-          return buildPipeline (lib::treeExplore (move(*this)));
+          return buildPipeline (lib::explore (move(*this)));
         }                      // expected next to invoke pullFrom(port,sink)
       
 
@@ -340,9 +289,9 @@ namespace engine {
     protected:
       /** @internal type rebinding helper to move the given tree-Explorer pipeline
        *            and layer a new PipelineBuilder subclass on top.
-       *  @note TreeExplorer itself is defined in a way to always strip away any existing
-       *            top-level TreeExplorer, then add a new processing layer and finally
-       *            place a new TreeExplorer layer on top. Taken together, this setup will
+       *  @note IterExplorer itself is defined in a way to always strip away any existing
+       *            top-level IterExplorer, then add a new processing layer and finally
+       *            place a new IterExplorer layer on top. Taken together, this setup will
        *            *slice away* the actual PipelineBuilder layer, move the resulting pipeline
        *            into the next building step and finally produce a cleanly linked processing
        *            pipeline without any interspersed builders. Yet still, partially constructed

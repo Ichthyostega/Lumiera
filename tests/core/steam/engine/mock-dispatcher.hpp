@@ -134,7 +134,7 @@ namespace test   {
    * and is able to probe some otherwise opaque internals of JobTicket.
    * Beyond that, MockJobTicket has the same storage size; and behaves
    * like the regular JobTicket after construction -- but any Job
-   * created by JobTicket::createJobFor(FrameCoord) will be wired
+   * created by JobTicket::createJobFor(nominalTime) will be wired
    * with the MockJob functor and can thus be related back to
    * the test specification setup.
    * @see JobPlanningPipeline_test
@@ -347,20 +347,6 @@ namespace test   {
       
     public:
       /* == mock implementation of the Dispatcher interface == */
-      
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
-      FrameCoord
-      locateRelative (FrameCoord const&, FrameCnt frameOffset)  override
-        {
-          UNIMPLEMENTED ("dummy implementation of the core dispatch operation");
-        }
-      
-      bool
-      isEndOfChunk (FrameCnt, ModelPort port)  override
-        {
-          UNIMPLEMENTED ("determine when to finish a planning chunk");
-        }
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
       
       size_t
       resolveModelPort (ModelPort modelPort)  override

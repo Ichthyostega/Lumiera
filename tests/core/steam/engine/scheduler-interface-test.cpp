@@ -22,6 +22,9 @@
 
 /** @file scheduler-interface-test.cpp
  ** unit test \ref SchedulerInterface_test
+ ** 
+ ** @deprecated 6/2023 the Scheduler interface is about to be defined anew,
+ **             and will likely be totally different than envisioned here...
  */
 
 
@@ -144,7 +147,8 @@ namespace test {
        *      driven by the exploration of a tree-like structure (the JobTicket).
        *      For the purpose of this interface demonstration test this recursive
        *      invocation structure is just emulated by a simple tail recursion.
-       * @see HierarchyOrientationIndicator_test#demonstrate_tree_rebuilding
+       * @deprecated 6/2023 STOP we do it quite different now, and better,
+       *             in the Job-Planning-Pipeline
        */
       void
       demonstrate_nested_job_specification (SchedulerFrontend& scheduler)

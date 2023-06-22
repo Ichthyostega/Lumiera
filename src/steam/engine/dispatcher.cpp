@@ -23,13 +23,11 @@
 
 /** @file dispatcher.cpp
  ** Implementation parts of job generation within an ongoing render process
- ** @todo valid draft, unfortunately stalled in 2013
+ ** @todo 2023 do we actually need a separate translation unit for this?
  */
 
 
 #include "steam/engine/dispatcher.hpp"
-//#include "lib/frameid.hpp"
-//#include "steam/state.hpp"
 
 
 
@@ -37,26 +35,6 @@ namespace steam {
 namespace engine {
 
   Dispatcher::~Dispatcher() { }  // emit VTables and Typeinfo here....
-  
-  
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : likely to become obsolete  
-  /** @todo WIP */
-  FrameCoord
-  Dispatcher::JobBuilder::relativeFrameLocation (TimeAnchor& refPoint, FrameCnt frameOffset)
-  {
-    FrameCoord frame;
-    frame.absoluteNominalTime = refPoint;
-    frame.absoluteFrameNumber = refPoint.getStartFrame();
-    frame.realTimeDeadline = refPoint.establishDeadlineFor (frameOffset);
-//  frame.modelPort = this->modelPort_;          ////////////////////////////TICKET #1301 : translation to model-port-ID now when Dispatcher-Pipeline is built
-//  frame.channelNr = this->channel_;
-    
-    ENSURE (frame.isDefined());
-    return dispatcher_->locateRelative (frame, frameOffset);
-  }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : likely to become obsolete  
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1276 :: to be refactored...
   
   
   

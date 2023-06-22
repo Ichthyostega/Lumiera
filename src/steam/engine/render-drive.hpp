@@ -41,7 +41,6 @@
 
 #include "steam/common.hpp"
 #include "steam/mobject/model-port.hpp"
-#include "steam/engine/time-anchor.hpp"
 #include "steam/engine/dispatcher.hpp"
 #include "steam/play/timings.hpp"
 #include "vault/engine/job.h"
@@ -147,7 +146,7 @@ namespace engine {
       
     private:
       void performJobPlanningChunk(FrameCnt nextStartFrame);
-      Job buildFollowUpJobFrom (TimeAnchor const& refPoint);
+      Job buildFollowUpJobFrom (Time refPoint);
     };
   
   

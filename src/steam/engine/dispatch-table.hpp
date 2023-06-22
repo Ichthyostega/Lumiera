@@ -23,7 +23,7 @@
 
 /** @file dispatch-table.hpp
  ** Implementation details of render job generation.
- ** @todo draft from 2011, stalled, relevance not yet clear
+ ** @todo 6/2023 »PlaybackVerticalSlice« : completing and integrating the core engine step by step
  */
 
 
@@ -45,7 +45,7 @@ namespace engine {
 //  class ExitNode;
   
   /**
-   * @todo 11/11 extremely fuzzy at the moment
+   * @todo 6/2023 gradually building up the core engine components...
    */
   class DispatchTable
     : public Dispatcher
@@ -53,10 +53,6 @@ namespace engine {
       
       /* ==== Dispatcher interface ==== */
       
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
-      FrameCoord locateRelative (FrameCoord const&, FrameCnt frameOffset) override;
-      bool       isEndOfChunk    (FrameCnt, ModelPort port)               override;
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1301 : obsoleted by rework of Dispatcher-Pipeline  
       size_t     resolveModelPort (ModelPort)                      override;
       JobTicket& getJobTicketFor  (size_t, TimeValue nominalTime)  override;
       

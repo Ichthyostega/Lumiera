@@ -268,7 +268,7 @@ namespace test  {
    *            locate here since this is a dedicated translation unit
    * @return `true` iff the job was defined in the typical way used by
    *         JobTicket to generate fill jobs for empty segments.
-   * @see JobTicket::JobTicket::createJobFor(FrameCoord)
+   * @see JobTicket::JobTicket::createJobFor(nominalTime)
    */
   bool
   MockJob::isNopJob (Job const& job)
