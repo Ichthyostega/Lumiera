@@ -41,10 +41,12 @@
 #include "vault/common.hpp"
 #include "lib/nocopy.hpp"
 //#include "lib/symbol.hpp"
+#include "vault/gear/activity.hpp"
 //#include "lib/util.hpp"
 
 //#include <string>
-
+#include <queue>
+#include <boost/lockfree/queue.hpp>
 
 namespace vault{
 namespace gear {
@@ -62,6 +64,17 @@ namespace gear {
   class SchedulerInvocation
     : util::NonCopyable
     {
+      struct ActOrder
+        {
+          size_t  waterlevel{0};
+          Activity* activity{nullptr};
+        };
+      
+      using InstructQueue = boost::lockfree::queue<ActOrder>;
+      using PriorityQueue = std::priority_queue<ActOrder>;
+      
+      InstructQueue instruct_;
+      PriorityQueue priority_;
       
     public:
       explicit
