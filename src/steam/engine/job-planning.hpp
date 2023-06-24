@@ -68,7 +68,7 @@
 #define STEAM_ENGINE_JOB_PLANNING_H
 
 #include "steam/common.hpp"
-#include "vault/engine/job.h"
+#include "vault/gear/job.h"
 #include "steam/engine/job-ticket.hpp"
 #include "steam/play/output-slot.hpp"
 #include "steam/play/timings.hpp"
@@ -88,6 +88,7 @@ namespace engine {
   using lib::time::Time;
   using lib::time::TimeVar;
   using lib::time::Duration;
+  using vault::gear::Job;
   
   
   

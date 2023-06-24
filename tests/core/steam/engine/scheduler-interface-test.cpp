@@ -32,13 +32,13 @@
 #include "lib/util.hpp"
 
 #include "vault/real-clock.hpp"
-#include "vault/engine/scheduler-frontend.hpp"
-#include "vault/engine/scheduler-diagnostics.hpp"
+#include "vault/gear/scheduler-frontend.hpp"
+#include "vault/gear/scheduler-diagnostics.hpp"
 #include "steam/engine/mock-dispatcher.hpp"
 
 
-namespace vault {
-namespace engine {
+namespace vault{
+namespace gear {
 namespace test {
   
   using util::isSameObject;
@@ -201,4 +201,4 @@ namespace test {
   /** Register this test class... */
   LAUNCHER(SchedulerInterface_test, "unit engine");
   
-}}} // namespace vault::engine::test
+}}} // namespace vault::gear::test

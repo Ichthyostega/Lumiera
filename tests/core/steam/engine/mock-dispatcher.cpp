@@ -40,7 +40,7 @@
 
 
 #include "steam/engine/mock-dispatcher.hpp"
-#include "vault/engine/nop-job-functor.hpp"
+#include "vault/gear/nop-job-functor.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
 #include "vault/real-clock.hpp"
@@ -66,7 +66,7 @@ namespace test  {
     using std::unordered_map;
     using util::access_or_default;
     
-    using vault::engine::JobParameter;
+    using vault::gear::JobParameter;
     
     
     const int MAX_PARAM_A(1000);   ///< random test values 0...1000
@@ -186,7 +186,7 @@ namespace test  {
     DummyClosure dummyClosure;
     
     /** access to the fallback-implementation for empty segments */
-    lib::Depend<vault::engine::NopJobFunctor> nopFunctor;
+    lib::Depend<vault::gear::NopJobFunctor> nopFunctor;
     
   }// (End)Implementation details
   

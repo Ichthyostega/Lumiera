@@ -84,7 +84,10 @@
 
 /* ======= Namespace Definitions ======= */
 
-/** Lumiera GTK UI implementation root. */
+/**
+ * Lumiera GTK UI implementation root.
+ * @ingroup gui
+ */
 namespace stage {
   
   /* some commonly used error marks for the UI... */

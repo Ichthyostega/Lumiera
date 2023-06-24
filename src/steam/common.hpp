@@ -41,7 +41,7 @@
 
 
 
-    /*  frequently used common types... */
+/* ===== frequently used common types ===== */
 
 #include "lib/p.hpp"
 #include "lib/util.hpp"
@@ -60,6 +60,7 @@
  * session support system, the playback-and-render-control subsystem and
  * the API and backbone of the renderengine. Most render implementation
  * code resides in the vault layer or is loaded from plug-ins though.
+ * @ingroup steam
  */
 namespace steam {
   
@@ -88,7 +89,7 @@ namespace steam {
   
   
   /**
-   * Render engine code as part of the Steam-Layer.
+   * Lumiera's render engine core and operational control.
    * Backbone of the engine, render nodes base and cooperation.
    * A good deal of the active engine code is outside the scope of the
    * Steam-Layer, e.g. code located in vault services and plugins.

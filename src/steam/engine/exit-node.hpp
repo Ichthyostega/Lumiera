@@ -35,7 +35,7 @@
 #include "lib/hash-value.h"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/time/timevalue.hpp"
-#include "vault/engine/job.h"              //////////////////////////////////////////////////////////////////TICKET #1295 : rather need a way to retrieve a real JobFunctor building block from the ProcNode
+#include "vault/gear/job.h"              //////////////////////////////////////////////////////////////////TICKET #1295 : rather need a way to retrieve a real JobFunctor building block from the ProcNode
 
 #include <utility>
 #include <deque>
@@ -51,7 +51,7 @@ namespace engine {
   class ExitNode;
   using ExitNodes = std::deque<engine::ExitNode>;
   
-  using vault::engine::JobFunctor;
+  using vault::gear::JobFunctor;
   
   namespace {// hard wired placeholder config....
     const Duration DUMMY_JOB_RUNTIME{FSecs{1,50}};

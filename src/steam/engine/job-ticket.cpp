@@ -31,7 +31,7 @@
 
 
 #include "steam/engine/job-ticket.hpp"
-#include "vault/engine/nop-job-functor.hpp"
+#include "vault/gear/nop-job-functor.hpp"
 #include "lib/depend.hpp"
 #include "lib/util.hpp"
 
@@ -39,14 +39,15 @@
 namespace steam {
 namespace engine {
   
-  using vault::engine::JobClosure;
+  using vault::gear::Job;
+  using vault::gear::JobClosure;
   using lib::HashVal;
   using lib::unConst;
   using lib::time::FSecs;
   
   
   namespace { // Details...
-    lib::Depend<vault::engine::NopJobFunctor> nopFunctor;
+    lib::Depend<vault::gear::NopJobFunctor> nopFunctor;
     
     /* ======== hard wired =================*/
     const FSecs JOB_MINIMUM_RUNTIME{1,1000};

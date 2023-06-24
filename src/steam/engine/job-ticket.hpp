@@ -36,7 +36,7 @@
 #define STEAM_ENGINE_JOB_TICKET_H
 
 #include "steam/common.hpp"
-#include "vault/engine/job.h"
+#include "vault/gear/job.h"
 #include "steam/engine/exit-node.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/linked-elements.hpp"
@@ -52,9 +52,9 @@
 namespace steam {
 namespace engine {
   
-using vault::engine::Job;
-using vault::engine::JobFunctor;
-using vault::engine::JobClosure;        /////////////////////////////////////////////////////////////////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
+using vault::gear::Job;
+using vault::gear::JobFunctor;
+using vault::gear::JobClosure;        /////////////////////////////////////////////////////////////////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
 using lib::LinkedElements;
 using lib::time::Duration;
 using lib::time::Time;

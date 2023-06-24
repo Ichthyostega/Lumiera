@@ -43,7 +43,7 @@
 #include "steam/mobject/model-port.hpp"
 #include "steam/engine/dispatcher.hpp"
 #include "steam/play/timings.hpp"
-#include "vault/engine/job.h"
+#include "vault/gear/job.h"
 //#include "lib/nocopy.hpp"
 
 
@@ -51,8 +51,8 @@ namespace steam {
 namespace engine {
   
 //  using std::function;
-  using vault::engine::JobParameter;
-  using vault::engine::JobClosure;
+  using vault::gear::JobParameter;
+  using vault::gear::JobClosure;
   using mobject::ModelPort;
 //  using lib::time::TimeSpan;
 //  using lib::time::FSecs;

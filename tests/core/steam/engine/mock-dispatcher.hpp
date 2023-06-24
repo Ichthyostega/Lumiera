@@ -58,7 +58,7 @@
 #include "steam/mobject/model-port.hpp"
 #include "steam/engine/dispatcher.hpp"
 #include "steam/engine/job-ticket.hpp"
-#include "vault/engine/job.h"
+#include "vault/gear/job.h"
 #include "vault/real-clock.hpp"
 #include "lib/allocator-handle.hpp"
 #include "lib/time/timevalue.hpp"
@@ -86,8 +86,8 @@ namespace test   {
   using util::isSameObject;
   using fixture::Segmentation;
   using vault::RealClock;
-  using vault::engine::Job;
-  using vault::engine::JobClosure;
+  using vault::gear::Job;
+  using vault::gear::JobClosure;
   
   
   

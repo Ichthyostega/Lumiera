@@ -28,7 +28,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "steam/engine/mock-dispatcher.hpp"
-#include "vault/engine/nop-job-functor.hpp"
+#include "vault/gear/nop-job-functor.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/util-tuple.hpp"
 #include "lib/util.hpp"
@@ -56,7 +56,7 @@ namespace test  {
    *       - configurable setup of a complete frame Dispatcher
    * @see JobPlanningPipeline_test
    * @see Dispatcher
-   * @see vault::engine::Job
+   * @see vault::gear::Job
    * @see steam::fixture::Segmentation
    */
   class MockSupport_test : public Test
@@ -130,7 +130,7 @@ namespace test  {
           
           // build a render job to do nothing....
           Job nopJob = JobTicket::NOP.createJobFor (frameTime);
-          CHECK (INSTANCEOF (vault::engine::NopJobFunctor, static_cast<JobClosure*> (nopJob.jobClosure)));   //////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
+          CHECK (INSTANCEOF (vault::gear::NopJobFunctor, static_cast<JobClosure*> (nopJob.jobClosure)));   //////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
           CHECK (nopJob.parameter.nominalTime == frameTime);
           InvocationInstanceID empty; ///////////////////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
           CHECK (lumiera_invokey_eq (&nopJob.parameter.invoKey, &empty));

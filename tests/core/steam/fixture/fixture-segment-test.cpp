@@ -44,7 +44,7 @@ namespace test  {
   using engine::ExitNode;
   using lib::diff::MakeRec;
   
-  using engine::Job;
+  using vault::gear::Job;
   using engine::JobTicket;
   using engine::test::MockSegmentation;
   

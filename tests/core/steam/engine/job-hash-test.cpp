@@ -29,6 +29,7 @@
 #include "lib/util.hpp"
 
 #include "vault/real-clock.hpp"
+#include "vault/gear/job.h"
 #include "steam/engine/mock-dispatcher.hpp"
 
 #include <boost/functional/hash.hpp>
@@ -39,8 +40,8 @@ namespace engine{
 namespace test  {
   
   using util::isSameObject;
-  using vault::engine::Job;
-  using vault::engine::JobParameter;
+  using vault::gear::Job;
+  using vault::gear::JobParameter;
   
   
   

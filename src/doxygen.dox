@@ -88,6 +88,10 @@ with the *ASCIIDOC* tool and published at the [Lumiera website](http://Lumiera.o
     @ingroup vault
 */
 
+/** @defgroup memory Memory Management
+    @ingroup vault
+*/
+
 
 /* ==== Global Namespaces ==== */
 
