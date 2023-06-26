@@ -61,17 +61,27 @@ namespace gear {
   
   
   /**
-   * Basic (abstracted) view of...
-   * 
-   * @see SomeSystem
-   * @see NA_test
+   * Term to describe an Activity,
+   * to happen within the Scheduler's control flow.
    */
   class Activity
     {
       
     public:
-//      explicit
-      Activity ()
+      enum Verb {INVOKE     ///< dispatches a JobFunctor into a worker thread
+                ,DEPEND     ///< verify a given number of dependencies has been satisfied
+                ,TIMESTART  ///< signal start of some processing (for timing measurement)
+                ,TIMESTOP   ///< correspondingly signal end of some processing
+                ,NOTIFY     ///< push a message to another Activity
+                ,PROBE      ///< evaluate a condition and inhibit another target Activity
+                ,TICK       ///< internal engine »heart beat« for internal maintenance hook(s)
+                };
+      
+      const Verb verb_;
+      
+      explicit
+      Activity (Verb verb)
+        : verb_{verb}
         { }
       
       // using default copy/assignment

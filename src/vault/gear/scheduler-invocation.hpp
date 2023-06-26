@@ -47,12 +47,16 @@
 //#include <string>
 #include <queue>
 #include <boost/lockfree/queue.hpp>
+#include <utility>
 
 namespace vault{
 namespace gear {
   
+  namespace error = lumiera::error;
 //  using util::isnil;
 //  using std::string;
+  
+  using std::move;
   
   
   /**
@@ -68,6 +72,16 @@ namespace gear {
         {
           size_t  waterlevel{0};
           Activity* activity{nullptr};
+          
+          /** @internal ordering function for time based scheduling
+           *  @note reversed order as required by std::priority_queue
+           *        to get the earliest element at top of the queue
+           */
+          bool
+          operator< (ActOrder const& o)  const
+            {
+              return waterlevel > o.waterlevel;
+            }
         };
       
       using InstructQueue = boost::lockfree::queue<ActOrder>;
@@ -77,10 +91,49 @@ namespace gear {
       PriorityQueue priority_;
       
     public:
-      explicit
-      SchedulerInvocation (int const& moo)
+//      explicit
+      SchedulerInvocation()
         { }
       
+      
+      /**
+       * Accept an Activity for time-bound execution
+       */
+      void
+      instruct (Activity& activity)
+        {
+          size_t waterLevel = 123;  /////////////////////////////////////////////////////OOO derive water level from time window
+          bool success = instruct_.push (ActOrder{waterLevel, &activity});
+          if (not success)
+            throw error::Fatal{"Scheduler entrance: memory allocation failed"};
+        }
+      
+      
+      /**
+       * Pick up a new Activity and enqueue it according to time order
+       */
+      void
+      prioriseNext()
+        {
+          ActOrder actOrder;
+          bool hasInput = instruct_.pop (actOrder);
+          if (not hasInput)
+            return;
+          priority_.push (move (actOrder));
+        }
+      
+      
+      /**
+       * If there is an Activity to process now, pick it from the scheduling queue
+       */
+      Activity&
+      acceptHead()
+        {
+          Activity* activity = priority_.top().activity;
+          ///////////////////////////////////////////////////////////////////////////////OOO need to handle an empty queue or an Activity not ready to schedule yet
+          priority_.pop();
+          return *activity;
+        }
     };
   
   

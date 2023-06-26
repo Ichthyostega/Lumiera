@@ -66,12 +66,14 @@ namespace gear {
    */
   class Scheduler
     {
-      int nothing_;
+      SchedulerInvocation layer1_;
+      SchedulerControl    layer2_;
       
     public:
       explicit
-      Scheduler (int const& boo)
-        : nothing_(boo)
+      Scheduler()
+        : layer1_{}
+        , layer2_{}
         { }
       
       // using default copy/assignment

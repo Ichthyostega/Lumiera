@@ -63,8 +63,8 @@ namespace gear {
     {
       
     public:
-      explicit
-      SchedulerControl (int const& b)
+//      explicit
+      SchedulerControl()
         { }
       
     };
