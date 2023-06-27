@@ -110,29 +110,49 @@ namespace gear {
       
       
       /**
-       * Pick up a new Activity and enqueue it according to time order
+       * Pick up all new Activities from the entrance queue
+       * and enqueue them according to time order
        */
       void
-      prioriseNext()
+      feedPriorisation()
         {
           ActOrder actOrder;
-          bool hasInput = instruct_.pop (actOrder);
-          if (not hasInput)
-            return;
-          priority_.push (move (actOrder));
+          while (instruct_.pop (actOrder))
+            priority_.push (move (actOrder));
         }
       
       
       /**
-       * If there is an Activity to process now, pick it from the scheduling queue
+       * @return `nullptr` if the queue is empty, else the Activity corresponding
+       *         to the currently most urgent element (without dequeuing it).
        */
-      Activity&
-      acceptHead()
+      Activity*
+      peekHead()
         {
-          Activity* activity = priority_.top().activity;
-          ///////////////////////////////////////////////////////////////////////////////OOO need to handle an empty queue or an Activity not ready to schedule yet
-          priority_.pop();
-          return *activity;
+          return priority_.empty()? nullptr
+                                  : priority_.top().activity;
+        }
+      
+      /**
+       * If there is an Activity to process now, pick it from the scheduling queue
+       * @return `nullptr` if the prioritisation queue is empty,
+       *         else a pointer to the most urgent Activity dequeued thereby.
+       */
+      Activity*
+      pullHead()
+        {
+          Activity* activity = peekHead();
+          if (activity)
+            priority_.pop();
+          return activity;
+        }
+      
+      /** Determine if there is work to do right now */
+      bool
+      isDue (size_t level)  const
+        {
+          return not priority_.empty()
+             and priority_.top().waterlevel <= level;
         }
     };
   

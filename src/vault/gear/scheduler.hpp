@@ -42,7 +42,7 @@
 
 #include "lib/error.hpp"
 #include "vault/gear/block-flow.hpp"
-#include "vault/gear/scheduler-control.hpp"
+#include "vault/gear/scheduler-commutator.hpp"
 #include "vault/gear/scheduler-invocation.hpp"
 //#include "lib/symbol.hpp"
 #include  "lib/nocopy.hpp"
@@ -67,7 +67,7 @@ namespace gear {
   class Scheduler
     {
       SchedulerInvocation layer1_;
-      SchedulerControl    layer2_;
+      SchedulerCommutator layer2_;
       
     public:
       explicit
