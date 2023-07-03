@@ -38,8 +38,9 @@
  ** 
  ** @note currently this rather marks the intended memory management pattern,
  **       while the actual allocations are still performed on the heap.
- ** @see ////TODO_test usage example
- ** @see scheduler.cpp implementation
+ ** @see BlockFlow_test
+ ** @see SchedulerUsage_test
+ ** @see extent-family.hpp underlying allocation scheme
  ** 
  ** @todo WIP-WIP-WIP 6/2023 »Playback Vertical Slice«
  ** 
@@ -68,8 +69,8 @@ namespace gear {
   /**
    * Basic (abstracted) view of...
    * 
-   * @see SomeSystem
-   * @see NA_test
+   * @see SchedulerCommutator
+   * @see BlockFlow_test
    */
   class BlockFlow
     : util::NonCopyable

@@ -25,9 +25,9 @@
  ** Layer-1 of the Scheduler: dispatch and invocation of activities.
  ** This is the lower layer of the implementation and provides low-level functionality.
  ** 
- ** @note as of X/2023 this is complete bs
- ** @see ////TODO_test usage example
- ** @see scheduler.cpp implementation
+ ** @see SchedulerInvocation_test
+ ** @see SchedulerUsage_test integrated usage
+ ** @see scheduler.cpp implementation details
  ** 
  ** @todo WIP-WIP-WIP 6/2023 »Playback Vertical Slice«
  ** 

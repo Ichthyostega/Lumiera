@@ -26,6 +26,10 @@
  ** or even to feed generated media content into the code to be tested.
  ** 
  ** @todo this facility was occasionally used until 2011, yet never really completed
+ ** @todo the implementation is linked against steam-layer to use a constant definition
+ **       from 'steam/mobject/session/testclip.hpp' — which highlights an conceptual
+ **       ambiguity underlying this whole concept; at inception time, there was no
+ **       clear notion pertaining the kind of structures related to the vault.
  */
 
 

@@ -22,6 +22,10 @@
 
 /** @file media-access-mock-test.cpp
  ** unit test \ref MediaAccessMock_test
+ **
+ ** @todo this test must be linked against the Core (including Steam),
+ **       yet conceptually it belongs into the Vault, indicating a design mismatch.
+ **       The test support facility drafted here was not used much since then.
  */
 
 

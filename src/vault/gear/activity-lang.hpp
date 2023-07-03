@@ -28,9 +28,9 @@
  ** can be passed to the scheduler's messaging queue to cause the described
  ** activities to be performed in the context of the Lumiera render engine.
  ** 
- ** @note this is a wild fantasy
- ** @see ////TODO_test usage example
- ** @see scheduler.cpp implementation
+ ** @warning mostly this is planned functionality
+ ** @see SchedulerActivity_test
+ ** @see activity.hpp definition of verbs
  ** 
  ** @todo WIP-WIP-WIP 6/2023 »Playback Vertical Slice«
  ** 
@@ -42,6 +42,7 @@
 
 
 #include "vault/gear/activity.hpp"
+#include "vault/gear/block-flow.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
@@ -56,19 +57,19 @@ namespace gear {
   
   
   /**
-   * Basic (abstracted) view of...
+   * TODO write type comment...
    * 
-   * @see SomeSystem
-   * @see NA_test
+   * @see Activity
+   * @see SchedulerActivity_test
    */
   class ActivityLang
     {
-      string nothing_;
+      BlockFlow& mem_;
       
     public:
 //      explicit
-      ActivityLang ()
-        : nothing_(b)
+      ActivityLang (BlockFlow& memManager)
+        : mem_{memManager}
         { }
       
       // using default copy/assignment

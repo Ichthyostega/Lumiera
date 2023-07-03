@@ -25,8 +25,8 @@
  ** Layer-2 of the Scheduler: coordination and interaction of activities.
  ** This is the upper layer of the implementation and provides high-level functionality.
  ** 
- ** @see ////TODO_test usage example
- ** @see scheduler.cpp implementation
+ ** @see SchedulerCommutator_test
+ ** @see scheduler.hpp usage
  ** 
  ** @todo WIP-WIP-WIP 6/2023 »Playback Vertical Slice«
  ** 
@@ -56,8 +56,8 @@ namespace gear {
   /**
    * Scheduler Layer-2 : coordination.
    * 
-   * @see SomeSystem
-   * @see NA_test
+   * @see SchedulerInvocation (Layer-1)
+   * @see SchedulerCommutator_test
    */
   class SchedulerCommutator
     : util::NonCopyable

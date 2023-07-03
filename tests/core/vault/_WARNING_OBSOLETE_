@@ -1,0 +1,5 @@
+WARNING: This directory is a left-over from the early stages of the Lumiera project.
+It holds a test, which logically belongs into the vault-layer, yet must be linked
+against the steam-layer to use a 'Testclip' from the session.
+
+Once file and output handling is actually designed and settled, this should be sorted out

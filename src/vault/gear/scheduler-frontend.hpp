@@ -25,6 +25,7 @@
  ** Scheduler service access point for higher layers.
  ** @todo WIP unfinished since 9/2013
  ** @warning as of 4/2023 Render-Engine integration work is underway ////////////////////////////////////////TICKET #1280
+ ** @deprecated as of 7/2023 the scheduler API will likely draw upon the ActivityLang
  ** 
  */
 

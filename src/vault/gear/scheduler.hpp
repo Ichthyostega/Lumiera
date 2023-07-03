@@ -28,8 +28,10 @@
  ** - Layer-1 allows to enqueue and prioritise render activity records
  ** - Layer-2 connects and coordinates activities to conduct complex calculations 
  ** 
- ** @see ////TODO_test usage example
- ** @see scheduler.cpp implementation
+ ** @see SchedulerUsage_test Component integration test
+ ** @see scheduler.cpp implementation details
+ ** @see SchedulerInvocation Layer-1
+ ** @see SchedulerCommutator Layer-2
  ** 
  ** @todo WIP-WIP-WIP 6/2023 »Playback Vertical Slice«
  ** 
@@ -61,8 +63,8 @@ namespace gear {
   /**
    * Schedule and coordinate render activities.
    * @todo WIP-WIP 6/2023
-   * @see SomeSystem
-   * @see NA_test
+   * @see BlockFlow
+   * @see SchedulerUsage_test
    */
   class Scheduler
     {
