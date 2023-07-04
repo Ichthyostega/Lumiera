@@ -50,6 +50,9 @@
 //#include "lib/util.hpp"
 
 //#include <string>
+#include <memory>
+#include <vector>
+#include <array>
 
 
 namespace vault{
@@ -64,14 +67,43 @@ namespace mem {
    * @todo WIP-WIP 7/2023
    * @see NA_test
    */
+  template<typename T, size_t siz>
   class ExtentFamily
     : util::NonCopyable
     {
+      using Storage = std::array<T,siz>;
+      
+      struct Extent
+        : std::unique_ptr<Storage>
+        {
+          /**
+           * @note default ctor immediately allocates the full storage,
+           *       but uses default initialisation rsp. no initialisation
+           *       in case the payload type T is a POD
+           */
+          Extent()
+            : std::unique_ptr<Storage>{new Storage}
+            { }
+        };
+      using Extents = std::vector<Extent>;
+      
+      Extents extents_;
+      
+      size_t start_,after_;
       
     public:
       explicit
-      ExtentFamily()
+      ExtentFamily(size_t initialCnt =0)
+        : extents_{initialCnt}
+        , start_{0}
+        , after_{initialCnt}
         { }
+      
+      void
+      reserve (size_t expectedMaxExtents)
+        {
+          extents_.reserve (expectedMaxExtents);
+        }
     };
   
   

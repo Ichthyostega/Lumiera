@@ -72,7 +72,7 @@ namespace test {
       void
       simpleUsage()
         {
-          ExtentFamily extents;
+          ExtentFamily<int, 10> extents{5};
         }
       
       
