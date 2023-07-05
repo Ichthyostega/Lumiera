@@ -26,6 +26,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "vault/gear/block-flow.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/format-cout.hpp"
@@ -36,10 +37,11 @@
 using test::Test;
 //using std::move;
 //using util::isSameObject;
+using lib::test::randTime;
 
 
 namespace vault{
-namespace mem  {
+namespace gear {
 namespace test {
   
 //  using lib::time::FrameRate;
@@ -72,6 +74,13 @@ namespace test {
       void
       simpleUsage()
         {
+          BlockFlow bFlow;
+          Time deadline = randTime();
+          Activity tick = bFlow.createActivity(Activity::TICK, deadline);
+          ///////////////////////////////////////////////////////////////////////////////OOO diagnostic function to check allocation
+          
+          bFlow.discardBefore (deadline + Time{0,5});
+          ///////////////////////////////////////////////////////////////////////////////OOO diagnostic function to check de-allocation
         }
       
       
@@ -99,4 +108,4 @@ namespace test {
   
   
   
-}}} // namespace vault::mem::test
+}}} // namespace vault::gear::test

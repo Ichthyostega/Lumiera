@@ -74,6 +74,7 @@ namespace gear {
                 ,TIMESTOP   ///< correspondingly signal end of some processing
                 ,NOTIFY     ///< push a message to another Activity
                 ,PROBE      ///< evaluate a condition and inhibit another target Activity
+                ,GATE       ///< probe window + count-down; activate next Activity, else re-schedule
                 ,TICK       ///< internal engine »heart beat« for internal maintenance hook(s)
                 };
       

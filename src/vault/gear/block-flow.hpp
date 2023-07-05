@@ -52,7 +52,10 @@
 
 
 #include "vault/common.hpp"
+#include "vault/gear/activity.hpp"
+#include "vault/mem/extent-family.hpp"
 //#include "lib/symbol.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/nocopy.hpp"
 //#include "lib/util.hpp"
 
@@ -64,7 +67,54 @@ namespace gear {
   
 //  using util::isnil;
 //  using std::string;
+  using lib::time::Time;
   
+  namespace {// hard-wired parametrisation
+    const size_t EPOCH_SIZ = 100;
+    const size_t ACTIVITIES_PER_FRAME = 10;
+    const size_t INITIAL_FRAMES = 50;
+    const size_t INITIAL_ALLOC  = 1 + (INITIAL_FRAMES * ACTIVITIES_PER_FRAME) / EPOCH_SIZ;
+    
+    using Allocator = mem::ExtentFamily<Activity, EPOCH_SIZ>;
+  }
+  
+  
+  /**
+   * 
+   */
+  class Epoch
+    : public Allocator::Extent
+    {
+    
+      /// @warning will faked, not constructed
+      Epoch()   = delete;
+      
+    public:
+      struct EpochGate
+        : Activity
+        {
+          EpochGate()
+            : Activity{GATE}
+            {
+              UNIMPLEMENTED ("initialise allocation usage marker to zero");
+            }
+          // default copyable
+        };
+      
+      static Epoch&
+      implantInto (Allocator::Extent& rawStorage)
+        {
+          Epoch& target = static_cast<Epoch&> (rawStorage);
+          new(&target[0]) EpochGate{};
+          return target;
+        }
+      
+      EpochGate&
+      gate()
+        {
+          return static_cast<EpochGate&> ((*this)[0]);
+        }
+    };
   
   /**
    * Basic (abstracted) view of...
@@ -75,11 +125,24 @@ namespace gear {
   class BlockFlow
     : util::NonCopyable
     {
+      Allocator alloc_;
       
     public:
-      explicit
-      BlockFlow (int woof)
+      BlockFlow()
+        : alloc_{INITIAL_ALLOC}
         { }
+      
+      Activity&
+      createActivity (Activity::Verb verb, Time deadline)
+        {
+          UNIMPLEMENTED ("place new allocation");
+        }
+      
+      void
+      discardBefore (Time deadline)
+        {
+          UNIMPLEMENTED ("traverse oldest Epochs and discard obsoleted");
+        }
     };
   
   

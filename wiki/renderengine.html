@@ -6853,7 +6853,7 @@ At first sight the link between asset and clip-MO is a simple logical relation b
 
 {{red{Note 1/2015}}} several aspects regarding the relation of clips and single/multichannel media are not yet settled. There is a preliminary implementation in the code base, but it is not sure yet how multichnnel media will actually be modelled. Currently, we tend to treat the channel multiplicity rather as a property of the involved media, i.e we have //one// clip object.</pre>
 </div>
-<div title="RenderActivity" creator="Ichthyostega" modifier="Ichthyostega" created="202304140145" modified="202306252308" tags="Rendering spec draft" changecount="4">
+<div title="RenderActivity" creator="Ichthyostega" modifier="Ichthyostega" created="202304140145" modified="202307042331" tags="Rendering spec draft" changecount="5">
 <pre>//Render Activities define the execution language of the render engine.//
 The [[Scheduler]] maintains the ability to perform these Activities, in a time-bound fashion, observing dependency relations; activities allow for notification of completed work, tracking of dependencies, timing measurements, re-scheduling of other activities -- and last but not least the dispatch of actual [[render jobs|RenderJob]]. Activities are what is actually enqueued with priority in the scheduler implementation, they are planned for a »µ-tick slot«, activated once when the activation time is reached, and then forgotten. Each Activity is a //verb//, but can be inhibited by conditions and carry operation object data. Formally, activating an Activity equates to a predication, and the subject of that utterance is »the render process«.
 
@@ -6871,6 +6871,8 @@ The [[Scheduler]] maintains the ability to perform these Activities, in a time-b
 :push a message to another Activity or process record
 ;probe
 :invoke a closure within engine context; inhibit another target Activity, depending on the result.
+;gate
+:probe a launch window [start…deadline[ and check a count-down latch ⟹activate next Activity | else re-schedule @self into the future
 ;tick
 :internal engine »heart beat« -- invoke internal maintenance hook(s)
  </pre>

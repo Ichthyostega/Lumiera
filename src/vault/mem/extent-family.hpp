@@ -71,32 +71,47 @@ namespace mem {
   class ExtentFamily
     : util::NonCopyable
     {
-      using Storage = std::array<T,siz>;
-      
+    public:
       struct Extent
-        : std::unique_ptr<Storage>
+        : std::array<T,siz>
+        {
+          using Payload = T;
+        };
+      
+    private:
+      struct Storage
+        : std::unique_ptr<char[]>
         {
           /**
            * @note default ctor immediately allocates the full storage,
-           *       but uses default initialisation rsp. no initialisation
-           *       in case the payload type T is a POD
+           *       but without initialisation since payload is `char`
            */
-          Extent()
-            : std::unique_ptr<Storage>{new Storage}
+          Storage()
+            : unique_ptr{new char[sizeof(Extent)]}
             { }
+          
+          /** access projected Extent storage type
+           * @warning payload is uninitialised and dtors won't be invoked
+           */
+          Extent&
+          access()
+            {
+              ENSURE (get() != nullptr);
+              return reinterpret_cast<Extent&> (*get());
+            }
         };
-      using Extents = std::vector<Extent>;
+      using Extents = std::vector<Storage>;
+      
       
       Extents extents_;
-      
       size_t start_,after_;
       
     public:
       explicit
       ExtentFamily(size_t initialCnt =0)
         : extents_{initialCnt}
-        , start_{0}
-        , after_{initialCnt}
+        , start_{0}        //  Extents allocated yet marked unused
+        , after_{0}
         { }
       
       void
