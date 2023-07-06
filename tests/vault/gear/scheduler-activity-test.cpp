@@ -39,7 +39,7 @@ using test::Test;
 
 
 namespace vault{
-namespace mem  {
+namespace gear  {
 namespace test {
   
 //  using lib::time::FrameRate;
@@ -72,6 +72,10 @@ namespace test {
       void
       simpleUsage()
         {
+          // Activities are »POD with constructor«
+          Activity tick(Activity::TICK);
+          CHECK (tick.verb_ == Activity::TICK);
+          CHECK (tick.next == nullptr);
         }
       
       
@@ -99,4 +103,4 @@ namespace test {
   
   
   
-}}} // namespace vault::mem::test
+}}} // namespace vault::gear::test

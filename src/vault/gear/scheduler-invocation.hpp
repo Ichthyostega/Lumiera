@@ -62,8 +62,8 @@ namespace gear {
   /**
    * Scheduler Layer-2 : invocation.
    * 
-   * @see SomeSystem
-   * @see NA_test
+   * @see Scheduler
+   * @see SchedulerInvocation_test
    */
   class SchedulerInvocation
     : util::NonCopyable

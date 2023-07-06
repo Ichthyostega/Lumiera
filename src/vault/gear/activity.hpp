@@ -47,6 +47,8 @@
 
 
 #include "vault/common.hpp"
+#include "vault/gear/job.h"
+#include "lib/time/timevalue.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
@@ -56,33 +58,130 @@
 namespace vault{
 namespace gear {
   
+  using lib::time::TimeValue;
+  using lib::time::TimeVar;
 //  using util::isnil;
 //  using std::string;
   
+  /**
+   * Wrapper to hold Time values in trivially constructible union.
+   * By an unfortunate design decision, lib::time::Time values are
+   * non-copyable, which prevents placing them into POD data
+   * 
+   * @todo 7/2023 this decision should be reverted //////////////////////////////////////////////////////////TICKET #1261 : reconsider (im)mutability of time entities
+   */
+  class Instant
+    {
+      int64_t microTick_;
+      
+    public:
+      Instant()  =default;  // @suppress("Class members should be properly initialized")
+      
+      Instant(TimeValue time)
+        : microTick_{_raw(time)}
+      { }
+      
+      operator TimeVar()  const
+        {
+          return TimeValue{microTick_};
+        }
+      
+      // default copy acceptable
+    };
   
   /**
    * Term to describe an Activity,
    * to happen within the Scheduler's control flow.
+   * @note Activity is a »POD with constructor«
+   *       - trivially *destructible*
+   *       - trivially *copyable*
+   *       - standard layout
    */
   class Activity
     {
-      
     public:
-      enum Verb {INVOKE     ///< dispatches a JobFunctor into a worker thread
-                ,DEPEND     ///< verify a given number of dependencies has been satisfied
+      /**  All possible kinds of activities */
+      enum Verb {INVOKE     ///< dispatch a JobFunctor into a worker thread
                 ,TIMESTART  ///< signal start of some processing (for timing measurement)
                 ,TIMESTOP   ///< correspondingly signal end of some processing
                 ,NOTIFY     ///< push a message to another Activity
-                ,PROBE      ///< evaluate a condition and inhibit another target Activity
                 ,GATE       ///< probe window + count-down; activate next Activity, else re-schedule
+                ,FEED       ///< supply additional payload data for a preceding Activity
+                ,POST       ///< post a message providing a chain of further time-bound Activities
                 ,TICK       ///< internal engine »heart beat« for internal maintenance hook(s)
                 };
       
       const Verb verb_;
       
+      /**
+       *  Activities are organised into _chains_
+       *  to represent _relations_ based on verbs.
+       */
+      Activity* next;
+      
+      
+      /* === Activity Data Arguments === */
+      
+      /** Payload data to provide */
+      struct Feed
+        {
+          size_t one;
+          size_t two;
+        };
+      
+      /** Timing observation to propagate */
+      struct Timing
+        {
+          Instant instant;
+          size_t  quality;
+        };
+      
+      /** Access gate condition to evaluate */
+      struct Condition
+        {
+          int     rest;     ///< alive while rest > 0
+          Instant dead;     ///< alive while time < dead
+        };
+      
+      /** Time window to define for activation */
+      struct TimeWindow
+        {
+          Instant life;
+          Instant dead;
+        };
+      
+      /** External work functor to activate */
+      struct Invocation
+        {
+          JobFunctor* task;
+          Instant     time;
+        };
+      
+      /** Notification towards another Activity */
+      struct Notification
+        {
+          Activity* target;
+          size_t    report;
+        };
+      
+      
+      /** Storage of Argument data dependent on Activity::verb_ */
+      union ArgumentData
+        {
+                Feed feed;
+              Timing timing;
+           Condition condition;
+          TimeWindow timeWindow;
+          Invocation invocation;
+        Notification notification;
+        };
+      ArgumentData data_;
+      
+      
       explicit
       Activity (Verb verb)
         : verb_{verb}
+        , next{nullptr}
         { }
       
       // using default copy/assignment

@@ -6853,7 +6853,7 @@ At first sight the link between asset and clip-MO is a simple logical relation b
 
 {{red{Note 1/2015}}} several aspects regarding the relation of clips and single/multichannel media are not yet settled. There is a preliminary implementation in the code base, but it is not sure yet how multichnnel media will actually be modelled. Currently, we tend to treat the channel multiplicity rather as a property of the involved media, i.e we have //one// clip object.</pre>
 </div>
-<div title="RenderActivity" creator="Ichthyostega" modifier="Ichthyostega" created="202304140145" modified="202307042331" tags="Rendering spec draft" changecount="5">
+<div title="RenderActivity" creator="Ichthyostega" modifier="Ichthyostega" created="202304140145" modified="202307061410" tags="Rendering spec draft" changecount="9">
 <pre>//Render Activities define the execution language of the render engine.//
 The [[Scheduler]] maintains the ability to perform these Activities, in a time-bound fashion, observing dependency relations; activities allow for notification of completed work, tracking of dependencies, timing measurements, re-scheduling of other activities -- and last but not least the dispatch of actual [[render jobs|RenderJob]]. Activities are what is actually enqueued with priority in the scheduler implementation, they are planned for a »µ-tick slot«, activated once when the activation time is reached, and then forgotten. Each Activity is a //verb//, but can be inhibited by conditions and carry operation object data. Formally, activating an Activity equates to a predication, and the subject of that utterance is »the render process«.
 
@@ -6861,21 +6861,28 @@ The [[Scheduler]] maintains the ability to perform these Activities, in a time-b
 ;invoke
 :dispatches a JobFunctor into an appropriate worker thread, based on the job definition's execution spec
 :no further dependency checks; Activities attached to the job are re-dispatched after the job function's completion
-;depend
-:verify a given number of dependencies has been satisfied, otherwise inhibit the indicated target Activity
 ;timestart
 :signal start of some processing -- for the purpose of timing measurement, but also to detect crashed tasks
 ;timestop
 :correspondingly signal end of some processing
 ;notify
 :push a message to another Activity or process record
-;probe
-:invoke a closure within engine context; inhibit another target Activity, depending on the result.
 ;gate
 :probe a launch window [start…deadline[ and check a count-down latch ⟹activate next Activity | else re-schedule @self into the future
+;feed
+:supply additional payload data for a preceding Activity
+;post
+:post a message providing a chain of further time-bound Activities
 ;tick
 :internal engine »heart beat« -- invoke internal maintenance hook(s)
- </pre>
+
+!Data organisation
+Activities are processed within a //performance critical part of the application// -- and are thus subject to [[Scheduler memory management|SchedulerMemory]].
+While Activities are logically polymorphic, they are implemented as »POD with constructor« -- meaning that they are classes with [[standard layout|https://en.cppreference.com/w/cpp/named_req/StandardLayoutType]] and at least a [[trivial destructor|https://en.cppreference.com/w/cpp/language/destructor#Trivial_destructor]], allowing to just place them into a memory block and forget about them (without need to call any non-trivial functions). The ''Argument data'' depends on the //actual verb// and is thus placed into a union, with access functions to ensure proper usage of the data fields (while it is always possible to access the data field directly). Since Activities are allocated a lot, small memory footprint is favoured, and thus some significant information -- notably the //time window// for activation of each Activity -- is defined //contextually.//
+
+Activities are organised into ''chains'', allowing to express relations based on their respective verbs.
+There are //standard usage patters,// hard coded into the {{{ActivityLang}}} and expected by the {{{SchedulerCommutator}}}, to express all relevant patterns of operational logic necessary to represent time-bound and dependent playback and render tasks.
+</pre>
 </div>
 <div title="RenderDrive" creator="Ichthyostega" modifier="Ichthyostega" created="202306122212" tags="spec Player draft" changecount="1">
 <pre>//the active core of each [[calculation stream|CalcStream]]//
