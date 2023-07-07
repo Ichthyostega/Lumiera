@@ -27,13 +27,15 @@
 
 #include "lib/test/run.hpp"
 #include "vault/gear/activity-lang.hpp"
-//#include "lib/time/timevalue.hpp"
+#include "lib/time/timevalue.hpp"
 //#include "lib/format-cout.hpp"
 //#include "lib/util.hpp"
 
 //#include <utility>
 
 using test::Test;
+using lib::time::Time;
+using lib::time::FSecs;
 //using std::move;
 //using util::isSameObject;
 
@@ -73,9 +75,11 @@ namespace test {
       simpleUsage()
         {
           // Activities are »POD with constructor«
-          Activity tick(Activity::TICK);
-          CHECK (tick.verb_ == Activity::TICK);
-          CHECK (tick.next == nullptr);
+          Activity gate{5, Time{FSecs{3,2}}};
+          CHECK (gate.verb_ == Activity::GATE);
+          CHECK (gate.next == nullptr);
+          CHECK (gate.data_.condition.rest == 5);
+          CHECK (gate.data_.condition.dead == Time(500,1));
         }
       
       

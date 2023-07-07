@@ -86,15 +86,15 @@ namespace gear {
     : public Allocator::Extent
     {
     
-      /// @warning will faked, not constructed
-      Epoch()   = delete;
+      /// @warning will be faked, not constructed
+      Epoch()    = delete;
       
     public:
       struct EpochGate
         : Activity
         {
           EpochGate()
-            : Activity{GATE}
+            : Activity{int(0), Time::ANYTIME}
             {
               UNIMPLEMENTED ("initialise allocation usage marker to zero");
             }

@@ -68,7 +68,7 @@ namespace gear {
    * By an unfortunate design decision, lib::time::Time values are
    * non-copyable, which prevents placing them into POD data
    * 
-   * @todo 7/2023 this decision should be reverted //////////////////////////////////////////////////////////TICKET #1261 : reconsider (im)mutability of time entities
+   * @todo 7/2023 this decision should be revised  //////////////////////////////////////////////////////////TICKET #1261 : reconsider (im)mutability of time entities
    */
   class Instant
     {
@@ -88,6 +88,8 @@ namespace gear {
       
       // default copy acceptable
     };
+  
+  
   
   /**
    * Term to describe an Activity,
@@ -182,9 +184,81 @@ namespace gear {
       Activity (Verb verb)
         : verb_{verb}
         , next{nullptr}
-        { }
+        {
+          setDefaultArg (verb);
+        }
       
       // using default copy/assignment
+      
+      
+      /* ==== special case initialisation ==== */
+      
+      Activity (size_t o1, size_t o2)
+        : Activity{FEED}
+        {
+          data_.feed.one = o1;
+          data_.feed.two = o2;
+        }
+      
+      explicit
+      Activity (Activity* target)
+        : Activity{NOTIFY}
+        {
+          data_.notification.target = target;
+        }
+      
+      explicit
+      Activity (int expectNotifications, Time deadline = Time::NEVER)
+        : Activity{GATE}
+        {
+          data_.condition.rest = expectNotifications;
+          data_.condition.dead = deadline;
+        }
+      
+      Activity (Time when, Activity* followUp)
+        : verb_{POST}
+        , next{followUp}
+        {
+          data_.timeWindow = {when,when};
+        }
+      
+      Activity (Time start, Time after, Activity* followUp)
+        : verb_{POST}
+        , next{followUp}
+        {
+          data_.timeWindow = {start,after};
+        }
+      
+      Activity()
+        : Activity{TICK}
+        { }
+      
+      
+    private:
+      void
+      setDefaultArg (Verb verb)
+        {
+          data_ = {0,0};
+          switch (verb) {
+            case INVOKE:
+              data_.invocation.time = Time::ANYTIME;
+              break;
+            case TIMESTART:
+            case TIMESTOP:
+              data_.timing.instant = Time::NEVER;
+              break;
+            case GATE:
+              data_.condition.rest = 1;
+              data_.condition.dead = Time::NEVER;
+              break;
+            case POST:
+              data_.timeWindow.life = Time::ANYTIME;
+              data_.timeWindow.dead = Time::NEVER;
+              break;
+            default:
+              break;
+            }
+        }
     };
   
   

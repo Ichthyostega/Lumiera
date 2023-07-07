@@ -119,7 +119,7 @@ namespace stage {
       default:
         throw lumiera::error::Logic (_Fmt{"UI Notification with invalid severity %d encountered. "
                                           "Given message text was '%s'"} % severity % text);
-    }  }
+  }  }
   
   
   void
