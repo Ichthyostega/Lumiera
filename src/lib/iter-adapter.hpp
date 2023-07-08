@@ -135,7 +135,7 @@ namespace lib {
    * - it is not just a disguised pointer (meaning, it's more expensive)
    * - it checks validity on every operation and may throw
    * - it has a distinct back-link to the source container
-   * - the source container needs to provide hasNext() and iterNext() free functions.
+   * - the source container needs to support `checkPoint()` and `iterNext()` free functions.
    * - we may need friendship to implement those extension points on the container
    * - the end-of-iteration can be detected by bool check
    * @note it is possible to "hide" a smart-ptr within the CON template parameter.
@@ -303,7 +303,7 @@ namespace lib {
   inline bool operator== (IterAdapter<P1,CON> const& il, IterAdapter<P2,CON> const& ir)  { return il.pos_ == ir.pos_; }
   
   template<class P1, class P2, class CON>
-  inline bool operator!= (IterAdapter<P1,CON> const& il, IterAdapter<P2,CON> const& ir)  { return !(il == ir); }
+  inline bool operator!= (IterAdapter<P1,CON> const& il, IterAdapter<P2,CON> const& ir)  { return not (il == ir); }
   
   
   

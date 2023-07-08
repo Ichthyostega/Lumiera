@@ -144,9 +144,9 @@ namespace test{
         template<class ITER>
         friend void
         iterNext (const TestContainer*, ITER& pos)
-          {
-            ++pos;
-          }
+        {
+          ++pos;
+        }
         
         /** Implementation of Iteration-logic: detect iteration end.
          *  @note the problem here is that this implementation chooses to use
@@ -161,15 +161,15 @@ namespace test{
         template<class ITER>
         friend bool
         checkPoint (const TestContainer* src, ITER& pos)
-          {
-            REQUIRE (src);
-            if ((pos != ITER()) && (pos != src->numberz_.end()))
-              return true;
-            else
-              {
-                pos = ITER();
-                return false;
-          }   }
+        {
+          REQUIRE (src);
+          if ((pos != ITER()) && (pos != src->numberz_.end()))
+            return true;
+          else
+            {
+              pos = ITER();
+              return false;
+        }   }
       };
     
   } // (END) impl test dummy container

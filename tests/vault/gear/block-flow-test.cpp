@@ -76,7 +76,7 @@ namespace test {
         {
           BlockFlow bFlow;
           Time deadline = randTime();
-          Activity tick = bFlow.createActivity(Activity::TICK, deadline);
+          Activity tick = bFlow.until(deadline).create();
           ///////////////////////////////////////////////////////////////////////////////OOO diagnostic function to check allocation
           
           bFlow.discardBefore (deadline + Time{0,5});

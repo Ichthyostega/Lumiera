@@ -46,7 +46,8 @@
 
 #include "vault/common.hpp"
 //#include "lib/symbol.hpp"
-#include  "lib/nocopy.hpp"
+#include "lib/iter-adapter.hpp"
+#include "lib/nocopy.hpp"
 //#include "lib/util.hpp"
 
 //#include <string>
@@ -76,6 +77,7 @@ namespace mem {
         : std::array<T,siz>
         {
           using Payload = T;
+          using SIZ = std::integral_constant<size_t,siz>;
         };
       
     private:
@@ -101,6 +103,7 @@ namespace mem {
             }
         };
       using Extents = std::vector<Storage>;
+      using RawIter = typename Extents::iterator;
       
       
       Extents extents_;
@@ -119,6 +122,23 @@ namespace mem {
         {
           extents_.reserve (expectedMaxExtents);
         }
+      
+      /** allow transparent iteration of Extents, expanding storage on demand */
+      using iterator = lib::IterAdapter<RawIter, ExtentFamily*>;     ////////////////////OOO consider to use a Extent* instead of the RawIter??
+      
+      /* == Iteration control API (used by IterAdapter via ADL) == */
+      
+      friend bool
+      checkPoint (ExtentFamily* exFam, RawIter& pos)
+      {
+        UNIMPLEMENTED ("ExtentFamily iteration control: check and adapt position");
+      }
+      
+      friend void
+      iterNext (ExtentFamily* exFam, RawIter& pos)
+      {
+        UNIMPLEMENTED ("ExtentFamily iteration control: access next Extent, possibly expand allocation");
+      }
     };
   
   

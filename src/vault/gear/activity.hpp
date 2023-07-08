@@ -181,7 +181,7 @@ namespace gear {
       
       
       explicit
-      Activity (Verb verb)
+      Activity (Verb verb)  noexcept
         : verb_{verb}
         , next{nullptr}
         {
@@ -193,7 +193,7 @@ namespace gear {
       
       /* ==== special case initialisation ==== */
       
-      Activity (size_t o1, size_t o2)
+      Activity (size_t o1, size_t o2)  noexcept
         : Activity{FEED}
         {
           data_.feed.one = o1;
@@ -201,42 +201,42 @@ namespace gear {
         }
       
       explicit
-      Activity (Activity* target)
+      Activity (Activity* target)  noexcept
         : Activity{NOTIFY}
         {
           data_.notification.target = target;
         }
       
       explicit
-      Activity (int expectNotifications, Time deadline = Time::NEVER)
+      Activity (int expectNotifications, Time deadline = Time::NEVER)  noexcept
         : Activity{GATE}
         {
           data_.condition.rest = expectNotifications;
           data_.condition.dead = deadline;
         }
       
-      Activity (Time when, Activity* followUp)
+      Activity (Time when, Activity* followUp)  noexcept
         : verb_{POST}
         , next{followUp}
         {
           data_.timeWindow = {when,when};
         }
       
-      Activity (Time start, Time after, Activity* followUp)
+      Activity (Time start, Time after, Activity* followUp)  noexcept
         : verb_{POST}
         , next{followUp}
         {
           data_.timeWindow = {start,after};
         }
       
-      Activity()
+      Activity()  noexcept
         : Activity{TICK}
         { }
       
       
     private:
       void
-      setDefaultArg (Verb verb)
+      setDefaultArg (Verb verb)  noexcept
         {
           data_ = {0,0};
           switch (verb) {
