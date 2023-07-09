@@ -31,11 +31,11 @@
 //#include "lib/format-cout.hpp"
 //#include "lib/util.hpp"
 
-//#include <utility>
+#include <utility>
 
 using test::Test;
 //using std::move;
-//using util::isSameObject;
+using util::isSameObject;
 
 
 namespace vault{
@@ -45,6 +45,10 @@ namespace test {
 //  using lib::time::FrameRate;
 //  using lib::time::Offset;
 //  using lib::time::Time;
+  
+  using Extents = ExtentFamily<int, 10>;
+  using Extent  = Extents::Extent;
+  using Iter    = Extents::iterator;
   
   
   
@@ -62,8 +66,9 @@ namespace test {
       run (Arg)
         {
            simpleUsage();
-           calculateDeadline();
-           setupDependentJob();
+           use_and_drop();
+           iteration();
+           wrapAround();
         }
       
       
@@ -72,26 +77,79 @@ namespace test {
       void
       simpleUsage()
         {
-          ExtentFamily<int, 10> extents{5};
+          Extents extents{5};
+          Extent& extent = extents.active()->access(); //////////////////////////////////////////OOO better Iter implementation for direct access
+          CHECK (10 == extent.size());
+          
+          int num = rand() % 1000;
+          extent[2] = num;
+          extent[5] = num+5;
+          CHECK (num   == extent[2]);
+          CHECK (num+5 == extent[5]);
         }
       
       
       
-      /** @test verify the timing calculations to establish
-       *        the scheduling deadline of a simple render job
+      /** @test verify claiming new and discarding old slots
        */
       void
-      calculateDeadline()
+      use_and_drop()
         {
+          ExtentFamily<int, 10> extents{5};
+          CHECK ( 0 == watch(extents).first());
+          CHECK ( 0 == watch(extents).last());
+          CHECK ( 0 == watch(extents).active());
+          CHECK ( 5 == watch(extents).size());
+          
+          extents.openNew(3);
+          CHECK ( 0 == watch(extents).first());
+          CHECK ( 3 == watch(extents).last());
+          CHECK ( 3 == watch(extents).active());
+          CHECK ( 5 == watch(extents).size());
+          
+          extents.dropOld(2);
+          CHECK ( 2 == watch(extents).first());
+          CHECK ( 3 == watch(extents).last());
+          CHECK ( 1 == watch(extents).active());
+          CHECK ( 5 == watch(extents).size());
         }
       
       
       
-      /** @test verify the setup of a prerequisite job in relation
-       *        to the master job depending on this prerequisite
+      /** @test verify access to the extents by iteration,
+       *        thereby possibly claiming the next extents
        */
       void
-      setupDependentJob()
+      iteration()
+        {
+          Extents extents{5};
+          Iter it = extents.active();
+          CHECK (it);
+          
+          Extent& extent = it->access(); ////////////////////////////////////////////////////////OOO better Iter implementation for direct access
+          CHECK (10 == extent.size());
+          
+          int num = rand() % 1000;
+          extent[2] = num;
+          CHECK (num == extent[2]);
+          
+          ++it;
+          CHECK (it);
+          Extent& nextEx = it->access();
+          CHECK (not isSameObject(extent, nextEx));
+          nextEx[5] = extent[2] + 1;
+          CHECK (num   == extent[2]);
+          CHECK (num+1 == nextEx[5]);
+        }
+      
+      
+      
+      /** @test verify in detail how iteration wraps around to also reuse
+       *        previously dropped extents, possibly rearranging the internal
+       *        management-vector to allow growing new extents at the end.
+       */
+      void
+      wrapAround()
         {
         }
     };

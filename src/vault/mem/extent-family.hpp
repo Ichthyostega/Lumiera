@@ -61,7 +61,9 @@ namespace mem {
   
 //  using util::isnil;
 //  using std::string;
-  
+  template<typename T, size_t siz>
+  class ExtentDiagnostic;
+
   
   /**
    * Memory manager to provide a sequence of Extents for cyclic usage.
@@ -123,8 +125,29 @@ namespace mem {
           extents_.reserve (expectedMaxExtents);
         }
       
+      void
+      openNew (size_t cnt)
+        {
+          UNIMPLEMENTED ("claim next cnt extents, possibly allocate");
+        }
+      
+      void
+      dropOld (size_t cnt)
+        {
+          UNIMPLEMENTED ("discard oldest cnt extents");
+        }
+      
+      
       /** allow transparent iteration of Extents, expanding storage on demand */
       using iterator = lib::IterAdapter<RawIter, ExtentFamily*>;     ////////////////////OOO consider to use a Extent* instead of the RawIter??
+      
+      
+      iterator
+      active()
+        {
+          UNIMPLEMENTED ("visit all active extents, possibly claim next ones");
+        }
+      
       
       /* == Iteration control API (used by IterAdapter via ADL) == */
       
@@ -139,9 +162,31 @@ namespace mem {
       {
         UNIMPLEMENTED ("ExtentFamily iteration control: access next Extent, possibly expand allocation");
       }
+      
+      friend class ExtentDiagnostic<T,siz>;
     };
   
   
+  
+  template<typename T, size_t siz>
+  struct ExtentDiagnostic
+    {
+      using ExFam = ExtentFamily<T,siz>;
+      
+      ExFam& exFam_;
+      
+      size_t first()  { return exFam_.start_; }
+      size_t last()   { return exFam_.after_; }
+      size_t size()   { return exFam_.extents_.size(); }
+      size_t active() { UNIMPLEMENTED ("count active"); }
+    };
+  
+  template<typename T, size_t siz>
+  inline ExtentDiagnostic<T,siz>
+  watch (ExtentFamily<T,siz>& extentFamily)
+  {
+    return ExtentDiagnostic<T,siz>{extentFamily};
+  }
   
 }} // namespace vault::mem
 #endif /*SRC_VAULT_MEM_EXTENT_FAMILY_H_*/
