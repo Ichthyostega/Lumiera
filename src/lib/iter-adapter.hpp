@@ -53,8 +53,10 @@
  ** There are many further ways of building a Lumiera Forward Iterator.
  ** For example, lib::IterSource exposes a "iterable" source of data elements,
  ** while hiding the actual container or generator implementation behind a
- ** VTable call. Besides, there are adapters for the most common usages
- ** with STL containers, and such iterators can also be combined and
+ ** VTable call. Furthermore, complex processing chains with recursive
+ ** expansion can be built with the \ref IterExporer builder function.
+ ** Besides, there are adapters for the most common usages with STL
+ ** containers, and such iterators can also be combined and
  ** extended with the help of \ref itertools.hpp
  ** 
  ** Basically every class in compliance with our specific iterator concept
@@ -141,7 +143,7 @@ namespace lib {
    * @note it is possible to "hide" a smart-ptr within the CON template parameter.
    * 
    * @tparam POS pointer or similar mutable link to the _current value_.
-   *             Will be `bool()` checked to detect iteration end
+   *             Will be `bool()` checked to detect iteration end, end else dereferenced.
    * @tparam CON type of the backing container, which needs to implement two
    *             extension point functions for iteration control
    * 
@@ -472,7 +474,7 @@ namespace lib {
       public:
         using IT::IT;
         
-      /* === state protocol API for IterStateWrapper === */
+        /* === state protocol API for IterStateWrapper === */
         bool
         checkPoint()  const
           {

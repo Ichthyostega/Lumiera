@@ -109,31 +109,46 @@ namespace mem {
               ENSURE (get() != nullptr);
               return reinterpret_cast<Extent&> (*get());
             }
-          
-          struct iterator
-            {
-              using value_type = Extent;
-              using reference  = Extent&;
-              using pointer    = Extent*;
-              
-              Storage* storageSlot;
-              
-              explicit
-              operator bool()  const
-                {
-                  return bool(storageSlot);
-                }
-              
-              Extent&
-              operator* ()
-                {
-                  REQUIRE (storageSlot and *storageSlot);
-                  return storageSlot->access();
-                }
-            };
         };
       using Extents = std::vector<Storage>;
-      using RawIter = typename Storage::iterator;
+      
+      
+      /**
+       * Iteration »State Core« based on Extents index position.
+       * @remark builds upon the specific wrap-around logic for
+       *         cyclic reuse of extent storage and allocation.
+       */
+      struct IdxLink
+        {
+          ExtentFamily* exFam{nullptr};
+          size_t        index{0};
+          
+          /* === state protocol API for IterStateWrapper === */
+          bool
+          checkPoint()  const
+            {
+              return exFam and index != exFam->after_;
+            }
+          
+          Extent&
+          yield()  const
+            {
+              UNIMPLEMENTED ("resolve index");
+            }
+          
+          void
+          iterNext()
+            {
+              UNIMPLEMENTED ("Iterate with wrap-around");
+            }
+          
+          bool
+          operator== (IdxLink const& oi)  const
+            {
+              return exFam == oi.exFam
+                 and index == oi.index;
+            }
+        };
       
       
       /* ==== Management Data ==== */
@@ -194,7 +209,7 @@ namespace mem {
       
       
       /** allow transparent iteration of Extents, expanding storage on demand */
-      using iterator = lib::IterAdapter<RawIter, ExtentFamily*>;     ////////////////////OOO consider to use a Extent* instead of the RawIter??
+      using iterator = lib::IterStateWrapper<Extent, IdxLink>;
       
       
       iterator
@@ -245,21 +260,6 @@ namespace mem {
         {
           idx = (idx+inc) % extents_.size();
         }
-      
-      
-      /* == Iteration control API (used by IterAdapter via ADL) == */
-      
-      friend bool
-      checkPoint (ExtentFamily* exFam, RawIter& pos)
-      {
-        UNIMPLEMENTED ("ExtentFamily iteration control: check and adapt position");
-      }
-      
-      friend void
-      iterNext (ExtentFamily* exFam, RawIter& pos)
-      {
-        UNIMPLEMENTED ("ExtentFamily iteration control: access next Extent, possibly expand allocation");
-      }
       
       
       /// „backdoor“ to watch internals from tests
