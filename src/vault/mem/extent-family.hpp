@@ -32,7 +32,7 @@
  ** and down to avoid holding larger amounts of unused memory, while the availability
  ** of a baseline amount of memory can be enforced. 
  ** 
- ** @see ////TODO_test usage example
+ ** @see ExtentFamily_test
  ** @see gear::BlockFlow usage example
  ** 
  ** @todo WIP-WIP-WIP 7/2023 »Playback Vertical Slice«
@@ -51,6 +51,7 @@
 //#include "lib/util.hpp"
 
 //#include <string>
+#include <algorithm>
 #include <memory>
 #include <vector>
 #include <array>
@@ -68,12 +69,17 @@ namespace mem {
   /**
    * Memory manager to provide a sequence of Extents for cyclic usage.
    * @todo WIP-WIP 7/2023
-   * @see NA_test
+   * @see ExtentFamily_test
    */
   template<typename T, size_t siz>
   class ExtentFamily
     : util::NonCopyable
     {
+      /** number of excess new extents
+       *  to add whenever new storage is required
+       */
+      static const size_t EXCESS_ALLOC{5};
+      
     public:
       struct Extent
         : std::array<T,siz>
@@ -108,6 +114,8 @@ namespace mem {
       using RawIter = typename Extents::iterator;
       
       
+      /* ==== Management Data ==== */
+      
       Extents extents_;
       size_t start_,after_;
       
@@ -125,17 +133,42 @@ namespace mem {
           extents_.reserve (expectedMaxExtents);
         }
       
+      /** claim next \a cnt extents, possibly allocate.
+       * @note always allocating slightly in excess
+       */
       void
       openNew (size_t cnt)
         {
-          UNIMPLEMENTED ("claim next cnt extents, possibly allocate");
+          if (not canAccomodate (cnt))
+            {//insufficient reserve -> allocate
+              size_t oldSiz = extents_.size();
+              size_t addSiz = cnt - freeSlotCnt()
+                              + EXCESS_ALLOC;
+              // add a strike of new extents at the end
+              extents_.resize (oldSiz + addSiz);
+              if (isWrapped())
+                {// need the new elements in the middle, before the existing start_
+                  auto p = extents_.begin();
+                  auto first = p + start_;
+                  auto mid   = p + oldSiz;
+                  auto last  = p + oldSiz + addSiz;
+                  // relocate [fist..mid) after [mid..last)
+                  std::rotate (first, mid, last);
+                  start_ += addSiz;
+                }
+            }
+          // now sufficient reserve extents are available
+          ENSURE (canAccomodate (cnt));
+          incWrap (after_, cnt);
         }
       
+      /** discard oldest \a cnt extents */
       void
       dropOld (size_t cnt)
         {
-          UNIMPLEMENTED ("discard oldest cnt extents");
-        }
+          REQUIRE (cnt <= activeSlotCnt());
+          incWrap (start_, cnt);
+        }                        ////////////////////////////////////////////////////////////////////////////TICKET #1316 : should reduce excess allocation (with apropriate damping to avoid oscillations)
       
       
       /** allow transparent iteration of Extents, expanding storage on demand */
@@ -146,6 +179,49 @@ namespace mem {
       active()
         {
           UNIMPLEMENTED ("visit all active extents, possibly claim next ones");
+        }
+      
+      
+    private:
+      bool
+      isWrapped()  const
+        {
+          return after_ < start_;
+        }     // note: both are equal only when empty
+      
+      /** @return number of allocated slots actually used */
+      size_t
+      activeSlotCnt()  const
+        {
+          REQUIRE (start_ <= extents_.size());
+          REQUIRE (after_ <= extents_.size());
+          
+          return not isWrapped()? after_ - start_
+                                : (after_ - 0)
+                                 +(extents_.size() - start_);
+        }
+      
+      size_t
+      freeSlotCnt()  const
+        {          // always keep one in reserve...
+          REQUIRE (activeSlotCnt() < extents_.size());
+          
+          return extents_.size() - activeSlotCnt();
+        }
+      
+      bool
+      canAccomodate (size_t addCnt)  const
+        {
+          return addCnt < freeSlotCnt();  // keep one in reserve
+        }
+      
+      /** increment index, but wrap at array end.
+       * @remark using the array cyclically
+       */
+      void
+      incWrap (size_t& idx, size_t inc)
+        {
+          idx = (idx+inc) % extents_.size();
         }
       
       
@@ -163,10 +239,18 @@ namespace mem {
         UNIMPLEMENTED ("ExtentFamily iteration control: access next Extent, possibly expand allocation");
       }
       
+      
+      /// „backdoor“ to watch internals from tests
       friend class ExtentDiagnostic<T,siz>;
     };
   
   
+  
+  
+  
+  
+  
+  /* ===== Test / Diagnostic ===== */
   
   template<typename T, size_t siz>
   struct ExtentDiagnostic
@@ -178,7 +262,7 @@ namespace mem {
       size_t first()  { return exFam_.start_; }
       size_t last()   { return exFam_.after_; }
       size_t size()   { return exFam_.extents_.size(); }
-      size_t active() { UNIMPLEMENTED ("count active"); }
+      size_t active() { return exFam_.activeSlotCnt(); }
     };
   
   template<typename T, size_t siz>
