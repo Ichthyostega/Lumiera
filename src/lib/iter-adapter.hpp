@@ -151,7 +151,7 @@ namespace lib {
    *       -# it should be copy constructible
    *       -# when IterAdapter is supposed to be assignable, then POS should be
    *       -# it should provide embedded typedefs for pointer, reference and value_type,
-   *          or alternatively resolve these types through specialisation of meta::TypeBinding.
+   *          or alternatively resolve these types through specialisation of meta::ValueTypeBinding.
    *       -# it should be convertible to the pointer type it declares
    *       -# dereferencing should yield a type that is convertible to the reference type
    * - CON points to the data source of this iterator (typically a data container type)

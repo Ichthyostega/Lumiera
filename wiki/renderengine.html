@@ -6853,7 +6853,7 @@ At first sight the link between asset and clip-MO is a simple logical relation b
 
 {{red{Note 1/2015}}} several aspects regarding the relation of clips and single/multichannel media are not yet settled. There is a preliminary implementation in the code base, but it is not sure yet how multichnnel media will actually be modelled. Currently, we tend to treat the channel multiplicity rather as a property of the involved media, i.e we have //one// clip object.</pre>
 </div>
-<div title="RenderActivity" creator="Ichthyostega" modifier="Ichthyostega" created="202304140145" modified="202307061410" tags="Rendering spec draft" changecount="9">
+<div title="RenderActivity" creator="Ichthyostega" modifier="Ichthyostega" created="202304140145" modified="202307102241" tags="Rendering spec draft" changecount="10">
 <pre>//Render Activities define the execution language of the render engine.//
 The [[Scheduler]] maintains the ability to perform these Activities, in a time-bound fashion, observing dependency relations; activities allow for notification of completed work, tracking of dependencies, timing measurements, re-scheduling of other activities -- and last but not least the dispatch of actual [[render jobs|RenderJob]]. Activities are what is actually enqueued with priority in the scheduler implementation, they are planned for a »µ-tick slot«, activated once when the activation time is reached, and then forgotten. Each Activity is a //verb//, but can be inhibited by conditions and carry operation object data. Formally, activating an Activity equates to a predication, and the subject of that utterance is »the render process«.
 
@@ -6882,6 +6882,9 @@ While Activities are logically polymorphic, they are implemented as »POD with c
 
 Activities are organised into ''chains'', allowing to express relations based on their respective verbs.
 There are //standard usage patters,// hard coded into the {{{ActivityLang}}} and expected by the {{{SchedulerCommutator}}}, to express all relevant patterns of operational logic necessary to represent time-bound and dependent playback and render tasks.
+
+!The Activity Language
+While the Activities are low-level primitives and can be handled directly by the scheduler, any actual rendering invocation must arrange several Activities into a suitable chain of operations. Thus the actual rendering invocation can be seen as a //sentence of the Activity Language.// Formally speaking, it is a //symbolic term.// Not every possible term (and thus sentence) leads to semantically sound behaviour, and thus the ''Scheduler Interface Setup'' is organised in the form of a //builder notation to construct viable Activity terms.// {{{vault::gear::ActivityLang}}} provides the framework for such builder invocations, and allows to create such terms as transient objects -- connected to the durable {{{Activity}}} records allocated into the [[»BlockFlow« memory manager|SchedulerMemory]] backing the Scheduler operation. The language term is thus a front-end, and exposes suitable extension and configuration points for the JobPlanningPipeline to instruct the necessary Scheduler operations to enact a specific [[render Job|RenderJob]].
 </pre>
 </div>
 <div title="RenderDrive" creator="Ichthyostega" modifier="Ichthyostega" created="202306122212" tags="spec Player draft" changecount="1">
@@ -7063,7 +7066,7 @@ Later on we expect a distinct __query subsystem__ to emerge, presumably embeddin
 
 &amp;rarr; QuantiserImpl</pre>
 </div>
-<div title="Scheduler" creator="Ichthyostega" modifier="Ichthyostega" created="202304140131" modified="202307032227" tags="Rendering spec draft" changecount="12">
+<div title="Scheduler" creator="Ichthyostega" modifier="Ichthyostega" created="202304140131" modified="202307102232" tags="Rendering spec draft" changecount="14">
 <pre>//Invoke and control the dependency and time based execution of  [[render jobs|RenderJob]]//
 The Scheduler acts as the central hub in the implementation of the RenderEngine and coordinates the //processing resources// of the application. Regarding architecture, the Scheduler is located in the Vault-Layer and //running// the Scheduler is equivalent to activating the »Vault Subsystem«. An EngineFaçade acts as entrance point, providing high-level render services to other parts of the application: [[render jobs|RenderJob]] can be activated under various timing and dependency constraints. Internally, the implementation is segregated into two layers
 ;Layer-2: Coordination
@@ -7083,6 +7086,9 @@ The time-based ordering and prioritisation of [[render activities|RenderActivity
 The [[Language of render activities|RenderActivity]] forms the interface to the scheduler -- new activities are defined as //terms// and handed over to the scheduler. This happens as part of the ongoing job planning activities -- and thus will be performed //from within jobs managed by the scheduler.// Thus the access to the scheduler happens almost entirely from within the scheduler's realm itself, and is governed by the usage scheme of the [[Workers|SchedulerWorker]].
 
 These ''Worker Threads'' will perform actual render activities most of the time (or be idle). However -- idle workers contend for new work, and for doing so, they //also perform the internal scheduler management activities.// As a consequence, all Scheduler coordination and [[memory management|SchedulerMemory]] is ''performed non-concurrent'': only a single Worker can acquire the {{{GroomingToken}}} and will then perform managment work until the next render activity is encountered at the top side of the //priority queue.//
+
+!!!Instructing the Scheduler
+The Scheduler is now considered an implementation-level facility with an interface specifically tailored at the JobPlanningPipeline: the [[»Render Activity Language«|RenderActivity]]. This //builder-style// setup allows to construct an ''~Activity-Term'' to model all the structural properties of an individual rendering invocation -- it is compriesed of a network of {{{Activity}}} records, which can be directly handled by the Scheduler.
 
 &amp;rarr; [[Activity|RenderActivity]]
 &amp;rarr; [[Memory|SchedulerMemory]]

@@ -197,7 +197,7 @@ namespace gear {
           currEpoch()
             {
               REQUIRE (bool(extent));
-              return static_cast<Epoch&> (extent->access()); ////////////////////////////OOO is it possible to adapt the iterator, so that dereferentiation directly yields the Extent?
+              return static_cast<Epoch&> (*extent);
             }
           
           void*

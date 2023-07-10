@@ -109,9 +109,31 @@ namespace mem {
               ENSURE (get() != nullptr);
               return reinterpret_cast<Extent&> (*get());
             }
+          
+          struct iterator
+            {
+              using value_type = Extent;
+              using reference  = Extent&;
+              using pointer    = Extent*;
+              
+              Storage* storageSlot;
+              
+              explicit
+              operator bool()  const
+                {
+                  return bool(storageSlot);
+                }
+              
+              Extent&
+              operator* ()
+                {
+                  REQUIRE (storageSlot and *storageSlot);
+                  return storageSlot->access();
+                }
+            };
         };
       using Extents = std::vector<Storage>;
-      using RawIter = typename Extents::iterator;
+      using RawIter = typename Storage::iterator;
       
       
       /* ==== Management Data ==== */

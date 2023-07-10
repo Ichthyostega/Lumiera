@@ -78,7 +78,7 @@ namespace test {
       simpleUsage()
         {
           Extents extents{5};
-          Extent& extent = extents.active()->access(); //////////////////////////////////////////OOO better Iter implementation for direct access
+          Extent& extent = *extents.active();
           CHECK (10 == extent.size());
           
           int num = rand() % 1000;
@@ -126,7 +126,7 @@ namespace test {
           Iter it = extents.active();
           CHECK (it);
           
-          Extent& extent = it->access(); ////////////////////////////////////////////////////////OOO better Iter implementation for direct access
+          Extent& extent{*it};
           CHECK (10 == extent.size());
           
           int num = rand() % 1000;
@@ -135,7 +135,7 @@ namespace test {
           
           ++it;
           CHECK (it);
-          Extent& nextEx = it->access();
+          Extent& nextEx{*it};
           CHECK (not isSameObject(extent, nextEx));
           nextEx[5] = extent[2] + 1;
           CHECK (num   == extent[2]);
