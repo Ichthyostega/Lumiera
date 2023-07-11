@@ -35,6 +35,7 @@
 
 using test::Test;
 //using std::move;
+using util::isnil;
 using util::isSameObject;
 
 
@@ -78,7 +79,8 @@ namespace test {
       simpleUsage()
         {
           Extents extents{5};
-          Extent& extent = *extents.active();
+          extents.openNew();
+          Extent& extent = *extents.begin();
           CHECK (10 == extent.size());
           
           int num = rand() % 1000;
@@ -123,8 +125,12 @@ namespace test {
       iteration()
         {
           Extents extents{5};
-          Iter it = extents.active();
+          Iter it = extents.begin();
+          CHECK (isnil (it));
+          
+          extents.openNew(2); // allocate two Extents
           CHECK (it);
+          CHECK (0 == it.getIndex());
           
           Extent& extent{*it};
           CHECK (10 == extent.size());
@@ -135,11 +141,26 @@ namespace test {
           
           ++it;
           CHECK (it);
+          CHECK (1 == it.getIndex());
           Extent& nextEx{*it};
           CHECK (not isSameObject(extent, nextEx));
           nextEx[5] = extent[2] + 1;
           CHECK (num   == extent[2]);
           CHECK (num+1 == nextEx[5]);
+          
+          ++it;
+          CHECK (it == extents.end());
+          CHECK (isnil (it));      // only two allocated
+          it.expandAlloc();       //  but can expand allocation
+          CHECK (it);
+          
+          // iterate again to verify we get the same memory blocks
+          it = extents.begin();
+          CHECK (isSameObject(*it, extent));
+          CHECK ((*it)[2] == num);
+          ++it;
+          CHECK (isSameObject(*it, nextEx));
+          CHECK ((*it)[5] == num+1);
         }
       
       

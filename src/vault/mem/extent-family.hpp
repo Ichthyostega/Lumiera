@@ -30,7 +30,7 @@
  ** will fall out of use eventually, and can then be placed back into a buffer of free
  ** extents. In accordance to overall demand, this reserve buffer can be scaled up
  ** and down to avoid holding larger amounts of unused memory, while the availability
- ** of a baseline amount of memory can be enforced. 
+ ** of a baseline amount of memory can be enforced.
  ** 
  ** @see ExtentFamily_test
  ** @see gear::BlockFlow usage example
@@ -48,7 +48,7 @@
 //#include "lib/symbol.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/nocopy.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <string>
 #include <algorithm>
@@ -62,6 +62,8 @@ namespace mem {
   
 //  using util::isnil;
 //  using std::string;
+  using util::unConst;
+  
   template<typename T, size_t siz>
   class ExtentDiagnostic;
 
@@ -133,13 +135,13 @@ namespace mem {
           Extent&
           yield()  const
             {
-              UNIMPLEMENTED ("resolve index");
+              return exFam->access (index);
             }
           
           void
           iterNext()
             {
-              UNIMPLEMENTED ("Iterate with wrap-around");
+              exFam->incWrap (index);
             }
           
           bool
@@ -171,10 +173,14 @@ namespace mem {
         }
       
       /** claim next \a cnt extents, possibly allocate.
-       * @note always allocating slightly in excess
+       * @remark the index pos previously marked as #after_
+       *         will always become the first new storage slot.
+       * @warning in case of #isWrapped, #first_ will be modified
+       *         and thus _any existing indices may be invalidated._
+       * @note   always allocating slightly in excess
        */
       void
-      openNew (size_t cnt)
+      openNew (size_t cnt =1)
         {
           if (not canAccomodate (cnt))
             {//insufficient reserve -> allocate
@@ -208,15 +214,18 @@ namespace mem {
         }                        ////////////////////////////////////////////////////////////////////////////TICKET #1316 : should reduce excess allocation (with apropriate damping to avoid oscillations)
       
       
-      /** allow transparent iteration of Extents, expanding storage on demand */
-      using iterator = lib::IterStateWrapper<Extent, IdxLink>;
-      
-      
-      iterator
-      active()
+      /** allow transparent iteration of Extents,
+       *  with the ability to expand storage */
+      struct iterator
+        : lib::IterStateWrapper<Extent, IdxLink>
         {
-          UNIMPLEMENTED ("visit all active extents, possibly claim next ones");
-        }
+          size_t getIndex() { return this->stateCore().index;    }
+          void expandAlloc(){ this->stateCore().exFam->openNew();}
+        };
+      
+      
+      iterator begin() { return iterator{IdxLink{this, start_}}; }
+      iterator end()   { return iterator{IdxLink{this, after_}}; }
       
       
     private:
@@ -230,7 +239,7 @@ namespace mem {
       size_t
       activeSlotCnt()  const
         {
-          REQUIRE (start_ <= extents_.size());
+          REQUIRE (start_ <  extents_.size());
           REQUIRE (after_ <= extents_.size());
           
           return not isWrapped()? after_ - start_
@@ -256,10 +265,27 @@ namespace mem {
        * @remark using the array cyclically
        */
       void
-      incWrap (size_t& idx, size_t inc)
+      incWrap (size_t& idx, size_t inc =1)
         {
           idx = (idx+inc) % extents_.size();
         }
+      
+      bool
+      isValidPos (size_t idx)  const
+        {
+          REQUIRE (idx < extents_.size());
+          REQUIRE (activeSlotCnt() > 0);
+          
+          return start_ <= idx
+             and idx < after_;
+        }
+      
+      Extent&
+      access (size_t idx)  const
+        {
+          REQUIRE (isValidPos (idx));
+          return unConst(this)->extents_[idx].access();
+        }     // deliberately const-ness does not cover payload
       
       
       /// „backdoor“ to watch internals from tests
