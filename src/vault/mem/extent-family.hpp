@@ -34,9 +34,6 @@
  ** 
  ** @see ExtentFamily_test
  ** @see gear::BlockFlow usage example
- ** 
- ** @todo WIP-WIP-WIP 7/2023 »Playback Vertical Slice«
- ** 
  */
 
 
@@ -49,7 +46,6 @@
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
-//#include <string>
 #include <algorithm>
 #include <memory>
 #include <vector>
@@ -59,13 +55,12 @@
 namespace vault{
 namespace mem {
   
-//  using util::isnil;
-//  using std::string;
   using util::unConst;
   
   template<typename T, size_t siz>
   class ExtentDiagnostic;
-
+  
+  
   
   /**
    * Memory manager to provide a sequence of Extents for cyclic usage.
@@ -73,7 +68,6 @@ namespace mem {
    * ctors or dtors on the objects nominally located in »slots« within the Extent.
    * @tparam T payload type living in the Extent's »slots«
    * @tparam siz number of »slots« per Extent
-   * @todo WIP-WIP 7/2023
    * @see ExtentFamily_test
    */
   template<typename T, size_t siz>
@@ -235,6 +229,7 @@ namespace mem {
       
       friend iterator begin (ExtentFamily& exFam) { return exFam.begin(); }
       friend iterator end   (ExtentFamily& exFam) { return exFam.end();   }
+      
       
       
     private: /* ====== storage management implementation ====== */

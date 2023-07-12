@@ -27,16 +27,12 @@
 
 #include "lib/test/run.hpp"
 #include "vault/mem/extent-family.hpp"
-//#include "lib/time/timevalue.hpp"
-//#include "lib/format-cout.hpp"////////////////////TODO
-#include "lib/test/diagnostic-output.hpp"////////////////////TODO
 #include "lib/iter-explorer.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 #include <utility>
 
 using test::Test;
-//using std::move;
 using util::isnil;
 using util::isSameObject;
 using lib::explore;
@@ -46,14 +42,9 @@ namespace vault{
 namespace mem  {
 namespace test {
   
-//  using lib::time::FrameRate;
-//  using lib::time::Offset;
-//  using lib::time::Time;
-  
   using Extents = ExtentFamily<int, 10>;
   using Extent  = Extents::Extent;
   using Iter    = Extents::iterator;
-  
   
   
   
@@ -243,10 +234,32 @@ namespace test {
       /** @test verify in detail how iteration wraps around to also reuse
        *        previously dropped extents, possibly rearranging the internal
        *        management-vector to allow growing new extents at the end.
+       *        - existing allocations are re-used cyclically
+       *        - this may lead to a »wrapped« internal state
+       *        - necessitating to expand allocations in the middle
+       *        - yet all existing Extent addresses remain stable
        */
       void
       wrapAround()
         {
+          // Helper to capture the storage addresses of all currently active Extents
+          auto snapshotAdr  = [](Extents& extents)
+                                  {
+                                    auto takeAdr  = [](auto& x){ return &*x; };
+                                    return explore(extents).transform(takeAdr).effuse();
+                                  };
+          auto verifyAdr    = [](auto snapshot, auto it)
+                                  {
+                                    for (auto oldAddr : snapshot)
+                                      {
+                                        if (not isSameObject(*oldAddr, *it))
+                                          return false;
+                                        ++it;
+                                      }
+                                    return true;
+                                  };
+          
+          
           Extents extents{5};
           CHECK ( 0 == watch(extents).first());
           CHECK ( 0 == watch(extents).last());
@@ -259,27 +272,69 @@ namespace test {
           CHECK ( 4 == watch(extents).active());
           CHECK ( 5 == watch(extents).size());
           
-          auto takeAdr  = [](auto& x){ return &*x; };
-          auto snapshot = explore(extents).transform(takeAdr).effuse();
-SHOW_EXPR(snapshot.size())
-SHOW_EXPR(snapshot[0])
-SHOW_EXPR(snapshot[3])
+          auto snapshot = snapshotAdr(extents);            // capture *addresses* of currently active Extents
+          CHECK (4 == snapshot.size());
           
           extents.openNew();
-SHOW_EXPR(watch(extents).first())
-SHOW_EXPR(watch(extents).last())
-SHOW_EXPR(watch(extents).active())
-SHOW_EXPR(watch(extents).size())
           CHECK ( 0 == watch(extents).first());
           CHECK ( 5 == watch(extents).last());
           CHECK ( 5 == watch(extents).active());
           CHECK (10 == watch(extents).size());             // Note: heuristics to over-allocate to some degree
-          auto it = extents.begin();
-          for (auto oldAddr : snapshot)
-            {
-              CHECK (isSameObject(*oldAddr, *it));
-              ++it;
-            }
+          CHECK (verifyAdr (snapshot, extents.begin()));
+          
+          extents.dropOld(3);                              // place the active window such as to start on last snapshotted Extent
+          CHECK ( 3 == watch(extents).first());
+          CHECK ( 5 == watch(extents).last());
+          CHECK ( 2 == watch(extents).active());
+          CHECK (10 == watch(extents).size());
+          CHECK (isSameObject (*extents.begin(), *snapshot.back()));
+          
+          extents.openNew(6);                              // now provoke a »wrapped« state of internal management of active Extents
+          CHECK ( 3 == watch(extents).first());            // ...Note: the position of the *first* active Extent...
+          CHECK ( 1 == watch(extents).last());             // ... is *behind* the position of the last active Extent
+          CHECK ( 8 == watch(extents).active());           // ... implying that the active strike wraps at allocation end
+          CHECK (10 == watch(extents).size());
+          snapshot = snapshotAdr (extents);                // take a new snapshot; this also verifies proper iteration
+          CHECK (8 == snapshot.size());
+          
+          extents.openNew(2);                              // ask for more than can be accommodated without ambiguity
+          CHECK ( 8 == watch(extents).first());            // ...Note: new allocation was inserted, existing tail shifted
+          CHECK ( 3 == watch(extents).last());             // ... allowing for the requested two »slots« to be accommodated
+          CHECK (10 == watch(extents).active());
+          CHECK (15 == watch(extents).size());
+          CHECK (verifyAdr (snapshot, extents.begin()));   // ... yet all existing Extent addresses have been rotated transparently
+          
+          extents.dropOld(10);                             // close out all active slots, wrapping the first-pos to approach last
+          CHECK ( 3 == watch(extents).first());
+          CHECK ( 3 == watch(extents).last());
+          CHECK ( 0 == watch(extents).active());
+          CHECK (15 == watch(extents).size());
+          
+          extents.openNew(12);                             // provoke a special boundary situation, where the end is *just wrapped*
+          CHECK ( 3 == watch(extents).first());
+          CHECK ( 0 == watch(extents).last());
+          CHECK (12 == watch(extents).active());
+          CHECK (15 == watch(extents).size());
+          
+          extents.dropOld(11);                             // and make this boundary situation even more nasty, just sitting on the rim
+          CHECK (14 == watch(extents).first());
+          CHECK ( 0 == watch(extents).last());
+          CHECK ( 1 == watch(extents).active());
+          CHECK (15 == watch(extents).size());
+          
+          CHECK (14 == extents.begin().getIndex());
+          snapshot = snapshotAdr (extents);                // verify iteration end just after wrapping properly detected
+          CHECK (1 == snapshot.size());
+          CHECK (isSameObject (*extents.begin(), *snapshot.front()));
+          
+          extents.openNew(14);                             // and now provoke further expansion, adding new allocation right at start
+          CHECK (19 == watch(extents).first());            // ...Note: first must be relocated to sit again at the very rim
+          CHECK (14 == watch(extents).last());             // ... to allow last to sit at the index previously used by first
+          CHECK (15 == watch(extents).active());
+          CHECK (20 == watch(extents).size());
+          
+          CHECK (19 == extents.begin().getIndex());        // ... yet address of the first Extent remains the same, just held in another slot
+          CHECK (isSameObject (*extents.begin(), *snapshot.front()));
         }
     };
   
