@@ -276,8 +276,9 @@ namespace mem {
           REQUIRE (idx < extents_.size());
           REQUIRE (activeSlotCnt() > 0);
           
-          return start_ <= idx
-             and idx < after_;
+          return isWrapped()? (start_ <= idx and idx < extents_.size())
+                               or idx < after_
+                            : (start_ <= idx and idx < after_);
         }
       
       Extent&

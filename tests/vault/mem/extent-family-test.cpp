@@ -28,7 +28,8 @@
 #include "lib/test/run.hpp"
 #include "vault/mem/extent-family.hpp"
 //#include "lib/time/timevalue.hpp"
-//#include "lib/format-cout.hpp"
+//#include "lib/format-cout.hpp"////////////////////TODO
+#include "lib/test/diagnostic-output.hpp"
 //#include "lib/util.hpp"
 
 #include <utility>
@@ -69,6 +70,7 @@ namespace test {
            simpleUsage();
            use_and_drop();
            iteration();
+           reuseUnclean();
            wrapAround();
         }
       
@@ -126,9 +128,9 @@ namespace test {
         {
           Extents extents{5};
           Iter it = extents.begin();
-          CHECK (isnil (it));
+          CHECK (isnil (it));  // no extents provided yet
           
-          extents.openNew(2); // allocate two Extents
+          extents.openNew(2); //  allot two extents for active use
           CHECK (it);
           CHECK (0 == it.getIndex());
           
@@ -161,6 +163,77 @@ namespace test {
           ++it;
           CHECK (isSameObject(*it, nextEx));
           CHECK ((*it)[5] == num+1);
+        }
+      
+      
+      
+      /** @test verify that neither constructors nor destructors are invoked
+       *        automatically when discarding or re-using extents.
+       */
+      void
+      reuseUnclean()
+        {
+            struct Probe
+              {
+                short val;
+                Probe() : val(1 + rand() % 1000) { }
+               ~Probe() { val = 0; }
+              };
+          
+          using SpecialExtents = ExtentFamily<Probe, 100>;
+          
+          SpecialExtents spex{3};
+          spex.openNew(2);
+          CHECK ( 0 == watch(spex).first());
+          CHECK ( 2 == watch(spex).last());
+          
+          // implant a new Probe object into each »slot« of the new extent
+          auto& extent = *spex.begin();
+          for (Probe& probe : extent)
+            new(&probe) Probe;
+          
+          auto calcChecksum = [](SpecialExtents::Extent& extent) -> size_t
+                                {
+                                  size_t sum{0};
+                                  for (Probe& probe : extent)
+                                    sum += probe.val;
+                                  return sum;
+                                };
+          
+          size_t checksum = calcChecksum (*spex.begin());
+          
+          // discard first extent, i.e. mark it as unused
+          // while the underlying memory block remains allocated
+          // and data within this block is not touched
+          spex.dropOld(1);
+          CHECK ( 1 == watch(spex).first());
+          CHECK ( 2 == watch(spex).last());
+          
+          // the »begin« (i.e. the first active extent is now another memory block
+          CHECK (not isSameObject (extent, *spex.begin()));
+          size_t checkSecond = calcChecksum (*spex.begin());
+          CHECK (checkSecond != checksum);
+          
+          // but the random data generated above still sits in the original (first) memory block
+          CHECK (checksum == calcChecksum (extent));
+          
+          // now let the actively allotted extents "wrap around"...
+          spex.dropOld(1);
+          CHECK ( 2 == watch(spex).first());
+          CHECK ( 2 == watch(spex).last());
+          spex.openNew(2);
+          CHECK ( 2 == watch(spex).first());
+          CHECK ( 1 == watch(spex).last());
+          
+          auto iter = spex.begin();
+          CHECK ( 2 == iter.getIndex());
+          ++iter;
+          CHECK ( 0 == iter.getIndex());
+          CHECK (isSameObject(*iter, extent));
+          
+          // and during all those allotting and dropping, data in the memory block was not touched,
+          // which also proves that constructors or destructors of the nominal "content" are not invoked
+          CHECK (checksum == calcChecksum (extent));
         }
       
       
