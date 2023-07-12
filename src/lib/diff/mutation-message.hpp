@@ -155,7 +155,7 @@ namespace diff{
       
       /**
        * Convenience builder for consuming an brace enclosed initializer_list
-       * @note initialiser elements will be _copied_ into a _heap alloacated_
+       * @note initialiser elements will be _copied_ into a _heap allocated_
        *       snapshot (vector), which is then managed by `shared_ptr`
        */
       MutationMessage(std::initializer_list<DiffStep> const&& ili)

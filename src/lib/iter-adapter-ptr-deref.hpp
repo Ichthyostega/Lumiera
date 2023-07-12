@@ -242,7 +242,7 @@ namespace lib {
           if (i_.isValid())
             currPtr_ = & (*i_);
           else
-            currPtr_ = 0;
+            currPtr_ = nullptr;
         }
       
       

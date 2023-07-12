@@ -118,6 +118,12 @@
 #include <utility>
 
 
+//Forward declaration to allow a default result container for IterExplorer::effuse
+namespace std {
+  template<typename T, class A> class vector;
+}
+
+
 namespace lib {
   
   using std::move;
@@ -1694,6 +1700,38 @@ namespace lib {
       asIterator()
         {
           return SRC {move(*this)};
+        }
+      
+      /** _terminal builder_ to pour and materialise all results from this Pipeline.
+       * @tparam CON a STL compliant container to store generated values (defaults to `vector`)
+       * @return new instance of the target container, filled with all values
+       *         pulled from this Pipeline until exhaustion.
+       */
+      template<template<typename> class CON =std::vector>
+      auto
+      effuse()
+        {
+          CON<value_type> con{};
+          this->effuse (con);
+          return con;
+        }
+      
+      template<class CON>
+      auto
+      effuse (CON&& sink) -> CON
+        {
+          CON con{move(sink)};
+          this->effuse (con);
+          return con;
+        }
+      
+      /** _terminal builder to fill an existing container with all results from this Pipeline */
+      template<class CON>
+      void
+      effuse (CON& con)
+        {
+          for (auto& val : *this)
+            con.push_back (val);
         }
     };
   

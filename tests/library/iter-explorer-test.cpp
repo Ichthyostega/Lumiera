@@ -115,6 +115,13 @@ namespace test{
             if (not checkPoint()) return;
             --p;
           }
+        
+        bool
+        operator== (CountDown const& o)  const
+          {
+            return e == o.e
+               and p == o.p;
+          }
       };
     
     
@@ -279,6 +286,7 @@ namespace test{
           verify_FilterChanges();
           verify_asIterSource();
           verify_IterSource();
+          verify_effuse();
           
           verify_depthFirstExploration();
           demonstrate_LayeredEvaluation();
@@ -1056,6 +1064,24 @@ namespace test{
           CHECK (3 == *seq);
           seq.flipFilter();  // everything rejected
           CHECK (isnil (seq));
+        }
+      
+      
+      
+      
+      /** @test verify _terminal operation_ to append all results into a container.
+       */
+      void
+      verify_effuse()
+        {
+          auto solidified = explore(CountDown{20})
+                               .filter   ([](uint i){ return i % 2; })
+                               .transform([](uint i){ return 0.5*i; })
+                               .effuse();
+          
+          using Res = decltype(solidified);
+          CHECK (lib::test::showType<Res>()  == "vector<double>"_expect);
+          CHECK (util::join(solidified, "|") == "9.5|8.5|7.5|6.5|5.5|4.5|3.5|2.5|1.5|0.5"_expect);
         }
       
       

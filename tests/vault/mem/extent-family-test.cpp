@@ -29,7 +29,8 @@
 #include "vault/mem/extent-family.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/format-cout.hpp"////////////////////TODO
-#include "lib/test/diagnostic-output.hpp"
+#include "lib/test/diagnostic-output.hpp"////////////////////TODO
+#include "lib/iter-explorer.hpp"
 //#include "lib/util.hpp"
 
 #include <utility>
@@ -38,6 +39,7 @@ using test::Test;
 //using std::move;
 using util::isnil;
 using util::isSameObject;
+using lib::explore;
 
 
 namespace vault{
@@ -99,7 +101,7 @@ namespace test {
       void
       use_and_drop()
         {
-          ExtentFamily<int, 10> extents{5};
+          Extents extents{5};
           CHECK ( 0 == watch(extents).first());
           CHECK ( 0 == watch(extents).last());
           CHECK ( 0 == watch(extents).active());
@@ -180,7 +182,7 @@ namespace test {
                ~Probe() { val = 0; }
               };
           
-          using SpecialExtents = ExtentFamily<Probe, 100>;
+          using SpecialExtents = ExtentFamily<Probe, 1000>;
           
           SpecialExtents spex{3};
           spex.openNew(2);
@@ -245,6 +247,39 @@ namespace test {
       void
       wrapAround()
         {
+          Extents extents{5};
+          CHECK ( 0 == watch(extents).first());
+          CHECK ( 0 == watch(extents).last());
+          CHECK ( 0 == watch(extents).active());
+          CHECK ( 5 == watch(extents).size());
+          
+          extents.openNew(4);
+          CHECK ( 0 == watch(extents).first());
+          CHECK ( 4 == watch(extents).last());
+          CHECK ( 4 == watch(extents).active());
+          CHECK ( 5 == watch(extents).size());
+          
+          auto takeAdr  = [](auto& x){ return &*x; };
+          auto snapshot = explore(extents).transform(takeAdr).effuse();
+SHOW_EXPR(snapshot.size())
+SHOW_EXPR(snapshot[0])
+SHOW_EXPR(snapshot[3])
+          
+          extents.openNew();
+SHOW_EXPR(watch(extents).first())
+SHOW_EXPR(watch(extents).last())
+SHOW_EXPR(watch(extents).active())
+SHOW_EXPR(watch(extents).size())
+          CHECK ( 0 == watch(extents).first());
+          CHECK ( 5 == watch(extents).last());
+          CHECK ( 5 == watch(extents).active());
+          CHECK (10 == watch(extents).size());             // Note: heuristics to over-allocate to some degree
+          auto it = extents.begin();
+          for (auto oldAddr : snapshot)
+            {
+              CHECK (isSameObject(*oldAddr, *it));
+              ++it;
+            }
         }
     };
   

@@ -45,7 +45,6 @@
 
 
 #include "vault/common.hpp"
-//#include "lib/symbol.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
@@ -70,6 +69,10 @@ namespace mem {
   
   /**
    * Memory manager to provide a sequence of Extents for cyclic usage.
+   * Storage extents, once allocated, will be re-used without invoking any
+   * ctors or dtors on the objects nominally located in »slots« within the Extent.
+   * @tparam T payload type living in the Extent's »slots«
+   * @tparam siz number of »slots« per Extent
    * @todo WIP-WIP 7/2023
    * @see ExtentFamily_test
    */
@@ -77,12 +80,13 @@ namespace mem {
   class ExtentFamily
     : util::NonCopyable
     {
-      /** number of excess new extents
-       *  to add whenever new storage is required
-       */
+      /** number of excess new extents to add
+       *  whenever new storage is required */
       static const size_t EXCESS_ALLOC{5};
       
+      
     public:
+      /** logical structure of a memory Extent */
       struct Extent
         : std::array<T,siz>
         {
@@ -90,7 +94,9 @@ namespace mem {
           using SIZ = std::integral_constant<size_t,siz>;
         };
       
+      
     private:
+      /** Entry in the Extents management datastructure */
       struct Storage
         : std::unique_ptr<char[]>
         {
@@ -168,7 +174,7 @@ namespace mem {
       
       void
       reserve (size_t expectedMaxExtents)
-        {
+        {                // pertaining management data only
           extents_.reserve (expectedMaxExtents);
         }
       
@@ -183,7 +189,7 @@ namespace mem {
       openNew (size_t cnt =1)
         {
           if (not canAccomodate (cnt))
-            {//insufficient reserve -> allocate
+            {//insufficient reserve => allocate
               size_t oldSiz = extents_.size();
               size_t addSiz = cnt - freeSlotCnt()
                               + EXCESS_ALLOC;
@@ -211,7 +217,7 @@ namespace mem {
         {
           REQUIRE (cnt <= activeSlotCnt());
           incWrap (start_, cnt);
-        }                        ////////////////////////////////////////////////////////////////////////////TICKET #1316 : should reduce excess allocation (with apropriate damping to avoid oscillations)
+        }                        ////////////////////////////////////////////////////////////////////////////TICKET #1316 : should reduce excess allocation (with appropriate damping to avoid oscillations)
       
       
       /** allow transparent iteration of Extents,
@@ -223,12 +229,15 @@ namespace mem {
           void expandAlloc(){ this->stateCore().exFam->openNew();}
         };
       
-      
+      /** iterate over all the currently active Extents */
       iterator begin() { return iterator{IdxLink{this, start_}}; }
       iterator end()   { return iterator{IdxLink{this, after_}}; }
       
+      friend iterator begin (ExtentFamily& exFam) { return exFam.begin(); }
+      friend iterator end   (ExtentFamily& exFam) { return exFam.end();   }
       
-    private:
+      
+    private: /* ====== storage management implementation ====== */
       bool
       isWrapped()  const
         {
@@ -249,7 +258,7 @@ namespace mem {
       
       size_t
       freeSlotCnt()  const
-        {          // always keep one in reserve...
+        {           // always keep one in reserve...
           REQUIRE (activeSlotCnt() < extents_.size());
           
           return extents_.size() - activeSlotCnt();
@@ -258,8 +267,9 @@ namespace mem {
       bool
       canAccomodate (size_t addCnt)  const
         {
-          return addCnt < freeSlotCnt();  // keep one in reserve
-        }
+          return addCnt < freeSlotCnt();
+        }     // keep one in reserve to allow for
+             //  unambiguous iteration end in wrapped state
       
       /** increment index, but wrap at array end.
        * @remark using the array cyclically
