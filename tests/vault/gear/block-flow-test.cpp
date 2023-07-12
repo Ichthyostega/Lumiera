@@ -64,19 +64,23 @@ namespace test {
       run (Arg)
         {
            simpleUsage();
-           calculateDeadline();
-           setupLalup();
+           verifyAPI();
+           handleEpoch();
+           placeActivity();
+           adjustEpochs();
+           storageFlow();
         }
       
       
       /** @test TODO demonstrate a simple usage scenario
+       * @todo WIP 7/23 ⟶ define ⟶ implement
        */
       void
       simpleUsage()
         {
           BlockFlow bFlow;
           Time deadline = randTime();
-          Activity tick = bFlow.until(deadline).create();
+          Activity& tick = bFlow.until(deadline).create();
           ///////////////////////////////////////////////////////////////////////////////OOO diagnostic function to check allocation
           
           bFlow.discardBefore (deadline + Time{0,5});
@@ -85,19 +89,51 @@ namespace test {
       
       
       
-      /** @test TODO
+      /** @test verify the primary BlockFlow API functions in isolation
+       * @todo WIP 7/23 ⟶ define ⟶ implement
        */
       void
-      calculateDeadline()
+      verifyAPI()
         {
         }
       
       
       
-      /** @test TODO
+      /** @test TODO cover the handling of Epochs
+       * @todo WIP 7/23 ⟶ define ⟶ implement
        */
       void
-      setupLalup()
+      handleEpoch()
+        {
+        }
+      
+      
+      
+      /** @test TODO place Activity record into storage
+       * @todo WIP 7/23 ⟶ define ⟶ implement
+       */
+      void
+      placeActivity()
+        {
+        }
+      
+      
+      
+      /** @test TODO load based regulation of Epoch spacing
+       * @todo WIP 7/23 ⟶ define ⟶ implement
+       */
+      void
+      adjustEpochs()
+        {
+        }
+      
+      
+      
+      /** @test TODO maintain progression of epochs.
+       * @todo WIP 7/23 ⟶ define ⟶ implement
+       */
+      void
+      storageFlow()
         {
         }
     };

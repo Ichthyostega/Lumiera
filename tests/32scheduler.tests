@@ -2,6 +2,12 @@ TESTING "Component Test Suite: Scheduler" ./test-suite --group=engine
 
 
 
+PLANNED "Activity observation framework" ActivityDetector_test <<END
+return: 0
+END
+
+
+
 PLANNED "BlockFlow memory management scheme" BlockFlow_test <<END
 return: 0
 END

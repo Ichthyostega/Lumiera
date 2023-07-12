@@ -225,7 +225,43 @@ namespace gear {
         {
           UNIMPLEMENTED ("traverse oldest Epochs and discard obsoleted");
         }
+      
+    private:
+      ///////////////////
+      
+      /// „backdoor“ to watch internals from tests
+      friend class FlowDiagnostic;
     };
+  
+  
+  
+  
+  
+  
+  
+  
+  /* ===== Test / Diagnostic ===== */
+  
+  class FlowDiagnostic
+    {
+      BlockFlow& flow_;
+      
+    public:
+      FlowDiagnostic(BlockFlow& theFlow)
+        : flow_{theFlow}
+      { }
+      
+//      size_t first()  { return exFam_.start_; }
+//      size_t last()   { return exFam_.after_; }
+      size_t cntEpochs() { return watch(flow_.alloc_).active(); }
+      size_t poolSize()  { return watch(flow_.alloc_).size(); }
+    };
+  
+  inline FlowDiagnostic
+  watch (BlockFlow& theFlow)
+  {
+    return FlowDiagnostic{theFlow};
+  }
   
   
   

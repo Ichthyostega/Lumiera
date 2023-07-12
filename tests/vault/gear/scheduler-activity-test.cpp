@@ -41,7 +41,7 @@ using lib::time::FSecs;
 
 
 namespace vault{
-namespace gear  {
+namespace gear {
 namespace test {
   
 //  using lib::time::FrameRate;
@@ -63,13 +63,22 @@ namespace test {
       virtual void
       run (Arg)
         {
-           simpleUsage();
-           walkingDeadline();
-           setupLalup();
+          simpleUsage();
+          
+          verifyActivity_Invoke();
+          verifyActivity_Notify();
+          verifyActivity_Gate();
+          
+          termBuilder();
+          
+          scenario_RenderJob();
+          scenario_IOJob();
+          scenario_MetaJob();
         }
       
       
       /** @test TODO demonstrate a simple usage scenario
+       * @todo WIP 7/23 ⟶ define ⟶ implement
        */
       void
       simpleUsage()
@@ -84,19 +93,71 @@ namespace test {
       
       
       
-      /** @test TODO
+      /** @test TODO behaviour of Activity::INVOKE
+       * @todo WIP 7/23 ⟶ define ⟶ implement
        */
       void
-      walkingDeadline()
+      verifyActivity_Invoke()
         {
         }
       
       
       
-      /** @test TODO
+      /** @test TODO behaviour of Activity::NOTIFY
+       * @todo WIP 7/23 ⟶ define ⟶ implement
        */
       void
-      setupLalup()
+      verifyActivity_Notify()
+        {
+        }
+      
+      
+      
+      /** @test TODO behaviour of Activity::GATE
+       * @todo WIP 7/23 ⟶ define ⟶ implement
+       */
+      void
+      verifyActivity_Gate()
+        {
+        }
+      
+      
+      
+      /** @test TODO verify the Activity term builder
+       * @todo WIP 7/23 ⟶ define ⟶ implement
+       */
+      void
+      termBuilder()
+        {
+        }
+      
+      
+      
+      /** @test TODO usage scenario: Activity graph for a render job
+       * @todo WIP 7/23 ⟶ define ⟶ implement
+       */
+      void
+      scenario_RenderJob()
+        {
+        }
+      
+      
+      
+      /** @test TODO usage scenario: Activity graph for an async Job
+       * @todo WIP 7/23 ⟶ define ⟶ implement
+       */
+      void
+      scenario_IOJob()
+        {
+        }
+      
+      
+      
+      /** @test TODO usage scenario: Activity graph for administrative job
+       * @todo WIP 7/23 ⟶ define ⟶ implement
+       */
+      void
+      scenario_MetaJob()
         {
         }
     };
