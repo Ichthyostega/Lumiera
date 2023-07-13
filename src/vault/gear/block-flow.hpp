@@ -54,12 +54,10 @@
 #include "vault/common.hpp"
 #include "vault/gear/activity.hpp"
 #include "vault/mem/extent-family.hpp"
-//#include "lib/symbol.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
-//#include <string>
 #include <utility>
 
 
@@ -67,11 +65,11 @@ namespace vault{
 namespace gear {
   
   using util::isnil;
-//  using std::string;
   using lib::time::Time;
   using lib::time::TimeVar;
   using lib::time::Duration;
   using lib::time::FrameRate;
+  
   
   namespace {// hard-wired parametrisation
     const size_t EPOCH_SIZ = 100;
@@ -94,13 +92,13 @@ namespace gear {
    * maintains a deadline time and keeps track of storage slots already claimed.
    * This is achieved by using the Activity record in the first slot as a GATE term
    * to maintain those administrative information.
-   * @remark rationale is to discard the Extent as a whole, once the deadline passed.
+   * @remark rationale is to discard the Extent as a whole, once deadline passed.
    */
   class Epoch
     : public Allocator::Extent
     {
       
-      /// @warning will be faked, not constructed
+      /// @warning will be faked, never constructed
       Epoch()    = delete;
       
     public:
@@ -150,19 +148,27 @@ namespace gear {
             }
         };
       
+      
+      EpochGate& gate() { return static_cast<EpochGate&> ((*this)[0]); }
+      Time   deadline() { return Time{gate().deadline()};              }
+      
+      
       static Epoch&
-      implantInto (Allocator::Extent& rawStorage)
+      implantInto (Allocator::iterator storageSlot)
         {
-          Epoch& target = static_cast<Epoch&> (rawStorage);
+          Epoch& target = static_cast<Epoch&> (*storageSlot);
           new(&target[0]) EpochGate{};
           return target;
         }
       
-      EpochGate&
-      gate()
+      static Epoch&
+      setup (Allocator::iterator storageSlot, Time deadline)
         {
-          return static_cast<EpochGate&> ((*this)[0]);
+          Epoch& newEpoch{implantInto (storageSlot)};
+          newEpoch.gate().deadline() = deadline;
+          return newEpoch;
         }
+
     };
   
   
@@ -181,6 +187,22 @@ namespace gear {
       Allocator alloc_;
       TimeVar epochStep_;
       
+      
+      /** @internal use a raw storage Extent as Epoch (unchecked cast) */
+      static Epoch&
+      asEpoch (Allocator::Extent& extent)
+        {
+          return static_cast<Epoch&> (extent);
+        }
+      
+      struct StorageAdaptor : Allocator::iterator
+        {
+          StorageAdaptor(Allocator::iterator it) : Allocator::iterator{it} { }
+          Epoch& yield()  const  { return asEpoch (Allocator::iterator::yield()); }
+        };
+      
+      
+
     public:
       BlockFlow()
         : alloc_{INITIAL_ALLOC}
@@ -194,6 +216,10 @@ namespace gear {
         }
       
       
+      /** Adapted storage-extent iterator, directly exposing Extent& */
+      using EpochIter = lib::IterableDecorator<Epoch, StorageAdaptor>;
+      
+      
       /**
        * Local handle to allow allocating a collection of Activities,
        * all sharing a common deadline. Internally, these records are
@@ -203,13 +229,16 @@ namespace gear {
        */
       class AllocatorHandle
         {
-          Allocator::iterator extent;
+          EpochIter epoch_;
           
         public:
           AllocatorHandle(Allocator::iterator slot)
-            : extent{slot}
+            : epoch_{slot}
           { }
           
+          /*************************************************//**
+           * Main API operation: allocate a new Activity record
+           */
           template<typename...ARGS>
           Activity&
           create (ARGS&& ...args)
@@ -218,18 +247,12 @@ namespace gear {
             }
           
         private:
-          Epoch&
-          currEpoch()
-            {
-              return asEpoch(extent);
-            }
-          
           void*
           claimSlot() ///< EX_SANE
             {
-              if (currEpoch().gate().hasFreeSlot())
+              if (epoch_->gate().hasFreeSlot())
                 {
-                  return currEpoch().gate().claimNextSlot();
+                  return epoch_->gate().claimNextSlot();
                 }
               else // Epoch overflow
                 { //  use following Epoch; possibly allocate
@@ -238,14 +261,16 @@ namespace gear {
             }
         };
       
+      
+      /* ===== public BlockFlow API ===== */
+      
       AllocatorHandle
       until (Time deadline)
         {
           if (isnil (alloc_))
             {//just create new Epoch one epochStep ahead
               alloc_.openNew();
-              Epoch& newEpoch = Epoch::implantInto (alloc_.first());
-              newEpoch.gate().deadline() = deadline + Time{epochStep_};
+              Epoch::setup (alloc_.begin(), deadline + Time{epochStep_});
               return AllocatorHandle{alloc_.begin()};
             }
           else
@@ -258,23 +283,24 @@ namespace gear {
       discardBefore (Time deadline)
         {
           if (isnil (alloc_)
-              or asEpoch(alloc_.first()).gate().deadline() > deadline)
+              or firstEpoch().deadline() > deadline)
             return;
         }
       
-    private:
-      /** @internal use a raw allocator Extent as Epoch (unchecked cast) */
-      static Epoch&
-      asEpoch (Allocator::iterator slot)
-        {
-          REQUIRE (bool(slot));
-          return asEpoch (*slot);
-        }
       
-      static Epoch&
-      asEpoch (Allocator::Extent& extent)
+      
+    private:
+      Epoch&
+      firstEpoch()
         {
-          return static_cast<Epoch&> (extent);
+          REQUIRE (not isnil (alloc_));
+          return asEpoch(*alloc_.begin());
+        }
+      Epoch&
+      lastEpoch()
+        {
+          REQUIRE (not isnil (alloc_));
+          return asEpoch(*alloc_.last());
         }
       
       
@@ -300,10 +326,10 @@ namespace gear {
         : flow_{theFlow}
       { }
       
-      Time   first()     { return Time{BlockFlow::asEpoch(flow_.alloc_.first()).gate().deadline()}; }
-      Time   last()      { return Time{BlockFlow::asEpoch(flow_.alloc_.last() ).gate().deadline()}; }
+      Time   first()     { return flow_.firstEpoch().deadline();}
+      Time   last()      { return flow_.lastEpoch().deadline(); }
       size_t cntEpochs() { return watch(flow_.alloc_).active(); }
-      size_t poolSize()  { return watch(flow_.alloc_).size(); }
+      size_t poolSize()  { return watch(flow_.alloc_).size();   }
     };
   
   inline FlowDiagnostic

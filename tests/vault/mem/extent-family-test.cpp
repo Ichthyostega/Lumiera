@@ -127,7 +127,7 @@ namespace test {
           extents.openNew(2); //  allot two extents for active use
           CHECK (it);
           CHECK (0 == it.getIndex());
-          CHECK (isSameObject(*it, extents.first()));
+          CHECK (isSameObject(*it, *extents.begin()));
           
           Extent& extent{*it};
           CHECK (10 == extent.size());
@@ -141,7 +141,7 @@ namespace test {
           CHECK (1 == it.getIndex());
           Extent& nextEx{*it};
           CHECK (not isSameObject(extent, nextEx));
-          CHECK (isSameObject(nextEx, extents.last()));
+          CHECK (isSameObject(nextEx, *extents.last()));
           nextEx[5] = extent[2] + 1;
           CHECK (num   == extent[2]);
           CHECK (num+1 == nextEx[5]);

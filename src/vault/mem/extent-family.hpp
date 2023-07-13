@@ -141,7 +141,7 @@ namespace mem {
           void
           iterNext()
             {
-              exFam->incWrap (index);
+              index = exFam->incWrap (index);
             }
           
           bool
@@ -150,6 +150,12 @@ namespace mem {
               return exFam == oi.exFam
                  and index == oi.index;
             }
+          
+          
+          /* === pass-through extended functionality === */
+          
+          size_t getIndex() { return index;    }
+          void expandAlloc(){ exFam->openNew();}
         };
       
       
@@ -184,7 +190,7 @@ namespace mem {
         {
           if (not canAccomodate (cnt))
             {//insufficient reserve => allocate
-              size_t oldSiz = extents_.size();
+              size_t oldSiz = slotCnt();
               size_t addSiz = cnt - freeSlotCnt()
                               + EXCESS_ALLOC;
               // add a strike of new extents at the end
@@ -202,7 +208,7 @@ namespace mem {
             }
           // now sufficient reserve extents are available
           ENSURE (canAccomodate (cnt));
-          incWrap (after_, cnt);
+          after_ = incWrap (after_, cnt);
         }
       
       /** discard oldest \a cnt extents */
@@ -210,18 +216,13 @@ namespace mem {
       dropOld (size_t cnt)
         {
           REQUIRE (cnt <= activeSlotCnt());
-          incWrap (start_, cnt);
+          start_ = incWrap (start_, cnt);
         }                        ////////////////////////////////////////////////////////////////////////////TICKET #1316 : should reduce excess allocation (with appropriate damping to avoid oscillations)
       
       
       /** allow transparent iteration of Extents,
        *  with the ability to expand storage */
-      struct iterator
-        : lib::IterStateWrapper<Extent, IdxLink>
-        {
-          size_t getIndex() { return this->stateCore().index;    }
-          void expandAlloc(){ this->stateCore().exFam->openNew();}
-        };
+      using iterator = lib::IterableDecorator<Extent, IdxLink>;
       
       /** iterate over all the currently active Extents */
       iterator begin() { return iterator{IdxLink{this, start_}}; }
@@ -232,8 +233,17 @@ namespace mem {
       
       
       bool empty()    const { return start_ == after_; }
-      Extent& last()  const { return access((after_+extents_.size()-1) % extents_.size()); } ///< @warning undefined behaviour when empty
-      Extent& first() const { return access(start_); }                                       ///< @warning undefined behaviour when empty
+      
+      /** positioned to the last / latest storage extent opened
+       * @warning undefined behaviour when empty
+       */
+      iterator
+      last()
+        {
+          REQUIRE (not empty());             // trick to safely decrement by one
+          size_t penultimate = incWrap (after_, slotCnt()-1);
+          return iterator{IdxLink{this, penultimate}};
+        }
       
       
     private: /* ====== storage management implementation ====== */
@@ -243,24 +253,30 @@ namespace mem {
           return after_ < start_;
         }     // note: both are equal only when empty
       
+      size_t
+      slotCnt()  const
+        {
+          return extents_.size();
+        }
+      
       /** @return number of allocated slots actually used */
       size_t
       activeSlotCnt()  const
         {
-          REQUIRE (start_ <  extents_.size());
-          REQUIRE (after_ <= extents_.size());
+          REQUIRE (start_ <  slotCnt());
+          REQUIRE (after_ <= slotCnt());
           
           return not isWrapped()? after_ - start_
                                 : (after_ - 0)
-                                 +(extents_.size() - start_);
+                                 +(slotCnt() - start_);
         }
       
       size_t
       freeSlotCnt()  const
         {           // always keep one in reserve...
-          REQUIRE (activeSlotCnt() < extents_.size());
+          REQUIRE (activeSlotCnt() < slotCnt());
           
-          return extents_.size() - activeSlotCnt();
+          return slotCnt() - activeSlotCnt();
         }
       
       bool
@@ -273,19 +289,19 @@ namespace mem {
       /** increment index, but wrap at array end.
        * @remark using the array cyclically
        */
-      void
-      incWrap (size_t& idx, size_t inc =1)
+      size_t
+      incWrap (size_t idx, size_t inc =1)
         {
-          idx = (idx+inc) % extents_.size();
+          return (idx+inc) % slotCnt();
         }
       
       bool
       isValidPos (size_t idx)  const
         {
-          REQUIRE (idx < extents_.size());
+          REQUIRE (idx < slotCnt());
           REQUIRE (activeSlotCnt() > 0);
           
-          return isWrapped()? (start_ <= idx and idx < extents_.size())
+          return isWrapped()? (start_ <= idx and idx < slotCnt())
                                or idx < after_
                             : (start_ <= idx and idx < after_);
         }
@@ -319,7 +335,7 @@ namespace mem {
       
       size_t first()  { return exFam_.start_; }
       size_t last()   { return exFam_.after_; }
-      size_t size()   { return exFam_.extents_.size(); }
+      size_t size()   { return exFam_.slotCnt(); }
       size_t active() { return exFam_.activeSlotCnt(); }
     };
   
