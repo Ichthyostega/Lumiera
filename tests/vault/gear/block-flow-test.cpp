@@ -31,14 +31,15 @@
 //#include "lib/time/timevalue.hpp"
 //#include "lib/format-cout.hpp"
 #include "lib/test/diagnostic-output.hpp" ////////////////////////////////TODO
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <utility>
 
 using test::Test;
 //using std::move;
-//using util::isSameObject;
+using util::isSameObject;
 using lib::test::randTime;
+using lib::test::showType;
 
 
 namespace vault{
@@ -108,18 +109,103 @@ namespace test {
       
       
       
-      /** @test TODO cover the handling of Epochs
-       * @todo WIP 7/23 ⟶ 🔁define ⟶ implement
+      /** @test cover properties and handling of Epochs (low-level)
+       *        - demonstrate that Epoch is placed into an Extent
+       *        - verify that both Extent and Epoch access the same memory block
+       *        - demonstrate the standard setup and initialisation of an Epoch
+       *        - allocate some Activities into the storage and observe free-managment
+       *        - detect when the Epoch is filled up
+       *        - verify alive / dead decision relative to given deadline
+       * @note this test covers helpers and implementation structures of BlockFlow,
+       *       without actually using a BlockFlow instance; rather, the typical handling
+       *       and low-level bookkeeping aspects are emulated and observed
        */
       void
       handleEpoch()
         {
+          using Extent = Allocator::Extent;
+          // the raw storage Extent is a compact block
+          // providing uninitialised storage typed as `vault::gear::Activity`
+          
+          Allocator alloc;
+          alloc.openNew();
+          Extent& extent = *alloc.begin();
+          CHECK (extent.size() == Extent::SIZ::value);
+          CHECK (sizeof(extent) == extent.size() * sizeof(Activity));
+          CHECK (showType<Extent::value_type>()  == "vault::gear::Activity"_expect);
+          
+          // we can just access some slot and place data there
+          extent[55].data_.feed.one = 555555555555555;
+          
+          // now establish an Epoch in this storage block:
+          Epoch& epoch = Epoch::setup (alloc.begin(), Time{0,10});
+          
+          // the underlying storage is not touched yet...
+          CHECK (epoch[55].data_.feed.one == 555555555555555);
+          
+          // but in the first slot, an »EpochGate« has been implanted
+          Epoch::EpochGate& gate = epoch.gate();
+          CHECK (isSameObject (gate, epoch[0]));
+          CHECK (isSameObject (epoch[0], extent[0]));
+          CHECK (Time{gate.deadline()} == Time(0,10));
+          CHECK (Time{gate.deadline()} == Time{epoch[0].data_.condition.dead});
+          CHECK (Activity::GATE  == epoch[0].verb_);
+          
+          // the gate's `next`-pointer is (ab)used to manage the next allocation slot
+          CHECK (isSameObject (*gate.next, epoch[extent.size()-1]));
+          
+          // the storage there is not yet used, but will be overwritten by the ctor call
+          epoch[extent.size()-1].data_.timing.instant = Time{5,5};
+          
+          // allocate a new Activity into the next free slot
+          BlockFlow::AllocatorHandle allocHandle{alloc.begin()};
+          Activity& timeStart = allocHandle.create (Activity::TIMESTART);
+          CHECK (isSameObject (timeStart, epoch[extent.size()-1]));
+          
+          // this Activity object is properly initialised (and memory was altered)
+          CHECK (epoch[extent.size()-1].data_.timing.instant != Time(5,5));
+          CHECK (epoch[extent.size()-1].data_.timing.instant == Time::NEVER);
+          CHECK (timeStart.verb_ == Activity::TIMESTART);
+          CHECK (timeStart.data_.timing.instant == Time::NEVER);
+          CHECK (timeStart.data_.timing.quality == 0);
+          
+          // and the free-pointer was decremented to point to the next free slot
+          CHECK (isSameObject (*gate.next, epoch[extent.size()-2]));
+          
+          // which also implies that there is still ample space left...
+          CHECK (gate.hasFreeSlot());
+          
+          // so let's eat this space up...
+          for (uint i=extent.size()-2; i>1; --i)
+            allocHandle.create();
+          
+          // one final slot is left (beyond of the EpochGate itself)
+          CHECK (isSameObject (*gate.next, epoch[1]));
+          CHECK (gate.hasFreeSlot());
+          
+          allocHandle.create (size_t(111), size_t(222));
+          CHECK (epoch[1].verb_ == Activity::FEED);
+          CHECK (epoch[1].data_.feed.one = 111);
+          CHECK (epoch[1].data_.feed.two = 222);
+          
+          // aaand the boat is full...
+          CHECK (not gate.hasFreeSlot());
+          CHECK (isSameObject (*gate.next, epoch[0]));
+          
+          // a given Epoch can be checked for relevance against a deadline
+          CHECK (gate.deadline() == Time(0,10));
+
+          CHECK (    gate.isAlive (Time(0,5)));
+          CHECK (    gate.isAlive (Time(999,9)));
+          CHECK (not gate.isAlive (Time(0,10)));
+          CHECK (not gate.isAlive (Time(1,10)));
+                     ////////////////////////////////////////////////////////////////////////////////////////TICKET #1298 : actually use a GATE implementation and then also check the count-down latch
         }
       
       
       
       /** @test TODO place Activity record into storage
-       * @todo WIP 7/23 ⟶ define ⟶ implement
+       * @todo WIP 7/23 ⟶ 🔁define ⟶ implement
        */
       void
       placeActivity()

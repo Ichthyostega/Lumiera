@@ -166,7 +166,7 @@ namespace mem {
       
     public:
       explicit
-      ExtentFamily(size_t initialCnt =0)
+      ExtentFamily(size_t initialCnt =1)
         : extents_{initialCnt}
         , start_{0}        //  Extents allocated yet marked unused
         , after_{0}
