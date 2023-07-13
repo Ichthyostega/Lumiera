@@ -460,39 +460,156 @@ namespace lib {
    */
   template<class IT>
   class IterStateCore
-      : public IT
+    : public IT
+    {
+      static_assert (lib::meta::can_IterForEach<IT>::value
+                    ,"Lumiera Iterator required as source");
+    protected:
+      IT&
+      srcIter()  const
+        {
+          return unConst(*this);
+        }
+      
+    public:
+      using IT::IT;
+      
+      /* === state protocol API for IterStateWrapper === */
+      bool
+      checkPoint()  const
+        {
+          return bool(srcIter());
+        }
+      
+      typename IT::reference
+      yield()  const
+        {
+          return *srcIter();
+        }
+      
+      void
+      iterNext()
+        {
+          ++ srcIter();
+        }
+    };
+  
+  
+  
+  
+  /**
+   * Decorator-Adapter to make a »state core« iterable as Lumiera Forward Iterator.
+   * This is a fundamental (and low-level) building block and works essentially the
+   * same as IterStateWrapper — with the significant difference however that the
+   * _Core is mixed in by inheritance_ and thus its full interface remains publicly
+   * accessible. Another notable difference is that this adapter deliberately
+   * *performs no sanity-checks*. This can be dangerous, but allows to use this
+   * setup even in performance critical code.
+   * @warning be sure to understand the consequences of using ´core.yield()´ without
+   *          checks; it might be a good idea to build safety checks into the Core
+   *          API functions instead.
+   * @tparam T nominal result type (maybe const, but without reference).
+   *         The resulting iterator will yield a reference to this type T
+   * @tparam COR type of the »state core«. The resulting iterator will _mix-in_
+   *         this type, and thus inherit properties like copy, move, VTable, POD.
+   *         The COR must implement the following _iteration control API:_
+   *          -# `checkPoint` establishes if the given state element represents a valid state
+   *          -# ´iterNext` evolves this state by one step (sideeffect)
+   *          -# `yield` realises the given state, exposing a result of type `T&`
+   */
+  template<typename T, class COR>
+  class IterableDecorator
+    : public COR
+    {
+      COR &      _core()       { return static_cast<COR&>       (*this); }
+      COR const& _core() const { return static_cast<COR const&> (*this); }
+      
+    protected:
+      void
+      __throw_if_empty()  const
+        {
+          if (not isValid())
+            _throwIterExhausted();
+        }
+      
+    public:
+      typedef T* pointer;
+      typedef T& reference;
+      typedef T  value_type;
+      
+      /** by default, pass anything down for initialisation of the core.
+       * @note especially this allows move-initialisation from an existing core.
+       * @remarks to prevent this rule from "eating" the standard copy operations,
+       *          and the no-op default ctor, we need to declare them explicitly below.
+       */
+      template<typename...ARGS>
+      IterableDecorator (ARGS&& ...init)
+        : COR(std::forward<ARGS>(init)...)
+        { }
+      
+      IterableDecorator()                                     =default;
+      IterableDecorator (IterableDecorator&&)                 =default;
+      IterableDecorator (IterableDecorator const&)            =default;
+      IterableDecorator& operator= (IterableDecorator&&)      =default;
+      IterableDecorator& operator= (IterableDecorator const&) =default;
+      
+      
+      /* === lumiera forward iterator concept === */
+      
+      explicit operator bool() const { return isValid(); }
+      
+      reference
+      operator*() const
+        {
+          return _core().yield();      // core interface: yield
+        }
+      
+      pointer
+      operator->() const
+        {
+          return & _core().yield();    // core interface: yield
+        }
+      
+      IterableDecorator&
+      operator++()
+        {
+          _core().iterNext();          // core interface: iterNext
+          return *this;
+        }
+      
+      bool
+      isValid ()  const
+        {
+          return _core().checkPoint(); // core interface: checkPoint
+        }
+      
+      bool
+      empty ()    const
+        {
+          return not isValid();
+        }
+      
+      
+      
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (IterableDecorator);
+      
+      
+      /// Supporting equality comparisons of equivalent iterators (equivalent state core)...
+      template<class T1, class T2>
+      friend bool
+      operator== (IterableDecorator<T1,COR> const& il, IterableDecorator<T2,COR> const& ir)
       {
-        static_assert (lib::meta::can_IterForEach<IT>::value
-                      ,"Lumiera Iterator required as source");
-      protected:
-        IT&
-        srcIter()  const
-          {
-            return unConst(*this);
-          }
-        
-      public:
-        using IT::IT;
-        
-        /* === state protocol API for IterStateWrapper === */
-        bool
-        checkPoint()  const
-          {
-            return bool(srcIter());
-          }
-        
-        typename IT::reference
-        yield()  const
-          {
-            return *srcIter();
-          }
-        
-        void
-        iterNext()
-          {
-            ++ srcIter();
-          }
-      };
+        return (il.empty()   and ir.empty())
+            or (il.isValid() and ir.isValid() and il._core() == ir._core());
+      }
+      
+      template<class T1, class T2>
+      friend bool
+      operator!= (IterableDecorator<T1,COR> const& il, IterableDecorator<T2,COR> const& ir)
+      {
+        return not (il == ir);
+      }
+    };
   
   
   

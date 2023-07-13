@@ -176,112 +176,6 @@ namespace lib {
     
     
     /**
-     * Decorate a state or logic core to treat it as Lumiera Forward Iterator.
-     * This Adapter does essentially the same as \ref IterStateWrapper, but here
-     * the state core is not encapsulated opaque, but rather inherited, and thus
-     * the full interface of the core remains publicly accessible.
-     */
-    template<typename T, class COR>
-    class IterableDecorator
-      : public COR
-      {
-        COR &      _core()       { return static_cast<COR&>       (*this); }
-        COR const& _core() const { return static_cast<COR const&> (*this); }
-        
-      protected:
-        void
-        __throw_if_empty()  const
-          {
-            if (not isValid())
-              throw lumiera::error::Invalid ("Can't iterate further",
-                    lumiera::error::LUMIERA_ERROR_ITER_EXHAUST);
-          }
-        
-        
-      public:
-        typedef T* pointer;
-        typedef T& reference;
-        typedef T  value_type;
-        
-        /** by default, pass anything down for initialisation of the core.
-         * @note especially this allows move-initialisation from an existing core.
-         * @remarks to prevent this rule from "eating" the standard copy operations,
-         *          and the no-op default ctor, we need to declare them explicitly below.
-         */
-        template<typename...ARGS>
-        IterableDecorator (ARGS&& ...init)
-          : COR(std::forward<ARGS>(init)...)
-          { }
-        
-        IterableDecorator()                                     =default;
-        IterableDecorator (IterableDecorator&&)                 =default;
-        IterableDecorator (IterableDecorator const&)            =default;
-        IterableDecorator& operator= (IterableDecorator&&)      =default;
-        IterableDecorator& operator= (IterableDecorator const&) =default;
-        
-        
-        /* === lumiera forward iterator concept === */
-        
-        explicit operator bool() const { return isValid(); }
-        
-        reference
-        operator*() const
-          {
-            __throw_if_empty();
-            return _core().yield ();     // core interface: yield
-          }
-        
-        pointer
-        operator->() const
-          {
-            __throw_if_empty();
-            return & _core().yield();    // core interface: yield
-          }
-        
-        IterableDecorator&
-        operator++()
-          {
-            __throw_if_empty();
-            _core().iterNext();          // core interface: iterNext
-            return *this;
-          }
-        
-        bool
-        isValid ()  const
-          {
-            return _core().checkPoint(); // core interface: checkPoint
-          }
-        
-        bool
-        empty ()    const
-          {
-            return not isValid();
-          }
-        
-        
-        
-        ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (IterableDecorator);
-        
-        
-        /// Supporting equality comparisons of equivalent iterators (same state core)...
-        template<class T1, class T2>
-        friend bool
-        operator== (IterableDecorator<T1,COR> const& il, IterableDecorator<T2,COR> const& ir)
-        {
-          return (il.empty()   and ir.empty())
-              or (il.isValid() and ir.isValid() and il._core() == ir._core());
-        }
-        
-        template<class T1, class T2>
-        friend bool
-        operator!= (IterableDecorator<T1,COR> const& il, IterableDecorator<T2,COR> const& ir)
-        {
-          return not (il == ir);
-        }
-      };
-    
-    
-    /**
      * Adapt an IterSource to make it iterable. As such, lib::IterSource is meant
      * to be iterable, while only exposing a conventional VTable-based _iteration interface_.
      * To support this usage, the library offers some builders to attach an iterator adapter.
@@ -403,7 +297,7 @@ namespace lib {
     struct _DecoratorTraits<SRC,   enable_if<is_StateCore<SRC>>>
       {
         using SrcVal  = typename CoreYield<SRC>::value_type;
-        using SrcIter = iter_explorer::IterableDecorator<SrcVal, SRC>;
+        using SrcIter = lib::IterableDecorator<SrcVal, SRC>;
       };
     
     template<class SRC>

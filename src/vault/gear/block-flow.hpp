@@ -249,7 +249,7 @@ namespace gear {
               return AllocatorHandle{alloc_.begin()};
             }
           else
-            {
+            {//find out how the given time relates to existing Epochs
               UNIMPLEMENTED ("search through existing Epochs to locate the latest one to support given deadline");
             }
         }
@@ -257,7 +257,9 @@ namespace gear {
       void
       discardBefore (Time deadline)
         {
-          UNIMPLEMENTED ("traverse oldest Epochs and discard obsoleted");
+          if (isnil (alloc_)
+              or asEpoch(alloc_.first()).gate().deadline() > deadline)
+            return;
         }
       
     private:
