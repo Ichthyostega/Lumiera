@@ -120,12 +120,14 @@ namespace test {
       iteration()
         {
           Extents extents{5};
+          CHECK (isnil (extents));
           Iter it = extents.begin();
           CHECK (isnil (it));  // no extents provided yet
           
           extents.openNew(2); //  allot two extents for active use
           CHECK (it);
           CHECK (0 == it.getIndex());
+          CHECK (isSameObject(*it, extents.first()));
           
           Extent& extent{*it};
           CHECK (10 == extent.size());
@@ -139,6 +141,7 @@ namespace test {
           CHECK (1 == it.getIndex());
           Extent& nextEx{*it};
           CHECK (not isSameObject(extent, nextEx));
+          CHECK (isSameObject(nextEx, extents.last()));
           nextEx[5] = extent[2] + 1;
           CHECK (num   == extent[2]);
           CHECK (num+1 == nextEx[5]);
@@ -261,6 +264,7 @@ namespace test {
           
           
           Extents extents{5};
+          CHECK ( extents.empty());
           CHECK ( 0 == watch(extents).first());
           CHECK ( 0 == watch(extents).last());
           CHECK ( 0 == watch(extents).active());

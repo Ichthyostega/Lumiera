@@ -30,6 +30,7 @@
 #include "vault/gear/block-flow.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/format-cout.hpp"
+#include "lib/test/diagnostic-output.hpp" ////////////////////////////////TODO
 //#include "lib/util.hpp"
 
 //#include <utility>
@@ -73,18 +74,26 @@ namespace test {
       
       
       /** @test TODO demonstrate a simple usage scenario
-       * @todo WIP 7/23 ⟶ define ⟶ implement
+       * @todo WIP 7/23 ⟶ ✔define ⟶ 🔁implement
        */
       void
       simpleUsage()
         {
           BlockFlow bFlow;
           Time deadline = randTime();
+          
           Activity& tick = bFlow.until(deadline).create();
-          ///////////////////////////////////////////////////////////////////////////////OOO diagnostic function to check allocation
+          CHECK (tick.verb_ == Activity::TICK);
+          CHECK (1 == watch(bFlow).cntEpochs());
+          CHECK (watch(bFlow).first() > deadline);
+          CHECK (watch(bFlow).first() - deadline == bFlow.currEpochStep());
+SHOW_EXPR(watch(bFlow).cntEpochs());
+SHOW_EXPR(watch(bFlow).poolSize());
+SHOW_EXPR(watch(bFlow).first());
           
           bFlow.discardBefore (deadline + Time{0,5});
-          ///////////////////////////////////////////////////////////////////////////////OOO diagnostic function to check de-allocation
+SHOW_EXPR(watch(bFlow).cntEpochs());
+          CHECK (0 == watch(bFlow).cntEpochs());
         }
       
       

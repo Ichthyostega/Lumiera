@@ -231,6 +231,10 @@ namespace mem {
       friend iterator end   (ExtentFamily& exFam) { return exFam.end();   }
       
       
+      bool empty()    const { return start_ == after_; }
+      Extent& last()  const { return access((after_+extents_.size()-1) % extents_.size()); } ///< @warning undefined behaviour when empty
+      Extent& first() const { return access(start_); }                                       ///< @warning undefined behaviour when empty
+      
       
     private: /* ====== storage management implementation ====== */
       bool

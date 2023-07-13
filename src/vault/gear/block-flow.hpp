@@ -57,7 +57,7 @@
 //#include "lib/symbol.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/nocopy.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <string>
 #include <utility>
@@ -66,15 +66,21 @@
 namespace vault{
 namespace gear {
   
-//  using util::isnil;
+  using util::isnil;
 //  using std::string;
   using lib::time::Time;
+  using lib::time::TimeVar;
+  using lib::time::Duration;
+  using lib::time::FrameRate;
   
   namespace {// hard-wired parametrisation
     const size_t EPOCH_SIZ = 100;
     const size_t ACTIVITIES_PER_FRAME = 10;
+    const size_t FRAMES_PER_EPOCH = EPOCH_SIZ/ACTIVITIES_PER_FRAME;
     const size_t INITIAL_FRAMES = 50;
     const size_t INITIAL_ALLOC  = 1 + (INITIAL_FRAMES * ACTIVITIES_PER_FRAME) / EPOCH_SIZ;
+    
+    const Duration INITIAL_EPOCH_STEP{FRAMES_PER_EPOCH * FrameRate{50}.duration()};
     
     /** raw allocator to provide a sequence of Extents to place Activity records */
     using Allocator = mem::ExtentFamily<Activity, EPOCH_SIZ>;
@@ -124,6 +130,12 @@ namespace gear {
             }
           // default copyable
           
+          Instant&
+          deadline()
+            {
+              return data_.condition.dead;
+            }
+          
           bool
           hasFreeSlot()
             { // see C++ § 5.9 : comparison of pointers within same array
@@ -167,11 +179,20 @@ namespace gear {
     : util::NonCopyable
     {
       Allocator alloc_;
+      TimeVar epochStep_;
       
     public:
       BlockFlow()
         : alloc_{INITIAL_ALLOC}
+        , epochStep_{INITIAL_EPOCH_STEP}
         { }
+      
+      Duration
+      currEpochStep()  const
+        {
+          return Duration{epochStep_};
+        }
+      
       
       /**
        * Local handle to allow allocating a collection of Activities,
@@ -185,6 +206,10 @@ namespace gear {
           Allocator::iterator extent;
           
         public:
+          AllocatorHandle(Allocator::iterator slot)
+            : extent{slot}
+          { }
+          
           template<typename...ARGS>
           Activity&
           create (ARGS&& ...args)
@@ -196,8 +221,7 @@ namespace gear {
           Epoch&
           currEpoch()
             {
-              REQUIRE (bool(extent));
-              return static_cast<Epoch&> (*extent);
+              return asEpoch(extent);
             }
           
           void*
@@ -217,7 +241,17 @@ namespace gear {
       AllocatorHandle
       until (Time deadline)
         {
-          UNIMPLEMENTED ("search through existing Epochs to locate the latest one to support given deadline");
+          if (isnil (alloc_))
+            {//just create new Epoch one epochStep ahead
+              alloc_.openNew();
+              Epoch& newEpoch = Epoch::implantInto (alloc_.first());
+              newEpoch.gate().deadline() = deadline + Time{epochStep_};
+              return AllocatorHandle{alloc_.begin()};
+            }
+          else
+            {
+              UNIMPLEMENTED ("search through existing Epochs to locate the latest one to support given deadline");
+            }
         }
       
       void
@@ -227,7 +261,20 @@ namespace gear {
         }
       
     private:
-      ///////////////////
+      /** @internal use a raw allocator Extent as Epoch (unchecked cast) */
+      static Epoch&
+      asEpoch (Allocator::iterator slot)
+        {
+          REQUIRE (bool(slot));
+          return asEpoch (*slot);
+        }
+      
+      static Epoch&
+      asEpoch (Allocator::Extent& extent)
+        {
+          return static_cast<Epoch&> (extent);
+        }
+      
       
       /// „backdoor“ to watch internals from tests
       friend class FlowDiagnostic;
@@ -251,8 +298,8 @@ namespace gear {
         : flow_{theFlow}
       { }
       
-//      size_t first()  { return exFam_.start_; }
-//      size_t last()   { return exFam_.after_; }
+      Time   first()     { return Time{BlockFlow::asEpoch(flow_.alloc_.first()).gate().deadline()}; }
+      Time   last()      { return Time{BlockFlow::asEpoch(flow_.alloc_.last() ).gate().deadline()}; }
       size_t cntEpochs() { return watch(flow_.alloc_).active(); }
       size_t poolSize()  { return watch(flow_.alloc_).size(); }
     };
