@@ -73,8 +73,9 @@ namespace test {
         }
       
       
-      /** @test TODO demonstrate a simple usage scenario
-       * @todo WIP 7/23 ⟶ ✔define ⟶ 🔁implement
+      /** @test demonstrate a simple usage scenario
+       *        - open new Epoch to allocate an Activity
+       *        - clean-up at a future time point
        */
       void
       simpleUsage()
@@ -87,12 +88,8 @@ namespace test {
           CHECK (1 == watch(bFlow).cntEpochs());
           CHECK (watch(bFlow).first() > deadline);
           CHECK (watch(bFlow).first() - deadline == bFlow.currEpochStep());
-SHOW_EXPR(watch(bFlow).cntEpochs());
-SHOW_EXPR(watch(bFlow).poolSize());
-SHOW_EXPR(watch(bFlow).first());
           
           bFlow.discardBefore (deadline + Time{0,5});
-SHOW_EXPR(watch(bFlow).cntEpochs());
           CHECK (0 == watch(bFlow).cntEpochs());
         }
       
@@ -104,12 +101,15 @@ SHOW_EXPR(watch(bFlow).cntEpochs());
       void
       verifyAPI()
         {
+//SHOW_EXPR(watch(bFlow).cntEpochs());
+//SHOW_EXPR(watch(bFlow).poolSize());
+//SHOW_EXPR(watch(bFlow).first());
         }
       
       
       
       /** @test TODO cover the handling of Epochs
-       * @todo WIP 7/23 ⟶ define ⟶ implement
+       * @todo WIP 7/23 ⟶ 🔁define ⟶ implement
        */
       void
       handleEpoch()

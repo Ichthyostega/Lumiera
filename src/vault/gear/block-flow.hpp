@@ -135,7 +135,14 @@ namespace gear {
             }
           
           bool
-          hasFreeSlot()
+          isAlive (Time deadline)
+            {
+              /////////////////////////////////////////////OOO preliminary implementation ... should use the GATE-Activity itself
+              return this->deadline() > deadline;
+            }
+          
+          bool
+          hasFreeSlot()  const
             { // see C++ § 5.9 : comparison of pointers within same array
               return next > this;
             }
@@ -197,6 +204,7 @@ namespace gear {
       
       struct StorageAdaptor : Allocator::iterator
         {
+          StorageAdaptor()  = default;
           StorageAdaptor(Allocator::iterator it) : Allocator::iterator{it} { }
           Epoch& yield()  const  { return asEpoch (Allocator::iterator::yield()); }
         };
@@ -285,6 +293,16 @@ namespace gear {
           if (isnil (alloc_)
               or firstEpoch().deadline() > deadline)
             return;
+          
+          size_t toDiscard{0};
+          for (Epoch& epoch : allEpochs())
+            {
+              if (epoch.gate().isAlive (deadline))
+                break;
+              ++toDiscard;
+            }
+          // ask to discard the enumerated Extents
+          alloc_.dropOld (toDiscard);
         }
       
       
@@ -301,6 +319,12 @@ namespace gear {
         {
           REQUIRE (not isnil (alloc_));
           return asEpoch(*alloc_.last());
+        }
+      
+      EpochIter
+      allEpochs()
+        {
+          return alloc_.begin();
         }
       
       
