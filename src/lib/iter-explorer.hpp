@@ -241,23 +241,12 @@ namespace lib {
     using std::conditional_t;
     using std::is_convertible;
     using std::remove_reference_t;
+    using meta::is_StateCore;
     using meta::can_IterForEach;
     using meta::can_STL_ForEach;
     using meta::ValueTypeBinding;
     using meta::has_TypeResult;
     
-    
-    META_DETECT_FUNCTION_ARGLESS(checkPoint);
-    META_DETECT_FUNCTION_ARGLESS(iterNext);
-    META_DETECT_FUNCTION_ARGLESS(yield);
-    
-    template<class SRC>
-    struct is_StateCore
-      : __and_< HasArglessFun_checkPoint<SRC>
-              , HasArglessFun_iterNext<SRC>
-              , HasArglessFun_yield<SRC>
-              >
-      { };
     
     template<class SRC>
     struct shall_wrap_STL_Iter
@@ -297,7 +286,7 @@ namespace lib {
     struct _DecoratorTraits<SRC,   enable_if<is_StateCore<SRC>>>
       {
         using SrcVal  = typename CoreYield<SRC>::value_type;
-        using SrcIter = lib::IterableDecorator<SrcVal, SRC>;
+        using SrcIter = lib::IterableDecorator<SrcVal, lib::CheckedCore<SRC>>;
       };
     
     template<class SRC>

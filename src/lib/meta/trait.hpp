@@ -504,6 +504,29 @@ namespace meta {
   
   
   
+  /** Trait template to detect a type exposing a »state core« API.
+   *  Such a type can be dressed up as "Lumiera Forward Iterator"
+   *  with the help of lib::IterStateWrapper or lib::IterableDecorator.
+   *  This check is heuristic, based on the presence of function names.
+   */
+  template<typename T>
+  class is_StateCore
+    {
+      using  Type = typename Strip<T>::Type;
+     
+      META_DETECT_FUNCTION_ARGLESS(checkPoint);
+      META_DETECT_FUNCTION_ARGLESS(iterNext);
+      META_DETECT_FUNCTION_ARGLESS(yield);
+      
+    public:
+      enum{ value = HasArglessFun_checkPoint<Type>::value
+                and HasArglessFun_iterNext<Type>::value
+                and HasArglessFun_yield<Type>::value
+          };
+    };
+  
+  
+  
   /** Trait template to detect a type usable with the STL for-each loop.
    *  Basically we're looking for the functions to get the begin/end iterator
    */

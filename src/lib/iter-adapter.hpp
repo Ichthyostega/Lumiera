@@ -35,6 +35,8 @@
  ** - the IterStateWrapper uses a variation of that approach, where the
  **   representation of the current state is embedded as an state value
  **   element right into the iterator instance.
+ ** - very similar is IterableDecorator, but this time directly as
+ **   decorator to inherit from the »state core«, and without checks.
  ** - the RangeIter allows just to expose a range of elements defined
  **   by a STL-like pair of "start" and "end" iterators
  ** 
@@ -332,7 +334,7 @@ namespace lib {
    *         The resulting iterator will hold an instance of ST, which thus
    *         needs to be copyable and default constructible to the extent
    *         this is required for the iterator as such.
-   * @see IterExplorer a pipeline builder framework on top of IterStateWrapper
+   * @see IterableDecorator for variation of the same concept
    * @see iter-explorer-test.hpp
    * @see iter-adaptor-test.cpp
    */
@@ -496,6 +498,73 @@ namespace lib {
   
   
   
+  /**
+   * Adapter to add sanity checks to a »state core«.
+   * @remark It is recommended to perform this kind of sanity checking by default,
+   *         since the performance overhead is minute compared even to a virtual function
+   *         call. However, there might be high-performance usage scenarios, where it is
+   *         essential for the optimiser to be able to "strip every wart".
+   */
+  template<class COR>
+  class CheckedCore
+    : public COR
+    {
+      static_assert (lib::meta::is_StateCore<COR>::value
+                    ,"Adapted type must expose a »state core« API");
+    protected:
+      COR&
+      _rawCore()  const
+        {
+          return unConst(*this);
+        }
+      
+      void
+      __throw_if_empty()  const
+        {
+          if (not checkPoint())
+            _throwIterExhausted();
+        }
+      
+    public:
+      /** blindly pass-down any argument...
+       * @remark allows slicing move-initialisation from decorated
+       */
+      template<typename...ARGS>
+      CheckedCore (ARGS&& ...init)
+        : COR(std::forward<ARGS>(init)...)
+        { }
+      
+      CheckedCore()                               =default;
+      CheckedCore (CheckedCore&&)                 =default;
+      CheckedCore (CheckedCore const&)            =default;
+      CheckedCore& operator= (CheckedCore&&)      =default;
+      CheckedCore& operator= (CheckedCore const&) =default;
+      
+      
+      /* === state protocol API for IterStateWrapper === */
+      bool
+      checkPoint()  const
+        {
+          return _rawCore().checkPoint();
+        }
+      
+      decltype(auto)
+      yield()  const
+        {
+          __throw_if_empty();
+          return _rawCore().yield();
+        }
+      
+      void
+      iterNext()
+        {
+          __throw_if_empty();
+          _rawCore().iterNext();
+        }
+    };
+  
+  
+  
   
   /**
    * Decorator-Adapter to make a »state core« iterable as Lumiera Forward Iterator.
@@ -507,15 +576,18 @@ namespace lib {
    * setup even in performance critical code.
    * @warning be sure to understand the consequences of using ´core.yield()´ without
    *          checks; it might be a good idea to build safety checks into the Core
-   *          API functions instead.
+   *          API functions instead, or to wrap the Core into \ref CheckedCore.
    * @tparam T nominal result type (maybe const, but without reference).
    *         The resulting iterator will yield a reference to this type T
    * @tparam COR type of the »state core«. The resulting iterator will _mix-in_
-   *         this type, and thus inherit properties like copy, move, VTable, POD.
+   *         this type, and thus inherit properties like copy, move, compare, VTable, POD.
    *         The COR must implement the following _iteration control API:_
    *          -# `checkPoint` establishes if the given state element represents a valid state
    *          -# ´iterNext` evolves this state by one step (sideeffect)
    *          -# `yield` realises the given state, exposing a result of type `T&`
+   * @see IterExplorer a pipeline builder framework on top of IterableDecorator
+   * @see iter-explorer-test.hpp
+   * @see iter-adaptor-test.cpp
    */
   template<typename T, class COR>
   class IterableDecorator
