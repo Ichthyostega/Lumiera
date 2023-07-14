@@ -205,17 +205,79 @@ namespace test {
       
       
       /** @test TODO place Activity record into storage
-       * @todo WIP 7/23 ⟶ 🔁define ⟶ implement
+       * @todo WIP 7/23 ⟶ ✔define ⟶ 🔁implement
        */
       void
       placeActivity()
         {
+          BlockFlow bFlow;
+          
+          Time t1 = Time{  0,10};
+          Time t2 = Time{500,10};
+          Time t3 = Time{  0,11};
+          
+          auto& a1 = bFlow.until(t1).create();
+          CHECK (watch(bFlow).allEpochs() == "10:200"_expect);
+          CHECK (watch(bFlow).find(a1)    == "10:200"_expect);
+          
+          auto& a3 = bFlow.until(t3).create();
+          CHECK (watch(bFlow).allEpochs() == "10:200|10:400|10:600|10:800|11:00"_expect);
+          CHECK (watch(bFlow).find(a3)    == "11:000"_expect);
+          
+          auto& a2 = bFlow.until(t2).create();
+          CHECK (watch(bFlow).allEpochs() == "10:200|10:400|10:600|10:800|11:00"_expect);
+          CHECK (watch(bFlow).find(a2)    == "11:600"_expect);
+          
+          Time t0 = Time{0,5};
+          
+          auto& a0 = bFlow.until(t0).create();
+          CHECK (watch(bFlow).allEpochs() == "10:200|10:400|10:600|10:800|11:00"_expect);
+          CHECK (watch(bFlow).find(a2)    == "10:200"_expect);
+          
+          BlockFlow::AllocatorHandle allocHandle = bFlow.until(Time{300,10});
+          for (uint i=1; i<Epoch::SIZ(); ++i)
+            allocHandle.create();
+          
+          CHECK (allocHandle.currDeadline() == Time(400,10));
+          CHECK (not allocHandle.hasFreeSlot());
+          
+          auto a4 = allocHandle.create();
+          CHECK (allocHandle.currDeadline() == Time(600,10));
+          CHECK (allocHandle.hasFreeSlot());
+          CHECK (watch(bFlow).find(a2)    == "10:600"_expect);
+
+          for (uint i=1; i<Epoch::SIZ(); ++i)
+            allocHandle.create();
+          
+          CHECK (allocHandle.currDeadline() == Time(800,10));
+          
+          auto& a5 = bFlow.until(Time{220,10}).create();
+          CHECK (watch(bFlow).find(a5)    == "10:600"_expect);
+          
+          allocHandle = bFlow.until(Time{900,10});
+          for (uint i=1; i<Epoch::SIZ(); ++i)
+            allocHandle.create();
+          
+          CHECK (not allocHandle.hasFreeSlot());
+          auto& a6 = bFlow.until(Time{850,10}).create();
+          CHECK (watch(bFlow).find(a6)    == "11:150"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10:200|10:400|10:600|10:800|11:00|11:150"_expect);
+          
+          auto& a7 = bFlow.until(Time{500,11}).create();
+          CHECK (watch(bFlow).find(a6)    == "11:600"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10:200|10:400|10:600|10:800|11:00|11:150|11:300|11:450|11:600"_expect);
+          
+          bFlow.discardBefore (Time{999,10});
+          CHECK (watch(bFlow).allEpochs() == "11:00|11:150|11:300|11:450|11:600"_expect);
+
+          auto& a8 = bFlow.until(Time{500,10}).create();
+          CHECK (watch(bFlow).find(a6)    == "11:150"_expect);
         }
       
       
       
       /** @test TODO load based regulation of Epoch spacing
-       * @todo WIP 7/23 ⟶ define ⟶ implement
+       * @todo WIP 7/23 ⟶ 🔁define ⟶ implement
        */
       void
       adjustEpochs()
