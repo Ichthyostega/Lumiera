@@ -300,7 +300,41 @@ namespace gear {
             }
           else
             {//find out how the given time relates to existing Epochs
-              UNIMPLEMENTED ("search through existing Epochs to locate the latest one to support given deadline");
+              if (firstEpoch().deadline() >= deadline)
+                // way into the past ... put it in the first available Epoch
+                return AllocatorHandle{alloc_.begin()};
+              else
+              if (lastEpoch().deadline() < deadline)
+                {  // a deadline beyond the established Epochs...
+                  //  create a grid of new epochs up to the requested point
+                  TimeVar lastDeadline = lastEpoch().deadline();
+                  auto distance = _raw(deadline) - _raw(lastDeadline);
+                  EpochIter nextEpoch{alloc_.end()};
+                  ENSURE (not nextEpoch);      // not valid yet, but we will allocate starting there...
+                  auto requiredNew = distance / _raw(epochStep_);
+                  if (distance % _raw(epochStep_) > 0)
+                    ++requiredNew;  // fractional:  requested deadline lies within last epoch 
+                  alloc_.openNew(requiredNew);   // Note: epochHandle now points to the first new Epoch
+                  for ( ; 0 < requiredNew; --requiredNew)
+                    {
+                      REQUIRE (nextEpoch);
+                      lastDeadline += epochStep_;
+                      Epoch::setup (nextEpoch, lastDeadline);
+                      if (deadline <= lastDeadline)
+                        {
+                          ENSURE (requiredNew == 1);
+                          return AllocatorHandle{nextEpoch};
+                        }     // break out and return handle to allocate into the matching Epoch
+                      ++nextEpoch;
+                    }
+                  NOTREACHED ("Logic of counting new Epochs");
+                }
+              else
+                for (EpochIter epochIt{alloc_.begin()}; epochIt; ++epochIt)
+                  if (epochIt->deadline() >= deadline)
+                    return AllocatorHandle{epochIt};
+              
+              NOTREACHED ("Inconsistency in BlockFlow Epoch deadline organisation");
             }
         }
       

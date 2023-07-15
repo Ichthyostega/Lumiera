@@ -221,17 +221,17 @@ namespace test {
           CHECK (watch(bFlow).find(a1)    == "10s200ms"_expect);
           
           auto& a3 = bFlow.until(t3).create();
-          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s0ms"_expect);
-          CHECK (watch(bFlow).find(a3)    == "11s0ms"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s"_expect);
+          CHECK (watch(bFlow).find(a3)    == "11s"_expect);
           
           auto& a2 = bFlow.until(t2).create();
-          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s00ms"_expect);
-          CHECK (watch(bFlow).find(a2)    == "11s600ms"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s"_expect);
+          CHECK (watch(bFlow).find(a2)    == "10s600ms"_expect);
           
           Time t0 = Time{0,5};
           
           auto& a0 = bFlow.until(t0).create();
-          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s00ms"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s"_expect);
           CHECK (watch(bFlow).find(a0)    == "10s200ms"_expect);
           
           BlockFlow::AllocatorHandle allocHandle = bFlow.until(Time{300,10});
@@ -261,14 +261,14 @@ namespace test {
           CHECK (not allocHandle.hasFreeSlot());
           auto& a6 = bFlow.until(Time{850,10}).create();
           CHECK (watch(bFlow).find(a6)    == "11s150ms"_expect);
-          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s00ms|11s150ms"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11sms|11s150ms"_expect);
           
           auto& a7 = bFlow.until(Time{500,11}).create();
           CHECK (watch(bFlow).find(a7)    == "11s600ms"_expect);
-          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s00ms|11s150ms|11s300ms|11s450ms|11s600ms"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11sms|11s150ms|11s300ms|11s450ms|11s600ms"_expect);
           
           bFlow.discardBefore (Time{999,10});
-          CHECK (watch(bFlow).allEpochs() == "11s00ms|11s150ms|11s300ms|11s450ms|11s600ms"_expect);
+          CHECK (watch(bFlow).allEpochs() == "11s|11s150ms|11s300ms|11s450ms|11s600ms"_expect);
 
           auto& a8 = bFlow.until(Time{500,10}).create();
           CHECK (watch(bFlow).find(a8)    == "11s150ms"_expect);
