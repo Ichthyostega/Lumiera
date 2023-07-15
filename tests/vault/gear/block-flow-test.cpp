@@ -88,7 +88,7 @@ namespace test {
           CHECK (tick.verb_ == Activity::TICK);
           CHECK (1 == watch(bFlow).cntEpochs());
           CHECK (watch(bFlow).first() > deadline);
-          CHECK (watch(bFlow).first() - deadline == bFlow.currEpochStep());
+          CHECK (watch(bFlow).first() - deadline == bFlow.getEpochStep());
           
           bFlow.discardBefore (deadline + Time{0,5});
           CHECK (0 == watch(bFlow).cntEpochs());
@@ -217,22 +217,22 @@ namespace test {
           Time t3 = Time{  0,11};
           
           auto& a1 = bFlow.until(t1).create();
-          CHECK (watch(bFlow).allEpochs() == "10:200"_expect);
-          CHECK (watch(bFlow).find(a1)    == "10:200"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10s200ms"_expect);
+          CHECK (watch(bFlow).find(a1)    == "10s200ms"_expect);
           
           auto& a3 = bFlow.until(t3).create();
-          CHECK (watch(bFlow).allEpochs() == "10:200|10:400|10:600|10:800|11:00"_expect);
-          CHECK (watch(bFlow).find(a3)    == "11:000"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s0ms"_expect);
+          CHECK (watch(bFlow).find(a3)    == "11s0ms"_expect);
           
           auto& a2 = bFlow.until(t2).create();
-          CHECK (watch(bFlow).allEpochs() == "10:200|10:400|10:600|10:800|11:00"_expect);
-          CHECK (watch(bFlow).find(a2)    == "11:600"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s00ms"_expect);
+          CHECK (watch(bFlow).find(a2)    == "11s600ms"_expect);
           
           Time t0 = Time{0,5};
           
           auto& a0 = bFlow.until(t0).create();
-          CHECK (watch(bFlow).allEpochs() == "10:200|10:400|10:600|10:800|11:00"_expect);
-          CHECK (watch(bFlow).find(a2)    == "10:200"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s00ms"_expect);
+          CHECK (watch(bFlow).find(a0)    == "10s200ms"_expect);
           
           BlockFlow::AllocatorHandle allocHandle = bFlow.until(Time{300,10});
           for (uint i=1; i<Epoch::SIZ(); ++i)
@@ -244,7 +244,7 @@ namespace test {
           auto a4 = allocHandle.create();
           CHECK (allocHandle.currDeadline() == Time(600,10));
           CHECK (allocHandle.hasFreeSlot());
-          CHECK (watch(bFlow).find(a2)    == "10:600"_expect);
+          CHECK (watch(bFlow).find(a4)    == "10s600ms"_expect);
 
           for (uint i=1; i<Epoch::SIZ(); ++i)
             allocHandle.create();
@@ -252,7 +252,7 @@ namespace test {
           CHECK (allocHandle.currDeadline() == Time(800,10));
           
           auto& a5 = bFlow.until(Time{220,10}).create();
-          CHECK (watch(bFlow).find(a5)    == "10:600"_expect);
+          CHECK (watch(bFlow).find(a5)    == "10s600ms"_expect);
           
           allocHandle = bFlow.until(Time{900,10});
           for (uint i=1; i<Epoch::SIZ(); ++i)
@@ -260,18 +260,18 @@ namespace test {
           
           CHECK (not allocHandle.hasFreeSlot());
           auto& a6 = bFlow.until(Time{850,10}).create();
-          CHECK (watch(bFlow).find(a6)    == "11:150"_expect);
-          CHECK (watch(bFlow).allEpochs() == "10:200|10:400|10:600|10:800|11:00|11:150"_expect);
+          CHECK (watch(bFlow).find(a6)    == "11s150ms"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s00ms|11s150ms"_expect);
           
           auto& a7 = bFlow.until(Time{500,11}).create();
-          CHECK (watch(bFlow).find(a6)    == "11:600"_expect);
-          CHECK (watch(bFlow).allEpochs() == "10:200|10:400|10:600|10:800|11:00|11:150|11:300|11:450|11:600"_expect);
+          CHECK (watch(bFlow).find(a7)    == "11s600ms"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s00ms|11s150ms|11s300ms|11s450ms|11s600ms"_expect);
           
           bFlow.discardBefore (Time{999,10});
-          CHECK (watch(bFlow).allEpochs() == "11:00|11:150|11:300|11:450|11:600"_expect);
+          CHECK (watch(bFlow).allEpochs() == "11s00ms|11s150ms|11s300ms|11s450ms|11s600ms"_expect);
 
           auto& a8 = bFlow.until(Time{500,10}).create();
-          CHECK (watch(bFlow).find(a6)    == "11:150"_expect);
+          CHECK (watch(bFlow).find(a8)    == "11s150ms"_expect);
         }
       
       
@@ -282,6 +282,28 @@ namespace test {
       void
       adjustEpochs()
         {
+          BlockFlow bFlow;
+          CHECK (bFlow.getEpochStep() == INITIAL_EPOCH_STEP);
+          
+          bFlow.markEpochOverflow();
+          CHECK (bFlow.getEpochStep() == INITIAL_EPOCH_STEP * OVERFLOW_BOOST_FACTOR);
+          bFlow.markEpochOverflow();
+          CHECK (bFlow.getEpochStep() == INITIAL_EPOCH_STEP * OVERFLOW_BOOST_FACTOR*OVERFLOW_BOOST_FACTOR);
+          
+          Duration dur1 = INITIAL_EPOCH_STEP;
+          Duration dur2 = INITIAL_EPOCH_STEP * OVERFLOW_BOOST_FACTOR;
+          
+          TimeVar step = bFlow.getEpochStep();
+          Rat     fill = 8_r/10;
+          Rat N = AVERAGE_EPOCHS;
+          
+          bFlow.markEpochUnderflow (dur1, fill);
+          CHECK (bFlow.getEpochStep() == step*((N-1)/N) + dur1*(1/N /fill));
+          
+          step = bFlow.getEpochStep();
+          fill = 3_r/10;
+          bFlow.markEpochUnderflow (dur2, fill);
+          CHECK (bFlow.getEpochStep() == step*((N-1)/N) + dur2*(1/N /fill));
         }
       
       

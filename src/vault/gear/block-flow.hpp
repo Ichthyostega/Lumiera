@@ -55,6 +55,9 @@
 #include "vault/gear/activity.hpp"
 #include "vault/mem/extent-family.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/iter-explorer.hpp"
+#include "lib/format-util.hpp"
+#include "lib/rational.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
@@ -64,6 +67,7 @@
 namespace vault{
 namespace gear {
   
+  using util::Rat;
   using util::isnil;
   using lib::time::Time;
   using lib::time::TimeVar;
@@ -79,6 +83,9 @@ namespace gear {
     const size_t INITIAL_ALLOC  = 1 + (INITIAL_FRAMES * ACTIVITIES_PER_FRAME) / EPOCH_SIZ;
     
     const Duration INITIAL_EPOCH_STEP{FRAMES_PER_EPOCH * FrameRate{50}.duration()};
+    
+    const Rat OVERFLOW_BOOST_FACTOR = 9_r/10;       ///< increase capacity on each Epoch overflow event 
+    const size_t AVERAGE_EPOCHS = 10;               ///< moving average len for exponential convergence towards average Epoch fill
     
     /** raw allocator to provide a sequence of Extents to place Activity records */
     using Allocator = mem::ExtentFamily<Activity, EPOCH_SIZ>;
@@ -218,9 +225,15 @@ namespace gear {
         { }
       
       Duration
-      currEpochStep()  const
+      getEpochStep()  const
         {
           return Duration{epochStep_};
+        }
+      
+      void
+      adjustEpochStep (Rat factor)
+        {
+          epochStep_ = getEpochStep() * factor;
         }
       
       
@@ -253,6 +266,10 @@ namespace gear {
             {
               return *new(claimSlot()) Activity {std::forward<ARGS> (args)...};
             }
+          
+          Time currDeadline() const { return epoch_->deadline(); }
+          bool hasFreeSlot()  const { return epoch_->gate().hasFreeSlot(); }
+          
           
         private:
           void*
@@ -306,6 +323,34 @@ namespace gear {
         }
       
       
+      /**
+       * Notify and adjust Epoch capacity as consequence of exhausting an Epoch.
+       * Whenever some Epoch can not accommodate a required allocation, the allocation
+       * is placed into subsequent Epoch(s) and then this event is triggered, reducing
+       * the epochStep_ by #OVERFLOW_BOOST_FACTOR to increase capacity.
+       */
+      void
+      markEpochOverflow()
+        {
+          UNIMPLEMENTED ("adjust size after overflow");
+        }
+      
+      /**
+       * On clean-up of past Epochs, the actual fill factor is checked to guess an
+       * Epoch duration for optimal usage of epoch storage. Assuming that requested
+       * Activity deadlines are evenly spaced, for a simple heuristic we can just divide
+       * actual Epoch duration by the fill factor (longer Epoch => less capacity).
+       * To avoid control oscillations however, it seems prudent to use damping by
+       * an exponential moving average, nominally over #AVERAGE_EPOCHS.
+       * The current epochStep_ is assumed to be such a moving average, and will be
+       * updated accordingly.
+       */
+      void
+      markEpochUnderflow (Duration actualLen, Rat fillFactor)
+        {
+          UNIMPLEMENTED ("adjust size when detecting partially filled Epochs");
+        }
+      
       
     private:
       Epoch&
@@ -354,6 +399,27 @@ namespace gear {
       Time   last()      { return flow_.lastEpoch().deadline(); }
       size_t cntEpochs() { return watch(flow_.alloc_).active(); }
       size_t poolSize()  { return watch(flow_.alloc_).size();   }
+      
+      /** find out in which Epoch the given Activity was placed */
+      TimeValue
+      find (Activity& someActivity)
+        {
+          for (Epoch& epoch : flow_.allEpochs())
+            for (Activity& act : epoch)
+              if (util::isSameObject (act, someActivity))
+                return epoch.deadline();
+          return Time::NEVER;
+        }
+      
+      /** render deadlines of all currently active Epochs */
+      std::string
+      allEpochs()
+        {
+          if (isnil (flow_.alloc_)) return "";
+          auto deadlines = lib::explore (flow_.allEpochs())
+                               .transform([](Epoch& a){ return TimeValue{a.deadline()}; });
+          return util::join(deadlines, "|");
+        }
     };
   
   inline FlowDiagnostic

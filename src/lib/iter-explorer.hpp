@@ -269,9 +269,9 @@ namespace lib {
       {
         using Res = remove_reference_t<decltype(std::declval<COR>().yield())>;
         
-        using value_type = typename meta::ValueTypeBinding<Res>::value_type;
-        using reference  = typename meta::ValueTypeBinding<Res>::reference;
-        using pointer    = typename meta::ValueTypeBinding<Res>::pointer;
+        using value_type = typename meta::RefTraits<Res>::Value;
+        using reference  = typename meta::RefTraits<Res>::Reference;
+        using pointer    = typename meta::RefTraits<Res>::Pointer;
       };
     
     
@@ -285,8 +285,9 @@ namespace lib {
     template<class SRC>
     struct _DecoratorTraits<SRC,   enable_if<is_StateCore<SRC>>>
       {
-        using SrcVal  = typename CoreYield<SRC>::value_type;
-        using SrcIter = lib::IterableDecorator<SrcVal, lib::CheckedCore<SRC>>;
+        using SrcRaw  = typename lib::meta::Strip<SRC>::Type;
+        using SrcVal  = typename CoreYield<SrcRaw>::value_type;
+        using SrcIter = lib::IterableDecorator<SrcVal, lib::CheckedCore<SrcRaw>>;
       };
     
     template<class SRC>
