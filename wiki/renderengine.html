@@ -6183,7 +6183,7 @@ This is the core service provided by the player subsystem. The purpose is to cre
 :any details of this processing remain opaque for the clients; even the player subsystem just accesses the EngineFaçade
 </pre>
 </div>
-<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202307032218" tags="overview impl discuss draft" changecount="31">
+<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202307161834" tags="overview impl discuss draft" changecount="33">
 <pre>//Integration effort to promote the development of rendering, playback and video display in the GUI//
 This IntegrationSlice was started in {{red{2023}}} as [[Ticket #1221|https://issues.lumiera.org/ticket/1221]] to coordinate the completion and integration of various implementation facilities, planned, drafted and built during the last years; this effort marks the return of development focus to the lower layers (after years of focussed UI development) and will implement the asynchronous and time-bound rendering coordinated by the [[Scheduler]] in the [[Vault|Vault-Layer]]
 
@@ -6222,6 +6222,11 @@ The Scheduler will be structured into two Layers, where the lower layer is imple
 :* thus needs to //understand Job dependencies//
 :* will be decomposed into several implementation layers
 :SchedulerMemory will be managed by an //Extent scheme.//
+;Asynchronous IO
+:is treated as a responsibility and may block dependent planned activities
+:a dependency check is operationalised as activity primitive and also used to hold allocations alive
+:operational control and data management is //performed by the workers// interspersed with render activities
+:however, only one worker at any time is allowed to perform these meta tasks, avoiding further synchronisation
 </pre>
 </div>
 <div title="Player" modifier="Ichthyostega" created="201012181700" modified="202304140114" tags="def overview" changecount="4">
@@ -7095,7 +7100,7 @@ The Scheduler is now considered an implementation-level facility with an interfa
 &amp;rarr; [[Workers|SchedulerWorker]]
 </pre>
 </div>
-<div title="SchedulerMemory" creator="Ichthyostega" modifier="Ichthyostega" created="202307031622" modified="202307121942" tags="Rendering operational draft" changecount="20">
+<div title="SchedulerMemory" creator="Ichthyostega" modifier="Ichthyostega" created="202307031622" modified="202307161840" tags="Rendering operational draft" changecount="21">
 <pre>//The Scheduler uses an »Extent« based memory management scheme known as {{{BlockFlow}}}.//
 The organisation of rendering happens in terms of [[Activities|RenderActivity]], which may bound by //dependencies// and limited by //deadlines.// For the operational point of view this implies that a sequence of allocations must be able to „flow through the Scheduler“ -- in fact, only references to these {{{Activity}}}-records are passed, while the actual descriptors reside at fixed memory locations. This is essential to model the dependencies and conditional execution structures efficiently. At some point however, any {{{Activity}}}-record will either be //performed// or //obsoleted// -- and this leads to the idea of managing the allocations in //extents// of memory here termed as »Epochs«
 * a new Activity is planted into a suitable //Epoch,// based on its deadline
@@ -7110,7 +7115,7 @@ Unfortunately this tricky arrangement also implies that many safety barriers of 
 * each »Epoch« gets an associated //deadline//
 * when the next [[job|RenderJob]] processed by a worker starts //after this Epoch's deadline//, the worker //has left the Epoch.//
 * when all workers have left an Epoch, only ''pending async IO tasks'' need to be considered, since IO can possibly be delayed for an extended period of time.&lt;br/&gt;For an IO task, buffers //need to be kept available,// and those buffers are indirectly tied to the job depending on them.
-* ⟹ thus a count of pending IO activities must be maintained //for each Epoch//  -- implemented by the same mechanism also employed for dependencies between render jobs, which is a notification message causing a local counter to be decremented.
+* ⟹ thus a count of pending IO activities must be maintained //for each Epoch//  -- implemented by the same mechanism also employed for dependencies between render jobs, which is a notification message causing a local counter to be decremented.&lt;br/&gt;All Epochs ''following the blocked one must be blocked as well'' -- since the callback from IO may immediately pass control there; only later, when the execution logic detects a passed deadline, it is possible to side step further activities; this is achieved by inserting {{{GATE}}}-[[Activity records|RenderActivity]] before any render job invocation bound by deadline.
 
 !operational capabilities
 The memory management for the scheduler is arranged into three layers...

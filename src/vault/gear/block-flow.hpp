@@ -28,13 +28,41 @@
  ** as messages through the scheduler, the actual implementation requires a fixed
  ** descriptor record sitting at a stable memory location while the computation
  ** is underway. Moreover, activities can spawn further activities, implying that
- ** activity descriptor records can emanate from multiple threads concurrently,
+ ** activity descriptor records for various deadlines need to be accommodated
  ** and the duration to keep those descriptors in valid state is contingent.
  ** On the other hand, ongoing rendering produces a constant flow of further
  ** activities, necessitating timely clean-up of obsolete descriptors.
  ** Used memory should be recycled, calling for an arrangement of
  ** pooled allocation tiles, extending the underlying block
  ** allocation on increased throughput.
+ ** 
+ ** # Implementation technique
+ ** 
+ ** The usage within the [Scheduler](\ref scheduler.hpp) can be arranged in a way
+ ** to avoid concurrency issues altogether; while allocations are not always done
+ ** by _the same thread,_ it can be ensured at any given time that only a single
+ ** Worker performs Scheduler administrative tasks (queue management and allocation);
+ ** a read/write barrier is issued whenever some Worker enters this management mode.
+ ** 
+ ** Memory is allocated in larger _extents,_ which are then used to place individual
+ ** fixed-size allocations. These are not managed further, assuming that the storage
+ ** is used for POD data records, and the destructors need not be invoked at all.
+ ** This arrangement is achieved by interpreting the storage extents as temporal
+ ** *Epochs*. Each #Epoch holds an Epoch::EpochGate to define a deadline and to allow
+ ** blocking this Epoch by pending IO operations (with the help of a count-down latch).
+ ** The rationale is based on the observation that any render activity for late and
+ ** obsolete goals is pointless and can be just side stepped. Once the scheduling has
+ ** passed a defined deadline (and no further pending IO operations are around), the
+ ** Epoch can be abandoned as a whole and the storage extent can be re-used.
+ ** 
+ ** Dynamic adjustments are necessary to keep this scheme running efficiently.
+ ** Ideally, the temporal stepping between subsequent Epochs should be chosen such
+ ** as to accommodate all render activities with deadlines falling into this Epoch,
+ ** without wasting much space for unused storage slots. But the throughput and thus
+ ** the allocation pressure of the scheduler can change intermittently, necessitating
+ ** to handle excess allocations by shifting them into the next Epoch. These _overflow
+ ** events_ are registered, and on clean-up the actual usage ratio of each Epoch is
+ ** detected, leading to exponentially damped adjustments of the actual Epoch duration. 
  ** 
  ** @note currently this rather marks the intended memory management pattern,
  **       while the actual allocations are still performed on the heap.
@@ -84,7 +112,7 @@ namespace gear {
     
     const Duration INITIAL_EPOCH_STEP{FRAMES_PER_EPOCH * FrameRate{50}.duration()};
     
-    const Rat OVERFLOW_BOOST_FACTOR = 9_r/10;       ///< increase capacity on each Epoch overflow event 
+    const Rat OVERFLOW_BOOST_FACTOR = 9_r/10;       ///< increase capacity on each Epoch overflow event
     const size_t AVERAGE_EPOCHS = 10;               ///< moving average len for exponential convergence towards average Epoch fill
     
     /** raw allocator to provide a sequence of Extents to place Activity records */
@@ -92,6 +120,7 @@ namespace gear {
   }
   
   
+
   
   /**
    * Allocation Extent holding _scheduler Activities_ to be performed altogether
@@ -187,7 +216,7 @@ namespace gear {
   
   
   
-  /**
+  /******************************************************//**
    * Allocation scheme for the Scheduler, based on Epoch(s).
    * Scheduling entails to provide a chain of Activity definitions,
    * which will then »flow« through the priority queue until invocation.
@@ -237,7 +266,7 @@ namespace gear {
         }
       
       
-      /** Adapted storage-extent iterator, directly exposing Extent& */
+      /** Adapted storage-Extent iterator, directly exposing Epoch& */
       using EpochIter = lib::IterableDecorator<Epoch, StorageAdaptor>;
       
       
@@ -279,19 +308,29 @@ namespace gear {
           void*
           claimSlot() ///< EX_SANE
             {
+              bool first{true};
               while (not (epoch_ and
                           epoch_->gate().hasFreeSlot()))
                   // Epoch overflow
                  //  use following Epoch; possibly allocate
-                if (not epoch_)
-                  {
-                    auto lastDeadline = flow_->lastEpoch().deadline();
-                    epoch_.expandAlloc();
-                    ENSURE (epoch_);
-                    Epoch::setup (epoch_, lastDeadline + flow_->getEpochStep());
-                  }
-                else
-                  ++epoch_;
+                {
+                  if (first)
+                    {// each shifted allocation accounted once as overflow
+                      flow_->markEpochOverflow();
+                      first = false;
+                    }
+                  if (not epoch_)
+                    {
+                      auto lastDeadline = flow_->lastEpoch().deadline();
+                      epoch_.expandAlloc(); // may throw out-of-memory..
+                      ENSURE (epoch_);
+                      Epoch::setup (epoch_, lastDeadline + flow_->getEpochStep());
+                    }
+                  else
+                    {
+                      ++epoch_;
+                    }
+                }
               return epoch_->gate().claimNextSlot();
             }
         };
@@ -299,6 +338,10 @@ namespace gear {
       
       /* ===== public BlockFlow API ===== */
       
+      /**
+       * initiate allocations for activities to happen until some deadline
+       * @return opaque handle allowing to perform several allocations.
+       */
       AllocatorHandle
       until (Time deadline)
         {
@@ -323,7 +366,7 @@ namespace gear {
                   ENSURE (not nextEpoch);      // not valid yet, but we will allocate starting there...
                   auto requiredNew = distance / _raw(epochStep_);
                   if (distance % _raw(epochStep_) > 0)
-                    ++requiredNew;  // fractional:  requested deadline lies within last epoch 
+                    ++requiredNew;  // fractional:  requested deadline lies within last epoch
                   alloc_.openNew(requiredNew);   // Note: epochHandle now points to the first new Epoch
                   for ( ; 0 < requiredNew; --requiredNew)
                     {
@@ -348,6 +391,13 @@ namespace gear {
             }
         }
       
+      /**
+       * Clean-up all storage related to activities before the given deadline.
+       * @note when some Epoch is blocked by pending IO, all subsequent Epochs
+       *       will be kept alive too, since the returning IO operation may trigger
+       *       activities there (at least up to the point where the control logic
+       *       detects a timeout and abandons the execution chain).
+       */
       void
       discardBefore (Time deadline)
         {
@@ -376,7 +426,7 @@ namespace gear {
       void
       markEpochOverflow()
         {
-          UNIMPLEMENTED ("adjust size after overflow");
+          adjustEpochStep (OVERFLOW_BOOST_FACTOR);
         }
       
       /**

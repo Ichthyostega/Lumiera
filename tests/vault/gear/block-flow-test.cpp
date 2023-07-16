@@ -66,7 +66,6 @@ namespace test {
       run (Arg)
         {
            simpleUsage();
-           verifyAPI();
            handleEpoch();
            placeActivity();
            adjustEpochs();
@@ -92,19 +91,6 @@ namespace test {
           
           bFlow.discardBefore (deadline + Time{0,5});
           CHECK (0 == watch(bFlow).cntEpochs());
-        }
-      
-      
-      
-      /** @test verify the primary BlockFlow API functions in isolation
-       * @todo WIP 7/23 ⟶ define ⟶ implement
-       */
-      void
-      verifyAPI()
-        {
-//SHOW_EXPR(watch(bFlow).cntEpochs());
-//SHOW_EXPR(watch(bFlow).poolSize());
-//SHOW_EXPR(watch(bFlow).first());
         }
       
       
@@ -200,8 +186,16 @@ namespace test {
       
       
       
-      /** @test TODO place Activity record into storage
-       * @todo WIP 7/23 ⟶ ✔define ⟶ 🔁implement
+      /** @test place Activity record into storage
+       *        - new Activity without any previously established Epoch
+       *        - place Activity into future, expanding the Epoch grid
+       *        - locate Activity relative to established Epoch grid
+       *        - fill up existing Epoch, causing overflow to next one
+       *        - exhaust multiple adjacent Epochs, overflowing to first free one
+       *        - exhaust last Epoch, causing setup of new Epoch, with reduced spacing
+       *        - use this reduced spacing also for subsequently created Epochs
+       *        - clean up obsoleted Epochs, based on given deadline
+       * @todo WIP 7/23 ⟶ ✔define ⟶ ✔implement
        */
       void
       placeActivity()
@@ -212,24 +206,28 @@ namespace test {
           Time t2 = Time{500,10};
           Time t3 = Time{  0,11};
           
+          // no Epoch established yet...
           auto& a1 = bFlow.until(t1).create();
           CHECK (watch(bFlow).allEpochs() == "10s200ms"_expect);
           CHECK (watch(bFlow).find(a1)    == "10s200ms"_expect);
           
+          // setup Epoch grid into the future
           auto& a3 = bFlow.until(t3).create();
           CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s"_expect);
           CHECK (watch(bFlow).find(a3)    == "11s"_expect);
           
+          // associate to existing Epoch
           auto& a2 = bFlow.until(t2).create();
           CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s"_expect);
           CHECK (watch(bFlow).find(a2)    == "10s600ms"_expect);
           
           Time t0 = Time{0,5};
-          
+          // late(past) Activity is placed in the oldest Epoch alive
           auto& a0 = bFlow.until(t0).create();
           CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s"_expect);
           CHECK (watch(bFlow).find(a0)    == "10s200ms"_expect);
           
+          // provoke Epoch overflow by exhausting all available storage slots
           BlockFlow::AllocatorHandle allocHandle = bFlow.until(Time{300,10});
           for (uint i=1; i<Epoch::SIZ(); ++i)
             allocHandle.create();
@@ -237,20 +235,25 @@ namespace test {
           CHECK (allocHandle.currDeadline() == Time(400,10));
           CHECK (not allocHandle.hasFreeSlot());
           
+          // ...causing next allocation to be shifted into subsequent Epoch
           auto& a4 = allocHandle.create();
           CHECK (allocHandle.currDeadline() == Time(600,10));
           CHECK (allocHandle.hasFreeSlot());
           CHECK (watch(bFlow).find(a4)    == "10s600ms"_expect);
 
+          // fill up and exhaust this Epoch too....
           for (uint i=1; i<Epoch::SIZ(); ++i)
             allocHandle.create();
           
+          // so the handle has moved to the after next Epoch
           CHECK (allocHandle.currDeadline() == Time(800,10));
           CHECK (allocHandle.hasFreeSlot());
           
+          // even allocation with way earlier deadline is shifted here now
           auto& a5 = bFlow.until(Time{220,10}).create();
           CHECK (watch(bFlow).find(a5)    == "10s800ms"_expect);
           
+          // now repeat the same pattern, but now towards uncharted Epochs
           allocHandle = bFlow.until(Time{900,10});
           for (uint i=2; i<Epoch::SIZ(); ++i)
             allocHandle.create();
@@ -258,24 +261,27 @@ namespace test {
           CHECK (allocHandle.currDeadline() == Time(0,11));
           CHECK (not allocHandle.hasFreeSlot());
           auto& a6 = bFlow.until(Time{850,10}).create();
-          CHECK (watch(bFlow).find(a6)    == "11s150ms"_expect);
-          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11sms|11s150ms"_expect);
+          // Note: encountered four overflow-Events, leading to decreased Epoch spacing for new Epochs
+          CHECK (watch(bFlow).find(a6)    == "11s131ms"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s|11s131ms"_expect);
           
           auto& a7 = bFlow.until(Time{500,11}).create();
-          CHECK (watch(bFlow).find(a7)    == "11s600ms"_expect);
-          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11sms|11s150ms|11s300ms|11s450ms|11s600ms"_expect);
+          // this allocation does not count as overflow, but has to expand the Epoch grid, now using the reduced Epoch spacing
+          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s|11s131ms|11s262ms|11s393ms|11s524ms"_expect);
+          CHECK (watch(bFlow).find(a7)    == "11s524ms"_expect);
           
           bFlow.discardBefore (Time{999,10});
-          CHECK (watch(bFlow).allEpochs() == "11s|11s150ms|11s300ms|11s450ms|11s600ms"_expect);
+          CHECK (watch(bFlow).allEpochs() == "11s|11s131ms|11s262ms|11s393ms|11s524ms"_expect);
 
+          // placed into the oldest Epoch still alive
           auto& a8 = bFlow.until(Time{500,10}).create();
-          CHECK (watch(bFlow).find(a8)    == "11s150ms"_expect);
+          CHECK (watch(bFlow).find(a8)    == "11s131ms"_expect);
         }
       
       
       
       /** @test TODO load based regulation of Epoch spacing
-       * @todo WIP 7/23 ⟶ 🔁define ⟶ implement
+       * @todo WIP 7/23 ⟶ ✔define ⟶ 🔁implement
        */
       void
       adjustEpochs()
@@ -307,7 +313,7 @@ namespace test {
       
       
       /** @test TODO maintain progression of epochs.
-       * @todo WIP 7/23 ⟶ define ⟶ implement
+       * @todo WIP 7/23 ⟶ 🔁define ⟶ implement
        */
       void
       storageFlow()
