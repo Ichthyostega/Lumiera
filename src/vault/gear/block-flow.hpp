@@ -275,14 +275,15 @@ namespace gear {
           void*
           claimSlot() ///< EX_SANE
             {
-              if (epoch_->gate().hasFreeSlot())
-                {
-                  return epoch_->gate().claimNextSlot();
-                }
-              else // Epoch overflow
-                { //  use following Epoch; possibly allocate
-                  UNIMPLEMENTED ("advance to next epoch");
-                }
+              while (not (epoch_ and
+                          epoch_->gate().hasFreeSlot()))
+                  // Epoch overflow
+                 //  use following Epoch; possibly allocate
+                if (not epoch_)
+                    epoch_.expandAlloc();
+                else
+                  ++epoch_;
+              return epoch_->gate().claimNextSlot();
             }
         };
       

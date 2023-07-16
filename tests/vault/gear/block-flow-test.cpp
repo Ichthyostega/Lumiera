@@ -241,7 +241,7 @@ namespace test {
           CHECK (allocHandle.currDeadline() == Time(400,10));
           CHECK (not allocHandle.hasFreeSlot());
           
-          auto a4 = allocHandle.create();
+          auto& a4 = allocHandle.create();
           CHECK (allocHandle.currDeadline() == Time(600,10));
           CHECK (allocHandle.hasFreeSlot());
           CHECK (watch(bFlow).find(a4)    == "10s600ms"_expect);
@@ -250,14 +250,16 @@ namespace test {
             allocHandle.create();
           
           CHECK (allocHandle.currDeadline() == Time(800,10));
+          CHECK (allocHandle.hasFreeSlot());
           
           auto& a5 = bFlow.until(Time{220,10}).create();
-          CHECK (watch(bFlow).find(a5)    == "10s600ms"_expect);
+          CHECK (watch(bFlow).find(a5)    == "10s800ms"_expect);
           
           allocHandle = bFlow.until(Time{900,10});
-          for (uint i=1; i<Epoch::SIZ(); ++i)
+          for (uint i=2; i<Epoch::SIZ(); ++i)
             allocHandle.create();
           
+          CHECK (allocHandle.currDeadline() == Time(0,11));
           CHECK (not allocHandle.hasFreeSlot());
           auto& a6 = bFlow.until(Time{850,10}).create();
           CHECK (watch(bFlow).find(a6)    == "11s150ms"_expect);
