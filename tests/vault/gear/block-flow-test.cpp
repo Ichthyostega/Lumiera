@@ -157,8 +157,8 @@ namespace test {
           // the storage there is not yet used, but will be overwritten by the ctor call
           epoch[extent.size()-1].data_.timing.instant = Time{5,5};
           
-          // allocate a new Activity into the next free slot
-          BlockFlow::AllocatorHandle allocHandle{alloc.begin()};
+          // allocate a new Activity into the next free slot (using a faked AllocatorHandle)
+          BlockFlow::AllocatorHandle allocHandle{alloc.begin(), nullptr};
           Activity& timeStart = allocHandle.create (Activity::TIMESTART);
           CHECK (isSameObject (timeStart, epoch[extent.size()-1]));
           
@@ -177,17 +177,13 @@ namespace test {
           
           // so let's eat this space up...
           for (uint i=extent.size()-2; i>1; --i)
-            allocHandle.create();
+            gate.claimNextSlot();
           
           // one final slot is left (beyond of the EpochGate itself)
           CHECK (isSameObject (*gate.next, epoch[1]));
           CHECK (gate.hasFreeSlot());
-          
-          allocHandle.create (size_t(111), size_t(222));
-          CHECK (epoch[1].verb_ == Activity::FEED);
-          CHECK (epoch[1].data_.feed.one = 111);
-          CHECK (epoch[1].data_.feed.two = 222);
-          
+
+          gate.claimNextSlot();
           // aaand the boat is full...
           CHECK (not gate.hasFreeSlot());
           CHECK (isSameObject (*gate.next, epoch[0]));

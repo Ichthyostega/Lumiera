@@ -247,14 +247,18 @@ namespace gear {
        * maintained in fixed-sized _extents_ and thus allocations may
        * _overflow_ — leading to allocation of further extents. However,
        * this extension is handled transparently by the embedded iterator.
+       * Moreover, a back-connection to the BlockFlow instance is maintained,
+       * enabling the latter to manage the Epoch spacing dynamically.
        */
       class AllocatorHandle
         {
           EpochIter epoch_;
+          BlockFlow* flow_;
           
         public:
-          AllocatorHandle(Allocator::iterator slot)
+          AllocatorHandle(Allocator::iterator slot, BlockFlow* parent)
             : epoch_{slot}
+            , flow_{parent}
           { }
           
           /*************************************************//**
@@ -280,7 +284,12 @@ namespace gear {
                   // Epoch overflow
                  //  use following Epoch; possibly allocate
                 if (not epoch_)
+                  {
+                    auto lastDeadline = flow_->lastEpoch().deadline();
                     epoch_.expandAlloc();
+                    ENSURE (epoch_);
+                    Epoch::setup (epoch_, lastDeadline + flow_->getEpochStep());
+                  }
                 else
                   ++epoch_;
               return epoch_->gate().claimNextSlot();
@@ -297,13 +306,13 @@ namespace gear {
             {//just create new Epoch one epochStep ahead
               alloc_.openNew();
               Epoch::setup (alloc_.begin(), deadline + Time{epochStep_});
-              return AllocatorHandle{alloc_.begin()};
+              return AllocatorHandle{alloc_.begin(), this};
             }
           else
             {//find out how the given time relates to existing Epochs
               if (firstEpoch().deadline() >= deadline)
                 // way into the past ... put it in the first available Epoch
-                return AllocatorHandle{alloc_.begin()};
+                return AllocatorHandle{alloc_.begin(), this};
               else
               if (lastEpoch().deadline() < deadline)
                 {  // a deadline beyond the established Epochs...
@@ -324,7 +333,7 @@ namespace gear {
                       if (deadline <= lastDeadline)
                         {
                           ENSURE (requiredNew == 1);
-                          return AllocatorHandle{nextEpoch};
+                          return AllocatorHandle{nextEpoch, this};
                         }     // break out and return handle to allocate into the matching Epoch
                       ++nextEpoch;
                     }
@@ -333,7 +342,7 @@ namespace gear {
               else
                 for (EpochIter epochIt{alloc_.begin()}; epochIt; ++epochIt)
                   if (epochIt->deadline() >= deadline)
-                    return AllocatorHandle{epochIt};
+                    return AllocatorHandle{epochIt, this};
               
               NOTREACHED ("Inconsistency in BlockFlow Epoch deadline organisation");
             }
