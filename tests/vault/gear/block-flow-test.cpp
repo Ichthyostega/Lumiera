@@ -35,6 +35,7 @@
 #include "lib/util.hpp"
 
 //#include <utility>
+#include <chrono>
 #include <vector>
 #include <tuple>
 
@@ -349,8 +350,9 @@ namespace test {
       void
       storageFlow()
         {
-          const uint ACTIVITIES = 120000;   // Activities to send through the test subject
-          const uint MAX_TIME   = 121000;   // Test steps to perform, with 2 steps / ms
+          const uint INSTANCES  = 120000;   // Activities to send through the test subject
+          const uint MAX_TIME   = 121000;   // Test steps to perform
+          const gavl_time_t STP = 500;      // with 2 steps per ms
           Offset BASE_DEADLINE{FSecs{1,2}}; // base pre-roll before deadline
           Offset SPREAD_DEAD{FSecs{2,100}}; // random spread of deadline around base
           const uint INVOKE_LAG = 500;      // „invoke“ the Activity after 500 steps (≙ simulated 250ms)
@@ -358,10 +360,9 @@ namespace test {
           
           using TestData = vector<pair<TimeVar, size_t>>;
           using Subjects = vector<reference_wrapper<Activity>>;
-          using Storage  = vector<Activity>;
           
-          
-          TestData testData{ACTIVITIES};
+          // pre-generate random test data
+          TestData testData{INSTANCES};
           for (auto&[t,r] : testData)
             {
               const size_t SPREAD   =  2*_raw(SPREAD_DEAD);
@@ -371,8 +372,8 @@ namespace test {
               t = TimeValue(MIN_DEAD + r);
             }
           
-          Activity dummy;
-          Subjects subject{ACTIVITIES, std::ref(dummy)};
+          Activity dummy;  // reserve memory for test subject index
+          Subjects subject{INSTANCES, std::ref(dummy)};
           
           auto runTest = [&](auto allocate, auto invoke) -> size_t
                             {
@@ -385,16 +386,104 @@ namespace test {
                               size_t checksum{0};
                               for (size_t i=0; i<MAX_TIME; ++i)
                                 {
-                                  if (i < ACTIVITIES)
+                                  if (i < INSTANCES)
                                     {
                                       auto const& data = testData[i];
                                       subject[i] = allocate(data.first, data.second);
                                     }
-                                  if (i >= INVOKE_LAG)
+                                  if (INVOKE_LAG <= i and i-INVOKE_LAG < INSTANCES)
                                     checksum += invoke(subject[i-INVOKE_LAG]);
                                 }
+                              return checksum;
                             };
           
+          auto benchmark = [INSTANCES](auto invokeTest)
+                            {
+                              using std::chrono::system_clock;
+                              using Dur = std::chrono::duration<double>;
+                              const double SCALE = 1e9; // Results are in ns
+                              
+                              auto start = system_clock::now();
+                              invokeTest();
+                              Dur duration = system_clock::now () - start;
+                              return duration.count()/(INSTANCES) * SCALE;
+                            };
+          
+          
+          /* =========== Test-Setup-1: no individual allocations/deallocations ========== */
+          size_t sum1{0};
+          vector<Activity> storage{INSTANCES};
+          auto noAlloc = [&]{ // use pre-allocated storage block
+                              auto allocate = [i=0, &storage](Time, size_t check) mutable -> Activity&
+                                                  {
+                                                    return *new(&storage[i++]) Activity{check, size_t{55}};
+                                                  };
+                              auto invoke   = [](Activity& feedActivity)
+                                                  {
+                                                    return feedActivity.data_.feed.one;
+                                                  };
+                              
+                              sum1 = runTest (allocate, invoke);
+                            };
+          
+          
+          /* =========== Test-Setup-2: individual heap allocations ========== */
+          size_t sum2{0};
+          auto heapAlloc = [&]{
+                              auto allocate = [](Time, size_t check) mutable -> Activity&
+                                                  {
+                                                    return *new Activity{check, size_t{55}};
+                                                  };
+                              auto invoke   = [](Activity& feedActivity)
+                                                  {
+                                                    size_t check = feedActivity.data_.feed.one; 
+                                                    delete &feedActivity;
+                                                    return check;
+                                                  };
+                              
+                              sum2 = runTest (allocate, invoke);
+                            };
+          
+          
+          /* =========== Test-Setup-3: use BlockFlow allocation scheme ========== */
+          size_t sum3{0};
+          auto blockFlow = [&]{
+                              BlockFlow blockFlow;
+                              auto allocate = [&](Time t, size_t check) mutable -> Activity&
+                                                  {
+                                                    return blockFlow.until(t).create (check, size_t{55});
+                                                  };
+                              auto invoke   = [&, i=0](Activity& feedActivity) mutable
+                                                  {
+                                                    size_t check = feedActivity.data_.feed.one;
+                                                    if (i % CLEAN_UP == 0)
+                                                      blockFlow.discardBefore (Time{TimeValue{i*STP}});
+                                                    return check;
+                                                  };
+                              
+                              sum3 = runTest (allocate, invoke);
+//SHOW_EXPR(watch(blockFlow).cntEpochs())
+//SHOW_EXPR(watch(blockFlow).poolSize())
+//SHOW_EXPR(watch(blockFlow).first())
+//SHOW_EXPR(watch(blockFlow).last())
+//SHOW_EXPR(_raw(blockFlow.getEpochStep()))
+//SHOW_EXPR(watch(blockFlow).allEpochs())
+                            };
+          
+          // INVOKE Setup-1
+          auto time_noAlloc = benchmark(noAlloc);
+SHOW_EXPR(time_noAlloc)
+SHOW_EXPR(sum1);
+          
+          // INVOKE Setup-2
+          auto time_heapAlloc = benchmark(heapAlloc);
+SHOW_EXPR(time_heapAlloc)
+SHOW_EXPR(sum2);
+          
+          // INVOKE Setup-3
+          auto time_blockFlow = benchmark(blockFlow);
+SHOW_EXPR(time_blockFlow)
+SHOW_EXPR(sum3);
         }
     };
   
