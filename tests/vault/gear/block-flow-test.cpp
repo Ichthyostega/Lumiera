@@ -270,7 +270,9 @@ namespace test {
           CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s|11s131ms|11s262ms|11s393ms|11s524ms"_expect);
           CHECK (watch(bFlow).find(a7)    == "11s524ms"_expect);
           
+SHOW_EXPR(bFlow.getEpochStep())
           bFlow.discardBefore (Time{999,10});
+SHOW_EXPR(bFlow.getEpochStep())
           CHECK (watch(bFlow).allEpochs() == "11s|11s131ms|11s262ms|11s393ms|11s524ms"_expect);
 
           // placed into the oldest Epoch still alive
@@ -280,7 +282,10 @@ namespace test {
       
       
       
-      /** @test TODO load based regulation of Epoch spacing
+      /** @test load based regulation of Epoch spacing
+       *        - on overflow, capacity is boosted by a fixed factor
+       *        - on clean-up, a moving average of (in hindsight) optimal length is
+       *          computed and used as the new Epoch spacing
        * @todo WIP 7/23 ⟶ ✔define ⟶ 🔁implement
        */
       void
@@ -289,27 +294,32 @@ namespace test {
           BlockFlow bFlow;
           CHECK (bFlow.getEpochStep() == INITIAL_EPOCH_STEP);
           
+          // whenever an Epoch overflow happens, capacity is boosted by reducing the Epoch duration
           bFlow.markEpochOverflow();
           CHECK (bFlow.getEpochStep() == INITIAL_EPOCH_STEP * OVERFLOW_BOOST_FACTOR);
           bFlow.markEpochOverflow();
           CHECK (bFlow.getEpochStep() == INITIAL_EPOCH_STEP * OVERFLOW_BOOST_FACTOR*OVERFLOW_BOOST_FACTOR);
           
-          Duration dur1 = INITIAL_EPOCH_STEP;
-          Duration dur2 = INITIAL_EPOCH_STEP * OVERFLOW_BOOST_FACTOR;
+          // To counteract this increase, on clean-up the actual fill rate of the Extent
+          // serves to guess an optimal Epoch duration, which is averaged exponentially
           
-          TimeVar step = bFlow.getEpochStep();
-          Rat     fill = 8_r/10;
+          // Using just arbitrary demo values for some fictional Epochs
+          TimeVar dur1 = INITIAL_EPOCH_STEP;
+          Rat     fill1 = 8_r/10;
+          TimeVar dur2 = INITIAL_EPOCH_STEP * OVERFLOW_BOOST_FACTOR;
+          Rat     fill2 = 3_r/10;
+          
           Rat N = AVERAGE_EPOCHS;
+          TimeVar step = bFlow.getEpochStep();
           
-          bFlow.markEpochUnderflow (dur1, fill);
-          CHECK (bFlow.getEpochStep() == step*((N-1)/N) + dur1*(1/N /fill));
+          bFlow.markEpochUnderflow (dur1, fill1);
+          CHECK (bFlow.getEpochStep() == Duration{FSecs{step}*(N-1)/N + FSecs{dur1}/fill1/N});
           
           step = bFlow.getEpochStep();
-          fill = 3_r/10;
-          bFlow.markEpochUnderflow (dur2, fill);
-          CHECK (bFlow.getEpochStep() == step*((N-1)/N) + dur2*(1/N /fill));
-        }
-      
+          bFlow.markEpochUnderflow (dur2, fill2);
+          CHECK (bFlow.getEpochStep() == Duration{FSecs{step}*(N-1)/N + FSecs{dur2}/fill2/N});
+        }                             // Note: for verification the exponential average is computed via FSecs
+                                     //        which is a different calculation path but yields the same result
       
       
       /** @test TODO maintain progression of epochs.

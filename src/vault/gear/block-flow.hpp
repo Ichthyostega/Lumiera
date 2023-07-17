@@ -98,6 +98,7 @@ namespace gear {
   using util::Rat;
   using util::isnil;
   using lib::time::Time;
+  using lib::time::FSecs;
   using lib::time::TimeVar;
   using lib::time::Duration;
   using lib::time::FrameRate;
@@ -436,13 +437,21 @@ namespace gear {
        * actual Epoch duration by the fill factor (longer Epoch => less capacity).
        * To avoid control oscillations however, it seems prudent to use damping by
        * an exponential moving average, nominally over #AVERAGE_EPOCHS.
-       * The current epochStep_ is assumed to be such a moving average, and will be
-       * updated accordingly.
+       * The current epochStep_ is assumed to be such a moving average,
+       * and will be updated accordingly.
+       * @todo the unclear status of the time base type hampers calculation
+       *       with fractional time values, as is necessary here. As workaround,
+       *       the argument is typed as TimeVar, which opens a calculation path
+       *       without much spurious range checks.  /////////////////////////////////////////////////////////TICKET #1259 : reorganise raw time base datatypes : need conversion path into FSecs
        */
       void
-      markEpochUnderflow (Duration actualLen, Rat fillFactor)
+      markEpochUnderflow (TimeVar actualLen, Rat fillFactor)
         {
-          UNIMPLEMENTED ("adjust size when detecting partially filled Epochs");
+          Rat contribution = Rat{_raw(actualLen), _raw(epochStep_)} / fillFactor;
+          // Exponential MA: mean ≔ mean * (N-1)/N  + newVal/N
+          const Rat N = AVERAGE_EPOCHS;
+          Rat avgFactor = (contribution + N-1) / N;
+          adjustEpochStep (avgFactor);
         }
       
       
