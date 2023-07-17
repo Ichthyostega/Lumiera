@@ -31,15 +31,23 @@
 //#include "lib/time/timevalue.hpp"
 //#include "lib/format-cout.hpp"
 #include "lib/test/diagnostic-output.hpp" ////////////////////////////////TODO
+#include "lib/meta/function.hpp"
 #include "lib/util.hpp"
 
 //#include <utility>
+#include <vector>
+#include <tuple>
 
 using test::Test;
 //using std::move;
 using util::isSameObject;
 using lib::test::randTime;
 using lib::test::showType;
+using lib::time::Offset;
+
+using std::vector;
+using std::pair;
+using std::reference_wrapper;
 
 
 namespace vault{
@@ -47,7 +55,6 @@ namespace gear {
 namespace test {
   
 //  using lib::time::FrameRate;
-//  using lib::time::Offset;
 //  using lib::time::Time;
   
   
@@ -330,12 +337,64 @@ namespace test {
                                      //        which is a different calculation path but yields the same result
       
       
-      /** @test TODO maintain progression of epochs.
-       * @todo WIP 7/23 ⟶ 🔁define ⟶ implement
+      /** @test investigate progression of epochs under realistic load
+       *        - expose the allocator to a load of 200fps for simulated 60sec
+       *        - assuming 10 Activities per frame, this means a throughput of 120000 Activities
+       *        - run this load exposure under saturation for performance measurement
+       *        - use a planning to deadline delay of 500ms, but with ±200ms random spread
+       *        - after 250ms (500 steps), »invoke« by accessing and adding the random checksum
+       *        - run a comparison of all-pre-allocated ⟷ heap allocated ⟷ BlockFlow 
+       * @todo WIP 7/23 ⟶ 🔁define ⟶ 🔁implement
        */
       void
       storageFlow()
         {
+          const uint ACTIVITIES = 120000;   // Activities to send through the test subject
+          const uint MAX_TIME   = 121000;   // Test steps to perform, with 2 steps / ms
+          Offset BASE_DEADLINE{FSecs{1,2}}; // base pre-roll before deadline
+          Offset SPREAD_DEAD{FSecs{2,100}}; // random spread of deadline around base
+          const uint INVOKE_LAG = 500;      // „invoke“ the Activity after 500 steps (≙ simulated 250ms)
+          const uint CLEAN_UP   = 200;      // perform clean-up every 200 steps
+          
+          using TestData = vector<pair<TimeVar, size_t>>;
+          using Subjects = vector<reference_wrapper<Activity>>;
+          using Storage  = vector<Activity>;
+          
+          
+          TestData testData{ACTIVITIES};
+          for (auto&[t,r] : testData)
+            {
+              const size_t SPREAD   =  2*_raw(SPREAD_DEAD);
+              const size_t MIN_DEAD = _raw(BASE_DEADLINE) - _raw(SPREAD_DEAD);
+              
+              r = rand() % SPREAD;
+              t = TimeValue(MIN_DEAD + r);
+            }
+          
+          Activity dummy;
+          Subjects subject{ACTIVITIES, std::ref(dummy)};
+          
+          auto runTest = [&](auto allocate, auto invoke) -> size_t
+                            {
+                              // allocate Activity record for deadline and with given random payload
+                              ASSERT_VALID_SIGNATURE (decltype(allocate), Activity&(Time, size_t));
+                              
+                              // access the given Activity, read the payload, then trigger disposal
+                              ASSERT_VALID_SIGNATURE (decltype(invoke),   size_t(Activity&));
+                              
+                              size_t checksum{0};
+                              for (size_t i=0; i<MAX_TIME; ++i)
+                                {
+                                  if (i < ACTIVITIES)
+                                    {
+                                      auto const& data = testData[i];
+                                      subject[i] = allocate(data.first, data.second);
+                                    }
+                                  if (i >= INVOKE_LAG)
+                                    checksum += invoke(subject[i-INVOKE_LAG]);
+                                }
+                            };
+          
         }
     };
   
