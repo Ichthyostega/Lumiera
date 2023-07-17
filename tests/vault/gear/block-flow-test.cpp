@@ -139,6 +139,8 @@ namespace test {
           
           // the gate's `next`-pointer is (ab)used to manage the next allocation slot
           CHECK (isSameObject (*gate.next, epoch[extent.size()-1]));
+          CHECK (0 == gate.filledSlots());
+          CHECK (0 == epoch.getFillFactor());
           
           // the storage there is not yet used, but will be overwritten by the ctor call
           epoch[extent.size()-1].data_.timing.instant = Time{5,5};
@@ -159,7 +161,10 @@ namespace test {
           CHECK (isSameObject (*gate.next, epoch[extent.size()-2]));
           
           // which also implies that there is still ample space left...
+          CHECK (1 == gate.filledSlots());
           CHECK (gate.hasFreeSlot());
+          
+          CHECK (epoch.getFillFactor() == Rat(gate.filledSlots(), Epoch::SIZ()-1));
           
           // so let's eat this space up...
           for (uint i=extent.size()-2; i>1; --i)
@@ -167,12 +172,15 @@ namespace test {
           
           // one final slot is left (beyond of the EpochGate itself)
           CHECK (isSameObject (*gate.next, epoch[1]));
+          CHECK (gate.filledSlots() == Epoch::SIZ()-2);
           CHECK (gate.hasFreeSlot());
 
           gate.claimNextSlot();
           // aaand the boat is full...
           CHECK (not gate.hasFreeSlot());
           CHECK (isSameObject (*gate.next, epoch[0]));
+          CHECK (gate.filledSlots() == Epoch::SIZ()-1);
+          CHECK (epoch.getFillFactor() == 1);
           
           // a given Epoch can be checked for relevance against a deadline
           CHECK (gate.deadline() == Time(0,10));
@@ -270,9 +278,9 @@ namespace test {
           CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s|11s131ms|11s262ms|11s393ms|11s524ms"_expect);
           CHECK (watch(bFlow).find(a7)    == "11s524ms"_expect);
           
-SHOW_EXPR(bFlow.getEpochStep())
+          CHECK (bFlow.getEpochStep() == "≺131ms≻"_expect);
           bFlow.discardBefore (Time{999,10});
-SHOW_EXPR(bFlow.getEpochStep())
+          CHECK (bFlow.getEpochStep() == "≺149ms≻"_expect);
           CHECK (watch(bFlow).allEpochs() == "11s|11s131ms|11s262ms|11s393ms|11s524ms"_expect);
 
           // placed into the oldest Epoch still alive

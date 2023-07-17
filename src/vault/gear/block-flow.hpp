@@ -114,6 +114,7 @@ namespace gear {
     const Duration INITIAL_EPOCH_STEP{FRAMES_PER_EPOCH * FrameRate{50}.duration()};
     
     const Rat OVERFLOW_BOOST_FACTOR = 9_r/10;       ///< increase capacity on each Epoch overflow event
+    const Rat EMPTY_THRESHOLD = 1_r/20;             ///< do not account for (almost) empty Epochs to avoid overshooting regulation
     const size_t AVERAGE_EPOCHS = 10;               ///< moving average len for exponential convergence towards average Epoch fill
     
     /** raw allocator to provide a sequence of Extents to place Activity records */
@@ -178,6 +179,13 @@ namespace gear {
               return this->deadline() > deadline;
             }
           
+          size_t
+          filledSlots()  const
+            {
+              const Activity* firstAllocPoint{this + (Epoch::SIZ()-1)};
+              return firstAllocPoint - next;
+            }
+          
           bool
           hasFreeSlot()  const
             { // see C++ § 5.9 : comparison of pointers within same array
@@ -195,6 +203,12 @@ namespace gear {
       
       EpochGate& gate() { return static_cast<EpochGate&> ((*this)[0]); }
       Time   deadline() { return Time{gate().deadline()};              }
+      
+      Rat
+      getFillFactor()
+        {
+          return Rat{gate().filledSlots(), SIZ()-1};
+        }
       
       
       static Epoch&
@@ -412,6 +426,9 @@ namespace gear {
               if (epoch.gate().isAlive (deadline))
                 break;
               ++toDiscard;
+              auto currDeadline = epoch.deadline();
+              auto epochDuration = currDeadline - updatePastDeadline(currDeadline);
+              markEpochUnderflow (epochDuration, epoch.getFillFactor());
             }
           // ask to discard the enumerated Extents
           alloc_.dropOld (toDiscard);
@@ -447,7 +464,9 @@ namespace gear {
       void
       markEpochUnderflow (TimeVar actualLen, Rat fillFactor)
         {
-          Rat contribution = Rat{_raw(actualLen), _raw(epochStep_)} / fillFactor;
+          Rat contribution{_raw(actualLen), _raw(epochStep_)};
+          if (fillFactor > EMPTY_THRESHOLD)  // treat almost empty blocks as if their length was optimal 
+              contribution /= fillFactor;
           // Exponential MA: mean ≔ mean * (N-1)/N  + newVal/N
           const Rat N = AVERAGE_EPOCHS;
           Rat avgFactor = (contribution + N-1) / N;
@@ -474,6 +493,24 @@ namespace gear {
         {
           return alloc_.begin();
         }
+      
+      /** @internal helper to calculate the duration of the oldest Epoch.
+       * @remark since we store the deadline for each Epoch, not it's duration,
+       *         we need to memorise and update a starting point, to calculate
+       *         the duration, which is used to guess an averaged optimal duration.
+       * @param current deadline of the oldest block, about to be discarded
+       * @return the memorised previous oldest deadline
+       */
+      Time
+      updatePastDeadline (TimeVar newDeadline)
+        {
+          if (pastDeadline_ == Time::ANYTIME)
+            pastDeadline_ = newDeadline - epochStep_;
+          TimeVar previous = pastDeadline_;
+          pastDeadline_ = newDeadline;
+          return previous;
+        }
+      TimeVar pastDeadline_{Time::ANYTIME};
       
       
       /// „backdoor“ to watch internals from tests
