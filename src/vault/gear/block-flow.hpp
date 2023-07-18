@@ -88,7 +88,6 @@
 #include "lib/rational.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
-#include "lib/format-cout.hpp"///////////////////////TODO
 
 #include <utility>
 
@@ -344,7 +343,6 @@ namespace gear {
                     {
                       auto lastDeadline = flow_->lastEpoch().deadline();
                       epoch_.expandAlloc(); // may throw out-of-memory..
-cout<<"||∧| +1 ⟶ "<<watch(flow_->alloc_).active()<<" of "<<watch(flow_->alloc_).size()<<endl;
                       ENSURE (epoch_);
                       Epoch::setup (epoch_, lastDeadline + flow_->getEpochStep());
                     }
@@ -367,11 +365,9 @@ cout<<"||∧| +1 ⟶ "<<watch(flow_->alloc_).active()<<" of "<<watch(flow_->allo
       AllocatorHandle
       until (Time deadline)
         {
-cout<<"||>| "<<TimeValue(deadline);
           if (isnil (alloc_))
             {//just create new Epoch one epochStep ahead
               alloc_.openNew();
-cout<<"\n||∧| +1 ⟶ "<<watch(alloc_).active()<<" of "<<watch(alloc_).size()<<endl;
               Epoch::setup (alloc_.begin(), deadline + Time{epochStep_});
               return AllocatorHandle{alloc_.begin(), this};
             }
@@ -379,10 +375,7 @@ cout<<"\n||∧| +1 ⟶ "<<watch(alloc_).active()<<" of "<<watch(alloc_).size()<<
             {//find out how the given time relates to existing Epochs
               if (firstEpoch().deadline() >= deadline)
                 // way into the past ... put it in the first available Epoch
-{
-cout<<" ««······  ⟶ ⟶ "<<TimeValue{firstEpoch().deadline()}<<endl;
                 return AllocatorHandle{alloc_.begin(), this};
-}
               else
               if (lastEpoch().deadline() < deadline)
                 {  // a deadline beyond the established Epochs...
@@ -394,9 +387,7 @@ cout<<" ««······  ⟶ ⟶ "<<TimeValue{firstEpoch().deadline()}<<endl;
                   auto requiredNew = distance / _raw(epochStep_);
                   if (distance % _raw(epochStep_) > 0)
                     ++requiredNew;  // fractional:  requested deadline lies within last epoch
-cout<<" »»······ "<<lastDeadline<<" ⟶ Δ"<<TimeValue(distance)<<endl;
                   alloc_.openNew(requiredNew);   // Note: epochHandle now points to the first new Epoch
-cout<<"||∧| +"<<requiredNew<<" ⟶ "<<watch(alloc_).active()<<" of "<<watch(alloc_).size()<<endl;
                   for ( ; 0 < requiredNew; --requiredNew)
                     {
                       REQUIRE (nextEpoch);
@@ -414,10 +405,7 @@ cout<<"||∧| +"<<requiredNew<<" ⟶ "<<watch(alloc_).active()<<" of "<<watch(al
               else
                 for (EpochIter epochIt{alloc_.begin()}; epochIt; ++epochIt)
                   if (epochIt->deadline() >= deadline)
-{
-cout<<" ◆◆······  ⟶ "<<TimeValue{epochIt->deadline()}<<endl;
                     return AllocatorHandle{epochIt, this};
-}
               
               NOTREACHED ("Inconsistency in BlockFlow Epoch deadline organisation");
             }
@@ -433,7 +421,6 @@ cout<<" ◆◆······  ⟶ "<<TimeValue{epochIt->deadline()}<<endl;
       void
       discardBefore (Time deadline)
         {
-cout<<"||■| CLUP <- "<<TimeValue(deadline)<<endl;
           if (isnil (alloc_)
               or firstEpoch().deadline() > deadline)
             return;
@@ -464,7 +451,6 @@ cout<<"||■| CLUP <- "<<TimeValue(deadline)<<endl;
         {
           if (epochStep_ > MIN_EPOCH_STEP)
             adjustEpochStep (BOOST_OVERFLOW);
-cout<<"||*| OVER -> "<<_raw(epochStep_)<<endl;
         }
       
       /**
@@ -498,7 +484,6 @@ cout<<"||*| OVER -> "<<_raw(epochStep_)<<endl;
           auto N = AVERAGE_EPOCHS;
           double avgFactor = (contribution + N-1) / N;
           adjustEpochStep (avgFactor);
-cout<<"||∨| MAVG -> "<<_raw(epochStep_)<<" <= len="<<actualLen<<" fill="<<fillFactor<<" -> want "<<TimeValue{gavl_time_t(_raw(actualLen)/fillFactor)}<<" con:"<<contribution<< " * "<<avgFactor<<endl;
         }
       
       
