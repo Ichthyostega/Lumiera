@@ -396,6 +396,7 @@ namespace time {
       /** @internal stretch offset by a possibly fractional factor,
        *            and quantise into raw (micro tick) grid */
       Offset stretchedByRationalFactor (boost::rational<int64_t>)  const;
+      Offset stretchedByFloatFactor    (double)  const;
       
       /** @internal diagnostics, indicating ∆ */
       operator std::string ()  const;
@@ -422,9 +423,9 @@ namespace time {
     return Offset(distance);
   }
   
-  template<typename INT>
+  template<typename FAC>
   inline Offset
-  operator* (Offset const& distance, INT factor)
+  operator* (Offset const& distance, FAC factor)
   {
     return factor*distance;
   }
@@ -443,6 +444,12 @@ namespace time {
   operator* (boost::rational<INTX> factor, Offset const& offset)
   {
     return offset.stretchedByRationalFactor (boost::rational<int64_t>(factor.numerator(), factor.denominator()));
+  }
+  
+  inline Offset
+  operator* (double factor, Offset const& offset)
+  {
+    return offset.stretchedByFloatFactor (factor);
   }
   
   

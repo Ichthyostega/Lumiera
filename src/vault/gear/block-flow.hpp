@@ -88,6 +88,7 @@
 #include "lib/rational.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
+#include "lib/format-cout.hpp"///////////////////////TODO
 
 #include <utility>
 
@@ -113,8 +114,10 @@ namespace gear {
     
     const Duration INITIAL_EPOCH_STEP{FRAMES_PER_EPOCH * FrameRate{50}.duration()};
     
-    const Rat OVERFLOW_BOOST_FACTOR = 9_r/10;       ///< increase capacity on each Epoch overflow event
-    const Rat EMPTY_THRESHOLD = 1_r/20;             ///< do not account for (almost) empty Epochs to avoid overshooting regulation
+    const double BOOST_FACTOR = 0.85;               ///< adjust capacity by this factor on Epoch overflow/underflow events
+    const double BOOST_OVERFLOW = pow(BOOST_FACTOR, 1.0/EPOCH_SIZ);
+    const double DAMP_THRESHOLD = 0.06;             ///< do not account for (almost) empty Epochs to avoid overshooting regulation
+    const TimeValue MIN_EPOCH_STEP{1000};           ///< minimal Epoch spacing in µs to prevent stalled Epoch progression
     const size_t AVERAGE_EPOCHS = 10;               ///< moving average len for exponential convergence towards average Epoch fill
     
     /** raw allocator to provide a sequence of Extents to place Activity records */
@@ -204,10 +207,10 @@ namespace gear {
       EpochGate& gate() { return static_cast<EpochGate&> ((*this)[0]); }
       Time   deadline() { return Time{gate().deadline()};              }
       
-      Rat
+      double
       getFillFactor()
         {
-          return Rat{gate().filledSlots(), SIZ()-1};
+          return double(gate().filledSlots()) / (SIZ()-1);
         }
       
       
@@ -275,9 +278,12 @@ namespace gear {
         }
       
       void
-      adjustEpochStep (Rat factor)
+      adjustEpochStep (double factor)
         {
-          epochStep_ = getEpochStep() * factor;
+          double stretched = _raw(epochStep_) * factor;
+          gavl_time_t microTicks(floor (stretched));
+          epochStep_ = TimeValue{microTicks};
+          
         }
       
       
@@ -338,6 +344,7 @@ namespace gear {
                     {
                       auto lastDeadline = flow_->lastEpoch().deadline();
                       epoch_.expandAlloc(); // may throw out-of-memory..
+cout<<"||∧| +1 ⟶ "<<watch(flow_->alloc_).active()<<" of "<<watch(flow_->alloc_).size()<<endl;
                       ENSURE (epoch_);
                       Epoch::setup (epoch_, lastDeadline + flow_->getEpochStep());
                     }
@@ -360,9 +367,11 @@ namespace gear {
       AllocatorHandle
       until (Time deadline)
         {
+cout<<"||>| "<<TimeValue(deadline);
           if (isnil (alloc_))
             {//just create new Epoch one epochStep ahead
               alloc_.openNew();
+cout<<"\n||∧| +1 ⟶ "<<watch(alloc_).active()<<" of "<<watch(alloc_).size()<<endl;
               Epoch::setup (alloc_.begin(), deadline + Time{epochStep_});
               return AllocatorHandle{alloc_.begin(), this};
             }
@@ -370,7 +379,10 @@ namespace gear {
             {//find out how the given time relates to existing Epochs
               if (firstEpoch().deadline() >= deadline)
                 // way into the past ... put it in the first available Epoch
+{
+cout<<" ««······  ⟶ ⟶ "<<TimeValue{firstEpoch().deadline()}<<endl;
                 return AllocatorHandle{alloc_.begin(), this};
+}
               else
               if (lastEpoch().deadline() < deadline)
                 {  // a deadline beyond the established Epochs...
@@ -382,7 +394,9 @@ namespace gear {
                   auto requiredNew = distance / _raw(epochStep_);
                   if (distance % _raw(epochStep_) > 0)
                     ++requiredNew;  // fractional:  requested deadline lies within last epoch
+cout<<" »»······ "<<lastDeadline<<" ⟶ Δ"<<TimeValue(distance)<<endl;
                   alloc_.openNew(requiredNew);   // Note: epochHandle now points to the first new Epoch
+cout<<"||∧| +"<<requiredNew<<" ⟶ "<<watch(alloc_).active()<<" of "<<watch(alloc_).size()<<endl;
                   for ( ; 0 < requiredNew; --requiredNew)
                     {
                       REQUIRE (nextEpoch);
@@ -400,7 +414,10 @@ namespace gear {
               else
                 for (EpochIter epochIt{alloc_.begin()}; epochIt; ++epochIt)
                   if (epochIt->deadline() >= deadline)
+{
+cout<<" ◆◆······  ⟶ "<<TimeValue{epochIt->deadline()}<<endl;
                     return AllocatorHandle{epochIt, this};
+}
               
               NOTREACHED ("Inconsistency in BlockFlow Epoch deadline organisation");
             }
@@ -416,6 +433,7 @@ namespace gear {
       void
       discardBefore (Time deadline)
         {
+cout<<"||■| CLUP <- "<<TimeValue(deadline)<<endl;
           if (isnil (alloc_)
               or firstEpoch().deadline() > deadline)
             return;
@@ -444,7 +462,9 @@ namespace gear {
       void
       markEpochOverflow()
         {
-          adjustEpochStep (OVERFLOW_BOOST_FACTOR);
+          if (epochStep_ > MIN_EPOCH_STEP)
+            adjustEpochStep (BOOST_OVERFLOW);
+cout<<"||*| OVER -> "<<_raw(epochStep_)<<endl;
         }
       
       /**
@@ -462,15 +482,23 @@ namespace gear {
        *       without much spurious range checks.  /////////////////////////////////////////////////////////TICKET #1259 : reorganise raw time base datatypes : need conversion path into FSecs
        */
       void
-      markEpochUnderflow (TimeVar actualLen, Rat fillFactor)
+      markEpochUnderflow (TimeVar actualLen, double fillFactor)
         {
-          Rat contribution{_raw(actualLen), _raw(epochStep_)};
-          if (fillFactor > EMPTY_THRESHOLD)  // treat almost empty blocks as if their length was optimal 
-              contribution /= fillFactor;
+          auto interpolate = [&](auto f, auto v1, auto v2) { return f*v2 + (1-f)*v1; };
+          
+          // use actual fill as signal, but limit signal for empty Epochs
+          double adjust =
+            fillFactor > DAMP_THRESHOLD? fillFactor
+                                       : interpolate (DAMP_THRESHOLD-fillFactor, fillFactor,BOOST_FACTOR);
+          
+          // damped adjustment towards ideal size
+          double contribution = double(_raw(actualLen)) / _raw(epochStep_) / adjust;
+          
           // Exponential MA: mean ≔ mean * (N-1)/N  + newVal/N
-          const Rat N = AVERAGE_EPOCHS;
-          Rat avgFactor = (contribution + N-1) / N;
+          auto N = AVERAGE_EPOCHS;
+          double avgFactor = (contribution + N-1) / N;
           adjustEpochStep (avgFactor);
+cout<<"||∨| MAVG -> "<<_raw(epochStep_)<<" <= len="<<actualLen<<" fill="<<fillFactor<<" -> want "<<TimeValue{gavl_time_t(_raw(actualLen)/fillFactor)}<<" con:"<<contribution<< " * "<<avgFactor<<endl;
         }
       
       

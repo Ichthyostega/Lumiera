@@ -277,6 +277,16 @@ namespace time {
   }
   
   
+  Offset
+  Offset::stretchedByFloatFactor (double factor)  const
+  {
+    double distance(this->t_);
+    distance *= factor;
+    gavl_time_t microTicks = floor (distance);
+    return Offset{buildRaw_(microTicks)};
+  }
+  
+  
   /** offset by the given number of frames. */
   Offset::Offset (FrameCnt count, FrameRate const& fps)
     : TimeValue{buildRaw_(

@@ -172,7 +172,7 @@ namespace test {
           CHECK (1 == gate.filledSlots());
           CHECK (gate.hasFreeSlot());
           
-          CHECK (epoch.getFillFactor() == Rat(gate.filledSlots(), Epoch::SIZ()-1));
+          CHECK (epoch.getFillFactor() == double(gate.filledSlots()) / (Epoch::SIZ()-1));
           
           // so let's eat this space up...
           for (uint i=extent.size()-2; i>1; --i)
@@ -278,22 +278,23 @@ namespace test {
           CHECK (not allocHandle.hasFreeSlot());
           auto& a6 = bFlow.until(Time{850,10}).create();
           // Note: encountered four overflow-Events, leading to decreased Epoch spacing for new Epochs
-          CHECK (watch(bFlow).find(a6)    == "11s131ms"_expect);
-          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s|11s131ms"_expect);
+          CHECK (watch(bFlow).find(a6)    == "11s198ms"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s|11s198ms"_expect);
           
           auto& a7 = bFlow.until(Time{500,11}).create();
           // this allocation does not count as overflow, but has to expand the Epoch grid, now using the reduced Epoch spacing
-          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s|11s131ms|11s262ms|11s393ms|11s524ms"_expect);
-          CHECK (watch(bFlow).find(a7)    == "11s524ms"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s|11s198ms|11s397ms|11s596ms"_expect);
+          CHECK (watch(bFlow).find(a7)    == "11s596ms"_expect);
           
-          CHECK (bFlow.getEpochStep() == "≺131ms≻"_expect);
+          // on clean-up, actual fill ratio is used to adjust to optimise Epoch length for better space usage
+          CHECK (bFlow.getEpochStep() == "≺198ms≻"_expect);
           bFlow.discardBefore (Time{999,10});
-          CHECK (bFlow.getEpochStep() == "≺149ms≻"_expect);
-          CHECK (watch(bFlow).allEpochs() == "11s|11s131ms|11s262ms|11s393ms|11s524ms"_expect);
+          CHECK (bFlow.getEpochStep() == "≺802ms≻"_expect);
+          CHECK (watch(bFlow).allEpochs() == "11s|11s198ms|11s397ms|11s596ms"_expect);
 
           // placed into the oldest Epoch still alive
           auto& a8 = bFlow.until(Time{500,10}).create();
-          CHECK (watch(bFlow).find(a8)    == "11s131ms"_expect);
+          CHECK (watch(bFlow).find(a8)    == "11s198ms"_expect);
         }
       
       
@@ -311,31 +312,45 @@ namespace test {
           CHECK (bFlow.getEpochStep() == INITIAL_EPOCH_STEP);
           
           // whenever an Epoch overflow happens, capacity is boosted by reducing the Epoch duration
+SHOW_EXPR(bFlow.getEpochStep())          
           bFlow.markEpochOverflow();
-          CHECK (bFlow.getEpochStep() == INITIAL_EPOCH_STEP * OVERFLOW_BOOST_FACTOR);
+SHOW_EXPR(bFlow.getEpochStep())
+SHOW_EXPR(INITIAL_EPOCH_STEP)
+SHOW_EXPR(INITIAL_EPOCH_STEP*BOOST_OVERFLOW)
+          CHECK (bFlow.getEpochStep() == INITIAL_EPOCH_STEP * BOOST_OVERFLOW);
           bFlow.markEpochOverflow();
-          CHECK (bFlow.getEpochStep() == INITIAL_EPOCH_STEP * OVERFLOW_BOOST_FACTOR*OVERFLOW_BOOST_FACTOR);
+          CHECK (bFlow.getEpochStep() == INITIAL_EPOCH_STEP * BOOST_OVERFLOW*BOOST_OVERFLOW);
           
           // To counteract this increase, on clean-up the actual fill rate of the Extent
           // serves to guess an optimal Epoch duration, which is averaged exponentially
           
           // Using just arbitrary demo values for some fictional Epochs
           TimeVar dur1 = INITIAL_EPOCH_STEP;
-          Rat     fill1 = 8_r/10;
-          TimeVar dur2 = INITIAL_EPOCH_STEP * OVERFLOW_BOOST_FACTOR;
-          Rat     fill2 = 3_r/10;
+          double  fac1 = 0.8;
+          TimeVar dur2 = INITIAL_EPOCH_STEP * BOOST_OVERFLOW;
+          double  fac2 = 0.4;
           
-          Rat N = AVERAGE_EPOCHS;
           TimeVar step = bFlow.getEpochStep();
+
+          auto movingAverage = [&](TimeValue old, double contribution)
+                                  {
+                                    auto N = AVERAGE_EPOCHS;
+                                    auto averageTicks = double(_raw(old))*(N-1)/N + contribution/N;
+                                    return TimeValue{gavl_time_t (floor (averageTicks))};
+                                  };
           
-          bFlow.markEpochUnderflow (dur1, fill1);
-          CHECK (bFlow.getEpochStep() == Duration{FSecs{step}*(N-1)/N + FSecs{dur1}/fill1/N});
+SHOW_EXPR(bFlow.getEpochStep())
+          bFlow.markEpochUnderflow (dur1, fac1);
+SHOW_EXPR(bFlow.getEpochStep())
+SHOW_EXPR(movingAverage(step, double(_raw(dur1)) / fac1))
+          CHECK (bFlow.getEpochStep() == movingAverage(step, double(_raw(dur1)) / fac1));
           
           step = bFlow.getEpochStep();
-          bFlow.markEpochUnderflow (dur2, fill2);
-          CHECK (bFlow.getEpochStep() == Duration{FSecs{step}*(N-1)/N + FSecs{dur2}/fill2/N});
-        }                             // Note: for verification the exponential average is computed via FSecs
-                                     //        which is a different calculation path but yields the same result
+          bFlow.markEpochUnderflow (dur2, fac2);
+SHOW_EXPR(_raw(bFlow.getEpochStep()))
+SHOW_EXPR(_raw(movingAverage(step, double(_raw(dur2)) / fac2)))
+          CHECK (bFlow.getEpochStep() == movingAverage(step, double(_raw(dur2)) / fac2));
+        }
       
       
       /** @test investigate progression of epochs under realistic load
@@ -363,13 +378,14 @@ namespace test {
           
           // pre-generate random test data
           TestData testData{INSTANCES};
-          for (auto&[t,r] : testData)
+          for (size_t i=0; i<INSTANCES; ++i)
             {
               const size_t SPREAD   =  2*_raw(SPREAD_DEAD);
               const size_t MIN_DEAD = _raw(BASE_DEADLINE) - _raw(SPREAD_DEAD);
               
+              auto&[t,r] = testData[i];
               r = rand() % SPREAD;
-              t = TimeValue(MIN_DEAD + r);
+              t = TimeValue(i*STP + MIN_DEAD + r);
             }
           
           Activity dummy;  // reserve memory for test subject index
@@ -458,15 +474,16 @@ namespace test {
                                                     size_t check = feedActivity.data_.feed.one;
                                                     if (i % CLEAN_UP == 0)
                                                       blockFlow.discardBefore (Time{TimeValue{i*STP}});
+                                                    ++i;
                                                     return check;
                                                   };
                               
                               sum3 = runTest (allocate, invoke);
-//SHOW_EXPR(watch(blockFlow).cntEpochs())
-//SHOW_EXPR(watch(blockFlow).poolSize())
-//SHOW_EXPR(watch(blockFlow).first())
-//SHOW_EXPR(watch(blockFlow).last())
-//SHOW_EXPR(_raw(blockFlow.getEpochStep()))
+SHOW_EXPR(watch(blockFlow).cntEpochs())
+SHOW_EXPR(watch(blockFlow).poolSize())
+SHOW_EXPR(watch(blockFlow).first())
+SHOW_EXPR(watch(blockFlow).last())
+SHOW_EXPR(_raw(blockFlow.getEpochStep()))
 //SHOW_EXPR(watch(blockFlow).allEpochs())
                             };
           
@@ -479,7 +496,8 @@ SHOW_EXPR(sum1);
           auto time_heapAlloc = benchmark(heapAlloc);
 SHOW_EXPR(time_heapAlloc)
 SHOW_EXPR(sum2);
-          
+
+cout<<"\n\n■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□"<<endl;
           // INVOKE Setup-3
           auto time_blockFlow = benchmark(blockFlow);
 SHOW_EXPR(time_blockFlow)
