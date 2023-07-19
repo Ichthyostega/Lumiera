@@ -278,23 +278,23 @@ namespace test {
           CHECK (not allocHandle.hasFreeSlot());
           auto& a6 = bFlow.until(Time{850,10}).create();
           // Note: encountered four overflow-Events, leading to decreased Epoch spacing for new Epochs
-          CHECK (watch(bFlow).find(a6)    == "11s198ms"_expect);
-          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s|11s198ms"_expect);
+          CHECK (watch(bFlow).find(a6)    == "11s193ms"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s|11s193ms"_expect);
           
           auto& a7 = bFlow.until(Time{500,11}).create();
           // this allocation does not count as overflow, but has to expand the Epoch grid, now using the reduced Epoch spacing
-          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s|11s198ms|11s397ms|11s596ms"_expect);
-          CHECK (watch(bFlow).find(a7)    == "11s596ms"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s|11s193ms|11s387ms|11s580ms"_expect);
+          CHECK (watch(bFlow).find(a7)    == "11s580ms"_expect);
           
           // on clean-up, actual fill ratio is used to adjust to optimise Epoch length for better space usage
-          CHECK (bFlow.getEpochStep() == "≺198ms≻"_expect);
+          CHECK (bFlow.getEpochStep() == "≺193ms≻"_expect);
           bFlow.discardBefore (Time{999,10});
-          CHECK (bFlow.getEpochStep() == "≺802ms≻"_expect);
-          CHECK (watch(bFlow).allEpochs() == "11s|11s198ms|11s397ms|11s596ms"_expect);
+          CHECK (bFlow.getEpochStep() == "≺234ms≻"_expect);
+          CHECK (watch(bFlow).allEpochs() == "11s|11s193ms|11s387ms|11s580ms"_expect);
 
           // placed into the oldest Epoch still alive
           auto& a8 = bFlow.until(Time{500,10}).create();
-          CHECK (watch(bFlow).find(a8)    == "11s198ms"_expect);
+          CHECK (watch(bFlow).find(a8)    == "11s193ms"_expect);
         }
       
       
@@ -328,9 +328,10 @@ SHOW_EXPR(INITIAL_EPOCH_STEP*BOOST_OVERFLOW)
           TimeVar dur1 = INITIAL_EPOCH_STEP;
           double  fac1 = 0.8;
           TimeVar dur2 = INITIAL_EPOCH_STEP * BOOST_OVERFLOW;
-          double  fac2 = 0.4;
+          double  fac2 = 0.3;
           
-          TimeVar step = bFlow.getEpochStep();
+          double  goal1 = double(_raw(dur1)) / (fac1/TARGET_FILL);
+          double  goal2 = double(_raw(dur2)) / (fac2/TARGET_FILL);
 
           auto movingAverage = [&](TimeValue old, double contribution)
                                   {
@@ -339,17 +340,20 @@ SHOW_EXPR(INITIAL_EPOCH_STEP*BOOST_OVERFLOW)
                                     return TimeValue{gavl_time_t (floor (averageTicks))};
                                   };
           
+          TimeVar step = bFlow.getEpochStep();
 SHOW_EXPR(bFlow.getEpochStep())
           bFlow.markEpochUnderflow (dur1, fac1);
 SHOW_EXPR(bFlow.getEpochStep())
-SHOW_EXPR(movingAverage(step, double(_raw(dur1)) / fac1))
-          CHECK (bFlow.getEpochStep() == movingAverage(step, double(_raw(dur1)) / fac1));
+SHOW_EXPR(fac1/TARGET_FILL)
+SHOW_EXPR(goal1)
+SHOW_EXPR(movingAverage(step, goal1))
+          CHECK (bFlow.getEpochStep() == movingAverage(step, goal1));
           
           step = bFlow.getEpochStep();
           bFlow.markEpochUnderflow (dur2, fac2);
 SHOW_EXPR(_raw(bFlow.getEpochStep()))
-SHOW_EXPR(_raw(movingAverage(step, double(_raw(dur2)) / fac2)))
-          CHECK (bFlow.getEpochStep() == movingAverage(step, double(_raw(dur2)) / fac2));
+SHOW_EXPR(_raw(movingAverage(step, goal2)))
+          CHECK (bFlow.getEpochStep() == movingAverage(step, goal2));
         }
       
       
@@ -461,13 +465,41 @@ SHOW_EXPR(_raw(movingAverage(step, double(_raw(dur2)) / fac2)))
                             };
           
           
-          /* =========== Test-Setup-3: use BlockFlow allocation scheme ========== */
+          /* =========== Test-Setup-3: manage individually by ref-cnt  ========== */
           size_t sum3{0};
+          vector<std::shared_ptr<Activity>> manager{INSTANCES};
+          auto sharedAlloc = [&]{
+                              auto allocate = [&, i=0](Time, size_t check) mutable -> Activity&
+                                                  {
+                                                    Activity* a = new Activity{check, size_t{55}};
+                                                    manager[i].reset(a);
+                                                    ++i;
+                                                    return *a;
+                                                  };
+                              auto invoke   = [&, i=0](Activity& feedActivity) mutable
+                                                  {
+                                                    size_t check = feedActivity.data_.feed.one; 
+                                                    manager[i].reset();
+                                                    return check;
+                                                  };
+                              
+                              sum3 = runTest (allocate, invoke);
+                            };
+          
+          
+          /* =========== Test-Setup-4: use BlockFlow allocation scheme ========== */
+          size_t sum4{0};
           auto blockFlow = [&]{
                               BlockFlow blockFlow;
-                              auto allocate = [&](Time t, size_t check) mutable -> Activity&
+                              BlockFlow::AllocatorHandle allocHandle = blockFlow.until(Time{400,0});
+                              auto allocate = [&, j=0](Time t, size_t check) mutable -> Activity&
                                                   {
-                                                    return blockFlow.until(t).create (check, size_t{55});
+                                                    if (++j >= 10) // typically several Activities are allocated on the same deadline
+                                                      {
+                                                        allocHandle = blockFlow.until(t);
+                                                        j = 0;
+                                                      }
+                                                    return allocHandle.create (check, size_t{55});
                                                   };
                               auto invoke   = [&, i=0](Activity& feedActivity) mutable
                                                   {
@@ -478,7 +510,7 @@ SHOW_EXPR(_raw(movingAverage(step, double(_raw(dur2)) / fac2)))
                                                     return check;
                                                   };
                               
-                              sum3 = runTest (allocate, invoke);
+                              sum4 = runTest (allocate, invoke);
 SHOW_EXPR(watch(blockFlow).cntEpochs())
 SHOW_EXPR(watch(blockFlow).poolSize())
 SHOW_EXPR(watch(blockFlow).first())
@@ -496,12 +528,17 @@ SHOW_EXPR(sum1);
           auto time_heapAlloc = benchmark(heapAlloc);
 SHOW_EXPR(time_heapAlloc)
 SHOW_EXPR(sum2);
+          
+          // INVOKE Setup-3
+          auto time_sharedAlloc = benchmark(sharedAlloc);
+SHOW_EXPR(time_sharedAlloc)
+SHOW_EXPR(sum3);
 
 cout<<"\n\n■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□"<<endl;
-          // INVOKE Setup-3
+          // INVOKE Setup-4
           auto time_blockFlow = benchmark(blockFlow);
 SHOW_EXPR(time_blockFlow)
-SHOW_EXPR(sum3);
+SHOW_EXPR(sum4);
         }
     };
   

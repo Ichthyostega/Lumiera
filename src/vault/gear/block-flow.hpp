@@ -113,8 +113,9 @@ namespace gear {
     
     const Duration INITIAL_EPOCH_STEP{FRAMES_PER_EPOCH * FrameRate{50}.duration()};
     
+    const double TARGET_FILL  = 0.90;               ///< aim at using this fraction of Epoch space on average (slightly below 100%)
     const double BOOST_FACTOR = 0.85;               ///< adjust capacity by this factor on Epoch overflow/underflow events
-    const double BOOST_OVERFLOW = pow(BOOST_FACTOR, 1.0/EPOCH_SIZ);
+    const double BOOST_OVERFLOW = pow(BOOST_FACTOR, 5.0/EPOCH_SIZ);
     const double DAMP_THRESHOLD = 0.06;             ///< do not account for (almost) empty Epochs to avoid overshooting regulation
     const TimeValue MIN_EPOCH_STEP{1000};           ///< minimal Epoch spacing in µs to prevent stalled Epoch progression
     const size_t AVERAGE_EPOCHS = 10;               ///< moving average len for exponential convergence towards average Epoch fill
@@ -472,10 +473,11 @@ namespace gear {
         {
           auto interpolate = [&](auto f, auto v1, auto v2) { return f*v2 + (1-f)*v1; };
           
-          // use actual fill as signal, but limit signal for empty Epochs
+          // use actual fill as signal, set desired fill-level as goal
+          fillFactor /= TARGET_FILL;
           double adjust =
-            fillFactor > DAMP_THRESHOLD? fillFactor
-                                       : interpolate (DAMP_THRESHOLD-fillFactor, fillFactor,BOOST_FACTOR);
+            fillFactor > DAMP_THRESHOLD? fillFactor   //  limit signal for almost empty Epochs to avoid overshooting
+                                       : interpolate (1 - fillFactor/DAMP_THRESHOLD, fillFactor,BOOST_FACTOR);
           
           // damped adjustment towards ideal size
           double contribution = double(_raw(actualLen)) / _raw(epochStep_) / adjust;
