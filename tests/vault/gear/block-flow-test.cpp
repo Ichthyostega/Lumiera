@@ -363,7 +363,7 @@ SHOW_EXPR(_raw(movingAverage(step, goal2)))
        *        - run this load exposure under saturation for performance measurement
        *        - use a planning to deadline delay of 500ms, but with ±200ms random spread
        *        - after 250ms (500 steps), »invoke« by accessing and adding the random checksum
-       *        - run a comparison of all-pre-allocated ⟷ heap allocated ⟷ BlockFlow 
+       *        - run a comparison of all-pre-allocated ⟷ heap allocated ⟷ Refcount ⟷ BlockFlow
        * @todo WIP 7/23 ⟶ 🔁define ⟶ 🔁implement
        */
       void

@@ -123,6 +123,47 @@ namespace gear {
     /** raw allocator to provide a sequence of Extents to place Activity records */
     using Allocator = mem::ExtentFamily<Activity, EPOCH_SIZ>;
   }
+  namespace blockFlow {///< Parametrisation of Scheduler memory management scheme
+    
+    /**
+     * Lightweight yet safe parametrisation of memory management.
+     * Used as default setting and thus for most tests.
+     */
+    struct DefaultConfig
+      {
+        /* === characteristic parameters === */
+        const size_t EPOCH_SIZ = 100;           ///< Number of storage slots to fit into one »Epoch«
+        const Duration DUTY_CYCLE{FSecs(1)};    ///< typical relaxation time or average pre-roll to deadline
+        const size_t INITIAL_STREAMS = 2;       ///< Number of streams with TYPICAL_FPS to expect for normal use
+        
+        /* === algorithm tuning settings === */
+        const double TARGET_FILL = 0.90;        ///< aim at using this fraction of Epoch space on average (slightly below 100%)
+        const double BOOST_FACTOR = 0.85;       ///< adjust capacity by this factor on Epoch overflow/underflow events
+        const double DAMP_THRESHOLD = 0.06;     ///< do not account for (almost) empty Epochs to avoid overshooting regulation
+        
+        /* === contextual assumptions === */
+        const size_t ACTIVITIES_PER_FRAME = 10; ///< how many Activity records are typically used to implement a single frame
+        const FrameRate TYPICAL_FPS{25};        ///< frame rate to use as reference point to relate DUTY_CYCLE and default counts
+        const size_t OVERLOAD_LIMIT = 200;      ///< load factor over normal use where to assume saturation and limit throughput
+      };
+    
+    /**
+     * Parametrisation tuned for Render Engine performance.
+     */
+    struct RenderConfig
+      : DefaultConfig
+      {
+        
+      };
+    
+    template<class CONF>
+    struct Strategy
+      : CONF
+      {
+          
+      };
+    
+  }
   
   
 
