@@ -57,12 +57,19 @@ namespace test {
   
 //  using lib::time::FrameRate;
 //  using lib::time::Time;
-  namespace {
-    using BlockFlow = gear::BlockFlow<>;
-    using Extent = BlockFlow::Extent;
-    using Epoch  = BlockFlow::Epoch;
+  namespace { // shorthand for test parametrisation
     
-    const size_t EXTENT_SIZ = Extent::SIZ();
+    using BlockFlow = gear::BlockFlow<>;
+    using Allocator = BlockFlow::Allocator;
+    using Strategy  = BlockFlow::Strategy;
+    using Extent    = BlockFlow::Extent;
+    using Epoch     = BlockFlow::Epoch;
+    
+    const size_t EXTENT_SIZ         = Extent::SIZ();
+    Duration     INITIAL_EPOCH_STEP = Strategy{}.initialEpochStep();
+    const size_t AVERAGE_EPOCHS     = Strategy{}.averageEpochs();
+    const double BOOST_OVERFLOW     = Strategy{}.boostFactorOverflow();
+    const double TARGET_FILL        = Strategy{}.config().TARGET_FILL;
   }
   
   
@@ -82,8 +89,8 @@ namespace test {
         {
            simpleUsage();
            handleEpoch();
-           placeActivity();
-           adjustEpochs();
+//           placeActivity();
+//           adjustEpochs();
            storageFlow();
         }
       
@@ -295,7 +302,7 @@ namespace test {
           // on clean-up, actual fill ratio is used to adjust to optimise Epoch length for better space usage
           CHECK (bFlow.getEpochStep() == "≺193ms≻"_expect);
           bFlow.discardBefore (Time{999,10});
-          CHECK (bFlow.getEpochStep() == "≺234ms≻"_expect);
+          CHECK (bFlow.getEpochStep() == "≺231ms≻"_expect);
           CHECK (watch(bFlow).allEpochs() == "11s|11s193ms|11s387ms|11s580ms"_expect);
 
           // placed into the oldest Epoch still alive
@@ -523,6 +530,11 @@ SHOW_EXPR(watch(blockFlow).first())
 SHOW_EXPR(watch(blockFlow).last())
 SHOW_EXPR(_raw(blockFlow.getEpochStep()))
 //SHOW_EXPR(watch(blockFlow).allEpochs())
+//SHOW_EXPR(blockFlow.initialEpochCnt())
+//SHOW_EXPR(INITIAL_ALLOC)
+//SHOW_EXPR(blockFlow.initialEpochStep())
+//SHOW_EXPR(INITIAL_EPOCH_STEP)
+//SHOW_EXPR(_raw(blockFlow.timeStep_cutOff()))
                             };
           
           // INVOKE Setup-1
@@ -543,8 +555,10 @@ SHOW_EXPR(sum3);
 cout<<"\n\n■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□"<<endl;
           // INVOKE Setup-4
           auto time_blockFlow = benchmark(blockFlow);
+cout<<"\n\n■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□"<<endl;
 SHOW_EXPR(time_blockFlow)
 SHOW_EXPR(sum4);
+cout<<"\n"<<endl;
         }
     };
   

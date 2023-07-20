@@ -180,7 +180,7 @@ namespace gear {
         const FrameRate
         initialFrameRate()  const
           {
-            return config().INITIAL_STREAMS * config().TYPICAL_FPS;
+            return uint(config().INITIAL_STREAMS) * boost::rational<uint>{config().TYPICAL_FPS};
           }
         
         Duration
@@ -195,6 +195,12 @@ namespace gear {
             return 1 + 2*_raw(config().DUTY_CYCLE) / _raw(initialEpochStep());
           }
         
+        size_t
+        averageEpochs()  const
+          {
+            return util::max (initialEpochCnt(), 6u);
+          }
+        
         double
         boostFactor()  const
           {
@@ -207,10 +213,12 @@ namespace gear {
             return pow(config().BOOST_FACTOR, 5.0/config().EPOCH_SIZ);
           }
         
-        Duration
+        TimeValue
         timeStep_cutOff()  const       ///< prevent stalling Epoch progression when reaching saturation
           {
-            return _raw(initialEpochStep()) / config().OVERLOAD_LIMIT;
+//            return TimeValue(_raw(initialEpochStep()) / config().OVERLOAD_LIMIT);
+//            return TimeValue(1000);
+            return TimeValue((framesPerEpoch()*TimeValue::SCALE / 50) / config().OVERLOAD_LIMIT);
           }
       };
     
@@ -350,10 +358,12 @@ namespace gear {
       
     public:
       using Allocator = mem::ExtentFamily<Activity, EPOCH_SIZ>;
+      using Strategy  = blockFlow::Strategy<CONF>;
       using RawIter   = typename Allocator::iterator;
       using Extent    = typename Allocator::Extent;
       using Epoch     = blockFlow::Epoch<Allocator>;
       
+      using Strategy::config;
       
     private:
       Allocator alloc_;
@@ -378,8 +388,10 @@ namespace gear {
 
     public:
       BlockFlow()
-        : alloc_{INITIAL_ALLOC}
-        , epochStep_{INITIAL_EPOCH_STEP}
+//        : alloc_{INITIAL_ALLOC}//Strategy::initialEpochCnt()}
+//        , epochStep_{INITIAL_EPOCH_STEP}//Strategy::initialEpochStep()}
+        : alloc_{Strategy::initialEpochCnt()}
+        , epochStep_{Strategy::initialEpochStep()}
         { }
       
       Duration
@@ -561,8 +573,10 @@ namespace gear {
       void
       markEpochOverflow()
         {
-          if (epochStep_ > MIN_EPOCH_STEP)
-            adjustEpochStep (BOOST_OVERFLOW);
+          if (epochStep_ > Strategy::timeStep_cutOff())
+            adjustEpochStep (Strategy::boostFactorOverflow());
+//          if (epochStep_ > MIN_EPOCH_STEP)//Strategy::timeStep_cutOff())
+//            adjustEpochStep (BOOST_OVERFLOW);//Strategy::boostFactorOverflow());
         }
       
       /**
@@ -585,16 +599,17 @@ namespace gear {
           auto interpolate = [&](auto f, auto v1, auto v2) { return f*v2 + (1-f)*v1; };
           
           // use actual fill as signal, set desired fill-level as goal
-          fillFactor /= TARGET_FILL;
+          fillFactor /= config().TARGET_FILL;
+          auto THRESH = config().DAMP_THRESHOLD;
           double adjust =
-            fillFactor > DAMP_THRESHOLD? fillFactor   //  limit signal for almost empty Epochs to avoid overshooting
-                                       : interpolate (1 - fillFactor/DAMP_THRESHOLD, fillFactor,BOOST_FACTOR);
+            fillFactor > THRESH? fillFactor   //  limit signal for almost empty Epochs to avoid overshooting
+                               : interpolate (1 - fillFactor/THRESH, fillFactor, Strategy::boostFactor());
           
           // damped adjustment towards ideal size
           double contribution = double(_raw(actualLen)) / _raw(epochStep_) / adjust;
           
           // Exponential MA: mean ≔ mean * (N-1)/N  + newVal/N
-          auto N = AVERAGE_EPOCHS;
+          auto N = AVERAGE_EPOCHS;//Strategy::averageEpochs();  /////////////////////////////////////TODO here different length -> Algo behaves worse
           double avgFactor = (contribution + N-1) / N;
           adjustEpochStep (avgFactor);
         }
