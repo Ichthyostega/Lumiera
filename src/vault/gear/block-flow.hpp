@@ -132,7 +132,7 @@ namespace gear {
     struct DefaultConfig
       {
         /* === characteristic parameters === */
-        const size_t EPOCH_SIZ = 100;           ///< Number of storage slots to fit into one »Epoch«
+        const static size_t EPOCH_SIZ = 100;    ///< Number of storage slots to fit into one »Epoch«
         const Duration DUTY_CYCLE{FSecs(1)};    ///< typical relaxation time or average pre-roll to deadline
         const size_t INITIAL_STREAMS = 2;       ///< Number of streams with TYPICAL_FPS to expect for normal use
         
@@ -153,125 +153,183 @@ namespace gear {
     struct RenderConfig
       : DefaultConfig
       {
-        
+        const static size_t EPOCH_SIZ = 300;
+        const size_t INITIAL_STREAMS = 4;
       };
     
+    /**
+     * Policy template to mix into the BlockFlow allocator,
+     * providing the parametrisation for self-regulation
+     */
     template<class CONF>
     struct Strategy
-      : CONF
       {
-          
+        CONF const&
+        config()  const
+          {           // Meyers Singleton
+            static const CONF configInstance;
+            return configInstance;
+          }
+        
+        size_t
+        framesPerEpoch()  const
+          {
+            return config().EPOCH_SIZ / config().ACTIVITIES_PER_FRAME;
+          }
+        
+        const FrameRate
+        initialFrameRate()  const
+          {
+            return config().INITIAL_STREAMS * config().TYPICAL_FPS;
+          }
+        
+        Duration
+        initialEpochStep()  const
+          {
+            return framesPerEpoch() / initialFrameRate();
+          }
+        
+        size_t
+        initialEpochCnt()  const       ///< reserve allocation headroom for two duty cycles
+          {
+            return 1 + 2*_raw(config().DUTY_CYCLE) / _raw(initialEpochStep());
+          }
+        
+        double
+        boostFactor()  const
+          {
+            return config().BOOST_FACTOR;
+          }
+        
+        double
+        boostFactorOverflow()  const   ///< reduced logarithmically, since overflow is detected on individual allocations
+          {
+            return pow(config().BOOST_FACTOR, 5.0/config().EPOCH_SIZ);
+          }
+        
+        Duration
+        timeStep_cutOff()  const       ///< prevent stalling Epoch progression when reaching saturation
+          {
+            return _raw(initialEpochStep()) / config().OVERLOAD_LIMIT;
+          }
       };
     
-  }
+    
+    
+    
+    /**
+     * Allocation Extent holding _scheduler Activities_ to be performed altogether
+     * before a common _deadline._ Other than the underlying raw Extent, the Epoch
+     * maintains a deadline time and keeps track of storage slots already claimed.
+     * This is achieved by using the Activity record in the first slot as a GATE term
+     * to maintain those administrative information.
+     * @remark rationale is to discard the Extent as a whole, once deadline passed.
+     */
+    template<class ALO>
+    class Epoch
+      : public ALO::Extent
+      {
+        using RawIter = typename ALO::iterator;
+        using SIZ     = typename ALO::Extent::SIZ;
+        
+        /// @warning will be faked, never constructed
+        Epoch()    = delete;
+        
+      public:
+        /**
+         * specifically rigged GATE Activity,
+         * used for managing Epoch metadata
+         * - the Condition::rest tracks pending async IO operations
+         * - the Condition::deadline is the nominal deadline of this Epoch
+         * - the field `next` points to the next free allocation Slot to use
+         */
+        struct EpochGate
+          : Activity
+          {
+            /** @note initially by default there is...
+             *      - effectively no deadline
+             *      - no IO operations pending (i.e. we can just discard the Epoch)
+             *      - the `next` usable Slot is the last Storage slot, and will be
+             *        decremented until there is only one slot left (EpochGate itself)
+             *  @warning EpochGate is assumed to sit in the Epoch's first slot
+             */
+            EpochGate()
+              : Activity{int(0), Time::ANYTIME}
+              {
+                // initialise allocation usage marker: start at last usable slot
+                next = this + (Epoch::SIZ() - 1);
+                ENSURE (next != this);
+              }
+            // default copyable
+            
+            Instant&
+            deadline()
+              {
+                return data_.condition.dead;
+              }
+            
+            bool
+            isAlive (Time deadline)
+              {
+                /////////////////////////////////////////////OOO preliminary implementation ... should use the GATE-Activity itself
+                return this->deadline() > deadline;
+              }
+            
+            size_t
+            filledSlots()  const
+              {
+                const Activity* firstAllocPoint{this + (Epoch::SIZ()-1)};
+                return firstAllocPoint - next;
+              }
+            
+            bool
+            hasFreeSlot()  const
+              { // see C++ § 5.9 : comparison of pointers within same array
+                return next > this;
+              }
+            
+            Activity*
+            claimNextSlot()
+              {
+                REQUIRE (hasFreeSlot());
+                return next--;
+              }
+          };
+        
+        
+        EpochGate& gate() { return static_cast<EpochGate&> ((*this)[0]); }
+        Time   deadline() { return Time{gate().deadline()};              }
+        
+        double
+        getFillFactor()
+          {
+            return double(gate().filledSlots()) / (SIZ()-1);
+          }
+        
+        
+        static Epoch&
+        implantInto (RawIter storageSlot)
+          {
+            Epoch& target = static_cast<Epoch&> (*storageSlot);
+            new(&target[0]) EpochGate{};
+            return target;
+          }
+        
+        static Epoch&
+        setup (RawIter storageSlot, Time deadline)
+          {
+            Epoch& newEpoch{implantInto (storageSlot)};
+            newEpoch.gate().deadline() = deadline;
+            return newEpoch;
+          }
+      };
   
   
-
+  }//(End)namespace blockFlow
   
-  /**
-   * Allocation Extent holding _scheduler Activities_ to be performed altogether
-   * before a common _deadline._ Other than the underlying raw Extent, the Epoch
-   * maintains a deadline time and keeps track of storage slots already claimed.
-   * This is achieved by using the Activity record in the first slot as a GATE term
-   * to maintain those administrative information.
-   * @remark rationale is to discard the Extent as a whole, once deadline passed.
-   */
-  class Epoch
-    : public Allocator::Extent
-    {
-      
-      /// @warning will be faked, never constructed
-      Epoch()    = delete;
-      
-    public:
-      /**
-       * specifically rigged GATE Activity,
-       * used for managing Epoch metadata
-       * - the Condition::rest tracks pending async IO operations
-       * - the Condition::deadline is the nominal deadline of this Epoch
-       * - the field `next` points to the next free allocation Slot to use
-       */
-      struct EpochGate
-        : Activity
-        {
-          /** @note initially by default there is...
-           *      - effectively no deadline
-           *      - no IO operations pending (i.e. we can just discard the Epoch)
-           *      - the `next` usable Slot is the last Storage slot, and will be
-           *        decremented until there is only one slot left (EpochGate itself)
-           *  @warning EpochGate is assumed to sit in the Epoch's first slot
-           */
-          EpochGate()
-            : Activity{int(0), Time::ANYTIME}
-            {
-              // initialise allocation usage marker: start at last usable slot
-              next = this + (Epoch::SIZ() - 1);
-              ENSURE (next != this);
-            }
-          // default copyable
-          
-          Instant&
-          deadline()
-            {
-              return data_.condition.dead;
-            }
-          
-          bool
-          isAlive (Time deadline)
-            {
-              /////////////////////////////////////////////OOO preliminary implementation ... should use the GATE-Activity itself
-              return this->deadline() > deadline;
-            }
-          
-          size_t
-          filledSlots()  const
-            {
-              const Activity* firstAllocPoint{this + (Epoch::SIZ()-1)};
-              return firstAllocPoint - next;
-            }
-          
-          bool
-          hasFreeSlot()  const
-            { // see C++ § 5.9 : comparison of pointers within same array
-              return next > this;
-            }
-          
-          Activity*
-          claimNextSlot()
-            {
-              REQUIRE (hasFreeSlot());
-              return next--;
-            }
-        };
-      
-      
-      EpochGate& gate() { return static_cast<EpochGate&> ((*this)[0]); }
-      Time   deadline() { return Time{gate().deadline()};              }
-      
-      double
-      getFillFactor()
-        {
-          return double(gate().filledSlots()) / (SIZ()-1);
-        }
-      
-      
-      static Epoch&
-      implantInto (Allocator::iterator storageSlot)
-        {
-          Epoch& target = static_cast<Epoch&> (*storageSlot);
-          new(&target[0]) EpochGate{};
-          return target;
-        }
-      
-      static Epoch&
-      setup (Allocator::iterator storageSlot, Time deadline)
-        {
-          Epoch& newEpoch{implantInto (storageSlot)};
-          newEpoch.gate().deadline() = deadline;
-          return newEpoch;
-        }
-
-    };
+  template<class CONF>
+  class FlowDiagnostic;
+  
   
   
   
@@ -283,25 +341,37 @@ namespace gear {
    * @see SchedulerCommutator
    * @see BlockFlow_test
    */
+  template<class CONF = blockFlow::DefaultConfig>
   class BlockFlow
-    : util::NonCopyable
+    : public blockFlow::Strategy<CONF>
+    , util::NonCopyable
     {
+      constexpr static size_t EPOCH_SIZ = CONF::EPOCH_SIZ;
+      
+    public:
+      using Allocator = mem::ExtentFamily<Activity, EPOCH_SIZ>;
+      using RawIter   = typename Allocator::iterator;
+      using Extent    = typename Allocator::Extent;
+      using Epoch     = blockFlow::Epoch<Allocator>;
+      
+      
+    private:
       Allocator alloc_;
       TimeVar epochStep_;
       
       
       /** @internal use a raw storage Extent as Epoch (unchecked cast) */
       static Epoch&
-      asEpoch (Allocator::Extent& extent)
+      asEpoch (Extent& extent)
         {
           return static_cast<Epoch&> (extent);
         }
       
-      struct StorageAdaptor : Allocator::iterator
+      struct StorageAdaptor : RawIter
         {
           StorageAdaptor()  = default;
-          StorageAdaptor(Allocator::iterator it) : Allocator::iterator{it} { }
-          Epoch& yield()  const  { return asEpoch (Allocator::iterator::yield()); }
+          StorageAdaptor(RawIter it) : RawIter{it} { }
+          Epoch& yield()  const  { return asEpoch (RawIter::yield()); }
         };
       
       
@@ -347,7 +417,7 @@ namespace gear {
           BlockFlow* flow_;
           
         public:
-          AllocatorHandle(Allocator::iterator slot, BlockFlow* parent)
+          AllocatorHandle(RawIter slot, BlockFlow* parent)
             : epoch_{slot}
             , flow_{parent}
           { }
@@ -570,7 +640,7 @@ namespace gear {
       
       
       /// „backdoor“ to watch internals from tests
-      friend class FlowDiagnostic;
+      friend class FlowDiagnostic<CONF>;
     };
   
   
@@ -582,12 +652,15 @@ namespace gear {
   
   /* ===== Test / Diagnostic ===== */
   
+  template<class CONF>
   class FlowDiagnostic
     {
-      BlockFlow& flow_;
+      using Epoch = typename BlockFlow<CONF>::Epoch;
+      
+      BlockFlow<CONF>& flow_;
       
     public:
-      FlowDiagnostic(BlockFlow& theFlow)
+      FlowDiagnostic(BlockFlow<CONF>& theFlow)
         : flow_{theFlow}
       { }
       
@@ -618,8 +691,9 @@ namespace gear {
         }
     };
   
-  inline FlowDiagnostic
-  watch (BlockFlow& theFlow)
+  template<class CONF>
+  inline FlowDiagnostic<CONF>
+  watch (BlockFlow<CONF>& theFlow)
   {
     return FlowDiagnostic{theFlow};
   }

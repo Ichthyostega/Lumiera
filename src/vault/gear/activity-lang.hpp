@@ -54,6 +54,7 @@ namespace gear {
   
 //  using util::isnil;
 //  using std::string;
+  using BlockFlowAlloc = BlockFlow<blockFlow::RenderConfig>;
   
   
   /**
@@ -64,11 +65,11 @@ namespace gear {
    */
   class ActivityLang
     {
-      BlockFlow& mem_;
+      BlockFlowAlloc& mem_;
       
     public:
 //      explicit
-      ActivityLang (BlockFlow& memManager)
+      ActivityLang (BlockFlowAlloc& memManager)
         : mem_{memManager}
         { }
       

@@ -57,6 +57,13 @@ namespace test {
   
 //  using lib::time::FrameRate;
 //  using lib::time::Time;
+  namespace {
+    using BlockFlow = gear::BlockFlow<>;
+    using Extent = BlockFlow::Extent;
+    using Epoch  = BlockFlow::Epoch;
+    
+    const size_t EXTENT_SIZ = Extent::SIZ();
+  }
   
   
   
@@ -117,7 +124,6 @@ namespace test {
       void
       handleEpoch()
         {
-          using Extent = Allocator::Extent;
           // the raw storage Extent is a compact block
           // providing uninitialised storage typed as `vault::gear::Activity`
           
@@ -172,7 +178,7 @@ namespace test {
           CHECK (1 == gate.filledSlots());
           CHECK (gate.hasFreeSlot());
           
-          CHECK (epoch.getFillFactor() == double(gate.filledSlots()) / (Epoch::SIZ()-1));
+          CHECK (epoch.getFillFactor() == double(gate.filledSlots()) / (EXTENT_SIZ-1));
           
           // so let's eat this space up...
           for (uint i=extent.size()-2; i>1; --i)
@@ -180,14 +186,14 @@ namespace test {
           
           // one final slot is left (beyond of the EpochGate itself)
           CHECK (isSameObject (*gate.next, epoch[1]));
-          CHECK (gate.filledSlots() == Epoch::SIZ()-2);
+          CHECK (gate.filledSlots() == EXTENT_SIZ-2);
           CHECK (gate.hasFreeSlot());
 
           gate.claimNextSlot();
           // aaand the boat is full...
           CHECK (not gate.hasFreeSlot());
           CHECK (isSameObject (*gate.next, epoch[0]));
-          CHECK (gate.filledSlots() == Epoch::SIZ()-1);
+          CHECK (gate.filledSlots() == EXTENT_SIZ-1);
           CHECK (epoch.getFillFactor() == 1);
           
           // a given Epoch can be checked for relevance against a deadline
@@ -245,7 +251,7 @@ namespace test {
           
           // provoke Epoch overflow by exhausting all available storage slots
           BlockFlow::AllocatorHandle allocHandle = bFlow.until(Time{300,10});
-          for (uint i=1; i<Epoch::SIZ(); ++i)
+          for (uint i=1; i<EXTENT_SIZ; ++i)
             allocHandle.create();
           
           CHECK (allocHandle.currDeadline() == Time(400,10));
@@ -258,7 +264,7 @@ namespace test {
           CHECK (watch(bFlow).find(a4)    == "10s600ms"_expect);
 
           // fill up and exhaust this Epoch too....
-          for (uint i=1; i<Epoch::SIZ(); ++i)
+          for (uint i=1; i<EXTENT_SIZ; ++i)
             allocHandle.create();
           
           // so the handle has moved to the after next Epoch
@@ -271,7 +277,7 @@ namespace test {
           
           // now repeat the same pattern, but now towards uncharted Epochs
           allocHandle = bFlow.until(Time{900,10});
-          for (uint i=2; i<Epoch::SIZ(); ++i)
+          for (uint i=2; i<EXTENT_SIZ; ++i)
             allocHandle.create();
           
           CHECK (allocHandle.currDeadline() == Time(0,11));
