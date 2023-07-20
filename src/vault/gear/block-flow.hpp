@@ -62,10 +62,17 @@
  ** the allocation pressure of the scheduler can change intermittently, necessitating
  ** to handle excess allocations by shifting them into the next Epoch. These _overflow
  ** events_ are registered, and on clean-up the actual usage ratio of each Epoch is
- ** detected, leading to exponentially damped adjustments of the actual Epoch duration. 
+ ** detected, leading to exponentially damped adjustments of the actual Epoch duration.
+ ** The increasing of capacity on overflow and the exponential targeting of an optimal
+ ** fill factor counteract each other, typically converging after some »duty cycles«. 
  ** 
- ** @note currently this rather marks the intended memory management pattern,
- **       while the actual allocations are still performed on the heap.
+ ** @remark 7/2023 this implementation explicates the intended memory management pattern,
+ **         yet a lot more measurements and observations with real-world load patterns
+ **         seem indicated. The _characteristic parameters_ in blockFlow::DefaultConfig
+ **         expose the most effective tuning points. In its current form, the underlying
+ **         ExtendFamily allocates the Extents directly from the default heap allocator,
+ **         which does not seem to be of relevance performance-wise, since the pool of
+ **         Extents, once allocated, is re-used cyclically.
  ** @see BlockFlow_test
  ** @see SchedulerUsage_test
  ** @see extent-family.hpp underlying allocation scheme
@@ -85,7 +92,6 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/format-util.hpp"
-#include "lib/rational.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
@@ -95,34 +101,13 @@
 namespace vault{
 namespace gear {
   
-  using util::Rat;
   using util::isnil;
   using lib::time::Time;
   using lib::time::FSecs;
   using lib::time::TimeVar;
   using lib::time::Duration;
-  using lib::time::FrameRate;
   
   
-  namespace {// hard-wired parametrisation
-    const size_t EPOCH_SIZ = 100;
-    const size_t ACTIVITIES_PER_FRAME = 10;
-    const size_t FRAMES_PER_EPOCH = EPOCH_SIZ/ACTIVITIES_PER_FRAME;
-    const size_t INITIAL_FRAMES = 50;
-    const size_t INITIAL_ALLOC  = 1 + (INITIAL_FRAMES * ACTIVITIES_PER_FRAME) / EPOCH_SIZ;
-    
-    const Duration INITIAL_EPOCH_STEP{FRAMES_PER_EPOCH * FrameRate{50}.duration()};
-    
-    const double TARGET_FILL  = 0.90;               ///< aim at using this fraction of Epoch space on average (slightly below 100%)
-    const double BOOST_FACTOR = 0.85;               ///< adjust capacity by this factor on Epoch overflow/underflow events
-    const double BOOST_OVERFLOW = pow(BOOST_FACTOR, 5.0/EPOCH_SIZ);
-    const double DAMP_THRESHOLD = 0.06;             ///< do not account for (almost) empty Epochs to avoid overshooting regulation
-    const TimeValue MIN_EPOCH_STEP{1000};           ///< minimal Epoch spacing in µs to prevent stalled Epoch progression
-    const size_t AVERAGE_EPOCHS = 10;               ///< moving average len for exponential convergence towards average Epoch fill
-    
-    /** raw allocator to provide a sequence of Extents to place Activity records */
-    using Allocator = mem::ExtentFamily<Activity, EPOCH_SIZ>;
-  }
   namespace blockFlow {///< Parametrisation of Scheduler memory management scheme
     
     /**
@@ -143,7 +128,7 @@ namespace gear {
         
         /* === contextual assumptions === */
         const size_t ACTIVITIES_PER_FRAME = 10; ///< how many Activity records are typically used to implement a single frame
-        const FrameRate TYPICAL_FPS{25};        ///< frame rate to use as reference point to relate DUTY_CYCLE and default counts
+        const size_t REFERENCE_FPS  =  25;      ///< frame rate to use as reference point to relate DUTY_CYCLE and default counts
         const size_t OVERLOAD_LIMIT = 200;      ///< load factor over normal use where to assume saturation and limit throughput
       };
     
@@ -177,22 +162,22 @@ namespace gear {
             return config().EPOCH_SIZ / config().ACTIVITIES_PER_FRAME;
           }
         
-        const FrameRate
+        size_t
         initialFrameRate()  const
           {
-            return uint(config().INITIAL_STREAMS) * boost::rational<uint>{config().TYPICAL_FPS};
+            return config().INITIAL_STREAMS * config().REFERENCE_FPS;
           }
         
         Duration
         initialEpochStep()  const
           {
-            return framesPerEpoch() / initialFrameRate();
+            return Duration{TimeValue(framesPerEpoch() * TimeValue::SCALE / initialFrameRate())};
           }
         
         size_t
         initialEpochCnt()  const       ///< reserve allocation headroom for two duty cycles
           {
-            return 1 + 2*_raw(config().DUTY_CYCLE) / _raw(initialEpochStep());
+            return util::max(2*_raw(config().DUTY_CYCLE) / _raw(initialEpochStep()), 2u);
           }
         
         size_t
@@ -213,12 +198,10 @@ namespace gear {
             return pow(config().BOOST_FACTOR, 5.0/config().EPOCH_SIZ);
           }
         
-        TimeValue
+        Duration
         timeStep_cutOff()  const       ///< prevent stalling Epoch progression when reaching saturation
           {
-//            return TimeValue(_raw(initialEpochStep()) / config().OVERLOAD_LIMIT);
-//            return TimeValue(1000);
-            return TimeValue((framesPerEpoch()*TimeValue::SCALE / 50) / config().OVERLOAD_LIMIT);
+            return Duration{TimeValue(_raw(initialEpochStep()) / config().OVERLOAD_LIMIT)};
           }
       };
     
@@ -573,11 +556,12 @@ namespace gear {
       void
       markEpochOverflow()
         {
-          if (epochStep_ > Strategy::timeStep_cutOff())
-            adjustEpochStep (Strategy::boostFactorOverflow());
-//          if (epochStep_ > MIN_EPOCH_STEP)//Strategy::timeStep_cutOff())
-//            adjustEpochStep (BOOST_OVERFLOW);//Strategy::boostFactorOverflow());
+          if (epochStep_ > _cache_timeStep_cutOff)
+            adjustEpochStep (_cache_boostFactorOverflow);
         }
+      // caching access to the config saves 15-30% per allocation
+      Duration _cache_timeStep_cutOff = Strategy::timeStep_cutOff();
+      double _cache_boostFactorOverflow = Strategy::boostFactorOverflow();
       
       /**
        * On clean-up of past Epochs, the actual fill factor is checked to guess an
@@ -588,10 +572,6 @@ namespace gear {
        * an exponential moving average, nominally over #AVERAGE_EPOCHS.
        * The current epochStep_ is assumed to be such a moving average,
        * and will be updated accordingly.
-       * @todo the unclear status of the time base type hampers calculation
-       *       with fractional time values, as is necessary here. As workaround,
-       *       the argument is typed as TimeVar, which opens a calculation path
-       *       without much spurious range checks.  /////////////////////////////////////////////////////////TICKET #1259 : reorganise raw time base datatypes : need conversion path into FSecs
        */
       void
       markEpochUnderflow (TimeVar actualLen, double fillFactor)
@@ -609,7 +589,7 @@ namespace gear {
           double contribution = double(_raw(actualLen)) / _raw(epochStep_) / adjust;
           
           // Exponential MA: mean ≔ mean * (N-1)/N  + newVal/N
-          auto N = AVERAGE_EPOCHS;//Strategy::averageEpochs();  /////////////////////////////////////TODO here different length -> Algo behaves worse
+          auto N = Strategy::averageEpochs();
           double avgFactor = (contribution + N-1) / N;
           adjustEpochStep (avgFactor);
         }
