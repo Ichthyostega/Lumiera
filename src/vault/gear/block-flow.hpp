@@ -76,9 +76,7 @@
  ** @see BlockFlow_test
  ** @see SchedulerUsage_test
  ** @see extent-family.hpp underlying allocation scheme
- ** 
- ** @todo WIP-WIP-WIP 6/2023 »Playback Vertical Slice«
- ** 
+ **
  */
 
 
@@ -124,12 +122,12 @@ namespace gear {
         /* === algorithm tuning settings === */
         const double TARGET_FILL = 0.90;        ///< aim at using this fraction of Epoch space on average (slightly below 100%)
         const double BOOST_FACTOR = 0.85;       ///< adjust capacity by this factor on Epoch overflow/underflow events
-        const double DAMP_THRESHOLD = 0.06;     ///< do not account for (almost) empty Epochs to avoid overshooting regulation
+        const double DAMP_THRESHOLD = 0.08;     ///< do not account for (almost) empty Epochs to avoid overshooting regulation
         
         /* === contextual assumptions === */
         const size_t ACTIVITIES_PER_FRAME = 10; ///< how many Activity records are typically used to implement a single frame
         const size_t REFERENCE_FPS  =  25;      ///< frame rate to use as reference point to relate DUTY_CYCLE and default counts
-        const size_t OVERLOAD_LIMIT = 200;      ///< load factor over normal use where to assume saturation and limit throughput
+        const size_t OVERLOAD_LIMIT =  60;      ///< load factor over normal use where to assume saturation and limit throughput
       };
     
     /**
@@ -371,8 +369,6 @@ namespace gear {
 
     public:
       BlockFlow()
-//        : alloc_{INITIAL_ALLOC}//Strategy::initialEpochCnt()}
-//        , epochStep_{INITIAL_EPOCH_STEP}//Strategy::initialEpochStep()}
         : alloc_{Strategy::initialEpochCnt()}
         , epochStep_{Strategy::initialEpochStep()}
         { }
@@ -435,17 +431,10 @@ namespace gear {
           void*
           claimSlot() ///< EX_SANE
             {
-              bool first{true};
               while (not (epoch_ and
                           epoch_->gate().hasFreeSlot()))
-                  // Epoch overflow
-                 //  use following Epoch; possibly allocate
-                {
-                  if (first)
-                    {// each shifted allocation accounted once as overflow
-                      flow_->markEpochOverflow();
-                      first = false;
-                    }
+                  // Epoch overflow...
+                {//  shift to following Epoch; possibly allocate
                   if (not epoch_)
                     {
                       auto lastDeadline = flow_->lastEpoch().deadline();
@@ -455,6 +444,7 @@ namespace gear {
                     }
                   else
                     {
+                      flow_->markEpochOverflow();
                       ++epoch_;
                     }
                 }
@@ -565,7 +555,7 @@ namespace gear {
       
       /**
        * On clean-up of past Epochs, the actual fill factor is checked to guess an
-       * Epoch duration for optimal usage of epoch storage. Assuming that requested
+       * Epoch duration to make optimal use of epoch storage. Assuming that requested
        * Activity deadlines are evenly spaced, for a simple heuristic we can just divide
        * actual Epoch duration by the fill factor (longer Epoch => less capacity).
        * To avoid control oscillations however, it seems prudent to use damping by

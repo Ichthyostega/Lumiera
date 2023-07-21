@@ -28,10 +28,10 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "vault/gear/block-flow.hpp"
+#include "lib/test/microbenchmark.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/format-cout.hpp"
-#include "lib/test/diagnostic-output.hpp" ////////////////////////////////TODO
 #include "lib/meta/function.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include <chrono>
@@ -66,6 +66,7 @@ namespace test {
     const size_t AVERAGE_EPOCHS     = Strategy{}.averageEpochs();
     const double BOOST_OVERFLOW     = Strategy{}.boostFactorOverflow();
     const double TARGET_FILL        = Strategy{}.config().TARGET_FILL;
+    const double ACTIVITIES_P_FR    = Strategy{}.config().ACTIVITIES_PER_FRAME;
   }
   
   
@@ -221,7 +222,6 @@ namespace test {
        *        - exhaust last Epoch, causing setup of new Epoch, with reduced spacing
        *        - use this reduced spacing also for subsequently created Epochs
        *        - clean up obsoleted Epochs, based on given deadline
-       * @todo WIP 7/23 ⟶ ✔define ⟶ ✔implement
        */
       void
       placeActivity()
@@ -288,32 +288,31 @@ namespace test {
           CHECK (not allocHandle.hasFreeSlot());
           auto& a6 = bFlow.until(Time{850,10}).create();
           // Note: encountered four overflow-Events, leading to decreased Epoch spacing for new Epochs
-          CHECK (watch(bFlow).find(a6)    == "11s193ms"_expect);
-          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s|11s193ms"_expect);
+          CHECK (watch(bFlow).find(a6)    == "11s192ms"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s|11s192ms"_expect);
           
           auto& a7 = bFlow.until(Time{500,11}).create();
           // this allocation does not count as overflow, but has to expand the Epoch grid, now using the reduced Epoch spacing
-          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s|11s193ms|11s387ms|11s580ms"_expect);
-          CHECK (watch(bFlow).find(a7)    == "11s580ms"_expect);
+          CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s|11s192ms|11s384ms|11s576ms"_expect);
+          CHECK (watch(bFlow).find(a7)    == "11s576ms"_expect);
           
           // on clean-up, actual fill ratio is used to adjust to optimise Epoch length for better space usage
-          CHECK (bFlow.getEpochStep() == "≺193ms≻"_expect);
+          CHECK (bFlow.getEpochStep() == "≺192ms≻"_expect);
           bFlow.discardBefore (Time{999,10});
-          CHECK (bFlow.getEpochStep() == "≺234ms≻"_expect);
-          CHECK (watch(bFlow).allEpochs() == "11s|11s193ms|11s387ms|11s580ms"_expect);
+          CHECK (bFlow.getEpochStep() == "≺218ms≻"_expect);
+          CHECK (watch(bFlow).allEpochs() == "11s|11s192ms|11s384ms|11s576ms"_expect);
 
           // placed into the oldest Epoch still alive
           auto& a8 = bFlow.until(Time{500,10}).create();
-          CHECK (watch(bFlow).find(a8)    == "11s193ms"_expect);
+          CHECK (watch(bFlow).find(a8)    == "11s192ms"_expect);
         }
       
       
       
       /** @test load based regulation of Epoch spacing
        *        - on overflow, capacity is boosted by a fixed factor
-       *        - on clean-up, a moving average of (in hindsight) optimal length is
-       *          computed and used as the new Epoch spacing
-       * @todo WIP 7/23 ⟶ ✔define ⟶ 🔁implement
+       *        - on clean-up, a moving average of (in hindsight) optimal length
+       *          is computed and used as the new Epoch spacing
        */
       void
       adjustEpochs()
@@ -322,11 +321,7 @@ namespace test {
           CHECK (bFlow.getEpochStep() == INITIAL_EPOCH_STEP);
           
           // whenever an Epoch overflow happens, capacity is boosted by reducing the Epoch duration
-SHOW_EXPR(bFlow.getEpochStep())          
           bFlow.markEpochOverflow();
-SHOW_EXPR(bFlow.getEpochStep())
-SHOW_EXPR(INITIAL_EPOCH_STEP)
-SHOW_EXPR(INITIAL_EPOCH_STEP*BOOST_OVERFLOW)
           CHECK (bFlow.getEpochStep() == INITIAL_EPOCH_STEP * BOOST_OVERFLOW);
           bFlow.markEpochOverflow();
           CHECK (bFlow.getEpochStep() == INITIAL_EPOCH_STEP * BOOST_OVERFLOW*BOOST_OVERFLOW);
@@ -351,41 +346,48 @@ SHOW_EXPR(INITIAL_EPOCH_STEP*BOOST_OVERFLOW)
                                   };
           
           TimeVar step = bFlow.getEpochStep();
-SHOW_EXPR(bFlow.getEpochStep())
           bFlow.markEpochUnderflow (dur1, fac1);
-SHOW_EXPR(bFlow.getEpochStep())
-SHOW_EXPR(fac1/TARGET_FILL)
-SHOW_EXPR(goal1)
-SHOW_EXPR(movingAverage(step, goal1))
           CHECK (bFlow.getEpochStep() == movingAverage(step, goal1));
           
           step = bFlow.getEpochStep();
           bFlow.markEpochUnderflow (dur2, fac2);
-SHOW_EXPR(_raw(bFlow.getEpochStep()))
-SHOW_EXPR(_raw(movingAverage(step, goal2)))
           CHECK (bFlow.getEpochStep() == movingAverage(step, goal2));
         }
       
       
+      
+      
       /** @test investigate progression of epochs under realistic load
-       *        - expose the allocator to a load of 200fps for simulated 60sec
-       *        - assuming 10 Activities per frame, this means a throughput of 120000 Activities
+       *        - expose the allocator to a load of 200fps for simulated 3 Minutes
+       *        - assuming 10 Activities per frame, this means a throughput of 360000 Activities
        *        - run this load exposure under saturation for performance measurement
        *        - use a planning to deadline delay of 500ms, but with ±200ms random spread
        *        - after 250ms (500 steps), »invoke« by accessing and adding the random checksum
        *        - run a comparison of all-pre-allocated ⟷ heap allocated ⟷ Refcount ⟷ BlockFlow
-       * @todo WIP 7/23 ⟶ 🔁define ⟶ 🔁implement
+       * @remarks
+       *  This test setup can be used to investigate different load scenarios.
+       *  In the standard as defined, the BlockFlow allocator is overloaded initially;
+       *  within 5 seconds, the algorithm should have regulated the Epoch stepping down
+       *  to accommodate the load peak. As immediate response, excess allocation requests
+       *  are shifted into later Epochs. To cope with a persisting higher load, the spacing
+       *  is reduced swiftly, by growing the internal pool with additional heap allocated Extents.
+       *  In the following balancing phase, the mechanism aims at bringing back the Epoch duration
+       *  into a narrow corridor, to keep the usage quotient as close as possible to 90%
        */
       void
       storageFlow()
         {
-          const uint INSTANCES  = 120000;   // Activities to send through the test subject
-          const uint MAX_TIME   = 121000;   // Test steps to perform
-          const gavl_time_t STP = 500;      // with 2 steps per ms
-          Offset BASE_DEADLINE{FSecs{1,2}}; // base pre-roll before deadline
-          Offset SPREAD_DEAD{FSecs{2,100}}; // random spread of deadline around base
-          const uint INVOKE_LAG = 500;      // „invoke“ the Activity after 500 steps (≙ simulated 250ms)
-          const uint CLEAN_UP   = 200;      // perform clean-up every 200 steps
+          const size_t      FPS = 200;
+          const size_t TICK_P_S = FPS * ACTIVITIES_P_FR;   // Simulated throughput 200 frames per second
+          const gavl_time_t STP = Time::SCALE / TICK_P_S;  // Simulation stepping (here 2 steps per ms)
+          const gavl_time_t RUN = _raw(Time{0,0,3});       // nominal length of the simulation time axis
+          Offset BASE_DEADLINE{FSecs{1,2}};                // base pre-roll before deadline
+          Offset SPREAD_DEAD{FSecs{2,100}};                // random spread of deadline around base
+          const uint INVOKE_LAG = _raw(Time{250,0}) /STP;  // „invoke“ the Activity after simulated 250ms (≙ 500 steps)
+          const uint CLEAN_UP   = _raw(Time{100,0}) /STP;  // perform clean-up every 200 steps
+          const uint INSTANCES  = RUN /STP;                // 120000 Activity records to send through the test subject
+          const uint MAX_TIME   = INSTANCES
+                                  +INVOKE_LAG+2*CLEAN_UP;  // overall count of Test steps to perform
           
           using TestData = vector<pair<TimeVar, size_t>>;
           using Subjects = vector<reference_wrapper<Activity>>;
@@ -428,16 +430,10 @@ SHOW_EXPR(_raw(movingAverage(step, goal2)))
                             };
           
           auto benchmark = [INSTANCES](auto invokeTest)
-                            {
-                              using std::chrono::system_clock;
-                              using Dur = std::chrono::duration<double>;
-                              const double SCALE = 1e9; // Results are in ns
-                              
-                              auto start = system_clock::now();
-                              invokeTest();
-                              Dur duration = system_clock::now () - start;
-                              return duration.count()/(INSTANCES) * SCALE;
+                            {         //  does the timing measurement with result in nanoseconds
+                              return lib::test::benchmarkTime(invokeTest, INSTANCES);
                             };
+          
           
           
           /* =========== Test-Setup-1: no individual allocations/deallocations ========== */
@@ -466,7 +462,7 @@ SHOW_EXPR(_raw(movingAverage(step, goal2)))
                                                   };
                               auto invoke   = [](Activity& feedActivity)
                                                   {
-                                                    size_t check = feedActivity.data_.feed.one; 
+                                                    size_t check = feedActivity.data_.feed.one;
                                                     delete &feedActivity;
                                                     return check;
                                                   };
@@ -488,7 +484,7 @@ SHOW_EXPR(_raw(movingAverage(step, goal2)))
                                                   };
                               auto invoke   = [&, i=0](Activity& feedActivity) mutable
                                                   {
-                                                    size_t check = feedActivity.data_.feed.one; 
+                                                    size_t check = feedActivity.data_.feed.one;
                                                     manager[i].reset();
                                                     return check;
                                                   };
@@ -527,39 +523,51 @@ SHOW_EXPR(_raw(movingAverage(step, goal2)))
           
           // INVOKE Setup-1
           auto time_noAlloc = benchmark(noAlloc);
-SHOW_EXPR(time_noAlloc)
-SHOW_EXPR(sum1);
           
           // INVOKE Setup-2
           auto time_heapAlloc = benchmark(heapAlloc);
-SHOW_EXPR(time_heapAlloc)
-SHOW_EXPR(sum2);
           
           // INVOKE Setup-3
           auto time_sharedAlloc = benchmark(sharedAlloc);
-SHOW_EXPR(time_sharedAlloc)
-SHOW_EXPR(sum3);
 
-cout<<"\n\n■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□"<<endl;
+          cout<<"\n\n■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■"<<endl;
+          
           // INVOKE Setup-4
           auto time_blockFlow = benchmark(blockFlowAlloc);
-cout<<"\n\n■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□"<<endl;
-SHOW_EXPR(time_blockFlow)
-SHOW_EXPR(sum4);
-cout<<"\n"<<endl;
-SHOW_EXPR(watch(blockFlow).cntEpochs())
-SHOW_EXPR(watch(blockFlow).poolSize())
-SHOW_EXPR(watch(blockFlow).first())
-SHOW_EXPR(watch(blockFlow).last())
-SHOW_EXPR(_raw(blockFlow.getEpochStep()))
-//SHOW_EXPR(watch(blockFlow).allEpochs())
-SHOW_EXPR(blockFlow.framesPerEpoch())
-SHOW_EXPR(blockFlow.initialEpochCnt())
-//SHOW_EXPR(INITIAL_ALLOC)
-SHOW_EXPR(blockFlow.initialEpochStep())
-//SHOW_EXPR(INITIAL_EPOCH_STEP)
-SHOW_EXPR(_raw(blockFlow.timeStep_cutOff()))
-SHOW_EXPR(blockFlow.averageEpochs())
+          
+          Duration expectStep{FSecs{blockFlow.framesPerEpoch(), FPS} * 9/10};
+          
+          cout<<"\n___Microbenchmark____"
+              <<"\nnoAlloc     : "<<time_noAlloc
+              <<"\nheapAlloc   : "<<time_heapAlloc
+              <<"\nsharedAlloc : "<<time_sharedAlloc
+              <<"\nblockFlow   : "<<time_blockFlow
+              <<"\n_____________________\n"
+              <<"\ninstances.... "<<INSTANCES
+              <<"\nfps.......... "<<FPS
+              <<"\nActivities/s. "<<TICK_P_S
+              <<"\nEpoch(expect) "<<expectStep
+              <<"\nEpoch  (real) "<<blockFlow.getEpochStep()
+              <<"\ncnt Epochs... "<<watch(blockFlow).cntEpochs()
+              <<"\nalloc pool... "<<watch(blockFlow).poolSize()
+              <<endl;
+          
+          // all Activities have been read in all test cases,
+          // yielding identical checksum
+          CHECK (sum1 == sum2);
+          CHECK (sum1 == sum3);
+          CHECK (sum1 == sum4);
+          
+          // Epoch spacing regulation must be converge up to ±10ms
+          CHECK (expectStep - blockFlow.getEpochStep() < Time(10,0));
+          
+          // after the initial overload is levelled,
+          // only a small number of Epochs should be active
+          CHECK (watch(blockFlow).cntEpochs() < 8);
+          
+          // Due to Debug / Release builds, we can not check the runtime only a very rough margin.
+          // With -O3, this amortised allocation time should be way below time_sharedAlloc
+          CHECK (time_blockFlow < 800);
         }
     };
   
