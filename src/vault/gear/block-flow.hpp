@@ -138,8 +138,8 @@ namespace gear {
     struct RenderConfig
       : DefaultConfig
       {
-        const static size_t EPOCH_SIZ = 300;
-        const size_t INITIAL_STREAMS = 4;
+        const static size_t EPOCH_SIZ = 500;
+        const size_t INITIAL_STREAMS = 5;
       };
     
     /**

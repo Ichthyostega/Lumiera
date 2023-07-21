@@ -28,19 +28,17 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "vault/gear/block-flow.hpp"
-//#include "lib/time/timevalue.hpp"
+#include "lib/time/timevalue.hpp"
 //#include "lib/format-cout.hpp"
 #include "lib/test/diagnostic-output.hpp" ////////////////////////////////TODO
 #include "lib/meta/function.hpp"
 #include "lib/util.hpp"
 
-//#include <utility>
 #include <chrono>
 #include <vector>
 #include <tuple>
 
 using test::Test;
-//using std::move;
 using util::isSameObject;
 using lib::test::randTime;
 using lib::test::showType;
@@ -55,8 +53,6 @@ namespace vault{
 namespace gear {
 namespace test {
   
-//  using lib::time::FrameRate;
-//  using lib::time::Time;
   namespace { // shorthand for test parametrisation
     
     using BlockFlow = gear::BlockFlow<>;
@@ -89,8 +85,8 @@ namespace test {
         {
            simpleUsage();
            handleEpoch();
-//           placeActivity();
-//           adjustEpochs();
+           placeActivity();
+           adjustEpochs();
            storageFlow();
         }
       
@@ -131,11 +127,11 @@ namespace test {
       void
       handleEpoch()
         {
-          // the raw storage Extent is a compact block
-          // providing uninitialised storage typed as `vault::gear::Activity`
-          
           Allocator alloc;
           alloc.openNew();
+          
+          // the raw storage Extent is a compact block
+          // providing uninitialised storage typed as `vault::gear::Activity`
           Extent& extent = *alloc.begin();
           CHECK (extent.size() == Extent::SIZ::value);
           CHECK (sizeof(extent) == extent.size() * sizeof(Activity));
@@ -144,7 +140,7 @@ namespace test {
           // we can just access some slot and place data there
           extent[55].data_.feed.one = 555555555555555;
           
-          // now establish an Epoch in this storage block:
+          // now establish an Epoch placed into this storage block:
           Epoch& epoch = Epoch::setup (alloc.begin(), Time{0,10});
           
           // the underlying storage is not touched yet...
@@ -163,8 +159,9 @@ namespace test {
           CHECK (0 == gate.filledSlots());
           CHECK (0 == epoch.getFillFactor());
           
-          // the storage there is not yet used, but will be overwritten by the ctor call
+          // the storage there is not used yet....
           epoch[extent.size()-1].data_.timing.instant = Time{5,5};
+          // ....but will be overwritten by the following ctor call
           
           // allocate a new Activity into the next free slot (using a faked AllocatorHandle)
           BlockFlow::AllocatorHandle allocHandle{alloc.begin(), nullptr};
@@ -302,7 +299,7 @@ namespace test {
           // on clean-up, actual fill ratio is used to adjust to optimise Epoch length for better space usage
           CHECK (bFlow.getEpochStep() == "≺193ms≻"_expect);
           bFlow.discardBefore (Time{999,10});
-          CHECK (bFlow.getEpochStep() == "≺231ms≻"_expect);
+          CHECK (bFlow.getEpochStep() == "≺234ms≻"_expect);
           CHECK (watch(bFlow).allEpochs() == "11s|11s193ms|11s387ms|11s580ms"_expect);
 
           // placed into the oldest Epoch still alive
@@ -501,10 +498,12 @@ SHOW_EXPR(_raw(movingAverage(step, goal2)))
           
           
           /* =========== Test-Setup-4: use BlockFlow allocation scheme ========== */
+          
           size_t sum4{0};
-          auto blockFlow = [&]{
-                              BlockFlow blockFlow;
-                              BlockFlow::AllocatorHandle allocHandle = blockFlow.until(Time{400,0});
+          gear::BlockFlow<blockFlow::RenderConfig> blockFlow;
+          // Note: using the RenderConfig, which uses larger blocks and more pre-allocation
+          auto blockFlowAlloc = [&]{
+                              auto allocHandle = blockFlow.until(Time{400,0});
                               auto allocate = [&, j=0](Time t, size_t check) mutable -> Activity&
                                                   {
                                                     if (++j >= 10) // typically several Activities are allocated on the same deadline
@@ -524,17 +523,6 @@ SHOW_EXPR(_raw(movingAverage(step, goal2)))
                                                   };
                               
                               sum4 = runTest (allocate, invoke);
-SHOW_EXPR(watch(blockFlow).cntEpochs())
-SHOW_EXPR(watch(blockFlow).poolSize())
-SHOW_EXPR(watch(blockFlow).first())
-SHOW_EXPR(watch(blockFlow).last())
-SHOW_EXPR(_raw(blockFlow.getEpochStep()))
-//SHOW_EXPR(watch(blockFlow).allEpochs())
-//SHOW_EXPR(blockFlow.initialEpochCnt())
-//SHOW_EXPR(INITIAL_ALLOC)
-//SHOW_EXPR(blockFlow.initialEpochStep())
-//SHOW_EXPR(INITIAL_EPOCH_STEP)
-//SHOW_EXPR(_raw(blockFlow.timeStep_cutOff()))
                             };
           
           // INVOKE Setup-1
@@ -554,11 +542,24 @@ SHOW_EXPR(sum3);
 
 cout<<"\n\n■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□"<<endl;
           // INVOKE Setup-4
-          auto time_blockFlow = benchmark(blockFlow);
+          auto time_blockFlow = benchmark(blockFlowAlloc);
 cout<<"\n\n■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□■□"<<endl;
 SHOW_EXPR(time_blockFlow)
 SHOW_EXPR(sum4);
 cout<<"\n"<<endl;
+SHOW_EXPR(watch(blockFlow).cntEpochs())
+SHOW_EXPR(watch(blockFlow).poolSize())
+SHOW_EXPR(watch(blockFlow).first())
+SHOW_EXPR(watch(blockFlow).last())
+SHOW_EXPR(_raw(blockFlow.getEpochStep()))
+//SHOW_EXPR(watch(blockFlow).allEpochs())
+SHOW_EXPR(blockFlow.framesPerEpoch())
+SHOW_EXPR(blockFlow.initialEpochCnt())
+//SHOW_EXPR(INITIAL_ALLOC)
+SHOW_EXPR(blockFlow.initialEpochStep())
+//SHOW_EXPR(INITIAL_EPOCH_STEP)
+SHOW_EXPR(_raw(blockFlow.timeStep_cutOff()))
+SHOW_EXPR(blockFlow.averageEpochs())
         }
     };
   
