@@ -64,7 +64,7 @@ namespace fixture {
    *   - similar for the end point: if the definition is omitted, the new Segment
    *     will cover the time range until the next Segmen's start
    *   - if upper/lower boundaries can not be established, the covered range will be
-   *     expanded from Time::ANYTIME up to Time::ANYTIME in as fitting current context
+   *     expanded from Time::ANYTIME up to Time::NEVER, taking into account the current context
    *   - after start and end point have been established by the above rules, the actual
    *     splicing operation will be determined; either an existing Segment is replaced
    *     altogether, or it is trimmed to fit, or the new Segment is inserted, thereby

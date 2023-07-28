@@ -251,7 +251,7 @@ namespace gear {
               }
             // default copyable
             
-            Instant&
+            activity::Instant&
             deadline()
               {
                 return data_.condition.dead;

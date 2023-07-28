@@ -49,8 +49,9 @@
 #include "vault/common.hpp"
 #include "vault/gear/job.h"
 #include "lib/time/timevalue.hpp"
+#include "lib/meta/function.hpp"
 //#include "lib/symbol.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <string>
 
@@ -63,31 +64,62 @@ namespace gear {
 //  using util::isnil;
 //  using std::string;
   
-  /**
-   * Wrapper to hold Time values in trivially constructible union.
-   * By an unfortunate design decision, lib::time::Time values are
-   * non-copyable, which prevents placing them into POD data
-   * 
-   * @todo 7/2023 this decision should be revised  //////////////////////////////////////////////////////////TICKET #1261 : reconsider (im)mutability of time entities
-   */
-  class Instant
+  class Activity;
+  
+  
+  namespace activity { ///< special definitions for the Scheduler activity language
+    
+    /**
+     * Wrapper to hold Time values in trivially constructible union.
+     * By an unfortunate design decision, lib::time::Time values are
+     * non-copyable, which prevents placing them into POD data
+     * 
+     * @todo 7/2023 this decision should be revised  //////////////////////////////////////////////////////////TICKET #1261 : reconsider (im)mutability of time entities
+     */
+    class Instant
+      {
+        int64_t microTick_;
+        
+      public:
+        Instant()  =default;  // @suppress("Class members should be properly initialized")
+        
+        Instant(TimeValue time)
+          : microTick_{_raw(time)}
+        { }
+        
+        operator TimeVar()  const
+          {
+            return TimeValue{microTick_};
+          }
+        
+        // default copy acceptable
+      };
+    
+    
+    /**
+     * Definition to emulate a _Concept_ for the *Execution Context*.
+     * The Execution Context need to be passed to any Activity _activation;_
+     * it provides the _bindings_ for functionality defined only on a conceptual
+     * level, and provided by an opaque implementation (actually the Scheduler)
+     */
+    template<class EXE>
+    constexpr void
+    _check_is_usable_as_ExecutionContext ()
     {
-      int64_t microTick_;
+#define ASSERT_MEMBER_FUNCTOR(_EXPR_, _SIG_) \
+        static_assert (lib::meta::has_Sig<decltype(_EXPR_), _SIG_>(), \
+                       "Execution-Context: " STRINGIFY(_FUN_) " expect function with signature: " STRINGIFY(_SIG_));
       
-    public:
-      Instant()  =default;  // @suppress("Class members should be properly initialized")
       
-      Instant(TimeValue time)
-        : microTick_{_raw(time)}
-      { }
+       EXE const& ctx = std::declval<EXE>();
       
-      operator TimeVar()  const
-        {
-          return TimeValue{microTick_};
-        }
+       ASSERT_MEMBER_FUNCTOR (ctx.post, void(Activity&, EXE&));
+
       
-      // default copy acceptable
-    };
+#undef ASSERT_MEMBER_FUNCTOR
+    }
+    
+  }//(End)namespace activity
   
   
   
@@ -101,6 +133,8 @@ namespace gear {
    */
   class Activity
     {
+      using Instant = activity::Instant;
+      
     public:
       /**  All possible kinds of activities */
       enum Verb {INVOKE     ///< dispatch a JobFunctor into a worker thread
