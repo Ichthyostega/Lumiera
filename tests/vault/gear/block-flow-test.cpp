@@ -166,13 +166,13 @@ namespace test {
           
           // allocate a new Activity into the next free slot (using a faked AllocatorHandle)
           BlockFlow::AllocatorHandle allocHandle{alloc.begin(), nullptr};
-          Activity& timeStart = allocHandle.create (Activity::TIMESTART);
+          Activity& timeStart = allocHandle.create (Activity::WORKSTART);
           CHECK (isSameObject (timeStart, epoch[extent.size()-1]));
           
           // this Activity object is properly initialised (and memory was altered)
           CHECK (epoch[extent.size()-1].data_.timing.instant != Time(5,5));
           CHECK (epoch[extent.size()-1].data_.timing.instant == Time::NEVER);
-          CHECK (timeStart.verb_ == Activity::TIMESTART);
+          CHECK (timeStart.verb_ == Activity::WORKSTART);
           CHECK (timeStart.data_.timing.instant == Time::NEVER);
           CHECK (timeStart.data_.timing.quality == 0);
           

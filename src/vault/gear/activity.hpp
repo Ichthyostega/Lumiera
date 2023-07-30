@@ -64,6 +64,8 @@ namespace gear {
 //  using util::isnil;
 //  using std::string;
   
+  namespace error = lumiera::error;
+  
   class Activity;
   
   
@@ -97,6 +99,18 @@ namespace gear {
     
     
     /**
+     * Result instruction from Activity activation.
+     * These codes are used by the ActivityLang to
+     * coordinate further processing of activity chains.
+     */
+    enum Proc {PASS  ///< pass on the activation down the chain
+              ,SKIP  ///< skip rest of the Activity chain for good
+              ,KILL  ///< obliterate the complete Activity-Term and all its dependencies
+              ,HALT  ///< abandon this play / render process
+              };
+    
+    
+    /**
      * Definition to emulate a _Concept_ for the *Execution Context*.
      * The Execution Context need to be passed to any Activity _activation;_
      * it provides the _bindings_ for functionality defined only on a conceptual
@@ -104,7 +118,7 @@ namespace gear {
      */
     template<class EXE>
     constexpr void
-    _check_is_usable_as_ExecutionContext ()
+    _verify_usable_as_ExecutionContext ()
     {
 #define ASSERT_MEMBER_FUNCTOR(_EXPR_, _SIG_) \
         static_assert (lib::meta::has_Sig<decltype(_EXPR_), _SIG_>(), \
@@ -113,7 +127,10 @@ namespace gear {
       
        EXE const& ctx = std::declval<EXE>();
       
-       ASSERT_MEMBER_FUNCTOR (ctx.post, void(Activity&, EXE&));
+       ASSERT_MEMBER_FUNCTOR (ctx.post, Proc(Activity&, EXE&, Time));
+       ASSERT_MEMBER_FUNCTOR (ctx.work, void(Time, size_t));
+       ASSERT_MEMBER_FUNCTOR (ctx.done, void(Time, size_t));
+       ASSERT_MEMBER_FUNCTOR (ctx.tick, Proc(Time));
 
       
 #undef ASSERT_MEMBER_FUNCTOR
@@ -138,12 +155,12 @@ namespace gear {
     public:
       /**  All possible kinds of activities */
       enum Verb {INVOKE     ///< dispatch a JobFunctor into a worker thread
-                ,TIMESTART  ///< signal start of some processing (for timing measurement)
-                ,TIMESTOP   ///< correspondingly signal end of some processing
+                ,WORKSTART  ///< signal start of some processing and transition *grooming mode* ⟼ *work mode
+                ,WORKSTOP   ///< correspondingly signal end of some processing
                 ,NOTIFY     ///< push a message to another Activity
                 ,GATE       ///< probe window + count-down; activate next Activity, else re-schedule
-                ,FEED       ///< supply additional payload data for a preceding Activity
                 ,POST       ///< post a message providing a chain of further time-bound Activities
+                ,FEED       ///< supply additional payload data for a preceding Activity
                 ,TICK       ///< internal engine »heart beat« for internal maintenance hook(s)
                 };
       
@@ -168,7 +185,7 @@ namespace gear {
       /** Timing observation to propagate */
       struct Timing
         {
-          Instant instant;
+          Instant instant;                ///////////////////////////////////////////////////////////////////TICKET #1317 : what time do we actually need to transport here, in addition to the invocation time (added automatically)?
           size_t  quality;
         };
       
@@ -268,6 +285,15 @@ namespace gear {
         { }
       
       
+      /********************************************************//**
+       * Core Operation: _Activate_ and _perform_ this Activity.
+       * @tparam EXE concrete binding for the _execution context_
+       * @param now current _»wall clock time« (time used for scheduling)
+       */
+      template<class EXE>
+      activity::Proc activate (EXE& executionCtx, Time now);
+      
+      
     private:
       void
       setDefaultArg (Verb verb)  noexcept
@@ -277,8 +303,8 @@ namespace gear {
             case INVOKE:
               data_.invocation.time = Time::ANYTIME;
               break;
-            case TIMESTART:
-            case TIMESTOP:
+            case WORKSTART:
+            case WORKSTOP:
               data_.timing.instant = Time::NEVER;
               break;
             case GATE:
@@ -293,7 +319,110 @@ namespace gear {
               break;
             }
         }
+      
+      
+      activity::Proc
+      invokeFunktor (Time)  noexcept
+        {
+          REQUIRE (verb_ == INVOKE);
+          REQUIRE (next);
+          REQUIRE (next->verb_ == FEED);
+          REQUIRE (next->next);
+          REQUIRE (next->next->verb_ == FEED);
+          REQUIRE (data_.invocation.task);
+          
+          JobClosure& functor = static_cast<JobClosure&> (*data_.invocation.task);      /////////////////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
+          lumiera_jobParameter param;
+          param.nominalTime = _raw(Time{data_.invocation.time});
+          param.invoKey.part.a = next->data_.feed.one;
+          param.invoKey.part.b = next->data_.feed.two;
+                           //////////////////////////////////////////////////////////////////////////////////TICKET #1295 : rework Job parameters to accommodate input / output info required for rendering          
+          try {
+              functor.invokeJobOperation (param);
+            }
+          ON_EXCEPTION_RETURN (activity::HALT, "Render Job invocation");
+          //
+          return activity::PASS;
+        }
+      
+      template<class EXE>
+      activity::Proc
+      signalStart (EXE& executionCtx, Time now)
+        {
+          executionCtx.work (now, data_.timing.quality);
+          return activity::PASS;
+        }
+      
+      template<class EXE>
+      activity::Proc
+      signalStop (EXE& executionCtx, Time now)
+        {
+          executionCtx.done (now, data_.timing.quality);
+          return activity::PASS;
+        }
+      
+      template<class EXE>
+      activity::Proc
+      dispatchNotify (EXE& executionCtx, Time now)
+        {
+          UNIMPLEMENTED ("double-dispatch a notification trigger");
+          return executionCtx.post (*next, executionCtx, now);
+        }
+      
+      template<class EXE>
+      activity::Proc
+      checkGate (EXE& executionCtx, Time now)
+        {
+          UNIMPLEMENTED ("evaluate GATE condition and branch accordingly");
+          return executionCtx.post (*next, executionCtx, now);
+        }
+      
+      template<class EXE>
+      activity::Proc
+      postChain (EXE& executionCtx, Time now)
+        {
+          REQUIRE (next);
+          return executionCtx.post (*next, executionCtx, now);
+        }
+      
+      template<class EXE>
+      activity::Proc
+      doTick (EXE& executionCtx, Time now)
+        {
+          return executionCtx.tick (now);
+        }
     };
+  
+  
+  
+  
+  template<class EXE>
+  activity::Proc
+  Activity::activate (EXE& executionCtx, Time now)
+  {
+    activity::_verify_usable_as_ExecutionContext<EXE>();
+    
+    switch (verb_) {
+      case INVOKE:
+        return invokeFunktor (now);
+      case WORKSTART:
+        return signalStart (executionCtx, now);
+      case WORKSTOP:
+        return signalStop (executionCtx, now);
+      case NOTIFY:
+        return dispatchNotify (executionCtx, now);
+      case GATE:
+        return checkGate (executionCtx, now);
+      case POST:
+        return postChain (executionCtx, now);
+      case FEED:
+        return activity::PASS;
+      case TICK:
+        return doTick (executionCtx, now);
+      default:
+        NOTREACHED ("uncovered Activity verb in activation function.");
+      }
+  }
   
   
   

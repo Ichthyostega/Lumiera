@@ -141,6 +141,7 @@ struct lumiera_jobParameter_struct
     InvocationInstanceID invoKey;
                          //////////////////////////////////////////////////////////////TODO: place an additional parameter value here, or make the instanceID globally unique?
                          ////////////////////////////////////////////////////////////////////////////////////TICKET #1293 job invocation identity
+                         ////////////////////////////////////////////////////////////////////////////////////TICKET #1295 : rework Job parameters to accommodate input / output info required for rendering          
   };
 typedef struct lumiera_jobParameter_struct lumiera_jobParameter;
 typedef lumiera_jobParameter* LumieraJobParameter;
