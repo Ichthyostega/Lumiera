@@ -269,8 +269,8 @@ namespace wrapper {
           discard();
         }
     };
-    
-    
+  
+  
   /**
    * Specialisation of the ItemWrapper to deal with references,
    * as if they were pointer values. Allows the reference value
@@ -329,6 +329,29 @@ namespace wrapper {
         {
           content_ = 0;
         }
+    };
+  
+  
+  /**
+   * Fallback-specialisation for `ItemWrapper<void>`.
+   * @remark This can be relevant when ItemWrapper is used to capture function results,
+   *         yet the given function has return type `void` and used for its side-effects.
+   */
+  template<>
+  class ItemWrapper<void>
+    {
+    public:
+      ItemWrapper()
+        { }
+      
+      // using default copy and assignment
+      
+      operator bool()  const { return true; }
+      bool isValid ()  const { return true; }
+      void reset ()          { /* NOP */ }
+      
+      /** @warning does nothing */
+      void operator*() const { /* NOP */ }
     };
   
   

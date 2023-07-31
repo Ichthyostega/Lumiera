@@ -27,7 +27,8 @@
 
 #include "lib/test/run.hpp"
 #include "activity-detector.hpp"
-//#include "lib/time/timevalue.hpp"
+#include "lib/test/test-helper.hpp"
+#include "lib/time/timevalue.hpp"
 //#include "lib/format-cout.hpp"
 //#include "lib/util.hpp"
 
@@ -46,7 +47,8 @@ namespace test {
   
 //  using lib::time::FrameRate;
 //  using lib::time::Offset;
-//  using lib::time::Time;
+  using lib::time::Time;
+  using lib::time::FSecs;
   
   
   
@@ -77,7 +79,15 @@ namespace test {
       void
       simpleUsage()
         {
-          ActivityDetector spectre;
+          ActivityDetector detector("spectre");
+          
+          auto trap = detector.buildDiagnosticFun<int(double,Time)>("trap")
+                              .returning(55);
+          
+          CHECK (55 == trap (1.23, Time{FSecs{3,2}}));
+          
+          CHECK (detector == "Rec(EventLogHeader| this = ActivityDetector(spectre) ), "
+                             "Rec(call| fun = trap, this = ActivityDetector(spectre) |{1.23, 0:00:01.500})"_expect);
         }
       
       

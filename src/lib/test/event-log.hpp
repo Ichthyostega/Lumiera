@@ -290,12 +290,6 @@ namespace test{
                                    , std::forward<ARGS>(args));
         }
       
-      string
-      getID()  const
-        {
-          return log_->front().get("this");
-        }
-      
       
     public:
       explicit
@@ -314,6 +308,14 @@ namespace test{
       
       
       // standard copy operations acceptable
+      
+      
+      /// @return logID defined with the ctor to distinguish this log instance
+      string
+      getID()  const
+        {
+          return log_->front().get("this");
+        }
       
       
       /** Merge this log into another log, forming a combined log

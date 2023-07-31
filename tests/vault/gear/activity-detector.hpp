@@ -46,6 +46,8 @@
 
 #include "vault/common.hpp"
 //#include "lib/test/test-helper.hpp"
+#include "lib/test/event-log.hpp"
+
 //#include "steam/play/dummy-play-connection.hpp"
 //#include "steam/fixture/node-graph-attachment.hpp"
 //#include "steam/fixture/segmentation.hpp"
@@ -58,10 +60,16 @@
 //#include "lib/time/timevalue.hpp"
 //#include "lib/diff/gen-node.hpp"
 //#include "lib/linked-elements.hpp"
+#include "lib/meta/variadic-helper.hpp"
+#include "lib/wrapper.hpp"
+#include "lib/format-util.hpp"
 //#include "lib/itertools.hpp"
 //#include "lib/depend.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
+#include <functional>
+#include <utility>
+#include <string>
 //#include <tuple>
 //#include <map>
 
@@ -70,19 +78,36 @@ namespace vault{
 namespace gear {
 namespace test {
   
+  using std::string;
 //  using std::make_tuple;
 //  using lib::diff::GenNode;
 //  using lib::diff::MakeRec;
 //  using lib::time::TimeValue;
 //  using lib::time::Time;
 //  using lib::HashVal;
-//  using util::isnil;
+  using util::isnil;
 //  using util::isSameObject;
 //  using fixture::Segmentation;
 //  using vault::RealClock;
 //  using vault::gear::Job;
 //  using vault::gear::JobClosure;
   
+  namespace {
+    template<template<typename...> class X, typename...ARGS>
+    struct _RebindTypeSeq
+      {
+        using Type = X<ARGS...>;
+      };
+    
+    template<template<typename...> class X
+            ,template<typename...> class U
+            ,typename...ARGS>
+    struct _RebindTypeSeq<X, U<ARGS...>>
+      {
+        using Type = X<ARGS...>;
+      };
+    
+  }
   
   
   /**
@@ -92,14 +117,84 @@ namespace test {
   class ActivityDetector
     : util::NonCopyable
     {
-      void* zombiePoolFactor_;
+      using EventLog = lib::test::EventLog;
+      
+      EventLog eventLog_;
+      
+      /**
+       * A Mock functor, logging all invocations into the EventLog
+       */
+      template<typename RET, typename...ARGS>
+      class DiagnosticFun
+        {
+          using RetVal   = lib::wrapper::ItemWrapper<RET>;
+          
+          string id_;
+          EventLog* log_;
+          RetVal retVal_;
+          
+        public:
+          DiagnosticFun (string id, EventLog& masterLog)
+            : id_{id}
+            , log_{&masterLog}
+            , retVal_{}
+            { }
+          
+          /** prepare a response value to return from the mock invocation */
+          DiagnosticFun&&
+          returning (RET&& riggedResponse)
+            {
+              retVal_ = std::forward<RET> (riggedResponse);
+              return std::move (*this);
+            }
+          
+          /** mock function call operator: logs all invocations */
+          RET
+          operator() (ARGS const& ...args)
+            {
+              log_->call (log_->getID(), id_, args...);
+              return *retVal_;
+            }
+        };
+      
       
     public:
-      /* == walking deadline implementation == */
-      
-      ActivityDetector()
-        : zombiePoolFactor_{}
+      ActivityDetector(string id)
+        : eventLog_{"ActivityDetector" + (isnil (id)? string{}: "("+id+")")}
         { }
+      
+      operator string()  const
+        {
+          return util::join (eventLog_);
+        }
+      
+      void
+      clear(string newID)
+        {
+          if (isnil (newID))
+            eventLog_.clear();
+          else
+            eventLog_.clear (newID);
+        }
+      
+      /**
+       * Generic testing helper: build a λ-mock, logging all invocations
+       * @tparam SIG signature of the functor to be generated
+       * @param  id  human readable ID, to designate invocations in the log
+       * @return a function object with signature #SIG
+       */
+      template<typename SIG>
+      auto
+      buildDiagnosticFun (string id)
+        {
+          using Ret = typename lib::meta::_Fun<SIG>::Ret;
+          using Args = typename lib::meta::_Fun<SIG>::Args;
+          using ArgsX = typename lib::meta::StripNullType<Args>::Seq;    ////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic
+          using SigTypes = typename lib::meta::Prepend<Ret, ArgsX>::Seq;
+          using Functor  = typename _RebindTypeSeq<DiagnosticFun, SigTypes>::Type;
+          
+          return Functor{id, eventLog_};
+        }
       
     private:
     };

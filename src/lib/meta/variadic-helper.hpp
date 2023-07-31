@@ -70,7 +70,7 @@ namespace meta {
    *    prior to C++11. Unfortunately these trailing NullType
    *    entries do not play well with other variadic defs.
    * @deprecated when we switch our primary type sequence type
-   *    to variadic parameters, this type will be obsoleted.
+   *    to variadic parameters, this type will be obsoleted.             ////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic
    */
   template<typename...TYPES>
   struct TySeq
@@ -99,7 +99,7 @@ namespace meta {
    * template definitions.
    * @note the result type is a TySec, to keep it apart from our
    *    legacy (non-variadic) lib::meta::Types
-   * @deprecated necessary for the transition to variadic sequences
+   * @deprecated necessary for the transition to variadic sequences      ////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic
    */
   template<typename SEQ>
   struct StripNullType;
