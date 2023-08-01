@@ -67,7 +67,8 @@ namespace test {
         {
           simpleUsage();
           
-          verifyDummyFuncttor();
+          verifyMockInvocation();
+          verifyDummyJobFunctor();
           detect_activation();
           detect_gate();
         }
@@ -92,11 +93,40 @@ namespace test {
       
       
       
+      /** @test verify the setup and detection of instrumented invocations
+       * @todo WIP 7/23 ⟶ define ⟶ implement
+       */
+      void
+      verifyMockInvocation()
+        {
+          ActivityDetector detector;
+          auto fun = detector.buildDiagnosticFun<void(uint)>("funny");
+          uint rnd = rand() % 10000;
+          
+          ++detector;
+          CHECK (1 == detector.currSeq());
+          CHECK (not detector.verifyInvocation ("funny"));
+          
+          detector.markSequence();
+          fun(rnd);
+          detector.markSequence();
+          CHECK (detector.verifyInvocation ("funny"));
+          CHECK (detector.verifyInvocation ("funny", rnd));
+          CHECK (detector.verifyInvocation ("funny", Seq(1)));
+          CHECK (detector.verifyInvocation ("funny", Seq(1), rnd));
+          CHECK (not detector.verifyInvocation ("bunny"));
+          CHECK (not detector.verifyInvocation ("funny", -rnd));
+          CHECK (not detector.verifyInvocation ("funny", Seq(5)));
+          CHECK (not detector.verifyInvocation ("funny", rnd, Seq(1)));
+        }
+      
+      
+      
       /** @test TODO diagnostic setup to detect a JobFunctor activation
        * @todo WIP 7/23 ⟶ define ⟶ implement
        */
       void
-      verifyDummyFuncttor()
+      verifyDummyJobFunctor()
         {
         }
       

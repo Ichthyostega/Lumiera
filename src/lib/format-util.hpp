@@ -215,5 +215,14 @@ namespace util {
   }
   
   
+  /** shortcut: List in parentheses, separated by comma, using temporary vector */
+  template<typename...ARGS>
+  inline string
+  joinArgList (ARGS const& ...args)
+  {
+    return "("+join (stringify<std::vector<string>> (args...))+")";
+  }
+  
+  
 } // namespace util
 #endif /*LIB_FORMAT_UTIL_H*/

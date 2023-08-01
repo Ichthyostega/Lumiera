@@ -62,6 +62,7 @@
 //#include "lib/linked-elements.hpp"
 #include "lib/meta/variadic-helper.hpp"
 #include "lib/wrapper.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
 //#include "lib/itertools.hpp"
 //#include "lib/depend.hpp"
@@ -94,6 +95,45 @@ namespace test {
 //  using vault::gear::JobClosure;
   
   
+  /** Marker for invocation sequence */
+  class Seq
+    {
+      uint step_;
+      
+    public:
+      Seq (uint start =0)
+        : step_{start}
+        { }
+      
+      operator uint()  const
+        {
+          return step_;
+        }
+      operator string()  const
+        {
+          return util::toString (step_);
+        }
+      
+      uint
+      operator++()
+        {
+          ++step_;
+          return step_;
+        }
+      
+      bool
+      operator== (Seq const& o)
+        {
+          return step_ == o.step_;
+        }
+    };
+  
+  
+  namespace {// Event markers
+    const string MARK_INC{"Inc"};
+    const string MARK_SEQ{"Seq"};
+  }
+  
   
   /**
    * Diagnostic context to record and evaluate activations within the Scheduler.
@@ -105,6 +145,7 @@ namespace test {
       using EventLog = lib::test::EventLog;
       
       EventLog eventLog_;
+      Seq invocationSeq_;
       
       /**
        * A Mock functor, logging all invocations into the EventLog
@@ -126,10 +167,11 @@ namespace test {
             { }
           
           /** prepare a response value to return from the mock invocation */
+          template<typename VAL>
           DiagnosticFun&&
-          returning (RET&& riggedResponse)
+          returning (VAL&& riggedResponse)
             {
-              retVal_ = std::forward<RET> (riggedResponse);
+              retVal_ = std::forward<VAL> (riggedResponse);
               return std::move (*this);
             }
           
@@ -144,8 +186,9 @@ namespace test {
       
       
     public:
-      ActivityDetector(string id)
+      ActivityDetector(string id ="")
         : eventLog_{"ActivityDetector" + (isnil (id)? string{}: "("+id+")")}
+        , invocationSeq_{0}
         { }
       
       operator string()  const
@@ -161,6 +204,28 @@ namespace test {
           else
             eventLog_.clear (newID);
         }
+      
+      uint
+      operator++()
+        {
+          ++invocationSeq_;
+          eventLog_.event (MARK_INC, invocationSeq_);
+          return invocationSeq_;
+        }
+      
+      uint
+      currSeq()  const
+        {
+          return invocationSeq_;
+        }
+      
+      uint
+      markSequence()
+        {
+          eventLog_.event (MARK_SEQ, invocationSeq_);
+          return operator++();
+        }
+      
       
       /**
        * Generic testing helper: build a λ-mock, logging all invocations
@@ -180,6 +245,36 @@ namespace test {
           
           return Functor{id, eventLog_};
         }
+      
+      template<typename...ARGS>
+      bool
+      verifyInvocation (string fun, Seq const& seq, ARGS const& ...args)
+        {
+          bool valid = eventLog_.verifyEvent(seq).id(MARK_INC)
+                                .beforeCall(fun).arg(args...)
+                                .beforeEvent(seq).id(MARK_SEQ);
+          if (not valid)
+            {
+              cerr << "FAIL___Function_invocation___________"
+                   << "\nfunction:"<<fun<<util::joinArgList (args...)
+                   << "\nsequence:"<<seq
+                   << "\n_______Event-Log_____________________\n"
+                   << util::join(eventLog_, "\n")
+                   << "\n───────╼━━━━━━━━╾────────────────────"
+                   << endl;
+            }
+          return valid;
+        }
+      
+      template<typename...ARGS>
+      bool
+      verifyInvocation (string fun, ARGS const& ...args)
+        {
+          Seq currentEventSeq = invocationSeq_;
+          markSequence();       // NOTE: incrementing here
+          return verifyInvocation (fun, currentEventSeq, args...);
+        }
+      
       
     private:
     };
