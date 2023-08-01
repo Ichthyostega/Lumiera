@@ -117,10 +117,10 @@ namespace test {
       void
       check_tuple_from_Typelist()
         {
-          typedef Types1::List L1; // starting from an existing Typelist...
+          using L1 = Types1::List;          // ... start from existing Typelist...
           
-          typedef Tuple<L1> T_L1;           // derive a tuple type from this typelist
-          typedef RebindTySeq<T_L1>::Seq Seq1;
+          using T_L1 = Tuple<L1>;           // derive a tuple type from this typelist
+          using Seq1 = RebindTupleTypes<T_L1>::Seq;
                                             // extract the underlying type sequence
           DISPLAY (T_L1);
           DISPLAY (Seq1);

@@ -85,6 +85,7 @@ namespace test {
 //  using lib::time::TimeValue;
 //  using lib::time::Time;
 //  using lib::HashVal;
+  using lib::meta::RebindVariadic;
   using util::isnil;
 //  using util::isSameObject;
 //  using fixture::Segmentation;
@@ -92,22 +93,6 @@ namespace test {
 //  using vault::gear::Job;
 //  using vault::gear::JobClosure;
   
-  namespace {
-    template<template<typename...> class X, typename...ARGS>
-    struct _RebindTypeSeq
-      {
-        using Type = X<ARGS...>;
-      };
-    
-    template<template<typename...> class X
-            ,template<typename...> class U
-            ,typename...ARGS>
-    struct _RebindTypeSeq<X, U<ARGS...>>
-      {
-        using Type = X<ARGS...>;
-      };
-    
-  }
   
   
   /**
@@ -191,7 +176,7 @@ namespace test {
           using Args = typename lib::meta::_Fun<SIG>::Args;
           using ArgsX = typename lib::meta::StripNullType<Args>::Seq;    ////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic
           using SigTypes = typename lib::meta::Prepend<Ret, ArgsX>::Seq;
-          using Functor  = typename _RebindTypeSeq<DiagnosticFun, SigTypes>::Type;
+          using Functor  = typename RebindVariadic<DiagnosticFun, SigTypes>::Type;
           
           return Functor{id, eventLog_};
         }

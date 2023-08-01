@@ -60,6 +60,7 @@
 namespace lib {
 namespace meta {
   
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND -- to be obsoleted
   /**
    * temporary workaround:
    * alternative definition of "type sequence",
@@ -117,6 +118,7 @@ namespace meta {
     {
       using Seq = TySeq<>;  // NOTE: this causes the result to be a TySeq
     };
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND(End) -- to be obsoleted
   
   
   
@@ -142,6 +144,10 @@ namespace meta {
   
   
   
+  
+  
+  
+  /* ==== Build Variadic Sequences ==== **/
   
   
   /** Hold a sequence of index numbers as template parameters */
@@ -230,7 +236,7 @@ namespace meta {
   template<typename...TYPES>
   struct BuildIdxIter<Types<TYPES...>>
     {
-      /////TODO as long as Types is not variadic (#987), we need to strip NullType here (instead of just using sizeof...(TYPES)
+      ///////////////////////TICKET #987 : since Types<T...> is not variadic, need to strip NullType here (instead of just using sizeof...(TYPES)
       enum {SIZ = lib::meta::count<typename Types<TYPES...>::List>::value };
       using Builder = BuildIndexSeq<SIZ>;
       
@@ -249,6 +255,34 @@ namespace meta {
       template<size_t c>
       using After = typename Builder::template After<c>;
     };
+  
+  
+  
+  
+  
+  /* ==== Rebinding Variadic Arguments ==== **/
+  
+  /**
+   * Metaprogramming helper to transfer variadic arguments.
+   * - builds a new type instantiation from the Template \a X
+   * - possibly picks up the variadic argument pack from a given
+   *   source template `U<ARGS....>`
+   * @tparam X a variadic template
+   */
+  template<template<typename...> class X, typename...ARGS>
+  struct RebindVariadic
+    {
+      using Type = X<ARGS...>;
+    };
+  
+  template<template<typename...> class X
+          ,template<typename...> class U
+          ,typename...ARGS>
+  struct RebindVariadic<X, U<ARGS...>>
+    {
+      using Type = X<ARGS...>;
+    };
+  
   
   
   
