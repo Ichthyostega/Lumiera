@@ -111,6 +111,35 @@ namespace gear {
     
     
     /**
+     * Extension point to invoke a callback from Activity activation
+     * @remark referred from the Activity::Verb::HOOK
+     * @see ActivityDetector primary usage for testing
+     */
+    class Hook
+      {
+      public:
+        virtual ~Hook();     ///< this is an interface
+        
+        /**
+         * Callback on activation of the corresponding HOOK-Activity.
+         * @param thisHook     the Activity record wired to this hook
+         * @param executionCtx opaque pointer to the actual execution context
+         * @param now          current »wall-clock-time« as used by the Scheduler
+         * @return decision how to proceed with the activation
+         * @remark the intended use is to rig this callback based on additional knowledge
+         *         regarding the usage context. Through \a thisHook, the follow-up chain
+         *         is accessible, and an additional payload data field (`size_t`). Since
+         *         the execution context is a _concept,_ it is necessary to know the actual
+         *         type of the concrete execution context and cast down in the implementation.
+         *         This mechanism is used especially for detecting expected test invocations. 
+         */
+        virtual Proc activation ( Activity& thisHook
+                                , void* executionCtx
+                                , Time now)            =0;
+      };
+    
+    
+    /**
      * Definition to emulate a _Concept_ for the *Execution Context*.
      * The Execution Context need to be passed to any Activity _activation;_
      * it provides the _bindings_ for functionality defined only on a conceptual
@@ -161,6 +190,7 @@ namespace gear {
                 ,GATE       ///< probe window + count-down; activate next Activity, else re-schedule
                 ,POST       ///< post a message providing a chain of further time-bound Activities
                 ,FEED       ///< supply additional payload data for a preceding Activity
+                ,HOOK       ///< invoke an _extension point_ through the activity::Hook interface
                 ,TICK       ///< internal engine »heart beat« for internal maintenance hook(s)
                 };
       
@@ -187,6 +217,13 @@ namespace gear {
         {
           Instant instant;                ///////////////////////////////////////////////////////////////////TICKET #1317 : what time do we actually need to transport here, in addition to the invocation time (added automatically)?
           size_t  quality;
+        };
+      
+      /** Extension point to invoke */
+      struct Callback
+        {
+          activity::Hook* hook;
+          size_t  arg;
         };
       
       /** Access gate condition to evaluate */
@@ -223,6 +260,7 @@ namespace gear {
         {
                 Feed feed;
               Timing timing;
+            Callback callback;
            Condition condition;
           TimeWindow timeWindow;
           Invocation invocation;
@@ -249,6 +287,14 @@ namespace gear {
         {
           data_.feed.one = o1;
           data_.feed.two = o2;
+        }
+      
+      Activity (JobFunctor& job, Time nominalTime, Activity& feed)  noexcept
+        : Activity{INVOKE}
+        {
+          data_.invocation.task = &job;
+          data_.invocation.time = nominalTime;
+          next = &feed;
         }
       
       explicit
@@ -278,6 +324,13 @@ namespace gear {
         , next{followUp}
         {
           data_.timeWindow = {start,after};
+        }
+      
+      Activity (activity::Hook& callback, size_t arg)  noexcept
+        : Activity{HOOK}
+        {
+          data_.callback.hook = &callback;
+          data_.callback.arg = arg;
         }
       
       Activity()  noexcept
@@ -387,6 +440,14 @@ namespace gear {
       
       template<class EXE>
       activity::Proc
+      callHook (EXE& executionCtx, Time now)
+        {
+          return data_.callback.hook? data_.callback.hook->activation(*this, &executionCtx, now)
+                                    : activity::PASS;
+        }
+      
+      template<class EXE>
+      activity::Proc
       doTick (EXE& executionCtx, Time now)
         {
           return executionCtx.tick (now);
@@ -417,6 +478,8 @@ namespace gear {
         return postChain (executionCtx, now);
       case FEED:
         return activity::PASS;
+      case HOOK:
+        return callHook (executionCtx, now);
       case TICK:
         return doTick (executionCtx, now);
       default:

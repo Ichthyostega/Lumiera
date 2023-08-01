@@ -52,7 +52,10 @@ namespace gear {
     
   } // internal details
   
-  
+  namespace activity {
+    
+    Hook::~Hook() { } // emit VTable here...
+  }
   
 //  NA::~NA() { }
   
