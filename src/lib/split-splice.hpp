@@ -76,6 +76,7 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/nocopy.hpp"
 
+#include <optional>
 #include <array>
 
 

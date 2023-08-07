@@ -38,6 +38,7 @@
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
+#include <optional>
 #include <utility>
 #include <string>
 #include <list>

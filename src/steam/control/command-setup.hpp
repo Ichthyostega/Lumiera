@@ -133,7 +133,7 @@ namespace control {
    * and immediately be assigned by a lambda, whose body is what follows the macro invocation
    */
   #define COMMAND_DEFINITION(_NAME_) \
-    CommandSetup _NAME_ = CommandSetup{STRINGIFY(_NAME_)}  = [&](CommandDef& def)
+    CommandSetup _NAME_ = CommandSetup{STRINGIFY(_NAME_)}  = [](CommandDef& def)
   
   
   
