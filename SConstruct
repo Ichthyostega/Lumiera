@@ -59,15 +59,17 @@ env.Clean ('build', [ 'src/pre.gch' ])
 ### === Alias Targets === ###########################################
 
 # pick up the targets defined by the sub SConscripts
-Import('lumiera plugins tools gui testsuite doxydoc')
+#Import('lumiera plugins tools gui testsuite doxydoc')
+Import('lumiera plugins tools gui testsuite')
 
 build = env.Alias('build', lumiera + plugins + tools + gui)
 env.Default('build')
 # SCons default target
 
 
-env.Alias ('all', build + testsuite + doxydoc)
-env.Alias ('doc', doxydoc)
+#env.Alias ('all', build + testsuite + doxydoc)
+env.Alias ('all', build + testsuite)
+#env.Alias ('doc', doxydoc)
 env.Alias ('none')
 
 env.Alias('install', gui)

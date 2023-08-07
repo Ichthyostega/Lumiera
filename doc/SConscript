@@ -7,10 +7,10 @@
 Import('env')
 
 
-doxydoc = env.Doxygen('devel/Doxyfile')
+#doxydoc = env.Doxygen('devel/Doxyfile')
 
 #  env.Install(dir = '$DESTDIR/share/doc/lumiera$VERSION/devel', source=documentation)
-env.Clean (doxydoc, doxydoc + ['devel/,doxylog','devel/warnings.txt'])
+#env.Clean (doxydoc, doxydoc + ['devel/,doxylog','devel/warnings.txt'])
 
 
-Export('doxydoc')
+#Export('doxydoc')

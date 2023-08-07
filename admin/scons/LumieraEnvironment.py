@@ -38,8 +38,8 @@ class LumieraEnvironment(Environment):
         Environment.__init__ (self, **kw)
         self.path = Record (extract_localPathDefs(buildSetup))    # e.g. buildExe -> env.path.buildExe
         self.libInfo = {}
-        self.Tool("BuilderGCH")
-        self.Tool("BuilderDoxygen")
+        #self.Tool("BuilderGCH")
+        #self.Tool("BuilderDoxygen")
         self.Tool("ToolDistCC")
         self.Tool("ToolCCache")
         register_LumieraResourceBuilder(self)

@@ -34,12 +34,13 @@ def DoxyfileParse(file_contents):
     
     import shlex
     lex = shlex.shlex(instream = file_contents, posix = True)
+    #lex = shlex.shlex(instream = file_contents, infile = file_contents, posix = True)
     lex.wordchars += "*+./-:"
     lex.whitespace = lex.whitespace.replace("\n", "")
     lex.escape = ""
     
     lineno = lex.lineno
-    token = lex.get_token()
+    token = lex.read_token()
     key = token   # the first token should be a key
     last_token = ""
     key_token = False
