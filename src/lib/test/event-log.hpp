@@ -415,6 +415,18 @@ namespace test{
       EventLog& destroy (string text);
       
       
+      /** Qualify the latest entry: set further attribute(s) */
+      template<typename X, typename...ARGS>
+      EventLog&
+      addAttrib (string const& key, X&& initialiser, ARGS&& ...args)
+        {
+          REQUIRE (not isnil (*log_));
+          mutateInPlace (log_->back())
+                        .attrib(key,initialiser, std::forward<ARGS>(args)...);
+          return *this;
+        }
+      
+      
       
       
       /* ==== Iteration ==== */

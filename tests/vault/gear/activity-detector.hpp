@@ -155,12 +155,6 @@ namespace test {
       
       operator bool()  const { return _Parent::operator bool(); }
       
-      template<typename...ARGS>
-      ActivityMatch&
-      arg (ARGS const& ...args)
-        {
-          return delegate (&EventMatch::arg<ARGS...>, args...);
-        }
       
 //      EventMatch& locate (string match);
 //      EventMatch& locateMatch (string regExp);
@@ -175,7 +169,7 @@ namespace test {
 //      EventMatch& beforeMatch (string regExp);
 //      EventMatch& beforeEvent (string match);
 //      EventMatch& beforeEvent (string classifier, string match);
-      ActivityMatch& beforeCall (string match) { return delegate (&EventMatch::beforeCall, move(match)); }
+      ActivityMatch& beforeInvocation (string match) { return delegate (&EventMatch::beforeCall, move(match)); }
 //      
 //      
 //      /* query builders to find a match stepping backwards */
@@ -185,6 +179,22 @@ namespace test {
 //      EventMatch& afterEvent (string match);
 //      EventMatch& afterEvent (string classifier, string match);
 //      EventMatch& afterCall (string match);
+      
+      /** qualifier: additionally match the function arguments */
+      template<typename...ARGS>
+      ActivityMatch&
+      arg (ARGS const& ...args)
+        {
+          return delegate (&EventMatch::arg<ARGS...>, args...);
+        }
+      
+      /** qualifier: additionally require the indicated sequence number */
+      ActivityMatch&
+      seq (uint seqNr)
+        {
+          _Parent::attrib (MARK_SEQ, util::toString (seqNr));
+          return *this;
+        }
       
     private:
       template<typename...ARGS>
@@ -219,12 +229,14 @@ namespace test {
           
           string id_;
           EventLog* log_;
+          Seq const* seqNr_;
           RetVal retVal_;
           
         public:
-          DiagnosticFun (string id, EventLog& masterLog)
+          DiagnosticFun (string id, EventLog& masterLog, Seq const& seqNr)
             : id_{id}
             , log_{&masterLog}
+            , seqNr_{&seqNr}
             , retVal_{}
             { }
           
@@ -241,7 +253,8 @@ namespace test {
           RET
           operator() (ARGS const& ...args)
             {
-              log_->call (log_->getID(), id_, args...);
+              log_->call (log_->getID(), id_, args...)
+                   .addAttrib (MARK_SEQ, *seqNr_);
               return *retVal_;
             }
         };
@@ -305,41 +318,24 @@ namespace test {
           using SigTypes = typename lib::meta::Prepend<Ret, ArgsX>::Seq;
           using Functor  = typename RebindVariadic<DiagnosticFun, SigTypes>::Type;
           
-          return Functor{id, eventLog_};
+          return Functor{id, eventLog_, invocationSeq_};
         }
       
       
-      template<typename...ARGS>
-      bool
-      verifyInvocation (string fun, Seq const& seq, ARGS const& ...args)
-        {
-          bool valid = eventLog_.verifyEvent(seq).id(MARK_INC)
-                                .beforeCall(fun).arg(args...)
-                                .beforeEvent(seq).id(MARK_SEQ);
-          if (not valid)
-            {
-              cerr << "FAIL___Function_invocation___________"
-                   << "\nfunction:"<<fun<<util::joinArgList (args...)
-                   << "\nsequence:"<<seq
-                   << "\n_______Event-Log_____________________\n"
-                   << util::join(eventLog_, "\n")
-                   << "\n───────╼━━━━━━━━╾────────────────────"
-                   << endl;
-            }
-          return valid;
-        }
-      
-      template<typename...ARGS>
-      bool
-      verifyInvocation (string fun, ARGS const& ...args)
-        {
-          return verifyInvocation (fun, invocationSeq_, args...);
-        }
       
       ActivityMatch
-      verifyCall (string fun)
+      verifyInvocation (string fun)
         {
           return ActivityMatch{move (eventLog_.verifyCall(fun))};
+        }
+      
+      string
+      getLog()  const
+        {
+          return "\n_______Event-Log_____________________\n"
+               + util::join (eventLog_, "\n")
+               + "\n───────╼━━━━━━━━╾────────────────────"
+               ;
         }
       
       

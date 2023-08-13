@@ -88,7 +88,7 @@ namespace test {
           CHECK (55 == trap (1.23, Time{FSecs{3,2}}));
           
           CHECK (detector == "Rec(EventLogHeader| this = ActivityDetector(spectre) ), "
-                             "Rec(call| fun = trap, this = ActivityDetector(spectre) |{1.23, 0:00:01.500})"_expect);
+                             "Rec(call| fun = trap, this = ActivityDetector(spectre), Seq = 0 |{1.23, 0:00:01.500})"_expect);
         }
       
       
@@ -109,14 +109,16 @@ namespace test {
           
           detector.markSequence();
           fun(rnd);
-          CHECK (detector.verifyCall ("funny"));
-          CHECK (detector.verifyCall ("funny").arg(rnd));
-          CHECK (detector.verifyInvocation ("funny", Seq(1)));
-          CHECK (detector.verifyInvocation ("funny", Seq(1), rnd));
+          CHECK (detector.verifyInvocation ("funny"));
+          CHECK (detector.verifyInvocation ("funny").arg(rnd));
+          CHECK (detector.verifyInvocation ("funny").seq(2));
+          CHECK (detector.verifyInvocation ("funny").arg(rnd).seq(2));
+          CHECK (detector.verifyInvocation ("funny").seq(2).arg(rnd));
           CHECK (not detector.verifyInvocation ("bunny"));
-          CHECK (not detector.verifyInvocation ("funny", -rnd));
-          CHECK (not detector.verifyInvocation ("funny", Seq(5)));
-          CHECK (not detector.verifyInvocation ("funny", rnd, Seq(1)));
+          CHECK (not detector.verifyInvocation ("funny").arg());
+          CHECK (not detector.verifyInvocation ("funny").arg(-rnd));
+          CHECK (not detector.verifyInvocation ("funny").seq(5));
+          CHECK (not detector.verifyInvocation ("funny").arg(rnd).seq(1));
         }
       
       
