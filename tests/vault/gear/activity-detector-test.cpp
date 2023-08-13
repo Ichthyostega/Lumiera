@@ -75,7 +75,7 @@ namespace test {
       
       
       /** @test TODO demonstrate a simple usage scenario
-       * @todo WIP 7/23 ⟶ define ⟶ implement
+       * @todo WIP 7/23 🔁 define 🔁 implement
        */
       void
       simpleUsage()
@@ -94,7 +94,7 @@ namespace test {
       
       
       /** @test verify the setup and detection of instrumented invocations
-       * @todo WIP 7/23 ⟶ define ⟶ implement
+       * @todo WIP 7/23 ✔ define 🔁 implement
        */
       void
       verifyMockInvocation()
@@ -109,9 +109,8 @@ namespace test {
           
           detector.markSequence();
           fun(rnd);
-          detector.markSequence();
-          CHECK (detector.verifyInvocation ("funny"));
-          CHECK (detector.verifyInvocation ("funny", rnd));
+          CHECK (detector.verifyCall ("funny"));
+          CHECK (detector.verifyCall ("funny").arg(rnd));
           CHECK (detector.verifyInvocation ("funny", Seq(1)));
           CHECK (detector.verifyInvocation ("funny", Seq(1), rnd));
           CHECK (not detector.verifyInvocation ("bunny"));

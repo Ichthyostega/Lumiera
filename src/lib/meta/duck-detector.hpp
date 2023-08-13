@@ -92,7 +92,7 @@
  **   types or RTTI
  ** 
  ** @see util-foreach.hpp usage example
- ** @see iter-tree-explorer.hpp (example: is_StateCore<SRC>)
+ ** @see iter-explorer.hpp (example: is_StateCore<SRC>)
  ** @see duck-detector-test.cpp
  ** @see duck-detector-extension-test.cpp
  ** 

@@ -36,7 +36,7 @@
  ** # Design
  ** 
  ** The IterChainSearch component is built as a processing pipeline, based on the
- ** [Tree-Explorer framework](\ref iter-tree-explorer.hpp). This yields several benefits, but
+ ** [Iterator-Explorer framework](\ref iter-explorer.hpp). This yields several benefits, but
  ** imposes some drawbacks. Without much effort, we get an extremely flexible and configurable
  ** solution, with acceptable / moderate performance. The result automatically adapts to a huge
  ** selection of data sources; it is possible (and is even intended) to attach it on top of an
@@ -67,7 +67,7 @@
  ** 
  ** @see IterChainSearch_test
  ** @see IterCursor_test
- ** @see iter-tree-explorer.hpp
+ ** @see iter-explorer.hpp
  ** @see [usage example](\ref event-log.hpp)
  ** 
  */
@@ -106,9 +106,16 @@ namespace iter {
                 .mutableFilter();
     }
     
+    /**
+     * define the chained-search mechanism:
+     * invoking `filter.expandChildren()` adds a new layer with the _copy_ of current
+     * iteration (search) state, which is a _mutableFilter_ and can thus be augmented.
+     * @remark the `expandChildren()` invocation happens from IterChainSearch::iterNext(),
+     *         which ensures the chained layers are expanded and matched until exhaustion.
+     */
     template<class SRC>
     auto
-    buildExplorer (SRC&& dataSource)
+    buildChainExplorer (SRC&& dataSource)
     {
       return buildSearchFilter (forward<SRC> (dataSource))
                 .expand ([](auto it){ return it; });   // child iterator starts as copy of current level iterator
@@ -127,7 +134,7 @@ namespace iter {
     struct _IterChainSetup
       {
         using Filter = decltype( buildSearchFilter(std::declval<SRC>()).asIterator() );
-        using Pipeline = decltype( buildExplorer (std::declval<SRC>()) );
+        using Pipeline = decltype( buildChainExplorer (std::declval<SRC>()) );
         
         /** each step in the chain is a functor to reconfigure the underlying filter */
         using StepFunctor = std::function<void(Filter&)>;
@@ -178,7 +185,7 @@ namespace iter {
       template<class SEQ>
       explicit
       IterChainSearch (SEQ&& srcData)
-        : _Base{buildExplorer (forward<SEQ> (srcData))}
+        : _Base{buildChainExplorer (forward<SEQ> (srcData))}
         {      // mark initial pristine state
           _Base::disableFilter();
         }
@@ -222,7 +229,7 @@ namespace iter {
        * @remarks the additional chained search condition given here will be applied _after_
        *       matching all other conditions already in the filter chain. Each such condition
        *       is used to _filter_ the underlying source iterator, i.e. pull it until finding
-       *       and element to match the condition. Basically these conditions are _not_ used in
+       *       an element to match the condition. Basically these conditions are _not_ used in
        *       conjunction, but rather one after another. But since each such step in the chain
        *       is defined by a functor, which gets the previous filter configuration as argument,
        *       it is _possible_ to build a step which _extends_ or sharpens the preceding condition.
@@ -259,7 +266,7 @@ namespace iter {
         {
           addStep ([predicate{forward<FUN> (filterPredicate)}]
                    (Filter& filter)
-                     {        // manipulate current filter configuration
+                     {         // manipulate current filter configuration
                        filter.setNewFilter (predicate);
                      });
           return move(*this);

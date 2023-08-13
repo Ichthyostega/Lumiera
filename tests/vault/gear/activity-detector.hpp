@@ -88,6 +88,8 @@ namespace test {
 //  using lib::HashVal;
   using lib::meta::RebindVariadic;
   using util::isnil;
+  using std::forward;
+  using std::move;
 //  using util::isSameObject;
 //  using fixture::Segmentation;
 //  using vault::RealClock;
@@ -133,6 +135,66 @@ namespace test {
     const string MARK_INC{"Inc"};
     const string MARK_SEQ{"Seq"};
   }
+  
+  class ActivityDetector;
+  
+  
+  class ActivityMatch
+    : private lib::test::EventMatch
+    {
+      using _Parent = lib::test::EventMatch;
+      
+      ActivityMatch (lib::test::EventMatch&& matcher)
+        : _Parent{move (matcher)}
+        { }
+      
+      friend class ActivityDetector;
+      
+    public:
+      // standard copy acceptable
+      
+      operator bool()  const { return _Parent::operator bool(); }
+      
+      template<typename...ARGS>
+      ActivityMatch&
+      arg (ARGS const& ...args)
+        {
+          return delegate (&EventMatch::arg<ARGS...>, args...);
+        }
+      
+//      EventMatch& locate (string match);
+//      EventMatch& locateMatch (string regExp);
+//      EventMatch& locateEvent (string match);
+//      EventMatch& locateEvent (string classifier, string match);
+//      EventMatch& locateCall (string match);
+//      
+//      
+//      /* query builders to find a match stepping forwards */
+//      
+//      EventMatch& before (string match);
+//      EventMatch& beforeMatch (string regExp);
+//      EventMatch& beforeEvent (string match);
+//      EventMatch& beforeEvent (string classifier, string match);
+      ActivityMatch& beforeCall (string match) { return delegate (&EventMatch::beforeCall, move(match)); }
+//      
+//      
+//      /* query builders to find a match stepping backwards */
+//      
+//      EventMatch& after (string match);
+//      EventMatch& afterMatch (string regExp);
+//      EventMatch& afterEvent (string match);
+//      EventMatch& afterEvent (string classifier, string match);
+//      EventMatch& afterCall (string match);
+      
+    private:
+      template<typename...ARGS>
+      ActivityMatch&
+      delegate (_Parent& (_Parent::*fun) (ARGS...),  ARGS&& ...args)
+        {
+          return static_cast<ActivityMatch&> (
+                   (this->*fun) (forward<ARGS> (args)...));
+        }
+    };
   
   
   /**
@@ -246,6 +308,7 @@ namespace test {
           return Functor{id, eventLog_};
         }
       
+      
       template<typename...ARGS>
       bool
       verifyInvocation (string fun, Seq const& seq, ARGS const& ...args)
@@ -270,9 +333,13 @@ namespace test {
       bool
       verifyInvocation (string fun, ARGS const& ...args)
         {
-          Seq currentEventSeq = invocationSeq_;
-          markSequence();       // NOTE: incrementing here
-          return verifyInvocation (fun, currentEventSeq, args...);
+          return verifyInvocation (fun, invocationSeq_, args...);
+        }
+      
+      ActivityMatch
+      verifyCall (string fun)
+        {
+          return ActivityMatch{move (eventLog_.verifyCall(fun))};
         }
       
       

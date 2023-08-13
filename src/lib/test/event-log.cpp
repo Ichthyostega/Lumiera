@@ -37,7 +37,7 @@
  ** 
  ** @see TestEventLog_test
  ** @see IterChainSearch_test
- ** @see iter-tree-explorer.hpp
+ ** @see iter-explorer.hpp
  ** 
  */
 
@@ -97,7 +97,7 @@ namespace test{
                          or entry.getType() == "destroy"
                          or entry.getType() == "logJoin"
                          )
-                     and !isnil(entry.scope())
+                     and not isnil(entry.scope())
                      and contains (*entry.scope(), match);
                 };
     }
@@ -110,7 +110,7 @@ namespace test{
                   return (  entry.getType() == classifier
                          or (entry.hasAttribute("ID") and contains (entry.get("ID"), classifier))
                          )
-                     and !isnil(entry.scope())
+                     and not isnil(entry.scope())
                      and contains (*entry.scope(), match);
                 };
     }
@@ -221,12 +221,12 @@ namespace test{
     
     template<typename COND>
     inline void
-    attachNextSerchStep (Filter& solution, COND&& filter, Direction direction)
+    attachNextSerchStep (Filter& solution, COND&& searchCond, Direction direction)
     {
       if (CURRENT == direction)
-        solution.search (forward<COND> (filter));
+        solution.search (forward<COND> (searchCond));
       else
-        solution.addStep ([predicate{forward<COND> (filter)}, direction]
+        solution.addStep ([predicate{forward<COND> (searchCond)}, direction]
                           (auto& filter)
                             {
                               filter.reverse (BACKWARD == direction);
@@ -238,9 +238,9 @@ namespace test{
     
     template<typename COND>
     inline void
-    refineSerach (Filter& solution, COND&& additionalFilter)
+    refineSerach (Filter& solution, COND&& additionalCond)
     {
-      solution.addStep ([predicate{forward<COND> (additionalFilter)}]
+      solution.addStep ([predicate{forward<COND> (additionalCond)}]
                         (auto& filter)
                           {
                             filter.andFilter (predicate);

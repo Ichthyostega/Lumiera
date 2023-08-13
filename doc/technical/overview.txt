@@ -794,7 +794,7 @@ provided as Lambda, and finally package all together into a self contained new
 iterator (value object). This is a rather new feature [small]#(as of 2017)# and
 we still need to determine its viability, yet it proved helpful when implementing
 certain kinds of search algorithms on top of an abstracted data source exposed
-as iterator. -> 'lib/iter-tree-explorer.hpp'
+as iterator. -> 'lib/iter-explorer.hpp'
 
 
 Front-end for boost::format

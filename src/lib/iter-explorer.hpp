@@ -1674,7 +1674,7 @@ namespace lib {
    * CHECK (12 == *ii);
    * ++ii;
    * \endcode
-   * In this example, a `CountDown` _state core_ is used, as defined in iter-tree-explorer-test.cpp
+   * In this example, a `CountDown` _state core_ is used, as defined in iter-explorer-test.cpp
    */
   template<class IT>
   inline auto
