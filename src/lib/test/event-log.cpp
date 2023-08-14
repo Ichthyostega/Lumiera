@@ -35,7 +35,7 @@
  ** (non-inline) functions and package all the actual implementation
  ** code into this dedicated translation unit.
  ** 
- ** @see TestEventLog_test
+ ** @see EventLog_test
  ** @see IterChainSearch_test
  ** @see iter-explorer.hpp
  ** 
@@ -785,10 +785,9 @@ namespace test{
    * @remarks the query expression is built similar to the other queries,
    *          but the logic of evaluation is flipped: whenever we find any match
    *          the overall result (when evaluating to `bool`) will be `false`.
-   * @warning this is not an proper exhaustive negation, since the implementation
-   *          does not proper backtracking with a stack of choices. This becomes
-   *          evident, when you combine `ensureNot()` with a switch in search
-   *          direction, like e.g. using `afterXXX` at some point in the chain.
+   * @note    since the chained search involves backtracking, this should perform
+   *          an exhaustive negation, searching for a possible match until no
+   *          further search options are left.
    */
   EventMatch
   EventLog::ensureNot (string match)  const

@@ -1,5 +1,5 @@
 /*
-  TestEventLog(Test)  -  helper for event registration and verification
+  EventLog(Test)  -  helper for event registration and verification
 
   Copyright (C)         Lumiera.org
     2015,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file test-event-log-test.cpp
- ** unit test \ref TestEventLog_test
+/** @file event-log-test.cpp
+ ** unit test \ref EventLog_test
  */
 
 
@@ -58,7 +58,7 @@ namespace test{
    *         printed to STDERR
    * @see event-log.hpp
    */
-  class TestEventLog_test : public Test
+  class EventLog_test : public Test
     {
       void
       run (Arg)
@@ -384,7 +384,7 @@ namespace test{
         }
     };
   
-  LAUNCHER (TestEventLog_test, "unit common");
+  LAUNCHER (EventLog_test, "unit common");
   
   
 }}} // namespace lib::test::test

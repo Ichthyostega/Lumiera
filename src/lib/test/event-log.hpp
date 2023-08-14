@@ -69,7 +69,7 @@
  **       diagnostics. This means: the sequence of matches you see in this diagnostic
  **       output is not necessarily the last match patch, which lead to the final failure
  ** 
- ** @see TestEventLog_test
+ ** @see EventLog_test
  ** @see [usage example](\ref AbstractTangible_test)
  ** 
  */
@@ -268,7 +268,7 @@ namespace test{
    * [information records](\ref lib::Record) into a possibly shared (vector)
    * buffer in heap storage. An extended query DSL allows to write
    * assertions to cover the occurrence of events in unit tests.
-   * @see TestEventLog_test
+   * @see EventLog_test
    */
   class EventLog
     {
@@ -321,7 +321,7 @@ namespace test{
       /** Merge this log into another log, forming a combined log
        * @param otherLog target to integrate this log's contents into.
        * @return reference to the merged new log instance
-       * @see TestEventLog_test::verify_logJoining()
+       * @see EventLog_test::verify_logJoining()
        */
       EventLog& joinInto (EventLog& otherLog);
       

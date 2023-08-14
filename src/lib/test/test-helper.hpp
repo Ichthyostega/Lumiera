@@ -302,6 +302,12 @@ namespace test{
         return expected.verify (actual);
       }
       
+      friend ExpectString
+      operator+ (std::string&& l, ExpectString&& r)
+      {
+        return ExpectString{(l+r).c_str()};
+      }
+      
       bool verify (std::string const& actual)  const;
     };
   

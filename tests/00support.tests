@@ -20,14 +20,14 @@ return: 0
 END
 
 
-TEST "Helper for event registration and verification" TestEventLog_test <<END
+TEST "Helper for event registration and verification" EventLog_test <<END
 err-lit: __Log_condition_violated__
 err-lit: FAILED to match("γ")
-err: ..after HEAD TestEventLog_test.+
+err: ..after HEAD EventLog_test.+
 err-lit: __Log_condition_violated__
 err-lit: FAILED to match("α")
 err-lit: ..after match("β") @ Rec(event|{β})
-err: ..after HEAD TestEventLog_test.+
+err: ..after HEAD EventLog_test.+
 err-lit: __Log_condition_violated__
 err-lit: FAILED to match("ham")
 err-lit: ..before match("beans") @ Rec(EventLogHeader| this = baked beans )

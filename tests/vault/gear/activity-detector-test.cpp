@@ -29,7 +29,7 @@
 #include "activity-detector.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/format-cout.hpp"
+#include "lib/format-cout.hpp"
 //#include "lib/util.hpp"
 
 //#include <utility>
@@ -94,7 +94,7 @@ namespace test {
       
       
       /** @test verify the setup and detection of instrumented invocations
-       * @todo WIP 7/23 ✔ define 🔁 implement
+       * @todo WIP 7/23 ✔ define ✔ implement
        */
       void
       verifyMockInvocation()
@@ -105,20 +105,36 @@ namespace test {
           
           ++detector;
           CHECK (1 == detector.currSeq());
-          CHECK (not detector.verifyInvocation ("funny"));
+          CHECK (detector.ensureNoInvocation ("funny"));
           
           detector.markSequence();
-          fun(rnd);
+          CHECK (2 == detector.currSeq());
+          CHECK (detector.verifySeqIncrement(2));
+          
+          fun (rnd);
           CHECK (detector.verifyInvocation ("funny"));
           CHECK (detector.verifyInvocation ("funny").arg(rnd));
           CHECK (detector.verifyInvocation ("funny").seq(2));
           CHECK (detector.verifyInvocation ("funny").arg(rnd).seq(2));
           CHECK (detector.verifyInvocation ("funny").seq(2).arg(rnd));
-          CHECK (not detector.verifyInvocation ("bunny"));
-          CHECK (not detector.verifyInvocation ("funny").arg());
-          CHECK (not detector.verifyInvocation ("funny").arg(-rnd));
-          CHECK (not detector.verifyInvocation ("funny").seq(5));
-          CHECK (not detector.verifyInvocation ("funny").arg(rnd).seq(1));
+          CHECK (detector.ensureNoInvocation ("bunny"));
+          CHECK (detector.ensureNoInvocation ("funny").arg());
+          CHECK (detector.ensureNoInvocation ("funny").arg(-rnd));
+          CHECK (detector.ensureNoInvocation ("funny").seq(5));
+          CHECK (detector.ensureNoInvocation ("funny").arg(rnd).seq(1));
+          
+          detector.markSequence();
+          fun (rnd+1);
+          CHECK (detector.verifyInvocation ("funny").seq(2)
+                         .beforeSeqIncrement(3)
+                         .beforeInvocation ("funny").seq(3).arg(rnd+1));
+          
+          CHECK (detector == "Rec(EventLogHeader| this = ActivityDetector )"
+                           ", Rec(event| ID = IncSeq |{1})"
+                           ", Rec(event| ID = IncSeq |{2})"
+                           ", Rec(call| fun = funny, this = ActivityDetector, Seq = 2 |{"+util::toString(rnd)+"})"
+                           ", Rec(event| ID = IncSeq |{3})"
+                           ", Rec(call| fun = funny, this = ActivityDetector, Seq = 3 |{"+util::toString(rnd+1)+"})"_expect);
         }
       
       

@@ -132,7 +132,7 @@ namespace test {
   
   
   namespace {// Event markers
-    const string MARK_INC{"Inc"};
+    const string MARK_INC{"IncSeq"};
     const string MARK_SEQ{"Seq"};
   }
   
@@ -194,6 +194,13 @@ namespace test {
         {
           _Parent::attrib (MARK_SEQ, util::toString (seqNr));
           return *this;
+        }
+      
+      ActivityMatch&
+      beforeSeqIncrement (uint seqNr)
+        {
+          _Parent::beforeEvent(MARK_INC, util::toString(seqNr));
+          return  *this;
         }
       
     private:
@@ -297,7 +304,6 @@ namespace test {
       uint
       markSequence()
         {
-          eventLog_.event (MARK_SEQ, invocationSeq_);
           return operator++();
         }
       
@@ -329,12 +335,25 @@ namespace test {
           return ActivityMatch{move (eventLog_.verifyCall(fun))};
         }
       
-      string
-      getLog()  const
+      ActivityMatch
+      ensureNoInvocation (string fun)
         {
-          return "\n_______Event-Log_____________________\n"
+          return ActivityMatch{move (eventLog_.ensureNot(fun).locateCall(fun))};
+        }
+      
+      ActivityMatch
+      verifySeqIncrement (uint seqNr)
+        {
+          return ActivityMatch{move (eventLog_.verifyEvent(MARK_INC, util::toString(seqNr)))};
+        }
+      
+      
+      string
+      showLog()  const
+        {
+          return "\n____Event-Log___________________________\n"
                + util::join (eventLog_, "\n")
-               + "\n───────╼━━━━━━━━╾────────────────────"
+               + "\n────╼━━━━━━━━╾──────────────────────────"
                ;
         }
       
