@@ -94,7 +94,10 @@ namespace test {
       
       
       /** @test verify the setup and detection of instrumented invocations
-       * @todo WIP 7/23 ✔ define ✔ implement
+       *        - a _sequence number_ is embedded into the ActivityDetector
+       *        - this sequence number is recorded into an attribute at each invocation
+       *        - a DSL for verification is provided (based on the EventLog)
+       *        - arguments and sequence numbers can be explicitly checked
        */
       void
       verifyMockInvocation()
@@ -107,7 +110,7 @@ namespace test {
           CHECK (1 == detector.currSeq());
           CHECK (detector.ensureNoInvocation ("funny"));
           
-          detector.markSequence();
+          ++detector;
           CHECK (2 == detector.currSeq());
           CHECK (detector.verifySeqIncrement(2));
           
@@ -117,13 +120,13 @@ namespace test {
           CHECK (detector.verifyInvocation ("funny").seq(2));
           CHECK (detector.verifyInvocation ("funny").arg(rnd).seq(2));
           CHECK (detector.verifyInvocation ("funny").seq(2).arg(rnd));
-          CHECK (detector.ensureNoInvocation ("bunny"));
-          CHECK (detector.ensureNoInvocation ("funny").arg());
-          CHECK (detector.ensureNoInvocation ("funny").arg(-rnd));
-          CHECK (detector.ensureNoInvocation ("funny").seq(5));
-          CHECK (detector.ensureNoInvocation ("funny").arg(rnd).seq(1));
+          CHECK (detector.ensureNoInvocation ("bunny"));                    // wrong name
+          CHECK (detector.ensureNoInvocation ("funny").arg());              // fails since empty argument list expected
+          CHECK (detector.ensureNoInvocation ("funny").arg(rnd+5));         // expecting wrong argument
+          CHECK (detector.ensureNoInvocation ("funny").seq(5));             // expecting wrong sequence number
+          CHECK (detector.ensureNoInvocation ("funny").arg(rnd).seq(1));    // expecting correct argument, but wrong sequence
           
-          detector.markSequence();
+          ++detector;
           fun (rnd+1);
           CHECK (detector.verifyInvocation ("funny").seq(2)
                          .beforeSeqIncrement(3)

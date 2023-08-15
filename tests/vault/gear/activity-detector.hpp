@@ -31,12 +31,29 @@
  ** means of indirection and extension. As a remedy, a set of preconfigured
  ** _detector Activity records_ is provided, which drop off event log messages
  ** by side effect. These detector probes can be wired in as decorators into
- ** a otherwise valid Activity-Term, allowing to watch and verify patterns
+ ** an otherwise valid Activity-Term, allowing to watch and verify patterns
  ** of invocation -- which might even happen concurrently.
- **
- ** @todo WIP-WIP-WIP 7/2023 right now this is a rather immature attempt
- **       towards a scaffolding to propel the build-up of the scheduler.
+ ** 
+ ** # Usage
+ ** 
+ ** An ActivityDetector instance can be created in local storage to get an arsenal
+ ** of probing tools and detectors, which are internally wired to record activation
+ ** into an lib::test::EventLog embedded into the ActivityDetector instance. A
+ ** _verification DSL_ is provided, internally relying on the building blocks and
+ ** the chained-search mechanism known from the EventLog. To distinguish similar
+ ** invocations and activations, a common _sequence number_ is maintained within
+ ** the ActivityDetector instance, which can be incremented explicitly. All
+ ** relevant events also capture the current sequence number as an attribute
+ ** of the generated log record.
+ ** 
+ ** ## Observation tools
+ ** - ActivityDetector::buildDiadnosticFun(id) generates a functor object with
+ **   _arbitrary signature,_ which records any invocation and arguments.
+ **   The corresponding verification matcher is #verifyInvocation(id)
+ ** 
+ ** @todo WIP-WIP-WIP 8/2023 gradually gaining traction.
  ** @see SchedulerActivity_test
+ ** @see EventLog_test (demonstration of EventLog capbabilities)
  */
 
 
@@ -97,40 +114,6 @@ namespace test {
 //  using vault::gear::JobClosure;
   
   
-  /** Marker for invocation sequence */
-  class Seq
-    {
-      uint step_;
-      
-    public:
-      Seq (uint start =0)
-        : step_{start}
-        { }
-      
-      operator uint()  const
-        {
-          return step_;
-        }
-      operator string()  const
-        {
-          return util::toString (step_);
-        }
-      
-      uint
-      operator++()
-        {
-          ++step_;
-          return step_;
-        }
-      
-      bool
-      operator== (Seq const& o)
-        {
-          return step_ == o.step_;
-        }
-    };
-  
-  
   namespace {// Event markers
     const string MARK_INC{"IncSeq"};
     const string MARK_SEQ{"Seq"};
@@ -139,6 +122,12 @@ namespace test {
   class ActivityDetector;
   
   
+  /**
+   * @internal ongoing evaluation and match of observed activities.
+   * @remark this temporary object provides a builder API for creating
+   *         chained verifications, similar to the usage of lib::test::EventLog.
+   *         Moreover, it is convertible to `bool` to retrieve the verification result.
+   */
   class ActivityMatch
     : private lib::test::EventMatch
     {
@@ -153,6 +142,10 @@ namespace test {
     public:
       // standard copy acceptable
       
+      /** final evaluation of the verification query,
+       *  usually triggered from the unit test `CHECK()`.
+       * @note failure cause is printed to STDERR.
+       */
       operator bool()  const { return _Parent::operator bool(); }
       
       
@@ -178,7 +171,7 @@ namespace test {
 //      EventMatch& afterMatch (string regExp);
 //      EventMatch& afterEvent (string match);
 //      EventMatch& afterEvent (string classifier, string match);
-//      EventMatch& afterCall (string match);
+      ActivityMatch& afterInvocation (string match) { return delegate (&EventMatch::afterCall, move(match)); }
       
       /** qualifier: additionally match the function arguments */
       template<typename...ARGS>
@@ -196,6 +189,7 @@ namespace test {
           return *this;
         }
       
+      /** special query to match an increment of the sequence number */
       ActivityMatch&
       beforeSeqIncrement (uint seqNr)
         {
@@ -203,7 +197,13 @@ namespace test {
           return  *this;
         }
       
+      
     private:
+      /** @internal helper to delegate to the inherited matcher building blocks
+       *  @note since ActivityMatch can only be created by ActivityDetector,
+       *        we can be sure the EventMatch reference returned from these calls
+       *        is actually a reference to `*this`, and can thus be downcasted.
+       *  */
       template<typename...ARGS>
       ActivityMatch&
       delegate (_Parent& (_Parent::*fun) (ARGS...),  ARGS&& ...args)
@@ -216,7 +216,11 @@ namespace test {
   
   /**
    * Diagnostic context to record and evaluate activations within the Scheduler.
-   * @todo WIP-WIP-WIP 7/23 a new loopy hope
+   * The provided tools and detectors are wired back internally, such as to record
+   * any observations into an lib::test::EventLog instance. Thus, after performing
+   * rigged functionality, the expected activities and their order can be verified.
+   * @see ActivityDetector_test
+   * @todo WIP-WIP-WIP 8/23 gradually building the verification tools needed...
    */
   class ActivityDetector
     : util::NonCopyable
@@ -224,7 +228,7 @@ namespace test {
       using EventLog = lib::test::EventLog;
       
       EventLog eventLog_;
-      Seq invocationSeq_;
+      uint invocationSeq_;
       
       /**
        * A Mock functor, logging all invocations into the EventLog
@@ -236,14 +240,14 @@ namespace test {
           
           string id_;
           EventLog* log_;
-          Seq const* seqNr_;
+          uint const* seqNr_;
           RetVal retVal_;
           
         public:
-          DiagnosticFun (string id, EventLog& masterLog, Seq const& seqNr)
+          DiagnosticFun (string id, EventLog& masterLog, uint const& invocationSeqNr)
             : id_{id}
             , log_{&masterLog}
-            , seqNr_{&seqNr}
+            , seqNr_{&invocationSeqNr}
             , retVal_{}
             { }
           
@@ -261,7 +265,7 @@ namespace test {
           operator() (ARGS const& ...args)
             {
               log_->call (log_->getID(), id_, args...)
-                   .addAttrib (MARK_SEQ, *seqNr_);
+                   .addAttrib (MARK_SEQ, util::toString(*seqNr_));
               return *retVal_;
             }
         };
@@ -278,6 +282,15 @@ namespace test {
           return util::join (eventLog_);
         }
       
+      string
+      showLog()  const
+        {
+          return "\n____Event-Log___________________________\n"
+               + util::join (eventLog_, "\n")
+               + "\n────╼━━━━━━━━╾──────────────────────────"
+               ;
+        }
+      
       void
       clear(string newID)
         {
@@ -287,11 +300,12 @@ namespace test {
             eventLog_.clear (newID);
         }
       
+      /** increment the internal invocation sequence number */
       uint
       operator++()
         {
           ++invocationSeq_;
-          eventLog_.event (MARK_INC, invocationSeq_);
+          eventLog_.event (MARK_INC, util::toString(invocationSeq_));
           return invocationSeq_;
         }
       
@@ -299,12 +313,6 @@ namespace test {
       currSeq()  const
         {
           return invocationSeq_;
-        }
-      
-      uint
-      markSequence()
-        {
-          return operator++();
         }
       
       
@@ -345,16 +353,6 @@ namespace test {
       verifySeqIncrement (uint seqNr)
         {
           return ActivityMatch{move (eventLog_.verifyEvent(MARK_INC, util::toString(seqNr)))};
-        }
-      
-      
-      string
-      showLog()  const
-        {
-          return "\n____Event-Log___________________________\n"
-               + util::join (eventLog_, "\n")
-               + "\n────╼━━━━━━━━╾──────────────────────────"
-               ;
         }
       
       
