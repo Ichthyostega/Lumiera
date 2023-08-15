@@ -73,12 +73,14 @@
 //#include "steam/engine/job-ticket.hpp"
 #include "vault/gear/job.h"
 #include "vault/gear/activity.hpp"
+#include "vault/gear/nop-job-functor.hpp"
 //#include "vault/real-clock.hpp"
 //#include "lib/allocator-handle.hpp"
-//#include "lib/time/timevalue.hpp"
+#include "lib/time/timevalue.hpp"
 //#include "lib/diff/gen-node.hpp"
 //#include "lib/linked-elements.hpp"
 #include "lib/meta/variadic-helper.hpp"
+#include "lib/meta/function.hpp"
 #include "lib/wrapper.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
@@ -89,6 +91,7 @@
 #include <functional>
 #include <utility>
 #include <string>
+#include <deque>
 //#include <tuple>
 //#include <map>
 
@@ -101,7 +104,7 @@ namespace test {
 //  using std::make_tuple;
 //  using lib::diff::GenNode;
 //  using lib::diff::MakeRec;
-//  using lib::time::TimeValue;
+  using lib::time::TimeValue;
 //  using lib::time::Time;
 //  using lib::HashVal;
   using lib::meta::RebindVariadic;
@@ -271,6 +274,53 @@ namespace test {
             }
         };
       
+      /** @internal type rebinding helper */
+      template<typename SIG>
+      struct _DiagnosticFun
+        {
+          using Ret = typename lib::meta::_Fun<SIG>::Ret;
+          using Args = typename lib::meta::_Fun<SIG>::Args;
+          using ArgsX = typename lib::meta::StripNullType<Args>::Seq;    ////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic
+          using SigTypes = typename lib::meta::Prepend<Ret, ArgsX>::Seq;
+          
+          using Type  = typename RebindVariadic<DiagnosticFun, SigTypes>::Type;
+        };
+      
+      
+      /**
+       * A Mocked job operation to detect any actual invocation
+       */
+      class MockJobFunctor
+        : public NopJobFunctor
+        {
+        public:
+          using SIG_Diagnostic = void(TimeValue, int32_t);
+          
+        private:
+          using MockOp = typename _DiagnosticFun<SIG_Diagnostic>::Type;
+          
+          MockOp mockOperation_;
+          
+          /** rigged diagnostic implementation of job invocation
+           * @note only data relevant for diagnostics is explicitly unpacked
+           */
+          void
+          invokeJobOperation (JobParameter param)  override
+            {
+              mockOperation_(TimeValue{param.nominalTime}, param.invoKey.part.a);
+            }
+          
+        public:
+          MockJobFunctor (MockOp mockedJobOperation)
+            : mockOperation_{move (mockedJobOperation)}
+            { }
+        };
+      
+      
+      /* ===== Maintain throw-away mock instances ===== */
+      
+      std::deque<MockJobFunctor> mockOps_{};
+      
       
     public:
       ActivityDetector(string id ="")
@@ -327,19 +377,15 @@ namespace test {
       auto
       buildDiagnosticFun (string id)
         {
-          using Ret = typename lib::meta::_Fun<SIG>::Ret;
-          using Args = typename lib::meta::_Fun<SIG>::Args;
-          using ArgsX = typename lib::meta::StripNullType<Args>::Seq;    ////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic
-          using SigTypes = typename lib::meta::Prepend<Ret, ArgsX>::Seq;
-          using Functor  = typename RebindVariadic<DiagnosticFun, SigTypes>::Type;
-          
+          using Functor = typename _DiagnosticFun<SIG>::Type;
           return Functor{id, eventLog_, invocationSeq_};
         }
       
-      JobFunctor&                      ///////////////////////////////////////////////////////////////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
+      JobClosure&                         ///////////////////////////////////////////////////////////////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
       buildMockJobFunctor (string id)
         {
-          UNIMPLEMENTED ("build a rigged JobFunctor");
+          return mockOps_.emplace_back (
+                   buildDiagnosticFun<MockJobFunctor::SIG_Diagnostic> (id));
         }
       
       

@@ -67,7 +67,8 @@
  **       combined with changed search direction, might lead to backtracking, which
  **       happens silently within the search engine, without printing any further
  **       diagnostics. This means: the sequence of matches you see in this diagnostic
- **       output is not necessarily the last match patch, which lead to the final failure
+ **       output is not necessarily the last match path, which leads to final failure
+ ** @warning as such EventLog is deliberately _not threadsafe_
  ** 
  ** @see EventLog_test
  ** @see [usage example](\ref AbstractTangible_test)
@@ -268,6 +269,7 @@ namespace test{
    * [information records](\ref lib::Record) into a possibly shared (vector)
    * buffer in heap storage. An extended query DSL allows to write
    * assertions to cover the occurrence of events in unit tests.
+   * @warning not threadsafe
    * @see EventLog_test
    */
   class EventLog

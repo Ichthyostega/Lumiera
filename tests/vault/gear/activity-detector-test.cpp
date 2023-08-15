@@ -143,13 +143,24 @@ namespace test {
       
       
       /** @test TODO diagnostic setup to detect a JobFunctor activation
-       * @todo WIP 7/23 🔁 define ⟶ implement
+       * @todo WIP 7/23 🔁 define 🔁 implement
        */
       void
       verifyMockJobFunctor()
         {
           ActivityDetector detector;
-          JobFunctor& mockFunctor = detector.buildMockJobFunctor ("mockJob");
+          InvocationInstanceID invoKey;
+          TimeVar nominal{FSecs{5,2}};
+          invoKey.part.a = 55;
+          
+          Job dummyJob{detector.buildMockJobFunctor ("mockJob")
+                      ,invoKey
+                      ,nominal};
+          
+          CHECK (detector.ensureNoInvocation ("mockJob"));
+          dummyJob.triggerJob();
+          CHECK (detector.verifyInvocation ("mockJob"));
+          CHECK (detector.verifyInvocation ("mockJob").arg(nominal, invoKey.part.a));
         }
       
       
