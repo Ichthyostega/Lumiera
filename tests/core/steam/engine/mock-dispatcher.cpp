@@ -89,26 +89,10 @@ namespace test  {
             invocationLog_[hash_value (parameter)] = Invocation(parameter);
           }
         
-        void
-        signalFailure (JobParameter,JobFailureReason)  override
-          {
-            NOTREACHED ("Job failure is not subject of this test");
-          }
-        
         JobKind
         getJobKind()  const override
           {
             return META_JOB;
-          }
-        
-        bool
-        verify (Time nominalJobTime, InvocationInstanceID invoKey)  const override
-          {
-            return Time::ANYTIME < nominalJobTime
-                && 0 <= invoKey.part.a
-                && invoKey.part.a < MAX_PARAM_A
-                && -MAX_PARAM_B <= invoKey.part.b
-                && invoKey.part.b < MAX_PARAM_B;
           }
         
         /**

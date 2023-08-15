@@ -82,13 +82,6 @@ namespace gear {
   }
   
   
-  void
-  Job::signalFailure (JobFailureReason reason)  const
-  {
-    myClosure(this).signalFailure (parameter, reason);
-  }
-  
-  
   /** find out about the classification of this job.
    *  Typically its not necessary for the normal scheduling of
    *  Jobs to know anything beyond the contents of the #lumiera_jobDescriptor,
@@ -97,21 +90,7 @@ namespace gear {
   JobKind
   Job::getKind()  const
   {
-    REQUIRE (isValid());
     return myClosure(this).getJobKind();
-  }
-    
-  
-  /** Render Job self verification.
-   *  performs a parameter consistency check
-   *  including a call-back to the defining JobTicket
-   */
-  bool
-  Job::isValid()  const
-  {
-    return this->jobClosure
-       and myClosure(this).verify (getNominalTime(),
-                                   getInvocationInstanceID());
   }
   
   
@@ -155,8 +134,6 @@ namespace {
   forwardInvocation (lumiera_jobDefinition& jobDef)
   {
     Job& job = static_cast<Job&> (jobDef);
-    
-    REQUIRE (job.isValid());
     return job;
   }
 }
@@ -170,13 +147,6 @@ lumiera_job_invoke  (LumieraJobDefinition jobDef)
 {
   REQUIRE (jobDef);
   forwardInvocation(*jobDef).triggerJob();
-}
-
-void
-lumiera_job_failure (LumieraJobDefinition jobDef, JobFailureReason reason)
-{
-  REQUIRE (jobDef);
-  forwardInvocation(*jobDef).signalFailure(reason);
 }
 
 size_t

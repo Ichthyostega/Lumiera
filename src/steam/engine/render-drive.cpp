@@ -51,23 +51,6 @@ namespace engine {
   }
   
   
-  void
-  RenderDrive::signalFailure (JobParameter parameter, JobFailureReason reason)
-  {
-    UNIMPLEMENTED ("what needs to be done when a planning continuation cant be invoked?");
-  }
-  
-  
-  bool
-  RenderDrive::verify (Time nominalTime, InvocationInstanceID invoKey)  const
-  {
-    UNIMPLEMENTED ("the actual meat: advance the render process");
-    return getTimings().isValid()
-        && Time::MIN < nominalTime && nominalTime < Time::MAX
-        && nominalTime == getTimings().getFrameStartAt (invoKey.frameNumber);
-  }
-  
-  
   InvocationInstanceID
   RenderDrive::buildInstanceID (HashVal seed)  const
   {

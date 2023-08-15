@@ -106,12 +106,10 @@ namespace engine {
           return META_JOB;
         }
       
-      bool verify (Time, InvocationInstanceID)      const override;
       size_t hashOfInstance (InvocationInstanceID)  const override;
       InvocationInstanceID buildInstanceID(HashVal) const override;
       
       void invokeJobOperation (JobParameter)              override;
-      void signalFailure (JobParameter, JobFailureReason) override;
       
       
       

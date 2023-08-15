@@ -71,8 +71,6 @@ namespace test  {
       verify_simple_job_properties()
         {
           MockJob job;
-          CHECK (job.isValid());
-          
           Time beforeInvocation = RealClock::now();
           job.triggerJob();
           
@@ -110,9 +108,7 @@ namespace test  {
                         : public JobClosure
                         {
                           void invokeJobOperation (JobParameter)              { /* irrelevant */ }
-                          void signalFailure (JobParameter,JobFailureReason)  { /* irrelevant */ }
                           JobKind getJobKind()  const                         { return META_JOB; }
-                          bool verify (Time, InvocationInstanceID)      const { return false; }
                           InvocationInstanceID buildInstanceID(HashVal) const { return InvocationInstanceID(); }
                           
                           size_t

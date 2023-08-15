@@ -84,15 +84,6 @@ enum JobPriority
   };
 
 
-/**
- * @todo find out about the possible kinds of failure
- */
-enum JobFailureReason
-  {
-    TIMEOUT, 
-    PREREQUISITE_NOT_AVAILABLE  ///////////////TODO
-  };
-
 typedef int64_t FrameCnt;
 
 
@@ -241,10 +232,8 @@ namespace gear {
       
       
       virtual void invokeJobOperation (JobParameter parameter)   =0;
-      virtual void signalFailure (JobParameter,JobFailureReason) =0;
       
       virtual JobKind getJobKind()                         const =0;
-      virtual bool verify (Time, InvocationInstanceID)     const =0;
       virtual HashVal hashOfInstance(InvocationInstanceID) const =0;
       virtual InvocationInstanceID buildInstanceID(HashVal)const =0;             ////////////////////////////TICKET #1293 : a size_t hash? or a LUID?
       
@@ -286,7 +275,6 @@ namespace gear {
       
       
       void triggerJob()                     const;
-      void signalFailure (JobFailureReason) const;
       
       
       Time
@@ -302,7 +290,6 @@ namespace gear {
         }
       
       JobKind getKind() const;
-      bool isValid()    const;
       
       bool usesClosure (JobClosure const&)  const;
       
@@ -338,13 +325,6 @@ extern "C" {
 /** trigger execution of a specific job,
  *  assuming availability of all prerequisites */
 void lumiera_job_invoke  (LumieraJobDefinition);
-
-/** signal inability to invoke this job
- * @todo decide what and how to communicate details of the failure
- * @remarks the purpose of this function is to allow for reliable checkpoints
- *          within the network of dependent job invocations, even after
- *          missing deadlines or aborting a sequence of jobs */
-void lumiera_job_failure (LumieraJobDefinition, JobFailureReason);
 
 /** calculate a hash value based on the Job's \em identity. */
 size_t lumiera_job_get_hash (LumieraJobDefinition);

@@ -71,7 +71,8 @@
 //#include "steam/mobject/model-port.hpp"
 //#include "steam/engine/dispatcher.hpp"
 //#include "steam/engine/job-ticket.hpp"
-//#include "vault/gear/job.h"
+#include "vault/gear/job.h"
+#include "vault/gear/activity.hpp"
 //#include "vault/real-clock.hpp"
 //#include "lib/allocator-handle.hpp"
 //#include "lib/time/timevalue.hpp"
@@ -335,6 +336,11 @@ namespace test {
           return Functor{id, eventLog_, invocationSeq_};
         }
       
+      JobFunctor&                      ///////////////////////////////////////////////////////////////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
+      buildMockJobFunctor (string id)
+        {
+          UNIMPLEMENTED ("build a rigged JobFunctor");
+        }
       
       
       ActivityMatch

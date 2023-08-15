@@ -65,12 +65,6 @@ namespace gear {
           return META_JOB;
         }
       
-      bool
-      verify (Time, InvocationInstanceID)  const
-        {
-          return true; // always happy
-        }
-      
       InvocationInstanceID
       buildInstanceID (HashVal)  const override
         {
@@ -90,12 +84,6 @@ namespace gear {
       invokeJobOperation (JobParameter)  override
         {
           /* NOP */
-        }
-      
-      void
-      signalFailure (JobParameter, JobFailureReason)  override
-        {
-          ///////////TODO do we ever need to notify anyone? can this even happen?
         }
       
     public:
