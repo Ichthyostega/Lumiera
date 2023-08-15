@@ -118,9 +118,12 @@ namespace test {
 //  using vault::gear::JobClosure;
   
   
-  namespace {// Event markers
+  namespace {// Diagnostic markers
     const string MARK_INC{"IncSeq"};
     const string MARK_SEQ{"Seq"};
+    
+    using SIG_JobDiagnostic = void(TimeValue, int32_t);
+    const size_t JOB_ARG_POS_TIME = 0;
   }
   
   class ActivityDetector;
@@ -199,6 +202,19 @@ namespace test {
         {
           _Parent::beforeEvent(MARK_INC, util::toString(seqNr));
           return  *this;
+        }
+      ActivityMatch&
+      afterSeqIncrement (uint seqNr)
+        {
+          _Parent::afterEvent(MARK_INC, util::toString(seqNr));
+          return  *this;
+        }
+      
+      /** qualifier: additionally match the nominal time argument of JobFunctor invocation */
+      ActivityMatch&
+      nominalTime (TimeValue const& time)
+        {
+          return delegate (&EventMatch::argPos<TimeValue const&>, size_t(JOB_ARG_POS_TIME), time);
         }
       
       
@@ -293,11 +309,7 @@ namespace test {
       class MockJobFunctor
         : public NopJobFunctor
         {
-        public:
-          using SIG_Diagnostic = void(TimeValue, int32_t);
-          
-        private:
-          using MockOp = typename _DiagnosticFun<SIG_Diagnostic>::Type;
+          using MockOp = typename _DiagnosticFun<SIG_JobDiagnostic>::Type;
           
           MockOp mockOperation_;
           
@@ -385,7 +397,7 @@ namespace test {
       buildMockJobFunctor (string id)
         {
           return mockOps_.emplace_back (
-                   buildDiagnosticFun<MockJobFunctor::SIG_Diagnostic> (id));
+                   buildDiagnosticFun<SIG_JobDiagnostic> (id));
         }
       
       

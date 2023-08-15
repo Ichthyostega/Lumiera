@@ -230,6 +230,14 @@ namespace test{
           return *this;
         }
       
+      /** refine filter to additionally require match on a specific positional argument */
+      template<typename ARG>
+      EventMatch&
+      argPos (size_t idx, ARG const& arg)
+        {
+          refineSerach_matchArgument (idx, util::toString(arg));
+          return *this;
+        }
       
       
       /* query builders to augment and refine the currently defined search condition*/
@@ -252,6 +260,7 @@ namespace test{
       bool foundSolution();
       void evaluateQuery (string matchSpec, Literal rel = "after");
       
+      void refineSerach_matchArgument (size_t idx, string match);
       void refineSerach_matchArguments (ArgSeq&& argSeq);
       void refineSerach_matchArgsRegExp (RExSeq&& regExpSeq, string rendered_regExps);
     };

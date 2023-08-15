@@ -236,10 +236,19 @@ namespace test{
           CHECK (log.verifyCall("fun3").arg("facts", 3.2, 1));
           CHECK (log.verifyCall("fun3").arg(string("facts"), 3.2f, int64_t(1)));
           CHECK (log.verifyCall("fun3").arg("facts", "3.2", "1"));
+          CHECK (log.verifyCall("fun3").argPos(0, "facts"));
+          CHECK (log.verifyCall("fun3").argPos(0, "act"));
+          CHECK (log.verifyCall("fun3").argPos(1, ".2"));
+          CHECK (log.verifyCall("fun3").argPos(1, 3.2));
+          CHECK (log.verifyCall("fun3").argPos(2, 1u));
           
-          CHECK (log.ensureNot("fun").arg(" facts ","3.2", "1"));
+          CHECK (log.ensureNot("fun").arg(" facts ","3.2", "1"));     // the match is on the exact textual representation...
           CHECK (log.ensureNot("fun").arg("facts",  "3.20","1"));
           CHECK (log.ensureNot("fun").arg("facts",  "3.2", "1L"));
+          CHECK (log.ensureNot("fun").argPos(1, "anything"));         // matches first invocation, which has no arguments
+          CHECK (log.ensureNot("fun3").argPos(3, 5555));              // the "fun3" invocation has only 3 arguments
+          CHECK (log.ensureNot("fun3").argPos(1, 3.3));               // the second argument is 2.3, not 3.3
+          CHECK (log.ensureNot("fun3").argPos(2, 5));                 // the last argument is 1, not 5
           
           CHECK (log.verifyCall("fun1").arg());
           CHECK (log.verifyCall("fun2").arg());

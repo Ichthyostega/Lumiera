@@ -142,15 +142,19 @@ namespace test {
       
       
       
-      /** @test TODO diagnostic setup to detect a JobFunctor activation
-       * @todo WIP 7/23 🔁 define 🔁 implement
+      /** @test diagnostic setup to detect a JobFunctor activation
+       *        - the ActivityDetector provides specifically rigged JobFunctor instances
+       *        - these capture all invocations, based on generic invocation logging
+       *        - special match qualifier to verify the job's nominal invocation time parameter
+       *        - event verification can be combined with other verifications to cover
+       *          complex invocation sequences
        */
       void
       verifyMockJobFunctor()
         {
           ActivityDetector detector;
           InvocationInstanceID invoKey;
-          TimeVar nominal{FSecs{5,2}};
+          Time nominal{FSecs{5,2}};
           invoKey.part.a = 55;
           
           Job dummyJob{detector.buildMockJobFunctor ("mockJob")
@@ -160,7 +164,17 @@ namespace test {
           CHECK (detector.ensureNoInvocation ("mockJob"));
           dummyJob.triggerJob();
           CHECK (detector.verifyInvocation ("mockJob"));
-          CHECK (detector.verifyInvocation ("mockJob").arg(nominal, invoKey.part.a));
+          CHECK (detector.verifyInvocation ("mockJob").arg(TimeValue{nominal}, invoKey.part.a));
+          CHECK (detector.verifyInvocation ("mockJob").nominalTime(nominal));
+          
+          ++detector;                                                                           // note: sequence number incremented between invocations
+          dummyJob.parameter.nominalTime += 5 * Time::SCALE;                                    // different job parameter (later nominal time point)
+          dummyJob.triggerJob();
+          
+          CHECK (detector.verifyInvocation ("mockJob").nominalTime(nominal).seq(0)
+                         .beforeInvocation ("mockJob").nominalTime(nominal + Time{FSecs{5}})    // matching first invocation and then second...
+                         .afterSeqIncrement(1)                                                  // note: searching backwards from the 2nd invocation
+                         );
         }
       
       

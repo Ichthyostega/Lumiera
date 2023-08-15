@@ -150,6 +150,17 @@ namespace test{
                 };                     //  otherwise the sizes do not match...
     }
     
+    /** refinement filter to match a specific positional argument */
+    inline auto
+    matchArgument (size_t idx, string match)
+    {
+      return [=](Entry const& entry)
+                {
+                  return idx < entry.childSize()
+                     and contains (entry.child(idx), match);
+                };
+    }
+    
     
     /** refinement filter, to cover all arguments by regular expression(s)
      * @param regExpSeq several regular expressions, which, when applied
@@ -494,7 +505,17 @@ namespace test{
   
   
   /**
-   * @internal refine filter condition additionally to match the call arguments.
+   * @internal refine filter condition additionally to match a specific positional call argument.
+   */
+  void
+  EventMatch::refineSerach_matchArgument (size_t idx, string match)
+  {
+    refineSerach (solution_, matchArgument(idx, match));
+    evaluateQuery ("match-argument(["+util::toString(idx)+"]="+match+")");
+  }
+  
+  /**
+   * @internal refine filter condition additionally to match a sequence of call arguments.
    */
   void
   EventMatch::refineSerach_matchArguments (ArgSeq&& argSeq)
