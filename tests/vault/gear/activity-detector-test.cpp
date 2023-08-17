@@ -69,6 +69,7 @@ namespace test {
           
           verifyMockInvocation();
           verifyMockJobFunctor();
+          verifyFakeExeContext();
           detect_activation();
           detect_gate();
         }
@@ -179,8 +180,26 @@ namespace test {
       
       
       
+      /** @test faked execution context to perform Activity activation
+       * @todo WIP 8/23 🔁 define ⟶ implement
+       */
+      void
+      verifyFakeExeContext()
+        {
+          ActivityDetector detector;
+          auto& ctx = detector.executionCtx;
+          // an otherwise opaque object fulfilling the "Concept"
+          activity::_verify_usable_as_ExecutionContext<decltype(detector.executionCtx)>();
+          
+          Time t = lib::test::randTime();
+          
+          CHECK (activity::PASS == ctx.tick(t));
+          cout<<detector.showLog()<<endl;
+        }
+      
+      
       /** @test TODO diagnostic setup to detect Activity activation and propagation
-       * @todo WIP 7/23 ⟶ define ⟶ implement
+       * @todo WIP 8/23 🔁 define ⟶ implement
        */
       void
       detect_activation()

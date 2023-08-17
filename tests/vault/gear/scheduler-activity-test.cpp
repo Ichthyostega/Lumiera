@@ -26,6 +26,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "activity-detector.hpp"
 #include "vault/gear/activity-lang.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "lib/format-cout.hpp"
@@ -78,7 +79,7 @@ namespace test {
       
       
       /** @test TODO demonstrate a simple usage scenario
-       * @todo WIP 7/23 ⟶ define ⟶ implement
+       * @todo WIP 7/23 🔁 define 🔁 implement
        */
       void
       simpleUsage()
@@ -94,11 +95,12 @@ namespace test {
       
       
       /** @test TODO behaviour of Activity::INVOKE
-       * @todo WIP 7/23 ⟶ define ⟶ implement
+       * @todo WIP 7/23 🔁 define ⟶ implement
        */
       void
       verifyActivity_Invoke()
         {
+          ActivityDetector detector;
         }
       
       

@@ -124,6 +124,11 @@ namespace test {
     
     using SIG_JobDiagnostic = void(TimeValue, int32_t);
     const size_t JOB_ARG_POS_TIME = 0;
+    
+    const string CTX_POST{"post"};
+    const string CTX_WORK{"work"};
+    const string CTX_DONE{"done"};
+    const string CTX_TICK{"tick"};
   }
   
   class ActivityDetector;
@@ -282,7 +287,7 @@ namespace test {
           
           /** mock function call operator: logs all invocations */
           RET
-          operator() (ARGS const& ...args)
+          operator() (ARGS ...args)
             {
               log_->call (log_->getID(), id_, args...)
                    .addAttrib (MARK_SEQ, util::toString(*seqNr_));
@@ -399,6 +404,39 @@ namespace test {
           return mockOps_.emplace_back (
                    buildDiagnosticFun<SIG_JobDiagnostic> (id));
         }
+      
+      
+      
+      struct FakeExecutionCtx;
+      using SIG_post = activity::Proc(Activity&, FakeExecutionCtx&, Time);
+      using SIG_work = void(Time, size_t);
+      using SIG_done = void(Time, size_t);
+      using SIG_tick = activity::Proc(Time);
+      
+      /**
+       * Mock setup of the execution context for Activity activation.
+       * The instance #executionCtx is wired back with the #eventLog_
+       * and allows thus to detect and verify all callbacks from the Activities.
+       * @note the return value of the #post and #tick functions can be changed
+       *       to another fixed response by calling DiagnosticFun::returning
+       */
+      struct FakeExecutionCtx
+        {
+          _DiagnosticFun<SIG_post>::Type post;
+          _DiagnosticFun<SIG_work>::Type work;
+          _DiagnosticFun<SIG_done>::Type done;
+          _DiagnosticFun<SIG_tick>::Type tick;
+          
+          FakeExecutionCtx (ActivityDetector& adi)
+            : post{adi.buildDiagnosticFun<SIG_post>(CTX_POST).returning(activity::PASS)}
+            , work{adi.buildDiagnosticFun<SIG_work>(CTX_WORK)}
+            , done{adi.buildDiagnosticFun<SIG_done>(CTX_DONE)}
+            , tick{adi.buildDiagnosticFun<SIG_tick>(CTX_TICK).returning(activity::PASS)}
+            { }
+        };
+      
+      FakeExecutionCtx executionCtx{*this};
+      
       
       
       ActivityMatch

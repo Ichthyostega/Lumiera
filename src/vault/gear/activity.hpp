@@ -154,12 +154,10 @@ namespace gear {
                        "Execution-Context: " STRINGIFY(_FUN_) " expect function with signature: " STRINGIFY(_SIG_));
       
       
-       EXE const& ctx = std::declval<EXE>();
-      
-       ASSERT_MEMBER_FUNCTOR (ctx.post, Proc(Activity&, EXE&, Time));
-       ASSERT_MEMBER_FUNCTOR (ctx.work, void(Time, size_t));
-       ASSERT_MEMBER_FUNCTOR (ctx.done, void(Time, size_t));
-       ASSERT_MEMBER_FUNCTOR (ctx.tick, Proc(Time));
+       ASSERT_MEMBER_FUNCTOR (EXE::post, Proc(Activity&, EXE&, Time));
+       ASSERT_MEMBER_FUNCTOR (EXE::work, void(Time, size_t));
+       ASSERT_MEMBER_FUNCTOR (EXE::done, void(Time, size_t));
+       ASSERT_MEMBER_FUNCTOR (EXE::tick, Proc(Time));
 
       
 #undef ASSERT_MEMBER_FUNCTOR
