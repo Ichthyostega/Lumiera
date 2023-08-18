@@ -285,6 +285,8 @@ namespace test {
               return std::move (*this);
             }
           
+          // default copyable
+          
           /** mock function call operator: logs all invocations */
           RET
           operator() (ARGS ...args)
@@ -292,6 +294,11 @@ namespace test {
               log_->call (log_->getID(), id_, args...)
                    .addAttrib (MARK_SEQ, util::toString(*seqNr_));
               return *retVal_;
+            }
+          
+          operator string()  const
+            {
+              return log_->getID()+"."+id_;
             }
         };
       
@@ -306,6 +313,8 @@ namespace test {
           
           using Type  = typename RebindVariadic<DiagnosticFun, SigTypes>::Type;
         };
+      
+      using Logger = _DiagnosticFun<void(string)>::Type;
       
       
       /**
@@ -334,9 +343,59 @@ namespace test {
         };
       
       
+      /**
+       * A rigged CALLBACK-Activity to watch passing of activations.
+       */
+      class ActivityProbe
+        : public Activity
+        , activity::Hook
+        {
+          Logger log_;
+          
+          activity::Proc
+          activation ( Activity& thisHook
+                     , Time now
+                     , void* executionCtx)  override
+          {
+            REQUIRE (Activity::HOOK == thisHook.verb_);
+            if (data_.callback.arg == 0)
+              {// no adapted target; just record this activation
+                log_(util::toString(now) + " ⧐ ");
+                return activity::PASS;
+              }
+            else
+              {// forward activation to the adapted target Activity
+                Activity& target = *reinterpret_cast<Activity*> (data_.callback.arg);
+                auto ctx = *static_cast<FakeExecutionCtx*> (executionCtx);
+                log_(util::toString(now) + " ⧐ " + util::toString (target));
+                return target.activate (now, ctx);
+              }
+          }
+          
+        std::string
+        diagnostic()  const override
+          {
+            return "Probe("+string{log_}+")";
+          }
+          
+        public:
+          explicit
+          ActivityProbe (string id, EventLog& masterLog, uint const& invocationSeqNr)
+            : Activity{*this, 0}
+            , log_{id, masterLog, invocationSeqNr}
+            { }
+          
+          operator string()  const
+            {
+              return diagnostic();
+            }
+        };
+      
+      
       /* ===== Maintain throw-away mock instances ===== */
       
       std::deque<MockJobFunctor> mockOps_{};
+      std::deque<ActivityProbe> mockActs_{};
       
       
     public:
@@ -405,6 +464,11 @@ namespace test {
                    buildDiagnosticFun<SIG_JobDiagnostic> (id));
         }
       
+      Activity&
+      buildActivationProbe (string id)
+        {
+          return mockActs_.emplace_back (id, eventLog_, invocationSeq_);
+        }
       
       
       struct FakeExecutionCtx;

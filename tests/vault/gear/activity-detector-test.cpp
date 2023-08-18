@@ -29,7 +29,7 @@
 #include "activity-detector.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/format-cout.hpp"
+#include "lib/format-cout.hpp" /////////////////////////////TODO
 //#include "lib/util.hpp"
 
 //#include <utility>
@@ -39,6 +39,8 @@
 //using lib::time::FSecs;
 //using std::move;
 //using util::isSameObject;
+using lib::test::randStr;
+using lib::test::randTime;
 
 
 namespace vault{
@@ -193,7 +195,7 @@ namespace test {
           // an otherwise opaque object fulfilling the "Concept"
           activity::_verify_usable_as_ExecutionContext<decltype(detector.executionCtx)>();
           
-          Time t = lib::test::randTime();
+          Time t = randTime();
           size_t x = rand();
           Activity a;
           
@@ -229,11 +231,15 @@ namespace test {
       
       
       /** @test TODO diagnostic setup to detect Activity activation and propagation
-       * @todo WIP 8/23 🔁 define ⟶ implement
+       * @todo WIP 8/23 🔁 define 🔁 implement
        */
       void
       detect_activation()
         {
+          auto someID = "trap-" + randStr(4);
+          ActivityDetector detector;
+          Activity& probe = detector.buildActivationProbe (someID);
+          cout << probe << endl;
         }
       
       

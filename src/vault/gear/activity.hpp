@@ -136,6 +136,17 @@ namespace gear {
         virtual Proc activation ( Activity& thisHook
                                 , Time now
                                 , void* executionCtx)  =0;
+        
+        virtual std::string
+        diagnostic()  const
+          {
+            return "Activity::Hook";
+          }
+        
+        operator std::string()  const
+          {
+            return diagnostic();
+          }
       };
     
     
