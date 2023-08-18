@@ -105,7 +105,7 @@ namespace test {
 //  using lib::diff::GenNode;
 //  using lib::diff::MakeRec;
   using lib::time::TimeValue;
-//  using lib::time::Time;
+  using lib::time::Time;
 //  using lib::HashVal;
   using lib::meta::RebindVariadic;
   using util::isnil;
@@ -122,13 +122,13 @@ namespace test {
     const string MARK_INC{"IncSeq"};
     const string MARK_SEQ{"Seq"};
     
-    using SIG_JobDiagnostic = void(TimeValue, int32_t);
+    using SIG_JobDiagnostic = void(Time, int32_t);
     const size_t JOB_ARG_POS_TIME = 0;
     
-    const string CTX_POST{"post"};
-    const string CTX_WORK{"work"};
-    const string CTX_DONE{"done"};
-    const string CTX_TICK{"tick"};
+    const string CTX_POST{"CTX-post"};
+    const string CTX_WORK{"CTX-work"};
+    const string CTX_DONE{"CTX-done"};
+    const string CTX_TICK{"CTX-tick"};
   }
   
   class ActivityDetector;
@@ -217,9 +217,9 @@ namespace test {
       
       /** qualifier: additionally match the nominal time argument of JobFunctor invocation */
       ActivityMatch&
-      nominalTime (TimeValue const& time)
+      nominalTime (Time const& time)
         {
-          return delegate (&EventMatch::argPos<TimeValue const&>, size_t(JOB_ARG_POS_TIME), time);
+          return delegate (&EventMatch::argPos<Time const&>, size_t(JOB_ARG_POS_TIME), time);
         }
       
       
@@ -324,7 +324,7 @@ namespace test {
           void
           invokeJobOperation (JobParameter param)  override
             {
-              mockOperation_(TimeValue{param.nominalTime}, param.invoKey.part.a);
+              mockOperation_(Time{TimeValue{param.nominalTime}}, param.invoKey.part.a);
             }
           
         public:
@@ -408,7 +408,7 @@ namespace test {
       
       
       struct FakeExecutionCtx;
-      using SIG_post = activity::Proc(Activity&, FakeExecutionCtx&, Time);
+      using SIG_post = activity::Proc(Time, Activity&, FakeExecutionCtx&);
       using SIG_work = void(Time, size_t);
       using SIG_done = void(Time, size_t);
       using SIG_tick = activity::Proc(Time);
@@ -433,6 +433,8 @@ namespace test {
             , done{adi.buildDiagnosticFun<SIG_done>(CTX_DONE)}
             , tick{adi.buildDiagnosticFun<SIG_tick>(CTX_TICK).returning(activity::PASS)}
             { }
+          
+          operator string()  const { return "≺test::CTX≻"; }
         };
       
       FakeExecutionCtx executionCtx{*this};

@@ -165,7 +165,7 @@ namespace test {
           CHECK (detector.ensureNoInvocation ("mockJob"));
           dummyJob.triggerJob();
           CHECK (detector.verifyInvocation ("mockJob"));
-          CHECK (detector.verifyInvocation ("mockJob").arg(TimeValue{nominal}, invoKey.part.a));
+          CHECK (detector.verifyInvocation ("mockJob").arg(nominal, invoKey.part.a));
           CHECK (detector.verifyInvocation ("mockJob").nominalTime(nominal));
           
           ++detector;                                                                           // note: sequence number incremented between invocations
@@ -181,7 +181,9 @@ namespace test {
       
       
       /** @test faked execution context to perform Activity activation
-       * @todo WIP 8/23 🔁 define ⟶ implement
+       *        - wired internally to report each invocation into the EventLog
+       *        - by default response of `post` and `tick` is `PASS`, but can be reconfigured
+       *        - invocation sequence can be verified by the usual scheme
        */
       void
       verifyFakeExeContext()
@@ -192,10 +194,38 @@ namespace test {
           activity::_verify_usable_as_ExecutionContext<decltype(detector.executionCtx)>();
           
           Time t = lib::test::randTime();
+          size_t x = rand();
+          Activity a;
+          
+          CHECK (detector.ensureNoInvocation(CTX_WORK));
+          CHECK (detector.ensureNoInvocation(CTX_POST));
+          CHECK (detector.ensureNoInvocation(CTX_DONE));
+          CHECK (detector.ensureNoInvocation(CTX_TICK));
+          
+          ctx.work (t,x);
+          CHECK (detector.verifyInvocation(CTX_WORK).arg(t,x));
+          
+          ctx.done (t,x);
+          CHECK (detector.verifyInvocation(CTX_DONE).arg(t,x));
+          
+          CHECK (activity::PASS == ctx.post (t, a, ctx));
+          CHECK (detector.verifyInvocation(CTX_POST).arg(t,a,ctx));
           
           CHECK (activity::PASS == ctx.tick(t));
-          cout<<detector.showLog()<<endl;
+          CHECK (detector.verifyInvocation(CTX_TICK).arg(t));
+          
+          ++detector;
+          ctx.tick.returning(activity::KILL);
+          CHECK (activity::KILL == ctx.tick(t));
+          CHECK (detector.verifyInvocation(CTX_TICK).nominalTime(t));
+          
+          CHECK (detector.verifyInvocation(CTX_WORK).nominalTime(t)
+                         .beforeInvocation(CTX_DONE).nominalTime(t)
+                         .beforeInvocation(CTX_POST).nominalTime(t)
+                         .beforeInvocation(CTX_TICK).nominalTime(t).seq(0)
+                         .beforeInvocation(CTX_TICK).nominalTime(t).seq(1));
         }
+      
       
       
       /** @test TODO diagnostic setup to detect Activity activation and propagation

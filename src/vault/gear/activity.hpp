@@ -123,8 +123,8 @@ namespace gear {
         /**
          * Callback on activation of the corresponding HOOK-Activity.
          * @param thisHook     the Activity record wired to this hook
-         * @param executionCtx opaque pointer to the actual execution context
          * @param now          current »wall-clock-time« as used by the Scheduler
+         * @param executionCtx opaque pointer to the actual execution context
          * @return decision how to proceed with the activation
          * @remark the intended use is to rig this callback based on additional knowledge
          *         regarding the usage context. Through \a thisHook, the follow-up chain
@@ -134,8 +134,8 @@ namespace gear {
          *         This mechanism is used especially for detecting expected test invocations. 
          */
         virtual Proc activation ( Activity& thisHook
-                                , void* executionCtx
-                                , Time now)            =0;
+                                , Time now
+                                , void* executionCtx)  =0;
       };
     
     
@@ -154,7 +154,7 @@ namespace gear {
                        "Execution-Context: " STRINGIFY(_FUN_) " expect function with signature: " STRINGIFY(_SIG_));
       
       
-       ASSERT_MEMBER_FUNCTOR (EXE::post, Proc(Activity&, EXE&, Time));
+       ASSERT_MEMBER_FUNCTOR (EXE::post, Proc(Time, Activity&, EXE&));
        ASSERT_MEMBER_FUNCTOR (EXE::work, void(Time, size_t));
        ASSERT_MEMBER_FUNCTOR (EXE::done, void(Time, size_t));
        ASSERT_MEMBER_FUNCTOR (EXE::tick, Proc(Time));
@@ -335,6 +335,9 @@ namespace gear {
         : Activity{TICK}
         { }
       
+      /// diagnostic representation
+      operator std::string()  const;
+      
       
       /********************************************************//**
        * Core Operation: _Activate_ and _perform_ this Activity.
@@ -342,7 +345,7 @@ namespace gear {
        * @param now current _»wall clock time« (time used for scheduling)
        */
       template<class EXE>
-      activity::Proc activate (EXE& executionCtx, Time now);
+      activity::Proc activate (Time now, EXE& executionCtx);
       
       
     private:
@@ -398,7 +401,7 @@ namespace gear {
       
       template<class EXE>
       activity::Proc
-      signalStart (EXE& executionCtx, Time now)
+      signalStart (Time now, EXE& executionCtx)
         {
           executionCtx.work (now, data_.timing.quality);
           return activity::PASS;
@@ -406,7 +409,7 @@ namespace gear {
       
       template<class EXE>
       activity::Proc
-      signalStop (EXE& executionCtx, Time now)
+      signalStop (Time now, EXE& executionCtx)
         {
           executionCtx.done (now, data_.timing.quality);
           return activity::PASS;
@@ -414,42 +417,46 @@ namespace gear {
       
       template<class EXE>
       activity::Proc
-      dispatchNotify (EXE& executionCtx, Time now)
+      dispatchNotify (Time now, EXE& executionCtx)
         {
           UNIMPLEMENTED ("double-dispatch a notification trigger");
-          return executionCtx.post (*next, executionCtx, now);
+          return executionCtx.post (now, *next, executionCtx);
         }
       
       template<class EXE>
       activity::Proc
-      checkGate (EXE& executionCtx, Time now)
+      checkGate (Time now, EXE& executionCtx)
         {
           UNIMPLEMENTED ("evaluate GATE condition and branch accordingly");
-          return executionCtx.post (*next, executionCtx, now);
+          return executionCtx.post (now, *next, executionCtx);
         }
       
       template<class EXE>
       activity::Proc
-      postChain (EXE& executionCtx, Time now)
+      postChain (Time now, EXE& executionCtx)
         {
           REQUIRE (next);
-          return executionCtx.post (*next, executionCtx, now);
+          return executionCtx.post (now, *next, executionCtx);
         }
       
       template<class EXE>
       activity::Proc
-      callHook (EXE& executionCtx, Time now)
+      callHook (Time now, EXE& executionCtx)
         {
-          return data_.callback.hook? data_.callback.hook->activation(*this, &executionCtx, now)
+          return data_.callback.hook? data_.callback.hook->activation(*this, now, &executionCtx)
                                     : activity::PASS;
         }
       
       template<class EXE>
       activity::Proc
-      doTick (EXE& executionCtx, Time now)
+      doTick (Time now, EXE& executionCtx)
         {
           return executionCtx.tick (now);
         }
+      
+      
+      std::string showVerb()  const;
+      std::string showData()  const;
     };
   
   
@@ -457,7 +464,7 @@ namespace gear {
   
   template<class EXE>
   activity::Proc
-  Activity::activate (EXE& executionCtx, Time now)
+  Activity::activate (Time now, EXE& executionCtx)
   {
     activity::_verify_usable_as_ExecutionContext<EXE>();
     
@@ -465,21 +472,21 @@ namespace gear {
       case INVOKE:
         return invokeFunktor (now);
       case WORKSTART:
-        return signalStart (executionCtx, now);
+        return signalStart (now, executionCtx);
       case WORKSTOP:
-        return signalStop (executionCtx, now);
+        return signalStop (now, executionCtx);
       case NOTIFY:
-        return dispatchNotify (executionCtx, now);
+        return dispatchNotify (now, executionCtx);
       case GATE:
-        return checkGate (executionCtx, now);
+        return checkGate (now, executionCtx);
       case POST:
-        return postChain (executionCtx, now);
+        return postChain (now, executionCtx);
       case FEED:
         return activity::PASS;
       case HOOK:
-        return callHook (executionCtx, now);
+        return callHook (now, executionCtx);
       case TICK:
-        return doTick (executionCtx, now);
+        return doTick (now, executionCtx);
       default:
         NOTREACHED ("uncovered Activity verb in activation function.");
       }
