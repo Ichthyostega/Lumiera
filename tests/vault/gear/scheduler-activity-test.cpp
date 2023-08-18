@@ -26,10 +26,12 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "activity-detector.hpp"
 #include "vault/gear/activity-lang.hpp"
+#include "vault/real-clock.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/format-cout.hpp"
+#include "lib/format-cout.hpp"  /////////////////////////////////////TODO
 //#include "lib/util.hpp"
 
 //#include <utility>
@@ -68,6 +70,7 @@ namespace test {
           
           verifyActivity_Invoke();
           verifyActivity_Notify();
+          verifyActivity_Post();
           verifyActivity_Gate();
           
           termBuilder();
@@ -94,13 +97,41 @@ namespace test {
       
       
       
-      /** @test TODO behaviour of Activity::INVOKE
-       * @todo WIP 7/23 🔁 define ⟶ implement
+      /** @test behaviour of Activity::INVOKE
+       *        - setup requires two FEED-Activities to be chained up as arguments
+       *        - use the rigged execution context provided by ActivityDetector
+       *        - can verify this way that the activation leads to JobFunctor invocation
        */
       void
       verifyActivity_Invoke()
         {
           ActivityDetector detector;
+          
+          size_t x1=rand(), x2=rand();
+          Time nomTime = lib::test::randTime();
+          Activity feed{x1,x2};
+          Activity feed2{x1+1,x1+2};
+          feed.next = &feed2;
+          Activity invoke{detector.buildMockJobFunctor("job"), nomTime, feed};
+          
+          Time realTime = RealClock::now();
+          CHECK (activity::PASS == invoke.activate (realTime, detector.executionCtx));
+          
+          cout << detector.showLog()<<endl;
+          CHECK (detector.verifyInvocation ("job").arg(nomTime, x1));
+        }
+      
+      
+      
+      /** @test TODO behaviour of Activity::NOTIFY
+       *        - notification entails to schedule a follow-up activation
+       *        - implies to pass the `next`-Activity to the execution context's `post()` hook
+       *        - use the rigged execution context from ActivityDetector to detect call
+       * @todo WIP 7/23 🔁 define ⟶ implement
+       */
+      void
+      verifyActivity_Notify()
+        {
         }
       
       
@@ -109,7 +140,7 @@ namespace test {
        * @todo WIP 7/23 ⟶ define ⟶ implement
        */
       void
-      verifyActivity_Notify()
+      verifyActivity_Post()
         {
         }
       
