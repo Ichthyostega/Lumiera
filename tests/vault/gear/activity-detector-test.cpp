@@ -242,6 +242,7 @@ namespace test {
           ActivityDetector detector;
           auto someID = "trap-" + randStr(4);
           Activity& probe = detector.buildActivationProbe (someID);
+          CHECK (Activity::HOOK == probe.verb_);
           
           Time realTime = RealClock::now();
           probe.activate (realTime, detector.executionCtx);
@@ -252,12 +253,43 @@ namespace test {
       
       
       /** @test TODO diagnostic setup to detect Activity activation and propagation
-       * @todo WIP 8/23 🔁 define ⟶ implement
+       * @todo WIP 8/23 ✔ define 🔁 implement
        */
       void
       watch_activationTap()
         {
           ActivityDetector detector;
+          
+          Time nomTime{99,11};
+          Activity feed{size_t{12},size_t{34}};
+          Activity feed2{size_t{56},size_t{78}};
+          feed.next = &feed2;
+          string jobID = "job-" + randStr(4);
+          Activity invoke{detector.buildMockJobFunctor(jobID), nomTime, feed};
+          
+          Time t1{0,1,1};
+          CHECK (activity::PASS == invoke.activate (t1, detector.executionCtx));
+          CHECK (detector.verifyInvocation (jobID).arg(nomTime, 12));
+          
+          // decorate the INVOKE-Activity with an ActivationTap
+          Activity& tap = detector.buildActivationTap (invoke);
+          CHECK (tap.next == invoke.next);
+          
+          ++detector;
+          Time t2{0,2,2};
+          // now activate through the Tap....
+          tap.activate(t2, detector.executionCtx);
+          CHECK (detector.verifySeqIncrement(1)       // ==> the ActivationTap "tap-INVOKE" reports and passes activation
+                         .beforeInvocation("tap-INVOKE").seq(1).arg("JobFun-ActivityDetector."+jobID)
+                         .beforeInvocation(jobID).seq(1).arg(nomTime,12));
+          
+          // WARNING: can still activate the watched subject directly...
+          ++detector;
+          Time t3{0,3,3};
+          invoke.activate (t3, detector.executionCtx);
+          CHECK (detector.verifyInvocation(jobID).seq(2));            // subject invoked
+          CHECK (detector.ensureNoInvocation("tap-INVOKE").seq(2)     // but invocation not detected by ActivationTap
+                         .beforeInvocation(jobID).seq(2));
         }
       
       

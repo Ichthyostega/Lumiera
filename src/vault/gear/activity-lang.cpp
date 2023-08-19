@@ -88,7 +88,7 @@ namespace gear {
   {
     switch (verb_) {
       case INVOKE:
-        return util::toString(data_.invocation.task)
+        return util::showPtr (data_.invocation.task)
              + ", "
              + util::toString(TimeValue{data_.invocation.time});
       case WORKSTART:

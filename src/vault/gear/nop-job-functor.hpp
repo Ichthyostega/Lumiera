@@ -40,6 +40,8 @@
 #include "vault/gear/job.h"
 #include "lib/time/timevalue.hpp"
 
+#include <string>
+
 
 namespace vault{
 namespace gear {
@@ -63,6 +65,12 @@ namespace gear {
       getJobKind()  const
         {
           return META_JOB;
+        }
+      
+      std::string
+      diagnostic()  const override
+        {
+          return "NopJobFunctor";
         }
       
       InvocationInstanceID

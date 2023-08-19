@@ -349,6 +349,9 @@ namespace gear {
       /// diagnostic representation
       operator std::string()  const;
       
+      std::string showVerb()  const;
+      std::string showData()  const;
+      
       
       /********************************************************//**
        * Core Operation: _Activate_ and _perform_ this Activity.
@@ -464,10 +467,6 @@ namespace gear {
         {
           return executionCtx.tick (now);
         }
-      
-      
-      std::string showVerb()  const;
-      std::string showData()  const;
     };
   
   

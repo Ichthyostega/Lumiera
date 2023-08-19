@@ -188,6 +188,7 @@ typedef lumiera_jobDescriptor* LumieraJobDescriptor;
 
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
+#include <string>
 
 
 
@@ -207,6 +208,17 @@ namespace gear {
     {
     public:
       virtual ~JobFunctor();     ///< this is an interface
+       
+      virtual std::string
+      diagnostic()  const
+        {
+          return "JobFunctor";
+        }
+      
+      operator std::string()  const
+        {
+          return diagnostic();
+        }
     };
   /**
    * Interface of the closure for frame rendering jobs.

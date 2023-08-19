@@ -336,6 +336,11 @@ namespace test {
               mockOperation_(Time{TimeValue{param.nominalTime}}, param.invoKey.part.a);
             }
           
+          string diagnostic()  const override
+            {
+              return "JobFun-"+string{mockOperation_};
+            }
+          
         public:
           MockJobFunctor (MockOp mockedJobOperation)
             : mockOperation_{move (mockedJobOperation)}
@@ -379,11 +384,17 @@ namespace test {
           }
           
         public:
-          explicit
           ActivityProbe (string id, EventLog& masterLog, uint const& invocationSeqNr)
             : Activity{*this, 0}
             , log_{id, masterLog, invocationSeqNr}
             { }
+            
+          ActivityProbe (Activity const& subject, string id, EventLog& masterLog, uint const& invocationSeqNr)
+            : Activity{*this, reinterpret_cast<size_t> (&subject)}
+            , log_{id, masterLog, invocationSeqNr}
+            {
+              next = subject.next;
+            }
           
           operator string()  const
             {
@@ -464,10 +475,22 @@ namespace test {
                    buildDiagnosticFun<SIG_JobDiagnostic> (id));
         }
       
+      /** build a rigged HOOK-Activity to record each invocation */
       Activity&
       buildActivationProbe (string id)
         {
           return mockActs_.emplace_back (id, eventLog_, invocationSeq_);
+        }
+      
+      /** build ActivationProbe to record each activation before passing it to the subject */
+      Activity&
+      buildActivationTap (Activity const& subject, string id ="")
+        {
+          return mockActs_.emplace_back (subject
+                                        ,isnil(id)? "tap-"+subject.showVerb()+util::showAddr(subject)
+                                                  : id
+                                        ,eventLog_
+                                        ,invocationSeq_);
         }
       
       
