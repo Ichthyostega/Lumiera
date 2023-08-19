@@ -217,7 +217,7 @@ namespace test {
       
       /** qualifier: additionally match the nominal time argument of JobFunctor invocation */
       ActivityMatch&
-      nominalTime (Time const& time)
+      timeArg (Time const& time)
         {
           return delegate (&EventMatch::argPos<Time const&>, size_t(JOB_ARG_POS_TIME), time);
         }

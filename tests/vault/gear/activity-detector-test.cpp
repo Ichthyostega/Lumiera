@@ -26,8 +26,9 @@
 
 
 #include "lib/test/run.hpp"
-#include "activity-detector.hpp"
 #include "lib/test/test-helper.hpp"
+#include "activity-detector.hpp"
+#include "vault/real-clock.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp" /////////////////////////////TODO
 //#include "lib/util.hpp"
@@ -72,8 +73,10 @@ namespace test {
           verifyMockInvocation();
           verifyMockJobFunctor();
           verifyFakeExeContext();
-          detect_activation();
-          detect_gate();
+          watch_activation();
+          watch_activationTap();
+          watch_notification();
+          watch_gate();
         }
       
       
@@ -168,14 +171,14 @@ namespace test {
           dummyJob.triggerJob();
           CHECK (detector.verifyInvocation ("mockJob"));
           CHECK (detector.verifyInvocation ("mockJob").arg(nominal, invoKey.part.a));
-          CHECK (detector.verifyInvocation ("mockJob").nominalTime(nominal));
+          CHECK (detector.verifyInvocation ("mockJob").timeArg(nominal));
           
           ++detector;                                                                           // note: sequence number incremented between invocations
           dummyJob.parameter.nominalTime += 5 * Time::SCALE;                                    // different job parameter (later nominal time point)
           dummyJob.triggerJob();
           
-          CHECK (detector.verifyInvocation ("mockJob").nominalTime(nominal).seq(0)
-                         .beforeInvocation ("mockJob").nominalTime(nominal + Time{FSecs{5}})    // matching first invocation and then second...
+          CHECK (detector.verifyInvocation ("mockJob").timeArg(nominal).seq(0)
+                         .beforeInvocation ("mockJob").timeArg(nominal + Time{FSecs{5}})        // matching first invocation and then second...
                          .afterSeqIncrement(1)                                                  // note: searching backwards from the 2nd invocation
                          );
         }
@@ -219,27 +222,53 @@ namespace test {
           ++detector;
           ctx.tick.returning(activity::KILL);
           CHECK (activity::KILL == ctx.tick(t));
-          CHECK (detector.verifyInvocation(CTX_TICK).nominalTime(t));
+          CHECK (detector.verifyInvocation(CTX_TICK).timeArg(t));
           
-          CHECK (detector.verifyInvocation(CTX_WORK).nominalTime(t)
-                         .beforeInvocation(CTX_DONE).nominalTime(t)
-                         .beforeInvocation(CTX_POST).nominalTime(t)
-                         .beforeInvocation(CTX_TICK).nominalTime(t).seq(0)
-                         .beforeInvocation(CTX_TICK).nominalTime(t).seq(1));
+          CHECK (detector.verifyInvocation(CTX_WORK).timeArg(t)
+                         .beforeInvocation(CTX_DONE).timeArg(t)
+                         .beforeInvocation(CTX_POST).timeArg(t)
+                         .beforeInvocation(CTX_TICK).timeArg(t).seq(0)
+                         .beforeInvocation(CTX_TICK).timeArg(t).seq(1));
+        }
+      
+      
+      
+      /** @test diagnostic setup to detect Activity activation and propagation
+       * @todo WIP 8/23 ✔ define ✔ implement
+       */
+      void
+      watch_activation()
+        {
+          ActivityDetector detector;
+          auto someID = "trap-" + randStr(4);
+          Activity& probe = detector.buildActivationProbe (someID);
+          
+          Time realTime = RealClock::now();
+          probe.activate (realTime, detector.executionCtx);
+          
+          CHECK (detector.verifyInvocation(someID).timeArg(realTime));
         }
       
       
       
       /** @test TODO diagnostic setup to detect Activity activation and propagation
-       * @todo WIP 8/23 🔁 define 🔁 implement
+       * @todo WIP 8/23 🔁 define ⟶ implement
        */
       void
-      detect_activation()
+      watch_activationTap()
         {
-          auto someID = "trap-" + randStr(4);
           ActivityDetector detector;
-          Activity& probe = detector.buildActivationProbe (someID);
-          cout << probe << endl;
+        }
+      
+      
+      
+      /** @test TODO diagnostic setup to detect Activity activation and propagation
+       * @todo WIP 8/23 🔁 define ⟶ implement
+       */
+      void
+      watch_notification()
+        {
+          ActivityDetector detector;
         }
       
       
@@ -248,7 +277,7 @@ namespace test {
        * @todo WIP 7/23 ⟶ define ⟶ implement
        */
       void
-      detect_gate()
+      watch_gate()
         {
         }
     };
