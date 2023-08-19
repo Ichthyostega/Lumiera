@@ -296,7 +296,7 @@ namespace test {
       
       
       /** @test inject (prepend) an ActivationTap into existing wiring
-       * @todo WIP 8/23 ✔ define 🔁 implement
+       * @todo WIP 8/23 ✔ define ✔ implement
        */
       void
       insert_ActivationTap()
@@ -337,11 +337,24 @@ namespace test {
       
       
       /** @test TODO diagnostic setup to watch Activity::GATE activation
-       * @todo WIP 7/23 ⟶ define ⟶ implement
+       * @todo WIP 7/23 🔁 define ⟶ implement
        */
       void
       watch_gate()
         {
+          ActivityDetector detector;
+          
+          Activity gate{0};
+          Activity followUp;
+          gate.next = &followUp;
+          
+          Activity* wiring = &gate;
+          detector.watchGate (wiring);
+          
+          Time tt{5,5};
+          wiring->activate(tt, detector.executionCtx);
+          
+          cout<<detector.showLog()<<endl;
         }
     };
   

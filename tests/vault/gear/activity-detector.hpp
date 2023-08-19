@@ -502,6 +502,22 @@ namespace test {
           return *wiring;
         }
       
+      Activity&
+      buildGateWatcher (Activity& gate)
+        {
+          Activity& watcher = buildActivationTap (gate);
+          insertActivationTap (gate.next, "after"+gate.showVerb()+util::showAddr(gate));
+          return watcher;
+        }
+      
+      Activity&
+      watchGate (Activity*& wiring)
+        {
+          wiring = wiring? & buildGateWatcher (*wiring)
+                         : & buildActivationProbe ("tail-"+util::showAddr(&wiring));
+          return *wiring;
+        }
+      
       
       struct FakeExecutionCtx;
       using SIG_post = activity::Proc(Time, Activity&, FakeExecutionCtx&);
