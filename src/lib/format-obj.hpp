@@ -170,6 +170,10 @@ namespace util {
    * a predictable display of printed unit-test results.
    * @remark while the actual parameter is passed by const-ref,
    *         cv-qualifiactions and references are stripped from the type
+   * @note Deliberately there is no magic detection/support for pointers.
+   *       This function _must not be overloaded_ (to avoid ambiguities
+   *       in more elaborate template instantiations). If you want pointers
+   *       to be indicated (with address), please use util::showPtr explicitly.
    */
   template<typename TY>
   inline std::string

@@ -118,7 +118,7 @@ namespace gear {
              + util::toString(data_.feed.two)
              + "}";
       case HOOK:
-        return util::toString(data_.callback.hook)
+        return util::showPtr (data_.callback.hook)
              + "("
              + util::toString(data_.callback.arg)
              + ")";
