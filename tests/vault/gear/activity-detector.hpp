@@ -493,6 +493,15 @@ namespace test {
                                         ,invocationSeq_);
         }
       
+      /** build ActivationProbe to record each activation before passing it to the subject */
+      Activity&
+      insertActivationTap (Activity*& wiring, string id ="")
+        {
+          wiring = wiring? & buildActivationTap (*wiring, id)
+                         : & buildActivationProbe (isnil(id)? "tail-"+util::showAddr(&wiring) : id);
+          return *wiring;
+        }
+      
       
       struct FakeExecutionCtx;
       using SIG_post = activity::Proc(Time, Activity&, FakeExecutionCtx&);

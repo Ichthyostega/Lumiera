@@ -31,7 +31,7 @@
 #include "vault/real-clock.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp" /////////////////////////////TODO
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <utility>
 
@@ -39,7 +39,7 @@
 //using lib::time::Time;
 //using lib::time::FSecs;
 //using std::move;
-//using util::isSameObject;
+using util::isSameObject;
 using lib::test::randStr;
 using lib::test::randTime;
 
@@ -74,7 +74,8 @@ namespace test {
           verifyMockJobFunctor();
           verifyFakeExeContext();
           watch_activation();
-          watch_activationTap();
+          watch_ActivationTap();
+          insert_ActivationTap();
           watch_notification();
           watch_gate();
         }
@@ -233,7 +234,7 @@ namespace test {
       
       
       
-      /** @test diagnostic setup to detect Activity activation and propagation
+      /** @test diagnostic setup to detect Activity activation
        * @todo WIP 8/23 ✔ define ✔ implement
        */
       void
@@ -252,11 +253,11 @@ namespace test {
       
       
       
-      /** @test TODO diagnostic setup to detect Activity activation and propagation
-       * @todo WIP 8/23 ✔ define 🔁 implement
+      /** @test diagnostic adaptor to detect and pass-through Activity activation
+       * @todo WIP 8/23 ✔ define ✔ implement
        */
       void
-      watch_activationTap()
+      watch_ActivationTap()
         {
           ActivityDetector detector;
           
@@ -290,6 +291,36 @@ namespace test {
           CHECK (detector.verifyInvocation(jobID).seq(2));            // subject invoked
           CHECK (detector.ensureNoInvocation("tap-INVOKE").seq(2)     // but invocation not detected by ActivationTap
                          .beforeInvocation(jobID).seq(2));
+        }
+      
+      
+      
+      /** @test inject (prepend) an ActivationTap into existing wiring
+       * @todo WIP 8/23 ✔ define 🔁 implement
+       */
+      void
+      insert_ActivationTap()
+        {
+          ActivityDetector detector;
+          
+          Activity subject;
+          Activity followUp{size_t(1), size_t(2)};
+          subject.next = &followUp;
+          Activity* wiring = &subject;
+          CHECK (isSameObject (*wiring, subject));
+          CHECK (wiring->verb_ == Activity::TICK);
+          
+          detector.insertActivationTap (wiring);
+          CHECK (not isSameObject (*wiring, subject));
+          CHECK (wiring->verb_ == Activity::HOOK);
+          CHECK (wiring->data_.callback.arg == size_t(&subject));
+          CHECK (wiring->next == subject.next);
+          
+          Time tt{1,1,1};
+          // now activate through the wiring....
+          wiring->activate(tt, detector.executionCtx);
+          CHECK (detector.verifyInvocation("tap-TICK").arg("⧐ Act(TICK")
+                         .beforeInvocation("CTX-tick").timeArg(tt));
         }
       
       
