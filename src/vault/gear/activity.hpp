@@ -169,6 +169,7 @@ namespace gear {
        ASSERT_MEMBER_FUNCTOR (EXE::work, void(Time, size_t));
        ASSERT_MEMBER_FUNCTOR (EXE::done, void(Time, size_t));
        ASSERT_MEMBER_FUNCTOR (EXE::tick, Proc(Time));
+       ASSERT_MEMBER_FUNCTOR (EXE::spin, Time(Time));
 
       
 #undef ASSERT_MEMBER_FUNCTOR
@@ -441,8 +442,13 @@ namespace gear {
       activity::Proc
       checkGate (Time now, EXE& executionCtx)
         {
-          UNIMPLEMENTED ("evaluate GATE condition and branch accordingly");
-          return executionCtx.post (now, *next, executionCtx);
+          REQUIRE (GATE == verb_);
+          if (now > data_.condition.dead)  // beyond deadline
+            return activity::SKIP;
+          if (0 < data_.condition.rest)    // prerequisite count not(yet) fulfilled -> spin (=re-invoke later)
+            return executionCtx.post (executionCtx.spin(now), *this, executionCtx);
+          else
+            return activity::PASS;
         }
       
       template<class EXE>

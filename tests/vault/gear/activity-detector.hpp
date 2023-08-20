@@ -106,6 +106,8 @@ namespace test {
 //  using lib::diff::MakeRec;
   using lib::time::TimeValue;
   using lib::time::Time;
+  using lib::time::FSecs;
+  using lib::time::Offset;
 //  using lib::HashVal;
   using lib::meta::RebindVariadic;
   using util::isnil;
@@ -129,6 +131,8 @@ namespace test {
     const string CTX_WORK{"CTX-work"};
     const string CTX_DONE{"CTX-done"};
     const string CTX_TICK{"CTX-tick"};
+    
+    Offset SPIN_DELAY{FSecs(1)};
   }
   
   class ActivityDetector;
@@ -503,18 +507,17 @@ namespace test {
         }
       
       Activity&
-      buildGateWatcher (Activity& gate)
+      buildGateWatcher (Activity& gate, string id ="")
         {
-          Activity& watcher = buildActivationTap (gate);
-          insertActivationTap (gate.next, "after"+gate.showVerb()+util::showAddr(gate));
-          return watcher;
+          insertActivationTap (gate.next, "after" + (isnil(id)? gate.showVerb()+util::showAddr(gate) : id));
+          return buildActivationTap (gate, id);
         }
       
       Activity&
-      watchGate (Activity*& wiring)
+      watchGate (Activity*& wiring, string id ="")
         {
-          wiring = wiring? & buildGateWatcher (*wiring)
-                         : & buildActivationProbe ("tail-"+util::showAddr(&wiring));
+          wiring = wiring? & buildGateWatcher (*wiring, id)
+                         : & buildActivationProbe (isnil(id)? "tail-"+util::showAddr(&wiring) : id);
           return *wiring;
         }
       
@@ -538,6 +541,8 @@ namespace test {
           _DiagnosticFun<SIG_work>::Type work;
           _DiagnosticFun<SIG_done>::Type done;
           _DiagnosticFun<SIG_tick>::Type tick;
+          
+          static Time spin (Time now) { return now + SPIN_DELAY; }
           
           FakeExecutionCtx (ActivityDetector& adi)
             : post{adi.buildDiagnosticFun<SIG_post>(CTX_POST).returning(activity::PASS)}

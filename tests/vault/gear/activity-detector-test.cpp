@@ -336,8 +336,15 @@ namespace test {
       
       
       
-      /** @test TODO diagnostic setup to watch Activity::GATE activation
-       * @todo WIP 7/23 🔁 define ⟶ implement
+      /** @test diagnostic setup to watch Activity::GATE activation
+       *        - when applied, Tap will be inserted before and after the
+       *          instrumented GATE-Activity
+       *        - it can thus be traced when the Gate is activated,
+       *          but also when the Gate condition is met and the `next`
+       *          Activity after the Gate is activated
+       *        - for this unit-test, a Gate and a follow-up Activity
+       *          is invoked directly, to verify the generated log entries
+       * @todo WIP 7/23 ✔ define ✔ implement
        */
       void
       watch_gate()
@@ -353,8 +360,13 @@ namespace test {
           
           Time tt{5,5};
           wiring->activate(tt, detector.executionCtx);
+          ++detector;
+          wiring->next->activate(tt, detector.executionCtx);
           
-          cout<<detector.showLog()<<endl;
+          CHECK (detector.verifyInvocation("tap-GATE").seq(0).timeArg(tt)
+                         .beforeSeqIncrement(1)
+                         .beforeInvocation("afterGATE").seq(1).timeArg(tt)
+                         .beforeInvocation("CTX-tick").seq(1).timeArg(tt));
         }
     };
   
