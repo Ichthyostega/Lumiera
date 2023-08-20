@@ -260,8 +260,8 @@ namespace gear {
             bool
             isAlive (Time deadline)
               {
-                /////////////////////////////////////////////OOO preliminary implementation ... should use the GATE-Activity itself
-                return this->deadline() > deadline;
+                return data_.condition.isHold() // NOTE: expected callback keeps alive
+                    or not data_.condition.isDead (deadline);
               }
             
             size_t

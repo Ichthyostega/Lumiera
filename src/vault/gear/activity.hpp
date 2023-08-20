@@ -241,6 +241,10 @@ namespace gear {
         {
           int     rest;     ///< alive while rest > 0
           Instant dead;     ///< alive while time < dead
+          
+          bool isDead (Time now)  const { return dead <= now;}
+          bool isHold ()          const { return rest > 0;   }
+          bool isFree (Time now)  const { return not (isHold() or isDead(now)); }
         };
       
       /** Time window to define for activation */
