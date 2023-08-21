@@ -137,6 +137,11 @@ namespace gear {
                                 , Time now
                                 , void* executionCtx)  =0;
         
+        /** Callback when dispatching a NOTIFY-Activity to \a thisHook */
+        virtual Proc notify     ( Activity& thisHook
+                                , Time now
+                                , void* executionCtx)  =0;
+        
         virtual std::string
         diagnostic()  const
           {
@@ -366,6 +371,12 @@ namespace gear {
       template<class EXE>
       activity::Proc activate (Time now, EXE& executionCtx);
       
+      template<class EXE>
+      activity::Proc dispatch (Time now, EXE& executionCtx);
+      
+      template<class EXE>
+      activity::Proc notify   (Time now, EXE& executionCtx);
+      
       
     private:
       void
@@ -418,6 +429,7 @@ namespace gear {
           return activity::PASS;
         }
       
+      
       template<class EXE>
       activity::Proc
       signalStart (Time now, EXE& executionCtx)
@@ -438,8 +450,16 @@ namespace gear {
       activity::Proc
       dispatchNotify (Time now, EXE& executionCtx)
         {
-          UNIMPLEMENTED ("double-dispatch a notification trigger");
-          return executionCtx.post (now, *next, executionCtx);
+          return executionCtx.post (now, *this, executionCtx);
+        }
+      
+      template<class EXE>
+      activity::Proc
+      notifyTarget (Time now, EXE& executionCtx)
+        {
+          REQUIRE (NOTIFY == verb_);
+          REQUIRE (data_.notification.target);
+          return data_.notification.target->notify (now, executionCtx);
         }
       
       template<class EXE>
@@ -447,12 +467,34 @@ namespace gear {
       checkGate (Time now, EXE& executionCtx)
         {
           REQUIRE (GATE == verb_);
-          if (now > data_.condition.dead)  // beyond deadline
+          if (data_.condition.isDead(now))  // beyond deadline
             return activity::SKIP;
-          if (0 < data_.condition.rest)    // prerequisite count not(yet) fulfilled -> spin (=re-invoke later)
-            return executionCtx.post (executionCtx.spin(now), *this, executionCtx);
+          if (data_.condition.isHold())     // prerequisite count not(yet) fulfilled -> spin (=re-invoke later)
+            return dispatchSelfDelayed (now, executionCtx);
           else
             return activity::PASS;
+        }
+      
+      template<class EXE>
+      activity::Proc
+      receiveGateNotification (Time now, EXE& executionCtx)
+        {
+          REQUIRE (GATE == verb_);
+          if (data_.condition.rest > 0)
+            --data_.condition.rest;
+          // maybe the Gate has been opened by this notification?
+          if (data_.condition.isFree(now)) //  yes => activate gated chain
+            return postChain (now, executionCtx);
+          else
+            return activity::PASS;
+        }
+      
+      template<class EXE>
+      activity::Proc
+      dispatchSelfDelayed (Time now, EXE& executionCtx)
+        {
+          REQUIRE (next);
+          return executionCtx.post (executionCtx.spin(now), *this, executionCtx);
         }
       
       template<class EXE>
@@ -468,6 +510,14 @@ namespace gear {
       callHook (Time now, EXE& executionCtx)
         {
           return data_.callback.hook? data_.callback.hook->activation(*this, now, &executionCtx)
+                                    : activity::PASS;
+        }
+      
+      template<class EXE>
+      activity::Proc
+      notifyHook (Time now, EXE& executionCtx)
+        {
+          return data_.callback.hook? data_.callback.hook->notify (*this, now, &executionCtx)
                                     : activity::PASS;
         }
       
@@ -510,6 +560,64 @@ namespace gear {
       default:
         NOTREACHED ("uncovered Activity verb in activation function.");
       }
+  }
+  
+
+  /**
+   * Entrance point for an activation, which has been dispatched indirectly
+   * through the dispatch and/or priority queue; typically this is achieved
+   * by invoking the `post`-λ on the \a executionCtx, or by _activating_
+   * a `POST`-Activity. Control flow passing here has acquired the `GroomingToken`
+   * and can thus assume single threaded execution until `WORKSTART`.
+   * @note special twist for the `NOTIFY`-Activity: it is not _activated_
+   *       itself, rather the #notify operation is invoked on its target(`next`);
+   *       this is necessary since a notification passes control-flow outside
+   *       the regular linear `next`-chain; when a `NOTIFY` is _activated,_
+   *       it will `post()` itself to acquire the `GroomingToken` and then
+   *       invoke this dispatch() function to pass the notification
+   */
+  template<class EXE>
+  activity::Proc
+  Activity::dispatch (Time now, EXE& executionCtx)
+  {
+    activity::_verify_usable_as_ExecutionContext<EXE>();
+    
+    switch (verb_) {
+      case NOTIFY:
+        return notifyTarget (now, executionCtx);
+      case POST:
+      case FEED:      // signal just to proceed with next...
+        return activity::PASS;
+      default:
+        return activate (now, executionCtx);
+      }
+  }
+  
+  
+  /**
+   * Special operation to receive a message or trigger from some other Activity.
+   * Notably this is used to implement _gating_ to wait for prerequisites; when
+   * a notification is passed to a `GATE`-Activity, the embedded counter is
+   * decremented; after all prerequisites are „checked off“ this way, the
+   * Activity-chain behind the Gate is activated.
+   */
+  template<class EXE>
+  activity::Proc
+  Activity::notify (Time now, EXE& executionCtx)
+  {
+    activity::_verify_usable_as_ExecutionContext<EXE>();
+    
+    switch (verb_) {
+      case GATE:
+        return receiveGateNotification (now, executionCtx);
+      case HOOK:
+        return notifyHook (now, executionCtx);
+      case POST:
+      case FEED:
+        return postChain (now, executionCtx);
+      default:
+        return dispatchSelfDelayed (now, executionCtx);
+      }     // Fallback: self-re-dispatch for async execution
   }
   
   

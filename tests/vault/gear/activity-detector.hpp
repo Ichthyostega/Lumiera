@@ -381,6 +381,26 @@ namespace test {
               }
           }
           
+          activity::Proc
+          notify     ( Activity& thisHook
+                     , Time now
+                     , void* executionCtx)  override
+          {
+            REQUIRE (Activity::HOOK == thisHook.verb_);
+            if (data_.callback.arg == 0)
+              {// no adapted target; just record this notification
+                log_(util::toString(now) + " --notify-↯• ");
+                return activity::PASS;
+              }
+            else
+              {// forward notification-dispatch to the adapted target Activity
+                Activity& target = *reinterpret_cast<Activity*> (data_.callback.arg);
+                auto ctx = *static_cast<FakeExecutionCtx*> (executionCtx);
+                log_(util::toString(now) + " --notify-↯> " + util::toString (target));
+                return target.activate (now, ctx);/////////////////////////////////////////////////////OOO
+              }
+          }
+          
         std::string
         diagnostic()  const override
           {
