@@ -397,7 +397,7 @@ namespace test {
                 Activity& target = *reinterpret_cast<Activity*> (data_.callback.arg);
                 auto ctx = *static_cast<FakeExecutionCtx*> (executionCtx);
                 log_(util::toString(now) + " --notify-↯> " + util::toString (target));
-                return target.activate (now, ctx);/////////////////////////////////////////////////////OOO
+                return target.notify (now, ctx);
               }
           }
           

@@ -182,6 +182,7 @@ namespace test {
                          .beforeInvocation ("mockJob").timeArg(nominal + Time{FSecs{5}})        // matching first invocation and then second...
                          .afterSeqIncrement(1)                                                  // note: searching backwards from the 2nd invocation
                          );
+//        cout << detector.showLog()<<endl; // HINT: use this for investigation...
         }
       
       
@@ -325,13 +326,36 @@ namespace test {
       
       
       
-      /** @test TODO diagnostic setup to detect Activity activation and propagation
-       * @todo WIP 8/23 🔁 define ⟶ implement
+      /** @test diagnostic setup to detect passing a notification
+       *        - setup a chain-Activity (here: a `TICK`) protected by a `GATE`
+       *        - configure the `GATE` to require one notification
+       *        - connect a `NOTIFY`-Activity to trigger the `GATE`
+       *        - inject a diagnostics Tap into the notification-connection
+       *        - dispatch of the notification can be verified
+       *        - notification has been passed through the Tap to the `GATE`
+       *        - `GATE` has been decremented to zero and triggers chain
+       *        - finally the chained `TICK`-Activity calls into the `executionCtx` 
+       * @todo WIP 8/23 ✔ define 🔁 implement
        */
       void
       watch_notification()
         {
           ActivityDetector detector;
+          
+          Activity chain;
+          Activity gate{1};
+          gate.next = &chain;
+          Activity notification{&gate};
+          CHECK (gate.data_.condition.rest == 1);
+          
+          detector.insertActivationTap (notification.data_.notification.target);
+          
+          Time tt{11,11};
+          notification.dispatch (tt, detector.executionCtx);
+          
+          CHECK (detector.verifyInvocation("tap-GATE").arg("11.011 --notify-↯> Act(GATE")
+                         .beforeInvocation("CTX-post").arg("11.011", "Act(TICK", "≺test::CTX≻"));
+          CHECK (gate.data_.condition.rest == 0);
         }
       
       
