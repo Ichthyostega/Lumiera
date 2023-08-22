@@ -109,7 +109,10 @@ namespace test {
       
       
       /** @test behaviour of Activity::POST
-       * @todo WIP 8/23 🔁 define ⟶ implement
+       *        - invoke the λ-post to dispatch the chain through the queue
+       *        - the chain to be executed is given as `next`
+       *        - time window for scheduling as data field
+       * @todo WIP 8/23 ✔ define ✔ implement
        */
       void
       verifyActivity_Post()
@@ -127,7 +130,7 @@ namespace test {
           post.activate (tt, detector.executionCtx);
           
           cout << detector.showLog() <<endl;
-          CHECK (detector.verifyInvocation("CTX-post").arg("11.011", "Act(TICK", "≺test::CTX≻"));   ///////////////////OOO need somehow to transport the time window...
+          CHECK (detector.verifyInvocation("CTX-post").arg("11.011", "Act(POST", "≺test::CTX≻"));
         }
       
       

@@ -33,11 +33,30 @@
  ** is in processing, the corresponding descriptor data record is maintained
  ** by the BlockStream custom memory manager.
  ** 
- ** @note right now this is a pipe dream
- ** @see ////TODO_test usage example
- ** @see scheduler.cpp implementation
+ ** # Performing Activities
  ** 
- ** @todo WIP-WIP-WIP 6/2023 »Playback Vertical Slice«
+ ** The Activity data records are »POD with constructor« and can be created
+ ** and copied freely; the provided constructors ensure consistent setup,
+ ** since the meaning of the _variant data_ depends on the Activity::verb_.
+ ** However, in actual usage, the builder functionality of the ActivityLang
+ ** is used to generate linked »Activity terms«, [connecting](\ref Activity::next)
+ ** chains of Activities in accordance with an implicit execution protocol, which
+ ** also forms the base of the Activity _state machine:_
+ ** - Activity::activate is invoked only once, when an Activity becomes _active._
+ ** - the provided [Execution Context](\ref _verify_usable_as_ExecutionContext)
+ **   is connected through several λ-bindings with the actual execution logic,
+ **   as provided by »Layer-2« of the Scheduler
+ ** - Activity::dispatch is always invoked from within the scheduler and implies
+ **   single threaded operation with the ability to mutate the scheduler queue;
+ **   typically this happens after de-queuing an Activity from the priority queue
+ **   and leads then to Activation of the retrieved Activity; however, it can also
+ **   happen _right now_ -- when the indicated time has passed.
+ ** - Activity::notify receives a message/trigger from another prerequisite Activity
+ ** 
+ ** @see SchedulerActivity_test
+ ** @see ActivityLang implementation of execution logic
+ ** 
+ ** @todo WIP-WIP 8/2023 »Playback Vertical Slice«
  ** 
  */
 
@@ -50,7 +69,6 @@
 #include "vault/gear/job.h"
 #include "lib/time/timevalue.hpp"
 #include "lib/meta/function.hpp"
-//#include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 //#include <string>
@@ -184,7 +202,8 @@ namespace gear {
   
   
   
-  /**
+  
+  /*********************************************//**
    * Term to describe an Activity,
    * to happen within the Scheduler's control flow.
    * @note Activity is a »POD with constructor«
@@ -491,10 +510,16 @@ namespace gear {
       
       template<class EXE>
       activity::Proc
+      dispatchSelf (Time when, EXE& executionCtx)
+        {
+          return executionCtx.post (when, *this, executionCtx);
+        }
+      
+      template<class EXE>
+      activity::Proc
       dispatchSelfDelayed (Time now, EXE& executionCtx)
         {
-          REQUIRE (next);
-          return executionCtx.post (executionCtx.spin(now), *this, executionCtx);
+          return dispatchSelf (executionCtx.spin(now), executionCtx);
         }
       
       template<class EXE>
@@ -532,6 +557,21 @@ namespace gear {
   
   
   
+  /**
+   * @remark this defines the _Activity state machine_ and implements
+   *         behaviour in dependency of the kind of Activity::Verb.
+   *         Actual implementation defined effects in the Scheduler
+   *         are abstracted as \a executionCtx:
+   *         - `post` : dispatch the given Activity with start time
+   *         - `work` : drop the `GroomingToken` and start processing
+   *         - `done` : record the end time of a media computation
+   *         - `tick` : regular maintenance hook
+   * @return activity::Proc indication how to proceed with execution
+   *         - activity::PASS continue with regular processing of `next`
+   *         - activity::SKIP ignore the rest of the chain, look for new work
+   *         - activity::KILL abort this complete Activity term (timeout)
+   *         - activity::HALT serious problem, stop the Scheduler
+   */
   template<class EXE>
   activity::Proc
   Activity::activate (Time now, EXE& executionCtx)
@@ -550,7 +590,7 @@ namespace gear {
       case GATE:
         return checkGate (now, executionCtx);
       case POST:
-        return postChain (now, executionCtx);
+        return dispatchSelf (now, executionCtx);
       case FEED:
         return activity::PASS;
       case HOOK:
