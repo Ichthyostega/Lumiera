@@ -113,11 +113,11 @@ namespace test {
           auto fun = detector.buildDiagnosticFun<void(uint)> ("funny");
           uint rnd = rand() % 10000;
           
-          ++detector;
+          detector.incrementSeq();
           CHECK (1 == detector.currSeq());
           CHECK (detector.ensureNoInvocation ("funny"));
           
-          ++detector;
+          detector.incrementSeq();
           CHECK (2 == detector.currSeq());
           CHECK (detector.verifySeqIncrement(2));
           
@@ -133,7 +133,7 @@ namespace test {
           CHECK (detector.ensureNoInvocation ("funny").seq(5));             // expecting wrong sequence number
           CHECK (detector.ensureNoInvocation ("funny").arg(rnd).seq(1));    // expecting correct argument, but wrong sequence
           
-          ++detector;
+          detector.incrementSeq();
           fun (rnd+1);
           CHECK (detector.verifyInvocation ("funny").seq(2)
                          .beforeSeqIncrement(3)
@@ -174,7 +174,7 @@ namespace test {
           CHECK (detector.verifyInvocation ("mockJob").arg(nominal, invoKey.part.a));
           CHECK (detector.verifyInvocation ("mockJob").timeArg(nominal));
           
-          ++detector;                                                                           // note: sequence number incremented between invocations
+          detector.incrementSeq();                                                              // note: sequence number incremented between invocations
           dummyJob.parameter.nominalTime += 5 * Time::SCALE;                                    // different job parameter (later nominal time point)
           dummyJob.triggerJob();
           
@@ -221,7 +221,7 @@ namespace test {
           CHECK (activity::PASS == ctx.tick(t));
           CHECK (detector.verifyInvocation(CTX_TICK).arg(t));
           
-          ++detector;
+          detector.incrementSeq();
           ctx.tick.returning(activity::KILL);
           CHECK (activity::KILL == ctx.tick(t));
           CHECK (detector.verifyInvocation(CTX_TICK).timeArg(t));
@@ -277,7 +277,7 @@ namespace test {
           Activity& tap = detector.buildActivationTap (invoke);
           CHECK (tap.next == invoke.next);
           
-          ++detector;
+          detector.incrementSeq();
           Time t2{0,2,2};
           // now activate through the Tap....
           tap.activate(t2, detector.executionCtx);
@@ -286,7 +286,7 @@ namespace test {
                          .beforeInvocation(jobID).seq(1).arg(nomTime,12));
           
           // WARNING: can still activate the watched subject directly...
-          ++detector;
+          detector.incrementSeq();
           Time t3{0,3,3};
           invoke.activate (t3, detector.executionCtx);
           CHECK (detector.verifyInvocation(jobID).seq(2));            // subject invoked
@@ -384,7 +384,7 @@ namespace test {
           
           Time tt{5,5};
           wiring->activate(tt, detector.executionCtx);
-          ++detector;
+          detector.incrementSeq();
           wiring->next->activate(tt, detector.executionCtx);
           
           CHECK (detector.verifyInvocation("tap-GATE").seq(0).timeArg(tt)

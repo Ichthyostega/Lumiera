@@ -464,7 +464,7 @@ namespace test {
       
       /** increment the internal invocation sequence number */
       uint
-      operator++()
+      incrementSeq()
         {
           ++invocationSeq_;
           eventLog_.event (MARK_INC, util::toString(invocationSeq_));

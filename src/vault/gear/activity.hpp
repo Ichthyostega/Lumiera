@@ -503,7 +503,7 @@ namespace gear {
             --data_.condition.rest;
           // maybe the Gate has been opened by this notification?
           if (data_.condition.isFree(now)) //  yes => activate gated chain
-            return postChain (now, executionCtx);
+            return postChain (now, executionCtx);    ////////////////////////////////////////////////////////TICKET #1319 : really re-scheduler directly? may lead to duplicate invocations!
           else
             return activity::PASS;
         }
@@ -519,7 +519,8 @@ namespace gear {
       activity::Proc
       dispatchSelfDelayed (Time now, EXE& executionCtx)
         {
-          return dispatchSelf (executionCtx.spin(now), executionCtx);
+          dispatchSelf (executionCtx.spin(now), executionCtx);
+          return activity::SKIP;
         }
       
       template<class EXE>
@@ -569,7 +570,7 @@ namespace gear {
    * @return activity::Proc indication how to proceed with execution
    *         - activity::PASS continue with regular processing of `next`
    *         - activity::SKIP ignore the rest of the chain, look for new work
-   *         - activity::KILL abort this complete Activity term (timeout)
+   *         - activity::KILL abort this complete Activity term (play change)
    *         - activity::HALT serious problem, stop the Scheduler
    */
   template<class EXE>
