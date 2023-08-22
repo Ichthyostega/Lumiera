@@ -68,9 +68,10 @@ namespace test {
         {
           simpleUsage();
           
-          verifyActivity_Invoke();
-          verifyActivity_Notify();
           verifyActivity_Post();
+          verifyActivity_Invoke();
+          verifyActivity_Notify_activate();
+          verifyActivity_Notify_dispatch();
           verifyActivity_Gate();
           
           termBuilder();
@@ -81,18 +82,52 @@ namespace test {
         }
       
       
-      /** @test TODO demonstrate a simple usage scenario
-       * @todo WIP 7/23 🔁 define 🔁 implement
-       */
+      /** @test demonstrate simple Activity usage */
       void
       simpleUsage()
         {
           // Activities are »POD with constructor«
-          Activity gate{5, Time{FSecs{3,2}}};
-          CHECK (gate.verb_ == Activity::GATE);
-          CHECK (gate.next == nullptr);
-          CHECK (gate.data_.condition.rest == 5);
-          CHECK (gate.data_.condition.dead == Time(500,1));
+          Activity start{Activity::WORKSTART};
+          CHECK (start.verb_ == Activity::WORKSTART);
+          CHECK (start.next  == nullptr);
+          CHECK (start.data_.timing.instant == Time::NEVER);       //////////////////////////////////////////TICKET #1317 : the purpose of this time data is not clear yet
+          CHECK (start.data_.timing.quality == 0);
+          
+          // use the ActivityDetector for test instrumentation...
+          ActivityDetector detector;
+          
+          // Activities can be invoked within an ExecutionContext
+          Time now = RealClock::now();
+          start.activate (now, detector.executionCtx);
+          
+          // In this case, activation causes invocation of λ-work on the context
+          CHECK (detector.verifyInvocation("CTX-work").arg(now, 0));
+          
+//        cout << detector.showLog()<<endl; // HINT: use this for investigation...
+        }
+      
+      
+      
+      /** @test behaviour of Activity::POST
+       * @todo WIP 8/23 🔁 define ⟶ implement
+       */
+      void
+      verifyActivity_Post()
+        {
+          Activity chain;
+          Activity post{Time{0,11}, Time{0,22}, &chain};
+          CHECK (Activity::TICK == chain.verb_);
+          CHECK (Activity::POST == post.verb_);
+          CHECK (Time(0,11) == post.data_.timeWindow.life);
+          CHECK (Time(0,22) == post.data_.timeWindow.dead);
+          CHECK ( & chain   == post.next);
+          
+          ActivityDetector detector;
+          Time tt{11,11};
+          post.activate (tt, detector.executionCtx);
+          
+          cout << detector.showLog() <<endl;
+          CHECK (detector.verifyInvocation("CTX-post").arg("11.011", "Act(TICK", "≺test::CTX≻"));   ///////////////////OOO need somehow to transport the time window...
         }
       
       
@@ -117,31 +152,46 @@ namespace test {
           Time realTime = RealClock::now();
           CHECK (activity::PASS == invoke.activate (realTime, detector.executionCtx));
           
-          cout << detector.showLog()<<endl;
           CHECK (detector.verifyInvocation ("job").arg(nomTime, x1));
         }
       
       
       
       /** @test TODO behaviour of Activity::NOTIFY
-       *        - notification entails to schedule a follow-up activation
-       *        - implies to pass the `next`-Activity to the execution context's `post()` hook
-       *        - use the rigged execution context from ActivityDetector to detect call
-       * @todo WIP 7/23 🔁 define ⟶ implement
+       *        - notification is dispatched as special message to an indicated target Activity
+       *        - when activated, a `NOTIFY`-Activity _posts itself_ through the Execution Context hook
+       *        - this way, further processing will happen in management mode (single threaded)
+       * @todo WIP 8/23 🔁 define ⟶ implement
        */
       void
-      verifyActivity_Notify()
+      verifyActivity_Notify_activate()
         {
+          Activity chain;
+          Activity notify{&chain};
+          
+          ActivityDetector detector;
+          Time tt{111,11};
+          notify.activate (tt, detector.executionCtx);
+          cout << detector.showLog() <<endl;
         }
       
       
       
       /** @test TODO behaviour of Activity::NOTIFY
-       * @todo WIP 7/23 ⟶ define ⟶ implement
+       *        - when _posting_ a `NOTIFY`, a dedicated _notification_ function is invoked on the chain
+       *        - what actually happens then depends on the receiver; here we just activate a test-Tap
+       * @todo WIP 8/23 🔁 define ⟶ implement
        */
       void
-      verifyActivity_Post()
+      verifyActivity_Notify_dispatch()
         {
+          ActivityDetector detector;
+          
+          Activity notify{detector.buildActivationProbe("targetActivity")};
+          
+          Time tt{111,11};
+          notify.dispatch (tt, detector.executionCtx);
+          cout << detector.showLog() <<endl;
         }
       
       
