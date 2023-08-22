@@ -72,7 +72,10 @@ namespace test {
           verifyActivity_Invoke();
           verifyActivity_Notify_activate();
           verifyActivity_Notify_dispatch();
-          verifyActivity_Gate();
+          verifyActivity_Gate_pass();
+          verifyActivity_Gate_dead();
+          verifyActivity_Gate_block();
+          verifyActivity_Gate_opened();
           
           termBuilder();
           
@@ -112,7 +115,6 @@ namespace test {
        *        - invoke the λ-post to dispatch the chain through the queue
        *        - the chain to be executed is given as `next`
        *        - time window for scheduling as data field
-       * @todo WIP 8/23 ✔ define ✔ implement
        */
       void
       verifyActivity_Post()
@@ -129,7 +131,6 @@ namespace test {
           Time tt{11,11};
           post.activate (tt, detector.executionCtx);
           
-          cout << detector.showLog() <<endl;
           CHECK (detector.verifyInvocation("CTX-post").arg("11.011", "Act(POST", "≺test::CTX≻"));
         }
       
@@ -176,6 +177,7 @@ namespace test {
           Time tt{111,11};
           notify.activate (tt, detector.executionCtx);
           cout << detector.showLog() <<endl;
+          CHECK (detector.verifyInvocation("CTX-post").arg("11.111", "Act(NOTIFY", "≺test::CTX≻"));
         }
       
       
@@ -189,22 +191,77 @@ namespace test {
       verifyActivity_Notify_dispatch()
         {
           ActivityDetector detector;
-          
-          Activity notify{detector.buildActivationProbe("targetActivity")};
+                                   // use a diagnostic Tap as chain to detect passing of notification
+          Activity notify{detector.buildActivationProbe("notifyTargetActivity")};
           
           Time tt{111,11};
           notify.dispatch (tt, detector.executionCtx);
+          cout << detector.showLog() <<endl;
+          CHECK (detector.verifyInvocation("notifyTargetActivity").arg("11.111"));
+        }
+      
+      
+      
+      /** @test TODO behaviour of Activity::GATE
+       * @todo WIP 8/23 🔁 define ⟶ implement
+       */
+      void
+      verifyActivity_Gate_pass()
+        {
+          Activity chain;
+          Activity gate{0};
+          gate.next = &chain;
+          
+          ActivityDetector detector;
           cout << detector.showLog() <<endl;
         }
       
       
       
       /** @test TODO behaviour of Activity::GATE
-       * @todo WIP 7/23 ⟶ define ⟶ implement
+       * @todo WIP 8/23 🔁 define ⟶ implement
        */
       void
-      verifyActivity_Gate()
+      verifyActivity_Gate_dead()
         {
+          Activity chain;
+          Activity gate{0};
+          gate.next = &chain;
+          
+          ActivityDetector detector;
+          cout << detector.showLog() <<endl;
+        }
+      
+      
+      
+      /** @test TODO behaviour of Activity::GATE
+       * @todo WIP 8/23 🔁 define ⟶ implement
+       */
+      void
+      verifyActivity_Gate_block()
+        {
+          Activity chain;
+          Activity gate{0};
+          gate.next = &chain;
+          
+          ActivityDetector detector;
+          cout << detector.showLog() <<endl;
+        }
+      
+      
+      
+      /** @test TODO behaviour of Activity::GATE
+       * @todo WIP 8/23 🔁 define ⟶ implement
+       */
+      void
+      verifyActivity_Gate_opened()
+        {
+          Activity chain;
+          Activity gate{0};
+          gate.next = &chain;
+          
+          ActivityDetector detector;
+          cout << detector.showLog() <<endl;
         }
       
       
