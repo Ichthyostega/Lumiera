@@ -192,7 +192,7 @@ namespace gear {
        ASSERT_MEMBER_FUNCTOR (EXE::work, void(Time, size_t));
        ASSERT_MEMBER_FUNCTOR (EXE::done, void(Time, size_t));
        ASSERT_MEMBER_FUNCTOR (EXE::tick, Proc(Time));
-       ASSERT_MEMBER_FUNCTOR (EXE::spin, Time(Time));
+       ASSERT_MEMBER_FUNCTOR (EXE::wait, Time(Time));
 
       
 #undef ASSERT_MEMBER_FUNCTOR
@@ -500,12 +500,15 @@ namespace gear {
         {
           REQUIRE (GATE == verb_);
           if (data_.condition.rest > 0)
-            --data_.condition.rest;
-          // maybe the Gate has been opened by this notification?
-          if (data_.condition.isFree(now)) //  yes => activate gated chain
-            return postChain (now, executionCtx);    ////////////////////////////////////////////////////////TICKET #1319 : really re-scheduler directly? may lead to duplicate invocations!
-          else
-            return activity::PASS;
+            {
+              --data_.condition.rest;
+              // maybe the Gate has been opened by this notification?
+              if (data_.condition.isFree(now))
+                {//yes => activate gated chain but lock redundant invocations
+                  data_.condition.dead = Time::MIN;
+                  return postChain (now, executionCtx);
+            }   }
+          return activity::PASS;
         }
       
       template<class EXE>
@@ -519,7 +522,7 @@ namespace gear {
       activity::Proc
       dispatchSelfDelayed (Time now, EXE& executionCtx)
         {
-          dispatchSelf (executionCtx.spin(now), executionCtx);
+          dispatchSelf (executionCtx.wait(now), executionCtx);
           return activity::SKIP;
         }
       

@@ -132,7 +132,7 @@ namespace test {
     const string CTX_DONE{"CTX-done"};
     const string CTX_TICK{"CTX-tick"};
     
-    Offset SPIN_DELAY{FSecs(1)};
+    Offset POLL_DELAY{FSecs(1)};
   }
   
   class ActivityDetector;
@@ -562,7 +562,7 @@ namespace test {
           _DiagnosticFun<SIG_done>::Type done;
           _DiagnosticFun<SIG_tick>::Type tick;
           
-          static Time spin (Time now) { return now + SPIN_DELAY; }
+          static Time wait (Time now) { return now + POLL_DELAY; }
           
           FakeExecutionCtx (ActivityDetector& adi)
             : post{adi.buildDiagnosticFun<SIG_post>(CTX_POST).returning(activity::PASS)}

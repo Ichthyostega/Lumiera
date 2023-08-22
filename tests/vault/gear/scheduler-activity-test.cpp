@@ -203,7 +203,6 @@ namespace test {
       /** @test behaviour of Activity::GATE:
        *        if conditions are met, the activation is just passed,
        *        so the executor (in the Scheduler) will just invoke the chain
-       * @todo WIP 8/23 ✔ define ✔ implement
        */
       void
       verifyActivity_Gate_pass()
@@ -222,9 +221,8 @@ namespace test {
       
       
       
-      /** @test TODO behaviour of Activity::GATE:
-       *             the rest of the chain is just skipped in case of deadline violation
-       * @todo WIP 8/23 ✔ define ✔ implement
+      /** @test behaviour of Activity::GATE:
+       *        the rest of the chain is just skipped in case of deadline violation
        */
       void
       verifyActivity_Gate_dead()
@@ -250,16 +248,13 @@ namespace test {
           detector.incrementSeq();
           CHECK (activity::SKIP == wiring.activate (t3, detector.executionCtx));
           CHECK (detector.verifyInvocation("tap-GATE").arg("33.335 ⧐ Act(GATE").seq(2));
-          
-          cout << detector.showLog() <<endl;
         }
       
       
       
-      /** @test TODO behaviour of Activity::GATE:
+      /** @test behaviour of Activity::GATE:
        *        the count-down condition determines if activation _passes_
        *        or will _spin around_ for later re-try
-       * @todo WIP 8/23 ✔ define ✔ implement
        */
       void
       verifyActivity_Gate_block()
@@ -275,17 +270,25 @@ namespace test {
           CHECK (activity::SKIP == wiring.activate (tt, detector.executionCtx));
           CHECK (23 == gate.data_.condition.rest);  //  prerequisite-count not altered
           
-          Time reScheduled = detector.executionCtx.spin(tt);
+          Time reScheduled = detector.executionCtx.wait(tt);
           CHECK (tt < reScheduled);
-          cout << detector.showLog() <<endl;
+          
           CHECK (detector.verifyInvocation("tap-GATE").arg("33.333 ⧐ Act(GATE")
                          .beforeInvocation("CTX-post").arg(reScheduled, "Act(GATE", "≺test::CTX≻"));
         }
       
       
       
-      /** @test TODO behaviour of Activity::GATE
-       * @todo WIP 8/23 🔁 define ✔ implement
+      /** @test behaviour of Activity::GATE on notification
+       *        - Gate configured initially such that it blocks
+       *          (without violating deadline)
+       *        - thus a regular activation signals to skip the chain,
+       *          but also re-schedules a further check into the future
+       *        - when receiving a notification, the latch is decremented
+       *        - if this causes the Gate to open, the chain is immediately
+       *          scheduled for activation, but the Gate also locked forever
+       *        - neither a further activation, or a further notification
+       *          has any effect after this point...
        */
       void
       verifyActivity_Gate_opened()
@@ -293,25 +296,55 @@ namespace test {
           Activity chain;
           Activity gate{1};
           gate.next = &chain;
+          // Conditionals in the gate block invocations
+          CHECK (gate.data_.condition.isHold());
+          CHECK (gate.data_.condition.rest == 1);
+          CHECK (gate.data_.condition.dead == Time::NEVER);
           
           ActivityDetector detector;
           Activity& wiring = detector.buildGateWatcher (gate);
           
           Time tt{333,33};
+          Time reScheduled = detector.executionCtx.wait(tt); // retrieve the next time to retry
+          CHECK (tt < reScheduled);
+          
+          // an attempt to activate blocks (and re-schedules for later retry)
           CHECK (activity::SKIP == wiring.activate (tt, detector.executionCtx));
-          CHECK (1 == gate.data_.condition.rest); // unchanged...
+          CHECK (1 == gate.data_.condition.rest); // unchanged (and locked)...
+          CHECK (detector.verifyInvocation("tap-GATE").arg("33.333 ⧐ Act(GATE")
+                         .beforeInvocation("CTX-post").arg(reScheduled, "Act(GATE", "≺test::CTX≻"));
           
           detector.incrementSeq();
           // Gate receives a notification from some prerequisite Activity
           CHECK (activity::PASS == wiring.notify(tt, detector.executionCtx));
           CHECK (0 == gate.data_.condition.rest); // condition has been decremented...
           
-          Time reScheduled = detector.executionCtx.spin(tt);
           CHECK (detector.verifyInvocation("tap-GATE").seq(0).arg("33.333 ⧐ Act(GATE")
                          .beforeInvocation("CTX-post").seq(0).arg(reScheduled, "Act(GATE", "≺test::CTX≻")
                          .beforeInvocation("tap-GATE").seq(1).arg("33.333 --notify-↯> Act(GATE")
-                         .beforeInvocation("CTX-post").seq(1).arg(tt, "afterGATE", "≺test::CTX≻"));  ////////TICKET #1319 : really re-scheduler directly? may lead to duplicate invocations!
-          cout << detector.showLog() <<endl;
+                         .beforeInvocation("CTX-post").seq(1).arg(tt, "afterGATE", "≺test::CTX≻"));
+          CHECK (gate.data_.condition.dead == Time::MIN);
+          
+          detector.incrementSeq();
+          Time ttt{444,44};
+          // when the re-scheduled check happens later, it is blocked to prevent double activation
+          CHECK (activity::SKIP == wiring.activate (ttt, detector.executionCtx));
+          CHECK (detector.verifyInvocation("tap-GATE").seq(2).arg("44.444 ⧐ Act(GATE"));
+          CHECK (detector.ensureNoInvocation("CTX-post").seq(2));
+          CHECK (gate.data_.condition.dead == Time::MIN);
+          
+          detector.incrementSeq();
+          // even a further notification has no effect now....
+          wiring.notify(ttt, detector.executionCtx);
+          // conditionals were not touched:
+          CHECK (gate.data_.condition.dead == Time::MIN);
+          CHECK (gate.data_.condition.rest == 0);
+          // the log shows the further notification (at Seq=3) but no dispatch happens anymore
+          CHECK (detector.verifySeqIncrement(3)
+                         .beforeInvocation("tap-GATE").seq(3).arg("44.444 --notify-↯> Act(GATE"));
+          CHECK (detector.ensureNoInvocation("CTX-post").seq(3).arg(tt, "afterGATE", "≺test::CTX≻"));
+          
+//        cout << detector.showLog()<<endl; // HINT: use this for investigation...
         }
       
       

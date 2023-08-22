@@ -7041,7 +7041,7 @@ __see also__
 &amp;rarr; the protocol [[how to operate the nodes|NodeOperationProtocol]]
 </pre>
 </div>
-<div title="RenderOperationLogic" creator="Ichthyostega" modifier="Ichthyostega" created="202307272322" modified="202307301650" tags="Rendering operational draft" changecount="12">
+<div title="RenderOperationLogic" creator="Ichthyostega" modifier="Ichthyostega" created="202307272322" modified="202308222257" tags="Rendering operational draft" changecount="15">
 <pre>//The operational logic of Activity execution is the concrete service provided by the [[Scheduler]] to implement interwoven [[render Activities|RenderActivity]] and [[Job  execution|RenderJob]].//
 * logically, each {{{Activity}}} record represents a //verb// to describe some act performed by »the render process«
 * the {{{ActivityLang}}} provides a //builder notation// to build „sentences of activities“ and it sets the framework for //execution// of Activities
@@ -7121,6 +7121,11 @@ Since the render engine can be considered performance critical, only a fixed set
 :Internal periodical maintenance duty cycle
 :* {{{TICK}}} : a special marker Activity, which re-inserts itself on each activation and performs an internal hook of the Render Engine
 :**  ⟹ the Activity Language invokes the ''λ-work''
+
+!!!Post and dispatch
+An Activity is //performed// by invoking its {{{activate(now, ctx)}}} function -- however, there is a twist: some Activities require interaction with the Scheduler queue or may even alter this queue -- and such Activities must be performed //in »management mode«// (single threaded, holding the {{{GroomingToken}}}). These requirements can be fulfilled by //dispatching// an Activity through the ''λ-post'', which attempts to acquire the {{{GroomingToken}}} and otherwise sends the action through the //dispatch queue.// Moreover, some follow-up activities need to happen //later// -- and this can be encoded by using a {{{POST}}}-Activity, which both defines a time window of execution and causes its chain-Activity to be sent through ''λ-post''.
+
+In a similar vein, also ''notifications'' need to happen decoupled from the activity chain from which they originate; thus the Post-mechanism is also used for dispatching notifications. Yet notifications are to be treated specially, since they are directed towards a receiver, which in the standard case is a {{{GATE}}}-Activity and will respond by //decrementing its internal latch.// Consequently, receiving a notification may cause the Gate to become opened; in this case the trigger is passed through a further dispatch through the ''λ-post'' to activate the chain-Activities hooked behind the Gate. The implementation of this state transition logic ensures that this chain behind a Gate can only be //activated once.//
 </pre>
 </div>
 <div title="RenderProcess" modifier="Ichthyostega" created="200706190705" modified="201112162056" tags="Rendering operational">
