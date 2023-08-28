@@ -1,0 +1,114 @@
+/*
+  ACTIVITY-TERM.hpp  -  definition language framework for scheduler activities
+
+  Copyright (C)         Lumiera.org
+    2023,               Hermann Vosseler <Ichthyostega@web.de>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+*/
+
+
+/** @file activity-term.hpp
+ ** A term of the _activity language_ describing interconnected scheduler activities.
+ ** The activity::Term is created as a transient object in _builder notation,_ and used
+ ** to lay out the specifics of the planned operations necessary to calculate a single
+ ** frame or to carry out some administrative task. The actual \ref Activity verbs are
+ ** allocated independently, within the BlockFlow allocation scheme, while the Term
+ ** links and configures these data records and prepares them to instruct the Scheduler.
+ ** Through the activity::Term, relevant attachment points are exposed for configuration,
+ ** yet after posting the entrance point of an activity chain to the Scheduler, the term
+ ** is obsoleted and can be discarded without affecting the individual Activities awaiting
+ ** activation through the Scheduler.
+ ** 
+ ** @see SchedulerActivity_test
+ ** @see activity-lang.hpp Entrance point to Activity definition
+ ** @see activity.hpp definition of verbs
+ ** 
+ ** @todo WIP-WIP-WIP 8/2023 »Playback Vertical Slice«
+ ** 
+ */
+
+
+#ifndef SRC_VAULT_GEAR_ACTIVITY_TERM_H_
+#define SRC_VAULT_GEAR_ACTIVITY_TERM_H_
+
+
+#include "vault/gear/activity.hpp"
+#include "vault/gear/block-flow.hpp"
+//#include "lib/symbol.hpp"
+#include "lib/time/timevalue.hpp"
+//#include "lib/util.hpp"
+
+//#include <string>
+#include <utility>
+
+
+namespace vault{
+namespace gear {
+  
+  using lib::time::Time;////////////WIP
+//  using util::isnil;
+//  using std::string;
+  using std::move;
+  
+  using BlockFlowAlloc = BlockFlow<blockFlow::RenderConfig>;
+  
+  
+  namespace activity {
+    
+    /**
+     * A Term of the »Activity Language«, describing the steps necessary
+     * to perform the calculation of a single frame or similar tasks.
+     */
+    class Term
+      {
+        
+        using AllocHandle = BlockFlowAlloc::AllocatorHandle;
+        
+        AllocHandle alloc_;
+        
+      public:
+        enum Template {CALC_JOB  ///< scheme for a synchronous media calculation job
+                      ,LOAD_JOB  ///< scheme for an asynchronous data retrieval job
+                      ,META_JOB  ///< scheme for planning and organisational job
+                      };
+        
+        explicit
+        Term (AllocHandle&& allocHandle, Template kind, Time start, Time after)
+          : alloc_{move (allocHandle)}
+          { }
+        
+//        virtual std::string
+//        diagnostic()  const
+//          {
+//            return "Activity::Hook";
+//          }
+        
+//        operator std::string()  const
+//          {
+//            return diagnostic();
+//          }
+      };
+    
+    
+    /** */
+    
+  }//(End)namespace activity
+  
+  
+  
+}} // namespace vault::gear
+#endif /*SRC_VAULT_GEAR_ACTIVITY_TERM_H_*/

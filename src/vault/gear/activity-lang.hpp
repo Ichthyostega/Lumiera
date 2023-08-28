@@ -43,6 +43,7 @@
 
 #include "vault/gear/activity.hpp"
 #include "vault/gear/block-flow.hpp"
+#include "vault/gear/activity-term.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
@@ -74,6 +75,18 @@ namespace gear {
         { }
       
       // using default copy/assignment
+      
+    private:
+      /** @internal generate the builder / configurator term */
+      activity::Term
+      setupActivityScheme (activity::Term::Template schemeKind, Time start, Time after)
+        {
+          return activity::Term{ mem_.until(after)
+                               , schemeKind
+                               , start
+                               , after
+                               };
+        }
     };
   
   

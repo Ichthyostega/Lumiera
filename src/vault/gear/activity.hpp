@@ -204,7 +204,7 @@ namespace gear {
   
   
   /*********************************************//**
-   * Term to describe an Activity,
+   * Record to describe an Activity,
    * to happen within the Scheduler's control flow.
    * @note Activity is a »POD with constructor«
    *       - trivially *destructible*
