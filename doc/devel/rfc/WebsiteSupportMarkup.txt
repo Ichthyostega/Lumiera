@@ -12,8 +12,8 @@ WebsiteSupportMarkup
 
 ********************************************************************************
 .Abstract
-The Lumiera Website and Documentation uses a lightweight, plaintext based
-Infrastructure built on top of Asciidoc and Git. To help with everyday
+The Lumiera Website and Documentation uses a lightweight, plain text based
+infrastructure built on top of Asciidoc and Git. To help with everyday
 authoring and editorial tasks, a set of support facilities is proposed,
 to be integrated seamlessly into the existing infrastructure. The front-end
 to these tools is specific markup, allowing for *cross-linking*, *tag*-based
@@ -34,38 +34,44 @@ Use Cases
 ~~~~~~~~~
 
 Authoring::
-  For now, the _authoring of new content_ is mostly a responsibility of the core developers.
-  It needs to be done close to the actual coding activities, typically once a new facility
-  is roughly finished. It is crucial for this activity not to impose a _context switch_
-  on the writer. It must be ``just writing down the obvious'' -- otherwise developers tend
-  to defer this activity ``for later''. This situation creates some unique problems...
+  For now, the _authoring of new content_ is mostly the responsibility of the core developers.
+  It needs to be done close to the related coding activities, typically once a new facility
+  is finished or in the final stages of completion. It is crucial for this
+  activity not to impose a _context switch_  on the writer. It must be ``just
+  writing down the obvious'' -- otherwise developers tend to defer this activity
+  ``for later''. This situation creates some unique problems... 
   
   - during the write-up, the coder-author realises several external presuppositions, which,
     during the act of coding, seemed to be ``obvious'' and ``self evident''.
-  - since expanding on all of those secondary topics is out of question (the author will rather
+  - since expanding on all of those secondary topics is out of scope (the author would rather
     abandon the task of documentation altogether), the only solution is to allow for *cross linking*,
-    even if the created links are dangling for the moment.
-  - the author can't effort to locate other documents and determine URLs; he won't even be willing
-    to consult a markup syntax reference. Because, what he's about to write is essentially hard to
-    put into words and thus requires his full attention.
+    even if the new links are dangling; well at least for the moment.
+  - the author can't invest the effort to locate additional relevant documents,
+    nor hunt for URLs; the author is disinclined to consult a markup syntax
+    reference. This arises from the nature of the required text which is
+    essentially difficult to grasp in the first place and even more difficult
+    too put into words. A task requiring full mental concentration. 
+
 
 Integrating Content::
   This task is often prompted by some kind of external cause: it might be someone asking for
   explanations and while trying to respond, it was determined that ``this should be in the documentation''.
   Thus, some existing markup is extracted from an external system and pasted into some location,
   ``just for the moment''. Of course, this content will be forgotten and rest there for
-  years to come. To deal with this situation...
+  years to come. To counter act such a situation, we propose the following:
   
-  - adapting the structural cross-references of the integrated markup needs to be an easy task.
-  - we need a way to hook the new content somehow into our existing categorisation
+  - structural cross-references of the integrated markup needs to be easy to do.
+  - a way in which we can somehow hook the new content into our current scheme
+    of categories
   - the person integrating the content wont't be willing to visit a lot of other locations,
     or to read a syntax reference for some kind of advanced markup.
 
 Editorial work::
-  The _editor_ is reviewing existing content. He'll try to emulate an assumed user's point of view
+  The _editor_ reviews current content. He'll try to emulate an assumed user's point of view
   to judge the adequacy of the presentation. This leads to rearranging and re-locating pages and whole
   trees of pages, even splitting some of them, and adding introductory paragraphs and pages here and
-  there -- all without the ability to read and understand any of the reviewed material in-depth.
+  there -- all without the ability to read or understand any of the reviewed
+  material to any degree of depth.
   
   - this work will be performed on the primary content using its ``natural'' representation: that is,
     the editor will copy and move files in the file system and edit text. There is no room for using
@@ -76,7 +82,7 @@ Editorial work::
 
 Tools for the task at hand
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-This RfC proposes a set of tools to cope with those problems. More specifically, this proposal details
+This RfC proposes a set of tools to improve these problems. More specifically, this proposal details
 a possible _front end_ for these tools, in a way which blends well with the existing Git / Asciidoc
 website infrastructure.
 
@@ -96,18 +102,18 @@ Variations and extensions
 - we might consider adding some domain prefixes, e.g. +link:rfc:SomeTopic+ or +link:ticket:SomeTopic+
   or +link:code:SomeTopic+
 
-Obviously, these cross-links needs to be resilient towards content reorganisation after-the-fact.
-Effectively this mandates introducing some kind of indirection, since we can't effort to regenerate the
+Obviously, these cross-links need to be resilient against content reorganisation after-the-fact.
+Effectively this mandates introducing some kind of indirection, since we can't afford to regenerate the
 whole website's HTML pages after each localised change. A possible solution could be to make the rendered
 cross link invoke a JavaScript function, which in turn consults some kind of index table. Another solution
 would be to let the cross link point to a server sided script.
 
 Tag extractor and Index
 ^^^^^^^^^^^^^^^^^^^^^^^
-Define suitable ways for attaching *tags* to various kinds of content. The syntax will be tailored to the
-kind of content in question, typically placing the tags in some kind of comment or specific header. For
-larger documents, it would be desirable to attach tags in a more fine-grained manner, e.g. tag only one
-paragraph or sub-section (but this is a nice-to-have, since it is anything but trivial to implement).
+Define suitable ways to attach *tags* to various kinds of content. The syntax will be tailored to the
+kind of content in question, typically placing a tag in, for example, a comment or possibly in a special
+header. For larger documents, it would be desirable to attach tags in a more fine-grained manner, e.g. tag
+only one paragraph or sub-section (but this is a nice-to-have, since it is anything but trivial to implement).
 
 Based on these tags, there should be a mechanism to integrate a list of links into some Asciidoc page.
 Obviously this list needs to be dynamic, e.g. by using JavaScript or by including pre-fabricated HTML
@@ -123,10 +129,10 @@ to take precedence.
 Definition entries
 ^^^^^^^^^^^^^^^^^^
 Define a suitable format to promote an existing piece of information into a *definition*. While not
-interfering with the presentation at the textual location of this definition, this mechanism should
-allow to extract this definition and present it within a glossary of terms. It would be nice if
-such a generated glossary could provide an automatic back-link to the location where the definition
-was picked up initially.
+interfering with the presentation at the textual location of this definition, the mechanism should support the  
+possibility of providing a definition in the source which is then extracted from the text and presented
+in a new file as, for example, a glossary of terms. It would be nice if such a generated glossary could
+provide an automatic back-link to the location where the definition was picked up initially.
 
 Of course, defining such a markup includes some reasoning about the suitable format of a glossary
 and definition-of-terms. (Scope? Just a sentence? Just a paragraph? How to utilise existing headings?)
@@ -144,7 +150,8 @@ interested in using them. He will not recall any fancy syntax, and he won't stic
 So, anything not outright obvious is out of question.
 
 - since we don't want fully dynamic page generation and we can't afford regenerating the whole website
-  for each small update, all of these facilities need some way to adapt after-the-fact.
+  for each small update, all of these facilities need some way to be integrated into the present
+  infrastructure with the least amount of change as pssible.
 - we need to build leeway into the system at various places. E.g. the cross-link facility needs a
   strategy to generate and match the IDs and order possible matches in a sensible way. What initially
   links to some doxygen comment might later on point to a glossary if applicable.
