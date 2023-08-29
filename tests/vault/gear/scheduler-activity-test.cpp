@@ -349,8 +349,12 @@ namespace test {
       
       
       
-      /** @test TODO verify the Activity term builder
-       * @todo WIP 8/23 🔁 define 🔁 implement
+      /** @test verify the Activity term builder
+       *        - use the builder syntax to define a simple Activity chain
+       *        - verify the basic outfitting and sane connectivity
+       *        - verify values reported by the BlockFlow allocator
+       *        - ensure the defined Job can be properly invoked
+       * @todo WIP 8/23 ✔ define ✔ implement
        */
       void
       termBuilder()
@@ -369,10 +373,6 @@ namespace test {
             act = & term.post();
           }// NOTE: generated Activity chain remains valid after term goes out of scope
           
-          cout << watch(bFlow).allEpochs() <<endl;
-          cout << watch(bFlow).cntEpochs() <<endl;
-          cout << watch(bFlow).cntElm() <<endl;
-          cout << watch(bFlow).find(*act) <<endl;
           // Values reported for the BlockFlow allocator look sane...
           CHECK (watch(bFlow).cntElm()    == 7);               // POST, GATE, WORKSTART, INVOKE, FEED, FEED, WORKSTOP
           CHECK (watch(bFlow).cntEpochs() == 1);               // all placed into a single epoch...
@@ -386,23 +386,21 @@ namespace test {
           
           // sane wiring, leading to an INVOCATE eventually
           while (act->verb_ != Activity::INVOKE)
-            {
-              cout << util::showAddr(*act) << " verb="<<act->verb_ <<" next="<<util::showAddr(*act->next)<<" next.verb="<<act->next->verb_<<endl;
-              
-              cout << *act <<endl;
-              cout << watch(bFlow).find(*act) <<endl;
             act = act->next;
-            }
+          
           CHECK (Activity::INVOKE == act->verb_);
-              cout << *act <<endl;
-              cout << watch(bFlow).find(*act) <<endl;
           CHECK (watch(bFlow).find(*act) != Time::NEVER);      // can also be found within the BlockFlow allocator
+          
+          // this invocation is properly defined and executable
+          Time now{55,5};
+          CHECK (activity::PASS == act->activate (now, detector.executionCtx));
+          CHECK (detector.verifyInvocation("mockJob"));
         }
       
       
       
       /** @test TODO usage scenario: Activity graph for a render job
-       * @todo WIP 7/23 ⟶ define ⟶ implement
+       * @todo WIP 8/23 🔁 define ⟶ implement
        */
       void
       scenario_RenderJob()
@@ -412,7 +410,7 @@ namespace test {
       
       
       /** @test TODO usage scenario: Activity graph for an async Job
-       * @todo WIP 7/23 ⟶ define ⟶ implement
+       * @todo WIP 8/23 🔁 define ⟶ implement
        */
       void
       scenario_IOJob()
@@ -422,7 +420,7 @@ namespace test {
       
       
       /** @test TODO usage scenario: Activity graph for administrative job
-       * @todo WIP 7/23 ⟶ define ⟶ implement
+       * @todo WIP 8/23 🔁 define ⟶ implement
        */
       void
       scenario_MetaJob()
