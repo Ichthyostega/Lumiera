@@ -6858,7 +6858,7 @@ At first sight the link between asset and clip-MO is a simple logical relation b
 
 {{red{Note 1/2015}}} several aspects regarding the relation of clips and single/multichannel media are not yet settled. There is a preliminary implementation in the code base, but it is not sure yet how multichnnel media will actually be modelled. Currently, we tend to treat the channel multiplicity rather as a property of the involved media, i.e we have //one// clip object.</pre>
 </div>
-<div title="RenderActivity" creator="Ichthyostega" modifier="Ichthyostega" created="202304140145" modified="202308011337" tags="Rendering spec draft" changecount="14">
+<div title="RenderActivity" creator="Ichthyostega" modifier="Ichthyostega" created="202304140145" modified="202308291242" tags="Rendering spec draft" changecount="15">
 <pre>//Render Activities define the execution language of the render engine.//
 The [[Scheduler]] maintains the ability to perform these Activities, in a time-bound fashion, observing dependency relations; activities allow for notification of completed work, tracking of dependencies, timing measurements, re-scheduling of other activities -- and last but not least the dispatch of actual [[render jobs|RenderJob]]. Activities are what is actually enqueued with priority in the scheduler implementation, they are planned for a »µ-tick slot«, activated once when the activation time is reached, and then forgotten. Each Activity is a //verb//, but can be inhibited by conditions and carry operation object data. Formally, activating an Activity equates to a predication, and the subject of that utterance is »the render process«.
 
@@ -6891,7 +6891,7 @@ Activities are organised into ''chains'', allowing to express relations based on
 There are //standard usage patters,// hard coded into the {{{ActivityLang}}} and expected by the {{{SchedulerCommutator}}}, to express all relevant [[patterns of operational logic|RenderOperationLogic]] necessary to represent time-bound and dependent playback and render tasks.
 
 !The Activity Language
-While the Activities are low-level primitives and can be handled directly by the scheduler, any actual rendering invocation must arrange several Activities into a suitable chain of operations. Thus the actual rendering invocation can be seen as a //sentence of the Activity Language.// Formally speaking, it is a //symbolic term.// Not every possible term (and thus sentence) leads to semantically sound behaviour, and thus the ''Scheduler Interface Setup'' is organised in the form of a //builder notation to construct viable Activity terms.// {{{vault::gear::ActivityLang}}} provides the framework for such builder invocations, and allows to create such terms as transient objects -- connected to the durable {{{Activity}}} records allocated into the [[»BlockFlow« memory manager|SchedulerMemory]] backing the Scheduler operation. The language term is thus a front-end, and exposes suitable extension and configuration points for the JobPlanningPipeline to instruct the necessary Scheduler operations to enact a specific [[render Job|RenderJob]].
+While the Activities are low-level primitives and can be handled directly by the scheduler, any actual rendering invocation must arrange several Activities into a suitable chain of operations. Thus the actual rendering invocation can be seen as a //sentence of the Activity Language.// Formally speaking, it is a //symbolic term.// Not every possible term (and thus sentence) leads to semantically sound behaviour, and thus the ''Scheduler Interface Setup'' is organised in the form of a //builder notation to construct viable Activity terms.// {{{vault::gear::ActivityLang}}} provides the framework for such builder invocations, and allows to create such terms as transient objects -- connected to the durable {{{Activity}}} records allocated into the [[»BlockFlow« memory manager|SchedulerMemory]] backing the Scheduler operation. The language term is thus a front-end, and exposes suitable extension and configuration points for the JobPlanningPipeline to instruct the necessary Scheduler operations in order to enact a specific [[render Job|RenderJob]].
 
 The //meaning// of Activities can be understood on two levels. For one, there is the abstract, //conceptual level:// Each Activity represents a verb to express something //performed by »the render process«// -- which in turn appears as a combination and connection of these elementary expressions. Activity verbs can be linked together in a limited number of ways
 * chaining means sequencing -- first //this// Activity, followed by //that// Activity
@@ -7041,7 +7041,7 @@ __see also__
 &amp;rarr; the protocol [[how to operate the nodes|NodeOperationProtocol]]
 </pre>
 </div>
-<div title="RenderOperationLogic" creator="Ichthyostega" modifier="Ichthyostega" created="202307272322" modified="202308222257" tags="Rendering operational draft" changecount="15">
+<div title="RenderOperationLogic" creator="Ichthyostega" modifier="Ichthyostega" created="202307272322" modified="202308291336" tags="Rendering operational draft" changecount="27">
 <pre>//The operational logic of Activity execution is the concrete service provided by the [[Scheduler]] to implement interwoven [[render Activities|RenderActivity]] and [[Job  execution|RenderJob]].//
 * logically, each {{{Activity}}} record represents a //verb// to describe some act performed by »the render process«
 * the {{{ActivityLang}}} provides a //builder notation// to build „sentences of activities“ and it sets the framework for //execution// of Activities
@@ -7049,7 +7049,7 @@ __see also__
 * the ''Scheduler Layer-1'' ({{{SchedulerInvocation}}}) provides the low-level coordination and invocation mechanics to launch [[render Jobs|RenderJob]].
 
 !Framework for Activity execution
-The individual {{{Activity}}} records serve as atomic execution elements; an Activity can be invoked once, either by time-bound trigger in the Scheduler's priority queue, or by receiving an activation message (directly when in //management mode,// indirectly through the invocation queue else). The data structure of the {{{Activity}}} record (&amp;rarr; [[description|RenderActivity]]) is maintained by the [[»block flow« memory allocation scheme|SchedulerMemory]] and can be considered stable and available (within the logical limits of its definition, which means until the overarching deadline has passed). The ''activation'' of an Activity causes the invocation of a hard-wired execution logic, taking into account the //type field// of the actual {{{Activity}}} record to be »performed«. This hard-wired logic however can be differentiated into a //generic// part (implemented directly in {{{class Activity}}}) and a //contextual// part, which is indirected through a ''λ-binding'', passed as ''execution context'', yet actually implemented by functions of ''Scheduler Layer-2''.
+The individual {{{Activity}}} records serve as atomic execution elements; an Activity can be invoked once, either by time-bound trigger in the Scheduler's priority queue, or by receiving an activation message (directly when in //management mode,// else indirectly through the invocation queue). The data structure of the {{{Activity}}} record (&amp;rarr; [[description|RenderActivity]]) is maintained by the [[»block flow« memory allocation scheme|SchedulerMemory]] and can be considered stable and available (within the logical limits of its definition, which means until the overarching deadline has passed). The ''activation'' of an Activity causes the invocation of a hard-wired execution logic, taking into account the //type field// of the actual {{{Activity}}} record to be »performed«. This hard-wired logic however can be differentiated into a //generic// part (implemented directly in {{{class Activity}}}) and a //contextual// part, which is indirected through a ''λ-binding'', passed as ''execution context'', yet actually implemented by functions of ''Scheduler Layer-2''.
 !!!execution patterns
 Since the render engine can be considered performance critical, only a fixed set of //operational patterns// is supported, implemented with a minimum of indirections and thus with limited configurability. It seems indicated to confine the scope of this operational logic to a finite low-level horizon, assuming that //all relevant high-level render activities// can actually be //expressed in terms of these fundamental patterns,// in combination with an opaque JobFunctor.
 ;Frame Render Job
@@ -7059,12 +7059,12 @@ Since the render engine can be considered performance critical, only a fixed set
 :** these Activities are chained-up (hooked onto the {{{next}}} pointer)
 :** depending on the //invocation context...//
 :*** in ''grooming mode'' (i.e. the current worker holds the {{{GroomingToken}}}) the follow-up activation happens synchronously
-:*** in ''work mode'' (i.e. the {{{GroomingToken}}} has been dropped) the Scheduler internals //must not be altered;// the chain has to be dispatched
+:*** in ''work mode'' (i.e. {{{GroomingToken}}} has been dropped) the Scheduler internals //must not be altered;// the chain thus has to be dispatched
 :** ⟹ the Activity Language invokes the ''λ-post''.
 :* {{{GATE}}} : provides a check-point to ensure the preconditions are met
-:** the current //wall-clock-time// is checked against the //deadline//
-:** moreover, a //prerequisite count// is checked, allowing passage only if the count has been ticked off to zero
-:** while surpassing the deadline simply obliterates all chained Activities, unmet prerequisites cause a spinning delay-and-recheck
+:** the current //scheduler-time// (≈ system time) is checked against the //deadline//
+:** moreover, a //prerequisite count// is checked, allowing passage only if the internal countdown latch has been ticked off to zero;
+:** while surpassing the deadline simply obliterates all chained Activities, unmet prerequisites cause a „spinning“ delay-and-recheck
 :** the count-down of prerequisites is caused by receiving a ''notification'' (either externally, or from a {{{NOTIFY}}}-Activity)
 :** receiving such a notification causes re-evaluation of the condition and possibly activation of the chain
 :** ⟹ the Activity Language evaluates the condition {prerequisite ≡ 0 and before deadline}.
@@ -7075,7 +7075,7 @@ Since the render engine can be considered performance critical, only a fixed set
 :** the {{{GroomingToken}}} is dropped, allowing other [[workers|SchedulerWorker]] to enter grooming mode and to retrieve further jobs.
 :** ⟹ the Activity Language invokes the ''λ-work''.
 :* {{{INVOKE}}} : actually invoke the JobFunctor given as immediate argument
-:** a fixed number of further {{{size_t}}} arguments are retrieved from the {{{FEED}}}-Activities following next
+:** a fixed number of further {{{uint64_t}}} arguments are retrieved from the {{{FEED}}}-Activities following next
 :** all currently foreseeable render operations invoked from here do not need more than 4 fixed arguments (the rest being prepared by the Builder)
 :**  ⟹ the Activity Language directly invokes the ''~JobFunctor'', in the current thread, which thus might be blocked indefinitely.
 :* {{{FEED}}} : used to transport argument data for render operations
@@ -7084,11 +7084,11 @@ Since the render engine can be considered performance critical, only a fixed set
 :** ⟹ the Activity Language invokes the ''λ-done''.
 :** the current time and a payload argument is emitted as message -- for self-regulation of the render engine
 :** logically, the current worker is now free for further work -- which is attained implicitly
-:* {{{NOTIFY}}} (optional) : pass a trigger event to some other Activity dependant on the current render operation's results
-:** the actual trigger is //double dispatched// -- depending on the target Activity given as argument
+:* {{{NOTIFY}}} (optional) : pass a trigger event to some other Activity dependent on the current render operation's results
+:** the actual trigger is //double dispatched// -- considering the target Activity given as argument
 :**  ⟹ the Activity Language ...
 :*** for a {{{GATE}}} as target ⟹ //triggers// the gate, which implies to decrement the dependency counter, possibly activating the chain
-:*** -- //further special trigger cases may be {{red{added later}}}// --
+:*** ┉┉ //further special trigger cases may be {{red{added later}}}// ┉┉
 :*** for any other target Activity ⟹ invoke the ''λ-post'' ⟹ contend for acquiring the {{{GroomingToken}}} to re-enter ''grooming mode''
 ;Media Reader Job
 :Retrieve raw media data from external storage, using ''asynchronous IO''
@@ -7120,7 +7120,7 @@ Since the render engine can be considered performance critical, only a fixed set
 ;Tick
 :Internal periodical maintenance duty cycle
 :* {{{TICK}}} : a special marker Activity, which re-inserts itself on each activation and performs an internal hook of the Render Engine
-:**  ⟹ the Activity Language invokes the ''λ-work''
+:**  ⟹ the Activity Language invokes the ''λ-tick''
 
 !!!Post and dispatch
 An Activity is //performed// by invoking its {{{activate(now, ctx)}}} function -- however, there is a twist: some Activities require interaction with the Scheduler queue or may even alter this queue -- and such Activities must be performed //in »management mode«// (single threaded, holding the {{{GroomingToken}}}). These requirements can be fulfilled by //dispatching// an Activity through the ''λ-post'', which attempts to acquire the {{{GroomingToken}}} and otherwise sends the action through the //dispatch queue.// Moreover, some follow-up activities need to happen //later// -- and this can be encoded by using a {{{POST}}}-Activity, which both defines a time window of execution and causes its chain-Activity to be sent through ''λ-post''.

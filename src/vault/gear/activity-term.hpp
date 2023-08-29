@@ -53,7 +53,7 @@
 #include "lib/time/timevalue.hpp"
 //#include "lib/util.hpp"
 
-//#include <string>
+#include <string>
 #include <utility>
 
 
@@ -63,7 +63,7 @@ namespace gear {
   using lib::time::Time;
   using lib::time::TimeValue;
 //  using util::isnil;
-//  using std::string;
+  using std::string;
   using std::move;
   
   using BlockFlowAlloc = BlockFlow<blockFlow::RenderConfig>;
@@ -85,6 +85,9 @@ namespace gear {
         Activity* invoke_{nullptr};
         Activity* post_{nullptr};
         
+        Activity* gate_{nullptr};
+        
+        
       public:
         enum Template {CALC_JOB  ///< scheme for a synchronous media calculation job
                       ,LOAD_JOB  ///< scheme for an asynchronous data retrieval job
@@ -96,19 +99,25 @@ namespace gear {
           : alloc_{move (allocHandle)}
           , invoke_{setupInvocation (job)}
           , post_{setupPost (start,after, invoke_)}
-          { }
+          {
+            configureTemplate (kind);
+          }
         
-//        virtual std::string
-//        diagnostic()  const
-//          {
-//            return "Activity::Hook";
-//          }
+        // standard copy acceptable
         
-//        operator std::string()  const
-//          {
-//            return diagnostic();
-//          }
+        operator std::string()  const
+          {
+            return "Term-"
+                 + (post_? string{*post_} : util::BOTTOM_INDICATOR)
+                 + "⧐"
+                 + (invoke_? string{*invoke_} : util::BOTTOM_INDICATOR);
+          }
         
+        
+        /**
+         * @return entrance point to this Activity-chain setup
+         * @remark use this call for instructing the Scheduler.
+         */
         Activity&
         post()
           {
@@ -117,6 +126,12 @@ namespace gear {
           }
         
       private:
+        void
+        configureTemplate (Template kind)
+          {
+            
+          }
+        
         Activity*
         setupInvocation (Job& job)
           {

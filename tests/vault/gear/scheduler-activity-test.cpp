@@ -350,7 +350,7 @@ namespace test {
       
       
       /** @test TODO verify the Activity term builder
-       * @todo WIP 8/23 🔁 define ⟶ implement
+       * @todo WIP 8/23 🔁 define 🔁 implement
        */
       void
       termBuilder()
@@ -365,8 +365,13 @@ namespace test {
           Time dead{0,10};
           auto term = activityLang.buildCalculationJob (job,start,dead);
           
+          // Time window parameters have been included
           Activity& post = term.post();
           CHECK (Activity::POST == post.verb_);
+          CHECK (start == post.data_.timeWindow.life);
+          CHECK (dead  == post.data_.timeWindow.dead);
+          
+          cout << term<<endl;
         }
       
       
