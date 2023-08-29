@@ -62,7 +62,7 @@
 
 
 #include "vault/common.hpp"
-//#include "lib/test/test-helper.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/test/event-log.hpp"
 
 //#include "steam/play/dummy-play-connection.hpp"
@@ -497,6 +497,19 @@ namespace test {
         {
           return mockOps_.emplace_back (
                    buildDiagnosticFun<SIG_JobDiagnostic> (id));
+        }
+      
+      Job
+      buildMockJob (string id =""
+                   ,Time nominal = lib::test::randTime()
+                   ,size_t extra = rand())
+        {
+          InvocationInstanceID invoKey;
+          invoKey.part.a = extra;
+          invoKey.part.t = _raw(nominal);
+          return Job{buildMockJobFunctor (isnil(id)? "mockJob-"+util::toString(nominal) : id)
+                    ,invoKey
+                    ,nominal};
         }
       
       /** build a rigged HOOK-Activity to record each invocation */

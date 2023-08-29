@@ -350,11 +350,23 @@ namespace test {
       
       
       /** @test TODO verify the Activity term builder
-       * @todo WIP 7/23 ⟶ define ⟶ implement
+       * @todo WIP 8/23 🔁 define ⟶ implement
        */
       void
       termBuilder()
         {
+          ActivityDetector detector;
+          
+          BlockFlowAlloc bFlow;
+          ActivityLang activityLang{bFlow};
+          
+          Job job = detector.buildMockJob();
+          Time start{0,1};
+          Time dead{0,10};
+          auto term = activityLang.buildCalculationJob (job,start,dead);
+          
+          Activity& post = term.post();
+          CHECK (Activity::POST == post.verb_);
         }
       
       

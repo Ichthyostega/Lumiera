@@ -76,15 +76,27 @@ namespace gear {
       
       // using default copy/assignment
       
+      
+      /**
+       * Builder-API: initiate definition of render activities for a media calculation job.
+       */
+      activity::Term
+      buildCalculationJob (Job job, Time start, Time deadline)
+        {
+          return setupActivityScheme (activity::Term::CALC_JOB, job, start, deadline);
+        }
+      
+      
     private:
       /** @internal generate the builder / configurator term */
       activity::Term
-      setupActivityScheme (activity::Term::Template schemeKind, Time start, Time after)
+      setupActivityScheme (activity::Term::Template schemeKind, Job job, Time start, Time after)
         {
           return activity::Term{ mem_.until(after)
                                , schemeKind
                                , start
                                , after
+                               , job
                                };
         }
     };

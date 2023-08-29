@@ -48,6 +48,7 @@
 
 #include "vault/gear/activity.hpp"
 #include "vault/gear/block-flow.hpp"
+#include "vault/gear/job.h"
 //#include "lib/symbol.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "lib/util.hpp"
@@ -80,6 +81,9 @@ namespace gear {
         
         AllocHandle alloc_;
         
+        Activity* invoke_{nullptr};
+        Activity* post_{nullptr};
+        
       public:
         enum Template {CALC_JOB  ///< scheme for a synchronous media calculation job
                       ,LOAD_JOB  ///< scheme for an asynchronous data retrieval job
@@ -87,7 +91,7 @@ namespace gear {
                       };
         
         explicit
-        Term (AllocHandle&& allocHandle, Template kind, Time start, Time after)
+        Term (AllocHandle&& allocHandle, Template kind, Time start, Time after, Job job)
           : alloc_{move (allocHandle)}
           { }
         
@@ -101,6 +105,13 @@ namespace gear {
 //          {
 //            return diagnostic();
 //          }
+        
+        Activity&
+        post()
+          {
+            REQUIRE (post_, "Activity Term not yet fully configured");
+            return *post_;
+          }
       };
     
     
