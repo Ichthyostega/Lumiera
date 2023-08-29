@@ -53,6 +53,7 @@
 #include "lib/time/timevalue.hpp"
 //#include "lib/util.hpp"
 
+//#include <tuple>
 #include <string>
 #include <utility>
 
@@ -129,8 +130,23 @@ namespace gear {
         void
         configureTemplate (Template kind)
           {
-            
+            switch (kind) {
+              case CALC_JOB:
+                setupGate();
+                insertWorkBracket();
+                break;
+              case LOAD_JOB:
+                UNIMPLEMENTED ("wiring for async job");
+                break;
+              case META_JOB:
+                /* use the minimal default wiring */
+                break;
+              default:
+                NOTREACHED ("uncovered Activity verb in activation function.");
+                break;
+              }
           }
+        
         
         Activity*
         setupInvocation (Job& job)
@@ -152,6 +168,44 @@ namespace gear {
         setupPost (Time start, Time after, Activity* followUp)
           {
             return & alloc_.create (start,after,followUp);
+          }
+        
+        void
+        setupGate()
+          {
+            if (gate_) return;
+            gate_ = & alloc_.create (0, Time{post_->data_.timeWindow.dead});
+            insert (post_, gate_);
+          }
+
+        void
+        insertWorkBracket()
+          {
+            auto start = alloc_.create (Activity::WORKSTART);
+            auto stop  = alloc_.create (Activity::WORKSTOP);
+            /////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1283 define the "quality" parameter to distinguish observable execution times
+            
+            insert (gate_? gate_: post_,  &start);
+            insert (findTail (start.next), &stop);
+          }
+        
+        
+        static void
+        insert (Activity* anchor, Activity* target)
+          {
+            REQUIRE (anchor);
+            REQUIRE (target);
+            target->next = anchor->next;
+            anchor->next = target;
+          }
+        
+        static Activity*
+        findTail (Activity* chain)
+          {
+            REQUIRE (chain);
+            while (chain->next)
+              chain = chain->next;
+            return chain;
           }
       };
     
