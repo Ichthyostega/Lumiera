@@ -104,12 +104,14 @@ namespace test {
           
           Activity& tick = bFlow.until(deadline).create();
           CHECK (tick.verb_ == Activity::TICK);
+          CHECK (1 == watch(bFlow).cntElm());
           CHECK (1 == watch(bFlow).cntEpochs());
           CHECK (watch(bFlow).first() > deadline);
           CHECK (watch(bFlow).first() - deadline == bFlow.getEpochStep());
           
           bFlow.discardBefore (deadline + Time{0,5});
           CHECK (0 == watch(bFlow).cntEpochs());
+          CHECK (0 == watch(bFlow).cntElm());
         }
       
       
@@ -295,6 +297,9 @@ namespace test {
           // this allocation does not count as overflow, but has to expand the Epoch grid, now using the reduced Epoch spacing
           CHECK (watch(bFlow).allEpochs() == "10s200ms|10s400ms|10s600ms|10s800ms|11s|11s192ms|11s384ms|11s576ms"_expect);
           CHECK (watch(bFlow).find(a7)    == "11s576ms"_expect);
+          
+          // we created 8 elements (a0...a7) and caused three epochs to overflow...
+          CHECK (watch(bFlow).cntElm() == 8 + EXTENT_SIZ-1 + EXTENT_SIZ-1 + EXTENT_SIZ-2);
           
           // on clean-up, actual fill ratio is used to adjust to optimise Epoch length for better space usage
           CHECK (bFlow.getEpochStep() == "≺192ms≻"_expect);

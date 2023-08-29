@@ -181,8 +181,8 @@ namespace gear {
         void
         insertWorkBracket()
           {
-            auto start = alloc_.create (Activity::WORKSTART);
-            auto stop  = alloc_.create (Activity::WORKSTOP);
+            Activity& start = alloc_.create (Activity::WORKSTART);
+            Activity& stop  = alloc_.create (Activity::WORKSTOP);
             /////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1283 define the "quality" parameter to distinguish observable execution times
             
             insert (gate_? gate_: post_,  &start);

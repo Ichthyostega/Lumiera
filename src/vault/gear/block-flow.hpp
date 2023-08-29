@@ -674,6 +674,16 @@ namespace gear {
                                .transform([](Epoch& a){ return TimeValue{a.deadline()}; });
           return util::join(deadlines, "|");
         }
+      
+      /** count all currently active allocated elements */
+      size_t
+      cntElm()
+        {
+          size_t cnt{0};
+          for (auto& epoch : flow_.allEpochs())
+            cnt += epoch.gate().filledSlots();
+          return cnt;
+        }
     };
   
   template<class CONF>

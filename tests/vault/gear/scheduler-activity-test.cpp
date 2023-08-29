@@ -359,19 +359,44 @@ namespace test {
           
           BlockFlowAlloc bFlow;
           ActivityLang activityLang{bFlow};
-          
-          Job job = detector.buildMockJob();
+
           Time start{0,1};
           Time dead{0,10};
-          auto term = activityLang.buildCalculationJob (job,start,dead);
+          Activity* act{nullptr};
+          {
+            auto term = activityLang.buildCalculationJob (detector.buildMockJob(), start,dead);
+            
+            act = & term.post();
+          }// NOTE: generated Activity chain remains valid after term goes out of scope
+          
+          cout << watch(bFlow).allEpochs() <<endl;
+          cout << watch(bFlow).cntEpochs() <<endl;
+          cout << watch(bFlow).cntElm() <<endl;
+          cout << watch(bFlow).find(*act) <<endl;
+          // Values reported for the BlockFlow allocator look sane...
+          CHECK (watch(bFlow).cntElm()    == 7);               // POST, GATE, WORKSTART, INVOKE, FEED, FEED, WORKSTOP
+          CHECK (watch(bFlow).cntEpochs() == 1);               // all placed into a single epoch...
+          CHECK (watch(bFlow).find(*act) > dead);              // which terminates shortly after the given deadline
+          CHECK (watch(bFlow).find(*act) < dead+Time(500,0));
           
           // Time window parameters have been included
-          Activity& post = term.post();
-          CHECK (Activity::POST == post.verb_);
-          CHECK (start == post.data_.timeWindow.life);
-          CHECK (dead  == post.data_.timeWindow.dead);
+          CHECK (Activity::POST == act->verb_);
+          CHECK (start == act->data_.timeWindow.life);
+          CHECK (dead  == act->data_.timeWindow.dead);
           
-          cout << term<<endl;
+          // sane wiring, leading to an INVOCATE eventually
+          while (act->verb_ != Activity::INVOKE)
+            {
+              cout << util::showAddr(*act) << " verb="<<act->verb_ <<" next="<<util::showAddr(*act->next)<<" next.verb="<<act->next->verb_<<endl;
+              
+              cout << *act <<endl;
+              cout << watch(bFlow).find(*act) <<endl;
+            act = act->next;
+            }
+          CHECK (Activity::INVOKE == act->verb_);
+              cout << *act <<endl;
+              cout << watch(bFlow).find(*act) <<endl;
+          CHECK (watch(bFlow).find(*act) != Time::NEVER);      // can also be found within the BlockFlow allocator
         }
       
       
