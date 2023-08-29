@@ -242,8 +242,8 @@ namespace gear {
       /** Payload data to provide */
       struct Feed
         {
-          size_t one;
-          size_t two;
+          uint64_t one;
+          uint64_t two;
         };
       
       /** Timing observation to propagate */
@@ -320,7 +320,7 @@ namespace gear {
       
       /* ==== special case initialisation ==== */
       
-      Activity (size_t o1, size_t o2)  noexcept
+      Activity (uint64_t o1, uint64_t o2)  noexcept
         : Activity{FEED}
         {
           data_.feed.one = o1;
@@ -437,8 +437,8 @@ namespace gear {
           JobClosure& functor = static_cast<JobClosure&> (*data_.invocation.task);      /////////////////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
           lumiera_jobParameter param;
           param.nominalTime = _raw(Time{data_.invocation.time});
-          param.invoKey.part.a = next->data_.feed.one;
-          param.invoKey.part.b = next->data_.feed.two;
+          param.invoKey.code.w1 = next->data_.feed.one;
+          param.invoKey.code.w2 = next->data_.feed.two;
                            //////////////////////////////////////////////////////////////////////////////////TICKET #1295 : rework Job parameters to accommodate input / output info required for rendering          
           try {
               functor.invokeJobOperation (param);

@@ -60,7 +60,8 @@
 namespace vault{
 namespace gear {
   
-  using lib::time::Time;////////////WIP
+  using lib::time::Time;
+  using lib::time::TimeValue;
 //  using util::isnil;
 //  using std::string;
   using std::move;
@@ -93,6 +94,8 @@ namespace gear {
         explicit
         Term (AllocHandle&& allocHandle, Template kind, Time start, Time after, Job job)
           : alloc_{move (allocHandle)}
+          , invoke_{setupInvocation (job)}
+          , post_{setupPost (start,after, invoke_)}
           { }
         
 //        virtual std::string
@@ -111,6 +114,29 @@ namespace gear {
           {
             REQUIRE (post_, "Activity Term not yet fully configured");
             return *post_;
+          }
+        
+      private:
+        Activity*
+        setupInvocation (Job& job)
+          {
+            Activity& feed1 = alloc_.create (job.parameter.invoKey.code.w1
+                                            ,job.parameter.invoKey.code.w2);
+            Activity& feed2 = alloc_.create (Activity::FEED);         ///////////////////////////////////////TICKET #1295 : rework Job parameters to accommodate input / output info required for rendering          
+            feed1.next = &feed2;
+            
+            JobClosure* functor = static_cast<JobClosure*> (job.jobClosure);             ////////////////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
+            REQUIRE (functor);
+            Activity& invo  = alloc_.create (*functor
+                                            , Time{TimeValue{job.parameter.nominalTime}}
+                                            , feed1);             ///////////////////////////////////////////TICKET #1287 : get rid of C-isms in Job descriptor
+            return & invo;
+          }
+        
+        Activity*
+        setupPost (Time start, Time after, Activity* followUp)
+          {
+            return & alloc_.create (start,after,followUp);
           }
       };
     

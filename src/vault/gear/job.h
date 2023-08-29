@@ -117,6 +117,10 @@ union InvocationInstanceID
     struct { int32_t a,b;
              int64_t t;
            } part;
+    struct {
+             uint64_t w1;
+             uint64_t w2;
+           } code;
   };
 
 

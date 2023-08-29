@@ -27,6 +27,7 @@
  ** This allows to verify the operation of the scheduler from within unit-tests;
  ** typically doing so incurs a performance overhead. 
  ** 
+ ** @deprecated 8/23 obsoleted by rework for »Playback Vertical Slice«     //////////////////////////////////TICKET #1228
  ** @see SchedulerFrontend
  ** @see scheduler-interface-test.cpp
  ** @see EngineServiceMock

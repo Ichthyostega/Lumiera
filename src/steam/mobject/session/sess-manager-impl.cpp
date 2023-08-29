@@ -49,6 +49,7 @@
 #include "common/query.hpp"
 
 #include <memory>
+#include <exception>
 
 
 
@@ -77,9 +78,8 @@ namespace session {
         }
       catch (...)
         {
-          ERROR (progress, "Unrecoverable Failure while creating the empty default session.");
-          throw lumiera::error::Fatal ( "Failure while creating the basic session object. System halted."
-                                      , LERR_(CREATE_SESSION));
+          ERROR (progress, "Unrecoverable Failure while creating the empty default session. System halted.");
+          std::terminate();
         }
     
     
@@ -295,7 +295,7 @@ namespace session {
    *  to several files (master file and edl files)
    */
   void
-  SessManagerImpl::save (string stnapshotID)
+  SessManagerImpl::save (string snapshotID)
   {
     UNIMPLEMENTED ("save session (serialised)");
     /////////////////////////////////////////////////TODO: need lock?
