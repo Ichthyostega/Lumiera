@@ -629,7 +629,12 @@ namespace gear {
     
     switch (verb_) {
       case NOTIFY:
-        return notifyTarget (now, executionCtx);
+        {
+          auto res = notifyTarget (now, executionCtx);
+          if (activity::PASS == res)
+            res=activity::SKIP;  // prevent activation of NOTIFY.next
+          return res;
+        }
       case POST:
       case FEED:      // signal just to proceed with next...
         return activity::PASS;

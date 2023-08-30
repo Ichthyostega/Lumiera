@@ -355,7 +355,6 @@ namespace test {
        *        - verify the basic outfitting and sane connectivity
        *        - verify values reported by the BlockFlow allocator
        *        - ensure the defined Job can be properly invoked
-       * @todo WIP 8/23 ✔ define ✔ implement
        */
       void
       termBuilder()
@@ -403,7 +402,14 @@ namespace test {
       /** @test verify the ability to _dispatch and perform_ a chain of activities.
        *        - use a directly wired, arbitrary chain
        *        - dispatch will activate all Activities
-       * @todo WIP 8/23 🔁 define ⟶ implement
+       *        - however, when the Gate is configured to be blocked
+       *          (waiting on prerequisites), then the rest of the chain is not activated,
+       *          only a re-check of the Gate is scheduled for later (1.011 -> 2.011)
+       *        - the dispatch function also handles the notifications;
+       *          when a notification towards the Gate is dispatched, the Gate is
+       *          decremented and thereby opened; activation of the rest of the chain
+       *          is then planned (but not executed synchronously in the same call)
+       * @todo WIP 8/23 ✔ define ✔ implement
        */
       void
       dispatchChain()
@@ -419,9 +425,31 @@ namespace test {
           // insert instrumentation to trace activation
           detector.watchGate (post.next, "Gate");
           
-          CHECK (activity::PASS == ActivityLang::dispatchChain (post, tt, detector.executionCtx));
+          CHECK (activity::PASS == ActivityLang::dispatchChain (post, tt, detector.executionCtx));      // start execution (case/seq == 0)
+          CHECK (detector.verifyInvocation("Gate")      .arg("1.011 ⧐ Act(GATE")                        // ...first the Gate was activated
+                         .beforeInvocation("after-Gate").arg("1.011 ⧐ Act(TICK")                        // ...then activation passed out of Gate...
+                         .beforeInvocation("CTX-tick")  .arg("1.011"));                                 // ...and finally the TICK invoked the λ-tick
 
-          cout << detector.showLog()<<endl;
+          detector.incrementSeq();
+          gate.data_.condition.incDependencies(); // Gate is blocked
+          CHECK (activity::PASS == ActivityLang::dispatchChain (post, tt, detector.executionCtx));      // start execution (case/seq == 1)
+          CHECK (detector.verifyInvocation("Gate")    .seq(1).arg("1.011 ⧐ Act(GATE")                   // ...the Gate was activated...
+                         .beforeInvocation("CTX-post").seq(1).arg("2.011","Act(GATE","≺test::CTX≻"));   // ...but was found blocked and re-scheduled itself to 2.011
+          CHECK (detector.ensureNoInvocation("after-Gate").seq(1)                                       // verify activation was not passed out behind Gate
+                         .afterInvocation("Gate").seq(1));
+          CHECK (detector.ensureNoInvocation("CTX-tick").seq(1)                                         // verify also the λ-tick was not invoked this time
+                         .afterInvocation("Gate").seq(1));
+          
+          detector.incrementSeq();
+          Activity notify{post.next}; // Notification via instrumented connection to the Gate
+          
+          CHECK (activity::PASS == ActivityLang::dispatchChain (notify, tt, detector.executionCtx));    // dispatch a notification (case/seq == 2)
+          CHECK (detector.verifyInvocation("Gate")    .seq(2).arg("1.011 --notify-↯> Act(GATE")         // ...notification dispatched towards the Gate
+                         .beforeInvocation("CTX-post").seq(2).arg("1.011","after-Gate","≺test::CTX≻")); // ...this opened the Gate and posted/requested activation of the rest of the chain
+          CHECK (detector.ensureNoInvocation("after-Gate").seq(2)                                       // verify that activation was not passed out directly
+                         .afterInvocation("CTX-post").seq(2));
+          CHECK (detector.ensureNoInvocation("CTX-tick").seq(2)                                         // verify also the λ-tick was not invoked directly
+                         .afterInvocation("CTX-post").seq(2));
         }
       
       
