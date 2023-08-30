@@ -1,7 +1,6 @@
 Documentation
 =============
 
-
 This documentation section contains documentation for both users and developers.
 
 == User ==
@@ -14,17 +13,94 @@ A user manual containing the full reference for using Lumiera is planned:
  * link:user/manual.html[User Manual]  _(planned)_
 
 == Developer ==
-Information about the structure and concepts Lumiera is based upon.
-These documents give an overview on the main components of the application:
 
- * link:design/index.html[Design Documents]
+This section is a guide on how the developer documentation is arranged, organised and grouped. We present here
+a map of the developer documention to assist you in navigating through the documents.
 
-Programming-oriented details about the functional layers of Lumiera as well as a Doxygen documentation :
+=== Developer Documentation is Arranged into Layers
 
- * link:technical/index.html[Technical Documents]
- * link:technical/code/codingGuidelines.html[Style and Coding Guidelines]
+image:devel/images/doc_map.png[Map]
 
-=== the TiddlyWiki ===
+The various pieces of documentation are not scattered about randomly. These are arranged and organised along
+established simple yet flexible guidelines to enable easy and intuitive access. It is not rigid and conformity
+is not required. There may be very good reasons to adapt the rules with some degree of flexibility at times;
+and sometimes it might be difficult to select a unique section in which to place new documents.
+
+The various documents are organised in an hierarchical structure of layers. The uppermost layer, or root, is
+the point of entry into the Lumiera developer documentation universe. The lowest layers are populated by the
+Lumiera API documentation which is currently produced from the source code using Doxygen.
+
+The map is depicted above in the illustration. Below we provide links to the top-level documents to all
+elements in the map froom which you can launch deeper into the lower layers of the documentation. We present
+these in tabular form to ease navigation.
+
+==== Documentation Layer Structure Appears at Various Places in The Project
+
+Lumiera homepage ::
+https://Lumiera.org[Lumiera homepage] by the menus on the left hand-side of the
+page. This menu is also organised into layers that reflects the organisation of
+the documentation to help you navigate through the documentation.
+
+Source code doc directory structure :: 
+The layout of the sub-directories below the *doc* directory is structured around
+the hierarchy,
+ 
+==== The Uppermost Layer
+
+At the highest, uppermost layer is the document
+https://lumiera.org/documentation/user/intro/intro.html[Lumiera (as seen) from Outter Space]. This is the node
+on the left in the illustration above. All new to Lumiera should read this document. You can always return
+to this document later if you are entirely lost and wish to find your bearings before navigating into the
+deeper documentation dungeons.
+
+==== The Second Layer
+
+At the second layer, the reader must make the first major decision oon which
+router to pursue: documentation with a heavy code based leaning; or more descriptive
+documentation on the design of Lumiera which avoids a code narrative. This
+section has two main sections:
+
+ * link:design/index.html[Lumiera Developer Design Documents]
+ * link:technical/index.html[Lumiera Developer Technical Documents]
+
+
+===== Design Documents
+
+.Developer Design Documentation
+[width="40%",frame="topbot",options="header"]
+|================================================================================================
+|Sub-System and top-level entry  |Remarks
+|https://lumiera.org/documentation/design/architecture/index.html[Architecture]|what
+|https://lumiera.org/documentation/design/model/index.html[Model]|Low-level and high-level models
+|https://lumiera.org/documentation/design/gui/index.html[GUI]|The user
+|https://lumiera.org/documentation/design/plugins/index.html[Plugins]|External tools to provide functionality
+|https://lumiera.org/documentation/design/lowlevel/index.html[Low-level Model]|Render nodes
+|https://lumiera.org/documentation/design/engine/index.html[Engine]|Renderer, output generation, ...
+|https://lumiera.org/documentation/design/workflow/index.html[Workflow]|
+|https://lumiera.org/documentation/design/governance/index.html[Governance]|Meta project concerns
+|================================================================================================
+
+
+
+===== Technical Documents
+
+.Developer Technical Documentation
+[width="40%",frame="topbot",options="header"]
+|================================================================================================
+|Sub-System top-level entry |Remarks
+|https://lumiera.org/documentation/technical/build/index.html[Build System]|Using SCons
+|https://lumiera.org/documentation/technical/stage/index.html[Stage] |GUI 
+|https://lumiera.org/documentation/technical/steam/index.html[Steam]|Using (TiddlyWiki)
+|https://lumiera.org/documentation/technical/vault/index.html[Vault]|Low-level operations
+|https://lumiera.org/documentation/technical/library/index.html[Support lib]|Interface and support libraries
+|https://lumiera.org/documentation/technical/code/index.html[Code base]|Code management, organisation, ...
+|https://lumiera.org/documentation/technical/infra/index.html[Infrastructure]|Code admin, checks, ...
+|https://lumiera.org/documentation/technical/howto/index.html[Developer HowTos]|Various developer HowTos
+|link:/doxy/index.html[API Doc]|Using link:http://doxygen.org[Doxygen] to generate doc from code
+|================================================================================================
+
+
+The TiddlyWiki::
 Currently, Lumiera is still in the design- and evolution phase.
 There is an embedded JavaScript wiki (TiddlyWiki) within the source tree, mostly
 used as design notebook, featuring day-to-day design sketches, notes but also
@@ -33,11 +109,6 @@ moved over to the documentation section(s) of the Lumiera website.
 
 -> access the Development link:{l}/wiki/renderengine.html[TiddlyWiki online here]
 
-=== API Documentation ===
-We use the link:http://doxygen.org[Doxygen] tool to extract
-code comments and generate code level API and reference documentation.
-
--> link:/doxy/index.html[Doxygen generated documentation]
 
 == Media and Presentations ==
 
