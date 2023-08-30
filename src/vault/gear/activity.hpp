@@ -269,6 +269,7 @@ namespace gear {
           bool isDead (Time now)  const { return dead <= now;}
           bool isHold ()          const { return rest > 0;   }
           bool isFree (Time now)  const { return not (isHold() or isDead(now)); }
+          void incDependencies()        { ++rest; }
         };
       
       /** Time window to define for activation */
@@ -614,7 +615,7 @@ namespace gear {
    * a `POST`-Activity. Control flow passing here has acquired the `GroomingToken`
    * and can thus assume single threaded execution until `WORKSTART`.
    * @note special twist for the `NOTIFY`-Activity: it is not _activated_
-   *       itself, rather the #notify operation is invoked on its target(`next`);
+   *       itself, rather the #notify operation is invoked on its target argument;
    *       this is necessary since a notification passes control-flow outside
    *       the regular linear `next`-chain; when a `NOTIFY` is _activated,_
    *       it will `post()` itself to acquire the `GroomingToken` and then

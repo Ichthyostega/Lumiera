@@ -542,7 +542,7 @@ namespace test {
       Activity&
       buildGateWatcher (Activity& gate, string id ="")
         {
-          insertActivationTap (gate.next, "after" + (isnil(id)? gate.showVerb()+util::showAddr(gate) : id));
+          insertActivationTap (gate.next, "after-" + (isnil(id)? gate.showVerb()+util::showAddr(gate) : id));
           return buildActivationTap (gate, id);
         }
       

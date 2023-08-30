@@ -87,6 +87,39 @@ namespace gear {
         }
       
       
+      /**
+       * Execution Framework: dispatch performance of a chain of Activities.
+       */
+      template<class EXE>
+      static activity::Proc
+      dispatchChain (Activity& chain, Time now, EXE& executionCtx)
+        {
+          activity::Proc res = chain.dispatch (now, executionCtx);
+          if (activity::PASS == res)
+            res = activateChain (chain.next, now, executionCtx);
+          else if (activity::SKIP == res)
+            res = activity::PASS;
+          return res;
+        }
+      
+      /**
+       * Execution Framework: successive activation of Activities in a chain.
+       */
+      template<class EXE>
+      static activity::Proc
+      activateChain (Activity* chain, Time now, EXE& executionCtx)
+        {
+          activity::Proc res{activity::PASS};
+          while (chain and activity::PASS == res)
+            {
+              res = chain->activate (now, executionCtx);
+              chain = chain->next;
+            }
+          if (activity::SKIP == res)// SKIP has been handled
+            res = activity::PASS;  //  just by aborting the loop
+          return res;
+        }
+      
     private:
       /** @internal generate the builder / configurator term */
       activity::Term

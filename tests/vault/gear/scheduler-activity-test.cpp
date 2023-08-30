@@ -78,6 +78,7 @@ namespace test {
           verifyActivity_Gate_opened();
           
           termBuilder();
+          dispatchChain();
           
           scenario_RenderJob();
           scenario_IOJob();
@@ -322,7 +323,7 @@ namespace test {
           CHECK (detector.verifyInvocation("tap-GATE").seq(0).arg("33.333 ⧐ Act(GATE")
                          .beforeInvocation("CTX-post").seq(0).arg(reScheduled, "Act(GATE", "≺test::CTX≻")
                          .beforeInvocation("tap-GATE").seq(1).arg("33.333 --notify-↯> Act(GATE")
-                         .beforeInvocation("CTX-post").seq(1).arg(tt, "afterGATE", "≺test::CTX≻"));
+                         .beforeInvocation("CTX-post").seq(1).arg(tt, "after-GATE", "≺test::CTX≻"));
           CHECK (gate.data_.condition.dead == Time::MIN);
           
           detector.incrementSeq();
@@ -342,7 +343,7 @@ namespace test {
           // the log shows the further notification (at Seq=3) but no dispatch happens anymore
           CHECK (detector.verifySeqIncrement(3)
                          .beforeInvocation("tap-GATE").seq(3).arg("44.444 --notify-↯> Act(GATE"));
-          CHECK (detector.ensureNoInvocation("CTX-post").seq(3).arg(tt, "afterGATE", "≺test::CTX≻"));
+          CHECK (detector.ensureNoInvocation("CTX-post").seq(3).arg(tt, "after-GATE", "≺test::CTX≻"));
           
 //        cout << detector.showLog()<<endl; // HINT: use this for investigation...
         }
@@ -396,6 +397,33 @@ namespace test {
           CHECK (activity::PASS == act->activate (now, detector.executionCtx));
           CHECK (detector.verifyInvocation("mockJob"));
         }
+      
+      
+      
+      /** @test verify the ability to _dispatch and perform_ a chain of activities.
+       *        - use a directly wired, arbitrary chain
+       *        - dispatch will activate all Activities
+       * @todo WIP 8/23 🔁 define ⟶ implement
+       */
+      void
+      dispatchChain()
+        {
+          Time tt{11,1};
+          Activity tick;
+          Activity gate{0};
+          gate.next = &tick;
+          Activity post{tt, &gate};
+          // so now we have POST ⟶ GATE ⟶ TICK;
+          
+          ActivityDetector detector;
+          // insert instrumentation to trace activation
+          detector.watchGate (post.next, "Gate");
+          
+          CHECK (activity::PASS == ActivityLang::dispatchChain (post, tt, detector.executionCtx));
+
+          cout << detector.showLog()<<endl;
+        }
+      
       
       
       
