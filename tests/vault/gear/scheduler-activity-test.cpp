@@ -456,11 +456,39 @@ namespace test {
       
       
       /** @test TODO usage scenario: Activity graph for a render job
-       * @todo WIP 8/23 🔁 define ⟶ implement
+       *        - build a activity term based on the »CalculationJob« wiring template
+       *        - dispatch the generated Activity chain and verify sequence of invocations
+       * @todo WIP 8/23 🔁 define 🔁 implement
        */
       void
       scenario_RenderJob()
         {
+          Time nominal{7,7};
+          
+          Time start{0,1};
+          Time dead{0,10};
+          Time now{555,5};
+          
+          ActivityDetector detector;
+          Job testJob{detector.buildMockJob("testJob", nominal, 12345)};
+          
+          BlockFlowAlloc bFlow;
+          ActivityLang activityLang{bFlow};
+          auto term = activityLang.buildCalculationJob (testJob, start,dead);
+          
+          Activity& anchor = term.post();
+          // insert instrumentation to trace activation
+          detector.watchGate (anchor.next, "theGate");
+          
+          CHECK (activity::PASS == ActivityLang::dispatchChain (anchor, now, detector.executionCtx));
+          
+          CHECK (detector.verifyInvocation("theGate").arg("5.555 ⧐ Act(GATE")
+                         .beforeInvocation("after-theGate").arg("⧐ Act(WORKSTART")
+                         .beforeInvocation("CTX-work").arg("5.555","")
+                         .beforeInvocation("testJob") .arg("7.007",12345)
+                         .beforeInvocation("CTX-done").arg("5.555",""));
+          
+          cout << detector.showLog()<<endl;
         }
       
       
