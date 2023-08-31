@@ -116,7 +116,7 @@ namespace gear {
         
         
         /**
-         * @return entrance point to this Activity-chain setup
+         * @return entrance point to this Activity-chain setup.
          * @remark use this call for instructing the Scheduler.
          */
         Activity&
@@ -124,6 +124,60 @@ namespace gear {
           {
             REQUIRE (post_, "Activity Term not yet fully configured");
             return *post_;
+          }
+        
+        /**
+         * Builder operation: block this Term waiting for prerequisite notification.
+         * @param notificationSrc an `NOTIFY`-Activity to attach the notification-link
+         * @note using this feature implies to wire in a `GATE`-Activity (if not already
+         *       present) and to increase the Gate's latch counter. Moreover, the Argument,
+         *       _must be a `NOTIFY`_ and will be modified to store the link to this receiving
+         *       Gate; typically this function is actually invoked starting from the other
+         *       Term — the prerequisite — by invoking `appendNotificationTo(targetTerm)`.
+         */
+        Term&
+        expectNotification (Activity& notificationSrc)
+          {
+            REQUIRE (Activity::NOTIFY == notificationSrc.verb_);
+            setupGate();
+            ENSURE (gate_);
+            ENSURE (Activity::GATE == gate_->verb_);
+            gate_->data_.condition.incDependencies();
+            notificationSrc.data_.notification.target = gate_;
+            return *this;
+          }
+        
+        /**
+         * Builder operation: append a Notification link to the end of this Term's chain.
+         * @param targetTerm another Term, which thereby becomes dependent on this Term.
+         * @remark the \q targetTerm will be inhibited, until this Term's chain has
+         *         been activated and processed up to emitting the inserted `NOTIFY`.
+         */
+        Term&
+        appendNotificationTo (Term& targetTerm)
+          {
+            UNIMPLEMENTED ("append NOTIFY and wire this through target.expectNotification()");
+            return *this;
+          }
+        
+        /**
+         * Insert a self-inhibition to enforce activation is possible only after the
+         * scheduled start time. Relevant for Jobs, which are to be triggered by external
+         * events, while the actual computation must not be start prior to activating the
+         * main chain, even if all prerequisites are already fulfilled.
+         * @remark typical example is when a target buffer is known to be available only
+         *         after the planned start time and until the planned deadline.
+         * @note the actual activation always goes through Activity::dispatch() and the
+         *         primary chain is aborted with activity::SKIP. However, since the additional
+         *         notification is inserted at a point executed holding the `GroomingToken`,
+         *         the `dispatch()` actually happens synchronous and immediately processes
+         *         the activated tail-chain in a nested call.
+         */
+        Term&
+        requireDirectActivation()
+          {
+            UNIMPLEMENTED ("wire in self-Notification");
+            return *this;
           }
         
       private:

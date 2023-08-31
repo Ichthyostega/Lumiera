@@ -81,6 +81,7 @@ namespace test {
           dispatchChain();
           
           scenario_RenderJob();
+          scenario_Notification();
           scenario_IOJob();
           scenario_MetaJob();
         }
@@ -479,6 +480,55 @@ namespace test {
           Activity& anchor = term.post();
           // insert instrumentation to trace activation
           detector.watchGate (anchor.next, "theGate");
+          
+          CHECK (activity::PASS == ActivityLang::dispatchChain (anchor, now, detector.executionCtx));
+          
+          CHECK (detector.verifyInvocation("theGate").arg("5.555 ⧐ Act(GATE")
+                         .beforeInvocation("after-theGate").arg("⧐ Act(WORKSTART")
+                         .beforeInvocation("CTX-work").arg("5.555","")
+                         .beforeInvocation("testJob") .arg("7.007",12345)
+                         .beforeInvocation("CTX-done").arg("5.555",""));
+          
+          cout << detector.showLog()<<endl;
+        }
+      
+      
+      
+      /** @test TODO usage scenario: Notification from prerequisite Jobs within time window
+       *        - build [similar](\ref #scenario_RenderJob) »CalculationJob« wiring
+       *        - configure extended dependency notification capabilities
+       *        - Case-1 : a Notification decreases the latch, but blocks otherwise
+       *        - Case-2 : when the primary chain is activated after the Notification,
+       *          then the tail chain behind the Gate is dispatched
+       * @todo WIP 8/23 🔁 define ⟶ implement
+       */
+      void
+      scenario_Notification()
+        {
+          Time nominal{7,7};
+          
+          Time start{0,1};
+          Time dead{0,10};
+          Time now{555,5};
+          
+          ActivityDetector detector;
+          Job testJob{detector.buildMockJob("testJob", nominal, 12345)};
+          
+          BlockFlowAlloc bFlow;
+          ActivityLang activityLang{bFlow};
+          auto term = activityLang.buildCalculationJob (testJob, start,dead);
+          
+          Activity& anchor = term.post();
+          // insert instrumentation to trace activation
+          detector.watchGate (anchor.next, "theGate");
+          
+          // establish a blocking prerequisite dependency
+          Activity trigger{Activity::NOTIFY};
+          // ...in real usage this happens from building the dependency's Term
+          term.expectNotification (trigger);
+          
+          // additionally insert inhibition prior to primary-chain activation
+          term.requireDirectActivation();
           
           CHECK (activity::PASS == ActivityLang::dispatchChain (anchor, now, detector.executionCtx));
           
