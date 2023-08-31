@@ -272,7 +272,7 @@ namespace test {
           CHECK (activity::SKIP == wiring.activate (tt, detector.executionCtx));
           CHECK (23 == gate.data_.condition.rest);  //  prerequisite-count not altered
           
-          Time reScheduled = detector.executionCtx.wait(tt);
+          Time reScheduled = tt + detector.executionCtx.getWaitDelay();
           CHECK (tt < reScheduled);
           
           CHECK (detector.verifyInvocation("tap-GATE").arg("33.333 ⧐ Act(GATE")
@@ -307,7 +307,7 @@ namespace test {
           Activity& wiring = detector.buildGateWatcher (gate);
           
           Time tt{333,33};
-          Time reScheduled = detector.executionCtx.wait(tt); // retrieve the next time to retry
+          Time reScheduled = tt + detector.executionCtx.getWaitDelay(); // retrieve the next time to retry
           CHECK (tt < reScheduled);
           
           // an attempt to activate blocks (and re-schedules for later retry)
@@ -410,7 +410,6 @@ namespace test {
        *          when a notification towards the Gate is dispatched, the Gate is
        *          decremented and thereby opened; activation of the rest of the chain
        *          is then planned (but not executed synchronously in the same call)
-       * @todo WIP 8/23 ✔ define ✔ implement
        */
       void
       dispatchChain()
@@ -423,17 +422,18 @@ namespace test {
           // so now we have POST ⟶ GATE ⟶ TICK;
           
           ActivityDetector detector;
+          detector.executionCtx._schedTime = tt;
           // insert instrumentation to trace activation
           detector.watchGate (post.next, "Gate");
           
-          CHECK (activity::PASS == ActivityLang::dispatchChain (post, tt, detector.executionCtx));      // start execution (case/seq == 0)
+          CHECK (activity::PASS == ActivityLang::dispatchChain (post, detector.executionCtx));          // start execution (case/seq == 0)
           CHECK (detector.verifyInvocation("Gate")      .arg("1.011 ⧐ Act(GATE")                        // ...first the Gate was activated
                          .beforeInvocation("after-Gate").arg("1.011 ⧐ Act(TICK")                        // ...then activation passed out of Gate...
                          .beforeInvocation("CTX-tick")  .arg("1.011"));                                 // ...and finally the TICK invoked the λ-tick
 
           detector.incrementSeq();
           gate.data_.condition.incDependencies(); // Gate is blocked
-          CHECK (activity::PASS == ActivityLang::dispatchChain (post, tt, detector.executionCtx));      // start execution (case/seq == 1)
+          CHECK (activity::PASS == ActivityLang::dispatchChain (post, detector.executionCtx));          // start execution (case/seq == 1)
           CHECK (detector.verifyInvocation("Gate")    .seq(1).arg("1.011 ⧐ Act(GATE")                   // ...the Gate was activated...
                          .beforeInvocation("CTX-post").seq(1).arg("2.011","Act(GATE","≺test::CTX≻"));   // ...but was found blocked and re-scheduled itself to 2.011
           CHECK (detector.ensureNoInvocation("after-Gate").seq(1)                                       // verify activation was not passed out behind Gate
@@ -444,7 +444,7 @@ namespace test {
           detector.incrementSeq();
           Activity notify{post.next}; // Notification via instrumented connection to the Gate
           
-          CHECK (activity::PASS == ActivityLang::dispatchChain (notify, tt, detector.executionCtx));    // dispatch a notification (case/seq == 2)
+          CHECK (activity::PASS == ActivityLang::dispatchChain (notify, detector.executionCtx));        // dispatch a notification (case/seq == 2)
           CHECK (detector.verifyInvocation("Gate")    .seq(2).arg("1.011 --notify-↯> Act(GATE")         // ...notification dispatched towards the Gate
                          .beforeInvocation("CTX-post").seq(2).arg("1.011","after-Gate","≺test::CTX≻")); // ...this opened the Gate and posted/requested activation of the rest of the chain
           CHECK (detector.ensureNoInvocation("after-Gate").seq(2)                                       // verify that activation was not passed out directly
@@ -456,10 +456,10 @@ namespace test {
       
       
       
-      /** @test TODO usage scenario: Activity graph for a render job
+      /** @test usage scenario: Activity graph for a render job
        *        - build a activity term based on the »CalculationJob« wiring template
        *        - dispatch the generated Activity chain and verify sequence of invocations
-       * @todo WIP 8/23 🔁 define 🔁 implement
+       * @todo WIP 8/23 ✔ define ✔ implement
        */
       void
       scenario_RenderJob()
@@ -471,6 +471,7 @@ namespace test {
           Time now{555,5};
           
           ActivityDetector detector;
+          detector.executionCtx._schedTime = now;                     ///////////////////////TODO this is evaluated dynamically, but can't really demonstrate that here
           Job testJob{detector.buildMockJob("testJob", nominal, 12345)};
           
           BlockFlowAlloc bFlow;
@@ -481,15 +482,13 @@ namespace test {
           // insert instrumentation to trace activation
           detector.watchGate (anchor.next, "theGate");
           
-          CHECK (activity::PASS == ActivityLang::dispatchChain (anchor, now, detector.executionCtx));
+          CHECK (activity::PASS == ActivityLang::dispatchChain (anchor, detector.executionCtx));
           
           CHECK (detector.verifyInvocation("theGate").arg("5.555 ⧐ Act(GATE")
                          .beforeInvocation("after-theGate").arg("⧐ Act(WORKSTART")
                          .beforeInvocation("CTX-work").arg("5.555","")
                          .beforeInvocation("testJob") .arg("7.007",12345)
                          .beforeInvocation("CTX-done").arg("5.555",""));
-          
-          cout << detector.showLog()<<endl;
         }
       
       
@@ -512,6 +511,7 @@ namespace test {
           Time now{555,5};
           
           ActivityDetector detector;
+          detector.executionCtx._schedTime = now;
           Job testJob{detector.buildMockJob("testJob", nominal, 12345)};
           
           BlockFlowAlloc bFlow;
@@ -530,7 +530,7 @@ namespace test {
           // additionally insert inhibition prior to primary-chain activation
           term.requireDirectActivation();
           
-          CHECK (activity::PASS == ActivityLang::dispatchChain (anchor, now, detector.executionCtx));
+          CHECK (activity::PASS == ActivityLang::dispatchChain (anchor, detector.executionCtx));
           
           CHECK (detector.verifyInvocation("theGate").arg("5.555 ⧐ Act(GATE")
                          .beforeInvocation("after-theGate").arg("⧐ Act(WORKSTART")

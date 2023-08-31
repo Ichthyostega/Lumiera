@@ -92,11 +92,11 @@ namespace gear {
        */
       template<class EXE>
       static activity::Proc
-      dispatchChain (Activity& chain, Time now, EXE& executionCtx)
+      dispatchChain (Activity& chain, EXE& executionCtx)
         {
-          activity::Proc res = chain.dispatch (now, executionCtx);
+          activity::Proc res = chain.dispatch (executionCtx.getSchedTime(), executionCtx);
           if (activity::PASS == res)
-            res = activateChain (chain.next, now, executionCtx);
+            res = activateChain (chain.next, executionCtx);
           else if (activity::SKIP == res)
             res = activity::PASS;
           return res;
@@ -107,12 +107,12 @@ namespace gear {
        */
       template<class EXE>
       static activity::Proc
-      activateChain (Activity* chain, Time now, EXE& executionCtx)
+      activateChain (Activity* chain, EXE& executionCtx)
         {
           activity::Proc res{activity::PASS};
           while (chain and activity::PASS == res)
             {
-              res = chain->activate (now, executionCtx);
+              res = chain->activate (executionCtx.getSchedTime(), executionCtx);
               chain = chain->next;
             }
           if (activity::SKIP == res)// SKIP has been handled

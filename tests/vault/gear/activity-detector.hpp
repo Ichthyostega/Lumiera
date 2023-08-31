@@ -101,6 +101,7 @@ namespace gear {
 namespace test {
   
   using std::string;
+  using std::function;
 //  using std::make_tuple;
 //  using lib::diff::GenNode;
 //  using lib::diff::MakeRec;
@@ -133,6 +134,7 @@ namespace test {
     const string CTX_TICK{"CTX-tick"};
     
     Offset POLL_DELAY{FSecs(1)};
+    Time SCHED_TIME_MARKER{777,7};  ///< marker value for "current scheduler time" used in tests
   }
   
   class ActivityDetector;
@@ -575,16 +577,20 @@ namespace test {
           _DiagnosticFun<SIG_done>::Type done;
           _DiagnosticFun<SIG_tick>::Type tick;
           
-          static Time wait (Time now) { return now + POLL_DELAY; }
+          function<Offset()> getWaitDelay = []    { return POLL_DELAY;       };
+          function<Time()>   getSchedTime = [this]{ return Time{_schedTime}; };
           
-          FakeExecutionCtx (ActivityDetector& adi)
-            : post{adi.buildDiagnosticFun<SIG_post>(CTX_POST).returning(activity::PASS)}
-            , work{adi.buildDiagnosticFun<SIG_work>(CTX_WORK)}
-            , done{adi.buildDiagnosticFun<SIG_done>(CTX_DONE)}
-            , tick{adi.buildDiagnosticFun<SIG_tick>(CTX_TICK).returning(activity::PASS)}
+          FakeExecutionCtx (ActivityDetector& detector)
+            : post{detector.buildDiagnosticFun<SIG_post>(CTX_POST).returning(activity::PASS)}
+            , work{detector.buildDiagnosticFun<SIG_work>(CTX_WORK)}
+            , done{detector.buildDiagnosticFun<SIG_done>(CTX_DONE)}
+            , tick{detector.buildDiagnosticFun<SIG_tick>(CTX_TICK).returning(activity::PASS)}
             { }
           
           operator string()  const { return "≺test::CTX≻"; }
+          
+          /** allow test code to manipulate the "current scheduler time" */
+          TimeVar _schedTime = SCHED_TIME_MARKER;
         };
       
       FakeExecutionCtx executionCtx{*this};

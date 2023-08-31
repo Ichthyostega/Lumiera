@@ -79,6 +79,7 @@ namespace gear {
   
   using lib::time::TimeValue;
   using lib::time::TimeVar;
+  using lib::time::Offset;
 //  using util::isnil;
 //  using std::string;
   
@@ -192,7 +193,9 @@ namespace gear {
        ASSERT_MEMBER_FUNCTOR (EXE::work, void(Time, size_t));
        ASSERT_MEMBER_FUNCTOR (EXE::done, void(Time, size_t));
        ASSERT_MEMBER_FUNCTOR (EXE::tick, Proc(Time));
-       ASSERT_MEMBER_FUNCTOR (EXE::wait, Time(Time));
+       
+       ASSERT_MEMBER_FUNCTOR (EXE::getWaitDelay, Offset());
+       ASSERT_MEMBER_FUNCTOR (EXE::getSchedTime, Time());
 
       
 #undef ASSERT_MEMBER_FUNCTOR
@@ -523,7 +526,7 @@ namespace gear {
       activity::Proc
       dispatchSelfDelayed (Time now, EXE& executionCtx)
         {
-          dispatchSelf (executionCtx.wait(now), executionCtx);
+          dispatchSelf (now + executionCtx.getWaitDelay(), executionCtx);
           return activity::SKIP;
         }
       
