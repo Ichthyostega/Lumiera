@@ -134,7 +134,7 @@ namespace test {
     const string CTX_TICK{"CTX-tick"};
     
     Offset POLL_DELAY{FSecs(1)};
-    Time SCHED_TIME_MARKER{777,7};  ///< marker value for "current scheduler time" used in tests
+    Time SCHED_TIME_MARKER{555,5};  ///< marker value for "current scheduler time" used in tests
   }
   
   class ActivityDetector;
