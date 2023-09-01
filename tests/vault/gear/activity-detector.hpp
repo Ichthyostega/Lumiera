@@ -268,10 +268,12 @@ namespace test {
       class DiagnosticFun
         {
           using RetVal   = lib::wrapper::ItemWrapper<RET>;
+          using ImplFun  = std::function<RET(ARGS...)>;
           
           string id_;
           EventLog* log_;
           uint const* seqNr_;
+          ImplFun implFun_;
           RetVal retVal_;
           
         public:
@@ -279,8 +281,11 @@ namespace test {
             : id_{id}
             , log_{&masterLog}
             , seqNr_{&invocationSeqNr}
+            , implFun_{}
             , retVal_{}
-            { }
+            {
+              retVal_.defaultInit();
+            }
           
           /** prepare a response value to return from the mock invocation */
           template<typename VAL>
@@ -288,6 +293,15 @@ namespace test {
           returning (VAL&& riggedResponse)
             {
               retVal_ = std::forward<VAL> (riggedResponse);
+              return std::move (*this);
+            }
+          
+          /** use the given λ to provide (optional) implementation logic */
+          template<class FUN>
+          DiagnosticFun&&
+          implementedAs (FUN&& customImpl)
+            {
+              implFun_ = std::forward<FUN> (customImpl);
               return std::move (*this);
             }
           
@@ -299,7 +313,8 @@ namespace test {
             {
               log_->call (log_->getID(), id_, args...)
                    .addAttrib (MARK_SEQ, util::toString(*seqNr_));
-              return *retVal_;
+              return implFun_? implFun_(std::forward<ARGS>(args)...)
+                             : *retVal_;
             }
           
           operator string()  const

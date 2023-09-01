@@ -235,6 +235,15 @@ namespace wrapper {
           return *this;
         }
       
+      /** implant a default-initialised instance of the payload type */
+      ItemWrapper&
+      defaultInit()
+        {
+          discard();
+          build (TY());
+          return *this;
+        }
+      
       operator bool()  const
         {
           return isValid();
@@ -306,6 +315,12 @@ namespace wrapper {
           return *this;
         }
       
+      ItemWrapper&
+      defaultInit()  ///< @note just reset for this specialisation
+        {
+          reset();
+          return *this;
+        }
       
       
       /* == value access == */
@@ -335,7 +350,7 @@ namespace wrapper {
   /**
    * Fallback-specialisation for `ItemWrapper<void>`.
    * @remark This can be relevant when ItemWrapper is used to capture function results,
-   *         yet the given function has return type `void` and used for its side-effects.
+   *         yet the given function has return type `void` and is used for side-effects.
    */
   template<>
   class ItemWrapper<void>
@@ -352,6 +367,12 @@ namespace wrapper {
       
       /** @warning does nothing */
       void operator*() const { /* NOP */ }
+      
+      ItemWrapper&
+      defaultInit()  ///< no effect for this specialisation
+        {
+          return *this;
+        }
     };
   
   

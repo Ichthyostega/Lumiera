@@ -186,7 +186,7 @@ namespace gear {
     {
 #define ASSERT_MEMBER_FUNCTOR(_EXPR_, _SIG_) \
         static_assert (lib::meta::has_Sig<decltype(_EXPR_), _SIG_>(), \
-                       "Execution-Context: " STRINGIFY(_FUN_) " expect function with signature: " STRINGIFY(_SIG_));
+                       "Execution-Context: " STRINGIFY(_EXPR_) " expect function with signature: " STRINGIFY(_SIG_));
       
       
        ASSERT_MEMBER_FUNCTOR (EXE::post, Proc(Time, Activity&, EXE&));

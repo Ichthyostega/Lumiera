@@ -71,6 +71,7 @@ namespace test {
           simpleUsage();
           
           verifyMockInvocation();
+          verifyFakeInvocation();
           verifyMockJobFunctor();
           verifyFakeExeContext();
           watch_activation();
@@ -145,6 +146,33 @@ namespace test {
                            ", Rec(call| fun = funny, this = ActivityDetector, Seq = 2 |{"+util::toString(rnd)+"})"
                            ", Rec(event| ID = IncSeq |{3})"
                            ", Rec(call| fun = funny, this = ActivityDetector, Seq = 3 |{"+util::toString(rnd+1)+"})"_expect);
+        }
+      
+      
+      
+      /** @test verify a variation of the instrumented functor
+       *        to call into a custom provided _fake implementation._
+       */
+      void
+      verifyFakeInvocation()
+        {
+          ActivityDetector detector;
+          auto fun = detector.buildDiagnosticFun<int(uint)> ("fakeFun");
+          uint rnd = rand() % 10000;
+          
+          CHECK (0 == fun (rnd));
+          
+          fun.returning(42);
+          detector.incrementSeq();
+          CHECK (42 == fun (rnd));
+
+          fun.implementedAs ([](uint i){ return -i; });
+          detector.incrementSeq();
+          CHECK (-int(rnd) == fun (rnd));
+          
+          CHECK (detector.verifyInvocation("fakeFun").seq(0)
+                         .beforeInvocation("fakeFun").seq(1)
+                         .beforeInvocation("fakeFun").seq(2));
         }
       
       
@@ -389,7 +417,7 @@ namespace test {
           
           CHECK (detector.verifyInvocation("tap-GATE").seq(0).timeArg(tt)
                          .beforeSeqIncrement(1)
-                         .beforeInvocation("afterGATE").seq(1).timeArg(tt)
+                         .beforeInvocation("after-GATE").seq(1).timeArg(tt)
                          .beforeInvocation("CTX-tick").seq(1).timeArg(tt));
         }
     };
