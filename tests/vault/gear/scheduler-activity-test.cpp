@@ -530,23 +530,36 @@ namespace test {
           
           // additionally insert inhibition prior to primary-chain activation
           term.requireDirectActivation();
+          CHECK (anchor.next->is (Activity::NOTIFY));
           
           detector.insertActivationTap(trigger.data_.notification.target, "trigger");
+          detector.executionCtx.post.implementedAs(
+            [&](Time when, Activity& postedAct, auto& ctx)
+               {
+                 if (when == ctx.getSchedTime())
+                   return activityLang.dispatchChain (postedAct, ctx);
+                 else
+                   return activity::PASS;
+               });
           
           CHECK (activity::PASS == ActivityLang::dispatchChain (trigger, detector.executionCtx));
-          CHECK (detector.verifyInvocation("trigger") .seq(0).arg("5.555 --notify-↯> Act(GATE"));
+          CHECK (detector.verifyInvocation("trigger") .seq(0).arg("5.555 --notify-↯> Act(GATE")
+                                                             .arg("<2, until 0:00:10.000"));
           
           detector.incrementSeq();
           CHECK (activity::PASS == ActivityLang::dispatchChain (anchor, detector.executionCtx));
           CHECK (detector.verifyInvocation("CTX-post").seq(1).arg("5.555","Act(NOTIFY","≺test::CTX≻")
-                         .beforeInvocation("theGate") .seq(1).arg("5.555 ⧐ Act(GATE")
-                         .beforeInvocation("CTX-post").seq(1).arg("6.555","Act(GATE","≺test::CTX≻"));
+                         .beforeInvocation("after-theGate").seq(1).arg("5.555 ⧐ Act(WORKSTART")
+                         .beforeInvocation("CTX-work").arg("5.555","")
+                         .beforeInvocation("testJob") .arg("7.007",12345)
+                         .beforeInvocation("CTX-done").arg("5.555","")
+                         .beforeInvocation("theGate").seq(1).arg("<0, until -85401592:56:01.825"));
           
           detector.incrementSeq();
           CHECK (activity::PASS == ActivityLang::dispatchChain (trigger, detector.executionCtx));
           
           CHECK (detector.verifyInvocation("trigger") .seq(2).arg("5.555 --notify-↯> Act(GATE")
-                         .beforeInvocation("CTX-post").seq(2).arg("5.555","after-theGate","≺test::CTX≻"));
+                                                             .arg("<0, until -85401592:56:01.825"));
           cout << detector.showLog()<<endl;
         }
       
