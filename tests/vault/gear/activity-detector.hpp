@@ -368,7 +368,7 @@ namespace test {
                      , Time now
                      , void* executionCtx)  override
           {
-            REQUIRE (Activity::HOOK == thisHook.verb_);
+            REQUIRE (thisHook.is (Activity::HOOK));
             if (data_.callback.arg == 0)
               {// no adapted target; just record this activation
                 log_(util::toString(now) + " ⧐ ");
@@ -388,7 +388,7 @@ namespace test {
                      , Time now
                      , void* executionCtx)  override
           {
-            REQUIRE (Activity::HOOK == thisHook.verb_);
+            REQUIRE (thisHook.is (Activity::HOOK));
             if (data_.callback.arg == 0)
               {// no adapted target; just record this notification
                 log_(util::toString(now) + " --notify-↯• ");

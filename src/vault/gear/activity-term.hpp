@@ -138,12 +138,10 @@ namespace gear {
         Term&
         expectNotification (Activity& notificationSrc)
           {
-            REQUIRE (Activity::NOTIFY == notificationSrc.verb_);
+            REQUIRE (notificationSrc.is (Activity::NOTIFY));
             setupGate();
-            ENSURE (gate_);
-            ENSURE (Activity::GATE == gate_->verb_);
-            gate_->data_.condition.incDependencies();
-            notificationSrc.data_.notification.target = gate_;
+            gate_->incDependencies();
+            notificationSrc.setNotificationTarget (gate_);
             return *this;
           }
         
@@ -229,6 +227,8 @@ namespace gear {
           {
             if (gate_) return;
             gate_ = & alloc_.create (0, Time{post_->data_.timeWindow.dead});
+            ENSURE (gate_);
+            ENSURE (gate_->is (Activity::GATE));
             insert (post_, gate_);
           }
 

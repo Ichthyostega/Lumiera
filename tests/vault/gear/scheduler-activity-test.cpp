@@ -123,8 +123,8 @@ namespace test {
         {
           Activity chain;
           Activity post{Time{0,11}, Time{0,22}, &chain};
-          CHECK (Activity::TICK == chain.verb_);
-          CHECK (Activity::POST == post.verb_);
+          CHECK (chain.is (Activity::TICK));
+          CHECK (post .is (Activity::POST));
           CHECK (Time(0,11) == post.data_.timeWindow.life);
           CHECK (Time(0,22) == post.data_.timeWindow.dead);
           CHECK ( & chain   == post.next);
@@ -381,15 +381,15 @@ namespace test {
           CHECK (watch(bFlow).find(*act) < dead+Time(500,0));
           
           // Time window parameters have been included
-          CHECK (Activity::POST == act->verb_);
+          CHECK (act->is (Activity::POST));
           CHECK (start == act->data_.timeWindow.life);
           CHECK (dead  == act->data_.timeWindow.dead);
           
           // sane wiring, leading to an INVOCATE eventually
-          while (act->verb_ != Activity::INVOKE)
+          while (not act->is (Activity::INVOKE))
             act = act->next;
           
-          CHECK (Activity::INVOKE == act->verb_);
+          CHECK (act->is (Activity::INVOKE));
           CHECK (watch(bFlow).find(*act) != Time::NEVER);      // can also be found within the BlockFlow allocator
           
           // this invocation is properly defined and executable
@@ -534,13 +534,12 @@ namespace test {
           
           CHECK (activity::PASS == ActivityLang::dispatchChain (anchor, detector.executionCtx));
           
+          cout << detector.showLog()<<endl;
           CHECK (detector.verifyInvocation("theGate").arg("5.555 ⧐ Act(GATE")
                          .beforeInvocation("after-theGate").arg("⧐ Act(WORKSTART")
                          .beforeInvocation("CTX-work").arg("5.555","")
                          .beforeInvocation("testJob") .arg("7.007",12345)
                          .beforeInvocation("CTX-done").arg("5.555",""));
-          
-          cout << detector.showLog()<<endl;
         }
       
       

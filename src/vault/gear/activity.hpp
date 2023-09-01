@@ -401,6 +401,28 @@ namespace gear {
       activity::Proc notify   (Time now, EXE& executionCtx);
       
       
+      /* === special case access and manipulation === */
+      bool
+      is (Activity::Verb expectedVerb)
+        {
+          return expectedVerb == this->verb_;
+        }
+      
+      void
+      incDependencies()
+        {
+          REQUIRE (is (GATE));
+          data_.condition.incDependencies();
+        }
+      
+      void
+      setNotificationTarget (Activity* target)
+        {
+          REQUIRE (is (NOTIFY));
+          data_.notification.target = target;
+        }
+      
+      
     private:
       void
       setDefaultArg (Verb verb)  noexcept

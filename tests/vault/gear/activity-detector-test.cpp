@@ -244,7 +244,7 @@ namespace test {
           ActivityDetector detector;
           auto someID = "trap-" + randStr(4);
           Activity& probe = detector.buildActivationProbe (someID);
-          CHECK (Activity::HOOK == probe.verb_);
+          CHECK (probe.is (Activity::HOOK));
           
           Time realTime = RealClock::now();
           probe.activate (realTime, detector.executionCtx);

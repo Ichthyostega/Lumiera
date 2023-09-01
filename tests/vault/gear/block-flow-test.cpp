@@ -155,7 +155,7 @@ namespace test {
           CHECK (isSameObject (epoch[0], extent[0]));
           CHECK (Time{gate.deadline()} == Time(0,10));
           CHECK (Time{gate.deadline()} == Time{epoch[0].data_.condition.dead});
-          CHECK (Activity::GATE  == epoch[0].verb_);
+          CHECK (epoch[0].is (Activity::GATE));
           
           // the gate's `next`-pointer is (ab)used to manage the next allocation slot
           CHECK (isSameObject (*gate.next, epoch[extent.size()-1]));
