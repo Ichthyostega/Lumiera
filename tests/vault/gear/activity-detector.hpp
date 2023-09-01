@@ -578,7 +578,7 @@ namespace test {
           _DiagnosticFun<SIG_tick>::Type tick;
           
           function<Offset()> getWaitDelay = []    { return POLL_DELAY;       };
-          function<Time()>   getSchedTime = [this]{ return Time{_schedTime}; };
+          function<Time()>   getSchedTime = [this]{ return SCHED_TIME_MARKER;};
           
           FakeExecutionCtx (ActivityDetector& detector)
             : post{detector.buildDiagnosticFun<SIG_post>(CTX_POST).returning(activity::PASS)}
@@ -588,9 +588,6 @@ namespace test {
             { }
           
           operator string()  const { return "≺test::CTX≻"; }
-          
-          /** allow test code to manipulate the "current scheduler time" */
-          TimeVar _schedTime = SCHED_TIME_MARKER;
         };
       
       FakeExecutionCtx executionCtx{*this};

@@ -422,7 +422,7 @@ namespace test {
           // so now we have POST ⟶ GATE ⟶ TICK;
           
           ActivityDetector detector;
-          detector.executionCtx._schedTime = tt;
+          detector.executionCtx.getSchedTime = [&]{ return tt; };
           // insert instrumentation to trace activation
           detector.watchGate (post.next, "Gate");
           
@@ -456,10 +456,9 @@ namespace test {
       
       
       
-      /** @test usage scenario: Activity graph for a render job
+      /** @test usage scenario: Activity graph for a simple render job
        *        - build a activity term based on the »CalculationJob« wiring template
        *        - dispatch the generated Activity chain and verify sequence of invocations
-       * @todo WIP 8/23 ✔ define ✔ implement
        */
       void
       scenario_RenderJob()
@@ -468,12 +467,15 @@ namespace test {
           
           Time start{0,1};
           Time dead{0,10};
-          Time now{555,5};
           
           ActivityDetector detector;
-          detector.executionCtx._schedTime = now;                     ///////////////////////TODO this is evaluated dynamically, but can't really demonstrate that here
           Job testJob{detector.buildMockJob("testJob", nominal, 12345)};
           
+          TimeVar now = Time{5,5};
+          detector.executionCtx.getSchedTime = [&]{ // increase "current" time on each access  
+                                                    now += FSecs(1,20);
+                                                    return now;
+                                                  };
           BlockFlowAlloc bFlow;
           ActivityLang activityLang{bFlow};
           auto term = activityLang.buildCalculationJob (testJob, start,dead);
@@ -484,11 +486,11 @@ namespace test {
           
           CHECK (activity::PASS == ActivityLang::dispatchChain (anchor, detector.executionCtx));
           
-          CHECK (detector.verifyInvocation("theGate").arg("5.555 ⧐ Act(GATE")
+          CHECK (detector.verifyInvocation("theGate").arg("5.105 ⧐ Act(GATE")
                          .beforeInvocation("after-theGate").arg("⧐ Act(WORKSTART")
-                         .beforeInvocation("CTX-work").arg("5.555","")
+                         .beforeInvocation("CTX-work").arg("5.155","")
                          .beforeInvocation("testJob") .arg("7.007",12345)
-                         .beforeInvocation("CTX-done").arg("5.555",""));
+                         .beforeInvocation("CTX-done").arg("5.355",""));
         }
       
       
@@ -511,7 +513,7 @@ namespace test {
           Time now{555,5};
           
           ActivityDetector detector;
-          detector.executionCtx._schedTime = now;
+          detector.executionCtx.getSchedTime = [&]{ return now; };
           Job testJob{detector.buildMockJob("testJob", nominal, 12345)};
           
           BlockFlowAlloc bFlow;
