@@ -133,7 +133,7 @@ namespace gear {
          *       present) and to increase the Gate's latch counter. Moreover, the Argument,
          *       _must be a `NOTIFY`_ and will be modified to store the link to this receiving
          *       Gate; typically this function is actually invoked starting from the other
-         *       Term — the prerequisite — by invoking `appendNotificationTo(targetTerm)`.
+         *       Term — the prerequisite — by invoking #appendNotificationTo(targetTerm).
          */
         Term&
         expectNotification (Activity& notificationSrc)
@@ -154,7 +154,9 @@ namespace gear {
         Term&
         appendNotificationTo (Term& targetTerm)
           {
-            UNIMPLEMENTED ("append NOTIFY and wire this through target.expectNotification()");
+            Activity& success = alloc_.create (Activity::NOTIFY);
+            insert (findTail (invoke_->next), &success);
+            targetTerm.expectNotification (success);
             return *this;
           }
         
@@ -174,7 +176,9 @@ namespace gear {
         Term&
         requireDirectActivation()
           {
-            UNIMPLEMENTED ("wire in self-Notification");
+            Activity& trigger = alloc_.create (Activity::NOTIFY);
+            expectNotification (trigger);
+            insert (post_, &trigger);
             return *this;
           }
         

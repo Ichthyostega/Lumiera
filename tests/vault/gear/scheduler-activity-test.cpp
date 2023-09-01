@@ -491,6 +491,7 @@ namespace test {
                          .beforeInvocation("CTX-work").arg("5.155","")
                          .beforeInvocation("testJob") .arg("7.007",12345)
                          .beforeInvocation("CTX-done").arg("5.355",""));
+          cout << detector.showLog()<<endl;
         }
       
       
