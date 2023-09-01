@@ -472,7 +472,7 @@ namespace test {
           Job testJob{detector.buildMockJob("testJob", nominal, 12345)};
           
           TimeVar now = Time{5,5};
-          detector.executionCtx.getSchedTime = [&]{ // increase "current" time on each access  
+          detector.executionCtx.getSchedTime = [&]{ // increase "current" time on each access
                                                     now += FSecs(1,20);
                                                     return now;
                                                   };
@@ -491,18 +491,17 @@ namespace test {
                          .beforeInvocation("CTX-work").arg("5.155","")
                          .beforeInvocation("testJob") .arg("7.007",12345)
                          .beforeInvocation("CTX-done").arg("5.355",""));
-          cout << detector.showLog()<<endl;
         }
       
       
       
-      /** @test TODO usage scenario: Notification from prerequisite Jobs within time window
+      /** @test usage scenario: Notification from prerequisite Jobs within time window
        *        - build [similar](\ref #scenario_RenderJob) »CalculationJob« wiring
        *        - configure extended dependency notification capabilities
        *        - Case-1 : a Notification decreases the latch, but blocks otherwise
        *        - Case-2 : when the primary chain is activated after the Notification,
        *          then the tail chain behind the Gate is dispatched
-       * @todo WIP 8/23 🔁 define ✔ implement
+       * @todo WIP 8/23 ✔ define ✔ implement
        */
       void
       scenario_Notification()
@@ -517,50 +516,70 @@ namespace test {
           
           BlockFlowAlloc bFlow;
           ActivityLang activityLang{bFlow};
-          auto term = activityLang.buildCalculationJob (testJob, start,dead);
           
-          Activity& anchor = term.post();
-          // insert instrumentation to trace activation
-          detector.watchGate (anchor.next, "theGate");
-          
-          // establish a blocking prerequisite dependency
+          // emulate a blocking prerequisite dependency
           Activity trigger{Activity::NOTIFY};
-          // ...in real usage this happens from building the dependency's Term
-          term.expectNotification (trigger);
           
-          // additionally insert inhibition prior to primary-chain activation
-          term.requireDirectActivation();
+          // Build the Activity-Term...
+          auto term = activityLang.buildCalculationJob (testJob, start,dead)
+                                  .expectNotification (trigger)               // ...require notification from prerequisite
+                                  .requireDirectActivation();                 // ...additionally insert inhibition to avoid activation
+                                                                              //    before the primary-chain has been scheduled
+          Activity& anchor = term.post();
+          CHECK (anchor.is (Activity::POST));
           CHECK (anchor.next->is (Activity::NOTIFY));
+          CHECK (anchor.next->next->is (Activity::GATE));
+          CHECK (anchor.next->next->next->is (Activity::WORKSTART));
+          CHECK (anchor.next->next->next->next->is (Activity::INVOKE));
+          CHECK (anchor.next->next->next->next->next->is (Activity::FEED));
+          CHECK (anchor.next->next->next->next->next->next->is (Activity::FEED));
+          CHECK (anchor.next->next->next->next->next->next->next->is (Activity::WORKSTOP));
+          CHECK (anchor.next->next->next->next->next->next->next->next == nullptr);
           
+          // insert test-instrumentation to trace activation
+          detector.watchGate (anchor.next->next, "theGate");
           detector.insertActivationTap(trigger.data_.notification.target, "trigger");
+          detector.insertActivationTap(anchor.next->data_.notification.target, "deBlock");
+          
+          // rig the λ-post to forward dispatch as expected in real usage
           detector.executionCtx.post.implementedAs(
             [&](Time when, Activity& postedAct, auto& ctx)
                {
-                 if (when == ctx.getSchedTime())
+                 if (when == ctx.getSchedTime())  // only for POST to run „right now“
                    return activityLang.dispatchChain (postedAct, ctx);
                  else
                    return activity::PASS;
                });
           
+          ///// Case-1 : send a notification from prerequisite, but prior to activating primary-chain
           CHECK (activity::PASS == ActivityLang::dispatchChain (trigger, detector.executionCtx));
-          CHECK (detector.verifyInvocation("trigger") .seq(0).arg("5.555 --notify-↯> Act(GATE")
-                                                             .arg("<2, until 0:00:10.000"));
+          CHECK (detector.verifyInvocation("trigger") .seq(0).arg("5.555 --notify-↯> Act(GATE")              // notification dispatched to the Gate
+                                                             .arg("<2, until 0:00:10.000"));                 // Note: the Gate-latch expects 2 notifications
+          CHECK (detector.ensureNoInvocation("testJob")                                                      // ==>   the latch was decremented but no invocation yet
+                         .afterInvocation("trigger"));
           
+          ///// Case-2 : now activate the primary-chain
           detector.incrementSeq();
           CHECK (activity::PASS == ActivityLang::dispatchChain (anchor, detector.executionCtx));
-          CHECK (detector.verifyInvocation("CTX-post").seq(1).arg("5.555","Act(NOTIFY","≺test::CTX≻")
-                         .beforeInvocation("after-theGate").seq(1).arg("5.555 ⧐ Act(WORKSTART")
-                         .beforeInvocation("CTX-work").arg("5.555","")
-                         .beforeInvocation("testJob") .arg("7.007",12345)
-                         .beforeInvocation("CTX-done").arg("5.555","")
-                         .beforeInvocation("theGate").seq(1).arg("<0, until -85401592:56:01.825"));
+          CHECK (detector.verifyInvocation("CTX-post").seq(1).arg("5.555","Act(NOTIFY","≺test::CTX≻")        // immediately at begin, the internal self-notification is posted
+                         .beforeInvocation("deBlock") .seq(1).arg("5.555 --notify-↯> Act(GATE")              // ...and then dispatched recursively via ActivityLang::dispatchChain() towards the Gate
+                                                             .arg("<1, until 0:00:10.000")                   // Note: at this point, the Gate-latch expects 1 notifications
+                         .beforeInvocation("CTX-post").seq(1).arg("5.555","after-theGate","≺test::CTX≻")     // ==>   the latch was decremented and the Gate OPENS, and thus post() the tail-chain
+                         .beforeInvocation("after-theGate")  .arg("5.555 ⧐ Act(WORKSTART")                   // ...causing the activation to pass behind the Gate
+                         .beforeInvocation("CTX-work").seq(1).arg("5.555","")                                // ...through WORKSTART
+                         .beforeInvocation("testJob") .seq(1).arg("7.007",12345)                             // ...then invoke the JobFunctor itself (with the nominal Time{7,7})
+                         .beforeInvocation("CTX-done").seq(1).arg("5.555","")                                // ...and finally the WORKSTOP
+                         .beforeInvocation("theGate") .seq(1).arg("5.555 ⧐ Act(GATE")                        // RETURN to the primary-chain activation (after the internal self-notification)
+                                                             .arg("<0, until -85401592:56:01.825"));         // -- however, after opening the Gate, the notification has blocked it permanently
+          CHECK (detector.ensureNoInvocation("testJob")                                                      // ==>  thus no further (redundant) activation of the JobFunctor
+                         .afterInvocation("CTX-done").seq(1));
           
           detector.incrementSeq();
-          CHECK (activity::PASS == ActivityLang::dispatchChain (trigger, detector.executionCtx));
-          
-          CHECK (detector.verifyInvocation("trigger") .seq(2).arg("5.555 --notify-↯> Act(GATE")
-                                                             .arg("<0, until -85401592:56:01.825"));
-          cout << detector.showLog()<<endl;
+          CHECK (activity::PASS == ActivityLang::dispatchChain (trigger, detector.executionCtx));            // and any further external trigger is likewise blocked:
+          CHECK (detector.verifyInvocation("trigger") .seq(2).arg("5.555 --notify-↯> Act(GATE")              // ... it reaches the Gate
+                                                             .arg("<0, until -85401592:56:01.825"));         // ... but the Gate has been closed permanently (by setting the deadline to Time::MIN)
+          CHECK (detector.ensureNoInvocation("testJob")                                                      // ==>  no further invocation
+                         .afterInvocation("trigger").seq(2));
         }
       
       
