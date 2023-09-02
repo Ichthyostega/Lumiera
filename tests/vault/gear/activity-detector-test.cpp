@@ -30,15 +30,13 @@
 #include "activity-detector.hpp"
 #include "vault/real-clock.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/format-cout.hpp" /////////////////////////////TODO
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
-//#include <utility>
 
-//using test::Test;
-//using lib::time::Time;
-//using lib::time::FSecs;
-//using std::move;
+using lib::time::Time;
+using lib::time::FSecs;
+
 using util::isSameObject;
 using lib::test::randStr;
 using lib::test::randTime;
@@ -47,14 +45,6 @@ using lib::test::randTime;
 namespace vault{
 namespace gear {
 namespace test {
-  
-//  using lib::time::FrameRate;
-//  using lib::time::Offset;
-  using lib::time::Time;
-  using lib::time::FSecs;
-  
-  
-  
   
   
   /*****************************************************************//**
@@ -82,8 +72,7 @@ namespace test {
         }
       
       
-      /** @test TODO demonstrate a simple usage scenario
-       * @todo WIP 7/23 🔁 define 🔁 implement
+      /** @test demonstrate a simple usage scenario of this test support facility
        */
       void
       simpleUsage()

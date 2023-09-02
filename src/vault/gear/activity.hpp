@@ -55,9 +55,7 @@
  ** 
  ** @see SchedulerActivity_test
  ** @see ActivityLang implementation of execution logic
- ** 
- ** @todo WIP-WIP 8/2023 »Playback Vertical Slice«
- ** 
+ **
  */
 
 
@@ -71,8 +69,6 @@
 #include "lib/meta/function.hpp"
 #include "lib/util.hpp"
 
-//#include <string>
-
 
 namespace vault{
 namespace gear {
@@ -80,10 +76,9 @@ namespace gear {
   using lib::time::TimeValue;
   using lib::time::TimeVar;
   using lib::time::Offset;
-//  using util::isnil;
-//  using std::string;
   
   namespace error = lumiera::error;
+  
   
   class Activity;
   
@@ -694,7 +689,6 @@ namespace gear {
         return dispatchSelfDelayed (now, executionCtx);
       }     // Fallback: self-re-dispatch for async execution
   }
-  
   
   
 }} // namespace vault::gear

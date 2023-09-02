@@ -28,12 +28,9 @@
  ** can be passed to the scheduler's messaging queue to cause the described
  ** activities to be performed in the context of the Lumiera render engine.
  ** 
- ** @warning mostly this is planned functionality
  ** @see SchedulerActivity_test
  ** @see activity.hpp definition of verbs
- ** 
- ** @todo WIP-WIP-WIP 6/2023 »Playback Vertical Slice«
- ** 
+ **
  */
 
 
@@ -44,22 +41,36 @@
 #include "vault/gear/activity.hpp"
 #include "vault/gear/block-flow.hpp"
 #include "vault/gear/activity-term.hpp"
-//#include "lib/symbol.hpp"
-//#include "lib/util.hpp"
-
-//#include <string>
 
 
 namespace vault{
 namespace gear {
   
-//  using util::isnil;
-//  using std::string;
   using BlockFlowAlloc = BlockFlow<blockFlow::RenderConfig>;
   
   
-  /**
-   * TODO write type comment...
+  
+  /*************************************************************************************//**
+   * Term builder and execution framework to perform chains of _scheduler Activities_.
+   * These are the verbs of a low-level execution language for render jobs; individual
+   * \ref Activity records are managed by the \ref BlockFlow allocation scheme and maintained
+   * until expiration their deadline. To enact a render job, a connection of Activities
+   * will be suitably wired, and the entry point to start execution can be instructed
+   * into the Scheduler.
+   * 
+   * The ActivityLang object provides an _construction and execution service_
+   * - it provides a builder API to construct _terms_ of properly wired Activity records
+   * - the activity::Term serves as a transient object for wiring and configuration and
+   *   can be discarded after enqueuing the entry point of a chain.
+   * - the static function ActivityLang::dispatchChain() provides the execution logic
+   *   for _activating_ a chain of Activities successively.
+   * - for real usage, this execution environment needs some functionality implemented
+   *   in the scheduler, which -- for the purpose of Activity activation -- is abstracted
+   *   as an *Execution Context* with the following operations
+   *   ** λ-post : hand over a chain of Activities for (time bound) activation
+   *   ** λ-work : signal start of media processing and then leave »management mode«
+   *   ** λ-done : signal completion of media processing
+   *   ** λ-tick : activate an internal heartbeat and scheduler maintenance hook 
    * 
    * @see Activity
    * @see SchedulerActivity_test
@@ -69,7 +80,7 @@ namespace gear {
       BlockFlowAlloc& mem_;
       
     public:
-//      explicit
+      explicit
       ActivityLang (BlockFlowAlloc& memManager)
         : mem_{memManager}
         { }
@@ -151,7 +162,6 @@ namespace gear {
                                };
         }
     };
-  
   
   
 }} // namespace vault::gear

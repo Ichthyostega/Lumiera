@@ -32,7 +32,7 @@
  ** _detector Activity records_ is provided, which drop off event log messages
  ** by side effect. These detector probes can be wired in as decorators into
  ** an otherwise valid Activity-Term, allowing to watch and verify patterns
- ** of invocation -- which might even happen concurrently.
+ ** of invocation.
  ** 
  ** # Usage
  ** 
@@ -50,9 +50,19 @@
  ** - ActivityDetector::buildDiadnosticFun(id) generates a functor object with
  **   _arbitrary signature,_ which records any invocation and arguments.
  **   The corresponding verification matcher is #verifyInvocation(id)
+ ** - ActivityDetector::buildMockJobFunctor(id) a JobFunctor implementation
+ **   suitably rigged to record invocations and arguments
+ ** - ActivityDetector::buildActivationProbe a debugging Activity to record activation
+ ** - ActivityDetector::insertActivationTap hooks this Activation-Probe before an
+ **   existing Activity-connection, so that passing on the activation can be detected
+ ** - ActivityDetector::watchGate rig a `GATE` activity by prepending and appending
+ **   an Activation-Probe, so that both incoming and outgoing activations can be traced
+ ** - ActivityDetector::executionCtx test setup of the execution environment abstraction
+ **   for performing chains of Activities; it provides the expected λ-functions as
+ **   instances of ActivityDetctor::DiagnosticFun, so that any invocation is recorded
  ** 
- ** @todo WIP-WIP-WIP 8/2023 gradually gaining traction.
  ** @see SchedulerActivity_test
+ ** @see ActivityDetector_test
  ** @see EventLog_test (demonstration of EventLog capbabilities)
  */
 
@@ -65,35 +75,20 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/test/event-log.hpp"
 
-//#include "steam/play/dummy-play-connection.hpp"
-//#include "steam/fixture/node-graph-attachment.hpp"
-//#include "steam/fixture/segmentation.hpp"
-//#include "steam/mobject/model-port.hpp"
-//#include "steam/engine/dispatcher.hpp"
-//#include "steam/engine/job-ticket.hpp"
 #include "vault/gear/job.h"
 #include "vault/gear/activity.hpp"
 #include "vault/gear/nop-job-functor.hpp"
-//#include "vault/real-clock.hpp"
-//#include "lib/allocator-handle.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/diff/gen-node.hpp"
-//#include "lib/linked-elements.hpp"
 #include "lib/meta/variadic-helper.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/wrapper.hpp"
-#include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
-//#include "lib/itertools.hpp"
-//#include "lib/depend.hpp"
 #include "lib/util.hpp"
 
 #include <functional>
 #include <utility>
 #include <string>
 #include <deque>
-//#include <tuple>
-//#include <map>
 
 
 namespace vault{
@@ -102,23 +97,14 @@ namespace test {
   
   using std::string;
   using std::function;
-//  using std::make_tuple;
-//  using lib::diff::GenNode;
-//  using lib::diff::MakeRec;
   using lib::time::TimeValue;
   using lib::time::Time;
   using lib::time::FSecs;
   using lib::time::Offset;
-//  using lib::HashVal;
   using lib::meta::RebindVariadic;
   using util::isnil;
   using std::forward;
   using std::move;
-//  using util::isSameObject;
-//  using fixture::Segmentation;
-//  using vault::RealClock;
-//  using vault::gear::Job;
-//  using vault::gear::JobClosure;
   
   
   namespace {// Diagnostic markers
@@ -167,29 +153,14 @@ namespace test {
       operator bool()  const { return _Parent::operator bool(); }
       
       
-//      EventMatch& locate (string match);
-//      EventMatch& locateMatch (string regExp);
-//      EventMatch& locateEvent (string match);
-//      EventMatch& locateEvent (string classifier, string match);
-//      EventMatch& locateCall (string match);
-//      
-//      
-//      /* query builders to find a match stepping forwards */
-//      
-//      EventMatch& before (string match);
-//      EventMatch& beforeMatch (string regExp);
-//      EventMatch& beforeEvent (string match);
-//      EventMatch& beforeEvent (string classifier, string match);
+      /* query builder(s) to find a match stepping forwards */
       ActivityMatch& beforeInvocation (string match) { return delegate (&EventMatch::beforeCall, move(match)); }
-//      
-//      
-//      /* query builders to find a match stepping backwards */
-//      
-//      EventMatch& after (string match);
-//      EventMatch& afterMatch (string regExp);
-//      EventMatch& afterEvent (string match);
-//      EventMatch& afterEvent (string classifier, string match);
+      // more here...
+
+      /* query builders to find a match stepping backwards */
       ActivityMatch& afterInvocation (string match) { return delegate (&EventMatch::afterCall, move(match)); }
+      // more here...
+      
       
       /** qualifier: additionally match the function arguments */
       template<typename...ARGS>
@@ -245,13 +216,13 @@ namespace test {
     };
   
   
+  
   /**
    * Diagnostic context to record and evaluate activations within the Scheduler.
    * The provided tools and detectors are wired back internally, such as to record
    * any observations into an lib::test::EventLog instance. Thus, after performing
    * rigged functionality, the expected activities and their order can be verified.
    * @see ActivityDetector_test
-   * @todo WIP-WIP-WIP 8/23 gradually building the verification tools needed...
    */
   class ActivityDetector
     : util::NonCopyable
