@@ -33,12 +33,39 @@
  ** is obsoleted and can be discarded without affecting the individual Activities awaiting
  ** activation through the Scheduler.
  ** 
+ ** # Wiring schemes
+ ** 
+ ** The »mechanics« of render activities are considered finite, and cohesive low-level code.
+ ** Thus only a [limited selection](\ref activity::Term::Template) of wiring schemes is provided,
+ ** offering just enough leeway to implement the foreseeable variations in functionality.
+ ** The underlying operational sequence is as follows
+ ** - as _entrance point,_ the complete chain of activities is _posted,_
+ **   thereby defining a start time and deadline window; moreover this indirection ensures
+ **   that the following execution until `WORKSTART` happens in »management mode«, which
+ **   is performed single threaded and may alter the scheduler queue (enqueue, dequeue).
+ ** - optionally, a `GATE` can enforce the deadline and block until a predetermined number
+ **   of prerequisite notifications has been received
+ ** - next follows the actual job invocation, which is bracketed in `WORKSTART` and `WORKSTOP`
+ ** - the actual job invocation relies on _two additional_ `FEED` records to hold parameters
+ ** - at the end of the chain, optionally a `NOTIFY` can be appended and linked to the `GATE`
+ **   of a follow-up job, which thereby becomes dependent on this actual job's completion.
+ ** 
+ ** While the regular media computation job employs this complete scheme, the Template::META_JOB
+ ** uses the minimal setup, comprised only of post and invocation (since the meta job is used for
+ ** planning further jobs and thus entirely in »management mode« and without further inhibitions
+ ** or notifications). Another variation is presented by the Template::LOAD_JOB, which enables
+ ** the integration of asynchronous IO. The actual JobFunctor in this case is assumed just to
+ ** dispatch a long running external IO operation and then return quickly. Upon completion
+ ** of the external work, a _callback_ will be activated, which must be wired such as to
+ ** re-activate the rest of the activities. Consequently for this mode of operation the
+ ** activity chain becomes _severed_ into two segments, cutting right behind the
+ ** last `FEED`-Activity (i.e. after issuing the Job) but before the `WORKSTOP`.
+ ** The callback then dispatches the `WORKSTOP` and possibly a chained `NOTIFY`.
+ ** 
  ** @see SchedulerActivity_test
  ** @see activity-lang.hpp Entrance point to Activity definition
  ** @see activity.hpp definition of verbs
- ** 
- ** @todo WIP-WIP-WIP 8/2023 »Playback Vertical Slice«
- ** 
+ **
  */
 
 
@@ -49,11 +76,8 @@
 #include "vault/gear/activity.hpp"
 #include "vault/gear/block-flow.hpp"
 #include "vault/gear/job.h"
-//#include "lib/symbol.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/util.hpp"
 
-//#include <tuple>
 #include <string>
 #include <utility>
 
@@ -63,7 +87,6 @@ namespace gear {
   
   using lib::time::Time;
   using lib::time::TimeValue;
-//  using util::isnil;
   using std::string;
   using std::move;
   
@@ -87,7 +110,7 @@ namespace gear {
         Activity* post_{nullptr};
         
         Activity* gate_{nullptr};
-        Activity* callback_{nullptr};
+        Activity* callback_{nullptr};   ///< @note indicates also this is an async job
         
         
       public:
@@ -167,7 +190,7 @@ namespace gear {
         appendNotificationTo (Term& targetTerm)
           {
             Activity& success = alloc_.create (Activity::NOTIFY);
-            insert (findTail (invoke_->next), &success);
+            insert (findTail (callback_? callback_ : invoke_), &success);
             targetTerm.expectNotification (success);
             return *this;
           }
@@ -204,7 +227,8 @@ namespace gear {
                 insertWorkBracket();
                 break;
               case LOAD_JOB:
-                UNIMPLEMENTED ("wiring for async job");
+                insertWorkBracket();
+                severAsyncChain();
                 break;
               case META_JOB:
                 /* use the minimal default wiring */
@@ -259,6 +283,17 @@ namespace gear {
             insert (findTail (start.next), &stop);
           }
         
+        void
+        severAsyncChain()
+          {
+            if (callback_) return;
+            Activity& cut = *invoke_->next->next;
+            REQUIRE (cut.is (Activity::FEED));
+            callback_ = cut.next;
+            cut.next = nullptr;
+            ENSURE (callback_);
+          }
+        
         
         static void
         insert (Activity* anchor, Activity* target)
@@ -279,12 +314,6 @@ namespace gear {
           }
       };
     
-    
-    /** */
-    
   }//(End)namespace activity
-  
-  
-  
-}} // namespace vault::gear
+}}// namespace vault::gear
 #endif /*SRC_VAULT_GEAR_ACTIVITY_TERM_H_*/

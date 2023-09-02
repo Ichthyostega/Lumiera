@@ -31,27 +31,17 @@
 #include "vault/gear/activity-lang.hpp"
 #include "vault/real-clock.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/format-cout.hpp"  /////////////////////////////////////TODO
-//#include "lib/util.hpp"
+#include "lib/format-cout.hpp"
 
-//#include <utility>
 
 using test::Test;
 using lib::time::Time;
 using lib::time::FSecs;
-//using std::move;
-//using util::isSameObject;
 
 
 namespace vault{
 namespace gear {
 namespace test {
-  
-//  using lib::time::FrameRate;
-//  using lib::time::Offset;
-//  using lib::time::Time;
-  
-  
   
   
   
@@ -508,7 +498,6 @@ namespace test {
       scenario_Notification()
         {
           Time nominal{7,7};
-          
           Time start{0,1};
           Time dead{0,10};
           
@@ -587,23 +576,21 @@ namespace test {
       
       
       
-      /** @test TODO usage scenario: Activity graph for an async Job
+      /** @test usage scenario: Activity graph for an async Job
        *        - use a simple [calculation job term](\ref #scenario_RenderJob) as follow-up receiver
        *        - build an activity Term based on the »Async Load Job« wiring and link it to the receiver
        *        - also retrieve the Activity record used as re-entrance point after completing async IO
-       * @todo WIP 8/23 ✔ define 🔁 implement
        */
       void
       scenario_IOJob()
         {
           Time nominal{7,7};
-          
           Time start{0,1};
           Time dead{0,10};
           
           ActivityDetector detector;
           Job loadJob{detector.buildMockJob("loadJob", nominal, 12345)};
-          Job calcJob{detector.buildMockJob("calcJob", nominal, 54321)};
+          Job calcJob{detector.buildMockJob("calcJob")};
 
           BlockFlowAlloc bFlow;
           ActivityLang activityLang{bFlow};
@@ -615,12 +602,34 @@ namespace test {
           Activity& anchor = loadTerm.post();
           Activity& notify = loadTerm.callback();
           
-          ActivityLang::dispatchChain (anchor, detector.executionCtx);
+          CHECK (anchor.is (Activity::POST));
+          CHECK (anchor.next->is (Activity::WORKSTART));
+          CHECK (anchor.next->next->is (Activity::INVOKE));
+          CHECK (anchor.next->next->next->is (Activity::FEED));
+          CHECK (anchor.next->next->next->next->is (Activity::FEED));
+          CHECK (anchor.next->next->next->next->next == nullptr);                                            // Note: chain is severed here
           
+          CHECK (notify.is (Activity::WORKSTOP));                                                            // ...WORKSTOP will be emitted from callback
+          CHECK (notify.next->is (Activity::NOTIFY));                                                        // ...followed by notification of dependent job(s)
+          CHECK (notify.next->next == nullptr);
+          
+          CHECK (notify.next->data_.notification.target == followup.post().next);                            // was wired to the GATE of the follow-up activity Term
+          CHECK (followup.post().next->is (Activity::GATE));
+          
+          
+          ///// Case-1 : trigger off the async IO job
+          CHECK (activity::PASS == ActivityLang::dispatchChain (anchor, detector.executionCtx));
+          CHECK (detector.verifyInvocation("CTX-work").seq(0).arg("5.555", "")                               // activation of WORKSTART
+                         .beforeInvocation("loadJob") .seq(0).arg("7.007", 12345));                          // activation of JobFunctor
+          CHECK (detector.ensureNoInvocation("CTX-done").seq(0)                                              // IO operation just runs, no further activity yet
+                         .afterInvocation("loadJob").seq(0));
+          
+          
+          ///// Case-2 : activate the rest of the chain after IO is done
           detector.incrementSeq();
-          ActivityLang::dispatchChain (notify, detector.executionCtx);
-          
-          cout << detector.showLog()<<endl;
+          CHECK (activity::PASS == ActivityLang::dispatchChain (notify, detector.executionCtx));
+          CHECK (detector.verifyInvocation("CTX-done").seq(1).arg("5.555", "")                               // activation of WORKSTOP via callback
+                         .beforeInvocation("CTX-post").seq(1).arg("5.555", "Act(NOTIFY", "≺test::CTX≻"));    // the following NOTIFY is posted...
         }
       
       
@@ -636,7 +645,6 @@ namespace test {
       scenario_MetaJob()
         {
           Time nominal{7,7};
-          
           Time start{0,1};
           Time dead{0,10};
           
