@@ -87,6 +87,7 @@ namespace gear {
         Activity* post_{nullptr};
         
         Activity* gate_{nullptr};
+        Activity* callback_{nullptr};
         
         
       public:
@@ -124,6 +125,17 @@ namespace gear {
           {
             REQUIRE (post_, "Activity Term not yet fully configured");
             return *post_;
+          }
+        
+        /**
+         * @return re-entrance point for completion after async IO.
+         * @remark initiate follow-up processing by ActivityLang::dispatchChain().
+         */
+        Activity&
+        callback()
+          {
+            REQUIRE (callback_, "Activity Term properly configured for async IO");
+            return *callback_;
           }
         
         /**

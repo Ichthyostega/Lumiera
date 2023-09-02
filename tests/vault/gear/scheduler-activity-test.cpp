@@ -457,7 +457,7 @@ namespace test {
       
       
       /** @test usage scenario: Activity graph for a simple render job
-       *        - build a activity term based on the »CalculationJob« wiring template
+       *        - build an activity term based on the »CalculationJob« wiring template
        *        - dispatch the generated Activity chain and verify sequence of invocations
        */
       void
@@ -581,16 +581,46 @@ namespace test {
                                                              .arg("<0, until -85401592:56:01.825"));         // ... but the Gate has been closed permanently (by setting the deadline to Time::MIN)
           CHECK (detector.ensureNoInvocation("testJob")                                                      // ==>  no further invocation
                          .afterInvocation("trigger").seq(2));
+          
+//        cout << detector.showLog()<<endl; // HINT: use this for investigation...
         }
       
       
       
       /** @test TODO usage scenario: Activity graph for an async Job
-       * @todo WIP 8/23 🔁 define ⟶ implement
+       *        - use a simple [calculation job term](\ref #scenario_RenderJob) as follow-up receiver
+       *        - build an activity Term based on the »Async Load Job« wiring and link it to the receiver
+       *        - also retrieve the Activity record used as re-entrance point after completing async IO
+       * @todo WIP 8/23 ✔ define 🔁 implement
        */
       void
       scenario_IOJob()
         {
+          Time nominal{7,7};
+          
+          Time start{0,1};
+          Time dead{0,10};
+          
+          ActivityDetector detector;
+          Job loadJob{detector.buildMockJob("loadJob", nominal, 12345)};
+          Job calcJob{detector.buildMockJob("calcJob", nominal, 54321)};
+
+          BlockFlowAlloc bFlow;
+          ActivityLang activityLang{bFlow};
+          
+          auto followup = activityLang.buildCalculationJob (calcJob, start,dead);
+          auto loadTerm = activityLang.buildAsyncLoadJob (loadJob, start,dead)
+                                      .appendNotificationTo (followup);
+          
+          Activity& anchor = loadTerm.post();
+          Activity& notify = loadTerm.callback();
+          
+          ActivityLang::dispatchChain (anchor, detector.executionCtx);
+          
+          detector.incrementSeq();
+          ActivityLang::dispatchChain (notify, detector.executionCtx);
+          
+          cout << detector.showLog()<<endl;
         }
       
       

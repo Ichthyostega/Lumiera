@@ -87,6 +87,15 @@ namespace gear {
         }
       
       /**
+       * Builder-API: initiate definition of IO data loading activities.
+       */
+      activity::Term
+      buildAsyncLoadJob (Job job, Time start, Time deadline)
+        {
+          return setupActivityScheme (activity::Term::LOAD_JOB, job, start, deadline);
+        }
+      
+      /**
        * Builder-API: initiate definition of internal/planning job.
        */
       activity::Term
