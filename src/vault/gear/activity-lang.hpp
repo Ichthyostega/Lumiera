@@ -86,6 +86,15 @@ namespace gear {
           return setupActivityScheme (activity::Term::CALC_JOB, job, start, deadline);
         }
       
+      /**
+       * Builder-API: initiate definition of internal/planning job.
+       */
+      activity::Term
+      buildMetaJob (Job job, Time start, Time deadline)
+        {
+          return setupActivityScheme (activity::Term::META_JOB, job, start, deadline);
+        }
+      
       
       /**
        * Execution Framework: dispatch performance of a chain of Activities.

@@ -478,9 +478,11 @@ namespace test {
                                                   };
           BlockFlowAlloc bFlow;
           ActivityLang activityLang{bFlow};
-          auto term = activityLang.buildCalculationJob (testJob, start,dead);
           
-          Activity& anchor = term.post();
+          // Build the Activity-Term for a simple calculation job...
+          Activity& anchor = activityLang.buildCalculationJob (testJob, start,dead)
+                                         .post(); // retrieve the entrance point to the chain
+          
           // insert instrumentation to trace activation
           detector.watchGate (anchor.next, "theGate");
           
@@ -501,7 +503,6 @@ namespace test {
        *        - Case-1 : a Notification decreases the latch, but blocks otherwise
        *        - Case-2 : when the primary chain is activated after the Notification,
        *          then the tail chain behind the Gate is dispatched
-       * @todo WIP 8/23 ✔ define ✔ implement
        */
       void
       scenario_Notification()
@@ -594,12 +595,44 @@ namespace test {
       
       
       
-      /** @test TODO usage scenario: Activity graph for administrative job
-       * @todo WIP 8/23 🔁 define ⟶ implement
+      /** @test usage scenario: Activity graph for administrative job
+       *        - by default, neither Gate, nor start/stop notification used
+       *        - rather, the `INVOKE` and the argument-`FEED` is posted directly
+       *  @remark the job itself is thus performed in »management mode«
+       *        (holding the `GroomingToken`), and may modify the queue
+       *        to generate new jobs.
        */
       void
       scenario_MetaJob()
         {
+          Time nominal{7,7};
+          
+          Time start{0,1};
+          Time dead{0,10};
+          
+          ActivityDetector detector;
+          Job testJob{detector.buildMockJob("metaJob", nominal, 12345)};
+          
+          BlockFlowAlloc bFlow;
+          ActivityLang activityLang{bFlow};
+          
+          // Build Activity-Term with a chain defining a meta-job...
+          Activity& anchor = activityLang.buildMetaJob (testJob, start,dead)
+                                         .post();
+          
+          CHECK (anchor.is (Activity::POST));
+          CHECK (anchor.next->is (Activity::INVOKE));
+          CHECK (anchor.next->next->is (Activity::FEED));
+          CHECK (anchor.next->next->next->is (Activity::FEED));
+          CHECK (anchor.next->next->next->next == nullptr);
+          
+          // insert test-instrumentation
+          detector.insertActivationTap(anchor.next);
+          
+          CHECK (activity::PASS == ActivityLang::dispatchChain (anchor, detector.executionCtx));
+
+          CHECK (detector.verifyInvocation("tap-INVOKE").arg("5.555 ⧐ Act(INVOKE")
+                         .beforeInvocation("metaJob") .arg("7.007",12345));
         }
     };
   
