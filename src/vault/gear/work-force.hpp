@@ -37,11 +37,17 @@
 
 
 #include "vault/common.hpp"
+#include "vault/gear/activity.hpp"
 #include "lib/nocopy.hpp"
 //#include "lib/symbol.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <string>
+#include <functional>
+#include <utility>
+#include <vector>
+#include <thread>
+#include <atomic>
 
 
 namespace vault{
@@ -49,6 +55,8 @@ namespace gear {
   
 //  using util::isnil;
 //  using std::string;
+  using std::move;
+  using std::atomic;
   
   
   /**
@@ -60,27 +68,69 @@ namespace gear {
   class WorkForce
     : util::NonCopyable
     {
-      short nothing_;
+      using WorkFun = std::function<activity::Proc(void)>;
+      using Pool = std::vector<std::thread>;
+      
+      WorkFun workFun_;
+      Pool workers_;
+      
+      atomic<bool> halt_{false};
       
     public:
-      template<typename FUN>
+      static const size_t FULL_SIZE;
+      
       explicit
-      WorkForce (FUN&& fun)
-        : nothing_{42}
-        { }
+      WorkForce (WorkFun&& fun)
+        : workFun_{move (fun)}
+        , workers_{}
+        { 
+          workers_.reserve (1.5*FULL_SIZE);
+        }
+      
+     ~WorkForce()
+        {
+          try {
+            deactivate();
+          }
+          ERROR_LOG_AND_IGNORE (threadpool, "defunct worker thread")
+        }
       
       
       void
       activate (double degree =1.0)
         {
-          UNIMPLEMENTED ("scale up");
+          halt_ = false;
+          size_t scale = util::max (size_t(degree*FULL_SIZE), 1u);
+          for (uint i = workers_.size(); i < scale; ++i)
+            workers_.emplace_back ([this]{ pullWork(); });
         }
       
       void
       deactivate()
         {
-          UNIMPLEMENTED ("scale down to halt");
+          halt_ = true;
+          for (auto& w : workers_)
+            if (w.joinable())
+              w.join();
+          workers_.clear();
         }
+      
+    private:
+      void
+      pullWork()
+        {
+          try {
+              while (true)
+                {
+                  activity::Proc res = workFun_();
+                  if (halt_ or res != activity::PASS)
+                    break;
+                }
+            }
+          ERROR_LOG_AND_IGNORE (threadpool, "defunct worker thread")
+        }
+      
+      
     };
   
   

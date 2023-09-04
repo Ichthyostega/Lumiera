@@ -37,6 +37,7 @@
 #include "vault/gear/work-force.hpp"
 //#include "lib/symbol.hpp"
 //#include "include/logging.h"
+#include "lib/util.hpp"
 
 //#include <string>
 
@@ -49,12 +50,15 @@ namespace gear {
   
   namespace { // internal details
     
+    size_t MINIMAL_CONCURRENCY = 2;
+    
   } // internal details
   
   
   
 //  NA::~NA() { }
   
+  const size_t WorkForce::FULL_SIZE = util::max (std::thread::hardware_concurrency(), MINIMAL_CONCURRENCY);
   
   
   

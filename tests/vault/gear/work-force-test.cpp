@@ -28,7 +28,7 @@
 #include "lib/test/run.hpp"
 #include "vault/gear/work-force.hpp"
 //#include "lib/time/timevalue.hpp"
-//#include "lib/format-cout.hpp"
+#include "lib/format-cout.hpp"   ///////////////////////////////WIP
 //#include "lib/util.hpp"
 
 //#include <utility>
@@ -75,9 +75,9 @@ namespace test {
       void
       simpleUsage()
         {
-          uint check{0};
+          atomic<uint> check{0};
           
-          WorkForce wof{[&]{ ++check; return true; }};
+          WorkForce wof{[&]{ ++check; return activity::PASS; }};
           
           CHECK (0 == check);
           

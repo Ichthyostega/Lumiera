@@ -7167,14 +7167,14 @@ Later on we expect a distinct __query subsystem__ to emerge, presumably embeddin
 
 &amp;rarr; QuantiserImpl</pre>
 </div>
-<div title="Scheduler" creator="Ichthyostega" modifier="Ichthyostega" created="202304140131" modified="202307272248" tags="Rendering spec draft" changecount="15">
+<div title="Scheduler" creator="Ichthyostega" modifier="Ichthyostega" created="202304140131" modified="202309042142" tags="Rendering spec draft" changecount="17">
 <pre>//Invoke and control the dependency and time based execution of  [[render jobs|RenderJob]]//
 The Scheduler acts as the central hub in the implementation of the RenderEngine and coordinates the //processing resources// of the application. Regarding architecture, the Scheduler is located in the Vault-Layer and //running// the Scheduler is equivalent to activating the »Vault Subsystem«. An EngineFaçade acts as entrance point, providing high-level render services to other parts of the application: [[render jobs|RenderJob]] can be activated under various timing and dependency constraints. Internally, the implementation is segregated into two layers
 ;Layer-2: Coordination
 :maintains a network of interconnected [[activities|RenderActivity]], tracks dependencies and observes timing constraints
+:coordinates a [[pool of active Workers|SchedulerWorker]] to dispatch the next activities
 ;Layer-1: Invocation
 :operates a low-level priority scheduling mechanism for time-bound execution of [[activities|RenderActivity]]
-:coordinates a ThreadPool and dispatches the execution of individual jobs into appropriate worker threads.
 
 !Event based vs. time based operational control
 Time bound delivery of media data is an important aspect of editing and playback -- yet other concerns are of similar importance: the ability to make optimum use of scarce resources and to complete extended processing in reasonable time, while retaining some overall responsiveness of the system. And, especially for the //final render,// it is tantamount to produce 100% correct results without any glitches -- a goal that can not be reconciled with the demand for perfect timing. These considerations alone are sufficient to indicate, that strict adherence to a pre-established calculation plan is not enough to build a viable render engine. As far as media processing is concerned, the limited I/O bandwidth is the most precious resource -- reading and writing data from persistent storage requires a lot of time, with generally unpredictable timings, necessitating asynchronous processing.
