@@ -1,5 +1,5 @@
 /*
-  SchedulerUsage(Test)  -  component integration test for the scheduler
+  WorkForce(Test)  -  verify worker thread service
 
   Copyright (C)         Lumiera.org
     2023,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,18 +20,20 @@
 
 * *****************************************************/
 
-/** @file scheduler-usage-test.cpp
- ** unit test \ref SchedulerUsage_test
+/** @file work-force-test.cpp
+ ** unit test \ref WorkForce_test
  */
 
 
 #include "lib/test/run.hpp"
-#include "vault/gear/scheduler.hpp"
+#include "vault/gear/work-force.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/format-cout.hpp"
 //#include "lib/util.hpp"
 
 //#include <utility>
+//#include <chrono>
+#include <thread>
 
 using test::Test;
 //using std::move;
@@ -42,6 +44,8 @@ namespace vault{
 namespace gear {
 namespace test {
   
+  using std::this_thread::sleep_for;
+  using namespace std::chrono_literals;
 //  using lib::time::FrameRate;
 //  using lib::time::Offset;
 //  using lib::time::Time;
@@ -51,12 +55,10 @@ namespace test {
   
   
   /*************************************************************************//**
-   * @test Scheduler component integration test: add and process dependent jobs.
-   * @see SchedulerActivity_test
-   * @see SchedulerInvocation_test
-   * @see SchedulerCommutator_test
+   * @test WorkForce-Service: maintain a pool of active worker threads.
+   * @see SchedulerUsage_test
    */
-  class SchedulerUsage_test : public Test
+  class WorkForce_test : public Test
     {
       
       virtual void
@@ -68,11 +70,21 @@ namespace test {
         }
       
       
-      /** @test TODO demonstrate a simple usage scenario
+      /** @test demonstrate simple worker pool usage 
        */
       void
       simpleUsage()
         {
+          uint check{0};
+          
+          WorkForce wof{[&]{ ++check; return true; }};
+          
+          CHECK (0 == check);
+          
+          wof.activate();
+          sleep_for(20ms);
+          
+          CHECK (0 < check);
         }
       
       
@@ -96,8 +108,8 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (SchedulerUsage_test, "unit engine");
+  LAUNCHER (WorkForce_test, "unit engine");
   
   
   
-}}} // namespace vault::gear::test
+}}} // namespace vault::mem::test

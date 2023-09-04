@@ -39,7 +39,7 @@ using test::Test;
 
 
 namespace vault{
-namespace mem  {
+namespace gear {
 namespace test {
   
 //  using lib::time::FrameRate;

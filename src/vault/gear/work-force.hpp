@@ -63,10 +63,24 @@ namespace gear {
       short nothing_;
       
     public:
+      template<typename FUN>
       explicit
-      WorkForce (char const& b)
-        : nothing_(b)
+      WorkForce (FUN&& fun)
+        : nothing_{42}
         { }
+      
+      
+      void
+      activate (double degree =1.0)
+        {
+          UNIMPLEMENTED ("scale up");
+        }
+      
+      void
+      deactivate()
+        {
+          UNIMPLEMENTED ("scale down to halt");
+        }
     };
   
   
