@@ -59,6 +59,53 @@ namespace gear {
   using std::atomic;
   
   
+  namespace work {
+    
+    struct Config
+      {
+        
+      };
+    
+    template<class CONF>
+    class Runner
+      : std::thread
+      , CONF
+      {
+      public:
+        Runner()
+          : thread{}
+          { }
+        
+      private:
+        void
+        pullWork()
+          {
+            try {
+              while (true)
+                {
+                  activity::Proc res = CONF::doWork();
+                  if (res == activity::WAIT)
+                    res = idleWait();
+                  if (res != activity::PASS)
+                    break;
+                }
+              }
+            ERROR_LOG_AND_IGNORE (threadpool, "defunct worker thread")
+            ////////////////////////////////////////////////////////////////////////////OOO very important to have a reliable exit-hook here!!!
+          }
+        
+        activity::Proc
+        idleWait()
+          {
+            using namespace std::chrono_literals;  /////////////WIP
+            std::this_thread::sleep_for (100ms);
+                                ////////////////////////////////WIP extended inactivity detector here
+            return activity::PASS;
+          }
+      };
+  }
+  
+  
   /**
    * Pool of worker threads for rendering.
    * 

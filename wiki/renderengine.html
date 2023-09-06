@@ -7245,7 +7245,7 @@ The primary scaling effects exploited to achieve this level of performance are t
 The way other parts of the system are built, requires us to obtain a guaranteed knowledge of some job's termination. It is possible to obtain that knowledge with some limited delay, but it nees to be absoultely reliable (violations leading to segfault). The requirements stated above assume this can be achieved through //jobs with guaranteed execution.// Alternatively we could consider installing specific callbacks -- in this case the scheduler itself has to guarantee the invocation of these callbacks, even if the corresponding job fails or is never invoked. It doesn't seem there is any other option.
 </pre>
 </div>
-<div title="SchedulerWorker" creator="Ichthyostega" modifier="Ichthyostega" created="202309041605" modified="202309041621" tags="Rendering spec draft" changecount="2">
+<div title="SchedulerWorker" creator="Ichthyostega" modifier="Ichthyostega" created="202309041605" modified="202309061718" tags="Rendering spec draft" changecount="10">
 <pre>The Scheduler //maintains a ''Work Force'' (a pool of workers) to perform the next [[render activities|RenderActivity]] continuously.//
 Each worker runs in a dedicated thread; the Activities are arranged in a way to avoid blocking those worker threads
 * IO operations are performed asynchronously {{red{planned as of 9/23}}}
@@ -7256,6 +7256,24 @@ Using a pool of workers to perform small isolated steps of work atomically and i
 This leads to a situation where it is more adequate to //distribute the scarce computation resources// to the tasks //sequenced in temporary and dependence order//. The computation tasks must be prepared and ordered -- but beyond that, there is not much that can be »managed« with a computation task. For this reason, the Scheduler in the Lumiera Render Engine uses a pool of workers, each providing one unit of computation resource (a »core«), and these workers will ''pull work'' actively, rather then distributing, queuing and dispatching tasks to a passive set of workers.
 
 Moreover, the actual computation tasks, which can be parallelised, are at least by an order of magnitude more expensive than any administrative work for sorting tasks, checking dependencies and maintaining process state. This leads to a scheme where a worker first performs some »management work«, until encountering the next actual computation job, at which point the worker leaves the //management mode// and transitions into //concurrent work mode//. All workers are expected to be in work mode almost entirely most of the time, and thus we can expect not much contention between workers performing »management work« -- allowing to confine this management work to //single threaded operation,// thereby drastically reducing the complexity of management data structures and memory allocation.
+!!!Regulating workers
+The behaviour of individual workers is guided solely by the return-value flag from the work-functor. Consequently, no shared flags and no direct synchronisation whatsoever is required //within the {{{WorkForce}}} implementation.// -- notwithstanding the fact that the implementation //within the work-functor// obviously needs some concurrency coordination to produce these return values, since this the whole point is to invoke this functor concurrently. The following aspects of worker behaviour can be directed:
+* returning {{{activity::PASS}}} instructs the worker to re-invoke the work-functor in the same thread immediately
+* returning {{{activity::WAIT}}} requests an //idle-wait cycle//
+* any other value, notably {{{activity::HALT}}} causes the worker to terminate
+* likewise, an exception from anywhere within the worker shall terminate the worker and activate a »disaster mode«
+Essentially this implies that //the workers themselves// (not some steering master) perform the management code leading to the aforementioned state directing return codes.
+
+The ''idle-wait cycle'' involves some degree of capacity control. First off, a worker receiving the {{{activity::WAIT}}} should perform a sleep (by the OS scheduler) for some small period (configurable as Render Engine parameter). However, if a worker encounters an extended ongoing sequence of idle-wait cycles, beyond a (likewise configurable) threshold, the //worker shall terminate.// This way, the {{{WorkForce}}} gradually scales down when not used any more. On the other hand, //scaling up// is performed stepwise or in one jump, and triggered by an external control call, typically issued by the {{{Scheduler}}} in response to a signal from the {{{Player}}} indicating a newly added workload.
+
+!!!Synchronisation and data consistency
+As pointed out above, the code controlling the worker behaviour must care for data consistency when using shared state. However, in the actual usage scenario for scheduling media computations the amount of »management work« is by orders of magnitude smaller than any actual media computations. For that reason, //all management work// involving shared data structures can be performed //exclusively single-threaded.// This is achieved by acquiring the {{{GroomingToken}}} within the Scheduler control layer (Layer-2). After mutating the queues to determine the next task, this token will be dropped again, prior to engaging into the actual media computations.
+
+Following the rules of [[C++ atomic Release-Acquire ordering|https://en.cppreference.com/w/cpp/atomic/memory_order#Release-Acquire_ordering]], for ensuring concurrent data consistency it is sufficient with this usage pattern to rely on a single atomic variable (used as implementation of the {{{GroomingToken}}}). All the other internal management data (notably the priority queue and the memory manager) can be implemented with ordinary memory accessible by all threads. The important part is actually to establish a »synchronises-with« relation
+# managment data is processed in one thread holding the {{{GroomingToken}}}
+# an atomic store is performed with {{{memory_order_release}}} (thereby dropping the token)
+# now another thread can perform an atomic load with {{{memory_order_acquire}}} -- but it is essential to check and branch on the loaded value
+# and only when the loaded value indicates that the load is //synchronised-with// the preceding store, then the other management data can be processed
 </pre>
 </div>
 <div title="ScopeLocator" modifier="Ichthyostega" created="200911192145" modified="200911202035" tags="def SessionLogic">

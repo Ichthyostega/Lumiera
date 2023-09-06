@@ -114,11 +114,12 @@ namespace gear {
     
     /**
      * Result instruction from Activity activation.
-     * These codes are used by the ActivityLang to
-     * coordinate further processing of activity chains.
+     * These codes are used by the ActivityLang and WorkForce
+     * to coordinate further processing of activities.
      */
     enum Proc {PASS  ///< pass on the activation down the chain
               ,SKIP  ///< skip rest of the Activity chain for good
+              ,WAIT  ///< nothing to do; wait and re-check for work later
               ,KILL  ///< obliterate the complete Activity-Term and all its dependencies
               ,HALT  ///< abandon this play / render process
               };
