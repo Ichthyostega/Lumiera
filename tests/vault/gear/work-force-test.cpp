@@ -33,6 +33,7 @@
 
 //#include <utility>
 //#include <chrono>
+#include <functional>
 #include <thread>
 
 using test::Test;
@@ -50,6 +51,9 @@ namespace test {
 //  using lib::time::Offset;
 //  using lib::time::Time;
   
+  namespace {
+    using WorkFun = std::function<work::SIG_WorkFun>;
+  }
   
   
   
@@ -64,9 +68,18 @@ namespace test {
       virtual void
       run (Arg)
         {
-           simpleUsage();
-           walkingDeadline();
-           setupLalup();
+          simpleUsage();
+          
+          verify_pullWork();
+          verify_workerHalt();
+          verify_workerSleep();
+          verify_workerDemote();
+          verify_finalHook();
+          verify_detectError();
+          verify_defaultPool();
+          verify_scalePool();
+          verify_countActive();
+          verify_dtor_blocks();
         }
       
       
@@ -76,8 +89,15 @@ namespace test {
       simpleUsage()
         {
           atomic<uint> check{0};
+          struct Setup
+            : work::Config
+            {
+              WorkFun doWork;
+            }
+            setup;
+          setup.doWork = [&]{ ++check; return activity::PASS; };
           
-          WorkForce wof{[&]{ ++check; return activity::PASS; }};
+          WorkForce wof{setup};
           
           CHECK (0 == check);
           
@@ -90,18 +110,110 @@ namespace test {
       
       
       /** @test TODO
+       * @todo WIP 9/23 ⟶ define ⟶ implement
        */
       void
-      walkingDeadline()
+      verify_pullWork()
         {
         }
       
       
       
       /** @test TODO
+       * @todo WIP 9/23 ⟶ define ⟶ implement
        */
       void
-      setupLalup()
+      verify_workerHalt()
+        {
+        }
+      
+      
+      
+      /** @test TODO
+       * @todo WIP 9/23 ⟶ define ⟶ implement
+       */
+      void
+      verify_workerSleep()
+        {
+        }
+      
+      
+      
+      /** @test TODO
+       * @todo WIP 9/23 ⟶ define ⟶ implement
+       */
+      void
+      verify_workerDemote()
+        {
+        }
+      
+      
+      
+      /** @test TODO
+       * @todo WIP 9/23 ⟶ define ⟶ implement
+       */
+      void
+      verify_finalHook()
+        {
+        }
+      
+      
+      
+      /** @test TODO
+       * @todo WIP 9/23 ⟶ define ⟶ implement
+       */
+      void
+      verify_detectError()
+        {
+        }
+      
+      
+      
+      /** @test TODO
+       * @todo WIP 9/23 ⟶ define ⟶ implement
+       */
+      void
+      verify_defaultPool()
+        {
+        }
+      
+      
+      
+      /** @test TODO
+       * @todo WIP 9/23 ⟶ define ⟶ implement
+       */
+      void
+      verify_scalePool()
+        {
+        }
+      
+      
+      
+      /** @test TODO
+       * @todo WIP 9/23 ⟶ define ⟶ implement
+       */
+      void
+      verify_countActive()
+        {
+        }
+      
+      
+      
+      /** @test TODO
+       * @todo WIP 9/23 ⟶ define ⟶ implement
+       */
+      void
+      verify_dtor_blocks()
+        {
+        }
+      
+      
+      
+      /** @test TODO
+       * @todo WIP 9/23 ⟶ define ⟶ implement
+       */
+      void
+      walkingDeadline()
         {
         }
     };

@@ -38,12 +38,12 @@
 
 #include "vault/common.hpp"
 #include "vault/gear/activity.hpp"
+#include "lib/meta/function.hpp"
 #include "lib/nocopy.hpp"
 //#include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 //#include <string>
-#include <functional>
 #include <utility>
 #include <vector>
 #include <thread>
@@ -56,30 +56,37 @@ namespace gear {
 //  using util::isnil;
 //  using std::string;
   using std::move;
+//  using std::forward;
   using std::atomic;
   
   
   namespace work {
     
+    using SIG_WorkFun = activity::Proc(void);
+    
     struct Config
       {
-        
+        static const size_t COMPUTATION_CAPACITY;
+        const size_t EXPECTED_MAX_POOL = 1.5*COMPUTATION_CAPACITY;
       };
     
     template<class CONF>
     class Runner
-      : std::thread
-      , CONF
+      : CONF
+      , public std::thread
       {
       public:
-        Runner()
-          : thread{}
+        Runner (CONF config)
+          : CONF{move (config)}
+          , thread{[this]{ pullWork(); }}
           { }
         
       private:
         void
         pullWork()
           {
+            ASSERT_VALID_SIGNATURE (decltype(CONF::doWork), SIG_WorkFun);
+            
             try {
               while (true)
                 {
@@ -103,7 +110,7 @@ namespace gear {
             return activity::PASS;
           }
       };
-  }
+  }//(End)namespace work
   
   
   /**
@@ -112,32 +119,29 @@ namespace gear {
    * @see SomeSystem
    * @see NA_test
    */
+  template<class CONF>
   class WorkForce
     : util::NonCopyable
     {
-      using WorkFun = std::function<activity::Proc(void)>;
-      using Pool = std::vector<std::thread>;
+      using Pool = std::vector<work::Runner<CONF>>;
       
-      WorkFun workFun_;
+      CONF setup_;
       Pool workers_;
       
-      atomic<bool> halt_{false};
       
     public:
-      static const size_t FULL_SIZE;
       
-      explicit
-      WorkForce (WorkFun&& fun)
-        : workFun_{move (fun)}
+      WorkForce (CONF config)
+        : setup_{move (config)}
         , workers_{}
         { 
-          workers_.reserve (1.5*FULL_SIZE);
+          workers_.reserve (setup_.EXPECTED_MAX_POOL);
         }
       
      ~WorkForce()
         {
           try {
-            deactivate();
+            awaitShutdown();
           }
           ERROR_LOG_AND_IGNORE (threadpool, "defunct worker thread")
         }
@@ -146,16 +150,16 @@ namespace gear {
       void
       activate (double degree =1.0)
         {
-          halt_ = false;
-          size_t scale = util::max (size_t(degree*FULL_SIZE), 1u);
+          size_t scale{setup_.COMPUTATION_CAPACITY};
+          scale *= degree;
+          scale = util::max (scale, 1u);
           for (uint i = workers_.size(); i < scale; ++i)
-            workers_.emplace_back ([this]{ pullWork(); });
+            workers_.emplace_back (setup_);
         }
       
       void
-      deactivate()
+      awaitShutdown()
         {
-          halt_ = true;
           for (auto& w : workers_)
             if (w.joinable())
               w.join();
@@ -163,21 +167,6 @@ namespace gear {
         }
       
     private:
-      void
-      pullWork()
-        {
-          try {
-              while (true)
-                {
-                  activity::Proc res = workFun_();
-                  if (halt_ or res != activity::PASS)
-                    break;
-                }
-            }
-          ERROR_LOG_AND_IGNORE (threadpool, "defunct worker thread")
-        }
-      
-      
     };
   
   

@@ -58,7 +58,9 @@ namespace gear {
   
 //  NA::~NA() { }
   
-  const size_t WorkForce::FULL_SIZE = util::max (std::thread::hardware_concurrency(), MINIMAL_CONCURRENCY);
+  /** default value for full computing capacity is to use all (virtual) cores */
+  const size_t work::Config::COMPUTATION_CAPACITY = util::max (std::thread::hardware_concurrency()
+                                                              , MINIMAL_CONCURRENCY);
   
   
   
