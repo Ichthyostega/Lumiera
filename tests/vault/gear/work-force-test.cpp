@@ -36,6 +36,7 @@
 //#include <chrono>
 #include <functional>
 #include <thread>
+#include <chrono>
 
 using test::Test;
 //using std::move;
@@ -48,6 +49,8 @@ namespace test {
   
   using std::this_thread::sleep_for;
   using namespace std::chrono_literals;
+  using std::chrono::milliseconds;
+  
 //  using lib::time::FrameRate;
 //  using lib::time::Offset;
 //  using lib::time::Time;
@@ -64,9 +67,27 @@ namespace test {
         {
           WorkFun doWork;
           
+          milliseconds IDLE_WAIT      = work::Config::IDLE_WAIT;
+          size_t       DISMISS_CYCLES = work::Config::DISMISS_CYCLES;
+          
           Setup (FUN&& workFun)
             : doWork{std::forward<FUN> (workFun)}
             { }
+          
+          Setup&&
+          withSleepPeriod (std::chrono::milliseconds millis)
+            {
+              IDLE_WAIT = millis;
+              return move(*this);
+            }
+          
+          Setup&&
+          dismissAfter (size_t cycles)
+            {
+              DISMISS_CYCLES = cycles;
+              return move(*this);
+            }
+          
         };
        
       return Setup{std::forward<FUN> (workFun)};
@@ -91,7 +112,7 @@ namespace test {
           verify_pullWork();
           verify_workerHalt();
           verify_workerSleep();
-          verify_workerDemote();
+          verify_workerDismiss();
           verify_finalHook();
           verify_detectError();
           verify_defaultPool();
@@ -182,6 +203,20 @@ namespace test {
       void
       verify_workerSleep()
         {
+          atomic<uint> check{0};
+          WorkForce wof{setup ([&]{ ++check; return activity::WAIT; })
+                          .withSleepPeriod (10ms)};
+          
+          wof.incScale();
+          sleep_for(10us);
+          
+          CHECK (1 == check);
+          
+          sleep_for(10us);
+          CHECK (1 == check);
+          
+          sleep_for(10ms);     // after waiting one sleep-period...
+          CHECK (2 == check);  // ...functor invoked again
         }
       
       
@@ -190,7 +225,7 @@ namespace test {
        * @todo WIP 9/23 ⟶ define ⟶ implement
        */
       void
-      verify_workerDemote()
+      verify_workerDismiss()
         {
         }
       
@@ -258,7 +293,7 @@ namespace test {
           atomic<uint> check{0};
           WorkForce wof{setup ([&]{
                                     ++check;
-                                    if (check == 100'000 or check == 100'110)
+                                    if (check == 10'000 or check == 10'110)
                                       return activity::HALT;
                                     else
                                       return activity::PASS;
@@ -273,7 +308,7 @@ namespace test {
           
           CHECK (3 == wof.size());
           
-          sleep_for(50ms);
+          sleep_for(200ms);        // ...sufficiently long to count way beyond 10'000
           CHECK (1 == wof.size());
         }
       

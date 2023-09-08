@@ -45,6 +45,7 @@
 
 //#include <string>
 #include <utility>
+#include <chrono>
 #include <thread>
 #include <atomic>
 #include <list>
@@ -60,8 +61,12 @@ namespace gear {
   using std::atomic;
   using util::unConst;
   
+  using std::chrono_literals::operator ""ms;  /////////////WIP
+
+  
   
   namespace work {
+    using std::chrono::milliseconds;
     
     using SIG_WorkFun = activity::Proc(void);
     
@@ -69,6 +74,9 @@ namespace gear {
       {
         static const size_t COMPUTATION_CAPACITY;
         const size_t EXPECTED_MAX_POOL = 1.5*COMPUTATION_CAPACITY;
+        
+        const milliseconds IDLE_WAIT = 20ms;
+        const size_t DISMISS_CYCLES = 100;
       };
     
     template<class CONF>
@@ -112,8 +120,7 @@ namespace gear {
         activity::Proc
         idleWait()
           {
-            using namespace std::chrono_literals;  /////////////WIP
-            std::this_thread::sleep_for (100ms);
+            std::this_thread::sleep_for (CONF::IDLE_WAIT);
                                 ////////////////////////////////WIP extended inactivity detector here
             return activity::PASS;
           }
