@@ -42,6 +42,7 @@
 #include "lib/nocopy.hpp"
 //#include "lib/symbol.hpp"
 #include "lib/util.hpp"
+#include "lib/format-cout.hpp"////////////////////WIP
 
 //#include <string>
 #include <utility>
@@ -108,6 +109,8 @@ namespace gear {
                     break;
                   if (res == activity::WAIT)
                     res = idleWait();
+                  else
+                    idleCycles = 0;
                   if (res != activity::PASS)
                     break;
                 }
@@ -120,10 +123,16 @@ namespace gear {
         activity::Proc
         idleWait()
           {
-            std::this_thread::sleep_for (CONF::IDLE_WAIT);
-                                ////////////////////////////////WIP extended inactivity detector here
-            return activity::PASS;
+            ++idleCycles;
+            if (idleCycles < CONF::DISMISS_CYCLES)
+              {
+                std::this_thread::sleep_for (CONF::IDLE_WAIT);
+                return activity::PASS;
+              }
+            else  // idle beyond threshold => terminate worker
+              return activity::HALT;
           }
+        size_t idleCycles{0};
       };
   }//(End)namespace work
   

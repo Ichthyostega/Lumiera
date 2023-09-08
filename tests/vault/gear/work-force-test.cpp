@@ -197,8 +197,7 @@ namespace test {
       
       
       
-      /** @test TODO
-       * @todo WIP 9/23 ⟶ define ⟶ implement
+      /** @test a worker can be sent to sleep, reducing the poll frequency.
        */
       void
       verify_workerSleep()
@@ -215,18 +214,34 @@ namespace test {
           sleep_for(10us);
           CHECK (1 == check);
           
-          sleep_for(10ms);     // after waiting one sleep-period...
+          sleep_for(12ms);     // after waiting one sleep-period...
           CHECK (2 == check);  // ...functor invoked again
         }
       
       
       
-      /** @test TODO
-       * @todo WIP 9/23 ⟶ define ⟶ implement
+      /** @test when a worker is sent into sleep-cycles for an extended time,
+       *        the worker terminates itself
        */
       void
       verify_workerDismiss()
         {
+          atomic<uint> check{0};
+          WorkForce wof{setup ([&]{ ++check; return activity::WAIT; })
+                          .withSleepPeriod (10ms)
+                          .dismissAfter(5)};
+          
+          wof.incScale();
+          sleep_for(20us);
+          
+          CHECK (1 == check);
+          
+          sleep_for(10ms);
+          CHECK (2 == check);      // after one wait cycle, one further invocation
+          
+          sleep_for(100ms);
+          CHECK (5 == check);      // only 5 invocations total...
+          CHECK (0 == wof.size()); // ...after that, the worker terminated
         }
       
       
@@ -293,7 +308,7 @@ namespace test {
           atomic<uint> check{0};
           WorkForce wof{setup ([&]{
                                     ++check;
-                                    if (check == 10'000 or check == 10'110)
+                                    if (check == 5'000 or check == 5'110)
                                       return activity::HALT;
                                     else
                                       return activity::PASS;
@@ -308,7 +323,8 @@ namespace test {
           
           CHECK (3 == wof.size());
           
-          sleep_for(200ms);        // ...sufficiently long to count way beyond 10'000
+          sleep_for(500ms);        // ...sufficiently long to count way beyond 10'000
+          CHECK (check > 6'000);
           CHECK (1 == wof.size());
         }
       
