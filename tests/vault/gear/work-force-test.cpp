@@ -100,7 +100,7 @@ namespace test {
         }
       
       
-      /** @test demonstrate simple worker pool usage 
+      /** @test demonstrate simple worker pool usage
        */
       void
       simpleUsage()
@@ -118,12 +118,34 @@ namespace test {
       
       
       
-      /** @test TODO
-       * @todo WIP 9/23 ⟶ define ⟶ implement
+      /** @test the given work-functor is invoked repeatedly, once activated.
        */
       void
       verify_pullWork()
         {
+          atomic<uint> check{0};
+          WorkForce wof{setup ([&]{ ++check; return activity::PASS; })};
+          
+          CHECK (0 == check);
+          
+          wof.incScale();
+          sleep_for(20ms);
+          
+          uint invocations = check;
+          CHECK (0 < invocations);
+          
+          sleep_for(2ms);
+          CHECK (invocations < check);
+          
+          invocations = check;
+          sleep_for(2ms);
+          CHECK (invocations < check);
+          
+          wof.awaitShutdown();
+          
+          invocations = check;
+          sleep_for(2ms);
+          CHECK (invocations == check);
         }
       
       
@@ -178,12 +200,26 @@ namespace test {
       
       
       
-      /** @test TODO
-       * @todo WIP 9/23 ⟶ define ⟶ implement
+      /** @test by default, the WorkForce is initially inactive;
+       *        once activated, it scales up to the number of cores
+       *        reported by the runtime system.
        */
       void
       verify_defaultPool()
         {
+          atomic<uint> check{0};
+          WorkForce wof{setup ([&]{ ++check; return activity::PASS; })};
+          
+          // after construction, the WorkForce is inactive
+          CHECK (0 == wof.size());
+          CHECK (0 == check);
+          
+          wof.activate();
+          sleep_for(20ms);
+          
+          CHECK (0 < check);
+          CHECK (wof.size() == work::Config::COMPUTATION_CAPACITY);
+          CHECK (work::Config::COMPUTATION_CAPACITY == std::thread::hardware_concurrency());
         }
       
       

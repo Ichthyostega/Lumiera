@@ -58,6 +58,7 @@ namespace gear {
   using std::move;
 //  using std::forward;
   using std::atomic;
+  using util::unConst;
   
   
   namespace work {
@@ -152,6 +153,12 @@ namespace gear {
         }
       
       
+      /**
+       * Activate or scale up the worker pool.
+       * @param degree fraction of the full #COMPUTATION_CAPACITY to activate
+       * @note will always activate at least one worker;
+       *       setting values > 1.0 leads to over-provisioning...
+       */
       void
       activate (double degree =1.0)
         {
@@ -159,6 +166,15 @@ namespace gear {
           scale *= degree;
           scale = util::max (scale, 1u);
           for (uint i = workers_.size(); i < scale; ++i)
+            workers_.emplace_back (setup_);
+        }
+      
+      void
+      incScale()
+        {
+          if (size() > setup_.COMPUTATION_CAPACITY)
+            return;
+          else
             workers_.emplace_back (setup_);
         }
       
@@ -174,9 +190,9 @@ namespace gear {
         }
       
       size_t
-      size()
+      size()  const
         {
-          workers_.remove_if([](auto& w){ return not w.joinable(); });
+          unConst(workers_).remove_if([](auto& w){ return not w.joinable(); });
           return workers_.size();
         }
       
