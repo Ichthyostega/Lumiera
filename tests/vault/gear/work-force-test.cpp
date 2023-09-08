@@ -53,6 +53,23 @@ namespace test {
   
   namespace {
     using WorkFun = std::function<work::SIG_WorkFun>;
+    
+    template<class FUN>
+    auto
+    setup (FUN&& workFun)
+    {
+      struct Setup
+        : work::Config
+        {
+          WorkFun doWork;
+          
+          Setup (FUN&& workFun)
+            : doWork{std::forward<FUN> (workFun)}
+            { }
+        };
+       
+      return Setup{std::forward<FUN> (workFun)};
+    }
   }
   
   
@@ -89,15 +106,7 @@ namespace test {
       simpleUsage()
         {
           atomic<uint> check{0};
-          struct Setup
-            : work::Config
-            {
-              WorkFun doWork;
-            }
-            setup;
-          setup.doWork = [&]{ ++check; return activity::PASS; };
-          
-          WorkForce wof{setup};
+          WorkForce wof{setup ([&]{ ++check; return activity::PASS; })};
           
           CHECK (0 == check);
           

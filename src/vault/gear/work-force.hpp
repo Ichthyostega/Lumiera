@@ -45,9 +45,9 @@
 
 //#include <string>
 #include <utility>
-#include <vector>
 #include <thread>
 #include <atomic>
+#include <list>
 
 
 namespace vault{
@@ -73,6 +73,7 @@ namespace gear {
     template<class CONF>
     class Runner
       : CONF
+      , util::NonCopyable
       , public std::thread
       {
       public:
@@ -80,6 +81,9 @@ namespace gear {
           : CONF{move (config)}
           , thread{[this]{ pullWork(); }}
           { }
+        
+        /** emergency break to trigger cooperative halt */
+        std::atomic<bool> emergency{false};
         
       private:
         void
@@ -91,6 +95,8 @@ namespace gear {
               while (true)
                 {
                   activity::Proc res = CONF::doWork();
+                  if (emergency.load (std::memory_order_relaxed))
+                    break;
                   if (res == activity::WAIT)
                     res = idleWait();
                   if (res != activity::PASS)
@@ -123,7 +129,7 @@ namespace gear {
   class WorkForce
     : util::NonCopyable
     {
-      using Pool = std::vector<work::Runner<CONF>>;
+      using Pool = std::list<work::Runner<CONF>>;
       
       CONF setup_;
       Pool workers_;
@@ -134,9 +140,7 @@ namespace gear {
       WorkForce (CONF config)
         : setup_{move (config)}
         , workers_{}
-        { 
-          workers_.reserve (setup_.EXPECTED_MAX_POOL);
-        }
+        { }
       
      ~WorkForce()
         {
@@ -160,6 +164,8 @@ namespace gear {
       void
       awaitShutdown()
         {
+          for (auto& w : workers_)
+            w.emergency.store(true, std::memory_order_relaxed);
           for (auto& w : workers_)
             if (w.joinable())
               w.join();
