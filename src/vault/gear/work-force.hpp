@@ -105,6 +105,7 @@ namespace gear {
               }
             ERROR_LOG_AND_IGNORE (threadpool, "defunct worker thread")
             ////////////////////////////////////////////////////////////////////////////OOO very important to have a reliable exit-hook here!!!
+            thread::detach();
           }
         
         activity::Proc
@@ -166,10 +167,17 @@ namespace gear {
         {
           for (auto& w : workers_)
             w.emergency.store(true, std::memory_order_relaxed);
-          for (auto& w : workers_)
-            if (w.joinable())
-              w.join();
-          workers_.clear();
+          using namespace std::chrono_literals;  ///////////////////////7///WIP
+          do
+            std::this_thread::sleep_for(10ms);
+          while (0 < size());
+        }
+      
+      size_t
+      size()
+        {
+          workers_.remove_if([](auto& w){ return not w.joinable(); });
+          return workers_.size();
         }
       
     private:
