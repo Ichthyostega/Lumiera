@@ -28,7 +28,8 @@
 #include "lib/test/run.hpp"
 #include "vault/gear/work-force.hpp"
 //#include "lib/time/timevalue.hpp"
-#include "lib/format-cout.hpp"   ///////////////////////////////WIP
+//#include "lib/format-cout.hpp"   ///////////////////////////////WIP
+#include "lib/test/diagnostic-output.hpp"   ///////////////////////////////WIP
 //#include "lib/util.hpp"
 
 //#include <utility>
@@ -150,12 +151,27 @@ namespace test {
       
       
       
-      /** @test TODO
-       * @todo WIP 9/23 ⟶ define ⟶ implement
+      /** @test can cause a worker to terminate by return-value from the work-functor
        */
       void
       verify_workerHalt()
         {
+          atomic<uint> check{0};
+          atomic<activity::Proc> control{activity::PASS};
+          WorkForce wof{setup ([&]{ ++check; return activity::Proc(control); })};
+          
+          wof.incScale();
+          sleep_for(1ms);
+          
+          uint invocations = check;
+          CHECK (0 < invocations);
+          
+          control = activity::HALT;
+          sleep_for(1ms);
+          
+          invocations = check;
+          sleep_for(10ms);
+          CHECK (invocations == check);
         }
       
       
@@ -234,12 +250,31 @@ namespace test {
       
       
       
-      /** @test TODO
-       * @todo WIP 9/23 ⟶ define ⟶ implement
+      /** @test dynamically determine count of currently active workers.
        */
       void
       verify_countActive()
         {
+          atomic<uint> check{0};
+          WorkForce wof{setup ([&]{
+                                    ++check;
+                                    if (check == 100'000 or check == 100'110)
+                                      return activity::HALT;
+                                    else
+                                      return activity::PASS;
+                                  })};
+          
+          CHECK (0 == wof.size());
+          
+          wof.incScale();
+          wof.incScale();
+          wof.incScale();
+          sleep_for(10us);         // this may be fragile; must be sufficiently short
+          
+          CHECK (3 == wof.size());
+          
+          sleep_for(50ms);
+          CHECK (1 == wof.size());
         }
       
       
