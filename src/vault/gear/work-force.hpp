@@ -61,15 +61,15 @@ namespace gear {
 //  using std::forward;
   using std::atomic;
   using util::unConst;
-  
-  using std::chrono_literals::operator ""ms;  /////////////WIP
 
   
   
   namespace work {
     using std::chrono::milliseconds;
+    using std::chrono_literals::operator ""ms;
     
-    using SIG_WorkFun = activity::Proc(void);
+    using SIG_WorkFun   = activity::Proc(void);   ///< config should define callable to perform work
+    using SIG_FinalHook = void(bool);             ///< config should define callable invoked at exit (argument: is error)
     
     struct Config
       {
@@ -80,6 +80,7 @@ namespace gear {
         const size_t DISMISS_CYCLES = 100;
       };
     
+    /** Individual worker thread: repeatedly pulls the `doWork` functor */
     template<class CONF>
     class Runner
       : CONF
@@ -99,24 +100,34 @@ namespace gear {
         void
         pullWork()
           {
-            ASSERT_VALID_SIGNATURE (decltype(CONF::doWork), SIG_WorkFun);
-            
-            try {
-              while (true)
-                {
-                  activity::Proc res = CONF::doWork();
-                  if (emergency.load (std::memory_order_relaxed))
-                    break;
-                  if (res == activity::WAIT)
-                    res = idleWait();
-                  else
-                    idleCycles = 0;
-                  if (res != activity::PASS)
-                    break;
-                }
+            ASSERT_VALID_SIGNATURE (decltype(CONF::doWork),    SIG_WorkFun);
+            ASSERT_VALID_SIGNATURE (decltype(CONF::finalHook), SIG_FinalHook);
+
+            bool regularExit{false};
+            try /* ================ pull work ===================== */
+              {
+                while (true)
+                  {
+                    activity::Proc res = CONF::doWork();
+                    if (emergency.load (std::memory_order_relaxed))
+                      break;
+                    if (res == activity::WAIT)
+                      res = idleWait();
+                    else
+                      idleCycles = 0;
+                    if (res != activity::PASS)
+                      break;
+                  }
+                regularExit = true;
               }
             ERROR_LOG_AND_IGNORE (threadpool, "defunct worker thread")
-            ////////////////////////////////////////////////////////////////////////////OOO very important to have a reliable exit-hook here!!!
+            
+            try /* ================ thread-exit hook ============== */
+              {
+                CONF::finalHook (not regularExit);
+              }
+            ERROR_LOG_AND_IGNORE (threadpool, "failure in thread-exit hook")
+            
             thread::detach();
           }
         
@@ -199,10 +210,8 @@ namespace gear {
         {
           for (auto& w : workers_)
             w.emergency.store(true, std::memory_order_relaxed);
-          using namespace std::chrono_literals;  ///////////////////////7///WIP
-          do
-            std::this_thread::sleep_for(10ms);
-          while (0 < size());
+          while (0 < size())
+            std::this_thread::sleep_for(setup_.IDLE_WAIT);
         }
       
       size_t

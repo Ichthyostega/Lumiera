@@ -57,6 +57,7 @@ namespace test {
   
   namespace {
     using WorkFun = std::function<work::SIG_WorkFun>;
+    using FinalFun = std::function<work::SIG_FinalHook>;
     
     template<class FUN>
     auto
@@ -66,6 +67,7 @@ namespace test {
         : work::Config
         {
           WorkFun doWork;
+          FinalFun finalHook = [](bool){ /*NOP*/ };
           
           milliseconds IDLE_WAIT      = work::Config::IDLE_WAIT;
           size_t       DISMISS_CYCLES = work::Config::DISMISS_CYCLES;
@@ -73,6 +75,13 @@ namespace test {
           Setup (FUN&& workFun)
             : doWork{std::forward<FUN> (workFun)}
             { }
+          
+          Setup&&
+          withFinalHook (FinalFun finalFun)
+            {
+              finalHook = move (finalFun);
+              return move(*this);
+            }
           
           Setup&&
           withSleepPeriod (std::chrono::milliseconds millis)
@@ -246,12 +255,27 @@ namespace test {
       
       
       
-      /** @test TODO
-       * @todo WIP 9/23 ⟶ define ⟶ implement
+      /** @test verify invocation of a thread-termination callback
        */
       void
       verify_finalHook()
         {
+          atomic<uint> check{0};
+          atomic<activity::Proc> control{activity::PASS};
+          WorkForce wof{setup([&]{ return activity::Proc(control); })
+                          .withFinalHook([&](bool){ ++check; })};
+          
+          CHECK (0 == check);
+          
+          wof.activate();
+          sleep_for(10ms);
+          CHECK (wof.size() == work::Config::COMPUTATION_CAPACITY);
+          CHECK (0 == check);
+          
+          control = activity::HALT;
+          sleep_for(10ms);
+          CHECK (0 == wof.size());
+          CHECK (check == work::Config::COMPUTATION_CAPACITY);
         }
       
       
