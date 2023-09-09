@@ -38,6 +38,6 @@ END
 
 
 
-PLANNED "Worker Thread Service" WorkForce_test <<END
+TEST "Worker Thread Service" WorkForce_test <<END
 return: 0
 END

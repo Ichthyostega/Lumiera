@@ -7167,9 +7167,9 @@ Later on we expect a distinct __query subsystem__ to emerge, presumably embeddin
 
 &amp;rarr; QuantiserImpl</pre>
 </div>
-<div title="Scheduler" creator="Ichthyostega" modifier="Ichthyostega" created="202304140131" modified="202309042142" tags="Rendering spec draft" changecount="17">
+<div title="Scheduler" creator="Ichthyostega" modifier="Ichthyostega" created="202304140131" modified="202309101341" tags="Rendering spec draft" changecount="19">
 <pre>//Invoke and control the dependency and time based execution of  [[render jobs|RenderJob]]//
-The Scheduler acts as the central hub in the implementation of the RenderEngine and coordinates the //processing resources// of the application. Regarding architecture, the Scheduler is located in the Vault-Layer and //running// the Scheduler is equivalent to activating the »Vault Subsystem«. An EngineFaçade acts as entrance point, providing high-level render services to other parts of the application: [[render jobs|RenderJob]] can be activated under various timing and dependency constraints. Internally, the implementation is segregated into two layers
+The Scheduler acts as the central hub in the implementation of the RenderEngine and coordinates the //processing resources// of the application. Regarding architecture, the Scheduler is located in the Vault-Layer and //running// the Scheduler is equivalent to activating the »Vault Subsystem«. An EngineFaçade acts as entrance point, providing high-level render services to other parts of the application: [[render jobs|RenderJob]] can be activated under various timing and dependency constraints. Internally, the implementation is organised into two layers:
 ;Layer-2: Coordination
 :maintains a network of interconnected [[activities|RenderActivity]], tracks dependencies and observes timing constraints
 :coordinates a [[pool of active Workers|SchedulerWorker]] to dispatch the next activities
@@ -7245,7 +7245,7 @@ The primary scaling effects exploited to achieve this level of performance are t
 The way other parts of the system are built, requires us to obtain a guaranteed knowledge of some job's termination. It is possible to obtain that knowledge with some limited delay, but it nees to be absoultely reliable (violations leading to segfault). The requirements stated above assume this can be achieved through //jobs with guaranteed execution.// Alternatively we could consider installing specific callbacks -- in this case the scheduler itself has to guarantee the invocation of these callbacks, even if the corresponding job fails or is never invoked. It doesn't seem there is any other option.
 </pre>
 </div>
-<div title="SchedulerWorker" creator="Ichthyostega" modifier="Ichthyostega" created="202309041605" modified="202309061718" tags="Rendering spec draft" changecount="10">
+<div title="SchedulerWorker" creator="Ichthyostega" modifier="Ichthyostega" created="202309041605" modified="202309101338" tags="Rendering spec draft" changecount="11">
 <pre>The Scheduler //maintains a ''Work Force'' (a pool of workers) to perform the next [[render activities|RenderActivity]] continuously.//
 Each worker runs in a dedicated thread; the Activities are arranged in a way to avoid blocking those worker threads
 * IO operations are performed asynchronously {{red{planned as of 9/23}}}
@@ -7257,7 +7257,7 @@ This leads to a situation where it is more adequate to //distribute the scarce c
 
 Moreover, the actual computation tasks, which can be parallelised, are at least by an order of magnitude more expensive than any administrative work for sorting tasks, checking dependencies and maintaining process state. This leads to a scheme where a worker first performs some »management work«, until encountering the next actual computation job, at which point the worker leaves the //management mode// and transitions into //concurrent work mode//. All workers are expected to be in work mode almost entirely most of the time, and thus we can expect not much contention between workers performing »management work« -- allowing to confine this management work to //single threaded operation,// thereby drastically reducing the complexity of management data structures and memory allocation.
 !!!Regulating workers
-The behaviour of individual workers is guided solely by the return-value flag from the work-functor. Consequently, no shared flags and no direct synchronisation whatsoever is required //within the {{{WorkForce}}} implementation.// -- notwithstanding the fact that the implementation //within the work-functor// obviously needs some concurrency coordination to produce these return values, since this the whole point is to invoke this functor concurrently. The following aspects of worker behaviour can be directed:
+The behaviour of individual workers is guided solely by the return-value flag from the work-functor. Consequently, no shared flags and no direct synchronisation whatsoever is required //within the {{{WorkForce}}} implementation.// -- notwithstanding the fact that the implementation //within the work-functor// obviously needs some concurrency coordination to produce these return values, since the whole point is to invoke this functor concurrently. The following aspects of worker behaviour can be directed:
 * returning {{{activity::PASS}}} instructs the worker to re-invoke the work-functor in the same thread immediately
 * returning {{{activity::WAIT}}} requests an //idle-wait cycle//
 * any other value, notably {{{activity::HALT}}} causes the worker to terminate

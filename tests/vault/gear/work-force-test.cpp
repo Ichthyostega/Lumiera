@@ -27,20 +27,14 @@
 
 #include "lib/test/run.hpp"
 #include "vault/gear/work-force.hpp"
-//#include "lib/time/timevalue.hpp"
-//#include "lib/format-cout.hpp"   ///////////////////////////////WIP
-#include "lib/test/diagnostic-output.hpp"   ///////////////////////////////WIP
-//#include "lib/util.hpp"
+#include "lib/sync.hpp"
 
-//#include <utility>
-//#include <chrono>
 #include <functional>
 #include <thread>
 #include <chrono>
+#include <set>
 
 using test::Test;
-//using std::move;
-//using util::isSameObject;
 
 
 namespace vault{
@@ -51,14 +45,16 @@ namespace test {
   using namespace std::chrono_literals;
   using std::chrono::milliseconds;
   
-//  using lib::time::FrameRate;
-//  using lib::time::Offset;
-//  using lib::time::Time;
   
   namespace {
     using WorkFun = std::function<work::SIG_WorkFun>;
     using FinalFun = std::function<work::SIG_FinalHook>;
     
+    /**
+     * Helper: setup a Worker-Pool configuration for the test.
+     * Derived from the default configuration, it allows to bind
+     * a lambda as work-functor and to tweak other parameters.
+     */
     template<class FUN>
     auto
     setup (FUN&& workFun)
@@ -108,6 +104,7 @@ namespace test {
   
   /*************************************************************************//**
    * @test WorkForce-Service: maintain a pool of active worker threads.
+   * @warning this test relies on empirical timings and can be brittle.
    * @see SchedulerUsage_test
    */
   class WorkForce_test : public Test
@@ -138,13 +135,13 @@ namespace test {
         {
           atomic<uint> check{0};
           WorkForce wof{setup ([&]{ ++check; return activity::PASS; })};
-          
+                           //  ^^^ this is the doWork-λ
           CHECK (0 == check);
           
           wof.activate();
           sleep_for(20ms);
           
-          CHECK (0 < check);
+          CHECK (0 < check); // λ invoked in the worker threads
         }
       
       
@@ -206,7 +203,7 @@ namespace test {
       
       
       
-      /** @test a worker can be sent to sleep, reducing the poll frequency.
+      /** @test a worker can be sent to sleep, throttling the poll frequency.
        */
       void
       verify_workerSleep()
@@ -230,7 +227,7 @@ namespace test {
       
       
       /** @test when a worker is sent into sleep-cycles for an extended time,
-       *        the worker terminates itself
+       *        the worker terminates itself.
        */
       void
       verify_workerDismiss()
@@ -260,28 +257,29 @@ namespace test {
       void
       verify_finalHook()
         {
-          atomic<uint> check{0};
+          atomic<uint> exited{0};
           atomic<activity::Proc> control{activity::PASS};
           WorkForce wof{setup([&]{ return activity::Proc(control); })
-                          .withFinalHook([&](bool){ ++check; })};
+                          .withFinalHook([&](bool){ ++exited; })};
           
-          CHECK (0 == check);
+          CHECK (0 == exited);
           
           wof.activate();
           sleep_for(10ms);
           CHECK (wof.size() == work::Config::COMPUTATION_CAPACITY);
-          CHECK (0 == check);
+          CHECK (0 == exited);
           
           control = activity::HALT;
           sleep_for(10ms);
           CHECK (0 == wof.size());
-          CHECK (check == work::Config::COMPUTATION_CAPACITY);
+          CHECK (exited == work::Config::COMPUTATION_CAPACITY);
         }
       
       
       
-      /** @test TODO
-       * @todo WIP 9/23 ⟶ define ⟶ implement
+      /** @test exceptions emanating from within the worker are catched
+       *        and reported by setting the isFailure argument flag of
+       *        the `finalHook` functor invoked at worker termination.
        */
       void
       verify_detectError()
@@ -298,7 +296,6 @@ namespace test {
                                              if (isFailure)
                                                ++errors;
                                            })};
-          
           CHECK (0 == check);
           CHECK (0 == errors);
           
@@ -308,7 +305,7 @@ namespace test {
           
           sleep_for(10us);
           CHECK (3 == wof.size());
-          CHECK (0 < check);
+          CHECK (0  < check);
           CHECK (0 == errors);
           
           sleep_for(200ms);   // wait for the programmed disaster
@@ -342,12 +339,75 @@ namespace test {
       
       
       
-      /** @test TODO
-       * @todo WIP 9/23 ⟶ define ⟶ implement
+      /** @test the number of (separate) workers can be scaled up,
+       *        both stepwise and as fraction of full hardware concurrency
        */
       void
       verify_scalePool()
         {
+          /** helper to count distinct thread-IDs */
+          class UniqueCnt
+            : public std::set<std::thread::id>
+            , public lib::Sync<>
+            {
+            public:
+              void
+              mark (std::thread::id const& tID)
+                {
+                  Lock guard(this);
+                  this->insert(tID);
+                }
+              
+              operator size_t()  const
+                {
+                  Lock guard(this);
+                  return this->size();
+                }
+            }
+            uniqueCnt;
+          
+          WorkForce wof{setup ([&]{
+                                    uniqueCnt.mark(std::this_thread::get_id());
+                                    return activity::PASS;
+                                  })};
+          
+          CHECK (0 == uniqueCnt);
+          CHECK (0 == wof.size());
+          
+          wof.incScale();
+          sleep_for(100us);
+          CHECK (1 == uniqueCnt);
+          CHECK (1 == wof.size());
+          
+          wof.incScale();
+          sleep_for(100us);
+          CHECK (2 == uniqueCnt);
+          CHECK (2 == wof.size());
+
+          
+          auto fullCnt = work::Config::COMPUTATION_CAPACITY;
+          
+          wof.activate (1.0);
+          sleep_for(1ms);
+          CHECK (fullCnt == uniqueCnt);
+          CHECK (fullCnt == wof.size());
+          
+          wof.activate (2.0);
+          sleep_for(1ms);
+          CHECK (2*fullCnt == uniqueCnt);
+          CHECK (2*fullCnt == wof.size());
+          
+          wof.awaitShutdown();
+          CHECK (0 == wof.size());
+          
+          uniqueCnt.clear();
+          sleep_for(1ms);
+          CHECK (0 == uniqueCnt);
+          
+          wof.activate (0.5);
+          sleep_for(1ms);
+          CHECK (fullCnt/2 == uniqueCnt);
+          CHECK (fullCnt/2 == wof.size());
         }
       
       
@@ -386,7 +446,7 @@ namespace test {
        *        - use a work-functor which keeps all workers blocked
        *        - start the WorkForce within a separate thread
        *        - in this separate thread, cause the WorkForce destructor to be called
-       *        - in the outer (controlling thread) release the work-functor blocking
+       *        - in the test main thread release the work-functor blocking
        *        - at this point, all workers return, detect shutdown and terminate
        */
       void
@@ -435,5 +495,4 @@ namespace test {
   LAUNCHER (WorkForce_test, "unit engine");
   
   
-  
-}}} // namespace vault::mem::test
+}}} // namespace vault::gear::test

@@ -23,12 +23,29 @@
 
 /** @file work-force.hpp
  ** A pool of workers for multithreaded rendering.
+ ** The Lumiera Render Engine is driven by active workers repeatedly pulling
+ ** the next planned chunk of work; maintaining the internal organisation of the
+ ** Scheduler is integrated into that pattern as _just another activity_ performed
+ ** by the workers. As a consequence, there is no need for a central »master« or
+ ** coordinator to dispatch individual jobs. As long as the worker pool holds
+ ** active workers, the engine is in running state.
  ** 
+ ** The WorkForce (worker pool service) in turn is passive and fulfils the purpose of
+ ** holding storage for the active worker objects in a list, pruning terminated entries.
+ ** Some parameters and configuration is provided to the workers, notably a _work functor_
+ ** invoked actively to »pull« work. The return value from this `doWork()`-function governs
+ ** the worker's behaviour, either by prompting to pull further work, by sending a worker
+ ** into a sleep cycle, or even asking the worker to terminate.
+ ** 
+ ** @warning concurrency and synchronisation in the Scheduler (which maintains and operates
+ **          WorkForce) is based on the assumption that _all maintenance and organisational
+ **          work is done chunk-wise by a single worker._ Other render activities may proceed
+ **          in parallel, yet any other worker about to pick the next task has to wait until
+ **          it is possible to grab the `GroomingToken` exclusively. For the WorkForce this
+ **          usage pattern implies that there is *no explicit synchronisation* -- scaling up
+ **          and shutting down must be performed non-concurrent.
  ** @see work-force-test.cpp
  ** @see scheduler-commutator.hpp usage as part of the scheduler
- ** 
- ** @todo WIP-WIP-WIP 6/2023 »Playback Vertical Slice«
- ** 
  */
 
 
@@ -40,11 +57,8 @@
 #include "vault/gear/activity.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/nocopy.hpp"
-//#include "lib/symbol.hpp"
 #include "lib/util.hpp"
-#include "lib/format-cout.hpp"////////////////////WIP
 
-//#include <string>
 #include <utility>
 #include <chrono>
 #include <thread>
@@ -55,21 +69,17 @@
 namespace vault{
 namespace gear {
   
-//  using util::isnil;
-//  using std::string;
   using std::move;
-//  using std::forward;
   using std::atomic;
   using util::unConst;
-
   
   
-  namespace work {
+  namespace work { ///< Details of WorkForce (worker pool) implementation
     using std::chrono::milliseconds;
     using std::chrono_literals::operator ""ms;
     
-    using SIG_WorkFun   = activity::Proc(void);   ///< config should define callable to perform work
-    using SIG_FinalHook = void(bool);             ///< config should define callable invoked at exit (argument: is error)
+    using SIG_WorkFun   = activity::Proc(void);   ///< config should define a callable with this signature to perform work
+    using SIG_FinalHook = void(bool);             ///< config should define callable invoked at exit (argument: isFailure)
     
     /**
      * Base for configuration of the worker pool.
@@ -90,7 +100,10 @@ namespace gear {
       };
     
     
-    /** Individual worker thread: repeatedly pulls the `doWork` functor */
+    /**
+     * Individual worker thread:
+     * repeatedly pulls the `doWork` functor.
+     */
     template<class CONF>
     class Runner
       : CONF
@@ -160,9 +173,9 @@ namespace gear {
   
   
   
-  /*************************************//**
+  /***********************************************************//**
    * Pool of worker threads for rendering.
-   * @note the \tparam CONF configuration/policy base must define
+   * @note the \tparam CONF configuration/policy base must define:
    *       - `doWork` - the _work-functor_ (with #SIG_WorkFun)
    *       - `finalHook` - called at thread exit
    * @see WorkForce_test
@@ -196,7 +209,7 @@ namespace gear {
       /**
        * Activate or scale up the worker pool.
        * @param degree fraction of the full #COMPUTATION_CAPACITY to activate
-       * @note will always activate at least one worker;
+       * @note will always activate at least one worker; will never scale down;
        *       setting values > 1.0 leads to over-provisioning...
        */
       void
