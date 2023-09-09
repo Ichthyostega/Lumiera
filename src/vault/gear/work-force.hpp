@@ -24,8 +24,8 @@
 /** @file work-force.hpp
  ** A pool of workers for multithreaded rendering.
  ** 
- ** @see ////TODO_test usage example
- ** @see scheduler.cpp implementation
+ ** @see work-force-test.cpp
+ ** @see scheduler-commutator.hpp usage as part of the scheduler
  ** 
  ** @todo WIP-WIP-WIP 6/2023 »Playback Vertical Slice«
  ** 
@@ -71,6 +71,15 @@ namespace gear {
     using SIG_WorkFun   = activity::Proc(void);   ///< config should define callable to perform work
     using SIG_FinalHook = void(bool);             ///< config should define callable invoked at exit (argument: is error)
     
+    /**
+     * Base for configuration of the worker pool.
+     * In real usage, a subclass of #Config is used,
+     * which additionally defines the two required functors
+     * - `doWork` : perform a piece of work and return control code
+     * - `finalHook` : callback invoked at work thread termination
+     * Obviously these two functors are defined in a way to call into
+     * the actual implementation of work management (i.e. the Scheduler).
+     */
     struct Config
       {
         static const size_t COMPUTATION_CAPACITY;
@@ -79,6 +88,7 @@ namespace gear {
         const milliseconds IDLE_WAIT = 20ms;
         const size_t DISMISS_CYCLES = 100;
       };
+    
     
     /** Individual worker thread: repeatedly pulls the `doWork` functor */
     template<class CONF>
@@ -148,11 +158,15 @@ namespace gear {
   }//(End)namespace work
   
   
-  /**
+  
+  
+  /*************************************//**
    * Pool of worker threads for rendering.
-   * 
-   * @see SomeSystem
-   * @see NA_test
+   * @note the \tparam CONF configuration/policy base must define
+   *       - `doWork` - the _work-functor_ (with #SIG_WorkFun)
+   *       - `finalHook` - called at thread exit
+   * @see WorkForce_test
+   * @see SchedulerCommutator
    */
   template<class CONF>
   class WorkForce
@@ -165,7 +179,6 @@ namespace gear {
       
       
     public:
-      
       WorkForce (CONF config)
         : setup_{move (config)}
         , workers_{}
@@ -220,8 +233,6 @@ namespace gear {
           unConst(workers_).remove_if([](auto& w){ return not w.joinable(); });
           return workers_.size();
         }
-      
-    private:
     };
   
   

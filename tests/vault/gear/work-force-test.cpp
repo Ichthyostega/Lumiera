@@ -216,7 +216,7 @@ namespace test {
                           .withSleepPeriod (10ms)};
           
           wof.incScale();
-          sleep_for(10us);
+          sleep_for(50us);
           
           CHECK (1 == check);
           
@@ -241,11 +241,11 @@ namespace test {
                           .dismissAfter(5)};
           
           wof.incScale();
-          sleep_for(20us);
+          sleep_for(50us);
           
           CHECK (1 == check);
           
-          sleep_for(10ms);
+          sleep_for(12ms);
           CHECK (2 == check);      // after one wait cycle, one further invocation
           
           sleep_for(100ms);
@@ -286,6 +286,34 @@ namespace test {
       void
       verify_detectError()
         {
+          atomic<uint> check{0};
+          atomic<uint> errors{0};
+          WorkForce wof{setup ([&]{
+                                    if (++check == 555)
+                                      throw error::State("evil");
+                                    return activity::PASS;
+                                  })
+                          .withFinalHook([&](bool isFailure)
+                                           {
+                                             if (isFailure)
+                                               ++errors;
+                                           })};
+          
+          CHECK (0 == check);
+          CHECK (0 == errors);
+          
+          wof.incScale();
+          wof.incScale();
+          wof.incScale();
+          
+          sleep_for(10us);
+          CHECK (3 == wof.size());
+          CHECK (0 < check);
+          CHECK (0 == errors);
+          
+          sleep_for(200ms);   // wait for the programmed disaster
+          CHECK (2 == wof.size());
+          CHECK (1 == errors);
         }
       
       
@@ -354,22 +382,51 @@ namespace test {
       
       
       
-      /** @test TODO
-       * @todo WIP 9/23 ⟶ define ⟶ implement
+      /** @test verify that the WorkForce dtor waits for all active threads to disappear
+       *        - use a work-functor which keeps all workers blocked
+       *        - start the WorkForce within a separate thread
+       *        - in this separate thread, cause the WorkForce destructor to be called
+       *        - in the outer (controlling thread) release the work-functor blocking
+       *        - at this point, all workers return, detect shutdown and terminate
        */
       void
       verify_dtor_blocks()
         {
-        }
-      
-      
-      
-      /** @test TODO
-       * @todo WIP 9/23 ⟶ define ⟶ implement
-       */
-      void
-      walkingDeadline()
-        {
+          atomic<bool> trapped{true};
+          auto blockingWork = [&]{
+                                   while (trapped)
+                                     /* spin */;
+                                   return activity::PASS;
+                                 };
+          
+          atomic<bool> pool_scaled_up{false};
+          atomic<bool> shutdown_done{false};
+          
+          std::thread operate{[&]{
+                                   {// nested scope...
+                                     WorkForce wof{setup (blockingWork)};
+                                     
+                                     wof.activate();
+                                     sleep_for(10ms);
+                                     CHECK (wof.size() == work::Config::COMPUTATION_CAPACITY);
+                                     pool_scaled_up = true;
+                                   } // WorkForce goes out of scope => dtor called
+                                   
+                                   // when reaching this point, dtor has terminated
+                                   shutdown_done = true;
+                                   operate.detach();
+                                 }};
+          
+          CHECK (operate.joinable());       // operate-thread is in running state
+          sleep_for(100ms);
+          
+          CHECK (pool_scaled_up);
+          CHECK (not shutdown_done);        // all workers are trapped in the work-functor
+                                            // thus the destructor can't dismantle the pool
+          trapped = false;
+          sleep_for(20ms);
+          CHECK (shutdown_done);
+          CHECK (not operate.joinable());   // operate-thread has detached and terminated
         }
     };
   
