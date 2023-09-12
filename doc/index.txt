@@ -70,9 +70,9 @@ section has two main sections:
 [width="40%",frame="topbot",options="header"]
 |================================================================================================
 |Sub-System and top-level entry  |Remarks
-|https://lumiera.org/documentation/design/architecture/index.html[Architecture]|what
+|https://lumiera.org/documentation/design/architecture/index.html[Architecture]|Structure of Lumiera
 |https://lumiera.org/documentation/design/model/index.html[Model]|Low-level and high-level models
-|https://lumiera.org/documentation/design/gui/index.html[GUI]|The user
+|https://lumiera.org/documentation/design/gui/index.html[GUI]|The Lumiera-user interaction layer
 |https://lumiera.org/documentation/design/plugins/index.html[Plugins]|External tools to provide functionality
 |https://lumiera.org/documentation/design/lowlevel/index.html[Low-level Model]|Render nodes
 |https://lumiera.org/documentation/design/engine/index.html[Engine]|Renderer, output generation, ...
