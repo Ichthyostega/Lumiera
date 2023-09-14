@@ -1,0 +1,115 @@
+2023-09-13 Lumiera Developers Meeting
+=====================================
+:Author: Ichthyo
+:Date: 2023-09-14
+
+Sep 13, 2023 on #lumiera 20:00 - 22:30 UTC +
+
+__Participants__
+
+ * ichthyo
+ * benny
+ * cehteh
+ 
+_Summary written by Ichthyo_
+
+''''
+
+Focus Topics
+------------
+_Ichthyo_ started to define a collection of *FocusTopics*.
+These should be topics to focus the further development *after* the current Engine integration effort
+is completed. Some existing tickets were extended, and further new tickets created, all marked with
+the Tag `FocusTopic`
+
+-> See https://issues.lumiera.org/report/17[Report-17] in the Lumiera Issue Tracker
+
+
+_Ichthyo_ identified some problematic questions around session modifications and change logging,
+especially in connection with rules based configuration.
+
+In-depth Discussion about event sourcing and session modification
+
+the problem with configuration changes: these should be recorded as an event in the Event-Log.
+This requires however to represent the complete configuration in a consolidated form as part of the Model.
+A change in the configuration could then be detected and recorded as an Event.
+
+Another task to address is how the actual Diff Messages will be generated. We could first manipulate
+the data model and then _detect_ a Diff. Yet the favourable solution would be to interpret the Commands
+and directly derive Events, with an attached Diff, which can then be applied against the data model
+as a projection.
+
+Discussion what topics should be addressed first
+
+It seems the topics regarding Event Log and Session persistence #1234 #540 and #569 should be addressed first,
+since these may lead to decisions relevant for many other parts of the system.
+Possibly also #332 regarding a full definition of placement capabilities.
+
+
+The topic of placement interpretation will already be touched in the *next* vertical slice,
+where we intend to add a clip to the timeline. For this we'll need at least a _simple_ resolution
+capability of placements, because we'll attempt do the groundwork for the Builder.
+
+_Benny_ proposes to add »interface« and »mock« tickets for Event-Log and Placements, blocking the
+full implementation follow-up tickets. Then these preliminary parts can be addressed first and 
+integrated as part of the »Add Clip« Vertical Slice. For Context: currently the »Playback« Vertical
+Slice is being worked on, aiming at a first integration of the Render Engine.
+
+
+Playback Vertical Slice
+-----------------------
+_Ichthyo_ reports on the progress of the »Playback Vertical Slice« effort.
+
+- Memory Manager is implemented and tested
+- Activity Language is also completed and tested
+- a passive worker pool has been implemented, based on the C++17 concurrency framework
+
+Next steps...
+
+- retrofit our existing Thread wrapper (which was based on POSIX) to use C\+\+17 thread support;
+  this should be a drop-in replacement, since our own old design almost completely matches the
+  design and feature set standardised with C++17
+- complete implementation of the Scheduler Layer-2, integrating Activity-Language and worker pool
+- integration test of the Scheduler
+
+Documentation Index and Glossary
+--------------------------------
+_Benny_ reworked and extended the documentation overview in the Lumiera website.
+This can be published now. Moreover, _Benny_ investigated Glossary and Index generation.
+It turns out that ASCIIDOC offers already an index generation feature, which could be configured
+and used to build an index and a glossary. The next goal would be to build a prototype for testing
+and to see how this can be integrated into the website infrastructure.
+
+Library solutions for Video Display
+-----------------------------------
+_Benny_ conducted some research regarding library solutions for *video display*, notably
+ffmpeg, GStreamer and libVLC. It was rather easy to code up an "hello world" example based on
+GStreamer, while it was difficult to find suitable documentation regarding the ffmpeg based
+solution. Moreover, GStreamer seems to have a much more active and helpful community.
+
+Next steps would be to also look more in-depth into libVLC, and especially to compare the
+feature sets of these solutions. _Cehteh_ points out that MPV (formerly MPlayer) would also
+be an interesting point of reference. _Benny_ mentions that GTK4 offers an integrated
+video display capability.
+
+Extended discussion ensues, regarding video frameworks and the difficulties regarding the plethora
+of interfaces, especially when it comes to hardware acceleration support. Ideally, the Lumiera
+project should follow the solutions provided by a sufficiently active community, capable to follow
+the constant evolution of interfaces and framework.
+
+It was agreed upon that the »Playback Vertical Slice« just needs a very simple solution to output
+raw video (RGB888 or YUV), and offers a good opportunity for experimentation to find a suitable
+support framework
+
+
+''''
+
+Next meeting
+------------
+
+The next meeting will be Wednesday Oct 11, 20:00 UTC
+
+
+''''
+
+

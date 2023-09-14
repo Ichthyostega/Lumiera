@@ -12,7 +12,22 @@ Anyone interested in Lumiera development is also encouraged to read mailing list
 archives and other documentation.
 
 
-12 Sep 2012
+13 Sep 2023
+-----------
+
+Topics
+~~~~~~
+ * »Focus Topics«
+ * Progress on the »Playback Vertical Slice«
+ * Website Index and Glossary generator
+ * Library solutions for video display in the GUI
+
+Summary
+^^^^^^^
+ * link:2023-09-13.html[Summary (by ichthyo)]
+
+
+12 Sep 2013
 -----------
 
 Topics
