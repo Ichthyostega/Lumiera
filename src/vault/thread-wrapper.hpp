@@ -32,7 +32,7 @@
  ** represent such an parallel action conveniently and safely; together with the object
  ** monitor, this allows to abstract away intricacies into self contained objects.
  ** 
- ** @note the thread wrapper is not intended for high performance computations.
+ ** @deprecated will be replaced by a thin wrapper on top of C++17 threads     //////////////////////////////TICKET #1279 : consolidate to C++17 features 
  */
 
 
@@ -106,6 +106,7 @@ namespace vault {
    * of sync. When invoking the #sync and #syncPoint functions, the caller will
    * block until the counterpart has also invoked the corresponding function.
    * If this doesn't happen, you'll block forever.
+   * @deprecated will be replaced by a thin wrapper on top of C++17 threads     /////////////////////////////TICKET #1279 : consolidate to C++17 features 
    */
   class Thread
     : util::MoveOnly
@@ -255,6 +256,7 @@ namespace vault {
   /**
    * Variant of the standard case, allowing additionally
    * to join on the termination of this thread.
+   * @deprecated will be replaced by a thin wrapper on top of C++17 threads     /////////////////////////////TICKET #1279 : consolidate to C++17 features 
    */
   class ThreadJoinable
     : public Thread

@@ -1,0 +1,44 @@
+TESTING "Library Test Suite: concurrency helpers" ./test-suite --group=common
+
+
+
+TEST "Multithread Locking by Monitor" SyncLocking_test  <<END
+return: 0
+END
+
+
+TEST "Multithread Locking class level" SyncClasslock_test  <<END
+return: 0
+END
+
+
+TEST "Thread-local diagnostic context" DiagnosticContext_test  <<END
+return: 0
+END
+
+
+TEST "Wait/Notify on Object Monitor" SyncWaiting_test  <<END
+return: 0
+END
+
+
+TEST "Wait/Notify with timeout" SyncTimedwait_test  <<END
+return: 0
+END
+
+
+TEST "Create 20 Threads passing context" ThreadWrapper_test  <<END
+return: 0
+END
+
+
+TEST "Waiting on Thread termination" ThreadWrapperJoin_test  <<END
+return: 0
+END
+
+
+TEST "Detect code runing in a given Thread" ThreadWrapperSelfRecognitionTest_test  <<END
+return: 0
+END
+
+
