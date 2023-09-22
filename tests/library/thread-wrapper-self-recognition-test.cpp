@@ -20,6 +20,10 @@
 
 * *****************************************************/
 
+/** @file thread-wrapper-self-recognition-test.cpp
+ ** unit test \ref ThreadWrapperSelfRecognitionTest_test
+ */
+
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"

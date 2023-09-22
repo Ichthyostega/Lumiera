@@ -378,7 +378,7 @@ namespace test {
           CHECK (!and_all (coll, [] (uint elm) { return 1 < elm; }));
           
           CHECK ( has_any (coll, [] (uint elm) { return 0 < elm; }));
-          CHECK ( has_any (coll, [] (uint elm) { return elm >= NUM_ELMS; }));
+          CHECK ( has_any (coll, [] (uint elm) { return elm == NUM_ELMS; }));
           CHECK (!has_any (coll, [] (uint elm) { return elm >  NUM_ELMS; }));
         }
       

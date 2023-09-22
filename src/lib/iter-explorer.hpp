@@ -61,6 +61,7 @@
  ** - in a similar vein, the *filter operation* binds a predicate to decide about using or discarding data
  ** - in concert, expand- and transform operation allow to build hierarchy evaluation algorithms without exposing
  **   any knowledge regarding the concrete hierarchy used and explored as data source.
+ ** - further special convenience adaptors and _terminal functions_ are provided.
  ** 
  ** In itself, the IterExplorer is an iterator with implementation defined type (all operations being inlined).
  ** But it is possible to package this structure behind a conventional iteration interface with virtual functions.
@@ -1584,6 +1585,20 @@ namespace lib {
       asIterator()
         {
           return SRC {move(*this)};
+        }
+      
+      /**
+       * _terminal builder_ to invoke a functor for side effect on the complete pipeline. 
+       * @note exhausts and discards the pipeline itself
+       */
+      template<class FUN>
+      void
+      foreach (FUN&& consumer)
+        {
+          auto consumeFun = iter_explorer::_FunTraits<FUN,SRC>::adaptFunctor (forward<FUN> (consumer));
+          SRC& pipeline = *this;
+          for ( ; pipeline; ++pipeline)
+            consumeFun (pipeline);
         }
       
       /** _terminal builder_ to pour and materialise all results from this Pipeline.
