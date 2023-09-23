@@ -26,15 +26,10 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
-
-//#include "lib/thread.hpp"
 #include "lib/sync-barrier.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/util-foreach.hpp"
-#include "lib/error.hpp"
 
-//#include <utility>
 #include <chrono>
 #include <thread>
 #include <atomic>
@@ -43,9 +38,9 @@
 using test::Test;
 using util::and_all;
 using lib::explore;
-using std::atomic_uint;
 using std::array;
 
+using std::atomic_uint;
 using std::this_thread::sleep_for;
 using namespace std::chrono_literals;
 
@@ -53,7 +48,7 @@ using namespace std::chrono_literals;
 namespace lib {
 namespace test {
   
-  namespace {
+  namespace {// Test setup for a concurrent calculation with checksum....
     
     const uint NUM_THREADS = 1024;
     
@@ -61,7 +56,7 @@ namespace test {
     atomic_uint stage2{0};
     atomic_uint finish{0};
     
-    SyncBarrier interThread{NUM_THREADS};
+    SyncBarrier interThread{NUM_THREADS  };
     SyncBarrier afterThread{NUM_THREADS+1};
     
     /**
@@ -76,18 +71,18 @@ namespace test {
         public:
           TestThread()
             : thread{[&]()
-                        {                                 //-STAGE-1------------------------------
-                          localSum = rand() % 1000;       // generate local value
-                          stage1.fetch_add (localSum);    // book in local value
-                          interThread.sync();             // wait for all other threads to have booked in
+                        {                                   //-STAGE-1------------------------------
+                          localSum = rand() % 1000;         // generate local value
+                          stage1.fetch_add (localSum);      // book in local value
+                          interThread.sync();               // wait for all other threads to have booked in
                           
-                                                          //-STAGE-2------------------------------
-                          localSum += stage1;             // pick up compounded sum from STAGE-1
-                          localSum += rand() % 1000;      // add further local value for STAGE-2
-                          stage2.fetch_add (localSum);    // book in local sum
-                          afterThread.sync();             // wait for other threads and supervisor
+                                                            //-STAGE-2------------------------------
+                          uint sync = stage1;               // pick up compounded sum from STAGE-1
+                          localSum += rand() % 1000;        // add further local value for STAGE-2
+                          stage2.fetch_add (localSum+sync); // book in both local values and synced sum
+                          afterThread.sync();               // wait for other threads and supervisor
                           
-                          finish.fetch_add(1);            // mark completion of this thread
+                          finish.fetch_add(1);              // mark completion of this thread
                           thread::detach(); //////////////////////////////////////////////OOO Wech-oh
                         }}
             { }
@@ -97,7 +92,7 @@ namespace test {
       };
     
     
-    /** sum up all `localSum` fields from all TestThread instances in a container */ 
+    /** sum up all `localSum` fields from all TestThread instances in a container */
     template<class CON>
     uint
     sumLocals (CON const& threads)
@@ -107,12 +102,17 @@ namespace test {
         .foreach ([&](TestThread const& t){ sum += t.localSum; });
       return sum;
     }
-  }
+  }//(End)Test setup
+  
+  
   
   
   /*******************************************************************//**
    * @test verify N-fold synchronisation points by multi-thread loat-test.
-   * 
+   *       - start a _huge number_ of TestThread
+   *       - all those pick up the partial sum from stage1
+   * @remark without coordinated synchronisation, some threads would see
+   *         an incomplete sum and thus the stage2 checksum would be lower
    * @see lib::SyncBarrier
    * @see steam::control::DispatcherLoop
    */
@@ -128,7 +128,7 @@ namespace test {
           CHECK (and_all (threads, [](auto& t){ return t.isRunning(); }));
           
           afterThread.sync();
-          sleep_for (1ms); // give the threads a chance to terminate
+          sleep_for (5ms); // give the threads a chance to terminate
           
           CHECK (NUM_THREADS == finish);                                // all threads have passed out....
           CHECK (0 < stage1);

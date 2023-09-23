@@ -48,7 +48,7 @@
 //#include "lib/meta/function.hpp"
 //#include "lib/result.hpp"
 
-//#include <utility>
+#include <thread>
 #include <atomic>
 
 
@@ -62,20 +62,37 @@ namespace lib {
   
   
   /**
-   * @todo write type comment
+   * A one time N-fold mutual synchronisation barrier.
+   * Calls to #sync() will block until N such calls occurred.
+   * @note The blocking wait is implemented by a check-and-`yield()` loop,
+   *       increasing load at the OS scheduler, possibly starving the system
+   *       when stretched out over extended time.
+   * @remark intended use is to allow all participants to catch up and reach
+   *       a well defined point with initialisation or implementation logic.
    */
   class SyncBarrier
     : util::NonCopyable
     {
+      std::atomic_int latch_;
+      
     public:
+      /** @param nFold the number of participants to sync */
       explicit
-      SyncBarrier (size_t nFold =2)
-        { }
+      SyncBarrier (uint nFold =2)
+        : latch_{int(nFold)}
+        {
+          REQUIRE (nFold >= 2, "Pointless to sync less than two participants.");
+        }
       
       void
       sync()
         {
-          UNIMPLEMENTED ("count-down latch logic");
+          size_t level = latch_.fetch_add(-1, std::memory_order_acq_rel);
+          if (1 < level)
+            do std::this_thread::yield();
+            while (0 < latch_.load (std::memory_order_relaxed));
+          else
+            latch_.store (0, std::memory_order_relaxed);
         }
     };
   
