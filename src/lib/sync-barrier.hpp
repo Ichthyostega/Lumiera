@@ -44,21 +44,12 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-//#include "include/logging.h"
-//#include "lib/meta/function.hpp"
-//#include "lib/result.hpp"
 
 #include <thread>
 #include <atomic>
 
 
 namespace lib {
-  
-//  using lib::Literal;
-//  namespace error = lumiera::error;
-//  using error::LERR_(STATE);
-//  using error::LERR_(EXTERNAL);
-  
   
   
   /**
@@ -76,12 +67,13 @@ namespace lib {
       std::atomic_int latch_;
       
     public:
-      /** @param nFold the number of participants to sync */
+      /** @param nFold the number of participants to sync (min. 2)*/
       explicit
       SyncBarrier (uint nFold =2)
         : latch_{int(nFold)}
         {
           REQUIRE (nFold >= 2, "Pointless to sync less than two participants.");
+          ENSURE  (nFold < 100'000, "Danger territory.... sync 100k Threads??");
         }
       
       void
@@ -93,7 +85,7 @@ namespace lib {
             while (0 < latch_.load (std::memory_order_relaxed));
           else
             latch_.store (0, std::memory_order_relaxed);
-        }
+        }             //  prevent spurious calls from wrapping
     };
   
   

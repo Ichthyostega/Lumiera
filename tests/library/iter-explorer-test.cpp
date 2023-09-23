@@ -286,6 +286,7 @@ namespace test{
           verify_FilterChanges();
           verify_asIterSource();
           verify_IterSource();
+          verify_resultSum();
           verify_effuse();
           
           verify_depthFirstExploration();
@@ -1066,6 +1067,24 @@ namespace test{
           CHECK (isnil (seq));
         }
       
+      
+      
+      
+      /** @test verify _terminal operation_ to sum up all values from the pipeline.
+       */
+      void
+      verify_resultSum()
+        {
+          auto accumulated = explore(CountDown{6})
+                               .transform([](int i){ return i-1; })
+                               .resultSum();
+          
+          using Res = decltype(accumulated);
+          CHECK (lib::test::showType<Res>()  == "int"_expect);
+          
+          auto expectedSum = [](auto N){ return N*(N+1) / 2; };
+          CHECK (accumulated == expectedSum(5));
+        }
       
       
       

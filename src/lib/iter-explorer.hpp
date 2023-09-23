@@ -389,12 +389,13 @@ namespace lib {
      *   within the same processing step; and in addition, it allows the processing step to
      *   remain agnostic with respect to the adaptation and concrete type of the functor/lambda.
      * @tparam FUN either the signature, or something _"function-like"_ passed as functor to be bound
-     * @tparam SRC (optional) but need to specify the source iterator type to apply when passing
-     *             a generic lambda or template as FUN. Such a generic functor will be _instantiated_
-     *             passing the type `SRC&` as argument. This instantiation may fail (and abort compilation),
-     *             but when it succeeds, we can infer the result type `Res` from the generic lambda
+     * @tparam SRC source type to feed to the function to be adapted.
+     * @remark Especially need to specify the source iterator type to apply when passing a generic lambda
+     *         or template as FUN. Such a generic functor will be _instantiated_ passing the type `SRC&`
+     *         as argument. This instantiation may fail (and abort compilation), but when it succeeds,
+     *         the result type `Res` can be inferred from the generic lambda.
      */
-    template<class FUN, typename SRC =void>
+    template<class FUN, typename SRC>
     struct _FunTraits
       {
         /** handle all regular "function-like" entities */
@@ -1588,7 +1589,7 @@ namespace lib {
         }
       
       /**
-       * _terminal builder_ to invoke a functor for side effect on the complete pipeline. 
+       * _terminal builder_ to invoke a functor for side effect on the complete pipeline.
        * @note exhausts and discards the pipeline itself
        */
       template<class FUN>
@@ -1600,6 +1601,29 @@ namespace lib {
           for ( ; pipeline; ++pipeline)
             consumeFun (pipeline);
         }
+      
+      /**
+       *  _terminal builder_ to invoke sum up resulting number values from the pipeline.
+       * @return accumulation of all results from the pipeline, combined by `std::plus`
+       */
+      template<class FUN>
+      auto
+      resultSum (FUN&& accessor)
+        {
+          auto accessVal = iter_explorer::_FunTraits<FUN,SRC>::adaptFunctor (forward<FUN> (accessor));
+          value_type sum{};
+          SRC& pipeline = *this;
+          for ( ; pipeline; ++pipeline)
+            sum += accessVal (pipeline);
+          return sum;
+        }
+      
+      auto
+      resultSum()
+        {
+          return IterExplorer::resultSum ([](const reference val){ return val; });
+        }
+      
       
       /** _terminal builder_ to pour and materialise all results from this Pipeline.
        * @tparam CON a STL compliant container to store generated values (defaults to `vector`)
