@@ -30,6 +30,7 @@
 #include "lib/sync-barrier.hpp"
 #include "lib/test/microbenchmark.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/sync.hpp"
 
 using test::Test;
 using std::array;
@@ -51,6 +52,35 @@ namespace test {
         public:
           FakeBarrier(uint=0) { /* be happy */ }
           void sync()         { /* indulge */  }
+      };
+    
+    
+    /**
+     * A Monitor based reference implementation,
+     * using Mutex + Condition Variable for sleeping wait.
+     */
+    class MonitorSync
+      : public Sync<NonrecursiveLock_Waitable>
+      {
+        int latch_;
+        
+        bool allPassed() { return latch_ <= 0; }
+        
+        public:
+          MonitorSync (uint nFold =2)
+            : latch_{int(nFold)}
+            { }
+          
+          void
+          sync()
+            {
+              Lock sync(this);
+              --latch_;
+              sync.wait(*this, &MonitorSync::allPassed);
+              sync.notifyAll();
+            }
+          
+        private:
       };
   }//(End)Test setup
   
@@ -101,10 +131,16 @@ namespace test {
        *         - SyncBarrier (48 Thr)   : 30µs
        *         - SyncBarrier (64 Thr)   : 50µs
        *         - SyncBarrier (80 Thr)   : 80µs
+       *         - MonitorWait (2 Thr)    : 7µs
+       *         - MonitorWait (4 Thr)    : 12µs
+       *         - MonitorWait (8 Thr)    : 27µs
+       *         - MonitorWait (16 Thr)   : 75µs
        * @note what we are measuring here is actually the *time to catch up*
        *       for all threads involved, implying we are observing the _operational_
        *       delay introduced by synchronisation, and not an overhead of the
-       *       implementation technique.
+       *       implementation technique as such. However — the classical implementation
+       *       based on Mutex + ConditionVar, which enters a thread sleep state on wait,
+       *       is slower by orders of magnitude. 
        */
       virtual void
       run (Arg)
@@ -121,9 +157,15 @@ namespace test {
           double time_yieldWait_2  = performanceTest<SyncBarrier,  2>();
           //
           double time_emptySetup   = performanceTest<FakeBarrier,  5>();
+          //
+          double time_sleepWait_16 = performanceTest<MonitorSync, 16>();
+          double time_sleepWait_8  = performanceTest<MonitorSync,  8>();
+          double time_sleepWait_4  = performanceTest<MonitorSync,  4>();
+          double time_sleepWait_2  = performanceTest<MonitorSync,  2>();
           
           cout<<"\n___Microbenchmark_______"
               <<"\nemptySetup             : "<<time_emptySetup
+              <<"\n                       : "
               <<"\nSyncBarrier (2 Thr)    : "<<time_yieldWait_2
               <<"\nSyncBarrier (4 Thr)    : "<<time_yieldWait_4
               <<"\nSyncBarrier (8 Thr)    : "<<time_yieldWait_8
@@ -132,6 +174,11 @@ namespace test {
               <<"\nSyncBarrier (48 Thr)   : "<<time_yieldWait_48
               <<"\nSyncBarrier (64 Thr)   : "<<time_yieldWait_64
               <<"\nSyncBarrier (80 Thr)   : "<<time_yieldWait_80
+              <<"\n                       : "
+              <<"\nMonitorWait (2 Thr)    : "<<time_sleepWait_2
+              <<"\nMonitorWait (4 Thr)    : "<<time_sleepWait_4
+              <<"\nMonitorWait (8 Thr)    : "<<time_sleepWait_8
+              <<"\nMonitorWait (16 Thr)   : "<<time_sleepWait_16
               <<"\n_____________________\n"
               <<"\nbarriers..... "<<NUM_STAGES
               <<endl;

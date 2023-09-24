@@ -40,6 +40,7 @@
  **       - Sync 4 threads : 700ns
  **       - increasing with number of threads, which implies we are measuring the time
  **         it takes all threads to catch-up on average...
+ **       - the classical Mutex+Condition-Var solution is slower by orders of magnitude!
  **       - these values are on par with typical thread scheduling leeway,
  **         so this implementation seems adequate for the time being (2023).
  */
