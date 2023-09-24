@@ -35,6 +35,13 @@
  ** @todo as of 9/2023 it remains to be seen if this facility is just a pre-C++20 workaround;
  **       otherwise it may present distinct performance characteristics than std::latch,
  **       possibly also a slightly more abstracted (and thus clearer) usage API.
+ ** @remark Typical overhead measured with optimised build on 8 Core machine
+ **       - Sync 2 threads : 280ns
+ **       - Sync 4 threads : 700ns
+ **       - increasing with number of threads, which implies we are measuring the time
+ **         it takes all threads to catch-up on average...
+ **       - these values are on par with typical thread scheduling leeway,
+ **         so this implementation seems adequate for the time being (2023).
  */
 
 
@@ -60,6 +67,7 @@ namespace lib {
    *       when stretched out over extended time.
    * @remark intended use is to allow all participants to catch up and reach
    *       a well defined point with initialisation or implementation logic.
+   * @see SyncBarrierPerformance_test::run for actual performance measurements!
    */
   class SyncBarrier
     : util::NonCopyable
