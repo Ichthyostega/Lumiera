@@ -286,7 +286,7 @@ namespace test{
           verify_FilterChanges();
           verify_asIterSource();
           verify_IterSource();
-          verify_resultSum();
+          verify_reduceVal();
           verify_effuse();
           
           verify_depthFirstExploration();
@@ -1070,20 +1070,39 @@ namespace test{
       
       
       
-      /** @test verify _terminal operation_ to sum up all values from the pipeline.
+      /** @test verify _terminal operation_ to sum or reduce all values from the pipeline.
        */
       void
-      verify_resultSum()
+      verify_reduceVal()
         {
-          auto accumulated = explore(CountDown{6})
-                               .transform([](int i){ return i-1; })
+          auto accumulated = explore(CountDown{30})
+                               .transform([](int i){ return i-1; })              // note: implicitly converts uint -> int
                                .resultSum();
           
           using Res = decltype(accumulated);
           CHECK (lib::test::showType<Res>()  == "int"_expect);
           
           auto expectedSum = [](auto N){ return N*(N+1) / 2; };
-          CHECK (accumulated == expectedSum(5));
+          CHECK (accumulated == expectedSum(29));
+          
+          // In the general case an accessor and a junctor can be given...
+          CHECK (explore(CountDown{10})
+                   .reduce([](int i){ return i - 0.5; }                          // accessor: produce a double
+                          ,[](string accu, float val)
+                                    {
+                                      return accu+">"+util::toString(val);       // junctor:  convert to String and combine with separator char
+                                    }
+                          , string{">-"}                                         // seedVal:  starting point for the reduction; also defines result type
+                          )
+                 == ">->9.5>8.5>7.5>6.5>5.5>4.5>3.5>2.5>1.5>0.5"_expect);
+          
+          // If only the accessor is given, values are combined by std::plus...
+          CHECK (explore(CountDown{9})
+                   .reduce([](auto it) -> string
+                             {
+                               return _Fmt{"○%s●"} % *it;                        // accessor: format into a string
+                             })
+                 == "○9●○8●○7●○6●○5●○4●○3●○2●○1●"_expect);
         }
       
       

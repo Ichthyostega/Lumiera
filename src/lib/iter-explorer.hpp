@@ -483,6 +483,19 @@ namespace lib {
     }
     
     
+    /**
+     * @internal derive suitable result value types when reducing elements into an accumulator.
+     */
+    template<class SRC, class FUN>
+    struct _ReduceTraits
+      {
+        using Result = typename iter_explorer::_FunTraits<FUN,SRC>::Res;
+        using ResVal = typename lib::meta::RefTraits<Result>::Value;
+      };
+    
+    
+    
+    
     
     /**
      * @internal Base of pipe processing decorator chain.
@@ -1602,26 +1615,36 @@ namespace lib {
             consumeFun (pipeline);
         }
       
+      
       /**
-       *  _terminal builder_ to invoke sum up resulting number values from the pipeline.
-       * @return accumulation of all results from the pipeline, combined by `std::plus`
+       * _terminal builder_ to sum up or reduce values from the pipeline.
+       * In the general case a _fold-left_ operation is performed; default values for the
+       * joining operation and the initial value however allow to fall back on summation of values.
+       * @param accessor a functor working on the pipeline result values or the iterator
+       * @param junctor  (optional) binary operation, joining the sum with the next result of the junctor
+       * @param seedVal  (optional) initial value to start accumulation from
+       * @return accumulation of all results from the pipeline, combined with the junctor
        */
-      template<class FUN>
-      auto
-      resultSum (FUN&& accessor)
+      template<class FUN
+              ,typename COMB =decltype(std::plus<>())
+              ,typename VAL  =typename iter_explorer::_ReduceTraits<SRC,FUN>::ResVal>
+      VAL
+      reduce (FUN&& accessor
+             ,COMB junctor  =COMB()
+             ,VAL seedVal   =VAL())
         {
           auto accessVal = iter_explorer::_FunTraits<FUN,SRC>::adaptFunctor (forward<FUN> (accessor));
-          value_type sum{};
-          SRC& pipeline = *this;
-          for ( ; pipeline; ++pipeline)
-            sum += accessVal (pipeline);
+          
+          VAL sum{move(seedVal)};
+          IterExplorer::foreach ([&](SRC& srcIter){ sum = junctor (sum, accessVal(srcIter)); });
           return sum;
         }
       
+      /** simplified _terminal builder_ to [reduce](\ref #reduce) by numeric sum. */
       auto
       resultSum()
         {
-          return IterExplorer::resultSum ([](const reference val){ return val; });
+          return IterExplorer::reduce ([](const reference val){ return val; });
         }
       
       

@@ -97,10 +97,8 @@ namespace test {
     uint
     sumLocals (CON const& threads)
     {
-      uint sum{0};
-      explore (threads)
-        .foreach ([&](TestThread const& t){ sum += t.localSum; });
-      return sum;
+      return explore (threads)
+              .reduce ([&](TestThread const& t){ return t.localSum; });
     }
   }//(End)Test setup
   
