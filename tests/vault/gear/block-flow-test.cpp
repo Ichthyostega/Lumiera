@@ -435,7 +435,7 @@ namespace test {
                             };
           
           auto benchmark = [INSTANCES](auto invokeTest)
-                            {         //  does the timing measurement with result in nanoseconds
+                            {         //  does the timing measurement with result in µ-seconds
                               return lib::test::benchmarkTime(invokeTest, INSTANCES);
                             };
           

@@ -55,7 +55,9 @@
 
 
 #include "lib/meta/function.hpp"
-#include "vault/thread-wrapper.hpp"
+//#include "vault/thread-wrapper.hpp"  /////////////////////////////////////////////OOO wieder ThreadJoinable verwenden
+#include "lib/sync-barrier.hpp"        ///TODO
+#include <thread>                      ///TODO
 
 #include <chrono>
 #include <vector>
@@ -67,7 +69,7 @@ namespace test{
   
   namespace {
     constexpr size_t DEFAULT_RUNS = 10'000'000;
-    constexpr double SCALE = 1e6;                  // Results are in µ sec
+    constexpr double SCALE = 1e6;            // Results are in µ-sec
   }
   
   
@@ -75,7 +77,7 @@ namespace test{
    * Helper to invoke a functor or λ to observe its running time.
    * @param invokeTestLoop the test (complete including loop) invoked once
    * @param repeatCnt number of repetitions to divide the timing measurement
-   * @return averaged time for one repetition, in nanoseconds
+   * @return averaged time for one repetition, in microseconds
    */
   template<class FUN>
   inline double
@@ -83,7 +85,6 @@ namespace test{
   {
     using std::chrono::system_clock;
     using Dur = std::chrono::duration<double>;
-    const double SCALE = 1e9; // Results are in ns
     
     auto start = system_clock::now();
     invokeTestLoop();
@@ -102,7 +103,7 @@ namespace test{
   benchmarkLoop (FUN const& testSubject, const size_t repeatCnt = DEFAULT_RUNS)
   {
     // the test subject gets the current loop-index and returns a checksum value
-    ASSERT_VALID_SIGNATURE (decltype(testSubject), size_t&(size_t));
+    ASSERT_VALID_SIGNATURE (decltype(testSubject), size_t(size_t));
     
     size_t checksum{0};
     for (size_t i=0; i<repeatCnt; ++i)
@@ -113,7 +114,7 @@ namespace test{
   
   /** perform a simple looped microbenchmark.
    * @param testSubject the operation to test as functor or λ
-   * @return a pair `(nanoseconds, checksum)`
+   * @return a pair `(microseconds, checksum)`
    * @warning this setup is only usable under strong optimisation;
    *          moreover, the scaffolding without actual operation should also
    *          be tested for comparison, to get a feeling for the setup overhead.
@@ -126,8 +127,8 @@ namespace test{
   {
     size_t checksum{0};
     auto invokeTestLoop = [&]{ checksum = benchmarkLoop (testSubject, repeatCnt); };
-    double nanos = benchmarkTime (invokeTestLoop, repeatCnt);
-    return std::make_tuple (nanos, checksum);
+    double micros = benchmarkTime (invokeTestLoop, repeatCnt);
+    return std::make_tuple (micros, checksum);
   }
   
   
@@ -138,58 +139,67 @@ namespace test{
    * and invokes the given test subject repeatedly.
    * @tparam number of threads to run in parallel
    * @param subject `void(void)` function to be timed
-   * @return the averaged invocation time in _microseconds_
+   * @param repeatCnt loop-count _within each thread_
+   * @return a pair `(microseconds, checksum)` combining the averaged
+   *         invocation time and a compounded checksum from all threads.
    * @remarks - the subject function will be _copied_ into each thread
    *          - so `nThreads` copies of this function will run in parallel
    *          - consider locking if this function accesses a shared closure.
    *          - if you pass a lambda, it is eligible for inlining followed
    *            by loop optimisation -- be sure to include some action, like
    *            e.g. accessing a volatile variable, to prevent the compiler
-   *            from optimising it away entirely.
+   *            from entirely optimising it away altogether.
    */
   template<size_t nThreads, class FUN>
-  inline double
-  threadBenchmark(FUN const& subject, const size_t nRepeat = DEFAULT_RUNS)
+  inline auto
+  threadBenchmark(FUN const& subject, const size_t repeatCnt = DEFAULT_RUNS)
   {
-    using vault::ThreadJoinable;
     using std::chrono::system_clock;
-    
     using Dur = std::chrono::duration<double>;
     
+    // the test subject gets the current loop-index and returns a checksum value
+    ASSERT_VALID_SIGNATURE (decltype(subject), size_t(size_t));
+    
     struct Thread
-      : ThreadJoinable
+//    : ThreadJoinable
+      : std::thread
       {
-        Thread(FUN const& subject, size_t loopCnt)
-          : ThreadJoinable("Micro-Benchmark"
-                          ,[=]()                   // local copy of the test-subject-Functor
+        Thread(FUN const& testSubject, size_t loopCnt, SyncBarrier& testStart)
+//        : ThreadJoinable("Micro-Benchmark"   ///////////////////////////////////////////////////////////OOO wieder Lumiera Thread-Wrapper verwenden #1279
+          : std::thread(
+                           [=, &testStart]()       // local copy of the test-subject-Functor
                              {
-                               syncPoint();        // block until all threads are ready
+                               testStart.sync();   // block until all threads are ready
                                auto start = system_clock::now();
                                for (size_t i=0; i < loopCnt; ++i)
-                                 subject();
+                                 checksum += testSubject(i);
                                duration = system_clock::now () - start;
                              })
           { }
-        /** measured time within thread */
-        Dur duration{};
+                             // Note: barrier at begin and join at end both ensure data synchronisation
+        Dur duration{};      // measured time within thread
+        size_t checksum{0};  // collected checksum
       };
     
+    SyncBarrier testStart{nThreads + 1};           // coordinated start of timing measurement
     std::vector<Thread> threads;
     threads.reserve(nThreads);
     for (size_t n=0; n<nThreads; ++n)              // create test threads
-      threads.emplace_back (subject, nRepeat);
+      threads.emplace_back (subject, repeatCnt, testStart);
 
-    for (auto& thread : threads)
-      thread.sync();                               // start timing measurement
+    testStart.sync();                              // barrier until all threads are ready
     
+    size_t checksum{0};
     Dur sumDuration{0.0};
     for (auto& thread : threads)
       {
-        thread.join();                             // block on measurement end
+        thread.join();                             // block on measurement end (fence)
         sumDuration += thread.duration;
+        checksum    += thread.checksum;
       }
     
-    return sumDuration.count() / (nThreads * nRepeat) * SCALE;
+    double micros = sumDuration.count() / (nThreads * repeatCnt) * SCALE;
+    return std::make_tuple (micros, checksum);
   }
   
   
