@@ -142,12 +142,12 @@ namespace test{
                    , bind (&HavocThread::doIt, this)
                    )
           {
-            CHECK (thread_.isValid());
+            CHECK (thread_);
           }
         
         ~HavocThread ()
           {
-            if (thread_.isValid())
+            if (thread_)
               thread_.join();
           }
       };

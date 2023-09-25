@@ -23,15 +23,34 @@
 
 
 /** @file thread.hpp
- ** Convenience front-end for basic thread handling needs.
- ** The Lumiera vault contains a dedicated low-level thread handling framework,
- ** which is relevant for scheduling render activities to make best use of parallelisation
- ** abilities of the given system. Typically, the upper layers should not have to deal much
- ** with thread handling, yet at some point there is the need to implement a self contained
- ** action running within a dedicated thread. The vault::Thread class is a wrapper to
- ** represent such an parallel action conveniently and safely; together with the object
- ** monitor, this allows to abstract away intricacies into self contained objects.
- ** 
+ ** Convenience front-end to simplify and codify basic thread handling.
+ ** While the implementation of threading and concurrency support is based on the C++
+ ** standard library, using in-project wrappers as front-end allows to codify some preferences
+ ** and provide simplifications for the prevalent use case. Notably, threads which must be
+ ** _joined_ are qualified as special case, while the standard case will just `detach()`
+ ** at thread end. The main-level of each thread catches exceptions, which are typically
+ ** ignored to keep the application running. Moreover, similar convenience wrappers are
+ ** provided to implement [N-fold synchronisation](\ref lib::SyncBarrier) and to organise
+ ** global locking and waiting in accordance with the _Object Monitor_ pattern. Together,
+ ** these aim at packaging concurrency facilities into self-contained RAII-style objects.
+ ** @remarks
+ **  - Lumiera offered simplified convenience wrappers long before a similar design
+ **    became part of the C++14 standard. These featured the distinction in join-able or
+ **    detached threads, the ability to define the thread main-entry as functor, and a
+ **    two-fold barrier between starter and new thread, which could also be used to define
+ **    a second custom synchronisation point. A similar setup with wrappers was provided
+ **    for locking, exposed in the form of the Object Monitor pattern.
+ **  - The original Render Engine design called for an active thread-pool, which was part
+ **    of a invoker service located in Vault layer; the thread-wrapper could only be used
+ **    in conjunction with this pool, re-using detached and terminated threads. All features
+ **    where implemented in plain-C on top of POSIX, using Mutexes and Condition Variables.
+ **  - In 2023, when actually heading towards integration of the Render Engine, in-depth
+ **    analysis showed that active dispatch into a thread pool would in fact complicate
+ **    the scheduling of Render-Activities — leading to a design change towards _pull_
+ **    of work tasks by competing _active workers._ This obsoleted the Thread-pool service
+ **    and paved the way for switch-over to the threading support meanwhile part of the
+ **    C++ standard library. Design and semantics were retained, while implemented
+ **    using modern features, notably the new _Atomics_ synchronisation framework.
  ** @todo WIP 9/23 about to be replaced by a thin wrapper on top of C++17 threads     ///////////////////////TICKET #1279 : consolidate to C++17 features 
  */
 
@@ -44,14 +63,11 @@
 #include "lib/nocopy.hpp"
 #include "include/logging.h"
 #include "lib/meta/function.hpp"
+#include "lib/format-string.hpp" ///////////////////////////OOO RLY? or maybe into CPP file?
 #include "lib/result.hpp"
 
-extern "C" {
-#include "vault/threads.h"
-}
-//#include "vault/threadpool-init.hpp"
 
-#include <type_traits>
+#include <thread>
 #include <utility>
 
 
@@ -67,10 +83,10 @@ namespace lib {
   
   
   /************************************************************************//**
-   * A thin convenience wrapper for dealing with threads,
-   * as implemented by the threadpool in the vault (based on pthread).
+   * A thin convenience wrapper to simplify thread-handling. The implementation
+   * is backed by the C++ standard library.
    * Using this wrapper...
-   * - helps with passing data to the function executed in the new thread
+   * - removes the need to join() threads, catches and ignores exceptions.
    * - allows to bind to various kinds of functions including member functions
    * The new thread starts immediately within the ctor; after returning, the new
    * thread has already copied the arguments and indeed actively started to run.
@@ -110,81 +126,38 @@ namespace lib {
   class Thread
     : util::MoveOnly
     {
-      /** @internal perfect forwarding through a C-style `void*` */
-      template<class FUN>
-      static FUN&&
-      forwardInitialiser (void* rawPtr) noexcept
-        {
-          REQUIRE (rawPtr);
-          FUN& initialiser = *reinterpret_cast<FUN*> (rawPtr);
-          return static_cast<FUN&&> (initialiser);
-        }
       
-      
-      template<class FUN>
-      static void
-      threadMain (void* arg)
+      template<class FUN, typename...ARGS>
+      void
+      threadMain (string threadID, FUN&& threadFunction, ARGS&& ...args)
         {
-          using Fun= typename lib::meta::_Fun<FUN>::Functor;
-          Fun _doIt_{forwardInitialiser<FUN> (arg)};
-          
-          //lumiera_thread_sync (); // sync point: arguments handed over   /////////////////////////////////OOO TOD-oh
-          
           try {
-              _doIt_(); // execute the actual operation in the new thread
+              markThreadStart (threadID);
+              //  execute the actual operation in this new thread
+              std::invoke (std::forward<FUN> (threadFunction), std::forward<ARGS> (args)...);
             }
-          
-          catch (std::exception& failure)
-            {
-              if (!lumiera_error_peek())
-                LUMIERA_ERROR_SET (sync, STATE
-                                  ,failure.what());
-            }
-          catch (...)
-            {
-              LUMIERA_ERROR_SET_ALERT (sync, EXTERNAL
-                                      , "Thread terminated abnormally");
-            }
+          ERROR_LOG_AND_IGNORE (thread, "Thread function")
         }
       
+      void
+      markThreadStart (string const& threadID)
+        {
+          string logMsg = util::_Fmt{"Thread '%s' start..."} % threadID;
+          TRACE (thread, "%s", logMsg.c_str());
+          //////////////////////////////////////////////////////////////////////OOO maybe set the the Thread-ID via POSIX ??
+        }
       
     protected:
-      LumieraThread threadHandle_;
+      std::thread threadImpl_;
       
       /** @internal derived classes may create an inactive thread */
-      Thread() : threadHandle_(0) { }
-      
-      
-      /** @internal use the Lumiera thread manager to start a new thread and hand over the operation */
-      template<class FUN>
-      void
-      launchThread (Literal purpose, FUN&& operation, NoBugFlag logging_flag, uint additionalFlags =0)
-        {
-          REQUIRE (!lumiera_error(), "Error pending at thread start");
-          using Functor = typename std::remove_reference<FUN>::type;
-          threadHandle_ =
-            nullptr; ////////////////////////////////////////////////////////////////////////////////////OOO LaLaLa
-//            lumiera_thread_run ( LUMIERA_THREADCLASS_INTERACTIVE | additionalFlags
-//                               , &threadMain<Functor>
-//                               , reinterpret_cast<void*> (&operation)
-//                               , purpose.c()
-//                               , logging_flag
-//                               );
-          if (!threadHandle_)
-            throw error::State ("Failed to start a new Thread for \"+purpose+\""
-                               , lumiera_error());
-          
-          // make sure the new thread had the opportunity to take the Operation
-          // prior to leaving and thereby possibly destroying this local context
-          //lumiera_thread_sync_other (threadHandle_); //////////////////////////////////////////////////OOO Dadü DaDa
-        }
-      
+      Thread() : threadImpl_{} { }
       
       
     public:
       /** Create a new thread to execute the given operation.
        *  The new thread starts up synchronously, can't be cancelled and it can't be joined.
-       *  @param purpose fixed char string used to denote the thread for diagnostics
+       *  @param threadID human readable descriptor to identify the thread for diagnostics
        *  @param logging_flag NoBug flag to receive diagnostics regarding the new thread
        *  @param operation a functor holding the code to execute within the new thread.
        *         Any function-like entity with signature `void(void)` is acceptable.
@@ -193,59 +166,36 @@ namespace lib {
        *         anything referred through a lambda closure here must stay alive
        *         until the new thread terminates.
        */
-      template<class FUN>
-      Thread (Literal purpose, FUN&& operation, NoBugFlag logging_flag = &NOBUG_FLAG(thread))
-        : threadHandle_{nullptr}
-        {
-          launchThread (purpose, std::forward<FUN> (operation), logging_flag);
-        }
+      template<class FUN, typename...ARGS>
+      Thread (string const& threadID, FUN&& threadFunction, ARGS&& ...args)
+        : threadImpl_{&Thread::threadMain<FUN,ARGS...>, this
+                     , threadID
+                     , std::forward<FUN> (threadFunction)
+                     , std::forward<ARGS> (args)... }
+        { }
       
       
-      /** @note by design there is no possibility to find out
-       *  just based on the thread handle if some thread is alive.
-       *  We define our own accounting here based on the internals
-       *  of the thread wrapper. This will break down, if you mix
-       *  uses of the C++ wrapper with the raw C functions. */
-      bool
-      isValid()  const
-        {
-          return threadHandle_;
-        }
-      
-      
-      /** Synchronisation barrier. In the function executing in this thread
-       *  needs to be a corresponding Thread::syncPoint() call. Blocking until
-       *  both the caller and the thread have reached the barrier.
+      /**
+       * Is this thread »active« and thus tied to OS resources?
+       * @note this implies some statefulness, which may contradict the RAII pattern.
+       *       - especially note the possibly for derived classes to create an _empty_ Thread.
+       *       - moreover note that ThreadJoinable may have terminated, but still awaits `join()`.
        */
-      void
-      sync()
+      explicit
+      operator bool()  const
         {
-          REQUIRE (isValid(), "Thread not running");
-          if (!lumiera_thread_sync_other (threadHandle_))
-            lumiera::throwOnError();
+          return threadImpl_.joinable();
         }
       
-      /** counterpart of the synchronisation barrier, to be called from
-       *  within the thread to be synchronised. Will block until both
-       *  this thread and the outward partner reached the barrier.
-       * @warning blocks on the _current_ thread's condition var
-       */
-      static void
-      syncPoint ()
-        {
-          lumiera_thread_sync ();
-        }
+      
       
     protected:
       /** determine if the currently executing code runs within this thread */
       bool
       invokedWithinThread()  const
         {
-          REQUIRE (isValid(), "Thread not running");
-          LumieraThread current = nullptr; // lumiera_thread_self ();  /////////////////////////////////OOO
-          return current
-             and current == this->threadHandle_;
-        }
+          return threadImpl_.get_id() == std::this_thread::get_id();
+        }     // Note: implies get_id() != std::thread::id{} ==> it is running
     };
   
   
@@ -266,8 +216,8 @@ namespace lib {
                       NoBugFlag logging_flag = &NOBUG_FLAG(thread))
         : Thread{}
         {
-          launchThread<FUN> (purpose, std::forward<FUN> (operation), logging_flag,
-                             LUMIERA_THREAD_JOINABLE);
+//          launchThread<FUN> (purpose, std::forward<FUN> (operation), logging_flag,
+//                             LUMIERA_THREAD_JOINABLE);
         }
       
       
@@ -279,17 +229,17 @@ namespace lib {
       lib::Result<void>
       join ()
         {
-          if (!isValid())
-            throw error::Logic ("joining on an already terminated thread");
-          
-          lumiera_err errorInOtherThread =
-              "TODO TOD-oh";//lumiera_thread_join (threadHandle_);            //////////////////////////////////OOO
-          threadHandle_ = 0;
-          
-          if (errorInOtherThread)
-            return error::State ("Thread terminated with error", errorInOtherThread);
-          else
-            return true;
+//          if (!isValid())
+//            throw error::Logic ("joining on an already terminated thread");
+//          
+//          lumiera_err errorInOtherThread =
+//              "TODO TOD-oh";//lumiera_thread_join (threadHandle_);            //////////////////////////////////OOO
+//          threadHandle_ = 0;
+//          
+//          if (errorInOtherThread)
+//            return error::State ("Thread terminated with error", errorInOtherThread);
+//          else
+//            return true;
         }
     };
   

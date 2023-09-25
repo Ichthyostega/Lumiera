@@ -161,8 +161,8 @@ namespace test{
           Thread ping ("SyncWaiting ping", bind (&Token::getIt, &tok));
           Thread pong ("SyncWaiting pong", bind (&Token::getIt, &tok));
           
-          CHECK (ping.isValid());
-          CHECK (pong.isValid());
+          CHECK (ping);
+          CHECK (pong);
           CHECK (0 == tok.result());
           
           usleep (100000); // if the threads don't block correctly, they've missed their chance by now... 
