@@ -33,7 +33,43 @@
  ** provided to implement [N-fold synchronisation](\ref lib::SyncBarrier) and to organise
  ** global locking and waiting in accordance with the _Object Monitor_ pattern. Together,
  ** these aim at packaging concurrency facilities into self-contained RAII-style objects.
- ** @remarks
+ ** 
+ ** # Usage
+ ** Based on experience, there seem to be two fundamentally different usage patterns for
+ ** thread-like entities: In most cases, they are just launched to participate in interactions
+ ** elsewhere defined. However, sometimes dedicated sub-processing is established and supervised,
+ ** finally to join results. And while the underlying implementation supports both usage styles,
+ ** a decision was made to reflect this dichotomy by casting two largely distinct front-ends.
+ ** 
+ ** The »just launch it« scheme is considered the default and embodied into lib::Thread.
+ ** Immediately launched on construction using the given _Invokable Functor_ and binding arguments,
+ ** it is not meant to be managed further, beyond possibly detecting the live-ness state through
+ ** `bool`-check. Exceptions propagating to top level within the new thread will be catched and
+ ** ignored, terminating and discarding the thread. Note however, since especially derived
+ ** classes can be used to create a safe anchor and working space for the launched operations,
+ ** it must be avoided to discard the Thread object while still operational; as a matter of
+ ** design, it should be assured the instance object outlives the enclosed chain of activity.
+ ** As a convenience, the destructor blocks for a short timespan of 20ms; a thread running
+ ** beyond that grace period will kill the whole application by `std::terminate`.
+ ** 
+ ** ## Synchronisation
+ ** The C++ standard provides that the end of the `std::thread` constructor _syncs-with_ the
+ ** start of the new thread function, and likewise the end of the thread activity _syncs-with_
+ ** the return from `join()`. According to the [syncs-with definition], this implies the
+ ** _happens before_ relation and thus precludes a data race. In practice thus
+ ** - the new thread function can access all data defined prior to ctor invocation
+ ** - the caller of `join()` is guaranteed to see all effects of the terminated thread.
+ ** Note however, that these guarantees do not extend into the initialisations performed
+ ** in a derived class's constructor, which start only after leaving the ctor of Thread.
+ ** So in theory there is a possible race between the extended setup in derived classes,
+ ** and the use of these facilities from within the thread function. In practice the new
+ ** thread, while already marked as live, still must be scheduled by the OS to commence,
+ ** which does not completely remove the possibility of undefined behaviour however. So
+ ** in cases where a race could be critical, additional means must be implemented; a
+ ** possible solution would be to use a [N-fold synchronisation barrier](\ref lib::SyncBarrier)
+ ** explicitly, or otherwise to ensure there is sufficient delay in the starting thread function.
+ ** 
+ ** @remarks Historical design evolution:
  **  - Lumiera offered simplified convenience wrappers long before a similar design
  **    became part of the C++14 standard. These featured the distinction in join-able or
  **    detached threads, the ability to define the thread main-entry as functor, and a
@@ -51,6 +87,7 @@
  **    and paved the way for switch-over to the threading support meanwhile part of the
  **    C++ standard library. Design and semantics were retained, while implemented
  **    using modern features, notably the new _Atomics_ synchronisation framework.
+ ** [syncs-with definition] : https://en.cppreference.com/w/cpp/atomic/memory_order#Synchronizes_with
  ** @todo WIP 9/23 about to be replaced by a thin wrapper on top of C++17 threads     ///////////////////////TICKET #1279 : consolidate to C++17 features 
  */
 
@@ -66,20 +103,93 @@
 #include "lib/format-string.hpp" ///////////////////////////OOO RLY? or maybe into CPP file?
 #include "lib/result.hpp"
 
-
 #include <thread>
+#include <string>
 #include <utility>
 
 
 namespace lib {
+
+  using std::string;
   
-  using lib::Literal;
-  namespace error = lumiera::error;
-  using error::LERR_(STATE);
-  using error::LERR_(EXTERNAL);
-  
-  typedef struct nobug_flag* NoBugFlag;
-  
+  namespace thread {// Thread-wrapper base implementation...
+    
+    class ThreadWrapper
+      : util::MoveOnly
+      {
+        
+        template<class FUN, typename...ARGS>
+        void
+        main (string threadID, FUN&& threadFunction, ARGS&& ...args)
+          {
+            try {
+                markThreadStart (threadID);
+                //  execute the actual operation in this new thread
+                std::invoke (std::forward<FUN> (threadFunction), std::forward<ARGS> (args)...);
+              }
+            ERROR_LOG_AND_IGNORE (thread, "Thread function")
+          }
+        
+        void
+        markThreadStart (string const& threadID)
+          {
+            string logMsg = util::_Fmt{"Thread '%s' start..."} % threadID;
+            TRACE (thread, "%s", logMsg.c_str());
+            //////////////////////////////////////////////////////////////////////OOO maybe set the the Thread-ID via POSIX ??
+          }
+        
+      protected:
+        std::thread threadImpl_;
+        
+        /** @internal derived classes may create an inactive thread */
+        ThreadWrapper() : threadImpl_{} { }
+        
+        
+      public:
+        /** Create a new thread to execute the given operation.
+         *  The new thread starts up synchronously, can't be cancelled and it can't be joined.
+         *  @param threadID human readable descriptor to identify the thread for diagnostics
+         *  @param logging_flag NoBug flag to receive diagnostics regarding the new thread
+         *  @param operation a functor holding the code to execute within the new thread.
+         *         Any function-like entity with signature `void(void)` is acceptable.
+         *  @warning The operation functor will be forwarded to create a copy residing
+         *         on the stack of the new thread; thus it can be transient, however
+         *         anything referred through a lambda closure here must stay alive
+         *         until the new thread terminates.
+         */
+        template<class FUN, typename...ARGS>
+        ThreadWrapper (string const& threadID, FUN&& threadFunction, ARGS&& ...args)
+          : threadImpl_{&ThreadWrapper::main<FUN,ARGS...>, this
+                       , threadID
+                       , std::forward<FUN> (threadFunction)
+                       , std::forward<ARGS> (args)... }
+          { }
+        
+        
+        /**
+         * Is this thread »active« and thus tied to OS resources?
+         * @note this implies some statefulness, which may contradict the RAII pattern.
+         *       - especially note the possibly for derived classes to create an _empty_ Thread.
+         *       - moreover note that ThreadJoinable may have terminated, but still awaits `join()`.
+         */
+        explicit
+        operator bool()  const
+          {
+            return threadImpl_.joinable();
+          }
+        
+        
+        
+      protected:
+        /** determine if the currently executing code runs within this thread */
+        bool
+        invokedWithinThread()  const
+          {
+            return threadImpl_.get_id() == std::this_thread::get_id();
+          }     // Note: implies get_id() != std::thread::id{} ==> it is running
+      };
+    
+  }//(End)base implementation.
   
   
   /************************************************************************//**
@@ -90,112 +200,15 @@ namespace lib {
    * - allows to bind to various kinds of functions including member functions
    * The new thread starts immediately within the ctor; after returning, the new
    * thread has already copied the arguments and indeed actively started to run.
-   * 
-   * # Joining, cancellation and memory management
-   * In the basic version (class Thread), the created thread is completely detached
-   * and not further controllable. There is no way to find out its execution state,
-   * wait on termination or even cancel it. Client code needs to implement such
-   * facilities explicitly, if needed. Care has to be taken with memory management,
-   * as there are no guarantees beyond the existence of the arguments bound into
-   * the operation functor. If the operation in the started thread needs additional
-   * storage, it has to manage it actively.
-   * 
-   * There is an extended version (class ThreadJoinable) to allow at least to wait
-   * on the started thread's termination (joining). Building on this it is possible
-   * to create a self-contained "thread in an object"; the dtor of such an class
-   * must join to prevent pulling away member variables the thread function will
-   * continue to use.
-   * 
-   * # failures in the thread function
-   * The operation started in the new thread is protected by a top-level catch block.
-   * Error states or caught exceptions can be propagated through the lumiera_error
-   * state flag, when using ThreadJoinable::join(). By invoking `join().maybeThrow()`
-   * on a join-able thread, exceptions can be propagated.
-   * @note any errorstate or caught exception detected on termination of a standard
-   * async Thread is considered a violation of policy and will result in emergency
-   * shutdown of the whole application.
-   * 
-   * # synchronisation barriers
-   * Lumiera threads provide a low-level synchronisation mechanism, which is used
-   * to secure the hand-over of additional arguments to the thread function. It
-   * can be used by client code, but care has to be taken to avoid getting out
-   * of sync. When invoking the #sync and #syncPoint functions, the caller will
-   * block until the counterpart has also invoked the corresponding function.
-   * If this doesn't happen, you'll block forever.
+   * @warning The destructor waits for a short grace period of 20ms, but calls
+   *          `std::terminate` afterwards, should the thread still be active then.
    */
   class Thread
-    : util::MoveOnly
+    : public thread::ThreadWrapper
     {
       
-      template<class FUN, typename...ARGS>
-      void
-      threadMain (string threadID, FUN&& threadFunction, ARGS&& ...args)
-        {
-          try {
-              markThreadStart (threadID);
-              //  execute the actual operation in this new thread
-              std::invoke (std::forward<FUN> (threadFunction), std::forward<ARGS> (args)...);
-            }
-          ERROR_LOG_AND_IGNORE (thread, "Thread function")
-        }
-      
-      void
-      markThreadStart (string const& threadID)
-        {
-          string logMsg = util::_Fmt{"Thread '%s' start..."} % threadID;
-          TRACE (thread, "%s", logMsg.c_str());
-          //////////////////////////////////////////////////////////////////////OOO maybe set the the Thread-ID via POSIX ??
-        }
-      
-    protected:
-      std::thread threadImpl_;
-      
-      /** @internal derived classes may create an inactive thread */
-      Thread() : threadImpl_{} { }
-      
-      
     public:
-      /** Create a new thread to execute the given operation.
-       *  The new thread starts up synchronously, can't be cancelled and it can't be joined.
-       *  @param threadID human readable descriptor to identify the thread for diagnostics
-       *  @param logging_flag NoBug flag to receive diagnostics regarding the new thread
-       *  @param operation a functor holding the code to execute within the new thread.
-       *         Any function-like entity with signature `void(void)` is acceptable.
-       *  @warning The operation functor will be forwarded to create a copy residing
-       *         on the stack of the new thread; thus it can be transient, however
-       *         anything referred through a lambda closure here must stay alive
-       *         until the new thread terminates.
-       */
-      template<class FUN, typename...ARGS>
-      Thread (string const& threadID, FUN&& threadFunction, ARGS&& ...args)
-        : threadImpl_{&Thread::threadMain<FUN,ARGS...>, this
-                     , threadID
-                     , std::forward<FUN> (threadFunction)
-                     , std::forward<ARGS> (args)... }
-        { }
-      
-      
-      /**
-       * Is this thread »active« and thus tied to OS resources?
-       * @note this implies some statefulness, which may contradict the RAII pattern.
-       *       - especially note the possibly for derived classes to create an _empty_ Thread.
-       *       - moreover note that ThreadJoinable may have terminated, but still awaits `join()`.
-       */
-      explicit
-      operator bool()  const
-        {
-          return threadImpl_.joinable();
-        }
-      
-      
-      
-    protected:
-      /** determine if the currently executing code runs within this thread */
-      bool
-      invokedWithinThread()  const
-        {
-          return threadImpl_.get_id() == std::this_thread::get_id();
-        }     // Note: implies get_id() != std::thread::id{} ==> it is running
+      using ThreadWrapper::ThreadWrapper;
     };
   
   
@@ -208,18 +221,10 @@ namespace lib {
    * to join on the termination of this thread.
    */
   class ThreadJoinable
-    : public Thread
+    : public thread::ThreadWrapper
     {
     public:
-      template<class FUN>
-      ThreadJoinable (Literal purpose, FUN&& operation,
-                      NoBugFlag logging_flag = &NOBUG_FLAG(thread))
-        : Thread{}
-        {
-//          launchThread<FUN> (purpose, std::forward<FUN> (operation), logging_flag,
-//                             LUMIERA_THREAD_JOINABLE);
-        }
-      
+      using ThreadWrapper::ThreadWrapper;
       
       /** put the caller into a blocking wait until this thread has terminated.
        *  @return token signalling either success or failure.
