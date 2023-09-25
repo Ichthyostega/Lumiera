@@ -65,7 +65,6 @@ namespace test {
         {
           simpleUse ();
           wrongUse ();
-          getError ();
         }
       
       
@@ -110,25 +109,6 @@ namespace test {
           
           VERIFY_ERROR(LOGIC, newThread.join() );
           VERIFY_ERROR(LOGIC, newThread.join() );
-        }
-      
-      
-      void
-      getError()
-        {
-          ThreadJoinable thread1("test Thread joining-3"
-                                , bind (&ThreadWrapperJoin_test::theAction, this, DESTRUCTION_CODE)
-                                );
-          
-          VERIFY_ERROR(SPECIAL, thread1.join().maybeThrow() );
-          
-          
-          
-          ThreadJoinable thread2("test Thread joining-4"
-                                , bind (&ThreadWrapperJoin_test::theAction, this, DESTRUCTION_CODE)
-                                );
-          
-          CHECK (not thread2.join().isValid()); // can check success without throwing
         }
     };
   

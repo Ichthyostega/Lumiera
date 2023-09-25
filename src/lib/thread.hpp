@@ -52,6 +52,11 @@
  ** As a convenience, the destructor blocks for a short timespan of 20ms; a thread running
  ** beyond that grace period will kill the whole application by `std::terminate`.
  ** 
+ ** For the exceptional case when a supervising thread need to await the termination of
+ ** launched threads, a different front-end \ref lib::ThreadJoinable is provided, exposing
+ ** the `join()` operation. Such threads *must* be joined however, and thus the destructor
+ ** immediately terminates the application in case the thread is still running.
+ ** 
  ** ## Synchronisation
  ** The C++ standard provides that the end of the `std::thread` constructor _syncs-with_ the
  ** start of the new thread function, and likewise the end of the thread activity _syncs-with_
@@ -106,37 +111,36 @@
 #include <thread>
 #include <string>
 #include <utility>
+#include <chrono>
 
 
 namespace lib {
 
   using std::string;
   
+  
   namespace thread {// Thread-wrapper base implementation...
     
+    template<bool autoTerm>
     class ThreadWrapper
       : util::MoveOnly
       {
-        
         template<class FUN, typename...ARGS>
         void
         main (string threadID, FUN&& threadFunction, ARGS&& ...args)
           {
+            markThreadStart (threadID);
             try {
-                markThreadStart (threadID);
-                //  execute the actual operation in this new thread
+                 //  execute the actual operation in this new thread
                 std::invoke (std::forward<FUN> (threadFunction), std::forward<ARGS> (args)...);
               }
             ERROR_LOG_AND_IGNORE (thread, "Thread function")
+            //
+            markThreadEnd (threadID);
+            if (autoTerm)
+              threadImpl_.detach();
           }
         
-        void
-        markThreadStart (string const& threadID)
-          {
-            string logMsg = util::_Fmt{"Thread '%s' start..."} % threadID;
-            TRACE (thread, "%s", logMsg.c_str());
-            //////////////////////////////////////////////////////////////////////OOO maybe set the the Thread-ID via POSIX ??
-          }
         
       protected:
         std::thread threadImpl_;
@@ -144,6 +148,11 @@ namespace lib {
         /** @internal derived classes may create an inactive thread */
         ThreadWrapper() : threadImpl_{} { }
         
+       ~ThreadWrapper()
+          {
+            if (autoTerm and threadImpl_.joinable())
+              waitGracePeriod();
+          }
         
       public:
         /** Create a new thread to execute the given operation.
@@ -187,6 +196,42 @@ namespace lib {
           {
             return threadImpl_.get_id() == std::this_thread::get_id();
           }     // Note: implies get_id() != std::thread::id{} ==> it is running
+        
+      private:
+        void
+        markThreadStart (string const& threadID)
+          {
+            string logMsg = util::_Fmt{"Thread '%s' start..."} % threadID;
+            TRACE (thread, "%s", logMsg.c_str());
+            //////////////////////////////////////////////////////////////////////OOO maybe set the the Thread-ID via POSIX ??
+          }
+        
+        void
+        markThreadEnd (string const& threadID)
+          {
+            string logMsg = util::_Fmt{"Thread '%s' finished..."} % threadID;
+            TRACE (thread, "%s", logMsg.c_str());
+          }
+        
+        void
+        waitGracePeriod()  noexcept
+          {
+            using std::chrono::steady_clock;
+            using std::chrono_literals::operator ""ms;
+
+            try {
+                auto start = steady_clock::now();
+                while (threadImpl_.joinable()
+                       and steady_clock::now () - start < 20ms
+                      )
+                  std::this_thread::yield();
+              }
+            ERROR_LOG_AND_IGNORE (thread, "Thread shutdown wait")
+            
+            if (threadImpl_.joinable())
+              ALERT (thread, "Thread failed to terminate after grace period. Abort.");
+            // invocation of std::thread dtor will presumably call std::terminate...
+          }
       };
     
   }//(End)base implementation.
@@ -204,7 +249,7 @@ namespace lib {
    *          `std::terminate` afterwards, should the thread still be active then.
    */
   class Thread
-    : public thread::ThreadWrapper
+    : public thread::ThreadWrapper<true>
     {
       
     public:
@@ -216,35 +261,29 @@ namespace lib {
   
   
   
-  /**
-   * Variant of the standard case, allowing additionally
-   * to join on the termination of this thread.
+  /************************************************************************//**
+   * Variant of the [standard case](\ref Thread), requiring to wait and `join()`
+   * on the termination of this thread. Useful to collect results calculated
+   * by multiple threads. Note however that the system resources of the thread
+   * are kept around until the `join()` call, and thus also the `bool` conversion
+   * yields `true`, even while the actual operation has already terminated.
+   * @warning Thread must be joined prior to destructor invocation, otherwise
+   *          the application is shut down immediately via `std::terminate`.
    */
   class ThreadJoinable
-    : public thread::ThreadWrapper
+    : public thread::ThreadWrapper<false>
     {
     public:
       using ThreadWrapper::ThreadWrapper;
       
-      /** put the caller into a blocking wait until this thread has terminated.
-       *  @return token signalling either success or failure.
-       *          The caller can find out by invoking `isValid()`
-       *          or `maybeThrow()` on this result token
-       */
-      lib::Result<void>
+      /** put the caller into a blocking wait until this thread has terminated */
+      void
       join ()
         {
-//          if (!isValid())
-//            throw error::Logic ("joining on an already terminated thread");
-//          
-//          lumiera_err errorInOtherThread =
-//              "TODO TOD-oh";//lumiera_thread_join (threadHandle_);            //////////////////////////////////OOO
-//          threadHandle_ = 0;
-//          
-//          if (errorInOtherThread)
-//            return error::State ("Thread terminated with error", errorInOtherThread);
-//          else
-//            return true;
+          if (not threadImpl_.joinable())
+            throw error::Logic ("joining on an already terminated thread");
+          
+          threadImpl_.join();
         }
     };
   

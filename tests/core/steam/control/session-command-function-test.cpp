@@ -345,7 +345,7 @@ namespace test    {
               
              ~InvocationProducer()
                 {
-                  this->join().maybeThrow();
+                  this->join(); // .maybeThrow();   /////////////////////////////////////////OOO should detect exceptions in thread explicitly
                   for (auto& id : cmdIDs_)
                     Command::remove (cStr(id));
                 }
