@@ -533,6 +533,11 @@ return: 0
 END
 
 
+TEST "Either-result-or-failure" Result_test  <<END
+return: 0
+END
+
+
 TEST "ScopedHolder_test" ScopedHolder_test <<END
 out: checking ScopedHolder<Dummy>...
 out: checking ScopedPtrHolder<Dummy>...

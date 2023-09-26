@@ -52,74 +52,23 @@ namespace lib {
   using util::isnil;
   using std::string;
   namespace error = lumiera::error;
-  
-  
+
   
   /**
-   * Optional Result value or status of some operation.
-   * It can be created for passing a result produced by the operation, or the
-   * failure to do so. The value can be retrieved by implicit or explicit conversion.
+   * Representation of the result of some operation, _EITHER_ a value or a failure.
+   * It can be created for passing a result produced by the operation, or the failure
+   * to do so. The value can be retrieved by implicit or explicit conversion.
    * @throw error::State on any attempt to access the value in case of failure
    * @warning this class has a lot of implicit conversions;
    *          care should be taken when defining functions
    *          to take Result instances as parameter....
    */
   template<typename RES>
-  class Result
-    {
-      string failureLog_;
-      wrapper::ItemWrapper<RES> value_;
-      
-    public:
-      /** mark an invalid/failed result */
-      Result (string const& failureReason ="no result")
-        : failureLog_{failureReason}
-        { }
-      
-      /** failed result, with reason given.*/
-      Result (lumiera::Error const& reason)
-       : failureLog_{reason.what()}
-       { }
-      
-      /** standard case: valid result */
-      Result (RES&& value)
-       : failureLog_{}
-       , value_{std::forward<RES> (value)}
-       { }
-      
-      
-      
-      bool
-      isValid()  const
-        {
-          return value_.isValid();
-        }
-      
-      void
-      maybeThrow()  const
-        {
-          if (not isValid())
-            throw error::State (failureLog_, lumiera_error_peek());
-        }
-      
-      operator RES()  const
-        {
-          maybeThrow();
-          return *value_;
-        }
-      
-      template<typename TY>
-      TY
-      get()  const
-        {
-          maybeThrow();
-          return static_cast<TY> (*value_);
-        }
-    };
+  class Result;
   
   
   /**
-   * Specialisation for signalling success or failure,
+   * The base case is just to capture success or failure,
    * without returning any value result.
    */
   template<>
@@ -138,21 +87,79 @@ namespace lib {
        : failureLog_{reason.what()}
        { }
       
-      
-      
-      bool
-      isValid()  const
-        {
-          return isnil (failureLog_);
-        }
+      operator bool() const { return isValid(); }
+      bool isValid()  const { return isnil (failureLog_); }
       
       void
       maybeThrow()  const
         {
           if (not isValid())
-            throw error::State (failureLog_, lumiera_error_peek());
+            throw error::State (failureLog_);
         }
     };
+  
+  
+  /**
+   * Optional Result value or status of some operation.
+   * It can be created for passing a result produced by the operation, or the
+   * failure to do so. The value can be retrieved by implicit or explicit conversion.
+   * @throw error::State on any attempt to access the value in case of failure
+   * @warning this class has a lot of implicit conversions;
+   *          care should be taken when defining functions
+   *          to take Result instances as parameter....
+   */
+  template<typename RES>
+  class Result
+    : public Result<void>
+    {
+      wrapper::ItemWrapper<RES> value_;
+      
+    public:
+      /** mark an invalid/failed result */
+      Result (string const& failureReason ="no result")
+        : Result<void>{failureReason}
+        { }
+      
+      /** failed result, with reason given.*/
+      Result (lumiera::Error const& reason)
+       : Result<void>{reason}
+       { }
+      
+      /** standard case: valid result */
+      Result (RES&& value)
+       : Result<void>{true}
+       , value_{std::forward<RES> (value)}
+       { }
+      
+      
+      
+      operator RES()  const
+        {
+          maybeThrow();
+          return *value_;
+        }
+      
+      template<typename TY>
+      TY
+      get()  const
+        {
+          maybeThrow();
+          return static_cast<TY> (*value_);
+        }
+      
+      template<typename MAKE, typename...ARGS>
+      RES
+      getOrElse (MAKE&& producer, ARGS ...args)
+        {
+          if (isValid())
+            return *value_;
+          else
+            return std::invoke(std::forward<MAKE> (producer), std::forward<ARGS> (args)...);
+        }
+    };
+  
+  template<typename VAL>
+  Result (VAL&& x) -> Result<VAL>;
   
   
   
