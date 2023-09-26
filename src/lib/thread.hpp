@@ -105,13 +105,10 @@
 #include "lib/nocopy.hpp"
 #include "include/logging.h"
 #include "lib/meta/function.hpp"
-#include "lib/format-string.hpp" ///////////////////////////OOO RLY? or maybe into CPP file?
-#include "lib/result.hpp"
 
 #include <thread>
 #include <string>
 #include <utility>
-#include <chrono>
 
 
 namespace lib {
@@ -198,40 +195,9 @@ namespace lib {
           }     // Note: implies get_id() != std::thread::id{} ==> it is running
         
       private:
-        void
-        markThreadStart (string const& threadID)
-          {
-            string logMsg = util::_Fmt{"Thread '%s' start..."} % threadID;
-            TRACE (thread, "%s", logMsg.c_str());
-            //////////////////////////////////////////////////////////////////////OOO maybe set the the Thread-ID via POSIX ??
-          }
-        
-        void
-        markThreadEnd (string const& threadID)
-          {
-            string logMsg = util::_Fmt{"Thread '%s' finished..."} % threadID;
-            TRACE (thread, "%s", logMsg.c_str());
-          }
-        
-        void
-        waitGracePeriod()  noexcept
-          {
-            using std::chrono::steady_clock;
-            using std::chrono_literals::operator ""ms;
-
-            try {
-                auto start = steady_clock::now();
-                while (threadImpl_.joinable()
-                       and steady_clock::now () - start < 20ms
-                      )
-                  std::this_thread::yield();
-              }
-            ERROR_LOG_AND_IGNORE (thread, "Thread shutdown wait")
-            
-            if (threadImpl_.joinable())
-              ALERT (thread, "Thread failed to terminate after grace period. Abort.");
-            // invocation of std::thread dtor will presumably call std::terminate...
-          }
+        void markThreadStart (string const& threadID);
+        void markThreadEnd   (string const& threadID);
+        void waitGracePeriod()  noexcept;
       };
     
   }//(End)base implementation.
@@ -281,7 +247,7 @@ namespace lib {
       join ()
         {
           if (not threadImpl_.joinable())
-            throw error::Logic ("joining on an already terminated thread");
+            throw lumiera::error::Logic ("joining on an already terminated thread");
           
           threadImpl_.join();
         }

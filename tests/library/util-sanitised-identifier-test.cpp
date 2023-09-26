@@ -26,6 +26,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
 
 
@@ -42,22 +43,16 @@ namespace test {
     {
       virtual void run (Arg)
         {
-          print_clean ("Word");
-          print_clean ("a Sentence");
-          print_clean ("trailing Withespace\n       \t");
-          print_clean ("with    a  \t lot\n  of Whitespace");
-          print_clean ("@with\".\'much ($punctuation)[]!");
-          print_clean ("§&Ω%€  leading garbage");
-          print_clean ("mixed    Ω   garbage");
-          print_clean ("Bääääh!!");
-          print_clean ("§&Ω%€");
+          CHECK (sanitise (                              "Word") == "Word"_expect);
+          CHECK (sanitise (                        "a Sentence") == "a_Sentence"_expect);
+          CHECK (sanitise (    "trailing Withespace\n       \t") == "trailing_Withespace"_expect);
+          CHECK (sanitise ("with    a  \t lot\n  of Whitespace") == "with_a_lot_of_Whitespace"_expect);
+          CHECK (sanitise (  "@with\".\'much ($punctuation)[]!") == "@with.much_($punctuation)"_expect);
+          CHECK (sanitise (            "§&Ω%€  leading garbage") == "leading_garbage"_expect);
+          CHECK (sanitise (              "mixed    Ω   garbage") == "mixed_garbage"_expect);
+          CHECK (sanitise (                          "Bääääh!!") == "Bh"_expect);
+          CHECK (sanitise (                             "§&Ω%€") == ""_expect);
         }
-      
-      /** @test print the original and the sanitised string */
-      void print_clean (const string org)
-      {
-        cout << "'" << org << "' --> '" << sanitise(org) << "'\n";
-      }
     };
   
   LAUNCHER (UtilSanitizedIdentifier_test, "unit common");

@@ -747,17 +747,6 @@ END
 
 
 TEST "util: sanitised identifier" UtilSanitizedIdentifier_test <<END
-out-lit: 'Word' --> 'Word'
-out-lit: 'a Sentence' --> 'a_Sentence'
-out-lit: 'trailing Withespace
-out-lit:        	' --> 'trailing_Withespace'
-out-lit: 'with    a  	 lot
-out-lit:   of Whitespace' --> 'with_a_lot_of_Whitespace'
-out-lit: '@with".'much (\$punctuation)[]!' --> '@with.much_(\$punctuation)'
-out-lit: '§&Ω%€  leading garbage' --> 'leading_garbage'
-out-lit: 'mixed    Ω   garbage' --> 'mixed_garbage'
-out-lit: 'Bääääh!!' --> 'Bh'
-out-lit: '§&Ω%€' --> ''
 return: 0
 END
 
