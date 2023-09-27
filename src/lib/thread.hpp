@@ -24,15 +24,16 @@
 
 /** @file thread.hpp
  ** Convenience front-end to simplify and codify basic thread handling.
- ** While the implementation of threading and concurrency support is based on the C++
- ** standard library, using in-project wrappers as front-end allows to codify some preferences
- ** and provide simplifications for the prevalent use case. Notably, threads which must be
- ** _joined_ are qualified as special case, while the standard case will just `detach()`
- ** at thread end. The main-level of each thread catches exceptions, which are typically
- ** ignored to keep the application running. Moreover, similar convenience wrappers are
- ** provided to implement [N-fold synchronisation](\ref lib::SyncBarrier) and to organise
- ** global locking and waiting in accordance with the _Object Monitor_ pattern. Together,
- ** these aim at packaging concurrency facilities into self-contained RAII-style objects.
+ ** While the implementation of threading and concurrency support is based on the
+ ** C++ standard library, using in-project wrappers as front-end allows to codify some
+ ** references and provide simplifications for the prevalent use case. Notably, threads
+ ** which must be _joined_ are qualified as special case, while the standard case will
+ ** just `detach()` at thread end. The main-level of each thread catches exceptions, which
+ ** are typically ignored to keep the application running. Moreover, similar convenience
+ ** wrappers are provided to implement [N-fold synchronisation](\ref lib::SyncBarrier)
+ ** and to organise global [locking and waiting](\ref lib::Sync) in accordance with the
+ ** _Object Monitor_ pattern. In concert, these allow to package concurrency facilities
+ ** into self-contained RAII-style objects.
  ** 
  ** # Usage
  ** Based on experience, there seem to be two fundamentally different usage patterns for
@@ -43,19 +44,21 @@
  ** 
  ** The »just launch it« scheme is considered the default and embodied into lib::Thread.
  ** Immediately launched on construction using the given _Invokable Functor_ and binding arguments,
- ** it is not meant to be managed further, beyond possibly detecting the live-ness state through
- ** `bool`-check. Exceptions propagating to top level within the new thread will be catched and
- ** ignored, terminating and discarding the thread. Note however, since especially derived
+ ** such a thread is not meant to be managed further, beyond possibly detecting the live-ness state
+ ** through `bool`-check. Exceptions propagating to top level within the new thread will be coughed
+ ** and ignored, terminating and discarding the thread. Note however, since especially derived
  ** classes can be used to create a safe anchor and working space for the launched operations,
- ** it must be avoided to discard the Thread object while still operational; as a matter of
+ ** it must be avoided to destroy the Thread object while still operational; as a matter of
  ** design, it should be assured the instance object outlives the enclosed chain of activity.
  ** As a convenience, the destructor blocks for a short timespan of 20ms; a thread running
  ** beyond that grace period will kill the whole application by `std::terminate`.
  ** 
  ** For the exceptional case when a supervising thread need to await the termination of
  ** launched threads, a different front-end \ref lib::ThreadJoinable is provided, exposing
- ** the `join()` operation. Such threads *must* be joined however, and thus the destructor
- ** immediately terminates the application in case the thread is still running.
+ ** the `join()` operation. This operation returns a [»Either« wrapper](\ref lib::Result),
+ ** to transport the return value and possible exceptions from the thread function to the
+ ** caller. Such threads *must* be joined however, and thus the destructor immediately
+ ** terminates the application in case the thread is still running.
  ** 
  ** ## Synchronisation
  ** The C++ standard provides that the end of the `std::thread` constructor _syncs-with_ the
@@ -73,7 +76,7 @@
  ** in cases where a race could be critical, additional means must be implemented; a
  ** possible solution would be to use a [N-fold synchronisation barrier](\ref lib::SyncBarrier)
  ** explicitly, or otherwise to ensure there is sufficient delay in the starting thread function.
- ** 
+ **
  ** @remarks Historical design evolution:
  **  - Lumiera offered simplified convenience wrappers long before a similar design
  **    became part of the C++14 standard. These featured the distinction in join-able or
@@ -92,8 +95,8 @@
  **    and paved the way for switch-over to the threading support meanwhile part of the
  **    C++ standard library. Design and semantics were retained, while implemented
  **    using modern features, notably the new _Atomics_ synchronisation framework.
+ **
  ** [syncs-with definition] : https://en.cppreference.com/w/cpp/atomic/memory_order#Synchronizes_with
- ** @todo WIP 9/23 about to be replaced by a thin wrapper on top of C++17 threads     ///////////////////////TICKET #1279 : consolidate to C++17 features 
  */
 
 
@@ -105,6 +108,7 @@
 #include "lib/nocopy.hpp"
 #include "include/logging.h"
 #include "lib/meta/function.hpp"
+#include "lib/result.hpp"
 
 #include <thread>
 #include <string>
@@ -122,6 +126,10 @@ namespace lib {
   
   namespace thread {// Thread-wrapper base implementation...
     
+    /** @internal wraps the C++ thread handle
+     *   and provides some implementation details,
+     *   which are then combined by the _policy template_
+     */
     struct ThreadWrapper
       : util::MoveOnly
       {
@@ -153,11 +161,36 @@ namespace lib {
       };
     
     
-    template<class BAS>
-    struct PolicyTODO
+    
+    /**
+     * Thread Lifecycle Policy:
+     * - launch thread without further control
+     * - errors in thread function will only be logged
+     * - thread detaches before terminating
+     * - »grace period« for thread to terminate on shutdown
+     */
+    template<class BAS, typename>
+    struct PolicyLaunchOnly
       : BAS
       {
         using BAS::BAS;
+        
+        template<class FUN, typename...ARGS>
+        void
+        perform_thread_function(FUN&& callable, ARGS&& ...args)
+          {
+            try {
+                 //  execute the actual operation in this new thread
+                std::invoke (std::forward<FUN> (callable), std::forward<ARGS> (args)...);
+              }
+            ERROR_LOG_AND_IGNORE (thread, "Thread function")
+          }
+        
+        void
+        handle_end_of_thread()
+          {
+            BAS::threadImpl_.detach();
+          }
         
         void
         handle_thread_still_running()
@@ -166,29 +199,69 @@ namespace lib {
           }
       };
     
+    
     /**
-     * Policy-based configuration of thread lifecycle
+     * Thread Lifecycle Policy:
+     * - thread with the ability to publish results
+     * - return value from the thread function will be stored
+     * - errors in thread function will likewise be captured and retained
+     * - thread *must* be joined after termination of the thread function
+     * @warning unjoined thread on dtor call will be a fatal error (std::terminate)
      */
-    template<template<class> class POL>
-    class ThreadLifecycle
-      : protected POL<ThreadWrapper>
+    template<class BAS, typename RES>
+    struct PolicyResultJoin
+      : BAS
       {
-        using Policy = POL<ThreadWrapper>;
+        using BAS::BAS;
+        
+        /** Wrapper to capture a success/failure indicator and possibly a computation result */
+        lib::Result<RES> result_{error::Logic{"Thread still running; need to join() first."}};
+        
         
         template<class FUN, typename...ARGS>
         void
-        main (FUN&& threadFunction, ARGS&& ...args)
+        perform_thread_function(FUN&& callable, ARGS&& ...args)
+          {
+            static_assert (std::__or_<std::is_same<RES,void>
+                                     ,std::is_constructible<RES, std::invoke_result_t<FUN,ARGS...>>>());
+            
+            // perform the given operation (failsafe) within this thread and capture result...
+            result_ = std::move (
+                        lib::Result{std::forward<FUN>(callable)
+                                   ,std::forward<ARGS>(args)...});
+          }
+        
+        void
+        handle_end_of_thread()
+          {
+            /* do nothing -- thread must be joined manually */;
+          }
+        
+        void
+        handle_thread_still_running()
+          {
+            ALERT (thread, "Thread '%s' was not joined. Abort.", BAS::threadID_.c_str());
+          }
+      };
+    
+    
+    /**
+     * Policy-based configuration of thread lifecycle
+     */
+    template<template<class,class> class POL, typename RES =void>
+    class ThreadLifecycle
+      : protected POL<ThreadWrapper, RES>
+      {
+        using Policy = POL<ThreadWrapper,RES>;
+        
+        template<typename...ARGS>
+        void
+        invokeThreadFunction (ARGS&& ...args)
           {
             Policy::markThreadStart();
-            try {
-                 //  execute the actual operation in this new thread
-                std::invoke (std::forward<FUN> (threadFunction), std::forward<ARGS> (args)...);
-              }
-            ERROR_LOG_AND_IGNORE (thread, "Thread function")
-            //
+            Policy::perform_thread_function (std::forward<ARGS> (args)...);
             Policy::markThreadEnd();
-//            if (autoTerm)
-              Policy::threadImpl_.detach();
+            Policy::handle_end_of_thread();
           }
         
         
@@ -216,31 +289,28 @@ namespace lib {
         /** Create a new thread to execute the given operation.
          *  The new thread starts up synchronously, can't be cancelled and it can't be joined.
          *  @param threadID human readable descriptor to identify the thread for diagnostics
-         *  @param logging_flag NoBug flag to receive diagnostics regarding the new thread
-         *  @param operation a functor holding the code to execute within the new thread.
-         *         Any function-like entity with signature `void(void)` is acceptable.
-         *  @warning The operation functor will be forwarded to create a copy residing
-         *         on the stack of the new thread; thus it can be transient, however
-         *         anything referred through a lambda closure here must stay alive
-         *         until the new thread terminates.
+         *  @param threadFunction a functor holding the code to execute within the new thread.
+         *         Any function-like entity or callable is acceptable; arguments can be given.
+         *  @warning The operation functor and all arguments will be copied into the new thread.
+         *         The return from this constructor _syncs-with_ the launch of the operation.
          */
         template<class FUN, typename...ARGS>
         ThreadLifecycle (string const& threadID, FUN&& threadFunction, ARGS&& ...args)
           : Policy{threadID
-                  , &ThreadLifecycle::main<FUN,ARGS...>, this
+                  , &ThreadLifecycle::invokeThreadFunction<FUN,ARGS...>, this
                   , std::forward<FUN> (threadFunction)
                   , std::forward<ARGS> (args)... }
           { }
-        
         
       };
     
   }//(End)base implementation.
   
   
+  
   /************************************************************************//**
-   * A thin convenience wrapper to simplify thread-handling. The implementation
-   * is backed by the C++ standard library.
+   * A thin convenience wrapper to simplify thread-handling.
+   * The implementation is backed by the C++ standard library.
    * Using this wrapper...
    * - removes the need to join() threads, catches and ignores exceptions.
    * - allows to bind to various kinds of functions including member functions
@@ -250,14 +320,12 @@ namespace lib {
    *          `std::terminate` afterwards, should the thread still be active then.
    */
   class Thread
-    : public thread::ThreadLifecycle<thread::PolicyTODO>
+    : public thread::ThreadLifecycle<thread::PolicyLaunchOnly>
     {
       
     public:
       using ThreadLifecycle::ThreadLifecycle;
     };
-  
-  
   
   
   
@@ -271,22 +339,39 @@ namespace lib {
    * @warning Thread must be joined prior to destructor invocation, otherwise
    *          the application is shut down immediately via `std::terminate`.
    */
+  template<typename RES =void>
   class ThreadJoinable
-    : public thread::ThreadLifecycle<thread::PolicyTODO>
+    : public thread::ThreadLifecycle<thread::PolicyResultJoin, RES>
     {
-    public:
-      using ThreadLifecycle::ThreadLifecycle;
+      using Impl = thread::ThreadLifecycle<thread::PolicyResultJoin, RES>;
       
-      /** put the caller into a blocking wait until this thread has terminated */
-      void
+    public:
+      using Impl::Impl;
+      
+      /**
+       * put the caller into a blocking wait until this thread has terminated
+       * @return intermediary token signalling either success or failure.
+       *     The caller can find out by invoking `isValid()` or `maybeThrow()`
+       *     on this result token. Moreover, if the _thread function_ yields a
+       *     result value, this value is copied into the token and can be retrieved
+       *     either by type conversion, or with `get<TY>()`, `value_or(default)`
+       *     or even with an alternative producer `or_else(λ)`.
+       */
+      lib::Result<RES>
       join ()
         {
-          if (not threadImpl_.joinable())
+          if (not Impl::threadImpl_.joinable())
             throw lumiera::error::Logic ("joining on an already terminated thread");
           
-          threadImpl_.join();
+          Impl::threadImpl_.join();
+          
+          return Impl::result_;
         }
     };
+
+  /** deduction guide: find out about result value to capture from a generic callable. */
+  template<typename FUN, typename...ARGS>
+  ThreadJoinable (string const&, FUN&&, ARGS&&...) -> ThreadJoinable<std::invoke_result_t<FUN,ARGS...>>;
   
   
   

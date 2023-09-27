@@ -48,6 +48,8 @@ namespace lib {
 namespace thread{
   
   namespace {
+    const auto SHUTDOWN_GRACE_PERIOD = 20ms;
+    
     string
     lifecycleMsg (Literal phase, string threadID)
     {
@@ -95,7 +97,7 @@ namespace thread{
     try {
         auto start = steady_clock::now();
         while (threadImpl_.joinable()
-               and steady_clock::now () - start < 20ms
+               and steady_clock::now () - start < SHUTDOWN_GRACE_PERIOD
               )
           std::this_thread::yield();
       }

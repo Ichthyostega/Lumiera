@@ -156,7 +156,7 @@ namespace test{
       void 
       waitPingPong (Token& tok)
         {
-          typedef ThreadJoinable Thread;  //////////////////////////////////////WIP
+          typedef ThreadJoinable<> Thread;  //////////////////////////////////////WIP
           
           Thread ping ("SyncWaiting ping", bind (&Token::getIt, &tok));
           Thread pong ("SyncWaiting pong", bind (&Token::getIt, &tok));

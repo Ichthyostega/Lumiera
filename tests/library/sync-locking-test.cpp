@@ -126,7 +126,7 @@ namespace test{
      */
     class HavocThread
       {
-        ThreadJoinable thread_;
+        ThreadJoinable<> thread_;
         
         void
         doIt ()

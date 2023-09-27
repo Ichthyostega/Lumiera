@@ -65,24 +65,24 @@ namespace test {
         {
           int contended = 0;
           
-          using Threads = lib::ScopedCollection<ThreadJoinable>;
+          using Threads = lib::ScopedCollection<ThreadJoinable<>>;
           
                // Start a bunch of threads with random access pattern
           Threads threads{NUM_THREADS,
                           [&](Threads::ElementHolder& storage)
                              {
-                               storage.create<ThreadJoinable> ("Sync-ClassLock stress test"
-                                                              ,[&]{
-                                                                    for (uint i=0; i<NUM_LOOP; ++i)
-                                                                      {
-                                                                        uint delay = rand() % 10;
-                                                                        usleep (delay);
+                               storage.create<ThreadJoinable<>> ("Sync-ClassLock stress test"
+                                                                ,[&]{
+                                                                      for (uint i=0; i<NUM_LOOP; ++i)
                                                                         {
-                                                                          ClassLock<void> guard;
-                                                                          ++contended;
+                                                                          uint delay = rand() % 10;
+                                                                          usleep (delay);
+                                                                          {
+                                                                            ClassLock<void> guard;
+                                                                            ++contended;
+                                                                          }
                                                                         }
-                                                                      }
-                                                                  });
+                                                                    });
                              }
                          };
           

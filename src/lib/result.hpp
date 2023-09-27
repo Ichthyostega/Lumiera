@@ -73,7 +73,7 @@ namespace lib {
   inline auto
   failsafeInvoke (std::exception_ptr& capturedFailure
                  ,FUN&& callable
-                 ,ARGS&& ...args)
+                 ,ARGS&& ...args)  noexcept
   {
     using Res = std::invoke_result_t<FUN,ARGS...>;
     try {
@@ -129,7 +129,7 @@ namespace lib {
        
       /** invoke a _callable_ and mark success or failure */
       template<class FUN, typename...ARGS,        typename=lib::meta::enable_if<std::is_invocable<FUN,ARGS...>>>
-      Result (FUN&& callable, ARGS&& ...args)
+      Result (FUN&& callable, ARGS&& ...args)     noexcept
         : failure_{}
         {
           failsafeInvoke (failure_
@@ -180,7 +180,7 @@ namespace lib {
       
       /** invoke a _callable_ and capture result in one shot */
       template<class FUN, typename...ARGS,          typename=lib::meta::enable_if<std::is_invocable<FUN,ARGS...>>>
-      Result (FUN&& callable, ARGS&& ...args)
+      Result (FUN&& callable, ARGS&& ...args)       noexcept
         : Result<void>{true}
         , value_{failsafeInvoke (failure_
                                 ,std::forward<FUN> (callable)
@@ -222,11 +222,11 @@ namespace lib {
         }
     };
   
-  /** deduction guard: allow _perfect forwarding_ of a any result into the ctor call. */
+  /** deduction guide: allow _perfect forwarding_ of a any result into the ctor call. */
   template<typename VAL,                             typename=lib::meta::disable_if<std::is_invocable<VAL>>>
   Result (VAL&&) -> Result<VAL>;
 
-  /** deduction guard: find out about result value to capture from a generic callable. */
+  /** deduction guide: find out about result value to capture from a generic callable. */
   template<typename FUN, typename...ARGS>
   Result (FUN&&, ARGS&&...) -> Result<std::invoke_result_t<FUN,ARGS...>>;
 
