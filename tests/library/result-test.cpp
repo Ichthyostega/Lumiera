@@ -44,7 +44,6 @@ namespace test{
   
   namespace error = lumiera::error;
   using error::LUMIERA_ERROR_FATAL;
-  using error::LUMIERA_ERROR_STATE; ///////////////////TODO
   
   
   namespace {
@@ -89,12 +88,12 @@ namespace test{
           CHECK (not isSameObject (sequel.get<Literal const&>(), THE_END));
           
           // »Either Right« case : mark as failure
-          Result<double> facepalm{error::Fatal()};
+          Result<double> facepalm{error::Fatal("zOMG")};
           CHECK (not facepalm.isValid());
           
-          VERIFY_ERROR (STATE, (double)facepalm       );
-          VERIFY_ERROR (STATE, facepalm.get<double&>());
-          VERIFY_ERROR (STATE, facepalm.maybeThrow()  );
+          VERIFY_ERROR (FATAL, (double)facepalm       );
+          VERIFY_ERROR (FATAL, facepalm.get<double&>());
+          VERIFY_ERROR (FATAL, facepalm.maybeThrow()  );
           
           CHECK (42.0 == facepalm.getOrElse([]{ return 42; }));
         }

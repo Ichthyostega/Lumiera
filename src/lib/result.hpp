@@ -22,9 +22,9 @@
 
 
 /** @file result.hpp
- ** Intermediary value object to represent the result of an operation.
- ** This operation might have produced a value result or failed with an exception.
- ** Typically, the Result token is used _inline_ -- immediately either invoking
+ ** Intermediary value object to represent »either« an operation result or a failure.
+ ** Some operation might have produced a value result or failed with an exception.
+ ** Typically, the Result token is used _inline_ — immediately either invoking
  ** one of the member function or employing the built-in result type conversion.
  ** It will be copyable iff the result value is copyable. There is an implicit
  ** valid or failure state, which can be tested. Any attempt to get the value
@@ -42,15 +42,14 @@
 #include "lib/wrapper.hpp"
 #include "lib/util.hpp"
 
+#include <exception>
 #include <utility>
-#include <string>
 
 
 
 namespace lib {
   
   using util::isnil;
-  using std::string;
   namespace error = lumiera::error;
 
   
@@ -74,27 +73,27 @@ namespace lib {
   template<>
   class Result<void>
     {
-      string failureLog_;
+      std::exception_ptr failure_;
       
     public:
       /** mark either failure (default) or success */
       Result (bool success =false)
-        : failureLog_{success? "": "operation failed"}
+        : failure_{success? nullptr: std::make_exception_ptr (error::State{"operation failed"})}
         { }
       
       /** failed result, with reason given.*/
       Result (lumiera::Error const& reason)
-       : failureLog_{reason.what()}
+       : failure_{std::make_exception_ptr (reason)}
        { }
       
       operator bool() const { return isValid(); }
-      bool isValid()  const { return isnil (failureLog_); }
+      bool isValid()  const { return not failure_; }
       
       void
       maybeThrow()  const
         {
-          if (not isValid())
-            throw error::State (failureLog_);
+          if (failure_)
+            std::rethrow_exception(failure_);
         }
     };
   
@@ -115,12 +114,7 @@ namespace lib {
       wrapper::ItemWrapper<RES> value_;
       
     public:
-      /** mark an invalid/failed result */
-      Result (string const& failureReason ="no result")
-        : Result<void>{failureReason}
-        { }
-      
-      /** failed result, with reason given.*/
+      /** mark failed result, with reason given.*/
       Result (lumiera::Error const& reason)
        : Result<void>{reason}
        { }
@@ -131,6 +125,7 @@ namespace lib {
        , value_{std::forward<RES> (value)}
        { }
       
+       // is or is not copyable depending on RES
       
       
       operator RES()  const
@@ -158,9 +153,9 @@ namespace lib {
         }
     };
   
+  /** deduction guard: allow _perfect forwarding_ of a any result into the ctor call. */
   template<typename VAL>
-  Result (VAL&& x) -> Result<VAL>;
-  
+  Result (VAL&&) -> Result<VAL>;
   
   
   

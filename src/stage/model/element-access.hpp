@@ -133,7 +133,7 @@ namespace model {
   struct ElementAccess::TypeConverter
     : RawResult::Visitor
     {
-      lib::Result<TAR&> result{"not convertible to desired target widget"};
+      lib::Result<TAR&> result{error::Invalid{"not convertible to desired target widget"}};
       
       template<typename X>                             // note the "backward" use. We pick that base interface
       using canUpcast = std::is_convertible<TAR*, X>; //  into which our desired result type can be upcast, because
@@ -150,7 +150,7 @@ namespace model {
                 result = *downcasted;
             }
           else
-            result = lib::Result<TAR&>{"access returns empty answer"};
+            result = lib::Result<TAR&>{error::State{"access returns empty answer"}};
         }
     };
   
