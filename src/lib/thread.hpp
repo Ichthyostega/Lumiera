@@ -111,47 +111,108 @@
 #include <utility>
 
 
+namespace util {
+  std::string sanitise (std::string const&);
+}
 namespace lib {
 
   using std::string;
   
   
+  
   namespace thread {// Thread-wrapper base implementation...
     
-    template<bool autoTerm>
-    class ThreadWrapper
+    struct ThreadWrapper
       : util::MoveOnly
       {
+        const string threadID_;
+        std::thread threadImpl_;
+        
+        bool isLive()  const { return threadImpl_.joinable(); }
+        
+        
+        /** @internal derived classes may create an inactive thread */
+        ThreadWrapper()
+          : threadID_{util::BOTTOM_INDICATOR}
+          , threadImpl_{}
+          { }
+        
+        template<typename...ARGS>
+        ThreadWrapper (string const& threadID, ARGS&& ...args)
+          : threadID_{util::sanitise (threadID)}
+          , threadImpl_{std::forward<ARGS> (args)... }
+          { }
+        
+        /** determine if the currently executing code runs within this thread */
+        bool invokedWithinThread()  const;
+        
+        void markThreadStart();
+        void markThreadEnd  ();
+        void setThreadName  ();
+        void waitGracePeriod()  noexcept;
+      };
+    
+    
+    template<class BAS>
+    struct PolicyTODO
+      : BAS
+      {
+        using BAS::BAS;
+        
+        void
+        handle_thread_still_running()
+          {
+            BAS::waitGracePeriod();
+          }
+      };
+    
+    /**
+     * Policy-based configuration of thread lifecycle
+     */
+    template<template<class> class POL>
+    class ThreadLifecycle
+      : protected POL<ThreadWrapper>
+      {
+        using Policy = POL<ThreadWrapper>;
+        
         template<class FUN, typename...ARGS>
         void
-        main (string threadID, FUN&& threadFunction, ARGS&& ...args)
+        main (FUN&& threadFunction, ARGS&& ...args)
           {
-            markThreadStart (threadID);
+            Policy::markThreadStart();
             try {
                  //  execute the actual operation in this new thread
                 std::invoke (std::forward<FUN> (threadFunction), std::forward<ARGS> (args)...);
               }
             ERROR_LOG_AND_IGNORE (thread, "Thread function")
             //
-            markThreadEnd (threadID);
-            if (autoTerm)
-              threadImpl_.detach();
+            Policy::markThreadEnd();
+//            if (autoTerm)
+              Policy::threadImpl_.detach();
           }
         
         
       protected:
-        std::thread threadImpl_;
-        
-        /** @internal derived classes may create an inactive thread */
-        ThreadWrapper() : threadImpl_{} { }
-        
-       ~ThreadWrapper()
+       ~ThreadLifecycle()
           {
-            if (autoTerm and threadImpl_.joinable())
-              waitGracePeriod();
+            if (Policy::isLive())
+              Policy::handle_thread_still_running();
           }
         
       public:
+        /**
+         * Is this thread »active« and thus tied to OS resources?
+         * @note this implies some statefulness, which may contradict the RAII pattern.
+         *       - especially note the possibly for derived classes to create an _empty_ Thread.
+         *       - moreover note that ThreadJoinable may have terminated, but still awaits `join()`.
+         */
+        explicit
+        operator bool()  const
+          {
+            return Policy::isLive();
+          }
+        
+        
         /** Create a new thread to execute the given operation.
          *  The new thread starts up synchronously, can't be cancelled and it can't be joined.
          *  @param threadID human readable descriptor to identify the thread for diagnostics
@@ -164,40 +225,14 @@ namespace lib {
          *         until the new thread terminates.
          */
         template<class FUN, typename...ARGS>
-        ThreadWrapper (string const& threadID, FUN&& threadFunction, ARGS&& ...args)
-          : threadImpl_{&ThreadWrapper::main<FUN,ARGS...>, this
-                       , threadID
-                       , std::forward<FUN> (threadFunction)
-                       , std::forward<ARGS> (args)... }
+        ThreadLifecycle (string const& threadID, FUN&& threadFunction, ARGS&& ...args)
+          : Policy{threadID
+                  , &ThreadLifecycle::main<FUN,ARGS...>, this
+                  , std::forward<FUN> (threadFunction)
+                  , std::forward<ARGS> (args)... }
           { }
         
         
-        /**
-         * Is this thread »active« and thus tied to OS resources?
-         * @note this implies some statefulness, which may contradict the RAII pattern.
-         *       - especially note the possibly for derived classes to create an _empty_ Thread.
-         *       - moreover note that ThreadJoinable may have terminated, but still awaits `join()`.
-         */
-        explicit
-        operator bool()  const
-          {
-            return threadImpl_.joinable();
-          }
-        
-        
-        
-      protected:
-        /** determine if the currently executing code runs within this thread */
-        bool
-        invokedWithinThread()  const
-          {
-            return threadImpl_.get_id() == std::this_thread::get_id();
-          }     // Note: implies get_id() != std::thread::id{} ==> it is running
-        
-      private:
-        void markThreadStart (string const& threadID);
-        void markThreadEnd   (string const& threadID);
-        void waitGracePeriod()  noexcept;
       };
     
   }//(End)base implementation.
@@ -215,11 +250,11 @@ namespace lib {
    *          `std::terminate` afterwards, should the thread still be active then.
    */
   class Thread
-    : public thread::ThreadWrapper<true>
+    : public thread::ThreadLifecycle<thread::PolicyTODO>
     {
       
     public:
-      using ThreadWrapper::ThreadWrapper;
+      using ThreadLifecycle::ThreadLifecycle;
     };
   
   
@@ -237,10 +272,10 @@ namespace lib {
    *          the application is shut down immediately via `std::terminate`.
    */
   class ThreadJoinable
-    : public thread::ThreadWrapper<false>
+    : public thread::ThreadLifecycle<thread::PolicyTODO>
     {
     public:
-      using ThreadWrapper::ThreadWrapper;
+      using ThreadLifecycle::ThreadLifecycle;
       
       /** put the caller into a blocking wait until this thread has terminated */
       void

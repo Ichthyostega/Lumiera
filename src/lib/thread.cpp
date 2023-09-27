@@ -31,11 +31,14 @@
 
 #include "lib/thread.hpp"
 #include "lib/format-string.hpp"
+#include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 #include <chrono>
 #include <pthread.h>
 
+using util::_Fmt;
+using lib::Literal;
 using std::chrono::steady_clock;
 using std::chrono_literals::operator ""ms;
 
@@ -45,47 +48,49 @@ namespace lib {
 namespace thread{
   
   namespace {
-    
-    void
-    setThreadName (std::thread& handle, string name)
+    string
+    lifecycleMsg (Literal phase, string threadID)
     {
-      // API limitation: max 15 characters + \0
-      name = util::sanitise(name).substr(0, 15);
-      
-      pthread_t nativeHandle = handle.native_handle();
-      pthread_setname_np(nativeHandle, name.c_str());
-    }
-    
-    void
-    lifecycle (string format, string threadID)
-    {
-      string message = util::_Fmt{format} % threadID;
-      TRACE (thread, "%s", message.c_str());
+      return _Fmt{"Thread '%s' %s"} % threadID % phase;
     }
   }
   
   
-  
-  template<bool autoTerm>
-  void
-  ThreadWrapper<autoTerm>::markThreadStart (string const& threadID)
+  /** @note implies get_id() != std::thread::id{} ==> it is running */
+  bool
+  ThreadWrapper::invokedWithinThread()  const
   {
-    lifecycle ("Thread '%s' start...", threadID);
-    setThreadName (threadImpl_, threadID);
+    return threadImpl_.get_id() == std::this_thread::get_id();
+  }
+
+  
+  void
+  ThreadWrapper::markThreadStart()
+  {
+    TRACE (thread, "%s", lifecycleMsg ("start...", threadID_).c_str());
+    setThreadName();
   }
   
   
-  template<bool autoTerm>
   void
-  ThreadWrapper<autoTerm>::markThreadEnd (string const& threadID)
+  ThreadWrapper::markThreadEnd()
   {
-    lifecycle ("Thread '%s' finished.", threadID);
+    TRACE (thread, "%s", lifecycleMsg ("finished.", threadID_).c_str());
   }
   
   
-  template<bool autoTerm>
   void
-  ThreadWrapper<autoTerm>::waitGracePeriod()  noexcept
+  ThreadWrapper::setThreadName()
+  {
+    pthread_t nativeHandle = threadImpl_.native_handle();
+    
+    // API limitation: max 15 characters + \0
+    pthread_setname_np(nativeHandle, threadID_.substr(0, 15).c_str());
+  }
+  
+  
+  void
+  ThreadWrapper::waitGracePeriod()  noexcept
   {
     try {
         auto start = steady_clock::now();
@@ -94,21 +99,13 @@ namespace thread{
               )
           std::this_thread::yield();
       }
-    ERROR_LOG_AND_IGNORE (thread, "Thread shutdown wait")
+    ERROR_LOG_AND_IGNORE (thread, lifecycleMsg("shutdown wait", threadID_).c_str());
     
     if (threadImpl_.joinable())
-      ALERT (thread, "Thread failed to terminate after grace period. Abort.");
+      ALERT (thread, "Thread '%s' failed to terminate after grace period. Abort.", threadID_.c_str());
     // invocation of std::thread dtor will presumably call std::terminate...
   }
   
-  
-  template void ThreadWrapper<true>::markThreadStart (string const&);
-  template void ThreadWrapper<true>::markThreadEnd   (string const&);
-  template void ThreadWrapper<true>::waitGracePeriod ()  noexcept;
-  
-  template void ThreadWrapper<false>::markThreadStart (string const&);
-  template void ThreadWrapper<false>::markThreadEnd   (string const&);
-  template void ThreadWrapper<false>::waitGracePeriod ()  noexcept;
   
   
 }}// namespace lib::thread
