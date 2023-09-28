@@ -108,6 +108,7 @@
 #include "lib/nocopy.hpp"
 #include "include/logging.h"
 #include "lib/meta/function.hpp"
+#include "lib/format-util.hpp"
 #include "lib/result.hpp"
 
 #include <thread>
@@ -302,6 +303,13 @@ namespace lib {
                   , std::forward<ARGS> (args)... }
           { }
         
+        template<class SUB, typename...ARGS>
+        ThreadLifecycle (RES (SUB::*memFun) (ARGS...), ARGS&& ...args)
+          : ThreadLifecycle{util::joinArgList (lib::meta::typeStr<SUB>(), args...)
+                           ,std::move (memFun)
+                           ,static_cast<SUB*> (this)
+                           ,std::forward<ARGS> (args)... }
+          { }
       };
     
   }//(End)base implementation.

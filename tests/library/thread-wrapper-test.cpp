@@ -93,8 +93,7 @@ namespace lib {
         : Thread
         {
           TestThread()
-            : Thread("test Thread creation",
-                     bind (&TestThread::theOperation, this, checksum.createVal(), checksum.createVal()))
+            : Thread{&TestThread::theOperation, checksum.createVal(), checksum.createVal()}
             { }                         // note the binding (functor object) is passed as anonymous temporary
           
           
