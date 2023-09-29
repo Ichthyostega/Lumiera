@@ -26,12 +26,18 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"///////////TODO
 #include "lib/thread.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/scoped-collection.hpp"
 
+#include <atomic>
 #include <chrono>
 
 using test::Test;
+using lib::explore;
+using std::atomic_uint;
+using std::this_thread::yield;
 using std::this_thread::sleep_for;
 using std::chrono::microseconds;
 
@@ -85,6 +91,36 @@ namespace lib {
         virtual void
         run (Arg)
           {
+            demonstrateSimpleUsage();
+            verifyConcurrentExecution();
+          }
+        
+        /**
+         * @test demonstrate simple usage of the thread-wrapper
+         */ 
+        void
+        demonstrateSimpleUsage()
+          {
+            lib::ScopedCollection<Thread> threads{NUM_THREADS};
+            
+            atomic_uint invocations{0};
+            for (uint i=0; i<NUM_THREADS; ++i)
+              threads.emplace<Thread> ("counter"
+                                      ,[&]{ ++invocations; });
+            
+            while (explore(threads).has_any())
+              yield();
+            
+            CHECK (invocations == NUM_THREADS);
+          }
+        
+        
+        /**
+         * @test verify the thread function is actually performed concurrently
+         */
+        void
+        verifyConcurrentExecution()
+          {
             lib::ScopedCollection<TestThread> threads{NUM_THREADS};
             
             size_t globalSum = 0;
@@ -95,7 +131,8 @@ namespace lib {
                 threads.emplace<TestThread> (&TestThread::doIt, uint{i}, uint{x});
               }
             
-            usleep (200000);  // pause 200ms for the threads to terminate.....
+            while (explore(threads).has_any())
+              yield();
             
             size_t checkSum = 0;
             for (auto& t : threads)

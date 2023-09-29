@@ -350,6 +350,12 @@ namespace lib {
       bool    empty ()       const { return 0 == level_; }
       
       
+      // use in standard range for loops...
+      friend iterator       begin (ScopedCollection& sco)      { return sco.begin(); }
+      friend const iterator begin (ScopedCollection const& sco){ return sco.begin(); }
+      friend iterator       end   (ScopedCollection& sco)      { return sco.end(); }
+      friend const iterator end   (ScopedCollection const& sco){ return sco.end(); }
+      
       
     private:
       /* ==== Storage: heap allocated array of element buffers ==== */

@@ -1647,6 +1647,30 @@ namespace lib {
           return IterExplorer::reduce ([](const reference val){ return val; });
         }
       
+      /** simplified _terminal builder_ to check if any result yields `true` (short-circuit) */
+      bool
+      has_any()
+        {
+          static_assert (std::is_constructible<bool,value_type>());
+          SRC& pipeline = *this;
+          for ( ; pipeline; ++pipeline)
+            if (*pipeline)
+              return true;
+          return false;
+        }
+      
+      /** simplified _terminal builder_ to check if all results yields `true` (short-circuit) */
+      bool
+      and_all()
+        {
+          static_assert (std::is_constructible<bool,value_type>());
+          SRC& pipeline = *this;
+          for ( ; pipeline; ++pipeline)
+            if (not *pipeline)
+              return false;
+          return true;
+        }
+      
       
       /** _terminal builder_ to pour and materialise all results from this Pipeline.
        * @tparam CON a STL compliant container to store generated values (defaults to `vector`)
