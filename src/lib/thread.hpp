@@ -127,7 +127,7 @@ namespace lib {
   
   namespace thread {// Thread-wrapper base implementation...
     
-    using lib::meta::typeStr;
+    using lib::meta::typeSymbol;
     using std::forward;
     using std::decay_t;
     using std::invoke_result_t;
@@ -313,7 +313,7 @@ namespace lib {
         
         template<class SUB, typename...ARGS>
         ThreadLifecycle (RES (SUB::*memFun) (ARGS...), ARGS ...args)
-          : ThreadLifecycle{util::joinDash (typeStr<SUB>(), args...)
+          : ThreadLifecycle{util::joinDash (typeSymbol<SUB>(), args...)
                            ,std::move (memFun)
                            ,static_cast<SUB*> (this)
                            ,forward<ARGS> (args)... }
