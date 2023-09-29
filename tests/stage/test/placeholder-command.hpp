@@ -102,8 +102,7 @@ namespace test{
       static string
       capture (ARGS ...args)
         {
-          using VecS = std::vector<string>;
-          return "Memento⧏" + util::join (util::stringify<VecS> (args...),"⧓") + "⧐";
+          return "Memento⧏" + util::join (util::stringify (args...),"⧓") + "⧐";
         }
       
       static void

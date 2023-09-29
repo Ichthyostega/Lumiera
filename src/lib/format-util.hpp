@@ -117,11 +117,19 @@ namespace util {
    */
   template<class CON, typename...ELMS>
   inline CON
-  stringify(ELMS const& ...elms)
+  collectStr(ELMS const& ...elms)
   {
     SeqContainer<CON,ELMS...> storage;
     do_stringify (storage, elms...);
     return CON {move(storage)};
+  }
+  
+  /** standard setup: convert to string into a vector */
+  template<typename...ELMS>
+  inline vector<string>
+  stringify (ELMS const& ...elms)
+  {
+    return collectStr<vector<string>> (elms...);
   }
   
   /** convert to string as transforming step in a pipeline
@@ -214,13 +222,30 @@ namespace util {
     return join (ili, delim);
   }
   
+  // Note: offering a variant of join with var-args would create lots of ambiguities
   
   /** shortcut: List in parentheses, separated by comma, using temporary vector */
   template<typename...ARGS>
   inline string
   joinArgList (ARGS const& ...args)
   {
-    return "("+join (stringify<std::vector<string>> (args...))+")";
+    return "("+join (stringify (args...))+")";
+  }
+  
+  /** shortcut: join directly with dashes */
+  template<typename...ARGS>
+  inline string
+  joinDash (ARGS const& ...args)
+  {
+    return join (stringify (args...), "-");
+  }
+  
+  /** shortcut: join directly with dashes */
+  template<typename...ARGS>
+  inline string
+  joinDot (ARGS const& ...args)
+  {
+    return join (stringify (args...), ".");
   }
   
   

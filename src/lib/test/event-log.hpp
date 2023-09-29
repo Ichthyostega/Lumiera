@@ -102,7 +102,7 @@ namespace test{
   
   using lib::Symbol;
   using std::string;
-  using util::stringify;
+  using util::collectStr;
   
   namespace {
     using Entry = lib::diff::Record<string>;
@@ -206,7 +206,7 @@ namespace test{
       EventMatch&
       arg (ARGS const& ...args)
         {
-          refineSerach_matchArguments (stringify<ArgSeq> (args...));
+          refineSerach_matchArguments (collectStr<ArgSeq> (args...));
           return *this;
         }
       
@@ -225,8 +225,8 @@ namespace test{
       EventMatch&
       argMatch (ARGS const& ...regExps)
         {
-          refineSerach_matchArgsRegExp (stringify<RExSeq> (regExps...),
-                                        util::join(stringify<ArgSeq>(regExps...)));
+          refineSerach_matchArgsRegExp (collectStr<RExSeq> (regExps...),
+                                        util::join(collectStr<ArgSeq>(regExps...)));
           return *this;
         }
       
@@ -380,7 +380,7 @@ namespace test{
       EventLog&
       call (string target, string function, ARGS const& ...args)
         {
-          return call (target, function, stringify<ArgSeq>(args...));
+          return call (target, function, collectStr<ArgSeq>(args...));
         }
       
       /** Log a function call on given object ("`this`")... */
@@ -402,7 +402,7 @@ namespace test{
       EventLog&
       note (ELMS const& ...initialiser)
         {
-          log_->emplace_back (stringify<ArgSeq> (initialiser...));
+          log_->emplace_back (collectStr<ArgSeq> (initialiser...));
           return *this;
         }
 

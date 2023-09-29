@@ -305,7 +305,7 @@ namespace lib {
         
         template<class SUB, typename...ARGS>
         ThreadLifecycle (RES (SUB::*memFun) (ARGS...), ARGS&& ...args)
-          : ThreadLifecycle{util::joinArgList (lib::meta::typeStr<SUB>(), args...)
+          : ThreadLifecycle{util::joinDash (lib::meta::typeStr<SUB>(), args...)
                            ,std::move (memFun)
                            ,static_cast<SUB*> (this)
                            ,std::forward<ARGS> (args)... }

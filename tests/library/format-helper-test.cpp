@@ -156,8 +156,8 @@ namespace test {
           
           using VecS = vector<string>;
           
-          // another variant: collect arbitrary number of arguments
-          VecS vals = stringify<VecS> (short(12), 345L, "67", '8');
+          // another variant: collect arbitrary heterogeneous arguments
+          VecS vals = stringify (short(12), 345L, "67", '8');
           CHECK (vals == VecS({"12", "345", "67", "8"}));
           
           
