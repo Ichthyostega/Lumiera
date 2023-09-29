@@ -26,15 +26,14 @@
 
 
 #include "lib/test/run.hpp"
-
 #include "lib/thread.hpp"
-#include "lib/sync.hpp"
-#include "lib/symbol.hpp"
+#include "lib/scoped-collection.hpp"
 
-#include <functional>
+#include <chrono>
 
-using std::bind;
 using test::Test;
+using std::this_thread::sleep_for;
+using std::chrono::microseconds;
 
 
 namespace lib {
@@ -42,65 +41,22 @@ namespace lib {
   
     namespace { // private test classes and data...
       
-      const uint NUM_THREADS      = 20;
-      const uint MAX_RAND_SUMMAND = 100;
-      
-      
-      class Checker
-        : public lib::Sync<>
-        {
-          volatile ulong hot_sum_;
-          ulong control_sum_;
-          
-        public:
-          Checker() : hot_sum_(0), control_sum_(0) { }
-          
-          bool
-          verify()    ///< verify test values got handled and accounted
-            {
-              return 0 < hot_sum_
-                  && control_sum_ == hot_sum_;
-            }
-          
-          uint
-          createVal() ///< generating test values, remembering the control sum
-            {
-              uint val(rand() % MAX_RAND_SUMMAND);
-              control_sum_ += val;
-              return val;
-            }
-          
-          void
-          addValues (uint a, uint b)   ///< to be called concurrently
-            {
-              Lock guard(this);
-              
-              hot_sum_ *= 2;
-              usleep (200);             // force preemption
-              hot_sum_ += 2 * (a+b);
-              usleep (200);
-              hot_sum_ /= 2;
-            }
-        };
-      
-      
-      Checker checksum; ///< global variable used by multiple threads
-      
-      
+      const uint NUM_THREADS = 200;
       
       
       struct TestThread
         : Thread
         {
-          TestThread()
-            : Thread{&TestThread::theOperation, checksum.createVal(), checksum.createVal()}
-            { }                         // note the binding (functor object) is passed as anonymous temporary
+          using Thread::Thread;
           
+          uint local{0};
           
           void
-          theOperation (uint a, uint b) ///< the actual operation running in a separate thread
+          doIt (uint a, uint b) ///< the actual operation running in a separate thread
             {
-              checksum.addValues (a,b);
+              uint sum = a + b;
+              sleep_for (microseconds{sum});
+              local = sum;
             }
         };
       
@@ -129,11 +85,27 @@ namespace lib {
         virtual void
         run (Arg)
           {
-            TestThread instances[NUM_THREADS]    SIDEEFFECT;
+            lib::ScopedCollection<TestThread> threads{NUM_THREADS};
+            
+            size_t globalSum = 0;
+            for (uint i=1; i<=NUM_THREADS; ++i)
+              {
+                uint x = rand() % 1000;
+                globalSum += (i + x);
+                threads.emplace<TestThread> (&TestThread::doIt, uint{i}, uint{x});
+              }
             
             usleep (200000);  // pause 200ms for the threads to terminate.....
             
-            CHECK (checksum.verify());
+            size_t checkSum = 0;
+            for (auto& t : threads)
+              {
+                CHECK (not t);
+                CHECK (0 < t.local);
+                checkSum += t.local;
+              }
+            CHECK (checkSum == globalSum);
+            
           }
       };
     
