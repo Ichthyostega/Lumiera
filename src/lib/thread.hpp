@@ -160,7 +160,7 @@ namespace lib {
           , threadImpl_{forward<ARGS> (args)... }
           { }
         
-        /** determine if the currently executing code runs within this thread */
+        /** detect if the currently executing code runs within this thread */
         bool invokedWithinThread()  const;
         
         void markThreadStart();
@@ -293,6 +293,9 @@ namespace lib {
           {
             return Policy::isLive();
           }
+        
+        /** @return does this call happen from within this thread? */
+        using Policy::invokedWithinThread;
         
         
         /** Create a new thread to execute the given operation.

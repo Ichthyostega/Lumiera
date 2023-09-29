@@ -196,7 +196,7 @@ namespace lib {
           return *value_;
         }
       
-      template<typename TY>
+      template<typename TY =RES>
       TY
       get()  const
         {

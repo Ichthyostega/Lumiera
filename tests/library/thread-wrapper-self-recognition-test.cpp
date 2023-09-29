@@ -26,10 +26,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
-
 #include "lib/thread.hpp"
-#include "lib/error.hpp"
 
 using test::Test;
 
@@ -38,35 +35,12 @@ using test::Test;
 namespace lib {
 namespace test {
   
-  namespace {
-    
-    class TestThread
-      : Thread
-      {
-        public:
-          TestThread()
-            : Thread{"test Thread self recognition"
-                    ,[&]()
-                        {
-                          CHECK (invocation_happens_within_this_thread());
-                        }}
-            { }
-          
-          bool
-          invocation_happens_within_this_thread()
-            {
-              return invokedWithinThread();
-            }
-      };
-    
-  }
-  
   
   /******************************************************//**
    * @test verify the ability of a thread to detect code
    *       executing within the thread itself.
-   * 
    * @see Thread::invokedWithinThread()
+   * @see thread::ThreadWrapper::invokedWithinThread()
    * @see steam::control::DispatcherLoop::stateIsSynched()
    */
   class ThreadWrapperSelfRecognitionTest_test : public Test
@@ -75,11 +49,13 @@ namespace test {
       virtual void
       run (Arg)
         {
-          TestThread testThread;
+          ThreadJoinable<bool> testThread{"Thread self detection"
+                                         ,[&]{
+                                               return testThread.invokedWithinThread();
+                                             }};
           
-          CHECK (not testThread.invocation_happens_within_this_thread());
-          
-          usleep(10); // give the thread a chance to run before shutdown
+          CHECK (not testThread.invokedWithinThread());
+          CHECK (testThread.join().get<bool>());
         }
     };
   
