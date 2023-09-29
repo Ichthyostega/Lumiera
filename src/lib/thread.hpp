@@ -127,6 +127,14 @@ namespace lib {
   
   namespace thread {// Thread-wrapper base implementation...
     
+    using lib::meta::typeStr;
+    using std::forward;
+    using std::decay_t;
+    using std::invoke_result_t;
+    using std::is_constructible;
+    using std::is_same;
+    using std::__or_;
+    
     /** @internal wraps the C++ thread handle
      *   and provides some implementation details,
      *   which are then combined by the _policy template_
@@ -149,7 +157,7 @@ namespace lib {
         template<typename...ARGS>
         ThreadWrapper (string const& threadID, ARGS&& ...args)
           : threadID_{util::sanitise (threadID)}
-          , threadImpl_{std::forward<ARGS> (args)... }
+          , threadImpl_{forward<ARGS> (args)... }
           { }
         
         /** determine if the currently executing code runs within this thread */
@@ -182,7 +190,7 @@ namespace lib {
           {
             try {
                  //  execute the actual operation in this new thread
-                std::invoke (std::forward<FUN> (callable), std::forward<ARGS> (args)...);
+                std::invoke (forward<FUN> (callable), forward<ARGS> (args)...);
               }
             ERROR_LOG_AND_IGNORE (thread, "Thread function")
           }
@@ -223,13 +231,13 @@ namespace lib {
         void
         perform_thread_function(FUN&& callable, ARGS&& ...args)
           {
-            static_assert (std::__or_<std::is_same<RES,void>
-                                     ,std::is_constructible<RES, std::invoke_result_t<FUN,ARGS...>>>());
+            static_assert (__or_<is_same<RES,void>
+                                ,is_constructible<RES, invoke_result_t<FUN,ARGS...>>>());
             
             // perform the given operation (failsafe) within this thread and capture result...
             result_ = std::move (
-                        lib::Result{std::forward<FUN>(callable)
-                                   ,std::forward<ARGS>(args)...});
+                        lib::Result{forward<FUN>(callable)
+                                   ,forward<ARGS>(args)...});
           }
         
         void
@@ -260,7 +268,7 @@ namespace lib {
         invokeThreadFunction (ARGS&& ...args)
           {
             Policy::markThreadStart();
-            Policy::perform_thread_function (std::forward<ARGS> (args)...);
+            Policy::perform_thread_function (forward<ARGS> (args)...);
             Policy::markThreadEnd();
             Policy::handle_end_of_thread();
           }
@@ -298,17 +306,17 @@ namespace lib {
         template<class FUN, typename...ARGS>
         ThreadLifecycle (string const& threadID, FUN&& threadFunction, ARGS&& ...args)
           : Policy{threadID
-                  , &ThreadLifecycle::invokeThreadFunction<FUN,ARGS...>, this
-                  , std::forward<FUN> (threadFunction)
-                  , std::forward<ARGS> (args)... }
-          { }
+                  , &ThreadLifecycle::invokeThreadFunction<FUN, decay_t<ARGS>...>, this
+                  , forward<FUN> (threadFunction)
+                  , decay_t<ARGS> (args)... }                                        // Note: need to decay the argument types
+          { }                                                                       //        (arguments must be copied)
         
         template<class SUB, typename...ARGS>
-        ThreadLifecycle (RES (SUB::*memFun) (ARGS...), ARGS&& ...args)
-          : ThreadLifecycle{util::joinDash (lib::meta::typeStr<SUB>(), args...)
+        ThreadLifecycle (RES (SUB::*memFun) (ARGS...), ARGS ...args)
+          : ThreadLifecycle{util::joinDash (typeStr<SUB>(), args...)
                            ,std::move (memFun)
                            ,static_cast<SUB*> (this)
-                           ,std::forward<ARGS> (args)... }
+                           ,forward<ARGS> (args)... }
           { }
       };
     
