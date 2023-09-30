@@ -351,7 +351,7 @@ namespace test    {
             public:
               InvocationProducer (SyncBarrier& trigger)
                 : barrier_{trigger}
-                , thread_{"command producer", [&]{ fabricateCommands(); }}
+                , thread_{"producer", [&]{ fabricateCommands(); }}
                 { }
               
              ~InvocationProducer()
@@ -391,7 +391,6 @@ namespace test    {
             };
           
           /* == controlling code in main thread == */
-          try{  
           Time prevState = testCommandState;
           
           FSecs expectedOffset{0};
@@ -424,19 +423,6 @@ namespace test    {
           
           __DELAY__
           CHECK (testCommandState - prevState == Time(expectedOffset));
-          }
-          catch(lumiera::Error& ex)
-            {
-              cout << "##### Lumix-Ex: "<<ex.what()<<endl;
-            }
-          catch(std::exception& jaleck)
-            {
-              cout << "##### Standard-Ex: "<<jaleck.what()<<endl;
-            }
-          catch(...)
-            {
-              cout << "WOOT??"<<endl;
-            }
         }// Note: leaving this scope blocks for joining all producer threads
     };
   

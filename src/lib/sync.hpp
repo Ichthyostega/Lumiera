@@ -474,7 +474,10 @@ namespace lib {
           
           /** convenience shortcut:
            *  Locks and immediately enters wait state,
-           *  observing a condition defined as member function. */
+           *  observing a condition defined as member function.
+           * @deprecated WARNING this function is not correct!          ////////////////////////////TICKET #1051
+           *             Lock is not released on error from within wait()
+           */
           template<class X>
           Lock(X* it, bool (X::*method)(void))
             : mon_(getMonitor(it)) 

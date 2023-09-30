@@ -224,7 +224,7 @@ namespace lib {
         using BAS::BAS;
         
         /** Wrapper to capture a success/failure indicator and possibly a computation result */
-        lib::Result<RES> result_{error::Logic{"Thread still running; need to join() first."}};
+        lib::Result<RES> result_{error::Logic{"No result yet, thread still running; need to join() first."}};
         
         
         template<class FUN, typename...ARGS>

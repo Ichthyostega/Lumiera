@@ -195,7 +195,8 @@ namespace control {
       void
       awaitStateProcessed()  const
         {
-          Lock blockWaiting(unConst(this), &DispatcherLoop::isStateSynched);       ///////////////////////TICKET #1057 : const correctness on wait predicate
+          Lock(unConst(this)).wait(unConst(*this), &DispatcherLoop::isStateSynched);  ///////////////////////TICKET #1051 : support bool-λ and fix the correctness-error in the »convenience shortcut«   
+                                                                                     ////////////////////////TICKET #1057 : const correctness on wait predicate
             // wake-up typically by updateState()
         }
       
