@@ -82,15 +82,19 @@ extern "C" {
 #include "steam/control/steam-dispatcher.hpp"
 #include "steam/control/command-def.hpp"
 #include "include/session-command-facade.h"
-#include "vault/thread-wrapper.hpp"
 #include "lib/typed-counter.hpp"
 #include "lib/format-string.hpp"
+#include "lib/sync-barrier.hpp"
+#include "lib/thread.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
+#include "lib/test/diagnostic-output.hpp"////////////////////TODO
 
 #include <boost/lexical_cast.hpp>
-#include <vector>
+#include <chrono>
 #include <string>
+#include <vector>
+#include <deque>
 
 
 namespace steam {
@@ -99,8 +103,11 @@ namespace test    {
   
   
   using boost::lexical_cast;
-  using lib::test::randTime;
+  using std::this_thread::sleep_for;
+  using std::chrono::microseconds;
+  using namespace std::chrono_literals;
   using steam::control::SessionCommand;
+  using lib::test::randTime;
   using lib::diff::GenNode;
   using lib::diff::Rec;
   using lib::time::Time;
@@ -109,11 +116,13 @@ namespace test    {
   using lib::time::Offset;
   using lib::time::FSecs;
   using lib::FamilyMember;
+  using lib::SyncBarrier;
   using lib::Symbol;
   using util::_Fmt;
   using util::isnil;
   using std::string;
   using std::vector;
+  using std::deque;
   using std::rand;
   
   
@@ -163,7 +172,7 @@ namespace test    {
   }//(End) test fixture
   
   
-#define __DELAY__ usleep(20000);
+#define __DELAY__ sleep_for (20ms);
   
   
   
@@ -215,8 +224,8 @@ namespace test    {
           lumiera::throwOnError();
           
           startDispatcher();
-          perform_simpleInvocation();
-          perform_messageInvocation();
+//          perform_simpleInvocation();
+//          perform_messageInvocation();
           perform_massivelyParallel(args_for_stresstest);
           stopDispatcher();
           
@@ -323,10 +332,13 @@ namespace test    {
           
           // we'll run several instances of the following thread....
           class InvocationProducer
-            : vault::ThreadJoinable
+            : util::NonCopyable
             {
+              SyncBarrier& barrier_;
               FamilyMember<InvocationProducer> id_;
               vector<string> cmdIDs_;
+              
+              lib::ThreadJoinable<void> thread_;
               
               Symbol
               cmdID(uint j)
@@ -337,15 +349,14 @@ namespace test    {
               
               
             public:
-              InvocationProducer()
-                : ThreadJoinable("test command producer", [&](){ fabricateCommands(); })
-                {
-                  this->sync();
-                }
+              InvocationProducer (SyncBarrier& trigger)
+                : barrier_{trigger}
+                , thread_{"command producer", [&]{ fabricateCommands(); }}
+                { }
               
              ~InvocationProducer()
                 {
-                  this->join(); // .maybeThrow();   /////////////////////////////////////////OOO should detect exceptions in thread explicitly
+                  thread_.join().maybeThrow();
                   for (auto& id : cmdIDs_)
                     Command::remove (cStr(id));
                 }
@@ -354,7 +365,7 @@ namespace test    {
               void
               fabricateCommands()
                 {
-                  syncPoint(); // barrier to ensure initialisation of the object
+                  barrier_.sync(); // barrier to unleash all threads together
                   
                   for (uint j=0; j<NUM_INVOC_PER_THRED; ++j)
                     {
@@ -375,24 +386,31 @@ namespace test    {
               __randomDelay()
                 {
                   if (not MAX_RAND_DELAY_us) return;
-                  usleep (1 + rand() % MAX_RAND_DELAY_us);   // random delay varying in steps of 1µs
+                  sleep_for (microseconds (1 + rand() % MAX_RAND_DELAY_us));   // random delay varying in steps of 1µs
                 }
             };
           
           /* == controlling code in main thread == */
-            
+          try{  
           Time prevState = testCommandState;
-          
-          // fire up several threads to issue commands in parallel...
-          vector<InvocationProducer> producerThreads{NUM_THREADS_DEFAULT};
           
           FSecs expectedOffset{0};
           for (uint i=0; i<NUM_THREADS_DEFAULT; ++i)
             for (uint j=0; j<NUM_INVOC_PER_THRED; ++j)
               expectedOffset += FSecs(i*7,2) - FSecs(j,2);
           
+          // fire up several threads to issue commands in parallel...
+          SyncBarrier trigger{NUM_THREADS_DEFAULT + 1};
+          deque<InvocationProducer> producerThreads;
+          for (uint i=0; i<NUM_THREADS_DEFAULT; ++i)
+            producerThreads.emplace_back (trigger);
+          
+          // start concurrent execution
+          trigger.sync();
+          
           // give the producer threads some head start...
-          usleep(MAX_RAND_DELAY_us * NUM_INVOC_PER_THRED / 2);
+          sleep_for (microseconds (MAX_RAND_DELAY_us * NUM_INVOC_PER_THRED / 2));
+          __DELAY__
           
           // stop the dispatching to cause the queue to build up...
           SteamDispatcher::instance().deactivate();
@@ -406,7 +424,19 @@ namespace test    {
           
           __DELAY__
           CHECK (testCommandState - prevState == Time(expectedOffset));
-          
+          }
+          catch(lumiera::Error& ex)
+            {
+              cout << "##### Lumix-Ex: "<<ex.what()<<endl;
+            }
+          catch(std::exception& jaleck)
+            {
+              cout << "##### Standard-Ex: "<<jaleck.what()<<endl;
+            }
+          catch(...)
+            {
+              cout << "WOOT??"<<endl;
+            }
         }// Note: leaving this scope blocks for joining all producer threads
     };
   

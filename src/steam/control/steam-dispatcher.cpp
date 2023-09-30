@@ -88,15 +88,17 @@
 #include "steam/control/looper.hpp"
 #include "steam/control/session-command-service.hpp"
 #include "steam/mobject/session.hpp"
-#include "vault/thread-wrapper.hpp"
 #include "lib/depend-inject.hpp"
+#include "lib/sync-barrier.hpp"
+#include "lib/thread.hpp"
 #include "lib/util.hpp"                ///////////////TODO for test command invocation
 
 #include <memory>
   
 using lib::Sync;
 using lib::RecursiveLock_Waitable;
-using vault::Thread;
+using lib::SyncBarrier;
+using lib::Thread;
 using std::unique_ptr;
 
 namespace steam {
@@ -113,8 +115,7 @@ namespace control {
    * @see DispatcherLooper_test
    */
   class DispatcherLoop
-    : Thread
-    , public CommandDispatch
+    : public CommandDispatch
     , public Sync<RecursiveLock_Waitable>
     {
       using ServiceHandle = lib::DependInject<SessionCommandService>::ServiceInstance<>;
@@ -122,9 +123,10 @@ namespace control {
       /** manage the primary public Session interface */
       ServiceHandle commandService_;
       
+      SyncBarrier   init_;
       CommandQueue queue_;
       Looper      looper_;
-      
+      Thread      thread_;
       
     public:
       /** start the session loop thread
@@ -136,15 +138,17 @@ namespace control {
        *         Such might happen indirectly, when something depends on "the Session"
        */
       DispatcherLoop (Subsys::SigTerm notification)
-        : Thread{"Lumiera Session", bind (&DispatcherLoop::runSessionThread, this, notification)}
-        , commandService_{ServiceHandle::NOT_YET_STARTED}
+        : commandService_{ServiceHandle::NOT_YET_STARTED}
         , queue_{}
         , looper_([&]() -> bool
                     {
                       return not queue_.empty();
                     })
+        , thread_{"Lumiera Session"
+                 ,&DispatcherLoop::runSessionThread
+                 , this, notification}
         {
-          Thread::sync(); // done with setup; loop may run now....
+          init_.sync();   // done with setup; loop may run now....
           INFO (session, "Steam-Dispatcher running...");
             {
               Lock(this);     // open public session interface:
@@ -155,7 +159,7 @@ namespace control {
      ~DispatcherLoop()
         {
           try {
-              commandService_.shutdown();  // redundant call, to ensure session interface is closed reliably 
+              commandService_.shutdown();  // redundant call, to ensure session interface is closed reliably
               INFO (session, "Steam-Dispatcher stopped.");
             }
           ERROR_LOG_AND_IGNORE(session, "Stopping the Steam-Dispatcher");
@@ -231,7 +235,7 @@ namespace control {
       runSessionThread (Subsys::SigTerm notifyEnd)
         {
           string errorMsg;
-          syncPoint();
+          init_.sync();
           try
             {
               while (looper_.shallLoop())
@@ -279,7 +283,7 @@ namespace control {
       bool
       isStateSynched()
         {
-          if (this->invokedWithinThread())
+          if (thread_.invokedWithinThread())
             throw error::Fatal("Possible Deadlock. "
                                "Attempt to synchronise to a command processing check point "
                                "from within the (single) session thread."

@@ -61,6 +61,7 @@
 
 #include <vector>
 #include <string>
+#include <atomic>
 
 
 namespace util {
@@ -84,6 +85,8 @@ namespace lib {
    * Rather, they are tied to a specific type context, e.g. a class
    * implementing a custom allocator. These typed contexts are
    * considered to be orthogonal and independent of each other.
+   * @remark 2023: allocation of global ID counters are protected by
+   *         double-checked locking with mutex, which is deemed adequate.
    */
   template<class CX>
   class TypedContext
@@ -202,14 +205,13 @@ namespace lib {
       const size_t id_;
       
       /** member counter shared per template instance */
-      static size_t memberCounter;
+      static std::atomic_size_t memberCounter;
       
       /** threadsafe allocation of member ID */
       static size_t
       allocateNextMember()
         {
-          ClassLock<FamilyMember> synchronised;
-          return memberCounter++;
+          return memberCounter.fetch_add(+1, std::memory_order_relaxed);
         }
       
     public:
@@ -242,7 +244,7 @@ namespace lib {
   
   /** allocate storage for the counter per type family */
   template<typename TY>
-  size_t FamilyMember<TY>::memberCounter{0};
+  std::atomic_size_t FamilyMember<TY>::memberCounter{0};
   
   
   
