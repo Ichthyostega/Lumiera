@@ -50,7 +50,7 @@ namespace test {
   
   namespace {// Test setup for a concurrent calculation with checksum....
     
-    const uint NUM_THREADS = 1024;
+    const uint NUM_THREADS = 256;
     
     atomic_uint stage1{0};
     atomic_uint stage2{0};

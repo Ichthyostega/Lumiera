@@ -198,7 +198,8 @@ namespace lib {
         void
         handle_end_of_thread()
           {
-            BAS::threadImpl_.detach();
+            if (BAS::isLive())
+              BAS::threadImpl_.detach();
           }
         
         void
@@ -344,6 +345,11 @@ namespace lib {
       
     public:
       using ThreadLifecycle::ThreadLifecycle;
+      
+      /** allow to detach explicitly — independent from thread-function's state
+       * @warning ensure that thread function only uses storage within its own scope
+       */
+      void detach() { ThreadLifecycle::handle_end_of_thread(); }
     };
   
   

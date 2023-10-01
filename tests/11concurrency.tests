@@ -17,7 +17,7 @@ return: 0
 END
 
 
-PLANNED "Yield-waiting sync performance" SyncBarrierPerformance_test  <<END
+TEST "Yield-waiting sync performance" SyncBarrierPerformance_test  <<END
 return: 0
 END
 

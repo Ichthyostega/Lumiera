@@ -263,7 +263,8 @@ namespace control {
             }
            // leave the Session thread...
           //  send notification of subsystem shutdown
-          notifyEnd (&errorMsg);
+          thread_.detach();
+          notifyEnd (&errorMsg); // invokes ~DispatcherLoop()
         }
       
       void
