@@ -67,12 +67,10 @@ namespace lumiera {
     class ExceptionError_test : public Test
       {
         typedef ExceptionError_test test;
-        virtual void run (Arg arg)
+        
+        virtual void
+        run (Arg)
           {
-            if (0 < arg.size() and arg[1]=="terminate")
-              terminateUnknown();
-            
-            
             catcher (&test::throwSpecial,  "");
             catcher (&test::throwDerived,  "test-1");
             catcher (&test::throwFatal,    "test-2");
@@ -84,7 +82,6 @@ namespace lumiera {
             catcher (&test::nestedThrower, "test-7");
             catcher (&test::doubleNestedTh,"test-8");
             
-            checkErrorIntegration();
             checkErrorFlagPropagation();
             checkRootCauseChaining();
           }
@@ -134,31 +131,7 @@ namespace lumiera {
         }
         
         
-        /** @test by constructing an lumiera::Error object,
-         *  the corresponding lumiera_error state is set automatically
-         */
-        void checkErrorIntegration()
-        {
-          lumiera_error ();
-          CHECK (not lumiera_error());
-          
-          Error err1;
-          Error err2("boo",LERR_(DERIVED));
-          CHECK (err1.getID () == lumiera_error ()); // (we didn't clear the first one!)
-          
-          Error err3("boooo",LERR_(DERIVED));
-          CHECK (err3.getID () == lumiera_error ());
-          
-          SpecificError err4;
-          CHECK (err4.getID () == LERR_(LIFE_AND_UNIVERSE));
-          CHECK (err4.getID () == lumiera_error ());
-          
-          CHECK (not lumiera_error());
-        }
-        
-        
-        void detectErrorflag        (string)     { throwOnError(); }
-        void detectErrorflagChained (string msg) { maybeThrow<error::Logic> (msg); }
+        void detectErrorflag (string) { throwOnError(); }
         
         
         /** @test verify throwing of Exceptions
@@ -169,12 +142,9 @@ namespace lumiera {
           lumiera_error_set(LERR_(LIFE_AND_UNIVERSE), "what is the answer?");
           CHECK (lumiera_error_peek());
           
-          catcher (&test::detectErrorflag, "");
-          CHECK (LERR_(LIFE_AND_UNIVERSE) == lumiera_error_peek());
-          
-          catcher (&test::detectErrorflagChained, "the big bang");
-          CHECK (LERR_(LIFE_AND_UNIVERSE) == lumiera_error());
-        }
+          catcher (&test::detectErrorflag);
+          CHECK (not lumiera_error_peek());
+        }// yet translating that into an exception also clears the error flag
         
         
         /** @test the chaining of lumiera::Exception objects
@@ -197,18 +167,6 @@ namespace lumiera {
           
           CHECK (err5.rootCause() == rerr.what());
           CHECK (err6.rootCause() == rerr.what());
-        }
-        
-        
-        /** @test terminate the Application by throwing an undeclared exception.
-         *        this should result in the global unknown() handler to be called,
-         *        so usually it will terminate the test run.
-         *  @note inside error.hpp, an initialisation hook has been installed into
-         *        AppState, causing our own unknown() handler to be installed and
-         *        invoked, which gives additional diagnostics.*/
-        void terminateUnknown ()  noexcept
-        {
-          throw Error{"Catch the hedgehog..."};
         }
         
         
@@ -238,7 +196,7 @@ namespace lumiera {
         /** helper: provides a bunch of catch-clauses and
          *  runs the given member functions within
          */
-        void catcher (void (ExceptionError_test::*funky)(string), string context)
+        void catcher (void (ExceptionError_test::*funky)(string), string context ="")
         {
           try
             {

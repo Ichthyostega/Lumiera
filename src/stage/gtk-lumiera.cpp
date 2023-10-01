@@ -154,10 +154,12 @@ namespace stage {
       }
     catch(...)
       {
-        if (!lumiera_error_peek())
-          LUMIERA_ERROR_SET (stage, STATE, "unexpected error when starting the GUI thread");
+        const char* errID = lumiera_error(); // clear C-style error flag
+        WARN (stage, "Unexpected error while starting the GUI thread.");
+        if (errID)
+          TRACE (stage, "Error flag was: %s", errID);
         return false;
-      }           // note: lumiera_error state remains set
+      }
   }
 
 } // namespace stage

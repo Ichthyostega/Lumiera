@@ -213,6 +213,8 @@ namespace lib {
     catch (lumiera::Error & ex)
       {
         WARN (progress, "Exception while closing AllocationCluster: %s", ex.what());
+        const char* errID = lumiera_error();
+        TRACE (debugging, "Error flag was: %s", errID);
       }
     catch (...)
       {

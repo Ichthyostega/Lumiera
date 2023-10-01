@@ -96,16 +96,13 @@ namespace lumiera {
   
   
   
-  /** @note we set the C-style errorstate as a side effect */
   Error::Error (string description, lumiera_err const id)  noexcept
     : std::exception{}
     , id_{id}
     , msg_{error::default_usermsg (this)}
     , desc_{description}
     , cause_{}
-    {
-      lumiera_error_set (this->id_, description.c_str());
-    }
+    { }
   
   
   Error::Error (std::exception const& cause, 
@@ -117,7 +114,6 @@ namespace lumiera {
     , cause_{extractCauseMsg(cause)}
     {
       string detailInfo{description + (isnil(cause_)? "" : " | cause = "+cause_)};
-      lumiera_error_set (this->id_, detailInfo.c_str());
     }
   
   

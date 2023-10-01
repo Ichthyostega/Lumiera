@@ -2,7 +2,7 @@ TESTING "Exception handling and diagnostics" ./test-suite --group=common
 
 
 
-TEST "ExceptionError_test" ExceptionError_test <<END
+TEST "Exceptions and Error flags" ExceptionError_test <<END
 out: caught: LUMIERA_ERROR_LIFE_AND_UNIVERSE:and everything\? \(don't panic\)...the answer is: 42
 out: caught lumiera::Error: LUMIERA_ERROR_DERIVED:convoluted exception
 out: caught error::Logic: LUMIERA_ERROR_FATAL:floundered \(test-2\).
@@ -16,7 +16,6 @@ out: intermediate handler caught: LUMIERA_ERROR_EXTERNAL:failure in external ser
 out: 2nd intermediate handler caught: LUMIERA_ERROR_STATE:unforeseen state -- caused by: LUMIERA_ERROR_EXTERNAL:failure in external service \(test-8\).....will rethrow as error::Config
 out: caught error::Invalid: LUMIERA_ERROR_CONFIG:misconfiguration -- caused by: LUMIERA_ERROR_EXTERNAL:failure in external service \(test-8\)\.
 out: caught lumiera::Error: LUMIERA_ERROR_LIFE_AND_UNIVERSE:and everything\? \(what is the answer\?\)\.
-out: caught error::Logic: LUMIERA_ERROR_LOGIC:internal logic broken \(the big bang\). -- caused by: LUMIERA_ERROR_LIFE_AND_UNIVERSE:and everything\? \(what is the answer\?\)\.
 return: 0
 END
 

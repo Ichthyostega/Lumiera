@@ -242,7 +242,7 @@ namespace lumiera {
       {
         throw error::Flag( error::detailInfo()
                          , errorFlag);
-  }   }                  //causes the error state to be set
+  }   }
   
   /** Check the lumiera error state and throw a specific exception
    *  in case a non-cleared errorflag is detected. No-op else.
