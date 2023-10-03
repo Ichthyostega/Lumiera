@@ -163,7 +163,7 @@ namespace test {
           double time_sleepWait_4  = performanceTest<MonitorSync,  4>();
           double time_sleepWait_2  = performanceTest<MonitorSync,  2>();
           
-          cout<<"\n___Microbenchmark_______"
+          cout<<"\n___Microbenchmark_______  (µs)"
               <<"\nemptySetup             : "<<time_emptySetup
               <<"\n                       : "
               <<"\nSyncBarrier (2 Thr)    : "<<time_yieldWait_2
@@ -179,7 +179,7 @@ namespace test {
               <<"\nMonitorWait (4 Thr)    : "<<time_sleepWait_4
               <<"\nMonitorWait (8 Thr)    : "<<time_sleepWait_8
               <<"\nMonitorWait (16 Thr)   : "<<time_sleepWait_16
-              <<"\n_____________________\n"
+              <<"\n________________________\n"
               <<"\nbarriers..... "<<NUM_STAGES
               <<endl;
           

@@ -309,7 +309,7 @@ namespace lib {
        * push new entry at the end of this container
        * and build object of type TY in place there
        */
-      template<class TY, typename...ARGS>
+      template<class TY =I, typename...ARGS>
       TY&
       emplace (ARGS&& ...args)
         {

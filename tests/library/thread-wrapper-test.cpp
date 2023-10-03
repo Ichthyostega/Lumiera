@@ -124,7 +124,7 @@ namespace test{
                                       {
                                         uint x = rand() % 1000;
                                         globalSum += (i + x);
-                                        threads.emplace<TestThread> (&TestThread::doIt, i, x);
+                                        threads.emplace (&TestThread::doIt, i, x);
                                       }                            // Note: bind to member function, copying arguments
                                     
                                     while (explore(threads).has_any())

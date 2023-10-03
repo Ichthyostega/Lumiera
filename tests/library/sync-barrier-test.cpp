@@ -28,15 +28,13 @@
 #include "lib/test/run.hpp"
 #include "lib/sync-barrier.hpp"
 #include "lib/iter-explorer.hpp"
-#include "lib/util-foreach.hpp"
+#include "lib/thread.hpp"
 
 #include <chrono>
-#include <thread>
 #include <atomic>
 #include <array>
 
 using test::Test;
-using util::and_all;
 using lib::explore;
 using std::array;
 
@@ -66,11 +64,12 @@ namespace test {
      * - book in the compound sum plus a further random number
      */
     class TestThread
-      : std::thread  ////////////////////////////////////////////////////////////////////OOO TOD-oh
+      : public lib::Thread
       {
         public:
           TestThread()
-            : thread{[&]()
+            : Thread{"Load Test"
+                    ,[&]()
                         {                                   //-STAGE-1------------------------------
                           localSum = rand() % 1000;         // generate local value
                           stage1.fetch_add (localSum);      // book in local value
@@ -83,12 +82,10 @@ namespace test {
                           afterThread.sync();               // wait for other threads and supervisor
                           
                           finish.fetch_add(1);              // mark completion of this thread
-                          thread::detach(); //////////////////////////////////////////////OOO Wech-oh
                         }}
             { }
           
           uint localSum; // *deliberately* not initialised to avoid race
-          bool isRunning()  const { return thread::joinable(); }   ///////////////////////OOO Wack-oh
       };
     
     
@@ -123,7 +120,7 @@ namespace test {
           array<TestThread,NUM_THREADS> threads;
           
           CHECK (0 == finish);
-          CHECK (and_all (threads, [](auto& t){ return t.isRunning(); }));
+          CHECK (explore(threads).and_all());
           
           afterThread.sync();
           sleep_for (5ms); // give the threads a chance to terminate

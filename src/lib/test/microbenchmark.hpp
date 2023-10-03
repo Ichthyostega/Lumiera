@@ -55,12 +55,11 @@
 
 
 #include "lib/meta/function.hpp"
-//#include "vault/thread-wrapper.hpp"  /////////////////////////////////////////////OOO wieder ThreadJoinable verwenden
-#include "lib/sync-barrier.hpp"        ///TODO
-#include <thread>                      ///TODO
+#include "lib/scoped-collection.hpp"
+#include "lib/sync-barrier.hpp"
+#include "lib/thread.hpp"
 
 #include <chrono>
-#include <vector>
 
 
 
@@ -161,20 +160,18 @@ namespace test{
     ASSERT_VALID_SIGNATURE (decltype(subject), size_t(size_t));
     
     struct Thread
-//    : ThreadJoinable
-      : std::thread
+      : lib::ThreadJoinable<>
       {
         Thread(FUN const& testSubject, size_t loopCnt, SyncBarrier& testStart)
-//        : ThreadJoinable("Micro-Benchmark"   ///////////////////////////////////////////////////////////OOO wieder Lumiera Thread-Wrapper verwenden #1279
-          : std::thread(
-                           [=, &testStart]()       // local copy of the test-subject-Functor
+          : ThreadJoinable{"Micro-Benchmark"
+                          ,[=, &testStart]()       // local copy of the test-subject-Functor
                              {
                                testStart.sync();   // block until all threads are ready
                                auto start = system_clock::now();
                                for (size_t i=0; i < loopCnt; ++i)
                                  checksum += testSubject(i);
                                duration = system_clock::now () - start;
-                             })
+                             }}
           { }
                              // Note: barrier at begin and join at end both ensure data synchronisation
         Dur duration{};      // measured time within thread
@@ -182,10 +179,9 @@ namespace test{
       };
     
     SyncBarrier testStart{nThreads + 1};           // coordinated start of timing measurement
-    std::vector<Thread> threads;
-    threads.reserve(nThreads);
+    lib::ScopedCollection<Thread> threads(nThreads);
     for (size_t n=0; n<nThreads; ++n)              // create test threads
-      threads.emplace_back (subject, repeatCnt, testStart);
+      threads.emplace (subject, repeatCnt, testStart);
 
     testStart.sync();                              // barrier until all threads are ready
     
