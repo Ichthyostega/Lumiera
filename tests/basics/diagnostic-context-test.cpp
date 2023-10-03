@@ -28,11 +28,16 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 
-#include "vault/thread-wrapper.hpp"
 #include "lib/diagnostic-context.hpp"
+#include "lib/thread.hpp"
 
-#include <cstdlib>
 #include <vector>
+#include <chrono>
+#include <array>
+
+using std::this_thread::sleep_for;
+using std::chrono_literals::operator ""us;
+
 
 
 
@@ -47,20 +52,15 @@ namespace test{
     const uint NUM_THREADS = 75;
     const uint MAX_RAND    = 100*1000;
     
-    inline bool
-    isOdd (uint val)
-    {
-      return bool (val % 2);
-    }
+    auto isOdd = [](auto val) { return bool (val % 2); };
     
   } // (End) test setup....
   
-  using vault::ThreadJoinable;
-  using error::LERR_(LOGIC);
+  using lib::ThreadJoinable;
   using std::rand;
   
   
-  /** 
+  /**
    * Subject of this test:
    * a thread-local stack of int values
    */
@@ -77,13 +77,11 @@ namespace test{
    *       DiagnosticContext frames are placed into automatic storage (as local
    *       variable within some function scope). Based on thread-local storage,
    *       the next reachable frame can be accessed from anywhere within
-   *       the callstack. This feature is useful for collecting 
+   *       the callstack. This feature is useful for collecting
    *       information regarding features cross-cutting
    *       the usual dependency hierarchy.
-   * 
    * @see lib::DiagnosticContext
-   * @see lib::ThreadLocal
-   * @see vault::Thread
+   * @see lib::ThreadJoinable
    */
   class DiagnosticContext_test : public Test
     {
@@ -112,7 +110,7 @@ namespace test{
           CHECK (0 == zero);
           CHECK (0 == Marker::access());
           
-          { // nested scope 
+          { // nested scope
             CHECK (0 == Marker::access());
             
             Marker one(1);
@@ -157,43 +155,48 @@ namespace test{
        *          we frequently got aborts even with 40 threads.
        *          This is surprising, since all of the lists
        *          generated in the individual threads are
-       *          of size below 20 elements. 
+       *          of size below 20 elements.
        */
       void
       verify_heavilyParallelUsage()
         {
-          TestThread testcase[NUM_THREADS]    SIDEEFFECT;
+          auto verifyResult = [](VecI sequence)
+                               {
+                                  uint prev = 0;
+                                  for (uint val : sequence)
+                                    {
+                                      CHECK (isOdd(val) and val > prev);
+                                      prev = val;
+                                    }
+                               };
           
+          std::array<TestThread, NUM_THREADS> testcase;
+
           for (uint i=0; i < NUM_THREADS; ++i)
-            testcase[i].join();
-//          CHECK (testcase[i].join().isValid() );   ////////////////////////////////////////////OOO need a way to pass the verification-Result. Maybe a Future?
+            verifyResult (testcase[i].join());
         }
       
       
+      /** build a call stack within separate thread and capture diagnostics */
       struct TestThread
-        : ThreadJoinable
+        : ThreadJoinable<VecI>
         {
           TestThread()
-            : ThreadJoinable("test diagnostic context stack"
-                            ,verifyDiagnosticStack)
+            : ThreadJoinable("test context stack"
+                            ,&verifyDiagnosticStack)
             { }
         };
       
-        
-      /** the actual test operation running in a separate thread */
-      static void
+      
+      /** the actual test operation running in a separate thread
+       *  produces a descending number sequence, and only odd values
+       *  will be captured into the diagnostic stack
+       */
+      static VecI
       verifyDiagnosticStack()
         {
           uint seed (1 + rand() % MAX_RAND);
-          
-          VecI sequence = descend (seed);
-          
-          uint prev = 0;
-          for (uint val : sequence)
-            if (not (isOdd(val) and seed >= val and val > prev ))
-              throw error::Fatal ("thread-local diagnostic stack");
-            else
-              prev = val;
+          return descend (seed);
         }
       
       static VecI
@@ -202,7 +205,8 @@ namespace test{
           if (current < 2)
             return Marker::extractStack();
           
-          usleep (500);
+          sleep_for (500us);
+          
           if (isOdd(current))
             {
               Marker remember(current);
