@@ -163,8 +163,8 @@ namespace lib {
         /** detect if the currently executing code runs within this thread */
         bool invokedWithinThread()  const;
         
-        void markThreadStart();
-        void markThreadEnd  ();
+        void markThreadStart(string);
+        void markThreadEnd  (string);
         void setThreadName  ();
         void waitGracePeriod()  noexcept;
       };
@@ -268,9 +268,10 @@ namespace lib {
         void
         invokeThreadFunction (ARGS&& ...args)
           {
-            Policy::markThreadStart();
+            string id{Policy::threadID_}; // local copy
+            Policy::markThreadStart(id);
             Policy::perform_thread_function (forward<ARGS> (args)...);
-            Policy::markThreadEnd();
+            Policy::markThreadEnd(id);
             Policy::handle_end_of_thread();
           }
         
@@ -347,7 +348,10 @@ namespace lib {
       using ThreadLifecycle::ThreadLifecycle;
       
       /** allow to detach explicitly — independent from thread-function's state
-       * @warning ensure that thread function only uses storage within its own scope
+       * @warning this function is borderline dangerous; it might be acceptable
+       *          in a situation where the thread totally manages itself and the
+       *          thread object is maintained in a unique_ptr. You must ensure that
+       *          the thread function only uses storage within its own scope.
        */
       void detach() { ThreadLifecycle::handle_end_of_thread(); }
     };

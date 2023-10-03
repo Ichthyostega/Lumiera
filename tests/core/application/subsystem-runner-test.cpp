@@ -21,7 +21,9 @@
 * *****************************************************/
 
 /** @file subsystem-runner-test.cpp
- ** unit test \ref SubsystemRunner_test
+ ** The \ref SubsystemRunner_test performs various scenarios
+ ** regarding start, stop and failure of _Subsystems._ Its primary
+ ** purpose is to cover the \ref SubsystemRunner.
  */
 
 
@@ -32,22 +34,28 @@
 #include "common/option.hpp"
 
 #include "lib/symbol.hpp"
-#include "vault/thread-wrapper.hpp"
+#include "lib/thread.hpp"
+#include "lib/sync-barrier.hpp"
 #include "lib/query-util.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 #include "lib/sync.hpp"
 
-#include <functional>
+#include <memory>
+#include <atomic>
+#include <chrono>
 
-using std::bind;
 using util::isnil;
 using util::cStr;
 using test::Test;
 using lib::Literal;
 using lib::query::extractID;
-using vault::Thread;
+using lib::Thread;
+using std::unique_ptr;
+using std::atomic_bool;
+using std::this_thread::sleep_for;
+using std::chrono::milliseconds;
 
 
 namespace lumiera {
@@ -95,45 +103,48 @@ namespace test  {
       class MockSys
         : public lumiera::Subsys
         {
-          Literal id_;
+          const string id_;
           const string spec_;
           
-          volatile bool isUp_;
-          volatile bool didRun_;
-          volatile bool started_;
-          volatile bool termRequest_;
-          int running_duration_;
+          atomic_bool isUp_{false};
+          atomic_bool didRun_{false};
+          atomic_bool started_{false};
+          atomic_bool termRequest_{false};
+          int running_duration_{0};
           
+          lib::SyncBarrier barrier_{};
+          unique_ptr<Thread> thread_{};
           
           bool
           shouldStart (lumiera::Option&)  override
             {
               string startSpec (extractID ("start",spec_));
               return "true" ==startSpec 
-                  || "fail" ==startSpec
-                  || "throw"==startSpec;
+                  or "fail" ==startSpec
+                  or "throw"==startSpec;
             }
           
           
           bool
           start (lumiera::Option&, Subsys::SigTerm termination)  override
             {
-              CHECK (!(isUp_|started_|didRun_), "attempt to start %s twice!", cStr(*this));
+              CHECK (not (isUp_ or started_ or didRun_), "attempt to start %s twice!", cStr(*this));
               
               string startSpec (extractID ("start",spec_));
-              CHECK (!isnil (startSpec));
+              CHECK (not isnil (startSpec));
               
               if ("true"==startSpec) //----simulate successful subsystem start
                 {
-                  CHECK (!started_);
+                  CHECK (not started_);
                    
-                  Thread (id_, bind (&MockSys::run, this, termination))
-                        .sync();     // run-status handshake
+                  // start »Subsystem operation« in a dedicated thread....
+                  thread_.reset (new Thread{id_, &MockSys::run, this, termination});
+                  barrier_.sync();    //---run-status handshake
                   
                   CHECK (started_);
                 }
               else
-              if ("fail"==startSpec) //----not starting, incorrectly reporting success
+              if ("fail"==startSpec)  //---not starting, incorrectly reporting success
                 return true;
               else
               if ("throw"==startSpec) //---starting flounders
@@ -171,13 +182,15 @@ namespace test  {
           run (Subsys::SigTerm termination)
             {
               string runSpec (extractID ("run",spec_));
-              CHECK (!isnil (runSpec));
+              CHECK (not isnil (runSpec));
               
               // run-status handshake
               started_ = true;
               isUp_    = ("true"==runSpec || "throw"==runSpec);
               didRun_  = ("false"!=runSpec); // includes "fail" and "throw"
-              lumiera_thread_sync ();
+              
+              // coordinate startup with controlling thread
+              barrier_.sync();
               
               if (isUp_) //-------------actually enter running state for some time
                 {
@@ -186,9 +199,9 @@ namespace test  {
                   
                   INFO (test, "thread %s now running....", cStr(*this));
                   
-                  while (!shouldTerminate())
+                  while (not shouldTerminate())
                     {
-                      usleep (1000*TICK_DURATION_ms);
+                      sleep_for (milliseconds{TICK_DURATION_ms});
                       running_duration_ -= TICK_DURATION_ms;
                     }
                   
@@ -221,16 +234,11 @@ namespace test  {
           
         public:
           MockSys(Literal id, Literal spec)
-            : id_(id),
-              spec_(spec),
-              isUp_(false),
-              didRun_(false),
-              started_(false),
-              termRequest_(false),
-              running_duration_(0)
+            : id_(id)
+            , spec_(spec)
             { }
           
-          ~MockSys() { }
+         ~MockSys() { }
           
           operator string ()  const { return "MockSys(\""+id_+"\")"; }
           
@@ -284,14 +292,14 @@ namespace test  {
             
             MockSys unit ("one", "start(true), run(true).");
             SubsystemRunner runner(dummyOpt);
-            CHECK (!unit.isRunning());
-            CHECK (!unit.didRun());
+            CHECK (not unit.isRunning());
+            CHECK (not unit.didRun());
             
             runner.maybeRun (unit);
             bool emergency = runner.wait();
             
-            CHECK (!emergency);
-            CHECK (!unit.isRunning());
+            CHECK (not emergency);
+            CHECK (not unit.isRunning());
             CHECK (unit.didRun());
           }
         
@@ -317,22 +325,23 @@ namespace test  {
             SubsystemRunner runner(dummyOpt);
             
             runner.maybeRun (unit1);  // this one doesn't start at all, which isn't considered an error
+            CHECK (not unit1.didRun());
             
             VERIFY_ERROR (TEST,  runner.maybeRun (unit2) );
             VERIFY_ERROR (LOGIC, runner.maybeRun (unit3) );     // incorrect behaviour trapped
             VERIFY_ERROR (LOGIC, runner.maybeRun (unit4) );     // detected that the subsystem didn't come up
             
-            usleep (DELAY_FOR_FLOUNDERING_THRAD_ms * 1000);     // preempt to allow unit4 to go away
+            sleep_for (milliseconds{DELAY_FOR_FLOUNDERING_THRAD_ms}); // preempt to allow unit4 to go away
             runner.wait();
             
-            CHECK (!unit1.isRunning());
-            CHECK (!unit2.isRunning());
-            CHECK (!unit3.isRunning());
-            CHECK (!unit4.isRunning());
-            CHECK (!unit1.didRun());
-            CHECK (!unit2.didRun());
-            CHECK (!unit3.didRun());
-            CHECK ( unit4.didRun()); // ...but it failed immediately
+            CHECK (not unit1.isRunning());
+            CHECK (not unit2.isRunning());
+            CHECK (not unit3.isRunning());
+            CHECK (not unit4.isRunning());
+            CHECK (not unit1.didRun());
+            CHECK (not unit2.didRun());
+            CHECK (not unit3.didRun());
+            CHECK (unit4.didRun()); // ...but it failed immediately
           }
         
         
@@ -347,8 +356,8 @@ namespace test  {
             runner.maybeRun (unit);
             bool emergency = runner.wait();
             
-            CHECK (emergency);      // emergency state got propagated
-            CHECK (!unit.isRunning());
+            CHECK (emergency == true);  // emergency state was propagated
+            CHECK (not unit.isRunning());
             CHECK (unit.didRun());
           }
         
@@ -376,11 +385,11 @@ namespace test  {
             
             bool emergency = runner.wait();
             
-            CHECK (!emergency);
-            CHECK (!unit1.isRunning());
-            CHECK (!unit2.isRunning());
-            CHECK (!unit3.isRunning());
-            CHECK (!unit4.isRunning());
+            CHECK (not emergency);
+            CHECK (not unit1.isRunning());
+            CHECK (not unit2.isRunning());
+            CHECK (not unit3.isRunning());
+            CHECK (not unit4.isRunning());
             CHECK (unit1.didRun());
             CHECK (unit2.didRun());
             CHECK (unit3.didRun());
@@ -404,21 +413,21 @@ namespace test  {
             SubsystemRunner runner(dummyOpt);
             
             VERIFY_ERROR (STATE, runner.maybeRun (unit4) );   // failure to bring up prerequisites is detected
-            CHECK ( unit1.isRunning());
-            CHECK ( unit2.isRunning());
-            CHECK (!unit3.isRunning());
+            CHECK (    unit1.isRunning());
+            CHECK (    unit2.isRunning());
+            CHECK (not unit3.isRunning());
             // shutdown has been triggered for unit4, but may require some time
             
             bool emergency = runner.wait();
             
-            CHECK (!emergency);     // no problems with the subsystems actually running...
-            CHECK (!unit1.isRunning());
-            CHECK (!unit2.isRunning());
-            CHECK (!unit3.isRunning());
-            CHECK (!unit4.isRunning());
-            CHECK ( unit1.didRun());
-            CHECK ( unit2.didRun());
-            CHECK (!unit3.didRun());
+            CHECK (not emergency);     // no problems with the subsystems actually running...
+            CHECK (not unit1.isRunning());
+            CHECK (not unit2.isRunning());
+            CHECK (not unit3.isRunning());
+            CHECK (not unit4.isRunning());
+            CHECK (    unit1.didRun());
+            CHECK (    unit2.didRun());
+            CHECK (not unit3.didRun());
             // can't say for sure if unit4 actually did run
           }
       };
