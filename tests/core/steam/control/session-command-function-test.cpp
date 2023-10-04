@@ -69,7 +69,7 @@
  ** verify the checksum before all command instances have been triggered. To avoid this
  ** situation, make sure the delay between actions in the threads is not too long and
  ** start a sufficiently high number of producer threads.
- ** 
+ **
  */
 
 
@@ -88,7 +88,6 @@ extern "C" {
 #include "lib/thread.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
-#include "lib/test/diagnostic-output.hpp"////////////////////TODO
 
 #include <boost/lexical_cast.hpp>
 #include <chrono>
@@ -216,7 +215,7 @@ namespace test    {
         }
       //-------------(End)FIXTURE
       
-     
+      
       virtual void
       run (Arg args_for_stresstest)
         {

@@ -27,13 +27,13 @@
 
 #include "lib/test/run.hpp"
 #include "lib/scoped-collection.hpp"
-#include "vault/thread-wrapper.hpp"
+#include "lib/sync-barrier.hpp"
+#include "lib/thread.hpp"
 #include "lib/sync.hpp"
 #include "lib/util.hpp"
 
 #include "lib/call-queue.hpp"
 
-#include <functional>
 #include <string>
 
 
@@ -42,11 +42,11 @@ namespace lib {
 namespace test{
   
   using lib::Sync;
-  using vault::ThreadJoinable;
+  using lib::SyncBarrier;
+  using lib::ThreadJoinable;
   
   using util::isnil;
   using std::string;
-  using std::bind;
   
   
   
@@ -103,8 +103,7 @@ namespace test{
    * @test verify a helper component for dispatching functors through a threadsafe queue.
    *       - simple usage
    *       - enqueue and dequeue several functors
-   *       - multithreaded stress test
-   *       
+   *       - multithreaded load test
    * @see lib::CallQueue
    * @see stage::NotificationService usage example
    * @see [DemoGuiRoundtrip](http://issues.lumiera.org/ticket/1099 "Ticket #1099")
@@ -181,11 +180,13 @@ namespace test{
       
       
       struct Worker
-        : ThreadJoinable
+        : ThreadJoinable<>
         , Sync<>
         {
           uint64_t producerSum = 0;
           uint64_t consumerSum = 0;
+          
+          SyncBarrier& trigger_;
           
           void
           countConsumerCall (uint increment)
@@ -194,13 +195,13 @@ namespace test{
               consumerSum += increment;
             }
           
-          Worker(CallQueue& queue)
+          Worker(CallQueue& queue, SyncBarrier& commonTrigger)
             : ThreadJoinable{"CallQueue_test: concurrent dispatch"
                             , [&]() {
                                 uint cnt    = rand() % MAX_RAND_STEPS;
                                 uint delay  = rand() % MAX_RAND_DELAY;
                                 
-                                syncPoint();               // block until all threads are ready
+                                trigger_.sync();            // block until all threads are ready
                                 for (uint i=0; i<cnt; ++i)
                                   {
                                     uint increment = rand() % MAX_RAND_INCMT;
@@ -210,6 +211,7 @@ namespace test{
                                     queue.invoke();  // NOTE: dequeue one functor added during our sleep
                                   }                 //        and thus belonging to some random other thread
                             }}
+            , trigger_{commonTrigger}
             { }
         };
       
@@ -226,22 +228,24 @@ namespace test{
       verify_ThreadSafety()
         {
           CallQueue queue;
+          SyncBarrier trigger{NUM_OF_THREADS + 1};
           
           // Start a bunch of threads with random access pattern
           Workers workers{NUM_OF_THREADS,
                           [&](Workers::ElementHolder& storage)
                             {
-                              storage.create<Worker>(queue);
+                              storage.create<Worker> (queue, trigger);
                             }
                          };
           
           // unleash all worker functions
-          for (auto& thread : workers)
-            thread.sync();
+          trigger.sync();
           
-          // wait for termination of all threads
+          // wait for termination of all threads and detect possible exceptions
+          bool allFine{true};
           for (auto& worker : workers)
-            worker.join();
+            allFine &= worker.join().isValid();
+          CHECK (allFine);
           
           // collect the results of all worker threads
           uint64_t globalProducerSum = 0;
