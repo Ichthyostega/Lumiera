@@ -224,8 +224,8 @@ namespace test    {
           lumiera::throwOnError();
           
           startDispatcher();
-//          perform_simpleInvocation();
-//          perform_messageInvocation();
+          perform_simpleInvocation();
+          perform_messageInvocation();
           perform_massivelyParallel(args_for_stresstest);
           stopDispatcher();
           

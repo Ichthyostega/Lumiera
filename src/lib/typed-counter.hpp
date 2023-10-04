@@ -219,8 +219,8 @@ namespace lib {
       /** threadsafe allocation of member ID */
       static size_t
       allocateNextMember()
-        {
-          return 1 + memberCounter.fetch_add(+1, std::memory_order_relaxed);
+        {                       // Note : returning previous value before increment
+          return memberCounter.fetch_add(+1, std::memory_order_relaxed);
         }
       
     public:

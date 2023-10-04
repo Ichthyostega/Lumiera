@@ -238,7 +238,7 @@ namespace test {
                           .dismissAfter(5)};
           
           wof.incScale();
-          sleep_for(50us);
+          sleep_for(100us);
           
           CHECK (1 == check);
           
