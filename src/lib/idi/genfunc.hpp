@@ -128,6 +128,9 @@ namespace idi {
   }
   
   
+  TypedCounter& sharedInstanceCounter();
+  
+  
   /** build a per-type identifier, with type prefix and running counter.
    * @return a type based prefix, followed by an instance number
    * @note we use the short prefix without namespace, not necessarily unique
@@ -141,8 +144,7 @@ namespace idi {
   inline string
   generateSymbolicID()
   {
-    static TypedCounter instanceCounter;
-    return format::instance_format (namePrefix<TY>(), instanceCounter.inc<TY>());
+    return format::instance_format (namePrefix<TY>(), sharedInstanceCounter().inc<TY>());
   }
   
   /** build a long type based identifier, with running counter and custom prefix.
@@ -156,8 +158,7 @@ namespace idi {
   inline string
   generateExtendedID(string prefix ="")
   {
-    static TypedCounter instanceCounter;
-    return format::instance_format (prefix + typeFullID<TY>(), instanceCounter.inc<TY>());
+    return format::instance_format (prefix + typeFullID<TY>(), sharedInstanceCounter().inc<TY>());
   }
   
   /**

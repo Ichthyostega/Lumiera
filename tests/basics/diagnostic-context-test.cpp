@@ -57,6 +57,7 @@ namespace test{
   } // (End) test setup....
   
   using lib::ThreadJoinable;
+  using error::LERR_(LOGIC);
   using std::rand;
   
   

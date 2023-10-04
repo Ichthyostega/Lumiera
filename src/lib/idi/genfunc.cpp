@@ -62,5 +62,11 @@ namespace idi {
   } //(End)integration helpers...
   
   
+  TypedCounter&
+  sharedInstanceCounter()
+  {        // Meyer's Singleton
+    static TypedCounter instanceCounter;
+    return instanceCounter;
+  }
   
 }} // namespace lib::idi
