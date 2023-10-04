@@ -27,9 +27,9 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/thread.hpp"
 #include "lib/sync.hpp"
 #include "lib/sync-classlock.hpp"
-#include "vault/thread-wrapper.hpp"
 #include "include/ui-protocol.hpp"
 #include "stage/ctrl/bus-term.hpp"
 #include "stage/ctrl/state-manager.hpp"
@@ -54,7 +54,7 @@ using boost::lexical_cast;
 
 using lib::Sync;
 using lib::ClassLock;
-using vault::ThreadJoinable;
+using lib::ThreadJoinable;
 using lib::iter_stl::dischargeToSnapshot;
 using lib::IterQueue;
 using lib::IterStack;
@@ -546,10 +546,10 @@ namespace test {
       
       
       /**
-       * @test integration test of mutation by diff message
+       * @test integration test of mutation by diff message.
        *  Since this test focuses on the bus side of standard interactions,
-       *  it seems indicated to emulate the complete invocation situation,
-       *  which involves passing thread boundraries. The main thread running
+       *  it seems indicated to simulate the complete invocation situation,
+       *  which involves passing thread boundaries. The main thread running
        *  this test shall enact the role of the UI event thread (since the
        *  UI-Bus in the real application is confined to this UI thread).
        *  Thus we'll start another thread to enact the role of the Session,
@@ -566,7 +566,7 @@ namespace test {
           
           struct SessionThread
             : Sync<>
-            , ThreadJoinable
+            , ThreadJoinable<>
             {
               // shared data
               uint64_t borgChecksum_ = 0;
@@ -663,21 +663,22 @@ namespace test {
               
                 
               /**
-               * launch the Session Thread and start injecting Borg
+               * launch the Session Thread and start injecting Borgs
                */
               SessionThread(function<void(DiffSource*)> notifyGUI)
                 : ThreadJoinable{"BusTerm_test: asynchronous diff mutation"
-                                , [=]() {
-                                    uint cnt       = rand() % MAX_RAND_BORGS;
-                                    for (uint i=0; i<cnt; ++i)
-                                      {
-                                        uint delay = rand() % MAX_RAND_DELAY;
-                                        uint id    = rand() % MAX_RAND_NUMBS;
-                                        usleep (delay);
-                                        scheduleBorg (id);
-                                        notifyGUI (new BorgGenerator{*this, i});
-                                      }
-                                }}
+                                , [=]
+                                    {
+                                      uint cnt       = rand() % MAX_RAND_BORGS;
+                                      for (uint i=0; i<cnt; ++i)
+                                        {
+                                          uint delay = rand() % MAX_RAND_DELAY;
+                                          uint id    = rand() % MAX_RAND_NUMBS;
+                                          usleep (delay);
+                                          scheduleBorg (id);
+                                          notifyGUI (new BorgGenerator{*this, i});
+                                        }
+                                    }}
                 { }
             };
           
@@ -685,6 +686,8 @@ namespace test {
           
           EventLog nexusLog = stage::test::Nexus::startNewLog();
           
+          // the simulated »GUI model«
+          //    — to be infested by hosts of Borg sent via Diff-Message...
           MockElm rootMock("alpha zero");
           ID rootID = rootMock.getID();
           

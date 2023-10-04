@@ -120,7 +120,7 @@ namespace diff{
   /**
    * Opaque message to effect a structural change on a target, which is
    * likewise only known in an abstract way, as being specifically structured.
-   * Sending such messages typically allows some _implemention defined_ part within
+   * Sending such messages typically allows some _implementation defined_ part within
    * the Session to communicate structure and content to some other _implementation defined_
    * part within the UI-Layer, without the necessity of both partners to be tightly coupled on
    * implementation level or even know much about the other's implementation details. As motivation,
