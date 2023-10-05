@@ -29,9 +29,9 @@
 #include "steam/play/play-service.hpp"
 #include "steam/play/output-manager.hpp"
 #include "steam/play/output-director.hpp"
-#include "vault/thread-wrapper.hpp"
+#include "lib/thread.hpp"
 
-using vault::Thread;
+using lib::Thread;
 
 
 namespace steam {
@@ -102,10 +102,11 @@ namespace play {
     if (not shutdown_initiated_)
       {
         shutdown_initiated_ = true;
-        Thread ("Output shutdown supervisor",
-                [=]{
-                     bringDown (completedSignal);
-                   });
+        Thread{"Output shutdown supervisor"
+              ,[=]{
+                    bringDown (completedSignal);
+                  }}
+              .detach();
       }
   }
   
