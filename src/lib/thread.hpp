@@ -352,6 +352,8 @@ namespace lib {
        *          in a situation where the thread totally manages itself and the
        *          thread object is maintained in a unique_ptr. You must ensure that
        *          the thread function only uses storage within its own scope.
+       * @deprecated can't sleep well while this function is exposed;
+       *          need a prime solution to address this relevant use case ////////////////////////////////////////OOO allow for a thread with explicit lifecycle
        */
       void detach() { ThreadLifecycle::handle_end_of_thread(); }
     };

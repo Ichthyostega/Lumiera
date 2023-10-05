@@ -263,7 +263,7 @@ namespace control {
             }
            // leave the Session thread...
           //  send notification of subsystem shutdown
-          thread_.detach();
+          thread_.detach();/////////////////////////////////////////////////////////////OOO while this case is exceptional, it still mandates better framework support
           notifyEnd (&errorMsg); // invokes ~DispatcherLoop()
         }
       

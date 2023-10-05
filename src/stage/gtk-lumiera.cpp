@@ -149,7 +149,7 @@ namespace stage {
   {
     try
       {
-        Thread {"GUI-Main", bind (&runGUI, terminationHandle)};
+        Thread {"GUI-Main", bind (&runGUI, terminationHandle)}; ///////////////////////////////////////////OOO this shows we need a self-contained and detached thread!
         return true; // if we reach this line...
       }
     catch(...)

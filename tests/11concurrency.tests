@@ -42,6 +42,16 @@ return: 0
 END
 
 
+PLANNED "Launch self-contained detached Thread" ThreadWrapperAutonomous_test  <<END
+return: 0
+END
+
+
+PLANNED "Detect Thread lifecycle state changes" ThreadWrapperLifecycle_test  <<END
+return: 0
+END
+
+
 TEST "Detect running in specific Thread" ThreadWrapperSelfRecognitionTest_test  <<END
 return: 0
 END
