@@ -39,7 +39,7 @@
 
 
 #include "lib/error.hpp"
-#include "vault/thread-wrapper.hpp"
+#include "lib/thread.hpp"
 
 #include <unistd.h>   // for usleep()
 
@@ -60,7 +60,7 @@ namespace node {
    * with adjustable frequency. Quick'n dirty implementation!
    */
   class TickService
-    : vault::ThreadJoinable
+    : lib::ThreadJoinable<>
     {
       typedef function<void(void)> Tick;
       volatile uint timespan_;
