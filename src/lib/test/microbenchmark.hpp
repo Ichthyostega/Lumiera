@@ -68,7 +68,7 @@ namespace test{
   
   namespace {
     constexpr size_t DEFAULT_RUNS = 10'000'000;
-    constexpr double SCALE = 1e6;            // Results are in µ-sec
+    using CLOCK_SCALE = std::micro;          // Results are in µ-sec
   }
   
   
@@ -83,12 +83,12 @@ namespace test{
   benchmarkTime (FUN const& invokeTestLoop, const size_t repeatCnt = DEFAULT_RUNS)
   {
     using std::chrono::system_clock;
-    using Dur = std::chrono::duration<double>;
+    using Dur = std::chrono::duration<double, CLOCK_SCALE>;
     
     auto start = system_clock::now();
     invokeTestLoop();
     Dur duration = system_clock::now () - start;
-    return duration.count()/(repeatCnt) * SCALE;
+    return duration.count()/(repeatCnt);
   };
   
   
@@ -154,7 +154,7 @@ namespace test{
   threadBenchmark(FUN const& subject, const size_t repeatCnt = DEFAULT_RUNS)
   {
     using std::chrono::system_clock;
-    using Dur = std::chrono::duration<double>;
+    using Dur = std::chrono::duration<double, CLOCK_SCALE>;
     
     // the test subject gets the current loop-index and returns a checksum value
     ASSERT_VALID_SIGNATURE (decltype(subject), size_t(size_t));
@@ -194,7 +194,7 @@ namespace test{
         checksum    += thread.checksum;
       }
     
-    double micros = sumDuration.count() / (nThreads * repeatCnt) * SCALE;
+    double micros = sumDuration.count() / (nThreads * repeatCnt);
     return std::make_tuple (micros, checksum);
   }
   

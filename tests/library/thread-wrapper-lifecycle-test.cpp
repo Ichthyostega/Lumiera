@@ -30,6 +30,7 @@
 #include "lib/iter-explorer.hpp"
 #include "lib/scoped-collection.hpp"
 #include "lib/test/microbenchmark.hpp"
+#include "lib/test/diagnostic-output.hpp"
 
 #include <atomic>
 #include <chrono>
@@ -40,6 +41,7 @@ using std::atomic_uint;
 using std::this_thread::yield;
 using std::this_thread::sleep_for;
 using std::chrono::microseconds;
+using std::chrono::system_clock;
 
 
 namespace lib {
@@ -49,6 +51,8 @@ namespace test{
       
       const uint NUM_THREADS = 200;
       const uint REPETITIONS = 10;
+      
+      using CLOCK_SCALE = std::micro; // Results are in µ-sec
     }
     
     
@@ -73,11 +77,19 @@ namespace test{
         void
         defaultWrapperLifecycle()
           {
-            atomic_uint i{0};
-            Thread thread("counter", [&]{ ++i; });     // bind a λ and launch thread
-            while (thread) yield();                    // ensure thread has finished and detached
+            using Dur = std::chrono::duration<double, CLOCK_SCALE>;
+            using Point = system_clock::time_point;
+            Point threadStart;
+            Point afterCtor;
+            Thread thread("lifecycle", [&]{
+                                            threadStart = system_clock::now();
+                                          });
+            afterCtor = system_clock::now();
+            while (thread) yield();
             
-            CHECK (i == 1);                            // verify the effect has taken place
+            double offset = Dur{threadStart - afterCtor}.count();
+SHOW_EXPR(offset)
+            CHECK (offset > 0);
             UNIMPLEMENTED ("demonstrate state change");
           }
         
