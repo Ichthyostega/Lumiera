@@ -90,6 +90,11 @@ namespace test{
             double offset = Dur{threadStart - afterCtor}.count();
 SHOW_EXPR(offset)
             CHECK (offset > 0);
+
+            Thread murks{Thread::ConfigBuilder([&]{
+                                                    cout << "Hello inner world "<<rand()%47<<endl;
+                                                  })
+                                .threadID("haha")};
             UNIMPLEMENTED ("demonstrate state change");
           }
         

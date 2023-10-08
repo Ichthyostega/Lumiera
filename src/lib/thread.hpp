@@ -107,7 +107,7 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "include/logging.h"
-#include "lib/meta/function.hpp"
+//#include "lib/builder-qualifier-support.hpp"//////////////////////////TODO
 #include "lib/format-util.hpp"
 #include "lib/result.hpp"
 
@@ -135,6 +135,20 @@ namespace lib {
     using std::is_same;
     using std::__or_;
     
+    ////////////////////////////////////////////////////////////////////////////////////////////////////OOO extract -> lib/meta
+    /**
+     * Metaprogramming helper to mark some arbitrary base type by subclassing.
+     * In most respects the _specially marked type_ behaves like the base; this
+     * can be used to mark some element at compile time, e.g. to direct it into
+     * a specialisation or let it pick some special overload.
+     */
+    template<class BAS, size_t m=0>
+    struct Marked
+      : BAS
+      {
+        using BAS::BAS;
+      };
+    ////////////////////////////////////////////////////////////////////////////////////////////////////OOO extract(End)
     /** @internal wraps the C++ thread handle
      *   and provides some implementation details,
      *   which are then combined by the _policy template_
@@ -261,8 +275,10 @@ namespace lib {
     template<template<class,class> class POL, typename RES =void>
     class ThreadLifecycle
       : protected POL<ThreadWrapper, RES>
+//      , public lib::BuilderQualifierSupport<ThreadLifecycle<POL,RES>>
       {
         using Policy = POL<ThreadWrapper,RES>;
+//        using Qualifier = typename lib::BuilderQualifierSupport<ThreadLifecycle<POL,RES>>::Qualifier;
         
         template<typename...ARGS>
         void
@@ -323,6 +339,44 @@ namespace lib {
                            ,static_cast<SUB*> (this)
                            ,forward<ARGS> (args)... }
           { }
+        
+        struct ConfigBuilder
+          : util::MoveOnly
+          {
+            using Launcher = std::function<void(ThreadLifecycle&)>;
+            Launcher launch;
+            
+            template<class FUN, typename...ARGS>
+            ConfigBuilder (FUN&& threadFunction, ARGS&& ...args)
+              : launch{[=]
+                       (ThreadLifecycle& wrapper)
+                          {
+                            wrapper.threadImpl_
+                              = std::thread{&ThreadLifecycle::invokeThreadFunction<FUN, decay_t<ARGS>...>
+                                           , &wrapper
+                                           , std::move(threadFunction)
+                                           , std::move(args)... };
+                          }}
+              { }
+            
+            ConfigBuilder&&
+            threadID (string const& id)
+              {
+                launch = [=, chain=std::move(launch)]
+                         (ThreadLifecycle& wrapper)
+                            {
+                              util::unConst(wrapper.threadID_) = id;
+                              chain (wrapper);
+                            };
+                return move(*this);
+              }
+          };
+        
+        ThreadLifecycle (ConfigBuilder launcher)
+          : Policy{}
+          { 
+            launcher.launch (*this);
+          }
       };
     
   }//(End)base implementation.
