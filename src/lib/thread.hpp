@@ -107,13 +107,13 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "include/logging.h"
-//#include "lib/builder-qualifier-support.hpp"//////////////////////////TODO
 #include "lib/format-util.hpp"
 #include "lib/result.hpp"
 
+#include <utility>
 #include <thread>
 #include <string>
-#include <utility>
+#include <tuple>
 
 
 namespace util {
@@ -122,6 +122,7 @@ namespace util {
 namespace lib {
 
   using std::string;
+  using std::tuple;
   
   
   
@@ -129,9 +130,12 @@ namespace lib {
     
     using lib::meta::typeSymbol;
     using std::forward;
+    using std::move;
     using std::decay_t;
     using std::invoke_result_t;
     using std::is_constructible;
+    using std::index_sequence_for;
+    using std::index_sequence;
     using std::is_same;
     using std::__or_;
     
@@ -275,10 +279,8 @@ namespace lib {
     template<template<class,class> class POL, typename RES =void>
     class ThreadLifecycle
       : protected POL<ThreadWrapper, RES>
-//      , public lib::BuilderQualifierSupport<ThreadLifecycle<POL,RES>>
       {
         using Policy = POL<ThreadWrapper,RES>;
-//        using Qualifier = typename lib::BuilderQualifierSupport<ThreadLifecycle<POL,RES>>::Qualifier;
         
         template<typename...ARGS>
         void
@@ -339,27 +341,46 @@ namespace lib {
                            ,static_cast<SUB*> (this)
                            ,forward<ARGS> (args)... }
           { }
+
         
-        struct ConfigBuilder
+        
+        template<typename...INVO, size_t...idx>
+        static auto
+        buildLauncher_impl (tuple<INVO...>&& argCopy, index_sequence<idx...>)
+        {
+          return [invocation = move(argCopy)]
+                 (ThreadLifecycle& wrapper)
+                    {
+                      ASSERT (not wrapper.isLive());
+                      wrapper.threadImpl_
+                        = std::thread{&ThreadLifecycle::invokeThreadFunction<INVO...>
+                                     , &wrapper
+                                     , move(std::get<idx> (invocation))... };
+                    };
+        }
+        
+        template<class...INVO>
+        static auto
+        buildLauncher (INVO&& ...args)
+        {
+          // materialise functor and arguments as copy, to be handed over into the new thread
+          return buildLauncher_impl (tuple<decay_t<INVO>...>{forward<INVO> (args)...}
+                                    ,index_sequence_for<INVO...>{});
+        }
+        
+        
+        struct Launch
           : util::MoveOnly
           {
             using Launcher = std::function<void(ThreadLifecycle&)>;
             Launcher launch;
             
             template<class FUN, typename...ARGS>
-            ConfigBuilder (FUN&& threadFunction, ARGS&& ...args)
-              : launch{[=]
-                       (ThreadLifecycle& wrapper)
-                          {
-                            wrapper.threadImpl_
-                              = std::thread{&ThreadLifecycle::invokeThreadFunction<FUN, decay_t<ARGS>...>
-                                           , &wrapper
-                                           , std::move(threadFunction)
-                                           , std::move(args)... };
-                          }}
+            Launch (FUN&& threadFunction, ARGS&& ...args)
+              : launch{buildLauncher (forward<FUN>(threadFunction), forward<ARGS>(args)...)}
               { }
             
-            ConfigBuilder&&
+            Launch&&
             threadID (string const& id)
               {
                 launch = [=, chain=std::move(launch)]
@@ -372,9 +393,9 @@ namespace lib {
               }
           };
         
-        ThreadLifecycle (ConfigBuilder launcher)
+        ThreadLifecycle (Launch launcher)
           : Policy{}
-          { 
+          {
             launcher.launch (*this);
           }
       };

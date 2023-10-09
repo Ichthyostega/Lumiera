@@ -91,9 +91,11 @@ namespace test{
 SHOW_EXPR(offset)
             CHECK (offset > 0);
 
-            Thread murks{Thread::ConfigBuilder([&]{
-                                                    cout << "Hello inner world "<<rand()%47<<endl;
-                                                  })
+            Thread murks{Thread::Launch([&](uint scope)
+                                           {
+                                             cout << "Hello nested world "<<rand()%scope <<endl;
+                                           }
+                                       , 47)
                                 .threadID("haha")};
             UNIMPLEMENTED ("demonstrate state change");
           }
