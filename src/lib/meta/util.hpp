@@ -210,6 +210,20 @@ namespace meta {
     };
   
   
+  /**
+   * Metaprogramming helper to mark some arbitrary base type by subclassing.
+   * In most respects the _specially marked type_ behaves like the base; this
+   * can be used to mark some element at compile time, e.g. to direct it into
+   * a specialisation or let it pick some special overload.
+   */
+  template<class BAS, size_t m=0>
+  struct Marked
+    : BAS
+    {
+      using BAS::BAS;
+    };
+  
+  
   
   
   

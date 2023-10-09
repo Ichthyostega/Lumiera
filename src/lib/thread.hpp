@@ -76,7 +76,23 @@
  ** in cases where a race could be critical, additional means must be implemented; a
  ** possible solution would be to use a [N-fold synchronisation barrier](\ref lib::SyncBarrier)
  ** explicitly, or otherwise to ensure there is sufficient delay in the starting thread function.
- **
+ ** 
+ ** ##Caveat
+ ** While these thread-wrapper building blocks aim at packaging the complexity away, there is
+ ** the danger to miss a potential race, which is inherent with starting threads: the operation
+ ** in the new thread contends with any initialisation done _after_ launching the thread. Even
+ ** though encapsulating complex concurrent logic into an opaque component, as built on top
+ ** of the thread-wrappers, is highly desirable from a code sanity angle — it is dangerously
+ ** tempting to package self-contained data initialisation into a subclass, leading to the
+ ** kind of _undefined behaviour,_ which „can never happen“ under normal circumstances.
+ ** Even while the OS scheduler typically adds an latency of at least 100µs to the start
+ ** of the new thread function, initialising anything (even subclass data members) after
+ ** creating the thread-wrapper instance *is undefined behaviour*. As a remedy
+ ** - it should be considered to put the thread-warpper into a _member_ (instead of inheriting)
+ ** - an explicit lib::SyncBarrier can be added, to ensure the thread-function touches any
+ **   extended facilities only after the initialisation is complete (as a downside, note that
+ **   any hard synchronisation adds a possibility for deadlock).
+ ** 
  ** @remarks Historical design evolution:
  **  - Lumiera offered simplified convenience wrappers long before a similar design
  **    became part of the C++14 standard. These featured the distinction in join-able or
@@ -140,23 +156,10 @@ namespace lib {
     using std::is_same;
     using std::__or_;
     
-    ////////////////////////////////////////////////////////////////////////////////////////////////////OOO extract -> lib/meta
     /**
-     * Metaprogramming helper to mark some arbitrary base type by subclassing.
-     * In most respects the _specially marked type_ behaves like the base; this
-     * can be used to mark some element at compile time, e.g. to direct it into
-     * a specialisation or let it pick some special overload.
-     */
-    template<class BAS, size_t m=0>
-    struct Marked
-      : BAS
-      {
-        using BAS::BAS;
-      };
-    ////////////////////////////////////////////////////////////////////////////////////////////////////OOO extract(End)
-    /** @internal wraps the C++ thread handle
-     *   and provides some implementation details,
-     *   which are then combined by the _policy template_
+     * @internal wraps the C++ thread handle
+     * and provides some implementation details,
+     * which are then combined by the _policy template_
      */
     struct ThreadWrapper
       : util::MoveOnly
@@ -173,10 +176,9 @@ namespace lib {
           , threadImpl_{}
           { }
         
-        template<typename...ARGS>
-        ThreadWrapper (string const& threadID, ARGS&& ...args)
+        ThreadWrapper (string const& threadID)
           : threadID_{util::sanitise (threadID)}
-          , threadImpl_{forward<ARGS> (args)... }
+          , threadImpl_{} //Note: deliberately not starting the thread yet...
           { }
         
         /** @internal actually launch the new thread.
@@ -325,49 +327,12 @@ namespace lib {
               Policy::handle_thread_still_running();
           }
         
-      public:
-        /**
-         * Is this thread »active« and thus tied to OS resources?
-         * @note this implies some statefulness, which may contradict the RAII pattern.
-         *       - especially note the possibly for derived classes to create an _empty_ Thread.
-         *       - moreover note that ThreadJoinable may have terminated, but still awaits `join()`.
-         */
-        explicit
-        operator bool()  const
-          {
-            return Policy::isLive();
-          }
-        
-        /** @return does this call happen from within this thread? */
-        using Policy::invokedWithinThread;
-        
-        
-        /** Create a new thread to execute the given operation.
-         *  The new thread starts up synchronously, can't be cancelled and it can't be joined.
-         *  @param threadID human readable descriptor to identify the thread for diagnostics
-         *  @param threadFunction a functor holding the code to execute within the new thread.
-         *         Any function-like entity or callable is acceptable; arguments can be given.
-         *  @warning The operation functor and all arguments will be copied into the new thread.
-         *         The return from this constructor _syncs-with_ the launch of the operation.
-         */
-        template<class FUN, typename...ARGS>
-        ThreadLifecycle (string const& threadID, FUN&& threadFunction, ARGS&& ...args)
-          : Policy{threadID
-                  , &ThreadLifecycle::invokeThreadFunction<FUN, decay_t<ARGS>...>, this
-                  , forward<FUN> (threadFunction)
-                  , decay_t<ARGS> (args)... }                                        // Note: need to decay the argument types
-          { }                                                                       //        (arguments must be copied)
-        
-        template<class SUB, typename...ARGS>
-        ThreadLifecycle (RES (SUB::*memFun) (ARGS...), ARGS ...args)
-          : ThreadLifecycle{util::joinDash (typeSymbol<SUB>(), args...)
-                           ,std::move (memFun)
-                           ,static_cast<SUB*> (this)
-                           ,forward<ARGS> (args)... }
+        /** derived classes may create a disabled thread */
+        ThreadLifecycle()
+          : Policy{}
           { }
-
         
-        
+      public:
         /**
          * Build a λ actually to launch the given thread operation later,
          * after the thread-wrapper-object is fully initialised.
@@ -389,7 +354,7 @@ namespace lib {
           return [invocation = move(argCopy)] //Note: functor+args bound by-value into the λ
                  (ThreadLifecycle& wrapper)
                     {                                                          //the thread-main function
-                      wrapper.launchThread (tuple_cat (tuple{&ThreadLifecycle::invokeThreadFunction<INVO...>
+                      wrapper.launchThread (tuple_cat (tuple{&ThreadLifecycle::invokeThreadFunction<decay_t<INVO>...>
                                                             , &wrapper}      //  passing the wrapper as instance-this
                                                       ,move (invocation))); //...invokeThreadFunction() in turn delegates
                     };                                                     //    to the user-provided thread-operation
@@ -397,15 +362,18 @@ namespace lib {
         
         
         /**
-         * Configuration builder to define the operation to run in the thread,
-         * and possibly configure further details, depending on the Policy used.
+         * Configuration builder to define the operation running within the thread,
+         * and possibly configure further details, depending on the actual Policy used.
          * @remark the primary ThreadLifecycle-ctor accepts such a Launch-instance
-         *         and invokes the chain of λ-functions collected in the member #launch
+         *         and invokes a chain of λ-functions collected in the member #launch
          */
         struct Launch
           : util::MoveOnly
           {
-            function<void(ThreadLifecycle&)> launch;
+            using Act = function<void(ThreadLifecycle&)>;
+            
+            Act launch;
+            string id;
             
             template<class FUN, typename...ARGS>
             Launch (FUN&& threadFunction, ARGS&& ...args)
@@ -413,23 +381,83 @@ namespace lib {
               { }
             
             Launch&&
-            threadID (string const& id)
+            threadID (string const& threadID)
               {
-                launch = [=, chain=std::move(launch)]
+                id = threadID;
+                return move(*this);
+              }
+            
+            Launch&&
+            addLayer (Act action)
+              {
+                launch = [action=move(action), chain=move(launch)]
                          (ThreadLifecycle& wrapper)
                             {
-                              util::unConst(wrapper.threadID_) = id;
+                              action(wrapper);
                               chain (wrapper);
                             };
                 return move(*this);
               }
           };
         
+        
+        /**
+         * Primary constructor: Launch the new thread with flexible configuration.
+         * @param launcher a #Launch builder with a λ-chain to configure and
+         *        finally trigger start of the thread
+         */
         ThreadLifecycle (Launch launcher)
-          : Policy{}
+          : Policy{launcher.id}
           {
             launcher.launch (*this);
           }
+        
+        /**
+         * Create a new thread to execute the given operation.
+         * The new thread starts up synchronously, can't be cancelled and it can't be joined.
+         * @param threadID human readable descriptor to identify the thread for diagnostics
+         * @param threadFunction a functor holding the code to execute within the new thread.
+         *        Any function-like entity or callable is acceptable; arguments can be given.
+         * @warning The operation functor and all arguments will be copied into the new thread.
+         *        The return from this constructor _syncs-with_ the launch of the operation.
+         */
+        template<class FUN, typename...ARGS>
+        ThreadLifecycle (string const& threadID, FUN&& threadFunction, ARGS&& ...args)
+          : ThreadLifecycle{
+              Launch{forward<FUN> (threadFunction), forward<ARGS> (args)...}
+                    .threadID(threadID)}
+          { }
+        
+        /**
+         * Special variant to bind a subclass member function as thread operation.
+         * @warning potential race between thread function and subclass initialisation
+         */
+        template<class SUB, typename...ARGS>
+        ThreadLifecycle (RES (SUB::*memFun) (ARGS...), ARGS ...args)
+          : ThreadLifecycle{
+              Launch{std::move (memFun)
+                    ,static_cast<SUB*> (this)
+                    ,forward<ARGS> (args)...
+                    }
+                    .threadID(util::joinDash (typeSymbol<SUB>(), args...))}
+          { }
+        
+        
+        
+        /**
+         * Is this thread »active« and thus tied to OS resources?
+         * @note this implies some statefulness, which may contradict the RAII pattern.
+         *       - especially note the possibly for derived classes to create an _empty_ Thread.
+         *       - moreover note that ThreadJoinable may have terminated, but still awaits `join()`.
+         */
+        explicit
+        operator bool()  const
+          {
+            return Policy::isLive();
+          }
+        
+        /** @return does this call happen from within this thread? */
+        using Policy::invokedWithinThread;
       };
     
   }//(End)base implementation.
