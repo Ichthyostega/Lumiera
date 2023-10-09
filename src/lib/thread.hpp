@@ -129,6 +129,7 @@ namespace lib {
   namespace thread {// Thread-wrapper base implementation...
     
     using lib::meta::typeSymbol;
+    using std::function;
     using std::forward;
     using std::move;
     using std::decay_t;
@@ -177,6 +178,29 @@ namespace lib {
           : threadID_{util::sanitise (threadID)}
           , threadImpl_{forward<ARGS> (args)... }
           { }
+        
+        /** @internal actually launch the new thread.
+         * Deliberately the #threadImpl_ is created empty, to allow for complete
+         * initialisation of all the combined policy classes stacked on top
+         * @warning Start of the new thread _syncs-with_ the return from std::thread ctor.
+         *          Thus -- in theory -- initialising members of derived classes after constructing
+         *          a non-empty std::thread object would be *undefined behaviour*. In practice however,
+         *          this is more of a „theoretical“ problem, since the OS scheduler has a considerable
+         *          latency, so that the code within the new thread typically starts executing with an
+         *          delay of _at least 100µs_
+         * @remark non the less, the thread-wrapper framework circumvents this possible undefined behaviour,
+         *          by first creating the threadImpl_ empty, and only later move-assigning the std::thread.
+         * @param invocation a tuple holding some invokable and possible arguments, together forming the
+         *          threadFunction to be executed in the new thread.
+         */
+        template<class...INVO>
+        void
+        launchThread (tuple<INVO...>&& invocation)
+          {
+            ASSERT (not isLive(), "Thread already running");
+            threadImpl_ = make_from_tuple<std::thread> (invocation);
+          };
+        
         
         /** detect if the currently executing code runs within this thread */
         bool invokedWithinThread()  const;
@@ -344,29 +368,44 @@ namespace lib {
 
         
         
+        /**
+         * Build a λ actually to launch the given thread operation later,
+         * after the thread-wrapper-object is fully initialised.
+         * The member function #invokeThreadFunction will be run as top-level
+         * within the new thread, possibly handling errors, but delegating to
+         * the user-provided actual thread-operation
+         * @param args a invokable + further arguments
+         * @note the invokable and the arguments will be materialised/copied
+         *       thereby decaying the given type; this is necessary, because
+         *       these arguments must be copied into the new thread. This will
+         *       fail to compile, if the given invokable can not be invoked
+         *       with these copied (and decayed) arguments.
+         */
         template<class...INVO>
         static auto
         buildLauncher (INVO&& ...args)
         {
-          // materialise functor and arguments as copy, to be handed over into the new thread
           tuple<decay_t<INVO>...> argCopy{forward<INVO> (args)...};
-          return [invocation = move(argCopy)]
+          return [invocation = move(argCopy)] //Note: functor+args bound by-value into the λ
                  (ThreadLifecycle& wrapper)
-                    {
-                      auto threadArgs = tuple_cat (tuple{&ThreadLifecycle::invokeThreadFunction<INVO...>, &wrapper}
-                                                  ,move (invocation));
-                      ASSERT (not wrapper.isLive());
-                      wrapper.threadImpl_
-                        = make_from_tuple<std::thread> (threadArgs);
-                    };
+                    {                                                          //the thread-main function
+                      wrapper.launchThread (tuple_cat (tuple{&ThreadLifecycle::invokeThreadFunction<INVO...>
+                                                            , &wrapper}      //  passing the wrapper as instance-this
+                                                      ,move (invocation))); //...invokeThreadFunction() in turn delegates
+                    };                                                     //    to the user-provided thread-operation
         }
         
         
+        /**
+         * Configuration builder to define the operation to run in the thread,
+         * and possibly configure further details, depending on the Policy used.
+         * @remark the primary ThreadLifecycle-ctor accepts such a Launch-instance
+         *         and invokes the chain of λ-functions collected in the member #launch
+         */
         struct Launch
           : util::MoveOnly
           {
-            using Launcher = std::function<void(ThreadLifecycle&)>;
-            Launcher launch;
+            function<void(ThreadLifecycle&)> launch;
             
             template<class FUN, typename...ARGS>
             Launch (FUN&& threadFunction, ARGS&& ...args)
