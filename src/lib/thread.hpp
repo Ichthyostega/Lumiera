@@ -134,8 +134,8 @@ namespace lib {
     using std::decay_t;
     using std::invoke_result_t;
     using std::is_constructible;
-    using std::index_sequence_for;
-    using std::index_sequence;
+    using std::make_from_tuple;
+    using std::tuple_cat;
     using std::is_same;
     using std::__or_;
     
@@ -344,28 +344,21 @@ namespace lib {
 
         
         
-        template<typename...INVO, size_t...idx>
-        static auto
-        buildLauncher_impl (tuple<INVO...>&& argCopy, index_sequence<idx...>)
-        {
-          return [invocation = move(argCopy)]
-                 (ThreadLifecycle& wrapper)
-                    {
-                      ASSERT (not wrapper.isLive());
-                      wrapper.threadImpl_
-                        = std::thread{&ThreadLifecycle::invokeThreadFunction<INVO...>
-                                     , &wrapper
-                                     , move(std::get<idx> (invocation))... };
-                    };
-        }
-        
         template<class...INVO>
         static auto
         buildLauncher (INVO&& ...args)
         {
           // materialise functor and arguments as copy, to be handed over into the new thread
-          return buildLauncher_impl (tuple<decay_t<INVO>...>{forward<INVO> (args)...}
-                                    ,index_sequence_for<INVO...>{});
+          tuple<decay_t<INVO>...> argCopy{forward<INVO> (args)...};
+          return [invocation = move(argCopy)]
+                 (ThreadLifecycle& wrapper)
+                    {
+                      auto threadArgs = tuple_cat (tuple{&ThreadLifecycle::invokeThreadFunction<INVO...>, &wrapper}
+                                                  ,move (invocation));
+                      ASSERT (not wrapper.isLive());
+                      wrapper.threadImpl_
+                        = make_from_tuple<std::thread> (threadArgs);
+                    };
         }
         
         
