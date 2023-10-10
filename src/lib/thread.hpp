@@ -495,36 +495,51 @@ namespace lib {
               }
             
           private:
+            /**
+             * Helper to adapt a user provided hook to be usable as lifecycle hook.
+             * @tparam HOOK type of the user provided λ or functor
+             * @tparam FUN  type of the function maintained in #PolicyLifecycleHook
+             * @note the user provided functor can take any type as argument, which
+             *       is reachable by static cast from the thread-wrapper. Especially
+             *       this allows both for low-level and userclass-internal hooks. 
+             */
+            template<typename HOOK, class FUN>
+            auto
+            adaptedHook (FUN Policy::*, HOOK&& hook)
+              {
+                static_assert(1 == _Fun<FUN>::ARITY);
+                static_assert(1 >= _Fun<HOOK>::ARITY);
+                // argument type expected by the hooks down in the policy class
+                using Arg = typename _Fun<FUN>::Args::List::Head;
+                // distinguish if user provided functor takes zero or one argument
+                if constexpr (0 == _Fun<HOOK>::ARITY)
+                  return [hook = forward<HOOK>(hook)](Arg){ hook(); };
+                else
+                  { // instance type expected by the user-provided hook
+                    using Target = typename _Fun<HOOK>::Args::List::Head;
+                    return [hook = forward<HOOK>(hook)]
+                           (Arg& threadWrapper)
+                              { // build a two-step cast path from the low-level wrapper to user type
+                                ThreadLifecycle& base = static_cast<ThreadLifecycle&> (threadWrapper);
+                                Target&        target = static_cast<Target&> (base);
+                                hook (target);
+                              };
+                  }
+              }
+            
+            /** add a config layer to store a user-provided functor into the polic baseclass(es) */
             template<typename HOOK, class FUN>
             Launch&&
             addHook (FUN Policy::*storedHook, HOOK&& hook)
               {
-                static_assert(1 == _Fun<FUN>::ARITY);
-                static_assert(1 >= _Fun<HOOK>::ARITY);
-                using Arg = typename _Fun<FUN>::Args::List::Head;
-                FUN adapted;
-                if constexpr (0 == _Fun<HOOK>::ARITY)
-                  {
-                    adapted = [hook = forward<HOOK>(hook)](Arg){ hook(); };
-                  }
-                else
-                  {
-                    using Target = typename _Fun<HOOK>::Args::List::Head;
-                    adapted = [hook = forward<HOOK>(hook)]
-                              (Arg& threadWrapper)
-                                {
-                                  ThreadLifecycle& base = static_cast<ThreadLifecycle&> (threadWrapper);
-                                  Target&        target = static_cast<Target&> (base);
-                                  hook (target);
-                                };
-                  }
-                return addLayer ([storedHook, hook = move(adapted)]
+                return addLayer ([storedHook, hook = adaptedHook (storedHook, forward<HOOK> (hook))]
                                  (ThreadLifecycle& wrapper)
                                     {
-                                      wrapper.*storedHook = move(hook);
+                                      wrapper.*storedHook = move (hook);
                                     });
               }
             
+            /** generic helper to add another »onion layer« to this config builder */ 
             Launch&&
             addLayer (Act action)
               {
