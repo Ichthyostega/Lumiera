@@ -144,7 +144,7 @@ namespace control {
                     {
                       return not queue_.empty();
                     })
-        , thread_{"Lumiera Session"
+        , thread_{"Session"
                  ,&DispatcherLoop::runSessionThread
                  , this, notification}
         {

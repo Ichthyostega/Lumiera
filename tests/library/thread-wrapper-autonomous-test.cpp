@@ -27,19 +27,15 @@
 
 #include "lib/test/run.hpp"
 #include "lib/thread.hpp"
-#include "lib/iter-explorer.hpp"
-#include "lib/scoped-collection.hpp"
-#include "lib/test/microbenchmark.hpp"
 
 #include <atomic>
 #include <chrono>
 
 using test::Test;
-using lib::explore;
 using std::atomic_uint;
 using std::this_thread::yield;
 using std::this_thread::sleep_for;
-using std::chrono::microseconds;
+using namespace std::chrono_literals;
 
 
 namespace lib {
@@ -74,11 +70,10 @@ namespace test{
         demonstrateSimpleUsage()
           {
             atomic_uint i{0};
-            Thread thread("counter", [&]{ ++i; });     // bind a λ and launch thread
-            while (thread) yield();                    // ensure thread has finished and detached
+            launchDetached ("anarchy", [&]{ ++i; });
             
+            sleep_for(1ms);
             CHECK (i == 1);                            // verify the effect has taken place
-            UNIMPLEMENTED ("actually launch detached");
           }
         
         
@@ -88,6 +83,7 @@ namespace test{
         void
         verifyMemoryManagement()
           {
+            UNIMPLEMENTED ("verify thread manages itself");
               struct TestThread
                 : Thread
                 {
@@ -99,39 +95,10 @@ namespace test{
                   doIt (uint a, uint b) ///< the actual operation running in a separate thread
                     {
                       uint sum = a + b;
-                      sleep_for (microseconds{sum});  // Note: explicit random delay before local store
+//                    sleep_for (microseconds{sum});  // Note: explicit random delay before local store
                       local = sum;
                     }
                 };
-            
-            // prepare Storage for these objects (not created yet)
-            lib::ScopedCollection<TestThread> threads{NUM_THREADS};
-            
-            size_t checkSum = 0;
-            size_t globalSum = 0;
-            auto launchThreads = [&]
-                                  {
-                                    for (uint i=1; i<=NUM_THREADS; ++i)
-                                      {
-                                        uint x = rand() % 1000;
-                                        globalSum += (i + x);
-                                        threads.emplace (&TestThread::doIt, i, x);
-                                      }                            // Note: bind to member function, copying arguments
-                                    
-                                    while (explore(threads).has_any())
-                                      yield();                  // wait for all threads to have detached
-                                    
-                                    for (auto& t : threads)
-                                      {
-                                        CHECK (0 < t.local);
-                                        checkSum += t.local;
-                                      }
-                                  };
-            
-            double runTime = benchmarkTime (launchThreads, REPETITIONS);
-            
-            CHECK (checkSum == globalSum);           // sum of precomputed random numbers matches sum from threads
-            CHECK (runTime < NUM_THREADS * 1000/2);  // random sleep time should be > 500ms on average
           }
       };
     

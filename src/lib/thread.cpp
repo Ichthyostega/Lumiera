@@ -67,17 +67,17 @@ namespace thread{
 
   
   void
-  ThreadWrapper::markThreadStart (string id)
+  ThreadWrapper::markThreadStart()
   {
-    TRACE (thread, "%s", lifecycleMsg ("start...", id).c_str());
+    TRACE (thread, "%s", lifecycleMsg ("start...", threadID_).c_str());
     setThreadName();
   }
   
   
   void
-  ThreadWrapper::markThreadEnd(string id)
+  ThreadWrapper::markThreadEnd()
   {
-    TRACE (thread, "%s", lifecycleMsg ("finished.", id).c_str());
+    TRACE (thread, "%s", lifecycleMsg ("finished.", threadID_).c_str());
   }
   
   

@@ -123,6 +123,7 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "include/logging.h"
+#include "lib/meta/trait.hpp"
 #include "lib/format-util.hpp"
 #include "lib/result.hpp"
 
@@ -207,10 +208,15 @@ namespace lib {
         /** detect if the currently executing code runs within this thread */
         bool invokedWithinThread()  const;
         
-        void markThreadStart(string);
-        void markThreadEnd  (string);
+        void markThreadStart();
+        void markThreadEnd  ();
         void setThreadName  ();
         void waitGracePeriod()  noexcept;
+        
+        /* empty implementation for some policy methods */
+        void handle_begin_thread() { }
+        void handle_after_thread() { }
+        void handle_thread_still_running() { }
       };
     
     
@@ -222,7 +228,7 @@ namespace lib {
      * - thread detaches before terminating
      * - »grace period« for thread to terminate on shutdown
      */
-    template<class BAS, typename>
+    template<class BAS, typename=void>
     struct PolicyLaunchOnly
       : BAS
       {
@@ -240,7 +246,7 @@ namespace lib {
           }
         
         void
-        handle_end_of_thread()
+        handle_after_thread()
           {
             if (BAS::isLive())
               BAS::threadImpl_.detach();
@@ -250,6 +256,36 @@ namespace lib {
         handle_thread_still_running()
           {
             BAS::waitGracePeriod();
+          }
+      };
+    
+    
+    /**
+     * Thread Lifecycle Policy Extension:
+     * additionally self-manage the thread-wrapper allocation.
+     * @warning the thread-wrapper must have been heap-allocated.
+     */
+    template<class BAS, class TAR>
+    struct PolicySelfManaged
+      : PolicyLaunchOnly<BAS>
+      {
+        using BasePol = PolicyLaunchOnly<BAS>;
+        using BasePol::BasePol;
+        
+        void
+        handle_after_thread()
+          {
+            TAR* selfAllocation = static_cast<TAR*>(
+                                    static_cast<void*> (this));
+            if (BAS::isLive())
+              BAS::threadImpl_.detach();
+            delete selfAllocation;
+          }
+        
+        void
+        handle_thread_still_running()
+          {
+            ALERT (thread, "Self-managed thread was deleted from outside. Abort.");
           }
       };
     
@@ -286,7 +322,7 @@ namespace lib {
           }
         
         void
-        handle_end_of_thread()
+        handle_after_thread()
           {
             /* do nothing -- thread must be joined manually */;
           }
@@ -312,11 +348,11 @@ namespace lib {
         void
         invokeThreadFunction (ARGS&& ...args)
           {
-            string id{Policy::threadID_}; // local copy
-            Policy::markThreadStart(id);
+            Policy::handle_begin_thread();
+            Policy::markThreadStart();
             Policy::perform_thread_function (forward<ARGS> (args)...);
-            Policy::markThreadEnd(id);
-            Policy::handle_end_of_thread();
+            Policy::markThreadEnd();
+            Policy::handle_after_thread();
           }
         
         
@@ -490,7 +526,7 @@ namespace lib {
        * @deprecated can't sleep well while this function is exposed;
        *          need a prime solution to address this relevant use case ////////////////////////////////////////OOO allow for a thread with explicit lifecycle
        */
-      void detach() { ThreadLifecycle::handle_end_of_thread(); }
+      void detach() { ThreadLifecycle::handle_after_thread(); }
     };
   
   
@@ -538,6 +574,35 @@ namespace lib {
   /** deduction guide: find out about result value to capture from a generic callable. */
   template<typename FUN, typename...ARGS>
   ThreadJoinable (string const&, FUN&&, ARGS&&...) -> ThreadJoinable<std::invoke_result_t<FUN,ARGS...>>;
+  
+  
+  
+  /************************************************************************//**
+   * Special configuration for a »fire-and-forget«-Thread.
+   * @internal this class is meant for subclassing. Start with #launchDetached()
+   * @tparam TAR the concrete type of the subclass to be started as autonomous,
+   *         self-managed thread. Must be passed down since thread deletes itself.
+   */
+  class ThreadAutonomous
+    : public thread::ThreadLifecycle<thread::PolicySelfManaged, ThreadAutonomous>
+    {
+      using Impl = thread::ThreadLifecycle<thread::PolicySelfManaged, ThreadAutonomous>;
+    public:
+      using Impl::Impl;
+    };
+  
+  /**
+   * Launch an autonomous self-managing thread (and forget about it).
+   * The thread-wrapper is allocated to the heap and will delete itself on termination.
+   * @tparam TAR concrete type of the subclass to be started as autonomous detached thread.
+   * @param args a valid argument list to call the ctor of thread::ThreadLifecycle
+   */
+  template<typename...INVO>
+  inline void
+  launchDetached (INVO&& ...args)
+  {
+    new ThreadAutonomous{forward<INVO> (args)...};  // Thread will pick up and manage *this
+  }
   
   
   
