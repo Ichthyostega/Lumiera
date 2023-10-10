@@ -214,9 +214,9 @@ namespace lib {
         void waitGracePeriod()  noexcept;
         
         /* empty implementation for some policy methods */
-        void handle_begin_thread() { }
-        void handle_after_thread() { }
-        void handle_thread_still_running() { }
+        void handle_begin_thread() { }   ///< called immediately at start of thread
+        void handle_after_thread() { }   ///< called immediately before end of thread
+        void handle_loose_thread() { }   ///< called when destroying wrapper on still running thread
       };
     
     
@@ -253,7 +253,7 @@ namespace lib {
           }
         
         void
-        handle_thread_still_running()
+        handle_loose_thread()
           {
             BAS::waitGracePeriod();
           }
@@ -283,9 +283,63 @@ namespace lib {
           }
         
         void
-        handle_thread_still_running()
+        handle_loose_thread()
           {
             ALERT (thread, "Self-managed thread was deleted from outside. Abort.");
+          }
+      };
+    
+    
+    /**
+     * Thread Lifecycle Policy Extension:
+     * additionally self-manage the thread-wrapper allocation.
+     * @warning the thread-wrapper must have been heap-allocated.
+     */
+    template<class BAS, class TAR>
+    struct PolicyLifecycleHook
+      : PolicyLaunchOnly<BAS>
+      {
+        using BasePol = PolicyLaunchOnly<BAS>;
+        using BasePol::BasePol;
+        
+        using Hook = function<void(TAR&)>;
+        
+        Hook hook_beginThread{};
+        Hook hook_afterThread{};
+        Hook hook_looseThread{};
+        
+        TAR&
+        castInstance()
+          {
+            return static_cast<TAR*>(
+                   static_cast<void*> (this));
+          }
+        
+        void
+        handle_begin_thread()
+          {
+            if (hook_beginThread)
+              hook_beginThread (castInstance());
+            else
+              BasePol::handle_begin_thread();
+          }
+        
+        void
+        handle_after_thread()
+          {
+            if (hook_afterThread)
+              hook_afterThread (castInstance());
+            else
+              BasePol::handle_after_thread();
+          }
+        
+        void
+        handle_loose_thread()
+          {
+            if (hook_looseThread)
+              hook_looseThread (castInstance());
+            else
+              BasePol::handle_loose_thread();
           }
       };
     
@@ -328,7 +382,7 @@ namespace lib {
           }
         
         void
-        handle_thread_still_running()
+        handle_loose_thread()
           {
             ALERT (thread, "Thread '%s' was not joined. Abort.", BAS::threadID_.c_str());
           }
@@ -360,7 +414,7 @@ namespace lib {
        ~ThreadLifecycle()
           {
             if (Policy::isLive())
-              Policy::handle_thread_still_running();
+              Policy::handle_loose_thread();
           }
         
         /** derived classes may create a disabled thread */
@@ -421,6 +475,40 @@ namespace lib {
               {
                 id = threadID;
                 return move(*this);
+              }
+            
+            template<typename HOOK>
+            Launch&&
+            atStart (HOOK&& hook)
+              {
+                return addHook (&Policy::hook_beginThread, forward<HOOK> (hook));
+              }
+            
+            template<typename HOOK>
+            Launch&&
+            atEnd (HOOK&& hook)
+              {
+                return addHook (&Policy::hook_afterThread, forward<HOOK> (hook));
+              }
+            
+            template<typename HOOK>
+            Launch&&
+            onOrphan (HOOK&& hook)
+              {
+                return addHook (&Policy::hook_looseThread, forward<HOOK> (hook));
+              }
+            
+          private:
+            template<typename HOOK, class FUN>
+            Launch&&
+            addHook (FUN Policy::*storedHook, HOOK&& hook)
+              {
+                return addLayer ([storedHook, hook = forward<HOOK>(hook)]
+                                 (ThreadLifecycle& wrapper)
+                                    {
+                                      wrapper.*storedHook = move (hook);
+                                      chain (wrapper);
+                                    });
               }
             
             Launch&&
