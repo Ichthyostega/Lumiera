@@ -82,31 +82,34 @@ namespace test{
             using Point = system_clock::time_point;
             Point threadStart;
             Point afterCtor;
+            
+            // the new thread starts immediately from ctor-call...
             Thread thread("lifecycle", [&]{
                                             threadStart = system_clock::now();
                                           });
             afterCtor = system_clock::now();
+            CHECK (thread);               // thread marked as running
+            
             while (thread) yield();
+            CHECK (not thread);           // thread now marked as detached/dead
             
             double offset = Dur{threadStart - afterCtor}.count();
-SHOW_EXPR(offset)
             CHECK (offset > 0);
-          }
+          }    //  Note: in practice we see here values > 100µs
+              //         but in theory the thread might even overtake the launcher 
         
         
         /**
-         * @test verify a special setup to start a thread explicitly and to track
-         *       the thread's lifecycle state.
+         * @test attach user provided callback hooks to the thread lifecycle.
          */
         void
         verifyThreadLifecycleHooks()
           {
-            atomic_uint stage{0};
+            atomic_uint stage{0};              // flexible launch-builder syntax:
             ThreadHookable thread{ThreadHookable::Launch([]{ sleep_for (5ms); })
-                                                .threadID("hooked thread")
                                                 .atStart([&]{ stage = 1; })
-                                                .atExit ([&]{ stage = 2; })};
-            
+                                                .atExit ([&]{ stage = 2; })
+                                                .threadID("hooked thread")};
             CHECK (thread);
             CHECK (0 == stage);
             

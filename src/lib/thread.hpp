@@ -60,6 +60,10 @@
  ** caller. Such threads *must* be joined however, and thus the destructor immediately
  ** terminates the application in case the thread is still running.
  ** 
+ ** A further variant ThreadHookable allows to attach user-provided callbacks invoked from
+ ** the thread lifecycle; this can be used to build a thread-object that manages itself
+ ** autonomously, or a thread that opens / closes interfaces tied to its lifecycle.
+ ** 
  ** ## Synchronisation
  ** The C++ standard provides that the end of the `std::thread` constructor _syncs-with_ the
  ** start of the new thread function, and likewise the end of the thread activity _syncs-with_
@@ -148,6 +152,7 @@ namespace lib {
     
     using lib::meta::typeSymbol;
     using lib::meta::_Fun;
+    using util::isnil;
     using std::function;
     using std::forward;
     using std::move;
@@ -180,7 +185,7 @@ namespace lib {
           { }
         
         ThreadWrapper (string const& threadID)
-          : threadID_{util::sanitise (threadID)}
+          : threadID_{isnil(threadID)? "sub-thread" : util::sanitise (threadID)}
           , threadImpl_{} //Note: deliberately not starting the thread yet...
           { }
         
@@ -264,38 +269,9 @@ namespace lib {
     
     /**
      * Thread Lifecycle Policy Extension:
-     * additionally self-manage the thread-wrapper allocation.
-     * @warning the thread-wrapper must have been heap-allocated.
-     */
-    template<class BAS, class TAR>
-    struct PolicySelfManaged
-      : PolicyLaunchOnly<BAS>
-      {
-        using BasePol = PolicyLaunchOnly<BAS>;
-        using BasePol::BasePol;
-        
-        void
-        handle_after_thread()
-          {
-            TAR* selfAllocation = static_cast<TAR*>(
-                                    static_cast<void*> (this));
-            if (BAS::isLive())
-              BAS::threadImpl_.detach();
-            delete selfAllocation;
-          }
-        
-        void
-        handle_loose_thread()
-          {
-            ALERT (thread, "Self-managed thread was deleted from outside. Abort.");
-          }
-      };
-    
-    
-    /**
-     * Thread Lifecycle Policy Extension:
-     * additionally self-manage the thread-wrapper allocation.
-     * @warning the thread-wrapper must have been heap-allocated.
+     * invoke user-provided callbacks from within thread lifecycle.
+     * @see ThreadLifecycle::invokeThreadFunction for invocation...
+     * @see ThreadLifecycle::Launch for configuration of these hooks.
      */
     template<class BAS, class TAR>
     struct PolicyLifecycleHook
@@ -501,7 +477,7 @@ namespace lib {
              * @tparam FUN  type of the function maintained in #PolicyLifecycleHook
              * @note the user provided functor can take any type as argument, which
              *       is reachable by static cast from the thread-wrapper. Especially
-             *       this allows both for low-level and userclass-internal hooks. 
+             *       this allows both for low-level and userclass-internal hooks.
              */
             template<typename HOOK, class FUN>
             auto
@@ -539,7 +515,7 @@ namespace lib {
                                     });
               }
             
-            /** generic helper to add another »onion layer« to this config builder */ 
+            /** generic helper to add another »onion layer« to this config builder */
             Launch&&
             addLayer (Act action)
               {
@@ -617,6 +593,10 @@ namespace lib {
   
   
   
+  
+  
+  
+  
   /************************************************************************//**
    * A thin convenience wrapper to simplify thread-handling.
    * The implementation is backed by the C++ standard library.
@@ -631,7 +611,6 @@ namespace lib {
   class Thread
     : public thread::ThreadLifecycle<thread::PolicyLaunchOnly>
     {
-      
     public:
       using ThreadLifecycle::ThreadLifecycle;
       
@@ -663,7 +642,6 @@ namespace lib {
     : public thread::ThreadLifecycle<thread::PolicyResultJoin, RES>
     {
       using Impl = thread::ThreadLifecycle<thread::PolicyResultJoin, RES>;
-      
     public:
       using Impl::Impl;
       
@@ -717,33 +695,53 @@ namespace lib {
   
   
   
-  /************************************************************************//**
-   * Special configuration for a »fire-and-forget«-Thread.
-   * @internal this class is meant for subclassing. Start with #launchDetached()
-   * @tparam TAR the concrete type of the subclass to be started as autonomous,
-   *         self-managed thread. Must be passed down since thread deletes itself.
+  /**
+   * Launch an autonomous self-managing thread (and forget about it).
+   * The thread-object is allocated to the heap and will delete itself on termination.
+   * @tparam TAR concrete type of the subclass to be started as autonomous detached thread.
+   * @param launchBuilder a flexible thread launch configuration to be used for starting;
+   *        especially this contains the thread function and arguments to run in the thread.
+   * @note  hooks `atExit` and `onOrphan` defined in the \a launchBuilder will be overridden.
+   * @remarks the `atExit` hook is the last piece of code executed within the thread; here it
+   *        takes a pointer to the allocated instance of type \a TAR and deletes it from heap.
+   *        Obviously this will invoke the destructor of the thread-wrapper eventually, at which
+   *        point the `onOrphan` hook is invoked (since the thread is still running); at this point
+   *        the C++ thread-handle is detached, so that invoking the dtor of std::thread will not
+   *        terminate the system, rather just let the thread go away. The net result is an object
+   *        of type \a TAR placed on the heap and kept there precisely as long as the thread runs.
    */
-  class ThreadAutonomous
-    : public thread::ThreadLifecycle<thread::PolicySelfManaged, ThreadAutonomous>
-    {
-      using Impl = thread::ThreadLifecycle<thread::PolicySelfManaged, ThreadAutonomous>;
-    public:
-      using Impl::Impl;
-    };
+  template<class TAR = ThreadHookable>
+  inline void
+  launchDetached (ThreadHookable::Launch&& launchBuilder)
+  {
+    static_assert (lib::meta::is_Subclass<TAR, ThreadHookable>());
+    
+    new TAR{move(launchBuilder)
+                 .atExit([](TAR& selfAllocation)
+                           {
+                             delete &selfAllocation;
+                           })
+                 .onOrphan([](thread::ThreadWrapper& wrapper)
+                           {
+                             if (wrapper.isLive())
+                               wrapper.threadImpl_.detach();
+                           })};
+     // Note: allocation tossed on the heap deliberately
+  } //  The thread-function will pick up and manage *this
   
   /**
    * Launch an autonomous self-managing thread (and forget about it).
-   * The thread-wrapper is allocated to the heap and will delete itself on termination.
    * @tparam TAR concrete type of the subclass to be started as autonomous detached thread.
    * @param args a valid argument list to call the ctor of thread::ThreadLifecycle
    */
-  template<typename...INVO>
+  template<class TAR = ThreadHookable, typename...INVO>
   inline void
-  launchDetached (INVO&& ...args)
+  launchDetached (string const& threadID, INVO&& ...args)
   {
-    new ThreadAutonomous{forward<INVO> (args)...};  // Thread will pick up and manage *this
+    using Launch = typename TAR::Launch;
+    launchDetached<TAR> (Launch{forward<INVO> (args)...}
+                          .threadID (threadID));
   }
-  
   
   
 } // namespace lib
