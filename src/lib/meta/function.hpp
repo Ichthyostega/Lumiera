@@ -128,6 +128,7 @@ namespace meta{
       using Args = Types<ARGS...>;
       using Sig  = RET(ARGS...);
       using Functor = std::function<Sig>;
+      enum { ARITY = sizeof...(ARGS) };
     };
   
   /** Specialisation to strip `noexcept` from the signature */

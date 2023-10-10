@@ -40,7 +40,7 @@ using lib::explore;
 using std::atomic_uint;
 using std::this_thread::yield;
 using std::this_thread::sleep_for;
-using std::chrono::microseconds;
+using namespace std::chrono_literals;
 using std::chrono::system_clock;
 
 
@@ -69,7 +69,8 @@ namespace test{
         run (Arg)
           {
             defaultWrapperLifecycle();
-            verifyExplicitLifecycleState();
+            verifyThreadLifecycleHooks();
+            demonstrateExplicitThreadLifecycle();
           }
         
         
@@ -90,14 +91,6 @@ namespace test{
             double offset = Dur{threadStart - afterCtor}.count();
 SHOW_EXPR(offset)
             CHECK (offset > 0);
-
-            Thread murks{Thread::Launch([&](uint scope)
-                                           {
-                                             cout << "Hello nested world "<<rand()%scope <<endl;
-                                           }
-                                       , 47)
-                                .threadID("haha")};
-            UNIMPLEMENTED ("demonstrate state change");
           }
         
         
@@ -106,8 +99,35 @@ SHOW_EXPR(offset)
          *       the thread's lifecycle state.
          */
         void
-        verifyExplicitLifecycleState()
+        verifyThreadLifecycleHooks()
           {
+            atomic_uint stage{0};
+            ThreadHookable thread{ThreadHookable::Launch([]{ sleep_for (5ms); })
+                                                .threadID("hooked thread")
+                                                .atStart([&]{ stage = 1; })
+                                                .atExit ([&]{ stage = 2; })};
+            
+            CHECK (thread);
+            CHECK (0 == stage);
+            
+            sleep_for (1ms);
+            CHECK (thread);
+            CHECK (1 == stage);
+            
+            while (thread) yield();
+            CHECK (not thread);
+            CHECK (2 == stage);
+          }
+        
+        
+        /**
+         * @test verify a special setup to start a thread explicitly and to track
+         *       the thread's lifecycle state.
+         */
+        void
+        demonstrateExplicitThreadLifecycle()
+          {
+            UNIMPLEMENTED ("demonstrate state change");
               struct TestThread
                 : Thread
                 {
@@ -119,39 +139,10 @@ SHOW_EXPR(offset)
                   doIt (uint a, uint b) ///< the actual operation running in a separate thread
                     {
                       uint sum = a + b;
-                      sleep_for (microseconds{sum});  // Note: explicit random delay before local store
+//                      sleep_for (microseconds{sum});  // Note: explicit random delay before local store
                       local = sum;
                     }
                 };
-            
-            // prepare Storage for these objects (not created yet)
-            lib::ScopedCollection<TestThread> threads{NUM_THREADS};
-            
-            size_t checkSum = 0;
-            size_t globalSum = 0;
-            auto launchThreads = [&]
-                                  {
-                                    for (uint i=1; i<=NUM_THREADS; ++i)
-                                      {
-                                        uint x = rand() % 1000;
-                                        globalSum += (i + x);
-                                        threads.emplace (&TestThread::doIt, i, x);
-                                      }                            // Note: bind to member function, copying arguments
-                                    
-                                    while (explore(threads).has_any())
-                                      yield();                  // wait for all threads to have detached
-                                    
-                                    for (auto& t : threads)
-                                      {
-                                        CHECK (0 < t.local);
-                                        checkSum += t.local;
-                                      }
-                                  };
-            
-            double runTime = benchmarkTime (launchThreads, REPETITIONS);
-            
-            CHECK (checkSum == globalSum);           // sum of precomputed random numbers matches sum from threads
-            CHECK (runTime < NUM_THREADS * 1000/2);  // random sleep time should be > 500ms on average
           }
       };
     

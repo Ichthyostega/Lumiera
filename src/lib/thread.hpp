@@ -124,6 +124,7 @@
 #include "lib/nocopy.hpp"
 #include "include/logging.h"
 #include "lib/meta/trait.hpp"
+#include "lib/meta/function.hpp"
 #include "lib/format-util.hpp"
 #include "lib/result.hpp"
 
@@ -146,6 +147,7 @@ namespace lib {
   namespace thread {// Thread-wrapper base implementation...
     
     using lib::meta::typeSymbol;
+    using lib::meta::_Fun;
     using std::function;
     using std::forward;
     using std::move;
@@ -302,24 +304,18 @@ namespace lib {
         using BasePol = PolicyLaunchOnly<BAS>;
         using BasePol::BasePol;
         
-        using Hook = function<void(TAR&)>;
+        using Self = PolicyLifecycleHook;
+        using Hook = function<void(Self&)>;
         
         Hook hook_beginThread{};
         Hook hook_afterThread{};
         Hook hook_looseThread{};
         
-        TAR&
-        castInstance()
-          {
-            return static_cast<TAR*>(
-                   static_cast<void*> (this));
-          }
-        
         void
         handle_begin_thread()
           {
             if (hook_beginThread)
-              hook_beginThread (castInstance());
+              hook_beginThread (*this);
             else
               BasePol::handle_begin_thread();
           }
@@ -328,16 +324,16 @@ namespace lib {
         handle_after_thread()
           {
             if (hook_afterThread)
-              hook_afterThread (castInstance());
-            else
-              BasePol::handle_after_thread();
+              hook_afterThread (*this);
+            if (BAS::isLive())  // Note: ensure thread is detached at end
+              BAS::threadImpl_.detach();
           }
         
         void
         handle_loose_thread()
           {
             if (hook_looseThread)
-              hook_looseThread (castInstance());
+              hook_looseThread (*this);
             else
               BasePol::handle_loose_thread();
           }
@@ -486,7 +482,7 @@ namespace lib {
             
             template<typename HOOK>
             Launch&&
-            atEnd (HOOK&& hook)
+            atExit (HOOK&& hook)
               {
                 return addHook (&Policy::hook_afterThread, forward<HOOK> (hook));
               }
@@ -503,11 +499,29 @@ namespace lib {
             Launch&&
             addHook (FUN Policy::*storedHook, HOOK&& hook)
               {
-                return addLayer ([storedHook, hook = forward<HOOK>(hook)]
+                static_assert(1 == _Fun<FUN>::ARITY);
+                static_assert(1 >= _Fun<HOOK>::ARITY);
+                using Arg = typename _Fun<FUN>::Args::List::Head;
+                FUN adapted;
+                if constexpr (0 == _Fun<HOOK>::ARITY)
+                  {
+                    adapted = [hook = forward<HOOK>(hook)](Arg){ hook(); };
+                  }
+                else
+                  {
+                    using Target = typename _Fun<HOOK>::Args::List::Head;
+                    adapted = [hook = forward<HOOK>(hook)]
+                              (Arg& threadWrapper)
+                                {
+                                  ThreadLifecycle& base = static_cast<ThreadLifecycle&> (threadWrapper);
+                                  Target&        target = static_cast<Target&> (base);
+                                  hook (target);
+                                };
+                  }
+                return addLayer ([storedHook, hook = move(adapted)]
                                  (ThreadLifecycle& wrapper)
                                     {
-                                      wrapper.*storedHook = move (hook);
-                                      chain (wrapper);
+                                      wrapper.*storedHook = move(hook);
                                     });
               }
             
@@ -662,6 +676,29 @@ namespace lib {
   /** deduction guide: find out about result value to capture from a generic callable. */
   template<typename FUN, typename...ARGS>
   ThreadJoinable (string const&, FUN&&, ARGS&&...) -> ThreadJoinable<std::invoke_result_t<FUN,ARGS...>>;
+  
+  
+  
+  /************************************************************************//**
+   * Extended variant of the [standard case](\ref Thread), allowing to install
+   * callbacks (hook functions) to be invoked during thread lifecycle:
+   * - `atStart` : invoked as first user code in the new thread
+   * - `atExit` : invoked as the last user code prior to detaching and thread end
+   * - `onOrphan` : invoked from the thread-wrapper destructor, when the actual
+   *   thread is detected as still running (according to the thread handle)
+   * By default, these callbacks are empty; custom callbacks can be installed
+   * through the ThreadLifecycle::Launch configuration builder using the
+   * corresponding builder functions (e.g. `.atExit(λ)`). The passed functor
+   * can either take no argument, or a single argument with a reference to
+   * some `*this` subtype, which must be reachable by static downcast from
+   * the ThreadLifecycle base type.
+   */
+  class ThreadHookable
+    : public thread::ThreadLifecycle<thread::PolicyLifecycleHook>
+    {
+    public:
+      using ThreadLifecycle::ThreadLifecycle;
+    };
   
   
   
