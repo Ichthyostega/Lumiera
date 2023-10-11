@@ -28,11 +28,10 @@
 #include "lib/test/run.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/tuple-helper.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/test/testdummy.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
-#include "lib/test/diagnostic-output.hpp"
-#include "lib/rational.hpp"
 #include "lib/util.hpp"
 
 #include <tuple>

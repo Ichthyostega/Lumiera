@@ -225,6 +225,20 @@ namespace lib {
         void handle_begin_thread() { }   ///< called immediately at start of thread
         void handle_after_thread() { }   ///< called immediately before end of thread
         void handle_loose_thread() { }   ///< called when destroying wrapper on still running thread
+        
+        /**
+         * allow to detach explicitly — independent from thread-function's state.
+         * @warning this function is borderline dangerous; it might be acceptable
+         *          in a situation where the thread totally manages itself and the
+         *          thread object is maintained in a unique_ptr. You must ensure that
+         *          the thread function does not touch anything in the wrapper object
+         *          after that point and only uses storage within its own scope.
+         */
+        void detach_thread_from_wrapper()
+          {
+            if (isLive())
+              threadImpl_.detach();
+          }
       };
     
     
@@ -362,6 +376,7 @@ namespace lib {
       };
     
     
+    
     /**
      * Policy-based configuration of thread lifecycle
      */
@@ -454,6 +469,13 @@ namespace lib {
             template<class FUN, typename...ARGS>
             Launch (FUN&& threadFunction, ARGS&& ...args)
               : launch{buildLauncher (forward<FUN>(threadFunction), forward<ARGS>(args)...)}
+              { }
+            
+            template<class TAR, typename...ARGS>
+            Launch (RES (TAR::*memFun) (ARGS...), ARGS ...args)  ///< ctor variant to bind a member function
+              : Launch{move (memFun)
+                      ,lib::meta::InstancePlaceholder<TAR>{}
+                      ,forward<ARGS> (args)... }
               { }
             
             Launch&&
@@ -737,8 +759,7 @@ namespace lib {
                            })
                  .onOrphan([](thread::ThreadWrapper& wrapper)
                            {
-                             if (wrapper.isLive())
-                               wrapper.threadImpl_.detach();
+                             wrapper.detach_thread_from_wrapper();
                            })};
      // Note: allocation tossed on the heap deliberately
   } //  The thread-function will pick up and manage *this

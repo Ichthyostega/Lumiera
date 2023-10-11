@@ -27,31 +27,27 @@
 
 #include "lib/test/run.hpp"
 #include "lib/thread.hpp"
-#include "lib/iter-explorer.hpp"
-#include "lib/scoped-collection.hpp"
-#include "lib/test/microbenchmark.hpp"
-#include "lib/test/diagnostic-output.hpp"
+#include "lib/test/testdummy.hpp"
 
 #include <atomic>
 #include <chrono>
+#include <memory>
 
 using test::Test;
 using lib::explore;
+using lib::test::Dummy;
 using std::atomic_uint;
 using std::this_thread::yield;
 using std::this_thread::sleep_for;
 using namespace std::chrono_literals;
 using std::chrono::system_clock;
+using std::unique_ptr;
 
 
 namespace lib {
 namespace test{
   
-    namespace { // test parameters
-      
-      const uint NUM_THREADS = 200;
-      const uint REPETITIONS = 10;
-      
+    namespace {
       using CLOCK_SCALE = std::micro; // Results are in µ-sec
     }
     
@@ -96,11 +92,11 @@ namespace test{
             double offset = Dur{threadStart - afterCtor}.count();
             CHECK (offset > 0);
           }    //  Note: in practice we see here values > 100µs
-              //         but in theory the thread might even overtake the launcher 
+              //         but in theory the thread might even overtake the launcher
         
         
-        /**
-         * @test attach user provided callback hooks to the thread lifecycle.
+        
+        /** @test attach user provided callback hooks to the thread lifecycle.
          */
         void
         verifyThreadLifecycleHooks()
@@ -124,29 +120,58 @@ namespace test{
         
         
         /**
-         * @test verify a special setup to start a thread explicitly and to track
-         *       the thread's lifecycle state.
+         * @test verify a special setup to start a thread explicitly
+         *       and to track the thread's lifecycle state.
+         *     - use a component to encapsulate the thread
+         *     - this TestThread component is managed in a `unique_ptr`
+         *     - thus it is explicitly possible to be _not_ in _running state_
+         *     - when starting the TestThread, a lifecycle callback is bound
+         *     - at termination this callback will clear the unique_ptr
+         *     - thus allocation and _running state_ is tied to the lifecycle
          */
         void
         demonstrateExplicitThreadLifecycle()
           {
-            UNIMPLEMENTED ("demonstrate state change");
               struct TestThread
-                : Thread
+                : ThreadHookable
                 {
-                  using Thread::Thread;
+                  using ThreadHookable::ThreadHookable;
                   
-                  uint local{0};
+                  atomic_uint processVal{23};
                   
                   void
-                  doIt (uint a, uint b) ///< the actual operation running in a separate thread
+                  doIt (uint haveFun)
                     {
-                      uint sum = a + b;
-//                      sleep_for (microseconds{sum});  // Note: explicit random delay before local store
-                      local = sum;
+                      sleep_for (100us);
+                      processVal = haveFun;
+                      sleep_for (5ms);
                     }
                 };
-          }
+            // Note the Dummy member allows to watch instance lifecycle
+            CHECK (0 == Dummy::checksum());
+            
+            // the frontEnd allows to access the TestThread component
+            // and also represents the running state
+            unique_ptr<TestThread> frontEnd;
+            CHECK (not frontEnd);  // obviously not running yet
+            
+            // start the thread and wire lifecycle callbacks
+            frontEnd.reset (new TestThread{
+                                  TestThread::Launch{&TestThread::doIt, 55u}
+                                            .atExit([&]{ frontEnd.reset(); })
+                                            .onOrphan([](thread::ThreadWrapper& wrapper)
+                                                       { wrapper.detach_thread_from_wrapper(); })
+                                          });
+
+            CHECK (frontEnd);                          // thread now marked as running
+            
+            CHECK (23 == frontEnd->processVal);        // this value was set by the ctor in this thread
+            sleep_for (1ms);                           // wait for the thread function to become active
+            CHECK (55 == frontEnd->processVal);        // changed by thread function
+            sleep_for (10ms);
+            
+            CHECK (not frontEnd);                      // meanwhile thread has finished
+          }                                            // and also cleared the front-end from the `atExit`-hook
       };
     
     

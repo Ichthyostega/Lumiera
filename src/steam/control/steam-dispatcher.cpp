@@ -231,6 +231,8 @@ namespace control {
        * any operation running in the Session thread is
        * started from here. When this loop terminates,
        * the »session subsystem« shuts down.
+       * @note the callback \a notifyEnd is typically bound
+       *    to invoke SteamDispatcher::endRunningLoopState().
        */
       void
       runSessionThread (Subsys::SigTerm notifyEnd)
