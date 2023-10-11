@@ -360,6 +360,27 @@ namespace lib {
           }
       };
     
+    template<class TAR>
+    struct InstancePlaceholder { };
+    
+    template<class W, class INVO>
+    inline INVO
+    lateBindInstance (W&, INVO invocation)
+    {
+      return invocation;
+    }
+    
+    template<class W, class F, class TAR, typename...ARGS>
+    inline auto
+    lateBindInstance (W& instance, const tuple<F, InstancePlaceholder<TAR>, ARGS...> invocation)
+    {
+      auto splice = [&instance](auto f, auto&, auto ...args)
+                      {
+                        TAR* instancePtr = static_cast<TAR*> (&instance);
+                        return tuple{move(f), instancePtr, move(args)...};
+                      };
+      return std::apply (splice, invocation);
+    }
     
     /**
      * Policy-based configuration of thread lifecycle
@@ -374,6 +395,7 @@ namespace lib {
         void
         invokeThreadFunction (ARGS&& ...args)
           {
+            if (not Policy::isLive()) return;
             Policy::handle_begin_thread();
             Policy::markThreadStart();
             Policy::perform_thread_function (forward<ARGS> (args)...);
@@ -396,6 +418,19 @@ namespace lib {
         
       public:
         /**
+         * Build the invocation tuple, using #invokeThreadFunction
+         * to delegate to the user-provided functor and arguments
+         */
+        template<class W, class...INVO>
+        static auto
+        buildInvocation (W& wrapper, tuple<INVO...>&& invocation)
+        {                                           //the thread-main function
+          return tuple_cat (tuple{&ThreadLifecycle::invokeThreadFunction<INVO...>
+                                 , &wrapper}      //  passing the wrapper as instance-this
+                           ,move (invocation));  //...invokeThreadFunction() in turn delegates
+        }                                       //    to the user-provided thread-operation
+        
+        /**
          * Build a λ actually to launch the given thread operation later,
          * after the thread-wrapper-object is fully initialised.
          * The member function #invokeThreadFunction will be run as top-level
@@ -413,13 +448,12 @@ namespace lib {
         buildLauncher (INVO&& ...args)
         {
           tuple<decay_t<INVO>...> argCopy{forward<INVO> (args)...};
-          return [invocation = move(argCopy)] //Note: functor+args bound by-value into the λ
+          return [invocation = move(argCopy)]// Note: functor+args bound by-value into the λ
                  (ThreadLifecycle& wrapper)
-                    {                                                          //the thread-main function
-                      wrapper.launchThread (tuple_cat (tuple{&ThreadLifecycle::invokeThreadFunction<decay_t<INVO>...>
-                                                            , &wrapper}      //  passing the wrapper as instance-this
-                                                      ,move (invocation))); //...invokeThreadFunction() in turn delegates
-                    };                                                     //    to the user-provided thread-operation
+                    {                        // special treatment for launchDetached
+                      auto boundInvocation = lateBindInstance (wrapper, move (invocation));
+                      wrapper.launchThread (buildInvocation (wrapper, move(boundInvocation)));
+                    };
         }
         
         
@@ -741,6 +775,30 @@ namespace lib {
     using Launch = typename TAR::Launch;
     launchDetached<TAR> (Launch{forward<INVO> (args)...}
                           .threadID (threadID));
+  }
+  
+  /** Special variant bind a member function of the subclass into the autonomous thread */
+  template<class TAR, typename...ARGS>
+  inline void
+  launchDetached (string const& threadID, void (TAR::*memFun) (ARGS...), ARGS ...args)
+  {
+    using Launch = typename TAR::Launch;
+    launchDetached<TAR> (Launch{std::move (memFun)
+                               ,thread::InstancePlaceholder<TAR>{}
+                               ,forward<ARGS> (args)...
+                               }
+                               .threadID (threadID));
+  }
+  
+  /** Special variant without explicitly given thread-ID */
+  template<class TAR, typename...ARGS>
+  inline void
+  launchDetached (void (TAR::*memFun) (ARGS...), ARGS ...args)
+  {
+    return launchDetached (util::joinDash (lib::meta::typeSymbol<TAR>(), args...)
+                          ,memFun
+                          ,forward<ARGS> (args)...
+                          );
   }
   
   

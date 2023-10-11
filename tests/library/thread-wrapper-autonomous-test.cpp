@@ -26,7 +26,9 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/testdummy.hpp"
 #include "lib/thread.hpp"
+#include "lib/test/diagnostic-output.hpp"///////////////////TODO
 
 #include <atomic>
 #include <chrono>
@@ -83,22 +85,30 @@ namespace test{
         void
         verifyMemoryManagement()
           {
-            UNIMPLEMENTED ("verify thread manages itself");
               struct TestThread
-                : Thread
+                : ThreadHookable
                 {
-                  using Thread::Thread;
+                  using ThreadHookable::ThreadHookable;
                   
-                  uint local{0};
+                  Dummy watcher;
                   
                   void
-                  doIt (uint a, uint b) ///< the actual operation running in a separate thread
+                  doIt (int extra)
                     {
-                      uint sum = a + b;
-//                    sleep_for (microseconds{sum});  // Note: explicit random delay before local store
-                      local = sum;
+                      watcher.setVal (extra);
+SHOW_EXPR(extra)
+                      sleep_for (5ms);
+SHOW_EXPR("bye")
                     }
                 };
+            //
+            CHECK (0 == Dummy::checksum());
+            //
+            launchDetached<TestThread> (&TestThread::doIt, 55);
+            
+            CHECK (0 < Dummy::checksum());
+            sleep_for (10ms);
+            CHECK (0 == Dummy::checksum());
           }
       };
     
