@@ -12,6 +12,20 @@ Anyone interested in Lumiera development is also encouraged to read mailing list
 archives and other documentation.
 
 
+11 Oct 2023
+-----------
+
+Topics
+~~~~~~
+ * Scheduler and worker pool design
+ * Rework of multithreading support
+ * Compiler and platform upgrades
+
+Summary
+^^^^^^^
+ * link:2023-10-11.html[Summary (by ichthyo)]
+
+
 13 Sep 2023
 -----------
 
