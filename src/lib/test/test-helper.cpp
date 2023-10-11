@@ -49,6 +49,8 @@ namespace test{
   long Dummy::_local_checksum = 0;
   bool Dummy::_throw_in_ctor = false;
   
+  EventLog Tracker::log{"Instance-Tracker"};
+  
   
   
   string

@@ -22,23 +22,32 @@
 
 
 /** @file testdummy.hpp
- ** unittest helper code: test dummy object.
- ** This dummy includes some distinct random identity marker
- ** plus a checksum facility to verify instance management, i.e.
- ** to verify each created instance was properly destroyed after use.
+ ** unittest helper code: test dummy objects to track instances.
+ ** These can be used to verify proper allocation handling, either by
+ ** watching the checksum of \ref Dummy, or by matching on the \ref EventLog
+ ** embedded into \ref Tracker.
  */
 
 
 #include "lib/nocopy.hpp"
+#include "lib/test/event-log.hpp"
+#include "lib/format-string.hpp"
+#include "lib/util.hpp"
 
 #include <algorithm>
+#include <limits>
 
 
 namespace lib {
 namespace test{
-    
   
-  class Dummy 
+  
+  /**
+   * A Dummy object for tests. Each instance includes some distinct
+   * random identity marker plus a checksum facility to verify instance management,
+   * i.e. to verify each created instance was properly destroyed after use.
+   */
+  class Dummy
     : util::NonCopyable
     {
       int val_;
@@ -62,6 +71,7 @@ namespace test{
         }
       
       virtual long
+      
       acc (int i)   ///< dummy API operation
         {
           return val_+i;
@@ -107,8 +117,100 @@ namespace test{
           if (_throw_in_ctor)
             throw val_;
         }
-
     };
+
+  
+  
+  
+  /**
+   * A tracking Dummy object for tests.
+   * All construction-, destruction and copy operations
+   * are logged into an embedded lib::test::EventLog
+   */
+  struct Tracker
+    {
+      static lib::test::EventLog log;
+      
+      static constexpr int DEFUNCT = std::numeric_limits<int>::min();
+      static constexpr int DEAD    = std::numeric_limits<int>::max();
+      
+      int val;
+      
+     ~Tracker()
+        {
+          log.call (this,"dtor", val);
+          val = DEAD;
+        }
+      
+      Tracker()
+        : val{rand() % 1000}
+        {
+          log.call (this,"ctor");
+        }
+      
+      Tracker(int v)
+        : val{v}
+        {
+          log.call (this,"ctor", v);
+        }
+      
+      Tracker(Tracker const& ol)
+        : val{ol.val}
+        {
+          log.call (this,"ctor-copy", ol);
+        }
+      
+      Tracker(Tracker && oo)
+        : val{oo.val}
+        {
+          log.call (this,"ctor-move", oo);
+          oo.val = DEFUNCT;
+        }
+      
+      Tracker&
+      operator= (Tracker const& ol)
+        {
+          if (util::isSameObject (*this, ol))
+            {
+              log.call (this, "self-assign-copy");
+            }
+          else
+            {
+              log.call (this, "assign-copy", ol);
+              val = ol.val;
+            }
+          return *this;
+        }
+      
+      Tracker&
+      operator= (Tracker && oo)
+        {
+          if (util::isSameObject (*this, oo))
+            {
+              log.call (this, "self-assign-move");
+            }
+          else
+            {
+              log.call (this, "assign-move", oo);
+              val = oo.val;
+              oo.val = DEFUNCT;
+            }
+          return *this;
+        }
+      
+      operator string()  const
+        {
+          return util::_Fmt{"Track{%02d}"} % val;
+        }
+      
+      friend void
+      swap (Tracker& t1, Tracker& t2)
+      {
+        log.call ("static", "swap", t1, t2);
+        std::swap (t1.val, t2.val);
+      }
+    };
+  
   
   
 }} // namespace lib::test

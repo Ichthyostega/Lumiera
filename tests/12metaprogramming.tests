@@ -238,6 +238,11 @@ return: 0
 END
 
 
+TEST "member function late binding" LateBindInstance_test  <<END
+return: 0
+END
+
+
 TEST "metaprogramming helpers" MetaUtils_test  <<END
 return: 0
 END

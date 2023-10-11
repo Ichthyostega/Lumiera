@@ -205,6 +205,54 @@ namespace meta{
   
   
   
+  /** Placeholder marker for a special argument position to be supplied later */
+  template<class TAR>
+  struct InstancePlaceholder { };
+  
+  namespace {// Helper to inject instance-pointer instead of placeholder...
+    /**
+     * @internal helper to detect an InstancePlaceholder
+     * @return   an instance-pointer, statically casted to the marked target type.
+     */
+    template<class W, class TAR>
+    constexpr inline TAR*
+    maybeInject (W& instance, InstancePlaceholder<TAR>)
+    {
+      return static_cast<TAR*> (&instance);
+    }
+    
+    /** (default case: fall-through) */
+    template<class W, typename X>
+    constexpr inline X
+    maybeInject (W&, X&& x)
+    {
+      return std::move(x);
+    }
+  }//(End)Helper for lateBindInstance.
+
+  /**
+   * Fix-up the arguments for a member-function invocation,
+   * allowing to inject the actual `this` instance into an existing argument sequence.
+   * @remark invocation of a member function requires to supply the _object instance_ as
+   *         first element in the argument list; sometimes this poses a design challenge,
+   *         since the actual instance may not be known at the point where the other arguments
+   *         are prepared. As a remedy, the position of the instance pointer can be marked with
+   *         the \ref InstancePlaceholder, allowing to splice in the actual pointer when known.
+   */
+  template<class W, class TUP>
+  constexpr inline auto
+  lateBindInstance (W& instance, TUP&& invocation)
+  {
+    auto splice = [&instance](auto&& ...xs)
+                    {
+                      return std::tuple{maybeInject (instance, std::move(xs))...};
+                    };
+    return std::apply (splice, std::forward<TUP> (invocation));
+  }
+  
+  
+  
+  
   
   
   
@@ -214,7 +262,7 @@ namespace meta{
    * and the bare function signature #Sig
    * @param RET the function return type
    * @param ARGS a type sequence describing the arguments
-   */
+   */                                  //////////////////////////////////////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic, then replace this by a single variadic template
   template<typename RET, typename ARGS>
   struct FunctionTypedef;
   

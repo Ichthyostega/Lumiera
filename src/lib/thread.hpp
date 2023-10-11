@@ -150,6 +150,7 @@ namespace lib {
   
   namespace thread {// Thread-wrapper base implementation...
     
+    using lib::meta::lateBindInstance;
     using lib::meta::typeSymbol;
     using lib::meta::_Fun;
     using util::isnil;
@@ -360,27 +361,6 @@ namespace lib {
           }
       };
     
-    template<class TAR>
-    struct InstancePlaceholder { };
-    
-    template<class W, class INVO>
-    inline INVO
-    lateBindInstance (W&, INVO invocation)
-    {
-      return invocation;
-    }
-    
-    template<class W, class F, class TAR, typename...ARGS>
-    inline auto
-    lateBindInstance (W& instance, const tuple<F, InstancePlaceholder<TAR>, ARGS...> invocation)
-    {
-      auto splice = [&instance](auto f, auto&, auto ...args)
-                      {
-                        TAR* instancePtr = static_cast<TAR*> (&instance);
-                        return tuple{move(f), instancePtr, move(args)...};
-                      };
-      return std::apply (splice, invocation);
-    }
     
     /**
      * Policy-based configuration of thread lifecycle
@@ -784,7 +764,7 @@ namespace lib {
   {
     using Launch = typename TAR::Launch;
     launchDetached<TAR> (Launch{std::move (memFun)
-                               ,thread::InstancePlaceholder<TAR>{}
+                               ,lib::meta::InstancePlaceholder<TAR>{}
                                ,forward<ARGS> (args)...
                                }
                                .threadID (threadID));
@@ -795,10 +775,10 @@ namespace lib {
   inline void
   launchDetached (void (TAR::*memFun) (ARGS...), ARGS ...args)
   {
-    return launchDetached (util::joinDash (lib::meta::typeSymbol<TAR>(), args...)
-                          ,memFun
-                          ,forward<ARGS> (args)...
-                          );
+    launchDetached (util::joinDash (lib::meta::typeSymbol<TAR>(), args...)
+                   ,memFun
+                   ,forward<ARGS> (args)...
+                   );
   }
   
   

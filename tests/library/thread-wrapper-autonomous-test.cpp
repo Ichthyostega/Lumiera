@@ -28,26 +28,18 @@
 #include "lib/test/run.hpp"
 #include "lib/test/testdummy.hpp"
 #include "lib/thread.hpp"
-#include "lib/test/diagnostic-output.hpp"///////////////////TODO
 
 #include <atomic>
 #include <chrono>
 
 using test::Test;
-using std::atomic_uint;
-using std::this_thread::yield;
+using std::atomic_bool;
 using std::this_thread::sleep_for;
 using namespace std::chrono_literals;
 
 
 namespace lib {
 namespace test{
-  
-    namespace { // test parameters
-      
-      const uint NUM_THREADS = 200;
-      const uint REPETITIONS = 10;
-    }
     
     
     /*******************************************************************//**
@@ -71,11 +63,11 @@ namespace test{
         void
         demonstrateSimpleUsage()
           {
-            atomic_uint i{0};
-            launchDetached ("anarchy", [&]{ ++i; });
+            atomic_bool didRun{false};
+            launchDetached ("anarchy", [&]{ didRun = true; });
             
             sleep_for(1ms);
-            CHECK (i == 1);                            // verify the effect has taken place
+            CHECK (didRun);  // verify the effect has taken place
           }
         
         
@@ -96,17 +88,17 @@ namespace test{
                   doIt (int extra)
                     {
                       watcher.setVal (extra);
-SHOW_EXPR(extra)
                       sleep_for (5ms);
-SHOW_EXPR("bye")
                     }
                 };
-            //
+            // Note the Dummy member allows to watch instance lifecycle
             CHECK (0 == Dummy::checksum());
-            //
+            
             launchDetached<TestThread> (&TestThread::doIt, 55);
             
             CHECK (0 < Dummy::checksum());
+            sleep_for (1ms);
+            CHECK (55 == Dummy::checksum());
             sleep_for (10ms);
             CHECK (0 == Dummy::checksum());
           }

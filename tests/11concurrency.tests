@@ -42,7 +42,7 @@ return: 0
 END
 
 
-PLANNED "Launch self-contained detached Thread" ThreadWrapperAutonomous_test  <<END
+TEST "Launch self-contained detached Thread" ThreadWrapperAutonomous_test  <<END
 return: 0
 END
 
