@@ -31,7 +31,7 @@
 #include "steam/play/output-director.hpp"
 #include "lib/thread.hpp"
 
-using lib::Thread;
+using lib::launchDetached;
 
 
 namespace steam {
@@ -102,11 +102,10 @@ namespace play {
     if (not shutdown_initiated_)
       {
         shutdown_initiated_ = true;
-        Thread{"Output shutdown supervisor"
-              ,[=]{
-                    bringDown (completedSignal);
-                  }}
-              .detach();
+        launchDetached ("Output shutdown supervisor"
+                       ,[=]{
+                             bringDown (completedSignal);
+                           });
       }
   }
   

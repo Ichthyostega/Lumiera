@@ -163,7 +163,7 @@ namespace test {
         }
       
       
-      /** @test replacement happens uniformely on all kinds of tuples
+      /** @test replacement happens uniformly on all kinds of tuples
        */
       void
       verify_cornerCases()
