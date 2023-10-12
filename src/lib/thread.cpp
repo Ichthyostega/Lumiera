@@ -35,10 +35,12 @@
 #include "lib/util.hpp"
 
 #include <chrono>
+#include <atomic>
 #include <pthread.h>
 
 using util::_Fmt;
 using lib::Literal;
+using std::atomic_uint;
 using std::chrono::steady_clock;
 using std::chrono_literals::operator ""ms;
 
@@ -55,6 +57,15 @@ namespace thread{
     {
       return _Fmt{"Thread '%s' %s"} % threadID % phase;
     }
+  }
+  
+  
+  /** Helper to create a suffix to the thread-ID with running count */
+  string
+  ThreadWrapper::decorate_with_global_count (string const& rawID)
+  {
+    static atomic_uint globalCnt{1};
+    return _Fmt{"%s.%03i"} % rawID % globalCnt.fetch_add (+1, std::memory_order_acq_rel);
   }
   
   

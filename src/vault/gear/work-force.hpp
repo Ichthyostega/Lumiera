@@ -43,7 +43,7 @@
  **          in parallel, yet any other worker about to pick the next task has to wait until
  **          it is possible to grab the `GroomingToken` exclusively. For the WorkForce this
  **          usage pattern implies that there is *no explicit synchronisation* -- scaling up
- **          and shutting down must be performed non-concurrent.
+ **          and shutting down must be performed non-concurrently.
  ** @see work-force-test.cpp
  ** @see scheduler-commutator.hpp usage as part of the scheduler
  */
@@ -56,12 +56,12 @@
 #include "vault/common.hpp"
 #include "vault/gear/activity.hpp"
 #include "lib/meta/function.hpp"
+#include "lib/thread.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
 #include <utility>
 #include <chrono>
-#include <thread>
 #include <atomic>
 #include <list>
 
@@ -72,6 +72,7 @@ namespace gear {
   using std::move;
   using std::atomic;
   using util::unConst;
+  using std::this_thread::sleep_for;
   
   
   namespace work { ///< Details of WorkForce (worker pool) implementation
@@ -100,26 +101,35 @@ namespace gear {
       };
     
     
-    /**
+    using Launch = lib::Thread::Launch;
+    
+    /*************************************//**
      * Individual worker thread:
      * repeatedly pulls the `doWork` functor.
      */
     template<class CONF>
-    class Runner
+    class Worker
       : CONF
       , util::NonCopyable
-      , public std::thread
       {
       public:
-        Runner (CONF config)
+        Worker (CONF config)
           : CONF{move (config)}
-          , thread{[this]{ pullWork(); }}
+          , thread_{Launch{&Worker::pullWork, this}
+                          .threadID("Worker")
+                          .decorateCounter()}
           { }
         
         /** emergency break to trigger cooperative halt */
         std::atomic<bool> emergency{false};
         
+        /** this Worker starts out active, but may terminate */
+        bool isDead() const { return not thread_; }
+        
+        
       private:
+        lib::Thread thread_;
+        
         void
         pullWork()
           {
@@ -150,9 +160,7 @@ namespace gear {
                 CONF::finalHook (not regularExit);
               }
             ERROR_LOG_AND_IGNORE (threadpool, "failure in thread-exit hook")
-            
-            thread::detach();
-          }
+          }// Thread will terminate....
         
         activity::Proc
         idleWait()
@@ -160,7 +168,7 @@ namespace gear {
             ++idleCycles;
             if (idleCycles < CONF::DISMISS_CYCLES)
               {
-                std::this_thread::sleep_for (CONF::IDLE_WAIT);
+                sleep_for (CONF::IDLE_WAIT);
                 return activity::PASS;
               }
             else  // idle beyond threshold => terminate worker
@@ -185,7 +193,7 @@ namespace gear {
   class WorkForce
     : util::NonCopyable
     {
-      using Pool = std::list<work::Runner<CONF>>;
+      using Pool = std::list<work::Worker<CONF>>;
       
       CONF setup_;
       Pool workers_;
@@ -235,15 +243,15 @@ namespace gear {
       awaitShutdown()
         {
           for (auto& w : workers_)
-            w.emergency.store(true, std::memory_order_relaxed);
+            w.emergency.store (true, std::memory_order_relaxed);
           while (0 < size())
-            std::this_thread::sleep_for(setup_.IDLE_WAIT);
+            sleep_for (setup_.IDLE_WAIT);
         }
       
       size_t
       size()  const
         {
-          unConst(workers_).remove_if([](auto& w){ return not w.joinable(); });
+          unConst(workers_).remove_if([](auto& w){ return w.isDead(); });
           return workers_.size();
         }
     };

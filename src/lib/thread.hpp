@@ -226,6 +226,8 @@ namespace lib {
         void handle_after_thread() { }   ///< called immediately before end of thread
         void handle_loose_thread() { }   ///< called when destroying wrapper on still running thread
         
+        static string decorate_with_global_count (string const&);
+        
         /**
          * allow to detach explicitly — independent from thread-function's state.
          * @warning this function is borderline dangerous; it might be acceptable
@@ -389,7 +391,6 @@ namespace lib {
         void
         invokeThreadFunction (ARGS&& ...args)
           {
-            if (not Policy::isLive()) return;
             Policy::handle_begin_thread();
             Policy::markThreadStart();
             Policy::perform_thread_function (forward<ARGS> (args)...);
@@ -481,6 +482,13 @@ namespace lib {
             threadID (string const& threadID)
               {
                 id = threadID;
+                return move(*this);
+              }
+            
+            Launch&&
+            decorateCounter()
+              {
+                id = Policy::decorate_with_global_count (id);
                 return move(*this);
               }
             

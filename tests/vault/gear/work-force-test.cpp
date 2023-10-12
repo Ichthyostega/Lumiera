@@ -27,7 +27,9 @@
 
 #include "lib/test/run.hpp"
 #include "vault/gear/work-force.hpp"
+#include "lib/thread.hpp"
 #include "lib/sync.hpp"
+#include "lib/test/diagnostic-output.hpp"////////////TODO
 
 #include <functional>
 #include <thread>
@@ -44,6 +46,7 @@ namespace test {
   using std::this_thread::sleep_for;
   using namespace std::chrono_literals;
   using std::chrono::milliseconds;
+  using lib::Thread;
   
   
   namespace {
@@ -213,7 +216,7 @@ namespace test {
                           .withSleepPeriod (10ms)};
           
           wof.incScale();
-          sleep_for(50us);
+          sleep_for(1ms);
           
           CHECK (1 == check);
           
@@ -238,7 +241,7 @@ namespace test {
                           .dismissAfter(5)};
           
           wof.incScale();
-          sleep_for(100us);
+          sleep_for(1ms);
           
           CHECK (1 == check);
           
@@ -375,12 +378,12 @@ namespace test {
           CHECK (0 == wof.size());
           
           wof.incScale();
-          sleep_for(100us);
+          sleep_for(1ms);
           CHECK (1 == uniqueCnt);
           CHECK (1 == wof.size());
           
           wof.incScale();
-          sleep_for(100us);
+          sleep_for(1ms);
           CHECK (2 == uniqueCnt);
           CHECK (2 == wof.size());
 
@@ -462,22 +465,22 @@ namespace test {
           atomic<bool> pool_scaled_up{false};
           atomic<bool> shutdown_done{false};
           
-          std::thread operate{[&]{
-                                   {// nested scope...
-                                     WorkForce wof{setup (blockingWork)};
-                                     
-                                     wof.activate();
-                                     sleep_for(10ms);
-                                     CHECK (wof.size() == work::Config::COMPUTATION_CAPACITY);
-                                     pool_scaled_up = true;
-                                   } // WorkForce goes out of scope => dtor called
-                                   
-                                   // when reaching this point, dtor has terminated
-                                   shutdown_done = true;
-                                   operate.detach();
-                                 }};
+          Thread operate{"controller"
+                        ,[&] {
+                               {// nested scope...
+                                 WorkForce wof{setup (blockingWork)};
+                                 
+                                 wof.activate();
+                                 sleep_for (10ms);
+                                 CHECK (wof.size() == work::Config::COMPUTATION_CAPACITY);
+                                 pool_scaled_up = true;
+                               } // WorkForce goes out of scope => dtor called
+                               
+                               // when reaching this point, dtor has terminated
+                               shutdown_done = true;
+                             }};
           
-          CHECK (operate.joinable());       // operate-thread is in running state
+          CHECK (operate);                  // operate-thread is in running state
           sleep_for(100ms);
           
           CHECK (pool_scaled_up);
@@ -486,7 +489,7 @@ namespace test {
           trapped = false;
           sleep_for(20ms);
           CHECK (shutdown_done);
-          CHECK (not operate.joinable());   // operate-thread has detached and terminated
+          CHECK (not operate);              // operate-thread has detached and terminated
         }
     };
   
