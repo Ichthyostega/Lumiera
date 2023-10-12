@@ -92,7 +92,7 @@ namespace stage {
     class GtkLumiera
       : util::NonCopyable
       {
-        UiBus uiBus_;
+        UiBus     uiBus_;
         UiManager uiManager_;
         
       public:

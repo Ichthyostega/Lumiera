@@ -77,7 +77,7 @@ namespace thread{
   void
   ThreadWrapper::markThreadEnd()
   {
-    TRACE (thread, "%s", lifecycleMsg ("finished.", threadID_).c_str());
+    TRACE (thread, "%s", lifecycleMsg ("terminates.", threadID_).c_str());
   }
   
   

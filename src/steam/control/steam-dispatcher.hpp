@@ -73,13 +73,15 @@ namespace control {
   
   
   /**
-   * Guard to manage processing commands working on the session.
+   * Guard to manage processing commands to operate on the session.
    * A static application facility, actually backing and implementing
    * the »session subsystem«. Embedded within the implementation of this
    * class is the _»session loop thread«_ to perform any session mutation
-   * commands and to operate the Builder, which translates the session
+   * commands and to activate the Builder, which translates the session
    * contents into a render nodes network. Also embedded herein is
    * the implementation of steam::control::SessionCommandService
+   * @warning destroying this object while #isRunning() will
+   *          terminate the Application unconditionally.
    */
   class SteamDispatcher
     : public lib::Sync<>

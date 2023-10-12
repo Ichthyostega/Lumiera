@@ -270,8 +270,7 @@ namespace lib {
         void
         handle_after_thread()
           {
-            if (BAS::isLive())
-              BAS::threadImpl_.detach();
+            BAS::detach_thread_from_wrapper();
           }
         
         void
@@ -316,8 +315,8 @@ namespace lib {
           {
             if (hook_afterThread)
               hook_afterThread (*this);
-            if (BAS::isLive())  // Note: ensure thread is detached at end
-              BAS::threadImpl_.detach();
+            // Note: ensure thread is detached at end
+            BAS::detach_thread_from_wrapper();
           }
         
         void
@@ -649,16 +648,6 @@ namespace lib {
     {
     public:
       using ThreadLifecycle::ThreadLifecycle;
-      
-      /** allow to detach explicitly — independent from thread-function's state
-       * @warning this function is borderline dangerous; it might be acceptable
-       *          in a situation where the thread totally manages itself and the
-       *          thread object is maintained in a unique_ptr. You must ensure that
-       *          the thread function only uses storage within its own scope.
-       * @deprecated can't sleep well while this function is exposed;
-       *          need a prime solution to address this relevant use case ////////////////////////////////////////OOO allow for a thread with explicit lifecycle
-       */
-      void detach() { ThreadLifecycle::handle_after_thread(); }
     };
   
   

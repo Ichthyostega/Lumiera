@@ -26,7 +26,7 @@
  ** The SteamDispatcher is at the heart of the session subsystem and implements a
  ** (single) session thread to perform commands and trigger builder runs. New commands
  ** can be enqueued with a dedicated CommandQueue, while the details of operation control
- ** logic are encapsulated in a [logic component](\ref Looper).
+ ** logic are encapsulated in a [processing logic component](\ref Looper).
  ** 
  ** # Operational Semantics
  ** We need to distinguish between the SteamDispatcher itself, which is a static (singleton) service,
@@ -34,15 +34,15 @@
  ** while the Session itself is a data structure and can be closed, opened or re-loaded. There is a singular
  ** transactional access point to the Session datastructure, which can be switched to new session contents.
  ** But external manipulation of the session contents is performed by commands, which are _dispatched_ --
- ** to manage this process is the concern of the »Session Subsystem«.
+ ** and the management of this process is the concern served by the »Session Subsystem«.
  ** 
  ** Closing a session blocks further command processing, while the lifecycle of the _Session Subsystem_ is
- ** actually linked to _running the \ref DispatcherLoop_ -- implementation logic defined within this
- ** translation unit. This loop implementation is performed in a dedicated thread, _the Session Loop Thread._
+ ** actually linked to _running the \ref DispatcherLoop_ -- a piece of implementation logic defined within this
+ ** translation unit. The loop implementation is performed within a dedicated thread, _the Session Loop Thread._
  ** And this also entails opening the public SessionCommandService interface.
  ** 
  ** ## Loop operation control
- ** The loop starts with a blocking wait state, bound to the condition Looper::requireAction. Here, Looper
+ ** The loop starts with a blocking wait state, bound to the condition Looper::requireAction. The Looper
  ** is a helper to encapsulate the control logic, separated from the actual control flow. In the loop body,
  ** depending on the Looper's decision, either the next command is fetched from the CommandQueue and dispatched,
  ** or a builder run is triggered, rebuilding the »Low-Level-Model« to reflect the executed command's effects.
@@ -53,21 +53,21 @@
  ** - yet we continue to dispatch further commands, until the queue is emptied
  ** - and only after a further small latency wait, the builder run is triggered
  ** - but we _enforce a builder run_ after some extended timeout period, even
- **   when the command queue is not yet emptied
+ **   when the command queue is not emptied yet
  ** - from the outside, it is possible to deactivate processing and place the
  **   loop into dormant state. This is used while closing or loading the Session
  ** - and of course we can request the Session Loop Thread to stop, for shutting
  **   down the »Session Subsystem« as a whole
  ** - in both cases the currently performed action (command or builder) is
- **   finished, without interrupt
+ **   finished, without interruption.
  ** 
  ** ## Locking
  ** The SteamDispatcher uses an "inner and outer capsule" design, and both layers are locked independently.
  ** On the outer layer, locking ensures sanity of the control data structures, while locking on the inner
  ** layer guards the communication with the Session Loop Thread, and coordinates sleep wait and notification.
  ** As usual with Lumiera's Thread wrapper, the management of the thread's lifecycle itself, hand-over of
- ** parameters, and starting / joining of the thread operation is protected by separate locking embedded
- ** into the thread and threadpool handling code.
+ ** parameters, and starting / joining of the thread operation is protected by means of synchronisation
+ ** embedded into the underlying implementation (C++ standard library thread support).
  ** @note most of the time, the Session Loop Thread does not hold any lock, most notably while performing
  **       a command or running the builder. Likewise, evaluation of the control logic in the Looper helper
  **       is a private detail of the performing thread. The lock is acquired solely for checking or leaving
@@ -93,13 +93,15 @@
 #include "lib/thread.hpp"
 #include "lib/util.hpp"                ///////////////TODO for test command invocation
 
+#include <utility>
 #include <memory>
   
 using lib::Sync;
-using lib::RecursiveLock_Waitable;
 using lib::SyncBarrier;
-using lib::Thread;
-using std::unique_ptr;
+using lib::ThreadHookable;
+using lib::RecursiveLock_Waitable;
+using std::make_unique;
+using std::move;
 
 namespace steam {
 namespace control {
@@ -119,14 +121,16 @@ namespace control {
     , public Sync<RecursiveLock_Waitable>
     {
       using ServiceHandle = lib::DependInject<SessionCommandService>::ServiceInstance<>;
+      using Launch = lib::ThreadHookable::Launch;
       
       /** manage the primary public Session interface */
       ServiceHandle commandService_;
-      
-      SyncBarrier   init_;
-      CommandQueue queue_;
-      Looper      looper_;
-      Thread      thread_;
+
+      SyncBarrier      init_;
+      CommandQueue    queue_;
+      string          error_;
+      Looper         looper_;
+      ThreadHookable thread_;
       
     public:
       /** start the session loop thread
@@ -137,16 +141,24 @@ namespace control {
        *         in case it does, the main application thread will be deadlocked on startup.
        *         Such might happen indirectly, when something depends on "the Session"
        */
-      DispatcherLoop (Subsys::SigTerm notification)
+      template<typename FUN>
+      DispatcherLoop (FUN&& atExit)
         : commandService_{ServiceHandle::NOT_YET_STARTED}
         , queue_{}
+        , error_{}
         , looper_([&]() -> bool
                     {
                       return not queue_.empty();
                     })
-        , thread_{"Session"
-                 ,&DispatcherLoop::runSessionThread
-                 , this, notification}
+        , thread_{ //----the-Session-Thread---------------
+                  Launch{&DispatcherLoop::runSessionThread, this}
+                        .threadID("Session")
+                        .atExit([this, signalEndOfThread = move(atExit)]
+                                (lib::thread::ThreadWrapper& handle)
+                                  {
+                                    handle.detach_thread_from_wrapper();
+                                    signalEndOfThread (&error_);
+                                  })}
         {
           init_.sync();   // done with setup; loop may run now....
           INFO (session, "Steam-Dispatcher running...");
@@ -161,6 +173,8 @@ namespace control {
           try {
               commandService_.shutdown();  // redundant call, to ensure session interface is closed reliably
               INFO (session, "Steam-Dispatcher stopped.");
+              if (thread_)
+                ALERT (session, "Dispatcher destroyed while Session thread is running. The rest is silence.");
             }
           ERROR_LOG_AND_IGNORE(session, "Stopping the Steam-Dispatcher");
         }
@@ -235,9 +249,8 @@ namespace control {
        *    to invoke SteamDispatcher::endRunningLoopState().
        */
       void
-      runSessionThread (Subsys::SigTerm notifyEnd)
+      runSessionThread ()
         {
-          string errorMsg;
           init_.sync();
           try
             {
@@ -256,18 +269,15 @@ namespace control {
             }
           catch (std::exception& problem)
             {  // could also be lumiera::Error
-              errorMsg = problem.what();
+              error_ = problem.what();
               lumiera_error();        // clear error flag
             }
           catch (...)
             {
-              errorMsg = string{lumiera_error()};
+              error_ = string{lumiera_error()};
             }
-           // leave the Session thread...
-          //  send notification of subsystem shutdown
-          thread_.detach();/////////////////////////////////////////////////////////////OOO while this case is exceptional, it still mandates better framework support
-          notifyEnd (&errorMsg); // invokes ~DispatcherLoop()
-        }
+           // Session thread terminates...
+        } //  atExit-λ will invoke ~DispatcherLoop()
       
       void
       awaitAction()   ///< at begin of loop body...
@@ -354,17 +364,39 @@ namespace control {
     Lock sync(this);
     if (runningLoop_) return false;
     
-    runningLoop_.reset (
-      new DispatcherLoop (
-            [=] (string* problemMessage)
-                {
+    runningLoop_ =
+         make_unique<DispatcherLoop>(
+            [=](string* problemIndicator)
+                { // when the Session thread ends....
                   SteamDispatcher::endRunningLoopState();
-                  termNotification(problemMessage);
-                }));
+                  termNotification (problemIndicator);
+                });
     
     if (active_)
       runningLoop_->activateCommandProecssing();
     return true;
+  }
+  
+  /** @internal clean-up when leaving the session loop thread.
+   *  This function is hooked up in to the termination callback,
+   *  and is in fact the only one to delete the loop PImpl. We
+   *  take the (outer) lock on SteamDispatcher to ensure no one
+   *  commits anything to the DispatcherLoop object while being
+   *  deleted. The call itself, while technically originating
+   *  from within DispatcherLoop::runSessionThread(), relies
+   *  solely on stack based context data and is a tail call.
+   */
+  void
+  SteamDispatcher::endRunningLoopState()
+  {
+    Lock sync(this);
+    if (runningLoop_)
+      runningLoop_.reset();  // delete DispatcherLoop object
+    else
+      WARN (command, "clean-up of DispatcherLoop invoked, "
+                     "while SteamDispatcher is not marked as 'running'. "
+                     "Likely an error in lifecycle logic, as the only one "
+                     "intended to delete this object is the loop thread itself.");
   }
   
   
@@ -394,28 +426,6 @@ namespace control {
     ERROR_LOG_AND_IGNORE (command, "Request for Session Loop Thread to terminate");
   }
   
-  
-  /** @internal clean-up when leaving the session loop thread.
-   *  This function is hooked up in to the termination callback,
-   *  and is in fact the only one to delete the loop PImpl. We
-   *  take the (outer) lock on SteamDispatcher to ensure no one
-   *  commits anything to the DispatcherLoop object while being
-   *  deleted. The call itself, while technically originating
-   *  from within DispatcherLoop::runSessionThread(), relies
-   *  solely on stack based context data and is a tail call.
-   */
-  void
-  SteamDispatcher::endRunningLoopState()
-  {
-    Lock sync(this);
-    if (runningLoop_)
-      runningLoop_.reset();  // delete DispatcherLoop object
-    else
-      WARN (command, "clean-up of DispatcherLoop invoked, "
-                     "while SteamDispatcher is not marked as 'running'. "
-                     "Likely an error in lifecycle logic, as the only one "
-                     "intended to delete this object is the loop thread itself.");
-  }
   
   
   /** activate processing of enqueued session commands.

@@ -183,7 +183,11 @@ namespace lumiera {
           INFO (subsystem, "Triggering startup of subsystem \"%s\"", cStr(*susy));
           
           for_each (susy->getPrerequisites(), start_);
-          bool started = susy->start (opts_, bind (&SubsystemRunner::sigTerm, this, susy, _1));
+          bool started = susy->start (opts_, [this,susy]
+                                             (string* problem)
+                                                {
+                                                  this->sigTerm (susy, problem);
+                                                });
           
           if (started)
             {
@@ -204,9 +208,9 @@ namespace lumiera {
         {
           REQUIRE (susy);
           Lock sync (this);
-          triggerEmergency(!isnil (problem));
+          triggerEmergency(not isnil (problem));
           INFO (subsystem, "Subsystem '%s' terminated.", cStr(*susy));
-          WARN_IF (!isnil(problem), subsystem, "Irregular shutdown caused by: %s", cStr(*problem));
+          WARN_IF (not isnil(problem), subsystem, "Irregular shutdown caused by: %s", cStr(*problem));
           ERROR_IF (susy->isRunning(), subsystem, "Subsystem '%s' signals termination, "
                                                   "without resetting running state", cStr(*susy));
           removeall (running_, susy);

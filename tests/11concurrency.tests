@@ -47,7 +47,7 @@ return: 0
 END
 
 
-PLANNED "Detect Thread lifecycle state changes" ThreadWrapperLifecycle_test  <<END
+TEST "Detect Thread lifecycle state changes" ThreadWrapperLifecycle_test  <<END
 return: 0
 END
 
