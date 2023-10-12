@@ -49,10 +49,10 @@
 #include "stage/gtk-base.hpp"
 
 #include "lib/error.hpp"
+#include "lib/thread.hpp"
 #include "stage/ui-bus.hpp"
 #include "stage/guifacade.hpp"
 #include "stage/ctrl/ui-manager.hpp"
-#include "vault/thread-wrapper.hpp"
 #include "common/subsys.hpp"
 #include "lib/nocopy.hpp"
 
@@ -65,8 +65,8 @@ extern "C" {
 
 
 
-using vault::Thread;
 using lumiera::Subsys;
+using lib::launchDetached;
 using lumiera::error::LUMIERA_ERROR_STATE;
 using stage::LUMIERA_INTERFACE_INAME(lumieraorg_Gui, 1);
 
@@ -128,28 +128,24 @@ namespace stage {
             return errorMsgBuff;
           }
       };
-    
-    
-    void
-    runGUI (Subsys::SigTerm reportOnTermination)       ///< this is the UI-Thread
-    {
-      string shutdownLog = GtkLumiera{}.run();
-      
-       // inform main thread that the GUI has been shut down...
-      reportOnTermination (&shutdownLog);
-    }//(End) GUI-Thread.
-    
+    //(End) GUI-Thread.
   }//(End) impl details
   
   
   
   
   bool
-  launchUI (Subsys::SigTerm& terminationHandle)
+  launchUI (Subsys::SigTerm& reportOnTermination)
   {
     try
       {
-        Thread {"GUI-Main", bind (&runGUI, terminationHandle)}; ///////////////////////////////////////////OOO this shows we need a self-contained and detached thread!
+        launchDetached ("GUI-Main"
+                       , [reportOnTermination]
+                            {
+                              string shutdownLog = GtkLumiera{}.run();
+                               // inform main thread that the GUI has been shut down...
+                              reportOnTermination (&shutdownLog);
+                            });
         return true; // if we reach this line...
       }
     catch(...)
