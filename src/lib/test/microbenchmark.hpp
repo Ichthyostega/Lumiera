@@ -82,7 +82,7 @@ namespace test{
   inline double
   benchmarkTime (FUN const& invokeTestLoop, const size_t repeatCnt = DEFAULT_RUNS)
   {
-    using std::chrono::system_clock;
+    using std::chrono::system_clock;;                               /////////////////////////////////////////TICKET #886
     using Dur = std::chrono::duration<double, CLOCK_SCALE>;
     
     auto start = system_clock::now();

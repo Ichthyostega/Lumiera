@@ -166,6 +166,9 @@ namespace lumiera {
       wait ()
         {
           Lock wait_blocking(this, &SubsystemRunner::allDead);
+              ////////////////////////////////////////////////////////////OOO Emergency-Exit richtig implementieren
+              if (isEmergencyExit())
+                usleep(2*1000*1000);
           return isEmergencyExit();
         }
       
@@ -223,9 +226,11 @@ namespace lumiera {
         {
           if (isEmergencyExit())
             {
-              Lock sync(this);
-              if (!sync.isTimedWait())
-                sync.setTimeout(EMERGENCYTIMEOUT);
+//              Lock sync(this);
+//              if (!sync.isTimedWait())
+//                sync.setTimeout(EMERGENCYTIMEOUT);
+              ////////////////////////////////////////////////////////////OOO Emergency-Exit richtig implementieren
+              return true;
             }
           
           return isnil (running_);  // end wait if no running subsystem left

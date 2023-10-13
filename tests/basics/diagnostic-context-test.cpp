@@ -29,6 +29,7 @@
 #include "lib/test/test-helper.hpp"
 
 #include "lib/diagnostic-context.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/thread.hpp"
 
 #include <vector>
@@ -171,10 +172,14 @@ namespace test{
                                     }
                                };
           
-          std::array<TestThread, NUM_THREADS> testcase;
-
-          for (uint i=0; i < NUM_THREADS; ++i)
-            verifyResult (testcase[i].join());
+          std::array<TestThread, NUM_THREADS> testcases;
+          
+          auto results = lib::explore(testcases)
+                             .transform([](TestThread& t){ return t.join(); })
+                             .effuse();
+          
+          for (auto& res : results)
+            verifyResult (res);
         }
       
       

@@ -14,7 +14,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -46,16 +46,17 @@
  ** - You can't use the Lock#wait and Lock#notify functions unless you pick
  **   a parametrisation including a condition variable.
  ** - The "this" pointer is fed to the ctor of the Lock guard object. Thus
- **   you may use any object's monitor as appropriate, especially in cases 
+ **   you may use any object's monitor as appropriate, especially in cases
  **   when adding the monitor to a given class may cause size problems.
  ** - For sake of completeness, this implementation provides the ability for
  **   timed waits. But please consider that in most cases there are better
  **   solutions for running an operation with given timeout by utilising the
  **   Lumiera scheduler. Thus use of timed waits is \b discouraged.
  ** - There is a special variant of the Lock guard called ClassLock, which
- **   can be used to lock based on a type, not an instance. 
+ **   can be used to lock based on a type, not an instance.
  ** - in DEBUG mode, the implementation includes NoBug resource tracking.
  ** 
+ ** @todo WIP-WIP 10/2023 switch from POSIX to C++14  ///////////////////////////////////////////////////////TICKET #1279 : also clean-up the Object-Monitor implementation
  ** @see mutex.h
  ** @see sync-locking-test.cpp
  ** @see sync-waiting-test.cpp
@@ -70,14 +71,10 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
-
-extern "C" {
-#include "lib/lockerror.h"
-}
-
-#include <pthread.h>
-#include <cerrno>
-#include <ctime>
+ 
+#include <mutex>
+#include <condition_variable>
+#include <chrono>
 
 
 
@@ -92,62 +89,47 @@ namespace lib {
     /* ========== adaptation layer for accessing backend/system level code ============== */
     
     struct Wrapped_ExclusiveMutex
+      : util::NonCopyable
       {
-        pthread_mutex_t mutex_;
+        std::mutex mutex_;
         
       protected:
-        Wrapped_ExclusiveMutex()
-          {
-            pthread_mutex_init (&mutex_, NULL);
-          }
-       ~Wrapped_ExclusiveMutex()
-          {
-            if (pthread_mutex_destroy (&mutex_))
-              ERROR (sync, "Failure destroying mutex.");
-          }               // shouldn't happen in a correct program
+        Wrapped_ExclusiveMutex() = default;
         
         void
         lock()
           {
-            if (pthread_mutex_lock (&mutex_))
-              throw lumiera::error::Fatal ("Mutex acquire failed");
-          }               // shouldn't happen in a correct program
+            mutex_.lock();
+          }
         
         void
         unlock()
           {
-            if (pthread_mutex_unlock (&mutex_))
-              ERROR (sync, "Failure unlocking mutex.");
-          }               // shouldn't happen in a correct program
+            mutex_.unlock();
+          }
       };
     
     
     
     struct Wrapped_RecursiveMutex
+      : util::NonCopyable
       {
-        pthread_mutex_t mutex_;
+        std::recursive_mutex mutex_;
         
       protected:
-        Wrapped_RecursiveMutex();
-       ~Wrapped_RecursiveMutex()
-          {
-            if (pthread_mutex_destroy (&mutex_))
-              ERROR (sync, "Failure destroying (rec)mutex.");
-          }               // shouldn't happen in a correct program
+        Wrapped_RecursiveMutex() = default;
         
         void
         lock()
           {
-            if (pthread_mutex_lock (&mutex_))
-              throw lumiera::error::Fatal ("(rec)Mutex acquire failed");
-          }               // shouldn't happen in a correct program
+            mutex_.lock();
+          }
         
         void
         unlock()
           {
-            if (pthread_mutex_unlock (&mutex_))
-              ERROR (sync, "Failure unlocking (rec)mutex.");
-          }               // shouldn't happen in a correct program
+            mutex_.unlock();
+          }
       };
     
     
@@ -155,44 +137,27 @@ namespace lib {
     struct Wrapped_Condition
       : MTX
       {
-         pthread_cond_t cond_;
+         std::condition_variable_any cond_;
         
       protected:
-        Wrapped_Condition()
-          {
-            pthread_cond_init (&cond_, NULL);
-          }
-       ~Wrapped_Condition()
-          {
-            if (pthread_cond_destroy (&cond_))
-              ERROR (sync, "Failure destroying condition variable.");
-          }               // shouldn't happen in a correct program
+        Wrapped_Condition() = default;
         
-        bool
+        void
         wait()
           {
-            int err;
-            do { err = pthread_cond_wait (&this->cond_, &this->mutex_);
-            } while(err == EINTR);
-            
-            if (err) lumiera_lockerror_set (err, &NOBUG_FLAG(sync), NOBUG_CONTEXT_NOFUNC);
-            return not err;
+            cond_.wait (this->mutex_);
           }
-        
+
+        template<class REPR, class PERI>
         bool
-        timedwait (const struct timespec* timeout)
+        timedwait (std::chrono::duration<REPR, PERI> const& timeout)
           {
-            int err;
-            do { err = pthread_cond_timedwait (&this->cond_, &this->mutex_, timeout);
-            } while(err == EINTR);
-              
-            if (err) lumiera_lockerror_set (err, &NOBUG_FLAG(sync), NOBUG_CONTEXT_NOFUNC);
-            return not err;
+            auto ret = cond_.wait_for (this->mutex_, timeout);
+            return (std::cv_status::no_timeout == ret);
           }
         
-        
-        void signal()    { pthread_cond_signal (&cond_); }
-        void broadcast() { pthread_cond_broadcast (&cond_); }
+        void signal()    { cond_.notify_one(); }
+        void broadcast() { cond_.notify_all(); }
       };
     
     
@@ -208,10 +173,7 @@ namespace lib {
       : protected MTX
       {
       protected:
-       ~Mutex () { }
-        Mutex () { }
-        Mutex (const Mutex&); ///< noncopyable...
-        const Mutex& operator= (const Mutex&);
+        Mutex () = default;
         
       public:
           void
@@ -225,43 +187,6 @@ namespace lib {
             {
               MTX::unlock ();
             }
-      };
-    
-    
-    
-    /**
-     * helper for specifying an optional timeout for an timed wait.
-     * Wrapping a timespec-struct, it allows for easy initialisation
-     * by a given relative offset.
-     * @todo integrate with std::chrono                                //////////////////////////TICKET #1055
-     */
-    struct Timeout
-      : timespec
-      {
-        Timeout() { reset(); }
-        
-        void reset() { tv_sec=tv_nsec=0; }
-        
-        /** initialise to NOW() + offset (in milliseconds) */
-        Timeout&
-        setOffset (ulong offs)
-          {
-            if (offs)
-              {
-                clock_gettime(CLOCK_REALTIME, this);                   //////////////////////////TICKET #886
-                tv_sec   += offs / 1000;
-                tv_nsec  += 1000000 * (offs % 1000);
-                if (tv_nsec >= 1000000000)
-                  {
-                    tv_sec += tv_nsec / 1000000000;
-                    tv_nsec %= 1000000000;
-              }   }
-            else
-              reset();
-            return *this;
-          }
-        
-        explicit operator bool() { return 0 != tv_sec; } // allows if (timeout_)....
       };
     
     
@@ -283,20 +208,19 @@ namespace lib {
           }
         
         
+        /** @return `false` in case of timeout */
         template<class BF>
         bool
-        wait (BF& predicate, Timeout& waitEndTime)
+        wait (BF& predicate, uint timeout_ms =0)
           {
-            bool ok = true;
-            while (ok and !predicate())
-              if (waitEndTime)
-                ok = Cond::timedwait (&waitEndTime);
+            while (not predicate())
+              if (timeout_ms != 0)
+                {
+                  if (not Cond::timedwait (std::chrono::milliseconds (timeout_ms)))
+                    return false;
+                }
               else
-                ok = Cond::wait ();
-            
-            if (not ok and lumiera_error_expect(LUMIERA_ERROR_LOCK_TIMEOUT)) return false;
-            lumiera::throwOnError();     // any other error throws
-            
+                Cond::wait ();
             return true;
           }
       };
@@ -340,15 +264,13 @@ namespace lib {
     class Monitor
       : IMPL
       {
-        Timeout timeout_;
-        
       public:
         Monitor() {}
         ~Monitor() {}
         
         /** allow copy, without interfering with the identity of IMPL */
-        Monitor (Monitor const& ref) : IMPL(), timeout_(ref.timeout_) { }
-        const Monitor& operator= (Monitor const& ref) { timeout_ = ref.timeout_; return *this; }
+        Monitor (Monitor const& ref) : IMPL() { }
+        const Monitor& operator= (Monitor const& ref) { /*prevent assignment to base*/ return *this; }
         
         
         void acquireLock() { IMPL::acquire(); }
@@ -357,22 +279,19 @@ namespace lib {
         void signal(bool a){ IMPL::signal(a); }
         
         bool
-        wait (Flag flag, ulong timedwait=0)
+        wait (Flag flag, ulong timedwait_ms=0)
           {
             BoolFlagPredicate checkFlag(flag);
-            return IMPL::wait(checkFlag, timeout_.setOffset(timedwait));
+            return IMPL::wait(checkFlag, timedwait_ms);
           }
         
         template<class X>
         bool
-        wait (X& instance, bool (X::*method)(void), ulong timedwait=0)    ///////////////////////TICKET #1051 : add support for lambdas
+        wait (X& instance, bool (X::*method)(void), ulong timedwait_ms=0)   /////////////////////TICKET #1051 : add support for lambdas
           {
             BoolMethodPredicate<X> invokeMethod(instance, method);        ///////////////////////TICKET #1057 : const correctness, allow use of const member functions
-            return IMPL::wait(invokeMethod, timeout_.setOffset(timedwait));
+            return IMPL::wait(invokeMethod, timedwait_ms);
           }
-        
-        void setTimeout(ulong relative) {timeout_.setOffset(relative);}
-        bool isTimedWait()              {return bool{timeout_};}
       };
     
     typedef Mutex<Wrapped_ExclusiveMutex> NonrecursiveLock_NoWait;
@@ -455,8 +374,6 @@ namespace lib {
           
           void notify()                     { mon_.signal(false);}
           void notifyAll()                  { mon_.signal(true); }
-          void setTimeout(ulong time)       { mon_.setTimeout(time); }
-          bool isTimedWait()                { return mon_.isTimedWait(); }
           
           template<typename C>
           bool
@@ -467,7 +384,7 @@ namespace lib {
           
           template<typename X>
           bool
-          wait  (X& instance, bool (X::*predicate)(void), ulong timeout=0)    //////////////////////TICKET #1051 : enable use of lambdas 
+          wait  (X& instance, bool (X::*predicate)(void), ulong timeout=0)    //////////////////////TICKET #1051 : enable use of lambdas
             {
               return mon_.wait(instance,predicate,timeout);
             }
@@ -480,8 +397,8 @@ namespace lib {
            */
           template<class X>
           Lock(X* it, bool (X::*method)(void))
-            : mon_(getMonitor(it)) 
-            { 
+            : mon_(getMonitor(it))
+            {
               mon_.acquireLock();
               mon_.wait(*it,method);
             }

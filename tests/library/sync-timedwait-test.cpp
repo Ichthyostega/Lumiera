@@ -27,27 +27,25 @@
 
 #include "lib/test/run.hpp"
 #include "lib/error.hpp"
-
 #include "lib/sync.hpp"
 
-#include <iostream>
+#include <chrono>
 
-using std::cout;
 using test::Test;
+using std::chrono::system_clock;
 
 
 namespace lib {
 namespace test{
   
-  namespace { // private test classes and data...
+  namespace { // test parameters...
     
-    const uint WAIT_mSec = 200;   ///< milliseconds to wait before timeout
+    const uint WAIT_mSec = 20;   ///< milliseconds to wait before timeout
+     
+    using CLOCK_SCALE = std::milli;           // Results are in ms
+    using Dur = std::chrono::duration<double, CLOCK_SCALE>;
     
-  } // (End) test classes and data....
-  
-  
-  
-  
+  }//(End) parameters
   
   
   
@@ -55,25 +53,16 @@ namespace test{
   
   
   /****************************************************************************//**
-   * @test timeout feature on condition wait as provided by pthread and accessible
-   *       via the object monitor based locking/waiting mechanism. Without creating
-   *       multiple threads, we engage into a blocking wait, which aborts due to
-   *       setting a timeout. Our waiting facility is written such as to invoke
-   *       the condition prior to entering wait state (and consecutively whenever
-   *       awakened). This test switches into wait-with-timeout mode right from
-   *       within this condition check and thus works even while there is no
-   *       other thread and thus an unconditional wait would stall forever.
-   *       
-   * @note it is discouraged to use the timed wait feature for "timing";
-   *       when possible you should prefer relying on the Lumiera scheduler
-   * 
+   * @test timeout feature on condition wait as provided by the underlying implementation
+   *       and accessible via the object monitor based locking/waiting mechanism. Without
+   *       creating multiple threads, we engage into a blocking wait, which aborts due to
+   *       setting a timeout.
    * @see SyncWaiting_test
-   * @see sync::Timeout
    * @see sync.hpp
    */
   class SyncTimedwait_test
     : public Test,
-      Sync<RecursiveLock_Waitable>
+      Sync<NonrecursiveLock_Waitable>
     {
       
       friend class Lock; // allows inheriting privately from Sync
@@ -82,60 +71,19 @@ namespace test{
       virtual void
       run (Arg)
         {
-          checkTimeoutStruct();
+          Lock lock(this);
           
-          Lock block(this, &SyncTimedwait_test::neverHappens);
+          auto start = system_clock::now();
+
+          bool salvation{false};
+          bool fulfilled = lock.wait (salvation, WAIT_mSec);
           
-          cout << "back from LaLaLand, alive and thriving!\n";
-          CHECK (block.isTimedWait());
+          CHECK (not fulfilled); // condition not fulfilled, but timeout
+          
+          Dur duration = system_clock::now () - start;
+          CHECK (WAIT_mSec <= duration.count());
+          CHECK (duration.count() < 2*WAIT_mSec);
         }
-      
-      
-      bool
-      neverHappens()                              ///< the "condition test" used for waiting....
-        {
-          Lock currentLock(this);                 // get the Lock recursively
-          if (!currentLock.isTimedWait())         // right from within the condition check:
-            currentLock.setTimeout(WAIT_mSec);    // switch waiting mode to timed wait and set timeout
-          
-          return false;
-        }
-      
-      
-      
-      void
-      checkTimeoutStruct()
-        {
-          sync::Timeout tout;
-          
-          CHECK (!tout);
-          CHECK (0 == tout.tv_sec);
-          CHECK (0 == tout.tv_nsec);
-          
-          tout.setOffset (0);
-          CHECK (!tout);
-          CHECK (0 == tout.tv_sec);
-          CHECK (0 == tout.tv_nsec);
-          
-          timespec ref;
-          clock_gettime(CLOCK_REALTIME, &ref);
-          tout.setOffset (1);
-          CHECK (tout);
-          CHECK (0 < tout.tv_sec);
-          CHECK (ref.tv_sec <= tout.tv_sec);
-          CHECK (ref.tv_nsec <= 1000000 + tout.tv_nsec || ref.tv_nsec > 1000000000-100000);
-          
-          clock_gettime(CLOCK_REALTIME, &ref);
-          tout.setOffset (1000);
-          CHECK (tout);
-          if (ref.tv_nsec!=0) // should have gotten an overflow to the seconds part
-            {
-              CHECK (ref.tv_sec <= 2 + tout.tv_sec );
-              CHECK ((ref.tv_nsec +  1000000 * 999) % 1000000000
-                                 <= tout.tv_nsec);
-            }
-        }
-      
     };
   
   
