@@ -32,9 +32,10 @@
 #include "lib/sync.hpp"
 
 #include <functional>
+#include <atomic>
 
-using std::bind;
 using test::Test;
+using std::atomic_bool;
 
 
 namespace lib {
@@ -73,14 +74,12 @@ namespace test{
         public Sync<NonrecursiveLock_Waitable>
       {
       protected:
-        volatile bool got_new_data_;
+        atomic_bool got_new_data_{false};
         
       public:
-        SyncOnBool() : got_new_data_ (false) {}
-        
         void getIt()
           {
-            Lock(this).wait (got_new_data_);
+            Lock(this).wait ([this]{ return bool(got_new_data_); });
             sum_ += input_;
           }
         
@@ -105,7 +104,7 @@ namespace test{
       public:
         void getIt()
           {
-            Lock await(this, &SyncOnMemberPredicate::checkTheFlag);
+            Lock await(this, &SyncOnMemberPredicate::checkTheFlag);   /////////////////////TODO becomes obsolete with the API change
             sum_ += input_;
           }
         
@@ -158,8 +157,8 @@ namespace test{
         {
           typedef ThreadJoinable<> Thread;  //////////////////////////////////////WIP
           
-          Thread ping ("SyncWaiting ping", bind (&Token::getIt, &tok));
-          Thread pong ("SyncWaiting pong", bind (&Token::getIt, &tok));
+          Thread ping ("SyncWaiting ping", [&]{ return tok.getIt(); });
+          Thread pong ("SyncWaiting pong", [&]{ return tok.getIt(); });
           
           CHECK (ping);
           CHECK (pong);

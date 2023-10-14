@@ -163,7 +163,7 @@ namespace control {
           init_.sync();   // done with setup; loop may run now....
           INFO (session, "Steam-Dispatcher running...");
             {
-              Lock(this);     // open public session interface:
+              Lock sync(this); // open public session interface:
               commandService_.createInstance(*this);
             }
         }

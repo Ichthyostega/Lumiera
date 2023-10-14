@@ -391,12 +391,12 @@ namespace test {
           auto fullCnt = work::Config::COMPUTATION_CAPACITY;
           
           wof.activate (1.0);
-          sleep_for(2ms);
+          sleep_for(5ms);
           CHECK (fullCnt == uniqueCnt);
           CHECK (fullCnt == wof.size());
           
           wof.activate (2.0);
-          sleep_for(2ms);
+          sleep_for(5ms);
           CHECK (2*fullCnt == uniqueCnt);
           CHECK (2*fullCnt == wof.size());
           
@@ -404,11 +404,11 @@ namespace test {
           CHECK (0 == wof.size());
           
           uniqueCnt.clear();
-          sleep_for(2ms);
+          sleep_for(5ms);
           CHECK (0 == uniqueCnt);
           
           wof.activate (0.5);
-          sleep_for(2ms);
+          sleep_for(5ms);
           CHECK (fullCnt/2 == uniqueCnt);
           CHECK (fullCnt/2 == wof.size());
         }
@@ -438,7 +438,8 @@ namespace test {
           
           CHECK (3 == wof.size());
           
-          sleep_for(500ms);        // ...sufficiently long to count way beyond 10'000
+          while (check < 6'000)
+            sleep_for(10ms);  // .....sufficiently long to count way beyond 10'000
           CHECK (check > 6'000);
           CHECK (1 == wof.size());
         }

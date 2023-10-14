@@ -64,8 +64,8 @@ namespace lib {
   class ClassLock 
     : public Sync<CONF>::Lock
     {
-      typedef typename Sync<CONF>::Lock Lock;
-      typedef typename sync::Monitor<CONF> Monitor;
+      using Lock    = typename Sync<CONF>::Lock;
+      using Monitor = typename sync::Monitor<CONF>;
       
       struct PerClassMonitor : Monitor {};
       
@@ -80,7 +80,9 @@ namespace lib {
         }
       
     public:
-      ClassLock() : Lock (getPerClassMonitor()) { }
+      ClassLock()
+        : Lock{getPerClassMonitor()}
+        { }
     };
   
   

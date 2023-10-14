@@ -192,36 +192,37 @@ namespace lib {
     
     
     template<class MTX>
-    class Condition
-      : public Mutex<Wrapped_Condition<MTX>>
+    struct Condition
+      : MTX
+      ,  std::condition_variable_any
       {
-        typedef Wrapped_Condition<MTX> Cond;
         
-      public:
+        template<class PRED>
         void
-        signal (bool wakeAll=false)
+        wait (PRED&& predicate)
           {
-            if (wakeAll)
-              Cond::broadcast ();
-            else
-              Cond::signal ();
+            condVar().wait (mutex(), std::forward<PRED> (predicate));
           }
         
-        
-        /** @return `false` in case of timeout */
-        template<class BF>
+        /** @return `false` in case of timeout,
+         *          `true` if predicate is fulfilled at return
+         */
+        template<class REPR, class PERI, class PRED>
         bool
-        wait (BF& predicate, uint timeout_ms =0)
+        wait_for (std::chrono::duration<REPR, PERI> const& timeout, PRED&& predicate)
           {
-            while (not predicate())
-              if (timeout_ms != 0)
-                {
-                  if (not Cond::timedwait (std::chrono::milliseconds (timeout_ms)))
-                    return false;
-                }
-              else
-                Cond::wait ();
-            return true;
+            return condVar().wait_for (mutex(), timeout, std::forward<PRED> (predicate));
+          }
+        
+        MTX&
+        mutex()
+          {
+            return static_cast<MTX&> (*this);
+          }
+        std::condition_variable_any&
+        condVar()
+          {
+            return static_cast<std::condition_variable_any&> (*this);
           }
       };
     
@@ -263,41 +264,35 @@ namespace lib {
     template<class IMPL>
     class Monitor
       : IMPL
+      , util::NonCopyable
       {
       public:
-        Monitor() {}
-        ~Monitor() {}
         
-        /** allow copy, without interfering with the identity of IMPL */
-        Monitor (Monitor const& ref) : IMPL() { }
-        const Monitor& operator= (Monitor const& ref) { /*prevent assignment to base*/ return *this; }
+        void lock()                { IMPL::lock(); }
+        void unlock()     noexcept { IMPL::unlock(); }
         
+        void notify_one() noexcept { IMPL::notify_one(); }
+        void notify_all() noexcept { IMPL::notify_all(); }
         
-        void acquireLock() { IMPL::acquire(); }
-        void releaseLock() { IMPL::release(); }
-        
-        void signal(bool a){ IMPL::signal(a); }
-        
-        bool
-        wait (Flag flag, ulong timedwait_ms=0)
+        template<class PRED>
+        void
+        wait (PRED&& predicate)
           {
-            BoolFlagPredicate checkFlag(flag);
-            return IMPL::wait(checkFlag, timedwait_ms);
+            IMPL::wait (std::forward<PRED>(predicate));
           }
         
-        template<class X>
+        template<class DUR, class PRED>
         bool
-        wait (X& instance, bool (X::*method)(void), ulong timedwait_ms=0)   /////////////////////TICKET #1051 : add support for lambdas
+        wait_for (DUR const& timeout, PRED&& predicate)
           {
-            BoolMethodPredicate<X> invokeMethod(instance, method);        ///////////////////////TICKET #1057 : const correctness, allow use of const member functions
-            return IMPL::wait(invokeMethod, timedwait_ms);
+            return IMPL::wait_for (timeout, std::forward<PRED> (predicate));
           }
       };
     
-    typedef Mutex<Wrapped_ExclusiveMutex> NonrecursiveLock_NoWait;
-    typedef Mutex<Wrapped_RecursiveMutex> RecursiveLock_NoWait;
-    typedef Condition<Wrapped_ExclusiveMutex>  NonrecursiveLock_Waitable;
-    typedef Condition<Wrapped_RecursiveMutex>  RecursiveLock_Waitable;
+    using NonrecursiveLock_NoWait   = std::mutex;
+    using    RecursiveLock_NoWait   = std::recursive_mutex;
+    using NonrecursiveLock_Waitable = Condition<std::mutex>;
+    using    RecursiveLock_Waitable = Condition<std::recursive_mutex>;
     
     
   } // namespace sync (helpers and building blocks)
@@ -347,11 +342,11 @@ namespace lib {
   template<class CONF = NonrecursiveLock_NoWait>
   class Sync
     {
-      typedef sync::Monitor<CONF> Monitor;
+      using Monitor = sync::Monitor<CONF>;
       mutable Monitor objectMonitor_;
       
       static Monitor&
-      getMonitor(const Sync* forThis)
+      getMonitor(Sync const* forThis)
         {
           REQUIRE (forThis);
           return forThis->objectMonitor_;
@@ -369,49 +364,62 @@ namespace lib {
           
         public:
           template<class X>
-          Lock(X* it) : mon_(getMonitor(it)){ mon_.acquireLock(); }
-          ~Lock()                           { mon_.releaseLock(); }
+          Lock(X* it) : mon_(getMonitor(it)){ mon_.lock(); }
+         ~Lock()                            { mon_.unlock(); }
           
-          void notify()                     { mon_.signal(false);}
-          void notifyAll()                  { mon_.signal(true); }
+          void notify()                     { mon_.notify_one(); }
+          void notifyAll()                  { mon_.notify_all(); }
           
           template<typename C>
           bool
-          wait (C& cond, ulong timeout=0)                     //////////////////////////////////////TICKET #1055 : accept std::chrono values here
+          wait (C&& cond, ulong timeout_ms=0)                     //////////////////////////////////////TICKET #1055 : accept std::chrono values here
             {
-              return mon_.wait(cond,timeout);
+              if (timeout_ms)
+                return mon_.wait_for (std::chrono::milliseconds(timeout_ms)
+                                     ,std::forward<C> (cond));
+              else
+                {
+                  mon_.wait (std::forward<C> (cond));
+                  return true;
+                }
             }
           
           template<typename X>
           bool
-          wait  (X& instance, bool (X::*predicate)(void), ulong timeout=0)    //////////////////////TICKET #1051 : enable use of lambdas
+          wait  (X& instance, bool (X::*predicate)(void), ulong timeout_ms=0)    //////////////////////TICKET #1051 : enable use of lambdas
             {
-              return mon_.wait(instance,predicate,timeout);
+              return wait([&]{ return (instance.*predicate)(); }, timeout_ms);
             }
           
           /** convenience shortcut:
            *  Locks and immediately enters wait state,
            *  observing a condition defined as member function.
            * @deprecated WARNING this function is not correct!          ////////////////////////////TICKET #1051
-           *             Lock is not released on error from within wait()
+           *             Lock is not released on error from within wait()  /////TODO is actually fixed now; retain this API??
            */
           template<class X>
           Lock(X* it, bool (X::*method)(void))
             : mon_(getMonitor(it))
             {
-              mon_.acquireLock();
-              mon_.wait(*it,method);
+              mon_.lock();
+              try { wait(*it,method); }
+              catch(...)
+                {
+                  mon_.unlock();
+                  throw;
+                }
             }
           
         protected:
           /** for creating a ClassLock */
-          Lock(Monitor& m) : mon_(m)
-            { mon_.acquireLock(); }
+          Lock(Monitor& m)
+            : mon_(m)
+            {
+              mon_.lock();
+            }
           
-          /** for controlled access to the
-           * underlying sync primitives */
-          Monitor&
-          accessMonitor() { return mon_; }
+          /** subclass access to underlying sync primitives */
+          Monitor& accessMonitor() { return mon_; }
         };
     };
   

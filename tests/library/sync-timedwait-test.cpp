@@ -75,7 +75,7 @@ namespace test{
           
           auto start = system_clock::now();
 
-          bool salvation{false};
+          auto salvation = []{ return false; };
           bool fulfilled = lock.wait (salvation, WAIT_mSec);
           
           CHECK (not fulfilled); // condition not fulfilled, but timeout
