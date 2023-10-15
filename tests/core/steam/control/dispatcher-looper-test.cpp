@@ -38,6 +38,8 @@ namespace test    {
   
   namespace { // test fixture...
     
+    using Dur = std::chrono::duration<double, std::milli>;
+    
     /**
      * @todo this value should be retrieved from configuration                  ////////////////////////////////TICKET #1052 : access application configuration
      * @see Looper::establishWakeTimeout()
@@ -45,22 +47,22 @@ namespace test    {
     const uint EXPECTED_BUILDER_DELAY_ms = 50;
     
     bool
-    isFast (uint timeoutDelay_ms)
+    isFast (milliseconds timeoutDelay)
       {
-        return timeoutDelay_ms < 1.2 * EXPECTED_BUILDER_DELAY_ms
-           and 0 < timeoutDelay_ms;
+        return timeoutDelay < Dur{1.2 * EXPECTED_BUILDER_DELAY_ms}
+           and 0ms < timeoutDelay;
       }
     
     bool
-    isSlow (uint timeoutDelay_ms)
+    isSlow (milliseconds timeoutDelay)
       {
-        return timeoutDelay_ms >= 1.2 * EXPECTED_BUILDER_DELAY_ms;
+        return timeoutDelay >= Dur{1.2 * EXPECTED_BUILDER_DELAY_ms};
       }
     
     bool
-    isDisabled (uint timeoutDelay_ms)
+    isDisabled (milliseconds timeoutDelay)
       {
-        return 0 == timeoutDelay_ms;
+        return 0ms == timeoutDelay;
       }
     
     
@@ -129,9 +131,9 @@ namespace test    {
           setup.has_commands_in_queue = true;
           CHECK (looper.requireAction());
           
-          uint timeout = looper.getTimeout();
-          CHECK (10 < timeout,  "configured idle timeout %2u to short", timeout);
-          CHECK (timeout < 800, "configured idle timeout %3u to long",  timeout);
+          milliseconds timeout = looper.getTimeout();
+          CHECK (10ms < timeout,  "configured idle timeout %2l to short", timeout.count());
+          CHECK (timeout < 800ms, "configured idle timeout %3l to long",  timeout.count());
         }
       
       

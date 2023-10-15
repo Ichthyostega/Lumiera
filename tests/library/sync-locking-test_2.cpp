@@ -27,45 +27,51 @@
 
 #include "lib/test/run.hpp"
 
-#include "lib/thread.hpp"
 #include "lib/sync.hpp"
-#include "lib/symbol.hpp"
+#include "lib/thread.hpp"
+#include "lib/iter-explorer.hpp"
+#include "lib/scoped-collection.hpp"
 
-#include <functional>
-
-using std::bind;
 using test::Test;
+using lib::explore;
+using std::this_thread::yield;
+using std::this_thread::sleep_for;
+using std::chrono_literals::operator ""us;
 
 
 namespace lib {
-  namespace test  {
-  
+namespace test{
+    
     namespace { // private test classes and data...
       
-      const uint NUM_THREADS      = 20;
+      const uint NUM_THREADS      = 200;
       const uint MAX_RAND_SUMMAND = 100;
       
       
+      
+      /** Helper to verify a contended chain calculation */
+      template<class POLICY>
       class Checker
-        : public lib::Sync<>
+        : public Sync<POLICY>
         {
-          volatile ulong hot_sum_;
-          ulong control_sum_;
+          size_t hot_sum_{0};
+          size_t control_sum_{0};
+          
+          using Lock = typename Sync<POLICY>::Lock;
           
         public:
-          Checker() : hot_sum_(0), control_sum_(0) { }
-          
           bool
           verify()    ///< verify test values got handled and accounted
             {
+              Lock guard{this};
               return 0 < hot_sum_
-                  && control_sum_ == hot_sum_;
+                 and control_sum_ == hot_sum_;
             }
           
           uint
           createVal() ///< generating test values, remembering the control sum
             {
-              uint val(rand() % MAX_RAND_SUMMAND);
+              uint val{rand() % MAX_RAND_SUMMAND};
               control_sum_ += val;
               return val;
             }
@@ -73,55 +79,31 @@ namespace lib {
           void
           addValues (uint a, uint b)   ///< to be called concurrently
             {
-              Lock guard(this);
+              Lock guard{this};
               
               hot_sum_ *= 2;
-              usleep (200);             // force preemption
+              sleep_for (200us);       // force preemption
               hot_sum_ += 2 * (a+b);
-              usleep (200);
+              sleep_for (200us);
               hot_sum_ /= 2;
             }
         };
-      
-      
-      Checker checksum; ///< global variable used by multiple threads
-      
-      
-      
-      
-      struct TestThread
-        : Thread
-        {
-          TestThread()
-            : Thread{&TestThread::theOperation, checksum.createVal(), checksum.createVal()}
-            { }                         // note the binding (functor object) is passed as anonymous temporary
-          
-          
-          void
-          theOperation (uint a, uint b) ///< the actual operation running in a separate thread
-            {
-              checksum.addValues (a,b);
-            }
-        };
-      
-    } // (End) test classes and data....
+    }// (End) test classes and data....
     
     
     
     
     
     
-    
-    
-    
-    
-    /**********************************************************************//**
-     * @test use the Lumiera Vault to create some new threads, utilising the
-     *       lumiera::Thread wrapper for binding to an arbitrary operation
-     *       and passing the appropriate context.
-     * 
-     * @see vault::Thread
-     * @see threads.h
+    /******************************************************************//**
+     * @test verify the object monitor provides locking and to prevent
+     *       data corruption on concurrent modification of shared storage.
+     *       - use a chained calculation with deliberate sleep state
+     *         while holding onto an intermediary result
+     *       - run this calculation contended by a huge number of threads
+     *       - either use locking or no locking
+     * @see sync.happ
+     * @see thread.hpp
      */
     class SyncLocking_test2 : public Test
       {
@@ -129,11 +111,31 @@ namespace lib {
         virtual void
         run (Arg)
           {
-            TestThread instances[NUM_THREADS]    SIDEEFFECT;
+            CHECK (can_calc_without_Error<NonrecursiveLock_NoWait>());
+            CHECK (can_calc_without_Error<RecursiveLock_NoWait>());
+            CHECK (not can_calc_without_Error<sync::NoLocking>());
+          }
+        
+        
+        template<class POLICY>
+        bool
+        can_calc_without_Error()
+          {
+            Checker<POLICY> checksum;  // shared variable used by multiple threads
             
-            usleep (200000);  // pause 200ms for the threads to terminate.....
+            lib::ScopedCollection<Thread> threads{NUM_THREADS};
+            for (uint i=1; i<=NUM_THREADS; ++i)
+              threads.emplace ([&checksum,   // Note: added values prepared in main thread
+                                a = checksum.createVal(),
+                                b = checksum.createVal()]
+                                {
+                                  checksum.addValues (a,b);
+                                });
             
-            CHECK (checksum.verify());
+            while (explore(threads).has_any())
+              yield();  // wait for all threads to terminate
+            
+            return checksum.verify();
           }
       };
     

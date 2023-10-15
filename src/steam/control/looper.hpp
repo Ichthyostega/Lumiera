@@ -53,6 +53,7 @@
 #include "vault/real-clock.hpp"
 
 #include <functional>
+#include <chrono>
 
 
 
@@ -63,6 +64,7 @@ namespace control {
   using lib::time::TimeVar;
   using lib::time::Offset;
   using lib::time::Duration;
+  using std::chrono::milliseconds;
   using vault::RealClock;
   
   namespace {
@@ -206,14 +208,15 @@ namespace control {
           return not isDying();
         }
       
-      ulong                                        /////////////////////////////////////////////TICKET #1056 : better return a std::chrono value here 
+      milliseconds
       getTimeout()  const
         {
           if (not useTimeout())
-            return 0;
+            return milliseconds::zero();
           else
-            return wakeTimeout_ms()
-                 * (isDirty_ and not isWorking()? 1 : slowdownFactor());
+            return milliseconds{
+                    wakeTimeout_ms()
+                    * (isDirty_ and not isWorking()? 1 : slowdownFactor())};
         }
       
       

@@ -74,10 +74,10 @@ namespace test {
           void
           sync()
             {
-              Lock sync(this);
+              Lock sync{this};
               --latch_;
-              sync.wait(*this, &MonitorSync::allPassed);
-              sync.notifyAll();
+              sync.wait ([this]{ return allPassed(); });
+              sync.notify_all();
             }
           
         private:

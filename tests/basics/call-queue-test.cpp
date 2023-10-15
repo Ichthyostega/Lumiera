@@ -191,7 +191,7 @@ namespace test{
           void
           countConsumerCall (uint increment)
             {
-              Lock sync(this);          // NOTE: will be invoked from some random other thread
+              Lock sync{this};          // NOTE: will be invoked from some random other thread
               consumerSum += increment;
             }
           

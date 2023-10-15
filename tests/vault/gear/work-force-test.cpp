@@ -357,13 +357,13 @@ namespace test {
               void
               mark (std::thread::id const& tID)
                 {
-                  Lock guard(this);
+                  Lock guard{this};
                   this->insert(tID);
                 }
               
               operator size_t()  const
                 {
-                  Lock guard(this);
+                  Lock guard{this};
                   return this->size();
                 }
             }

@@ -24,20 +24,28 @@
 /** @file sync.hpp
  ** Object Monitor based synchronisation.
  ** The actual locking, signalling and waiting is implemented by delegating to the
- ** raw pthreads locking/sync calls. Rather, the purpose of the Sync baseclass is
- ** to support locking based on the <b>object monitor pattern</b>. This pattern
- ** describes a way of dealing with synchronisation known to play well with
- ** scoping, encapsulation and responsibility for a single purpose.
+ ** a _mutex_ and for waiting also to a _condition variable_ as provided by the C++
+ ** standard library. The purpose of the Sync baseclass is to provide a clear and simple
+ ** „everyday“ concurrency coordination based on the <b>object monitor pattern</b>. This
+ ** pattern describes a way of dealing with synchronisation known to play well with
+ ** scoping, encapsulation and responsibility for a single purpose. For performance
+ ** critical code, other solutions (e.g. Atomics) might be preferable.
+ ** 
+ ** # Usage
  ** 
  ** A class becomes _lockable_ by inheriting from lib::Sync with the appropriate
  ** parametrisation. This causes any instance to inherit a monitor member (object),
- ** managing a mutex and (optionally) a condition variable for waiting. The actual
- ** synchronisation is achieved by placing a guard object as local (stack) variable
- ** into a given scope (typically a member function body). This guard object of
- ** class lib::Sync::Lock accesses the enclosing object's monitor and automatically
- ** manages the locking and unlocking; optionally it may also be used for waiting
- ** on a condition.
- ** 
+ ** maintaining a dedicated a mutex and (optionally) a condition variable for waiting.
+ ** The actual synchronisation is achieved by placing a guard object as local (stack)
+ ** variable into a given scope (typically a member function body). This guard object
+ ** of class lib::Sync::Lock accesses the enclosing object's monitor and automatically
+ ** manages the locking and unlocking; optionally it may also be used to perform a
+ ** [wait-on-condition] — the call to `Lock::wait(predicate)` will first check the
+ ** predicate, and if it does not yield `true`, the thread will be put to sleep.
+ ** It must be awakened from another thread by invoking `notify_one|all` and will
+ ** then re-check the condition predicate. The `wait_for` variant allows to set
+ ** a timeout to limit the sleep state, which implies however that the call may
+ ** possibly return `false` in case the condition predicate is not (yet) fulfilled. 
  ** @note
  ** - It is important to select a suitable parametrisation of the monitor.
  **   This is done by specifying one of the defined policy classes.
@@ -48,15 +56,11 @@
  ** - The "this" pointer is fed to the ctor of the Lock guard object. Thus
  **   you may use any object's monitor as appropriate, especially in cases
  **   when adding the monitor to a given class may cause size problems.
- ** - For sake of completeness, this implementation provides the ability for
- **   timed waits. But please consider that in most cases there are better
- **   solutions for running an operation with given timeout by utilising the
- **   Lumiera scheduler. Thus use of timed waits is \b discouraged.
  ** - There is a special variant of the Lock guard called ClassLock, which
  **   can be used to lock based on a type, not an instance.
- ** - in DEBUG mode, the implementation includes NoBug resource tracking.
  ** 
  ** @todo WIP-WIP 10/2023 switch from POSIX to C++14  ///////////////////////////////////////////////////////TICKET #1279 : also clean-up the Object-Monitor implementation
+ ** [wait-on-condition]: https://en.cppreference.com/w/cpp/thread/condition_variable_any/wait
  ** @see mutex.h
  ** @see sync-locking-test.cpp
  ** @see sync-waiting-test.cpp
@@ -226,6 +230,12 @@ namespace lib {
           }
       };
     
+    struct NoLocking
+      {
+        void lock()            { /* boo */ }
+        void unlock() noexcept { /* hoo */ }
+      };
+    
     
     
     
@@ -345,6 +355,7 @@ namespace lib {
       using Monitor = sync::Monitor<CONF>;
       mutable Monitor objectMonitor_;
       
+    public:
       static Monitor&
       getMonitor(Sync const* forThis)
         {
@@ -353,9 +364,8 @@ namespace lib {
         }
       
       
-    public:
       /*****************************************//**
-       * scoped object to control the actual locking.
+       * scoped guard to control the actual locking.
        */
       class Lock
         : util::NonCopyable
@@ -364,45 +374,37 @@ namespace lib {
           
         public:
           template<class X>
-          Lock(X* it) : mon_(getMonitor(it)){ mon_.lock(); }
+          Lock(X* it) : mon_{getMonitor(it)}{ mon_.lock(); }
          ~Lock()                            { mon_.unlock(); }
           
-          void notify()                     { mon_.notify_one(); }
-          void notifyAll()                  { mon_.notify_all(); }
+          void notify_one()                 { mon_.notify_one(); }
+          void notify_all()                 { mon_.notify_all(); }
           
-          template<typename C>
-          bool
-          wait (C&& cond, ulong timeout_ms=0)                     //////////////////////////////////////TICKET #1055 : accept std::chrono values here
+          template<class PRED>
+          void
+          wait (PRED&& predicate)
             {
-              if (timeout_ms)
-                return mon_.wait_for (std::chrono::milliseconds(timeout_ms)
-                                     ,std::forward<C> (cond));
-              else
-                {
-                  mon_.wait (std::forward<C> (cond));
-                  return true;
-                }
+              mon_.wait (std::forward<PRED>(predicate));
             }
           
-          template<typename X>
+          template<class DUR, class PRED>
           bool
-          wait  (X& instance, bool (X::*predicate)(void), ulong timeout_ms=0)    //////////////////////TICKET #1051 : enable use of lambdas
+          wait_for (DUR const& timeout, PRED&& predicate)
             {
-              return wait([&]{ return (instance.*predicate)(); }, timeout_ms);
+              return mon_.wait_for (timeout, std::forward<PRED> (predicate));
             }
           
           /** convenience shortcut:
-           *  Locks and immediately enters wait state,
-           *  observing a condition defined as member function.
-           * @deprecated WARNING this function is not correct!          ////////////////////////////TICKET #1051
-           *             Lock is not released on error from within wait()  /////TODO is actually fixed now; retain this API??
+           *  Locks and immediately enters wait state on the given predicate
            */
-          template<class X>
-          Lock(X* it, bool (X::*method)(void))
+          template<class X, class PRED>
+          Lock(X* it, PRED&& predicate)
             : mon_(getMonitor(it))
             {
               mon_.lock();
-              try { wait(*it,method); }
+              try {
+                  mon_.wait (std::forward<PRED>(predicate));
+                }
               catch(...)
                 {
                   mon_.unlock();
@@ -413,7 +415,7 @@ namespace lib {
         protected:
           /** for creating a ClassLock */
           Lock(Monitor& m)
-            : mon_(m)
+            : mon_{m}
             {
               mon_.lock();
             }

@@ -33,6 +33,7 @@
 
 using test::Test;
 using std::chrono::system_clock;
+using std::chrono::milliseconds;
 
 
 namespace lib {
@@ -40,7 +41,8 @@ namespace test{
   
   namespace { // test parameters...
     
-    const uint WAIT_mSec = 20;   ///< milliseconds to wait before timeout
+    const uint WAIT_mSec = 20;                ///< milliseconds to wait before timeout
+    const milliseconds TIMEOUT{WAIT_mSec};
      
     using CLOCK_SCALE = std::milli;           // Results are in ms
     using Dur = std::chrono::duration<double, CLOCK_SCALE>;
@@ -71,12 +73,12 @@ namespace test{
       virtual void
       run (Arg)
         {
-          Lock lock(this);
+          Lock lock{this};
           
           auto start = system_clock::now();
 
           auto salvation = []{ return false; };
-          bool fulfilled = lock.wait (salvation, WAIT_mSec);
+          bool fulfilled = lock.wait_for (TIMEOUT, salvation);
           
           CHECK (not fulfilled); // condition not fulfilled, but timeout
           

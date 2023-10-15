@@ -80,7 +80,7 @@ namespace lib {
       Literal
       internedString (string && symbolString)
         {
-          Lock sync(this);
+          Lock sync{this};
           auto res = table_.insert (forward<string> (symbolString));
           return res.first->c_str();
         }

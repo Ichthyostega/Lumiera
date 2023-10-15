@@ -122,7 +122,7 @@ namespace asset {
     //////////////////////////////////////////////////////////TICKET #840 check validity of Ident Category
     ID<KIND> asset_id (getID (idi));
     
-    DB::Lock guard(&registry);
+    DB::Lock guard{&registry};
     //////////////////////////////////////////////////////////TICKET #840 handle duplicate Registrations
     lib::P<KIND> smart_ptr (obj, &destroy);
     

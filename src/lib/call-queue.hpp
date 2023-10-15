@@ -76,7 +76,7 @@ namespace lib {
             throw error::Logic( "Unbound Functor fed to dispatcher CallQueue"
                               , error::LUMIERA_ERROR_BOTTOM_VALUE);
           {
-            Lock sync(this);
+            Lock sync{this};
             queue_.feed (move(op));
           }
           return *this;
@@ -89,7 +89,7 @@ namespace lib {
             {
               Operation operate;
               {
-                Lock sync(this);
+                Lock sync{this};
                 operate = move (*queue_);
                 ++queue_;
               }
@@ -105,7 +105,7 @@ namespace lib {
       size_t
       size()  const
         {
-          Lock sync(this);
+          Lock sync{this};
           return queue_.size();
         }
       

@@ -31,89 +31,46 @@
 #include "lib/thread.hpp"
 #include "lib/sync.hpp"
 
-#include <functional>
 #include <atomic>
 
 using test::Test;
+using std::atomic_uint;
 using std::atomic_bool;
+using std::this_thread::sleep_for;
+using std::chrono_literals::operator ""ms;
 
 
 namespace lib {
 namespace test{
   
-  namespace { // private test classes and data...
-    
-    
-    /** Interface defining the basic interaction pattern for this test */
-    class Token
-      {
-      public:
-          
-        /** blocking concurrent operation */
-        virtual void getIt()             =0;
-        
-        /** start the notification chain */
-        virtual void provide (uint val)  =0;
-        
-        /** harvesting the result...*/
-        uint result () { return sum_; }
-        
-        
-      protected:
-        volatile uint sum_, input_;
-        
-        virtual ~Token() {}
-        
-        Token() : sum_(0), input_(0) {}
-      };
-    
+  namespace { // test subject...
     
     /** demonstrates how to wait on a simple boolean flag */
     class SyncOnBool
-      : public Token,
-        public Sync<NonrecursiveLock_Waitable>
+      : public Sync<NonrecursiveLock_Waitable>
       {
-      protected:
+        atomic_uint sum_{0}, input_{0};
         atomic_bool got_new_data_{false};
         
       public:
         void getIt()
           {
-            Lock(this).wait ([this]{ return bool(got_new_data_); });
+            Lock await{this, [&]{ return bool(got_new_data_); }};
             sum_ += input_;
           }
         
         void provide (uint val)
           {
-            Lock sync(this);
+            Lock sync{this};
             input_ = val;
             got_new_data_ = true;
-            sync.notifyAll();
-          }
-      };
-    
-    
-    /** this variant demonstrates how to wait on an condition
-     *  defined in terms of a (bool) member function
-     */
-    class SyncOnMemberPredicate
-      : public SyncOnBool
-      {
-        bool checkTheFlag() { return this->got_new_data_; }
-        
-      public:
-        void getIt()
-          {
-            Lock await(this, &SyncOnMemberPredicate::checkTheFlag);   /////////////////////TODO becomes obsolete with the API change
-            sum_ += input_;
+            sync.notify_all();
           }
         
+        /** harvesting the result...*/
+        uint result () { return sum_; }
       };
-    
-  } // (End) test classes and data....
-  
-  
-  
+  }//(End) test subject.
   
   
   
@@ -124,11 +81,9 @@ namespace test{
   /************************************************************************//**
    * @test concurrent waiting and notification, implemented via object monitor.
    * This test covers the second part of the monitor pattern, which builds upon
-   * the locking part, additionally using an embedded condition. We provide
-   * several pre-configured ways of specifying the condition to wait upon.
-   * - check a boolean flag
-   * - evaluate a member function as predicate
-   * 
+   * the locking part, additionally using an embedded condition. Two interwoven
+   * threads are created, both blocked until a start value is given. Once awakened,
+   * each thread should add the start value to a common sum field.
    * @see SyncLocking_test
    * @see sync.hpp
    */
@@ -138,43 +93,26 @@ namespace test{
       virtual void
       run (Arg)
         {
-          SyncOnBool use_sync_var;
-          waitPingPong (use_sync_var);
+          SyncOnBool token;
           
-          SyncOnMemberPredicate use_member_pred;
-          waitPingPong (use_member_pred);
-        }
-      
-      
-      /** 
-       * Helper actually performing the test: 
-       * creates two threads and let them block and wait until a start value is given.
-       * When awakened, each thread should add the start value to a common sum field.
-       * @param tok object containing the monitor and condition to be tested. 
-       */
-      void 
-      waitPingPong (Token& tok)
-        {
-          typedef ThreadJoinable<> Thread;  //////////////////////////////////////WIP
-          
-          Thread ping ("SyncWaiting ping", [&]{ return tok.getIt(); });
-          Thread pong ("SyncWaiting pong", [&]{ return tok.getIt(); });
+          ThreadJoinable ping ("SyncWaiting ping", [&]{ token.getIt(); });
+          ThreadJoinable pong ("SyncWaiting pong", [&]{ token.getIt(); });
           
           CHECK (ping);
           CHECK (pong);
-          CHECK (0 == tok.result());
+          CHECK (0 == token.result());
           
-          usleep (100000); // if the threads don't block correctly, they've missed their chance by now... 
+          sleep_for (100ms);  // if the threads don't block correctly, they've missed their chance by now...
           
           // kick off the notification cascade...
           uint val = (rand() % 1000);
-          tok.provide (val);
+          token.provide (val);
           
           // wait for the two Threads to finish their handshake
           pong.join();
           ping.join();
           
-          CHECK (2*val == tok.result());
+          CHECK (2*val == token.result());
         }
     };
   

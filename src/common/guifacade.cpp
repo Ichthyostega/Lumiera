@@ -118,7 +118,7 @@ namespace stage {
         bool
         start (lumiera::Option&, Subsys::SigTerm termNotification)  override
           {
-            Lock guard (this);
+            Lock guard{this};
             if (facade)
               return false;    // already started
             
@@ -159,7 +159,7 @@ namespace stage {
         void
         closeGuiModule ()
           {
-            Lock guard (this);
+            Lock guard{this};
             if (!facade)
               {
                 WARN (guifacade, "Termination signal invoked, but GUI is currently closed. "

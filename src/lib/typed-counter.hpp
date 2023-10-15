@@ -157,7 +157,7 @@ namespace lib {
           IxID typeID = TypedContext<TypedCounter>::ID<TY>::get();
           if (size() < typeID)
             {       // protect against concurrent slot allocations
-              Lock sync(this);
+              Lock sync{this};
               if (size() < typeID)
                 counters_.resize (typeID);
             }

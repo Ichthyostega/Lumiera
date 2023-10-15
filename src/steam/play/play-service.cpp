@@ -113,7 +113,7 @@ namespace play {
               throw;
             }
           
-          Lock sync(this);
+          Lock sync{this};
           processes_.push_back (frontend); // keeping a weak-reference
           return frontend;
         }
@@ -132,7 +132,7 @@ namespace play {
                                      /////////////////////////////////////////////TICKET #867 : somehow ensure sane abort of all attached calculation efforts
           delete dyingProcess;
           
-          Lock sync(this);
+          Lock sync{this};
           remove_if (processes_, isDead);
         }
       

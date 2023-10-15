@@ -69,7 +69,7 @@ namespace vault {
       bool 
       checkRunningState ()  noexcept override
         {
-          //Lock guard (*this);
+          //Lock guard{*this};
           TODO ("implement detecting running state");
           return false;
         }

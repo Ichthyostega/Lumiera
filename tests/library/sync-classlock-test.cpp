@@ -87,7 +87,7 @@ namespace test {
                          };
           
           for (auto& thread : threads)
-            thread.join();   // block until thread terminates
+            thread.join(); // block until thread terminates
           
           CHECK (contended == NUM_THREADS * NUM_LOOP,
                  "ALARM: Lock failed, concurrent modification "

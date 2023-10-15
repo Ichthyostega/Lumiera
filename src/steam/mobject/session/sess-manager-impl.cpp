@@ -228,7 +228,7 @@ namespace session {
   bool
   SessManagerImpl::isUp()
   {
-    Lock sync(this);
+    Lock sync{this};
     return bool(pSess_);                          ///////////////////// TICKET #702 possible race, because this gets true way before the interface is up
   }
   
@@ -238,7 +238,7 @@ namespace session {
   void
   SessManagerImpl::clear()
   {
-    Lock sync(this);
+    Lock sync{this};
     pSess_->clear();
   }
   
@@ -251,7 +251,7 @@ namespace session {
   void
   SessManagerImpl::close()
   {
-    Lock sync(this);
+    Lock sync{this};
     if (isUp())
       lifecycle_->shutDown();
     pSess_.reset();
@@ -266,7 +266,7 @@ namespace session {
   void
   SessManagerImpl::reset()
   {
-    Lock sync(this);
+    Lock sync{this};
     if (isUp())
       lifecycle_->shutDown();
     lifecycle_->pullUp();
@@ -279,7 +279,7 @@ namespace session {
   SessManagerImpl::load()
   {
     UNIMPLEMENTED ("load serialised session");
-    Lock sync(this);
+    Lock sync{this};
     if (isUp())
       lifecycle_->shutDown();
     lifecycle_->pullUp();

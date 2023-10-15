@@ -163,7 +163,7 @@ namespace control {
           init_.sync();   // done with setup; loop may run now....
           INFO (session, "Steam-Dispatcher running...");
             {
-              Lock sync(this); // open public session interface:
+              Lock sync{this}; // open public session interface:
               commandService_.createInstance(*this);
             }
         }
@@ -182,42 +182,41 @@ namespace control {
       void
       activateCommandProecssing()
         {
-          Lock sync(this);
+          Lock sync{this};
           looper_.enableProcessing(true);
           INFO (command, "Session command processing activated.");
-          sync.notifyAll();
+          sync.notify_all();
         }
       
       void
       deactivateCommandProecssing()
         {
-          Lock sync(this);
+          Lock sync{this};
           looper_.enableProcessing(false);
           INFO (command, "Session command interface closed.");
-          sync.notifyAll();
+          sync.notify_all();
         }
       
       void
       requestStop()  noexcept
         {
-          Lock sync(this);
+          Lock sync{this};
           commandService_.shutdown(); // closes Session interface
           looper_.triggerShutdown();
-          sync.notifyAll();
+          sync.notify_all();
         }
       
       void
       awaitStateProcessed()  const
         {
-          Lock(unConst(this)).wait(unConst(*this), &DispatcherLoop::isStateSynched);  ///////////////////////TICKET #1051 : support bool-λ and fix the correctness-error in the »convenience shortcut«   
-                                                                                     ////////////////////////TICKET #1057 : const correctness on wait predicate
-            // wake-up typically by updateState()
+          Lock{this, [&]{ return isStateSynched(); }};
+           //  wake-up typically by updateState()
         }
       
       size_t
       size()  const
         {
-          Lock sync(this);
+          Lock sync{this};
           return queue_.size();
         }
       
@@ -227,17 +226,17 @@ namespace control {
       void
       enqueue (Command&& cmd)  override
         {
-          Lock sync(this);
+          Lock sync{this};
           queue_.feed (move (cmd));
-          sync.notifyAll();
+          sync.notify_all();
         }
       
       void
       clear()  override
         {
-          Lock sync(this);
+          Lock sync{this};
           queue_.clear();
-          sync.notifyAll();
+          sync.notify_all();
         }
       
     private:
@@ -282,8 +281,8 @@ namespace control {
       void
       awaitAction()   ///< at begin of loop body...
         {
-          Lock(this).wait(looper_, &Looper::requireAction,
-                          looper_.getTimeout());
+          Lock{this}.wait_for (looper_.getTimeout()
+                              ,[&]{ return looper_.requireAction(); });
         }
       
       void
@@ -291,11 +290,11 @@ namespace control {
         {
           looper_.markStateProcessed();
           if (looper_.isDisabled())     // otherwise wake-up would not be safe
-            Lock(this).notifyAll();
+            getMonitor(this).notify_all();
         }
       
       bool
-      isStateSynched()
+      isStateSynched()  const
         {
           if (thread_.invokedWithinThread())
             throw error::Fatal("Possible Deadlock. "
@@ -310,7 +309,7 @@ namespace control {
         {
           Command cmd;
             {
-              Lock sync(this);
+              Lock sync{this};
               if (not queue_.empty())
                 cmd = queue_.pop();
             }
@@ -361,7 +360,7 @@ namespace control {
   bool
   SteamDispatcher::start (Subsys::SigTerm termNotification)
   {
-    Lock sync(this);
+    Lock sync{this};
     if (runningLoop_) return false;
     
     runningLoop_ =
@@ -389,7 +388,7 @@ namespace control {
   void
   SteamDispatcher::endRunningLoopState()
   {
-    Lock sync(this);
+    Lock sync{this};
     if (runningLoop_)
       runningLoop_.reset();  // delete DispatcherLoop object
     else
@@ -407,7 +406,7 @@ namespace control {
   bool
   SteamDispatcher::isRunning()
   {
-    Lock sync(this);
+    Lock sync{this};
     return bool(runningLoop_);
   }
   
@@ -419,7 +418,7 @@ namespace control {
   SteamDispatcher::requestStop()  noexcept
   {
     try {
-      Lock sync(this);
+      Lock sync{this};
       if (runningLoop_)
         runningLoop_->requestStop();
     }
@@ -439,7 +438,7 @@ namespace control {
   void
   SteamDispatcher::activate()
   {
-    Lock sync(this);
+    Lock sync{this};
     active_ = true;
     if (runningLoop_)
       runningLoop_->activateCommandProecssing();
@@ -455,7 +454,7 @@ namespace control {
   void
   SteamDispatcher::deactivate()
   {
-    Lock sync(this);
+    Lock sync{this};
     active_ = false;
     if (runningLoop_)
       runningLoop_->deactivateCommandProecssing();
@@ -471,7 +470,7 @@ namespace control {
   void
   SteamDispatcher::awaitDeactivation()
   {
-    Lock sync(this);
+    Lock sync{this};
     if (runningLoop_)
       runningLoop_->awaitStateProcessed();
   }
@@ -481,7 +480,7 @@ namespace control {
   void
   SteamDispatcher::clear()
   {
-    Lock sync(this);
+    Lock sync{this};
     if (not empty())
       {
         WARN (command, "DISCARDING pending Session commands.");
@@ -494,7 +493,7 @@ namespace control {
   bool
   SteamDispatcher::empty()  const
   {
-    Lock sync(this);
+    Lock sync{this};
     return not runningLoop_
         or 0 == runningLoop_->size();
   }

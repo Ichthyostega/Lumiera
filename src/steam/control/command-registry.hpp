@@ -151,7 +151,7 @@ namespace control {
       void
       track (Symbol cmdID, Command const& commandHandle)
         {
-          Lock sync(this);
+          Lock sync{this};
           
           REQUIRE (commandHandle);
           if (contains (index_,cmdID) || contains(ridx_, &commandHandle))
@@ -173,7 +173,7 @@ namespace control {
       bool
       remove (Symbol cmdID)
         {
-          Lock sync(this);
+          Lock sync{this};
           
           bool actually_remove = contains (index_,cmdID);
           if (actually_remove)
@@ -197,7 +197,7 @@ namespace control {
       Command
       queryIndex (Symbol cmdID)
         {
-          Lock sync(this);
+          Lock sync{this};
           return getValue_or_default (index_, cmdID, Command() );
         }                                           //if not found
       
@@ -209,7 +209,7 @@ namespace control {
       Symbol
       findDefinition (Command const& cmdInstance)  const
         {
-          Lock sync(this);
+          Lock sync{this};
           return getValue_or_default (ridx_, &cmdInstance, Symbol::BOTTOM );
         }                                   //used as Key
       

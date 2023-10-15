@@ -576,7 +576,7 @@ namespace test {
               void
               scheduleBorg (uint id)
                 {
-                  Lock sync(this);
+                  Lock sync{this};
                   borgChecksum_ += id;
                   sessionBorgs_.push(id);
                 }
@@ -584,7 +584,7 @@ namespace test {
               auto
               dispatchBorgs()
                 {
-                  Lock sync(this);
+                  Lock sync{this};
                   return dischargeToSnapshot (sessionBorgs_);
                 }
               

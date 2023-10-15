@@ -174,7 +174,7 @@ namespace advice {
         void
         manageAdviceData (PointOfAdvice* entry, DeleterFunc* how_to_delete)
           {
-            Lock sync (this);
+            Lock sync{this};
             adviceDataRegistry_.manage (entry, how_to_delete);
           }
         
@@ -196,14 +196,14 @@ namespace advice {
         publishRequestBindingChange(PointOfAdvice & req,
                                     HashVal previous_bindingKey)
           {
-            Lock sync (this);
+            Lock sync{this};
             index_.modifyRequest(previous_bindingKey, req);
           }
         
         void
         registerRequest(PointOfAdvice & req)
           {
-            Lock sync (this);
+            Lock sync{this};
             index_.addRequest (req);
           }
         
@@ -212,7 +212,7 @@ namespace advice {
           {
             try
               {
-                Lock sync (this);
+                Lock sync{this};
                 index_.removeRequest (req);
               }
             
@@ -227,7 +227,7 @@ namespace advice {
         void
         publishProvision (PointOfAdvice* newProvision, const PointOfAdvice* previousProvision)
           {
-            Lock sync (this);
+            Lock sync{this};
             
             if (!previousProvision && newProvision)
               index_.addProvision (*newProvision);
@@ -244,7 +244,7 @@ namespace advice {
         void
         discardSolutions (const PointOfAdvice* existingProvision)
           {
-            Lock sync (this);
+            Lock sync{this};
             
             if (existingProvision)
               index_.removeProvision (*existingProvision);

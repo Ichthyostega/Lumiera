@@ -71,7 +71,7 @@ namespace play {
   bool
   OutputDirector::connectUp()
   {
-    Lock sync(this);
+    Lock sync{this};
     REQUIRE (not shutdown_initiated_);
     
     player_.createInstance();
@@ -122,7 +122,7 @@ namespace play {
   void
   OutputDirector::bringDown (SigTerm completedSignal)
   {
-    Lock sync(this);
+    Lock sync{this};
     string problemLog;
     if (not isOperational())
       {
