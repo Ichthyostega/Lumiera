@@ -32,9 +32,6 @@
 #include "lib/test/test.h"
 #include "lib/mutex.h"
 #include "lib/recmutex.h"
-#include "lib/condition.h"
-#include "lib/reccondition.h"
-#include "lib/rwlock.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -157,212 +154,29 @@ TEST (recursivemutexsection)
 }
 
 
-
-TEST (rwlocksection)
-{
-  lumiera_rwlock rwlock;
-  lumiera_rwlock_init (&rwlock, "rwsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-
-  LUMIERA_WRLOCK_SECTION (NOBUG_ON, &rwlock)
-    {
-      printf ("write locked section 1\n");
-    }
-
-  LUMIERA_RDLOCK_SECTION (NOBUG_ON, &rwlock)
-    {
-      printf ("read locked section 2\n");
-    }
-
-  lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-}
-
-
-TEST (rwlockforgotunlock)
-{
-  lumiera_rwlock rwlock;
-  lumiera_rwlock_init (&rwlock, "rwlockforgotunlock", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-
-  LUMIERA_RDLOCK_SECTION (NOBUG_ON, &rwlock)
-    {
-      break;    // LOCK_SECTIONS must not be left by a jump
-    }
-
-  lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-}
-
-
-
-TEST (rwdeadlockwr)
-{
-  lumiera_rwlock rwlock;
-  lumiera_rwlock_init (&rwlock, "rwsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-
-  LUMIERA_WRLOCK_SECTION (NOBUG_ON, &rwlock)
-    {
-      printf ("write locked section 1\n");
-      LUMIERA_RDLOCK_SECTION (NOBUG_ON, &rwlock)
-        {
-          printf ("read locked section 2\n");
-        }
-    }
-
-  lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-}
-
-
-
-TEST (rwdeadlockrw)
-{
-  lumiera_rwlock rwlock;
-  lumiera_rwlock_init (&rwlock, "rwsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-
-  LUMIERA_RDLOCK_SECTION (NOBUG_ON, &rwlock)
-    {
-      printf ("read locked section 1\n");
-      LUMIERA_WRLOCK_SECTION (NOBUG_ON, &rwlock)
-        {
-          printf ("write locked section 2\n");
-        }
-    }
-
-  lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-}
-
-
-TEST (conditionops (compiletest only))
-{
-  lumiera_condition cond;
-  lumiera_condition_init (&cond, "conditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-
-  LUMIERA_CONDITION_SECTION (NOBUG_ON, &cond)
-    {
-      LUMIERA_CONDITION_WAIT(1);
-      LUMIERA_CONDITION_SIGNAL;
-      LUMIERA_CONDITION_BROADCAST;
-    }
-
-  lumiera_condition_destroy (&cond, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-}
-
-
-TEST (conditionsection)
-{
-  lumiera_condition cond;
-  lumiera_condition_init (&cond, "conditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-
-  LUMIERA_CONDITION_SECTION (NOBUG_ON, &cond)
-    {
-      printf ("condition locked section 1\n");
-    }
-
-  LUMIERA_CONDITION_SECTION (NOBUG_ON, &cond)
-    {
-      printf ("condition locked section 2\n");
-    }
-
-  lumiera_condition_destroy (&cond, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-}
-
-
-
-TEST (conditionforgotunlock)
-{
-  lumiera_condition cond;
-  lumiera_condition_init (&cond, "conditionforgotunlock", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-
-  LUMIERA_CONDITION_SECTION (NOBUG_ON, &cond)
-    {
-      break;    // CONDITION_SECTIONS must not be left by a jump
-    }
-
-  lumiera_condition_destroy (&cond, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-}
-
-
-
-TEST (recconditionops (compiletest only))
-{
-  lumiera_reccondition reccond;
-  lumiera_reccondition_init (&reccond, "recconditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-
-  LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &reccond)
-    {
-      LUMIERA_RECCONDITION_WAIT(1);
-      LUMIERA_RECCONDITION_SIGNAL;
-      LUMIERA_RECCONDITION_BROADCAST;
-    }
-
-  lumiera_reccondition_destroy (&reccond, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-}
-
-
-TEST (recconditionsection)
-{
-  lumiera_reccondition reccond;
-  lumiera_reccondition_init (&reccond, "recconditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-
-  LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &reccond)
-    {
-      printf ("reccondition locked section 1\n");
-    }
-
-  LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &reccond)
-    {
-      printf ("reccondition locked section 2\n");
-    }
-
-  lumiera_reccondition_destroy (&reccond, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-}
-
-
-TEST (recconditionforgotunlock)
-{
-  lumiera_reccondition reccond;
-  lumiera_reccondition_init (&reccond, "recconditionforgotunlock", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-
-  LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &reccond)
-    {
-      break;    // RECCONDITION_SECTIONS must not be left by a jump
-    }
-
-  lumiera_reccondition_destroy (&reccond, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-}
-
-TEST (chainedrecconditionsection)
-{
-  lumiera_reccondition outer, inner;
-  lumiera_reccondition_init (&outer, "outer_recconditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-  lumiera_reccondition_init (&inner, "inner_recconditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-
-  LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &outer)
-    {
-      printf ("outer reccondition locked section\n");
-      LUMIERA_RECCONDITION_SECTION_CHAIN (NOBUG_ON, &inner)
-	{
-	  printf ("inner reccondition locked section\n");
-	}
-    }
-  lumiera_reccondition_destroy (&outer, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-  lumiera_reccondition_destroy (&inner, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-}
-
-TEST (nestedrecconditionsection)
-{
-  lumiera_reccondition outer, inner;
-  lumiera_reccondition_init (&outer, "outer_recconditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-  lumiera_reccondition_init (&inner, "inner_recconditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-
-  LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &outer)
-    {
-      printf ("outer reccondition locked section\n");
-      LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &inner)
-	{
-	  printf ("inner reccondition locked section\n");
-	}
-    }
-  lumiera_reccondition_destroy (&outer, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-  lumiera_reccondition_destroy (&inner, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
-}
-
+/* ====== 10/2023 : partially dismantled
+ * 
+ * After switching to C++14 Threads and Locking (#1279),
+ * some backend-services are no longer used...
+ * - rwlocksection
+ * - rwlockforgotunlock
+ * - rwdeadlockwr
+ * - rwdeadlockrw
+ * - rwlockdeadlockwr
+ * - rwlockdeadlockrw
+ * - conditionops
+ * - conditionsection
+ * - conditionforgotunlock
+ * - condition signaling (planned)
+ * - condition broadcasting (planned)
+ * - recconditionops
+ * - recconditionsection
+ * - recconditionforgotunlock
+ * - chainedrecconditionsection
+ * - nestedrecconditionsection
+ * - reccondition signaling (planned)
+ * - reccondition broadcasting (planned)
+ * 
+ */
 
 TESTS_END

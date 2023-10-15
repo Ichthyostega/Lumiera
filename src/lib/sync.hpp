@@ -26,7 +26,7 @@
  ** The actual locking, signalling and waiting is implemented by delegating to the
  ** a _mutex_ and for waiting also to a _condition variable_ as provided by the C++
  ** standard library. The purpose of the Sync baseclass is to provide a clear and simple
- ** „everyday“ concurrency coordination based on the <b>object monitor pattern</b>. This
+ ** „everyday“ concurrency coordination based on the *Object Monitor Pattern*. This
  ** pattern describes a way of dealing with synchronisation known to play well with
  ** scoping, encapsulation and responsibility for a single purpose. For performance
  ** critical code, other solutions (e.g. Atomics) might be preferable.
@@ -45,7 +45,7 @@
  ** It must be awakened from another thread by invoking `notify_one|all` and will
  ** then re-check the condition predicate. The `wait_for` variant allows to set
  ** a timeout to limit the sleep state, which implies however that the call may
- ** possibly return `false` in case the condition predicate is not (yet) fulfilled. 
+ ** possibly return `false` in case the condition predicate is not (yet) fulfilled.
  ** @note
  ** - It is important to select a suitable parametrisation of the monitor.
  **   This is done by specifying one of the defined policy classes.
@@ -58,13 +58,12 @@
  **   when adding the monitor to a given class may cause size problems.
  ** - There is a special variant of the Lock guard called ClassLock, which
  **   can be used to lock based on a type, not an instance.
- ** 
- ** @todo WIP-WIP 10/2023 switch from POSIX to C++14  ///////////////////////////////////////////////////////TICKET #1279 : also clean-up the Object-Monitor implementation
+ **
  ** [wait-on-condition]: https://en.cppreference.com/w/cpp/thread/condition_variable_any/wait
  ** @see mutex.h
  ** @see sync-locking-test.cpp
  ** @see sync-waiting-test.cpp
- ** @see \ref asset::AssetManager::reg() "usage example: asset registration"
+ ** @see \ref steam::control::DispatcherLoop "usage example: receiving session coomands"
  ** @see \ref subsystem-runner.hpp "usage example: subsystem start/shutdown"
  */
 
@@ -75,11 +74,10 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
- 
+
 #include <mutex>
 #include <condition_variable>
 #include <chrono>
-
 
 
 namespace lib {
@@ -87,113 +85,7 @@ namespace lib {
   /** Helpers and building blocks for Monitor based synchronisation */
   namespace sync {
     
-    
-    
-    
-    /* ========== adaptation layer for accessing backend/system level code ============== */
-    
-    struct Wrapped_ExclusiveMutex
-      : util::NonCopyable
-      {
-        std::mutex mutex_;
-        
-      protected:
-        Wrapped_ExclusiveMutex() = default;
-        
-        void
-        lock()
-          {
-            mutex_.lock();
-          }
-        
-        void
-        unlock()
-          {
-            mutex_.unlock();
-          }
-      };
-    
-    
-    
-    struct Wrapped_RecursiveMutex
-      : util::NonCopyable
-      {
-        std::recursive_mutex mutex_;
-        
-      protected:
-        Wrapped_RecursiveMutex() = default;
-        
-        void
-        lock()
-          {
-            mutex_.lock();
-          }
-        
-        void
-        unlock()
-          {
-            mutex_.unlock();
-          }
-      };
-    
-    
-    template<class MTX>
-    struct Wrapped_Condition
-      : MTX
-      {
-         std::condition_variable_any cond_;
-        
-      protected:
-        Wrapped_Condition() = default;
-        
-        void
-        wait()
-          {
-            cond_.wait (this->mutex_);
-          }
-
-        template<class REPR, class PERI>
-        bool
-        timedwait (std::chrono::duration<REPR, PERI> const& timeout)
-          {
-            auto ret = cond_.wait_for (this->mutex_, timeout);
-            return (std::cv_status::no_timeout == ret);
-          }
-        
-        void signal()    { cond_.notify_one(); }
-        void broadcast() { cond_.notify_all(); }
-      };
-    
-    
-    
-    
-    
-    
-    
-    /* ========== abstractions defining the usable synchronisation primitives ============== */
-    
-    template<class MTX>
-    class Mutex
-      : protected MTX
-      {
-      protected:
-        Mutex () = default;
-        
-      public:
-          void
-          acquire()
-            {
-              MTX::lock ();
-            }
-          
-          void
-          release()
-            {
-              MTX::unlock ();
-            }
-      };
-    
-    
+    /* ========== policies to define required degree of locking functionality ============== */
     
     template<class MTX>
     struct Condition
@@ -238,33 +130,7 @@ namespace lib {
     
     
     
-    
-    /* ==== functor types for defining the waiting condition ==== */
-    
-    typedef volatile bool& Flag;
-    
-    struct BoolFlagPredicate
-      {
-        Flag flag_;
-        BoolFlagPredicate (Flag f) : flag_(f) {}
-       
-        bool operator() () { return flag_; }
-      };
-    
-    
-    template<class X>
-    struct BoolMethodPredicate
-      {
-        typedef bool (X::*Method)(void);
-        
-        X& instance_;
-        Method method_;
-        BoolMethodPredicate (X& x, Method m) : instance_(x), method_(m) {}
-       
-        bool operator() () { return (instance_.*method_)(); }
-      };
-    
-    
+    /* ========== Object Monitor ============== */
     
     /**
      * Object Monitor for synchronisation and waiting.
@@ -306,8 +172,6 @@ namespace lib {
     
     
   } // namespace sync (helpers and building blocks)
-  
-  
   
   
   
@@ -424,8 +288,6 @@ namespace lib {
           Monitor& accessMonitor() { return mon_; }
         };
     };
-  
-  
   
   
 } // namespace lumiera

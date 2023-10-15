@@ -6,7 +6,7 @@ Lumiera (as seen) from Outer Space
 
 ******************************************************************************
 .abstract
-The Lumiera Community is in the process of making a non-linear video editing 
+The Lumiera Community is in the process of making a non-linear video editing
 and compositing FOSS application for Linux/Unix/Posix operating systems.  The
 application is geared towards professional, high-quality work; but
 it is equally suitable for low-end users, due to its in-design scalability.
@@ -70,7 +70,7 @@ aspects film production tools will have to exhibit to aspire to be labelled
         requires crisp-quality results with no concessions made throughout the
         entire workflow that might compromise quality of the final work.
         A common requirement is the ability to reproduce all rendering
-        calculations down to the last bit. 
+        calculations down to the last bit.
 
  Performance and Productivity::
         Professionals want to get things done on time, but
@@ -84,14 +84,14 @@ aspects film production tools will have to exhibit to aspire to be labelled
         Lumiera must be adept to reap the maximum from the hardware at hand.
 
  Durability::
-        The rapid pace at which software and hardware rampage forward is surely 
+        The rapid pace at which software and hardware rampage forward is surely
         a warning to new software projects and the dangers of locking into any
         current technological ``fashion'' to achieve a ``cheap'' goal, feature
         or performance boost.  Once the fad fades, the software woes begin.
         The software must be able to engage new technological developments
         without any compromise to functionality or backward compatibility.
 
-	
+
 
 Fundamental Forces
 ------------------
@@ -129,7 +129,7 @@ details such as header format conversion or access to individual channels.
 
 To complement this approach, Lumiera does _not_ rely on hard-wired, global
 conventions -- rather we allow the building up of project specific conventions and
-rules xref:rules[<-] to fit a given requirement and preferred working style. 
+rules xref:rules[<-] to fit a given requirement and preferred working style.
 
 Lumiera will be supplied with a conventional template and a default
 configuration to ease the learning curve for new users.
@@ -172,7 +172,7 @@ At a first glance, it looks fairly natural to set up the graphs xref:graphs[<-]
 as described above.  Data can then be pushed into the system through the input
 nodes and the final result can be seen at the output node. Several multimedia
 frameworks use this approach. However this scheme exhibits a number of
-shortcomings which make it inappropriate for non-linear video editing. 
+shortcomings which make it inappropriate for non-linear video editing.
 
 Lumiera takes a different approach.  Data is pulled through a pipe: any rendering
 request starts at the output node and makes its way back up through the graph to
@@ -183,8 +183,8 @@ the inputs. This scheme offers a number of advantages over the naive scheme.
 Don't waste work
 ~~~~~~~~~~~~~~~~
 
-Rendering A/V data can be computationally intensive.  To avoid duplicated or wasted work and 
-ensure it is possible to render on time, 
+Rendering A/V data can be computationally intensive.  To avoid duplicated or wasted work and
+ensure it is possible to render on time,
 Lumiera employs a sophisticated means of using
 cache xref:caching[<-] and profiling xref:profiling[<-].
 
@@ -234,12 +234,12 @@ The screenshot of the GUI presented above is more or less the standard GUI when
 it is started for the first time without any user configuration etc.  A second
 viewer is planned for later to be added to the default. We support a much more
 sophisticated screen concept xref:screenconcept[<-] to adapt to different
-workplaces and workflows. 
+workplaces and workflows.
 // TODO
 // The above paragrph isn't all it should be, but I can't tell what it should
 // be without seeing it in the context of the other changes I'm making.
 // I suspect it's better to discuss how rewritable the GUI is rather than
-// the specifics ot the GUI presented above. -- hendrik
+// the specifics of the GUI presented above. -- hendrik
 
 At a first glance, the GUI might seem somewhat overwhelming, something similar
 to the cockpit in a jumbo jet.  However, nearly all the bells and whistles can
@@ -318,7 +318,7 @@ individual clips, or the pipes collecting output from transitions, from nested
 sequences and from groups of forks (``tracks''). At some point, at the timeline level,
 all processed data is collected within the aforementioned global pipes to form the
 small number of output streams produced by rendering and playback. Each timeline
-uses a separate set of global pipes. 
+uses a separate set of global pipes.
 
 
 Asset View
@@ -334,7 +334,7 @@ There are various kinds of assets available in any project:
   * source media/footage/soundfiles
   * all available effects and transitions
   * user defined ``effect stacks'' and effect collections ("effect palette")
-  * internal artefacts like sequences and automation data sets
+  * internal artifacts like sequences and automation data sets
   * markers, labels, tags and similar kinds of meta data
 
 Actually, the same underlying _fork_ data structure is used to implement the
@@ -368,10 +368,10 @@ Vault.
 Session Storage
 ~~~~~~~~~~~~~~~
 
-The current representation of a project resident in memory is internally known 
+The current representation of a project resident in memory is internally known
 as a session, whereas from a GUI user perspective, this is known as a project.
 In this section, we will use the term ``session'' as we are discussing the internals
-of Lumiera here. 
+of Lumiera here.
 
 Everything is stored in a session.  If a user saves a session, then there should
 be no difference to the user whether they continue working or throw all their
@@ -384,7 +384,7 @@ operations on these objects.  For example, unlimited ability to undo previous
 steps, selective undo of previous steps or the possibility of merging various
 steps might even be a possibility.  On a practical note, work on a project at
 the office and work on the same project at home can be merged each morning and
-evening. 
+evening.
 
 Session storage is envisaged to operate similar to a database or journalling
 file system. Any operation will be logged prior to execution. This protects
@@ -499,7 +499,7 @@ will not reinvent the wheel each time he sits down to programme an
 application. A programmer will typically borrow and use features and
 functionality from other programmers---or even borrow from himself, stuff
 written long ago in the past. Such features are collected together in
-libraries. 
+libraries.
 
 A library is used in an application by _linking_ the library into the
 application. (There are other things to be done, but we'll call these 'details',
@@ -531,7 +531,7 @@ available to an application is known as run-time linking, aka plug-ins.
 Plug-ins offer other benefits: the application can continue to use both the old
 features and the new features together, side-by-side, by using the version
 number associated with the plug-in. This saves the application from the havoc
-of library incompatibility that is 
+of library incompatibility that is
 associated with other linking methods.
 
 Most modern applications use plug-ins, some are heavily dependent on plug-ins
@@ -552,7 +552,7 @@ backend, right up to the GUI -- the interface will have to be compatible to both
 and C++. In effect, this means that LPI will be implemented in C.
 
 Using LPI a plugin interface can be defined for each external library.  The
-Lumiera code base can then use the external library by including the 
+Lumiera code base can then use the external library by including the
 plugin interface for that particular library.
 
 LPI defines a uniform framework of how to manage plugins within Lumiera. It
@@ -560,7 +560,7 @@ declares a number of macros that allow details of a plugin to be defined:
     - name of the plugin
     - version of the plugin (include major and minor version numbers)
     - name each call-back function defined by the plugin and exported by the
-      external library 
+      external library
     - methods to initialise and destroy the plugin
 
 Defining some plugin interface then entails using LPI to specify the details of
@@ -602,6 +602,6 @@ The Inner Core
 ~~~~~~~~~~~~~~
 Developers and Readers curious about the inner workings of the application
 might want to have a look into the overview document of our technical
-documentation section. Learn more about 
+documentation section. Learn more about
 link:{ldoc}/technical/overview.html[The Inner Core]...
 

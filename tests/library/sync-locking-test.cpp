@@ -26,181 +26,124 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/error.hpp"
 
 #include "lib/sync.hpp"
 #include "lib/thread.hpp"
+#include "lib/iter-explorer.hpp"
+#include "lib/scoped-collection.hpp"
 
-#include <iostream>
-#include <functional>
-
-using std::bind;
-
-using std::cout;
 using test::Test;
+using lib::explore;
+using std::this_thread::yield;
+using std::this_thread::sleep_for;
+using std::chrono_literals::operator ""us;
 
 
 namespace lib {
 namespace test{
-  
-  namespace { // private test classes and data...
-  
-    const uint NUM_COUNTERS = 20;       ///< number of independent counters to increment in parallel
-    const uint NUM_THREADS  = 10;       ///< number of threads trying to increment these counters
-    const uint MAX_PAUSE    = 10000;    ///< maximum delay implemented as empty counting loop
-    const uint MAX_SUM      = 1000;     ///< trigger when to finish incrementing
-    const uint MAX_INC      = 10;       ///< maximum increment on each step
+    
+    namespace { // private test classes and data...
+      
+      const uint NUM_THREADS      = 200;
+      const uint MAX_RAND_SUMMAND = 100;
+      
+      
+      
+      /** Helper to verify a contended chain calculation */
+      template<class POLICY>
+      class Checker
+        : public Sync<POLICY>
+        {
+          size_t hot_sum_{0};
+          size_t control_sum_{0};
+          
+          using Lock = typename Sync<POLICY>::Lock;
+          
+        public:
+          bool
+          verify()    ///< verify test values got handled and accounted
+            {
+              Lock guard{this};
+              return 0 < hot_sum_
+                 and control_sum_ == hot_sum_;
+            }
+          
+          uint
+          createVal() ///< generating test values, remembering the control sum
+            {
+              uint val{rand() % MAX_RAND_SUMMAND};
+              control_sum_ += val;
+              return val;
+            }
+          
+          void
+          addValues (uint a, uint b)   ///< to be called concurrently
+            {
+              Lock guard{this};
+              
+              hot_sum_ *= 2;
+              sleep_for (200us);       // force preemption
+              hot_sum_ += 2 * (a+b);
+              sleep_for (200us);
+              hot_sum_ /= 2;
+            }
+        };
+    }// (End) test classes and data....
     
     
     
-    class Victim
-      : public Sync<RecursiveLock_NoWait>
-      {
-        volatile uint cnt_[NUM_COUNTERS];
-        volatile uint step_;         ///< @note stored as instance variable
-        
-        void
-        pause ()
-          {
-            Lock guard{this};  // note recursive lock
-            
-            for ( uint i=0, lim=(rand() % MAX_PAUSE); i<lim; ++i)
-              ;
-          }
-        
-        void 
-        incrementAll ()
-          {
-            for (uint i=0; i<NUM_COUNTERS; ++i)
-              {
-                pause();
-                cnt_[i] += step_;
-              }
-          }
-        
-        
-      public:
-        Victim ()
-          {
-            for (uint i=0; i<NUM_COUNTERS; ++i)
-              cnt_[i] = 0;
-          }
-        
-        void 
-        inc (uint newStep)
-          {
-            Lock guard{this};
-            step_ = newStep;
-            incrementAll();
-          }
-        
-        bool
-        belowLimit ()
-          {
-            Lock guard{this};
-            return cnt_[0] < MAX_SUM;
-          }
-        
-        bool
-        checkAllEqual ()
-          {
-            for (uint i=1; i<NUM_COUNTERS; ++i)
-              if (cnt_[i-1] != cnt_[i])
-                return false;
-            return true;
-          }
-        
-        void 
-        report ()
-          {
-            for (uint i=0; i<NUM_COUNTERS; ++i)
-              cout << "Counter-#" << i << " = " << cnt_[i] << "\n";
-          }
-      }
-    ourVictim;
     
     
     
-    /**
-     * A Thread trying to increment all victim counters in sync...
+    /******************************************************************//**
+     * @test verify the object monitor provides locking and to prevent
+     *       data corruption on concurrent modification of shared storage.
+     *       - use a chained calculation with deliberate sleep state
+     *         while holding onto an intermediary result
+     *       - run this calculation contended by a huge number of threads
+     *       - either use locking or no locking
+     * @see sync.happ
+     * @see thread.hpp
      */
-    class HavocThread
+    class SyncLocking_test : public Test
       {
-        ThreadJoinable<> thread_;
         
-        void
-        doIt ()
+        virtual void
+        run (Arg)
           {
-            while (ourVictim.belowLimit())
-              ourVictim.inc (rand() % MAX_INC);
+            CHECK (can_calc_without_Error<NonrecursiveLock_NoWait>());
+            CHECK (can_calc_without_Error<RecursiveLock_NoWait>());
+            CHECK (not can_calc_without_Error<sync::NoLocking>());
           }
         
-      public:
         
-        HavocThread ()
-          : thread_("HavocThread"
-                   , bind (&HavocThread::doIt, this)
-                   )
+        template<class POLICY>
+        bool
+        can_calc_without_Error()
           {
-            CHECK (thread_);
-          }
-        
-        ~HavocThread ()
-          {
-            if (thread_)
-              thread_.join();
+            Checker<POLICY> checksum;  // shared variable used by multiple threads
+            
+            lib::ScopedCollection<Thread> threads{NUM_THREADS};
+            for (uint i=1; i<=NUM_THREADS; ++i)
+              threads.emplace ([&checksum,   // Note: added values prepared in main thread
+                                a = checksum.createVal(),
+                                b = checksum.createVal()]
+                                {
+                                  checksum.addValues (a,b);
+                                });
+            
+            while (explore(threads).has_any())
+              yield();  // wait for all threads to terminate
+            
+            return checksum.verify();
           }
       };
     
-  } // (End) test classes and data....
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  /******************************************************************//**
-   * @test create multiple threads, all concurrently trying to increment
-   * a number of counters with random steps and random pauses. Without
-   * locking, the likely result will be differing counters.
-   * But because the class Victim uses an object level monitor to
-   * guard the mutations, the state should remain consistent.
-   * 
-   * @see SyncWaiting_test condition based wait/notify
-   * @see SyncClasslock_test locking a type, not an instance 
-   * @see sync.hpp
-   */
-  class SyncLocking_test : public Test
-    {
-      
-      virtual void
-      run (Arg)
-        {
-          CHECK (ourVictim.checkAllEqual());
-          {
-            HavocThread threads[NUM_THREADS]   SIDEEFFECT;
-          } 
-          // all finished and joined here...
-          
-          if (!ourVictim.checkAllEqual())
-            {
-              cout << "Thread locking is broken; internal state got messed up\n"
-                      "NOTE: all counters should be equal and >=" << MAX_SUM << "\n";
-              ourVictim.report();
-            }
-        }
-      
-    };
-  
-  
-  
-  /** Register this test class... */
-  LAUNCHER (SyncLocking_test, "unit common");
-  
-  
-  
+    
+    
+    /** Register this test class... */
+    LAUNCHER (SyncLocking_test, "function common");
+    
+    
+    
 }} // namespace lib::test
