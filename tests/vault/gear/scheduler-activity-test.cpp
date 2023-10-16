@@ -107,6 +107,8 @@ namespace test {
        *        - invoke the λ-post to dispatch the chain through the queue
        *        - the chain to be executed is given as `next`
        *        - time window for scheduling as data field
+       *        - the start time from this window becomes the `when` parameter
+       *        - the `now` parameter from the activation is thus ignored
        */
       void
       verifyActivity_Post()
@@ -120,10 +122,10 @@ namespace test {
           CHECK ( & chain   == post.next);
           
           ActivityDetector detector;
-          Time tt{11,11};
+          Time tt{5,5};
           post.activate (tt, detector.executionCtx);
           
-          CHECK (detector.verifyInvocation("CTX-post").arg("11.011", "Act(POST", "≺test::CTX≻"));
+          CHECK (detector.verifyInvocation("CTX-post").arg("11.000", "Act(POST", "≺test::CTX≻"));
         }
       
       

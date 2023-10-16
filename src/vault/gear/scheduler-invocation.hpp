@@ -58,6 +58,10 @@ namespace gear {
   
   using std::move;
   
+  namespace {// Internal defaults
+    const size_t INITIAL_CAPACITY = 128;
+  }
+  
   
   /**
    * Scheduler Layer-1 : invocation.
@@ -93,6 +97,8 @@ namespace gear {
     public:
 //      explicit
       SchedulerInvocation()
+        : instruct_{INITIAL_CAPACITY}
+        , priority_{}
         { }
       
       

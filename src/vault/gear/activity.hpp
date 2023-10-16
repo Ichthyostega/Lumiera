@@ -550,10 +550,10 @@ namespace gear {
       
       template<class EXE>
       activity::Proc
-      postChain (Time now, EXE& executionCtx)
+      postChain (Time when, EXE& executionCtx)
         {
           REQUIRE (next);
-          return executionCtx.post (now, *next, executionCtx);
+          return executionCtx.post (when, *next, executionCtx);
         }
       
       template<class EXE>
@@ -616,7 +616,7 @@ namespace gear {
       case GATE:
         return checkGate (now, executionCtx);
       case POST:
-        return dispatchSelf (now, executionCtx);
+        return dispatchSelf (Time{data_.timeWindow.life}, executionCtx);
       case FEED:
         return activity::PASS;
       case HOOK:
@@ -635,6 +635,9 @@ namespace gear {
    * by invoking the `post`-λ on the \a executionCtx, or by _activating_
    * a `POST`-Activity. Control flow passing here has acquired the `GroomingToken`
    * and can thus assume single threaded execution until `WORKSTART`.
+   * @param now the scheduler-time; assuming that a call through the `post`-λ will
+   *       only be actually de-queued when scheduler-time equals the start time
+   *       defined in the POST activity and passed through the `post`-λ as parameter.
    * @note special twist for the `NOTIFY`-Activity: it is not _activated_
    *       itself, rather the #notify operation is invoked on its target argument;
    *       this is necessary since a notification passes control-flow outside

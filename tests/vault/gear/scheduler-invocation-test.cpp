@@ -62,12 +62,12 @@ namespace test {
       run (Arg)
         {
            simpleUsage();
-           walkingDeadline();
-           setupLalup();
+           verify_Queuing();
+           verify_WaterLevel();
         }
       
       
-      /** @test TODO demonstrate a simple usage scenario
+      /** @test demonstrate a simple usage scenario of data passing
        */
       void
       simpleUsage()
@@ -88,20 +88,22 @@ namespace test {
       
       
       
-      /** @test TODO
+      /** @test TODO verify records are passed properly through the queues
        */
       void
-      walkingDeadline()
+      verify_Queuing()
         {
+          UNIMPLEMENTED ("queues");
         }
       
       
       
-      /** @test TODO
+      /** @test TODO verify the given time point is utilised for prioritisation
        */
       void
-      setupLalup()
+      verify_WaterLevel()
         {
+          UNIMPLEMENTED ("water level");
         }
     };
   
