@@ -29,13 +29,13 @@
 #include "vault/gear/scheduler-invocation.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/format-cout.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <utility>
 
 using test::Test;
 //using std::move;
-//using util::isSameObject;
+using util::isSameObject;
 
 
 namespace vault{
@@ -72,6 +72,18 @@ namespace test {
       void
       simpleUsage()
         {
+          SchedulerInvocation sched;
+          Activity activity;
+          
+          CHECK (not sched.peekHead());
+          
+          sched.instruct (activity);
+          sched.feedPriorisation();
+          CHECK (sched.peekHead());
+          
+          Activity* head = sched.pullHead();
+          CHECK (not sched.peekHead());
+          CHECK (isSameObject (*head, activity)); 
         }
       
       

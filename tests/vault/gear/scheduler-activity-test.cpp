@@ -279,7 +279,7 @@ namespace test {
        *        - when receiving a notification, the latch is decremented
        *        - if this causes the Gate to open, the chain is immediately
        *          scheduled for activation, but the Gate also locked forever
-       *        - neither a further activation, or a further notification
+       *        - neither a further activation, nor a further notification
        *          has any effect after this point...
        */
       void

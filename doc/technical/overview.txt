@@ -303,8 +303,25 @@ invoke and control the dependency and time based execution of the _Render Jobs._
 Regarding architecture, the Scheduler is located in the Vault-Layer and running the Scheduler
 is equivalent to activating the »Vault Subsystem«. An EngineFaçade acts as entrance point,
 providing high-level render services to other parts of the application: render jobs can be
-activated under various timing and dependency constraints.
-Internally, the implementation is organised into two layers:
+activated under various timing and dependency constraints, which can be grouped
+into three basic modes of control:
+
+Deadline::
+ Higher priority jobs ordered by a deadline time plus some (negative) hysteresis.
+ Jobs are started when they approach their deadline. When it is foreseeable that a
+ jobs will miss the deadline, it will be skipped, preferring to use resources on
+ calculations expected to be successful and on time.
+
+Best Effort::
+ Background calculations will use excess resources of the system;
+ a typical example would be the calculation of preview images and sound waveform
+ outlines for the GUI.
+
+Freewheeling::
+ Calculation for final rendering will use all available resources and never
+ skip any processing, irrespective of the time it takes to complete.
+
+Internally, the implementation of the Scheduler is organised in two layers:
 
 Layer-2: Coordination::
   Maintain a network of interconnected activities, track dependencies and observe
@@ -313,28 +330,10 @@ Layer-2: Coordination::
 Layer-1: Invocation::
   Operates a low-level priority scheduling mechanism for time-bound execution of activities.
 
-Generally speaking, a render calculation can be organised by different modes of control:
-
-.Deadline
-Higher priority jobs ordered by a deadline time plus some (negative) hysteresis.
-Jobs are started when they approach their deadline. When it is foreseeable that a
-jobs will miss the deadline, it will be skipped, preferring to use resources on
-calculations expected to be successful and in time.
-
-.Background
-Background calculations will use excess resources of the system;
-a typical example would be the calculation of preview images and sound waveform
-outlines for the GUI.
-
-.Best Effort
-Calculation for final rendering will use all available resources and never skip any
-processing, irrespecive of the time it takes to complete.
-
-
 Job
 ^^^
 A _Render Job_ is prepared as a self-contained functor, with a well defined time window
-of execution. A job, once triggered, will run to completion without and can not be aborted.
+of execution. A job, once triggered, will run to completion unattended and can not be aborted.
 The scheduler is able to observe and maintain dependencies between render jobs, allowing
 to break down an extended calculation into a chain of small steps.
 

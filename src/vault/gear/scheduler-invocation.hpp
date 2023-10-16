@@ -29,7 +29,7 @@
  ** @see SchedulerUsage_test integrated usage
  ** @see scheduler.cpp implementation details
  ** 
- ** @todo WIP-WIP-WIP 6/2023 »Playback Vertical Slice«
+ ** @todo WIP-WIP-WIP 10/2023 »Playback Vertical Slice«
  ** 
  */
 
@@ -60,7 +60,7 @@ namespace gear {
   
   
   /**
-   * Scheduler Layer-2 : invocation.
+   * Scheduler Layer-1 : invocation.
    * 
    * @see Scheduler
    * @see SchedulerInvocation_test
