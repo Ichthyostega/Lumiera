@@ -28,14 +28,18 @@
 #include "lib/test/run.hpp"
 #include "activity-detector.hpp"
 #include "vault/gear/scheduler-commutator.hpp"
+#include "lib/test/microbenchmark.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
 //#include "lib/util.hpp"
+#include "lib/test/diagnostic-output.hpp"///////////////////////////TODO TOD-Oh
 
 //#include <utility>
 #include <thread>
+#include <chrono>
 
 using test::Test;
+using lib::test::threadBenchmark;
 //using std::move;
 //using util::isSameObject;
 
@@ -47,6 +51,14 @@ namespace test {
 //  using lib::time::FrameRate;
 //  using lib::time::Offset;
   using lib::time::Time;
+  using std::this_thread::yield;
+  using std::this_thread::sleep_for;
+  using std::chrono_literals::operator ""us;
+  
+  namespace {// Test parameters
+    const size_t NUM_THREADS = 20;
+    const size_t REPETITIONS = 100;
+  }
   
   
   
@@ -65,6 +77,7 @@ namespace test {
         {
           demonstrateSimpleUsage();
           verify_GroomingToken();
+          torture_GroomingToken();
           verify_DispatchDecision();
           verify_findWork();
           verify_postDispatch();
@@ -95,8 +108,8 @@ namespace test {
       
       
       
-      /** @test TODO verify logic to control concurrent execution 
-       * @todo WIP 10/23 🔁 define ⟶ ✔ implement
+      /** @test verify logic to control concurrent execution
+       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_GroomingToken()
@@ -111,6 +124,45 @@ namespace test {
           
           sched.dropGroomingToken();
           CHECK (not sched.holdsGroomingToken (myself));
+        }
+      
+      
+      
+      /** @test ensure the GroomingToken mechanism indeed creates an
+       *   exclusive section protected against concurrent corruption.
+       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
+       */
+      void
+      torture_GroomingToken()
+        {
+          SchedulerCommutator sched;
+          
+          size_t checkSum{0};
+          auto pause_and_sum = [&](size_t i) -> size_t
+                                  {
+                                    auto oldSum = checkSum;
+                                    sleep_for (500us);
+                                    checkSum = oldSum + i;
+                                    return 1;
+                                  };
+          auto protected_sum = [&](size_t i) -> size_t
+                                  {
+                                    while (not sched.acquireGoomingToken())
+                                      yield();
+                                    pause_and_sum(i);
+                                    sched.dropGroomingToken();
+                                    return 1;
+                                  };
+          
+          threadBenchmark<NUM_THREADS> (pause_and_sum, REPETITIONS);
+          
+          size_t brokenSum = checkSum;
+          checkSum = 0;
+          
+          threadBenchmark<NUM_THREADS> (protected_sum, REPETITIONS);
+          
+          CHECK (brokenSum < checkSum);
+          CHECK (checkSum = NUM_THREADS * REPETITIONS*(REPETITIONS-1)/2);
         }
       
       
