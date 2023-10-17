@@ -33,6 +33,7 @@
 //#include "lib/util.hpp"
 
 //#include <utility>
+#include <thread>
 
 using test::Test;
 //using std::move;
@@ -88,18 +89,28 @@ namespace test {
           // use the ActivityDetector for test instrumentation...
           ActivityDetector detector;
           
-          sched.postDispatch (sched.findWork(queues), detector.executionCtx);
+//        sched.postDispatch (sched.findWork(queues), detector.executionCtx);  ///////////////////////OOO findWork umschreiben
           cout << detector.showLog()<<endl; // HINT: use this for investigation...
         }
       
       
       
       /** @test TODO verify logic to control concurrent execution 
-       * @todo WIP 10/23 🔁 define ⟶ implement
+       * @todo WIP 10/23 🔁 define ⟶ ✔ implement
        */
       void
       verify_GroomingToken()
         {
+          SchedulerCommutator sched;
+          
+          auto myself = std::this_thread::get_id();
+          CHECK (not sched.holdsGroomingToken (myself));
+          
+          CHECK (sched.acquireGoomingToken());
+          CHECK (    sched.holdsGroomingToken (myself));
+          
+          sched.dropGroomingToken();
+          CHECK (not sched.holdsGroomingToken (myself));
         }
       
       

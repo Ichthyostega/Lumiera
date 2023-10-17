@@ -47,12 +47,18 @@
 //#include "lib/util.hpp"
 
 //#include <string>
+#include <thread>
+#include <atomic>
 
 
 namespace vault{
 namespace gear {
   
   using lib::time::Time;
+  using std::atomic;
+  using std::memory_order::memory_order_relaxed;
+  using std::memory_order::memory_order_acquire;
+  using std::memory_order::memory_order_release;
 //  using util::isnil;
 //  using std::string;
   
@@ -66,11 +72,59 @@ namespace gear {
   class SchedulerCommutator
     : util::NonCopyable
     {
+      using ThreadID = std::thread::id;
+      atomic<ThreadID> groomingToken_{};
       
     public:
 //      explicit
       SchedulerCommutator()
         { }
+      
+      
+      /**
+       * acquire the right to perform internal state transitions.
+       * @return `true` if this attempt succeeded
+       * @note only one thread at a time can acquire the GoomingToken successfully.
+       * @remark only if _testing and branching_ on the return value, this also constitutes
+       *         also sync barrier; _in this case you can be sure_ to see the real values
+       *         of any scheduler internals and are free to manipulate.
+       */
+      bool
+      acquireGoomingToken()  noexcept
+        {
+          ThreadID expect_noThread;                   // expect no one else to be in...
+          ThreadID myself = std::this_thread::get_id();
+          return groomingToken_.compare_exchange_strong (expect_noThread, myself
+                                                        ,memory_order_acquire // success also constitutes an acquire barrier 
+                                                        ,memory_order_relaxed // failure has no synchronisation ramifications
+                                                        );
+        }
+      
+      /**
+       * relinquish the right for internal transitions.
+       * @remark any changes done to scheduler internals prior to this call will be
+       *         _sequenced-before_ anything another thread does later, _bot only_
+       *         if the other thread first successfully acquires the GroomingToken.
+       */
+      void
+      dropGroomingToken()  noexcept
+        {          // expect that this thread actually holds the Grooming-Token
+          REQUIRE (groomingToken_.load(memory_order_relaxed) == std::this_thread::get_id());
+          const ThreadID noThreadHoldsIt;
+          groomingToken_.store (noThreadHoldsIt, memory_order_release);
+        }
+      
+      /**
+       * check if the indicated thread currently holds
+       * the right to conduct internal state transitions.
+       */
+      bool
+      holdsGroomingToken (ThreadID id)  noexcept
+        {
+          return id == groomingToken_.load (memory_order_relaxed);
+        }
+      
+      
       
       Activity*
       findWork (SchedulerInvocation& layer1)
