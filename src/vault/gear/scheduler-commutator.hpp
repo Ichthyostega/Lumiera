@@ -38,9 +38,10 @@
 
 
 #include "vault/common.hpp"
-#include "lib/nocopy.hpp"
+#include "vault/gear/activity.hpp"
 #include "vault/gear/scheduler-invocation.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/nocopy.hpp"
 
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
@@ -71,10 +72,11 @@ namespace gear {
       SchedulerCommutator()
         { }
       
-      void
-      doWork (SchedulerInvocation& layer1)
+      Activity*
+      findWork (SchedulerInvocation& layer1)
         {
           layer1.feedPrioritisation();
+          UNIMPLEMENTED("wtf??");
           while (layer1.isDue (currentSchedulerTime()))
             {
               Activity* activity = layer1.pullHead();
@@ -83,7 +85,7 @@ namespace gear {
               else
                 {
                   performExternalWork (activity);
-                  return;
+                  UNIMPLEMENTED("return");
                 }
             }
         }
@@ -110,6 +112,13 @@ namespace gear {
       performExternalWork (Activity* activity)
         {
           UNIMPLEMENTED ("drop the exclusion flag and then engage into the external render activity");
+        }
+      
+      template<class EXE>
+      activity::Proc
+      postDispatch (Activity* chain, EXE& executionCtx)
+        {
+          UNIMPLEMENTED ("core function: maybe perform activity");
         }
     };
   

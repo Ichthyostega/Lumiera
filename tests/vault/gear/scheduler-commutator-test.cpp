@@ -26,9 +26,10 @@
 
 
 #include "lib/test/run.hpp"
+#include "activity-detector.hpp"
 #include "vault/gear/scheduler-commutator.hpp"
-//#include "lib/time/timevalue.hpp"
-//#include "lib/format-cout.hpp"
+#include "lib/time/timevalue.hpp"
+#include "lib/format-cout.hpp"
 //#include "lib/util.hpp"
 
 //#include <utility>
@@ -44,7 +45,7 @@ namespace test {
   
 //  using lib::time::FrameRate;
 //  using lib::time::Offset;
-//  using lib::time::Time;
+  using lib::time::Time;
   
   
   
@@ -61,35 +62,89 @@ namespace test {
       virtual void
       run (Arg)
         {
-           simpleUsage();
-           walkingDeadline();
-           setupLalup();
+          demonstrateSimpleUsage();
+          verify_GroomingToken();
+          verify_DispatchDecision();
+          verify_findWork();
+          verify_postDispatch();
+          integratedWorkCycle();
         }
       
       
       /** @test TODO demonstrate a simple usage scenario
+       * @todo WIP 10/23 ✔ define ⟶ 🔁 implement
        */
       void
-      simpleUsage()
+      demonstrateSimpleUsage()
+        {
+          SchedulerInvocation queues;
+          SchedulerCommutator sched;
+          Activity activity;
+          Time when{1,2,3};
+          
+          // prepare scenario: some activity is enqueued
+          queues.instruct (activity, when);
+          
+          // use the ActivityDetector for test instrumentation...
+          ActivityDetector detector;
+          
+          sched.postDispatch (sched.findWork(queues), detector.executionCtx);
+          cout << detector.showLog()<<endl; // HINT: use this for investigation...
+        }
+      
+      
+      
+      /** @test TODO verify logic to control concurrent execution 
+       * @todo WIP 10/23 🔁 define ⟶ implement
+       */
+      void
+      verify_GroomingToken()
         {
         }
       
       
       
-      /** @test TODO
+      /** @test TODO verify the decision logic where and when
+       *        to perform the dispatch of an Scheduler Activity chain.
+       * @todo WIP 10/23 🔁 define ⟶ implement
        */
       void
-      walkingDeadline()
+      verify_DispatchDecision()
         {
+          UNIMPLEMENTED ("DispatchDecision");
         }
       
       
       
-      /** @test TODO
+      /** @test TODO verify logic of queue updates and work prioritisation.
+       * @todo WIP 10/23 🔁 define ⟶ implement
        */
       void
-      setupLalup()
+      verify_findWork()
         {
+          UNIMPLEMENTED ("findWork");
+        }
+      
+      
+      
+      /** @test TODO verify entrance point for performing an Activity chain.
+       * @todo WIP 10/23 🔁 define ⟶ implement
+       */
+      void
+      verify_postDispatch()
+        {
+          UNIMPLEMENTED ("postDispatch");
+        }
+      
+      
+      
+      /** @test TODO build the integrated sequence of worker activation
+       * @todo WIP 10/23 🔁 define ⟶ implement
+       */
+      void
+      integratedWorkCycle()
+        {
+          UNIMPLEMENTED ("integratedWorkCycle");
         }
     };
   
