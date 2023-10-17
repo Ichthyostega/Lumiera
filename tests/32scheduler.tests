@@ -20,7 +20,7 @@ END
 
 
 
-PLANNED "Scheduler Layer-1" SchedulerInvocation_test <<END
+TEST "Scheduler Layer-1" SchedulerInvocation_test <<END
 return: 0
 END
 

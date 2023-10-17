@@ -120,7 +120,7 @@ namespace gear {
        * and enqueue them according to time order
        */
       void
-      feedPriorisation()
+      feedPrioritisation()
         {
           ActOrder actOrder;
           while (instruct_.pop (actOrder))
@@ -133,7 +133,7 @@ namespace gear {
        * effectively bypassing the thread dispatching entrance queue.
        */
       void
-      feedPriorisation (Activity& activity, Time when)
+      feedPrioritisation (Activity& activity, Time when)
         {
           priority_.push (ActOrder{waterLevel(when), &activity});
         }

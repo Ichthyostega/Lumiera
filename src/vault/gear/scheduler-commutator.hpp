@@ -74,7 +74,7 @@ namespace gear {
       void
       doWork (SchedulerInvocation& layer1)
         {
-          layer1.feedPriorisation();
+          layer1.feedPrioritisation();
           while (layer1.isDue (currentSchedulerTime()))
             {
               Activity* activity = layer1.pullHead();
