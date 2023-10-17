@@ -42,6 +42,7 @@
 #include "lib/nocopy.hpp"
 //#include "lib/symbol.hpp"
 #include "vault/gear/activity.hpp"
+#include "lib/time/timevalue.hpp"
 //#include "lib/util.hpp"
 
 //#include <string>
@@ -52,11 +53,12 @@
 namespace vault{
 namespace gear {
   
-  namespace error = lumiera::error;
+  using lib::time::Time;
 //  using util::isnil;
 //  using std::string;
-  
   using std::move;
+  
+  namespace error = lumiera::error;
   
   namespace {// Internal defaults
     const size_t INITIAL_CAPACITY = 128;
@@ -74,7 +76,7 @@ namespace gear {
     {
       struct ActOrder
         {
-          size_t  waterlevel{0};
+          int64_t   waterlevel{0};
           Activity* activity{nullptr};
           
           /** @internal ordering function for time based scheduling
@@ -95,7 +97,6 @@ namespace gear {
       PriorityQueue priority_;
       
     public:
-//      explicit
       SchedulerInvocation()
         : instruct_{INITIAL_CAPACITY}
         , priority_{}
@@ -106,10 +107,9 @@ namespace gear {
        * Accept an Activity for time-bound execution
        */
       void
-      instruct (Activity& activity)
+      instruct (Activity& activity, Time when)
         {
-          size_t waterLevel = 123;  /////////////////////////////////////////////////////OOO derive water level from time window
-          bool success = instruct_.push (ActOrder{waterLevel, &activity});
+          bool success = instruct_.push (ActOrder{waterLevel(when), &activity});
           if (not success)
             throw error::Fatal{"Scheduler entrance: memory allocation failed"};
         }
@@ -125,6 +125,17 @@ namespace gear {
           ActOrder actOrder;
           while (instruct_.pop (actOrder))
             priority_.push (move (actOrder));
+        }
+      
+      
+      /**
+       * Feed the given Activity directly into time prioritisation,
+       * effectively bypassing the thread dispatching entrance queue.
+       */
+      void
+      feedPriorisation (Activity& activity, Time when)
+        {
+          priority_.push (ActOrder{waterLevel(when), &activity});
         }
       
       
@@ -155,10 +166,17 @@ namespace gear {
       
       /** Determine if there is work to do right now */
       bool
-      isDue (size_t level)  const
+      isDue (Time now)  const
         {
           return not priority_.empty()
-             and priority_.top().waterlevel <= level;
+             and priority_.top().waterlevel <= waterLevel(now);
+        }
+      
+    private:
+      static int64_t
+      waterLevel (Time time)
+        {
+          return _raw(time);
         }
     };
   

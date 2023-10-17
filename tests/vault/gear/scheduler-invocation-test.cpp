@@ -74,10 +74,11 @@ namespace test {
         {
           SchedulerInvocation sched;
           Activity activity;
+          Time when{1,2,3};
           
           CHECK (not sched.peekHead());
           
-          sched.instruct (activity);
+          sched.instruct (activity, when);
           sched.feedPriorisation();
           CHECK (sched.peekHead());
           

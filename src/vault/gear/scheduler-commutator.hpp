@@ -40,6 +40,8 @@
 #include "vault/common.hpp"
 #include "lib/nocopy.hpp"
 #include "vault/gear/scheduler-invocation.hpp"
+#include "lib/time/timevalue.hpp"
+
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
@@ -49,6 +51,7 @@
 namespace vault{
 namespace gear {
   
+  using lib::time::Time;
 //  using util::isnil;
 //  using std::string;
   
@@ -72,7 +75,7 @@ namespace gear {
       doWork (SchedulerInvocation& layer1)
         {
           layer1.feedPriorisation();
-          while (layer1.isDue (currentLevel()))
+          while (layer1.isDue (currentSchedulerTime()))
             {
               Activity* activity = layer1.pullHead();
               if (isInternalWork (activity))
@@ -85,10 +88,10 @@ namespace gear {
             }
         }
       
-      size_t
-      currentLevel()  const
+      Time
+      currentSchedulerTime()  const
         {
-          UNIMPLEMENTED ("define waterlevel based on current time");
+          UNIMPLEMENTED ("how to manage the current scheduler time");
         }
       
       bool
