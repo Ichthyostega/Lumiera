@@ -31,11 +31,11 @@
 #include "lib/test/microbenchmark.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/thread.hpp"
 //#include "lib/util.hpp"
 #include "lib/test/diagnostic-output.hpp"///////////////////////////TODO TOD-Oh
 
 //#include <utility>
-#include <thread>
 #include <chrono>
 
 using test::Test;
@@ -58,6 +58,15 @@ namespace test {
   namespace {// Test parameters
     const size_t NUM_THREADS = 20;
     const size_t REPETITIONS = 100;
+    
+    inline void
+    ___ensureGroomingTokenReleased(SchedulerCommutator& sched)
+    {
+      auto myself = std::this_thread::get_id();
+      CHECK (not sched.holdsGroomingToken(myself));
+      CHECK (sched.acquireGoomingToken());
+      sched.dropGroomingToken();
+    }
   }
   
   
@@ -124,6 +133,7 @@ namespace test {
           
           sched.dropGroomingToken();
           CHECK (not sched.holdsGroomingToken (myself));
+          ___ensureGroomingTokenReleased(sched);
         }
       
       
@@ -163,6 +173,7 @@ namespace test {
           
           CHECK (brokenSum < checkSum);
           CHECK (checkSum = NUM_THREADS * REPETITIONS*(REPETITIONS-1)/2);
+          ___ensureGroomingTokenReleased(sched);
         }
       
       
@@ -174,7 +185,53 @@ namespace test {
       void
       verify_DispatchDecision()
         {
-          UNIMPLEMENTED ("DispatchDecision");
+          SchedulerCommutator sched;
+          ___ensureGroomingTokenReleased(sched);
+          
+          Time t1{10,0};
+          Time t2{20,0};
+          Time t3{30,0};
+          Time now{t2};
+          
+          auto myself = std::this_thread::get_id();
+          CHECK (sched.decideDispatchNow (t1, now));
+          CHECK (sched.holdsGroomingToken (myself));
+          
+          CHECK (sched.decideDispatchNow (t1, now));
+          CHECK (sched.holdsGroomingToken (myself));
+          
+          CHECK (sched.decideDispatchNow (t2, now));
+          CHECK (sched.holdsGroomingToken (myself));
+          
+          CHECK (not sched.decideDispatchNow (t3, now));
+          CHECK (sched.holdsGroomingToken (myself));
+          sched.dropGroomingToken();
+          
+          CHECK (not sched.decideDispatchNow (t3, now));
+          CHECK (not sched.holdsGroomingToken (myself));
+          
+          std::atomic_bool stop{false};
+          lib::ThreadJoinable theHog{"grooming-hog"
+                                    , [&]{
+                                           CHECK (sched.acquireGoomingToken());
+                                           do sleep_for (100us);
+                                           while (not stop);
+                                           sched.dropGroomingToken();
+                                         }};
+          sleep_for (500us);
+          CHECK (not sched.acquireGoomingToken());
+          
+          CHECK (not sched.decideDispatchNow (t1, now));
+          CHECK (not sched.holdsGroomingToken (myself));
+          
+          CHECK (not sched.decideDispatchNow (t2, now));
+          CHECK (not sched.holdsGroomingToken (myself));
+          
+          stop = true;
+          theHog.join().maybeThrow();
+          
+          CHECK (sched.decideDispatchNow (t2, now));
+          CHECK (sched.holdsGroomingToken (myself));
         }
       
       

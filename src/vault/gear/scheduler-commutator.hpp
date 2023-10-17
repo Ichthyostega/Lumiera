@@ -64,7 +64,7 @@ namespace gear {
   
   
   /**
-   * Scheduler Layer-2 : coordination.
+   * Scheduler Layer-2 : execution of Scheduler Activities.
    * 
    * @see SchedulerInvocation (Layer-1)
    * @see SchedulerCommutator_test
@@ -95,7 +95,7 @@ namespace gear {
           ThreadID expect_noThread;                   // expect no one else to be in...
           ThreadID myself = std::this_thread::get_id();
           return groomingToken_.compare_exchange_strong (expect_noThread, myself
-                                                        ,memory_order_acquire // success also constitutes an acquire barrier 
+                                                        ,memory_order_acquire // success also constitutes an acquire barrier
                                                         ,memory_order_relaxed // failure has no synchronisation ramifications
                                                         );
         }
@@ -124,6 +124,22 @@ namespace gear {
           return id == groomingToken_.load (memory_order_relaxed);
         }
       
+      
+      /**
+       * Decide if Activities shall be performed now and in this thread.
+       * @param when the indicated time of start of the first Activity
+       * @param now  current scheduler time
+       * @return allow dispatch if acquired GroomingToken and time is due
+       * @warning accesses current ThreadID and changes GroomingToken state
+       */
+      bool
+      decideDispatchNow (Time when, Time now)
+        {
+          auto myself = std::this_thread::get_id();
+          return (when <= now)
+             and (holdsGroomingToken (myself)
+                  or acquireGoomingToken());
+        }
       
       
       Activity*

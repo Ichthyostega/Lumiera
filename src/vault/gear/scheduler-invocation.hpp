@@ -22,7 +22,7 @@
 
 
 /** @file scheduler-invocation.hpp
- ** Layer-1 of the Scheduler: dispatch and invocation of activities.
+ ** Layer-1 of the Scheduler: queueing and prioritisation of activities.
  ** This is the lower layer of the implementation and provides low-level functionality.
  ** 
  ** @see SchedulerInvocation_test
@@ -66,7 +66,7 @@ namespace gear {
   
   
   /**
-   * Scheduler Layer-1 : invocation.
+   * Scheduler Layer-1 : time based dispatch.
    * 
    * @see Scheduler
    * @see SchedulerInvocation_test
