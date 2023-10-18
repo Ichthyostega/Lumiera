@@ -142,6 +142,7 @@ namespace gear {
         }
       
       
+      /** look into the queues and possibly retrieve work due by now */
       Activity*
       findWork (SchedulerInvocation& layer1, Time now)
         {
@@ -156,10 +157,31 @@ namespace gear {
         }
       
       
-      
+      /***************************************************//**
+       * This is the primary entrance point to the Scheduler.
+       * Engage into activity as controlled by given start time.
+       * Attempts to acquire the GroomingToken if Activity is due
+       * immediately, otherwise just enqueue it for prioritisation.
+       * @param chain the Render Activities to put into action
+       * @param when  the indicated time of start for these
+       * @param executionCtx abstracted execution environment for
+       *              Render Activities (typically backed by the
+       *              Scheduler as a whole, including notifications
+       * @return Status value to indicate how to proceed processing
+       *       - activity::PASS continue processing in regular operation
+       *       - activity::WAIT nothing to do now, check back later
+       *       - activity::HALT serious problem, cease processing
+       * @note Attempts to acquire the GroomingToken for immediate
+       *       processing, but not for just enqueuing planned tasks.
+       *       Never drops the GroomingToken explicitly (unless when
+       *       switching from grooming-mode to work-mode in the course
+       *       of processing the given Activity chain regularly).
+       */
       template<class EXE>
       activity::Proc
-      postDispatch (Activity* chain, EXE& executionCtx)
+      postDispatch (Activity* chain, Time when
+                   ,EXE& executionCtx
+                   ,SchedulerInvocation& layer1)
         {
           UNIMPLEMENTED ("core function: maybe perform activity");
         }

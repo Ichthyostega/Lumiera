@@ -118,7 +118,7 @@ namespace test {
           ActivityDetector detector;
           
 //        sched.postDispatch (sched.findWork(queues), detector.executionCtx);  ///////////////////////OOO findWork umschreiben
-          cout << detector.showLog()<<endl; // HINT: use this for investigation...
+//        cout << detector.showLog()<<endl; // HINT: use this for investigation...
         }
       
       
@@ -329,12 +329,61 @@ namespace test {
       
       
       /** @test TODO verify entrance point for performing an Activity chain.
-       * @todo WIP 10/23 🔁 define ⟶ implement
+       * @todo WIP 10/23 ✔ define ⟶ 🔁 implement
        */
       void
       verify_postDispatch()
         {
-          UNIMPLEMENTED ("postDispatch");
+          // rigged execution environment to detect activations
+          ActivityDetector detector;
+          Activity& activity = detector.buildActivationProbe ("testActivity");
+          
+          SchedulerInvocation queue;
+          SchedulerCommutator sched;
+          
+          Time t1{10,0};
+          Time t2{20,0};
+          Time t3{30,0};
+          Time now{t2};
+          
+              // no one holds the GroomingToken
+          ___ensureGroomingTokenReleased(sched);
+          auto myself = std::this_thread::get_id();
+          CHECK (not sched.holdsGroomingToken (myself));
+          
+          // no effect when no Activity given
+          CHECK (activity::WAIT == sched.postDispatch (nullptr, now, detector.executionCtx, queue));
+          CHECK (not sched.holdsGroomingToken (myself));
+          
+          // Activity immediately dispatched when on time and GroomingToken can be acquired
+          CHECK (activity::PASS == sched.postDispatch (&activity, t1, detector.executionCtx, queue));
+          CHECK (    sched.holdsGroomingToken (myself));
+          CHECK (    queue.empty());
+          
+          // future Activity is enqueued by short-circuit directly into the PriorityQueue if possible
+          CHECK (activity::PASS == sched.postDispatch (&activity, t3, detector.executionCtx, queue));
+          CHECK (    sched.holdsGroomingToken (myself));
+          CHECK (not queue.empty());
+          CHECK (isSameObject (activity, *queue.peekHead())); //  appears at Head, implying it's in Priority-Queue
+          
+          queue.pullHead();
+          sched.dropGroomingToken();
+          CHECK (not sched.holdsGroomingToken (myself));
+          CHECK (queue.empty());
+          
+          // ...but GroomingToken is not acquired explicitly; Activity is just placed into the Instruct-Queue
+          CHECK (activity::PASS == sched.postDispatch (&activity, t3, detector.executionCtx, queue));
+          CHECK (not sched.holdsGroomingToken (myself));
+          CHECK (not queue.peekHead());           // not appearing at Head this time,
+          CHECK (not queue.empty());             //  rather waiting in the Instruct-Queue
+          
+          
+          blockGroomingToken(sched);
+          CHECK (activity::PASS == sched.postDispatch (&activity, t2, detector.executionCtx, queue));
+          CHECK (not sched.holdsGroomingToken (myself));
+          CHECK (not queue.peekHead());     // was enqueued, not executed
+          
+          cout << detector.showLog()<<endl; // HINT: use this for investigation...
         }
       
       

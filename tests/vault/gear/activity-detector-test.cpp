@@ -64,7 +64,7 @@ namespace test {
           verifyFakeInvocation();
           verifyMockJobFunctor();
           verifyFakeExeContext();
-          watch_activation();
+          watch_ActivationProbe();
           watch_ActivationTap();
           insert_ActivationTap();
           watch_notification();
@@ -207,7 +207,7 @@ namespace test {
       /** @test faked execution context to perform Activity activation
        *        - wired internally to report each invocation into the EventLog
        *        - by default response of `post` and `tick` is `PASS`, but can be reconfigured
-       *        - invocation sequence can be verified by the usual scheme
+       *        - invocation sequence can be verified by matching internally logged events
        */
       void
       verifyFakeExeContext()
@@ -252,11 +252,10 @@ namespace test {
       
       
       
-      /** @test diagnostic setup to detect Activity activation
-       * @todo WIP 8/23 ✔ define ✔ implement
+      /** @test a rigged diagnostic probe to detect Activity activation
        */
       void
-      watch_activation()
+      watch_ActivationProbe()
         {
           ActivityDetector detector;
           auto someID = "trap-" + randStr(4);
@@ -272,7 +271,6 @@ namespace test {
       
       
       /** @test diagnostic adaptor to detect and pass-through Activity activation
-       * @todo WIP 8/23 ✔ define ✔ implement
        */
       void
       watch_ActivationTap()
@@ -314,7 +312,6 @@ namespace test {
       
       
       /** @test inject (prepend) an ActivationTap into existing wiring
-       * @todo WIP 8/23 ✔ define ✔ implement
        */
       void
       insert_ActivationTap()
@@ -343,7 +340,7 @@ namespace test {
       
       
       
-      /** @test diagnostic setup to detect passing a notification
+      /** @test diagnostic setup to detect and watch passing a notification
        *        - setup a chain-Activity (here: a `TICK`) protected by a `GATE`
        *        - configure the `GATE` to require one notification
        *        - connect a `NOTIFY`-Activity to trigger the `GATE`
@@ -351,8 +348,7 @@ namespace test {
        *        - dispatch of the notification can be verified
        *        - notification has been passed through the Tap to the `GATE`
        *        - `GATE` has been decremented to zero and triggers chain
-       *        - finally the chained `TICK`-Activity calls into the `executionCtx` 
-       * @todo WIP 8/23 ✔ define 🔁 implement
+       *        - finally the chained `TICK`-Activity calls into the `executionCtx`
        */
       void
       watch_notification()
@@ -385,7 +381,6 @@ namespace test {
        *          Activity after the Gate is activated
        *        - for this unit-test, a Gate and a follow-up Activity
        *          is invoked directly, to verify the generated log entries
-       * @todo WIP 7/23 ✔ define ✔ implement
        */
       void
       watch_gate()
