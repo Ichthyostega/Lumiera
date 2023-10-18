@@ -102,13 +102,6 @@ namespace gear {
         , priority_{}
         { }
       
-      bool
-      empty()  const
-        {
-          return instruct_.empty()
-             and priority_.empty();
-        }
-      
       
       /**
        * Accept an Activity for time-bound execution
@@ -178,6 +171,21 @@ namespace gear {
           return not priority_.empty()
              and priority_.top().waterlevel <= waterLevel(now);
         }
+      
+      bool
+      empty()  const
+        {
+          return instruct_.empty()
+             and priority_.empty();
+        }
+      
+      /** @return the earliest time of prioritised work */
+      Time
+      headTime()  const
+        {
+          return priority_.empty()? Time::ANYTIME
+                                  : Time{TimeValue{priority_.top().waterlevel}};
+        }                              //Note: 64-bit waterLevel corresponds to µ-Ticks 
       
     private:
       static int64_t

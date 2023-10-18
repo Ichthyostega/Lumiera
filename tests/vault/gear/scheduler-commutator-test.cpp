@@ -296,6 +296,7 @@ namespace test {
           
           queue.instruct (a3, t3);                                 // activity scheduled into the future
           CHECK (not sched.findWork (queue, now));                 // for time `now` not found
+          CHECK (t3 == queue.headTime());
           
           queue.instruct (a1, t1);
           CHECK (isSameObject (a1, *sched.findWork(queue, now)));  // but past activity is found
@@ -303,7 +304,8 @@ namespace test {
           
           queue.instruct (a2, t2);
           CHECK (isSameObject (a2, *sched.findWork(queue, now)));  // activity scheduled for `now` is found
-          CHECK (not sched.findWork (queue, now));
+          CHECK (not sched.findWork (queue, now));                 // nothing more found for `now`
+          CHECK (t3 == queue.headTime());
           CHECK (not queue.empty());                               // yet the future activity a3 is still queued...
           
           CHECK (isSameObject (a3, *sched.findWork(queue, t3)));   // ...and will be found when querying "later"
@@ -312,14 +314,16 @@ namespace test {
           
           queue.instruct (a2, t2);
           queue.instruct (a1, t1);
+          CHECK (t1 == queue.headTime());
           CHECK (isSameObject (a1, *sched.findWork(queue, now)));  // the earlier activity is found first
+          CHECK (t2 == queue.headTime());
           CHECK (isSameObject (a2, *sched.findWork(queue, now)));
           CHECK (not sched.findWork (queue, now));
           CHECK (    queue.empty());
           
           queue.instruct (a2, t2);                                 // prepare activity which /would/ be found...
           blockGroomingToken(sched);                               // but prevent this thread from acquiring the GroomingToken
-          CHECK (not sched.findWork (queue, now));                 // thus search aborts out immediately
+          CHECK (not sched.findWork (queue, now));                 // thus search aborts immediately
           CHECK (not queue.empty());
           
           unblockGroomingToken();                                  // yet when we're able to get the GroomingToken
@@ -329,8 +333,8 @@ namespace test {
       
       
       
-      /** @test TODO verify entrance point for performing an Activity chain.
-       * @todo WIP 10/23 ✔ define ⟶ 🔁 implement
+      /** @test verify entrance point for performing an Activity chain.
+       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_postDispatch()
@@ -360,7 +364,7 @@ namespace test {
           CHECK (detector.verifyInvocation("testActivity").timeArg(now)); // was invoked immediately
           CHECK (    sched.holdsGroomingToken (myself));
           CHECK (    queue.empty());
-          detector.incrementSeq(); // mark this point in the log
+          detector.incrementSeq(); // Seq-point-1 in the detector log
           
           // future Activity is enqueued by short-circuit directly into the PriorityQueue if possible
           CHECK (activity::PASS == sched.postDispatch (&activity, future, detector.executionCtx, queue));
@@ -385,8 +389,24 @@ namespace test {
           CHECK (not sched.holdsGroomingToken (myself));
           CHECK (not queue.peekHead());     // was enqueued, not executed
           
+          // Note: this test achieved a single direct invocation;
+          // all further cases after Seq-point-1 were queued only
+          CHECK (detector.ensureNoInvocation("testActivity")
+                         .afterSeqIncrement(1));
+          
+          // As sanity-check: after the point where we purged the queue
+          // two further cases where enqueued; we could retrieve them if
+          // re-acquiring the GroomingToken and using suitable query-time
           unblockGroomingToken();
-          cout << detector.showLog()<<endl; // HINT: use this for investigation...
+          queue.feedPrioritisation();
+          CHECK (now == queue.headTime());
+          CHECK (isSameObject (activity, *sched.findWork(queue, now)));
+          CHECK (sched.holdsGroomingToken (myself));
+          CHECK (future == queue.headTime());
+          CHECK (not queue.isDue(now));
+          CHECK (    queue.isDue(future));
+          CHECK (sched.findWork(queue, future));
+          CHECK (    queue.empty());
         }
       
       
@@ -398,6 +418,7 @@ namespace test {
       integratedWorkCycle()
         {
           UNIMPLEMENTED ("integratedWorkCycle");
+//        cout << detector.showLog()<<endl; // HINT: use this for investigation...
         }
     };
   
