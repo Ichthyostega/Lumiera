@@ -32,7 +32,7 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/thread.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 #include "lib/test/diagnostic-output.hpp"///////////////////////////TODO TOD-Oh
 
 //#include <utility>
@@ -41,7 +41,7 @@
 using test::Test;
 using lib::test::threadBenchmark;
 //using std::move;
-//using util::isSameObject;
+using util::isSameObject;
 
 
 namespace vault{
@@ -51,6 +51,10 @@ namespace test {
 //  using lib::time::FrameRate;
 //  using lib::time::Offset;
   using lib::time::Time;
+  using std::atomic_bool;
+  using lib::ThreadHookable;
+  using std::unique_ptr;
+  using std::make_unique;
   using std::this_thread::yield;
   using std::this_thread::sleep_for;
   using std::chrono_literals::operator ""us;
@@ -178,9 +182,45 @@ namespace test {
       
       
       
+      atomic_bool stopTheHog_{false};
+      unique_ptr<ThreadHookable> groomingHog_;
+      using Launch = ThreadHookable::Launch;
+      
+      /** @internal Helper to block the GroomingToken in another thread */
+      void
+      blockGroomingToken (SchedulerCommutator& sched)
+        {
+          REQUIRE (not groomingHog_);
+          if (sched.holdsGroomingToken(std::this_thread::get_id()))
+              sched.dropGroomingToken();
+          
+          stopTheHog_ = false;
+          groomingHog_ = make_unique<ThreadHookable>(
+                           Launch{[&]{
+                                       CHECK (sched.acquireGoomingToken());
+                                       do sleep_for (100us);
+                                       while (not stopTheHog_);
+                                       sched.dropGroomingToken();
+                                     }}
+                                 .atExit([&]{ groomingHog_.reset(); })
+                                 .threadID("grooming-hog"));
+          sleep_for (500us);
+        }
+      
+      /** @internal stop the background thread to unblock the GrooingToken */
+      void
+      unblockGroomingToken()
+        {
+          stopTheHog_ = true;
+          while (groomingHog_)
+            yield();
+        }
+      
+      
+      
       /** @test TODO verify the decision logic where and when
        *        to perform the dispatch of an Scheduler Activity chain.
-       * @todo WIP 10/23 🔁 define ⟶ implement
+       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_DispatchDecision()
@@ -210,15 +250,7 @@ namespace test {
           CHECK (not sched.decideDispatchNow (t3, now));
           CHECK (not sched.holdsGroomingToken (myself));
           
-          std::atomic_bool stop{false};
-          lib::ThreadJoinable theHog{"grooming-hog"
-                                    , [&]{
-                                           CHECK (sched.acquireGoomingToken());
-                                           do sleep_for (100us);
-                                           while (not stop);
-                                           sched.dropGroomingToken();
-                                         }};
-          sleep_for (500us);
+          blockGroomingToken(sched);
           CHECK (not sched.acquireGoomingToken());
           
           CHECK (not sched.decideDispatchNow (t1, now));
@@ -227,8 +259,7 @@ namespace test {
           CHECK (not sched.decideDispatchNow (t2, now));
           CHECK (not sched.holdsGroomingToken (myself));
           
-          stop = true;
-          theHog.join().maybeThrow();
+          unblockGroomingToken();
           
           CHECK (sched.decideDispatchNow (t2, now));
           CHECK (sched.holdsGroomingToken (myself));
@@ -242,7 +273,51 @@ namespace test {
       void
       verify_findWork()
         {
-          UNIMPLEMENTED ("findWork");
+          SchedulerInvocation queue;
+          SchedulerCommutator sched;
+          
+          Time t1{10,0};
+          Time t2{20,0};
+          Time t3{30,0};
+          Time now{t2};
+
+          CHECK (not sched.findWork (queue, now));                 // empty queue, no work found
+          
+          Activity a1{1u,1u};
+          Activity a2{2u,2u};
+          Activity a3{3u,3u};
+          
+          queue.instruct (a3, t3);                                 // activity scheduled into the future
+          CHECK (not sched.findWork (queue, now));                 // for time `now` not found
+          
+          queue.instruct (a1, t1);
+          CHECK (isSameObject (a1, *sched.findWork(queue, now)));  // but past activity is found
+          CHECK (not sched.findWork (queue, now));                 // activity was retrieved
+          
+          queue.instruct (a2, t2);
+          CHECK (isSameObject (a2, *sched.findWork(queue, now)));  // activity scheduled for `now` is found
+          CHECK (not sched.findWork (queue, now));
+          CHECK (not queue.empty());                               // yet the future activity a3 is still queued...
+          
+          CHECK (isSameObject (a3, *sched.findWork(queue, t3)));   // ...and will be found when querying "later"
+          CHECK (not sched.findWork (queue, t3));
+          CHECK (    queue.empty());                               // Everything retrieved and queue really empty
+          
+          queue.instruct (a2, t2);
+          queue.instruct (a1, t1);
+          CHECK (isSameObject (a1, *sched.findWork(queue, now)));  // the earlier activity is found first
+          CHECK (isSameObject (a2, *sched.findWork(queue, now)));
+          CHECK (not sched.findWork (queue, now));
+          CHECK (    queue.empty());
+          
+          queue.instruct (a2, t2);                                 // prepare activity which /would/ be found...
+          blockGroomingToken(sched);                               // but prevent this thread from acquiring the GroomingToken
+          CHECK (not sched.findWork (queue, now));                 // thus search aborts out immediately
+          CHECK (not queue.empty());
+          
+          unblockGroomingToken();                                  // yet when we're able to get the GroomingToken
+          CHECK (isSameObject (a2, *sched.findWork(queue, now)));  // the task can be retrieved
+          CHECK (queue.empty());
         }
       
       

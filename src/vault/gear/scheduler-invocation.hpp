@@ -102,6 +102,13 @@ namespace gear {
         , priority_{}
         { }
       
+      bool
+      empty()  const
+        {
+          return instruct_.empty()
+             and priority_.empty();
+        }
+      
       
       /**
        * Accept an Activity for time-bound execution

@@ -143,7 +143,7 @@ namespace gear {
       
       
       Activity*
-      findWork (SchedulerInvocation& layer1)
+      findWork (SchedulerInvocation& layer1, Time now)
         {
           layer1.feedPrioritisation();
           UNIMPLEMENTED("wtf??");
