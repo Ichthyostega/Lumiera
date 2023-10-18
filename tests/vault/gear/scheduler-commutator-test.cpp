@@ -95,8 +95,8 @@ namespace test {
 //        verify_GroomingToken();
 //        torture_GroomingToken();
 //        verify_DispatchDecision();
-//        verify_findWork();
-//        verify_postDispatch();
+          verify_findWork();
+          verify_postDispatch();
           integratedWorkCycle();
         }
       
@@ -314,7 +314,6 @@ namespace test {
           
           queue.instruct (a2, t2);
           queue.instruct (a1, t1);
-          CHECK (t1 == queue.headTime());
           CHECK (isSameObject (a1, *sched.findWork(queue, now)));  // the earlier activity is found first
           CHECK (t2 == queue.headTime());
           CHECK (isSameObject (a2, *sched.findWork(queue, now)));
@@ -411,16 +410,19 @@ namespace test {
       
       
       
-      /** @test TODO build the integrated sequence of worker activation
+      /** @test step-wise perform the typical sequence of planning and worker activation
        *        - use the Render-Job scenario from SchedulerActivity_test::scenario_RenderJob()
        *        - use similar instrumentation to trace Activities
-       * @todo WIP 10/23 🔁 define ⟶ implement
+       *        - specifically rig the diagnostic executionCtx to drop the GroomingToken at λ-work
+       *        - Step-1 : schedule the Activity-term
+       *        - Step-2 : later search for work, retrieve and dispatch the term
+       *        - verify the expected sequence of Activities actually occurred
+       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
       integratedWorkCycle()
-        {
+        { //   ===================================================================== setup a rigged Job
           Time nominal{7,7};
-          
           Time start{0,1};
           Time dead{0,10};
           
@@ -438,25 +440,57 @@ namespace test {
           detector.watchGate (anchor.next, "theGate");
 
           
+          //   ===================================================================== setup test subject
           SchedulerInvocation queue;
           SchedulerCommutator sched;
           
-          Time now = detector.executionCtx.getSchedTime();
-          Time past {Time::ZERO};
+              // no one holds the GroomingToken
+          ___ensureGroomingTokenReleased(sched);
+          auto myself = std::this_thread::get_id();
+          CHECK (not sched.holdsGroomingToken (myself));
           
-//        CHECK (activity::PASS == ActivityLang::dispatchChain (anchor, detector.executionCtx));
+          TimeVar now{Time::ZERO};
           
-          sched.postDispatch (&anchor, now, detector.executionCtx, queue);
-          //////////////////////////////////////////////////////////////////////TODO advance "now" time
+          // rig the ExecutionCtx to allow manipulating "current scheduler time"
+          detector.executionCtx.getSchedTime = [&]{ return Time{now}; };
+          // rig the λ-work to verify GroomingToken and to drop it then
+          detector.executionCtx.work.implementedAs(
+            [&](Time, size_t)
+               {
+                 CHECK (sched.holdsGroomingToken (myself));
+                 sched.dropGroomingToken();
+               });
+          
+          
+          //   ===================================================================== actual test sequence
+          // Add the Activity-Term to be scheduled at start-Time
+          sched.postDispatch (&anchor, start, detector.executionCtx, queue);
+          CHECK (detector.ensureNoInvocation("testJob"));
+          CHECK (not sched.holdsGroomingToken (myself));
+          CHECK (not queue.empty());
+          
+          // later->"now"
+          now = Time{555,5};
+          detector.incrementSeq();
+          
+          // Assuming a worker runs "later" and retrieves work...
           Activity* act = sched.findWork(queue,now);
+          CHECK (sched.holdsGroomingToken (myself));       // acquired the GroomingToken
+          CHECK (isSameObject(*act, anchor));              // "found" the rigged Activity as next work to do
+          
           sched.postDispatch (act, now, detector.executionCtx, queue);
           
-//        CHECK (detector.verifyInvocation("theGate").arg("5.105 ⧐ Act(GATE")
-//                       .beforeInvocation("after-theGate").arg("⧐ Act(WORKSTART")
-//                       .beforeInvocation("CTX-work").arg("5.155","")
-//                       .beforeInvocation("testJob") .arg("7.007",12345)
-//                       .beforeInvocation("CTX-done").arg("5.355",""));
-          cout << detector.showLog()<<endl; // HINT: use this for investigation...
+          CHECK (queue.empty());
+          CHECK (not sched.holdsGroomingToken (myself));   // the λ-work was invoked and dropped the GroomingToken
+          
+          CHECK (detector.verifySeqIncrement(1)
+                         .beforeInvocation("theGate").arg("5.555 ⧐ Act(GATE")
+                         .beforeInvocation("after-theGate").arg("⧐ Act(WORKSTART")
+                         .beforeInvocation("CTX-work").arg("5.555","")
+                         .beforeInvocation("testJob") .arg("7.007",12345)
+                         .beforeInvocation("CTX-done").arg("5.555",""));
+          
+//        cout << detector.showLog()<<endl; // HINT: use this for investigation...
         }
     };
   

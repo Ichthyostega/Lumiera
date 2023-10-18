@@ -538,7 +538,7 @@ namespace test {
             [&](Time when, Activity& postedAct, auto& ctx)
                {
                  if (when == ctx.getSchedTime())  // only for POST to run „right now“
-                   return activityLang.dispatchChain (postedAct, ctx);
+                   return ActivityLang::dispatchChain (postedAct, ctx);
                  else
                    return activity::PASS;
                });

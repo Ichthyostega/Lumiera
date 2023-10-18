@@ -280,7 +280,7 @@ namespace test {
           
           /** mock function call operator: logs all invocations */
           RET
-          operator() (ARGS ...args)
+          operator() (ARGS ...args)  const
             {
               log_->call (log_->getID(), id_, args...)
                    .addAttrib (MARK_SEQ, util::toString(*seqNr_));
