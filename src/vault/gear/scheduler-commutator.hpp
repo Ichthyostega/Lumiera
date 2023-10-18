@@ -40,6 +40,7 @@
 #include "vault/common.hpp"
 #include "vault/gear/activity.hpp"
 #include "vault/gear/scheduler-invocation.hpp"
+#include "vault/gear/activity-lang.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/nocopy.hpp"
 
@@ -183,7 +184,17 @@ namespace gear {
                    ,EXE& executionCtx
                    ,SchedulerInvocation& layer1)
         {
-          UNIMPLEMENTED ("core function: maybe perform activity");
+          if (!chain) return activity::WAIT;
+          
+          Time now = executionCtx.getSchedTime();
+          if (decideDispatchNow (when, now))
+            return ActivityLang::dispatchChain (*chain, executionCtx);
+          else
+            if (holdsGroomingToken(std::this_thread::get_id()))
+              layer1.feedPrioritisation (*chain, when);
+            else
+              layer1.instruct (*chain, when);
+          return activity::PASS;
         }
     };
   
