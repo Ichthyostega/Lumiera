@@ -24,12 +24,45 @@
 /** @file scheduler-commutator.hpp
  ** Layer-2 of the Scheduler: coordination and interaction of activities.
  ** This is the upper layer of the implementation and provides high-level functionality.
- ** 
+ ** Rendering Activities are represented as a chain of \ref Activity verbs (records),
+ ** which are interconnected to create a low-level _execution language._ The prime
+ ** Activity obviously is to \ref Activity::Verb::INVOKE a \ref JobFunctor encapsulating
+ ** media processing operations; further Activity verbs provide building blocks for
+ ** execution logic, to check preconditions, notify follow-up tasks after calculation
+ ** results are available and to control the scheduling process itself. The Scheduler
+ ** as a service allows to execute Activities while observing time and dependency
+ ** constraints and in response to external events (notably after IO callback).
+ **
+ ** Activity records are tiny data records (standard layout and trivially constructible);
+ ** they are comprised of a verb tag and a `union` for variant parameter storage, and will
+ ** be managed _elsewhere_ relying on the \ref BlockFlow allocation scheme. Within the
+ ** scheduler queues and execution environment it is thus sufficient to pass `Activity*`.
+ ** While the actual media processing is performed concurrently by a \ref WorkForce with
+ ** a pool of _actively pulling workers,_ any allocations and changes to internal state
+ ** and data structures of the Scheduler itself must be protected against data corruption
+ ** by concurrency. The intended usage scenario involves media data computations which
+ ** are by several orders of magnitude more expensive than all the further internal
+ ** management operations. Thus the design of the Scheduler relies on simple mutual
+ ** exclusion (implemented by atomic lock, see \ref SchedulerCommutator::groomingToken_).
+ ** Each worker in search for the next task will first _acquire_ the Grooming-Token, then
+ ** execute some internal Activities until encountering an actual media computation JobFunctor.
+ ** At this point, the execution will switch from _»grooming mode«_ into _work mode;_ the
+ ** worker _drops_ the Grooming-Token at this point and will then refrain from touching
+ ** any further Scheduler internals. Finally, after completion of the current Render Job,
+ ** the worker will again contend for the Grooming-Token to retrieve more work.
+ **
+ ** In typical usage, Layer-2 of the Scheduler will perform the following operations
+ ** - accept and enqueue new task descriptions (as chain-of-Activities)
+ ** - retrieve the most urgent entry from Layer-1
+ ** - use the [Activity Language environment](\ref ActivityLang) to _perform_
+ **   the retrieved chain within some worker thread; this is called _dispatch_
+ ** The central cross road of this implementation is the #postDispatch function.
+ ** @see SchedulerCommutator::acquireGroomingToken()
+ ** @see SchedulerCommutator::findWork()
+ ** @see SchedulerCommutator::postDispatch()
  ** @see SchedulerCommutator_test
  ** @see scheduler.hpp usage
- ** 
- ** @todo WIP-WIP-WIP 6/2023 »Playback Vertical Slice«
- ** 
+ **
  */
 
 
@@ -44,10 +77,6 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/nocopy.hpp"
 
-//#include "lib/symbol.hpp"
-//#include "lib/util.hpp"
-
-//#include <string>
 #include <thread>
 #include <atomic>
 
@@ -60,13 +89,14 @@ namespace gear {
   using std::memory_order::memory_order_relaxed;
   using std::memory_order::memory_order_acquire;
   using std::memory_order::memory_order_release;
-//  using util::isnil;
-//  using std::string;
   
   
-  /**
+  
+  /*************************************************************//**
    * Scheduler Layer-2 : execution of Scheduler Activities.
-   * 
+   * - protect data structures through exclusive »grooming mode«
+   * - use the underlying Layer-1 to retrieve the most urgent work
+   * - dispatch and execute a chain of _Render Activities_
    * @see SchedulerInvocation (Layer-1)
    * @see SchedulerCommutator_test
    */
@@ -76,33 +106,32 @@ namespace gear {
       using ThreadID = std::thread::id;
       atomic<ThreadID> groomingToken_{};
       
-    public:
-//      explicit
-      SchedulerCommutator()
-        { }
+      auto thisThread() { return std::this_thread::get_id(); }
       
+      
+    public:
+      SchedulerCommutator()  = default;
       
       /**
        * acquire the right to perform internal state transitions.
        * @return `true` if this attempt succeeded
        * @note only one thread at a time can acquire the GoomingToken successfully.
        * @remark only if _testing and branching_ on the return value, this also constitutes
-       *         also sync barrier; _in this case you can be sure_ to see the real values
+       *         a valid sync barrier; _in this case you can be sure_ to see the real values
        *         of any scheduler internals and are free to manipulate.
        */
       bool
       acquireGoomingToken()  noexcept
         {
           ThreadID expect_noThread;                   // expect no one else to be in...
-          ThreadID myself = std::this_thread::get_id();
-          return groomingToken_.compare_exchange_strong (expect_noThread, myself
+          return groomingToken_.compare_exchange_strong (expect_noThread, thisThread()
                                                         ,memory_order_acquire // success also constitutes an acquire barrier
                                                         ,memory_order_relaxed // failure has no synchronisation ramifications
                                                         );
         }
       
       /**
-       * relinquish the right for internal transitions.
+       * relinquish the right for internal state transitions.
        * @remark any changes done to scheduler internals prior to this call will be
        *         _sequenced-before_ anything another thread does later, _bot only_
        *         if the other thread first successfully acquires the GroomingToken.
@@ -110,7 +139,7 @@ namespace gear {
       void
       dropGroomingToken()  noexcept
         {          // expect that this thread actually holds the Grooming-Token
-          REQUIRE (groomingToken_.load(memory_order_relaxed) == std::this_thread::get_id());
+          REQUIRE (groomingToken_.load(memory_order_relaxed) == thisThread());
           const ThreadID noThreadHoldsIt;
           groomingToken_.store (noThreadHoldsIt, memory_order_release);
         }
@@ -130,15 +159,14 @@ namespace gear {
        * Decide if Activities shall be performed now and in this thread.
        * @param when the indicated time of start of the first Activity
        * @param now  current scheduler time
-       * @return allow dispatch if acquired GroomingToken and time is due
-       * @warning accesses current ThreadID and changes GroomingToken state
+       * @return allow dispatch if time is due and GroomingToken was acquired
+       * @warning accesses current ThreadID and changes GroomingToken state.
        */
       bool
       decideDispatchNow (Time when, Time now)
         {
-          auto myself = std::this_thread::get_id();
           return (when <= now)
-             and (holdsGroomingToken (myself)
+             and (holdsGroomingToken (thisThread())
                   or acquireGoomingToken());
         }
       
@@ -147,7 +175,7 @@ namespace gear {
       Activity*
       findWork (SchedulerInvocation& layer1, Time now)
         {
-          if (holdsGroomingToken(std::this_thread::get_id())
+          if (holdsGroomingToken (thisThread())
               or acquireGoomingToken())
             {
               layer1.feedPrioritisation();
@@ -190,14 +218,13 @@ namespace gear {
           if (decideDispatchNow (when, now))
             return ActivityLang::dispatchChain (*chain, executionCtx);
           else
-            if (holdsGroomingToken(std::this_thread::get_id()))
+            if (holdsGroomingToken (thisThread()))
               layer1.feedPrioritisation (*chain, when);
             else
               layer1.instruct (*chain, when);
           return activity::PASS;
         }
     };
-  
   
   
 }} // namespace vault::gear

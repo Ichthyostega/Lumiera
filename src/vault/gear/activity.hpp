@@ -28,10 +28,10 @@
  ** temporal limits (deadlines) and dependency constraints. A predefined
  ** and fixed set of _Activity verbs_ defines atomic operations the engine
  ** is able to perform, directed by the scheduler. Complex calculation
- ** tasks are constructed from interconnected activities, passing through
+ ** tasks are constructed from interconnected activities, passed through
  ** the messaging and priority queue of the scheduler. While an Activity
  ** is in processing, the corresponding descriptor data record is maintained
- ** by the BlockStream custom memory manager.
+ ** by the \ref BlockStream custom memory manager.
  ** 
  ** # Performing Activities
  ** 
@@ -50,7 +50,9 @@
  **   single threaded operation with the ability to mutate the scheduler queue;
  **   typically this happens after de-queuing an Activity from the priority queue
  **   and leads then to Activation of the retrieved Activity; however, it can also
- **   happen _right now_ -- when the indicated time has passed.
+ **   happen _right away_ — when the indicated time has passed.
+ ** - Activity::INVOKE represents the relevant case of a [»Render Job«](\ref JobFunctor)
+ **   and is typically performed by [workers running concurrently](\ref WorkForce)
  ** - Activity::notify receives a message/trigger from another prerequisite Activity
  ** 
  ** @see SchedulerActivity_test
@@ -133,7 +135,7 @@ namespace gear {
     class Hook
       {
       public:
-        virtual ~Hook();     ///< this is an interface
+        virtual ~Hook();  ///< this is an interface
         
         /**
          * Callback on activation of the corresponding HOOK-Activity.

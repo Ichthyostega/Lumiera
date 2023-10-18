@@ -26,7 +26,7 @@ END
 
 
 
-PLANNED "Scheduler Layer-2" SchedulerCommutator_test <<END
+TEST "Scheduler Layer-2" SchedulerCommutator_test <<END
 return: 0
 END
 

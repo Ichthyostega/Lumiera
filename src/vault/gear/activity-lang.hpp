@@ -54,7 +54,7 @@ namespace gear {
    * Term builder and execution framework to perform chains of _scheduler Activities_.
    * These are the verbs of a low-level execution language for render jobs; individual
    * \ref Activity records are managed by the \ref BlockFlow allocation scheme and maintained
-   * until expiration their deadline. To enact a render job, a connection of Activities
+   * until expiration of their deadline. To enact a render job, a connection of Activities
    * will be suitably wired, and the entry point to start execution can be instructed
    * into the Scheduler.
    * 
@@ -65,7 +65,7 @@ namespace gear {
    * - the static function ActivityLang::dispatchChain() provides the execution logic
    *   for _activating_ a chain of Activities successively.
    * - for real usage, this execution environment needs some functionality implemented
-   *   in the scheduler, which -- for the purpose of Activity activation -- is abstracted
+   *   in the scheduler, which — for the purpose of Activity activation — is abstracted
    *   as an *Execution Context* with the following operations
    *   ** λ-post : hand over a chain of Activities for (time bound) activation
    *   ** λ-work : signal start of media processing and then leave »management mode«

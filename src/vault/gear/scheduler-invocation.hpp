@@ -23,14 +23,21 @@
 
 /** @file scheduler-invocation.hpp
  ** Layer-1 of the Scheduler: queueing and prioritisation of activities.
- ** This is the lower layer of the implementation and provides low-level functionality.
- ** 
+ ** This is the lower layer of the implementation and provides the data structures
+ ** necessary to implement low-level scheduling functionality. The Scheduler operates
+ ** on Activity records maintained elsewhere, in the \ref BlockFlow allocation scheme.
+ ** Layer-2 adds the ability to _perform_ these _Render Activities,_ constituting a
+ ** low-level execution language. Since the services of the Scheduler are used in
+ ** a multi-threaded context, new entries will be passed in through an lock-free
+ ** _Instruction Queue._ The actual time based prioritisation is achieved by the
+ ** use of a _Priority Queue_ — which however must be concurrency protected.
+ ** The Layer-2 thus assures that _mutating operations_ are performed
+ ** exclusively from a special »grooming mode« (management mode).
+ ** @see SchedulerCommutator::findWork()
+ ** @see SchedulerCommutator::postDispatch()
  ** @see SchedulerInvocation_test
  ** @see SchedulerUsage_test integrated usage
- ** @see scheduler.cpp implementation details
- ** 
- ** @todo WIP-WIP-WIP 10/2023 »Playback Vertical Slice«
- ** 
+ **
  */
 
 
@@ -40,12 +47,9 @@
 
 #include "vault/common.hpp"
 #include "lib/nocopy.hpp"
-//#include "lib/symbol.hpp"
 #include "vault/gear/activity.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/util.hpp"
 
-//#include <string>
 #include <queue>
 #include <boost/lockfree/queue.hpp>
 #include <utility>
@@ -54,8 +58,6 @@ namespace vault{
 namespace gear {
   
   using lib::time::Time;
-//  using util::isnil;
-//  using std::string;
   using std::move;
   
   namespace error = lumiera::error;
@@ -65,15 +67,18 @@ namespace gear {
   }
   
   
-  /**
+  /***************************************************//**
    * Scheduler Layer-1 : time based dispatch.
-   * 
+   * Manages pointers to _Render Activity records._
+   * - new entries passed in through the #instruct_ queue
+   * - time based prioritisation in the #priority_ queue
    * @see Scheduler
    * @see SchedulerInvocation_test
    */
   class SchedulerInvocation
     : util::NonCopyable
     {
+      /** @internal data record passed through the queues */
       struct ActOrder
         {
           int64_t   waterlevel{0};
@@ -96,6 +101,7 @@ namespace gear {
       InstructQueue instruct_;
       PriorityQueue priority_;
       
+      
     public:
       SchedulerInvocation()
         : instruct_{INITIAL_CAPACITY}
@@ -117,7 +123,7 @@ namespace gear {
       
       /**
        * Pick up all new Activities from the entrance queue
-       * and enqueue them according to time order
+       * and enqueue them to be retrieved ordered by start time.
        */
       void
       feedPrioritisation()
@@ -131,6 +137,7 @@ namespace gear {
       /**
        * Feed the given Activity directly into time prioritisation,
        * effectively bypassing the thread dispatching entrance queue.
+       * @remark Layer-2 uses this shortcut when in »grooming mode«.
        */
       void
       feedPrioritisation (Activity& activity, Time when)
@@ -151,9 +158,10 @@ namespace gear {
         }
       
       /**
-       * If there is an Activity to process now, pick it from the scheduling queue
+       * Retrieve from the scheduling queue the Activity with earliest start time.
        * @return `nullptr` if the prioritisation queue is empty,
        *         else a pointer to the most urgent Activity dequeued thereby.
+       * @remark Activity Records are managed by the \ref BlockFlow allocator.
        */
       Activity*
       pullHead()
@@ -163,6 +171,9 @@ namespace gear {
             priority_.pop();
           return activity;
         }
+      
+      
+      /* ===== query functions ===== */
       
       /** Determine if there is work to do right now */
       bool
@@ -185,7 +196,7 @@ namespace gear {
         {
           return priority_.empty()? Time::ANYTIME
                                   : Time{TimeValue{priority_.top().waterlevel}};
-        }                              //Note: 64-bit waterLevel corresponds to µ-Ticks 
+        }                              //Note: 64-bit waterLevel corresponds to µ-Ticks
       
     private:
       static int64_t

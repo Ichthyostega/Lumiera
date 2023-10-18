@@ -33,28 +33,23 @@
 #include "lib/format-cout.hpp"
 #include "lib/thread.hpp"
 #include "lib/util.hpp"
-#include "lib/test/diagnostic-output.hpp"///////////////////////////TODO TOD-Oh
 
-//#include <utility>
 #include <chrono>
 
 using test::Test;
 using lib::test::threadBenchmark;
-//using std::move;
-using util::isSameObject;
 
 
 namespace vault{
 namespace gear {
 namespace test {
   
-//  using lib::time::FrameRate;
-//  using lib::time::Offset;
   using lib::time::Time;
   using lib::time::FSecs;
   using std::atomic_bool;
   using lib::ThreadHookable;
   using lib::thread::ThreadWrapper;
+  using util::isSameObject;
   
   using std::unique_ptr;
   using std::make_unique;
@@ -62,18 +57,10 @@ namespace test {
   using std::this_thread::sleep_for;
   using std::chrono_literals::operator ""us;
   
-  namespace {// Test parameters
-    const size_t NUM_THREADS = 20;
+  
+  namespace { // Load test parameters
+    const size_t NUM_THREADS = 20;  ///< @see #torture_GroomingToken()
     const size_t REPETITIONS = 100;
-    
-    inline void
-    ___ensureGroomingTokenReleased(SchedulerCommutator& sched)
-    {
-      auto myself = std::this_thread::get_id();
-      CHECK (not sched.holdsGroomingToken(myself));
-      CHECK (sched.acquireGoomingToken());
-      sched.dropGroomingToken();
-    }
   }
   
   
@@ -81,8 +68,23 @@ namespace test {
   
   
   /******************************************************************//**
-   * @test Scheduler Layer-2: dependency notification and triggering.
+   * @test Scheduler Layer-2: coordination of Activity execution.
+   * @remark Layer-2 combines the queue data structure from Layer-1 with the
+   *       »Activity Language« to allow _performing_ of Render Activities.
+   *       This test verifies the proper integration of these building blocks
+   *       - the _Grooming-Token_ is an atomic lock tied to current thread-id;
+   *         it will be acquired for all operations manipulating internal state
+   *       - the \ref ActivityDetector is used as a test helper to record calls
+   *         and to verify the Activities are indeed activated as expected
+   *       - the #integratedWorkCycle() walks through all the steps typically
+   *         happening when a Render-Job is first planned and scheduled, and
+   *         then retrieved and executed by the \ref WorkForce. However, these
+   *         steps are invoked directly here, and with suitable instrumentation
+   *         to watch processing in detail
+   *       - the complete Scheduler functionality is assembled one level higher
+   *         in the [Scheduler-Service](\ref scheduler.hpp)...
    * @see SchedulerActivity_test
+   * @see ActivityDetector_test
    * @see SchedulerUsage_test
    */
   class SchedulerCommutator_test : public Test
@@ -91,41 +93,43 @@ namespace test {
       virtual void
       run (Arg)
         {
-//        demonstrateSimpleUsage();
-//        verify_GroomingToken();
-//        torture_GroomingToken();
-//        verify_DispatchDecision();
+          demonstrateSimpleUsage();
+          verify_GroomingToken();
+          torture_GroomingToken();
+          verify_DispatchDecision();
           verify_findWork();
           verify_postDispatch();
           integratedWorkCycle();
         }
       
       
-      /** @test TODO demonstrate a simple usage scenario
-       * @todo WIP 10/23 ✔ define ⟶ 🔁 implement
+      /** @test demonstrate a simple usage scenario
        */
       void
       demonstrateSimpleUsage()
         {
-          SchedulerInvocation queues;
+          SchedulerInvocation queue;
           SchedulerCommutator sched;
           Activity activity;
-          Time when{1,2,3};
-          
-          // prepare scenario: some activity is enqueued
-          queues.instruct (activity, when);
+          Time when{1,2};
           
           // use the ActivityDetector for test instrumentation...
           ActivityDetector detector;
+          Time now = detector.executionCtx.getSchedTime();
           
-//        sched.postDispatch (sched.findWork(queues), detector.executionCtx);  ///////////////////////OOO findWork umschreiben
+          // prepare scenario: some activity is enqueued
+          queue.instruct (activity, when);
+          
+          sched.postDispatch (sched.findWork(queue,now), now, detector.executionCtx,queue);
+          CHECK (detector.verifyInvocation("CTX-tick").arg(now));
+          CHECK (queue.empty());
+          
 //        cout << detector.showLog()<<endl; // HINT: use this for investigation...
         }
       
       
       
       /** @test verify logic to control concurrent execution
-       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_GroomingToken()
@@ -143,11 +147,22 @@ namespace test {
           ___ensureGroomingTokenReleased(sched);
         }
       
+      /** @internal helper to ensure consistent Grooming-Token state */
+      static void
+      ___ensureGroomingTokenReleased (SchedulerCommutator& sched)
+        {
+          auto myself = std::this_thread::get_id();
+          CHECK (not sched.holdsGroomingToken(myself));
+          CHECK (sched.acquireGoomingToken());
+          sched.dropGroomingToken();
+        }
       
       
-      /** @test ensure the GroomingToken mechanism indeed creates an
-       *   exclusive section protected against concurrent corruption.
-       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
+      
+      /** @test ensure the GroomingToken mechanism indeed creates mutual
+       *        exclusion to protected against concurrent corruption.
+       * @remark uses lib::test::threadBenchmark() to put the test-subject
+       *        under pressure by strongly contended parallel execution.
        */
       void
       torture_GroomingToken()
@@ -165,7 +180,7 @@ namespace test {
           auto protected_sum = [&](size_t i) -> size_t
                                   {
                                     while (not sched.acquireGoomingToken())
-                                      yield();
+                                      yield();    // contend until getting exclusive access
                                     pause_and_sum(i);
                                     sched.dropGroomingToken();
                                     return 1;
@@ -189,7 +204,7 @@ namespace test {
       unique_ptr<ThreadHookable> groomingHog_;
       using Launch = ThreadHookable::Launch;
       
-      /** @internal Helper to block the GroomingToken in another thread */
+      /** @internal Helper to block the GroomingToken from another thread */
       void
       blockGroomingToken (SchedulerCommutator& sched)
         {
@@ -206,10 +221,10 @@ namespace test {
                                        sched.dropGroomingToken();
                                      }}
                                  .atExit([&](ThreadWrapper& handle)
-                                           {
-                                             handle.detach_thread_from_wrapper();
-                                             groomingHog_.reset();
-                                           })
+                                     {
+                                       handle.detach_thread_from_wrapper();
+                                       groomingHog_.reset();
+                                     })
                                  .threadID("grooming-hog"));
           sleep_for (500us);
         }
@@ -225,9 +240,10 @@ namespace test {
       
       
       
-      /** @test verify the decision logic where and when to perform
-       *        the dispatch of an Scheduler Activity chain.
-       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
+      
+      
+      /** @test verify the logic to decide where and when to perform
+       *        the dispatch of a Scheduler Activity chain.
        */
       void
       verify_DispatchDecision()
@@ -241,17 +257,17 @@ namespace test {
           Time now{t2};
           
           auto myself = std::this_thread::get_id();
-          CHECK (sched.decideDispatchNow (t1, now));
+          CHECK (sched.decideDispatchNow (t1, now));               // time is before now => good to execute
+          CHECK (sched.holdsGroomingToken (myself));               // Side-Effect: acquired the Grooming-Token
+          
+          CHECK (sched.decideDispatchNow (t1, now));               // also works if Grooming-Token is already acquired
           CHECK (sched.holdsGroomingToken (myself));
           
-          CHECK (sched.decideDispatchNow (t1, now));
+          CHECK (sched.decideDispatchNow (t2, now));               // Boundary case time == now  => good to execute
           CHECK (sched.holdsGroomingToken (myself));
           
-          CHECK (sched.decideDispatchNow (t2, now));
-          CHECK (sched.holdsGroomingToken (myself));
-          
-          CHECK (not sched.decideDispatchNow (t3, now));
-          CHECK (sched.holdsGroomingToken (myself));
+          CHECK (not sched.decideDispatchNow (t3, now));           // Task in the future shall not be dispatched now
+          CHECK (sched.holdsGroomingToken (myself));               // ...and this case has no impact on the Grooming-Token
           sched.dropGroomingToken();
           
           CHECK (not sched.decideDispatchNow (t3, now));
@@ -260,7 +276,7 @@ namespace test {
           blockGroomingToken(sched);
           CHECK (not sched.acquireGoomingToken());
           
-          CHECK (not sched.decideDispatchNow (t1, now));
+          CHECK (not sched.decideDispatchNow (t1, now));           // unable to acquire => can not decide positively
           CHECK (not sched.holdsGroomingToken (myself));
           
           CHECK (not sched.decideDispatchNow (t2, now));
@@ -275,7 +291,6 @@ namespace test {
       
       
       /** @test verify logic of queue updates and work prioritisation.
-       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_findWork()
@@ -295,7 +310,7 @@ namespace test {
           Activity a3{3u,3u};
           
           queue.instruct (a3, t3);                                 // activity scheduled into the future
-          CHECK (not sched.findWork (queue, now));                 // for time `now` not found
+          CHECK (not sched.findWork (queue, now));                 // ... not found with time `now`
           CHECK (t3 == queue.headTime());
           
           queue.instruct (a1, t1);
@@ -333,12 +348,11 @@ namespace test {
       
       
       /** @test verify entrance point for performing an Activity chain.
-       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_postDispatch()
         {
-          // rigged execution environment to detect activations
+          // rigged execution environment to detect activations--------------
           ActivityDetector detector;
           Activity& activity = detector.buildActivationProbe ("testActivity");
           
@@ -388,12 +402,12 @@ namespace test {
           CHECK (not sched.holdsGroomingToken (myself));
           CHECK (not queue.peekHead());     // was enqueued, not executed
           
-          // Note: this test achieved a single direct invocation;
+          // Note: this test achieved one single direct invocation;
           // all further cases after Seq-point-1 were queued only
           CHECK (detector.ensureNoInvocation("testActivity")
                          .afterSeqIncrement(1));
           
-          // As sanity-check: after the point where we purged the queue
+          // As sanity-check: after the point where we purged the queue,
           // two further cases where enqueued; we could retrieve them if
           // re-acquiring the GroomingToken and using suitable query-time
           unblockGroomingToken();
@@ -417,7 +431,8 @@ namespace test {
        *        - Step-1 : schedule the Activity-term
        *        - Step-2 : later search for work, retrieve and dispatch the term
        *        - verify the expected sequence of Activities actually occurred
-       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
+       * @see ActivityLang::buildCalculationJob()
+       * @see ActivityDetector::buildMockJob()
        */
       void
       integratedWorkCycle()
@@ -463,7 +478,7 @@ namespace test {
           
           
           //   ===================================================================== actual test sequence
-          // Add the Activity-Term to be scheduled at start-Time
+          // Add the Activity-Term to be scheduled for planned start-Time
           sched.postDispatch (&anchor, start, detector.executionCtx, queue);
           CHECK (detector.ensureNoInvocation("testJob"));
           CHECK (not sched.holdsGroomingToken (myself));
@@ -476,7 +491,7 @@ namespace test {
           // Assuming a worker runs "later" and retrieves work...
           Activity* act = sched.findWork(queue,now);
           CHECK (sched.holdsGroomingToken (myself));       // acquired the GroomingToken
-          CHECK (isSameObject(*act, anchor));              // "found" the rigged Activity as next work to do
+          CHECK (isSameObject(*act, anchor));              // "found" the rigged Activity as next piece of work
           
           sched.postDispatch (act, now, detector.executionCtx, queue);
           
