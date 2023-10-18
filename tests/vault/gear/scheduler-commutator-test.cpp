@@ -53,6 +53,8 @@ namespace test {
   using lib::time::Time;
   using std::atomic_bool;
   using lib::ThreadHookable;
+  using lib::thread::ThreadWrapper;
+  
   using std::unique_ptr;
   using std::make_unique;
   using std::this_thread::yield;
@@ -202,7 +204,11 @@ namespace test {
                                        while (not stopTheHog_);
                                        sched.dropGroomingToken();
                                      }}
-                                 .atExit([&]{ groomingHog_.reset(); })
+                                 .atExit([&](ThreadWrapper& handle)
+                                           {
+                                             handle.detach_thread_from_wrapper();
+                                             groomingHog_.reset();
+                                           })
                                  .threadID("grooming-hog"));
           sleep_for (500us);
         }
@@ -218,8 +224,8 @@ namespace test {
       
       
       
-      /** @test TODO verify the decision logic where and when
-       *        to perform the dispatch of an Scheduler Activity chain.
+      /** @test verify the decision logic where and when to perform
+       *        the dispatch of an Scheduler Activity chain.
        * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
@@ -267,8 +273,8 @@ namespace test {
       
       
       
-      /** @test TODO verify logic of queue updates and work prioritisation.
-       * @todo WIP 10/23 🔁 define ⟶ implement
+      /** @test verify logic of queue updates and work prioritisation.
+       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_findWork()

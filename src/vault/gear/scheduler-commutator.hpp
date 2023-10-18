@@ -145,44 +145,17 @@ namespace gear {
       Activity*
       findWork (SchedulerInvocation& layer1, Time now)
         {
-          layer1.feedPrioritisation();
-          UNIMPLEMENTED("wtf??");
-          while (layer1.isDue (currentSchedulerTime()))
+          if (holdsGroomingToken(std::this_thread::get_id())
+              or acquireGoomingToken())
             {
-              Activity* activity = layer1.pullHead();
-              if (isInternalWork (activity))
-                performInternalWork (activity);
-              else
-                {
-                  performExternalWork (activity);
-                  UNIMPLEMENTED("return");
-                }
+              layer1.feedPrioritisation();
+              if (layer1.isDue (now))
+                return layer1.pullHead();
             }
+          return nullptr;
         }
       
-      Time
-      currentSchedulerTime()  const
-        {
-          UNIMPLEMENTED ("how to manage the current scheduler time");
-        }
       
-      bool
-      isInternalWork (Activity* activity)
-        {
-          UNIMPLEMENTED ("determine if an Activity counts as internal management task");
-        }
-      
-      void
-      performInternalWork (Activity* activity)
-        {
-          UNIMPLEMENTED ("evaluate a term");
-        }
-      
-      void
-      performExternalWork (Activity* activity)
-        {
-          UNIMPLEMENTED ("drop the exclusion flag and then engage into the external render activity");
-        }
       
       template<class EXE>
       activity::Proc
