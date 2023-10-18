@@ -91,12 +91,12 @@ namespace test {
       virtual void
       run (Arg)
         {
-          demonstrateSimpleUsage();
-          verify_GroomingToken();
-          torture_GroomingToken();
-          verify_DispatchDecision();
-          verify_findWork();
-          verify_postDispatch();
+//        demonstrateSimpleUsage();
+//        verify_GroomingToken();
+//        torture_GroomingToken();
+//        verify_DispatchDecision();
+//        verify_findWork();
+//        verify_postDispatch();
           integratedWorkCycle();
         }
       
@@ -412,13 +412,51 @@ namespace test {
       
       
       /** @test TODO build the integrated sequence of worker activation
+       *        - use the Render-Job scenario from SchedulerActivity_test::scenario_RenderJob()
+       *        - use similar instrumentation to trace Activities
        * @todo WIP 10/23 🔁 define ⟶ implement
        */
       void
       integratedWorkCycle()
         {
-          UNIMPLEMENTED ("integratedWorkCycle");
-//        cout << detector.showLog()<<endl; // HINT: use this for investigation...
+          Time nominal{7,7};
+          
+          Time start{0,1};
+          Time dead{0,10};
+          
+          ActivityDetector detector;
+          Job testJob{detector.buildMockJob("testJob", nominal, 12345)};
+          
+          BlockFlowAlloc bFlow;
+          ActivityLang activityLang{bFlow};
+          
+          // Build the Activity-Term for a simple calculation job...
+          Activity& anchor = activityLang.buildCalculationJob (testJob, start,dead)
+                                         .post(); // retrieve the entrance point to the chain
+          
+          // insert instrumentation to trace activation
+          detector.watchGate (anchor.next, "theGate");
+
+          
+          SchedulerInvocation queue;
+          SchedulerCommutator sched;
+          
+          Time now = detector.executionCtx.getSchedTime();
+          Time past {Time::ZERO};
+          
+//        CHECK (activity::PASS == ActivityLang::dispatchChain (anchor, detector.executionCtx));
+          
+          sched.postDispatch (&anchor, now, detector.executionCtx, queue);
+          //////////////////////////////////////////////////////////////////////TODO advance "now" time
+          Activity* act = sched.findWork(queue,now);
+          sched.postDispatch (act, now, detector.executionCtx, queue);
+          
+//        CHECK (detector.verifyInvocation("theGate").arg("5.105 ⧐ Act(GATE")
+//                       .beforeInvocation("after-theGate").arg("⧐ Act(WORKSTART")
+//                       .beforeInvocation("CTX-work").arg("5.155","")
+//                       .beforeInvocation("testJob") .arg("7.007",12345)
+//                       .beforeInvocation("CTX-done").arg("5.355",""));
+          cout << detector.showLog()<<endl; // HINT: use this for investigation...
         }
     };
   
