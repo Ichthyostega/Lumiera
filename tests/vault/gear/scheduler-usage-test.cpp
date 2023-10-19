@@ -1,5 +1,5 @@
 /*
-  SchedulerUsage(Test)  -  component integration test for the scheduler
+  SchedulerUsage(Test)  -  verify standard usage patterns of the scheduler service
 
   Copyright (C)         Lumiera.org
     2023,               Hermann Vosseler <Ichthyostega@web.de>
@@ -51,7 +51,7 @@ namespace test {
   
   
   /*************************************************************************//**
-   * @test Scheduler component integration test: add and process dependent jobs.
+   * @test Ensure expected Scheduler functionality in standard usage situations. 
    * @see SchedulerActivity_test
    * @see SchedulerInvocation_test
    * @see SchedulerCommutator_test

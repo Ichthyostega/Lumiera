@@ -234,7 +234,7 @@ namespace gear {
                 /* use the minimal default wiring */
                 break;
               default:
-                NOTREACHED ("uncovered Activity verb in activation function.");
+                NOTREACHED ("unknown wiring scheme for Render Jobs.");
                 break;
               }
           }
