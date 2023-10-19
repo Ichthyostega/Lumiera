@@ -117,7 +117,7 @@ namespace gear {
         /* === characteristic parameters === */
         const static size_t EPOCH_SIZ = 100;    ///< Number of storage slots to fit into one »Epoch«
         const Duration DUTY_CYCLE{FSecs(1)};    ///< typical relaxation time or average pre-roll to deadline
-        const size_t INITIAL_STREAMS = 2;       ///< Number of streams with TYPICAL_FPS to expect for normal use
+        const size_t INITIAL_STREAMS = 2;       ///< Number of streams with #REFERENCE_FPS to expect for normal use
         
         /* === algorithm tuning settings === */
         const double TARGET_FILL = 0.90;        ///< aim at using this fraction of Epoch space on average (slightly below 100%)

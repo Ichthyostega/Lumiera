@@ -69,24 +69,31 @@ namespace test {
       
       
       /** @test TODO demonstrate a simple usage scenario
+       * @todo WIP 10/23 ✔ define ⟶ 🔁 implement
        */
       void
       simpleUsage()
         {
+          BlockFlowAlloc bFlow;
+          EngineObserver watch;
+          Scheduler{bFlow, watch};
         }
       
       
       
       /** @test TODO
+       * @todo WIP 10/23 🔁 define ⟶ implement
        */
       void
       walkingDeadline()
         {
+          UNIMPLEMENTED ("walking Deadline");
         }
       
       
       
       /** @test TODO
+       * @todo WIP 10/23 🔁 define ⟶ implement
        */
       void
       setupLalup()

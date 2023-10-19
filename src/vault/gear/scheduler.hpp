@@ -44,8 +44,12 @@
 
 #include "lib/error.hpp"
 #include "vault/gear/block-flow.hpp"
+#include "vault/gear/work-force.hpp"
+#include "vault/gear/activity-lang.hpp"
 #include "vault/gear/scheduler-commutator.hpp"
 #include "vault/gear/scheduler-invocation.hpp"
+#include "vault/gear/load-controller.hpp"
+#include "vault/gear/engine-observer.hpp"
 //#include "lib/symbol.hpp"
 #include  "lib/nocopy.hpp"
 //#include "lib/util.hpp"
@@ -67,18 +71,86 @@ namespace gear {
    * @see SchedulerUsage_test
    */
   class Scheduler
+    : util::NonCopyable
     {
+      using Setup = work::Config;  ////////////////////////////////////////////////////OOO actually need subclass to attach the work-function
+      
       SchedulerInvocation layer1_;
       SchedulerCommutator layer2_;
+//    WorkForce<Setup> workForce_;
+      
+      ActivityLang activityLang_;
+      LoadController loadControl_;
+      EngineObserver& engineObserver_;
       
     public:
       explicit
-      Scheduler()
+      Scheduler (BlockFlowAlloc& activityAllocator
+                ,EngineObserver& engineObserver)
         : layer1_{}
         , layer2_{}
+//      , workForce_{connectWorkers()}
+        , activityLang_{activityAllocator}
+        , loadControl_{activityAllocator}
+        , engineObserver_{engineObserver}
         { }
       
-      // using default copy/assignment
+      
+      /**
+       * 
+       */
+      void
+      terminateProcessing()
+        {
+          UNIMPLEMENTED("suicide");
+        }
+      
+      
+      /**
+       * 
+       */
+      double
+      getLoadIndicator()
+        {
+          UNIMPLEMENTED("load indicator");
+        }
+      
+      
+      /**
+       * 
+       */
+      void
+      seedCalcStream()
+        {
+          UNIMPLEMENTED("get it going");
+        }
+      
+      
+      /**
+       * 
+       */
+      void
+      buildJob()
+        {
+          UNIMPLEMENTED("wrap the ActivityTerm");
+        }
+      
+      
+      /**
+       * 
+       */
+      void
+      getWork()
+        {
+          UNIMPLEMENTED("the Worker-Funkction");
+        }
+      
+    private:
+      Setup
+      connectWorkers()
+        {
+          UNIMPLEMENTED("build Worker pool operational setup");
+        }
     };
   
   
