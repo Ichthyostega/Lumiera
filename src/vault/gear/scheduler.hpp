@@ -63,9 +63,17 @@ namespace gear {
 //  using util::isnil;
 //  using std::string;
   
+    namespace { // Scheduler default config
+      
+      const auto   IDLE_WAIT = 20ms;
+      const size_t DISMISS_CYCLES = 100;
+    }
   
-  /**
-   * Schedule and coordinate render activities.
+  
+  
+  
+  /******************************************************//**
+   * »Scheduler-Service« : coordinate render activities.
    * @todo WIP-WIP 6/2023
    * @see BlockFlow
    * @see SchedulerUsage_test
@@ -73,23 +81,30 @@ namespace gear {
   class Scheduler
     : util::NonCopyable
     {
-      using Setup = work::Config;  ////////////////////////////////////////////////////OOO actually need subclass to attach the work-function
+      /** Binding of worker callbacks to the scheduler implementation */
+      struct Setup : work::Config
+        {
+          Scheduler& scheduler;
+          activity::Proc doWork() { return scheduler.getWork();          }
+          void finalHook (bool _) { scheduler.handleWorkerTermination(_);}
+        };
+      
       
       SchedulerInvocation layer1_;
       SchedulerCommutator layer2_;
-//    WorkForce<Setup> workForce_;
+      WorkForce<Setup> workForce_;
       
       ActivityLang activityLang_;
       LoadController loadControl_;
       EngineObserver& engineObserver_;
       
+      
     public:
-      explicit
       Scheduler (BlockFlowAlloc& activityAllocator
                 ,EngineObserver& engineObserver)
         : layer1_{}
         , layer2_{}
-//      , workForce_{connectWorkers()}
+        , workForce_{Setup{IDLE_WAIT, DISMISS_CYCLES, *this}}
         , activityLang_{activityAllocator}
         , loadControl_{activityAllocator}
         , engineObserver_{engineObserver}
@@ -139,17 +154,17 @@ namespace gear {
       /**
        * 
        */
-      void
+      activity::Proc
       getWork()
         {
           UNIMPLEMENTED("the Worker-Funkction");
         }
       
     private:
-      Setup
-      connectWorkers()
+      void
+      handleWorkerTermination (bool isFailure)
         {
-          UNIMPLEMENTED("build Worker pool operational setup");
+          UNIMPLEMENTED("die harder");
         }
     };
   

@@ -72,12 +72,12 @@ namespace gear {
   using std::move;
   using std::atomic;
   using util::unConst;
+  using std::chrono::milliseconds;
+  using std::chrono_literals::operator ""ms;
   using std::this_thread::sleep_for;
   
   
   namespace work { ///< Details of WorkForce (worker pool) implementation
-    using std::chrono::milliseconds;
-    using std::chrono_literals::operator ""ms;
     
     using SIG_WorkFun   = activity::Proc(void);   ///< config should define a callable with this signature to perform work
     using SIG_FinalHook = void(bool);             ///< config should define callable invoked at exit (argument: isFailure)
@@ -94,7 +94,6 @@ namespace gear {
     struct Config
       {
         static const size_t COMPUTATION_CAPACITY;
-        const size_t EXPECTED_MAX_POOL = 1.5*COMPUTATION_CAPACITY;
         
         const milliseconds IDLE_WAIT = 20ms;
         const size_t DISMISS_CYCLES = 100;
