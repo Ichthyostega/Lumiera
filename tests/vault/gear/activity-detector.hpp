@@ -119,7 +119,7 @@ namespace test {
     const string CTX_DONE{"CTX-done"};
     const string CTX_TICK{"CTX-tick"};
     
-    Offset POLL_DELAY{FSecs(1)};
+    Offset POLL_WAIT_DELAY{FSecs(1)};
     Time SCHED_TIME_MARKER{555,5};  ///< marker value for "current scheduler time" used in tests
   }
   
@@ -563,7 +563,7 @@ namespace test {
           _DiagnosticFun<SIG_done>::Type done;
           _DiagnosticFun<SIG_tick>::Type tick;
           
-          function<Offset()> getWaitDelay = []    { return POLL_DELAY;       };
+          function<Offset()> getWaitDelay = []    { return POLL_WAIT_DELAY;       };
           function<Time()>   getSchedTime = [this]{ return SCHED_TIME_MARKER;};
           
           FakeExecutionCtx (ActivityDetector& detector)

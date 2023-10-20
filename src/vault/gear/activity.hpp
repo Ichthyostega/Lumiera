@@ -604,7 +604,7 @@ namespace gear {
   activity::Proc
   Activity::activate (Time now, EXE& executionCtx)
   {
-    activity::_verify_usable_as_ExecutionContext<EXE>();
+//    activity::_verify_usable_as_ExecutionContext<EXE>();
     
     switch (verb_) {
       case INVOKE:
@@ -651,7 +651,7 @@ namespace gear {
   activity::Proc
   Activity::dispatch (Time now, EXE& executionCtx)
   {
-    activity::_verify_usable_as_ExecutionContext<EXE>();
+//    activity::_verify_usable_as_ExecutionContext<EXE>();
     
     switch (verb_) {
       case NOTIFY:
@@ -681,7 +681,7 @@ namespace gear {
   activity::Proc
   Activity::notify (Time now, EXE& executionCtx)
   {
-    activity::_verify_usable_as_ExecutionContext<EXE>();
+//    activity::_verify_usable_as_ExecutionContext<EXE>();
     
     switch (verb_) {
       case GATE:

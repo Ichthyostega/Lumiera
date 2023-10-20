@@ -65,8 +65,9 @@ namespace gear {
   
     namespace { // Scheduler default config
       
-      const auto   IDLE_WAIT = 20ms;
-      const size_t DISMISS_CYCLES = 100;
+      const auto   IDLE_WAIT = 20ms;           ///< sleep-recheck cycle for workers deemed _idle_
+      const size_t DISMISS_CYCLES = 100;       ///< number of wait cycles before an idle worker terminates completely
+      Offset POLL_WAIT_DELAY{FSecs(1,1000)};   ///< delay until re-evaluating a condition previously found unsatisfied
     }
   
   
@@ -166,7 +167,71 @@ namespace gear {
         {
           UNIMPLEMENTED("die harder");
         }
+      
+      
+      /** @internal expose a binding for Activity execution */
+      class ExecutionCtx;
     };
+  
+  
+  /**
+   * @remark when due, the scheduled Activities are performed within the
+   *  [Activity-Language execution environment](\ref ActivityLang::dispatchChain());
+   *  some aspects of Activity _activation_ however require external functionality,
+   *  which — for the purpose of language definition — was abstracted as _Execution-context._
+   *  The implementation of these binding functions fills in relevant external effects and
+   *  is in fact supplied by the implementation internals of the scheduler itself.   
+   */
+  class Scheduler::ExecutionCtx
+    : private Scheduler
+    {
+    public:
+      static ExecutionCtx&
+      from (Scheduler& self)
+      {
+        return static_cast<ExecutionCtx&> (self);
+      }
+      
+      /* ==== Implementation of the Concept ExecutionCtx ==== */
+      
+      /** λ-post: */
+      activity::Proc
+      post (Time when, Activity& chain, ExecutionCtx& ctx)
+        {
+          return layer2_.postDispatch (&chain, when, ctx, layer1_);
+        }
+      
+      void
+      work (Time, size_t)
+        {
+          UNIMPLEMENTED ("λ-work");
+        }
+      
+      void
+      done (Time, size_t)
+        {
+          UNIMPLEMENTED ("λ-done");
+        }
+      
+      activity::Proc
+      tick (Time)
+        {
+          UNIMPLEMENTED ("λ-tick");
+        }
+      
+      Offset
+      getWaitDelay()
+        {
+          return POLL_WAIT_DELAY;
+        }
+      
+      Time
+      getSchedTime()
+        {
+          UNIMPLEMENTED ("access scheduler Time");
+        }
+    };
+  
   
   
   
