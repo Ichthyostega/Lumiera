@@ -194,7 +194,11 @@ namespace gear {
       
       /* ==== Implementation of the Concept ExecutionCtx ==== */
       
-      /** λ-post: */
+      /**
+       * λ-post: enqueue for time-bound execution, possibly dispatch immediately.
+       * This is the »main entrance« to get some Activity scheduled.
+       * @remark the \a ctx argument is redundant (helpful for test/mocking)
+       */
       activity::Proc
       post (Time when, Activity& chain, ExecutionCtx& ctx)
         {
