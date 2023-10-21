@@ -46,17 +46,15 @@
 // 03/20 - investigate type deduction bug with PtrDerefIter
 // 01/21 - look for ways to detect the presence of an (possibly inherited) getID() function
 // 08/22 - techniques to supply additional feature selectors to a constructor call
+// 10/23 - search for ways to detect signatures of member functions and functors uniformly
 
 
 /** @file try.cpp
- * Investigate techniques to supply additional descriptive ctor arguments in a type safe way.
- * The idea is to provide friend functors, which might tweak or reset internal settings;
- * these functors are packaged into free standing friend functions with intuitive naming,
- * which, on call-site, look like algebraic expressions/data-types.
- * 
- * If desired, this mechanism can be mixed-in and integrated into a constructor call,
- * thus optionally allowing for arbitrary extra qualifiers, even with extra arguments.
- * @see builder-qualifier-support.hpp (wrapped as support lib)
+ * Investigate how to detect the signature of a _function-like member,_ irrespective
+ * if referring to a static function, a member function or a functor member. Turns out this
+ * can be achieved in a syntactically uniform way by passing either a pointer or member pointer.
+ * @see vault::gear::_verify_usable_as_ExecutionContext
+ * @see lib::meta::isFunMember
  */
 
 typedef unsigned int uint;
@@ -67,100 +65,101 @@ typedef unsigned int uint;
 #include "lib/test/diagnostic-output.hpp"
 #include "lib/util.hpp"
 
-#include <functional>
+#include "lib/meta/function.hpp"
 
-
-
-
-template<class TAR>
-class PropertyQualifierSupport
+struct Stat
   {
-  protected:
-    using Manipulator = std::function<void(TAR&)>;
-    
-    struct Qualifier
-      : Manipulator
-      {
-        using Manipulator::Manipulator;
-      };
+    static long fun (double, char*) {return 42; }
+  };
 
-    template<class... QUALS>
-    friend void qualify(TAR& target, Qualifier& qualifier, QUALS& ...qs)
+struct Funi
+  {
+    std::function<long(double, char*)> fun;
+    short gun;
+  };
+
+struct Dyna
+  {
+    long fun (double, char*) const {return 42; }
+  };
+
+
+using lib::meta::_Fun;
+
+
+  /** @deprecated this is effectively the same than using decltype */
+  template<typename P>
+  struct Probe
+    : _Fun<P>
     {
-      qualifier(target);
-      qualify(target, qs...);
-    }
-    
-    friend void qualify(TAR&){ }
+      Probe(P&&){}
+    };
 
-  public:
-    // default construct and copyable
-  };
+  template<typename FUN, typename SIG, bool =_Fun<FUN>()>
+  struct has_SIGx
+    : std::is_same<SIG, typename _Fun<FUN>::Sig>
+    {
+//      has_SIGx() = default;
+//      has_SIGx(FUN, _Fun<SIG>){ }
+    };
 
-
-class Feat
-  : PropertyQualifierSupport<Feat>
+  template<typename FUN, typename X>
+  struct has_SIGx<FUN,X,false>
+    : std::false_type
+    {
+//      has_SIGx() = default;
+//      has_SIGx(FUN, _Fun<X>){ }
+    };
+  
+  
+  
+  template<typename SIG, typename FUN>
+  constexpr inline auto
+  isFunMember (FUN)
   {
-    
-    friend Qualifier bla();
-    friend Qualifier blubb(string);
-
-  public:
-    Feat() = default;
-    
-    template<class... QS>
-    Feat(Qualifier qual, QS... qs)
-      : Feat{}
-      {
-        qualify(*this, qual, qs...);
-      }
-    
-    operator string ()  const
-      {
-        return "Feat{"+prop_+"}";
-      }
-    
-  private:
-    string prop_{"∅"};
-  };
-
-
-Feat::Qualifier
-bla()
-{
-  return Feat::Qualifier{[](Feat& feat)
-                            {
-                              feat.prop_ = "bla";
-                            }};
-}
-
-Feat::Qualifier
-blubb(string murks)
-{
-  return Feat::Qualifier{[=](Feat& feat)
-                            {
-                              feat.prop_ += ".blubb("+murks+")";
-                            }};
-}
-
+    return has_SIGx<FUN,SIG>{};
+  }
+  
+#define ARSERT_MEMBER_FUNCTOR(_EXPR_, _SIG_) \
+        static_assert (isFunMember<_SIG_>(_EXPR_), \
+                       "Member " STRINGIFY(_EXPR_) " unsuitable, expect function signature: " STRINGIFY(_SIG_));
 
 int
 main (int, char**)
   {
-    Feat f0;
-    SHOW_EXPR(f0);
+    using F1 = decltype(Stat::fun);
+    using F2 = decltype(Funi::fun);
+    using F3 = decltype(&Dyna::fun);
     
-    Feat f1(bla());
-    SHOW_EXPR(f1);
+    SHOW_TYPE(F1)
+    SHOW_TYPE(F2)
+    SHOW_TYPE(F3)
     
-    Feat f2(blubb("Ψ"));
-    SHOW_EXPR(f2);
+    using F1a = decltype(&Stat::fun);
+    using F2a = decltype(&Funi::fun);
+    using F2b = decltype(&Funi::gun);
+    SHOW_TYPE(F1a)
+    SHOW_TYPE(F2a)
+    SHOW_TYPE(F2b)
     
-    Feat f3(bla(),blubb("↯"));
-    SHOW_EXPR(f3);
+    SHOW_TYPE(_Fun<F1>::Sig)
+    SHOW_TYPE(_Fun<F2>::Sig)
+    SHOW_TYPE(_Fun<F3>::Sig)
+
+    SHOW_TYPE(_Fun<F1a>::Sig)
+    SHOW_TYPE(_Fun<F2a>::Sig)
     
-    Feat f4(blubb("💡"), bla());  // Note: evaluated from left to right, bla() overwrites prop
-    SHOW_EXPR(f4);
+    SHOW_EXPR(_Fun<F2a>::value)
+    SHOW_EXPR(_Fun<F2b>::value)
+    cout <<  "\n--------\n";
+    
+    SHOW_EXPR(bool(isFunMember<long(double,char*)>(&Stat::fun)))
+    SHOW_EXPR(bool(isFunMember<long(double,char*)>(&Funi::fun)))
+    SHOW_EXPR(bool(isFunMember<long(double,char*)>(&Funi::gun)))
+    SHOW_EXPR(bool(isFunMember<long(double,char*)>(&Dyna::fun)))
+    
+    ARSERT_MEMBER_FUNCTOR (&Stat::fun, long(double,char*));
+    ARSERT_MEMBER_FUNCTOR (&Dyna::fun, long(double,char*));
     
     cout <<  "\n.gulp.\n";
     return 0;

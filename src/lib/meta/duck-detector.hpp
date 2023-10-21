@@ -164,7 +164,7 @@
  *  Defines a metafunction (template), allowing to detect
  *  the presence of a member function with the specific
  *  signature, as defined by the parameters.
- * @note this check is not sensible to overloads,
+ * @note this check is not sensitive to overloads,
  *       due to the explicitly given argument types
  */
 #define META_DETECT_FUNCTION(_RET_TYPE_,_FUN_NAME_,_ARGS_) \

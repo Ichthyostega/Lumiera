@@ -175,6 +175,12 @@ namespace meta{
     : _Fun<RET(ARGS...)>
     { };
   
+  /** allow also to probe _plain member fields,_ which may hold a functor */
+  template<class C, typename FUN>
+  struct _Fun<FUN (C::*)>
+    : _Fun<FUN>
+    { };
+  
   
   
   
@@ -187,9 +193,15 @@ namespace meta{
    *             or std::function instance, or λ instance or language function
    *             reference or function pointer
    */
-  template<typename FUN, typename SIG>
+  template<typename FUN, typename SIG,  bool =_Fun<FUN>()>
   struct has_Sig
     : std::is_same<SIG, typename _Fun<FUN>::Sig>
+    { };
+  
+  /** catch-all to prevent compilation failure for anything not function-like. */
+  template<typename FUN, typename X>
+  struct has_Sig<FUN,X, false>
+    : std::false_type
     { };
   
   /**
@@ -200,6 +212,33 @@ namespace meta{
 #define ASSERT_VALID_SIGNATURE(_FUN_, _SIG_) \
         static_assert (lib::meta::has_Sig<_FUN_, _SIG_>::value, \
                        "Function " STRINGIFY(_FUN_) " unsuitable, expected signature: " STRINGIFY(_SIG_));
+  
+  
+  
+  /**
+   * Helper to pick up a member field for verification
+   * @tparam SIG signature of the _function like_ entity expected
+   * @tparam FUN address- or member-pointer, e.g. `&Class::member`
+   * @return suitably parametrised \ref has_Sig instance (which is bool convertible)
+   * @remark intended for use with generic types, when expecting a _somehow invokable_
+   *         member, irrespective if a static function, member function or functor object
+   */
+  template<typename SIG, typename FUN>
+  constexpr inline auto
+  isFunMember (FUN)
+  {
+    return has_Sig<FUN,SIG>{};
+  }
+  
+  /**
+   * Macro for a compile-time check to verify some member is present
+   * and comprises something invokable with a specific signature.
+   * @remark typically used with _generic types_ or bindings
+   */
+#define ASSERT_MEMBER_FUNCTOR(_EXPR_, _SIG_) \
+        static_assert (lib::meta::isFunMember<_SIG_>(_EXPR_), \
+                       "Member " STRINGIFY(_EXPR_) " unsuitable, expect function signature: " STRINGIFY(_SIG_));
+  
   
   
   

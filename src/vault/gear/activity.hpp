@@ -182,21 +182,13 @@ namespace gear {
     constexpr void
     _verify_usable_as_ExecutionContext ()
     {
-#define ASSERT_MEMBER_FUNCTOR(_EXPR_, _SIG_) \
-        static_assert (lib::meta::has_Sig<decltype(_EXPR_), _SIG_>(), \
-                       "Execution-Context: " STRINGIFY(_EXPR_) " expect function with signature: " STRINGIFY(_SIG_));
+      ASSERT_MEMBER_FUNCTOR (&EXE::post, Proc(Time, Activity&, EXE&));
+      ASSERT_MEMBER_FUNCTOR (&EXE::work, void(Time, size_t));
+      ASSERT_MEMBER_FUNCTOR (&EXE::done, void(Time, size_t));
+      ASSERT_MEMBER_FUNCTOR (&EXE::tick, Proc(Time));
       
-      
-       ASSERT_MEMBER_FUNCTOR (EXE::post, Proc(Time, Activity&, EXE&));
-       ASSERT_MEMBER_FUNCTOR (EXE::work, void(Time, size_t));
-       ASSERT_MEMBER_FUNCTOR (EXE::done, void(Time, size_t));
-       ASSERT_MEMBER_FUNCTOR (EXE::tick, Proc(Time));
-       
-       ASSERT_MEMBER_FUNCTOR (EXE::getWaitDelay, Offset());
-       ASSERT_MEMBER_FUNCTOR (EXE::getSchedTime, Time());
-
-      
-#undef ASSERT_MEMBER_FUNCTOR
+      ASSERT_MEMBER_FUNCTOR (&EXE::getWaitDelay, Offset());
+      ASSERT_MEMBER_FUNCTOR (&EXE::getSchedTime, Time());
     }
     
   }//(End)namespace activity
@@ -604,7 +596,7 @@ namespace gear {
   activity::Proc
   Activity::activate (Time now, EXE& executionCtx)
   {
-//    activity::_verify_usable_as_ExecutionContext<EXE>();
+    activity::_verify_usable_as_ExecutionContext<EXE>();
     
     switch (verb_) {
       case INVOKE:
@@ -651,7 +643,7 @@ namespace gear {
   activity::Proc
   Activity::dispatch (Time now, EXE& executionCtx)
   {
-//    activity::_verify_usable_as_ExecutionContext<EXE>();
+    activity::_verify_usable_as_ExecutionContext<EXE>();
     
     switch (verb_) {
       case NOTIFY:
@@ -681,7 +673,7 @@ namespace gear {
   activity::Proc
   Activity::notify (Time now, EXE& executionCtx)
   {
-//    activity::_verify_usable_as_ExecutionContext<EXE>();
+    activity::_verify_usable_as_ExecutionContext<EXE>();
     
     switch (verb_) {
       case GATE:
