@@ -436,7 +436,7 @@ namespace test {
        */
       void
       integratedWorkCycle()
-        { //   ===================================================================== setup a rigged Job
+        { //   ·==================================================================== setup a rigged Job
           Time nominal{7,7};
           Time start{0,1};
           Time dead{0,10};
@@ -455,7 +455,7 @@ namespace test {
           detector.watchGate (anchor.next, "theGate");
 
           
-          //   ===================================================================== setup test subject
+          //    ·=================================================================== setup test subject
           SchedulerInvocation queue;
           SchedulerCommutator sched;
           
@@ -477,7 +477,7 @@ namespace test {
                });
           
           
-          //   ===================================================================== actual test sequence
+          //    ·=================================================================== actual test sequence
           // Add the Activity-Term to be scheduled for planned start-Time
           sched.postDispatch (&anchor, start, detector.executionCtx, queue);
           CHECK (detector.ensureNoInvocation("testJob"));

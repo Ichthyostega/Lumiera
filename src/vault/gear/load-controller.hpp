@@ -96,7 +96,9 @@ namespace gear {
         }
       
       enum
-      Capacity {SPINTIME   ///< imminent activities
+      Capacity {DISPATCH   ///< sent to work
+               ,TENDNEXT   ///< reserved for next task
+               ,SPINTIME   ///< awaiting imminent activities
                ,NEARTIME   ///< capacity for active processing required
                ,WORKTIME   ///< typical stable work task rhythm expected
                ,IDLETIME   ///< time to go to sleep
@@ -114,7 +116,18 @@ namespace gear {
         {
           UNIMPLEMENTED ("establish a randomised targeted delay time");
         }
-
+      
+      Capacity
+      incomingCapacity (Time head, Time now)
+        {
+          UNIMPLEMENTED ("decide how to use incoming free work capacity");
+        }
+      
+      Capacity
+      outgoingCapacity (Time head, Time now)
+        {
+          UNIMPLEMENTED ("decide how to use outgoing free work capacity");
+        }
     };
   
   

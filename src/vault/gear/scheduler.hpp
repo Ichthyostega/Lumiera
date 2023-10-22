@@ -55,6 +55,7 @@
 //#include "lib/util.hpp"
 
 //#include <string>
+#include <utility>
 
 
 namespace vault{
@@ -62,13 +63,14 @@ namespace gear {
   
 //  using util::isnil;
 //  using std::string;
+  using std::move;
   
-    namespace { // Scheduler default config
-      
-      const auto   IDLE_WAIT = 20ms;           ///< sleep-recheck cycle for workers deemed _idle_
-      const size_t DISMISS_CYCLES = 100;       ///< number of wait cycles before an idle worker terminates completely
-      Offset POLL_WAIT_DELAY{FSecs(1,1000)};   ///< delay until re-evaluating a condition previously found unsatisfied
-    }
+  namespace { // Scheduler default config
+    
+    const auto   IDLE_WAIT = 20ms;           ///< sleep-recheck cycle for workers deemed _idle_
+    const size_t DISMISS_CYCLES = 100;       ///< number of wait cycles before an idle worker terminates completely
+    Offset POLL_WAIT_DELAY{FSecs(1,1000)};   ///< delay until re-evaluating a condition previously found unsatisfied
+  }
   
   
   
@@ -163,13 +165,11 @@ namespace gear {
       
       
       /**
-       * 
+       * The worker-Functor: called by the active Workers from the
+       * \ref WorkForce to pull / perform the actual render Activities.
        */
-      activity::Proc
-      getWork()
-        {
-          UNIMPLEMENTED("the Worker-Funkction");
-        }
+      activity::Proc getWork();
+      
       
     private:
       void
@@ -184,11 +184,36 @@ namespace gear {
        * @return how to proceed further with this worker
        */
       activity::Proc
-      scatteredDelay()
+      scatteredDelay (LoadController::Capacity capacity)
         {
           UNIMPLEMENTED("scattered short-term delay");
         }
       
+      
+      /**
+       * monad-like step sequence: perform sequence of steps,
+       * as long as the result remains activity::PASS
+       */
+      struct WorkerInstruction
+        {
+          activity::Proc lastResult = activity::PASS;
+          
+          /*** exposes the latest verdict as overall result */
+          operator activity::Proc()
+            {
+              return activity::SKIP == lastResult? activity::PASS
+                                                 : lastResult;
+            }
+          
+          template<class FUN>
+          WorkerInstruction
+          performStep (FUN step)
+            {
+              if (activity::PASS == lastResult)
+                lastResult = step();
+              return move(*this);
+            }
+        };
       
       /** @internal expose a binding for Activity execution */
       class ExecutionCtx;
@@ -201,7 +226,7 @@ namespace gear {
    *  some aspects of Activity _activation_ however require external functionality,
    *  which — for the purpose of language definition — was abstracted as _Execution-context._
    *  The implementation of these binding functions fills in relevant external effects and
-   *  is in fact supplied by the implementation internals of the scheduler itself.   
+   *  is in fact supplied by the implementation internals of the scheduler itself.
    */
   class Scheduler::ExecutionCtx
     : private Scheduler
@@ -257,6 +282,40 @@ namespace gear {
         }
     };
   
+  
+  
+  
+  /**
+   * @remarks this function is invoked from within the worker thread(s) and will
+   *   - decide if and how the capacity of this worker shall be used right now
+   *   - possibly go into a short targeted wait state to redirect capacity at a better time point
+   *   - and most notably jump into the dispatch of the render Activities, to calculate media data.
+   * @return an instruction for the work::Worker how to proceed next:
+   *   - activity::PROC causes the worker to poll again immediately
+   *   - activity::SLEEP induces a sleep state
+   *   - activity::HALT terminates the worker
+   */
+  inline activity::Proc
+  Scheduler::getWork()
+  {
+    ExecutionCtx& ctx = ExecutionCtx::from(*this);
+    Time now = ctx.getSchedTime();
+    Time head = layer1_.headTime();
+    
+    return WorkerInstruction{}
+              .performStep([&]{ return scatteredDelay(
+                                          loadControl_.incomingCapacity (head,now)); 
+                              })
+              .performStep([&]{
+                                Activity* act = layer2_.findWork(layer1_,now);
+                                return layer2_.postDispatch (act, now, ctx, layer1_);
+                              })
+              .performStep([&]{ return scatteredDelay(
+                                          loadControl_.outgoingCapacity (head,now)); 
+                              })
+              ;
+  }
+
   
   
   
