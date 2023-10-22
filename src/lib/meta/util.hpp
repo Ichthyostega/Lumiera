@@ -385,15 +385,46 @@ namespace util {
         catch(...) { return FAILURE_INDICATOR; }
     };
   
+  /** specialisation to allow rendering pointers to string-convertible types.
+   * @note    different than #showPtr(), the address is not rendered here.
+   * @warning could be brittle, due to overlap with lib::meta::enable_CustomStringConversion;
+   *          whenever there is an explicit string conversion, it must be excluded here.
+   */
+  template<typename X>
+  struct StringConv<X*,      lib::meta::disable_if<std::__or_<std::is_same<std::remove_cv_t<X>, char>
+                                                             ,std::is_same<std::remove_cv_t<X>, void>
+                                                             > >>
+    {
+      static std::string
+      invoke (X const* ptr) noexcept
+        try        { return ptr? "↗" + StringConv<X>::invoke(*ptr)
+                               : BOTTOM_INDICATOR + "«"+typeStr(ptr)+"»";
+                   }
+        catch(...) { return FAILURE_INDICATOR; }
+    };
+  
   // NOTE: this is meant to be extensible;
   //       more specialisations are e.g. in format-obj.hpp
   
   
   
   
+  /** human readable display of boolean values
+   * @return "`true`" or "`false`"
+   */
+  inline std::string
+  showBool (bool yes)  noexcept
+  {
+    return yes? lib::meta::BOOL_TRUE_STR
+              : lib::meta::BOOL_FALSE_STR;
+  }
+  
   /** pretty-print a double in fixed-point format */
   std::string showDouble (double) noexcept;
   std::string showFloat (float)   noexcept;
+  
+  
+  
   
   /** pretty-print an address as hex-suffix */
   std::string showAddr (void const* addr) noexcept;
@@ -424,17 +455,6 @@ namespace util {
     return smPtr? label+"("+showAddr(smPtr.get()) + ") ↗" + StringConv<TargetType>::invoke(*smPtr)
                 : BOTTOM_INDICATOR + " «" + typeStr(smPtr) + "»";
   }
-  
-  /** human readable display of boolean values
-   * @return "`true`" or "`false`"
-   */
-  inline std::string
-  showBool (bool yes)  noexcept
-  {
-    return yes? lib::meta::BOOL_TRUE_STR
-              : lib::meta::BOOL_FALSE_STR;
-  }
-  
   
   
 }// namespace util

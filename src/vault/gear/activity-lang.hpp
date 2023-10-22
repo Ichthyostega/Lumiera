@@ -121,11 +121,12 @@ namespace gear {
        */
       template<class EXE>
       static activity::Proc
-      dispatchChain (Activity& chain, EXE& executionCtx)
+      dispatchChain (Activity* chain, EXE& executionCtx)
         {
-          activity::Proc res = chain.dispatch (executionCtx.getSchedTime(), executionCtx);
+          if (!chain) return activity::PASS;
+          activity::Proc res = chain->dispatch (executionCtx.getSchedTime(), executionCtx);
           if (activity::PASS == res)
-            res = activateChain (chain.next, executionCtx);
+            res = activateChain (chain->next, executionCtx);
           else if (activity::SKIP == res)
             res = activity::PASS;
           return res;

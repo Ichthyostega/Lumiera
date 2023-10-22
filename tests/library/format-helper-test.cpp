@@ -115,20 +115,20 @@ namespace test {
           Reticent closeLipped;
           UnReticent chatterer;
           
-          CHECK (toString (closeLipped) == "«Reticent»"  );
-          CHECK (toString (chatterer)   == "hey Joe!"    );
+          CHECK (toString (closeLipped) == "«Reticent»"_expect);
+          CHECK (toString (chatterer)   ==   "hey Joe!"_expect);
           
-          CHECK (toString (&chatterer)  == "«UnReticent»"); // string convertible => type display
-          CHECK (toString (nullptr)     == "↯"           ); // runtime exception, caught
+          CHECK (toString (&chatterer)  ==  "↗hey Joe!"_expect); // pointer indicated
+          CHECK (toString (nullptr)     ==          "↯"_expect); // runtime exception, caught
           
-          CHECK (toString (true)        == "true"        ); // special handling for bool
-          CHECK (toString (2+2 == 5)    == "false"       );
-          CHECK (toString (12.34e55)    == "1.234e+56"   );
+          CHECK (toString (true)        ==       "true"_expect); // special handling for bool
+          CHECK (toString (2+2 == 5)    ==      "false"_expect);
+          CHECK (toString (12.34e55)    ==  "1.234e+56"_expect);
           
           CHECK (toString (short(12))
                 +toString (345L)
                 +toString ("67")
-                +toString ('8')         == "12345678"    ); // these go through lexical_cast<string>
+                +toString ('8')         ==   "12345678"_expect); // these go through lexical_cast<string>
         }
       
       
@@ -151,7 +151,7 @@ namespace test {
           for (auto s : ss)
             res += s;
           
-          CHECK (res == "..2.113.114.115.116.117.118.119.1110.11");
+          CHECK (res == "..2.113.114.115.116.117.118.119.1110.11"_expect);
           
           
           using VecS = vector<string>;

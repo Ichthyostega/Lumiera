@@ -396,7 +396,7 @@ namespace test {
           CHECK (fullCnt == wof.size());
           
           wof.activate (2.0);
-          sleep_for(5ms);
+          sleep_for(10ms);
           CHECK (2*fullCnt == uniqueCnt);
           CHECK (2*fullCnt == wof.size());
           

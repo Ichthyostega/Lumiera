@@ -418,14 +418,14 @@ namespace test {
           // insert instrumentation to trace activation
           detector.watchGate (post.next, "Gate");
           
-          CHECK (activity::PASS == ActivityLang::dispatchChain (post, detector.executionCtx));          // start execution (case/seq == 0)
+          CHECK (activity::PASS == ActivityLang::dispatchChain (&post, detector.executionCtx));         // start execution (case/seq == 0)
           CHECK (detector.verifyInvocation("Gate")      .arg("1.011 ⧐ Act(GATE")                        // ...first the Gate was activated
                          .beforeInvocation("after-Gate").arg("1.011 ⧐ Act(TICK")                        // ...then activation passed out of Gate...
                          .beforeInvocation("CTX-tick")  .arg("1.011"));                                 // ...and finally the TICK invoked the λ-tick
 
           detector.incrementSeq();
           gate.data_.condition.incDependencies(); // Gate is blocked
-          CHECK (activity::PASS == ActivityLang::dispatchChain (post, detector.executionCtx));          // start execution (case/seq == 1)
+          CHECK (activity::PASS == ActivityLang::dispatchChain (&post, detector.executionCtx));         // start execution (case/seq == 1)
           CHECK (detector.verifyInvocation("Gate")    .seq(1).arg("1.011 ⧐ Act(GATE")                   // ...the Gate was activated...
                          .beforeInvocation("CTX-post").seq(1).arg("2.011","Act(GATE","≺test::CTX≻"));   // ...but was found blocked and re-scheduled itself to 2.011
           CHECK (detector.ensureNoInvocation("after-Gate").seq(1)                                       // verify activation was not passed out behind Gate
@@ -436,7 +436,7 @@ namespace test {
           detector.incrementSeq();
           Activity notify{post.next}; // Notification via instrumented connection to the Gate
           
-          CHECK (activity::PASS == ActivityLang::dispatchChain (notify, detector.executionCtx));        // dispatch a notification (case/seq == 2)
+          CHECK (activity::PASS == ActivityLang::dispatchChain (&notify, detector.executionCtx));       // dispatch a notification (case/seq == 2)
           CHECK (detector.verifyInvocation("Gate")    .seq(2).arg("1.011 --notify-↯> Act(GATE")         // ...notification dispatched towards the Gate
                          .beforeInvocation("CTX-post").seq(2).arg("1.011","after-Gate","≺test::CTX≻")); // ...this opened the Gate and posted/requested activation of the rest of the chain
           CHECK (detector.ensureNoInvocation("after-Gate").seq(2)                                       // verify that activation was not passed out directly
@@ -478,7 +478,7 @@ namespace test {
           // insert instrumentation to trace activation
           detector.watchGate (anchor.next, "theGate");
           
-          CHECK (activity::PASS == ActivityLang::dispatchChain (anchor, detector.executionCtx));
+          CHECK (activity::PASS == ActivityLang::dispatchChain (&anchor, detector.executionCtx));
           
           CHECK (detector.verifyInvocation("theGate").arg("5.105 ⧐ Act(GATE")
                          .beforeInvocation("after-theGate").arg("⧐ Act(WORKSTART")
@@ -535,7 +535,7 @@ namespace test {
           
           // rig the λ-post to forward dispatch as expected in real usage
           detector.executionCtx.post.implementedAs(
-            [&](Time when, Activity& postedAct, auto& ctx)
+            [&](Time when, Activity* postedAct, auto& ctx)
                {
                  if (when == ctx.getSchedTime())  // only for POST to run „right now“
                    return ActivityLang::dispatchChain (postedAct, ctx);
@@ -544,7 +544,7 @@ namespace test {
                });
           
           ///// Case-1 : send a notification from prerequisite, but prior to activating primary-chain
-          CHECK (activity::PASS == ActivityLang::dispatchChain (trigger, detector.executionCtx));
+          CHECK (activity::PASS == ActivityLang::dispatchChain (&trigger, detector.executionCtx));
           CHECK (detector.verifyInvocation("trigger") .seq(0).arg("5.555 --notify-↯> Act(GATE")              // notification dispatched to the Gate
                                                              .arg("<2, until 0:00:10.000"));                 // Note: the Gate-latch expects 2 notifications
           CHECK (detector.ensureNoInvocation("testJob")                                                      // ==>   the latch was decremented but no invocation yet
@@ -552,7 +552,7 @@ namespace test {
           
           ///// Case-2 : now activate the primary-chain
           detector.incrementSeq();
-          CHECK (activity::PASS == ActivityLang::dispatchChain (anchor, detector.executionCtx));
+          CHECK (activity::PASS == ActivityLang::dispatchChain (&anchor, detector.executionCtx));
           CHECK (detector.verifyInvocation("CTX-post").seq(1).arg("5.555","Act(NOTIFY","≺test::CTX≻")        // immediately at begin, the internal self-notification is posted
                          .beforeInvocation("deBlock") .seq(1).arg("5.555 --notify-↯> Act(GATE")              // ...and then dispatched recursively via ActivityLang::dispatchChain() towards the Gate
                                                              .arg("<1, until 0:00:10.000")                   // Note: at this point, the Gate-latch expects 1 notifications
@@ -567,7 +567,7 @@ namespace test {
                          .afterInvocation("CTX-done").seq(1));
           
           detector.incrementSeq();
-          CHECK (activity::PASS == ActivityLang::dispatchChain (trigger, detector.executionCtx));            // and any further external trigger is likewise blocked:
+          CHECK (activity::PASS == ActivityLang::dispatchChain (&trigger, detector.executionCtx));           // and any further external trigger is likewise blocked:
           CHECK (detector.verifyInvocation("trigger") .seq(2).arg("5.555 --notify-↯> Act(GATE")              // ... it reaches the Gate
                                                              .arg("<0, until -85401592:56:01.825"));         // ... but the Gate has been closed permanently (by setting the deadline to Time::MIN)
           CHECK (detector.ensureNoInvocation("testJob")                                                      // ==>  no further invocation
@@ -620,7 +620,7 @@ namespace test {
           
           
           ///// Case-1 : trigger off the async IO job
-          CHECK (activity::PASS == ActivityLang::dispatchChain (anchor, detector.executionCtx));
+          CHECK (activity::PASS == ActivityLang::dispatchChain (&anchor, detector.executionCtx));
           CHECK (detector.verifyInvocation("CTX-work").seq(0).arg("5.555", "")                               // activation of WORKSTART
                          .beforeInvocation("loadJob") .seq(0).arg("7.007", 12345));                          // activation of JobFunctor
           CHECK (detector.ensureNoInvocation("CTX-done").seq(0)                                              // IO operation just runs, no further activity yet
@@ -629,7 +629,7 @@ namespace test {
           
           ///// Case-2 : activate the rest of the chain after IO is done
           detector.incrementSeq();
-          CHECK (activity::PASS == ActivityLang::dispatchChain (notify, detector.executionCtx));
+          CHECK (activity::PASS == ActivityLang::dispatchChain (&notify, detector.executionCtx));
           CHECK (detector.verifyInvocation("CTX-done").seq(1).arg("5.555", "")                               // activation of WORKSTOP via callback
                          .beforeInvocation("CTX-post").seq(1).arg("5.555", "Act(NOTIFY", "≺test::CTX≻"));    // the following NOTIFY is posted...
         }
@@ -669,7 +669,7 @@ namespace test {
           // insert test-instrumentation
           detector.insertActivationTap(anchor.next);
           
-          CHECK (activity::PASS == ActivityLang::dispatchChain (anchor, detector.executionCtx));
+          CHECK (activity::PASS == ActivityLang::dispatchChain (&anchor, detector.executionCtx));
 
           CHECK (detector.verifyInvocation("tap-INVOKE").arg("5.555 ⧐ Act(INVOKE")
                          .beforeInvocation("metaJob") .arg("7.007",12345));

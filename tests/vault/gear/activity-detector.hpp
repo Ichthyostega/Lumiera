@@ -544,7 +544,7 @@ namespace test {
       
       
       struct FakeExecutionCtx;
-      using SIG_post = activity::Proc(Time, Activity&, FakeExecutionCtx&);
+      using SIG_post = activity::Proc(Time, Activity*, FakeExecutionCtx&);
       using SIG_work = void(Time, size_t);
       using SIG_done = void(Time, size_t);
       using SIG_tick = activity::Proc(Time);

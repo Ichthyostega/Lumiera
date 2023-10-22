@@ -216,7 +216,7 @@ namespace gear {
           
           Time now = executionCtx.getSchedTime();
           if (decideDispatchNow (when, now))
-            return ActivityLang::dispatchChain (*chain, executionCtx);
+            return ActivityLang::dispatchChain (chain, executionCtx);
           else
             if (holdsGroomingToken (thisThread()))
               layer1.feedPrioritisation (*chain, when);

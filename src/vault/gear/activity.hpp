@@ -182,7 +182,7 @@ namespace gear {
     constexpr void
     _verify_usable_as_ExecutionContext ()
     {
-      ASSERT_MEMBER_FUNCTOR (&EXE::post, Proc(Time, Activity&, EXE&));
+      ASSERT_MEMBER_FUNCTOR (&EXE::post, Proc(Time, Activity*, EXE&));
       ASSERT_MEMBER_FUNCTOR (&EXE::work, void(Time, size_t));
       ASSERT_MEMBER_FUNCTOR (&EXE::done, void(Time, size_t));
       ASSERT_MEMBER_FUNCTOR (&EXE::tick, Proc(Time));
@@ -485,7 +485,7 @@ namespace gear {
       activity::Proc
       dispatchNotify (Time now, EXE& executionCtx)
         {
-          return executionCtx.post (now, *this, executionCtx);
+          return executionCtx.post (now, this, executionCtx);
         }
       
       template<class EXE>
@@ -531,7 +531,7 @@ namespace gear {
       activity::Proc
       dispatchSelf (Time when, EXE& executionCtx)
         {
-          return executionCtx.post (when, *this, executionCtx);
+          return executionCtx.post (when, this, executionCtx);
         }
       
       template<class EXE>
@@ -547,7 +547,7 @@ namespace gear {
       postChain (Time when, EXE& executionCtx)
         {
           REQUIRE (next);
-          return executionCtx.post (when, *next, executionCtx);
+          return executionCtx.post (when, next, executionCtx);
         }
       
       template<class EXE>

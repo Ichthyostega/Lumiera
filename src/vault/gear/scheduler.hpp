@@ -246,9 +246,9 @@ namespace gear {
        * @remark the \a ctx argument is redundant (helpful for test/mocking)
        */
       activity::Proc
-      post (Time when, Activity& chain, ExecutionCtx& ctx)
+      post (Time when, Activity* chain, ExecutionCtx& ctx)
         {
-          return layer2_.postDispatch (&chain, when, ctx, layer1_);
+          return layer2_.postDispatch (chain, when, ctx, layer1_);
         }
       
       void
@@ -307,8 +307,8 @@ namespace gear {
                                           loadControl_.incomingCapacity (head,now)); 
                               })
               .performStep([&]{
-                                Activity* act = layer2_.findWork(layer1_,now);
-                                return layer2_.postDispatch (act, now, ctx, layer1_);
+                                Activity* act = layer2_.findWork (layer1_,now);
+                                return ctx.post (now, act, ctx);
                               })
               .performStep([&]{ return scatteredDelay(
                                           loadControl_.outgoingCapacity (head,now)); 

@@ -173,16 +173,16 @@ namespace test {
          CHECK (dump(lateBindInstance (dummy, tuple<>{}))         == "()"_expect);
          CHECK (dump(lateBindInstance (dummy, tuple{42}))         == "(42)"_expect);
          CHECK (dump(lateBindInstance (dummy, tuple{1,2,3}))      == "(1,2,3)"_expect);
-         CHECK (dump(lateBindInstance (dummy, tuple{marker,2,3})) == "(«long»,2,3)"_expect);
-         CHECK (dump(lateBindInstance (dummy, tuple{1,marker,3})) == "(1,«long»,3)"_expect);
-         CHECK (dump(lateBindInstance (dummy, tuple{1,2,marker})) == "(1,2,«long»)"_expect);
-         CHECK (dump(lateBindInstance (dummy, tuple{marker}))     == "(«long»)"_expect);
+         CHECK (dump(lateBindInstance (dummy, tuple{marker,2,3})) == "(↗555,2,3)"_expect);
+         CHECK (dump(lateBindInstance (dummy, tuple{1,marker,3})) == "(1,↗555,3)"_expect);
+         CHECK (dump(lateBindInstance (dummy, tuple{1,2,marker})) == "(1,2,↗555)"_expect);
+         CHECK (dump(lateBindInstance (dummy, tuple{marker}))     == "(↗555)"_expect);
          CHECK (dump(lateBindInstance (dummy, tuple{string{"1"}
                                                    ,"2"
                                                    ,marker
                                                    ,tuple(2,3)
                                                    , 5.5
-                                                   }))            == "(1,2,«long»,«tuple<int, int>»──(2,3),5.5)"_expect);
+                                                   }))            == "(1,2,↗555,«tuple<int, int>»──(2,3),5.5)"_expect);
         }
     };
   

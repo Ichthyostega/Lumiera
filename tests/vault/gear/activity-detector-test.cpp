@@ -232,8 +232,8 @@ namespace test {
           ctx.done (t,x);
           CHECK (detector.verifyInvocation(CTX_DONE).arg(t,x));
           
-          CHECK (activity::PASS == ctx.post (t, a, ctx));
-          CHECK (detector.verifyInvocation(CTX_POST).arg(t,a,ctx));
+          CHECK (activity::PASS == ctx.post (t, &a, ctx));
+          CHECK (detector.verifyInvocation(CTX_POST).arg(t,&a,ctx));
           
           CHECK (activity::PASS == ctx.tick(t));
           CHECK (detector.verifyInvocation(CTX_TICK).arg(t));
