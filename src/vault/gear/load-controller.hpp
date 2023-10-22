@@ -29,9 +29,9 @@
  ** scenarios, a wide array of load patterns may be encountered, complicating
  ** any generic performance optimisation. Rather, the participating components
  ** are designed to withstand a short-term imbalance, expecting that general
- ** engine parametrisation will be adjusted based on moving averages. 
+ ** engine parametrisation will be adjusted based on moving averages.
  **
- ** @see scheduler.hpp 
+ ** @see scheduler.hpp
  ** @see SchedulerStress_test
  ** 
  ** @todo WIP-WIP-WIP 10/2023 »Playback Vertical Slice«
@@ -45,11 +45,13 @@
 
 #include "lib/error.hpp"
 //#include "vault/gear/block-flow.hpp"
+#include "vault/gear/activity-lang.hpp"
 //#include "lib/symbol.hpp"
 #include  "lib/nocopy.hpp"
 //#include "lib/util.hpp"
 
 //#include <string>
+#include <chrono>
 
 
 namespace vault{
@@ -57,6 +59,7 @@ namespace gear {
   
 //  using util::isnil;
 //  using std::string;
+  using std::chrono::microseconds;
   
   
   /**
@@ -75,6 +78,43 @@ namespace gear {
       LoadController (BlockFlowAlloc& blockFlow)
         : allocator_{blockFlow}
         { }
+      
+      
+      /**
+       * @note const and non-grooming
+       */
+      bool
+      tendedNext()  const
+        {
+          UNIMPLEMENTED ("Predicate to determine if next foreseeable Activity was tended for");
+        }
+      
+      void
+      tendNext()
+        {
+          UNIMPLEMENTED ("tend for the next foreseeable Activity");
+        }
+      
+      enum
+      Capacity {SPINTIME   ///< imminent activities
+               ,NEARTIME   ///< capacity for active processing required
+               ,WORKTIME   ///< typical stable work task rhythm expected
+               ,IDLETIME   ///< time to go to sleep
+               };
+      
+      Capacity
+      classifyCapacity()  const
+        {
+          UNIMPLEMENTED ("establish a categorisation for available capacity");
+        }
+      
+      
+      microseconds
+      scatteredDelayTime()
+        {
+          UNIMPLEMENTED ("establish a randomised targeted delay time");
+        }
+
     };
   
   

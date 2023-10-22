@@ -55,6 +55,7 @@ namespace test {
    * @see SchedulerActivity_test
    * @see SchedulerInvocation_test
    * @see SchedulerCommutator_test
+   * @see SchedulerLoadControl_test
    */
   class SchedulerService_test : public Test
     {

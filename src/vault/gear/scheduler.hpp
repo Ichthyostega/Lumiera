@@ -33,7 +33,7 @@
  ** @see SchedulerInvocation Layer-1
  ** @see SchedulerCommutator Layer-2
  ** 
- ** @todo WIP-WIP-WIP 6/2023 »Playback Vertical Slice«
+ ** @todo WIP-WIP 10/2023 »Playback Vertical Slice«
  ** 
  */
 
@@ -75,7 +75,7 @@ namespace gear {
   
   /******************************************************//**
    * »Scheduler-Service« : coordinate render activities.
-   * @todo WIP-WIP 6/2023
+   * @todo WIP-WIP 10/2023
    * @see BlockFlow
    * @see SchedulerUsage_test
    */
@@ -110,6 +110,16 @@ namespace gear {
         , loadControl_{activityAllocator}
         , engineObserver_{engineObserver}
         { }
+      
+      
+      /**
+       * 
+       */
+      void
+      ignite()
+        {
+          UNIMPLEMENTED("suicide");
+        }
       
       
       /**
@@ -166,6 +176,17 @@ namespace gear {
       handleWorkerTermination (bool isFailure)
         {
           UNIMPLEMENTED("die harder");
+        }
+      
+      
+      /**
+       * send this thread into a targeted short-time wait.
+       * @return how to proceed further with this worker
+       */
+      activity::Proc
+      scatteredDelay()
+        {
+          UNIMPLEMENTED("scattered short-term delay");
         }
       
       

@@ -32,6 +32,12 @@ END
 
 
 
+TEST "Scheduler Load-Control" SchedulerLoadControl_test <<END
+return: 0
+END
+
+
+
 PLANNED "Scheduler Integration" SchedulerService_test <<END
 return: 0
 END

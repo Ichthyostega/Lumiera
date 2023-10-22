@@ -559,7 +559,7 @@ namespace gear {
        * Activity deadlines are evenly spaced, for a simple heuristic we can just divide
        * actual Epoch duration by the fill factor (longer Epoch => less capacity).
        * To avoid control oscillations however, it seems prudent to use damping by
-       * an exponential moving average, nominally over #AVERAGE_EPOCHS.
+       * an exponential moving average, nominally over #Strategy::averageEpochs().
        * The current epochStep_ is assumed to be such a moving average,
        * and will be updated accordingly.
        */
@@ -578,7 +578,7 @@ namespace gear {
           // damped adjustment towards ideal size
           double contribution = double(_raw(actualLen)) / _raw(epochStep_) / adjust;
           
-          // Exponential MA: mean ≔ mean * (N-1)/N  + newVal/N
+          // Exponential MA: mean ≔ mean · (N-1)/N  + newVal/N
           auto N = Strategy::averageEpochs();
           double avgFactor = (contribution + N-1) / N;
           adjustEpochStep (avgFactor);
