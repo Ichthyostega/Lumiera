@@ -78,13 +78,14 @@
 
 #include "lib/error.hpp"
 //#include "vault/gear/block-flow.hpp"
-#include "vault/gear/activity-lang.hpp"
+//#include "vault/gear/activity-lang.hpp"
 //#include "lib/symbol.hpp"
 #include  "lib/nocopy.hpp"
 //#include "lib/util.hpp"
 
 //#include <string>
 #include <chrono>
+#include <utility>
 
 
 namespace vault{
@@ -96,8 +97,9 @@ namespace gear {
   using lib::time::Time;
   using lib::time::FSecs;
   using lib::time::TimeVar;
-  using lib::time::Offset;
+  using lib::time::TimeValue;
   using lib::time::Duration;
+  using lib::time::Offset;
   using std::chrono_literals::operator ""ms;
   using std::chrono_literals::operator ""us;
   
@@ -125,16 +127,26 @@ namespace gear {
   class LoadController
     : util::NonCopyable
     {
-      BlockFlowAlloc& allocator_;
-      
-      TimeVar tendedHead_{Time::ANYTIME};
-      
     public:
+      struct Wiring
+        {
+          size_t maxCapacity{2};
+        };
+      
       explicit
-      LoadController (BlockFlowAlloc& blockFlow)
-        : allocator_{blockFlow}
+      LoadController (Wiring&& wiring)
+        : wiring_{std::move (wiring)}
         { }
       
+      LoadController()
+        : LoadController{Wiring{}}
+        { }
+      
+    private:
+      Wiring wiring_;
+      
+      TimeVar tendedHead_{Time::ANYTIME};
+    public:
       
       /**
        * did we already tend for the indicated next head time?

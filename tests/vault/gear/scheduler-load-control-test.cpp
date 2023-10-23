@@ -78,8 +78,7 @@ namespace test {
       void
       simpleUsage()
         {
-          BlockFlowAlloc bFlow;
-          LoadController ctrl{bFlow};
+          LoadController ctrl;
         }
       
       
@@ -126,8 +125,7 @@ namespace test {
       void
       tendNextActivity()
         {
-          BlockFlowAlloc bFlow;
-          LoadController lctrl{bFlow};
+          LoadController lctrl;
           
           Time t1{1,0};
           Time t2{2,0};
@@ -172,8 +170,7 @@ namespace test {
       void
       classifyCapacity()
         {
-          BlockFlowAlloc bFlow;
-          LoadController lctrl{bFlow};
+          LoadController lctrl;
           
           Time next{0,10};
           

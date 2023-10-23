@@ -113,7 +113,7 @@ namespace gear {
         , layer2_{}
         , workForce_{Setup{IDLE_WAIT, DISMISS_CYCLES, *this}}
         , activityLang_{activityAllocator}
-        , loadControl_{activityAllocator}
+        , loadControl_{connectMonitoring()}
         , engineObserver_{engineObserver}
         { }
       
@@ -218,6 +218,16 @@ namespace gear {
               return move(*this);
             }
         };
+      
+      
+      /** @internal connect state signals for use by the LoadController */
+      LoadController::Wiring
+      connectMonitoring()
+        {
+          LoadController::Wiring setup;
+          setup.maxCapacity = work::Config::COMPUTATION_CAPACITY;
+          return setup;
+        }
       
       /** @internal expose a binding for Activity execution */
       class ExecutionCtx;
