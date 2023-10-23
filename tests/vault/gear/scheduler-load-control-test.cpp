@@ -64,8 +64,9 @@ namespace test {
       run (Arg)
         {
            simpleUsage();
-           classifyTimings();
+           classifyHorizon();
            tendNextActivity();
+           classifyCapacity();
            walkingDeadline();
            setupLalup();
         }
@@ -93,7 +94,7 @@ namespace test {
        * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
-      classifyTimings()
+      classifyHorizon()
         {
           Time next{0,10};
           
@@ -105,16 +106,16 @@ namespace test {
           Time t31{t3 + ut};
           Time t4{next - NOW_HORIZON};
           
-          CHECK (Capacity::IDLETIME == LoadController::classifyCapacity (Offset{next - ut }));
-          CHECK (Capacity::IDLETIME == LoadController::classifyCapacity (Offset{next - t1 }));
-          CHECK (Capacity::WORKTIME == LoadController::classifyCapacity (Offset{next - t2 }));
-          CHECK (Capacity::WORKTIME == LoadController::classifyCapacity (Offset{next - t21}));
-          CHECK (Capacity::NEARTIME == LoadController::classifyCapacity (Offset{next - t3 }));
-          CHECK (Capacity::NEARTIME == LoadController::classifyCapacity (Offset{next - t31}));
-          CHECK (Capacity::SPINTIME == LoadController::classifyCapacity (Offset{next - t4 }));
+          CHECK (Capacity::IDLETIME == LoadController::classifyTimeHorizon (Offset{next - ut }));
+          CHECK (Capacity::IDLETIME == LoadController::classifyTimeHorizon (Offset{next - t1 }));
+          CHECK (Capacity::WORKTIME == LoadController::classifyTimeHorizon (Offset{next - t2 }));
+          CHECK (Capacity::WORKTIME == LoadController::classifyTimeHorizon (Offset{next - t21}));
+          CHECK (Capacity::NEARTIME == LoadController::classifyTimeHorizon (Offset{next - t3 }));
+          CHECK (Capacity::NEARTIME == LoadController::classifyTimeHorizon (Offset{next - t31}));
+          CHECK (Capacity::SPINTIME == LoadController::classifyTimeHorizon (Offset{next - t4 }));
           
-          CHECK (Capacity::DISPATCH == LoadController::classifyCapacity (Offset::ZERO      ));
-          CHECK (Capacity::DISPATCH == LoadController::classifyCapacity (Offset{t4 - next }));
+          CHECK (Capacity::DISPATCH == LoadController::classifyTimeHorizon (Offset::ZERO      ));
+          CHECK (Capacity::DISPATCH == LoadController::classifyTimeHorizon (Offset{t4 - next }));
         }
       
       
@@ -157,6 +158,77 @@ namespace test {
           CHECK (not lctrl.tendedNext (t3));
         }
       
+      
+      
+      /** @test verify allocation decision for free capacity
+       *      - due and overdue Activities are prioritised
+       *      - keep spinning when next Activity to schedule is very close
+       *      - otherwise, priority is to tend for the next known Activity
+       *      - beyond that, free capacity is redistributed according to horizon
+       *      - for incoming free capacity there is a preference to keep it sleeping,
+       *        to allow for disposing of excess capacity after extended sleep time
+       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
+       */
+      void
+      classifyCapacity()
+        {
+          BlockFlowAlloc bFlow;
+          LoadController lctrl{bFlow};
+          
+          Time next{0,10};
+          
+          Time ut{1,0};
+          Time t1{0,9};
+          Time t2{next - SLEEP_HORIZON};
+          Time t3{next - WORK_HORIZON};
+          Time t4{next - NOW_HORIZON};
+          Time t5{next + ut};                              //       ╭──────────────  next Activity at scheduler head
+                                                          //        │     ╭────────  current time of evaluation
+          // Time `next` has not been tended yet...      //         ▼     ▼
+          CHECK (Capacity::TENDNEXT == lctrl.markOutgoingCapacity (next, ut ));
+          
+          // but after marking `next` as tended, capacity can be directed elsewhere
+          lctrl.tendNext (next);
+          CHECK (Capacity::IDLETIME == lctrl.markOutgoingCapacity (next, ut ));
+          
+          CHECK (Capacity::IDLETIME == lctrl.markOutgoingCapacity (next, t1 ));
+          CHECK (Capacity::WORKTIME == lctrl.markOutgoingCapacity (next, t2 ));
+          CHECK (Capacity::NEARTIME == lctrl.markOutgoingCapacity (next, t3 ));
+          CHECK (Capacity::SPINTIME == lctrl.markOutgoingCapacity (next, t4 ));
+          
+          CHECK (Capacity::DISPATCH == lctrl.markOutgoingCapacity (next,next));
+          CHECK (Capacity::DISPATCH == lctrl.markOutgoingCapacity (next, t5 ));
+          
+          CHECK (Capacity::IDLETIME == lctrl.markIncomingCapacity (next, ut ));
+          CHECK (Capacity::IDLETIME == lctrl.markIncomingCapacity (next, t1 ));
+          CHECK (Capacity::IDLETIME == lctrl.markIncomingCapacity (next, t2 ));
+          CHECK (Capacity::NEARTIME == lctrl.markIncomingCapacity (next, t3 ));
+          CHECK (Capacity::SPINTIME == lctrl.markIncomingCapacity (next, t4 ));
+          
+          CHECK (Capacity::DISPATCH == lctrl.markIncomingCapacity (next,next));
+          CHECK (Capacity::DISPATCH == lctrl.markIncomingCapacity (next, t5 ));
+          
+          // tend-next works in limited ways also on incoming capacity
+          lctrl.tendNext (Time::NEVER);
+          CHECK (Capacity::IDLETIME == lctrl.markIncomingCapacity (next, ut ));
+          CHECK (Capacity::IDLETIME == lctrl.markIncomingCapacity (next, t1 ));
+          CHECK (Capacity::IDLETIME == lctrl.markIncomingCapacity (next, t2 ));
+          CHECK (Capacity::TENDNEXT == lctrl.markIncomingCapacity (next, t3 ));
+          CHECK (Capacity::SPINTIME == lctrl.markIncomingCapacity (next, t4 ));
+          
+          CHECK (Capacity::DISPATCH == lctrl.markIncomingCapacity (next,next));
+          CHECK (Capacity::DISPATCH == lctrl.markIncomingCapacity (next, t5 ));
+          
+          // while being used rather generously on outgoing capacity
+          CHECK (Capacity::TENDNEXT == lctrl.markOutgoingCapacity (next, ut ));
+          CHECK (Capacity::TENDNEXT == lctrl.markOutgoingCapacity (next, t1 ));
+          CHECK (Capacity::TENDNEXT == lctrl.markOutgoingCapacity (next, t2 ));
+          CHECK (Capacity::TENDNEXT == lctrl.markOutgoingCapacity (next, t3 ));
+          CHECK (Capacity::SPINTIME == lctrl.markOutgoingCapacity (next, t4 ));
+          
+          CHECK (Capacity::DISPATCH == lctrl.markOutgoingCapacity (next,next));
+          CHECK (Capacity::DISPATCH == lctrl.markOutgoingCapacity (next, t5 ));
+        }
       
       
       /** @test TODO

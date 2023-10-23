@@ -169,7 +169,7 @@ namespace gear {
       
       /** classification of time horizon for scheduling */
       static Capacity
-      classifyCapacity (Offset off)
+      classifyTimeHorizon (Offset off)
         {
           if (off > SLEEP_HORIZON) return IDLETIME;
           if (off > WORK_HORIZON)  return WORKTIME;
@@ -179,22 +179,28 @@ namespace gear {
         }
       
       
+      Capacity
+      markOutgoingCapacity (Time head, Time now)
+        {
+          auto horizon = classifyTimeHorizon (Offset{head - now});
+          return horizon > SPINTIME
+             and not tendedNext(head)? TENDNEXT
+                                     : horizon;
+        }
+      
+      Capacity
+      markIncomingCapacity (Time head, Time now)
+        {
+          return classifyTimeHorizon (Offset{head - now})
+               > NEARTIME ? IDLETIME
+                          : markOutgoingCapacity(head,now);
+        }
+      
+      
       Time
       scatteredDelayTime (Capacity capacity)
         {
           UNIMPLEMENTED ("establish a randomised targeted delay time");
-        }
-      
-      Capacity
-      incomingCapacity (Time head, Time now)
-        {
-          UNIMPLEMENTED ("decide how to use incoming free work capacity");
-        }
-      
-      Capacity
-      outgoingCapacity (Time head, Time now)
-        {
-          UNIMPLEMENTED ("decide how to use outgoing free work capacity");
         }
     };
   

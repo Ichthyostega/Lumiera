@@ -308,14 +308,14 @@ namespace gear {
     
     return WorkerInstruction{}
               .performStep([&]{ return scatteredDelay(
-                                          loadControl_.incomingCapacity (head,now)); 
+                                          loadControl_.markIncomingCapacity (head,now)); 
                               })
               .performStep([&]{
                                 Activity* act = layer2_.findWork (layer1_,now);
                                 return ctx.post (now, act, ctx);
                               })
               .performStep([&]{ return scatteredDelay(
-                                          loadControl_.outgoingCapacity (head,now)); 
+                                          loadControl_.markOutgoingCapacity (head,now)); 
                               })
               ;
   }
