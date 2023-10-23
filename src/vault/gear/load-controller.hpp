@@ -143,7 +143,7 @@ namespace gear {
         { }
       
     private:
-      Wiring wiring_;
+      const Wiring wiring_;
       
       TimeVar tendedHead_{Time::ANYTIME};
     public:
@@ -209,10 +209,31 @@ namespace gear {
         }
       
       
-      Time
-      scatteredDelayTime (Capacity capacity)
+      Offset
+      scatteredDelayTime (Time now, Capacity capacity)
         {
-          UNIMPLEMENTED ("establish a randomised targeted delay time");
+          auto scatter = [&](Duration horizon)
+                            {
+                              size_t step = 1;////////////////////////////////////////////////////TODO implement randomisation
+                              return Offset{_raw(horizon) * step / wiring_.maxCapacity};
+                            };
+          
+          switch (capacity) {
+            case DISPATCH:
+              return Offset::ZERO;
+            case SPINTIME:
+              return Offset::ZERO;
+            case TENDNEXT:
+              return Offset{tendedHead_-now};
+            case NEARTIME:
+              return Offset{tendedHead_-now  + scatter(WORK_HORIZON)};
+            case WORKTIME:
+              return Offset{tendedHead_-now  + scatter(SLEEP_HORIZON)};
+            case IDLETIME:
+              return /*without start offset*/  scatter(SLEEP_HORIZON);
+            default:
+              NOTREACHED ("uncovered work capacity classification.");
+            }
         }
     };
   

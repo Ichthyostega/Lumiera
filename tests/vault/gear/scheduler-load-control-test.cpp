@@ -27,6 +27,7 @@
 
 #include "lib/test/run.hpp"
 #include "vault/gear/load-controller.hpp"
+#include "vault/real-clock.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/format-cout.hpp"
 //#include "lib/util.hpp"
@@ -34,7 +35,7 @@
 //#include <utility>
 
 using test::Test;
-//using std::move;
+using std::move;
 //using util::isSameObject;
 
 
@@ -46,6 +47,7 @@ namespace test {
 //  using lib::time::Offset;
 //  using lib::time::Time;
   using Capacity = LoadController::Capacity;
+  using Wiring = LoadController::Wiring;
   
   
   
@@ -67,6 +69,7 @@ namespace test {
            classifyHorizon();
            tendNextActivity();
            classifyCapacity();
+           scatteredReCheck();
            walkingDeadline();
            setupLalup();
         }
@@ -225,6 +228,34 @@ namespace test {
           
           CHECK (Capacity::DISPATCH == lctrl.markOutgoingCapacity (next,next));
           CHECK (Capacity::DISPATCH == lctrl.markOutgoingCapacity (next, t5 ));
+        }
+      
+      
+      
+      /** @test verify the re-distribution of free capacity by targeted delay
+       * @todo WIP 10/23 🔁 define ⟶ implement
+       */
+      void
+      scatteredReCheck()
+        {
+          Wiring setup;
+          setup.maxCapacity = 16;
+          LoadController lctrl{move(setup)};
+          
+          auto isBetween = [](auto lo, auto hi, auto val)
+                              {
+                                return lo <= val and val < hi;
+                              };
+          
+          TimeVar now = RealClock::now();
+          Time next{now + FSecs(10)};
+          lctrl.tendNext (next);
+          CHECK (Time::ZERO ==                              lctrl.scatteredDelayTime (now, Capacity::DISPATCH) );
+          CHECK (Time::ZERO ==                              lctrl.scatteredDelayTime (now, Capacity::SPINTIME) );
+          CHECK (      next ==                              lctrl.scatteredDelayTime (now, Capacity::TENDNEXT) );
+          CHECK (isBetween (      next, next+WORK_HORIZON , lctrl.scatteredDelayTime (now, Capacity::NEARTIME)));
+          CHECK (isBetween (      next, next+SLEEP_HORIZON, lctrl.scatteredDelayTime (now, Capacity::WORKTIME)));
+          CHECK (isBetween (Time::ZERO, SLEEP_HORIZON     , lctrl.scatteredDelayTime (now, Capacity::IDLETIME)));
         }
       
       
