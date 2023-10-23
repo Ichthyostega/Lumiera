@@ -95,6 +95,7 @@ namespace gear {
   
   using lib::time::Time;
   using lib::time::FSecs;
+  using lib::time::TimeVar;
   using lib::time::Offset;
   using lib::time::Duration;
   using std::chrono_literals::operator ""ms;
@@ -126,6 +127,8 @@ namespace gear {
     {
       BlockFlowAlloc& allocator_;
       
+      TimeVar tendedHead_{Time::ANYTIME};
+      
     public:
       explicit
       LoadController (BlockFlowAlloc& blockFlow)
@@ -134,18 +137,25 @@ namespace gear {
       
       
       /**
+       * did we already tend for the indicated next head time?
        * @note const and non-grooming
        */
       bool
-      tendedNext()  const
+      tendedNext (Time nextHead)  const
         {
-          UNIMPLEMENTED ("Predicate to determine if next foreseeable Activity was tended for");
+          return nextHead == tendedHead_;
         }
       
+      /**
+       * Mark the indicated next head time as tended.
+       * @remark while this is just implemented as simple state,
+       *   the meaning is that some free capacity has been directed
+       *   towards that time, and thus further capacity go elsewhere.
+       */
       void
-      tendNext()
+      tendNext (Time nextHead)
         {
-          UNIMPLEMENTED ("tend for the next foreseeable Activity");
+          tendedHead_ = nextHead;
         }
       
       enum

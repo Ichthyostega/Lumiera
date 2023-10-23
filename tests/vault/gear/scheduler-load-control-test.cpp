@@ -65,6 +65,7 @@ namespace test {
         {
            simpleUsage();
            classifyTimings();
+           tendNextActivity();
            walkingDeadline();
            setupLalup();
         }
@@ -94,9 +95,6 @@ namespace test {
       void
       classifyTimings()
         {
-          BlockFlowAlloc bFlow;
-          LoadController ctrl{bFlow};
-          
           Time next{0,10};
           
           Time ut{1,0};
@@ -117,6 +115,46 @@ namespace test {
           
           CHECK (Capacity::DISPATCH == LoadController::classifyCapacity (Offset::ZERO      ));
           CHECK (Capacity::DISPATCH == LoadController::classifyCapacity (Offset{t4 - next }));
+        }
+      
+      
+      
+      /** @test verify the mark for _tended next head_ Activity.
+       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
+       */
+      void
+      tendNextActivity()
+        {
+          BlockFlowAlloc bFlow;
+          LoadController lctrl{bFlow};
+          
+          Time t1{1,0};
+          Time t2{2,0};
+          Time t3{3,0};
+          
+          CHECK (not lctrl.tendedNext (t2));
+          
+          lctrl.tendNext (t2);
+          CHECK (    lctrl.tendedNext (t2));
+          CHECK (not lctrl.tendedNext (t3));
+          
+          lctrl.tendNext (t3);
+          CHECK (    lctrl.tendedNext (t3));
+          
+          // However — this is not a history memory...
+          CHECK (not lctrl.tendedNext (t1));
+          CHECK (not lctrl.tendedNext (t2));
+          CHECK (    lctrl.tendedNext (t3));
+          
+          lctrl.tendNext (t1);
+          CHECK (    lctrl.tendedNext (t1));
+          CHECK (not lctrl.tendedNext (t2));
+          CHECK (not lctrl.tendedNext (t3));
+          
+          lctrl.tendNext (t2);
+          CHECK (not lctrl.tendedNext (t1));
+          CHECK (    lctrl.tendedNext (t2));
+          CHECK (not lctrl.tendedNext (t3));
         }
       
       
