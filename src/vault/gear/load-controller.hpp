@@ -31,6 +31,39 @@
  ** are designed to withstand a short-term imbalance, expecting that general
  ** engine parametrisation will be adjusted based on moving averages.
  **
+ ** # Principles for Engine Load Control
+ ** 
+ ** Scheduling and dispatch of Activities are driven by active workers invoking
+ ** the Scheduler-Service to retrieve the next piece of work. While this scheme
+ ** ensures that the scarce resource (computation or IO capacity) is directed
+ ** towards the most urgent next task, achieving a smooth operation of the engine
+ ** without wasted capacity requires additionally to control the request cycles
+ ** of the workers, possibly removing excess capacity. Whenever a worker pulls
+ ** the next task, an assessment of the timing situation is conducted, and the
+ ** worker is placed into some partition of the overall available capacity,
+ ** to reflect the current load and demand. Workers are thus moved between
+ ** the segments, preferring to assign work to workers already in the active
+ ** segment, thereby allowing idle workers to be shut down after some time.
+ ** 
+ ** The key element to decide upon the classification of a worker is the current
+ ** scheduling situation: are some Activities overdue? does the next Activity
+ ** to be considered reach far into the future? If there is immediately imminent
+ ** work, then capacity is kept around; otherwise the capacity can be considered
+ ** to be in excess for now. A worker not required right now can be sent into a
+ ** targeted sleep delay, in order to shift its capacity into a zone where it
+ ** will more likely be required. It is essential to apply some randomisation
+ ** on such capacity shifts, in order to achieve an even distribution of free
+ ** capacity and avoid contention between workers asking for new assignments.
+ ** 
+ ** When a worker becomes available and is not needed at the moment, the first
+ ** thing to check is the time of the next approaching Activity; this worker
+ ** can then be directed close to this next task, which thereby has been tended
+ ** for and can be marked accordingly. Any further worker appearing meanwhile
+ ** can then be directed into the time zone _after_ the next approaching task.
+ ** Workers immediately returning from active work are always preferred for
+ ** assigning new tasks, while workers returning from idle state are typically
+ ** sent back into idle state, unless there is direct need for more capacity.
+ ** 
  ** @see scheduler.hpp
  ** @see SchedulerStress_test
  ** 
@@ -59,7 +92,27 @@ namespace gear {
   
 //  using util::isnil;
 //  using std::string;
-  using std::chrono::microseconds;
+  
+  using lib::time::Time;
+  using lib::time::FSecs;
+  using lib::time::Offset;
+  using lib::time::Duration;
+  using std::chrono_literals::operator ""ms;
+  using std::chrono_literals::operator ""us;
+  
+  namespace { // Scheduler default config
+    
+    inline TimeValue
+    _uTicks (std::chrono::microseconds us)
+    {
+      return TimeValue{us.count()};
+    }
+    
+     
+    Duration SLEEP_HORIZON{_uTicks (20ms)};
+    Duration WORK_HORIZON {_uTicks ( 5ms)};
+    Duration NOW_HORIZON  {_uTicks (50us)};
+  }
   
   
   /**
@@ -104,15 +157,20 @@ namespace gear {
                ,IDLETIME   ///< time to go to sleep
                };
       
-      Capacity
-      classifyCapacity()  const
+      /** classification of time horizon for scheduling */
+      static Capacity
+      classifyCapacity (Offset off)
         {
-          UNIMPLEMENTED ("establish a categorisation for available capacity");
+          if (off > SLEEP_HORIZON) return IDLETIME;
+          if (off > WORK_HORIZON)  return WORKTIME;
+          if (off > NOW_HORIZON)   return NEARTIME;
+          if (off > Time::ZERO)    return SPINTIME;
+          else                     return DISPATCH;
         }
       
       
-      microseconds
-      scatteredDelayTime()
+      Time
+      scatteredDelayTime (Capacity capacity)
         {
           UNIMPLEMENTED ("establish a randomised targeted delay time");
         }

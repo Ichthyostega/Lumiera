@@ -64,6 +64,10 @@ namespace gear {
 //  using util::isnil;
 //  using std::string;
   using std::move;
+  using lib::time::Time;
+  using lib::time::FSecs;
+  using lib::time::Offset;
+  using lib::time::Duration;
   
   namespace { // Scheduler default config
     
