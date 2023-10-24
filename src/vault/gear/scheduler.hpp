@@ -183,15 +183,8 @@ namespace gear {
         }
       
       
-      /**
-       * send this thread into a targeted short-time wait.
-       * @return how to proceed further with this worker
-       */
-      activity::Proc
-      scatteredDelay (LoadController::Capacity capacity)
-        {
-          UNIMPLEMENTED("scattered short-term delay");
-        }
+      /** send this thread into a targeted short-time wait. */
+      activity::Proc scatteredDelay (Time now, LoadController::Capacity);
       
       
       /**
@@ -202,7 +195,9 @@ namespace gear {
         {
           activity::Proc lastResult = activity::PASS;
           
-          /*** exposes the latest verdict as overall result */
+          /** exposes the latest verdict as overall result
+           * @note returning activity::SKIP from the dispatch
+           *   signals early exit, which is acquitted here. */
           operator activity::Proc()
             {
               return activity::SKIP == lastResult? activity::PASS
@@ -303,7 +298,7 @@ namespace gear {
    * @remarks this function is invoked from within the worker thread(s) and will
    *   - decide if and how the capacity of this worker shall be used right now
    *   - possibly go into a short targeted wait state to redirect capacity at a better time point
-   *   - and most notably jump into the dispatch of the render Activities, to calculate media data.
+   *   - and most notably commence with dispatch of render Activities, to calculate media data.
    * @return an instruction for the work::Worker how to proceed next:
    *   - activity::PROC causes the worker to poll again immediately
    *   - activity::SLEEP induces a sleep state
@@ -317,19 +312,47 @@ namespace gear {
     Time head = layer1_.headTime();
     
     return WorkerInstruction{}
-              .performStep([&]{ return scatteredDelay(
+              .performStep([&]{ return scatteredDelay(now,
                                           loadControl_.markIncomingCapacity (head,now)); 
                               })
               .performStep([&]{
                                 Activity* act = layer2_.findWork (layer1_,now);
                                 return ctx.post (now, act, ctx);
                               })
-              .performStep([&]{ return scatteredDelay(
+              .performStep([&]{ return scatteredDelay(now,
                                           loadControl_.markOutgoingCapacity (head,now)); 
                               })
               ;
   }
-
+  
+  
+  /**
+   * A worker [asking for work](\ref #getWork) constitutes free capacity,
+   * which can be redirected into a focused zone of the scheduler time axis
+   * where it is most likely to be useful, unless there is active work to
+   * be carried out right away.
+   * @param capacity classification of the capacity to employ this thread
+   * @return how to proceed further with this worker
+   * @note as part of the regular work processing, this function may
+   *       place the current thread into a short-term targeted sleep.
+   */
+  inline activity::Proc
+  Scheduler::scatteredDelay (Time now, LoadController::Capacity capacity)
+  {
+    switch (capacity) {
+      case LoadController::DISPATCH:
+        return activity::PASS;
+      case LoadController::SPINTIME:
+        std::this_thread::yield();
+        return activity::PASS;
+      case LoadController::IDLETIME:
+        return activity::WAIT;
+      default:
+        Offset targetedDelay = loadControl_.scatteredDelayTime (now, capacity);
+        std::this_thread::sleep_for (std::chrono::microseconds (_raw(targetedDelay)));
+        return activity::PASS;
+      }
+  }
   
   
   

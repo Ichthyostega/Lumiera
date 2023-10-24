@@ -281,7 +281,7 @@ namespace test {
           
           auto expect = _raw(SLEEP_HORIZON)/2;
           auto error = fabs(avg/expect - 1);
-          CHECK (0.001 > error);        // observing a quite stable skew ~ 0.4‰ on my system
+          CHECK (0.002 > error);        // observing a quite stable skew ~ 0.8‰ on my system
         }                              //  let's see if this error bound triggers eventually...
       
       

@@ -42,8 +42,9 @@
  ** the next task, an assessment of the timing situation is conducted, and the
  ** worker is placed into some partition of the overall available capacity,
  ** to reflect the current load and demand. Workers are thus moved between
- ** the segments, preferring to assign work to workers already in the active
- ** segment, thereby allowing idle workers to be shut down after some time.
+ ** the segments of capacity, preferring to assign work to workers already
+ ** in the active segment, thereby allowing idle workers to be shut down
+ ** after some time.
  ** 
  ** The key element to decide upon the classification of a worker is the current
  ** scheduling situation: are some Activities overdue? does the next Activity
@@ -52,7 +53,7 @@
  ** to be in excess for now. A worker not required right now can be sent into a
  ** targeted sleep delay, in order to shift its capacity into a zone where it
  ** will more likely be required. It is essential to apply some randomisation
- ** on such capacity shifts, in order to achieve an even distribution of free
+ ** on these capacity shifts, in order to achieve an even distribution of free
  ** capacity and avoid contention between workers asking for new assignments.
  ** 
  ** When a worker becomes available and is not needed at the moment, the first
