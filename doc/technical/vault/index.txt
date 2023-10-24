@@ -5,5 +5,4 @@ Here we collect bits of technical documentation for the Vault-Layer.
 
 For now, we have:
 
- * link:ConfigLoader.html[Config Loader brainstorming from 2008]
  * link:scheduler.html[Scheduler and Jobs]

@@ -4,37 +4,16 @@ Scheduler and Job handling
 The purpose of the _Scheduler_ is to run small self contained _Jobs_
 ordered by priority and observing specific timing constraints.
 
-Scheduler implementation ideas
-------------------------------
+NOTE: Subject to [yellow-background]#active design and implementation# work as of 10/2023
 
-Use multiple priority queues
+Work-in-progress documentation can be found in the
+link:{l}/wiki/renderengine.html#PlaybackVerticalSlice%20RenderEngine%20Scheduler%20SchedulerWorker%20SchedulerMemory%20RenderActivity%20Player%20FrameDispatcher%20JobPlanningPipeline%20PlayProcess%20Rendering%20ProcNode%20NodeOperationProtocol[Tiddly Wiki]
 
-- background work
-- foreground high-priority
-- soft-realtime actions
 
 About Jobs
 ----------
 A job is a closure to run a small and limited action or operation, which
 in itself _should not block_. Job may depend on each other and on resources
-to be provided. A job may be conained in multiple queues and may be marked
-as _canceled_ -- in which case the job function will never run and the job
-will be discarded on occasion.
-
-Job States
-~~~~~~~~~~
-
-[source,C]
---------------
-enum job_state
-{ 
-  done,         // already done, nothing to do
-  running,      // job is running 
-  waiting,      // waits for some resource (annother job)
-  rejected,     // sorry, cant do that dave, time will run out
-  expired,      // time expired
-  aborted       // got aborted
-}
---------------
-
+to be provided. A job may be rescheduled prior to invocation, but it is
+activated at most once by an _Scheduler Action._
 
