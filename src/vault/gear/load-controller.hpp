@@ -111,16 +111,17 @@ namespace gear {
       return TimeValue{us.count()};
     }
     
-     
+    
     Duration SLEEP_HORIZON{_uTicks (20ms)};
     Duration WORK_HORIZON {_uTicks ( 5ms)};
     Duration NOW_HORIZON  {_uTicks (50us)};
   }
   
   
+  
   /**
    * Controller to coordinate resource usage related to the Scheduler.
-   * @todo WIP-WIP 10/2023 just a placeholder for now
+   * @todo WIP-WIP 10/2023 gradually filling in functionality as needed
    * @see BlockFlow
    * @see Scheduler
    */
@@ -131,6 +132,7 @@ namespace gear {
       struct Wiring
         {
           size_t maxCapacity{2};
+          ///////TODO add here functors to access performance indicators
         };
       
       explicit
@@ -146,8 +148,8 @@ namespace gear {
       const Wiring wiring_;
       
       TimeVar tendedHead_{Time::ANYTIME};
-    public:
       
+    public:
       /**
        * did we already tend for the indicated next head time?
        * @note const and non-grooming
@@ -163,6 +165,7 @@ namespace gear {
        * @remark while this is just implemented as simple state,
        *   the meaning is that some free capacity has been directed
        *   towards that time, and thus further capacity go elsewhere.
+       * @warning must hold the grooming-Token to use this mutation.
        */
       void
       tendNext (Time nextHead)
@@ -170,14 +173,16 @@ namespace gear {
           tendedHead_ = nextHead;
         }
       
-      enum
-      Capacity {DISPATCH   ///< sent to work
-               ,TENDNEXT   ///< reserved for next task
-               ,SPINTIME   ///< awaiting imminent activities
-               ,NEARTIME   ///< capacity for active processing required
-               ,WORKTIME   ///< typical stable work task rhythm expected
-               ,IDLETIME   ///< time to go to sleep
-               };
+      
+      
+      /** Allocation of capacity to time horizon of expected work */
+      enum Capacity {DISPATCH   ///< sent to work
+                    ,TENDNEXT   ///< reserved for next task
+                    ,SPINTIME   ///< awaiting imminent activities
+                    ,NEARTIME   ///< capacity for active processing required
+                    ,WORKTIME   ///< typical stable work task rhythm expected
+                    ,IDLETIME   ///< time to go to sleep
+                    };
       
       /** classification of time horizon for scheduling */
       static Capacity
@@ -191,6 +196,8 @@ namespace gear {
         }
       
       
+      /** decide how this thread's capacity shall be used
+       *  after it returned from being actively employed */
       Capacity
       markOutgoingCapacity (Time head, Time now)
         {
@@ -200,6 +207,8 @@ namespace gear {
                                      : horizon;
         }
       
+      /** decide how this thread's capacity shall be used
+       *  when returning from idle wait and asking for work */
       Capacity
       markIncomingCapacity (Time head, Time now)
         {
@@ -209,13 +218,30 @@ namespace gear {
         }
       
       
+      
+      /**
+       * Generate a time offset to relocate currently unused capacity
+       * to a time range where it's likely to be needed. Assuming the
+       * classification is based on the current distance to the next
+       * Activity known to the scheduler (the next tended head time).
+       * - for capacity immediately to be dispatched this function
+       *   will not be used, yet returns logically sound values.
+       * - after the next head time has been tended for, free capacity
+       *   should be relocated into a time span behind that point
+       * - the closer the next head time, the more focused this relocation
+       * - but each individual delay is randomised within those time bounds,
+       *   to produce an even »flow« of capacity on average. Randomisation
+       *   relies on a hash (bit rotation) of current time, broken down
+       *   to the desired time horizon.
+       */
       Offset
       scatteredDelayTime (Time now, Capacity capacity)
         {
           auto scatter = [&](Duration horizon)
                             {
-                              size_t step = 1;////////////////////////////////////////////////////TODO implement randomisation
-                              return Offset{_raw(horizon) * step / wiring_.maxCapacity};
+                              gavl_time_t wrap = hash_value(now) % _raw(horizon);
+                              ENSURE (0 <= wrap and wrap < _raw(horizon));
+                              return TimeValue{wrap};
                             };
           
           switch (capacity) {
@@ -230,7 +256,7 @@ namespace gear {
             case WORKTIME:
               return Offset{tendedHead_-now  + scatter(SLEEP_HORIZON)};
             case IDLETIME:
-              return /*without start offset*/  scatter(SLEEP_HORIZON);
+              return Offset{/*no base offset*/ scatter(SLEEP_HORIZON)};
             default:
               NOTREACHED ("uncovered work capacity classification.");
             }

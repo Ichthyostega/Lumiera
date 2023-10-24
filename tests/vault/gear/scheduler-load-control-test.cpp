@@ -31,6 +31,7 @@
 //#include "lib/time/timevalue.hpp"
 //#include "lib/format-cout.hpp"
 //#include "lib/util.hpp"
+#include "lib/test/diagnostic-output.hpp"/////////////////////TODO
 
 //#include <utility>
 
@@ -70,8 +71,8 @@ namespace test {
            tendNextActivity();
            classifyCapacity();
            scatteredReCheck();
+           
            walkingDeadline();
-           setupLalup();
         }
       
       
@@ -82,6 +83,7 @@ namespace test {
       simpleUsage()
         {
           LoadController ctrl;
+          /////////////////////////TODO a simple usage example focusing on load diagnostics
         }
       
       
@@ -233,30 +235,55 @@ namespace test {
       
       
       /** @test verify the re-distribution of free capacity by targeted delay
-       * @todo WIP 10/23 🔁 define ⟶ implement
+       *      - the implementation uses the next-tended start time as anchor point
+       *      - capacity classes which should be scheduled right away will actually
+       *        never call this function — yet still a sensible value is returned here
+       *      - capacity targeted at current work will be redistributed behind the
+       *        next-tended time, and within a time span corresponding to the work realm
+       *      - capacity targeted towards more future work will be distributed within
+       *        the horizon defined by the sleep-cycle
+       *      - especially for capacity sent to sleep, this redistribution works
+       *        without being shifted behind the next-tended time, since in that case
+       *        the goal is to produce a random distribution of the »sleeper« callbacks.
+       *      - the offset is indeed randomised, using current time for randomisation
+       * @see LoadController::scatteredDelayTime()
+       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
       scatteredReCheck()
         {
-          Wiring setup;
-          setup.maxCapacity = 16;
-          LoadController lctrl{move(setup)};
-          
-          auto isBetween = [](auto lo, auto hi, auto val)
+          auto is_between = [](auto lo, auto hi, auto val)
                               {
                                 return lo <= val and val < hi;
                               };
           
+          LoadController lctrl;
+          
           TimeVar now = RealClock::now();
-          Time next{now + FSecs(10)};
-          lctrl.tendNext (next);
+          Offset ten{FSecs(10)};
+          Time next{now + ten};
+          lctrl.tendNext(next);
+          
           CHECK (Time::ZERO ==                              lctrl.scatteredDelayTime (now, Capacity::DISPATCH) );
           CHECK (Time::ZERO ==                              lctrl.scatteredDelayTime (now, Capacity::SPINTIME) );
-          CHECK (      next ==                              lctrl.scatteredDelayTime (now, Capacity::TENDNEXT) );
-          CHECK (isBetween (      next, next+WORK_HORIZON , lctrl.scatteredDelayTime (now, Capacity::NEARTIME)));
-          CHECK (isBetween (      next, next+SLEEP_HORIZON, lctrl.scatteredDelayTime (now, Capacity::WORKTIME)));
-          CHECK (isBetween (Time::ZERO, SLEEP_HORIZON     , lctrl.scatteredDelayTime (now, Capacity::IDLETIME)));
-        }
+          CHECK (       ten ==                              lctrl.scatteredDelayTime (now, Capacity::TENDNEXT) );
+          CHECK (is_between (       ten, ten+ WORK_HORIZON, lctrl.scatteredDelayTime (now, Capacity::NEARTIME)));
+          CHECK (is_between (       ten, ten+SLEEP_HORIZON, lctrl.scatteredDelayTime (now, Capacity::WORKTIME)));
+          CHECK (is_between (Time::ZERO,     SLEEP_HORIZON, lctrl.scatteredDelayTime (now, Capacity::IDLETIME)));
+          
+          // Offset is randomised based on the current time
+          // Verify this yields an even distribution
+          double avg{0};
+          const size_t REPETITIONS = 1e6;
+          for (size_t i=0; i< REPETITIONS; ++i)
+            avg += _raw(lctrl.scatteredDelayTime (RealClock::now(), Capacity::IDLETIME));
+          avg /= REPETITIONS;
+          
+          auto expect = _raw(SLEEP_HORIZON)/2;
+          auto error = fabs(avg/expect - 1);
+          CHECK (0.001 > error);        // observing a quite stable skew ~ 0.4‰ on my system
+        }                              //  let's see if this error bound triggers eventually...
+      
       
       
       /** @test TODO
@@ -266,16 +293,6 @@ namespace test {
       walkingDeadline()
         {
           UNIMPLEMENTED ("walking Deadline");
-        }
-      
-      
-      
-      /** @test TODO
-       * @todo WIP 10/23 🔁 define ⟶ implement
-       */
-      void
-      setupLalup()
-        {
         }
     };
   
