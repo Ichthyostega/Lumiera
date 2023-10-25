@@ -26,9 +26,10 @@
 
 
 #include "lib/test/run.hpp"
+#include "activity-detector.hpp"
 #include "vault/gear/scheduler.hpp"
-//#include "lib/time/timevalue.hpp"
-//#include "lib/format-cout.hpp"
+#include "lib/time/timevalue.hpp"
+#include "lib/format-cout.hpp"
 //#include "lib/util.hpp"
 
 //#include <utility>
@@ -44,7 +45,7 @@ namespace test {
   
 //  using lib::time::FrameRate;
 //  using lib::time::Offset;
-//  using lib::time::Time;
+  using lib::time::Time;
   
   
   
@@ -64,8 +65,8 @@ namespace test {
       run (Arg)
         {
            simpleUsage();
+           invokeWorkFunction();
            walkingDeadline();
-           setupLalup();
         }
       
       
@@ -82,13 +83,29 @@ namespace test {
       
       
       
-      /** @test TODO
+      /** @test TODO verify visible behaviour of the work-pulling function
        * @todo WIP 10/23 🔁 define ⟶ implement
        */
       void
-      walkingDeadline()
+      invokeWorkFunction()
         {
-          UNIMPLEMENTED ("walking Deadline");
+          BlockFlowAlloc bFlow;
+          EngineObserver watch;
+          Scheduler scheduler{bFlow, watch};
+          
+          ActivityDetector detector;
+          Activity& probe = detector.buildActivationProbe ("testProbe");
+          
+          // this test class is declared friend to get a backdoor to Scheduler internals...
+          auto& schedCtx = Scheduler::ExecutionCtx::from(scheduler);
+          Time now = schedCtx.getSchedTime();
+          schedCtx.post (now, &probe, schedCtx);
+          
+          CHECK (activity::WAIT == scheduler.getWork());
+          
+          cout << detector.showLog()<<endl; // HINT: use this for investigation...
+          CHECK (detector.verifyInvocation("testProbe"));
+          ////////////////////////////////////////////////////////////////////////////////////TODO need a way to get the actual time passed to the Probe
         }
       
       
@@ -97,8 +114,9 @@ namespace test {
        * @todo WIP 10/23 🔁 define ⟶ implement
        */
       void
-      setupLalup()
+      walkingDeadline()
         {
+          UNIMPLEMENTED ("walking Deadline");
         }
     };
   

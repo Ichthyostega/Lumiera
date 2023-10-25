@@ -191,9 +191,9 @@ namespace test {
           
           // but after marking `next` as tended, capacity can be directed elsewhere
           lctrl.tendNext (next);
-          CHECK (Capacity::IDLEWAIT == lctrl.markOutgoingCapacity (next, ut ));
+          CHECK (Capacity::WORKTIME == lctrl.markOutgoingCapacity (next, ut ));
           
-          CHECK (Capacity::IDLEWAIT == lctrl.markOutgoingCapacity (next, t1 ));
+          CHECK (Capacity::WORKTIME == lctrl.markOutgoingCapacity (next, t1 ));
           CHECK (Capacity::WORKTIME == lctrl.markOutgoingCapacity (next, t2 ));
           CHECK (Capacity::NEARTIME == lctrl.markOutgoingCapacity (next, t3 ));
           CHECK (Capacity::SPINTIME == lctrl.markOutgoingCapacity (next, t4 ));

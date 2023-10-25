@@ -50,6 +50,7 @@
 #include "vault/gear/scheduler-invocation.hpp"
 #include "vault/gear/load-controller.hpp"
 #include "vault/gear/engine-observer.hpp"
+#include "vault/real-clock.hpp"
 //#include "lib/symbol.hpp"
 #include  "lib/nocopy.hpp"
 //#include "lib/util.hpp"
@@ -68,6 +69,10 @@ namespace gear {
   using lib::time::FSecs;
   using lib::time::Offset;
   using lib::time::Duration;
+  
+  namespace test {  // declared friend for test access
+    class SchedulerService_test;
+  }
   
   namespace { // Scheduler default config
     
@@ -226,6 +231,10 @@ namespace gear {
       
       /** @internal expose a binding for Activity execution */
       class ExecutionCtx;
+      
+      
+      /** open private backdoor for tests */
+      friend class test::SchedulerService_test;
     };
   
   
@@ -284,10 +293,11 @@ namespace gear {
           return POLL_WAIT_DELAY;
         }
       
+      /** access high-resolution-clock, rounded to µ-Ticks */
       Time
       getSchedTime()
         {
-          UNIMPLEMENTED ("access scheduler Time");
+          return RealClock::now();
         }
     };
   

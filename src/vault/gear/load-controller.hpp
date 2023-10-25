@@ -205,7 +205,8 @@ namespace gear {
           auto horizon = classifyTimeHorizon (Offset{head - now});
           return horizon > SPINTIME
              and not tendedNext(head)? TENDNEXT
-                                     : horizon;
+                                     : horizon==IDLEWAIT ? WORKTIME
+                                                         : horizon;
         }
       
       /** decide how this thread's capacity shall be used
