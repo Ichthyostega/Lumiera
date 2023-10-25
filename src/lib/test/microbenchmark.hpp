@@ -88,7 +88,7 @@ namespace test{
     auto start = system_clock::now();
     invokeTestLoop();
     Dur duration = system_clock::now () - start;
-    return duration.count()/(repeatCnt);
+    return duration.count() / repeatCnt;
   };
   
   

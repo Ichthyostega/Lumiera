@@ -123,6 +123,12 @@ namespace gear {
         { }
       
       
+      bool
+      empty()  const
+        {
+          return layer1_.empty();
+        }
+      
       /**
        * 
        */

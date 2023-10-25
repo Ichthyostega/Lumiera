@@ -30,6 +30,7 @@
 #include "vault/gear/scheduler.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/test/microbenchmark.hpp"
 #include "lib/test/diagnostic-output.hpp"///////////////TODO
 //#include "lib/util.hpp"
 
@@ -99,22 +100,51 @@ namespace test {
           
           // this test class is declared friend to get a backdoor to Scheduler internals...
           auto& schedCtx = Scheduler::ExecutionCtx::from(scheduler);
-          Time now = schedCtx.getSchedTime();
-          schedCtx.post (now, &probe, schedCtx);
           
-          CHECK (activity::WAIT == scheduler.getWork());
           
-          cout << detector.showLog()<<endl; // HINT: use this for investigation...
-          CHECK (detector.verifyInvocation("testProbe"));
-          ////////////////////////////////////////////////////////////////////////////////////TODO need a way to get the actual time passed to the Probe
-SHOW_EXPR(now)
-SHOW_EXPR(detector.invokeTime(probe))
 
           auto wasClose = [](TimeValue a, TimeValue b)
-                            {
-                              return Duration{Offset{a,b}} < Duration{FSecs{1,2000}}; // 500µs are considered "close"
-                            };
-          CHECK (wasClose (now, detector.invokeTime (probe)));
+                              {                                // 500µs are considered "close"
+                                return Duration{Offset{a,b}} < Duration{FSecs{1,2000}};
+                              };
+          auto wasInvoked = [&](Time start)
+                              {
+                                Time invoked = detector.invokeTime (probe);
+                                return invoked >= start
+                                   and wasClose (invoked, start);
+                              };
+          
+          TimeVar start = RealClock::now();
+          schedCtx.post (start, &probe, schedCtx);
+SHOW_EXPR(_raw(start))
+SHOW_EXPR(_raw(detector.invokeTime(probe)))
+          
+          CHECK (wasInvoked(start));
+          CHECK (scheduler.empty());
+          
+          activity::Proc res;
+          double delay_us;
+          int64_t slip_us;
+          
+          
+          auto pullWork = [&] {
+                                uint REPETITIONS = 1;
+                                delay_us = lib::test::benchmarkTime([&]{ res = scheduler.getWork(); }, REPETITIONS);
+                                slip_us = _raw(detector.invokeTime(probe)) - _raw(start);
+                              };
+
+//          start = RealClock::now();
+          pullWork();
+          
+SHOW_EXPR(_raw(start))
+SHOW_EXPR(_raw(detector.invokeTime(probe)))
+SHOW_EXPR(res);
+SHOW_EXPR(delay_us)
+SHOW_EXPR(slip_us)
+SHOW_EXPR(wasInvoked(start))
+          CHECK (activity::WAIT == res);
+          
+          cout << detector.showLog()<<endl; // HINT: use this for investigation...
         }
       
       
