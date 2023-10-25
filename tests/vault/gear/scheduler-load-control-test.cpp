@@ -108,10 +108,10 @@ namespace test {
           Time t21{t2 + ut};
           Time t3{next - WORK_HORIZON};
           Time t31{t3 + ut};
-          Time t4{next - NOW_HORIZON};
+          Time t4{next - NEAR_HORIZON};
           
-          CHECK (Capacity::IDLETIME == LoadController::classifyTimeHorizon (Offset{next - ut }));
-          CHECK (Capacity::IDLETIME == LoadController::classifyTimeHorizon (Offset{next - t1 }));
+          CHECK (Capacity::IDLEWAIT == LoadController::classifyTimeHorizon (Offset{next - ut }));
+          CHECK (Capacity::IDLEWAIT == LoadController::classifyTimeHorizon (Offset{next - t1 }));
           CHECK (Capacity::WORKTIME == LoadController::classifyTimeHorizon (Offset{next - t2 }));
           CHECK (Capacity::WORKTIME == LoadController::classifyTimeHorizon (Offset{next - t21}));
           CHECK (Capacity::NEARTIME == LoadController::classifyTimeHorizon (Offset{next - t3 }));
@@ -183,7 +183,7 @@ namespace test {
           Time t1{0,9};
           Time t2{next - SLEEP_HORIZON};
           Time t3{next - WORK_HORIZON};
-          Time t4{next - NOW_HORIZON};
+          Time t4{next - NEAR_HORIZON};
           Time t5{next + ut};                              //       ╭──────────────  next Activity at scheduler head
                                                           //        │     ╭────────  current time of evaluation
           // Time `next` has not been tended yet...      //         ▼     ▼
@@ -191,9 +191,9 @@ namespace test {
           
           // but after marking `next` as tended, capacity can be directed elsewhere
           lctrl.tendNext (next);
-          CHECK (Capacity::IDLETIME == lctrl.markOutgoingCapacity (next, ut ));
+          CHECK (Capacity::IDLEWAIT == lctrl.markOutgoingCapacity (next, ut ));
           
-          CHECK (Capacity::IDLETIME == lctrl.markOutgoingCapacity (next, t1 ));
+          CHECK (Capacity::IDLEWAIT == lctrl.markOutgoingCapacity (next, t1 ));
           CHECK (Capacity::WORKTIME == lctrl.markOutgoingCapacity (next, t2 ));
           CHECK (Capacity::NEARTIME == lctrl.markOutgoingCapacity (next, t3 ));
           CHECK (Capacity::SPINTIME == lctrl.markOutgoingCapacity (next, t4 ));
@@ -201,9 +201,9 @@ namespace test {
           CHECK (Capacity::DISPATCH == lctrl.markOutgoingCapacity (next,next));
           CHECK (Capacity::DISPATCH == lctrl.markOutgoingCapacity (next, t5 ));
           
-          CHECK (Capacity::IDLETIME == lctrl.markIncomingCapacity (next, ut ));
-          CHECK (Capacity::IDLETIME == lctrl.markIncomingCapacity (next, t1 ));
-          CHECK (Capacity::IDLETIME == lctrl.markIncomingCapacity (next, t2 ));
+          CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, ut ));
+          CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, t1 ));
+          CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, t2 ));
           CHECK (Capacity::NEARTIME == lctrl.markIncomingCapacity (next, t3 ));
           CHECK (Capacity::SPINTIME == lctrl.markIncomingCapacity (next, t4 ));
           
@@ -212,9 +212,9 @@ namespace test {
           
           // tend-next works in limited ways also on incoming capacity
           lctrl.tendNext (Time::NEVER);
-          CHECK (Capacity::IDLETIME == lctrl.markIncomingCapacity (next, ut ));
-          CHECK (Capacity::IDLETIME == lctrl.markIncomingCapacity (next, t1 ));
-          CHECK (Capacity::IDLETIME == lctrl.markIncomingCapacity (next, t2 ));
+          CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, ut ));
+          CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, t1 ));
+          CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, t2 ));
           CHECK (Capacity::TENDNEXT == lctrl.markIncomingCapacity (next, t3 ));
           CHECK (Capacity::SPINTIME == lctrl.markIncomingCapacity (next, t4 ));
           
@@ -269,14 +269,14 @@ namespace test {
           CHECK (       ten ==                              lctrl.scatteredDelayTime (now, Capacity::TENDNEXT) );
           CHECK (is_between (       ten, ten+ WORK_HORIZON, lctrl.scatteredDelayTime (now, Capacity::NEARTIME)));
           CHECK (is_between (       ten, ten+SLEEP_HORIZON, lctrl.scatteredDelayTime (now, Capacity::WORKTIME)));
-          CHECK (is_between (Time::ZERO,     SLEEP_HORIZON, lctrl.scatteredDelayTime (now, Capacity::IDLETIME)));
+          CHECK (is_between (Time::ZERO,     SLEEP_HORIZON, lctrl.scatteredDelayTime (now, Capacity::IDLEWAIT)));
           
           // Offset is randomised based on the current time
           // Verify this yields an even distribution
           double avg{0};
           const size_t REPETITIONS = 1e6;
           for (size_t i=0; i< REPETITIONS; ++i)
-            avg += _raw(lctrl.scatteredDelayTime (RealClock::now(), Capacity::IDLETIME));
+            avg += _raw(lctrl.scatteredDelayTime (RealClock::now(), Capacity::IDLEWAIT));
           avg /= REPETITIONS;
           
           auto expect = _raw(SLEEP_HORIZON)/2;

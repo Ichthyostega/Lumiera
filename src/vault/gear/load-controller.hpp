@@ -115,7 +115,7 @@ namespace gear {
     
     Duration SLEEP_HORIZON{_uTicks (20ms)};
     Duration WORK_HORIZON {_uTicks ( 5ms)};
-    Duration NOW_HORIZON  {_uTicks (50us)};
+    Duration NEAR_HORIZON {_uTicks (50us)};
   }
   
   
@@ -182,16 +182,16 @@ namespace gear {
                     ,SPINTIME   ///< awaiting imminent activities
                     ,NEARTIME   ///< capacity for active processing required
                     ,WORKTIME   ///< typical stable work task rhythm expected
-                    ,IDLETIME   ///< time to go to sleep
+                    ,IDLEWAIT   ///< time to go to sleep
                     };
       
       /** classification of time horizon for scheduling */
       static Capacity
       classifyTimeHorizon (Offset off)
         {
-          if (off > SLEEP_HORIZON) return IDLETIME;
+          if (off > SLEEP_HORIZON) return IDLEWAIT;
           if (off > WORK_HORIZON)  return WORKTIME;
-          if (off > NOW_HORIZON)   return NEARTIME;
+          if (off > NEAR_HORIZON)  return NEARTIME;
           if (off > Time::ZERO)    return SPINTIME;
           else                     return DISPATCH;
         }
@@ -214,7 +214,7 @@ namespace gear {
       markIncomingCapacity (Time head, Time now)
         {
           return classifyTimeHorizon (Offset{head - now})
-               > NEARTIME ? IDLETIME
+               > NEARTIME ? IDLEWAIT
                           : markOutgoingCapacity(head,now);
         }
       
@@ -256,7 +256,7 @@ namespace gear {
               return Offset{tendedHead_-now  + scatter(WORK_HORIZON)};
             case WORKTIME:
               return Offset{tendedHead_-now  + scatter(SLEEP_HORIZON)};
-            case IDLETIME:
+            case IDLEWAIT:
               return Offset{/*no base offset*/ scatter(SLEEP_HORIZON)};
             default:
               NOTREACHED ("uncovered work capacity classification.");

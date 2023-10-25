@@ -308,19 +308,24 @@ namespace gear {
   Scheduler::getWork()
   {
     ExecutionCtx& ctx = ExecutionCtx::from(*this);
-    Time now = ctx.getSchedTime();
-    Time head = layer1_.headTime();
     
     return WorkerInstruction{}
-              .performStep([&]{ return scatteredDelay(now,
-                                          loadControl_.markIncomingCapacity (head,now)); 
+              .performStep([&]{
+                                Time now = ctx.getSchedTime();
+                                Time head = layer1_.headTime();
+                                return scatteredDelay(now,
+                                          loadControl_.markIncomingCapacity (head,now));
                               })
               .performStep([&]{
+                                Time now = ctx.getSchedTime();
                                 Activity* act = layer2_.findWork (layer1_,now);
                                 return ctx.post (now, act, ctx);
                               })
-              .performStep([&]{ return scatteredDelay(now,
-                                          loadControl_.markOutgoingCapacity (head,now)); 
+              .performStep([&]{
+                                Time now = ctx.getSchedTime();
+                                Time head = layer1_.headTime();
+                                return scatteredDelay(now,
+                                          loadControl_.markOutgoingCapacity (head,now));
                               })
               ;
   }
@@ -333,6 +338,9 @@ namespace gear {
    * be carried out right away.
    * @param capacity classification of the capacity to employ this thread
    * @return how to proceed further with this worker
+   *       - activity::PASS indicates to proceed or call back immediately
+   *       - activity::SKIP causes to exit this round, yet call back again
+   *       - activity::WAIT exits and places the worker into sleep mode
    * @note as part of the regular work processing, this function may
    *       place the current thread into a short-term targeted sleep.
    */
@@ -344,13 +352,23 @@ namespace gear {
         return activity::PASS;
       case LoadController::SPINTIME:
         std::this_thread::yield();
-        return activity::PASS;
-      case LoadController::IDLETIME:
+        return activity::SKIP;
+      case LoadController::IDLEWAIT:
         return activity::WAIT;
+      case LoadController::TENDNEXT:
+        {
+          Time head = layer1_.headTime();
+          auto self = std::this_thread::get_id();
+          if (not loadControl_.tendedNext(head)
+              and (layer2_.holdsGroomingToken(self)
+                  or layer2_.acquireGoomingToken()))
+            loadControl_.tendNext(head);
+        }// Fall-through to perform targeted wait
+        // @suppress("No break at end of case")
       default:
         Offset targetedDelay = loadControl_.scatteredDelayTime (now, capacity);
         std::this_thread::sleep_for (std::chrono::microseconds (_raw(targetedDelay)));
-        return activity::PASS;
+        return activity::SKIP;  //  indicates to abort this processing-chain for good
       }
   }
   
