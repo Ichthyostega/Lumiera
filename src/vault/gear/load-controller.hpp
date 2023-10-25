@@ -202,10 +202,11 @@ namespace gear {
       Capacity
       markOutgoingCapacity (Time head, Time now)
         {
+          if (head == Time::NEVER) return IDLEWAIT;                    // empty queue
           auto horizon = classifyTimeHorizon (Offset{head - now});
           return horizon > SPINTIME
              and not tendedNext(head)? TENDNEXT
-                                     : horizon==IDLEWAIT ? WORKTIME
+                                     : horizon==IDLEWAIT ? WORKTIME    // re-randomise sleeper cycles
                                                          : horizon;
         }
       

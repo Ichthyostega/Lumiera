@@ -194,7 +194,7 @@ namespace gear {
       Time
       headTime()  const
         {
-          return priority_.empty()? Time::ANYTIME
+          return priority_.empty()? Time::NEVER
                                   : Time{TimeValue{priority_.top().waterlevel}};
         }                              //Note: 64-bit waterLevel corresponds to µ-Ticks
       

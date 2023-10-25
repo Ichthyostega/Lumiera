@@ -35,6 +35,7 @@
 //#include "lib/util.hpp"
 
 //#include <utility>
+#include <thread>
 
 using test::Test;
 //using std::move;
@@ -48,7 +49,14 @@ namespace test {
 //  using lib::time::FrameRate;
 //  using lib::time::Offset;
   using lib::time::Time;
+  using std::this_thread::sleep_for;
   
+  namespace {                            ////////////////////////////////////////////////////////////////////TICKET #1055 want to construct lumiera Time from std::chrono literals
+    Time t100us = Time{FSecs{1, 10'000}};
+    Time t200us = t100us + t100us;
+    Time t500us = t200us + t200us + t100us;
+    Time t1ms   = Time{1,0};
+  }
   
   
   
@@ -85,7 +93,13 @@ namespace test {
       
       
       
-      /** @test TODO verify visible behaviour of the work-pulling function
+      /** @test verify visible behaviour of the [work-pulling function](\ref Scheduler::getWork)
+       *      - use a rigged Activity probe to capture the schedule time on invocation
+       *      - additionally perform a timing measurement for invoking the work-function
+       *      - empty invocations cost ~5µs (-O3) rsp. ~25µs (debug)
+       *      - this implies we can show timing-delay effects in the millisecond range
+       *      - demonstrated behaviour
+       *        + an Activity already due will be dispatched immediately by post()
        * @todo WIP 10/23 🔁 define ⟶ implement
        */
       void
@@ -98,9 +112,24 @@ namespace test {
           ActivityDetector detector;
           Activity& probe = detector.buildActivationProbe ("testProbe");
           
-          // this test class is declared friend to get a backdoor to Scheduler internals...
-          auto& schedCtx = Scheduler::ExecutionCtx::from(scheduler);
+          TimeVar start;
+          int64_t delay_us;
+          int64_t slip_us;
+          activity::Proc res;
+
+          auto post = [&](Time start)
+                              { // this test class is declared friend to get a backdoor to Scheduler internals...
+                                auto& schedCtx = Scheduler::ExecutionCtx::from(scheduler);
+                                
+                                schedCtx.post (start, &probe, schedCtx);
+                              };
           
+          auto pullWork = [&] {
+                                uint REPETITIONS = 1;
+                                delay_us = lib::test::benchmarkTime([&]{ res = scheduler.getWork(); }, REPETITIONS);
+                                slip_us = _raw(detector.invokeTime(probe)) - _raw(start);
+                                cout << "res:"<<res<<" delay="<<delay_us<<"µs slip="<<slip_us<<"µs"<<endl;
+                              };
           
 
           auto wasClose = [](TimeValue a, TimeValue b)
@@ -114,25 +143,17 @@ namespace test {
                                    and wasClose (invoked, start);
                               };
           
-          TimeVar start = RealClock::now();
-          schedCtx.post (start, &probe, schedCtx);
+          cout << "Scheduled right away..."<<endl;
+          start = RealClock::now();
+          post(start);
+          
 SHOW_EXPR(_raw(start))
 SHOW_EXPR(_raw(detector.invokeTime(probe)))
           
           CHECK (wasInvoked(start));
           CHECK (scheduler.empty());
-          
-          activity::Proc res;
-          double delay_us;
-          int64_t slip_us;
-          
-          
-          auto pullWork = [&] {
-                                uint REPETITIONS = 1;
-                                delay_us = lib::test::benchmarkTime([&]{ res = scheduler.getWork(); }, REPETITIONS);
-                                slip_us = _raw(detector.invokeTime(probe)) - _raw(start);
-                              };
 
+          cout << "pullWork() on empty queue..."<<endl;
 //          start = RealClock::now();
           pullWork();
           
@@ -143,6 +164,104 @@ SHOW_EXPR(delay_us)
 SHOW_EXPR(slip_us)
 SHOW_EXPR(wasInvoked(start))
           CHECK (activity::WAIT == res);
+          CHECK (slip_us  < 100);
+          
+          cout << "Due at pullWork()..."<<endl;
+          TimeVar now = RealClock::now();
+          start = now + t100us;
+          post (start);
+          CHECK (not scheduler.empty());
+          
+          TimeVar cow = RealClock::now();
+          sleep_for (100us);
+          TimeVar wow = RealClock::now();
+          pullWork();
+SHOW_EXPR(_raw(now))
+SHOW_EXPR(_raw(cow))
+SHOW_EXPR(_raw(wow))
+SHOW_EXPR(_raw(start))
+SHOW_EXPR(_raw(detector.invokeTime(probe)))
+SHOW_EXPR(res);
+SHOW_EXPR(delay_us)
+SHOW_EXPR(slip_us)
+SHOW_EXPR(wasInvoked(start))
+          CHECK (activity::WAIT == res);
+          CHECK (wasInvoked(start));
+          CHECK (scheduler.empty());
+          CHECK (delay_us < 500);
+          CHECK (slip_us  < 500);
+
+          cout << "next some time ahead => up-front delay"<<endl;
+          now = RealClock::now();
+          start = now + t500us;
+          post (start);
+          CHECK (not scheduler.empty());
+          
+          pullWork();
+SHOW_EXPR(_raw(now))
+SHOW_EXPR(_raw(cow))
+SHOW_EXPR(_raw(wow))
+SHOW_EXPR(_raw(start))
+SHOW_EXPR(_raw(detector.invokeTime(probe)))
+SHOW_EXPR(res);
+SHOW_EXPR(delay_us)
+SHOW_EXPR(slip_us)
+SHOW_EXPR(wasInvoked(start))
+          CHECK (activity::PASS == res);
+          CHECK (not wasInvoked(start));
+          CHECK (delay_us > 500);
+          CHECK (delay_us < 1000);
+          pullWork();
+SHOW_EXPR(_raw(now))
+SHOW_EXPR(_raw(start))
+SHOW_EXPR(_raw(detector.invokeTime(probe)))
+SHOW_EXPR(res);
+SHOW_EXPR(delay_us)
+SHOW_EXPR(slip_us)
+SHOW_EXPR(wasInvoked(start))
+          CHECK (wasInvoked(start));
+          CHECK (delay_us < 200);
+          CHECK (slip_us  < 500);
+          CHECK (activity::WAIT == res);
+          CHECK (scheduler.empty());
+          
+          cout << "follow-up with some distance => follow-up delay"<<endl;
+          now = RealClock::now();
+          start = now + t100us;
+          post (start);
+          post (start+t1ms);
+          sleep_for (100us);
+          pullWork();
+SHOW_EXPR(_raw(now))
+SHOW_EXPR(_raw(start))
+SHOW_EXPR(_raw(detector.invokeTime(probe)))
+SHOW_EXPR(res);
+SHOW_EXPR(delay_us)
+SHOW_EXPR(slip_us)
+SHOW_EXPR(wasInvoked(start))
+SHOW_EXPR(scheduler.empty())
+          CHECK (wasInvoked(start));
+          CHECK (delay_us > 900);
+          CHECK (slip_us  < 100);
+          CHECK (activity::PASS == res);
+          CHECK (not scheduler.empty());
+          
+          start += t1ms;
+          pullWork();
+SHOW_EXPR(_raw(now))
+SHOW_EXPR(_raw(start))
+SHOW_EXPR(_raw(detector.invokeTime(probe)))
+SHOW_EXPR(res);
+SHOW_EXPR(delay_us)
+SHOW_EXPR(slip_us)
+SHOW_EXPR(wasInvoked(start))
+SHOW_EXPR(scheduler.empty())
+          CHECK (wasInvoked(start));
+          CHECK (delay_us < 500);
+          CHECK (slip_us  < 500);
+          CHECK (activity::WAIT == res);
+          CHECK (scheduler.empty());
+          
           
           cout << detector.showLog()<<endl; // HINT: use this for investigation...
         }
