@@ -345,16 +345,18 @@ namespace test {
        */
       class ActivityProbe
         : public Activity
-        , activity::Hook
+        , public activity::Hook
         {
           Logger log_;
-          
+          TimeVar invoked_{Time::ANYTIME};
+
           activity::Proc
           activation ( Activity& thisHook
                      , Time now
                      , void* executionCtx)  override
           {
             REQUIRE (thisHook.is (Activity::HOOK));
+            invoked_ = now;
             if (data_.callback.arg == 0)
               {// no adapted target; just record this activation
                 log_(util::toString(now) + " ⧐ ");
@@ -375,6 +377,7 @@ namespace test {
                      , void* executionCtx)  override
           {
             REQUIRE (thisHook.is (Activity::HOOK));
+            invoked_ = now;
             if (data_.callback.arg == 0)
               {// no adapted target; just record this notification
                 log_(util::toString(now) + " --notify-↯• ");
@@ -411,6 +414,19 @@ namespace test {
           operator string()  const
             {
               return diagnostic();
+            }
+          
+          
+          static Time
+          lastInvoked (Activity const* act)
+            {
+              if (act and act->verb_ == HOOK)
+                {
+                  ActivityProbe* probe = dynamic_cast<ActivityProbe*> (act->data_.callback.hook); 
+                  if (probe)
+                    return probe->invoked_;
+                }
+              return Time::NEVER;
             }
         };
       
@@ -541,6 +557,12 @@ namespace test {
                          : & buildActivationProbe (isnil(id)? "tail-"+util::showAddr(&wiring) : id);
           return *wiring;
         }
+      
+      
+      Time invokeTime (Activity const* hook) { return ActivityProbe::lastInvoked (hook); }
+      bool wasInvoked (Activity const* hook) { return invokeTime(hook).isRegular(); }
+      Time invokeTime (Activity const& hook) { return invokeTime (&hook); }
+      bool wasInvoked (Activity const& hook) { return wasInvoked (&hook); }
       
       
       struct FakeExecutionCtx;

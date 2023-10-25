@@ -194,6 +194,9 @@ namespace time {
       /** @internal diagnostics */
       operator std::string ()  const;
       
+      /** @return is in-domain, not a boundary value */
+      bool isRegular()  const;
+      
       // Supporting totally_ordered
       friend bool operator<  (TimeValue const& t1, TimeValue const& t2)  { return t1.t_ <  t2.t_; }
       friend bool operator<  (TimeValue const& t1, gavl_time_t t2)       { return t1.t_ <  t2   ; }
@@ -766,6 +769,13 @@ namespace time {
     TimeValue start{_raw(*this)};
     return Offset{start} + extension > Time::MAX? TimeSpan{Time::MAX-extension, Time::MAX}
                                                 : TimeSpan{start, extension};
+  }
+  
+  inline bool
+  TimeValue::isRegular()  const
+  {
+    return Time::MIN < *this
+       and *this < Time::MAX;
   }
   
   

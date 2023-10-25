@@ -262,10 +262,16 @@ namespace test {
           Activity& probe = detector.buildActivationProbe (someID);
           CHECK (probe.is (Activity::HOOK));
           
+          CHECK (not detector.wasInvoked (probe));
+          
           Time realTime = RealClock::now();
           probe.activate (realTime, detector.executionCtx);
           
           CHECK (detector.verifyInvocation(someID).timeArg(realTime));
+          
+          // Probe instance recalls last invocation "now" argument
+          CHECK (realTime == detector.invokeTime (probe));
+          CHECK (detector.wasInvoked (probe));
         }
       
       

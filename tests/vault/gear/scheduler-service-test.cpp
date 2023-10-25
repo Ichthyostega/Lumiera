@@ -30,6 +30,7 @@
 #include "vault/gear/scheduler.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/test/diagnostic-output.hpp"///////////////TODO
 //#include "lib/util.hpp"
 
 //#include <utility>
@@ -106,6 +107,14 @@ namespace test {
           cout << detector.showLog()<<endl; // HINT: use this for investigation...
           CHECK (detector.verifyInvocation("testProbe"));
           ////////////////////////////////////////////////////////////////////////////////////TODO need a way to get the actual time passed to the Probe
+SHOW_EXPR(now)
+SHOW_EXPR(detector.invokeTime(probe))
+
+          auto wasClose = [](TimeValue a, TimeValue b)
+                            {
+                              return Duration{Offset{a,b}} < Duration{FSecs{1,2000}}; // 500µs are considered "close"
+                            };
+          CHECK (wasClose (now, detector.invokeTime (probe)));
         }
       
       
