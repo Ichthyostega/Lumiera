@@ -143,12 +143,21 @@ namespace test {
                                    and wasClose (invoked, start);
                               };
           
+          start = Time::ZERO;
+//          auto& ctx = detector.executionCtx;
+          auto& ctx = Scheduler::ExecutionCtx::from(scheduler);
+          probe.activate(start, ctx);
+          auto [muck,_] = lib::test::microBenchmark([&](size_t){ probe.activate(start, ctx);
+                                                                  return size_t(1);
+                                                                }
+                                                    , 200);
+SHOW_EXPR(muck)          
+          
           cout << "Scheduled right away..."<<endl;
           start = RealClock::now();
           post(start);
           
-SHOW_EXPR(_raw(start))
-SHOW_EXPR(_raw(detector.invokeTime(probe)))
+SHOW_EXPR(_raw(detector.invokeTime(probe)) - _raw(start))
           
           CHECK (wasInvoked(start));
           CHECK (scheduler.empty());
@@ -157,11 +166,6 @@ SHOW_EXPR(_raw(detector.invokeTime(probe)))
 //          start = RealClock::now();
           pullWork();
           
-SHOW_EXPR(_raw(start))
-SHOW_EXPR(_raw(detector.invokeTime(probe)))
-SHOW_EXPR(res);
-SHOW_EXPR(delay_us)
-SHOW_EXPR(slip_us)
 SHOW_EXPR(wasInvoked(start))
           CHECK (activity::WAIT == res);
           CHECK (slip_us  < 100);
@@ -176,15 +180,9 @@ SHOW_EXPR(wasInvoked(start))
           sleep_for (100us);
           TimeVar wow = RealClock::now();
           pullWork();
-SHOW_EXPR(_raw(now))
-SHOW_EXPR(_raw(cow))
-SHOW_EXPR(_raw(wow))
-SHOW_EXPR(_raw(start))
-SHOW_EXPR(_raw(detector.invokeTime(probe)))
-SHOW_EXPR(res);
-SHOW_EXPR(delay_us)
-SHOW_EXPR(slip_us)
-SHOW_EXPR(wasInvoked(start))
+SHOW_EXPR(_raw(cow) - _raw(now))
+SHOW_EXPR(_raw(wow) - _raw(cow))
+SHOW_EXPR(_raw(detector.invokeTime(probe)) - _raw(wow))
           CHECK (activity::WAIT == res);
           CHECK (wasInvoked(start));
           CHECK (scheduler.empty());
@@ -198,29 +196,13 @@ SHOW_EXPR(wasInvoked(start))
           CHECK (not scheduler.empty());
           
           pullWork();
-SHOW_EXPR(_raw(now))
-SHOW_EXPR(_raw(cow))
-SHOW_EXPR(_raw(wow))
-SHOW_EXPR(_raw(start))
-SHOW_EXPR(_raw(detector.invokeTime(probe)))
-SHOW_EXPR(res);
-SHOW_EXPR(delay_us)
-SHOW_EXPR(slip_us)
-SHOW_EXPR(wasInvoked(start))
           CHECK (activity::PASS == res);
           CHECK (not wasInvoked(start));
           CHECK (delay_us > 500);
           CHECK (delay_us < 1000);
           pullWork();
-SHOW_EXPR(_raw(now))
-SHOW_EXPR(_raw(start))
-SHOW_EXPR(_raw(detector.invokeTime(probe)))
-SHOW_EXPR(res);
-SHOW_EXPR(delay_us)
-SHOW_EXPR(slip_us)
-SHOW_EXPR(wasInvoked(start))
           CHECK (wasInvoked(start));
-          CHECK (delay_us < 200);
+          CHECK (delay_us < 200);  ///////////////OOO dangerously tight
           CHECK (slip_us  < 500);
           CHECK (activity::WAIT == res);
           CHECK (scheduler.empty());
@@ -248,14 +230,6 @@ SHOW_EXPR(scheduler.empty())
           
           start += t1ms;
           pullWork();
-SHOW_EXPR(_raw(now))
-SHOW_EXPR(_raw(start))
-SHOW_EXPR(_raw(detector.invokeTime(probe)))
-SHOW_EXPR(res);
-SHOW_EXPR(delay_us)
-SHOW_EXPR(slip_us)
-SHOW_EXPR(wasInvoked(start))
-SHOW_EXPR(scheduler.empty())
           CHECK (wasInvoked(start));
           CHECK (delay_us < 500);
           CHECK (slip_us  < 500);

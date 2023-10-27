@@ -76,6 +76,8 @@
 #include "vault/gear/activity-lang.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/nocopy.hpp"
+#include "lib/format-cout.hpp"  /////////////////////////TODO
+#include "vault/real-clock.hpp"
 
 #include <thread>
 #include <atomic>
@@ -106,7 +108,7 @@ namespace gear {
       using ThreadID = std::thread::id;
       atomic<ThreadID> groomingToken_{};
       
-      auto thisThread() { return std::this_thread::get_id(); }
+      auto thisThread() { return ThreadID();}/////////////////TODO std::this_thread::get_id(); }
       
       
     public:
@@ -123,6 +125,7 @@ namespace gear {
       bool
       acquireGoomingToken()  noexcept
         {
+return true;
           ThreadID expect_noThread;                   // expect no one else to be in...
           return groomingToken_.compare_exchange_strong (expect_noThread, thisThread()
                                                         ,memory_order_acquire // success also constitutes an acquire barrier
@@ -139,6 +142,7 @@ namespace gear {
       void
       dropGroomingToken()  noexcept
         {          // expect that this thread actually holds the Grooming-Token
+return;
           REQUIRE (groomingToken_.load(memory_order_relaxed) == thisThread());
           const ThreadID noThreadHoldsIt;
           groomingToken_.store (noThreadHoldsIt, memory_order_release);
@@ -151,6 +155,7 @@ namespace gear {
       bool
       holdsGroomingToken (ThreadID id)  noexcept
         {
+return true;
           return id == groomingToken_.load (memory_order_relaxed);
         }
       
@@ -215,14 +220,26 @@ namespace gear {
           if (!chain) return activity::WAIT;
           
           Time now = executionCtx.getSchedTime();
-          if (decideDispatchNow (when, now))
-            return ActivityLang::dispatchChain (chain, executionCtx);
+          bool shallDispatch =decideDispatchNow (when, now);
+          Time t1 = executionCtx.getSchedTime();
+          activity::Proc res;
+          if (shallDispatch)
+            {
+              res =  ActivityLang::dispatchChain (chain, executionCtx);
+            }
+//            return ActivityLang::dispatchChain (chain, executionCtx);
           else
+            {
             if (holdsGroomingToken (thisThread()))
               layer1.feedPrioritisation (*chain, when);
             else
               layer1.instruct (*chain, when);
-          return activity::PASS;
+//          return activity::PASS;
+            res = activity::PASS;
+            }
+          Time t2 = executionCtx.getSchedTime();
+cout << "+++++++++Post: "<<_raw(t2) - _raw(now)<<"µs ("<<_raw(t1)-_raw(now)<<"|+|"<<_raw(t2)-_raw(t1)<<(shallDispatch?":dispatch":":enqueue")<<")"<<endl;
+          return res;
         }
     };
   

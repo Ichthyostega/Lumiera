@@ -613,6 +613,7 @@ namespace test{
   EventLog::EventLog (string logID)
     : log_(new Log)
     {
+      log_->reserve(2000);
       log({"type=EventLogHeader", "this="+logID});
     }
   
