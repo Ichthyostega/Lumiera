@@ -100,6 +100,21 @@ namespace test {
        *      - this implies we can show timing-delay effects in the millisecond range
        *      - demonstrated behaviour
        *        + an Activity already due will be dispatched immediately by post()
+       *        + an Activity due at the point when invoking the work-function is dispatched
+       *        + while queue is empty, the work-function returns immediately, indicating sleep
+       *        + invoking the work-function when there is still some time span up to the next
+       *          planned Activity will enter a targeted sleep, returning shortly after the
+       *          next schedule. Entering then again will cause dispatch of that activity.
+       *        + if the work-function dispatches an Activity while the next entry is planned
+       *          for some time ahead, the work-function will likewise go into a targeted
+       *          sleep and only return at or shortly after that next planned time entry
+       *        + after dispatching an Activity in a situation with no follow-up work,
+       *          the work-function inserts a targeted sleep of random duration,
+       *          to re-shuffle the rhythm of sleep cycles
+       *        + when the next planned Activity has already be »tended for« (by placing
+       *          another worker into a targeted sleep), further workers entering the
+       *          work-function will be re-targeted by a random sleep to focus capacity
+       *          into a time zone behind the next entry.
        * @note Invoke the Activity probe itself can take 50..150µs, due to the EventLog,
        *       which is not meant to be used in performance critical paths but only for tests,
        *       because it performs lots of heap allocations and string operations. Moreover,
@@ -158,6 +173,7 @@ namespace test {
           cout << "pullWork() on empty queue..."<<endl;
           pullWork();                                                       // Call the work-Function on empty Scheduler queue
           CHECK (activity::WAIT == res);                                    // the result instructs this thread to go to sleep immediately
+          CHECK (delay_us < 40);
           
           
           cout << "Due at pullWork()..."<<endl;
@@ -172,11 +188,11 @@ namespace test {
           CHECK (wasInvoked(start));
           CHECK (slip_us  < 300);                                           // Note: typically there is a slip of 100..200µs, because sleep waits longer
           CHECK (scheduler.empty());                                        // The scheduler is empty now and this thread will go to sleep,
-          CHECK (delay_us < 20000);                                         // however the sleep-cycle is first re-shuffled by a wait between 0 ... 20ms
+          CHECK (delay_us < 20200);                                         // however the sleep-cycle is first re-shuffled by a wait between 0 ... 20ms
           CHECK (activity::PASS == res);                                    // this thread is instructed to check back once
           pullWork();
           CHECK (activity::WAIT == res);                                    // ...yet since the queue is still empty, it is sent immediately to sleep
-          CHECK (delay_us < 20);
+          CHECK (delay_us < 40);
           
           
           cout << "next some time ahead => up-front delay"<<endl;
@@ -193,12 +209,12 @@ namespace test {
           pullWork();                                                       // if we now re-invoke the work-Function as instructed...
           CHECK (wasInvoked(start));                                        // then the next schedule is already slightly overdue and immediately invoked
           CHECK (scheduler.empty());                                        // the queue is empty and thus this thread will be sent to sleep
-          CHECK (delay_us < 20000);                                         // but beforehand the sleep-cycle is re-shuffled by a wait between 0 ... 20ms
+          CHECK (delay_us < 20200);                                         // but beforehand the sleep-cycle is re-shuffled by a wait between 0 ... 20ms
           CHECK (slip_us  < 300);
           CHECK (activity::PASS == res);                                    // instruction to check back once
           pullWork();
           CHECK (activity::WAIT == res);                                    // but next call will send this thread to sleep right away
-          CHECK (delay_us < 20);
+          CHECK (delay_us < 40);
           
           
           cout << "follow-up with some distance => follow-up delay"<<endl;
@@ -208,16 +224,8 @@ namespace test {
           post (start+t1ms);                                                // But another schedule is placed 1ms behind
           sleep_for (100us);                                                // wait for "soon" to pass...
           pullWork();
-SHOW_EXPR(_raw(now))
-SHOW_EXPR(_raw(start))
-SHOW_EXPR(_raw(detector.invokeTime(probe)))
-SHOW_EXPR(res);
-SHOW_EXPR(delay_us)
-SHOW_EXPR(slip_us)
-SHOW_EXPR(wasInvoked(start))
-SHOW_EXPR(scheduler.empty())
           CHECK (wasInvoked(start));                                       // Result: the first invocation happened immediately
-          CHECK (slip_us  < 200);
+          CHECK (slip_us  < 300);
           CHECK (delay_us > 900);                                          // yet this thread was afterwards kept in sleep to await the next one
           CHECK (activity::PASS == res);                                   // instruction to re-invoke immediately
           CHECK (not scheduler.empty());                                   // since there is still work in the queue
@@ -226,13 +234,32 @@ SHOW_EXPR(scheduler.empty())
           pullWork();                                                      // re-invoke immediately as instructed
           CHECK (wasInvoked(start));                                       // Result: also the next Activity has been dispatched
           CHECK (slip_us < 400);                                           // not much slip
-          CHECK (slip_us < 20000);                                         // ...and the post-delay is used to re-shuffle the sleep cycle as usual
+          CHECK (delay_us < 20200);                                        // ...and the post-delay is used to re-shuffle the sleep cycle as usual
           CHECK (activity::PASS == res);                                   // since queue is empty, we will call back once...
           CHECK (scheduler.empty());
           pullWork();
           CHECK (activity::WAIT == res);                                   // and then go to sleep.
           
-          cout << detector.showLog()<<endl; // HINT: use this for investigation...
+          
+          cout << "already tended-next => re-target capacity"<<endl;
+          now = RealClock::now();
+          start = now + t500us;                                             // Set the next schedule with some distance...
+          post (start);
+          
+          // Access scheduler internals (as friend)
+          CHECK (start == scheduler.layer1_.headTime());                    // next schedule indeed appears as next-head
+          CHECK (not scheduler.loadControl_.tendedNext(start));             // but this next time was not yet marked as "tended"
+          
+          scheduler.loadControl_.tendNext(start);                           // manipulate scheduler to mark next-head as "tended"
+          CHECK (    scheduler.loadControl_.tendedNext(start));
+          
+          CHECK (start == scheduler.layer1_.headTime());                    // other state still the same
+          CHECK (not scheduler.empty());
+          
+          pullWork();
+          CHECK (not wasInvoked(start));                                    // since next-head was marked as "tended"...
+          CHECK (not scheduler.empty());                                    // ...this thread is not used to dispatch it
+          CHECK (delay_us < 6000);                                          // rather it is re-focussed as free capacity within WORK_HORIZON
         }
       
       

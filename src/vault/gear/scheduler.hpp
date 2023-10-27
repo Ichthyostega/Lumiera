@@ -244,6 +244,8 @@ namespace gear {
     };
   
   
+  
+  
   /**
    * @remark when due, the scheduled Activities are performed within the
    *  [Activity-Language execution environment](\ref ActivityLang::dispatchChain());
