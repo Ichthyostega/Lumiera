@@ -143,76 +143,60 @@ namespace test {
                                    and wasClose (invoked, start);
                               };
           
-          start = Time::ZERO;
-//          auto& ctx = detector.executionCtx;
-          auto& ctx = Scheduler::ExecutionCtx::from(scheduler);
-          probe.activate(start, ctx);
-          auto [muck,_] = lib::test::microBenchmark([&](size_t){ probe.activate(start, ctx);
-                                                                  return size_t(1);
-                                                                }
-                                                    , 200);
-SHOW_EXPR(muck)          
           
           cout << "Scheduled right away..."<<endl;
           start = RealClock::now();
-          post(start);
-          
-SHOW_EXPR(_raw(detector.invokeTime(probe)) - _raw(start))
-          
-          CHECK (wasInvoked(start));
+          post(start);                                                      // Post the testProbe to be scheduled "now"
+          CHECK (wasInvoked(start));                                        // Result: invoked directly, not enqueued at all
           CHECK (scheduler.empty());
-
-          cout << "pullWork() on empty queue..."<<endl;
-//          start = RealClock::now();
-          pullWork();
           
-SHOW_EXPR(wasInvoked(start))
-          CHECK (activity::WAIT == res);
-          CHECK (slip_us  < 100);
+          
+          cout << "pullWork() on empty queue..."<<endl;
+          pullWork();                                                       // Call the work-Function on empty Scheduler queue
+          CHECK (activity::WAIT == res);                                    // get immediately signalled to go to sleep
+          
           
           cout << "Due at pullWork()..."<<endl;
           TimeVar now = RealClock::now();
-          start = now + t100us;
+          start = now + t100us;                                             // Set a schedule 100ms ahead of "now"
           post (start);
-          CHECK (not scheduler.empty());
+          CHECK (not scheduler.empty());                                    // was enqueued
+          CHECK (not wasInvoked(start));                                    // ...but not activated yet
           
-          TimeVar cow = RealClock::now();
-          sleep_for (100us);
-          TimeVar wow = RealClock::now();
+          sleep_for (100us);                                                // wait beyond the planned start point (typically waits ~150µs or more)
           pullWork();
-SHOW_EXPR(_raw(cow) - _raw(now))
-SHOW_EXPR(_raw(wow) - _raw(cow))
-SHOW_EXPR(_raw(detector.invokeTime(probe)) - _raw(wow))
           CHECK (activity::WAIT == res);
           CHECK (wasInvoked(start));
           CHECK (scheduler.empty());
-          CHECK (delay_us < 500);
-          CHECK (slip_us  < 500);
-
+          CHECK (delay_us < 500);                                           // Note: the call itself can take 50..150µs, due to the EventLog in the testProbe
+          CHECK (slip_us  < 500);                                           // Note: also there is a slip of typically 100..200µs, because sleep waits longer
+          
+          
           cout << "next some time ahead => up-front delay"<<endl;
           now = RealClock::now();
-          start = now + t500us;
+          start = now + t500us;                                             // Set a schedule significantly into the future...
           post (start);
           CHECK (not scheduler.empty());
           
-          pullWork();
-          CHECK (activity::PASS == res);
-          CHECK (not wasInvoked(start));
-          CHECK (delay_us > 500);
+          pullWork();                                                       // ...and invoke the work-Function immediately "now"
+          CHECK (activity::PASS == res);                                    // Result: this thread was kept in sleep in the work-Function
+          CHECK (not wasInvoked(start));                                    // but the next dispatch did not happen yet; we are instructed to re-invoke immediately
+          CHECK (delay_us > 500);                                           // this proves that there was a delay to wait for the next schedule
           CHECK (delay_us < 1000);
-          pullWork();
-          CHECK (wasInvoked(start));
-          CHECK (delay_us < 200);  ///////////////OOO dangerously tight
+          pullWork();                                                       // if we now re-invoke the work-Function as instructed...
+          CHECK (wasInvoked(start));                                        // then the next schedule is already slightly overdue and immediately invoked
+          CHECK (delay_us < 300);                 // Warning: this limit is dangerously tight
           CHECK (slip_us  < 500);
-          CHECK (activity::WAIT == res);
+          CHECK (activity::WAIT == res);                                    // since there is nothing left in the Queue, we are instructed to sleep
           CHECK (scheduler.empty());
+          
           
           cout << "follow-up with some distance => follow-up delay"<<endl;
           now = RealClock::now();
           start = now + t100us;
-          post (start);
-          post (start+t1ms);
-          sleep_for (100us);
+          post (start);                                                     // This time the schedule is set to be "soon"
+          post (start+t1ms);                                                // But another schedule is placed 1ms behind
+          sleep_for (100us);                                                // wait for "soon" to pass...
           pullWork();
 SHOW_EXPR(_raw(now))
 SHOW_EXPR(_raw(start))
@@ -222,18 +206,18 @@ SHOW_EXPR(delay_us)
 SHOW_EXPR(slip_us)
 SHOW_EXPR(wasInvoked(start))
 SHOW_EXPR(scheduler.empty())
-          CHECK (wasInvoked(start));
-          CHECK (delay_us > 900);
+          CHECK (wasInvoked(start));                                       // Result: the first invocation happened immediately
           CHECK (slip_us  < 100);
-          CHECK (activity::PASS == res);
-          CHECK (not scheduler.empty());
+          CHECK (delay_us > 900);                                          // yet this thread was afterwards kept in sleep to await the next one
+          CHECK (activity::PASS == res);                                   // instruction to re-invoke immediately
+          CHECK (not scheduler.empty());                                   // since there is still work in the queue
           
-          start += t1ms;
-          pullWork();
-          CHECK (wasInvoked(start));
-          CHECK (delay_us < 500);
-          CHECK (slip_us  < 500);
-          CHECK (activity::WAIT == res);
+          start += t1ms;                                                   // (just re-adjust the reference point to calculate slip_us)
+          pullWork();                                                      // re-invoke immediately as instructed
+          CHECK (wasInvoked(start));                                       // Result: also the next Activity has been dispatched
+          CHECK (delay_us < 300);                                          // not much slip and delay
+          CHECK (slip_us  < 300);                                          // Remark: here we often see cache-effects, since last EventLog call is way back, due to the long sleep
+          CHECK (activity::WAIT == res);                                   // since queue is empty, we are instructed to sleep
           CHECK (scheduler.empty());
           
           

@@ -70,8 +70,6 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/util.hpp"
-#include "lib/format-cout.hpp"  /////////////////////////TODO
-#include "vault/real-clock.hpp"
 
 
 namespace vault{
@@ -616,14 +614,7 @@ namespace gear {
       case FEED:
         return activity::PASS;
       case HOOK:
-//        return callHook (now, executionCtx);
-{
-Time t0 = executionCtx.getSchedTime();
-        activity::Proc res = callHook (now, executionCtx);
-Time t2 = executionCtx.getSchedTime();
-cout << "+++++++++++HO: "<<_raw(t2) - _raw(t0)<<"µs"<<endl;
-        return res;
-}
+        return callHook (now, executionCtx);
       case TICK:
         return doTick (now, executionCtx);
       default:
@@ -666,11 +657,7 @@ cout << "+++++++++++HO: "<<_raw(t2) - _raw(t0)<<"µs"<<endl;
       case FEED:      // signal just to proceed with next...
         return activity::PASS;
       default:
-Time t0 = executionCtx.getSchedTime();
-        activity::Proc res = activate (now, executionCtx);
-Time t2 = executionCtx.getSchedTime();
-cout << "++++++++++ACT: "<<_raw(t2) - _raw(t0)<<"µs"<<endl;
-        return res;
+        return activate (now, executionCtx);
       }
   }
   

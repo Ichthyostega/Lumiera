@@ -52,9 +52,8 @@
 #include "vault/gear/engine-observer.hpp"
 #include "vault/real-clock.hpp"
 //#include "lib/symbol.hpp"
-#include "lib/nocopy.hpp"
+#include  "lib/nocopy.hpp"
 //#include "lib/util.hpp"
-#include "lib/format-cout.hpp"  /////////////////////////TODO
 
 //#include <string>
 #include <utility>
@@ -336,11 +335,7 @@ namespace gear {
               .performStep([&]{
                                 Time now = ctx.getSchedTime();
                                 Activity* act = layer2_.findWork (layer1_,now);
-                                Time moo = ctx.getSchedTime();
-                                auto res = ctx.post (now, act, ctx);
-                                Time boo = ctx.getSchedTime();
-cout << "+++++Dispatch: "<<_raw(boo) - _raw(now)<<"µs ("<<_raw(moo)-_raw(now)<<"|+|"<<_raw(boo)-_raw(moo)<<")"<<endl;
-                                return res;
+                                return ctx.post (now, act, ctx);
                               })
               .performStep([&]{
                                 Time now = ctx.getSchedTime();
@@ -368,12 +363,10 @@ cout << "+++++Dispatch: "<<_raw(boo) - _raw(now)<<"µs ("<<_raw(moo)-_raw(now)<<
   inline activity::Proc
   Scheduler::scatteredDelay (Time now, LoadController::Capacity capacity)
   {
-cout<<"|capacity="<<capacity<<"\n";
     switch (capacity) {
       case LoadController::DISPATCH:
         return activity::PASS;
       case LoadController::SPINTIME:
-cout<<"|yield\n";
         std::this_thread::yield();
         return activity::SKIP;
       case LoadController::IDLEWAIT:
@@ -385,18 +378,11 @@ cout<<"|yield\n";
           if (not loadControl_.tendedNext(head)
               and (layer2_.holdsGroomingToken(self)
                   or layer2_.acquireGoomingToken()))
-{
-cout << "|tendNext...";
             loadControl_.tendNext(head);
-}else
-  {
-cout << "|not tendNext...";
-  }
         }// Fall-through to perform targeted wait
         // @suppress("No break at end of case")
       default:
         Offset targetedDelay = loadControl_.scatteredDelayTime (now, capacity);
-cout << "|sleep->"<<_raw(targetedDelay)<<"\n";
         std::this_thread::sleep_for (std::chrono::microseconds (_raw(targetedDelay)));
         return activity::SKIP;  //  indicates to abort this processing-chain for good
       }

@@ -360,7 +360,6 @@ namespace test {
             if (data_.callback.arg == 0)
               {// no adapted target; just record this activation
                 log_(util::toString(now) + " ⧐ ");
-//                log_(" ⧐ ");
                 return activity::PASS;
               }
             else
