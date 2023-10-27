@@ -269,7 +269,9 @@ namespace test {
           CHECK (       ten ==                              lctrl.scatteredDelayTime (now, Capacity::TENDNEXT) );
           CHECK (is_between (       ten, ten+ WORK_HORIZON, lctrl.scatteredDelayTime (now, Capacity::NEARTIME)));
           CHECK (is_between (       ten, ten+SLEEP_HORIZON, lctrl.scatteredDelayTime (now, Capacity::WORKTIME)));
-          CHECK (is_between (Time::ZERO,     SLEEP_HORIZON, lctrl.scatteredDelayTime (now, Capacity::IDLEWAIT)));
+          CHECK (is_between (       ten, ten+SLEEP_HORIZON, lctrl.scatteredDelayTime (now, Capacity::IDLEWAIT)));
+          
+          lctrl.tendNext(Time::ANYTIME); // reset to ensure we get no base offset
           
           // Offset is randomised based on the current time
           // Verify this yields an even distribution

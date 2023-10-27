@@ -100,6 +100,10 @@ namespace test {
        *      - this implies we can show timing-delay effects in the millisecond range
        *      - demonstrated behaviour
        *        + an Activity already due will be dispatched immediately by post()
+       * @note Invoke the Activity probe itself can take 50..150µs, due to the EventLog,
+       *       which is not meant to be used in performance critical paths but only for tests,
+       *       because it performs lots of heap allocations and string operations. Moreover,
+       *       we see additional cache effects after an extended sleep period.
        * @todo WIP 10/23 🔁 define ⟶ implement
        */
       void
@@ -153,7 +157,7 @@ namespace test {
           
           cout << "pullWork() on empty queue..."<<endl;
           pullWork();                                                       // Call the work-Function on empty Scheduler queue
-          CHECK (activity::WAIT == res);                                    // get immediately signalled to go to sleep
+          CHECK (activity::WAIT == res);                                    // the result instructs this thread to go to sleep immediately
           
           
           cout << "Due at pullWork()..."<<endl;
@@ -165,11 +169,14 @@ namespace test {
           
           sleep_for (100us);                                                // wait beyond the planned start point (typically waits ~150µs or more)
           pullWork();
-          CHECK (activity::WAIT == res);
           CHECK (wasInvoked(start));
-          CHECK (scheduler.empty());
-          CHECK (delay_us < 500);                                           // Note: the call itself can take 50..150µs, due to the EventLog in the testProbe
-          CHECK (slip_us  < 500);                                           // Note: also there is a slip of typically 100..200µs, because sleep waits longer
+          CHECK (slip_us  < 300);                                           // Note: typically there is a slip of 100..200µs, because sleep waits longer
+          CHECK (scheduler.empty());                                        // The scheduler is empty now and this thread will go to sleep,
+          CHECK (delay_us < 20000);                                         // however the sleep-cycle is first re-shuffled by a wait between 0 ... 20ms
+          CHECK (activity::PASS == res);                                    // this thread is instructed to check back once
+          pullWork();
+          CHECK (activity::WAIT == res);                                    // ...yet since the queue is still empty, it is sent immediately to sleep
+          CHECK (delay_us < 20);
           
           
           cout << "next some time ahead => up-front delay"<<endl;
@@ -185,10 +192,13 @@ namespace test {
           CHECK (delay_us < 1000);
           pullWork();                                                       // if we now re-invoke the work-Function as instructed...
           CHECK (wasInvoked(start));                                        // then the next schedule is already slightly overdue and immediately invoked
-          CHECK (delay_us < 300);                 // Warning: this limit is dangerously tight
-          CHECK (slip_us  < 500);
-          CHECK (activity::WAIT == res);                                    // since there is nothing left in the Queue, we are instructed to sleep
-          CHECK (scheduler.empty());
+          CHECK (scheduler.empty());                                        // the queue is empty and thus this thread will be sent to sleep
+          CHECK (delay_us < 20000);                                         // but beforehand the sleep-cycle is re-shuffled by a wait between 0 ... 20ms
+          CHECK (slip_us  < 300);
+          CHECK (activity::PASS == res);                                    // instruction to check back once
+          pullWork();
+          CHECK (activity::WAIT == res);                                    // but next call will send this thread to sleep right away
+          CHECK (delay_us < 20);
           
           
           cout << "follow-up with some distance => follow-up delay"<<endl;
@@ -207,7 +217,7 @@ SHOW_EXPR(slip_us)
 SHOW_EXPR(wasInvoked(start))
 SHOW_EXPR(scheduler.empty())
           CHECK (wasInvoked(start));                                       // Result: the first invocation happened immediately
-          CHECK (slip_us  < 100);
+          CHECK (slip_us  < 200);
           CHECK (delay_us > 900);                                          // yet this thread was afterwards kept in sleep to await the next one
           CHECK (activity::PASS == res);                                   // instruction to re-invoke immediately
           CHECK (not scheduler.empty());                                   // since there is still work in the queue
@@ -215,11 +225,12 @@ SHOW_EXPR(scheduler.empty())
           start += t1ms;                                                   // (just re-adjust the reference point to calculate slip_us)
           pullWork();                                                      // re-invoke immediately as instructed
           CHECK (wasInvoked(start));                                       // Result: also the next Activity has been dispatched
-          CHECK (delay_us < 300);                                          // not much slip and delay
-          CHECK (slip_us  < 300);                                          // Remark: here we often see cache-effects, since last EventLog call is way back, due to the long sleep
-          CHECK (activity::WAIT == res);                                   // since queue is empty, we are instructed to sleep
+          CHECK (slip_us < 400);                                           // not much slip
+          CHECK (slip_us < 20000);                                         // ...and the post-delay is used to re-shuffle the sleep cycle as usual
+          CHECK (activity::PASS == res);                                   // since queue is empty, we will call back once...
           CHECK (scheduler.empty());
-          
+          pullWork();
+          CHECK (activity::WAIT == res);                                   // and then go to sleep.
           
           cout << detector.showLog()<<endl; // HINT: use this for investigation...
         }

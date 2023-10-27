@@ -82,7 +82,7 @@
 //#include "vault/gear/activity-lang.hpp"
 //#include "lib/symbol.hpp"
 #include  "lib/nocopy.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <string>
 #include <chrono>
@@ -152,13 +152,14 @@ namespace gear {
       
     public:
       /**
-       * did we already tend for the indicated next head time?
+       * did we already tend for the indicated next relevant head time?
        * @note const and non-grooming
        */
       bool
       tendedNext (Time nextHead)  const
         {
-          return nextHead == tendedHead_;
+          return not nextHead.isRegular()   // note: empty queue reports Time::NEVER
+              or nextHead == tendedHead_;
         }
       
       /**
@@ -202,7 +203,6 @@ namespace gear {
       Capacity
       markOutgoingCapacity (Time head, Time now)
         {
-          if (head == Time::NEVER) return IDLEWAIT;                    // empty queue
           auto horizon = classifyTimeHorizon (Offset{head - now});
           return horizon > SPINTIME
              and not tendedNext(head)? TENDNEXT
@@ -247,19 +247,20 @@ namespace gear {
                               return TimeValue{wrap};
                             };
           
+          TimeVar headDistance = util::max (tendedHead_-now, Time::ZERO);
+          
           switch (capacity) {
             case DISPATCH:
               return Offset::ZERO;
             case SPINTIME:
               return Offset::ZERO;
             case TENDNEXT:
-              return Offset{tendedHead_-now};
+              return Offset{headDistance};
             case NEARTIME:
-              return Offset{tendedHead_-now  + scatter(WORK_HORIZON)};
+              return Offset{headDistance  + scatter(WORK_HORIZON)};
             case WORKTIME:
-              return Offset{tendedHead_-now  + scatter(SLEEP_HORIZON)};
             case IDLEWAIT:
-              return Offset{/*no base offset*/ scatter(SLEEP_HORIZON)};
+              return Offset{headDistance  + scatter(SLEEP_HORIZON)};
             default:
               NOTREACHED ("uncovered work capacity classification.");
             }

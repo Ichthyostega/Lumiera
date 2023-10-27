@@ -363,28 +363,36 @@ namespace gear {
   inline activity::Proc
   Scheduler::scatteredDelay (Time now, LoadController::Capacity capacity)
   {
+    auto doTargetedSleep = [&]
+          {
+            Offset targetedDelay = loadControl_.scatteredDelayTime (now, capacity);
+            std::this_thread::sleep_for (std::chrono::microseconds (_raw(targetedDelay)));
+          };
+    auto doTendNextHead = [&]
+          {
+            Time head = layer1_.headTime();
+            auto self = std::this_thread::get_id();
+            if (not loadControl_.tendedNext(head)
+                and (layer2_.holdsGroomingToken(self)
+                    or layer2_.acquireGoomingToken()))
+              loadControl_.tendNext(head);
+          };
+    
     switch (capacity) {
       case LoadController::DISPATCH:
         return activity::PASS;
       case LoadController::SPINTIME:
         std::this_thread::yield();
-        return activity::SKIP;
+        return activity::SKIP;     //  prompts to abort chain but call again immediately
       case LoadController::IDLEWAIT:
-        return activity::WAIT;
+        return activity::WAIT;     //  prompts to switch this thread into sleep mode
       case LoadController::TENDNEXT:
-        {
-          Time head = layer1_.headTime();
-          auto self = std::this_thread::get_id();
-          if (not loadControl_.tendedNext(head)
-              and (layer2_.holdsGroomingToken(self)
-                  or layer2_.acquireGoomingToken()))
-            loadControl_.tendNext(head);
-        }// Fall-through to perform targeted wait
-        // @suppress("No break at end of case")
+        doTendNextHead();
+        doTargetedSleep();         //  let this thread wait until nest head time is due
+        return activity::SKIP;
       default:
-        Offset targetedDelay = loadControl_.scatteredDelayTime (now, capacity);
-        std::this_thread::sleep_for (std::chrono::microseconds (_raw(targetedDelay)));
-        return activity::SKIP;  //  indicates to abort this processing-chain for good
+        doTargetedSleep();
+        return activity::SKIP;     //  prompts to abort this processing-chain for good
       }
   }
   
