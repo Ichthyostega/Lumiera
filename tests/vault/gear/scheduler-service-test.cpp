@@ -96,7 +96,7 @@ namespace test {
       /** @test verify visible behaviour of the [work-pulling function](\ref Scheduler::getWork)
        *      - use a rigged Activity probe to capture the schedule time on invocation
        *      - additionally perform a timing measurement for invoking the work-function
-       *      - empty invocations cost ~5µs (-O3) rsp. ~25µs (debug)
+       *      - invoking the Activity probe itself costs 50...150µs, Scheduler internals < 50µs
        *      - this implies we can show timing-delay effects in the millisecond range
        *      - demonstrated behaviour
        *        + an Activity already due will be dispatched immediately by post()
@@ -140,6 +140,7 @@ namespace test {
                               { // this test class is declared friend to get a backdoor to Scheduler internals...
                                 auto& schedCtx = Scheduler::ExecutionCtx::from(scheduler);
                                 
+                                scheduler.layer2_.acquireGoomingToken();
                                 schedCtx.post (start, &probe, schedCtx);
                               };
           

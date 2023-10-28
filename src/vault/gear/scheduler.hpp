@@ -26,12 +26,66 @@
  ** The implementation of scheduling services is provided by an integration
  ** of two layers of functionality:
  ** - Layer-1 allows to enqueue and prioritise render activity records
- ** - Layer-2 connects and coordinates activities to conduct complex calculations 
+ ** - Layer-2 connects and coordinates activities to conduct complex calculations
+ ** Additionally, a [custom allocation scheme](\ref BlockFlow) is involved,
+ ** a [notification service](\ref EngineObserver) and the execution environment
+ ** for the low-level [»Activity Language](\ref ActivityLang). Some operational
+ ** control and and load management is delegated to the \ref LoadController.
+ ** The *purpose* of the »Scheduler Service« in the lumiera Render Engine
+ ** is to coordinate the execution of [»Render Jobs«](\ref vault::gear::Job),
+ ** which can be controlled by a timing scheme, but also triggered in response
+ ** to some prerequisite event, most notably the completion of IO work.
  ** 
- ** @see SchedulerUsage_test Component integration test
- ** @see scheduler.cpp implementation details
+ ** # Thread coordination
+ ** The typical situation found when rendering media is the demand to distribute
+ ** rather scarce computation resources to various self-contained tasks sequenced
+ ** in temporary and dependency order. In addition, some internal management work
+ ** must be conducted to order these tasks, generate further tasks and coordinate
+ ** the dependencies. Overall, any such internal work is by orders of magnitude
+ ** less expensive than the actual media calculations, which reach up into the
+ ** range of 1-10 milliseconds, possibly even way more (seconds for expensive
+ ** computations). For this reason, the Scheduler in the Lumiera Render Engine
+ ** uses a pool of workers, each representing one unit of computation resource
+ ** (a »core«), and these workers will _pull work actively,_ rather then
+ ** distributing, queuing and dispatching tasks to a passive set of workers.
+ ** And notably the »management work« is performed also by the workers themselves,
+ ** to the degree it is necessary to retrieve the next piece of computation.
+ ** So there is no dedicated »queue manager« — scheduling is driven by the workers.
+ ** 
+ ** Assuming that this internal work is comparatively cheap to perform, a choice
+ ** was made to handle any internal state changes of the Scheduler exclusively
+ ** in single-threaded mode. This is achieved by an atomic lock, maintained in
+ ** [Layer-2 of the Scheduler implementation](\ref SchedulerCommutator::groomingToken_).
+ ** Any thread looking for more work will pull a pre-configured functor, which
+ ** is implemented by the [work-function](\ref Scheduler::getWork()). The thread
+ ** will attempt to acquire the lock, designated as »grooming-token« -- but only
+ ** if this is necessary to perform internal changes. Since workers are calling
+ ** in randomly, in many cases there might be no task to perform at the moment,
+ ** and the worker can be instructed to go to a sleep cycle and call back later.
+ ** On the other hand, when load is high, workers are instructed to call back
+ ** immediately again to find the next piece of work. Based on assessment of
+ ** the current [»head time«](\ref SchedulerInvocation::headTime), a quick
+ ** decision will be made if the thread's capacity is useful right now,
+ ** or if this capacity will be re-focussed into another zone of the
+ ** scheduler's time axis, based on the distance to the next task.
+ ** 
+ ** If however a thread is put to work, it will start dequeuing an entry from
+ ** the head of the [priority queue](\ref SchedulerInvocation::pullHead),
+ ** and start interpreting this entry as a _chain of render activities_  with
+ ** the help of the [»Activity Language«](\ref ActivityLang::dispatchChain).
+ ** In the typical scenario, after some preparatory checks and notifications,
+ ** the thread [transitions into work mode](\ref Scheduler::ExecutionCtx::work),
+ ** which entails to [drop the grooming-token](\ref SchedulerCommutator::dropGroomingToken).
+ ** Since the scheduler queue only stores references to render activities, which are
+ ** allocated in a [special arrangement](\ref BlockFlow) exploiting the known deadline
+ ** time of each task, further processing can commence concurrently.
+ ** 
+ ** @see SchedulerService_test Component integration test
+ ** @see SchedulerStress_test
+ ** @see SchedulerUsage_test
  ** @see SchedulerInvocation Layer-1
  ** @see SchedulerCommutator Layer-2
+ ** @see activity.hpp description of »Render Activities«
  ** 
  ** @todo WIP-WIP 10/2023 »Playback Vertical Slice«
  ** 
@@ -321,31 +375,51 @@ namespace gear {
    *   - activity::PROC causes the worker to poll again immediately
    *   - activity::SLEEP induces a sleep state
    *   - activity::HALT terminates the worker
+   * @note Under some circumstances, this function depends on acquiring the »grooming-token«,
+   *     which is an atomic lock to ensure only one thread at a time can alter scheduler internals.
+   *     In the regular processing sequence, this token is dropped after dequeuing and processing
+   *     some Activities, yet prior to invoking the actual »Render Job«. Explicitly dropping the
+   *     token at the end of this function is a safeguard against deadlocking the system.
+   *     If some other thread happens to hold the token, SchedulerCommutator::findWork
+   *     will bail out, leading to active spinning wait for the current thread.
    */
   inline activity::Proc
   Scheduler::getWork()
   {
-    ExecutionCtx& ctx = ExecutionCtx::from(*this);
-    
-    return WorkerInstruction{}
-              .performStep([&]{
-                                Time now = ctx.getSchedTime();
-                                Time head = layer1_.headTime();
-                                return scatteredDelay(now,
-                                          loadControl_.markIncomingCapacity (head,now));
-                              })
-              .performStep([&]{
-                                Time now = ctx.getSchedTime();
-                                Activity* act = layer2_.findWork (layer1_,now);
-                                return ctx.post (now, act, ctx);
-                              })
-              .performStep([&]{
-                                Time now = ctx.getSchedTime();
-                                Time head = layer1_.headTime();
-                                return scatteredDelay(now,
-                                          loadControl_.markOutgoingCapacity (head,now));
-                              })
-              ;
+    auto self = std::this_thread::get_id();
+    auto& ctx = ExecutionCtx::from (*this);
+    try {
+        auto res = WorkerInstruction{}
+                      .performStep([&]{
+                                        Time now = ctx.getSchedTime();
+                                        Time head = layer1_.headTime();
+                                        return scatteredDelay(now,
+                                                  loadControl_.markIncomingCapacity (head,now));
+                                      })
+                      .performStep([&]{
+                                        Time now = ctx.getSchedTime();
+                                        Activity* act = layer2_.findWork (layer1_,now);
+                                        return ctx.post (now, act, ctx);
+                                      })
+                      .performStep([&]{
+                                        Time now = ctx.getSchedTime();
+                                        Time head = layer1_.headTime();
+                                        return scatteredDelay(now,
+                                                  loadControl_.markOutgoingCapacity (head,now));
+                                      });
+        
+        // ensure lock clean-up
+        if (res != activity::PASS
+            and layer2_.holdsGroomingToken(self))
+          layer2_.dropGroomingToken();
+        return res;
+      }
+    catch(...)
+      {
+        if (layer2_.holdsGroomingToken (self))
+          layer2_.dropGroomingToken();
+        throw;
+      }
   }
   
   
@@ -366,7 +440,11 @@ namespace gear {
   Scheduler::scatteredDelay (Time now, LoadController::Capacity capacity)
   {
     auto doTargetedSleep = [&]
-          {
+          { // ensure not to block the Scheduler after management work
+            auto self = std::this_thread::get_id();
+            if (layer2_.holdsGroomingToken (self))
+              layer2_.dropGroomingToken();
+             // relocate this thread(capacity) to a time where its more useful
             Offset targetedDelay = loadControl_.scatteredDelayTime (now, capacity);
             std::this_thread::sleep_for (std::chrono::microseconds (_raw(targetedDelay)));
           };

@@ -369,7 +369,7 @@ namespace test {
           CHECK (not sched.holdsGroomingToken (myself));
           
           // no effect when no Activity given
-          CHECK (activity::WAIT == sched.postDispatch (nullptr, now, detector.executionCtx, queue));
+          CHECK (activity::SKIP == sched.postDispatch (nullptr, now, detector.executionCtx, queue));
           CHECK (not sched.holdsGroomingToken (myself));
           
           // Activity immediately dispatched when on time and GroomingToken can be acquired

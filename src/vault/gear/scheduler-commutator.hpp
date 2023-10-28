@@ -200,6 +200,7 @@ namespace gear {
        *       - activity::PASS continue processing in regular operation
        *       - activity::WAIT nothing to do now, check back later
        *       - activity::HALT serious problem, cease processing
+       *       - activity::SKIP to contend (spin) on GroomingToken
        * @note Attempts to acquire the GroomingToken for immediate
        *       processing, but not for just enqueuing planned tasks.
        *       Never drops the GroomingToken explicitly (unless when
@@ -212,7 +213,7 @@ namespace gear {
                    ,EXE& executionCtx
                    ,SchedulerInvocation& layer1)
         {
-          if (!chain) return activity::WAIT;
+          if (!chain) return activity::SKIP;
           
           Time now = executionCtx.getSchedTime();
           if (decideDispatchNow (when, now))
