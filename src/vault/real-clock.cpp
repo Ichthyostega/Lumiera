@@ -22,25 +22,26 @@
 
 
 /** @file real-clock.cpp
- ** Implementation of simplified access to the current wall clock time.
- ** 
- ** @todo just a rough draft as of 2012 / 2017
- ** @todo the idea was that the vault has elaborate knowledge about
- **       timings and time progression; upper layers should thus be able
- **       to fulfil their timing needs by querying the vault layer
+ ** Implementation of simplified access to current system time.
+ ** Actually, a _steady clock_ is employed, with an unspecified base time,
+ ** typically starting anew at each system boot. The micro-tick value will
+ ** increase monotonously, without gaps at NTP corrections, but also without
+ ** any relation to an external world time.
  */
 
 
 #include "vault/real-clock.hpp"
 
-#include <ctime>
+#include <chrono>
 
 
 using lib::time::FSecs;
+using std::chrono::steady_clock;
+using std::chrono::microseconds;
+using std::chrono::floor;
 
 namespace vault {
   
-#define MICRO_TICS_PER_NANOSECOND (1000*1000*1000 / TimeValue::SCALE)
   
   
   /** events during the last ms are considered "recent" for the purpose of testing */
@@ -50,17 +51,12 @@ namespace vault {
   TimeValue
   RealClock::_readSystemTime()
   {
-    timespec now;
-    clock_gettime(CLOCK_REALTIME, &now);
-                                      ////////////////////////////////////////////TODO shouldn't that be CLOCK_MONOTONIC ?
-                                      ////////////////////////////////////////////TODO (what happens on ntp adjustments?)
-                                      ////////////////////////////////////////////TICKET #886
+    auto now = steady_clock::now();
+    auto microTicks = floor<microseconds> (now.time_since_epoch())
+                        .count();
     
-    gavl_time_t ticksSince1970 = now.tv_sec * TimeValue::SCALE
-                               + now.tv_nsec / MICRO_TICS_PER_NANOSECOND;
-    
-    ENSURE (ticksSince1970 == _raw(TimeValue{ticksSince1970}));
-    return TimeValue::buildRaw_(ticksSince1970);  // bypassing the limit check
+    ENSURE (microTicks == _raw(TimeValue{microTicks}));
+    return TimeValue::buildRaw_(microTicks);        // bypassing the limit check
   }
   
   

@@ -227,8 +227,8 @@ namespace test {
           pullWork();
           CHECK (wasInvoked(start));                                       // Result: the first invocation happened immediately
           CHECK (slip_us  < 300);
-          CHECK (delay_us > 900);                                          // yet this thread was afterwards kept in sleep to await the next one
-          CHECK (activity::PASS == res);                                   // instruction to re-invoke immediately
+          CHECK (delay_us > 900);                                          // yet this thread was afterwards kept in sleep to await the next task;
+          CHECK (activity::PASS == res);                                   // returns instruction to re-invoke immediately
           CHECK (not scheduler.empty());                                   // since there is still work in the queue
           
           start += t1ms;                                                   // (just re-adjust the reference point to calculate slip_us)

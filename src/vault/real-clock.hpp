@@ -26,12 +26,9 @@
  ** system clock with a sufficient level of precision. The result is
  ** delivered in lumiera's [internal time format](\ref lib::time::Time)
  ** 
- ** @todo As of 4/23, still just a draft, but considered an established feature
  ** @todo this might be a good candidate also to provide some kind of
  **       translation service, i.e. a grid to anchor a logical time value
  **       with actual running wall clock time.
- ** @todo not clear if this becomes some kind of central service (singleton)
- **       or just a bunch of library routines
  ** 
  ** @see lib/time/timevalue.hpp
  */
@@ -52,7 +49,7 @@ namespace vault {
   
   
   /**
-   * Convenience frontend to access the current wall clock time
+   * Convenience frontend to access the current raw system time
    */
   class RealClock
     {
@@ -63,7 +60,7 @@ namespace vault {
       static Time
       now()
         {
-          return Time(_readSystemTime());
+          return Time{_readSystemTime()};
         }
       
       static bool
