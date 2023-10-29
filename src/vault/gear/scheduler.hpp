@@ -186,22 +186,28 @@ namespace gear {
         }
       
       /**
-       * Spark the engine self-regulation cycle and power up WorkForce
+       * Spark the engine self-regulation cycle and power up WorkForce.
+       * @note set off automatically when [put to use](\ref #seedCalcStream);
+       *       while active, the [duty-cycle](\ref #handleDutyCycle) retains
+       *       itself, albeit bound to disengage when falling empty.
        */
       void
       ignite()
         {
           TRACE (engine, "Ignite Scheduler Dispatch.");
           handleDutyCycle (RealClock::now());
-          workForce_.activate();
+          if (not empty())
+            workForce_.activate();
         }
       
       
       /**
        * Bring down processing destructively as fast as possible.
        * Dismiss worker threads as soon as possible, and clear the queues.
-       * @warning Currently running Activities can not be aborted, but anything
-       *    not yet scheduled will be discarded, irrespective of dependencies
+       * @warning Actually running Activities can not be aborted, but anything
+       *    not yet scheduled will be discarded, irrespective of dependencies.
+       * @remark should never need to call this in regular operation,
+       *    since an empty scheduler disengages automatically.
        */
       void
       terminateProcessing()
@@ -251,12 +257,7 @@ namespace gear {
       
     private:
       void handleDutyCycle (Time now);
-      
-      void
-      handleWorkerTermination (bool isFailure)
-        {
-          UNIMPLEMENTED("die harder");
-        }
+      void handleWorkerTermination (bool isFailure);
       
       void triggerEmergency();
       
@@ -527,6 +528,19 @@ namespace gear {
         Activity& tickActivity = activityLang_.createTick (deadline);
         ctx.post(nextTick, &tickActivity, ctx);
       }
+  }
+  
+  /**
+   * Callback invoked whenever a worker-thread is about to exit
+   * @param isFailuere if the exit was caused by uncaught exception
+   */
+  inline void
+  Scheduler::handleWorkerTermination (bool isFailure)
+  {
+    if (isFailure)
+      triggerEmergency();
+    else
+      loadControl_.markWorkerExit();
   }
   
   /**

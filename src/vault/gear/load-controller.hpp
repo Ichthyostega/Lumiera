@@ -158,6 +158,13 @@ namespace gear {
           /////////////////////////////////////////////////////////////////////////////OOO build integrated load state
         }
       
+      /** statistics update on scaling down the WorkForce */
+      void
+      markWorkerExit()
+        {
+          ///////do something deeply moving
+        }
+      
       /**
        * did we already tend for the indicated next relevant head time?
        * @note const and non-grooming

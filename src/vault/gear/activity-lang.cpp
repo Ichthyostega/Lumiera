@@ -21,35 +21,29 @@
 * *****************************************************/
 
 /** @file activity-lang.cpp
- ** Implementation details of the scheduler activity language framework.
- ** 
- ** @todo WIP-WIP-WIP 8/2023 »Playback Vertical Slice«
- ** 
+ ** Supporting implementation for the scheduler activity language framework.
+ ** @note most of the language processing is defined as inline functions
+ **       and uses fixed-size data storage in a dedicated custom allocator.
+ **       Timing measurements confirmed the benefits, reducing invocations
+ **       from ~50µs to <5µs in optimised mode, and this indeed matters,
+ **       as the scheduler can be considered performance sensitive code.
  */
 
 
 #include "vault/gear/activity-lang.hpp"
-//#include "lib/symbol.hpp"
-//#include "include/logging.h"
 #include "lib/format-obj.hpp"
 
 #include <string>
 
 using std::string;
-//using util::isnil;
 using lib::time::Time;
 using lib::time::TimeValue;
 
 
 namespace vault{
 namespace gear {
-  
-  namespace { // internal details
-    
-  } // internal details
-  
   namespace activity {
-    
+    Hook::~Hook() { } // emit VTable here...
   }
   
   
@@ -130,9 +124,4 @@ namespace gear {
   }
   
   
-  
-  
-  /**
-   */
-
 }} // namespace vault::gear

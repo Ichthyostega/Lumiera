@@ -77,6 +77,7 @@ namespace test {
         {
            simpleUsage();
            verify_StartStop();
+           verify_Disengage();
            invokeWorkFunction();
            walkingDeadline();
         }
@@ -95,8 +96,8 @@ namespace test {
       
       
       
-      /** @test TODO get the scheduler into running state
-       * @todo WIP 10/23 ✔ define ⟶ 🔁 implement
+      /** @test get the scheduler into running state
+       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_StartStop()
@@ -105,12 +106,61 @@ namespace test {
           EngineObserver watch;
           Scheduler scheduler{bFlow, watch};
           CHECK (isnil (scheduler));
+
+          Activity dummy{uint64_t(123), uint64_t(456)};
+          auto postIt = [&] { auto& schedCtx = Scheduler::ExecutionCtx::from(scheduler);
+                              schedCtx.post (RealClock::now()+t200us, &dummy, schedCtx);
+                            };
           
+          scheduler.ignite();
+          CHECK (isnil (scheduler));        // no start without any post()
+          
+          postIt();
           scheduler.ignite();
           CHECK (not isnil (scheduler));
           
           scheduler.terminateProcessing();
           CHECK (isnil (scheduler));
+          
+          postIt();
+          postIt();
+          scheduler.ignite();
+          CHECK (not isnil (scheduler));
+          //... and just walk away => scheduler unwinds cleanly from destructor
+        }//     Note: BlockFlow and WorkForce unwinding is covered in dedicated tests
+      
+      
+      
+      /** @test TODO verify the scheduler processes and winds down automatically
+       *        when falling empty.
+       * @todo WIP 10/23 ✔ define ⟶ 🔁 implement
+       */
+      void
+      verify_Disengage()
+        {
+          BlockFlowAlloc bFlow;
+          EngineObserver watch;
+          Scheduler scheduler{bFlow, watch};
+          CHECK (isnil (scheduler));
+          
+          Activity dummy{uint64_t(123), uint64_t(456)};
+          auto postIt = [&] { auto& schedCtx = Scheduler::ExecutionCtx::from(scheduler);
+                              schedCtx.post (RealClock::now()+t200us, &dummy, schedCtx);
+                            };
+          
+          UNIMPLEMENTED("disengage");
+          scheduler.ignite();
+          CHECK (isnil (scheduler));
+          
+          postIt();
+          scheduler.ignite();
+          CHECK (not isnil (scheduler));
+SHOW_EXPR(_raw(RealClock::now()))
+SHOW_EXPR(_raw(scheduler.layer1_.headTime()))
+          
+          scheduler.terminateProcessing();
+          CHECK (isnil (scheduler));
+SHOW_EXPR(_raw(RealClock::now()))
         }
       
       
