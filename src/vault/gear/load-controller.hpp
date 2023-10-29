@@ -151,6 +151,13 @@ namespace gear {
       TimeVar tendedHead_{Time::ANYTIME};
       
     public:
+      /** periodic call to build integrated state indicators */
+      void
+      updateState (Time now)
+        {
+          /////////////////////////////////////////////////////////////////////////////OOO build integrated load state
+        }
+      
       /**
        * did we already tend for the indicated next relevant head time?
        * @note const and non-grooming

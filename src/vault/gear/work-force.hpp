@@ -132,9 +132,9 @@ namespace gear {
         void
         pullWork()
           {
-            ASSERT_VALID_SIGNATURE (decltype(CONF::doWork),    SIG_WorkFun);
-            ASSERT_VALID_SIGNATURE (decltype(CONF::finalHook), SIG_FinalHook);
-
+            ASSERT_MEMBER_FUNCTOR (&CONF::doWork,    SIG_WorkFun);
+            ASSERT_MEMBER_FUNCTOR (&CONF::finalHook, SIG_FinalHook);
+            
             bool regularExit{false};
             try /* ================ pull work ===================== */
               {

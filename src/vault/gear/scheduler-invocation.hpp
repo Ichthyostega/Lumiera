@@ -109,6 +109,14 @@ namespace gear {
         { }
       
       
+      /** forcibly clear out the schedule */
+      void
+      discardSchedule()
+        {
+          instruct_.consume_all([](auto&){/*obliterate*/});
+          priority_ = PriorityQueue();
+        }
+      
       /**
        * Accept an Activity for time-bound execution
        */
@@ -181,6 +189,13 @@ namespace gear {
         {
           return not priority_.empty()
              and priority_.top().waterlevel <= waterLevel(now);
+        }
+      
+      /** detect a compulsory Activity with missed deadline */
+      bool
+      isOutOfTime()  const
+        {
+          return false; /////////////////////////////////////////////////////////////////OOO compulsory Activities
         }
       
       bool

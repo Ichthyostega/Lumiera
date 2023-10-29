@@ -116,6 +116,13 @@ namespace gear {
         }
       
       
+      /** @internal setup a scheduler »Tick« for internal state maintenance */
+      Activity& createTick (Time deadline){ return mem_.until(deadline).create (Activity::TICK); }
+      
+      /** @internal propagate new clean-up deadline to the BlockFlow allocator */
+      void discardBefore (Time deadline)  { mem_.discardBefore (deadline); }
+      
+      
       /**
        * Execution Framework: dispatch performance of a chain of Activities.
        */

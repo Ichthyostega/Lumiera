@@ -130,9 +130,11 @@ namespace gear {
   
   namespace { // Scheduler default config
     
-    const auto   IDLE_WAIT = 20ms;           ///< sleep-recheck cycle for workers deemed _idle_
-    const size_t DISMISS_CYCLES = 100;       ///< number of wait cycles before an idle worker terminates completely
-    Offset POLL_WAIT_DELAY{FSecs(1,1000)};   ///< delay until re-evaluating a condition previously found unsatisfied
+    const auto   IDLE_WAIT = 20ms;            ///< sleep-recheck cycle for workers deemed _idle_
+    const size_t DISMISS_CYCLES = 100;        ///< number of wait cycles before an idle worker terminates completely
+    Offset POLL_WAIT_DELAY{FSecs(1,1000)};    ///< delay until re-evaluating a condition previously found unsatisfied
+    Offset DUTY_CYCLE_PERIOD{FSecs(1,20)};    ///< period of the regular scheduler »tick« for state maintenance.
+    Offset DUTY_CYCLE_TOLERANCE{FSecs(1,10)}; ///< maximum slip tolerated on duty-cycle start before triggering Scheduler-emergency
   }
   
   
@@ -184,22 +186,29 @@ namespace gear {
         }
       
       /**
-       * 
+       * Spark the engine self-regulation cycle and power up WorkForce
        */
       void
       ignite()
         {
-          UNIMPLEMENTED("suicide");
+          TRACE (engine, "Ignite Scheduler Dispatch.");
+          handleDutyCycle (RealClock::now());
+          workForce_.activate();
         }
       
       
       /**
-       * 
+       * Bring down processing destructively as fast as possible.
+       * Dismiss worker threads as soon as possible, and clear the queues.
+       * @warning Currently running Activities can not be aborted, but anything
+       *    not yet scheduled will be discarded, irrespective of dependencies
        */
       void
       terminateProcessing()
         {
-          UNIMPLEMENTED("suicide");
+          TRACE (engine, "Forcibly terminate Scheduler Dispatch.");
+          workForce_.awaitShutdown();
+          layer1_.discardSchedule();
         }
       
       
@@ -241,11 +250,15 @@ namespace gear {
       
       
     private:
+      void handleDutyCycle (Time now);
+      
       void
       handleWorkerTermination (bool isFailure)
         {
           UNIMPLEMENTED("die harder");
         }
+      
+      void triggerEmergency();
       
       
       /** send this thread into a targeted short-time wait. */
@@ -474,6 +487,55 @@ namespace gear {
         doTargetedSleep();
         return activity::SKIP;     //  prompts to abort this processing-chain for good
       }
+  }
+  
+  
+  /**
+   * »Tick-hook« : code to maintain sane running status.
+   * This function will be invoked [regularly](\ref DUTY_CYCLE_PERIOD) while the scheduler
+   * is actively processing; in fact this function determines when the scheduler falls empty
+   * and can be shut down — and thus regular invocation is equivalent to running state.
+   * Code for all kinds of status updates, low-level clean-up and maintenance work related
+   * to the building blocks of the scheduler shall be added here. It will be invoked from
+   * within some (random) worker thread, frequently enough for humans to seem like an
+   * immediate response, but with sufficient large time period to amortise even slightly
+   * more computational expensive work; IO and possibly blocking operations should be
+   * avoided here though. Exceptions emanating from here will shut down the engine.
+   */
+  inline void
+  Scheduler::handleDutyCycle (Time now)
+  {
+    // consolidate queue content
+    layer1_.feedPrioritisation();
+    //////////////////////////////////////////////////////////////////////OOO clean-up of outdated tasks here
+    if (layer1_.isOutOfTime())
+      {
+        triggerEmergency();
+        return; // leave everything as-is
+      }
+    
+    // clean-up of obsolete Activities
+    activityLang_.discardBefore (now);
+    
+    loadControl_.updateState (now);
+    
+    if (not empty())
+      {// prepare next duty cycle »tick«
+        Time nextTick = now + DUTY_CYCLE_PERIOD;
+        Time deadline = nextTick + DUTY_CYCLE_TOLERANCE;
+        auto& ctx = ExecutionCtx::from (*this);
+        Activity& tickActivity = activityLang_.createTick (deadline);
+        ctx.post(nextTick, &tickActivity, ctx);
+      }
+  }
+  
+  /**
+   * Trip the emergency brake and unwind processing while retaining all state.
+   */
+  inline void
+  Scheduler::triggerEmergency()
+  {
+    UNIMPLEMENTED ("scheduler overrun -- trigger Emergency");
   }
   
   

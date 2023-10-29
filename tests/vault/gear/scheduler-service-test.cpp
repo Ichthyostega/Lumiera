@@ -32,7 +32,7 @@
 #include "lib/format-cout.hpp"
 #include "lib/test/microbenchmark.hpp"
 #include "lib/test/diagnostic-output.hpp"///////////////TODO
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <utility>
 #include <thread>
@@ -48,6 +48,7 @@ namespace test {
   
 //  using lib::time::FrameRate;
 //  using lib::time::Offset;
+  using util::isnil;
   using lib::time::Time;
   using std::this_thread::sleep_for;
   
@@ -75,6 +76,7 @@ namespace test {
       run (Arg)
         {
            simpleUsage();
+           verify_StartStop();
            invokeWorkFunction();
            walkingDeadline();
         }
@@ -88,7 +90,27 @@ namespace test {
         {
           BlockFlowAlloc bFlow;
           EngineObserver watch;
-          Scheduler{bFlow, watch};
+          Scheduler scheduler{bFlow, watch};
+        }
+      
+      
+      
+      /** @test TODO get the scheduler into running state
+       * @todo WIP 10/23 ✔ define ⟶ 🔁 implement
+       */
+      void
+      verify_StartStop()
+        {
+          BlockFlowAlloc bFlow;
+          EngineObserver watch;
+          Scheduler scheduler{bFlow, watch};
+          CHECK (isnil (scheduler));
+          
+          scheduler.ignite();
+          CHECK (not isnil (scheduler));
+          
+          scheduler.terminateProcessing();
+          CHECK (isnil (scheduler));
         }
       
       
