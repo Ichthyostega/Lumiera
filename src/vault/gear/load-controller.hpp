@@ -65,10 +65,19 @@
  ** assigning new tasks, while workers returning from idle state are typically
  ** sent back into idle state, unless there is direct need for more capacity.
  ** 
+ ** # Load indicator
+ ** A fusion of some operational values is used to build a heuristic indicator
+ ** of current scheduler load. These values can be retrieved with low overhead.
+ ** - the fraction of maximal concurrency actually used
+ ** - a sampling of the lag, i.e. the average distance to the next task;
+ **   this observation is sampled whenever a worker asks for more work.
+ ** 
  ** @see scheduler.hpp
+ ** @see SchedulerLoadControl_test
+ ** @see SchedulerService_test::verify_LoadFactor()
  ** @see SchedulerStress_test
  ** 
- ** @todo WIP-WIP-WIP 10/2023 »Playback Vertical Slice«
+ ** @todo WIP-WIP 11/2023 »Playback Vertical Slice«
  ** 
  */
 
@@ -109,6 +118,7 @@ namespace gear {
   using std::chrono_literals::operator ""us;
   using std::function;
   using std::atomic_int64_t;
+  using std::memory_order_relaxed;
   
   namespace { // Scheduler default config
     
@@ -122,12 +132,16 @@ namespace gear {
     Duration SLEEP_HORIZON{_uTicks (20ms)};
     Duration WORK_HORIZON {_uTicks ( 5ms)};
     Duration NEAR_HORIZON {_uTicks (50us)};
+    
+    const double LAG_SAMPLE_DAMPING = 2;    ///< smoothing factor for exponential moving average of lag;
   }
   
   
   
   /**
    * Controller to coordinate resource usage related to the Scheduler.
+   * - implements the schematics for capacity redistribution
+   * - provides some performance indicators, notably the LoadController::effectiveLoad()
    * @todo WIP-WIP 10/2023 gradually filling in functionality as needed
    * @see BlockFlow
    * @see Scheduler
@@ -161,32 +175,65 @@ namespace gear {
       
       atomic_int64_t sampledLag_{0};
       
+      /**
+       * @internal evaluate the situation encountered when a worker calls for work.
+       * @remark this function updates an exponential moving average of schedule
+       *         head distance in a concurrency safe way. The value sampled is
+       *         clamped to prevent poisoning by excess peaks.
+       * @warning Called from a hot path, with the potential to create congestion.
+       *         Measurements indicate single call < 200ns and < 5µs when contended.
+       */
       void
       markLagSample (Time head, Time now)
-        {
-          double headroom = _raw(std::clamp<TimeVar> (now - (head.isRegular()? head:now)
-                                                     , -SLEEP_HORIZON
-                                                     , WORK_HORIZON));
-          const int64_t N = wiring_.maxCapacity * 3;
-          int64_t average = sampledLag_.load (std::memory_order_relaxed);
+        {                                        // negative when free capacity
+          double lag = _raw(std::clamp<TimeVar> (now - (head.isRegular()? head:now)
+                                                , -SLEEP_HORIZON
+                                                , WORK_HORIZON));
+          const double alpha = LAG_SAMPLE_DAMPING / (1 + wiring_.maxCapacity);
+          int64_t average = sampledLag_.load (memory_order_relaxed);
           int64_t newAverage;
-          do newAverage = std::floor ((headroom + (N-1)*average) / N);
-          while (not sampledLag_.compare_exchange_weak (average, newAverage, std::memory_order_relaxed));
+          do newAverage = std::floor (lag*alpha + (1-alpha)*average);
+          while (not sampledLag_.compare_exchange_weak (average, newAverage, memory_order_relaxed));
         }
       
     public:
+      /**
+       * @return guess of current scheduler pressure
+       * @remark the value is sampled at the points where workers pull work.
+       *         Since these »capacity events« happen randomly, the current
+       *         distance to the schedule head hints at either free headroom
+       *         or overload leading to congestion.
+       * @see #markLagSample
+       */
       int64_t
-      lag()
+      averageLag()  const
         {
-          return sampledLag_.load (std::memory_order_relaxed);
+          return sampledLag_.load (memory_order_relaxed);
         }
+      
+      /**
+       * @internal (re)set the currently seen average lag.
+       * @return the previous average value
+       * @remark intended for unit testing and state reset;
+       *         thread-save. Regular use not recommended.
+       */
+      int64_t
+      setCurrentAverageLag (int64_t lag)
+        {
+          return sampledLag_.exchange(lag, memory_order_relaxed);
+        }
+      
       /**
        * @return guess of current load relative to full load
+       * @remark based on the fusion of several state values,
+       *         which can be retrieved with low overhead
+       *         - the used fraction of possible concurrency
+       *         - [sampling of distance to next task](\ref averageLag)
        */
       double
-      effectiveLoad()
+      effectiveLoad()  const
         {
-          double lag = sampledLag_.load (std::memory_order_relaxed);
+          double lag = sampledLag_.load (memory_order_relaxed);
           lag -= 200;
           lag /= _raw(WORK_HORIZON);
           lag *= 10;

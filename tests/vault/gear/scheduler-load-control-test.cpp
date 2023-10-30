@@ -34,9 +34,12 @@
 #include "lib/test/diagnostic-output.hpp"/////////////////////TODO
 
 //#include <utility>
+#include <chrono>
 
 using test::Test;
 using std::move;
+
+using std::chrono::microseconds;
 //using util::isSameObject;
 
 
@@ -71,6 +74,7 @@ namespace test {
            tendNextActivity();
            classifyCapacity();
            scatteredReCheck();
+           indicateAverageLoad();
            
            walkingDeadline();
         }
@@ -285,6 +289,88 @@ namespace test {
           auto error = fabs(avg/expect - 1);
           CHECK (0.002 > error);        // observing a quite stable skew ~ 0.8‰ on my system
         }                              //  let's see if this error bound triggers eventually...
+      
+      
+      
+      
+      /** @test verify fusion of sampled observations to guess average scheduler load
+       *      - use a rigged wiring of the load controller to verify calculation
+       *        based on known values of current _concurrency_ and _schedule pressure_
+       *      - scheduling on average 200µs behind nominal schedule is considered
+       *        the regular balanced state and thus defined as 100% schedule pressure
+       *      - if congestion builds up to 1/10 of WORK_HORIZON, 200% overload is indicated
+       *      - on the other hand, if workers appear on average 200µs before the typical
+       *        balanced state, the resulting headroom is defined to constitute 50% pressure
+       *      - the pressure value is multiplied with the degree of concurrency
+       *      - the pressure is sampled from the lag (distance of current time to the
+       *        next activity to schedule), which is observed whenever a worker
+       *        calls in to retrieve more work. These calls happen randomly.
+       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
+       */
+      void
+      indicateAverageLoad()
+        {
+          uint maxThreads = 10;
+          uint currThreads = 0;
+          
+          LoadController::Wiring setup;
+          setup.maxCapacity = maxThreads;
+          setup.currWorkForceSize = [&]{ return currThreads; };
+          // rigged setup to verify calculated load indicator
+          LoadController lctrl{move(setup)};
+          
+          CHECK (0 == lctrl.averageLag());
+          CHECK (0 == lctrl.effectiveLoad());
+          
+          // Manipulate the sampled average lag (in µs)
+          lctrl.setCurrentAverageLag (200);
+          // Scheduling 200µs behind nominal start time -> 100% schedule pressure
+          
+          currThreads = 5;
+          CHECK (0.5 == lctrl.effectiveLoad());
+          currThreads = 8;
+          CHECK (0.8 == lctrl.effectiveLoad());
+          currThreads = 10;
+          CHECK (1.0 == lctrl.effectiveLoad());
+          
+          // congestion +500µs -> 200% schedule pressure
+          lctrl.setCurrentAverageLag (200+500);
+          CHECK (2.0 == lctrl.effectiveLoad());
+          
+          lctrl.setCurrentAverageLag (200+500+500);
+          CHECK (3.0 == lctrl.effectiveLoad());  // -> 300%
+          
+          // if average headroom 500µs -> 50% load
+          lctrl.setCurrentAverageLag (200-500);
+          CHECK (0.5 == lctrl.effectiveLoad());
+          CHECK (-300 == lctrl.averageLag());
+          
+          lctrl.setCurrentAverageLag (200-500-500-500);
+          CHECK (0.25 == lctrl.effectiveLoad());
+          CHECK (-1300 == lctrl.averageLag());
+          
+          // load indicator is always modulated by concurrency level
+          currThreads = 2;
+          CHECK (0.05 == lctrl.effectiveLoad());
+          
+          // average lag is sampled from the situation when workers call in
+          Time head = Time::ZERO;
+          TimeVar curr = Time{1,0};
+          lctrl.markIncomingCapacity (head,curr);
+          CHECK (-882 == lctrl.averageLag());
+          
+          lctrl.markIncomingCapacity (head,curr);
+          CHECK (-540 == lctrl.averageLag());
+
+          curr = Time{0,1};
+          lctrl.markIncomingCapacity (head,curr);
+          lctrl.markIncomingCapacity (head,curr);
+          CHECK (1291 == lctrl.averageLag());
+          
+          curr = head - Time{0,2};
+          lctrl.markIncomingCapacity (head,curr);
+          CHECK (-2581 == lctrl.averageLag());
+        }
       
       
       

@@ -167,7 +167,7 @@ SHOW_EXPR(wuff())
               sleep_for(50us);
               cout << wuff() << " +++ Load: "<<scheduler.getLoadIndicator()
                              <<" --- HT= "<<_raw(scheduler.layer1_.headTime())-_raw(wau)
-                             <<" -+- Lag "<< scheduler.loadControl_.lag()
+                             <<" -+- Lag "<< scheduler.loadControl_.averageLag()
                              <<endl;
             }
         }
