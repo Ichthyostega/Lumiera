@@ -59,6 +59,8 @@
 #include "lib/sync-barrier.hpp"
 #include "lib/thread.hpp"
 
+#include "lib/test/microbenchmark-adaptor.hpp"
+
 #include <chrono>
 
 
@@ -82,12 +84,12 @@ namespace test{
   inline double
   benchmarkTime (FUN const& invokeTestLoop, const size_t repeatCnt = DEFAULT_RUNS)
   {
-    using std::chrono::system_clock;;                               /////////////////////////////////////////TICKET #886
+    using std::chrono::steady_clock;
     using Dur = std::chrono::duration<double, CLOCK_SCALE>;
     
-    auto start = system_clock::now();
+    auto start = steady_clock::now();
     invokeTestLoop();
-    Dur duration = system_clock::now () - start;
+    Dur duration = steady_clock::now () - start;
     return duration.count() / repeatCnt;
   };
   
@@ -102,11 +104,11 @@ namespace test{
   benchmarkLoop (FUN const& testSubject, const size_t repeatCnt = DEFAULT_RUNS)
   {
     // the test subject gets the current loop-index and returns a checksum value
-    ASSERT_VALID_SIGNATURE (decltype(testSubject), size_t(size_t));
+    auto subject4benchmark = microbenchmark::adapted4benchmark (testSubject);
     
     size_t checksum{0};
     for (size_t i=0; i<repeatCnt; ++i)
-      checksum += testSubject(i);
+      checksum += subject4benchmark(i);
     return checksum;
   }
   
@@ -137,7 +139,7 @@ namespace test{
    * This function fires up a number of threads
    * and invokes the given test subject repeatedly.
    * @tparam number of threads to run in parallel
-   * @param subject `void(void)` function to be timed
+   * @param subject function to be timed in parallel
    * @param repeatCnt loop-count _within each thread_
    * @return a pair `(microseconds, checksum)` combining the averaged
    *         invocation time and a compounded checksum from all threads.
@@ -153,24 +155,25 @@ namespace test{
   inline auto
   threadBenchmark(FUN const& subject, const size_t repeatCnt = DEFAULT_RUNS)
   {
-    using std::chrono::system_clock;
+    using std::chrono::steady_clock;
     using Dur = std::chrono::duration<double, CLOCK_SCALE>;
     
     // the test subject gets the current loop-index and returns a checksum value
-    ASSERT_VALID_SIGNATURE (decltype(subject), size_t(size_t));
+    auto subject4benchmark = microbenchmark::adapted4benchmark (subject);
+    using Subject = decltype(subject4benchmark);
     
     struct Thread
       : lib::ThreadJoinable<>
       {
-        Thread(FUN const& testSubject, size_t loopCnt, SyncBarrier& testStart)
+        Thread(Subject const& testSubject, size_t loopCnt, SyncBarrier& testStart)
           : ThreadJoinable{"Micro-Benchmark"
                           ,[=, &testStart]()       // local copy of the test-subject-Functor
                              {
                                testStart.sync();   // block until all threads are ready
-                               auto start = system_clock::now();
+                               auto start = steady_clock::now();
                                for (size_t i=0; i < loopCnt; ++i)
                                  checksum += testSubject(i);
-                               duration = system_clock::now () - start;
+                               duration = steady_clock::now () - start;
                              }}
           { }
                              // Note: barrier at begin and join at end both ensure data synchronisation
@@ -181,7 +184,7 @@ namespace test{
     SyncBarrier testStart{nThreads + 1};           // coordinated start of timing measurement
     lib::ScopedCollection<Thread> threads(nThreads);
     for (size_t n=0; n<nThreads; ++n)              // create test threads
-      threads.emplace (subject, repeatCnt, testStart);
+      threads.emplace (subject4benchmark, repeatCnt, testStart);
 
     testStart.sync();                              // barrier until all threads are ready
     
