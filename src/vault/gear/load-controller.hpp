@@ -164,16 +164,14 @@ namespace gear {
       void
       markLagSample (Time head, Time now)
         {
+          double headroom = _raw(std::clamp<TimeVar> (now - (head.isRegular()? head:now)
+                                                     , -SLEEP_HORIZON
+                                                     , WORK_HORIZON));
           const int64_t N = wiring_.maxCapacity * 3;
-          double headroom = _raw(head.isRegular()? head:now) - _raw(now);
           int64_t average = sampledLag_.load (std::memory_order_relaxed);
           int64_t newAverage;
-          do{
-              double chango = (headroom + (N-1)*average) / N;
-              newAverage = std::floor (chango);
-            }
+          do newAverage = std::floor ((headroom + (N-1)*average) / N);
           while (not sampledLag_.compare_exchange_weak (average, newAverage, std::memory_order_relaxed));
-//cout<<"NAV "<< newAverage<< " headroom="<<headroom<<endl;
         }
       
     public:
@@ -188,14 +186,20 @@ namespace gear {
       double
       effectiveLoad()
         {
-          return wiring_.currWorkForceSize() / double(wiring_.maxCapacity);
+          double lag = sampledLag_.load (std::memory_order_relaxed);
+          lag -= 200;
+          lag /= _raw(WORK_HORIZON);
+          lag *= 10;
+          double lagFactor = lag<0? 1/(1-lag): 1+lag;
+          double loadFactor = wiring_.currWorkForceSize() / double(wiring_.maxCapacity);
+          return loadFactor * lagFactor;
         }
       
       /** periodic call to build integrated state indicators */
       void
-      updateState (Time now)
+      updateState (Time)
         {
-          /////////////////////////////////////////////////////////////////////////////OOO build integrated load state
+          /////////////////////////////////////////////////////////////////////////////TODO anything we need to calculate on each »scheduler tick«?
         }
       
       /** statistics update on scaling down the WorkForce */

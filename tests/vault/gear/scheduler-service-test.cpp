@@ -151,12 +151,6 @@ namespace test {
                                 schedCtx.post (RealClock::now() + start + TimeValue{i}, &dummy, schedCtx);
                             };
           
-          auto [mil,_] = lib::test::microBenchmark([&](int i){
-                              auto& schedCtx = Scheduler::ExecutionCtx::from(scheduler);
-                              schedCtx.post (RealClock::now() + TimeValue{i}, &dummy, schedCtx);
-          }, 1e5);
-SHOW_EXPR(mil);
-scheduler.layer2_.dropGroomingToken();
           
           auto fatPackage = work::Config::COMPUTATION_CAPACITY * 1000/20; 
           createLoad (Offset{Time{5,0}}, fatPackage);
