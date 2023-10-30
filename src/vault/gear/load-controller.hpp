@@ -83,10 +83,14 @@
 //#include "lib/symbol.hpp"
 #include  "lib/nocopy.hpp"
 #include "lib/util.hpp"
+#include "lib/format-cout.hpp"
 
 //#include <string>
+#include <cmath>
+#include <atomic>
 #include <chrono>
 #include <utility>
+#include <functional>
 
 
 namespace vault{
@@ -103,6 +107,8 @@ namespace gear {
   using lib::time::Offset;
   using std::chrono_literals::operator ""ms;
   using std::chrono_literals::operator ""us;
+  using std::function;
+  using std::atomic_int64_t;
   
   namespace { // Scheduler default config
     
@@ -133,6 +139,8 @@ namespace gear {
       struct Wiring
         {
           size_t maxCapacity{2};
+          
+          function<size_t()> currWorkForceSize{[]{ return 0; }};
           ///////TODO add here functors to access performance indicators
         };
       
@@ -150,7 +158,39 @@ namespace gear {
       
       TimeVar tendedHead_{Time::ANYTIME};
       
+      
+      atomic_int64_t sampledLag_{0};
+      
+      void
+      markLagSample (Time head, Time now)
+        {
+          const int64_t N = wiring_.maxCapacity * 3;
+          double headroom = _raw(head.isRegular()? head:now) - _raw(now);
+          int64_t average = sampledLag_.load (std::memory_order_relaxed);
+          int64_t newAverage;
+          do{
+              double chango = (headroom + (N-1)*average) / N;
+              newAverage = std::floor (chango);
+            }
+          while (not sampledLag_.compare_exchange_weak (average, newAverage, std::memory_order_relaxed));
+//cout<<"NAV "<< newAverage<< " headroom="<<headroom<<endl;
+        }
+      
     public:
+      int64_t
+      lag()
+        {
+          return sampledLag_.load (std::memory_order_relaxed);
+        }
+      /**
+       * @return guess of current load relative to full load
+       */
+      double
+      effectiveLoad()
+        {
+          return wiring_.currWorkForceSize() / double(wiring_.maxCapacity);
+        }
+      
       /** periodic call to build integrated state indicators */
       void
       updateState (Time now)
@@ -229,6 +269,7 @@ namespace gear {
       Capacity
       markIncomingCapacity (Time head, Time now)
         {
+          markLagSample (head,now);
           return classifyTimeHorizon (Offset{head - now})
                > NEARTIME ? IDLEWAIT
                           : markOutgoingCapacity(head,now);

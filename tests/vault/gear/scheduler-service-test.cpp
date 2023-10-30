@@ -75,10 +75,10 @@ namespace test {
       virtual void
       run (Arg)
         {
-           simpleUsage();
-           verify_StartStop();
-           verify_Disengage();
-           invokeWorkFunction();
+//           simpleUsage();
+//           verify_StartStop();
+           verify_LoadFactor();
+//           invokeWorkFunction();
            walkingDeadline();
         }
       
@@ -107,7 +107,7 @@ namespace test {
           Scheduler scheduler{bFlow, watch};
           CHECK (isnil (scheduler));
 
-          Activity dummy{uint64_t(123), uint64_t(456)};
+          Activity dummy{Activity::FEED};
           auto postIt = [&] { auto& schedCtx = Scheduler::ExecutionCtx::from(scheduler);
                               schedCtx.post (RealClock::now()+t200us, &dummy, schedCtx);
                             };
@@ -136,31 +136,39 @@ namespace test {
        * @todo WIP 10/23 ✔ define ⟶ 🔁 implement
        */
       void
-      verify_Disengage()
+      verify_LoadFactor()
         {
           BlockFlowAlloc bFlow;
           EngineObserver watch;
           Scheduler scheduler{bFlow, watch};
           CHECK (isnil (scheduler));
           
-          Activity dummy{uint64_t(123), uint64_t(456)};
-          auto postIt = [&] { auto& schedCtx = Scheduler::ExecutionCtx::from(scheduler);
-                              schedCtx.post (RealClock::now()+t200us, &dummy, schedCtx);
+          Activity dummy{Activity::FEED};
+          auto createLoad = [&](Offset start, uint cnt) 
+                            { // use internal API (this test is declared as friend)  
+                              auto& schedCtx = Scheduler::ExecutionCtx::from(scheduler);
+                              for (uint i=0; i<cnt; ++i)           // flood the queue
+                                schedCtx.post (RealClock::now() + start + TimeValue{i}, &dummy, schedCtx);
                             };
           
-          UNIMPLEMENTED("disengage");
-          scheduler.ignite();
-          CHECK (isnil (scheduler));
+          auto fatPackage = work::Config::COMPUTATION_CAPACITY * 1000/20; 
+          createLoad (Offset{Time{5,0}}, fatPackage);
           
-          postIt();
           scheduler.ignite();
-          CHECK (not isnil (scheduler));
-SHOW_EXPR(_raw(RealClock::now()))
-SHOW_EXPR(_raw(scheduler.layer1_.headTime()))
-          
-          scheduler.terminateProcessing();
-          CHECK (isnil (scheduler));
-SHOW_EXPR(_raw(RealClock::now()))
+          auto wau = RealClock::now();
+          auto wuff = [&]{ return _raw(RealClock::now()) - _raw(wau); };
+SHOW_EXPR(wuff())
+//          CHECK (isnil (scheduler));
+//          CHECK (not isnil (scheduler));
+SHOW_EXPR(wuff())
+          while (not isnil (scheduler))
+            {
+              sleep_for(50us);
+              cout << wuff() << " +++ Load: "<<scheduler.getLoadIndicator()
+                             <<" --- HT= "<<_raw(scheduler.layer1_.headTime())-_raw(wau)
+                             <<" -+- Lag "<< scheduler.loadControl_.lag()
+                             <<endl;
+            }
         }
       
       

@@ -580,7 +580,7 @@ namespace gear {
           
           // Exponential MA: mean ≔ mean · (N-1)/N  + newVal/N
           auto N = Strategy::averageEpochs();
-          double avgFactor = (contribution + N-1) / N;
+          double avgFactor = (contribution + N-1) / N;    // contribution = newVal / mean  => can extract factor
           adjustEpochStep (avgFactor);
         }
       

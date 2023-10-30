@@ -224,7 +224,7 @@ namespace gear {
       double
       getLoadIndicator()
         {
-          UNIMPLEMENTED("load indicator");
+          return loadControl_.effectiveLoad();
         }
       
       
@@ -300,6 +300,7 @@ namespace gear {
         {
           LoadController::Wiring setup;
           setup.maxCapacity = work::Config::COMPUTATION_CAPACITY;
+          setup.currWorkForceSize = [this]{ return workForce_.size(); };
           return setup;
         }
       
@@ -358,9 +359,10 @@ namespace gear {
         }
       
       activity::Proc
-      tick (Time)
+      tick (Time now)
         {
-          UNIMPLEMENTED ("λ-tick");
+          handleDutyCycle (now);
+          return activity::PASS;
         }
       
       Offset

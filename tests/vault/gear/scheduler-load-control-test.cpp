@@ -179,19 +179,19 @@ namespace test {
           
           Time next{0,10};
           
-          Time ut{1,0};
+          Time mt{1,0};
           Time t1{0,9};
           Time t2{next - SLEEP_HORIZON};
           Time t3{next - WORK_HORIZON};
           Time t4{next - NEAR_HORIZON};
-          Time t5{next + ut};                              //       ╭──────────────  next Activity at scheduler head
+          Time t5{next + mt};                              //       ╭──────────────  next Activity at scheduler head
                                                           //        │     ╭────────  current time of evaluation
           // Time `next` has not been tended yet...      //         ▼     ▼
-          CHECK (Capacity::TENDNEXT == lctrl.markOutgoingCapacity (next, ut ));
+          CHECK (Capacity::TENDNEXT == lctrl.markOutgoingCapacity (next, mt ));
           
           // but after marking `next` as tended, capacity can be directed elsewhere
           lctrl.tendNext (next);
-          CHECK (Capacity::WORKTIME == lctrl.markOutgoingCapacity (next, ut ));
+          CHECK (Capacity::WORKTIME == lctrl.markOutgoingCapacity (next, mt ));
           
           CHECK (Capacity::WORKTIME == lctrl.markOutgoingCapacity (next, t1 ));
           CHECK (Capacity::WORKTIME == lctrl.markOutgoingCapacity (next, t2 ));
@@ -201,7 +201,7 @@ namespace test {
           CHECK (Capacity::DISPATCH == lctrl.markOutgoingCapacity (next,next));
           CHECK (Capacity::DISPATCH == lctrl.markOutgoingCapacity (next, t5 ));
           
-          CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, ut ));
+          CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, mt ));
           CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, t1 ));
           CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, t2 ));
           CHECK (Capacity::NEARTIME == lctrl.markIncomingCapacity (next, t3 ));
@@ -212,7 +212,7 @@ namespace test {
           
           // tend-next works in limited ways also on incoming capacity
           lctrl.tendNext (Time::NEVER);
-          CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, ut ));
+          CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, mt ));
           CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, t1 ));
           CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, t2 ));
           CHECK (Capacity::TENDNEXT == lctrl.markIncomingCapacity (next, t3 ));
@@ -222,7 +222,7 @@ namespace test {
           CHECK (Capacity::DISPATCH == lctrl.markIncomingCapacity (next, t5 ));
           
           // while being used rather generously on outgoing capacity
-          CHECK (Capacity::TENDNEXT == lctrl.markOutgoingCapacity (next, ut ));
+          CHECK (Capacity::TENDNEXT == lctrl.markOutgoingCapacity (next, mt ));
           CHECK (Capacity::TENDNEXT == lctrl.markOutgoingCapacity (next, t1 ));
           CHECK (Capacity::TENDNEXT == lctrl.markOutgoingCapacity (next, t2 ));
           CHECK (Capacity::TENDNEXT == lctrl.markOutgoingCapacity (next, t3 ));
