@@ -57,6 +57,8 @@ namespace test {
     Time t200us = t100us + t100us;
     Time t500us = t200us + t200us + t100us;
     Time t1ms   = Time{1,0};
+    
+    const uint TYPICAL_TIME_FOR_ONE_SCHEDULE_us = 20;
   }
   
   
@@ -144,29 +146,33 @@ namespace test {
           CHECK (isnil (scheduler));
           
           Activity dummy{Activity::FEED};
+          
+          auto anchor = RealClock::now();
+auto wuff = [&](Time when =RealClock::now()){ return _raw(when) - _raw(anchor); };
           auto createLoad = [&](Offset start, uint cnt) 
                             { // use internal API (this test is declared as friend)  
                               auto& schedCtx = Scheduler::ExecutionCtx::from(scheduler);
                               for (uint i=0; i<cnt; ++i)           // flood the queue
-                                schedCtx.post (RealClock::now() + start + TimeValue{i}, &dummy, schedCtx);
+                                schedCtx.post (anchor + start + TimeValue{i}, &dummy, schedCtx);
                             };
           
           
-          auto fatPackage = work::Config::COMPUTATION_CAPACITY * 1000/20; 
+          auto LOAD_PEAK_DURATION_us = 2000;
+          auto fatPackage = work::Config::COMPUTATION_CAPACITY * LOAD_PEAK_DURATION_us/TYPICAL_TIME_FOR_ONE_SCHEDULE_us; 
+SHOW_EXPR(wuff())
+SHOW_EXPR(wuff(scheduler.layer1_.headTime()))
           createLoad (Offset{Time{5,0}}, fatPackage);
+          createLoad (Offset{Time{15,0}}, fatPackage);
           
+SHOW_EXPR(wuff())
           scheduler.ignite();
-          auto wau = RealClock::now();
-          auto wuff = [&]{ return _raw(RealClock::now()) - _raw(wau); };
 SHOW_EXPR(wuff())
-//          CHECK (isnil (scheduler));
-//          CHECK (not isnil (scheduler));
-SHOW_EXPR(wuff())
+SHOW_EXPR(wuff(scheduler.layer1_.headTime()))
           while (not isnil (scheduler))
             {
               sleep_for(50us);
               cout << wuff() << " +++ Load: "<<scheduler.getLoadIndicator()
-                             <<" --- HT= "<<_raw(scheduler.layer1_.headTime())-_raw(wau)
+                             <<" --- HT= "<<wuff(scheduler.layer1_.headTime())
                              <<" -+- Lag "<< scheduler.loadControl_.averageLag()
                              <<endl;
             }

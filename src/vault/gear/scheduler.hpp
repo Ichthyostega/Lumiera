@@ -108,6 +108,7 @@
 //#include "lib/symbol.hpp"
 #include  "lib/nocopy.hpp"
 //#include "lib/util.hpp"
+#include "lib/format-cout.hpp"/////////////////TODO
 
 //#include <string>
 #include <utility>
@@ -263,7 +264,7 @@ namespace gear {
       
       
       /** send this thread into a targeted short-time wait. */
-      activity::Proc scatteredDelay (Time now, LoadController::Capacity);
+      activity::Proc scatteredDelay (Time now, LoadController::Capacity,bool in);////////////TODO
       
       
       /**
@@ -410,7 +411,7 @@ namespace gear {
                                         Time now = ctx.getSchedTime();
                                         Time head = layer1_.headTime();
                                         return scatteredDelay(now,
-                                                  loadControl_.markIncomingCapacity (head,now));
+                                                  loadControl_.markIncomingCapacity (head,now),true);
                                       })
                       .performStep([&]{
                                         Time now = ctx.getSchedTime();
@@ -421,7 +422,7 @@ namespace gear {
                                         Time now = ctx.getSchedTime();
                                         Time head = layer1_.headTime();
                                         return scatteredDelay(now,
-                                                  loadControl_.markOutgoingCapacity (head,now));
+                                                  loadControl_.markOutgoingCapacity (head,now),false);
                                       });
         
         // ensure lock clean-up
@@ -453,7 +454,7 @@ namespace gear {
    *       place the current thread into a short-term targeted sleep.
    */
   inline activity::Proc
-  Scheduler::scatteredDelay (Time now, LoadController::Capacity capacity)
+  Scheduler::scatteredDelay (Time now, LoadController::Capacity capacity, bool in)
   {
     auto doTargetedSleep = [&]
           { // ensure not to block the Scheduler after management work
@@ -462,7 +463,11 @@ namespace gear {
               layer2_.dropGroomingToken();
              // relocate this thread(capacity) to a time where its more useful
             Offset targetedDelay = loadControl_.scatteredDelayTime (now, capacity);
+TimeVar head = layer1_.headTime()-now;
+cout <<"\n|oo|"<<(in?"^":"v")<<" Sleep-->"<<_raw(targetedDelay)<<"  <head:"<<_raw(head);
             std::this_thread::sleep_for (std::chrono::microseconds (_raw(targetedDelay)));
+head = layer1_.headTime()-now;
+cout <<"\n|••|"<<(in?"^":"v")<<"   eep<--"<<_raw(targetedDelay)<<"  <head:"<<_raw(head);
           };
     auto doTendNextHead = [&]
           {
@@ -481,6 +486,10 @@ namespace gear {
         std::this_thread::yield();
         return activity::SKIP;     //  prompts to abort chain but call again immediately
       case LoadController::IDLEWAIT:
+{        
+Time head = layer1_.headTime()-now;
+cout <<"\n|**|"<<(in?"^":"v")<<" --------------------------------------------Deep-Sleep-->  <head:"<<_raw(head);
+}
         return activity::WAIT;     //  prompts to switch this thread into sleep mode
       case LoadController::TENDNEXT:
         doTendNextHead();
