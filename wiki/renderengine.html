@@ -7201,7 +7201,7 @@ The Scheduler is now considered an implementation-level facility with an interfa
 &amp;rarr; [[Workers|SchedulerWorker]]
 </pre>
 </div>
-<div title="SchedulerLoadControl" creator="Ichthyostega" modifier="Ichthyostega" created="202310240240" modified="202310272133" tags="Rendering operational spec draft" changecount="48">
+<div title="SchedulerLoadControl" creator="Ichthyostega" modifier="Ichthyostega" created="202310240240" modified="202311010317" tags="Rendering operational spec draft" changecount="60">
 <pre>The scheduling mechanism //requires active control of work parameters to achieve good performance on average.//
 In a nutshell, the scheduler arranges planned [[render activities|RenderActivity]] onto a time axis -- and is complemented by an [[active »work force«|SchedulerWorker]] to //pull and retrieve// the most urgent next task when free processing capacity becomes available. This arrangement shifts focus from the //management of tasks// towards the //management of capacity// -- which seems more adequate, given that capacity is scarce while tasks are abundant, yet limited in size and processed atomically.
 
@@ -7226,6 +7226,18 @@ Drawing upon these principles, the treatment of worker calls can be aligned to t
 # beyond that, capacity can be redirected into a focussed zone behind the head
 # and if the head is far away, capacity is transitioned into the reserve segment
 Worker capacity events can be further distinguished into //incoming capacity// and //outgoing capacity.// The latter is the most desirable transition, since it corresponds to a worker just returning from a computation task, while incoming capacity stems from workers calling back after a sleep period. Thus a high priority is placed on re-assigning the outgoing capacity immediately back to further active work, while for incoming capacity there is a preference to send it back to sleep. A worker placed into the sleeping reserve for an extended stretch of time can be considered excess capacity and will be removed from the [[work force|SchedulerWorker]]. This kind of asymmetry creates a cascading flow, and allows in the end to synthesise an average load factor, which in turn can be used to regulate the Engine on a global level. If scheduling is overloaded, increasing the slip of planned timings, more capacity might be added back when available, or the planning process should be throttled accordingly.
+!!!Capacity redistribution scheme
+The effective behaviour results from the collaboration of {{{Scheduler::scatteredDelay()}}} with the {{{LoadController}}}. Redistribution can happen on //incoming capacity// (before the actual dispatch) and on //outgoing capacity//. After a »targeted sleep«, the thread is sent back with {{{PASS}}} and will thus immediately re-enter the capacity decision logic. The actual decision is then based on the current distance to the scheduler's »head element«
+|!next head|!|&gt;|!incoming|&gt;|!outgoing|
+|~|!distance|!tend-next|!regular|!tend-next|!regular|
+|unknown                 | ∞| IDLEWAIT | IDLEWAIT | WORKTIME | WORKTIME |
+|sleep-horizon | &gt;20ms| IDLEWAIT | IDLEWAIT | TENDNEXT | WORKTIME |
+|work-horizon   | &gt;5ms| IDLEWAIT | IDLEWAIT | TENDNEXT | WORKTIME |
+|near-horizon  | &gt;50µs| TENDNEXT | NEARTIME | TENDNEXT | NEARTIME |
+|imminent         | &gt;now| SPINTIME | SPINTIME | SPINTIME | SPINTIME |
+|past                 | &lt;now| DISPATCH | DISPATCH| DISPATCH | DISPATCH |
+|case matrix for capacity redistribution|c
+&amp;rarr; please have a look at {{{SchedulerLoadControl_test::classifyCapacity}}}
 
 !!!Playback and processing priority
 Not all tasks are on equal footing though. Given the diverse nature of functions fulfilled by the render engine, several kinds of render processes can be distinguished:

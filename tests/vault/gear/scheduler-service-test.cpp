@@ -30,6 +30,7 @@
 #include "vault/gear/scheduler.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/format-string.hpp"
 #include "lib/test/microbenchmark.hpp"
 #include "lib/test/diagnostic-output.hpp"///////////////TODO
 #include "lib/util.hpp"
@@ -48,7 +49,9 @@ namespace test {
   
 //  using lib::time::FrameRate;
 //  using lib::time::Offset;
+  using util::max;
   using util::isnil;
+  using util::_Fmt;
   using lib::time::Time;
   using std::this_thread::sleep_for;
   
@@ -58,7 +61,7 @@ namespace test {
     Time t500us = t200us + t200us + t100us;
     Time t1ms   = Time{1,0};
     
-    const uint TYPICAL_TIME_FOR_ONE_SCHEDULE_us = 20;
+    const uint TYPICAL_TIME_FOR_ONE_SCHEDULE_us = 3;
   }
   
   
@@ -133,9 +136,20 @@ namespace test {
       
       
       
-      /** @test TODO verify the scheduler processes and winds down automatically
+      /** @test verify the scheduler processes scheduled events,
+       *        indicates current load and winds down automatically
        *        when falling empty.
-       * @todo WIP 10/23 ✔ define ⟶ 🔁 implement
+       *      - placing short bursts of single FEED-Activities
+       *      - these actually do nothing and can be processed typically < 5µs
+       *      - placing them spaced by 1µs, so the scheduler will build up congestion
+       *      - since this Activity does not drop the »grooming-token«, actually only
+       *        a single worker will process all Activities in a single peak
+       *      - after the peak is done, the load indicator will drop again
+       *      - when reaching the scheduler »tick«, the queue should be empty
+       *        and the scheduler will stop active processing
+       *      - the main thread (this test) polls every 50µs to observe the load
+       *      - verify the expected load pattern
+       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_LoadFactor()
@@ -145,12 +159,14 @@ namespace test {
           Scheduler scheduler{bFlow, watch};
           CHECK (isnil (scheduler));
           
+          // use a single FEED as content
           Activity dummy{Activity::FEED};
           
           auto anchor = RealClock::now();
-auto wuff = [&](Time when =RealClock::now()){ return _raw(when) - _raw(anchor); };
-          auto createLoad = [&](Offset start, uint cnt) 
-                            { // use internal API (this test is declared as friend)  
+          auto offset = [&](Time when =RealClock::now()){ return _raw(when) - _raw(anchor); };
+          
+          auto createLoad = [&](Offset start, uint cnt)
+                            { // use internal API (this test is declared as friend)
                               auto& schedCtx = Scheduler::ExecutionCtx::from(scheduler);
                               for (uint i=0; i<cnt; ++i)           // flood the queue
                                 schedCtx.post (anchor + start + TimeValue{i}, &dummy, schedCtx);
@@ -158,24 +174,97 @@ auto wuff = [&](Time when =RealClock::now()){ return _raw(when) - _raw(anchor); 
           
           
           auto LOAD_PEAK_DURATION_us = 2000;
-          auto fatPackage = work::Config::COMPUTATION_CAPACITY * LOAD_PEAK_DURATION_us/TYPICAL_TIME_FOR_ONE_SCHEDULE_us; 
-SHOW_EXPR(wuff())
-SHOW_EXPR(wuff(scheduler.layer1_.headTime()))
-          createLoad (Offset{Time{5,0}}, fatPackage);
+          auto fatPackage = LOAD_PEAK_DURATION_us/TYPICAL_TIME_FOR_ONE_SCHEDULE_us;
+          
+          createLoad (Offset{Time{ 5,0}}, fatPackage);
           createLoad (Offset{Time{15,0}}, fatPackage);
           
-SHOW_EXPR(wuff())
           scheduler.ignite();
-SHOW_EXPR(wuff())
-SHOW_EXPR(wuff(scheduler.layer1_.headTime()))
-          while (not isnil (scheduler))
+          cout << "Timing: start-up required..."<<offset()<<"µs"<<endl;
+          
+          // now watch change of load and look out for two peaks....
+          uint   peak1_s  =0;
+          uint   peak1_dur=0;
+          double peak1_max=0;
+          uint   peak2_s  =0;
+          uint   peak2_dur=0;
+          double peak2_max=0;
+          
+          uint phase=0;
+          _Fmt row{"%6d | Load: %5.3f  Head:%5d Lag:%6d\n"};
+          
+          while (not isnil (scheduler)) // should fall empty at end
             {
               sleep_for(50us);
-              cout << wuff() << " +++ Load: "<<scheduler.getLoadIndicator()
-                             <<" --- HT= "<<wuff(scheduler.layer1_.headTime())
-                             <<" -+- Lag "<< scheduler.loadControl_.averageLag()
-                             <<endl;
+              double load = scheduler.getLoadIndicator();
+              
+              switch (phase) {
+                case 0:
+                  if (load > 1.0)
+                    {
+                      ++phase;
+                      peak1_s = offset();
+                    }
+                  break;
+                case 1:
+                  peak1_max = max (load, peak1_max);
+                  if (load < 1.0)
+                    {
+                      ++phase;
+                      peak1_dur = offset() - peak1_s;
+                    }
+                  break;
+                case 2:
+                  if (load > 1.0)
+                    {
+                      ++phase;
+                      peak2_s = offset();
+                    }
+                  break;
+                case 3:
+                  peak2_max = max (load, peak2_max);
+                  if (load < 1.0)
+                    {
+                      ++phase;
+                      peak2_dur = offset() - peak2_s;
+                    }
+                  break;
+                }
+                cout << row % offset() % load
+                                       % offset(scheduler.layer1_.headTime())
+                                       % scheduler.loadControl_.averageLag();
             }
+          uint done = offset();
+          
+          //--------Summary-Table------------------------------
+          _Fmt peak{"\nPeak %d ....... %5d +%dµs %34tmax=%3.1f"};
+          cout << "-------+-------------+----------+----------"
+               << "\n\n"
+               << peak % 1 % peak1_s % peak1_dur % peak1_max
+               << peak % 2 % peak2_s % peak2_dur % peak2_max
+               << "\nTick   ....... "<<done
+               <<endl;
+          
+          CHECK (phase == 4);
+          CHECK (peak1_s > 5000);   // first peak was scheduled at 5ms
+          CHECK (peak1_s < 10000);
+          CHECK (peak2_s > 15000);  // second peak was scheduled at 15ms
+          CHECK (peak2_s < 20000);
+          CHECK (peak1_max > 2.0);
+          CHECK (peak2_max > 2.0);
+          
+          CHECK (done > 50000);     // »Tick« period is 50ms
+                                    // and this tick should determine end of timeline
+          
+          cout << "\nwaiting for shutdown of WorkForce";
+          while (scheduler.workForce_.size() > 0)
+            {
+              sleep_for(10ms);
+              cout << "." << std::flush;
+            }
+          uint shutdown = offset();
+          cout << "\nShutdown after "<<shutdown / 1.0e6<<"sec"<<endl;
+          CHECK (shutdown > 2.0e6);
         }
       
       

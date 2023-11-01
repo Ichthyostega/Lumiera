@@ -182,6 +182,7 @@ namespace test {
           LoadController lctrl;
           
           Time next{0,10};
+          Time nil{Time::NEVER};
           
           Time mt{1,0};
           Time t1{0,9};
@@ -197,6 +198,7 @@ namespace test {
           lctrl.tendNext (next);
           CHECK (Capacity::WORKTIME == lctrl.markOutgoingCapacity (next, mt ));
           
+          CHECK (Capacity::WORKTIME == lctrl.markOutgoingCapacity ( nil, mt ));
           CHECK (Capacity::WORKTIME == lctrl.markOutgoingCapacity (next, t1 ));
           CHECK (Capacity::WORKTIME == lctrl.markOutgoingCapacity (next, t2 ));
           CHECK (Capacity::NEARTIME == lctrl.markOutgoingCapacity (next, t3 ));
@@ -205,7 +207,7 @@ namespace test {
           CHECK (Capacity::DISPATCH == lctrl.markOutgoingCapacity (next,next));
           CHECK (Capacity::DISPATCH == lctrl.markOutgoingCapacity (next, t5 ));
           
-          CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, mt ));
+          CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity ( nil, mt ));
           CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, t1 ));
           CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, t2 ));
           CHECK (Capacity::NEARTIME == lctrl.markIncomingCapacity (next, t3 ));
@@ -215,8 +217,8 @@ namespace test {
           CHECK (Capacity::DISPATCH == lctrl.markIncomingCapacity (next, t5 ));
           
           // tend-next works in limited ways also on incoming capacity
-          lctrl.tendNext (Time::NEVER);
-          CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, mt ));
+          lctrl.tendNext (Time::NEVER);   // mark as not yet tended...
+          CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity ( nil, mt ));
           CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, t1 ));
           CHECK (Capacity::IDLEWAIT == lctrl.markIncomingCapacity (next, t2 ));
           CHECK (Capacity::TENDNEXT == lctrl.markIncomingCapacity (next, t3 ));
@@ -226,7 +228,7 @@ namespace test {
           CHECK (Capacity::DISPATCH == lctrl.markIncomingCapacity (next, t5 ));
           
           // while being used rather generously on outgoing capacity
-          CHECK (Capacity::TENDNEXT == lctrl.markOutgoingCapacity (next, mt ));
+          CHECK (Capacity::WORKTIME == lctrl.markOutgoingCapacity ( nil, mt ));  //  re-randomisation before long-term sleep
           CHECK (Capacity::TENDNEXT == lctrl.markOutgoingCapacity (next, t1 ));
           CHECK (Capacity::TENDNEXT == lctrl.markOutgoingCapacity (next, t2 ));
           CHECK (Capacity::TENDNEXT == lctrl.markOutgoingCapacity (next, t3 ));

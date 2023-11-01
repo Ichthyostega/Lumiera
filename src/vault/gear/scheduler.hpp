@@ -79,6 +79,13 @@
  ** Since the scheduler queue only stores references to render activities, which are
  ** allocated in a [special arrangement](\ref BlockFlow) exploiting the known deadline
  ** time of each task, further processing can commence concurrently.
+ ** @note The grooming-token should always be dropped by a deliberate state transition.
+ **       Notably _internal processing_ (e.g. planning of new jobs) will _not_ drop
+ **       the token, since it must be able to change the schedule. Such internal
+ **       tasks can be processed in row and will be confined to a single thread
+ **       (there is a special treatment at the end of #getWork() to achieve that).
+ **       As a safety net, the grooming-token will automatically be dropped after
+ **       catching an exception, or when a thread is sent to sleep.
  ** 
  ** @see SchedulerService_test Component integration test
  ** @see SchedulerStress_test
@@ -108,7 +115,6 @@
 //#include "lib/symbol.hpp"
 #include  "lib/nocopy.hpp"
 //#include "lib/util.hpp"
-#include "lib/format-cout.hpp"/////////////////TODO
 
 //#include <string>
 #include <utility>
@@ -264,7 +270,7 @@ namespace gear {
       
       
       /** send this thread into a targeted short-time wait. */
-      activity::Proc scatteredDelay (Time now, LoadController::Capacity,bool in);////////////TODO
+      activity::Proc scatteredDelay (Time now, LoadController::Capacity);
       
       
       /**
@@ -411,7 +417,7 @@ namespace gear {
                                         Time now = ctx.getSchedTime();
                                         Time head = layer1_.headTime();
                                         return scatteredDelay(now,
-                                                  loadControl_.markIncomingCapacity (head,now),true);
+                                                  loadControl_.markIncomingCapacity (head,now));
                                       })
                       .performStep([&]{
                                         Time now = ctx.getSchedTime();
@@ -422,7 +428,7 @@ namespace gear {
                                         Time now = ctx.getSchedTime();
                                         Time head = layer1_.headTime();
                                         return scatteredDelay(now,
-                                                  loadControl_.markOutgoingCapacity (head,now),false);
+                                                  loadControl_.markOutgoingCapacity (head,now));
                                       });
         
         // ensure lock clean-up
@@ -454,7 +460,7 @@ namespace gear {
    *       place the current thread into a short-term targeted sleep.
    */
   inline activity::Proc
-  Scheduler::scatteredDelay (Time now, LoadController::Capacity capacity, bool in)
+  Scheduler::scatteredDelay (Time now, LoadController::Capacity capacity)
   {
     auto doTargetedSleep = [&]
           { // ensure not to block the Scheduler after management work
@@ -463,11 +469,7 @@ namespace gear {
               layer2_.dropGroomingToken();
              // relocate this thread(capacity) to a time where its more useful
             Offset targetedDelay = loadControl_.scatteredDelayTime (now, capacity);
-TimeVar head = layer1_.headTime()-now;
-cout <<"\n|oo|"<<(in?"^":"v")<<" Sleep-->"<<_raw(targetedDelay)<<"  <head:"<<_raw(head);
             std::this_thread::sleep_for (std::chrono::microseconds (_raw(targetedDelay)));
-head = layer1_.headTime()-now;
-cout <<"\n|••|"<<(in?"^":"v")<<"   eep<--"<<_raw(targetedDelay)<<"  <head:"<<_raw(head);
           };
     auto doTendNextHead = [&]
           {
@@ -486,10 +488,6 @@ cout <<"\n|••|"<<(in?"^":"v")<<"   eep<--"<<_raw(targetedDelay)<<"  <head:"<
         std::this_thread::yield();
         return activity::SKIP;     //  prompts to abort chain but call again immediately
       case LoadController::IDLEWAIT:
-{        
-Time head = layer1_.headTime()-now;
-cout <<"\n|**|"<<(in?"^":"v")<<" --------------------------------------------Deep-Sleep-->  <head:"<<_raw(head);
-}
         return activity::WAIT;     //  prompts to switch this thread into sleep mode
       case LoadController::TENDNEXT:
         doTendNextHead();
