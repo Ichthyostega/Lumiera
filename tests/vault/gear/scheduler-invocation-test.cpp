@@ -192,7 +192,7 @@ namespace test {
       
       
       
-      /** @test verify that obsoleted or rejected entries are dropped transparently
+      /** @test verify extended classification data and information functions at scheduler head
        *      - add entries providing extra information regarding significance
        *      - verify that missing the deadline is detected
        *      - entries past deadline are marked _outdated_ (will be dropped by Layer-2)
@@ -233,6 +233,9 @@ namespace test {
           CHECK (    sched.isMissed   (Time{4,0}));
           CHECK (    sched.isDue      (Time{4,0}));
           
+          sched.activate (ManifestationID{23});
+          CHECK (not sched.isOutdated (Time{1,0}));
+          
           sched.drop (ManifestationID{5});
           CHECK (Time(1,0) == sched.headTime());
           CHECK (    sched.isOutdated (Time{1,0}));
@@ -241,12 +244,9 @@ namespace test {
           CHECK (not sched.isMissed (Time{1,0}));
           CHECK (    sched.isDue    (Time{1,0}));
           
-          sched.feedPrioritisation (act, Time{0,0}, Time{2,0}, ManifestationID{5}, true);
-          CHECK (Time(0,0) == sched.headTime());                               //  ^^^^ marked as compulsory
+          sched.feedPrioritisation (act, Time{0,0}, Time{2,0}, ManifestationID{23}, true);
+          CHECK (Time(0,0) == sched.headTime());                               //   ^^^^ marked as compulsory
           CHECK (not sched.isMissed (Time{1,0}));
-          CHECK (    sched.isOutdated (Time{1,0}));                            // marked as outdated since manifestation 5 is not activated
-          
-          sched.activate (ManifestationID{5});
           CHECK (not sched.isOutdated (Time{1,0}));
           CHECK (not sched.isOutOfTime(Time{2,0}));                            // still OK /at/ deadline
           CHECK (    sched.isOutOfTime(Time{3,0}));                            // ↯ past deadline yet marked as compulsory
@@ -254,10 +254,13 @@ namespace test {
           CHECK (    sched.isMissed   (Time{3,0}));
           
           sched.drop (ManifestationID{5});
+          CHECK (    sched.isOutOfTime(Time{3,0}));                            // Manifestation-5 is altogether irrelevant for this case
+          
+          sched.drop (ManifestationID{23});
           CHECK (Time(0,0) == sched.headTime());
           CHECK (    sched.isOutdated (Time{1,0}));
           CHECK (not sched.isOutOfTime(Time{2,0}));
-          CHECK (not sched.isOutOfTime(Time{3,0}));                            // the disabled manifestation masks the fatal out-of-time state
+          CHECK (not sched.isOutOfTime(Time{3,0}));                            // the disabled manifestation-23 masks the fatal out-of-time state
           CHECK (    sched.isOutdated (Time{3,0}));
           CHECK (    sched.isMissed   (Time{3,0}));
           

@@ -98,6 +98,7 @@ namespace test {
           torture_GroomingToken();
           verify_DispatchDecision();
           verify_findWork();
+          verify_Significance();
           verify_postDispatch();
           integratedWorkCycle();
         }
@@ -342,6 +343,85 @@ namespace test {
           
           unblockGroomingToken();                                  // yet when we're able to get the GroomingToken
           CHECK (isSameObject (a2, *sched.findWork(queue, now)));  // the task can be retrieved
+          CHECK (queue.empty());
+        }
+      
+      
+      
+      /** @test verify that obsoleted or rejected entries are dropped transparently
+       *      - add entries providing extra information regarding significance
+       *      - verify that missing the deadline is detected
+       *      - entries past deadline will be dropped when pulling for work
+       *      - entries tagged with an ManifestationID can be disabled and
+       *        will be automatically disposed.
+       *      - an entry marked as _compulsory_ will block that process
+       *        when missing it's deadline
+       */
+      void
+      verify_Significance()
+        {
+          SchedulerInvocation queue;
+          SchedulerCommutator sched;
+          
+          Time t1{10,0};   Activity a1{1u,1u};
+          Time t2{20,0};   Activity a2{2u,2u};
+          Time t3{30,0};   Activity a3{3u,3u};
+          Time t4{40,0};   Activity a4{4u,4u};
+          
+          queue.instruct (a1, t1, t4, ManifestationID{5});
+          queue.instruct (a2, t2, t3);
+          queue.instruct (a3, t3, t3, ManifestationID{23}, true);
+          queue.instruct (a4, t4, t4);
+          queue.activate(ManifestationID{5});
+          queue.activate(ManifestationID{23});
+          
+          queue.feedPrioritisation();
+          CHECK (t1 == queue.headTime());
+          CHECK (isSameObject (a1, *queue.peekHead()));
+          CHECK (not queue.isMissed(t1));
+          CHECK (not queue.isOutdated(t1));
+          
+          queue.drop(ManifestationID{5});
+          CHECK (t1 == queue.headTime());
+          CHECK (not queue.isMissed(t1));
+          CHECK (    queue.isOutdated(t1));
+          
+          CHECK (not sched.findWork(queue, t1));
+          CHECK (t2 == queue.headTime());
+          CHECK (not queue.isMissed  (t2));
+          CHECK (not queue.isOutdated(t2));
+          CHECK (    queue.isMissed  (t3));
+          CHECK (    queue.isOutdated(t3));
+          
+          CHECK (not sched.findWork(queue, t2));
+          CHECK (t3 == queue.headTime());
+          CHECK (not queue.isMissed   (t3));
+          CHECK (not queue.isOutdated (t3));
+          CHECK (not queue.isOutOfTime(t3));
+          CHECK (    queue.isMissed   (t4));
+          CHECK (    queue.isOutdated (t4));
+          CHECK (    queue.isOutOfTime(t4));
+          
+          CHECK (not sched.findWork(queue, t4));
+          CHECK (t3 == queue.headTime());
+          CHECK (not queue.isMissed   (t3));
+          CHECK (not queue.isOutdated (t3));
+          CHECK (not queue.isOutOfTime(t3));
+          CHECK (    queue.isMissed   (t4));
+          CHECK (    queue.isOutdated (t4));
+          CHECK (    queue.isOutOfTime(t4));
+          
+          queue.drop(ManifestationID{5});
+          CHECK (t3 == queue.headTime());
+          CHECK (not queue.isMissed   (t3));
+          CHECK (    queue.isOutdated (t3));
+          CHECK (not queue.isOutOfTime(t3));
+          CHECK (    queue.isMissed   (t4));
+          CHECK (    queue.isOutdated (t4));
+          CHECK (not queue.isOutOfTime(t4));
+          
+          CHECK (isSameObject (a3, *queue.peekHead()));
+          CHECK (isSameObject (a4, *sched.findWork(queue, t4)));
           CHECK (queue.empty());
         }
       
