@@ -116,7 +116,7 @@ namespace idi {
   }
   
   /** designation of an distinct object instance
-   * @par obj pointer to the memory location of the object
+   * @param obj pointer to the memory location of the object
    * @return a notation "typename.hash", where the hash is given
    *         as 4 hex digits derived from the memory location
    */

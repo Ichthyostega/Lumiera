@@ -228,6 +228,7 @@ namespace test {
                                      })
                                  .threadID("grooming-hog"));
           sleep_for (500us);
+          ENSURE (groomingHog_);
         }
       
       /** @internal stop the background thread to unblock the GrooingToken */
@@ -369,7 +370,7 @@ namespace test {
           Time t4{40,0};   Activity a4{4u,4u};
           
           queue.instruct (a1, t1, t4, ManifestationID{5});
-          queue.instruct (a2, t2, t3);
+          queue.instruct (a2, t2, t2);
           queue.instruct (a3, t3, t3, ManifestationID{23}, true);
           queue.instruct (a4, t4, t4);
           queue.activate(ManifestationID{5});
@@ -388,13 +389,15 @@ namespace test {
           
           CHECK (not sched.findWork(queue, t1));
           CHECK (t2 == queue.headTime());
+          CHECK (isSameObject (a2, *queue.peekHead()));
           CHECK (not queue.isMissed  (t2));
           CHECK (not queue.isOutdated(t2));
           CHECK (    queue.isMissed  (t3));
           CHECK (    queue.isOutdated(t3));
           
-          CHECK (not sched.findWork(queue, t2));
+          CHECK (not sched.findWork(queue, t2+Time{5,0}));
           CHECK (t3 == queue.headTime());
+          CHECK (isSameObject (a3, *queue.peekHead()));
           CHECK (not queue.isMissed   (t3));
           CHECK (not queue.isOutdated (t3));
           CHECK (not queue.isOutOfTime(t3));
@@ -411,7 +414,7 @@ namespace test {
           CHECK (    queue.isOutdated (t4));
           CHECK (    queue.isOutOfTime(t4));
           
-          queue.drop(ManifestationID{5});
+          queue.drop(ManifestationID{23});
           CHECK (t3 == queue.headTime());
           CHECK (not queue.isMissed   (t3));
           CHECK (    queue.isOutdated (t3));

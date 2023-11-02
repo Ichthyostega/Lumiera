@@ -33,6 +33,22 @@
  ** use of a _Priority Queue_ — which however must be concurrency protected.
  ** The Layer-2 thus assures that _mutating operations_ are performed
  ** exclusively from a special »grooming mode« (management mode).
+ ** @par Data maintained in Queue Entries
+ **   - the [Activity itself](\ref SchedulerInvocation::ActOrder::activity)
+ **     is allocated externally an only referred by pointer; however, this
+ **     pointer must not be dereferenced after the *deadline* passed.
+ **   - an entry can be scheduled after reaching the
+ **     [start time](\ref SchedulerInvocation::ActOrder::waterlevel)
+ **   - the [deadline](\ref SchedulerInvocation::ActOrder::deathtime)
+ **     marks latest point in time where starting is still allowed
+ **   - entries can be tagged with a distinctive
+ **     [»manifestation ID«](\ref SchedulerInvocation::ActOrder::manifestationID),
+ **     which allows to filter out complete _families_ of already planned entries
+ **   - as a safety measure, an entry can be marked as
+ **     [compulsory](\ref SchedulerInvocation::ActOrder::isCompulsory).
+ **     In regular operation, this has no effect, but an *emergency state*
+ **     is triggered in the SchedulerService, should such an entry
+ **     [miss it's deadline](\ref SchedulerInvocation::isOutOfTime())
  ** @see SchedulerCommutator::findWork()
  ** @see SchedulerCommutator::postDispatch()
  ** @see SchedulerInvocation_test

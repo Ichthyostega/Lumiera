@@ -54,6 +54,7 @@
  ** In typical usage, Layer-2 of the Scheduler will perform the following operations
  ** - accept and enqueue new task descriptions (as chain-of-Activities)
  ** - retrieve the most urgent entry from Layer-1
+ ** - silently dispose of any outdated entries
  ** - use the [Activity Language environment](\ref ActivityLang) to _perform_
  **   the retrieved chain within some worker thread; this is called _dispatch_
  ** The central cross road of this implementation is the #postDispatch function.
@@ -171,7 +172,11 @@ namespace gear {
         }
       
       
-      /** look into the queues and possibly retrieve work due by now */
+      /**
+       * Look into the queues and possibly retrieve work due by now.
+       * @note transparently discards any outdated entries,
+       *       but blocks if a compulsory entry becomes outdated.
+       */
       Activity*
       findWork (SchedulerInvocation& layer1, Time now)
         {
@@ -179,7 +184,9 @@ namespace gear {
               or acquireGoomingToken())
             {
               layer1.feedPrioritisation();
-              if (layer1.isDue (now))
+              while (layer1.isOutdated (now) and not layer1.isOutOfTime(now))
+                layer1.pullHead();
+              if (layer1.isDue (now) and not layer1.isOutOfTime(now))
                 return layer1.pullHead();
             }
           return nullptr;
