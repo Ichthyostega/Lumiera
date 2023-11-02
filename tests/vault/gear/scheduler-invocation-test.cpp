@@ -69,10 +69,11 @@ namespace test {
           SchedulerInvocation sched;
           Activity activity;
           Time when{1,2,3};
+          Time dead{2,3,4};
           
           CHECK (not sched.peekHead());
           
-          sched.instruct (activity, when);
+          sched.instruct (activity, when, dead);
           sched.feedPrioritisation();
           CHECK (sched.peekHead());
           
@@ -106,6 +107,7 @@ namespace test {
           CHECK (isSameObject (*sched.pullHead(), two));
           CHECK (isSameObject (*sched.pullHead(), ree));
           CHECK (not sched.peekHead());
+          CHECK (sched.empty());
         }
       
       
@@ -124,36 +126,6 @@ namespace test {
           Activity a3{3u,3u};
           Activity a4{4u,4u};
           
-          sched.instruct (a2, Time{2,0});
-          sched.instruct (a4, Time{4,0});
-          sched.feedPrioritisation();
-          CHECK (isSameObject (*sched.peekHead(), a2));
-          
-          sched.instruct (a3, Time{3,0});
-          sched.instruct (a1, Time{1,0});
-          CHECK (isSameObject (*sched.peekHead(), a2));
-          
-          sched.feedPrioritisation();
-          CHECK (isSameObject (*sched.pullHead(), a1));
-          CHECK (isSameObject (*sched.pullHead(), a2));
-          CHECK (isSameObject (*sched.pullHead(), a3));
-          CHECK (isSameObject (*sched.pullHead(), a4));
-        }
-      
-      
-      
-      /** @test verify that obsoleted or rejected entries are dropped transparently
-       */
-      void
-      verify_Significance()
-        {
-          SchedulerInvocation sched;
-          Activity a1{1u,1u};
-          Activity a2{2u,2u};
-          Activity a3{3u,3u};
-          Activity a4{4u,4u};
-          
-          UNIMPLEMENTED ("transparentely discard obsoleted entries from schedule");
           sched.instruct (a2, Time{2,0});
           sched.instruct (a4, Time{4,0});
           sched.feedPrioritisation();
@@ -216,6 +188,97 @@ namespace test {
           CHECK (not sched.peekHead());
           CHECK (not sched.isDue (Time{0,1}));
           CHECK (not sched.isDue (Time{0,10}));
+        }
+      
+      
+      
+      /** @test verify that obsoleted or rejected entries are dropped transparently
+       *      - add entries providing extra information regarding significance
+       *      - verify that missing the deadline is detected
+       *      - entries past deadline are marked _outdated_ (will be dropped by Layer-2)
+       *      - entries can be tagged with an ManifestationID, allowing to enable
+       *        or disable visibility for a »family« of schedule entries
+       *      - use the flag for _compulsory_ entries, allowing to detect
+       *        a fatal _jammed_ situation where the head entry is
+       *        out of time, while marked mandatory to process.
+       */
+      void
+      verify_Significance()
+        {
+          SchedulerInvocation sched;
+          Activity act;
+          
+          sched.feedPrioritisation (act, Time{2,0}, Time{3,0});
+          CHECK (Time(2,0) == sched.headTime());
+          CHECK (    sched.isDue    (Time{2,0}));
+          CHECK (not sched.isMissed (Time{2,0}));
+          CHECK (not sched.isMissed (Time{3,0}));
+          CHECK (    sched.isMissed (Time{4,0}));
+          
+          CHECK (not sched.isOutdated (Time{2,0}));
+          CHECK (not sched.isOutdated (Time{3,0}));
+          CHECK (    sched.isOutdated (Time{4,0}));
+          
+          sched.feedPrioritisation (act, Time{1,0}, Time{3,0}, ManifestationID{5});
+          CHECK (Time(1,0) == sched.headTime());
+          CHECK (    sched.isOutdated (Time{1,0}));
+          CHECK (not sched.isMissed (Time{1,0}));
+          
+          sched.activate (ManifestationID{5});
+          CHECK (Time(1,0) == sched.headTime());
+          CHECK (    sched.isDue      (Time{1,0}));
+          CHECK (not sched.isOutdated (Time{1,0}));
+          CHECK (not sched.isOutdated (Time{3,0}));
+          CHECK (    sched.isOutdated (Time{4,0}));
+          CHECK (    sched.isMissed   (Time{4,0}));
+          CHECK (    sched.isDue      (Time{4,0}));
+          
+          sched.drop (ManifestationID{5});
+          CHECK (Time(1,0) == sched.headTime());
+          CHECK (    sched.isOutdated (Time{1,0}));
+          CHECK (    sched.isOutdated (Time{4,0}));
+          CHECK (    sched.isMissed (Time{4,0}));
+          CHECK (not sched.isMissed (Time{1,0}));
+          CHECK (    sched.isDue    (Time{1,0}));
+          
+          sched.feedPrioritisation (act, Time{0,0}, Time{2,0}, ManifestationID{5}, true);
+          CHECK (Time(0,0) == sched.headTime());                               //  ^^^^ marked as compulsory
+          CHECK (not sched.isMissed (Time{1,0}));
+          CHECK (    sched.isOutdated (Time{1,0}));                            // marked as outdated since manifestation 5 is not activated
+          
+          sched.activate (ManifestationID{5});
+          CHECK (not sched.isOutdated (Time{1,0}));
+          CHECK (not sched.isOutOfTime(Time{2,0}));                            // still OK /at/ deadline
+          CHECK (    sched.isOutOfTime(Time{3,0}));                            // ↯ past deadline yet marked as compulsory
+          CHECK (    sched.isOutdated (Time{3,0}));
+          CHECK (    sched.isMissed   (Time{3,0}));
+          
+          sched.drop (ManifestationID{5});
+          CHECK (Time(0,0) == sched.headTime());
+          CHECK (    sched.isOutdated (Time{1,0}));
+          CHECK (not sched.isOutOfTime(Time{2,0}));
+          CHECK (not sched.isOutOfTime(Time{3,0}));                            // the disabled manifestation masks the fatal out-of-time state
+          CHECK (    sched.isOutdated (Time{3,0}));
+          CHECK (    sched.isMissed   (Time{3,0}));
+          
+          sched.pullHead();
+          CHECK (Time(1,0) == sched.headTime());
+          CHECK (    sched.isOutdated (Time{1,0}));
+          CHECK (    sched.isDue      (Time{1,0}));
+          
+          sched.pullHead();
+          CHECK (Time(2,0) == sched.headTime());
+          CHECK (not sched.isOutdated (Time{2,0}));
+          CHECK (    sched.isOutdated (Time{4,0}));
+          CHECK (    sched.isMissed   (Time{4,0}));
+          CHECK (    sched.isDue      (Time{4,0}));
+          
+          sched.pullHead();
+          CHECK (Time::NEVER == sched.headTime());
+          CHECK (not sched.isMissed   (Time{4,0}));
+          CHECK (not sched.isOutdated (Time{4,0}));
+          CHECK (not sched.isDue      (Time{4,0}));
+          CHECK (sched.empty());
         }
     };
   

@@ -49,9 +49,11 @@
 #include "lib/nocopy.hpp"
 #include "vault/gear/activity.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/util.hpp"
 
 #include <queue>
 #include <boost/lockfree/queue.hpp>
+#include <unordered_set>
 #include <utility>
 
 namespace vault{
@@ -72,6 +74,7 @@ namespace gear {
    * Manages pointers to _Render Activity records._
    * - new entries passed in through the #instruct_ queue
    * - time based prioritisation in the #priority_ queue
+   * @warning not threadsafe; requires Layer-2 to coordinate.
    * @see Scheduler
    * @see SchedulerInvocation_test
    */
@@ -88,6 +91,7 @@ namespace gear {
           uint32_t  manifestationID :32;
           char                      :0;
           bool      isCompulsory    :1;
+                                  ///////////////////////////////////////////////////////////////////////////TICKET #1245 : use direct bit-field initialiser in C++20
           
           /** @internal ordering function for time based scheduling
            *  @note reversed order as required by std::priority_queue
@@ -98,21 +102,22 @@ namespace gear {
             {
               return waterlevel > o.waterlevel;
             }
-          
-          ActOrder() =default; //////////////////////////////////////////////////////////////////////////////TICKET #1245 : use direct bit-field initialiser in C++20
         };
       
       using InstructQueue = boost::lockfree::queue<ActOrder>;
       using PriorityQueue = std::priority_queue<ActOrder>;
+      using ActivationSet = std::unordered_set<ManifestationID>;
       
       InstructQueue instruct_;
       PriorityQueue priority_;
       
+      ActivationSet allowed_;
       
     public:
       SchedulerInvocation()
         : instruct_{INITIAL_CAPACITY}
         , priority_{}
+        , allowed_{}
         { }
       
       
@@ -201,6 +206,26 @@ namespace gear {
           return activity;
         }
       
+      /**
+       * Enable entries marked with a specific ManifestationID to be processed.
+       * By default, entries are marked with the default ManifestationID, which
+       * is always implicitly activated. Any other ID must be actively allowed,
+       * otherwise the entry is deemed [outdated](\ref isOutdated) and will
+       * be silently discarded in regular processing by Layer-2.
+       * @remark this feature allows to supersede part of a schedule
+       */
+      void
+      activate (ManifestationID manID)
+        {
+          allowed_.insert (manID);
+        }
+      
+      void
+      drop (ManifestationID manID)
+        {
+          allowed_.erase (manID);
+        }
+      
       
       /* ===== query functions ===== */
       
@@ -211,12 +236,41 @@ namespace gear {
           return not priority_.empty()
              and priority_.top().waterlevel <= waterLevel(now);
         }
-      
-      /** detect a compulsory Activity with missed deadline */
+
+      /** determine if Activity at scheduler head missed it's deadline
+       * @warning due to memory management, such an Activity must not be dereferenced */
       bool
-      isOutOfTime()  const
+      isMissed  (Time now)  const
         {
-          return false; /////////////////////////////////////////////////////////////////OOO compulsory Activities
+          return not priority_.empty()
+             and waterLevel(now) > priority_.top().deathlevel;
+        }
+      
+      /** determine if Activities with the given ManifestationID shall be processed */
+      bool
+      isActivated (ManifestationID manID)  const
+        {
+          return manID == ManifestationID()
+              or util::contains (allowed_, manID);
+        }
+      
+      /** determine if Activity at scheduler is outdated and should be discarded */
+      bool
+      isOutdated (Time now)  const
+        {
+          return isMissed (now)
+              or (not priority_.empty()
+                  and not isActivated (priority_.top().manifestationID));
+        }
+      
+      /** detect a compulsory Activity at scheduler head with missed deadline */
+      bool
+      isOutOfTime (Time now)  const
+        {
+          return isMissed (now)
+             and (not priority_.empty()
+                  and priority_.top().isCompulsory
+                  and isActivated (priority_.top().manifestationID));
         }
       
       bool

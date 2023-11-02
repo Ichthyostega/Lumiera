@@ -50,7 +50,7 @@ namespace gear {
   HashVal
   hash_value (ManifestationID const& id)
     {
-      return hash_value (uint32_t{id});
+      return boost::hash_value (uint32_t{id});
     }
   ///////////////////////////////////////////////////////////////////////////////////////////////TODO extract scheduler-API
   

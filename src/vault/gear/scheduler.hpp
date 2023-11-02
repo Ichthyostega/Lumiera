@@ -518,7 +518,7 @@ namespace gear {
     // consolidate queue content
     layer1_.feedPrioritisation();
     //////////////////////////////////////////////////////////////////////OOO clean-up of outdated tasks here
-    if (layer1_.isOutOfTime())
+    if (layer1_.isOutOfTime (now))
       {
         triggerEmergency();
         return; // leave everything as-is
