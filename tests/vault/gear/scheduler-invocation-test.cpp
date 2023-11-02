@@ -28,6 +28,7 @@
 #include "lib/test/run.hpp"
 #include "vault/gear/scheduler-invocation.hpp"
 #include "lib/util.hpp"
+#include "lib/test/diagnostic-output.hpp"///////////////////TODO
 
 using test::Test;
 using util::isSameObject;
@@ -54,6 +55,7 @@ namespace test {
            simpleUsage();
            verify_Queuing();
            verify_WaterLevel();
+           verify_Significance();
            verify_stability();
            verify_isDue();
         }
@@ -122,6 +124,36 @@ namespace test {
           Activity a3{3u,3u};
           Activity a4{4u,4u};
           
+          sched.instruct (a2, Time{2,0});
+          sched.instruct (a4, Time{4,0});
+          sched.feedPrioritisation();
+          CHECK (isSameObject (*sched.peekHead(), a2));
+          
+          sched.instruct (a3, Time{3,0});
+          sched.instruct (a1, Time{1,0});
+          CHECK (isSameObject (*sched.peekHead(), a2));
+          
+          sched.feedPrioritisation();
+          CHECK (isSameObject (*sched.pullHead(), a1));
+          CHECK (isSameObject (*sched.pullHead(), a2));
+          CHECK (isSameObject (*sched.pullHead(), a3));
+          CHECK (isSameObject (*sched.pullHead(), a4));
+        }
+      
+      
+      
+      /** @test verify that obsoleted or rejected entries are dropped transparently
+       */
+      void
+      verify_Significance()
+        {
+          SchedulerInvocation sched;
+          Activity a1{1u,1u};
+          Activity a2{2u,2u};
+          Activity a3{3u,3u};
+          Activity a4{4u,4u};
+          
+          UNIMPLEMENTED ("transparentely discard obsoleted entries from schedule");
           sched.instruct (a2, Time{2,0});
           sched.instruct (a4, Time{4,0});
           sched.feedPrioritisation();

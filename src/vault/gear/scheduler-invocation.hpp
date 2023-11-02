@@ -81,8 +81,13 @@ namespace gear {
       /** @internal data record passed through the queues */
       struct ActOrder
         {
-          int64_t   waterlevel{0};
           Activity* activity{nullptr};
+          int64_t   waterlevel{0};
+          int64_t   deathlevel{0};
+          
+          uint32_t  manifestationID :32;
+          char                      :0;
+          bool      isCompulsory    :1;
           
           /** @internal ordering function for time based scheduling
            *  @note reversed order as required by std::priority_queue
@@ -93,6 +98,8 @@ namespace gear {
             {
               return waterlevel > o.waterlevel;
             }
+          
+          ActOrder() =default; //////////////////////////////////////////////////////////////////////////////TICKET #1245 : use direct bit-field initialiser in C++20
         };
       
       using InstructQueue = boost::lockfree::queue<ActOrder>;
@@ -121,9 +128,16 @@ namespace gear {
        * Accept an Activity for time-bound execution
        */
       void
-      instruct (Activity& activity, Time when)
+      instruct (Activity& activity, Time when
+                                  , Time dead =Time::NEVER
+                                  , ManifestationID manID =ManifestationID()
+                                  , bool compulsory =false)
         {
-          bool success = instruct_.push (ActOrder{waterLevel(when), &activity});
+          bool success = instruct_.push (ActOrder{&activity
+                                                 , waterLevel(when)
+                                                 , waterLevel(dead)
+                                                 , uint32_t(manID)
+                                                 , compulsory});
           if (not success)
             throw error::Fatal{"Scheduler entrance: memory allocation failed"};
         }
@@ -148,9 +162,16 @@ namespace gear {
        * @remark Layer-2 uses this shortcut when in »grooming mode«.
        */
       void
-      feedPrioritisation (Activity& activity, Time when)
+      feedPrioritisation (Activity& activity, Time when
+                                            , Time dead =Time::NEVER
+                                            , ManifestationID manID =ManifestationID()
+                                            , bool compulsory =false)
         {
-          priority_.push (ActOrder{waterLevel(when), &activity});
+          priority_.push (ActOrder{&activity
+                                  , waterLevel(when)
+                                  , waterLevel(dead)
+                                  , uint32_t(manID)
+                                  , compulsory});
         }
       
       

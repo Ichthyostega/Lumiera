@@ -34,6 +34,7 @@
 #include "lib/format-obj.hpp"
 
 #include <string>
+#include <boost/functional/hash.hpp> ////////////////////////////////////////////////////////////TODO should be in a scheduler translation-unit / extract scheduler-API
 
 using std::string;
 using lib::time::Time;
@@ -45,6 +46,13 @@ namespace gear {
   namespace activity {
     Hook::~Hook() { } // emit VTable here...
   }
+  ///////////////////////////////////////////////////////////////////////////////////////////////TODO should be in a scheduler translation-unit / extract scheduler-API
+  HashVal
+  hash_value (ManifestationID const& id)
+    {
+      return hash_value (uint32_t{id});
+    }
+  ///////////////////////////////////////////////////////////////////////////////////////////////TODO extract scheduler-API
   
   
   Activity::operator string()  const

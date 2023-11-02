@@ -81,6 +81,32 @@ namespace gear {
   
   namespace error = lumiera::error;
   
+  ///////////////////////////////////////////////////////////////////////////////////////////////TODO placed here for convenience while developing the Scheduler
+  ///////////////////////////////////////////////////////////////////////////////////////////////     extract scheduler-API
+  /**
+   * Marker for current (and obsolete) manifestations
+   * of a CalcStream processed by the Render-Engine.
+   * An opaque, copyable and comparable value object.
+   * @remark to be maintained by the PlayProcess and used
+   *         by the Scheduler to discard superseded planning.
+   */
+  class ManifestationID
+    {
+      uint32_t id_;
+      
+    public:
+      ManifestationID (uint32_t rawID =0)
+        : id_{rawID}
+        { }
+      // standard copy operations acceptable
+      
+      explicit operator uint32_t()  const { return id_;}
+      
+      friend bool operator== (ManifestationID const& a, ManifestationID const& b) { return a.id_ == b.id_; }
+      friend bool operator!= (ManifestationID const& a, ManifestationID const& b) { return not (a == b);   }
+    };
+  HashVal hash_value (ManifestationID const& id);
+  ///////////////////////////////////////////////////////////////////////////////////////////////TODO extract scheduler-API
   
   class Activity;
   
