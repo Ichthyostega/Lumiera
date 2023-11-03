@@ -84,6 +84,39 @@ namespace gear {
     const size_t INITIAL_CAPACITY = 128;
   }
   
+  /**
+   * @internal data record passed through the queues,
+   *           representing an event to be scheduled
+   */
+  struct ActivationEvent
+    {
+      Activity* activity{nullptr};
+      int64_t   starting{0};
+      int64_t   deadline{0};
+      
+      uint32_t  manifestation :32;
+      char                    :0;
+      bool      isCompulsory  :1;
+                              ///////////////////////////////////////////////////////////////////////////TICKET #1245 : use direct bit-field initialiser in C++20
+      
+      /** @internal ordering function for time based scheduling
+       *  @note reversed order as required by std::priority_queue
+       *        to get the earliest element at top of the queue
+       */
+      bool
+      operator< (ActivationEvent const& o)  const
+        {
+          return starting > o.starting;
+        }
+      
+      operator bool()      const { return bool{activity}; }
+      operator Activity*() const { return activity; }
+      
+      static ActivationEvent nil() { return {nullptr, _raw(Time::ANYTIME), _raw(Time::NEVER), 0, false}; }
+    };
+  
+  
+  
   
   /***************************************************//**
    * Scheduler Layer-1 : time based dispatch.
@@ -97,31 +130,8 @@ namespace gear {
   class SchedulerInvocation
     : util::NonCopyable
     {
-      /** @internal data record passed through the queues */
-      struct ActOrder
-        {
-          Activity* activity{nullptr};
-          int64_t   waterlevel{0};
-          int64_t   deathlevel{0};
-          
-          uint32_t  manifestationID :32;
-          char                      :0;
-          bool      isCompulsory    :1;
-                                  ///////////////////////////////////////////////////////////////////////////TICKET #1245 : use direct bit-field initialiser in C++20
-          
-          /** @internal ordering function for time based scheduling
-           *  @note reversed order as required by std::priority_queue
-           *        to get the earliest element at top of the queue
-           */
-          bool
-          operator< (ActOrder const& o)  const
-            {
-              return waterlevel > o.waterlevel;
-            }
-        };
-      
-      using InstructQueue = boost::lockfree::queue<ActOrder>;
-      using PriorityQueue = std::priority_queue<ActOrder>;
+      using InstructQueue = boost::lockfree::queue<ActivationEvent>;
+      using PriorityQueue = std::priority_queue<ActivationEvent>;
       using ActivationSet = std::unordered_set<ManifestationID>;
       
       InstructQueue instruct_;
@@ -145,6 +155,7 @@ namespace gear {
           priority_ = PriorityQueue();
         }
       
+      
       /**
        * Accept an Activity for time-bound execution
        */
@@ -154,11 +165,11 @@ namespace gear {
                                   , ManifestationID manID =ManifestationID()
                                   , bool compulsory =false)
         {
-          bool success = instruct_.push (ActOrder{&activity
-                                                 , waterLevel(when)
-                                                 , waterLevel(dead)
-                                                 , uint32_t(manID)
-                                                 , compulsory});
+          bool success = instruct_.push (ActivationEvent{&activity
+                                                        , waterLevel(when)
+                                                        , waterLevel(dead)
+                                                        , uint32_t(manID)
+                                                        , compulsory});
           if (not success)
             throw error::Fatal{"Scheduler entrance: memory allocation failed"};
         }
@@ -171,7 +182,7 @@ namespace gear {
       void
       feedPrioritisation()
         {
-          ActOrder actOrder;
+          ActivationEvent actOrder;
           while (instruct_.pop (actOrder))
             priority_.push (move (actOrder));
         }
@@ -188,38 +199,38 @@ namespace gear {
                                             , ManifestationID manID =ManifestationID()
                                             , bool compulsory =false)
         {
-          priority_.push (ActOrder{&activity
-                                  , waterLevel(when)
-                                  , waterLevel(dead)
-                                  , uint32_t(manID)
-                                  , compulsory});
+          priority_.push (ActivationEvent{&activity
+                                         , waterLevel(when)
+                                         , waterLevel(dead)
+                                         , uint32_t(manID)
+                                         , compulsory});
         }
       
       
       /**
-       * @return `nullptr` if the queue is empty, else the Activity corresponding
-       *         to the currently most urgent element (without dequeuing it).
+       * @return _»empty marker«_ if the queue is empty, else a copy of
+       *         the currently most urgent element (without dequeuing it).
        */
-      Activity*
+      ActivationEvent
       peekHead()
         {
-          return priority_.empty()? nullptr
-                                  : priority_.top().activity;
+          return priority_.empty()? ActivationEvent::nil()
+                                  : priority_.top();
         }
       
       /**
-       * Retrieve from the scheduling queue the Activity with earliest start time.
-       * @return `nullptr` if the prioritisation queue is empty,
+       * Retrieve from the scheduling queue the entry with earliest start time.
+       * @return _»empty marker«_ if the prioritisation queue is empty,
        *         else a pointer to the most urgent Activity dequeued thereby.
        * @remark Activity Records are managed by the \ref BlockFlow allocator.
        */
-      Activity*
+      ActivationEvent
       pullHead()
         {
-          Activity* activity = peekHead();
-          if (activity)
+          ActivationEvent head = peekHead();
+          if (head)
             priority_.pop();
-          return activity;
+          return head;
         }
       
       /**
@@ -250,7 +261,7 @@ namespace gear {
       isDue (Time now)  const
         {
           return not priority_.empty()
-             and priority_.top().waterlevel <= waterLevel(now);
+             and priority_.top().starting <= waterLevel(now);
         }
 
       /** determine if Activity at scheduler head missed it's deadline
@@ -259,7 +270,7 @@ namespace gear {
       isMissed  (Time now)  const
         {
           return not priority_.empty()
-             and waterLevel(now) > priority_.top().deathlevel;
+             and waterLevel(now) > priority_.top().deadline;
         }
       
       /** determine if Activities with the given ManifestationID shall be processed */
@@ -276,7 +287,7 @@ namespace gear {
         {
           return isMissed (now)
               or (not priority_.empty()
-                  and not isActivated (priority_.top().manifestationID));
+                  and not isActivated (priority_.top().manifestation));
         }
       
       /** detect a compulsory Activity at scheduler head with missed deadline */
@@ -286,7 +297,7 @@ namespace gear {
           return isMissed (now)
              and (not priority_.empty()
                   and priority_.top().isCompulsory
-                  and isActivated (priority_.top().manifestationID));
+                  and isActivated (priority_.top().manifestation));
         }
       
       bool
@@ -301,7 +312,7 @@ namespace gear {
       headTime()  const
         {
           return priority_.empty()? Time::NEVER
-                                  : Time{TimeValue{priority_.top().waterlevel}};
+                                  : Time{TimeValue{priority_.top().starting}};
         }                              //Note: 64-bit waterLevel corresponds to µ-Ticks
       
     private:

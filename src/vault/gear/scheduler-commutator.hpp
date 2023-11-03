@@ -177,7 +177,7 @@ namespace gear {
        * @note transparently discards any outdated entries,
        *       but blocks if a compulsory entry becomes outdated.
        */
-      Activity*
+      ActivationEvent
       findWork (SchedulerInvocation& layer1, Time now)
         {
           if (holdsGroomingToken (thisThread())
@@ -189,7 +189,7 @@ namespace gear {
               if (layer1.isDue (now) and not layer1.isOutOfTime(now))
                 return layer1.pullHead();
             }
-          return nullptr;
+          return ActivationEvent::nil();
         }
       
       
