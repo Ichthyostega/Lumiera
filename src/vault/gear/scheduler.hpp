@@ -254,6 +254,12 @@ namespace gear {
           UNIMPLEMENTED("wrap the ActivityTerm");
         }
       
+      //////////////////////////////////////////////////////////////////////////////////////////////OOO the role of this function remains unclear; currently used from »Tick«
+      activity::Proc postChain (Activity*, Time start
+                                         , Time dead =Time::ANYTIME
+                                         , ManifestationID manID =ManifestationID()
+                                         , bool isCompulsory = false);
+      
       
       /**
        * The worker-Functor: called by the active Workers from the
@@ -500,6 +506,18 @@ namespace gear {
   }
   
   
+  //////////////////////////////////////////////////////////////////////////////////////////////OOO the role of this function remains unclear; currently used from »Tick«
+  inline activity::Proc
+  Scheduler::postChain (Activity* chain, Time start, Time dead
+                       ,ManifestationID manID, bool isCompulsory)
+  {
+    auto& ctx = ExecutionCtx::from (*this);
+    return layer2_.postDispatch (chain, start, ctx, layer1_
+                   //////////////////////////////////////////////////////////////////////////////////////////////OOO API / Design problem with "context" and significance-Params
+                                                        ,dead,manID,isCompulsory);
+  }
+
+  
   /**
    * »Tick-hook« : code to maintain sane running status.
    * This function will be invoked [regularly](\ref DUTY_CYCLE_PERIOD) while the scheduler
@@ -517,7 +535,10 @@ namespace gear {
   {
     // consolidate queue content
     layer1_.feedPrioritisation();
-    //////////////////////////////////////////////////////////////////////OOO clean-up of outdated tasks here
+    // clean-up of outdated tasks here
+    while (layer1_.isOutdated (now) and not layer1_.isOutOfTime(now))
+      layer1_.pullHead();
+    // protect against missing the deadline of a compulsory task
     if (layer1_.isOutOfTime (now))
       {
         triggerEmergency();
@@ -533,9 +554,8 @@ namespace gear {
       {// prepare next duty cycle »tick«
         Time nextTick = now + DUTY_CYCLE_PERIOD;
         Time deadline = nextTick + DUTY_CYCLE_TOLERANCE;
-        auto& ctx = ExecutionCtx::from (*this);
         Activity& tickActivity = activityLang_.createTick (deadline);
-        ctx.post(nextTick, &tickActivity, ctx);
+        postChain (&tickActivity, nextTick, deadline, ManifestationID(), true);
       }
   }
   

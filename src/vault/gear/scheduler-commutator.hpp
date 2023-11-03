@@ -218,7 +218,13 @@ namespace gear {
       activity::Proc
       postDispatch (Activity* chain, Time when
                    ,EXE& executionCtx
-                   ,SchedulerInvocation& layer1)
+                   ,SchedulerInvocation& layer1
+                   //////////////////////////////////////////////////////////////////////////////////////////////OOO API / Design problem with "context" and significance-Params
+                                                                 , Time dead =Time::NEVER //////////////////////////////////TODO booom!!
+                                                                 , ManifestationID manID =ManifestationID()
+                                                                 , bool compulsory = false
+                   //////////////////////////////////////////////////////////////////////////////////////////////OOO API / Design problem with "context" and significance-Params
+                   )
         {
           if (!chain) return activity::SKIP;
           
@@ -227,9 +233,9 @@ namespace gear {
             return ActivityLang::dispatchChain (chain, executionCtx);
           else
             if (holdsGroomingToken (thisThread()))
-              layer1.feedPrioritisation (*chain, when);
+              layer1.feedPrioritisation (*chain, when, dead, manID, compulsory);
             else
-              layer1.instruct (*chain, when);
+              layer1.instruct (*chain, when, dead, manID, compulsory);
           return activity::PASS;
         }
     };

@@ -28,7 +28,6 @@
 #include "lib/test/run.hpp"
 #include "vault/gear/scheduler-invocation.hpp"
 #include "lib/util.hpp"
-#include "lib/test/diagnostic-output.hpp"///////////////////TODO
 
 using test::Test;
 using util::isSameObject;
