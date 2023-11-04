@@ -254,11 +254,8 @@ namespace gear {
           UNIMPLEMENTED("wrap the ActivityTerm");
         }
       
-      //////////////////////////////////////////////////////////////////////////////////////////////OOO the role of this function remains unclear; currently used from »Tick«
-      activity::Proc postChain (Activity*, Time start
-                                         , Time dead =Time::ANYTIME
-                                         , ManifestationID manID =ManifestationID()
-                                         , bool isCompulsory = false);
+      
+      void postChain (ActivationEvent);  //////////////////////////////////////OOO could be private?
       
       
       /**
@@ -317,9 +314,16 @@ namespace gear {
           return setup;
         }
       
+      /** access high-resolution-clock, rounded to µ-Ticks */
+      Time
+      getSchedTime()
+        {
+          return RealClock::now();
+        }
+      
       /** @internal expose a binding for Activity execution */
       class ExecutionCtx;
-      
+      friend class ExecutionCtx;
       
       /** open private backdoor for tests */
       friend class test::SchedulerService_test;
@@ -337,26 +341,37 @@ namespace gear {
    *  is in fact supplied by the implementation internals of the scheduler itself.
    */
   class Scheduler::ExecutionCtx
-    : private Scheduler
+    : util::NonCopyable
     {
+      Scheduler& scheduler_;
     public:
-      static ExecutionCtx&
-      from (Scheduler& self)
-      {
-        return static_cast<ExecutionCtx&> (self);
-      }
+      
+      ActivationEvent rootEvent;
+      
+      ExecutionCtx(Scheduler& self, ActivationEvent toDispatch)
+        : scheduler_{self}
+        , rootEvent{toDispatch}
+      { }
+      
       
       /* ==== Implementation of the Concept ExecutionCtx ==== */
       
       /**
        * λ-post: enqueue for time-bound execution, possibly dispatch immediately.
-       * This is the »main entrance« to get some Activity scheduled.
-       * @remark the \a ctx argument is redundant (helpful for test/mocking)
+       * @remark This function represents and _abstracted entrance to scheduling_
+       *         for the ActivityLang and is relevant for recursive forwarding
+       *         of activations and notifications. The concrete implementation
+       *         needs some further contextual information, which is passed
+       *         down here as a nested sub-context.
        */
       activity::Proc
       post (Time when, Activity* chain, ExecutionCtx& ctx)
         {
-          return layer2_.postDispatch (chain, when, ctx, layer1_);
+          ActivationEvent chainEvent = ctx.rootEvent;
+          chainEvent.activity = chain;
+          chainEvent.starting = _raw(when);
+          ExecutionCtx subCtx{scheduler_, chainEvent};
+          return scheduler_.layer2_.postDispatch (chainEvent, subCtx, scheduler_.layer1_);
         }
       
       void
@@ -374,7 +389,7 @@ namespace gear {
       activity::Proc
       tick (Time now)
         {
-          handleDutyCycle (now);
+          scheduler_.handleDutyCycle (now);
           return activity::PASS;
         }
       
@@ -388,10 +403,25 @@ namespace gear {
       Time
       getSchedTime()
         {
-          return RealClock::now();
+          return scheduler_.getSchedTime();
         }
     };
   
+  
+  
+  
+  /**
+   * Enqueue for time-bound execution, possibly dispatch immediately.
+   * This is the »main entrance« to get some Activity scheduled.
+   * @param actEvent the Activity, start time and deadline
+   *        and optionally further context information
+   */
+  inline void
+  Scheduler::postChain (ActivationEvent actEvent)
+  {
+    ExecutionCtx ctx{*this, actEvent};
+    layer2_.postDispatch (actEvent, ctx, layer1_);
+  }
   
   
   
@@ -416,22 +446,22 @@ namespace gear {
   Scheduler::getWork()
   {
     auto self = std::this_thread::get_id();
-    auto& ctx = ExecutionCtx::from (*this);
     try {
         auto res = WorkerInstruction{}
                       .performStep([&]{
-                                        Time now = ctx.getSchedTime();
+                                        Time now = getSchedTime();
                                         Time head = layer1_.headTime();
                                         return scatteredDelay(now,
                                                   loadControl_.markIncomingCapacity (head,now));
                                       })
                       .performStep([&]{
-                                        Time now = ctx.getSchedTime();
-                                        Activity* act = layer2_.findWork (layer1_,now);
-                                        return ctx.post (now, act, ctx);
+                                        Time now = getSchedTime();
+                                        auto toDispatch = layer2_.findWork (layer1_,now);
+                                        ExecutionCtx ctx{*this, toDispatch};
+                                        return layer2_.postDispatch (toDispatch, ctx, layer1_);
                                       })
                       .performStep([&]{
-                                        Time now = ctx.getSchedTime();
+                                        Time now = getSchedTime();
                                         Time head = layer1_.headTime();
                                         return scatteredDelay(now,
                                                   loadControl_.markOutgoingCapacity (head,now));
@@ -506,16 +536,6 @@ namespace gear {
   }
   
   
-  //////////////////////////////////////////////////////////////////////////////////////////////OOO the role of this function remains unclear; currently used from »Tick«
-  inline activity::Proc
-  Scheduler::postChain (Activity* chain, Time start, Time dead
-                       ,ManifestationID manID, bool isCompulsory)
-  {
-    auto& ctx = ExecutionCtx::from (*this);
-    return layer2_.postDispatch (chain, start, ctx, layer1_
-                   //////////////////////////////////////////////////////////////////////////////////////////////OOO API / Design problem with "context" and significance-Params
-                                                        ,dead,manID,isCompulsory);
-  }
 
   
   /**
@@ -555,7 +575,7 @@ namespace gear {
         Time nextTick = now + DUTY_CYCLE_PERIOD;
         Time deadline = nextTick + DUTY_CYCLE_TOLERANCE;
         Activity& tickActivity = activityLang_.createTick (deadline);
-        postChain (&tickActivity, nextTick, deadline, ManifestationID(), true);
+        postChain (ActivationEvent{tickActivity, nextTick, deadline, ManifestationID(), true});
       }
   }
   

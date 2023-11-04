@@ -72,7 +72,7 @@ namespace test {
           
           CHECK (not sched.peekHead());
           
-          sched.instruct (activity, when, dead);
+          sched.instruct ({activity, when, dead});
           sched.feedPrioritisation();
           CHECK (sched.peekHead());
           
@@ -93,18 +93,18 @@ namespace test {
           SchedulerInvocation sched;
           Activity one{1u,1u};
           Activity two{2u,2u};
-          Activity ree{3u,3u};
+          Activity wee{3u,3u};
           Time t{5,5};
           
-          sched.instruct (one, t);
-          sched.instruct (two, t);
-          sched.instruct (ree, t);
+          sched.instruct ({one, t});
+          sched.instruct ({two, t});
+          sched.instruct ({wee, t});
           CHECK (not sched.peekHead());
           
           sched.feedPrioritisation();
           CHECK (isSameObject (*sched.pullHead(), one));
           CHECK (isSameObject (*sched.pullHead(), two));
-          CHECK (isSameObject (*sched.pullHead(), ree));
+          CHECK (isSameObject (*sched.pullHead(), wee));
           CHECK (not sched.peekHead());
           CHECK (sched.empty());
         }
@@ -125,13 +125,13 @@ namespace test {
           Activity a3{3u,3u};
           Activity a4{4u,4u};
           
-          sched.instruct (a2, Time{2,0});
-          sched.instruct (a4, Time{4,0});
+          sched.instruct ({a2, Time{2,0}});
+          sched.instruct ({a4, Time{4,0}});
           sched.feedPrioritisation();
           CHECK (isSameObject (*sched.peekHead(), a2));
           
-          sched.instruct (a3, Time{3,0});
-          sched.instruct (a1, Time{1,0});
+          sched.instruct ({a3, Time{3,0}});
+          sched.instruct ({a1, Time{1,0}});
           CHECK (isSameObject (*sched.peekHead(), a2));
           
           sched.feedPrioritisation();
@@ -155,10 +155,10 @@ namespace test {
           Activity a3{3u,3u};
           Activity a4{4u,4u};
           
-          sched.feedPrioritisation (a1, Time{0,5});
-          sched.feedPrioritisation (a2, Time{0,5});
-          sched.feedPrioritisation (a3, Time{0,5});
-          sched.feedPrioritisation (a4, Time{0,4});
+          sched.feedPrioritisation ({a1, Time{0,5}});
+          sched.feedPrioritisation ({a2, Time{0,5}});
+          sched.feedPrioritisation ({a3, Time{0,5}});
+          sched.feedPrioritisation ({a4, Time{0,4}});
           CHECK (isSameObject (*sched.pullHead(), a4));
           CHECK (isSameObject (*sched.pullHead(), a3));
           CHECK (isSameObject (*sched.pullHead(), a1));
@@ -177,7 +177,7 @@ namespace test {
           SchedulerInvocation sched;
           Activity a1{1u,1u};
           
-          sched.feedPrioritisation (a1, Time{0,5});
+          sched.feedPrioritisation ({a1, Time{0,5}});
           CHECK (isSameObject (*sched.peekHead(), a1));
           CHECK (    sched.isDue (Time{0,10}));
           CHECK (    sched.isDue (Time{0,5}));
@@ -207,7 +207,7 @@ namespace test {
           SchedulerInvocation sched;
           Activity act;
           
-          sched.feedPrioritisation (act, Time{2,0}, Time{3,0});
+          sched.feedPrioritisation ({act, Time{2,0}, Time{3,0}});
           CHECK (Time(2,0) == sched.headTime());
           CHECK (    sched.isDue    (Time{2,0}));
           CHECK (not sched.isMissed (Time{2,0}));
@@ -218,7 +218,7 @@ namespace test {
           CHECK (not sched.isOutdated (Time{3,0}));
           CHECK (    sched.isOutdated (Time{4,0}));
           
-          sched.feedPrioritisation (act, Time{1,0}, Time{3,0}, ManifestationID{5});
+          sched.feedPrioritisation ({act, Time{1,0}, Time{3,0}, ManifestationID{5}});
           CHECK (Time(1,0) == sched.headTime());
           CHECK (    sched.isOutdated (Time{1,0}));
           CHECK (not sched.isMissed (Time{1,0}));
@@ -243,8 +243,8 @@ namespace test {
           CHECK (not sched.isMissed (Time{1,0}));
           CHECK (    sched.isDue    (Time{1,0}));
           
-          sched.feedPrioritisation (act, Time{0,0}, Time{2,0}, ManifestationID{23}, true);
-          CHECK (Time(0,0) == sched.headTime());                               //   ^^^^ marked as compulsory
+          sched.feedPrioritisation ({act, Time{0,0}, Time{2,0}, ManifestationID{23}, true});
+          CHECK (Time(0,0) == sched.headTime());                               //    ^^^^ marked as compulsory
           CHECK (not sched.isMissed (Time{1,0}));
           CHECK (not sched.isOutdated (Time{1,0}));
           CHECK (not sched.isOutOfTime(Time{2,0}));                            // still OK /at/ deadline

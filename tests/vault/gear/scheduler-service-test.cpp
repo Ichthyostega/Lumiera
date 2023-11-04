@@ -113,9 +113,7 @@ namespace test {
           CHECK (isnil (scheduler));
 
           Activity dummy{Activity::FEED};
-          auto postIt = [&] { auto& schedCtx = Scheduler::ExecutionCtx::from(scheduler);
-                              schedCtx.post (RealClock::now()+t200us, &dummy, schedCtx);
-                            };
+          auto postIt = [&] { scheduler.postChain (ActivationEvent{dummy, RealClock::now()+t200us}); };
           
           scheduler.ignite();
           CHECK (isnil (scheduler));        // no start without any post()
@@ -167,9 +165,8 @@ namespace test {
           
           auto createLoad = [&](Offset start, uint cnt)
                             { // use internal API (this test is declared as friend)
-                              auto& schedCtx = Scheduler::ExecutionCtx::from(scheduler);
-                              for (uint i=0; i<cnt; ++i)           // flood the queue
-                                schedCtx.post (anchor + start + TimeValue{i}, &dummy, schedCtx);
+                              for (uint i=0; i<cnt; ++i) // flood the queue
+                                scheduler.postChain (ActivationEvent{dummy, anchor + start + TimeValue{i}});
                             };
           
           
@@ -314,10 +311,8 @@ namespace test {
 
           auto post = [&](Time start)
                               { // this test class is declared friend to get a backdoor to Scheduler internals...
-                                auto& schedCtx = Scheduler::ExecutionCtx::from(scheduler);
-                                
                                 scheduler.layer2_.acquireGoomingToken();
-                                schedCtx.post (start, &probe, schedCtx);
+                                scheduler.postChain(ActivationEvent{probe, start});
                               };
           
           auto pullWork = [&] {

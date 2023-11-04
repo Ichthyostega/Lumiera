@@ -90,14 +90,32 @@ namespace gear {
    */
   struct ActivationEvent
     {
-      Activity* activity{nullptr};
-      int64_t   starting{0};
-      int64_t   deadline{0};
+      Activity* activity;
+      int64_t   starting;
+      int64_t   deadline;
       
       uint32_t  manifestation :32;
-      char                    :0;
       bool      isCompulsory  :1;
-                              ///////////////////////////////////////////////////////////////////////////TICKET #1245 : use direct bit-field initialiser in C++20
+      
+      ActivationEvent()
+        : activity{nullptr}
+        , starting{_raw(Time::ANYTIME)}
+        , deadline{_raw(Time::NEVER)}
+        , manifestation{0}
+        , isCompulsory{false}
+        { }
+
+      ActivationEvent(Activity& act, Time when
+                                   , Time dead =Time::NEVER
+                                   , ManifestationID manID =ManifestationID()
+                                   , bool compulsory =false)
+        : activity{&act}
+        , starting{_raw(when)}
+        , deadline{_raw(dead)}
+        , manifestation{manID}
+        , isCompulsory{compulsory}
+        { }
+       // default copy operations acceptable
       
       /** @internal ordering function for time based scheduling
        *  @note reversed order as required by std::priority_queue
@@ -112,7 +130,7 @@ namespace gear {
       operator bool()      const { return bool{activity}; }
       operator Activity*() const { return activity; }
       
-      static ActivationEvent nil() { return {nullptr, _raw(Time::ANYTIME), _raw(Time::NEVER), 0, false}; }
+      Time startTime()     const { return Time{TimeValue{starting}};}
     };
   
   
@@ -157,34 +175,27 @@ namespace gear {
       
       
       /**
-       * Accept an Activity for time-bound execution
+       * Accept an ActivationEvent with an Activity for time-bound execution
        */
       void
-      instruct (Activity& activity, Time when
-                                  , Time dead =Time::NEVER
-                                  , ManifestationID manID =ManifestationID()
-                                  , bool compulsory =false)
+      instruct (ActivationEvent actEvent)
         {
-          bool success = instruct_.push (ActivationEvent{&activity
-                                                        , waterLevel(when)
-                                                        , waterLevel(dead)
-                                                        , uint32_t(manID)
-                                                        , compulsory});
+          bool success = instruct_.push (move (actEvent));
           if (not success)
             throw error::Fatal{"Scheduler entrance: memory allocation failed"};
         }
       
       
       /**
-       * Pick up all new Activities from the entrance queue
+       * Pick up all new events from the entrance queue
        * and enqueue them to be retrieved ordered by start time.
        */
       void
       feedPrioritisation()
         {
-          ActivationEvent actOrder;
-          while (instruct_.pop (actOrder))
-            priority_.push (move (actOrder));
+          ActivationEvent actEvent;
+          while (instruct_.pop (actEvent))
+            priority_.push (move (actEvent));
         }
       
       
@@ -194,16 +205,9 @@ namespace gear {
        * @remark Layer-2 uses this shortcut when in »grooming mode«.
        */
       void
-      feedPrioritisation (Activity& activity, Time when
-                                            , Time dead =Time::NEVER
-                                            , ManifestationID manID =ManifestationID()
-                                            , bool compulsory =false)
+      feedPrioritisation (ActivationEvent actEvent)
         {
-          priority_.push (ActivationEvent{&activity
-                                         , waterLevel(when)
-                                         , waterLevel(dead)
-                                         , uint32_t(manID)
-                                         , compulsory});
+          priority_.push (move (actEvent));
         }
       
       
@@ -214,7 +218,7 @@ namespace gear {
       ActivationEvent
       peekHead()
         {
-          return priority_.empty()? ActivationEvent::nil()
+          return priority_.empty()? ActivationEvent()
                                   : priority_.top();
         }
       

@@ -119,9 +119,9 @@ namespace test {
           Time now = detector.executionCtx.getSchedTime();
           
           // prepare scenario: some activity is enqueued
-          queue.instruct (activity, when);
+          queue.instruct ({activity, when});
           
-          sched.postDispatch (sched.findWork(queue,now), now, detector.executionCtx,queue);
+          sched.postDispatch (sched.findWork(queue,now), detector.executionCtx,queue);
           CHECK (detector.verifyInvocation("CTX-tick").arg(now));
           CHECK (queue.empty());
           
@@ -311,15 +311,15 @@ namespace test {
           Activity a2{2u,2u};
           Activity a3{3u,3u};
           
-          queue.instruct (a3, t3);                                 // activity scheduled into the future
+          queue.instruct ({a3, t3});                               // activity scheduled into the future
           CHECK (not sched.findWork (queue, now));                 // ... not found with time `now`
           CHECK (t3 == queue.headTime());
           
-          queue.instruct (a1, t1);
+          queue.instruct ({a1, t1});
           CHECK (isSameObject (a1, *sched.findWork(queue, now)));  // but past activity is found
           CHECK (not sched.findWork (queue, now));                 // activity was retrieved
           
-          queue.instruct (a2, t2);
+          queue.instruct ({a2, t2});
           CHECK (isSameObject (a2, *sched.findWork(queue, now)));  // activity scheduled for `now` is found
           CHECK (not sched.findWork (queue, now));                 // nothing more found for `now`
           CHECK (t3 == queue.headTime());
@@ -329,15 +329,15 @@ namespace test {
           CHECK (not sched.findWork (queue, t3));
           CHECK (    queue.empty());                               // Everything retrieved and queue really empty
           
-          queue.instruct (a2, t2);
-          queue.instruct (a1, t1);
+          queue.instruct ({a2, t2});
+          queue.instruct ({a1, t1});
           CHECK (isSameObject (a1, *sched.findWork(queue, now)));  // the earlier activity is found first
           CHECK (t2 == queue.headTime());
           CHECK (isSameObject (a2, *sched.findWork(queue, now)));
           CHECK (not sched.findWork (queue, now));
           CHECK (    queue.empty());
           
-          queue.instruct (a2, t2);                                 // prepare activity which /would/ be found...
+          queue.instruct ({a2, t2});                               // prepare activity which /would/ be found...
           blockGroomingToken(sched);                               // but prevent this thread from acquiring the GroomingToken
           CHECK (not sched.findWork (queue, now));                 // thus search aborts immediately
           CHECK (not queue.empty());
@@ -369,10 +369,10 @@ namespace test {
           Time t3{30,0};   Activity a3{3u,3u};
           Time t4{40,0};   Activity a4{4u,4u};
           
-          queue.instruct (a1, t1, t4, ManifestationID{5});
-          queue.instruct (a2, t2, t2);
-          queue.instruct (a3, t3, t3, ManifestationID{23}, true);
-          queue.instruct (a4, t4, t4);
+          queue.instruct ({a1, t1, t4, ManifestationID{5}});
+          queue.instruct ({a2, t2, t2});
+          queue.instruct ({a3, t3, t3, ManifestationID{23}, true});
+          queue.instruct ({a4, t4, t4});
           queue.activate(ManifestationID{5});
           queue.activate(ManifestationID{23});
           
@@ -451,19 +451,19 @@ namespace test {
           auto myself = std::this_thread::get_id();
           CHECK (not sched.holdsGroomingToken (myself));
           
-          // no effect when no Activity given
-          CHECK (activity::SKIP == sched.postDispatch (nullptr, now, detector.executionCtx, queue));
+          // no effect when empty / no Activity given
+          CHECK (activity::SKIP == sched.postDispatch (ActivationEvent(), detector.executionCtx, queue));
           CHECK (not sched.holdsGroomingToken (myself));
           
           // Activity immediately dispatched when on time and GroomingToken can be acquired
-          CHECK (activity::PASS == sched.postDispatch (&activity, past, detector.executionCtx, queue));
+          CHECK (activity::PASS == sched.postDispatch (ActivationEvent{activity, past}, detector.executionCtx, queue));
           CHECK (detector.verifyInvocation("testActivity").timeArg(now)); // was invoked immediately
           CHECK (    sched.holdsGroomingToken (myself));
           CHECK (    queue.empty());
           detector.incrementSeq(); // Seq-point-1 in the detector log
           
           // future Activity is enqueued by short-circuit directly into the PriorityQueue if possible
-          CHECK (activity::PASS == sched.postDispatch (&activity, future, detector.executionCtx, queue));
+          CHECK (activity::PASS == sched.postDispatch (ActivationEvent{activity, future}, detector.executionCtx, queue));
           CHECK (    sched.holdsGroomingToken (myself));
           CHECK (not queue.empty());
           CHECK (isSameObject (activity, *queue.peekHead())); //  appears at Head, implying it's in Priority-Queue
@@ -474,14 +474,14 @@ namespace test {
           CHECK (queue.empty());
           
           // ...but GroomingToken is not acquired explicitly; Activity is just placed into the Instruct-Queue
-          CHECK (activity::PASS == sched.postDispatch (&activity, future, detector.executionCtx, queue));
+          CHECK (activity::PASS == sched.postDispatch (ActivationEvent{activity, future}, detector.executionCtx, queue));
           CHECK (not sched.holdsGroomingToken (myself));
           CHECK (not queue.peekHead());           // not appearing at Head this time,
           CHECK (not queue.empty());             //  rather waiting in the Instruct-Queue
           
           
           blockGroomingToken(sched);
-          CHECK (activity::PASS == sched.postDispatch (&activity, now, detector.executionCtx, queue));
+          CHECK (activity::PASS == sched.postDispatch (ActivationEvent{activity, now}, detector.executionCtx, queue));
           CHECK (not sched.holdsGroomingToken (myself));
           CHECK (not queue.peekHead());     // was enqueued, not executed
           
@@ -562,7 +562,7 @@ namespace test {
           
           //    ·=================================================================== actual test sequence
           // Add the Activity-Term to be scheduled for planned start-Time
-          sched.postDispatch (&anchor, start, detector.executionCtx, queue);
+          sched.postDispatch (ActivationEvent{anchor, start}, detector.executionCtx, queue);
           CHECK (detector.ensureNoInvocation("testJob"));
           CHECK (not sched.holdsGroomingToken (myself));
           CHECK (not queue.empty());
@@ -572,11 +572,11 @@ namespace test {
           detector.incrementSeq();
           
           // Assuming a worker runs "later" and retrieves work...
-          Activity* act = sched.findWork(queue,now);
+          ActivationEvent act = sched.findWork(queue,now);
           CHECK (sched.holdsGroomingToken (myself));       // acquired the GroomingToken
           CHECK (isSameObject(*act, anchor));              // "found" the rigged Activity as next piece of work
           
-          sched.postDispatch (act, now, detector.executionCtx, queue);
+          sched.postDispatch (act, detector.executionCtx, queue);
           
           CHECK (queue.empty());
           CHECK (not sched.holdsGroomingToken (myself));   // the λ-work was invoked and dropped the GroomingToken

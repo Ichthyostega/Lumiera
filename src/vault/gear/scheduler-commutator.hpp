@@ -189,7 +189,7 @@ namespace gear {
               if (layer1.isDue (now) and not layer1.isOutOfTime(now))
                 return layer1.pullHead();
             }
-          return ActivationEvent::nil();
+          return ActivationEvent();
         }
       
       
@@ -216,26 +216,21 @@ namespace gear {
        */
       template<class EXE>
       activity::Proc
-      postDispatch (Activity* chain, Time when
+      postDispatch (ActivationEvent event
                    ,EXE& executionCtx
                    ,SchedulerInvocation& layer1
-                   //////////////////////////////////////////////////////////////////////////////////////////////OOO API / Design problem with "context" and significance-Params
-                                                                 , Time dead =Time::NEVER //////////////////////////////////TODO booom!!
-                                                                 , ManifestationID manID =ManifestationID()
-                                                                 , bool compulsory = false
-                   //////////////////////////////////////////////////////////////////////////////////////////////OOO API / Design problem with "context" and significance-Params
                    )
         {
-          if (!chain) return activity::SKIP;
+          if (!event) return activity::SKIP;
           
           Time now = executionCtx.getSchedTime();
-          if (decideDispatchNow (when, now))
-            return ActivityLang::dispatchChain (chain, executionCtx);
+          if (decideDispatchNow (event.startTime(), now))
+            return ActivityLang::dispatchChain (event, executionCtx);
           else
             if (holdsGroomingToken (thisThread()))
-              layer1.feedPrioritisation (*chain, when, dead, manID, compulsory);
+              layer1.feedPrioritisation (move (event));
             else
-              layer1.instruct (*chain, when, dead, manID, compulsory);
+              layer1.instruct (move (event));
           return activity::PASS;
         }
     };
