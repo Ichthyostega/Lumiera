@@ -368,7 +368,7 @@ namespace test {
           Time t2{20,0};   Activity a2{2u,2u};
           Time t3{30,0};   Activity a3{3u,3u};
           Time t4{40,0};   Activity a4{4u,4u};
-          
+                     //     start,deadline, manif.ID,       isCompulsory
           queue.instruct ({a1, t1, t4, ManifestationID{5}});
           queue.instruct ({a2, t2, t2});
           queue.instruct ({a3, t3, t3, ManifestationID{23}, true});
@@ -497,7 +497,7 @@ namespace test {
           queue.feedPrioritisation();
           CHECK (now == queue.headTime());
           CHECK (isSameObject (activity, *sched.findWork(queue, now)));
-          CHECK (sched.holdsGroomingToken (myself));
+          CHECK (sched.holdsGroomingToken (myself));  // findWork() acquired the token
           CHECK (future == queue.headTime());
           CHECK (not queue.isDue(now));
           CHECK (    queue.isDue(future));

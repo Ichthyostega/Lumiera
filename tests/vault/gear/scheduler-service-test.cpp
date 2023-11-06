@@ -80,10 +80,11 @@ namespace test {
       virtual void
       run (Arg)
         {
-//           simpleUsage();
-//           verify_StartStop();
+           simpleUsage();
+           verify_StartStop();
            verify_LoadFactor();
-//           invokeWorkFunction();
+           invokeWorkFunction();
+           scheduleRenderJob();
            walkingDeadline();
         }
       
@@ -137,7 +138,7 @@ namespace test {
       /** @test verify the scheduler processes scheduled events,
        *        indicates current load and winds down automatically
        *        when falling empty.
-       *      - placing short bursts of single FEED-Activities
+       *      - schedule short bursts of single FEED-Activities
        *      - these actually do nothing and can be processed typically < 5µs
        *      - placing them spaced by 1µs, so the scheduler will build up congestion
        *      - since this Activity does not drop the »grooming-token«, actually only
@@ -146,12 +147,14 @@ namespace test {
        *      - when reaching the scheduler »tick«, the queue should be empty
        *        and the scheduler will stop active processing
        *      - the main thread (this test) polls every 50µs to observe the load
+       *      - after 2 seconds of idle-sleeping, the WorkForce is disengaged
        *      - verify the expected load pattern
        * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_LoadFactor()
         {
+          MARK_TEST_FUN
           BlockFlowAlloc bFlow;
           EngineObserver watch;
           Scheduler scheduler{bFlow, watch};
@@ -284,19 +287,20 @@ namespace test {
        *        + after dispatching an Activity in a situation with no follow-up work,
        *          the work-function inserts a targeted sleep of random duration,
        *          to re-shuffle the rhythm of sleep cycles
-       *        + when the next planned Activity has already be »tended for« (by placing
+       *        + when the next planned Activity was already »tended for« (by placing
        *          another worker into a targeted sleep), further workers entering the
        *          work-function will be re-targeted by a random sleep to focus capacity
        *          into a time zone behind the next entry.
-       * @note Invoke the Activity probe itself can take 50..150µs, due to the EventLog,
+       * @note Invoking the Activity probe itself can take 50..150µs, due to the EventLog,
        *       which is not meant to be used in performance critical paths but only for tests,
        *       because it performs lots of heap allocations and string operations. Moreover,
        *       we see additional cache effects after an extended sleep period.
-       * @todo WIP 10/23 🔁 define ⟶ implement
+       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
       invokeWorkFunction()
         {
+          MARK_TEST_FUN
           BlockFlowAlloc bFlow;
           EngineObserver watch;
           Scheduler scheduler{bFlow, watch};
@@ -310,7 +314,7 @@ namespace test {
           activity::Proc res;
 
           auto post = [&](Time start)
-                              { // this test class is declared friend to get a backdoor to Scheduler internals...
+                              { // this test class is declared friend to get a backdoor into Scheduler internals...
                                 scheduler.layer2_.acquireGoomingToken();
                                 scheduler.postChain(ActivationEvent{probe, start});
                               };
@@ -432,6 +436,47 @@ namespace test {
           CHECK (not wasInvoked(start));                                    // since next-head was marked as "tended"...
           CHECK (not scheduler.empty());                                    // ...this thread is not used to dispatch it
           CHECK (delay_us < 6000);                                          // rather it is re-focussed as free capacity within WORK_HORIZON
+        }
+      
+      
+      
+      /** @test TODO schedule a render job through the high-level Job-builder API.
+       *      - use the mock Job-Functor provided by the ActivityDetector
+       * @todo WIP 11/23 ✔ define ⟶ 🔁 implement
+       */
+      void
+      scheduleRenderJob()
+        {
+          MARK_TEST_FUN
+          BlockFlowAlloc bFlow;
+          EngineObserver watch;
+          Scheduler scheduler{bFlow, watch};
+
+          Time nominal{7,7};
+          Time start{0,1};
+          Time dead{0,10};
+          
+          ActivityDetector detector;
+          Job testJob{detector.buildMockJob("testJob", nominal, 1337)};
+          
+          CHECK (scheduler.empty());
+          scheduler.defineSchedule(testJob)
+                   .startOffset(200us)
+                   .lifeWindow (1ms)
+                   .manifestation(ManifestationID{55})
+                   .post();
+          
+          CHECK (not scheduler.empty());
+          CHECK (detector.ensureNoInvocation("testJob"));
+          
+          sleep_for(400us);
+          CHECK (detector.ensureNoInvocation("testJob"));
+          
+          CHECK (activity::PASS == scheduler.getWork());
+          CHECK (scheduler.empty());
+          
+          cout << detector.showLog()<<endl; // HINT: use this for investigation...
+          CHECK (detector.verifyInvocation("testJob"));
         }
       
       

@@ -147,6 +147,46 @@ namespace gear {
   
   
   
+  class ScheduleSpec
+    {
+      Job job_;
+      
+    public:
+      ScheduleSpec (Job job)
+        : job_{job}
+        { }
+      
+      ScheduleSpec
+      startOffset (microseconds microTicks)
+        {
+          UNIMPLEMENTED ("start offset");
+          return move(*this);
+        }
+      
+      ScheduleSpec
+      lifeWindow (microseconds microTicks)
+        {
+          UNIMPLEMENTED ("deadline relative to starts");
+          return move(*this);
+        }
+      
+      ScheduleSpec
+      manifestation (ManifestationID manID)
+        {
+          UNIMPLEMENTED ("store manifestation-ID");
+          return move(*this);
+        }
+      
+      ScheduleSpec
+      post()
+        {
+          UNIMPLEMENTED ("build chain and hand-over into queue");
+          return move(*this);
+        }
+    };
+  
+  
+  
   /******************************************************//**
    * »Scheduler-Service« : coordinate render activities.
    * @todo WIP-WIP 10/2023
@@ -248,8 +288,8 @@ namespace gear {
       /**
        * 
        */
-      void
-      buildJob()
+      ScheduleSpec
+      defineSchedule (Job job)
         {
           UNIMPLEMENTED("wrap the ActivityTerm");
         }

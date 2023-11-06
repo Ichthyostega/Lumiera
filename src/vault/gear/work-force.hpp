@@ -73,7 +73,9 @@ namespace gear {
   using std::atomic;
   using util::unConst;
   using std::chrono::milliseconds;
+  using std::chrono::microseconds;
   using std::chrono_literals::operator ""ms;
+  using std::chrono_literals::operator ""us;
   using std::this_thread::sleep_for;
   
   
