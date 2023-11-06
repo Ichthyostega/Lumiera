@@ -117,6 +117,7 @@
 //#include "lib/util.hpp"
 
 //#include <string>
+#include <optional>
 #include <utility>
 
 
@@ -145,44 +146,50 @@ namespace gear {
   }
   
   
-  
+  class Scheduler;
   
   class ScheduleSpec
+    : util::MoveAssign
     {
       Job job_;
+      TimeVar start_{Time::ANYTIME};
+      TimeVar death_{Time::NEVER};
+      ManifestationID manID_{};
+      bool isCompulsory_{false};
+      
+      Scheduler& theScheduler_;
+      std::optional<activity::Term> term_;
       
     public:
-      ScheduleSpec (Job job)
+      ScheduleSpec (Scheduler& sched, Job job)
         : job_{job}
+        , theScheduler_{sched}
+        , term_{std::nullopt}
         { }
       
       ScheduleSpec
-      startOffset (microseconds microTicks)
+      startOffset (microseconds afterNow)
         {
-          UNIMPLEMENTED ("start offset");
+          start_ = RealClock::now() + _uTicks(afterNow);
           return move(*this);
         }
       
       ScheduleSpec
-      lifeWindow (microseconds microTicks)
+      lifeWindow (microseconds afterStart)
         {
-          UNIMPLEMENTED ("deadline relative to starts");
+          death_ = start_ + _uTicks(afterStart);
           return move(*this);
         }
       
       ScheduleSpec
       manifestation (ManifestationID manID)
         {
-          UNIMPLEMENTED ("store manifestation-ID");
+          manID_ = manID;
           return move(*this);
         }
       
-      ScheduleSpec
-      post()
-        {
-          UNIMPLEMENTED ("build chain and hand-over into queue");
-          return move(*this);
-        }
+      /** build Activity chain and hand-over to the Scheduler. */
+      ScheduleSpec post();
     };
   
   
@@ -286,12 +293,16 @@ namespace gear {
       
       
       /**
-       * 
+       * Render Job builder: start definition of a schedule
+       * to invoke the given Job. Use the functions on the returned builder
+       * to fill in the details of the schedule; defining a start point and
+       * a deadline is mandatory. Issue this schedule then by invoking `post()`
+       * @warning the deadline is also used to manage the allocation.
        */
       ScheduleSpec
       defineSchedule (Job job)
         {
-          UNIMPLEMENTED("wrap the ActivityTerm");
+          return ScheduleSpec{*this, job};
         }
       
       
@@ -364,6 +375,9 @@ namespace gear {
       /** @internal expose a binding for Activity execution */
       class ExecutionCtx;
       friend class ExecutionCtx;
+      
+      /** the Job builder is allowed to allocate and dispatch */
+      friend class ScheduleSpec;
       
       /** open private backdoor for tests */
       friend class test::SchedulerService_test;
@@ -450,6 +464,31 @@ namespace gear {
     };
   
   
+  
+  
+  /** @note after invoking this terminal operation,
+   *        the schedule is defined and will be triggered
+   *        when start time arrives. However, before reaching
+   *        this trigger point, the embedded activity::Term can
+   *        still be augmented and dependencies can be established.
+   *  @remark This ScheduleSpec builder is disposable (and can be moved),
+   *        while the actual Activities are allocated into the BlockFlow,
+   *        where they are guaranteed to live until reaching the deadline.
+   */
+  inline ScheduleSpec
+  ScheduleSpec::post()
+  {
+    term_ = move(
+      theScheduler_
+        .activityLang_
+        .buildCalculationJob (job_, start_,death_));
+     //set up new schedule by retrieving the Activity-chain...
+    theScheduler_.postChain ({term_->post(), start_
+                                           , death_
+                                           , manID_
+                                           , isCompulsory_});
+    return move(*this);
+  }
   
   
   /**

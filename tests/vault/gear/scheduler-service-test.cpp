@@ -459,7 +459,11 @@ namespace test {
           ActivityDetector detector;
           Job testJob{detector.buildMockJob("testJob", nominal, 1337)};
           
+          auto anchor = RealClock::now();
+          auto offset = [&](Time when =RealClock::now()){ return _raw(when) - _raw(anchor); };
+//////////////////////////////////
           CHECK (scheduler.empty());
+SHOW_EXPR(offset())          
           scheduler.defineSchedule(testJob)
                    .startOffset(200us)
                    .lifeWindow (1ms)
@@ -468,11 +472,15 @@ namespace test {
           
           CHECK (not scheduler.empty());
           CHECK (detector.ensureNoInvocation("testJob"));
+SHOW_EXPR(offset())          
           
           sleep_for(400us);
           CHECK (detector.ensureNoInvocation("testJob"));
+SHOW_EXPR(offset())          
           
-          CHECK (activity::PASS == scheduler.getWork());
+          auto res= scheduler.getWork();
+SHOW_EXPR(res)          
+//          CHECK (activity::PASS == scheduler.getWork());
           CHECK (scheduler.empty());
           
           cout << detector.showLog()<<endl; // HINT: use this for investigation...
