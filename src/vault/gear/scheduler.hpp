@@ -367,9 +367,11 @@ namespace gear {
       activity::Proc
       post (Time when, Activity* chain, ExecutionCtx& ctx)
         {
+          REQUIRE (chain);
           ActivationEvent chainEvent = ctx.rootEvent;
           chainEvent.activity = chain;
-          chainEvent.starting = _raw(when);
+          chainEvent.starting = _raw(chain->constrainedStart (when));
+          chainEvent.deadline = _raw(chain->constrainedDeath (chainEvent.deathTime()));
           ExecutionCtx subCtx{scheduler_, chainEvent};
           return scheduler_.layer2_.postDispatch (chainEvent, subCtx, scheduler_.layer1_);
         }

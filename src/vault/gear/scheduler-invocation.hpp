@@ -110,8 +110,8 @@ namespace gear {
                                    , ManifestationID manID =ManifestationID()
                                    , bool compulsory =false)
         : activity{&act}
-        , starting{_raw(when)}
-        , deadline{_raw(dead)}
+        , starting{_raw(act.constrainedStart(when))}
+        , deadline{_raw(act.constrainedDeath(dead))}
         , manifestation{manID}
         , isCompulsory{compulsory}
         { }
@@ -131,6 +131,7 @@ namespace gear {
       operator Activity*() const { return activity; }
       
       Time startTime()     const { return Time{TimeValue{starting}};}
+      Time deathTime()     const { return Time{TimeValue{deadline}};}
     };
   
   

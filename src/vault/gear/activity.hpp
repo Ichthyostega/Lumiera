@@ -438,6 +438,20 @@ namespace gear {
           data_.notification.target = target;
         }
       
+      Time
+      constrainedStart (Time start)   ///< constrain by a POST-Activity's start time
+        {
+          return is(POST)? util::max (start, Time{data_.timeWindow.life})
+                         : start;
+        }
+      
+      Time
+      constrainedDeath (Time death)   ///< constrain by a POST-Activity's deadline
+        {
+          return is(POST)? util::min (death, Time{data_.timeWindow.dead})
+                         : death;
+        }
+      
       
     private:
       void
