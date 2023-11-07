@@ -391,6 +391,8 @@ namespace lib {
         void
         invokeThreadFunction (ARGS&& ...args)
           {
+            while (not Policy::isLive()) // wait for thread-ID to become visible
+              std::this_thread::yield();//  (typically happens when debugging)
             Policy::handle_begin_thread();
             Policy::markThreadStart();
             Policy::perform_thread_function (forward<ARGS> (args)...);
