@@ -76,6 +76,7 @@
 #include "vault/gear/scheduler-invocation.hpp"
 #include "vault/gear/activity-lang.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/format-string.hpp"
 #include "lib/nocopy.hpp"
 
 #include <thread>
@@ -85,11 +86,18 @@
 namespace vault{
 namespace gear {
   
+  using lib::time::Offset;
+  using lib::time::FSecs;
   using lib::time::Time;
   using std::atomic;
   using std::memory_order::memory_order_relaxed;
   using std::memory_order::memory_order_acquire;
   using std::memory_order::memory_order_release;
+  
+  namespace { // Configuration / Scheduling limit
+    
+    Offset FUTURE_PLANNING_LIMIT{FSecs{20}};  ///< limit timespan of deadline into the future (~360 MiB max)
+  }
   
   
   
@@ -156,6 +164,21 @@ namespace gear {
         }
       
       
+      void
+      sanityCheck (ActivationEvent const& event, Time now)
+        {
+          if (event.startTime() == Time::ANYTIME)
+            throw error::Fatal ("Attempt to schedule an Activity without valid start time");
+          if (event.deathTime() == Time::NEVER)
+            throw error::Fatal ("Attempt to schedule an Activity without valid deadline");
+          Offset toDeadline{now, event.deathTime()};
+          if (toDeadline > FUTURE_PLANNING_LIMIT)
+            throw error::Fatal (util::_Fmt{"Attempt to schedule Activity %s "
+                                           "with a deadline by %s into the future"}
+                                          % *event.activity
+                                          % toDeadline);
+        }
+
       /**
        * Decide if Activities shall be performed now and in this thread.
        * @param when the indicated time of start of the first Activity
@@ -224,6 +247,7 @@ namespace gear {
           if (!event) return activity::SKIP;
           
           Time now = executionCtx.getSchedTime();
+          sanityCheck (event, now);
           if (decideDispatchNow (event.startTime(), now))
             return ActivityLang::dispatchChain (event, executionCtx);
           else

@@ -111,7 +111,7 @@ namespace test {
       void
       postNewTask (Scheduler& scheduler, Activity& chain, Time start)
         {
-          ActivationEvent actEvent{chain, start};
+          ActivationEvent actEvent{chain, start, start + Time{50,0}};  // add dummy deadline +50ms
           Scheduler::ExecutionCtx ctx{scheduler, actEvent};
           scheduler.layer2_.postDispatch (actEvent, ctx, scheduler.layer1_);
         }
