@@ -80,10 +80,10 @@ namespace test {
       virtual void
       run (Arg)
         {
-//           simpleUsage();
-//           verify_StartStop();
-//           verify_LoadFactor();
-//           invokeWorkFunction();
+           simpleUsage();
+           verify_StartStop();
+           verify_LoadFactor();
+           invokeWorkFunction();
            scheduleRenderJob();
            walkingDeadline();
         }
@@ -101,6 +101,21 @@ namespace test {
         }
       
       
+      /**
+       * @internal helper to inject a new task into the Scheduler,
+       *           without also activating WorkForce and load control.
+       * @remark this class is declared friend by the Scheduler to grant
+       *           this kind of »implementation backdoor« access; the function
+       *           defined there does essentially the same than Scheduler::postChain()
+       */
+      void
+      postNewTask (Scheduler& scheduler, Activity& chain, Time start)
+        {
+          ActivationEvent actEvent{chain, start};
+          Scheduler::ExecutionCtx ctx{scheduler, actEvent};
+          scheduler.layer2_.postDispatch (actEvent, ctx, scheduler.layer1_);
+        }
+      
       
       /** @test get the scheduler into running state
        * @todo WIP 10/23 ✔ define ⟶ ✔ implement
@@ -114,7 +129,7 @@ namespace test {
           CHECK (isnil (scheduler));
 
           Activity dummy{Activity::FEED};
-          auto postIt = [&] { scheduler.postChain (ActivationEvent{dummy, RealClock::now()+t200us}); };
+          auto postIt = [&] { postNewTask (scheduler, dummy, RealClock::now()+t200us); };
           
           scheduler.ignite();
           CHECK (isnil (scheduler));        // no start without any post()
@@ -169,7 +184,7 @@ namespace test {
           auto createLoad = [&](Offset start, uint cnt)
                             { // use internal API (this test is declared as friend)
                               for (uint i=0; i<cnt; ++i) // flood the queue
-                                scheduler.postChain (ActivationEvent{dummy, anchor + start + TimeValue{i}});
+                                postNewTask (scheduler, dummy, anchor + start + TimeValue{i});
                             };
           
           
@@ -316,7 +331,7 @@ namespace test {
           auto post = [&](Time start)
                               { // this test class is declared friend to get a backdoor into Scheduler internals...
                                 scheduler.layer2_.acquireGoomingToken();
-                                scheduler.postChain(ActivationEvent{probe, start});
+                                postNewTask (scheduler, probe, start);
                               };
           
           auto pullWork = [&] {

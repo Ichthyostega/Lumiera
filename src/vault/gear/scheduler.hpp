@@ -319,6 +319,7 @@ namespace gear {
     private:
       void handleDutyCycle (Time now);
       void handleWorkerTermination (bool isFailure);
+      void maybeScaleWorkForce();
       
       void triggerEmergency();
       
@@ -500,6 +501,7 @@ namespace gear {
   inline void
   Scheduler::postChain (ActivationEvent actEvent)
   {
+    maybeScaleWorkForce();
     ExecutionCtx ctx{*this, actEvent};
     layer2_.postDispatch (actEvent, ctx, layer1_);
   }
@@ -671,6 +673,23 @@ namespace gear {
       triggerEmergency();
     else
       loadControl_.markWorkerExit();
+  }
+  
+  /**
+   * Hook invoked whenever a new task is passed in.
+   * Ensures that the Scheduler is in running state and
+   * possibly steps up the WorkForce if not yet running at
+   * full computation power.
+   * @note the capacity scales down automatically when some
+   *       workers fall idle for extended time (> 2sec).
+   */
+  inline void
+  Scheduler::maybeScaleWorkForce()
+  {
+    if (empty())
+      ignite();
+    else
+      workForce_.incScale();
   }
   
   /**
