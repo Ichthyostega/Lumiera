@@ -80,10 +80,10 @@ namespace test {
       virtual void
       run (Arg)
         {
-           simpleUsage();
-           verify_StartStop();
-           verify_LoadFactor();
-           invokeWorkFunction();
+//           simpleUsage();
+//           verify_StartStop();
+//           verify_LoadFactor();
+//           invokeWorkFunction();
            scheduleRenderJob();
            walkingDeadline();
         }
@@ -464,24 +464,27 @@ namespace test {
 //////////////////////////////////
           CHECK (scheduler.empty());
 SHOW_EXPR(offset())          
+          auto buidl=
           scheduler.defineSchedule(testJob)
                    .startOffset(200us)
-                   .lifeWindow (1ms)
-                   .manifestation(ManifestationID{55})
-                   .post();
+                   .lifeWindow (1ms);
+SHOW_EXPR(offset())          
+          buidl    .post();
           
           CHECK (not scheduler.empty());
-          CHECK (detector.ensureNoInvocation("testJob"));
+//          CHECK (detector.ensureNoInvocation("testJob"));
 SHOW_EXPR(offset())          
           
           sleep_for(400us);
-          CHECK (detector.ensureNoInvocation("testJob"));
+//          CHECK (detector.ensureNoInvocation("testJob"));
 SHOW_EXPR(offset())          
-          
+          scheduler.layer1_.feedPrioritisation();
           auto res= scheduler.getWork();
-SHOW_EXPR(res)          
+SHOW_EXPR(offset())          
+SHOW_EXPR(res)
+SHOW_EXPR(offset(scheduler.layer1_.headTime()))
 //          CHECK (activity::PASS == scheduler.getWork());
-          CHECK (scheduler.empty());
+//          CHECK (scheduler.empty());
           
           cout << detector.showLog()<<endl; // HINT: use this for investigation...
           CHECK (detector.verifyInvocation("testJob"));

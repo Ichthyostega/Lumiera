@@ -360,7 +360,7 @@ namespace gear {
       connectMonitoring()
         {
           LoadController::Wiring setup;
-          setup.maxCapacity = work::Config::COMPUTATION_CAPACITY;
+          setup.maxCapacity = []{ return work::Config::COMPUTATION_CAPACITY; };
           setup.currWorkForceSize = [this]{ return workForce_.size(); };
           return setup;
         }

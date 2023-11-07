@@ -152,8 +152,7 @@ namespace gear {
     public:
       struct Wiring
         {
-          size_t maxCapacity{2};
-          
+          function<size_t()> maxCapacity      {[]{ return 1; }};
           function<size_t()> currWorkForceSize{[]{ return 0; }};
           ///////TODO add here functors to access performance indicators
         };
@@ -189,7 +188,7 @@ namespace gear {
           double lag = _raw(std::clamp<TimeVar> (now - (head.isRegular()? head:now)
                                                 , -SLEEP_HORIZON
                                                 , WORK_HORIZON));
-          const double alpha = LAG_SAMPLE_DAMPING / (1 + wiring_.maxCapacity);
+          const double alpha = LAG_SAMPLE_DAMPING / (1 + wiring_.maxCapacity());
           int64_t average = sampledLag_.load (memory_order_relaxed);
           int64_t newAverage;
           do newAverage = std::floor (lag*alpha + (1-alpha)*average);
@@ -238,7 +237,7 @@ namespace gear {
           lag /= _raw(WORK_HORIZON);
           lag *= 10;
           double lagFactor = lag<0? 1/(1-lag): 1+lag;
-          double loadFactor = wiring_.currWorkForceSize() / double(wiring_.maxCapacity);
+          double loadFactor = wiring_.currWorkForceSize() / double(wiring_.maxCapacity());
           return loadFactor * lagFactor;
         }
       

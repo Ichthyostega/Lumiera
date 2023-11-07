@@ -316,7 +316,7 @@ namespace test {
           uint currThreads = 0;
           
           LoadController::Wiring setup;
-          setup.maxCapacity = maxThreads;
+          setup.maxCapacity       = [&]{ return maxThreads; };
           setup.currWorkForceSize = [&]{ return currThreads; };
           // rigged setup to verify calculated load indicator
           LoadController lctrl{move(setup)};

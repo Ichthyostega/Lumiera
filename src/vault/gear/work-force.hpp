@@ -95,10 +95,12 @@ namespace gear {
      */
     struct Config
       {
-        static const size_t COMPUTATION_CAPACITY;
+        static size_t COMPUTATION_CAPACITY;
         
         const milliseconds IDLE_WAIT = 20ms;
         const size_t DISMISS_CYCLES = 100;
+        
+        static size_t getDefaultComputationCapacity();
       };
     
     

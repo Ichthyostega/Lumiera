@@ -23,26 +23,13 @@
 /** @file work-force.cpp
  ** Implementation of render worker coordination.
  ** 
- ** @note as of X/2023 this is complete bs
- ** @todo WIP  ///////////////////////TICKET #
- ** 
- ** @see ////TODO_test usage example
- ** @see scheduler.cpp implementation
- ** 
- ** @todo WIP-WIP-WIP 6/2023 »Playback Vertical Slice«
+ ** @todo WIP-WIP 11/2023 »Playback Vertical Slice«
  ** 
  */
 
 
 #include "vault/gear/work-force.hpp"
-//#include "lib/symbol.hpp"
-//#include "include/logging.h"
 #include "lib/util.hpp"
-
-//#include <string>
-
-//using std::string;
-//using util::isnil;
 
 
 namespace vault{
@@ -56,15 +43,24 @@ namespace gear {
   
   
   
-//  NA::~NA() { }
-  
-  /** default value for full computing capacity is to use all (virtual) cores */
-  const size_t work::Config::COMPUTATION_CAPACITY = util::max (std::thread::hardware_concurrency()
-                                                              , MINIMAL_CONCURRENCY);
-  
-  
+  /**
+   * Nominal »full size« of a pool of concurrent workers.
+   * This value is [initialised](\ref Config::getDefaultComputationCapacity)
+   * to use all available concurrent computing cores, but can be adjusted.
+   * Adjustments should be done before a worker pool scales up.
+   * @warning this value is taken as-is; setting it to zero will disable
+   *          many (but not all) aspects of concurrent processing.
+   */
+  size_t work::Config::COMPUTATION_CAPACITY = Config::getDefaultComputationCapacity();
   
   /**
+   * default value for full computing capacity is to use all (virtual) cores.
    */
+  size_t
+  work::Config::getDefaultComputationCapacity()
+  {
+    return util::max (std::thread::hardware_concurrency()
+                     , MINIMAL_CONCURRENCY);
+  }
 
 }} // namespace vault::gear

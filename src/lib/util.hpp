@@ -52,21 +52,21 @@ namespace util {
   
   
   template <class NUM>
-  inline int
+  inline int constexpr
   sgn (NUM n)
   {
     return (n==0)? 0 :((n<0)? -1:+1 );
   }
   
   template <class N1, class N2>
-  inline N1
+  inline N1 constexpr
   min (N1 n1, N2 n2)
   {
     return n2 < n1? N1(n2) : n1;
   }
   
   template <class N1, class N2>
-  inline N1
+  inline N1 constexpr
   max (N1 n1, N2 n2)
   {
     return n1 < n2? N1(n2) : n1;
@@ -74,7 +74,7 @@ namespace util {
   
   /** cut a numeric value to be >=0 */
   template <typename NUM>
-  inline NUM
+  inline NUM constexpr
   noneg (NUM val)
   {
     return (0<val? val : 0);
@@ -82,7 +82,7 @@ namespace util {
   
   /** force a numeric to be within bounds, inclusively */
   template <typename NUM, typename NB>
-  inline NUM
+  inline NUM constexpr
   limited (NB lowerBound, NUM val, NB upperBound)
   {
     return min ( max (val, lowerBound)
