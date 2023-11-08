@@ -27,6 +27,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/error.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/format-cout.hpp"
@@ -39,6 +40,8 @@ using util::for_each;
 using lumiera::Error;
 using lumiera::LUMIERA_ERROR_EXCEPTION;
 using lumiera::error::LUMIERA_ERROR_ASSERTION;
+using lib::time::TimeVar;
+using lib::time::Time;
 
 using boost::algorithm::is_lower;
 using boost::algorithm::is_digit;
@@ -51,7 +54,7 @@ namespace test{
 namespace test{
   
   template<class T>
-  class Wrmrmpft 
+  class Wrmrmpft
     {
       T tt_;
     };
@@ -76,6 +79,7 @@ namespace test{
           checkGarbageStr();
           checkTypeDisplay();
           checkThrowChecker();
+          checkLocalManipulation();
         }
       
       
@@ -140,7 +144,7 @@ namespace test{
         }
       
       
-      /** @test check the VERIFY_ERROR macro, 
+      /** @test check the VERIFY_ERROR macro,
        *        which ensures a given error is raised.
        */
       void
@@ -155,6 +159,48 @@ namespace test{
 #endif    ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #537 : restore throwing ASSERT
         }
       
+      
+      /** @test check a local manipulations,
+       *        which are undone when leaving the scope.
+       */
+      void
+      checkLocalManipulation()
+        {
+          int equilibrium = 42;
+          {
+            // manipulate the value temporarily...
+            TRANSIENTLY(equilibrium) = 49;
+            
+            CHECK (49 == equilibrium);
+          }
+          CHECK (42 == equilibrium);
+          
+          
+          TimeVar day_of_reckoning{Time{555,5}};
+          try
+            {
+              TRANSIENTLY(equilibrium) = 55;
+              TRANSIENTLY(day_of_reckoning) = Time::ANYTIME;
+              
+              CHECK (55 == equilibrium);
+              CHECK (Time::ANYTIME  == day_of_reckoning);
+              throw "RRRrrevenge!!!!!!!!!!!!!!!!1!!11!!";
+            }
+          catch(...) { }
+          CHECK (42 == equilibrium);
+          CHECK (Time(555,5) == day_of_reckoning);
+          
+          
+          { // can also use λ for manipulation and clean-up
+            TRANSIENTLY ([&]{ day_of_reckoning *= 2; })
+               .cleanUp ([&]{ equilibrium      /= 2; });
+            
+            CHECK (42 == equilibrium);             // not yet touched...
+            CHECK (Time(110,11) == day_of_reckoning);
+          }
+          CHECK (Time(110,11) == day_of_reckoning);
+          CHECK (21 == equilibrium);
+        }
     };
   
   LAUNCHER (TestHelper_test, "unit common");

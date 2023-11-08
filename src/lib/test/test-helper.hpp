@@ -42,6 +42,7 @@
 
 #include "lib/symbol.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/test/transiently.hpp"
 #include "lib/format-obj.hpp"
 
 #include <boost/lexical_cast.hpp>
