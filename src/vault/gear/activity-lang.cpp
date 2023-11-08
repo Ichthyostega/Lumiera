@@ -32,11 +32,14 @@
 
 #include "vault/gear/activity-lang.hpp"
 #include "lib/format-obj.hpp"
+#include "lib/symbol.hpp"
+#include "vault/gear/scheduler.hpp"//////////////////////////////////////////////////////////////TODO extract -> scheduler.cpp
 
 #include <string>
 #include <boost/functional/hash.hpp> ////////////////////////////////////////////////////////////TODO should be in a scheduler translation-unit / extract scheduler-API
 
 using std::string;
+using lib::Symbol;
 using lib::time::Time;
 using lib::time::TimeValue;
 
@@ -52,6 +55,10 @@ namespace gear {
     {
       return boost::hash_value (uint32_t{id});
     }
+  
+  Symbol WorkTiming::WORKSTART{"WorkStart"};
+  Symbol WorkTiming::WORKSTOP {"WorkStop"};
+  
   ///////////////////////////////////////////////////////////////////////////////////////////////TODO extract scheduler-API
   
   

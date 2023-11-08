@@ -94,7 +94,7 @@
  ** @see SchedulerCommutator Layer-2
  ** @see activity.hpp description of »Render Activities«
  ** 
- ** @todo WIP-WIP 10/2023 »Playback Vertical Slice«
+ ** @todo WIP 11/2023 »Playback Vertical Slice«
  ** 
  */
 
@@ -196,7 +196,7 @@ namespace gear {
   
   /******************************************************//**
    * »Scheduler-Service« : coordinate render activities.
-   * @todo WIP-WIP 10/2023
+   * @todo WIP 11/2023
    * @see BlockFlow
    * @see SchedulerUsage_test
    */
@@ -387,6 +387,21 @@ namespace gear {
   
   
   
+  /** work-timing event for performance observation */
+  class WorkTiming
+    : public EngineEvent
+    {
+      using Payload = EngineEvent::Payload<Time>;
+      using EngineEvent::EngineEvent;
+      
+      static Symbol WORKSTART;
+      static Symbol WORKSTOP;
+      
+    public:
+      static WorkTiming start (Time now) { return WorkTiming{WORKSTART, Payload{now}}; }
+      static WorkTiming stop  (Time now) { return WorkTiming{WORKSTOP,  Payload{now}}; }
+    };
+  
   /**
    * @remark when due, the scheduled Activities are performed within the
    *  [Activity-Language execution environment](\ref ActivityLang::dispatchChain());
@@ -431,16 +446,24 @@ namespace gear {
           return scheduler_.layer2_.postDispatch (chainEvent, subCtx, scheduler_.layer1_);
         }
       
+      /**
+       * λ-work : transition Managment-Mode -> Work-Mode
+       * - drop the Grooming-Token (allow concurrent execution from now on)
+       * - signal start time of actual processing
+       * @warning current thread is expected to hold the Grooming-Token
+       */
       void
-      work (Time, size_t)
+      work (Time now, size_t qualifier)
         {
-          UNIMPLEMENTED ("λ-work");
+          scheduler_.layer2_.dropGroomingToken();
+          scheduler_.engineObserver_.dispatchEvent(qualifier, WorkTiming::start(now));
         }
       
+      /** λ-done : signal end time of actual processing */
       void
-      done (Time, size_t)
+      done (Time now, size_t qualifier)
         {
-          UNIMPLEMENTED ("λ-done");
+          scheduler_.engineObserver_.dispatchEvent(qualifier, WorkTiming::stop(now));
         }
       
       activity::Proc
