@@ -306,6 +306,12 @@ namespace gear {
         }
       
       bool
+      hasPendingInput()  const
+        {
+          return not instruct_.empty();
+        }
+      
+      bool
       empty()  const
         {
           return instruct_.empty()

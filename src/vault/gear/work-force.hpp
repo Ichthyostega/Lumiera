@@ -236,7 +236,7 @@ namespace gear {
       void
       incScale()
         {
-          if (size() > setup_.COMPUTATION_CAPACITY)
+          if (size() >= setup_.COMPUTATION_CAPACITY)
             return;
           else
             workers_.emplace_back (setup_);

@@ -306,8 +306,6 @@ namespace gear {
         }
       
       
-      void postChain (ActivationEvent);  //////////////////////////////////////OOO could be private?
-      
       
       /**
        * The worker-Functor: called by the active Workers from the
@@ -317,6 +315,7 @@ namespace gear {
       
       
     private:
+      void postChain (ActivationEvent);
       void handleDutyCycle (Time now);
       void handleWorkerTermination (bool isFailure);
       void maybeScaleWorkForce();
@@ -364,6 +363,13 @@ namespace gear {
           setup.maxCapacity = []{ return work::Config::COMPUTATION_CAPACITY; };
           setup.currWorkForceSize = [this]{ return workForce_.size(); };
           return setup;
+        }
+      
+      void
+      ensureDroppedGroomingToken()
+        {
+          if (layer2_.holdsGroomingToken (thisThread()))
+            layer2_.dropGroomingToken();
         }
       
       /** access high-resolution-clock, rounded to µ-Ticks */
@@ -466,6 +472,7 @@ namespace gear {
           scheduler_.engineObserver_.dispatchEvent(qualifier, WorkTiming::stop(now));
         }
       
+      /** λ-tick : scheduler management duty cycle */
       activity::Proc
       tick (Time now)
         {
@@ -511,6 +518,7 @@ namespace gear {
                                            , death_
                                            , manID_
                                            , isCompulsory_});
+    theScheduler_.ensureDroppedGroomingToken();
     return move(*this);
   }
   
@@ -551,10 +559,10 @@ namespace gear {
   inline activity::Proc
   Scheduler::getWork()
   {
-    auto self = std::this_thread::get_id();
     try {
         auto res = WorkerInstruction{}
                       .performStep([&]{
+                                        layer2_.maybeFeed(layer1_);
                                         Time now = getSchedTime();
                                         Time head = layer1_.headTime();
                                         return scatteredDelay(now,
@@ -567,6 +575,7 @@ namespace gear {
                                         return layer2_.postDispatch (toDispatch, ctx, layer1_);
                                       })
                       .performStep([&]{
+                                        layer2_.maybeFeed(layer1_);
                                         Time now = getSchedTime();
                                         Time head = layer1_.headTime();
                                         return scatteredDelay(now,
@@ -574,15 +583,13 @@ namespace gear {
                                       });
         
         // ensure lock clean-up
-        if (res != activity::PASS
-            and layer2_.holdsGroomingToken(self))
-          layer2_.dropGroomingToken();
+        if (res != activity::PASS)
+          ensureDroppedGroomingToken();
         return res;
       }
     catch(...)
       {
-        if (layer2_.holdsGroomingToken (self))
-          layer2_.dropGroomingToken();
+        ensureDroppedGroomingToken();
         throw;
       }
   }
@@ -606,19 +613,16 @@ namespace gear {
   {
     auto doTargetedSleep = [&]
           { // ensure not to block the Scheduler after management work
-            auto self = std::this_thread::get_id();
-            if (layer2_.holdsGroomingToken (self))
-              layer2_.dropGroomingToken();
-             // relocate this thread(capacity) to a time where its more useful
+            ensureDroppedGroomingToken();
+            // relocate this thread(capacity) to a time where its more useful
             Offset targetedDelay = loadControl_.scatteredDelayTime (now, capacity);
             std::this_thread::sleep_for (std::chrono::microseconds (_raw(targetedDelay)));
           };
     auto doTendNextHead = [&]
           {
             Time head = layer1_.headTime();
-            auto self = std::this_thread::get_id();
             if (not loadControl_.tendedNext(head)
-                and (layer2_.holdsGroomingToken(self)
+                and (layer2_.holdsGroomingToken(thisThread())
                     or layer2_.acquireGoomingToken()))
               loadControl_.tendNext(head);
           };

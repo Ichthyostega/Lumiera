@@ -31,6 +31,7 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-string.hpp"
+#include "lib/test/transiently.hpp"
 #include "lib/test/microbenchmark.hpp"
 #include "lib/test/diagnostic-output.hpp"///////////////TODO
 #include "lib/util.hpp"
@@ -466,6 +467,9 @@ namespace test {
           BlockFlowAlloc bFlow;
           EngineObserver watch;
           Scheduler scheduler{bFlow, watch};
+          
+          // prevent scale-up of the Scheuler's WorkForce
+          TRANSIENTLY(work::Config::COMPUTATION_CAPACITY) = 0;
 
           Time nominal{7,7};
           Time start{0,1};
@@ -481,8 +485,8 @@ namespace test {
 SHOW_EXPR(offset())          
           auto buidl=
           scheduler.defineSchedule(testJob)
-                   .startOffset(200us)
-                   .lifeWindow (1ms);
+                   .startOffset(400us)
+                   .lifeWindow (2ms);
 SHOW_EXPR(offset())          
           buidl    .post();
           
@@ -493,7 +497,6 @@ SHOW_EXPR(offset())
           sleep_for(400us);
 //          CHECK (detector.ensureNoInvocation("testJob"));
 SHOW_EXPR(offset())          
-          scheduler.layer1_.feedPrioritisation();
           auto res= scheduler.getWork();
 SHOW_EXPR(offset())          
 SHOW_EXPR(res)

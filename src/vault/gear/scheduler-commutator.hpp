@@ -97,6 +97,9 @@ namespace gear {
   namespace { // Configuration / Scheduling limit
     
     Offset FUTURE_PLANNING_LIMIT{FSecs{20}};  ///< limit timespan of deadline into the future (~360 MiB max)
+    
+    /** convenient short-notation, also used by SchedulerService */
+    auto inline thisThread() { return std::this_thread::get_id(); }
   }
   
   
@@ -114,8 +117,6 @@ namespace gear {
     {
       using ThreadID = std::thread::id;
       atomic<ThreadID> groomingToken_{};
-      
-      auto thisThread() { return std::this_thread::get_id(); }
       
       
     public:
@@ -194,6 +195,16 @@ namespace gear {
                   or acquireGoomingToken());
         }
       
+      
+      /** tend to the input queue if possible */
+      void
+      maybeFeed (SchedulerInvocation& layer1)
+        {
+          if (layer1.hasPendingInput()
+              and (holdsGroomingToken(thisThread())
+                   or acquireGoomingToken()))
+            layer1.feedPrioritisation();
+        }
       
       /**
        * Look into the queues and possibly retrieve work due by now.
