@@ -12,6 +12,20 @@ Anyone interested in Lumiera development is also encouraged to read mailing list
 archives and other documentation.
 
 
+8 Nov 2023
+----------
+
+Topics
+~~~~~~
+ * Wikipedia
+ * Scheduler integration and testing
+ * Video output to the GUI
+
+Summary
+^^^^^^^
+ * link:2023-11-08.html[Summary (by ichthyo)]
+
+
 11 Oct 2023
 -----------
 

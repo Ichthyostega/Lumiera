@@ -46,7 +46,7 @@ The duration of one video frame at 25fps is 40ms, which implies that the schedul
 with its timings in the order of magnitude of 1ms. Thus it is desirable that the internal overhead
 is kept below 100µs. This goal is not difficult to achieve; it suffices to pay some attention to
 aspects of performance. To place this into context, single instructions in a modern CPU operate
-on the nanoseconds level.
+at the nanoseconds level.
 
 
 Compiler and Platform upgrades
@@ -69,5 +69,3 @@ The next meeting will be Wednesday Nov 8, 20:00 UTC.
 You are welcome to join.
 
 ''''
-
-

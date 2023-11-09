@@ -1,0 +1,99 @@
+2023-11-08 Lumiera Developers Meeting
+=====================================
+:Author: Ichthyo
+:Date: 2023-11-09
+
+Nov 8, 2023 on #lumiera 22:30 - 23:30 UTC +
+
+__Participants__
+
+ * ichthyo
+ * benny
+ * cehteh
+ 
+_Summary written by Ichthyo_
+
+''''
+
+Wikipedia
+---------
+https://en.wikipedia.org/wiki/User:IgorVladimirsky[Igor Vladimirsky]
+contacted _Ichthyo_ last week regarding a mention of Lumiera in the context of Cinelerra.
+He was involved with the
+https://cinelerra-cv.wikidot.com[Cinelerra-CV project]
+and already contributed several improvements to the Wikipedia entry for Cinelerra,
+which includes a mention of »the Lumiera rewrite« since
+https://en.wikipedia.org/w/index.php?title=Cinelerra&diff=prev&oldid=207875710[April 2008].
+_Igor_ rightfully pointed out that Lumiera is not a fork of Cinelerra and the description of the project's
+origin might be too much biased towards the developer's perspective at that time. This critique extends also
+to the descriptions at the introductory pages of the Lumiera website itself; these characterisations were
+written during the same founding phase and not much reviewed ever since. After some exchange of proposals
+and ideas, an update and reformulation of the introductory pages was accomplished. The update to the
+content at Wikipedia, which _Igor_ thankfully completed, was a good opportunity to add some further
+sources, notably an archive.org link to an article at
+https://web.archive.org/web/20090129083001/https://www.linux.com/feature/126441[Linux.com]
+and remove a ^[citation needed]^ tag.
+
+-> see the reworked
+{l}/project/index.html[``About''] and {l}/project/faq.html[``FAQ''] pages +
+-> section in the
+https://en.wikipedia.org/wiki/Cinelerra#Lumiera[Wikipedia page for Cinelerra].
+
+
+Development Summary
+-------------------
+As usual, _Ichthyo_ summarises the progress of coding work under the umbrella of the »Playback Vertical Slice«.
+Activities were focussed on integration of developed components and parts forming the *Scheduler Service*
+at the core of the Render Engine. Some further aspects were addressed, notably the proper use of locking
+and a new scheme to distribute available computing capacity in accordance to the planned schedule and
+an integrated load indicator. The Scheduler implementation is now largely complete and passes the
+component integration tests. The level of performance observed using short bursts of load seems adequate
+and scheduling delay is mostly dominated by the leeway of the OS thread scheduling and caching effects.
+
+The next step would be to setup some meaningful load- and stress testing, using a synthetic load,
+which can be adjusted to reflect typical patterns of the expected load in actual usage. Care has
+to be taken however to distil an indicator actually describing the scheduling overhead and to avoid
+capturing just the overall system performance.
+
+
+Investigation: Video Display
+----------------------------
+_Benny_ continued his research regarding solutions for video display in the GUI. We agreed previously
+that the current ``vertical slice'' affords the opportunity to try out available mainstream solutions
+to find out more about their strength and weaknesses. _Benny_ decided to look at *GStreamer* first,
+since this framework is in very widespread use, with tutorials and documentation readily available.
+He conducted some experiments and was able to put together a demo which decodes an AVI file and
+displays the video content into a given GTK window. The following investigations will focus on
+the details how to inject arbitrary content into such a display, without directly relying on the
+complete decoding and rendering pipeline of GStreamer, since we intend to use the Lumiera Render
+Engine to coordinate all processing and manage all resources.
+
+Another point worth mentioning is the fact that the GTK project intends to discontinue support
+of the Xlib / X.org output backend, focussing entirely on Wayland. GStreamer fully supports
+Wayland already.
+
+_Ichthyo_ adds that he intends to use directly generated video content for this ``vertical slice'',
+so to avoid involving any file-IO. It seems quite feasible to use libCairo (which is already a project
+dependency and well known) do draw some simple animation. This code could than be packaged as a generator
+node and used in the more or less synthetic node graph, which will be provided by the setup for this
+integration effort.
+
+Coding News
+-----------
+During all the past years, it was customary to publish a ``coding news'' report at fall time.
+There was much progress in the Lumiera project lately, since _Ichthyo_ was able to quit his regular
+work job this spring to focus entirely on his personal programming and artwork projects. The
+``vertical slice'' however will not be completed this year, and thus we agreed to author the usual
+news update now, while providing an additional report once the work will be completed and we are
+able to demonstrate running video display in the GUI.
+
+
+''''
+
+Next meeting
+------------
+
+The next meeting will be Wednesday Dec 13, 20:00 UTC. 
+You are welcome to join.
+
+''''
