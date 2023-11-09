@@ -117,7 +117,7 @@ namespace test {
       
       
       /** @test cover properties and handling of Epochs (low-level)
-       *        - demonstrate that Epoch is placed into an Extent
+       *        - demonstrate that each Epoch is placed into an Extent
        *        - verify that both Extent and Epoch access the same memory block
        *        - demonstrate the standard setup and initialisation of an Epoch
        *        - allocate some Activities into the storage and observe free-managment
@@ -191,7 +191,7 @@ namespace test {
           for (uint i=extent.size()-2; i>1; --i)
             gate.claimNextSlot();
           
-          // one final slot is left (beyond of the EpochGate itself)
+          // one final slot is left (beyond the EpochGate itself)
           CHECK (isSameObject (*gate.next, epoch[1]));
           CHECK (gate.filledSlots() == EXTENT_SIZ-2);
           CHECK (gate.hasFreeSlot());
@@ -210,7 +210,6 @@ namespace test {
           CHECK (    gate.isAlive (Time(999,9)));
           CHECK (not gate.isAlive (Time(0,10)));
           CHECK (not gate.isAlive (Time(1,10)));
-                     ////////////////////////////////////////////////////////////////////////////////////////TICKET #1298 : actually use a GATE implementation and then also check the count-down latch
         }
       
       

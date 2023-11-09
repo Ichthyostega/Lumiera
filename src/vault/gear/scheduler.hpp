@@ -283,12 +283,51 @@ namespace gear {
       
       
       /**
-       * 
+       * Set the Scheduler to work on a new CalcStream.
+       * @param planningJob a »meta-Job« to schedule a chunk of render-Jobs.
+       * @param manID (optional) a manifestation-ID to be enabled for processing
+       * @note the planningJob will be dispatched _immediately now,_ which typically
+       *       will cause its dispatch in the current thread (but that is not guaranteed).
+       *       The _deadline_ is also set automatically to a very large leeway (1/10 sec),
+       *       and the new planning job is marked as _compulsory_ — implying that the
+       *       Scheduler will [trigger emergency](\ref #triggerEmergency) if this deadline
+       *       can not be met. Emergency will cause all PlayProcess to be paused.
+       * @remark it is up to the planning instance to use this mechanism properly; the idea
+       *       is to [place follow-up jobs](\ref #continueMetaJob) repeatedly, always to
+       *       define the next chunk of work jobs. If a ManifestationID is given, then
+       *       obviously the work jobs must use the same ID, since jobs with an ID not
+       *       [explicitly enabled](\ref SchedulerInvocation::activate) will be silently
+       *       discarded (unless the ID is zero, which is always implicitly enabled).
+       *       Moreover, the recommendation is to start planning with at least 20ms
+       *       of remaining headroom, to ensure smooth allocation of capacity.
        */
       void
-      seedCalcStream()
+      seedCalcStream (Job planningJob
+                     ,ManifestationID manID = ManifestationID())
         {
-          UNIMPLEMENTED("get it going");
+          layer1_.activate(manID);
+          continueMetaJob (RealClock::now(), planningJob, manID);
+        }
+      
+      
+      /**
+       * Place a follow-up job-planning job into the timeline.
+       */
+      void
+      continueMetaJob (Time nextStart
+                      ,Job planningJob
+                      ,ManifestationID manID = ManifestationID())
+        {
+          bool isCompulsory = true;
+          Time deadline = nextStart + DUTY_CYCLE_TOLERANCE;
+          // place the meta-Job into the timeline...
+          postChain ({activityLang_.buildMetaJob(planningJob, nextStart, deadline)
+                                   .post()
+                     , nextStart
+                     , deadline
+                     , manID
+                     , isCompulsory});
+          ensureDroppedGroomingToken();
         }
       
       

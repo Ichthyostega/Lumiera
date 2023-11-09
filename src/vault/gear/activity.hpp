@@ -101,6 +101,7 @@ namespace gear {
       // standard copy operations acceptable
       
       explicit operator uint32_t()  const { return id_;}
+      explicit operator bool()      const { return id_ != 0; }
       
       friend bool operator== (ManifestationID const& a, ManifestationID const& b) { return a.id_ == b.id_; }
       friend bool operator!= (ManifestationID const& a, ManifestationID const& b) { return not (a == b);   }

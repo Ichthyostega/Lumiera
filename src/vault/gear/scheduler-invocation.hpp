@@ -249,7 +249,8 @@ namespace gear {
       void
       activate (ManifestationID manID)
         {
-          allowed_.insert (manID);
+          if (manID)
+            allowed_.insert (manID);
         }
       
       void

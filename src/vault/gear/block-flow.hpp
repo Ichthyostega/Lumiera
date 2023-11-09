@@ -484,7 +484,7 @@ namespace gear {
                   auto requiredNew = distance / _raw(epochStep_);
                   if (distance % _raw(epochStep_) > 0)
                     ++requiredNew;  // fractional:  requested deadline lies within last epoch
-                  alloc_.openNew(requiredNew);   // Note: epochHandle now points to the first new Epoch
+                  alloc_.openNew(requiredNew);   // Note: nextEpoch now points to the first new Epoch
                   for ( ; 0 < requiredNew; --requiredNew)
                     {
                       REQUIRE (nextEpoch);
