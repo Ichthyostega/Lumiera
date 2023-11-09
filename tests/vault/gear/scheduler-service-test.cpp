@@ -69,7 +69,8 @@ namespace test {
   
   
   /*************************************************************************//**
-   * @test Scheduler component integration test: add and process dependent jobs.
+   * @test Scheduler component integration test: use the service API for
+   *       state control and to add Jobs and watch processing patterns.
    * @see SchedulerActivity_test
    * @see SchedulerInvocation_test
    * @see SchedulerCommutator_test
@@ -456,9 +457,17 @@ namespace test {
       
       
       
-      /** @test TODO schedule a render job through the high-level Job-builder API.
+      /** @test Schedule a render job through the high-level Job-builder API.
        *      - use the mock Job-Functor provided by the ActivityDetector
-       * @todo WIP 11/23 ✔ define ⟶ 🔁 implement
+       *      - manipulate the WorkForce to prevent it from scaling up
+       *      - this allows us to investigate the queue entry created
+       *        through the public regular API for scheduling Render Jobs
+       *      - after that, the test manually invokes the work-pulling function
+       *        and verifies the mock Job-Functor has been invoked
+       *      - note however that this time a complete Activity chain
+       *        was created, including a Gate and all state transitions,
+       *        since we used the high-level API of the SchedulerService
+       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
       scheduleRenderJob()
@@ -478,34 +487,43 @@ namespace test {
           ActivityDetector detector;
           Job testJob{detector.buildMockJob("testJob", nominal, 1337)};
           
-          auto anchor = RealClock::now();
-          auto offset = [&](Time when =RealClock::now()){ return _raw(when) - _raw(anchor); };
-//////////////////////////////////
           CHECK (scheduler.empty());
-SHOW_EXPR(offset())          
-          auto buidl=
+          
+          // use the public Render-Job builder API
           scheduler.defineSchedule(testJob)
                    .startOffset(400us)
-                   .lifeWindow (2ms);
-SHOW_EXPR(offset())          
-          buidl    .post();
+                   .lifeWindow (2ms)
+                   .post();
           
           CHECK (not scheduler.empty());
-//          CHECK (detector.ensureNoInvocation("testJob"));
-SHOW_EXPR(offset())          
           
-          sleep_for(400us);
-//          CHECK (detector.ensureNoInvocation("testJob"));
-SHOW_EXPR(offset())          
-          auto res= scheduler.getWork();
-SHOW_EXPR(offset())          
-SHOW_EXPR(res)
-SHOW_EXPR(offset(scheduler.layer1_.headTime()))
-//          CHECK (activity::PASS == scheduler.getWork());
-//          CHECK (scheduler.empty());
+          // cause the new entry to migrate to the priority queue...
+          scheduler.layer2_.maybeFeed(scheduler.layer1_);
           
-          cout << detector.showLog()<<endl; // HINT: use this for investigation...
-          CHECK (detector.verifyInvocation("testJob"));
+          // investigate the generated ActivationEvent at queue head
+          auto entry = scheduler.layer1_.peekHead();
+          auto now = RealClock::now();
+          
+          CHECK (entry.activity->is(Activity::POST));
+          CHECK (entry.activity->next->is(Activity::GATE));
+          CHECK (entry.activity->next->next->is(Activity::WORKSTART));
+          CHECK (entry.activity->next->next->next->is(Activity::INVOKE));
+          CHECK (entry.startTime() - now < _uTicks( 400us));
+          CHECK (entry.deathTime() - now < _uTicks(2400us));
+          CHECK (entry.manifestation == 0);
+          CHECK (entry.isCompulsory  == false);
+          
+          
+          sleep_for(400us);          // wait to be sure the new entry has reached maturity
+          detector.incrementSeq();   // mark this point in the detector-log...
+          
+          // Explicitly invoke the work-Function (normally done by the workers)
+          CHECK (activity::PASS == scheduler.getWork());
+          
+          CHECK (detector.verifySeqIncrement(1)
+                         .beforeInvocation("testJob").arg("7.007", 1337));
+          
+//        cout << detector.showLog()<<endl; // HINT: use this for investigation...
         }
       
       
