@@ -44,6 +44,12 @@ END
 
 
 
+PLANNED "Synthetic Load for Test" TestChainLoad_test <<END
+return: 0
+END
+
+
+
 PLANNED "Scheduler Performance" SchedulerStress_test <<END
 return: 0
 END
