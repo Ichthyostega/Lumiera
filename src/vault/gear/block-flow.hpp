@@ -104,6 +104,7 @@ namespace gear {
   using lib::time::FSecs;
   using lib::time::TimeVar;
   using lib::time::Duration;
+  using lib::time::FrameRate;
   
   
   namespace blockFlow {///< Parametrisation of Scheduler memory management scheme
@@ -327,6 +328,7 @@ namespace gear {
    * Scheduling entails to provide a chain of Activity definitions,
    * which will then »flow« through the priority queue until invocation.
    * 
+   * @see ActivityLang
    * @see SchedulerCommutator
    * @see BlockFlow_test
    */
@@ -385,7 +387,16 @@ namespace gear {
           double stretched = _raw(epochStep_) * factor;
           gavl_time_t microTicks(floor (stretched));
           epochStep_ = TimeValue{microTicks};
-          
+        }
+      
+      /** provide a hint to the self-regulating allocation scheme */
+      void
+      announceAdditionalFlow (FrameRate additionalFps)
+        {
+          FrameRate currFps{config().framesPerEpoch(), epochStep_};
+          /////////////////////////////////////////////////////////////////////TODO need arithmetics on FrameRate
+          /////////////////////////////////////////////////////////////////////TODO -> then just add the new and calculate new stepping
+          /////////////////////////////////////////////////////////////////////TODO !! watch out for the minimum limit !!
         }
       
       

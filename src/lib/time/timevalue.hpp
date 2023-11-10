@@ -667,7 +667,11 @@ namespace time {
     public:
       FrameRate (uint fps) ;
       FrameRate (uint num, uint denom);
-      FrameRate (boost::rational<uint> const& fractionalRate);
+      FrameRate (size_t count, Duration timeReference);
+      explicit
+      FrameRate (boost::rational<uint> fractionalRate);
+      
+      static FrameRate approx(double fps);
       
       // standard copy acceptable;
       
@@ -806,9 +810,24 @@ namespace time {
     { }
   
   inline
-  FrameRate::FrameRate (boost::rational<uint> const& fractionalRate)
+  FrameRate::FrameRate (boost::rational<uint> fractionalRate)
     : boost::rational<uint> (__ensure_nonzero(fractionalRate))
     { }
+  
+  boost::rational<uint> __framerate_approximation (size_t, Duration);
+  boost::rational<uint> __framerate_approximation (double);
+  
+  inline
+  FrameRate::FrameRate (size_t count, Duration timeReference)
+    : FrameRate{__framerate_approximation (count, timeReference)}
+    { }
+  
+  inline FrameRate
+  FrameRate::approx (double fps)
+  {
+    return FrameRate{__framerate_approximation (fps)};
+  }
+  
   
   inline double
   FrameRate::asDouble()  const

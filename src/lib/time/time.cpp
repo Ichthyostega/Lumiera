@@ -49,6 +49,7 @@
 #include "lib/rational.hpp"
 #include "lib/util-quant.hpp"
 #include "lib/format-string.hpp"
+#include "lib/util.hpp"
 
 extern "C" {
 #include "lib/tmpbuf.h"
@@ -62,12 +63,15 @@ extern "C" {
 #include <boost/lexical_cast.hpp>
 
 using std::string;
+using util::limited;
 using util::floordiv;
 using lib::time::FSecs;
 using lib::time::FrameRate;
 using boost::rational_cast;
 using boost::lexical_cast;
 
+#undef MAX
+#undef MIN
 
 
 namespace error = lumiera::error;
@@ -263,6 +267,47 @@ namespace time {
     
     return Duration (1, *this);
   }
+  
+  
+  /** a rather arbitrary safety limit imposed on internal numbers used to represent a frame rate.
+   * @remark rational numbers bear the danger to overflow for quite ordinary computations;
+   *         we stay away from the absolute maximum by an additional safety margin of 1/1000. 
+   */
+  const uint RATE_LIMIT{std::numeric_limits<uint>::max() / 1000};
+  
+  /**
+   * @internal helper to work around the limitations of `uint`.
+   * @return a fractional number approximating the floating-point spec.
+   * @todo imposing a quite coarse limitation. If this turns out
+   *       to be a problem: we can do better, use lib::reQuant (rational.hpp)
+   */
+  boost::rational<uint>
+  __framerate_approximation (double fps)
+  {
+    double quantised{fabs(fps) * RATE_LIMIT};
+    
+    uint num = uint(limited (1u, quantised + 0.5, 1000u*RATE_LIMIT));
+    uint den = RATE_LIMIT;
+    return {num, den};
+  }
+  
+  /**
+   * @internal helper calculate the _count per time span_ approximately,
+   *           to the precision possible to represent as fractional `uint`.
+   */
+  boost::rational<uint>
+  __framerate_approximation (size_t cnt, Duration timeReference)
+  {
+    boost::rational<uint64_t> quot{cnt, _raw(timeReference)};
+    if (quot.denominator() < RATE_LIMIT
+        and quot.numerator() < RATE_LIMIT/1000)
+      return {uint(quot.numerator()) * uint(Time::SCALE)
+             ,uint(quot.denominator())
+             };
+    // precise computation can not be handled numerically...
+    return __framerate_approximation (rational_cast<double>(quot) * Time::SCALE);
+  }
+  
 
   
   

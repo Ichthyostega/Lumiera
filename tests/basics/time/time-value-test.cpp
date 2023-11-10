@@ -229,6 +229,20 @@ namespace test{
           
           CHECK (isnil (Duration (0, FrameRate::PAL)));
           CHECK (isnil (Duration (0, FrameRate(123))));
+          
+          CHECK (FrameRate::approx(2000) ==       "1000FPS"_expect);                     // limited
+          CHECK (FrameRate::approx(1e-5) == "43/4294967FPS"_expect);
+          CHECK (FrameRate::approx(1e-6) ==  "4/4294967FPS"_expect);
+          CHECK (FrameRate::approx(1e-7) ==  "1/4294967FPS"_expect);                     // limited
+          CHECK (FrameRate::approx(1e-8) ==  "1/4294967FPS"_expect);                     // limited
+          
+          CHECK (FrameRate(      20'000, Duration{Time{0,10}}) ==      "2000FPS"_expect);
+          CHECK (FrameRate(      20'000, Duration{Time::MAX }) == "1/4294967FPS"_expect);// limited
+          
+          CHECK (FrameRate(size_t(2e10), Duration{Time::MAX }) ==     "279397/4294967FPS"_expect);
+          CHECK (FrameRate(size_t(2e14), Duration{Time::MAX }) == "2793967531/4294967FPS"_expect);
+          CHECK (FrameRate(size_t(2e15), Duration{Time::MAX }) == "1000FPS"_expect);     // limited
+          CHECK (FrameRate(size_t(2e16), Duration{Time::MAX }) == "1000FPS"_expect);     // limited
         }
       
       
