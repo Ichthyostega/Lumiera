@@ -88,6 +88,7 @@ namespace test {
            handleEpoch();
            placeActivity();
            adjustEpochs();
+           announceLoad();
            storageFlow();
         }
       
@@ -356,6 +357,26 @@ namespace test {
           step = bFlow.getEpochStep();
           bFlow.markEpochUnderflow (dur2, fac2);
           CHECK (bFlow.getEpochStep() == movingAverage(step, goal2));
+        }
+      
+      
+      
+      /** @test announce additional load to reserve additional capacity up-front. */
+      void
+      announceLoad()
+        {
+          BlockFlow bFlow;
+          
+          Duration initialStep{bFlow.getEpochStep()};
+          size_t initialFPS = Strategy{}.initialFrameRate();
+          
+          // signal that the load will be doubled
+          bFlow.announceAdditionalFlow (FrameRate(initialFPS));
+          CHECK (bFlow.getEpochStep() * 2 == initialStep);
+          
+          // signal that the load will again be doubled
+          bFlow.announceAdditionalFlow (FrameRate(2*initialFPS));
+          CHECK (bFlow.getEpochStep() * 4 == initialStep);
         }
       
       

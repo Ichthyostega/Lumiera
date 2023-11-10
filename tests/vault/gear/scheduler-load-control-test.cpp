@@ -28,28 +28,19 @@
 #include "lib/test/run.hpp"
 #include "vault/gear/load-controller.hpp"
 #include "vault/real-clock.hpp"
-//#include "lib/time/timevalue.hpp"
-//#include "lib/format-cout.hpp"
-//#include "lib/util.hpp"
-#include "lib/test/diagnostic-output.hpp"/////////////////////TODO
 
-//#include <utility>
 #include <chrono>
 
 using test::Test;
-using std::move;
-
-using std::chrono::microseconds;
-//using util::isSameObject;
 
 
 namespace vault{
 namespace gear {
 namespace test {
   
-//  using lib::time::FrameRate;
-//  using lib::time::Offset;
-//  using lib::time::Time;
+  using std::move;
+  using std::chrono::microseconds;
+  
   using Capacity = LoadController::Capacity;
   using Wiring = LoadController::Wiring;
   
@@ -75,8 +66,6 @@ namespace test {
            classifyCapacity();
            scatteredReCheck();
            indicateAverageLoad();
-           
-           walkingDeadline();
         }
       
       
@@ -99,7 +88,6 @@ namespace test {
        *        Activities from the zone considered part of current active operation
        *      - Activities within the NOW_HORIZON can be awaited by yield-spinning
        *      - and any event from current into the past will be scheduled right away
-       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
       classifyHorizon()
@@ -129,7 +117,6 @@ namespace test {
       
       
       /** @test verify the mark for _tended next head_ Activity.
-       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
       tendNextActivity()
@@ -174,7 +161,6 @@ namespace test {
        *      - beyond that, free capacity is redistributed according to horizon
        *      - for incoming free capacity there is a preference to keep it sleeping,
        *        to allow for disposing of excess capacity after extended sleep time
-       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
       classifyCapacity()
@@ -253,7 +239,6 @@ namespace test {
        *        the goal is to produce a random distribution of the »sleeper« callbacks.
        *      - the offset is indeed randomised, using current time for randomisation
        * @see LoadController::scatteredDelayTime()
-       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
       scatteredReCheck()
@@ -307,7 +292,6 @@ namespace test {
        *      - the pressure is sampled from the lag (distance of current time to the
        *        next activity to schedule), which is observed whenever a worker
        *        calls in to retrieve more work. These calls happen randomly.
-       * @todo WIP 10/23 ✔ define ⟶ ✔ implement
        */
       void
       indicateAverageLoad()
@@ -372,17 +356,6 @@ namespace test {
           curr = head - Time{0,2};
           lctrl.markIncomingCapacity (head,curr);
           CHECK (-2581 == lctrl.averageLag());
-        }
-      
-      
-      
-      /** @test TODO
-       * @todo WIP 10/23 🔁 define ⟶ implement
-       */
-      void
-      walkingDeadline()
-        {
-          UNIMPLEMENTED ("walking Deadline");
         }
     };
   

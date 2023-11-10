@@ -389,15 +389,6 @@ namespace gear {
           epochStep_ = TimeValue{microTicks};
         }
       
-      /** provide a hint to the self-regulating allocation scheme */
-      void
-      announceAdditionalFlow (FrameRate additionalFps)
-        {
-          FrameRate currFps{config().framesPerEpoch(), epochStep_};
-          /////////////////////////////////////////////////////////////////////TODO need arithmetics on FrameRate
-          /////////////////////////////////////////////////////////////////////TODO -> then just add the new and calculate new stepping
-          /////////////////////////////////////////////////////////////////////TODO !! watch out for the minimum limit !!
-        }
       
       
       /** Adapted storage-Extent iterator, directly exposing Epoch& */
@@ -593,6 +584,24 @@ namespace gear {
           auto N = Strategy::averageEpochs();
           double avgFactor = (contribution + N-1) / N;    // contribution = newVal / mean  => can extract factor
           adjustEpochStep (avgFactor);
+        }
+      
+      
+      /**
+       * provide a hint to the self-regulating allocation scheme.
+       * Signalling additional calculation flow in advance will
+       * immediately reduce the Epoch stepping to accommodate for
+       * more Activities per time unit, thereby preventing excessive
+       * overflow and reduced performance, until the mechanism has
+       * adapted itself to the actual situation after roughly 2sec.
+       */
+      void
+      announceAdditionalFlow (FrameRate additionalFps)
+        {
+          FrameRate currFps{Strategy::framesPerEpoch(), Duration{epochStep_}};
+          currFps += additionalFps;
+          TimeVar adaptedSpacing = Strategy::framesPerEpoch() / currFps;
+          epochStep_ = util::max (adaptedSpacing, _cache_timeStep_cutOff);
         }
       
       

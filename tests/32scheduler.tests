@@ -32,7 +32,7 @@ END
 
 
 
-PLANNED "Scheduler Load-Control" SchedulerLoadControl_test <<END
+TEST "Scheduler Load-Control" SchedulerLoadControl_test <<END
 return: 0
 END
 

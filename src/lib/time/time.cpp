@@ -273,22 +273,39 @@ namespace time {
    * @remark rational numbers bear the danger to overflow for quite ordinary computations;
    *         we stay away from the absolute maximum by an additional safety margin of 1/1000. 
    */
-  const uint RATE_LIMIT{std::numeric_limits<uint>::max() / 1000};
+  const uint RATE_LIMIT{std::numeric_limits<uint>::max() / 1024};
   
   /**
    * @internal helper to work around the limitations of `uint`.
    * @return a fractional number approximating the floating-point spec.
-   * @todo imposing a quite coarse limitation. If this turns out
-   *       to be a problem: we can do better, use lib::reQuant (rational.hpp)
+   * @todo imposing a quite coarse limitation. If this turns out to be
+   *       a problem: we can do better, use lib::reQuant (rational.hpp)
    */
   boost::rational<uint>
   __framerate_approximation (double fps)
   {
-    double quantised{fabs(fps) * RATE_LIMIT};
+    const double UPPER_LIMIT = int64_t(RATE_LIMIT*1024) << 31;
+    const int64_t HAZARD = util::ilog2(RATE_LIMIT);
     
-    uint num = uint(limited (1u, quantised + 0.5, 1000u*RATE_LIMIT));
-    uint den = RATE_LIMIT;
-    return {num, den};
+    double doo = limited (1.0, fabs(fps) * RATE_LIMIT + 0.5, UPPER_LIMIT);
+    int64_t boo(doo);
+    util::Rat quantised{boo
+                       ,int64_t(RATE_LIMIT)
+                       };
+    
+    int64_t num = quantised.numerator();
+    int64_t toxic = util::ilog2(abs(num));
+    toxic = util::max (0, toxic - HAZARD);
+    
+    int64_t base = quantised.denominator();
+    if (toxic)
+      {
+        base = util::max (base >> toxic, 1);
+        num = util::reQuant (num, quantised.denominator(), base);
+      }
+    return {limited (1u, num,  RATE_LIMIT)
+           ,limited (1u, base, RATE_LIMIT)
+           };
   }
   
   /**
@@ -300,7 +317,7 @@ namespace time {
   {
     boost::rational<uint64_t> quot{cnt, _raw(timeReference)};
     if (quot.denominator() < RATE_LIMIT
-        and quot.numerator() < RATE_LIMIT/1000)
+        and quot.numerator() < RATE_LIMIT*1024/1e6)
       return {uint(quot.numerator()) * uint(Time::SCALE)
              ,uint(quot.denominator())
              };

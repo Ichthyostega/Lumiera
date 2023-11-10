@@ -122,6 +122,9 @@ namespace gear {
       /** @internal propagate new clean-up deadline to the BlockFlow allocator */
       void discardBefore (Time deadline)  { mem_.discardBefore (deadline); }
       
+      /** @internal announce expected additional load to the allocator */
+      void announceLoad (FrameRate fps)   { mem_.announceAdditionalFlow(fps); }
+      
       
       /**
        * Execution Framework: dispatch performance of a chain of Activities.

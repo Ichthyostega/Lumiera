@@ -303,9 +303,11 @@ namespace gear {
        */
       void
       seedCalcStream (Job planningJob
-                     ,ManifestationID manID = ManifestationID())
+                     ,ManifestationID manID = ManifestationID()
+                     ,FrameRate expectedAdditionalLoad = FrameRate(25))
         {
-          layer1_.activate(manID);
+          layer1_.activate (manID);
+          activityLang_.announceLoad (expectedAdditionalLoad);
           continueMetaJob (RealClock::now(), planningJob, manID);
         }
       
