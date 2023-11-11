@@ -32,13 +32,13 @@
 //#include "lib/time/timevalue.hpp"
 //#include "lib/format-cout.hpp"
 #include "lib/test/diagnostic-output.hpp"//////////////////////////TODO TOD-oh
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 
 //using lib::time::Time;
 //using lib::time::FSecs;
 
-//using util::isSameObject;
+using util::isSameObject;
 //using lib::test::randStr;
 //using lib::test::randTime;
 
@@ -85,12 +85,64 @@ namespace test {
         {
           using Node = TestChainLoad<>::Node;
           
-          Node n0;
+          Node n0;                                                          // Default-created empty Node
           CHECK (n0.hash == 0);
+          CHECK (n0.pred.size() == DEFAULT_FAN);
+          CHECK (n0.succ.size() == DEFAULT_FAN);
+          CHECK (n0.pred == Node::Tab{0});
+          CHECK (n0.succ == Node::Tab{0});
           
-          Node n1{23}, n2{55};
+          Node n1{23}, n2{55};                                              // further Nodes with initial seed hash
           CHECK (n1.hash == 23);
           CHECK (n2.hash == 55);
+          
+          CHECK (0 == n0.calculate());                                      // hash calculation is NOP on unconnected Nodes
+          CHECK (0 == n0.hash);
+          CHECK (23 == n1.calculate());
+          CHECK (23 == n1.hash);
+          CHECK (55 == n2.calculate());
+          CHECK (55 == n2.hash);
+          
+          n0.addPred(n1);                                                   // establish bidirectional link between Nodes
+          CHECK (isSameObject(*n0.pred[0], n1));
+          CHECK (isSameObject(*n1.succ[0], n0));
+          CHECK (not n0.pred[1]);
+          CHECK (not n1.succ[1]);
+          CHECK (n2.pred == Node::Tab{0});
+          CHECK (n2.succ == Node::Tab{0});
+          
+          n2.addSucc(n0);                                                   // works likewise in the other direction
+          CHECK (isSameObject(*n0.pred[0], n1));
+          CHECK (isSameObject(*n0.pred[1], n2));                            // next link added into next free slot
+          CHECK (isSameObject(*n2.succ[0], n0));
+          CHECK (not n0.pred[2]);
+          CHECK (not n2.succ[1]);
+          
+          CHECK (n0.hash == 0);
+          n0.calculate();                                                   // but now hash calculation combines predecessors
+          CHECK (n0.hash == 6050854883719206282u);
+          
+          Node n00;                                                         // another Node...
+          n00.addPred(n2)                                                   // just adding the predecessors in reversed order
+             .addPred(n1);
+          
+          CHECK (n00.hash == 0);
+          n00.calculate();                                                  // ==> hash is different, since it depends on order
+          CHECK (n00.hash == 17052526497278249714u);
+          CHECK (n0.hash  == 6050854883719206282u);
+
+          CHECK (isSameObject(*n1.succ[0], n0));
+          CHECK (isSameObject(*n1.succ[1], n00));
+          CHECK (isSameObject(*n2.succ[0], n0));
+          CHECK (isSameObject(*n2.succ[1], n00));
+          CHECK (isSameObject(*n00.pred[0], n2));
+          CHECK (isSameObject(*n00.pred[1], n1));
+          CHECK (isSameObject(*n0.pred[0],  n1));
+          CHECK (isSameObject(*n0.pred[1],  n2));
+          
+          CHECK (n00.hash == 17052526497278249714u);
+          n00.calculate();                                                  // calculation is NOT idempotent (inherently statefull)
+          CHECK (n00.hash == 13151338213516862912u);
         }
       
       

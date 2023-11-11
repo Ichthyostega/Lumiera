@@ -58,6 +58,7 @@
 //#include "lib/format-util.hpp"
 //#include "lib/util.hpp"
 
+#include <boost/functional/hash.hpp>
 //#include <functional>
 //#include <utility>
 //#include <string>
@@ -81,11 +82,14 @@ namespace test {
 //  using util::isnil;
 //  using std::forward;
 //  using std::move;
+  using boost::hash_combine;
   
   
   namespace {// Diagnostic markers
 //    const string MARK_INC{"IncSeq"};
 //    const string MARK_SEQ{"Seq"};
+    const size_t DEFAULT_FAN = 16;
+    const size_t DEFAULT_SIZ = 256;
     
 //    using SIG_JobDiagnostic = void(Time, int32_t);
   }
@@ -97,7 +101,7 @@ namespace test {
    * @tparam maxFan maximal fan-in/out from a node, also limits maximal parallel strands.
    * @see TestChainLoad_test
    */
-  template<size_t numNodes =256, size_t maxFan =16>
+  template<size_t numNodes =DEFAULT_SIZ, size_t maxFan =DEFAULT_FAN>
   class TestChainLoad
     : util::NonCopyable
     {
@@ -106,11 +110,60 @@ namespace test {
       struct Node
         : util::MoveOnly
         {
+          using Tab = std::array<Node*, maxFan>;
+          
           size_t hash;
+          Tab pred;
+          Tab succ;
           
           Node(size_t seed =0)
             : hash{seed}
+            , pred{0}
+            , succ{0}
             { }
+          
+          Node&
+          addPred (Node& other)
+            {
+              for (Node*& entry : pred)
+                if (not entry)
+                  {
+                    entry = &other;
+                    for (Node*& backlink : other.succ)
+                      if (not backlink)
+                        {
+                          backlink = this;
+                          return *this;
+                        }
+                  }
+              NOTREACHED ("excess node linkage");
+            }
+          
+          Node&
+          addSucc (Node& other)
+            {
+              for (Node*& entry : succ)
+                if (not entry)
+                  {
+                    entry = &other;
+                    for (Node*& backlink : other.pred)
+                      if (not backlink)
+                        {
+                          backlink = this;
+                          return *this;
+                        }
+                  }
+              NOTREACHED ("excess node linkage");
+            }
+          
+          size_t
+          calculate()
+            {
+              for (Node*& entry: pred)
+                if (entry)
+                  hash_combine (hash, entry->hash);
+              return hash;
+            }
         };
       
     private:
