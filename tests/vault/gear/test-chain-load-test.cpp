@@ -60,21 +60,43 @@ namespace test {
       run (Arg)
         {
           simpleUsage();
+          verify_Node();
+
           witch_gate();
         }
       
       
       /** @test TODO demonstrate simple usage of the test-load
+       * @todo WIP 11/23 🔁 define ⟶ 🔁 implement
        */
       void
       simpleUsage()
         {
-          UNIMPLEMENTED ("setup of TestChainLoad");
+          TestChainLoad testLoad;
         }
       
       
       
       /** @test TODO diagnostic blah
+       * @todo WIP 11/23 🔁 define ⟶ implement
+       */
+      void
+      verify_Node()
+        {
+          using Node = TestChainLoad<>::Node;
+          
+          Node n0;
+          CHECK (n0.hash == 0);
+          
+          Node n1{23}, n2{55};
+          CHECK (n1.hash == 23);
+          CHECK (n2.hash == 55);
+        }
+      
+      
+      
+      /** @test TODO diagnostic blah
+       * @todo WIP 11/23 🔁 define ⟶ implement
        */
       void
       witch_gate()

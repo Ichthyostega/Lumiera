@@ -62,6 +62,9 @@
 //#include <utility>
 //#include <string>
 //#include <deque>
+#include <vector>
+#include <memory>
+#include <array>
 
 
 namespace vault{
@@ -91,18 +94,38 @@ namespace test {
   
   /**
    * A Generator for synthetic Render Jobs for Scheduler load testing.
+   * @tparam maxFan maximal fan-in/out from a node, also limits maximal parallel strands.
    * @see TestChainLoad_test
    */
+  template<size_t numNodes =256, size_t maxFan =16>
   class TestChainLoad
     : util::NonCopyable
     {
           
     public:
-      TestChainLoad ()
+      struct Node
+        : util::MoveOnly
+        {
+          size_t hash;
+          
+          Node(size_t seed =0)
+            : hash{seed}
+            { }
+        };
+      
+    private:
+      using NodeStorage = std::array<Node, numNodes>;
+      
+      std::unique_ptr<NodeStorage> nodes_;
+      
+    public:
+      TestChainLoad()
+        : nodes_{new NodeStorage}
         { }
           
     private:
     };
+  
   
   
 }}} // namespace vault::gear::test
