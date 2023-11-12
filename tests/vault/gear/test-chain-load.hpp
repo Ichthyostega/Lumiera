@@ -60,10 +60,10 @@
 
 #include <boost/functional/hash.hpp>
 //#include <functional>
-//#include <utility>
+#include <utility>
 //#include <string>
 //#include <deque>
-#include <vector>
+//#include <vector>
 #include <memory>
 #include <array>
 
@@ -82,7 +82,8 @@ namespace test {
 //  using util::isnil;
   using util::unConst;
 //  using std::forward;
-//  using std::move;
+  using std::swap;
+  using std::move;
   using boost::hash_combine;
   
   
@@ -104,7 +105,7 @@ namespace test {
    */
   template<size_t numNodes =DEFAULT_SIZ, size_t maxFan =DEFAULT_FAN>
   class TestChainLoad
-    : util::NonCopyable
+    : util::MoveOnly
     {
           
     public:
@@ -121,46 +122,51 @@ namespace test {
               Iter end() { return after; }
               friend Iter end(Tab& tab) { return tab.end(); }
               
+              void clear() { after = _Arr::begin(); }      ///< @warning pointer data in array not cleared
+              
               size_t size() const { return unConst(this)->end()-_Arr::begin(); }
               bool  empty() const { return 0 == size();     }
               
               Iter
-              add(Node& n)
+              add(Node* n)
                 {
                   if (after != _Arr::end())
                     {
-                      *after = &n;
+                      *after = n;
                       return after++;
                     }
                   NOTREACHED ("excess node linkage");
                 }
+              
             };
           
           size_t hash;
-          Tab pred;
-          Tab succ;
+          size_t level{0}, repeat{0};
+          Tab pred{0}, succ{0};
           
           Node(size_t seed =0)
             : hash{seed}
-            , pred{0}
-            , succ{0}
             { }
           
           Node&
-          addPred (Node& other)
+          addPred (Node* other)
             {
-              pred.add(other);
-              other.succ.add(*this);
-              NOTREACHED ("excess node linkage");
+              REQUIRE (other);
+              pred.add (other);
+              other->succ.add (this);
+              return *this;
             }
           
           Node&
-          addSucc (Node& other)
+          addSucc (Node* other)
             {
-              pred.add(other);
-              other.pred.add(*this);
-              NOTREACHED ("excess node linkage");
+              REQUIRE (other);
+              succ.add (other);
+              other->pred.add (this);
+              return *this;
             }
+          Node& addPred(Node& other) { return addPred(&other); }
+          Node& addSucc(Node& other) { return addSucc(&other); }
           
           size_t
           calculate()
@@ -173,6 +179,7 @@ namespace test {
         };
       
     private:
+      using NodeTab = typename Node::Tab;
       using NodeStorage = std::array<Node, numNodes>;
       
       std::unique_ptr<NodeStorage> nodes_;
@@ -181,7 +188,45 @@ namespace test {
       TestChainLoad()
         : nodes_{new NodeStorage}
         { }
+      
+      
+      size_t size()     const { return nodes_->size(); }
+      size_t topLevel() const { return nodes_->back().level; }
+      size_t getSeed()  const { return nodes_->front().hash; }
+      size_t getHash()  const { return nodes_->back().hash;  }
+      
+      
+      /* ===== topology control ===== */
+      
+      /**
+       * Use current configuration and seed to (re)build Node connectivity.
+       */
+      TestChainLoad
+      buildToplolgy()
+        {
+          NodeTab a,b,
+          *curr{&a}, *next{&b};
+          Node* node = &nodes_->front();
+          size_t level{0};
           
+          curr->add (node++);
+          ++level;
+          while (node < &nodes_->back())
+            {
+              Node* n = (*curr)[0];
+              next->add (node++);
+              (*next)[0]->level = level;
+              (*next)[0]->addPred(n);
+              swap (next, curr);
+              next->clear();
+              ++level;
+            }
+          ENSURE (node == &nodes_->back());
+          node->level = level;
+          node->addPred ((*curr)[0]);
+          return move(*this);
+        }
+      
     private:
     };
   

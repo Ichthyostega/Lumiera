@@ -62,6 +62,7 @@ namespace test {
         {
           simpleUsage();
           verify_Node();
+          verify_Topology();
 
           witch_gate();
         }
@@ -78,8 +79,8 @@ namespace test {
       
       
       
-      /** @test TODO diagnostic blah
-       * @todo WIP 11/23 🔁 define ⟶ implement
+      /** @test data structure to represent a computation Node
+       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_Node()
@@ -88,6 +89,8 @@ namespace test {
           
           Node n0;                                                          // Default-created empty Node
           CHECK (n0.hash == 0);
+          CHECK (n0.level == 0);
+          CHECK (n0.repeat == 0);
           CHECK (n0.pred.size() == 0 );
           CHECK (n0.succ.size() == 0 );
           CHECK (n0.pred == Node::Tab{0});
@@ -105,17 +108,17 @@ namespace test {
           CHECK (55 == n2.hash);
           
           n0.addPred(n1);                                                   // establish bidirectional link between Nodes
-          CHECK (isSameObject(*n0.pred[0], n1));
-          CHECK (isSameObject(*n1.succ[0], n0));
+          CHECK (isSameObject (*n0.pred[0], n1));
+          CHECK (isSameObject (*n1.succ[0], n0));
           CHECK (not n0.pred[1]);
           CHECK (not n1.succ[1]);
           CHECK (n2.pred == Node::Tab{0});
           CHECK (n2.succ == Node::Tab{0});
           
           n2.addSucc(n0);                                                   // works likewise in the other direction
-          CHECK (isSameObject(*n0.pred[0], n1));
-          CHECK (isSameObject(*n0.pred[1], n2));                            // next link added into next free slot
-          CHECK (isSameObject(*n2.succ[0], n0));
+          CHECK (isSameObject (*n0.pred[0], n1));
+          CHECK (isSameObject (*n0.pred[1], n2));                           // next link added into next free slot
+          CHECK (isSameObject (*n2.succ[0], n0));
           CHECK (not n0.pred[2]);
           CHECK (not n2.succ[1]);
           
@@ -132,20 +135,20 @@ namespace test {
           CHECK (n00.hash == 17052526497278249714u);
           CHECK (n0.hash  == 6050854883719206282u);
 
-          CHECK (isSameObject(*n1.succ[0], n0));
-          CHECK (isSameObject(*n1.succ[1], n00));
-          CHECK (isSameObject(*n2.succ[0], n0));
-          CHECK (isSameObject(*n2.succ[1], n00));
-          CHECK (isSameObject(*n00.pred[0], n2));
-          CHECK (isSameObject(*n00.pred[1], n1));
-          CHECK (isSameObject(*n0.pred[0],  n1));
-          CHECK (isSameObject(*n0.pred[1],  n2));
+          CHECK (isSameObject (*n1.succ[0], n0));
+          CHECK (isSameObject (*n1.succ[1], n00));
+          CHECK (isSameObject (*n2.succ[0], n0));
+          CHECK (isSameObject (*n2.succ[1], n00));
+          CHECK (isSameObject (*n00.pred[0], n2));
+          CHECK (isSameObject (*n00.pred[1], n1));
+          CHECK (isSameObject (*n0.pred[0],  n1));
+          CHECK (isSameObject (*n0.pred[1],  n2));
           
           CHECK (n00.hash == 17052526497278249714u);
           n00.calculate();                                                  // calculation is NOT idempotent (inherently statefull)
           CHECK (n00.hash == 13151338213516862912u);
           
-          CHECK (isnil (n0.succ));
+          CHECK (isnil (n0.succ));                                          // number of predecessors or successors properly accounted for
           CHECK (isnil (n00.succ));
           CHECK (n00.succ.empty());
           CHECK (0 == n00.succ.size());
@@ -155,6 +158,22 @@ namespace test {
           CHECK (2 == n2.succ.size());
           CHECK (isnil (n1.pred));
           CHECK (isnil (n2.pred));
+        }
+      
+      
+      
+      /** @test TODO build topology by connecting the nodes
+       * @todo WIP 11/23 🔁 define ⟶ implement
+       */
+      void
+      verify_Topology()
+        {
+          auto graph = TestChainLoad<32>{}
+                          .buildToplolgy();
+          
+          CHECK (31 == graph.topLevel());
+          CHECK (0  == graph.getSeed());
+          CHECK (0  == graph.getHash());
         }
       
       
