@@ -59,7 +59,7 @@
 //#include "lib/util.hpp"
 
 #include <boost/functional/hash.hpp>
-//#include <functional>
+#include <functional>
 #include <utility>
 //#include <string>
 //#include <deque>
@@ -80,6 +80,7 @@ namespace test {
 //  using lib::time::Offset;
 //  using lib::meta::RebindVariadic;
 //  using util::isnil;
+  using util::max;
   using util::unConst;
 //  using std::forward;
   using std::swap;
@@ -148,6 +149,15 @@ namespace test {
             : hash{seed}
             { }
           
+          void
+          clear()
+            {
+              hash = 0;
+              level = repeat = 0;
+              pred.clear();
+              succ.clear();
+            }
+          
           Node&
           addPred (Node* other)
             {
@@ -181,8 +191,13 @@ namespace test {
     private:
       using NodeTab = typename Node::Tab;
       using NodeStorage = std::array<Node, numNodes>;
+      using CtrlRule = std::function<size_t(size_t, double)>;
       
       std::unique_ptr<NodeStorage> nodes_;
+      
+      CtrlRule seedingRule_  {[](size_t, double){ return 0; }};
+      CtrlRule expansionRule_{[](size_t, double){ return 0; }};
+      CtrlRule reductionRule_{[](size_t, double){ return 0; }};
       
     public:
       TestChainLoad()
@@ -204,26 +219,75 @@ namespace test {
       TestChainLoad
       buildToplolgy()
         {
-          NodeTab a,b,
-          *curr{&a}, *next{&b};
+          NodeTab a,b,          // working data for generation
+                 *curr{&a},     // the current set of nodes to carry on
+                 *next{&b};     // the next set of nodes connected to current
           Node* node = &nodes_->front();
           size_t level{0};
+          size_t expectedLevel = max (1u, numNodes/maxFan);
           
-          curr->add (node++);
-          ++level;
+          // prepare building blocks for the topology generation...
+          auto height = [&](double level)
+                              {
+                                return level/expectedLevel;
+                              };
+          auto spaceLeft = [&]{ return next->size() < maxFan; };
+          auto addNode   = [&]{
+                                Node* n = *next->add (node++);
+                                n->clear();
+                                n->level = level;
+                                return n;
+                              };
+          auto apply  = [&](CtrlRule& rule, Node* n)
+                              {
+                                return rule (n->hash, height(level));
+                              };
+          
+          addNode(); // prime next with root node
+          // visit all further nodes and establish links
           while (node < &nodes_->back())
             {
-              Node* n = (*curr)[0];
-              next->add (node++);
-              (*next)[0]->level = level;
-              (*next)[0]->addPred(n);
-              swap (next, curr);
-              next->clear();
               ++level;
+              curr->clear();
+              swap (next, curr);
+              size_t toReduce{0};
+              Node* r;
+              REQUIRE (spaceLeft());
+              for (Node* o : *curr)
+                { // follow-up on all Nodes in current level...
+                  o->calculate();
+                  size_t toSeed   = apply (seedingRule_, o);
+                  size_t toExpand = apply (expansionRule_,o);
+                  while (0 < toSeed and spaceLeft())
+                    { // start a new chain from seed
+                      Node* n = addNode();
+                      n->hash = this->getSeed();
+                      --toSeed;
+                    }
+                  while (0 < toExpand and spaceLeft())
+                    { // fork out secondary chain from o
+                      Node* n = addNode();
+                      o->addSucc(n);
+                      --toExpand;
+                    }
+                  if (not toReduce and spaceLeft())
+                    { // carry-on the chain from o
+                      r = addNode();
+                      toReduce = apply (reductionRule_, o);
+                    }
+                  else
+                    --toReduce;
+                  ENSURE (r);
+                  r->addPred(o);
+                }
             }
           ENSURE (node == &nodes_->back());
-          node->level = level;
-          node->addPred ((*curr)[0]);
+          // connect ends of all remaining chains to top-Node
+          node->clear();
+          node->level = ++level;
+          for (Node* o : *next)
+            node->addPred(o);
+          //
           return move(*this);
         }
       
