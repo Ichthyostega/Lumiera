@@ -80,6 +80,7 @@ namespace test {
 //  using lib::time::Offset;
 //  using lib::meta::RebindVariadic;
 //  using util::isnil;
+  using util::unConst;
 //  using std::forward;
 //  using std::move;
   using boost::hash_combine;
@@ -110,7 +111,30 @@ namespace test {
       struct Node
         : util::MoveOnly
         {
-          using Tab = std::array<Node*, maxFan>;
+          using _Arr = std::array<Node*, maxFan>;
+          using Iter = typename _Arr::iterator;
+          
+          /** Table with connections to other Node records */
+          struct Tab : _Arr
+            {
+              Iter after = _Arr::begin();
+              Iter end() { return after; }
+              friend Iter end(Tab& tab) { return tab.end(); }
+              
+              size_t size() const { return unConst(this)->end()-_Arr::begin(); }
+              bool  empty() const { return 0 == size();     }
+              
+              Iter
+              add(Node& n)
+                {
+                  if (after != _Arr::end())
+                    {
+                      *after = &n;
+                      return after++;
+                    }
+                  NOTREACHED ("excess node linkage");
+                }
+            };
           
           size_t hash;
           Tab pred;
@@ -125,34 +149,16 @@ namespace test {
           Node&
           addPred (Node& other)
             {
-              for (Node*& entry : pred)
-                if (not entry)
-                  {
-                    entry = &other;
-                    for (Node*& backlink : other.succ)
-                      if (not backlink)
-                        {
-                          backlink = this;
-                          return *this;
-                        }
-                  }
+              pred.add(other);
+              other.succ.add(*this);
               NOTREACHED ("excess node linkage");
             }
           
           Node&
           addSucc (Node& other)
             {
-              for (Node*& entry : succ)
-                if (not entry)
-                  {
-                    entry = &other;
-                    for (Node*& backlink : other.pred)
-                      if (not backlink)
-                        {
-                          backlink = this;
-                          return *this;
-                        }
-                  }
+              pred.add(other);
+              other.pred.add(*this);
               NOTREACHED ("excess node linkage");
             }
           

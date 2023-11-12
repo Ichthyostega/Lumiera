@@ -38,6 +38,7 @@
 //using lib::time::Time;
 //using lib::time::FSecs;
 
+using util::isnil;
 using util::isSameObject;
 //using lib::test::randStr;
 //using lib::test::randTime;
@@ -87,8 +88,8 @@ namespace test {
           
           Node n0;                                                          // Default-created empty Node
           CHECK (n0.hash == 0);
-          CHECK (n0.pred.size() == DEFAULT_FAN);
-          CHECK (n0.succ.size() == DEFAULT_FAN);
+          CHECK (n0.pred.size() == 0 );
+          CHECK (n0.succ.size() == 0 );
           CHECK (n0.pred == Node::Tab{0});
           CHECK (n0.succ == Node::Tab{0});
           
@@ -143,6 +144,17 @@ namespace test {
           CHECK (n00.hash == 17052526497278249714u);
           n00.calculate();                                                  // calculation is NOT idempotent (inherently statefull)
           CHECK (n00.hash == 13151338213516862912u);
+          
+          CHECK (isnil (n0.succ));
+          CHECK (isnil (n00.succ));
+          CHECK (n00.succ.empty());
+          CHECK (0 == n00.succ.size());
+          CHECK (2 == n00.pred.size());
+          CHECK (2 == n0.pred.size());
+          CHECK (2 == n1.succ.size());
+          CHECK (2 == n2.succ.size());
+          CHECK (isnil (n1.pred));
+          CHECK (isnil (n2.pred));
         }
       
       
