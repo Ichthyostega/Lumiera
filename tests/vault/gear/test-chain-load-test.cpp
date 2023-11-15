@@ -30,7 +30,7 @@
 #include "test-chain-load.hpp"
 //#include "vault/real-clock.hpp"
 //#include "lib/time/timevalue.hpp"
-//#include "lib/format-cout.hpp"
+#include "lib/format-cout.hpp" ////////////////////////////////////TODO Moo-oh
 #include "lib/test/diagnostic-output.hpp"//////////////////////////TODO TOD-oh
 #include "lib/util.hpp"
 
@@ -63,6 +63,7 @@ namespace test {
           simpleUsage();
           verify_Node();
           verify_Topology();
+          control_Topology();
 
           witch_gate();
         }
@@ -174,6 +175,58 @@ namespace test {
           CHECK (31 == graph.topLevel());
           CHECK (0  == graph.getSeed());
           CHECK (0  == graph.getHash());
+          
+          using N = TestChainLoad<>::Node;
+          std::array<N,7> n;
+          n[1].addPred(n[0]);
+          n[2].addPred(n[0]);
+          n[3].addPred(n[1]);
+          n[3].addPred(n[2]);
+          n[4].addPred(n[1]);
+          n[6].addPred(n[3]);
+          n[6].addPred(n[4]);
+          n[6].addPred(n[5]);
+          n[0].hash = 55;
+          n[4].hash = n[0].hash;
+          
+          using namespace dot;
+          Section nodes("Nodes");
+          Section layers("Layers");
+          Section topology("Topology");
+          
+          Code BOTTOM{"shape=doublecircle"};
+          Code SEED  {"shape=circle"};
+          Code TOP   {"shape=box, style=rounded"};
+          Code DEFAULT{};
+          
+          auto nNr = [&](N& nn){ return size_t(&nn - &n[0]); }; 
+          for (N& nn : n)
+            {
+              size_t i = nNr(nn);
+              nodes += Node(i).label(i+1).style(i==0          ? BOTTOM
+                                               :isnil(nn.pred)? SEED
+                                               :isnil(nn.succ)? TOP
+                                               :                DEFAULT);
+              for (N* suc : nn.succ)
+                topology += connect(i, nNr(*suc));
+            }
+          layers += scope(0) + Node(0) + rankMIN();
+          layers += scope(1) + Node(1) + Node(2);
+          layers += scope(2) + Node(3) + Node(4) + Node(5);
+          layers += scope(3) + Node(6);
+          
+          cout << digraph(nodes,layers,topology) <<endl;
+        }
+      
+      
+      
+      /** @test TODO diagnostic blah
+       * @todo WIP 11/23 🔁 define ⟶ implement
+       */
+      void
+      control_Topology()
+        {
+          UNIMPLEMENTED ("witch topology");
         }
       
       

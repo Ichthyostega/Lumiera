@@ -29,9 +29,36 @@
  ** to carry out a reproducible computation. Data dependencies between jobs can be established
  ** to verify handling of dependent jobs and job completion messages within the scheduler. 
  ** 
- ** # Usage
+ ** # Random computation structure
+ ** A system of connected hash values is used as computation load, akin to a blockchain.
+ ** Each processing step is embodied into a node, with a hash value computed by combining
+ ** all predecessor nodes. Connectivity is represented as bidirectional pointer links, each
+ ** nodes knows its predecessors and successors (if any), while the maximum _fan out_ or
+ ** _fan in_ and the total number of nodes is limited statically. All nodes are placed
+ ** into a single pre-allocated memory block and always processed in ascending dependency
+ ** order. The result hash from complete processing can thus be computed by a single linear
+ ** pass over all nodes; yet alternatively each node can be _scheduled_ as an individual
+ ** computation job, which obviously requires that it's predecessor nodes have already
+ ** been computed, otherwise the resulting hash will not match up with expectation.
+ ** If significant per-node computation time is required, the hashing can be
+ ** arbitrarily repeated at each node.
  ** 
- ** Duh oh
+ ** The topology of connectivity is generated randomly, yet completely deterministic through
+ ** configurable _control functions_ driven by each node's (hash)value. This way, each node
+ ** can optionally fork out to several successor nodes, but can also reduce and combine its
+ ** predecessor nodes; additionally, new chains can be spawned (to simulate the effect of
+ ** data loading Jobs without predecessor). The computation always  begins with the _root
+ ** node_, proceeds over the node links and finally leads to the _top node,_ which connects
+ ** all chains of computation, leaving no dead end.
+ ** 
+ ** ## Usage
+ ** A TestChainLoad instance is created with predetermined maximum fan factor and a fixed
+ ** number of nodes, which are immediately allocated and initialised. Using _builder notation,_
+ ** control functions can then be configured. The [topology generation](\ref TestChainLoad::buildTopology)
+ ** then traverses the nodes, starting with the seed value from the root node, and establishes
+ ** the complete node connectivity. After this priming, the expected result hash should be
+ ** [retrieved](\ref TestChainLoad::getHash). The node structure can than be traversed or
+ ** [scheduled as Render Jobs](\ref TestChainLoad::scheduleJobs).
  ** 
  ** ## Observation tools
  ** - jaleck
@@ -64,6 +91,8 @@
 //#include <string>
 //#include <deque>
 //#include <vector>
+#include <sstream>
+#include <string>
 #include <memory>
 #include <array>
 
@@ -83,6 +112,7 @@ namespace test {
   using util::max;
   using util::unConst;
 //  using std::forward;
+  using std::string;
   using std::swap;
   using std::move;
   using boost::hash_combine;
@@ -95,6 +125,96 @@ namespace test {
     const size_t DEFAULT_SIZ = 256;
     
 //    using SIG_JobDiagnostic = void(Time, int32_t);
+  }
+  
+  
+  namespace dot {
+    
+    /**
+     * Helper to generate DOT-Graphviz rendering of topology
+     */
+    class DotOut
+      {
+        std::ostringstream buff_;
+        
+      public:
+        
+        operator string()  const { return buff_.str(); }
+      };
+    
+    struct Code
+      {
+        Code (string code ="")
+          {
+            
+          }
+        
+        Code&&
+        operator+= (Code&& c)
+          {
+            
+          }
+        
+        Code&&
+        operator+ (Code&& c)
+          {
+            
+          }
+      };
+    
+    struct Section : Code
+      {
+        Section(string name)
+          {
+            
+          }
+      };
+    
+    struct Node : Code
+      {
+        Node (size_t id)
+          {
+            
+          }
+        Node&&
+        label(size_t i)
+          {
+            return move(*this);
+          }
+        Node&&
+        style(Code code)
+          {
+            return move(*this);
+          }
+      };
+    
+    inline Code
+    scope (size_t id)
+    {
+      
+    }
+    inline Code
+    rankMIN()
+    {
+      
+    }
+    
+    inline Code
+    connect (size_t src, size_t dest)
+    {
+      
+    }
+    
+    template<class...COD>
+    inline DotOut
+    digraph (COD ...parts)
+    {
+      
+    }
+    
+    
+////////////////////////////////////////////    
+////////////////////////////////////////////    
   }
   
   
