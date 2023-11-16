@@ -170,50 +170,12 @@ namespace test {
       verify_Topology()
         {
           auto graph = TestChainLoad<32>{}
-                          .buildToplolgy();
+                          .buildToplolgy()
+                          .printTopologyDOT();
           
           CHECK (31 == graph.topLevel());
           CHECK (0  == graph.getSeed());
           CHECK (0  == graph.getHash());
-          
-          ///////////////////////////////////////////////////////////////////////TODO : what follows is WIP to test the DOT graph generator....
-          using N = const TestChainLoad<32>::Node;
-          
-          using namespace dot;
-          Section nodes("Nodes");
-          Section layers("Layers");
-          Section topology("Topology");
-          
-          Code BOTTOM{"shape=doublecircle"};
-          Code SEED  {"shape=circle"};
-          Code TOP   {"shape=box, style=rounded"};
-          Code DEFAULT{};
-          
-          N& n0n = *graph.allNodes();
-          auto nNr = [&](N& nn){ return size_t(&nn - &n0n); };
-          size_t level(0);
-          Scope timeLevel{level};
-          layers += timeLevel.rank("min ");
-          for (N& nn : graph.allNodes())
-            {
-              size_t i = nNr(nn);
-              nodes += Node(i).label(i+1).style(i==0          ? BOTTOM
-                                               :isnil(nn.pred)? SEED
-                                               :isnil(nn.succ)? TOP
-                                               :                DEFAULT);
-              for (N* suc : nn.succ)
-                topology += connect(i, nNr(*suc));
-              
-              if (level != nn.level)
-                {
-                  ++level;
-                  ENSURE (level == nn.level);
-                  timeLevel = Scope(level).rank("same");
-                  layers += timeLevel;
-                }
-              timeLevel.add(Node(i));
-            }
-          cout << digraph(nodes,layers,topology) <<endl;
         }
       
       

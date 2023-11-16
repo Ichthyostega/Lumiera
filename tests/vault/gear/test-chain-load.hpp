@@ -86,6 +86,7 @@
 //#include "lib/meta/function.hpp"
 //#include "lib/wrapper.hpp"
 #include "lib/iter-explorer.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/dot-gen.hpp"
 
 #include <boost/functional/hash.hpp>
@@ -111,6 +112,8 @@ namespace test {
 //  using lib::meta::RebindVariadic;
   using util::max;
   using util::unConst;
+  using util::toString;
+  using util::showHashLSB;
 //  using std::forward;
 //  using std::string;
   using std::swap;
@@ -256,7 +259,7 @@ namespace test {
       /**
        * Use current configuration and seed to (re)build Node connectivity.
        */
-      TestChainLoad
+      TestChainLoad&&
       buildToplolgy()
         {
           NodeTab a,b,          // working data for generation
@@ -328,6 +331,66 @@ namespace test {
           for (Node* o : *next)
             node->addPred(o);
           //
+          return move(*this);
+        }
+      
+      
+      /* ===== Operators ===== */
+      
+      std::string
+      generateTopologyDOT()
+        {
+          using namespace dot;
+          
+          Section nodes("Nodes");
+          Section layers("Layers");
+          Section topology("Topology");
+          
+          // Styles to distinguish the computation nodes
+          Code BOTTOM{"shape=doublecircle"};
+          Code SEED  {"shape=circle"};
+          Code TOP   {"shape=box, style=rounded"};
+          Code DEFAULT{};
+          
+          auto nodeID = [&](Node& nn){ return size_t(&nn - &nodes_->front()); };
+          
+          // prepare time-level zero
+          size_t level(0);
+          auto timeLevel = scope(level);
+          layers += timeLevel.rank("min ");
+          
+          for (Node& n : allNodes())
+            {
+              size_t i = nodeID(n);
+              nodes += node(i).label(toString(i)+": "+showHashLSB(n.hash))
+                              .style(i==0         ? BOTTOM
+                                    :isnil(n.pred)? SEED
+                                    :isnil(n.succ)? TOP
+                                    :               DEFAULT);
+              for (Node* suc : n.succ)
+                topology += connect (i, nodeID(*suc));
+              
+              if (level != n.level)
+                {// switch to next time-level
+                  ++level;
+                  ENSURE (level == n.level);
+                  timeLevel = scope(level).rank("same");
+                  layers += timeLevel;
+                }
+              timeLevel.add (node(i));
+            }
+          
+          // combine and render collected definitions as DOT-code
+          return digraph (nodes, layers, topology);
+        }
+      
+      TestChainLoad&&
+      printTopologyDOT()
+        {
+          cout << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───\n"
+               << generateTopologyDOT()
+               << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───"
+               << endl;
           return move(*this);
         }
       

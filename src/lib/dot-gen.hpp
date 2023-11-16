@@ -109,6 +109,79 @@ namespace dot_gen { ///< Collection of builder DSL functions to generate Graphvi
     };
   
   
+  
+  /** generate a Node name or a node_statement
+   *  defining attributes of that node. All variables
+   *  use the format `N<number>`. */
+  struct Node : Code
+    {
+      Node (size_t id)
+        : Code{"N"+toString(id)}
+        { }
+      
+      Node&&
+      addAttrib (string def)
+        {
+          if (back() != ']')
+            append ("[");
+          else
+            {
+              resize (length()-2);
+              append (", ");
+            }
+          append (def+" ]");
+          return move(*this);
+        }
+      
+      Node&&
+      label (string text)
+        {
+          return addAttrib ("label=\""+text+"\"");
+        }
+      
+      Node&&
+      style (Code const& code)
+        {
+          if (not isnil(code))
+            addAttrib (code);
+          return move(*this);
+        }
+    };
+  
+  
+  /** accumulator to collect nodes grouped into a scope */
+  struct Scope : Code
+    {
+      Scope (size_t id)
+        : Code{"{ /*"+toString(id)+"*/ }"}
+        { }
+      
+      Scope&&
+      add (Code const& code)
+        {
+          resize(length()-1);
+          append (code+" }");
+          return move(*this);
+        }
+      
+      Scope&&
+      rank (string rankSetting)
+        {
+          return add(Code{"rank="+rankSetting});
+        }
+    };
+  
+  inline Node  node  (size_t id) { return Node(id);  }
+  inline Scope scope (size_t id) { return Scope(id); }
+  
+  /** generate a directed node connectivity clause */
+  inline Code
+  connect (size_t src, size_t dest)
+  {
+    return Code{Node(src) +" -> "+ Node(dest)};
+  }
+  
+  
   /** Helper to collect DOT-Graphviz code for output */
   class DotOut
     {
@@ -153,76 +226,6 @@ namespace dot_gen { ///< Collection of builder DSL functions to generate Graphvi
           return buff_.str();
         }
     };
-  
-  
-  /** generate a Node name or a node_statement
-   *  defining attributes of that node. All variables
-   *  use the format `N<number>`. */
-  struct Node : Code
-    {
-      Node (size_t id)
-        : Code{"N"+toString(id)}
-        { }
-      
-      Node&&
-      addAttrib (string def)
-        {
-          if (back() != ']')
-            append ("[");
-          else
-            {
-              resize (length()-2);
-              append (", ");
-            }
-          append (def+" ]");
-          return move(*this);
-        }
-      
-      Node&&
-      label (size_t i)
-        {
-          return addAttrib ("label="+toString(i));
-        }
-      
-      Node&&
-      style (Code const& code)
-        {
-          if (not isnil(code))
-            addAttrib (code);
-          return move(*this);
-        }
-    };
-  
-  
-  /** accumulator to collect nodes grouped into a scope */
-  struct Scope : Code
-    {
-      Scope (size_t id)
-        : Code{"{ /*"+toString(id)+"*/ }"}
-        { }
-      
-      Scope&&
-      add (Code const& code)
-        {
-          resize(length()-1);
-          append (code+" }");
-          return move(*this);
-        }
-      
-      Scope&&
-      rank (string rankSetting)
-        {
-          return add(Code{"rank="+rankSetting});
-        }
-    };
-  
-  /** generate a directed node connectivity clause */
-  inline Code
-  connect (size_t src, size_t dest)
-  {
-    return Code{Node(src) +" -> "+ Node(dest)};
-  }
-  
   
   /**
    * Entrance-point: generate a graph spec in DOT-Language.

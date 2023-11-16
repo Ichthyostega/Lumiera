@@ -91,6 +91,16 @@ namespace util {
   /** preconfigured format for pretty-printing of addresses */
   std::ostream& showAddr (std::ostream&, void const* addr);
   
+  /** renders the size_t in hex, optionally only trailing bytes */
+  std::string showHash   (size_t hash, uint showBytes=8)  noexcept;
+  
+  inline std::string
+  showHashLSB (size_t hash)  noexcept
+  {
+    return showHash(hash,1);
+  }
+  
+  
   
   namespace {
     /** toggle to prefer specialisation with direct lexical conversion */

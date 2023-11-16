@@ -325,6 +325,7 @@ namespace util {
   using std::setw;
   using std::right;
   using std::setfill;
+  using std::uppercase;
   using std::noshowbase;
   using std::ostringstream;
   using std::ostream;
@@ -393,6 +394,25 @@ namespace util {
     try {
       ostringstream buffer;
       showAddr (buffer, addr);
+      return buffer.str();
+    }
+    catch(...)
+    { return FAILURE_INDICATOR; }
+  
+  
+  string
+  showHash (size_t hash, uint showBytes)  noexcept
+    try {
+      showBytes = util::limited (1u, showBytes, 8u);
+      size_t suffix_modulus = size_t(1) << showBytes * 8;
+      ostringstream buffer;
+      buffer << hex
+             << uppercase
+             << noshowbase
+             << setw (showBytes * 2)  // need 2 hex digits per byte
+             << setfill('0')
+             << right
+             << (showBytes==8? hash : hash % suffix_modulus);
       return buffer.str();
     }
     catch(...)
