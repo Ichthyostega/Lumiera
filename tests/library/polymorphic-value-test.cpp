@@ -157,8 +157,8 @@ namespace test{
     
   }
   
-  typedef PolymorphicValue<Interface, MAX_SIZ> PolyVal;
-  typedef std::vector<PolyVal> TestList;
+  using PolyVal = PolymorphicValue<Interface, MAX_SIZ>;
+  using TestList = std::vector<PolyVal> ;
   
   
   
@@ -235,10 +235,10 @@ namespace test{
           verifyCreation_and_Copy<PolyVal, MaximumSizedImp>();
           
           // Special case: client objects expose extension point for copy support
-          typedef polyvalue::CopySupport<Interface> CopySupportAPI;                    // Copy support API declared as sub-interface
-          typedef Imp<MAX_ELM,CopySupportAPI> CopySupportingImp;                       // insert this sub-interface between public API and Implementation
-          typedef PolymorphicValue<Interface, MAX_SIZ, CopySupportAPI> OptimalPolyVal; // Make the Holder use this special attachment point
-          CHECK (sizeof(OptimalPolyVal) < sizeof(PolyVal));                            // results in smaller Holder and less implementation overhead
+          using CopySupportAPI    = polyvalue::CopySupport<Interface>;                    // Copy support API declared as sub-interface
+          using CopySupportingImp = Imp<MAX_ELM,CopySupportAPI>;                          // insert this sub-interface between public API and Implementation
+          using OptimalPolyVal    = PolymorphicValue<Interface, MAX_SIZ, CopySupportAPI>; // Make the Holder use this special attachment point
+          CHECK (sizeof(OptimalPolyVal) < sizeof(PolyVal));                               // results in smaller Holder and less implementation overhead
           
           verifyCreation_and_Copy<OptimalPolyVal, CopySupportingImp>();
         }
@@ -248,9 +248,9 @@ namespace test{
       void
       verifyCreation_and_Copy()
         {
-          typedef PV Holder;
-          typedef IMP ImpType;
-          typedef typename PV::Interface Api;
+          using Holder  = PV;
+          using ImpType = IMP;
+          using Api     = typename PV::Interface ;
           
           long prevSum = _checkSum;
           uint prevCnt = _created;
@@ -260,13 +260,13 @@ namespace test{
           CHECK (prevCnt+1   <= _created);             // Note: usually, the compiler optimises
           CHECK (prevCnt+2   >= _created);             //       and skips the spurious copy-operation
           CHECK (sizeof(Holder) >= sizeof(ImpType));
-          Api& embedded = val;
-          CHECK (isSameObject(embedded,val));
-          CHECK (INSTANCEOF(ImpType, &embedded));
+          Api& api = val;
+          CHECK (isSameObject(api,val));
+          CHECK (INSTANCEOF(ImpType, &api));
           
           prevCnt = _created;
           Holder val2(val);       // invoke copy ctor without knowing the implementation type
-          embedded.apiFunc();
+          api.apiFunc();
           CHECK (val != val2);    // invoking the API function had an sideeffect on the state
           val = val2;             // assignment of copy back to the original...
           CHECK (val == val2);    // cancels the side effect

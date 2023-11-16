@@ -176,13 +176,14 @@ namespace test {
           CHECK (0  == graph.getSeed());
           CHECK (0  == graph.getHash());
           
+          ///////////////////////////////////////////////////////////////////////TODO : what follows is WIP to test the DOT graph generator....
           using N = TestChainLoad<>::Node;
           std::array<N,7> n;
           n[1].addPred(n[0]);
           n[2].addPred(n[0]);
           n[3].addPred(n[1]);
           n[3].addPred(n[2]);
-          n[4].addPred(n[1]);
+          n[5].addPred(n[1]);
           n[6].addPred(n[3]);
           n[6].addPred(n[4]);
           n[6].addPred(n[5]);
@@ -199,7 +200,7 @@ namespace test {
           Code TOP   {"shape=box, style=rounded"};
           Code DEFAULT{};
           
-          auto nNr = [&](N& nn){ return size_t(&nn - &n[0]); }; 
+          auto nNr = [&](N& nn){ return size_t(&nn - &n[0]); };
           for (N& nn : n)
             {
               size_t i = nNr(nn);
@@ -210,10 +211,10 @@ namespace test {
               for (N* suc : nn.succ)
                 topology += connect(i, nNr(*suc));
             }
-          layers += scope(0) + Node(0) + rankMIN();
-          layers += scope(1) + Node(1) + Node(2);
-          layers += scope(2) + Node(3) + Node(4) + Node(5);
-          layers += scope(3) + Node(6);
+          layers += Scope(0).rank("min ").add(Node(0));
+          layers += Scope(1).rank("same").add(Node(1)).add(Node(2));
+          layers += Scope(2).rank("same").add(Node(3)).add(Node(4)).add(Node(5));
+          layers += Scope(3).rank("same").add(Node(6));
           
           cout << digraph(nodes,layers,topology) <<endl;
         }

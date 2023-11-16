@@ -82,18 +82,18 @@
 //#include "lib/meta/variadic-helper.hpp"
 //#include "lib/meta/function.hpp"
 //#include "lib/wrapper.hpp"
-//#include "lib/format-util.hpp"
-//#include "lib/util.hpp"
+#include "lib/format-util.hpp"  /////////////////TODO used only for dot generation
+#include "lib/util.hpp" /////////////////TODO used only for dot generation
 
 #include <boost/functional/hash.hpp>
 #include <functional>
 #include <utility>
 //#include <string>
 //#include <deque>
-//#include <vector>
-#include <sstream>
-#include <string>
 #include <memory>
+#include <sstream>  /////////////////TODO used only for dot generation
+#include <string>
+#include <vector> /////////////////TODO used only for dot generation
 #include <array>
 
 
@@ -108,7 +108,8 @@ namespace test {
 //  using lib::time::FSecs;
 //  using lib::time::Offset;
 //  using lib::meta::RebindVariadic;
-//  using util::isnil;
+  using util::toString;   /////////////////TODO used only for dot generation
+  using util::isnil;      /////////////////TODO used only for dot generation
   using util::max;
   using util::unConst;
 //  using std::forward;
@@ -130,6 +131,29 @@ namespace test {
   
   namespace dot {
     
+    struct Code : string
+      {
+        using string::string;
+        Code(string const& c) : string{c}      { }
+        Code(string     && c) : string{move(c)}{ }
+      };
+    
+    struct Section
+      {
+        std::vector<string> lines;
+        
+        Section (string name)
+          : lines{"// "+name}
+          { }
+        
+        Section&&
+        operator+= (Code&& code)
+          {
+            lines.emplace_back(move (code));
+            return move(*this);
+          }
+      };
+    
     /**
      * Helper to generate DOT-Graphviz rendering of topology
      */
@@ -137,84 +161,120 @@ namespace test {
       {
         std::ostringstream buff_;
         
+        static uint const IDENT_STEP = 2;
       public:
-        
-        operator string()  const { return buff_.str(); }
-      };
-    
-    struct Code
-      {
-        Code (string code ="")
+        void
+        putLine (string line, uint indent=0)
           {
-            
+            if (indent)
+              buff_ << string(indent,' ');
+            buff_   << line
+                    << '\n';
           }
         
-        Code&&
-        operator+= (Code&& c)
+        void
+        put (Code const& code)
           {
-            
+            buff_ << code;
           }
         
-        Code&&
-        operator+ (Code&& c)
+        void
+        put (Section const& sect)
           {
-            
+            for (string const& line : sect.lines)
+              putLine (line, IDENT_STEP);
           }
-      };
-    
-    struct Section : Code
-      {
-        Section(string name)
+        
+        template<class P, class...PS>
+        void
+        put (P const& part, PS const& ...parts)
           {
-            
+            put (part);
+            putLine ("");
+            put (parts...);
+          }
+        
+        /** retrieve complete code generated thus far */
+        operator string()  const
+          {
+            return buff_.str();
           }
       };
     
     struct Node : Code
       {
         Node (size_t id)
-          {
-            
-          }
+          : Code{"N"+toString(id)}
+          { }
+        
         Node&&
-        label(size_t i)
+        addAttrib (string def)
           {
+            if (back() != ']')
+              append ("[");
+            else
+              {
+                resize (length()-2);
+                append (", ");
+              }
+            append (def+" ]");
             return move(*this);
           }
+        
         Node&&
-        style(Code code)
+        label (size_t i)
           {
+            return addAttrib ("label="+toString(i));
+          }
+        
+        Node&&
+        style (Code const& code)
+          {
+            if (not isnil(code))
+              addAttrib (code);
             return move(*this);
           }
       };
     
-    inline Code
-    scope (size_t id)
-    {
-      
-    }
-    inline Code
-    rankMIN()
-    {
-      
-    }
+    struct Scope : Code
+      {
+        Scope (size_t id)
+          : Code{"{ /*"+toString(id)+"*/ }"}
+          { }
+        
+        Scope&&
+        add (Code const& code)
+          {
+            resize(length()-1);
+            append (code+" }");
+            return move(*this);
+          }
+        
+        Scope&&
+        rank (string rankSetting)
+          {
+            return add(Code{"rank="+rankSetting});
+          }
+      };
     
     inline Code
     connect (size_t src, size_t dest)
     {
-      
+      return Code{Node(src) +" -> "+ Node(dest)};
     }
     
     template<class...COD>
     inline DotOut
     digraph (COD ...parts)
     {
-      
+      DotOut script;
+      script.putLine (Code{"digraph {"});
+      script.put (parts...);
+      script.putLine (Code{"}"});
+      return script;
     }
     
     
-////////////////////////////////////////////    
-////////////////////////////////////////////    
   }
   
   
