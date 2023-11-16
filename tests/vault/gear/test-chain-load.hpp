@@ -61,7 +61,10 @@
  ** [scheduled as Render Jobs](\ref TestChainLoad::scheduleJobs).
  ** 
  ** ## Observation tools
- ** - jaleck
+ ** The generated topology can be visualised as a graph, using the Graphviz-DOT language.
+ ** Nodes are rendered from bottom to top, organised into strata according to the time-level
+ ** and showing predecessor -> successor connectivity. Seed nodes are distinguished by
+ ** circular shape.
  ** 
  ** @see TestChainLoad_test
  ** @see SchedulerStress_test
@@ -83,8 +86,7 @@
 //#include "lib/meta/function.hpp"
 //#include "lib/wrapper.hpp"
 #include "lib/iter-explorer.hpp"
-#include "lib/format-util.hpp"  /////////////////TODO used only for dot generation
-#include "lib/util.hpp" /////////////////TODO used only for dot generation
+#include "lib/dot-gen.hpp"
 
 #include <boost/functional/hash.hpp>
 #include <functional>
@@ -92,9 +94,7 @@
 //#include <string>
 //#include <deque>
 #include <memory>
-#include <sstream>  /////////////////TODO used only for dot generation
 #include <string>
-#include <vector> /////////////////TODO used only for dot generation
 #include <array>
 
 
@@ -109,173 +109,19 @@ namespace test {
 //  using lib::time::FSecs;
 //  using lib::time::Offset;
 //  using lib::meta::RebindVariadic;
-  using util::toString;   /////////////////TODO used only for dot generation
-  using util::isnil;      /////////////////TODO used only for dot generation
   using util::max;
   using util::unConst;
 //  using std::forward;
-  using std::string;
+//  using std::string;
   using std::swap;
   using std::move;
   using boost::hash_combine;
   
+  namespace dot = lib::dot_gen;
   
-  namespace {// Diagnostic markers
-//    const string MARK_INC{"IncSeq"};
-//    const string MARK_SEQ{"Seq"};
+  namespace { // Default definitions for topology generation
     const size_t DEFAULT_FAN = 16;
     const size_t DEFAULT_SIZ = 256;
-    
-//    using SIG_JobDiagnostic = void(Time, int32_t);
-  }
-  
-  
-  namespace dot {
-    
-    struct Code : string
-      {
-        using string::string;
-        Code(string const& c) : string{c}      { }
-        Code(string     && c) : string{move(c)}{ }
-      };
-    
-    struct Section
-      {
-        std::vector<string> lines;
-        
-        Section (string name)
-          : lines{"// "+name}
-          { }
-        
-        Section&&
-        operator+= (Code const& code)
-          {
-            lines.emplace_back(code);
-            return move(*this);
-          }
-      };
-    
-    /**
-     * Helper to generate DOT-Graphviz rendering of topology
-     */
-    class DotOut
-      {
-        std::ostringstream buff_;
-        
-        static uint const IDENT_STEP = 2;
-      public:
-        void
-        putLine (string line, uint indent=0)
-          {
-            if (indent)
-              buff_ << string(indent,' ');
-            buff_   << line
-                    << '\n';
-          }
-        
-        void
-        put (Code const& code)
-          {
-            buff_ << code;
-          }
-        
-        void
-        put (Section const& sect)
-          {
-            for (string const& line : sect.lines)
-              putLine (line, IDENT_STEP);
-          }
-        
-        template<class P, class...PS>
-        void
-        put (P const& part, PS const& ...parts)
-          {
-            put (part);
-            putLine ("");
-            put (parts...);
-          }
-        
-        /** retrieve complete code generated thus far */
-        operator string()  const
-          {
-            return buff_.str();
-          }
-      };
-    
-    struct Node : Code
-      {
-        Node (size_t id)
-          : Code{"N"+toString(id)}
-          { }
-        
-        Node&&
-        addAttrib (string def)
-          {
-            if (back() != ']')
-              append ("[");
-            else
-              {
-                resize (length()-2);
-                append (", ");
-              }
-            append (def+" ]");
-            return move(*this);
-          }
-        
-        Node&&
-        label (size_t i)
-          {
-            return addAttrib ("label="+toString(i));
-          }
-        
-        Node&&
-        style (Code const& code)
-          {
-            if (not isnil(code))
-              addAttrib (code);
-            return move(*this);
-          }
-      };
-    
-    struct Scope : Code
-      {
-        Scope (size_t id)
-          : Code{"{ /*"+toString(id)+"*/ }"}
-          { }
-        
-        Scope&&
-        add (Code const& code)
-          {
-            resize(length()-1);
-            append (code+" }");
-            return move(*this);
-          }
-        
-        Scope&&
-        rank (string rankSetting)
-          {
-            return add(Code{"rank="+rankSetting});
-          }
-      };
-    
-    inline Code
-    connect (size_t src, size_t dest)
-    {
-      return Code{Node(src) +" -> "+ Node(dest)};
-    }
-    
-    template<class...COD>
-    inline DotOut
-    digraph (COD ...parts)
-    {
-      DotOut script;
-      script.putLine (Code{"digraph {"});
-      script.put (parts...);
-      script.putLine (Code{"}"});
-      return script;
-    }
-    
-    
   }
   
   
