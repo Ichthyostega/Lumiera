@@ -82,6 +82,7 @@
 //#include "lib/meta/variadic-helper.hpp"
 //#include "lib/meta/function.hpp"
 //#include "lib/wrapper.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/format-util.hpp"  /////////////////TODO used only for dot generation
 #include "lib/util.hpp" /////////////////TODO used only for dot generation
 
@@ -147,9 +148,9 @@ namespace test {
           { }
         
         Section&&
-        operator+= (Code&& code)
+        operator+= (Code const& code)
           {
-            lines.emplace_back(move (code));
+            lines.emplace_back(code);
             return move(*this);
           }
       };
@@ -295,13 +296,17 @@ namespace test {
         {
           using _Arr = std::array<Node*, maxFan>;
           using Iter = typename _Arr::iterator;
+          using CIter = typename _Arr::const_iterator;
           
           /** Table with connections to other Node records */
           struct Tab : _Arr
             {
               Iter after = _Arr::begin();
-              Iter end() { return after; }
-              friend Iter end(Tab& tab) { return tab.end(); }
+              
+              Iter  end()      { return after; }
+              CIter end() const{ return after; }
+              friend Iter  end (Tab      & tab){ return tab.end(); }
+              friend CIter end (Tab const& tab){ return tab.end(); }
               
               void clear() { after = _Arr::begin(); }      ///< @warning pointer data in array not cleared
               
@@ -389,6 +394,15 @@ namespace test {
       size_t topLevel() const { return nodes_->back().level; }
       size_t getSeed()  const { return nodes_->front().hash; }
       size_t getHash()  const { return nodes_->back().hash;  }
+      
+      
+      using NodeIter = decltype(lib::explore (std::declval<NodeStorage & >()));
+      
+      NodeIter
+      allNodes()
+        {
+          return lib::explore (*nodes_);
+        }
       
       
       /* ===== topology control ===== */
