@@ -88,6 +88,7 @@
 #include "lib/iter-explorer.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/dot-gen.hpp"
+#include "lib/util.hpp"
 
 #include <boost/functional/hash.hpp>
 #include <functional>
@@ -110,7 +111,9 @@ namespace test {
 //  using lib::time::FSecs;
 //  using lib::time::Offset;
 //  using lib::meta::RebindVariadic;
+  using util::min;
   using util::max;
+  using util::limited;
   using util::unConst;
   using util::toString;
   using util::showHashLSB;
@@ -125,8 +128,37 @@ namespace test {
   namespace { // Default definitions for topology generation
     const size_t DEFAULT_FAN = 16;
     const size_t DEFAULT_SIZ = 256;
+    
+    const double CAP_EPSILON = 0.001;    ///< tiny bias to absorb rounding problems
   }
   
+  
+  /**
+   * Helper to cap and map to a value range.
+   */
+  struct Cap
+    {
+      double lower{0};
+      double value{0};
+      double upper{1};
+      
+      Cap(int    i) : value(i){ }
+      Cap(size_t s) : value(s){ }
+      Cap(double d) : value{d}{ }
+      
+      size_t
+      mapped (size_t scale)
+        {
+          if (value==lower)
+            return 0;
+          value -= lower;
+          value /= upper-lower;
+          value *= scale;
+          value += CAP_EPSILON;
+          value = limited (size_t(0), value, scale);
+          return size_t(value);
+        }
+    };
   
   
   /**
@@ -225,7 +257,7 @@ namespace test {
     private:
       using NodeTab = typename Node::Tab;
       using NodeStorage = std::array<Node, numNodes>;
-      using CtrlRule = std::function<size_t(size_t, double)>;
+      using CtrlRule = std::function<Cap(size_t, double)>;
       
       std::unique_ptr<NodeStorage> nodes_;
       
@@ -256,6 +288,28 @@ namespace test {
       
       /* ===== topology control ===== */
       
+      TestChainLoad&&
+      seedingRule (CtrlRule r)
+        {
+          seedingRule_ = r;
+          return move(*this);
+        }
+      
+      TestChainLoad&&
+      expansionRule (CtrlRule r)
+        {
+          expansionRule_ = r;
+          return move(*this);
+        }
+      
+      TestChainLoad&&
+      reductionRule (CtrlRule r)
+        {
+          reductionRule_ = r;
+          return move(*this);
+        }
+      
+      
       /**
        * Use current configuration and seed to (re)build Node connectivity.
        */
@@ -283,7 +337,8 @@ namespace test {
                               };
           auto apply  = [&](CtrlRule& rule, Node* n)
                               {
-                                return rule (n->hash, height(level));
+                                Cap param = rule (n->hash, height(level));
+                                return param.mapped (maxFan);
                               };
           
           addNode(); // prime next with root node
@@ -352,12 +407,11 @@ namespace test {
           Code TOP   {"shape=box, style=rounded"};
           Code DEFAULT{};
           
-          auto nodeID = [&](Node& nn){ return size_t(&nn - &nodes_->front()); };
+          auto nodeID = [&](Node& n){ return size_t(&n - &nodes_->front()); };
           
           // prepare time-level zero
           size_t level(0);
-          auto timeLevel = scope(level);
-          layers += timeLevel.rank("min ");
+          auto timeLevel = scope(level).rank("min ");
           
           for (Node& n : allNodes())
             {
@@ -372,13 +426,14 @@ namespace test {
               
               if (level != n.level)
                 {// switch to next time-level
+                  layers += timeLevel;
                   ++level;
                   ENSURE (level == n.level);
                   timeLevel = scope(level).rank("same");
-                  layers += timeLevel;
                 }
               timeLevel.add (node(i));
             }
+          layers += timeLevel; // close last layer
           
           // combine and render collected definitions as DOT-code
           return digraph (nodes, layers, topology);
