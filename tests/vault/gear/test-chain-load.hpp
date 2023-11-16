@@ -142,9 +142,16 @@ namespace test {
       double value{0};
       double upper{1};
       
-      Cap(int    i) : value(i){ }
-      Cap(size_t s) : value(s){ }
-      Cap(double d) : value{d}{ }
+      Cap (int    i) : value(i){ }
+      Cap (size_t s) : value(s){ }
+      Cap (double d) : value{d}{ }
+      
+      template<typename NL, typename NV, typename NU>
+      Cap (NL l, NV v, NU u)
+        : lower(l)
+        , value(v)
+        , upper(u)
+        { }
       
       size_t
       mapped (size_t scale)
@@ -188,6 +195,9 @@ namespace test {
               CIter end() const{ return after; }
               friend Iter  end (Tab      & tab){ return tab.end(); }
               friend CIter end (Tab const& tab){ return tab.end(); }
+              
+              Node* front() { return empty()? nullptr : _Arr::front(); }
+              Node* back()  { return empty()? nullptr : *(after-1);    }
               
               void clear() { after = _Arr::begin(); }      ///< @warning pointer data in array not cleared
               
@@ -324,16 +334,18 @@ namespace test {
           size_t expectedLevel = max (1u, numNodes/maxFan);
           
           // prepare building blocks for the topology generation...
-          auto height = [&](double level)
-                              {
-                                return level/expectedLevel;
-                              };
-          auto spaceLeft = [&]{ return next->size() < maxFan; };
+          auto moreNext  = [&]{ return next->size() < maxFan;      };
+          auto moreNodes = [&]{ return node < &nodes_->back();     };
+          auto spaceLeft = [&]{ return moreNext() and moreNodes(); };
           auto addNode   = [&]{
                                 Node* n = *next->add (node++);
                                 n->clear();
                                 n->level = level;
                                 return n;
+                              };
+          auto height = [&](double level)
+                              {
+                                return level/expectedLevel;
                               };
           auto apply  = [&](CtrlRule& rule, Node* n)
                               {
@@ -343,13 +355,13 @@ namespace test {
           
           addNode(); // prime next with root node
           // visit all further nodes and establish links
-          while (node < &nodes_->back())
+          while (moreNodes())
             {
               ++level;
               curr->clear();
               swap (next, curr);
               size_t toReduce{0};
-              Node* r;
+              Node* r = nullptr;
               REQUIRE (spaceLeft());
               for (Node* o : *curr)
                 { // follow-up on all Nodes in current level...
@@ -375,9 +387,16 @@ namespace test {
                     }
                   else
                     --toReduce;
-                  ENSURE (r);
-                  r->addPred(o);
+                  if (r) // connect chain from o...
+                    r->addPred(o);
+                  else // space for successors is already exhausted
+                    { //  can not carry-on, but must ensure no chain is broken
+                      ENSURE (not next->empty());
+                      if (o->succ.empty())
+                        o->addSucc (next->back());
+                    }
                 }
+              ENSURE (not next->empty());
             }
           ENSURE (node == &nodes_->back());
           // connect ends of all remaining chains to top-Node

@@ -170,6 +170,7 @@ namespace test {
       verify_Topology()
         {
           auto graph = TestChainLoad<32>{}
+                          .expansionRule([](size_t hash, double){ return Cap{5, hash % 10, 9}; })
                           .buildToplolgy()
                           .printTopologyDOT();
           
