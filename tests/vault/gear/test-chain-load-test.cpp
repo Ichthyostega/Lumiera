@@ -214,13 +214,17 @@ namespace test {
       
       
       
-      /** @test TODO diagnostic blah
+      /** @test flexible control of generated topology
        * @todo WIP 11/23 🔁 define ⟶ implement
        */
       void
       control_Topology()
         {
-          UNIMPLEMENTED ("witch topology");
+          auto graph = TestChainLoad<32>{};
+          
+          graph.expansionRule([](size_t h,double){ return Cap{8, h%16, 63}; })
+               .buildToplolgy()
+               .printTopologyDOT();
         }
       
       

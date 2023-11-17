@@ -380,9 +380,9 @@ namespace test {
                       o->addSucc(n);
                       --toExpand;
                     }
-                  if (not toReduce and spaceLeft())
-                    { // carry-on the chain from o
-                      r = addNode();
+                  if (not toReduce)
+                    {          // carry-on chain from o
+                      r = spaceLeft()? addNode():nullptr;
                       toReduce = apply (reductionRule_, o);
                     }
                   else
