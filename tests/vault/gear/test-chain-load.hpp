@@ -331,7 +331,7 @@ namespace test {
                  *next{&b};     // the next set of nodes connected to current
           Node* node = &nodes_->front();
           size_t level{0};
-          size_t expectedLevel = max (1u, numNodes/maxFan);
+          size_t expectedLevel = max (1u, numNodes/maxFan); // guess, typically too low
           
           // prepare building blocks for the topology generation...
           auto moreNext  = [&]{ return next->size() < maxFan;      };
@@ -403,10 +403,15 @@ namespace test {
           node->clear();
           node->level = ++level;
           for (Node* o : *next)
-            node->addPred(o);
+            {
+              o->calculate();
+              node->addPred(o);
+            }
+          node->calculate();
           //
           return move(*this);
         }
+      
       
       
       /* ===== Operators ===== */

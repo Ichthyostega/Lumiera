@@ -163,21 +163,54 @@ namespace test {
       
       
       
-      /** @test TODO build topology by connecting the nodes
-       * @todo WIP 11/23 🔁 define ⟶ implement
+      /** @test build topology by connecting the nodes
+       *        - pre-allocate a block with 32 nodes and then
+       *          build a topology to connect these, using default rules
+       *        - in the default case, nodes are linearly chained
+       *        - hash is also computed by chaining with predecessor hash
+       *        - hash computations can be reproduced
+       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_Topology()
         {
           auto graph = TestChainLoad<32>{}
-                          .expansionRule([](size_t hash, double){ return Cap{5, hash % 10, 9}; })
-                          .buildToplolgy()
-                          .printTopologyDOT();
+                          .buildToplolgy();
           
-          CHECK (31 == graph.topLevel());
-          CHECK (0  == graph.getSeed());
-          CHECK (0  == graph.getHash());
-        }
+          CHECK (graph.topLevel() == 31);
+          CHECK (graph.getSeed()  ==  0);
+          CHECK (graph.getHash()  == 6692160254289221734u);
+          
+          auto* node = & *graph.allNodes();
+          CHECK (node->hash == graph.getSeed());
+          CHECK (node->succ.size() == 1);
+          CHECK (isSameObject(*node, *node->succ[0]->pred[0]));
+          
+          size_t steps{0};
+          while (not isnil(node->succ))
+            {// verify node connectivity
+              ++steps;
+              node = node->succ[0];
+              CHECK (steps == node->level);
+              CHECK (1 == node->pred.size());
+              size_t exHash = node->hash;
+              
+              // recompute the hash -> reproducible
+              node->hash = 0;
+              node->calculate();
+              CHECK (exHash == node->hash);
+              
+              // explicitly compute the hash using boost::hash
+              node->hash = 0;
+              boost::hash_combine (node->hash, node->pred[0]->hash);
+              CHECK (exHash == node->hash);
+            }
+           // got a complete chain using all allocated nodes
+          CHECK (steps == 31);
+          CHECK (steps == graph.topLevel());
+          CHECK (node->hash == graph.getHash());
+          CHECK (node->hash == 6692160254289221734u);
+        }    //  hash of the graph is hash of last node
       
       
       
