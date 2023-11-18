@@ -47,14 +47,16 @@
 // 01/21 - look for ways to detect the presence of an (possibly inherited) getID() function
 // 08/22 - techniques to supply additional feature selectors to a constructor call
 // 10/23 - search for ways to detect signatures of member functions and functors uniformly
+// 11/23 - prototype for a builder-DSL to configure a functor to draw and map random values
 
 
 /** @file try.cpp
- * Investigate how to detect the signature of a _function-like member,_ irrespective
- * if referring to a static function, a member function or a functor member. Turns out this
- * can be achieved in a syntactically uniform way by passing either a pointer or member pointer.
- * @see vault::gear::_verify_usable_as_ExecutionContext
- * @see lib::meta::isFunMember
+ * Prototyping to find a suitable DSL to configure drawing of random numbers and mapping results.
+ * The underlying implementation shall be extracted from (and later used by) TestChainLoad; the
+ * random numbers will be derived from node hash values and must be mapped to yield parameters
+ * limited to a very small value range. While numerically simple, this turns out to be rather
+ * error-prone, hence the desire to put a DSL in front. The challenge however arises from
+ * the additional requirement to support various usage patters, all with minimal specs.
  */
 
 typedef unsigned int uint;
@@ -66,100 +68,81 @@ typedef unsigned int uint;
 #include "lib/util.hpp"
 
 #include "lib/meta/function.hpp"
+#include <functional>
 
-struct Stat
+using std::function;
+
+template<typename T, T max>
+struct Limited
   {
-    static long fun (double, char*) {return 42; }
+    static constexpr T min() { return T(0); }
+    static constexpr T max() { return max;  }
+    
+    T val;
+    
+    template<typename X>
+    Limited (X raw)
+      : val(util::limited (X(min()), raw, X(max())))
+      { }
   };
 
-struct Funi
+template<typename T, T max>
+struct Spec
   {
-    std::function<long(double, char*)> fun;
-    short gun;
+    using Lim = Limited<T,max>;
+    static constexpr double CAP_EPSILON = 0.001;
+        
+    double lower{0};
+    double upper{max};
+    
+    Spec() = default;
+    
+    Lim
+    limited (double val)
+      {
+        if (val==lower)
+          return Lim{0};
+        val -= lower;
+        val /= upper-lower;
+        val *= max;
+        val += CAP_EPSILON;
+        return Lim{val};
+      }
+      
   };
 
-struct Dyna
+template<typename T, T max>
+struct Draw
+  : Spec<T,max>
+  , function<Limited<T,max>(size_t)>
   {
-    long fun (double, char*) const {return 42; }
+    using Spc = Spec<T,max>;
+    using Lim = typename Spc::Lim;
+    using Fun = function<Lim(size_t)>;
+    
+    Draw()
+      : Spc{}
+      , Fun{[](size_t){ return Spc{}.limited(0); }}
+      { }
+      
+    template<class FUN>
+    Draw(FUN fun)
+      : Fun{fun}
+      { }
   };
-
-
-using lib::meta::_Fun;
-
-
-  /** @deprecated this is effectively the same than using decltype */
-  template<typename P>
-  struct Probe
-    : _Fun<P>
-    {
-      Probe(P&&){}
-    };
-
-  template<typename FUN, typename SIG, bool =_Fun<FUN>()>
-  struct has_SIGx
-    : std::is_same<SIG, typename _Fun<FUN>::Sig>
-    {
-//      has_SIGx() = default;
-//      has_SIGx(FUN, _Fun<SIG>){ }
-    };
-
-  template<typename FUN, typename X>
-  struct has_SIGx<FUN,X,false>
-    : std::false_type
-    {
-//      has_SIGx() = default;
-//      has_SIGx(FUN, _Fun<X>){ }
-    };
-  
-  
-  
-  template<typename SIG, typename FUN>
-  constexpr inline auto
-  isFunMember (FUN)
-  {
-    return has_SIGx<FUN,SIG>{};
-  }
-  
-#define ARSERT_MEMBER_FUNCTOR(_EXPR_, _SIG_) \
-        static_assert (isFunMember<_SIG_>(_EXPR_), \
-                       "Member " STRINGIFY(_EXPR_) " unsuitable, expect function signature: " STRINGIFY(_SIG_));
 
 int
 main (int, char**)
   {
-    using F1 = decltype(Stat::fun);
-    using F2 = decltype(Funi::fun);
-    using F3 = decltype(&Dyna::fun);
+    using D = Draw<uint,16>;
+    using L = typename D::Lim;
+    using S = typename D::Spc;
+    D draw;
+SHOW_EXPR(draw)
+SHOW_EXPR(draw(5).val)
+    draw = D{[](size_t i){ return S{}.limited(i); }};
     
-    SHOW_TYPE(F1)
-    SHOW_TYPE(F2)
-    SHOW_TYPE(F3)
-    
-    using F1a = decltype(&Stat::fun);
-    using F2a = decltype(&Funi::fun);
-    using F2b = decltype(&Funi::gun);
-    SHOW_TYPE(F1a)
-    SHOW_TYPE(F2a)
-    SHOW_TYPE(F2b)
-    
-    SHOW_TYPE(_Fun<F1>::Sig)
-    SHOW_TYPE(_Fun<F2>::Sig)
-    SHOW_TYPE(_Fun<F3>::Sig)
-
-    SHOW_TYPE(_Fun<F1a>::Sig)
-    SHOW_TYPE(_Fun<F2a>::Sig)
-    
-    SHOW_EXPR(_Fun<F2a>::value)
-    SHOW_EXPR(_Fun<F2b>::value)
-    cout <<  "\n--------\n";
-    
-    SHOW_EXPR(bool(isFunMember<long(double,char*)>(&Stat::fun)))
-    SHOW_EXPR(bool(isFunMember<long(double,char*)>(&Funi::fun)))
-    SHOW_EXPR(bool(isFunMember<long(double,char*)>(&Funi::gun)))
-    SHOW_EXPR(bool(isFunMember<long(double,char*)>(&Dyna::fun)))
-    
-    ARSERT_MEMBER_FUNCTOR (&Stat::fun, long(double,char*));
-    ARSERT_MEMBER_FUNCTOR (&Dyna::fun, long(double,char*));
+SHOW_EXPR(draw(5).val)
     
     cout <<  "\n.gulp.\n";
     return 0;
