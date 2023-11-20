@@ -20,53 +20,6 @@
 
 */
 
-// 8/07  - how to control NOBUG??
-//         execute with   NOBUG_LOG='ttt:TRACE' bin/try
-// 1/08  - working out a static initialisation problem for Visitor (Tag creation)
-// 1/08  - check 64bit longs
-// 4/08  - comparison operators on shared_ptr<Asset>
-// 4/08  - conversions on the value_type used for boost::any
-// 5/08  - how to guard a downcasting access, so it is compiled in only if the involved types are convertible
-// 7/08  - combining partial specialisation and subclasses
-// 10/8  - abusing the STL containers to hold noncopyable values
-// 6/09  - investigating how to build a mixin template providing an operator bool()
-// 12/9  - tracking down a strange "warning: type qualifiers ignored on function return type"
-// 1/10  - can we determine at compile time the presence of a certain function (for duck-typing)?
-// 4/10  - pretty printing STL containers with python enabled GDB?
-// 1/11  - exploring numeric limits
-// 1/11  - integer floor and wrap operation(s)
-// 1/11  - how to fetch the path of the own executable -- at least under Linux?
-// 10/11 - simple demo using a pointer and a struct
-// 11/11 - using the boost random number generator(s)
-// 12/11 - how to detect if string conversion is possible?
-// 1/12  - is partial application of member functions possible?
-// 5/14  - c++11 transition: detect empty function object
-// 7/14  - c++11 transition: std hash function vs. boost hash
-// 9/14  - variadic templates and perfect forwarding
-// 11/14 - pointer to member functions and name mangling
-// 8/15  - Segfault when loading into GDB (on Debian/Jessie 64bit
-// 8/15  - generalising the Variant::Visitor
-// 1/16  - generic to-string conversion for ostream
-// 1/16  - build tuple from runtime-typed variant container
-// 3/17  - generic function signature traits, including support for Lambdas
-// 9/17  - manipulate variadic templates to treat varargs in several chunks
-// 11/17 - metaprogramming to detect the presence of extension points
-// 11/17 - detect generic lambda
-// 12/17 - investigate SFINAE failure. Reason was indirect use while in template instantiation
-// 03/18 - Dependency Injection / Singleton initialisation / double checked locking
-// 04/18 - investigate construction of static template members
-// 08/18 - Segfault when compiling some regular expressions for EventLog search
-// 10/18 - investigate insidious reinterpret cast
-// 12/18 - investigate the trinomial random number algorithm from the C standard lib
-// 04/19 - forwarding tuple element(s) to function invocation
-// 06/19 - use a statefull counting filter in a treeExplorer pipeline
-// 03/20 - investigate type deduction bug with PtrDerefIter
-// 01/21 - look for ways to detect the presence of an (possibly inherited) getID() function
-// 08/22 - techniques to supply additional feature selectors to a constructor call
-// 10/23 - search for ways to detect signatures of member functions and functors uniformly
-// 11/23 - prototype for a builder-DSL to configure a functor to draw and map random values
-
-
 /** @file random-draw.hpp
  ** Build a component to select limited values randomly.
  ** Prototyping to find a suitable DSL to configure drawing of random numbers and mapping results.
@@ -106,198 +59,229 @@
 
 
 namespace lib {
-
-using lib::meta::_Fun;
-using std::function;
-using std::forward;
-using std::move;
-
-
-template<typename T, T max>
-struct Limited
-  {
-    static constexpr T minVal() { return T(0); }
-    static constexpr T maxVal() { return max;  }
-    
-    T val;
-    
-    template<typename X>
-    Limited (X raw)
-      : val(util::limited (X(minVal()), raw, X(maxVal())))
-      { }
-  };
-
-template<typename T, T max>
-struct Spec
-  {
-    using Lim = Limited<T,max>;
-    static constexpr double CAP_EPSILON = 0.0001;
-        
-    double probability{0};
-    T maxResult{Lim::maxVal()};
-    
-    Spec() = default;
-    
-    explicit
-    Spec (double p) : probability{p}{ }
-    
-    Lim
-    limited (double val)
-      {
-        if (probability == 0.0 or val == 0.0)
-          return Lim{0};
-        double q = (1.0 - probability);
-        val -= q;
-        val /= probability;
-        val *= maxResult;
-        val += 1 + CAP_EPSILON;
-        return Lim{val};
-      }
+  
+  using lib::meta::_Fun;
+  using std::function;
+  using std::forward;
+  using std::move;
+  
+  
+  
+  /**
+   * A Result Value confined into fixed bounds.
+   * @tparam T underlying base type (number like)
+   * @tparam max maximum allowed param value (inclusive)
+   * @tparam max minimum allowed param value (inclusive) - defaults to "zero".
+   */
+  template<typename T, T max, T min =T(0)>
+  struct Limited
+    {
+      static constexpr T minVal() { return min; }
+      static constexpr T maxVal() { return max; }
       
-  };
-
-template<typename T, T max>
-struct Draw
-  : Spec<T,max>
-  , function<Limited<T,max>(size_t)>
-  {
-    using Spc = Spec<T,max>;
-    using Lim = typename Spc::Lim;
-    using Fun = function<Lim(size_t)>;
-    
-    Draw()
-      : Spc{}
-      , Fun{[this](size_t hash){ return Spc::limited (asRand (hash)); }}
-      { }
+      T val;
       
-    template<class FUN>
-    Draw(FUN&& fun)
-      : Spc{1.0}
-      , Fun{adaptOut(adaptIn(std::forward<FUN> (fun)))}
-      { }
-    
-    
-    Draw&&
-    probability (double p)
-      {
-        Spc::probability = p;
-        return move (*this);
-      }
-    
-    Draw&&
-    maxVal (uint m)
-      {
-        Spc::maxResult = m;
-        return move (*this);
-      }
-
-    template<class FUN>
-    Draw&&
-    mapping (FUN&& fun)
-      {
-        Fun(*this) = adaptOut(adaptIn(std::forward<FUN> (fun)));
-        return move (*this);
-      }
-    
-    
-    
-    double
-    asRand (size_t hash)
-      {
-        return double(hash % 256)/256;
-      }
-    
-    /**
-     * @internal helper to expose the signature `size_t(size_t)`
-     *           by wrapping a given lambda or functor.
-     */
-    template<class SIG, typename SEL=void>
-    struct Adaptor
-      {
-        static_assert (not sizeof(SIG), "Unable to adapt given functor.");
-      };
-    
-    template<typename RES>
-    struct Adaptor<RES(size_t)>
-      {
-        template<typename FUN>
-        static decltype(auto)
-        build (FUN&& fun)
-          {
+      template<typename X>
+      Limited (X raw)
+        : val(util::limited (X(minVal()), raw, X(maxVal())))
+        { }
+      
+      operator T&()
+        {
+          return val;
+        }
+      operator T const&()  const
+        {
+          return val;
+        }
+    };
+  
+  
+  
+  /**
+   * A component and builder to draw limited parameter values
+   * based on some source of randomness (or hash input).
+   * Effectively this is a function which "draws" on invocation.
+   */
+  template<typename T, T max>
+  class RandomDraw
+    : public function<Limited<T,max>(size_t)>
+    {
+      using Lim = Limited<T,max>;
+      using Fun = function<Lim(size_t)>;
+      
+      T maxResult_{Lim::maxVal()};           ///< maximum parameter val actually to produce < max
+      double probability_{0};                ///< probability that value is in [1 .. m]
+      
+      
+      /** @internal quantise into limited result value */
+      Lim
+      limited (double val)
+        {
+          if (probability_ == 0.0 or val == 0.0)
+            return Lim{0};
+          double q = (1.0 - probability_);
+          val -= q;                          // [0 .. [q .. 1[
+          val /= probability_;               // [0 .. 1[
+          val *= maxResult_;                 // [0 .. m[
+          val += 1;                          // [1 .. m]
+          val += CAP_EPSILON;                // round down yet absorb dust
+          return Lim{val};
+        }
+      
+      static size_t constexpr QUANTISER  = 1 << 8;
+      static double constexpr CAP_EPSILON = 1/(2.0 * QUANTISER);
+      
+      /** @internal draw from source of randomness */
+      double
+      asRand (size_t hash)
+        {
+          return double(hash % QUANTISER) / QUANTISER;
+        }
+      
+      
+    public:
+      /** Drawing is _disabled_ by default, always yielding "zero" */
+      RandomDraw()
+        : Fun{[this](size_t hash){ return limited (asRand (hash)); }}
+        { }
+      
+      /**
+       * Build a RandomDraw by adapting a value-processing function,
+       * which is adapted to accept the nominal input type. The effect
+       * of the given function is determined by its output value
+       * - `size_t`: the function output is used as source of randomness
+       * - `double`: output is directly used as draw value `[0.0..1.0[`
+       * - `RandomDraw` : the function yields a parametrised instance,
+       *   which is directly used to produce the output, bypassing any
+       *   further local settings (#probability_, #maxResult_)
+       */
+      template<class FUN>
+      RandomDraw(FUN&& fun)
+        : probability_{1.0}
+        , Fun{adaptOut(adaptIn(std::forward<FUN> (fun)))}
+        { }
+      
+      
+      /* ===== Builder API ===== */
+      
+      RandomDraw&&
+      probability (double p)
+        {
+          probability_ = p;
+          return move (*this);
+        }
+      
+      RandomDraw&&
+      maxVal (uint m)
+        {
+          maxResult_ = m;
+          return move (*this);
+        }
+  
+      template<class FUN>
+      RandomDraw&&
+      mapping (FUN&& fun)
+        {
+          Fun(*this) = adaptOut(adaptIn(std::forward<FUN> (fun)));
+          return move (*this);
+        }
+      
+      
+      
+      /**
+       * @internal helper to expose the signature `size_t(size_t)`
+       *           by wrapping a given lambda or functor.
+       */
+      template<class SIG, typename SEL=void>
+      struct Adaptor
+        {
+          static_assert (not sizeof(SIG), "Unable to adapt given functor.");
+        };
+      
+      template<typename RES>
+      struct Adaptor<RES(size_t)>
+        {
+          template<typename FUN>
+          static decltype(auto)
+          build (FUN&& fun)
+            {
+              return std::forward<FUN>(fun);
+            }
+        };
+      
+      template<typename RES>
+      struct Adaptor<RES(void)>
+        {
+          template<typename FUN>
+          static auto
+          build (FUN&& fun)
+            {
+              return [functor=std::forward<FUN>(fun)]
+                     (size_t)
+                        {
+                          return functor();
+                        };
+            }
+        };
+      
+      
+      template<class FUN>
+      decltype(auto)
+      adaptIn (FUN&& fun)
+        {
+          static_assert (lib::meta::_Fun<FUN>(), "Need something function-like.");
+          static_assert (lib::meta::_Fun<FUN>::ARITY <= 1, "Function with zero or one argument expected.");
+          
+          using Sig = typename lib::meta::_Fun<FUN>::Sig;
+          
+          return Adaptor<Sig>::build (forward<FUN> (fun));
+        }
+      
+      template<class FUN>
+      decltype(auto)
+      adaptOut (FUN&& fun)
+        {
+          static_assert (lib::meta::_Fun<FUN>(), "Need something function-like.");
+          static_assert (lib::meta::_Fun<FUN>::ARITY ==1, "Function with exactly one argument required.");
+          
+          using Res = typename lib::meta::_Fun<FUN>::Ret;
+          
+          if constexpr (std::is_same_v<Res, Lim>)
             return std::forward<FUN>(fun);
-          }
-      };
-    
-    template<typename RES>
-    struct Adaptor<RES(void)>
-      {
-        template<typename FUN>
-        static auto
-        build (FUN&& fun)
-          {
-            return [functor=std::forward<FUN>(fun)]
-                   (size_t)
+          else
+          if constexpr (std::is_same_v<Res, size_t>)
+            return [functor=std::forward<FUN>(fun), this]
+                   (size_t rawHash)
                       {
-                        return functor();
+                        size_t hash = functor(rawHash);
+                        double randomNum = asRand (hash);
+                        return limited (randomNum);
                       };
-          }
-      };
-    
-    
-    template<class FUN>
-    decltype(auto)
-    adaptIn (FUN&& fun)
-      {
-        static_assert (lib::meta::_Fun<FUN>(), "Need something function-like.");
-        static_assert (lib::meta::_Fun<FUN>::ARITY <= 1, "Function with zero or one argument expected.");
-        
-        using Sig = typename lib::meta::_Fun<FUN>::Sig;
-        
-        return Adaptor<Sig>::build (forward<FUN> (fun));
-      }
-    
-    template<class FUN>
-    decltype(auto)
-    adaptOut (FUN&& fun)
-      {
-        static_assert (lib::meta::_Fun<FUN>(), "Need something function-like.");
-        static_assert (lib::meta::_Fun<FUN>::ARITY ==1, "Function with exactly one argument required.");
-        
-        using Res = typename lib::meta::_Fun<FUN>::Ret;
-        
-        if constexpr (std::is_same_v<Res, Lim>)
-          return std::forward<FUN>(fun);
-        else
-        if constexpr (std::is_same_v<Res, size_t>)
-          return [functor=std::forward<FUN>(fun), this]
-                 (size_t rawHash)
-                    {
-                      size_t hash = functor(rawHash);
-                      double randomNum = asRand (hash);
-                      return Spc::limited (randomNum);
-                    };
-        else
-        if constexpr (std::is_same_v<Res, double>)
-          return [functor=std::forward<FUN>(fun), this]
-                 (size_t rawHash)
-                    {
-                      double randomNum = functor(rawHash);
-                      return Spc::limited (randomNum);
-                    };
-        else
-        if constexpr (std::is_same_v<Res, Draw>)
-          return [functor=std::forward<FUN>(fun), this]
-                 (size_t rawHash)
-                    {
-                      Draw parametricDraw = functor(rawHash);
-                      return parametricDraw (rawHash);
-                    };
-        else
-          static_assert (not sizeof(Res), "unable to adapt / handle result type");
-        NOTREACHED("Handle based on return type");
-      }
-    
-  };
+          else
+          if constexpr (std::is_same_v<Res, double>)
+            return [functor=std::forward<FUN>(fun), this]
+                   (size_t rawHash)
+                      {
+                        double randomNum = functor(rawHash);
+                        return limited (randomNum);
+                      };
+          else
+          if constexpr (std::is_same_v<Res, RandomDraw>)
+            return [functor=std::forward<FUN>(fun), this]
+                   (size_t rawHash)
+                      {
+                        RandomDraw parametricDraw = functor(rawHash);
+                        return parametricDraw (rawHash);
+                      };
+          else
+            static_assert (not sizeof(Res), "unable to adapt / handle result type");
+          NOTREACHED("Handle based on return type");
+        }
+      
+    private:
+      
+    };
   
   
 } // namespace lib

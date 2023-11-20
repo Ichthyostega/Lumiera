@@ -30,6 +30,7 @@
 #include "lib/test/run.hpp"
 //#include "lib/test/test-helper.hpp"
 #include "lib/random-draw.hpp"
+#include "lib/test/diagnostic-output.hpp"////////////////////TODO
 //#include "lib/util.hpp"
 
 //#include <cstdlib>
@@ -52,7 +53,7 @@ namespace test{
     
   }
 
-  
+  using Draw = lib::RandomDraw<uint, 10>;
   
   
   
@@ -74,6 +75,7 @@ namespace test{
           simpleUse();
           
           verify_numerics();
+          verify_buildProfile();
           verify_dynamicChange();
         }
       
@@ -85,7 +87,13 @@ namespace test{
       void
       simpleUse()
         {
-          UNIMPLEMENTED ("simple usage example");
+          auto draw = Draw().probability(0.5);
+          CHECK (draw(0)   == 0);
+          CHECK (draw(127) == 0);
+          CHECK (draw(128) == 1);
+          CHECK (draw(141) == 2);
+          CHECK (draw(255) ==10);
+          CHECK (draw(256) == 0);
         }
       
       
@@ -97,6 +105,17 @@ namespace test{
       verify_numerics()
         {
           UNIMPLEMENTED ("verify random number transformations");
+        }
+      
+      
+      
+      /** @test TODO verify the Builder-API to define the profile of result values.
+       * @todo WIP 11/23 🔁 define ⟶ implement
+       */
+      void
+      verify_buildProfile()
+        {
+          UNIMPLEMENTED ("verify random number profile configuration");
         }
       
       
