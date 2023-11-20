@@ -97,36 +97,53 @@ namespace lib {
     };
   
   
+  namespace random_draw { // Policy definitions
+    
+    /**
+     * Default policy for RandomDraw: generate limted-range random numbers.
+     * @tparam max result values will be `uint` in the range `[0 ... max]`
+     */
+    template<uint max>
+    struct LimitedRandomGenerate
+      : function<Limited<uint, max>(void)>
+      {
+        static double defaultSrc() { return rand()/double(RAND_MAX); }
+      };
+    
+  }//(End)Policy definitions
+  
+  
   
   /**
    * A component and builder to draw limited parameter values
    * based on some source of randomness (or hash input).
    * Effectively this is a function which "draws" on invocation.
+   * @tparam POL configuration policy baseclass
    */
-  template<typename T, T max>
+  template<class POL>
   class RandomDraw
-    : public function<Limited<T,max>(size_t)>
+    : public POL
     {
-      using Lim = Limited<T,max>;
-      using Fun = function<Lim(size_t)>;
+      using Fun = typename _Fun<POL>::Functor;
+      using Tar = typename _Fun<POL>::Ret;
       
-      T maxResult_{Lim::maxVal()};           ///< maximum parameter val actually to produce < max
+      Tar    maxResult_{Tar::maxVal()};      ///< maximum parameter val actually to produce < max
       double probability_{0};                ///< probability that value is in [1 .. m]
       
       
       /** @internal quantise into limited result value */
-      Lim
+      Tar
       limited (double val)
         {
           if (probability_ == 0.0 or val == 0.0)
-            return Lim{0};
+            return Tar{0};
           double q = (1.0 - probability_);
           val -= q;                          // [0 .. [q .. 1[
           val /= probability_;               // [0 .. 1[
           val *= maxResult_;                 // [0 .. m[
           val += 1;                          // [1 .. m]
           val += CAP_EPSILON;                // round down yet absorb dust
-          return Lim{val};
+          return Tar{val};
         }
       
       static size_t constexpr QUANTISER  = 1 << 8;
@@ -143,7 +160,7 @@ namespace lib {
     public:
       /** Drawing is _disabled_ by default, always yielding "zero" */
       RandomDraw()
-        : Fun{[this](size_t hash){ return limited (asRand (hash)); }}
+        : Fun{adaptOut(POL::defaultSrc)}
         { }
       
       /**
@@ -189,53 +206,19 @@ namespace lib {
       
       
       
-      /**
-       * @internal helper to expose the signature `size_t(size_t)`
-       *           by wrapping a given lambda or functor.
-       */
-      template<class SIG, typename SEL=void>
-      struct Adaptor
-        {
-          static_assert (not sizeof(SIG), "Unable to adapt given functor.");
-        };
       
-      template<typename RES>
-      struct Adaptor<RES(size_t)>
-        {
-          template<typename FUN>
-          static decltype(auto)
-          build (FUN&& fun)
-            {
-              return std::forward<FUN>(fun);
-            }
-        };
-      
-      template<typename RES>
-      struct Adaptor<RES(void)>
-        {
-          template<typename FUN>
-          static auto
-          build (FUN&& fun)
-            {
-              return [functor=std::forward<FUN>(fun)]
-                     (size_t)
-                        {
-                          return functor();
-                        };
-            }
-        };
-      
+    private:
       
       template<class FUN>
       decltype(auto)
       adaptIn (FUN&& fun)
         {
           static_assert (lib::meta::_Fun<FUN>(), "Need something function-like.");
-          static_assert (lib::meta::_Fun<FUN>::ARITY <= 1, "Function with zero or one argument expected.");
           
-          using Sig = typename lib::meta::_Fun<FUN>::Sig;
+          using Sig     = typename lib::meta::_Fun<FUN>::Sig;
+          using Adaptor = typename POL::template Adaptor<Sig>;
           
-          return Adaptor<Sig>::build (forward<FUN> (fun));
+          return Adaptor::build (forward<FUN> (fun));
         }
       
       template<class FUN>
@@ -243,11 +226,10 @@ namespace lib {
       adaptOut (FUN&& fun)
         {
           static_assert (lib::meta::_Fun<FUN>(), "Need something function-like.");
-          static_assert (lib::meta::_Fun<FUN>::ARITY ==1, "Function with exactly one argument required.");
           
           using Res = typename lib::meta::_Fun<FUN>::Ret;
           
-          if constexpr (std::is_same_v<Res, Lim>)
+          if constexpr (std::is_same_v<Res, Tar>)
             return std::forward<FUN>(fun);
           else
           if constexpr (std::is_same_v<Res, size_t>)
@@ -278,8 +260,6 @@ namespace lib {
             static_assert (not sizeof(Res), "unable to adapt / handle result type");
           NOTREACHED("Handle based on return type");
         }
-      
-    private:
       
     };
   

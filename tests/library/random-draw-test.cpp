@@ -51,9 +51,52 @@ namespace test{
   namespace {
 //    const Literal THE_END = "all dead and hero got the girl";
     
+    struct SymmetricFive
+      : function<Limited<int, 5,-5>(size_t)>
+      {
+        static size_t defaultSrc (size_t hash) { return hash; }
+        
+        /**
+         * @internal helper to expose the signature `size_t(size_t)`
+         *           by wrapping a given lambda or functor.
+         */
+        template<class SIG>
+        struct Adaptor
+          {
+            static_assert (not sizeof(SIG), "Unable to adapt given functor.");
+          };
+        
+        template<typename RES>
+        struct Adaptor<RES(size_t)>
+          {
+            template<typename FUN>
+            static decltype(auto)
+            build (FUN&& fun)
+              {
+                return std::forward<FUN>(fun);
+              }
+          };
+        
+        template<typename RES>
+        struct Adaptor<RES(void)>
+          {
+            template<typename FUN>
+            static auto
+            build (FUN&& fun)
+              {
+                return [functor=std::forward<FUN>(fun)]
+                       (size_t)
+                          {
+                            return functor();
+                          };
+              }
+          };
+        
+      };
   }
 
-  using Draw = lib::RandomDraw<uint, 10>;
+
+  using Draw = RandomDraw<SymmetricFive>;
   
   
   
@@ -74,6 +117,7 @@ namespace test{
         {
           simpleUse();
           
+          verify_policy();
           verify_numerics();
           verify_buildProfile();
           verify_dynamicChange();
@@ -88,12 +132,30 @@ namespace test{
       simpleUse()
         {
           auto draw = Draw().probability(0.5);
-          CHECK (draw(0)   == 0);
-          CHECK (draw(127) == 0);
-          CHECK (draw(128) == 1);
-          CHECK (draw(141) == 2);
-          CHECK (draw(255) ==10);
-          CHECK (draw(256) == 0);
+SHOW_EXPR (int(draw(0)  ));
+SHOW_EXPR (int(draw(127)));
+SHOW_EXPR (int(draw(128)));
+SHOW_EXPR (int(draw(141)));
+SHOW_EXPR (int(draw(255)));
+SHOW_EXPR (int(draw(256)));
+//          CHECK (draw(0)   == 0);
+//          CHECK (draw(127) == 0);
+//          CHECK (draw(128) == 1);
+//          CHECK (draw(141) == 2);
+//          CHECK (draw(255) ==10);
+//          CHECK (draw(256) == 0);
+        }
+      
+      
+      
+      /** @test TODO verify configuration through policy template
+       * @todo WIP 11/23 🔁 define ⟶ implement
+       */
+      void
+      verify_policy()
+        {
+//          auto d1 = RandomDraw<random_draw::LimitedRandomGenerate<5>>().probability(1.0);
+//SHOW_EXPR (uint(d1()))
         }
       
       
