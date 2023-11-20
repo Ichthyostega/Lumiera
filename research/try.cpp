@@ -69,6 +69,7 @@
  * real implementation this will have to be supplied at usage site through a traits template,
  * otherwise it would not be possible to integrate seamlessly with custom data sources (as
  * happens in the intended use case, where actually a Node is the data source)
+ * @note transformed into a generic library component for usage by vault::gear::TestChainLoad
  */
 
 typedef unsigned int uint;

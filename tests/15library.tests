@@ -508,6 +508,11 @@ return: 0
 END
 
 
+PLANNED "pick limited numbers randomly" RandomDraw_test  <<END
+return: 0
+END
+
+
 TEST "fractional arithmetics" Rational_test  <<END
 return: 0
 END
