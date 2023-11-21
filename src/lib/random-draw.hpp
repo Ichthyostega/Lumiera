@@ -172,7 +172,7 @@ namespace lib {
       Tar
       limited (double val)
         {
-          if (probability_ == 0.0 or val == 0.0)
+          if (probability_ == 0.0)
             return Tar::zeroVal();
           //
           REQUIRE (Tar::minVal() <= minResult_);
@@ -182,6 +182,8 @@ namespace lib {
           REQUIRE (probability_ <= 1.0);
           auto org = util::max (Tar::zeroVal(), minResult_);
           double q = (1.0 - probability_);
+          if (val < q) // control probability of values ≠ neutral
+            return Tar::zeroVal();
           val -= q;                          // [0 .. [q .. 1[
           val /= probability_;               // [0 .. 1[
           if  (org == minResult_)
@@ -201,7 +203,7 @@ namespace lib {
               val += CAP_EPSILON;
               return Tar{floor (val)};
             }
-        }                             //----headroom to accommodate low probabilities        
+        }                             //----headroom to accommodate low probabilities
       static size_t constexpr QUANTISER   = 1 << 4 + util::ilog2 (Tar::maxVal()-Tar::minVal());
       static double constexpr CAP_EPSILON = 1/(2.0 * QUANTISER);
       

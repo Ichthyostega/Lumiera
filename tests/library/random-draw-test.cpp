@@ -32,9 +32,11 @@
 #include "lib/random-draw.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/test/diagnostic-output.hpp"////////////////////TODO
+#include "lib/format-string.hpp"
 //#include "lib/util.hpp"
 
 //#include <cstdlib>
+#include <array>
 
 
 
@@ -43,6 +45,7 @@ namespace test{
   
 //  using util::isSameObject;
 //  using std::rand;
+  using util::_Fmt;
   using lib::time::FSecs;
   using lib::time::TimeVar;
   
@@ -55,7 +58,7 @@ namespace test{
 //    const Literal THE_END = "all dead and hero got the girl";
     
     struct SymmetricFive
-      : function<Limited<int, 5,-5,0>(size_t)>
+      : function<Limited<int, 2,-2, 0>(size_t)>
       {
         static size_t defaultSrc (size_t hash) { return hash; }
         
@@ -135,45 +138,38 @@ namespace test{
       simpleUse()
         {
           auto draw = Draw().probability(0.5);
-SHOW_EXPR (int(draw(0)  ));
-SHOW_EXPR (int(draw(63 )));
-SHOW_EXPR (int(draw(64 )));
-SHOW_EXPR (int(draw(70 )));
-SHOW_EXPR (int(draw(72 )));
-SHOW_EXPR (int(draw(82 )));
-SHOW_EXPR (int(draw(83 )));
-SHOW_EXPR (int(draw(84 )));
-SHOW_EXPR (int(draw(85 )));
-SHOW_EXPR (int(draw(86 )));
-SHOW_EXPR (int(draw(87 )));
-SHOW_EXPR (int(draw(88 )));
-SHOW_EXPR (int(draw(89 )));
-SHOW_EXPR (int(draw(90 )));
-SHOW_EXPR (int(draw(91 )));
-SHOW_EXPR (int(draw(92 )));
-SHOW_EXPR (int(draw(93 )));
-SHOW_EXPR (int(draw(94 )));
-SHOW_EXPR (int(draw(95 )));
-SHOW_EXPR (int(draw(96 )));
-SHOW_EXPR (int(draw(97 )));
-SHOW_EXPR (int(draw(102)));
-SHOW_EXPR (int(draw(103)));
-SHOW_EXPR (int(draw(108)));
-SHOW_EXPR (int(draw(109)));
-SHOW_EXPR (int(draw(121)));
-SHOW_EXPR (int(draw(122)));
-SHOW_EXPR (int(draw(127)));
-SHOW_EXPR (int(draw(128)));
-SHOW_EXPR (int(draw(129)));
-SHOW_EXPR (int(draw(192)));
-SHOW_EXPR (int(draw(255)));
-SHOW_EXPR (int(draw(256)));
-//          CHECK (draw(0)   == 0);
-//          CHECK (draw(127) == 0);
-//          CHECK (draw(128) == 1);
-//          CHECK (draw(141) == 2);
-//          CHECK (draw(255) ==10);
-//          CHECK (draw(256) == 0);
+//SHOW_EXPR (int(draw(0)  ));
+//SHOW_EXPR (int(draw(16 )));
+//SHOW_EXPR (int(draw(31 )));
+//SHOW_EXPR (int(draw(32 )));
+//SHOW_EXPR (int(draw(39 )));
+//SHOW_EXPR (int(draw(40 )));
+//SHOW_EXPR (int(draw(47 )));
+//SHOW_EXPR (int(draw(48 )));
+//SHOW_EXPR (int(draw(55 )));
+//SHOW_EXPR (int(draw(56 )));
+//SHOW_EXPR (int(draw(63 )));
+//SHOW_EXPR (int(draw(64 )));
+//SHOW_EXPR (int(draw(65 )));
+//SHOW_EXPR (int(draw(95 )));
+//SHOW_EXPR (int(draw(96 )));
+//SHOW_EXPR (int(draw(127)));
+//SHOW_EXPR (int(draw(128)));
+//SHOW_EXPR (int(draw(168)));
+//SHOW_EXPR (int(draw(256)));
+          CHECK (draw(  0) ==  0);
+          CHECK (draw( 16) ==  0);
+          CHECK (draw( 32) ==  1);
+          CHECK (draw( 40) ==  2);
+          CHECK (draw( 48) == -2);
+          CHECK (draw( 56) == -1);
+          CHECK (draw( 64) ==  0);
+          CHECK (draw( 95) ==  0);
+          CHECK (draw( 96) ==  1);
+          CHECK (draw(127) == -1);
+          CHECK (draw(128) ==  0);
+          CHECK (draw(168) ==  2);
+          CHECK (draw(256) ==  0);
         }
       
       
@@ -204,12 +200,184 @@ SHOW_EXPR (int(draw(256)));
       
       
       /** @test TODO verify random number transformations
-       * @todo WIP 11/23 🔁 define ⟶ implement
+       *      - use a Draw instance with result values `[-2..0..+2]`
+       *      - values are evenly distributed within limits of quantisation
+       *      - the probability parameter controls the amount of neutral results
+       * @todo WIP 11/23 🔁 define ⟶ ✔ implement
        */
       void
       verify_numerics()
         {
-          UNIMPLEMENTED ("verify random number transformations");
+          auto distribution = [](Draw const& draw)
+                  {
+                    using Arr = std::array<uint,5>;
+                    Arr step{0};
+                    Arr freq{0};
+                    for (uint i=0; i<128; ++i)
+                      {
+                        int res = draw(i);
+                        CHECK (-2 <= res and res <= +2);
+                        int idx = res+2;
+                        freq[idx] += 1;
+                        if (res and not step[idx])
+                          step[idx] = i;
+                      }
+                    _Fmt line{"val:%+d (%02d|%5.2f%%)\n"};
+                    string report;
+                    for (int idx=0; idx<5; ++idx)
+                      {
+                        report += line % (idx-2) % step[idx] % (100.0*freq[idx]/128);
+                      }
+                    return report;
+                 };
+          
+          auto draw = Draw();
+          string report{"+++| --empty--    \n"};
+
+          CHECK (draw(  0) ==  0);
+          CHECK (draw( 32) ==  0);
+          CHECK (draw( 96) ==  0);
+
+          report += distribution(draw);
+          CHECK (report ==
+                "+++| --empty--    \n"
+                "val:-2 (00| 0.00%)\n"
+                "val:-1 (00| 0.00%)\n"
+                "val:+0 (00|100.00%)\n"
+                "val:+1 (00| 0.00%)\n"
+                "val:+2 (00| 0.00%)\n"_expect);
+          
+          
+          draw.probability(1.0);
+          CHECK (draw(  0) == +1);
+          CHECK (draw( 15) == +1);
+          CHECK (draw( 16) == +2);
+          CHECK (draw( 31) == +2);
+          CHECK (draw( 32) == -2);
+          CHECK (draw( 47) == -2);
+          CHECK (draw( 48) == -1);
+          CHECK (draw( 63) == -1);
+          CHECK (draw( 64) == +1);
+          CHECK (draw( 96) == -2);
+
+          report = "+++| p ≔ 1.0      \n";
+          report += distribution(draw);
+          CHECK (report ==
+                "+++| p ≔ 1.0      \n"
+                "val:-2 (32|25.00%)\n"
+                "val:-1 (48|25.00%)\n"
+                "val:+0 (00| 0.00%)\n"
+                "val:+1 (01|25.00%)\n"
+                "val:+2 (16|25.00%)\n"_expect);
+          
+          
+          draw.probability(0.99);
+          CHECK (draw(  0) ==  0);
+          CHECK (draw(  1) == +1);
+          CHECK (draw( 16) == +1);
+          CHECK (draw( 17) == +2);
+          CHECK (draw( 32) == +2);
+          CHECK (draw( 33) == -2);
+          CHECK (draw( 48) == -2);
+          CHECK (draw( 49) == -1);
+          CHECK (draw( 63) == -1);
+          CHECK (draw( 64) ==  0);
+          CHECK (draw( 65) == +1);
+          CHECK (draw( 80) == +1); // 64+16
+          CHECK (draw( 82) == +2); // 64+17
+          CHECK (draw( 97) == -2); // 64+33
+          CHECK (draw(352) == +2); // 64+32+256
+          CHECK (draw(353) == -2); // 64+33+256
+          
+          report = "+++| p ≔ 0.99     \n";
+          report += distribution(draw);
+          CHECK (report ==
+                "+++| p ≔ 0.99     \n"
+                "val:-2 (33|25.00%)\n"
+                "val:-1 (49|23.44%)\n"
+                "val:+0 (00| 1.56%)\n"
+                "val:+1 (01|25.00%)\n"
+                "val:+2 (17|25.00%)\n"_expect);
+          
+          
+          draw.probability(0.98);
+          CHECK (draw(  0) ==  0);
+          CHECK (draw(  1) ==  0);
+          CHECK (draw(  2) == +1);
+          CHECK (draw( 63) == -1);
+          CHECK (draw( 64) ==  0);
+          CHECK (draw( 65) ==  0);
+          CHECK (draw( 66) == +1);
+          
+          report = "+++| p ≔ 0.98     \n";
+          report += distribution(draw);
+          CHECK (report ==
+                "+++| p ≔ 0.98     \n"
+                "val:-2 (33|25.00%)\n"
+                "val:-1 (49|23.44%)\n"
+                "val:+0 (00| 3.12%)\n"
+                "val:+1 (02|23.44%)\n"
+                "val:+2 (17|25.00%)\n"_expect);
+          
+          
+          draw.probability(0.97);
+          report = "+++| p ≔ 0.97     \n";
+          report += distribution(draw);
+          CHECK (report ==
+                "+++| p ≔ 0.97     \n"
+                "val:-2 (33|25.00%)\n"
+                "val:-1 (49|23.44%)\n"
+                "val:+0 (00| 3.12%)\n"
+                "val:+1 (02|25.00%)\n"
+                "val:+2 (18|23.44%)\n"_expect);
+          
+          
+          draw.probability(0.75);
+          report = "+++| p ≔ 0.75     \n";
+          report += distribution(draw);
+          CHECK (report ==
+                "+++| p ≔ 0.75     \n"
+                "val:-2 (40|18.75%)\n"
+                "val:-1 (52|18.75%)\n"
+                "val:+0 (00|25.00%)\n"
+                "val:+1 (16|18.75%)\n"
+                "val:+2 (28|18.75%)\n"_expect);
+          
+          
+          draw.probability(0.5);
+          report = "+++| p ≔ 0.50     \n";
+          report += distribution(draw);
+          CHECK (report ==
+                "+++| p ≔ 0.50     \n"
+                "val:-2 (48|12.50%)\n"
+                "val:-1 (56|12.50%)\n"
+                "val:+0 (00|50.00%)\n"
+                "val:+1 (32|12.50%)\n"
+                "val:+2 (40|12.50%)\n"_expect);
+          
+          
+          draw.probability(0.2);
+          report = "+++| p ≔ 0.20     \n";
+          report += distribution(draw);
+          CHECK (report ==
+                "+++| p ≔ 0.20     \n"
+                "val:-2 (58| 4.69%)\n"
+                "val:-1 (61| 4.69%)\n"
+                "val:+0 (00|81.25%)\n"
+                "val:+1 (52| 4.69%)\n"
+                "val:+2 (55| 4.69%)\n"_expect);
+          
+          
+          draw.probability(0.1);
+          report = "+++| p ≔ 0.10     \n";
+          report += distribution(draw);
+          CHECK (report ==
+                "+++| p ≔ 0.10     \n"
+                "val:-2 (61| 3.12%)\n"
+                "val:-1 (63| 1.56%)\n"
+                "val:+0 (00|90.62%)\n"
+                "val:+1 (58| 3.12%)\n"
+                "val:+2 (60| 1.56%)\n"_expect);
         }
       
       
