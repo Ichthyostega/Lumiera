@@ -68,12 +68,12 @@
 #define LIB_RATIONAL_H
 
 
+#include "lib/util-quant.hpp"
+
 #include <cmath>
 #include <limits>
 #include <stdint.h>
 #include <boost/rational.hpp>
-
-#include "lib/util-quant.hpp"
 
 
 namespace util {
@@ -85,51 +85,6 @@ namespace util {
   // these are neither standard C++ nor POSIX, yet pretty much common place...
   using uchar = unsigned char;
   using uint  = unsigned int;
-  
-  
-  /**
-   * Integral binary logarithm (disregarding fractional part)
-   * @return index of the largest bit set in `num`; -1 for `num==0`
-   * @todo C++20 will provide `std::bit_width(i)` — run a microbenchmark!
-   * @remark The implementation uses an unrolled loop to break down the given number
-   *         in a logarithmic search, subtracting away the larger powers of 2 first.
-   *         Explained 10/2021 by user «[ToddLehman]» in this [stackoverflow].
-   * @note Microbenchmarks indicate that this function and `std::ilogb(double)` perform
-   *         in the same order of magnitude (which is surprising). This function gets
-   *         slightly faster for smaller data types. The naive bitshift-count implementation
-   *         is always significantly slower (8 times for int64_t, 1.6 times for int8_t)
-   * @see Rational_test::verify_intLog2()
-   * @see ZoomWindow_test
-   * 
-   * [ToddLehman]: https://stackoverflow.com/users/267551/todd-lehman
-   * [stackoverflow]: https://stackoverflow.com/a/24748637 "How to do an integer log2()"
-   */
-  template<typename I>
-  inline int
-  ilog2 (I num)
-  {
-    if (num <= 0)
-      return -1;
-    const I MAX_POW = sizeof(I)*CHAR_BIT - 1;
-    int logB{0};
-    auto remove_power = [&](I pow)
-                          {
-                            if (pow > MAX_POW) return;
-                            if (num >= I{1} << pow)
-                              {
-                                logB += pow;
-                                num >>= pow;
-                              }
-                          };
-    remove_power(32);
-    remove_power(16);
-    remove_power (8);
-    remove_power (4);
-    remove_power (2);
-    remove_power (1);
-    
-    return logB;
-  }
   
   
   inline bool
