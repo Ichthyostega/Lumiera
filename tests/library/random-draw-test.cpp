@@ -30,6 +30,7 @@
 #include "lib/test/run.hpp"
 //#include "lib/test/test-helper.hpp"
 #include "lib/random-draw.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/test/diagnostic-output.hpp"////////////////////TODO
 //#include "lib/util.hpp"
 
@@ -42,6 +43,8 @@ namespace test{
   
 //  using util::isSameObject;
 //  using std::rand;
+  using lib::time::FSecs;
+  using lib::time::TimeVar;
   
 //  namespace error = lumiera::error;
 //  using error::LUMIERA_ERROR_FATAL;
@@ -154,8 +157,21 @@ SHOW_EXPR (int(draw(256)));
       void
       verify_policy()
         {
-//          auto d1 = RandomDraw<random_draw::LimitedRandomGenerate<5>>().probability(1.0);
-//SHOW_EXPR (uint(d1()))
+          auto d1 = RandomDraw<random_draw::LimitedRandomGenerate<5>>().probability(1.0);
+          uint v1 = d1();
+          CHECK (0 < v1 and v1 <=5);
+          
+          struct SpecialPolicy
+            : function<Limited<char, 'Z','A'>(char,uint)>
+            {
+              static double defaultSrc (char b, uint off) { return fmod ((b-'A'+off)/double('Z'-'A'), 1.0); }
+            };
+            
+          auto d2 = RandomDraw<SpecialPolicy>().probability(1.0);
+          CHECK (d2('A', 2) == 'D');
+          CHECK (d2('M',10) == 'X');
+          CHECK (d2('Y', 0) == 'Z');
+          CHECK (d2('Y',15) == 'P');
         }
       
       

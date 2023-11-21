@@ -396,18 +396,16 @@ namespace wrapper {
   
   
   /**
-   * Extension of ItemWrapper: a function remembering
-   * the result of the last invocation. Initially, the "value"
-   * is bottom (undefined, NIL), until the function is invoked
-   * for the first time. After that, the result of the last
-   * invocation can be accessed by `operator* ()`
-   * 
-   * @note non-copyable. (removing this limitation would
-   *       require a much more expensive implementation,
-   *       by implementing operator() ourselves)
+   * Extension of ItemWrapper: a function remembering the result of the
+   * last invocation. Initially, the "value" is bottom (undefined, NIL),
+   * until the function is invoked for the first time. After that, the
+   * result of the last invocation can be accessed by `operator* ()`
+   * @note deliberately non-copyable, since we capture a reference
+   *       to `this` in order to write to the embedded ItemWrapper.
+   *       (to alleviate, we'd have to re-link after copying/moving)
    */
   template<typename SIG>
-  class FunctionResult
+  struct FunctionResult
     : public function<SIG>
     , util::NonCopyable
     {
@@ -416,43 +414,28 @@ namespace wrapper {
       
       ResWrapper lastResult_;
       
-      
-      Res
-      captureResult (Res res)
-        {
-          lastResult_ = res;
-          return res;
-        }
-      
     public:
-      /** default ctor yields an object
-       *  locked to \em invalid state */
-      FunctionResult () { }
+      /** by default locked to _invalid state_  */
+      FunctionResult()  = default;
       
-      /** Create result-remembering functor
-       *  by binding the given function. Explanation:
-       *  - `*this` is a _function_
-       *  - initially it is defined as invalid
-       *  - then we build the function composition of
-       *    the target function, and a function storing
-       *    the result value into the ResWrapper member
-       *  - define ourselves by assigning the resulting
-       *    composite function
+      /**
+       * Create result-remembering functor by outfitting a _copy_
+       * of the given function with an adaptor to _capture_ each
+       * produced result.
+       * @warning if function result is a value, it is copied.
        */
       template<typename FUN>
-      FunctionResult (FUN targetFunction)
-        {
-          using std::bind;
-          using std::placeholders::_1;
-          using lib::meta::func::chained;
-                                                      // note: binding "this" mandates noncopyable
-          function<Res(Res)> doCaptureResult  = bind (&FunctionResult::captureResult, this, _1 );
-          function<SIG> chainedWithResCapture = chained (targetFunction, doCaptureResult);
-          
-          function<SIG>::operator= (chainedWithResCapture); // define the function (baseclass)
-        }
+      FunctionResult (FUN&& targetFunction)
+        : function<SIG>{lib::meta::func::chained
+                            ( std::forward<FUN> (targetFunction)
+                            , [this](Res res) -> Res
+                                    {
+                                      lastResult_ = res;
+                                      return std::forward<Res> (res);
+                                    })}
+        { }
       
-      
+      /** retrieve the last function result observed */
       Res& operator*() const { return *lastResult_; }
       bool isValid ()  const { return lastResult_.isValid(); }
      

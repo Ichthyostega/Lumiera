@@ -644,123 +644,6 @@ namespace func{
   
   
   
-  
-  
-  
-  
-  namespace _composed { // repetitive impl.code for function composition
-    using std::bind;
-    using std::function;
-    using std::placeholders::_1;
-    using std::placeholders::_2;
-    using std::placeholders::_3;
-    using std::placeholders::_4;
-    using std::placeholders::_5;
-    using std::placeholders::_6;
-    using std::placeholders::_7;
-    using std::placeholders::_8;
-    using std::placeholders::_9;
-    
-    template<typename RES, typename F1, typename F2, uint n>
-    struct Build;
-    
-    template<typename RES, typename F1, typename F2>
-    struct Build<RES,F1,F2, 0 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1)); }
-      };
-    
-    template<typename RES, typename F1, typename F2>
-    struct Build<RES,F1,F2, 1 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1)); }
-      };
-    
-    template<typename RES, typename F1, typename F2>
-    struct Build<RES,F1,F2, 2 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2)); }
-      };
-    
-    template<typename RES, typename F1, typename F2>
-    struct Build<RES,F1,F2, 3 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3)); }
-      };
-    
-    template<typename RES, typename F1, typename F2>
-    struct Build<RES,F1,F2, 4 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4)); }
-      };
-    
-    template<typename RES, typename F1, typename F2>
-    struct Build<RES,F1,F2, 5 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5)); }
-      };
-    
-    template<typename RES, typename F1, typename F2>
-    struct Build<RES,F1,F2, 6 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5,_6)); }
-      };
-    
-    template<typename RES, typename F1, typename F2>
-    struct Build<RES,F1,F2, 7 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5,_6,_7)); }
-      };
-    
-    template<typename RES, typename F1, typename F2>
-    struct Build<RES,F1,F2, 8 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5,_6,_7,_8)); }
-      };
-    
-    template<typename RES, typename F1, typename F2>
-    struct Build<RES,F1,F2, 9 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5,_6,_7,_8,_9)); }
-      };
-  } // (End) impl namespace (_composed)
-  
-  
-  
-  /**
-   * Functional composition. Create a functor, which
-   * on invocation will execute two functions chained,
-   * i.e. fed the result of invoking the first function
-   * as argument into the second function.  
-   */
-  template<typename F1, typename RET>
-  class FunctionComposition
-    {
-      typedef typename _Fun<F1>::Args Args;
-      typedef typename _Fun<F1>::Ret  Ret1;
-      
-      typedef Types<Ret1> ArgsF2;
-      typedef typename FunctionTypedef<RET, ArgsF2>::Sig SigF2;
-      typedef typename FunctionTypedef<RET, Args>::Sig ChainedSig;
-      
-      enum { ARG_CNT = count<typename Args::List>::value };
-      
-      
-    public:
-      static function<ChainedSig>
-      chain (F1& f1, SigF2& f2)
-        {
-          return _composed::Build<ChainedSig,F1,SigF2, ARG_CNT>::func (f1,f2);
-        }
-      static function<ChainedSig>
-      chain (F1& f1, function<SigF2>& f2)
-        {
-          return _composed::Build<ChainedSig,F1,function<SigF2>, ARG_CNT>::func (f1,f2);
-        }
-    };
-  
-  
-  
   /**
    * Bind a specific argument to an arbitrary value.
    * Especially, this "value" might be another binder.
@@ -826,13 +709,13 @@ namespace func{
         typedef FunctionClosure<Signature> Type;
       };
     
-    template<typename SIG1, typename SIG2>
+    template<typename FUN1, typename FUN2>
     struct _Chain
       {
-        typedef typename _Fun<SIG1>::Args Args;
-        typedef typename _Fun<SIG2>::Ret  Ret;
-        typedef typename FunctionTypedef<Ret, Args>::Sig Chained;
-        typedef function<Chained> Function;
+        typedef typename _Fun<FUN1>::Args Args;
+        typedef typename _Fun<FUN2>::Ret  Ret;
+        typedef typename FunctionTypedef<Ret, Args>::Sig ChainedSig;
+        typedef function<ChainedSig> Functor;
       };
     
     template<typename SIG>
@@ -946,14 +829,21 @@ namespace func{
   }
   
   
-  /** build a functor chaining the given functions */
-  template<typename SIG1, typename SIG2>
-  inline
-  typename _Chain<SIG1,SIG2>::Function
-  chained (SIG1& f1, SIG2& f2)
+  /** build a functor chaining the given functions: feed the result of f1 into f2.
+   * @note the mathematical notation would be `chained ≔ f2 ∘f1`
+   */
+  template<typename FUN1, typename FUN2>
+  inline auto
+  chained (FUN1&& f1, FUN2&& f2)
   {
-    typedef typename _Chain<SIG1,SIG2>::Ret Ret;
-    return FunctionComposition<SIG1,Ret>::chain (f1, f2);
+    using Ret = typename _Chain<FUN1,FUN2>::Ret;
+    
+    return [functor1 = std::forward<FUN1> (f1)
+           ,functor2 = std::forward<FUN2> (f2)]
+           (auto&& ...args) -> Ret
+            {
+              return functor2 (functor1 (std::forward<decltype(args)> (args)...));
+            };
   }
   
   

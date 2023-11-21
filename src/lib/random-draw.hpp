@@ -52,6 +52,7 @@
 
 
 #include "lib/meta/function.hpp"
+#include "lib/meta/function-closure.hpp"
 #include "lib/util.hpp"
 
 #include <functional>
@@ -138,10 +139,11 @@ namespace lib {
           if (probability_ == 0.0 or val == 0.0)
             return Tar{0};
           double q = (1.0 - probability_);
+          auto org = Tar::minVal();
           val -= q;                          // [0 .. [q .. 1[
           val /= probability_;               // [0 .. 1[
-          val *= maxResult_;                 // [0 .. m[
-          val += 1;                          // [1 .. m]
+          val *= maxResult_ - org;           // [0 .. m[
+          val += org+1;                      // [1 .. m]
           val += CAP_EPSILON;                // round down yet absorb dust
           return Tar{val};
         }
@@ -154,6 +156,13 @@ namespace lib {
       asRand (size_t hash)
         {
           return double(hash % QUANTISER) / QUANTISER;
+        }
+      
+      /** @internal core operation: draw and quantise into limited value */
+      Tar
+      drawLimited (size_t hash)
+        {
+           return limited (asRand (hash));
         }
       
       
@@ -190,7 +199,7 @@ namespace lib {
         }
       
       RandomDraw&&
-      maxVal (uint m)
+      maxVal (Tar m)
         {
           maxResult_ = m;
           return move (*this);
@@ -228,33 +237,25 @@ namespace lib {
           static_assert (lib::meta::_Fun<FUN>(), "Need something function-like.");
           
           using Res = typename lib::meta::_Fun<FUN>::Ret;
+          using lib::meta::func::chained;
           
-          if constexpr (std::is_same_v<Res, Tar>)
+          if constexpr (std::is_same_v<Res, Tar>)//  ◁──────────────────────────┨ function produces result directly
             return std::forward<FUN>(fun);
           else
-          if constexpr (std::is_same_v<Res, size_t>)
-            return [functor=std::forward<FUN>(fun), this]
-                   (size_t rawHash)
-                      {
-                        size_t hash = functor(rawHash);
-                        double randomNum = asRand (hash);
-                        return limited (randomNum);
-                      };
+          if constexpr (std::is_same_v<Res, size_t>)//  ◁───────────────────────┨ function yields random source to draw value
+            return chained (std::forward<FUN>(fun)
+                           ,[this](size_t hash){ return drawLimited(hash); });
           else
-          if constexpr (std::is_same_v<Res, double>)
-            return [functor=std::forward<FUN>(fun), this]
-                   (size_t rawHash)
-                      {
-                        double randomNum = functor(rawHash);
-                        return limited (randomNum);
-                      };
+          if constexpr (std::is_same_v<Res, double>)//  ◁───────────────────────┨ function yields random value to be quantised
+            return chained (std::forward<FUN>(fun)
+                           ,[this](double rand){ return limited(rand); });
           else
-          if constexpr (std::is_same_v<Res, RandomDraw>)
+          if constexpr (std::is_same_v<Res, RandomDraw>)// ◁────────────────────┨ function yields parametrised RandomDraw to invoke
             return [functor=std::forward<FUN>(fun), this]
-                   (size_t rawHash)
-                      {
-                        RandomDraw parametricDraw = functor(rawHash);
-                        return parametricDraw (rawHash);
+                   (auto&& ...inArgs)
+                      {                              // invoke with copy
+                        RandomDraw parametricDraw = functor(inArgs...);
+                        return parametricDraw (forward<decltype(inArgs)> (inArgs)...);
                       };
           else
             static_assert (not sizeof(Res), "unable to adapt / handle result type");
