@@ -129,7 +129,7 @@ namespace test{
       
       
       /** @test TODO demonstrate a basic usage scenario
-       * @todo WIP 11/23 🔁 define ⟶ implement
+       * @todo WIP 11/23 ✔ define ⟶ 🔁 implement
        */
       void
       simpleUse()
@@ -152,7 +152,7 @@ SHOW_EXPR (int(draw(256)));
       
       
       /** @test TODO verify configuration through policy template
-       * @todo WIP 11/23 🔁 define ⟶ implement
+       * @todo WIP 11/23 🔁 define ⟶ 🔁 implement
        */
       void
       verify_policy()
