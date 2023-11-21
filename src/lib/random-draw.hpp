@@ -189,22 +189,22 @@ namespace lib {
               val *= maxResult_ - org;       // [0 .. m[
               val += org+1;                  // [1 .. m]
               val += CAP_EPSILON;            // round down yet absorb dust
-              return Tar{val};
+              return Tar{floor (val)};
             }
           else// Origin is somewhere within value range
             {//  ==> wrap "negative" part above max
             //       to map 0.0 ⟼ org (≙neutral)
               val *= maxResult_ - minResult_;
               val += org+1;                  // max inclusive but <0 ⟼ org
-              if (val > maxResult_)          // wrap the "negatives"
+              if (val >= maxResult_+1)       // wrap the "negatives"
                 val -= maxResult_+1 - minResult_;
               val += CAP_EPSILON;
-              return Tar{val};
+              return Tar{floor (val)};
             }
-        }
-      
-      static size_t constexpr QUANTISER  = 1 << 8;
+        }                             //----headroom to accommodate low probabilities        
+      static size_t constexpr QUANTISER   = 1 << 4 + util::ilog2 (Tar::maxVal()-Tar::minVal());
       static double constexpr CAP_EPSILON = 1/(2.0 * QUANTISER);
+      
       
       /** @internal draw from source of randomness */
       double

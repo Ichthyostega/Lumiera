@@ -55,7 +55,7 @@ namespace test{
 //    const Literal THE_END = "all dead and hero got the girl";
     
     struct SymmetricFive
-      : function<Limited<int, 5,-5>(size_t)>
+      : function<Limited<int, 5,-5,0>(size_t)>
       {
         static size_t defaultSrc (size_t hash) { return hash; }
         
@@ -136,9 +136,36 @@ namespace test{
         {
           auto draw = Draw().probability(0.5);
 SHOW_EXPR (int(draw(0)  ));
+SHOW_EXPR (int(draw(63 )));
+SHOW_EXPR (int(draw(64 )));
+SHOW_EXPR (int(draw(70 )));
+SHOW_EXPR (int(draw(72 )));
+SHOW_EXPR (int(draw(82 )));
+SHOW_EXPR (int(draw(83 )));
+SHOW_EXPR (int(draw(84 )));
+SHOW_EXPR (int(draw(85 )));
+SHOW_EXPR (int(draw(86 )));
+SHOW_EXPR (int(draw(87 )));
+SHOW_EXPR (int(draw(88 )));
+SHOW_EXPR (int(draw(89 )));
+SHOW_EXPR (int(draw(90 )));
+SHOW_EXPR (int(draw(91 )));
+SHOW_EXPR (int(draw(92 )));
+SHOW_EXPR (int(draw(93 )));
+SHOW_EXPR (int(draw(94 )));
+SHOW_EXPR (int(draw(95 )));
+SHOW_EXPR (int(draw(96 )));
+SHOW_EXPR (int(draw(97 )));
+SHOW_EXPR (int(draw(102)));
+SHOW_EXPR (int(draw(103)));
+SHOW_EXPR (int(draw(108)));
+SHOW_EXPR (int(draw(109)));
+SHOW_EXPR (int(draw(121)));
+SHOW_EXPR (int(draw(122)));
 SHOW_EXPR (int(draw(127)));
 SHOW_EXPR (int(draw(128)));
-SHOW_EXPR (int(draw(141)));
+SHOW_EXPR (int(draw(129)));
+SHOW_EXPR (int(draw(192)));
 SHOW_EXPR (int(draw(255)));
 SHOW_EXPR (int(draw(256)));
 //          CHECK (draw(0)   == 0);
