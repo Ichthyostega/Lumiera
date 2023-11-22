@@ -46,7 +46,9 @@ namespace test{
   
   
   namespace { // policy and configuration for test...
-    
+
+    double ctxParameter = 1.0;
+
     /**
      * @note the test uses a rather elaborate result value setting
      *     - produces five distinct values
@@ -67,28 +69,34 @@ namespace test{
             static_assert (not sizeof(SIG), "Unable to adapt given functor.");
           };
         
+        /** allow a mapping function rely on quantisation cycles */
         template<typename RES>
-        struct Adaptor<RES(size_t)>
-          {
-            template<typename FUN>
-            static decltype(auto)
-            build (FUN&& fun)
-              {
-                return std::forward<FUN>(fun);
-              }
-          };
-        
-        template<typename RES>
-        struct Adaptor<RES(void)>
+        struct Adaptor<RES(uint,uint)>
           {
             template<typename FUN>
             static auto
             build (FUN&& fun)
               {
                 return [functor=std::forward<FUN>(fun)]
-                       (size_t)
+                       (size_t hash)
                           {
-                            return functor();
+                            return functor(uint(hash/64), uint(hash%64));
+                          };
+              }
+          };
+        
+        /** inject external contextual state into a mapping function */
+        template<typename RES>
+        struct Adaptor<RES(size_t, double)>
+          {
+            template<typename FUN>
+            static auto
+            build (FUN&& fun)
+              {
+                return [functor=std::forward<FUN>(fun)]
+                       (size_t hash)
+                          {
+                            return functor(hash, ctxParameter);
                           };
               }
           };
@@ -123,7 +131,7 @@ namespace test{
           
           verify_policy();
           verify_numerics();
-          verify_buildProfile();
+          verify_adaptMapping();
           verify_dynamicChange();
         }
       
@@ -153,8 +161,8 @@ namespace test{
       
       
       
-      /** @test TODO verify configuration through policy template
-       * @todo WIP 11/23 🔁 define ⟶ 🔁 implement
+      /** @test verify configuration through policy template
+       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_policy()
@@ -549,13 +557,138 @@ namespace test{
       
       
       
-      /** @test TODO verify the Builder-API to define the profile of result values.
-       * @todo WIP 11/23 🔁 define ⟶ implement
+      /** @test bind custom mapping transformation functions.
+       *      - use different translation into positional values as input for the
+       *        actual result value mapping
+       *      - use a mapping function with different arguments, which is wired
+       *        by the appropriate Adapter from the Policy
+       *      - moreover, the concrete Policy may tap into the context, which is
+       *        demonstrated here by accessing a global variable. In practice,
+       *        this capability allows to accept custom types as data source.
+       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
-      verify_buildProfile()
+      verify_adaptMapping()
         {
-          UNIMPLEMENTED ("verify random number profile configuration");
+          // Note: no special Adapter required for the following function,
+          //       since it takes the same arguments as our RandomDraw (size_t);
+          //       moreover, since the function yields a double, the adapter scheme
+          //       concludes that this function wants to feed directly into the
+          //       primary mapping function RandomDraw::limited(double)
+          auto d1 = Draw([](size_t hash) -> double { return hash / 10.0; });
+          CHECK (d1( 0) == +1);
+          CHECK (d1( 1) == +1);
+          CHECK (d1( 2) == +1);
+          CHECK (d1( 3) == +2);
+          CHECK (d1( 4) == +2);
+          CHECK (d1( 5) == -2);
+          CHECK (d1( 6) == -2);
+          CHECK (d1( 7) == -2);
+          CHECK (d1( 8) == -1);
+          CHECK (d1( 9) == -1);
+          CHECK (d1(10) ==  0);
+          CHECK (d1(11) ==  0);
+          CHECK (d1(12) ==  0);
+          CHECK (d1(13) ==  0);
+          
+          d1.probability(0.4);
+          CHECK (d1( 0) ==  0);
+          CHECK (d1( 1) ==  0);
+          CHECK (d1( 2) ==  0);
+          CHECK (d1( 3) ==  0);
+          CHECK (d1( 4) ==  0);
+          CHECK (d1( 5) ==  0);
+          CHECK (d1( 6) == +1); // probability 0.4
+          CHECK (d1( 7) == +2);
+          CHECK (d1( 8) == -2);
+          CHECK (d1( 9) == -1);
+          CHECK (d1(10) ==  0);
+          
+          d1.minVal(-1).probability(0.7);
+          CHECK (d1( 0) ==  0);
+          CHECK (d1( 1) ==  0);
+          CHECK (d1( 2) ==  0);
+          CHECK (d1( 3) ==  0);
+          CHECK (d1( 4) == +1);
+          CHECK (d1( 5) == +1);
+          CHECK (d1( 6) == +2);
+          CHECK (d1( 7) == +2);
+          CHECK (d1( 8) == -1);
+          CHECK (d1( 9) == -1);
+          CHECK (d1(10) ==  0);
+          
+          // The next example demonstrates accepting special input arguments;
+          // as defined in the policy, this function will get the `(div, mod)`
+          // of the hash with modulus 64
+          auto d2 = Draw([](uint cycle, uint rem){ return double(rem) / ((cycle+1)*5); });
+          CHECK (d2( 0) == +1);
+          CHECK (d2( 1) == +1);
+          CHECK (d2( 2) == +2);
+          CHECK (d2( 3) == -2);
+          CHECK (d2( 4) == -1); // the first cycle is only 5 steps long (0+1)*5
+          CHECK (d2( 5) ==  0);
+          CHECK (d2( 6) ==  0);
+          CHECK (d2( 7) ==  0);
+          CHECK (d2( 8) ==  0);
+          CHECK (d2( 9) ==  0);
+          CHECK (d2(10) ==  0);
+          CHECK (d2(63) ==  0);
+          CHECK (d2(64) == +1); // the second cycle starts here...
+          CHECK (d2(65) == +1);
+          CHECK (d2(66) == +1);
+          CHECK (d2(67) == +2);
+          CHECK (d2(68) == +2);
+          CHECK (d2(69) == -2);
+          CHECK (d2(70) == -2);
+          CHECK (d2(71) == -2);
+          CHECK (d2(72) == -1);
+          CHECK (d2(73) == -1);
+          CHECK (d2(74) ==  0); // and is 10 steps long (same pattern as in the first example above)
+          CHECK (d2(75) ==  0);
+          
+          // The next example uses the other Adapter variant, which „sneaks in“ a context value
+          // Moreover, we can change the mapping function of an existing RandomDraw, as demonstrated here
+          d2.mapping([](size_t hash, double ctx){ return hash / ctx; });
+          
+          ctxParameter = 4.0;
+          CHECK (d2( 0) == +1);
+          CHECK (d2( 1) == +2);
+          CHECK (d2( 2) == -2);
+          CHECK (d2( 3) == -1); // cycle-length: 4
+          CHECK (d2( 4) ==  0);
+          CHECK (d2( 5) ==  0);
+          CHECK (d2( 6) ==  0);
+          CHECK (d2( 7) ==  0);
+          CHECK (d2( 8) ==  0);
+          CHECK (d2( 9) ==  0);
+          CHECK (d2(10) ==  0);
+          
+          ctxParameter = 8.0;
+          CHECK (d2( 0) == +1);
+          CHECK (d2( 1) == +1);
+          CHECK (d2( 2) == +2);
+          CHECK (d2( 3) == +2);
+          CHECK (d2( 4) == -2);
+          CHECK (d2( 5) == -2);
+          CHECK (d2( 6) == -1);
+          CHECK (d2( 7) == -1); // cycle-length: 8
+          CHECK (d2( 8) ==  0);
+          CHECK (d2( 9) ==  0);
+          CHECK (d2(10) ==  0);
+          
+          // and can of course dynamically tweak the mapping profile...
+          d2.maxVal(0).probability(0.5);
+          CHECK (d2( 0) ==  0);
+          CHECK (d2( 1) ==  0);
+          CHECK (d2( 2) ==  0);
+          CHECK (d2( 3) ==  0);
+          CHECK (d2( 4) == -2); // start here due to probability 0.5
+          CHECK (d2( 5) == -2);
+          CHECK (d2( 6) == -1);
+          CHECK (d2( 7) == -1); // cycle-length: 4
+          CHECK (d2( 8) ==  0);
+          CHECK (d2( 9) ==  0);
+          CHECK (d2(10) ==  0);
         }
       
       
@@ -567,6 +700,30 @@ namespace test{
       verify_dynamicChange()
         {
           UNIMPLEMENTED ("change the generation profile dynamically");
+SHOW_EXPR(int(d2( 0)));
+SHOW_EXPR(int(d2( 1)));
+SHOW_EXPR(int(d2( 2)));
+SHOW_EXPR(int(d2( 3)));
+SHOW_EXPR(int(d2( 4)));
+SHOW_EXPR(int(d2( 5)));
+SHOW_EXPR(int(d2( 6)));
+SHOW_EXPR(int(d2( 7)));
+SHOW_EXPR(int(d2( 8)));
+SHOW_EXPR(int(d2( 9)));
+SHOW_EXPR(int(d2(10)));
+SHOW_EXPR(int(d2(63)));
+SHOW_EXPR(int(d2(64)));
+SHOW_EXPR(int(d2(65)));
+SHOW_EXPR(int(d2(66)));
+SHOW_EXPR(int(d2(67)));
+SHOW_EXPR(int(d2(68)));
+SHOW_EXPR(int(d2(69)));
+SHOW_EXPR(int(d2(70)));
+SHOW_EXPR(int(d2(71)));
+SHOW_EXPR(int(d2(72)));
+SHOW_EXPR(int(d2(73)));
+SHOW_EXPR(int(d2(74)));
+SHOW_EXPR(int(d2(75)));
         }
     };
   

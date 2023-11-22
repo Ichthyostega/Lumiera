@@ -162,7 +162,8 @@ namespace lib {
   class RandomDraw
     : public POL
     {
-      using Fun = typename _Fun<POL>::Functor;
+      using Sig = typename _Fun<POL>::Sig;
+      using Fun = function<Sig>;
       using Tar = typename _Fun<POL>::Ret;
       
       Tar    maxResult_{Tar::maxVal()};      ///< maximum result val actually to produce < max
@@ -185,6 +186,8 @@ namespace lib {
           double q = (1.0 - probability_);
           if (val < q) // control probability of values ≠ neutral
             return Tar::zeroVal();
+          if (val > 1.0)
+            val = 1.0;
           val -= q;                          // [0 .. [q .. 1[
           val /= probability_;               // [0 .. 1[
           auto org = Tar::zeroVal();
@@ -239,7 +242,7 @@ namespace lib {
        * Drawing is _disabled_ by default, always yielding "zero"
        */
       RandomDraw()
-        : Fun{adaptOut(POL::defaultSrc)}
+        : POL{adaptOut(POL::defaultSrc)}
         { }
       
       /**
@@ -254,8 +257,8 @@ namespace lib {
        */
       template<class FUN>
       RandomDraw(FUN&& fun)
-        : probability_{1.0}
-        , Fun{adaptOut(adaptIn(std::forward<FUN> (fun)))}
+        : POL{adaptOut(adaptIn(std::forward<FUN> (fun)))}
+        , probability_{1.0}
         { }
       
       
@@ -290,7 +293,8 @@ namespace lib {
       RandomDraw&&
       mapping (FUN&& fun)
         {
-          Fun(*this) = adaptOut(adaptIn(std::forward<FUN> (fun)));
+          Fun& thisMapping = static_cast<Fun&> (*this);
+          thisMapping = adaptOut(adaptIn(std::forward<FUN> (fun)));
           return move (*this);
         }
       
@@ -305,12 +309,19 @@ namespace lib {
       decltype(auto)
       adaptIn (FUN&& fun)
         {
-          static_assert (lib::meta::_Fun<FUN>(), "Need something function-like.");
+          using _Fun = lib::meta::_Fun<FUN>;
+          static_assert (_Fun(), "Need something function-like.");
           
-          using Sig     = typename lib::meta::_Fun<FUN>::Sig;
+          using Sig     = typename _Fun::Sig;
+          using Args    = typename _Fun::Args;
+          using BaseIn  = typename lib::meta::_Fun<POL>::Args;
           using Adaptor = typename POL::template Adaptor<Sig>;
           
-          return Adaptor::build (forward<FUN> (fun));
+          if constexpr (std::is_same_v<Args, BaseIn>)
+             // function accepts same arguments as this RandomDraw
+            return forward<FUN> (fun); // pass-through directly
+          else
+            return Adaptor::build (forward<FUN> (fun));
         }
       
       /** @internal adapt output side of a given function, allowing to handle it's results
