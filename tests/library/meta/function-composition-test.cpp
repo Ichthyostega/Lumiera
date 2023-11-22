@@ -39,6 +39,8 @@ namespace meta {
 namespace test {
   
   using ::test::Test;
+  using lib::test::showType;
+  using lib::meta::_Fun;
   using func::applyFirst;
   using func::applyLast;
   using func::bindLast;
@@ -142,10 +144,12 @@ namespace test {
       virtual void
       run (Arg)
         {
-          check_diagnostics ();
-          check_partialApplication ();
-          check_functionalComposition ();
-          check_bindToArbitraryParameter ();
+          check_diagnostics();
+          check_partialApplication();
+          check_functionalComposition();
+          check_bindToArbitraryParameter();
+          
+          verify_referenceHandling();
         }
       
       
@@ -383,6 +387,52 @@ namespace test {
           CHECK (1+2+3+4+88 == f_bound_5 (_1_,_2_,_3_,_4_   ) );
         }
       
+      
+      /** @internal static function to pass as reference for test */
+      static long floorIt (float it) { return long(floor (it)); }
+      
+      
+      /** @test ensure reference types and arguments are handled properly */
+      void
+      verify_referenceHandling()
+        {
+          int   ii = 99;
+          float ff = 88;
+          auto fun = std::function{[](float& f, int& i, long l) -> double { return f + i + l; }};
+          auto& f1 = fun;
+          
+          // build chained and a partially applied functors
+          auto chain = func::chained(f1,floorIt);
+          auto pappl = func::applyFirst (f1, ff);
+          
+          using Sig1 = _Fun<decltype(f1)>::Sig;
+          using SigC = _Fun<decltype(chain)>::Sig;
+          using SigP = _Fun<decltype(pappl)>::Sig;
+          
+          CHECK (showType<Sig1>() == "double (float&, int&, long)"_expect);
+          CHECK (showType<SigC>() ==   "long (float&, int&, long)"_expect);
+          CHECK (showType<SigP>() ==         "double (int&, long)"_expect);
+          
+          CHECK (220 == f1   (ff,ii,33));
+          CHECK (220 == chain(ff,ii,33));
+          CHECK (220 == pappl(   ii,33));
+
+          // change original values to prove that references were
+          // passed and stored properly in the adapted functors
+          ii = 22;
+          ff = 42;
+          
+          CHECK ( 97 == f1   (ff,ii,33));
+          CHECK ( 97 == chain(ff,ii,33));
+          CHECK ( 97 == pappl(   ii,33));
+          
+          // can even exchange the actual function, since f1 was passed as reference
+          fun =  [](float& f, int& i, size_t s) -> double { return f - i - s; };
+          
+          CHECK (-13 == f1   (ff,ii,33));
+          CHECK (-13 == chain(ff,ii,33));
+          CHECK (-13 == pappl(   ii,33));
+        }
     };
   
   

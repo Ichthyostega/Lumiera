@@ -185,6 +185,29 @@ namespace meta{
   
   
   
+  /** abbreviation for referring to a function's return type */
+  template<typename FUN>
+  using _FunRet = typename _Fun<FUN>::Ret;
+  
+  namespace {
+    template<typename FUN>
+    struct _DetectSingleArgFunction
+      {
+        static_assert(_Fun<FUN>()           , "something funktion-like required");
+        static_assert(_Fun<FUN>::ARITY == 1 , "function with exactly one argument required");
+        
+        using Sig = typename _Fun<FUN>::Sig;
+        using Arg = typename _Fun<Sig>::Args::List::Head;
+      };
+  }
+  
+  /** abbreviation for referring to a function's single Argument type */
+  template<typename FUN>
+  using _FunArg = typename _DetectSingleArgFunction<FUN>::Arg;
+  
+  
+  
+  
   /**
    * Meta-function to check that some _function like_ entity
    * offers the expected signature
@@ -303,24 +326,28 @@ namespace meta{
    * @param ARGS a type sequence describing the arguments
    */                                  //////////////////////////////////////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic, then replace this by a single variadic template
   template<typename RET, typename ARGS>
-  struct FunctionTypedef;
+  struct BuildFunType;
   
   
   template< typename RET>
-  struct FunctionTypedef<RET, Types<> >
+  struct BuildFunType<RET, Types<> >
   {
-    typedef function<RET(void)> Func;
-    typedef          RET Sig();
+    using Sig = RET(void);
+    using Fun = _Fun<Sig>;
+    using Func = function<Sig>;
+    using Functor = Func;
   };
   
   
   template< typename RET
           , typename A1
           >
-  struct FunctionTypedef<RET, Types<A1>>
+  struct BuildFunType<RET, Types<A1>>
   {
-    typedef function<RET(A1)> Func;
-    typedef          RET Sig(A1);
+    using Sig = RET(A1);
+    using Fun = _Fun<Sig>;
+    using Func = function<Sig>;
+    using Functor = Func;
   };
   
   
@@ -328,10 +355,12 @@ namespace meta{
           , typename A1
           , typename A2
           >
-  struct FunctionTypedef<RET, Types<A1,A2>>
+  struct BuildFunType<RET, Types<A1,A2>>
   {
-    typedef function<RET(A1,A2)> Func;
-    typedef          RET Sig(A1,A2);
+    using Sig = RET(A1,A2);
+    using Fun = _Fun<Sig>;
+    using Func = function<Sig>;
+    using Functor = Func;
   };
   
   
@@ -340,10 +369,12 @@ namespace meta{
           , typename A2
           , typename A3
           >
-  struct FunctionTypedef<RET, Types<A1,A2,A3>>
+  struct BuildFunType<RET, Types<A1,A2,A3>>
   {
-    typedef function<RET(A1,A2,A3)> Func;
-    typedef          RET Sig(A1,A2,A3);
+    using Sig = RET(A1,A2,A3);
+    using Fun = _Fun<Sig>;
+    using Func = function<Sig>;
+    using Functor = Func;
   };
   
   
@@ -353,10 +384,12 @@ namespace meta{
           , typename A3
           , typename A4
           >
-  struct FunctionTypedef<RET, Types<A1,A2,A3,A4>>
+  struct BuildFunType<RET, Types<A1,A2,A3,A4>>
   {
-    typedef function<RET(A1,A2,A3,A4)> Func;
-    typedef          RET Sig(A1,A2,A3,A4);
+    using Sig = RET(A1,A2,A3,A4);
+    using Fun = _Fun<Sig>;
+    using Func = function<Sig>;
+    using Functor = Func;
   };
   
   
@@ -367,10 +400,12 @@ namespace meta{
           , typename A4
           , typename A5
           >
-  struct FunctionTypedef<RET, Types<A1,A2,A3,A4,A5>>
+  struct BuildFunType<RET, Types<A1,A2,A3,A4,A5>>
   {
-    typedef function<RET(A1,A2,A3,A4,A5)> Func;
-    typedef          RET Sig(A1,A2,A3,A4,A5);
+    using Sig = RET(A1,A2,A3,A4,A5);
+    using Fun = _Fun<Sig>;
+    using Func = function<Sig>;
+    using Functor = Func;
   };
   
   
@@ -382,10 +417,12 @@ namespace meta{
           , typename A5
           , typename A6
           >
-  struct FunctionTypedef<RET, Types<A1,A2,A3,A4,A5,A6>>
+  struct BuildFunType<RET, Types<A1,A2,A3,A4,A5,A6>>
   {
-    typedef function<RET(A1,A2,A3,A4,A5,A6)> Func;
-    typedef          RET Sig(A1,A2,A3,A4,A5,A6);
+    using Sig = RET(A1,A2,A3,A4,A5,A6);
+    using Fun = _Fun<Sig>;
+    using Func = function<Sig>;
+    using Functor = Func;
   };
   
   
@@ -398,10 +435,12 @@ namespace meta{
           , typename A6
           , typename A7
           >
-  struct FunctionTypedef<RET, Types<A1,A2,A3,A4,A5,A6,A7>>
+  struct BuildFunType<RET, Types<A1,A2,A3,A4,A5,A6,A7>>
   {
-    typedef function<RET(A1,A2,A3,A4,A5,A6,A7)> Func;
-    typedef          RET Sig(A1,A2,A3,A4,A5,A6,A7);
+    using Sig = RET(A1,A2,A3,A4,A5,A6,A7);
+    using Fun = _Fun<Sig>;
+    using Func = function<Sig>;
+    using Functor = Func;
   };
   
   
@@ -415,10 +454,12 @@ namespace meta{
           , typename A7
           , typename A8
           >
-  struct FunctionTypedef<RET, Types<A1,A2,A3,A4,A5,A6,A7,A8>>
+  struct BuildFunType<RET, Types<A1,A2,A3,A4,A5,A6,A7,A8>>
   {
-    typedef function<RET(A1,A2,A3,A4,A5,A6,A7,A8)> Func;
-    typedef          RET Sig(A1,A2,A3,A4,A5,A6,A7,A8);
+    using Sig = RET(A1,A2,A3,A4,A5,A6,A7,A8);
+    using Fun = _Fun<Sig>;
+    using Func = function<Sig>;
+    using Functor = Func;
   };
   
   
@@ -433,10 +474,12 @@ namespace meta{
           , typename A8
           , typename A9
           >
-  struct FunctionTypedef<RET, Types<A1,A2,A3,A4,A5,A6,A7,A8,A9>>
+  struct BuildFunType<RET, Types<A1,A2,A3,A4,A5,A6,A7,A8,A9>>
   {
-    typedef function<RET(A1,A2,A3,A4,A5,A6,A7,A8,A9)> Func;
-    typedef          RET Sig(A1,A2,A3,A4,A5,A6,A7,A8,A9);
+    using Sig = RET(A1,A2,A3,A4,A5,A6,A7,A8,A9);
+    using Fun = _Fun<Sig>;
+    using Func = function<Sig>;
+    using Functor = Func;
   };
   
   

@@ -61,7 +61,7 @@ namespace control {
   
   using std::function;
   
-  using lib::meta::FunctionTypedef;
+  using lib::meta::BuildFunType;
   using lib::meta::_Fun;
   using lib::meta::Types;
   using lib::meta::Append;
@@ -84,9 +84,9 @@ namespace control {
       using ExtendedArgs    = typename Types<ExtendedArglist>::Seq;
       
     public:
-      using OperateSig = typename FunctionTypedef<void, Args>::Sig;
-      using CaptureSig = typename FunctionTypedef<MEM,  Args>::Sig;
-      using UndoOp_Sig = typename FunctionTypedef<void, ExtendedArgs>::Sig;
+      using OperateSig = typename BuildFunType<void, Args>::Sig;
+      using CaptureSig = typename BuildFunType<MEM,  Args>::Sig;
+      using UndoOp_Sig = typename BuildFunType<void, ExtendedArgs>::Sig;
       using CmdArgs    = Args;
       using Memento    = MEM;
     };
@@ -124,9 +124,9 @@ namespace control {
           using ExtendedArglist = typename Append<ARG, Memento>::List;
           using ExtendedArgs    = typename Types<ExtendedArglist>::Seq;
           
-          using OperateSig = typename FunctionTypedef<void, ARG>::Sig;
-          using CaptureSig = typename FunctionTypedef<Ret,ARG>::Sig;
-          using UndoOp_Sig = typename FunctionTypedef<void, ExtendedArgs>::Sig;
+          using OperateSig = typename BuildFunType<void, ARG>::Sig;
+          using CaptureSig = typename BuildFunType<Ret,ARG>::Sig;
+          using UndoOp_Sig = typename BuildFunType<void, ExtendedArgs>::Sig;
         };
       /** Case2: defining the actual Undo function */
       template<typename ARG>
@@ -138,9 +138,9 @@ namespace control {
           using OperationArglist = typename SplitLast<Args>::List;
           using OperationArgs    = typename Types<OperationArglist>::Seq;
           
-          using OperateSig = typename FunctionTypedef<void, OperationArgs>::Sig;
-          using CaptureSig = typename FunctionTypedef<Ret,OperationArgs>::Sig;
-          using UndoOp_Sig = typename FunctionTypedef<void, ARG>::Sig;
+          using OperateSig = typename BuildFunType<void, OperationArgs>::Sig;
+          using CaptureSig = typename BuildFunType<Ret,OperationArgs>::Sig;
+          using UndoOp_Sig = typename BuildFunType<void, ARG>::Sig;
         };
       
     public:

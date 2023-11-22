@@ -149,7 +149,7 @@ namespace test {
           typedef Prepend<Num<1>, Args>::Seq NewArgs;               // manipulate the argument type(s)
           DISPLAY (NewArgs);
           
-          typedef FunctionTypedef<RetType,NewArgs>::Sig NewSig;  // re-build a new function signature
+          typedef BuildFunType<RetType,NewArgs>::Sig NewSig;     // re-build a new function signature
           
           NewSig& fun =  getNumberz<1,5,9>;                    //...which is compatible to an existing real function signature!
           
@@ -337,7 +337,7 @@ namespace test {
           
           // finally combine all techniques....
           using NumberzArg = Types<List2>::Seq;
-          using NumberzSig = FunctionTypedef<int,NumberzArg>::Sig;
+          using NumberzSig = BuildFunType<int,NumberzArg>::Sig;
           
           Tuple<NumberzArg> numberzTup (Num<5>(22), Num<6>(33), Num<7>(44));
           

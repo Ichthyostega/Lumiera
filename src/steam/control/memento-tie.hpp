@@ -72,7 +72,7 @@ namespace control {
    *  the undo and capture function, setting up the necessary bindings and closures for
    *  allowing them to cooperate behind the scenes to carry out the UNDO functionality.
    *  On construction, the UndoMutation functor retrieves the wired up functions,
-   *  storing them into generic containers (type erasure) for later invocation. 
+   *  storing them into generic containers (type erasure) for later invocation.
    *  
    *  More specifically, the \c captureFunction, which is expected to run immediately prior
    *  to the actual command operation, returns a \b memento value object (of unspecific type),
@@ -143,29 +143,27 @@ namespace control {
        *  @note similar to #getState(), the returned functor will throw
        *        when the state capturing wasn't yet invoked
        */
-      function<SIG> 
+      function<SIG>
       tieUndoFunc()
         {
           using std::bind;
           
           return bindLast( undo_           // getState() bound to last argument of undo(...)
                          , bind (&MementoTie::getState, this)
-                         ); 
+                         );
         }
       
       /** bind the capturing function to the internal memento store within this object.
        *  @return a functor, which on invocation will automatically store the return value
        *        of the capturing function (= the current memento value) into the field
-       *        #memento_ within this object 
+       *        #memento_ within this object
        */
       function<SIG>
       tieCaptureFunc()
         {
-          using std::placeholders::_1;
-          
-          function<void(MEM)> doCaptureMemento = bind (&MementoTie::capture, this, _1 );
-          
-          return chained(capture_, doCaptureMemento);
+          return chained(capture_
+                        ,[this](MEM const& mementoVal){ capture (mementoVal); }
+                        );
         }
       
       
@@ -183,7 +181,7 @@ namespace control {
       
       
       /** conversion to bool() yields true
-       *  if all functions are usable and 
+       *  if all functions are usable and
        *  memento state has been captured
        */
       explicit
@@ -203,7 +201,7 @@ namespace control {
       
     };
   
-
+  
   template<typename SIG, typename MEM>
   MementoTie<SIG,MEM>::operator std::string()  const
   {

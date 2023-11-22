@@ -35,7 +35,13 @@
  ** 
  ** @todo the implementation is able to handle partial application with N arguments,
  **       but currently we need just one argument, thus only this case was wrapped
- **       up into a convenient functions func::applyFirst and func::applyLast  
+ **       up into a convenient functions func::applyFirst and func::applyLast
+ ** @todo 11/23 these functor-utils were written at a time when support for handling
+ **       generic functions in C++ was woefully inadequate; at that time, we neither
+ **       had Lambda-support in the language, nor the ability to use variadic arguments.
+ **       Providing a one-shot function-style interface for this kind of manipulations
+ **       is still considered beneficial, and thus we should gradually modernise
+ **       the tools we want to retain...
  ** 
  ** @see control::CommandDef usage example
  ** @see function.hpp
@@ -50,6 +56,7 @@
 #include "lib/meta/tuple-helper.hpp"
 
 #include <functional>
+#include <utility>
 #include <tuple>
 
 
@@ -58,8 +65,10 @@ namespace lib {
 namespace meta{
 namespace func{
   
-  using std::function;
   using std::tuple;
+  using std::function;
+  using std::forward;
+  using std::move;
   
   
   
@@ -607,8 +616,8 @@ namespace func{
       
       
     public:
-      typedef function<typename FunctionTypedef<Ret,ArgsL>::Sig> LeftReducedFunc;
-      typedef function<typename FunctionTypedef<Ret,ArgsR>::Sig> RightReducedFunc;
+      typedef function<typename BuildFunType<Ret,ArgsL>::Sig> LeftReducedFunc;
+      typedef function<typename BuildFunType<Ret,ArgsR>::Sig> RightReducedFunc;
       
       
       /** do a partial function application, closing the first arguments<br/>
@@ -670,7 +679,7 @@ namespace func{
       using PreparedArgTypes = typename Types<PreparedArgs>::Seq;
       using RemainingArgs    = typename Types<ReducedArgs>::Seq;
       
-      using ReducedSig = typename FunctionTypedef<Ret,RemainingArgs>::Sig;
+      using ReducedSig = typename BuildFunType<Ret,RemainingArgs>::Sig;
       
       template<class SRC, class TAR, size_t i>
       using IdxSelector = typename PartiallyInitTuple<SRC, TAR, pos>::template IndexMapper<i>;
@@ -694,10 +703,12 @@ namespace func{
   
   namespace { // ...helpers for specifying types in function declarations....
     
+    using std::get;
+    
     template<typename RET, typename ARG>
     struct _Sig
       {
-        typedef typename FunctionTypedef<RET, ARG>::Sig Type;
+        typedef typename BuildFunType<RET, ARG>::Sig Type;
         typedef TupleApplicator<Type> Applicator;
       };
     
@@ -712,32 +723,92 @@ namespace func{
     template<typename FUN1, typename FUN2>
     struct _Chain
       {
-        typedef typename _Fun<FUN1>::Args Args;
-        typedef typename _Fun<FUN2>::Ret  Ret;
-        typedef typename FunctionTypedef<Ret, Args>::Sig ChainedSig;
-        typedef function<ChainedSig> Functor;
+        using Ret  = typename _Fun<FUN2>::Ret;
+        using Args = typename _Fun<FUN1>::Args;
+        
+        using FunType = typename BuildFunType<Ret,Args>::Fun;
+        static auto adaptedFunType() { return FunType{}; }
+        
+        
+        template<typename F1, typename F2
+                ,typename RET, typename... ARGS>
+        static auto
+        composedFunctions (F1&& f1, F2&& f2, _Fun<RET(ARGS...)>)
+          {
+            tuple<F1,F2> binding{forward<F1> (f1)
+                                ,forward<F2> (f2)
+                                };
+            return [binding = move(binding)]
+                   (ARGS ...args) mutable -> RET
+                      {
+                        auto& functor1 = get<0>(binding);
+                        auto& functor2 = get<1>(binding);
+                        //
+                        return functor2 (functor1 (forward<ARGS> (args)...));
+                      };
+          }
       };
     
-    template<typename SIG>
+    template<typename FUN>
     struct _PapS
       {
-        typedef typename _Fun<SIG>::Ret Ret;
-        typedef typename _Fun<SIG>::Args Args;
-        typedef typename Split<Args>::Head Arg;
-        typedef typename Split<Args>::Tail Rest;
-        typedef typename _Sig<Ret,Rest>::Type Signature;
-        typedef function<Signature> Function;
+        using Ret  = typename _Fun<FUN>::Ret;
+        using Args = typename _Fun<FUN>::Args;
+        using Arg  = typename Split<Args>::Head;
+        using Rest = typename Split<Args>::Tail;
+        
+        using FunType = typename BuildFunType<Ret,Rest>::Fun;
+        static auto adaptedFunType() { return FunType{}; }
+        
+        
+        template<typename F, typename A
+                ,typename RET, typename... ARGS>
+        static auto
+        bindFrontArg (F&& fun, A&& arg, _Fun<RET(ARGS...)>)
+          {
+            tuple<F,A> binding{forward<F> (fun)
+                              ,forward<A> (arg)
+                              };
+            return [binding = move(binding)]
+                   (ARGS ...args) mutable -> RET
+                      {
+                        auto& functor = get<0>(binding);
+                        //
+                        return functor ( forward<A> (get<1>(binding))
+                                       , forward<ARGS> (args)...);
+                      };
+          }
       };
     
-    template<typename SIG>
+    template<typename FUN>
     struct _PapE
       {
-        typedef typename _Fun<SIG>::Ret Ret;
-        typedef typename _Fun<SIG>::Args Args;
-        typedef typename Split<Args>::End Arg;
-        typedef typename Split<Args>::Prefix Rest;
-        typedef typename _Sig<Ret,Rest>::Type Signature;
-        typedef function<Signature> Function;
+        using Ret  = typename _Fun<FUN>::Ret;
+        using Args = typename _Fun<FUN>::Args;
+        using Arg  = typename Split<Args>::End;
+        using Rest = typename Split<Args>::Prefix;
+        
+        using FunType = typename BuildFunType<Ret,Rest>::Fun;
+        static auto adaptedFunType() { return FunType{}; }
+        
+        
+        template<typename F, typename A
+                ,typename RET, typename... ARGS>
+        static auto
+        bindBackArg (F&& fun, A&& arg, _Fun<RET(ARGS...)>)
+          {
+            tuple<F,A> binding{forward<F> (fun)
+                              ,forward<A> (arg)
+                              };
+            return [binding = move(binding)]
+                   (ARGS ...args) mutable -> RET
+                      {
+                        auto& functor = get<0>(binding);
+                        //
+                        return functor ( forward<ARGS> (args)...
+                                       , forward<A> (get<1>(binding)));
+                      };
+          }
       };
     
   } // (End) argument type shortcuts
@@ -761,7 +832,8 @@ namespace func{
   }
   
   
-  /** apply the given function to the argument tuple */
+  /** apply the given function to the argument tuple
+   * @deprecated 11/23 meanwhile provided by the standard lib! */
   template<typename SIG, typename...ARG>
   inline
   typename _Fun<SIG>::Ret
@@ -774,7 +846,7 @@ namespace func{
   
   /** close the given function over all arguments,
    *  using the values from the argument tuple.
-   *  @return a closure object, which can be 
+   *  @return a closure object, which can be
    *          invoked later to yield the
    *          function result. */
   template<typename SIG, typename...ARG>
@@ -788,29 +860,25 @@ namespace func{
   
   
   /** close the given function over the first argument */
-  template<typename SIG, typename ARG>
-  inline
-  typename _PapS<SIG>::Function
-  applyFirst (SIG& f, ARG arg)
+  template<typename FUN, typename ARG>
+  inline auto
+  applyFirst (FUN&& fun, ARG&& arg)
   {
-    typedef typename _PapS<SIG>::Arg ArgType;
-    typedef Types<ArgType>           ArgTypeSeq;
-    typedef Tuple<ArgTypeSeq>        ArgTuple;
-    ArgTuple val(arg);
-    return PApply<SIG,ArgTypeSeq>::bindFront (f, val);
+    static_assert (_Fun<FUN>(), "expect something function-like");
+    return _PapS<FUN>::bindFrontArg (forward<FUN> (fun)
+                                    ,forward<ARG> (arg)
+                                    ,_PapS<FUN>::adaptedFunType());
   }
   
   /** close the given function over the last argument */
-  template<typename SIG, typename ARG>
-  inline
-  typename _PapE<SIG>::Function
-  applyLast (SIG& f, ARG arg)
+  template<typename FUN, typename ARG>
+  inline auto
+  applyLast (FUN&& fun, ARG&& arg)
   {
-    typedef typename _PapE<SIG>::Arg ArgType;
-    typedef Types<ArgType>           ArgTypeSeq;
-    typedef Tuple<ArgTypeSeq>        ArgTuple;
-    ArgTuple val(arg);
-    return PApply<SIG,ArgTypeSeq>::bindBack (f, val);
+    static_assert (_Fun<FUN>(), "expect something function-like");
+    return _PapE<FUN>::bindBackArg (forward<FUN> (fun)
+                                   ,forward<ARG> (arg)
+                                   ,_PapE<FUN>::adaptedFunType());
   }
   
   
@@ -818,7 +886,7 @@ namespace func{
    *  which especially might be a (nested) binder... */
   template<typename SIG, typename TERM>
   inline
-  typename _PapE<SIG>::Function
+  typename _PapE<SIG>::FunType::Functor
   bindLast (SIG& f, TERM const& arg)
   {
     typedef Types<TERM>     ArgTypeSeq;
@@ -836,14 +904,12 @@ namespace func{
   inline auto
   chained (FUN1&& f1, FUN2&& f2)
   {
-    using Ret = typename _Chain<FUN1,FUN2>::Ret;
-    
-    return [functor1 = std::forward<FUN1> (f1)
-           ,functor2 = std::forward<FUN2> (f2)]
-           (auto&& ...args) -> Ret
-            {
-              return functor2 (functor1 (std::forward<decltype(args)> (args)...));
-            };
+    static_assert (_Fun<FUN1>(), "expect something function-like for function-1");
+    static_assert (_Fun<FUN2>(), "expect something function-like for function-2");
+    using Chain = _Chain<FUN1,FUN2>;
+    return Chain::composedFunctions (forward<FUN1> (f1)
+                                    ,forward<FUN2> (f2)
+                                    ,Chain::adaptedFunType());
   }
   
   

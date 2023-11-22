@@ -341,6 +341,7 @@ namespace lib {
           
           using Res = typename lib::meta::_Fun<FUN>::Ret;
           using lib::meta::func::chained;
+          using lib::meta::_FunRet;
           
           if constexpr (std::is_same_v<Res, Tar>)//  ◁──────────────────────────┨ function produces result directly
             return std::forward<FUN>(fun);
@@ -355,13 +356,13 @@ namespace lib {
                            ,[this](double rand){ return limited(rand); }
                            );
           else
-          if constexpr (std::is_same_v<Res, RandomDraw const&>)// ◁─────────────┨ function yields parametrised RandomDraw to invoke
+          if constexpr (std::is_same_v<Res, RandomDraw>)// ◁────────────────────┨ function yields parametrised RandomDraw to invoke
             return [functor=std::forward<FUN>(fun), this]
-                   (auto&& ...inArgs)
-                      {                                     // invoke with copy
-                        RandomDraw const& parametricDraw = functor(inArgs...);
+                   (auto&& ...inArgs) -> _FunRet<RandomDraw>
+                      {                              // invoke with copy
+                        RandomDraw parametricDraw = functor(inArgs...);
                         return parametricDraw (forward<decltype(inArgs)> (inArgs)...);
-                      };                                 //    forward arguments
+                      };                          //    forward arguments
           else
             static_assert (not sizeof(Res), "unable to adapt / handle result type");
           NOTREACHED("Handle based on return type");

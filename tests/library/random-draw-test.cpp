@@ -42,6 +42,7 @@ namespace test{
   using util::_Fmt;
   using lib::time::FSecs;
   using lib::time::TimeVar;
+  using lib::meta::_FunRet;
   
   
   
@@ -78,7 +79,7 @@ namespace test{
             build (FUN&& fun)
               {
                 return [functor=std::forward<FUN>(fun)]
-                       (size_t hash)
+                       (size_t hash) -> _FunRet<FUN>
                           {
                             return functor(uint(hash/64), uint(hash%64));
                           };
@@ -94,7 +95,7 @@ namespace test{
             build (FUN&& fun)
               {
                 return [functor=std::forward<FUN>(fun)]
-                       (size_t hash)
+                       (size_t hash) -> _FunRet<FUN>
                           {
                             return functor(hash, ctxParameter);
                           };
@@ -693,37 +694,90 @@ namespace test{
       
       
       
+      template<typename FUN, typename ARG, typename RET, typename... ARGS>
+      auto
+      _applyFirst (FUN&& fun, ARG&& arg, _Fun<RET(ARGS...)>)
+        {
+          std::tuple<FUN,ARG> binding{std::forward<FUN> (fun)
+                                     ,std::forward<ARG>(arg)
+                                     };
+          return [binding = std::move(binding)]
+                 (ARGS ...args) mutable -> RET
+                    {
+                      auto& functor = std::get<0> (binding);
+                      //
+                      return functor ( std::forward<ARG> (std::get<1> (binding))
+                                     , std::forward<ARGS> (args)...);
+                    };
+        }
+      
+      template<typename FUN, typename ARG>
+      auto
+      applyFirst (FUN&& fun, ARG&& arg)
+        {
+          using Ret    = typename lib::meta::_Fun<FUN>::Ret;
+          using AllArgs = typename lib::meta::_Fun<FUN>::Args;
+          using RestArgs = typename lib::meta::Split<AllArgs>::Tail;
+          using AdaptedFun = typename lib::meta::BuildFunType<Ret,RestArgs>::Fun;
+          
+          return _applyFirst( std::forward<FUN> (fun)
+                            , std::forward<ARG> (arg)
+                            , AdaptedFun{});
+        }
+      
       /** @test TODO change the generation profile dynamically
        * @todo WIP 11/23 🔁 define ⟶ implement
        */
       void
       verify_dynamicChange()
         {
-          UNIMPLEMENTED ("change the generation profile dynamically");
-SHOW_EXPR(int(d2( 0)));
-SHOW_EXPR(int(d2( 1)));
-SHOW_EXPR(int(d2( 2)));
-SHOW_EXPR(int(d2( 3)));
-SHOW_EXPR(int(d2( 4)));
-SHOW_EXPR(int(d2( 5)));
-SHOW_EXPR(int(d2( 6)));
-SHOW_EXPR(int(d2( 7)));
-SHOW_EXPR(int(d2( 8)));
-SHOW_EXPR(int(d2( 9)));
-SHOW_EXPR(int(d2(10)));
-SHOW_EXPR(int(d2(63)));
-SHOW_EXPR(int(d2(64)));
-SHOW_EXPR(int(d2(65)));
-SHOW_EXPR(int(d2(66)));
-SHOW_EXPR(int(d2(67)));
-SHOW_EXPR(int(d2(68)));
-SHOW_EXPR(int(d2(69)));
-SHOW_EXPR(int(d2(70)));
-SHOW_EXPR(int(d2(71)));
-SHOW_EXPR(int(d2(72)));
-SHOW_EXPR(int(d2(73)));
-SHOW_EXPR(int(d2(74)));
-SHOW_EXPR(int(d2(75)));
+//          auto d1 = Draw([](Draw& draw, uint cycle, uint){
+//              draw.probability(cycle*0.2); 
+//          });
+//          
+//SHOW_EXPR(int(d1(        0)));
+//SHOW_EXPR(int(d1(        1)));
+//SHOW_EXPR(int(d1(        2)));
+//SHOW_EXPR(int(d1(       16)));
+//SHOW_EXPR(int(d1(       32)));
+//SHOW_EXPR(int(d1(       48)));
+//SHOW_EXPR(int(d1(       63)));
+//SHOW_EXPR(int(d1(       64)));
+//SHOW_EXPR(int(d1(    64 +1)));
+//SHOW_EXPR(int(d1(    64 +2)));
+//SHOW_EXPR(int(d1(    64+16)));
+//SHOW_EXPR(int(d1(    64+32)));
+//SHOW_EXPR(int(d1(    64+48)));
+//SHOW_EXPR(int(d1(    64+64)));
+//SHOW_EXPR(int(d1(128   +16)));
+//SHOW_EXPR(int(d1(128   +32)));
+//SHOW_EXPR(int(d1(128   +48)));
+//SHOW_EXPR(int(d1(128   +64)));
+//SHOW_EXPR(int(d1(128+64+16)));
+//SHOW_EXPR(int(d1(128+64+32)));
+//SHOW_EXPR(int(d1(128+64+48)));
+//SHOW_EXPR(int(d1(128+64+64)));
+          int yy = 99;
+          float ff = 88;
+          auto fuK = std::function{[](float& f, int& i, size_t s) -> double { return f + i + s; }};
+          auto& f1 = fuK;
+          auto f2 = lib::meta::func::applyFirst(f1, ff);
+          using lib::meta::_Fun;
+          using Sig1 = _Fun<decltype(f1)>::Sig;
+          using Sig2 = _Fun<decltype(f2)>::Sig;
+          yy = 22;
+          ff = 42;
+SHOW_TYPE(Sig1)
+SHOW_TYPE(Sig2)
+SHOW_EXPR(f1 (ff,yy,33))
+SHOW_EXPR(f2 (   yy,33))
+SHOW_TYPE(decltype(f2 (   yy,33)))
+SHOW_TYPE(decltype(f2))
+          
+          fuK =  [](float& f, int& i, size_t s) -> double { return f * i * s; };
+          
+SHOW_EXPR(f1 (ff,yy,33))
+SHOW_EXPR(f2 (   yy,33))
         }
     };
   

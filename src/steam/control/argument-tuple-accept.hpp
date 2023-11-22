@@ -506,7 +506,7 @@ namespace control {
       {
         using Args = typename Types<TYPES...>::Seq;
         using Ret  = void;
-        using Sig  = typename FunctionTypedef<void, Args>::Sig;
+        using Sig  = typename BuildFunType<void, Args>::Sig;
         using ArgTuple = std::tuple<TYPES...>;
       };
   
