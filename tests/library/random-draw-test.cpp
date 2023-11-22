@@ -79,7 +79,7 @@ namespace test{
             build (FUN&& fun)
               {
                 return [functor=std::forward<FUN>(fun)]
-                       (size_t hash) -> _FunRet<FUN>
+                       (size_t hash) mutable -> _FunRet<FUN>
                           {
                             return functor(uint(hash/64), uint(hash%64));
                           };
@@ -731,53 +731,47 @@ namespace test{
       void
       verify_dynamicChange()
         {
-//          auto d1 = Draw([](Draw& draw, uint cycle, uint){
-//              draw.probability(cycle*0.2); 
-//          });
-//          
-//SHOW_EXPR(int(d1(        0)));
-//SHOW_EXPR(int(d1(        1)));
-//SHOW_EXPR(int(d1(        2)));
-//SHOW_EXPR(int(d1(       16)));
-//SHOW_EXPR(int(d1(       32)));
-//SHOW_EXPR(int(d1(       48)));
-//SHOW_EXPR(int(d1(       63)));
-//SHOW_EXPR(int(d1(       64)));
-//SHOW_EXPR(int(d1(    64 +1)));
-//SHOW_EXPR(int(d1(    64 +2)));
-//SHOW_EXPR(int(d1(    64+16)));
-//SHOW_EXPR(int(d1(    64+32)));
-//SHOW_EXPR(int(d1(    64+48)));
-//SHOW_EXPR(int(d1(    64+64)));
-//SHOW_EXPR(int(d1(128   +16)));
-//SHOW_EXPR(int(d1(128   +32)));
-//SHOW_EXPR(int(d1(128   +48)));
-//SHOW_EXPR(int(d1(128   +64)));
-//SHOW_EXPR(int(d1(128+64+16)));
-//SHOW_EXPR(int(d1(128+64+32)));
-//SHOW_EXPR(int(d1(128+64+48)));
-//SHOW_EXPR(int(d1(128+64+64)));
-          int yy = 99;
-          float ff = 88;
-          auto fuK = std::function{[](float& f, int& i, size_t s) -> double { return f + i + s; }};
-          auto& f1 = fuK;
-          auto f2 = lib::meta::func::applyFirst(f1, ff);
-          using lib::meta::_Fun;
-          using Sig1 = _Fun<decltype(f1)>::Sig;
-          using Sig2 = _Fun<decltype(f2)>::Sig;
-          yy = 22;
-          ff = 42;
-SHOW_TYPE(Sig1)
-SHOW_TYPE(Sig2)
-SHOW_EXPR(f1 (ff,yy,33))
-SHOW_EXPR(f2 (   yy,33))
-SHOW_TYPE(decltype(f2 (   yy,33)))
-SHOW_TYPE(decltype(f2))
+          auto d1 = Draw([](Draw& draw, uint cycle, uint){
+              draw.probability((cycle+1)*0.25); 
+          });
           
-          fuK =  [](float& f, int& i, size_t s) -> double { return f * i * s; };
-          
-SHOW_EXPR(f1 (ff,yy,33))
-SHOW_EXPR(f2 (   yy,33))
+SHOW_EXPR(int(d1(        0)));
+SHOW_EXPR(int(d1(        8)));
+SHOW_EXPR(int(d1(       16)));
+SHOW_EXPR(int(d1(       24)));
+SHOW_EXPR(int(d1(       32)));
+SHOW_EXPR(int(d1(       40)));
+SHOW_EXPR(int(d1(       48)));
+SHOW_EXPR(int(d1(       56)));
+SHOW_EXPR(int(d1(       63)));
+SHOW_EXPR(int(d1(    64 +0)));
+SHOW_EXPR(int(d1(    64 +8)));
+SHOW_EXPR(int(d1(    64+16)));
+SHOW_EXPR(int(d1(    64+24)));
+SHOW_EXPR(int(d1(    64+32)));
+SHOW_EXPR(int(d1(    64+40)));
+SHOW_EXPR(int(d1(    64+48)));
+SHOW_EXPR(int(d1(    64+56)));
+SHOW_EXPR(int(d1(    64+63)));
+SHOW_EXPR(int(d1(128    +0)));
+SHOW_EXPR(int(d1(128    +8)));
+SHOW_EXPR(int(d1(128   +16)));
+SHOW_EXPR(int(d1(128   +24)));
+SHOW_EXPR(int(d1(128   +32)));
+SHOW_EXPR(int(d1(128   +40)));
+SHOW_EXPR(int(d1(128   +48)));
+SHOW_EXPR(int(d1(128   +56)));
+SHOW_EXPR(int(d1(128   +63)));
+SHOW_EXPR(int(d1(128+64 +0)));
+SHOW_EXPR(int(d1(128+64 +8)));
+SHOW_EXPR(int(d1(128+64+16)));
+SHOW_EXPR(int(d1(128+64+24)));
+SHOW_EXPR(int(d1(128+64+32)));
+SHOW_EXPR(int(d1(128+64+40)));
+SHOW_EXPR(int(d1(128+64+48)));
+SHOW_EXPR(int(d1(128+64+56)));
+SHOW_EXPR(int(d1(128+64+63)));
+SHOW_EXPR(int(d1(128+64+64)));
         }
     };
   

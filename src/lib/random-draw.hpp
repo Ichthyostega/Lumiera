@@ -302,6 +302,15 @@ namespace lib {
       
       
     private:
+      template<class SIG>
+      struct is_Manipulator
+        : std::false_type { };
+      
+      template<typename...ARGS>
+      struct is_Manipulator<void(RandomDraw&, ARGS...)>
+        : std::true_type { };
+      
+      
       /** @internal adapt input side of a given function to conform to the
        *            global input arguments as defined in the Policy base function.
        *  @return a function pre-fitted with a suitable Adapter from the Policy */
@@ -309,6 +318,7 @@ namespace lib {
       decltype(auto)
       adaptIn (FUN&& fun)
         {
+          using lib::meta::func::applyFirst;
           using _Fun = lib::meta::_Fun<FUN>;
           static_assert (_Fun(), "Need something function-like.");
           
@@ -320,6 +330,10 @@ namespace lib {
           if constexpr (std::is_same_v<Args, BaseIn>)
              // function accepts same arguments as this RandomDraw
             return forward<FUN> (fun); // pass-through directly
+          else
+          if constexpr (is_Manipulator<Sig>())
+             // function wants to manipulate *this dynamically...
+            return adaptIn (applyFirst(forward<FUN> (fun), *this));
           else
             return Adaptor::build (forward<FUN> (fun));
         }
@@ -356,16 +370,35 @@ namespace lib {
                            ,[this](double rand){ return limited(rand); }
                            );
           else
-          if constexpr (std::is_same_v<Res, RandomDraw>)// ◁────────────────────┨ function yields parametrised RandomDraw to invoke
-            return [functor=std::forward<FUN>(fun), this]
-                   (auto&& ...inArgs) -> _FunRet<RandomDraw>
-                      {                              // invoke with copy
-                        RandomDraw parametricDraw = functor(inArgs...);
-                        return parametricDraw (forward<decltype(inArgs)> (inArgs)...);
-                      };                          //    forward arguments
+          if constexpr (std::is_same_v<Res, void>)  // ◁──────────────────────────┨ function manipulates parameters by side-effect
+            return [functor=std::forward<FUN>(fun)
+                   ,processDraw=getCurrMapping()]
+                   (auto&& ...inArgs) mutable -> _FunRet<RandomDraw>
+                      {
+                        functor(inArgs...);     //  invoke manipulator with copy
+                        return processDraw (forward<decltype(inArgs)> (inArgs)...);
+                      };                      //    forward arguments to *this
           else
             static_assert (not sizeof(Res), "unable to adapt / handle result type");
           NOTREACHED("Handle based on return type");
+        }
+      
+      
+      /** @internal capture the current mapping processing-chain as function. 
+       *   RandomDraw is-a function to process and map the input argument into a
+       *   limited and quantised output value. The actual chain can be re-configured.
+       *   This function picks up a snapshot copy of the current configuration; it is
+       *   used to build a chain of functions, which incorporates this current function.
+       *   If no function was configured yet, the default processing chain is returned.
+       */
+      Fun
+      getCurrMapping()
+        {
+          Fun& currentProcessingFunction = *this;
+          if (not currentProcessingFunction)
+            return Fun{adaptOut(POL::defaultSrc)};
+          else
+            return Fun{currentProcessingFunction};
         }
     };
   
