@@ -150,10 +150,12 @@ namespace lib {
   
   
   
+  
   /**********************************************************//**
    * A component and builder to draw limited parameter values
    * based on some source of randomness (or hash input).
    * Effectively this is a function which "draws" on invocation.
+   * Probabilities and ranges can be configured by builder API.
    * @tparam POL configuration policy baseclass
    */
   template<class POL>
@@ -165,7 +167,7 @@ namespace lib {
       
       Tar    maxResult_{Tar::maxVal()};      ///< maximum result val actually to produce < max
       Tar    minResult_{Tar::minVal()};      ///< minimum result val actually to produce > min
-      double probability_{0};                ///< probability that value is in [1 .. m]
+      double probability_{0};                ///< probability that value is in [min .. max] \ neutral
       
       
       /** @internal quantise into limited result value */
@@ -180,17 +182,26 @@ namespace lib {
           REQUIRE (minResult_ < maxResult_);
           REQUIRE (0.0 <= probability_);
           REQUIRE (probability_ <= 1.0);
-          auto org = util::max (Tar::zeroVal(), minResult_);
           double q = (1.0 - probability_);
           if (val < q) // control probability of values ≠ neutral
             return Tar::zeroVal();
           val -= q;                          // [0 .. [q .. 1[
           val /= probability_;               // [0 .. 1[
+          auto org = Tar::zeroVal();
           if  (org == minResult_)
             { // simple standard case
               val *= maxResult_ - org;       // [0 .. m[
               val += org+1;                  // [1 .. m]
               val += CAP_EPSILON;            // round down yet absorb dust
+              return Tar{floor (val)};
+            }
+          else
+          if (org < minResult_ or org > maxResult_)
+            { // disjoint form origin, but compact
+              org = minResult_;              // ensure all values covered
+              val *= maxResult_ - org + 1;   // [o .. m]
+              val += org;
+              val += CAP_EPSILON;
               return Tar{floor (val)};
             }
           else// Origin is somewhere within value range
@@ -253,14 +264,25 @@ namespace lib {
       RandomDraw&&
       probability (double p)
         {
-          probability_ = p;
+          probability_ = util::limited (0.0, p ,1.0);
           return move (*this);
         }
       
       RandomDraw&&
       maxVal (Tar m)
         {
-          maxResult_ = m;
+          maxResult_ = util::min (m, Tar::maxVal());
+          if (minResult_>=maxResult_)
+            minVal (--m);
+          return move (*this);
+        }
+      
+      RandomDraw&&
+      minVal (Tar m)
+        {
+          minResult_ = util::max (m, Tar::minVal());
+          if (maxResult_<=minResult_)
+            maxVal (++m);
           return move (*this);
         }
       
