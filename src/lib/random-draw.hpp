@@ -25,38 +25,39 @@
  ** Generally speaking, RandomDraw uses some suitable source of randomness to "draw" a result
  ** value with a limited target domain. The intended usage scenario is to parametrise some
  ** configuration or computation »randomly«, with well defined probabilities and value ranges.
- ** A DSL is provide to simplify the common configuration and value mapping scenarios.
+ ** A DSL is provided to simplify the common configuration and value mapping scenarios.
  ** @paragraph The underlying implementation was extracted 11/2023 from (and later used by)
  **     TestChainLoad; there, random numbers are derived from node hash values and must be mapped
  **     to yield control parameters governing the topology of a DAG datastructure. Notably, a
  **     draw is performed on each step to decide if the graph should fork. While numerically
  **     simple, this turned out to be rather error-prone, and resulting code is dense and
- **     difficult to understand, hence the desire to put a library component in front.
+ **     difficult to understand, hence the desire to wrap it into a library component.
  ** 
  ** # Implementation structure
  ** RandomDraw inherits from a _policy template_, which in turn is-a std::function. The signature
- ** of this function defines the input to work on; its output is assumed to be some variation of
- ** a [»limited value«](\ref Limited). Notably, results are assumed to conform to an ordered
+ ** of this function defines the input to work on; its output is assumed to be some variation
+ ** of a [»limited value«](\ref Limited). Notably, results are assumed to conform to an ordered
  ** interval of integral values. The [core functionality](\ref drawLimited) is to use the value
  ** from the random source (a `size_t` hash), break it down by some _modulus_ to create an arbitrary
- ** selection and then map this _drawn value_ into the target value range. This mapping however allows
- ** to discard some of the _possible drawn values_ — which equates to define a probability of producing
- ** a result different than "zero" (the neutral value of the result range). Moreover, the actual value
- ** mapping can be limited and configured even more within the confines of the target type.
+ ** selection, followed by mapping this _drawn value_ into the target value range. This mapping allows
+ ** to discard some of the _possible drawn values_ however — which equates to define a probability of
+ ** producing a result different than "zero" (the neutral value of the result range). Moreover, the
+ ** actual value mapping can be limited and configured within the confines of the target type.
  ** 
- ** Additional flexibility can be gained by _binding a functor_ thereby defining further mapping and
+ ** Additional flexibility can be gained by _binding a functor,_ thereby defining further mapping and
  ** transformations. A wide array of function signatures can be accepted, as long as it is possible
  ** somehow to _adapt_ those functions to conform to the overall scheme as defined by the Policy base.
  ** Such a mapping function can be given directly at construction, or it can be set up later through
- ** the configuration DSL. As a special twist, it is even possible to bind a function exposing a
- ** reference to some RandomDraw instance (which can be the host object itself). Since such a
- ** function can likewise accept the input randomness source, this setup opens the ability
- ** for dynamic parametrisation of the result probabilities.
+ ** the configuration DSL. As a special twist, it is even possible to bind a function to _manipulate_
+ ** the actual instance of RandomDraw dynamically. Such a function takes `RandomDraw&` as first
+ ** argument, plus any sequence of further arguments which can be adapted from the overall input;
+ ** it is invoked prior to evaluating each input value and can tweak the instance by side-effect.
+ ** After that, the input value is passed to the adapted instance.
  ** 
  ** ## Policy template
- ** For practical use, the RandomDraw template must be instantiate with a custom provided
+ ** For practical use, the RandomDraw template must be instantiated with a custom provided
  ** policy template. This configuration allows to attach to locally defined types and facilities.
- ** The policy template is assumed to conform to the following requirements
+ ** The policy template is assumed to conform to the following requirements:
  ** - its base type is std::function, with a result value similar to \ref Limited
  ** - more specifically, the result type must be number-like and expose extension points
  **   to determine the `minVal()`, `maxVal()` and `zeroVal()`
@@ -67,7 +68,7 @@
  ** - optionally, this policy may also define a template `Adaptor<Sig>`, possibly with
  **   specialisations for various function signatures. These adaptors are used to
  **   conform any mapping function and thus allow to simplify or widen the
- **   possibly configurations at usage site.
+ **   possible configurations at usage site.
  ** @todo 11/2023 This is a first draft and was extracted from an actual usage scenario.
  **   It remains to be seen if the scheme as defined is of any further use henceforth.
  ** @see RandomDraw_test
@@ -80,6 +81,8 @@
 #define LIB_RANDOM_DRAW_H
 
 
+#include "lib/error.h"
+#include "lib/nocopy.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "lib/util-quant.hpp"
@@ -90,6 +93,7 @@
 
 
 namespace lib {
+  namespace err = lumiera::error;
   
   using lib::meta::_Fun;
   using std::function;
@@ -103,6 +107,7 @@ namespace lib {
    * @tparam T underlying base type (number like)
    * @tparam max maximum allowed param value (inclusive)
    * @tparam max minimum allowed param value (inclusive) - defaults to "zero".
+   * @tparam zero the _neutral value_ in the value range
    */
   template<typename T, T max, T min =T(0), T zero =min>
   struct Limited
@@ -161,6 +166,7 @@ namespace lib {
   template<class POL>
   class RandomDraw
     : public POL
+    , util::MoveOnly
     {
       using Sig = typename _Fun<POL>::Sig;
       using Fun = function<Sig>;
@@ -169,6 +175,11 @@ namespace lib {
       Tar    maxResult_{Tar::maxVal()};      ///< maximum result val actually to produce < max
       Tar    minResult_{Tar::minVal()};      ///< minimum result val actually to produce > min
       double probability_{0};                ///< probability that value is in [min .. max] \ neutral
+      
+      /** due to function binding, this object
+       *  should actually be non-copyable,
+       *  which would defeat DLS use  */
+      bool   fixedLocation_{false};
       
       
       /** @internal quantise into limited result value */
@@ -246,20 +257,40 @@ namespace lib {
         { }
       
       /**
-       * Build a RandomDraw by adapting a value-processing function,
+       * Build a RandomDraw by attaching a value-processing function,
        * which is adapted to accept the nominal input type. The effect
-       * of the given function is determined by its output value
+       * of the given function is determined by its output value...
        * - `size_t`: the function output is used as source of randomness
        * - `double`: output is directly used as draw value `[0.0..1.0[`
-       * - `RandomDraw` : the function yields a parametrised instance,
-       *   which is directly used to produce the output, bypassing any
-       *   further local settings (#probability_, #maxResult_)
+       * - `void(RandomDraw&, ...)` : the function manipulates the current
+       *   instance, to control parameters dynamically, based on input.
        */
       template<class FUN>
       RandomDraw(FUN&& fun)
-        : POL{adaptOut(adaptIn(std::forward<FUN> (fun)))}
+        : POL{}
         , probability_{1.0}
-        { }
+        , fixedLocation_{true}  // prevent move-copy (function binds to *this)
+        {
+          mapping (forward<FUN> (fun));
+        }
+      
+      /**
+       * Object can be move-initialised, unless
+       * a custom processing function was installed.
+       */
+      RandomDraw(RandomDraw && rr)
+        : POL{adaptOut(POL::defaultSrc)}
+        , maxResult_{move(rr.maxResult_)}
+        , minResult_{move(rr.minResult_)}
+        , probability_{rr.probability_}
+        , fixedLocation_{rr.fixedLocation_}
+        {
+          if (fixedLocation_)
+            throw err::State{"RandomDraw was already configured with a processing function, "
+                             "which binds into a fixed object location. It can not be moved anymore."
+                            , err::LUMIERA_ERROR_LIFECYCLE};
+        }
+      
       
       
       /* ===== Builder API ===== */
@@ -295,6 +326,7 @@ namespace lib {
         {
           Fun& thisMapping = static_cast<Fun&> (*this);
           thisMapping = adaptOut(adaptIn(std::forward<FUN> (fun)));
+          fixedLocation_ = true; // function will bind to *this
           return move (*this);
         }
       
@@ -302,6 +334,7 @@ namespace lib {
       
       
     private:
+      /// metafunction: the given function wants to manipulate `*this` dynamically
       template<class SIG>
       struct is_Manipulator
         : std::false_type { };
@@ -311,11 +344,12 @@ namespace lib {
         : std::true_type { };
       
       
+      
       /** @internal adapt input side of a given function to conform to the
        *            global input arguments as defined in the Policy base function.
        *  @return a function pre-fitted with a suitable Adapter from the Policy */
       template<class FUN>
-      decltype(auto)
+      auto
       adaptIn (FUN&& fun)
         {
           using lib::meta::func::applyFirst;
@@ -333,7 +367,7 @@ namespace lib {
           else
           if constexpr (is_Manipulator<Sig>())
              // function wants to manipulate *this dynamically...
-            return adaptIn (applyFirst(forward<FUN> (fun), *this));
+            return adaptIn (applyFirst (forward<FUN> (fun), *this));
           else
             return Adaptor::build (forward<FUN> (fun));
         }
@@ -342,13 +376,13 @@ namespace lib {
        *   - a function producing the overall result-type is installed as-is
        *   - a `size_t` result is assumed be a hash and passed into #drawLimited
        *   - likewise a `double` is assumed to be already a random val to be #limited
-       *   - special treatment is given to a function which produces reference to some
-       *     `RandomDraw`; this allows to produce a dynamic parametrisation, which is
-       *     then invoked on the same input arguments to produce the result value.
+       *   - special treatment is given to a function with `void` result, which is assumed
+       *     to perform some manipulation on this RandomDraw instance by side-effect;
+       *     this allows to changes parameters dynamically, based on the input data.
        * @return adapted function which produces a result value of type #Tar
        */
       template<class FUN>
-      decltype(auto)
+      auto
       adaptOut (FUN&& fun)
         {
           static_assert (lib::meta::_Fun<FUN>(), "Need something function-like.");
@@ -365,26 +399,26 @@ namespace lib {
                            ,[this](size_t hash){ return drawLimited(hash); }
                            );
           else
-          if constexpr (std::is_same_v<Res, double>)//  ◁───────────────────────┨ function yields random value to be quantised
+          if constexpr (std::is_same_v<Res, double>)//  ◁───────────────────────┨ function yields mapping value to be quantised
             return chained (std::forward<FUN>(fun)
                            ,[this](double rand){ return limited(rand); }
                            );
           else
-          if constexpr (std::is_same_v<Res, void>)  // ◁──────────────────────────┨ function manipulates parameters by side-effect
+          if constexpr (std::is_same_v<Res, void>)  // ◁────────────────────────┨ function manipulates parameters by side-effect
             return [functor=std::forward<FUN>(fun)
                    ,processDraw=getCurrMapping()]
-                   (auto&& ...inArgs) mutable -> _FunRet<RandomDraw>
+                   (auto&& ...inArgs) -> _FunRet<RandomDraw>
                       {
                         functor(inArgs...);     //  invoke manipulator with copy
                         return processDraw (forward<decltype(inArgs)> (inArgs)...);
-                      };                      //    forward arguments to *this
+                      };                      //    forward arguments to mapping-fun
           else
             static_assert (not sizeof(Res), "unable to adapt / handle result type");
           NOTREACHED("Handle based on return type");
         }
       
       
-      /** @internal capture the current mapping processing-chain as function. 
+      /** @internal capture the current mapping processing-chain as function.
        *   RandomDraw is-a function to process and map the input argument into a
        *   limited and quantised output value. The actual chain can be re-configured.
        *   This function picks up a snapshot copy of the current configuration; it is
@@ -395,10 +429,10 @@ namespace lib {
       getCurrMapping()
         {
           Fun& currentProcessingFunction = *this;
-          if (not currentProcessingFunction)
-            return Fun{adaptOut(POL::defaultSrc)};
-          else
+          if (fixedLocation_ and currentProcessingFunction)
             return Fun{currentProcessingFunction};
+          else
+            return Fun{adaptOut(POL::defaultSrc)};
         }
     };
   

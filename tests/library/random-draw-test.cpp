@@ -28,9 +28,8 @@
 
 #include "lib/test/run.hpp"
 #include "lib/random-draw.hpp"
-#include "lib/time/timevalue.hpp"
-#include "lib/test/diagnostic-output.hpp"////////////////////TODO
 #include "lib/format-string.hpp"
+#include "lib/test/test-helper.hpp"
 
 #include <array>
 
@@ -40,9 +39,8 @@ namespace lib {
 namespace test{
   
   using util::_Fmt;
-  using lib::time::FSecs;
-  using lib::time::TimeVar;
   using lib::meta::_FunRet;
+  using err::LUMIERA_ERROR_LIFECYCLE;
   
   
   
@@ -79,7 +77,7 @@ namespace test{
             build (FUN&& fun)
               {
                 return [functor=std::forward<FUN>(fun)]
-                       (size_t hash) mutable -> _FunRet<FUN>
+                       (size_t hash) -> _FunRet<FUN>
                           {
                             return functor(uint(hash/64), uint(hash%64));
                           };
@@ -139,7 +137,6 @@ namespace test{
       
       
       /** @test demonstrate a basic usage scenario
-       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
       simpleUse()
@@ -151,8 +148,8 @@ namespace test{
           CHECK (draw( 40) ==  2);
           CHECK (draw( 48) == -2);
           CHECK (draw( 56) == -1);
-          CHECK (draw( 64) ==  0);
-          CHECK (draw( 95) ==  0);
+          CHECK (draw( 64) ==  0); // values repeat after 64 steps
+          CHECK (draw( 95) ==  0); // ~ half of each cycle yields the »neutral value«
           CHECK (draw( 96) ==  1);
           CHECK (draw(127) == -1);
           CHECK (draw(128) ==  0);
@@ -163,7 +160,15 @@ namespace test{
       
       
       /** @test verify configuration through policy template
-       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
+       *      - use the default policy, which takes no input values,
+       *        but rather directly generates a random number; in this
+       *        case here, input values are ∈ [0 .. 5]
+       *      - define another policy template, to produce char values,
+       *        while always requiring two input data values `(char,uint)`;
+       *        moreover, define the `defaultSrc()` directly to produce the
+       *        raw mapping values (double) using a custom formula; the
+       *        resulting RandomDraw instance is now a function with
+       *        two input arguments, producing char values.
        */
       void
       verify_policy()
@@ -177,7 +182,7 @@ namespace test{
             {
               static double defaultSrc (char b, uint off) { return fmod ((b-'A'+off)/double('Z'-'A'), 1.0); }
             };
-            
+          
           auto d2 = RandomDraw<SpecialPolicy>().probability(1.0);
           CHECK (d2('A', 2) == 'D');
           CHECK (d2('M',10) == 'X');
@@ -187,7 +192,7 @@ namespace test{
       
       
       
-      /** @test verify random number transformations
+      /** @test verify random number transformations.
        *      - use a Draw instance with result values `[-2..0..+2]`
        *      - values are evenly distributed within limits of quantisation
        *      - the probability parameter controls the amount of neutral results
@@ -196,13 +201,12 @@ namespace test{
        *      - probability defines the cases within [min..max] \ neutral
        *      - all other cases `q = 1 - p` will yield the neutral value
        *      - implausible max/min settings will be corrected automatically
-       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_numerics()
         {
           auto distribution = [](Draw const& draw)
-                  {
+                  { // investigate value distribution
                     using Arr = std::array<int,5>;
                     Arr step{-1,-1,-1,-1,-1};
                     Arr freq{0};
@@ -559,14 +563,13 @@ namespace test{
       
       
       /** @test bind custom mapping transformation functions.
-       *      - use different translation into positional values as input for the
-       *        actual result value mapping
-       *      - use a mapping function with different arguments, which is wired
-       *        by the appropriate Adapter from the Policy
+       *      - use different translation into positional values
+       *        as input for the actual result value mapping;
+       *      - use a mapping function with different arguments,
+       *        which is wired by the appropriate Adapter from the Policy;
        *      - moreover, the concrete Policy may tap into the context, which is
        *        demonstrated here by accessing a global variable. In practice,
        *        this capability allows to accept custom types as data source.
-       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_adaptMapping()
@@ -610,7 +613,7 @@ namespace test{
           CHECK (d1( 1) ==  0);
           CHECK (d1( 2) ==  0);
           CHECK (d1( 3) ==  0);
-          CHECK (d1( 4) == +1);
+          CHECK (d1( 4) == +1); // probability 0.7
           CHECK (d1( 5) == +1);
           CHECK (d1( 6) == +2);
           CHECK (d1( 7) == +2);
@@ -686,7 +689,7 @@ namespace test{
           CHECK (d2( 4) == -2); // start here due to probability 0.5
           CHECK (d2( 5) == -2);
           CHECK (d2( 6) == -1);
-          CHECK (d2( 7) == -1); // cycle-length: 4
+          CHECK (d2( 7) == -1); // cycle-length: 8
           CHECK (d2( 8) ==  0);
           CHECK (d2( 9) ==  0);
           CHECK (d2(10) ==  0);
@@ -694,84 +697,111 @@ namespace test{
       
       
       
-      template<typename FUN, typename ARG, typename RET, typename... ARGS>
-      auto
-      _applyFirst (FUN&& fun, ARG&& arg, _Fun<RET(ARGS...)>)
-        {
-          std::tuple<FUN,ARG> binding{std::forward<FUN> (fun)
-                                     ,std::forward<ARG>(arg)
-                                     };
-          return [binding = std::move(binding)]
-                 (ARGS ...args) mutable -> RET
-                    {
-                      auto& functor = std::get<0> (binding);
-                      //
-                      return functor ( std::forward<ARG> (std::get<1> (binding))
-                                     , std::forward<ARGS> (args)...);
-                    };
-        }
       
-      template<typename FUN, typename ARG>
-      auto
-      applyFirst (FUN&& fun, ARG&& arg)
-        {
-          using Ret    = typename lib::meta::_Fun<FUN>::Ret;
-          using AllArgs = typename lib::meta::_Fun<FUN>::Args;
-          using RestArgs = typename lib::meta::Split<AllArgs>::Tail;
-          using AdaptedFun = typename lib::meta::BuildFunType<Ret,RestArgs>::Fun;
-          
-          return _applyFirst( std::forward<FUN> (fun)
-                            , std::forward<ARG> (arg)
-                            , AdaptedFun{});
-        }
-      
-      /** @test TODO change the generation profile dynamically
-       * @todo WIP 11/23 🔁 define ⟶ implement
+      /** @test change the generation profile dynamically
+       *      - a »manipulator function« gets the current RandomDraw instance,
+       *        and any arguments that can generally be adapted for mapping functions;
+       *        it uses these arguments to manipulate the state before each new invocation;
+       *        in the example here, the probability is manipulated in each cycle.
+       *      - a »manipulator function« can be installed on top of any existing configuration,
+       *        including another custom mapping function; in the example here, we first install
+       *        a custom mapping for the hash values, to change the cycle to 4 steps only. Then,
+       *        in a second step, a »manipulator« is installed on top, this time accepting the
+       *        raw hash value and manipulating the minValue. After the manipulator was invoked,
+       *        the RandomDraw instance will be evaluated through the mapping-chain present
+       *        prior to installation of the »manipulator« — in this case, still the mapping
+       *        to change the cycle to 4 steps length; so in the result, the minValue is
+       *        increased in each cycle.
        */
       void
       verify_dynamicChange()
         {
-          auto d1 = Draw([](Draw& draw, uint cycle, uint){
-              draw.probability((cycle+1)*0.25); 
-          });
+          auto d1 = Draw([](Draw& draw, uint cycle, uint)
+                            {  // manipulate the probability
+                              draw.probability((cycle+1)*0.25);
+                            });
           
-SHOW_EXPR(int(d1(        0)));
-SHOW_EXPR(int(d1(        8)));
-SHOW_EXPR(int(d1(       16)));
-SHOW_EXPR(int(d1(       24)));
-SHOW_EXPR(int(d1(       32)));
-SHOW_EXPR(int(d1(       40)));
-SHOW_EXPR(int(d1(       48)));
-SHOW_EXPR(int(d1(       56)));
-SHOW_EXPR(int(d1(       63)));
-SHOW_EXPR(int(d1(    64 +0)));
-SHOW_EXPR(int(d1(    64 +8)));
-SHOW_EXPR(int(d1(    64+16)));
-SHOW_EXPR(int(d1(    64+24)));
-SHOW_EXPR(int(d1(    64+32)));
-SHOW_EXPR(int(d1(    64+40)));
-SHOW_EXPR(int(d1(    64+48)));
-SHOW_EXPR(int(d1(    64+56)));
-SHOW_EXPR(int(d1(    64+63)));
-SHOW_EXPR(int(d1(128    +0)));
-SHOW_EXPR(int(d1(128    +8)));
-SHOW_EXPR(int(d1(128   +16)));
-SHOW_EXPR(int(d1(128   +24)));
-SHOW_EXPR(int(d1(128   +32)));
-SHOW_EXPR(int(d1(128   +40)));
-SHOW_EXPR(int(d1(128   +48)));
-SHOW_EXPR(int(d1(128   +56)));
-SHOW_EXPR(int(d1(128   +63)));
-SHOW_EXPR(int(d1(128+64 +0)));
-SHOW_EXPR(int(d1(128+64 +8)));
-SHOW_EXPR(int(d1(128+64+16)));
-SHOW_EXPR(int(d1(128+64+24)));
-SHOW_EXPR(int(d1(128+64+32)));
-SHOW_EXPR(int(d1(128+64+40)));
-SHOW_EXPR(int(d1(128+64+48)));
-SHOW_EXPR(int(d1(128+64+56)));
-SHOW_EXPR(int(d1(128+64+63)));
-SHOW_EXPR(int(d1(128+64+64)));
+          CHECK (d1(        0) ==  0);
+          CHECK (d1(        8) ==  0);
+          CHECK (d1(       16) ==  0);
+          CHECK (d1(       24) ==  0);
+          CHECK (d1(       32) ==  0);
+          CHECK (d1(       40) ==  0);
+          CHECK (d1(       48) ==  1); // 1st cycle: 25% probability
+          CHECK (d1(       56) == -2);
+          CHECK (d1(       63) == -1);
+          CHECK (d1(    64 +0) ==  0);
+          CHECK (d1(    64 +8) ==  0);
+          CHECK (d1(    64+16) ==  0);
+          CHECK (d1(    64+24) ==  0);
+          CHECK (d1(    64+32) ==  1); // 2nd cycle: 50% probability
+          CHECK (d1(    64+40) ==  2);
+          CHECK (d1(    64+48) == -2);
+          CHECK (d1(    64+56) == -1);
+          CHECK (d1(    64+63) == -1);
+          CHECK (d1(128    +0) ==  0);
+          CHECK (d1(128    +8) ==  0);
+          CHECK (d1(128   +16) ==  1); // 3rd cycle: 75% probability
+          CHECK (d1(128   +24) ==  1);
+          CHECK (d1(128   +32) ==  2);
+          CHECK (d1(128   +40) == -2);
+          CHECK (d1(128   +48) == -2);
+          CHECK (d1(128   +56) == -1);
+          CHECK (d1(128   +63) == -1);
+          CHECK (d1(128+64 +0) ==  1); // 4rth cycle: 100% probability
+          CHECK (d1(128+64 +8) ==  1);
+          CHECK (d1(128+64+16) ==  2);
+          CHECK (d1(128+64+24) ==  2);
+          CHECK (d1(128+64+32) == -2);
+          CHECK (d1(128+64+40) == -2);
+          CHECK (d1(128+64+48) == -1);
+          CHECK (d1(128+64+56) == -1);
+          CHECK (d1(128+64+63) == -1);
+          CHECK (d1(128+64+64) ==  1);
+          
+          // NOTE: once a custom mapping function has been installed,
+          //       the object can no longer be moved, due to reference binding.
+          VERIFY_ERROR (LIFECYCLE, Draw dx{move(d1)} );
+          
+          
+          auto d2 = Draw([](size_t hash)
+                            {  // change cycle 4 steps only
+                              return fmod (hash/4.0, 1.0);
+                            });
+
+          CHECK (d2( 0) == +1); // 1st cycle
+          CHECK (d2( 1) == +2);
+          CHECK (d2( 2) == -2);
+          CHECK (d2( 3) == -1);
+          CHECK (d2( 4) == +1); // 2nd cycle
+          CHECK (d2( 5) == +2);
+          CHECK (d2( 6) == -2);
+          CHECK (d2( 7) == -1);
+          CHECK (d2( 8) == +1); // 3rd cycle
+          CHECK (d2( 9) == +2);
+          CHECK (d2(10) == -2);
+          CHECK (d2(11) == -1);
+          CHECK (d2(12) == +1);
+
+          d2.mapping([](Draw& draw, size_t hash)
+                            {  // manipulate the minVal per cycle
+                              int cycle = hash / 4;
+                              draw.minVal(-2+cycle);
+                            });
+          
+          CHECK (d2( 0) == +1); // 1st cycle -> minVal ≡ -2
+          CHECK (d2( 1) == +2);
+          CHECK (d2( 2) == -2);
+          CHECK (d2( 3) == -1);
+          CHECK (d2( 4) == +1); // 2nd cycle -> minVal ≡ -1
+          CHECK (d2( 5) == +1);
+          CHECK (d2( 6) == +2);
+          CHECK (d2( 7) == -1);
+          CHECK (d2( 8) == +1); // 3rd cycle -> minVal ≡ 0
+          CHECK (d2( 9) == +1);
+          CHECK (d2(10) == +2);
+          CHECK (d2(11) == +2);
+          CHECK (d2(12) == +1);
         }
     };
   

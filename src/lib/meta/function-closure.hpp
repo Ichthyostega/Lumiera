@@ -54,6 +54,7 @@
 
 #include "lib/meta/function.hpp"
 #include "lib/meta/tuple-helper.hpp"
+#include "lib/util.hpp"
 
 #include <functional>
 #include <utility>
@@ -556,6 +557,11 @@ namespace func{
    * @note the construction of this helper template does not verify or
    *       match types to the signature. In case of mismatch, you'll get
    *       a compilation failure from `std::bind` (which can be confusing)
+   * @todo 11/2023 started with modernising these functor utils.
+   *       The most relevant bindFirst() / bindLast() operations do no longer
+   *       rely on the PApply template.  There is however the more general case
+   *       of _binding multiple arguments,_ which is still used at a few places.
+   *       Possibly PApply should be rewritten from scratch, using modern tooling.
    */
   template<typename SIG, typename VAL>
   class PApply
@@ -704,6 +710,8 @@ namespace func{
   namespace { // ...helpers for specifying types in function declarations....
     
     using std::get;
+    using util::unConst;
+    
     
     template<typename RET, typename ARG>
     struct _Sig
@@ -739,7 +747,7 @@ namespace func{
                                 ,forward<F2> (f2)
                                 };
             return [binding = move(binding)]
-                   (ARGS ...args) mutable -> RET
+                   (ARGS ...args) -> RET
                       {
                         auto& functor1 = get<0>(binding);
                         auto& functor2 = get<1>(binding);
@@ -770,11 +778,11 @@ namespace func{
                               ,forward<A> (arg)
                               };
             return [binding = move(binding)]
-                   (ARGS ...args) mutable -> RET
+                   (ARGS ...args) -> RET
                       {
                         auto& functor = get<0>(binding);
-                        //
-                        return functor ( forward<A> (get<1>(binding))
+                        //                           //Warning: might corrupt ownership
+                        return functor ( forward<A> (unConst (get<1>(binding)))
                                        , forward<ARGS> (args)...);
                       };
           }
@@ -801,12 +809,12 @@ namespace func{
                               ,forward<A> (arg)
                               };
             return [binding = move(binding)]
-                   (ARGS ...args) mutable -> RET
+                   (ARGS ...args) -> RET
                       {
                         auto& functor = get<0>(binding);
                         //
                         return functor ( forward<ARGS> (args)...
-                                       , forward<A> (get<1>(binding)));
+                                       , forward<A> (unConst (get<1>(binding))));
                       };
           }
       };
@@ -859,7 +867,8 @@ namespace func{
   }
   
   
-  /** close the given function over the first argument */
+  /** close the given function over the first argument.
+   * @warning never tie an ownership-managing object by-value! */
   template<typename FUN, typename ARG>
   inline auto
   applyFirst (FUN&& fun, ARG&& arg)
