@@ -439,6 +439,10 @@ out-lit:         42
 END
 
 
+PLANNED "Lazy init of a functor" LazyInit_test <<END
+END
+
+
 TEST "configurable Factory" MultiFact_test <<END
 END
 
