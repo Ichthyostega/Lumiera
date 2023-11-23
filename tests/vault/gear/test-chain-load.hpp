@@ -87,6 +87,7 @@
 //#include "lib/wrapper.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/random-draw.hpp"
 #include "lib/dot-gen.hpp"
 #include "lib/util.hpp"
 
@@ -117,6 +118,8 @@ namespace test {
   using util::unConst;
   using util::toString;
   using util::showHashLSB;
+  using lib::meta::_FunRet;
+
 //  using std::forward;
 //  using std::string;
   using std::swap;
@@ -170,6 +173,7 @@ namespace test {
   
   /**
    * A Generator for synthetic Render Jobs for Scheduler load testing.
+   * Allocates a fixed set of #numNodes and generates connecting toplology.
    * @tparam maxFan maximal fan-in/out from a node, also limits maximal parallel strands.
    * @see TestChainLoad_test
    */
@@ -179,6 +183,7 @@ namespace test {
     {
           
     public:
+      /** Graph Data structure */
       struct Node
         : util::MoveOnly
         {
@@ -263,6 +268,16 @@ namespace test {
               return hash;
             }
         };
+        
+        
+        /** link Node.hash to random parameter generation */
+        class NodeControlBinding;
+        
+        /** Parameter values limited [0 .. maxFan] */
+        using Param = lib::Limited<size_t, maxFan>;
+        
+        /** Topology is governed by rules for random params */
+        using Rule = lib::RandomDraw<NodeControlBinding>;
       
     private:
       using NodeTab = typename Node::Tab;
@@ -474,6 +489,102 @@ namespace test {
         }
       
     private:
+    };
+  
+  
+  
+  /**
+   * Policy/Binding for generation of [random parameters](\ref TestChainLoad::Param)
+   * by [»drawing«](\ref random-draw.hpp) based on the [node-hash](\ref TestChainLoad::Node).
+   * Notably this policy template maps the ways to spell out [»Ctrl rules«](\ref TestChainLoad::Rule)
+   * to configure the probability profile of the topology parameters _seeding, expansion, reduction
+   * and pruning._ The RandomDraw component used to implement those rules provides a builder-DSL
+   * and accepts λ-bindings in various forms to influence mapping of Node hash into result parameters.
+   */
+  template<size_t numNodes, size_t maxFan>
+  class TestChainLoad<numNodes,maxFan>::NodeControlBinding
+    : protected std::function<Param(Node*)>
+    {
+      /** by default use Node-hash directly as source of randomness */
+      static size_t
+      defaultSrc (Node* node)
+        {
+          return node? node->hash:0;
+        }
+      
+      static size_t
+      level (Node* node)
+        {
+          return node? node->level:0;
+        }
+      
+      static double
+      guessHeight (size_t level)
+        {     // heuristic guess, typically too low
+          double expectedHeight = max (1u, numNodes/maxFan);
+          return level / expectedHeight;
+        }
+      
+      
+      
+      /** Adaptor to handle further mapping functions */
+      template<class SIG>
+      struct Adaptor
+        {
+          static_assert (not sizeof(SIG), "Unable to adapt given functor.");
+        };
+      
+      /** allow simple rules directly manipulating the hash value */
+      template<typename RES>
+      struct Adaptor<RES(size_t)>
+        {
+          template<typename FUN>
+          static auto
+          build (FUN&& fun)
+            {
+              return [functor=std::forward<FUN>(fun)]
+                     (Node* node) -> _FunRet<FUN>
+                        {
+                          return functor (defaultSrc (node));
+                        };
+            }
+        };
+      
+      /** allow rules additionally involving the height of the graph,
+       *  which also represents time. 1.0 refers to (guessed) _full height. */
+      template<typename RES>
+      struct Adaptor<RES(size_t,double)>
+        {
+          
+          template<typename FUN>
+          static auto
+          build (FUN&& fun)
+            {
+              return [functor=std::forward<FUN>(fun)]
+                     (Node* node) -> _FunRet<FUN>
+                        {
+                          return functor (defaultSrc (node)
+                                         ,guessHeight(level(node)));
+                        };
+            }
+        };
+      
+      /** rules may also build solely on the (guessed) height. */
+      template<typename RES>
+      struct Adaptor<RES(double)>
+        {
+          
+          template<typename FUN>
+          static auto
+          build (FUN&& fun)
+            {
+              return [functor=std::forward<FUN>(fun)]
+                     (Node* node) -> _FunRet<FUN>
+                        {
+                          return functor (guessHeight(level(node)));
+                        };
+            }
+        };
     };
   
   
