@@ -30,7 +30,9 @@
 #include "lib/lazy-init.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/test/test-helper.hpp"
+#include "lib/test/testdummy.hpp"
 #include "lib/test/diagnostic-output.hpp" /////////////////////TODO TODOH
+#include "lib/util.hpp"
 
 //#include <array>
 
@@ -40,6 +42,7 @@ namespace lib {
 namespace test{
   
 //  using util::_Fmt;
+  using util::isSameObject;
   using lib::meta::isFunMember;
 //  using lib::meta::_FunRet;
 //  using err::LUMIERA_ERROR_LIFECYCLE;
@@ -73,7 +76,7 @@ namespace test{
           simpleUse();
           
           verify_trojanLambda();
-          verify_inlineFunctorStorage();
+          verify_inlineStorage();
 //          verify_numerics();
 //          verify_adaptMapping();
 //          verify_dynamicChange();
@@ -161,8 +164,48 @@ namespace test{
       /** @test verify that std::function indeed stores a simple functor inline
        */
       void
-      verify_inlineFunctorStorage()
+      verify_inlineStorage()
         {
+          Dummy::checksum() = 0;
+          using DummyManager = std::shared_ptr<Dummy>;
+          
+          DummyManager dummy{new Dummy};
+          long currSum = Dummy::checksum();
+          CHECK (currSum > 0);
+          CHECK (currSum == dummy->getVal());
+          CHECK (1 == dummy.use_count());
+          {
+            // --- nested Scope ---
+            auto lambda = [dummy]{ return &dummy; };
+            CHECK (2 == dummy.use_count());
+            CHECK (currSum == Dummy::checksum());
+            
+            RawAddr location = lambda();
+            CHECK (location == &lambda);
+            
+            std::function funWrap{lambda};
+            CHECK (funWrap);
+            CHECK (not isSameObject (funWrap, lambda));
+            CHECK (3 == dummy.use_count());
+            CHECK (currSum == Dummy::checksum());
+            
+SHOW_EXPR(location)
+            location = funWrap();
+SHOW_EXPR(location)
+SHOW_EXPR(RawAddr(&funWrap))
+SHOW_EXPR(RawAddr(dummy.get()))
+
+            std::function fuckWrap{[location]{ return &location; }};
+            CHECK (fuckWrap);
+SHOW_EXPR(RawAddr(&location))
+SHOW_EXPR(RawAddr(fuckWrap()))
+SHOW_EXPR(RawAddr(&fuckWrap))
+          }
+          CHECK (1 == dummy.use_count());
+          CHECK (currSum == Dummy::checksum());
+          dummy.reset();
+          CHECK (0 == dummy.use_count());
+          CHECK (0 == Dummy::checksum());
         }
       
       
