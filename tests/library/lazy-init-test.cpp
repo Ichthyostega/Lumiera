@@ -40,6 +40,7 @@ namespace lib {
 namespace test{
   
 //  using util::_Fmt;
+  using lib::meta::isFunMember;
 //  using lib::meta::_FunRet;
 //  using err::LUMIERA_ERROR_LIFECYCLE;
   
@@ -71,6 +72,7 @@ namespace test{
         {
           simpleUse();
           
+          verify_trojanLambda();
           verify_inlineFunctorStorage();
 //          verify_numerics();
 //          verify_adaptMapping();
@@ -84,6 +86,74 @@ namespace test{
       void
       simpleUse()
         {
+        }
+      
+      
+      
+      /** @test verify construction of the »trap« front-end eventually to trigger initialisation
+       *      - this test does not involve any std::function, rather a heap-allocated copy of a λ
+       *      # the _target function_ finally to be invoked performs a verifiable computation
+       *      # the _delegate_ receives an memory location and returns a reference to the target
+       *      # the generated _»trojan λ«_ captures its own address, invokes the delegate,
+       *        retrieves a reference to a target functor, and invokes these with actual arguments.
+       * @remark the purpose of this convoluted scheme is for the _delegate to perform initialisation,_
+       *         taking into account the current memory location „sniffed“ by the trojan.
+       */
+      void
+      verify_trojanLambda()
+        {
+          size_t beacon;
+          auto fun = [&](uint challenge){ return beacon+challenge; };
+          
+          using Sig = size_t(uint);
+          CHECK (isFunMember<Sig> (&fun));
+          
+          beacon = rand();
+          uint c = beacon % 42;
+          // verify we can invoke the target function
+          CHECK (beacon+c == fun(c));
+
+          // verify we can also invoke the target function through a reference
+          using FunType = decltype(fun);
+          FunType& funRef = fun;
+          CHECK (beacon+c == funRef(c));
+          
+          // construct delegate function exposing the expected behaviour;
+          // additionally this function captures the passed-in address.
+          RawAddr location{nullptr};
+          auto delegate = [&](RawAddr adr) -> FunType&
+                            {
+                              location = adr;
+                              return fun;
+                            };
+          using Delegate = decltype(delegate);
+          Delegate *delP = new Delegate(delegate);
+          
+          // verify the heap-allocated copy of the delegate behaves as expected
+          location = nullptr;
+          CHECK (beacon+c == (*delP)(this)(c));
+          CHECK (location == this);
+          
+          // now (finally) build the »trap function«,
+          // taking ownership of the heap-allocated delegate copy
+          auto trojanLambda = TrojanFun<Sig>::generateTrap (delP);
+          CHECK (sizeof(trojanLambda) == 2*sizeof(size_t));
+          
+          // on invocation...
+          // - it captures its current location
+          // - passes this to the delegate
+          // - invokes the target function returned from the delegate
+          CHECK (beacon+c == trojanLambda(c));
+          CHECK (location == &trojanLambda);
+          
+          // repeat that with a copy, and changed beacon value
+          auto trojanClone = trojanLambda;
+          beacon = rand();
+          c = beacon % 55;
+          CHECK (beacon+c == trojanClone(c));
+          CHECK (location == &trojanClone);
+          CHECK (beacon+c == trojanLambda(c));
+          CHECK (location == &trojanLambda);
         }
       
       

@@ -81,16 +81,76 @@
 //#include "lib/util.hpp"
 
 //#include <functional>
-//#include <utility>
+#include <utility>
+#include <memory>
 
 
 namespace lib {
 //  namespace err = lumiera::error;
   
-//  using lib::meta::_Fun;
+  using lib::meta::_Fun;
+  using lib::meta::has_Sig;
 //  using std::function;
-//  using std::forward;
-//  using std::move;
+  using std::forward;
+  using std::move;
+  
+  using RawAddr = void const*;
+  
+  
+  /**
+   * »Trojan Function« builder.
+   * Generates a Lambda to invoke a delegate for the actual computation.
+   * On invocation, the current storage location of the λ is determined.
+   */
+  template<class SIG>
+  class TrojanFun
+    {
+      template<class DEL>
+      using Manager = std::shared_ptr<DEL>;
+      
+      template<class DEL, typename RET, typename... ARGS>
+      static auto
+      buildTrapActivator (Manager<DEL>&& managedDelegate, _Fun<RET(ARGS...)>)
+        {
+          return [chain = move(managedDelegate)]
+                 (ARGS ...args) -> RET
+                    {
+                      auto currLocation = &chain;
+                      auto& functor = (*chain) (currLocation);
+                      //
+                      return functor (forward<ARGS> (args)...);
+                    };
+        }
+    public:
+      
+      /**
+       * Invocation: build a Lambda to activate the »Trap«
+       * and then to forward the invocation to the actual
+       * function, which should have been initialised
+       * by the delegate invoked.
+       * @param delegate a functor object pass invocation;
+       *        the delegate must return a reference to the
+       *        actual function implementation to invoke.
+       *        Must be heap-allocated.
+       * @return a lightweight lambda usable as trigger.
+       * @note takes ownership of the delegate
+       */
+      template<class DEL>
+      static auto
+      generateTrap (DEL* delegate)
+        {
+          static_assert (_Fun<DEL>(), "Delegate must be function-like");
+          using Ret = typename _Fun<DEL>::Ret;
+          static_assert (_Fun<Ret>(), "Result from invoking delegate must also be function-like");
+          static_assert (has_Sig<Ret, SIG>(), "Result from delegate must expose target signature");
+          
+          REQUIRE (delegate);
+          
+          return buildTrapActivator (Manager<DEL>{delegate}, _Fun<SIG>());
+        }
+    };
+  
+  
   
   /**
    * 
