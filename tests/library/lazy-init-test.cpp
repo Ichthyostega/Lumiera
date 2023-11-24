@@ -73,22 +73,11 @@ namespace test{
       void
       run (Arg)
         {
-          simpleUse();
-          
           verify_trojanLambda();
           verify_inlineStorage();
-//          verify_numerics();
-//          verify_adaptMapping();
-//          verify_dynamicChange();
-        }
-      
-      
-      
-      /** @test demonstrate a basic usage scenario
-       */
-      void
-      simpleUse()
-        {
+          verify_TargetRelocation();
+          verify_triggerMechanism();
+          verify_lazyInitialisation();
         }
       
       
@@ -203,6 +192,112 @@ namespace test{
       
       
       
+      /** @test verify navigating an object structure
+       *        by applying known offsets consecutively
+       *        from a starting point within an remote instance
+       * @remark in the real usage scenario, we know _only_ the offset
+       *        and and attempt to find home without knowing the layout.
+       */
+      void
+      verify_TargetRelocation()
+        {
+          struct Nested
+            {
+              int unrelated{rand()};
+              int anchor{rand()};
+            };
+          struct Demo
+            {
+              Nested nested;
+              virtual ~Demo(){ };
+              virtual RawAddr peek()
+                {
+                  return &nested.anchor;
+                }
+            };
+          
+          // find out generic offset...
+          const ptrdiff_t offNested = []{
+                                         Nested probe;
+                                         return captureRawAddrOffset(&probe, &probe.anchor);
+                                        }();
+          Demo here;
+          // find out actual offset in existing object
+          const ptrdiff_t offBase = captureRawAddrOffset(&here, &here.nested);
+          
+          CHECK (offBase > 0);
+          CHECK (offNested > 0);
+          
+          // create a copy far far away...
+          auto farAway = std::make_unique<Demo> (here);
+          
+          // reconstruct base address from starting point
+          RawAddr startPoint = farAway->peek();
+          Nested* farNested = relocate<Nested>(startPoint, -offNested);
+          CHECK (here.nested.unrelated == farNested->unrelated);
+
+          Demo* farSelf = relocate<Demo> (farNested, -offBase);
+          CHECK (here.nested.anchor == farSelf->nested.anchor);
+          CHECK (isSameObject (*farSelf, *farAway));
+        }
+      
+      
+      
+      /** @test demonstrate the trigger mechanism in isolation
+       */
+      void
+      verify_triggerMechanism()
+        {
+          using Fun = std::function<float(int)>;
+          Fun theFun;
+          CHECK (not theFun);
+          
+          int report{0};
+          auto delegate = [&report](RawAddr insideFun) -> Fun&
+                              {
+                                auto realFun = [&report](int num)
+                                                          {
+                                                            report += num;
+                                                            return num + 23.55f;
+                                                          };
+                                Fun& target = *relocate<Fun>(insideFun, -FUNCTOR_PAYLOAD_OFFSET);
+                                report = -42; // as proof that the init-delegate was invoked
+                                target = realFun;
+                                return target;
+                              };
+          CHECK (not theFun);
+          // install the init-»trap«
+          theFun = TrojanFun<float(int)>::generateTrap (&delegate);
+          CHECK (theFun);
+          CHECK (0 == report);
+          
+          // invoke function
+          int feed{1+rand()%100};
+          float res = theFun (feed);
+          
+          // delegate *and* realFun were invoked
+          CHECK (feed == report + 42);
+          CHECK (res = feed -42 +23.55f);
+          
+          // again...
+          report = 0;
+          feed = -1-rand()%20;
+          res = theFun (feed);
+          
+          // this time the delegate was *not* invoked,
+          // only the installed realFun
+          CHECK (feed == report);
+          CHECK (res = feed + 23.55f);
+        }
+      
+      
+      
+      /** @test demonstrate a basic usage scenario
+       */
+      void
+      verify_lazyInitialisation()
+        {
+        }
     };
   
   

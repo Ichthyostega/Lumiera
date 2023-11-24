@@ -117,7 +117,7 @@ namespace lib {
       char* anchorAddr = reinterpret_cast<char*> (unConst(anchor));
       char* adjusted   = anchorAddr + offset;
       void* rawTarget  = reinterpret_cast<void*> (adjusted);
-      return static_cast<TAR*> (adjusted);
+      return static_cast<TAR*> (rawTarget);
     }
     
     
@@ -129,7 +129,7 @@ namespace lib {
      *          exploited as a trick to allow for automatic late initialisation
      *          in a situation, were a functor needs to capture references.
      */
-    const ptrdiff_t PAYLOAD_OFFSET =
+    const ptrdiff_t FUNCTOR_PAYLOAD_OFFSET =
       []{
           size_t slot{42};
           std::function<RawAddr(void)> probe = [slot]{ return RawAddr(&slot); };
@@ -273,6 +273,14 @@ namespace lib {
       
       
       template<class SIG>
+      void
+      installEmptyInitialiser()
+        {
+          pendingInit_.reset (new HeapStorage{emptyInitialiser<SIG>()});
+        }
+      
+    private:
+      template<class SIG>
       DelegateType<SIG>
       emptyInitialiser()
         {
@@ -282,40 +290,6 @@ namespace lib {
                                      {
                                        return disabledFunctor;
                                      });
-        }
-      template<class SIG>
-      void
-      installEmptyInitialiser()
-        {
-          pendingInit_.reset (new HeapStorage{emptyInitialiser<SIG>()});
-        }
-      
-      
-    private:
-      template<class SIG, class INI>
-      DelegateType<SIG>
-      buildInitialiserDelegate (std::function<SIG>& targetFunctor, INI&& initialiser)
-        {
-          using TargetFun = std::function<SIG>;
-          return DelegateType<SIG>{
-                     [performInit = forward<INI> (initialiser)
-                     ,targetOffset = captureRawAddrOffset (this, &targetFunctor)]
-                     (RawAddr location) -> TargetFun&
-                        {// apply known offset backwards to find current location of the host object
-                          TargetFun* target = relocate<TargetFun> (location, -PAYLOAD_OFFSET);
-                          LazyInit* self = relocate<LazyInit> (target, -targetOffset);
-                          REQUIRE (self);
-                          performInit (self);
-                          self->pendingInit_.reset();
-                          return *target;
-                        }};
-        }
-      
-      template<class SIG>
-      DelegateType<SIG>*
-      getPointerToDelegate(HeapStorage& buffer)
-        {
-          return reinterpret_cast<DelegateType<SIG>*> (&buffer);
         }
       
       template<class SIG, class INI>
@@ -328,6 +302,32 @@ namespace lib {
            // place a »Trojan« into the target functor to trigger initialisation on invocation...
           targetFunctor = TrojanFun<SIG>::generateTrap (getPointerToDelegate<SIG> (*storageHandle));
           return storageHandle;
+        }
+      
+      template<class SIG>
+      DelegateType<SIG>*
+      getPointerToDelegate(HeapStorage& buffer)
+        {
+          return reinterpret_cast<DelegateType<SIG>*> (&buffer);
+        }
+      
+      template<class SIG, class INI>
+      DelegateType<SIG>
+      buildInitialiserDelegate (std::function<SIG>& targetFunctor, INI&& initialiser)
+        {
+          using TargetFun = std::function<SIG>;
+          return DelegateType<SIG>{
+                     [performInit = forward<INI> (initialiser)
+                     ,targetOffset = captureRawAddrOffset (this, &targetFunctor)]
+                     (RawAddr location) -> TargetFun&
+                        {// apply known offset backwards to find current location of the host object
+                          TargetFun* target = relocate<TargetFun> (location, -FUNCTOR_PAYLOAD_OFFSET);
+                          LazyInit* self = relocate<LazyInit> (target, -targetOffset);
+                          REQUIRE (self);
+                          performInit (self);
+                          self->pendingInit_.reset();
+                          return *target;
+                        }};
         }
     };
   
