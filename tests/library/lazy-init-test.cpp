@@ -30,7 +30,7 @@
 #include "lib/lazy-init.hpp"
 //#include "lib/format-string.hpp"
 //#include "lib/test/test-helper.hpp"
-#include "lib/test/testdummy.hpp"
+//#include "lib/test/testdummy.hpp"
 #include "lib/test/diagnostic-output.hpp" /////////////////////TODO TODOH
 #include "lib/util.hpp"
 
@@ -140,7 +140,7 @@ namespace test{
           // now (finally) build the »trap function«,
           // taking ownership of the heap-allocated delegate copy
           auto trojanLambda = TrojanFun<Sig>::generateTrap (delP);
-          CHECK (sizeof(trojanLambda) == 2*sizeof(size_t));
+          CHECK (sizeof(trojanLambda) == sizeof(size_t));
           
           // on invocation...
           // - it captures its current location
@@ -162,50 +162,43 @@ namespace test{
       
       
       /** @test verify that std::function indeed stores a simple functor inline
+       * @remark The implementation of LazyInit relies crucially on a known optimisation
+       *         in the standard library ─ which unfortunately is not guaranteed by the standard:
+       *         Typically, std::function will apply _small object optimisation_ to place a very
+       *         small functor directly into the wrapper, if the payload has a trivial copy-ctor.
+       *         Libstdc++ is known to be rather restrictive, other implementations trade increased
+       *         storage size of std::function against more optimisation possibilities.
+       *         LazyInit exploits this optimisation to „spy“ about the current object location,
+       *         to allow executing the lazy initialisation on first use, without further help
+       *         by client code. This trickery seems to be the only way, since λ-capture by reference
+       *         is broken after copying or moving the host object (which is required for DSL use).
+       *         In case this turns out to be fragile, LazyInit should become a "LateInit" and needs
+       *         help by the client or the user to trigger initialisation; alternatively the DSL
+       *         could be split off into a separate builder object distinct from RandomDraw.
        */
       void
       verify_inlineStorage()
         {
-          Dummy::checksum() = 0;
-          using DummyManager = std::shared_ptr<Dummy>;
+//        char payload[24];// ◁─────────────────────────────── use this to make the test fail....
+          const char* payload = "Outer Space";
+          auto lambda = [payload]{ return RawAddr(&payload); };
           
-          DummyManager dummy{new Dummy};
-          long currSum = Dummy::checksum();
-          CHECK (currSum > 0);
-          CHECK (currSum == dummy->getVal());
-          CHECK (1 == dummy.use_count());
-          {
-            // --- nested Scope ---
-            auto lambda = [dummy]{ return &dummy; };
-            CHECK (2 == dummy.use_count());
-            CHECK (currSum == Dummy::checksum());
-            
-            RawAddr location = lambda();
-            CHECK (location == &lambda);
-            
-            std::function funWrap{lambda};
-            CHECK (funWrap);
-            CHECK (not isSameObject (funWrap, lambda));
-            CHECK (3 == dummy.use_count());
-            CHECK (currSum == Dummy::checksum());
-            
-SHOW_EXPR(location)
-            location = funWrap();
-SHOW_EXPR(location)
-SHOW_EXPR(RawAddr(&funWrap))
-SHOW_EXPR(RawAddr(dummy.get()))
-
-            std::function fuckWrap{[location]{ return &location; }};
-            CHECK (fuckWrap);
-SHOW_EXPR(RawAddr(&location))
-SHOW_EXPR(RawAddr(fuckWrap()))
-SHOW_EXPR(RawAddr(&fuckWrap))
-          }
-          CHECK (1 == dummy.use_count());
-          CHECK (currSum == Dummy::checksum());
-          dummy.reset();
-          CHECK (0 == dummy.use_count());
-          CHECK (0 == Dummy::checksum());
+          RawAddr location = lambda();
+          CHECK (location == &lambda);
+          
+          std::function funWrap{lambda};
+          CHECK (funWrap);
+          CHECK (not isSameObject (funWrap, lambda));
+          
+          location = funWrap();
+          CHECK (util::isCloseBy (location, funWrap));
+          // if »small object optimisation« was used,
+          // the lambda will be copied directly into the std:function;
+          // otherwise it will be heap allocated and this test fails.
+          
+          // for context: these are considered "close by",
+          // since both are sitting right here in the same stack frame
+          CHECK (util::isCloseBy (funWrap, lambda));
         }
       
       

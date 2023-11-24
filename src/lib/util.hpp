@@ -357,7 +357,6 @@ namespace util {
   {
     return static_cast<const void*> (std::addressof(x));
   }
-  
   template<class X>
   inline const void*
   getAddr (X* x)
@@ -365,6 +364,34 @@ namespace util {
     return static_cast<const void*> (x);
   }
   
+  /** the addressable memory »slot« — platform dependent */
+  template<typename X>
+  inline size_t
+  slotNr (X const& x)
+  {
+    return reinterpret_cast<size_t> (std::addressof(x)) / sizeof(size_t);
+  }
+  template<typename X>
+  inline size_t
+  slotNr (X const* x)
+  {
+    return reinterpret_cast<size_t> (x)  / sizeof(size_t);;
+  }
+  
+  
+  /** determine heuristically if two objects
+   *  are located „close to each other“ in memory.
+   * @remark can be used to find out about heap vs. stack allocation
+   */
+  template<typename A, typename B>
+  inline bool
+  isCloseBy (A&& a, B&& b, size_t consideredNearby =50)
+  {
+    size_t loc1 = slotNr (std::forward<A> (a));
+    size_t loc2 = slotNr (std::forward<B> (b));
+    size_t dist = loc2 > loc1? loc2-loc1:loc1-loc2;
+    return dist < consideredNearby;
+  }
   
   
   

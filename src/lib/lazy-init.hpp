@@ -105,18 +105,15 @@ namespace lib {
   template<class SIG>
   class TrojanFun
     {
-      template<class DEL>
-      using Manager = std::shared_ptr<DEL>;
-      
       template<class DEL, typename RET, typename... ARGS>
       static auto
-      buildTrapActivator (Manager<DEL>&& managedDelegate, _Fun<RET(ARGS...)>)
+      buildTrapActivator (DEL* delegate, _Fun<RET(ARGS...)>)
         {
-          return [chain = move(managedDelegate)]
+          return [delegate]
                  (ARGS ...args) -> RET
                     {
-                      auto currLocation = &chain;
-                      auto& functor = (*chain) (currLocation);
+                      auto currLocation = &delegate;
+                      auto& functor = (*delegate) (currLocation);
                       //
                       return functor (forward<ARGS> (args)...);
                     };
@@ -146,7 +143,7 @@ namespace lib {
           
           REQUIRE (delegate);
           
-          return buildTrapActivator (Manager<DEL>{delegate}, _Fun<SIG>());
+          return buildTrapActivator (delegate, _Fun<SIG>());
         }
     };
   
