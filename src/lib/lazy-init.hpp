@@ -76,9 +76,10 @@
 //#include "lib/error.h"
 //#include "lib/nocopy.hpp"
 #include "lib/meta/function.hpp"
+#include "lib/opaque-holder.hpp"
 //#include "lib/meta/function-closure.hpp"
 //#include "lib/util-quant.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <functional>
 #include <utility>
@@ -86,15 +87,60 @@
 
 
 namespace lib {
-//  namespace err = lumiera::error;
+  namespace err = lumiera::error;
   
   using lib::meta::_Fun;
   using lib::meta::has_Sig;
 //  using std::function;
+  using util::unConst;
   using std::forward;
   using std::move;
   
   using RawAddr = void const*;
+  
+  namespace {// the anonymous namespace of horrors...
+    
+    inline ptrdiff_t
+    captureRawAddrOffset (RawAddr anchor, RawAddr subject)
+    {
+      // Dear Mr.Compiler, please get out of my way.
+      // I just sincerely want to shoot myself into my foot...
+      char* anchorAddr  = reinterpret_cast<char*> (unConst(anchor));
+      char* subjectAddr = reinterpret_cast<char*> (unConst(subject));
+      return subjectAddr - anchorAddr;
+    }
+    
+    template<class TAR>
+    inline static TAR*
+    relocate (RawAddr anchor, ptrdiff_t offset)
+    {
+      char* anchorAddr = reinterpret_cast<char*> (unConst(anchor));
+      char* adjusted   = anchorAddr + offset;
+      void* rawTarget  = reinterpret_cast<void*> (adjusted);
+      return static_cast<TAR*> (adjusted);
+    }
+    
+    
+    /**
+     * @internal *implementation defined* : offset of a payload placed directly
+     *  into a std::function when the _small object optimisation_ applies.
+     * @warning relies on implementation behaviour not guaranteed by the standard,
+     *          while supported by all known implementations today. This is
+     *          exploited as a trick to allow for automatic late initialisation
+     *          in a situation, were a functor needs to capture references.
+     */
+    const ptrdiff_t PAYLOAD_OFFSET =
+      []{
+          size_t slot{42};
+          std::function<RawAddr(void)> probe = [slot]{ return RawAddr(&slot); };
+          RawAddr functor = &probe;
+          RawAddr payload = probe();
+          if (not util::isCloseBy(functor, payload))
+            throw err::Fatal{"Unable to use lib::LazyInit because std::function does not "
+                             "apply small-object optimisation with inline storage."};
+          return captureRawAddrOffset (functor,payload);
+        }();
+  }
   
   
   /**
@@ -152,9 +198,137 @@ namespace lib {
   /**
    * 
    */
+  template<class PAR>
   class LazyInit
+    : public PAR
     {
+      template<class SIG>
+      using DelegateType = std::function<std::function<SIG>&(RawAddr)>;
       
+      using PlaceholderType = DelegateType<void(void)>;
+      using HeapStorage = OpaqueHolder<PlaceholderType>;
+      using PendingInit = std::shared_ptr<HeapStorage>;
+      
+      PendingInit pendingInit_;
+      
+      PendingInit const&
+      __trapLocked (PendingInit const& init)
+        {
+          if (not init)
+            throw err::State{"Component was already configured with a processing function, "
+                             "which binds into a fixed object location. It can not be moved anymore."
+                            , err::LUMIERA_ERROR_LIFECYCLE};
+          return init;
+        }
+      
+      PendingInit&&
+      __trapLocked (PendingInit && init)
+        {
+          if (not init)
+            throw err::State{"Component was already configured with a processing function, "
+                             "which binds into a fixed object location. It can not be moved anymore."
+                            , err::LUMIERA_ERROR_LIFECYCLE};
+          return move (init);
+        }
+      
+      
+    public:
+      template<class SIG, class INI, typename...ARGS>
+      LazyInit (std::function<SIG>& targetFunctor, INI&& initialiser, ARGS&& ...parentCtorArgs)
+        : PAR(forward<ARGS> (parentCtorArgs)...)
+        , pendingInit_{prepareInitialiser (targetFunctor, forward<INI> (initialiser))}
+        { }
+      
+      LazyInit (LazyInit const& ref)
+        : PAR{ref}
+        , pendingInit_{__trapLocked (ref.pendingInit_)}
+        { }
+      
+      LazyInit (LazyInit && rref)
+        : PAR{move (rref)}
+        , pendingInit_{__trapLocked (move(rref.pendingInit_))}
+        { }
+      
+      LazyInit&
+      operator= (LazyInit const& ref)
+        {
+          if (not util::isSameObject (ref, *this))
+            {
+              PAR::operator= (ref);
+              pendingInit_ = __trapLocked (ref.pendingInit_);
+            }
+          return *this;
+        }
+      
+      LazyInit&
+      operator= (LazyInit && rref)
+        {
+          if (not util::isSameObject (rref, *this))
+            {
+              PAR::operator= (move (rref));
+              pendingInit_ = __trapLocked (move (rref.pendingInit_));
+            }
+          return *this;
+        }
+      
+      
+      template<class SIG>
+      DelegateType<SIG>
+      emptyInitialiser()
+        {
+          using TargetFun = std::function<SIG>;
+          return DelegateType<SIG>([disabledFunctor = TargetFun()]
+                                   (RawAddr) -> TargetFun&
+                                     {
+                                       return disabledFunctor;
+                                     });
+        }
+      template<class SIG>
+      void
+      installEmptyInitialiser()
+        {
+          pendingInit_.reset (new HeapStorage{emptyInitialiser<SIG>()});
+        }
+      
+      
+    private:
+      template<class SIG, class INI>
+      DelegateType<SIG>
+      buildInitialiserDelegate (std::function<SIG>& targetFunctor, INI&& initialiser)
+        {
+          using TargetFun = std::function<SIG>;
+          return DelegateType<SIG>{
+                     [performInit = forward<INI> (initialiser)
+                     ,targetOffset = captureRawAddrOffset (this, &targetFunctor)]
+                     (RawAddr location) -> TargetFun&
+                        {// apply known offset backwards to find current location of the host object
+                          TargetFun* target = relocate<TargetFun> (location, -PAYLOAD_OFFSET);
+                          LazyInit* self = relocate<LazyInit> (target, -targetOffset);
+                          REQUIRE (self);
+                          performInit (self);
+                          self->pendingInit_.reset();
+                          return *target;
+                        }};
+        }
+      
+      template<class SIG>
+      DelegateType<SIG>*
+      getPointerToDelegate(HeapStorage& buffer)
+        {
+          return reinterpret_cast<DelegateType<SIG>*> (&buffer);
+        }
+      
+      template<class SIG, class INI>
+      PendingInit
+      prepareInitialiser (std::function<SIG>& targetFunctor, INI&& initialiser)
+        {
+          PendingInit storageHandle{
+            new HeapStorage{
+              buildInitialiserDelegate (targetFunctor, forward<INI> (initialiser))}};
+           // place a »Trojan« into the target functor to trigger initialisation on invocation...
+          targetFunctor = TrojanFun<SIG>::generateTrap (getPointerToDelegate<SIG> (*storageHandle));
+          return storageHandle;
+        }
     };
   
   

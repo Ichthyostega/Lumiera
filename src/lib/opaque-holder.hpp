@@ -649,21 +649,34 @@ namespace lib {
           placeDefault();
         }
       
+      /** immediately move-emplace an embedded subclass type */
+      template<class SUB>
+      InPlaceBuffer (SUB&& instance)
+        {
+          static_assert (siz >= sizeof(SUB), "InPlaceBuffer too small");
+          
+          new(&buf_) SUB (std::forward<SUB> (instance));
+        }
+      
+      template<typename TY>
+      struct TypeTag{ };
+      /** helper to mark the subclass type to create.
+       * @remarks we can not specify explicit template arguments on ctor calls,
+       *  so the only way is to use a dummy marker argument to pass the type.
+       *  Use as `InPlaceBuffer(embedType<XYZ>, arg1, arg2, arg3)` */
+      template<typename SUB>
+      static auto embedType() { return TypeTag<SUB>{}; }
+      
       /** immediately emplace an embedded subclass type */
       template<class TY, typename...ARGS>
-      InPlaceBuffer (TY*, ARGS&& ...args)
+      InPlaceBuffer (TypeTag<TY>, ARGS&& ...args)
         {
           static_assert (siz >= sizeof(TY), "InPlaceBuffer too small");
           
           new(&buf_) TY (std::forward<ARGS> (args)...);
         }
       
-      /** helper to mark the subclass type to create.
-       * @remarks we can not specify explicit template arguments on ctor calls,
-       *  so the only way is to use a dummy marker argument to pass the type.
-       *  Use as `InPlaceBuffer(embedType<XYZ>, arg1, arg2, arg3)` */
-      template<typename SUB>
-      static auto embedType() { return (SUB*) nullptr; }
+      
       
       /** a "planting handle" can be used to expose an opaque InPlaceBuffer through an API */
       using Handle = PlantingHandle<BA, DEFAULT>;
