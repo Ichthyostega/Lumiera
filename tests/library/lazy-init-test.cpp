@@ -340,13 +340,22 @@ namespace test{
             {
               return [theFun = forward<FUN> (fun2install)]
                      (LazyDemo* self)
-                        {
+                        { // this runs when init is actually performed....
                           CHECK (self);
-                          self->fun = [self, chain = move(theFun)]
-                                      (int i)
-                                        {
-                                          return chain (i + self->seed);  // Note: binding to actual instance location
-                                        };
+                          if (self->fun)
+                            // chain-up behind existing function
+                            self->fun = [self, prevFun = move(self->fun), nextFun = move(theFun)]
+                                        (int i)
+                                          {
+                                            return nextFun (prevFun (i));
+                                          };
+                          else
+                            // build new function chain, inject seed from object
+                            self->fun = [self, newFun = move(theFun)]
+                                        (int i)
+                                          {
+                                            return newFun (i + self->seed);  // Note: binding to actual instance location
+                                          };
                         };
             }
           
@@ -359,11 +368,19 @@ namespace test{
             }
           
           template<typename FUN>
-          LazyDemo(FUN&& someFun)
+          LazyDemo (FUN&& someFun)
             : LazyInit{MarkDisabled()}
             , fun{}
             {
               installInitialiser(fun, buildInit (forward<FUN> (someFun)));
+            }
+          
+          template<typename FUN>
+          LazyDemo&&
+          attach (FUN&& someFun)
+            {
+              installInitialiser(fun, buildInit (forward<FUN> (someFun)));
+              return move(*this);
             }
         };
       
@@ -373,7 +390,9 @@ namespace test{
        *     - the initialisation routine _adapts_ this function and links it with the current
        *       object location; thus, invoking this function on a copy would crash / corrupt memory.
        *     - however, as long as initialisation has not been triggered, LazyDemo instances can be
-       *       copied; they may even be assigned to existing instances, overwriting their state. 
+       *       copied; they may even be assigned to existing instances, overwriting their state.
+       *     - a second given function will be chained behind the first one; this happens immediately
+       *       if the first function was already invoked (and this initialised)
        */
       void
       verify_complexUsageWithCopy()
@@ -404,6 +423,21 @@ namespace test{
           CHECK (26 == d1.fun(22));                   // seed value is picked up dynamically
           
           VERIFY_ERROR (LIFECYCLE, LazyDemo dx{move(d1)} );
+          
+          // attach a further function, to be chained-up
+          d1.attach([](int i)
+                          {
+                            return i / 2;
+                          });
+          CHECK (d1.isInit());
+          CHECK (d1.seed == 3);
+          CHECK (12 == d1.fun(21)); // 21+3+1=25 / 2
+          CHECK (13 == d1.fun(22));
+          CHECK (13 == d1.fun(23));
+          d1.seed++;
+          CHECK (14 == d1.fun(23)); // 23+4+1=28 / 2
+          CHECK (14 == d1.fun(24));
+          CHECK (15 == d1.fun(25));
         }
     };
   

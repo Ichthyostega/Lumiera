@@ -260,8 +260,10 @@ namespace lib {
       template<class SIG, class INI, typename...ARGS>
       LazyInit (std::function<SIG>& targetFunctor, INI&& initialiser, ARGS&& ...parentCtorArgs)
         : PAR(forward<ARGS> (parentCtorArgs)...)
-        , pendingInit_{prepareInitialiser (targetFunctor, forward<INI> (initialiser))}
-        { }
+        , pendingInit_{}
+        { 
+          installInitialiser (targetFunctor, forward<INI> (initialiser));
+        }
       
       
       LazyInit (LazyInit const& ref)
