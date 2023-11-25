@@ -206,7 +206,7 @@ namespace lib {
       using DelegateType = std::function<std::function<SIG>&(RawAddr)>;
       
       using PlaceholderType = DelegateType<void(void)>;
-      using HeapStorage = OpaqueHolder<PlaceholderType>;
+      using HeapStorage = InPlaceBuffer<PlaceholderType>;
       using PendingInit = std::shared_ptr<HeapStorage>;
       
       PendingInit pendingInit_;

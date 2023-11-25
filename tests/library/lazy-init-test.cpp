@@ -297,6 +297,30 @@ namespace test{
       void
       verify_lazyInitialisation()
         {
+          using Fun = std::function<float(int)>;
+          using Lazy = LazyInit<Fun>;
+          
+          bool init{false};
+          uint invoked{0};
+          Lazy funny{funny, [&](Lazy* self)
+                              {
+                                Fun& thisFun = static_cast<Fun&> (*self);
+                                
+                                thisFun = [&invoked](int num)
+                                                      {
+                                                        ++invoked;
+                                                        return num * 0.555f;
+                                                      };
+                                init = true;
+                              }};
+          CHECK (not invoked);
+          CHECK (not init);
+          CHECK (funny);
+          
+          int feed = 1 + rand()%99;
+          CHECK (feed*0.555f == funny(feed));
+          CHECK (1 == invoked);
+          CHECK (init);
         }
     };
   
