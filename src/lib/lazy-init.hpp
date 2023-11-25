@@ -335,6 +335,13 @@ namespace lib {
       PendingInit
       prepareInitialiser (std::function<SIG>& targetFunctor, INI&& initialiser)
         {
+          if (isInit() and targetFunctor)
+            {// object is already »engaged« — no need to delay init
+              using ExpectedArg = _FunArg<INI>;
+              initialiser (static_cast<ExpectedArg> (this));
+              return PendingInit(); // keep engaged; no pending init
+            }
+          // else: prepare delayed init...
           PendingInit storageHandle{
             new HeapStorage{
               buildInitialiserDelegate (targetFunctor, forward<INI> (initialiser))}};
@@ -344,10 +351,20 @@ namespace lib {
         }
       
       template<class SIG>
-      DelegateType<SIG>*
+      static DelegateType<SIG>*
       getPointerToDelegate (HeapStorage& buffer)
         {
           return reinterpret_cast<DelegateType<SIG>*> (&buffer);
+        }
+      
+      template<class SIG>
+      static std::function<SIG>
+      maybeInvoke (PendingInit const& pendingInit, RawAddr location)
+        {
+          if (not pendingInit) // no pending init -> empty TargetFun
+            return std::function<SIG>();
+          auto* pendingDelegate = getPointerToDelegate<SIG>(*pendingInit);
+          return (*pendingDelegate) (location); // invoke to create new TargetFun
         }
       
       template<class SIG, class INI>
@@ -358,12 +375,15 @@ namespace lib {
           using ExpectedArg = _FunArg<INI>;
           return DelegateType<SIG>{
                      [performInit = forward<INI> (initialiser)
+                     ,previousInit = move (pendingInit_)
                      ,targetOffset = captureRawAddrOffset (this, &targetFunctor)]
                      (RawAddr location) -> TargetFun&
                         {// apply known offset backwards to find current location of the host object
                           TargetFun* target = relocate<TargetFun> (location, -FUNCTOR_PAYLOAD_OFFSET);
                           LazyInit* self = relocate<LazyInit> (target, -targetOffset);
                           REQUIRE (self);
+                            // setup  target as it would be with eager init
+                          (*target) = maybeInvoke<SIG> (previousInit, location);
                           // invoke init, possibly downcast to derived *self
                           performInit (static_cast<ExpectedArg> (self));
                           self->pendingInit_.reset(); // release storage
