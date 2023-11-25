@@ -34,7 +34,7 @@
 #include "lib/test/diagnostic-output.hpp" /////////////////////TODO TODOH
 #include "lib/util.hpp"
 
-//#include <array>
+#include <memory>
 
 
 
@@ -42,10 +42,10 @@ namespace lib {
 namespace test{
   
 //  using util::_Fmt;
+  using std::make_unique;
   using util::isSameObject;
   using lib::meta::isFunMember;
-//  using lib::meta::_FunRet;
-//  using err::LUMIERA_ERROR_LIFECYCLE;
+  using err::LUMIERA_ERROR_LIFECYCLE;
   
   
   
@@ -78,6 +78,7 @@ namespace test{
           verify_TargetRelocation();
           verify_triggerMechanism();
           verify_lazyInitialisation();
+          verify_complexUsageWithCopy();
         }
       
       
@@ -87,7 +88,7 @@ namespace test{
        *      # the _target function_ finally to be invoked performs a verifiable computation
        *      # the _delegate_ receives an memory location and returns a reference to the target
        *      # the generated _»trojan λ«_ captures its own address, invokes the delegate,
-       *        retrieves a reference to a target functor, and invokes these with actual arguments.
+       *        retrieves a reference to a target functor, and finally invokes this with actual arguments.
        * @remark the purpose of this convoluted scheme is for the _delegate to perform initialisation,_
        *         taking into account the current memory location „sniffed“ by the trojan.
        */
@@ -119,16 +120,15 @@ namespace test{
                               return fun;
                             };
           using Delegate = decltype(delegate);
-          Delegate *delP = new Delegate(delegate);
+          auto delP = make_unique<Delegate> (delegate);
           
           // verify the heap-allocated copy of the delegate behaves as expected
           location = nullptr;
           CHECK (beacon+c == (*delP)(this)(c));
           CHECK (location == this);
           
-          // now (finally) build the »trap function«,
-          // taking ownership of the heap-allocated delegate copy
-          auto trojanLambda = TrojanFun<Sig>::generateTrap (delP);
+          // now (finally) build the »trap function«...
+          auto trojanLambda = TrojanFun<Sig>::generateTrap (delP.get());
           CHECK (sizeof(trojanLambda) == sizeof(size_t));
           
           // on invocation...
@@ -138,7 +138,7 @@ namespace test{
           CHECK (beacon+c == trojanLambda(c));
           CHECK (location == &trojanLambda);
           
-          // repeat that with a copy, and changed beacon value
+          // repeat same with a copy, and changed beacon value
           auto trojanClone = trojanLambda;
           beacon = rand();
           c = beacon % 55;
@@ -150,17 +150,17 @@ namespace test{
       
       
       
-      /** @test verify that std::function indeed stores a simple functor inline
+      /** @test verify that std::function indeed stores a simple functor inline.
        * @remark The implementation of LazyInit relies crucially on a known optimisation
        *         in the standard library ─ which unfortunately is not guaranteed by the standard:
        *         Typically, std::function will apply _small object optimisation_ to place a very
        *         small functor directly into the wrapper, if the payload has a trivial copy-ctor.
-       *         Libstdc++ is known to be rather restrictive, other implementations trade increased
-       *         storage size of std::function against more optimisation possibilities.
+       *         `Libstdc++` is known to be rather restrictive, while other implementations trade
+       *         increased storage size of std::function against more optimisation possibilities.
        *         LazyInit exploits this optimisation to „spy“ about the current object location,
-       *         to allow executing the lazy initialisation on first use, without further help
+       *         allowing to execute the lazy initialisation on first use, without further help
        *         by client code. This trickery seems to be the only way, since λ-capture by reference
-       *         is broken after copying or moving the host object (which is required for DSL use).
+       *         is broken after copying or moving the host object (typically required for DSL use).
        *         In case this turns out to be fragile, LazyInit should become a "LateInit" and needs
        *         help by the client or the user to trigger initialisation; alternatively the DSL
        *         could be split off into a separate builder object distinct from RandomDraw.
@@ -169,7 +169,7 @@ namespace test{
       verify_inlineStorage()
         {
 //        char payload[24];// ◁─────────────────────────────── use this to make the test fail....
-          const char* payload = "Outer Space";
+          const char* payload = "please look elsewhere";
           auto lambda = [payload]{ return RawAddr(&payload); };
           
           RawAddr location = lambda();
@@ -196,7 +196,7 @@ namespace test{
        *        by applying known offsets consecutively
        *        from a starting point within an remote instance
        * @remark in the real usage scenario, we know _only_ the offset
-       *        and and attempt to find home without knowing the layout.
+       *        and attempt to find home without knowing the layout.
        */
       void
       verify_TargetRelocation()
@@ -229,7 +229,7 @@ namespace test{
           CHECK (offNested > 0);
           
           // create a copy far far away...
-          auto farAway = std::make_unique<Demo> (here);
+          auto farAway = make_unique<Demo> (here);
           
           // reconstruct base address from starting point
           RawAddr startPoint = farAway->peek();
@@ -321,6 +321,89 @@ namespace test{
           CHECK (feed*0.555f == funny(feed));
           CHECK (1 == invoked);
           CHECK (init);
+        }
+      
+      
+      
+      /** elaborate setup used for integration test */
+      struct LazyDemo
+        : LazyInit<>
+        {
+          using Fun = std::function<int(int)>;
+          
+          int seed{0};
+          Fun fun; // ◁────────────────────────────────── this will be initialised lazily....
+          
+          template<typename FUN>
+          auto
+          buildInit (FUN&& fun2install)
+            {
+              return [theFun = forward<FUN> (fun2install)]
+                     (LazyDemo* self)
+                        {
+                          CHECK (self);
+                          self->fun = [self, chain = move(theFun)]
+                                      (int i)
+                                        {
+                                          return chain (i + self->seed);  // Note: binding to actual instance location
+                                        };
+                        };
+            }
+          
+          
+          LazyDemo()
+            : LazyInit{MarkDisabled()}
+            , fun{}
+            {
+              installInitialiser(fun, buildInit([](int){ return 0; }));
+            }
+          
+          template<typename FUN>
+          LazyDemo(FUN&& someFun)
+            : LazyInit{MarkDisabled()}
+            , fun{}
+            {
+              installInitialiser(fun, buildInit (forward<FUN> (someFun)));
+            }
+        };
+      
+      /**
+       * @test use an elaborately constructed example to cover more corner cases
+       *     - the function to manage and initialise lazily is _a member_ of the _derived class_
+       *     - the initialisation routine _adapts_ this function and links it with the current
+       *       object location; thus, invoking this function on a copy would crash / corrupt memory.
+       *     - however, as long as initialisation has not been triggered, LazyDemo instances can be
+       *       copied; they may even be assigned to existing instances, overwriting their state. 
+       */
+      void
+      verify_complexUsageWithCopy()
+        {
+          LazyDemo d1;
+          CHECK (not d1.isInit());                    // not initialised, since function was not invoked yet
+          CHECK (d1.fun);                             // the functor is not empty anymore, since the »trap« was installed
+          
+          d1.seed = 2;
+          CHECK (0 == d1.fun(22));                    // d1 was default initialised and thus got the "return 0" function
+          CHECK (d1.isInit());                        // first invocation also triggered the init-routine
+          
+          // is »engaged« after init and rejects move / copy
+          VERIFY_ERROR (LIFECYCLE, LazyDemo dx{move(d1)} );
+          
+          
+          d1 = LazyDemo{[](int i)                     // assign a fresh copy (discarding any state in d1)
+                          {
+                            return i + 1;             // using a "return i+1" function
+                          }};
+          CHECK (not d1.isInit());
+          CHECK (d1.seed == 0);                       // assignment indeed erased any existing settings (seed≔2)
+          CHECK (d1.fun);
+          
+          CHECK (23 == d1.fun(22));                   // new function was tied in (while also referring to self->seed)
+          CHECK (d1.isInit());
+          d1.seed = 3;                                // set the seed
+          CHECK (26 == d1.fun(22));                   // seed value is picked up dynamically
+          
+          VERIFY_ERROR (LIFECYCLE, LazyDemo dx{move(d1)} );
         }
     };
   

@@ -54,7 +54,7 @@
  ** that the »trojan functor« itself is stored somehow embedded into the target object
  ** to be initialised. If there is a fixed distance relation in memory, then the target
  ** can be derived from the self-position of the functor; if this assumption is broken
- ** however, memory corruption and SEGFAULT may be caused. 
+ ** however, memory corruption and SEGFAULT may be caused.
  ** 
  ** @todo 11/2023 at the moment I am just desperately trying to get a bye-product of my
  **       main effort into usable shape and salvage an design idea that sounded clever
@@ -73,15 +73,12 @@
 #define LIB_LAZY_INIT_H
 
 
-//#include "lib/error.h"
-//#include "lib/nocopy.hpp"
+#include "lib/error.h"
 #include "lib/meta/function.hpp"
 #include "lib/opaque-holder.hpp"
-//#include "lib/meta/function-closure.hpp"
-//#include "lib/util-quant.hpp"
 #include "lib/util.hpp"
 
-//#include <functional>
+#include <functional>
 #include <utility>
 #include <memory>
 
@@ -90,13 +87,15 @@ namespace lib {
   namespace err = lumiera::error;
   
   using lib::meta::_Fun;
+  using lib::meta::_FunArg;
   using lib::meta::has_Sig;
-//  using std::function;
   using util::unConst;
+  using std::function;
   using std::forward;
   using std::move;
   
   using RawAddr = void const*;
+  
   
   namespace {// the anonymous namespace of horrors...
     
@@ -104,7 +103,7 @@ namespace lib {
     captureRawAddrOffset (RawAddr anchor, RawAddr subject)
     {
       // Dear Mr.Compiler, please get out of my way.
-      // I just sincerely want to shoot myself into my foot...
+      // I just genuinely want to shoot myself into my foot...
       char* anchorAddr  = reinterpret_cast<char*> (unConst(anchor));
       char* subjectAddr = reinterpret_cast<char*> (unConst(subject));
       return subjectAddr - anchorAddr;
@@ -140,7 +139,10 @@ namespace lib {
                              "apply small-object optimisation with inline storage."};
           return captureRawAddrOffset (functor,payload);
         }();
-  }
+    //
+  }//(End)low-level manipulations
+  
+  
   
   
   /**
@@ -171,12 +173,11 @@ namespace lib {
        * and then to forward the invocation to the actual
        * function, which should have been initialised
        * by the delegate invoked.
-       * @param delegate a functor object pass invocation;
+       * @param delegate a functor object to forward invocation;
        *        the delegate must return a reference to the
        *        actual function implementation to invoke.
        *        Must be heap-allocated.
        * @return a lightweight lambda usable as trigger.
-       * @note takes ownership of the delegate
        */
       template<class DEL>
       static auto
@@ -195,10 +196,18 @@ namespace lib {
   
   
   
-  /**
-   * 
+  
+  
+  struct EmptyBase { };
+  
+  /**************************************************************//**
+   * Mix-in for lazy/delayed initialisation of an embedded functor.
+   * This allows to keep the overall object (initially) copyable,
+   * while later preventing copy once the functor was »engaged«.
+   * Initially, only a »trap« is installed into the functor,
+   * invoking an initialisation closure on first use.
    */
-  template<class PAR>
+  template<class PAR =EmptyBase>
   class LazyInit
     : public PAR
     {
@@ -209,7 +218,9 @@ namespace lib {
       using HeapStorage = InPlaceBuffer<PlaceholderType>;
       using PendingInit = std::shared_ptr<HeapStorage>;
       
+      /** manage heap storage for a pending initialisation closure */
       PendingInit pendingInit_;
+      
       
       PendingInit const&
       __trapLocked (PendingInit const& init)
@@ -232,12 +243,26 @@ namespace lib {
         }
       
       
+      
+    protected:
+      struct MarkDisabled{};
+      
+      /** @internal allows derived classes to leave the initialiser deliberately disabled */
+      template<typename...ARGS>
+      LazyInit (MarkDisabled, ARGS&& ...parentCtorArgs)
+        : PAR(forward<ARGS> (parentCtorArgs)...)
+        , pendingInit_{}
+        { }
+      
+      
     public:
+      /** prepare an initialiser to be activated on first use */
       template<class SIG, class INI, typename...ARGS>
       LazyInit (std::function<SIG>& targetFunctor, INI&& initialiser, ARGS&& ...parentCtorArgs)
         : PAR(forward<ARGS> (parentCtorArgs)...)
         , pendingInit_{prepareInitialiser (targetFunctor, forward<INI> (initialiser))}
         { }
+      
       
       LazyInit (LazyInit const& ref)
         : PAR{ref}
@@ -272,6 +297,12 @@ namespace lib {
         }
       
       
+      bool
+      isInit()  const
+        {
+          return not pendingInit_;
+        }
+      
       template<class SIG>
       void
       installEmptyInitialiser()
@@ -279,7 +310,15 @@ namespace lib {
           pendingInit_.reset (new HeapStorage{emptyInitialiser<SIG>()});
         }
       
-    private:
+      template<class SIG, class INI>
+      void
+      installInitialiser (std::function<SIG>& targetFunctor, INI&& initialiser)
+        {
+          pendingInit_ = prepareInitialiser (targetFunctor, forward<INI> (initialiser));
+        }
+      
+      
+    private: /* ========== setup of the initialisation mechanism ========== */
       template<class SIG>
       DelegateType<SIG>
       emptyInitialiser()
@@ -306,7 +345,7 @@ namespace lib {
       
       template<class SIG>
       DelegateType<SIG>*
-      getPointerToDelegate(HeapStorage& buffer)
+      getPointerToDelegate (HeapStorage& buffer)
         {
           return reinterpret_cast<DelegateType<SIG>*> (&buffer);
         }
@@ -316,6 +355,7 @@ namespace lib {
       buildInitialiserDelegate (std::function<SIG>& targetFunctor, INI&& initialiser)
         {
           using TargetFun = std::function<SIG>;
+          using ExpectedArg = _FunArg<INI>;
           return DelegateType<SIG>{
                      [performInit = forward<INI> (initialiser)
                      ,targetOffset = captureRawAddrOffset (this, &targetFunctor)]
@@ -324,9 +364,10 @@ namespace lib {
                           TargetFun* target = relocate<TargetFun> (location, -FUNCTOR_PAYLOAD_OFFSET);
                           LazyInit* self = relocate<LazyInit> (target, -targetOffset);
                           REQUIRE (self);
-                          performInit (self);
-                          self->pendingInit_.reset();
-                          return *target;
+                          // invoke init, possibly downcast to derived *self
+                          performInit (static_cast<ExpectedArg> (self));
+                          self->pendingInit_.reset(); // release storage
+                          return *target; // invoked by the »Trojan« to yield first result
                         }};
         }
     };
