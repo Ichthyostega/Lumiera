@@ -45,7 +45,8 @@
  ** before first use. Thus, a _»trojan functor«_ is placed into this work-function,
  ** with the goal to activate a „trap“ on first use. This allows to invoke the actual
  ** initialisation, which is also configured as a functor, and which is the only part
- ** the client must provide actively, to activate the mechanism.
+ ** the client must provide actively, to activate the mechanism. Several initialisation
+ ** steps can be attached consecutively, and will later be triggered in sequence.
  ** 
  ** There is one _gory detail_ however: the initialisation hook needs the actual instance
  ** pointer valid *at the time of actual initialisation*. And since initialisation shall
@@ -54,7 +55,10 @@
  ** that the »trojan functor« itself is stored somehow embedded into the target object
  ** to be initialised. If there is a fixed distance relation in memory, then the target
  ** can be derived from the self-position of the functor; if this assumption is broken
- ** however, memory corruption and SEGFAULT may be caused.
+ ** however, memory corruption and SEGFAULT might ensue. These assumptions are covered
+ ** by an assertion and unit tests; as long as the function and the LazyInit instance
+ ** are arranged in a fixed memory layout, this scheme should work. Do not place one
+ ** or the other into a virtual base class though.
  ** 
  ** @todo 11/2023 at the moment I am just desperately trying to get a bye-product of my
  **       main effort into usable shape and salvage an design idea that sounded clever
@@ -384,12 +388,13 @@ namespace lib {
                           TargetFun* target = relocate<TargetFun> (location, -FUNCTOR_PAYLOAD_OFFSET);
                           LazyInit* self = relocate<LazyInit> (target, -targetOffset);
                           REQUIRE (self);
+                              // tie storage to this (possibly recursive) call
+                          auto storageHandle = move(self->pendingInit_);
                             // setup  target as it would be with eager init
                           (*target) = maybeInvoke<SIG> (previousInit, location);
                           // invoke init, possibly downcast to derived *self
                           performInit (static_cast<ExpectedArg> (self));
-                          self->pendingInit_.reset(); // release storage
-                          return *target; // invoked by the »Trojan« to yield first result
+                          return *target; // back to the »Trojan« to yield first result
                         }};
         }
     };

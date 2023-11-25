@@ -27,11 +27,9 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/lazy-init.hpp"
-//#include "lib/format-string.hpp"
-//#include "lib/test/test-helper.hpp"
-//#include "lib/test/testdummy.hpp"
-#include "lib/test/diagnostic-output.hpp" /////////////////////TODO TODOH
+#include "lib/meta/util.hpp"
 #include "lib/util.hpp"
 
 #include <memory>
@@ -41,20 +39,15 @@
 namespace lib {
 namespace test{
   
-//  using util::_Fmt;
-  using std::make_unique;
   using util::isSameObject;
   using lib::meta::isFunMember;
+  using lib::meta::disable_if;
   using err::LUMIERA_ERROR_LIFECYCLE;
   
+  using std::is_same;
+  using std::remove_reference_t;
+  using std::make_unique;
   
-  
-  namespace { // policy and configuration for test...
-
-    //
-  }//(End) Test config
-
-
   
   
   
@@ -62,7 +55,7 @@ namespace test{
    * @test Verify a mix-in to allow for lazy initialisation of complex infrastructure
    *       tied to a std::function; the intention is to have a »trap« hidden in the
    *       function itself to trigger on first use and perform the one-time
-   *       initialisation, then finally lock the object in place.
+   *       initialisation, then finally lock the object at a fixed place.
    * @see lazy-init.hpp
    * @see lib::RandomDraw
    */
@@ -344,14 +337,14 @@ namespace test{
                           CHECK (self);
                           if (self->fun)
                             // chain-up behind existing function
-                            self->fun = [self, prevFun = move(self->fun), nextFun = move(theFun)]
+                            self->fun = [self, prevFun=self->fun, nextFun=theFun]
                                         (int i)
                                           {
                                             return nextFun (prevFun (i));
                                           };
                           else
                             // build new function chain, inject seed from object
-                            self->fun = [self, newFun = move(theFun)]
+                            self->fun = [self, newFun=theFun]
                                         (int i)
                                           {
                                             return newFun (i + self->seed);  // Note: binding to actual instance location
@@ -366,8 +359,8 @@ namespace test{
             {
               installInitialiser(fun, buildInit([](int){ return 0; }));
             }
-          
-          template<typename FUN>
+                                                 // prevent this ctor from shadowing the copy ctors    //////TICKET #963
+          template<typename FUN,      typename =disable_if<is_same<remove_reference_t<FUN>, LazyDemo>>>
           LazyDemo (FUN&& someFun)
             : LazyInit{MarkDisabled()}
             , fun{}
@@ -393,51 +386,102 @@ namespace test{
        *       copied; they may even be assigned to existing instances, overwriting their state.
        *     - a second given function will be chained behind the first one; this happens immediately
        *       if the first function was already invoked (and this initialised)
+       *     - but when however both functions are attached immediately, prior to invocation,
+       *       then an elaborate chain of initialisers is setup behind the scenes and played back
+       *       in definition order once lazy initialisation is triggered
+       *     - all the intermediary state is safe to copy and move and fork
+       * @remark 11/2023 memory allocations were verified using lib::test::Tracker and the EventLog
        */
       void
       verify_complexUsageWithCopy()
         {
-          LazyDemo d1;
-          CHECK (not d1.isInit());                    // not initialised, since function was not invoked yet
-          CHECK (d1.fun);                             // the functor is not empty anymore, since the »trap« was installed
+          LazyDemo dd;
+          CHECK (not dd.isInit());                    // not initialised, since function was not invoked yet
+          CHECK (dd.fun);                             // the functor is not empty anymore, since the »trap« was installed
           
-          d1.seed = 2;
-          CHECK (0 == d1.fun(22));                    // d1 was default initialised and thus got the "return 0" function
-          CHECK (d1.isInit());                        // first invocation also triggered the init-routine
+          dd.seed = 2;
+          CHECK (0 == dd.fun(22));                    // d1 was default initialised and thus got the "return 0" function
+          CHECK (dd.isInit());                        // first invocation also triggered the init-routine
           
           // is »engaged« after init and rejects move / copy
-          VERIFY_ERROR (LIFECYCLE, LazyDemo dx{move(d1)} );
+          VERIFY_ERROR (LIFECYCLE, LazyDemo dx{move(dd)} );
           
           
-          d1 = LazyDemo{[](int i)                     // assign a fresh copy (discarding any state in d1)
+          dd = LazyDemo{[](int i)                     // assign a fresh copy (discarding any state in d1)
                           {
                             return i + 1;             // using a "return i+1" function
                           }};
-          CHECK (not d1.isInit());
-          CHECK (d1.seed == 0);                       // assignment indeed erased any existing settings (seed≔2)
-          CHECK (d1.fun);
+          CHECK (not dd.isInit());
+          CHECK (dd.seed == 0);                       // assignment indeed erased any existing settings (seed≔2)
+          CHECK (dd.fun);
           
-          CHECK (23 == d1.fun(22));                   // new function was tied in (while also referring to self->seed)
-          CHECK (d1.isInit());
-          d1.seed = 3;                                // set the seed
-          CHECK (26 == d1.fun(22));                   // seed value is picked up dynamically
+          CHECK (23 == dd.fun(22));                   // new function was tied in (while also referring to self->seed)
+          CHECK (dd.isInit());
+          dd.seed = 3;                                // set the seed
+          CHECK (26 == dd.fun(22));                   // seed value is picked up dynamically
           
-          VERIFY_ERROR (LIFECYCLE, LazyDemo dx{move(d1)} );
+          VERIFY_ERROR (LIFECYCLE, LazyDemo dx{move(dd)} );
           
           // attach a further function, to be chained-up
-          d1.attach([](int i)
+          dd.attach([](int i)
                           {
                             return i / 2;
                           });
-          CHECK (d1.isInit());
-          CHECK (d1.seed == 3);
-          CHECK (12 == d1.fun(21)); // 21+3+1=25 / 2
-          CHECK (13 == d1.fun(22));
-          CHECK (13 == d1.fun(23));
-          d1.seed++;
-          CHECK (14 == d1.fun(23)); // 23+4+1=28 / 2
-          CHECK (14 == d1.fun(24));
-          CHECK (15 == d1.fun(25));
+          CHECK (dd.isInit());
+          CHECK (dd.seed == 3);
+          CHECK (12 == dd.fun(21)); // 21+3+1=25 / 2
+          CHECK (13 == dd.fun(22));
+          CHECK (13 == dd.fun(23));
+          dd.seed++;
+          CHECK (14 == dd.fun(23)); // 23+4+1=28 / 2
+          CHECK (14 == dd.fun(24));
+          CHECK (15 == dd.fun(25));
+          
+          // ...use exactly the same configuration,
+          // but applied in one shot -> chained lazy-Init
+          dd = LazyDemo{[](int i){return i+1; }}
+                .attach([](int i){return i/2; });
+          dd.seed = 3;
+          CHECK (not dd.isInit());
+          CHECK (dd.seed == 3);
+          CHECK (dd.fun);
+          
+          CHECK (12 == dd.fun(21));
+          CHECK (13 == dd.fun(22));
+          CHECK (13 == dd.fun(23));
+          dd.seed++;
+          CHECK (14 == dd.fun(23));
+          CHECK (14 == dd.fun(24));
+          CHECK (15 == dd.fun(25));
+          
+          // create a nested graph of chained pending init
+          dd = LazyDemo{[](int i){return i+1; }};
+          LazyDemo d1{dd};
+          LazyDemo d2{move(dd)};
+          d2.seed = 3;
+          d2.attach ([](int i){return i/2; });
+          LazyDemo d3{d2};
+          d2.attach ([](int i){return i-1; });
+          
+          // dd was left in defunct state by the move, and thus is locked
+          CHECK (not dd.fun);
+          CHECK (dd.isInit());
+          VERIFY_ERROR (LIFECYCLE, LazyDemo dx{move(dd)} );
+          // this can be amended by assigning another instance not yet engaged
+          dd = d2;
+          d2.seed = 5;
+          std::swap (d2,d3);
+          std::swap (d3,d1);
+          // confused??    ;-)
+          CHECK (not dd.isInit() and dd.seed == 3);  // Seed≡3 {i+1} ⟶ {i/2} ⟶ {i-1}
+          CHECK (not d1.isInit() and d1.seed == 5);  // Seed≡5 {i+1} ⟶ {i/2} ⟶ {i-1}
+          CHECK (not d2.isInit() and d2.seed == 3);  // Seed≡3 {i+1} ⟶ {i/2}
+          CHECK (not d3.isInit() and d3.seed == 0);  // Seed≡0 {i+1}
+          
+          CHECK (12 == dd.fun(23)); // 23+3 +1 = 27/2 = 13 -1 = 12
+          CHECK (13 == d1.fun(23)); // 23+5 +1 = 29/2 = 14 -1 = 13
+          CHECK (13 == d2.fun(23)); // 23+3 +1 = 27/2 = 13    = 13
+          CHECK (24 == d3.fun(23)); // 23+0 +1                = 24
         }
     };
   
