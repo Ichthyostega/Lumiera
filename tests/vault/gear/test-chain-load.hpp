@@ -258,6 +258,7 @@ namespace test {
       Rule seedingRule_  {};
       Rule expansionRule_{};
       Rule reductionRule_{};
+      Rule pruningRule_  {};
       
     public:
       TestChainLoad()
@@ -305,6 +306,13 @@ namespace test {
           return move(*this);
         }
       
+      TestChainLoad&&
+      pruningRule (Rule r)
+        {
+          pruningRule_ = move(r);
+          return move(*this);
+        }
+      
       
       /**
        * Use current configuration and seed to (re)build Node connectivity.
@@ -322,6 +330,7 @@ namespace test {
           Rule expansionRule = expansionRule_;
           Rule reductionRule = reductionRule_;
           Rule seedingRule   = seedingRule_;
+          Rule pruningRule   = pruningRule_;
           
           // prepare building blocks for the topology generation...
           auto moreNext  = [&]{ return next->size() < maxFan;      };
@@ -342,9 +351,6 @@ namespace test {
           while (moreNodes())
             {
               curr->clear();
-              if (isnil(next))
-                addNode(); // ensure parent
-              ++level;
               swap (next, curr);
               size_t toReduce{0};
               Node* r = nullptr;
@@ -352,6 +358,8 @@ namespace test {
               for (Node* o : *curr)
                 { // follow-up on all Nodes in current level...
                   o->calculate();
+                  if (apply (pruningRule,o))
+                    continue; // discontinue
                   size_t toSeed   = apply (seedingRule, o);
                   size_t toExpand = apply (expansionRule,o);
                   while (0 < toSeed and spaceLeft())
@@ -382,12 +390,16 @@ namespace test {
                         o->addSucc (next->back());
                     }
                 }
+              ENSURE (not isnil(next) or spaceLeft());
+              if (isnil(next))
+                addNode(); // ensure parent
               ENSURE (not next->empty());
+              ++level;
             }
           ENSURE (node == &nodes_->back());
           // connect ends of all remaining chains to top-Node
           node->clear();
-          node->level = ++level;
+          node->level = level;
           for (Node* o : *next)
             {
               o->calculate();

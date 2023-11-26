@@ -222,7 +222,8 @@ namespace test {
         {
           auto graph = TestChainLoad<32>{};
           
-          graph.expansionRule(graph.rule().probability(0.5).maxVal(4))
+          graph.expansionRule(graph.rule().probability(0.25).maxVal(4).shuffle())
+               .pruningRule(graph.rule().probability(0.2).shuffle())
                .buildToplolgy()
                .printTopologyDOT();
         }
