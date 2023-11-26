@@ -49,7 +49,10 @@
  ** predecessor nodes; additionally, new chains can be spawned (to simulate the effect of
  ** data loading Jobs without predecessor). The computation always  begins with the _root
  ** node_, proceeds over the node links and finally leads to the _top node,_ which connects
- ** all chains of computation, leaving no dead end.
+ ** all chains of computation, leaving no dead end. The probabilistic rules controlling the
+ ** topology can be configured using the lib::RandomDraw component, allowing either just
+ ** to set a fixed probability or to define elaborate dynamic configurations based on the
+ ** graph height or node connectivity properties.
  ** 
  ** ## Usage
  ** A TestChainLoad instance is created with predetermined maximum fan factor and a fixed
@@ -68,6 +71,7 @@
  ** 
  ** @see TestChainLoad_test
  ** @see SchedulerStress_test
+ ** @see random-draw.hpp
  */
 
 
@@ -131,49 +135,14 @@ namespace test {
   namespace { // Default definitions for topology generation
     const size_t DEFAULT_FAN = 16;
     const size_t DEFAULT_SIZ = 256;
-    
-    const double CAP_EPSILON = 0.001;    ///< tiny bias to absorb rounding problems
   }
   
   
-  /**
-   * Helper to cap and map to a value range.
-   */
-  struct Cap
-    {
-      double lower{0};
-      double value{0};
-      double upper{1};
-      
-      Cap (int    i) : value(i){ }
-      Cap (size_t s) : value(s){ }
-      Cap (double d) : value{d}{ }
-      
-      template<typename NL, typename NV, typename NU>
-      Cap (NL l, NV v, NU u)
-        : lower(l)
-        , value(v)
-        , upper(u)
-        { }
-      
-      size_t
-      mapped (size_t scale)
-        {
-          if (value==lower)
-            return 0;
-          value -= lower;
-          value /= upper-lower;
-          value *= scale;
-          value += CAP_EPSILON;
-          value = limited (size_t(0), value, scale);
-          return size_t(value);
-        }
-    };
   
   
-  /**
+  /***********************************************************************//**
    * A Generator for synthetic Render Jobs for Scheduler load testing.
-   * Allocates a fixed set of #numNodes and generates connecting toplology.
+   * Allocates a fixed set of #numNodes and generates connecting topology.
    * @tparam maxFan maximal fan-in/out from a node, also limits maximal parallel strands.
    * @see TestChainLoad_test
    */
@@ -282,13 +251,12 @@ namespace test {
     private:
       using NodeTab = typename Node::Tab;
       using NodeStorage = std::array<Node, numNodes>;
-      using CtrlRule = std::function<Cap(size_t, double)>;
       
       std::unique_ptr<NodeStorage> nodes_;
       
-      CtrlRule seedingRule_  {[](size_t, double){ return 0; }};
-      CtrlRule expansionRule_{[](size_t, double){ return 0; }};
-      CtrlRule reductionRule_{[](size_t, double){ return 0; }};
+      Rule seedingRule_  {};
+      Rule expansionRule_{};
+      Rule reductionRule_{};
       
     public:
       TestChainLoad()
@@ -313,24 +281,26 @@ namespace test {
       
       /* ===== topology control ===== */
       
+      static Rule rule() { return Rule(); }
+      
       TestChainLoad&&
-      seedingRule (CtrlRule r)
+      seedingRule (Rule&& r)
         {
-          seedingRule_ = r;
+          seedingRule_ = move(r);
           return move(*this);
         }
       
       TestChainLoad&&
-      expansionRule (CtrlRule r)
+      expansionRule (Rule&& r)
         {
-          expansionRule_ = r;
+          expansionRule_ = move(r);
           return move(*this);
         }
       
       TestChainLoad&&
-      reductionRule (CtrlRule r)
+      reductionRule (Rule&& r)
         {
-          reductionRule_ = r;
+          reductionRule_ = move(r);
           return move(*this);
         }
       
@@ -346,7 +316,11 @@ namespace test {
                  *next{&b};     // the next set of nodes connected to current
           Node* node = &nodes_->front();
           size_t level{0};
-          size_t expectedLevel = max (1u, numNodes/maxFan); // guess, typically too low
+          
+          // local copy of all rules (they are non-copyable, once engaged)
+          Rule expansionRule = expansionRule_;
+          Rule reductionRule = reductionRule_;
+          Rule seedingRule   = seedingRule_;
           
           // prepare building blocks for the topology generation...
           auto moreNext  = [&]{ return next->size() < maxFan;      };
@@ -358,14 +332,9 @@ namespace test {
                                 n->level = level;
                                 return n;
                               };
-          auto height = [&](double level)
+          auto apply  = [&](Rule& rule, Node* n)
                               {
-                                return level/expectedLevel;
-                              };
-          auto apply  = [&](CtrlRule& rule, Node* n)
-                              {
-                                Cap param = rule (n->hash, height(level));
-                                return param.mapped (maxFan);
+                                return rule(n);
                               };
           
           addNode(); // prime next with root node
@@ -381,8 +350,8 @@ namespace test {
               for (Node* o : *curr)
                 { // follow-up on all Nodes in current level...
                   o->calculate();
-                  size_t toSeed   = apply (seedingRule_, o);
-                  size_t toExpand = apply (expansionRule_,o);
+                  size_t toSeed   = apply (seedingRule, o);
+                  size_t toExpand = apply (expansionRule,o);
                   while (0 < toSeed and spaceLeft())
                     { // start a new chain from seed
                       Node* n = addNode();
@@ -398,7 +367,7 @@ namespace test {
                   if (not toReduce)
                     {          // carry-on chain from o
                       r = spaceLeft()? addNode():nullptr;
-                      toReduce = apply (reductionRule_, o);
+                      toReduce = apply (reductionRule, o);
                     }
                   else
                     --toReduce;
@@ -503,8 +472,9 @@ namespace test {
    */
   template<size_t numNodes, size_t maxFan>
   class TestChainLoad<numNodes,maxFan>::NodeControlBinding
-    : protected std::function<Param(Node*)>
+    : public std::function<Param(Node*)>
     {
+    protected:
       /** by default use Node-hash directly as source of randomness */
       static size_t
       defaultSrc (Node* node)

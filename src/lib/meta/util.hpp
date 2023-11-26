@@ -135,6 +135,12 @@ namespace meta {
   
   
   
+  /** helper to prevent a template constructor from shadowing inherited copy ctors */
+  template<typename ARG, class SELF>
+  using disable_if_self = disable_if<std::is_same<std::remove_reference_t<ARG>, SELF>>;
+  
+  
+  
   /** detect possibility of a conversion to string.
    *  Naive implementation, which first attempts to build a string instance by
    *  implicit conversion, and then tries to invoke an explicit string conversion.

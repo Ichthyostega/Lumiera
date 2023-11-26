@@ -222,7 +222,7 @@ namespace test {
         {
           auto graph = TestChainLoad<32>{};
           
-          graph.expansionRule([](size_t h,double){ return Cap{8, h%16, 63}; })
+          graph.expansionRule(graph.rule().probability(0.5).maxVal(4))
                .buildToplolgy()
                .printTopologyDOT();
         }

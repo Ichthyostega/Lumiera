@@ -143,6 +143,12 @@ namespace meta{
     : _Fun<SIG>
     { };
   
+  /** Specialisation to strip spurious const for type analysis */
+  template<typename SIG>
+  struct _Fun<SIG const&>
+    : _Fun<SIG>
+    { };
+  
   /** Specialisation when using a function reference */
   template<typename SIG>
   struct _Fun<SIG&>

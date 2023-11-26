@@ -69,9 +69,23 @@
  **   specialisations for various function signatures. These adaptors are used to
  **   conform any mapping function and thus allow to simplify or widen the
  **   possible configurations at usage site.
+ ** 
+ ** ## Copy inhibition
+ ** The configuration of the RandomDraw processing pipeline makes heavy use of function composition
+ ** and adaptation to handle a wide selection of input types and usage patterns. Unfortunately this
+ ** requires to like the generated configuration-λ to the object instance (capturing by reference);
+ ** not allowing this would severely limit the possible configurations. This implies that an object
+ ** instance must not be moved anymore, once the processing pipeline has been configured. And this
+ ** in turn would severely limit it's usage in a DSL. As a compromise, RandomDraw relies on
+ ** [lazy on-demand initialisation](\ref lazy-init.hpp): as long as the processing function has
+ ** not been invoked, the internal pipeline is unconfigured, and the object can be moved and copied.
+ ** Once invoked, the prepared configuration is assembled and the function »engaged«; from this point
+ ** on, any attempt to move or copy the object will throw an exception, while it is still possible
+ ** to assign other RandomDraw instances to this object.
  ** @todo 11/2023 This is a first draft and was extracted from an actual usage scenario.
  **   It remains to be seen if the scheme as defined is of any further use henceforth.
  ** @see RandomDraw_test
+ ** @see lazy-init.hpp
  ** @see TestChainLoad_test
  ** @see SchedulerStress_test
  */
@@ -82,7 +96,7 @@
 
 
 #include "lib/error.h"
-#include "lib/nocopy.hpp"
+#include "lib/lazy-init.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "lib/util-quant.hpp"
@@ -95,6 +109,7 @@
 namespace lib {
   namespace err = lumiera::error;
   
+  using lib::meta::disable_if_self;
   using lib::meta::_Fun;
   using std::function;
   using std::forward;
@@ -165,9 +180,11 @@ namespace lib {
    */
   template<class POL>
   class RandomDraw
-    : public POL
-    , util::MoveOnly
+    : public LazyInit<POL>
     {
+      using Lazy = LazyInit<POL>;
+      using Disabled = typename Lazy::MarkDisabled;
+      
       using Sig = typename _Fun<POL>::Sig;
       using Fun = function<Sig>;
       using Tar = typename _Fun<POL>::Ret;
@@ -175,11 +192,6 @@ namespace lib {
       Tar    maxResult_{Tar::maxVal()};      ///< maximum result val actually to produce < max
       Tar    minResult_{Tar::minVal()};      ///< minimum result val actually to produce > min
       double probability_{0};                ///< probability that value is in [min .. max] \ neutral
-      
-      /** due to function binding, this object
-       *  should actually be non-copyable,
-       *  which would defeat DLS use  */
-      bool   fixedLocation_{false};
       
       
       /** @internal quantise into limited result value */
@@ -253,8 +265,10 @@ namespace lib {
        * Drawing is _disabled_ by default, always yielding "zero"
        */
       RandomDraw()
-        : POL{adaptOut(POL::defaultSrc)}
-        { }
+        : Lazy{Disabled()}
+        {
+          mapping (POL::defaultSrc);
+        }
       
       /**
        * Build a RandomDraw by attaching a value-processing function,
@@ -265,30 +279,12 @@ namespace lib {
        * - `void(RandomDraw&, ...)` : the function manipulates the current
        *   instance, to control parameters dynamically, based on input.
        */
-      template<class FUN>
+      template<class FUN,      typename =disable_if_self<FUN, RandomDraw>>
       RandomDraw(FUN&& fun)
-        : POL{}
+        : Lazy{Disabled()}
         , probability_{1.0}
-        , fixedLocation_{true}  // prevent move-copy (function binds to *this)
         {
           mapping (forward<FUN> (fun));
-        }
-      
-      /**
-       * Object can be move-initialised, unless
-       * a custom processing function was installed.
-       */
-      RandomDraw(RandomDraw && rr)
-        : POL{adaptOut(POL::defaultSrc)}
-        , maxResult_{move(rr.maxResult_)}
-        , minResult_{move(rr.minResult_)}
-        , probability_{rr.probability_}
-        , fixedLocation_{rr.fixedLocation_}
-        {
-          if (fixedLocation_)
-            throw err::State{"RandomDraw was already configured with a processing function, "
-                             "which binds into a fixed object location. It can not be moved anymore."
-                            , err::LUMIERA_ERROR_LIFECYCLE};
         }
       
       
@@ -325,8 +321,12 @@ namespace lib {
       mapping (FUN&& fun)
         {
           Fun& thisMapping = static_cast<Fun&> (*this);
-          thisMapping = adaptOut(adaptIn(std::forward<FUN> (fun)));
-          fixedLocation_ = true; // function will bind to *this
+          Lazy::installInitialiser (thisMapping
+                                   ,[theFun = forward<FUN> (fun)]
+                                    (RandomDraw* self)
+                                       { // when lazy init is performed....
+                                         self->installAdapted (theFun);
+                                       });
           return move (*this);
         }
       
@@ -345,6 +345,16 @@ namespace lib {
       
       
       
+      /** @internal adapt a function and install it to control drawing and mapping */
+      template<class FUN>
+      void
+      installAdapted (FUN&& fun)
+        {
+          Fun& thisMapping = static_cast<Fun&> (*this);
+          thisMapping = adaptOut(adaptIn(std::forward<FUN> (fun)));
+        }
+      
+      
       /** @internal adapt input side of a given function to conform to the
        *            global input arguments as defined in the Policy base function.
        *  @return a function pre-fitted with a suitable Adapter from the Policy */
@@ -359,7 +369,6 @@ namespace lib {
           using Sig     = typename _Fun::Sig;
           using Args    = typename _Fun::Args;
           using BaseIn  = typename lib::meta::_Fun<POL>::Args;
-          using Adaptor = typename POL::template Adaptor<Sig>;
           
           if constexpr (std::is_same_v<Args, BaseIn>)
              // function accepts same arguments as this RandomDraw
@@ -369,7 +378,10 @@ namespace lib {
              // function wants to manipulate *this dynamically...
             return adaptIn (applyFirst (forward<FUN> (fun), *this));
           else
-            return Adaptor::build (forward<FUN> (fun));
+            {// attempt to find a custom adaptor via Policy template
+              using Adaptor = typename POL::template Adaptor<Sig>;
+              return Adaptor::build (forward<FUN> (fun));
+            }
         }
       
       /** @internal adapt output side of a given function, allowing to handle it's results
@@ -429,7 +441,7 @@ namespace lib {
       getCurrMapping()
         {
           Fun& currentProcessingFunction = *this;
-          if (fixedLocation_ and currentProcessingFunction)
+          if (currentProcessingFunction)
             return Fun{currentProcessingFunction};
           else
             return Fun{adaptOut(POL::defaultSrc)};

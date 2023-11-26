@@ -41,11 +41,8 @@ namespace test{
   
   using util::isSameObject;
   using lib::meta::isFunMember;
-  using lib::meta::disable_if;
+  using lib::meta::disable_if_self;
   using err::LUMIERA_ERROR_LIFECYCLE;
-  
-  using std::is_same;
-  using std::remove_reference_t;
   using std::make_unique;
   
   
@@ -360,7 +357,7 @@ namespace test{
               installInitialiser(fun, buildInit([](int){ return 0; }));
             }
                                                  // prevent this ctor from shadowing the copy ctors    //////TICKET #963
-          template<typename FUN,      typename =disable_if<is_same<remove_reference_t<FUN>, LazyDemo>>>
+          template<typename FUN,      typename =disable_if_self<FUN, LazyDemo>>
           LazyDemo (FUN&& someFun)
             : LazyInit{MarkDisabled()}
             , fun{}
