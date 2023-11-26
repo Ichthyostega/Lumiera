@@ -192,6 +192,7 @@ namespace lib {
       Tar    maxResult_{Tar::maxVal()};      ///< maximum result val actually to produce < max
       Tar    minResult_{Tar::minVal()};      ///< minimum result val actually to produce > min
       double probability_{0};                ///< probability that value is in [min .. max] \ neutral
+      size_t shuffle_{0};                    ///< statefull additional randomisation to inject into hash 
       
       
       /** @internal quantise into limited result value */
@@ -249,6 +250,8 @@ namespace lib {
       double
       asRand (size_t hash)
         {
+          if (shuffle_)
+            hash *= shuffle_++;
           return double(hash % QUANTISER) / QUANTISER;
         }
       
@@ -313,6 +316,13 @@ namespace lib {
           minResult_ = util::max (m, Tar::minVal());
           if (maxResult_<=minResult_)
             maxVal (++m);
+          return move (*this);
+        }
+      
+      RandomDraw&&
+      shuffle (size_t seed =55)
+        {
+          shuffle_ = seed;
           return move (*this);
         }
       

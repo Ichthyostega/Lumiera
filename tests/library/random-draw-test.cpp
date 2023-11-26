@@ -377,6 +377,36 @@ namespace test{
                 "val:+2 (60| 1.56%)\n"_expect);
           
           
+                             // ══════════
+          draw.probability(1.0).shuffle(1);
+          CHECK (draw( 6) == +1); //  6*1
+          CHECK (draw( 6) == +1); //  6*2
+          CHECK (draw( 6) == +2); //  6*3
+          CHECK (draw( 6) == +2); //  6*4
+          CHECK (draw( 6) == +2); //  6*5
+          CHECK (draw( 6) == -2); //  6*6
+          CHECK (draw(16) == -1); // 16*7 %64 = 48
+          CHECK (draw(16) == +1); // 16*8 %64 =  0
+          
+          report = "+++| p ≔ 1.0 +shuffle \n";
+          report += distribution(draw);
+          CHECK (report ==
+                "+++| p ≔ 1.0 +shuffle \n"
+                "val:-2 (03|25.00%)\n"
+                "val:-1 (04|25.00%)\n"
+                "val:+0 (-1| 0.00%)\n"
+                "val:+1 (00|25.00%)\n"
+                "val:+2 (02|25.00%)\n"_expect);
+          draw.shuffle(0);
+          CHECK (draw(16) == +2); // shuffling disabled
+          CHECK (draw(16) == +2); // values reproducible
+          CHECK (draw(32) == -2);
+          CHECK (draw(32) == -2);
+          CHECK (draw(16) == +2);
+          CHECK (draw(16) == +2);
+          
+          
+          
                              // ═════════
           draw.probability(0.5).maxVal(1);
           CHECK (draw(  0) ==  0);
