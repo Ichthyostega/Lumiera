@@ -118,6 +118,7 @@ namespace test {
 //  using lib::meta::RebindVariadic;
   using util::min;
   using util::max;
+  using util::isnil;
   using util::limited;
   using util::unConst;
   using util::toString;
@@ -284,21 +285,21 @@ namespace test {
       static Rule rule() { return Rule(); }
       
       TestChainLoad&&
-      seedingRule (Rule&& r)
+      seedingRule (Rule r)
         {
           seedingRule_ = move(r);
           return move(*this);
         }
       
       TestChainLoad&&
-      expansionRule (Rule&& r)
+      expansionRule (Rule r)
         {
           expansionRule_ = move(r);
           return move(*this);
         }
       
       TestChainLoad&&
-      reductionRule (Rule&& r)
+      reductionRule (Rule r)
         {
           reductionRule_ = move(r);
           return move(*this);
@@ -317,7 +318,7 @@ namespace test {
           Node* node = &nodes_->front();
           size_t level{0};
           
-          // local copy of all rules (they are non-copyable, once engaged)
+          // local copy of all rules (non-copyable, once engaged)
           Rule expansionRule = expansionRule_;
           Rule reductionRule = reductionRule_;
           Rule seedingRule   = seedingRule_;
@@ -337,12 +338,13 @@ namespace test {
                                 return rule(n);
                               };
           
-          addNode(); // prime next with root node
           // visit all further nodes and establish links
           while (moreNodes())
             {
-              ++level;
               curr->clear();
+              if (isnil(next))
+                addNode(); // ensure parent
+              ++level;
               swap (next, curr);
               size_t toReduce{0};
               Node* r = nullptr;
