@@ -1647,6 +1647,13 @@ namespace lib {
           return IterExplorer::reduce ([](const reference val){ return val; });
         }
       
+      /** simplified _terminal builder_ to count number of elements from this sequence. */
+      size_t
+      count()
+        {
+          return IterExplorer::reduce ([](auto){ return size_t(1); });
+        }
+      
       /** simplified _terminal builder_ to check if any result yields `true` (short-circuit) */
       bool
       has_any()

@@ -64,6 +64,7 @@ namespace test {
           verify_Node();
           verify_Topology();
           control_Topology();
+          reseed_recalculate();
 
           witch_gate();
         }
@@ -215,17 +216,47 @@ namespace test {
       
       
       /** @test flexible control of generated topology
-       * @todo WIP 11/23 🔁 define ⟶ implement
+       * @todo WIP 11/23 🔁 define ⟶ 🔁 implement
        */
       void
       control_Topology()
         {
           auto graph = TestChainLoad<32>{};
           
-          graph.expansionRule(graph.rule().probability(0.25).maxVal(4).shuffle())
-               .pruningRule(graph.rule().probability(0.2).shuffle())
+          graph.expansionRule(graph.rule().probability(0.8).maxVal(1))
+               .pruningRule(graph.rule().probability(0.6))
                .buildToplolgy()
                .printTopologyDOT();
+        }
+      
+      
+      
+      /** @test set and propagate seed values and recalculate all node hashes
+       * @todo WIP 11/23 🔁 define ⟶ implement
+       */
+      void
+      reseed_recalculate()
+        {
+          auto graph = TestChainLoad<32>{};
+          graph.expansionRule(graph.rule().probability(0.8).maxVal(1))
+               .pruningRule(graph.rule().probability(0.6))
+               .buildToplolgy();
+          
+          using Node = TestChainLoad<32>::Node;
+          auto isStartNode = [](Node& n){ return isStart(n); };
+          auto isExitNode = [](Node& n){ return isExit(n); };
+          
+          CHECK (8 == graph.allNodes().filter(isStartNode).count());
+          CHECK (15 == graph.allNodes().filter(isExitNode).count());
+          
+          CHECK (graph.getHash() == 14172386810742845390u);
+          
+          graph.setSeed(55).clearNodeHashes();
+          CHECK (graph.getSeed() == 55);
+          CHECK (graph.getHash() == 0);
+          
+          graph.recalculate();
+          CHECK (graph.getHash() == 6093128458724583708u);
         }
       
       

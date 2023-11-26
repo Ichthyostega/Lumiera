@@ -237,6 +237,12 @@ namespace test {
                   hash_combine (hash, entry->hash);
               return hash;
             }
+          
+          friend bool isStart (Node const& n) { return isnil (n.pred); };
+          friend bool isStart (Node const* n) { return n and isnil (n->pred); };
+          
+          friend bool isExit  (Node const& n) { return isnil (n.succ); };
+          friend bool isExit  (Node const* n) { return n and isnil (n->succ); };
         };
         
         
@@ -336,10 +342,12 @@ namespace test {
           auto moreNext  = [&]{ return next->size() < maxFan;      };
           auto moreNodes = [&]{ return node < &nodes_->back();     };
           auto spaceLeft = [&]{ return moreNext() and moreNodes(); };
-          auto addNode   = [&]{
+          auto addNode   = [&](size_t seed =0)
+                              {
                                 Node* n = *next->add (node++);
                                 n->clear();
                                 n->level = level;
+                                n->hash = seed;
                                 return n;
                               };
           auto apply  = [&](Rule& rule, Node* n)
@@ -364,8 +372,7 @@ namespace test {
                   size_t toExpand = apply (expansionRule,o);
                   while (0 < toSeed and spaceLeft())
                     { // start a new chain from seed
-                      Node* n = addNode();
-                      n->hash = this->getSeed();
+                      addNode(this->getSeed());
                       --toSeed;
                     }
                   while (0 < toExpand and spaceLeft())
@@ -391,8 +398,8 @@ namespace test {
                     }
                 }
               ENSURE (not isnil(next) or spaceLeft());
-              if (isnil(next))
-                addNode(); // ensure parent
+              if (isnil(next)) // ensure graph continues
+                addNode(this->getSeed());
               ENSURE (not next->empty());
               ++level;
             }
@@ -407,6 +414,47 @@ namespace test {
             }
           node->calculate();
           //
+          return move(*this);
+        }
+      
+      
+      /**
+       * Set the overall seed value.
+       * @note does not propagate seed to consecutive start nodes
+       */
+      TestChainLoad&&
+      setSeed (size_t seed = rand())
+        {
+          nodes_->front().hash = seed;
+          return move(*this);
+        }
+      
+      
+      /**
+       * Recalculate all node hashes and propagate seed value.
+       */
+      TestChainLoad&&
+      recalculate()
+        {
+          size_t seed = this->getSeed();
+          for (Node& n : allNodes())
+            {
+              n.hash = isStart(n)? seed : 0;
+              n.calculate();
+            }
+          return move(*this);
+        }
+      
+      
+      /**
+       * Clear node hashes and propagate seed value.
+       */
+      TestChainLoad&&
+      clearNodeHashes()
+        {
+          size_t seed = this->getSeed();
+          for (Node& n : allNodes())
+            n.hash = isStart(n)? seed : 0;
           return move(*this);
         }
       
