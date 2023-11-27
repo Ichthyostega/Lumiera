@@ -278,6 +278,7 @@ namespace test{
           verify_expandOperation();
           verify_expand_rootCurrent();
           verify_transformOperation();
+          verify_elementGroupingOperation();
           verify_combinedExpandTransform();
           verify_customProcessingLayer();
           verify_scheduledExpansion();
@@ -664,6 +665,67 @@ namespace test{
           CHECK (2 == *kk); // Surprise -- someone ate my numberz...
           ++kk;
           CHECK (isnil (kk));
+        }
+      
+      
+      /** @test package elements from the source pipeline into fixed-sized groups.
+       * These groups are implemented as std::array and initialised with the values
+       * yielded consecutively from the underlying source pipeline. The main iterator
+       * then yields a reference to this data (which can be unpacked conveniently
+       * by a structured binding, or processed as a STL container.
+       * Moreover, there is a secondary interface, allowing to iterate over the
+       * values stored in this group; this is also exposed for the rest, which
+       * did not suffice to fill a full group.
+       */
+      void
+      verify_elementGroupingOperation()
+        {
+          auto showGroup = [](auto it){ return "["+util::join(*it)+"]"; };
+          CHECK (materialise (
+                    explore(CountDown{10})
+                      .grouped<3>()
+                      .transform(showGroup)
+                    )
+                 == "[10, 9, 8]-[7, 6, 5]-[4, 3, 2]"_expect);
+          
+          
+          auto ii = explore(CountDown{23})
+                      .grouped<5>();
+          CHECK(ii);
+          CHECK(ii.getGroupedElms());
+          CHECK(not ii.getRestElms());
+          CHECK (materialise(ii.getGroupedElms()) == "23-22-21-20-19"_expect);
+          
+          CHECK ( test::showType<decltype(*ii)>()== "array<unsigned int, 5ul>&"_expect);
+          
+          uint s = *(ii.getGroupedElms());
+          for ( ; ii; ++ii)
+            {
+              auto grp = *ii;
+              CHECK (5 == grp.size());
+              auto& [a,b,c,d,e] = grp;
+              CHECK (a == s);
+              CHECK (b == a-1);
+              CHECK (c == a-2);
+              CHECK (d == a-3);
+              CHECK (e == a-4);
+              CHECK (not ii.getRestElms());
+              s -= 5;
+            }
+          CHECK (s < 5);
+          CHECK (s == 3);
+          
+          CHECK (not ii);
+          CHECK(ii.getGroupedElms());
+          CHECK(ii.getRestElms());
+          CHECK (materialise(ii.getGroupedElms()) == "3-2-1"_expect);
+          CHECK (materialise(ii.getRestElms())    == "3-2-1"_expect);
+          
+          
+          auto iii = explore(CountDown{4})
+                      .grouped<5>();
+          CHECK (not iii);
+          CHECK (materialise(iii.getRestElms())    == "4-3-2-1"_expect);
         }
       
       

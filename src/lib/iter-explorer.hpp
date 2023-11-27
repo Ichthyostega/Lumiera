@@ -850,6 +850,128 @@ namespace lib {
     
     
     /**
+     * @internal Decorator for IterExplorer to group consecutive elements into fixed sized chunks.
+     * One group of elements is always prepared eagerly, and then the next one on iteration.
+     * The group is packaged into a std::array, returning a _reference_ into the internal buffer.
+     * If there are leftover elements at the end of the source sequence, which are not sufficient
+     * to fill a full group, these can be retrieved through the special API getRestElms(), which
+     * returns an iterator.
+     */
+    template<class SRC, class RES, uint grp>
+    class Grouping
+      : public SRC
+      {
+        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        
+      protected:
+        using Group = std::array<RES, grp>;
+        using Iter  = typename Group::iterator;
+        struct Buffer
+          {
+            char storage[sizeof(Group)];
+            
+            Group& group() { return reinterpret_cast<Group&> (storage); }
+            
+            Iter begin() { return group().begin();}
+            Iter end()   { return group().end();  }
+          };
+        Buffer buff_;
+        uint   pos_{0};
+        
+        
+      public:
+        using value_type = Group;
+        using reference  = Group&;
+        using pointer    = Group*;
+
+        Grouping() =default;
+        // inherited default copy operations
+        
+        Grouping (SRC&& dataSrc)
+          : SRC{move (dataSrc)}
+          {
+            pullGroup(); // initially pull to establish the invariant
+          }
+        
+        
+        /**
+         * Iterate over the Elements in the current group.
+         * @return a Lumiera Forward Iterator with value type RES
+         */
+        auto
+        getGroupedElms()
+          {
+            ENSURE (buff_.begin()+pos_ <= buff_.end());
+                   // Array iterators are actually pointers
+            return RangeIter{buff_.begin(), buff_.begin()+pos_};
+          }
+        
+        /**
+         * Retrieve the tail elements produced by the source,
+         * which did not suffice to fill a full group.
+         * @remark getRest() is NIL during regular iteration, but
+         *         possibly yields elements when checkPoint() = false;
+         */
+        auto
+        getRestElms()
+          {
+            return checkPoint()? RangeIter<Iter>()
+                               : getGroupedElms();
+          }
+        
+        /** refresh state when other layers manipulate the source sequence.
+         * @note possibly pulls to re-establish the invariant */
+        void
+        expandChildren()
+          {
+            SRC::expandChildren();
+            pullGroup();
+          }
+        
+      public: /* === Iteration control API for IterableDecorator === */
+        
+        bool
+        checkPoint()  const
+          {
+            return pos_ == grp;
+          }
+        
+        reference
+        yield()  const
+          {
+            return unConst(buff_).group();
+          }
+        
+        void
+        iterNext()
+          {
+            pullGroup();
+          }
+        
+        
+      protected:
+        SRC&
+        srcIter()  const
+          {
+            return unConst(*this);
+          }
+        
+        /** @note establishes the invariant:
+         *        source has been consumed to fill a group */
+        void
+        pullGroup ()
+          {
+            for (pos_=0
+                ; pos_<grp and srcIter()
+                ; ++pos_,++srcIter()
+                )
+              buff_.group()[pos_] = *srcIter();
+          }
+      };
+    
+    
+    
+    /**
      * @internal Decorator for IterExplorer to filter elements based on a predicate.
      * Similar to the Transformer, the given functor is adapted as appropriate. However,
      * we require the functor's result type to be convertible to bool, to serve as approval test.
@@ -1459,6 +1581,26 @@ namespace lib {
         }
       
       
+      /** adapt this IterExplorer group result elements into fixed size chunks, packaged as std::array.
+       * The first group of elements is pulled eagerly at construction, while further groups are formed
+       * on consecutive iteration. Iteration ends when no further full group can be formed; this may
+       * leave out some leftover elements, which can then be retrieved by iteration through the
+       * special API [getRestElms()](\ref iter_explorer::Grouping::getRestElms).
+       * @return processing pipeline with attached [Grouping](\ref iter_explorer::Grouping) decorator
+       * @warning yields a reference into the internal buffer, changed on next iteration.
+       */
+      template<uint grp>
+      auto
+      grouped()
+        {
+          using Value   = typename meta::ValueTypeBinding<SRC>::value_type;
+          using ResCore = iter_explorer::Grouping<SRC, Value, grp>;
+          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          
+          return IterExplorer<ResIter> (ResCore {move(*this)});
+        }
+      
+      
       /** adapt this IterExplorer to iterate only as long as a condition holds true.
        * @return processing pipeline with attached [stop condition](\ref iter_explorer::StopTrigger)
        */
@@ -1573,6 +1715,25 @@ namespace lib {
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
           return IterExplorer<ResIter> (ResCore {move(*this)});
+        }
+      
+      
+      
+      /** preconfigured transformer to pass pointers down the pipeline */
+      auto
+      asPtr()
+        {
+          using Val = typename meta::ValueTypeBinding<SRC>::value_type;
+          static_assert (not std::is_pointer_v<Val>);
+          return IterExplorer::transform ([](Val& ref){ return &ref; });
+        }
+      
+      /** preconfigured transformer to dereference pointers into references */
+      auto
+      derefPtr()
+        {
+          using Ptr = typename meta::ValueTypeBinding<SRC>::value_type;
+          return IterExplorer::transform ([](Ptr ptr){ return *ptr; });
         }
       
       

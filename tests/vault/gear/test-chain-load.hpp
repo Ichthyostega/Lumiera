@@ -239,10 +239,12 @@ namespace test {
             }
           
           friend bool isStart (Node const& n) { return isnil (n.pred); };
-          friend bool isStart (Node const* n) { return n and isnil (n->pred); };
-          
           friend bool isExit  (Node const& n) { return isnil (n.succ); };
-          friend bool isExit  (Node const* n) { return n and isnil (n->succ); };
+          friend bool isInner (Node const& n) { return not (isStart(n) or isExit(n)); }
+          
+          friend bool isStart (Node const* n) { return n and isStart (*n); };
+          friend bool isExit  (Node const* n) { return n and isExit  (*n); };
+          friend bool isInner (Node const* n) { return n and isInner (*n); };
         };
         
         
@@ -285,6 +287,16 @@ namespace test {
         {
           return lib::explore (*nodes_);
         }
+      auto
+      allNodePtr()
+        {
+          return allNodes().asPtr();
+        }
+      
+      /** @return the node's index number, based on its storage location */
+      size_t nodeID(Node const* n){ return size_t(n - &nodes_->front()); };
+      size_t nodeID(Node const& n){ return nodeID (&n); };
+      
       
       
       /* ===== topology control ===== */
@@ -476,8 +488,6 @@ namespace test {
           Code SEED  {"shape=circle"};
           Code TOP   {"shape=box, style=rounded"};
           Code DEFAULT{};
-          
-          auto nodeID = [&](Node& n){ return size_t(&n - &nodes_->front()); };
           
           // prepare time-level zero
           size_t level(0);

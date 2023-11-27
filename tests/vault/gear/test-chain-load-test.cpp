@@ -48,6 +48,19 @@ namespace vault{
 namespace gear {
 namespace test {
   
+  namespace { // shorthands and parameters for test...
+    
+    /** shorthand for specific parameters employed by the following tests */
+    using ChainLoad32 = TestChainLoad<32,16>;
+    using Node = ChainLoad32::Node;
+    auto isStartNode = [](Node& n){ return isStart(n); };
+    auto isInnerNode = [](Node& n){ return isInner(n); };
+    auto isExitNode =  [](Node& n){ return isExit(n); };
+      
+  }//(End)test definitions
+  
+  
+  
   
   /*****************************************************************//**
    * @test verify a tool to generate synthetic load for Scheduler tests.
@@ -126,7 +139,7 @@ namespace test {
           
           CHECK (n0.hash == 0);
           n0.calculate();                                                   // but now hash calculation combines predecessors
-          CHECK (n0.hash == 6050854883719206282u);
+          CHECK (n0.hash == 0x53F8F4753B85558A);
           
           Node n00;                                                         // another Node...
           n00.addPred(n2)                                                   // just adding the predecessors in reversed order
@@ -134,8 +147,8 @@ namespace test {
           
           CHECK (n00.hash == 0);
           n00.calculate();                                                  // ==> hash is different, since it depends on order
-          CHECK (n00.hash == 17052526497278249714u);
-          CHECK (n0.hash  == 6050854883719206282u);
+          CHECK (n00.hash == 0xECA6BE804934CAF2);
+          CHECK (n0.hash  == 0x53F8F4753B85558A);
 
           CHECK (isSameObject (*n1.succ[0], n0));
           CHECK (isSameObject (*n1.succ[1], n00));
@@ -146,9 +159,9 @@ namespace test {
           CHECK (isSameObject (*n0.pred[0],  n1));
           CHECK (isSameObject (*n0.pred[1],  n2));
           
-          CHECK (n00.hash == 17052526497278249714u);
+          CHECK (n00.hash == 0xECA6BE804934CAF2);
           n00.calculate();                                                  // calculation is NOT idempotent (inherently statefull)
-          CHECK (n00.hash == 13151338213516862912u);
+          CHECK (n00.hash == 0xB682F06D29B165C0);
           
           CHECK (isnil (n0.succ));                                          // number of predecessors or successors properly accounted for
           CHECK (isnil (n00.succ));
@@ -175,12 +188,12 @@ namespace test {
       void
       verify_Topology()
         {
-          auto graph = TestChainLoad<32>{}
+          auto graph = ChainLoad32{}
                           .buildToplolgy();
           
           CHECK (graph.topLevel() == 31);
           CHECK (graph.getSeed()  ==  0);
-          CHECK (graph.getHash()  == 6692160254289221734u);
+          CHECK (graph.getHash()  == 0x5CDF544B70E59866);
           
           auto* node = & *graph.allNodes();
           CHECK (node->hash == graph.getSeed());
@@ -210,7 +223,7 @@ namespace test {
           CHECK (steps == 31);
           CHECK (steps == graph.topLevel());
           CHECK (node->hash == graph.getHash());
-          CHECK (node->hash == 6692160254289221734u);
+          CHECK (node->hash == 0x5CDF544B70E59866);
         }    //  hash of the graph is hash of last node
       
       
@@ -221,7 +234,7 @@ namespace test {
       void
       control_Topology()
         {
-          auto graph = TestChainLoad<32>{};
+          ChainLoad32 graph;
           
           graph.expansionRule(graph.rule().probability(0.8).maxVal(1))
                .pruningRule(graph.rule().probability(0.6))
@@ -231,32 +244,88 @@ namespace test {
       
       
       
-      /** @test set and propagate seed values and recalculate all node hashes
-       * @todo WIP 11/23 🔁 define ⟶ implement
+      /** @test set and propagate seed values and recalculate all node hashes.
+       * @remark This test uses parameter rules with some expansion and a
+       *         pruning rule with 60% probability. This setup is known to
+       *         create a sequence of tiny isolated trees with 4 nodes each;
+       *         there are 8 such groups, each with a fork and two exit nodes;
+       *         the last group is wired differently however, because there the
+       *         limiting-mechanism of the topology generation activates to ensure
+       *         that the last node is an exit node. The following code traverses
+       *         all nodes grouped into 4-node clusters to verify this regular
+       *         pattern and the calculated hashes.
+       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
       reseed_recalculate()
         {
-          auto graph = TestChainLoad<32>{};
+          ChainLoad32 graph;
           graph.expansionRule(graph.rule().probability(0.8).maxVal(1))
                .pruningRule(graph.rule().probability(0.6))
                .buildToplolgy();
           
-          using Node = TestChainLoad<32>::Node;
-          auto isStartNode = [](Node& n){ return isStart(n); };
-          auto isExitNode = [](Node& n){ return isExit(n); };
-          
           CHECK (8 == graph.allNodes().filter(isStartNode).count());
           CHECK (15 == graph.allNodes().filter(isExitNode).count());
           
-          CHECK (graph.getHash() == 14172386810742845390u);
+          CHECK (graph.getHash() == 0xC4AE6EB741C22FCE);
+          graph.allNodePtr().grouped<4>()
+               .foreach([&](auto group)
+                 {  // verify wiring pattern
+                   //  and the resulting exit hashes
+                   auto& [a,b,c,d] = *group;
+                   CHECK (isStart(a));
+                   CHECK (isInner(b));
+                   if (b->succ.size() == 2)
+                     {
+                       CHECK (isExit(c));
+                       CHECK (isExit(d));
+                       CHECK (c->hash == 0xAEDC04CFA2E5B999);
+                       CHECK (d->hash == 0xAEDC04CFA2E5B999);
+                     }
+                   else
+                     { // the last chunk is wired differently
+                       CHECK (b->succ.size() == 1);
+                       CHECK (b->succ[0] == c);
+                       CHECK (isInner(c));
+                       CHECK (isExit(d));
+                       CHECK (graph.nodeID(d) == 31);
+                       CHECK (d->hash == graph.getHash());
+                     }      //   this is the global exit node
+                 });
+          
           
           graph.setSeed(55).clearNodeHashes();
           CHECK (graph.getSeed() == 55);
           CHECK (graph.getHash() == 0);
+          graph.allNodePtr().grouped<4>()
+               .foreach([&](auto group)
+                 {  // verify hashes have been reset
+                   auto& [a,b,c,d] = *group;
+                   CHECK (a->hash == 55);
+                   CHECK (b->hash ==  0);
+                   CHECK (b->hash ==  0);
+                   CHECK (b->hash ==  0);
+                 });
           
           graph.recalculate();
-          CHECK (graph.getHash() == 6093128458724583708u);
+          CHECK (graph.getHash() == 0x548F240CE91A291C);
+          graph.allNodePtr().grouped<4>()
+               .foreach([&](auto group)
+                 {  // verify hashes were recalculated
+                   //  based on the new seed
+                   auto& [a,b,c,d] = *group;
+                   CHECK (a->hash == 55);
+                   if (b->succ.size() == 2)
+                     {
+                       CHECK (c->hash == 0x7887993B0ED41395);
+                       CHECK (d->hash == 0x7887993B0ED41395);
+                     }
+                   else
+                     {
+                       CHECK (graph.nodeID(d) == 31);
+                       CHECK (d->hash == graph.getHash());
+                     }
+                 });
         }
       
       
