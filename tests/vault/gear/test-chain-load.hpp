@@ -652,6 +652,7 @@ namespace test {
   
   /* ========= Graph Statistics Evaluation ========= */
   
+  const string STAT_NODE{"node"};    ///< all nodes
   const string STAT_SEED{"seed"};    ///< seed node
   const string STAT_EXIT{"exit"};    ///< exit node
   const string STAT_INNR{"innr"};    ///< inner node
@@ -660,8 +661,9 @@ namespace test {
   const string STAT_LINK{"link"};    ///< 1:1 linking node
   const string STAT_KNOT{"knot"};    ///< knot (joins and forks)
   
-  const std::array KEYS = {STAT_SEED,STAT_EXIT,STAT_INNR,STAT_FORK,STAT_JOIN,STAT_LINK,STAT_KNOT};
+  const std::array KEYS = {STAT_NODE,STAT_SEED,STAT_EXIT,STAT_INNR,STAT_FORK,STAT_JOIN,STAT_LINK,STAT_KNOT};
   const uint CAT = KEYS.size();
+  const uint IDX_SEED = 1; // index of STAT_SEED
   
   namespace {
     template<class NOD>
@@ -669,7 +671,8 @@ namespace test {
     prepareEvaluaions()
     {
       return std::array<std::function<uint(NOD&)>, CAT>
-        { [](NOD& n){ return isStart(n);}
+        { [](NOD&  ){ return 1;         }
+        , [](NOD& n){ return isStart(n);}
         , [](NOD& n){ return isExit(n); }
         , [](NOD& n){ return isInner(n);}
         , [](NOD& n){ return isFork(n); }
@@ -697,9 +700,11 @@ namespace test {
       double pLW{0};                 ///< average per level and level-width
       double cL {0};                 ///< weight centre level for this indicator
       double cLW{0};                 ///< weight centre level width-reduced
+      double sL {0};                 ///< weight centre on subgraph
+      double sLW{0};                 ///< weight centre on subgraph width-reduced
       
       void
-      addPoint (uint levelID, uint width, uint items)
+      addPoint (uint levelID, uint sublevelID, uint width, uint items)
         {
           REQUIRE (levelID == data.size()); // ID is zero based
           REQUIRE (width > 0);
@@ -709,18 +714,32 @@ namespace test {
           pLW += items / double(width);
           cL  += levelID * items;
           cLW += levelID * items/double(width);
+          sL  += sublevelID * items;
+          sLW += sublevelID * items/double(width);
         }
       
       void
-      closeAverages (uint nodes)
+      closeAverages (uint nodes, uint levels, double avgheight)
         {
-          uint levels = data.size();
+          REQUIRE (levels == data.size());
           REQUIRE (levels > 0);
           frac = cnt / double(nodes);
           cL   = pL?   cL/pL  :0;    // weighted averages: normalise to weight sum
           cLW  = pLW? cLW/pLW :0;
+          sL   = pL?   sL/pL  :0;
+          sLW  = pLW? sLW/pLW :0;
           pL  /= levels;             // simple averages : normalise to number of levels
           pLW /= levels;
+          cL  /= levels-1;           // weight centres : as fraction of maximum level-ID
+          cLW /= levels-1;
+          ASSERT (avgheight >= 1.0);
+          if (avgheight > 1.0)
+            {                        // likewise for weight centres relative to subgraph
+              sL  /= avgheight-1;    // height is 1-based, while the contribution was 0-based
+              sLW /= avgheight-1;
+            }
+          else
+              sL = sLW = 0.5;
         }
     };
   
@@ -731,7 +750,11 @@ namespace test {
     {
       uint nodes{0};
       uint levels{0};
+      uint segments{1};
+      uint maxheight{0};
+      double avgheight{0};
       VecU width{};
+      VecU sublevel{};
       
       std::array<Indicator, CAT> indicators;
       
@@ -744,23 +767,27 @@ namespace test {
         }
       
       void
-      addPoint (uint levelWidth, LevelSums& particulars)
+      addPoint (uint levelWidth, uint sublevelID, LevelSums& particulars)
         {
           levels += 1;
           nodes += levelWidth;
           width.push_back (levelWidth);
+          sublevel.push_back (sublevelID);
           ASSERT (levels == width.size());
           ASSERT (0 < levels);
           ASSERT (0 < levelWidth);
           for (uint i=0; i< CAT; ++i)
-            indicators[i].addPoint (levels-1, levelWidth, particulars[i]);
+            indicators[i].addPoint (levels-1, sublevelID, levelWidth, particulars[i]);
         }
       
       void
-      closeAverages()
+      closeAverages (uint segs, uint maxSublevelID)
         {
+          segments = segs;
+          maxheight = maxSublevelID + 1;
+          avgheight = levels / double(segments);
           for (uint i=0; i< CAT; ++i)
-            indicators[i].closeAverages (nodes);
+            indicators[i].closeAverages (nodes,levels,avgheight);
         }
       
     private:
@@ -768,6 +795,7 @@ namespace test {
       reserve (uint lvls)
         {
           width.reserve (lvls);
+          sublevel.reserve(lvls);
           for (uint i=0; i< CAT; ++i)
             {
               indicators[i] = Indicator{};
@@ -798,16 +826,31 @@ namespace test {
       auto classify = prepareEvaluaions<Node>();
       Statistic stat(totalLevels);
       LevelSums particulars{0};
-      size_t level{0};
+      size_t level{0},
+          sublevel{0},
+       maxsublevel{0};
+      size_t segs{0};
       uint width{0};
+      auto detectSubgraphs = [&]{ // to be called when a level is complete
+                                  if (width==1 and particulars[IDX_SEED]==1)
+                                    { // previous level actually started new subgraph
+                                      sublevel = 0;
+                                      ++segs;
+                                    }
+                                  else
+                                    maxsublevel = max (sublevel,maxsublevel);
+                                };
       
       for (Node& node : allNodes())
         {
           if (level != node.level)
-            {   // record statistics for previous level
-              stat.addPoint (width, particulars);
+            {// Level completed...
+              detectSubgraphs();
+              // record statistics for previous level
+              stat.addPoint (width, sublevel, particulars);
               //   switch to next time-level
               ++level;
+              ++sublevel;
               ENSURE (level == node.level);
               particulars = LevelSums{0};
               width = 0;
@@ -818,19 +861,48 @@ namespace test {
             particulars[i] += classify[i](node);
         }
       ENSURE (level = topLevel());
-      stat.addPoint (width, particulars);
-      stat.closeAverages();
+      detectSubgraphs();
+      stat.addPoint (width, sublevel, particulars);
+      stat.closeAverages (segs, maxsublevel);
       return stat;
     }
   
   
   
+  /**
+   * Print a tabular summary of graph characteristics
+   * @remark explanation of indicators
+   *  - »node« : accounting for all nodes
+   *  - »seed« : seed nodes start a new subgraph or side chain
+   *  - »exit« : exit nodes produce output and have no successor
+   *  - »innr« : inner nodes have both predecessors and successors
+   *  - »fork« : a node linked to more than one successor
+   *  - »join« : a node consuming data from more than one predecessor
+   *  - »link« : a node in a linear processing chain; one input, one output
+   *  - »LEVL« : the overall number of distinct _time levels_ in the graph
+   *  - »SEGS« : the number of completely disjoint partial subgraphs
+   *  - »knot« : a node which both joins data and forks out to multiple successors
+   *  - `frac` : the percentage of overall nodes falling into this category
+   *  - `∅pL`  : averaged per Level
+   *  - `∅pLW` : count normalised to the width at that level and then averaged per Level
+   *  - `γL◆`  : weight centre of this kind of node, relative to the overall graph
+   *  - `γLW◆` : the same, but using the level-width-normalised value
+   *  - `γL⬙`  : weight centre, but relative to the current subgraph or segment
+   *  - `γLW⬙` : same but using level-width-normalised value
+   *  Together, these values indicates how the simulated processing load
+   *  is structured over time, assuming that the _»Levels« are processed consecutively_
+   *  in temporal order. The graph can unfold or contract over time, and thus nodes can
+   *  be clustered irregularly, which can be seen from the weight centres; for that
+   *  reason, the width-normalised variants of the indicators are also accounted for,
+   *  since a wider graph also implies that there are more nodes of each kind per level,
+   *  even while the actual density of this kind did not increase.
+   */
   template<size_t numNodes, size_t maxFan>
   inline TestChainLoad<numNodes,maxFan>&&
   TestChainLoad<numNodes,maxFan>::printTopologyStatistics()
     {
-      cout << "INDI cnt frac ∅pL  ∅pLW   γL    γLW\n";
-      _Fmt line{"%s %3d %3.0f%% %4.2f %4.2f %5.1f %5.1f\n"};
+      cout << "INDI: cnt frac ∅pL  ∅pLW  γL◆ γLW◆  γL⬙ γLW⬙\n";
+      _Fmt line{"%4s: %3d %3.0f%% %4.2f %4.2f %4.2f %4.2f %4.2f %4.2f\n"};
       Statistic stat = computeGraphStatistics();
       for (uint i=0; i< CAT; ++i)
         {
@@ -842,8 +914,15 @@ namespace test {
                        % indi.pLW
                        % indi.cL
                        % indi.cLW
+                       % indi.sL
+                       % indi.sLW
                        ;
         }
+      cout << _Fmt{"LEVL: %3d\n"} % stat.levels;
+      cout << _Fmt{"SEGS: %3d   h = ∅%3.1f / max.%2d\n"}
+                       % stat.segments
+                       % stat.avgheight
+                       % stat.maxheight;
       cout << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───"
            << endl;
       return move(*this);
