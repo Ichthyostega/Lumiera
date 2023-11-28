@@ -239,7 +239,8 @@ namespace test {
           graph.expansionRule(graph.rule().probability(0.8).maxVal(1))
                .pruningRule(graph.rule().probability(0.6))
                .buildToplolgy()
-               .printTopologyDOT();
+               .printTopologyDOT()
+               .printTopologyStatistics();
         }
       
       

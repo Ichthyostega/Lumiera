@@ -90,6 +90,7 @@
 //#include "lib/meta/function.hpp"
 //#include "lib/wrapper.hpp"
 #include "lib/iter-explorer.hpp"
+#include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/random-draw.hpp"
 #include "lib/dot-gen.hpp"
@@ -104,7 +105,6 @@
 #include <memory>
 #include <string>
 #include <array>
-#include <map>
 
 
 namespace vault{
@@ -118,6 +118,7 @@ namespace test {
 //  using lib::time::FSecs;
 //  using lib::time::Offset;
 //  using lib::meta::RebindVariadic;
+  using util::_Fmt;
   using util::min;
   using util::max;
   using util::isnil;
@@ -544,6 +545,7 @@ namespace test {
       
       
       Statistic computeGraphStatistics();
+      TestChainLoad&& printTopologyStatistics();
       
     private:
     };
@@ -648,6 +650,8 @@ namespace test {
   
   
   
+  /* ========= Graph Statistics Evaluation ========= */
+  
   const string STAT_SEED{"seed"};    ///< seed node
   const string STAT_EXIT{"exit"};    ///< exit node
   const string STAT_INNR{"innr"};    ///< inner node
@@ -662,7 +666,7 @@ namespace test {
   namespace {
     template<class NOD>
     inline auto
-    buildEvaluations()
+    prepareEvaluaions()
     {
       return std::array<std::function<uint(NOD&)>, CAT>
         { [](NOD& n){ return isStart(n);}
@@ -676,7 +680,7 @@ namespace test {
     }
   }
   
-  using VecU = std::vector<uint>;
+  using VecU      = std::vector<uint>;
   using LevelSums = std::array<uint, CAT>;
   
   /**
@@ -689,21 +693,22 @@ namespace test {
       VecU data{};
       uint cnt{0};                   ///< global sum over all levels
       double frac{0};                ///< fraction of all nodes
-      double pL{0};                  ///< average per level
+      double pL {0};                 ///< average per level
       double pLW{0};                 ///< average per level and level-width
-      double cL{0};                  ///< weight centre level for this indicator
+      double cL {0};                 ///< weight centre level for this indicator
       double cLW{0};                 ///< weight centre level width-reduced
       
       void
-      addPoint (uint level, uint width, uint items)
+      addPoint (uint levelID, uint width, uint items)
         {
-          REQUIRE (level == data.size());
+          REQUIRE (levelID == data.size()); // ID is zero based
+          REQUIRE (width > 0);
           data.push_back (items);
           cnt += items;
           pL  += items;
           pLW += items / double(width);
-          cL  += level * items;
-          cLW += level * items/double(width);
+          cL  += levelID * items;
+          cLW += levelID * items/double(width);
         }
       
       void
@@ -712,8 +717,8 @@ namespace test {
           uint levels = data.size();
           REQUIRE (levels > 0);
           frac = cnt / double(nodes);
-          cL  /= pL;                 // weighted averages: normalise to weight sum
-          cLW /= pLW;
+          cL   = pL?   cL/pL  :0;    // weighted averages: normalise to weight sum
+          cLW  = pLW? cLW/pLW :0;
           pL  /= levels;             // simple averages : normalise to number of levels
           pLW /= levels;
         }
@@ -728,14 +733,14 @@ namespace test {
       uint levels{0};
       VecU width{};
       
-      std::map<const string, Indicator> indicators;
+      std::array<Indicator, CAT> indicators;
       
       explicit
       Statistic (uint lvls)
         : nodes{0}
-        , levels{lvls}
+        , levels{0}
         {
-          reserve (levels);
+          reserve (lvls);
         }
       
       void
@@ -745,38 +750,52 @@ namespace test {
           nodes += levelWidth;
           width.push_back (levelWidth);
           ASSERT (levels == width.size());
+          ASSERT (0 < levels);
+          ASSERT (0 < levelWidth);
           for (uint i=0; i< CAT; ++i)
-            indicators[KEYS[i]].addPoint (levels, levelWidth, particulars[i]);
+            indicators[i].addPoint (levels-1, levelWidth, particulars[i]);
         }
       
       void
       closeAverages()
         {
-          for (auto& KEY : KEYS)
-            indicators[KEY].closeAverages (nodes);
+          for (uint i=0; i< CAT; ++i)
+            indicators[i].closeAverages (nodes);
         }
       
     private:
       void
-      reserve (uint levels)
+      reserve (uint lvls)
         {
-          width.reserve (levels);
-          for (auto& KEY : KEYS)
+          width.reserve (lvls);
+          for (uint i=0; i< CAT; ++i)
             {
-              indicators[KEY] = Indicator{};
-              indicators[KEY].data.reserve(levels);
+              indicators[i] = Indicator{};
+              indicators[i].data.reserve(lvls);
             }
         }
     };
   
   
   
+  /**
+   * Operator on TestChainLoad to evaluate current graph connectivity.
+   * In a pass over the internal storage, all nodes are classified
+   * and accounted into a set of categories, thereby evaluating
+   * - the overall number of nodes and levels generated
+   * - the number of nodes in each level (termed _level width_)
+   * - the fraction of overall nodes falling into each category
+   * - the average number of category members over the levels
+   * - the density of members, normalised over level width
+   * - the weight centre of this category members
+   * - the weight centre of according to density
+   */
   template<size_t numNodes, size_t maxFan>
   inline Statistic
   TestChainLoad<numNodes,maxFan>::computeGraphStatistics()
     {
       auto totalLevels = uint(topLevel());
-      auto classify = buildEvaluations<Node>();
+      auto classify = prepareEvaluaions<Node>();
       Statistic stat(totalLevels);
       LevelSums particulars{0};
       size_t level{0};
@@ -784,10 +803,6 @@ namespace test {
       
       for (Node& node : allNodes())
         {
-          ++width;
-          for (uint i=0; i<CAT; ++i)
-            particulars[i] += classify[i](node);
-            
           if (level != node.level)
             {   // record statistics for previous level
               stat.addPoint (width, particulars);
@@ -797,13 +812,42 @@ namespace test {
               particulars = LevelSums{0};
               width = 0;
             }
+           // classify and account..
+          ++width;
+          for (uint i=0; i<CAT; ++i)
+            particulars[i] += classify[i](node);
         }
       ENSURE (level = topLevel());
       stat.addPoint (width, particulars);
       stat.closeAverages();
       return stat;
     }
-
+  
+  
+  
+  template<size_t numNodes, size_t maxFan>
+  inline TestChainLoad<numNodes,maxFan>&&
+  TestChainLoad<numNodes,maxFan>::printTopologyStatistics()
+    {
+      cout << "INDI cnt frac ∅pL  ∅pLW   γL    γLW\n";
+      _Fmt line{"%s %3d %3.0f%% %4.2f %4.2f %5.1f %5.1f\n"};
+      Statistic stat = computeGraphStatistics();
+      for (uint i=0; i< CAT; ++i)
+        {
+          Indicator& indi = stat.indicators[i];
+          cout << line % KEYS[i]
+                       % indi.cnt
+                       % (indi.frac*100)
+                       % indi.pL
+                       % indi.pLW
+                       % indi.cL
+                       % indi.cLW
+                       ;
+        }
+      cout << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───"
+           << endl;
+      return move(*this);
+    }
   
   
   
