@@ -98,18 +98,20 @@
 #include <boost/functional/hash.hpp>
 #include <functional>
 #include <utility>
-//#include <string>
+#include <string>
 //#include <deque>
+#include <vector>
 #include <memory>
 #include <string>
 #include <array>
+#include <map>
 
 
 namespace vault{
 namespace gear {
 namespace test {
   
-//  using std::string;
+  using std::string;
 //  using std::function;
 //  using lib::time::TimeValue;
 //  using lib::time::Time;
@@ -137,6 +139,8 @@ namespace test {
     const size_t DEFAULT_FAN = 16;
     const size_t DEFAULT_SIZ = 256;
   }
+  
+  struct Statistic;
   
   
   
@@ -627,6 +631,113 @@ namespace test {
                         };
             }
         };
+    };
+  
+  
+  
+  
+  const string STAT_SEED{"seed"};    ///< seed node
+  const string STAT_EXIT{"exit"};    ///< exit node
+  const string STAT_INNR{"innr"};    ///< inner node
+  const string STAT_FORK{"fork"};    ///< forking node
+  const string STAT_JOIN{"join"};    ///< joining node
+  const string STAT_LINK{"link"};    ///< 1:1 linking node
+  const string STAT_KNOT{"knot"};    ///< knot (joins and forks)
+  
+  const std::array KEYS = {STAT_SEED,STAT_EXIT,STAT_INNR,STAT_FORK,STAT_JOIN,STAT_LINK,STAT_KNOT};
+  const uint CAT = KEYS.size();
+  
+  using VecU = std::vector<uint>;
+  using LevelSums = std::array<uint, CAT>;
+  
+  /**
+   * Distribution indicators for one kind of evaluation.
+   * Evaluations over the kind of node are collected per (time)level.
+   * This data is then counted, averaged and weighted.
+   */
+  struct Indicator
+    {
+      VecU data{};
+      uint cnt{0};                   ///< global sum over all levels
+      double frac{0};                ///< fraction of all nodes
+      double pL{0};                  ///< average per level
+      double pLW{0};                 ///< average per level and level-width
+      double cL{0};                  ///< weight centre level for this indicator
+      double cLW{0};                 ///< weight centre level width-reduced
+      
+      void
+      addPoint (uint level, uint width, uint items)
+        {
+          REQUIRE (level == data.size());
+          data.push_back (items);
+          cnt += items;
+          pL  += items;
+          pLW += items / double(width);
+          cL  += level * items;
+          cLW += level * items/double(width);
+        }
+      
+      void
+      closeAverages (uint nodes)
+        {
+          uint levels = data.size();
+          REQUIRE (levels > 0);
+          frac = cnt / double(nodes);
+          cL  /= pL;                 // weighted averages: normalise to weight sum
+          cLW /= pLW;
+          pL  /= levels;             // simple averages : normalise to number of levels
+          pLW /= levels;
+        }
+    };
+  
+  /**
+   * Statistic data calculated for a given chain-load topology
+   */
+  struct Staticstic
+    {
+      uint nodes{0};
+      uint levels{0};
+      VecU width{};
+      
+      std::map<const string, Indicator> indicators;
+      
+      explicit
+      Staticstic (uint lvls)
+        : nodes{0}
+        , levels{lvls}
+        {
+          reserve (levels);
+        }
+      
+      void
+      addPoint (uint levelWidth, LevelSums& particulars)
+        {
+          levels += 1;
+          nodes += levelWidth;
+          width.push_back (levelWidth);
+          ASSERT (levels == width.size());
+          for (uint i=0; i< CAT; ++i)
+            indicators[KEYS[i]].addPoint (levels, levelWidth, particulars[i]);
+        }
+      
+      void
+      closeAverages()
+        {
+          for (auto& KEY : KEYS)
+            indicators[KEY].closeAverages (nodes);
+        }
+      
+    private:
+      void
+      reserve (uint levels)
+        {
+          width.reserve (levels);
+          for (auto& KEY : KEYS)
+            {
+              indicators[KEY] = Indicator{};
+              indicators[KEY].data.reserve(levels);
+            }
+        }
     };
   
   
