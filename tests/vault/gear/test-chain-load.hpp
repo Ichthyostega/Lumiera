@@ -245,10 +245,19 @@ namespace test {
           friend bool isStart (Node const& n) { return isnil (n.pred); };
           friend bool isExit  (Node const& n) { return isnil (n.succ); };
           friend bool isInner (Node const& n) { return not (isStart(n) or isExit(n)); }
+          friend bool isFork  (Node const& n) { return 1 < n.succ.size(); }
+          friend bool isJoin  (Node const& n) { return 1 < n.pred.size(); }
+          friend bool isLink  (Node const& n) { return 1 == n.pred.size() and 1 == n.succ.size(); }
+          friend bool isKnot  (Node const& n) { return isFork(n) and isJoin(n); }
+
           
-          friend bool isStart (Node const* n) { return n and isStart (*n); };
-          friend bool isExit  (Node const* n) { return n and isExit  (*n); };
-          friend bool isInner (Node const* n) { return n and isInner (*n); };
+          friend bool isStart (Node const* n) { return n and isStart(*n); };
+          friend bool isExit  (Node const* n) { return n and isExit (*n); };
+          friend bool isInner (Node const* n) { return n and isInner(*n); };
+          friend bool isFork  (Node const* n) { return n and isFork (*n); };
+          friend bool isJoin  (Node const* n) { return n and isJoin (*n); };
+          friend bool isLink  (Node const* n) { return n and isLink (*n); };
+          friend bool isKnot  (Node const* n) { return n and isKnot (*n); };
         };
         
         
@@ -533,6 +542,9 @@ namespace test {
           return move(*this);
         }
       
+      
+      Statistic computeGraphStatistics();
+      
     private:
     };
   
@@ -647,6 +659,23 @@ namespace test {
   const std::array KEYS = {STAT_SEED,STAT_EXIT,STAT_INNR,STAT_FORK,STAT_JOIN,STAT_LINK,STAT_KNOT};
   const uint CAT = KEYS.size();
   
+  namespace {
+    template<class NOD>
+    inline auto
+    buildEvaluations()
+    {
+      return std::array<std::function<uint(NOD&)>, CAT>
+        { [](NOD& n){ return isStart(n);}
+        , [](NOD& n){ return isExit(n); }
+        , [](NOD& n){ return isInner(n);}
+        , [](NOD& n){ return isFork(n); }
+        , [](NOD& n){ return isJoin(n); }
+        , [](NOD& n){ return isLink(n); }
+        , [](NOD& n){ return isKnot(n); }
+        };
+    }
+  }
+  
   using VecU = std::vector<uint>;
   using LevelSums = std::array<uint, CAT>;
   
@@ -693,7 +722,7 @@ namespace test {
   /**
    * Statistic data calculated for a given chain-load topology
    */
-  struct Staticstic
+  struct Statistic
     {
       uint nodes{0};
       uint levels{0};
@@ -702,7 +731,7 @@ namespace test {
       std::map<const string, Indicator> indicators;
       
       explicit
-      Staticstic (uint lvls)
+      Statistic (uint lvls)
         : nodes{0}
         , levels{lvls}
         {
@@ -739,6 +768,42 @@ namespace test {
             }
         }
     };
+  
+  
+  
+  template<size_t numNodes, size_t maxFan>
+  inline Statistic
+  TestChainLoad<numNodes,maxFan>::computeGraphStatistics()
+    {
+      auto totalLevels = uint(topLevel());
+      auto classify = buildEvaluations<Node>();
+      Statistic stat(totalLevels);
+      LevelSums particulars{0};
+      size_t level{0};
+      uint width{0};
+      
+      for (Node& node : allNodes())
+        {
+          ++width;
+          for (uint i=0; i<CAT; ++i)
+            particulars[i] += classify[i](node);
+            
+          if (level != node.level)
+            {   // record statistics for previous level
+              stat.addPoint (width, particulars);
+              //   switch to next time-level
+              ++level;
+              ENSURE (level == node.level);
+              particulars = LevelSums{0};
+              width = 0;
+            }
+        }
+      ENSURE (level = topLevel());
+      stat.addPoint (width, particulars);
+      stat.closeAverages();
+      return stat;
+    }
+
   
   
   
