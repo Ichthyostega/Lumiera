@@ -62,7 +62,9 @@ namespace test{
 #define SHOW_TYPE(_TY_) \
     cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::test::showType<_TY_>() <<endl;
 #define SHOW_EXPR(_XX_) \
-    cout << "#--◆--# " << STRINGIFY(_XX_) << " ? = " << _XX_ <<endl;
+    cout << "#--◆--# " << STRINGIFY(_XX_) << " ? = " << util::toString(_XX_) <<endl;
+#define SHOW_EXPL(_XX_) \
+    cout << "#--◆--# " << STRINGIFY(_XX_) << " ? = " << boost::lexical_cast<string>(_XX_) <<endl;
 
 
 #endif /*LIB_TEST_DIAGNOSTIC_OUTPUT_H*/

@@ -29,7 +29,6 @@
 #include "vault/gear/work-force.hpp"
 #include "lib/thread.hpp"
 #include "lib/sync.hpp"
-#include "lib/test/diagnostic-output.hpp"////////////TODO
 
 #include <functional>
 #include <thread>

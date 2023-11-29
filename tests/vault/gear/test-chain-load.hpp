@@ -100,10 +100,10 @@
 #include <functional>
 #include <utility>
 #include <string>
-//#include <deque>
 #include <vector>
 #include <memory>
 #include <string>
+#include <tuple>
 #include <array>
 
 
@@ -652,14 +652,21 @@ namespace test {
   
   /* ========= Graph Statistics Evaluation ========= */
   
-  const string STAT_NODE{"node"};    ///< all nodes
-  const string STAT_SEED{"seed"};    ///< seed node
-  const string STAT_EXIT{"exit"};    ///< exit node
-  const string STAT_INNR{"innr"};    ///< inner node
-  const string STAT_FORK{"fork"};    ///< forking node
-  const string STAT_JOIN{"join"};    ///< joining node
-  const string STAT_LINK{"link"};    ///< 1:1 linking node
-  const string STAT_KNOT{"knot"};    ///< knot (joins and forks)
+  struct StatKey
+    : std::pair<size_t,string>
+    {
+      using std::pair<size_t,string>::pair;
+      operator size_t const&() const { return this->first; }
+      operator string const&() const { return this->second;}
+    };
+  const StatKey STAT_NODE{0,"node"};    ///< all nodes
+  const StatKey STAT_SEED{1,"seed"};    ///< seed node
+  const StatKey STAT_EXIT{2,"exit"};    ///< exit node
+  const StatKey STAT_INNR{3,"innr"};    ///< inner node
+  const StatKey STAT_FORK{4,"fork"};    ///< forking node
+  const StatKey STAT_JOIN{5,"join"};    ///< joining node
+  const StatKey STAT_LINK{6,"link"};    ///< 1:1 linking node
+  const StatKey STAT_KNOT{7,"knot"};    ///< knot (joins and forks)
   
   const std::array KEYS = {STAT_NODE,STAT_SEED,STAT_EXIT,STAT_INNR,STAT_FORK,STAT_JOIN,STAT_LINK,STAT_KNOT};
   const uint CAT = KEYS.size();
@@ -696,6 +703,7 @@ namespace test {
       VecU data{};
       uint cnt{0};                   ///< global sum over all levels
       double frac{0};                ///< fraction of all nodes
+      double pS {0};                 ///< average per segment
       double pL {0};                 ///< average per level
       double pLW{0};                 ///< average per level and level-width
       double cL {0};                 ///< weight centre level for this indicator
@@ -710,6 +718,7 @@ namespace test {
           REQUIRE (width > 0);
           data.push_back (items);
           cnt += items;
+          pS  += items;
           pL  += items;
           pLW += items / double(width);
           cL  += levelID * items;
@@ -719,7 +728,7 @@ namespace test {
         }
       
       void
-      closeAverages (uint nodes, uint levels, double avgheight)
+      closeAverages (uint nodes, uint levels, uint segments, double avgheight)
         {
           REQUIRE (levels == data.size());
           REQUIRE (levels > 0);
@@ -728,6 +737,7 @@ namespace test {
           cLW  = pLW? cLW/pLW :0;
           sL   = pL?   sL/pL  :0;
           sLW  = pLW? sLW/pLW :0;
+          pS  /= segments;           // simple averages : normalise to number of levels
           pL  /= levels;             // simple averages : normalise to number of levels
           pLW /= levels;
           cL  /= levels-1;           // weight centres : as fraction of maximum level-ID
@@ -787,7 +797,7 @@ namespace test {
           maxheight = maxSublevelID + 1;
           avgheight = levels / double(segments);
           for (uint i=0; i< CAT; ++i)
-            indicators[i].closeAverages (nodes,levels,avgheight);
+            indicators[i].closeAverages (nodes,levels,segments,avgheight);
         }
       
     private:
@@ -901,8 +911,8 @@ namespace test {
   inline TestChainLoad<numNodes,maxFan>&&
   TestChainLoad<numNodes,maxFan>::printTopologyStatistics()
     {
-      cout << "INDI: cnt frac ∅pL  ∅pLW  γL◆ γLW◆  γL⬙ γLW⬙\n";
-      _Fmt line{"%4s: %3d %3.0f%% %4.2f %4.2f %4.2f %4.2f %4.2f %4.2f\n"};
+      cout << "INDI: cnt frac   ∅pS  ∅pL  ∅pLW  γL◆ γLW◆  γL⬙ γLW⬙\n";
+      _Fmt line{"%4s: %3d %3.0f%% %5.1f %5.2f %4.2f %4.2f %4.2f %4.2f %4.2f\n"};
       Statistic stat = computeGraphStatistics();
       for (uint i=0; i< CAT; ++i)
         {
@@ -910,6 +920,7 @@ namespace test {
           cout << line % KEYS[i]
                        % indi.cnt
                        % (indi.frac*100)
+                       % indi.pS
                        % indi.pL
                        % indi.pLW
                        % indi.cL

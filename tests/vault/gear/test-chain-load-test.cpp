@@ -56,7 +56,7 @@ namespace test {
     auto isStartNode = [](Node& n){ return isStart(n); };
     auto isInnerNode = [](Node& n){ return isInner(n); };
     auto isExitNode =  [](Node& n){ return isExit(n); };
-      
+    
   }//(End)test definitions
   
   
@@ -76,7 +76,10 @@ namespace test {
           simpleUsage();
           verify_Node();
           verify_Topology();
-          control_Topology();
+          verify_Expansion();
+          verify_Reduction();
+          verify_SeedChains();
+          verify_PruneChains();
           reseed_recalculate();
 
           witch_gate();
@@ -228,19 +231,113 @@ namespace test {
       
       
       
-      /** @test flexible control of generated topology
-       * @todo WIP 11/23 🔁 define ⟶ 🔁 implement
+      /** @test demonstrate shaping of generated topology
+       *      - the expansion rule injects forking nodes
+       *      - after some expansion, width limitation is enforced
+       *      - thus join nodes are introduced to keep all chains connected
+       *      - by default, the hash controls shape, evolving identical in each branch
+       *      - with additional shuffling, the decisions are more random
+       *      - statistics can be computed to characterise the graph
+       *      - the graph can be visualised as _Graphviz diagram_
+       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
-      control_Topology()
+      verify_Expansion()
         {
           ChainLoad32 graph;
           
-          graph.expansionRule(graph.rule().probability(0.8).maxVal(1))
-               .pruningRule(graph.rule().probability(0.6))
+          // moderate symmetrical expansion with 40% probability and maximal +2 links
+          graph.expansionRule(graph.rule().probability(0.4).maxVal(2))
                .buildToplolgy()
-               .printTopologyDOT()
-               .printTopologyStatistics();
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+               ;
+          CHECK (graph.getHash() == 0xAE332109116C5100);
+          
+          auto stat = graph.computeGraphStatistics();
+          CHECK (stat.indicators[STAT_NODE].cnt == 32);                        // the 32 Nodes...
+          CHECK (stat.levels                    == 11);                        // ... were organised into 11 levels
+          CHECK (stat.indicators[STAT_FORK].cnt == 4);                         // we got 4 »Fork« events
+          CHECK (stat.indicators[STAT_SEED].cnt == 1);                         // one start node
+          CHECK (stat.indicators[STAT_EXIT].cnt == 1);                         // and one exit node at end
+          CHECK (stat.indicators[STAT_NODE].pL == "2.9090909"_expect);         // ∅ 3 Nodes / level
+          CHECK (stat.indicators[STAT_NODE].cL == "0.640625"_expect);          // with Node density concentrated towards end
+          
+          
+          // with additional re-shuffling, probability acts independent in each branch
+          // leading to more chances to draw a »fork«, leading to a faster expanding graph
+          graph.expansionRule(graph.rule().probability(0.4).maxVal(2).shuffle(23))
+               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+               ;
+          CHECK (graph.getHash() == 0xCBD0807DF6C84637);
+          
+          stat = graph.computeGraphStatistics();
+          CHECK (stat.levels                    == 8);                         // expands faster, with only 8 levels
+          CHECK (stat.indicators[STAT_NODE].pL  == 4);                         // this time ∅ 4 Nodes / level
+          CHECK (stat.indicators[STAT_FORK].cnt == 7);                         // 7 »Fork« events
+          CHECK (stat.indicators[STAT_JOIN].cnt == 2);                         // but also 2 »Join« nodes...
+          CHECK (stat.indicators[STAT_JOIN].cL  == "0.92857143"_expect);       // which are totally concentrated towards end
+          CHECK (stat.indicators[STAT_EXIT].cnt == 1);                         // finally to connect to the single exit
+          
+          
+          // if the generation is allowed to run for longer,
+          // while more constrained in width...
+          TestChainLoad<256,8> gra_2;
+          gra_2.expansionRule(gra_2.rule().probability(0.4).maxVal(2).shuffle(23))
+               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+               ;
+          CHECK (gra_2.getHash() == 0xE629826A1A8DEB38);
+          
+          stat = gra_2.computeGraphStatistics();
+          CHECK (stat.levels                     == 37);                       // much more levels, as can be expected
+          CHECK (stat.indicators[STAT_NODE].pL   == "6.9189189"_expect);       // ∅ 7 Nodes per level
+          CHECK (stat.indicators[STAT_JOIN].pL   == "0.78378378"_expect);      // but also almost one join per level to deal with the limitation
+          CHECK (stat.indicators[STAT_FORK].frac == "0.24609375"_expect);      // 25% forks (there is just not enough room for more forks)
+          CHECK (stat.indicators[STAT_JOIN].frac == "0.11328125"_expect);      // and 11% joins
+//SHOW_EXPR(graph.getHash())
+//SHOW_EXPR(stat.indicators[STAT_NODE].pL)
+//SHOW_EXPR(stat.indicators[STAT_JOIN].cL)
+        }
+      
+      
+      
+      /** @test TODO demonstrate shaping of generated topology
+       *      - TODO
+       * @todo WIP 11/23 🔁 define ⟶ 🔁 implement
+       */
+      void
+      verify_Reduction()
+        {
+          
+        }
+      
+      
+      
+      /** @test TODO demonstrate shaping of generated topology
+       *      - TODO the seed rule allows to start new chains in the middle of the graph
+       * @todo WIP 11/23 🔁 define ⟶ 🔁 implement
+       */
+      void
+      verify_SeedChains()
+        {
+          
+        }
+      
+      
+      
+      /** @test TODO demonstrate shaping of generated topology
+       *      - TODO the prune rule terminates chains randomly
+       *      - this can lead to fragmentation in several sub-graphs
+       * @todo WIP 11/23 🔁 define ⟶ 🔁 implement
+       */
+      void
+      verify_PruneChains()
+        {
+          
         }
       
       
