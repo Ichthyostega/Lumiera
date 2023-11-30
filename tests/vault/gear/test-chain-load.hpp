@@ -47,12 +47,13 @@
  ** configurable _control functions_ driven by each node's (hash)value. This way, each node
  ** can optionally fork out to several successor nodes, but can also reduce and combine its
  ** predecessor nodes; additionally, new chains can be spawned (to simulate the effect of
- ** data loading Jobs without predecessor). The computation always  begins with the _root
- ** node_, proceeds over the node links and finally leads to the _top node,_ which connects
- ** all chains of computation, leaving no dead end. The probabilistic rules controlling the
- ** topology can be configured using the lib::RandomDraw component, allowing either just
- ** to set a fixed probability or to define elaborate dynamic configurations based on the
- ** graph height or node connectivity properties.
+ ** data loading Jobs without predecessor) and chains can be deliberately pruned, possibly
+ ** splitting the computation into several disjoint sub-graphs. Anyway, the computation always
+ ** begins with the _root node_, proceeds over the node links and finally connects any open
+ ** chains of computation to the _top node,_ leaving no dead end. The probabilistic rules
+ ** controlling the topology can be configured using the lib::RandomDraw component, allowing
+ ** either just to set a fixed probability or to define elaborate dynamic configurations
+ ** based on the graph height or node connectivity properties.
  ** 
  ** ## Usage
  ** A TestChainLoad instance is created with predetermined maximum fan factor and a fixed
@@ -80,7 +81,7 @@
 
 
 #include "vault/common.hpp"
-#include "lib/test/test-helper.hpp"
+#include "lib/test/transiently.hpp"
 
 //#include "vault/gear/job.h"
 //#include "vault/gear/activity.hpp"
@@ -127,6 +128,7 @@ namespace test {
   using util::toString;
   using util::showHashLSB;
   using lib::meta::_FunRet;
+  using lib::test::Transiently;
 
 //  using std::forward;
 //  using std::string;
@@ -348,6 +350,9 @@ namespace test {
       
       /**
        * Use current configuration and seed to (re)build Node connectivity.
+       * While working in-place, the wiring and thus the resulting hash values
+       * are completely rewritten, progressing from start and controlled by
+       * evaluating the _drawing rules_ on the current node, computing its hash.
        */
       TestChainLoad&&
       buildToplolgy()
@@ -358,11 +363,11 @@ namespace test {
           Node* node = &nodes_->front();
           size_t level{0};
           
-          // local copy of all rules (non-copyable, once engaged)
-          Rule expansionRule = expansionRule_;
-          Rule reductionRule = reductionRule_;
-          Rule seedingRule   = seedingRule_;
-          Rule pruningRule   = pruningRule_;
+          // transient snapshot of rules (non-copyable, once engaged)
+          Transiently originalExpansionRule{expansionRule_};
+          Transiently originalReductionRule{reductionRule_};
+          Transiently originalseedingRule  {seedingRule_};
+          Transiently originalPruningRule  {pruningRule_};
           
           // prepare building blocks for the topology generation...
           auto moreNext  = [&]{ return next->size() < maxFan;      };
@@ -392,10 +397,10 @@ namespace test {
               for (Node* o : *curr)
                 { // follow-up on all Nodes in current level...
                   o->calculate();
-                  if (apply (pruningRule,o))
+                  if (apply (pruningRule_,o))
                     continue; // discontinue
-                  size_t toSeed   = apply (seedingRule, o);
-                  size_t toExpand = apply (expansionRule,o);
+                  size_t toSeed   = apply (seedingRule_, o);
+                  size_t toExpand = apply (expansionRule_,o);
                   while (0 < toSeed and spaceLeft())
                     { // start a new chain from seed
                       addNode(this->getSeed());
@@ -410,7 +415,7 @@ namespace test {
                   if (not toReduce)
                     {          // carry-on chain from o
                       r = spaceLeft()? addNode():nullptr;
-                      toReduce = apply (reductionRule, o);
+                      toReduce = apply (reductionRule_, o);
                     }
                   else
                     --toReduce;

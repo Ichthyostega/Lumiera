@@ -48,11 +48,11 @@
  ** transformations. A wide array of function signatures can be accepted, as long as it is possible
  ** somehow to _adapt_ those functions to conform to the overall scheme as defined by the Policy base.
  ** Such a mapping function can be given directly at construction, or it can be set up later through
- ** the configuration DSL. As a special twist, it is even possible to bind a function to _manipulate_
- ** the actual instance of RandomDraw dynamically. Such a function takes `RandomDraw&` as first
- ** argument, plus any sequence of further arguments which can be adapted from the overall input;
- ** it is invoked prior to evaluating each input value and can tweak the instance by side-effect.
- ** After that, the input value is passed to the adapted instance.
+ ** the configuration DSL. As a special twist, it is even possible to change parameters dynamically,
+ ** based on the current input value. This requires the mapping function to construct a pristine
+ ** instance of RandomDraw, apply configuration based on the input and then return this instance
+ ** by value — without ever »engaging« and invoking; this dynamically configured instance will
+ ** then be invoked once, passing the current input values to yield the result value.
  ** 
  ** ## Policy template
  ** For practical use, the RandomDraw template must be instantiated with a custom provided
@@ -344,17 +344,6 @@ namespace lib {
       
       
     private:
-      /// metafunction: the given function wants to manipulate `*this` dynamically
-      template<class SIG>
-      struct is_Manipulator
-        : std::false_type { };
-      
-      template<typename...ARGS>
-      struct is_Manipulator<void(RandomDraw&, ARGS...)>
-        : std::true_type { };
-      
-      
-      
       /** @internal adapt a function and install it to control drawing and mapping */
       template<class FUN>
       void
@@ -384,10 +373,6 @@ namespace lib {
              // function accepts same arguments as this RandomDraw
             return forward<FUN> (fun); // pass-through directly
           else
-          if constexpr (is_Manipulator<Sig>())
-             // function wants to manipulate *this dynamically...
-            return adaptIn (applyFirst (forward<FUN> (fun), *this));
-          else
             {// attempt to find a custom adaptor via Policy template
               using Adaptor = typename POL::template Adaptor<Sig>;
               return Adaptor::build (forward<FUN> (fun));
@@ -398,9 +383,9 @@ namespace lib {
        *   - a function producing the overall result-type is installed as-is
        *   - a `size_t` result is assumed be a hash and passed into #drawLimited
        *   - likewise a `double` is assumed to be already a random val to be #limited
-       *   - special treatment is given to a function with `void` result, which is assumed
-       *     to perform some manipulation on this RandomDraw instance by side-effect;
-       *     this allows to changes parameters dynamically, based on the input data.
+       *   - special treatment is given to a function returning a `RandomDraw` instance
+       *     by value; such a function is assumed to set some parametrisation based
+       *     on the input data, allowing to change parameters dynamically.
        * @return adapted function which produces a result value of type #Tar
        */
       template<class FUN>
@@ -426,35 +411,16 @@ namespace lib {
                            ,[this](double rand){ return limited(rand); }
                            );
           else
-          if constexpr (std::is_same_v<Res, void>)  // ◁────────────────────────┨ function manipulates parameters by side-effect
-            return [functor=std::forward<FUN>(fun)
-                   ,processDraw=getCurrMapping()]
+          if constexpr (std::is_same_v<Res, RandomDraw>) // ◁───────────────────┨ RandomDraw with dynamically adjusted parameters
+            return [functor=std::forward<FUN>(fun)]
                    (auto&& ...inArgs) -> _FunRet<RandomDraw>
-                      {
-                        functor(inArgs...);     //  invoke manipulator with copy
-                        return processDraw (forward<decltype(inArgs)> (inArgs)...);
-                      };                      //    forward arguments to mapping-fun
+                      {                               // invoke manipulator with copy
+                        RandomDraw adaptedDraw = functor(inArgs...);
+                        return adaptedDraw (forward<decltype(inArgs)> (inArgs)...);
+                      };                           //    forward arguments to mapping-fun
           else
             static_assert (not sizeof(Res), "unable to adapt / handle result type");
           NOTREACHED("Handle based on return type");
-        }
-      
-      
-      /** @internal capture the current mapping processing-chain as function.
-       *   RandomDraw is-a function to process and map the input argument into a
-       *   limited and quantised output value. The actual chain can be re-configured.
-       *   This function picks up a snapshot copy of the current configuration; it is
-       *   used to build a chain of functions, which incorporates this current function.
-       *   If no function was configured yet, the default processing chain is returned.
-       */
-      Fun
-      getCurrMapping()
-        {
-          Fun& currentProcessingFunction = *this;
-          if (currentProcessingFunction)
-            return Fun{currentProcessingFunction};
-          else
-            return Fun{adaptOut(POL::defaultSrc)};
         }
     };
   

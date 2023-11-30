@@ -723,32 +723,24 @@ namespace test{
           CHECK (d2( 8) ==  0);
           CHECK (d2( 9) ==  0);
           CHECK (d2(10) ==  0);
+          
+          // NOTE: once a custom mapping function has been installed,
+          //       the object can no longer be moved, due to reference binding.
+          VERIFY_ERROR (LIFECYCLE, Draw dx{move(d2)} );
         }
       
       
       
       
-      /** @test change the generation profile dynamically
-       *      - a »manipulator function« gets the current RandomDraw instance,
-       *        and any arguments that can generally be adapted for mapping functions;
-       *        it uses these arguments to manipulate the state before each new invocation;
+      /** @test change the generation profile dynamically, based on current input;
        *        in the example here, the probability is manipulated in each cycle.
-       *      - a »manipulator function« can be installed on top of any existing configuration,
-       *        including another custom mapping function; in the example here, we first install
-       *        a custom mapping for the hash values, to change the cycle to 4 steps only. Then,
-       *        in a second step, a »manipulator« is installed on top, this time accepting the
-       *        raw hash value and manipulating the minValue. After the manipulator was invoked,
-       *        the RandomDraw instance will be evaluated through the mapping-chain present
-       *        prior to installation of the »manipulator« — in this case, still the mapping
-       *        to change the cycle to 4 steps length; so in the result, the minValue is
-       *        increased in each cycle.
        */
       void
       verify_dynamicChange()
         {
-          auto d1 = Draw([](Draw& draw, uint cycle, uint)
-                            {  // manipulate the probability
-                              draw.probability((cycle+1)*0.25);
+          auto d1 = Draw([](uint cycle, uint)
+                            {  // dynamically control probability
+                              return Draw().probability((cycle+1)*0.25);
                             });
           
           CHECK (d1(        0) ==  0);
@@ -788,50 +780,6 @@ namespace test{
           CHECK (d1(128+64+56) == -1);
           CHECK (d1(128+64+63) == -1);
           CHECK (d1(128+64+64) ==  1);
-          
-          // NOTE: once a custom mapping function has been installed,
-          //       the object can no longer be moved, due to reference binding.
-          VERIFY_ERROR (LIFECYCLE, Draw dx{move(d1)} );
-          
-          
-          auto d2 = Draw([](size_t hash)
-                            {  // change cycle 4 steps only
-                              return fmod (hash/4.0, 1.0);
-                            });
-
-          CHECK (d2( 0) == +1); // 1st cycle
-          CHECK (d2( 1) == +2);
-          CHECK (d2( 2) == -2);
-          CHECK (d2( 3) == -1);
-          CHECK (d2( 4) == +1); // 2nd cycle
-          CHECK (d2( 5) == +2);
-          CHECK (d2( 6) == -2);
-          CHECK (d2( 7) == -1);
-          CHECK (d2( 8) == +1); // 3rd cycle
-          CHECK (d2( 9) == +2);
-          CHECK (d2(10) == -2);
-          CHECK (d2(11) == -1);
-          CHECK (d2(12) == +1);
-
-          d2.mapping([](Draw& draw, size_t hash)
-                            {  // manipulate the minVal per cycle
-                              int cycle = hash / 4;
-                              draw.minVal(-2+cycle);
-                            });
-          
-          CHECK (d2( 0) == +1); // 1st cycle -> minVal ≡ -2
-          CHECK (d2( 1) == +2);
-          CHECK (d2( 2) == -2);
-          CHECK (d2( 3) == -1);
-          CHECK (d2( 4) == +1); // 2nd cycle -> minVal ≡ -1
-          CHECK (d2( 5) == +1);
-          CHECK (d2( 6) == +2);
-          CHECK (d2( 7) == -1);
-          CHECK (d2( 8) == +1); // 3rd cycle -> minVal ≡ 0
-          CHECK (d2( 9) == +1);
-          CHECK (d2(10) == +2);
-          CHECK (d2(11) == +2);
-          CHECK (d2(12) == +1);
         }
     };
   

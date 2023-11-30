@@ -298,9 +298,6 @@ namespace test {
           CHECK (stat.indicators[STAT_JOIN].pL   == "0.78378378"_expect);      // but also almost one join per level to deal with the limitation
           CHECK (stat.indicators[STAT_FORK].frac == "0.24609375"_expect);      // 25% forks (there is just not enough room for more forks)
           CHECK (stat.indicators[STAT_JOIN].frac == "0.11328125"_expect);      // and 11% joins
-//SHOW_EXPR(graph.getHash())
-//SHOW_EXPR(stat.indicators[STAT_NODE].pL)
-//SHOW_EXPR(stat.indicators[STAT_JOIN].cL)
         }
       
       
@@ -312,8 +309,27 @@ namespace test {
       void
       verify_Reduction()
         {
+          ChainLoad32 graph;
           
+          // moderate symmetrical expansion with 40% probability and maximal +2 links
+          graph.expansionRule(graph.rule().mapping([&](Node* n)
+                                                      {
+                                                        if (isStart(n))
+                                                          return graph.rule().probability(1.0).maxVal(8).mapping([](size_t){ return 1.0; });
+                                                        else
+                                                          return graph.rule();
+                                                      }))
+               .reductionRule(graph.rule().probability(0.2).maxVal(3).shuffle(555))
+               .buildToplolgy()
+             .printTopologyDOT()
+             .printTopologyStatistics()
+               ;
+//          CHECK (graph.getHash() == 0xAE332109116C5100);
+SHOW_EXPR(graph.getHash())
         }
+//SHOW_EXPR(graph.getHash())
+//SHOW_EXPR(stat.indicators[STAT_NODE].pL)
+//SHOW_EXPR(stat.indicators[STAT_JOIN].cL)
       
       
       

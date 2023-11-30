@@ -65,7 +65,7 @@ namespace test{
       
      ~Transiently()
         {
-          manipulated_ = originalVal_;
+          manipulated_ = std::move (originalVal_);
         }
       
       template<typename X>
