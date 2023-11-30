@@ -326,6 +326,13 @@ namespace lib {
           return move (*this);
         }
       
+      RandomDraw&&
+      fixedVal (Tar v)
+        {
+          mapping ([v](size_t){ return v; });
+          return move (*this);
+        }
+      
       template<class FUN>
       RandomDraw&&
       mapping (FUN&& fun)

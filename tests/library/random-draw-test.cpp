@@ -588,6 +588,19 @@ namespace test{
                 "val:+0 (00|50.00%)\n"
                 "val:+1 (-1| 0.00%)\n"
                 "val:+2 (-1| 0.00%)\n"_expect);
+          
+          
+             // ═════════
+          draw.fixedVal(1);
+          report = "+++| fixedVal(1) \n";
+          report += distribution(draw);
+          CHECK (report ==
+                "+++| fixedVal(1) \n"
+                "val:-2 (-1| 0.00%)\n"
+                "val:-1 (-1| 0.00%)\n"
+                "val:+0 (-1| 0.00%)\n"
+                "val:+1 (00|100.00%)\n"
+                "val:+2 (-1| 0.00%)\n"_expect);
         }
       
       

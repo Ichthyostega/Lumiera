@@ -302,34 +302,74 @@ namespace test {
       
       
       
-      /** @test TODO demonstrate shaping of generated topology
-       *      - TODO
-       * @todo WIP 11/23 🔁 define ⟶ 🔁 implement
+      /** @test demonstrate impact of reduction on graph topology
+       *      - after one fixed initial expansion, reduction causes
+       *        all chains to be joined eventually
+       *      - expansion and reduction can counterbalance each other,
+       *        leading to localised »packages« of branchings and reductions
+       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_Reduction()
         {
           ChainLoad32 graph;
           
-          // moderate symmetrical expansion with 40% probability and maximal +2 links
-          graph.expansionRule(graph.rule().mapping([&](Node* n)
-                                                      {
-                                                        if (isStart(n))
-                                                          return graph.rule().probability(1.0).maxVal(8).mapping([](size_t){ return 1.0; });
-                                                        else
-                                                          return graph.rule();
-                                                      }))
+          // expand immediately at start and then gradually reduce / join chains
+          graph.expansionRule(graph.rule_atStart(8))
                .reductionRule(graph.rule().probability(0.2).maxVal(3).shuffle(555))
                .buildToplolgy()
-             .printTopologyDOT()
-             .printTopologyStatistics()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
                ;
-//          CHECK (graph.getHash() == 0xAE332109116C5100);
-SHOW_EXPR(graph.getHash())
+          CHECK (graph.getHash() == 0x8454196BFA40CFE1);
+          
+          auto stat = graph.computeGraphStatistics();
+          CHECK (stat.levels                    == 9);                         // This connection pattern filled 9 levels
+          CHECK (stat.indicators[STAT_JOIN].cnt == 4);                         // we got 4 »Join« events (reductions=
+          CHECK (stat.indicators[STAT_FORK].cnt == 1);                         // and the single expansion/fork
+          CHECK (stat.indicators[STAT_FORK].cL  == 0.0);                       // ...sitting right at the beginning
+          CHECK (stat.indicators[STAT_NODE].cL  == "0.37890625"_expect);       // Nodes are concentrated towards the beginning
+          
+          
+          
+          // expansion and reduction can counterbalance each other
+          graph.expansionRule(graph.rule().probability(0.2).maxVal(3).shuffle(555))
+               .reductionRule(graph.rule().probability(0.2).maxVal(3).shuffle(555))
+               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+               ;
+          CHECK (graph.getHash() == 0x825696EA63E579A4);
+          
+          stat = graph.computeGraphStatistics();
+          CHECK (stat.levels                    == 12);                        // This example runs a bit longer
+          CHECK (stat.indicators[STAT_NODE].pL  == "2.6666667"_expect);        // in the middle threading 3-5 Nodes per Level
+          CHECK (stat.indicators[STAT_FORK].cnt == 5);                         // with 5 expansions
+          CHECK (stat.indicators[STAT_JOIN].cnt == 3);                         // and 3 reductions
+          CHECK (stat.indicators[STAT_FORK].cL  == "0.45454545"_expect);       // forks dominating earlier
+          CHECK (stat.indicators[STAT_JOIN].cL  == "0.66666667"_expect);       // while joins need forks as prerequisite
+          
+          
+          
+          // expansion bursts can be balanced with a heightened reduction intensity
+          graph.expansionRule(graph.rule().probability(0.3).maxVal(4).shuffle(555))
+               .reductionRule(graph.rule().probability(0.9).maxVal(2).shuffle(555))
+               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+               ;
+          CHECK (graph.getHash() == 0xA850E6A4921521AB);
+          
+          stat = graph.computeGraphStatistics();
+          CHECK (stat.levels                    == 12);                        // This graph has a similar outline
+          CHECK (stat.indicators[STAT_NODE].pL  == "2.6666667"_expect);        // in the middle threading 3-5 Nodes per Level
+          CHECK (stat.indicators[STAT_FORK].cnt == 7);                         // ...yet with quite different internal structure
+          CHECK (stat.indicators[STAT_JOIN].cnt == 9);                         //
+          CHECK (stat.indicators[STAT_FORK].cL  == "0.41558442"_expect);
+          CHECK (stat.indicators[STAT_JOIN].cL  == "0.62626263"_expect);
+          CHECK (stat.indicators[STAT_FORK].pLW == "0.19583333"_expect);       // while the densities of forks and joins almost match,
+          CHECK (stat.indicators[STAT_JOIN].pLW == "0.26527778"_expect);       // a slightly higher reduction density leads to convergence eventually
         }
-//SHOW_EXPR(graph.getHash())
-//SHOW_EXPR(stat.indicators[STAT_NODE].pL)
-//SHOW_EXPR(stat.indicators[STAT_JOIN].cL)
       
       
       
@@ -342,6 +382,10 @@ SHOW_EXPR(graph.getHash())
         {
           
         }
+//SHOW_EXPR(graph.getHash())
+//SHOW_EXPR(stat.indicators[STAT_NODE].pL)
+//SHOW_EXPR(stat.indicators[STAT_FORK].cL)
+//SHOW_EXPR(stat.indicators[STAT_JOIN].cL)
       
       
       

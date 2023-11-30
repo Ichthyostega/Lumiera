@@ -317,8 +317,6 @@ namespace test {
       
       /* ===== topology control ===== */
       
-      static Rule rule() { return Rule(); }
-      
       TestChainLoad&&
       seedingRule (Rule r)
         {
@@ -346,6 +344,21 @@ namespace test {
           pruningRule_ = move(r);
           return move(*this);
         }
+      
+      
+      /** Abbreviation for starting rules */
+      static Rule rule() { return Rule(); }
+      
+      static Rule
+      rule_atStart (uint v)
+        {
+          return Rule().mapping([v](Node* n)
+                                  {
+                                    return isStart(n)? Rule().fixedVal(v)
+                                                     : Rule();
+                                  });
+        }
+      
       
       
       /**
