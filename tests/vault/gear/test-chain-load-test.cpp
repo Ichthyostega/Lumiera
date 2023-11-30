@@ -373,19 +373,60 @@ namespace test {
       
       
       
-      /** @test TODO demonstrate shaping of generated topology
-       *      - TODO the seed rule allows to start new chains in the middle of the graph
-       * @todo WIP 11/23 🔁 define ⟶ 🔁 implement
+      /** @test demonstrate shaping of generated topology by seeding new chains
+       *      - the seed rule allows to start new chains in the middle of the graph
+       *      - combined with with reduction, the emerging structure resembles
+       *        the processing pattern encountered with real media calculations
+       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_SeedChains()
         {
+          ChainLoad32 graph;
           
+          // randomly start new chains, to be carried-on linearly
+          graph.seedingRule(graph.rule().probability(0.2).maxVal(3).shuffle())
+               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+               ;
+          
+          CHECK (graph.getHash() == 0x12A49C0E413B573B);
+          
+          auto stat = graph.computeGraphStatistics();
+          CHECK (stat.levels                    == 8);                         // 8 Levels...
+          CHECK (stat.indicators[STAT_SEED].cnt == 11);                        // overall 11 »Seed« events generated several ongoing chains
+          CHECK (stat.indicators[STAT_FORK].cnt == 0);                         // yet no branching/expanding
+          CHECK (stat.indicators[STAT_LINK].cnt == 19);                        // thus more and more chains were just carried on
+          CHECK (stat.indicators[STAT_LINK].pL == 2.375);                      // on average 2-3 per level are continuations
+          CHECK (stat.indicators[STAT_NODE].pL == 4);                          // leading to ∅ 4 Nodes per level
+          CHECK (stat.indicators[STAT_NODE].cL == "0.63392857"_expect);        // with nodes amassing towards the end
+          CHECK (stat.indicators[STAT_LINK].cL == "0.63157895"_expect);        // because there are increasingly more links to carry-on
+          CHECK (stat.indicators[STAT_JOIN].cL == "0.92857143"_expect);        // while joining only happens at the end when connecting to exit
+          
+          
+          
+          // combining random seed nodes with reduction leads to a processing pattern
+          // with side-chaines successively joined into a single common result
+          graph.seedingRule(graph.rule().probability(0.2).maxVal(3).shuffle())
+               .reductionRule(graph.rule().probability(0.9).maxVal(2))
+               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+               ;
+          CHECK (graph.getHash() == 0x82E39529C470E20A);
+          
+          stat = graph.computeGraphStatistics();
+          CHECK (stat.indicators[STAT_SEED].cnt == 11);                        // the same number of 11 »Seed« events
+          CHECK (stat.indicators[STAT_JOIN].cnt == 6);                         // but now 6 joining nodes
+          CHECK (stat.indicators[STAT_LINK].cnt == 15);                        // and less carry-on
+          CHECK (stat.indicators[STAT_FORK].cnt == 0);                         // no branching
+          CHECK (stat.indicators[STAT_NODE].pL  == 3.2);                       // leading a slightly leaner graph with ∅ 3.2 Nodes per level
+          CHECK (stat.indicators[STAT_NODE].cL  == "0.5625"_expect);           // and also slightly more evenly spaced this time
+          CHECK (stat.indicators[STAT_LINK].cL  == "0.55555556"_expect);       // links are also more encountered in the middle
+          CHECK (stat.indicators[STAT_JOIN].cL  == "0.72222222"_expect);       // and also joins are happening underway
+          CHECK (stat.levels                    == 10);                        // mostly because a leaner graph takes longer to use 32 Nodes
         }
-//SHOW_EXPR(graph.getHash())
-//SHOW_EXPR(stat.indicators[STAT_NODE].pL)
-//SHOW_EXPR(stat.indicators[STAT_FORK].cL)
-//SHOW_EXPR(stat.indicators[STAT_JOIN].cL)
       
       
       
@@ -399,6 +440,10 @@ namespace test {
         {
           
         }
+//SHOW_EXPR(graph.getHash())
+//SHOW_EXPR(stat.indicators[STAT_NODE].pL)
+//SHOW_EXPR(stat.indicators[STAT_FORK].cL)
+//SHOW_EXPR(stat.indicators[STAT_JOIN].cL)
       
       
       
@@ -484,6 +529,12 @@ namespace test {
                        CHECK (d->hash == graph.getHash());
                      }
                  });
+          
+          // seeding and recalculation are reproducible
+          graph.setSeed(0).recalculate();
+          CHECK (graph.getHash() == 0xC4AE6EB741C22FCE);
+          graph.setSeed(55).recalculate();
+          CHECK (graph.getHash() == 0x548F240CE91A291C);
         }
       
       
