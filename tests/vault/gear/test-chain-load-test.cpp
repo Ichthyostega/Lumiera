@@ -76,11 +76,12 @@ namespace test {
           simpleUsage();
           verify_Node();
           verify_Topology();
-          verify_Expansion();
-          verify_Reduction();
-          verify_SeedChains();
-          verify_PruneChains();
-          reseed_recalculate();
+          showcase_Expansion();
+          showcase_Reduction();
+          showcase_SeedChains();
+          showcase_PruneChains();
+          showcase_StablePattern();
+          verify_reseed_recalculate();
 
           witch_gate();
         }
@@ -232,6 +233,7 @@ namespace test {
       
       
       
+      
       /** @test demonstrate shaping of generated topology
        *      - the expansion rule injects forking nodes
        *      - after some expansion, width limitation is enforced
@@ -243,7 +245,7 @@ namespace test {
        * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
-      verify_Expansion()
+      showcase_Expansion()
         {
           ChainLoad32 graph;
           
@@ -304,6 +306,7 @@ namespace test {
       
       
       
+      
       /** @test demonstrate impact of reduction on graph topology
        *      - after one fixed initial expansion, reduction causes
        *        all chains to be joined eventually
@@ -312,7 +315,7 @@ namespace test {
        * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
-      verify_Reduction()
+      showcase_Reduction()
         {
           ChainLoad32 graph;
           
@@ -374,6 +377,7 @@ namespace test {
       
       
       
+      
       /** @test demonstrate shaping of generated topology by seeding new chains
        *      - the seed rule allows to start new chains in the middle of the graph
        *      - combined with with reduction, the emerging structure resembles
@@ -381,7 +385,7 @@ namespace test {
        * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
-      verify_SeedChains()
+      showcase_SeedChains()
         {
           ChainLoad32 graph;
           
@@ -431,13 +435,16 @@ namespace test {
       
       
       
-      /** @test TODO demonstrate shaping of generated topology
-       *      - TODO the prune rule terminates chains randomly
-       *      - this can lead to fragmentation in several sub-graphs
-       * @todo WIP 11/23 🔁 define ⟶ 🔁 implement
+      
+      /** @test demonstrate topology with pruning and multiple segments
+       *      - the prune rule terminates chains randomly
+       *      - this can lead to fragmentation into several sub-graphs
+       *      - these can be completely segregated, or appear interwoven
+       *      - equilibrium of seeding and pruning can be established
+       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
-      verify_PruneChains()
+      showcase_PruneChains()
         {
           ChainLoad32 graph;
           
@@ -447,7 +454,6 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          
           CHECK (graph.getHash() == 0xC4AE6EB741C22FCE);
           
           auto stat = graph.computeGraphStatistics();
@@ -468,7 +474,6 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          
           CHECK (graph.getHash() == 0xC515DB464FF76818);
           
           stat = graph.computeGraphStatistics();
@@ -494,7 +499,6 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          
           CHECK (graph.getHash() == 0xEF172CC4B0DE2334);
           
           stat = graph.computeGraphStatistics();
@@ -518,7 +522,6 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          
           CHECK (graph.getHash() == 0xD0A27C9B81058637);
           
           // NOTE: this example produced 10 disjoint graph parts,
@@ -556,53 +559,279 @@ namespace test {
           CHECK (stat.indicators[STAT_JOIN].pL  == 1);                         // with one »Join« event per level on average
           CHECK (stat.indicators[STAT_SEED].cnt == 21);                        // seeds are injected with /fixed rate/, meaning that
           CHECK (stat.indicators[STAT_SEED].pL  == "2.3333333"_expect);        // there is one additional seed for every node in previous level
+        }
+      
+      
+      
+      
+      
+      /** @test examples of realistic stable processing patterns
+       *      - some cases achieve a real equilibrium
+       *      - other examples' structure is slowly expanding
+       *        and become stable under constriction of width
+       *      - some examples go into a stable repetitive loop
+       *      - injecting additional randomness generates a
+       *        chaotic yet stationary flow of similar patterns
+       * @note these examples use a larger pre-allocation of nodes
+       *       to demonstrate the stable state; because, towards end,
+       *       a tear-down into one single exit node will be enforced.
+       * @remark creating any usable example is a matter of experimentation;
+       *       the usual starting point is to balance expanding and contracting
+       *       forces; yet generation can either run-away or suffocate, and
+       *       so the task is to find a combination of seed values and slight
+       *       parameter variations leading into repeated re-establishment
+       *       of some node constellation. When this is achieved, additional
+       *       shuffling can be introduced to uncover further potential.
+       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
+       */
+      void
+      showcase_StablePattern()
+        {
+          TestChainLoad<256> graph;
           
-          
-          TestChainLoad<256> gra_2;
-          // The next example is »interesting« insofar it shows self-similarity
-          // The generation is entirely repetitive and locally predictable,
-          // producing an ongoing sequence of small graph segments,
-          // partially overlapping with interwoven starts.
-//          gra_2.seedingRule(gra_2.rule_atLink(1))
-//               .pruningRule(gra_2.rule().probability(0.4))
-//               .reductionRule(gra_2.rule().probability(0.6).maxVal(5).minVal(2))
-//               .setSeed(23)
-//               .buildToplolgy()
+          // This example creates a repetitive, non-expanding stable pattern
+          // comprised of four small graph segments, generated interleaved
+          // Explanation: rule_atLink() triggers when the preceding node is a »Link«
+          graph.seedingRule(graph.rule_atLink(1))
+               .pruningRule(graph.rule().probability(0.4))
+               .reductionRule(graph.rule().probability(0.6).maxVal(5).minVal(2))
+               .setSeed(23)
+               .buildToplolgy()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
-//               ;
+               ;
+          CHECK (graph.getHash() == 0xED40D07688A9905);
           
-          // this one goes into a stable repetition loop
-//          gra_2.seedingRule(gra_2.rule_atLink(1))
-//               .pruningRule(gra_2.rule().probability(0.5))
-//               .reductionRule(gra_2.rule().probability(0.6).maxVal(5).minVal(2))
-//               .setSeed(23)
-//               .buildToplolgy()
+          auto stat = graph.computeGraphStatistics();
+          CHECK (stat.indicators[STAT_NODE].cL   == "0.49970598"_expect);      // The resulting distribution of nodes is stable and even
+          CHECK (stat.levels                     == 94);                       // ...arranging the 256 nodes into 94 levels
+          CHECK (stat.indicators[STAT_NODE].pL   == "2.7234043"_expect);       // ...with ∅ 2.7 nodes per level
+          CHECK (stat.indicators[STAT_SEED].pL   == "1.0319149"_expect);       // comprised of ∅ 1 seed per level
+          CHECK (stat.indicators[STAT_JOIN].pL   == "0.4787234"_expect);       //            ~ ∅ ½ join per level
+          CHECK (stat.indicators[STAT_EXIT].pL   == "0.32978723"_expect);      //            ~ ∅ ⅓ exit per level
+          CHECK (stat.indicators[STAT_SEED].frac == "0.37890625"_expect);      // overall, 38% nodes are seeds
+          CHECK (stat.indicators[STAT_EXIT].frac == "0.12109375"_expect);      //      and 12% are exit nodes
+          CHECK (stat.indicators[STAT_SEED].cLW  == "0.47963675"_expect);      // the density centre of all node kinds
+          CHECK (stat.indicators[STAT_LINK].cLW  == "0.49055446"_expect);      //  ...is close to the middle
+          CHECK (stat.indicators[STAT_JOIN].cLW  == "0.53299599"_expect);
+          CHECK (stat.indicators[STAT_EXIT].cLW  == "0.55210026"_expect);
+          
+          
+          
+          // with only a slight increase in pruning probability
+          // the graph goes into a stable repetition loop rather,
+          // repeating a single shape with 3 seeds, 3 links and one 3-fold join as exit
+          graph.seedingRule(graph.rule_atLink(1))
+               .pruningRule(graph.rule().probability(0.5))
+               .reductionRule(graph.rule().probability(0.6).maxVal(5).minVal(2))
+               .setSeed(23)
+               .buildToplolgy()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
-//               ;
+               ;
+          CHECK (graph.getHash() == 0xD801FFCF44B202F4);
           
-          // this one comes close to a relistic stable processing pattern
-          // just the individual graph is still to complicated
-          // and it the load increases over time
-          gra_2.seedingRule(gra_2.rule().probability(0.5).maxVal(2))
-//               .pruningRule(gra_2.rule().probability(0.55))
-               .reductionRule(gra_2.rule().probability(0.5).maxVal(5))
-               .pruningRule(gra_2.rule_atJoin(1))
+          stat = graph.computeGraphStatistics();
+          CHECK (stat.levels                     == 78);                       //
+          CHECK (stat.indicators[STAT_NODE].pL   == "3.2820513"_expect);       // ∅ 3.3 nodes per level
+          CHECK (stat.indicators[STAT_SEED].frac == "0.41796875"_expect);      // 42% seed
+          CHECK (stat.indicators[STAT_EXIT].frac == "0.140625"_expect);        // 14% exit
+          
+          
+          
+          // The next example uses a different generation approach:
+          // Here, seeding happens randomly, while every join immediately
+          // forces a prune, so all joins become exit nodes.
+          // With a reduction probability slightly over seed, yet limited reduction strength
+          // the generation goes into a stable repetition loop, yet with rather small graphs,
+          // comprised each of two seeds, two links and a single 2-fold join at exit,
+          // with exit and the two seeds of the following graph happening simultaneously.
+          graph.seedingRule(graph.rule().probability(0.6).maxVal(1))
+               .reductionRule(graph.rule().probability(0.75).maxVal(3))
+               .pruningRule(graph.rule_atJoin(1))
+               .setSeed(47)
+               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+               ;
+          CHECK (graph.getHash() == 0xB9580850D637CD45);
+          
+          stat = graph.computeGraphStatistics();
+          CHECK (stat.levels                     == 104);                       //
+          CHECK (stat.indicators[STAT_NODE].pL   == "2.4615385"_expect);        // ∅ 2.5 nodes per level
+          CHECK (stat.indicators[STAT_SEED].frac == "0.40234375"_expect);       // 40% seed
+          CHECK (stat.indicators[STAT_EXIT].frac == "0.1953125"_expect);        // 20% exit
+          CHECK (stat.indicators[STAT_SEED].pL   == "0.99038462"_expect);       // resulting in 1 seed per level
+          CHECK (stat.indicators[STAT_EXIT].pL   == "0.48076923"_expect);       //              ½ exit per level
+          
+          
+          // Increased seed probability combined with overall seed value 0  ◁──── (crucial, other seeds produce larger graphs)
+          // produces what seems to be the best stable repetition loop:
+          // same shape as in preceding, yet interwoven by 2 steps
+          graph.seedingRule(graph.rule().probability(0.8).maxVal(1))
+               .reductionRule(graph.rule().probability(0.75).maxVal(3))
+               .pruningRule(graph.rule_atJoin(1))
+               .setSeed(0)
+               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+               ;
+          CHECK (graph.getHash() == 0xC8C23AF1A9729901);
+          
+          stat = graph.computeGraphStatistics();
+          CHECK (stat.levels                     == 55);                       // much denser arrangement due to stronger interleaving
+          CHECK (stat.indicators[STAT_NODE].pL   == "4.6545455"_expect);       // ∅ 4.7 nodes per level — almost twice as much
+          CHECK (stat.indicators[STAT_SEED].frac == "0.3984375"_expect);       // 40% seed
+          CHECK (stat.indicators[STAT_EXIT].frac == "0.19140625"_expect);      // 20% exit              — same fractions
+          CHECK (stat.indicators[STAT_SEED].pL   == "1.8545455"_expect);       // 1.85 seed per level   — higher density
+          CHECK (stat.indicators[STAT_EXIT].pL   == "0.89090909"_expect);      // 0.9 exit per level
+          
+          
+          // With just the addition of irregularity through shuffling on the reduction,
+          // a stable and tightly interwoven pattern of medium sized graphs is generated
+          graph.seedingRule(graph.rule().probability(0.8).maxVal(1))
+               .reductionRule(graph.rule().probability(0.75).maxVal(3).shuffle())
+               .pruningRule(graph.rule_atJoin(1))
+               .setSeed(0)
+               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+               ;
+          CHECK (graph.getHash() == 0x2C66D34BA0680AF5);
+          
+          stat = graph.computeGraphStatistics();
+          CHECK (stat.levels                   == 45);                         //
+          CHECK (stat.indicators[STAT_NODE].pL == "5.6888889"_expect);         // ∅ 5.7 nodes per level
+          CHECK (stat.indicators[STAT_SEED].pL == "2.3555556"_expect);         // ∅ 2.4 seeds
+          CHECK (stat.indicators[STAT_LINK].pL == "2.4888889"_expect);         // ∅ 2.5 link nodes
+          CHECK (stat.indicators[STAT_EXIT].pL == "0.82222222"_expect);        // ∅ 0.8 join/exit nodes — indicating stronger spread/reduction
+          
+          
+          
+          // This example uses another setup, without special rules;
+          // rather, seed, reduction and pruning are tuned to balance each other.
+          // The result is a regular interwoven pattern of very small graphs,
+          // slowly expanding yet stable under constriction of width.
+          // Predominant is a shape with two seeds on two levels, a single link and a 2-fold join;
+          // caused by width constriction, this becomes complemented by larger compounds at intervals.
+          graph.seedingRule(graph.rule().probability(0.8).maxVal(1))
+               .reductionRule(graph.rule().probability(0.75).maxVal(3))
+               .pruningRule(graph.rule().probability(0.55))
+               .setSeed(55)   // ◁───────────────────────────────────────────── use 31 for width limited to 8 nodes
+               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+               ;
+          CHECK (graph.getHash() == 0x4E6A586532A450FD);
+          
+          stat = graph.computeGraphStatistics();
+          CHECK (stat.levels                     == 22);                       // ▶ resulting graph is very dense, hitting the parallelisation limit
+          CHECK (stat.indicators[STAT_NODE].pL   == "11.636364"_expect);       // ∅ almost 12 nodes per level !
+          CHECK (stat.indicators[STAT_SEED].pL   == "6.5454545"_expect);       // comprised of ∅ 6.5 seeds
+          CHECK (stat.indicators[STAT_LINK].pL   == "2.2727273"_expect);       //              ∅ 2.3 links
+          CHECK (stat.indicators[STAT_JOIN].pL   == "2.7272727"_expect);       //              ∅ 2.7 joins
+          CHECK (stat.indicators[STAT_EXIT].pL   == "2.3636364"_expect);       //              ∅ 2.4 exits
+          CHECK (stat.indicators[STAT_SEED].frac == "0.5625"_expect);          // 56% seed
+          CHECK (stat.indicators[STAT_EXIT].frac == "0.203125"_expect);        // 20% exit
+          
+          
+          
+          // A slight parameters variation generates medium sized graphs, which are deep interwoven;
+          // the generation is slowly expanding, but becomes stable under width constriction
+          graph.seedingRule(graph.rule().probability(0.8).maxVal(1))
+               .reductionRule(graph.rule().probability(0.6).maxVal(5).minVal(2))
+               .pruningRule(graph.rule().probability(0.4))
                .setSeed(42)
                .buildToplolgy()
-             .printTopologyDOT()
-             .printTopologyStatistics()
-               ;
-//SHOW_EXPR(graph.getHash())
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+             ;
+          CHECK (graph.getHash() == 0x58A972A5154FEB95);
           
-          stat = gra_2.computeGraphStatistics();
-//          CHECK (stat.levels                    == 9);                         // Generation carries on for 13 levels
+          stat = graph.computeGraphStatistics();
+          CHECK (stat.levels                     == 27);                       //
+          CHECK (stat.indicators[STAT_NODE].pL   == "9.4814815"_expect);       // ∅ 9.5 nodes per level — ⅓ less dense
+          CHECK (stat.indicators[STAT_SEED].frac == "0.3984375"_expect);       // 40% seed
+          CHECK (stat.indicators[STAT_LINK].frac == "0.45703125"_expect);      // 45% link
+          CHECK (stat.indicators[STAT_JOIN].frac == "0.11328125"_expect);      // 11% joins
+          CHECK (stat.indicators[STAT_EXIT].frac == "0.08203125"_expect);      //  8% exits  — hinting at very strong reduction
+          
+          
+          
+          // The same setup with different seeing produces a
+          // stable repetitive change of linear chain and small tree with 2 joins
+          graph.seedingRule(graph.rule().probability(0.8).maxVal(2))
+               .reductionRule(graph.rule().probability(0.6).maxVal(5).minVal(2))
+               .pruningRule(graph.rule().probability(0.42))
+               .setSeed(23)
+               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+               ;
+          CHECK (graph.getHash() == 0x9B9E007964F751A2);
+          
+          stat = graph.computeGraphStatistics();
+          CHECK (stat.levels                     == 130);                      //
+          CHECK (stat.indicators[STAT_NODE].pL   == "1.9692308"_expect);       // ∅ ~2 nodes per level — much lesser density
+          CHECK (stat.indicators[STAT_SEED].frac == "0.33203125"_expect);      // 33% seed
+          CHECK (stat.indicators[STAT_LINK].frac == "0.41796875"_expect);      // 42% link
+          CHECK (stat.indicators[STAT_JOIN].frac == "0.1640625"_expect);       // 16% join
+          CHECK (stat.indicators[STAT_EXIT].frac == "0.16796875"_expect);      // 16% exit  — only a 2:1 reduction on average
+          
+          
+          // With added shuffling in the seed rule, and under width constriction,
+          // an irregular sequence of small to large and strongly interwoven graphs emerges.
+          graph.seedingRule(graph.rule().probability(0.8).maxVal(2).shuffle())
+               .reductionRule(graph.rule().probability(0.6).maxVal(5).minVal(2))
+               .pruningRule(graph.rule().probability(0.42))
+               .setSeed(23)
+               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+               ;
+          CHECK (graph.getHash() == 0xE491294D0B7F3D4D);
+          
+          stat = graph.computeGraphStatistics();
+          CHECK (stat.levels                   == 21);                         // rather dense
+          CHECK (stat.indicators[STAT_NODE].pL == "12.190476"_expect);         // ∅ 12.2 nodes per level
+          CHECK (stat.indicators[STAT_SEED].pL == "7.2380952"_expect);         // ∅  7.2 seeds
+          CHECK (stat.indicators[STAT_LINK].pL == "3.047619"_expect);          // ∅  3   links
+          CHECK (stat.indicators[STAT_JOIN].pL == "1.8571429"_expect);         // ∅  1.9 joins
+          CHECK (stat.indicators[STAT_EXIT].pL == "0.66666667"_expect);        // ∅  0.6 exits
+          
+          
+          
+          // The final example attempts to balance expansion and reduction forces.
+          // Since reduction needs expanded nodes to work on, expansion always gets
+          // a head start and we need to tune reduction to slightly higher strength
+          // to ensure the graph width does not explode. The result is one single
+          // graph with increasingly complex connections, which can expand into
+          // width limitation at places, but also collapse to a single thread
+          graph.expansionRule(graph.rule().probability(0.27).maxVal(4))
+               .reductionRule(graph.rule().probability(0.44).maxVal(6).minVal(2))
+               .seedingRule(graph.rule())
+               .pruningRule(graph.rule())
+               .setSeed(62)
+               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+               ;
+          CHECK (graph.getHash() == 0x8208F1B6517481F0);
+          
+          stat = graph.computeGraphStatistics();
+          CHECK (stat.levels                     == 31);                       // rather high concurrency
+          CHECK (stat.indicators[STAT_SEED].cnt  ==  1);                       // a single seed
+          CHECK (stat.indicators[STAT_EXIT].cnt  ==  1);                       // ...and exit
+          CHECK (stat.indicators[STAT_NODE].pL   == "8.2580645"_expect);       // ∅ 8.25 nodes per level
+          CHECK (stat.indicators[STAT_FORK].frac == "0.16015625"_expect);      // 16% forks
+          CHECK (stat.indicators[STAT_LINK].frac == "0.76953125"_expect);      // 77% links
+          CHECK (stat.indicators[STAT_JOIN].frac == "0.10546875"_expect);      // 10% joins
+          CHECK (stat.indicators[STAT_KNOT].frac == "0.0390625"_expect);       //  3% »Knot« nodes which both join and fork
+          CHECK (stat.indicators[STAT_FORK].cLW  == "0.41855453"_expect);      // density centre of forks lies earlier
+          CHECK (stat.indicators[STAT_JOIN].cLW  == "0.70806275"_expect);      // while density centre of joins heavily leans towards end
         }
-//SHOW_EXPR(graph.getHash())
-//SHOW_EXPR(stat.indicators[STAT_NODE].pL)
-//SHOW_EXPR(stat.indicators[STAT_FORK].cL)
-//SHOW_EXPR(stat.indicators[STAT_JOIN].cL)
+      
+      
       
       
       
@@ -619,7 +848,7 @@ namespace test {
        * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
-      reseed_recalculate()
+      verify_reseed_recalculate()
         {
           ChainLoad32 graph;
           graph.expansionRule(graph.rule().probability(0.8).maxVal(1))

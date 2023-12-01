@@ -943,6 +943,7 @@ namespace test {
    *  - »SEGS« : the number of completely disjoint partial subgraphs
    *  - »knot« : a node which both joins data and forks out to multiple successors
    *  - `frac` : the percentage of overall nodes falling into this category
+   *  - `∅pS`  : averaged per Segment (warning: see below)
    *  - `∅pL`  : averaged per Level
    *  - `∅pLW` : count normalised to the width at that level and then averaged per Level
    *  - `γL◆`  : weight centre of this kind of node, relative to the overall graph
@@ -956,6 +957,9 @@ namespace test {
    *  reason, the width-normalised variants of the indicators are also accounted for,
    *  since a wider graph also implies that there are more nodes of each kind per level,
    *  even while the actual density of this kind did not increase.
+   *  @warning no comprehensive connectivity analysis is performed, and thus there is
+   *           *no reliable indication of subgraphs*. The `SEGS` statistics may be misleading,
+   *           since these count only completely severed and restarted graphs.
    */
   template<size_t numNodes, size_t maxFan>
   inline TestChainLoad<numNodes,maxFan>&&
