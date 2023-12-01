@@ -231,6 +231,7 @@ namespace test {
       
       
       
+      
       /** @test demonstrate shaping of generated topology
        *      - the expansion rule injects forking nodes
        *      - after some expansion, width limitation is enforced
@@ -302,6 +303,7 @@ namespace test {
       
       
       
+      
       /** @test demonstrate impact of reduction on graph topology
        *      - after one fixed initial expansion, reduction causes
        *        all chains to be joined eventually
@@ -331,7 +333,6 @@ namespace test {
           CHECK (stat.indicators[STAT_NODE].cL  == "0.37890625"_expect);       // Nodes are concentrated towards the beginning
           
           
-          
           // expansion and reduction can counterbalance each other
           graph.expansionRule(graph.rule().probability(0.2).maxVal(3).shuffle(555))
                .reductionRule(graph.rule().probability(0.2).maxVal(3).shuffle(555))
@@ -348,7 +349,6 @@ namespace test {
           CHECK (stat.indicators[STAT_JOIN].cnt == 3);                         // and 3 reductions
           CHECK (stat.indicators[STAT_FORK].cL  == "0.45454545"_expect);       // forks dominating earlier
           CHECK (stat.indicators[STAT_JOIN].cL  == "0.66666667"_expect);       // while joins need forks as prerequisite
-          
           
           
           // expansion bursts can be balanced with a heightened reduction intensity
@@ -370,6 +370,7 @@ namespace test {
           CHECK (stat.indicators[STAT_FORK].pLW == "0.19583333"_expect);       // while the densities of forks and joins almost match,
           CHECK (stat.indicators[STAT_JOIN].pLW == "0.26527778"_expect);       // a slightly higher reduction density leads to convergence eventually
         }
+      
       
       
       
@@ -405,7 +406,6 @@ namespace test {
           CHECK (stat.indicators[STAT_JOIN].cL == "0.92857143"_expect);        // while joining only happens at the end when connecting to exit
           
           
-          
           // combining random seed nodes with reduction leads to a processing pattern
           // with side-chaines successively joined into a single common result
           graph.seedingRule(graph.rule().probability(0.2).maxVal(3).shuffle())
@@ -430,6 +430,7 @@ namespace test {
       
       
       
+      
       /** @test TODO demonstrate shaping of generated topology
        *      - TODO the prune rule terminates chains randomly
        *      - this can lead to fragmentation in several sub-graphs
@@ -438,7 +439,165 @@ namespace test {
       void
       verify_PruneChains()
         {
+          ChainLoad32 graph;
           
+          // terminate chains randomly
+          graph.pruningRule(graph.rule().probability(0.2))
+               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+               ;
+          
+          CHECK (graph.getHash() == 0xC4AE6EB741C22FCE);
+          
+          auto stat = graph.computeGraphStatistics();
+          CHECK (stat.levels                    == 32);                        // only a single line of connections...
+          CHECK (stat.segments                  ==  8);                        // albeit severed into 8 segments
+          CHECK (stat.indicators[STAT_NODE].pS  ==  4);                        // with always 4 Nodes per segment
+          CHECK (stat.indicators[STAT_NODE].pL  ==  1);                        // and only ever a single node per level
+          CHECK (stat.indicators[STAT_SEED].cnt ==  8);                        // consequently we get 8 »Seed« nodes
+          CHECK (stat.indicators[STAT_EXIT].cnt ==  8);                        //                     8 »Exit« nodes
+          CHECK (stat.indicators[STAT_LINK].cnt == 16);                        //                and 16 interconnecting links
+          
+          
+          // combined with expansion, several tree-shaped segments emerge
+          graph.pruningRule(graph.rule().probability(0.2))
+               .expansionRule(graph.rule().probability(0.6))
+               .setSeed(10101)
+               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+               ;
+          
+          CHECK (graph.getHash() == 0xC515DB464FF76818);
+          
+          stat = graph.computeGraphStatistics();
+          CHECK (stat.levels                    == 15);                        //
+          CHECK (stat.segments                  ==  5);                        // this time the graph is segregated into 5 parts
+          CHECK (stat.indicators[STAT_NODE].pS  == 6.4);                       // with 4 Nodes per segment
+          CHECK (stat.indicators[STAT_FORK].sL  == 0.0);                       // where »Fork« is always placed at the beginning of each segment
+          CHECK (stat.indicators[STAT_LINK].sL  == 0.5);                       // carry-on »Link« nodes in the very middle of the segment
+          CHECK (stat.indicators[STAT_EXIT].sL  == 1.0);                       // and several »Exit« at the end
+          CHECK (stat.indicators[STAT_EXIT].pS  == 2.6);                       // averaging 2.6 exits per segment (4·3 + 1)/5
+          CHECK (stat.indicators[STAT_SEED].cnt ==  5);                        // so overall we get 8 »Seed« nodes
+          CHECK (stat.indicators[STAT_FORK].cnt ==  5);                        //                   5 »Fork« nodes
+          CHECK (stat.indicators[STAT_EXIT].cnt == 13);                        //                  13 »Exit« nodes
+          CHECK (stat.indicators[STAT_LINK].cnt == 14);                        //              and 14 interconnecting links
+          CHECK (stat.indicators[STAT_NODE].pL  == "2.1333333"_expect);        // leading to ∅ ~2 Nodes per level
+          
+          
+          // however, by chance, with more randomised pruning points...
+          graph.pruningRule(graph.rule().probability(0.2).shuffle(5))
+               .expansionRule(graph.rule().probability(0.6))
+               .setSeed(10101)
+               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+               ;
+          
+          CHECK (graph.getHash() == 0xEF172CC4B0DE2334);
+          
+          stat = graph.computeGraphStatistics();
+          CHECK (stat.segments                  ==  1);                        // ...the graph can evade severing altogether
+          CHECK (stat.indicators[STAT_FORK].cnt ==  2);                        // with overall 2 »Fork«
+          CHECK (stat.indicators[STAT_EXIT].cnt ==  9);                        //          and 9 »Exit« nodes
+          CHECK (stat.indicators[STAT_EXIT].pL == "1.2857143"_expect);         // ∅ 1.3 exits per level
+          CHECK (stat.indicators[STAT_NODE].pL == "4.5714286"_expect);         // ∅ 4.6 nodes per level
+          
+
+          graph.expansionRule(graph.rule()); // reset
+          
+          
+          // combined with a special seeding rule,
+          // which injects /another seed/ in the next level after each seed,
+          // an equilibrium of chain seeding and termination can be achieved...
+          graph.seedingRule(graph.rule_atStart(1))
+               .pruningRule(graph.rule().probability(0.2))
+               .setSeed(10101)
+               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+               ;
+          
+          CHECK (graph.getHash() == 0xD0A27C9B81058637);
+          
+          // NOTE: this example produced 10 disjoint graph parts,
+          //       which however start and end interleaved
+          stat = graph.computeGraphStatistics();
+          CHECK (stat.levels                    == 13);                        // Generation carries on for 13 levels
+          CHECK (stat.segments                  ==  1);                        // NOTE: the detection of segments FAILS here (due to interleaved starts)
+          CHECK (stat.indicators[STAT_SEED].cnt == 11);                        // 11 »Seed« nodes
+          CHECK (stat.indicators[STAT_EXIT].cnt == 10);                        // 10 »Exit« nodes
+          CHECK (stat.indicators[STAT_LINK].cnt == 10);                        // 10 interconnecting links
+          CHECK (stat.indicators[STAT_JOIN].cnt ==  1);                        // and one additional »Join«
+          CHECK (stat.indicators[STAT_JOIN].cL  == "0.91666667"_expect);       // ....appended at graph completion
+          CHECK (stat.indicators[STAT_NODE].pL  == "2.4615385"_expect);        // overall ∅ 2½ nodes per level
+          CHECK (stat.indicators[STAT_NODE].cL  == "0.48697917"_expect);       // with generally levelled distribution
+          CHECK (stat.indicators[STAT_SEED].cL  == "0.41666667"_expect);       // also for the seeds
+          CHECK (stat.indicators[STAT_EXIT].cL  == "0.55"_expect);             // and the exits
+          
+          
+          // The next example is »interesting« insofar it shows self-similarity
+          // The generation is entirely repetitive and locally predictable,
+          // producing an ongoing sequence of small graph segments,
+          // partially overlapping with interwoven starts.
+          graph.seedingRule(graph.rule().fixedVal(1))
+               .pruningRule(graph.rule().probability(0.5))
+               .reductionRule(graph.rule().probability(0.8).maxVal(4))
+               .setSeed(10101)
+               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+               ;
+          CHECK (graph.getHash() == 0x1D56DF2FB0D4AF97);
+          
+          stat = graph.computeGraphStatistics();
+          CHECK (stat.levels                    == 9);                         // Generation carries on for 13 levels
+          CHECK (stat.indicators[STAT_JOIN].pL  == 1);                         // with one »Join« event per level on average
+          CHECK (stat.indicators[STAT_SEED].cnt == 21);                        // seeds are injected with /fixed rate/, meaning that
+          CHECK (stat.indicators[STAT_SEED].pL  == "2.3333333"_expect);        // there is one additional seed for every node in previous level
+          
+          
+          TestChainLoad<256> gra_2;
+          // The next example is »interesting« insofar it shows self-similarity
+          // The generation is entirely repetitive and locally predictable,
+          // producing an ongoing sequence of small graph segments,
+          // partially overlapping with interwoven starts.
+//          gra_2.seedingRule(gra_2.rule_atLink(1))
+//               .pruningRule(gra_2.rule().probability(0.4))
+//               .reductionRule(gra_2.rule().probability(0.6).maxVal(5).minVal(2))
+//               .setSeed(23)
+//               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+//               ;
+          
+          // this one goes into a stable repetition loop
+//          gra_2.seedingRule(gra_2.rule_atLink(1))
+//               .pruningRule(gra_2.rule().probability(0.5))
+//               .reductionRule(gra_2.rule().probability(0.6).maxVal(5).minVal(2))
+//               .setSeed(23)
+//               .buildToplolgy()
+//             .printTopologyDOT()
+//             .printTopologyStatistics()
+//               ;
+          
+          // this one comes close to a relistic stable processing pattern
+          // just the individual graph is still to complicated
+          // and it the load increases over time
+          gra_2.seedingRule(gra_2.rule().probability(0.5).maxVal(2))
+//               .pruningRule(gra_2.rule().probability(0.55))
+               .reductionRule(gra_2.rule().probability(0.5).maxVal(5))
+               .pruningRule(gra_2.rule_atJoin(1))
+               .setSeed(42)
+               .buildToplolgy()
+             .printTopologyDOT()
+             .printTopologyStatistics()
+               ;
+//SHOW_EXPR(graph.getHash())
+          
+          stat = gra_2.computeGraphStatistics();
+//          CHECK (stat.levels                    == 9);                         // Generation carries on for 13 levels
         }
 //SHOW_EXPR(graph.getHash())
 //SHOW_EXPR(stat.indicators[STAT_NODE].pL)

@@ -359,6 +359,38 @@ namespace test {
                                   });
         }
       
+      static Rule
+      rule_atJoin (uint v)
+        {
+          return Rule().mapping([v](Node* n)
+                                  {
+                                    return isJoin(n) ? Rule().fixedVal(v)
+                                                     : Rule();
+                                  });
+        }
+      
+      static Rule
+      rule_atLink (uint v)
+        {
+          return Rule().mapping([v](Node* n)
+                                  { // NOTE: when applying these rules,
+                                    //       successors are not yet wired...
+                                    return not (isJoin(n) or isStart(n))
+                                                     ? Rule().fixedVal(v)
+                                                     : Rule();
+                                  });
+        }
+      
+      static Rule
+      rule_atJoin_else (double p1, double p2, uint v=1)
+        {
+          return Rule().mapping([p1,p2,v](Node* n)
+                                  {
+                                    return isJoin(n) ? Rule().probability(p1).maxVal(v)
+                                                     : Rule().probability(p2).maxVal(v);
+                                  });
+        }
+
       
       
       /**
