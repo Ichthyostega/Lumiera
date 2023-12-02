@@ -86,8 +86,9 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include <type_traits>
+#include <cstddef>
 #include <utility>
+#include <type_traits>
 
 
 namespace lib {
@@ -213,7 +214,8 @@ namespace lib {
       /** Inner capsule managing the contained object (interface) */
       struct Buffer
         {
-          char content_[siz];
+          alignas(size_t) std::byte content_[siz];
+          
           void* ptr() { return &content_; }
           
           virtual ~Buffer() {}           ///< this is an ABC with VTable
@@ -255,7 +257,7 @@ namespace lib {
           SUB&
           get()  const  ///< core operation: target is contained within the inline buffer
             {
-              return *reinterpret_cast<SUB*> (unConst(this)->ptr());
+              return * std::launder (reinterpret_cast<SUB*> (unConst(this)->ptr()));
             }
           
           ~Buff()
@@ -328,12 +330,12 @@ namespace lib {
       Buffer&
       buff()
         {
-          return *reinterpret_cast<Buffer*> (&storage_);
+          return * std::launder (reinterpret_cast<Buffer*> (&storage_));
         }
       const Buffer&
       buff()  const
         {
-          return *reinterpret_cast<const Buffer *> (&storage_);
+          return * std::launder (reinterpret_cast<const Buffer *> (&storage_));
         }
       
       
@@ -614,13 +616,14 @@ namespace lib {
     : util::NonCopyable
     {
       
-      mutable char buf_[siz];
+      alignas(BA) mutable
+        std::byte buf_[siz];
       
       
       BA&
       getObj()  const
         {
-          return reinterpret_cast<BA&> (buf_);
+          return * std::launder (reinterpret_cast<BA*> (&buf_));
         }
       
       void

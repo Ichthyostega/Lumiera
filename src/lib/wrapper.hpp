@@ -49,6 +49,7 @@
 #include "lib/util.hpp"
 
 #include <functional>
+#include <cstddef>
 
 
 namespace lib {
@@ -113,8 +114,9 @@ namespace wrapper {
       using TY_unconst = std::remove_const_t<TY>;
       
       
-      mutable
-      char content_[sizeof(TY)];
+      alignas(TY) mutable
+        std::byte content_[sizeof(TY)];
+      
       bool created_;
       
       template<typename REF>
@@ -135,7 +137,7 @@ namespace wrapper {
       TY&
       access ()  const
         {
-          return reinterpret_cast<TY&> (content_);
+          return * std::launder (reinterpret_cast<TY*> (&content_));
         }
       
       TY_unconst&

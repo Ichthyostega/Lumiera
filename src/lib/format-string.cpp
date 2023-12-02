@@ -54,6 +54,8 @@
 #include <boost/static_assert.hpp>
 #include <boost/format.hpp>
 #include <iostream>
+#include <cstddef>
+#include <new>
 
 
 
@@ -67,14 +69,14 @@ namespace util {
   namespace { // implementation details...
     
     inline boost::format&
-    accessImpl (char* buffer)
+    accessImpl (std::byte* buffer)
     {
-      return reinterpret_cast<boost::format&> (*buffer);
+      return * std::launder (reinterpret_cast<boost::format*> (buffer));
     }
     
     
     inline void
-    destroyImpl (char* buffer)
+    destroyImpl (std::byte* buffer)
     {
       accessImpl(buffer).~format();
     }
@@ -83,7 +85,7 @@ namespace util {
     /** in case the formatting of a (primitive) value fails,
      *  we try to supply an error indicator instead */
     void
-    pushFailsafeReplacement (char* formatter, const char* errorMsg =NULL)
+    pushFailsafeReplacement (std::byte* formatter, const char* errorMsg =NULL)
     try {
         string placeholder("<Error");
         if (errorMsg){
@@ -98,7 +100,7 @@ namespace util {
     
     
     inline void
-    suppressInsufficientArgumentErrors (char* formatter)
+    suppressInsufficientArgumentErrors (std::byte* formatter)
     {
       using namespace boost::io;
       accessImpl(formatter).exceptions (all_error_bits ^ too_few_args_bit);

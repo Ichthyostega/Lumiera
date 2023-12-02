@@ -42,6 +42,7 @@
 
 
 #include "vault/common.hpp"
+#include "lib/uninitialised-storage.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
@@ -90,16 +91,18 @@ namespace mem {
       
       
     private:
+      using _UniqueStoragePtr = std::unique_ptr<lib::UninitialisedStorage<T,siz>>;
+      
       /** Entry in the Extents management datastructure */
       struct Storage
-        : std::unique_ptr<char[]>
+        : _UniqueStoragePtr
         {
           /**
            * @note default ctor immediately allocates the full storage,
-           *       but without initialisation since payload is `char`
+           *       but without any initialisation of memory content
            */
           Storage()
-            : unique_ptr{new char[sizeof(Extent)]}
+            : _UniqueStoragePtr{new lib::UninitialisedStorage<T,siz>}
             { }
           
           /** access projected Extent storage type
@@ -108,8 +111,9 @@ namespace mem {
           Extent&
           access()
             {
-              ENSURE (get() != nullptr);
-              return reinterpret_cast<Extent&> (*get());
+              auto* rawStorage = this->get();
+              ENSURE (rawStorage != nullptr);
+              return static_cast<Extent&> (rawStorage->array());
             }
         };
       using Extents = std::vector<Storage>;

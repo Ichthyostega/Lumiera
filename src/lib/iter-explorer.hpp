@@ -106,6 +106,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/uninitialised-storage.hpp"
 #include "lib/meta/duck-detector.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/trait.hpp"
@@ -867,13 +868,11 @@ namespace lib {
         using Group = std::array<RES, grp>;
         using Iter  = typename Group::iterator;
         struct Buffer
+          : lib::UninitialisedStorage<RES,grp>
           {
-            char storage[sizeof(Group)];
-            
-            Group& group() { return reinterpret_cast<Group&> (storage); }
-            
-            Iter begin() { return group().begin();}
-            Iter end()   { return group().end();  }
+            Group& group(){ return *this;          }
+            Iter begin()  { return group().begin();}
+            Iter end()    { return group().end();  }
           };
         Buffer buff_;
         uint   pos_{0};

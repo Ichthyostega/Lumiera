@@ -91,6 +91,25 @@ namespace meta {
     
     
     /**
+     * Metafunction " max( alignof(T) ) for T in TYPES "
+     */
+    template<class TYPES>
+    struct maxAlign;
+    template<>
+    struct maxAlign<NullType>
+      {
+        static constexpr int value = 0;
+      };
+    template<class TY, class TYPES>
+    struct maxAlign<Node<TY,TYPES>>
+      {
+        static constexpr size_t thisval = alignof(TY);
+        static constexpr size_t nextval = maxAlign<TYPES>::value;
+        static constexpr size_t value   = nextval > thisval?  nextval:thisval;
+      };
+    
+    
+    /**
      * Metafunction to check if a specific type is contained
      * in a given typelist. Only exact match is detected.
      */

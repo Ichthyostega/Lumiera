@@ -57,6 +57,7 @@
 
 #include "lib/error.hpp"
 
+#include <cstddef>
 #include <utility>
 #include <list>
 
@@ -81,7 +82,8 @@ namespace lib {
     {
       struct Allocation
         {
-          char buf_[sizeof(TY)];
+          alignas(TY)
+            std::byte buf_[sizeof(TY)];
           
           template<typename...ARGS>
           TY&
@@ -93,7 +95,7 @@ namespace lib {
           TY&
           access()
             {
-              return reinterpret_cast<TY&> (buf_);
+              return * std::launder (reinterpret_cast<TY*> (&buf_));
             }
           void
           discard() /// @warning strong assumption made here: Payload was created 

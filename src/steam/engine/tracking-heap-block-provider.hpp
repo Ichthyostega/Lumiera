@@ -175,7 +175,7 @@ namespace engine {
       throw error::Invalid ("Buffer with the given ID not yet emitted");
     
     diagn::Block& memoryBlock = access_emitted (bufferID);
-    TY* converted = reinterpret_cast<TY*> (memoryBlock.accessMemory());
+    TY* converted = std::launder (reinterpret_cast<TY*> (memoryBlock.accessMemory()));
     
     REQUIRE (converted);
     return *converted;

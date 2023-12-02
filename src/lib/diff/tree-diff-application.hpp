@@ -209,9 +209,6 @@ namespace diff{
         {
           scopes_.emplace();
           TreeMutator::Handle placementHandle (scopes_.top());
-          
-          static_assert (buffSiz >= sizeof(typename MutatorStack::value_type)
-                        ,"insufficient working buffer for TreeMutator");
           return placementHandle;
         }
       

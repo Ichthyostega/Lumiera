@@ -88,6 +88,7 @@
 #include "lib/util.hpp"
 
 #include <type_traits>
+#include <cstddef>
 #include <utility>
 #include <string>
 
@@ -222,10 +223,11 @@ namespace lib {
   template<typename TYPES>
   class Variant
     {
-      // WARNING: never add any member field before the storage_ array    /////////////////////////TICKET #1204
       
     public:
-      enum { SIZ = meta::maxSize<typename TYPES::List>::value };
+      enum { SIZ   = meta::maxSize<typename TYPES::List>::value
+           , ALIGN = meta::maxAlign<typename TYPES::List>::value
+           };
       
       template<typename RET>
       using VisitorFunc      = typename variant::VFunc<RET>::template VisitorInterface<TYPES>;
@@ -264,7 +266,8 @@ namespace lib {
       struct Buffer
         : meta::VirtualCopySupportInterface<Buffer>
         {
-          char content_[SIZ];
+          alignas(ALIGN)
+            std::byte content_[SIZ];
           
           void* ptr() { return &content_; }
           
@@ -287,7 +290,7 @@ namespace lib {
           TY&
           access()  const  ///< core operation: target is contained within the inline buffer
             {
-              return *reinterpret_cast<TY*> (unConst(this)->ptr());
+              return * std::launder (reinterpret_cast<TY*> (unConst(this)->ptr()));
             }
           
          ~Buff()
@@ -396,12 +399,12 @@ namespace lib {
       Buffer&
       buffer()
         {
-          return *reinterpret_cast<Buffer*> (&storage_);
+          return * std::launder (reinterpret_cast<Buffer*> (&storage_));
         }
       Buffer const&
       buffer()  const
         {
-          return *reinterpret_cast<const Buffer*> (&storage_);
+          return * std::launder (reinterpret_cast<const Buffer*> (&storage_));
         }
       
       template<typename X>

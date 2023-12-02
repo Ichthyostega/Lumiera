@@ -166,6 +166,9 @@
 #include "lib/meta/duck-detector.hpp"
 #include "lib/util.hpp"
 
+#include <cstddef>
+#include <new>
+
 
 namespace lib {
   
@@ -383,12 +386,13 @@ namespace lib {
       /* === embedded object in buffer === */
       
       /** Storage for embedded objects */
-      mutable char buf_[siz];
+      alignas(IFA) mutable
+        std::byte buf_[siz];
       
       IFA&
       accessEmbedded()  const
         {
-          return reinterpret_cast<IFA&> (buf_);
+          return * std::launder (reinterpret_cast<IFA*> (&buf_));
         }
       
       void

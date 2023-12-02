@@ -159,11 +159,11 @@ namespace util {
       /** size of an opaque implementation Buffer */
       enum{ FORMATTER_SIZE = lib::meta::SizeTrait::BOOST_FORMAT };
       
-      typedef char Implementation[FORMATTER_SIZE];
+      typedef std::byte Implementation[FORMATTER_SIZE];
       
       
       /** @internal buffer to hold a boost::format */
-      mutable Implementation formatter_;
+      alignas(size_t) mutable Implementation formatter_;
       
       
       /** call into the opaque implementation */

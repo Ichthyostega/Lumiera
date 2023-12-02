@@ -65,6 +65,7 @@
 
 #include <type_traits>
 #include <utility>
+#include <cstddef>
 
 
 
@@ -86,7 +87,8 @@ namespace wrapper {
   template<typename X, typename COND =void>
   class ReplaceableItem
     {
-      char content_[sizeof(X)];
+      alignas(X)
+        std::byte content_[sizeof(X)];
       
     public:
       ReplaceableItem()
@@ -131,7 +133,7 @@ namespace wrapper {
       X&
       access()
         {
-          return reinterpret_cast<X&>(content_);
+          return * std::launder (reinterpret_cast<X*> (&content_));
         }
       
       void

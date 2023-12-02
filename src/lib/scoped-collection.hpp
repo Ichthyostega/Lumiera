@@ -75,6 +75,7 @@
 #include "lib/meta/trait.hpp"
 #include "lib/iter-adapter.hpp"
 
+#include <cstddef>
 #include <type_traits>
 
 
@@ -113,15 +114,15 @@ namespace lib {
       class ElementHolder
         : util::NonCopyable
         {
-          
-          mutable char buf_[siz];
+          alignas(I) mutable
+            std::byte buf_[siz];
           
         public:
          
           I&
           accessObj()  const
             {
-              return reinterpret_cast<I&> (buf_);
+              return * std::launder (reinterpret_cast<I*> (&buf_));
             }
           
           void
