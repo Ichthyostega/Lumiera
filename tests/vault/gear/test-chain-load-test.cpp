@@ -30,10 +30,12 @@
 #include "test-chain-load.hpp"
 //#include "vault/real-clock.hpp"
 //#include "lib/time/timevalue.hpp"
+#include "vault/gear/job.h"
 #include "lib/format-cout.hpp" ////////////////////////////////////TODO Moo-oh
 #include "lib/test/diagnostic-output.hpp"//////////////////////////TODO TOD-oh
 #include "lib/util.hpp"
 
+#include <array>
 
 //using lib::time::Time;
 //using lib::time::FSecs;
@@ -42,6 +44,7 @@ using util::isnil;
 using util::isSameObject;
 //using lib::test::randStr;
 //using lib::test::randTime;
+using std::array;
 
 
 namespace vault{
@@ -82,8 +85,7 @@ namespace test {
           showcase_PruneChains();
           showcase_StablePattern();
           verify_reseed_recalculate();
-
-          witch_gate();
+          verify_scheduling_setup();
         }
       
       
@@ -927,13 +929,58 @@ namespace test {
       
       
       
-      /** @test TODO diagnostic blah
-       * @todo WIP 11/23 🔁 define ⟶ implement
+      /** @test TODO setup for running a chain-load as scheduled task
+       *      - running an isolated Node recalculation
+       *      - dispatch of this recalculation packaged as render job
+       *      
+       * @todo WIP 12/23 🔁 define ⟶ implement
        */
       void
-      witch_gate()
+      verify_scheduling_setup()
         {
-          UNIMPLEMENTED ("witch gate");
+          array<Node,4> nodes;
+          auto& [s,p1,p2,e] = nodes;
+          s.addSucc(p1)
+           .addSucc(p2);
+          e.addPred(p1)
+           .addPred(p2);
+          s.level = 0;
+          p1.level = p2.level = 1;
+          e.level = 2;
+          CHECK (e.hash == 0);
+          for (Node& n : nodes)
+            n.calculate();
+          CHECK (e.hash == 0x6A5924BA3389D7C);
+          
+          
+          // now do the same invoked as »render job«
+          for (Node& n : nodes)
+            n.hash = 0;
+          s.level  = 0;
+          p1.level = 1;
+          p2.level = 1;
+          e.level  = 2;
+          
+          RandomChainCalcFunctor<32,16> chainJob{nodes[0]};
+          Job job0{chainJob
+                  ,chainJob.encodeNodeID(0)
+                  ,chainJob.encodeLevel(0)};
+          Job job1{chainJob
+                  ,chainJob.encodeNodeID(1)
+                  ,chainJob.encodeLevel(1)};
+          Job job2{chainJob
+                  ,chainJob.encodeNodeID(2)
+                  ,chainJob.encodeLevel(1)};
+          Job job3{chainJob
+                  ,chainJob.encodeNodeID(3)
+                  ,chainJob.encodeLevel(2)};
+          
+          CHECK (e.hash == 0);
+          job0.triggerJob();
+          job2.triggerJob();
+          job1.triggerJob();
+          job3.triggerJob();
+          CHECK (e.hash == 0x6A5924BA3389D7C);
         }
     };
   

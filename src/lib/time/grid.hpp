@@ -76,7 +76,7 @@ namespace time {
       virtual TimeValue timeOf    (FSecs gridTime, int=0) const   =0;
     };
   
-  typedef std::shared_ptr<const Grid> PGrid;
+  using PGrid = std::shared_ptr<const Grid>;
   
   
   

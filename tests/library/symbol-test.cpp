@@ -47,12 +47,16 @@ namespace lib {
 namespace test{
   
   
-  /******************************************************//**
-   * @test properties of Symbol data type. Currently this is
-   *       just a thin wrapper for a const char *
-   * @todo this test is very much WIP, as the implementation
-   *       of a real symbol type and symbol table remains
-   *       to be done. ///////////////////////////Ticket #157
+  /***********************************************************//**
+   * @test properties of Literal and Symbol data types.
+   *     - a lib::Literal is just a thin wrapper for a `const char *`
+   *     - lib::Symbol uses the same implementation, but relies on
+   *       character string constants _interned_ into a symbol table.
+   * @todo 2023 this test is very much in preliminary shape, as the
+   *       implementation of a real symbol table remains was lacking.
+   *       At some point, a simplistic implementation of »interned strings«
+   *       was added (TICKET #157) — yet still the actual relevance of
+   *       unique Symbols remains nebulous
    */
   class Symbol_test : public Test
     {
@@ -132,6 +136,17 @@ namespace test{
           CHECK (sy3 == Symbol{"⟂"});
           CHECK (sy3.c() == Symbol{"⟂"}.c());
           CHECK (Symbol{}.c() == Symbol{"⟂"}.c());
+          
+          // EMPTY and BOTTOM are distinct Symbols, yet both count as "empty"
+          CHECK (Symbol::EMPTY == Symbol{""});
+          CHECK (Symbol::BOTTOM == Symbol{"⟂"});
+          CHECK (Symbol::EMPTY != Symbol::BOTTOM);
+          CHECK (Symbol{nullptr} == Symbol::BOTTOM);
+          CHECK (Symbol::EMPTY.empty());
+          CHECK (Symbol::BOTTOM.empty());
+          CHECK (not Symbol::FAILURE.empty());
+          CHECK (isnil (Symbol{"⟂"}));
+          CHECK (isnil (Symbol{""}));
           
           // re-assignment
           sy3 = Symbol{l1};

@@ -83,13 +83,14 @@
 #include "vault/common.hpp"
 #include "lib/test/transiently.hpp"
 
-//#include "vault/gear/job.h"
+#include "vault/gear/job.h"
 //#include "vault/gear/activity.hpp"
-//#include "vault/gear/nop-job-functor.hpp"
-//#include "lib/time/timevalue.hpp"
+#include "vault/gear/nop-job-functor.hpp"
+#include "lib/time/timevalue.hpp"
 //#include "lib/meta/variadic-helper.hpp"
 //#include "lib/meta/function.hpp"
 //#include "lib/wrapper.hpp"
+#include "lib/time/quantiser.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
@@ -115,7 +116,7 @@ namespace test {
   using std::string;
 //  using std::function;
 //  using lib::time::TimeValue;
-//  using lib::time::Time;
+  using lib::time::Time;
 //  using lib::time::FSecs;
 //  using lib::time::Offset;
 //  using lib::meta::RebindVariadic;
@@ -992,6 +993,55 @@ namespace test {
            << endl;
       return move(*this);
     }
+  
+  
+  
+  
+  
+  /* ========= Render Job generation and Scheduling ========= */
+  
+  template<size_t numNodes, size_t maxFan>
+  class RandomChainCalcFunctor
+    : public NopJobFunctor
+    {
+      using Node = typename TestChainLoad<numNodes,maxFan>::Node;
+      
+    public:
+      RandomChainCalcFunctor(Node& startNode)
+        { }
+      
+      
+      /** rigged special implementation of job invocation
+       */
+      void
+      invokeJobOperation (JobParameter param)  override
+        {
+          UNIMPLEMENTED ("unpack parameters and dispatch into TestChainLoad-Node");
+        }
+      
+      string diagnostic()  const override
+        {
+          return "ChainCalc-TODoh";
+        }
+      
+      /** package the node-index to invoke.
+       * @note per convention for this test, this info will be
+       *  packaged into the lower word of the InvocationInstanceID
+       */
+      static auto
+      encodeNodeID (size_t idx)
+        {
+          InvocationInstanceID invoKey;
+          invoKey.code.w1 = idx;
+          return invoKey;
+        };
+      
+      static Time
+      encodeLevel (size_t level)
+        {
+          UNIMPLEMENTED ("setup a FixedFrameQuantiser with 1FPS");
+        }
+    };
   
   
   

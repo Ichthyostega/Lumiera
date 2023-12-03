@@ -116,7 +116,7 @@ namespace test {
       void
       createGrid_simplified()
         {
-          PGrid simplePALGrid = TimeGrid::build ("", FrameRate::PAL);
+          PGrid simplePALGrid = TimeGrid::build (FrameRate::PAL);
           CHECK (simplePALGrid);
           CHECK (!util::isnil (simplePALGrid->ident.name));   // note: name-ID filled in automatically
           cout << "simple PAL Grid: " << simplePALGrid->ident << endl;

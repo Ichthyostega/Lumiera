@@ -88,7 +88,7 @@ namespace meta {
     {
     PGrid gridImplementation = AssetManager::instance().wrap (newGrid);
     PQuant quantiser (dynamic_pointer_cast<const Quantiser>(gridImplementation));
-    Literal bindingID (cStr(newGrid.ident.name));
+    Literal bindingID (cStr(newGrid.ident.name));                            //////////////TODO 2023 shouldn't that be a lib::Symbol?
     
     advice::Provision<PGrid>(bindingID).setAdvice(gridImplementation);
     advice::Provision<PQuant>(bindingID).setAdvice(quantiser);
@@ -157,16 +157,23 @@ namespace meta {
       }
     GridID nameID (id);
     
-    return publishWrapped (*new SimpleTimeGrid(origin, fps, nameID));
+    // build new Meta-Asset, registered with AssetManager, and publish into Advice-System 
+    return publishWrapped (*new SimpleTimeGrid(origin, fps, nameID));             ///////////////////////////TICKET #840 currently this replaces an existing Registration. What do we actually want here?
   }
   
   
   /* === TimeGrid shortcut builder functions === */
   
   PGrid
-  TimeGrid::build (Symbol gridID, FrameRate frames_per_second)
+  TimeGrid::build (FrameRate frames_per_second)                   ///< automatically generates a generic grid name
   {
-    return build (gridID,frames_per_second, Time(0,0));
+    return build (Symbol::EMPTY,frames_per_second);
+  }
+  
+  PGrid
+  TimeGrid::build (Symbol gridID, FrameRate frames_per_second)    ///< grid origin is at Time::ZERO
+  {
+    return build (gridID,frames_per_second, Time::ZERO);
   }
   
   

@@ -94,7 +94,7 @@ namespace test{
           int n = count;                            // frame count, accessible as plain number
           
           CHECK (Time(FSecs(n-1, 25)) <= org);      // verify quantisation: the original time
-          CHECK (org < Time(FSecs(n+1, 25)));       // is properly bracketed by (n-1, n+2)
+          CHECK (org < Time(FSecs(n+1, 25)));       // is properly bracketed by (n-1, n+1)
         }
       
       

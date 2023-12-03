@@ -252,6 +252,7 @@ namespace time {
   /** predefined constant for PAL framerate */
   const FrameRate FrameRate::PAL  (25);
   const FrameRate FrameRate::NTSC (30000,1001);
+  const FrameRate FrameRate::STEP (1);
   
   const FrameRate FrameRate::HALTED (1,std::numeric_limits<int>::max());
   

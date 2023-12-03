@@ -148,7 +148,7 @@ namespace lib {
        Symbol& operator= (Symbol &&)     = default;
        
        explicit operator bool()  const { return not empty(); }
-       bool empty()              const { return *this == BOTTOM; }
+       bool empty()              const { return *this == BOTTOM or *this == EMPTY; }
        
        size_t
        length()  const

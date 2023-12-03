@@ -679,6 +679,7 @@ namespace time {
       
       static const FrameRate PAL;
       static const FrameRate NTSC;
+      static const FrameRate STEP;       ///< 1 frame per second
       
       static const FrameRate HALTED;
       

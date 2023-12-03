@@ -105,11 +105,11 @@ namespace test{
       void
       checkTimecodeUsageCycle ()
         {
-          string quellCode = generateRandomFrameNr();
-          PQuant refScale  = Quantiser::retrieve("pal0");
+          string srcCode  = generateRandomFrameNr();
+          PQuant refScale = Quantiser::retrieve("pal0");
           
           // get internal (raw) time value
-          TimeValue t1 = format::Frames::parse(quellCode, *refScale);
+          TimeValue t1 = format::Frames::parse (srcCode, *refScale);
           ENSURE (0 != t1);
           
           // manipulating
@@ -134,8 +134,8 @@ namespace test{
           q2.accept (Mutation::changeTime(v1));
           CHECK (30 == q2.formatAs<Frames>() - frames1);     // q2 == v1 == t1 + (6*5)/(5*5)sec
           
-          CHECK (quellCode == string(frames1));
-          CHECK (quellCode != string(frames2));
+          CHECK (srcCode == string(frames1));
+          CHECK (srcCode != string(frames2));
           
           showTimeCode (frames1);
           showTimeCode (frames2);

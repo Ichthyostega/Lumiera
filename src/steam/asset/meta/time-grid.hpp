@@ -90,6 +90,7 @@ namespace meta {
       
     public:
       /* === shortcut builder functions === */
+      static PGrid build (FrameRate frames_per_second);
       static PGrid build (Symbol gridID, FrameRate frames_per_second);
       static PGrid build (Symbol gridID, FrameRate frames_per_second, Time origin);
       
