@@ -930,8 +930,7 @@ namespace test {
       /** @test TODO setup for running a chain-load as scheduled task
        *      - running an isolated Node recalculation
        *      - dispatch of this recalculation packaged as render job
-       *      
-       * @todo WIP 12/23 🔁 define ⟶ implement
+       * @todo WIP 12/23 🔁 define ⟶ 🔁 implement
        */
       void
       verify_scheduling_setup()
@@ -975,10 +974,18 @@ namespace test {
           
           CHECK (e.hash == 0);
           job0.triggerJob();
+          //   ◁───────────────────────────────────────────── Note: fail to invoke some predecessor....
           job2.triggerJob();
-          job1.triggerJob();
+          job3.triggerJob();
+          CHECK (e.hash != 0x6A5924BA3389D7C);
+          
+          e.hash = 0;
+          job1.triggerJob(); // recalculate missing part of the graph...
           job3.triggerJob();
           CHECK (e.hash == 0x6A5924BA3389D7C);
+          
+          job3.triggerJob(); // Hash calculations are *not* idempotent
+          CHECK (e.hash != 0x6A5924BA3389D7C);
         }
     };
   

@@ -117,6 +117,7 @@ namespace test {
 //  using std::function;
 //  using lib::time::TimeValue;
   using lib::time::Time;
+  using lib::time::FrameRate;
 //  using lib::time::FSecs;
 //  using lib::time::Offset;
 //  using lib::meta::RebindVariadic;
@@ -1014,8 +1015,18 @@ namespace test {
     {
       using Node = typename TestChainLoad<maxFan>::Node;
       
+      Node* startNode_;
+      
+      static lib::time::Grid&
+      testGrid()        ///< Meyer's Singleton : a fixed 1fps quantiser
+        {
+          static lib::time::FixedFrameQuantiser gridOne{FrameRate::STEP};
+          return gridOne;
+        }
+      
     public:
       RandomChainCalcFunctor(Node& startNode)
+        : startNode_{&startNode}
         { }
       
       
@@ -1024,19 +1035,26 @@ namespace test {
       void
       invokeJobOperation (JobParameter param)  override
         {
-          UNIMPLEMENTED ("unpack parameters and dispatch into TestChainLoad-Node");
+          size_t nodeIdx = decodeNodeID (param.invoKey);
+          size_t level = decodeLevel (TimeValue{param.nominalTime});
+          Node& target = startNode_[nodeIdx];
+          ASSERT (target.level == level);
+          // invoke the »media calculation«
+          target.calculate();
         }
       
       string diagnostic()  const override
         {
-          return "ChainCalc-TODoh";
+          return _Fmt{"ChainCalc(w:%d)▶%s"}
+                     % maxFan
+                     % util::showAddr(startNode_);
         }
       
       /** package the node-index to invoke.
        * @note per convention for this test, this info will be
        *  packaged into the lower word of the InvocationInstanceID
        */
-      static auto
+      static InvocationInstanceID
       encodeNodeID (size_t idx)
         {
           InvocationInstanceID invoKey;
@@ -1044,10 +1062,22 @@ namespace test {
           return invoKey;
         };
       
+      static size_t
+      decodeNodeID (InvocationInstanceID invoKey)
+        {
+          return size_t(invoKey.code.w1);
+        };
+      
       static Time
       encodeLevel (size_t level)
         {
-          UNIMPLEMENTED ("setup a FixedFrameQuantiser with 1FPS");
+          return Time{testGrid().timeOf (FrameCnt(level))};
+        }
+      
+      static size_t
+      decodeLevel (TimeValue nominalTime)
+        {
+          return testGrid().gridPoint (nominalTime);
         }
     };
   
