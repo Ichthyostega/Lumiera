@@ -155,7 +155,7 @@ namespace test {
    * @tparam maxFan maximal fan-in/out from a node, also limits maximal parallel strands.
    * @see TestChainLoad_test
    */
-  template<size_t numNodes =DEFAULT_SIZ, size_t maxFan =DEFAULT_FAN>
+  template<size_t maxFan =DEFAULT_FAN>
   class TestChainLoad
     : util::MoveOnly
     {
@@ -276,33 +276,40 @@ namespace test {
       
     private:
       using NodeTab = typename Node::Tab;
-      using NodeStorage = std::array<Node, numNodes>;
+      using NodeIT = lib::RangeIter<Node*>;
       
-      std::unique_ptr<NodeStorage> nodes_;
+      std::unique_ptr<Node[]> nodes_;
+      size_t numNodes_;
       
       Rule seedingRule_  {};
       Rule expansionRule_{};
       Rule reductionRule_{};
       Rule pruningRule_  {};
       
+      Node* frontNode() { return &nodes_[0];          }
+      Node* afterNode() { return &nodes_[numNodes_];  }
+      Node* backNode()  { return &nodes_[numNodes_-1];}
+      
     public:
-      TestChainLoad()
-        : nodes_{new NodeStorage}
-        { }
+      explicit
+      TestChainLoad(size_t nodeCnt =DEFAULT_SIZ)
+        : nodes_{new Node[nodeCnt]}
+        , numNodes_{nodeCnt}
+        {
+          REQUIRE (1 < nodeCnt);
+        }
       
       
-      size_t size()     const { return nodes_->size(); }
-      size_t topLevel() const { return nodes_->back().level; }
-      size_t getSeed()  const { return nodes_->front().hash; }
-      size_t getHash()  const { return nodes_->back().hash;  }
+      size_t size()     const { return afterNode() - frontNode();        }
+      size_t topLevel() const { return unConst(this)->backNode()->level; }
+      size_t getSeed()  const { return unConst(this)->frontNode()->hash; }
+      size_t getHash()  const { return unConst(this)->backNode()->hash;  } /////////////////////TODO combine hash of all exit nodes
       
       
-      using NodeIter = decltype(lib::explore (std::declval<NodeStorage & >()));
-      
-      NodeIter
+      auto
       allNodes()
         {
-          return lib::explore (*nodes_);
+          return lib::explore (NodeIT{frontNode(),afterNode()});
         }
       auto
       allNodePtr()
@@ -311,7 +318,7 @@ namespace test {
         }
       
       /** @return the node's index number, based on its storage location */
-      size_t nodeID(Node const* n){ return size_t(n - &nodes_->front()); };
+      size_t nodeID(Node const* n){ return n - frontNode(); };
       size_t nodeID(Node const& n){ return nodeID (&n); };
       
       
@@ -406,7 +413,7 @@ namespace test {
           NodeTab a,b,          // working data for generation
                  *curr{&a},     // the current set of nodes to carry on
                  *next{&b};     // the next set of nodes connected to current
-          Node* node = &nodes_->front();
+          Node* node = frontNode();
           size_t level{0};
           
           // transient snapshot of rules (non-copyable, once engaged)
@@ -417,7 +424,7 @@ namespace test {
           
           // prepare building blocks for the topology generation...
           auto moreNext  = [&]{ return next->size() < maxFan;      };
-          auto moreNodes = [&]{ return node < &nodes_->back();     };
+          auto moreNodes = [&]{ return node < backNode();          };
           auto spaceLeft = [&]{ return moreNext() and moreNodes(); };
           auto addNode   = [&](size_t seed =0)
                               {
@@ -480,7 +487,7 @@ namespace test {
               ENSURE (not next->empty());
               ++level;
             }
-          ENSURE (node == &nodes_->back());
+          ENSURE (node == backNode());
           // connect ends of all remaining chains to top-Node
           node->clear();
           node->level = level;
@@ -502,7 +509,7 @@ namespace test {
       TestChainLoad&&
       setSeed (size_t seed = rand())
         {
-          nodes_->front().hash = seed;
+          frontNode()->hash = seed;
           return move(*this);
         }
       
@@ -611,8 +618,8 @@ namespace test {
    * and pruning._ The RandomDraw component used to implement those rules provides a builder-DSL
    * and accepts λ-bindings in various forms to influence mapping of Node hash into result parameters.
    */
-  template<size_t numNodes, size_t maxFan>
-  class TestChainLoad<numNodes,maxFan>::NodeControlBinding
+  template<size_t maxFan>
+  class TestChainLoad<maxFan>::NodeControlBinding
     : public std::function<Param(Node*)>
     {
     protected:
@@ -631,8 +638,8 @@ namespace test {
       
       static double
       guessHeight (size_t level)
-        {     // heuristic guess, typically too low
-          double expectedHeight = max (1u, numNodes/maxFan);
+        {     // heuristic guess for a »fully stable state«
+          double expectedHeight = 2*maxFan;
           return level / expectedHeight;
         }
       
@@ -662,7 +669,8 @@ namespace test {
         };
       
       /** allow rules additionally involving the height of the graph,
-       *  which also represents time. 1.0 refers to (guessed) _full height. */
+       *  which also represents time. 1.0 refers to _stable state generation,_
+       *  guessed as height Level ≡ 2·maxFan . */
       template<typename RES>
       struct Adaptor<RES(size_t,double)>
         {
@@ -879,9 +887,9 @@ namespace test {
    * - the weight centre of this category members
    * - the weight centre of according to density
    */
-  template<size_t numNodes, size_t maxFan>
+  template<size_t maxFan>
   inline Statistic
-  TestChainLoad<numNodes,maxFan>::computeGraphStatistics()
+  TestChainLoad<maxFan>::computeGraphStatistics()
     {
       auto totalLevels = uint(topLevel());
       auto classify = prepareEvaluaions<Node>();
@@ -962,9 +970,9 @@ namespace test {
    *           *no reliable indication of subgraphs*. The `SEGS` statistics may be misleading,
    *           since these count only completely severed and restarted graphs.
    */
-  template<size_t numNodes, size_t maxFan>
-  inline TestChainLoad<numNodes,maxFan>&&
-  TestChainLoad<numNodes,maxFan>::printTopologyStatistics()
+  template<size_t maxFan>
+  inline TestChainLoad<maxFan>&&
+  TestChainLoad<maxFan>::printTopologyStatistics()
     {
       cout << "INDI: cnt frac   ∅pS  ∅pL  ∅pLW  γL◆ γLW◆  γL⬙ γLW⬙\n";
       _Fmt line{"%4s: %3d %3.0f%% %5.1f %5.2f %4.2f %4.2f %4.2f %4.2f %4.2f\n"};
@@ -1000,11 +1008,11 @@ namespace test {
   
   /* ========= Render Job generation and Scheduling ========= */
   
-  template<size_t numNodes, size_t maxFan>
+  template<size_t maxFan>
   class RandomChainCalcFunctor
     : public NopJobFunctor
     {
-      using Node = typename TestChainLoad<numNodes,maxFan>::Node;
+      using Node = typename TestChainLoad<maxFan>::Node;
       
     public:
       RandomChainCalcFunctor(Node& startNode)

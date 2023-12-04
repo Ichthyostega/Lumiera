@@ -54,8 +54,8 @@ namespace test {
   namespace { // shorthands and parameters for test...
     
     /** shorthand for specific parameters employed by the following tests */
-    using ChainLoad32 = TestChainLoad<32,16>;
-    using Node = ChainLoad32::Node;
+    using ChainLoad16 = TestChainLoad<16>;
+    using Node = ChainLoad16::Node;
     auto isStartNode = [](Node& n){ return isStart(n); };
     auto isInnerNode = [](Node& n){ return isInner(n); };
     auto isExitNode =  [](Node& n){ return isExit(n); };
@@ -106,8 +106,6 @@ namespace test {
       void
       verify_Node()
         {
-          using Node = TestChainLoad<>::Node;
-          
           Node n0;                                                          // Default-created empty Node
           CHECK (n0.hash == 0);
           CHECK (n0.level == 0);
@@ -194,7 +192,7 @@ namespace test {
       void
       verify_Topology()
         {
-          auto graph = ChainLoad32{}
+          auto graph = ChainLoad16{32}
                           .buildToplolgy();
           
           CHECK (graph.topLevel() == 31);
@@ -249,7 +247,7 @@ namespace test {
       void
       showcase_Expansion()
         {
-          ChainLoad32 graph;
+          ChainLoad16 graph{32};
           
           // moderate symmetrical expansion with 40% probability and maximal +2 links
           graph.expansionRule(graph.rule().probability(0.4).maxVal(2))
@@ -289,7 +287,7 @@ namespace test {
           
           // if the generation is allowed to run for longer,
           // while more constrained in width...
-          TestChainLoad<256,8> gra_2;
+          TestChainLoad<8> gra_2{256};
           gra_2.expansionRule(gra_2.rule().probability(0.4).maxVal(2).shuffle(23))
                .buildToplolgy()
 //             .printTopologyDOT()
@@ -319,7 +317,7 @@ namespace test {
       void
       showcase_Reduction()
         {
-          ChainLoad32 graph;
+          ChainLoad16 graph{32};
           
           // expand immediately at start and then gradually reduce / join chains
           graph.expansionRule(graph.rule_atStart(8))
@@ -389,7 +387,7 @@ namespace test {
       void
       showcase_SeedChains()
         {
-          ChainLoad32 graph;
+          ChainLoad16 graph{32};
           
           // randomly start new chains, to be carried-on linearly
           graph.seedingRule(graph.rule().probability(0.2).maxVal(3).shuffle())
@@ -448,7 +446,7 @@ namespace test {
       void
       showcase_PruneChains()
         {
-          ChainLoad32 graph;
+          ChainLoad16 graph{32};
           
           // terminate chains randomly
           graph.pruningRule(graph.rule().probability(0.2))
@@ -589,7 +587,7 @@ namespace test {
       void
       showcase_StablePattern()
         {
-          TestChainLoad<256> graph;
+          ChainLoad16 graph{256};
           
           // This example creates a repetitive, non-expanding stable pattern
           // comprised of four small graph segments, generated interleaved
@@ -852,7 +850,7 @@ namespace test {
       void
       verify_reseed_recalculate()
         {
-          ChainLoad32 graph;
+          ChainLoad16 graph{32};
           graph.expansionRule(graph.rule().probability(0.8).maxVal(1))
                .pruningRule(graph.rule().probability(0.6))
                .buildToplolgy();
@@ -961,7 +959,7 @@ namespace test {
           p2.level = 1;
           e.level  = 2;
           
-          RandomChainCalcFunctor<32,16> chainJob{nodes[0]};
+          RandomChainCalcFunctor<16> chainJob{nodes[0]};
           Job job0{chainJob
                   ,chainJob.encodeNodeID(0)
                   ,chainJob.encodeLevel(0)};
