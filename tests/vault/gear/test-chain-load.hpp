@@ -1136,31 +1136,31 @@ namespace test {
       using Node = typename TestChainLoad<maxFan>::Node;
       
       function<void(size_t,size_t)> scheduleCalcJob_;
-      function<void(size_t,size_t)> markDependency_;
+      function<void(Node*,Node*)>   markDependency_;
       function<void(size_t,bool)>   continuation_;
       
-      size_t chunkSize_;
       size_t maxCnt_;
-      
       Node* nodes_;
-      size_t currIdx_{0};
+      
+      size_t currIdx_{0}; // Note: this test-JobFunctor is statefull
       
     public:
       template<class CAL, class DEP, class CON>
-      RandomChainPlanFunctor(size_t chunkSize, size_t maxLevel,
-                             Node& nodeArray,
+      RandomChainPlanFunctor(Node& nodeArray, size_t nodeCnt,
                              CAL&& schedule, DEP&& markDepend,
                              CON&& continuation)
         : scheduleCalcJob_{forward<CAL> (schedule)}
-        , markDependency_{forward<CAL> (markDepend)}
-        , continuation_{continuation}
-        , chunkSize_{chunkSize}
-        , maxCnt_{maxLevel}
+        , markDependency_{forward<DEP> (markDepend)}
+        , continuation_{forward<CON> (continuation)}
+        , maxCnt_{nodeCnt}
         , nodes_{&nodeArray}
         { }
       
       
-      /** render job invocation to trigger one Node recalculation */
+      /** render job invocation to trigger one batch of scheduling;
+       *  the installed callback-λ should actually place a job with
+       *  RandomChainCalcFunctor for each node, and also inform the
+       *  Scheduler about dependency relations between jobs. */
       void
       invokeJobOperation (JobParameter param)  override
         {
@@ -1171,7 +1171,7 @@ namespace test {
               if (n->level > targetLevel)
                 break;
               scheduleCalcJob_(currIdx_, n->level);
-              for (Node* pred: n.pred)
+              for (Node* pred: n->pred)
                 markDependency_(pred,n);
             }
           continuation_(targetLevel, currIdx_ < maxCnt_);

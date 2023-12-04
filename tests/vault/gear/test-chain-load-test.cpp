@@ -927,10 +927,16 @@ namespace test {
       
       
       
-      /** @test TODO setup for running a chain-load as scheduled task
+      /** @test setup for running a chain-load as scheduled task
        *      - running an isolated Node recalculation
        *      - dispatch of this recalculation packaged as render job
-       * @todo WIP 12/23 🔁 define ⟶ 🔁 implement
+       *      - verify the planning job, which processes nodes in batches;
+       *        for the test, the callback-λ will not invoke the Scheduler,
+       *        but rather use the instructions to create clone nodes;
+       *        if all nodes are processed and all dependency connections
+       *        properly reported through the callback-λ, then calculating
+       *        this clone network should reproduce the original hash.
+       * @todo WIP 12/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_scheduling_setup()
@@ -986,6 +992,73 @@ namespace test {
           
           job3.triggerJob(); // Hash calculations are *not* idempotent
           CHECK (e.hash != 0x6A5924BA3389D7C);
+          
+          
+          // use the »planing job« to organise the calculations:
+          // Let the callbacks create a clone — which at the end should generate the same hash
+          array<Node,4> clone;
+          size_t lastTouched(-1);
+          size_t lastLevel(-1);
+          bool shallContinue{false};
+          auto getNodeIdx  = [&](Node* n) { return n - &nodes[0]; };
+          
+          // callback-λ rigged for test....
+          // Instead of invoking the Scheduler, here we replicate the node structure
+          auto disposeStep = [&](size_t idx, size_t level)
+                                {
+                                  Node& n = clone[idx];
+                                  n.clear();
+                                  n.level = level;
+                                  lastTouched = idx;
+                                };
+          auto setDependency = [&](Node* pred, Node* succ)
+                                {
+                                  size_t predIdx = getNodeIdx(pred);
+                                  size_t succIdx = getNodeIdx(succ);
+                                  // replicate this relation into the clone array
+                                  clone[predIdx].addSucc(clone[succIdx]);
+                                };
+          auto continuation = [&](size_t levelDone, bool work_left)
+                                {
+                                  lastLevel = levelDone;
+                                  shallContinue = work_left;
+                                };
+          // build a JobFunctor for the planning step(s)
+          RandomChainPlanFunctor<16> planJob{nodes.front(), nodes.size()
+                                            ,disposeStep
+                                            ,setDependency
+                                            ,continuation};
+          Job jobP1{planJob
+                   ,InvocationInstanceID()
+                   ,planJob.encodeLevel(1)};
+          Job jobP2{planJob
+                   ,InvocationInstanceID()
+                   ,planJob.encodeLevel(3)};
+          
+          jobP1.triggerJob();
+          CHECK (lastTouched = 2);
+          CHECK (lastLevel = 1);
+          Node* lastN = &clone[lastTouched];
+          CHECK (lastN->level == lastLevel);
+          CHECK (    isnil (lastN->succ));
+          CHECK (not isnil (lastN->pred));
+          CHECK (shallContinue);
+          
+          jobP2.triggerJob();
+          CHECK (lastTouched = 3);
+          CHECK (lastLevel = 3);
+          lastN = &clone[lastTouched];
+          CHECK (lastN->level == 2);
+          CHECK (lastN->level < lastLevel);
+          CHECK (    isnil (lastN->succ));
+          CHECK (not isnil (lastN->pred));
+          CHECK (not shallContinue);
+          
+          // all clone nodes should be wired properly now
+          CHECK (lastN->hash == 0);
+          for (Node& n : clone)
+            n.calculate();
+          CHECK (lastN->hash == 0x6A5924BA3389D7C);
         }
     };
   
