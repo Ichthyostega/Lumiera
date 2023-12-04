@@ -72,7 +72,8 @@ enum JobKind
   {
     CALC_JOB,  ///< calculating frame data, CPU bound
     LOAD_JOB,  ///< accessing prerequisites, IO bound
-    META_JOB   ///< render process self organisation
+    META_JOB,  ///< render process self organisation
+    TEST_JOB   ///< test and diagnostic and research
   };
 
 enum JobPriority

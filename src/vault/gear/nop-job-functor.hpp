@@ -51,9 +51,8 @@ namespace gear {
   
   
   /**
-   * Stub implementation of the JobFunctor interface
+   * Stub/Test implementation of the JobFunctor interface
    * for a render job _to do nothing at all_
-   * @todo WIP as of 4/2023
    */
   class NopJobFunctor
     : public JobClosure
@@ -64,7 +63,7 @@ namespace gear {
       JobKind
       getJobKind()  const
         {
-          return META_JOB;
+          return TEST_JOB;
         }
       
       std::string

@@ -27,7 +27,7 @@
  ** characteristics of the implementation, a well-defined artificial computation load is
  ** necessary, comprised of the invocation of an extended number of Jobs, each configured
  ** to carry out a reproducible computation. Data dependencies between jobs can be established
- ** to verify handling of dependent jobs and job completion messages within the scheduler. 
+ ** to verify handling of dependent jobs and job completion messages within the scheduler.
  ** 
  ** # Random computation structure
  ** A system of connected hash values is used as computation load, akin to a blockchain.
@@ -83,9 +83,10 @@
 #include "vault/common.hpp"
 #include "lib/test/transiently.hpp"
 
+//#include "lib/hash-value.h"
 #include "vault/gear/job.h"
 //#include "vault/gear/activity.hpp"
-#include "vault/gear/nop-job-functor.hpp"
+//#include "vault/gear/nop-job-functor.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "lib/meta/variadic-helper.hpp"
 //#include "lib/meta/function.hpp"
@@ -114,9 +115,9 @@ namespace gear {
 namespace test {
   
   using std::string;
-//  using std::function;
-//  using lib::time::TimeValue;
+  using std::function;
   using lib::time::Time;
+  using lib::time::TimeValue;
   using lib::time::FrameRate;
 //  using lib::time::FSecs;
 //  using lib::time::Offset;
@@ -132,11 +133,11 @@ namespace test {
   using lib::meta::_FunRet;
   using lib::test::Transiently;
 
-//  using std::forward;
-//  using std::string;
+  using std::forward;
+  using std::string;
   using std::swap;
   using std::move;
-  using boost::hash_combine;
+//  using boost::hash_combine;
   
   namespace dot = lib::dot_gen;
   
@@ -241,9 +242,8 @@ namespace test {
           size_t
           calculate()
             {
-              for (Node*& entry: pred)
-                if (entry)
-                  hash_combine (hash, entry->hash);
+              for (Node* entry: pred)
+                boost::hash_combine (hash, entry->hash);
               return hash;
             }
           
@@ -735,7 +735,7 @@ namespace test {
   namespace {
     template<class NOD>
     inline auto
-    prepareEvaluaions()
+    prepareEvaluations()
     {
       return std::array<std::function<uint(NOD&)>, CAT>
         { [](NOD&  ){ return 1;         }
@@ -893,7 +893,7 @@ namespace test {
   TestChainLoad<maxFan>::computeGraphStatistics()
     {
       auto totalLevels = uint(topLevel());
-      auto classify = prepareEvaluaions<Node>();
+      auto classify = prepareEvaluations<Node>();
       Statistic stat(totalLevels);
       LevelSums particulars{0};
       size_t level{0},
@@ -1009,46 +1009,46 @@ namespace test {
   
   /* ========= Render Job generation and Scheduling ========= */
   
-  template<size_t maxFan>
-  class RandomChainCalcFunctor
-    : public NopJobFunctor
+  /**
+   * Baseclass: JobFunctor to invoke TestChainLoad
+   */
+  class ChainFunctor
+    : public JobClosure
     {
-      using Node = typename TestChainLoad<maxFan>::Node;
-      
-      Node* startNode_;
       
       static lib::time::Grid&
-      testGrid()        ///< Meyer's Singleton : a fixed 1fps quantiser
+      testGrid()        ///< Meyer's Singleton : a fixed 1-f/s quantiser
         {
           static lib::time::FixedFrameQuantiser gridOne{FrameRate::STEP};
           return gridOne;
         }
       
+      /* === JobFunctor Interface === */
+      
+      string diagnostic()  const             =0;
+      void invokeJobOperation (JobParameter) =0;
+      
+      JobKind
+      getJobKind()  const
+        {
+          return TEST_JOB;
+        }
+      
+      InvocationInstanceID
+      buildInstanceID (HashVal)  const override
+        {
+          return InvocationInstanceID();
+        }
+      
+      size_t
+      hashOfInstance (InvocationInstanceID invoKey)  const override
+        {
+          std::hash<size_t> hashr;
+          HashVal res = hashr (invoKey.frameNumber);
+          return res;
+        }
+      
     public:
-      RandomChainCalcFunctor(Node& startNode)
-        : startNode_{&startNode}
-        { }
-      
-      
-      /** rigged special implementation of job invocation
-       */
-      void
-      invokeJobOperation (JobParameter param)  override
-        {
-          size_t nodeIdx = decodeNodeID (param.invoKey);
-          size_t level = decodeLevel (TimeValue{param.nominalTime});
-          Node& target = startNode_[nodeIdx];
-          ASSERT (target.level == level);
-          // invoke the »media calculation«
-          target.calculate();
-        }
-      
-      string diagnostic()  const override
-        {
-          return _Fmt{"ChainCalc(w:%d)▶%s"}
-                     % maxFan
-                     % util::showAddr(startNode_);
-        }
       
       /** package the node-index to invoke.
        * @note per convention for this test, this info will be
@@ -1078,6 +1078,109 @@ namespace test {
       decodeLevel (TimeValue nominalTime)
         {
           return testGrid().gridPoint (nominalTime);
+        }
+    };
+  
+  
+  
+  /**
+   * Render JobFunctor to invoke the _calculation_ of a single Node.
+   * The existing Node connectivity is used to retrieve the hash values
+   * from predecessors — so these are expected to be calculated beforehand.
+   * For setup, the start of the ChainLoad's Node array is required.
+   * @tparam maxFan controls expected Node memory layout
+   */
+  template<size_t maxFan>
+  class RandomChainCalcFunctor
+    : public ChainFunctor
+    {
+      using Node = typename TestChainLoad<maxFan>::Node;
+      
+      Node* startNode_;
+      
+    public:
+      RandomChainCalcFunctor(Node& startNode)
+        : startNode_{&startNode}
+        { }
+      
+      
+      /** render job invocation to trigger one Node recalculation */
+      void
+      invokeJobOperation (JobParameter param)  override
+        {
+          size_t nodeIdx = decodeNodeID (param.invoKey);
+          size_t level = decodeLevel (TimeValue{param.nominalTime});
+          Node& target = startNode_[nodeIdx];
+          ASSERT (target.level == level);
+          // invoke the »media calculation«
+          target.calculate();
+        }
+      
+      string diagnostic()  const override
+        {
+          return _Fmt{"ChainCalc(w:%d)◀%s"}
+                     % maxFan
+                     % util::showAddr(startNode_);
+        }
+    };
+  
+  
+  /**
+   * Render JobFunctor to perform chunk wise planning of Node jobs
+   * to calculate a complete Chain-Load graph step by step.
+   */
+  template<size_t maxFan>
+  class RandomChainPlanFunctor
+    : public ChainFunctor
+    {
+      using Node = typename TestChainLoad<maxFan>::Node;
+      
+      function<void(size_t,size_t)> scheduleCalcJob_;
+      function<void(size_t,size_t)> markDependency_;
+      function<void(size_t,bool)>   continuation_;
+      
+      size_t chunkSize_;
+      size_t maxCnt_;
+      
+      Node* nodes_;
+      size_t currIdx_{0};
+      
+    public:
+      template<class CAL, class DEP, class CON>
+      RandomChainPlanFunctor(size_t chunkSize, size_t maxLevel,
+                             Node& nodeArray,
+                             CAL&& schedule, DEP&& markDepend,
+                             CON&& continuation)
+        : scheduleCalcJob_{forward<CAL> (schedule)}
+        , markDependency_{forward<CAL> (markDepend)}
+        , continuation_{continuation}
+        , chunkSize_{chunkSize}
+        , maxCnt_{maxLevel}
+        , nodes_{&nodeArray}
+        { }
+      
+      
+      /** render job invocation to trigger one Node recalculation */
+      void
+      invokeJobOperation (JobParameter param)  override
+        {
+          size_t targetLevel = decodeLevel (TimeValue{param.nominalTime});
+          for ( ; currIdx_<maxCnt_; ++currIdx_)
+            {
+              Node* n = &nodes_[currIdx_];
+              if (n->level > targetLevel)
+                break;
+              scheduleCalcJob_(currIdx_, n->level);
+              for (Node* pred: n.pred)
+                markDependency_(pred,n);
+            }
+          continuation_(targetLevel, currIdx_ < maxCnt_);
+        }
+      
+      
+      string diagnostic()  const override
+        {
+          return "ChainPlan";
         }
     };
   
