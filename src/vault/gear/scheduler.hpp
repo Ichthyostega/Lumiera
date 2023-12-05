@@ -190,6 +190,20 @@ namespace gear {
       
       /** build Activity chain and hand-over to the Scheduler. */
       ScheduleSpec post();
+      
+      ScheduleSpec
+      linkToSuccessor (ScheduleSpec& succSpec)
+        {
+          term_->appendNotificationTo (*succSpec.term_);
+          return move(*this);
+        }
+      
+      ScheduleSpec
+      linkToPredecessor (ScheduleSpec& predSpec)
+        {
+          predSpec.term_->appendNotificationTo (*term_);
+          return move(*this);
+        }
     };
   
   

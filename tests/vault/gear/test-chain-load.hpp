@@ -85,8 +85,9 @@
 
 //#include "lib/hash-value.h"
 #include "vault/gear/job.h"
-//#include "vault/gear/activity.hpp"
+#include "vault/gear/scheduler.hpp"
 //#include "vault/gear/nop-job-functor.hpp"
+#include "lib/uninitialised-storage.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "lib/meta/variadic-helper.hpp"
 //#include "lib/meta/function.hpp"
@@ -102,10 +103,10 @@
 #include <boost/functional/hash.hpp>
 #include <functional>
 #include <utility>
-#include <string>
-#include <vector>
+#include <future>
 #include <memory>
 #include <string>
+#include <vector>
 #include <tuple>
 #include <array>
 
@@ -119,6 +120,7 @@ namespace test {
   using lib::time::Time;
   using lib::time::TimeValue;
   using lib::time::FrameRate;
+  using lib::time::Duration;
 //  using lib::time::FSecs;
 //  using lib::time::Offset;
 //  using lib::meta::RebindVariadic;
@@ -138,12 +140,18 @@ namespace test {
   using std::swap;
   using std::move;
 //  using boost::hash_combine;
+  using std::chrono_literals::operator ""s;
   
+  namespace err = lumiera::error;
   namespace dot = lib::dot_gen;
   
   namespace { // Default definitions for topology generation
     const size_t DEFAULT_FAN = 16;
     const size_t DEFAULT_SIZ = 256;
+    
+    const auto SAFETY_TIMEOUT = 5s;
+    const auto STANDARD_DEADLINE = 10ms;
+    const size_t DEFAULT_CHUNKSIZE = 64;
   }
   
   struct Statistic;
@@ -606,7 +614,10 @@ namespace test {
       Statistic computeGraphStatistics();
       TestChainLoad&& printTopologyStatistics();
       
-    private:
+      class ScheduleCtx;
+      friend class ScheduleCtx; // accesses raw storage array
+      
+      ScheduleCtx setupSchedule (Scheduler& scheduler);
     };
   
   
@@ -1183,6 +1194,199 @@ namespace test {
           return "ChainPlan";
         }
     };
+  
+  
+  
+  
+  /**
+   * Setup and wiring for a test run to schedule a computation structure
+   * as defined by this TestChainLoad instance. This context is linked to
+   * a concrete TestChainLoad and Scheduler instance and holds a memory block
+   * with actual schedules, which are dispatched in batches into the Scheduler.
+   * It is *crucial* to keep this object *alive during the complete test run*,
+   * which is achieved by a blocking wait on the callback triggered after
+   * dispatching the last batch of calculation jobs. This process itself
+   * is meant for test usage and not thread-safe (while obviously the
+   * actual scheduling and processing happens in the worker threads).
+   * Yet the instance can be re-used to dispatch further test runs.
+   */
+  template<size_t maxFan>
+  class TestChainLoad<maxFan>::ScheduleCtx
+    : util::MoveOnly
+    {
+      TestChainLoad& chainLoad_;
+      Scheduler&     scheduler_;
+      
+      lib::UninitialisedDynBlock<ScheduleSpec> schedule_;
+
+      FrameRate  levelSpeed_{1, Duration{_uTicks(1ms)}};
+      uint       loadFactor_{2};
+      size_t      chunkSize_{DEFAULT_CHUNKSIZE};
+      TimeVar     startTime_{Time::ANYTIME};
+      Duration      preRoll_{_uTicks(200us)};
+      microseconds deadline_{STANDARD_DEADLINE};
+      ManifestationID manID_{};
+      
+      std::promise<void> signalDone_{};
+      
+      RandomChainCalcFunctor<maxFan> calcFunctor_;
+      RandomChainPlanFunctor<maxFan> planFunctor_;
+      
+      
+      /* ==== Callbacks from job planning ==== */
+      
+      /** Callback: place a single job into the scheduler */
+      void
+      disposeStep (size_t idx, size_t level)
+        {
+          schedule_[idx] = scheduler_.defineSchedule(calcJob (idx,level))
+                                     .manifestation(manID_)
+                                     .startTime (calcStartTime(level))
+                                     .lifeWindow (deadline_)
+                                     .post();
+        }
+      
+      /** Callback: define a dependency between scheduled jobs */
+      void
+      setDependency (Node* pred, Node* succ)
+        {
+          size_t predIdx = chainLoad_.nodeID (pred);
+          size_t succIdx = chainLoad_.nodeID (succ);
+          schedule_[predIdx].linkToSuccessor (schedule_[succIdx]);
+        }
+      
+      /** continue planning: schedule follow-up planning job */
+      void
+      continuation (size_t levelDone, bool work_left)
+        {
+          if (work_left)
+            {
+              size_t nextChunkLevel = calcNextLevel (levelDone);
+              scheduler_.continueMetaJob (calcPlanScheduleTime (nextChunkLevel)
+                                         ,planningJob (nextChunkLevel)
+                                         ,manID_);
+            }
+          else
+            signalDone_.set_value();
+        }
+      
+      std::future<void>
+      performRun()
+        {
+          size_t numNodes = chainLoad_.size();
+          schedule_.allocate (numNodes);
+          startTime_ = anchorStartTime();
+          scheduler_.seedCalcStream (planningJob(0)
+                                    ,manID_
+                                    ,calcLoadHint());
+          return attachNewCompletionSignal();
+        }
+      
+    public:
+      ScheduleCtx (TestChainLoad& mother, Scheduler& scheduler)
+        : chainLoad_{mother}
+        , scheduler_{scheduler}
+        , calcFunctor_{chainLoad_.nodes_[0]}
+        , planFunctor_{chainLoad_.nodes_[0], chainLoad_.numNodes_
+                      ,[this](size_t i, size_t l){ disposeStep(i,l);  }
+                      ,[this](auto* p, auto* s)  { setDependency(p,s);}
+                      ,[this](size_t l, bool w)  { continuation(l,w); }
+                      }
+        { }
+      
+      ScheduleCtx
+      launch_and_wait()
+        {
+          awaitBlocking(
+            performRun());
+          return move(*this);
+        }
+      
+      
+    private:
+      /** push away any existing wait state and attach new clean state */
+      std::future<void>
+      attachNewCompletionSignal()
+        {
+          signalDone_.set_exception (std::make_exception_ptr(std::future_error (std::future_errc::broken_promise)));
+          std::promise<void> notYetTriggered;
+          signalDone_.swap (notYetTriggered);
+          return signalDone_.get_future();
+        }
+      
+      void
+      awaitBlocking(std::future<void> signal)
+        {
+          if (std::future_status::timeout == signal.wait_for (SAFETY_TIMEOUT))
+            throw err::Fatal("Timeout on Scheduler test exceeded.");
+        }
+      
+      Job
+      calcJob (size_t idx, size_t level)
+        {
+          return Job{calcFunctor_
+                    ,calcFunctor_.encodeNodeID(idx)
+                    ,calcFunctor_.encodeLevel(level)
+                    };
+        }
+      
+      Job
+      planningJob (size_t level)
+        {
+          return Job{planFunctor_
+                    ,InvocationInstanceID()
+                    ,planFunctor_.encodeLevel(level)
+                    };
+        }
+      
+      Time
+      anchorStartTime()
+        {
+          return RealClock::now() + preRoll_;
+        }
+      
+      FrameRate
+      calcLoadHint()
+        {
+          return FrameRate{levelSpeed_ * loadFactor_};
+        }
+      
+      size_t
+      calcNextLevel (size_t levelDone)
+        {
+          return levelDone + chunkSize_;
+        }
+      
+      Time
+      calcStartTime(size_t level)
+        {
+          return startTime_ + level / levelSpeed_;
+        }
+      
+      Time
+      calcPlanScheduleTime (size_t nextChunkLevel)
+        {/* must be at least 1 level ahead,
+            because dependencies are defined backwards;
+            the chain-load graph only defines dependencies over one level
+            thus the first level in the next chunk must still be able to attach
+            dependencies to the last row of the preceding chunk, implying that
+            those still need to be ahead of schedule.
+          */
+          nextChunkLevel = nextChunkLevel>2? nextChunkLevel-2 : 0;
+          return calcStartTime(nextChunkLevel) - preRoll_;
+        }
+    };
+  
+  
+  /**
+   * establish and configure the context used for scheduling computations.
+   */
+  template<size_t maxFan>
+  typename TestChainLoad<maxFan>::ScheduleCtx
+  TestChainLoad<maxFan>::setupSchedule(Scheduler& scheduler)
+  {
+    return ScheduleCtx{*this, scheduler};
+  }
   
   
   

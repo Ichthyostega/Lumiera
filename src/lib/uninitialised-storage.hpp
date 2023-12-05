@@ -126,5 +126,114 @@ namespace lib {
     };
   
   
+  
+  
+  /**
+   * Managed uninitialised Heap-allocated storage with array like access.
+   * @tparam T the nominal type assumed to sit in each »slot«
+   */
+  template<typename T>
+  class UninitialisedDynBlock
+    {
+      using _Arr = T[];
+      
+      T* buff_{nullptr};
+      size_t size_{0};
+      
+    public:
+      T*
+      allocate(size_t cnt)
+        {
+          if (buff_) discard();
+          size_ = cnt;
+          buff_ = cnt? std::aligned_alloc (std::alignment_of<T>(), cnt * sizeof(T))
+                     : nullptr;
+          return buff_;
+        }
+      
+      void
+      discard()
+        {
+          std::free (buff_);
+          buff_ = nullptr;
+          size_ = 0;
+        }
+      
+      
+      UninitialisedDynBlock()  =default;
+     ~UninitialisedDynBlock()
+        {
+          if (buff_)
+            discard();
+        }
+      explicit
+      UninitialisedDynBlock (size_t cnt)
+        {
+          if (cnt)
+            allocate(cnt);
+        }
+      
+      UninitialisedDynBlock (UninitialisedDynBlock && rr)
+        {
+          if (this != &rr)
+            swap (*this, rr);
+        }
+      
+      UninitialisedDynBlock (UninitialisedDynBlock const&)            =delete;
+      UninitialisedDynBlock& operator= (UninitialisedDynBlock &&)     =delete;
+      UninitialisedDynBlock& operator= (UninitialisedDynBlock const&) =delete;
+      
+      friend void
+      swap (UninitialisedDynBlock& u1, UninitialisedDynBlock& u2)
+      {
+        std::swap (u1.size_, u2.size_);
+        std::swap (u1.buff_, u2.buff_);
+      }
+      
+      explicit
+      operator bool()  const
+        {
+          return bool(buff_);
+        }
+      
+      size_t
+      size()  const
+        {
+          return size_;
+        }
+      
+      
+      _Arr&
+      array()
+        {
+          return * std::launder (reinterpret_cast<_Arr* > (buff_));
+        }
+      
+      _Arr const&
+      array()  const
+        {
+          return * std::launder (reinterpret_cast<_Arr const*> (buff_));
+        }
+      
+      
+      T &      operator[] (size_t idx)        { return array()[idx]; }
+      T const& operator[] (size_t idx)  const { return array()[idx]; }
+      
+      
+      template<typename...Args>
+      T&
+      createAt (size_t idx, Args&& ...args)
+        {
+          return *new(&operator[](idx)) T{std::forward<Args>(args)...};
+        }
+      
+      void
+      destroyAt (size_t idx)
+        {
+          operator[](idx).~T();
+        }
+    };
+  
+  
 } // namespace lib
 #endif /*LIB_UNINITIALISED_STORAGE_H*/
