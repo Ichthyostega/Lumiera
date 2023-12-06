@@ -1135,6 +1135,7 @@ namespace test {
           Node& target = startNode_[nodeIdx];
           ASSERT (target.level == level);
           // invoke the »media calculation«
+cout<<_Fmt{"\n!◆! %s: calc(i=%d, lev:%d)"} % markThread() % nodeIdx % level <<endl;          
           target.calculate();
         }
       
@@ -1187,9 +1188,11 @@ namespace test {
       invokeJobOperation (JobParameter param)  override
         {
           size_t targetLevel = decodeLevel (TimeValue{param.nominalTime});
+cout<<_Fmt{"\n!◆!plan...to:%d%19t|curr=%d (max:%d)"} % targetLevel % currIdx_ % maxCnt_<<endl;          
           for ( ; currIdx_<maxCnt_; ++currIdx_)
             {
               Node* n = &nodes_[currIdx_];
+cout<<_Fmt{"%16t|n.(%d,lev:%d)"} % currIdx_ % n->level <<endl;
               if (n->level > targetLevel)
                 break;
               scheduleCalcJob_(currIdx_, n->level);
@@ -1250,6 +1253,7 @@ namespace test {
       void
       disposeStep (size_t idx, size_t level)
         {
+cout <<_Fmt{"... dispose(i=%d,lev:%d) -> @%s"} % idx % level % relT(calcStartTime(level))<<endl;
           schedule_[idx] = scheduler_.defineSchedule(calcJob (idx,level))
                                      .manifestation(manID_)
                                      .startTime (calcStartTime(level))
@@ -1270,9 +1274,11 @@ namespace test {
       void
       continuation (size_t levelDone, bool work_left)
         {
+cout <<_Fmt{"+++ %s: Continuation(levelDone=%d, work_left:%s)"} % markThread() % levelDone % work_left <<endl;
           if (work_left)
             {
               size_t nextChunkLevel = calcNextLevel (levelDone);
+cout <<"--> reschedule to "<<nextChunkLevel<<endl;
               scheduler_.continueMetaJob (calcPlanScheduleTime (nextChunkLevel)
                                          ,planningJob (nextChunkLevel)
                                          ,manID_);
@@ -1285,6 +1291,7 @@ namespace test {
       performRun()
         {
           size_t numNodes = chainLoad_.size();
+cout <<"+++ "<<markThread()<<": seed(num:"<<numNodes<<")"<<endl;
           schedule_.allocate (numNodes);
           startTime_ = anchorStartTime();
           scheduler_.seedCalcStream (planningJob(0)
@@ -1353,7 +1360,10 @@ namespace test {
       Time
       anchorStartTime()
         {
-          return RealClock::now() + preRoll_;
+Time ank = RealClock::now() + preRoll_;
+cout<<"ANCHOR="+relT(ank)+" preRoll="+util::toString(_raw(preRoll_))<<endl;
+//          return RealClock::now() + preRoll_;
+          return ank;
         }
       
       FrameRate

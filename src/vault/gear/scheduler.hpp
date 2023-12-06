@@ -115,6 +115,7 @@
 //#include "lib/symbol.hpp"
 #include  "lib/nocopy.hpp"
 //#include "lib/util.hpp"
+#include "lib/format-cout.hpp"///////////////////////TODO
 
 //#include <string>
 #include <optional>
@@ -583,6 +584,26 @@ namespace gear {
     return move(*this);
   }
   
+namespace{
+  inline string
+  relT (int64_t pling)
+  {
+    static int64_t nulli{0};
+    if (nulli == 0) nulli = pling;
+    return util::toString(pling - nulli);
+  }
+  inline string
+  relT (Time plong)
+  {
+    return relT(_raw(plong));
+  }
+  
+  inline string
+  markThread()
+  {
+    return util::showHashLSB (std::hash<std::thread::id>{}(thisThread()));
+  }
+}
   
   /**
    * Enqueue for time-bound execution, possibly dispatch immediately.
@@ -593,7 +614,8 @@ namespace gear {
   inline void
   Scheduler::postChain (ActivationEvent actEvent)
   {
-    maybeScaleWorkForce();
+    maybeScaleWorkForce ();
+cout<<"‖SCH‖ "+markThread()+": @"+relT(RealClock::now())+" ○ start="+relT(actEvent.starting)+" dead:"+util::toString(actEvent.deadline - actEvent.starting)<<endl;
     ExecutionCtx ctx{*this, actEvent};
     layer2_.postDispatch (actEvent, ctx, layer1_);
   }
@@ -632,6 +654,7 @@ namespace gear {
                       .performStep([&]{
                                         Time now = getSchedTime();
                                         auto toDispatch = layer2_.findWork (layer1_,now);
+cout<<"   ·‖ "+markThread()+": @ "+relT(now)+" HT:"+relT(layer1_.headTime())+"  -> "+(toDispatch? "▶ "+relT(toDispatch.starting): string("∘"))<<endl;
                                         ExecutionCtx ctx{*this, toDispatch};
                                         return layer2_.postDispatch (toDispatch, ctx, layer1_);
                                       })
@@ -724,6 +747,7 @@ namespace gear {
   inline void
   Scheduler::handleDutyCycle (Time now)
   {
+cout<<"‖▷▷▷‖ "+markThread()+": @ "+relT(now)+(empty()? string(" EMPTY"): " HT:"+relT(layer1_.headTime()))<<endl;
     // consolidate queue content
     layer1_.feedPrioritisation();
     // clean-up of outdated tasks here
@@ -761,6 +785,8 @@ namespace gear {
       triggerEmergency();
     else
       loadControl_.markWorkerExit();
+Time now = getSchedTime();
+cout<<"‖▽▼▽‖ "+markThread()+": @ "+relT(now)<<endl;
   }
   
   /**
@@ -775,9 +801,15 @@ namespace gear {
   Scheduler::maybeScaleWorkForce()
   {
     if (empty())
+{
       ignite();
+cout<<"‖IGN‖     wof:"+util::toString(workForce_.size())<<endl;
+}
     else
+{
       workForce_.incScale();
+cout<<"‖•△•‖     wof:"+util::toString(workForce_.size())+" HT:"+relT(layer1_.headTime())<<endl;
+}
   }
   
   /**
