@@ -146,7 +146,7 @@ namespace lib {
         {
           if (buff_) discard();
           size_ = cnt;
-          buff_ = cnt? std::aligned_alloc (std::alignment_of<T>(), cnt * sizeof(T))
+          buff_ = cnt? static_cast<T*> (std::aligned_alloc (std::alignment_of<T>(), cnt * sizeof(T)))
                      : nullptr;
           return buff_;
         }

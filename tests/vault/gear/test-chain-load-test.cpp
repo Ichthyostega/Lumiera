@@ -76,7 +76,7 @@ namespace test {
       virtual void
       run (Arg)
         {
-          simpleUsage();
+          usageExample();
           verify_Node();
           verify_Topology();
           showcase_Expansion();
@@ -93,9 +93,27 @@ namespace test {
        * @todo WIP 11/23 🔁 define ⟶ 🔁 implement
        */
       void
-      simpleUsage()
+      usageExample()
         {
-          TestChainLoad testLoad;
+          auto anchor = RealClock::now();
+          auto offset = [&](Time when =RealClock::now()){ return _raw(when) - _raw(anchor); };
+
+          auto testLoad =
+            TestChainLoad{64}
+               .configureShape_simple_short_segments()
+               .buildToplolgy();
+SHOW_EXPR(offset())
+          
+          BlockFlowAlloc bFlow;
+          EngineObserver watch;
+          Scheduler scheduler{bFlow, watch};
+          
+SHOW_EXPR(testLoad.getHash())
+SHOW_EXPR(offset())
+          testLoad.setupSchedule(scheduler)
+                  .launch_and_wait();
+SHOW_EXPR(offset())
+SHOW_EXPR(testLoad.getHash())
         }
       
       

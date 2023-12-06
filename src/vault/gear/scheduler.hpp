@@ -157,13 +157,13 @@ namespace gear {
       ManifestationID manID_{};
       bool isCompulsory_{false};
       
-      Scheduler& theScheduler_;
+      Scheduler* theScheduler_;
       std::optional<activity::Term> term_;
       
     public:
       ScheduleSpec (Scheduler& sched, Job job)
         : job_{job}
-        , theScheduler_{sched}
+        , theScheduler_{&sched}
         , term_{std::nullopt}
         { }
       
@@ -171,6 +171,13 @@ namespace gear {
       startOffset (microseconds afterNow)
         {
           start_ = RealClock::now() + _uTicks(afterNow);
+          return move(*this);
+        }
+      
+      ScheduleSpec
+      startTime (Time fixedTime)
+        {
+          start_ = fixedTime;
           return move(*this);
         }
       
@@ -565,15 +572,14 @@ namespace gear {
   ScheduleSpec::post()
   {
     term_ = move(
-      theScheduler_
-        .activityLang_
-        .buildCalculationJob (job_, start_,death_));
+      theScheduler_->activityLang_
+          .buildCalculationJob (job_, start_,death_));
      //set up new schedule by retrieving the Activity-chain...
-    theScheduler_.postChain ({term_->post(), start_
-                                           , death_
-                                           , manID_
-                                           , isCompulsory_});
-    theScheduler_.ensureDroppedGroomingToken();
+    theScheduler_->postChain ({term_->post(), start_
+                                            , death_
+                                            , manID_
+                                            , isCompulsory_});
+    theScheduler_->ensureDroppedGroomingToken();
     return move(*this);
   }
   

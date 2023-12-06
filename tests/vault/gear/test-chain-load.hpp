@@ -309,7 +309,7 @@ namespace test {
         }
       
       
-      size_t size()     const { return afterNode() - frontNode();        }
+      size_t size()     const { return numNodes_; }
       size_t topLevel() const { return unConst(this)->backNode()->level; }
       size_t getSeed()  const { return unConst(this)->frontNode()->hash; }
       size_t getHash()  const { return unConst(this)->backNode()->hash;  } /////////////////////TODO combine hash of all exit nodes
@@ -406,6 +406,17 @@ namespace test {
                                     return isJoin(n) ? Rule().probability(p1).maxVal(v)
                                                      : Rule().probability(p2).maxVal(v);
                                   });
+        }
+      
+      
+      /** preconfigured topology: simple interwoven 3-step graph segments */
+      TestChainLoad&&
+      configureShape_simple_short_segments()
+        {
+          seedingRule(rule().probability(0.8).maxVal(1));
+          reductionRule(rule().probability(0.75).maxVal(3));
+          pruningRule(rule_atJoin(1));
+          return move(*this);
         }
 
       
@@ -1229,8 +1240,8 @@ namespace test {
       
       std::promise<void> signalDone_{};
       
-      RandomChainCalcFunctor<maxFan> calcFunctor_;
-      RandomChainPlanFunctor<maxFan> planFunctor_;
+      std::unique_ptr<RandomChainCalcFunctor<maxFan>> calcFunctor_;
+      std::unique_ptr<RandomChainPlanFunctor<maxFan>> planFunctor_;
       
       
       /* ==== Callbacks from job planning ==== */
@@ -1286,12 +1297,12 @@ namespace test {
       ScheduleCtx (TestChainLoad& mother, Scheduler& scheduler)
         : chainLoad_{mother}
         , scheduler_{scheduler}
-        , calcFunctor_{chainLoad_.nodes_[0]}
-        , planFunctor_{chainLoad_.nodes_[0], chainLoad_.numNodes_
-                      ,[this](size_t i, size_t l){ disposeStep(i,l);  }
-                      ,[this](auto* p, auto* s)  { setDependency(p,s);}
-                      ,[this](size_t l, bool w)  { continuation(l,w); }
-                      }
+        , calcFunctor_{new RandomChainCalcFunctor<maxFan>{chainLoad_.nodes_[0]}}
+        , planFunctor_{new RandomChainPlanFunctor<maxFan>{chainLoad_.nodes_[0], chainLoad_.numNodes_
+                                                         ,[this](size_t i, size_t l){ disposeStep(i,l);  }
+                                                         ,[this](auto* p, auto* s)  { setDependency(p,s);}
+                                                         ,[this](size_t l, bool w)  { continuation(l,w); }
+                                                         }}
         { }
       
       ScheduleCtx
@@ -1324,18 +1335,18 @@ namespace test {
       Job
       calcJob (size_t idx, size_t level)
         {
-          return Job{calcFunctor_
-                    ,calcFunctor_.encodeNodeID(idx)
-                    ,calcFunctor_.encodeLevel(level)
+          return Job{*calcFunctor_
+                    , calcFunctor_->encodeNodeID(idx)
+                    , calcFunctor_->encodeLevel(level)
                     };
         }
       
       Job
       planningJob (size_t level)
         {
-          return Job{planFunctor_
-                    ,InvocationInstanceID()
-                    ,planFunctor_.encodeLevel(level)
+          return Job{*planFunctor_
+                    , InvocationInstanceID()
+                    , planFunctor_->encodeLevel(level)
                     };
         }
       
@@ -1360,7 +1371,7 @@ namespace test {
       Time
       calcStartTime(size_t level)
         {
-          return startTime_ + level / levelSpeed_;
+          return startTime_ + Time{level / levelSpeed_};
         }
       
       Time
@@ -1380,11 +1391,13 @@ namespace test {
   
   /**
    * establish and configure the context used for scheduling computations.
+   * @note clears hashes and re-propagates seed in the node graph beforehand.
    */
   template<size_t maxFan>
   typename TestChainLoad<maxFan>::ScheduleCtx
   TestChainLoad<maxFan>::setupSchedule(Scheduler& scheduler)
   {
+    clearNodeHashes();
     return ScheduleCtx{*this, scheduler};
   }
   
