@@ -234,11 +234,11 @@ namespace gear {
         }
       
       void
-      incScale()
+      incScale(uint step =+1)
         {
-          if (size() >= setup_.COMPUTATION_CAPACITY)
-            return;
-          else
+          uint i = workers_.size();
+          uint target = util::min (i+step, setup_.COMPUTATION_CAPACITY);
+          for ( ; i < target; ++i)
             workers_.emplace_back (setup_);
         }
       

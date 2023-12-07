@@ -142,6 +142,7 @@ namespace gear {
     const auto   IDLE_WAIT = 20ms;            ///< sleep-recheck cycle for workers deemed _idle_
     const size_t DISMISS_CYCLES = 100;        ///< number of wait cycles before an idle worker terminates completely
     Offset POLL_WAIT_DELAY{FSecs(1,1000)};    ///< delay until re-evaluating a condition previously found unsatisfied
+    Offset SEED_CALC_OFFSET{_uTicks(250us)};  ///< tiny delay to ensure the first job is actually enqueued to force ignite()
     Offset DUTY_CYCLE_PERIOD{FSecs(1,20)};    ///< period of the regular scheduler »tick« for state maintenance.
     Offset DUTY_CYCLE_TOLERANCE{FSecs(1,10)}; ///< maximum slip tolerated on duty-cycle start before triggering Scheduler-emergency
   }
@@ -271,7 +272,8 @@ namespace gear {
       ignite()
         {
           TRACE (engine, "Ignite Scheduler Dispatch.");
-          handleDutyCycle (RealClock::now());
+          bool force_continued_run{true};
+          handleDutyCycle (RealClock::now(), force_continued_run);
           if (not empty())
             workForce_.activate();
         }
@@ -330,7 +332,7 @@ namespace gear {
         {
           layer1_.activate (manID);
           activityLang_.announceLoad (expectedAdditionalLoad);
-          continueMetaJob (RealClock::now(), planningJob, manID);
+          continueMetaJob (RealClock::now()+SEED_CALC_OFFSET, planningJob, manID);
         }
       
       
@@ -379,9 +381,9 @@ namespace gear {
       
     private:
       void postChain (ActivationEvent);
-      void handleDutyCycle (Time now);
+      void handleDutyCycle (Time now, bool =false);
       void handleWorkerTermination (bool isFailure);
-      void maybeScaleWorkForce();
+      void maybeScaleWorkForce (Time startHorizon);
       
       void triggerEmergency();
       
@@ -425,6 +427,7 @@ namespace gear {
           LoadController::Wiring setup;
           setup.maxCapacity = []{ return work::Config::COMPUTATION_CAPACITY; };
           setup.currWorkForceSize = [this]{ return workForce_.size(); };
+          setup.stepUpWorkForce   = [this](uint steps){ workForce_.incScale(steps); };
           return setup;
         }
       
@@ -497,7 +500,7 @@ namespace gear {
       
       /**
        * λ-post: enqueue for time-bound execution, possibly dispatch immediately.
-       * @remark This function represents and _abstracted entrance to scheduling_
+       * @remark This function represents an _abstracted entrance to scheduling_
        *         for the ActivityLang and is relevant for recursive forwarding
        *         of activations and notifications. The concrete implementation
        *         needs some further contextual information, which is passed
@@ -614,7 +617,7 @@ namespace{
   inline void
   Scheduler::postChain (ActivationEvent actEvent)
   {
-    maybeScaleWorkForce ();
+    maybeScaleWorkForce (actEvent.startTime());
 cout<<"‖SCH‖ "+markThread()+": @"+relT(RealClock::now())+" ○ start="+relT(actEvent.starting)+" dead:"+util::toString(actEvent.deadline - actEvent.starting)<<endl;
     ExecutionCtx ctx{*this, actEvent};
     layer2_.postDispatch (actEvent, ctx, layer1_);
@@ -743,9 +746,11 @@ cout<<"   ·‖ "+markThread()+": @ "+relT(now)+" HT:"+relT(layer1_.headTime())+
    * immediate response, but with sufficient large time period to amortise even slightly
    * more computational expensive work; IO and possibly blocking operations should be
    * avoided here though. Exceptions emanating from here will shut down the engine.
+   * @param forceContinuation whether a follow-up DutyCycle _must_ happen,
+   *        irrespective if the queue has still further entries (idle detection)
    */
   inline void
-  Scheduler::handleDutyCycle (Time now)
+  Scheduler::handleDutyCycle (Time now, bool forceContinuation)
   {
 cout<<"‖▷▷▷‖ "+markThread()+": @ "+relT(now)+(empty()? string(" EMPTY"): " HT:"+relT(layer1_.headTime()))<<endl;
     // consolidate queue content
@@ -765,14 +770,16 @@ cout<<"‖▷▷▷‖ "+markThread()+": @ "+relT(now)+(empty()? string(" EMPTY"
     
     loadControl_.updateState (now);
     
-    if (not empty())
+    if (not empty() or forceContinuation)
       {// prepare next duty cycle »tick«
         Time nextTick = now + DUTY_CYCLE_PERIOD;
         Time deadline = nextTick + DUTY_CYCLE_TOLERANCE;
         Activity& tickActivity = activityLang_.createTick (deadline);
-        postChain (ActivationEvent{tickActivity, nextTick, deadline, ManifestationID(), true});
-      }
-  }
+        ActivationEvent tickEvent{tickActivity, nextTick, deadline, ManifestationID(), true};
+        ExecutionCtx ctx{*this, tickEvent};
+        layer2_.postDispatch (tickEvent, ctx, layer1_);
+      } // *deliberately* use low-level entrance
+  }    //  to avoid ignite() cycles and derailed load-regulation
   
   /**
    * Callback invoked whenever a worker-thread is about to exit
@@ -798,7 +805,7 @@ cout<<"‖▽▼▽‖ "+markThread()+": @ "+relT(now)<<endl;
    *       workers fall idle for extended time (> 2sec).
    */
   inline void
-  Scheduler::maybeScaleWorkForce()
+  Scheduler::maybeScaleWorkForce (Time startHorizon)
   {
     if (empty())
 {
@@ -807,7 +814,7 @@ cout<<"‖IGN‖     wof:"+util::toString(workForce_.size())<<endl;
 }
     else
 {
-      workForce_.incScale();
+      loadControl_.ensureCapacity (startHorizon);
 cout<<"‖•△•‖     wof:"+util::toString(workForce_.size())+" HT:"+relT(layer1_.headTime())<<endl;
 }
   }

@@ -129,9 +129,10 @@ namespace gear {
     }
     
     
-    Duration SLEEP_HORIZON{_uTicks (20ms)};
-    Duration WORK_HORIZON {_uTicks ( 5ms)};
-    Duration NEAR_HORIZON {_uTicks (50us)};
+    Duration SLEEP_HORIZON{_uTicks (20ms)}; ///< schedules beyond that horizon justify going idle
+    Duration WORK_HORIZON {_uTicks ( 5ms)}; ///< the scope of activity _currently in the works_
+    Duration NEAR_HORIZON {_uTicks (50us)}; ///< what counts as "imminent" (e.g. for spin-waiting)
+    Duration STANDARD_LAG {_uTicks(200us)}; ///< Experience shows that on average scheduling happens with 200µs delay
     
     const double LAG_SAMPLE_DAMPING = 2;    ///< smoothing factor for exponential moving average of lag;
   }
@@ -154,6 +155,7 @@ namespace gear {
         {
           function<size_t()> maxCapacity      {[]{ return 1; }};
           function<size_t()> currWorkForceSize{[]{ return 0; }};
+          function<void(uint)> stepUpWorkForce{[](uint){/*NOP*/}};
           ///////TODO add here functors to access performance indicators
         };
       
@@ -232,8 +234,8 @@ namespace gear {
       double
       effectiveLoad()  const
         {
-          double lag = sampledLag_.load (memory_order_relaxed);
-          lag -= 200;
+          double lag = averageLag();
+          lag -= _raw(STANDARD_LAG);
           lag /= _raw(WORK_HORIZON);
           lag *= 10;
           double lagFactor = lag<0? 1/(1-lag): 1+lag;
@@ -246,6 +248,13 @@ namespace gear {
       updateState (Time)
         {
           /////////////////////////////////////////////////////////////////////////////TODO anything we need to calculate on each »scheduler tick«?
+          //
+          auto lag = averageLag();
+          if (lag > _raw(WORK_HORIZON))
+              wiring_.stepUpWorkForce(+4);
+          else
+          if (averageLag() > 2*_raw(STANDARD_LAG))
+              wiring_.stepUpWorkForce(+1);
         }
       
       /** statistics update on scaling down the WorkForce */
@@ -253,6 +262,18 @@ namespace gear {
       markWorkerExit()
         {
           ///////do something deeply moving
+        }
+      
+      /**
+       * Hook to check and possibly scale up WorkForce to handle one additional job
+       */
+      void
+      ensureCapacity (Time startHorizon)
+        {
+          if (startHorizon > 2* SLEEP_HORIZON)
+            return;
+          if (averageLag() > 2*_raw(STANDARD_LAG))
+            wiring_.stepUpWorkForce(+1);
         }
       
       /**

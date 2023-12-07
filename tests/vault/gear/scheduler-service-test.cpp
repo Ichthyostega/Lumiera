@@ -134,10 +134,9 @@ namespace test {
           auto postIt = [&] { postNewTask (scheduler, dummy, RealClock::now()+t200us); };
           
           scheduler.ignite();
-          CHECK (isnil (scheduler));        // no start without any post()
+          CHECK (not isnil (scheduler));// repeated »tick« task enlisted....
           
           postIt();
-          scheduler.ignite();
           CHECK (not isnil (scheduler));
           
           scheduler.terminateProcessing();
