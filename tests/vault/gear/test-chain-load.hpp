@@ -1290,14 +1290,15 @@ cout <<"--> reschedule to "<<nextChunkLevel<<endl;
       std::future<void>
       performRun()
         {
+          auto finished = attachNewCompletionSignal();
           size_t numNodes = chainLoad_.size();
 cout <<"+++ "<<markThread()<<": seed(num:"<<numNodes<<")"<<endl;
           schedule_.allocate (numNodes);
           startTime_ = anchorStartTime();
-          scheduler_.seedCalcStream (planningJob(0)
+          scheduler_.seedCalcStream (planningJob(calcNextLevel(0)-1)
                                     ,manID_
                                     ,calcLoadHint());
-          return attachNewCompletionSignal();
+          return finished;
         }
       
     public:
@@ -1326,7 +1327,6 @@ cout <<"+++ "<<markThread()<<": seed(num:"<<numNodes<<")"<<endl;
       std::future<void>
       attachNewCompletionSignal()
         {
-          signalDone_.set_exception (std::make_exception_ptr(std::future_error (std::future_errc::broken_promise)));
           std::promise<void> notYetTriggered;
           signalDone_.swap (notYetTriggered);
           return signalDone_.get_future();
