@@ -142,7 +142,6 @@ namespace gear {
     const auto   IDLE_WAIT = 20ms;            ///< sleep-recheck cycle for workers deemed _idle_
     const size_t DISMISS_CYCLES = 100;        ///< number of wait cycles before an idle worker terminates completely
     Offset POLL_WAIT_DELAY{FSecs(1,1000)};    ///< delay until re-evaluating a condition previously found unsatisfied
-    Offset SEED_CALC_OFFSET{_uTicks(250us)};  ///< tiny delay to ensure the first job is actually enqueued to force ignite()
     Offset DUTY_CYCLE_PERIOD{FSecs(1,20)};    ///< period of the regular scheduler »tick« for state maintenance.
     Offset DUTY_CYCLE_TOLERANCE{FSecs(1,10)}; ///< maximum slip tolerated on duty-cycle start before triggering Scheduler-emergency
   }
@@ -332,7 +331,7 @@ namespace gear {
         {
           layer1_.activate (manID);
           activityLang_.announceLoad (expectedAdditionalLoad);
-          continueMetaJob (RealClock::now()+SEED_CALC_OFFSET, planningJob, manID);
+          continueMetaJob (RealClock::now(), planningJob, manID);
         }
       
       
