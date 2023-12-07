@@ -585,7 +585,7 @@ namespace test {
           _DiagnosticFun<SIG_done>::Type done;
           _DiagnosticFun<SIG_tick>::Type tick;
           
-          function<Offset()> getWaitDelay = []    { return POLL_WAIT_DELAY;       };
+          function<Offset()> getWaitDelay = []    { return POLL_WAIT_DELAY;  };
           function<Time()>   getSchedTime = [this]{ return SCHED_TIME_MARKER;};
           
           FakeExecutionCtx (ActivityDetector& detector)

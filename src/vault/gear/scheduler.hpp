@@ -141,7 +141,7 @@ namespace gear {
     
     const auto   IDLE_WAIT = 20ms;            ///< sleep-recheck cycle for workers deemed _idle_
     const size_t DISMISS_CYCLES = 100;        ///< number of wait cycles before an idle worker terminates completely
-    Offset POLL_WAIT_DELAY{FSecs(1,1000)};    ///< delay until re-evaluating a condition previously found unsatisfied
+    Offset POLL_WAIT_DELAY{FSecs(1,1000)};    ///< delay until re-evaluating after notification (obscure feature, retained for future use)
     Offset DUTY_CYCLE_PERIOD{FSecs(1,20)};    ///< period of the regular scheduler »tick« for state maintenance.
     Offset DUTY_CYCLE_TOLERANCE{FSecs(1,10)}; ///< maximum slip tolerated on duty-cycle start before triggering Scheduler-emergency
   }
@@ -746,7 +746,9 @@ cout<<"   ·‖ "+markThread()+": @ "+relT(now)+" HT:"+relT(layer1_.headTime())+
    * more computational expensive work; IO and possibly blocking operations should be
    * avoided here though. Exceptions emanating from here will shut down the engine.
    * @param forceContinuation whether a follow-up DutyCycle _must_ happen,
-   *        irrespective if the queue has still further entries (idle detection)
+   *        irrespective if the queue has still further entries. Used
+   *        on first Tick-Cycle directly after ignition, which is
+   *        then also shortened (to improve scheduling precision)
    */
   inline void
   Scheduler::handleDutyCycle (Time now, bool forceContinuation)
@@ -771,7 +773,7 @@ cout<<"‖▷▷▷‖ "+markThread()+": @ "+relT(now)+(empty()? string(" EMPTY"
     
     if (not empty() or forceContinuation)
       {// prepare next duty cycle »tick«
-        Time nextTick = now + DUTY_CYCLE_PERIOD;
+        Time nextTick = now + (forceContinuation? WORK_HORIZON : DUTY_CYCLE_PERIOD);
         Time deadline = nextTick + DUTY_CYCLE_TOLERANCE;
         Activity& tickActivity = activityLang_.createTick (deadline);
         ActivationEvent tickEvent{tickActivity, nextTick, deadline, ManifestationID(), true};

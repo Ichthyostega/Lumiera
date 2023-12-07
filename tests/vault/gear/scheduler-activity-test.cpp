@@ -247,8 +247,11 @@ namespace test {
       
       
       /** @test behaviour of Activity::GATE:
-       *        the count-down condition determines if activation _passes_
-       *        or will _spin around_ for later re-try
+       *        the count-down condition determines if activation _passes;_
+       *        otherwise the Gate will just return activity::SKIP
+       * @remark in the original design, the Gate would poll for changes
+       *        by re-scheduling itself into the Future; this behaviour
+       *        turned out to be unnecessary and problematic.
        */
       void
       verifyActivity_Gate_block()
@@ -264,11 +267,7 @@ namespace test {
           CHECK (activity::SKIP == wiring.activate (tt, detector.executionCtx));
           CHECK (23 == gate.data_.condition.rest);  //  prerequisite-count not altered
           
-          Time reScheduled = tt + detector.executionCtx.getWaitDelay();
-          CHECK (tt < reScheduled);
-          
-          CHECK (detector.verifyInvocation("tap-GATE").arg("33.333 ⧐ Act(GATE")
-                         .beforeInvocation("CTX-post").arg(reScheduled, "Act(GATE", "≺test::CTX≻"));
+          CHECK (detector.verifyInvocation("tap-GATE").arg("33.333 ⧐ Act(GATE"));
         }
       
       
@@ -299,14 +298,11 @@ namespace test {
           Activity& wiring = detector.buildGateWatcher (gate);
           
           Time tt{333,33};
-          Time reScheduled = tt + detector.executionCtx.getWaitDelay(); // retrieve the next time to retry
-          CHECK (tt < reScheduled);
           
-          // an attempt to activate blocks (and re-schedules for later retry)
+          // an attempt to activate blocks (returing SKIP, nothing else happens)
           CHECK (activity::SKIP == wiring.activate (tt, detector.executionCtx));
           CHECK (1 == gate.data_.condition.rest); // unchanged (and locked)...
-          CHECK (detector.verifyInvocation("tap-GATE").arg("33.333 ⧐ Act(GATE")
-                         .beforeInvocation("CTX-post").arg(reScheduled, "Act(GATE", "≺test::CTX≻"));
+          CHECK (detector.verifyInvocation("tap-GATE").arg("33.333 ⧐ Act(GATE"));
           
           detector.incrementSeq();
           // Gate receives a notification from some prerequisite Activity
@@ -314,17 +310,17 @@ namespace test {
           CHECK (0 == gate.data_.condition.rest); // condition has been decremented...
           
           CHECK (detector.verifyInvocation("tap-GATE").seq(0).arg("33.333 ⧐ Act(GATE")
-                         .beforeInvocation("CTX-post").seq(0).arg(reScheduled, "Act(GATE", "≺test::CTX≻")
                          .beforeInvocation("tap-GATE").seq(1).arg("33.333 --notify-↯> Act(GATE")
                          .beforeInvocation("CTX-post").seq(1).arg(tt, "after-GATE", "≺test::CTX≻"));
           CHECK (gate.data_.condition.dead == Time::MIN);
           
           detector.incrementSeq();
           Time ttt{444,44};
-          // when the re-scheduled check happens later, it is blocked to prevent double activation
+          // when another activation happens later, it is blocked to prevent double activation
           CHECK (activity::SKIP == wiring.activate (ttt, detector.executionCtx));
           CHECK (detector.verifyInvocation("tap-GATE").seq(2).arg("44.444 ⧐ Act(GATE"));
-          CHECK (detector.ensureNoInvocation("CTX-post").seq(2));
+          CHECK (detector.ensureNoInvocation("CTX-post").seq(2)
+                         .afterInvocation("tap-GATE").seq(2));
           CHECK (gate.data_.condition.dead == Time::MIN);
           
           detector.incrementSeq();
@@ -426,8 +422,7 @@ namespace test {
           detector.incrementSeq();
           gate.data_.condition.incDependencies(); // Gate is blocked
           CHECK (activity::PASS == ActivityLang::dispatchChain (&post, detector.executionCtx));         // start execution (case/seq == 1)
-          CHECK (detector.verifyInvocation("Gate")    .seq(1).arg("1.011 ⧐ Act(GATE")                   // ...the Gate was activated...
-                         .beforeInvocation("CTX-post").seq(1).arg("2.011","Act(GATE","≺test::CTX≻"));   // ...but was found blocked and re-scheduled itself to 2.011
+          CHECK (detector.verifyInvocation("Gate").seq(1).arg("1.011 ⧐ Act(GATE"));                     // ...the Gate was activated, but blocked...
           CHECK (detector.ensureNoInvocation("after-Gate").seq(1)                                       // verify activation was not passed out behind Gate
                          .afterInvocation("Gate").seq(1));
           CHECK (detector.ensureNoInvocation("CTX-tick").seq(1)                                         // verify also the λ-tick was not invoked this time

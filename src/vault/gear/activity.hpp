@@ -204,6 +204,8 @@ namespace gear {
      * The Execution Context need to be passed to any Activity _activation;_
      * it provides the _bindings_ for functionality defined only on a conceptual
      * level, and provided by an opaque implementation (actually the Scheduler)
+     * @remark `getWaitDelay` was once used for Gate, but is now an obscure
+     *         fall-back for _other notifications_ (retained for future use)
      */
     template<class EXE>
     constexpr void
@@ -540,13 +542,13 @@ namespace gear {
       
       template<class EXE>
       activity::Proc
-      checkGate (Time now, EXE& executionCtx)
+      checkGate (Time now, EXE&)
         {
           REQUIRE (GATE == verb_);
           if (data_.condition.isDead(now))  // beyond deadline
             return activity::SKIP;
-          if (data_.condition.isHold())     // prerequisite count not(yet) fulfilled -> spin (=re-invoke later)
-            return dispatchSelfDelayed (now, executionCtx);
+          if (data_.condition.isHold())     // prerequisite count not(yet) fulfilled -> block further activation
+            return activity::SKIP;
           else
             return activity::PASS;
         }
@@ -726,7 +728,7 @@ namespace gear {
         return postChain (now, executionCtx);
       default:
         return dispatchSelfDelayed (now, executionCtx);
-      }     // Fallback: self-re-dispatch for async execution
+      }     // Fallback: self-re-dispatch for async execution (-> getWaitDelay())
   }
   
   
