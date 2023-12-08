@@ -44,6 +44,12 @@ END
 
 
 
+TEST "Self-managed one-time Job" SpecialJobFun_test <<END
+return: 0
+END
+
+
+
 PLANNED "Synthetic Load for Test" TestChainLoad_test <<END
 return: 0
 END

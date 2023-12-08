@@ -82,9 +82,15 @@ namespace lib {
        *  Typically this is followed by activating
        *  the handle by the managing service.
        */
-      Handle ( )
-      : smPtr_()
-      { }
+      Handle()  = default;
+      
+      /** directly establish handle from an implementation,
+       *  which typically way just heap allocated beforehand.
+       */
+      explicit
+      Handle (IMP* imp)
+        : smPtr_{imp}
+        { }
       
                                  Handle (Handle const& r)          = default;
                                  Handle (Handle && rr)             = default;

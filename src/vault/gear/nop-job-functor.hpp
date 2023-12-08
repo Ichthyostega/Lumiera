@@ -63,7 +63,7 @@ namespace gear {
       JobKind
       getJobKind()  const
         {
-          return TEST_JOB;
+          return META_JOB;
         }
       
       std::string

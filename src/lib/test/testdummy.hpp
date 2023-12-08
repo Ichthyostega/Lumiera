@@ -48,7 +48,7 @@ namespace test{
    * i.e. to verify each created instance was properly destroyed after use.
    */
   class Dummy
-    : util::NonCopyable
+    : util::MoveAssign
     {
       int val_;
       
@@ -57,6 +57,11 @@ namespace test{
       static bool _throw_in_ctor;
       
     public:
+      virtual ~Dummy()       ///< can act as interface
+        {
+          checksum() -= val_;
+        }
+      
       Dummy ()
         : val_(1 + (rand() % 100000000))
         { init(); }
@@ -65,14 +70,24 @@ namespace test{
         : val_(v)
         { init(); }
       
-      virtual ~Dummy()
+      Dummy (Dummy && oDummy)
+        : Dummy(0)
         {
-          checksum() -= val_;
+          swap (*this, oDummy);
         }
       
-      virtual long
+      Dummy&
+      operator= (Dummy && oDummy)
+        {
+          if (&oDummy != this)
+            swap (*this, oDummy);
+          return *this;
+        }
       
-      acc (int i)   ///< dummy API operation
+      
+      /** a dummy API operation */
+      virtual long
+      acc (int i)
         {
           return val_+i;
         }
@@ -93,7 +108,7 @@ namespace test{
       friend void
       swap (Dummy& dum1, Dummy& dum2)  ///< checksum neutral
       {
-        std::swap(dum1.val_, dum2.val_);
+        std::swap (dum1.val_, dum2.val_);
       }
       
       static long&

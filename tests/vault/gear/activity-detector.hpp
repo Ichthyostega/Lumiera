@@ -333,6 +333,12 @@ namespace test {
               return "JobFun-"+string{mockOperation_};
             }
           
+          JobKind
+          getJobKind()  const
+            {
+              return TEST_JOB;
+            }
+          
         public:
           MockJobFunctor (MockOp mockedJobOperation)
             : mockOperation_{move (mockedJobOperation)}
