@@ -1018,6 +1018,7 @@ SHOW_EXPR(testLoad.getHash())
           // Let the callbacks create a clone — which at the end should generate the same hash
           array<Node,4> clone;
           size_t lastTouched(-1);
+          size_t lastNode (-1);
           size_t lastLevel(-1);
           bool shallContinue{false};
           auto getNodeIdx  = [&](Node* n) { return n - &nodes[0]; };
@@ -1038,8 +1039,9 @@ SHOW_EXPR(testLoad.getHash())
                                   // replicate this relation into the clone array
                                   clone[predIdx].addSucc(clone[succIdx]);
                                 };
-          auto continuation = [&](size_t levelDone, bool work_left)
+          auto continuation = [&](size_t nodeDone, size_t levelDone, bool work_left)
                                 {
+                                  lastNode =nodeDone;
                                   lastLevel = levelDone;
                                   shallContinue = work_left;
                                 };
@@ -1049,15 +1051,16 @@ SHOW_EXPR(testLoad.getHash())
                                             ,setDependency
                                             ,continuation};
           Job jobP1{planJob
-                   ,InvocationInstanceID()
-                   ,planJob.encodeLevel(1)};
+                   ,planJob.encodeNodeID(1)
+                   ,Time::ANYTIME};
           Job jobP2{planJob
-                   ,InvocationInstanceID()
-                   ,planJob.encodeLevel(3)};
+                   ,planJob.encodeNodeID(5)
+                   ,Time::ANYTIME};
           
           jobP1.triggerJob();
-          CHECK (lastTouched = 2);
           CHECK (lastLevel = 1);
+          CHECK (lastTouched = 2);
+          CHECK (lastTouched == lastNode);
           Node* lastN = &clone[lastTouched];
           CHECK (lastN->level == lastLevel);
           CHECK (    isnil (lastN->succ));
@@ -1065,8 +1068,9 @@ SHOW_EXPR(testLoad.getHash())
           CHECK (shallContinue);
           
           jobP2.triggerJob();
-          CHECK (lastTouched = 3);
           CHECK (lastLevel = 3);
+          CHECK (lastTouched = 3);
+          CHECK (lastTouched == lastNode);
           lastN = &clone[lastTouched];
           CHECK (lastN->level == 2);
           CHECK (lastN->level < lastLevel);

@@ -1159,9 +1159,9 @@ cout<<_Fmt{"\n!◆! %s: calc(i=%d, lev:%d)"} % markThread() % nodeIdx % level <<
     {
       using Node = typename TestChainLoad<maxFan>::Node;
       
-      function<void(size_t,size_t)> scheduleCalcJob_;
-      function<void(Node*,Node*)>   markDependency_;
-      function<void(size_t,bool)>   continuation_;
+      function<void(size_t,size_t)>   scheduleCalcJob_;
+      function<void(Node*,Node*)>      markDependency_;
+      function<void(size_t,size_t,bool)> continuation_;
       
       size_t maxCnt_;
       Node* nodes_;
@@ -1188,19 +1188,24 @@ cout<<_Fmt{"\n!◆! %s: calc(i=%d, lev:%d)"} % markThread() % nodeIdx % level <<
       void
       invokeJobOperation (JobParameter param)  override
         {
-          size_t targetLevel = decodeLevel (TimeValue{param.nominalTime});
-cout<<_Fmt{"\n!◆!plan...to:%d%19t|curr=%d (max:%d)"} % targetLevel % currIdx_ % maxCnt_<<endl;          
+          size_t reachedLevel{0};
+          size_t targetNodeIDX = decodeNodeID (param.invoKey);
+cout<<_Fmt{"\n!◆!plan...to:%d%19t|curr=%d (max:%d)"} % targetNodeIDX % currIdx_ % maxCnt_<<endl;          
           for ( ; currIdx_<maxCnt_; ++currIdx_)
             {
               Node* n = &nodes_[currIdx_];
 cout<<_Fmt{"%16t|n.(%d,lev:%d)"} % currIdx_ % n->level <<endl;
-              if (n->level > targetLevel)
-                break;
+              if (currIdx_ <= targetNodeIDX)
+                reachedLevel = n->level;
+              else // continue until end of current level
+                if (n->level > reachedLevel)
+                  break;
               scheduleCalcJob_(currIdx_, n->level);
               for (Node* pred: n->pred)
                 markDependency_(pred,n);
             }
-          continuation_(targetLevel, currIdx_ < maxCnt_);
+          ENSURE (currIdx_ > 0);
+          continuation_(currIdx_-1, reachedLevel, currIdx_ < maxCnt_);
         }
       
       
@@ -1273,15 +1278,15 @@ cout <<_Fmt{"... dispose(i=%d,lev:%d) -> @%s"} % idx % level % relT(calcStartTim
       
       /** continue planning: schedule follow-up planning job */
       void
-      continuation (size_t levelDone, bool work_left)
+      continuation (size_t lastNodeIDX, size_t levelDone, bool work_left)
         {
-cout <<_Fmt{"+++ %s: Continuation(levelDone=%d, work_left:%s)"} % markThread() % levelDone % work_left <<endl;
+cout <<_Fmt{"+++ %s: Continuation(lastNode=%d, levelDone=%d, work_left:%s)"} % markThread() % lastNodeIDX % levelDone % work_left <<endl;
           if (work_left)
             {
-              size_t nextChunkLevel = calcNextLevel (levelDone);
-cout <<"--> reschedule to "<<nextChunkLevel<<endl;
-              scheduler_.continueMetaJob (calcPlanScheduleTime (nextChunkLevel)
-                                         ,planningJob (nextChunkLevel)
+              size_t nextChunkEndNode = calcNextChunkEnd (lastNodeIDX);
+cout <<"--> reschedule to ..."<<nextChunkEndNode<<endl;
+              scheduler_.continueMetaJob (calcPlanScheduleTime (nextChunkEndNode)
+                                         ,planningJob (nextChunkEndNode)
                                          ,manID_);
             }
           else
@@ -1295,10 +1300,11 @@ cout <<"--> reschedule to "<<nextChunkLevel<<endl;
         {
           auto finished = attachNewCompletionSignal();
           size_t numNodes = chainLoad_.size();
+          size_t firstChunkEndNode = calcNextChunkEnd(0)-1;
 cout <<"+++ "<<markThread()<<": seed(num:"<<numNodes<<")"<<endl;
           schedule_.allocate (numNodes);
           startTime_ = anchorStartTime();
-          scheduler_.seedCalcStream (planningJob(calcNextLevel(0)-1)
+          scheduler_.seedCalcStream (planningJob(firstChunkEndNode)
                                     ,manID_
                                     ,calcLoadHint());
           return finished;
@@ -1312,7 +1318,7 @@ cout <<"+++ "<<markThread()<<": seed(num:"<<numNodes<<")"<<endl;
         , planFunctor_{new RandomChainPlanFunctor<maxFan>{chainLoad_.nodes_[0], chainLoad_.numNodes_
                                                          ,[this](size_t i, size_t l){ disposeStep(i,l);  }
                                                          ,[this](auto* p, auto* s)  { setDependency(p,s);}
-                                                         ,[this](size_t l, bool w)  { continuation(l,w); }
+                                                         ,[this](size_t n,size_t l, bool w){ continuation(n,l,w); }
                                                          }}
         { }
       
@@ -1352,11 +1358,11 @@ cout <<"+++ "<<markThread()<<": seed(num:"<<numNodes<<")"<<endl;
         }
       
       Job
-      planningJob (size_t level)
+      planningJob (size_t endNodeIDX)
         {
           return Job{*planFunctor_
-                    , InvocationInstanceID()
-                    , planFunctor_->encodeLevel(level)
+                    , planFunctor_->encodeNodeID(endNodeIDX)
+                    , Time::ANYTIME
                     };
         }
       
@@ -1389,9 +1395,9 @@ cout<<"ANCHOR="+relT(ank)+" preRoll="+util::toString(_raw(preRoll_))<<endl;
         }
       
       size_t
-      calcNextLevel (size_t levelDone)
+      calcNextChunkEnd (size_t lastNodeIDX)
         {
-          return levelDone + chunkSize_;
+          return lastNodeIDX + chunkSize_;
         }
       
       Time
@@ -1401,7 +1407,7 @@ cout<<"ANCHOR="+relT(ank)+" preRoll="+util::toString(_raw(preRoll_))<<endl;
         }
       
       Time
-      calcPlanScheduleTime (size_t nextChunkLevel)
+      calcPlanScheduleTime (size_t lastNodeIDX)
         {/* must be at least 1 level ahead,
             because dependencies are defined backwards;
             the chain-load graph only defines dependencies over one level
@@ -1409,6 +1415,7 @@ cout<<"ANCHOR="+relT(ank)+" preRoll="+util::toString(_raw(preRoll_))<<endl;
             dependencies to the last row of the preceding chunk, implying that
             those still need to be ahead of schedule.
           */
+          size_t nextChunkLevel = chainLoad_.nodes_[lastNodeIDX].level;
           nextChunkLevel = nextChunkLevel>2? nextChunkLevel-2 : 0;
           return calcStartTime(nextChunkLevel) - preRoll_;
         }

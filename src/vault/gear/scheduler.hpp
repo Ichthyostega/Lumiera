@@ -723,7 +723,7 @@ cout<<"   ·‖ "+markThread()+": @ "+relT(now)+" HT:"+relT(layer1_.headTime())+
         return activity::WAIT;     //  prompts to switch this thread into sleep mode
       case LoadController::TENDNEXT:
         doTendNextHead();
-        doTargetedSleep();         //  let this thread wait until nest head time is due
+        doTargetedSleep();         //  let this thread wait until next head time is due
         return activity::SKIP;
       default:
         doTargetedSleep();
