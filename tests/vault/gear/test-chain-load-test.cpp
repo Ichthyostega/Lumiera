@@ -109,11 +109,13 @@ SHOW_EXPR(offset())
           Scheduler scheduler{bFlow, watch};
           
 SHOW_EXPR(testLoad.getHash())
+          CHECK (testLoad.getHash() == 0x5306191657DA4105);
 SHOW_EXPR(offset())
           testLoad.setupSchedule(scheduler)
                   .launch_and_wait();
 SHOW_EXPR(offset())
 SHOW_EXPR(testLoad.getHash())
+          CHECK (testLoad.getHash() == 0x5306191657DA4105);
         }
       
       

@@ -86,6 +86,7 @@
 //#include "lib/hash-value.h"
 #include "vault/gear/job.h"
 #include "vault/gear/scheduler.hpp"
+#include "vault/gear/special-job-fun.hpp"
 //#include "vault/gear/nop-job-functor.hpp"
 #include "lib/uninitialised-storage.hpp"
 #include "lib/time/timevalue.hpp"
@@ -1284,7 +1285,9 @@ cout <<"--> reschedule to "<<nextChunkLevel<<endl;
                                          ,manID_);
             }
           else
-            signalDone_.set_value();
+            scheduler_.continueMetaJob (calcStartTime (levelDone+1)
+                                       ,wakeUpJob()
+                                       ,manID_);
         }
       
       std::future<void>
@@ -1354,6 +1357,19 @@ cout <<"+++ "<<markThread()<<": seed(num:"<<numNodes<<")"<<endl;
           return Job{*planFunctor_
                     , InvocationInstanceID()
                     , planFunctor_->encodeLevel(level)
+                    };
+        }
+      
+      Job
+      wakeUpJob ()
+        {
+          SpecialJobFun wakeUpFun{[this](JobParameter)
+                                    {
+                                      signalDone_.set_value();
+                                    }};
+          return Job{ wakeUpFun
+                    , InvocationInstanceID()
+                    , Time::ANYTIME
                     };
         }
       
