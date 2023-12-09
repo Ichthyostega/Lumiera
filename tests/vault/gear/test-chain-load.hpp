@@ -153,6 +153,7 @@ namespace test {
     const auto SAFETY_TIMEOUT = 5s;
     const auto STANDARD_DEADLINE = 10ms;
     const size_t DEFAULT_CHUNKSIZE = 64;
+    const microseconds PLANNING_TIME_PER_NODE = 80us;
   }
   
   struct Statistic;
@@ -1243,7 +1244,7 @@ cout<<_Fmt{"%16t|n.(%d,lev:%d)"} % currIdx_ % n->level <<endl;
       uint       loadFactor_{2};
       size_t      chunkSize_{DEFAULT_CHUNKSIZE};
       TimeVar     startTime_{Time::ANYTIME};
-      Duration      preRoll_{_uTicks(200us)};
+      microseconds  preRoll_{guessPlanningPreroll (chunkSize_)};
       microseconds deadline_{STANDARD_DEADLINE};
       ManifestationID manID_{};
       
@@ -1322,7 +1323,7 @@ cout <<"+++ "<<markThread()<<": seed(num:"<<numNodes<<")"<<endl;
                                                          }}
         { }
       
-      ScheduleCtx
+      ScheduleCtx&&
       launch_and_wait()
         {
           awaitBlocking(
@@ -1330,6 +1331,45 @@ cout <<"+++ "<<markThread()<<": seed(num:"<<numNodes<<")"<<endl;
           return move(*this);
         }
       
+      
+      /* ===== Setter / builders for custom configuration ===== */
+      
+      ScheduleCtx&&
+      withLevelDuration (microseconds plannedTime_per_level)
+        {
+          levelSpeed_ = FrameRate{1, Duration{_uTicks(plannedTime_per_level)}};
+        }
+      
+      ScheduleCtx&&
+      withLoadFactor (uint factor_on_levelSpeed)
+        {
+          loadFactor_ = factor_on_levelSpeed;
+        }
+      
+      ScheduleCtx&&
+      withChunkSize (size_t nodes_per_chunk)
+        {
+          chunkSize_ = nodes_per_chunk;
+          preRoll_ = guessPlanningPreroll (chunkSize_);
+        }
+      
+      ScheduleCtx&&
+      withPreRoll (microseconds planning_headstart)
+        {
+          preRoll_ = planning_headstart;
+        }
+      
+      ScheduleCtx&&
+      withJobDeadline (microseconds deadline_after_start)
+        {
+          deadline_ = deadline_after_start;
+        }
+      
+      ScheduleCtx&&
+      withManifestation (ManifestationID manID)
+        {
+          manID_ = manID;
+        }
       
     private:
       /** push away any existing wait state and attach new clean state */
@@ -1382,10 +1422,16 @@ cout <<"+++ "<<markThread()<<": seed(num:"<<numNodes<<")"<<endl;
       Time
       anchorStartTime()
         {
-Time ank = RealClock::now() + preRoll_;
-cout<<"ANCHOR="+relT(ank)+" preRoll="+util::toString(_raw(preRoll_))<<endl;
-//          return RealClock::now() + preRoll_;
+Time ank = RealClock::now() + _uTicks(preRoll_);
+cout<<"ANCHOR="+relT(ank)+" preRoll="+util::toString(_raw(_uTicks(preRoll_)))<<endl;
+//          return RealClock::now() + _uTicks(preRoll_);
           return ank;
+        }
+      
+      static microseconds
+      guessPlanningPreroll(size_t chunkSize)
+        {
+          return chunkSize * PLANNING_TIME_PER_NODE;
         }
       
       FrameRate
@@ -1417,7 +1463,7 @@ cout<<"ANCHOR="+relT(ank)+" preRoll="+util::toString(_raw(preRoll_))<<endl;
           */
           size_t nextChunkLevel = chainLoad_.nodes_[lastNodeIDX].level;
           nextChunkLevel = nextChunkLevel>2? nextChunkLevel-2 : 0;
-          return calcStartTime(nextChunkLevel) - preRoll_;
+          return calcStartTime(nextChunkLevel) - _uTicks(preRoll_);
         }
     };
   
