@@ -84,6 +84,7 @@ namespace test {
           showcase_SeedChains();
           showcase_PruneChains();
           showcase_StablePattern();
+          verify_computation_load();
           verify_reseed_recalculate();
           verify_scheduling_setup();
         }
@@ -129,7 +130,7 @@ SHOW_EXPR(testLoad.getHash())
           Node n0;                                                          // Default-created empty Node
           CHECK (n0.hash == 0);
           CHECK (n0.level == 0);
-          CHECK (n0.repeat == 0);
+          CHECK (n0.weight == 0);
           CHECK (n0.pred.size() == 0 );
           CHECK (n0.succ.size() == 0 );
           CHECK (n0.pred == Node::Tab{0});
@@ -860,6 +861,20 @@ SHOW_EXPR(testLoad.getHash())
       
       
       
+      
+      
+      
+      /** @test WIP verify calibration of a configurable computational load.
+       * @todo WIP 12/23 🔁 define ⟶ 🔁 implement
+       */
+      void
+      verify_computation_load()
+        {
+          ComputationalLoad cpuLoad;
+        }
+      
+      
+      
       /** @test set and propagate seed values and recalculate all node hashes.
        * @remark This test uses parameter rules with some expansion and a
        *         pruning rule with 60% probability. This setup is known to
@@ -878,6 +893,7 @@ SHOW_EXPR(testLoad.getHash())
           ChainLoad16 graph{32};
           graph.expansionRule(graph.rule().probability(0.8).maxVal(1))
                .pruningRule(graph.rule().probability(0.6))
+               .weightRule((graph.rule().probability(0.5)))
                .buildToplolgy();
           
           CHECK (8 == graph.allNodes().filter(isStartNode).count());
@@ -907,12 +923,16 @@ SHOW_EXPR(testLoad.getHash())
                    auto& [a,b,c,d] = *group;
                    CHECK (isStart(a));
                    CHECK (isInner(b));
+                   CHECK (not a->weight);
+                   CHECK (not b->weight);
                    if (b->succ.size() == 2)
                      {
                        CHECK (isExit(c));
                        CHECK (isExit(d));
                        CHECK (c->hash == 0xAEDC04CFA2E5B999);
                        CHECK (d->hash == 0xAEDC04CFA2E5B999);
+                       CHECK (c->weight == 4);
+                       CHECK (d->weight == 4);
                      }
                    else
                      { // the last chunk is wired differently

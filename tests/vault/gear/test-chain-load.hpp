@@ -213,7 +213,7 @@ namespace test {
             };
           
           size_t hash;
-          size_t level{0}, repeat{0};
+          size_t level{0}, weight{0};
           Tab pred{0}, succ{0};
           
           Node(size_t seed =0)
@@ -224,7 +224,7 @@ namespace test {
           clear()
             {
               hash = 0;
-              level = repeat = 0;
+              level = weight = 0;
               pred.clear();
               succ.clear();
             }
@@ -296,6 +296,7 @@ namespace test {
       Rule expansionRule_{};
       Rule reductionRule_{};
       Rule pruningRule_  {};
+      Rule weightRule_   {};
       
       Node* frontNode() { return &nodes_[0];          }
       Node* afterNode() { return &nodes_[numNodes_];  }
@@ -387,6 +388,13 @@ namespace test {
           return move(*this);
         }
       
+      TestChainLoad&&
+      weightRule (Rule r)
+        {
+          weightRule_ = move(r);
+          return move(*this);
+        }
+      
       
       /** Abbreviation for starting rules */
       static Rule rule() { return Rule(); }
@@ -466,6 +474,7 @@ namespace test {
           Transiently originalReductionRule{reductionRule_};
           Transiently originalseedingRule  {seedingRule_};
           Transiently originalPruningRule  {pruningRule_};
+          Transiently originalWeightRule   {weightRule_};
           
           // prepare building blocks for the topology generation...
           auto moreNext  = [&]{ return next->size() < maxFan;      };
@@ -495,6 +504,7 @@ namespace test {
               for (Node* o : *curr)
                 { // follow-up on all Nodes in current level...
                   o->calculate();
+                  o->weight = apply (weightRule_,o);
                   if (apply (pruningRule_,o))
                     continue; // discontinue
                   size_t toSeed   = apply (seedingRule_, o);
@@ -613,7 +623,9 @@ namespace test {
           for (Node& n : allNodes())
             {
               size_t i = nodeID(n);
-              nodes += node(i).label(toString(i)+": "+showHashLSB(n.hash))
+              string tag{toString(i)+": "+showHashLSB(n.hash)};
+              if (n.weight) tag +="."+toString(n.weight);
+              nodes += node(i).label(tag)
                               .style(i==0         ? BOTTOM
                                     :isnil(n.pred)? SEED
                                     :isnil(n.succ)? TOP
@@ -1049,6 +1061,20 @@ namespace test {
            << endl;
       return move(*this);
     }
+  
+  
+  
+  
+  
+  /* ========= Configurable Computational Load ========= */
+  
+  /**
+   * A calibratable CPU load to be invoked from a node job functor.
+   */
+  class ComputationalLoad
+    {
+    public:
+    };
   
   
   
