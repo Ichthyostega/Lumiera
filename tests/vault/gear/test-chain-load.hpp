@@ -314,7 +314,6 @@ namespace test {
       size_t size()     const { return numNodes_; }
       size_t topLevel() const { return unConst(this)->backNode()->level; }
       size_t getSeed()  const { return unConst(this)->frontNode()->hash; }
-      size_t getHash()  const { return unConst(this)->backNode()->hash;  } /////////////////////TODO combine hash of all exit nodes
       
       
       auto
@@ -327,6 +326,30 @@ namespace test {
         {
           return allNodes().asPtr();
         }
+      
+      auto
+      allExitNodes()
+        {
+          return allNodes().filter([](Node& n){ return isExit(n); });
+        }
+      auto
+      allExitHashes()  const
+        {
+          return unConst(this)->allExitNodes().transform([](Node& n){ return n.hash; });
+        }
+      
+      /** global hash is the combination of all exit node hashes != 0 */
+      size_t
+      getHash()  const
+        {
+          auto combineBoostHashes = [](size_t h, size_t hx){ boost::hash_combine(h,hx); return h;};
+          return allExitHashes()
+                    .filter([](size_t h){ return h != 0; })
+                    .reduce(lib::iter_explorer::IDENTITY
+                           ,combineBoostHashes
+                           );
+        }
+      
       
       /** @return the node's index number, based on its storage location */
       size_t nodeID(Node const* n){ return n - frontNode(); };

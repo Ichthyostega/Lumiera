@@ -1165,6 +1165,11 @@ namespace test{
                                return _Fmt{"○%s●"} % *it;                        // accessor: format into a string
                              })
                  == "○9●○8●○7●○6●○5●○4●○3●○2●○1●"_expect);
+          
+          // a predefined IDENTITY accessor takes values from the pipeline as-is
+          CHECK (explore(CountDown{9})
+                   .reduce(iter_explorer::IDENTITY, std::minus<int>(), expectedSum(9))
+                 == 0);
         }
       
       

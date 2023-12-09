@@ -109,13 +109,13 @@ SHOW_EXPR(offset())
           Scheduler scheduler{bFlow, watch};
           
 SHOW_EXPR(testLoad.getHash())
-          CHECK (testLoad.getHash() == 0x5306191657DA4105);
+          CHECK (testLoad.getHash() == 0xD2F292D864CF8086);
 SHOW_EXPR(offset())
           testLoad.setupSchedule(scheduler)
                   .launch_and_wait();
 SHOW_EXPR(offset())
 SHOW_EXPR(testLoad.getHash())
-          CHECK (testLoad.getHash() == 0x5306191657DA4105);
+          CHECK (testLoad.getHash() == 0xD2F292D864CF8086);
         }
       
       
@@ -217,7 +217,7 @@ SHOW_EXPR(testLoad.getHash())
           
           CHECK (graph.topLevel() == 31);
           CHECK (graph.getSeed()  ==  0);
-          CHECK (graph.getHash()  == 0x5CDF544B70E59866);
+          CHECK (graph.getHash()  == 0xB3445F1240A1B05F);
           
           auto* node = & *graph.allNodes();
           CHECK (node->hash == graph.getSeed());
@@ -246,9 +246,15 @@ SHOW_EXPR(testLoad.getHash())
            // got a complete chain using all allocated nodes
           CHECK (steps == 31);
           CHECK (steps == graph.topLevel());
-          CHECK (node->hash == graph.getHash());
           CHECK (node->hash == 0x5CDF544B70E59866);
-        }    //  hash of the graph is hash of last node
+          
+          // Since this graph has only a single exit-node,
+          // the global hash of the graph is derived from this hash
+          size_t globalHash{0};
+          boost::hash_combine (globalHash, node->hash);
+          CHECK (globalHash == graph.getHash());
+          CHECK (globalHash == 0xB3445F1240A1B05F);
+        }
       
       
       
@@ -275,7 +281,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0xAE332109116C5100);
+          CHECK (graph.getHash() == 0x6EDD7B92F12E9A37);
           
           auto stat = graph.computeGraphStatistics();
           CHECK (stat.indicators[STAT_NODE].cnt == 32);                        // the 32 Nodes...
@@ -294,7 +300,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0xCBD0807DF6C84637);
+          CHECK (graph.getHash() == 0x9E0C7D98B61E1789);
           
           stat = graph.computeGraphStatistics();
           CHECK (stat.levels                    == 8);                         // expands faster, with only 8 levels
@@ -313,7 +319,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (gra_2.getHash() == 0xE629826A1A8DEB38);
+          CHECK (gra_2.getHash() == 0x28B121BE7F1F7362);
           
           stat = gra_2.computeGraphStatistics();
           CHECK (stat.levels                     == 37);                       // much more levels, as can be expected
@@ -346,7 +352,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0x8454196BFA40CFE1);
+          CHECK (graph.getHash() == 0x1D201B70F18E995A);
           
           auto stat = graph.computeGraphStatistics();
           CHECK (stat.levels                    == 9);                         // This connection pattern filled 9 levels
@@ -363,7 +369,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0x825696EA63E579A4);
+          CHECK (graph.getHash() == 0x8AF4BDAE5AA6880C);
           
           stat = graph.computeGraphStatistics();
           CHECK (stat.levels                    == 12);                        // This example runs a bit longer
@@ -381,7 +387,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0xA850E6A4921521AB);
+          CHECK (graph.getHash() == 0x220A2E81F65146FC);
           
           stat = graph.computeGraphStatistics();
           CHECK (stat.levels                    == 12);                        // This graph has a similar outline
@@ -415,8 +421,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          
-          CHECK (graph.getHash() == 0x12A49C0E413B573B);
+          CHECK (graph.getHash() == 0x11BB1409A61A9B78);
           
           auto stat = graph.computeGraphStatistics();
           CHECK (stat.levels                    == 8);                         // 8 Levels...
@@ -438,7 +443,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0x82E39529C470E20A);
+          CHECK (graph.getHash() == 0x3DFA720156540247);
           
           stat = graph.computeGraphStatistics();
           CHECK (stat.indicators[STAT_SEED].cnt == 11);                        // the same number of 11 »Seed« events
@@ -474,7 +479,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0xC4AE6EB741C22FCE);
+          CHECK (graph.getHash() == 0x660BD1CD261A990);
           
           auto stat = graph.computeGraphStatistics();
           CHECK (stat.levels                    == 32);                        // only a single line of connections...
@@ -494,7 +499,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0xC515DB464FF76818);
+          CHECK (graph.getHash() == 0xAF4204DD69BB467C);
           
           stat = graph.computeGraphStatistics();
           CHECK (stat.levels                    == 15);                        //
@@ -519,7 +524,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0xEF172CC4B0DE2334);
+          CHECK (graph.getHash() == 0xF14A09EEFFEC7B18);
           
           stat = graph.computeGraphStatistics();
           CHECK (stat.segments                  ==  1);                        // ...the graph can evade severing altogether
@@ -542,7 +547,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0xD0A27C9B81058637);
+          CHECK (graph.getHash() == 0x3965FAC3B9A2A545);
           
           // NOTE: this example produced 10 disjoint graph parts,
           //       which however start and end interleaved
@@ -572,7 +577,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0x1D56DF2FB0D4AF97);
+          CHECK (graph.getHash() == 0x20546083916F7521);
           
           stat = graph.computeGraphStatistics();
           CHECK (stat.levels                    == 9);                         // Generation carries on for 13 levels
@@ -620,7 +625,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0xED40D07688A9905);
+          CHECK (graph.getHash() == 0xCAFA895DF9BDFB70);
           
           auto stat = graph.computeGraphStatistics();
           CHECK (stat.indicators[STAT_NODE].cL   == "0.49970598"_expect);      // The resulting distribution of nodes is stable and even
@@ -649,7 +654,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0xD801FFCF44B202F4);
+          CHECK (graph.getHash() == 0x38788543EA81C664);
           
           stat = graph.computeGraphStatistics();
           CHECK (stat.levels                     == 78);                       //
@@ -674,7 +679,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0xB9580850D637CD45);
+          CHECK (graph.getHash() == 0xBD309241A343FD43);
           
           stat = graph.computeGraphStatistics();
           CHECK (stat.levels                     == 104);                       //
@@ -696,7 +701,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0xC8C23AF1A9729901);
+          CHECK (graph.getHash() == 0x44860825C80753C4);
           
           stat = graph.computeGraphStatistics();
           CHECK (stat.levels                     == 55);                       // much denser arrangement due to stronger interleaving
@@ -717,7 +722,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0x2C66D34BA0680AF5);
+          CHECK (graph.getHash() == 0x202F5F3801CB3A0A);
           
           stat = graph.computeGraphStatistics();
           CHECK (stat.levels                   == 45);                         //
@@ -742,7 +747,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0x4E6A586532A450FD);
+          CHECK (graph.getHash() == 0x9E124CA52972CC66);
           
           stat = graph.computeGraphStatistics();
           CHECK (stat.levels                     == 22);                       // ▶ resulting graph is very dense, hitting the parallelisation limit
@@ -766,7 +771,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
              ;
-          CHECK (graph.getHash() == 0x58A972A5154FEB95);
+          CHECK (graph.getHash() == 0xE0FF7A332B7335E5);
           
           stat = graph.computeGraphStatistics();
           CHECK (stat.levels                     == 27);                       //
@@ -788,7 +793,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0x9B9E007964F751A2);
+          CHECK (graph.getHash() == 0xCD8B689C1514D40E);
           
           stat = graph.computeGraphStatistics();
           CHECK (stat.levels                     == 130);                      //
@@ -809,7 +814,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0xE491294D0B7F3D4D);
+          CHECK (graph.getHash() == 0x7DA33206D0773991);
           
           stat = graph.computeGraphStatistics();
           CHECK (stat.levels                   == 21);                         // rather dense
@@ -836,7 +841,7 @@ SHOW_EXPR(testLoad.getHash())
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0x8208F1B6517481F0);
+          CHECK (graph.getHash() == 0x259C7CA1B86E6C61);
           
           stat = graph.computeGraphStatistics();
           CHECK (stat.levels                     == 31);                       // rather high concurrency
@@ -878,7 +883,23 @@ SHOW_EXPR(testLoad.getHash())
           CHECK (8 == graph.allNodes().filter(isStartNode).count());
           CHECK (15 == graph.allNodes().filter(isExitNode).count());
           
-          CHECK (graph.getHash() == 0xC4AE6EB741C22FCE);
+          
+          // verify computation of the globally combined exit hash
+          auto exitHashes = graph.allNodes()
+                                 .filter(isExitNode)
+                                 .transform([](Node& n){ return n.hash; })
+                                 .effuse();
+          CHECK (15 == exitHashes.size());
+          
+          size_t combinedHash{0};
+          for (uint i=0; i <15; ++i)
+            boost::hash_combine (combinedHash, exitHashes[i]);
+          
+          CHECK (graph.getHash() == combinedHash);
+          CHECK (graph.getHash() == 0x59AC21CFAE268613);
+          
+          
+          // verify connectivity and local exit hashes
           graph.allNodePtr().grouped<4>()
                .foreach([&](auto group)
                  {  // verify wiring pattern
@@ -900,7 +921,7 @@ SHOW_EXPR(testLoad.getHash())
                        CHECK (isInner(c));
                        CHECK (isExit(d));
                        CHECK (graph.nodeID(d) == 31);
-                       CHECK (d->hash == graph.getHash());
+                       CHECK (d->hash == 0xC4AE6EB741C22FCE);
                      }      //   this is the global exit node
                  });
           
@@ -919,7 +940,7 @@ SHOW_EXPR(testLoad.getHash())
                  });
           
           graph.recalculate();
-          CHECK (graph.getHash() == 0x548F240CE91A291C);
+          CHECK (graph.getHash() == 0xA76EA46C6C004CA2);
           graph.allNodePtr().grouped<4>()
                .foreach([&](auto group)
                  {  // verify hashes were recalculated
@@ -934,15 +955,15 @@ SHOW_EXPR(testLoad.getHash())
                    else
                      {
                        CHECK (graph.nodeID(d) == 31);
-                       CHECK (d->hash == graph.getHash());
+                       CHECK (d->hash == 0x548F240CE91A291C);
                      }
                  });
           
           // seeding and recalculation are reproducible
           graph.setSeed(0).recalculate();
-          CHECK (graph.getHash() == 0xC4AE6EB741C22FCE);
+          CHECK (graph.getHash() == 0x59AC21CFAE268613);
           graph.setSeed(55).recalculate();
-          CHECK (graph.getHash() == 0x548F240CE91A291C);
+          CHECK (graph.getHash() == 0xA76EA46C6C004CA2);
         }
       
       

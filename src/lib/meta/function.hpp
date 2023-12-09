@@ -213,6 +213,21 @@ namespace meta{
   
   
   
+  template<typename FUN, uint a>
+  using has_Arity = std::bool_constant<_Fun<FUN>::ARITY == a>;
+  
+  template<typename FUN>
+  using is_NullaryFun = has_Arity<FUN,0>;
+  
+  template<typename FUN>
+  using is_UnaryFun  = has_Arity<FUN,1>;
+  
+  template<typename FUN>
+  using is_BinaryFun = has_Arity<FUN,2>;
+  
+  
+  
+  
   
   /**
    * Meta-function to check that some _function like_ entity
