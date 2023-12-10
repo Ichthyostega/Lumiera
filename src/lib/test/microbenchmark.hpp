@@ -126,10 +126,10 @@ namespace test{
   inline auto
   microBenchmark (FUN const& testSubject, const size_t repeatCnt = DEFAULT_RUNS)
   {
-    size_t checksum{0};
+    volatile size_t checksum{0};
     auto invokeTestLoop = [&]{ checksum = benchmarkLoop (testSubject, repeatCnt); };
     double micros = benchmarkTime (invokeTestLoop, repeatCnt);
-    return std::make_tuple (micros, checksum);
+    return std::make_pair (micros, checksum);
   }
   
   

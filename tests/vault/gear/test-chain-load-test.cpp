@@ -875,18 +875,20 @@ SHOW_EXPR(testLoad.getHash())
           
           double micros = cpuLoad.invoke();
 SHOW_EXPR(micros)
-          CHECK (micros <= 5000);
-          CHECK (micros > 20);
+          CHECK (micros < 2000);
+          CHECK (micros > 2);
           
-          ComputationalLoad::calibrate();
+          cpuLoad.calibrate();
           
           micros = cpuLoad.invoke();
 SHOW_EXPR(micros)
-          CHECK (micros < 111);
-          CHECK (micros > 90);
+          CHECK (micros < 123);
+          CHECK (micros > 80);
           
           micros = cpuLoad.benchmark();
 SHOW_EXPR(micros)
+          CHECK (micros < 105);
+          CHECK (micros > 95);
         }
       
       

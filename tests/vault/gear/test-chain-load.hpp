@@ -149,14 +149,17 @@ namespace test {
   namespace err = lumiera::error;
   namespace dot = lib::dot_gen;
   
-  namespace { // Default definitions for topology generation
-    const size_t DEFAULT_FAN = 16;
-    const size_t DEFAULT_SIZ = 256;
+  namespace { // Default definitions for structured load testing
     
-    const auto SAFETY_TIMEOUT = 5s;
-    const auto STANDARD_DEADLINE = 10ms;
-    const size_t DEFAULT_CHUNKSIZE = 64;
-    const microseconds PLANNING_TIME_PER_NODE = 80us;
+    const size_t DEFAULT_FAN = 16;                      ///< default maximum connectivity per Node
+    const size_t DEFAULT_SIZ = 256;                     ///< default node count for the complete load graph
+    
+    const auto SAFETY_TIMEOUT = 5s;                     ///< maximum time limit for test run, abort if exceeded
+    const auto STANDARD_DEADLINE = 10ms;                ///< deadline to use for each individual computation job
+    const size_t DEFAULT_CHUNKSIZE = 64;                ///< number of computation jobs to prepare in each planning round
+    const size_t LOAD_BENCHMARK_RUNS = 500;             ///< repetition count for calibration benchmark for ComputationalLoad
+    const double LOAD_SPEED_BASELINE = 100;             ///< initial assumption for calculation speed (without calibration)
+    const microseconds PLANNING_TIME_PER_NODE = 80us;   ///< time budget to reserve for each node to be planned and scheduled
   }
   
   struct Statistic;
@@ -1076,25 +1079,87 @@ namespace test {
    */
   class ComputationalLoad
     {
+      lib::UninitialisedDynBlock<size_t> memBlock_{};
+      
+      static double&
+      computationSpeed()    ///< in iterations/µs
+        {
+          static double speed{LOAD_SPEED_BASELINE};
+          return speed;
+        }
+      
     public:
       microseconds timeBase = 100us;
+      bool useAllocation = false;
       
       double
       invoke (uint scaleStep =1)
         {
-          UNIMPLEMENTED ("impose the CPU load");
+          return benchmarkTime ([this,scaleStep]{ causeComputationLoad(scaleStep); });
         }
       
       double
       benchmark (uint scaleStep =1)
         {
-          UNIMPLEMENTED ("determine current actual load through a microbenchmark");
+          return microBenchmark ([&]{ invoke(scaleStep);}
+                                ,LOAD_BENCHMARK_RUNS)
+                              .first;
+        }
+      
+      void
+      calibrate()
+        {
+cout<<">CAL: speed="<<computationSpeed()<<" rounds:"<<roundsNeeded(1)<<endl;
+          auto speed = determineSpeed();
+cout<<".CAL: speed="<<speed<<endl;          
+          speed = determineSpeed();
+cout<<".CAL: speed="<<speed<<endl;          
+          computationSpeed() = determineSpeed();
+cout<<"<CAL: speed="<<computationSpeed()<<" rounds:"<<roundsNeeded(1)<<endl;
         }
       
       static void
-      calibrate()
+      calibrate (microseconds timeBase)
         {
-          UNIMPLEMENTED ("determine the plattform factor");
+          ComputationalLoad probe;
+          probe.timeBase = timeBase;
+          probe.calibrate();
+        }
+      
+    private:
+      uint64_t
+      roundsNeeded (uint scaleStep)
+        {
+          auto desiredMicros = scaleStep*timeBase.count();
+          return uint64_t(desiredMicros*computationSpeed());
+        }
+      
+      void
+      causeComputationLoad (uint scaleStep)
+        {
+          auto round = roundsNeeded(scaleStep);
+          volatile size_t sink;
+          size_t scree;
+          for ( ; 0 < round; --round)
+            scree = compute (scree);
+          sink = scree;
+          sink++;
+        }
+      
+      size_t
+      compute (size_t input)
+        {
+          boost::hash_combine (input,input);
+          return input;
+        }
+      
+      double
+      determineSpeed()
+        {
+          uint step4gauge = 1;
+          double micros   = benchmark (step4gauge);
+          auto roundsDone = roundsNeeded (step4gauge);
+          return roundsDone / micros;
         }
     };
   
