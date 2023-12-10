@@ -89,6 +89,7 @@
 #include "vault/gear/special-job-fun.hpp"
 //#include "vault/gear/nop-job-functor.hpp"
 #include "lib/uninitialised-storage.hpp"
+#include "lib/test/microbenchmark.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "lib/meta/variadic-helper.hpp"
 //#include "lib/meta/function.hpp"
@@ -122,6 +123,8 @@ namespace test {
   using lib::time::TimeValue;
   using lib::time::FrameRate;
   using lib::time::Duration;
+  using lib::test::benchmarkTime;
+  using lib::test::microBenchmark;
 //  using lib::time::FSecs;
 //  using lib::time::Offset;
 //  using lib::meta::RebindVariadic;
@@ -1074,6 +1077,25 @@ namespace test {
   class ComputationalLoad
     {
     public:
+      microseconds timeBase = 100us;
+      
+      double
+      invoke (uint scaleStep =1)
+        {
+          UNIMPLEMENTED ("impose the CPU load");
+        }
+      
+      double
+      benchmark (uint scaleStep =1)
+        {
+          UNIMPLEMENTED ("determine current actual load through a microbenchmark");
+        }
+      
+      static void
+      calibrate()
+        {
+          UNIMPLEMENTED ("determine the plattform factor");
+        }
     };
   
   

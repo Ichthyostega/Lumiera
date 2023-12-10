@@ -82,7 +82,7 @@ namespace test{
    */
   template<class FUN>
   inline double
-  benchmarkTime (FUN const& invokeTestLoop, const size_t repeatCnt = DEFAULT_RUNS)
+  benchmarkTime (FUN const& invokeTestLoop, const size_t repeatCnt =1)
   {
     using std::chrono::steady_clock;
     using Dur = std::chrono::duration<double, CLOCK_SCALE>;

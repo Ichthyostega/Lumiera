@@ -871,6 +871,22 @@ SHOW_EXPR(testLoad.getHash())
       verify_computation_load()
         {
           ComputationalLoad cpuLoad;
+          CHECK (cpuLoad.timeBase == 100us);
+          
+          double micros = cpuLoad.invoke();
+SHOW_EXPR(micros)
+          CHECK (micros <= 5000);
+          CHECK (micros > 20);
+          
+          ComputationalLoad::calibrate();
+          
+          micros = cpuLoad.invoke();
+SHOW_EXPR(micros)
+          CHECK (micros < 111);
+          CHECK (micros > 90);
+          
+          micros = cpuLoad.benchmark();
+SHOW_EXPR(micros)
         }
       
       
