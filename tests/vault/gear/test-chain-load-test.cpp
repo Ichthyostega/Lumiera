@@ -872,6 +872,7 @@ SHOW_EXPR(testLoad.getHash())
         {
           ComputationalLoad cpuLoad;
           CHECK (cpuLoad.timeBase == 100us);
+          cpuLoad.useAllocation = true;
           
           double micros = cpuLoad.invoke();
 SHOW_EXPR(micros)
@@ -882,13 +883,13 @@ SHOW_EXPR(micros)
           
           micros = cpuLoad.invoke();
 SHOW_EXPR(micros)
-          CHECK (micros < 123);
+          CHECK (micros < 133);
           CHECK (micros > 80);
           
           micros = cpuLoad.benchmark();
 SHOW_EXPR(micros)
-          CHECK (micros < 105);
-          CHECK (micros > 95);
+          CHECK (micros < 110);
+          CHECK (micros > 90);
         }
       
       

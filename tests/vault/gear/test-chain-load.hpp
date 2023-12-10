@@ -139,6 +139,7 @@ namespace test {
   using lib::meta::_FunRet;
   using lib::test::Transiently;
 
+  using std::make_pair;
   using std::forward;
   using std::string;
   using std::swap;
@@ -1079,23 +1080,29 @@ namespace test {
    */
   class ComputationalLoad
     {
-      lib::UninitialisedDynBlock<size_t> memBlock_{};
+      using Sink = volatile size_t;
+      
+      lib::UninitialisedDynBlock<Sink> memBlock_{};
       
       static double&
-      computationSpeed()    ///< in iterations/µs
+      computationSpeed (bool mem)     ///< in iterations/µs
         {
-          static double speed{LOAD_SPEED_BASELINE};
-          return speed;
+          static double cpuSpeed{LOAD_SPEED_BASELINE};
+          static double memSpeed{LOAD_SPEED_BASELINE};
+          return mem? memSpeed : cpuSpeed;
         }
       
     public:
       microseconds timeBase = 100us;
+      size_t       sizeBase = 1000;
       bool useAllocation = false;
       
       double
       invoke (uint scaleStep =1)
         {
-          return benchmarkTime ([this,scaleStep]{ causeComputationLoad(scaleStep); });
+          if (scaleStep == 0) return 0;
+          return useAllocation? benchmarkTime ([this,scaleStep]{ causeMemProcessLoad (scaleStep); })
+                              : benchmarkTime ([this,scaleStep]{ causeComputationLoad(scaleStep); });
         }
       
       double
@@ -1109,13 +1116,13 @@ namespace test {
       void
       calibrate()
         {
-cout<<">CAL: speed="<<computationSpeed()<<" rounds:"<<roundsNeeded(1)<<endl;
+cout<<">CAL: speed="<<computationSpeed(useAllocation)<<" rounds:"<<roundsNeeded(1)<<endl;
           auto speed = determineSpeed();
 cout<<".CAL: speed="<<speed<<endl;          
           speed = determineSpeed();
 cout<<".CAL: speed="<<speed<<endl;          
-          computationSpeed() = determineSpeed();
-cout<<"<CAL: speed="<<computationSpeed()<<" rounds:"<<roundsNeeded(1)<<endl;
+          computationSpeed(useAllocation) = determineSpeed();
+cout<<"<CAL: speed="<<computationSpeed(useAllocation)<<" rounds:"<<roundsNeeded(1)<<endl;
         }
       
       static void
@@ -1131,26 +1138,42 @@ cout<<"<CAL: speed="<<computationSpeed()<<" rounds:"<<roundsNeeded(1)<<endl;
       roundsNeeded (uint scaleStep)
         {
           auto desiredMicros = scaleStep*timeBase.count();
-          return uint64_t(desiredMicros*computationSpeed());
+          return uint64_t(desiredMicros*computationSpeed(useAllocation));
+        }
+      
+      auto
+      allocNeeded (uint scaleStep)
+        {
+          auto cnt = roundsNeeded(scaleStep);
+          auto siz = scaleStep * sizeBase;
+          // increase size to fit
+          siz = cnt /(cnt/siz);
+          cnt /= siz;
+          return make_pair (siz,cnt);
         }
       
       void
       causeComputationLoad (uint scaleStep)
         {
-          auto round = roundsNeeded(scaleStep);
-          volatile size_t sink;
+          auto round = roundsNeeded (scaleStep);
+          Sink sink;
           size_t scree;
           for ( ; 0 < round; --round)
-            scree = compute (scree);
+            boost::hash_combine (scree,scree);
           sink = scree;
           sink++;
         }
       
-      size_t
-      compute (size_t input)
+      void
+      causeMemProcessLoad (uint scaleStep)
         {
-          boost::hash_combine (input,input);
-          return input;
+          auto [siz,round] = allocNeeded (scaleStep);
+          memBlock_.allocate(siz);
+          ++*memBlock_.front();
+          for ( ; 0 < round; --round)
+            for (size_t i=0; i<memBlock_.size()-1; ++i)
+              memBlock_[i+1] += memBlock_[i];
+          ++*memBlock_.back();
         }
       
       double
@@ -1158,8 +1181,8 @@ cout<<"<CAL: speed="<<computationSpeed()<<" rounds:"<<roundsNeeded(1)<<endl;
         {
           uint step4gauge = 1;
           double micros   = benchmark (step4gauge);
-          auto roundsDone = roundsNeeded (step4gauge);
-          return roundsDone / micros;
+          auto stepsDone  = roundsNeeded (step4gauge);
+          return stepsDone / micros;
         }
     };
   

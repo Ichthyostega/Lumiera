@@ -137,7 +137,7 @@ namespace lib {
     {
       using _Arr = T[];
       
-      T* buff_{nullptr};
+      void*  buff_{nullptr};
       size_t size_{0};
       
     public:
@@ -146,9 +146,9 @@ namespace lib {
         {
           if (buff_) discard();
           size_ = cnt;
-          buff_ = cnt? static_cast<T*> (std::aligned_alloc (std::alignment_of<T>(), cnt * sizeof(T)))
+          buff_ = cnt? std::aligned_alloc (std::alignment_of<T>(), cnt * sizeof(T))
                      : nullptr;
-          return buff_;
+          return front();
         }
       
       void
@@ -215,6 +215,13 @@ namespace lib {
           return * std::launder (reinterpret_cast<_Arr const*> (buff_));
         }
       
+      
+      T *      front()       { return &array()[0]; }
+      T const* front() const { return &array()[0]; }
+      T *      after()       { return &array()[size_];}
+      T const* after() const { return &array()[size_];}
+      T *      back ()       { return after() - 1; }
+      T const* back () const { return after() - 1; }
       
       T &      operator[] (size_t idx)        { return array()[idx]; }
       T const& operator[] (size_t idx)  const { return array()[idx]; }
