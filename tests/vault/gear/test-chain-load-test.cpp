@@ -28,22 +28,14 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "test-chain-load.hpp"
-//#include "vault/real-clock.hpp"
-//#include "lib/time/timevalue.hpp"
 #include "vault/gear/job.h"
-#include "lib/format-cout.hpp" ////////////////////////////////////TODO Moo-oh
-#include "lib/test/diagnostic-output.hpp"//////////////////////////TODO TOD-oh
 #include "lib/util.hpp"
 
 #include <array>
 
-//using lib::time::Time;
-//using lib::time::FSecs;
 
 using util::isnil;
 using util::isSameObject;
-//using lib::test::randStr;
-//using lib::test::randTime;
 using std::array;
 
 
@@ -86,36 +78,31 @@ namespace test {
           showcase_StablePattern();
           verify_computation_load();
           verify_reseed_recalculate();
+          verify_runtime_reference();
           verify_scheduling_setup();
         }
       
       
-      /** @test TODO demonstrate simple usage of the test-load
-       * @todo WIP 11/23 🔁 define ⟶ 🔁 implement
+      /** @test demonstrate simple usage of the test-load
+       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
       usageExample()
         {
-          auto anchor = RealClock::now();
-          auto offset = [&](Time when =RealClock::now()){ return _raw(when) - _raw(anchor); };
-
           auto testLoad =
             TestChainLoad{64}
-               .configureShape_simple_short_segments()
+               .configureShape_short_segments3_interleaved()
                .buildToplolgy();
-SHOW_EXPR(offset())
           
           BlockFlowAlloc bFlow;
           EngineObserver watch;
           Scheduler scheduler{bFlow, watch};
           
-SHOW_EXPR(testLoad.getHash())
           CHECK (testLoad.getHash() == 0xD2F292D864CF8086);
-SHOW_EXPR(offset())
+          
           testLoad.setupSchedule(scheduler)
                   .launch_and_wait();
-SHOW_EXPR(offset())
-SHOW_EXPR(testLoad.getHash())
+          
           CHECK (testLoad.getHash() == 0xD2F292D864CF8086);
         }
       
@@ -691,6 +678,7 @@ SHOW_EXPR(testLoad.getHash())
           CHECK (stat.indicators[STAT_EXIT].pL   == "0.48076923"_expect);       //              ½ exit per level
           
           
+          // »short_segments_interleaved«
           // Increased seed probability combined with overall seed value 0  ◁──── (crucial, other seeds produce larger graphs)
           // produces what seems to be the best stable repetition loop:
           // same shape as in preceding, yet interwoven by 2 steps
@@ -864,8 +852,8 @@ SHOW_EXPR(testLoad.getHash())
       
       
       
-      /** @test WIP verify calibration of a configurable computational load.
-       * @todo WIP 12/23 🔁 define ⟶ 🔁 implement
+      /** @test verify calibration of a configurable computational load.
+       * @todo WIP 12/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_computation_load()
@@ -874,74 +862,51 @@ SHOW_EXPR(testLoad.getHash())
           CHECK (cpuLoad.timeBase == 100us);
           
           double micros = cpuLoad.invoke();
-SHOW_EXPR(micros)
           CHECK (micros < 2000);
           CHECK (micros > 2);
           
           cpuLoad.calibrate();
           
           micros = cpuLoad.invoke();
-SHOW_EXPR(micros)
           CHECK (micros < 133);
           CHECK (micros > 80);
           
           micros = cpuLoad.benchmark();
-SHOW_EXPR(micros)
           CHECK (micros < 110);
           CHECK (micros > 90);
           
           cpuLoad.useAllocation = true;
-SHOW_EXPR(cpuLoad.useAllocation)
           micros = cpuLoad.invoke();
-SHOW_EXPR(micros)
           CHECK (micros < 133);
           CHECK (micros > 80);
           
           micros = cpuLoad.benchmark();
-SHOW_EXPR(micros)
           CHECK (micros < 110);
           CHECK (micros > 90);
           
           cpuLoad.timeBase = 1ms;
           cpuLoad.sizeBase *= 100;
-SHOW_EXPR(cpuLoad.sizeBase)
-          
-          cpuLoad.useAllocation = false;
-          micros = cpuLoad.benchmark();
-SHOW_EXPR(micros)
-          cpuLoad.useAllocation = true;
-          micros = cpuLoad.benchmark();
-SHOW_EXPR(micros)
-          
           cpuLoad.calibrate();
-
+          
           cpuLoad.useAllocation = false;
-          micros = cpuLoad.benchmark();
-SHOW_EXPR(micros)
-          cpuLoad.useAllocation = true;
-          micros = cpuLoad.benchmark();
-SHOW_EXPR(micros)
-SHOW_EXPR(5)
-          cpuLoad.useAllocation = false;
+          micros = cpuLoad.invoke();
+          CHECK (micros > 900);
           micros = cpuLoad.invoke(5);
-SHOW_EXPR(micros)
+          CHECK (micros > 4600);
+          micros = cpuLoad.invoke(10);
+          CHECK (micros > 9500);
+          micros = cpuLoad.invoke(100);
+          CHECK (micros > 95000);
+          
           cpuLoad.useAllocation = true;
+          micros = cpuLoad.invoke();
+          CHECK (micros > 900);
           micros = cpuLoad.invoke(5);
-SHOW_EXPR(micros)
-SHOW_EXPR(10)
-          cpuLoad.useAllocation = false;
+          CHECK (micros > 4600);
           micros = cpuLoad.invoke(10);
-SHOW_EXPR(micros)
-          cpuLoad.useAllocation = true;
-          micros = cpuLoad.invoke(10);
-SHOW_EXPR(micros)
-SHOW_EXPR(100)
-          cpuLoad.useAllocation = false;
+          CHECK (micros > 9500);
           micros = cpuLoad.invoke(100);
-SHOW_EXPR(micros)
-          cpuLoad.useAllocation = true;
-          micros = cpuLoad.invoke(100);
-SHOW_EXPR(micros)
+          CHECK (micros > 95000);
         }
       
       
@@ -1056,6 +1021,18 @@ SHOW_EXPR(micros)
           graph.setSeed(55).recalculate();
           CHECK (graph.getHash() == 0xA76EA46C6C004CA2);
         }
+      
+      
+      
+      /** @test TODO compute synchronous execution time for reference
+       * @todo WIP 12/23 🔁 define ⟶ 🔁 implement
+       */
+      void
+      verify_runtime_reference()
+        {
+          
+        }
+      
       
       
       

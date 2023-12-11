@@ -50,7 +50,7 @@ END
 
 
 
-PLANNED "Synthetic Load for Test" TestChainLoad_test <<END
+TEST "Synthetic Load for Test" TestChainLoad_test <<END
 return: 0
 END
 

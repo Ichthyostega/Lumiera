@@ -40,8 +40,8 @@
  ** pass over all nodes; yet alternatively each node can be _scheduled_ as an individual
  ** computation job, which obviously requires that it's predecessor nodes have already
  ** been computed, otherwise the resulting hash will not match up with expectation.
- ** If significant per-node computation time is required, the hashing can be
- ** arbitrarily repeated at each node.
+ ** If significant per-node computation time is required, an artificial computational
+ ** load can be generated, controlled by a weight setting computed for each node.
  ** 
  ** The topology of connectivity is generated randomly, yet completely deterministic through
  ** configurable _control functions_ driven by each node's (hash)value. This way, each node
@@ -54,6 +54,11 @@
  ** controlling the topology can be configured using the lib::RandomDraw component, allowing
  ** either just to set a fixed probability or to define elaborate dynamic configurations
  ** based on the graph height or node connectivity properties.
+ ** - expansionRule: controls forking of the graph behind the current node
+ ** - reductionRule: controls joining of the graph into a combining successor node
+ ** - seedingRule: controls injection of new start nodes in the middle of the graph
+ ** - pruningRule: controls insertion of exit nodes to cut-off some chain immediately
+ ** - weightRule: controls assignment of a Node::weight to command the ComputationalLoad 
  ** 
  ** ## Usage
  ** A TestChainLoad instance is created with predetermined maximum fan factor and a fixed
@@ -70,6 +75,9 @@
  ** and showing predecessor -> successor connectivity. Seed nodes are distinguished by
  ** circular shape.
  ** 
+ ** Moreover, Statistics can be computed over the generated graph, allowing to draw some
+ ** conclusions regarding node distribution and connectivity.
+ ** 
  ** @see TestChainLoad_test
  ** @see SchedulerStress_test
  ** @see random-draw.hpp
@@ -83,17 +91,12 @@
 #include "vault/common.hpp"
 #include "lib/test/transiently.hpp"
 
-//#include "lib/hash-value.h"
 #include "vault/gear/job.h"
 #include "vault/gear/scheduler.hpp"
 #include "vault/gear/special-job-fun.hpp"
-//#include "vault/gear/nop-job-functor.hpp"
 #include "lib/uninitialised-storage.hpp"
 #include "lib/test/microbenchmark.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/meta/variadic-helper.hpp"
-//#include "lib/meta/function.hpp"
-//#include "lib/wrapper.hpp"
 #include "lib/time/quantiser.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/format-string.hpp"
@@ -117,17 +120,6 @@ namespace vault{
 namespace gear {
 namespace test {
   
-  using std::string;
-  using std::function;
-  using lib::time::Time;
-  using lib::time::TimeValue;
-  using lib::time::FrameRate;
-  using lib::time::Duration;
-  using lib::test::benchmarkTime;
-  using lib::test::microBenchmark;
-//  using lib::time::FSecs;
-//  using lib::time::Offset;
-//  using lib::meta::RebindVariadic;
   using util::_Fmt;
   using util::min;
   using util::max;
@@ -136,15 +128,22 @@ namespace test {
   using util::unConst;
   using util::toString;
   using util::showHashLSB;
-  using lib::meta::_FunRet;
+  using lib::time::Time;
+  using lib::time::TimeValue;
+  using lib::time::FrameRate;
+  using lib::time::Duration;
+  using lib::test::benchmarkTime;
+  using lib::test::microBenchmark;
   using lib::test::Transiently;
+  using lib::meta::_FunRet;
 
+  using std::string;
+  using std::function;
   using std::make_pair;
   using std::forward;
   using std::string;
   using std::swap;
   using std::move;
-//  using boost::hash_combine;
   using std::chrono_literals::operator ""s;
   
   namespace err = lumiera::error;
@@ -160,8 +159,11 @@ namespace test {
     const size_t DEFAULT_CHUNKSIZE = 64;                ///< number of computation jobs to prepare in each planning round
     const size_t LOAD_BENCHMARK_RUNS = 500;             ///< repetition count for calibration benchmark for ComputationalLoad
     const double LOAD_SPEED_BASELINE = 100;             ///< initial assumption for calculation speed (without calibration)
+    const microseconds LOAD_DEFAULT_TIME = 100us;       ///< default time delay produced by ComputationalLoad at `Node.weight==1`
+    const size_t LOAD_DEFAULT_MEM_SIZE   = 1000;        ///< default allocation base size used if ComputationalLoad.useAllocation
     const microseconds PLANNING_TIME_PER_NODE = 80us;   ///< time budget to reserve for each node to be planned and scheduled
   }
+  
   
   struct Statistic;
   
@@ -405,6 +407,7 @@ namespace test {
       
       /** Abbreviation for starting rules */
       static Rule rule() { return Rule(); }
+      static Rule value(size_t v) { return Rule().fixedVal(v); }
       
       static Rule
       rule_atStart (uint v)
@@ -449,13 +452,33 @@ namespace test {
         }
       
       
+      /** preconfigured topology: isolated simple 2-step chains */
+      TestChainLoad&&
+      configureShape_short_chains2()
+        {
+          pruningRule(rule().probability(0.8));
+          weightRule(value(1));
+          return move(*this);
+        }
+      
+      /** preconfigured topology: simple 3-step chains, starting interleaved */
+      TestChainLoad&&
+      configureShape_short_chains3_interleaved()
+        {
+          pruningRule(rule().probability(0.6));
+          seedingRule(rule_atStart(1));
+          weightRule(value(1));
+          return move(*this);
+        }
+      
       /** preconfigured topology: simple interwoven 3-step graph segments */
       TestChainLoad&&
-      configureShape_simple_short_segments()
+      configureShape_short_segments3_interleaved()
         {
           seedingRule(rule().probability(0.8).maxVal(1));
           reductionRule(rule().probability(0.75).maxVal(3));
           pruningRule(rule_atJoin(1));
+          weightRule(value(1));
           return move(*this);
         }
 
@@ -1077,6 +1100,23 @@ namespace test {
   
   /**
    * A calibratable CPU load to be invoked from a node job functor.
+   * Two distinct methods for load generation are provided
+   * - tight loop with arithmetics in register
+   * - repeatedly accessing and adding memory marked as `volatile`
+   * The `timeBase` multiplied with the given `scaleStep´ determines
+   * the actual run time. When using the _memory method_ (`useAllocation`),
+   * a heap block of `staleStep*sizeBase` is used, and the number of
+   * repetitions is chosen such as to match the given timing goal.
+   * @note since performance depends on the platform, it is mandatory
+   *   to invoke the [self calibration](\ref ComputationalLoad::calibrate)
+   *   at least once prior to use. Performing the calibration with default
+   *   base settings is acceptable, since mostly the overall expense is
+   *   growing linearly; obviously the calibration is more precisely
+   *   however when using the actual `timeBase` and `sizeBase` of
+   *   the intended usage. The calibration watches processing
+   *   speed in a microbenchmark with `LOAD_BENCHMARK_RUNS`
+   *   repetitions; the result is stored in a static
+   *   variable and can thus be reused.
    */
   class ComputationalLoad
     {
@@ -1093,43 +1133,49 @@ namespace test {
         }
       
     public:
-      microseconds timeBase = 100us;
-      size_t       sizeBase = 1000;
+      microseconds timeBase = LOAD_DEFAULT_TIME;
+      size_t       sizeBase = LOAD_DEFAULT_MEM_SIZE;
       bool useAllocation = false;
       
+      /** cause a delay by computational load */
       double
       invoke (uint scaleStep =1)
         {
-          if (scaleStep == 0) return 0;
+          if (scaleStep == 0 or timeBase < 1us)
+            return 0;  //  disabled
           return useAllocation? benchmarkTime ([this,scaleStep]{ causeMemProcessLoad (scaleStep); })
                               : benchmarkTime ([this,scaleStep]{ causeComputationLoad(scaleStep); });
         }
       
+      /** @return averaged runtime in current configuration */
       double
       benchmark (uint scaleStep =1)
         {
           return microBenchmark ([&]{ invoke(scaleStep);}
                                 ,LOAD_BENCHMARK_RUNS)
-                              .first;
+                              .first; // ∅ runtime in µs
         }
       
       void
       calibrate()
         {
-cout<<">CAL: speed="<<computationSpeed(useAllocation)<<" rounds:"<<roundsNeeded(1)<<endl;
           TRANSIENTLY(useAllocation) = false;
           performIncrementalCalibration();
           useAllocation = true;
           performIncrementalCalibration();
-cout<<"<CAL: speed="<<computationSpeed(useAllocation)<<" rounds:"<<roundsNeeded(1)<<endl;
         }
       
-      static void
-      calibrate (microseconds timeBase)
+      void
+      maybeCalibrate()
         {
-          ComputationalLoad probe;
-          probe.timeBase = timeBase;
-          probe.calibrate();
+          if (not isCalibrated())
+            calibrate();
+        }
+      
+      bool
+      isCalibrated()  const
+        {
+          return computationSpeed(false) != LOAD_SPEED_BASELINE;
         }
       
     private:
@@ -1144,7 +1190,7 @@ cout<<"<CAL: speed="<<computationSpeed(useAllocation)<<" rounds:"<<roundsNeeded(
       allocNeeded (uint scaleStep)
         {
           auto cnt = roundsNeeded(scaleStep);
-          auto siz = scaleStep * sizeBase;
+          auto siz = max (scaleStep * sizeBase, 1u);
           auto rep = max (cnt/siz, 1u);
           // increase size to fit
           siz = cnt / rep;
@@ -1192,7 +1238,6 @@ cout<<"<CAL: speed="<<computationSpeed(useAllocation)<<" rounds:"<<roundsNeeded(
           do {
               speed = determineSpeed();
               delta = abs(1.0 - speed/prev);
-cout<<".CAL: "<<prev<<"->"<<speed<<" Δ="<<delta<<endl;          
               prev = speed;
             }
           while (delta > 0.05);
@@ -1293,10 +1338,12 @@ cout<<".CAL: "<<prev<<"->"<<speed<<" Δ="<<delta<<endl;
       using Node = typename TestChainLoad<maxFan>::Node;
       
       Node* startNode_;
+      ComputationalLoad* compuLoad_;
       
     public:
-      RandomChainCalcFunctor(Node& startNode)
+      RandomChainCalcFunctor(Node& startNode, ComputationalLoad* load =nullptr)
         : startNode_{&startNode}
+        , compuLoad_{load}
         { }
       
       
@@ -1309,7 +1356,9 @@ cout<<".CAL: "<<prev<<"->"<<speed<<" Δ="<<delta<<endl;
           Node& target = startNode_[nodeIdx];
           ASSERT (target.level == level);
           // invoke the »media calculation«
-cout<<_Fmt{"\n!◆! %s: calc(i=%d, lev:%d)"} % markThread() % nodeIdx % level <<endl;          
+cout<<_Fmt{"\n!◆! %s: calc(i=%d, lev:%d)"} % markThread() % nodeIdx % level <<endl;
+          if (compuLoad_ and target.weight)
+            compuLoad_->invoke (target.weight);
           target.calculate();
         }
       
@@ -1363,7 +1412,7 @@ cout<<_Fmt{"\n!◆! %s: calc(i=%d, lev:%d)"} % markThread() % nodeIdx % level <<
         {
           size_t reachedLevel{0};
           size_t targetNodeIDX = decodeNodeID (param.invoKey);
-cout<<_Fmt{"\n!◆!plan...to:%d%19t|curr=%d (max:%d)"} % targetNodeIDX % currIdx_ % maxCnt_<<endl;          
+cout<<_Fmt{"\n!◆!plan...to:%d%19t|curr=%d (max:%d)"} % targetNodeIDX % currIdx_ % maxCnt_<<endl;
           for ( ; currIdx_<maxCnt_; ++currIdx_)
             {
               Node* n = &nodes_[currIdx_];
@@ -1413,7 +1462,7 @@ cout<<_Fmt{"%16t|n.(%d,lev:%d)"} % currIdx_ % n->level <<endl;
       lib::UninitialisedDynBlock<ScheduleSpec> schedule_;
 
       FrameRate  levelSpeed_{1, Duration{_uTicks(1ms)}};
-      uint       loadFactor_{2};
+      uint  blockLoadFactor_{2};
       size_t      chunkSize_{DEFAULT_CHUNKSIZE};
       TimeVar     startTime_{Time::ANYTIME};
       microseconds  preRoll_{guessPlanningPreroll (chunkSize_)};
@@ -1422,6 +1471,7 @@ cout<<_Fmt{"%16t|n.(%d,lev:%d)"} % currIdx_ % n->level <<endl;
       
       std::promise<void> signalDone_{};
       
+      std::unique_ptr<ComputationalLoad>              compuLoad_;
       std::unique_ptr<RandomChainCalcFunctor<maxFan>> calcFunctor_;
       std::unique_ptr<RandomChainPlanFunctor<maxFan>> planFunctor_;
       
@@ -1476,6 +1526,7 @@ cout <<"--> reschedule to ..."<<nextChunkEndNode<<endl;
           size_t firstChunkEndNode = calcNextChunkEnd(0)-1;
 cout <<"+++ "<<markThread()<<": seed(num:"<<numNodes<<")"<<endl;
           schedule_.allocate (numNodes);
+          compuLoad_->maybeCalibrate();
           startTime_ = anchorStartTime();
           scheduler_.seedCalcStream (planningJob(firstChunkEndNode)
                                     ,manID_
@@ -1487,7 +1538,8 @@ cout <<"+++ "<<markThread()<<": seed(num:"<<numNodes<<")"<<endl;
       ScheduleCtx (TestChainLoad& mother, Scheduler& scheduler)
         : chainLoad_{mother}
         , scheduler_{scheduler}
-        , calcFunctor_{new RandomChainCalcFunctor<maxFan>{chainLoad_.nodes_[0]}}
+        , compuLoad_{new ComputationalLoad}
+        , calcFunctor_{new RandomChainCalcFunctor<maxFan>{chainLoad_.nodes_[0], compuLoad_.get()}}
         , planFunctor_{new RandomChainPlanFunctor<maxFan>{chainLoad_.nodes_[0], chainLoad_.numNodes_
                                                          ,[this](size_t i, size_t l){ disposeStep(i,l);  }
                                                          ,[this](auto* p, auto* s)  { setDependency(p,s);}
@@ -1515,7 +1567,7 @@ cout <<"+++ "<<markThread()<<": seed(num:"<<numNodes<<")"<<endl;
       ScheduleCtx&&
       withLoadFactor (uint factor_on_levelSpeed)
         {
-          loadFactor_ = factor_on_levelSpeed;
+          blockLoadFactor_ = factor_on_levelSpeed;
         }
       
       ScheduleCtx&&
@@ -1541,6 +1593,33 @@ cout <<"+++ "<<markThread()<<": seed(num:"<<numNodes<<")"<<endl;
       withManifestation (ManifestationID manID)
         {
           manID_ = manID;
+        }
+      
+      ScheduleCtx&&
+      withLoadTimeBase (microseconds timeBase =LOAD_DEFAULT_TIME)
+        {
+          compuLoad_->timeBase = timeBase;
+        }
+      
+      ScheduleCtx&&
+      deactivateLoad()
+        {
+          compuLoad_->timeBase = 0us;
+        }
+      
+      ScheduleCtx&&
+      withLoadMem (size_t sizeBase =LOAD_DEFAULT_MEM_SIZE)
+        {
+          if (not sizeBase)
+            {
+              compuLoad_->sizeBase = LOAD_DEFAULT_MEM_SIZE;
+              compuLoad_->useAllocation =false;
+            }
+          else
+            {
+              compuLoad_->sizeBase = sizeBase;
+              compuLoad_->useAllocation =true;
+            }
         }
       
     private:
@@ -1609,7 +1688,7 @@ cout<<"ANCHOR="+relT(ank)+" preRoll="+util::toString(_raw(_uTicks(preRoll_)))<<e
       FrameRate
       calcLoadHint()
         {
-          return FrameRate{levelSpeed_ * loadFactor_};
+          return FrameRate{levelSpeed_ * blockLoadFactor_};
         }
       
       size_t
@@ -1631,7 +1710,7 @@ cout<<"ANCHOR="+relT(ank)+" preRoll="+util::toString(_raw(_uTicks(preRoll_)))<<e
             the chain-load graph only defines dependencies over one level
             thus the first level in the next chunk must still be able to attach
             dependencies to the last row of the preceding chunk, implying that
-            those still need to be ahead of schedule.
+            those still need to be ahead of schedule, and not yet dispatched.
           */
           size_t nextChunkLevel = chainLoad_.nodes_[lastNodeIDX].level;
           nextChunkLevel = nextChunkLevel>2? nextChunkLevel-2 : 0;
