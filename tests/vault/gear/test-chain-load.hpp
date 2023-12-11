@@ -1439,7 +1439,6 @@ namespace test {
           Node& target = startNode_[nodeIdx];
           ASSERT (target.level == level);
           // invoke the »media calculation«
-cout<<_Fmt{"\n!◆! %s: calc(i=%d, lev:%d)"} % markThread() % nodeIdx % level <<endl;
           if (compuLoad_ and target.weight)
             compuLoad_->invoke (target.weight);
           target.calculate();
@@ -1495,11 +1494,9 @@ cout<<_Fmt{"\n!◆! %s: calc(i=%d, lev:%d)"} % markThread() % nodeIdx % level <<
         {
           size_t reachedLevel{0};
           size_t targetNodeIDX = decodeNodeID (param.invoKey);
-cout<<_Fmt{"\n!◆!plan...to:%d%19t|curr=%d (max:%d)"} % targetNodeIDX % currIdx_ % maxCnt_<<endl;
           for ( ; currIdx_<maxCnt_; ++currIdx_)
             {
               Node* n = &nodes_[currIdx_];
-cout<<_Fmt{"%16t|n.(%d,lev:%d)"} % currIdx_ % n->level <<endl;
               if (currIdx_ <= targetNodeIDX)
                 reachedLevel = n->level;
               else // continue until end of current level
@@ -1565,7 +1562,6 @@ cout<<_Fmt{"%16t|n.(%d,lev:%d)"} % currIdx_ % n->level <<endl;
       void
       disposeStep (size_t idx, size_t level)
         {
-cout <<_Fmt{"... dispose(i=%d,lev:%d) -> @%s"} % idx % level % relT(calcStartTime(level))<<endl;
           schedule_[idx] = scheduler_.defineSchedule(calcJob (idx,level))
                                      .manifestation(manID_)
                                      .startTime (calcStartTime(level))
@@ -1586,11 +1582,9 @@ cout <<_Fmt{"... dispose(i=%d,lev:%d) -> @%s"} % idx % level % relT(calcStartTim
       void
       continuation (size_t lastNodeIDX, size_t levelDone, bool work_left)
         {
-cout <<_Fmt{"+++ %s: Continuation(lastNode=%d, levelDone=%d, work_left:%s)"} % markThread() % lastNodeIDX % levelDone % work_left <<endl;
           if (work_left)
             {
               size_t nextChunkEndNode = calcNextChunkEnd (lastNodeIDX);
-cout <<"--> reschedule to ..."<<nextChunkEndNode<<endl;
               scheduler_.continueMetaJob (calcPlanScheduleTime (nextChunkEndNode)
                                          ,planningJob (nextChunkEndNode)
                                          ,manID_);
@@ -1607,7 +1601,6 @@ cout <<"--> reschedule to ..."<<nextChunkEndNode<<endl;
           auto finished = attachNewCompletionSignal();
           size_t numNodes = chainLoad_.size();
           size_t firstChunkEndNode = calcNextChunkEnd(0)-1;
-cout <<"+++ "<<markThread()<<": seed(num:"<<numNodes<<")"<<endl;
           schedule_.allocate (numNodes);
           compuLoad_->maybeCalibrate();
           startTime_ = anchorStartTime();
@@ -1756,10 +1749,7 @@ cout <<"+++ "<<markThread()<<": seed(num:"<<numNodes<<")"<<endl;
       Time
       anchorStartTime()
         {
-Time ank = RealClock::now() + _uTicks(preRoll_);
-cout<<"ANCHOR="+relT(ank)+" preRoll="+util::toString(_raw(_uTicks(preRoll_)))<<endl;
-//          return RealClock::now() + _uTicks(preRoll_);
-          return ank;
+          return RealClock::now() + _uTicks(preRoll_);
         }
       
       static microseconds

@@ -115,7 +115,6 @@
 //#include "lib/symbol.hpp"
 #include  "lib/nocopy.hpp"
 //#include "lib/util.hpp"
-#include "lib/format-cout.hpp"///////////////////////TODO
 
 //#include <string>
 #include <optional>
@@ -586,26 +585,6 @@ namespace gear {
     return move(*this);
   }
   
-namespace{
-  inline string
-  relT (int64_t pling)
-  {
-    static int64_t nulli{0};
-    if (nulli == 0) nulli = pling;
-    return util::toString(pling - nulli);
-  }
-  inline string
-  relT (Time plong)
-  {
-    return relT(_raw(plong));
-  }
-  
-  inline string
-  markThread()
-  {
-    return util::showHashLSB (std::hash<std::thread::id>{}(thisThread()));
-  }
-}
   
   /**
    * Enqueue for time-bound execution, possibly dispatch immediately.
@@ -617,7 +596,6 @@ namespace{
   Scheduler::postChain (ActivationEvent actEvent)
   {
     maybeScaleWorkForce (actEvent.startTime());
-cout<<"‖SCH‖ "+markThread()+": @"+relT(RealClock::now())+" ○ start="+relT(actEvent.starting)+" dead:"+util::toString(actEvent.deadline - actEvent.starting)<<endl;
     ExecutionCtx ctx{*this, actEvent};
     layer2_.postDispatch (actEvent, ctx, layer1_);
   }
@@ -656,7 +634,6 @@ cout<<"‖SCH‖ "+markThread()+": @"+relT(RealClock::now())+" ○ start="+relT(
                       .performStep([&]{
                                         Time now = getSchedTime();
                                         auto toDispatch = layer2_.findWork (layer1_,now);
-cout<<"   ·‖ "+markThread()+": @ "+relT(now)+" HT:"+relT(layer1_.headTime())+"  -> "+(toDispatch? "▶ "+relT(toDispatch.starting): string("∘"))<<endl;
                                         ExecutionCtx ctx{*this, toDispatch};
                                         return layer2_.postDispatch (toDispatch, ctx, layer1_);
                                       })
@@ -753,7 +730,6 @@ cout<<"   ·‖ "+markThread()+": @ "+relT(now)+" HT:"+relT(layer1_.headTime())+
   inline void
   Scheduler::handleDutyCycle (Time now, bool forceContinuation)
   {
-cout<<"‖▷▷▷‖ "+markThread()+": @ "+relT(now)+(empty()? string(" EMPTY"): " HT:"+relT(layer1_.headTime()))<<endl;
     // consolidate queue content
     layer1_.feedPrioritisation();
     // clean-up of outdated tasks here
@@ -793,8 +769,6 @@ cout<<"‖▷▷▷‖ "+markThread()+": @ "+relT(now)+(empty()? string(" EMPTY"
       triggerEmergency();
     else
       loadControl_.markWorkerExit();
-Time now = getSchedTime();
-cout<<"‖▽▼▽‖ "+markThread()+": @ "+relT(now)<<endl;
   }
   
   /**
@@ -809,15 +783,9 @@ cout<<"‖▽▼▽‖ "+markThread()+": @ "+relT(now)<<endl;
   Scheduler::maybeScaleWorkForce (Time startHorizon)
   {
     if (empty())
-{
       ignite();
-cout<<"‖IGN‖     wof:"+util::toString(workForce_.size())<<endl;
-}
     else
-{
       loadControl_.ensureCapacity (startHorizon);
-cout<<"‖•△•‖     wof:"+util::toString(workForce_.size())+" HT:"+relT(layer1_.headTime())<<endl;
-}
   }
   
   /**
