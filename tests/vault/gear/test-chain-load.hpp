@@ -1117,11 +1117,10 @@ namespace test {
       calibrate()
         {
 cout<<">CAL: speed="<<computationSpeed(useAllocation)<<" rounds:"<<roundsNeeded(1)<<endl;
-          auto speed = determineSpeed();
-cout<<".CAL: speed="<<speed<<endl;          
-          speed = determineSpeed();
-cout<<".CAL: speed="<<speed<<endl;          
-          computationSpeed(useAllocation) = determineSpeed();
+          TRANSIENTLY(useAllocation) = false;
+          performIncrementalCalibration();
+          useAllocation = true;
+          performIncrementalCalibration();
 cout<<"<CAL: speed="<<computationSpeed(useAllocation)<<" rounds:"<<roundsNeeded(1)<<endl;
         }
       
@@ -1146,10 +1145,10 @@ cout<<"<CAL: speed="<<computationSpeed(useAllocation)<<" rounds:"<<roundsNeeded(
         {
           auto cnt = roundsNeeded(scaleStep);
           auto siz = scaleStep * sizeBase;
+          auto rep = max (cnt/siz, 1u);
           // increase size to fit
-          siz = cnt /(cnt/siz);
-          cnt /= siz;
-          return make_pair (siz,cnt);
+          siz = cnt / rep;
+          return make_pair (siz,rep);
         }
       
       void
@@ -1183,6 +1182,20 @@ cout<<"<CAL: speed="<<computationSpeed(useAllocation)<<" rounds:"<<roundsNeeded(
           double micros   = benchmark (step4gauge);
           auto stepsDone  = roundsNeeded (step4gauge);
           return stepsDone / micros;
+        }
+      
+      void
+      performIncrementalCalibration()
+        {
+          double& speed = computationSpeed(useAllocation);
+          double prev{speed},delta;
+          do {
+              speed = determineSpeed();
+              delta = abs(1.0 - speed/prev);
+cout<<".CAL: "<<prev<<"->"<<speed<<" Δ="<<delta<<endl;          
+              prev = speed;
+            }
+          while (delta > 0.05);
         }
     };
   

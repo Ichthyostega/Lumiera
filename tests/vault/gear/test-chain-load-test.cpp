@@ -872,7 +872,6 @@ SHOW_EXPR(testLoad.getHash())
         {
           ComputationalLoad cpuLoad;
           CHECK (cpuLoad.timeBase == 100us);
-          cpuLoad.useAllocation = true;
           
           double micros = cpuLoad.invoke();
 SHOW_EXPR(micros)
@@ -890,6 +889,59 @@ SHOW_EXPR(micros)
 SHOW_EXPR(micros)
           CHECK (micros < 110);
           CHECK (micros > 90);
+          
+          cpuLoad.useAllocation = true;
+SHOW_EXPR(cpuLoad.useAllocation)
+          micros = cpuLoad.invoke();
+SHOW_EXPR(micros)
+          CHECK (micros < 133);
+          CHECK (micros > 80);
+          
+          micros = cpuLoad.benchmark();
+SHOW_EXPR(micros)
+          CHECK (micros < 110);
+          CHECK (micros > 90);
+          
+          cpuLoad.timeBase = 1ms;
+          cpuLoad.sizeBase *= 100;
+SHOW_EXPR(cpuLoad.sizeBase)
+          
+          cpuLoad.useAllocation = false;
+          micros = cpuLoad.benchmark();
+SHOW_EXPR(micros)
+          cpuLoad.useAllocation = true;
+          micros = cpuLoad.benchmark();
+SHOW_EXPR(micros)
+          
+          cpuLoad.calibrate();
+
+          cpuLoad.useAllocation = false;
+          micros = cpuLoad.benchmark();
+SHOW_EXPR(micros)
+          cpuLoad.useAllocation = true;
+          micros = cpuLoad.benchmark();
+SHOW_EXPR(micros)
+SHOW_EXPR(5)
+          cpuLoad.useAllocation = false;
+          micros = cpuLoad.invoke(5);
+SHOW_EXPR(micros)
+          cpuLoad.useAllocation = true;
+          micros = cpuLoad.invoke(5);
+SHOW_EXPR(micros)
+SHOW_EXPR(10)
+          cpuLoad.useAllocation = false;
+          micros = cpuLoad.invoke(10);
+SHOW_EXPR(micros)
+          cpuLoad.useAllocation = true;
+          micros = cpuLoad.invoke(10);
+SHOW_EXPR(micros)
+SHOW_EXPR(100)
+          cpuLoad.useAllocation = false;
+          micros = cpuLoad.invoke(100);
+SHOW_EXPR(micros)
+          cpuLoad.useAllocation = true;
+          micros = cpuLoad.invoke(100);
+SHOW_EXPR(micros)
         }
       
       
