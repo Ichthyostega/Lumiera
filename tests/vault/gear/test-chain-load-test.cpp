@@ -27,6 +27,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/test/diagnostic-output.hpp"
 #include "test-chain-load.hpp"
 #include "vault/gear/job.h"
 #include "lib/util.hpp"
@@ -59,6 +60,10 @@ namespace test {
   
   /*****************************************************************//**
    * @test verify a tool to generate synthetic load for Scheduler tests.
+   * @remark statistics output and the generation of Graphviz-DOT diagrams
+   *       is commented out; these diagnostics are crucial to understand
+   *       the generated load pattern or to develop new graph shapes.
+   *       Visualise graph with `dot -Tpng example.dot | display`
    * @see SchedulerService_test
    * @see SchedulerStress_test
    */
@@ -84,7 +89,8 @@ namespace test {
       
       
       /** @test demonstrate simple usage of the test-load
-       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
+       *      - build a graph with 64 nodes, grouped into small segments
+       *      - use a scheduler instance to »perform« this graph
        */
       void
       usageExample()
@@ -94,22 +100,24 @@ namespace test {
                .configureShape_short_segments3_interleaved()
                .buildToplolgy();
           
+          // while building the graph, node hashes are computed
+          CHECK (testLoad.getHash() == 0xD2F292D864CF8086);
+          
+          
           BlockFlowAlloc bFlow;
           EngineObserver watch;
           Scheduler scheduler{bFlow, watch};
           
-          CHECK (testLoad.getHash() == 0xD2F292D864CF8086);
-          
           testLoad.setupSchedule(scheduler)
                   .launch_and_wait();
           
+          // invocation through Scheduler has reproduced all node hashes
           CHECK (testLoad.getHash() == 0xD2F292D864CF8086);
         }
       
       
       
       /** @test data structure to represent a computation Node
-       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_Node()
@@ -195,7 +203,6 @@ namespace test {
        *        - in the default case, nodes are linearly chained
        *        - hash is also computed by chaining with predecessor hash
        *        - hash computations can be reproduced
-       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_Topology()
@@ -256,7 +263,6 @@ namespace test {
        *      - with additional shuffling, the decisions are more random
        *      - statistics can be computed to characterise the graph
        *      - the graph can be visualised as _Graphviz diagram_
-       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
       showcase_Expansion()
@@ -326,7 +332,6 @@ namespace test {
        *        all chains to be joined eventually
        *      - expansion and reduction can counterbalance each other,
        *        leading to localised »packages« of branchings and reductions
-       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
       showcase_Reduction()
@@ -396,7 +401,6 @@ namespace test {
        *      - the seed rule allows to start new chains in the middle of the graph
        *      - combined with with reduction, the emerging structure resembles
        *        the processing pattern encountered with real media calculations
-       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
       showcase_SeedChains()
@@ -454,7 +458,6 @@ namespace test {
        *      - this can lead to fragmentation into several sub-graphs
        *      - these can be completely segregated, or appear interwoven
        *      - equilibrium of seeding and pruning can be established
-       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
       showcase_PruneChains()
@@ -595,7 +598,6 @@ namespace test {
        *       parameter variations leading into repeated re-establishment
        *       of some node constellation. When this is achieved, additional
        *       shuffling can be introduced to uncover further potential.
-       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
       showcase_StablePattern()
@@ -853,7 +855,6 @@ namespace test {
       
       
       /** @test verify calibration of a configurable computational load.
-       * @todo WIP 12/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_computation_load()
@@ -921,7 +922,6 @@ namespace test {
        *         that the last node is an exit node. The following code traverses
        *         all nodes grouped into 4-node clusters to verify this regular
        *         pattern and the calculated hashes.
-       * @todo WIP 11/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_reseed_recalculate()
@@ -1024,13 +1024,62 @@ namespace test {
       
       
       
-      /** @test TODO compute synchronous execution time for reference
-       * @todo WIP 12/23 🔁 define ⟶ 🔁 implement
+      /** @test compute synchronous execution time for reference
        */
       void
       verify_runtime_reference()
         {
+          double t1 =
+            TestChainLoad{64}
+               .configureShape_short_segments3_interleaved()
+               .buildToplolgy()
+               .calcRuntimeReference();
           
+          double t2 =
+            TestChainLoad{64}
+               .configureShape_short_segments3_interleaved()
+               .buildToplolgy()
+               .calcRuntimeReference(1ms);
+          
+          double t3 =
+            TestChainLoad{256}
+               .configureShape_short_segments3_interleaved()
+               .buildToplolgy()
+               .calcRuntimeReference();
+          
+          auto isWithin10Percent = [](double t, double r)
+                                    {
+                                      auto delta = abs (1.0 - t/r);
+                                      return delta < 0.1;
+                                    };
+          
+          // the test-graph has 64 Nodes,
+          // each using the default load of 100µs
+          CHECK (isWithin10Percent(t1, 6400));   // thus overall we should be close to 6.4ms
+          CHECK (isWithin10Percent(t2, 10*t1));  // and the 10-fold load should yield 10-times
+          CHECK (isWithin10Percent(t3,  4*t1));  // using 4 times as much nodes (64->256)
+          
+          // the time measurement uses a performance
+          // which clears, re-seeds and calculates the complete graph
+          auto graph =
+            TestChainLoad{64}
+               .configureShape_short_segments3_interleaved()
+               .buildToplolgy();
+          
+          CHECK (graph.getHash() == 0xD2F292D864CF8086);
+          
+          graph.clearNodeHashes();
+          CHECK (graph.getHash() == 0);
+          
+          // this is used by the timing benchmark
+          graph.performGraphSynchronously();
+          CHECK (graph.getHash() == 0xD2F292D864CF8086);
+          
+          graph.clearNodeHashes();
+          CHECK (graph.getHash() == 0);
+          
+          graph.calcRuntimeReference();
+          CHECK (graph.getHash() == 0xD2F292D864CF8086);
         }
       
       
@@ -1045,7 +1094,6 @@ namespace test {
        *        if all nodes are processed and all dependency connections
        *        properly reported through the callback-λ, then calculating
        *        this clone network should reproduce the original hash.
-       * @todo WIP 12/23 ✔ define ⟶ ✔ implement
        */
       void
       verify_scheduling_setup()

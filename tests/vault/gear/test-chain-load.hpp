@@ -58,7 +58,7 @@
  ** - reductionRule: controls joining of the graph into a combining successor node
  ** - seedingRule: controls injection of new start nodes in the middle of the graph
  ** - pruningRule: controls insertion of exit nodes to cut-off some chain immediately
- ** - weightRule: controls assignment of a Node::weight to command the ComputationalLoad 
+ ** - weightRule: controls assignment of a Node::weight to command the ComputationalLoad
  ** 
  ** ## Usage
  ** A TestChainLoad instance is created with predetermined maximum fan factor and a fixed
@@ -66,7 +66,7 @@
  ** control functions can then be configured. The [topology generation](\ref TestChainLoad::buildTopology)
  ** then traverses the nodes, starting with the seed value from the root node, and establishes
  ** the complete node connectivity. After this priming, the expected result hash should be
- ** [retrieved](\ref TestChainLoad::getHash). The node structure can than be traversed or
+ ** [retrieved](\ref TestChainLoad::getHash). The node structure can then be traversed or
  ** [scheduled as Render Jobs](\ref TestChainLoad::scheduleJobs).
  ** 
  ** ## Observation tools
@@ -75,6 +75,10 @@
  ** and showing predecessor -> successor connectivity. Seed nodes are distinguished by
  ** circular shape.
  ** 
+ ** The complete graph can be [performed synchronously](\ref TestChainLoad::performGraphSynchronously),
+ ** allowing to watch a [baseline run-time](\ref TestChainLoad::calcRuntimeReference) when execution
+ ** all nodes consecutively, using the configured load but without any time gaps. The run time
+ ** in µs can be compared to the timings observed when performing the graph through the Scheduler.
  ** Moreover, Statistics can be computed over the generated graph, allowing to draw some
  ** conclusions regarding node distribution and connectivity.
  ** 
@@ -157,6 +161,7 @@ namespace test {
     const auto SAFETY_TIMEOUT = 5s;                     ///< maximum time limit for test run, abort if exceeded
     const auto STANDARD_DEADLINE = 10ms;                ///< deadline to use for each individual computation job
     const size_t DEFAULT_CHUNKSIZE = 64;                ///< number of computation jobs to prepare in each planning round
+    const size_t GRAPH_BENCHMARK_RUNS = 5;              ///< repetition count for reference calculation of a complete node graph
     const size_t LOAD_BENCHMARK_RUNS = 500;             ///< repetition count for calibration benchmark for ComputationalLoad
     const double LOAD_SPEED_BASELINE = 100;             ///< initial assumption for calculation speed (without calibration)
     const microseconds LOAD_DEFAULT_TIME = 100us;       ///< default time delay produced by ComputationalLoad at `Node.weight==1`
@@ -522,6 +527,11 @@ namespace test {
                               {
                                 return rule(n);
                               };
+          auto calcNode = [&](Node* n)
+                              {
+                                n->calculate();
+                                n->weight = apply(weightRule_,n);
+                              };
           
           // visit all further nodes and establish links
           while (moreNodes())
@@ -533,8 +543,7 @@ namespace test {
               REQUIRE (spaceLeft());
               for (Node* o : *curr)
                 { // follow-up on all Nodes in current level...
-                  o->calculate();
-                  o->weight = apply (weightRule_,o);
+                  calcNode(o);
                   if (apply (pruningRule_,o))
                     continue; // discontinue
                   size_t toSeed   = apply (seedingRule_, o);
@@ -578,10 +587,10 @@ namespace test {
           node->level = level;
           for (Node* o : *next)
             {
-              o->calculate();
+              calcNode(o);
               node->addPred(o);
             }
-          node->calculate();
+          calcNode(node);
           //
           return move(*this);
         }
@@ -683,6 +692,43 @@ namespace test {
         {
           cout << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───\n"
                << generateTopologyDOT()
+               << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───"
+               << endl;
+          return move(*this);
+        }
+      
+      
+      /**
+       * Conduct a number of benchmark runs over processing the Graph synchronously.
+       * @return runtime time in microseconds
+       * @remark can be used as reference point to judge Scheduler performance;
+       *       - additional parallelisation could be exploited: ∅w / floor(∅w/concurrency)
+       *       - but the Scheduler also adds overhead and dispatch leeway
+       */
+      double
+      calcRuntimeReference(microseconds timeBase =LOAD_DEFAULT_TIME
+                          ,size_t       sizeBase =0
+                          ,size_t       repeatCnt=GRAPH_BENCHMARK_RUNS
+                          )
+        {
+          return microBenchmark ([&]{ performGraphSynchronously(timeBase,sizeBase); }
+                                ,repeatCnt)
+                              .first; // ∅ runtime in µs
+        }
+      
+      /** Emulate complete graph processing in a single threaded loop. */
+      TestChainLoad&& performGraphSynchronously(microseconds timeBase =LOAD_DEFAULT_TIME
+                                               ,size_t       sizeBase =0);
+      
+      TestChainLoad&&
+      printRuntimeReference(microseconds timeBase =LOAD_DEFAULT_TIME
+                           ,size_t       sizeBase =0
+                           ,size_t       repeatCnt=GRAPH_BENCHMARK_RUNS
+                           )
+        {
+          cout << _Fmt{"runtime ∅(%d) = %6.2fms   (single-threaded)\n"}
+                      % repeatCnt
+                      % (1e-3 * calcRuntimeReference(timeBase,sizeBase,repeatCnt))
                << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───"
                << endl;
           return move(*this);
@@ -1119,6 +1165,7 @@ namespace test {
    *   variable and can thus be reused.
    */
   class ComputationalLoad
+    : util::MoveAssign
     {
       using Sink = volatile size_t;
       
@@ -1244,6 +1291,42 @@ namespace test {
         }
     };
   
+  
+  /**
+   * @param timeBase time delay produced by ComputationalLoad at `Node.weight==1`;
+   *                 can be set to zero to disable the synthetic processing load on nodes
+   * @param sizeBase allocation base size used; also causes switch to memory-access based load
+   * @see TestChainLoad::calcRuntimeReference() for a benchmark based on this processing
+   */
+  template<size_t maxFan>
+  TestChainLoad<maxFan>&&
+  TestChainLoad<maxFan>::performGraphSynchronously (microseconds timeBase, size_t sizeBase)
+  {
+    ComputationalLoad compuLoad;
+    compuLoad.timeBase = timeBase;
+    if (not sizeBase)
+      {
+        compuLoad.sizeBase = LOAD_DEFAULT_MEM_SIZE;
+        compuLoad.useAllocation =false;
+      }
+    else
+      {
+        compuLoad.sizeBase = sizeBase;
+        compuLoad.useAllocation =true;
+      }
+    compuLoad.maybeCalibrate();
+    
+    size_t seed = this->getSeed();
+    for (Node& n : allNodes())
+      {
+        n.hash = isStart(n)? seed : 0;
+        if (n.weight)
+          compuLoad.invoke (n.weight);
+        n.calculate();
+      }
+    return move(*this);
+  }
+
   
   
   
@@ -1725,7 +1808,7 @@ cout<<"ANCHOR="+relT(ank)+" preRoll="+util::toString(_raw(_uTicks(preRoll_)))<<e
    */
   template<size_t maxFan>
   typename TestChainLoad<maxFan>::ScheduleCtx
-  TestChainLoad<maxFan>::setupSchedule(Scheduler& scheduler)
+  TestChainLoad<maxFan>::setupSchedule (Scheduler& scheduler)
   {
     clearNodeHashes();
     return ScheduleCtx{*this, scheduler};
