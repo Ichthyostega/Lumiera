@@ -84,7 +84,7 @@ namespace test {
         {
            simpleUsage();
            verify_StartStop();
-//           verify_LoadFactor();  // broken, presumably by lates adjustments to control logic
+           verify_LoadFactor();
            invokeWorkFunction();
            scheduleRenderJob();
            walkingDeadline();
