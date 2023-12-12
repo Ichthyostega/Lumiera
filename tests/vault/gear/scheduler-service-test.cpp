@@ -552,21 +552,27 @@ namespace test {
       processSchedule()
         {
           MARK_TEST_FUN
+          TestChainLoad testLoad{64};
           
-          auto testLoad =
-            TestChainLoad{64}
-               .configureShape_short_segments3_interleaved()
-               .buildToplolgy();
+//             .configureShape_short_segments3_interleaved()
+          testLoad.expansionRule(testLoad.rule().probability(0.27).maxVal(4))
+                  .reductionRule(testLoad.rule().probability(0.44).maxVal(6).minVal(2))
+                  .weightRule   (testLoad.rule().probability(0.66).maxVal(3))
+                  .setSeed(55)
+                  .buildToplolgy();
           
           // while building calculation plan graph
           // node hashes were computed, observing dependencies
           size_t expectedHash = testLoad.getHash();
           
-          double referenceTime = testLoad.calcRuntimeReference();
-SHOW_EXPR(referenceTime)          
+          testLoad.performGraphSynchronously();
+          CHECK (testLoad.getHash() == expectedHash);
+          
           testLoad.printTopologyDOT()
                   .printTopologyStatistics()
                   ;
+          double referenceTime = testLoad.calcRuntimeReference();
+SHOW_EXPR(referenceTime)          
           
           BlockFlowAlloc bFlow;
           EngineObserver watch;

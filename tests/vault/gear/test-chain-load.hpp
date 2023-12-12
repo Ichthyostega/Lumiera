@@ -862,8 +862,9 @@ namespace test {
   const StatKey STAT_JOIN{5,"join"};    ///< joining node
   const StatKey STAT_LINK{6,"link"};    ///< 1:1 linking node
   const StatKey STAT_KNOT{7,"knot"};    ///< knot (joins and forks)
+  const StatKey STAT_WGHT{8,"wght"};    ///< node weight
   
-  const std::array KEYS = {STAT_NODE,STAT_SEED,STAT_EXIT,STAT_INNR,STAT_FORK,STAT_JOIN,STAT_LINK,STAT_KNOT};
+  const std::array KEYS = {STAT_NODE,STAT_SEED,STAT_EXIT,STAT_INNR,STAT_FORK,STAT_JOIN,STAT_LINK,STAT_KNOT,STAT_WGHT};
   const uint CAT = KEYS.size();
   const uint IDX_SEED = 1; // index of STAT_SEED
   
@@ -881,6 +882,7 @@ namespace test {
         , [](NOD& n){ return isJoin(n); }
         , [](NOD& n){ return isLink(n); }
         , [](NOD& n){ return isKnot(n); }
+        , [](NOD& n){ return n.weight;  }
         };
     }
   }
