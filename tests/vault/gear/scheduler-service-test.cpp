@@ -435,21 +435,21 @@ namespace test {
           post (start+t1ms);                                                // But another schedule is placed 1ms behind
           sleep_for (100us);                                                // wait for "soon" to pass...
           pullWork();
-          CHECK (wasInvoked(start));                                       // Result: the first invocation happened immediately
+          CHECK (wasInvoked(start));                                        // Result: the first invocation happened immediately
           CHECK (slip_us  < 300);
-          CHECK (delay_us > 900);                                          // yet this thread was afterwards kept in sleep to await the next task;
-          CHECK (activity::PASS == res);                                   // returns instruction to re-invoke immediately
-          CHECK (not scheduler.empty());                                   // since there is still work in the queue
+          CHECK (delay_us > 900);                                           // yet this thread was afterwards kept in sleep to await the next task;
+          CHECK (activity::PASS == res);                                    // returns instruction to re-invoke immediately
+          CHECK (not scheduler.empty());                                    // since there is still work in the queue
           
-          start += t1ms;                                                   // (just re-adjust the reference point to calculate slip_us)
-          pullWork();                                                      // re-invoke immediately as instructed
-          CHECK (wasInvoked(start));                                       // Result: also the next Activity has been dispatched
-          CHECK (slip_us < 400);                                           // not much slip
-          CHECK (delay_us < 20200);                                        // ...and the post-delay is used to re-shuffle the sleep cycle as usual
-          CHECK (activity::PASS == res);                                   // since queue is empty, we will call back once...
+          start += t1ms;                                                    // (just re-adjust the reference point to calculate slip_us)
+          pullWork();                                                       // re-invoke immediately as instructed
+          CHECK (wasInvoked(start));                                        // Result: also the next Activity has been dispatched
+          CHECK (slip_us < 400);                                            // not much slip
+          CHECK (delay_us < 20200);                                         // ...and the post-delay is used to re-shuffle the sleep cycle as usual
+          CHECK (activity::PASS == res);                                    // since queue is empty, we will call back once...
           CHECK (scheduler.empty());
           pullWork();
-          CHECK (activity::WAIT == res);                                   // and then go to sleep.
+          CHECK (activity::WAIT == res);                                    // and then go to sleep.
           
           
           cout << "already tended-next => re-target capacity"<<endl;
@@ -552,7 +552,31 @@ namespace test {
       processSchedule()
         {
           MARK_TEST_FUN
-          UNIMPLEMENTED ("walking Deadline");
+          
+          auto testLoad =
+            TestChainLoad{64}
+               .configureShape_short_segments3_interleaved()
+               .buildToplolgy();
+          
+          // while building calculation plan graph
+          // node hashes were computed, observing dependencies
+          size_t expectedHash = testLoad.getHash();
+          
+          double referenceTime = testLoad.calcRuntimeReference();
+SHOW_EXPR(referenceTime)          
+          testLoad.printTopologyDOT()
+                  .printTopologyStatistics()
+                  ;
+          
+          BlockFlowAlloc bFlow;
+          EngineObserver watch;
+          Scheduler scheduler{bFlow, watch};
+          
+          testLoad.setupSchedule(scheduler)
+                  .launch_and_wait();
+          
+          // invocation through Scheduler has reproduced all node hashes
+          CHECK (testLoad.getHash() == expectedHash);
         }
     };
   
