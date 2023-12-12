@@ -79,6 +79,10 @@ namespace gear {
   using std::this_thread::sleep_for;
   
   
+  namespace {
+    const double MAX_OVERPROVISIONING = 3.0;      ///< safety guard to prevent catastrophic overprovisioning
+  }
+  
   namespace work { ///< Details of WorkForce (worker pool) implementation
     
     using SIG_WorkFun   = activity::Proc(void);   ///< config should define a callable with this signature to perform work
@@ -227,8 +231,7 @@ namespace gear {
       activate (double degree =1.0)
         {
           size_t scale{setup_.COMPUTATION_CAPACITY};
-          scale *= degree;
-          scale = util::max (scale, 1u);
+          scale = size_t(util::limited (0.0, degree*scale, scale*MAX_OVERPROVISIONING));
           for (uint i = workers_.size(); i < scale; ++i)
             workers_.emplace_back (setup_);
         }
