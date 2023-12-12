@@ -1292,6 +1292,24 @@ namespace test {
     };
   
   
+  /** a »throw-away« render-job */
+  inline SpecialJobFun
+  onetimeCrunch (milliseconds runTime)
+  {   // ensure calibration prior to use
+    ComputationalLoad().maybeCalibrate();
+    //
+    return SpecialJobFun{
+            [runTime](JobParameter) -> void
+                        {
+                          ComputationalLoad crunch;
+                          crunch.timeBase = runTime;
+                          crunch.invoke();
+                        }};
+  }
+  
+  
+  
+  
   /**
    * @param timeBase time delay produced by ComputationalLoad at `Node.weight==1`;
    *                 can be set to zero to disable the synthetic processing load on nodes

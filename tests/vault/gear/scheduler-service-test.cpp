@@ -26,6 +26,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "test-chain-load.hpp"
 #include "activity-detector.hpp"
 #include "vault/gear/scheduler.hpp"
 #include "lib/time/timevalue.hpp"
@@ -51,7 +52,6 @@ namespace test {
 //  using lib::time::FrameRate;
 //  using lib::time::Offset;
   using util::max;
-  using util::isnil;
   using util::_Fmt;
   using lib::time::Time;
   using std::this_thread::sleep_for;
@@ -87,12 +87,12 @@ namespace test {
            verify_LoadFactor();
            invokeWorkFunction();
            scheduleRenderJob();
-           walkingDeadline();
+           processSchedule();
         }
       
       
-      /** @test TODO demonstrate a simple usage scenario
-       * @todo WIP 10/23 ✔ define ⟶ 🔁 implement
+      /** @test demonstrate a simple usage scenario
+       * @todo WIP 12/23 ✔ define ⟶ ✔ implement
        */
       void
       simpleUsage()
@@ -100,7 +100,27 @@ namespace test {
           BlockFlowAlloc bFlow;
           EngineObserver watch;
           Scheduler scheduler{bFlow, watch};
-        }
+          CHECK (scheduler.empty());
+          
+          auto task = onetimeCrunch(4ms);
+          CHECK (1 == task.remainingInvocations());
+          
+          Job job{ task
+                 , InvocationInstanceID()
+                 , Time::ANYTIME
+                 };
+          scheduler.defineSchedule(job)
+                   .startOffset(6ms)
+                   .lifeWindow(2ms)
+                   .post();
+          CHECK (not scheduler.empty());
+          
+          sleep_for (3ms); // not invoked yet
+          CHECK (1 == task.remainingInvocations());
+          
+          sleep_for (20ms);
+          CHECK (0 == task.remainingInvocations());
+        }             // task has been invoked
       
       
       /**
@@ -110,7 +130,7 @@ namespace test {
        *           this kind of »implementation backdoor« access; the function
        *           defined there does essentially the same than Scheduler::postChain()
        */
-      void
+      static void
       postNewTask (Scheduler& scheduler, Activity& chain, Time start)
         {
           ActivationEvent actEvent{chain, start, start + Time{50,0}};  // add dummy deadline +50ms
@@ -128,24 +148,24 @@ namespace test {
           BlockFlowAlloc bFlow;
           EngineObserver watch;
           Scheduler scheduler{bFlow, watch};
-          CHECK (isnil (scheduler));
+          CHECK (scheduler.empty());
 
           Activity dummy{Activity::FEED};
           auto postIt = [&] { postNewTask (scheduler, dummy, RealClock::now()+t200us); };
           
           scheduler.ignite();
-          CHECK (not isnil (scheduler));// repeated »tick« task enlisted....
+          CHECK (not scheduler.empty());// repeated »tick« task enlisted....
           
           postIt();
-          CHECK (not isnil (scheduler));
+          CHECK (not scheduler.empty());
           
           scheduler.terminateProcessing();
-          CHECK (isnil (scheduler));
+          CHECK (scheduler.empty());
           
           postIt();
           postIt();
           scheduler.ignite();
-          CHECK (not isnil (scheduler));
+          CHECK (not scheduler.empty());
           //... and just walk away => scheduler unwinds cleanly from destructor
         }//     Note: BlockFlow and WorkForce unwinding is covered in dedicated tests
       
@@ -174,7 +194,7 @@ namespace test {
           BlockFlowAlloc bFlow;
           EngineObserver watch;
           Scheduler scheduler{bFlow, watch};
-          CHECK (isnil (scheduler));
+          CHECK (scheduler.empty());
           
           // use a single FEED as content
           Activity dummy{Activity::FEED};
@@ -196,7 +216,7 @@ namespace test {
           createLoad (Offset{Time{15,0}}, fatPackage);
           
           scheduler.ignite();
-          cout << "Timing: start-up required..."<<offset()<<"µs"<<endl;
+          cout << "Timing : start-up required.."<<offset()<<" µs"<<endl;
           
           // now watch change of load and look out for two peaks....
           uint   peak1_s  =0;
@@ -209,7 +229,7 @@ namespace test {
           uint phase=0;
           _Fmt row{"%6d | Load: %5.3f  Head:%5d Lag:%6d\n"};
           
-          while (not isnil (scheduler)) // should fall empty at end
+          while (not scheduler.empty()) // should fall empty at end
             {
               sleep_for(50us);
               double load = scheduler.getLoadIndicator();
@@ -470,7 +490,6 @@ namespace test {
       void
       scheduleRenderJob()
         {
-          MARK_TEST_FUN
           BlockFlowAlloc bFlow;
           EngineObserver watch;
           Scheduler scheduler{bFlow, watch};
@@ -526,12 +545,13 @@ namespace test {
       
       
       
-      /** @test TODO
-       * @todo WIP 10/23 🔁 define ⟶ implement
+      /** @test TODO schedule and process a complete work load
+       * @todo WIP 12/23 🔁 define ⟶ implement
        */
       void
-      walkingDeadline()
+      processSchedule()
         {
+          MARK_TEST_FUN
           UNIMPLEMENTED ("walking Deadline");
         }
     };

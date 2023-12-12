@@ -175,14 +175,20 @@ namespace gear {
       explicit
       operator bool()  const
         {
-          return _Handle::isValid()
-             and 0 < _Handle::impl().remainingInvocations();
+          return 0 < remainingInvocations();
         }
       
       operator JobClosure&()  const
         {
           REQUIRE (operator bool());
           return _Handle::impl();
+        }
+      
+      uint
+      remainingInvocations()  const
+        {
+          return _Handle::isValid()? _Handle::impl().remainingInvocations()
+                                   : 0;
         }
       
       long
