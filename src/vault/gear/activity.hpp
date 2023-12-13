@@ -526,13 +526,6 @@ namespace gear {
       
       template<class EXE>
       activity::Proc
-      dispatchNotify (Time now, EXE& executionCtx)
-        {
-          return executionCtx.post (now, this, executionCtx);
-        }
-      
-      template<class EXE>
-      activity::Proc
       notifyTarget (Time now, EXE& executionCtx)
         {
           REQUIRE (NOTIFY == verb_);
@@ -649,7 +642,7 @@ namespace gear {
       case WORKSTOP:
         return signalStop (now, executionCtx);
       case NOTIFY:
-        return dispatchNotify (now, executionCtx);
+        return dispatch (now, executionCtx); //▷ special processing for the Notification
       case GATE:
         return checkGate (now, executionCtx);
       case POST:
@@ -678,9 +671,7 @@ namespace gear {
    * @note special twist for the `NOTIFY`-Activity: it is not _activated_
    *       itself, rather the #notify operation is invoked on its target argument;
    *       this is necessary since a notification passes control-flow outside
-   *       the regular linear `next`-chain; when a `NOTIFY` is _activated,_
-   *       it will `post()` itself to acquire the `GroomingToken` and then
-   *       invoke this dispatch() function to pass the notification
+   *       the regular linear `next`-chain.
    */
   template<class EXE>
   activity::Proc
@@ -690,12 +681,7 @@ namespace gear {
     
     switch (verb_) {
       case NOTIFY:
-        {
-          auto res = notifyTarget (now, executionCtx);
-          if (activity::PASS == res)
-            res=activity::SKIP;  // prevent activation of NOTIFY.next
-          return res;
-        }
+        return notifyTarget (now, executionCtx);
       case POST:
       case FEED:      // signal just to proceed with next...
         return activity::PASS;
@@ -711,6 +697,9 @@ namespace gear {
    * a notification is passed to a `GATE`-Activity, the embedded counter is
    * decremented; after all prerequisites are „checked off“ this way, the
    * Activity-chain behind the Gate is activated.
+   * @note this function is invoked from the context of the source, and
+   *       thus any follow-up actions beyond that scope are re-POSTed,
+   *       after possibly performing the GATE-check.
    */
   template<class EXE>
   activity::Proc

@@ -552,6 +552,7 @@ namespace test {
       processSchedule()
         {
           MARK_TEST_FUN
+          auto LOAD_BASE = 200us;
           TestChainLoad testLoad{64};
           
 //             .configureShape_short_segments3_interleaved()
@@ -565,13 +566,13 @@ namespace test {
           // node hashes were computed, observing dependencies
           size_t expectedHash = testLoad.getHash();
           
-          testLoad.performGraphSynchronously();
+          testLoad.performGraphSynchronously(LOAD_BASE);
           CHECK (testLoad.getHash() == expectedHash);
           
           testLoad.printTopologyDOT()
                   .printTopologyStatistics()
                   ;
-          double referenceTime = testLoad.calcRuntimeReference();
+          double referenceTime = testLoad.calcRuntimeReference(LOAD_BASE);
 SHOW_EXPR(referenceTime)          
           
           BlockFlowAlloc bFlow;
@@ -579,6 +580,7 @@ SHOW_EXPR(referenceTime)
           Scheduler scheduler{bFlow, watch};
           
           testLoad.setupSchedule(scheduler)
+                  .withLoadTimeBase(LOAD_BASE)
                   .launch_and_wait();
           
           // invocation through Scheduler has reproduced all node hashes

@@ -1658,12 +1658,14 @@ namespace test {
       withLevelDuration (microseconds plannedTime_per_level)
         {
           levelSpeed_ = FrameRate{1, Duration{_uTicks(plannedTime_per_level)}};
+          return move(*this);
         }
       
       ScheduleCtx&&
       withLoadFactor (uint factor_on_levelSpeed)
         {
           blockLoadFactor_ = factor_on_levelSpeed;
+          return move(*this);
         }
       
       ScheduleCtx&&
@@ -1671,36 +1673,42 @@ namespace test {
         {
           chunkSize_ = nodes_per_chunk;
           preRoll_ = guessPlanningPreroll (chunkSize_);
+          return move(*this);
         }
       
       ScheduleCtx&&
       withPreRoll (microseconds planning_headstart)
         {
           preRoll_ = planning_headstart;
+          return move(*this);
         }
       
       ScheduleCtx&&
       withJobDeadline (microseconds deadline_after_start)
         {
           deadline_ = deadline_after_start;
+          return move(*this);
         }
       
       ScheduleCtx&&
       withManifestation (ManifestationID manID)
         {
           manID_ = manID;
+          return move(*this);
         }
       
       ScheduleCtx&&
       withLoadTimeBase (microseconds timeBase =LOAD_DEFAULT_TIME)
         {
           compuLoad_->timeBase = timeBase;
+          return move(*this);
         }
       
       ScheduleCtx&&
       deactivateLoad()
         {
           compuLoad_->timeBase = 0us;
+          return move(*this);
         }
       
       ScheduleCtx&&
@@ -1716,6 +1724,7 @@ namespace test {
               compuLoad_->sizeBase = sizeBase;
               compuLoad_->useAllocation =true;
             }
+          return move(*this);
         }
       
     private:
