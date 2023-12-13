@@ -125,7 +125,7 @@ namespace test {
           Time tt{5,5};
           post.activate (tt, detector.executionCtx);
           
-          CHECK (detector.verifyInvocation("CTX-post").arg("11.000", "Act(POST", "≺test::CTX≻"));
+          CHECK (detector.verifyInvocation("CTX-post").arg("11.000","22.000", "Act(POST", "≺test::CTX≻"));
         }
       
       
@@ -157,8 +157,13 @@ namespace test {
       
       /** @test behaviour of Activity::NOTIFY when _activated_
        *        - notification is dispatched as special message to an indicated target Activity
-       *        - when activated, a `NOTIFY`-Activity _posts itself_ through the Execution Context hook
-       *        - this way, further processing will happen in management mode (single threaded)
+       *        - when activated, a `NOTIFY`-Activity _dispatches_ into the Activity::notify()
+       *          of the target Activity
+       *        - what happens then depends on the target
+       *        - usually the target is a `GATE` (see below), but here for sake of simplicity,
+       *          a `TICK`-Activity is used; on notification, this will _post_ itself as new task,
+       *          with a delay retrieved from context (here configured to be +1sec), and without
+       *          specifying a deadline (thus a deadline from the context will be used).
        */
       void
       verifyActivity_Notify_activate()
@@ -170,7 +175,7 @@ namespace test {
           Time tt{111,11};
           notify.activate (tt, detector.executionCtx);
           
-          CHECK (detector.verifyInvocation("CTX-post").arg("11.111", "Act(NOTIFY", "≺test::CTX≻"));
+          CHECK (detector.verifyInvocation("CTX-post").arg("12.111", Time::NEVER, "Act(TICK", "≺test::CTX≻"));
         }
       
       
@@ -286,20 +291,21 @@ namespace test {
       void
       verifyActivity_Gate_opened()
         {
+          Time tt{333,33};
+          Time td{555,55};
+          
           Activity chain;
-          Activity gate{1};
+          Activity gate{1,td};
           gate.next = &chain;
           // Conditionals in the gate block invocations
           CHECK (gate.data_.condition.isHold());
           CHECK (gate.data_.condition.rest == 1);
-          CHECK (gate.data_.condition.dead == Time::NEVER);
+          CHECK (gate.data_.condition.dead == td);
           
           ActivityDetector detector;
           Activity& wiring = detector.buildGateWatcher (gate);
           
-          Time tt{333,33};
-          
-          // an attempt to activate blocks (returing SKIP, nothing else happens)
+          // an attempt to activate blocks (returning SKIP, nothing else happens)
           CHECK (activity::SKIP == wiring.activate (tt, detector.executionCtx));
           CHECK (1 == gate.data_.condition.rest); // unchanged (and locked)...
           CHECK (detector.verifyInvocation("tap-GATE").arg("33.333 ⧐ Act(GATE"));
@@ -311,7 +317,7 @@ namespace test {
           
           CHECK (detector.verifyInvocation("tap-GATE").seq(0).arg("33.333 ⧐ Act(GATE")
                          .beforeInvocation("tap-GATE").seq(1).arg("33.333 --notify-↯> Act(GATE")
-                         .beforeInvocation("CTX-post").seq(1).arg(tt, "after-GATE", "≺test::CTX≻"));
+                         .beforeInvocation("CTX-post").seq(1).arg(tt,td, "after-GATE", "≺test::CTX≻"));
           CHECK (gate.data_.condition.dead == Time::MIN);
           
           detector.incrementSeq();
@@ -392,8 +398,7 @@ namespace test {
        *        - use a directly wired, arbitrary chain
        *        - dispatch will activate all Activities
        *        - however, when the Gate is configured to be blocked
-       *          (waiting on prerequisites), then the rest of the chain is not activated,
-       *          only a re-check of the Gate is scheduled for later (1.011 -> 2.011)
+       *          (waiting on prerequisites), then the rest of the chain is not activated.
        *        - the dispatch function also handles the notifications;
        *          when a notification towards the Gate is dispatched, the Gate is
        *          decremented and thereby opened; activation of the rest of the chain
@@ -403,8 +408,9 @@ namespace test {
       dispatchChain()
         {
           Time tt{11,1};
+          Time td{22,2};
           Activity tick;
-          Activity gate{0};
+          Activity gate{0,td};
           gate.next = &tick;
           Activity post{tt, &gate};
           // so now we have POST ⟶ GATE ⟶ TICK;
@@ -433,7 +439,7 @@ namespace test {
           
           CHECK (activity::PASS == ActivityLang::dispatchChain (&notify, detector.executionCtx));       // dispatch a notification (case/seq == 2)
           CHECK (detector.verifyInvocation("Gate")    .seq(2).arg("1.011 --notify-↯> Act(GATE")         // ...notification dispatched towards the Gate
-                         .beforeInvocation("CTX-post").seq(2).arg("1.011","after-Gate","≺test::CTX≻")); // ...this opened the Gate and posted/requested activation of the rest of the chain
+                         .beforeInvocation("CTX-post").seq(2).arg("1.011","2.022","after-Gate","≺test::CTX≻")); // ...this opened the Gate and posted follow-up chain
           CHECK (detector.ensureNoInvocation("after-Gate").seq(2)                                       // verify that activation was not passed out directly
                          .afterInvocation("CTX-post").seq(2));
           CHECK (detector.ensureNoInvocation("CTX-tick").seq(2)                                         // verify also the λ-tick was not invoked directly
@@ -530,7 +536,7 @@ namespace test {
           
           // rig the λ-post to forward dispatch as expected in real usage
           detector.executionCtx.post.implementedAs(
-            [&](Time when, Activity* postedAct, auto& ctx)
+            [&](Time when, Time, Activity* postedAct, auto& ctx)
                {
                  if (when == ctx.getSchedTime())  // only for POST to run „right now“
                    return ActivityLang::dispatchChain (postedAct, ctx);
@@ -548,10 +554,9 @@ namespace test {
           ///// Case-2 : now activate the primary-chain
           detector.incrementSeq();
           CHECK (activity::PASS == ActivityLang::dispatchChain (&anchor, detector.executionCtx));
-          CHECK (detector.verifyInvocation("CTX-post").seq(1).arg("5.555","Act(NOTIFY","≺test::CTX≻")        // immediately at begin, the internal self-notification is posted
-                         .beforeInvocation("deBlock") .seq(1).arg("5.555 --notify-↯> Act(GATE")              // ...and then dispatched recursively via ActivityLang::dispatchChain() towards the Gate
+          CHECK (detector.verifyInvocation("deBlock") .seq(1).arg("5.555 --notify-↯> Act(GATE")              // immediately at begin, the internal self-notification is dispatched towards the Gate 
                                                              .arg("<1, until 0:00:10.000")                   // Note: at this point, the Gate-latch expects 1 notifications
-                         .beforeInvocation("CTX-post").seq(1).arg("5.555","after-theGate","≺test::CTX≻")     // ==>   the latch was decremented and the Gate OPENS, and thus post() the tail-chain
+                         .beforeInvocation("CTX-post").seq(1).arg("5.555","10.0","after-theGate","≺test::CTX≻")  //==> latch was decremented, Gate OPENS, posting the tail-chain with Deadline from Gate
                          .beforeInvocation("after-theGate")  .arg("5.555 ⧐ Act(WORKSTART")                   // ...causing the activation to pass behind the Gate
                          .beforeInvocation("CTX-work").seq(1).arg("5.555","")                                // ...through WORKSTART
                          .beforeInvocation("testJob") .seq(1).arg("7.007",12345)                             // ...then invoke the JobFunctor itself (with the nominal Time{7,7})
@@ -626,7 +631,7 @@ namespace test {
           detector.incrementSeq();
           CHECK (activity::PASS == ActivityLang::dispatchChain (&notify, detector.executionCtx));
           CHECK (detector.verifyInvocation("CTX-done").seq(1).arg("5.555", "")                               // activation of WORKSTOP via callback
-                         .beforeInvocation("CTX-post").seq(1).arg("5.555", "Act(NOTIFY", "≺test::CTX≻"));    // the following NOTIFY is posted...
+                         .beforeInvocation("CTX-post").seq(1).arg("5.555","10.0","WORKSTART","≺test::CTX≻"));// the attached chain is activated, POSTing the second Activity
         }
       
       

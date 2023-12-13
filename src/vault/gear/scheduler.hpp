@@ -505,13 +505,13 @@ namespace gear {
        *         down here as a nested sub-context.
        */
       activity::Proc
-      post (Time when, Activity* chain, ExecutionCtx& ctx)
+      post (Time when, Time dead, Activity* chain, ExecutionCtx& ctx)
         {
           REQUIRE (chain);
           ActivationEvent chainEvent = ctx.rootEvent;
           chainEvent.activity = chain;
           chainEvent.starting = _raw(chain->constrainedStart (when));
-          chainEvent.deadline = _raw(chain->constrainedDeath (chainEvent.deathTime()));
+          chainEvent.deadline = _raw(chain->constrainedDeath (dead.isRegular()? dead:chainEvent.deathTime()));
           ExecutionCtx subCtx{scheduler_, chainEvent};
           return scheduler_.layer2_.postDispatch (chainEvent, subCtx, scheduler_.layer1_);
         }

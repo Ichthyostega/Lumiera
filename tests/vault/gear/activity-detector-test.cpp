@@ -218,6 +218,7 @@ namespace test {
           activity::_verify_usable_as_ExecutionContext<decltype(detector.executionCtx)>();
           
           Time t = randTime();
+          Time td{t+Time(0,1)};
           size_t x = rand();
           Activity a;
           
@@ -232,8 +233,8 @@ namespace test {
           ctx.done (t,x);
           CHECK (detector.verifyInvocation(CTX_DONE).arg(t,x));
           
-          CHECK (activity::PASS == ctx.post (t, &a, ctx));
-          CHECK (detector.verifyInvocation(CTX_POST).arg(t,&a,ctx));
+          CHECK (activity::PASS == ctx.post (t,td, &a, ctx));
+          CHECK (detector.verifyInvocation(CTX_POST).arg(t,td,&a,ctx));
           
           CHECK (activity::PASS == ctx.tick(t));
           CHECK (detector.verifyInvocation(CTX_TICK).arg(t));
@@ -362,7 +363,7 @@ namespace test {
           ActivityDetector detector;
           
           Activity chain;
-          Activity gate{1};
+          Activity gate{1, Time{22,22}};
           gate.next = &chain;
           Activity notification{&gate};
           CHECK (gate.data_.condition.rest == 1);
@@ -373,7 +374,7 @@ namespace test {
           notification.dispatch (tt, detector.executionCtx);
           
           CHECK (detector.verifyInvocation("tap-GATE").arg("11.011 --notify-↯> Act(GATE")
-                         .beforeInvocation("CTX-post").arg("11.011", "Act(TICK", "≺test::CTX≻"));
+                         .beforeInvocation("CTX-post").arg("11.011","22.022", "Act(TICK", "≺test::CTX≻"));
           CHECK (gate.data_.condition.rest == 0);
         }
       

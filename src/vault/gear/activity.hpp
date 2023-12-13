@@ -211,7 +211,7 @@ namespace gear {
     constexpr void
     _verify_usable_as_ExecutionContext ()
     {
-      ASSERT_MEMBER_FUNCTOR (&EXE::post, Proc(Time, Activity*, EXE&));
+      ASSERT_MEMBER_FUNCTOR (&EXE::post, Proc(Time, Time, Activity*, EXE&));
       ASSERT_MEMBER_FUNCTOR (&EXE::work, void(Time, size_t));
       ASSERT_MEMBER_FUNCTOR (&EXE::done, void(Time, size_t));
       ASSERT_MEMBER_FUNCTOR (&EXE::tick, Proc(Time));
@@ -292,6 +292,14 @@ namespace gear {
           bool isHold ()          const { return rest > 0;   }
           bool isFree (Time now)  const { return not (isHold() or isDead(now)); }
           void incDependencies()        { ++rest; }
+          
+          Time
+          lockPermanently()
+            {
+              auto oldDeadline{dead};
+              dead = Time::MIN;
+              return Time{oldDeadline};
+            }
         };
       
       /** Time window to define for activation */
@@ -557,33 +565,33 @@ namespace gear {
               // maybe the Gate has been opened by this notification?
               if (data_.condition.isFree(now))
                 {//yes => activate gated chain but lock redundant invocations
-                  data_.condition.dead = Time::MIN;
-                  return postChain (now, executionCtx);
+                  Time dead = data_.condition.lockPermanently();
+                  return postChain (now,dead, executionCtx);
             }   }
           return activity::PASS;
         }
       
       template<class EXE>
       activity::Proc
-      dispatchSelf (Time when, EXE& executionCtx)
+      dispatchSelf (Time when, Time dead, EXE& executionCtx)
         {
-          return executionCtx.post (when, this, executionCtx);
+          return executionCtx.post (when, dead, this, executionCtx);
         }
       
       template<class EXE>
       activity::Proc
-      dispatchSelfDelayed (Time now, EXE& executionCtx)
+      dispatchSelfDelayed (Time now, Time dead, EXE& executionCtx)
         {
-          dispatchSelf (now + executionCtx.getWaitDelay(), executionCtx);
+          dispatchSelf (now + executionCtx.getWaitDelay(), dead, executionCtx);
           return activity::SKIP;
         }
       
       template<class EXE>
       activity::Proc
-      postChain (Time when, EXE& executionCtx)
+      postChain (Time when, Time dead, EXE& executionCtx)
         {
           REQUIRE (next);
-          return executionCtx.post (when, next, executionCtx);
+          return executionCtx.post (when, dead, next, executionCtx);
         }
       
       template<class EXE>
@@ -646,7 +654,7 @@ namespace gear {
       case GATE:
         return checkGate (now, executionCtx);
       case POST:
-        return dispatchSelf (Time{data_.timeWindow.life}, executionCtx);
+        return dispatchSelf (Time{data_.timeWindow.life},Time{data_.timeWindow.dead}, executionCtx);
       case FEED:
         return activity::PASS;
       case HOOK:
@@ -713,10 +721,10 @@ namespace gear {
       case HOOK:
         return notifyHook (now, executionCtx);
       case POST:
-      case FEED:
-        return postChain (now, executionCtx);
+      case FEED:               //   ▽▽▽▽▽ implies to use a deadline from the context
+        return postChain (now,Time::NEVER, executionCtx);
       default:
-        return dispatchSelfDelayed (now, executionCtx);
+        return dispatchSelfDelayed (now,Time::NEVER, executionCtx);
       }     // Fallback: self-re-dispatch for async execution (-> getWaitDelay())
   }
   
