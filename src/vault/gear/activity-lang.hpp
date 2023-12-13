@@ -163,12 +163,12 @@ namespace gear {
     private:
       /** @internal generate the builder / configurator term */
       activity::Term
-      setupActivityScheme (activity::Term::Template schemeKind, Job job, Time start, Time after)
+      setupActivityScheme (activity::Term::Template schemeKind, Job job, Time start, Time dead)
         {
-          return activity::Term{ mem_.until(after)
+          return activity::Term{ mem_.until(dead)
                                , schemeKind
                                , start
-                               , after
+                               , dead
                                , job
                                };
         }

@@ -195,6 +195,14 @@ namespace gear {
           return move(*this);
         }
       
+      ScheduleSpec
+      compulsory (bool truely =true)
+        {
+          isCompulsory_ = truely;
+          return move(*this);
+        }
+      
+      
       /** build Activity chain and hand-over to the Scheduler. */
       ScheduleSpec post();
       

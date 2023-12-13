@@ -120,10 +120,10 @@ namespace gear {
                       };
         
         explicit
-        Term (AllocHandle&& allocHandle, Template kind, Time start, Time after, Job job)
+        Term (AllocHandle&& allocHandle, Template kind, Time start, Time dead, Job job)
           : alloc_{move (allocHandle)}
           , invoke_{setupInvocation (job)}
-          , post_{setupPost (start,after, invoke_)}
+          , post_{setupPost (start,dead, invoke_)}
           {
             configureTemplate (kind);
           }
@@ -257,9 +257,9 @@ namespace gear {
           }
         
         Activity*
-        setupPost (Time start, Time after, Activity* followUp)
+        setupPost (Time start, Time dead, Activity* followUp)
           {
-            return & alloc_.create (start,after,followUp);
+            return & alloc_.create (start,dead,followUp);
           }
         
         void

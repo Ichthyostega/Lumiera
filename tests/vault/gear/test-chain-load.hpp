@@ -1610,10 +1610,16 @@ namespace test {
                                          ,manID_);
             }
           else
-            scheduler_.continueMetaJob (calcStartTime (levelDone+1)
-                                       ,wakeUpJob()
-                                       ,manID_);
+            scheduler_.defineSchedule(wakeUpJob())
+                      .manifestation (manID_)
+                      .startTime(calcStartTime (levelDone+1))
+                      .lifeWindow(1s)
+                      .compulsory()
+                      .post()
+                      .linkToPredecessor (schedule_[lastNodeIDX])
+                      ;               //  Setup wait-dependency on last computation
         }
+      
       
       std::future<void>
       performRun()
