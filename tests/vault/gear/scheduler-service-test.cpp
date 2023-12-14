@@ -553,7 +553,7 @@ namespace test {
         {
           MARK_TEST_FUN
           
-          auto LOAD_BASE = 1ms;
+          auto LOAD_BASE = 500us;
           TestChainLoad testLoad{64};
           
 //             .configureShape_short_segments3_interleaved()
@@ -583,6 +583,7 @@ SHOW_EXPR(referenceTime)
           testLoad.setupSchedule(scheduler)
                   .withLoadTimeBase(LOAD_BASE)
                   .withJobDeadline(100ms)
+                  .requireSchedule()
                   .launch_and_wait();
           
           // invocation through Scheduler has reproduced all node hashes

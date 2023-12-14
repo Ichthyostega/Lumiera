@@ -196,15 +196,22 @@ namespace gear {
         }
       
       ScheduleSpec
-      compulsory (bool truely =true)
+      compulsory (bool indeed =true)
         {
-          isCompulsory_ = truely;
+          isCompulsory_ = indeed;
           return move(*this);
         }
       
       
       /** build Activity chain and hand-over to the Scheduler. */
       ScheduleSpec post();
+      
+      ScheduleSpec
+      requireSchedule ()
+        {
+          term_->requireDirectActivation();
+          return move(*this);
+        }
       
       ScheduleSpec
       linkToSuccessor (ScheduleSpec& succSpec)

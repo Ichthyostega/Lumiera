@@ -1563,10 +1563,11 @@ namespace test {
 
       FrameRate  levelSpeed_{1, Duration{_uTicks(1ms)}};
       uint  blockLoadFactor_{2};
+      bool  requireSchedule_{false};
       size_t      chunkSize_{DEFAULT_CHUNKSIZE};
       TimeVar     startTime_{Time::ANYTIME};
-      microseconds  preRoll_{guessPlanningPreroll (chunkSize_)};
       microseconds deadline_{STANDARD_DEADLINE};
+      microseconds  preRoll_{guessPlanningPreroll (chunkSize_)};
       ManifestationID manID_{};
       
       std::promise<void> signalDone_{};
@@ -1587,6 +1588,8 @@ namespace test {
                                      .startTime (calcStartTime(level))
                                      .lifeWindow (deadline_)
                                      .post();
+          if (requireSchedule_)
+            schedule_[idx].requireSchedule();
         }
       
       /** Callback: define a dependency between scheduled jobs */
@@ -1613,8 +1616,7 @@ namespace test {
             scheduler_.defineSchedule(wakeUpJob())
                       .manifestation (manID_)
                       .startTime(calcStartTime (levelDone+1))
-                      .lifeWindow(1s)
-                      .compulsory()
+                      .lifeWindow(SAFETY_TIMEOUT)
                       .post()
                       .linkToPredecessor (schedule_[lastNodeIDX])
                       ;               //  Setup wait-dependency on last computation
@@ -1686,6 +1688,13 @@ namespace test {
       withPreRoll (microseconds planning_headstart)
         {
           preRoll_ = planning_headstart;
+          return move(*this);
+        }
+      
+      ScheduleCtx&&
+      requireSchedule (bool indeed =true)
+        {
+          requireSchedule_ = indeed;
           return move(*this);
         }
       
