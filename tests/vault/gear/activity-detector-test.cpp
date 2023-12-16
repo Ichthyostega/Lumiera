@@ -240,8 +240,8 @@ namespace test {
           CHECK (detector.verifyInvocation(CTX_TICK).arg(t));
           
           detector.incrementSeq();
-          ctx.tick.returning(activity::KILL);
-          CHECK (activity::KILL == ctx.tick(t));
+          ctx.tick.returning(activity::KICK);
+          CHECK (activity::KICK == ctx.tick(t));
           CHECK (detector.verifyInvocation(CTX_TICK).timeArg(t));
           
           CHECK (detector.verifyInvocation(CTX_WORK).timeArg(t)
@@ -360,21 +360,28 @@ namespace test {
       void
       watch_notification()
         {
+          Time tt{11,11};  // start time of the NOTIFY
+          Time ts{22,22};  // start time of the target-chain
+          Time td{33,33};  // deadline for the target-chain
           ActivityDetector detector;
           
           Activity chain;
-          Activity gate{1, Time{22,22}};
+          Activity gate{1, td};
           gate.next = &chain;
-          Activity notification{&gate};
+          Activity notification{&gate, ts};                                                    // note: follow-up start time `ts` injected here
           CHECK (gate.data_.condition.rest == 1);
           
           detector.insertActivationTap (notification.data_.notification.target);
           
-          Time tt{11,11};
-          notification.dispatch (tt, detector.executionCtx);
+          notification.activate (tt, detector.executionCtx);                                   // dispatch time `tt` (is actually irrelevant here)
+          // activating the NOTIFY causes it to POST its target, thereby setting the deadline from the GATE
+          CHECK (detector.verifyInvocation("CTX-post").arg("22.022","33.033", "tap-GATE", "≺test::CTX≻"));
           
-          CHECK (detector.verifyInvocation("tap-GATE").arg("11.011 --notify-↯> Act(GATE")
-                         .beforeInvocation("CTX-post").arg("11.011","22.022", "Act(TICK", "≺test::CTX≻"));
+          detector.incrementSeq();
+          // to see the effect of the instrumentation, we need to mimic the behaviour of λ-post,
+          // which is to call Activity::dispatch() on the given target
+          notification.data_.notification.target->dispatch (ts, detector.executionCtx);        // note: using `ts` for the follow-up chain
+          CHECK (detector.verifyInvocation("tap-GATE").seq(1).arg("22.022 --notify-↯> Act(GATE"));
           CHECK (gate.data_.condition.rest == 0);
         }
       

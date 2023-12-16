@@ -176,7 +176,7 @@ namespace gear {
             REQUIRE (notificationSrc.is (Activity::NOTIFY));
             setupGate();
             gate_->incDependencies();
-            notificationSrc.setNotificationTarget (gate_);
+            notificationSrc.setNotificationTarget (gate_, Time{post_->data_.timeWindow.life});
             return *this;
           }
         

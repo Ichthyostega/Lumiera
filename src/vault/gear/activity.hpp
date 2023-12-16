@@ -186,6 +186,8 @@ namespace gear {
                                 , Time now
                                 , void* executionCtx)  =0;
         
+        virtual Time getDeadline() const               =0;
+        
         virtual std::string
         diagnostic()  const
           {
@@ -204,8 +206,6 @@ namespace gear {
      * The Execution Context need to be passed to any Activity _activation;_
      * it provides the _bindings_ for functionality defined only on a conceptual
      * level, and provided by an opaque implementation (actually the Scheduler)
-     * @remark `getWaitDelay` was once used for Gate, but is now an obscure
-     *         fall-back for _other notifications_ (retained for future use)
      */
     template<class EXE>
     constexpr void
@@ -216,7 +216,6 @@ namespace gear {
       ASSERT_MEMBER_FUNCTOR (&EXE::done, void(Time, size_t));
       ASSERT_MEMBER_FUNCTOR (&EXE::tick, Proc(Time));
       
-      ASSERT_MEMBER_FUNCTOR (&EXE::getWaitDelay, Offset());
       ASSERT_MEMBER_FUNCTOR (&EXE::getSchedTime, Time());
     }
     
@@ -291,6 +290,7 @@ namespace gear {
           bool isDead (Time now)  const { return dead <= now;}
           bool isHold ()          const { return rest > 0;   }
           bool isFree (Time now)  const { return not (isHold() or isDead(now)); }
+          Time getDeadline()      const { return Time{dead}; }
           void incDependencies()        { ++rest; }
           
           Time
@@ -320,7 +320,7 @@ namespace gear {
       struct Notification
         {
           Activity* target;
-          size_t    report;
+          Instant   timing;
         };
       
       
@@ -367,10 +367,11 @@ namespace gear {
         }
       
       explicit
-      Activity (Activity* target)  noexcept
+      Activity (Activity* target, Time limitWhen =Time::ANYTIME)  noexcept
         : Activity{NOTIFY}
         {
           data_.notification.target = target;
+          data_.notification.timing = limitWhen;
         }
       
       explicit
@@ -424,13 +425,10 @@ namespace gear {
       template<class EXE>
       activity::Proc dispatch (Time now, EXE& executionCtx);
       
-      template<class EXE>
-      activity::Proc notify   (Time now, EXE& executionCtx);
-      
       
       /* === special case access and manipulation === */
       bool
-      is (Activity::Verb expectedVerb)
+      is (Activity::Verb expectedVerb)  const
         {
           return expectedVerb == this->verb_;
         }
@@ -443,10 +441,11 @@ namespace gear {
         }
       
       void
-      setNotificationTarget (Activity* target)
+      setNotificationTarget (Activity* target, Time limitStart =Time::ANYTIME)
         {
           REQUIRE (is (NOTIFY));
           data_.notification.target = target;
+          data_.notification.timing = limitStart;
         }
       
       Time
@@ -534,15 +533,6 @@ namespace gear {
       
       template<class EXE>
       activity::Proc
-      notifyTarget (Time now, EXE& executionCtx)
-        {
-          REQUIRE (NOTIFY == verb_);
-          REQUIRE (data_.notification.target);
-          return data_.notification.target->notify (now, executionCtx);
-        }
-      
-      template<class EXE>
-      activity::Proc
       checkGate (Time now, EXE&)
         {
           REQUIRE (GATE == verb_);
@@ -554,9 +544,8 @@ namespace gear {
             return activity::PASS;
         }
       
-      template<class EXE>
       activity::Proc
-      receiveGateNotification (Time now, EXE& executionCtx)
+      receiveGateNotification (Time now)
         {
           REQUIRE (GATE == verb_);
           if (data_.condition.rest > 0)
@@ -565,33 +554,39 @@ namespace gear {
               // maybe the Gate has been opened by this notification?
               if (data_.condition.isFree(now))
                 {//yes => activate gated chain but lock redundant invocations
-                  Time dead = data_.condition.lockPermanently();
-                  return postChain (now,dead, executionCtx);
+                  data_.condition.lockPermanently();
+                  return activity::PASS;
             }   }
-          return activity::PASS;
-        }
-      
-      template<class EXE>
-      activity::Proc
-      dispatchSelf (Time when, Time dead, EXE& executionCtx)
-        {
-          return executionCtx.post (when, dead, this, executionCtx);
-        }
-      
-      template<class EXE>
-      activity::Proc
-      dispatchSelfDelayed (Time now, Time dead, EXE& executionCtx)
-        {
-          dispatchSelf (now + executionCtx.getWaitDelay(), dead, executionCtx);
           return activity::SKIP;
         }
       
       template<class EXE>
       activity::Proc
-      postChain (Time when, Time dead, EXE& executionCtx)
+      postSelf (Time now, EXE& executionCtx)
         {
           REQUIRE (next);
-          return executionCtx.post (when, dead, next, executionCtx);
+          if (is(POST))
+            return executionCtx.post (Time{data_.timeWindow.life},Time{data_.timeWindow.dead}, this, executionCtx);
+          else
+            return executionCtx.post (now,Time::NEVER, this, executionCtx);
+        }
+      
+      template<class EXE>
+      activity::Proc
+      postNotify (Time now, EXE& executionCtx)
+        {
+          REQUIRE (is(NOTIFY));
+          Activity* target = data_.notification.target;
+          REQUIRE (target);
+          REQUIRE (not target->is(HOOK) or target->data_.callback.hook);
+          Time startHint = target->is(GATE) or
+                           target->is(HOOK)? Time{data_.notification.timing}
+                                           : now;
+          Time deadline  = target->is(GATE)? target->data_.condition.getDeadline()
+                         : target->is(HOOK)? target->data_.callback.hook->getDeadline()
+                                           : Time::NEVER;
+          // indirectly forward to Activity::dispatch()
+          return executionCtx.post (startHint,deadline, target, executionCtx);
         }
       
       template<class EXE>
@@ -650,11 +645,11 @@ namespace gear {
       case WORKSTOP:
         return signalStop (now, executionCtx);
       case NOTIFY:
-        return dispatch (now, executionCtx); //▷ special processing for the Notification
+        return postNotify (now, executionCtx);
+      case POST:
+        return postSelf  (now, executionCtx);
       case GATE:
         return checkGate (now, executionCtx);
-      case POST:
-        return dispatchSelf (Time{data_.timeWindow.life},Time{data_.timeWindow.dead}, executionCtx);
       case FEED:
         return activity::PASS;
       case HOOK:
@@ -673,6 +668,11 @@ namespace gear {
    * by invoking the `post`-λ on the \a executionCtx, or by _activating_
    * a `POST`-Activity. Control flow passing here has acquired the `GroomingToken`
    * and can thus assume single threaded execution until `WORKSTART`.
+   * 
+   * Notably this entrance is used to implement _gating_ to wait for prerequisites;
+   * when a notification is passed to a `GATE`-Activity, the embedded counter is
+   * decremented; after all prerequisites are „checked off“ this way, the
+   * Activity-chain behind the Gate is activated.
    * @param now the scheduler-time; assuming that a call through the `post`-λ will
    *       only be actually de-queued when scheduler-time equals the start time
    *       defined in the POST activity and passed through the `post`-λ as parameter.
@@ -688,44 +688,16 @@ namespace gear {
     activity::_verify_usable_as_ExecutionContext<EXE>();
     
     switch (verb_) {
-      case NOTIFY:
-        return notifyTarget (now, executionCtx);
       case POST:
       case FEED:      // signal just to proceed with next...
         return activity::PASS;
+      case GATE:
+        return receiveGateNotification (now);
+      case HOOK:
+        return notifyHook (now, executionCtx);
       default:
         return activate (now, executionCtx);
       }
-  }
-  
-  
-  /**
-   * Special operation to receive a message or trigger from some other Activity.
-   * Notably this is used to implement _gating_ to wait for prerequisites; when
-   * a notification is passed to a `GATE`-Activity, the embedded counter is
-   * decremented; after all prerequisites are „checked off“ this way, the
-   * Activity-chain behind the Gate is activated.
-   * @note this function is invoked from the context of the source, and
-   *       thus any follow-up actions beyond that scope are re-POSTed,
-   *       after possibly performing the GATE-check.
-   */
-  template<class EXE>
-  activity::Proc
-  Activity::notify (Time now, EXE& executionCtx)
-  {
-    activity::_verify_usable_as_ExecutionContext<EXE>();
-    
-    switch (verb_) {
-      case GATE:
-        return receiveGateNotification (now, executionCtx);
-      case HOOK:
-        return notifyHook (now, executionCtx);
-      case POST:
-      case FEED:               //   ▽▽▽▽▽ implies to use a deadline from the context
-        return postChain (now,Time::NEVER, executionCtx);
-      default:
-        return dispatchSelfDelayed (now,Time::NEVER, executionCtx);
-      }     // Fallback: self-re-dispatch for async execution (-> getWaitDelay())
   }
   
   

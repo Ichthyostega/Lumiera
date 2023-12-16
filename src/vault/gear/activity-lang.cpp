@@ -107,8 +107,8 @@ namespace gear {
              + util::toString(data_.timing.quality);
       case NOTIFY:
         return util::showAddr(data_.notification.target)
-             + ", report="
-             + util::toString(data_.notification.report);
+             + ", timing:"
+             + util::toString(Time{data_.notification.timing});
       case GATE:
         return "<"
              + util::toString(data_.condition.rest)

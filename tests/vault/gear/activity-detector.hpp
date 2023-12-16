@@ -102,6 +102,7 @@ namespace test {
   using lib::time::FSecs;
   using lib::time::Offset;
   using lib::meta::RebindVariadic;
+  using util::unConst;
   using util::isnil;
   using std::forward;
   using std::move;
@@ -119,7 +120,6 @@ namespace test {
     const string CTX_DONE{"CTX-done"};
     const string CTX_TICK{"CTX-tick"};
     
-    Offset POLL_WAIT_DELAY{FSecs(1)};
     Time SCHED_TIME_MARKER{555,5};  ///< marker value for "current scheduler time" used in tests
   }
   
@@ -355,61 +355,80 @@ namespace test {
         {
           Logger log_;
           TimeVar invoked_{Time::ANYTIME};
-
+          
+          Activity*
+          target()
+            {
+              return reinterpret_cast<Activity*> (data_.callback.arg);
+            }
+          
+          Activity const*
+          target()  const
+            {
+              return unConst(this)->target();
+            }
+          
           activity::Proc
           activation ( Activity& thisHook
                      , Time now
                      , void* executionCtx)  override
-          {
-            REQUIRE (thisHook.is (Activity::HOOK));
-            invoked_ = now;
-            if (data_.callback.arg == 0)
-              {// no adapted target; just record this activation
-                log_(util::toString(now) + " ⧐ ");
-                return activity::PASS;
-              }
-            else
-              {// forward activation to the adapted target Activity
-                Activity& target = *reinterpret_cast<Activity*> (data_.callback.arg);
-                auto ctx = *static_cast<FakeExecutionCtx*> (executionCtx);
-                log_(util::toString(now) + " ⧐ " + util::toString (target));
-                return target.activate (now, ctx);
-              }
-          }
+            {
+              REQUIRE (thisHook.is (Activity::HOOK));
+              invoked_ = now;
+              if (not target())
+                {// no adapted target; just record this activation
+                  log_(util::toString(now) + " ⧐ ");
+                  return activity::PASS;
+                }
+              else
+                {// forward activation to the adapted target Activity
+                  auto ctx = *static_cast<FakeExecutionCtx*> (executionCtx);
+                  log_(util::toString(now) + " ⧐ " + util::toString (*target()));
+                  return target()->activate (now, ctx);
+                }
+            }
           
           activity::Proc
           notify     ( Activity& thisHook
                      , Time now
                      , void* executionCtx)  override
-          {
-            REQUIRE (thisHook.is (Activity::HOOK));
-            invoked_ = now;
-            if (data_.callback.arg == 0)
-              {// no adapted target; just record this notification
-                log_(util::toString(now) + " --notify-↯• ");
-                return activity::PASS;
-              }
-            else
-              {// forward notification-dispatch to the adapted target Activity
-                Activity& target = *reinterpret_cast<Activity*> (data_.callback.arg);
-                auto ctx = *static_cast<FakeExecutionCtx*> (executionCtx);
-                log_(util::toString(now) + " --notify-↯> " + util::toString (target));
-                return target.notify (now, ctx);
-              }
-          }
+            {
+              REQUIRE (thisHook.is (Activity::HOOK));
+              invoked_ = now;
+              if (not target())
+                {// no adapted target; just record this notification
+                  log_(util::toString(now) + " --notify-↯• ");
+                  return activity::PASS;
+                }
+              else
+                {// forward notification-dispatch to the adapted target Activity
+                  auto ctx = *static_cast<FakeExecutionCtx*> (executionCtx);
+                  log_(util::toString(now) + " --notify-↯> " + util::toString (*target()));
+                  return target()->dispatch (now, ctx);
+                }
+            }
           
-        std::string
-        diagnostic()  const override
-          {
-            return "Probe("+string{log_}+")";
-          }
+          Time
+          getDeadline()  const override
+            {
+              if (target() and target()->is(Activity::GATE))
+                return target()->data_.condition.getDeadline();
+              else
+                return Time::NEVER;
+            }
+          
+          std::string
+          diagnostic()  const override
+            {
+              return "Probe("+string{log_}+")";
+            }
           
         public:
           ActivityProbe (string id, EventLog& masterLog, uint const& invocationSeqNr)
             : Activity{*this, 0}
             , log_{id, masterLog, invocationSeqNr}
             { }
-            
+          
           ActivityProbe (Activity const& subject, string id, EventLog& masterLog, uint const& invocationSeqNr)
             : Activity{*this, reinterpret_cast<size_t> (&subject)}
             , log_{id, masterLog, invocationSeqNr}
@@ -428,7 +447,7 @@ namespace test {
             {
               if (act and act->verb_ == HOOK)
                 {
-                  ActivityProbe* probe = dynamic_cast<ActivityProbe*> (act->data_.callback.hook); 
+                  ActivityProbe* probe = dynamic_cast<ActivityProbe*> (act->data_.callback.hook);
                   if (probe)
                     return probe->invoked_;
                 }
@@ -591,7 +610,6 @@ namespace test {
           _DiagnosticFun<SIG_done>::Type done;
           _DiagnosticFun<SIG_tick>::Type tick;
           
-          function<Offset()> getWaitDelay = []    { return POLL_WAIT_DELAY;  };
           function<Time()>   getSchedTime = [this]{ return SCHED_TIME_MARKER;};
           
           FakeExecutionCtx (ActivityDetector& detector)
