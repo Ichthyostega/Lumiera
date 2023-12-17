@@ -262,10 +262,18 @@ namespace gear {
           if (decideDispatchNow (event.startTime(), now))
             return ActivityLang::dispatchChain (event, executionCtx);
           else
-            if (holdsGroomingToken (thisThread()))
-              layer1.feedPrioritisation (move (event));
-            else
-              layer1.instruct (move (event));
+            instructFollowUp (event,layer1);
+          return activity::PASS;
+        }
+      
+      activity::Proc
+      instructFollowUp (ActivationEvent event
+                       ,SchedulerInvocation& layer1 )
+        {
+          if (holdsGroomingToken (thisThread()))
+            layer1.feedPrioritisation (move (event));
+          else
+            layer1.instruct (move (event));
           return activity::PASS;
         }
     };

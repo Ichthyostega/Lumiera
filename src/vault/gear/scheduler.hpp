@@ -526,8 +526,8 @@ namespace gear {
           chainEvent.activity = chain;
           chainEvent.starting = _raw(chain->constrainedStart (when));
           chainEvent.deadline = _raw(chain->constrainedDeath (dead.isRegular()? dead:chainEvent.deathTime()));
-          ExecutionCtx subCtx{scheduler_, chainEvent};
-          return scheduler_.layer2_.postDispatch (chainEvent, subCtx, scheduler_.layer1_);
+//          ExecutionCtx subCtx{scheduler_, chainEvent};
+          return scheduler_.layer2_.instructFollowUp (chainEvent, scheduler_.layer1_);
         }
       
       /**

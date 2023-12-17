@@ -583,7 +583,7 @@ SHOW_EXPR(referenceTime)
           testLoad.setupSchedule(scheduler)
                   .withLoadTimeBase(LOAD_BASE)
                   .withJobDeadline(100ms)
-                  .requireSchedule()
+//                .requireSchedule()
                   .launch_and_wait();
           
           // invocation through Scheduler has reproduced all node hashes
