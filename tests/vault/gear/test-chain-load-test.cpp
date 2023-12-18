@@ -817,12 +817,17 @@ namespace test {
           
           
           
+          // »chain_loadBursts«
           // The final example attempts to balance expansion and reduction forces.
           // Since reduction needs expanded nodes to work on, expansion always gets
           // a head start and we need to tune reduction to slightly higher strength
           // to ensure the graph width does not explode. The result is one single
           // graph with increasingly complex connections, which can expand into
-          // width limitation at places, but also collapse to a single thread
+          // width limitation at places, but also collapse to a single thread.
+          // The seed controls how fast the onset of the pattern happens.
+          // low values -> long single-chain prelude
+          // seed ≔ 55 -> prelude with 2 chains, then join, then onset at level 17
+          // high values -> massive onset quickly going into saturation
           graph.expansionRule(graph.rule().probability(0.27).maxVal(4))
                .reductionRule(graph.rule().probability(0.44).maxVal(6).minVal(2))
                .seedingRule(graph.rule())

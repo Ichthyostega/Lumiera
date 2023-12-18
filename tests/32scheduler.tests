@@ -38,7 +38,7 @@ END
 
 
 
-PLANNED "Scheduler Integration" SchedulerService_test <<END
+TEST "Scheduler Integration" SchedulerService_test <<END
 return: 0
 END
 

@@ -82,13 +82,13 @@ namespace test{
    */
   template<class FUN>
   inline double
-  benchmarkTime (FUN const& invokeTestLoop, const size_t repeatCnt =1)
+  benchmarkTime (FUN const& invokeTestCode, const size_t repeatCnt =1)
   {
     using std::chrono::steady_clock;
     using Dur = std::chrono::duration<double, CLOCK_SCALE>;
     
     auto start = steady_clock::now();
-    invokeTestLoop();
+    invokeTestCode();
     Dur duration = steady_clock::now () - start;
     return duration.count() / repeatCnt;
   };

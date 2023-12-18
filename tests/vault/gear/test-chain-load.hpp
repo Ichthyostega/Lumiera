@@ -486,6 +486,18 @@ namespace test {
           weightRule(value(1));
           return move(*this);
         }
+      
+      /** preconfigured topology: single graph with massive »load bursts«
+       * @see TestChainLoad_test::showcase_StablePattern() */
+      TestChainLoad&&
+      configureShape_chain_loadBursts()
+        {
+          expansionRule(rule().probability(0.27).maxVal(4));
+          reductionRule(rule().probability(0.44).maxVal(6).minVal(2));
+          weightRule   (rule().probability(0.66).maxVal(3));
+          setSeed(55);        // ◁─────── produces a prelude with parallel chains,
+          return move(*this);//           then fork at level 17 followed by bursts of load.
+        }
 
       
       
@@ -1651,12 +1663,17 @@ namespace test {
                                                          }}
         { }
       
-      ScheduleCtx&&
+      /** dispose one complete run of the graph into the scheduler
+       * @return observed runtime in µs
+       */
+      double
       launch_and_wait()
         {
-          awaitBlocking(
-            performRun());
-          return move(*this);
+          return benchmarkTime ([this]
+                                {
+                                  awaitBlocking(
+                                    performRun());
+                                });
         }
       
       
