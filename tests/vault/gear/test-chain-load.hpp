@@ -1575,7 +1575,6 @@ namespace test {
 
       FrameRate  levelSpeed_{1, Duration{_uTicks(1ms)}};
       uint  blockLoadFactor_{2};
-      bool  requireSchedule_{false};
       size_t      chunkSize_{DEFAULT_CHUNKSIZE};
       TimeVar     startTime_{Time::ANYTIME};
       microseconds deadline_{STANDARD_DEADLINE};
@@ -1600,8 +1599,6 @@ namespace test {
                                      .startTime (calcStartTime(level))
                                      .lifeWindow (deadline_)
                                      .post();
-          if (requireSchedule_)
-            schedule_[idx].requireSchedule();
         }
       
       /** Callback: define a dependency between scheduled jobs */
@@ -1705,13 +1702,6 @@ namespace test {
       withPreRoll (microseconds planning_headstart)
         {
           preRoll_ = planning_headstart;
-          return move(*this);
-        }
-      
-      ScheduleCtx&&
-      requireSchedule (bool indeed =true)
-        {
-          requireSchedule_ = indeed;
           return move(*this);
         }
       

@@ -207,6 +207,12 @@ namespace gear {
          *         notification is inserted at a point executed holding the `GroomingToken`,
          *         the `dispatch()` actually happens synchronous and immediately processes
          *         the activated tail-chain in a nested call.
+         * @deprecated 12/23 this feature seemed necessary in the first implementation,
+         *         yet after integration and follow-up refactorings (NOTIFY-handling) it
+         *         turned out both superfluous and potentially dangerous, since it creates
+         *         additional management work and possible contention on the Grooming-Token.
+         *         The way NOTIFY-activities are handled now already ensures that they are
+         *         activated only after their target's start time.
          */
         Term&
         requireDirectActivation()

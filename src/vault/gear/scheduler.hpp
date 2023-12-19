@@ -205,12 +205,6 @@ namespace gear {
       /** build Activity chain and hand-over to the Scheduler. */
       ScheduleSpec post();
       
-      ScheduleSpec
-      requireSchedule ()
-        {
-          term_->requireDirectActivation();
-          return move(*this);
-        }
       
       ScheduleSpec
       linkToSuccessor (ScheduleSpec& succSpec)
