@@ -511,16 +511,16 @@ namespace gear {
        *         of activations and notifications. The concrete implementation
        *         needs some further contextual information, which is passed
        *         down here as a nested sub-context.
+       * @note   different than Scheduler::postChain(), this operation here
+       *         always enqueues the \a chain, never dispatches directly.
+       *         This special twist helps to improve parallelisation.
        */
       activity::Proc
       post (Time when, Time dead, Activity* chain, ExecutionCtx& ctx)
         {
           REQUIRE (chain);
           ActivationEvent chainEvent = ctx.rootEvent;
-          chainEvent.activity = chain;
-          chainEvent.starting = _raw(chain->constrainedStart (when));
-          chainEvent.deadline = _raw(chain->constrainedDeath (dead.isRegular()? dead:chainEvent.deathTime()));
-//          ExecutionCtx subCtx{scheduler_, chainEvent};
+          chainEvent.refineTo (chain, when, dead);
           return scheduler_.layer2_.instructFollowUp (chainEvent, scheduler_.layer1_);
         }
       

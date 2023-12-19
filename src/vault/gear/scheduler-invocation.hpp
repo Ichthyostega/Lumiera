@@ -132,6 +132,14 @@ namespace gear {
       
       Time startTime()     const { return Time{TimeValue{starting}};}
       Time deathTime()     const { return Time{TimeValue{deadline}};}
+      
+      void
+      refineTo (Activity* chain, Time when, Time dead)
+        {
+          activity = chain;
+          starting = _raw(activity->constrainedStart (when.isRegular()? when:startTime()));
+          deadline = _raw(activity->constrainedDeath (dead.isRegular()? dead:deathTime()));
+        }
     };
   
   
