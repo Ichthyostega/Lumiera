@@ -336,6 +336,7 @@ namespace gear {
                      ,ManifestationID manID = ManifestationID()
                      ,FrameRate expectedAdditionalLoad = FrameRate(25))
         {
+          auto guard = layer2_.requireGroomingTokenHere();  // allow mutation
           layer1_.activate (manID);
           activityLang_.announceLoad (expectedAdditionalLoad);
           continueMetaJob (RealClock::now(), planningJob, manID);
@@ -352,6 +353,7 @@ namespace gear {
         {
           bool isCompulsory = true;
           Time deadline = nextStart + DUTY_CYCLE_TOLERANCE;
+          auto guard = layer2_.requireGroomingTokenHere(); // protect allocation
           // place the meta-Job into the timeline...
           postChain ({activityLang_.buildMetaJob(planningJob, nextStart, deadline)
                                    .post()
@@ -359,7 +361,6 @@ namespace gear {
                      , deadline
                      , manID
                      , isCompulsory});
-          ensureDroppedGroomingToken();
         }
       
       
@@ -574,7 +575,8 @@ namespace gear {
    */
   inline ScheduleSpec
   ScheduleSpec::post()
-  {
+  {                                  // protect allocation
+    auto guard = theScheduler_->layer2_.requireGroomingTokenHere();
     term_ = move(
       theScheduler_->activityLang_
           .buildCalculationJob (job_, start_,death_));
@@ -583,7 +585,6 @@ namespace gear {
                                             , death_
                                             , manID_
                                             , isCompulsory_});
-    theScheduler_->ensureDroppedGroomingToken();
     return move(*this);
   }
   
@@ -732,6 +733,8 @@ namespace gear {
   inline void
   Scheduler::handleDutyCycle (Time now, bool forceContinuation)
   {
+    auto guard = layer2_.requireGroomingTokenHere();
+    
     // consolidate queue content
     layer1_.feedPrioritisation();
     // clean-up of outdated tasks here

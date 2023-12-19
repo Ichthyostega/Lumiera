@@ -93,10 +93,13 @@ namespace gear {
   using std::memory_order::memory_order_relaxed;
   using std::memory_order::memory_order_acquire;
   using std::memory_order::memory_order_release;
+  using std::chrono_literals::operator ""us;
+  using std::chrono::microseconds;
   
   namespace { // Configuration / Scheduling limit
     
     Offset FUTURE_PLANNING_LIMIT{FSecs{20}};  ///< limit timespan of deadline into the future (~360 MiB max)
+    microseconds GROOMING_WAIT_CYCLE{70us};   ///< wait-sleep in case a thread must forcibly acquire the Grooming-Token
     
     /** convenient short-notation, also used by SchedulerService */
     auto inline thisThread() { return std::this_thread::get_id(); }
@@ -163,6 +166,12 @@ namespace gear {
         {
           return id == groomingToken_.load (memory_order_relaxed);
         }
+      
+      
+      class ScopedGroomingGuard;
+      /** a scope guard to force acquisition of the GroomingToken */
+      ScopedGroomingGuard requireGroomingTokenHere();
+      
       
       
       void
@@ -277,6 +286,60 @@ namespace gear {
           return activity::PASS;
         }
     };
+  
+  
+  
+  
+  class SchedulerCommutator::ScopedGroomingGuard
+    : util::MoveOnly
+    {
+      SchedulerCommutator& commutator_;
+      bool handledActively_;
+      
+      bool
+      ensureHoldsToken()
+        {
+          if (commutator_.holdsGroomingToken(thisThread()))
+            return false;
+          while (not commutator_.acquireGoomingToken())
+            std::this_thread::sleep_for (GROOMING_WAIT_CYCLE);
+          return true;
+        }
+      
+    public:
+      /** @warning can block indefinitely if someone hogs the token */
+      ScopedGroomingGuard (SchedulerCommutator& layer2)
+        : commutator_(layer2)
+        , handledActively_{ensureHoldsToken()}
+        { }
+      
+     ~ScopedGroomingGuard()
+        {
+          if (handledActively_)
+            commutator_.dropGroomingToken();
+        }
+    };
+  
+  
+  /**
+   * @warning this provides very specific functionality
+   *    required by the »Scheduler Service« to handle both
+   *    _external_ and _internal_ calls properly.
+   *  - whenever a thread already holds the GroomingToken,
+   *    no further action is performed (so the cost of this
+   *    feature is one additional atomic read on the token)
+   *  - however, a thread coming _from the outside_ and not
+   *    belonging to the Scheduler ecosystem is typically not
+   *    aware of the GroomingToken altogether. The token is
+   *    acquired, possibly incurring a *blocking wait*, and
+   *    it is dropped transparently when leaving the scope.
+   */
+  inline SchedulerCommutator::ScopedGroomingGuard
+  SchedulerCommutator::requireGroomingTokenHere()
+    {
+      return ScopedGroomingGuard(*this);
+    }
+
   
   
 }} // namespace vault::gear

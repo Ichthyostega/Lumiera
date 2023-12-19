@@ -95,6 +95,7 @@ namespace test {
         {
           demonstrateSimpleUsage();
           verify_GroomingToken();
+          verify_GroomingGuard();
           torture_GroomingToken();
           verify_DispatchDecision();
           verify_findWork();
@@ -158,6 +159,38 @@ namespace test {
           CHECK (not sched.holdsGroomingToken(myself));
           CHECK (sched.acquireGoomingToken());
           sched.dropGroomingToken();
+        }
+      
+      
+      
+      /** @test verify extended logic to protect a scope
+       *      - if the thread already holds the grooming token, nothing happens
+       *      - otherwise, it is acquired (blocking) and dropped on exit
+       */
+      void
+      verify_GroomingGuard()
+        {
+          SchedulerCommutator sched;
+          
+          // Case-1: if a thread already holds the token....
+          CHECK (sched.acquireGoomingToken());
+          CHECK (sched.holdsGroomingToken (thisThread()));
+          {
+            auto guard = sched.requireGroomingTokenHere();
+            CHECK (sched.holdsGroomingToken (thisThread()));
+          }// leave scope -> nothing happens in this case
+          CHECK (sched.holdsGroomingToken (thisThread()));
+          
+          // Case-2: when not holding the token...
+          sched.dropGroomingToken();
+          {
+              // acquire automatically (this may block)
+            auto guard = sched.requireGroomingTokenHere();
+            CHECK (sched.holdsGroomingToken (thisThread()));
+          }// leave scope -> dropped automatically
+          CHECK (not sched.holdsGroomingToken (thisThread()));
+          
+          ___ensureGroomingTokenReleased(sched);
         }
       
       
