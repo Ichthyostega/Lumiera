@@ -315,7 +315,8 @@ namespace gear {
       
      ~ScopedGroomingGuard()
         {
-          if (handledActively_)
+          if (handledActively_ and
+              commutator_.holdsGroomingToken(thisThread()))
             commutator_.dropGroomingToken();
         }
     };
