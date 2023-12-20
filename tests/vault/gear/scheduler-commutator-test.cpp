@@ -487,8 +487,8 @@ namespace test {
           auto myself = std::this_thread::get_id();
           CHECK (not sched.holdsGroomingToken (myself));
           
-          // no effect when empty / no Activity given
-          CHECK (activity::SKIP == sched.postDispatch (ActivationEvent(), detector.executionCtx, queue));
+          // no effect when empty / no Activity given (usually this can happen due to lock contention)
+          CHECK (activity::KICK == sched.postDispatch (ActivationEvent(), detector.executionCtx, queue));
           CHECK (not sched.holdsGroomingToken (myself));
           
           // Activity immediately dispatched when on time and GroomingToken can be acquired

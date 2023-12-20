@@ -120,6 +120,7 @@ namespace test {
           verify_pullWork();
           verify_workerHalt();
           verify_workerSleep();
+          verify_workerRetard();
           verify_workerDismiss();
           verify_finalHook();
           verify_detectError();
@@ -224,6 +225,31 @@ namespace test {
           
           sleep_for(12ms);     // after waiting one sleep-period...
           CHECK (2 == check);  // ...functor invoked again
+        }
+      
+      
+      
+      /** @test a worker can be retarded and throttled in case of contention.
+       */
+      void
+      verify_workerRetard()
+        {
+          atomic<uint> check{0};
+          {                                                  // ▽▽▽▽ regular work-cycles without delay
+            WorkForce wof{setup ([&]{ ++check; return activity::PASS; })};
+            wof.incScale();
+            sleep_for(5ms);
+          }
+          uint cyclesPASS{check};
+          check = 0;
+          {                                                  // ▽▽▽▽ signals »contention«
+            WorkForce wof{setup ([&]{ ++check; return activity::KICK; })};
+            wof.incScale();
+            sleep_for(5ms);
+          }
+          uint cyclesKICK{check};
+          CHECK (cyclesKICK < cyclesPASS);
+          CHECK (cyclesKICK < 50);
         }
       
       

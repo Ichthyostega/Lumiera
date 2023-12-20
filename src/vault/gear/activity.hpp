@@ -149,7 +149,7 @@ namespace gear {
     enum Proc {PASS  ///< pass on the activation down the chain
               ,SKIP  ///< skip rest of the Activity chain for good
               ,WAIT  ///< nothing to do; wait and re-check for work later
-              ,KILL  ///< obliterate the complete Activity-Term and all its dependencies
+              ,KICK  ///< back pressure; get out of the way but be back soon
               ,HALT  ///< abandon this play / render process
               };
     
@@ -628,7 +628,6 @@ namespace gear {
    * @return activity::Proc indication how to proceed with execution
    *         - activity::PASS continue with regular processing of `next`
    *         - activity::SKIP ignore the rest of the chain, look for new work
-   *         - activity::KILL abort this complete Activity term (play change)
    *         - activity::HALT serious problem, stop the Scheduler
    */
   template<class EXE>

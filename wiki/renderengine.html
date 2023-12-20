@@ -7302,7 +7302,7 @@ The primary scaling effects exploited to achieve this level of performance are t
 The way other parts of the system are built, requires us to obtain a guaranteed knowledge of some job's termination. It is possible to obtain that knowledge with some limited delay, but it nees to be absoultely reliable (violations leading to segfault). The requirements stated above assume this can be achieved through //jobs with guaranteed execution.// Alternatively we could consider installing specific callbacks -- in this case the scheduler itself has to guarantee the invocation of these callbacks, even if the corresponding job fails or is never invoked. It doesn't seem there is any other option.
 </pre>
 </div>
-<div title="SchedulerWorker" creator="Ichthyostega" modifier="Ichthyostega" created="202309041605" modified="202310280149" tags="Rendering operational spec draft" changecount="14">
+<div title="SchedulerWorker" creator="Ichthyostega" modifier="Ichthyostega" created="202309041605" modified="202312201342" tags="Rendering operational spec draft" changecount="15">
 <pre>The Scheduler //maintains a ''Work Force'' (a pool of workers) to perform the next [[render activities|RenderActivity]] continuously.//
 Each worker runs in a dedicated thread; the Activities are arranged in a way to avoid blocking those worker threads
 * IO operations are performed asynchronously {{red{planned as of 9/23}}}
@@ -7317,6 +7317,7 @@ Moreover, the actual computation tasks, which can be parallelised, are at least 
 The behaviour of individual workers is guided solely by the return-value flag from the work-functor. Consequently, no shared flags and no direct synchronisation whatsoever is required //within the {{{WorkForce}}} implementation.// -- notwithstanding the fact that the implementation //within the work-functor// obviously needs some concurrency coordination to produce these return values, since the whole point is to invoke this functor concurrently. The following aspects of worker behaviour can be directed:
 * returning {{{activity::PASS}}} instructs the worker to re-invoke the work-functor in the same thread immediately
 * returning {{{activity::WAIT}}} requests an //idle-wait cycle//
+* returning {{{activity::KICK}}} signals //contention,// causing a short back-off
 * any other value, notably {{{activity::HALT}}} causes the worker to terminate
 * likewise, an exception from anywhere within the worker shall terminate the worker and activate a »disaster mode«
 Essentially this implies that //the workers themselves// (not some steering master) perform the management code leading to the aforementioned state directing return codes.

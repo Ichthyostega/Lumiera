@@ -35,7 +35,7 @@
  ** Some parameters and configuration is provided to the workers, notably a _work functor_
  ** invoked actively to »pull« work. The return value from this `doWork()`-function governs
  ** the worker's behaviour, either by prompting to pull further work, by sending a worker
- ** into a sleep cycle, or even asking the worker to terminate.
+ ** into a sleep cycle, perform contention mitigation, or even asking the worker to terminate.
  ** 
  ** @warning concurrency and synchronisation in the Scheduler (which maintains and operates
  **          WorkForce) is based on the assumption that _all maintenance and organisational
@@ -80,7 +80,20 @@ namespace gear {
   
   
   namespace {
-    const double MAX_OVERPROVISIONING = 3.0;      ///< safety guard to prevent catastrophic overprovisioning
+    const double MAX_OVERPROVISIONING = 3.0;      ///< safety guard to prevent catastrophic over-provisioning
+    
+    const size_t CONTEND_SOFT_LIMIT  = 3;                         ///< zone for soft anti-contention measures, counting continued contention events
+    const size_t CONTEND_STARK_LIMIT = CONTEND_SOFT_LIMIT + 5;    ///< zone for stark measures, performing a sleep with exponential stepping
+    const size_t CONTEND_SATURATION  = CONTEND_STARK_LIMIT + 4;   ///< upper limit for the contention event count
+    const size_t CONTEND_SOFT_FACTOR = 100;                       ///< base counter for a spinning wait loop
+    const size_t CONTEND_RANDOM_STEP = 11;                        ///< stepping for randomisation of anti-contention measures
+    const microseconds CONTEND_WAIT = 100us;                      ///< base time unit for the exponentially stepped-up sleep delay in case of contention
+    
+    inline size_t
+    thisThreadHash()
+    {
+      return std::hash<std::thread::id>{} (std::this_thread::get_id());
+    }
   }
   
   namespace work { ///< Details of WorkForce (worker pool) implementation
@@ -101,11 +114,16 @@ namespace gear {
       {
         static size_t COMPUTATION_CAPACITY;
         
-        const milliseconds IDLE_WAIT = 20ms;
-        const size_t DISMISS_CYCLES = 100;
+        const milliseconds IDLE_WAIT = 20ms;      ///< wait period when a worker _falls idle_
+        const size_t DISMISS_CYCLES  = 100;       ///< number of idle cycles after which the worker terminates
         
         static size_t getDefaultComputationCapacity();
       };
+    
+    
+    
+    void   performRandomisedSpin (size_t,size_t);
+    microseconds steppedRandDelay(size_t,size_t);
     
     
     using Launch = lib::Thread::Launch;
@@ -151,10 +169,15 @@ namespace gear {
                     activity::Proc res = CONF::doWork();
                     if (emergency.load (std::memory_order_relaxed))
                       break;
+                    if (res == activity::KICK)
+                      res = contentionWait();
+                    else
+                      if (kickLevel_)
+                        --kickLevel_;
                     if (res == activity::WAIT)
                       res = idleWait();
                     else
-                      idleCycles = 0;
+                      idleCycles_ = 0;
                     if (res != activity::PASS)
                       break;
                   }
@@ -172,8 +195,8 @@ namespace gear {
         activity::Proc
         idleWait()
           {
-            ++idleCycles;
-            if (idleCycles < CONF::DISMISS_CYCLES)
+            ++idleCycles_;
+            if (idleCycles_ < CONF::DISMISS_CYCLES)
               {
                 sleep_for (CONF::IDLE_WAIT);
                 return activity::PASS;
@@ -181,7 +204,33 @@ namespace gear {
             else  // idle beyond threshold => terminate worker
               return activity::HALT;
           }
-        size_t idleCycles{0};
+        size_t idleCycles_{0};
+        
+        
+        activity::Proc
+        contentionWait()
+          {
+            if (not randFact_)
+              randFact_ = thisThreadHash() % CONTEND_RANDOM_STEP;
+            
+            if (kickLevel_ <= CONTEND_SOFT_LIMIT)
+              for (uint i=0; i<kickLevel_; ++i)
+                {
+                  performRandomisedSpin (kickLevel_,randFact_);
+                  std::this_thread::yield();
+                }
+            else
+              {
+                auto stepping = util::min (kickLevel_, CONTEND_STARK_LIMIT) - CONTEND_SOFT_LIMIT;
+                std::this_thread::sleep_for (steppedRandDelay(stepping,randFact_));
+              }
+            
+            if (kickLevel_ < CONTEND_SATURATION)
+              ++kickLevel_;
+            return activity::PASS;
+          }
+        size_t kickLevel_{0};
+        size_t randFact_{0};
       };
   }//(End)namespace work
   

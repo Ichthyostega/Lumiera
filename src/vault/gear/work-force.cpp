@@ -62,5 +62,38 @@ namespace gear {
     return util::max (std::thread::hardware_concurrency()
                      , MINIMAL_CONCURRENCY);
   }
+  
+  
+  /**
+   * This is part of the weak level of anti-contention measures.
+   * When a worker is kicked out from processing due to contention, the immediate
+   * reaction is to try again; if this happens repeatedly however, increasingly strong
+   * delays are interspersed. Within the _weak zone,_ a short spinning wait is performed,
+   * and then the thread requests a `yield()` from the OS scheduler; this cycle is repeated. 
+   */
+  void
+  work::performRandomisedSpin (size_t stepping, size_t randFact)
+  {
+    size_t degree = CONTEND_SOFT_FACTOR * (1+randFact) * stepping;
+    for (volatile size_t i=0; i<degree; ++i) {/*SPIN*/}
+  }
+  
+  /**
+   * Calculate the delay time for a stronger anti-contention wait.
+   * If the contention lasts, the worker must back out temporarily to allow other workers
+   * to catch up. The delay time is stepped up quickly up to a saturation level, where the
+   * worker sleeps in the microseconds range — this level is chosen as a balance between
+   * retaining some reactivity vs not incurring additional load. The stepping of the
+   * anti-contention measures is »sticky« to some degree, because it is not set to
+   * zero, once contention ends, but rather stepped down gradually.
+   */
+  microseconds
+  work::steppedRandDelay (size_t stepping, size_t randFact)
+  {
+    REQUIRE (stepping > 0);
+    uint factor = 1u << (stepping-1);
+    return (CONTEND_WAIT + 10us*randFact) * factor;
+  }
+
 
 }} // namespace vault::gear

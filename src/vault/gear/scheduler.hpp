@@ -670,6 +670,7 @@ namespace gear {
    * @return how to proceed further with this worker
    *       - activity::PASS indicates to proceed or call back immediately
    *       - activity::SKIP causes to exit this round, yet call back again
+   *       - activity::KICK signals contention (not emitted here)
    *       - activity::WAIT exits and places the worker into sleep mode
    * @note as part of the regular work processing, this function may
    *       place the current thread into a short-term targeted sleep.
