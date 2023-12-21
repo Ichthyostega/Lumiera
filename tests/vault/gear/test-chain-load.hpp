@@ -166,7 +166,7 @@ namespace test {
     const double LOAD_SPEED_BASELINE = 100;             ///< initial assumption for calculation speed (without calibration)
     const microseconds LOAD_DEFAULT_TIME = 100us;       ///< default time delay produced by ComputationalLoad at `Node.weight==1`
     const size_t LOAD_DEFAULT_MEM_SIZE   = 1000;        ///< default allocation base size used if ComputationalLoad.useAllocation
-    const microseconds PLANNING_TIME_PER_NODE = 80us;   ///< time budget to reserve for each node to be planned and scheduled
+    const microseconds PLANNING_TIME_PER_NODE = 400us;  ///< time budget to reserve for each node to be planned and scheduled
   }
   
   

@@ -84,10 +84,11 @@ namespace test {
       smokeTest()
         {
           MARK_TEST_FUN
-          TestChainLoad testLoad{128};
+          TestChainLoad testLoad{512};
           testLoad.configureShape_chain_loadBursts()
                   .buildToplolgy()
-                  .printTopologyDOT();
+//                .printTopologyDOT()
+                  ;
           
           auto stats = testLoad.computeGraphStatistics();
           cout << _Fmt{"Test-Load: Nodes: %d  Levels: %d  ∅Node/Level: %3.1f  Forks: %d  Joins: %d"}
@@ -120,7 +121,8 @@ namespace test {
           double performanceTime =
             testLoad.setupSchedule(scheduler)
                     .withLoadTimeBase(LOAD_BASE)
-                    .withJobDeadline(50ms)
+                    .withJobDeadline(100ms)
+                    .withChunkSize(20)
                     .launch_and_wait();
           
           cout << "runTime(Scheduler): "<<performanceTime/1000<<"ms"<<endl;
