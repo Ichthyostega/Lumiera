@@ -108,6 +108,8 @@ namespace gear {
 //  using util::isnil;
 //  using std::string;
   
+  using util::max;
+  using util::limited;
   using lib::time::Time;
   using lib::time::FSecs;
   using lib::time::TimeVar;
@@ -373,7 +375,7 @@ namespace gear {
                               return TimeValue{wrap};
                             };
           
-          TimeVar headDistance = util::max (tendedHead_-now, Time::ZERO);
+          TimeVar headDistance = max (tendedHead_-now, Time::ZERO);
           
           switch (capacity) {
             case DISPATCH:
@@ -383,7 +385,7 @@ namespace gear {
             case TENDNEXT:
               return Offset{headDistance};
             case NEARTIME:
-              return Offset{headDistance  + scatter(WORK_HORIZON)};
+              return Offset{headDistance  + scatter(Offset{limited (NEAR_HORIZON,headDistance,WORK_HORIZON)})};
             case WORKTIME:
             case IDLEWAIT:
               return Offset{headDistance  + scatter(SLEEP_HORIZON)};
