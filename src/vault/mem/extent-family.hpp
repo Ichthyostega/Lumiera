@@ -56,6 +56,10 @@
 namespace vault{
 namespace mem {
   
+  namespace {
+    const size_t ALLOC_SAFETY_LIMIT = 8_GiB;
+  }
+  
   using util::unConst;
   
   template<typename T, size_t siz>
@@ -198,6 +202,7 @@ namespace mem {
               size_t addSiz = cnt - freeSlotCnt()
                               + EXCESS_ALLOC;
               // add a strike of new extents at the end
+              ___sanityCheckAllocSize (addSiz);
               extents_.resize (oldSiz + addSiz);
               if (isWrapped())
                 {// need the new elements in the middle, before the existing start_
@@ -316,6 +321,19 @@ namespace mem {
           REQUIRE (isValidPos (idx));
           return unConst(this)->extents_[idx].access();
         }     // deliberately const-ness does not cover payload
+      
+      void
+      ___sanityCheckAllocSize (size_t addCnt)
+        {
+          size_t resultSiz = slotCnt()+addCnt;
+          size_t requiredSpace = resultSiz * sizeof(Extent);
+          using namespace lumiera::error;
+          if (requiredSpace > ALLOC_SAFETY_LIMIT)
+            throw Fatal{"Raw allocation exceeds safety limit: "
+                         +util::showSize(requiredSpace)    +" > "
+                         +util::showSize(ALLOC_SAFETY_LIMIT)
+                       , LUMIERA_ERROR_CAPACITY};
+        }
       
       
       /// „backdoor“ to watch internals from tests

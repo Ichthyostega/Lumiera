@@ -79,8 +79,6 @@
 
 
 namespace stage {
-  namespace error = lumiera::error;
-  using error::LUMIERA_ERROR_ASSERTION;
   using lib::test::EventLog;
   using lib::test::EventMatch;
   

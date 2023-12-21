@@ -429,6 +429,7 @@ namespace util {
   std::string showDouble (double) noexcept;
   std::string showFloat (float)   noexcept;
   
+  std::string showSize (size_t)   noexcept;
   
   
   
@@ -464,4 +465,28 @@ namespace util {
   
   
 }// namespace util
+
+
+
+/* === Literals for common size designations === */
+
+inline uint
+operator""_KiB (unsigned long long const siz)
+{
+  return uint(siz) * 1024u;
+}
+
+inline uint
+operator""_MiB (unsigned long long const siz)
+{
+  return uint(siz) * 1024u*1024u;
+}
+
+inline unsigned long long
+operator""_GiB (unsigned long long const siz)
+{
+  return siz * 1024uLL*1024uLL*1024uLL;
+}
+
+
 #endif /*LIB_META_UTIL_H*/

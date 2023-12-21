@@ -1818,8 +1818,9 @@ namespace test {
       size_t
       calcNextChunkEnd (size_t lastNodeIDX)
         {
-          return lastNodeIDX + chunkSize_;
-        }
+          lastNodeIDX += chunkSize_;
+          return min (lastNodeIDX, chainLoad_.size()-1);
+        }                      //  prevent out-of-bound access
       
       Time
       calcStartTime(size_t level)
@@ -1836,6 +1837,7 @@ namespace test {
             dependencies to the last row of the preceding chunk, implying that
             those still need to be ahead of schedule, and not yet dispatched.
           */
+          lastNodeIDX = min (lastNodeIDX, chainLoad_.size()-1);  // prevent out-of-bound access
           size_t nextChunkLevel = chainLoad_.nodes_[lastNodeIDX].level;
           nextChunkLevel = nextChunkLevel>2? nextChunkLevel-2 : 0;
           return calcStartTime(nextChunkLevel) - _uTicks(preRoll_);

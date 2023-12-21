@@ -106,8 +106,20 @@ namespace gear {
   using lib::time::Duration;
   using lib::time::FrameRate;
   
+  namespace err = lumiera::error;
+  
   
   namespace blockFlow {///< Parametrisation of Scheduler memory management scheme
+    
+    /** limit for maximum number of blocks allowed in Epoch expansion
+     * @note SchedulerCommutator::sanityCheck() defines a similar limit,
+     *      but there the same reasoning is translated into a hard limit for
+     *      deadlines to be < 20sec, while this limit here will only be triggered
+     *      if the current block duration has been lowered to the OVERLOAD_LIMIT
+     * @see scheduler-commutator.hpp
+     */
+    const size_t BLOCK_EXPAND_SAFETY_LIMIT = 3000;
+    
     
     /**
      * Lightweight yet safe parametrisation of memory management.
@@ -484,6 +496,7 @@ namespace gear {
                   EpochIter nextEpoch{alloc_.end()};
                   ENSURE (not nextEpoch);      // not valid yet, but we will allocate starting there...
                   auto requiredNew = distance / _raw(epochStep_);
+                  ___sanityCheckAlloc(requiredNew);
                   if (distance % _raw(epochStep_) > 0)
                     ++requiredNew;  // fractional:  requested deadline lies within last epoch
                   alloc_.openNew(requiredNew);   // Note: nextEpoch now points to the first new Epoch
@@ -642,6 +655,16 @@ namespace gear {
           return previous;
         }
       TimeVar pastDeadline_{Time::ANYTIME};
+      
+      void
+      ___sanityCheckAlloc (size_t newBlockCnt)
+        {
+          if (newBlockCnt > blockFlow::BLOCK_EXPAND_SAFETY_LIMIT)
+            throw err::Fatal{"Deadline expansion causes allocation of "
+                              +util::showSize(newBlockCnt) +"blocks > "
+                              +util::showSize(blockFlow::BLOCK_EXPAND_SAFETY_LIMIT)
+                            , err::LUMIERA_ERROR_CAPACITY};
+        }
       
       
       /// „backdoor“ to watch internals from tests
