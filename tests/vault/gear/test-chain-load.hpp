@@ -166,7 +166,8 @@ namespace test {
     const double LOAD_SPEED_BASELINE = 100;             ///< initial assumption for calculation speed (without calibration)
     const microseconds LOAD_DEFAULT_TIME = 100us;       ///< default time delay produced by ComputationalLoad at `Node.weight==1`
     const size_t LOAD_DEFAULT_MEM_SIZE   = 1000;        ///< default allocation base size used if ComputationalLoad.useAllocation
-    const microseconds PLANNING_TIME_PER_NODE = 400us;  ///< time budget to reserve for each node to be planned and scheduled
+    const Duration SCHEDULE_LEVEL_STEP{_uTicks(1ms)};   ///< time budget to plan for the calculation of each »time level« of jobs
+    const Duration SCHEDULE_PLAN_STEP{_uTicks(100us)};  ///< time budget to reserve for each node to be planned and scheduled
   }
   
   
@@ -1573,12 +1574,13 @@ namespace test {
       
       lib::UninitialisedDynBlock<ScheduleSpec> schedule_;
 
-      FrameRate  levelSpeed_{1, Duration{_uTicks(1ms)}};
+      FrameRate  levelSpeed_{1, SCHEDULE_LEVEL_STEP};
+      FrameRate   planSpeed_{1, SCHEDULE_PLAN_STEP};
       uint  blockLoadFactor_{2};
       size_t      chunkSize_{DEFAULT_CHUNKSIZE};
       TimeVar     startTime_{Time::ANYTIME};
       microseconds deadline_{STANDARD_DEADLINE};
-      microseconds  preRoll_{guessPlanningPreroll (chunkSize_)};
+      microseconds  preRoll_{guessPlanningPreroll()};
       ManifestationID manID_{};
       
       std::promise<void> signalDone_{};
@@ -1617,7 +1619,7 @@ namespace test {
           if (work_left)
             {
               size_t nextChunkEndNode = calcNextChunkEnd (lastNodeIDX);
-              scheduler_.continueMetaJob (calcPlanScheduleTime (nextChunkEndNode)
+              scheduler_.continueMetaJob (calcPlanScheduleTime (lastNodeIDX+1)
                                          ,planningJob (nextChunkEndNode)
                                          ,manID_);
             }
@@ -1684,6 +1686,14 @@ namespace test {
         }
       
       ScheduleCtx&&
+      withPlanningStep (microseconds planningTime_per_node)
+        {
+          planSpeed_ = FrameRate{1, Duration{_uTicks(planningTime_per_node)}};
+          preRoll_ = guessPlanningPreroll();
+          return move(*this);
+        }
+      
+      ScheduleCtx&&
       withLoadFactor (uint factor_on_levelSpeed)
         {
           blockLoadFactor_ = factor_on_levelSpeed;
@@ -1694,7 +1704,7 @@ namespace test {
       withChunkSize (size_t nodes_per_chunk)
         {
           chunkSize_ = nodes_per_chunk;
-          preRoll_ = guessPlanningPreroll (chunkSize_);
+          preRoll_ = guessPlanningPreroll();
           return move(*this);
         }
       
@@ -1803,10 +1813,10 @@ namespace test {
           return RealClock::now() + _uTicks(preRoll_);
         }
       
-      static microseconds
-      guessPlanningPreroll(size_t chunkSize)
+      microseconds
+      guessPlanningPreroll()
         {
-          return chunkSize * PLANNING_TIME_PER_NODE;
+          return microseconds(_raw(Time{chunkSize_ / planSpeed_}));
         }
       
       FrameRate

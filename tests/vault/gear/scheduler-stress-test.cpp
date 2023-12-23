@@ -122,6 +122,7 @@ namespace test {
             testLoad.setupSchedule(scheduler)
                     .withLoadTimeBase(LOAD_BASE)
                     .withJobDeadline(100ms)
+                    .withPlanningStep(200us)
                     .withChunkSize(20)
                     .launch_and_wait();
           
