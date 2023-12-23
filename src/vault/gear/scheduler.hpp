@@ -205,20 +205,8 @@ namespace gear {
       /** build Activity chain and hand-over to the Scheduler. */
       ScheduleSpec post();
       
-      
-      ScheduleSpec
-      linkToSuccessor (ScheduleSpec& succSpec)
-        {
-          term_->appendNotificationTo (*succSpec.term_);
-          return move(*this);
-        }
-      
-      ScheduleSpec
-      linkToPredecessor (ScheduleSpec& predSpec)
-        {
-          predSpec.term_->appendNotificationTo (*term_);
-          return move(*this);
-        }
+      ScheduleSpec linkToSuccessor (ScheduleSpec&);
+      ScheduleSpec linkToPredecessor(ScheduleSpec&);
     };
   
   
@@ -587,6 +575,23 @@ namespace gear {
                                             , isCompulsory_});
     return move(*this);
   }
+  
+  inline ScheduleSpec
+  ScheduleSpec::linkToSuccessor (ScheduleSpec& succSpec)
+    {                                  // protect allocation
+      auto guard = theScheduler_->layer2_.requireGroomingTokenHere();
+      term_->appendNotificationTo (*succSpec.term_);
+      return move(*this);
+    }
+  
+  inline ScheduleSpec
+  ScheduleSpec::linkToPredecessor (ScheduleSpec& predSpec)
+    {                                  // protect allocation
+      auto guard = theScheduler_->layer2_.requireGroomingTokenHere();
+      predSpec.term_->appendNotificationTo (*term_);
+      return move(*this);
+    }
+  
   
   
   /**
