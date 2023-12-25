@@ -50,7 +50,7 @@
  **     is triggered in the SchedulerService, should such an entry
  **     [miss it's deadline](\ref SchedulerInvocation::isOutOfTime())
  ** @see SchedulerCommutator::findWork()
- ** @see SchedulerCommutator::postDispatch()
+ ** @see SchedulerCommutator::postChain()
  ** @see SchedulerInvocation_test
  ** @see SchedulerUsage_test integrated usage
  **

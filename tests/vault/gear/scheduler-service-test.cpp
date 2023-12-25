@@ -129,8 +129,7 @@ namespace test {
       postNewTask (Scheduler& scheduler, Activity& chain, Time start)
         {
           ActivationEvent actEvent{chain, start, start + Time{50,0}};  // add dummy deadline +50ms
-          Scheduler::ExecutionCtx ctx{scheduler, actEvent};
-          scheduler.layer2_.postDispatch (actEvent, ctx, scheduler.layer1_);
+          scheduler.layer2_.postChain (actEvent, scheduler.layer1_);
         }
       
       
@@ -299,7 +298,7 @@ namespace test {
       
       
       
-      /** @test verify visible behaviour of the [work-pulling function](\ref Scheduler::getWork)
+      /** @test verify visible behaviour of the [work-pulling function](\ref Scheduler::doWork)
        *      - use a rigged Activity probe to capture the schedule time on invocation
        *      - additionally perform a timing measurement for invoking the work-function
        *      - invoking the Activity probe itself costs 50...150µs, Scheduler internals < 50µs
@@ -308,8 +307,8 @@ namespace test {
        *        + an Activity already due will be dispatched immediately by post()
        *        + an Activity due at the point when invoking the work-function is dispatched
        *        + while queue is empty, the work-function returns immediately, indicating sleep
-       *        + invoking the work-function when there is still some time span up to the next
-       *          planned Activity will enter a targeted sleep, returning shortly after the
+       *        + invoking the work-function, when there is still some time span up to the next
+       *          planned Activity, will cause a targeted sleep, returning shortly after the
        *          next schedule. Entering then again will cause dispatch of that activity.
        *        + if the work-function dispatches an Activity while the next entry is planned
        *          for some time ahead, the work-function will likewise go into a targeted
@@ -349,7 +348,7 @@ namespace test {
                               };
           
           auto pullWork = [&] {
-                                delay_us = lib::test::benchmarkTime([&]{ res = scheduler.getWork(); });
+                                delay_us = lib::test::benchmarkTime([&]{ res = scheduler.doWork(); });
                                 slip_us = _raw(detector.invokeTime(probe)) - _raw(start);
                                 cout << "res:"<<res<<" delay="<<delay_us<<"µs slip="<<slip_us<<"µs"<<endl;
                               };
@@ -528,7 +527,7 @@ namespace test {
           detector.incrementSeq();   // mark this point in the detector-log...
           
           // Explicitly invoke the work-Function (normally done by the workers)
-          CHECK (activity::PASS == scheduler.getWork());
+          CHECK (activity::PASS == scheduler.doWork());
           
           CHECK (detector.verifySeqIncrement(1)
                          .beforeInvocation("testJob").arg("7.007", 1337));

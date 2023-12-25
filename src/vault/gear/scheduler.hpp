@@ -57,7 +57,7 @@
  ** in single-threaded mode. This is achieved by an atomic lock, maintained in
  ** [Layer-2 of the Scheduler implementation](\ref SchedulerCommutator::groomingToken_).
  ** Any thread looking for more work will pull a pre-configured functor, which
- ** is implemented by the [work-function](\ref Scheduler::getWork()). The thread
+ ** is implemented by the [work-function](\ref Scheduler::doWork()). The thread
  ** will attempt to acquire the lock, designated as »grooming-token« -- but only
  ** if this is necessary to perform internal changes. Since workers are calling
  ** in randomly, in many cases there might be no task to perform at the moment,
@@ -83,7 +83,7 @@
  **       Notably _internal processing_ (e.g. planning of new jobs) will _not_ drop
  **       the token, since it must be able to change the schedule. Such internal
  **       tasks can be processed in row and will be confined to a single thread
- **       (there is a special treatment at the end of #getWork() to achieve that).
+ **       (there is a special treatment at the end of #doWork() to achieve that).
  **       As a safety net, the grooming-token will automatically be dropped after
  **       catching an exception, or when a thread is sent to sleep.
  ** 
@@ -130,7 +130,6 @@ namespace gear {
   using lib::time::Time;
   using lib::time::FSecs;
   using lib::time::Offset;
-  using lib::time::Duration;
   
   namespace test {  // declared friend for test access
     class SchedulerService_test;
@@ -142,6 +141,7 @@ namespace gear {
     const size_t DISMISS_CYCLES = 100;        ///< number of wait cycles before an idle worker terminates completely
     Offset DUTY_CYCLE_PERIOD{FSecs(1,20)};    ///< period of the regular scheduler »tick« for state maintenance.
     Offset DUTY_CYCLE_TOLERANCE{FSecs(1,10)}; ///< maximum slip tolerated on duty-cycle start before triggering Scheduler-emergency
+    Offset FUTURE_PLANNING_LIMIT{FSecs{20}};  ///< limit timespan of deadline into the future (~360 MiB max)
   }
   
   
@@ -224,7 +224,7 @@ namespace gear {
       struct Setup : work::Config
         {
           Scheduler& scheduler;
-          activity::Proc doWork() { return scheduler.getWork();          }
+          activity::Proc doWork() { return scheduler.doWork();           }
           void finalHook (bool _) { scheduler.handleWorkerTermination(_);}
         };
       
@@ -291,7 +291,9 @@ namespace gear {
       
       
       /**
-       * 
+       * @return a synthetic indicator fused from several observations
+       *       - 1.0 defines full work capacity yet no significant congestion
+       *       - values > 2.0 indicate overload
        */
       double
       getLoadIndicator()
@@ -341,7 +343,6 @@ namespace gear {
         {
           bool isCompulsory = true;
           Time deadline = nextStart + DUTY_CYCLE_TOLERANCE;
-          auto guard = layer2_.requireGroomingTokenHere(); // protect allocation
           // place the meta-Job into the timeline...
           postChain ({activityLang_.buildMetaJob(planningJob, nextStart, deadline)
                                    .post()
@@ -371,48 +372,17 @@ namespace gear {
        * The worker-Functor: called by the active Workers from the
        * \ref WorkForce to pull / perform the actual render Activities.
        */
-      activity::Proc getWork();
+      activity::Proc doWork();
       
       
     private:
       void postChain (ActivationEvent);
+      void sanityCheck (ActivationEvent const&);
       void handleDutyCycle (Time now, bool =false);
       void handleWorkerTermination (bool isFailure);
       void maybeScaleWorkForce (Time startHorizon);
       
       void triggerEmergency();
-      
-      
-      /** send this thread into a targeted short-time wait. */
-      activity::Proc scatteredDelay (Time now, LoadController::Capacity);
-      
-      
-      /**
-       * monad-like step sequence: perform sequence of steps,
-       * as long as the result remains activity::PASS
-       */
-      struct WorkerInstruction
-        {
-          activity::Proc lastResult = activity::PASS;
-          
-          /** exposes the latest verdict as overall result
-           * @note returning activity::SKIP from the dispatch
-           *   signals early exit, which is acquitted here. */
-          operator activity::Proc()
-            {
-              return activity::SKIP == lastResult? activity::PASS
-                                                 : lastResult;
-            }
-          
-          template<class FUN>
-          WorkerInstruction
-          performStep (FUN step)
-            {
-              if (activity::PASS == lastResult)
-                lastResult = step();
-              return move(*this);
-            }
-        };
       
       
       /** @internal connect state signals for use by the LoadController */
@@ -424,13 +394,6 @@ namespace gear {
           setup.currWorkForceSize = [this]{ return workForce_.size(); };
           setup.stepUpWorkForce   = [this](uint steps){ workForce_.incScale(steps); };
           return setup;
-        }
-      
-      void
-      ensureDroppedGroomingToken()
-        {
-          if (layer2_.holdsGroomingToken (thisThread()))
-            layer2_.dropGroomingToken();
         }
       
       /** access high-resolution-clock, rounded to µ-Ticks */
@@ -450,6 +413,8 @@ namespace gear {
       /** open private backdoor for tests */
       friend class test::SchedulerService_test;
     };
+  
+  
   
   
   
@@ -500,9 +465,6 @@ namespace gear {
        *         of activations and notifications. The concrete implementation
        *         needs some further contextual information, which is passed
        *         down here as a nested sub-context.
-       * @note   different than Scheduler::postChain(), this operation here
-       *         always enqueues the \a chain, never dispatches directly.
-       *         This special twist helps to improve parallelisation.
        */
       activity::Proc
       post (Time when, Time dead, Activity* chain, ExecutionCtx& ctx)
@@ -510,7 +472,8 @@ namespace gear {
           REQUIRE (chain);
           ActivationEvent chainEvent = ctx.rootEvent;
           chainEvent.refineTo (chain, when, dead);
-          return scheduler_.layer2_.instructFollowUp (chainEvent, scheduler_.layer1_);
+          scheduler_.sanityCheck (chainEvent);
+          return scheduler_.layer2_.postChain (chainEvent, scheduler_.layer1_);
         }
       
       /**
@@ -550,6 +513,22 @@ namespace gear {
     };
   
   
+  inline activity::Proc
+  Scheduler::doWork()
+  {
+    return layer2_.dispatchCapacity (layer1_
+                                    ,loadControl_
+                                    ,[this](ActivationEvent toDispatch)
+                                            {
+                                              ExecutionCtx ctx{*this, toDispatch};
+                                              return ActivityLang::dispatchChain (toDispatch, ctx);
+                                            }
+                                    ,[this]{ return getSchedTime(); }
+                                    );
+  }
+  
+  
+  
   
   
   /** @note after invoking this terminal operation,
@@ -564,7 +543,7 @@ namespace gear {
   inline ScheduleSpec
   ScheduleSpec::post()
   {                                  // protect allocation
-    auto guard = theScheduler_->layer2_.requireGroomingTokenHere();
+//  auto guard = theScheduler_->layer2_.requireGroomingTokenHere();//////////////////////////////////////TODO  can we avoid that?
     term_ = move(
       theScheduler_->activityLang_
           .buildCalculationJob (job_, start_,death_));
@@ -578,20 +557,37 @@ namespace gear {
   
   inline ScheduleSpec
   ScheduleSpec::linkToSuccessor (ScheduleSpec& succSpec)
-    {                                  // protect allocation
-      auto guard = theScheduler_->layer2_.requireGroomingTokenHere();
+    {
       term_->appendNotificationTo (*succSpec.term_);
       return move(*this);
     }
   
   inline ScheduleSpec
   ScheduleSpec::linkToPredecessor (ScheduleSpec& predSpec)
-    {                                  // protect allocation
-      auto guard = theScheduler_->layer2_.requireGroomingTokenHere();
+    {
       predSpec.term_->appendNotificationTo (*term_);
       return move(*this);
     }
   
+  
+  
+  inline void
+  Scheduler::sanityCheck (ActivationEvent const& event)
+    {
+      if (not event)
+        throw error::Logic ("Empty event passed into Scheduler entrance");
+      if (event.startTime() == Time::ANYTIME)
+        throw error::Fatal ("Attempt to schedule an Activity without valid start time");
+      if (event.deathTime() == Time::NEVER)
+        throw error::Fatal ("Attempt to schedule an Activity without valid deadline");
+      Time now{getSchedTime()};
+      Offset toDeadline{now, event.deathTime()};
+      if (toDeadline > FUTURE_PLANNING_LIMIT)
+        throw error::Fatal (util::_Fmt{"Attempt to schedule Activity %s "
+                                       "with a deadline by %s into the future"}
+                                      % *event.activity
+                                      % toDeadline);
+    }
   
   
   /**
@@ -603,118 +599,9 @@ namespace gear {
   inline void
   Scheduler::postChain (ActivationEvent actEvent)
   {
+    sanityCheck (actEvent);
     maybeScaleWorkForce (actEvent.startTime());
-    ExecutionCtx ctx{*this, actEvent};
-    layer2_.postDispatch (actEvent, ctx, layer1_);
-  }
-  
-  
-  
-  /**
-   * @remarks this function is invoked from within the worker thread(s) and will
-   *   - decide if and how the capacity of this worker shall be used right now
-   *   - possibly go into a short targeted wait state to redirect capacity at a better time point
-   *   - and most notably commence with dispatch of render Activities, to calculate media data.
-   * @return an instruction for the work::Worker how to proceed next:
-   *   - activity::PROC causes the worker to poll again immediately
-   *   - activity::SLEEP induces a sleep state
-   *   - activity::HALT terminates the worker
-   * @note Under some circumstances, this function depends on acquiring the »grooming-token«,
-   *     which is an atomic lock to ensure only one thread at a time can alter scheduler internals.
-   *     In the regular processing sequence, this token is dropped after dequeuing and processing
-   *     some Activities, yet prior to invoking the actual »Render Job«. Explicitly dropping the
-   *     token at the end of this function is a safeguard against deadlocking the system.
-   *     If some other thread happens to hold the token, SchedulerCommutator::findWork
-   *     will bail out, leading to active spinning wait for the current thread.
-   */
-  inline activity::Proc
-  Scheduler::getWork()
-  {
-    try {
-        auto res = WorkerInstruction{}
-                      .performStep([&]{
-                                        layer2_.maybeFeed(layer1_);
-                                        Time now = getSchedTime();
-                                        Time head = layer1_.headTime();
-                                        return scatteredDelay(now,
-                                                  loadControl_.markIncomingCapacity (head,now));
-                                      })
-                      .performStep([&]{
-                                        Time now = getSchedTime();
-                                        auto toDispatch = layer2_.findWork (layer1_,now);
-                                        ExecutionCtx ctx{*this, toDispatch};
-                                        return layer2_.postDispatch (toDispatch, ctx, layer1_);
-                                      })
-                      .performStep([&]{
-                                        layer2_.maybeFeed(layer1_);
-                                        Time now = getSchedTime();
-                                        Time head = layer1_.headTime();
-                                        return scatteredDelay(now,
-                                                  loadControl_.markOutgoingCapacity (head,now));
-                                      });
-        
-        // ensure lock clean-up
-        if (res != activity::PASS)
-          ensureDroppedGroomingToken();
-        return res;
-      }
-    catch(...)
-      {
-        ensureDroppedGroomingToken();
-        throw;
-      }
-  }
-  
-  
-  /**
-   * A worker [asking for work](\ref #getWork) constitutes free capacity,
-   * which can be redirected into a focused zone of the scheduler time axis
-   * where it is most likely to be useful, unless there is active work to
-   * be carried out right away.
-   * @param capacity classification of the capacity to employ this thread
-   * @return how to proceed further with this worker
-   *       - activity::PASS indicates to proceed or call back immediately
-   *       - activity::SKIP causes to exit this round, yet call back again
-   *       - activity::KICK signals contention (not emitted here)
-   *       - activity::WAIT exits and places the worker into sleep mode
-   * @note as part of the regular work processing, this function may
-   *       place the current thread into a short-term targeted sleep.
-   */
-  inline activity::Proc
-  Scheduler::scatteredDelay (Time now, LoadController::Capacity capacity)
-  {
-    auto doTargetedSleep = [&]
-          { // ensure not to block the Scheduler after management work
-            ensureDroppedGroomingToken();
-            // relocate this thread(capacity) to a time where its more useful
-            Offset targetedDelay = loadControl_.scatteredDelayTime (now, capacity);
-            std::this_thread::sleep_for (std::chrono::microseconds (_raw(targetedDelay)));
-          };
-    auto doTendNextHead = [&]
-          {
-            Time head = layer1_.headTime();
-            if (not loadControl_.tendedNext(head)
-                and (layer2_.holdsGroomingToken(thisThread())
-                    or layer2_.acquireGoomingToken()))
-              loadControl_.tendNext(head);
-          };
-    
-    switch (capacity) {
-      case LoadController::DISPATCH:
-        return activity::PASS;
-      case LoadController::SPINTIME:
-        std::this_thread::yield();
-        return activity::SKIP;     //  prompts to abort chain but call again immediately
-      case LoadController::IDLEWAIT:
-        return activity::WAIT;     //  prompts to switch this thread into sleep mode
-      case LoadController::TENDNEXT:
-        doTendNextHead();
-        doTargetedSleep();         //  let this thread wait until next head time is due
-        return activity::SKIP;
-      default:
-        doTargetedSleep();
-        return activity::SKIP;     //  prompts to abort this processing-chain for good
-      }
+    layer2_.postChain (actEvent, layer1_);
   }
   
   
@@ -764,8 +651,7 @@ namespace gear {
         Time deadline = nextTick + DUTY_CYCLE_TOLERANCE;
         Activity& tickActivity = activityLang_.createTick (deadline);
         ActivationEvent tickEvent{tickActivity, nextTick, deadline, ManifestationID(), true};
-        ExecutionCtx ctx{*this, tickEvent};
-        layer2_.postDispatch (tickEvent, ctx, layer1_);
+        layer2_.postChain (tickEvent, layer1_);
       } // *deliberately* use low-level entrance
   }    //  to avoid ignite() cycles and derailed load-regulation
   

@@ -112,7 +112,7 @@ namespace gear {
   namespace blockFlow {///< Parametrisation of Scheduler memory management scheme
     
     /** limit for maximum number of blocks allowed in Epoch expansion
-     * @note SchedulerCommutator::sanityCheck() defines a similar limit,
+     * @note Scheduler::sanityCheck() defines a similar limit,
      *      but there the same reasoning is translated into a hard limit for
      *      deadlines to be < 20sec, while this limit here will only be triggered
      *      if the current block duration has been lowered to the OVERLOAD_LIMIT

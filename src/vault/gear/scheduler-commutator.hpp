@@ -57,10 +57,10 @@
  ** - silently dispose of any outdated entries
  ** - use the [Activity Language environment](\ref ActivityLang) to _perform_
  **   the retrieved chain within some worker thread; this is called _dispatch_
- ** The central cross road of this implementation is the #postDispatch function.
+ ** The main entrance point into this implementation is the #postChain function.
  ** @see SchedulerCommutator::acquireGroomingToken()
  ** @see SchedulerCommutator::findWork()
- ** @see SchedulerCommutator::postDispatch()
+ ** @see SchedulerCommutator::postChain()
  ** @see SchedulerCommutator_test
  ** @see scheduler.hpp usage
  **
@@ -74,6 +74,7 @@
 #include "vault/common.hpp"
 #include "vault/gear/activity.hpp"
 #include "vault/gear/scheduler-invocation.hpp"
+#include "vault/gear/load-controller.hpp"
 #include "vault/gear/activity-lang.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-string.hpp"
@@ -98,7 +99,6 @@ namespace gear {
   
   namespace { // Configuration / Scheduling limit
     
-    Offset FUTURE_PLANNING_LIMIT{FSecs{20}};  ///< limit timespan of deadline into the future (~360 MiB max)
     microseconds GROOMING_WAIT_CYCLE{70us};   ///< wait-sleep in case a thread must forcibly acquire the Grooming-Token
     
     /** convenient short-notation, also used by SchedulerService */
@@ -174,37 +174,6 @@ namespace gear {
       
       
       
-      void
-      sanityCheck (ActivationEvent const& event, Time now)
-        {
-          if (event.startTime() == Time::ANYTIME)
-            throw error::Fatal ("Attempt to schedule an Activity without valid start time");
-          if (event.deathTime() == Time::NEVER)
-            throw error::Fatal ("Attempt to schedule an Activity without valid deadline");
-          Offset toDeadline{now, event.deathTime()};
-          if (toDeadline > FUTURE_PLANNING_LIMIT)
-            throw error::Fatal (util::_Fmt{"Attempt to schedule Activity %s "
-                                           "with a deadline by %s into the future"}
-                                          % *event.activity
-                                          % toDeadline);
-        }
-
-      /**
-       * Decide if Activities shall be performed now and in this thread.
-       * @param when the indicated time of start of the first Activity
-       * @param now  current scheduler time
-       * @return allow dispatch if time is due and GroomingToken was acquired
-       * @warning accesses current ThreadID and changes GroomingToken state.
-       */
-      bool
-      decideDispatchNow (Time when, Time now)
-        {
-          return (when <= now)
-             and (holdsGroomingToken (thisThread())
-                  or acquireGoomingToken());
-        }
-      
-      
       /** tend to the input queue if possible */
       void
       maybeFeed (SchedulerInvocation& layer1)
@@ -236,48 +205,22 @@ namespace gear {
         }
       
       
-      /***************************************************//**
+      /***********************************************************//**
        * This is the primary entrance point to the Scheduler.
-       * Engage into activity as controlled by given start time.
-       * Attempts to acquire the GroomingToken if Activity is due
-       * immediately, otherwise just enqueue it for prioritisation.
-       * @param chain the Render Activities to put into action
-       * @param when  the indicated time of start for these
-       * @param executionCtx abstracted execution environment for
-       *              Render Activities (typically backed by the
-       *              Scheduler as a whole, including notifications
+       * Place the given event into the schedule, with prioritisation
+       * according to its start time.
+       * @param event the chain of Render Activities to be scheduled,
+       *              including start time and deadline
        * @return Status value to indicate how to proceed processing
        *       - activity::PASS continue processing in regular operation
        *       - activity::WAIT nothing to do now, check back later
        *       - activity::HALT serious problem, cease processing
-       *       - activity::KICK to contend (spin) on GroomingToken
-       * @note Attempts to acquire the GroomingToken for immediate
-       *       processing, but not for just enqueuing planned tasks.
-       *       Never drops the GroomingToken explicitly (unless when
-       *       switching from grooming-mode to work-mode in the course
-       *       of processing the given Activity chain regularly).
+       * @note Never attempts to acquire the GroomingToken itself,
+       *       but if current thread holds the token, the task can
+       *       be placed directly into the scheduler queue.
        */
-      template<class EXE>
       activity::Proc
-      postDispatch (ActivationEvent event
-                   ,EXE& executionCtx
-                   ,SchedulerInvocation& layer1
-                   )
-        {
-          if (!event) return activity::KICK;
-          
-          Time now = executionCtx.getSchedTime();
-          sanityCheck (event, now);
-          if (decideDispatchNow (event.startTime(), now))
-            return ActivityLang::dispatchChain (event, executionCtx);
-          else
-            instructFollowUp (event,layer1);
-          return activity::PASS;
-        }
-      
-      activity::Proc
-      instructFollowUp (ActivationEvent event
-                       ,SchedulerInvocation& layer1 )
+      postChain (ActivationEvent event, SchedulerInvocation& layer1)
         {
           if (holdsGroomingToken (thisThread()))
             layer1.feedPrioritisation (move (event));
@@ -285,7 +228,179 @@ namespace gear {
             layer1.instruct (move (event));
           return activity::PASS;
         }
+
+      
+      /**
+       * Implementation of the worker-Functor:
+       * - redirect work capacity in accordance to current scheduler and load
+       * - dequeue and dispatch the Activity chains from the queue to perform the render jobs.
+       */
+      template<class DISPATCH, class CLOCK>
+      activity::Proc
+      dispatchCapacity (SchedulerInvocation&, LoadController&, DISPATCH, CLOCK);
+      
+      
+      
+    private:
+      activity::Proc
+      scatteredDelay (Time now, Time head
+                     ,LoadController& loadController
+                     ,LoadController::Capacity capacity);
+      
+      void
+      ensureDroppedGroomingToken()
+        {
+          if (holdsGroomingToken (thisThread()))
+            dropGroomingToken();
+        }
+      
+      /**
+       * monad-like step sequence: perform sequence of steps,
+       * as long as the result remains activity::PASS
+       */
+      struct WorkerInstruction
+        {
+          activity::Proc lastResult = activity::PASS;
+          
+          /** exposes the latest verdict as overall result
+           * @note returning activity::SKIP from the dispatch
+           *   signals early exit, which is acquitted here. */
+          operator activity::Proc()
+            {
+              return activity::SKIP == lastResult? activity::PASS
+                                                 : lastResult;
+            }
+          
+          template<class FUN>
+          WorkerInstruction
+          performStep (FUN step)
+            {
+              if (activity::PASS == lastResult)
+                lastResult = step();
+              return move(*this);
+            }
+        };
     };
+  
+  
+  
+  
+  
+  
+  /**
+   * @remarks this function is invoked from within the worker thread(s) and will
+   *   - decide if and how the capacity of this worker shall be used right now
+   *   - possibly go into a short targeted wait state to redirect capacity at a better time point
+   *   - and most notably commence with dispatch of render Activities, to calculate media data.
+   * @return an instruction for the work::Worker how to proceed next:
+   *   - activity::PASS causes the worker to poll again immediately
+   *   - activity::KICK to contend (spin) on GroomingToken
+   *   - activity::WAIT induces a sleep state
+   *   - activity::HALT terminates the worker
+   * @note Under some circumstances, this function depends on acquiring the »grooming-token«,
+   *     which is an atomic lock to ensure only one thread at a time can alter scheduler internals.
+   *     In the regular processing sequence, this token is dropped after dequeuing and processing
+   *     some Activities, yet prior to invoking the actual »Render Job«. Explicitly dropping the
+   *     token at the end of this function is a safeguard against deadlocking the system.
+   *     If some other thread happens to hold the token, SchedulerCommutator::findWork
+   *     will bail out, leading to active spinning wait for the current thread.
+   */
+  template<class DISPATCH, class CLOCK>
+  inline activity::Proc
+  SchedulerCommutator::dispatchCapacity (SchedulerInvocation& layer1
+                                        ,LoadController& loadController
+                                        ,DISPATCH executeActivity
+                                        ,CLOCK getSchedTime
+                                        )
+  {
+    try {
+        auto res = WorkerInstruction{}
+                      .performStep([&]{
+                                        maybeFeed(layer1);
+                                        Time now = getSchedTime();
+                                        Time head = layer1.headTime();
+                                        return scatteredDelay(now, head, loadController,
+                                                  loadController.markIncomingCapacity (head,now));
+                                      })
+                      .performStep([&]{
+                                        Time now = getSchedTime();
+                                        auto toDispatch = findWork (layer1,now);
+                                        if (not toDispatch) return activity::KICK; // contention
+                                        return executeActivity (toDispatch);
+                                      })
+                      .performStep([&]{
+                                        maybeFeed(layer1);
+                                        Time now = getSchedTime();
+                                        Time head = layer1.headTime();
+                                        return scatteredDelay(now, head, loadController,
+                                                  loadController.markOutgoingCapacity (head,now));
+                                      });
+        
+        // ensure lock clean-up
+        if (res != activity::PASS)
+          ensureDroppedGroomingToken();
+        return res;
+      }
+    catch(...)
+      {
+        ensureDroppedGroomingToken();
+        throw;
+      }
+  }
+  
+  
+  /**
+   * A worker [asking for work](\ref #doWork) constitutes free capacity,
+   * which can be redirected into a focused zone of the scheduler time axis
+   * where it is most likely to be useful, unless there is active work to
+   * be carried out right away.
+   * @param capacity classification of the capacity to employ this thread
+   * @return how to proceed further with this worker
+   *       - activity::PASS indicates to proceed or call back immediately
+   *       - activity::SKIP causes to exit this round, yet call back again
+   *       - activity::KICK signals contention (not emitted here)
+   *       - activity::WAIT exits and places the worker into sleep mode
+   * @note as part of the regular work processing, this function may
+   *       place the current thread into a short-term targeted sleep.
+   */
+  inline activity::Proc
+  SchedulerCommutator::scatteredDelay (Time now, Time head
+                                      ,LoadController& loadController
+                                      ,LoadController::Capacity capacity)
+  {
+    auto doTargetedSleep = [&]
+          { // ensure not to block the Scheduler after management work
+            ensureDroppedGroomingToken();
+            // relocate this thread(capacity) to a time where its more useful
+            Offset targetedDelay = loadController.scatteredDelayTime (now, capacity);
+            std::this_thread::sleep_for (std::chrono::microseconds (_raw(targetedDelay)));
+          };
+    auto doTendNextHead = [&]
+          {
+            if (not loadController.tendedNext(head)
+                and (holdsGroomingToken(thisThread())
+                    or acquireGoomingToken()))
+              loadController.tendNext(head);
+          };
+    
+    switch (capacity) {
+      case LoadController::DISPATCH:
+        return activity::PASS;
+      case LoadController::SPINTIME:
+        std::this_thread::yield();
+        return activity::SKIP;     //  prompts to abort chain but call again immediately
+      case LoadController::IDLEWAIT:
+        return activity::WAIT;     //  prompts to switch this thread into sleep mode
+      case LoadController::TENDNEXT:
+        doTendNextHead();
+        doTargetedSleep();         //  let this thread wait until next head time is due
+        return activity::SKIP;
+      default:
+        doTargetedSleep();
+        return activity::SKIP;     //  prompts to abort this processing-chain for good
+      }
+  }
+  
   
   
   

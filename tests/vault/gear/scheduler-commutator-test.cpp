@@ -97,10 +97,9 @@ namespace test {
           verify_GroomingToken();
           verify_GroomingGuard();
           torture_GroomingToken();
-          verify_DispatchDecision();
           verify_findWork();
           verify_Significance();
-          verify_postDispatch();
+          verify_postChain();
           integratedWorkCycle();
         }
       
@@ -124,7 +123,7 @@ namespace test {
           // prepare scenario: some activity is enqueued
           queue.instruct ({activity, when, dead});
           
-          sched.postDispatch (sched.findWork(queue,now), detector.executionCtx,queue);
+////          sched.postChain (sched.findWork(queue,now), detector.executionCtx,queue);///////////////TODO
           CHECK (detector.verifyInvocation("CTX-tick").arg(now));
           CHECK (queue.empty());
           
@@ -279,51 +278,51 @@ namespace test {
       
       
       
-      /** @test verify the logic to decide where and when to perform
-       *        the dispatch of a Scheduler Activity chain.
-       */
-      void
-      verify_DispatchDecision()
-        {
-          SchedulerCommutator sched;
-          ___ensureGroomingTokenReleased(sched);
-          
-          Time t1{10,0};
-          Time t2{20,0};
-          Time t3{30,0};
-          Time now{t2};
-          
-          auto myself = std::this_thread::get_id();
-          CHECK (sched.decideDispatchNow (t1, now));               // time is before now => good to execute
-          CHECK (sched.holdsGroomingToken (myself));               // Side-Effect: acquired the Grooming-Token
-          
-          CHECK (sched.decideDispatchNow (t1, now));               // also works if Grooming-Token is already acquired
-          CHECK (sched.holdsGroomingToken (myself));
-          
-          CHECK (sched.decideDispatchNow (t2, now));               // Boundary case time == now  => good to execute
-          CHECK (sched.holdsGroomingToken (myself));
-          
-          CHECK (not sched.decideDispatchNow (t3, now));           // Task in the future shall not be dispatched now
-          CHECK (sched.holdsGroomingToken (myself));               // ...and this case has no impact on the Grooming-Token
-          sched.dropGroomingToken();
-          
-          CHECK (not sched.decideDispatchNow (t3, now));
-          CHECK (not sched.holdsGroomingToken (myself));
-          
-          blockGroomingToken(sched);
-          CHECK (not sched.acquireGoomingToken());
-          
-          CHECK (not sched.decideDispatchNow (t1, now));           // unable to acquire => can not decide positively
-          CHECK (not sched.holdsGroomingToken (myself));
-          
-          CHECK (not sched.decideDispatchNow (t2, now));
-          CHECK (not sched.holdsGroomingToken (myself));
-          
-          unblockGroomingToken();
-          
-          CHECK (sched.decideDispatchNow (t2, now));
-          CHECK (sched.holdsGroomingToken (myself));
-        }
+//    /** @test verify the logic to decide where and when to perform
+//     *        the dispatch of a Scheduler Activity chain.
+//     */
+//    void
+//    verify_DispatchDecision()
+//      {
+//        SchedulerCommutator sched;
+//        ___ensureGroomingTokenReleased(sched);
+//        
+//        Time t1{10,0};
+//        Time t2{20,0};
+//        Time t3{30,0};
+//        Time now{t2};
+//        
+//        auto myself = std::this_thread::get_id();
+//        CHECK (sched.decideDispatchNow (t1, now));               // time is before now => good to execute
+//        CHECK (sched.holdsGroomingToken (myself));               // Side-Effect: acquired the Grooming-Token
+//        
+//        CHECK (sched.decideDispatchNow (t1, now));               // also works if Grooming-Token is already acquired
+//        CHECK (sched.holdsGroomingToken (myself));
+//        
+//        CHECK (sched.decideDispatchNow (t2, now));               // Boundary case time == now  => good to execute
+//        CHECK (sched.holdsGroomingToken (myself));
+//        
+//        CHECK (not sched.decideDispatchNow (t3, now));           // Task in the future shall not be dispatched now
+//        CHECK (sched.holdsGroomingToken (myself));               // ...and this case has no impact on the Grooming-Token
+//        sched.dropGroomingToken();
+//        
+//        CHECK (not sched.decideDispatchNow (t3, now));
+//        CHECK (not sched.holdsGroomingToken (myself));
+//        
+//        blockGroomingToken(sched);
+//        CHECK (not sched.acquireGoomingToken());
+//        
+//        CHECK (not sched.decideDispatchNow (t1, now));           // unable to acquire => can not decide positively
+//        CHECK (not sched.holdsGroomingToken (myself));
+//        
+//        CHECK (not sched.decideDispatchNow (t2, now));
+//        CHECK (not sched.holdsGroomingToken (myself));
+//        
+//        unblockGroomingToken();
+//        
+//        CHECK (sched.decideDispatchNow (t2, now));
+//        CHECK (sched.holdsGroomingToken (myself));
+//      }
       
       
       
@@ -468,7 +467,7 @@ namespace test {
       /** @test verify entrance point for performing an Activity chain.
        */
       void
-      verify_postDispatch()
+      verify_postChain()
         {
           // rigged execution environment to detect activations--------------
           ActivityDetector detector;
@@ -488,18 +487,18 @@ namespace test {
           CHECK (not sched.holdsGroomingToken (myself));
           
           // no effect when empty / no Activity given (usually this can happen due to lock contention)
-          CHECK (activity::KICK == sched.postDispatch (ActivationEvent(), detector.executionCtx, queue));
+          CHECK (activity::KICK == sched.postChain (ActivationEvent(), queue));
           CHECK (not sched.holdsGroomingToken (myself));
           
-          // Activity immediately dispatched when on time and GroomingToken can be acquired
-          CHECK (activity::PASS == sched.postDispatch (makeEvent(past), detector.executionCtx, queue));
+          // Activity immediately dispatched when on time and GroomingToken can be acquired ///////////////////////////TODO
+          CHECK (activity::PASS == sched.postChain (makeEvent(past), queue));
           CHECK (detector.verifyInvocation("testActivity").timeArg(now)); // was invoked immediately
           CHECK (    sched.holdsGroomingToken (myself));
           CHECK (    queue.empty());
           detector.incrementSeq(); // Seq-point-1 in the detector log
           
           // future Activity is enqueued by short-circuit directly into the PriorityQueue if possible
-          CHECK (activity::PASS == sched.postDispatch (makeEvent(future), detector.executionCtx, queue));
+          CHECK (activity::PASS == sched.postChain (makeEvent(future), queue));
           CHECK (    sched.holdsGroomingToken (myself));
           CHECK (not queue.empty());
           CHECK (isSameObject (activity, *queue.peekHead())); //  appears at Head, implying it's in Priority-Queue
@@ -510,14 +509,14 @@ namespace test {
           CHECK (queue.empty());
           
           // ...but GroomingToken is not acquired explicitly; Activity is just placed into the Instruct-Queue
-          CHECK (activity::PASS == sched.postDispatch (makeEvent(future), detector.executionCtx, queue));
+          CHECK (activity::PASS == sched.postChain (makeEvent(future), queue));
           CHECK (not sched.holdsGroomingToken (myself));
           CHECK (not queue.peekHead());           // not appearing at Head this time,
           CHECK (not queue.empty());             //  rather waiting in the Instruct-Queue
           
           
           blockGroomingToken(sched);
-          CHECK (activity::PASS == sched.postDispatch (makeEvent(now), detector.executionCtx, queue));
+          CHECK (activity::PASS == sched.postChain (makeEvent(now), queue));
           CHECK (not sched.holdsGroomingToken (myself));
           CHECK (not queue.peekHead());     // was enqueued, not executed
           
@@ -586,7 +585,7 @@ namespace test {
           TimeVar now{Time::ZERO};
           
           // rig the ExecutionCtx to allow manipulating "current scheduler time"
-          detector.executionCtx.getSchedTime = [&]{ return Time{now}; };
+          detector.executionCtx.getSchedTime = [&]{ return Time{now}; };///////////////////////////TODO RLY?
           // rig the λ-work to verify GroomingToken and to drop it then
           detector.executionCtx.work.implementedAs(
             [&](Time, size_t)
@@ -598,7 +597,7 @@ namespace test {
           
           //    ·=================================================================== actual test sequence
           // Add the Activity-Term to be scheduled for planned start-Time
-          sched.postDispatch (ActivationEvent{anchor, start}, detector.executionCtx, queue);
+          sched.postChain (ActivationEvent{anchor, start}, queue);
           CHECK (detector.ensureNoInvocation("testJob"));
           CHECK (not sched.holdsGroomingToken (myself));
           CHECK (not queue.empty());
@@ -612,7 +611,7 @@ namespace test {
           CHECK (sched.holdsGroomingToken (myself));       // acquired the GroomingToken
           CHECK (isSameObject(*act, anchor));              // "found" the rigged Activity as next piece of work
           
-          sched.postDispatch (act, detector.executionCtx, queue);
+          sched.postChain (act, queue); ////////////////////////TODO must dispatch here
           
           CHECK (queue.empty());
           CHECK (not sched.holdsGroomingToken (myself));   // the λ-work was invoked and dropped the GroomingToken
