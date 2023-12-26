@@ -372,15 +372,58 @@ namespace gear {
           return static_cast<Epoch&> (extent);
         }
       
-      struct StorageAdaptor : RawIter
+      /**
+       * Adapt the access to the raw storage to present the Extents as Epoch;
+       * also caches the address resolution for performance reasons (+20%).
+       */
+      class StorageAdaptor
+        : public RawIter
         {
+          Epoch* curr_{nullptr};
+          
+          Epoch*
+          accessEpoch()
+            {
+              return RawIter::checkPoint()? & asEpoch (RawIter::yield())
+                                          : nullptr;
+            }
+          
+        public:
           StorageAdaptor()  = default;
-          StorageAdaptor(RawIter it) : RawIter{it} { }
-          Epoch& yield()  const  { return asEpoch (RawIter::yield()); }
+          StorageAdaptor(RawIter it)
+            : RawIter{it}
+            , curr_{accessEpoch()}
+            { }
+          
+          bool
+          checkPoint()  const
+            {
+              return bool(curr_);
+            }
+          
+          Epoch&
+          yield()  const
+            {
+              return *curr_;
+            }
+          
+          void
+          iterNext()
+            {
+              RawIter::iterNext();
+              curr_ = accessEpoch();
+            }
+          
+          void
+          expandAlloc (size_t cnt =1)
+            {
+              RawIter::expandAlloc(cnt);
+              curr_ = accessEpoch();
+            }
         };
       
       
-
+      
     public:
       BlockFlow()
         : alloc_{Strategy::initialEpochCnt()}
@@ -499,7 +542,8 @@ namespace gear {
                   ___sanityCheckAlloc(requiredNew);
                   if (distance % _raw(epochStep_) > 0)
                     ++requiredNew;  // fractional:  requested deadline lies within last epoch
-                  alloc_.openNew(requiredNew);   // Note: nextEpoch now points to the first new Epoch
+                  nextEpoch.expandAlloc (requiredNew);
+                  // nextEpoch now points to the first new Epoch
                   for ( ; 0 < requiredNew; --requiredNew)
                     {
                       REQUIRE (nextEpoch);

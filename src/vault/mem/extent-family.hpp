@@ -163,7 +163,17 @@ namespace mem {
           /* === pass-through extended functionality === */
           
           size_t getIndex() { return index;    }
-          void expandAlloc(){ exFam->openNew();}
+          
+          void
+          expandAlloc (size_t cnt =1)
+            {
+              size_t prevStart = exFam->start_;
+              exFam->openNew(cnt);
+              if (index >= prevStart)
+                index += (exFam->start_-prevStart);
+                // was in a segment that might be moved up
+              ENSURE (exFam->isValidPos (index));
+            }
         };
       
       

@@ -524,7 +524,7 @@ namespace test {
           gear::BlockFlow<blockFlow::RenderConfig> blockFlow;
           // Note: using the RenderConfig, which uses larger blocks and more pre-allocation
           auto blockFlowAlloc = [&]{
-                              auto allocHandle = blockFlow.until(Time{400,0});
+                              auto allocHandle = blockFlow.until(Time{BASE_DEADLINE});
                               auto allocate = [&, j=0](Time t, size_t check) mutable -> Activity&
                                                   {
                                                     if (++j >= 10) // typically several Activities are allocated on the same deadline
