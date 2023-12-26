@@ -366,17 +366,9 @@ namespace test {
                               };
           
           
-          cout << "Scheduled right away..."<<endl;
-          start = RealClock::now();
-          post(start);                                                      // Post the testProbe to be scheduled "now"
-          CHECK (wasInvoked(start));                                        // Result: invoked directly, not enqueued at all
-          CHECK (scheduler.empty());
-          
-          
           cout << "pullWork() on empty queue..."<<endl;
           pullWork();                                                       // Call the work-Function on empty Scheduler queue
           CHECK (activity::WAIT == res);                                    // the result instructs this thread to go to sleep immediately
-          CHECK (delay_us < 40);
           
           
           cout << "Due at pullWork()..."<<endl;

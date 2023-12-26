@@ -100,6 +100,7 @@ namespace test {
           verify_findWork();
           verify_Significance();
           verify_postChain();
+          verify_dispatch();
           integratedWorkCycle();
         }
       
@@ -123,7 +124,10 @@ namespace test {
           // prepare scenario: some activity is enqueued
           queue.instruct ({activity, when, dead});
           
-////          sched.postChain (sched.findWork(queue,now), detector.executionCtx,queue);///////////////TODO
+          // retrieve one event from queue and dispatch it
+          ActivationEvent act = sched.findWork(queue,now);
+          ActivityLang::dispatchChain (act, detector.executionCtx);
+          
           CHECK (detector.verifyInvocation("CTX-tick").arg(now));
           CHECK (queue.empty());
           
@@ -484,18 +488,15 @@ namespace test {
               // no one holds the GroomingToken
           ___ensureGroomingTokenReleased(sched);
           auto myself = std::this_thread::get_id();
-          CHECK (not sched.holdsGroomingToken (myself));
+          CHECK (sched.acquireGoomingToken());
           
-          // no effect when empty / no Activity given (usually this can happen due to lock contention)
-          CHECK (activity::KICK == sched.postChain (ActivationEvent(), queue));
-          CHECK (not sched.holdsGroomingToken (myself));
-          
-          // Activity immediately dispatched when on time and GroomingToken can be acquired ///////////////////////////TODO
+          // Activity with start time way into the past is enqueued, but then discarded
           CHECK (activity::PASS == sched.postChain (makeEvent(past), queue));
-          CHECK (detector.verifyInvocation("testActivity").timeArg(now)); // was invoked immediately
-          CHECK (    sched.holdsGroomingToken (myself));
-          CHECK (    queue.empty());
-          detector.incrementSeq(); // Seq-point-1 in the detector log
+          CHECK (detector.ensureNoInvocation("testActivity"));  //  not invoked
+          CHECK (queue.peekHead());                            //   still in the queue...
+          CHECK (not sched.findWork (queue,now));             //    but it is not retrieved due to deadline
+          CHECK (not queue.peekHead());                      //     and thus was dropped
+          CHECK (queue.empty());
           
           // future Activity is enqueued by short-circuit directly into the PriorityQueue if possible
           CHECK (activity::PASS == sched.postChain (makeEvent(future), queue));
@@ -520,12 +521,11 @@ namespace test {
           CHECK (not sched.holdsGroomingToken (myself));
           CHECK (not queue.peekHead());     // was enqueued, not executed
           
-          // Note: this test achieved one single direct invocation;
-          // all further cases after Seq-point-1 were queued only
-          CHECK (detector.ensureNoInvocation("testActivity")
-                         .afterSeqIncrement(1));
+          // Note: this test did not cause any direct invocation;
+          // all provided events were queued only
+          CHECK (detector.ensureNoInvocation("testActivity"));
           
-          // As sanity-check: after the point where we purged the queue,
+          // As sanity-check: the first event was enqueued and the picked up;
           // two further cases where enqueued; we could retrieve them if
           // re-acquiring the GroomingToken and using suitable query-time
           unblockGroomingToken();
@@ -539,6 +539,71 @@ namespace test {
           CHECK (sched.findWork(queue, future));
           CHECK (    queue.empty());
         }
+      
+      
+      
+      /** @test verify basic functionality to dequeue and dispatch entries.
+       * @remark this is actually the core of the [»work-function«](\ref Scheduler::doWork),
+       *         and can not easily be demonstrated on a unit-test level, due to the interplay
+       *         with timing and load distribution. So this test is limited to show _that_ an entry
+       *         passes through the queues and is dispatched
+       * @see SchedulerService_test::invokeWorkFunction() for a more comprehensive integration test
+       */
+      void
+      verify_dispatch()
+        {
+          // rigged execution environment to detect activations--------------
+          ActivityDetector detector;
+          Activity& activity = detector.buildActivationProbe ("testActivity");
+                                                                                  // set a dummy deadline to pass the sanity check
+          SchedulerInvocation queue;
+          SchedulerCommutator sched;
+          LoadController      lCtrl;
+          
+          Time start{0,1};
+          Time dead{0,10};
+          // prepare the queue with one activity
+          CHECK (Time::NEVER == queue.headTime());
+          queue.instruct ({activity, start, dead});
+          queue.feedPrioritisation();
+          CHECK (start == queue.headTime());
+          
+          // for the first testcase,
+          // set Grooming-Token to be blocked
+          blockGroomingToken(sched);
+          auto myself = std::this_thread::get_id();
+          CHECK (not sched.holdsGroomingToken (myself));
+          
+          // invoking the dequeue and dispatch requires some wiring
+          // with functionality provided by other parts of the scheduler
+          auto getSchedTime = detector.executionCtx.getSchedTime;
+          auto executeActivity = [&](ActivationEvent event)
+                                    {
+                                      return ActivityLang::dispatchChain (event, detector.executionCtx);
+                                    };
+          
+          // Invoke the pull-work functionality directly from this thread
+          // (in real usage, this function is invoked from a worker)
+          CHECK (activity::KICK == sched.dispatchCapacity (queue
+                                                          ,lCtrl
+                                                          ,executeActivity
+                                                          ,getSchedTime));
+          CHECK (not queue.empty());
+          // the first invocation was kicked back,
+          // since the Grooming-token could not be acquired.
+          unblockGroomingToken();
+          
+          // ...now this thread can acquire, fetch from queue and dispatch....
+          CHECK (activity::PASS == sched.dispatchCapacity (queue
+                                                          ,lCtrl
+                                                          ,executeActivity
+                                                          ,getSchedTime));
+          
+          CHECK (queue.empty());
+          CHECK (not sched.holdsGroomingToken (myself));
+          CHECK (detector.verifyInvocation("testActivity"));
+        }
+      
       
       
       
@@ -585,7 +650,7 @@ namespace test {
           TimeVar now{Time::ZERO};
           
           // rig the ExecutionCtx to allow manipulating "current scheduler time"
-          detector.executionCtx.getSchedTime = [&]{ return Time{now}; };///////////////////////////TODO RLY?
+          detector.executionCtx.getSchedTime = [&]{ return Time{now}; };
           // rig the λ-work to verify GroomingToken and to drop it then
           detector.executionCtx.work.implementedAs(
             [&](Time, size_t)
@@ -611,7 +676,8 @@ namespace test {
           CHECK (sched.holdsGroomingToken (myself));       // acquired the GroomingToken
           CHECK (isSameObject(*act, anchor));              // "found" the rigged Activity as next piece of work
           
-          sched.postChain (act, queue); ////////////////////////TODO must dispatch here
+          // dispatch the Activity-chain just retrieved from the queue
+          ActivityLang::dispatchChain (act, detector.executionCtx);
           
           CHECK (queue.empty());
           CHECK (not sched.holdsGroomingToken (myself));   // the λ-work was invoked and dropped the GroomingToken
