@@ -29,6 +29,7 @@
 
 #include "steam/play/diagnostic-output-slot.hpp"
 #include "steam/engine/buffhandle.hpp"
+#include "steam/engine/buffhandle-attach.hpp"
 #include "steam/engine/testframe.hpp"
 
 

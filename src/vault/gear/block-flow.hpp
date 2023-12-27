@@ -410,6 +410,7 @@ namespace gear {
           void
           iterNext()
             {
+              RawIter::validatePos(curr_);
               RawIter::iterNext();
               curr_ = accessEpoch();
             }

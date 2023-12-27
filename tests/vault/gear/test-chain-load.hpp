@@ -1264,7 +1264,7 @@ namespace test {
         {
           auto round = roundsNeeded (scaleStep);
           Sink sink;
-          size_t scree;
+          size_t scree{0x55DEAD55};
           for ( ; 0 < round; --round)
             boost::hash_combine (scree,scree);
           sink = scree;

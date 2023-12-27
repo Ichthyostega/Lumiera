@@ -55,6 +55,7 @@
 
 namespace vault{
 namespace mem {
+  namespace err = lumiera::error;
   
   namespace {
     const size_t ALLOC_SAFETY_LIMIT = 8_GiB;
@@ -174,7 +175,31 @@ namespace mem {
                 // was in a segment that might be moved up
               ENSURE (exFam->isValidPos (index));
             }
+          
+          /**
+           * Ensure this iterator is still in-sync with expected
+           * target position; attempt to re-establish proper sync
+           * after growing the Extents pool with position rotation.
+           * @remark typically steps up by number of new slots.
+           */
+          void
+          validatePos (Extent* knownTarget)
+            {
+              if (knownTarget == & yield())
+                return;
+              size_t prevIdx = index;
+              do{
+                  iterNext();
+                  if (knownTarget == & yield())
+                    return;
+                }
+              while (index != prevIdx);
+              // went full circle without hitting the expected target Extent....
+              throw err::Logic {"Unable to fix-up an iterator after Extent allocation. "
+                                "Reference position obsolete or unknown to the memory manager."};
+            }
         };
+      
       
       
       /* ==== Management Data ==== */
@@ -337,12 +362,11 @@ namespace mem {
         {
           size_t resultSiz = slotCnt()+addCnt;
           size_t requiredSpace = resultSiz * sizeof(Extent);
-          using namespace lumiera::error;
           if (requiredSpace > ALLOC_SAFETY_LIMIT)
-            throw Fatal{"Raw allocation exceeds safety limit: "
-                         +util::showSize(requiredSpace)    +" > "
-                         +util::showSize(ALLOC_SAFETY_LIMIT)
-                       , LUMIERA_ERROR_CAPACITY};
+            throw err::Fatal{"Raw allocation exceeds safety limit: "
+                            +util::showSize(requiredSpace)    +" > "
+                            +util::showSize(ALLOC_SAFETY_LIMIT)
+                            ,err::LUMIERA_ERROR_CAPACITY};
         }
       
       

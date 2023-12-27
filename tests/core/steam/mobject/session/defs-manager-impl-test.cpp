@@ -37,7 +37,7 @@
 #include "steam/streamtype.hpp"
 #include "lib/format-string.hpp"
 #include "lib/query-util.hpp"
-#include "common/query.hpp"
+#include "common/query/defs-manager-impl.hpp"
 
 using util::_Fmt;
 using util::isnil;
