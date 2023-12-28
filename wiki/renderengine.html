@@ -6183,7 +6183,7 @@ This is the core service provided by the player subsystem. The purpose is to cre
 :any details of this processing remain opaque for the clients; even the player subsystem just accesses the EngineFaçade
 </pre>
 </div>
-<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202307220249" tags="overview impl discuss draft" changecount="34">
+<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202312281714" tags="overview impl discuss draft" changecount="37">
 <pre>//Integration effort to promote the development of rendering, playback and video display in the GUI//
 This IntegrationSlice was started in {{red{2023}}} as [[Ticket #1221|https://issues.lumiera.org/ticket/1221]] to coordinate the completion and integration of various implementation facilities, planned, drafted and built during the last years; this effort marks the return of development focus to the lower layers (after years of focussed UI development) and will implement the asynchronous and time-bound rendering coordinated by the [[Scheduler]] in the [[Vault|Vault-Layer]]
 
@@ -6211,9 +6211,12 @@ __June23__: building upon this prototyping approach, the dispatcher pipeline cou
 __July23__: this leads to a shift of work focus towards implementing the [[Scheduler]] itself.
 The Scheduler will be structured into two Layers, where the lower layer is implemented as //priority queue// (using the STL). So the most tricky part to solve is the representation of //dependencies// between jobs, with the possible extension to handling IO operations asynchronously. Analysis and planning of the implementation indicate that the [[scheduler memory managment|SchedulerMemory]] can be based on //Extents//, which are interpreted as »Epochs« with a deadline. These considerations imply what steps to take next for building up Scheduler functionality and memory management required for processing a simple job
 * ✔ build a first working draft for the {{{BlockFlow}}} allocation scheme [[#1311|https://issues.lumiera.org/ticket/1311]]
-* 🗘 define and cover the basic [[Activities|RenderActivity]] necessary to implement a plain-simple-Job (without dependencies)
-* ⌛ pass such an Activity through the two layers of the Scheduler
+* ✔ define and cover the basic [[Activities|RenderActivity]] necessary to implement a plain-simple-Job (without dependencies)
+* ✔ pass such an Activity through the two layers of the Scheduler
+* 🗘 establish a baseline for //performance measurements//
 * ⌛ adapt the [[job planning pipeline|JobPlanningPipeline]] implemented thus far to produce the appropriate {{{Activity}}} records for the scheduler
+
+__December23__: building the Scheduler required some time and dedication, including some related topics like a [[dedicated memory management scheme|SchedulerMemory]], rework and modernisation of the [[#1279 thread handling framework|https://issues.lumiera.org/ticket/1279]], using a [[worker pool|SchedulerWorker]] and developing the [[foundation for load control|SchedulerLoadControl]]. This amounts to the creation of a considerable body of new code; some load- and stress testing helps to establish performance characteristics .
 
 !Decisions
 ;Scheduler
@@ -6227,6 +6230,10 @@ The Scheduler will be structured into two Layers, where the lower layer is imple
 :a dependency check is operationalised as activity primitive and also used to hold allocations alive
 :operational control and data management is //performed by the workers// interspersed with render activities
 :however, only one worker at any time is allowed to perform these meta tasks, avoiding further synchronisation
+;Workers
+:are active agents in the Lumiera ~Render-Engine and drive the processing collaboratively
+:there is no central »manager« or »dispatcher« thread, rather work is //pulled// and management work is handled alongside
+:Load and capacity management is [[handled stochastically|SchedulerLoadControl]] -- workers „sample the timeline“
 </pre>
 </div>
 <div title="Player" modifier="Ichthyostega" created="201012181700" modified="202304140114" tags="def overview" changecount="4">
@@ -6858,7 +6865,7 @@ At first sight the link between asset and clip-MO is a simple logical relation b
 
 {{red{Note 1/2015}}} several aspects regarding the relation of clips and single/multichannel media are not yet settled. There is a preliminary implementation in the code base, but it is not sure yet how multichnnel media will actually be modelled. Currently, we tend to treat the channel multiplicity rather as a property of the involved media, i.e we have //one// clip object.</pre>
 </div>
-<div title="RenderActivity" creator="Ichthyostega" modifier="Ichthyostega" created="202304140145" modified="202308291242" tags="Rendering spec draft" changecount="15">
+<div title="RenderActivity" creator="Ichthyostega" modifier="Ichthyostega" created="202304140145" modified="202312281737" tags="Rendering spec draft" changecount="16">
 <pre>//Render Activities define the execution language of the render engine.//
 The [[Scheduler]] maintains the ability to perform these Activities, in a time-bound fashion, observing dependency relations; activities allow for notification of completed work, tracking of dependencies, timing measurements, re-scheduling of other activities -- and last but not least the dispatch of actual [[render jobs|RenderJob]]. Activities are what is actually enqueued with priority in the scheduler implementation, they are planned for a »µ-tick slot«, activated once when the activation time is reached, and then forgotten. Each Activity is a //verb//, but can be inhibited by conditions and carry operation object data. Formally, activating an Activity equates to a predication, and the subject of that utterance is »the render process«.
 
@@ -6898,7 +6905,7 @@ The //meaning// of Activities can be understood on two levels. For one, there is
 * guarding means inhibiting and releasing -- once the prerequisites of a {{{GATE}}} have been ticket off, and unless the deadline is violated
 * notification implies a trigger -- an impulse, either to //decrement// a {{{GATE}}} or to //activate// another Activity
 * posting anchors a pattern -- a complete structure of further Activities is put underway, possibly with an explicit //start time// and //deadline.//
-However, the //meaning// of Activities can also be understood at the //operational level:// This is what the [[operational logic of Activity execution|RenderOperationLogic]] entails, what is implemented as interpretation of the Activity Language and what is actually backed and implemented by the [[Scheduler]].
+However, the //meaning// of Activities can also be understood at the //operational level:// This is what the [[operational logic of Activity execution|RenderOperationLogic]] entails, what is implemented as interpretation of the Activity Language and what is actually backed and implemented by the [[internals of the Scheduler|SchedulerProcessing]].
 </pre>
 </div>
 <div title="RenderDrive" creator="Ichthyostega" modifier="Ichthyostega" created="202306122212" tags="spec Player draft" changecount="1">
@@ -7041,7 +7048,7 @@ __see also__
 &amp;rarr; the protocol [[how to operate the nodes|NodeOperationProtocol]]
 </pre>
 </div>
-<div title="RenderOperationLogic" creator="Ichthyostega" modifier="Ichthyostega" created="202307272322" modified="202310272134" tags="Rendering operational draft" changecount="30">
+<div title="RenderOperationLogic" creator="Ichthyostega" modifier="Ichthyostega" created="202307272322" modified="202312281644" tags="Rendering operational draft" changecount="31">
 <pre>//The operational logic of Activity execution is the concrete service provided by the [[Scheduler]] to implement interwoven [[render Activities|RenderActivity]] and [[Job  execution|RenderJob]].//
 * logically, each {{{Activity}}} record represents a //verb// to describe some act performed by »the render process«
 * the {{{ActivityLang}}} provides a //builder notation// to build „sentences of activities“ and it sets the framework for //execution// of Activities
@@ -7125,7 +7132,7 @@ Since the render engine can be considered performance critical, only a fixed set
 !!!Post and dispatch
 An Activity is //performed// by invoking its {{{activate(now, ctx)}}} function -- however, there is a twist: some Activities require interaction with the Scheduler queue or may even alter this queue -- and such Activities must be performed //in »management mode«// (single threaded, holding the {{{GroomingToken}}}). These requirements can be fulfilled by //dispatching// an Activity through the ''λ-post'', which attempts to acquire the {{{GroomingToken}}} to proceed directly -- and otherwise sends the action through the //dispatch queue.// Moreover, some follow-up activities need to happen //later// -- and this can be encoded by using a {{{POST}}}-Activity, which both defines a time window of execution and causes its chain-Activity to be sent through ''λ-post''. All the Lambda functions mentioned here are part of the //execution context,// which represents and abstracts the scheduler environment.
 
-In a similar vein, also ''dependency notifications'' need to happen decoupled from the activity chain from which they originate; thus the Post-mechanism is also used for dispatching notifications. Yet notifications are to be treated specially, since they are directed towards a receiver, which in the standard case is a {{{GATE}}}-Activity and will respond by //decrementing its internal latch.// Consequently, receiving a notification may cause the Gate to become opened; in this case the trigger is passed through a further dispatch through the ''λ-post'' to activate the chain-Activities hooked behind the Gate. Otherwise, if the latch is already zero (or the deadline has passed), nothing happens. Thus the implementation of state transition logic ensures the chain behind a Gate can only be //activated once.//
+In a similar vein, also ''dependency notifications'' need to happen decoupled from the activity chain from which they originate; thus the Post-mechanism is also used for dispatching notifications. Yet notifications are to be treated specially, since they are directed towards a receiver, which in the standard case is a {{{GATE}}}-Activity and will respond by //decrementing its internal latch.// Consequently, notifications will be sent through the ''λ-post'' -- which operationally re-schedules a continuation as a follow-up job. Receiving such a notification may cause the Gate to become opened; in this case the trigger leads to //activation of the chain// hooked behind the Gate, which at some point typically enters into another calculation job. Otherwise, if the latch (in the Gate) is already zero (or the deadline has passed), nothing happens. Thus the implementation of state transition logic ensures the chain behind a Gate can only be //activated once.//
 </pre>
 </div>
 <div title="RenderProcess" modifier="Ichthyostega" created="200706190705" modified="201112162056" tags="Rendering operational">
@@ -7167,7 +7174,7 @@ Later on we expect a distinct __query subsystem__ to emerge, presumably embeddin
 
 &amp;rarr; QuantiserImpl</pre>
 </div>
-<div title="Scheduler" creator="Ichthyostega" modifier="Ichthyostega" created="202304140131" modified="202310240237" tags="Rendering spec draft" changecount="24">
+<div title="Scheduler" creator="Ichthyostega" modifier="Ichthyostega" created="202304140131" modified="202312281735" tags="Rendering spec draft" changecount="29">
 <pre>//Invoke and control the dependency and time based execution of  [[render jobs|RenderJob]]//
 The Scheduler acts as the central hub in the implementation of the RenderEngine and coordinates the //processing resources// of the application. Regarding architecture, the Scheduler is located in the Vault-Layer and //running// the Scheduler is equivalent to activating the »Vault Subsystem«. An EngineFaçade acts as entrance point, providing high-level render services to other parts of the application: [[render jobs|RenderJob]] can be activated under various timing and dependency constraints. Internally, the implementation is organised into two layers:
 ;Layer-2: Coordination
@@ -7193,12 +7200,20 @@ The [[Language of render activities|RenderActivity]] forms the interface to the 
 
 These ''Worker Threads'' will perform actual render activities most of the time (or be idle). However -- idle workers contend for new work, and for doing so, they //also perform the internal scheduler management activities.// As a consequence, all Scheduler coordination and [[memory management|SchedulerMemory]] is ''performed non-concurrent'': only a single Worker can acquire the {{{GroomingToken}}} and will then perform managment work until the next render activity is encountered at the top side of the //priority queue.//
 
+This leads to a »chaotic«, event-driven processing style without a central managing entity -- the scheduler does not „run the shop“ and rather fulfils a role as bookkeeping and balancing guide. Operationally, the internals of the Scheduler are grouped into several components and arranged towards two entrance lanes: defining a new schedule entry and retrieving work.
+&amp;rarr; SchedulerProcessing
+
+!!!Performance
+Processing is not driven by a centralised algorithm, but rather stochastically by workers becoming available for further work. This allows for adaptation to a wide array of load patterns, but turns assessment of the Scheduler's capabilities and limitations into a challenging task. The speed and throughput of the processing are largely defined by the actual scheduler -- up to the point where the Scheduler is overloaded permanently and the //schedule slips away.// Based on that observation, a framework for [[Scheduler Load- and Performance-testing|SchedulerTest]] was^^{{red{12/2023 rather is about to be}}}^^ established.
+
 !!!Instructing the Scheduler
 The Scheduler is now considered an implementation-level facility with an interface specifically tailored at the JobPlanningPipeline: the [[»Render Activity Language«|RenderActivity]]. This //builder-style// setup allows to construct an ''~Activity-Term'' to model all the structural properties of an individual rendering invocation -- it is compriesed of a network of {{{Activity}}} records, which can be directly handled by the Scheduler.
 
 &amp;rarr; [[Activity|RenderActivity]]
 &amp;rarr; [[Memory|SchedulerMemory]]
 &amp;rarr; [[Workers|SchedulerWorker]]
+&amp;rarr; [[Internals|SchedulerProcessing]]
+&amp;rarr; [[Testing|SchedulerTest]]
 </pre>
 </div>
 <div title="SchedulerLoadControl" creator="Ichthyostega" modifier="Ichthyostega" created="202310240240" modified="202311010317" tags="Rendering operational spec draft" changecount="60">
@@ -7255,7 +7270,7 @@ These distinct »processing classes« seem to impose almost contradictory calcul
 A task placed into the scheduling timeline basically represents some //»cross-section of probability«.// If work capacity happens to „land“ into its definition realm and no further overdue task is scheduled before, the task can use the available capacity. Yet when the deadline of the task has passed without any free capacity „hitting“ its scope, its chances are wasted and the scheduler will discard the entry. And by exploiting these relationships, it is possible to craft a scheme of time slot allocation to translate an abstract processing priority into a probabilistic access to some fraction of capacity. Even more so, since it is possible to place multiple instances of the same task into the scheduling timeline, relying on the [[»Gate« mechanism|RenderOperationLogic]] of the [[Activity-Language|RenderActivity]], to spread out a small level of background processing probability over an extended period of time.
 </pre>
 </div>
-<div title="SchedulerMemory" creator="Ichthyostega" modifier="Ichthyostega" created="202307031622" modified="202310241427" tags="Rendering operational draft" changecount="31">
+<div title="SchedulerMemory" creator="Ichthyostega" modifier="Ichthyostega" created="202307031622" modified="202312281738" tags="Rendering operational draft" changecount="32">
 <pre>//The Scheduler uses an »Extent« based memory management scheme known as {{{BlockFlow}}}.//
 The organisation of rendering happens in terms of [[Activities|RenderActivity]], which may bound by //dependencies// and limited by //deadlines.// For the operational point of view this implies that a sequence of allocations must be able to „flow through the Scheduler“ -- in fact, only references to these {{{Activity}}}-records are passed, while the actual descriptors reside at fixed memory locations. This is essential to model the dependencies and conditional execution structures efficiently. At some point however, any {{{Activity}}}-record will either be //performed// or //obsoleted// -- and this leads to the idea of managing the allocations in //extents// of memory here termed as »Epochs«
 * a new Activity is planted into a suitable //Epoch,// based on its deadline
@@ -7285,6 +7300,16 @@ The auto-regulation of this allocation scheme is based on //controlling the Epoc
 It should be noted that {{{BlockFlow}}} provides very specific services, which are more elaborate than just a custom memory allocator. By leveraging possible scale factors, it is possible however to bring the amortised effort for a single {{{Activity}}} allocation down into the same order of magnitude as a standard heap allocation, which equates to roughly 30ns on contemporary machines. For context, an individually managed allocation-deallocation pair with a ref-counting {{{std::shared_ptr}}} has a typical performance cost of ~100ns.
 
 The primary scaling effects exploited to achieve this level of performance are the combined de-allocation of a complete Epoch, and the combination of several allocations tied to a common deadline. However -- since the Epoch duration is chosen dynamically, performance can potentially be //degraded drastically// once the scheme is put under pressure -- since each new allocation has to search through the list of active Epochs. Parameters are tuned such as to ensure this list remains very short (about 5 Epochs) under typical operational conditions.
+
+&amp;rarr; [[Scheduler performance testing|SchedulerTest]]
+</pre>
+</div>
+<div title="SchedulerProcessing" creator="Ichthyostega" modifier="Ichthyostega" created="202312281750" modified="202312281756" tags="Rendering operational draft" changecount="5">
+<pre>At first sight, the internals of [[Activity|RenderActivity]] processing may seem overwhelmingly complex -- especially since there is no active »processing loop« which might serve as a starting point for the understanding. It is thus necessary to restate the working mode of the Scheduler: it is an //accounting and direction service// for the //active// [[render workers|SchedulerWorker]]. Any processing happens stochastically and is driven by events
+* a //worker// becoming ready to perform further tasks
+* an external //IO event// {{red{12/23 only planned yet}}}
+* a //planning job// to add new elements to the schedule
+The last point highlights a //circular structure:// the planning job itself was part of the schedule, picked up by a worker and activated; this way, the system feeds itself.
 </pre>
 </div>
 <div title="SchedulerRequirements" modifier="Ichthyostega" created="201107080145" modified="201112171835" tags="Rendering spec draft discuss">
@@ -7302,7 +7327,38 @@ The primary scaling effects exploited to achieve this level of performance are t
 The way other parts of the system are built, requires us to obtain a guaranteed knowledge of some job's termination. It is possible to obtain that knowledge with some limited delay, but it nees to be absoultely reliable (violations leading to segfault). The requirements stated above assume this can be achieved through //jobs with guaranteed execution.// Alternatively we could consider installing specific callbacks -- in this case the scheduler itself has to guarantee the invocation of these callbacks, even if the corresponding job fails or is never invoked. It doesn't seem there is any other option.
 </pre>
 </div>
-<div title="SchedulerWorker" creator="Ichthyostega" modifier="Ichthyostega" created="202309041605" modified="202312201342" tags="Rendering operational spec draft" changecount="15">
+<div title="SchedulerTest" creator="Ichthyostega" modifier="Ichthyostega" created="202312281814" modified="202312281836" tags="Rendering operational draft" changecount="4">
+<pre>With the Scheduler testing effort [[#1344|https://issues.lumiera.org/ticket/1344]], several goals are pursued
+* by exposing the new scheduler implementation to excessive overload, its robustness can be assessed and defects can be spotted
+* with the help of a systematic, calibrated load, characteristic performance limits and breaking points can be established
+* when performed in a reproducible way, these //stress tests// can also serve to characterise the actual platform
+* a synthetic load emulating standard use cases allows to watch complex interaction patterns and to optimise the implementation
+
+!A synthetic load for performance testing
+In fall 2023, a load generator component was developed [[#1346|https://issues.lumiera.org/ticket/1346]] as foundation for Scheduler testing.
+The {{{TestChainLoad}}} is inspired by the idea of a blockchain, and features a //graph// of //processing steps (nodes)// to model complex interconnected computations. Each //node// in this graph stands for one render job to be scheduled, and it is connected to //predecessors// and //successors//. The node is able to compute a chained hash based on the hash values of its predecessors. When configured with a //seed value//, this graph has the capability to compute a well defined result hash, which involves the invocation of every node in the right order. For verification, this computation can be done sequentially, by a single thread performing linear pass over the graph. The actual test however is to traverse the graph to produce a schedule of render jobs, each linked to a single node and defining prerequisites in accordance to the graph's structure. It is up to the scheduler then to ensure dependency relations and work out a way to pass on activation, so that the proper result hash will be reproduced at the end.
+
+The Scheduler thus follows the connectivity pattern, and defining a specific pattern characterises the load to produce. Patterns are formed by connecting (or re-connecting) nodes, based on the node's hash -- which implies that patterns are generated. The generation process and thus the emerging form is controlled and defined by a small number of rules. Each rule defines a probability mapping; when fed with a node hash, some output parameter value is generated randomly yet deterministically. The following //topology control rules// are recognised
+;seeding rule
+:when non-zero, the given number of new start (seed) nodes is injected.
+:all seed nodes hold the same, preconfigured fixed seed value and only have successors, no predecessors
+;expansion rule
+:when non-zero, the current node forks out to the given additional number of successor nodes
+;reduction rule
+:when non-zero, the current node will join the given number of additional predecessor nodes
+;pruning rule
+:when non-zero, the current node will be an exit node and terminate the current chain without successor
+:when all ongoing chains happen to be terminated, a new seed node is injected automatically
+;weight rule
+:when non-zero, a computational weight with the given level is applied when invoking the node as render job
+:the //base time// of that weight can be configured (in microseconds) and is roughly calibrated for the current machine
+* //without any rule,// the default is to connect linear chains with one predecessor and one successor
+* the node graph holds a fixed preconfigured number of nodes
+* the //width// is likewise preconfigured, i.e. the number of nodes on the same »level« and typically started at the same time
+* generation is automatically terminated with an exit node, joining all remaining chains
+</pre>
+</div>
+<div title="SchedulerWorker" creator="Ichthyostega" modifier="Ichthyostega" created="202309041605" modified="202312281745" tags="Rendering operational spec draft" changecount="21">
 <pre>The Scheduler //maintains a ''Work Force'' (a pool of workers) to perform the next [[render activities|RenderActivity]] continuously.//
 Each worker runs in a dedicated thread; the Activities are arranged in a way to avoid blocking those worker threads
 * IO operations are performed asynchronously {{red{planned as of 9/23}}}
@@ -7310,7 +7366,7 @@ Each worker runs in a dedicated thread; the Activities are arranged in a way to 
 !Workload and invocation scheme
 Using a pool of workers to perform small isolated steps of work atomically and in parallel is an well established pattern in high performance computing. However, the workload for rendering media is known to have some distinctive traits, calling for a slightly different approach compared with an operation system scheduler or a load balancer. Notably, the demand for resources is high, often using „whatever it takes“ -- driving the system into load saturation. The individual chunks of work, which can be computed independently, are comparatively large, and must often be computed in a constrained order. For real-time performance, it is desirable to compute data as late as possible, to avoid blocking memory with computed results. And for the final quality render, for the same reason it is advisable to proceed in data dependency order to keep as much data as possible in memory and avoid writing temporary files.
 
-This leads to a situation where it is more adequate to //distribute the scarce computation resources// to the tasks //sequenced in temporary and dependency order//. The computation tasks must be prepared and ordered -- but beyond that, there is not much that can be »managed« with a computation task. For this reason, the Scheduler in the Lumiera Render Engine uses a pool of workers, each providing one unit of computation resource (a »core«), and these workers will ''pull work'' actively, rather then distributing, queuing and dispatching tasks to a passive set of workers.
+This leads to a situation where it is more adequate to //distribute the scarce computation resources// to the tasks //sequenced in temporary and dependency order//. The computation tasks must be prepared and ordered -- but beyond that, there is not much that can be »managed« with a computation task. For this reason, the Scheduler in the Lumiera Render Engine uses a pool of workers, each providing one unit of computation resource (a »core«), and these workers will ''pull work'' actively, which stands in contrast to the usual pattern of distributing, queuing and dispatching tasks towards a passive set of workers.
 
 Moreover, the actual computation tasks, which can be parallelised, are at least by an order of magnitude more expensive than any administrative work for sorting tasks, checking dependencies and maintaining process state. This leads to a scheme where a worker first performs some »management work«, until encountering the next actual computation job, at which point the worker leaves the //management mode// and transitions into //concurrent work mode//. All workers are expected to be in work mode almost entirely most of the time, and thus we can expect not much contention between workers performing »management work« -- allowing to confine this management work to //single threaded operation,// thereby drastically reducing the complexity of management data structures and memory allocation.
 !!!Regulating workers
@@ -7332,6 +7388,8 @@ Following the rules of [[C++ atomic Release-Acquire ordering|https://en.cpprefer
 # an atomic store is performed with {{{memory_order_release}}} (thereby dropping the token)
 # now another thread can perform an atomic load with {{{memory_order_acquire}}} -- but it is essential to check and branch on the loaded value
 # and only when the loaded value indicates that the load is //synchronised-with// the preceding store, then the other management data can be processed
+
+&amp;rarr; [[Internals of processing in the Scheduler|SchedulerProcessing]]
 </pre>
 </div>
 <div title="ScopeLocator" modifier="Ichthyostega" created="200911192145" modified="200911202035" tags="def SessionLogic">

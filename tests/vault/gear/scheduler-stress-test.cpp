@@ -71,13 +71,16 @@ namespace test {
       virtual void
       run (Arg)
         {
-           smokeTest();
+           //smokeTest();
+           setup_systematicSchedule();
            generalFuckup();
            walkingDeadline();
         }
       
       
       /** @test TODO demonstrate sustained operation under load
+       *      - TODO this is a placeholder and works now, but need a better example
+       *      - it should not produce so much overload, rather some stretch of steady-state processing
        * @todo WIP 12/23 🔁 define ⟶ implement
        */
       void
@@ -130,6 +133,66 @@ namespace test {
 
           // invocation through Scheduler has reproduced all node hashes
           CHECK (testLoad.getHash() == expectedHash);
+        }
+      
+      
+      
+      /** @test TODO build a scheme to adapt the schedule to expected runtime.
+       * @todo WIP 12/23 🔁 define ⟶ implement
+       */
+      void
+      setup_systematicSchedule()
+        {
+          MARK_TEST_FUN
+          TestChainLoad testLoad{64};
+          testLoad.configureShape_chain_loadBursts()
+                  .buildToplolgy()
+                  .printTopologyDOT()
+                  .printTopologyStatistics()
+                  ;
+          
+          auto LOAD_BASE = 500us;
+          ComputationalLoad cpuLoad;
+          cpuLoad.timeBase = LOAD_BASE;
+          cpuLoad.calibrate();
+          
+          double micros = cpuLoad.invoke();
+SHOW_EXPR(micros);
+          CHECK (micros < 550);
+          CHECK (micros > 450);
+          
+          auto levelWeights = testLoad.allLevelWeights();
+SHOW_EXPR(levelWeights.size())
+          for (auto& w : levelWeights)
+            cout<<"level:"<<w.first<<" ∑="<<w.second<<endl;
+          
+          using Node = TestChainLoad<>::Node;
+          auto nodeData = testLoad.allNodes()
+                                  .transform([](Node& n){ return make_pair(n.level,n.weight); })
+                                  .effuse();
+          for (auto& n : nodeData)
+            cout<<"level:"<<n.first<<" w="<<n.second<<endl;
+          CHECK (nodeData[22].first == 16);
+          CHECK (nodeData[23].first == 17);  CHECK (nodeData[23].second == 3);  CHECK (levelWeights[17].second == 3);
+          
+          CHECK (nodeData[24].first == 18);  CHECK (nodeData[24].second == 0);
+          CHECK (nodeData[25].first == 18);  CHECK (nodeData[25].second == 0);
+          CHECK (nodeData[26].first == 18);  CHECK (nodeData[26].second == 0);
+          CHECK (nodeData[27].first == 18);  CHECK (nodeData[27].second == 0);
+          CHECK (nodeData[28].first == 18);  CHECK (nodeData[28].second == 0);  CHECK (levelWeights[18].second == 0);
+          
+          CHECK (nodeData[29].first == 19);  CHECK (nodeData[29].second == 2);
+          CHECK (nodeData[30].first == 19);  CHECK (nodeData[30].second == 2);
+          CHECK (nodeData[31].first == 19);  CHECK (nodeData[31].second == 2);
+          CHECK (nodeData[32].first == 19);  CHECK (nodeData[32].second == 2);
+          CHECK (nodeData[33].first == 19);  CHECK (nodeData[33].second == 2);  CHECK (levelWeights[19].second == 10);
+          
+          CHECK (nodeData[34].first == 20);  CHECK (nodeData[34].second == 3);
+          CHECK (nodeData[35].first == 20);  CHECK (nodeData[35].second == 2);  CHECK (levelWeights[20].second == 5);
+          
+          CHECK (nodeData[36].first == 21);  CHECK (nodeData[36].second == 1);
+          CHECK (nodeData[37].first == 21);  CHECK (nodeData[37].second == 1);
+          CHECK (nodeData[38].first == 21);  CHECK (nodeData[38].second == 3);  CHECK (levelWeights[21].second == 5);
         }
       
       

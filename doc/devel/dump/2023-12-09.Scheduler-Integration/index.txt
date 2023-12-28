@@ -91,9 +91,16 @@ Dump-05::
   at those parts of the graph where it is possible
 - Note moreover, that the actual computation time spent in those nodes with
   a computational weight (suffix `.1` ... `.3`) is mostly in excess of the
-  configured times. For example, a node with weight 3 (≙ 3·500µs) often nees
+  configured times. For example, a node with weight 3 (≙ 3·500µs) often needs
   2-3ms to complete. This is probably due to cache effects, since the weight
   calibration is performed in a hot microbenchmark loop, while here, in a
   more realistic setting, the cpu-load code is invoked intermingled with
   management code, atomic exchanges, sleep-waits and OS scheduler activity.
+
+Dump-06::
+ The same test setup, but after rework of the Scheduler entrance and
+ with better schedule focus and a contention mitigation scheme (28.12.23)
++
+- refTime(singleThr): 31.8014ms
+- runTime(Scheduler): 42.0706ms
 

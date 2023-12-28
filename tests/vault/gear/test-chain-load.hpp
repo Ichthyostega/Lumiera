@@ -748,6 +748,27 @@ namespace test {
         }
       
       
+      /** calculate node weights aggregated per level */
+      auto
+      allLevelWeights()
+        {
+          std::vector<std::pair<size_t,size_t>> weightTab;
+          weightTab.reserve (topLevel()+1);
+          auto currLevel = [&]()-> decltype(auto) { return weightTab.back();           };
+          auto nextLevel = [&](size_t levelID)    { weightTab.emplace_back(levelID,0); };
+          nextLevel (0);
+          for (Node& n : allNodes())
+            {
+              if (n.level > currLevel().first)
+                nextLevel(n.level);
+               // aggregate weights within level
+              currLevel().second += n.weight;
+            }
+          return weightTab;
+        }
+      
+      
+      
       Statistic computeGraphStatistics();
       TestChainLoad&& printTopologyStatistics();
       
