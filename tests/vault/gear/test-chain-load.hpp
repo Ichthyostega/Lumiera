@@ -748,23 +748,74 @@ namespace test {
         }
       
       
+      using Agg = std::tuple<size_t,size_t,size_t>;
+      
+      template<class IT>
+      class WeightAggregator
+        : public IT
+        {
+          std::optional<Agg> agg_{};
+          
+          IT&
+          srcIter()  const
+            {
+              return unConst(*this);
+            }
+          
+          static void
+          account (Agg& agg, IT const& item)
+            {
+              auto& [level,nodes,weight] = agg;
+              auto& n = *item;
+              level = n.level;
+              weight += n.weight;
+              ++nodes;
+            }
+          void
+          pullGroup()
+            {
+              size_t group = srcIter()->level;
+              agg_ = Agg{};
+              do{
+                  account (*agg_, srcIter());
+                  ++ srcIter();
+                }
+              while (srcIter() and group == srcIter()->level);
+            }
+        public:
+          WeightAggregator() =default;
+          WeightAggregator (IT&& src)
+            : IT{move (src)}
+            {
+              if (srcIter())
+                pullGroup();
+            }
+          bool
+          checkPoint()  const
+            {
+              return bool(agg_);
+            }
+          
+          Agg&
+          yield()  const
+            {
+              return *unConst(this)->agg_;
+            }
+          
+          void
+          iterNext()
+            {
+              if (srcIter())
+                pullGroup();
+              else
+                agg_ = std::nullopt;
+            }
+        };
       /** calculate node weights aggregated per level */
       auto
       allLevelWeights()
         {
-          std::vector<std::pair<size_t,size_t>> weightTab;
-          weightTab.reserve (topLevel()+1);
-          auto currLevel = [&]()-> decltype(auto) { return weightTab.back();           };
-          auto nextLevel = [&](size_t levelID)    { weightTab.emplace_back(levelID,0); };
-          nextLevel (0);
-          for (Node& n : allNodes())
-            {
-              if (n.level > currLevel().first)
-                nextLevel(n.level);
-               // aggregate weights within level
-              currLevel().second += n.weight;
-            }
-          return weightTab;
+//          return allNodes().processingLayer<WeightAggregator>();
         }
       
       

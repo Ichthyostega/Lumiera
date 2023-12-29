@@ -161,10 +161,13 @@ SHOW_EXPR(micros);
           CHECK (micros < 550);
           CHECK (micros > 450);
           
-          auto levelWeights = testLoad.allLevelWeights();
+          std::vector<TestChainLoad<>::Agg> levelWeights = testLoad.allNodes().processingLayer<TestChainLoad<>::WeightAggregator>().effuse();
 SHOW_EXPR(levelWeights.size())
           for (auto& w : levelWeights)
-            cout<<"level:"<<w.first<<" ∑="<<w.second<<endl;
+            {
+              auto& [level,nodes,weight] = w;
+              cout<<"level:"<<level<<" nodes:"<<nodes<<" ∑="<<weight<<endl;
+            }
           
           using Node = TestChainLoad<>::Node;
           auto nodeData = testLoad.allNodes()
@@ -172,27 +175,28 @@ SHOW_EXPR(levelWeights.size())
                                   .effuse();
           for (auto& n : nodeData)
             cout<<"level:"<<n.first<<" w="<<n.second<<endl;
+          auto getWeight = [&](uint level) { return std::get<2> (levelWeights[level]); };
           CHECK (nodeData[22].first == 16);
-          CHECK (nodeData[23].first == 17);  CHECK (nodeData[23].second == 3);  CHECK (levelWeights[17].second == 3);
+          CHECK (nodeData[23].first == 17);  CHECK (nodeData[23].second == 3);  CHECK (getWeight(17) == 3);
           
           CHECK (nodeData[24].first == 18);  CHECK (nodeData[24].second == 0);
           CHECK (nodeData[25].first == 18);  CHECK (nodeData[25].second == 0);
           CHECK (nodeData[26].first == 18);  CHECK (nodeData[26].second == 0);
           CHECK (nodeData[27].first == 18);  CHECK (nodeData[27].second == 0);
-          CHECK (nodeData[28].first == 18);  CHECK (nodeData[28].second == 0);  CHECK (levelWeights[18].second == 0);
+          CHECK (nodeData[28].first == 18);  CHECK (nodeData[28].second == 0);  CHECK (getWeight(18) == 0);
           
           CHECK (nodeData[29].first == 19);  CHECK (nodeData[29].second == 2);
           CHECK (nodeData[30].first == 19);  CHECK (nodeData[30].second == 2);
           CHECK (nodeData[31].first == 19);  CHECK (nodeData[31].second == 2);
           CHECK (nodeData[32].first == 19);  CHECK (nodeData[32].second == 2);
-          CHECK (nodeData[33].first == 19);  CHECK (nodeData[33].second == 2);  CHECK (levelWeights[19].second == 10);
+          CHECK (nodeData[33].first == 19);  CHECK (nodeData[33].second == 2);  CHECK (getWeight(19) == 10);
           
           CHECK (nodeData[34].first == 20);  CHECK (nodeData[34].second == 3);
-          CHECK (nodeData[35].first == 20);  CHECK (nodeData[35].second == 2);  CHECK (levelWeights[20].second == 5);
+          CHECK (nodeData[35].first == 20);  CHECK (nodeData[35].second == 2);  CHECK (getWeight(20) == 5);
           
           CHECK (nodeData[36].first == 21);  CHECK (nodeData[36].second == 1);
           CHECK (nodeData[37].first == 21);  CHECK (nodeData[37].second == 1);
-          CHECK (nodeData[38].first == 21);  CHECK (nodeData[38].second == 3);  CHECK (levelWeights[21].second == 5);
+          CHECK (nodeData[38].first == 21);  CHECK (nodeData[38].second == 3);  CHECK (getWeight(21) == 5);
         }
       
       
