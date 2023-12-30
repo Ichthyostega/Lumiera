@@ -161,7 +161,7 @@ SHOW_EXPR(micros);
           CHECK (micros < 550);
           CHECK (micros > 450);
           
-          std::vector<TestChainLoad<>::Agg> levelWeights = testLoad.allNodes().processingLayer<TestChainLoad<>::WeightAggregator>().effuse();
+          std::vector<LevelWeight> levelWeights = testLoad.allLevelWeights().effuse();
 SHOW_EXPR(levelWeights.size())
           for (auto& w : levelWeights)
             {
@@ -175,7 +175,7 @@ SHOW_EXPR(levelWeights.size())
                                   .effuse();
           for (auto& n : nodeData)
             cout<<"level:"<<n.first<<" w="<<n.second<<endl;
-          auto getWeight = [&](uint level) { return std::get<2> (levelWeights[level]); };
+          auto getWeight = [&](uint level) { return levelWeights[level].weight; };
           CHECK (nodeData[22].first == 16);
           CHECK (nodeData[23].first == 17);  CHECK (nodeData[23].second == 3);  CHECK (getWeight(17) == 3);
           

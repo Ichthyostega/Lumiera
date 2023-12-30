@@ -67,6 +67,7 @@
 #include <limits>
 #include <string>
 #include <tuple>
+#include <cmath>
 
 
 namespace lib {
@@ -279,6 +280,7 @@ namespace test{
           verify_expand_rootCurrent();
           verify_transformOperation();
           verify_elementGroupingOperation();
+          verify_aggregatingGroupItration();
           verify_combinedExpandTransform();
           verify_customProcessingLayer();
           verify_scheduledExpansion();
@@ -668,6 +670,7 @@ namespace test{
         }
       
       
+      
       /** @test package elements from the source pipeline into fixed-sized groups.
        * These groups are implemented as std::array and initialised with the values
        * yielded consecutively from the underlying source pipeline. The main iterator
@@ -726,6 +729,47 @@ namespace test{
                       .grouped<5>();
           CHECK (not iii);
           CHECK (materialise(iii.getRestElms())    == "4-3-2-1"_expect);
+        }
+      
+      
+      /** @test another form of grouping, where groups are formed by a derived property
+       * thereby passing each element in the group to an aggregator function, working on
+       * an accumulator per group. Downstream, the resulting, accumulated value is exposed
+       * for each group, while consuming all source values belonging to this group.
+       * - in the simple form, all members of a group are "added" together
+       * - the elaborate form allows to provide a custom aggregation function, which takes
+       *   the »accumulator« as first argument by reference; the type of this argument
+       *   implicitly defines what is instantiated for each group and yielded as result.
+       */
+      void
+      verify_aggregatingGroupItration()
+        {
+          CHECK (materialise (
+                    explore(CountDown{10})
+                      .groupedBy(std::ilogbf)
+                    )
+                 == "27-22-5-1"_expect);       // 10+9+8|7+6+5+4|3+2|1
+
+          CHECK (materialise (
+                    explore(CountDown{10})
+                      .transform(util::toString<uint>)
+                      .groupedBy([](auto& it) { return std::ilogbf (it.p); })    // note trickery: takes not the value, rather the iterator and
+                    )                                                           //  accesses internals of CountDown, bypassing the transform layer above
+                 == "1098-7654-32-1"_expect);  // `+` does string concatenation
+          
+          
+          auto showGroup = [](auto it){ return "["+util::join(*it)+"]"; };
+          // elaborate form with custom aggregation...
+          CHECK (materialise (
+                    explore(CountDown{10})
+                      .groupedBy(std::ilogbf
+                                ,[](vector<uint>& accum, uint val)
+                                    {
+                                      accum.push_back (val);
+                                    })
+                      .transform(showGroup)
+                    )
+                 == "[10, 9, 8]-[7, 6, 5, 4]-[3, 2]-[1]"_expect);
         }
       
       

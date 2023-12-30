@@ -170,6 +170,12 @@ namespace test {
     const Duration SCHEDULE_PLAN_STEP{_uTicks(100us)};  ///< time budget to reserve for each node to be planned and scheduled
   }
   
+  struct LevelWeight
+    {
+      size_t level{0};
+      size_t nodes{0};
+      size_t weight{0};
+    };
   
   struct Statistic;
   
@@ -748,74 +754,19 @@ namespace test {
         }
       
       
-      using Agg = std::tuple<size_t,size_t,size_t>;
-      
-      template<class IT>
-      class WeightAggregator
-        : public IT
-        {
-          std::optional<Agg> agg_{};
-          
-          IT&
-          srcIter()  const
-            {
-              return unConst(*this);
-            }
-          
-          static void
-          account (Agg& agg, IT const& item)
-            {
-              auto& [level,nodes,weight] = agg;
-              auto& n = *item;
-              level = n.level;
-              weight += n.weight;
-              ++nodes;
-            }
-          void
-          pullGroup()
-            {
-              size_t group = srcIter()->level;
-              agg_ = Agg{};
-              do{
-                  account (*agg_, srcIter());
-                  ++ srcIter();
-                }
-              while (srcIter() and group == srcIter()->level);
-            }
-        public:
-          WeightAggregator() =default;
-          WeightAggregator (IT&& src)
-            : IT{move (src)}
-            {
-              if (srcIter())
-                pullGroup();
-            }
-          bool
-          checkPoint()  const
-            {
-              return bool(agg_);
-            }
-          
-          Agg&
-          yield()  const
-            {
-              return *unConst(this)->agg_;
-            }
-          
-          void
-          iterNext()
-            {
-              if (srcIter())
-                pullGroup();
-              else
-                agg_ = std::nullopt;
-            }
-        };
       /** calculate node weights aggregated per level */
       auto
       allLevelWeights()
         {
-//          return allNodes().processingLayer<WeightAggregator>();
+          return allNodes()
+                  .groupedBy([](Node& n){ return n.level; }
+                            ,[](LevelWeight& lw, Node const& n)
+                              {
+                                lw.level = n.level;
+                                lw.weight += n.weight;
+                                ++lw.nodes;
+                              }
+                            );
         }
       
       

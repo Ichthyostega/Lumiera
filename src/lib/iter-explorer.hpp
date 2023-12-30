@@ -117,6 +117,7 @@
 #include "lib/util.hpp"
 
 #include <functional>
+#include <optional>
 #include <utility>
 
 
@@ -420,6 +421,7 @@ namespace lib {
         using Sig = typename FunDetector<FUN>::Sig;
         using Arg = typename _Fun<Sig>::Args::List::Head;  // assuming function with a single argument
         using Res = typename _Fun<Sig>::Ret;
+        static_assert (meta::is_UnaryFun<Sig>());
         
         
         
@@ -968,6 +970,107 @@ namespace lib {
               buff_.group()[pos_] = *srcIter();
           }
       };
+    
+    
+    
+    /**
+     * @internal Decorator for IterExplorer to group consecutive elements controlled by some
+     * grouping value \a GRP and compute an aggregate value \a AGG for each such group as
+     * iterator yield. The first group is consumed eagerly, each further group on iteration;
+     * thus when the aggregate for the last group appears as result, the source iterator has
+     * already been exhausted. The aggregate is default-initialised at start of each group
+     * and then the computation functor \a FAGG is invoked for each consecutive element marked
+     * with the same _grouping value_ — and this grouping value itself is obtained by invoking
+     * the functor \a FGRP on each source value. No capturing or even reordering of the source
+     * elements takes place, rather groups are formed based on the changes of the grouping value
+     * over the source iterator's result sequence.
+     * @tparam AGG data type to collect the aggregate; must be default constructible and assignable
+     * @tparam GRP value type to indicate a group
+     * @note while `groupFun` is adapted, the `aggFun` is _not adapted_ to the source iterator,
+     *       but expected always to take the _value type_ of the preceding iterator, i.e. `*srcIter`.
+     *       This limitation was deemed acceptable (adapting a function with several arguments would
+     *       require quite some nasty technicalities). The first argument of this `aggFun` refers
+     *       to the accumulator by value, and thereby also implititly defines the aggregate result type.
+     */
+    template<class SRC, typename AGG, class GRP>
+    class GroupAggregator
+      : public SRC
+      {
+        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        
+      protected:
+        using SrcValue   = typename meta::ValueTypeBinding<SRC>::value_type;
+        using Grouping   = function<GRP(SRC&)>;
+        using Aggregator = function<void(AGG&, SrcValue&)>;
+        
+        std::optional<AGG> agg_{};
+        
+        Grouping   grouping_;
+        Aggregator aggregate_;
+        
+      public:
+        using value_type = typename meta::RefTraits<AGG>::Value;
+        using reference  = typename meta::RefTraits<AGG>::Reference;
+        using pointer    = typename meta::RefTraits<AGG>::Pointer;
+
+        GroupAggregator() =default;
+        // inherited default copy operations
+        
+        template<class FGRP, class FAGG>
+        GroupAggregator (SRC&& dataSrc, FGRP&& groupFun, FAGG&& aggFun)
+          : SRC{move (dataSrc)}
+          , grouping_{_FunTraits<FGRP,SRC>::adaptFunctor (forward<FGRP> (groupFun))}
+          , aggregate_{forward<FAGG> (aggFun)}
+          {
+            pullGroup(); // initially pull to establish the invariant
+          }
+        
+        
+      public: /* === Iteration control API for IterableDecorator === */
+        bool
+        checkPoint()  const
+          {
+            return bool(agg_);
+          }
+        
+        reference
+        yield()  const
+          {
+            return *unConst(this)->agg_;
+          }
+        
+        void
+        iterNext()
+          {
+            if (srcIter())
+              pullGroup();
+            else
+              agg_ = std::nullopt;
+          }
+        
+        
+      protected:
+        SRC&
+        srcIter()  const
+          {
+            return unConst(*this);
+          }
+        
+        /** @note establishes the invariant:
+         *        source has been consumed up to the beginning of next group */
+        void
+        pullGroup()
+          {
+            GRP group = grouping_(srcIter());
+            agg_ = AGG{};
+            do{
+                aggregate_(*agg_, *srcIter());
+                ++ srcIter();
+              }
+            while (srcIter() and group == grouping_(srcIter()));
+          }
+      };
+    
     
     
     
@@ -1581,7 +1684,7 @@ namespace lib {
         }
       
       
-      /** adapt this IterExplorer group result elements into fixed size chunks, packaged as std::array.
+      /** adapt this IterExplorer to group result elements into fixed size chunks, packaged as std::array.
        * The first group of elements is pulled eagerly at construction, while further groups are formed
        * on consecutive iteration. Iteration ends when no further full group can be formed; this may
        * leave out some leftover elements, which can then be retrieved by iteration through the
@@ -1598,6 +1701,47 @@ namespace lib {
           using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
           
           return IterExplorer<ResIter> (ResCore {move(*this)});
+        }
+      
+      
+      /** adapt this IterExplorer to group elements by a custom criterium and aggregate the group members.
+       * The first group of elements is pulled eagerly at construction, further groups are formed on each
+       * iteration. Aggregation is done by a custom functor, which takes an _aggregator value_ as first
+       * argument and the current element (or iterator) as second argument. Downstream, the aggregator
+       * value computed for each group is yielded on iteration.
+       * @param groupFun a functor to derive a grouping criterium from the source sequence; consecutive elements
+       *        yielding the same grouping value will be combined / aggregated
+       * @param aggFun a functor to compute contribution to the aggregate value. Signature `void(AGG&, Val&)`,
+       *        where the type AGG implicitly also defines the _value_ to use for accumulation and the result value,
+       *        while Val must be assignable from the _source value_ provided by the preceding iterator in the pipeline.
+       */
+      template<class FGRP, class FAGG>
+      auto
+      groupedBy (FGRP&& groupFun, FAGG&& aggFun)
+        {
+          using GroupVal = typename iter_explorer::_FunTraits<FGRP,SRC>::Res;
+          
+          static_assert (meta::is_BinaryFun<FAGG>());
+          using ArgType1  = typename _Fun<FAGG>::Args::List::Head;
+          using Aggregate = typename meta::RefTraits<ArgType1>::Value;
+          
+          using ResCore = iter_explorer::GroupAggregator<SRC, Aggregate, GroupVal>;
+          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          
+          return IterExplorer<ResIter> (ResCore {move(*this)
+                                                ,forward<FGRP> (groupFun)
+                                                ,forward<FAGG> (aggFun)});
+        }
+      
+      /** simplified grouping to sum / combine all values in a group */
+      template<class FGRP>
+      auto
+      groupedBy (FGRP&& groupFun)
+        {
+          using Value   = typename meta::ValueTypeBinding<SRC>::value_type;
+          return groupedBy (forward<FGRP> (groupFun)
+                           ,[](Value& agg, Value const& val){ agg += val; }
+                           );
         }
       
       
