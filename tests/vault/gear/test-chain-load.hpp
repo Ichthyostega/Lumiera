@@ -177,6 +177,25 @@ namespace test {
       size_t weight{0};
     };
   
+  /**
+   * simplified model for expense of a node, computed concurrently.
+   * @remark assumptions of this model
+   *   - weight factor describes expense to compute this node
+   *   - nodes on the same level can be parallelised without limitation
+   *   - no consideration of stacking / ordering of tasks; rather the speed-up
+   *     is applied as an average factor to the summed node weights for a level
+   * @return guess for a compounded weight factor
+   */
+  inline double
+  computeWeightFactor (LevelWeight const& lw, uint concurrency)
+  {
+    REQUIRE (0 < concurrency);
+    double speedUp = lw.nodes? lw.nodes / std::ceil (double(lw.nodes)/concurrency)
+                             : 1.0;
+    ENSURE (1.0 <= speedUp);
+    return lw.weight / speedUp;
+  }
+  
   struct Statistic;
   
   
@@ -767,6 +786,19 @@ namespace test {
                                 ++lw.nodes;
                               }
                             );
+        }
+      
+      /** sequence of the summed compounded weight factors _after_ each level */
+      auto
+      levelScheduleSequence (uint concurrency =1)
+        {
+          return allLevelWeights()
+                  .transform([schedule=0.0, concurrency]
+                             (LevelWeight const& lw) mutable
+                              {
+                                schedule += computeWeightFactor (lw, concurrency);
+                                return schedule;
+                              });
         }
       
       
