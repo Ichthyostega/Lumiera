@@ -174,6 +174,7 @@ namespace test {
     {
       size_t level{0};
       size_t nodes{0};
+      size_t endidx{0};
       size_t weight{0};
     };
   
@@ -779,10 +780,11 @@ namespace test {
         {
           return allNodes()
                   .groupedBy([](Node& n){ return n.level; }
-                            ,[](LevelWeight& lw, Node const& n)
+                            ,[this](LevelWeight& lw, Node const& n)
                               {
                                 lw.level = n.level;
                                 lw.weight += n.weight;
+                                lw.endidx = nodeID(n);
                                 ++lw.nodes;
                               }
                             );
