@@ -1640,6 +1640,7 @@ namespace test {
       microseconds  preRoll_{guessPlanningPreroll()};
       ManifestationID manID_{};
       
+      std::vector<TimeVar> startTimes_{};
       std::promise<void> signalDone_{};
       
       std::unique_ptr<ComputationalLoad>              compuLoad_;
@@ -1655,7 +1656,7 @@ namespace test {
         {
           schedule_[idx] = scheduler_.defineSchedule(calcJob (idx,level))
                                      .manifestation(manID_)
-                                     .startTime (calcStartTime(level))
+                                     .startTime (jobStartTime(level))
                                      .lifeWindow (deadline_)
                                      .post();
         }
@@ -1683,7 +1684,7 @@ namespace test {
           else
             scheduler_.defineSchedule(wakeUpJob())
                       .manifestation (manID_)
-                      .startTime(calcStartTime (levelDone+1))
+                      .startTime(jobStartTime (levelDone+1))
                       .lifeWindow(SAFETY_TIMEOUT)
                       .post()
                       .linkToPredecessor (schedule_[lastNodeIDX])
@@ -1699,24 +1700,27 @@ namespace test {
           size_t firstChunkEndNode = calcNextChunkEnd(0)-1;
           schedule_.allocate (numNodes);
           compuLoad_->maybeCalibrate();
-          startTime_ = anchorStartTime();
+          calcFunctor_.reset (new RandomChainCalcFunctor<maxFan>{chainLoad_.nodes_[0], compuLoad_.get()});
+          planFunctor_.reset (new RandomChainPlanFunctor<maxFan>{chainLoad_.nodes_[0], chainLoad_.numNodes_
+                                                                ,[this](size_t i, size_t l){ disposeStep(i,l);  }
+                                                                ,[this](auto* p, auto* s)  { setDependency(p,s);}
+                                                                ,[this](size_t n,size_t l, bool w){ continuation(n,l,w); }
+                                                                });
+          startTime_ = anchorSchedule();
           scheduler_.seedCalcStream (planningJob(firstChunkEndNode)
                                     ,manID_
                                     ,calcLoadHint());
           return finished;
         }
       
+      
     public:
       ScheduleCtx (TestChainLoad& mother, Scheduler& scheduler)
         : chainLoad_{mother}
         , scheduler_{scheduler}
         , compuLoad_{new ComputationalLoad}
-        , calcFunctor_{new RandomChainCalcFunctor<maxFan>{chainLoad_.nodes_[0], compuLoad_.get()}}
-        , planFunctor_{new RandomChainPlanFunctor<maxFan>{chainLoad_.nodes_[0], chainLoad_.numNodes_
-                                                         ,[this](size_t i, size_t l){ disposeStep(i,l);  }
-                                                         ,[this](auto* p, auto* s)  { setDependency(p,s);}
-                                                         ,[this](size_t n,size_t l, bool w){ continuation(n,l,w); }
-                                                         }}
+        , calcFunctor_{}
+        , planFunctor_{}
         { }
       
       /** dispose one complete run of the graph into the scheduler
@@ -1730,6 +1734,19 @@ namespace test {
                                   awaitBlocking(
                                     performRun());
                                 });
+        }
+      
+      auto
+      getScheduleSeq()
+        {
+          if (isnil (startTimes_))
+            fillDefaultSchedule();
+          
+          return lib::explore(startTimes_)
+                     .transform([&](Time jobTime) -> Time
+                                  {
+                                    return jobTime - startTimes_[0];
+                                  });
         }
       
       
@@ -1747,13 +1764,6 @@ namespace test {
         {
           planSpeed_ = FrameRate{1, Duration{_uTicks(planningTime_per_node)}};
           preRoll_ = guessPlanningPreroll();
-          return move(*this);
-        }
-      
-      ScheduleCtx&&
-      withLoadFactor (uint factor_on_levelSpeed)
-        {
-          blockLoadFactor_ = factor_on_levelSpeed;
           return move(*this);
         }
       
@@ -1776,6 +1786,25 @@ namespace test {
       withJobDeadline (microseconds deadline_after_start)
         {
           deadline_ = deadline_after_start;
+          return move(*this);
+        }
+      
+      ScheduleCtx&&
+      withAdaptedSchedule(double stressFac =1.0)
+        {
+          return move(*this);
+        }
+      
+      ScheduleCtx&&
+      withUpfrontPlanning()
+        {
+          return move(*this);
+        }
+      
+      ScheduleCtx&&
+      withAnnouncedLoadFactor (uint factor_on_levelSpeed)
+        {
+          blockLoadFactor_ = factor_on_levelSpeed;
           return move(*this);
         }
       
@@ -1864,12 +1893,6 @@ namespace test {
                     };
         }
       
-      Time
-      anchorStartTime()
-        {
-          return RealClock::now() + _uTicks(preRoll_);
-        }
-      
       microseconds
       guessPlanningPreroll()
         {
@@ -1890,9 +1913,42 @@ namespace test {
         }                      //  prevent out-of-bound access
       
       Time
-      calcStartTime(size_t level)
+      anchorSchedule()
         {
-          return startTime_ + Time{level / levelSpeed_};
+          Time anchor = RealClock::now() + _uTicks(preRoll_);
+          if (isnil (startTimes_))
+            fillDefaultSchedule();
+          size_t numPoints = chainLoad_.topLevel()+2;
+          ENSURE (startTimes_.size() == numPoints);
+          for (size_t level=0; level<numPoints; ++level)
+            startTimes_[level] += anchor;
+          return anchor;
+        }
+      
+      void
+      fillDefaultSchedule()
+        {
+          size_t numPoints = chainLoad_.topLevel()+2;
+          startTimes_.clear();
+          startTimes_.reserve (numPoints);
+          for (size_t level=0; level<numPoints; ++level)
+            startTimes_.push_back (level / levelSpeed_);
+        }
+      
+      void
+      fillAdaptedSchedule (double stressFac, uint concurrency)
+        {
+          size_t numPoints = chainLoad_.topLevel()+2;
+          startTimes_.clear();
+          startTimes_.reserve (numPoints);
+          chainLoad_.levelScheduleSequence(concurrency).effuse();
+        }
+      
+      Time
+      jobStartTime (size_t level)
+        {
+          ENSURE (level < startTimes_.size());
+          return startTimes_[level];
         }
       
       Time
@@ -1907,7 +1963,7 @@ namespace test {
           lastNodeIDX = min (lastNodeIDX, chainLoad_.size()-1);  // prevent out-of-bound access
           size_t nextChunkLevel = chainLoad_.nodes_[lastNodeIDX].level;
           nextChunkLevel = nextChunkLevel>2? nextChunkLevel-2 : 0;
-          return calcStartTime(nextChunkLevel) - _uTicks(preRoll_);
+          return jobStartTime(nextChunkLevel) - _uTicks(preRoll_);
         }
     };
   
