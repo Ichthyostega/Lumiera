@@ -149,8 +149,8 @@ namespace test {
           TestChainLoad testLoad{64};
           testLoad.configureShape_chain_loadBursts()
                   .buildToplolgy()
-                  .printTopologyDOT()
-                  .printTopologyStatistics()
+//                .printTopologyDOT()
+//                .printTopologyStatistics()
                   ;
           
           auto LOAD_BASE = 500us;
@@ -166,9 +166,9 @@ SHOW_EXPR(micros);
           // build a schedule sequence based on
           // summing up weight factors, with example concurrency ≔ 4
           uint concurrency = 4;
-          auto stepsFactors = testLoad.levelScheduleSequence(concurrency).effuse();
-          CHECK (stepsFactors.size() == 1+testLoad.topLevel());
-          CHECK (stepsFactors.size() == 27);
+          auto stepFactors = testLoad.levelScheduleSequence(concurrency).effuse();
+          CHECK (stepFactors.size() == 1+testLoad.topLevel());
+          CHECK (stepFactors.size() == 27);
           
           
           // Build-Performance-test-setup--------
@@ -179,48 +179,98 @@ SHOW_EXPR(micros);
           auto testSetup =
             testLoad.setupSchedule(scheduler)
                     .withLoadTimeBase(LOAD_BASE)
-                    .withJobDeadline(20ms)
+                    .withJobDeadline(50ms)
                     .withUpfrontPlanning();
           
           auto schedule = testSetup.getScheduleSeq().effuse();
           CHECK (schedule.size() == testLoad.topLevel() + 2);
           CHECK (schedule[ 0] == _uTicks(0ms));
           CHECK (schedule[ 1] == _uTicks(1ms));
+          CHECK (schedule[ 2] == _uTicks(2ms));
+          //     ....
+          CHECK (schedule[25] == _uTicks(25ms));
           CHECK (schedule[26] == _uTicks(26ms));
           CHECK (schedule[27] == _uTicks(27ms));
           
+          // Adapted Schedule----------
           double stressFac = 1.0;
           testSetup.withAdaptedSchedule (stressFac, concurrency);
           schedule =  testSetup.getScheduleSeq().effuse();
           CHECK (schedule.size() == testLoad.topLevel() + 2);
-SHOW_EXPR(schedule[0])
-SHOW_EXPR(schedule[1])
-SHOW_EXPR(schedule[2])
-SHOW_EXPR(schedule[3])
-SHOW_EXPR(schedule[4])
-SHOW_EXPR(schedule[5])
-SHOW_EXPR(schedule[6])
-SHOW_EXPR(schedule[7])
-SHOW_EXPR(schedule[8])
-SHOW_EXPR(schedule[9])
-SHOW_EXPR(schedule[10])
-SHOW_EXPR(schedule[11])
-SHOW_EXPR(schedule[12])
-SHOW_EXPR(schedule[13])
-SHOW_EXPR(schedule[14])
-SHOW_EXPR(schedule[15])
-SHOW_EXPR(schedule[16])
-SHOW_EXPR(schedule[17])
-SHOW_EXPR(schedule[18])
-SHOW_EXPR(schedule[19])
-SHOW_EXPR(schedule[20])
-SHOW_EXPR(schedule[21])
-SHOW_EXPR(schedule[22])
-SHOW_EXPR(schedule[23])
-SHOW_EXPR(schedule[24])
-SHOW_EXPR(schedule[25])
-SHOW_EXPR(schedule[26])
-SHOW_EXPR(schedule[27])
+          CHECK (schedule[ 0] == _uTicks(0ms));
+          CHECK (schedule[ 1] == _uTicks(0ms));
+
+            // verify the numbers in detail....
+          _Fmt stepFmt{"lev:%-2d  stepFac:%-6.3f schedule:%6.3f"};
+          auto stepStr = [&](uint i){ return string{stepFmt % i % stepFactors[i>0?i-1:0] % (_raw(schedule[i])/1000.0)}; };
+          
+          CHECK (stepStr( 0) == "lev:0   stepFac:0.000  schedule: 0.000"_expect);
+          CHECK (stepStr( 1) == "lev:1   stepFac:0.000  schedule: 0.000"_expect);
+          CHECK (stepStr( 2) == "lev:2   stepFac:0.000  schedule: 0.000"_expect);
+          CHECK (stepStr( 3) == "lev:3   stepFac:2.000  schedule: 1.000"_expect);
+          CHECK (stepStr( 4) == "lev:4   stepFac:2.000  schedule: 1.000"_expect);
+          CHECK (stepStr( 5) == "lev:5   stepFac:2.000  schedule: 1.000"_expect);
+          CHECK (stepStr( 6) == "lev:6   stepFac:2.000  schedule: 1.000"_expect);
+          CHECK (stepStr( 7) == "lev:7   stepFac:3.000  schedule: 1.500"_expect);
+          CHECK (stepStr( 8) == "lev:8   stepFac:5.000  schedule: 2.500"_expect);
+          CHECK (stepStr( 9) == "lev:9   stepFac:7.000  schedule: 3.500"_expect);
+          CHECK (stepStr(10) == "lev:10  stepFac:8.000  schedule: 4.000"_expect);
+          CHECK (stepStr(11) == "lev:11  stepFac:8.000  schedule: 4.000"_expect);
+          CHECK (stepStr(12) == "lev:12  stepFac:8.000  schedule: 4.000"_expect);
+          CHECK (stepStr(13) == "lev:13  stepFac:9.000  schedule: 4.500"_expect);
+          CHECK (stepStr(14) == "lev:14  stepFac:10.000 schedule: 5.000"_expect);
+          CHECK (stepStr(15) == "lev:15  stepFac:12.000 schedule: 6.000"_expect);
+          CHECK (stepStr(16) == "lev:16  stepFac:12.000 schedule: 6.000"_expect);
+          CHECK (stepStr(17) == "lev:17  stepFac:13.000 schedule: 6.500"_expect);
+          CHECK (stepStr(18) == "lev:18  stepFac:16.000 schedule: 8.000"_expect);
+          CHECK (stepStr(19) == "lev:19  stepFac:16.000 schedule: 8.000"_expect);
+          CHECK (stepStr(20) == "lev:20  stepFac:20.000 schedule:10.000"_expect);
+          CHECK (stepStr(21) == "lev:21  stepFac:22.500 schedule:11.250"_expect);
+          CHECK (stepStr(22) == "lev:22  stepFac:24.167 schedule:12.083"_expect);
+          CHECK (stepStr(23) == "lev:23  stepFac:26.167 schedule:13.083"_expect);
+          CHECK (stepStr(24) == "lev:24  stepFac:28.167 schedule:14.083"_expect);
+          CHECK (stepStr(25) == "lev:25  stepFac:30.867 schedule:15.433"_expect);
+          CHECK (stepStr(26) == "lev:26  stepFac:31.867 schedule:15.933"_expect);
+          CHECK (stepStr(27) == "lev:27  stepFac:32.867 schedule:16.433"_expect);
+          
+          
+          // Adapted Schedule with lower stress level and higher concurrency....
+          stressFac = 0.3;
+          concurrency = 6;
+          stepFactors = testLoad.levelScheduleSequence(concurrency).effuse();
+          
+          testSetup.withAdaptedSchedule (stressFac, concurrency);
+          schedule =  testSetup.getScheduleSeq().effuse();
+          
+          CHECK (stepStr( 0) == "lev:0   stepFac:0.000  schedule: 0.000"_expect);
+          CHECK (stepStr( 1) == "lev:1   stepFac:0.000  schedule: 0.000"_expect);
+          CHECK (stepStr( 2) == "lev:2   stepFac:0.000  schedule: 0.000"_expect);
+          CHECK (stepStr( 3) == "lev:3   stepFac:2.000  schedule: 3.333"_expect);
+          CHECK (stepStr( 4) == "lev:4   stepFac:2.000  schedule: 3.333"_expect);
+          CHECK (stepStr( 5) == "lev:5   stepFac:2.000  schedule: 3.333"_expect);
+          CHECK (stepStr( 6) == "lev:6   stepFac:2.000  schedule: 3.333"_expect);
+          CHECK (stepStr( 7) == "lev:7   stepFac:3.000  schedule: 5.000"_expect);
+          CHECK (stepStr( 8) == "lev:8   stepFac:5.000  schedule: 8.333"_expect);
+          CHECK (stepStr( 9) == "lev:9   stepFac:7.000  schedule:11.666"_expect);
+          CHECK (stepStr(10) == "lev:10  stepFac:8.000  schedule:13.333"_expect);
+          CHECK (stepStr(11) == "lev:11  stepFac:8.000  schedule:13.333"_expect);
+          CHECK (stepStr(12) == "lev:12  stepFac:8.000  schedule:13.333"_expect);
+          CHECK (stepStr(13) == "lev:13  stepFac:9.000  schedule:15.000"_expect);
+          CHECK (stepStr(14) == "lev:14  stepFac:10.000 schedule:16.666"_expect);
+          CHECK (stepStr(15) == "lev:15  stepFac:12.000 schedule:20.000"_expect);
+          CHECK (stepStr(16) == "lev:16  stepFac:12.000 schedule:20.000"_expect);
+          CHECK (stepStr(17) == "lev:17  stepFac:13.000 schedule:21.666"_expect);
+          CHECK (stepStr(18) == "lev:18  stepFac:16.000 schedule:26.666"_expect);
+          CHECK (stepStr(19) == "lev:19  stepFac:16.000 schedule:26.666"_expect);
+          CHECK (stepStr(20) == "lev:20  stepFac:18.000 schedule:30.000"_expect);  // note: here the higher concurrency allows to process all 5 concurrent nodes at once
+          CHECK (stepStr(21) == "lev:21  stepFac:20.500 schedule:34.166"_expect);
+          CHECK (stepStr(22) == "lev:22  stepFac:22.167 schedule:36.944"_expect);
+          CHECK (stepStr(23) == "lev:23  stepFac:23.167 schedule:38.611"_expect);
+          CHECK (stepStr(24) == "lev:24  stepFac:24.167 schedule:40.277"_expect);
+          CHECK (stepStr(25) == "lev:25  stepFac:25.967 schedule:43.277"_expect);
+          CHECK (stepStr(26) == "lev:26  stepFac:26.967 schedule:44.944"_expect);
+          CHECK (stepStr(27) == "lev:27  stepFac:27.967 schedule:46.611"_expect);
+          
           
           micros = testSetup.launch_and_wait();
 SHOW_EXPR(micros);

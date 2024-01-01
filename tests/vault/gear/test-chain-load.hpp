@@ -162,7 +162,7 @@ namespace test {
     const auto SAFETY_TIMEOUT = 5s;                     ///< maximum time limit for test run, abort if exceeded
     const auto STANDARD_DEADLINE = 10ms;                ///< deadline to use for each individual computation job
     const size_t DEFAULT_CHUNKSIZE = 64;                ///< number of computation jobs to prepare in each planning round
-    const size_t UPFRONT_PLANNING_BOOST = 2;            ///< factor to increase the computed pre-roll to ensure up-front planning
+    const double UPFRONT_PLANNING_BOOST = 2.6;          ///< factor to increase the computed pre-roll to ensure up-front planning
     const size_t GRAPH_BENCHMARK_RUNS = 5;              ///< repetition count for reference calculation of a complete node graph
     const size_t LOAD_BENCHMARK_RUNS = 500;             ///< repetition count for calibration benchmark for ComputationalLoad
     const double LOAD_SPEED_BASELINE = 100;             ///< initial assumption for calculation speed (without calibration)
@@ -171,7 +171,17 @@ namespace test {
     const Duration SCHEDULE_LEVEL_STEP{_uTicks(1ms)};   ///< time budget to plan for the calculation of each »time level« of jobs
     const Duration SCHEDULE_PLAN_STEP{_uTicks(100us)};  ///< time budget to reserve for each node to be planned and scheduled
     
-    inline uint defaultConcurr() { return work::Config::getDefaultComputationCapacity(); }
+    inline uint
+    defaultConcurr()
+    {
+      return work::Config::getDefaultComputationCapacity();
+    }
+    
+    inline double
+    _uSec (microseconds ticks)
+    {
+      return std::chrono::duration<double, std::micro>{ticks}.count();
+    }
   }
   
   struct LevelWeight
@@ -1737,8 +1747,9 @@ namespace test {
                                 {
                                   awaitBlocking(
                                     performRun());
-                                });
-        }
+                                })
+               -_uSec(preRoll_);
+        }     // timing starts with nominal zero without pre-roll
       
       auto
       getScheduleSeq()
@@ -1954,7 +1965,7 @@ namespace test {
           startTimes_.reserve (numPoints);
           startTimes_.push_back (Time::ZERO);
           chainLoad_.levelScheduleSequence (concurrency)
-                    .transform([&](double scheduleFact){ return (scheduleFact/stressFac) / levelSpeed_;})
+                    .transform([&](double scheduleFact){ return (scheduleFact/stressFac) * Offset{1,levelSpeed_};})
                     .effuse(startTimes_);
         }
       
