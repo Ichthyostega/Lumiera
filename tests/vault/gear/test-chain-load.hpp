@@ -131,6 +131,7 @@ namespace test {
   using util::limited;
   using util::unConst;
   using util::toString;
+  using util::isLimited;
   using util::showHashLSB;
   using lib::time::Time;
   using lib::time::TimeValue;
@@ -161,6 +162,7 @@ namespace test {
     const auto SAFETY_TIMEOUT = 5s;                     ///< maximum time limit for test run, abort if exceeded
     const auto STANDARD_DEADLINE = 10ms;                ///< deadline to use for each individual computation job
     const size_t DEFAULT_CHUNKSIZE = 64;                ///< number of computation jobs to prepare in each planning round
+    const size_t UPFRONT_PLANNING_BOOST = 2;            ///< factor to increase the computed pre-roll to ensure up-front planning
     const size_t GRAPH_BENCHMARK_RUNS = 5;              ///< repetition count for reference calculation of a complete node graph
     const size_t LOAD_BENCHMARK_RUNS = 500;             ///< repetition count for calibration benchmark for ComputationalLoad
     const double LOAD_SPEED_BASELINE = 100;             ///< initial assumption for calculation speed (without calibration)
@@ -168,6 +170,8 @@ namespace test {
     const size_t LOAD_DEFAULT_MEM_SIZE   = 1000;        ///< default allocation base size used if ComputationalLoad.useAllocation
     const Duration SCHEDULE_LEVEL_STEP{_uTicks(1ms)};   ///< time budget to plan for the calculation of each »time level« of jobs
     const Duration SCHEDULE_PLAN_STEP{_uTicks(100us)};  ///< time budget to reserve for each node to be planned and scheduled
+    
+    inline uint defaultConcurr() { return work::Config::getDefaultComputationCapacity(); }
   }
   
   struct LevelWeight
@@ -1697,7 +1701,7 @@ namespace test {
         {
           auto finished = attachNewCompletionSignal();
           size_t numNodes = chainLoad_.size();
-          size_t firstChunkEndNode = calcNextChunkEnd(0)-1;
+          size_t firstChunkEndNode = calcNextChunkEnd(0);
           schedule_.allocate (numNodes);
           compuLoad_->maybeCalibrate();
           calcFunctor_.reset (new RandomChainCalcFunctor<maxFan>{chainLoad_.nodes_[0], compuLoad_.get()});
@@ -1743,7 +1747,7 @@ namespace test {
             fillDefaultSchedule();
           
           return lib::explore(startTimes_)
-                     .transform([&](Time jobTime) -> Time
+                     .transform([&](Time jobTime) -> TimeVar
                                   {
                                     return jobTime - startTimes_[0];
                                   });
@@ -1790,14 +1794,21 @@ namespace test {
         }
       
       ScheduleCtx&&
-      withAdaptedSchedule(double stressFac =1.0)
+      withAdaptedSchedule (double stressFac =1.0, uint concurrency=0)
         {
+          if (not concurrency)  // use hardware concurrency (#cores) by default
+            concurrency = defaultConcurr();
+          ENSURE (isLimited (1u, concurrency, 3*defaultConcurr()));
+          withLevelDuration (compuLoad_->timeBase);
+          fillAdaptedSchedule (stressFac, concurrency);
           return move(*this);
         }
       
       ScheduleCtx&&
       withUpfrontPlanning()
         {
+          withChunkSize (chainLoad_.size());
+          preRoll_ *= UPFRONT_PLANNING_BOOST;
           return move(*this);
         }
       
@@ -1941,7 +1952,10 @@ namespace test {
           size_t numPoints = chainLoad_.topLevel()+2;
           startTimes_.clear();
           startTimes_.reserve (numPoints);
-          chainLoad_.levelScheduleSequence(concurrency).effuse();
+          startTimes_.push_back (Time::ZERO);
+          chainLoad_.levelScheduleSequence (concurrency)
+                    .transform([&](double scheduleFact){ return (scheduleFact/stressFac) / levelSpeed_;})
+                    .effuse(startTimes_);
         }
       
       Time

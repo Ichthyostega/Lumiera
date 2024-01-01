@@ -89,6 +89,14 @@ namespace util {
                , upperBound);
   }
   
+  template <typename NUM, typename NB>
+  inline bool constexpr
+  isLimited (NB lowerBound, NUM val, NB upperBound)
+  {
+    return lowerBound <= val
+       and val <= upperBound;
+  }
+  
   /** positive integral number from textual representation
    * @return always a number, 0 in case of unparseable text,
    *         limited to 0 <= num <= LUMIERA_MAX_ORDINAL_NUMBER */

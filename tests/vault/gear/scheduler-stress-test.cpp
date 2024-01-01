@@ -189,6 +189,39 @@ SHOW_EXPR(micros);
           CHECK (schedule[26] == _uTicks(26ms));
           CHECK (schedule[27] == _uTicks(27ms));
           
+          double stressFac = 1.0;
+          testSetup.withAdaptedSchedule (stressFac, concurrency);
+          schedule =  testSetup.getScheduleSeq().effuse();
+          CHECK (schedule.size() == testLoad.topLevel() + 2);
+SHOW_EXPR(schedule[0])
+SHOW_EXPR(schedule[1])
+SHOW_EXPR(schedule[2])
+SHOW_EXPR(schedule[3])
+SHOW_EXPR(schedule[4])
+SHOW_EXPR(schedule[5])
+SHOW_EXPR(schedule[6])
+SHOW_EXPR(schedule[7])
+SHOW_EXPR(schedule[8])
+SHOW_EXPR(schedule[9])
+SHOW_EXPR(schedule[10])
+SHOW_EXPR(schedule[11])
+SHOW_EXPR(schedule[12])
+SHOW_EXPR(schedule[13])
+SHOW_EXPR(schedule[14])
+SHOW_EXPR(schedule[15])
+SHOW_EXPR(schedule[16])
+SHOW_EXPR(schedule[17])
+SHOW_EXPR(schedule[18])
+SHOW_EXPR(schedule[19])
+SHOW_EXPR(schedule[20])
+SHOW_EXPR(schedule[21])
+SHOW_EXPR(schedule[22])
+SHOW_EXPR(schedule[23])
+SHOW_EXPR(schedule[24])
+SHOW_EXPR(schedule[25])
+SHOW_EXPR(schedule[26])
+SHOW_EXPR(schedule[27])
+          
           micros = testSetup.launch_and_wait();
 SHOW_EXPR(micros);
         }
