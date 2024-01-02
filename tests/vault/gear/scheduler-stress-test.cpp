@@ -97,7 +97,7 @@ namespace test {
           MARK_TEST_FUN
           TestChainLoad testLoad{512};
           testLoad.configureShape_chain_loadBursts()
-                  .buildToplolgy()
+                  .buildTopology()
 //                .printTopologyDOT()
                   ;
           
@@ -153,7 +153,7 @@ namespace test {
         {
           TestChainLoad testLoad{64};
           testLoad.configureShape_chain_loadBursts()
-                  .buildToplolgy()
+                  .buildTopology()
 //                .printTopologyDOT()
 //                .printTopologyStatistics()
                   ;
@@ -293,7 +293,7 @@ SHOW_EXPR(micros);
           MARK_TEST_FUN
           TestChainLoad testLoad{64};
           testLoad.configureShape_chain_loadBursts()
-                  .buildToplolgy()
+                  .buildTopology()
 //                .printTopologyDOT()
 //                .printTopologyStatistics()
                   ;

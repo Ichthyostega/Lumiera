@@ -74,7 +74,7 @@
 //#include "lib/util.hpp"
 
 //#include <functional>
-//#include <utility>
+#include <utility>
 //#include <memory>
 //#include <string>
 //#include <vector>
@@ -108,7 +108,7 @@ namespace test {
 //  using std::forward;
 //  using std::string;
 //  using std::swap;
-//  using std::move;
+  using std::move;
   
   namespace err = lumiera::error;  //////////////////////////TODO RLY?
   
@@ -118,21 +118,92 @@ namespace test {
   
   namespace stress_test_rig {
     
+    /**
+     * Specific stress test scheme to determine the
+     * »breaking point« where the Scheduler starts to slip
+     */
     template<class CONF>
     class BreakingPointBench
+      : CONF
       {
+        using TestLoad  = decltype(std::declval<CONF>().testLoad());
+        using TestSetup = decltype(std::declval<CONF>().testSetup (std::declval<TestLoad&>()));
+        
+        struct Res
+          {
+            double stressFac{0};
+            double percentOff{0};
+            double stdDev{0};
+            double avgDelta{0};
+            double avgTime{0};
+          };
+        
+        /** prepare the ScheduleCtx for a specifically parametrised test series */
+        void
+        configureTest (TestSetup& testSetup, double stressFac)
+          {
+            testSetup.withLoadTimeBase (CONF::LOAD_BASE)
+                     .withAdaptedSchedule(stressFac, CONF::CONCURRENCY);
+          }
+        
+        /** perform a repetition of test runs and compute statistics */
+        Res
+        runProbes (TestSetup& testSetup)
+          {
+            UNIMPLEMENTED ("test loop and statistics computation");
+            Res res{};
+            return res;
+          }
+        
+        /** criterion to decide if this test series constitutes a slipped schedule */
+        bool
+        decideBreakPoint (Res& res)
+          {
+            return true; //////TODO booooo
+          }
+        
+        /**
+         * invoke a binary search to produce a sequence of test series
+         * with the goal to narrow down the stressFact where the Schedule slips away.
+         */
+        template<class FUN>
+        Res
+        conductBinarySearch (FUN&& runTestCase)
+          {
+            UNIMPLEMENTED ("invoke a library implementation of binary search");
+          }
+        
+        
       public:
+        /**
+         * Launch a measurement sequence to determine the »breaking point«
+         * for the configured test load and parametrisation of the Scheduler.
+         * @return a tuple `[stress-factor, ∅delta, ∅run-time]`
+         */
         auto
         searchBreakingPoint()
           {
-            double finalStress{0};
-            double avgDelta{0};
-            double avgTime{0};
-            return make_tuple (finalStress, avgDelta, avgTime);
+            TRANSIENTLY(work::Config::COMPUTATION_CAPACITY) = CONF::CONCURRENCY;
+            
+            TestLoad testLoad = CONF::testLoad().buildTopology();
+            TestSetup testSetup = CONF::testSetup (testLoad);
+            
+            auto performEvaluation = [&](double stressFac)
+                                        {
+                                          configureTest (testSetup, stressFac);
+                                          auto res = runProbes (testSetup);
+                                          return make_tuple (decideBreakPoint(res), res);
+                                        };
+            
+            Res res = conductBinarySearch (move (performEvaluation));
+            return make_tuple (res.stressFac, res.avgDelta, res.avgTime);
           }
       };
-  }
+  }//namespace stress_test_rig
   
+  
+  
+  /** configurable template for running Scheduler Stress tests */
   class StressRig
     : util::NonCopyable
     {
@@ -140,6 +211,37 @@ namespace test {
     public:
       using usec = std::chrono::microseconds;
       
+      usec LOAD_BASE = 500us;
+      uint CONCURRENCY = work::Config::getDefaultComputationCapacity();
+
+      BlockFlowAlloc bFlow{};
+      EngineObserver watch{};
+      Scheduler scheduler{bFlow, watch};
+      
+      /** Extension point: build the computation topology for this test */
+      auto
+      testLoad()
+        {
+          return TestChainLoad<>{64};
+        }
+      
+      /** (optional) extension point: base configuration of the test ScheduleCtx */
+      template<class TL>
+      auto
+      testSetup (TL& testLoad)
+        {
+          return testLoad.setupSchedule(scheduler)
+                         .withJobDeadline(100ms)
+                         .withUpfrontPlanning();
+        }
+      
+      /**
+       * Entrance Point: build a stress test measurement setup
+       * to determine the »breaking point« where the Scheduler is unable
+       * to keep up with the defined schedule.
+       * @tparam CONF specialised subclass of StressRig with customisation
+       * @return a builder to configure and then launch the actual test
+       */
       template<class CONF>
       static auto
       with()

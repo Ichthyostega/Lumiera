@@ -100,7 +100,7 @@ namespace test {
           auto testLoad =
             TestChainLoad{64}
                .configureShape_short_segments3_interleaved()
-               .buildToplolgy();
+               .buildTopology();
           
           // while building the graph, node hashes are computed
           CHECK (testLoad.getHash() == 0xD2F292D864CF8086);
@@ -210,7 +210,7 @@ namespace test {
       verify_Topology()
         {
           auto graph = ChainLoad16{32}
-                          .buildToplolgy();
+                          .buildTopology();
           
           CHECK (graph.topLevel() == 31);
           CHECK (graph.getSeed()  ==  0);
@@ -273,7 +273,7 @@ namespace test {
           
           // moderate symmetrical expansion with 40% probability and maximal +2 links
           graph.expansionRule(graph.rule().probability(0.4).maxVal(2))
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -292,7 +292,7 @@ namespace test {
           // with additional re-shuffling, probability acts independent in each branch
           // leading to more chances to draw a »fork«, leading to a faster expanding graph
           graph.expansionRule(graph.rule().probability(0.4).maxVal(2).shuffle(23))
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -311,7 +311,7 @@ namespace test {
           // while more constrained in width...
           TestChainLoad<8> gra_2{256};
           gra_2.expansionRule(gra_2.rule().probability(0.4).maxVal(2).shuffle(23))
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -343,7 +343,7 @@ namespace test {
           // expand immediately at start and then gradually reduce / join chains
           graph.expansionRule(graph.rule_atStart(8))
                .reductionRule(graph.rule().probability(0.2).maxVal(3).shuffle(555))
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -360,7 +360,7 @@ namespace test {
           // expansion and reduction can counterbalance each other
           graph.expansionRule(graph.rule().probability(0.2).maxVal(3).shuffle(555))
                .reductionRule(graph.rule().probability(0.2).maxVal(3).shuffle(555))
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -378,7 +378,7 @@ namespace test {
           // expansion bursts can be balanced with a heightened reduction intensity
           graph.expansionRule(graph.rule().probability(0.3).maxVal(4).shuffle(555))
                .reductionRule(graph.rule().probability(0.9).maxVal(2).shuffle(555))
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -411,7 +411,7 @@ namespace test {
           
           // randomly start new chains, to be carried-on linearly
           graph.seedingRule(graph.rule().probability(0.2).maxVal(3).shuffle())
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -433,7 +433,7 @@ namespace test {
           // with side-chaines successively joined into a single common result
           graph.seedingRule(graph.rule().probability(0.2).maxVal(3).shuffle())
                .reductionRule(graph.rule().probability(0.9).maxVal(2))
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -468,7 +468,7 @@ namespace test {
           
           // terminate chains randomly
           graph.pruningRule(graph.rule().probability(0.2))
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -488,7 +488,7 @@ namespace test {
           graph.pruningRule(graph.rule().probability(0.2))
                .expansionRule(graph.rule().probability(0.6))
                .setSeed(10101)
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -513,7 +513,7 @@ namespace test {
           graph.pruningRule(graph.rule().probability(0.2).shuffle(5))
                .expansionRule(graph.rule().probability(0.6))
                .setSeed(10101)
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -536,7 +536,7 @@ namespace test {
           graph.seedingRule(graph.rule_atStart(1))
                .pruningRule(graph.rule().probability(0.2))
                .setSeed(10101)
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -566,7 +566,7 @@ namespace test {
                .pruningRule(graph.rule().probability(0.5))
                .reductionRule(graph.rule().probability(0.8).maxVal(4))
                .setSeed(10101)
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -613,7 +613,7 @@ namespace test {
                .pruningRule(graph.rule().probability(0.4))
                .reductionRule(graph.rule().probability(0.6).maxVal(5).minVal(2))
                .setSeed(23)
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -642,7 +642,7 @@ namespace test {
                .pruningRule(graph.rule().probability(0.5))
                .reductionRule(graph.rule().probability(0.6).maxVal(5).minVal(2))
                .setSeed(23)
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -667,7 +667,7 @@ namespace test {
                .reductionRule(graph.rule().probability(0.75).maxVal(3))
                .pruningRule(graph.rule_atJoin(1))
                .setSeed(47)
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -690,7 +690,7 @@ namespace test {
                .reductionRule(graph.rule().probability(0.75).maxVal(3))
                .pruningRule(graph.rule_atJoin(1))
                .setSeed(0)
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -711,7 +711,7 @@ namespace test {
                .reductionRule(graph.rule().probability(0.75).maxVal(3).shuffle())
                .pruningRule(graph.rule_atJoin(1))
                .setSeed(0)
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -736,7 +736,7 @@ namespace test {
                .reductionRule(graph.rule().probability(0.75).maxVal(3))
                .pruningRule(graph.rule().probability(0.55))
                .setSeed(55)   // ◁───────────────────────────────────────────── use 31 for width limited to 8 nodes
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -760,7 +760,7 @@ namespace test {
                .reductionRule(graph.rule().probability(0.6).maxVal(5).minVal(2))
                .pruningRule(graph.rule().probability(0.4))
                .setSeed(42)
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
              ;
@@ -782,7 +782,7 @@ namespace test {
                .reductionRule(graph.rule().probability(0.6).maxVal(5).minVal(2))
                .pruningRule(graph.rule().probability(0.42))
                .setSeed(23)
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -803,7 +803,7 @@ namespace test {
                .reductionRule(graph.rule().probability(0.6).maxVal(5).minVal(2))
                .pruningRule(graph.rule().probability(0.42))
                .setSeed(23)
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -835,7 +835,7 @@ namespace test {
                .seedingRule(graph.rule())
                .pruningRule(graph.rule())
                .setSeed(62)
-               .buildToplolgy()
+               .buildTopology()
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
@@ -937,7 +937,7 @@ namespace test {
           graph.expansionRule(graph.rule().probability(0.8).maxVal(1))
                .pruningRule(graph.rule().probability(0.6))
                .weightRule((graph.rule().probability(0.5)))
-               .buildToplolgy();
+               .buildTopology();
           
           CHECK (8 == graph.allNodes().filter(isStartNode).count());
           CHECK (15 == graph.allNodes().filter(isExitNode).count());
@@ -1039,19 +1039,19 @@ namespace test {
           double t1 =
             TestChainLoad{64}
                .configureShape_short_segments3_interleaved()
-               .buildToplolgy()
+               .buildTopology()
                .calcRuntimeReference();
           
           double t2 =
             TestChainLoad{64}
                .configureShape_short_segments3_interleaved()
-               .buildToplolgy()
+               .buildTopology()
                .calcRuntimeReference(1ms);
           
           double t3 =
             TestChainLoad{256}
                .configureShape_short_segments3_interleaved()
-               .buildToplolgy()
+               .buildTopology()
                .calcRuntimeReference();
           
           auto isWithin10Percent = [](double t, double r)
@@ -1071,7 +1071,7 @@ namespace test {
           auto graph =
             TestChainLoad{64}
                .configureShape_short_segments3_interleaved()
-               .buildToplolgy();
+               .buildTopology();
           
           CHECK (graph.getHash() == 0xD2F292D864CF8086);
           
@@ -1102,7 +1102,7 @@ namespace test {
         {
           TestChainLoad testLoad{64};
           testLoad.configureShape_chain_loadBursts()
-                  .buildToplolgy()
+                  .buildTopology()
 //                .printTopologyDOT()
                   ;
           

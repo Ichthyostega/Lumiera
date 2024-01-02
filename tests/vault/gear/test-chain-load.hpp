@@ -571,7 +571,7 @@ namespace test {
        * evaluating the _drawing rules_ on the current node, computing its hash.
        */
       TestChainLoad&&
-      buildToplolgy()
+      buildTopology()
         {
           NodeTab a,b,          // working data for generation
                  *curr{&a},     // the current set of nodes to carry on

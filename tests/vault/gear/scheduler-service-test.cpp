@@ -548,7 +548,7 @@ namespace test {
           MARK_TEST_FUN
           TestChainLoad<16> testLoad{64};
           testLoad.configureShape_chain_loadBursts()
-                  .buildToplolgy();
+                  .buildTopology();
           
           auto stats = testLoad.computeGraphStatistics();
           cout << _Fmt{"Test-Load: Nodes: %d  Levels: %d  ∅Node/Level: %3.1f  Forks: %d  Joins: %d"}
