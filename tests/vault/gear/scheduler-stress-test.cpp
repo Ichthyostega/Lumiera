@@ -33,7 +33,7 @@
 #include "lib/format-cout.hpp"
 #include "lib/test/diagnostic-output.hpp"//////////////////////////TODO work in distress
 //#include "lib/format-string.hpp"
-//#include "lib/test/transiently.hpp"
+#include "lib/test/transiently.hpp"
 //#include "lib/test/microbenchmark.hpp"
 //#include "lib/util.hpp"
 
@@ -75,6 +75,7 @@ namespace test {
         {
            //smokeTest();
            setup_systematicSchedule();
+           search_breaking_point();
            generalFuckup();
            walkingDeadline();
         }
@@ -145,7 +146,6 @@ namespace test {
       void
       setup_systematicSchedule()
         {
-          MARK_TEST_FUN
           TestChainLoad testLoad{64};
           testLoad.configureShape_chain_loadBursts()
                   .buildToplolgy()
@@ -271,15 +271,60 @@ SHOW_EXPR(micros);
           CHECK (stepStr(26) == "lev:26  stepFac:26.967 schedule:44.944"_expect);
           CHECK (stepStr(27) == "lev:27  stepFac:27.967 schedule:46.611"_expect);
           
+          // perform a Test with this low stress level (0.3)
+          double runTime = testSetup.launch_and_wait();
+          double expected = testSetup.getExpectedEndTime();
+          CHECK (fabs (runTime-expected) < 5000);
+        }    //  Scheduler should able to follow the expected schedule
+      
+      
+      
+      /** @test TODO determine the breaking point towards scheduler overload
+       * @todo WIP 1/24 🔁 define ⟶ implement
+       */
+      void
+      search_breaking_point()
+        {
+          MARK_TEST_FUN
+          TestChainLoad testLoad{64};
+          testLoad.configureShape_chain_loadBursts()
+                  .buildToplolgy()
+//                .printTopologyDOT()
+//                .printTopologyStatistics()
+                  ;
           
-          micros = testSetup.launch_and_wait();
-SHOW_EXPR(micros);
+          // Adapted Schedule----------
+          TRANSIENTLY(work::Config::COMPUTATION_CAPACITY) = 4;
+          auto LOAD_BASE = 500us;
+          double stressFac = 0.6;
+          uint concurrency = 4;
+          
+          // Build-Performance-test-setup--------
+          BlockFlowAlloc bFlow;
+          EngineObserver watch;
+          Scheduler scheduler{bFlow, watch};
+          
+          auto testSetup =
+            testLoad.setupSchedule(scheduler)
+                    .withLoadTimeBase(LOAD_BASE)
+                    .withJobDeadline(50ms)
+                    .withUpfrontPlanning()
+                    .withAdaptedSchedule(stressFac, concurrency);
+          
+          double refTime = testLoad.calcRuntimeReference(LOAD_BASE);
+SHOW_EXPR(refTime);
+          
+          double runTime = testSetup.launch_and_wait();
+SHOW_EXPR(runTime);
+          double expTime = testSetup.getExpectedEndTime();
+SHOW_EXPR(expTime);
+SHOW_EXPR(runTime-expTime)
         }
       
       
       
       /** @test TODO
-       * @todo WIP 12/23 🔁 define ⟶ implement
+       * @todo WIP 1/24 🔁 define ⟶ implement
        */
       void
       generalFuckup()
@@ -290,7 +335,7 @@ SHOW_EXPR(micros);
       
       
       /** @test TODO
-       * @todo WIP 12/23 🔁 define ⟶ implement
+       * @todo WIP 1/24 🔁 define ⟶ implement
        */
       void
       walkingDeadline()

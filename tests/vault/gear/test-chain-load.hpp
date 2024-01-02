@@ -1760,8 +1760,14 @@ namespace test {
           return lib::explore(startTimes_)
                      .transform([&](Time jobTime) -> TimeVar
                                   {
-                                    return jobTime - startTimes_[0];
+                                    return jobTime - startTimes_.front();
                                   });
+        }
+      
+      double
+      getExpectedEndTime()
+        {
+          return _raw(startTimes_.back() - startTimes_.front());
         }
       
       
