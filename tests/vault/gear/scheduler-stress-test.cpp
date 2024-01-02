@@ -296,7 +296,7 @@ SHOW_EXPR(micros);
           // Adapted Schedule----------
           TRANSIENTLY(work::Config::COMPUTATION_CAPACITY) = 4;
           auto LOAD_BASE = 500us;
-          double stressFac = 0.6;
+          double stressFac = 0.5;
           uint concurrency = 4;
           
           // Build-Performance-test-setup--------
@@ -307,6 +307,7 @@ SHOW_EXPR(micros);
           auto testSetup =
             testLoad.setupSchedule(scheduler)
                     .withLoadTimeBase(LOAD_BASE)
+                    .withLoadMem()
                     .withJobDeadline(50ms)
                     .withUpfrontPlanning()
                     .withAdaptedSchedule(stressFac, concurrency);

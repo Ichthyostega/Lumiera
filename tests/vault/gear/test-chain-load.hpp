@@ -1255,8 +1255,6 @@ namespace test {
     {
       using Sink = volatile size_t;
       
-      lib::UninitialisedDynBlock<Sink> memBlock_{};
-      
       static double&
       computationSpeed (bool mem)     ///< in iterations/µs
         {
@@ -1346,12 +1344,12 @@ namespace test {
       causeMemProcessLoad (uint scaleStep)
         {
           auto [siz,round] = allocNeeded (scaleStep);
-          memBlock_.allocate(siz);
-          ++*memBlock_.front();
+          lib::UninitialisedDynBlock<Sink> memBlock{siz};
+          ++*memBlock.front();
           for ( ; 0 < round; --round)
-            for (size_t i=0; i<memBlock_.size()-1; ++i)
-              memBlock_[i+1] += memBlock_[i];
-          ++*memBlock_.back();
+            for (size_t i=0; i<memBlock.size()-1; ++i)
+              memBlock[i+1] += memBlock[i];
+          ++*memBlock.back();
         }
       
       double
