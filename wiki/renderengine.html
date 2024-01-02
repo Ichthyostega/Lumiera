@@ -7327,7 +7327,7 @@ The last point highlights a //circular structure:// the planning job itself was 
 The way other parts of the system are built, requires us to obtain a guaranteed knowledge of some job's termination. It is possible to obtain that knowledge with some limited delay, but it nees to be absoultely reliable (violations leading to segfault). The requirements stated above assume this can be achieved through //jobs with guaranteed execution.// Alternatively we could consider installing specific callbacks -- in this case the scheduler itself has to guarantee the invocation of these callbacks, even if the corresponding job fails or is never invoked. It doesn't seem there is any other option.
 </pre>
 </div>
-<div title="SchedulerTest" creator="Ichthyostega" modifier="Ichthyostega" created="202312281814" modified="202312281836" tags="Rendering operational draft" changecount="4">
+<div title="SchedulerTest" creator="Ichthyostega" modifier="Ichthyostega" created="202312281814" modified="202401022341" tags="Rendering operational draft" changecount="9">
 <pre>With the Scheduler testing effort [[#1344|https://issues.lumiera.org/ticket/1344]], several goals are pursued
 * by exposing the new scheduler implementation to excessive overload, its robustness can be assessed and defects can be spotted
 * with the help of a systematic, calibrated load, characteristic performance limits and breaking points can be established
@@ -7356,6 +7356,13 @@ The Scheduler thus follows the connectivity pattern, and defining a specific pat
 * the node graph holds a fixed preconfigured number of nodes
 * the //width// is likewise preconfigured, i.e. the number of nodes on the same »level« and typically started at the same time
 * generation is automatically terminated with an exit node, joining all remaining chains
+
+! Scheduler Stress Testing
+The point of departure for any stress testing is to show that the subject is resilient and will break in controlled ways only. Since the Scheduler relies on the limited computational resources available in the system, overload is easy to provoke by adding too many render jobs; delay will build up until some job's deadline is violated, at which point the Scheduler will drop this job (and any follow-up jobs with unmet dependencies). Much more challenging however is the task to find out about //the boundary of regular scheduler operation.// The domain of regular operation can be defined by the ability of the scheduler to follow and conform to the timings set out explicitly in the schedule. Obviously, short and localised load peaks can be accommodated, yet once a persistent backlog builds up, the schedule starts to slip and the calculation process will flounder.
+
+A method to determine such a »''breaking point''« in a systematic way relies on the //synthetic calculation load// mentioned above, the {{{TestChainLoad}}}. Using a simplified model of expected computation expense, a timing grid for scheduling can be established, which is then //scaled and condensed// to provoke loss of control in the Scheduler -- a condition that can be determined by statistical observation: since the process of scheduling contains an element of //essential randomness,// persistent overload will be indicated by an increasing variance of the overall runtime, and a departure from the nominal runtime of the executed schedule. This consideration leads to a formalised condition, which can be used to control a //binary search// to find the breaking point in terms of a //critical stress factor.//
+
+Observing this breaking point in correlation with various load patterns will unveil performance characteristics and weak spots of the implementation.
 </pre>
 </div>
 <div title="SchedulerWorker" creator="Ichthyostega" modifier="Ichthyostega" created="202309041605" modified="202312281745" tags="Rendering operational spec draft" changecount="21">

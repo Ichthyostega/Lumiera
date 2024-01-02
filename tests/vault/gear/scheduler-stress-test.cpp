@@ -27,6 +27,7 @@
 
 #include "lib/test/run.hpp"
 #include "test-chain-load.hpp"
+#include "stress-test-rig.hpp"
 #include "vault/gear/scheduler.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-string.hpp"
@@ -344,6 +345,20 @@ SHOW_EXPR(refTime);
               sdev = sqrt (sdev/REPETITIONS);
               cout << rowFmt % stress % (avg/1000) % (sdev/1000) % (avgd/1000) % (double(misses)/REPETITIONS) % (expTime/1000) <<endl;
             }
+///////////////////////////////////////////////////////////////////////////////////////////////////WIP : draft for testbench-DSL          
+            struct Setup : StressRig
+              {
+                usec LOAD_BASE = 500us;
+                uint CONCURRENCY = 4;
+                
+                auto testLoad() { return TestChainLoad<>{64}.configureShape_chain_loadBursts(); }
+              };
+            
+            auto [stress,delta,time] = StressRig::with<Setup>().searchBreakingPoint();
+///////////////////////////////////////////////////////////////////////////////////////////////////WIP : draft for testbench-DSL
+SHOW_EXPR(stress)
+SHOW_EXPR(delta)
+SHOW_EXPR(time)
         }
       
       
