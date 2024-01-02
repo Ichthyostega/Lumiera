@@ -104,3 +104,24 @@ Dump-06::
 - refTime(singleThr): 31.8014ms
 - runTime(Scheduler): 42.0706ms
 
+
+Time-01::
+ Search for the »breaking Point« where the computation slips off schedule.
++
+- using a load graph with 64 nodes in a single chain
+- this chain progresses for the first half with no or low concurrency
+- after node-23 the graph forks out massively up to 16 nodes in parallel
+- concurrency is set to 4 and the worker pool limited accordingly
++
+The overall density of the schedule (»stress factor«) is increased in small steps,
+repeating each series 30 times and computing averages. The Scheduler is able to
+follow initially, with very low standard derivation and low average delta to
+the scheduled overall time. When approaching stress factor = 0.5, the number
+of _glitches_ (with Δ > 2ms) increases, while the average delta and the
+standard derivation exhibit a steep rise. This leads to the following
+trigger criteria
++
+- more than 55% glitches with Δ > 2ms
+- σ > 2ms
+- ∅Δ > 4ms
+

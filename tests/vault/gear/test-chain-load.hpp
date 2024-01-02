@@ -1946,8 +1946,9 @@ namespace test {
             fillDefaultSchedule();
           size_t numPoints = chainLoad_.topLevel()+2;
           ENSURE (startTimes_.size() == numPoints);
+          Offset base{startTimes_.front(), anchor};
           for (size_t level=0; level<numPoints; ++level)
-            startTimes_[level] += anchor;
+            startTimes_[level] += base;
           return anchor;
         }
       

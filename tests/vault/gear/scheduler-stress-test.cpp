@@ -38,6 +38,8 @@
 //#include "lib/util.hpp"
 
 //#include <utility>
+//#include <vector>
+#include <array>
 
 using test::Test;
 //using std::move;
@@ -52,6 +54,8 @@ namespace test {
 //  using lib::time::Offset;
 //  using lib::time::Time;
   using util::_Fmt;
+//  using std::vector;
+  using std::array;
   
   namespace { // Test definitions and setup...
     
@@ -296,7 +300,6 @@ SHOW_EXPR(micros);
           // Adapted Schedule----------
           TRANSIENTLY(work::Config::COMPUTATION_CAPACITY) = 4;
           auto LOAD_BASE = 500us;
-          double stressFac = 0.5;
           uint concurrency = 4;
           
           // Build-Performance-test-setup--------
@@ -307,19 +310,40 @@ SHOW_EXPR(micros);
           auto testSetup =
             testLoad.setupSchedule(scheduler)
                     .withLoadTimeBase(LOAD_BASE)
-                    .withLoadMem()
                     .withJobDeadline(50ms)
-                    .withUpfrontPlanning()
-                    .withAdaptedSchedule(stressFac, concurrency);
+                    .withUpfrontPlanning();
           
+          auto sqr = [](auto n){ return n*n; };
+          _Fmt pointFmt{"....·%-2d: t=%4.1f %s  Δ=%4.1f %s"};
+          _Fmt rowFmt  {"%4.2f|  : ∅=%4.1f ±%4.2f    ∅Δ=%4.1f %%%3.1f -- expect:%4.1fms"};
           double refTime = testLoad.calcRuntimeReference(LOAD_BASE);
 SHOW_EXPR(refTime);
-          
-          double runTime = testSetup.launch_and_wait();
-SHOW_EXPR(runTime);
-          double expTime = testSetup.getExpectedEndTime();
-SHOW_EXPR(expTime);
-SHOW_EXPR(runTime-expTime)
+          const uint REPETITIONS{30};
+          for (double stress=0.2; stress < 0.7; stress+=0.03)
+            {
+              testSetup.withAdaptedSchedule(stress, concurrency);
+              array<double, REPETITIONS> runTime;
+              array<double, REPETITIONS> delta;
+              for (uint i=0; i<REPETITIONS; ++i)
+                {
+                  runTime[i] = testSetup.launch_and_wait();
+                }
+              double expTime = testSetup.getExpectedEndTime();
+              double avg = lib::explore(runTime).resultSum() / REPETITIONS;
+              double avgd = fabs (avg-expTime);
+              double sdev{0};
+              uint misses{0};
+              for (uint i=0; i<REPETITIONS; ++i)
+                {
+                  sdev += sqr (runTime[i] - avg);
+                  delta[i] = fabs (runTime[i] - expTime);
+                  if (delta[i] > 2000)
+                    ++misses;
+                  cout << pointFmt % i % (runTime[i]/1000) % (runTime[i]>avg?"+":"-") % (delta[i]/1000) % (delta[i] > 2000? "●":"○") <<endl;
+                }
+              sdev = sqrt (sdev/REPETITIONS);
+              cout << rowFmt % stress % (avg/1000) % (sdev/1000) % (avgd/1000) % (double(misses)/REPETITIONS) % (expTime/1000) <<endl;
+            }
         }
       
       
