@@ -49,7 +49,19 @@
  ** To perform this test scheme, an operational Scheduler is required, and an instance
  ** of the TestChainLoad must be provided, configured with desired load properties.
  ** The _stressFactor_ of the corresponding generated schedule will be the active parameter
- ** of this test, performing a binary search for the _breaking point._
+ ** of this test, performing a binary search for the _breaking point._ The Measurement
+ ** attempts to narrow down to the point of massive failure, when the ability to somehow
+ ** cope with the schedule completely break down. Based on watching the Scheduler in
+ ** operation, the detection was linked to three conditions, which typically will
+ ** be triggered together, and within a narrow and reproducible parameter range:
+ ** - an individual run counts as _accidentally failed_ when the execution slips
+ **   away by more than 2ms with respect to the defined overall schedule. When more
+ **   than 55% of all observed runs are considered as failed, the first condition is met
+ ** - moreover, the observed ''standard derivation'' must also surpass the same limit
+ **   of > 2ms, which indicates that the Scheduling mechanism  is under substantial
+ **   strain; in regular operation, the slip is rather ~ 200µs.
+ ** - the third condition is that the ''averaged delta'' has surpassed 4ms,
+ **   which is 2 times the basic failure indicator.
  ** 
  ** ## Observation tools
  ** 
@@ -154,7 +166,7 @@ namespace test {
             auto sqr = [](auto n){ return n*n; };
             Res res;
             auto& [sf,pf,sdev,avgD,avgT,expT] = res;
-            sf = stressFac;
+            sf   = stressFac;
             expT = testSetup.getExpectedEndTime() / 1000;
             std::array<double, CONF::REPETITIONS> runTime;
             for (uint i=0; i<CONF::REPETITIONS; ++i)
@@ -182,7 +194,9 @@ namespace test {
         bool
         decideBreakPoint (Res& res)
           {
-            return true; //////TODO booooo
+            return res.percentOff > CONF::TRIGGER_FAIL
+               and res.stdDev     > CONF::TRIGGER_SDEV
+               and res.avgDelta   > CONF::TRIGGER_DELTA;
           }
         
         /**
@@ -196,10 +210,11 @@ namespace test {
             UNIMPLEMENTED ("invoke a library implementation of binary search");
           }
         
+        
         _Fmt fmtRun_ {"....·%-2d:  Δ=%4.1f         t=%4.1f %s %s"};                      //      i % Δ % t % t>avg?  % fail?
         _Fmt fmtStep_{ "%4.2f|  : ∅Δ=%4.1f±%-4.2f  ∅t=%4.1f %%%3.1f -- expect:%4.1fms"}; // stress % ∅Δ % σ % ∅t % fail % t-expect
-        _Fmt fmtResVal_{"%9s: %5.2f%s"};
         _Fmt fmtResSDv_{"%9s= %5.2f ±%4.2f%s"};
+        _Fmt fmtResVal_{"%9s: %5.2f%s"};
         
         void
         showRun(uint i, double delta, double t, bool over, bool fail)
@@ -279,10 +294,10 @@ namespace test {
       
       usec LOAD_BASE = 500us;
       uint CONCURRENCY = work::Config::getDefaultComputationCapacity();
-      double FAIL_LIMIT = 2.0;          ///< delta-limit when to count a run as failure
-      double TRIGGER_FAIL = 0.55;       ///< %-fact: criterion-1 failures above this rate
-      double TRIGGER_SDEV = FAIL_LIMIT; ///< in ms : criterion-2 standard derivation
-      double TRIGGER_DELTA = 4.0;       ///< in ms : criterion-3 delta above this limit
+      double FAIL_LIMIT = 2.0;             ///< delta-limit when to count a run as failure
+      double TRIGGER_FAIL = 0.55;          ///< %-fact: criterion-1 failures above this rate
+      double TRIGGER_SDEV = FAIL_LIMIT;    ///< in ms : criterion-2 standard derivation
+      double TRIGGER_DELTA = 2*FAIL_LIMIT; ///< in ms : criterion-3 delta above this limit
       bool showRuns = false;    ///< print a line for each individual run
       bool showStep = true;     ///< print a line for each binary search step
       bool showRes  = true;     ///< print result data
