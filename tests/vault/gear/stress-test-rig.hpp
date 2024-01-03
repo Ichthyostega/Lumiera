@@ -79,7 +79,7 @@
 //#include <string>
 //#include <vector>
 #include <tuple>
-//#include <array>
+#include <array>
 
 
 namespace vault{
@@ -136,6 +136,7 @@ namespace test {
             double stdDev{0};
             double avgDelta{0};
             double avgTime{0};
+            double expTime{0};
           };
         
         /** prepare the ScheduleCtx for a specifically parametrised test series */
@@ -148,10 +149,32 @@ namespace test {
         
         /** perform a repetition of test runs and compute statistics */
         Res
-        runProbes (TestSetup& testSetup)
+        runProbes (TestSetup& testSetup, double stressFac)
           {
-            UNIMPLEMENTED ("test loop and statistics computation");
-            Res res{};
+            auto sqr = [](auto n){ return n*n; };
+            Res res;
+            auto& [sf,pf,sdev,avgD,avgT,expT] = res;
+            sf = stressFac;
+            expT = testSetup.getExpectedEndTime() / 1000;
+            std::array<double, CONF::REPETITIONS> runTime;
+            for (uint i=0; i<CONF::REPETITIONS; ++i)
+              {
+                runTime[i] = testSetup.launch_and_wait() / 1000;
+                avgT += runTime[i];
+              }
+            avgT /= CONF::REPETITIONS;
+            avgD = fabs (avgT-expT);
+            for (uint i=0; i<CONF::REPETITIONS; ++i)
+              {
+                sdev += sqr (runTime[i] - avgT);
+                double delta = fabs (runTime[i] - expT);
+                bool fail = (delta > CONF::FAIL_LIMIT);
+                if (fail)
+                  ++ pf;
+                showRun(i, delta, runTime[i], runTime[i] > avgT, fail);
+              }
+            sdev = sqrt (sdev/CONF::REPETITIONS);
+            showStep(res);
             return res;
           }
         
@@ -173,6 +196,49 @@ namespace test {
             UNIMPLEMENTED ("invoke a library implementation of binary search");
           }
         
+        _Fmt fmtRun_ {"....·%-2d:  Δ=%4.1f         t=%4.1f %s %s"};                      //      i % Δ % t % t>avg?  % fail?
+        _Fmt fmtStep_{ "%4.2f|  : ∅Δ=%4.1f±%-4.2f  ∅t=%4.1f %%%3.1f -- expect:%4.1fms"}; // stress % ∅Δ % σ % ∅t % fail % t-expect
+        _Fmt fmtResVal_{"%9s: %5.2f%s"};
+        _Fmt fmtResSDv_{"%9s= %5.2f ±%4.2f%s"};
+        
+        void
+        showRun(uint i, double delta, double t, bool over, bool fail)
+          {
+            if (CONF::showRuns)
+              cout << fmtRun_ % i % delta % t % (over? "+":"-") % (fail? "●":"○")
+                   << endl;
+          }
+        
+        void
+        showStep(Res& res)
+          {
+            if (CONF::showStep)
+              cout << fmtStep_ % res.stressFac % res.avgDelta % res.stdDev % res.avgTime % res.percentOff % res.expTime
+                   << endl;
+          }
+        
+        void
+        showRes(Res& res)
+          {
+            if (CONF::showRes)
+              {
+                cout << fmtResVal_ % "stresFac" % res.stressFac             % ""  <<endl;
+                cout << fmtResVal_ %     "fail" %(res.percentOff * 100)     % '%' <<endl;
+                cout << fmtResSDv_ %       "∅Δ" % res.avgDelta % res.stdDev % "ms"<<endl;
+                cout << fmtResVal_ %  "runTime" % res.avgTime               % "ms"<<endl;
+                cout << fmtResVal_ % "expected" % res.expTime               % "ms"<<endl;
+              }
+          }
+        
+        void
+        showRef(TestLoad testLoad)
+          {
+            if (CONF::showRef)
+              cout << fmtResVal_ % "refTime"
+                                 % (testLoad.calcRuntimeReference(CONF::LOAD_BASE) /1000)
+                                 % "ms" << endl;
+          }
+        
         
       public:
         /**
@@ -191,7 +257,7 @@ namespace test {
             auto performEvaluation = [&](double stressFac)
                                         {
                                           configureTest (testSetup, stressFac);
-                                          auto res = runProbes (testSetup);
+                                          auto res = runProbes (testSetup, stressFac);
                                           return make_tuple (decideBreakPoint(res), res);
                                         };
             
@@ -213,6 +279,16 @@ namespace test {
       
       usec LOAD_BASE = 500us;
       uint CONCURRENCY = work::Config::getDefaultComputationCapacity();
+      double FAIL_LIMIT = 2.0;          ///< delta-limit when to count a run as failure
+      double TRIGGER_FAIL = 0.55;       ///< %-fact: criterion-1 failures above this rate
+      double TRIGGER_SDEV = FAIL_LIMIT; ///< in ms : criterion-2 standard derivation
+      double TRIGGER_DELTA = 4.0;       ///< in ms : criterion-3 delta above this limit
+      bool showRuns = false;    ///< print a line for each individual run
+      bool showStep = true;     ///< print a line for each binary search step
+      bool showRes  = true;     ///< print result data
+      bool showRef  = true;     ///< calculate single threaded reference time
+      
+      static uint constexpr REPETITIONS{30};
 
       BlockFlowAlloc bFlow{};
       EngineObserver watch{};
