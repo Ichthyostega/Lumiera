@@ -81,6 +81,7 @@
 #include "vault/gear/scheduler.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "lib/iter-explorer.hpp"
+#include "lib/meta/function.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"//////////////////////////TODO RLY?
 //#include "lib/util.hpp"
@@ -99,8 +100,8 @@ namespace gear {
 namespace test {
   
   using util::_Fmt;
-//  using util::min;
-//  using util::max;
+  using util::min;
+  using util::max;
 //  using util::isnil;
 //  using util::limited;
 //  using util::unConst;
@@ -115,7 +116,7 @@ namespace test {
 
 //  using std::string;
 //  using std::function;
-//  using std::make_pair;
+  using std::make_pair;
   using std::make_tuple;
 //  using std::forward;
 //  using std::string;
@@ -129,6 +130,71 @@ namespace test {
   }
   
   namespace stress_test_rig {
+    
+    template<class X, class P>
+    struct _ValidateBinarySearchFun
+      {
+        static_assert (not sizeof(P), "Functor unsuitable for binary search. "
+                                      "Expected signature pair<bool,X>(PAR)" );
+      };
+    template<class RES, class PAR>
+    struct _ValidateBinarySearchFun<std::pair<bool,RES>(PAR), PAR>
+      {
+        using Result = RES;
+      };
+    template<class FUN, typename PAR>
+    inline auto
+    make_binarySearchResults()
+    {
+      using Sig  = typename lib::meta::_Fun<FUN>::Sig;
+      using Res  = typename _ValidateBinarySearchFun<Sig,PAR>::Result;
+      using Data = std::vector<std::pair<bool, Res>>;
+      return Data{};
+    }
+    
+    template<class FUN, class CON, typename PAR>
+    inline auto
+    binarySearch_impl (FUN&& fun, CON results, PAR lower, PAR upper, PAR epsilon)
+    {
+      REQUIRE (lower <= upper);
+      while ((upper-lower) >= epsilon)
+        {
+          PAR div = (upper-lower) / 2;
+          results.emplace_back (fun(div));
+          bool hit = results.back().first;
+          if (hit)
+            upper = div;
+          else
+            lower = div;
+        }
+      return results;
+    }
+    
+    template<class FUN, typename PAR>
+    inline auto
+    binarySearch_inner (FUN&& fun, PAR lower, PAR upper, PAR epsilon)
+    {
+      auto results = make_binarySearchResults<FUN,PAR>();
+      return binarySearch_impl(forward<FUN> (fun), results, lower,upper,epsilon);
+    }
+    
+    template<class FUN, typename PAR>
+    inline auto
+    binarySearch_upper (FUN&& fun, PAR lower, PAR upper, PAR epsilon)
+    {
+      REQUIRE (lower <= upper);
+      auto results = make_binarySearchResults<FUN,PAR>();
+      results.emplace_back (fun(upper));
+      bool hit = results.back().first;
+      if (not hit)
+        {// the upper end breaks contract => search above
+          PAR len = (upper-lower);
+          lower = upper - len/10;
+          upper = lower + 14*len/10;
+        }
+      return binarySearch_impl(forward<FUN> (fun), results, lower,upper,epsilon);
+    }
+    
     
     /**
      * Specific stress test scheme to determine the
@@ -207,7 +273,30 @@ namespace test {
         Res
         conductBinarySearch (FUN&& runTestCase)
           {
-            UNIMPLEMENTED ("invoke a library implementation of binary search");
+            auto results = binarySearch_upper (forward<FUN> (runTestCase), 0.0, CONF::UPPER_STRESS, CONF::EPSILON);
+            uint s = results.size();
+            ENSURE (s >= 2);
+            Res res;
+            auto& [sf,pf,sdev,avgD,avgT,expT] = res;
+            // average data over the last three steps investigated for smoothing
+            uint points = min (results.size(), 3u);
+            for (uint i=results.size()-points; i<results.size(); ++i)
+              {
+                Res resx = results[i].second;
+                pf   += resx.percentOff;
+                sdev += resx.stdDev;
+                avgD += resx.avgDelta;
+                avgT += resx.avgTime;
+                expT += resx.expTime;
+              }
+            pf   /= points;
+            sdev /= points;
+            avgD /= points;
+            avgT /= points;
+            expT /= points;
+            // »breaking point« stress in the middle of the last interval
+            sf = (results[s-1].second.stressFac + results[s-2].second.stressFac) / 2;
+            return res;
           }
         
         
@@ -273,7 +362,7 @@ namespace test {
                                         {
                                           configureTest (testSetup, stressFac);
                                           auto res = runProbes (testSetup, stressFac);
-                                          return make_tuple (decideBreakPoint(res), res);
+                                          return make_pair (decideBreakPoint(res), res);
                                         };
             
             Res res = conductBinarySearch (move (performEvaluation));
@@ -294,7 +383,9 @@ namespace test {
       
       usec LOAD_BASE = 500us;
       uint CONCURRENCY = work::Config::getDefaultComputationCapacity();
-      double FAIL_LIMIT = 2.0;             ///< delta-limit when to count a run as failure
+      double EPSILON      = 0.01;          ///< error bound to abort binary search
+      double UPPER_STRESS = 0.6;           ///< starting point for the upper limit, likely to fail
+      double FAIL_LIMIT   = 2.0;           ///< delta-limit when to count a run as failure
       double TRIGGER_FAIL = 0.55;          ///< %-fact: criterion-1 failures above this rate
       double TRIGGER_SDEV = FAIL_LIMIT;    ///< in ms : criterion-2 standard derivation
       double TRIGGER_DELTA = 2*FAIL_LIMIT; ///< in ms : criterion-3 delta above this limit
