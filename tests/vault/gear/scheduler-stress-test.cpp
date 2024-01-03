@@ -291,74 +291,23 @@ SHOW_EXPR(micros);
       search_breaking_point()
         {
           MARK_TEST_FUN
-          TestChainLoad testLoad{64};
-          testLoad.configureShape_chain_loadBursts()
-                  .buildTopology()
-//                .printTopologyDOT()
-//                .printTopologyStatistics()
-                  ;
           
-          // Adapted Schedule----------
-          TRANSIENTLY(work::Config::COMPUTATION_CAPACITY) = 4;
-          auto LOAD_BASE = 500us;
-          uint concurrency = 4;
-          
-          // Build-Performance-test-setup--------
-          BlockFlowAlloc bFlow;
-          EngineObserver watch;
-          Scheduler scheduler{bFlow, watch};
-          
-          auto testSetup =
-            testLoad.setupSchedule(scheduler)
-                    .withLoadTimeBase(LOAD_BASE)
-                    .withJobDeadline(50ms)
-                    .withUpfrontPlanning();
-          
-          auto sqr = [](auto n){ return n*n; };
-          _Fmt pointFmt{"....·%-2d: t=%4.1f %s  Δ=%4.1f %s"};
-          _Fmt rowFmt  {"%4.2f|  : ∅=%4.1f ±%4.2f    ∅Δ=%4.1f %%%3.1f -- expect:%4.1fms"};
-          double refTime = testLoad.calcRuntimeReference(LOAD_BASE);
-SHOW_EXPR(refTime);
-          const uint REPETITIONS{30};
-          for (double stress=0.2; stress < 0.7; stress+=0.03)
-            {
-              testSetup.withAdaptedSchedule(stress, concurrency);
-              array<double, REPETITIONS> runTime;
-              array<double, REPETITIONS> delta;
-              for (uint i=0; i<REPETITIONS; ++i)
-                {
-                  runTime[i] = testSetup.launch_and_wait();
-                }
-              double expTime = testSetup.getExpectedEndTime();
-              double avg = lib::explore(runTime).resultSum() / REPETITIONS;
-              double avgd = fabs (avg-expTime);
-              double sdev{0};
-              uint misses{0};
-              for (uint i=0; i<REPETITIONS; ++i)
-                {
-                  sdev += sqr (runTime[i] - avg);
-                  delta[i] = fabs (runTime[i] - expTime);
-                  if (delta[i] > 2000)
-                    ++misses;
-                  cout << pointFmt % i % (runTime[i]/1000) % (runTime[i]>avg?"+":"-") % (delta[i]/1000) % (delta[i] > 2000? "●":"○") <<endl;
-                }
-              sdev = sqrt (sdev/REPETITIONS);
-              cout << rowFmt % stress % (avg/1000) % (sdev/1000) % (avgd/1000) % (double(misses)/REPETITIONS) % (expTime/1000) <<endl;
-            }
-///////////////////////////////////////////////////////////////////////////////////////////////////WIP : draft for testbench-DSL          
             struct Setup : StressRig
               {
                 usec LOAD_BASE = 500us;
                 uint CONCURRENCY = 4;
+                bool showRuns = true;
                 
                 auto testLoad() { return TestChainLoad<>{64}.configureShape_chain_loadBursts(); }
               };
             
-            auto [stress,delta,time] = StressRig::with<Setup>().searchBreakingPoint();
-///////////////////////////////////////////////////////////////////////////////////////////////////WIP : draft for testbench-DSL
+          auto [stress,delta,time] = StressRig::with<Setup>().searchBreakingPoint();
+
 SHOW_EXPR(stress)
 SHOW_EXPR(delta)
 SHOW_EXPR(time)
+          CHECK (delta > 4.0);
+          CHECK (0.55 > stress and stress > 0.4);
         }
       
       

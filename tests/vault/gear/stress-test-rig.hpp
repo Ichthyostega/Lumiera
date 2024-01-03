@@ -159,13 +159,14 @@ namespace test {
       REQUIRE (lower <= upper);
       while ((upper-lower) >= epsilon)
         {
-          PAR div = (upper-lower) / 2;
+          PAR div = lower + (upper-lower) / 2;
           results.emplace_back (fun(div));
           bool hit = results.back().first;
           if (hit)
             upper = div;
           else
             lower = div;
+cout<<"##################LOOP lower="<<lower<<" div="<<div<<" upper="<<upper<<" hit="<<hit<<endl;
         }
       return results;
     }
@@ -251,6 +252,7 @@ namespace test {
                   ++ pf;
                 showRun(i, delta, runTime[i], runTime[i] > avgT, fail);
               }
+            pf /= CONF::REPETITIONS;
             sdev = sqrt (sdev/CONF::REPETITIONS);
             showStep(res);
             return res;
@@ -300,7 +302,7 @@ namespace test {
           }
         
         
-        _Fmt fmtRun_ {"....·%-2d:  Δ=%4.1f         t=%4.1f %s %s"};                      //      i % Δ % t % t>avg?  % fail?
+        _Fmt fmtRun_ {"....·%-2d:  Δ=%4.1f        t=%4.1f  %s %s"};                      //      i % Δ % t % t>avg?  % fail?
         _Fmt fmtStep_{ "%4.2f|  : ∅Δ=%4.1f±%-4.2f  ∅t=%4.1f %%%3.1f -- expect:%4.1fms"}; // stress % ∅Δ % σ % ∅t % fail % t-expect
         _Fmt fmtResSDv_{"%9s= %5.2f ±%4.2f%s"};
         _Fmt fmtResVal_{"%9s: %5.2f%s"};
@@ -328,14 +330,14 @@ namespace test {
               {
                 cout << fmtResVal_ % "stresFac" % res.stressFac             % ""  <<endl;
                 cout << fmtResVal_ %     "fail" %(res.percentOff * 100)     % '%' <<endl;
-                cout << fmtResSDv_ %       "∅Δ" % res.avgDelta % res.stdDev % "ms"<<endl;
+                cout << fmtResSDv_ %    "delta" % res.avgDelta % res.stdDev % "ms"<<endl;
                 cout << fmtResVal_ %  "runTime" % res.avgTime               % "ms"<<endl;
                 cout << fmtResVal_ % "expected" % res.expTime               % "ms"<<endl;
               }
           }
         
         void
-        showRef(TestLoad testLoad)
+        showRef(TestLoad& testLoad)
           {
             if (CONF::showRef)
               cout << fmtResVal_ % "refTime"
@@ -366,6 +368,8 @@ namespace test {
                                         };
             
             Res res = conductBinarySearch (move (performEvaluation));
+            showRes (res);
+            showRef (testLoad);
             return make_tuple (res.stressFac, res.avgDelta, res.avgTime);
           }
       };
@@ -394,7 +398,7 @@ namespace test {
       bool showRes  = true;     ///< print result data
       bool showRef  = true;     ///< calculate single threaded reference time
       
-      static uint constexpr REPETITIONS{30};
+      static uint constexpr REPETITIONS{20};
 
       BlockFlowAlloc bFlow{};
       EngineObserver watch{};
