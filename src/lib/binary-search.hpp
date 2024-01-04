@@ -1,5 +1,5 @@
 /*
-  STRESS-TEST-RIG.hpp  -  setup for stress and performance investigation
+  BINARY-SEARCH.hpp  -  generic search over continuous domain with a probe predicate
 
   Copyright (C)         Lumiera.org
     2024,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,58 +20,16 @@
 
 */
 
-/** @file stress-test-rig.hpp
- ** A test bench to conduct performance measurement series. Outfitted especially
- ** to determine runtime behaviour of the Scheduler and associated parts of the
- ** Lumiera Engine through systematic execution of load scenarios.
- ** 
- ** # Scheduler Stress Testing
- ** 
- ** The point of departure for any stress testing is to show that the subject will
- ** break in controlled ways only. For the Scheduler this can easily be achieved by
- ** overloading until job deadlines are broken. Much more challenging however is the
- ** task to find out about the boundary of regular scheduler operation. This realm
- ** can be defined by the ability of the scheduler to follow and conform to the
- ** timings set out explicitly in the schedule. Obviously, short and localised
- ** load peaks can be accommodated, yet once a persistent backlog builds up,
- ** the schedule starts to slip and the calculation process will flounder.
- ** 
- ** A method to determine such a _»breaking point«_ in a systematic way is based on
- ** building a [synthetic calculation load](\ref test-chain-load.hpp) and establish
- ** the timings of a test schedule based on a simplified model of expected computation
- ** expense. By scaling and condensing these schedule timings, a loss of control can
- ** be provoked, and determined by statistical observation: since the process of
- ** scheduling contains an essentially random component, persistent overload will be
- ** indicated by an increasing variance of the overall runtime, and a departure from
- ** the nominal runtime of the executed schedule.
- ** 
- ** ## Setup
- ** To perform this test scheme, an operational Scheduler is required, and an instance
- ** of the TestChainLoad must be provided, configured with desired load properties.
- ** The _stressFactor_ of the corresponding generated schedule will be the active parameter
- ** of this test, performing a binary search for the _breaking point._ The Measurement
- ** attempts to narrow down to the point of massive failure, when the ability to somehow
- ** cope with the schedule completely break down. Based on watching the Scheduler in
- ** operation, the detection was linked to three conditions, which typically will
- ** be triggered together, and within a narrow and reproducible parameter range:
- ** - an individual run counts as _accidentally failed_ when the execution slips
- **   away by more than 2ms with respect to the defined overall schedule. When more
- **   than 55% of all observed runs are considered as failed, the first condition is met
- ** - moreover, the observed ''standard derivation'' must also surpass the same limit
- **   of > 2ms, which indicates that the Scheduling mechanism  is under substantial
- **   strain; in regular operation, the slip is rather ~ 200µs.
- ** - the third condition is that the ''averaged delta'' has surpassed 4ms,
- **   which is 2 times the basic failure indicator.
- ** 
- ** ## Observation tools
+/** @file binary-search.hpp
+ ** Textbook implementation of the classical binary search over continuous domain.
  ** 
  ** @see TestChainLoad_test
  ** @see SchedulerStress_test
  */
 
 
-#ifndef VAULT_GEAR_TEST_STRESS_TEST_RIG_H
-#define VAULT_GEAR_TEST_STRESS_TEST_RIG_H
+#ifndef LIB_BINARY_SEARCH_H
+#define LIB_BINARY_SEARCH_H
 
 
 #include "vault/common.hpp"
@@ -95,9 +53,7 @@
 #include <array>
 
 
-namespace vault{
-namespace gear {
-namespace test {
+namespace lib {
   
   using util::_Fmt;
   using util::min;
@@ -427,5 +383,5 @@ namespace test {
     };
   
   
-}}} // namespace vault::gear::test
-#endif /*VAULT_GEAR_TEST_STRESS_TEST_RIG_H*/
+} // namespace lib
+#endif /*LIB_BINARY_SEARCH_H*/
