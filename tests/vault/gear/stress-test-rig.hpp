@@ -67,6 +67,7 @@
  ** 
  ** @see TestChainLoad_test
  ** @see SchedulerStress_test
+ ** @see binary-search.hpp
  */
 
 
@@ -75,6 +76,7 @@
 
 
 #include "vault/common.hpp"
+#include "lib/binary-search.hpp"
 //#include "test-chain-load.hpp"
 //#include "lib/test/transiently.hpp"
 
@@ -131,58 +133,6 @@ namespace test {
   }
   
   namespace stress_test_rig {
-    
-    
-    template<class FUN, typename PAR>
-    inline auto
-    binarySearch_inner (FUN&& fun, PAR lower, PAR upper, PAR epsilon)
-    {
-      ASSERT_VALID_SIGNATURE (FUN, bool(PAR) );
-      REQUIRE (lower <= upper);
-      while ((upper-lower) >= epsilon)
-        {
-          PAR div = (lower+upper) / 2;
-          bool hit = fun(div);
-          if (hit)
-            upper = div;
-          else
-            lower = div;
-        }
-      return (lower+upper)/2;
-    }
-    
-    
-    template<class FUN, typename PAR>
-    inline auto
-    binarySearch_upper (FUN&& fun, PAR lower, PAR upper, PAR epsilon)
-    {
-      REQUIRE (lower <= upper);
-      bool hit = fun(upper);
-      if (not hit)
-        {// the upper end breaks contract => search above
-          PAR len = (upper-lower);
-          lower = upper - len/10;
-          upper = lower + 14*len/10;
-        }
-      return binarySearch_inner (forward<FUN> (fun), lower,upper,epsilon);
-    }
-    
-    
-    template<class FUN, typename PAR>
-    inline auto
-    binarySearch (FUN&& fun, PAR lower, PAR upper, PAR epsilon)
-    {
-      REQUIRE (lower <= upper);
-      bool hit = fun(lower);
-      if (hit)
-        {// the lower end breaks contract => search below
-          PAR len = (upper-lower);
-          upper = lower + len/10;
-          lower = upper - 14*len/10;
-        }
-      return binarySearch_upper (forward<FUN> (fun), lower,upper,epsilon);
-    }
-    
     
     /**
      * Specific stress test scheme to determine the
@@ -262,7 +212,9 @@ namespace test {
         Res
         conductBinarySearch (FUN&& runTestCase, vector<Res> const& results)
           {
-            double breakPoint = binarySearch_upper (forward<FUN> (runTestCase), 0.0, CONF::UPPER_STRESS, CONF::EPSILON);
+            double breakPoint = lib::binarySearch_upper (forward<FUN> (runTestCase)
+                                                        , 0.0, CONF::UPPER_STRESS
+                                                        , CONF::EPSILON);
             uint s = results.size();
             ENSURE (s >= 2);
             Res res;

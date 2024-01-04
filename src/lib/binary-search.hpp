@@ -22,8 +22,19 @@
 
 /** @file binary-search.hpp
  ** Textbook implementation of the classical binary search over continuous domain.
+ ** The domain is given by its lower and upper end points. Within this domain,
+ ** a _breaking point_ is located, where the result of a _probe predicate_
+ ** flips from `false` to `true`. For the core search, the _invariant_
+ ** is assumed, implying that the `predicate(lower) ≡ false` and
+ ** `predicate(upper) ≡ true`.
  ** 
- ** @see TestChainLoad_test
+ ** For good convergence, it is advisable to enter the search with rather tight
+ ** bounds. For the case that it's not clear if the invariant holds for both ends,
+ ** two alternative entrance points are provided, which check the condition on the
+ ** interval ends and possibly shift and expand the search domain in case the
+ ** assumption is broken.
+ ** 
+ ** @see stress-test-rig.hpp
  ** @see SchedulerStress_test
  */
 
@@ -32,355 +43,77 @@
 #define LIB_BINARY_SEARCH_H
 
 
-#include "vault/common.hpp"
-//#include "test-chain-load.hpp"
-//#include "lib/test/transiently.hpp"
-
-#include "vault/gear/scheduler.hpp"
-#include "lib/time/timevalue.hpp"
-//#include "lib/iter-explorer.hpp"
 #include "lib/meta/function.hpp"
-#include "lib/format-string.hpp"
-#include "lib/format-cout.hpp"//////////////////////////TODO RLY?
-//#include "lib/util.hpp"
 
-//#include <functional>
 #include <utility>
-//#include <memory>
-//#include <string>
-#include <vector>
-#include <tuple>
-#include <array>
 
 
 namespace lib {
   
-  using util::_Fmt;
-  using util::min;
-  using util::max;
-//  using util::isnil;
-//  using util::limited;
-//  using util::unConst;
-//  using util::toString;
-//  using util::isLimited;
-//  using lib::time::Time;
-//  using lib::time::TimeValue;
-//  using lib::time::FrameRate;
-//  using lib::time::Duration;
-//  using lib::test::Transiently;
-//  using lib::meta::_FunRet;
-
-//  using std::string;
-//  using std::function;
-  using std::make_pair;
-  using std::make_tuple;
-//  using std::forward;
-//  using std::string;
-//  using std::swap;
-  using std::vector;
-  using std::move;
+  using std::forward;
   
-  namespace err = lumiera::error;  //////////////////////////TODO RLY?
-  
-  namespace { // Default definitions ....
-    
+  /** binary search: actual search loop
+   * - search until (upper-lower) < epsilon
+   * - the \a FUN performs the actual test
+   * - the goal is to narrow down the breaking point
+   * @note `fun(lower)` must be `false` and
+   *       `fun(upper)` must be `true`
+   */
+  template<class FUN, typename PAR>
+  inline auto
+  binarySearch_inner (FUN&& fun, PAR lower, PAR upper, PAR epsilon)
+  {
+    ASSERT_VALID_SIGNATURE (FUN, bool(PAR) );
+    REQUIRE (lower <= upper);
+    while ((upper-lower) >= epsilon)
+      {
+        PAR div = (lower+upper) / 2;
+        bool hit = fun(div);
+        if (hit)
+          upper = div;
+        else
+          lower = div;
+      }
+    return (lower+upper)/2;
   }
   
-  namespace stress_test_rig {
-    
-    
-    template<class FUN, typename PAR>
-    inline auto
-    binarySearch_inner (FUN&& fun, PAR lower, PAR upper, PAR epsilon)
-    {
-      ASSERT_VALID_SIGNATURE (FUN, bool(PAR) );
-      REQUIRE (lower <= upper);
-      while ((upper-lower) >= epsilon)
-        {
-          PAR div = (lower+upper) / 2;
-          bool hit = fun(div);
-          if (hit)
-            upper = div;
-          else
-            lower = div;
-        }
-      return (lower+upper)/2;
-    }
-    
-    
-    template<class FUN, typename PAR>
-    inline auto
-    binarySearch_upper (FUN&& fun, PAR lower, PAR upper, PAR epsilon)
-    {
-      REQUIRE (lower <= upper);
-      bool hit = fun(upper);
-      if (not hit)
-        {// the upper end breaks contract => search above
-          PAR len = (upper-lower);
-          lower = upper - len/10;
-          upper = lower + 14*len/10;
-        }
-      return binarySearch_inner (forward<FUN> (fun), lower,upper,epsilon);
-    }
-    
-    
-    template<class FUN, typename PAR>
-    inline auto
-    binarySearch (FUN&& fun, PAR lower, PAR upper, PAR epsilon)
-    {
-      REQUIRE (lower <= upper);
-      bool hit = fun(lower);
-      if (hit)
-        {// the lower end breaks contract => search below
-          PAR len = (upper-lower);
-          upper = lower + len/10;
-          lower = upper - 14*len/10;
-        }
-      return binarySearch_upper (forward<FUN> (fun), lower,upper,epsilon);
-    }
-    
-    
-    /**
-     * Specific stress test scheme to determine the
-     * »breaking point« where the Scheduler starts to slip
-     */
-    template<class CONF>
-    class BreakingPointBench
-      : CONF
-      {
-        using TestLoad  = decltype(std::declval<CONF>().testLoad());
-        using TestSetup = decltype(std::declval<CONF>().testSetup (std::declval<TestLoad&>()));
-        
-        struct Res
-          {
-            double stressFac{0};
-            double percentOff{0};
-            double stdDev{0};
-            double avgDelta{0};
-            double avgTime{0};
-            double expTime{0};
-          };
-        
-        /** prepare the ScheduleCtx for a specifically parametrised test series */
-        void
-        configureTest (TestSetup& testSetup, double stressFac)
-          {
-            testSetup.withLoadTimeBase (CONF::LOAD_BASE)
-                     .withAdaptedSchedule(stressFac, CONF::CONCURRENCY);
-          }
-        
-        /** perform a repetition of test runs and compute statistics */
-        Res
-        runProbes (TestSetup& testSetup, double stressFac)
-          {
-            auto sqr = [](auto n){ return n*n; };
-            Res res;
-            auto& [sf,pf,sdev,avgD,avgT,expT] = res;
-            sf   = stressFac;
-            expT = testSetup.getExpectedEndTime() / 1000;
-            std::array<double, CONF::REPETITIONS> runTime;
-            for (uint i=0; i<CONF::REPETITIONS; ++i)
-              {
-                runTime[i] = testSetup.launch_and_wait() / 1000;
-                avgT += runTime[i];
-              }
-            avgT /= CONF::REPETITIONS;
-            avgD = fabs (avgT-expT);
-            for (uint i=0; i<CONF::REPETITIONS; ++i)
-              {
-                sdev += sqr (runTime[i] - avgT);
-                double delta = fabs (runTime[i] - expT);
-                bool fail = (delta > CONF::FAIL_LIMIT);
-                if (fail)
-                  ++ pf;
-                showRun(i, delta, runTime[i], runTime[i] > avgT, fail);
-              }
-            pf /= CONF::REPETITIONS;
-            sdev = sqrt (sdev/CONF::REPETITIONS);
-            showStep(res);
-            return res;
-          }
-        
-        /** criterion to decide if this test series constitutes a slipped schedule */
-        bool
-        decideBreakPoint (Res& res)
-          {
-            return res.percentOff > CONF::TRIGGER_FAIL
-               and res.stdDev     > CONF::TRIGGER_SDEV
-               and res.avgDelta   > CONF::TRIGGER_DELTA;
-          }
-        
-        /**
-         * invoke a binary search to produce a sequence of test series
-         * with the goal to narrow down the stressFact where the Schedule slips away.
-         */
-        template<class FUN>
-        Res
-        conductBinarySearch (FUN&& runTestCase, vector<Res> const& results)
-          {
-            double breakPoint = binarySearch_upper (forward<FUN> (runTestCase), 0.0, CONF::UPPER_STRESS, CONF::EPSILON);
-            uint s = results.size();
-            ENSURE (s >= 2);
-            Res res;
-            auto& [sf,pf,sdev,avgD,avgT,expT] = res;
-            // average data over the last three steps investigated for smoothing
-            uint points = min (results.size(), 3u);
-            for (uint i=results.size()-points; i<results.size(); ++i)
-              {
-                Res const& resx = results[i];
-                pf   += resx.percentOff;
-                sdev += resx.stdDev;
-                avgD += resx.avgDelta;
-                avgT += resx.avgTime;
-                expT += resx.expTime;
-              }
-            pf   /= points;
-            sdev /= points;
-            avgD /= points;
-            avgT /= points;
-            expT /= points;
-            sf = breakPoint;
-            return res;
-          }
-        
-        
-        _Fmt fmtRun_ {"....·%-2d:  Δ=%4.1f        t=%4.1f  %s %s"};                          //      i % Δ  % t % t>avg?  % fail?
-        _Fmt fmtStep_{ "%4.2f|  : ∅Δ=%4.1f±%-4.2f  ∅t=%4.1f  %s %%%3.1f -- expect:%4.1fms"}; // stress % ∅Δ % σ % ∅t % fail % pecentOff % t-expect
-        _Fmt fmtResSDv_{"%9s= %5.2f ±%4.2f%s"};
-        _Fmt fmtResVal_{"%9s: %5.2f%s"};
-        
-        void
-        showRun(uint i, double delta, double t, bool over, bool fail)
-          {
-            if (CONF::showRuns)
-              cout << fmtRun_ % i % delta % t % (over? "+":"-") % (fail? "●":"○")
-                   << endl;
-          }
-        
-        void
-        showStep(Res& res)
-          {
-            if (CONF::showStep)
-              cout << fmtStep_ % res.stressFac % res.avgDelta % res.stdDev % res.avgTime
-                               % (decideBreakPoint(res)? "—◆—":"—◇—")
-                               % res.percentOff % res.expTime
-                   << endl;
-          }
-        
-        void
-        showRes(Res& res)
-          {
-            if (CONF::showRes)
-              {
-                cout << fmtResVal_ % "stresFac" % res.stressFac             % ""  <<endl;
-                cout << fmtResVal_ %     "fail" %(res.percentOff * 100)     % '%' <<endl;
-                cout << fmtResSDv_ %    "delta" % res.avgDelta % res.stdDev % "ms"<<endl;
-                cout << fmtResVal_ %  "runTime" % res.avgTime               % "ms"<<endl;
-                cout << fmtResVal_ % "expected" % res.expTime               % "ms"<<endl;
-              }
-          }
-        
-        void
-        showRef(TestLoad& testLoad)
-          {
-            if (CONF::showRef)
-              cout << fmtResVal_ % "refTime"
-                                 % (testLoad.calcRuntimeReference(CONF::LOAD_BASE) /1000)
-                                 % "ms" << endl;
-          }
-        
-        
-      public:
-        /**
-         * Launch a measurement sequence to determine the »breaking point«
-         * for the configured test load and parametrisation of the Scheduler.
-         * @return a tuple `[stress-factor, ∅delta, ∅run-time]`
-         */
-        auto
-        searchBreakingPoint()
-          {
-            TRANSIENTLY(work::Config::COMPUTATION_CAPACITY) = CONF::CONCURRENCY;
-            
-            TestLoad testLoad = CONF::testLoad().buildTopology();
-            TestSetup testSetup = CONF::testSetup (testLoad);
-            
-            vector<Res> observations;
-            auto performEvaluation = [&](double stressFac)
-                                        {
-                                          configureTest (testSetup, stressFac);
-                                          auto res = runProbes (testSetup, stressFac);
-                                          observations.push_back (res);
-                                          return decideBreakPoint(res);
-                                        };
-            
-            Res res = conductBinarySearch (move(performEvaluation), observations);
-            showRes (res);
-            showRef (testLoad);
-            return make_tuple (res.stressFac, res.avgDelta, res.avgTime);
-          }
-      };
-  }//namespace stress_test_rig
+  
+  /** entrance point to binary search to ensure the upper point
+   *  indeed fulfils the test. If this is not the case, the search domain
+   *  is shifted up, but also expanded so that the given upper point is
+   *  still located within, but close to the lower end.
+   * @note `fun(lower)` must be `false`
+   */
+  template<class FUN, typename PAR>
+  inline auto
+  binarySearch_upper (FUN&& fun, PAR lower, PAR upper, PAR epsilon)
+  {
+    REQUIRE (lower <= upper);
+    bool hit = fun(upper);
+    if (not hit)
+      {// the upper end breaks contract => search above
+        PAR len = (upper-lower);
+        lower = upper - len/10;
+        upper = lower + 14*len/10;
+      }
+    return binarySearch_inner (forward<FUN> (fun), lower,upper,epsilon);
+  }
   
   
-  
-  /** configurable template for running Scheduler Stress tests */
-  class StressRig
-    : util::NonCopyable
-    {
-      
-    public:
-      using usec = std::chrono::microseconds;
-      
-      usec LOAD_BASE = 500us;
-      uint CONCURRENCY = work::Config::getDefaultComputationCapacity();
-      double EPSILON      = 0.01;          ///< error bound to abort binary search
-      double UPPER_STRESS = 0.6;           ///< starting point for the upper limit, likely to fail
-      double FAIL_LIMIT   = 2.0;           ///< delta-limit when to count a run as failure
-      double TRIGGER_FAIL = 0.55;          ///< %-fact: criterion-1 failures above this rate
-      double TRIGGER_SDEV = FAIL_LIMIT;    ///< in ms : criterion-2 standard derivation
-      double TRIGGER_DELTA = 2*FAIL_LIMIT; ///< in ms : criterion-3 delta above this limit
-      bool showRuns = false;    ///< print a line for each individual run
-      bool showStep = true;     ///< print a line for each binary search step
-      bool showRes  = true;     ///< print result data
-      bool showRef  = true;     ///< calculate single threaded reference time
-      
-      static uint constexpr REPETITIONS{20};
-
-      BlockFlowAlloc bFlow{};
-      EngineObserver watch{};
-      Scheduler scheduler{bFlow, watch};
-      
-      /** Extension point: build the computation topology for this test */
-      auto
-      testLoad()
-        {
-          return TestChainLoad<>{64};
-        }
-      
-      /** (optional) extension point: base configuration of the test ScheduleCtx */
-      template<class TL>
-      auto
-      testSetup (TL& testLoad)
-        {
-          return testLoad.setupSchedule(scheduler)
-                         .withJobDeadline(100ms)
-                         .withUpfrontPlanning();
-        }
-      
-      /**
-       * Entrance Point: build a stress test measurement setup
-       * to determine the »breaking point« where the Scheduler is unable
-       * to keep up with the defined schedule.
-       * @tparam CONF specialised subclass of StressRig with customisation
-       * @return a builder to configure and then launch the actual test
-       */
-      template<class CONF>
-      static auto
-      with()
-        {
-          return stress_test_rig::BreakingPointBench<CONF>{};
-        }
-    };
+  template<class FUN, typename PAR>
+  inline auto
+  binarySearch (FUN&& fun, PAR lower, PAR upper, PAR epsilon)
+  {
+    REQUIRE (lower <= upper);
+    bool hit = fun(lower);
+    if (hit)
+      {// the lower end breaks contract => search below
+        PAR len = (upper-lower);
+        upper = lower + len/10;
+        lower = upper - 14*len/10;
+      }
+    return binarySearch_upper (forward<FUN> (fun), lower,upper,epsilon);
+  }
   
   
 } // namespace lib
