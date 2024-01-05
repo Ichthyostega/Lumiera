@@ -191,7 +191,10 @@ namespace test {
     const microseconds LOAD_DEFAULT_TIME = 100us;       ///< default time delay produced by ComputationalLoad at `Node.weight==1`
     const size_t LOAD_DEFAULT_MEM_SIZE   = 1000;        ///< default allocation base size used if ComputationalLoad.useAllocation
     const Duration SCHEDULE_LEVEL_STEP{_uTicks(1ms)};   ///< time budget to plan for the calculation of each »time level« of jobs
+    const Duration SCHEDULE_NODE_STEP{Duration::NIL};   ///< additional time step to include in the plan for each job (node).
     const Duration SCHEDULE_PLAN_STEP{_uTicks(100us)};  ///< time budget to reserve for each node to be planned and scheduled
+    const bool     SCHEDULE_DEPENDENCY = false;         ///< explicitly schedule a dependent job (or rely on NOTIFY)
+    const bool     SCHEDULE_NOTIFY     = true;          ///< explicitly set notify dispatch time to the dependencie's start time. 
     
     inline uint
     defaultConcurr()
@@ -1666,7 +1669,10 @@ namespace test {
       lib::UninitialisedDynBlock<ScheduleSpec> schedule_;
 
       FrameRate  levelSpeed_{1, SCHEDULE_LEVEL_STEP};
+      FrameRate   nodeSpeed_{1, SCHEDULE_NODE_STEP};
       FrameRate   planSpeed_{1, SCHEDULE_PLAN_STEP};
+      double    schedNotify_{SCHEDULE_NOTIFY? 1.0:0.0};
+      bool     schedDepends_{SCHEDULE_DEPENDENCY};
       uint  blockLoadFactor_{2};
       size_t      chunkSize_{DEFAULT_CHUNKSIZE};
       TimeVar     startTime_{Time::ANYTIME};
@@ -1794,13 +1800,6 @@ namespace test {
       /* ===== Setter / builders for custom configuration ===== */
       
       ScheduleCtx&&
-      withLevelDuration (microseconds plannedTime_per_level)
-        {
-          levelSpeed_ = FrameRate{1, Duration{_uTicks(plannedTime_per_level)}};
-          return move(*this);
-        }
-      
-      ScheduleCtx&&
       withPlanningStep (microseconds planningTime_per_node)
         {
           planSpeed_ = FrameRate{1, Duration{_uTicks(planningTime_per_node)}};
@@ -1824,9 +1823,44 @@ namespace test {
         }
       
       ScheduleCtx&&
-      withJobDeadline (microseconds deadline_after_start)
+      withUpfrontPlanning()
         {
-          deadline_ = deadline_after_start;
+          withChunkSize (chainLoad_.size());
+          preRoll_ *= UPFRONT_PLANNING_BOOST;
+          return move(*this);
+        }
+      
+      ScheduleCtx&&
+      withLevelDuration (microseconds fixedTime_per_level)
+        {
+          levelSpeed_ = FrameRate{1, Duration{_uTicks(fixedTime_per_level)}};
+          return move(*this);
+        }
+      
+      ScheduleCtx&&
+      withBaseExpense (microseconds fixedTime_per_node)
+        {
+          nodeSpeed_ = FrameRate{1, Duration{_uTicks(fixedTime_per_node)}};
+          return move(*this);
+        }
+      
+      ScheduleCtx&&
+      withScheduleDependency (bool explicitly)
+        {
+          schedDepends_ = explicitly;
+          return move(*this);
+        }
+      
+      ScheduleCtx&&
+      withScheduleNotify (double degree)
+        {
+          schedNotify_ = degree;
+          return move(*this);
+        }
+      
+      ScheduleCtx&&
+      withBaseExpense ()
+        {
           return move(*this);
         }
       
@@ -1842,10 +1876,9 @@ namespace test {
         }
       
       ScheduleCtx&&
-      withUpfrontPlanning()
+      withJobDeadline (microseconds deadline_after_start)
         {
-          withChunkSize (chainLoad_.size());
-          preRoll_ *= UPFRONT_PLANNING_BOOST;
+          deadline_ = deadline_after_start;
           return move(*this);
         }
       
