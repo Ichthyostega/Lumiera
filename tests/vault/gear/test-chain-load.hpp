@@ -1669,8 +1669,8 @@ namespace test {
       lib::UninitialisedDynBlock<ScheduleSpec> schedule_;
 
       FrameRate  levelSpeed_{1, SCHEDULE_LEVEL_STEP};
-      FrameRate   nodeSpeed_{1, SCHEDULE_NODE_STEP};
       FrameRate   planSpeed_{1, SCHEDULE_PLAN_STEP};
+      TimeVar   nodeExpense_{SCHEDULE_NODE_STEP};
       double    schedNotify_{SCHEDULE_NOTIFY? 1.0:0.0};
       bool     schedDepends_{SCHEDULE_DEPENDENCY};
       uint  blockLoadFactor_{2};
@@ -1696,7 +1696,7 @@ namespace test {
         {
           schedule_[idx] = scheduler_.defineSchedule(calcJob (idx,level))
                                      .manifestation(manID_)
-                                     .startTime (jobStartTime(level))
+                                     .startTime (jobStartTime(level, idx))
                                      .lifeWindow (deadline_)
                                      .post();
         }
@@ -1793,7 +1793,8 @@ namespace test {
       double
       getExpectedEndTime()
         {
-          return _raw(startTimes_.back() - startTimes_.front());
+          return _raw(startTimes_.back() - startTimes_.front()
+                     + Duration{nodeExpense_}*chainLoad_.size());
         }
       
       
@@ -1840,7 +1841,7 @@ namespace test {
       ScheduleCtx&&
       withBaseExpense (microseconds fixedTime_per_node)
         {
-          nodeSpeed_ = FrameRate{1, Duration{_uTicks(fixedTime_per_node)}};
+          nodeExpense_ = _uTicks(fixedTime_per_node);
           return move(*this);
         }
       
@@ -2030,10 +2031,11 @@ namespace test {
         }
       
       Time
-      jobStartTime (size_t level)
+      jobStartTime (size_t level, size_t nodeIDX =0)
         {
           ENSURE (level < startTimes_.size());
-          return startTimes_[level];
+          return startTimes_[level]
+               + nodeExpense_ * nodeIDX;
         }
       
       Time
