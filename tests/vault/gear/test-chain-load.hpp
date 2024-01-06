@@ -1697,9 +1697,13 @@ namespace test {
           schedule_[idx] = scheduler_.defineSchedule(calcJob (idx,level))
                                      .manifestation(manID_)
                                      .startTime (jobStartTime(level, idx))
-                                     .lifeWindow (deadline_)
-                                     .post();
-        }
+                                     .lifeWindow (deadline_);
+          Node& n = chainLoad_.nodes_[idx];
+          if (isnil (n.pred)
+              or schedDepends_)
+            schedule_[idx].post();
+        }// Node with dependencies will be triggered by NOTIFY
+        //  and thus must not necessarily be scheduled explicitly.
       
       /** Callback: define a dependency between scheduled jobs */
       void

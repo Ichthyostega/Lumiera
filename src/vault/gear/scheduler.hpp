@@ -207,6 +207,8 @@ namespace gear {
       
       ScheduleSpec linkToSuccessor (ScheduleSpec&);
       ScheduleSpec linkToPredecessor(ScheduleSpec&);
+    private:
+      void maybeBuildTerm();
     };
   
   
@@ -544,9 +546,7 @@ namespace gear {
   ScheduleSpec::post()
   {                                  // protect allocation
 //  auto guard = theScheduler_->layer2_.requireGroomingTokenHere();//////////////////////////////////////TODO  can we avoid that?
-    term_ = move(
-      theScheduler_->activityLang_
-          .buildCalculationJob (job_, start_,death_));
+    maybeBuildTerm();
      //set up new schedule by retrieving the Activity-chain...
     theScheduler_->postChain ({term_->post(), start_
                                             , death_
@@ -555,9 +555,24 @@ namespace gear {
     return move(*this);
   }
   
+  /**
+   * @internal if not done yet, then construct the Activity-Language term
+   *   describing the schedule according to the parameters set thus far.
+   */
+  inline void
+  ScheduleSpec::maybeBuildTerm()
+  {
+    if (term_) return;
+    term_ = move(
+      theScheduler_->activityLang_
+          .buildCalculationJob (job_, start_,death_));
+  }
+  
   inline ScheduleSpec
   ScheduleSpec::linkToSuccessor (ScheduleSpec& succSpec)
     {
+      this->maybeBuildTerm();
+      succSpec.maybeBuildTerm();
       term_->appendNotificationTo (*succSpec.term_);
       return move(*this);
     }
@@ -565,6 +580,8 @@ namespace gear {
   inline ScheduleSpec
   ScheduleSpec::linkToPredecessor (ScheduleSpec& predSpec)
     {
+      predSpec.maybeBuildTerm();
+      this->maybeBuildTerm();
       predSpec.term_->appendNotificationTo (*term_);
       return move(*this);
     }
