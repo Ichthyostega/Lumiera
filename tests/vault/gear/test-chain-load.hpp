@@ -193,8 +193,8 @@ namespace test {
     const Duration SCHEDULE_LEVEL_STEP{_uTicks(1ms)};   ///< time budget to plan for the calculation of each »time level« of jobs
     const Duration SCHEDULE_NODE_STEP{Duration::NIL};   ///< additional time step to include in the plan for each job (node).
     const Duration SCHEDULE_PLAN_STEP{_uTicks(100us)};  ///< time budget to reserve for each node to be planned and scheduled
-    const bool     SCHEDULE_DEPENDENCY = false;         ///< explicitly schedule a dependent job (or rely on NOTIFY)
-    const bool     SCHEDULE_NOTIFY     = true;          ///< explicitly set notify dispatch time to the dependencie's start time. 
+    const bool     SCHED_DEPENDS = false;               ///< explicitly schedule a dependent job (or rely on NOTIFY)
+    const bool     SCHED_NOTIFY  = true;                ///< explicitly set notify dispatch time to the dependency's start time.
     
     inline uint
     defaultConcurr()
@@ -1358,7 +1358,7 @@ namespace test {
         {
           auto round = roundsNeeded (scaleStep);
           Sink sink;
-          size_t scree{0x55DEAD55};
+          size_t scree{sink};
           for ( ; 0 < round; --round)
             boost::hash_combine (scree,scree);
           sink = scree;
@@ -1369,12 +1369,14 @@ namespace test {
       causeMemProcessLoad (uint scaleStep)
         {
           auto [siz,round] = allocNeeded (scaleStep);
-          lib::UninitialisedDynBlock<Sink> memBlock{siz};
-          ++*memBlock.front();
+          lib::UninitialisedDynBlock<size_t> memBlock{siz};
+          Sink sink;
+          *memBlock.front() = sink+1;
           for ( ; 0 < round; --round)
             for (size_t i=0; i<memBlock.size()-1; ++i)
               memBlock[i+1] += memBlock[i];
-          ++*memBlock.back();
+          sink = *memBlock.back();
+          sink++;
         }
       
       double
@@ -1671,8 +1673,8 @@ namespace test {
       FrameRate  levelSpeed_{1, SCHEDULE_LEVEL_STEP};
       FrameRate   planSpeed_{1, SCHEDULE_PLAN_STEP};
       TimeVar   nodeExpense_{SCHEDULE_NODE_STEP};
-      double    schedNotify_{SCHEDULE_NOTIFY? 1.0:0.0};
-      bool     schedDepends_{SCHEDULE_DEPENDENCY};
+      double    schedNotify_{SCHED_NOTIFY? 1.0:0.0};
+      bool     schedDepends_{SCHED_DEPENDS};
       uint  blockLoadFactor_{2};
       size_t      chunkSize_{DEFAULT_CHUNKSIZE};
       TimeVar     startTime_{Time::ANYTIME};
@@ -1850,14 +1852,14 @@ namespace test {
         }
       
       ScheduleCtx&&
-      withScheduleDependency (bool explicitly)
+      withSchedDepends (bool explicitly)
         {
           schedDepends_ = explicitly;
           return move(*this);
         }
       
       ScheduleCtx&&
-      withScheduleNotify (double degree)
+      withSchedNotify (double degree)
         {
           schedNotify_ = degree;
           return move(*this);

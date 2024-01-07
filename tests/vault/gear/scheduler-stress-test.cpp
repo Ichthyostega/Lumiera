@@ -296,6 +296,7 @@ SHOW_EXPR(micros);
               {
                 usec LOAD_BASE = 500us;
                 uint CONCURRENCY = 4;
+                bool SCHED_DEPENDS = true;
                 bool showRuns = true;
                 
                 auto testLoad() { return TestChainLoad<>{64}.configureShape_chain_loadBursts(); }
@@ -306,7 +307,7 @@ SHOW_EXPR(micros);
 SHOW_EXPR(stress)
 SHOW_EXPR(delta)
 SHOW_EXPR(time)
-          CHECK (delta > 4.0);
+          CHECK (delta > 2.0);
           CHECK (0.55 > stress and stress > 0.4);
         }
       

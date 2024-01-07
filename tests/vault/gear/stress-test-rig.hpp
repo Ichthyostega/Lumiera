@@ -159,7 +159,9 @@ namespace test {
         void
         configureTest (TestSetup& testSetup, double stressFac)
           {
-            testSetup.withLoadTimeBase (CONF::LOAD_BASE)
+            testSetup.withLoadTimeBase(CONF::LOAD_BASE)
+                     .withBaseExpense (CONF::BASE_EXPENSE)
+                     .withSchedDepends(CONF::SCHED_DEPENDS)
                      .withAdaptedSchedule(stressFac, CONF::CONCURRENCY);
           }
         
@@ -328,6 +330,8 @@ namespace test {
       using usec = std::chrono::microseconds;
       
       usec LOAD_BASE = 500us;
+      usec BASE_EXPENSE = 0us;
+      bool SCHED_DEPENDS = false;
       uint CONCURRENCY = work::Config::getDefaultComputationCapacity();
       double EPSILON      = 0.01;          ///< error bound to abort binary search
       double UPPER_STRESS = 0.6;           ///< starting point for the upper limit, likely to fail
