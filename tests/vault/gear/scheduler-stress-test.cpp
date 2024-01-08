@@ -71,6 +71,7 @@ namespace test {
    * @see SchedulerActivity_test
    * @see SchedulerInvocation_test
    * @see SchedulerCommutator_test
+   * @see stress-test-rig.hpp
    */
   class SchedulerStress_test : public Test
     {
@@ -145,8 +146,11 @@ namespace test {
       
       
       
-      /** @test TODO build a scheme to adapt the schedule to expected runtime.
-       * @todo WIP 12/23 🔁 define ⟶ implement
+      /** @test build a scheme to adapt the schedule to expected runtime.
+       *      - as in many other tests, use the massively forking load pattern
+       *      - demonstrate how TestChainLoad computes an idealised level expense
+       *      - verify how schedule times are derived from this expense sequence
+       * @todo WIP 12/23 ✔ define ⟶ ✔ implement
        */
       void
       setup_systematicSchedule()
@@ -164,7 +168,6 @@ namespace test {
           cpuLoad.calibrate();
           
           double micros = cpuLoad.invoke();
-SHOW_EXPR(micros);
           CHECK (micros < 550);
           CHECK (micros > 450);
           
@@ -285,7 +288,17 @@ SHOW_EXPR(micros);
       
       
       /** @test TODO determine the breaking point towards scheduler overload
-       * @todo WIP 1/24 🔁 define ⟶ implement
+       *      - use the integrated StressRig
+       *      - demonstrate how parameters can be tweaked
+       *      - perform a run, leading to a binary search for the breaking point
+       * @note on my machine, I observe stress factors close below 0.5, due to the fact
+       *       that the ComputationalLoad typically takes 2 times as long in concurrent
+       *       usage compared to its calibration, which is done in a tight loop. This
+       *       is strange and may well be due to some peculiarity of my system. Which
+       *       also implies that this test's behaviour might be difficult to verify,
+       *       other than by qualitative interpretation of the log output on STDOUT.
+       * @see stress-test-rig.hpp
+       * @todo WIP 1/24 ✔ define ⟶ ✔ implement
        */
       void
       search_breaking_point()
@@ -303,10 +316,6 @@ SHOW_EXPR(micros);
               };
             
           auto [stress,delta,time] = StressRig::with<Setup>().searchBreakingPoint();
-
-SHOW_EXPR(stress)
-SHOW_EXPR(delta)
-SHOW_EXPR(time)
           CHECK (delta > 2.0);
           CHECK (0.55 > stress and stress > 0.4);
         }

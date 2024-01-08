@@ -1673,7 +1673,7 @@ namespace test {
       FrameRate  levelSpeed_{1, SCHEDULE_LEVEL_STEP};
       FrameRate   planSpeed_{1, SCHEDULE_PLAN_STEP};
       TimeVar   nodeExpense_{SCHEDULE_NODE_STEP};
-      double    schedNotify_{SCHED_NOTIFY? 1.0:0.0};
+      bool      schedNotify_{SCHED_NOTIFY};
       bool     schedDepends_{SCHED_DEPENDS};
       uint  blockLoadFactor_{2};
       size_t      chunkSize_{DEFAULT_CHUNKSIZE};
@@ -1713,7 +1713,8 @@ namespace test {
         {
           size_t predIdx = chainLoad_.nodeID (pred);
           size_t succIdx = chainLoad_.nodeID (succ);
-          schedule_[predIdx].linkToSuccessor (schedule_[succIdx]);
+          bool unlimitedTime = not schedNotify_;
+          schedule_[predIdx].linkToSuccessor (schedule_[succIdx], unlimitedTime);
         }
       
       /** continue planning: schedule follow-up planning job */
@@ -1733,7 +1734,7 @@ namespace test {
                       .startTime(jobStartTime (levelDone+1))
                       .lifeWindow(SAFETY_TIMEOUT)
                       .post()
-                      .linkToPredecessor (schedule_[lastNodeIDX])
+                      .linkToPredecessor (schedule_[lastNodeIDX], not schedNotify_)
                       ;               //  Setup wait-dependency on last computation
         }
       
@@ -1859,9 +1860,9 @@ namespace test {
         }
       
       ScheduleCtx&&
-      withSchedNotify (double degree)
+      withSchedNotify (bool doSetTime =true)
         {
-          schedNotify_ = degree;
+          schedNotify_ = doSetTime;
           return move(*this);
         }
       

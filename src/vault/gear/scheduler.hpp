@@ -205,8 +205,8 @@ namespace gear {
       /** build Activity chain and hand-over to the Scheduler. */
       ScheduleSpec post();
       
-      ScheduleSpec linkToSuccessor (ScheduleSpec&);
-      ScheduleSpec linkToPredecessor(ScheduleSpec&);
+      ScheduleSpec linkToSuccessor (ScheduleSpec&,  bool unlimitedTime =false);
+      ScheduleSpec linkToPredecessor(ScheduleSpec&, bool unlimitedTime =false);
     private:
       void maybeBuildTerm();
     };
@@ -569,20 +569,20 @@ namespace gear {
   }
   
   inline ScheduleSpec
-  ScheduleSpec::linkToSuccessor (ScheduleSpec& succSpec)
+  ScheduleSpec::linkToSuccessor (ScheduleSpec& succSpec, bool unlimitedTime)
     {
       this->maybeBuildTerm();
       succSpec.maybeBuildTerm();
-      term_->appendNotificationTo (*succSpec.term_);
+      term_->appendNotificationTo (*succSpec.term_, unlimitedTime);
       return move(*this);
     }
   
   inline ScheduleSpec
-  ScheduleSpec::linkToPredecessor (ScheduleSpec& predSpec)
+  ScheduleSpec::linkToPredecessor (ScheduleSpec& predSpec, bool unlimitedTime)
     {
       predSpec.maybeBuildTerm();
       this->maybeBuildTerm();
-      predSpec.term_->appendNotificationTo (*term_);
+      predSpec.term_->appendNotificationTo (*term_, unlimitedTime);
       return move(*this);
     }
   

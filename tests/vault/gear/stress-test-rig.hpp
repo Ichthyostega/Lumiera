@@ -161,6 +161,7 @@ namespace test {
           {
             testSetup.withLoadTimeBase(CONF::LOAD_BASE)
                      .withBaseExpense (CONF::BASE_EXPENSE)
+                     .withSchedNotify (CONF::SCHED_NOTIFY)
                      .withSchedDepends(CONF::SCHED_DEPENDS)
                      .withAdaptedSchedule(stressFac, CONF::CONCURRENCY);
           }
@@ -181,11 +182,11 @@ namespace test {
                 avgT += runTime[i];
               }
             avgT /= CONF::REPETITIONS;
-            avgD = fabs (avgT-expT);
+            avgD = (avgT-expT); // can be < 0
             for (uint i=0; i<CONF::REPETITIONS; ++i)
               {
                 sdev += sqr (runTime[i] - avgT);
-                double delta = fabs (runTime[i] - expT);
+                double delta = (runTime[i] - expT);
                 bool fail = (delta > CONF::FAIL_LIMIT);
                 if (fail)
                   ++ pf;
@@ -331,6 +332,7 @@ namespace test {
       
       usec LOAD_BASE = 500us;
       usec BASE_EXPENSE = 0us;
+      bool SCHED_NOTIFY  = true;
       bool SCHED_DEPENDS = false;
       uint CONCURRENCY = work::Config::getDefaultComputationCapacity();
       double EPSILON      = 0.01;          ///< error bound to abort binary search

@@ -171,12 +171,13 @@ namespace gear {
          *       Term — the prerequisite — by invoking #appendNotificationTo(targetTerm).
          */
         Term&
-        expectNotification (Activity& notificationSrc)
+        expectNotification (Activity& notificationSrc, bool unlimitedTime =false)
           {
             REQUIRE (notificationSrc.is (Activity::NOTIFY));
             setupGate();
             gate_->incDependencies();
-            notificationSrc.setNotificationTarget (gate_, Time{post_->data_.timeWindow.life});
+            Time triggerTimeStart{unlimitedTime? Time::ANYTIME : post_->data_.timeWindow.life};
+            notificationSrc.setNotificationTarget (gate_, triggerTimeStart);
             return *this;
           }
         
@@ -187,11 +188,11 @@ namespace gear {
          *         been activated and processed up to emitting the inserted `NOTIFY`.
          */
         Term&
-        appendNotificationTo (Term& targetTerm)
+        appendNotificationTo (Term& targetTerm, bool unlimitedTime =false)
           {
             Activity& success = alloc_.create (Activity::NOTIFY);
             insert (findTail (callback_? callback_ : invoke_), &success);
-            targetTerm.expectNotification (success);
+            targetTerm.expectNotification (success, unlimitedTime);
             return *this;
           }
         
