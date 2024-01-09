@@ -328,7 +328,14 @@ namespace test {
       void
       generalFuckup()
         {
-          UNIMPLEMENTED("tbd");
+          TestChainLoad<8> testLoad{64};
+          testLoad.seedingRule(testLoad.rule().probability(0.6).maxVal(2))
+                  .pruningRule(testLoad.rule().probability(0.44))
+                  .setSeed(60)
+                  .buildTopology()
+                .printTopologyDOT()
+                .printTopologyStatistics()
+                  ;
         }
       
       
