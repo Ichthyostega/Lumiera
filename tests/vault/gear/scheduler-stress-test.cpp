@@ -80,9 +80,9 @@ namespace test {
       run (Arg)
         {
            //smokeTest();
-           setup_systematicSchedule();
-           search_breaking_point();
-           generalFuckup();
+//           setup_systematicSchedule();
+//           search_breaking_point();
+           investigateWorkProcessing();
            walkingDeadline();
         }
       
@@ -326,16 +326,39 @@ namespace test {
        * @todo WIP 1/24 🔁 define ⟶ implement
        */
       void
-      generalFuckup()
+      investigateWorkProcessing()
         {
-          TestChainLoad<8> testLoad{64};
-          testLoad.seedingRule(testLoad.rule().probability(0.6).maxVal(2))
-                  .pruningRule(testLoad.rule().probability(0.44))
-                  .setSeed(60)
-                  .buildTopology()
-                .printTopologyDOT()
-                .printTopologyStatistics()
-                  ;
+//          TestChainLoad<8> testLoad{64};
+//          testLoad.seedingRule(testLoad.rule().probability(0.6).minVal(2))
+//                  .pruningRule(testLoad.rule().probability(0.44))
+//                  .setSeed(55)
+//                  .buildTopology()
+//                .printTopologyDOT()
+//                .printTopologyStatistics()
+//                  ;
+          MARK_TEST_FUN
+          
+            struct Setup : StressRig
+              {
+                usec LOAD_BASE = 500us;
+//                uint CONCURRENCY = 4;
+//                bool SCHED_DEPENDS = true;
+                bool showRuns = true;
+                
+                auto
+                testLoad()
+                  {
+                    TestChainLoad<8> testLoad{64};
+                    testLoad.seedingRule(testLoad.rule().probability(0.6).minVal(2))
+                            .pruningRule(testLoad.rule().probability(0.44))
+                            .setSeed(55);
+                    return testLoad;
+                  }
+              };
+          auto [stress,delta,time] = StressRig::with<Setup>().searchBreakingPoint();
+SHOW_EXPR(stress)
+SHOW_EXPR(delta)
+SHOW_EXPR(time)
         }
       
       
