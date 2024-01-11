@@ -193,6 +193,7 @@ namespace test {
     const Duration SCHEDULE_LEVEL_STEP{_uTicks(1ms)};   ///< time budget to plan for the calculation of each »time level« of jobs
     const Duration SCHEDULE_NODE_STEP{Duration::NIL};   ///< additional time step to include in the plan for each job (node).
     const Duration SCHEDULE_PLAN_STEP{_uTicks(100us)};  ///< time budget to reserve for each node to be planned and scheduled
+    const Offset   SCHEDULE_WAKE_UP{_uTicks(10us)};     ///< tiny offset to place the final wake-up job behind any systematic schedule
     const bool     SCHED_DEPENDS = false;               ///< explicitly schedule a dependent job (or rely on NOTIFY)
     const bool     SCHED_NOTIFY  = true;                ///< explicitly set notify dispatch time to the dependency's start time.
     
@@ -1592,9 +1593,9 @@ namespace test {
     {
       using Node = typename TestChainLoad<maxFan>::Node;
       
-      function<void(size_t,size_t)>   scheduleCalcJob_;
-      function<void(Node*,Node*)>      markDependency_;
-      function<void(size_t,size_t,bool)> continuation_;
+      function<void(size_t,size_t)>          scheduleCalcJob_;
+      function<void(Node*,Node*)>             markDependency_;
+      function<void(size_t,size_t,size_t,bool)> continuation_;
       
       size_t maxCnt_;
       Node* nodes_;
@@ -1621,6 +1622,7 @@ namespace test {
       void
       invokeJobOperation (JobParameter param)  override
         {
+          size_t start{currIdx_};
           size_t reachedLevel{0};
           size_t targetNodeIDX = decodeNodeID (param.invoKey);
           for ( ; currIdx_<maxCnt_; ++currIdx_)
@@ -1636,7 +1638,7 @@ namespace test {
                 markDependency_(pred,n);
             }
           ENSURE (currIdx_ > 0);
-          continuation_(currIdx_-1, reachedLevel, currIdx_ < maxCnt_);
+          continuation_(start, currIdx_-1, reachedLevel, currIdx_ < maxCnt_);
         }
       
       
@@ -1719,7 +1721,7 @@ namespace test {
       
       /** continue planning: schedule follow-up planning job */
       void
-      continuation (size_t lastNodeIDX, size_t levelDone, bool work_left)
+      continuation (size_t chunkStart, size_t lastNodeIDX, size_t levelDone, bool work_left)
         {
           if (work_left)
             {
@@ -1729,13 +1731,15 @@ namespace test {
                                          ,manID_);
             }
           else
-            scheduler_.defineSchedule(wakeUpJob())
-                      .manifestation (manID_)
-                      .startTime(jobStartTime (levelDone+1))
-                      .lifeWindow(SAFETY_TIMEOUT)
-                      .post()
-                      .linkToPredecessor (schedule_[lastNodeIDX], not schedNotify_)
-                      ;               //  Setup wait-dependency on last computation
+            {
+              auto wakeUp =  scheduler_.defineSchedule(wakeUpJob())
+                                       .manifestation (manID_)
+                                       .startTime(jobStartTime (levelDone+1, lastNodeIDX+1) + SCHEDULE_WAKE_UP)
+                                       .lifeWindow(SAFETY_TIMEOUT)
+                                       .post();
+              for (size_t exitIDX : lastExitNodes (chunkStart))
+                wakeUp.linkToPredecessor (schedule_[exitIDX]);
+            }      //  Setup wait-dependency on last computations
         }
       
       
@@ -1751,7 +1755,8 @@ namespace test {
           planFunctor_.reset (new RandomChainPlanFunctor<maxFan>{chainLoad_.nodes_[0], chainLoad_.numNodes_
                                                                 ,[this](size_t i, size_t l){ disposeStep(i,l);  }
                                                                 ,[this](auto* p, auto* s)  { setDependency(p,s);}
-                                                                ,[this](size_t n,size_t l, bool w){ continuation(n,l,w); }
+                                                                ,[this](size_t s,size_t n,size_t l, bool w)
+                                                                                       { continuation(s,n,l,w); }
                                                                 });
           startTime_ = anchorSchedule();
           scheduler_.seedCalcStream (planningJob(firstChunkEndNode)
@@ -2026,14 +2031,15 @@ namespace test {
         }
       
       void
-      fillAdaptedSchedule (double stressFac, uint concurrency)
+      fillAdaptedSchedule (double stressFact, uint concurrency)
         {
+          REQUIRE (stressFact > 0);
           size_t numPoints = chainLoad_.topLevel()+2;
           startTimes_.clear();
           startTimes_.reserve (numPoints);
           startTimes_.push_back (Time::ZERO);
           chainLoad_.levelScheduleSequence (concurrency)
-                    .transform([&](double scheduleFact){ return (scheduleFact/stressFac) * Offset{1,levelSpeed_};})
+                    .transform([&](double scheduleFact){ return (scheduleFact/stressFact) * Offset{1,levelSpeed_};})
                     .effuse(startTimes_);
         }
       
@@ -2044,6 +2050,14 @@ namespace test {
           return startTimes_[level]
                + nodeExpense_ * nodeIDX;
         }
+      
+      auto
+      lastExitNodes (size_t lastChunkStartIDX)
+        {
+          return chainLoad_.allExitNodes()
+                           .transform([&](Node& n){ return chainLoad_.nodeID(n); })
+                           .filter([=](size_t idx){ return idx >= lastChunkStartIDX; });
+        }                // index of all Exit-Nodes within last planning-chunk... 
       
       Time
       calcPlanScheduleTime (size_t lastNodeIDX)

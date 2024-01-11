@@ -328,15 +328,42 @@ namespace test {
       void
       investigateWorkProcessing()
         {
-//          TestChainLoad<8> testLoad{64};
-//          testLoad.seedingRule(testLoad.rule().probability(0.6).minVal(2))
-//                  .pruningRule(testLoad.rule().probability(0.44))
-//                  .setSeed(55)
-//                  .buildTopology()
-//                .printTopologyDOT()
-//                .printTopologyStatistics()
-//                  ;
           MARK_TEST_FUN
+          TestChainLoad<8> testLoad{64};
+          testLoad.seedingRule(testLoad.rule().probability(0.6).minVal(2))
+                  .pruningRule(testLoad.rule().probability(0.44))
+                  .setSeed(55)
+                  .buildTopology()
+                .printTopologyDOT()
+                .printTopologyStatistics()
+                  ;
+//          ////////////////////////////////////////////////////////WIP : Run test directly for investigation of SEGFAULT....
+//          BlockFlowAlloc bFlow;
+//          EngineObserver watch;
+//          Scheduler scheduler{bFlow, watch};
+//          auto LOAD_BASE = 500us;
+//          auto stressFac = 1.0;
+//          auto concurrency = 8;
+//          
+//          ComputationalLoad cpuLoad;
+//          cpuLoad.timeBase = LOAD_BASE;
+//          cpuLoad.calibrate();
+//          
+//          double loadMicros = cpuLoad.invoke();
+//          double refTime = testLoad.calcRuntimeReference(LOAD_BASE);
+//SHOW_EXPR(loadMicros)
+//          
+//          auto testSetup =
+//            testLoad.setupSchedule(scheduler)
+//                    .withLoadTimeBase(LOAD_BASE)
+//                    .withJobDeadline(50ms)
+//                    .withUpfrontPlanning()
+//                    .withAdaptedSchedule (stressFac, concurrency);
+//          double runTime = testSetup.launch_and_wait();
+//          double expected = testSetup.getExpectedEndTime();
+//SHOW_EXPR(runTime)
+//SHOW_EXPR(expected)
+//SHOW_EXPR(refTime)
           
             struct Setup : StressRig
               {

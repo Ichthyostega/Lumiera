@@ -1315,7 +1315,7 @@ namespace test {
                                   // replicate this relation into the clone array
                                   clone[predIdx].addSucc(clone[succIdx]);
                                 };
-          auto continuation = [&](size_t nodeDone, size_t levelDone, bool work_left)
+          auto continuation = [&](size_t, size_t nodeDone, size_t levelDone, bool work_left)
                                 {
                                   lastNode =nodeDone;
                                   lastLevel = levelDone;
