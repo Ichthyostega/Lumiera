@@ -1,0 +1,84 @@
+2024-01-10 Lumiera Developers Meeting
+=====================================
+:Author: Benny
+:Date: 2024-01-20
+
+Jan 10, 2024 on #lumiera 20:00 - 23:00 UTC +
+
+__Participants__
+
+ * ichthyo
+ * benny
+ 
+
+
+''''
+
+Two main points of discussion:
+    - Scheduler tests to examine its suitability
+    - Using Gstreamer to view video for our verttical slice
+
+
+Test Scheduler Suitability
+--------------------------
+
+Once the scheduler had been implemented it was necessary to subject it
+to various load tests to establish its stability, and stress tests were necessary to
+provide information on performance limitations so that we would be able to establish
+whether these limitations met the demands required by Lumiera. 
+Results were encouraging.
+
+_Ichthyo_ reported on stress tests on the new scheduler. With over 500 test
+jobs the scheduler was stable. Stress tests revealed typical limitations of
+the scheduler, which exhibited behaviour that is well within the requirements
+oof Lumiera. Load tests showed that the sheduler remained stable when
+subjected to heavy loads.
+
+Stress tests wrere somewhat more involved as it was necessary
+to establish reasonable performance boundaries of the scheduler: we can always
+overload any scheduler with 
+fanatically huge numbers of jobs so that beyond its abaility to process all jobs on the
+queue. Indeed scheduler performace is always a delicate and complex area to
+investigate. Of interest, however, is to establish some reasonable information
+on the processing rate of the schedular which
+_Ichthyo_ was able to estimate statistically by carefully observing the
+scheduler under a collection of various loads.
+
+Some goals of the tests:
+
+ - tests to establish the scheduler breaking point or performance limitations
+ - tests under pressure with high loads and high parallelism
+ - test to demonstrate that the scheduler is stable under load for several seconds 
+
+Tests on various hardware constellations are not expected to reveal any
+unexpected information.
+
+Tests will not ultimately resolve the issue of whether the scheduler can perform
+as desired, but by carefully selecting the kind of tests to subject the
+scheduler to can reduce the probility of unexpected performance bottleneck.   
+
+
+GStreamer Demo to Play Video
+----------------------------
+
+_Benn_ has written a simple GStreamer demo so that a video in raw format can be
+displayed on the GUI for the current vertical slice. Should the output be directly
+played in some widget, or is it better to load the pixels into some
+buffer in memory which can then be displayed by some other mechanism.
+
+This is a general question requiring further investigation: play a video
+directly or supply the raw data directly in some buffer?
+
+''''
+
+Next meeting
+------------
+
+The next Lumiera meeting is scheduled for Wednesday, Feb 17 at 20:00 UTC.
+Should this be inconvenient for you, please speak up on, for example,
+link:http://lists.lumiera.org/cgi-bin/mailman/listinfo/lumiera[lumiera@lists.lumiera.org]
+and let us know of when you would prefer to attend.
+
+''''
+
+
