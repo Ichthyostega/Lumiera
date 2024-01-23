@@ -11,6 +11,19 @@ spending time on the task of writing a summary.
 Anyone interested in Lumiera development is also encouraged to read mailing list
 archives and other documentation.
 
+10 Jan 2024
+-----------
+
+Topics
+~~~~~~
+ * Scheduler performance testing
+ * using GStreamer for Video output to the GUI
+
+Summary
+^^^^^^^
+ * link:2024-01-10.html[Summary (by benn)]
+
+
 13 Dec 2023
 -----------
 
