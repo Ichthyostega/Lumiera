@@ -2057,7 +2057,7 @@ namespace test {
           return chainLoad_.allExitNodes()
                            .transform([&](Node& n){ return chainLoad_.nodeID(n); })
                            .filter([=](size_t idx){ return idx >= lastChunkStartIDX; });
-        }                // index of all Exit-Nodes within last planning-chunk... 
+        }                // index of all Exit-Nodes within last planning-chunk...
       
       Time
       calcPlanScheduleTime (size_t lastNodeIDX)

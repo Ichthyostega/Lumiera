@@ -334,24 +334,24 @@ namespace test {
                   .pruningRule(testLoad.rule().probability(0.44))
                   .setSeed(55)
                   .buildTopology()
-                .printTopologyDOT()
-                .printTopologyStatistics()
+//                .printTopologyDOT()
+//                .printTopologyStatistics()
                   ;
 //          ////////////////////////////////////////////////////////WIP : Run test directly for investigation of SEGFAULT....
 //          BlockFlowAlloc bFlow;
 //          EngineObserver watch;
 //          Scheduler scheduler{bFlow, watch};
-//          auto LOAD_BASE = 500us;
+          auto LOAD_BASE = 500us;
 //          auto stressFac = 1.0;
 //          auto concurrency = 8;
 //          
-//          ComputationalLoad cpuLoad;
-//          cpuLoad.timeBase = LOAD_BASE;
-//          cpuLoad.calibrate();
+          ComputationalLoad cpuLoad;
+          cpuLoad.timeBase = LOAD_BASE;
+          cpuLoad.calibrate();
 //          
-//          double loadMicros = cpuLoad.invoke();
+          double loadMicros = cpuLoad.invoke();
 //          double refTime = testLoad.calcRuntimeReference(LOAD_BASE);
-//SHOW_EXPR(loadMicros)
+SHOW_EXPR(loadMicros)
 //          
 //          auto testSetup =
 //            testLoad.setupSchedule(scheduler)
@@ -368,6 +368,8 @@ namespace test {
             struct Setup : StressRig
               {
                 usec LOAD_BASE = 500us;
+                usec BASE_EXPENSE = 200us;
+                double UPPER_STRESS = 8;
 //                uint CONCURRENCY = 4;
 //                bool SCHED_DEPENDS = true;
                 bool showRuns = true;
