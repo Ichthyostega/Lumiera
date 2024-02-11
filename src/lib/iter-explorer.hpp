@@ -981,16 +981,16 @@ namespace lib {
      * already been exhausted. The aggregate is default-initialised at start of each group
      * and then the computation functor \a FAGG is invoked for each consecutive element marked
      * with the same _grouping value_ — and this grouping value itself is obtained by invoking
-     * the functor \a FGRP on each source value. No capturing or even reordering of the source
-     * elements takes place, rather groups are formed based on the changes of the grouping value
-     * over the source iterator's result sequence.
+     * the functor \a FGRP on each source value. All computation are performed on-the-fly. No
+     * capturing or reordering of the source elements takes place, rather groups are formed
+     * based on the changes of the grouping value over the source iterator's result sequence.
      * @tparam AGG data type to collect the aggregate; must be default constructible and assignable
      * @tparam GRP value type to indicate a group
      * @note while `groupFun` is adapted, the `aggFun` is _not adapted_ to the source iterator,
      *       but expected always to take the _value type_ of the preceding iterator, i.e. `*srcIter`.
      *       This limitation was deemed acceptable (adapting a function with several arguments would
      *       require quite some nasty technicalities). The first argument of this `aggFun` refers
-     *       to the accumulator by value, and thereby also implititly defines the aggregate result type.
+     *       to the accumulator by value, and thereby also implicitly defines the aggregate result type.
      */
     template<class SRC, typename AGG, class GRP>
     class GroupAggregator

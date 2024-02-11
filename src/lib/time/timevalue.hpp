@@ -541,16 +541,16 @@ namespace time {
                           : Duration::NIL;
   }
   
-  template<typename INT>
+  template<typename NUM>
   inline Offset
-  operator* (INT factor, Duration const& dur)
+  operator* (NUM factor, Duration const& dur)
   {
     return factor * Offset(dur);
   }
   
-  template<typename INT>
+  template<typename NUM>
   inline Offset
-  operator* (Duration const& dur, INT factor)
+  operator* (Duration const& dur, NUM factor)
   {
     return factor*dur;
   }

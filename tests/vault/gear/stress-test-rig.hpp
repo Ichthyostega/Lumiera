@@ -340,7 +340,7 @@ namespace test {
       double FAIL_LIMIT   = 2.0;           ///< delta-limit when to count a run as failure
       double TRIGGER_FAIL = 0.55;          ///< %-fact: criterion-1 failures above this rate
       double TRIGGER_SDEV = FAIL_LIMIT;    ///< in ms : criterion-2 standard derivation
-      double TRIGGER_DELTA = 2*FAIL_LIMIT; ///< in ms : criterion-3 delta above this limit
+      double TRIGGER_DELTA = 2*FAIL_LIMIT; ///< in ms : criterion-3 average delta above this limit
       bool showRuns = false;    ///< print a line for each individual run
       bool showStep = true;     ///< print a line for each binary search step
       bool showRes  = true;     ///< print result data

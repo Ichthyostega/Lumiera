@@ -329,7 +329,7 @@ namespace test {
       investigateWorkProcessing()
         {
           MARK_TEST_FUN
-          TestChainLoad<8> testLoad{64};
+          TestChainLoad<8> testLoad{256};
           testLoad.seedingRule(testLoad.rule().probability(0.6).minVal(2))
                   .pruningRule(testLoad.rule().probability(0.44))
                   .setSeed(55)
@@ -369,7 +369,11 @@ SHOW_EXPR(loadMicros)
               {
                 usec LOAD_BASE = 500us;
                 usec BASE_EXPENSE = 200us;
-                double UPPER_STRESS = 8;
+                double UPPER_STRESS = 12;
+                //
+                double FAIL_LIMIT   = 0.7;
+                double TRIGGER_SDEV = 0.25;
+                double TRIGGER_DELTA = 0.5;
 //                uint CONCURRENCY = 4;
 //                bool SCHED_DEPENDS = true;
                 bool showRuns = true;
@@ -377,7 +381,7 @@ SHOW_EXPR(loadMicros)
                 auto
                 testLoad()
                   {
-                    TestChainLoad<8> testLoad{64};
+                    TestChainLoad<8> testLoad{256};
                     testLoad.seedingRule(testLoad.rule().probability(0.6).minVal(2))
                             .pruningRule(testLoad.rule().probability(0.44))
                             .setSeed(55);
