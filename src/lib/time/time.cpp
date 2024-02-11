@@ -340,6 +340,7 @@ namespace time {
   }
   
   
+  /** @warning loss of precision on large time values beyond double mantissa length `2^52 ≈ 4.5e15` */
   Offset
   Offset::stretchedByFloatFactor (double factor)  const
   {

@@ -371,9 +371,9 @@ SHOW_EXPR(loadMicros)
                 usec BASE_EXPENSE = 200us;
                 double UPPER_STRESS = 12;
                 //
-                double FAIL_LIMIT   = 0.7;
-                double TRIGGER_SDEV = 0.25;
-                double TRIGGER_DELTA = 0.5;
+                double FAIL_LIMIT   = 1.0; //0.7;
+                double TRIGGER_SDEV = 1.0; //0.25;
+                double TRIGGER_DELTA = 2.0; //0.5;
 //                uint CONCURRENCY = 4;
 //                bool SCHED_DEPENDS = true;
                 bool showRuns = true;
@@ -384,6 +384,7 @@ SHOW_EXPR(loadMicros)
                     TestChainLoad<8> testLoad{256};
                     testLoad.seedingRule(testLoad.rule().probability(0.6).minVal(2))
                             .pruningRule(testLoad.rule().probability(0.44))
+                            .weightRule(testLoad.value(1))
                             .setSeed(55);
                     return testLoad;
                   }
