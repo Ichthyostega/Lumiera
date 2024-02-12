@@ -50,6 +50,7 @@
 
 //#include "lib/meta/function.hpp"
 #include "lib/nocopy.hpp"
+#include "lib/iter-explorer.hpp"
 
 //#include <utility>
 #include <cstdint>
@@ -57,6 +58,7 @@
 #include <vector>
 #include <chrono>
 #include <limits>
+#include <algorithm>
 
 
 namespace lib {
@@ -82,7 +84,7 @@ namespace lib {
       
       struct Inc
         {
-          Instance when{};
+          Instance when;
           uint8_t thread :8;
           uint8_t caseID :8;
           bool   isLeave :1;
@@ -110,17 +112,28 @@ namespace lib {
           return threadID;
         }
       
-      Sequence
-      getMySequence()
+      Sequence&
+      getMySequence(uint8_t threadID)
         {
-          uint8_t id{getMySlot()};
-          if (id >= rec_.size())
+          if (threadID >= rec_.size())
             {
-              rec_.reserve (id);
-              for (size_t i = rec_.size(); i < id; ++i)
+              rec_.reserve (threadID+1);
+              for (size_t i = rec_.size(); i < threadID+1u; ++i)
                 rec_.emplace_back();
             }
-          return rec_[id];
+          return rec_[threadID];
+        }
+      
+      void
+      addEntry(uint8_t caseID, bool isLeave)
+        {
+          uint8_t threadID{getMySlot()};
+          Sequence& seq = getMySequence(threadID);
+          Inc& incidence = seq.emplace_back();
+          incidence.when = Clock::now();
+          incidence.thread = threadID;
+          incidence.caseID = caseID;
+          incidence.isLeave = isLeave;
         }
       
       
@@ -151,27 +164,73 @@ namespace lib {
       
       /* ===== Measurement API ===== */
       
-      void
-      markEnter(uint8_t caseID =0)
-        {
-          UNIMPLEMENTED ("Incidence measurement");
-        }
-      
-      void
-      markLeave(uint8_t caseID =0)
-        {
-          UNIMPLEMENTED ("Incidence measurement");
-        }
+      void markEnter(uint8_t caseID =0) { addEntry(caseID, false); }
+      void markLeave(uint8_t caseID =0) { addEntry(caseID, true); }
       
       
       /* ===== Evaluations ===== */
       
+      struct Statistic
+        {
+          double cumulatedTime{0};
+        };
+      
+      Statistic evaluate();
+      
       double
       calcCumulatedTime()
         {
-          UNIMPLEMENTED ("Evaluation");
+          return evaluate().cumulatedTime;
         }
+      
     };
+  
+  
+  
+  /**
+   * Visit all data captured thus far, construct a unified timeline
+   * and then compute statistics evaluations to characterise observations
+   * @warning caller must ensure there was a barrier or visibility sync before invocation.
+   */
+  IncidenceCount::Statistic
+  IncidenceCount::evaluate()
+    {
+      Statistic stat;
+      size_t numThreads = rec_.size();
+      if (numThreads == 0) return stat;
+      
+      size_t numEvents = explore(rec_)
+                           .transform([](Sequence& seq){ return seq.size(); })
+                           .resultSum();
+      if (numEvents == 0) return stat;
+      Sequence timeline;
+      timeline.reserve(numEvents);
+      for (Sequence& seq : rec_)
+        for (Inc& event : seq)
+          timeline.emplace_back(event);
+      std::sort (timeline.begin(), timeline.end()
+                ,[](Inc const& l, Inc const& r) { return l.when < r.when; }
+                );
+      
+      int active{0};
+      Instance prev = timeline.front().when;
+      for (Inc& event : timeline)
+        {
+          if (event.isLeave)
+            {
+              ASSERT (0 < active);
+              Dur timeSlice = event.when - prev;
+              stat.cumulatedTime += active * timeSlice.count();
+              --active;
+            }
+          else
+            {
+              ++active;
+            }
+          prev = event.when;
+        }
+      return stat;
+    }
   
   
 } // namespace lib

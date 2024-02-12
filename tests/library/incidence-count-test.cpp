@@ -61,8 +61,8 @@ namespace test{
       
       
       
-      /** @test TODO
-       * @todo WIP 2/24 🔁 define ⟶ implement
+      /** @test watch time spent in code bracketed by measurement calls.
+       * @todo WIP 2/24 ✔ define ⟶ ✔ implement
        */
       void
       demonstrate_usage()
@@ -71,11 +71,17 @@ namespace test{
           watch.markEnter();
           sleep_for (1ms);
           watch.markLeave();
+          //
+          sleep_for (5ms);
+          //
+          watch.markEnter();
+          sleep_for (1ms);
+          watch.markLeave();
           
           double time = watch.calcCumulatedTime();
 SHOW_EXPR(time)
-          CHECK (time > 900);
-          CHECK (time < 1100);
+          CHECK (time > 1900);
+          CHECK (time < 2500);
         }
       
       
