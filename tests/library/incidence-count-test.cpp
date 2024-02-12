@@ -26,7 +26,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/format-cout.hpp"//////////////TODO RLY?
+#include "lib/test/diagnostic-output.hpp"//////////////TODO RLY?
 #include "lib/incidence-count.hpp"
 
 //#include <string>
@@ -35,6 +35,7 @@
 
 //using std::string;
 using std::this_thread::sleep_for;
+using std::chrono_literals::operator ""ms;
 
 
 namespace lib {
@@ -66,6 +67,15 @@ namespace test{
       void
       demonstrate_usage()
         {
+          IncidenceCount watch;
+          watch.markEnter();
+          sleep_for (1ms);
+          watch.markLeave();
+          
+          double time = watch.calcCumulatedTime();
+SHOW_EXPR(time)
+          CHECK (time > 900);
+          CHECK (time < 1100);
         }
       
       
