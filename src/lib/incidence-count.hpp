@@ -64,6 +64,7 @@
 namespace lib {
   
 //  using std::forward;
+  using std::vector;
   
   /**
    * A recorder for concurrent incidences.
@@ -90,8 +91,8 @@ namespace lib {
           bool   isLeave :1;
         };
       
-      using Sequence = std::vector<Inc>;
-      using Recording = std::vector<Sequence>;
+      using Sequence =  vector<Inc>;
+      using Recording = vector<Sequence>;
       
       Recording rec_;
       
@@ -145,9 +146,7 @@ namespace lib {
       expectThreads(uint8_t cnt)
         {
           REQUIRE (cnt);
-          rec_.reserve (cnt);
-          for ( ; cnt; --cnt)
-            rec_.emplace_back();
+          rec_.resize (cnt);
           return *this;
         }
       
@@ -172,7 +171,27 @@ namespace lib {
       
       struct Statistic
         {
+          size_t eventCnt{0};
+          size_t activationCnt{0};
           double cumulatedTime{0};
+          double coveredTime{0};
+          
+          vector<size_t> caseCntr{};
+          vector<size_t> thrdCntr{};
+          vector<double> caseTime{};
+          vector<double> thrdTime{};
+          
+          template<typename VAL>
+          static VAL
+          access (vector<VAL> const& data, size_t idx)
+            {
+              return idx < data.size()? data[idx]
+                                      : VAL{};
+            }
+          size_t cntCase  (size_t  id) { return access (caseCntr, id); }
+          size_t cntThread(size_t  id) { return access (thrdCntr, id); }
+          double timeCase  (size_t id) { return access (caseTime, id); }
+          double timeThread(size_t id) { return access (thrdTime, id); }
         };
       
       Statistic evaluate();
@@ -189,7 +208,7 @@ namespace lib {
   
   /**
    * Visit all data captured thus far, construct a unified timeline
-   * and then compute statistics evaluations to characterise observations
+   * and then compute statistics evaluations to characterise observations.
    * @warning caller must ensure there was a barrier or visibility sync before invocation.
    */
   IncidenceCount::Statistic
@@ -213,22 +232,52 @@ namespace lib {
                 );
       
       int active{0};
+      size_t numCases = std::numeric_limits<uint8_t>::max()+1;
+      vector<int> active_case(numCases);
+      vector<int> active_thrd(numThreads);
+      stat.thrdCntr.resize (numThreads);
+      stat.thrdTime.resize (numThreads);
+      
+      // Integrate over the timeline...
+      // - book the preceding interval length into each affected partial sum
+      // - adjust current active count in accordance to the current event
       Instance prev = timeline.front().when;
       for (Inc& event : timeline)
         {
+          if (event.caseID >= stat.caseCntr.size())
+            {
+              stat.caseCntr.resize (event.caseID+1);
+              stat.caseTime.resize (event.caseID+1);
+            }
+          Dur timeSlice = event.when - prev;
+          stat.cumulatedTime += active * timeSlice.count();
+          for (uint i=0; i < stat.caseCntr.size(); ++i)
+            stat.caseTime[i] += active_case[i] * timeSlice.count();
+          for (uint i=0; i < numThreads; ++i)
+            stat.thrdTime[i] += active_thrd[i] * timeSlice.count();
           if (event.isLeave)
             {
               ASSERT (0 < active);
-              Dur timeSlice = event.when - prev;
-              stat.cumulatedTime += active * timeSlice.count();
+              ASSERT (0 < active_case[event.caseID]);
+              ASSERT (0 < active_thrd[event.thread]);
               --active;
+              --active_case[event.caseID];
+              --active_thrd[event.thread];
             }
           else
             {
               ++active;
+              ++active_case[event.caseID];
+              ++active_thrd[event.thread];
+              ++stat.caseCntr[event.caseID];
+              ++stat.thrdCntr[event.thread];
+              ++stat.activationCnt;
             }
           prev = event.when;
         }
+      Dur covered = timeline.back().when - timeline.front().when;
+      stat.coveredTime = covered.count();
+      stat.eventCnt = timeline.size();
       return stat;
     }
   

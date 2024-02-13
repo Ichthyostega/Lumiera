@@ -28,12 +28,14 @@
 #include "lib/test/run.hpp"
 #include "lib/test/diagnostic-output.hpp"//////////////TODO RLY?
 #include "lib/incidence-count.hpp"
+#include "lib/util.hpp"
 
 //#include <string>
 #include <thread>
 
 
 //using std::string;
+using util::isLimited;
 using std::this_thread::sleep_for;
 using std::chrono_literals::operator ""ms;
 
@@ -79,19 +81,76 @@ namespace test{
           watch.markLeave();
           
           double time = watch.calcCumulatedTime();
-SHOW_EXPR(time)
           CHECK (time > 1900);
           CHECK (time < 2500);
         }
       
       
       /** @test TODO verify proper counting of possibly overlapping incidences
-       * @todo WIP 2/24 🔁 define ⟶ implement
+       * @todo WIP 2/24 ✔ define ⟶ 🔁 implement
        */
       void
       verify_incidentCount()
         {
-          UNIMPLEMENTED("verify proper counting of possibly overlapping incidences");
+          IncidenceCount watch;
+          watch.expectThreads(1)
+               .expectIncidents(20);
+          
+          watch.markEnter(1);
+          sleep_for (1ms);
+          watch.markEnter(3);
+          sleep_for (2ms);
+          watch.markEnter(2);
+          watch.markLeave(3);
+          sleep_for (1ms);
+          watch.markLeave(1);
+          watch.markEnter(3);
+          sleep_for (3ms);
+          watch.markEnter(1);
+          watch.markLeave(2);
+          sleep_for (1ms);
+          watch.markLeave(3);
+          sleep_for (1ms);
+          watch.markLeave(1);
+          
+          auto stat = watch.evaluate();
+SHOW_EXPR(stat.cumulatedTime);
+SHOW_EXPR(stat.coveredTime);
+SHOW_EXPR(stat.eventCnt);
+SHOW_EXPR(stat.activationCnt);
+SHOW_EXPR(stat.cntCase(0));
+SHOW_EXPR(stat.cntCase(1));
+SHOW_EXPR(stat.cntCase(2));
+SHOW_EXPR(stat.cntCase(3));
+SHOW_EXPR(stat.cntCase(4));
+SHOW_EXPR(stat.timeCase(0));
+SHOW_EXPR(stat.timeCase(1));
+SHOW_EXPR(stat.timeCase(2));
+SHOW_EXPR(stat.timeCase(3));
+SHOW_EXPR(stat.timeCase(4));
+SHOW_EXPR(stat.cntThread(0));
+SHOW_EXPR(stat.cntThread(1));
+SHOW_EXPR(stat.timeThread(0));
+SHOW_EXPR(stat.timeThread(1));
+         CHECK (isLimited (15500, stat.cumulatedTime, 17500));   // ≈ 16ms
+         CHECK (isLimited ( 8500, stat.coveredTime,   10000));   // ≈ 9ms
+         CHECK (10== stat.eventCnt);
+         CHECK (5 == stat.activationCnt);
+         CHECK (0 == stat.cntCase(0));
+         CHECK (2 == stat.cntCase(1));
+         CHECK (1 == stat.cntCase(2));
+         CHECK (2 == stat.cntCase(3));
+         CHECK (0 == stat.cntCase(4));
+         CHECK (0 == stat.timeCase(0));
+         CHECK (isLimited ( 5500, stat.timeCase(1), 6800));      // ≈ 6ms
+         CHECK (isLimited ( 3500, stat.timeCase(2), 4500));      // ≈ 4ms
+         CHECK (isLimited ( 5500, stat.timeCase(3), 6800));      // ≈ 6ms
+         CHECK (0 == stat.timeCase(4));
+         CHECK (5 == stat.cntThread(0));
+         CHECK (0 == stat.cntThread(1));
+         CHECK (stat.cumulatedTime == stat.timeThread(0));
+         CHECK (0                  == stat.timeThread(1));
+         CHECK (1 > abs(stat.cumulatedTime - (stat.timeCase(1) + stat.timeCase(2) + stat.timeCase(3))));
         }
       
       
