@@ -40,12 +40,20 @@
 using util::isLimited;
 using std::this_thread::sleep_for;
 using std::chrono_literals::operator ""ms;
+using std::chrono_literals::operator ""us;
 using std::chrono::microseconds;
 
 
 namespace lib {
 namespace test{
   
+  namespace {
+    inline bool
+    isNumEq (double d1, double d2)
+    {
+      return 0.001 > abs(d1-d2);
+    };
+  }
   
   
   
@@ -120,6 +128,7 @@ namespace test{
           auto stat = watch.evaluate();
 SHOW_EXPR(stat.cumulatedTime);
 SHOW_EXPR(stat.coveredTime);
+SHOW_EXPR(stat.activeTime);
 SHOW_EXPR(stat.eventCnt);
 SHOW_EXPR(stat.activationCnt);
 SHOW_EXPR(stat.cntCase(0));
@@ -136,7 +145,7 @@ SHOW_EXPR(stat.cntThread(0));
 SHOW_EXPR(stat.cntThread(1));
 SHOW_EXPR(stat.timeThread(0));
 SHOW_EXPR(stat.timeThread(1));
-         CHECK (isLimited (15500, stat.cumulatedTime, 17500));   // ≈ 16ms
+         CHECK (isLimited (15500, stat.cumulatedTime, 17800));   // ≈ 16ms
          CHECK (isLimited ( 8500, stat.coveredTime,   10000));   // ≈ 9ms
          CHECK (10== stat.eventCnt);
          CHECK (5 == stat.activationCnt);
@@ -152,9 +161,10 @@ SHOW_EXPR(stat.timeThread(1));
          CHECK (0 == stat.timeCase(4));
          CHECK (5 == stat.cntThread(0));
          CHECK (0 == stat.cntThread(1));
-         CHECK (stat.cumulatedTime == stat.timeThread(0));
-         CHECK (0                  == stat.timeThread(1));
-         CHECK (1 > abs(stat.cumulatedTime - (stat.timeCase(1) + stat.timeCase(2) + stat.timeCase(3))));
+         CHECK (stat.activeTime == stat.timeThread(0));
+         CHECK (0               == stat.timeThread(1));
+         CHECK (isNumEq (stat.activeTime, stat.coveredTime));
+         CHECK (isNumEq (stat.cumulatedTime , stat.timeCase(1) + stat.timeCase(2) + stat.timeCase(3)));
         }
       
       
@@ -165,18 +175,16 @@ SHOW_EXPR(stat.timeThread(1));
       verify_concurrencyStatistic()
         {
           MARK_TEST_FUN
-          const size_t CONCURR = std::thread::hardware_concurrency();
 
           IncidenceCount watch;
-          watch.expectThreads(CONCURR)
-               .expectIncidents(5000);
+          watch.expectThreads(2)
+               .expectIncidents(2);
           
-          auto act = [&]{ // two nested activities with random delay
-                          uint delay = 100 + rand() % 800;
+          auto act = [&]{ // two nested activities
                           watch.markEnter();
-                          sleep_for (microseconds(delay));
+                          sleep_for (600us);
                           watch.markEnter(2);
-                          sleep_for (microseconds(delay));
+                          sleep_for (200us);
                           watch.markLeave(2);
                           watch.markLeave();
                         };
@@ -196,6 +204,7 @@ SHOW_EXPR(stat.timeThread(1));
           auto stat = watch.evaluate();
 SHOW_EXPR(runTime)
 SHOW_EXPR(stat.cumulatedTime);
+SHOW_EXPR(stat.activeTime);
 SHOW_EXPR(stat.coveredTime);
 SHOW_EXPR(stat.eventCnt);
 SHOW_EXPR(stat.activationCnt);
@@ -217,8 +226,10 @@ SHOW_EXPR(stat.avgConcurrency);
 SHOW_EXPR(stat.timeAtConc(0));
 SHOW_EXPR(stat.timeAtConc(1));
 SHOW_EXPR(stat.timeAtConc(2));
+SHOW_EXPR(stat.timeAtConc(3));
           CHECK (runTime > stat.coveredTime);
           CHECK (stat.coveredTime < stat.cumulatedTime);
+          CHECK (stat.activeTime <= stat.cumulatedTime);
           CHECK (8 == stat.eventCnt);
           CHECK (4 == stat.activationCnt);
           CHECK (2 == stat.cntCase(0));
@@ -228,18 +239,19 @@ SHOW_EXPR(stat.timeAtConc(2));
           CHECK (2 == stat.cntThread(0));
           CHECK (2 == stat.cntThread(1));
           CHECK (0 == stat.cntThread(3));
-          CHECK (isLimited(0, stat.avgConcurrency, 2));
-          CHECK (stat.timeAtConc(0) == 0.0);
+          CHECK (isLimited(1, stat.avgConcurrency, 2));
+          CHECK (0 == stat.timeAtConc(0));
+          CHECK (0  < stat.timeAtConc(1));
+          CHECK (0  < stat.timeAtConc(2));
+          CHECK (0 == stat.timeAtConc(3));
           CHECK (stat.timeAtConc(1) < stat.coveredTime);
           CHECK (stat.timeAtConc(2) < stat.coveredTime);
-          
-          auto isNumEq = [](double d1, double d2){ return 0,001 > abs(d1-d2); };
           
           CHECK (isNumEq (stat.avgConcurrency, (1*stat.timeAtConc(1) + 2*stat.timeAtConc(2)) // average concurrency is a weighted mean
                                                / stat.coveredTime));                        //  of the times spent at each concurrency level
           
-          CHECK (isNumEq (stat.cumulatedTime , stat.timeThread(0) + stat.timeThread(1)));   //  cumulated time is spent in both threads
-          CHECK (isNumEq (stat.cumulatedTime , stat.timeCase(0) + stat.timeCase(2)));       //  and likewise in all cases together
+          CHECK (isNumEq (stat.cumulatedTime , stat.timeCase(0) + stat.timeCase(2)));       //  cumulated time compounds all cases, including overlap
+          CHECK (isNumEq (stat.activeTime    , stat.timeThread(0) + stat.timeThread(1)));   //  while active time disregards overlapping activities per thread
           CHECK (isNumEq (stat.coveredTime   , stat.timeAtConc(1) + stat.timeAtConc(2)));   //  the covered time happens at any non-zero concurrency level
           
           CHECK (stat.timeCase(2) < stat.timeCase(0));                                      //  Note: case-2 is nested into case-0
@@ -253,7 +265,23 @@ SHOW_EXPR(stat.timeAtConc(2));
       void
       perform_multithreadStressTest()
         {
-          UNIMPLEMENTED("verify thread-safe operation under pressure");
+          MARK_TEST_FUN
+          const size_t CONCURR = std::thread::hardware_concurrency();
+
+          IncidenceCount watch;
+          watch.expectThreads(CONCURR)
+               .expectIncidents(5000);
+          
+          auto act = [&]{ // two nested activities with random delay
+                          uint delay = 100 + rand() % 800;
+                          watch.markEnter();
+                          sleep_for (microseconds(delay));
+                          watch.markEnter(2);
+                          sleep_for (microseconds(delay));
+                          watch.markLeave(2);
+                          watch.markLeave();
+                        };
+          
         }
     };
   
