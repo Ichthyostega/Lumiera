@@ -175,11 +175,13 @@ namespace lib {
           size_t activationCnt{0};
           double cumulatedTime{0};
           double coveredTime{0};
+          double avgConcurrency{0};
           
           vector<size_t> caseCntr{};
           vector<size_t> thrdCntr{};
           vector<double> caseTime{};
           vector<double> thrdTime{};
+          vector<double> concTime{};
           
           template<typename VAL>
           static VAL
@@ -192,6 +194,7 @@ namespace lib {
           size_t cntThread(size_t  id) { return access (thrdCntr, id); }
           double timeCase  (size_t id) { return access (caseTime, id); }
           double timeThread(size_t id) { return access (thrdTime, id); }
+          double timeAtConc(size_t id) { return access (concTime, id); }
         };
       
       Statistic evaluate();
@@ -237,6 +240,7 @@ namespace lib {
       vector<int> active_thrd(numThreads);
       stat.thrdCntr.resize (numThreads);
       stat.thrdTime.resize (numThreads);
+      stat.concTime.resize (numThreads);
       
       // Integrate over the timeline...
       // - book the preceding interval length into each affected partial sum
@@ -255,6 +259,10 @@ namespace lib {
             stat.caseTime[i] += active_case[i] * timeSlice.count();
           for (uint i=0; i < numThreads; ++i)
             stat.thrdTime[i] += active_thrd[i] * timeSlice.count();
+          size_t concurr = explore(active_thrd).filter([](int a){ return 0 < a; }).count();
+          ENSURE (concurr <= numThreads);
+          stat.avgConcurrency += concurr * timeSlice.count(); // contribution for weighted average
+          stat.concTime[concurr] += timeSlice.count();
           if (event.isLeave)
             {
               ASSERT (0 < active);
@@ -278,6 +286,9 @@ namespace lib {
       Dur covered = timeline.back().when - timeline.front().when;
       stat.coveredTime = covered.count();
       stat.eventCnt = timeline.size();
+      ENSURE (0 < stat.activationCnt);
+      ENSURE (stat.eventCnt % 2 == 0);
+      stat.avgConcurrency /= stat.coveredTime; // time used as weight sum
       return stat;
     }
   
