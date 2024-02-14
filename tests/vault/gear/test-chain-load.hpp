@@ -122,6 +122,7 @@
 #include "vault/gear/special-job-fun.hpp"
 #include "lib/uninitialised-storage.hpp"
 #include "lib/test/microbenchmark.hpp"
+#include "lib/incidence-count.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/quantiser.hpp"
 #include "lib/iter-explorer.hpp"
@@ -1177,7 +1178,7 @@ namespace test {
           for (uint i=0; i<CAT; ++i)
             particulars[i] += classify[i](node);
         }
-      ENSURE (level = topLevel());
+      ENSURE (level == topLevel());
       detectSubgraphs();
       stat.addPoint (width, sublevel, particulars);
       stat.closeAverages (segs, maxsublevel);
@@ -1549,14 +1550,17 @@ namespace test {
     : public ChainFunctor
     {
       using Node = typename TestChainLoad<maxFan>::Node;
+      using Watch = lib::IncidenceCount;
       
       Node* startNode_;
       ComputationalLoad* compuLoad_;
+      Watch* watch_;
       
     public:
-      RandomChainCalcFunctor(Node& startNode, ComputationalLoad* load =nullptr)
+      RandomChainCalcFunctor(Node& startNode, ComputationalLoad* load =nullptr, Watch* watch =nullptr)
         : startNode_{&startNode}
         , compuLoad_{load}
+        , watch_{watch}
         { }
       
       
@@ -1564,6 +1568,7 @@ namespace test {
       void
       invokeJobOperation (JobParameter param)  override
         {
+          if (watch_) watch_->markEnter();
           size_t nodeIdx = decodeNodeID (param.invoKey);
           size_t level = decodeLevel (TimeValue{param.nominalTime});
           Node& target = startNode_[nodeIdx];
@@ -1572,6 +1577,7 @@ namespace test {
           if (compuLoad_ and target.weight)
             compuLoad_->invoke (target.weight);
           target.calculate();
+          if (watch_) watch_->markLeave();
         }
       
       string diagnostic()  const override
@@ -1692,6 +1698,8 @@ namespace test {
       std::unique_ptr<RandomChainCalcFunctor<maxFan>> calcFunctor_;
       std::unique_ptr<RandomChainPlanFunctor<maxFan>> planFunctor_;
       
+      std::unique_ptr<lib::IncidenceCount> watchInvocations_;
+      
       
       /* ==== Callbacks from job planning ==== */
       
@@ -1752,7 +1760,7 @@ namespace test {
           size_t firstChunkEndNode = calcNextChunkEnd(0);
           schedule_.allocate (numNodes);
           compuLoad_->maybeCalibrate();
-          calcFunctor_.reset (new RandomChainCalcFunctor<maxFan>{chainLoad_.nodes_[0], compuLoad_.get()});
+          calcFunctor_.reset (new RandomChainCalcFunctor<maxFan>{chainLoad_.nodes_[0], compuLoad_.get(), watchInvocations_.get()});
           planFunctor_.reset (new RandomChainPlanFunctor<maxFan>{chainLoad_.nodes_[0], chainLoad_.numNodes_
                                                                 ,[this](size_t i, size_t l){ disposeStep(i,l);  }
                                                                 ,[this](auto* p, auto* s)  { setDependency(p,s);}
@@ -1810,8 +1818,22 @@ namespace test {
                      + Duration{nodeExpense_}*(chainLoad_.size()/stressFact_));
         }
       
+      auto
+      getInvocationStatistic()
+        {
+          return watchInvocations_? watchInvocations_->evaluate()
+                                  : lib::IncidenceCount::Statistic{};
+        }
+      
       
       /* ===== Setter / builders for custom configuration ===== */
+      
+      ScheduleCtx&&
+      withInstrumentation (bool doWatch =true)
+        {
+          watchInvocations_.reset (doWatch? new lib::IncidenceCount : nullptr);
+          return move(*this);
+        }
       
       ScheduleCtx&&
       withPlanningStep (microseconds planningTime_per_node)

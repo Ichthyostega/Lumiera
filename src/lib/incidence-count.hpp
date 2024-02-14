@@ -212,7 +212,7 @@ namespace lib {
    * and then compute statistics evaluations to characterise observations.
    * @warning caller must ensure there was a barrier or visibility sync before invocation.
    */
-  IncidenceCount::Statistic
+  inline IncidenceCount::Statistic
   IncidenceCount::evaluate()
     {
       Statistic stat;

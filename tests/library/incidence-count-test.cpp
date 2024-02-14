@@ -26,7 +26,6 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/test/diagnostic-output.hpp"//////////////TODO RLY?
 #include "lib/test/microbenchmark.hpp"
 #include "lib/incidence-count.hpp"
 #include "lib/thread.hpp"
@@ -76,7 +75,6 @@ namespace test{
       
       
       /** @test watch time spent in code bracketed by measurement calls.
-       * @todo WIP 2/24 ✔ define ⟶ ✔ implement
        */
       void
       demonstrate_usage()
@@ -98,9 +96,7 @@ namespace test{
         }
       
       
-      /** @test verify proper counting of possibly overlapping incidences
-       * @todo WIP 2/24 ✔ define ⟶ ✔ implement
-       */
+      /** @test verify proper counting of possibly overlapping incidences. */
       void
       verify_incidentCount()
         {
@@ -126,56 +122,35 @@ namespace test{
           watch.markLeave(1);
           
           auto stat = watch.evaluate();
-SHOW_EXPR(stat.cumulatedTime);
-SHOW_EXPR(stat.coveredTime);
-SHOW_EXPR(stat.activeTime);
-SHOW_EXPR(stat.eventCnt);
-SHOW_EXPR(stat.activationCnt);
-SHOW_EXPR(stat.cntCase(0));
-SHOW_EXPR(stat.cntCase(1));
-SHOW_EXPR(stat.cntCase(2));
-SHOW_EXPR(stat.cntCase(3));
-SHOW_EXPR(stat.cntCase(4));
-SHOW_EXPR(stat.timeCase(0));
-SHOW_EXPR(stat.timeCase(1));
-SHOW_EXPR(stat.timeCase(2));
-SHOW_EXPR(stat.timeCase(3));
-SHOW_EXPR(stat.timeCase(4));
-SHOW_EXPR(stat.cntThread(0));
-SHOW_EXPR(stat.cntThread(1));
-SHOW_EXPR(stat.timeThread(0));
-SHOW_EXPR(stat.timeThread(1));
-         CHECK (isLimited (15500, stat.cumulatedTime, 17800));   // ≈ 16ms
-         CHECK (isLimited ( 8500, stat.coveredTime,   10000));   // ≈ 9ms
-         CHECK (10== stat.eventCnt);
-         CHECK (5 == stat.activationCnt);
-         CHECK (0 == stat.cntCase(0));
-         CHECK (2 == stat.cntCase(1));
-         CHECK (1 == stat.cntCase(2));
-         CHECK (2 == stat.cntCase(3));
-         CHECK (0 == stat.cntCase(4));
-         CHECK (0 == stat.timeCase(0));
-         CHECK (isLimited ( 5500, stat.timeCase(1), 6800));      // ≈ 6ms
-         CHECK (isLimited ( 3500, stat.timeCase(2), 4500));      // ≈ 4ms
-         CHECK (isLimited ( 5500, stat.timeCase(3), 6800));      // ≈ 6ms
-         CHECK (0 == stat.timeCase(4));
-         CHECK (5 == stat.cntThread(0));
-         CHECK (0 == stat.cntThread(1));
-         CHECK (stat.activeTime == stat.timeThread(0));
-         CHECK (0               == stat.timeThread(1));
-         CHECK (isNumEq (stat.activeTime, stat.coveredTime));
-         CHECK (isNumEq (stat.cumulatedTime , stat.timeCase(1) + stat.timeCase(2) + stat.timeCase(3)));
+          
+          CHECK (isLimited (15500, stat.cumulatedTime, 17800));   // ≈ 16ms
+          CHECK (isLimited ( 8500, stat.coveredTime,   10000));   // ≈ 9ms
+          CHECK (10== stat.eventCnt);
+          CHECK (5 == stat.activationCnt);
+          CHECK (0 == stat.cntCase(0));
+          CHECK (2 == stat.cntCase(1));
+          CHECK (1 == stat.cntCase(2));
+          CHECK (2 == stat.cntCase(3));
+          CHECK (0 == stat.cntCase(4));
+          CHECK (0 == stat.timeCase(0));
+          CHECK (isLimited ( 5500, stat.timeCase(1), 6800));      // ≈ 6ms
+          CHECK (isLimited ( 3500, stat.timeCase(2), 4500));      // ≈ 4ms
+          CHECK (isLimited ( 5500, stat.timeCase(3), 6800));      // ≈ 6ms
+          CHECK (0 == stat.timeCase(4));
+          CHECK (5 == stat.cntThread(0));
+          CHECK (0 == stat.cntThread(1));
+          CHECK (stat.activeTime == stat.timeThread(0));
+          CHECK (0               == stat.timeThread(1));
+          CHECK (isNumEq (stat.activeTime, stat.coveredTime));
+          CHECK (isNumEq (stat.cumulatedTime , stat.timeCase(1) + stat.timeCase(2) + stat.timeCase(3)));
         }
       
       
-      /** @test verify observation of concurrency degree
-       * @todo WIP 2/24 ✔ define ⟶ ✔ implement
-       */
+      
+      /** @test verify observation of concurrency degree. */
       void
       verify_concurrencyStatistic()
         {
-          MARK_TEST_FUN
-
           IncidenceCount watch;
           watch.expectThreads(2)
                .expectIncidents(2);
@@ -202,31 +177,7 @@ SHOW_EXPR(stat.timeThread(1));
           // join ensures visibility of all data changes from within threads,
           // which is a prerequisite for performing the data evaluation safely.
           auto stat = watch.evaluate();
-SHOW_EXPR(runTime)
-SHOW_EXPR(stat.cumulatedTime);
-SHOW_EXPR(stat.activeTime);
-SHOW_EXPR(stat.coveredTime);
-SHOW_EXPR(stat.eventCnt);
-SHOW_EXPR(stat.activationCnt);
-SHOW_EXPR(stat.cntCase(0));
-SHOW_EXPR(stat.cntCase(1));
-SHOW_EXPR(stat.cntCase(2));
-SHOW_EXPR(stat.cntCase(3));
-SHOW_EXPR(stat.timeCase(0));
-SHOW_EXPR(stat.timeCase(1));
-SHOW_EXPR(stat.timeCase(2));
-SHOW_EXPR(stat.timeCase(3));
-SHOW_EXPR(stat.cntThread(0));
-SHOW_EXPR(stat.cntThread(1));
-SHOW_EXPR(stat.cntThread(2));
-SHOW_EXPR(stat.timeThread(0));
-SHOW_EXPR(stat.timeThread(1));
-SHOW_EXPR(stat.timeThread(2));
-SHOW_EXPR(stat.avgConcurrency);
-SHOW_EXPR(stat.timeAtConc(0));
-SHOW_EXPR(stat.timeAtConc(1));
-SHOW_EXPR(stat.timeAtConc(2));
-SHOW_EXPR(stat.timeAtConc(3));
+          
           CHECK (runTime > stat.coveredTime);
           CHECK (stat.coveredTime < stat.cumulatedTime);
           CHECK (stat.activeTime <= stat.cumulatedTime);
@@ -259,13 +210,11 @@ SHOW_EXPR(stat.timeAtConc(3));
         }
       
       
-      /** @test TODO verify thread-safe operation under pressure
-       * @todo WIP 2/24 ✔ define ⟶ ✔ implement
-       */
+      
+      /** @test verify thread-safe operation under pressure. */
       void
       perform_multithreadStressTest()
         {
-          MARK_TEST_FUN
           constexpr size_t CONCURR = 16;
           const size_t REPETITIONS = 100;
 
@@ -283,76 +232,32 @@ SHOW_EXPR(stat.timeAtConc(3));
                           watch.markLeave();
                         };
           
+          // Invoke these two nested activations numerous times in several threads
           auto [runTime, sum] = test::threadBenchmark<CONCURR> (act, REPETITIONS);
-SHOW_EXPR(runTime)          
-SHOW_EXPR(sum)          
-          CHECK (1600 == sum);
+          
+          CHECK (sum == CONCURR*REPETITIONS);      // each invocation contributes +1
           CHECK (isLimited (900, runTime, 1400));  // delay is 500µs on average
           
+          // compute statistics over recorded events
           auto stat = watch.evaluate();
-SHOW_EXPR(stat.cumulatedTime);
-SHOW_EXPR(stat.activeTime);
-SHOW_EXPR(stat.coveredTime);
+          
+          // on average two times 500µs per invocation
           CHECK (isLimited (900*REPETITIONS, stat.coveredTime, 1400*REPETITIONS));
-          CHECK (stat.activeTime > 900 * REPETITIONS * CONCURR);
-SHOW_EXPR(stat.eventCnt);
-SHOW_EXPR(stat.activationCnt);
+          CHECK (stat.activeTime > 900 * REPETITIONS*CONCURR);
           CHECK (stat.activationCnt == 2*REPETITIONS*CONCURR);
-SHOW_EXPR(stat.cntCase(0));
           CHECK (stat.cntCase(0) ==      REPETITIONS*CONCURR);
-SHOW_EXPR(stat.cntCase(1));
           CHECK (stat.cntCase(1) ==      0);
-SHOW_EXPR(stat.cntCase(2));
           CHECK (stat.cntCase(2) ==      REPETITIONS*CONCURR);
-SHOW_EXPR(stat.cntCase(3));
-SHOW_EXPR(stat.timeCase(0));
-SHOW_EXPR(stat.timeCase(1));
-SHOW_EXPR(stat.timeCase(2));
-SHOW_EXPR(stat.timeCase(3));
-SHOW_EXPR(stat.cntThread(0));
-SHOW_EXPR(stat.cntThread(1));
-SHOW_EXPR(stat.cntThread(2));
-SHOW_EXPR(stat.cntThread(3));
-SHOW_EXPR(stat.cntThread(4));
-SHOW_EXPR(stat.cntThread(5));
-SHOW_EXPR(stat.cntThread(6));
-SHOW_EXPR(stat.cntThread(7));
-SHOW_EXPR(stat.cntThread(8));
-SHOW_EXPR(stat.cntThread(9));
-SHOW_EXPR(stat.timeThread(0));
-SHOW_EXPR(stat.timeThread(1));
-SHOW_EXPR(stat.timeThread(2));
-SHOW_EXPR(stat.timeThread(3));
-SHOW_EXPR(stat.timeThread(4));
-SHOW_EXPR(stat.timeThread(5));
-SHOW_EXPR(stat.timeThread(6));
-SHOW_EXPR(stat.timeThread(7));
-SHOW_EXPR(stat.timeThread(8));
-SHOW_EXPR(stat.timeThread(9));
-SHOW_EXPR(stat.avgConcurrency);
+          
           CHECK (isLimited(CONCURR/2, stat.avgConcurrency, CONCURR));
+          // if there are enough cores, ∅ concurrency should even be close to CONCURR
+          
           for (uint i=0; i<CONCURR; ++i)
             CHECK (isLimited(REPETITIONS*900, stat.timeThread(i), REPETITIONS*1400));
-          CHECK (0 == stat.timeThread(CONCURR));
-          CHECK (0 == stat.timeAtConc(CONCURR+1));
-SHOW_EXPR(stat.timeAtConc(0));
-SHOW_EXPR(stat.timeAtConc(1));
-SHOW_EXPR(stat.timeAtConc(2));
-SHOW_EXPR(stat.timeAtConc(3));
-SHOW_EXPR(stat.timeAtConc(4));
-SHOW_EXPR(stat.timeAtConc(5));
-SHOW_EXPR(stat.timeAtConc(6));
-SHOW_EXPR(stat.timeAtConc(7));
-SHOW_EXPR(stat.timeAtConc(8));
-SHOW_EXPR(stat.timeAtConc(9));
-SHOW_EXPR(stat.timeAtConc(10));
-SHOW_EXPR(stat.timeAtConc(11));
-SHOW_EXPR(stat.timeAtConc(12));
-SHOW_EXPR(stat.timeAtConc(13));
-SHOW_EXPR(stat.timeAtConc(14));
-SHOW_EXPR(stat.timeAtConc(15));
-SHOW_EXPR(stat.timeAtConc(16));
-SHOW_EXPR(stat.timeAtConc(17));
+          
+          CHECK (0 == stat.timeThread(CONCURR));   // there should not be any idle time recorded
+          CHECK (0 == stat.timeAtConc(CONCURR+1)); // there should be never more concurrency than number of threads
+          // most of the time, concurrency should be close to the defined maximum
           CHECK (isLimited(REPETITIONS*900, stat.timeAtConc(CONCURR), REPETITIONS*1200));
         }
     };

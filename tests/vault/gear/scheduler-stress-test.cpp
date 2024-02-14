@@ -82,7 +82,8 @@ namespace test {
            //smokeTest();
 //           setup_systematicSchedule();
 //           search_breaking_point();
-           investigateWorkProcessing();
+           verify_instrumentation();
+//           investigateWorkProcessing();
            walkingDeadline();
         }
       
@@ -284,6 +285,96 @@ namespace test {
           double expected = testSetup.getExpectedEndTime();
           CHECK (fabs (runTime-expected) < 5000);
         }    //  Scheduler should able to follow the expected schedule
+      
+      
+      
+      /** @test TODO verify detailed instrumentation of job invocations
+       * @todo WIP 2/24 🔁 define ⟶ implement
+       */
+      void
+      verify_instrumentation()
+        {
+          MARK_TEST_FUN
+          TestChainLoad testLoad{20};
+          testLoad
+                .printTopologyDOT()
+                .printTopologyStatistics()
+                  ;
+
+          BlockFlowAlloc bFlow;
+          EngineObserver watch;
+          Scheduler scheduler{bFlow, watch};
+          auto LOAD_BASE = 500us;
+//          auto stressFac = 1.0;
+//          auto concurrency = 8;
+//          
+          ComputationalLoad cpuLoad;
+          cpuLoad.timeBase = LOAD_BASE;
+          cpuLoad.calibrate();
+//          
+          double loadMicros = cpuLoad.invoke();
+          double refTime = testLoad.calcRuntimeReference(LOAD_BASE);
+SHOW_EXPR(loadMicros)
+          
+          auto testSetup =
+            testLoad.setupSchedule(scheduler)
+                    .withLoadTimeBase(LOAD_BASE)
+                    .withJobDeadline(50ms)
+                    .withUpfrontPlanning()
+                    .withInstrumentation()
+//                    .withAdaptedSchedule (stressFac, concurrency)
+                    ;
+          double runTime = testSetup.launch_and_wait();
+          double expected = testSetup.getExpectedEndTime();
+SHOW_EXPR(runTime)
+SHOW_EXPR(expected)
+SHOW_EXPR(refTime)
+          auto stat = testSetup.getInvocationStatistic();
+SHOW_EXPR(stat.cumulatedTime);
+SHOW_EXPR(stat.activeTime);
+SHOW_EXPR(stat.coveredTime);
+SHOW_EXPR(stat.eventCnt);
+SHOW_EXPR(stat.activationCnt);
+SHOW_EXPR(stat.cntCase(0));
+SHOW_EXPR(stat.cntCase(1));
+SHOW_EXPR(stat.cntCase(2));
+SHOW_EXPR(stat.cntCase(3));
+SHOW_EXPR(stat.timeCase(0));
+SHOW_EXPR(stat.timeCase(1));
+SHOW_EXPR(stat.timeCase(2));
+SHOW_EXPR(stat.timeCase(3));
+SHOW_EXPR(stat.cntThread(0));
+SHOW_EXPR(stat.cntThread(1));
+SHOW_EXPR(stat.cntThread(2));
+SHOW_EXPR(stat.cntThread(3));
+SHOW_EXPR(stat.cntThread(4));
+SHOW_EXPR(stat.cntThread(5));
+SHOW_EXPR(stat.cntThread(6));
+SHOW_EXPR(stat.cntThread(7));
+SHOW_EXPR(stat.cntThread(8));
+SHOW_EXPR(stat.cntThread(9));
+SHOW_EXPR(stat.timeThread(0));
+SHOW_EXPR(stat.timeThread(1));
+SHOW_EXPR(stat.timeThread(2));
+SHOW_EXPR(stat.timeThread(3));
+SHOW_EXPR(stat.timeThread(4));
+SHOW_EXPR(stat.timeThread(5));
+SHOW_EXPR(stat.timeThread(6));
+SHOW_EXPR(stat.timeThread(7));
+SHOW_EXPR(stat.timeThread(8));
+SHOW_EXPR(stat.timeThread(9));
+SHOW_EXPR(stat.avgConcurrency);
+SHOW_EXPR(stat.timeAtConc(0));
+SHOW_EXPR(stat.timeAtConc(1));
+SHOW_EXPR(stat.timeAtConc(2));
+SHOW_EXPR(stat.timeAtConc(3));
+SHOW_EXPR(stat.timeAtConc(4));
+SHOW_EXPR(stat.timeAtConc(5));
+SHOW_EXPR(stat.timeAtConc(6));
+SHOW_EXPR(stat.timeAtConc(7));
+SHOW_EXPR(stat.timeAtConc(8));
+SHOW_EXPR(stat.timeAtConc(9));
+        }
       
       
       
