@@ -32,11 +32,9 @@
 #include "lib/thread.hpp"
 #include "lib/util.hpp"
 
-//#include <string>
 #include <thread>
 
 
-//using std::string;
 using util::isLimited;
 using std::this_thread::sleep_for;
 using std::chrono_literals::operator ""ms;
@@ -57,9 +55,11 @@ namespace test{
   
   
   
-  /***************************************************************************//**
-   * @test verifies capturing and restoring of std::ostream formatting state.
-   * @see ios-savepoint.hpp
+  /***************************************************************//**
+   * @test verify recording and evaluation of concurrent invocations
+   *       of a piece of code instrumented for investigation.
+   * @see incidence-count.hpp
+   * @see vault::gear::TestChainLoad::ScheduleCtx
    */
   class IncidenceCount_test
     : public Test
@@ -168,7 +168,7 @@ SHOW_EXPR(stat.timeThread(1));
         }
       
       
-      /** @test TODO verify observation of concurrency degree
+      /** @test verify observation of concurrency degree
        * @todo WIP 2/24 ✔ define ⟶ ✔ implement
        */
       void
@@ -260,17 +260,18 @@ SHOW_EXPR(stat.timeAtConc(3));
       
       
       /** @test TODO verify thread-safe operation under pressure
-       * @todo WIP 2/24 🔁 define ⟶ implement
+       * @todo WIP 2/24 ✔ define ⟶ ✔ implement
        */
       void
       perform_multithreadStressTest()
         {
           MARK_TEST_FUN
-          const size_t CONCURR = std::thread::hardware_concurrency();
+          constexpr size_t CONCURR = 16;
+          const size_t REPETITIONS = 100;
 
           IncidenceCount watch;
           watch.expectThreads(CONCURR)
-               .expectIncidents(5000);
+               .expectIncidents(10000);
           
           auto act = [&]{ // two nested activities with random delay
                           uint delay = 100 + rand() % 800;
@@ -282,6 +283,77 @@ SHOW_EXPR(stat.timeAtConc(3));
                           watch.markLeave();
                         };
           
+          auto [runTime, sum] = test::threadBenchmark<CONCURR> (act, REPETITIONS);
+SHOW_EXPR(runTime)          
+SHOW_EXPR(sum)          
+          CHECK (1600 == sum);
+          CHECK (isLimited (900, runTime, 1400));  // delay is 500µs on average
+          
+          auto stat = watch.evaluate();
+SHOW_EXPR(stat.cumulatedTime);
+SHOW_EXPR(stat.activeTime);
+SHOW_EXPR(stat.coveredTime);
+          CHECK (isLimited (900*REPETITIONS, stat.coveredTime, 1400*REPETITIONS));
+          CHECK (stat.activeTime > 900 * REPETITIONS * CONCURR);
+SHOW_EXPR(stat.eventCnt);
+SHOW_EXPR(stat.activationCnt);
+          CHECK (stat.activationCnt == 2*REPETITIONS*CONCURR);
+SHOW_EXPR(stat.cntCase(0));
+          CHECK (stat.cntCase(0) ==      REPETITIONS*CONCURR);
+SHOW_EXPR(stat.cntCase(1));
+          CHECK (stat.cntCase(1) ==      0);
+SHOW_EXPR(stat.cntCase(2));
+          CHECK (stat.cntCase(2) ==      REPETITIONS*CONCURR);
+SHOW_EXPR(stat.cntCase(3));
+SHOW_EXPR(stat.timeCase(0));
+SHOW_EXPR(stat.timeCase(1));
+SHOW_EXPR(stat.timeCase(2));
+SHOW_EXPR(stat.timeCase(3));
+SHOW_EXPR(stat.cntThread(0));
+SHOW_EXPR(stat.cntThread(1));
+SHOW_EXPR(stat.cntThread(2));
+SHOW_EXPR(stat.cntThread(3));
+SHOW_EXPR(stat.cntThread(4));
+SHOW_EXPR(stat.cntThread(5));
+SHOW_EXPR(stat.cntThread(6));
+SHOW_EXPR(stat.cntThread(7));
+SHOW_EXPR(stat.cntThread(8));
+SHOW_EXPR(stat.cntThread(9));
+SHOW_EXPR(stat.timeThread(0));
+SHOW_EXPR(stat.timeThread(1));
+SHOW_EXPR(stat.timeThread(2));
+SHOW_EXPR(stat.timeThread(3));
+SHOW_EXPR(stat.timeThread(4));
+SHOW_EXPR(stat.timeThread(5));
+SHOW_EXPR(stat.timeThread(6));
+SHOW_EXPR(stat.timeThread(7));
+SHOW_EXPR(stat.timeThread(8));
+SHOW_EXPR(stat.timeThread(9));
+SHOW_EXPR(stat.avgConcurrency);
+          CHECK (isLimited(CONCURR/2, stat.avgConcurrency, CONCURR));
+          for (uint i=0; i<CONCURR; ++i)
+            CHECK (isLimited(REPETITIONS*900, stat.timeThread(i), REPETITIONS*1400));
+          CHECK (0 == stat.timeThread(CONCURR));
+          CHECK (0 == stat.timeAtConc(CONCURR+1));
+SHOW_EXPR(stat.timeAtConc(0));
+SHOW_EXPR(stat.timeAtConc(1));
+SHOW_EXPR(stat.timeAtConc(2));
+SHOW_EXPR(stat.timeAtConc(3));
+SHOW_EXPR(stat.timeAtConc(4));
+SHOW_EXPR(stat.timeAtConc(5));
+SHOW_EXPR(stat.timeAtConc(6));
+SHOW_EXPR(stat.timeAtConc(7));
+SHOW_EXPR(stat.timeAtConc(8));
+SHOW_EXPR(stat.timeAtConc(9));
+SHOW_EXPR(stat.timeAtConc(10));
+SHOW_EXPR(stat.timeAtConc(11));
+SHOW_EXPR(stat.timeAtConc(12));
+SHOW_EXPR(stat.timeAtConc(13));
+SHOW_EXPR(stat.timeAtConc(14));
+SHOW_EXPR(stat.timeAtConc(15));
+SHOW_EXPR(stat.timeAtConc(16));
+SHOW_EXPR(stat.timeAtConc(17));
+          CHECK (isLimited(REPETITIONS*900, stat.timeAtConc(CONCURR), REPETITIONS*1200));
         }
     };
   

@@ -48,11 +48,9 @@
 #define LIB_INCIDENCE_COUNT_H
 
 
-//#include "lib/meta/function.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/iter-explorer.hpp"
 
-//#include <utility>
 #include <cstdint>
 #include <atomic>
 #include <vector>
@@ -63,7 +61,6 @@
 
 namespace lib {
   
-//  using std::forward;
   using std::vector;
   
   /**
@@ -211,7 +208,7 @@ namespace lib {
   
   
   /**
-   * Visit all data captured thus far, construct a unified timeline
+   * Visit all data captured thus far, construct an unified timeline
    * and then compute statistics evaluations to characterise observations.
    * @warning caller must ensure there was a barrier or visibility sync before invocation.
    */

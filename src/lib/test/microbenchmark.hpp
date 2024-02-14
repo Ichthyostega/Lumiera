@@ -146,10 +146,10 @@ namespace test{
    * @remarks - the subject function will be _copied_ into each thread
    *          - so `nThreads` copies of this function will run in parallel
    *          - consider locking if this function accesses a shared closure.
-   *          - if you pass a lambda, it is eligible for inlining followed
-   *            by loop optimisation -- be sure to include some action, like
-   *            e.g. accessing a volatile variable, to prevent the compiler
-   *            from entirely optimising it away altogether.
+   *          - if you pass a lambda, it is eligible for inlining followed by
+   *            loop optimisation -- be sure to include an observable effect,
+   *            like returning a value tied to the actual computation, to
+   *            prevent the compiler from optimising it away altogether.
    */
   template<size_t nThreads, class FUN>
   inline auto
