@@ -284,6 +284,23 @@ namespace lumiera {
                    , _OP_DESCR_, errID?errID:"??");         \
     }
 
+#define ERROR_LOG_AND_RETHROW(_FLAG_,_OP_DESCR_) \
+  catch (std::exception& problem)                 \
+    {                                              \
+      const char* errID = lumiera_error();          \
+      WARN (_FLAG_, "%s failed: %s", _OP_DESCR_, problem.what()); \
+      TRACE (debugging, "Error flag was: %s", errID); \
+      throw;                                           \
+    }                                                   \
+  catch (...)                                            \
+    {                                                     \
+      const char* errID = lumiera_error();                 \
+      ERROR (_FLAG_, "%s failed with unknown exception; "   \
+                     "error flag is: %s"                     \
+                   , _OP_DESCR_, errID?errID:"??");           \
+      throw;                                                   \
+    }
+
 /******************************************************//**
  * convenience shortcut to catch and absorb any exception,
  * then returning a default value instead. This scheme is
@@ -294,7 +311,7 @@ namespace lumiera {
   catch (std::exception& problem)                \
     {                                             \
       const char* errID = lumiera_error();         \
-      WARN (stage, "%s (Signal Handler) failed: %s",\
+      WARN (stage, "%s (Handler) failed: %s",       \
                    _OP_DESCR_, problem.what());      \
       TRACE (debugging, "Error flag was: %s", errID); \
       return (_VAL_);                                  \
@@ -302,7 +319,7 @@ namespace lumiera {
   catch (...)                                            \
     {                                                     \
       const char* errID = lumiera_error();                 \
-      ERROR (stage, "(Signal Handler) %s failed with "      \
+      ERROR (stage, "(Handler) %s failed with "             \
                     "unknown exception; error flag is: %s"   \
                    , _OP_DESCR_, errID?errID:"??");           \
       return (_VAL_);                                          \

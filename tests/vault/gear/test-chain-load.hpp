@@ -1789,14 +1789,15 @@ namespace test {
        */
       double
       launch_and_wait()
-        {
-          return benchmarkTime ([this]
-                                {
-                                  awaitBlocking(
-                                    performRun());
-                                })
-               -_uSec(preRoll_);
-        }     // timing starts with nominal zero without pre-roll
+        try {
+            return benchmarkTime ([this]
+                                  {
+                                    awaitBlocking(
+                                      performRun());
+                                  })
+                 -_uSec(preRoll_); // timing accounted without pre-roll
+          }
+          ERROR_LOG_AND_RETHROW(test,"Scheduler testing")
       
       auto
       getScheduleSeq()
@@ -1831,7 +1832,14 @@ namespace test {
       ScheduleCtx&&
       withInstrumentation (bool doWatch =true)
         {
-          watchInvocations_.reset (doWatch? new lib::IncidenceCount : nullptr);
+          if (doWatch)
+            {
+              watchInvocations_.reset (new lib::IncidenceCount);
+              watchInvocations_->expectThreads (work::Config::COMPUTATION_CAPACITY)
+                                .expectIncidents(chainLoad_.size());
+            }
+          else
+            watchInvocations_.reset();
           return move(*this);
         }
       

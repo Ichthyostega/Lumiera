@@ -228,9 +228,9 @@ namespace lib {
       for (Sequence& seq : rec_)
         for (Inc& event : seq)
           timeline.emplace_back(event);
-      std::sort (timeline.begin(), timeline.end()
-                ,[](Inc const& l, Inc const& r) { return l.when < r.when; }
-                );
+      std::stable_sort (timeline.begin(), timeline.end()
+                       ,[](Inc const& l, Inc const& r) { return l.when < r.when; }
+                       );
       
       int active{0};
       vector<int> active_case;
