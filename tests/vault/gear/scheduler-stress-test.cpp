@@ -295,8 +295,8 @@ namespace test {
       verify_instrumentation()
         {
           MARK_TEST_FUN
-          TestChainLoad testLoad{20};
-          testLoad
+          TestChainLoad testLoad{800};
+          testLoad.setWeight(1)
                 .printTopologyDOT()
                 .printTopologyStatistics()
                   ;
@@ -304,23 +304,25 @@ namespace test {
           BlockFlowAlloc bFlow;
           EngineObserver watch;
           Scheduler scheduler{bFlow, watch};
-          auto LOAD_BASE = 500us;
+          auto LOAD_BASE = 10ms;
 //          auto stressFac = 1.0;
 //          auto concurrency = 8;
 //          
           ComputationalLoad cpuLoad;
-          cpuLoad.timeBase = LOAD_BASE;
+          cpuLoad.timeBase = 200us;
           cpuLoad.calibrate();
 //          
           double loadMicros = cpuLoad.invoke();
-          double refTime = testLoad.calcRuntimeReference(LOAD_BASE);
+//          double refTime = testLoad.calcRuntimeReference(LOAD_BASE);
 SHOW_EXPR(loadMicros)
           
           auto testSetup =
             testLoad.setupSchedule(scheduler)
                     .withLoadTimeBase(LOAD_BASE)
-                    .withJobDeadline(50ms)
-                    .withUpfrontPlanning()
+                    .withLevelDuration(10us)
+                    .withJobDeadline(2s)
+//                    .withBaseExpense(500us)
+//                    .withUpfrontPlanning()
                     .withInstrumentation()
 //                    .withAdaptedSchedule (stressFac, concurrency)
                     ;
@@ -328,7 +330,7 @@ SHOW_EXPR(loadMicros)
           double expected = testSetup.getExpectedEndTime();
 SHOW_EXPR(runTime)
 SHOW_EXPR(expected)
-SHOW_EXPR(refTime)
+//SHOW_EXPR(refTime)
           auto stat = testSetup.getInvocationStatistic();
 SHOW_EXPR(stat.cumulatedTime);
 SHOW_EXPR(stat.activeTime);
