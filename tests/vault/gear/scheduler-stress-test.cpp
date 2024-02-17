@@ -288,95 +288,43 @@ namespace test {
       
       
       
-      /** @test TODO verify detailed instrumentation of job invocations
-       * @todo WIP 2/24 🔁 define ⟶ implement
+      /** @test verify capability for instrumentation of job invocations
+       * @see IncidenceCount_test
+       * @todo WIP 2/24 ✔ define ⟶ ✔ implement
        */
       void
       verify_instrumentation()
         {
-          MARK_TEST_FUN
-          TestChainLoad testLoad{800};
-          testLoad.setWeight(1)
-                .printTopologyDOT()
-                .printTopologyStatistics()
-                  ;
-
+          const size_t NODES = 20;
+          const size_t CORES = work::Config::COMPUTATION_CAPACITY;
+          auto LOAD_BASE = 5ms;
+          
+          TestChainLoad testLoad{NODES};
+          
           BlockFlowAlloc bFlow;
           EngineObserver watch;
           Scheduler scheduler{bFlow, watch};
-          auto LOAD_BASE = 10ms;
-//          auto stressFac = 1.0;
-//          auto concurrency = 8;
-//          
-          ComputationalLoad cpuLoad;
-          cpuLoad.timeBase = 200us;
-          cpuLoad.calibrate();
-//          
-          double loadMicros = cpuLoad.invoke();
-//          double refTime = testLoad.calcRuntimeReference(LOAD_BASE);
-SHOW_EXPR(loadMicros)
           
           auto testSetup =
-            testLoad.setupSchedule(scheduler)
-                    .withLoadTimeBase(LOAD_BASE)
-                    .withLevelDuration(10us)
-                    .withJobDeadline(2s)
-//                    .withBaseExpense(500us)
-//                    .withUpfrontPlanning()
-                    .withInstrumentation()
-//                    .withAdaptedSchedule (stressFac, concurrency)
-                    ;
+                 testLoad.setWeight(1)
+                  .setupSchedule(scheduler)
+                  .withLoadTimeBase(LOAD_BASE)
+                  .withJobDeadline(50ms)
+                  .withInstrumentation()                             // activate an instrumentation bracket around each job invocation
+                  ;
           double runTime = testSetup.launch_and_wait();
-          double expected = testSetup.getExpectedEndTime();
-SHOW_EXPR(runTime)
-SHOW_EXPR(expected)
-//SHOW_EXPR(refTime)
-          auto stat = testSetup.getInvocationStatistic();
-SHOW_EXPR(stat.cumulatedTime);
-SHOW_EXPR(stat.activeTime);
-SHOW_EXPR(stat.coveredTime);
-SHOW_EXPR(stat.eventCnt);
-SHOW_EXPR(stat.activationCnt);
-SHOW_EXPR(stat.cntCase(0));
-SHOW_EXPR(stat.cntCase(1));
-SHOW_EXPR(stat.cntCase(2));
-SHOW_EXPR(stat.cntCase(3));
-SHOW_EXPR(stat.timeCase(0));
-SHOW_EXPR(stat.timeCase(1));
-SHOW_EXPR(stat.timeCase(2));
-SHOW_EXPR(stat.timeCase(3));
-SHOW_EXPR(stat.cntThread(0));
-SHOW_EXPR(stat.cntThread(1));
-SHOW_EXPR(stat.cntThread(2));
-SHOW_EXPR(stat.cntThread(3));
-SHOW_EXPR(stat.cntThread(4));
-SHOW_EXPR(stat.cntThread(5));
-SHOW_EXPR(stat.cntThread(6));
-SHOW_EXPR(stat.cntThread(7));
-SHOW_EXPR(stat.cntThread(8));
-SHOW_EXPR(stat.cntThread(9));
-SHOW_EXPR(stat.timeThread(0));
-SHOW_EXPR(stat.timeThread(1));
-SHOW_EXPR(stat.timeThread(2));
-SHOW_EXPR(stat.timeThread(3));
-SHOW_EXPR(stat.timeThread(4));
-SHOW_EXPR(stat.timeThread(5));
-SHOW_EXPR(stat.timeThread(6));
-SHOW_EXPR(stat.timeThread(7));
-SHOW_EXPR(stat.timeThread(8));
-SHOW_EXPR(stat.timeThread(9));
-SHOW_EXPR(stat.avgConcurrency);
-SHOW_EXPR(stat.timeAtConc(0));
-SHOW_EXPR(stat.timeAtConc(1));
-SHOW_EXPR(stat.timeAtConc(2));
-SHOW_EXPR(stat.timeAtConc(3));
-SHOW_EXPR(stat.timeAtConc(4));
-SHOW_EXPR(stat.timeAtConc(5));
-SHOW_EXPR(stat.timeAtConc(6));
-SHOW_EXPR(stat.timeAtConc(7));
-SHOW_EXPR(stat.timeAtConc(8));
-SHOW_EXPR(stat.timeAtConc(9));
-        }
+          
+          auto stat = testSetup.getInvocationStatistic();            // retrieve observed invocation statistics
+          
+          CHECK (runTime < stat.activeTime);
+          CHECK (isLimited (4900, stat.activeTime/NODES, 8000));     // should be close to 5000
+          CHECK (stat.coveredTime < runTime);
+          CHECK (NODES == stat.activationCnt);                       // each node activated once
+          CHECK (isLimited (CORES/2, stat.avgConcurrency, CORES));   // should ideally come close to hardware concurrency
+          CHECK (0 == stat.timeAtConc(0));
+          CHECK (0 == stat.timeAtConc(CORES+1));
+          CHECK (runTime/2 < stat.timeAtConc(CORES-1)+stat.timeAtConc(CORES));
+        }                                                            // should ideally spend most of the time at highes concurrency levels
       
       
       
