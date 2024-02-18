@@ -163,7 +163,7 @@ namespace test {
                      .withBaseExpense (CONF::BASE_EXPENSE)
                      .withSchedNotify (CONF::SCHED_NOTIFY)
                      .withSchedDepends(CONF::SCHED_DEPENDS)
-                     .withInstrumentation(CONF::INSTRUMENTATION)          // side-effect: clear existing statistics 
+                     .withInstrumentation(CONF::INSTRUMENTATION)          // side-effect: clear existing statistics
                      .withAdaptedSchedule(stressFac, CONF::CONCURRENCY);
           }
         

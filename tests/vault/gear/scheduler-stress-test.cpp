@@ -81,8 +81,8 @@ namespace test {
         {
            //smokeTest();
 //           setup_systematicSchedule();
-//           search_breaking_point();
-           verify_instrumentation();
+           search_breaking_point();
+//           verify_instrumentation();
 //           investigateWorkProcessing();
            walkingDeadline();
         }

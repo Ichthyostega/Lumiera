@@ -187,7 +187,7 @@ namespace test {
     const size_t DEFAULT_SIZ = 256;                     ///< default node count for the complete load graph
     
     const auto SAFETY_TIMEOUT = 5s;                     ///< maximum time limit for test run, abort if exceeded
-    const auto STANDARD_DEADLINE = 10ms;                ///< deadline to use for each individual computation job
+    const auto STANDARD_DEADLINE = 30ms;                ///< deadline to use for each individual computation job
     const size_t DEFAULT_CHUNKSIZE = 64;                ///< number of computation jobs to prepare in each planning round
     const double UPFRONT_PLANNING_BOOST = 2.6;          ///< factor to increase the computed pre-roll to ensure up-front planning
     const size_t GRAPH_BENCHMARK_RUNS = 5;              ///< repetition count for reference calculation of a complete node graph
@@ -1965,8 +1965,9 @@ namespace test {
                   if (not concurrency)
                     concurrency = defaultConcurrency();
                   double formFac = concurrency / stat.avgConcurrency;
-                  double expectedCumulatedTime = _uSec(compuLoad_->timeBase) * chainLoad_.getWeightSum();
-                  formFac *= stat.activeTime / expectedCumulatedTime;
+                  double expectedNodeTime = _uSec(compuLoad_->timeBase) * chainLoad_.getWeightSum() / chainLoad_.size();
+                  double realAvgNodeTime = stat.activeTime / stat.activationCnt;
+                  formFac *= realAvgNodeTime / expectedNodeTime;
                   return withAdaptedSchedule (stressFac, concurrency, formFac);
                 }
             }
