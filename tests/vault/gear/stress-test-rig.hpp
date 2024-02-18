@@ -163,6 +163,7 @@ namespace test {
                      .withBaseExpense (CONF::BASE_EXPENSE)
                      .withSchedNotify (CONF::SCHED_NOTIFY)
                      .withSchedDepends(CONF::SCHED_DEPENDS)
+                     .withInstrumentation(CONF::INSTRUMENTATION)          // side-effect: clear existing statistics 
                      .withAdaptedSchedule(stressFac, CONF::CONCURRENCY);
           }
         
@@ -174,13 +175,14 @@ namespace test {
             Res res;
             auto& [sf,pf,sdev,avgD,avgT,expT] = res;
             sf   = stressFac;
-            expT = testSetup.getExpectedEndTime() / 1000;
             std::array<double, CONF::REPETITIONS> runTime;
             for (uint i=0; i<CONF::REPETITIONS; ++i)
               {
                 runTime[i] = testSetup.launch_and_wait() / 1000;
                 avgT += runTime[i];
+                testSetup.adaptEmpirically (stressFac, CONF::CONCURRENCY);
               }
+            expT = testSetup.getExpectedEndTime() / 1000;
             avgT /= CONF::REPETITIONS;
             avgD = (avgT-expT); // can be < 0
             for (uint i=0; i<CONF::REPETITIONS; ++i)
@@ -335,6 +337,7 @@ namespace test {
       bool SCHED_NOTIFY  = true;
       bool SCHED_DEPENDS = false;
       uint CONCURRENCY = work::Config::getDefaultComputationCapacity();
+      bool INSTRUMENTATION = true;
       double EPSILON      = 0.01;          ///< error bound to abort binary search
       double UPPER_STRESS = 0.6;           ///< starting point for the upper limit, likely to fail
       double FAIL_LIMIT   = 2.0;           ///< delta-limit when to count a run as failure

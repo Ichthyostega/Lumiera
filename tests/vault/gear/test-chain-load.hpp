@@ -224,9 +224,9 @@ namespace test {
     };
   
   /**
-   * simplified model for expense of a node, computed concurrently.
+   * simplified model for expense of a level of nodes, computed concurrently.
    * @remark assumptions of this model
-   *   - weight factor describes expense to compute this node
+   *   - weight factor describes expense to compute a node
    *   - nodes on the same level can be parallelised without limitation
    *   - no consideration of stacking / ordering of tasks; rather the speed-up
    *     is applied as an average factor to the summed node weights for a level
@@ -831,6 +831,15 @@ namespace test {
           return move(*this);
         }
       
+      
+      /** overall sum of configured node weights **/
+      size_t
+      getWeightSum()
+        {
+          return allNodes()
+                  .transform([](Node& n){ return n.weight; })
+                  .resultSum();
+        }
       
       /** calculate node weights aggregated per level */
       auto
@@ -1925,14 +1934,42 @@ namespace test {
           return move(*this);
         }
       
+      /**
+       * Establish a differentiated schedule per level, taking node weights into account
+       * @param stressFac   further proportional tightening of the schedule times
+       * @param concurrency the nominally available concurrency, applied per level
+       * @param formFac     further expenses to take into account (reducing the stressFac);
+       */
       ScheduleCtx&&
-      withAdaptedSchedule (double stressFac =1.0, uint concurrency=0)
+      withAdaptedSchedule (double stressFac =1.0, uint concurrency=0, double formFac =1.0)
         {
           if (not concurrency)  // use hardware concurrency (#cores) by default
             concurrency = defaultConcurrency();
           ENSURE (isLimited (1u, concurrency, 3*defaultConcurrency()));
+          REQUIRE (formFac > 0.0);
+          stressFac /= formFac;
           withLevelDuration (compuLoad_->timeBase);
           fillAdaptedSchedule (stressFac, concurrency);
+          return move(*this);
+        }
+      
+      ScheduleCtx&&
+      adaptEmpirically (double stressFac =1.0, uint concurrency=0)
+        {
+          if (watchInvocations_)
+            {
+              auto stat = watchInvocations_->evaluate();
+              if (0 < stat.activationCnt)
+                {// looks like we have actual measurement data
+                  ENSURE (0.0 < stat.avgConcurrency);
+                  if (not concurrency)
+                    concurrency = defaultConcurrency();
+                  double formFac = concurrency / stat.avgConcurrency;
+                  double expectedCumulatedTime = _uSec(compuLoad_->timeBase) * chainLoad_.getWeightSum();
+                  formFac *= stat.activeTime / expectedCumulatedTime;
+                  return withAdaptedSchedule (stressFac, concurrency, formFac);
+                }
+            }
           return move(*this);
         }
       

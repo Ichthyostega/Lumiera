@@ -324,7 +324,7 @@ namespace test {
           CHECK (0 == stat.timeAtConc(0));
           CHECK (0 == stat.timeAtConc(CORES+1));
           CHECK (runTime/2 < stat.timeAtConc(CORES-1)+stat.timeAtConc(CORES));
-        }                                                            // should ideally spend most of the time at highes concurrency levels
+        }                                                            // should ideally spend most of the time at highest concurrency levels
       
       
       

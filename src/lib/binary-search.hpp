@@ -56,6 +56,7 @@ namespace lib {
    * - search until (upper-lower) < epsilon
    * - the \a FUN performs the actual test
    * - the goal is to narrow down the breaking point
+   * @param fun `bool(PAR)` perform probe and decide criterion.
    * @note `fun(lower)` must be `false` and
    *       `fun(upper)` must be `true`
    */
