@@ -155,6 +155,8 @@ namespace test {
             double expTime{0};
           };
         
+        double adjustmentFac{1.0};
+        
         /** prepare the ScheduleCtx for a specifically parametrised test series */
         void
         configureTest (TestSetup& testSetup, double stressFac)
@@ -164,7 +166,7 @@ namespace test {
                      .withSchedNotify (CONF::SCHED_NOTIFY)
                      .withSchedDepends(CONF::SCHED_DEPENDS)
                      .withInstrumentation(CONF::INSTRUMENTATION)          // side-effect: clear existing statistics
-                     .withAdaptedSchedule(stressFac, CONF::CONCURRENCY);
+                     .withAdaptedSchedule(stressFac, CONF::CONCURRENCY, adjustmentFac);
           }
         
         /** perform a repetition of test runs and compute statistics */
@@ -181,6 +183,7 @@ namespace test {
                 runTime[i] = testSetup.launch_and_wait() / 1000;
                 avgT += runTime[i];
                 testSetup.adaptEmpirically (stressFac, CONF::CONCURRENCY);
+                this->adjustmentFac = testSetup.getStressFac() / stressFac;
               }
             expT = testSetup.getExpectedEndTime() / 1000;
             avgT /= CONF::REPETITIONS;

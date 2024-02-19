@@ -1707,10 +1707,10 @@ namespace test {
       FrameRate  levelSpeed_{1, SCHEDULE_LEVEL_STEP};
       FrameRate   planSpeed_{1, SCHEDULE_PLAN_STEP};
       TimeVar   nodeExpense_{SCHEDULE_NODE_STEP};
-      double     stressFact_{1.0};
+      double      stressFac_{1.0};
       bool      schedNotify_{SCHED_NOTIFY};
       bool     schedDepends_{SCHED_DEPENDS};
-      uint  blockLoadFactor_{2};
+      uint     blockLoadFac_{2};
       size_t      chunkSize_{DEFAULT_CHUNKSIZE};
       TimeVar     startTime_{Time::ANYTIME};
       microseconds deadline_{STANDARD_DEADLINE};
@@ -1842,7 +1842,7 @@ namespace test {
       getExpectedEndTime()
         {
           return _raw(startTimes_.back() - startTimes_.front()
-                     + Duration{nodeExpense_}*(chainLoad_.size()/stressFact_));
+                     + Duration{nodeExpense_}*(chainLoad_.size()/stressFac_));
         }
       
       auto
@@ -1851,6 +1851,9 @@ namespace test {
           return watchInvocations_? watchInvocations_->evaluate()
                                   : lib::IncidenceCount::Statistic{};
         }
+      
+      double getStressFac() { return stressFac_; }
+      
       
       
       /* ===== Setter / builders for custom configuration ===== */
@@ -1986,7 +1989,7 @@ namespace test {
       ScheduleCtx&&
       withAnnouncedLoadFactor (uint factor_on_levelSpeed)
         {
-          blockLoadFactor_ = factor_on_levelSpeed;
+          blockLoadFac_ = factor_on_levelSpeed;
           return move(*this);
         }
       
@@ -2084,7 +2087,7 @@ namespace test {
       FrameRate
       calcLoadHint()
         {
-          return FrameRate{levelSpeed_ * blockLoadFactor_};
+          return FrameRate{levelSpeed_ * blockLoadFac_};
         }
       
       size_t
@@ -2112,7 +2115,7 @@ namespace test {
       fillDefaultSchedule()
         {
           size_t numPoints = chainLoad_.topLevel()+2;
-          stressFact_ = 1.0;
+          stressFac_ = 1.0;
           startTimes_.clear();
           startTimes_.reserve (numPoints);
           for (size_t level=0; level<numPoints; ++level)
@@ -2123,13 +2126,13 @@ namespace test {
       fillAdaptedSchedule (double stressFact, uint concurrency)
         {
           REQUIRE (stressFact > 0);
-          stressFact_ = stressFact;
+          stressFac_ = stressFact;
           size_t numPoints = chainLoad_.topLevel()+2;
           startTimes_.clear();
           startTimes_.reserve (numPoints);
           startTimes_.push_back (Time::ZERO);
           chainLoad_.levelScheduleSequence (concurrency)
-                    .transform([&](double scheduleFact){ return (scheduleFact/stressFact_) * Offset{1,levelSpeed_};})
+                    .transform([&](double scheduleFact){ return (scheduleFact/stressFac_) * Offset{1,levelSpeed_};})
                     .effuse(startTimes_);
         }
       
@@ -2138,7 +2141,7 @@ namespace test {
         {
           ENSURE (level < startTimes_.size());
           return startTimes_[level]
-               + nodeExpense_ * (nodeIDX/stressFact_);
+               + nodeExpense_ * (nodeIDX/stressFac_);
         }
       
       auto

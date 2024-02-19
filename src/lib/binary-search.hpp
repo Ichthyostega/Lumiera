@@ -90,9 +90,11 @@ namespace lib {
   binarySearch_upper (FUN&& fun, PAR lower, PAR upper, PAR epsilon)
   {
     REQUIRE (lower <= upper);
-    bool hit = fun(upper);
-    if (not hit)
-      {// the upper end breaks contract => search above
+    while (true)
+      {
+        bool hit = fun(upper);
+        if (hit) break;
+        // the upper end breaks contract => search above
         PAR len = (upper-lower);
         lower = upper - len/10;
         upper = lower + 14*len/10;
@@ -106,9 +108,11 @@ namespace lib {
   binarySearch (FUN&& fun, PAR lower, PAR upper, PAR epsilon)
   {
     REQUIRE (lower <= upper);
-    bool hit = fun(lower);
-    if (hit)
-      {// the lower end breaks contract => search below
+    while (true)
+      {
+        bool hit = fun(lower);
+        if (not hit) break;
+        // the lower end breaks contract => search below
         PAR len = (upper-lower);
         upper = lower + len/10;
         lower = upper - 14*len/10;
