@@ -834,7 +834,7 @@ namespace test {
       
       /** overall sum of configured node weights **/
       size_t
-      getWeightSum()
+      calcWeightSum()
         {
           return allNodes()
                   .transform([](Node& n){ return n.weight; })
@@ -868,6 +868,15 @@ namespace test {
                                 schedule += computeWeightFactor (lw, concurrency);
                                 return schedule;
                               });
+        }
+      
+      /** calculate the simplified/theoretic reduction of compounded weight through concurrency */
+      double
+      calcExpectedCompoundedWeight (uint concurrency =1)
+        {
+          return allLevelWeights()
+                  .transform([concurrency](LevelWeight const& lw){ return computeWeightFactor (lw, concurrency); })
+                  .resultSum();
         }
       
       
@@ -1969,8 +1978,11 @@ namespace test {
                     concurrency = defaultConcurrency();
                   double worktimeRatio = 1 - stat.timeAtConc(0) / stat.coveredTime;
                   double workConcurrency = stat.avgConcurrency / worktimeRatio;
-                  double formFac = concurrency / workConcurrency;
-                  double expectedNodeTime = _uSec(compuLoad_->timeBase) * chainLoad_.getWeightSum() / chainLoad_.size();
+                  double weightSum = chainLoad_.calcWeightSum();
+                  double expectedCompoundedWeight = chainLoad_.calcExpectedCompoundedWeight(concurrency);
+                  double expectedConcurrency = weightSum / expectedCompoundedWeight;
+                  double formFac = 1 / (workConcurrency / expectedConcurrency);
+                  double expectedNodeTime = _uSec(compuLoad_->timeBase) * weightSum / chainLoad_.size();
                   double realAvgNodeTime = stat.activeTime / stat.activationCnt;
                   formFac *= realAvgNodeTime / expectedNodeTime;
                   return withAdaptedSchedule (stressFac, concurrency, formFac);

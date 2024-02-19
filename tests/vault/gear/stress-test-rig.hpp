@@ -183,7 +183,7 @@ namespace test {
                 runTime[i] = testSetup.launch_and_wait() / 1000;
                 avgT += runTime[i];
                 testSetup.adaptEmpirically (stressFac, CONF::CONCURRENCY);
-                this->adjustmentFac = testSetup.getStressFac() / stressFac;
+                this->adjustmentFac = 1 / (testSetup.getStressFac() / stressFac);
               }
             expT = testSetup.getExpectedEndTime() / 1000;
             avgT /= CONF::REPETITIONS;
@@ -249,7 +249,7 @@ namespace test {
         
         
         _Fmt fmtRun_ {"....·%-2d:  Δ=%4.1f        t=%4.1f  %s %s"};                          //      i % Δ  % t % t>avg?  % fail?
-        _Fmt fmtStep_{ "%4.2f|  : ∅Δ=%4.1f±%-4.2f  ∅t=%4.1f  %s %%%3.1f -- expect:%4.1fms"}; // stress % ∅Δ % σ % ∅t % fail % pecentOff % t-expect
+        _Fmt fmtStep_{ "%4.2f|  : ∅Δ=%4.1f±%-4.2f  ∅t=%4.1f  %s %%%-3.0f -- expect:%4.1fms"};// stress % ∅Δ % σ % ∅t % fail % pecentOff % t-expect
         _Fmt fmtResSDv_{"%9s= %5.2f ±%4.2f%s"};
         _Fmt fmtResVal_{"%9s: %5.2f%s"};
         
@@ -267,7 +267,7 @@ namespace test {
             if (CONF::showStep)
               cout << fmtStep_ % res.stressFac % res.avgDelta % res.stdDev % res.avgTime
                                % (decideBreakPoint(res)? "—◆—":"—◇—")
-                               % res.percentOff % res.expTime
+                               % (100*res.percentOff) % res.expTime
                    << endl;
           }
         

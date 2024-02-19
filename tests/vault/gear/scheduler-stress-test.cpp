@@ -350,15 +350,14 @@ namespace test {
               {
                 usec LOAD_BASE = 500us;
                 uint CONCURRENCY = 4;
-                bool SCHED_DEPENDS = true;
                 bool showRuns = true;
                 
                 auto testLoad() { return TestChainLoad<>{64}.configureShape_chain_loadBursts(); }
               };
             
           auto [stress,delta,time] = StressRig::with<Setup>().searchBreakingPoint();
-          CHECK (delta > 2.0);
-          CHECK (0.55 > stress and stress > 0.4);
+          CHECK (delta > 2.5);
+          CHECK (1.15 > stress and stress > 0.9);
         }
       
       
