@@ -1964,7 +1964,9 @@ namespace test {
                   ENSURE (0.0 < stat.avgConcurrency);
                   if (not concurrency)
                     concurrency = defaultConcurrency();
-                  double formFac = concurrency / stat.avgConcurrency;
+                  double worktimeRatio = 1 - stat.timeAtConc(0) / stat.coveredTime;
+                  double workConcurrency = stat.avgConcurrency / worktimeRatio;
+                  double formFac = concurrency / workConcurrency;
                   double expectedNodeTime = _uSec(compuLoad_->timeBase) * chainLoad_.getWeightSum() / chainLoad_.size();
                   double realAvgNodeTime = stat.activeTime / stat.activationCnt;
                   formFac *= realAvgNodeTime / expectedNodeTime;
