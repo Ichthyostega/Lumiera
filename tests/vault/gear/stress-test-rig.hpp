@@ -64,6 +64,13 @@
  **   which is 2 times the basic failure indicator.
  ** 
  ** ## Observation tools
+ ** As a complement to the bench::BreakingPoint tool, another tool is provided to
+ ** run a specific Scheduler setup while varying a single control parameter within
+ ** defined limits. This produces a set of (x,y) data, which can be used to search
+ ** for correlations or build a linear regression model to describe the Scheduler's
+ ** behaviour as function of the control parameter. The typical use case would be
+ ** to use the input length (number of Jobs) as control parameter, leading to a
+ ** model for the Scheduler's expense.
  ** 
  ** @see TestChainLoad_test
  ** @see SchedulerStress_test
@@ -132,18 +139,106 @@ namespace test {
     
   }
   
-  namespace stress_test_rig {
+  
+  
+  /** configurable template framework for running Scheduler Stress tests */
+  class StressRig
+    : util::NonCopyable
+    {
+      
+    public:
+      /***********************************************************************//**
+       * Entrance Point: build a stress test measurement setup using a dedicated
+       * \a TOOL class, takes the configuration \a CONF as template parameter
+       * and which is assumed to inherit (indirectly) from StressRig.
+       * @tparam CONF specialised subclass of StressRig with customisation
+       * @return a builder to configure and then launch the actual test
+       */
+      template<class CONF>
+      static auto
+      with()
+        {
+          return Launcher<CONF>{};
+        }
+      
+      
+      /* ======= default configuration (inherited) ======= */
+      
+      using usec = std::chrono::microseconds;
+      
+      usec LOAD_BASE = 500us;
+      usec BASE_EXPENSE = 0us;
+      bool SCHED_NOTIFY  = true;
+      bool SCHED_DEPENDS = false;
+      uint CONCURRENCY = work::Config::getDefaultComputationCapacity();
+      bool INSTRUMENTATION = true;
+      double EPSILON      = 0.01;          ///< error bound to abort binary search
+      double UPPER_STRESS = 0.6;           ///< starting point for the upper limit, likely to fail
+      double FAIL_LIMIT   = 2.0;           ///< delta-limit when to count a run as failure
+      double TRIGGER_FAIL = 0.55;          ///< %-fact: criterion-1 failures above this rate
+      double TRIGGER_SDEV = FAIL_LIMIT;    ///< in ms : criterion-2 standard derivation
+      double TRIGGER_DELTA = 2*FAIL_LIMIT; ///< in ms : criterion-3 average delta above this limit
+      bool showRuns = false;    ///< print a line for each individual run
+      bool showStep = true;     ///< print a line for each binary search step
+      bool showRes  = true;     ///< print result data
+      bool showRef  = true;     ///< calculate single threaded reference time
+      
+      static uint constexpr REPETITIONS{20};
+
+      BlockFlowAlloc bFlow{};
+      EngineObserver watch{};
+      Scheduler scheduler{bFlow, watch};
+      
+      
+      
+    protected:
+      /** Extension point: build the computation topology for this test */
+      auto
+      testLoad()
+        {
+          return TestChainLoad<>{64};
+        }
+      
+      /** (optional) extension point: base configuration of the test ScheduleCtx */
+      template<class TL>
+      auto
+      testSetup (TL& testLoad)
+        {
+          return testLoad.setupSchedule(scheduler)
+                         .withJobDeadline(100ms)
+                         .withUpfrontPlanning();
+        }
+      
+      template<class CONF>
+      struct Launcher : CONF
+        {
+          template<template<class> class TOOL, typename...ARGS>
+          auto
+          perform (ARGS&& ...args)
+            {
+              return TOOL<CONF>{}.perform (std::forward<ARGS> (args)...);
+            }
+        };
+    };
+  
+  
+  
+  
+  namespace bench { ///< Specialised tools to investigate scheduler performance
     
-    /**
+    using std::declval;
+    
+    
+    /**************************************************//**
      * Specific stress test scheme to determine the
      * »breaking point« where the Scheduler starts to slip
      */
     template<class CONF>
-    class BreakingPointBench
-      : CONF
+    class BreakingPoint
+      : public CONF
       {
-        using TestLoad  = decltype(std::declval<CONF>().testLoad());
-        using TestSetup = decltype(std::declval<CONF>().testSetup (std::declval<TestLoad&>()));
+        using TestLoad  = decltype(declval<BreakingPoint>().testLoad());
+        using TestSetup = decltype(declval<BreakingPoint>().testSetup (declval<TestLoad&>()));
         
         struct Res
           {
@@ -301,7 +396,7 @@ namespace test {
          * @return a tuple `[stress-factor, ∅delta, ∅run-time]`
          */
         auto
-        searchBreakingPoint()
+        perform()
           {
             TRANSIENTLY(work::Config::COMPUTATION_CAPACITY) = CONF::CONCURRENCY;
             
@@ -323,73 +418,43 @@ namespace test {
             return make_tuple (res.stressFac, res.avgDelta, res.avgTime);
           }
       };
-  }//namespace stress_test_rig
-  
-  
-  
-  /** configurable template for running Scheduler Stress tests */
-  class StressRig
-    : util::NonCopyable
-    {
-      
-    public:
-      using usec = std::chrono::microseconds;
-      
-      usec LOAD_BASE = 500us;
-      usec BASE_EXPENSE = 0us;
-      bool SCHED_NOTIFY  = true;
-      bool SCHED_DEPENDS = false;
-      uint CONCURRENCY = work::Config::getDefaultComputationCapacity();
-      bool INSTRUMENTATION = true;
-      double EPSILON      = 0.01;          ///< error bound to abort binary search
-      double UPPER_STRESS = 0.6;           ///< starting point for the upper limit, likely to fail
-      double FAIL_LIMIT   = 2.0;           ///< delta-limit when to count a run as failure
-      double TRIGGER_FAIL = 0.55;          ///< %-fact: criterion-1 failures above this rate
-      double TRIGGER_SDEV = FAIL_LIMIT;    ///< in ms : criterion-2 standard derivation
-      double TRIGGER_DELTA = 2*FAIL_LIMIT; ///< in ms : criterion-3 average delta above this limit
-      bool showRuns = false;    ///< print a line for each individual run
-      bool showStep = true;     ///< print a line for each binary search step
-      bool showRes  = true;     ///< print result data
-      bool showRef  = true;     ///< calculate single threaded reference time
-      
-      static uint constexpr REPETITIONS{20};
-
-      BlockFlowAlloc bFlow{};
-      EngineObserver watch{};
-      Scheduler scheduler{bFlow, watch};
-      
-      /** Extension point: build the computation topology for this test */
-      auto
-      testLoad()
-        {
-          return TestChainLoad<>{64};
-        }
-      
-      /** (optional) extension point: base configuration of the test ScheduleCtx */
-      template<class TL>
-      auto
-      testSetup (TL& testLoad)
-        {
-          return testLoad.setupSchedule(scheduler)
-                         .withJobDeadline(100ms)
-                         .withUpfrontPlanning();
-        }
-      
-      /**
-       * Entrance Point: build a stress test measurement setup
-       * to determine the »breaking point« where the Scheduler is unable
-       * to keep up with the defined schedule.
-       * @tparam CONF specialised subclass of StressRig with customisation
-       * @return a builder to configure and then launch the actual test
-       */
-      template<class CONF>
-      static auto
-      with()
-        {
-          return stress_test_rig::BreakingPointBench<CONF>{};
-        }
-    };
-  
-  
-}}} // namespace vault::gear::test
+    
+    
+    
+    
+    /**************************************************//**
+     * Specific test scheme to perform a Scheduler setup
+     * over a given control parameter range to determine
+     * correlations
+     */
+    template<class CONF>
+    class ParameterRange
+      : public CONF
+      {
+        using TestLoad  = decltype(declval<ParameterRange>().testLoad());
+        using TestSetup = decltype(declval<ParameterRange>().testSetup (declval<TestLoad&>()));
+        
+        
+        
+      public:
+        /**
+         * Launch a measurement sequence running the Scheduler with a
+         * varying parameter value to investigate (x,y) correlations.
+         * @return ////TODO a tuple `[stress-factor, ∅delta, ∅run-time]`
+         */
+        auto
+        perform()
+          {
+            TRANSIENTLY(work::Config::COMPUTATION_CAPACITY) = CONF::CONCURRENCY;
+            
+            TestLoad testLoad = CONF::testLoad().buildTopology();
+            TestSetup testSetup = CONF::testSetup (testLoad);
+            
+            UNIMPLEMENTED ("parametric runs");
+//          return make_tuple (res.stressFac, res.avgDelta, res.avgTime);
+          }
+      };
+    //
+  }// namespace bench
+}}}// namespace vault::gear::test
 #endif /*VAULT_GEAR_TEST_STRESS_TEST_RIG_H*/

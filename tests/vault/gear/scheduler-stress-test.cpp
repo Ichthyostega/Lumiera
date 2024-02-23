@@ -355,7 +355,8 @@ namespace test {
                 auto testLoad() { return TestChainLoad<>{64}.configureShape_chain_loadBursts(); }
               };
             
-          auto [stress,delta,time] = StressRig::with<Setup>().searchBreakingPoint();
+          auto [stress,delta,time] = StressRig::with<Setup>()
+                                               .perform<bench::BreakingPoint>();
           CHECK (delta > 2.5);
           CHECK (1.15 > stress and stress > 0.9);
         }
@@ -429,7 +430,8 @@ SHOW_EXPR(loadMicros)
                     return testLoad;
                   }
               };
-          auto [stress,delta,time] = StressRig::with<Setup>().searchBreakingPoint();
+          auto [stress,delta,time] = StressRig::with<Setup>()
+                                               .perform<bench::BreakingPoint>();
 SHOW_EXPR(stress)
 SHOW_EXPR(delta)
 SHOW_EXPR(time)
