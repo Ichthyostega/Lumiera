@@ -93,7 +93,7 @@
 #include "lib/meta/function.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"//////////////////////////TODO RLY?
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <functional>
 #include <utility>
@@ -194,9 +194,9 @@ namespace test {
     protected:
       /** Extension point: build the computation topology for this test */
       auto
-      testLoad()
+      testLoad(size_t nodes =64)
         {
-          return TestChainLoad<>{64};
+          return TestChainLoad<>{nodes};
         }
       
       /** (optional) extension point: base configuration of the test ScheduleCtx */
@@ -431,10 +431,29 @@ namespace test {
     class ParameterRange
       : public CONF
       {
-        using TestLoad  = decltype(declval<ParameterRange>().testLoad());
+        using TestLoad  = decltype(declval<ParameterRange>().testLoad(1));
         using TestSetup = decltype(declval<ParameterRange>().testSetup (declval<TestLoad&>()));
         
+        template<typename PAR>
+        using Point = std::pair<PAR, double>;
         
+        
+        template<typename PAR>
+        void
+        runTest (Point<PAR>& point)
+          {
+            PAR param = point.first;
+            double stressFac = 1.0;
+            TestLoad testLoad = CONF::testLoad(param).buildTopology();
+            TestSetup testSetup = CONF::testSetup (testLoad)
+                                       .withLoadTimeBase(CONF::LOAD_BASE)
+                                       .withBaseExpense (CONF::BASE_EXPENSE)
+                                       .withSchedNotify (CONF::SCHED_NOTIFY)
+                                       .withSchedDepends(CONF::SCHED_DEPENDS)
+                                       .withAdaptedSchedule(stressFac, CONF::CONCURRENCY);
+            point.second = testSetup.launch_and_wait() / 1000;
+cout << "x="<<point.first<<" y="<<point.second<<endl;
+          }
         
       public:
         /**
@@ -442,16 +461,32 @@ namespace test {
          * varying parameter value to investigate (x,y) correlations.
          * @return ////TODO a tuple `[stress-factor, ∅delta, ∅run-time]`
          */
+        template<typename PAR>
         auto
-        perform()
+        perform (PAR lower, PAR upper)
           {
             TRANSIENTLY(work::Config::COMPUTATION_CAPACITY) = CONF::CONCURRENCY;
             
-            TestLoad testLoad = CONF::testLoad().buildTopology();
-            TestSetup testSetup = CONF::testSetup (testLoad);
+            PAR dist = upper - lower;
+            uint cnt = CONF::REPETITIONS;
+            vector<Point<PAR>> results(cnt);
+            PAR minP{upper}, maxP{lower};
+            for (uint i=0; i<cnt; ++i)
+              {
+                auto random = double(rand())/RAND_MAX;
+                PAR pos = lower + PAR(floor (random*dist + 0.5));
+                results[i].first = pos;
+                minP = min (pos, minP);
+                maxP = max (pos, maxP);
+              }
+            // ensure the bounds participate in test
+            if (maxP < upper) results[cnt-2].first = upper;
+            if (minP > lower) results[cnt-1].first = lower;
             
-            UNIMPLEMENTED ("parametric runs");
-//          return make_tuple (res.stressFac, res.avgDelta, res.avgTime);
+            for (auto& point : results)
+              runTest (point);
+            
+            return results;
           }
       };
     //

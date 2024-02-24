@@ -81,8 +81,9 @@ namespace test {
         {
            //smokeTest();
 //           setup_systematicSchedule();
-           search_breaking_point();
 //           verify_instrumentation();
+//           search_breaking_point();
+           watch_expenseFunction();
 //           investigateWorkProcessing();
            walkingDeadline();
         }
@@ -328,16 +329,22 @@ namespace test {
       
       
       
-      /** @test TODO determine the breaking point towards scheduler overload
+      /** @test determine the breaking point towards scheduler overload
        *      - use the integrated StressRig
        *      - demonstrate how parameters can be tweaked
        *      - perform a run, leading to a binary search for the breaking point
-       * @note on my machine, I observe stress factors close below 0.5, due to the fact
-       *       that the ComputationalLoad typically takes 2 times as long in concurrent
-       *       usage compared to its calibration, which is done in a tight loop. This
-       *       is strange and may well be due to some peculiarity of my system. Which
-       *       also implies that this test's behaviour might be difficult to verify,
-       *       other than by qualitative interpretation of the log output on STDOUT.
+       * @remark this stress-test setup uses instrumentation internally note to deduce
+       *   some systematic deviations from the theoretically established behaviour.
+       *   For example, on my machine, the ComputationalLoad performs slower within the
+       *   Scheduler environment compared to its calibration, which is done in a tight loop.
+       *   This may be due to internals of the processor, which show up under increased
+       *   contention combined with more frequent cache misses. In a similar vein, the
+       *   actually observed concurrency turns out to be consistently lower than could
+       *   be expected by accounting for the work units in isolation, without considering
+       *   dependency constraints. These observed deviations are cast into an empirical
+       *   »form factor«, which is then used to correct the applied stress factor.
+       *   Only with taking these corrective steps, the observed stress factor at
+       *   _breaking point_ comes close to the theoretically expected value of 1.0
        * @see stress-test-rig.hpp
        * @todo WIP 1/24 ✔ define ⟶ ✔ implement
        */
@@ -359,6 +366,41 @@ namespace test {
                                                .perform<bench::BreakingPoint>();
           CHECK (delta > 2.5);
           CHECK (1.15 > stress and stress > 0.9);
+        }
+      
+      
+      
+      /** @test TODO Investigate the relation of run time (expense) to input length.
+       * @see vault::gear::bench::ParameterRange
+       * @todo WIP 1/24 🔁 define ⟶ 🔁 implement
+       */
+      void
+      watch_expenseFunction()
+        {
+          ComputationalLoad cpuLoad;
+          cpuLoad.timeBase = 200us;
+          cpuLoad.calibrate();
+//////////////////////////////////////////////////////////////////TODO for development only
+          MARK_TEST_FUN
+          
+            struct Setup : StressRig
+              {
+                usec LOAD_BASE = 500us;
+                uint CONCURRENCY = 4;
+                bool showRuns = true;
+                
+                auto testLoad(size_t nodes)
+                  {
+                    TestChainLoad<8> testLoad{nodes};
+                    return testLoad.seedingRule(testLoad.rule().probability(0.6).minVal(2))
+                                   .pruningRule(testLoad.rule().probability(0.44))
+                                   .weightRule(testLoad.value(1))
+                                   .setSeed(55);
+                  }
+              };
+            
+          auto results = StressRig::with<Setup>()
+                                   .perform<bench::ParameterRange> (2,64);
         }
       
       
