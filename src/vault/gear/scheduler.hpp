@@ -461,7 +461,7 @@ namespace gear {
       /* ==== Implementation of the Concept ExecutionCtx ==== */
       
       /**
-       * λ-post: enqueue for time-bound execution, possibly dispatch immediately.
+       * λ-post: enqueue for time-bound execution, within given ExecutionCtx.
        * @remark This function represents an _abstracted entrance to scheduling_
        *         for the ActivityLang and is relevant for recursive forwarding
        *         of activations and notifications. The concrete implementation

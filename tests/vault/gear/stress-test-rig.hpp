@@ -450,9 +450,12 @@ namespace test {
                                        .withBaseExpense (CONF::BASE_EXPENSE)
                                        .withSchedNotify (CONF::SCHED_NOTIFY)
                                        .withSchedDepends(CONF::SCHED_DEPENDS)
-                                       .withAdaptedSchedule(stressFac, CONF::CONCURRENCY);
-            point.second = testSetup.launch_and_wait() / 1000;
-cout << "x="<<point.first<<" y="<<point.second<<endl;
+                                       .withAdaptedSchedule(stressFac, CONF::CONCURRENCY)
+                                       .withInstrumentation();
+            double testMillis = testSetup.launch_and_wait() / 1000;
+            auto stat = testSetup.getInvocationStatistic();
+            point.second = stat.coveredTime / 1000;
+cout << "x="<<point.first<<"\t y="<<point.second<<"\t e2e="<<testMillis<<"\t conc:"<<stat.avgConcurrency<<" ∅t="<<stat.activeTime/stat.activationCnt<<" ("<<stat.activationCnt<<")"<<endl;
           }
         
       public:

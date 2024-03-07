@@ -391,16 +391,21 @@ namespace test {
                 
                 auto testLoad(size_t nodes)
                   {
-                    TestChainLoad<8> testLoad{nodes};
-                    return testLoad.seedingRule(testLoad.rule().probability(0.6).minVal(2))
-                                   .pruningRule(testLoad.rule().probability(0.44))
-                                   .weightRule(testLoad.value(1))
-                                   .setSeed(55);
+                    TestChainLoad testLoad{nodes};
+//                  return testLoad.seedingRule(testLoad.rule().probability(0.6).minVal(2))
+//                                 .pruningRule(testLoad.rule().probability(0.44))
+//                                 .weightRule(testLoad.value(1))
+//                                 .setSeed(55);
+                    return testLoad.setWeight(1);
                   }
               };
             
           auto results = StressRig::with<Setup>()
                                    .perform<bench::ParameterRange> (2,64);
+
+cout<<"\"len\";\"dur\""<<endl;
+for (auto val : results)
+  cout<<val.first<<";"<<val.second<<endl;
         }
       
       
