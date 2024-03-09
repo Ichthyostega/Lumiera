@@ -529,6 +529,15 @@ namespace test {
         }
       
       
+      /** preconfigured topology: only unconnected seed/exit nodes */
+      TestChainLoad&&
+      configure_isolated_nodes()
+        {
+          pruningRule(value(1));
+          weightRule(value(1));
+          return move(*this);
+        }
+      
       /** preconfigured topology: isolated simple 2-step chains */
       TestChainLoad&&
       configureShape_short_chains2()
@@ -672,8 +681,12 @@ namespace test {
           for (Node* o : *next)
             {
               calcNode(o);
+              if (apply (pruningRule_,o))
+                continue; // leave unconnected
               node->addPred(o);
             }
+          if (isnil (node->pred)) // last remains isolated
+            node->hash = this->getSeed();
           calcNode(node);
           //
           return move(*this);

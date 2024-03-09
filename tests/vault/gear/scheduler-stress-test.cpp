@@ -397,8 +397,7 @@ namespace test {
 //                                 .weightRule(testLoad.value(1))
 //                                 .setSeed(55);
 //                  return testLoad.setWeight(1);
-                    return testLoad.pruningRule(testLoad.value(1))
-                                   .weightRule(testLoad.value(1));
+                    return testLoad.configure_isolated_nodes();
                   }
               };
             
