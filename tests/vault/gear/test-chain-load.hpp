@@ -49,11 +49,12 @@
  ** predecessor nodes; additionally, new chains can be spawned (to simulate the effect of
  ** data loading Jobs without predecessor) and chains can be deliberately pruned, possibly
  ** splitting the computation into several disjoint sub-graphs. Anyway, the computation always
- ** begins with the _root node_, proceeds over the node links and finally connects any open
- ** chains of computation to the _top node,_ leaving no dead end. The probabilistic rules
- ** controlling the topology can be configured using the lib::RandomDraw component, allowing
- ** either just to set a fixed probability or to define elaborate dynamic configurations
- ** based on the graph height or node connectivity properties.
+ ** begins with the _root node_, establishes the node links and marks each open end as an
+ ** _exit node_ — until all the nodes in the pre-allocated node space were visited. Hash
+ ** values of all exit nodes will be combined into one characteristic hash for the graph,
+ ** The probabilistic rules controlling the topology can be configured using the lib::RandomDraw
+ ** component, allowing either just to set a fixed probability or to define elaborate dynamic
+ ** configurations based on the graph height or node connectivity properties.
  ** - expansionRule: controls forking of the graph behind the current node
  ** - reductionRule: controls joining of the graph into a combining successor node
  ** - seedingRule: controls injection of new start nodes in the middle of the graph
@@ -606,7 +607,7 @@ namespace test {
           
           // prepare building blocks for the topology generation...
           auto moreNext  = [&]{ return next->size() < maxFan;      };
-          auto moreNodes = [&]{ return node < backNode();          };
+          auto moreNodes = [&]{ return node <= backNode();         };
           auto spaceLeft = [&]{ return moreNext() and moreNodes(); };
           auto addNode   = [&](size_t seed =0)
                               {
@@ -674,20 +675,10 @@ namespace test {
               ENSURE (not next->empty());
               ++level;
             }
-          ENSURE (node == backNode());
-          // connect ends of all remaining chains to top-Node
-          node->clear();
-          node->level = level;
+          ENSURE (node > backNode());
+          // all open nodes on last level become exit nodes
           for (Node* o : *next)
-            {
               calcNode(o);
-              if (apply (pruningRule_,o))
-                continue; // leave unconnected
-              node->addPred(o);
-            }
-          if (isnil (node->pred)) // last remains isolated
-            node->hash = this->getSeed();
-          calcNode(node);
           //
           return move(*this);
         }

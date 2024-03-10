@@ -103,7 +103,7 @@ namespace test {
                .buildTopology();
           
           // while building the graph, node hashes are computed
-          CHECK (testLoad.getHash() == 0x439FD852C19E2D68);
+          CHECK (testLoad.getHash() == 0x554F5086DE5B0861);
           
           
           BlockFlowAlloc bFlow;
@@ -114,7 +114,7 @@ namespace test {
                   .launch_and_wait();
           
           // invocation through Scheduler has reproduced all node hashes
-          CHECK (testLoad.getHash() == 0x439FD852C19E2D68);
+          CHECK (testLoad.getHash() == 0x554F5086DE5B0861);
         }
       
       
@@ -296,15 +296,16 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0x9E0C7D98B61E1789);
+          CHECK (graph.getHash() == 0x710D010554FEA614);
           
           stat = graph.computeGraphStatistics();
-          CHECK (stat.levels                    == 8);                         // expands faster, with only 8 levels
-          CHECK (stat.indicators[STAT_NODE].pL  == 4);                         // this time ∅ 4 Nodes / level
+          CHECK (stat.levels                    == 7);                         // expands faster, with only 7 levels
+          CHECK (stat.indicators[STAT_NODE].pL  == "4.5714286"_expect);        // this time ∅ 4.6 Nodes / level
           CHECK (stat.indicators[STAT_FORK].cnt == 7);                         // 7 »Fork« events
-          CHECK (stat.indicators[STAT_JOIN].cnt == 2);                         // but also 2 »Join« nodes...
-          CHECK (stat.indicators[STAT_JOIN].cL  == "0.92857143"_expect);       // which are totally concentrated towards end
-          CHECK (stat.indicators[STAT_EXIT].cnt == 1);                         // finally to connect to the single exit
+          CHECK (stat.indicators[STAT_EXIT].cnt == 10);                        // but 10 »Exit« nodes....
+          CHECK (stat.indicators[STAT_JOIN].cnt == 1);                         // and even one »Join« node....
+          CHECK (stat.indicators[STAT_EXIT].cL  == 1);                         // which are totally concentrated towards end
+          CHECK (stat.indicators[STAT_JOIN].cL  == 1);                         //  when nodes are exhausted
           
           
           // if the generation is allowed to run for longer,
@@ -315,14 +316,16 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (gra_2.getHash() == 0x28B121BE7F1F7362);
+          CHECK (gra_2.getHash() == 0x619491B22C3F8A6F);
           
           stat = gra_2.computeGraphStatistics();
-          CHECK (stat.levels                     == 37);                       // much more levels, as can be expected
-          CHECK (stat.indicators[STAT_NODE].pL   == "6.9189189"_expect);       // ∅ 7 Nodes per level
-          CHECK (stat.indicators[STAT_JOIN].pL   == "0.78378378"_expect);      // but also almost one join per level to deal with the limitation
+          CHECK (stat.levels                     == 36);                       // much more levels, as can be expected
+          CHECK (stat.indicators[STAT_NODE].pL   == "7.1111111"_expect);       // ∅ 7 Nodes per level
+          CHECK (stat.indicators[STAT_JOIN].pL   == "0.77777778"_expect);      // but also almost one join per level to deal with the limitation
           CHECK (stat.indicators[STAT_FORK].frac == "0.24609375"_expect);      // 25% forks (there is just not enough room for more forks)
-          CHECK (stat.indicators[STAT_JOIN].frac == "0.11328125"_expect);      // and 11% joins
+          CHECK (stat.indicators[STAT_JOIN].frac == "0.109375"_expect);        // and 10% joins
+          CHECK (stat.indicators[STAT_EXIT].cnt  == 3);                        // ...leading to 3 »Exit« nodes
+          CHECK (stat.indicators[STAT_EXIT].cL   == 1);                        // ....located at the very end
         }
       
       
@@ -347,14 +350,14 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0x1D201B70F18E995A);
+          CHECK (graph.getHash() == 0x3E9BFAE5E686BEB4);
           
           auto stat = graph.computeGraphStatistics();
-          CHECK (stat.levels                    == 9);                         // This connection pattern filled 9 levels
+          CHECK (stat.levels                    == 8);                         // This connection pattern filled 8 levels
           CHECK (stat.indicators[STAT_JOIN].cnt == 4);                         // we got 4 »Join« events (reductions=
           CHECK (stat.indicators[STAT_FORK].cnt == 1);                         // and the single expansion/fork
           CHECK (stat.indicators[STAT_FORK].cL  == 0.0);                       // ...sitting right at the beginning
-          CHECK (stat.indicators[STAT_NODE].cL  == "0.37890625"_expect);       // Nodes are concentrated towards the beginning
+          CHECK (stat.indicators[STAT_NODE].cL  == "0.42857143"_expect);       // Nodes are concentrated towards the beginning
           
           
           // expansion and reduction can counterbalance each other
@@ -364,15 +367,15 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0x8AF4BDAE5AA6880C);
+          CHECK (graph.getHash() == 0xB0335595D34F1D8D);
           
           stat = graph.computeGraphStatistics();
-          CHECK (stat.levels                    == 12);                        // This example runs a bit longer
-          CHECK (stat.indicators[STAT_NODE].pL  == "2.6666667"_expect);        // in the middle threading 3-5 Nodes per Level
+          CHECK (stat.levels                    == 11);                        // This example runs a bit longer
+          CHECK (stat.indicators[STAT_NODE].pL  == "2.9090909"_expect);        // in the middle threading 3-5 Nodes per Level
           CHECK (stat.indicators[STAT_FORK].cnt == 5);                         // with 5 expansions
           CHECK (stat.indicators[STAT_JOIN].cnt == 3);                         // and 3 reductions
-          CHECK (stat.indicators[STAT_FORK].cL  == "0.45454545"_expect);       // forks dominating earlier
-          CHECK (stat.indicators[STAT_JOIN].cL  == "0.66666667"_expect);       // while joins need forks as prerequisite
+          CHECK (stat.indicators[STAT_FORK].cL  == 0.5);                       // forks dominating earlier
+          CHECK (stat.indicators[STAT_JOIN].cL  == "0.73333333"_expect);       // while joins need forks as prerequisite
           
           
           // expansion bursts can be balanced with a heightened reduction intensity
@@ -415,18 +418,18 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0x11BB1409A61A9B78);
+          CHECK (graph.getHash() == 0xBC35A96B3CE1F39F);
           
           auto stat = graph.computeGraphStatistics();
-          CHECK (stat.levels                    == 8);                         // 8 Levels...
-          CHECK (stat.indicators[STAT_SEED].cnt == 11);                        // overall 11 »Seed« events generated several ongoing chains
+          CHECK (stat.levels                    == 7);                         // 7 Levels...
+          CHECK (stat.indicators[STAT_SEED].cnt == 12);                        // overall 12 »Seed« events generated several ongoing chains
           CHECK (stat.indicators[STAT_FORK].cnt == 0);                         // yet no branching/expanding
-          CHECK (stat.indicators[STAT_LINK].cnt == 19);                        // thus more and more chains were just carried on
-          CHECK (stat.indicators[STAT_LINK].pL == 2.375);                      // on average 2-3 per level are continuations
-          CHECK (stat.indicators[STAT_NODE].pL == 4);                          // leading to ∅ 4 Nodes per level
-          CHECK (stat.indicators[STAT_NODE].cL == "0.63392857"_expect);        // with nodes amassing towards the end
-          CHECK (stat.indicators[STAT_LINK].cL == "0.63157895"_expect);        // because there are increasingly more links to carry-on
-          CHECK (stat.indicators[STAT_JOIN].cL == "0.92857143"_expect);        // while joining only happens at the end when connecting to exit
+          CHECK (stat.indicators[STAT_LINK].cnt == 14);                        // thus more and more chains were just carried on
+          CHECK (stat.indicators[STAT_LINK].pL == 2);                          // on average 2-3 per level are continuations
+          CHECK (stat.indicators[STAT_NODE].pL == "4.5714286"_expect);         // leading to ∅ 4.5 Nodes per level
+          CHECK (stat.indicators[STAT_NODE].cL == "0.734375"_expect);          // with nodes amassing towards the end
+          CHECK (stat.indicators[STAT_LINK].cL == "0.64285714"_expect);        // because there are increasingly more links to carry-on
+          CHECK (stat.indicators[STAT_JOIN].cL == 1);                          // while joining only happens at the very end
           
           
           // combining random seed nodes with reduction leads to a processing pattern
@@ -492,21 +495,20 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0xAF4204DD69BB467C);
+          CHECK (graph.getHash() == 0x1D0A7C39647340AA);
           
           stat = graph.computeGraphStatistics();
-          CHECK (stat.levels                    == 15);                        //
+          CHECK (stat.levels                    == 14);                        //
           CHECK (stat.segments                  ==  5);                        // this time the graph is segregated into 5 parts
-          CHECK (stat.indicators[STAT_NODE].pS  == 6.4);                       // with 4 Nodes per segment
-          CHECK (stat.indicators[STAT_FORK].sL  == 0.0);                       // where »Fork« is always placed at the beginning of each segment
-          CHECK (stat.indicators[STAT_LINK].sL  == 0.5);                       // carry-on »Link« nodes in the very middle of the segment
-          CHECK (stat.indicators[STAT_EXIT].sL  == 1.0);                       // and several »Exit« at the end
-          CHECK (stat.indicators[STAT_EXIT].pS  == 2.6);                       // averaging 2.6 exits per segment (4·3 + 1)/5
-          CHECK (stat.indicators[STAT_SEED].cnt ==  5);                        // so overall we get 8 »Seed« nodes
+          CHECK (stat.indicators[STAT_NODE].pS  == "6.4"_expect);              // with 4 Nodes per segment
+          CHECK (stat.indicators[STAT_FORK].sL  == "0"_expect);                // where »Fork« is always placed at the beginning of each segment
+          CHECK (stat.indicators[STAT_EXIT].sL  == "1"_expect);                // and several »Exit« at the end
+          CHECK (stat.indicators[STAT_EXIT].pS  == "3"_expect);                // with always 3 exits per segment
+          CHECK (stat.indicators[STAT_SEED].cnt ==  5);                        // so overall we get 5 »Seed« nodes
           CHECK (stat.indicators[STAT_FORK].cnt ==  5);                        //                   5 »Fork« nodes
-          CHECK (stat.indicators[STAT_EXIT].cnt == 13);                        //                  13 »Exit« nodes
-          CHECK (stat.indicators[STAT_LINK].cnt == 14);                        //              and 14 interconnecting links
-          CHECK (stat.indicators[STAT_NODE].pL  == "2.1333333"_expect);        // leading to ∅ ~2 Nodes per level
+          CHECK (stat.indicators[STAT_EXIT].cnt == 15);                        //                  15 »Exit« nodes
+          CHECK (stat.indicators[STAT_LINK].cnt == 12);                        //              and 12 interconnecting links
+          CHECK (stat.indicators[STAT_NODE].pL  == "2.2857143"_expect);        // leading to ∅ ~2 Nodes per level
           
           
           // however, by chance, with more randomised pruning points...
@@ -517,14 +519,14 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0xF14A09EEFFEC7B18);
+          CHECK (graph.getHash() == 0x12BB22F76ECC5C1B);
           
           stat = graph.computeGraphStatistics();
           CHECK (stat.segments                  ==  1);                        // ...the graph can evade severing altogether
-          CHECK (stat.indicators[STAT_FORK].cnt ==  2);                        // with overall 2 »Fork«
-          CHECK (stat.indicators[STAT_EXIT].cnt ==  9);                        //          and 9 »Exit« nodes
-          CHECK (stat.indicators[STAT_EXIT].pL == "1.2857143"_expect);         // ∅ 1.3 exits per level
-          CHECK (stat.indicators[STAT_NODE].pL == "4.5714286"_expect);         // ∅ 4.6 nodes per level
+          CHECK (stat.indicators[STAT_FORK].cnt ==  3);                        // with overall 3 »Fork«
+          CHECK (stat.indicators[STAT_EXIT].cnt == 10);                        //         and 10 »Exit« nodes
+          CHECK (stat.indicators[STAT_EXIT].pL == "1.6666667"_expect);         // ∅ 1.6 exits per level
+          CHECK (stat.indicators[STAT_NODE].pL == "5.3333333"_expect);         // ∅ 5.3 nodes per level
           
 
           graph.expansionRule(graph.rule()); // reset
@@ -540,22 +542,22 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0x17B66B1A4DE2172A);
+          CHECK (graph.getHash() == 0xBFFA04FE8202C708);
           
-          // NOTE: this example produced 10 disjoint graph parts,
+          // NOTE: this example produced 11 disjoint graph parts,
           //       which however start and end interleaved
           stat = graph.computeGraphStatistics();
-          CHECK (stat.levels                    == 13);                        // Generation carries on for 13 levels
-          CHECK (stat.segments                  ==  2);                        // NOTE: the detection of segments FAILS here (due to interleaved starts)
+          CHECK (stat.levels                    == 12);                        // Generation carries on for 12 levels
+          CHECK (stat.segments                  ==  1);                        // NOTE: the detection of segments FAILS here (due to interleaved starts)
           CHECK (stat.indicators[STAT_SEED].cnt == 12);                        // 12 »Seed« nodes
           CHECK (stat.indicators[STAT_EXIT].cnt == 11);                        // 11 »Exit« nodes (including the isolated, last one)
           CHECK (stat.indicators[STAT_LINK].cnt == 10);                        // 10 interconnecting links
           CHECK (stat.indicators[STAT_JOIN].cnt ==  1);                        // and one additional »Join«
-          CHECK (stat.indicators[STAT_JOIN].cL  == "0.91666667"_expect);       // ....appended at graph completion
-          CHECK (stat.indicators[STAT_NODE].pL  == "2.4615385"_expect);        // overall ∅ 2½ nodes per level
-          CHECK (stat.indicators[STAT_NODE].cL  == "0.48697917"_expect);       // with generally levelled distribution
-          CHECK (stat.indicators[STAT_SEED].cL  == "0.46527778"_expect);       // also for the seeds
-          CHECK (stat.indicators[STAT_EXIT].cL  == "0.58333333"_expect);       // and the exits
+          CHECK (stat.indicators[STAT_JOIN].cL  == "1"_expect);                // ....appended at graph completion
+          CHECK (stat.indicators[STAT_NODE].pL  == "2.6666667"_expect);        // overall ∅ 2⅔ nodes per level (converging ⟶ 3)
+          CHECK (stat.indicators[STAT_NODE].cL  == "0.52840909"_expect);       // with generally levelled distribution
+          CHECK (stat.indicators[STAT_SEED].cL  == "0.5"_expect);              // also for the seeds
+          CHECK (stat.indicators[STAT_EXIT].cL  == "0.62809917"_expect);       // and the exits
           
           
           // The next example is »interesting« insofar it shows self-similarity
@@ -570,13 +572,13 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0xDAF51E27A6D91151);
+          CHECK (graph.getHash() == 0xFB0A0EA9B7072507);
           
           stat = graph.computeGraphStatistics();
-          CHECK (stat.levels                    == 9);                         // Generation carries on for 13 levels
+          CHECK (stat.levels                    == 8);                         // Generation carries on for 13 levels
           CHECK (stat.indicators[STAT_JOIN].pL  == 1);                         // with one »Join« event per level on average
-          CHECK (stat.indicators[STAT_SEED].cnt == 21);                        // seeds are injected with /fixed rate/, meaning that
-          CHECK (stat.indicators[STAT_SEED].pL  == "2.3333333"_expect);        // there is one additional seed for every node in previous level
+          CHECK (stat.indicators[STAT_SEED].cnt == 22);                        // seeds are injected with /fixed rate/, meaning that
+          CHECK (stat.indicators[STAT_SEED].pL  == 2.75);                      // there is one additional seed for every node in previous level
         }
       
       
@@ -617,21 +619,21 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0xCAFA895DF9BDFB70);
+          CHECK (graph.getHash() == 0x6B5D7BD3130044E2);
           
           auto stat = graph.computeGraphStatistics();
-          CHECK (stat.indicators[STAT_NODE].cL   == "0.49970598"_expect);      // The resulting distribution of nodes is stable and even
-          CHECK (stat.levels                     == 94);                       // ...arranging the 256 nodes into 94 levels
-          CHECK (stat.indicators[STAT_NODE].pL   == "2.7234043"_expect);       // ...with ∅ 2.7 nodes per level
-          CHECK (stat.indicators[STAT_SEED].pL   == "1.0319149"_expect);       // comprised of ∅ 1 seed per level
-          CHECK (stat.indicators[STAT_JOIN].pL   == "0.4787234"_expect);       //            ~ ∅ ½ join per level
-          CHECK (stat.indicators[STAT_EXIT].pL   == "0.32978723"_expect);      //            ~ ∅ ⅓ exit per level
-          CHECK (stat.indicators[STAT_SEED].frac == "0.37890625"_expect);      // overall, 38% nodes are seeds
-          CHECK (stat.indicators[STAT_EXIT].frac == "0.12109375"_expect);      //      and 12% are exit nodes
-          CHECK (stat.indicators[STAT_SEED].cLW  == "0.47963675"_expect);      // the density centre of all node kinds
-          CHECK (stat.indicators[STAT_LINK].cLW  == "0.49055446"_expect);      //  ...is close to the middle
-          CHECK (stat.indicators[STAT_JOIN].cLW  == "0.53299599"_expect);
-          CHECK (stat.indicators[STAT_EXIT].cLW  == "0.55210026"_expect);
+          CHECK (stat.indicators[STAT_NODE].cL   == "0.50509511"_expect);      // The resulting distribution of nodes is stable and balanced
+          CHECK (stat.levels                     == 93);                       // ...arranging the 256 nodes into 93 levels
+          CHECK (stat.indicators[STAT_NODE].pL   == "2.7526882"_expect);       // ...with ∅ 2.7 nodes per level
+          CHECK (stat.indicators[STAT_SEED].pL   == "1.0537634"_expect);       // comprised of ∅ 1 seed per level
+          CHECK (stat.indicators[STAT_JOIN].pL   == "0.48387097"_expect);      //            ~ ∅ ½ join per level
+          CHECK (stat.indicators[STAT_EXIT].pL   == "0.34408602"_expect);      //            ~ ∅ ⅓ exit per level
+          CHECK (stat.indicators[STAT_SEED].frac == "0.3828125"_expect);       // overall, 38% nodes are seeds
+          CHECK (stat.indicators[STAT_EXIT].frac == "0.125"_expect);           //      and ⅛ are exit nodes
+          CHECK (stat.indicators[STAT_SEED].cLW  == "0.49273514"_expect);      // the density centre of all node kinds
+          CHECK (stat.indicators[STAT_LINK].cLW  == "0.49588657"_expect);      //  ...is close to the middle
+          CHECK (stat.indicators[STAT_JOIN].cLW  == "0.52481335"_expect);
+          CHECK (stat.indicators[STAT_EXIT].cLW  == "0.55716297"_expect);
           
           
           
@@ -646,13 +648,13 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0x38788543EA81C664);
+          CHECK (graph.getHash() == 0x20122CF2A1F301D1);
           
           stat = graph.computeGraphStatistics();
-          CHECK (stat.levels                     == 78);                       //
-          CHECK (stat.indicators[STAT_NODE].pL   == "3.2820513"_expect);       // ∅ 3.3 nodes per level
-          CHECK (stat.indicators[STAT_SEED].frac == "0.41796875"_expect);      // 42% seed
-          CHECK (stat.indicators[STAT_EXIT].frac == "0.140625"_expect);        // 14% exit
+          CHECK (stat.levels                     == 77);                       //
+          CHECK (stat.indicators[STAT_NODE].pL   == "3.3246753"_expect);       // ∅ 3.3 nodes per level
+          CHECK (stat.indicators[STAT_SEED].frac == "0.421875"_expect);        // 42% seed
+          CHECK (stat.indicators[STAT_EXIT].frac == "0.14453125"_expect);      // 14% exit
           
           
           
@@ -715,14 +717,14 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0x904E12AB04888BD1);
+          CHECK (graph.getHash() == 0x7C0453E7A4F6418D);
           
           stat = graph.computeGraphStatistics();
-          CHECK (stat.levels                   == 45);                         //
-          CHECK (stat.indicators[STAT_NODE].pL == "5.6888889"_expect);         // ∅ 5.7 nodes per level
-          CHECK (stat.indicators[STAT_SEED].pL == "2.3555556"_expect);         // ∅ 2.4 seeds
-          CHECK (stat.indicators[STAT_LINK].pL == "2.4888889"_expect);         // ∅ 2.5 link nodes
-          CHECK (stat.indicators[STAT_EXIT].pL == "0.84444444"_expect);        // ∅ 0.8 join/exit nodes — indicating stronger spread/reduction
+          CHECK (stat.levels                   == 44);                         //
+          CHECK (stat.indicators[STAT_NODE].pL == "5.8181818"_expect);         // ∅ 5.7 nodes per level
+          CHECK (stat.indicators[STAT_SEED].pL == "2.4318182"_expect);         // ∅ 2.4 seeds
+          CHECK (stat.indicators[STAT_LINK].pL == "2.4772727"_expect);         // ∅ 2.5 link nodes
+          CHECK (stat.indicators[STAT_EXIT].pL == "1"_expect);                 // ∅ 1   join/exit nodes — indicating stronger spread/reduction
           
           
           
@@ -740,17 +742,17 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0xD82AB42040F5EBF7);
+          CHECK (graph.getHash() == 0x904A906B7859301A);
           
           stat = graph.computeGraphStatistics();
-          CHECK (stat.levels                     == 22);                       // ▶ resulting graph is very dense, hitting the parallelisation limit
-          CHECK (stat.indicators[STAT_NODE].pL   == "11.636364"_expect);       // ∅ almost 12 nodes per level !
-          CHECK (stat.indicators[STAT_SEED].pL   == "6.5454545"_expect);       // comprised of ∅ 6.5 seeds
-          CHECK (stat.indicators[STAT_LINK].pL   == "2.2727273"_expect);       //              ∅ 2.3 links
-          CHECK (stat.indicators[STAT_JOIN].pL   == "2.6818182"_expect);       //              ∅ 2.7 joins
-          CHECK (stat.indicators[STAT_EXIT].pL   == "2.4090909"_expect);       //              ∅ 2.4 exits
+          CHECK (stat.levels                     == 21);                       // ▶ resulting graph is very dense, hitting the parallelisation limit
+          CHECK (stat.indicators[STAT_NODE].pL   == "12.190476"_expect);       // ∅ more than 12 nodes per level !
+          CHECK (stat.indicators[STAT_SEED].pL   == "6.8571429"_expect);       // comprised of ∅ 6.9 seeds
+          CHECK (stat.indicators[STAT_LINK].pL   == "2.3809524"_expect);       //              ∅ 2.4 links
+          CHECK (stat.indicators[STAT_JOIN].pL   == "2.8095238"_expect);       //              ∅ 2.8 joins
+          CHECK (stat.indicators[STAT_EXIT].pL   == "2.5714286"_expect);       //              ∅ 2.6 exits
           CHECK (stat.indicators[STAT_SEED].frac == "0.5625"_expect    );      // 56% seed
-          CHECK (stat.indicators[STAT_EXIT].frac == "0.20703125"_expect);      // 20% exit
+          CHECK (stat.indicators[STAT_EXIT].frac == "0.2109375"_expect);       // 21% exit
           
           
           
@@ -764,15 +766,15 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
              ;
-          CHECK (graph.getHash() == 0xD65FFB73A3C1B4B7);
+          CHECK (graph.getHash() == 0x9453C56534FF9CD6);
           
           stat = graph.computeGraphStatistics();
-          CHECK (stat.levels                     == 27);                       //
-          CHECK (stat.indicators[STAT_NODE].pL   == "9.4814815"_expect);       // ∅ 9.5 nodes per level — ⅓ less dense
-          CHECK (stat.indicators[STAT_SEED].frac == "0.3984375"_expect);       // 40% seed
-          CHECK (stat.indicators[STAT_LINK].frac == "0.45703125"_expect);      // 45% link
+          CHECK (stat.levels                     == 26);                       //
+          CHECK (stat.indicators[STAT_NODE].pL   == "9.8461538"_expect);       // ∅ 9.8 nodes per level — ⅓ less dense
+          CHECK (stat.indicators[STAT_SEED].frac == "0.40234375"_expect);      // 40% seed
+          CHECK (stat.indicators[STAT_LINK].frac == "0.453125"_expect);        // 45% link
           CHECK (stat.indicators[STAT_JOIN].frac == "0.109375"_expect );       // 11% joins
-          CHECK (stat.indicators[STAT_EXIT].frac == "0.0859375"_expect);       //  8% exits  — hinting at very strong reduction
+          CHECK (stat.indicators[STAT_EXIT].frac == "0.08984375"_expect);      //  8% exits  — hinting at very strong reduction
           
           
           // The same setup with different seeing produces a
@@ -785,11 +787,11 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0x53C7B04F8D234E66);
+          CHECK (graph.getHash() == 0xA57727C2ED277C87);
           
           stat = graph.computeGraphStatistics();
-          CHECK (stat.levels                     == 130);                      //
-          CHECK (stat.indicators[STAT_NODE].pL   == "1.9692308"_expect);       // ∅ ~2 nodes per level — much lesser density
+          CHECK (stat.levels                     == 129);                      //
+          CHECK (stat.indicators[STAT_NODE].pL   == "1.9844961"_expect);       // ∅ ~2 nodes per level — much lesser density
           CHECK (stat.indicators[STAT_SEED].frac == "0.3359375"_expect);       // 33% seed
           CHECK (stat.indicators[STAT_LINK].frac == "0.4140625"_expect);       // 42% link
           CHECK (stat.indicators[STAT_JOIN].frac == "0.1640625"_expect);       // 16% join
@@ -806,15 +808,15 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0x7DA33206D0773991);
+          CHECK (graph.getHash() == 0x4D0575F8BD269FC3);
           
           stat = graph.computeGraphStatistics();
-          CHECK (stat.levels                   == 21);                         // rather dense
-          CHECK (stat.indicators[STAT_NODE].pL == "12.190476"_expect);         // ∅ 12.2 nodes per level
-          CHECK (stat.indicators[STAT_SEED].pL == "7.2380952"_expect);         // ∅  7.2 seeds
-          CHECK (stat.indicators[STAT_LINK].pL == "3.047619"_expect);          // ∅  3   links
-          CHECK (stat.indicators[STAT_JOIN].pL == "1.8571429"_expect);         // ∅  1.9 joins
-          CHECK (stat.indicators[STAT_EXIT].pL == "0.66666667"_expect);        // ∅  0.6 exits
+          CHECK (stat.levels                   == 20);                         // rather dense
+          CHECK (stat.indicators[STAT_NODE].pL == "12.8"_expect);              // ∅ 12.8 nodes per level
+          CHECK (stat.indicators[STAT_SEED].pL == "7.65"_expect);              // ∅  7.7 seeds
+          CHECK (stat.indicators[STAT_LINK].pL == "3.15"_expect);              // ∅  3   links
+          CHECK (stat.indicators[STAT_JOIN].pL == "1.9"_expect);               // ∅  1.9 joins
+          CHECK (stat.indicators[STAT_EXIT].pL == "0.95"_expect);              // ∅ ~1   exit per level
           
           
           
@@ -838,19 +840,19 @@ namespace test {
 //             .printTopologyDOT()
 //             .printTopologyStatistics()
                ;
-          CHECK (graph.getHash() == 0x259C7CA1B86E6C61);
+          CHECK (graph.getHash() == 0x25114F8770B1B78E);
           
           stat = graph.computeGraphStatistics();
-          CHECK (stat.levels                     == 31);                       // rather high concurrency
+          CHECK (stat.levels                     == 30);                       // rather high concurrency
           CHECK (stat.indicators[STAT_SEED].cnt  ==  1);                       // a single seed
-          CHECK (stat.indicators[STAT_EXIT].cnt  ==  1);                       // ...and exit
-          CHECK (stat.indicators[STAT_NODE].pL   == "8.2580645"_expect);       // ∅ 8.25 nodes per level
+          CHECK (stat.indicators[STAT_EXIT].cnt  ==  4);                       // ...and 4 exit when running out of node space
+          CHECK (stat.indicators[STAT_NODE].pL   == "8.5333333"_expect);       // ∅ 8.25 nodes per level
           CHECK (stat.indicators[STAT_FORK].frac == "0.16015625"_expect);      // 16% forks
-          CHECK (stat.indicators[STAT_LINK].frac == "0.76953125"_expect);      // 77% links
-          CHECK (stat.indicators[STAT_JOIN].frac == "0.10546875"_expect);      // 10% joins
+          CHECK (stat.indicators[STAT_LINK].frac == "0.76171875"_expect);      // 77% links
+          CHECK (stat.indicators[STAT_JOIN].frac == "0.1015625"_expect);       // 10% joins
           CHECK (stat.indicators[STAT_KNOT].frac == "0.0390625"_expect);       //  3% »Knot« nodes which both join and fork
-          CHECK (stat.indicators[STAT_FORK].cLW  == "0.41855453"_expect);      // density centre of forks lies earlier
-          CHECK (stat.indicators[STAT_JOIN].cLW  == "0.70806275"_expect);      // while density centre of joins heavily leans towards end
+          CHECK (stat.indicators[STAT_FORK].cLW  == "0.43298744"_expect);      // density centre of forks lies earlier
+          CHECK (stat.indicators[STAT_JOIN].cLW  == "0.64466378"_expect);      // while density centre of joins leans rather towards end
         }
       
       
@@ -922,12 +924,9 @@ namespace test {
        * @remark This test uses parameter rules with some expansion and a
        *         pruning rule with 60% probability. This setup is known to
        *         create a sequence of tiny isolated trees with 4 nodes each;
-       *         there are 8 such groups, each with a fork and two exit nodes;
-       *         the last group is wired differently however, because there the
-       *         limiting-mechanism of the topology generation activates to ensure
-       *         that the last node is an exit node. The following code traverses
-       *         all nodes grouped into 4-node clusters to verify this regular
-       *         pattern and the calculated hashes.
+       *         there are 8 such groups, each with a fork and two exit nodes.
+       *         The following code traverses all nodes grouped into 4-node
+       *         clusters to verify the regular pattern and calculated hashes.
        */
       void
       verify_reseed_recalculate()
@@ -939,7 +938,7 @@ namespace test {
                .buildTopology();
           
           CHECK (8 == graph.allNodes().filter(isStartNode).count());
-          CHECK (15 == graph.allNodes().filter(isExitNode).count());
+          CHECK (16 == graph.allNodes().filter(isExitNode).count());
           
           
           // verify computation of the globally combined exit hash
@@ -947,14 +946,14 @@ namespace test {
                                  .filter(isExitNode)
                                  .transform([](Node& n){ return n.hash; })
                                  .effuse();
-          CHECK (15 == exitHashes.size());
+          CHECK (16 == exitHashes.size());
           
           size_t combinedHash{0};
-          for (uint i=0; i <15; ++i)
+          for (uint i=0; i <16; ++i)
             boost::hash_combine (combinedHash, exitHashes[i]);
           
           CHECK (graph.getHash() == combinedHash);
-          CHECK (graph.getHash() == 0x59AC21CFAE268613);
+          CHECK (graph.getHash() == 0x33B00C450215EB00);
           
           
           // verify connectivity and local exit hashes
@@ -967,24 +966,12 @@ namespace test {
                    CHECK (isInner(b));
                    CHECK (not a->weight);
                    CHECK (not b->weight);
-                   if (b->succ.size() == 2)
-                     {
-                       CHECK (isExit(c));
-                       CHECK (isExit(d));
-                       CHECK (c->hash == 0xAEDC04CFA2E5B999);
-                       CHECK (d->hash == 0xAEDC04CFA2E5B999);
-                       CHECK (c->weight == 4);
-                       CHECK (d->weight == 4);
-                     }
-                   else
-                     { // the last chunk is wired differently
-                       CHECK (b->succ.size() == 1);
-                       CHECK (b->succ[0] == c);
-                       CHECK (isInner(c));
-                       CHECK (isExit(d));
-                       CHECK (graph.nodeID(d) == 31);
-                       CHECK (d->hash == 0xC4AE6EB741C22FCE);
-                     }      //   this is the global exit node
+                   CHECK (isExit(c));
+                   CHECK (isExit(d));
+                   CHECK (c->hash == 0xAEDC04CFA2E5B999);
+                   CHECK (d->hash == 0xAEDC04CFA2E5B999);
+                   CHECK (c->weight == 4);
+                   CHECK (d->weight == 4);
                  });
           
           
@@ -1002,30 +989,22 @@ namespace test {
                  });
           
           graph.recalculate();
-          CHECK (graph.getHash() == 0xA76EA46C6C004CA2);
+          CHECK (graph.getHash() == 0x17427F67DBC8BCC0);
           graph.allNodePtr().grouped<4>()
                .foreach([&](auto group)
                  {  // verify hashes were recalculated
                    //  based on the new seed
                    auto& [a,b,c,d] = *group;
                    CHECK (a->hash == 55);
-                   if (b->succ.size() == 2)
-                     {
-                       CHECK (c->hash == 0x7887993B0ED41395);
-                       CHECK (d->hash == 0x7887993B0ED41395);
-                     }
-                   else
-                     {
-                       CHECK (graph.nodeID(d) == 31);
-                       CHECK (d->hash == 0x548F240CE91A291C);
-                     }
+                   CHECK (c->hash == 0x7887993B0ED41395);
+                   CHECK (d->hash == 0x7887993B0ED41395);
                  });
           
           // seeding and recalculation are reproducible
           graph.setSeed(0).recalculate();
-          CHECK (graph.getHash() == 0x59AC21CFAE268613);
+          CHECK (graph.getHash() == 0x33B00C450215EB00);
           graph.setSeed(55).recalculate();
-          CHECK (graph.getHash() == 0xA76EA46C6C004CA2);
+          CHECK (graph.getHash() == 0x17427F67DBC8BCC0);
         }
       
       
@@ -1072,20 +1051,20 @@ namespace test {
                .configureShape_short_segments3_interleaved()
                .buildTopology();
           
-          CHECK (graph.getHash() == 0xD2F292D864CF8086);
+          CHECK (graph.getHash() == 0x554F5086DE5B0861);
           
           graph.clearNodeHashes();
           CHECK (graph.getHash() == 0);
           
           // this is used by the timing benchmark
           graph.performGraphSynchronously();
-          CHECK (graph.getHash() == 0xD2F292D864CF8086);
+          CHECK (graph.getHash() == 0x554F5086DE5B0861);
           
           graph.clearNodeHashes();
           CHECK (graph.getHash() == 0);
           
           graph.calcRuntimeReference();
-          CHECK (graph.getHash() == 0xD2F292D864CF8086);
+          CHECK (graph.getHash() == 0x554F5086DE5B0861);
         }
       
       
@@ -1107,7 +1086,7 @@ namespace test {
           
           // compute aggregated level data....
           auto level = testLoad.allLevelWeights().effuse();
-          CHECK (level.size() == 27);
+          CHECK (level.size() == 26);
           
           // visualise and verify this data......
           auto node  = testLoad.allNodePtr().effuse();
@@ -1181,7 +1160,7 @@ namespace test {
           // summing up weight factors, with example concurrency ≔ 4
           uint concurrency = 4;
           auto steps = testLoad.levelScheduleSequence(concurrency).effuse();
-          CHECK (steps.size() == 27);
+          CHECK (steps.size() == 26);
           
           // for documentation/verification: show also the boost factor and the resulting weight factor
           auto boost = [&](uint i){ return level[i].nodes / std::ceil (double(level[i].nodes)/concurrency); };
@@ -1216,8 +1195,7 @@ namespace test {
           CHECK (stepStr(22) == "lev:22  nodes:6  Σw: 6  3.0 Δ2.000 ▿▿ 26.167"_expect);
           CHECK (stepStr(23) == "lev:23  nodes:6  Σw: 6  3.0 Δ2.000 ▿▿ 28.167"_expect);
           CHECK (stepStr(24) == "lev:24  nodes:10 Σw: 9  3.3 Δ2.700 ▿▿ 30.867"_expect);
-          CHECK (stepStr(25) == "lev:25  nodes:2  Σw: 2  2.0 Δ1.000 ▿▿ 31.867"_expect);
-          CHECK (stepStr(26) == "lev:26  nodes:1  Σw: 1  1.0 Δ1.000 ▿▿ 32.867"_expect);
+          CHECK (stepStr(25) == "lev:25  nodes:3  Σw: 4  3.0 Δ1.333 ▿▿ 32.200"_expect);
         }
       
       
