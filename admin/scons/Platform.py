@@ -79,6 +79,9 @@ def configure(env):
     if not conf.CheckCXXHeader('functional'):
         problems.append('We rely on the C++11 functor objects.')
     
+    if not conf.CheckLibWithHeader('stdc++fs', 'filesystem', 'C++'):
+        problems.append('We need the C++17 filesystem support.')
+    
     if not conf.CheckCXXHeader('boost/config.hpp'):
         problems.append('We need the C++ boost-libraries.')
     else:

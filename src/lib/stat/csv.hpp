@@ -1,21 +1,24 @@
 /*
- *  csv - parser and encoder
- *
- *  Copyright 2021, Hermann Vosseler <Ichthyostega@web.de>
- *
- *  This file is part of the Yoshimi-Testsuite, which is free software:
- *  you can redistribute and/or modify it under the terms of the GNU
- *  General Public License as published by the Free Software Foundation,
- *  either version 3 of the License, or (at your option) any later version.
- *
- *  Yoshimi-Testsuite is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with yoshimi.  If not, see <http://www.gnu.org/licenses/>.
- ***************************************************************/
+  CSV.hpp  -  Parser and Encoder for CSV data
+
+  Copyright (C)         Lumiera.org
+    2022,               Hermann Vosseler <Ichthyostega@web.de>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+*/
 
 
 /** @file csv.hpp
@@ -36,159 +39,171 @@
  ** - only quoted fields may contain whitespace or comma
  ** - no escaping of quotes, i.e. no quotes within quotes
  ** [RFC 4180]: https://datatracker.ietf.org/doc/html/rfc4180
- ** 
- ** @todo WIP as of 9/21
- ** @see util::DataFile used for [Timing statistics](\ref TimingObservation.hpp)
- ** 
+ ** @see lib::stat::DataFile
+ **
  */
 
 
+#ifndef LIB_STAT_CSV_H
+#define LIB_STAT_CSV_H
 
-#ifndef TESTRUNNER_UTIL_CSV_HPP_
-#define TESTRUNNER_UTIL_CSV_HPP_
-
-
-#include "util/error.hpp"
-#include "util/format.hpp"
-#include "util/regex.hpp"
+#include "lib/error.hpp"
+#include "lib/nocopy.hpp"
+#include "lib/format-string.hpp"
+#include "lib/format-obj.hpp"
+#include "lib/stat/regex.hpp"
 
 #include <limits>
 #include <string>
 
+namespace lib {
+namespace stat {
+  
+  namespace error = lumiera::error;
 
-namespace util {
-
-using std::regex;
-using std::string;
-
-namespace { // Implementation details...
-
-    const string MATCH_SINGLE_TOKEN {R"~(([^,;"\s]*)\s*)~"};
-    const string MATCH_QUOTED_TOKEN {R"~("([^"]*)"\s*)~"};
-    const string MATCH_DELIMITER    {R"~((?:^|,|;)\s*)~"};
-
+  using util::_Fmt;
+  using util::toString;
+  using std::string;
+  using std::regex;
+  
+  
+  namespace { // Implementation details...
+  
+    const string MATCH_SINGLE_TOKEN { R"~(([^,;"\s]*)\s*)~"};
+    const string MATCH_QUOTED_TOKEN { R"~("([^"]*)"\s*)~" };
+    const string MATCH_DELIMITER    { R"~((?:^|,|;)\s*)~" };
+    
     const regex ACCEPT_FIELD{ MATCH_DELIMITER + "(?:"+ MATCH_QUOTED_TOKEN +"|"+ MATCH_SINGLE_TOKEN +")"
                             , regex::optimize};
-
-
+    
     template<typename VAL>
-    inline string format4Csv(VAL const& val)
+    inline string
+    format4Csv (VAL const& val)
     {
-        std::ostringstream oss;
-        oss.precision(std::numeric_limits<VAL>::digits10);
-        oss << val;
-        return oss.str();
+      std::ostringstream oss;
+      oss.precision (std::numeric_limits<VAL>::digits10);  /////////////////////////////OOO herausfinden ob hier lexical_cast genügt ==> dann toString()
+      oss << val;
+      return oss.str();
     }
-    inline string format4Csv(string const& val)
+    
+    inline string
+    format4Csv (string const& val)
     {
-        return '"'+val+'"';
+      return '"'+val+'"';
     }
-    inline string format4Csv(bool boo)
+    
+    inline string
+    format4Csv (bool boo)
     {
-        return formatVal(boo);
+      return util::showBool(boo);  ///////////////////////OOO würde toSting() das korrekt hinbekommen
     }
-
-}//(End)Implementation
-
-
-/**
- * Parser to split one line of CSV data into fields.
- * @remarks iterator-like throw-away object
- *  - the `bool` evaluation indicates more fields to extract
- *  - dereference to get the field as string
- *  - increment to move to the next field
- * @throws error::Invalid on CSV format violation
- */
-class CsvLine
+  }//(End)Implementation
+  
+  
+  /**
+   * Format and append a data value to a CSV string representation
+   */
+  template<typename VAL>
+  inline void
+  appendCsvField (string& csv, VAL const& val)
+  {
+    csv += (0 == csv.length()? "":",")
+         + format4Csv(val);
+  }
+  
+  
+  /**
+   * Parser to split one line of CSV data into fields.
+   * @remarks iterator-like throw-away object
+   *  - the `bool` evaluation indicates more fields to extract
+   *  - dereference to get the field as string
+   *  - increment to move to the next field
+   * @throws error::Invalid on CSV format violation
+   * @todo 3/24 should be rewritten as Lumiera Forward Iterator
+   */
+  class CsvLine
     : util::NonCopyable
-    , MatchSeq
-{
-    string const& line_;
-    size_t   field_;
-    iterator curr_;
-    size_t   pos_;
+    , util::MatchSeq
+    {
+      string const& line_;
+      size_t   field_;
+      iterator curr_;
+      size_t   pos_;
 
-public:
-    CsvLine(string const& line)
+    public:
+      CsvLine (string const& line)
         : MatchSeq(line, ACCEPT_FIELD)
         , line_{line}
         , field_{0}
         , curr_{MatchSeq::begin()}
         , pos_{0}
-    { }
-
-    explicit operator bool()
-    {
-        return isValid();
-    }
-
-    string operator*()
-    {
-        if (not isValid()) fail();
-        auto& mat = *curr_;
-        return mat[2].matched? mat[2]
-                             : mat[1];
-    }
-
-    void operator++()
-    {
-        if (not isValid())
+        { }
+      
+      explicit operator bool()  const
+        {
+          return isValid ();
+        }
+      
+      string operator*()  const
+        {
+          if (not isValid ()) fail();
+          auto& mat = *curr_;
+          return mat[2].matched? mat[2]
+                               : mat[1];
+        }
+      
+      void
+      operator++()
+        {
+          if (not isValid())
             fail();
-        pos_ = curr_->position() + curr_->length();
-        ++curr_;
-        if (pos_ < line_.length() and not isValid())
-            fail();
-        ++field_;
-    }
-
-    size_t getParsedFieldCnt()
-    {
-        return field_;
-    }
-
-    bool isValid()
-    {
-        return curr_ != end()
-           and curr_->position() == pos_
-           and not curr_->empty();
-    }
-
-    bool isParseFail()
-    {
-        return curr_ != end()
-           and not isValid();
-    }
-
-    void fail()
-    {
-        if (curr_ == end())
-            if (pos_ >= line_.length())
-                throw error::Invalid("Only "+formatVal(field_)+" data fields. Line:"+line_);
-            else
-                throw error::Invalid("Garbage after last field. Line:"
-                                    +line_.substr(0,pos_)+"|↯|"+line_.substr(pos_));
-        else
-            if (pos_ != curr_->position())
-                throw error::Invalid("Garbage before field("+formatVal(field_+1)+"):"
-                                    +line_.substr(0,pos_)+"|↯|"+line_.substr(pos_));
-            else
-                throw error::Invalid("CSV parse floundered. Line:"+line_);
-    }
-};
-
-
-
-/**
- * Format and append a data value to a CSV string representation
- */
-template<typename VAL>
-inline void appendCsvField(string& csv, VAL const& val)
-{
-    csv += (0 == csv.length()? "":",")
-         + format4Csv(val);
-}
-
-
-
-} // namespace util
-#endif /*TESTRUNNER_UTIL_CSV_HPP_*/
+          pos_ = curr_->position() + curr_->length();
+          ++curr_;
+          if (pos_ < line_.length() and not isValid())
+            fail ();
+          ++field_;
+        }
+      
+      size_t
+      getParsedFieldCnt()
+        {
+          return field_;
+        }
+      
+      bool
+      isValid()  const
+        {
+          return curr_ != end()
+             and pos_ == size_t(curr_->position())
+             and not curr_->empty();
+        }
+      
+      bool
+      isParseFail()  const
+        {
+          return curr_ != end()
+             and not isValid();
+        }
+      
+      void
+      fail()  const
+        {
+          if (curr_ == end())
+              if (pos_ >= line_.length())
+                  throw error::Invalid{_Fmt{"Only %d data fields. Line:%s"}
+                                           % field_ % line_};
+              else
+                  throw error::Invalid{_Fmt{"Garbage after last field. Line:%s|↯|%s"}
+                                           % line_.substr(0,pos_) % line_.substr(pos_)};
+          else
+              if (pos_ != curr_->position())
+                  throw error::Invalid{_Fmt{"Garbage before field(%d):%s|↯|%s"}
+                                           % (field_+1)
+                                           % line_.substr(0,pos_) % line_.substr(pos_)};
+              else
+                  throw error::Invalid{"CSV parse floundered. Line:"+toString(line_)};
+        }
+    };
+  
+}} // namespace lib::stat
+#endif /*LIB_STAT_CSV_H*/
