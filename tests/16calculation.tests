@@ -1,0 +1,12 @@
+TESTING "Library Test Suite: calculation" ./test-suite --group=calculation
+
+
+
+PLANNED "Data Table with CSV storage" DataCSV_test <<END
+return: 0
+END
+
+
+PLANNED "Statistic and Regression" Statistic_test << END
+return: 0
+END

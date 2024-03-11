@@ -20,6 +20,11 @@ return: 0
 END
 
 
+PLANNED "Temporary working directory" TempDir_test <<END
+return: 0
+END
+
+
 TEST "Helper for event registration and verification" EventLog_test <<END
 err-lit: __Log_condition_violated__
 err-lit: FAILED to match("γ")
