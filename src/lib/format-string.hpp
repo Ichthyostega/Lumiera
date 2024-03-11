@@ -108,6 +108,7 @@
 #define UTIL_FORMAT_STRING_H
 
 #include "lib/error.hpp"
+#include "lib/symbol.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/meta/util.hpp"
 #include "lib/meta/size-trait.hpp"

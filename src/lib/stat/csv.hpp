@@ -141,12 +141,12 @@ namespace stat {
       
       explicit operator bool()  const
         {
-          return isValid ();
+          return isValid();
         }
       
       string operator*()  const
         {
-          if (not isValid ()) fail();
+          if (not isValid()) fail();
           auto& mat = *curr_;
           return mat[2].matched? mat[2]
                                : mat[1];
@@ -196,12 +196,12 @@ namespace stat {
                   throw error::Invalid{_Fmt{"Garbage after last field. Line:%s|↯|%s"}
                                            % line_.substr(0,pos_) % line_.substr(pos_)};
           else
-              if (pos_ != curr_->position())
+          if (pos_ != size_t(curr_->position()))
                   throw error::Invalid{_Fmt{"Garbage before field(%d):%s|↯|%s"}
                                            % (field_+1)
                                            % line_.substr(0,pos_) % line_.substr(pos_)};
-              else
-                  throw error::Invalid{"CSV parse floundered. Line:"+toString(line_)};
+          
+          throw error::Invalid{_Fmt{"CSV parse floundered. Line:%s"} % line_};
         }
     };
   

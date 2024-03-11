@@ -439,11 +439,13 @@ namespace stat{
                   ,[&](auto& col)
                     {
                       if (not csv)
-                        if (csv.isParseFail())
-                          csv.fail();
-                        else
-                          throw error::Invalid{_Fmt{"Insufficient data; only %d fields, %d expected. Line:%s"}
-                                                   % csv.getParsedFieldCnt() % columnCnt % line};
+                        {
+                          if (csv.isParseFail())
+                            csv.fail();
+                          else
+                            throw error::Invalid{_Fmt{"Insufficient data; only %d fields, %d expected. Line:%s"}
+                                                     % csv.getParsedFieldCnt() % columnCnt % line};
+                        }
                       
                       using Value = typename std::remove_reference<decltype(col)>::type::ValueType;
                       col.get() = parseAs<Value>(*csv);

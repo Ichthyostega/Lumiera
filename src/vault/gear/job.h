@@ -193,6 +193,7 @@ typedef lumiera_jobDescriptor* LumieraJobDescriptor;
 
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
+#include "lib/nocopy.hpp"
 #include <string>
 
 

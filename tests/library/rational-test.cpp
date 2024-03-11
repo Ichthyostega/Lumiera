@@ -28,6 +28,7 @@
 
 #include "lib/error.hpp"
 #include "lib/test/run.hpp"
+#include "lib/integral.hpp"
 #include "lib/format-cout.hpp"
 
 #include "lib/rational.hpp"

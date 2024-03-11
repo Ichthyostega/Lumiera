@@ -46,6 +46,7 @@
 #ifndef LUMIERA_OPTION_H
 #define LUMIERA_OPTION_H
 
+#include "lib/nocopy.hpp"
 #include "lib/cmdline.hpp"
 #include "lib/format-cout.hpp"
 

@@ -42,7 +42,7 @@
 #define _STDBOOL_H // prevent <atomic> from including stdbool.h
 
 #include "include/logging.h"
-#include "include/lifecycle.h"
+#include "lib/hash-standard.hpp"
 #include "lib/error.h"
 
 #include <exception>

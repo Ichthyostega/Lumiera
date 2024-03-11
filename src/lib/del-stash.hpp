@@ -45,6 +45,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/symbol.hpp"
 #include "lib/nocopy.hpp"
 
 #include <algorithm>

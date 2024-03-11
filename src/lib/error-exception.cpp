@@ -33,6 +33,7 @@
 
 
 #include "lib/error.hpp"
+#include "include/lifecycle.h"
 #include "lib/meta/util.hpp"
 #include "lib/util.hpp"
 

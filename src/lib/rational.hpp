@@ -82,9 +82,6 @@ namespace util {
   using boost::rational_cast;
   using std::abs;
   
-  // these are neither standard C++ nor POSIX, yet pretty much common place...
-  using uchar = unsigned char;
-  using uint  = unsigned int;
   
   
   inline bool
