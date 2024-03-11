@@ -27,23 +27,15 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/rational.hpp"
-#include "lib/test/diagnostic-output.hpp"/////////////////////////TODO
+#include "lib/random.hpp"
 
 
-#include <chrono>
-#include <array>
-
-using std::array;
-
-
-namespace util {
+namespace lib {
 namespace test {
   
-  
-  /***************************************************************************//**
-   * @test demonstrate simple access to random number generation, as well as
-   *       the setup of controlled random number sequences.
+  /******************************************************************//**
+   * @test demonstrate simple access to random number generation,
+   *       as well as  the setup of controlled random number sequences.
    * @see  random.hpp
    */
   class Random_test : public Test
@@ -53,19 +45,60 @@ namespace test {
       run (Arg)
         {
           simpleUsage();
+          verify_reproducibleSequence();
         }
       
       
-      /**
-       * @test demonstrate usage of default random number generators
-       */
+      /** @test demonstrate usage of default random number generators */
       void
       simpleUsage()
         {
+          int r1 = rani();
+          CHECK (0 <= r1 and r1 < RAND_MAX);
+          
+          int r2 = rani();
+          CHECK (0 <= r2 and r2 < RAND_MAX);
+          CHECK (r1 != r2);
+        }
+      
+      
+      /** @test demonstrate that random number sequences can be reproduced
+       *      - use a rigged SeedNucleus, always returning a fixed sees
+       *      - build two distinct random sequence generators, yet seeded
+       *        from the same source; they will produce the same sequence
+       *      - sequences can be re-shuffled by a seed value, so that
+       *        the following random numbers will start to differ
+       *      - but even this re-shuffling is deterministic
+       */
+      void
+      verify_reproducibleSequence()
+        {
+          class : public SeedNucleus
+            {
+              uint64_t getSeed()  override  { return 55; }
+            }
+            coreOfEvil;
+          
+          Random src1{coreOfEvil};
+          
+          int      r1 = src1.i32();
+          uint64_t r2 = src1.u64();
+          double   r3 = src1.uni();
+          
+          Random src2{coreOfEvil};
+          CHECK (r1 == src2.i32());
+          CHECK (r2 == src2.u64());
+          CHECK (r3 == src2.uni());
+          
+          src1.randomise(coreOfEvil);
+          CHECK (src1.i32() != src2.i32());
+          
+          src2.randomise(coreOfEvil);
+          CHECK (src1.i32() == src2.i32());
         }
     };
   
   LAUNCHER (Random_test, "unit common");
   
   
-}} // namespace util::test
+}} // namespace lib::test

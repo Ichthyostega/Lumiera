@@ -23,16 +23,69 @@
 
 /** @file random.cpp
  ** Implementation details and common storage for random number generation.
+ ** @todo 3/2024 work out how some executions or performances are configured reproducibly.
  */
 
 
-//#include "error.hpp"
 #include "lib/random.hpp"
-//#include "lib/util.hpp"
 
-//#include <functional>
+#include <string>
+
+using std::string;
 
 
 namespace lib {
+  namespace {
+    
+    const string ENTROPY_SOURCE_SPEC{"/dev/random"};
+    
+    
+    class EntropyNucleus
+      : public SeedNucleus
+      {
+        std::random_device entropySource_;
+        
+        uint64_t
+        getSeed()  override
+          {
+            return entropySource_();
+          }
+        
+      public:
+        EntropyNucleus(string const& SPEC)
+          : entropySource_{SPEC}
+          { }
+      };
+    
+    class EternalNucleus
+      : public SeedNucleus
+      {
+        uint64_t
+        getSeed()  override
+          {
+            return LIFE_AND_UNIVERSE_4EVER;
+          }
+      };
+    
+    /** static global entropy source instance */
+    EntropyNucleus entropyNucleus{ENTROPY_SOURCE_SPEC};
+    
+    /// @todo this one should somehow be configurable
+    EternalNucleus eternalNucleus;
+  }
+  
+  
+  SeedNucleus::~SeedNucleus() { }
+  
+  Random defaultGen{eternalNucleus};
+  Random entropyGen{entropyNucleus};
+  
+  
+  void
+  randomiseRandomness()
+  {
+    entropyGen.randomise(entropyNucleus);
+    defaultGen.randomise(entropyNucleus);
+  }
   
 } // namespace lib

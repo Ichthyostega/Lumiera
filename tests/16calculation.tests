@@ -12,6 +12,6 @@ return: 0
 END
 
 
-PLANNED "Random numbers and Seed" Random_test << END
+TEST "Random numbers and Seed" Random_test << END
 return: 0
 END

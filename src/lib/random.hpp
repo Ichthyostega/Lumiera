@@ -23,7 +23,11 @@
 
 /** @file random.hpp
  ** Generating (pseudo) random numbers with controlled seed.
- ** As an extension on top of the [C++ random number framework] to integral arithmetics, rational numbers can be defined
+ ** As an extension on top of the [C++ random number framework], several instances
+ ** of random number sequence generators can be easily created with a controlled seed.
+ ** For simplified usage, two default instances are exposed as global variable
+ ** - lib::defaultGen uses fixed seeding (planned: make this configurable)
+ ** - lib::entropyGen always uses true randomness as seed value.
  ** [C++ random number framework]: https://en.cppreference.com/w/cpp/numeric/random
  ** @see Random_test
  */
@@ -42,7 +46,12 @@
 namespace lib {
   
   /** Establishes a seed point for any instance or performance. */
-  class SeedNucleus;
+  class SeedNucleus
+    {
+    public:
+      virtual ~SeedNucleus();     ///< this is an interface
+      virtual uint64_t getSeed()  =0;
+    };
   
   /**
    * Access point to a selection of random number sources.
@@ -62,14 +71,16 @@ namespace lib {
       
       GEN generator_;
       
+    public:
       /** Random instances are created as part of an execution scheme */
       RandomSequencer(SeedNucleus&);
-      friend class SeedNucleus;
       
-    public:
       int      i32() { return uniformI_(generator_); }
       uint64_t u64() { return uniformU_(generator_); }
       double   uni() { return uniformD_(generator_); }
+      
+      /** inject controlled randomisation */
+      void randomise(SeedNucleus&);
     };
   
   /**
@@ -90,6 +101,30 @@ namespace lib {
   inline int      rani() { return defaultGen.i32(); }
   inline uint64_t ranu() { return defaultGen.u64(); }
   inline double   rado() { return defaultGen.uni(); }
+  
+  
+  /** inject true randomness into the #defaultGen */
+  void randomiseRandomness();
+  
+  
+  /* ===== Implementation details ===== */
+  
+  template<class GEN>
+  inline
+  RandomSequencer<GEN>::RandomSequencer (SeedNucleus& nucleus)
+    : uniformI_{0}
+    , uniformU_{0}
+    , uniformD_{}
+    , generator_{nucleus.getSeed()}
+    { }
+  
+  
+  template<class GEN>
+  inline void
+  RandomSequencer<GEN>::randomise (SeedNucleus& nucleus)
+  {
+    generator_.discard (nucleus.getSeed() % 55555);
+  }
   
   
 } // namespace lib

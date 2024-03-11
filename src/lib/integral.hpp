@@ -38,6 +38,7 @@
 using uchar = unsigned char;
 using uint  = unsigned int;
 
+const uint LIFE_AND_UNIVERSE_4EVER = 42;
 
   
 #endif /*LIB_INTEGRAL_H*/
