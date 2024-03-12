@@ -62,8 +62,8 @@ namespace lumiera {
   
   /**
    * Interface and Base definition for all Lumiera Exceptions.
-   * Provides common operations for getting an diagnostic message
-   * and to obtaining the _root cause_ message, i.e. the message
+   * Provides common operations for getting a diagnostic message
+   * and to obtain the _root cause_ message, i.e. the message
    * from the first exception encountered in a chain of exceptions.
    */
   class Error
@@ -234,7 +234,7 @@ namespace lumiera {
    * Check the lumiera error state, which maybe was set by C-code.
    * @throw Errorflag exception to signal an detected lumiera error
    * @note specific error code and information is enclosed in
-   *       the raised exception; the error state is \em not cleared.
+   *       the raised exception; the error state is _not cleared_.
    */
   inline void
   throwOnError()

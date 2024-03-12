@@ -28,28 +28,8 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/test/temp-dir.hpp"
-//#include "lib/time/timevalue.hpp"
-//#include "lib/error.hpp"
-//#include "lib/util-foreach.hpp"
-#include "lib/format-cout.hpp"
-#include "lib/test/diagnostic-output.hpp"
 
-//#include <boost/algorithm/string.hpp>
 #include <fstream>
-//#include <functional>
-//#include <string>
-
-//using util::for_each;
-//using lumiera::Error;
-//using lumiera::LUMIERA_ERROR_EXCEPTION;
-//using lumiera::error::LUMIERA_ERROR_ASSERTION;
-//using lib::time::TimeVar;
-//using lib::time::Time;
-
-//using boost::algorithm::is_lower;
-//using boost::algorithm::is_digit;
-//using std::function;
-//using std::string;
 
 
 namespace lib {
@@ -57,11 +37,9 @@ namespace test{
 namespace test{
   
   
-  
-  
   /***************************************************************//**
-   * @test validate proper working of a temporary working directory,
-   *       with automatic name allocation and clean-up.
+   * @test validate proper behaviour of a temporary working directory,
+   *       including automatic name allocation and clean-up.
    * @see temp-dir.hpp
    * @see DataCSV_test usage example
    */
@@ -85,7 +63,7 @@ namespace test{
           
           std::ofstream out{ff, std::ios_base::out};
           auto scree = randStr(55);
-          out << scree << endl;
+          out << scree << std::endl;
           out.close();
           
           CHECK (fs::is_regular_file (ff));
@@ -99,10 +77,49 @@ namespace test{
       
       
       
-      /** @test prints "sizeof()" including some type name. */
+      /** @test automatic clean-up even in case of errors. */
       void
       verify_Lifecycle ()
         {
+          fs::path d1;
+          fs::path d2;
+          {
+            TempDir tt;
+            d1 = tt;
+            tt.makeFile("huibuh");
+            tt.makeFile("huibuh");
+            tt.makeFile("huibuh");
+            std::ofstream boo{d1 / "huibuh"};
+            boo << "boo";
+            fs::create_directories(d1 / "bug/bear");
+            fs::rename (d1 / "huibuh", d1 / "bug/bear/fray");
+            
+            auto scare = [&]{
+                              TempDir tt;
+                              d2 = tt;
+                              tt.makeFile("Mooo");
+                              CHECK (fs::exists(d2 / "Mooo"));
+                              CHECK (not fs::is_empty(d2));
+                              fs::create_directory(d2 / "Mooo"); // Booom!
+                            };
+            CHECK (d2.empty());
+            CHECK (not d1.empty());
+            
+            VERIFY_FAIL ("File exists", scare() );
+            // nested context was cleaned-up after exception
+            CHECK (not fs::exists(d2));
+            CHECK (    fs::exists(d1));
+            CHECK (not d2.empty());
+            CHECK (d1 != d2);
+            
+            boo << "moo";
+            boo.close();
+            CHECK (6 ==  fs::file_size(d1 / "bug/bear/fray"));
+            // so bottom line: can do filesystem stuff for real...
+          }
+          // All traces are gone...
+          CHECK (not fs::exists(d1));
+          CHECK (not fs::exists(d2));
         }
     };
   
@@ -110,4 +127,3 @@ namespace test{
   
   
 }}} // namespace lib::test::test
-

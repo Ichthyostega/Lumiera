@@ -107,7 +107,7 @@ namespace lumiera {
     { }
   
   
-  Error::Error (std::exception const& cause, 
+  Error::Error (std::exception const& cause,
                 string description, lumiera_err const id)  noexcept
     : std::exception{}
     , id_{id}
@@ -123,8 +123,8 @@ namespace lumiera {
   
   /** Description of the problem, including the internal char constant
    *  in accordance to Lumiera's error identification scheme.
-   *  If a root cause can be obtained, this will be included in the
-   *  generated output as well. 
+   *  If a root cause can be obtained, this will be included
+   *  in the generated output as well.
    */
   CStr
   Error::what()  const noexcept
@@ -135,11 +135,11 @@ namespace lumiera {
         if (!isnil (desc_))  what_ += " ("+desc_+").";
         if (!isnil (cause_)) what_ += string(" -- caused by: ") + cause_;
       }
-    return what_.c_str(); 
+    return what_.c_str();
   }
   
   
-  /** @internal get at the description message of the 
+  /** @internal get at the description message of the
    *  first exception encountered in a chain of exceptions
    */
   const string

@@ -39,12 +39,8 @@
 #include "lib/format-string.hpp"
 #include "lib/util.hpp"
 
-//#include <unordered_map>
-//#include <iostream>
-//#include <vector>
 #include <fstream>
 #include <string>
-//#include <map>
 
 
 namespace lib {
@@ -76,7 +72,8 @@ namespace test{
       
      ~TempDir()
         {
-          destroyTempDirectory();
+          if (fs::exists (loc_))
+            destroyTempDirectory();
         }
       
       
@@ -145,9 +142,11 @@ namespace test{
       
       void
       destroyTempDirectory()
-        {
-          UNIMPLEMENTED ("destroy");
-        }
+        try {
+            fs::remove_all (loc_);
+            ENSURE (not fs::exists(loc_));
+          }
+        ERROR_LOG_AND_IGNORE (filesys, "TempDir clean-up")
     };
   
   

@@ -129,7 +129,6 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (  progress,                    logging);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   main,                       progress);
 /** progress log for the vault layer */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   vault,                      progress);
-NOBUG_CPP_DEFINE_FLAG_PARENT    (    file,                      vault);         //opening/closing files etc
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    mmap,                      vault);         //mmap errors
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    thread,                    vault);         //starting/stopping threads
 NOBUG_CPP_DEFINE_FLAG_PARENT    (     threads,                  thread);
@@ -151,7 +150,7 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (    play,                      steam);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   stage,                      progress);
 /** progress log for the support lib */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   library,                    progress);
-NOBUG_CPP_DEFINE_FLAG_PARENT    (    resourcecollector,         library);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    filesys,                   library);       //filesystem operations, opening/closing files...
 /** progress log for the common lib */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   common,                     progress);
 /** progress log, config subsystem */

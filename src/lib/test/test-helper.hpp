@@ -337,16 +337,16 @@ operator""_expect (const char* lit, size_t siz)
 /* === test helper macros === */
 
 /**
- * Macro to verify a statement indeed raises an exception.
+ * Macro to verify that a statement indeed raises an exception.
  * If no exception is thrown, the #NOTREACHED macro will trigger
- * an assertion failure. In case of an exception, the #lumiera_error
+ * an assertion failure. In case of exception, the #lumiera_error
  * state is checked, cleared and verified.
  */
 #define VERIFY_ERROR(ERROR_ID, ERRONEOUS_STATEMENT)               \
           try                                                      \
             {                                                       \
               ERRONEOUS_STATEMENT ;                                  \
-              NOTREACHED("expected '%s' failure in: %s",              \
+              NOTREACHED("expected »%s« failure in: %s",              \
                           #ERROR_ID, #ERRONEOUS_STATEMENT);            \
             }                                                           \
           catch (lumiera::Error& ex)                                     \
@@ -360,6 +360,31 @@ operator""_expect (const char* lit, size_t siz)
               CHECK (lumiera_error_peek()                                        \
                      == lib::test::ExpectString{LUMIERA_ERROR_##ERROR_ID} );      \
               lumiera_error();                                                     \
+            }
+
+/**
+ * Macro to verify that a statement indeed raises a std::exception,
+ * which additionally contains some FAILURE_MSG in its description.
+ */
+#define VERIFY_FAIL(FAILURE_MSG, ERRONEOUS_STATEMENT)   \
+          try                                            \
+            {                                             \
+              ERRONEOUS_STATEMENT ;                        \
+              NOTREACHED("expected »%s«-failure in: %s"     \
+                        , FAILURE_MSG, #ERRONEOUS_STATEMENT);\
+            }                                                 \
+          catch (std::exception& sex)                          \
+            {                                                   \
+              CHECK (util::contains (sex.what(), FAILURE_MSG)    \
+                    ,"expected failure with »%s« -- but got: %s"  \
+                    ,FAILURE_MSG, sex.what());                     \
+              lumiera_error();                                      \
+            }                                                        \
+          catch (...)                                                 \
+            {                                                          \
+              NOTREACHED("expected »%s«-failure, "                      \
+                         "yet something scary happened instead...",      \
+                          FAILURE_MSG);                                   \
             }
 
 
