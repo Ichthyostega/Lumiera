@@ -91,7 +91,7 @@ namespace util {
       static std::string
       invoke (fs::path path) noexcept
       try {
-          return "\""+std::string{path}+"\"";
+          return "≺"+std::string{path}+"≻";
         }
       catch(...)
         { return lib::meta::FAILURE_INDICATOR; }

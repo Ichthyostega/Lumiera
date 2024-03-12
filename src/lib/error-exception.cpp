@@ -85,6 +85,7 @@ namespace lumiera {
     LUMIERA_ERROR_DEFINE (WRONG_TYPE,   "runtime type mismatch");
     LUMIERA_ERROR_DEFINE (ITER_EXHAUST, "end of sequence reached");
     LUMIERA_ERROR_DEFINE (CAPACITY,     "predefined fixed storage capacity");
+    LUMIERA_ERROR_DEFINE (SAFETY_LIMIT, "exceeding fixed internal safety limit");
     LUMIERA_ERROR_DEFINE (INDEX_BOUNDS, "index out of bounds");
     LUMIERA_ERROR_DEFINE (BOTTOM_VALUE, "invalid or NIL value");
     LUMIERA_ERROR_DEFINE (UNCONNECTED,  "missing connection");

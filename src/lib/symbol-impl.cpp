@@ -36,7 +36,7 @@
 
 #include "lib/symbol.hpp"
 #include "lib/symbol-table.hpp"
-#include "include/limits.h"
+#include "include/limits.hpp"
 extern "C" {
 #include "lib/safeclib.h"
 }

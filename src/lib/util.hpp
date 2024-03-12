@@ -37,7 +37,7 @@
 #ifndef LIB_UTIL_H
 #define LIB_UTIL_H
 
-#include "include/limits.h"
+#include "include/limits.hpp"
 #include "lib/hash-standard.hpp"
 
 #include <set>

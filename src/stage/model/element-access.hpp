@@ -55,7 +55,7 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/result.hpp"
-#include "include/limits.h"
+#include "include/limits.hpp"
 #include "lib/variant.hpp"
 #include "lib/meta/typelist-manip.hpp"
 #include "lib/access-casted.hpp"
