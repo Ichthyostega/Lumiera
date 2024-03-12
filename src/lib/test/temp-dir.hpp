@@ -37,9 +37,12 @@
 #include "lib/stat/file.hpp"
 #include "include/limits.hpp"
 #include "lib/format-string.hpp"
+#include "lib/util.hpp"
+
 //#include <unordered_map>
 //#include <iostream>
 //#include <vector>
+#include <fstream>
 #include <string>
 //#include <map>
 
@@ -50,29 +53,11 @@ namespace test{
   namespace error = lumiera::error;
   
   using util::_Fmt;
+  using util::isnil;
+  using std::string;
   
   namespace {
     Literal TEMPFILE_PREFIX = "Lux";
-  }
-  inline bool
-  has_perm (fs::path const& p, fs::perms permissionMask)
-  {
-    return (fs::status(p).permissions() & permissionMask) == permissionMask;
-  }
-  inline bool
-  can_read (fs::path const& p)
-  {
-    return has_perm (p, fs::perms::owner_read);
-  }
-  inline bool
-  can_write (fs::path const& p)
-  {
-    return has_perm (p, fs::perms::owner_write);
-  }
-  inline bool
-  can_exec (fs::path const& p)
-  {
-    return has_perm (p, fs::perms::owner_exec);
   }
   
   
@@ -101,9 +86,20 @@ namespace test{
         }
       
       fs::path
-      makeFile()
+      makeFile (string name ="")
         {
-          UNIMPLEMENTED ("make temporary file");
+          if (isnil (name))
+            return establishNewFile (string{TEMPFILE_PREFIX});
+
+          auto newFile = loc_ / name;
+          if (fs::exists (newFile))
+            return establishNewFile (name);
+          
+          std::ofstream{newFile};
+          if (fs::exists (newFile) and fs::is_empty(newFile))
+            return newFile;
+          //
+          throw error::Fatal{_Fmt{"Failed to create unique new file %s in TempDir."} % newFile};
         }
       
       
@@ -127,6 +123,26 @@ namespace test{
                                  % LUMIERA_MAX_COMPETITION
                             ,error::LUMIERA_ERROR_SAFETY_LIMIT };
         }
+      
+      fs::path
+      establishNewFile (string prefix)
+        {
+          for (uint attempt=0; attempt<LUMIERA_MAX_COMPETITION; ++attempt)
+            {
+              auto randName = prefix + "." + util::showHash (entropyGen.u64());
+              auto newPath = loc_ / randName;
+              //  attempt to create it....
+              if (fs::exists(newPath))
+                continue;
+              std::ofstream{newPath};
+              if (fs::exists(newPath) and fs::is_empty (newPath))
+                return newPath;    // success!
+            }
+          throw error::Fatal{_Fmt{"Failed to create unique new file at %s after %d attempts."}
+                                 % loc_ % LUMIERA_MAX_COMPETITION
+                            ,error::LUMIERA_ERROR_SAFETY_LIMIT };
+        }
+      
       void
       destroyTempDirectory()
         {

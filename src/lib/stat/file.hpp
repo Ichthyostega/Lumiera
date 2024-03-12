@@ -78,6 +78,33 @@ namespace std::filesystem {
                                   fs::canonical(rawPath))
                                 : rawPath;
   }
+  
+  
+  /** check if the denoted path \a p has at least the given permissions */
+  inline bool
+  has_perm (fs::path const& p, fs::perms permissionMask)
+  {
+    return (fs::status(p).permissions() & permissionMask) == permissionMask;
+  }
+  
+  /** check if the owner has read permissions on the denoted file or directory */
+  inline bool
+  can_read (fs::path const& p)
+  {
+    return has_perm (p, fs::perms::owner_read);
+  }
+  
+  inline bool
+  can_write (fs::path const& p)
+  {
+    return has_perm (p, fs::perms::owner_write);
+  }
+  
+  inline bool
+  can_exec (fs::path const& p)
+  {
+    return has_perm (p, fs::perms::owner_exec);
+  }
 }//(End)namespace fs
 
 

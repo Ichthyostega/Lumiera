@@ -2,7 +2,7 @@
   TempDir(Test)  -  verify automated temporary working directory
 
   Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+    2024,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -79,24 +79,6 @@ namespace test{
       simpleUsage()
         {
           TempDir temp;
-SHOW_EXPR(temp)
-SHOW_EXPR(fs::path{temp})
-SHOW_EXPR(has_perm(temp, fs::perms::owner_read));
-SHOW_EXPR(has_perm(temp, fs::perms::owner_write));
-SHOW_EXPR(has_perm(temp, fs::perms::owner_exec));
-SHOW_EXPR(has_perm(temp, fs::perms::owner_all));
-SHOW_EXPR(has_perm(temp, fs::perms::group_read));
-SHOW_EXPR(has_perm(temp, fs::perms::group_write));
-SHOW_EXPR(has_perm(temp, fs::perms::group_exec));
-SHOW_EXPR(has_perm(temp, fs::perms::group_all));
-SHOW_EXPR(has_perm(temp, fs::perms::others_read));
-SHOW_EXPR(has_perm(temp, fs::perms::others_write));
-SHOW_EXPR(has_perm(temp, fs::perms::others_exec));
-SHOW_EXPR(has_perm(temp, fs::perms::others_all));
-SHOW_EXPR(has_perm(temp, fs::perms::all));
-SHOW_EXPR(can_read(temp));
-SHOW_EXPR(can_write(temp));
-SHOW_EXPR(can_exec(temp));
           auto ff = temp.makeFile();
           CHECK (fs::exists (ff));
           CHECK (fs::is_empty (ff));

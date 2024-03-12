@@ -180,6 +180,11 @@ return: 0
 END
 
 
+PLANNED "Filesystem manipulations" FileSupport_test <<END
+return: 0
+END
+
+
 TEST "formatting/string conversion in output" FormatCOUT_test <<END
 out-lit: Type: int ......
 out-lit: is_StringLike<int>	 : No
