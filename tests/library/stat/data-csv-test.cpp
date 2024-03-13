@@ -51,6 +51,7 @@ using util::isnil;
 //using std::function;
 using std::string;
 using std::vector;
+using std::make_tuple;
 
 
 namespace lib {
@@ -78,6 +79,9 @@ namespace test{
     
   }//(End)Test setup
   
+  using error::LUMIERA_ERROR_STATE;
+  using error::LUMIERA_ERROR_INVALID;
+  
   
   
   /***********************************************************//**
@@ -93,9 +97,9 @@ namespace test{
       run (Arg)
         {
           simpleUsage();
-          checkGarbageStr();
-          checkThrowChecker();
-          checkLocalManipulation();
+          verify_rowHandling();
+          verify_CSV_Format();
+          verify_persistentDataFile();
         }
       
       
@@ -135,27 +139,108 @@ namespace test{
       
       
       void
-      checkGarbageStr()
+      verify_rowHandling()
         {
-          UNIMPLEMENTED("Rabäääääh");
+          TestTab tab;
+          CHECK (3 == tab.columnCnt);
+          
+          CHECK (isnil (tab));
+          CHECK (0 == tab.size());
+          CHECK (0 == tab.id.data.size());
+          CHECK (0 == tab.val.data.size());
+          CHECK (0 == tab.off.data.size());
+          CHECK ("ID"  == tab.id.header);
+          CHECK ("Value" == tab.val.header);
+          CHECK ("Offset" == tab.off.header);
+          
+          VERIFY_ERROR (STATE, tab.id.get() );
+          VERIFY_ERROR (STATE, tab.val.get());
+          VERIFY_ERROR (STATE, tab.off.get());
+          VERIFY_ERROR (STATE, tab.off = 5  );
+          VERIFY_ERROR (STATE,(tab.off == 5));
+          
+          // direct access to the data is possible and tolerated
+          tab.val.data.push_back (5.5);
+          CHECK (tab.val == 5.5);
+          VERIFY_ERROR (STATE, (tab.off == 5));
+          CHECK (1 == tab.val.data.size());
+          CHECK (0 == tab.off.data.size());
+          CHECK (0 == tab.id.data.size());
+          CHECK (0 == tab.size());
+          CHECK (isnil (tab));
+          
+          tab.newRow();
+          CHECK ( "" == string{tab.id});
+          CHECK (5.5 == tab.val);
+          CHECK ( 0  == tab.off);
+          CHECK (1 == tab.val.data.size());
+          CHECK (1 == tab.off.data.size());
+          CHECK (1 == tab.id.data.size());
+          CHECK (1 == tab.size());
+          CHECK (not isnil (tab));
+          CHECK (tab.off.data   == vector({0}));
+          CHECK (tab.val.data   == vector({5.5}));
+          
+          tab.allColumns() = make_tuple("●", 2.3, -11);
+          CHECK ("●" == string{tab.id});
+          CHECK (2.3 == tab.val);
+          CHECK (-11 == tab.off);
+          
+          tab.dupRow();
+          tab.val = 42;
+          tab.id  = "◆";
+          CHECK (tab.off.data   == vector({-11,-11}));
+          CHECK (tab.val.data   == vector({2.3,42.0}));
+          CHECK (tab.id.data    == vector<string>({"●","◆"}));
+          
+          tab.reserve(100);
+          CHECK (tab.id.data.capacity()  >= 100);
+          CHECK (tab.val.data.capacity() >= 100);
+          CHECK (tab.off.data.capacity() >= 100);
+          CHECK (tab.id.data.size()  == 2);
+          CHECK (tab.val.data.size() == 2);
+          CHECK (tab.off.data.size() == 2);
+          CHECK (2 == tab.size());
+          CHECK ("◆" == string{tab.id});
+          CHECK ( 42 == tab.val);
+          CHECK (-11 == tab.off);
+          
+          forEach(tab.allColumns()
+                 ,[](auto& col){ col.data.resize(2); }
+                 );
+          CHECK (2 == tab.size());
+          CHECK ("◆" == string{tab.id});
+          CHECK ( 42 == tab.val);
+          CHECK (-11 == tab.off);
+          
+          tab.dropLastRow();
+          CHECK (1 == tab.size());
+          CHECK ("●" == string{tab.id});
+          CHECK (2.3 == tab.val);
+          CHECK (-11 == tab.off);
+          CHECK (tab.val.data.size() == 1);
+          CHECK (tab.val.data.capacity() >= 100);
+          
+          tab.clear();
+          CHECK (isnil (tab));
+          CHECK (tab.val.data.size() == 0);
+          CHECK (tab.val.data.capacity() >= 100);
         }
       
       
-      /** @test check the VERIFY_ERROR macro,
-       *        which ensures a given error is raised.
-       */
+      /** @test validate the simple CSV conversion functions used by DataFile */
       void
-      checkThrowChecker()
+      verify_CSV_Format()
         {
         }
       
       
-      /** @test check a local manipulations,
-       *        which are undone when leaving the scope.
+      /** @test verify a table backed by persistent CSV data
        */
       void
-      checkLocalManipulation()
+      verify_persistentDataFile()
         {
+          UNIMPLEMENTED("Arrrröööh");
         }
     };
   
