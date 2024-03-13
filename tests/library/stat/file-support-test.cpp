@@ -29,28 +29,8 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/test/temp-dir.hpp"
 #include "lib/stat/file.hpp"
-//#include "lib/time/timevalue.hpp"
-//#include "lib/error.hpp"
-//#include "lib/util-foreach.hpp"
-#include "lib/format-cout.hpp"
-#include "lib/test/diagnostic-output.hpp"
 
-//#include <boost/algorithm/string.hpp>
 #include <fstream>
-//#include <functional>
-//#include <string>
-
-//using util::for_each;
-//using lumiera::Error;
-//using lumiera::LUMIERA_ERROR_EXCEPTION;
-//using lumiera::error::LUMIERA_ERROR_ASSERTION;
-//using lib::time::TimeVar;
-//using lib::time::Time;
-
-//using boost::algorithm::is_lower;
-//using boost::algorithm::is_digit;
-//using std::function;
-//using std::string;
 
 
 namespace lib {
@@ -62,7 +42,7 @@ namespace test{
   
   
   
-  /***************************************************************//**
+  /********************************************************************//**
    * @test verify supplemental helper functions for file-handling support,
    *       provided to complement the C++ `<filesystem>` library.
    * @see file.hpp
@@ -82,38 +62,69 @@ namespace test{
       simplifiedPermissionAccess()
         {
           TempDir temp;
-SHOW_EXPR(temp)
-SHOW_EXPR(fs::path{temp})
           fs::path f = temp.makeFile("Lumiera.nix");
-SHOW_EXPR(f);
-SHOW_EXPR(fs::exists(f));
+          CHECK (fs::exists(f));
+          CHECK (f.filename() == "Lumiera.nix");
+          CHECK (f.parent_path() == temp);
+          
+          // enforce specific permissions...
+          fs::permissions(f, fs::perms::owner_read | fs::perms::group_all | fs::perms::others_exec);
+          
+          CHECK (    fs::has_perm(f, fs::perms::owner_read));
+          CHECK (not fs::has_perm(f, fs::perms::owner_write));
+          CHECK (not fs::has_perm(f, fs::perms::owner_exec));
+          CHECK (not fs::has_perm(f, fs::perms::owner_all));
+          CHECK (    fs::has_perm(f, fs::perms::group_read));
+          CHECK (    fs::has_perm(f, fs::perms::group_write));
+          CHECK (    fs::has_perm(f, fs::perms::group_exec));
+          CHECK (    fs::has_perm(f, fs::perms::group_all));
+          CHECK (not fs::has_perm(f, fs::perms::others_read));
+          CHECK (not fs::has_perm(f, fs::perms::others_write));
+          CHECK (    fs::has_perm(f, fs::perms::others_exec));
+          CHECK (not fs::has_perm(f, fs::perms::others_all));
+          CHECK (not fs::has_perm(f, fs::perms::all));
+          CHECK (    fs::can_read(f));
+          CHECK (not fs::can_write(f));
+          CHECK (not fs::can_exec(f));
+          
+          // and indeed: we can not write
           std::ofstream out{f};
-SHOW_EXPR(fs::exists(f));
-SHOW_EXPR(fs::status(f).permissions())
-SHOW_EXPR(fs::has_perm(temp, fs::perms::owner_read));
-SHOW_EXPR(fs::has_perm(temp, fs::perms::owner_write));
-SHOW_EXPR(fs::has_perm(temp, fs::perms::owner_exec));
-SHOW_EXPR(fs::has_perm(temp, fs::perms::owner_all));
-SHOW_EXPR(fs::has_perm(temp, fs::perms::group_read));
-SHOW_EXPR(fs::has_perm(temp, fs::perms::group_write));
-SHOW_EXPR(fs::has_perm(temp, fs::perms::group_exec));
-SHOW_EXPR(fs::has_perm(temp, fs::perms::group_all));
-SHOW_EXPR(fs::has_perm(temp, fs::perms::others_read));
-SHOW_EXPR(fs::has_perm(temp, fs::perms::others_write));
-SHOW_EXPR(fs::has_perm(temp, fs::perms::others_exec));
-SHOW_EXPR(fs::has_perm(temp, fs::perms::others_all));
-SHOW_EXPR(fs::has_perm(temp, fs::perms::all));
-SHOW_EXPR(fs::can_read(temp));
-SHOW_EXPR(fs::can_write(temp));
-SHOW_EXPR(fs::can_exec(temp));
+          out << "outch";
+          out.close();
+          CHECK (not out.good());
+          CHECK (0 == fs::file_size(f));
         }
       
       
       
-      /** @test prints "sizeof()" including some type name. */
+      /** @test verify _consolidated path_
+       *      - retrieves and expands the POSIX home directory
+       *      - transforms into canonical, absolute path
+       */
       void
       homedirectoryExpansion ()
         {
+          fs::path sweetHome{"~"};
+          CHECK ("~" == sweetHome.generic_string());
+          CHECK (not sweetHome.empty());
+          CHECK (not sweetHome.has_parent_path());
+          CHECK (not sweetHome.is_absolute());
+          
+          sweetHome = fs::consolidated (sweetHome);
+          CHECK (not util::startsWith (sweetHome.generic_string(), "~"));
+          CHECK (    util::startsWith (sweetHome.generic_string(), "/"));
+          CHECK (not sweetHome.empty());
+          CHECK (    sweetHome.has_parent_path());
+          CHECK (    sweetHome.is_absolute());
+          CHECK (fs::is_directory(sweetHome));
+
+          fs::path itFollows = fs::consolidated ("~/it/follows");
+          CHECK (util::startsWith (itFollows.generic_string(), "/"));
+          CHECK (util::endsWith (itFollows.generic_string(), "follows"));
+          CHECK (itFollows.filename() == "follows");
+          CHECK (itFollows.is_absolute());
+          
+          CHECK (fs::relative (itFollows, sweetHome) == "it/follows");
         }
     };
   
