@@ -31,11 +31,13 @@
 //#include "lib/time/timevalue.hpp"
 //#include "lib/error.hpp"
 //#include "lib/util-foreach.hpp"
+#include "lib/util.hpp"
 #include "lib/format-cout.hpp"            ///////////////////////TODO
 #include "lib/test/diagnostic-output.hpp" ///////////////////////TODO
 
 //#include <functional>
-//#include <string>
+#include <string>
+#include <vector>
 
 //using lumiera::Error;
 //using lumiera::LUMIERA_ERROR_EXCEPTION;
@@ -45,21 +47,37 @@
 
 //using boost::algorithm::is_lower;
 //using boost::algorithm::is_digit;
+using util::isnil;
 //using std::function;
-//using std::string;
+using std::string;
+using std::vector;
 
 
 namespace lib {
 namespace stat{
 namespace test{
   
-  template<class T>
-  class Wrmrmpft
+  namespace {//Setup for test
+    
+    /** Define the layout of a data row */
+    struct TableForm
     {
-      T tt_;
+        Column<string>  id{"ID"};
+        Column<double> val{"Value"};
+        Column<int>    off{"Offset"};
+    
+        auto allColumns()
+        {   return std::tie(id
+                           ,val
+                           ,off
+                           );
+        }
     };
+    
+    using TestTab = DataFile<TableForm>;
+    
+  }//(End)Test setup
   
-  struct Murpf { };
   
   
   /***********************************************************//**
@@ -74,17 +92,43 @@ namespace test{
       void
       run (Arg)
         {
+          simpleUsage();
           checkGarbageStr();
-          checkTypeDisplay();
           checkThrowChecker();
           checkLocalManipulation();
         }
       
       
-      /** @test prints "sizeof()" including some type name. */
+      /** @test add rows and data to a table without filename. */
       void
-      checkTypeDisplay ()
+      simpleUsage ()
         {
+          TestTab tab;
+          CHECK (isnil (tab));
+          tab.newRow();
+          CHECK (not isnil (tab));
+          CHECK (1 == tab.size());
+          CHECK ( "" == string{tab.id});
+          CHECK (0.0 == tab.val);
+          CHECK ( 0  == tab.off);
+          tab.id = "one";
+          tab.val = 1.0;
+          
+          tab.dupRow();
+          CHECK (2 == tab.size());
+          CHECK ("one" == string{tab.id});
+          CHECK ( 1.0  == tab.val);
+          CHECK (   0  == tab.off);
+          
+          tab.id = "two";
+          tab.val = 5.0;
+          tab.off = -23;
+          CHECK ("two" == string{tab.id});
+          CHECK ( 5.0  == tab.val);
+          CHECK ( -23  == tab.off);
+          
+          CHECK (tab.off.header == "Offset");
+          CHECK (tab.off.data   == vector({0,-23}));
         }
       
       
@@ -93,6 +137,7 @@ namespace test{
       void
       checkGarbageStr()
         {
+          UNIMPLEMENTED("Rabäääääh");
         }
       
       

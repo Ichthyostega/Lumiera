@@ -71,6 +71,8 @@
  ** 
  ** std::vector<int>& counters = daz.n.data;
  ** \endcode
+ ** 
+ ** @see DataCSV_test
  **
  */
 
@@ -240,7 +242,7 @@ namespace stat{
       fs::path filename_;
       
     public:
-      DataFile(fs::path csvFile)
+      DataFile(fs::path csvFile ="")
         : filename_{fs::consolidated (csvFile)}
         {
           loadData();
@@ -334,6 +336,9 @@ namespace stat{
       save (size_t lineLimit =std::numeric_limits<size_t>::max()
            ,bool backupOld =false)
         {
+          if (filename_.empty())
+            throw error::Logic{"Unable to save DataFile without filename given."};
+          
           fs::path newFilename{filename_};
           newFilename += ".tmp";
           
@@ -354,6 +359,22 @@ namespace stat{
           filename_ = fs::consolidated(filename_);
         }                // lock onto absolute path
       
+      
+      void
+      saveAs (fs::path newStorage
+             ,size_t lineLimit =std::numeric_limits<size_t>::max())
+        {
+          newStorage = fs::consolidated (newStorage);
+          if (fs::exists(newStorage))
+            throw error::Invalid{_Fmt{"Storing DataFile rejected: target %s exists already"}
+                                     % newStorage};
+          if (not (newStorage.parent_path().empty()
+                   or fs::exists(newStorage.parent_path())))
+            throw error::Invalid{_Fmt{"DataFile(%s) placed into nonexistent directory %s"}
+                                     % newStorage.filename() % newStorage.parent_path()};
+          filename_ = newStorage;
+          save (lineLimit);
+        }
       
       
     private: /* === Implementation === */
