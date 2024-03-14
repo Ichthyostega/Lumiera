@@ -73,6 +73,8 @@ namespace std {
   template<class X> class reference_wrapper;
   template<class X> class shared_ptr;
   template<class X, class D> class unique_ptr;
+  template<class C, class T> class basic_filebuf;
+  template<class C> class char_traits;
 }
 namespace lib{
   template<class X, class B>  class P;
@@ -368,15 +370,21 @@ namespace meta {
             >
     { };
   
+  // need to exclude files and input streams from automatic string conversion
+  template<typename X>
+  struct is_StreamSource
+    : is_same<X, std::basic_filebuf<char, std::char_traits<char> > >
+    { };
+  
   /** when to use custom string conversions for output streams */
   template<typename X>
   struct use_StringConversion4Stream
     : __and_<is_class<typename Strip<X>::TypePlain>
             ,__not_<is_pointer<X>>
             ,__not_<can_lexical2string<X>>
+            ,__not_<is_StreamSource<X>>
             >
     { };
-  
   
   
   /** detect smart pointers */
