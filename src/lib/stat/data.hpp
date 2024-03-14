@@ -22,7 +22,7 @@
 
 
 /** @file data.hpp
- ** Manage a table with time series data, stored persistently as CSV.
+ ** Manage a table with data records, stored persistently as CSV.
  ** In the context of observations, configuration, calibration and QA, a series
  ** of measurement data taken over time is often evaluated statistically, to distill
  ** typical averages, variances and trends. Short of using a database, a modest
@@ -131,34 +131,6 @@ namespace stat{
                         (fun(elms), ...);
                       }
                 ,tuple);
-  }
-  
-  
-  
-  /** parse string representation into typed value */
-  template<typename TAR>
-  inline TAR
-  parseAs (string const& encodedVal)
-  {
-      std::istringstream converter{encodedVal};
-      TAR value;
-      converter >> value;
-      if (converter.fail())
-          throw error::Invalid{_Fmt{"unable to parse \"%s\""} % encodedVal};
-      return value;
-  }
-  
-  template<>
-  inline bool
-  parseAs(string const& encodedBool)
-  {
-      return util::boolVal(encodedBool);
-  }
-  template<>
-  inline string
-  parseAs(string const& string)
-  {
-      return string; // pass-through (even if empty)
   }
   
   

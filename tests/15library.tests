@@ -180,7 +180,7 @@ return: 0
 END
 
 
-PLANNED "Filesystem manipulations" FileSupport_test <<END
+TEST "Filesystem manipulations" FileSupport_test <<END
 return: 0
 END
 

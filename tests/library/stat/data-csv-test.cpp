@@ -27,31 +27,23 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/test/temp-dir.hpp"
 #include "lib/stat/data.hpp"
-//#include "lib/time/timevalue.hpp"
-//#include "lib/error.hpp"
-//#include "lib/util-foreach.hpp"
+#include "lib/time/timevalue.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
-#include "lib/format-cout.hpp"            ///////////////////////TODO
-#include "lib/test/diagnostic-output.hpp" ///////////////////////TODO
 
-//#include <functional>
+#include <sstream>
 #include <string>
 #include <vector>
 
-//using lumiera::Error;
-//using lumiera::LUMIERA_ERROR_EXCEPTION;
-//using lumiera::error::LUMIERA_ERROR_ASSERTION;
-//using lib::time::TimeVar;
-//using lib::time::Time;
-
-//using boost::algorithm::is_lower;
-//using boost::algorithm::is_digit;
 using util::isnil;
-//using std::function;
+using lib::time::Time;
+using lib::test::TempDir;
+using std::make_tuple;
 using std::string;
 using std::vector;
-using std::make_tuple;
+
 
 
 namespace lib {
@@ -60,14 +52,15 @@ namespace test{
   
   namespace {//Setup for test
     
+    
     /** Define the layout of a data row */
     struct TableForm
     {
-        Column<string>  id{"ID"};
+        Column<string>  id{"ID"};     //   ◁────── names given here must match first storage line
         Column<double> val{"Value"};
         Column<int>    off{"Offset"};
     
-        auto allColumns()
+        auto allColumns()         //   ◁────────── mandatory function; defines actual sequence of columns
         {   return std::tie(id
                            ,val
                            ,off
@@ -80,7 +73,6 @@ namespace test{
   }//(End)Test setup
   
   using error::LUMIERA_ERROR_STATE;
-  using error::LUMIERA_ERROR_INVALID;
   
   
   
@@ -232,63 +224,126 @@ namespace test{
       void
       verify_CSV_Format()
         {
-          string line;
           double val = 1.0 / 3;
+          CHECK (util::toString(val)              == "0.33333333"_expect         );
+          CHECK (util::showDecimal(val)           == "0.333333333333333"_expect  );
+          CHECK (util::showComplete(val)          == "0.33333333333333331"_expect);
+          CHECK (boost::lexical_cast<string>(val) == "0.33333333333333331"_expect);
+          
+          CHECK (format4Csv(double(1) / 3) == "0.333333333333333"_expect   );
+          CHECK (format4Csv(float(1) / 3)  == "0.333333"_expect            );
+          CHECK (format4Csv(f128(1) / 3)   == "0.333333333333333333"_expect);
+          CHECK (format4Csv(bool(1))       == "true"_expect );
+          CHECK (format4Csv(bool(0))       == "false"_expect);
+          CHECK (format4Csv("Starship-3")  == "\"Starship-3\""_expect ); // 3rd test today ;-)
+          CHECK (format4Csv(Time(1,2,25,13)) == "\"13:25:02.001\""_expect);
+          
+          
+          string line;
           int64_t ii = -100000;
+          bool boo   = true;
           
           appendCsvField (line, ii);
           CHECK (line == "-100000"_expect);
-SHOW_EXPR(val)
-SHOW_EXPL(val)
-SHOW_EXPR(std::to_string(val))
-SHOW_EXPR(format4Csv(val));
-SHOW_EXPR(util::showDecimal(val))
-SHOW_EXPR(util::showComplete(val))
-          double vval = parseAs<double>(format4Csv(val));
-SHOW_EXPR(vval)
-SHOW_EXPL(vval)
-SHOW_EXPR(std::to_string(vval))
-SHOW_EXPR(format4Csv(vval));
-SHOW_EXPR(util::showDecimal(val))
-SHOW_EXPR(util::showComplete(val))
-          vval = parseAs<double>(boost::lexical_cast<string>(val));
-SHOW_EXPR(vval)
-SHOW_EXPL(vval)
-SHOW_EXPR(std::to_string(vval))
-SHOW_EXPR(format4Csv(vval));
-SHOW_EXPR(util::showDecimal(val))
-SHOW_EXPR(util::showComplete(val))
-          bool boo;
-SHOW_EXPR(boo);
-SHOW_EXPL(boo)
-SHOW_EXPR(std::to_string(boo))
-SHOW_EXPR(format4Csv(boo));
-SHOW_EXPR(format4Csv(-42));
-SHOW_EXPR(format4Csv(uint64_t(-42)));
-          auto moo = f128(1) / 3;
-SHOW_EXPR(moo)
-SHOW_EXPL(moo)
-SHOW_EXPR(std::to_string(moo))
-SHOW_EXPR(format4Csv(moo));
-SHOW_EXPR(util::showDecimal(moo))
-SHOW_EXPR(util::showComplete(moo))
-          auto oo = 1.0f / 3;
-SHOW_EXPR(oo)
-SHOW_EXPL(oo)
-SHOW_EXPR(std::to_string(oo))
-SHOW_EXPR(format4Csv(oo));
-SHOW_EXPR(util::showDecimal(oo))
-SHOW_EXPR(util::showComplete(oo))
-SHOW_EXPR(format4Csv(lib::time::Time(1,2,3,4)));
+          appendCsvField (line, val);
+          CHECK (line == "-100000,0.333333333333333"_expect);
+          appendCsvField (line, boo);
+          CHECK (line == "-100000,0.333333333333333,true"_expect);
+          appendCsvField (line, "Raptor");
+          CHECK (line == "-100000,0.333333333333333,true,\"Raptor\""_expect);
+          
+          
+          CsvLine csvLine(line);
+          CHECK (csvLine.isValid());
+          CHECK (*csvLine == "-100000"_expect);
+          CHECK (-100000 == parseAs<int>(*csvLine));
+          ++csvLine;
+          CHECK (csvLine.isValid());
+          CHECK (*csvLine == "0.333333333333333"_expect);
+          CHECK (0.333333343f == parseAs<float>(*csvLine));
+          ++csvLine;
+          CHECK (csvLine.isValid());
+
+          CHECK (*csvLine == "true"_expect);
+          CHECK (true == parseAs<bool>(*csvLine));
+          ++csvLine;
+          CHECK (csvLine.isValid());
+          CHECK (*csvLine == "Raptor"_expect);
+          CHECK ("Raptor" == parseAs<string>(*csvLine));
+          ++csvLine;
+          CHECK (not csvLine.isValid());
+          
+          line = " ◐0◑. ; \t \"' \" \n ,oh my ;";
+          CsvLine horror(line);
+          CHECK ("◐0◑." == *horror);           // as far as our CSV format is concerned, this is valid
+          CHECK (0 == horror.getParsedFieldCnt());
+          ++horror;
+          CHECK (1 == horror.getParsedFieldCnt());
+          CHECK ("' " == *horror);
+          ++horror;
+          CHECK ("oh" == *horror);
+          CHECK (2 == horror.getParsedFieldCnt());
+          
+          // next field is not quoted, but contains space
+          VERIFY_FAIL (",oh |↯|my ;", ++horror );
+          
+          CHECK (not horror.isValid());
+          CHECK (horror.isParseFail());
         }
       
       
-      /** @test verify a table backed by persistent CSV data
-       */
+      /** @test verify a table backed by persistent CSV data */
       void
       verify_persistentDataFile()
         {
-          UNIMPLEMENTED("Arrrröööh");
+          TempDir temp;
+          // prepare a data file to load into the table...
+          fs::path f = temp.makeFile("dataz.csv");
+          std::ofstream content{f};
+          content << R"("ID", "Value", "Offset")"<<endl
+                  << R"(  "one" , 5.5 ;    +1  )"<<endl
+                  << R"(;" 0 ";0)"               <<endl;  //   ◁────── demonstrating some leeway in storage format
+          content.close();
+          
+          TestTab dat{f};
+          CHECK (2 == dat.size());
+          CHECK ("ID"  == dat.id.header);
+          CHECK ("Value" == dat.val.header);
+          CHECK ("Offset" == dat.off.header);
+          //Note: data is reversed in storage — last/newest line first
+          CHECK ("one" == string{dat.id});
+          CHECK ( 5.5  == dat.val);
+          CHECK (  1   == dat.off);
+          CHECK (dat.id.data    == vector<string>({"","one"}));
+          CHECK (dat.val.data   == vector<double>({0 ,5.5  }));
+          CHECK (dat.off.data   == vector<int>   ({0 ,1    }));
+          
+          // can modify some values....
+          dat.id = "mid";
+          dat.dupRow();
+          dat.id = "last";
+          dat.off *= -1;
+          // can dump the contents as CSV
+          CHECK (dat.dumpCSV() ==
+R"("",0,0
+"mid",5.5,1
+"last",5.5,-1
+)"_expect);
+          
+          // save complete table in current state, overwriting on disk
+          dat.save();
+          
+          // read back data rewritten on disk...
+          std::ifstream readback{f};
+          std::ostringstream inBuff;
+          inBuff << readback.rdbuf();
+          CHECK (inBuff.str() ==
+R"("ID","Value","Offset"
+"last",5.5,-1
+"mid",5.5,1
+"",0,0
+)"_expect);
+         // note again the reversed order in storage: last line at top
         }
     };
   

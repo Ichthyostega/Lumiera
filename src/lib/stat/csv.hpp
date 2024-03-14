@@ -104,6 +104,35 @@ namespace stat {
   }
   
   
+  /** parse string representation into typed value */
+  template<typename TAR>
+  inline TAR
+  parseAs (string const& encodedVal)
+  {
+      std::istringstream converter{encodedVal};
+      TAR value;
+      converter >> value;
+      if (converter.fail())
+          throw error::Invalid{_Fmt{"unable to parse \"%s\""} % encodedVal};
+      return value;
+  }
+  
+  template<>
+  inline bool
+  parseAs(string const& encodedBool)
+  {
+      return util::boolVal(encodedBool);
+  }
+  template<>
+  inline string
+  parseAs(string const& string)
+  {
+      return string; // pass-through (even if empty)
+  }
+  
+  
+  
+  
   /**
    * Parser to split one line of CSV data into fields.
    * @remarks iterator-like throw-away object
@@ -123,7 +152,7 @@ namespace stat {
       size_t   pos_;
 
     public:
-      CsvLine (string const& line)
+      CsvLine (string& line)        // NOTE: string must exist elsewhere
         : MatchSeq(line, ACCEPT_FIELD)
         , line_{line}
         , field_{0}
