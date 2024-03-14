@@ -52,6 +52,7 @@
 #include <cxxabi.h>
 #endif
 
+#include <limits>
 #include <iomanip>
 #include <sstream>
 #include <string>
@@ -75,6 +76,15 @@ namespace { // hard-wired configuration for debugging output....
   
   /** show only this amount of trailing bytes from an address */
   const size_t DIAGNOSTICS_ADDRESS_SUFFIX_LEN = 4;
+  
+  
+  /** maximum decimal digits able to pass through a round trip without value change */ 
+  template<typename F>
+  constexpr size_t PRECISION_DECIMAL = std::numeric_limits<F>::digits10;
+  
+  /** decimal digits require tod represent each different floating-point value */ 
+  template<typename F>
+  constexpr size_t PRECISION_COMPLETE = std::numeric_limits<F>::max_digits10;
 }
 
 
@@ -329,7 +339,18 @@ namespace util {
   using std::noshowbase;
   using std::ostringstream;
   using std::ostream;
-  
+
+  template<typename F>
+  string
+  showFloatingPoint (F val, size_t precision)  noexcept
+    try {
+      ostringstream buffer;
+      buffer.precision (precision);
+      buffer << val;
+      return buffer.str();
+    }
+    catch(...)
+    { return FAILURE_INDICATOR; }
   
   /**
    * @return fixed point string representation, never empty
@@ -338,28 +359,16 @@ namespace util {
    *       we do want a predictable string representation of simple fractional
    *       values like `0.1` (which can not be represented as binary floats)
    */
-  string
-  showDouble (double val)  noexcept
-    try {
-      ostringstream buffer;
-      buffer.precision (DIAGNOSTICS_DOUBLE_PRECISION);
-      buffer << val;
-      return buffer.str();
-    }
-    catch(...)
-    { return FAILURE_INDICATOR; }
+  string showDouble (double val)   noexcept { return showFloatingPoint (val, DIAGNOSTICS_DOUBLE_PRECISION); }
+  string showFloat  (float val)    noexcept { return showFloatingPoint (val, DIAGNOSTICS_FLOAT_PRECISION); }
   
+  string showDecimal (double val)  noexcept { return showFloatingPoint (val, PRECISION_DECIMAL<double>); }
+  string showDecimal (float val)   noexcept { return showFloatingPoint (val, PRECISION_DECIMAL<float>); }
+  string showDecimal (f128 val)    noexcept { return showFloatingPoint (val, PRECISION_DECIMAL<f128>); }
   
-  string
-  showFloat (float val)  noexcept
-    try {
-      ostringstream buffer;
-      buffer.precision (DIAGNOSTICS_FLOAT_PRECISION);
-      buffer << val;
-      return buffer.str();
-    }
-    catch(...)
-    { return FAILURE_INDICATOR; }
+  string showComplete (double val) noexcept { return showFloatingPoint (val, PRECISION_COMPLETE<double>); }
+  string showComplete (float val)  noexcept { return showFloatingPoint (val, PRECISION_COMPLETE<float>); }
+  string showComplete (f128 val)   noexcept { return showFloatingPoint (val, PRECISION_COMPLETE<f128>); }
   
   
   string

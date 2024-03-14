@@ -232,6 +232,54 @@ namespace test{
       void
       verify_CSV_Format()
         {
+          string line;
+          double val = 1.0 / 3;
+          int64_t ii = -100000;
+          
+          appendCsvField (line, ii);
+          CHECK (line == "-100000"_expect);
+SHOW_EXPR(val)
+SHOW_EXPL(val)
+SHOW_EXPR(std::to_string(val))
+SHOW_EXPR(format4Csv(val));
+SHOW_EXPR(util::showDecimal(val))
+SHOW_EXPR(util::showComplete(val))
+          double vval = parseAs<double>(format4Csv(val));
+SHOW_EXPR(vval)
+SHOW_EXPL(vval)
+SHOW_EXPR(std::to_string(vval))
+SHOW_EXPR(format4Csv(vval));
+SHOW_EXPR(util::showDecimal(val))
+SHOW_EXPR(util::showComplete(val))
+          vval = parseAs<double>(boost::lexical_cast<string>(val));
+SHOW_EXPR(vval)
+SHOW_EXPL(vval)
+SHOW_EXPR(std::to_string(vval))
+SHOW_EXPR(format4Csv(vval));
+SHOW_EXPR(util::showDecimal(val))
+SHOW_EXPR(util::showComplete(val))
+          bool boo;
+SHOW_EXPR(boo);
+SHOW_EXPL(boo)
+SHOW_EXPR(std::to_string(boo))
+SHOW_EXPR(format4Csv(boo));
+SHOW_EXPR(format4Csv(-42));
+SHOW_EXPR(format4Csv(uint64_t(-42)));
+          auto moo = f128(1) / 3;
+SHOW_EXPR(moo)
+SHOW_EXPL(moo)
+SHOW_EXPR(std::to_string(moo))
+SHOW_EXPR(format4Csv(moo));
+SHOW_EXPR(util::showDecimal(moo))
+SHOW_EXPR(util::showComplete(moo))
+          auto oo = 1.0f / 3;
+SHOW_EXPR(oo)
+SHOW_EXPL(oo)
+SHOW_EXPR(std::to_string(oo))
+SHOW_EXPR(format4Csv(oo));
+SHOW_EXPR(util::showDecimal(oo))
+SHOW_EXPR(util::showComplete(oo))
+SHOW_EXPR(format4Csv(lib::time::Time(1,2,3,4)));
         }
       
       

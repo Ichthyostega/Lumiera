@@ -37,6 +37,7 @@
 #ifndef LIB_META_UTIL_H
 #define LIB_META_UTIL_H
 
+#include "lib/integral.hpp"
 
 #include <typeinfo>
 #include <string>
@@ -425,9 +426,19 @@ namespace util {
               : lib::meta::BOOL_FALSE_STR;
   }
   
-  /** pretty-print a double in fixed-point format */
+  /** pretty-print a double in (rounded) fixed-point format */
   std::string showDouble (double) noexcept;
   std::string showFloat (float)   noexcept;
+  
+  /** show maximum reproducible decimal representation */
+  std::string showDecimal (double) noexcept;
+  std::string showDecimal (float)  noexcept;
+  std::string showDecimal (f128)   noexcept;
+  
+  /** show enough decimal digits to represent every distinct value */
+  std::string showComplete (double) noexcept;
+  std::string showComplete (float)  noexcept;
+  std::string showComplete (f128)   noexcept;
   
   std::string showSize (size_t)   noexcept;
   

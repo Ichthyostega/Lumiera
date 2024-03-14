@@ -80,22 +80,14 @@ namespace stat {
     inline string
     format4Csv (VAL const& val)
     {
-      std::ostringstream oss;
-      oss.precision (std::numeric_limits<VAL>::digits10);  /////////////////////////////OOO herausfinden ob hier lexical_cast genügt ==> dann toString()
-      oss << val;
-      return oss.str();
-    }
-    
-    inline string
-    format4Csv (string const& val)
-    {
-      return '"'+val+'"';
-    }
-    
-    inline string
-    format4Csv (bool boo)
-    {
-      return util::showBool(boo);  ///////////////////////OOO würde toSting() das korrekt hinbekommen
+      if constexpr (std::is_floating_point_v<VAL>)
+        return util::showDecimal (val);
+                  //   standard textual rendering
+      auto res = util::toString (val);
+      if constexpr (std::is_arithmetic_v<VAL>)
+        return res;   // includes bool
+      else
+        return '"'+res+'"';
     }
   }//(End)Implementation
   

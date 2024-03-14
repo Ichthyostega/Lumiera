@@ -38,6 +38,9 @@
 using uchar = unsigned char;
 using uint  = unsigned int;
 
+using f128  = long double;
+static_assert(10 <= sizeof(f128));
+
 const uint LIFE_AND_UNIVERSE_4EVER = 42;
 
   
