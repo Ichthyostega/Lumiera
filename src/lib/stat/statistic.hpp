@@ -37,6 +37,7 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
+#include "lib/iter-adapter.hpp"
 #include "lib/format-string.hpp"
 #include "lib/util.hpp"
 
@@ -119,14 +120,17 @@ namespace stat{
       
       
       using iterator = const D*;
+      using const_iterator = iterator;
       
       size_t size()  const { return e_ - b_; }
       bool empty()   const { return b_ == e_;}
       
       iterator begin() const { return b_; }
       iterator end()   const { return e_; }
+      friend const_iterator begin (DataSpan const& span){ return span.begin();}
+      friend const_iterator end   (DataSpan const& span){ return span.end();  }
       
-      D const& operator[](size_t i) const { return b_ + i; }
+      D const& operator[](size_t i) const { return *(b_ + i); }
       D const& at(size_t i)  const
         {
           if (i >= size())
@@ -135,6 +139,12 @@ namespace stat{
           return this->operator[](i);
         }
     };
+  
+  /** deduction guide: derive content from container. */
+  template<class CON>
+  DataSpan (CON const& container) -> DataSpan<typename lib::meta::ValueTypeBinding<CON>::value_type>;
+  
+  
   
   
   
@@ -318,7 +328,7 @@ namespace stat{
   inline auto
   computeLinearRegression (RegressionData const& points)
   {
-    return computeLinearRegression(DataSpan<RegressionPoint>{points});
+    return computeLinearRegression (DataSpan<RegressionPoint>{points});
   }
   
   
@@ -359,7 +369,7 @@ namespace stat{
   inline auto
   computeTimeSeriesLinearRegression (VecD const& series)
   {
-    return computeTimeSeriesLinearRegression(DataSpan<double>{series});
+    return computeTimeSeriesLinearRegression (DataSpan<double>{series});
   }
   
 }} // namespace lib::stat

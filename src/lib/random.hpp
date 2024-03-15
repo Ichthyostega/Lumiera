@@ -100,7 +100,7 @@ namespace lib {
   
   inline int      rani() { return defaultGen.i32(); }
   inline uint64_t ranu() { return defaultGen.u64(); }
-  inline double   rado() { return defaultGen.uni(); }
+  inline double   runi() { return defaultGen.uni(); }
   
   
   /** inject true randomness into the #defaultGen */

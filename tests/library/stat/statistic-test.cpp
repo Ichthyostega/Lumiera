@@ -28,39 +28,26 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/stat/statistic.hpp"
-//#include "lib/time/timevalue.hpp"
-//#include "lib/error.hpp"
-//#include "lib/util-foreach.hpp"
+#include "lib/iter-explorer.hpp"
+#include "lib/format-util.hpp"
+#include "lib/random.hpp"
+#include "lib/util.hpp"
 #include "lib/format-cout.hpp"            ///////////////////////TODO
 #include "lib/test/diagnostic-output.hpp" ///////////////////////TODO
 
-//#include <functional>
-//#include <string>
-
-//using util::for_each;
-//using lumiera::Error;
-//using lumiera::LUMIERA_ERROR_EXCEPTION;
-//using lumiera::error::LUMIERA_ERROR_ASSERTION;
-//using lib::time::TimeVar;
-//using lib::time::Time;
-
-//using boost::algorithm::is_lower;
-//using boost::algorithm::is_digit;
-//using std::function;
-//using std::string;
 
 
 namespace lib {
 namespace stat{
 namespace test{
   
-  template<class T>
-  class Wrmrmpft
-    {
-      T tt_;
-    };
-  
-  struct Murpf { };
+  namespace {
+    const size_t NUM_POINTS = 1'000;
+  }
+
+  using lib::test::roughEQ;
+  using util::isnil;
+  using error::LUMIERA_ERROR_INVALID;
   
   
   /**************************************************************//**
@@ -82,36 +69,118 @@ namespace test{
         }
       
       
-      /** @test prints "sizeof()" including some type name. */
-      void
-      check_baseStatistics ()
-        {
-        }
       
-      
-      
-      
+      /** @test a simplified preview on C++20 ranges */
       void
       demonstrate_DataSpan()
         {
+          auto dat = VecD{0,1,2,3,4,5};
+          
+          DataSpan all{dat};
+          CHECK (not isnil (all));
+          CHECK (dat.size() == all.size());
+          
+          auto i = all.begin();
+          CHECK (i != all.end());
+          CHECK (0 == *i);
+          ++i;
+          CHECK (1 == *i);
+          
+          DataSpan innr{*i, dat.back()};
+          CHECK (util::join(innr) == "1, 2, 3, 4"_expect);
+          CHECK (2 == innr.at(1));
+          CHECK (2 == innr[1]);
+          CHECK (4 == innr[3]);
+          CHECK (5 == innr[4]); // »undefined behaviour«
+          
+          VERIFY_ERROR (INVALID, innr.at(4) )
+          
+          CHECK (1+2+3+4 == lib::explore(innr).resultSum());
         }
       
       
-      /** @test check the VERIFY_ERROR macro,
-       *        which ensures a given error is raised.
+      /** @test helpers to calculate mean and standard derivation */
+      void
+      check_baseStatistics ()
+        {
+          auto dat = VecD{4,2,5,8,6};
+          DataSpan all = lastN(dat, dat.size());
+          DataSpan rst = lastN(dat, 4);
+          CHECK (2 == *rst.begin());
+          CHECK (4 == rst.size());
+          CHECK (5 == all.size());
+          
+          CHECK (5.0 == average (all));
+          CHECK (5.25 == average(rst));
+          
+          // Surprise : divide by N-1 since it is a guess for the real standard derivation
+          CHECK (sdev (all, 5.0) == sqrt(20/(5-1)));
+          
+          CHECK (5.0  == averageLastN (dat,20));
+          CHECK (5.0  == averageLastN (dat, 5));
+          CHECK (5.25 == averageLastN (dat, 4));
+          CHECK (7.0  == averageLastN (dat, 2));
+          CHECK (6.0  == averageLastN (dat, 1));
+          CHECK (0.0  == averageLastN (dat, 0));
+        }
+      
+      
+      /** @test attribute a weight to each data point going into linear regression
+       *      - using a simple scenario with three points
+       *      - a line with gradients would run through the end points (1,1) ⟶ (5,5)
+       *      - but we have a middle point, offset by -2 and with double weight
+       *      - thus the regression line is overall shifted by -1
+       *      - standard derivation is √3 and correlation 81%
+       *        (both plausible and manually checked
        */
       void
       check_wightedLinearRegression()
         {
+          RegressionData points{{1,1, 1}
+                               ,{5,5, 1}
+                               ,{3,1, 2}
+                               };
+          
+          auto [socket,gradient
+               ,predicted,deltas
+               ,correlation
+               ,maxDelta
+               ,sdev]          = computeLinearRegression (points);
+          
+          CHECK (socket ==  -1);
+          CHECK (gradient == 1);
+          CHECK (util::join (predicted) == "0, 4, 2"_expect );
+          CHECK (util::join (deltas)    == "1, 1, -1"_expect );
+          CHECK (maxDelta               == 1);
+          CHECK (correlation            == "0.81649658"_expect );
+          CHECK (sdev                   == "1.7320508"_expect );
         }
       
       
-      /** @test check a local manipulations,
-       *        which are undone when leaving the scope.
+      
+      /** @test regression over a series of measurement data
+       *      - use greater mount of data generated with randomness
+       *      - actually a power function is  _hidden in the data_
        */
       void
       check_TimeSeriesLinearRegression()
         {
+          auto dirt = []        { return runi() - 0.5; };
+          auto fun = [&](uint i){ auto x = double(i)/NUM_POINTS;
+                                  return x*x;
+                                };
+          VecD data;
+          data.reserve (NUM_POINTS);
+          for (uint i=0; i<NUM_POINTS; ++i)
+            data.push_back (fun(i) + dirt());
+          
+          auto [socket,gradient,correlation] = computeTimeSeriesLinearRegression (data);
+          
+          // regression line should roughly connect 0 to 1,
+          // yet slightly shifted downwards, cutting through the parabolic curve
+          CHECK (roughEQ (gradient*NUM_POINTS, 1,    0.08));
+          CHECK (roughEQ (socket,             -0.16, 0.3 ));
+          CHECK (correlation > 0.65);
         }
     };
   
