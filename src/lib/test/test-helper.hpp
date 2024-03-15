@@ -41,6 +41,7 @@
 
 
 #include "lib/symbol.hpp"
+#include "lib/meta/trait.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/test/transiently.hpp"
 #include "lib/format-obj.hpp"
@@ -48,7 +49,9 @@
 #include <boost/lexical_cast.hpp>
 #include <typeinfo>
 #include <cstdlib>
+#include <limits>
 #include <string>
+#include <cmath>
 
 
 
@@ -61,6 +64,41 @@ namespace test{
   using lib::meta::demangleCxx;
   
   
+  constexpr auto ROUGH_PRECISION  = pow (10, -3);
+  constexpr auto EPSILON_ULP      = 5;
+  
+  
+  template<typename F, typename N>
+  constexpr inline                                   meta::enable_if< std::is_floating_point<F>,
+  bool                                                              >
+  roughEQ (F val, N target, F limit =ROUGH_PRECISION)
+  {
+    REQUIRE (0 < limit);
+    return abs (val/target - F(1)) < limit;
+  }
+  
+  
+  template<typename F>
+  constexpr inline                                   meta::enable_if< std::is_floating_point<F>,
+  F                                                                 >
+  ulp (F val)
+  {
+    val = fabs (val);
+    const int exp = val < std::numeric_limits<F>::min()
+                  ? std::numeric_limits<F>::min_exponent - 1  // fixed exponent for subnormals
+                  : std::ilogb (val);
+    auto scaledUlp = std::ldexp (std::numeric_limits<F>::epsilon(), exp);
+    ENSURE (F(0) < scaledUlp);
+    return scaledUlp;
+  }
+  
+  template<typename F, typename N>
+  constexpr inline                                   meta::enable_if< std::is_floating_point<F>,
+  bool                                                              >
+  epsEQ (F val, N target, uint ulps =EPSILON_ULP)
+  {
+    return abs (val - target) < ulps * ulp<F> (target);
+  }
   
   
   /** for printing sizeof().
