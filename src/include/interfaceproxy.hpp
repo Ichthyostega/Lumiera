@@ -128,7 +128,6 @@
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
-using util::cStr;
 
 namespace lumiera {
 namespace facade {

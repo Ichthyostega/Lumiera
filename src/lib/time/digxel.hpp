@@ -84,11 +84,10 @@ namespace time {
   
   namespace digxel {
     
-    using util::cStr;
     using lib::Literal;
     using boost::lexical_cast;
     
-    typedef const char* CBuf;
+    using CBuf = CStr;
     
     
     /**

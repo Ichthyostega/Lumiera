@@ -31,7 +31,6 @@
 #include "lib/lifecycleregistry.hpp"
 #include "lib/util.hpp"
 
-using util::cStr;
 
 
 

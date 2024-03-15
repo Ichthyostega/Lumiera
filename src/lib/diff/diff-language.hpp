@@ -177,7 +177,6 @@ namespace diff{
           void
           applyTo (Interpreter& interpreter)
             {
-              using util::cStr;
               TRACE (diff, "verb %4s(%s)", cStr(verb()), cStr(elm()) );
               verb().applyTo (interpreter, elm());
             }

@@ -39,7 +39,6 @@ typedef boost::program_options::variables_map VarMap;
 namespace op = boost::program_options;
 
 using lib::VectS;
-using util::cStr;
 
 
 namespace lumiera {

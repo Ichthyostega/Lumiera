@@ -244,7 +244,6 @@ namespace diff{
   /* ======= Implementation of Tree Diff Application via TreeMutator ======= */
   
   using util::unConst;
-  using util::cStr;
   using util::_Fmt;
   using std::move;
   using std::swap;

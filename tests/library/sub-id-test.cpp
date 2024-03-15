@@ -43,7 +43,6 @@
 namespace lib {
 namespace test{
   
-  using util::cStr;
   using util::for_each;
   using std::bind;
   using std::placeholders::_1;

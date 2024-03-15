@@ -52,7 +52,6 @@ namespace test {
   using std::shared_ptr;
   using boost::algorithm::trim;
   
-  using util::cStr;
   using util::isnil;
   using util::contains;
   using util::typeStr;

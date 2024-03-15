@@ -52,7 +52,6 @@ namespace control {
   
   using lib::Symbol;
   using std::string;
-  using util::cStr;
   
    
   Symbol

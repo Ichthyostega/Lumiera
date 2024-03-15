@@ -37,7 +37,6 @@
 #include <memory>
 #include <list>
 
-using util::cStr;
 using util::isnil;
 using std::list;
 

@@ -48,7 +48,6 @@ extern "C" {
 #include "lib/util.hpp"
 
 
-using util::cStr;
 using lib::Literal;
 using std::unique_ptr;
 

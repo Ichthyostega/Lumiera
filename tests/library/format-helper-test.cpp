@@ -235,31 +235,33 @@ namespace test {
       void
       checkPrefixSuffix()
         {
-          CHECK (startsWith ("abcdef", "abcdef"));
-          CHECK (startsWith ("abcdef", "abcde"));
-          CHECK (startsWith ("abcdef", "abcd"));
-          CHECK (startsWith ("abcdef", "abc"));
-          CHECK (startsWith ("abcdef", "ab"));
-          CHECK (startsWith ("abcdef", "a"));
-          CHECK (startsWith ("abcdef", ""));
-          CHECK (startsWith ("", ""));
+          string abcdef{"abcdef"};
+          CHECK (startsWith (abcdef, "abcdef"));
+          CHECK (startsWith (abcdef, "abcde"));
+          CHECK (startsWith (abcdef, "abcd"));
+          CHECK (startsWith (abcdef, "abc"));
+          CHECK (startsWith (abcdef, "ab"));
+          CHECK (startsWith (abcdef, "a"));
+          CHECK (startsWith (abcdef, ""));
           
-          CHECK (not startsWith ("abc", "abcd"));
-          CHECK (not startsWith ("a", "ä"));
-          CHECK (not startsWith ("ä", "a"));
+          CHECK (endsWith (abcdef, "abcdef"));
+          CHECK (endsWith (abcdef, "bcdef"));
+          CHECK (endsWith (abcdef, "cdef"));
+          CHECK (endsWith (abcdef, "def"));
+          CHECK (endsWith (abcdef, "ef"));
+          CHECK (endsWith (abcdef, "f"));
+          CHECK (endsWith (abcdef, ""));
           
-          CHECK (endsWith ("abcdef", "abcdef"));
-          CHECK (endsWith ("abcdef", "bcdef"));
-          CHECK (endsWith ("abcdef", "cdef"));
-          CHECK (endsWith ("abcdef", "def"));
-          CHECK (endsWith ("abcdef", "ef"));
-          CHECK (endsWith ("abcdef", "f"));
-          CHECK (endsWith ("abcdef", ""));
-          CHECK (endsWith ("", ""));
+          CHECK (startsWith (string{}, ""));
+          CHECK (endsWith   (string{}, ""));
           
-          CHECK (not endsWith ("abc", " abc"));
-          CHECK (not endsWith ("a", "ä"));
-          CHECK (not endsWith ("ä", "a"));
+          CHECK (not startsWith (string{"abc"}, "abcd"));
+          CHECK (not startsWith (string{"a"}, "ä"));
+          CHECK (not startsWith (string{"ä"}, "a"));
+          
+          CHECK (not endsWith (string{"abc"}, " abc"));
+          CHECK (not endsWith (string{"a"},   "ä"));
+          CHECK (not endsWith (string{"ä"},   "a"));
           
           string abc{"abcdef"};
           removePrefix(abc, "ab");

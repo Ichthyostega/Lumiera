@@ -106,13 +106,13 @@
 #ifndef STEAM_MOBJECT_PLACEMENT_INDEX_H
 #define STEAM_MOBJECT_PLACEMENT_INDEX_H
 
-#include "lib/util.hpp"
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/itertools.hpp"
 #include "steam/mobject/placement.hpp"
 #include "steam/mobject/placement-ref.hpp"
 #include "lib/nocopy.hpp"
+#include "lib/util.hpp"
 
 #include <unordered_map>
 #include <memory>

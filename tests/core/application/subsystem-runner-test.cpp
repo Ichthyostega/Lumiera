@@ -47,7 +47,6 @@
 #include <chrono>
 
 using util::isnil;
-using util::cStr;
 using test::Test;
 using lib::Literal;
 using lib::query::extractID;

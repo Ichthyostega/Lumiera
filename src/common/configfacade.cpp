@@ -70,7 +70,6 @@ extern "C" {
 
 namespace lumiera {
   
-  using util::cStr;
   using util::isnil;
   using lib::Literal;
   
@@ -135,7 +134,6 @@ extern "C" { /* ==== implementation C interface for accessing setup.ini ======= 
   using lumiera::Config;
   using lib::SearchPathSplitter;
   using util::isnil;
-  using util::cStr;
   
   
   

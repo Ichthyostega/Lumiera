@@ -53,7 +53,6 @@
 #include <cstdlib>
 
 using util::_Fmt;
-using util::cStr;
 using std::string;
 using std::rand;
 

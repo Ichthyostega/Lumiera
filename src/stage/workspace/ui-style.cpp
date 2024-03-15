@@ -44,7 +44,6 @@
 using Gtk::IconSize;
 using Gtk::IconFactory;
 
-using util::cStr;
 
 
 namespace stage {

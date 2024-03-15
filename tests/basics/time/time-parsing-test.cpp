@@ -34,7 +34,6 @@
 #include "lib/util.hpp"
 
 using lib::Symbol;
-using util::cStr;
 
 
 namespace lib {

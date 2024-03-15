@@ -60,6 +60,16 @@
 #include <string>
 #include <cstring>
 
+using CStr = const char*;
+
+/** convenience shortcut: forced conversion to c-String via string.
+ *  usable for printf with objects providing to-string conversion. */
+inline CStr
+cStr (std::string const& rendered)
+{
+  return rendered.c_str();
+}
+
 
 namespace lib {
   
@@ -74,7 +84,7 @@ namespace lib {
    */
   class Literal
     {
-       const char * str_;
+       CStr str_;
        
     public:
        /** empty string by default */
@@ -88,8 +98,8 @@ namespace lib {
          : str_(o.str_)
          { }
        
-       operator const char* ()  const { return str_; }
-       const char* c()          const { return str_; }
+       operator CStr()  const { return str_; }
+       const char* c()  const { return str_; }
        
        bool
        empty()  const
@@ -97,11 +107,11 @@ namespace lib {
            return !str_ || 0 == std::strlen(str_);
          }
        
-       bool operator== (const char* cString)  const;
+       bool operator== (CStr cString)  const;
 
     protected:
        /** Assignment generally prohibited */
-       Literal& operator= (const char* newStr) noexcept
+       Literal& operator= (CStr newStr) noexcept
          {
            str_ = newStr;
            return *this;
@@ -122,7 +132,7 @@ namespace lib {
       static Symbol BOTTOM;
       static Symbol FAILURE;
       
-      Symbol (const char* lit =NULL)
+      Symbol (CStr lit =NULL)
         : Symbol{std::string(lit? lit : BOTTOM.c())}
         { }
       
@@ -137,7 +147,7 @@ namespace lib {
         : Symbol{std::string(base)+"."+ext}
         { }
       
-      Symbol (Literal const& base, const char* ext)
+      Symbol (Literal const& base, CStr ext)
         : Symbol{base, std::string(ext)}
         { }
        
@@ -180,9 +190,9 @@ namespace lib {
   
   /* === mixed comparisons === */
   
-  inline bool operator== (const char* s1,    Literal s2)        { return s2.operator== (s1); }
-  inline bool operator== (Symbol s1,         const char* s2)    { return s1.operator== (s2); }
-  inline bool operator== (const char* s1,    Symbol      s2)    { return s2.operator== (s1); }
+  inline bool operator== (CStr s1,           Literal s2)        { return s2.operator== (s1); }
+  inline bool operator== (Symbol s1,         CStr s2)           { return s1.operator== (s2); }
+  inline bool operator== (CStr s1,           Symbol      s2)    { return s2.operator== (s1); }
   inline bool operator== (Literal s1,        Symbol  s2)        { return s1.operator== (s2.c()); }
   inline bool operator== (Symbol s1,         Literal s2)        { return s2.operator== (s1.c()); }
   inline bool operator== (Literal s1,        std::string s2)    { return s1.operator== (s2.c_str()); }
@@ -194,10 +204,10 @@ namespace lib {
   
   inline bool operator!= (Literal const& s1, Literal const& s2) { return not s1.operator== (s2.c()); }
   inline bool operator!= (Symbol const& s1,  Symbol const& s2)  { return not (s1.c() == s2.c()); }
-  inline bool operator!= (Literal s1,        const char* s2)    { return not s1.operator== (s2); }
-  inline bool operator!= (const char* s1,    Literal s2)        { return not s2.operator== (s1); }
-  inline bool operator!= (Symbol s1,         const char* s2)    { return not s1.operator== (s2); }
-  inline bool operator!= (const char* s1,    Symbol      s2)    { return not s2.operator== (s1); }
+  inline bool operator!= (Literal s1,        CStr s2)           { return not s1.operator== (s2); }
+  inline bool operator!= (CStr s1,           Literal s2)        { return not s2.operator== (s1); }
+  inline bool operator!= (Symbol s1,         CStr s2)           { return not s1.operator== (s2); }
+  inline bool operator!= (CStr s1,           Symbol      s2)    { return not s2.operator== (s1); }
   inline bool operator!= (Literal s1,        Symbol  s2)        { return not s1.operator== (s2.c()); }
   inline bool operator!= (Symbol s1,         Literal s2)        { return not s2.operator== (s1.c()); }
   inline bool operator!= (Literal s1,        std::string s2)    { return not s1.operator== (s2.c_str()); }
@@ -211,14 +221,14 @@ namespace lib {
   inline std::string
   operator+ (std::string str, Literal const& sym)
   {
-    const char* symP (sym);
+    CStr symP (sym);
     return str + symP;
   }
   
   inline std::string
   operator+ (Literal const& sym, std::string str)
   {
-    const char* symP (sym);
+    CStr symP (sym);
     return symP + str;
   }
   

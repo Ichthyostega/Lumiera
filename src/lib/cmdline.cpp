@@ -27,8 +27,8 @@
 
 
 
-#include "lib/util.hpp"
 #include "include/logging.h"
+#include "lib/hash-standard.hpp"
 #include "lib/cmdline.hpp"
 #include "lib/format-util.hpp"
 

@@ -38,7 +38,6 @@
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
-using util::cStr;
 using std::string;
 
 

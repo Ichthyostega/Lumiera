@@ -30,9 +30,9 @@
  */
 
 
-#include "lib/util.hpp"
-#include "lib/symbol.hpp"
 #include "common/advice/binding.hpp"
+#include "lib/symbol.hpp"
+#include "lib/util.hpp"
 
 #include <boost/functional/hash.hpp>
 #include <boost/lexical_cast.hpp>

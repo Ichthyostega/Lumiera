@@ -39,7 +39,6 @@
  */
 
 
-#include "lib/util.hpp"
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/format-string.hpp"
@@ -49,6 +48,7 @@
 #include "steam/control/command-registry.hpp"
 #include "steam/control/command-impl-clone-builder.hpp"
 #include "steam/control/handling-pattern.hpp"
+#include "lib/util.hpp"
 
 #include <utility>
 #include <sstream>
@@ -57,7 +57,6 @@
 using std::ostringstream;
 using std::string;
 using std::move;
-using util::cStr;
 using util::_Fmt;
 
 

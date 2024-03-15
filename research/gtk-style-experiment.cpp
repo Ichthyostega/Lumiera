@@ -60,7 +60,6 @@
 
 #include <string>
 
-using util::cStr;
 using util::join;
 using std::string;
 

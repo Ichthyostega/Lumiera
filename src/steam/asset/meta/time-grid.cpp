@@ -38,7 +38,6 @@
 #include <string>
 
 using util::_Fmt;
-using util::cStr;
 using util::isnil;
 using std::string;
 

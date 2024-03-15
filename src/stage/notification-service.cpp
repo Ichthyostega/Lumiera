@@ -78,7 +78,6 @@ using lib::diff::TreeMutator;
 using lib::diff::MutationMessage;
 using stage::ctrl::UiDispatcher;
 using stage::ctrl::BusTerm;
-using util::cStr;
 using util::_Fmt;
 
 using std::string;

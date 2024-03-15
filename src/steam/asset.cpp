@@ -44,7 +44,6 @@ using util::removeall;
 using util::for_each;
 using util::and_all;
 using util::isnil;
-using util::cStr;
 using util::_Fmt;
 
 

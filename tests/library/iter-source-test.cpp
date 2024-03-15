@@ -52,7 +52,6 @@ namespace test{
   using lib::test::randStr;
   using lib::test::randTime;
   using util::isnil;
-  using util::cStr;
   using std::make_pair;
   using std::string;
   using std::list;

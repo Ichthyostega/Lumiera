@@ -66,7 +66,6 @@ namespace lumiera {
   using std::vector;
   using std::string;
   using util::_Fmt;
-  using util::cStr;
   using util::isnil;
   using util::and_all;
   using util::for_each;

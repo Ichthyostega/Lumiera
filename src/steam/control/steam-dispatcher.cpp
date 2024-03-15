@@ -315,7 +315,7 @@ namespace control {
             }
           if (cmd)
             {
-              INFO (command, "+++ dispatch %s", util::cStr(cmd));          ///////////////////////////////TICKET #211 actually use a command logging and execution strategy here
+              INFO (command, "+++ dispatch %s", cStr(cmd));          ////////////////////////////////////////TICKET #211 actually use a command logging and execution strategy here
               
               //////////////////////////////////////////////////////TODO : magic to invoke commands from unit tests
               if (util::startsWith (string(cmd.getID()), "test"))

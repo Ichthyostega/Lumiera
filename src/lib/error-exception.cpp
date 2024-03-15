@@ -41,7 +41,6 @@
 #include <typeinfo>
 #include <iostream>
 
-using util::cStr;
 using util::isnil;
 using std::exception;
 

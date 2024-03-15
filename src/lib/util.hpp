@@ -40,15 +40,30 @@
 #include "include/limits.hpp"
 #include "lib/hash-standard.hpp"
 
-#include <set>
 #include <string>
-#include <algorithm>
+
+namespace std {// forward declarations to avoid pervasive includes
+  
+  template<typename T>
+  class allocator;
+  template<typename K, typename CMP, class ALLO>
+  class set;
+  
+  template<typename IT, typename V>
+  IT find (IT, IT, V const&);
+  template<typename IT, typename V>
+  IT remove (IT, IT, V const&);
+}
+
+
+const char* cStr (std::string  const&);
 
 
 
 namespace util {
   
   using std::string;
+  using CStr = const char*;
   
   
   template <class NUM>
@@ -101,31 +116,33 @@ namespace util {
    * @return always a number, 0 in case of unparseable text,
    *         limited to 0 <= num <= LUMIERA_MAX_ORDINAL_NUMBER */
   inline uint
-  uNum (const char* pCStr)
+  uNum (CStr charPtr)
   {
-    if (!pCStr) return 0;
-    int parsedNumber(std::atoi (pCStr));
+    if (!charPtr) return 0;
+    int parsedNumber (std::atoi (charPtr));
     return limited (0, parsedNumber, LUMIERA_MAX_ORDINAL_NUMBER);
   }
   
   inline int
-  sNum (const char* pCStr)
+  sNum (CStr charPtr)
   {
-    if (!pCStr) return 0;
-    int parsedNumber(std::atoi (pCStr));
+    if (!charPtr) return 0;
+    int parsedNumber (std::atoi (charPtr));
     return limited (-LUMIERA_MAX_ORDINAL_NUMBER, parsedNumber, LUMIERA_MAX_ORDINAL_NUMBER);
   }
   
+  template<class OBJ>
   inline uint
-  uNum (string const& spec)
+  uNum (OBJ const& spec)
   {
-    return uNum (spec.c_str());
+    return uNum (cStr(spec));
   }
   
+  template<class OBJ>
   inline int
-  sNum (string const& spec)
+  sNum (OBJ const& spec)
   {
-    return sNum (spec.c_str());
+    return sNum (cStr(spec));
   }
   
   
@@ -156,9 +173,9 @@ namespace util {
   }
   
   inline bool
-  isnil (const char* pCStr)
+  isnil (CStr charPtr)
   {
-    return !pCStr or !(*pCStr);
+    return !charPtr or !(*charPtr);
   }
   
   
@@ -167,13 +184,13 @@ namespace util {
   inline bool
   startsWith (string const& str, string const& prefix)
   {
-    return 0 == str.rfind(prefix, 0);
+    return 0 == str.rfind (prefix, 0);
   }
   
   inline bool
-  startsWith (string const& str, const char* prefix)
+  startsWith (string const& str, CStr prefix)
   {
-    return 0 == str.rfind(prefix, 0);
+    return 0 == str.rfind (prefix, 0);
   }
   
   /** check if string ends with the given suffix */
@@ -183,11 +200,11 @@ namespace util {
     size_t l = suffix.length();
     if (l > str.length()) return false;
     size_t pos = str.length() - l;
-    return pos == str.find(suffix, pos);
+    return pos == str.find (suffix, pos);
   }
   
   inline bool
-  endsWith (string const& str, const char* suffix)
+  endsWith (string const& str, CStr suffix)
   {
     return endsWith (str, string(suffix));
   }
@@ -216,9 +233,9 @@ namespace util {
   }
   
   /** shortcut for set value containment test */
-  template <typename T>
+  template <typename T, class CMP, class ALO>
   inline bool
-  contains (std::set<T> const& set, T const& val)
+  contains (std::set<T,CMP,ALO> const& set, T const& val)
   {
     return set.end() != set.find (val);
   }
@@ -447,19 +464,6 @@ namespace util {
    *  all other content as `false`, including empty strings. Never throws.
    */
   bool isYes (string const&) noexcept;
-  
-  
-  
-  
-  /** convenience shortcut: conversion to c-String via string.
-   *  usable for printf with objects providing to-string conversion.
-   */
-  inline const char*
-  cStr (string const& org)
-  {
-    return org.c_str();
-  }
-  
   
 } // namespace util
 

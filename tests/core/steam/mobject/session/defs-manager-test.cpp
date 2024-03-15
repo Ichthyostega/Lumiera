@@ -50,7 +50,6 @@ namespace mobject {
 namespace session {
 namespace test    {
   
-  using util::cStr;
   using lib::Symbol;
   using asset::ID;
   using asset::Asset;

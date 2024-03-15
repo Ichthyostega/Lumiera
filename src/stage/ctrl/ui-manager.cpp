@@ -45,7 +45,6 @@
 
 #include <gdlmm.h>
   
-using util::cStr;
 using util::isnil;
 
 

@@ -36,13 +36,10 @@
 
 #include "lib/symbol.hpp"
 #include "lib/symbol-table.hpp"
-#include "include/limits.hpp"
-extern "C" {
-#include "lib/safeclib.h"
-}
 
 #include <boost/functional/hash.hpp>
 #include <cstddef>
+#include <cstring>
 #include <string>
 
 using std::size_t;
@@ -65,6 +62,12 @@ namespace lib {
     {
       static SymbolTable theSymbolTable;
       return theSymbolTable;  // Meyer's Singleton
+    }
+    
+    inline int
+    strNcmp (CStr a, CStr b, size_t len)
+    {
+      return a == b ? 0 : std::strncmp (a?a:"", b?b:"", len);
     }
   }
   
@@ -96,9 +99,9 @@ namespace lib {
   /** equality on Literal and Symbol values is defined
    *  based on the content, not the address. */
   bool
-  Literal::operator== (const char* cString)  const
+  Literal::operator== (CStr charPtr)  const
   {
-    return !lumiera_strncmp (this->str_, cString, STRING_MAX_RELEVANT);
+    return 0 == strNcmp (this->str_, charPtr, STRING_MAX_RELEVANT);
   }
   
   

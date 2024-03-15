@@ -48,7 +48,6 @@ namespace test    {
   using std::bind;
   using std::string;
   
-  using util::cStr;
   using util::contains;
   
   

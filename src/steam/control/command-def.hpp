@@ -84,7 +84,6 @@ namespace control {
   using std::placeholders::_1;
   using std::tuple_size;
   using lib::Symbol;
-  using util::cStr;
   
   using lib::meta::_Fun;
   using lib::meta::NullType;
