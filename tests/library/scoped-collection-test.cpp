@@ -91,7 +91,7 @@ namespace test{
   
   
   using util::isnil;
-  using lumiera::error::LERR_(ITER_EXHAUST);
+  using LERR_(ITER_EXHAUST);
   
   typedef ScopedCollection<Dummy, sizeof(SubDummy)> CollD;
   

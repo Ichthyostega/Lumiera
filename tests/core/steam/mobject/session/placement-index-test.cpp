@@ -44,12 +44,15 @@ using util::isSameObject;
 using std::string;
 
 
-namespace steam    {
+namespace steam   {
 namespace mobject {
 namespace session {
 namespace test    {
   
   using session::test::TestClip;
+  using LERR_(BOTTOM_PLACEMENTREF);
+  using LERR_(NONEMPTY_SCOPE);
+  using LERR_(INVALID_SCOPE);
   
   typedef PlacementIndex& Idx;
   

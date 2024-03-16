@@ -33,16 +33,14 @@
 #include "lib/util.hpp"
 
 
-
-
-namespace steam    {
+namespace steam   {
 namespace mobject {
 namespace session {
 namespace test    {
   
   using util::isnil;
   using util::isSameObject;
-  using lumiera::error::LERR_(INVALID);
+  using LERR_(INVALID_SCOPE);
   
   
   /***********************************************************************//**
@@ -54,7 +52,7 @@ namespace test    {
    *       some path frames to play with.
    * @note this test executes a lot of functionality in a manual by-hand way,
    *       which in the actual application is accessed and utilised through
-   *       QueryFocus objects as frontend. 
+   *       QueryFocus objects as frontend.
    *       
    * @see  mobject::session::QueryFocusStack
    * @see  mobject::session::ScopePath
@@ -63,7 +61,7 @@ namespace test    {
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           // Prepare an (test)Index and
           // set up dummy session contents
@@ -251,4 +249,4 @@ namespace test    {
   LAUNCHER (QueryFocusStack_test, "unit session");
   
   
-}}}} // namespace steam::mobject::session::test
+}}}}// namespace steam::mobject::session::test

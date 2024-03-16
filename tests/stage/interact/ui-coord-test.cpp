@@ -41,12 +41,12 @@ using util::join;
 
 
 
-namespace stage  {
+namespace stage    {
 namespace interact {
-namespace test {
+namespace test     {
   
-  using lumiera::error::LERR_(INDEX_BOUNDS);
-  using lumiera::error::LERR_(LOGIC);
+  using LERR_(INDEX_BOUNDS);
+  using LERR_(LOGIC);
   
   
   

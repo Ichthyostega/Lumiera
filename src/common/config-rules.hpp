@@ -72,9 +72,13 @@
 
 
 namespace lumiera {
+  namespace error {
+    LUMIERA_ERROR_DECLARE (CAPABILITY_QUERY);  ///< unresolvable capability query.
+  }
   
   using std::string;
   using lib::P;
+
   
   
   /////////////////////////////////////////////////////////////////////TICKET #705 this is draft/preview code; a real resolution system needs to be integrated
@@ -207,11 +211,6 @@ namespace lumiera {
         
         // TODO: find out what operations we need to support here for the »real solution« (using Prolog)
       };
-      
-      
-    
-    
-    LUMIERA_ERROR_DECLARE (CAPABILITY_QUERY);  ///< unresolvable capability query.
   
   } // namespace query
   

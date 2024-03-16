@@ -65,6 +65,11 @@
 //#include <string>
 
 
+namespace lumiera {
+namespace error {
+  LUMIERA_ERROR_DECLARE (CANT_PLAY); ///< unable to build playback or render process for this configuration
+}}
+
 namespace steam {
 namespace play {
 
@@ -114,11 +119,6 @@ namespace play {
      ~PlayService();    /////TODO notifyTermination_(&error_); }
       
     };
-  
-  
-  LUMIERA_ERROR_DECLARE (CANT_PLAY); ///< unable to build playback or render process for this configuration
-  
-  
   
   
 }} // namespace steam::play

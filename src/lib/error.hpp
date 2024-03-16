@@ -49,16 +49,18 @@
 #include <string>
 
 
+#define LERR_(_NAME_) lumiera::error::LUMIERA_ERROR_##_NAME_
+
 namespace lumiera {
   
   using std::string;
   using CStr = const char*;
   
+  namespace error {
+    /** error-ID for unspecified exceptions */
+    LUMIERA_ERROR_DECLARE(EXCEPTION);
+  }
   
-#define LERR_(_NAME_) LUMIERA_ERROR_##_NAME_
-  
-  /** error-ID for unspecified exceptions */
-  LUMIERA_ERROR_DECLARE(EXCEPTION);
   
   /**
    * Interface and Base definition for all Lumiera Exceptions.

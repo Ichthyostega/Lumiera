@@ -240,7 +240,7 @@ namespace stage {
     
     
     
-    using lumiera::error::LERR_(LIFECYCLE);
+    using LERR_(LIFECYCLE);
     
     lib::Depend<NotificationService> _instance; ///< a backdoor for the C Language impl to access the actual SessionCommand implementation...
     

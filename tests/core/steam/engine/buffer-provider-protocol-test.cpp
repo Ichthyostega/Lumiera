@@ -46,8 +46,8 @@ namespace test  {
   using lib::test::Dummy;
   
   using steam::engine::BuffHandle;
-  using error::LERR_(LOGIC);
-  using error::LERR_(LIFECYCLE);
+  using LERR_(LIFECYCLE);
+  using LERR_(LOGIC);
   
   
   namespace { // Test fixture

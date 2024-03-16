@@ -47,9 +47,9 @@ namespace lib {
 namespace diff{
 namespace test{
   
-  using lumiera::error::LERR_(INVALID);
-  using lumiera::error::LERR_(INDEX_BOUNDS);
-  using lumiera::error::LERR_(BOTTOM_VALUE);
+  using LERR_(INVALID);
+  using LERR_(INDEX_BOUNDS);
+  using LERR_(BOTTOM_VALUE);
   
   namespace {//Test fixture....
     

@@ -182,7 +182,7 @@ namespace lib {
           creator_ = []() -> OBJ*
                       {
                         throw error::Fatal("Service not available at this point of the Application Lifecycle"
-                                          ,error::LERR_(LIFECYCLE));
+                                          ,LERR_(LIFECYCLE));
                       };
         }
       

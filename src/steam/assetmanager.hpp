@@ -22,7 +22,7 @@
 
 /** @file assetmanager.hpp
  ** Steam-Layer Interface: Asset Lookup and Organisation.
- ** Declares the AssetManager interface used to access individual 
+ ** Declares the AssetManager interface used to access individual
  ** Asset instances.
  ** 
  ** These classes are placed into namespace asset and proc_interface.
@@ -58,6 +58,13 @@ using std::string;
 using std::list;
 
 
+namespace lumiera {
+namespace error {
+  LUMIERA_ERROR_DECLARE (UNKNOWN_ASSET_ID);  ///< use of a non-registered Asset ID.
+  LUMIERA_ERROR_DECLARE (WRONG_ASSET_KIND);  ///< Asset ID of wrong Asset kind, unable to cast.
+}}
+
+
 namespace steam {
 namespace asset {
   
@@ -67,7 +74,7 @@ namespace asset {
   /**
    * Facade for the Asset subsystem
    */
-  class AssetManager 
+  class AssetManager
     : util::NonCopyable
     {
       asset::DB & registry;
@@ -130,9 +137,6 @@ namespace asset {
       
     };
     
-    
-    LUMIERA_ERROR_DECLARE (UNKNOWN_ASSET_ID);  ///< use of a non-registered Asset ID.
-    LUMIERA_ERROR_DECLARE (WRONG_ASSET_KIND);  ///< Asset ID of wrong Asset kind, unable to cast.
 
 }} // namespace steam::asset
 

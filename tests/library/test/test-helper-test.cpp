@@ -38,8 +38,8 @@
 
 using util::for_each;
 using lumiera::Error;
-using lumiera::LUMIERA_ERROR_EXCEPTION;
-using lumiera::error::LUMIERA_ERROR_ASSERTION;
+using LERR_(EXCEPTION);
+using LERR_(ASSERTION);
 using lib::time::TimeVar;
 using lib::time::Time;
 

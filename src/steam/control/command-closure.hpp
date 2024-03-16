@@ -76,8 +76,6 @@
 #include <string>
 
 
-
-
 namespace steam {
 namespace control {
   
@@ -86,9 +84,6 @@ namespace control {
   
   using std::string;
   
-  
-  
-  LUMIERA_ERROR_DECLARE (UNBOUND_ARGUMENTS);  ///< Command functor not yet usable, because arguments aren't bound
   
   
   /** 

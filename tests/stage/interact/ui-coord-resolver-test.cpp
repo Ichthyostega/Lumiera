@@ -46,12 +46,12 @@ using util::join;
 
 
 
-namespace stage  {
-namespace interact {
-namespace test {
+namespace stage   {
+namespace interact{
+namespace test    {
   
-  using lumiera::error::LERR_(INVALID);
-  using lumiera::error::LERR_(STATE);
+  using LERR_(INVALID);
+  using LERR_(STATE);
   
   
   

@@ -50,7 +50,7 @@ namespace test{
   using std::vector;
   using std::string;
   
-  using lumiera::error::LERR_(ITER_EXHAUST);
+  using LERR_(ITER_EXHAUST);
   
   
   namespace { // test fixture

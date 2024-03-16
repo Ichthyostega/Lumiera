@@ -41,15 +41,12 @@ using std::ostream;
 
 using util::isSameObject;
 
-using lumiera::error::LERR_(BOTTOM_VALUE);
-using lumiera::error::LERR_(WRONG_TYPE);
+using LERR_(BOTTOM_VALUE);
+using LERR_(WRONG_TYPE);
 
 
 namespace util {
 namespace test {
-  
-  
-  
   
   
   

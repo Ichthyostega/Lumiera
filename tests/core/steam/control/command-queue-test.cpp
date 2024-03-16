@@ -24,25 +24,19 @@
 #include "lib/test/run.hpp"
 #include "steam/control/command-queue.hpp"
 #include "steam/control/command-def.hpp"
-//#include "steam/control/command-registry.hpp"
-//#include "lib/test/event-log.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 #include "steam/control/test-dummy-commands.hpp"
 
-//#include <cstdlib>
 
-
-namespace steam {
-namespace control {
-namespace test    {
+namespace steam  {
+namespace control{
+namespace test   {
   
-  
-//  using std::function;
-//  using std::rand;
   using lib::Symbol;
   using util::isnil;
+  using LERR_(UNBOUND_ARGUMENTS);
   
   
   namespace { // test fixture...
@@ -52,11 +46,6 @@ namespace test    {
     
   }//(End) test fixture
   
-//  typedef shared_ptr<CommandImpl> PCommandImpl;
-//  typedef HandlingPattern const& HaPatt;
-  
-  
-  
   
   
   
@@ -64,7 +53,6 @@ namespace test    {
    * @test verify proper working of queue management used within SteamDispatcher.
    *       - can enqueue and dequeue command messages
    *       - handling of priority messages
-   * 
    * @see CommandQueue
    * @see DispatcherLoop
    * @see SteamDispatcher
@@ -95,7 +83,7 @@ namespace test    {
         }
       //-------------(End)FIXTURE
       
-     
+      
       virtual void
       run (Arg)
         {

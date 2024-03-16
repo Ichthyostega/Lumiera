@@ -53,7 +53,7 @@
 
 namespace steam {
 namespace control {
-  
+  namespace err = lumiera::error;
   
   
   /**
@@ -79,8 +79,8 @@ namespace control {
       operator() (CmdClosure& clo)
         {
           if (!clo)
-            throw lumiera::error::State ("Lifecycle error: function arguments not ready",
-                                         LERR_(UNBOUND_ARGUMENTS));
+            throw err::State{"Lifecycle error: function arguments not ready"
+                            , LERR_(UNBOUND_ARGUMENTS)};
           clo.invoke (func_);
         }
     };
@@ -122,8 +122,8 @@ namespace control {
       captureState (CmdClosure& clo)
         {
           if (!clo)
-            throw lumiera::error::State ("need additional function arguments to be able to capture UNDO state",
-                                         LERR_(UNBOUND_ARGUMENTS));
+            throw err::State{"need additional function arguments to be able to capture UNDO state"
+                            , LERR_(UNBOUND_ARGUMENTS)};
           
           captureMemento_(clo);
           return *this;

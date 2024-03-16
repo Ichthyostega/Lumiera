@@ -122,9 +122,6 @@ namespace mobject {
 namespace session {
   
   
-  LUMIERA_ERROR_DECLARE (EMPTY_SCOPE_PATH);  ///< Placement scope not locatable (empty model path)
-  
-  
   /**
    * Sequence of nested scopes within the high-level model.
    * Implemented as vector of Scope elements. Providing

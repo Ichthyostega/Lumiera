@@ -57,8 +57,8 @@ namespace play {
     : outputFeeds_(feeds)
     {
       if (isnil (feeds))
-        throw error::State ("creating a PlayProcess without any usable output connections"
-                           , LUMIERA_ERROR_CANT_PLAY);
+        throw error::State{"creating a PlayProcess without any usable output connections"
+                          , LERR_(CANT_PLAY)};
     }
   
   

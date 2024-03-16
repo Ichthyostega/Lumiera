@@ -57,7 +57,7 @@ namespace test{
   using steam::asset::meta::TimeGrid;
   using lib::meta::Types;
   using lib::meta::InstantiateChainedCombinations;
-  using error::LERR_(UNCONNECTED);
+  using LERR_(UNCONNECTED);
   
   
   

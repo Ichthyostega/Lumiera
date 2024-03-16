@@ -56,6 +56,7 @@
 
 namespace steam {
 namespace control {
+  namespace err = lumiera::error;
   
   using lib::InPlaceBuffer;
   using std::string;
@@ -143,9 +144,9 @@ namespace control {
       invoke (CmdFunctor const& func)  override
         {
           if (!isValid())
-            throw lumiera::error::State ("Lifecycle error: can't bind functor, "
-                                         "command arguments not yet provided",
-                                         LERR_(UNBOUND_ARGUMENTS));
+            throw err::State{"Lifecycle error: can't bind functor, "
+                             "command arguments not yet provided"
+                            , LERR_(UNBOUND_ARGUMENTS)};
           
           arguments_->invoke(func);
         }

@@ -49,15 +49,17 @@ using std::smatch;
 using std::regex_search;
 using boost::lexical_cast;
 
-namespace error = lumiera::error;
+namespace lumiera {
+namespace error {
+  LUMIERA_ERROR_DEFINE (INVALID_TIMECODE, "timecode format error, illegal value encountered");
+}}
 
 namespace lib {
 namespace time {
+  namespace error = lumiera::error;
   
-  
-  namespace format {  /* ================= Timecode implementation details ======== */ 
+  namespace format {  /* ================= Timecode implementation details ======== */
     
-    LUMIERA_ERROR_DEFINE (INVALID_TIMECODE, "timecode format error, illegal value encountered");
     
     
     /** try to parse a frame number specification
@@ -120,7 +122,7 @@ namespace time {
     Seconds::parse (string const& seconds, QuantR grid)
     {
       static regex fracSecs_parser ("(?:^|[^\\./\\d\\-])(\\-?\\d+)(?:([\\-\\+]\\d+)?/(\\d+))?sec");
-                                  //__no leading[./-\d]   number      [+-]  number '/' number 'sec'   
+                                  //__no leading[./-\d]   number      [+-]  number '/' number 'sec'
       
       #define SUB_EXPR(N) lexical_cast<int> (match[N])
       smatch match;
@@ -152,7 +154,7 @@ namespace time {
     
     
     /** build up a frame count
-     *  by quantising the given time value 
+     *  by quantising the given time value
      */
     void
     Frames::rebuild (FrameNr& frameNr, QuantR quantiser, TimeValue const& rawTime)
@@ -161,7 +163,7 @@ namespace time {
     }
     
     /** calculate the time point denoted by this frame count */
-    TimeValue 
+    TimeValue
     Frames::evaluate (FrameNr const& frameNr, QuantR quantiser)
     {
       return quantiser.timeOf (frameNr);
@@ -182,7 +184,7 @@ namespace time {
     
     /** calculate the time point denoted by this SMPTE timecode,
      *  by summing up the timecode's components */
-    TimeValue 
+    TimeValue
     Smpte::evaluate (SmpteTC const& tc, QuantR quantiser)
     {
       uint frameRate = tc.getFps();
@@ -204,8 +206,8 @@ namespace time {
      *       it need to be the actual framerate used by the quantiser.
      *       Especially in case of NTSC drop-frame, the timecode
      *       uses 30fps here, while the quantisation uses 29.97
-     * @todo this design just doesn't feel quite right... 
-     */ 
+     * @todo this design just doesn't feel quite right...
+     */
     uint
     Smpte::getFramerate (QuantR quantiser_, TimeValue const& rawTime)
     {
@@ -224,7 +226,7 @@ namespace time {
      *  0:0:0:0 to 23:59:59:##. When this strategy function is invoked,
      *  the frames, seconds, minutes and hours fields have already been processed
      *  and stored into the component digxels, under the assumption the overall
-     *  value stays in range. 
+     *  value stays in range.
      * @note currently the range is extended "naturally" (i.e. mathematically).
      *       The representation is flipped around the zero point and the value
      *       of the hours is just allowed to increase beyond 23
@@ -395,10 +397,10 @@ namespace time {
   void
   SmpteTC::invertOrientation()
   {
-    int fr (getFps()); 
+    int fr (getFps());
     int f (fr - frames); // revert orientation
     int s (60 - secs);  //  of the components
-    int m (60 - mins); //   
+    int m (60 - mins); //
     int h = -hours;   //  assumed to be negative
     sgn *= -1;       //   flip sign field
     
@@ -408,7 +410,7 @@ namespace time {
     
     hours.setValueRaw(h);
     mins   = m;  // invoking setters
-    secs   = s; //  ensures normalisation 
+    secs   = s; //  ensures normalisation
     frames = f;
   }
   
@@ -459,14 +461,14 @@ namespace time {
   
   /** */
   int
-  HmsTC::getMins() const 
+  HmsTC::getMins() const
   {
     return lumiera_time_minutes (tpoint_);
   }
   
   /** */
   int
-  HmsTC::getHours() const 
+  HmsTC::getHours() const
   {
     return lumiera_time_hours (tpoint_);
   }

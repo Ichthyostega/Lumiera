@@ -47,8 +47,6 @@ using lib::time::Duration;
 using lib::time::Time;
 using lib::hash::LuidH;
 
-using lumiera::error::LERR_(WRONG_TYPE);
-
 using std::string;
 using std::tuple;
 using std::get;
@@ -57,6 +55,7 @@ namespace lib  {
 namespace meta {
 namespace test {
   
+  using LERR_(WRONG_TYPE);
   
   
   

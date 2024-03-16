@@ -93,8 +93,8 @@ namespace session {
     ___check_validTaget (Scope const& target)
     {
       if (!target.isValid())
-        throw Invalid ("Invalid target location for QueryFocus"
-                      , LUMIERA_ERROR_INVALID_SCOPE);             ////////////////TICKET #197
+        throw Invalid{"Invalid target location for QueryFocus"
+                     , LERR_(INVALID_SCOPE)};             /////////////////////////////////////////TICKET #197
     }
   }//(End) shortcut
   

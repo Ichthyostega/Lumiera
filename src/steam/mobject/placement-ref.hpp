@@ -71,20 +71,20 @@
 #include "steam/mobject/session/session-service-fetch.hpp"
 
 
+namespace lumiera {
+namespace error {
+  LUMIERA_ERROR_DECLARE (INVALID_PLACEMENTREF);  ///< unresolvable placement reference, or of incompatible type
+  LUMIERA_ERROR_DECLARE (BOTTOM_PLACEMENTREF);  ///<  NIL placement-ID marker encountered
+}}
+
 
 namespace steam {
   namespace error = lumiera::error;
   
   namespace mobject {
   
-  
-  
   class MObject;
   
-  
-  
-  LUMIERA_ERROR_DECLARE (INVALID_PLACEMENTREF);  ///< unresolvable placement reference, or of incompatible type
-  LUMIERA_ERROR_DECLARE (BOTTOM_PLACEMENTREF);  ///<  NIL placement-ID marker encountered
   
   
   /**
@@ -110,7 +110,7 @@ namespace steam {
        * Any source allowing to infer a \em compatible mobject::Placement
        * is accepted. Here, compatibility is decided based on the run time
        * type of the pointee, in comparison to the template parameter Y.
-       * In any case, for this ctor to succeed, the provided ref or ID 
+       * In any case, for this ctor to succeed, the provided ref or ID
        * needs to be resolvable to a placement by the implicit PlacementIndex
        * facility used by all PlacementRef instances (typically the Session).
        * @note there is no default ctor, a reference source is mandatory.
@@ -118,14 +118,14 @@ namespace steam {
        *              - an existing Placement
        *              - just an Placement::ID
        *              - a plain LUID
-       * @throw error::Invalid on incompatible run time type of the resolved ID  
+       * @throw error::Invalid on incompatible run time type of the resolved ID
        */
       template<class Y>
       explicit
       PlacementRef (Y const& refID)
         : id_(recast (refID))
-        { 
-          validate(id_); 
+        {
+          validate(id_);
         }
       
       /** Default is an NIL Placement ref. It throws on any access. */
@@ -137,15 +137,15 @@ namespace steam {
       
       PlacementRef (PlacementRef const& r)    ///< copy ctor
         : id_(r.id_)
-        { 
-          validate(id_); 
+        {
+          validate(id_);
         }
       
       template<class X>
       PlacementRef (PlacementRef<X> const& r) ///< extended copy ctor, when type X is assignable to MX
         : id_(recast(r))
         {
-          validate(id_); 
+          validate(id_);
         }
       
       
@@ -183,7 +183,7 @@ namespace steam {
       
       PlacementMX& operator*()  const { return access(id_); } ///< dereferencing fetches referred Placement from Index
       
-      PlacementMX& operator->() const { return access(id_); } ///< provide access to pointee API by smart-ptr chaining 
+      PlacementMX& operator->() const { return access(id_); } ///< provide access to pointee API by smart-ptr chaining
       
       operator string()         const { return access(id_).operator string(); }
       size_t use_count()        const { return access(id_).use_count(); }
@@ -211,7 +211,7 @@ namespace steam {
         }
       
       bool isValid()  const
-        { 
+        {
           if (checkValidity())
             try
               {
@@ -270,15 +270,15 @@ namespace steam {
       access (_Id const& placementID)
         {
           if (!placementID)
-            throw error::Logic ("Attempt to access a NIL PlacementRef"
-                               , LERR_(BOTTOM_PLACEMENTREF));
+            throw error::Logic{"Attempt to access a NIL PlacementRef"
+                              , LERR_(BOTTOM_PLACEMENTREF)};
           
           Placement<MObject> & genericPlacement (session::SessionServiceFetch::resolveID (placementID));  // may throw
           REQUIRE (genericPlacement.isValid());
           
           if (!(genericPlacement.template isCompatible<MX>()))
-            throw error::Invalid("actual type of the resolved placement is incompatible"
-                                , LERR_(INVALID_PLACEMENTREF));
+            throw error::Invalid{"actual type of the resolved placement is incompatible"
+                                , LERR_(INVALID_PLACEMENTREF)};
                   ////////////////////////TODO: 1. better message, including type?
                   ////////////////////////TODO: 2. define a separate error-ID for the type mismatch!
           

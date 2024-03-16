@@ -72,8 +72,8 @@ namespace test{
       };
   }
   
-  using error::LERR_(LIFECYCLE);
-  using error::LERR_(FATAL);
+  using LERR_(LIFECYCLE);
+  using LERR_(FATAL);
   
   
   

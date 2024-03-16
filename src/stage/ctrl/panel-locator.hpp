@@ -126,7 +126,7 @@ namespace ctrl {
     if (-1 == typeID)
       throw error::Invalid (_Fmt{"Requested type «%s» not usable as docking panel."}
                                 % util::typeStr<PAN>()
-                           ,error::LERR_(WRONG_TYPE));
+                           ,LERR_(WRONG_TYPE));
     
     return dynamic_cast<PAN&> (preliminary_impl_PanelLookup (typeID));
   }

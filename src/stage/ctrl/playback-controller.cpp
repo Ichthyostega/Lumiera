@@ -62,7 +62,7 @@ namespace ctrl {
   {
     if (not instance)
       throw error::Logic ("GTK UI is not in running state"
-                         , error::LERR_(LIFECYCLE));
+                         , LERR_(LIFECYCLE));
     
     return *instance;
   }

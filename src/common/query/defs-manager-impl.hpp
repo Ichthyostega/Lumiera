@@ -53,7 +53,6 @@ using util::_Fmt;
 
 using steam::ConfigResolver;
 using lumiera::query::QueryHandler;                    ///////TODO preliminary interface defined in config-rules.hpp
-using lumiera::query::LERR_(CAPABILITY_QUERY);
 
 
 namespace lumiera{
@@ -149,9 +148,9 @@ namespace query  {
       res = create (capabilities); // not yet known as default, create new
     
     if (!res)
-      throw lumiera::error::Config (_Fmt("The following Query could not be resolved: %s.")
-                                        % capabilities.rebuild().asKey()
-                                   , LUMIERA_ERROR_CAPABILITY_QUERY );
+      throw error::Config (_Fmt("The following Query could not be resolved: %s.")
+                               % capabilities.rebuild().asKey()
+                          , LERR_(CAPABILITY_QUERY) );
     else
       return res;
   }

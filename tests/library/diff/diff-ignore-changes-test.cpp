@@ -56,7 +56,7 @@ namespace test{
                   ATTRIB2("β", int64_t(2)),                // attribute α = 2L   (int64_t)
                   ATTRIB3("γ", 3.45),                      // attribute γ = 3.45 (double)
                   TYPE_X("type", "ξ"),                     // a "magic" type attribute "Xi"
-                  TYPE_Z("type", "ζ"),                     // 
+                  TYPE_Z("type", "ζ"),                     //
                   CHILD_A("a"),                            // unnamed string child node
                   CHILD_B('b'),                            // unnamed char child node
                   CHILD_T(Time(12,34,56,78)),              // unnamed time value child
@@ -66,7 +66,7 @@ namespace test{
     
   }//(End)Test fixture
   
-  
+  using LERR_(DIFF_CONFLICT);
   
   
   

@@ -709,7 +709,7 @@ namespace time {
     {
       if (n == NUM{0})
         throw error::Logic ("Degenerated frame grid not allowed"
-                           , error::LERR_(BOTTOM_VALUE));
+                           , LERR_(BOTTOM_VALUE));
       return n;
     }
     

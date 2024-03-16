@@ -176,7 +176,7 @@ namespace steam  {
       
       
       
-      using lumiera::error::LERR_(LIFECYCLE);
+      using LERR_(LIFECYCLE);
       lib::Depend<DummyPlayerService> _instance; ///< a backdoor for the C Language impl to access the actual SessionCommand implementation...
       
       typedef ProcessImpl* ProcP;

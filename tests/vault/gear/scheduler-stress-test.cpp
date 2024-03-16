@@ -382,6 +382,11 @@ namespace test {
           cpuLoad.calibrate();
 //////////////////////////////////////////////////////////////////TODO for development only
           MARK_TEST_FUN
+                    TestChainLoad testLoad{64};
+                    testLoad.configure_isolated_nodes()
+                            .buildTopology()
+                            .printTopologyDOT()
+                            .printTopologyStatistics();
           
             struct Setup : StressRig
               {

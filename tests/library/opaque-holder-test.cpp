@@ -43,9 +43,9 @@ namespace test{
   using util::isnil;
   using util::for_each;
   using util::isSameObject;
-  using error::LERR_(BOTTOM_VALUE);
-  using error::LERR_(WRONG_TYPE);
-  using error::LERR_(ASSERTION);
+  using LERR_(BOTTOM_VALUE);
+  using LERR_(WRONG_TYPE);
+  using LERR_(ASSERTION);
   
   using std::vector;
   using std::cout;

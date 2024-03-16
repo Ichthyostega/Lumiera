@@ -36,7 +36,7 @@
 
 namespace lib {
   
-  using lumiera::error::LERR_(BOTTOM_VALUE);
+  using LERR_(BOTTOM_VALUE);
   
   
   

@@ -69,7 +69,7 @@ using lib::hash::LuidH;
 using lib::diff::Rec;
 using lib::diff::TreeMutator;
 using lib::diff::collection;
-using lib::diff::LUMIERA_ERROR_DIFF_STRUCTURE;
+using LERR_(DIFF_STRUCTURE);
 using std::make_unique;
 using util::toString;
 

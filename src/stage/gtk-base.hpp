@@ -80,6 +80,12 @@
 #endif
 
 
+namespace lumiera {
+namespace error {
+  /* some commonly used error marks for the UI... */
+  LUMIERA_ERROR_DECLARE (UIWIRING); // "GUI state contradicts assumptions in signal wiring"
+}}
+
 
 
 /* ======= Namespace Definitions ======= */
@@ -89,9 +95,6 @@
  * @ingroup gui
  */
 namespace stage {
-  
-  /* some commonly used error marks for the UI... */
-  LUMIERA_ERROR_DECLARE (UIWIRING); // "GUI state contradicts assumptions in signal wiring"
   
   /* widely used type abbreviations */
   using uString =  Glib::ustring;

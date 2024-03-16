@@ -55,8 +55,8 @@
 #include "lib/symbol.hpp"
 
 
-namespace lib {
-namespace diff{
+namespace lumiera {
+namespace error  {
   LUMIERA_ERROR_DECLARE(DIFF_STRUCTURE); ///< Invalid diff structure: implicit rules and assumptions violated.
 }}
 namespace Glib {
@@ -67,7 +67,7 @@ namespace stage {
 //using lib::Literal;
   using lib::Symbol;
 //using cuString = const Glib::ustring;
-  using lib::diff::LERR_(DIFF_STRUCTURE);
+  using LERR_(DIFF_STRUCTURE);
   
   
   extern const Symbol META_kind;

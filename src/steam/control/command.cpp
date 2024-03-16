@@ -60,15 +60,18 @@ using std::move;
 using util::_Fmt;
 
 
-namespace steam {
-namespace control {
-  namespace error = lumiera::error;
-  
+namespace lumiera {
+namespace error {
   LUMIERA_ERROR_DEFINE (INVALID_COMMAND,   "Unknown or insufficiently defined command");
   LUMIERA_ERROR_DEFINE (DUPLICATE_COMMAND, "Attempt to redefine an already existing command definition");
   LUMIERA_ERROR_DEFINE (INVALID_ARGUMENTS, "Arguments provided for binding doesn't match stored command function parameters");
   LUMIERA_ERROR_DEFINE (UNBOUND_ARGUMENTS, "Command mutation functor not yet usable, because arguments aren't bound");
   LUMIERA_ERROR_DEFINE (MISSING_MEMENTO,   "Undo functor not yet usable, because no undo state has been captured");
+}}
+
+namespace steam {
+namespace control {
+  namespace error = lumiera::error;
   
   
   namespace { // some common error checks...
@@ -116,7 +119,7 @@ namespace control {
   
   
   /** Access existing command for use.
-   *  @throw error::Invalid if command not 
+   *  @throw error::Invalid if command not
    *         registered or incompletely defined.
    *  @remark this function deliberately returns by-value.
    *         Returning a reference into the global CommandRegistry
@@ -197,7 +200,7 @@ namespace control {
     Command cloneDefinition;
     cloneDefinition.activate (move (registry.createCloneImpl(this->impl())), newCmdID);
     ENSURE (cloneDefinition);
-    return cloneDefinition; 
+    return cloneDefinition;
   }
   
   
@@ -212,7 +215,7 @@ namespace control {
     Command clone;
     clone.activate (move (cloneImpl));
     ENSURE (clone);
-    return clone; 
+    return clone;
   }
   
   
@@ -226,7 +229,7 @@ namespace control {
   {
     CommandImplCloneBuilder cloneBuilder(allocator_);
     refObject.prepareClone(cloneBuilder);
-    return allocator_.create<CommandImpl> (refObject, cloneBuilder.clonedUndoMutation() 
+    return allocator_.create<CommandImpl> (refObject, cloneBuilder.clonedUndoMutation()
                                                     , cloneBuilder.clonedClosuere());
   }
   
@@ -246,7 +249,7 @@ namespace control {
   bool
   Command::remove (Symbol cmdID)
   {
-    return CommandRegistry::instance().remove (cmdID); 
+    return CommandRegistry::instance().remove (cmdID);
   }
   
   

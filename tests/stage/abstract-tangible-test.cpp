@@ -80,11 +80,11 @@ using steam::control::CommandDef;
 
 
 
-namespace stage  {
-namespace model{
-namespace test {
+namespace stage {
+namespace model {
+namespace test  {
   
-  using lumiera::error::LERR_(WRONG_TYPE);
+  using LERR_(WRONG_TYPE);
   using ID = lib::idi::BareEntryID const&;
   
   namespace { // test fixture...
@@ -760,4 +760,4 @@ namespace test {
   LAUNCHER (AbstractTangible_test, "unit stage");
   
   
-}}} // namespace stage::model::test
+}}}// namespace stage::model::test

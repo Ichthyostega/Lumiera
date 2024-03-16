@@ -50,9 +50,10 @@ namespace test {
   using std::move;
   using std::rand;
   
-  using lumiera::error::LERR_(LIFECYCLE);
-  
-  
+  using LERR_(LIFECYCLE);
+  using LERR_(INVALID_COMMAND);
+  using LERR_(DUPLICATE_COMMAND);
+  using LERR_(UNBOUND_ARGUMENTS);
   
   
   namespace  { // Test fixture....

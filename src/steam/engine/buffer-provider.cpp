@@ -210,8 +210,8 @@ namespace engine {
     REQUIRE (refEntry.isTypeKey());
     REQUIRE (!metaEntry.isTypeKey());
     if (!metaEntry.isLocked())
-      throw error::Logic ("unable to attach an object because buffer isn't locked for use"
-                         , LERR_(LIFECYCLE));
+      throw error::Logic{"unable to attach an object because buffer isn't locked for use"
+                        , LERR_(LIFECYCLE)};
     
     metaEntry.useTypeHandlerFrom (refEntry); // EX_STRONG
   }

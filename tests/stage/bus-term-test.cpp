@@ -88,8 +88,8 @@ namespace test {
   using lib::test::EventLog;
   using lib::CallQueue;
   
-  using steam::control::LUMIERA_ERROR_UNBOUND_ARGUMENTS;
-  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
+  using LERR_(UNBOUND_ARGUMENTS);
+  using LERR_(WRONG_TYPE);
   
   using ID = lib::idi::BareEntryID const&;
   
@@ -239,7 +239,7 @@ namespace test {
           // we cannot invoke commands without binding required arguments
           VERIFY_ERROR (WRONG_TYPE, mock.invoke(cmd) );
           
-          // proper argument typing is ensured while dispatching the bind message. 
+          // proper argument typing is ensured while dispatching the bind message.
           VERIFY_ERROR (WRONG_TYPE, mock.invoke(cmd, Rec({"lalala"})) );
           
           // command can't be issued, since it's still unbound
@@ -390,7 +390,7 @@ namespace test {
           CHECK (nexusLog.verifyEvent("create", "alpha")
                          .beforeCall("mark").on("TestNexus").arg("alpha", "Centauri")  // bus API invoked
                          .beforeCall("doMsg").on("alpha").arg("Centauri")              // handler on target invoked
-                         .beforeEvent("mark", "Centauri")                              // target action activated 
+                         .beforeEvent("mark", "Centauri")                              // target action activated
                          .beforeEvent("TestNexus","delivered mark to bID-alpha"));     // dispatch done within UI-Bus
           
           CHECK (nexusLog.verifyEvent("TestNexus","delivered mark to bID-alpha")
@@ -619,7 +619,7 @@ namespace test {
                       ClassLock<BorgGenerator> sync;
                       --generator_instances;
                     }
-                    
+                  
                   
                   /* == Interface IterSource<DiffStep> == */
                   
@@ -661,7 +661,7 @@ namespace test {
                     }
                 };
               
-                
+              
               /**
                * launch the Session Thread and start injecting Borgs
                */

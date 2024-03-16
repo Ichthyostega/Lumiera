@@ -49,11 +49,6 @@ namespace session {
   using util::isnil;
   
   
-  
-  LUMIERA_ERROR_DEFINE (EMPTY_SCOPE_PATH, "Placement scope not locatable (empty model path)");
-  
-  
-  
   namespace { // Helpers and shortcuts....
     
     /** issue a query to discover the (raw) path to root,

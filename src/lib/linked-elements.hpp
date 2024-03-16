@@ -71,7 +71,7 @@
 namespace lib {
   
   namespace error = lumiera::error;
-  using error::LERR_(INDEX_BOUNDS);
+  using LERR_(INDEX_BOUNDS);
   using util::unConst;
   
   

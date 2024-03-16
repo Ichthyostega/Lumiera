@@ -40,9 +40,6 @@
 
 namespace lib {
   
-  LUMIERA_ERROR_DEFINE (FILE_NOT_DIRECTORY, "path element points at a file instead of a directory");
-  
-  
   using std::regex;
   using std::regex_replace;
   

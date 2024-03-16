@@ -356,7 +356,7 @@ namespace lib {
               
               if (!buff)
                 throw error::Logic(indicateTypeMismatch(b)
-                                  ,error::LERR_(WRONG_TYPE));
+                                  ,LERR_(WRONG_TYPE));
               else
                return *buff;
             }

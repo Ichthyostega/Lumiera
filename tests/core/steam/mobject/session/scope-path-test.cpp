@@ -37,7 +37,7 @@
 #include <string>
 
 
-namespace steam    {
+namespace steam   {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -46,9 +46,10 @@ namespace test    {
   using util::isnil;
   using util::isSameObject;
   
-  using lumiera::error::LERR_(LOGIC);
-  using lumiera::error::LERR_(INVALID);
-  
+  using LERR_(LOGIC);
+  using LERR_(INVALID_SCOPE);
+  using LERR_(NOT_IN_SESSION);
+  using LERR_(EMPTY_SCOPE_PATH);
   
   
   
@@ -67,7 +68,7 @@ namespace test    {
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           // Prepare an (test)Index backing the PlacementRefs
           PPIdx index = build_testScopes();
@@ -294,7 +295,7 @@ namespace test    {
           path1 = path2;                        // but path without refcount may be overwritten
           path1 = path3;
           CHECK (path1 == path3);
-                    
+          
           intrusive_ptr_release (&path2);       // refcount drops to zero...
           CHECK (0 == path1.ref_count());
           CHECK (0 == path2.ref_count());
@@ -342,7 +343,7 @@ namespace test    {
           
           TestPlacement<> newNode (*new DummyMO);
           PMO& parentRefPoint = parent.getTop();
-          Scope newLocation = 
+          Scope newLocation =
               index->find(      // place newNode as sibling of "leaf"
                   index->insert (newNode, parentRefPoint));
           path.navigate (newLocation);            __SHOWPATH(5)
@@ -383,7 +384,6 @@ namespace test    {
           CHECK (isSameObject (other.getTop(), separatePlacement));
           ScopePath rootPrefix = commonPrefix (path,refPath);
           CHECK (rootPrefix.endsAt (root));
-          
         }
       
       

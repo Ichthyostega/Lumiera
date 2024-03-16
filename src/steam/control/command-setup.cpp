@@ -122,7 +122,7 @@ namespace control {
   {
     if (not definitionBlock)
       throw error::Invalid ("unbound function/closure provided for CommandSetup"
-                           , error::LERR_(BOTTOM_VALUE));
+                           , LERR_(BOTTOM_VALUE));
     
     pendingCmdDefinitions().emplace_front (cmdID_, move(definitionBlock));
     return *this;
@@ -219,7 +219,7 @@ namespace control {
     if (not entry->second)
       throw error::Logic (_Fmt{"Command instance '%s' is not (yet/anymore) active"}
                               % instanceID
-                         , error::LERR_(LIFECYCLE));
+                         , LERR_(LIFECYCLE));
     return entry->second;
   }
   
@@ -245,7 +245,7 @@ namespace control {
         if (not entry->second.isValid())
           throw error::Logic (_Fmt{"Command instance '%s' is not (yet/anymore) active"}
                                   % instanceID
-                             , error::LERR_(LIFECYCLE));
+                             , LERR_(LIFECYCLE));
         if (not must_be_bound or entry->second.canExec())
           instance = move(entry->second);
       }

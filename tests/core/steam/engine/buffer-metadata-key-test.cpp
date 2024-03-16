@@ -43,11 +43,6 @@ namespace engine{
 namespace metadata{
 namespace test  {
   
-  
-  using lumiera::error::LERR_(INVALID);
-  using lumiera::error::LERR_(LIFECYCLE);
-  
-  
   namespace { // Test fixture
     
     const size_t TEST_MAX_SIZE = 1024 * 1024;

@@ -34,16 +34,18 @@
 #include "lib/error.hpp"
 
 
-
-namespace steam {
-namespace control {
-  
-  
+namespace lumiera {
+namespace error   {
   LUMIERA_ERROR_DECLARE (INVALID_ARGUMENTS);  ///< Arguments provided for binding doesn't match stored command function parameters
+  LUMIERA_ERROR_DECLARE (UNBOUND_ARGUMENTS);  ///< Command functor not yet usable, because arguments aren't bound
+}}
+
+namespace steam   {
+namespace control {
+  namespace err = lumiera::error;
   
   
-  
-  /** 
+  /**
    * Adapter interface for invoking an argument binding for a command
    * \em without the need to disclose the concrete types and number of arguments.
    * At the receiver side, the concrete type can be restored by a dynamic cast.
@@ -51,7 +53,7 @@ namespace control {
    * usually this receiver will be an implementation object, whose exact
    * type has been erased after definition, while the implementation
    * internally of course knows the type and thus can perform an
-   * dynamic cast on the passed on argument tuple 
+   * dynamic cast on the passed on argument tuple
    */
   struct Arguments;
   
@@ -65,13 +67,12 @@ namespace control {
      
       template<typename TUP>
       TUP const&
-      get ()
+      get()
         {
           TypedArguments<TUP>* dest = dynamic_cast<TypedArguments<TUP>*> (this);
-          if (!dest)
-            throw lumiera::error::Invalid("Wrong type or number of arguments"
-                                         , LUMIERA_ERROR_INVALID_ARGUMENTS);
-          
+          if (not dest)
+            throw err::Invalid{"Wrong type or number of arguments"
+                              , LERR_(INVALID_ARGUMENTS)};
           return dest->args_;
         }
     };
@@ -87,7 +88,6 @@ namespace control {
         : args_(a)
         { }
     };
-  
   
   
   

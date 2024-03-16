@@ -51,6 +51,9 @@ namespace steam {
 namespace asset{
 namespace test {
   
+  using LERR_(UNKNOWN_ASSET_ID);
+  using LERR_(WRONG_ASSET_KIND);
+  
   using MediaAccessMock = lib::DependInject<vault::MediaAccessFacade>
                                 ::Local<vault::test::MediaAccessMock>;
 
@@ -66,7 +69,7 @@ namespace test {
       virtual void run(Arg arg)
         {
           MediaAccessMock useMockMedia;
-          
+
           createMedia();
           factoryVariants();
           createMetaAssets();
@@ -128,19 +131,12 @@ namespace test {
           CHECK (aMang.known (mm3->getID()));
 
           CHECK ( !aMang.known (mm3->getID(), Category(AUDIO))); // not found within AUDIO-Category
-          try
-            { // can't be found if specifying wrong Asset kind....
-              aMang.getAsset (ID<asset::Proc>(mm1->getID()));
-              NOTREACHED();
-            }
-          catch (lumiera::error::Invalid& xxx) {CHECK (xxx.getID()==LUMIERA_ERROR_WRONG_ASSET_KIND);}
-          try
-            { // try accessing nonexistent ID
-              aMang.getAsset (ID<Asset> (1234567890));
-              NOTREACHED();
-            }
-          catch (lumiera::error::Invalid& xxx) {CHECK (xxx.getID()==LUMIERA_ERROR_UNKNOWN_ASSET_ID);}
-          lumiera_error (); // reset errorflag
+
+          // can't be found if specifying wrong Asset kind....
+          VERIFY_ERROR (WRONG_ASSET_KIND, aMang.getAsset (ID<asset::Proc>(mm1->getID())) );
+
+          // try accessing nonexistent ID
+          VERIFY_ERROR (UNKNOWN_ASSET_ID, aMang.getAsset (ID<Asset> (1234567890)) );
 
 
           // checking the Ident-Fields

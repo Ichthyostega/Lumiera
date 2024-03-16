@@ -47,9 +47,9 @@ namespace steam {
 namespace engine{
 namespace test  {
   
-  using lumiera::error::LERR_(FATAL);
-  using lumiera::error::LERR_(INVALID);
-  using lumiera::error::LERR_(LIFECYCLE);
+  using LERR_(FATAL);
+  using LERR_(INVALID);
+  using LERR_(LIFECYCLE);
   
   
   namespace { // Test fixture

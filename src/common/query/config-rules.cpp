@@ -36,9 +36,11 @@ using lumiera::QueryKey;
 
 
 namespace lumiera {
+  namespace error {
+    LUMIERA_ERROR_DEFINE (CAPABILITY_QUERY, "unresolvable capability query");
+  }
   namespace query {
     
-    LUMIERA_ERROR_DEFINE (CAPABILITY_QUERY, "unresolvable capability query");
     
     
   } // namespace query

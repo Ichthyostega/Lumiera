@@ -45,14 +45,21 @@ using lib::Depend;
 using lib::Sync;
 
 
+namespace lumiera {
+namespace error {
+   // ------pre-defined-common-error-cases---------------
+  LUMIERA_ERROR_DEFINE (UNKNOWN_ASSET_ID, "non-registered Asset ID");
+  LUMIERA_ERROR_DEFINE (WRONG_ASSET_KIND, "wrong Asset kind, unable to cast");
+}}
+
 namespace steam {
 namespace asset {
   namespace error = lumiera::error;
   
-  /** 
+  /**
    * AssetManager error responses, caused by querying
    * invalid Asset IDs from the internal DB.
-   */ 
+   */
   struct IDErr
     : error::Invalid
     {
@@ -60,10 +67,6 @@ namespace asset {
     };
   
   
-   // ------pre-defined-common-error-cases---------------
-  //
-  LUMIERA_ERROR_DEFINE (UNKNOWN_ASSET_ID, "non-registered Asset ID");
-  LUMIERA_ERROR_DEFINE (WRONG_ASSET_KIND, "wrong Asset kind, unable to cast");
   
   struct UnknownID : IDErr
     {
@@ -100,7 +103,7 @@ namespace asset {
   
   
   /** provide the unique ID for given Asset::Ident tuple */
-  ID<Asset> 
+  ID<Asset>
   AssetManager::getID (const Asset::Ident& idi)
   {
     return asset::hash_value (idi);
@@ -114,7 +117,7 @@ namespace asset {
    * @throw error::Invalid in case of invalid identity spec
    */
   template<class KIND>
-  ID<KIND>  
+  ID<KIND>
   AssetManager::reg (KIND* obj, const Asset::Ident& idi)
   {
     AssetManager& _aMang (AssetManager::instance());
@@ -133,16 +136,16 @@ namespace asset {
   
   /** @note the KIND of asset needs to be assignable by the actual stored asset
    *  @throw error::Invalid if nothing is found or if the actual KIND
-   *         of the stored object differs and can't be casted.  
+   *         of the stored object differs and can't be casted.
    */
   template<class KIND>
   lib::P<KIND>
-  AssetManager::getAsset (const ID<KIND>& id)  
+  AssetManager::getAsset (const ID<KIND>& id)
   {
     if (lib::P<KIND> obj = registry.get (id))
       return obj;
     else
-      if (known (id))    // provide Ident tuple of existing Asset 
+      if (known (id))    // provide Ident tuple of existing Asset
         throw WrongKind (registry.get(ID<Asset>(id))->ident);
       else
         throw UnknownID (id);
@@ -151,14 +154,14 @@ namespace asset {
   /** Convenience shortcut for fetching the registered smart-ptr
    *  which is in charge of the given asset instance. By querying
    *  directly asset.id (of type ID<Asset>), the call to registry.get()
-   *  can bypass the dynamic cast, because the type of the asset 
-   *  is explicitly given by type KIND. 
+   *  can bypass the dynamic cast, because the type of the asset
+   *  is explicitly given by type KIND.
    */
   template<class KIND>
   lib::P<KIND>
   AssetManager::wrap (const KIND& asset)
   {
-    ENSURE (instance().known(asset.id), 
+    ENSURE (instance().known(asset.id),
             "unregistered asset instance encountered.");
     return static_pointer_cast<KIND,Asset>
             (instance().registry.get (asset.id));
@@ -173,7 +176,7 @@ namespace asset {
   AssetManager::known (IDA id)
   {
     return bool(registry.get (ID<Asset>(id)));
-  }       // query most general Asset ID-kind and use implicit 
+  }       // query most general Asset ID-kind and use implicit
          //  conversion from smart-ptr to bool (test if empty)
   
   
@@ -190,13 +193,13 @@ namespace asset {
   
   namespace { // details implementing AssetManager::remove
     
-    void 
+    void
     recursive_call (AssetManager* instance, PAsset& pA)
-    { 
+    {
       instance->remove (pA->getID());
     }
     
-    function<void(PAsset&)> 
+    function<void(PAsset&)>
     detach_child_recursively ()  ///< @return a functor recursively invoking remove(child)
     {
       return bind( &recursive_call, &AssetManager::instance(), _1 );
@@ -205,10 +208,10 @@ namespace asset {
   
   /**
    * remove the given asset from the internal DB
-   * <i>together with all its dependents</i> 
+   * _together with all its dependents_
    */
   void
-  AssetManager::remove (IDA id)  
+  AssetManager::remove (IDA id)
   {
     PAsset asset = getAsset (id);
     for_each (asset->dependants, detach_child_recursively());
@@ -225,7 +228,7 @@ namespace asset {
   }
   
   
-  list<PcAsset> 
+  list<PcAsset>
   AssetManager::listContent() const
   {
     list<PcAsset> res;

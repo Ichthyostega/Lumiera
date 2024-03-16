@@ -54,7 +54,7 @@ namespace lib {
 namespace idi {
 namespace test{
   
-  using lumiera::error::LERR_(WRONG_TYPE);
+  using LERR_(WRONG_TYPE);
   
   namespace { // Test definitions...
     

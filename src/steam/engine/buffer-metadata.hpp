@@ -126,9 +126,6 @@ namespace engine {
   
   namespace metadata {
     
-    using error::LERR_(LIFECYCLE);
-    using error::LERR_(BOTTOM_VALUE);
-    
     namespace { // details of hash calculation
         template<typename VAL>
         HashVal
@@ -649,19 +646,19 @@ namespace engine {
            ,bool onlyNew =false)
         {
           if (!concreteBuffer)
-            throw error::Invalid ("Attempt to lock a slot for a NULL buffer"
-                                 , error::LUMIERA_ERROR_BOTTOM_VALUE);
+            throw error::Invalid{"Attempt to lock a slot for a NULL buffer"
+                                , LERR_(BOTTOM_VALUE)};
           
           Entry newEntry(parentKey, concreteBuffer, implID);
           Entry* existing = table_.fetch (newEntry);
           
           if (existing && onlyNew)
-            throw error::Logic ("Attempt to lock a slot for a new buffer, "
-                                "while actually the old buffer is still locked"
-                               , error::LUMIERA_ERROR_LIFECYCLE );
+            throw error::Logic{"Attempt to lock a slot for a new buffer, "
+                               "while actually the old buffer is still locked"
+                              , LERR_(LIFECYCLE)};
           if (existing && existing->isLocked())
-            throw error::Logic ("Attempt to re-lock a buffer still in use"
-                               , error::LUMIERA_ERROR_LIFECYCLE );
+            throw error::Logic{"Attempt to re-lock a buffer still in use"
+                              , LERR_(LIFECYCLE)};
           
           if (!existing)
             return store_and_lock (newEntry); // actual creation
@@ -719,8 +716,8 @@ namespace engine {
       markLocked (Key const& parentKey, void* buffer, LocalKey const& implID =UNSPECIFIC)
         {
           if (!buffer)
-            throw error::Fatal ("Attempt to lock for a NULL buffer. Allocation floundered?"
-                               , error::LUMIERA_ERROR_BOTTOM_VALUE);
+            throw error::Fatal{"Attempt to lock for a NULL buffer. Allocation floundered?"
+                              , LERR_(BOTTOM_VALUE)};
           
           return this->lock(parentKey, buffer, implID, true); // force creation of a new entry
         }
@@ -742,8 +739,8 @@ namespace engine {
       release (Entry const& entry)
         {
           if (FREE != entry.state())
-            throw error::Logic ("Attempt to release a buffer still in use"
-                               , error::LUMIERA_ERROR_LIFECYCLE);
+            throw error::Logic{"Attempt to release a buffer still in use"
+                              , LERR_(LIFECYCLE)};
           
           table_.remove (HashVal(entry));
         }

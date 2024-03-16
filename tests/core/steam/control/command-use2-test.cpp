@@ -52,7 +52,6 @@ namespace steam {
 namespace control {
 namespace test    {
 
-
   using util::_Fmt;
   using std::string;
   using std::function;
@@ -61,8 +60,7 @@ namespace test    {
   using boost::lexical_cast;
   using util::contains;
   
-  
-  using lumiera::error::LERR_(EXTERNAL);
+  using LERR_(EXTERNAL);
   
   
   /** diagnostics: checks if the given value has been written

@@ -59,8 +59,7 @@ namespace test    {
   using lib::test::showSizeof;
   using lib::test::randTime;
   using namespace lib::meta;
-  
-  
+  using LERR_(MISSING_MEMENTO);
   
   
   

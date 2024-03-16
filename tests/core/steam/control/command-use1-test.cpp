@@ -41,9 +41,10 @@ namespace test    {
   
   using util::isSameObject;
   using util::contains;
-  
-  
-  
+  using LERR_(INVALID_COMMAND);
+  using LERR_(DUPLICATE_COMMAND);
+  using LERR_(UNBOUND_ARGUMENTS);
+  using LERR_(INVALID_ARGUMENTS);
   
   
   
@@ -52,7 +53,6 @@ namespace test    {
    * @test command usage aspects I: defining commands in various ways,
    *       then re-accessing those definitions, create instances,
    *       invoke them and undo the effect. Clean up finally.
-   * 
    * @see Command
    * @see command-basic-test.cpp (simple usage example)
    */
@@ -65,7 +65,7 @@ namespace test    {
       
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           command1::check_ = 0;
           uint cnt_defs = Command::definition_count();

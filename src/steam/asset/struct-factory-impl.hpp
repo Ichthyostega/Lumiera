@@ -70,7 +70,7 @@ namespace asset {
   using util::isnil;
   using util::contains;
   using lumiera::Query;
-  using lumiera::query::LERR_(CAPABILITY_QUERY);
+  using LERR_(CAPABILITY_QUERY);
   using lib::query::extractID;
   
   using steam::mobject::Session;

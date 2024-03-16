@@ -104,9 +104,9 @@ namespace mobject {
    * 
    * Placements are defined to form a hierarchy, thereby mirroring
    * the relations between their referents to some degree. This allows
-   * for building APIs targeted at specific kinds of MObjects, and 
+   * for building APIs targeted at specific kinds of MObjects, and
    * at the same time allows a specific placement to stand-in when
-   * just a unspecific Placement<MObject> is required.  
+   * just a unspecific Placement<MObject> is required.
    * 
    * @param MO the (compile time) type of the referent
    * @param B  immediate base class of this placement
@@ -115,7 +115,7 @@ namespace mobject {
   class Placement ;
   
   
-  /** 
+  /**
    * this specialisation forms the root of all placements
    * and defines all of Placement's actual functionality.
    */
@@ -134,15 +134,15 @@ namespace mobject {
       
       
     public:
-      /** smart pointer: accessing the MObject, 
+      /** smart pointer: accessing the MObject,
        *  which is subject to placement.
        *  @note we don't provide operator*
        */
-      MObject * 
-      operator-> ()  const 
-        { 
-          ENSURE (*this); 
-          return _SmartPtr::operator-> (); 
+      MObject *
+      operator->()  const
+        {
+          ENSURE (*this);
+          return _SmartPtr::operator->();
         }
       
       /** run time diagnostics: is the pointee
@@ -186,7 +186,7 @@ namespace mobject {
       
       /** interface for defining the kind of placement
        *  to employ, and for controlling any additional
-       *  constraints and properties. 
+       *  constraints and properties.
        */
       session::LocatingPin chain;
       
@@ -194,7 +194,7 @@ namespace mobject {
        *  by the various LocatingPin (\see #chain) and
        *  provide the resulting (explicit) placement.
        */
-      virtual ExplicitPlacement resolve ()  const; 
+      virtual ExplicitPlacement resolve ()  const;
                                //////////////////////////TODO (1) could resolve() return a reference?  Otherwise placement-ref.hpp needs to include ExplicitPlacement
                                //////////////////////////TODO (2) does this really need to be virtual. Guess not. It's not abstract and not really polymorphic. But virtual here causes template bloat.
                                              ////////////TICKET #439
@@ -207,7 +207,7 @@ namespace mobject {
         { }
       
     protected:
-      Placement (MObject & subject, Deleter killer) 
+      Placement (MObject & subject, Deleter killer)
         : _SmartPtr (&subject, killer) { };
         
       friend class session::MObjectFactory;
@@ -258,7 +258,7 @@ namespace mobject {
       
       _Id
       getID ()  const  ///< @note overrides HashIndexed::getID to pass specific type information,
-        { 
+        {
           return _Parent::template recastID<MO>();
         }
       
@@ -266,9 +266,8 @@ namespace mobject {
   
   
   /** @todo cleanup uses of ref-to-placement. See Ticket #115 */
-  typedef Placement<MObject> PlacementMO; 
-  //‘typedef class mobject::Placement<mobject::MObject, mobject::MObject> mobject::PlacementMO’
-  typedef Placement<MObject> PMO; 
+  typedef Placement<MObject> PlacementMO;
+  typedef Placement<MObject> PMO;
   
   
   

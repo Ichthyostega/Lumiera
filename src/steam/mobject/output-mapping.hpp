@@ -217,8 +217,8 @@ namespace mobject {
           operator Target()
             {
               if (not isValid())
-                throw error::Logic ("attempt to resolve an unconnected output mapping"
-                                   , error::LERR_(UNCONNECTED));
+                throw error::Logic{"attempt to resolve an unconnected output mapping"
+                                  , LERR_(UNCONNECTED)};
               return resolve();
             }
           

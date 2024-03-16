@@ -57,7 +57,7 @@ namespace test{
   using std::list;
   using std::rand;
   
-  using lumiera::error::LERR_(ITER_EXHAUST);
+  using LERR_(ITER_EXHAUST);
   
   using iter_source::eachEntry;
   using iter_source::transform;

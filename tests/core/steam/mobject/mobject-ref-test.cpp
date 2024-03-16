@@ -43,6 +43,7 @@
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
+#include <string>
 
 using lib::test::showSizeof;
 using lib::time::Duration;
@@ -52,7 +53,7 @@ using util::isnil;
 using std::string;
 
 
-namespace steam    {
+namespace steam   {
 namespace mobject {
 namespace test    {
   
@@ -76,6 +77,9 @@ namespace test    {
     }
   }
   
+  
+  using LERR_(INVALID_PLACEMENTREF);
+  using LERR_(BOTTOM_MOBJECTREF);
   
   using session::Clip;
   using session::PMedia;

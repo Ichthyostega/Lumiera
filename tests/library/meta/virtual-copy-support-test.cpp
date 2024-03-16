@@ -41,8 +41,8 @@ using util::_Fmt;
 using util::isnil;
 using std::string;
 
-using lumiera::error::LERR_(LOGIC);
-using lumiera::error::LERR_(WRONG_TYPE);
+using LERR_(LOGIC);
+using LERR_(WRONG_TYPE);
 
 
 namespace lib  {
@@ -220,9 +220,9 @@ namespace test {
               Opaque* impl = dynamic_cast<Opaque*> (&bas);
               
               if (!impl)
-                throw error::Logic("virtual copy works only on instances "
+                throw error::Logic{"virtual copy works only on instances "
                                    "of the same concrete implementation class"
-                                  ,error::LERR_(WRONG_TYPE));
+                                  , LERR_(WRONG_TYPE)};
               else
                return *impl;
             }

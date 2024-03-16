@@ -53,6 +53,10 @@ namespace lumiera {
   /** static storage for the facade access front-end */
   lib::Depend<Play> Play::facade;
   
+  
+  namespace error {
+    LUMIERA_ERROR_DEFINE (CANT_PLAY, "unable to build playback or render process for this configuration");
+  }
 }//(End) namespace lumiera
 
 
@@ -197,9 +201,6 @@ namespace play {
   
   
   
-  LUMIERA_ERROR_DEFINE (CANT_PLAY, "unable to build playback or render process for this configuration");
- 
-
 
 }} // namespace steam::play
 

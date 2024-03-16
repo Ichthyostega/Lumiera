@@ -37,12 +37,16 @@
 #include <string>
 
 
+namespace lumiera {
+namespace error {
+  LUMIERA_ERROR_DECLARE (EMPTY_SCOPE_PATH); ///< Placement scope not locatable (empty model path)
+  LUMIERA_ERROR_DECLARE (NO_PARENT_SCOPE); ///<  Parent scope of root not accessible
+  LUMIERA_ERROR_DECLARE (INVALID_SCOPE);  ///<   Placement scope invalid and not locatable within model
+}}
+
 namespace steam {
 namespace mobject {
 namespace session {
-  
-  LUMIERA_ERROR_DECLARE (NO_PARENT_SCOPE); ///< Parent scope of root not accessible
-  LUMIERA_ERROR_DECLARE (INVALID_SCOPE);  ///<  Placement scope invalid and not locatable within model
   
   
   

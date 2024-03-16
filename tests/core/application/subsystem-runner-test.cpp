@@ -87,8 +87,8 @@ namespace test  {
       /** marker for simulated failure exceptions */
       LUMIERA_ERROR_DEFINE( TEST, "simulated failure.");
       
-      using error::LERR_(LOGIC);
-      using error::LERR_(STATE);
+      using LERR_(LOGIC);
+      using LERR_(STATE);
       
       
       
@@ -147,7 +147,7 @@ namespace test  {
                 return true;
               else
               if ("throw"==startSpec) //---starting flounders
-                throw error::Fatal("simulated failure to start the subsystem", LERR_(TEST));
+                throw error::Fatal("simulated failure to start the subsystem", LUMIERA_ERROR_TEST);
               
               return started_;
             }
@@ -212,7 +212,7 @@ namespace test  {
               if ("true" ==runSpec) termination(0); // signal regular termination
               if ("throw"==runSpec)
                 {
-                  Error problemIndicator("simulated Problem terminating subsystem",LERR_(TEST));
+                  Error problemIndicator("simulated Problem terminating subsystem",LUMIERA_ERROR_TEST);
                   lumiera_error();    //  reset error state....
                                      //   Note: in real life this actually
                                     //    would be an catched exception!

@@ -94,8 +94,8 @@
 namespace lib {
   
   namespace error = lumiera::error;
-  using error::LERR_(BOTTOM_VALUE);
-  using error::LERR_(WRONG_TYPE);
+  using LERR_(BOTTOM_VALUE);
+  using LERR_(WRONG_TYPE);
   
   using util::isSameObject;
   using util::unConst;

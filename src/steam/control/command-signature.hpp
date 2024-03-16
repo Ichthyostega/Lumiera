@@ -55,6 +55,11 @@
 
 
 
+namespace lumiera {
+namespace error {
+  LUMIERA_ERROR_DECLARE (UNBOUND_ARGUMENTS); ///< Command functor not yet usable, because arguments aren't bound
+  LUMIERA_ERROR_DECLARE (MISSING_MEMENTO);  ///<  Undo functor not yet usable, because no undo state has been captured
+}}
 
 namespace steam {
 namespace control {

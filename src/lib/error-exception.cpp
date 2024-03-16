@@ -77,6 +77,7 @@ namespace lumiera {
     LUMIERA_ERROR_DEFINE (FLAG     , "non-cleared lumiera errorstate");
     LUMIERA_ERROR_DEFINE (INVALID  , "invalid input or parameters");
     LUMIERA_ERROR_DEFINE (EXTERNAL , "failure in external service");
+    LUMIERA_ERROR_DEFINE (EXCEPTION, "generic Lumiera exception");
     LUMIERA_ERROR_DEFINE (ASSERTION, "assertion failure");
     
     /* some further generic error situations */
@@ -91,8 +92,6 @@ namespace lumiera {
     LUMIERA_ERROR_DEFINE (UNIMPLEMENTED,"using a feature not yet implemented....");
     
   } // namespace error
-  
-  LUMIERA_ERROR_DEFINE (EXCEPTION, "generic Lumiera exception");
   
   
   

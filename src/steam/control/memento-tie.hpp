@@ -54,14 +54,13 @@
 
 namespace steam {
 namespace control {
+  namespace err = lumiera::error;
   
   using boost::equality_comparable;
   using lib::meta::func::bindLast;
   using lib::meta::func::chained;
   using lib::meta::equals_safeInvoke;
   using lib::wrapper::ReplaceableItem;
-    
-  LUMIERA_ERROR_DECLARE (MISSING_MEMENTO);  ///<  Undo functor not yet usable, because no undo state has been captured
   
   
   /**
@@ -174,8 +173,8 @@ namespace control {
       getState ()
         {
           if (!isCaptured_)
-            throw lumiera::error::State ("need to invoke memento state capturing beforehand",
-                                         LERR_(MISSING_MEMENTO));
+            throw err::State{"need to invoke memento state capturing beforehand"
+                            , LERR_(MISSING_MEMENTO)};
           return memento_;
         }
       

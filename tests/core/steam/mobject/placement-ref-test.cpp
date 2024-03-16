@@ -38,18 +38,20 @@
 #include "lib/util.hpp"
 
 
-using util::isSameObject;
-
-
 namespace steam    {
 namespace mobject {
 namespace session {
 namespace test    {
   
   using namespace mobject::test;
-  typedef TestPlacement<TestSubMO21> PSub;
   
-  typedef PlacementMO::ID P_ID;
+  using util::isSameObject;
+  using LERR_(NOT_IN_SESSION);
+  using LERR_(BOTTOM_PLACEMENTREF);
+  
+  using PSub = TestPlacement<TestSubMO21>;
+  using P_ID = PlacementMO::ID;
+  
   
   
   /***********************************************************************//**

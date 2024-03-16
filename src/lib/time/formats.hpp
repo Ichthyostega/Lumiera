@@ -44,6 +44,11 @@
 #include <string>
 #include <bitset>
 
+namespace lumiera {
+namespace error {
+  LUMIERA_ERROR_DECLARE (INVALID_TIMECODE); ///< timecode format error, illegal value encountered.
+}}
+
 
 namespace lib {
 namespace time {
@@ -64,13 +69,11 @@ namespace time {
   
   namespace format {
     
-    LUMIERA_ERROR_DECLARE (INVALID_TIMECODE); ///< timecode format error, illegal value encountered.
-    
     using std::string;
     using lib::meta::NoInstance; // the following types are for metaprogramming only...
     
     
-    /** 
+    /**
      * Frame count as timecode format.
      * An integral number used to count frames
      * can be used as a simple from of time code.
@@ -192,7 +195,7 @@ namespace time {
      */
     class Supported
       {
-        enum { MAXID = 8 }; 
+        enum { MAXID = 8 };
         
         std::bitset<MAXID> flags_;
         

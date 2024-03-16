@@ -81,7 +81,14 @@
 #include <string>
 
 
-
+namespace lumiera {
+namespace error {
+  LUMIERA_ERROR_DECLARE (UNBOUND_ARGUMENTS);  ///< Command functor not yet usable, because arguments aren't bound
+  LUMIERA_ERROR_DECLARE (INVALID_COMMAND);    ///< Unknown or insufficiently defined command
+  LUMIERA_ERROR_DECLARE (DUPLICATE_COMMAND);  ///< Attempt to redefine an already existing command definition
+  LUMIERA_ERROR_DECLARE (INVALID_ARGUMENTS);  ///< Arguments provided for binding doesn't match stored command function parameters
+  LUMIERA_ERROR_DECLARE (MISSING_MEMENTO);  ///<  Undo functor not yet usable, because no undo state has been captured
+}}
 
 namespace steam {
 namespace control {
@@ -92,15 +99,7 @@ namespace control {
   using lib::meta::Tuple;
   using lib::meta::Types;
   
-  
-  LUMIERA_ERROR_DECLARE (UNBOUND_ARGUMENTS);  ///< Command functor not yet usable, because arguments aren't bound
-  LUMIERA_ERROR_DECLARE (INVALID_COMMAND);    ///< Unknown or insufficiently defined command
-  LUMIERA_ERROR_DECLARE (DUPLICATE_COMMAND);  ///< Attempt to redefine an already existing command definition
-  LUMIERA_ERROR_DECLARE (INVALID_ARGUMENTS);  ///< Arguments provided for binding doesn't match stored command function parameters
-  
-  
-  
-  typedef void* FuncPtr;
+  using FuncPtr = void*;
   
   class CommandDef;
   class CommandImpl;

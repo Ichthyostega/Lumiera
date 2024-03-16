@@ -73,10 +73,14 @@ using stage::LUMIERA_INTERFACE_INAME(lumieraorg_Gui, 1);
 using std::string;
 
 
-namespace stage {
-  
+namespace lumiera {
+namespace error {
   /* == definition common error marks for the UI, declared in gtk-base.hpp == */
   LUMIERA_ERROR_DEFINE (UIWIRING, "GUI state contradicts assumptions in signal wiring");
+}}
+
+
+namespace stage {
   
   namespace { // implementation details
     

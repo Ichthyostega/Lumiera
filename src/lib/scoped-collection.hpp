@@ -82,8 +82,8 @@
 namespace lib {
   
   namespace error = lumiera::error;
-  using error::LERR_(CAPACITY);
-  using error::LERR_(INDEX_BOUNDS);
+  using LERR_(INDEX_BOUNDS);
+  using LERR_(CAPACITY);
   
   
   

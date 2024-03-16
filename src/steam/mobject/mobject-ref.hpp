@@ -69,17 +69,18 @@
 
 ///////////////////////////////////////////TODO: define an C-API representation here, make the header multilingual!
 
+namespace lumiera {
+namespace error {
+  LUMIERA_ERROR_DECLARE (BOTTOM_MOBJECTREF);  ///<  NIL MObjectRef encountered
+}}
+
 namespace steam {
 namespace mobject {
   
   namespace error = lumiera::error;
   
-  
-  
   class MObject;
   
-  
-  LUMIERA_ERROR_DECLARE (BOTTOM_MOBJECTREF);  ///<  NIL MObjectRef encountered
   
   /**
    * An active (smart-ptr like) external reference
@@ -137,7 +138,7 @@ namespace mobject {
       
       /** allow to use MObjectRef instead of a Placement-ID (hash)
        *  @todo not sure if that leads to unexpected conversions,
-       *        because the underlying implementation can be 
+       *        because the underlying implementation can be
        *        converted to size_t */                      //////////////////////////TICKET #682  revisit that decision later
       operator _Id const&()  const
         {
@@ -146,7 +147,7 @@ namespace mobject {
       
       
       
-      /** resolves the referred placement to an 
+      /** resolves the referred placement to an
        *  ExplicitPlacement and returns the found start time
        */
       lib::time::Time
@@ -157,7 +158,7 @@ namespace mobject {
       
       
       /** attach a child element to the model
-       *  @param newPlacement to be copied into the model, placed 
+       *  @param newPlacement to be copied into the model, placed
        *         into the scope of the object denoted by this MORef
        *  @return MORef designing the newly created and attached object instance
        */
@@ -181,7 +182,7 @@ namespace mobject {
        */
       void
       purge ()
-        { 
+        {
           if (isValid())
             session::SessionServiceMutate::detach_and_clear (pRef_);
           
@@ -214,7 +215,7 @@ namespace mobject {
        *  - any Placement-ID
        *  - any Placement-Ref
        *  - a plain LUID
-       * @throws error::Invalid when the (directly or indirectly 
+       * @throws error::Invalid when the (directly or indirectly
        *         referred placement isn't known to the session PlacementIndex,
        *         or when the placement actually found has an incompatible dynamic type
        */
@@ -233,7 +234,7 @@ namespace mobject {
       /** build and activate an MObject reference based on
        *  an existing reference of the same pointee type
        *  @note STRONG exception safety guarantee
-       *  @throws error::Invalid when the referred placement 
+       *  @throws error::Invalid when the referred placement
        *          isn't known to the current session's PlacementIndex
        */
       MORef&
@@ -254,7 +255,7 @@ namespace mobject {
        *  @note STRONG exception safety guarantee
        *  @throws error::Invalid when the referred placement isn't registered
        *       within the current session, or if the runtime type of the pointees
-       *       aren't assignment compatible 
+       *       aren't assignment compatible
        */
       template<typename MOX>
       MORef&
@@ -270,7 +271,7 @@ namespace mobject {
       bool
       isValid()  const
         {
-          return _Handle::isValid() 
+          return _Handle::isValid()
               && pRef_.isValid();
         }
       

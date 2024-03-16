@@ -56,7 +56,7 @@
  ** When adding a Placement to the index, it is mandatory to specify a Scope: this is
  ** another Placement already registered within the index; the new Placement can be thought
  ** of as being located "within" or "below" this scope-defining reference Placement. An
- ** typical example would be the addition of a \c Placement<session::Clip>, specifying 
+ ** typical example would be the addition of a \c Placement<session::Clip>, specifying
  ** a \c Placement<session::Fork> as scope. This would bring the mentioned Clip onto the
  ** "Track", as implemented by a Fork-MObject. Thus, all "object instances" within the
  ** session are arranged in a tree-like fashion. On creation of the PlacementIndex,
@@ -133,17 +133,19 @@ namespace std {
 }
 
 
+namespace lumiera {
+namespace error {
+  LUMIERA_ERROR_DECLARE (NOT_IN_SESSION);   ///< referring to a Placement not known to the current session
+  LUMIERA_ERROR_DECLARE (PLACEMENT_TYPE);   ///< requested Placement (pointee) type not compatible with data or context
+  LUMIERA_ERROR_DECLARE (NONEMPTY_SCOPE);   ///< Placement scope (still) contains other elements
+}}
+
 namespace steam {
 namespace mobject {
   
   class MObject;
   
 namespace session {
-  
-  LUMIERA_ERROR_DECLARE (NOT_IN_SESSION);   ///< referring to a Placement not known to the current session
-  LUMIERA_ERROR_DECLARE (PLACEMENT_TYPE);   ///< requested Placement (pointee) type not compatible with data or context
-  LUMIERA_ERROR_DECLARE (NONEMPTY_SCOPE);   ///< Placement scope (still) contains other elements
-  
   
   using std::unique_ptr;
   
@@ -210,17 +212,17 @@ namespace session {
       
       PlacementMO& getScope (PlacementMO const&)     const;
       PlacementMO& getScope (ID)                     const;
-                                                     
+      
       iterator getReferrers (ID)                     const;
-                                                     
-                                                     
-      /** retrieve the logical root scope */         
+      
+      
+      /** retrieve the logical root scope */
       PlacementMO& getRoot()                         const;
-                                                     
+      
       size_t size()                                  const;
       bool contains (PlacementMO const&)             const;
       bool contains (ID)                             const;
-                                                     
+      
       bool isValid()                                 const;
       
       
@@ -294,7 +296,7 @@ namespace session {
     return static_cast<Placement<MO>&> (result);
   }
   
-    
+  
   template<class MO>
   inline Placement<MO>&
   PlacementIndex::find (PlacementRef<MO> const& pRef)  const
@@ -307,7 +309,7 @@ namespace session {
   inline Placement<MObject>&
   PlacementIndex::getScope (PlacementMO const& p)  const
   {
-    return getScope(p.getID()); 
+    return getScope(p.getID());
   }
   
   

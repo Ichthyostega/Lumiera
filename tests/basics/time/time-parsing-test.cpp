@@ -41,7 +41,7 @@ namespace time{
 namespace test{
   
   using steam::asset::meta::TimeGrid;
-  using format::LERR_(INVALID_TIMECODE);
+  using LERR_(INVALID_TIMECODE);
   
   
   namespace { // Helper for writing test cases

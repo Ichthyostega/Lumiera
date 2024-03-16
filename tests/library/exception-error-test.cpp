@@ -53,7 +53,7 @@ namespace lumiera {
     LUMIERA_ERROR_DEFINE (DERIVED, "convoluted exception");
     
     /** define a specific Error subclass derived from error::external */
-    using DerivedError = error::LumieraError<LERR_(DERIVED), error::External>;
+    using DerivedError = error::LumieraError<LUMIERA_ERROR_DERIVED, error::External>;
     
     
     /******************************************************//**
@@ -139,7 +139,7 @@ namespace lumiera {
          */
         void checkErrorFlagPropagation()
         {
-          lumiera_error_set(LERR_(LIFE_AND_UNIVERSE), "what is the answer?");
+          lumiera_error_set(LUMIERA_ERROR_LIFE_AND_UNIVERSE, "what is the answer?");
           CHECK (lumiera_error_peek());
           
           catcher (&test::detectErrorflag);

@@ -94,14 +94,16 @@
 #include <tuple>
 
 
+namespace lumiera {
+namespace error {
+  LUMIERA_ERROR_DECLARE(DIFF_STRUCTURE); ///< Invalid diff structure: implicit rules and assumptions violated.
+  LUMIERA_ERROR_DECLARE(DIFF_CONFLICT); ///<  Collision in diff application: contents of target not as expected.
+}}
 
 namespace lib {
 namespace diff{
   
   namespace error = lumiera::error;
-  
-  LUMIERA_ERROR_DECLARE(DIFF_STRUCTURE); ///< Invalid diff structure: implicit rules and assumptions violated.
-  LUMIERA_ERROR_DECLARE(DIFF_CONFLICT); ///<  Collision in diff application: contents of target not as expected.
   
   
   template<class I, typename E>

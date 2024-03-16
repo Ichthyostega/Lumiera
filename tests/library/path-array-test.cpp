@@ -44,8 +44,8 @@ using util::join;
 namespace lib  {
 namespace test {
   
-  using lumiera::error::LERR_(INDEX_BOUNDS);
-  using lumiera::error::LERR_(INVALID);
+  using LERR_(INDEX_BOUNDS);
+  using LERR_(INVALID);
   
   using ParrT = lib::PathArray<5>;
   

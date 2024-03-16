@@ -43,9 +43,7 @@
 
 namespace steam {
 namespace engine {
-  
   namespace error = lumiera::error;
-  using error::LERR_(LIFECYCLE);
   
   using lib::HashVal;
   

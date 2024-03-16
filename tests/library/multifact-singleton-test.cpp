@@ -46,7 +46,7 @@ namespace test{
   using std::ostream;
   using std::string;
   
-  using lumiera::error::LERR_(INVALID);
+  using LERR_(INVALID);
   
   
   namespace { // hierarchy of test dummy objects

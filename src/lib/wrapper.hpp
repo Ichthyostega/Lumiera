@@ -58,7 +58,7 @@ namespace wrapper {
   using util::unConst;
   using util::isSameObject;
   using lib::meta::_Fun;
-  using lumiera::error::LERR_(BOTTOM_VALUE);
+  using LERR_(BOTTOM_VALUE);
   
   using std::function;
   

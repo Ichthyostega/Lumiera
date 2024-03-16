@@ -41,19 +41,17 @@
 #include <memory>
 
 
+namespace lumiera {
+namespace error {
+  LUMIERA_ERROR_DECLARE (CANT_PLAY); ///< unable to build playback or render process for this configuration
+}}
+
 namespace steam {
 namespace play {
   
 //using std::string;
 //using std::vector;
   using std::shared_ptr;
-  
-  
-  LUMIERA_ERROR_DECLARE(CANT_PLAY); ///< unable to build playback or render process for this configuration
-
-  
-  
-  
   
   
   

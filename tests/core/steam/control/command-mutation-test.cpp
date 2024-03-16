@@ -49,6 +49,8 @@ namespace test    {
   
   using namespace lib::meta;
   using control::CmdClosure;
+  using LERR_(MISSING_MEMENTO);
+  using LERR_(UNBOUND_ARGUMENTS);
   
   
   namespace { /* ======= test functions to bind ========= */

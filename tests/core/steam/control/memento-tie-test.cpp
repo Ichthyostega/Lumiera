@@ -37,12 +37,9 @@ using std::bind;
 using std::rand;
 
 
-namespace steam {
+namespace steam   {
 namespace control {
 namespace test    {
-  
-  
-  
   
   namespace {
     
@@ -66,6 +63,8 @@ namespace test    {
      */
     const size_t ALIGNMENT = sizeof(size_t);
   }
+  
+  using LERR_(MISSING_MEMENTO);
   
   
   

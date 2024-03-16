@@ -37,7 +37,7 @@
 #include <string>
 #include <vector>
 
-using lumiera::error::LERR_(ITER_EXHAUST);
+using LERR_(ITER_EXHAUST);
 using lib::iter_stl::IterSnapshot;
 using lib::iter_stl::snapshot;
 using lib::time::Time;

@@ -88,45 +88,45 @@ namespace diff{
   void
   TreeDiffMutatorBinding::__failMismatch (Literal oper, GenNode const& spec)
   {
-    throw error::State(_Fmt("Unable to %s element %s. Current shape of target "
+    throw error::State{_Fmt("Unable to %s element %s. Current shape of target "
                             "data does not match expectations") % oper % spec
-                      , LUMIERA_ERROR_DIFF_CONFLICT);
+                      , LERR_(DIFF_CONFLICT)};
   }
   
   void
   TreeDiffMutatorBinding::__expect_further_elements (GenNode const& elm)
   {
     if (not treeMutator_->hasSrc())
-      throw error::State(_Fmt("Premature end of target sequence, still expecting element %s; "
+      throw error::State{_Fmt("Premature end of target sequence, still expecting element %s; "
                               "unable to apply diff further.") % elm
-                        , LUMIERA_ERROR_DIFF_CONFLICT);
+                        , LERR_(DIFF_CONFLICT)};
   }
   
   void
   TreeDiffMutatorBinding::__fail_not_found (GenNode const& elm)
   {
-    throw error::State(_Fmt("Premature end of sequence; unable to locate "
-                            "element %s in the remainder of the target.") % elm
-                      , LUMIERA_ERROR_DIFF_CONFLICT);
+      throw error::State{_Fmt("Premature end of sequence; unable to locate "
+                              "element %s in the remainder of the target.") % elm
+                        , LERR_(DIFF_CONFLICT)};
   }
   
   void
   TreeDiffMutatorBinding::__expect_end_of_scope (GenNode::ID const& idi)
   {
     if (not treeMutator_->completeScope())
-      throw error::State(_Fmt("Diff application floundered in nested scope %s; "
+      throw error::State{_Fmt("Diff application floundered in nested scope %s; "
                               "unexpected extra elements found when diff "
                               "should have settled everything.") % idi.getSym()
-                        , LUMIERA_ERROR_DIFF_STRUCTURE);
+                        , LERR_(DIFF_STRUCTURE)};
   }
   
   void
   TreeDiffMutatorBinding::__expect_valid_parent_scope (GenNode::ID const& idi)
   {
     if (0 == scopeManger_->depth())
-      throw error::Fatal(_Fmt("Diff application floundered after leaving scope %s; "
+      throw error::Fatal{_Fmt("Diff application floundered after leaving scope %s; "
                               "unbalanced nested scopes, diff attempts to pop root.") % idi.getSym()
-                        , LUMIERA_ERROR_DIFF_STRUCTURE);
+                        , LERR_(DIFF_STRUCTURE)};
   }
   
   

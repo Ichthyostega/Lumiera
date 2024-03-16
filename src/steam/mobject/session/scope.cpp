@@ -53,13 +53,17 @@ using std::vector;
 using lib::IterSource;
 using lib::iter_source::wrapIter;
 
+
+namespace lumiera {
+namespace error {
+  LUMIERA_ERROR_DEFINE (INVALID_SCOPE, "Placement scope invalid and not locatable within model");
+  LUMIERA_ERROR_DEFINE (NO_PARENT_SCOPE, "Parent scope of root not accessible");
+  LUMIERA_ERROR_DEFINE (EMPTY_SCOPE_PATH, "Placement scope not locatable (empty model path)");
+}}
+
 namespace steam {
 namespace mobject {
 namespace session {
-  
-  
-  LUMIERA_ERROR_DEFINE (INVALID_SCOPE, "Placement scope invalid and not locatable within model");
-  LUMIERA_ERROR_DEFINE (NO_PARENT_SCOPE, "Parent scope of root not accessible");
   
   
   

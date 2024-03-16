@@ -35,10 +35,7 @@
 #include "lib/util.hpp"
 
 
-using util::isSameObject;
-
-
-namespace steam    {
+namespace steam   {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -61,6 +58,8 @@ namespace test    {
     }
   }
   
+  using LERR_(NO_PARENT_SCOPE);
+  using util::isSameObject;
   
   
   
@@ -72,7 +71,7 @@ namespace test    {
    *       - discovers the scope of a placement
    *       - finds the parent scope
    *       - enumerates a scope path up to root
-   * 
+   *
    * @see  mobject::Placement
    * @see  mobject::session::ScopePath
    * @see  mobject::session::QueryFocus
@@ -81,7 +80,7 @@ namespace test    {
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           // Prepare an (test)Session
           // with some dummy contents
@@ -201,4 +200,4 @@ namespace test    {
   LAUNCHER (PlacementScope_test, "function session");
   
   
-}}}} // namespace steam::mobject::session::test
+}}}}// namespace steam::mobject::session::test

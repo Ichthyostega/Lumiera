@@ -50,8 +50,7 @@ namespace lib {
   namespace error = lumiera::error;
   namespace fsys = boost::filesystem;
   
-  LUMIERA_ERROR_DECLARE (FILE_NOT_DIRECTORY); ///< path element points at a file instead of a directory
-  using error::LERR_(ITER_EXHAUST);
+  using LERR_(ITER_EXHAUST);
   
   
   /** retrieve the location of the executable */
