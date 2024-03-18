@@ -414,12 +414,17 @@ return: 0
 END
 
 
-TEST "HashGenerator_test" HashGenerator_test <<END
+PLANNED "generate a Gnuplot diagram" GnuplotGen_test <<END
 return: 0
 END
 
 
-TEST "HashIndexed_test" HashIndexed_test <<END
+TEST "generate hash values" HashGenerator_test <<END
+return: 0
+END
+
+
+TEST "verify indexing by hash" HashIndexed_test <<END
 return: 0
 END
 
@@ -771,6 +776,11 @@ END
 
 
 TEST "util: sanitised identifier" UtilSanitizedIdentifier_test <<END
+return: 0
+END
+
+
+PLANNED "text template substitution" TextTemplate_test <<END
 return: 0
 END
 
