@@ -75,22 +75,38 @@ namespace lib {
           TEXT, KEY, COND, JUMP, ITER, LOOP
         };
       
+      /** cross-references by index number */
+      using Idx = size_t;
+      
       struct ParseCtx
         {
           Clause clause;
+          Idx begin{0};
+          Idx after{0};
         };
       
       struct Action
         {
-          Code code;
-          string val;
+          Code code{TEXT};
+          string val{""};
+          Idx refIDX{0};
+          
+          template<class IT>
+          string instantiate (IT&);
         };
       
-      template<class BIND>
-      struct Instance
+      /** Binding to a specific data source.
+       * @note requires partial specialisation */
+      template<class DAT, typename SEL=void>
+      struct InstanceCore
         {
-          
+          static_assert (not sizeof(DAT),
+                         "unable to bind this data source "
+                         "for TextTemplate instantiation");
         };
+      
+      /** the text template is compiled into a sequence of Actions */
+      using ActionSeq = std::vector<Action>;
       
       using PipeTODO = std::vector<string>;
       using InstanceIter = decltype (explore (std::declval<PipeTODO const&>()));
