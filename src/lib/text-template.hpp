@@ -23,7 +23,69 @@
 
 /** @file text-template.hpp
  ** A minimalistic text templating engine with flexible data binding.
+ ** Text template instantiation implies the interpretation of a template specification,
+ ** which contains literal text with some placeholder tags. This is combined with an actual
+ ** data source; the engine needs to retrieve data values as directed by key names extracted
+ ** from the placeholders and render and splice them into the placeholder locations. This
+ ** process is crucial for code generation, for external tool integration and is also often
+ ** used for dynamic web page generation. Several external libraries are available, offering
+ ** a host of extended functionality. This library implementation for internal use by the
+ ** Lumiera application however attempts to remain focused on the essential functionality,
+ ** with only minimal assumptions regarding the data source used for instantiation. Rather
+ ** than requiring data to be given in some map, or custom JSON data type, or some special
+ ** property-tree or dynamic object type, a _data binding protocol_ is stipulated; this
+ ** way, any data type can be attached, given that five generic functions can be implemented
+ ** to establish the binding. By default, a pre-defined binding is provided for a STL map
+ ** and for Lumiera's »External Tree Description« format based on `Record<GenNode>`.
  ** 
+ ** # Template syntax and features
+ ** 
+ ** TextTemplate is able to substitute simple placeholders by name, it can handle
+ ** conditional sections and supports a data iteration construct for a nested scope.
+ ** The supported functionality is best explained with an example:
+ ** \code
+ ** Rendered at ${date}.
+ ** ${if critical}
+ ** WARNING: critical!
+ ** ${else}(routine report)${end if critical}
+ ** 
+ ** Participants
+ ** ${for person}- ${name} ${if role}(${role})${end if role}
+ ** ${else}** no participants **
+ ** ${end for person}
+ ** \endcode
+ ** This template spec is parsed and preprocessed into an internal representation,
+ ** which can then be rendered with any suitable data source.
+ ** - the placeholder `${date}` is replaced by a value retrieved with the key "date"
+ ** - the conditional section will appear only if a key "critical" is defined
+ ** - when the data defines content under the key "person", and this content
+ **   can be suitably interpreted as a sequence of sub-scopes, then the »for block«
+ **   is instantiated for each entry, using the values retrieved through the keys
+ **   "name" and "role". Typically these keys are defined for each sub-scope
+ ** - note that the key "role" is enclosed into a conditional section
+ ** - note that both for conditional sections, and for iteration, an _else branch_
+ **   can be defined.
+ ** How data is actually accessed, and what constitutes a nested scope is obviously
+ ** a matter of the actual data binding, which is picked up through a template
+ ** specialisation for lib::TextTemplate::DataSource
+ ** 
+ ** # Implementation notes
+ ** 
+ ** The template specification is parsed and compiled immediately when constructing
+ ** the TextTemplate instance. At this point, syntactical errors, e.g. mismatched
+ ** conditional opening and closing tags will be detected and raised as exceptions.
+ ** The _compiled template_ is represented as a vector of action tokens, holding the
+ ** constant parts as strings in heap memory and marking the positions of placeholders
+ ** and block bounds.
+ ** 
+ ** The actual instantiation is initiated through TextTemplate::render(), which picks
+ ** a suitable data binding (causing a compilation failure in case not binding can
+ ** be established). This function yields an iterator, which will traverse the
+ ** sequence of action tokens precompiled for this template and combine them
+ ** with the retrieved data, yielding a std::string_view for each instantiated
+ ** chunk of the template. The full result can thus be generated either by
+ ** looping, or by invoking util::join() on the provided iterator.
+ **  
  ** @todo WIP-WIP-WIP 3/2024
  ** @see TextTemplate_test
  ** @see gnuplot-gen.hpp
@@ -43,26 +105,28 @@
 
 //#include <cmath>
 //#include <limits>
-#include <vector>
 #include <string>
-//#include <stdint.h>
-//#include <boost/rational.hpp>
+#include <vector>
+#include <stack>
+#include <map>
 
 
 namespace lib {
   
-//  using Rat = boost::rational<int64_t>;
-//  using boost::rational_cast;
-//  using std::abs;
   using std::string;
+  using StrView = std::string_view;
   
   
-  namespace {// preconfigured TextTemplate data bindings
+  namespace {
     
+    /** shorthand for an »iter-explorer« build from some source X */
+    template<class X>
+    using ExploreIter = decltype (lib::explore (std::declval<X>()));
   }
   
   
-  /**
+  
+  /*****************************************//**
    * Text template substitution engine
    */
   class TextTemplate
@@ -92,31 +156,48 @@ namespace lib {
           Idx refIDX{0};
           
           template<class IT>
-          string instantiate (IT&);
-        };
-      
-      /** Binding to a specific data source.
-       * @note requires partial specialisation */
-      template<class DAT, typename SEL=void>
-      struct InstanceCore
-        {
-          static_assert (not sizeof(DAT),
-                         "unable to bind this data source "
-                         "for TextTemplate instantiation");
+          StrView instantiate (IT&);
         };
       
       /** the text template is compiled into a sequence of Actions */
       using ActionSeq = std::vector<Action>;
       
-      using PipeTODO = std::vector<string>;
-      using InstanceIter = decltype (explore (std::declval<PipeTODO const&>()));
+
+      /** Binding to a specific data source.
+       * @note requires partial specialisation */
+      template<class DAT, typename SEL=void>
+      class DataSource;
+      
+      template<class SRC>
+      class InstanceCore
+        {
+          using ActionIter = ExploreIter<ActionSeq const&>;
+          using DataCtxIter = typename SRC::Iter;
+          using NestedCtx = std::pair<DataCtxIter, SRC>;
+          using CtxStack = std::stack<NestedCtx, std::vector<NestedCtx>>;
+          
+          SRC        dataSrc_;
+          ActionIter actionIter_;
+          CtxStack   ctxStack_;
+          StrView    rendered_;
+          
+        public:
+          InstanceCore (ActionSeq const& actions, SRC);
+          
+          bool checkPoint() const;
+          StrView& yield()  const;
+          void iterNext();
+        };
+      
+      template<class DAT>
+      using InstanceIter = ExploreIter<InstanceCore<DataSource<DAT>>>;
       
     public:
       TextTemplate(string spec)
         { }
       
       template<class DAT>
-      InstanceIter
+      InstanceIter<DAT>
       render (DAT const& data)  const;
       
       template<class DAT>
@@ -126,9 +207,75 @@ namespace lib {
   
   
   
+  
+  
+  /* ======= preconfigured data bindings ======= */
+  
+  template<class DAT, typename SEL=void>
+  struct TextTemplate::DataSource
+    {
+      static_assert (not sizeof(DAT),
+                     "unable to bind this data source "
+                     "for TextTemplate instantiation");
+    };
+    
+  template<>
+  struct TextTemplate::DataSource<std::map<string,string>>
+    {
+      using Iter = std::string_view;
+    };
+  
+  
+  template<class SRC>
+  TextTemplate::InstanceCore<SRC>::InstanceCore (TextTemplate::ActionSeq const& actions, SRC s)
+    : dataSrc_{s}
+    , actionIter_{explore (actions)}
+    , ctxStack_{}
+    { }
+  
+  
+  template<class SRC>
+  inline bool
+  TextTemplate::InstanceCore<SRC>::checkPoint()  const
+  {
+    UNIMPLEMENTED ("TextTemplate instantiation: check point on action token");
+  }
+  
+  template<class SRC>
+  inline StrView&
+  TextTemplate::InstanceCore<SRC>::yield()  const
+  {
+    UNIMPLEMENTED ("TextTemplate instantiation: yield instantiated string element for action token");
+  }
+  
+  template<class SRC>
+  inline void
+  TextTemplate::InstanceCore<SRC>::iterNext()
+  {
+    UNIMPLEMENTED ("TextTemplate instantiation: advance to interpretation of next action token");
+  }
+  
+  
+  
+  /**
+   * Interpret an action token from the compiled text template
+   * based on the given data binding and iteration state to yield a rendering
+   * @param instanceIter the wrapped InstanceCore with the actual data binding
+   * @return a string-view pointing to the effective rendered chunk corresponding to this action
+   */
+  template<class IT>
+  inline StrView
+  TextTemplate::Action::instantiate (IT& instanceIter)
+  {
+    UNIMPLEMENTED ("actual implementation of template action interpretation");
+  }
+  
+  
+  
+  
   /** */
   template<class DAT>
-  inline TextTemplate::InstanceIter
+  inline TextTemplate::InstanceIter<DAT>
   TextTemplate::render (DAT const& data)  const
   {
     UNIMPLEMENTED ("actually instantiate the text template");
