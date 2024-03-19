@@ -34,12 +34,15 @@
 
 //#include <chrono>
 //#include <array>
+#include <map>
 
 //using std::array;
 
 
 namespace lib {
 namespace test {
+  
+  using MapS = std::map<string, string>;
   
   
   /***************************************************************************//**
@@ -69,12 +72,16 @@ namespace test {
         }
       
       
-      /** @test TODO
-       * @todo WIP 4/24 🔁 define ⟶ implement
+      /** @test TODO simple point-and-shot usage...
+       * @todo WIP 4/24 ✔ define ⟶ 🔁 implement
        */
       void
       simpeUsage()
         {
+          MapS snaps{{"whatever", "cruel world"}
+                    ,{"greeting", "farewell"}};
+          CHECK (TextTemplate::apply ("${greeting} ${whatever} ↯", snaps)
+                 == "farewell cruel world ↯"_expect);
         }
       
       

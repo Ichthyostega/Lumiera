@@ -36,10 +36,15 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
+#include "lib/iter-explorer.hpp"
+#include "lib/format-util.hpp"
 //#include "lib/util.hpp"
 
 //#include <cmath>
 //#include <limits>
+#include <vector>
+#include <string>
 //#include <stdint.h>
 //#include <boost/rational.hpp>
 
@@ -49,6 +54,79 @@ namespace lib {
 //  using Rat = boost::rational<int64_t>;
 //  using boost::rational_cast;
 //  using std::abs;
+  using std::string;
+  
+  
+  namespace {// preconfigured TextTemplate data bindings
+    
+  }
+  
+  
+  /**
+   * Text template substitution engine
+   */
+  class TextTemplate
+    : util::MoveOnly
+    {
+      enum Clause {
+          IF, FOR
+        };
+      enum Code {
+          TEXT, KEY, COND, JUMP, ITER, LOOP
+        };
+      
+      struct ParseCtx
+        {
+          Clause clause;
+        };
+      
+      struct Action
+        {
+          Code code;
+          string val;
+        };
+      
+      template<class BIND>
+      struct Instance
+        {
+          
+        };
+      
+      using PipeTODO = std::vector<string>;
+      using InstanceIter = decltype (explore (std::declval<PipeTODO const&>()));
+      
+    public:
+      TextTemplate(string spec)
+        { }
+      
+      template<class DAT>
+      InstanceIter
+      render (DAT const& data)  const;
+      
+      template<class DAT>
+      static string
+      apply (string spec, DAT const& data);
+    };
+  
+  
+  
+  /** */
+  template<class DAT>
+  inline TextTemplate::InstanceIter
+  TextTemplate::render (DAT const& data)  const
+  {
+    UNIMPLEMENTED ("actually instantiate the text template");
+  }
+  
+  /** */
+  template<class DAT>
+  inline string
+  TextTemplate::apply (string spec, DAT const& data)
+  {
+    return util::join (TextTemplate(spec).render (data)
+                      ,"");
+  }
+  
   
   
 }// namespace lib
