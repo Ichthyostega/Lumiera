@@ -1,0 +1,144 @@
+/*
+  ITER-INDEX.hpp  -  iterator with indexed random-access to referred container
+
+  Copyright (C)         Lumiera.org
+    2024,               Hermann Vosseler <Ichthyostega@web.de>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+*/
+
+
+/** @file iter-index.hpp
+ ** Iterator-style access handle to a referred container with subscript index.
+ ** This wrapper packages a current index number and a back-link to some data container
+ ** with subscript operator and range check. This allows to hand out a navigable access point
+ ** to a processing algorithm while abstracting away the actual data storage. Besides usage
+ ** as »Lumiera Forward Iterator«, the current access position can be retrieved directly
+ ** and it can be relocated to another valid index position; this implies also the ability
+ ** to re-set the iteration to the container's start.
+ ** 
+ ** @see IterIndex_test
+ ** @see iter-adapter.hpp
+ ** @see [usage example](\ref lib::TextTemplate::InstanceCore)
+ ** 
+ */
+
+
+#ifndef SRC_LIB_ITER_INDEX_H
+#define SRC_LIB_ITER_INDEX_H
+
+
+#include "lib/iter-adapter.hpp"
+
+//#include <type_traits>
+//#include <utility>
+
+
+namespace lib {
+  
+  namespace {// Implementation of the access core
+    
+    template<typename PTR>
+    struct IndexAccessCore
+      {
+        PTR    data_{};
+        size_t idx_{0};
+        
+        using ResVal = decltype(data_->operator[](0));
+        
+        using value_type = typename meta::RefTraits<ResVal>::Value;
+        using reference  = typename meta::RefTraits<ResVal>::Reference;
+        
+        using IterWrapper = lib::IterStateWrapper<value_type, IndexAccessCore>;
+        
+        bool
+        checkPoint() const
+          {
+            return isValidIDX(idx_);
+          }
+        
+        reference
+        yield()  const
+          {
+            return (*data_)[idx_];
+          }
+        
+        void
+        iterNext()
+          {
+            ++idx_;
+          }
+        
+        
+        bool
+        isValidIDX (size_t idx)  const
+          {
+            return bool(data_)
+               and idx < data_->size();
+          }
+        
+        
+        friend bool operator== (IndexAccessCore const& c1, IndexAccessCore const& c2)
+        {
+          return c1.data_ == c2.data_ and (not c1.data_ or c1.idx_ == c2.idx_);
+        }
+        friend bool operator!= (IndexAccessCore const& c1, IndexAccessCore const& c2)
+        {
+          return not (c1 == c2);
+        }
+      };
+    
+  }//(End)Implementation
+  
+  
+  /**
+   * 
+   */
+  template<class CON, typename PTR = CON*>
+  class IterIndex
+    : public IndexAccessCore<PTR>::IterWrapper
+    {
+      using _Cor = IndexAccessCore<PTR>;
+      using _Par = typename _Cor::IterWrapper;
+      
+    public:
+      IterIndex()  = default;
+      IterIndex (CON& dataContainer)
+        : _Par{_Cor{&dataContainer, 0}}
+        { }
+      
+      
+      size_t
+      getIDX()  const
+        {
+          _Par::__throw_if_empty();
+          return const_cast<IterIndex*>(this)->stateCore().idx_;
+        }
+      
+      void
+      setIDX (size_t newIDX)
+        {
+          auto& core = _Par::stateCore(); 
+          if (not core.isValidIDX (newIDX))
+            throw lumiera::error::Invalid ("Attempt to set index out of bounds",
+                  lumiera::error::LUMIERA_ERROR_INDEX_BOUNDS);
+          core.idx_ = newIDX;
+        }
+    };
+  
+  
+} // namespace lib
+#endif /*SRC_LIB_ITER_INDEX_H*/
