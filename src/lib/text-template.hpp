@@ -49,9 +49,9 @@
  ** WARNING: critical!
  ** ${else}(routine report)${end if critical}
  ** 
- ** Participants
- ** ${for person}- ${name} ${if role}(${role})${end if role}
- ** ${else}** no participants **
+ ** **Participants**
+ ** ${for person} - ${name} ${if role}(${role})${end if role}
+ ** ${else} _no participants_
  ** ${end for person}
  ** \endcode
  ** This template spec is parsed and preprocessed into an internal representation,
@@ -62,10 +62,10 @@
  **   can be suitably interpreted as a sequence of sub-scopes, then the »for block«
  **   is instantiated for each entry, using the values retrieved through the keys
  **   "name" and "role". Typically these keys are defined for each sub-scope
- ** - note that the key "role" is enclosed into a conditional section
+ ** - note that `${role}` is enclosed into a conditional section, making it optional
  ** - note that both for conditional sections, and for iteration, an _else branch_
- **   can be defined.
- ** How data is actually accessed, and what constitutes a nested scope is obviously
+ **   can optionally be defined in the template.
+ ** How data is actually accessed and what constitutes a nested scope is obviously
  ** a matter of the actual data binding, which is picked up through a template
  ** specialisation for lib::TextTemplate::DataSource
  ** 
@@ -101,7 +101,7 @@
 #include "lib/nocopy.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/format-util.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <cmath>
 //#include <limits>
@@ -115,6 +115,8 @@ namespace lib {
   
   using std::string;
   using StrView = std::string_view;
+  
+  using util::unConst;
   
   
   namespace {
@@ -142,6 +144,9 @@ namespace lib {
       /** cross-references by index number */
       using Idx = size_t;
       
+      template<class SRC>
+      class InstanceCore;
+      
       struct ParseCtx
         {
           Clause clause;
@@ -155,8 +160,8 @@ namespace lib {
           string val{""};
           Idx refIDX{0};
           
-          template<class IT>
-          StrView instantiate (IT&);
+          template<class SRC>
+          StrView instantiate (InstanceCore<SRC>&)  const;
         };
       
       /** the text template is compiled into a sequence of Actions */
@@ -187,6 +192,8 @@ namespace lib {
           bool checkPoint() const;
           StrView& yield()  const;
           void iterNext();
+          
+          void instantiateNext();
         };
       
       template<class DAT>
@@ -231,28 +238,44 @@ namespace lib {
     : dataSrc_{s}
     , actionIter_{explore (actions)}
     , ctxStack_{}
-    { }
+    , rendered_{}
+    {
+      instantiateNext();
+    }
   
-  
+  /**
+   * TextTemplate instantiation: check point on rendered Action.
+   * In active operation, there is a further Action, and this action
+   * can be (or has already been) rendered successfully.
+   */
   template<class SRC>
   inline bool
   TextTemplate::InstanceCore<SRC>::checkPoint()  const
   {
-    UNIMPLEMENTED ("TextTemplate instantiation: check point on action token");
+    return bool(actionIter_);
   }
   
   template<class SRC>
   inline StrView&
   TextTemplate::InstanceCore<SRC>::yield()  const
   {
-    UNIMPLEMENTED ("TextTemplate instantiation: yield instantiated string element for action token");
+    return unConst(this)->rendered_;
   }
   
   template<class SRC>
   inline void
   TextTemplate::InstanceCore<SRC>::iterNext()
   {
-    UNIMPLEMENTED ("TextTemplate instantiation: advance to interpretation of next action token");
+    ++actionIter_;
+    instantiateNext();
+  }
+  
+  template<class SRC>
+  inline void
+  TextTemplate::InstanceCore<SRC>::instantiateNext()
+  {
+    rendered_ = actionIter_? actionIter_->instantiate(*this)
+                           : StrView{};
   }
   
   
@@ -263,11 +286,26 @@ namespace lib {
    * @param instanceIter the wrapped InstanceCore with the actual data binding
    * @return a string-view pointing to the effective rendered chunk corresponding to this action
    */
-  template<class IT>
+  template<class SRC>
   inline StrView
-  TextTemplate::Action::instantiate (IT& instanceIter)
+  TextTemplate::Action::instantiate (InstanceCore<SRC>&)  const
   {
-    UNIMPLEMENTED ("actual implementation of template action interpretation");
+    switch (code) {
+      case TEXT:
+        return val;
+      case KEY:
+        return "";
+      case COND:
+        return "";
+      case JUMP:
+        return "";
+      case ITER:
+        return "";
+      case LOOP:
+        return "";
+      default:
+        NOTREACHED ("uncovered Activity verb in activation function.");
+      }
   }
   
   
