@@ -48,7 +48,7 @@
 #define LIB_STAT_CSV_H
 
 #include "lib/error.hpp"
-#include "lib/nocopy.hpp"
+#include "lib/null-value.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-obj.hpp"
 #include "lib/stat/regex.hpp"
@@ -140,35 +140,39 @@ namespace stat {
    *  - dereference to get the field as string
    *  - increment to move to the next field
    * @throws error::Invalid on CSV format violation
-   * @todo 3/24 should be rewritten as Lumiera Forward Iterator
    */
   class CsvLine
-    : util::NonCopyable
-    , util::MatchSeq
+    : public util::RegexSearchIter
     {
-      string const& line_;
-      size_t   field_;
-      iterator curr_;
-      size_t   pos_;
+      string const& line_{};
+      size_t   field_{0};
+      size_t   pos_{0};
+      
+      util::RegexSearchIter const& curr() const { return *this; }
+      util::RegexSearchIter        end()  const { return util::RegexSearchIter{}; }
 
     public:
-      CsvLine (string& line)        // NOTE: string must exist elsewhere
-        : MatchSeq(line, ACCEPT_FIELD)
+      CsvLine()
+        : line_{lib::NullValue<string>::get()}
+        { }
+      
+      CsvLine (string& line) // NOTE: string and reg-exp must exist elsewhere
+        : RegexSearchIter(line, ACCEPT_FIELD)
         , line_{line}
-        , field_{0}
-        , curr_{MatchSeq::begin()}
-        , pos_{0}
         { }
       
       explicit operator bool()  const
         {
           return isValid();
         }
+
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (CsvLine);
+      
       
       string operator*()  const
         {
           if (not isValid()) fail();
-          auto& mat = *curr_;
+          auto& mat = *curr();
           return mat[2].matched? mat[2]
                                : mat[1];
         }
@@ -178,8 +182,8 @@ namespace stat {
         {
           if (not isValid())
             fail();
-          pos_ = curr_->position() + curr_->length();
-          ++curr_;
+          pos_ = curr()->position() + curr()->length();
+          util::RegexSearchIter::operator ++();
           if (pos_ < line_.length() and not isValid())
             fail ();
           ++field_;
@@ -194,22 +198,22 @@ namespace stat {
       bool
       isValid()  const
         {
-          return curr_ != end()
-             and pos_ == size_t(curr_->position())
-             and not curr_->empty();
+          return curr() != end()
+             and pos_ == size_t(curr()->position())
+             and not curr()->empty();
         }
       
       bool
       isParseFail()  const
         {
-          return curr_ != end()
+          return curr() != end()
              and not isValid();
         }
       
       void
       fail()  const
         {
-          if (curr_ == end())
+          if (curr() == end())
               if (pos_ >= line_.length())
                   throw error::Invalid{_Fmt{"Only %d data fields. Line:%s"}
                                            % field_ % line_};
@@ -217,7 +221,7 @@ namespace stat {
                   throw error::Invalid{_Fmt{"Garbage after last field. Line:%s|↯|%s"}
                                            % line_.substr(0,pos_) % line_.substr(pos_)};
           else
-          if (pos_ != size_t(curr_->position()))
+          if (pos_ != size_t(curr()->position()))
                   throw error::Invalid{_Fmt{"Garbage before field(%d):%s|↯|%s"}
                                            % (field_+1)
                                            % line_.substr(0,pos_) % line_.substr(pos_)};

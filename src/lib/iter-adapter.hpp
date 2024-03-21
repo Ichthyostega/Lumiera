@@ -127,6 +127,15 @@ namespace lib {
       friend ITER   end   (ITER const&)   { return ITER(); }                    \
       using iterator_category = std::input_iterator_tag;                         \
       using difference_type = size_t;
+
+  /** define increment operator forwarding to baseclass but returning current */
+#define LIFT_PARENT_INCREMENT_OPERATOR(_BASECLASS_)\
+      auto&                       \
+      operator++()                 \
+        {                           \
+          _BASECLASS_::operator++(); \
+          return *this;               \
+        }
   
   
 

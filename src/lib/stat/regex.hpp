@@ -32,6 +32,8 @@
 #define LIB_STAT_REGEX_H
 
 
+#include "lib/iter-adapter.hpp"
+
 #include <regex>
 #include <string>
 #include <optional>
@@ -45,16 +47,22 @@ namespace util {
   
   
   /** wrapped regex iterator to allow usage in foreach loops */
-  struct MatchSeq
+  struct RegexSearchIter
     : std::sregex_iterator
     {
-      MatchSeq (string const& toParse, regex const& regex)
+      RegexSearchIter()  = default;
+      
+      RegexSearchIter (string const& toParse, regex const& regex)
         : std::sregex_iterator{toParse.begin(), toParse.end(), regex}
         { }
-  
-      using iterator = std::sregex_iterator;
-      iterator begin() const { return *this; }
-      iterator end()   const { return iterator(); }
+      
+      operator bool()  const { return isValid(); }
+      
+      bool isValid ()  const { return (*this)->ready() and not (*this)->empty(); }
+      bool empty ()    const { return not isValid(); }
+
+      LIFT_PARENT_INCREMENT_OPERATOR (std::sregex_iterator);
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (RegexSearchIter);
     };
   
 } // namespace util

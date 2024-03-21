@@ -289,6 +289,9 @@ namespace test{
           
           CHECK (not horror.isValid());
           CHECK (horror.isParseFail());
+          
+          // CsvLine is a »Lumiera Forward Iterator«
+          CHECK (meta::can_IterForEach<CsvLine>::value);
         }
       
       
