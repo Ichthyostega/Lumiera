@@ -200,7 +200,7 @@ namespace test{
       
       
       
-      /** @test verify the const and dereferencing variants,
+      /** @test verify variant created from a const_iterator,
        *  based on the const-ness of the underlying STL iterator
        */
       void

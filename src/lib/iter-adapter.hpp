@@ -407,11 +407,8 @@ namespace lib {
       
       /** allow derived classes to
        *  access state representation */
-      ST &
-      stateCore()
-        {
-          return core_;
-        }
+      ST &      stateCore()       { return core_; }
+      ST const& stateCore() const { return core_; }
       
       void
       __throw_if_empty()  const

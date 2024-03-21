@@ -28,12 +28,12 @@
  ** to a processing algorithm while abstracting away the actual data storage. Besides usage
  ** as »Lumiera Forward Iterator«, the current access position can be retrieved directly
  ** and it can be relocated to another valid index position; this implies also the ability
- ** to re-set the iteration to the container's start.
+ ** to re-set the iteration to the container's start. Optionally, a smart-ptr can be
+ ** embedded, allowing the handle also to owns and manage the data container.
  ** 
  ** @see IterIndex_test
  ** @see iter-adapter.hpp
  ** @see [usage example](\ref lib::TextTemplate::InstanceCore)
- ** 
  */
 
 
@@ -42,9 +42,6 @@
 
 
 #include "lib/iter-adapter.hpp"
-
-//#include <type_traits>
-//#include <utility>
 
 
 namespace lib {
@@ -100,12 +97,22 @@ namespace lib {
           return not (c1 == c2);
         }
       };
-    
+    //
   }//(End)Implementation
   
   
+  
   /**
-   * 
+   * Subscript-index based access to a container, packaged as iterator.
+   * This is a copyable and assignable value object (handle), referring to some
+   * data container maintained elsewhere. The container must provide an `operator[]`.
+   * This handle can be used as »Lumiera Forward Iterator«, but with the additional
+   * capability to retrieve and re-set the current index position.
+   * @tparam CON a container with `operator[]` and a function `size()`
+   * @tparam PTR how to refer to this container; can be defined as smart-ptr,
+   *             additionally allowing to manage this container automatically.
+   * @remark while a default constructed IterIndex and some _exhausted_ IterIndex
+   *             compare equal, only the latter can be re-set into active state.
    */
   template<class CON, typename PTR = CON*>
   class IterIndex
@@ -116,8 +123,9 @@ namespace lib {
       
     public:
       IterIndex()  = default;
-      IterIndex (CON& dataContainer)
-        : _Par{_Cor{&dataContainer, 0}}
+      IterIndex (CON& container)  : IterIndex{&container}{ };
+      IterIndex (PTR pContainer)
+        : _Par{_Cor{pContainer, 0}}
         { }
       
       
@@ -125,13 +133,13 @@ namespace lib {
       getIDX()  const
         {
           _Par::__throw_if_empty();
-          return const_cast<IterIndex*>(this)->stateCore().idx_;
+          return _Par::stateCore().idx_;
         }
       
       void
       setIDX (size_t newIDX)
         {
-          auto& core = _Par::stateCore(); 
+          auto& core = _Par::stateCore();
           if (not core.isValidIDX (newIDX))
             throw lumiera::error::Invalid ("Attempt to set index out of bounds",
                   lumiera::error::LUMIERA_ERROR_INDEX_BOUNDS);

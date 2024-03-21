@@ -34,6 +34,7 @@
 #include "lib/util.hpp"
 
 #include <vector>
+#include <memory>
 
 
 
@@ -44,6 +45,8 @@ namespace test{
   using util::join;
   using util::isnil;
   using std::vector;
+  using std::shared_ptr;
+  using std::make_shared;
   
   using LERR_(ITER_EXHAUST);
   using LERR_(INDEX_BOUNDS);
@@ -56,6 +59,7 @@ namespace test{
     using Numz = vector<uint>;
     using Iter = IterIndex<Numz>;
     using CIter = IterIndex<const Numz>;
+    using SMIter = IterIndex<Numz, shared_ptr<Numz>>;
     
     inline Numz
     makeNumz()
@@ -179,7 +183,8 @@ namespace test{
       void
       iterTypeVariations ()
         {
-          Numz numz{makeNumz()};
+          auto smartNumz = make_shared<Numz> (makeNumz());
+          Numz      & numz{*smartNumz};
           Numz const& const_numz{numz};
           
           uint i = 0;
@@ -202,16 +207,38 @@ namespace test{
               CHECK (iter);
               CHECK (iter != CIter());
               CHECK (*iter == i-1);
-              
-              // note: the previous run indeed modified
-              // the elements within the container.
-              
-            // ++(*iter);   // doesn't compile, because it yields a "* const"
+                           // Note: the preceding loop has indeed modified the contents
+//            ++(*iter);  //  but this doesn't compile, because the CIter yields a _const_
             }
           
           verifyComparisons (CIter{numz});
+          
+          CHECK (1 == smartNumz.use_count());
+          {
+            SMIter smIter{smartNumz};
+            CIter cIter{*smartNumz};
+            CHECK (*cIter == uint(-1));
+            for (i=0; smIter; ++smIter, ++i)
+              {
+                CHECK (smIter);
+                CHECK (smIter != SMIter());
+                CHECK (*smIter == i-1);
+                ++(*smIter);
+                CHECK (*smIter == i);
+              }
+            CHECK (isnil (smIter));
+            CHECK (smIter == SMIter());
+            cIter.setIDX(5);
+            smIter.setIDX(5);
+            CHECK (*smIter == *cIter);
+            
+            verifyComparisons (smIter);
+            
+            CHECK (5 == *cIter);   // shared data modified
+            CHECK (2 == smartNumz.use_count());
+          }
+          CHECK (1 == smartNumz.use_count());
         }
-      
       
       
       
