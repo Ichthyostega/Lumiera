@@ -137,7 +137,38 @@ namespace lib {
     const regex ACCEPT_MARKUP { MATCH_ESCAPE+"|"+MATCH_FIELD
                               , regex::ECMAScript|regex::optimize
                               };
-                             // Sub-Matches: 1 = ESCAPE; 2 = ELSE; 3 = END; 4 = LOGIC; 5 = KEY;   
+                             // Sub-Matches: 1 = ESCAPE; 2 = ELSE; 3 = END; 4 = LOGIC; 5 = KEY;
+    
+    struct TagSyntax
+      {
+        enum Keyword{ ESCAPE
+                    , KEYID
+                    , IF
+                    , END_IF
+                    , FOR
+                    , END_FOR
+                    , ELSE
+                    };
+        Keyword syntaxCase{ESCAPE};
+        StrView lead;
+        StrView key;
+      };
+    
+    inline auto
+    parse (string input)
+    {
+      auto classify = [pre=size_t(0)]
+                      (smatch mat) mutable -> TagSyntax
+                        {
+                          REQUIRE (not mat.empty());
+                          StrView lead{}; //////////////////////////////OOO find a way to move that along trailing
+                          if (mat[1].matched)
+                            return TagSyntax{TagSyntax::ESCAPE,lead};
+                        };
+      util::RegexSearchIter parser{input, ACCEPT_MARKUP};
+//      return explore(parser)               ///////////////////////////OOO find out why this is not forward-iterable
+//                .transform(classify);
+    }
   }
   
   
