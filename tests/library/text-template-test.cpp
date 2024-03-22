@@ -91,11 +91,11 @@ namespace test {
       /** @test TODO
        * @note the regular expression \ref ACCEPT_FIELD is comprised of several
        *       alternatives and optional parts, which are marked by 5 sub-expressions
-       *       - 1 ≙ end token
-       *       - 2 ≙ some logic token ("if" or "for")
-       *       - 3 ≙ a key or key path
-       *       - 4 ≙ else token (which must be solitary)
-       *       - 5 ≙ an escaped field (which should not be processed)
+       *       - 1 ≙ an escaped field (which should not be processed)
+       *       - 2 ≙ else token (which must be solitary)
+       *       - 3 ≙ end token
+       *       - 4 ≙ some logic token ("if" or "for")
+       *       - 5 ≙ a key or key path
        * @todo WIP 4/24 🔁 define ⟶ implement
        */
       void
@@ -106,140 +106,80 @@ namespace test {
           CHECK (not regex_search (input, mat, ACCEPT_MARKUP));
           
           input = " Hallelujah ";
-          CHECK (not regex_search (input, mat, ACCEPT_MARKUP));
+          CHECK (not regex_search (input, mat, ACCEPT_MARKUP));      // walk away ... nothing to see here...
           
-          input = " stale${beer}forever ";
-SHOW_EXPR(input)
+          input = " stale${beer}forever";
           CHECK (regex_search (input, mat, ACCEPT_MARKUP));
-SHOW_EXPR(mat.position())
           CHECK (mat.position() == 6);
-SHOW_EXPR(mat.length())
           CHECK (mat.length() == 7);
-SHOW_EXPR(mat.prefix())
           CHECK (mat.prefix() == " stale"_expect);
-SHOW_EXPR(mat.suffix())
-          CHECK (mat.suffix() == "forever "_expect);
-SHOW_EXPR(string(mat[0]))
-          CHECK (mat[0] == "${beer}"_expect);
-SHOW_EXPR(string(mat[1]))
-          CHECK (not mat[1].matched);
-SHOW_EXPR(string(mat[2]))
-          CHECK (not mat[2].matched);
-SHOW_EXPR(string(mat[3]))
-          CHECK (mat[3] == "beer"_expect);
-SHOW_EXPR(string(mat[4]))
-          CHECK (not mat[4].matched);
-SHOW_EXPR(string(mat[5]))
-          CHECK (not mat[5].matched);
+          CHECK (mat.suffix() == "forever"_expect);
+          CHECK (mat[0]       == "${beer}"_expect);                  // so this first example demonstrates placeholder recognition 
+          CHECK (not mat[1].matched);                                // Sub-1 : this is not an escaped pattern
+          CHECK (not mat[2].matched);                                // Sub-2 : this pattern does not start with "else"
+          CHECK (not mat[3].matched);                                // Sub-3 : no "end" keyword
+          CHECK (not mat[4].matched);                                // Sub-4 : no further logic syntax
+          CHECK (mat[5] == "beer"_expect);                           // Sub-5 : extracts the Key ID
           
           input = " watch ${for stale}${beer} whatever ";
-SHOW_EXPR(input)
           CHECK (regex_search (input, mat, ACCEPT_MARKUP));
-SHOW_EXPR(mat.position())
           CHECK (mat.position() == 7);
-SHOW_EXPR(mat.length())
           CHECK (mat.length() == 12);
-SHOW_EXPR(mat.prefix())
           CHECK (mat.prefix() == " watch "_expect);
-SHOW_EXPR(mat.suffix())
-          CHECK (mat.suffix() == "${beer} whatever "_expect);
-SHOW_EXPR(string(mat[0]))
-          CHECK (mat[0] == "${for stale}"_expect);
-SHOW_EXPR(string(mat[1]))
-          CHECK (not mat[1].matched);
-SHOW_EXPR(string(mat[2]))
-          CHECK (mat[2] == "for"_expect);
-SHOW_EXPR(string(mat[3]))
-          CHECK (mat[3] == "stale"_expect);
-SHOW_EXPR(string(mat[4]))
-SHOW_EXPR(string(mat[5]))
+          CHECK (mat.suffix() == "${beer} whatever "_expect);        // (performing only one search here...)
+          CHECK (mat[0]       == "${for stale}"_expect);             // Matched a regular opening iteration tag
+          CHECK (not mat[2].matched);                                // Sub-2 does not trigger, since there is no "else" mark
+          CHECK (not mat[3].matched);                                // Sub-3 does not trigger, no end mark either
+          CHECK (mat[4] == "for"_expect);                            // Sub-4 picks the "for" keyword
+          CHECK (mat[5] == "stale"_expect);                          // Sub-5 extracts a simple Key ≡ "stale"
           
-          input = " work ${end if  beer} however ";
-SHOW_EXPR(input)
+          input = " work ${ end if  beer \t } however ";
           CHECK (regex_search (input, mat, ACCEPT_MARKUP));
-SHOW_EXPR(mat.position())
           CHECK (mat.position() == 6);
-SHOW_EXPR(mat.length())
-          CHECK (mat.length() == 15);
-SHOW_EXPR(mat.prefix())
+          CHECK (mat.length() == 19);
           CHECK (mat.prefix() == " work "_expect);
-SHOW_EXPR(mat.suffix())
           CHECK (mat.suffix() == " however "_expect);
-SHOW_EXPR(string(mat[0]))
-          CHECK (mat[0] == "${end if  beer}"_expect);
-SHOW_EXPR(string(mat[1]))
-          CHECK (mat[1] == "end "_expect);
-SHOW_EXPR(string(mat[2]))
-          CHECK (mat[2] == "if"_expect);
-SHOW_EXPR(string(mat[3]))
-          CHECK (mat[3] == "beer"_expect);
-SHOW_EXPR(string(mat[4]))
-SHOW_EXPR(string(mat[5]))
+          CHECK (mat[0]       == "${ end if  beer \t }"_expect);     // A regular end marker of an conditional
+          CHECK (mat[3] == "end "_expect);                           // Sub-3 triggers on the "end" token
+          CHECK (mat[4] == "if"_expect);                             // Sub-4 picks the "if" keyword
+          CHECK (mat[5] == "beer"_expect);                           // Sub-5 extracts a simple Key ≡ "beer"
           
-          input = " catch ${end while stale}${endfor brown.beer} ever ";
-SHOW_EXPR(input)
+          input = " catch ${endgame stale}${endfor brown.beer} ever ";
           CHECK (regex_search (input, mat, ACCEPT_MARKUP));
-SHOW_EXPR(mat.position())
-          CHECK (mat.position() == 25);
-SHOW_EXPR(mat.length())
+          CHECK (mat.position() == 23);
           CHECK (mat.length() == 20);
-SHOW_EXPR(mat.prefix())
-          CHECK (mat.prefix() == " catch ${end while stale}"_expect);
-SHOW_EXPR(mat.suffix())
+          CHECK (mat.prefix() == " catch ${endgame stale}"_expect);// "while" is no valid keyword at the second position of the syntax
           CHECK (mat.suffix() == " ever "_expect);
-SHOW_EXPR(string(mat[0]))
-          CHECK (mat[0] == "${endfor brown.beer}"_expect);
-SHOW_EXPR(string(mat[1]))
-          CHECK (mat[1] == "end"_expect);
-SHOW_EXPR(string(mat[2]))
-          CHECK (mat[2] == "for"_expect);
-SHOW_EXPR(string(mat[3]))
-          CHECK (mat[3] == "brown.beer"_expect);
-SHOW_EXPR(string(mat[4]))
-SHOW_EXPR(string(mat[5]))
+          CHECK (mat[0]       == "${endfor brown.beer}"_expect);     // ...thus search proceeds to match on the second pattern installment
+          CHECK (mat[3] == "end"_expect);                            // Sub-3 triggers on the "end" token
+          CHECK (mat[4] == "for"_expect);                            // Sub-4 picks the "for" keyword
+          CHECK (mat[5] == "brown.beer"_expect);                     // Sub-5 extracts a hierarchical key ID
           
           input = " catch ${else} ever ";
-SHOW_EXPR(input)
           CHECK (regex_search (input, mat, ACCEPT_MARKUP));
-SHOW_EXPR(mat.position())
           CHECK (mat.position() == 7);
-SHOW_EXPR(mat.length())
           CHECK (mat.length() == 7);
-SHOW_EXPR(mat.prefix())
           CHECK (mat.prefix() == " catch "_expect);
-SHOW_EXPR(mat.suffix())
           CHECK (mat.suffix() == " ever "_expect);
-SHOW_EXPR(string(mat[0]))
-          CHECK (mat[0] == "${else}"_expect);
-SHOW_EXPR(string(mat[1]))
-SHOW_EXPR(string(mat[2]))
-SHOW_EXPR(string(mat[3]))
-          CHECK (mat[3] == "else"_expect);
-SHOW_EXPR(string(mat[4]))
-SHOW_EXPR(string(mat[5]))
+          CHECK (mat[0]       == "${else}"_expect);                  // Standard match on an "else"-tag
+          CHECK (mat[2] == "else"_expect);                           // Sub-2 confirmed a solitary "else" keyword
+          CHECK (not mat[1].matched);
+          CHECK (not mat[3].matched);
+          CHECK (not mat[4].matched);
+          CHECK (not mat[5].matched);
           
           input = " catch ${else if} fever \\${can.beer} ";
-SHOW_EXPR(input)
           CHECK (regex_search (input, mat, ACCEPT_MARKUP));
-SHOW_EXPR(mat.position())
           CHECK (mat.position() == 24);
-SHOW_EXPR(mat.length())
           CHECK (mat.length() == 2);
-SHOW_EXPR(mat.prefix())
-          CHECK (mat.prefix() == " catch ${else if} fever "_expect);
-SHOW_EXPR(mat.suffix())
-          CHECK (mat.suffix() == "{can.beer} "_expect);
-SHOW_EXPR(string(mat[0]))
-          CHECK (mat[0] == "\\$"_expect);
-SHOW_EXPR(string(mat[1]))
-SHOW_EXPR(string(mat[2]))
+          CHECK (mat.prefix() == " catch ${else if} fever "_expect); // Note: first pattern does not match as "else" must be solitary
+          CHECK (mat.suffix() == "{can.beer} "_expect);              // Note: the following braced expression is tossed aside 
+          CHECK (mat[0]       == "\\$"_expect);                      // Only the escaped pattern mark opening is picked up
           CHECK (not mat[2].matched);
-SHOW_EXPR(string(mat[3]))
           CHECK (not mat[3].matched);
-SHOW_EXPR(string(mat[4]))
           CHECK (not mat[4].matched);
-SHOW_EXPR(string(mat[5]))
-          CHECK (mat[5] == "\\$"_expect);
+          CHECK (not mat[5].matched);
+          CHECK (mat[1] == "\\$"_expect);                            // Sub-1 picks the escaped mark (and the remainder is no complete tag)
         }
       
       

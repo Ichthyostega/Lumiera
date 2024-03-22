@@ -127,17 +127,17 @@ namespace lib {
     
     const string MATCH_SINGLE_KEY = "[A-Za-z_]+\\w*";
     const string MATCH_KEY_PATH   = MATCH_SINGLE_KEY+"(?:\\."+MATCH_SINGLE_KEY+")*";
-    const string MATCH_LOGIC_TOK  = "(?:if|for)";
-    const string MATCH_END_TOK    = "(?:end\\s*)";
+    const string MATCH_LOGIC_TOK  = "if|for";
+    const string MATCH_END_TOK    = "end\\s*";
     const string MATCH_ELSE_TOK   = "else";
-    const string MATCH_SYNTAX     = "("+MATCH_END_TOK+")?(?:("+MATCH_LOGIC_TOK+")\\s+)?("+MATCH_KEY_PATH+")|("+MATCH_ELSE_TOK+")";
-    const string MATCH_FIELD      = "\\$\\{(?:"+MATCH_SYNTAX+")\\}";
+    const string MATCH_SYNTAX     = "("+MATCH_ELSE_TOK+")|(?:("+MATCH_END_TOK+")?("+MATCH_LOGIC_TOK+")\\s+)?("+MATCH_KEY_PATH+")";
+    const string MATCH_FIELD      = "\\$\\{\\s*(?:"+MATCH_SYNTAX+")\\s*\\}";
     const string MATCH_ESCAPE     = R"~((\\\$))~";
     
-    const regex ACCEPT_MARKUP { MATCH_FIELD+"|"+MATCH_ESCAPE
-                              , regex::optimize
+    const regex ACCEPT_MARKUP { MATCH_ESCAPE+"|"+MATCH_FIELD
+                              , regex::ECMAScript|regex::optimize
                               };
-                             // Sub-Matches: 1 = END; 2 = LOGIC; 3 = KEY; 4 = ELSE; 5 = ESCAPE  
+                             // Sub-Matches: 1 = ESCAPE; 2 = ELSE; 3 = END; 4 = LOGIC; 5 = KEY;   
   }
   
   
