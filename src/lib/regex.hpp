@@ -23,13 +23,11 @@
 
 /** @file regex.hpp
  ** Convenience wrappers and helpers for dealing with regular expressions.
- ** 
- ** @todo 3/2024 should be with the generic utils, might be a Lumiera Forward Iterator
  */
 
 
-#ifndef LIB_STAT_REGEX_H
-#define LIB_STAT_REGEX_H
+#ifndef LIB_REGEX_H
+#define LIB_REGEX_H
 
 
 #include "lib/iter-adapter.hpp"
@@ -65,5 +63,11 @@ namespace util {
       ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (RegexSearchIter);
     };
   
-} // namespace util
+}// namespace util
+
+namespace lib {
+  using std::regex;
+  using std::smatch;
+  using std::string;
+}// namespace lib
 #endif/*LIB_STAT_REGEX_H*/

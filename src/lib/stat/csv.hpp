@@ -51,7 +51,7 @@
 #include "lib/null-value.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-obj.hpp"
-#include "lib/stat/regex.hpp"
+#include "lib/regex.hpp"
 
 #include <limits>
 #include <string>

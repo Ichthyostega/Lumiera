@@ -99,12 +99,12 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
+#include "lib/iter-index.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/format-util.hpp"
+#include "lib/regex.hpp"
 #include "lib/util.hpp"
 
-//#include <cmath>
-//#include <limits>
 #include <string>
 #include <vector>
 #include <stack>
@@ -124,6 +124,20 @@ namespace lib {
     /** shorthand for an »iter-explorer« build from some source X */
     template<class X>
     using ExploreIter = decltype (lib::explore (std::declval<X>()));
+    
+    const string MATCH_SINGLE_KEY = "[A-Za-z_]+\\w*";
+    const string MATCH_KEY_PATH   = MATCH_SINGLE_KEY+"(?:\\."+MATCH_SINGLE_KEY+")*";
+    const string MATCH_LOGIC_TOK  = "(?:if|for)";
+    const string MATCH_END_TOK    = "(?:end\\s*)";
+    const string MATCH_ELSE_TOK   = "else";
+    const string MATCH_SYNTAX     = "("+MATCH_END_TOK+")?(?:("+MATCH_LOGIC_TOK+")\\s+)?("+MATCH_KEY_PATH+")|("+MATCH_ELSE_TOK+")";
+    const string MATCH_FIELD      = "\\$\\{(?:"+MATCH_SYNTAX+")\\}";
+    const string MATCH_ESCAPE     = R"~((\\\$))~";
+    
+    const regex ACCEPT_MARKUP { MATCH_FIELD+"|"+MATCH_ESCAPE
+                              , regex::optimize
+                              };
+                             // Sub-Matches: 1 = END; 2 = LOGIC; 3 = KEY; 4 = ELSE; 5 = ESCAPE  
   }
   
   
@@ -176,7 +190,7 @@ namespace lib {
       template<class SRC>
       class InstanceCore
         {
-          using ActionIter = ExploreIter<ActionSeq const&>;
+          using ActionIter = IterIndex<const ActionSeq>;
           using DataCtxIter = typename SRC::Iter;
           using NestedCtx = std::pair<DataCtxIter, SRC>;
           using CtxStack = std::stack<NestedCtx, std::vector<NestedCtx>>;
@@ -194,6 +208,7 @@ namespace lib {
           void iterNext();
           
           void instantiateNext();
+          StrView getContent(string key);
         };
       
       template<class DAT>
@@ -225,13 +240,32 @@ namespace lib {
                      "unable to bind this data source "
                      "for TextTemplate instantiation");
     };
-    
+  
+  using MapS = std::map<string,string>;
+  
   template<>
-  struct TextTemplate::DataSource<std::map<string,string>>
+  struct TextTemplate::DataSource<MapS>
     {
+      MapS* data_;
       using Iter = std::string_view;
+      
+      bool
+      contains (string key)
+        {
+          return util::contains (*data_, key);
+        }
+      
+      string const&
+      retrieveContent (string key)
+        {
+          return (*data_)[key];
+        }
     };
   
+  
+  
+  
+  /* ======= implementation of the instantiation state ======= */
   
   template<class SRC>
   TextTemplate::InstanceCore<SRC>::InstanceCore (TextTemplate::ActionSeq const& actions, SRC s)
@@ -278,6 +312,14 @@ namespace lib {
                            : StrView{};
   }
   
+  template<class SRC>
+  inline StrView
+  TextTemplate::InstanceCore<SRC>::getContent(string key)
+  {
+    static StrView nil{""};
+    return dataSrc_.contains(key)? dataSrc_.retrieveContent(key) : nil;
+  }
+  
   
   
   /**
@@ -288,13 +330,13 @@ namespace lib {
    */
   template<class SRC>
   inline StrView
-  TextTemplate::Action::instantiate (InstanceCore<SRC>&)  const
+  TextTemplate::Action::instantiate (InstanceCore<SRC>& core)  const
   {
     switch (code) {
       case TEXT:
         return val;
       case KEY:
-        return "";
+        return core.getContent (val);
       case COND:
         return "";
       case JUMP:
