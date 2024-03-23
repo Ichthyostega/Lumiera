@@ -194,7 +194,7 @@ namespace test {
                     "${two}, \\$, ${if high}"_expect);
           
           auto render = [](TagSyntax& tag) -> string
-                            { return _Fmt{"▶%s‖%d|%s‖▷"} % string{tag.lead} % uint(tag.syntaxCase) % tag.key; };
+                            { return _Fmt{"▶%s‖%d|%s‖▷"} % string{tag.lead} % uint(tag.syntax) % tag.key; };
           
           auto wau = parse(input)
                         .transform(render);

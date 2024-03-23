@@ -837,7 +837,7 @@ namespace test{
       /**
        * demo of a custom processing layer
        * interacting directly with the iteration mechanism.
-       * @note we can assume `SRC` is itself a Lumiera Iterator
+       * @note we can assume `SRC` is itself a Lumiera »State Core«
        */
       template<class SRC>
       struct MagicTestRubbish

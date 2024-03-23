@@ -105,6 +105,7 @@
 #include "lib/regex.hpp"
 #include "lib/util.hpp"
 
+#include <optional>
 #include <string>
 #include <vector>
 #include <stack>
@@ -113,6 +114,8 @@
 
 namespace lib {
   
+  using std::optional;
+  using std::nullopt;
   using std::string;
   using StrView = std::string_view;
   
@@ -149,8 +152,9 @@ namespace lib {
                     , END_FOR
                     , ELSE
                     };
-        Keyword syntaxCase{ESCAPE};
+        Keyword syntax{ESCAPE};
         StrView lead;
+        StrView tail;
         string key;
       };
     
@@ -166,30 +170,33 @@ namespace lib {
                           auto pre = rest.length() - restAhead;
                           tag.lead = rest.substr(0, pre);
                           rest = rest.substr(tag.lead.length());
-                          if (mat[1].matched)
-                            return tag;
                           if (mat[5].matched)
                             tag.key = mat[5];
-                          if (mat[4].matched)
-                            { // detected a logic keyword...
-                              if ("if" == mat[4])
-                                tag.syntaxCase = mat[5].matched? TagSyntax::END_IF : TagSyntax::IF;
+                          if (not mat[1].matched)
+                            { // not escaped but indeed active field
+                              rest = rest.substr(mat.length());
+                              if (mat[4].matched)
+                                { // detected a logic keyword...
+                                  if ("if" == mat[4])
+                                    tag.syntax = mat[3].matched? TagSyntax::END_IF : TagSyntax::IF;
+                                  else
+                                  if ("for" == mat[4])
+                                    tag.syntax = mat[3].matched? TagSyntax::END_FOR : TagSyntax::FOR;
+                                  else
+                                    throw error::Logic("unexpected keyword");
+                                }
                               else
-                              if ("for" == mat[4])
-                                tag.syntaxCase = mat[5].matched? TagSyntax::END_FOR : TagSyntax::FOR;
+                              if (mat[2].matched)
+                                tag.syntax = TagSyntax::ELSE;
                               else
-                                throw error::Logic("unexpected keyword");
+                                tag.syntax = TagSyntax::KEYID;
                             }
-                          else
-                          if (mat[3].matched)
-                            tag.syntaxCase = TagSyntax::ELSE;
-                          else
-                            tag.syntaxCase = TagSyntax::KEYID;
+                          tag.tail = rest;
                           return tag;
                         };
       
       return explore (util::RegexSearchIter{input, ACCEPT_MARKUP})
-                .transform(classify);
+               .transform (classify);
     }
   }
   
@@ -224,7 +231,7 @@ namespace lib {
       struct Action
         {
           Code code{TEXT};
-          string val{""};
+          string val{};
           Idx refIDX{0};
           
           template<class SRC>
@@ -234,7 +241,11 @@ namespace lib {
       /** the text template is compiled into a sequence of Actions */
       using ActionSeq = std::vector<Action>;
       
-
+      
+      /** processor in a parse pipeline — yields sequence of Actions */
+      template<class PAR>
+      class ActionCompiler;
+      
       /** Binding to a specific data source.
        * @note requires partial specialisation */
       template<class DAT, typename SEL=void>
@@ -283,6 +294,89 @@ namespace lib {
   
   
   
+  /* ======= Parser / Compiler pipeline ======= */
+  
+  /**
+   * @remarks this is a »custom processing layer«
+   *   to be used in an [Iter-Explorer](\ref iter-explorer.hpp)-pipeline.
+   *   The source layer (which is assumed to comply to the »State Core« concept),
+   *   yields TagSyntax records, one for each match of the ACCEPT_MARKUP reg-exp.
+   *   The actual compilation step, which is implemented as pull-processing here,
+   *   will emit one or several Action tokens on each match, thereby embedding the
+   *   extracted keys and possibly static fill strings. Since the _performance_ allows
+   *   for conditionals and iteration, some cross-linking is necessary, based on index
+   *   numbers for the actions emitted and coordinated by a stack of bracketing constructs.
+   */
+  template<class PAR>
+  class TextTemplate::ActionCompiler
+    {
+      Idx idx_{0};
+      Action currToken_{};
+      optional<StrView> post_{nullopt};
+      
+    public:
+      using PAR::PAR;
+      
+      /* === state core protocol === */
+      
+      bool
+      checkPoint()  const
+        {
+          return PAR::checkPoint()
+              or bool(post_);
+        }
+      
+      Action const&
+      yield()  const
+        {
+          return currToken_;
+        }
+      
+      void
+      iterNext()
+        {
+          ++idx_;
+          if (post_)
+            post_ = nullopt;
+          else
+            currToken_ = compile();
+        }
+      
+    private:
+      Action
+      compile()
+        {                      //...throws if exhausted
+          TagSyntax& tag = PAR::yield();
+          auto isState   = [this](Code c){ return c == currToken_.code; };
+          auto nextState = [this] {
+                                    StrView lead = tag.tail;
+                                    PAR::iterNext();
+                                    // first expose intermittent text before next tag
+                                    if (PAR::checkPoint())
+                                      lead = PAR::yield().lead;
+                                    else // expose tail after final match
+                                      post_ = lead;
+                                    return Action{TEXT, lead};
+                                  };
+          switch (tag.syntax) {
+            case TagSyntax::ESCAPE:
+              return nextState();
+            case TagSyntax::KEYID:
+              if (isState (KEY))
+                return nextState();
+              return Action{KEY, tag.key};
+            case TagSyntax::IF:
+            case TagSyntax::END_IF:
+            case TagSyntax::FOR:
+            case TagSyntax::END_FOR:
+            default:
+              NOTREACHED ("uncovered TagSyntax keyword while compiling a TextTemplate.");
+            }
+        }
+    };
+  
+  
+  
   
   /* ======= preconfigured data bindings ======= */
   
@@ -319,6 +413,36 @@ namespace lib {
   
   
   /* ======= implementation of the instantiation state ======= */
+  
+  /**
+   * Interpret an action token from the compiled text template
+   * based on the given data binding and iteration state to yield a rendering
+   * @param instanceIter the wrapped InstanceCore with the actual data binding
+   * @return a string-view pointing to the effective rendered chunk corresponding to this action
+   */
+  template<class SRC>
+  inline StrView
+  TextTemplate::Action::instantiate (InstanceCore<SRC>& core)  const
+  {
+    switch (code) {
+      case TEXT:
+        return val;
+      case KEY:
+        return core.getContent (val);
+      case COND:
+        return "";
+      case JUMP:
+        return "";
+      case ITER:
+        return "";
+      case LOOP:
+        return "";
+      default:
+        NOTREACHED ("uncovered Activity verb in activation function.");
+      }
+  }
+  
+  
   
   template<class SRC>
   TextTemplate::InstanceCore<SRC>::InstanceCore (TextTemplate::ActionSeq const& actions, SRC s)
@@ -373,35 +497,6 @@ namespace lib {
     return dataSrc_.contains(key)? dataSrc_.retrieveContent(key) : nil;
   }
   
-  
-  
-  /**
-   * Interpret an action token from the compiled text template
-   * based on the given data binding and iteration state to yield a rendering
-   * @param instanceIter the wrapped InstanceCore with the actual data binding
-   * @return a string-view pointing to the effective rendered chunk corresponding to this action
-   */
-  template<class SRC>
-  inline StrView
-  TextTemplate::Action::instantiate (InstanceCore<SRC>& core)  const
-  {
-    switch (code) {
-      case TEXT:
-        return val;
-      case KEY:
-        return core.getContent (val);
-      case COND:
-        return "";
-      case JUMP:
-        return "";
-      case ITER:
-        return "";
-      case LOOP:
-        return "";
-      default:
-        NOTREACHED ("uncovered Activity verb in activation function.");
-      }
-  }
   
   
   
