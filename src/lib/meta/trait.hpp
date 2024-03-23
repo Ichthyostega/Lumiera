@@ -336,6 +336,7 @@ namespace meta {
   template<typename X>
   struct is_StringLike
     : __or_< is_basically<X, std::string>
+           , is_basically<X, std::string_view>
            , is_convertible<X, const char*>
            >
     { };

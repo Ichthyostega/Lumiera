@@ -48,6 +48,7 @@ namespace lib {
 namespace test {
   
   using MapS = std::map<string, string>;
+  using LERR_(ITER_EXHAUST);
   
   
   /***************************************************************************//**
@@ -193,12 +194,49 @@ namespace test {
                  ==
                     "${two}, \\$, ${if high}"_expect);
           
-          auto render = [](TagSyntax& tag) -> string
-                            { return _Fmt{"▶%s‖%d|%s‖▷"} % string{tag.lead} % uint(tag.syntax) % tag.key; };
           
-          auto wau = parse(input)
-                        .transform(render);
-SHOW_EXPR(util::join(wau))
+          // Parse matches of this regexp into well defined syntax elements
+          auto parser = parse(input);
+          CHECK (not isnil(parser));
+          CHECK (parser->syntax == TagSyntax::KEYID);
+          CHECK (parser->lead == "one "_expect);
+          CHECK (parser->key  == "two"_expect);
+          ++parser;
+          CHECK (parser);
+          CHECK (parser->syntax == TagSyntax::ESCAPE);
+          CHECK (parser->lead == " three "_expect);
+          CHECK (parser->key  == ""_expect);
+          ++parser;
+          CHECK (parser);
+          CHECK (parser->syntax == TagSyntax::IF);
+          CHECK (parser->lead == "\\${four} "_expect);
+          CHECK (parser->key  == "high"_expect);
+          ++parser;
+          CHECK (isnil (parser));
+          VERIFY_ERROR (ITER_EXHAUST, *parser);
+          VERIFY_ERROR (ITER_EXHAUST, ++parser);
+          
+          
+          // Generate sequence of Action tokens from parsing results
+          auto render = [](TextTemplate::Action const& act) -> string
+                             { return _Fmt{"‖%d|↷%d‖▷%s"} % uint(act.code) % act.refIDX % act.val; };
+SHOW_EXPR(util::join(parse(input)
+                       .processingLayer<TextTemplate::ActionCompiler>()
+                       .transform(render)
+                    , "▶"))
+          input = R"~(
+ Prefix-1 ${some.key} next one is \${escaped}
+ Prefix-2 ${if cond1} active ${else} inactive ${end if
+}Prefix-3 ${if cond2} active2${end if cond2} more
+ Prefix-4 ${for data} fixed ${embedded}
+    Pre-5 ${if nested}nested-active${
+            else     }nested-inactive${ end
+            if nested}loop-suffix${else}${end
+for} tail...
+)~";
+          auto compiler = parse(input)
+                            .processingLayer<TextTemplate::ActionCompiler>();
+SHOW_EXPR(util::join(compiler.transform(render),"▶\n▶"))
         }
       
       

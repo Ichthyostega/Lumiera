@@ -133,7 +133,7 @@ namespace lib {
     const string MATCH_LOGIC_TOK  = "if|for";
     const string MATCH_END_TOK    = "end\\s*";
     const string MATCH_ELSE_TOK   = "else";
-    const string MATCH_SYNTAX     = "("+MATCH_ELSE_TOK+")|(?:("+MATCH_END_TOK+")?("+MATCH_LOGIC_TOK+")\\s+)?("+MATCH_KEY_PATH+")";
+    const string MATCH_SYNTAX     = "("+MATCH_ELSE_TOK+")|(?:("+MATCH_END_TOK+")?("+MATCH_LOGIC_TOK+")\\s*)?("+MATCH_KEY_PATH+")?";
     const string MATCH_FIELD      = "\\$\\{\\s*(?:"+MATCH_SYNTAX+")\\s*\\}";
     const string MATCH_ESCAPE     = R"~((\\\$))~";
     
@@ -198,6 +198,9 @@ namespace lib {
       return explore (util::RegexSearchIter{input, ACCEPT_MARKUP})
                .transform (classify);
     }
+  }
+  namespace test {  // declared friend for test access
+    class TextTemplate_test;
   }
   
   
@@ -289,6 +292,8 @@ namespace lib {
       template<class DAT>
       static string
       apply (string spec, DAT const& data);
+      
+      friend class test::TextTemplate_test;
     };
   
   
@@ -309,9 +314,10 @@ namespace lib {
    */
   template<class PAR>
   class TextTemplate::ActionCompiler
+    : public PAR
     {
       Idx idx_{0};
-      Action currToken_{};
+      Action currToken_{TEXT, initLead()};
       optional<StrView> post_{nullopt};
       
     public:
@@ -348,16 +354,16 @@ namespace lib {
         {                      //...throws if exhausted
           TagSyntax& tag = PAR::yield();
           auto isState   = [this](Code c){ return c == currToken_.code; };
-          auto nextState = [this] {
-                                    StrView lead = tag.tail;
-                                    PAR::iterNext();
-                                    // first expose intermittent text before next tag
-                                    if (PAR::checkPoint())
-                                      lead = PAR::yield().lead;
-                                    else // expose tail after final match
-                                      post_ = lead;
-                                    return Action{TEXT, lead};
-                                  };
+          auto nextState = [this, &tag] {
+                                          StrView lead = tag.tail;
+                                          PAR::iterNext();
+                                          // first expose intermittent text before next tag
+                                          if (PAR::checkPoint())
+                                            lead = PAR::yield().lead;
+                                          else // expose tail after final match
+                                            post_ = lead;
+                                          return Action{TEXT, string{lead}};
+                                        };
           switch (tag.syntax) {
             case TagSyntax::ESCAPE:
               return nextState();
@@ -366,12 +372,45 @@ namespace lib {
                 return nextState();
               return Action{KEY, tag.key};
             case TagSyntax::IF:
+              if (isState (COND))
+                return nextState();
+              ///////////////////////////////////////////////////OOO push IF-clause here
+              return Action{COND, tag.key};
             case TagSyntax::END_IF:
+              ///////////////////////////////////////////////////OOO verify and pop IF-clause here
+              return nextState();
             case TagSyntax::FOR:
+              if (isState (ITER))
+                return nextState();
+              ///////////////////////////////////////////////////OOO push FOR-clause here
+              return Action{ITER, tag.key};
             case TagSyntax::END_FOR:
+              ///////////////////////////////////////////////////OOO verify and pop FOR-clause here
+              return nextState();
+            case TagSyntax::ELSE:
+              if (true) /////////////////////////////////////////OOO derive IF or FOR from context
+                {
+                  if (isState (JUMP))
+                    return nextState();
+              ///////////////////////////////////////////////////OOO actual IF-else implementation
+                  return Action{JUMP};
+                }
+              else
+                {
+                  if (isState (LOOP))
+                    return nextState();
+              ///////////////////////////////////////////////////OOO actual FOR-else implementation
+                  return Action{LOOP};
+                }
             default:
               NOTREACHED ("uncovered TagSyntax keyword while compiling a TextTemplate.");
             }
+        }
+      
+      string
+      initLead() ///< first Action must present the literal text before the first tag 
+        {
+          return string{PAR::checkPoint()? PAR::yield().lead : ""};
         }
     };
   
