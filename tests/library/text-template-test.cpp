@@ -29,8 +29,10 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"///////////////////////TODO
 #include "lib/text-template.hpp"
+#include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"///////////////////////TODO
 #include "lib/test/diagnostic-output.hpp"///////////////////////TODO
+#include "lib/stat/csv.hpp"
 
 //#include <chrono>
 //#include <array>
@@ -39,6 +41,7 @@
 //using std::array;
 using std::regex_search;
 using std::smatch;
+using util::_Fmt;
 
 
 namespace lib {
@@ -180,6 +183,22 @@ namespace test {
           CHECK (not mat[4].matched);
           CHECK (not mat[5].matched);
           CHECK (mat[1] == "\\$"_expect);                            // Sub-1 picks the escaped mark (and the remainder is no complete tag)
+          
+          
+          // Demonstration: can use this regular expression in a matching pipeline....
+          input = "one ${two} three \\${four} ${if high} five";
+          CHECK (util::join(
+                    explore (util::RegexSearchIter{input, ACCEPT_MARKUP})
+                      .transform ([](smatch mat){ return mat.str(); }))
+                 ==
+                    "${two}, \\$, ${if high}"_expect);
+          
+          auto render = [](TagSyntax& tag) -> string
+                            { return _Fmt{"▶%s‖%d|%s‖▷"} % string{tag.lead} % uint(tag.syntaxCase) % tag.key; };
+          
+          auto wau = parse(input)
+                        .transform(render);
+SHOW_EXPR(util::join(wau))
         }
       
       

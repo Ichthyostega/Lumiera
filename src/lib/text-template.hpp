@@ -101,7 +101,7 @@
 #include "lib/nocopy.hpp"
 #include "lib/iter-index.hpp"
 #include "lib/iter-explorer.hpp"
-#include "lib/format-util.hpp"
+#include "lib/format-util.hpp"///////////////////OOO use format-string??
 #include "lib/regex.hpp"
 #include "lib/util.hpp"
 
@@ -151,23 +151,45 @@ namespace lib {
                     };
         Keyword syntaxCase{ESCAPE};
         StrView lead;
-        StrView key;
+        string key;
       };
     
     inline auto
-    parse (string input)
+    parse (string const& input)
     {
-      auto classify = [pre=size_t(0)]
+      auto classify = [rest=StrView(input)]
                       (smatch mat) mutable -> TagSyntax
                         {
                           REQUIRE (not mat.empty());
-                          StrView lead{}; //////////////////////////////OOO find a way to move that along trailing
+                          TagSyntax tag;
+                          auto restAhead = mat.length() + mat.suffix().length();
+                          auto pre = rest.length() - restAhead;
+                          tag.lead = rest.substr(0, pre);
+                          rest = rest.substr(tag.lead.length());
                           if (mat[1].matched)
-                            return TagSyntax{TagSyntax::ESCAPE,lead};
+                            return tag;
+                          if (mat[5].matched)
+                            tag.key = mat[5];
+                          if (mat[4].matched)
+                            { // detected a logic keyword...
+                              if ("if" == mat[4])
+                                tag.syntaxCase = mat[5].matched? TagSyntax::END_IF : TagSyntax::IF;
+                              else
+                              if ("for" == mat[4])
+                                tag.syntaxCase = mat[5].matched? TagSyntax::END_FOR : TagSyntax::FOR;
+                              else
+                                throw error::Logic("unexpected keyword");
+                            }
+                          else
+                          if (mat[3].matched)
+                            tag.syntaxCase = TagSyntax::ELSE;
+                          else
+                            tag.syntaxCase = TagSyntax::KEYID;
+                          return tag;
                         };
-      util::RegexSearchIter parser{input, ACCEPT_MARKUP};
-//      return explore(parser)               ///////////////////////////OOO find out why this is not forward-iterable
-//                .transform(classify);
+      
+      return explore (util::RegexSearchIter{input, ACCEPT_MARKUP})
+                .transform(classify);
     }
   }
   
