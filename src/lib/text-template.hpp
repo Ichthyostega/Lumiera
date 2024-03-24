@@ -316,7 +316,6 @@ namespace lib {
    */
   class TextTemplate::ActionCompiler
     {
-      Idx idx_{0};
       ScopeStack scope_{};
       
     public:
@@ -325,83 +324,72 @@ namespace lib {
       buildActions (PAR&& parseIter)
         {
           ActionSeq actions;
-          actions.emplace_back (Action{TEXT, initLead(parseIter)});
           while (parseIter)
-            {
-              idx_ = actions.size();
-              actions.emplace_back(
-                        compile (parseIter, actions.back().code));
-            }
+              compile (parseIter, actions);
           return actions;
         }
       
     private:
       template<class PAR>
-      Action
-      compile (PAR& parseIter, Code currCode)
-        {                      //...throws if exhausted
-          TagSyntax& tag = *parseIter;
-          auto isState   = [&](Code c){ return c == currCode; };
-          auto nextState = [&]          {
-                                          StrView lead = tag.tail;
-                                          ++parseIter;
-                                          // first expose intermittent text before next tag
-                                          if (parseIter)
-                                            lead = parseIter->lead;
-                                          return Action{TEXT, string{lead}};
-                                        };
-          switch (tag.syntax) {
+      void
+      compile (PAR& parseIter, ActionSeq& actions)
+        {
+          auto add       = [&](Code c, string v){ actions.push_back (Action{c,v});  };
+          auto addCode   = [&](Code c)  { add (   c, parseIter->key);               };
+          auto addLead   = [&]          { add (TEXT, string{parseIter->lead});      };
+          auto openScope = [&](Clause c){ scope_.push (ParseCtx{c, actions.size()});};
+          
+          switch (parseIter->syntax) {
             case TagSyntax::ESCAPE:
-              return nextState();
+              addLead();
+              break;
             case TagSyntax::KEYID:
-              if (isState (KEY))
-                return nextState();
-              return Action{KEY, tag.key};
+              addLead();
+              addCode(KEY);
+              break;
             case TagSyntax::IF:
-              if (isState (COND))
-                return nextState();
-              ///////////////////////////////////////////////////OOO push IF-clause here
-              scope_.push (ParseCtx{IF, idx_});
-              return Action{COND, tag.key};
+              addLead();
+              openScope(IF);
+              addCode(COND);
+              break;
             case TagSyntax::END_IF:
+              addLead();
               ///////////////////////////////////////////////////OOO verify and pop IF-clause here
 //              if (scope_.empty() or
 //                  (not isnil(tag.key) scope_.top())
-              return nextState();
+              break;
             case TagSyntax::FOR:
-              if (isState (ITER))
-                return nextState();
+              addLead();
+              openScope(FOR);
               ///////////////////////////////////////////////////OOO push FOR-clause here
-              return Action{ITER, tag.key};
+              addCode(ITER);
+              break;
             case TagSyntax::END_FOR:
+              addLead();
               ///////////////////////////////////////////////////OOO verify and pop FOR-clause here
-              return nextState();
+              break;
             case TagSyntax::ELSE:
+              addLead();
               if (true) /////////////////////////////////////////OOO derive IF or FOR from context
                 {
-                  if (isState (JUMP))
-                    return nextState();
               ///////////////////////////////////////////////////OOO actual IF-else implementation
-                  return Action{JUMP};
+                  addCode(JUMP);
                 }
               else
                 {
-                  if (isState (LOOP))
-                    return nextState();
               ///////////////////////////////////////////////////OOO actual FOR-else implementation
-                  return Action{LOOP};
+                  addCode(LOOP);
                 }
+              break;
             default:
               NOTREACHED ("uncovered TagSyntax keyword while compiling a TextTemplate.");
             }
-        }
-      
-      template<class PAR>
-      string
-      initLead (PAR& parseIter) ///< first Action must present the literal text before the first tag 
-        {
-          return string{parseIter? parseIter->lead : ""};
-        }
+          
+          StrView tail = parseIter->tail;
+          ++parseIter;
+          if (not parseIter)
+            add (TEXT, string{tail});
+        }     // add final action to supply text after last active tag
     };
   
   
