@@ -220,8 +220,8 @@ namespace test {
           // Generate sequence of Action tokens from parsing results
           auto render = [](TextTemplate::Action const& act) -> string
                              { return _Fmt{"‖%d|↷%d‖▷%s"} % uint(act.code) % act.refIDX % act.val; };
-SHOW_EXPR(util::join(parse(input)
-                       .processingLayer<TextTemplate::ActionCompiler>()
+          auto act1 = TextTemplate::ActionCompiler().buildActions(parse(input));
+SHOW_EXPR(util::join(explore(act1)
                        .transform(render)
                     , "▶"))
           input = R"~(
@@ -234,9 +234,8 @@ SHOW_EXPR(util::join(parse(input)
             if nested}loop-suffix${else}${end
 for} tail...
 )~";
-          auto compiler = parse(input)
-                            .processingLayer<TextTemplate::ActionCompiler>();
-SHOW_EXPR(util::join(compiler.transform(render),"▶\n▶"))
+          auto actions = TextTemplate::ActionCompiler().buildActions(parse(input));
+SHOW_EXPR(util::join (explore(actions).transform(render),"▶\n▶"))
         }
       
       

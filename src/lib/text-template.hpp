@@ -205,6 +205,8 @@ namespace lib {
   
   
   
+  
+  
   /*****************************************//**
    * Text template substitution engine
    */
@@ -230,6 +232,7 @@ namespace lib {
           Idx begin{0};
           Idx after{0};
         };
+      using ScopeStack = std::stack<ParseCtx, std::vector<ParseCtx>>;
       
       struct Action
         {
@@ -246,7 +249,6 @@ namespace lib {
       
       
       /** processor in a parse pipeline — yields sequence of Actions */
-      template<class PAR>
       class ActionCompiler;
       
       /** Binding to a specific data source.
@@ -312,56 +314,40 @@ namespace lib {
    *   for conditionals and iteration, some cross-linking is necessary, based on index
    *   numbers for the actions emitted and coordinated by a stack of bracketing constructs.
    */
-  template<class PAR>
   class TextTemplate::ActionCompiler
-    : public PAR
     {
       Idx idx_{0};
-      Action currToken_{TEXT, initLead()};
-      optional<StrView> post_{nullopt};
+      ScopeStack scope_{};
       
     public:
-      using PAR::PAR;
-      
-      /* === state core protocol === */
-      
-      bool
-      checkPoint()  const
+      template<class PAR>
+      ActionSeq
+      buildActions (PAR&& parseIter)
         {
-          return PAR::checkPoint()
-              or bool(post_);
-        }
-      
-      Action const&
-      yield()  const
-        {
-          return currToken_;
-        }
-      
-      void
-      iterNext()
-        {
-          ++idx_;
-          if (post_)
-            post_ = nullopt;
-          else
-            currToken_ = compile();
+          ActionSeq actions;
+          actions.emplace_back (Action{TEXT, initLead(parseIter)});
+          while (parseIter)
+            {
+              idx_ = actions.size();
+              actions.emplace_back(
+                        compile (parseIter, actions.back().code));
+            }
+          return actions;
         }
       
     private:
+      template<class PAR>
       Action
-      compile()
+      compile (PAR& parseIter, Code currCode)
         {                      //...throws if exhausted
-          TagSyntax& tag = PAR::yield();
-          auto isState   = [this](Code c){ return c == currToken_.code; };
-          auto nextState = [this, &tag] {
+          TagSyntax& tag = *parseIter;
+          auto isState   = [&](Code c){ return c == currCode; };
+          auto nextState = [&]          {
                                           StrView lead = tag.tail;
-                                          PAR::iterNext();
+                                          ++parseIter;
                                           // first expose intermittent text before next tag
-                                          if (PAR::checkPoint())
-                                            lead = PAR::yield().lead;
-                                          else // expose tail after final match
-                                            post_ = lead;
+                                          if (parseIter)
+                                            lead = parseIter->lead;
                                           return Action{TEXT, string{lead}};
                                         };
           switch (tag.syntax) {
@@ -375,9 +361,12 @@ namespace lib {
               if (isState (COND))
                 return nextState();
               ///////////////////////////////////////////////////OOO push IF-clause here
+              scope_.push (ParseCtx{IF, idx_});
               return Action{COND, tag.key};
             case TagSyntax::END_IF:
               ///////////////////////////////////////////////////OOO verify and pop IF-clause here
+//              if (scope_.empty() or
+//                  (not isnil(tag.key) scope_.top())
               return nextState();
             case TagSyntax::FOR:
               if (isState (ITER))
@@ -407,10 +396,11 @@ namespace lib {
             }
         }
       
+      template<class PAR>
       string
-      initLead() ///< first Action must present the literal text before the first tag 
+      initLead (PAR& parseIter) ///< first Action must present the literal text before the first tag 
         {
-          return string{PAR::checkPoint()? PAR::yield().lead : ""};
+          return string{parseIter? parseIter->lead : ""};
         }
     };
   
