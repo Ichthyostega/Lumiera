@@ -317,6 +317,38 @@ for} tail...
           CHECK (actions[24].code == TextTemplate::Code::TEXT);                // a final static segment after the last active tag
           CHECK (actions[24].val  == " tail...\n"_expect);
           CHECK (actions[24].refIDX == 0);
+          
+          
+          
+          VERIFY_FAIL ("TextTemplate spec without active placeholders"
+                      , TextTemplate::compile("horror boredom"));
+          
+          VERIFY_FAIL ("Tag without key: ...horror ${<placeholder> |↯|}"
+                      , TextTemplate::compile("horror ${ } vacui"));
+          
+          VERIFY_FAIL (" ...horror ${if <conditional> |↯|}"
+                      , TextTemplate::compile("horror ${if} late"));
+          
+          VERIFY_FAIL (" ...horror ${for <data-id> |↯|}"
+                      , TextTemplate::compile("horror ${for} all"));
+          
+          VERIFY_FAIL ("Misplaced ...horror |↯|${else}"
+                      , TextTemplate::compile("horror ${else} deaf"));
+          
+          VERIFY_FAIL ("unqualified \"end\" without logic-keyword"
+                      , TextTemplate::compile("horror without ${end}"));
+          
+          VERIFY_FAIL ("Unbalanced Logic: expect ${end ?? } -- found ...horror ${end |↯|for }"
+                      , TextTemplate::compile("horror ${end for} ever"));
+          
+          VERIFY_FAIL ("Unbalanced Logic: expect ${end for free} -- found ...${end |↯|if }"
+                      , TextTemplate::compile("horror ${for free}${end if}"));
+          
+          VERIFY_FAIL ("Unbalanced Logic: expect ${end for free} -- found ... yet ${end |↯|for me}"
+                      , TextTemplate::compile("${if wee} horror ${for free} yet ${end for me}"));
+          
+          VERIFY_FAIL ("Conflicting ... precipitous ${else} ⟷ ... callous |↯|${else}"
+                      , TextTemplate::compile("${if smarmy} precipitous ${else} callous ${else} horror"));
         }
       
       

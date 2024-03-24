@@ -186,11 +186,15 @@ namespace lib {
                                   if ("for" == mat[4])
                                     tag.syntax = mat[3].matched? TagSyntax::END_FOR : TagSyntax::FOR;
                                   else
-                                    throw error::Logic(_Fmt{"unexpected keyword \"%s\""} % mat[4]);
+                                    throw error::Logic{_Fmt{"unexpected keyword \"%s\""} % mat[4]};
                                 }
                               else
                               if (mat[2].matched)
                                 tag.syntax = TagSyntax::ELSE;
+                              else
+                              if ("end" == mat[5])
+                                throw error::Invalid{_Fmt{"unqualified \"end\" without logic-keyword:"
+                                                          " ...%s${end |↯|}"} % tag.lead};
                               else
                                 tag.syntax = TagSyntax::KEYID;
                             }
@@ -358,6 +362,13 @@ namespace lib {
           auto abbrev      = [&](auto s){ return s.length()<16? s : s.substr(s.length()-15); };              // (shorten lead display to 15 chars)
           
            //  Syntax / consistency checks...
+          auto __requireKey    = [&](string descr)
+                                      {
+                                        if (isnil (parseIter->key))
+                                          throw error::Invalid{_Fmt{"Tag without key: ...%s${%s |↯|}"}
+                                                                   % abbrev(lead()) % descr
+                                                              };
+                                      };
           auto __checkBalanced = [&](Clause c)
                                       {
                                         if (not scopeMatch(c))
@@ -400,10 +411,12 @@ namespace lib {
               addLead();
               break;
             case TagSyntax::KEYID:
+              __requireKey("<placeholder>");
               addLead();
               addCode(KEY);
               break;
             case TagSyntax::IF:
+              __requireKey("if <conditional>");
               addLead();
               openScope(IF);
               addCode(COND);
@@ -418,6 +431,7 @@ namespace lib {
               closeScope();
               break;
             case TagSyntax::FOR:
+              __requireKey("for <data-id>");
               addLead();
               openScope(FOR);
               addCode(ITER);
