@@ -45,9 +45,12 @@
 
 
 namespace lib {
-  
-  namespace {// Implementation of the access core
+  namespace iter {
     
+    /**
+     * Implementation of a »IterStateCore«
+     * to access the container through an embedded index variable.
+     */
     template<typename PTR>
     struct IndexAccessCore
       {
@@ -116,9 +119,9 @@ namespace lib {
    */
   template<class CON, typename PTR = CON*>
   class IterIndex
-    : public IndexAccessCore<PTR>::IterWrapper
+    : public iter::IndexAccessCore<PTR>::IterWrapper
     {
-      using _Cor = IndexAccessCore<PTR>;
+      using _Cor = iter::IndexAccessCore<PTR>;
       using _Par = typename _Cor::IterWrapper;
       
     public:

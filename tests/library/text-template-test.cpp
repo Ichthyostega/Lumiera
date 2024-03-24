@@ -67,7 +67,7 @@ namespace test {
       virtual void
       run (Arg)
         {
-//          simpeUsage();
+          simpeUsage();
           verify_parsing();
           verify_instantiation();
           verify_keySubstituton();
@@ -79,8 +79,8 @@ namespace test {
         }
       
       
-      /** @test TODO simple point-and-shot usage...
-       * @todo WIP 4/24 ✔ define ⟶ 🔁 implement
+      /** @test simple point-and-shot usage...
+       * @todo WIP 4/24 ✔ define ⟶ ✔ implement
        */
       void
       simpeUsage()
@@ -92,7 +92,7 @@ namespace test {
         }
       
       
-      /** @test TODO
+      /** @test parsing of tag markup and compilation into a sequence of Action-codes
        * @note the regular expression \ref ACCEPT_FIELD is comprised of several
        *       alternatives and optional parts, which are marked by 5 sub-expressions
        *       - 1 ≙ an escaped field (which should not be processed)
@@ -100,7 +100,7 @@ namespace test {
        *       - 3 ≙ end token
        *       - 4 ≙ some logic token ("if" or "for")
        *       - 5 ≙ a key or key path
-       * @todo WIP 4/24 🔁 define ⟶ implement
+       * @todo WIP 4/24 ✔ define ⟶ ✔ implement
        */
       void
       verify_parsing()
@@ -118,7 +118,7 @@ namespace test {
           CHECK (mat.length() == 7);
           CHECK (mat.prefix() == " stale"_expect);
           CHECK (mat.suffix() == "forever"_expect);
-          CHECK (mat[0]       == "${beer}"_expect);                  // so this first example demonstrates placeholder recognition 
+          CHECK (mat[0]       == "${beer}"_expect);                  // so this first example demonstrates placeholder recognition
           CHECK (not mat[1].matched);                                // Sub-1 : this is not an escaped pattern
           CHECK (not mat[2].matched);                                // Sub-2 : this pattern does not start with "else"
           CHECK (not mat[3].matched);                                // Sub-3 : no "end" keyword
@@ -177,13 +177,14 @@ namespace test {
           CHECK (mat.position() == 24);
           CHECK (mat.length() == 2);
           CHECK (mat.prefix() == " catch ${else if} fever "_expect); // Note: first pattern does not match as "else" must be solitary
-          CHECK (mat.suffix() == "{can.beer} "_expect);              // Note: the following braced expression is tossed aside 
+          CHECK (mat.suffix() == "{can.beer} "_expect);              // Note: the following braced expression is tossed aside
           CHECK (mat[0]       == "\\$"_expect);                      // Only the escaped pattern mark opening is picked up
           CHECK (not mat[2].matched);
           CHECK (not mat[3].matched);
           CHECK (not mat[4].matched);
           CHECK (not mat[5].matched);
           CHECK (mat[1] == "\\$"_expect);                            // Sub-1 picks the escaped mark (and the remainder is no complete tag)
+          
           
           
           // Demonstration: can use this regular expression in a matching pipeline....
@@ -196,7 +197,7 @@ namespace test {
           
           
           // Parse matches of this regexp into well defined syntax elements
-          auto parser = parse(input);
+          auto parser = parse (input);
           CHECK (not isnil(parser));
           CHECK (parser->syntax == TagSyntax::KEYID);
           CHECK (parser->lead == "one "_expect);
@@ -217,13 +218,8 @@ namespace test {
           VERIFY_ERROR (ITER_EXHAUST, ++parser);
           
           
+          
           // Generate sequence of Action tokens from parsing results
-          auto render = [](TextTemplate::Action const& act) -> string
-                             { return _Fmt{"‖%d|↷%d‖▷%s"} % uint(act.code) % act.refIDX % act.val; };
-          auto act1 = TextTemplate::ActionCompiler().buildActions(parse(input));
-SHOW_EXPR(util::join(explore(act1)
-                       .transform(render)
-                    , "▶"))
           input = R"~(
  Prefix-1 ${some.key} next one is \${escaped}
  Prefix-2 ${if cond1} active ${else} inactive ${end if
@@ -234,8 +230,7 @@ SHOW_EXPR(util::join(explore(act1)
             if nested}loop-suffix${else}${end
 for} tail...
 )~";
-          auto actions = TextTemplate::ActionCompiler().buildActions(parse(input));
-SHOW_EXPR(util::join (explore(actions).transform(render),"▶\n▶"))
+          auto actions = TextTemplate::compile (input);
           CHECK (25 == actions.size());
           
           CHECK (actions[ 0].code == TextTemplate::Code::TEXT);

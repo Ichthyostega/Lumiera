@@ -286,8 +286,11 @@ namespace lib {
       template<class DAT>
       using InstanceIter = ExploreIter<InstanceCore<DataSource<DAT>>>;
       
+      ActionSeq actions_;
+      
     public:
       TextTemplate(string spec)
+        : actions_{compile (spec)}
         { }
       
       template<class DAT>
@@ -298,6 +301,7 @@ namespace lib {
       static string
       apply (string spec, DAT const& data);
       
+      static ActionSeq compile (string const&);
       friend class test::TextTemplate_test;
     };
   
@@ -461,6 +465,15 @@ namespace lib {
         }     // add final action to supply text after last active tag
     };
   
+  inline TextTemplate::ActionSeq
+  TextTemplate::compile (string const& spec)
+  {
+    ActionSeq code = ActionCompiler().buildActions (parse (spec));
+    if (isnil (code))
+      throw error::Invalid ("TextTemplate spec without active placeholders.");
+    return code;
+  }
+  
   
   
   
@@ -479,7 +492,7 @@ namespace lib {
   template<>
   struct TextTemplate::DataSource<MapS>
     {
-      MapS* data_;
+      MapS const * data_;
       using Iter = std::string_view;
       
       bool
@@ -491,7 +504,9 @@ namespace lib {
       string const&
       retrieveContent (string key)
         {
-          return (*data_)[key];
+          auto elm = data_->find (key);
+          ENSURE (elm != data_->end());
+          return elm->second;
         }
     };
   
@@ -533,7 +548,7 @@ namespace lib {
   template<class SRC>
   TextTemplate::InstanceCore<SRC>::InstanceCore (TextTemplate::ActionSeq const& actions, SRC s)
     : dataSrc_{s}
-    , actionIter_{explore (actions)}
+    , actionIter_{actions}
     , ctxStack_{}
     , rendered_{}
     {
@@ -587,12 +602,14 @@ namespace lib {
   
   
   
-  /** */
+  /**
+   * Instantiate this (pre-compiled) TextTemplate using the given data binding.
+   */
   template<class DAT>
   inline TextTemplate::InstanceIter<DAT>
   TextTemplate::render (DAT const& data)  const
   {
-    UNIMPLEMENTED ("actually instantiate the text template");
+    return explore (InstanceCore{actions_, DataSource<DAT>{&data}});
   }
   
   /** */
