@@ -154,6 +154,8 @@ namespace meta {
     {
       
       static Yes_t check_implicit(std::string);
+      static Yes_t check_implicit(std::string_view);
+      static Yes_t check_implicit(const char*);
       static No_t  check_implicit(...);
       
       
