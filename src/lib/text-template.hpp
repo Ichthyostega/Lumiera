@@ -101,7 +101,8 @@
 #include "lib/nocopy.hpp"
 #include "lib/iter-index.hpp"
 #include "lib/iter-explorer.hpp"
-#include "lib/format-util.hpp"///////////////////OOO use format-string??
+#include "lib/format-string.hpp"
+#include "lib/format-util.hpp"
 #include "lib/regex.hpp"
 #include "lib/util.hpp"
 
@@ -113,12 +114,14 @@
 
 
 namespace lib {
+  namespace error = lumiera::error;
   
   using std::optional;
   using std::nullopt;
   using std::string;
   using StrView = std::string_view;
   
+  using util::_Fmt;
   using util::unConst;
   
   
@@ -183,7 +186,7 @@ namespace lib {
                                   if ("for" == mat[4])
                                     tag.syntax = mat[3].matched? TagSyntax::END_FOR : TagSyntax::FOR;
                                   else
-                                    throw error::Logic("unexpected keyword");
+                                    throw error::Logic(_Fmt{"unexpected keyword \"%s\""} % mat[4]);
                                 }
                               else
                               if (mat[2].matched)
@@ -334,11 +337,60 @@ namespace lib {
       void
       compile (PAR& parseIter, ActionSeq& actions)
         {
-          auto add       = [&](Code c, string v){ actions.push_back (Action{c,v});  };
-          auto addCode   = [&](Code c)  { add (   c, parseIter->key);               };
-          auto addLead   = [&]          { add (TEXT, string{parseIter->lead});      };
-          auto openScope = [&](Clause c){ scope_.push (ParseCtx{c, actions.size()});};
+          auto currIDX   = [&]{ return actions.size(); };
+          auto valid     = [&](Idx i){ return 0 < i and i < actions.size(); };
+          auto clause    = [](Clause c)-> string { return c==IF? "if" : "for"; };
+          auto scopeClause = [&]{ return scope_.empty()? "??" : clause(scope_.top().clause); };
           
+           //  Support for bracketing constructs (if / for)
+          auto beginIdx    = [&]{ return scope_.empty()? 0 : scope_.top().begin; };                          // Index of action where scope was opened
+          auto scopeKey    = [&]{ return valid(beginIdx())? actions[beginIdx()].val : "";};                  // Key controlling the if-/for-Scope
+          auto keyMatch    = [&]{ return isnil(parseIter->key) or parseIter->key == scopeKey(); };           // Key matches in opening and closing tag
+          auto clauseMatch = [&](Clause c){ return not scope_.empty() and scope_.top().clause == c; };       // Kind of closing tag matches innermost scope
+          auto scopeMatch  = [&](Clause c){ return clauseMatch(c) and keyMatch(); };
+          
+          auto lead        = [&]{ return parseIter->lead; };
+          auto clashLead   = [&]{ return actions[scope_.top().after - 1].val; };                             // (for diagnostics: lead before a conflicting other "else")
+          auto abbrev      = [&](auto s){ return s.length()<16? s : s.substr(s.length()-15); };              // (shorten lead display to 15 chars)
+          
+           //  Syntax / consistency checks...
+          auto __checkBalanced = [&](Clause c)
+                                      {
+                                        if (not scopeMatch(c))
+                                          throw error::Invalid{_Fmt{"Unbalanced Logic: expect ${end %s %s}"
+                                                                    " -- found ...%s${end |↯|%s %s}"}
+                                                                   % scopeClause() % scopeKey()
+                                                                   % abbrev(lead())
+                                                                   % clause(c) % parseIter->key
+                                                              };
+                                      };
+          auto __checkInScope  = [&]  {
+                                        if (scope_.empty())
+                                          throw error::Invalid{_Fmt{"Misplaced ...%s|↯|${else}"}
+                                                                   % abbrev(lead())};
+                                      };
+          auto __checkNoDup    = [&]  {
+                                        if (scope_.top().after != 0)
+                                          throw error::Invalid{_Fmt{"Conflicting ...%s${else} ⟷ ...%s|↯|${else}"}
+                                                                   % abbrev(clashLead()) % abbrev(lead())};
+                                      };
+          
+           //  Primitives used for code generation....
+          auto add             = [&](Code c, string v){ actions.push_back (Action{c,v});};
+          auto addCode         = [&](Code c)  { add (   c, parseIter->key);             };                   // add code token and transfer key picked up by parser
+          auto addLead         = [&]          { add (TEXT, string{parseIter->lead});    };                   // add TEXT token to represent the static part before this tag
+          auto openScope       = [&](Clause c){ scope_.push (ParseCtx{c, currIDX()});   };                   // start nested scope for bracketing construct (if / for)
+          auto closeScope      = [&]          { scope_.pop();                           };                   // close innermost nested scope
+          
+          auto linkElseToStart = [&]{ actions[beginIdx()].refIDX = currIDX();           };                   // link the start position of the else-branch into opening logic code
+          auto markJumpInScope = [&]{ scope_.top().after = currIDX();                   };                   // memorise jump before else-branch for later linkage
+          auto linkLoopBack    = [&]{ actions.back().refIDX = scope_.top().begin;       };                   // fill in the back-jump position at loop end
+          auto linkJumpToNext  = [&]{ actions[scope_.top().after].refIDX = currIDX();   };                   // link jump to the position after the end of the logic bracket
+          
+          auto hasElse         = [&]{ return scope_.top().after != 0; };                                     // a jump code to link was only marked if there was an else tag
+          
+          
+          /* === Code Generation === */
           switch (parseIter->syntax) {
             case TagSyntax::ESCAPE:
               addLead();
@@ -354,31 +406,48 @@ namespace lib {
               break;
             case TagSyntax::END_IF:
               addLead();
-              ///////////////////////////////////////////////////OOO verify and pop IF-clause here
-//              if (scope_.empty() or
-//                  (not isnil(tag.key) scope_.top())
+              __checkBalanced(IF);
+              if (hasElse())
+                linkJumpToNext();
+              else
+                linkElseToStart();
+              closeScope();
               break;
             case TagSyntax::FOR:
               addLead();
               openScope(FOR);
-              ///////////////////////////////////////////////////OOO push FOR-clause here
               addCode(ITER);
               break;
             case TagSyntax::END_FOR:
               addLead();
-              ///////////////////////////////////////////////////OOO verify and pop FOR-clause here
+              __checkBalanced(FOR);
+              if (hasElse())
+                linkJumpToNext();
+              else
+                { // no else-branch; end active loop here
+                  addCode(LOOP);
+                  linkLoopBack();
+                  linkElseToStart();  // jump behind when iteration turns out empty
+                }
+              closeScope();
               break;
             case TagSyntax::ELSE:
               addLead();
-              if (true) /////////////////////////////////////////OOO derive IF or FOR from context
+              __checkInScope();
+              __checkNoDup();
+              if (IF == scope_.top().clause)
                 {
-              ///////////////////////////////////////////////////OOO actual IF-else implementation
+                  markJumpInScope();
                   addCode(JUMP);
+                  linkElseToStart();
                 }
               else
                 {
-              ///////////////////////////////////////////////////OOO actual FOR-else implementation
                   addCode(LOOP);
+                  linkLoopBack();
+                  markJumpInScope();
+                  addCode(JUMP);
+                  linkElseToStart();  // jump to else-block when iteration turns out empty
                 }
               break;
             default:
