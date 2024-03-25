@@ -122,6 +122,7 @@ namespace lib {
   using StrView = std::string_view;
   
   using util::_Fmt;
+  using util::isnil;
   using util::unConst;
   
   
@@ -140,7 +141,7 @@ namespace lib {
     iterNestedKeys (string key, string const& iterDef)
     {
       return explore (util::RegexSearchIter{iterDef, ACCEPT_DATA_ELM})
-                .transform ([&](smatch mat){ return key+"."+string{mat[1]}; });
+                .transform ([&](smatch mat){ return key+"."+string{mat[1]}+"."; });
     }
 
     
@@ -521,37 +522,75 @@ namespace lib {
   
   using MapS = std::map<string,string>;
   
+  /**
+   * Data-binding for a Map-of-strings.
+   * Simple keys are retrieved by direct lookup.
+   * For the representation of nested data sequences,
+   * the following conventions apply
+   * - the data sequence itself is represented by an index-key
+   * - the value associated to this index-key is a CSV sequence
+   * - each element in this sequence defines a key prefix
+   * - nested keys are then defined as `<index-key>.<elm-key>.<key>`
+   * - when key decoration is enabled for a nested data source, each
+   *   lookup for a given key is first tried with the prefix, then as-is.
+   * Consequently, all data in the sequence must be present in the original
+   * map, stored under the decorated keys.
+   * @note multiply nested sequences are _not supported._
+   *       While it _is_ possible to have nested loops, the resulting sets
+   *       of keys must be disjoint and data must be present in the base map.
+   * @see TextTemplate_test::verify_Map_binding()
+   */
   template<>
   struct TextTemplate::DataSource<MapS>
     {
       MapS const * data_;
-      using Iter = decltype(iterNestedKeys("",""));
+      string keyPrefix_{};
+      
+      bool isNested() { return not isnil (keyPrefix_); }
+      
       
       bool
       contains (string key)
         {
-          return util::contains (*data_, key);
+          return (isNested() and util::contains (*data_, keyPrefix_+key))
+              or util::contains (*data_, key);
         }
       
       string const&
       retrieveContent (string key)
         {
-          auto elm = data_->find (key);
+          MapS::const_iterator elm;
+          if (isNested())
+            {
+              elm = data_->find (keyPrefix_+key);
+              if (elm == data_->end())
+                elm = data_->find (key);
+            }
+          else
+            elm = data_->find (key);
           ENSURE (elm != data_->end());
           return elm->second;
         }
       
+      
+      using Iter = decltype(iterNestedKeys("",""));
+      
       Iter
       getSequence (string key)
         {
-          UNIMPLEMENTED ("extract data sequence from definition key");
+          if (not contains(key))
+            return Iter{};
+          else
+            return iterNestedKeys (key, retrieveContent(key));
         }
       
       DataSource
       openContext (Iter& iter)
         {
           REQUIRE (iter);
-          UNIMPLEMENTED ("open a nested sub-data-ctx based on the given iterator");
+          DataSource nested{*this};
+          nested.keyPrefix_ = *iter;
+          return nested;
         }
     };
   
