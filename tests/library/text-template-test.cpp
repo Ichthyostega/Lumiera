@@ -42,6 +42,7 @@
 using std::regex_search;
 using std::smatch;
 using util::_Fmt;
+using util::join;
 
 
 namespace lib {
@@ -352,12 +353,20 @@ for} tail...
         }
       
       
-      /** @test TODO
-       * @todo WIP 4/24 🔁 define ⟶ implement
+      
+      /** @test TODO Compile a template and instantiate with various data bindings.
+       * @todo WIP 4/24 🔁 define ⟶ ✔ implement
        */
       void
       verify_instantiation()
         {
+          string wonder = "${a} / ${b} = (${a} + ${b})/${a} ≕ ${phi}";
+          TextTemplate temple{wonder};
+          CHECK (join(temple.keys()) == "a, b, a, b, a, phi"_expect);
+          
+          auto insta = temple.submit (string{"phi=Φ, b=b, a=a"});
+          CHECK (not isnil(insta));
+          CHECK (join(insta,"⁐") == "⁐a⁐ / ⁐b⁐ = (⁐a⁐ + ⁐b⁐)/⁐a⁐ ≕ ⁐Φ⁐"_expect);
         }
       
       

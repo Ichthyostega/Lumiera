@@ -106,7 +106,7 @@
 #include "lib/regex.hpp"
 #include "lib/util.hpp"
 
-#include <optional>
+#include <memory>
 #include <string>
 #include <vector>
 #include <stack>
@@ -116,8 +116,6 @@
 namespace lib {
   namespace error = lumiera::error;
   
-  using std::optional;
-  using std::nullopt;
   using std::string;
   using StrView = std::string_view;
   
@@ -142,6 +140,17 @@ namespace lib {
     {
       return explore (util::RegexSearchIter{iterDef, ACCEPT_DATA_ELM})
                 .transform ([&](smatch mat){ return key+"."+string{mat[1]}+"."; });
+    }
+    
+    //-----------Syntax-for-key-value-data-from-string------
+    const string MATCH_BINDING_TOK { R"~(([\w\.]+)\s*=\s*([^,;"\s]*)\s*)~"};
+    const regex ACCEPT_BINDING_ELM {MATCH_DELIMITER + MATCH_BINDING_TOK};
+    
+    inline auto
+    iterBindingSeq (string const& dataDef)
+    {
+      return explore (util::RegexSearchIter{dataDef, ACCEPT_BINDING_ELM})
+                .transform ([&](smatch mat){ return std::make_pair (string{mat[1]},string{mat[2]}); });
     }
 
     
@@ -320,12 +329,19 @@ namespace lib {
       
       template<class DAT>
       InstanceIter<DAT>
+      submit (DAT const& data)  const;
+      
+      template<class DAT>
+      string
       render (DAT const& data)  const;
       
       template<class DAT>
       static string
       apply (string spec, DAT const& data);
       
+      auto keys()  const;
+      
+      /// @internal exposed for testing
       static ActionSeq compile (string const&);
       friend class test::TextTemplate_test;
     };
@@ -550,6 +566,10 @@ namespace lib {
       
       bool isNested() { return not isnil (keyPrefix_); }
       
+      DataSource()  = default;
+      DataSource(MapS const& map)
+        : data_{&map}
+        { }
       
       bool
       contains (string key)
@@ -596,6 +616,31 @@ namespace lib {
         }
     };
   
+  using PairS = std::pair<string,string>;
+  
+  template<>
+  struct TextTemplate::DataSource<string>
+    : TextTemplate::DataSource<MapS>
+    {
+      std::shared_ptr<MapS> spec_;
+      
+      DataSource (string const& dataSpec)
+        : spec_{new MapS}
+        {
+          data_ = spec_.get();
+          explore (iterBindingSeq (dataSpec))
+            .foreach([this](PairS const& bind){ spec_->insert (bind); });
+        }
+        
+      DataSource
+      openContext (Iter& iter)
+        {
+          DataSource nested(*this);
+          auto nestedBase = DataSource<MapS>::openContext (iter);
+          nested.keyPrefix_ = nestedBase.keyPrefix_;
+          return nested;
+        }
+    };
   
   
   
@@ -772,23 +817,40 @@ namespace lib {
   
   /**
    * Instantiate this (pre-compiled) TextTemplate using the given data binding.
+   * @return iterator to perform the evaluation and substitution step-by step,
+   *                  thereby producing a sequence of `std::string_view&`
    */
   template<class DAT>
   inline TextTemplate::InstanceIter<DAT>
-  TextTemplate::render (DAT const& data)  const
+  TextTemplate::submit (DAT const& data)  const
   {
-    return explore (InstanceCore{actions_, DataSource<DAT>{&data}});
+    return explore (InstanceCore{actions_, DataSource<DAT>{data}});
   }
   
-  /** */
+  /** submit data and materialise rendered results into a single string */
+  template<class DAT>
+  inline string
+  TextTemplate::render (DAT const& data)  const
+  {
+    return util::join (submit (data), "");
+  }
+  
+  /** one-shot shorthand: compile a template and apply it to the given data */
   template<class DAT>
   inline string
   TextTemplate::apply (string spec, DAT const& data)
   {
-    return util::join (TextTemplate(spec).render (data)
-                      ,"");
+    return TextTemplate(spec).render (data);
   }
   
+  /** diagnostics: query a list of all active keys expected by the template. */
+  inline auto
+  TextTemplate::keys()  const
+  {
+    return explore (actions_)
+              .filter   ([](Action const& a){ return a.code == KEY or a.code == COND or a.code == ITER; })
+              .transform([](Action const& a){ return a.val; });
+  }
   
   
 }// namespace lib
