@@ -118,6 +118,14 @@ namespace util {
     return regex_match (textForm, trueTokens);
   }
   
+  
+  bool
+  isNo (string const& textForm) noexcept
+  {
+    return isnil (textForm)
+        or regex_match (textForm, falseTokens);
+  }
+  
 
   
 } // namespace util

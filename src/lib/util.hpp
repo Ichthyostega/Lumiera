@@ -465,6 +465,12 @@ namespace util {
    */
   bool isYes (string const&) noexcept;
   
+  /** check if the given text is empty or can be interpreted as rejection (bool `false`)-
+   * @remarks this function fishes for the known `false` tokens;
+   *   any other non-empty content counts as _not no._
+   */
+  bool isNo (string const&) noexcept;
+  
 } // namespace util
 
 

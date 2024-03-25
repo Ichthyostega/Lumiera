@@ -131,6 +131,20 @@ namespace lib {
     template<class X>
     using ExploreIter = decltype (lib::explore (std::declval<X>()));
     
+    //-----------Syntax-for-iteration-control-in-map------
+    const string MATCH_DATA_TOKEN { R"~(([^,;"\s]*)\s*)~"};
+    const string MATCH_DELIMITER  { R"~((?:^|,|;)\s*)~" };
+    const regex ACCEPT_DATA_ELM   {MATCH_DELIMITER + MATCH_DATA_TOKEN};
+    
+    inline auto
+    iterNestedKeys (string key, string const& iterDef)
+    {
+      return explore (util::RegexSearchIter{iterDef, ACCEPT_DATA_ELM})
+                .transform ([&](smatch mat){ return key+"."+string{mat[1]}; });
+    }
+
+    
+    //-----------Syntax-for-TextTemplate-tags--------
     const string MATCH_SINGLE_KEY = "[A-Za-z_]+\\w*";
     const string MATCH_KEY_PATH   = MATCH_SINGLE_KEY+"(?:\\."+MATCH_SINGLE_KEY+")*";
     const string MATCH_LOGIC_TOK  = "if|for";
@@ -283,8 +297,12 @@ namespace lib {
           StrView& yield()  const;
           void iterNext();
           
-          void instantiateNext();
+          StrView instantiateNext();
+          StrView reInstatiate (Idx =Idx(-1));
           StrView getContent(string key);
+          bool conditional (string key);
+          bool openIteration (string key);
+          bool loopFurther();
         };
       
       template<class DAT>
@@ -507,7 +525,7 @@ namespace lib {
   struct TextTemplate::DataSource<MapS>
     {
       MapS const * data_;
-      using Iter = std::string_view;
+      using Iter = decltype(iterNestedKeys("",""));
       
       bool
       contains (string key)
@@ -521,6 +539,19 @@ namespace lib {
           auto elm = data_->find (key);
           ENSURE (elm != data_->end());
           return elm->second;
+        }
+      
+      Iter
+      getSequence (string key)
+        {
+          UNIMPLEMENTED ("extract data sequence from definition key");
+        }
+      
+      DataSource
+      openContext (Iter& iter)
+        {
+          REQUIRE (iter);
+          UNIMPLEMENTED ("open a nested sub-data-ctx based on the given iterator");
         }
     };
   
@@ -545,13 +576,16 @@ namespace lib {
       case KEY:
         return core.getContent (val);
       case COND:
-        return "";
+        return core.conditional (val)? core.reInstatiate()                  // next is the conditional content
+                                     : core.reInstatiate(refIDX);           // points to start of else-block (or after)
       case JUMP:
-        return "";
+        return core.reInstatiate(refIDX);
       case ITER:
-        return "";
+        return core.openIteration(val)? core.reInstatiate()                 // looping initiated => continue with next
+                                      : core.reInstatiate(refIDX);          // points to start of else-block (or after)
       case LOOP:
-        return "";
+        return core.loopFurther()     ? core.reInstatiate(refIDX+1)         // start with one after the loop opening
+                                      : core.reInstatiate();                // continue with next -> jump over else-block
       default:
         NOTREACHED ("uncovered Activity verb in activation function.");
       }
@@ -593,23 +627,102 @@ namespace lib {
   TextTemplate::InstanceCore<SRC>::iterNext()
   {
     ++actionIter_;
-    instantiateNext();
+    rendered_ = instantiateNext();
   }
   
-  template<class SRC>
-  inline void
-  TextTemplate::InstanceCore<SRC>::instantiateNext()
-  {
-    rendered_ = actionIter_? actionIter_->instantiate(*this)
-                           : StrView{};
-  }
   
+  /** Instantiate next Action token and expose its rendering */
   template<class SRC>
   inline StrView
-  TextTemplate::InstanceCore<SRC>::getContent(string key)
+  TextTemplate::InstanceCore<SRC>::instantiateNext()
+  {
+    return actionIter_? actionIter_->instantiate(*this)
+                      : StrView{};
+  }
+  
+  /**
+   * relocate to another Action token and continue instantiation there
+   * @param nextCode index number of the next token;
+   *        when not given, then iterate one step ahead
+   * @return the rendering produced by the selected next Action token
+   */
+  template<class SRC>
+  inline StrView
+  TextTemplate::InstanceCore<SRC>::reInstatiate (Idx nextCode)
+  {
+    if (nextCode == Idx(-1))
+      ++actionIter_;
+    else
+      actionIter_.setIDX (nextCode);
+    return instantiateNext();
+  }
+  
+  /** retrieve a data value from the data source for the indiated key */
+  template<class SRC>
+  inline StrView
+  TextTemplate::InstanceCore<SRC>::getContent (string key)
   {
     static StrView nil{""};
     return dataSrc_.contains(key)? dataSrc_.retrieveContent(key) : nil;
+  }
+  
+  /** retrieve a data value for the key and interpret it as boolean expression */
+  template<class SRC>
+  inline bool
+  TextTemplate::InstanceCore<SRC>::conditional (string key)
+  {
+    return not util::isNo (string{getContent (key)});
+  }
+  
+  /**
+   * Attempt to open data sequence by evaluating the entrance key.
+   * Data is retrieved for the key and evaluated to produce a collection of
+   * data entities to be iterated; each of these will be handled as a data scope
+   * nested into the current data scope. This implies to push a #NestedCtx into the
+   * #ctxStack_, store aside the current data source and replace it with the new
+   * data source for the nested scope. If iteration can not be initiated, all of
+   * the initialisation is reverted and the previous scope is reinstated.
+   * @return `true` if the nested context exists and the first element is available,
+   *         `false` if iteration is not possible and the original context was restored
+   */
+  template<class SRC>
+  inline bool
+  TextTemplate::InstanceCore<SRC>::openIteration (string key)
+  {
+    if (dataSrc_.contains(key))
+      if (DataCtxIter dataIter = dataSrc_.getSequence(key))
+        {
+          ctxStack_.push (NestedCtx{move (dataIter)
+                                   ,dataSrc_});
+          dataSrc_ = dataSrc_.openContext (ctxStack_.top().first);
+          return true;
+        }
+    return false;
+  }
+  
+  /**
+   * Possibly continue the iteration within an already established nested scope.
+   * If iteration to the next element is possible, it is expanded into the nested scope,
+   * else, when reaching iteration end, the enclosing scope is reinstated
+   * @return `true` if the next iterated element is available, `false` after iteration end
+   */
+  template<class SRC>
+  inline bool
+  TextTemplate::InstanceCore<SRC>::loopFurther()
+  {
+    DataCtxIter& dataIter = ctxStack_.top().first;
+    ++dataIter;
+    if (dataIter)
+      {             // open next nested context *from enclosing context*
+        dataSrc_ = ctxStack_.top().second.openContext (dataIter);
+        return true;
+      }
+    else
+      {         // restore original data context
+        std::swap (dataSrc_, ctxStack_.top().second);
+        ctxStack_.pop();
+        return false;
+      }
   }
   
   
