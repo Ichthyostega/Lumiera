@@ -317,8 +317,6 @@ namespace lib {
           bool loopFurther();
         };
       
-      template<class DAT>
-      using InstanceIter = ExploreIter<InstanceCore<DataSource<DAT>>>;
       
       ActionSeq actions_;
       
@@ -328,7 +326,7 @@ namespace lib {
         { }
       
       template<class DAT>
-      InstanceIter<DAT>
+      auto
       submit (DAT const& data)  const;
       
       template<class DAT>
@@ -536,6 +534,8 @@ namespace lib {
       static_assert (not sizeof(DAT),
                      "unable to bind this data source "
                      "for TextTemplate instantiation");
+      
+      DataSource (DAT const&);
     };
   
   using MapS = std::map<string,string>;
@@ -561,7 +561,7 @@ namespace lib {
   template<>
   struct TextTemplate::DataSource<MapS>
     {
-      MapS const * data_;
+      MapS const * data_{nullptr};
       string keyPrefix_{};
       
       bool isNested() { return not isnil (keyPrefix_); }
@@ -641,6 +641,29 @@ namespace lib {
           return nested;
         }
     };
+  
+  namespace {// help the compiler with picking the proper specialisation for the data binding
+    
+    template<class STR,              typename = meta::enable_if<meta::is_StringLike<STR>> >
+    inline auto
+    bindDataSource(STR const& spec)
+      {
+        return TextTemplate::DataSource<string>{spec};
+      }
+    
+    inline auto
+    bindDataSource(MapS const& map)
+      {
+        return TextTemplate::DataSource<MapS>{map};
+      }
+    
+    /* Why this approach? couldn't we use CTAD?
+     * - for one, there are various compiler bugs related to nested templates and CTAD
+     * - moreover I am unable to figure out how to write a deduction guide for an
+     *   user provided specialisation, given possibly within another header.
+     */
+  }
+  
   
   
   
@@ -821,10 +844,10 @@ namespace lib {
    *                  thereby producing a sequence of `std::string_view&`
    */
   template<class DAT>
-  inline TextTemplate::InstanceIter<DAT>
+  inline auto
   TextTemplate::submit (DAT const& data)  const
   {
-    return explore (InstanceCore{actions_, DataSource<DAT>{data}});
+    return explore (InstanceCore{actions_, bindDataSource(data)});
   }
   
   /** submit data and materialise rendered results into a single string */
