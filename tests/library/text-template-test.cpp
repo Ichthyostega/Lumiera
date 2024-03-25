@@ -201,19 +201,19 @@ namespace test {
           CHECK (not isnil(parser));
           CHECK (parser->syntax == TagSyntax::KEYID);
           CHECK (parser->lead == "one "_expect);
-          CHECK (parser->key  == "two"_expect);
+          CHECK (parser->key  == "two"_expect);                      // extract "two" as key for data lookup
           ++parser;
           CHECK (parser);
           CHECK (parser->syntax == TagSyntax::ESCAPE);
           CHECK (parser->lead == " three "_expect);
-          CHECK (parser->key  == ""_expect);
+          CHECK (parser->key  == ""_expect);                         // empty since this tag has been escaped
           ++parser;
           CHECK (parser);
           CHECK (parser->syntax == TagSyntax::IF);
-          CHECK (parser->lead == "\\${four} "_expect);
-          CHECK (parser->key  == "high"_expect);
+          CHECK (parser->lead == "${four} "_expect);                 // note: leading escape sign removed
+          CHECK (parser->key  == "high"_expect);                     // key ≡ "high" used to evaluate conditional
           ++parser;
-          CHECK (isnil (parser));
+          CHECK (isnil (parser));                                    // note: the /parser/ stops right behind last token
           VERIFY_ERROR (ITER_EXHAUST, *parser);
           VERIFY_ERROR (ITER_EXHAUST, ++parser);
           
@@ -243,8 +243,8 @@ for} tail...
           CHECK (actions[ 2].code == TextTemplate::Code::TEXT);                // static text between active fields
           CHECK (actions[ 2].val  == " next one is "_expect);
           
-          CHECK (actions[ 3].code == TextTemplate::Code::TEXT);                // since next tag was escaped, it appears in static segment
-          CHECK (actions[ 3].val  == "\\${escaped}\n Prefix-2 "_expect);
+          CHECK (actions[ 3].code == TextTemplate::Code::TEXT);                // since next tag was escaped, it appears in static segment,
+          CHECK (actions[ 3].val  == "${escaped}\n Prefix-2 "_expect);         // yet without the leading escape, which has been absorbed.
           
           CHECK (actions[ 4].code == TextTemplate::Code::COND);                // start of an if-bracket construct
           CHECK (actions[ 4].val  == "cond1"_expect);                          // data marked with "cond1" will be used to determine true/false

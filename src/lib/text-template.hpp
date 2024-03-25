@@ -190,7 +190,9 @@ namespace lib {
                           rest = rest.substr(tag.lead.length());
                           if (mat[5].matched)
                             tag.key = mat[5];
-                          if (not mat[1].matched)
+                          if (mat[1].matched)
+                            rest = rest.substr(1);  // strip escape
+                          else
                             { // not escaped but indeed active field
                               rest = rest.substr(mat.length());
                               if (mat[4].matched)
