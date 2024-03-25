@@ -342,8 +342,8 @@ for} tail...
           VERIFY_FAIL ("Unbalanced Logic: expect ${end ?? } -- found ...horror ${end |↯|for }"
                       , TextTemplate::compile("horror ${end for} ever"));
           
-          VERIFY_FAIL ("Unbalanced Logic: expect ${end for free} -- found ...${end |↯|if }"
-                      , TextTemplate::compile("horror ${for free}${end if}"));
+          VERIFY_FAIL ("Unbalanced Logic: expect ${end for free} -- found ... horror ${end |↯|if }"
+                      , TextTemplate::compile("${for free} horror ${end if}"));
           
           VERIFY_FAIL ("Unbalanced Logic: expect ${end for free} -- found ... yet ${end |↯|for me}"
                       , TextTemplate::compile("${if wee} horror ${for free} yet ${end for me}"));

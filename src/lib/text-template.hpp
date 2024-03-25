@@ -126,13 +126,9 @@ namespace lib {
   
   namespace {
     
-    /** shorthand for an »iter-explorer« build from some source X */
-    template<class X>
-    using ExploreIter = decltype (lib::explore (std::declval<X>()));
-    
     //-----------Syntax-for-iteration-control-in-map------
-    const string MATCH_DATA_TOKEN { R"~(([^,;"\s]*)\s*)~"};
-    const string MATCH_DELIMITER  { R"~((?:^|,|;)\s*)~" };
+    const string MATCH_DATA_TOKEN = R"~(([^,;"\s]*)\s*)~";
+    const string MATCH_DELIMITER  = R"~((?:^|,|;)\s*)~"  ;
     const regex ACCEPT_DATA_ELM   {MATCH_DELIMITER + MATCH_DATA_TOKEN};
     
     inline auto
@@ -143,14 +139,18 @@ namespace lib {
     }
     
     //-----------Syntax-for-key-value-data-from-string------
-    const string MATCH_BINDING_TOK { R"~(([\w\.]+)\s*=\s*([^,;"\s]*)\s*)~"};
+    const string MATCH_BINDING_KEY = R"~(([\w\.]+))~";
+    const string MATCH_BINDING_VAL = R"~(([^,;"\s]+)\s*)~";
+    const string MATCH_QUOTED_VAL  = R"~("([^"]+)"\s*)~";
+    const string MATCH_BINDING_TOK = MATCH_BINDING_KEY+"\\s*=\\s*(?:"+MATCH_BINDING_VAL+"|"+MATCH_QUOTED_VAL+")";
     const regex ACCEPT_BINDING_ELM {MATCH_DELIMITER + MATCH_BINDING_TOK};
     
     inline auto
     iterBindingSeq (string const& dataDef)
     {
       return explore (util::RegexSearchIter{dataDef, ACCEPT_BINDING_ELM})
-                .transform ([&](smatch mat){ return std::make_pair (string{mat[1]},string{mat[2]}); });
+                .transform ([&](smatch mat){ return std::make_pair (string{mat[1]}
+                                                                   ,string{mat[3].matched? mat[3]:mat[2]}); });
     }
 
     
