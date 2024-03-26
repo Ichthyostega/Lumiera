@@ -135,7 +135,7 @@ namespace lib {
     iterNestedKeys (string key, string const& iterDef)
     {
       return explore (util::RegexSearchIter{iterDef, ACCEPT_DATA_ELM})
-                .transform ([&](smatch mat){ return key+"."+string{mat[1]}+"."; });
+                .transform ([key](smatch mat){ return key+"."+string{mat[1]}+"."; });
     }
     
     //-----------Syntax-for-key-value-data-from-string------
@@ -424,6 +424,11 @@ namespace lib {
                                           throw error::Invalid{_Fmt{"Conflicting ...%s${else} ⟷ ...%s|↯|${else}"}
                                                                    % abbrev(clashLead()) % abbrev(lead())};
                                       };
+          auto __checkClosed   = [&]  {
+                                        if (not scope_.empty())
+                                          throw error::Invalid{_Fmt{"Unclosed Logic tags: |↯|${end %s %s} missing"}
+                                                                   % scopeClause() % scopeKey()};
+                                      };
           
            //  Primitives used for code generation....
           auto add             = [&](Code c, string v){ actions.push_back (Action{c,v});};
@@ -510,8 +515,11 @@ namespace lib {
           StrView tail = parseIter->tail;
           ++parseIter;
           if (not parseIter)
-            add (TEXT, string{tail});
-        }     // add final action to supply text after last active tag
+            {//add final action to supply text after last active tag
+              add (TEXT, string{tail});
+              __checkClosed();
+            }
+        }
     };
   
   inline TextTemplate::ActionSeq
@@ -611,7 +619,7 @@ namespace lib {
         {
           REQUIRE (iter);
           DataSource nested{*this};
-          nested.keyPrefix_ = *iter;
+          nested.keyPrefix_ += *iter;
           return nested;
         }
     };
@@ -709,7 +717,7 @@ namespace lib {
     , ctxStack_{}
     , rendered_{}
     {
-      instantiateNext();
+      rendered_ = instantiateNext();
     }
   
   /**
@@ -798,7 +806,7 @@ namespace lib {
   inline bool
   TextTemplate::InstanceCore<SRC>::openIteration (string key)
   {
-    if (dataSrc_.contains(key))
+    if (conditional (key))
       if (DataCtxIter dataIter = dataSrc_.getSequence(key))
         {
           ctxStack_.push (NestedCtx{move (dataIter)

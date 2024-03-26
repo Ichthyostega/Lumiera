@@ -34,8 +34,6 @@
 #include "lib/test/diagnostic-output.hpp"///////////////////////TODO
 #include "lib/stat/csv.hpp"
 
-//#include <chrono>
-//#include <array>
 #include <map>
 
 //using std::array;
@@ -71,7 +69,6 @@ namespace test {
           simpeUsage();
           verify_parsing();
           verify_instantiation();
-          verify_keySubstituton();
           verify_conditional();
           verify_iteration();
           verify_Map_binding();
@@ -350,12 +347,18 @@ for} tail...
           
           VERIFY_FAIL ("Conflicting ... precipitous ${else} ⟷ ... callous |↯|${else}"
                       , TextTemplate::compile("${if smarmy} precipitous ${else} callous ${else} horror"));
+          
+          VERIFY_FAIL ("Unclosed Logic tags: |↯|${end if sleazy} missing"
+                      , TextTemplate::compile("${if sleazy} precipitous ${else} horror"));
+          
+          VERIFY_FAIL ("Unclosed Logic tags: |↯|${end for horror} missing"
+                      , TextTemplate::compile("${for horror}${if flimsy} atrocious ${end if} precipitous"));
         }
       
       
       
-      /** @test TODO Compile a template and instantiate with various data bindings.
-       * @todo WIP 4/24 🔁 define ⟶ ✔ implement
+      /** @test Compile a template and instantiate with various data bindings.
+       * @todo WIP 4/24 ✔ define ⟶ ✔ implement
        */
       void
       verify_instantiation()
@@ -367,34 +370,81 @@ for} tail...
           auto insta = temple.submit (string{"phi=Φ, b=b, a=a"});
           CHECK (not isnil(insta));
           CHECK (join(insta,"⁐") == "⁐a⁐ / ⁐b⁐ = (⁐a⁐ + ⁐b⁐)/⁐a⁐ ≕ ⁐Φ⁐"_expect);
+          
+          CHECK (temple.render("phi=Φ,a=μ,b=ν")        ==      "μ / ν = (μ + ν)/μ ≕ Φ"_expect     );
+          CHECK (temple.render("phi=schmuh,a=8,b=5")   ==      "8 / 5 = (8 + 5)/8 ≕ schmuh"_expect);
+          CHECK (temple.render("phi=1.6180,a=55,b=34") == "55 / 34 = (55 + 34)/55 ≕ 1.6180"_expect);
         }
       
       
-      /** @test TODO
-       * @todo WIP 4/24 🔁 define ⟶ implement
-       */
-      void
-      verify_keySubstituton()
-        {
-          UNIMPLEMENTED ("nebbich");
-        }
       
-      
-      /** @test TODO
-       * @todo WIP 4/24 🔁 define ⟶ implement
+      /** @test Segments of the text-template can be included
+       *        conditionally, based on interpretation of a controlling key
+       * @todo WIP 4/24 ✔ define ⟶ ✔ implement
        */
       void
       verify_conditional()
         {
+          TextTemplate t1{"Value ${if val}= ${val} ${else}missing${endif}..."};
+          
+          CHECK (t1.render("val=55")    == "Value = 55 ..."_expect  );
+          CHECK (t1.render("val=\"\"")  == "Value missing..."_expect);      // empty value counts as false
+          CHECK (t1.render("val=\" \"") == "Value =   ..."_expect   );      // one space counts as content (=true)
+          CHECK (t1.render("val=false") == "Value missing..."_expect);      // various bool-false tokens recognised
+          CHECK (t1.render("val=NO"  )  == "Value missing..."_expect);
+          CHECK (t1.render("val= 0 " )  == "Value missing..."_expect);
+          CHECK (t1.render("val=true")  == "Value = true ..."_expect);      // bool true token treated as content
+          CHECK (t1.render("vol=high")  == "Value missing..."_expect);      // missing key treated as false
+          
+          
+          TextTemplate t2{"Solution${if val} is ${val} ${endif val}..."};
+          CHECK (t2.render("val=42") == "Solution is 42 ..."_expect );
+          CHECK (t2.render("nil=42") == "Solution..."_expect        );
+          
+          
+          TextTemplate t3{" 1 ${if a} 2 ${if b} 3 ${else} ${b} ${endif b} 4 ${else}${if a} 5 ${else} ${a} ${endif a}${endif a} 6 "};
+          CHECK (t3.render("a=2,b=3") == " 1  2  3  4  6 "_expect );             // ^^^^^ Note can never be true here
+          CHECK (t3.render("a=2,b=0") == " 1  2  0  4  6 "_expect );
+          CHECK (t3.render("a=0,b=3") == " 1  0  6 "_expect       );             // thus if a ≙ false we see only 1 §{a} 6
+          CHECK (t3.render("a=0,b=0") == " 1  0  6 "_expect       );
         }
       
       
-      /** @test TODO
-       * @todo WIP 4/24 🔁 define ⟶ implement
+      
+      /** @test Segments of the text-template can be iterated...
+       *      - there is a control-key to guide the iteration
+       *      - how this key translates into nested data scopes
+       *        is defined by the implementation of the data binding
+       *      - for this test we use the Map-binding, which synthesises
+       *        key prefixes and expects bindings for those decorated keys
+       *      - typically, keys in inner scopes will shadow outer keys,
+       *        as is here demonstrated with the "x" key at top level
+       *      - loops and conditionals can be nested
+       * @todo WIP 4/24 ✔ define ⟶ ✔ implement
        */
       void
       verify_iteration()
         {
+          TextTemplate t1{"▶${for i} ${x} ▷${else} ∅${end for} ◇ ${i} ▶"};
+          
+          CHECK (t1.render("i=\"1,2,3\", i.1.x=3, i.2.x=5, i.3.x=8 ") == "▶ 3 ▷ 5 ▷ 8 ▷ ◇ 1,2,3 ▶"_expect );   // fully defined
+          CHECK (t1.render("i=\"3,1,2\", i.1.x=3, i.2.x=5, i.3.x=8 ") == "▶ 8 ▷ 3 ▷ 5 ▷ ◇ 3,1,2 ▶"_expect );   // order changed
+          CHECK (t1.render("i=\"3,2,3\", i.1.x=3, i.2.x=5, i.3.x=8 ") == "▶ 8 ▷ 5 ▷ 8 ▷ ◇ 3,2,3 ▶"_expect );   // duplicate entities
+          CHECK (t1.render("i=\"3,2,1\",          i.2.x=5, i.3.x=8 ") == "▶ 8 ▷ 5 ▷  ▷ ◇ 3,2,1 ▶"_expect );    // missing key for entity-1
+          CHECK (t1.render("i=\"3,2,1\",     x=↯, i.2.x=5, i.3.x=8 ") == "▶ 8 ▷ 5 ▷ ↯ ▷ ◇ 3,2,1 ▶"_expect );   // top-level key "x" partially shadowed
+          CHECK (t1.render("i=\"p,q,r\",     x=↯, i.q.x=5, i.3.x=8 ") == "▶ ↯ ▷ 5 ▷ ↯ ▷ ◇ p,q,r ▶"_expect );   // arbitrary names for the entities
+          CHECK (t1.render("i=  0      ,     x=↯, i.q.x=5, i.3.x=8 ") == "▶ ∅ ◇ 0 ▶"_expect );                 // "0" is false, thus no iteration
+          CHECK (t1.render("                 x=↯, i.q.x=5, i.3.x=8 ") == "▶ ∅ ◇  ▶"_expect );                  // no binding for iteration-control key i
+          
+          
+          TextTemplate t2{"▶${for i}${if x}${for j}${x}▷${else}${x}●${end for j}${end if x} 🔁 ${end for i} ▶"};
+          
+          CHECK (t2.render("i=\"1,2\",j=\"1,2\", x=1    , i.1.j.1.x=11, i.1.j.2.x=12, i.2.j.1.x=21, i.2.j.2.x=22") == "▶11▷12▷ 🔁 21▷22▷ 🔁  ▶"_expect );
+          CHECK (t2.render("i=\"1,2\",j=\"1,2\", i.1.x=1, i.1.j.1.x=11, i.1.j.2.x=12, i.2.j.1.x=21, i.2.j.2.x=22") == "▶11▷12▷ 🔁  🔁  ▶"_expect );
+          CHECK (t2.render("i=\"1,2\"          , x=00   , i.1.j.1.x=11, i.1.j.2.x=12, i.2.j.1.x=21, i.2.j.2.x=22") == "▶00● 🔁 00● 🔁  ▶"_expect );
+          CHECK (t2.render("i=\"1,2\"          , x=00   , i.1.x    =10,               i.2.x    =20,             ") == "▶10● 🔁 20● 🔁  ▶"_expect );
+          CHECK (t2.render("          j=\"1,2\"                                                                 ") == "▶ ▶"_expect );
+          CHECK (t2.render("                                                                                    ") == "▶ ▶"_expect );
         }
       
       
