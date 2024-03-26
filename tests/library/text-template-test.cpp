@@ -319,7 +319,7 @@ for} tail...
           
           
           VERIFY_FAIL ("TextTemplate spec without active placeholders"
-                      , TextTemplate::compile("horror boredom"));
+                      , TextTemplate::compile("O tempora O mores"));
           
           VERIFY_FAIL ("Tag without key: ...horror ${<placeholder> |↯|}"
                       , TextTemplate::compile("horror ${ } vacui"));

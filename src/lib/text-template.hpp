@@ -71,21 +71,96 @@
  ** 
  ** # Implementation notes
  ** 
- ** The template specification is parsed and compiled immediately when constructing
- ** the TextTemplate instance. At this point, syntactical errors, e.g. mismatched
- ** conditional opening and closing tags will be detected and raised as exceptions.
- ** The _compiled template_ is represented as a vector of action tokens, holding the
- ** constant parts as strings in heap memory and marking the positions of placeholders
- ** and block bounds.
+ ** The template specification is [parsed and compiled](\ref TextTemplate::parse)
+ ** immediately when constructing the TextTemplate instance. At this point, syntactical
+ ** and logical errors, e.g. mismatched conditional opening and closing tags will be
+ ** detected and raised as exceptions. The _compiled template_ is represented as a
+ ** vector of action tokens, holding the constant parts as strings in heap memory
+ ** and marking the positions of placeholders and block bounds. The branching
+ ** and looping possibly happening later, on instantiation, is prepared
+ ** by issuing appropriate branching and jump markers, referring
+ ** to other points in the sequence by index number...
+ ** - `TEXT` stores a text segment to be included literally
+ ** - `KEY`  marks the placeholders, storing the key to retrieve a substitution value
+ ** - `COND` indicates a branching point, based on a data value retrieved by key
+ ** - `ITER` indicates the start of an iteration over data indicated by key
+ ** - `LOOP` marks the end of the iterated segment, linked back to the start
+ ** - `JUMP` represents an unconditional jump to the index number given
+ ** Whenever an _else-section_ is specified in the template, a `JUMP` is emitted
+ ** beforehand, while the first `TEXT` in the _else-section_ is wired as `refIDX`
+ ** from the starting token.
  ** 
- ** The actual instantiation is initiated through TextTemplate::render(), which picks
- ** a suitable data binding (causing a compilation failure in case not binding can
+ ** The actual instantiation is initiated through TextTemplate::submit(), which picks
+ ** a suitable data binding (causing a compilation failure in case no binding can
  ** be established). This function yields an iterator, which will traverse the
  ** sequence of action tokens precompiled for this template and combine them
  ** with the retrieved data, yielding a std::string_view for each instantiated
  ** chunk of the template. The full result can thus be generated either by
  ** looping, or by invoking util::join() on the provided iterator.
- **  
+ ** 
+ ** ## Data Access
+ ** 
+ **  ** The [instantiation processing logic](\ref TextTemplate::Action::instantiate) is
+ ** defined in terms of a *data binding*, represented as TextTemplate::DataSource.
+ ** This binding, assuming a _generic data access protocol,_ has to be supplied by
+ ** a concrete (partial) specialisation of the template `DataSource<DAT>`. This
+ ** allows to render the text template with _structured data,_ in whatever
+ ** actual format the data is available. Notably, bindings are pre-defined
+ ** for string data in a Map, and for Lumiera's »[External Tree Description]«
+ ** format, based on a [generic data node](\ref gen-node.hpp). Generally speaking,
+ ** the following _abstracted primitive operations_ are required to access data:
+ ** - the `DataSource<DAT>` object itself is a copyable value object, representing
+ **   an _abstracted reference to the data._ We can assume that it stores a `const *`
+ **   internally, pointing to some data entity residing elsewhere in memory.
+ ** - it must somehow be possible, to generate a nested sub-data context, represented
+ **   by the same reference data type; this implies that there is some implementation
+ **   mechanism in place to tap into a _nested sub-scope_ within the data.
+ ** - `bool dataSrc.contains(key)` checks if a binding is available for the given \a key.
+ **   If this function returns `false` no further access is attempted for this \a key.
+ ** - `string const& retrieveContent(key)` acquires a reference to string data representing
+ **   the _content_ bound to this \a key. This string content is assumed to remain stable
+ **   in memory during the instantiation process, which exposes a `std::string_view`
+ ** - `Iter getSequence(key)` attempts to _»open« a data sequence,_ assuming that the
+ **   \a key somehow links to data that can somehow be interpreted as a sequence of
+ **   nested sub-data-entities. The result is expected as »[Lumiera Forward Iterator]«.
+ ** - `DataSource<DAT> openContext(Iter)` is supplied with the \a Iter from `getSequence()`
+ **   and assumed to return a new data binding as `DataSource` object, tied to the nested
+ **   data entity or context corresponding to the current »yield« of the Iterator. This
+ **   implies that a `Iter it` can be advanced by `++iter` and then passed in again to
+ **   get the data-src (reference handle) to access the next »sub entity«, repeating
+ **   this procedure until the iterator is _exhausted_ (bool `false`). Moreover, it is
+ **   assumed, that recursive invocations of `retrieveConent(key)` on this sub-scope
+ **   reference will yield the _data values_ designated by \a key _for this sub-entity,
+ **   as well as possibly also accessing data _visible from enclosing scopes._
+ ** 
+ ** \par Map Binding
+ ** The preconfigured binding to `std::map<string,string>` implements this protocol — relying
+ ** however on some trickery and conventions, since the map as such is one single „flat“ data
+ ** repository. The intricate part relates to iteration (which can be considered more a »proof
+ ** of concept« for testing). More specifically, accessing data for a _loop control key_ should
+ ** yield a CSV list of key prefixes. These are combined with the loop control key to form
+ ** a prefix for individual data values: `"<loop>.<entity>.<key>"`. When encountering a "key"
+ ** while in iteration, first an access is attempted with this _decoration prefix; if this
+ ** fails, a second attempt is made with the bare key alone. See TextTemplate_test::verify_iteration,
+ ** which uses a special setup, where a string of `key=value` pairs is parsed on-the-fly to populate
+ ** a `map<string,string>`
+ ** 
+ ** \par ETD Binding
+ ** While the _Map Binding_ detailed in the preceding paragraph is mostly intended to handle
+ ** simple key substitutions, the more elaborate binding to `GenNode` data (ETD) is meant to
+ ** handle structural data, as encountered in the internal communication of components within
+ ** the Lumiera application — notably the »diff binding« used to populate the GUI with entities
+ ** represented in the _Session Model_ in Steam-Layer. The mapping is straight-forward, as the
+ ** required concepts can be supported directly
+ ** - Key lookup is translated into _Attribute Lookup_ — starting in the current record and
+ **   possibly walking up a scope path
+ ** - the loop key accesses a _nested Attribute_ (lib::diff::GenNode) and exposes its _children_
+ **   for the iteration; thus each entity is again a `Rec<GenNode>` and can be represented
+ **   recursively as a DataSource<Rec<GenNode>>
+ ** - the DataSource implementation includes an  _optional parent link,_ which is consulted
+ **   whenever _Attribute Lookup_ in the current record does not yield a result.    
+ ** [External Tree Description]: https://lumiera.org/documentation/design/architecture/ETD.html
+ ** [Lumiera Forward Iterator]: https://lumiera.org/documentation/technical/library/iterator.html
  ** @todo WIP-WIP-WIP 3/2024
  ** @see TextTemplate_test
  ** @see gnuplot-gen.hpp
@@ -132,7 +207,7 @@ namespace lib {
     const regex ACCEPT_DATA_ELM   {MATCH_DELIMITER + MATCH_DATA_TOKEN};
     
     inline auto
-    iterNestedKeys (string key, string const& iterDef)
+    iterNestedKeys (string key, StrView const& iterDef)
     {
       return explore (util::RegexSearchIter{iterDef, ACCEPT_DATA_ELM})
                 .transform ([key](smatch mat){ return key+"."+string{mat[1]}+"."; });
@@ -274,7 +349,7 @@ namespace lib {
           Idx refIDX{0};
           
           template<class SRC>
-          StrView instantiate (InstanceCore<SRC>&)  const;
+          auto instantiate (InstanceCore<SRC>&)  const;
         };
       
       /** the text template is compiled into a sequence of Actions */
@@ -296,25 +371,27 @@ namespace lib {
           using DataCtxIter = typename SRC::Iter;
           using NestedCtx = std::pair<DataCtxIter, SRC>;
           using CtxStack = std::stack<NestedCtx, std::vector<NestedCtx>>;
+          using Value   = typename SRC::Value;
           
           SRC        dataSrc_;
           ActionIter actionIter_;
           CtxStack   ctxStack_;
-          StrView    rendered_;
+          Value      rendered_;
           
         public:
           InstanceCore (ActionSeq const& actions, SRC);
           
           bool checkPoint() const;
-          StrView& yield()  const;
+          auto& yield()  const;
           void iterNext();
           
-          StrView instantiateNext();
-          StrView reInstatiate (Idx =Idx(-1));
-          StrView getContent(string key);
+          Value instantiateNext();
+          Value reInstatiate (Idx =Idx(-1));
+          Value getContent(string key);
           bool conditional (string key);
           bool openIteration (string key);
           bool loopFurther();
+          void focusNested();
         };
       
       
@@ -579,6 +656,10 @@ namespace lib {
         : data_{&map}
         { }
       
+      
+      using Value = std::string_view;
+      using Iter = decltype(iterNestedKeys("",""));
+      
       bool
       contains (string key)
         {
@@ -586,7 +667,7 @@ namespace lib {
               or util::contains (*data_, key);
         }
       
-      string const&
+      Value
       retrieveContent (string key)
         {
           MapS::const_iterator elm;
@@ -601,9 +682,6 @@ namespace lib {
           ENSURE (elm != data_->end());
           return elm->second;
         }
-      
-      
-      using Iter = decltype(iterNestedKeys("",""));
       
       Iter
       getSequence (string key)
@@ -684,12 +762,13 @@ namespace lib {
    * @return a string-view pointing to the effective rendered chunk corresponding to this action
    */
   template<class SRC>
-  inline StrView
+  inline auto
   TextTemplate::Action::instantiate (InstanceCore<SRC>& core)  const
   {
+    using Result = decltype (core.getContent(val));
     switch (code) {
       case TEXT:
-        return val;
+        return Result(val);
       case KEY:
         return core.getContent (val);
       case COND:
@@ -733,7 +812,7 @@ namespace lib {
   }
   
   template<class SRC>
-  inline StrView&
+  inline auto&
   TextTemplate::InstanceCore<SRC>::yield()  const
   {
     return unConst(this)->rendered_;
@@ -750,7 +829,7 @@ namespace lib {
   
   /** Instantiate next Action token and expose its rendering */
   template<class SRC>
-  inline StrView
+  inline typename SRC::Value
   TextTemplate::InstanceCore<SRC>::instantiateNext()
   {
     return actionIter_? actionIter_->instantiate(*this)
@@ -764,7 +843,7 @@ namespace lib {
    * @return the rendering produced by the selected next Action token
    */
   template<class SRC>
-  inline StrView
+  inline typename SRC::Value
   TextTemplate::InstanceCore<SRC>::reInstatiate (Idx nextCode)
   {
     if (nextCode == Idx(-1))
@@ -776,7 +855,7 @@ namespace lib {
   
   /** retrieve a data value from the data source for the indiated key */
   template<class SRC>
-  inline StrView
+  inline typename SRC::Value
   TextTemplate::InstanceCore<SRC>::getContent (string key)
   {
     static StrView nil{""};
@@ -811,7 +890,7 @@ namespace lib {
         {
           ctxStack_.push (NestedCtx{move (dataIter)
                                    ,dataSrc_});
-          dataSrc_ = dataSrc_.openContext (ctxStack_.top().first);
+          focusNested();
           return true;
         }
     return false;
@@ -831,7 +910,7 @@ namespace lib {
     ++dataIter;
     if (dataIter)
       {             // open next nested context *from enclosing context*
-        dataSrc_ = ctxStack_.top().second.openContext (dataIter);
+        focusNested();
         return true;
       }
     else
@@ -840,6 +919,28 @@ namespace lib {
         ctxStack_.pop();
         return false;
       }
+  }
+  
+  /**
+   * Step down into the innermost data item context, prepared at the top of #ctxStack_.
+   * This includes re-assigning the current #dataSrc_ to a new nested data scope,
+   * created from the enclosing scope, which is assumed to sit at the top of ctxStack_,
+   * and which is _guaranteed to rest locked at this memory location_ as long as operation
+   * is carried on within the new nested context. This is to say that a pointer to the
+   * parent scope (residing at ctxStack_.top()) can be embedded and used from this
+   * nested context safely. To leave this nested scope, it is sufficient to
+   * swap this->dataSrc_ with the stack top and then pop the topmost frame.
+   */
+  template<class SRC>
+  inline void
+  TextTemplate::InstanceCore<SRC>::focusNested()
+  {
+    REQUIRE (not ctxStack_.empty());
+    NestedCtx& innermostScope = ctxStack_.top();
+    DataCtxIter& currentDataItem = innermostScope.first;
+    SRC&         parentDataSrc = innermostScope.second;
+    
+    this->dataSrc_ = parentDataSrc.openContext (currentDataItem);
   }
   
   

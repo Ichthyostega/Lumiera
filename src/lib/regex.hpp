@@ -41,6 +41,7 @@ namespace util {
   using std::regex;
   using std::smatch;
   using std::string;
+  using std::string_view;
   
   
   
@@ -52,6 +53,10 @@ namespace util {
       
       RegexSearchIter (string const& toParse, regex const& regex)
         : std::sregex_iterator{toParse.begin(), toParse.end(), regex}
+        { }
+      RegexSearchIter (string_view toParse, regex const& regex)
+        : std::sregex_iterator{string::const_iterator{toParse.begin()}
+                              ,string::const_iterator{toParse.end()}, regex}
         { }
       
       operator bool()  const { return isValid(); }
