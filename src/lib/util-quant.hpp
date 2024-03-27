@@ -146,6 +146,7 @@ namespace util {
    * @see https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
    * @see http://en.cppreference.com/w/cpp/types/numeric_limits/epsilon
    * @see https://en.wikipedia.org/wiki/Unit_in_the_last_place
+   * @todo 3/2024 seems we have solved this problem several times meanwhile /////////////////////////////////TICKET #1360 sort out floating-point rounding and precision
    */
   inline bool
   almostEqual (double d1, double d2, unsigned int ulp =2)

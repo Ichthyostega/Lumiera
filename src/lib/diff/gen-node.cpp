@@ -157,7 +157,7 @@ namespace diff{
   DataCap::matchDbl (double d)  const
   {
     class MatchDouble
-      : public Variant<DataValues>::Predicate
+      : public Variant<DataValues>::Predicate                    //////////////////////////////////TICKET #1360 floating-point precision
       {
         double num_;
 

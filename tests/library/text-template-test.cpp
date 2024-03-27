@@ -29,6 +29,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"///////////////////////TODO
 #include "lib/text-template.hpp"
+#include "lib/text-template-gen-node-binding.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"///////////////////////TODO
 #include "lib/test/diagnostic-output.hpp"///////////////////////TODO

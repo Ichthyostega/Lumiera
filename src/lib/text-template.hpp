@@ -163,6 +163,7 @@
  ** [Lumiera Forward Iterator]: https://lumiera.org/documentation/technical/library/iterator.html
  ** @todo WIP-WIP-WIP 3/2024
  ** @see TextTemplate_test
+ ** @see text-template-gen-node-binding.hpp
  ** @see gnuplot-gen.hpp
  ** @see SchedulerStress_test
  */

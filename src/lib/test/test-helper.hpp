@@ -75,7 +75,7 @@ namespace test{
   {
     REQUIRE (0 < limit);
     return abs (val/target - F(1)) < limit;
-  }
+  }                                  //////////////////////////////////////////////////////////////////////////TICKET #1360 looks like this problem was solved several times
   
   
   template<typename F>
