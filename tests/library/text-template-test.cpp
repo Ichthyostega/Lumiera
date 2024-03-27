@@ -42,6 +42,7 @@ using std::regex_search;
 using std::smatch;
 using util::_Fmt;
 using util::join;
+using lib::diff::MakeRec;
 
 
 namespace lib {
@@ -455,6 +456,66 @@ for} tail...
       void
       verify_Map_binding()
         {
+          MapS data{{"a","5"}
+                   ,{"i","p,q,r"}
+                   ,{"i.p.a","11"}
+                   ,{"i.q.a","22"}
+                   ,{"i.q.aa","222"}};
+          
+          auto binding = bindDataSource (data);
+          CHECK (meta::typeStr(binding) == "TextTemplate::DataSource<map<string, string>, void>"_expect );
+          CHECK (    binding.contains("a"));
+          CHECK (not binding.contains("b"));
+          CHECK (binding.retrieveContent("a")      == "5"_expect );
+          CHECK (binding.retrieveContent("i")      == "p,q,r"_expect );
+          CHECK (binding.retrieveContent("i.q.aa") == "222"_expect );
+          CHECK (not binding.isNested());
+          
+          auto it = binding.getSequence("i");
+          CHECK (it);
+          CHECK (*it == "i.p."_expect );
+          CHECK (meta::typeStr(it) == "IterExplorer<IterableDecorator<string, CheckedCore<iter_explorer::Transformer<iter_explorer::BaseAdapter<RegexSearchIter>, string> > > >"_expect );
+          
+          auto subBind = binding.openContext(it);
+          CHECK (subBind.isNested());
+          CHECK ((meta::is_same<decltype(binding),decltype(subBind)>()));
+          CHECK (    subBind.contains("a"));
+          CHECK (not subBind.contains("b"));
+          CHECK (not subBind.contains("aa"));
+          CHECK (    subBind.contains("i"));
+          CHECK (subBind.retrieveContent("i") == "p,q,r"_expect );
+          CHECK (subBind.retrieveContent("a") == "11"_expect );
+          
+          ++it;
+          CHECK (it);
+          CHECK (*it == "i.q."_expect );
+          
+          // Note: existing sub-ctx is not automatically linked to the Iterator
+          CHECK (subBind.retrieveContent("a") == "11"_expect );
+          // ...rather need to open a new sub-ctx explicitly
+          subBind = binding.openContext(it);
+          CHECK (subBind.isNested());
+          CHECK (subBind.contains("a"));
+          CHECK (subBind.contains("aa"));
+          CHECK (subBind.retrieveContent("a")     == "22"_expect );
+          CHECK (subBind.retrieveContent("aa")    == "222"_expect);
+          CHECK (subBind.retrieveContent("i.p.a") == "11"_expect );
+          CHECK (subBind.retrieveContent("i.q.a") == "22"_expect );
+          
+          ++it;
+          CHECK (it);
+          CHECK (*it == "i.r."_expect );
+          
+          subBind = binding.openContext(it);
+          CHECK (    subBind.contains("a"));
+          CHECK (not subBind.contains("aa"));
+          CHECK (subBind.retrieveContent("a")     == "5"_expect  );
+          CHECK (subBind.retrieveContent("i.p.a") == "11"_expect );
+          CHECK (subBind.retrieveContent("i.q.a") == "22"_expect );
+          
+          ++it;
+          CHECK (isnil (it));
+          VERIFY_ERROR (ITER_EXHAUST, *it);
         }
       
       
@@ -464,6 +525,106 @@ for} tail...
       void
       verify_ETD_binding()
         {
+          auto root = MakeRec()
+                      .set("a", 5)
+                      .set("i", MakeRec()
+                                .scope( MakeRec()
+                                          .set("a", 11)
+                                        .genNode()
+                                      , MakeRec()
+                                          .set("a", 22)
+                                          .set("aa", 222)
+                                        .genNode()
+                                      ))
+                      .genNode();
+SHOW_EXPR(root)
+          auto binding = bindDataSource (root);
+SHOW_TYPE(decltype(binding))
+SHOW_EXPR(meta::typeStr(binding))
+SHOW_EXPR(binding.contains("a"))
+SHOW_EXPR(binding.contains("b"))
+SHOW_EXPR(binding.retrieveContent("a"))
+SHOW_EXPR(binding.retrieveContent("i"))
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////////          
+SHOW_EXPR(binding.retrieveContent("i.q.aa"))
+SHOW_EXPR(binding.isNested())
+          CHECK (meta::typeStr(binding) == "TextTemplate::DataSource<map<string, string>, void>"_expect );
+          CHECK (    binding.contains("a"));
+          CHECK (not binding.contains("b"));
+          CHECK (binding.retrieveContent("a")      == "5"_expect );
+          CHECK (binding.retrieveContent("i")      == "p,q,r"_expect );
+          CHECK (binding.retrieveContent("i.q.aa") == "222"_expect );
+          CHECK (not binding.isNested());
+          
+          auto it = binding.getSequence("i");
+SHOW_EXPR(meta::typeStr(it))
+SHOW_EXPR(bool(it))
+SHOW_EXPR(*it)
+          CHECK (it);
+          CHECK (*it == "i.p."_expect );
+          CHECK (meta::typeStr(it) == "IterExplorer<IterableDecorator<string, CheckedCore<iter_explorer::Transformer<iter_explorer::BaseAdapter<RegexSearchIter>, string> > > >"_expect );
+          
+          auto subBind = binding.openContext(it);
+SHOW_EXPR(meta::typeStr(subBind))
+SHOW_EXPR(bool(std::is_same<decltype(binding),decltype(subBind)>()))
+SHOW_EXPR(subBind.isNested())
+SHOW_EXPR(subBind.contains("a"))
+SHOW_EXPR(subBind.contains("b"))
+SHOW_EXPR(subBind.contains("aa"))
+SHOW_EXPR(subBind.contains("i"))
+SHOW_EXPR(subBind.retrieveContent("i"))
+SHOW_EXPR(subBind.retrieveContent("a"))
+          CHECK (subBind.isNested());
+          CHECK ((meta::is_same<decltype(binding),decltype(subBind)>()));
+          CHECK (    subBind.contains("a"));
+          CHECK (not subBind.contains("b"));
+          CHECK (not subBind.contains("aa"));
+          CHECK (    subBind.contains("i"));
+          CHECK (subBind.retrieveContent("i") == "p,q,r"_expect );
+          CHECK (subBind.retrieveContent("a") == "11"_expect );
+          ++it;
+SHOW_EXPR(bool(it))
+SHOW_EXPR(*it)
+          CHECK (it);
+          CHECK (*it == "i.q."_expect );
+SHOW_EXPR(subBind.retrieveContent("a"))
+          CHECK (subBind.retrieveContent("a") == "11"_expect );
+          subBind = binding.openContext(it);
+SHOW_EXPR(subBind.isNested())
+SHOW_EXPR(subBind.contains("a"))
+SHOW_EXPR(subBind.contains("aa"))
+SHOW_EXPR(subBind.retrieveContent("a"))
+SHOW_EXPR(subBind.retrieveContent("aa"))
+SHOW_EXPR(subBind.retrieveContent("i.p.a"))
+SHOW_EXPR(subBind.retrieveContent("i.q.a"))
+          CHECK (subBind.isNested());
+          CHECK (subBind.contains("a"));
+          CHECK (subBind.contains("aa"));
+          CHECK (subBind.retrieveContent("a")     == "22"_expect );
+          CHECK (subBind.retrieveContent("aa")    == "222"_expect);
+          CHECK (subBind.retrieveContent("i.p.a") == "11"_expect );
+          CHECK (subBind.retrieveContent("i.q.a") == "22"_expect );
+          ++it;
+SHOW_EXPR(bool(it))
+          CHECK (it);
+SHOW_EXPR(*it)
+          CHECK (*it == "i.r."_expect );
+          subBind = binding.openContext(it);
+SHOW_EXPR(subBind.contains("a"))
+SHOW_EXPR(subBind.contains("aa"))
+SHOW_EXPR(subBind.retrieveContent("a"))
+SHOW_EXPR(subBind.retrieveContent("i.p.a"))
+SHOW_EXPR(subBind.retrieveContent("i.q.a"))
+          CHECK (    subBind.contains("a"));
+          CHECK (not subBind.contains("aa"));
+          CHECK (subBind.retrieveContent("a")     == "5"_expect  );
+          CHECK (subBind.retrieveContent("i.p.a") == "11"_expect );
+          CHECK (subBind.retrieveContent("i.q.a") == "22"_expect );
+          ++it;
+SHOW_EXPR(bool(it))
+          CHECK (isnil (it));
+          VERIFY_ERROR (ITER_EXHAUST, *it);
+#endif          
         }
     };
   
