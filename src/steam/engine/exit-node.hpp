@@ -24,7 +24,7 @@
  ** Effective top-level exit point to pull rendered data from the nodes network.
  ** 
  ** @todo 6/2023 WIP-WIP used as placeholder; relation to ProcNode not yet determined           /////////////TICKET #1306
- ** @see procnode.hpp
+ ** @see proc-node.hpp
  */
 
 #ifndef ENGINE_EXIT_NODE_H

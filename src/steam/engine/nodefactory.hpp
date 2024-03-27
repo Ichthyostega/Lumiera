@@ -32,7 +32,7 @@
 #ifndef ENGINE_NODEFACTORY_H
 #define ENGINE_NODEFACTORY_H
 
-#include "steam/engine/procnode.hpp"
+#include "steam/engine/proc-node.hpp"
 #include "steam/mobject/placement.hpp"
 #include "steam/engine/nodewiring.hpp"
 

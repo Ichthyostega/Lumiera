@@ -27,7 +27,7 @@
  */
 
 
-#include "steam/engine/procnode.hpp"
+#include "steam/engine/proc-node.hpp"
 #include "steam/engine/nodewiring.hpp"
 #include "steam/engine/nodeoperation.hpp"
 #include "steam/engine/nodewiring-config.hpp"

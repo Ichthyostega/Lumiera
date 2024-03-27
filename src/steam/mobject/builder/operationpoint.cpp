@@ -28,7 +28,7 @@
 
 
 #include "steam/mobject/builder/operationpoint.hpp"
-#include "steam/engine/procnode.hpp"
+#include "steam/engine/proc-node.hpp"
 #include "steam/asset/media.hpp"
 #include "steam/asset/proc.hpp"
 #include "steam/engine/nodefactory.hpp"

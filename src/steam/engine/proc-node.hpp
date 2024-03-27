@@ -1,5 +1,5 @@
 /*
-  PROCNODE.hpp  -  Key abstraction of the Render Engine: a Processing Node
+  PROC-NODE.hpp  -  Key abstraction of the Render Engine: a Processing Node
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,7 +20,7 @@
 
 */
 
-/** @file procnode.hpp
+/** @file proc-node.hpp
  ** Interface to the processing nodes and the render nodes network.
  **
  ** Actually, there are three different interfaces to consider

@@ -33,7 +33,7 @@
 #ifndef STEAM_ENGINE_MASK_H
 #define STEAM_ENGINE_MASK_H
 
-#include "steam/engine/procnode.hpp"
+#include "steam/engine/proc-node.hpp"
 
 
 

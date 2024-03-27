@@ -36,7 +36,7 @@
 #ifndef ENGINE_SOURCE_H
 #define ENGINE_SOURCE_H
 
-#include "steam/engine/procnode.hpp"
+#include "steam/engine/proc-node.hpp"
 
 
 

@@ -28,7 +28,7 @@
 #include "lib/test/run.hpp"
 #include "lib/error.hpp"
 
-#include "steam/engine/procnode.hpp"
+#include "steam/engine/proc-node.hpp"
 #include "steam/engine/bufftable-obsolete.hpp"
 #include "lib/ref-array.hpp"
 #include "lib/format-cout.hpp"

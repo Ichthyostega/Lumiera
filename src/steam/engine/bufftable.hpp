@@ -36,7 +36,7 @@
 
 #include "lib/error.hpp"
 #include "steam/engine/buffhandle.hpp"
-#include "steam/engine/procnode.hpp"
+#include "steam/engine/proc-node.hpp"
 #include "lib/iter-adapter.hpp"
 
 #include <vector>

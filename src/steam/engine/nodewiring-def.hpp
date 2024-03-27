@@ -40,7 +40,7 @@
 #define ENGINE_NODEWIRING_DEF_H
 
 
-#include "steam/engine/procnode.hpp"
+#include "steam/engine/proc-node.hpp"
 #include "lib/ref-array.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/nocopy.hpp"

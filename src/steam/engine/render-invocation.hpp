@@ -37,7 +37,7 @@
 
 
 //#include "steam/state.hpp"
-#include "steam/engine/procnode.hpp"
+#include "steam/engine/proc-node.hpp"
 #include "steam/engine/buffhandle.hpp"
 //#include "steam/engine/bufftable-obsolete.hpp"
 
