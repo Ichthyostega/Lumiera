@@ -50,8 +50,10 @@
 #include <boost/lexical_cast.hpp>
 
 
+using util::join;
 using boost::lexical_cast;
 using lib::time::TimeValue;
+using lib::transformIterator;
 using util::almostEqual;
 using lib::hash::LuidH;
 
@@ -287,6 +289,72 @@ namespace diff{
   DataCap::operator string()  const
   {
     return "DataCap|"+string(this->buffer());
+  }
+  
+  
+  
+  
+  
+  /** compact textual representation of a Record<GenNode> (»object«). */
+  string renderCompact (Rec const& rec)
+  {
+    auto renderChild  = [](diff::GenNode const& n){ return renderCompact(n); };
+    auto renderAttrib = [](diff::GenNode const& n){
+                                                    return (n.isNamed()? n.idi.getSym()+"=" : "")
+                                                         +  renderCompact(n);
+                                                  };
+    
+    return (Rec::TYPE_NIL==rec.getType()? "" : rec.getType())
+         + "{"
+         +  join (transformIterator (rec.attribs(), renderAttrib))
+         + (isnil(rec.scope())?   "" : "|")
+         +  join (transformIterator (rec.scope()  , renderChild))
+         + "}"
+         ;
+  }
+  
+  string
+  renderCompact (RecRef const& ref)
+  {
+    return "Ref->" + (ref.empty()? util::BOTTOM_INDICATOR
+                                 : renderCompact (*ref.get()));
+  }
+  
+  /** @remark presentation is oriented towards readability
+   *   - numbers are slightly rounded (see \ref util::showDouble() )
+   *   - time values are displayed timecode-like
+   *   - nested scopes are displayed recursively, enclosed in curly brackets
+   * @see text-template-gen-node-binding.hpp
+   */
+  string
+  renderCompact (GenNode const& node)
+  {
+        class Renderer
+          : public Variant<diff::DataValues>::Renderer
+          {
+    #define RENDER_CONTENT(_TY_) \
+            virtual string handle  (_TY_ const& val) override { return util::toString(val); }
+            
+            RENDER_CONTENT (int)
+            RENDER_CONTENT (int64_t)
+            RENDER_CONTENT (short)
+            RENDER_CONTENT (char)
+            RENDER_CONTENT (double)
+            RENDER_CONTENT (bool)
+            RENDER_CONTENT (time::Time)
+            RENDER_CONTENT (time::Offset)
+            RENDER_CONTENT (time::Duration)
+            RENDER_CONTENT (time::TimeSpan)
+     #undef RENDER_CONTENT
+            
+            virtual string handle (string const& val) override { return val; }
+            virtual string handle (LuidH const& val)  override { return util::showHash(val, 2);}
+            virtual string handle (RecRef const& ref) override { return renderCompact(ref); }
+            virtual string handle (Rec const& rec)    override { return renderCompact(rec); }
+          };
+    
+    Renderer visitor;
+    return node.data.accept (visitor);
   }
   
   

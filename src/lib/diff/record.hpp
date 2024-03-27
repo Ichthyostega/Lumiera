@@ -683,6 +683,12 @@ namespace diff{
           return record_;
         }
       
+      operator string()  const
+        {
+          return "Ref->" + (empty()? util::BOTTOM_INDICATOR
+                                   : string(*record_));
+        }
+      
       /** @note equality of references (instance pointers), not targets */
       friend bool
       operator== (RecordRef const& r1, RecordRef const& r2)

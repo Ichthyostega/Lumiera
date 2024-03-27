@@ -252,6 +252,13 @@ namespace lib {
           virtual ~Predicate() { } ///< this is an interface
         };
       
+      class Renderer
+        : public VisitorConstFunc<string>
+        {
+        public:
+          virtual ~Renderer() { } ///< this is an interface
+        };                                                      ///////////////////////////////////TICKET #1361 : unable to make the Visitor fully generic
+      
       /**
        * Metafunction to pick the first of the variant's types,
        * which satisfies the given trait or predicate template
@@ -274,9 +281,10 @@ namespace lib {
           
           virtual ~Buffer() {}           ///< this is an ABC with VTable
           
-          virtual void dispatch (Visitor&)         =0;
-          virtual bool dispatch (Predicate&) const =0;
-          virtual operator string()          const =0;
+          virtual void   dispatch (Visitor&)         =0;
+          virtual bool   dispatch (Predicate&) const =0;
+          virtual string dispatch (Renderer&)  const =0;
+          virtual operator string()            const =0;
         };
       
       
@@ -374,6 +382,15 @@ namespace lib {
           dispatch (Predicate& visitor)  const
             {
               using Dispatcher = variant::VFunc<bool>::template ValueAcceptInterface<const TY>;
+              
+              Dispatcher& typeDispatcher = visitor;
+              return typeDispatcher.handle (this->access());
+            }
+          
+          string
+          dispatch (Renderer& visitor)  const
+            {
+              using Dispatcher = variant::VFunc<string>::template ValueAcceptInterface<const TY>;
               
               Dispatcher& typeDispatcher = visitor;
               return typeDispatcher.handle (this->access());
@@ -533,6 +550,12 @@ namespace lib {
       
       bool
       accept (Predicate& visitor)  const
+        {
+          return buffer().dispatch (visitor);
+        }
+      
+      string
+      accept (Renderer& visitor)  const
         {
           return buffer().dispatch (visitor);
         }

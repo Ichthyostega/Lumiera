@@ -147,6 +147,8 @@ namespace test{
           CHECK (!n3.isNamed());
           
           cout << n3 <<endl; // diagnostic spam
+          
+          CHECK (renderCompact(n3) == "spam{ham=eggs}"_expect);
         }
       
       
@@ -288,6 +290,8 @@ namespace test{
           cout << "--spam--"<<endl;
           for (auto & elm : n)
             cout << elm <<endl;
+          
+          CHECK (renderCompact(n) == "{hasSpam=true|*, ★, 3.1415927, ham{|eggs, spam, spam}, 0:00:00.000≺920ms≻, 42}"_expect);
           
           
           auto iter = n.begin();

@@ -501,6 +501,15 @@ namespace diff{
     };
   
   
+  /** compact textual representation of a GenNode tree */
+  string renderCompact (GenNode const&);
+  string renderCompact (RecRef const&);
+  string renderCompact (Rec const&);
+  
+  
+  
+  
+  
   
   /**
    * metafunction to detect types able to be wrapped into a GenNode.
