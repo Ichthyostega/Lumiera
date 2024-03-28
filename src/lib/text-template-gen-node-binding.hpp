@@ -49,8 +49,7 @@
  **   can expand a `${value}` placeholder in that scope.
  ** - Attributes of enclosing scopes are also visible — unless shadowed.
  ** [ETD]: https://lumiera.org/documentation/design/architecture/ETD.html
- ** @todo WIP-WIP-WIP 3/2024
- ** @see TextTemplate_test
+ ** @see TextTemplate_test::verify_ETD_binding
  */
 
 
@@ -60,124 +59,99 @@
 
 #include "lib/diff/gen-node.hpp"
 #include "lib/text-template.hpp"
-//#include "lib/format-string.hpp"
-//#include "lib/format-util.hpp"
-//#include "lib/regex.hpp"
-//#include "lib/util.hpp"
 
-//#include <memory>
 #include <string>
-//#include <vector>
-//#include <stack>
-//#include <map>
 
 
 namespace lib {
   
   using std::string;
-//  using StrView = std::string_view;
-//  
-//  using util::_Fmt;
-//  using util::isnil;
-//  using util::unConst;
   
   
-  namespace {
+  namespace text_template {
     
-  }
-  
-  /* ======= Data binding for GenNode (ETD) ======= */
-  
-  /**
-   * Data-binding for a tree of GenNode data (ETD).
-   * Attributes are accessible as keys, while iteration descends
-   * into the child scope of the attribute indicated in the ${for <key>}` tag.
-   * @see TextTemplate_test::verify_ETD_binding()
-   */
-  template<>
-  struct TextTemplate::DataSource<diff::GenNode>
-    {
-      using Node = diff::GenNode;
-      using Rec  = diff::Rec;
-      
-      Node const* data_;
-      DataSource* parScope_;
-      bool isSubScope() { return bool(parScope_); }
-      
-      DataSource(Node const& root)
-        : data_{&root}
-        , parScope_{nullptr}
-        { }
-      
-      
-      using Value = std::string;
-      using Iter = Rec::scopeIter;
-      
-      Node const*
-      findNode (string key)
-        {
-          if (data_->isNested())
-            {// standard case: Attribute lookup
-              Rec const& record = data_->data.get<Rec>();
-              if (record.hasAttribute (key))
-                return & record.get (key);
-            }
-          else
-          if ("value" == key) // special treatment for a »pseudo context«
-            return data_;    //  comprised only of a single value node
-          else
-          if (isSubScope())
-            return parScope_->findNode (key);
-          
-          return nullptr;
-        }
-      
-      bool
-      contains (string key)
-        {
-          return bool(findNode (key));
-        }
-      
-      Value
-      retrieveContent (string key)
-        {
-          return Value(findNode(key)->data);  ///////////////////////////////OOO this is not correct -- need a way to render the bare content
-        }
-      
-      Iter
-      getSequence (string key)
-        {
-          if (not contains(key))
-            return Iter{};
-          Node const* node = findNode (key);
-          if (not node->isNested())
-            return Iter{};
-          else
-            return node->data.get<Rec>().scope();
-        }
-      
-      DataSource
-      openContext (Iter& iter)
-        {
-          REQUIRE (iter);
-          DataSource nested{*this};
-          nested.parScope_ = this;
-          nested.data_ = & *iter;
-          return nested;
-        }
-    };
-  
-  
-  namespace {// help the compiler with picking the proper specialisation for the data binding
+    /* ======= Data binding for GenNode (ETD) ======= */
     
-    inline auto
-    bindDataSource(diff::GenNode const& etd)
+    /**
+     * Data-binding for a tree of GenNode data (ETD).
+     * Attributes are accessible as keys, while iteration descends
+     * into the child scope of the attribute indicated in the ${for <key>}` tag.
+     * @see TextTemplate_test::verify_ETD_binding()
+     */
+    template<>
+    struct DataSource<diff::GenNode>
       {
-        return TextTemplate::DataSource<diff::GenNode>{etd};
-      }
-  }
-  
-  
+        using Node = diff::GenNode;
+        using Rec  = diff::Rec;
+        
+        Node const* data_;
+        DataSource* parScope_;
+        bool isSubScope() { return bool(parScope_); }
+        
+        DataSource(Node const& root)
+          : data_{&root}
+          , parScope_{nullptr}
+          { }
+        
+        
+        using Value = std::string;
+        using Iter = Rec::scopeIter;
+        
+        Node const*
+        findNode (string key)
+          {
+            if (data_->isNested())
+              {// standard case: Attribute lookup
+                Rec const& record = data_->data.get<Rec>();
+                if (record.hasAttribute (key))
+                  return & record.get (key);
+              }
+            else
+            if ("value" == key) // special treatment for a »pseudo context«
+              return data_;    //  comprised only of a single value node
+             // ask parent scope...
+            if (isSubScope())
+              return parScope_->findNode (key);
+            
+            return nullptr;
+          }
+        
+        bool
+        contains (string key)
+          {
+            return bool(findNode (key));
+          }
+        
+        Value
+        retrieveContent (string key)
+          {
+            return renderCompact (*findNode(key));
+          }
+        
+        Iter
+        getSequence (string key)
+          {
+            if (not contains(key))
+              return Iter{};
+            Node const* node = findNode (key);
+            if (not node->isNested())
+              return Iter{};
+            else
+              return node->data.get<Rec>().scope();
+          }
+        
+        DataSource
+        openContext (Iter& iter)
+          {
+            REQUIRE (iter);
+            DataSource nested{*this};
+            nested.parScope_ = this;
+            nested.data_ = & *iter;
+            return nested;
+          }
+      };
+    
+  }// namespace text_template
   
 }// namespace lib
 #endif /*LIB_TEXT_TEMPLATE_GEN_NODE_BINDING_H*/

@@ -27,13 +27,9 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"///////////////////////TODO
+#include "lib/test/test-helper.hpp"
 #include "lib/text-template.hpp"
 #include "lib/text-template-gen-node-binding.hpp"
-#include "lib/format-string.hpp"
-#include "lib/format-cout.hpp"///////////////////////TODO
-#include "lib/test/diagnostic-output.hpp"///////////////////////TODO
-#include "lib/stat/csv.hpp"
 
 #include <map>
 
@@ -42,7 +38,9 @@ using std::regex_search;
 using std::smatch;
 using util::_Fmt;
 using util::join;
+using lib::diff::Rec;
 using lib::diff::MakeRec;
+using lib::diff::GenNode;
 
 
 namespace lib {
@@ -50,6 +48,9 @@ namespace test {
   
   using MapS = std::map<string, string>;
   using LERR_(ITER_EXHAUST);
+  
+  using text_template::ACCEPT_MARKUP;
+  using text_template::TagSyntax;
   
   
   /***************************************************************************//**
@@ -79,9 +80,7 @@ namespace test {
         }
       
       
-      /** @test simple point-and-shot usage...
-       * @todo WIP 4/24 ✔ define ⟶ ✔ implement
-       */
+      /** @test simple point-and-shot usage... */
       void
       simpeUsage()
         {
@@ -100,7 +99,6 @@ namespace test {
        *       - 3 ≙ end token
        *       - 4 ≙ some logic token ("if" or "for")
        *       - 5 ≙ a key or key path
-       * @todo WIP 4/24 ✔ define ⟶ ✔ implement
        */
       void
       verify_parsing()
@@ -197,7 +195,7 @@ namespace test {
           
           
           // Parse matches of this regexp into well defined syntax elements
-          auto parser = parse (input);
+          auto parser = text_template::parse (input);
           CHECK (not isnil(parser));
           CHECK (parser->syntax == TagSyntax::KEYID);
           CHECK (parser->lead == "one "_expect);
@@ -359,9 +357,7 @@ for} tail...
       
       
       
-      /** @test Compile a template and instantiate with various data bindings.
-       * @todo WIP 4/24 ✔ define ⟶ ✔ implement
-       */
+      /** @test Compile a template and instantiate with various data bindings. */
       void
       verify_instantiation()
         {
@@ -381,8 +377,7 @@ for} tail...
       
       
       /** @test Segments of the text-template can be included
-       *        conditionally, based on interpretation of a controlling key
-       * @todo WIP 4/24 ✔ define ⟶ ✔ implement
+       *        conditionally, based on interpretation of a controlling key.
        */
       void
       verify_conditional()
@@ -420,9 +415,8 @@ for} tail...
        *      - for this test we use the Map-binding, which synthesises
        *        key prefixes and expects bindings for those decorated keys
        *      - typically, keys in inner scopes will shadow outer keys,
-       *        as is here demonstrated with the "x" key at top level
+       *        as is demonstrated here with the "x" key at top level
        *      - loops and conditionals can be nested
-       * @todo WIP 4/24 ✔ define ⟶ ✔ implement
        */
       void
       verify_iteration()
@@ -450,8 +444,10 @@ for} tail...
         }
       
       
-      /** @test TODO
-       * @todo WIP 4/24 🔁 define ⟶ implement
+      
+      /** @test build a data binding to a map-of-strings,
+       *        and verify all the operations used internally
+       *        by the text-template engine to navigate the data.
        */
       void
       verify_Map_binding()
@@ -462,14 +458,14 @@ for} tail...
                    ,{"i.q.a","22"}
                    ,{"i.q.aa","222"}};
           
-          auto binding = bindDataSource (data);
-          CHECK (meta::typeStr(binding) == "TextTemplate::DataSource<map<string, string>, void>"_expect );
+          auto binding = text_template::DataSource{data};
+          CHECK (meta::typeStr(binding) == "text_template::DataSource<map<string, string>, void>"_expect );
           CHECK (    binding.contains("a"));
           CHECK (not binding.contains("b"));
           CHECK (binding.retrieveContent("a")      == "5"_expect );
           CHECK (binding.retrieveContent("i")      == "p,q,r"_expect );
           CHECK (binding.retrieveContent("i.q.aa") == "222"_expect );
-          CHECK (not binding.isNested());
+          CHECK (not binding.isSubScope());
           
           auto it = binding.getSequence("i");
           CHECK (it);
@@ -477,7 +473,7 @@ for} tail...
           CHECK (meta::typeStr(it) == "IterExplorer<IterableDecorator<string, CheckedCore<iter_explorer::Transformer<iter_explorer::BaseAdapter<RegexSearchIter>, string> > > >"_expect );
           
           auto subBind = binding.openContext(it);
-          CHECK (subBind.isNested());
+          CHECK (subBind.isSubScope());
           CHECK ((meta::is_same<decltype(binding),decltype(subBind)>()));
           CHECK (    subBind.contains("a"));
           CHECK (not subBind.contains("b"));
@@ -494,7 +490,7 @@ for} tail...
           CHECK (subBind.retrieveContent("a") == "11"_expect );
           // ...rather need to open a new sub-ctx explicitly
           subBind = binding.openContext(it);
-          CHECK (subBind.isNested());
+          CHECK (subBind.isSubScope());
           CHECK (subBind.contains("a"));
           CHECK (subBind.contains("aa"));
           CHECK (subBind.retrieveContent("a")     == "22"_expect );
@@ -519,8 +515,15 @@ for} tail...
         }
       
       
-      /** @test TODO
-       * @todo WIP 4/24 🔁 define ⟶ implement
+      /** @test represent the same logical structure as in the
+       *        [preceding test](\ref #verify_Map_binding),
+       *        yet this time as a tree of GenNodes
+       *      - value bindings are translated into attribute access
+       *      - the iteration now requires an actually nested scope,
+       *        holding a sequence of child nodes
+       *      - each of these nodes constitutes a »data entity«
+       *      - when accessing keys from _within_ such a nested scope, attributes
+       *        of enclosing scopes are visible, unless shadowed by local definition.
        */
       void
       verify_ETD_binding()
@@ -535,96 +538,63 @@ for} tail...
                                           .set("a", 22)
                                           .set("aa", 222)
                                         .genNode()
+                                      , MakeRec()
+                                          /*——empty——*/
+                                        .genNode()
                                       ))
                       .genNode();
-SHOW_EXPR(root)
-          auto binding = bindDataSource (root);
-SHOW_TYPE(decltype(binding))
-SHOW_EXPR(meta::typeStr(binding))
-SHOW_EXPR(binding.contains("a"))
-SHOW_EXPR(binding.contains("b"))
-SHOW_EXPR(binding.retrieveContent("a"))
-SHOW_EXPR(binding.retrieveContent("i"))
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////////          
-SHOW_EXPR(binding.retrieveContent("i.q.aa"))
-SHOW_EXPR(binding.isNested())
-          CHECK (meta::typeStr(binding) == "TextTemplate::DataSource<map<string, string>, void>"_expect );
+          
+          auto binding = text_template::DataSource{root};
+          CHECK (meta::typeStr(binding) == "text_template::DataSource<GenNode, void>"_expect );
           CHECK (    binding.contains("a"));
           CHECK (not binding.contains("b"));
-          CHECK (binding.retrieveContent("a")      == "5"_expect );
-          CHECK (binding.retrieveContent("i")      == "p,q,r"_expect );
-          CHECK (binding.retrieveContent("i.q.aa") == "222"_expect );
-          CHECK (not binding.isNested());
+          CHECK (binding.retrieveContent("a")  == "5"_expect );
+          CHECK (binding.retrieveContent("i")  == "{|{a=11}, {a=22, aa=222}, {}}"_expect );
+          CHECK (not binding.isSubScope());
           
           auto it = binding.getSequence("i");
-SHOW_EXPR(meta::typeStr(it))
-SHOW_EXPR(bool(it))
-SHOW_EXPR(*it)
           CHECK (it);
-          CHECK (*it == "i.p."_expect );
-          CHECK (meta::typeStr(it) == "IterExplorer<IterableDecorator<string, CheckedCore<iter_explorer::Transformer<iter_explorer::BaseAdapter<RegexSearchIter>, string> > > >"_expect );
+          CHECK (renderCompact(*it) == "{a=11}");
+          CHECK (*it == root.data.get<Rec>().get("i").data.get<Rec>().child(0));
           
           auto subBind = binding.openContext(it);
-SHOW_EXPR(meta::typeStr(subBind))
-SHOW_EXPR(bool(std::is_same<decltype(binding),decltype(subBind)>()))
-SHOW_EXPR(subBind.isNested())
-SHOW_EXPR(subBind.contains("a"))
-SHOW_EXPR(subBind.contains("b"))
-SHOW_EXPR(subBind.contains("aa"))
-SHOW_EXPR(subBind.contains("i"))
-SHOW_EXPR(subBind.retrieveContent("i"))
-SHOW_EXPR(subBind.retrieveContent("a"))
-          CHECK (subBind.isNested());
+          CHECK (subBind.isSubScope());
           CHECK ((meta::is_same<decltype(binding),decltype(subBind)>()));
           CHECK (    subBind.contains("a"));
           CHECK (not subBind.contains("b"));
           CHECK (not subBind.contains("aa"));
           CHECK (    subBind.contains("i"));
-          CHECK (subBind.retrieveContent("i") == "p,q,r"_expect );
-          CHECK (subBind.retrieveContent("a") == "11"_expect );
+          CHECK (subBind.retrieveContent("i")  == "{|{a=11}, {a=22, aa=222}, {}}"_expect );
+          CHECK (subBind.retrieveContent("a")  == "11"_expect );
+          
           ++it;
-SHOW_EXPR(bool(it))
-SHOW_EXPR(*it)
           CHECK (it);
-          CHECK (*it == "i.q."_expect );
-SHOW_EXPR(subBind.retrieveContent("a"))
-          CHECK (subBind.retrieveContent("a") == "11"_expect );
+          CHECK (renderCompact(*it) == "{a=22, aa=222}");
+          CHECK (subBind.retrieveContent("a")  == "11"_expect );
+          
           subBind = binding.openContext(it);
-SHOW_EXPR(subBind.isNested())
-SHOW_EXPR(subBind.contains("a"))
-SHOW_EXPR(subBind.contains("aa"))
-SHOW_EXPR(subBind.retrieveContent("a"))
-SHOW_EXPR(subBind.retrieveContent("aa"))
-SHOW_EXPR(subBind.retrieveContent("i.p.a"))
-SHOW_EXPR(subBind.retrieveContent("i.q.a"))
-          CHECK (subBind.isNested());
+          CHECK (subBind.isSubScope());
           CHECK (subBind.contains("a"));
           CHECK (subBind.contains("aa"));
-          CHECK (subBind.retrieveContent("a")     == "22"_expect );
-          CHECK (subBind.retrieveContent("aa")    == "222"_expect);
-          CHECK (subBind.retrieveContent("i.p.a") == "11"_expect );
-          CHECK (subBind.retrieveContent("i.q.a") == "22"_expect );
+          CHECK (subBind.retrieveContent("a")  == "22"_expect );
+          CHECK (subBind.retrieveContent("aa") == "222"_expect);
+          
           ++it;
-SHOW_EXPR(bool(it))
           CHECK (it);
-SHOW_EXPR(*it)
-          CHECK (*it == "i.r."_expect );
+          CHECK (renderCompact(*it) == "{}");
+          
           subBind = binding.openContext(it);
-SHOW_EXPR(subBind.contains("a"))
-SHOW_EXPR(subBind.contains("aa"))
-SHOW_EXPR(subBind.retrieveContent("a"))
-SHOW_EXPR(subBind.retrieveContent("i.p.a"))
-SHOW_EXPR(subBind.retrieveContent("i.q.a"))
           CHECK (    subBind.contains("a"));
           CHECK (not subBind.contains("aa"));
-          CHECK (subBind.retrieveContent("a")     == "5"_expect  );
-          CHECK (subBind.retrieveContent("i.p.a") == "11"_expect );
-          CHECK (subBind.retrieveContent("i.q.a") == "22"_expect );
+          CHECK (subBind.retrieveContent("a")  == "5"_expect  );
+          
           ++it;
-SHOW_EXPR(bool(it))
           CHECK (isnil (it));
           VERIFY_ERROR (ITER_EXHAUST, *it);
-#endif          
+          
+          
+          TextTemplate tt{"${for i}a=${a} ${if aa}and aa=${aa} ${endif}${endfor}."};
+          CHECK (tt.render(root) == "a=11 a=22 and aa=222 a=5 ."_expect);
         }
     };
   

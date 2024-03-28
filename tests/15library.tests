@@ -780,7 +780,7 @@ return: 0
 END
 
 
-PLANNED "text template substitution" TextTemplate_test <<END
+TEST "text template substitution" TextTemplate_test <<END
 return: 0
 END
 

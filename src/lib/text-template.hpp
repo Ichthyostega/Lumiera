@@ -147,9 +147,10 @@
  ** 
  ** \par ETD Binding
  ** While the _Map Binding_ detailed in the preceding paragraph is mostly intended to handle
- ** simple key substitutions, the more elaborate binding to `GenNode` data (ETD) is meant to
- ** handle structural data, as encountered in the internal communication of components within
- ** the Lumiera application — notably the »diff binding« used to populate the GUI with entities
+ ** simple key substitutions, the more elaborate binding to `GenNode` data (ETD), which is
+ ** provided in the separate header text-template-gen-node-binding.hpp,  is meant to handle
+ ** structural data, as encountered in the internal communication of components within the
+ ** Lumiera application — notably the »diff binding« used to populate the GUI with entities
  ** represented in the _Session Model_ in Steam-Layer. The mapping is straight-forward, as the
  ** required concepts can be supported directly
  ** - Key lookup is translated into _Attribute Lookup_ — starting in the current record and
@@ -158,10 +159,9 @@
  **   for the iteration; thus each entity is again a `Rec<GenNode>` and can be represented
  **   recursively as a DataSource<Rec<GenNode>>
  ** - the DataSource implementation includes an  _optional parent link,_ which is consulted
- **   whenever _Attribute Lookup_ in the current record does not yield a result.    
+ **   whenever _Attribute Lookup_ in the current record does not yield a result.
  ** [External Tree Description]: https://lumiera.org/documentation/design/architecture/ETD.html
  ** [Lumiera Forward Iterator]: https://lumiera.org/documentation/technical/library/iterator.html
- ** @todo WIP-WIP-WIP 3/2024
  ** @see TextTemplate_test
  ** @see text-template-gen-node-binding.hpp
  ** @see gnuplot-gen.hpp
@@ -192,6 +192,10 @@
 namespace lib {
   namespace error = lumiera::error;
   
+  namespace test {  // declared friend for test access
+    class TextTemplate_test;
+  }
+  
   using std::string;
   using StrView = std::string_view;
   
@@ -200,7 +204,7 @@ namespace lib {
   using util::unConst;
   
   
-  namespace {
+  namespace text_template { ///< Parser and DataSource binding for lib::TextTemplate
     
     //-----------Syntax-for-iteration-control-in-map------
     const string MATCH_DATA_TOKEN = R"~(([^,;"\s]*)\s*)~";
@@ -307,17 +311,30 @@ namespace lib {
       return explore (util::RegexSearchIter{input, ACCEPT_MARKUP})
                .transform (classify);
     }
-  }
-  namespace test {  // declared friend for test access
-    class TextTemplate_test;
-  }
+    
+    
+    /**
+     * Binding to a specific data source.
+     * @note requires partial specialisation
+     */
+    template<class DAT, typename SEL=void>
+    class DataSource;
+    
+  }//(namespace) text_template
   
   
   
   
   
-  /*****************************************//**
-   * Text template substitution engine
+  
+  /*************************************************//**
+   * Text template substitution engine.
+   * Can substitute `${placeholders}` by name and
+   * can handle conditional and iterated sections.
+   * Structural data for the substitution is accessed
+   * and navigated through a generic _Data Source binding._
+   * By default, a binding for Map-of-strings is provided.
+   * @see TextTemplate_test
    */
   class TextTemplate
     : util::MoveOnly
@@ -356,15 +373,10 @@ namespace lib {
       /** the text template is compiled into a sequence of Actions */
       using ActionSeq = std::vector<Action>;
       
-      
       /** processor in a parse pipeline — yields sequence of Actions */
       class ActionCompiler;
       
-      /** Binding to a specific data source.
-       * @note requires partial specialisation */
-      template<class DAT, typename SEL=void>
-      class DataSource;
-      
+      /** Iterator »State Core« to process the template instantiation */
       template<class SRC>
       class InstanceCore
         {
@@ -428,8 +440,8 @@ namespace lib {
   /* ======= Parser / Compiler pipeline ======= */
   
   /**
-   * @remarks this is a »custom processing layer«
-   *   to be used in an [Iter-Explorer](\ref iter-explorer.hpp)-pipeline.
+   * @remarks this builder component is used on top of a
+   *   [Iter-Explorer](\ref iter-explorer.hpp)-pipeline, based on a reg-exp.
    *   The source layer (which is assumed to comply to the »State Core« concept),
    *   yields TagSyntax records, one for each match of the ACCEPT_MARKUP reg-exp.
    *   The actual compilation step, which is implemented as pull-processing here,
@@ -464,15 +476,15 @@ namespace lib {
           auto scopeClause = [&]{ return scope_.empty()? "??" : clause(scope_.top().clause); };
           
            //  Support for bracketing constructs (if / for)
-          auto beginIdx    = [&]{ return scope_.empty()? 0 : scope_.top().begin; };                          // Index of action where scope was opened
-          auto scopeKey    = [&]{ return valid(beginIdx())? actions[beginIdx()].val : "";};                  // Key controlling the if-/for-Scope
-          auto keyMatch    = [&]{ return isnil(parseIter->key) or parseIter->key == scopeKey(); };           // Key matches in opening and closing tag
-          auto clauseMatch = [&](Clause c){ return not scope_.empty() and scope_.top().clause == c; };       // Kind of closing tag matches innermost scope
+          auto beginIdx    = [&]{ return scope_.empty()? 0 : scope_.top().begin; };                    // Index of action where scope was opened
+          auto scopeKey    = [&]{ return valid(beginIdx())? actions[beginIdx()].val : "";};            // Key controlling the if-/for-Scope
+          auto keyMatch    = [&]{ return isnil(parseIter->key) or parseIter->key == scopeKey(); };     // Key matches in opening and closing tag
+          auto clauseMatch = [&](Clause c){ return not scope_.empty() and scope_.top().clause == c; }; // Kind of closing tag matches innermost scope
           auto scopeMatch  = [&](Clause c){ return clauseMatch(c) and keyMatch(); };
           
           auto lead        = [&]{ return parseIter->lead; };
-          auto clashLead   = [&]{ return actions[scope_.top().after - 1].val; };                             // (for diagnostics: lead before a conflicting other "else")
-          auto abbrev      = [&](auto s){ return s.length()<16? s : s.substr(s.length()-15); };              // (shorten lead display to 15 chars)
+          auto clashLead   = [&]{ return actions[scope_.top().after - 1].val; };                       // (for diagnostics: lead before a conflicting other "else")
+          auto abbrev      = [&](auto s){ return s.length()<16? s : s.substr(s.length()-15); };        // (shorten lead display to 15 chars)
           
            //  Syntax / consistency checks...
           auto __requireKey    = [&](string descr)
@@ -480,8 +492,7 @@ namespace lib {
                                         if (isnil (parseIter->key))
                                           throw error::Invalid{_Fmt{"Tag without key: ...%s${%s |↯|}"}
                                                                    % abbrev(lead()) % descr
-                                                              };
-                                      };
+                                      };                      };
           auto __checkBalanced = [&](Clause c)
                                       {
                                         if (not scopeMatch(c))
@@ -490,8 +501,7 @@ namespace lib {
                                                                    % scopeClause() % scopeKey()
                                                                    % abbrev(lead())
                                                                    % clause(c) % parseIter->key
-                                                              };
-                                      };
+                                      };                      };
           auto __checkInScope  = [&]  {
                                         if (scope_.empty())
                                           throw error::Invalid{_Fmt{"Misplaced ...%s|↯|${else}"}
@@ -510,18 +520,19 @@ namespace lib {
           
            //  Primitives used for code generation....
           auto add             = [&](Code c, string v){ actions.push_back (Action{c,v});};
-          auto addCode         = [&](Code c)  { add (   c, parseIter->key);             };                   // add code token and transfer key picked up by parser
-          auto addLead         = [&]          { add (TEXT, string{parseIter->lead});    };                   // add TEXT token to represent the static part before this tag
-          auto openScope       = [&](Clause c){ scope_.push (ParseCtx{c, currIDX()});   };                   // start nested scope for bracketing construct (if / for)
-          auto closeScope      = [&]          { scope_.pop();                           };                   // close innermost nested scope
+          auto addCode         = [&](Code c)  { add (   c, parseIter->key);             };   // add code token and transfer key picked up by parser
+          auto addLead         = [&]          { add (TEXT, string{parseIter->lead});    };   // add TEXT token to represent the static part before this tag
+          auto openScope       = [&](Clause c){ scope_.push (ParseCtx{c, currIDX()});   };   // start nested scope for bracketing construct (if / for)
+          auto closeScope      = [&]          { scope_.pop();                           };   // close innermost nested scope
           
-          auto linkElseToStart = [&]{ actions[beginIdx()].refIDX = currIDX();           };                   // link the start position of the else-branch into opening logic code
-          auto markJumpInScope = [&]{ scope_.top().after = currIDX();                   };                   // memorise jump before else-branch for later linkage
-          auto linkLoopBack    = [&]{ actions.back().refIDX = scope_.top().begin;       };                   // fill in the back-jump position at loop end
-          auto linkJumpToNext  = [&]{ actions[scope_.top().after].refIDX = currIDX();   };                   // link jump to the position after the end of the logic bracket
+          auto linkElseToStart = [&]{ actions[beginIdx()].refIDX = currIDX();           };   // link the start position of the else-branch into opening logic code
+          auto markJumpInScope = [&]{ scope_.top().after = currIDX();                   };   // memorise jump before else-branch for later linkage
+          auto linkLoopBack    = [&]{ actions.back().refIDX = scope_.top().begin;       };   // fill in the back-jump position at loop end
+          auto linkJumpToNext  = [&]{ actions[scope_.top().after].refIDX = currIDX();   };   // link jump to the position after the end of the logic bracket
           
-          auto hasElse         = [&]{ return scope_.top().after != 0; };                                     // a jump code to link was only marked if there was an else tag
+          auto hasElse         = [&]{ return scope_.top().after != 0; };                     // a jump code to link was only marked if there was an else tag
           
+          using text_template::TagSyntax;
           
           /* === Code Generation === */
           switch (parseIter->syntax) {
@@ -603,7 +614,7 @@ namespace lib {
   inline TextTemplate::ActionSeq
   TextTemplate::compile (string const& spec)
   {
-    ActionSeq code = ActionCompiler().buildActions (parse (spec));
+    ActionSeq code = ActionCompiler().buildActions (text_template::parse (spec));
     if (isnil (code))
       throw error::Invalid ("TextTemplate spec without active placeholders.");
     return code;
@@ -612,144 +623,138 @@ namespace lib {
   
   
   
+  
+  
   /* ======= preconfigured data bindings ======= */
   
-  template<class DAT, typename SEL=void>
-  struct TextTemplate::DataSource
-    {
-      static_assert (not sizeof(DAT),
-                     "unable to bind this data source "
-                     "for TextTemplate instantiation");
-      
-      DataSource (DAT const&);
-    };
-  
-  using MapS = std::map<string,string>;
-  
-  /**
-   * Data-binding for a Map-of-strings.
-   * Simple keys are retrieved by direct lookup.
-   * For the representation of nested data sequences,
-   * the following conventions apply
-   * - the data sequence itself is represented by an index-key
-   * - the value associated to this index-key is a CSV sequence
-   * - each element in this sequence defines a key prefix
-   * - nested keys are then defined as `<index-key>.<elm-key>.<key>`
-   * - when key decoration is enabled for a nested data source, each
-   *   lookup for a given key is first tried with the prefix, then as-is.
-   * Consequently, all data in the sequence must be present in the original
-   * map, stored under the decorated keys.
-   * @note multiply nested sequences are _not supported._
-   *       While it _is_ possible to have nested loops, the resulting sets
-   *       of keys must be disjoint and data must be present in the base map.
-   * @see TextTemplate_test::verify_Map_binding()
-   */
-  template<>
-  struct TextTemplate::DataSource<MapS>
-    {
-      MapS const * data_{nullptr};
-      string keyPrefix_{};
-      
-      bool isNested() { return not isnil (keyPrefix_); }
-      
-      DataSource()  = default;
-      DataSource(MapS const& map)
-        : data_{&map}
-        { }
-      
-      
-      using Value = std::string_view;
-      using Iter = decltype(iterNestedKeys("",""));
-      
-      bool
-      contains (string key)
-        {
-          return (isNested() and util::contains (*data_, keyPrefix_+key))
-              or util::contains (*data_, key);
-        }
-      
-      Value
-      retrieveContent (string key)
-        {
-          MapS::const_iterator elm;
-          if (isNested())
-            {
-              elm = data_->find (keyPrefix_+key);
-              if (elm == data_->end())
-                elm = data_->find (key);
-            }
-          else
-            elm = data_->find (key);
-          ENSURE (elm != data_->end());
-          return elm->second;
-        }
-      
-      Iter
-      getSequence (string key)
-        {
-          if (not contains(key))
-            return Iter{};
-          else
-            return iterNestedKeys (key, retrieveContent(key));
-        }
-      
-      DataSource
-      openContext (Iter& iter)
-        {
-          REQUIRE (iter);
-          DataSource nested{*this};
-          nested.keyPrefix_ += *iter;
-          return nested;
-        }
-    };
-  
-  using PairS = std::pair<string,string>;
-  
-  template<>
-  struct TextTemplate::DataSource<string>
-    : TextTemplate::DataSource<MapS>
-    {
-      std::shared_ptr<MapS> spec_;
-      
-      DataSource (string const& dataSpec)
-        : spec_{new MapS}
-        {
-          data_ = spec_.get();
-          explore (iterBindingSeq (dataSpec))
-            .foreach([this](PairS const& bind){ spec_->insert (bind); });
-        }
+  namespace text_template {
+    
+    template<class DAT, typename SEL>
+    struct DataSource
+      {
+        static_assert (not sizeof(DAT),
+                       "unable to bind this data source "
+                       "for TextTemplate instantiation");
         
-      DataSource
-      openContext (Iter& iter)
-        {
-          DataSource nested(*this);
-          auto nestedBase = DataSource<MapS>::openContext (iter);
-          nested.keyPrefix_ = nestedBase.keyPrefix_;
-          return nested;
-        }
-    };
-  
-  namespace {// help the compiler with picking the proper specialisation for the data binding
+        DataSource (DAT const&);
+      };
     
-    template<class STR,              typename = meta::enable_if<meta::is_StringLike<STR>> >
-    inline auto
-    bindDataSource(STR const& spec)
-      {
-        return TextTemplate::DataSource<string>{spec};
-      }
+    using MapS = std::map<string,string>;
     
-    inline auto
-    bindDataSource(MapS const& map)
-      {
-        return TextTemplate::DataSource<MapS>{map};
-      }
-    
-    /* Why this approach? couldn't we use CTAD?
-     * - for one, there are various compiler bugs related to nested templates and CTAD
-     * - moreover I am unable to figure out how to write a deduction guide for an
-     *   user provided specialisation, given possibly within another header.
+    /**
+     * Data-binding for a Map-of-strings.
+     * Simple keys are retrieved by direct lookup.
+     * For the representation of nested data sequences,
+     * the following conventions apply
+     * - the data sequence itself is represented by an index-key
+     * - the value associated to this index-key is a CSV sequence
+     * - each element in this sequence defines a key prefix
+     * - nested keys are then defined as `<index-key>.<elm-key>.<key>`
+     * - when key decoration is enabled for a nested data source, each
+     *   lookup for a given key is first tried with the prefix, then as-is.
+     * Consequently, all data in the sequence must be present in the original
+     * map, stored under the decorated keys.
+     * @note multiply nested sequences are _not supported._
+     *       While it _is_ possible to have nested loops, the resulting sets
+     *       of keys must be disjoint and data must be present in the base map.
+     * @see TextTemplate_test::verify_Map_binding()
      */
-  }
+    template<>
+    struct DataSource<MapS>
+      {
+        MapS const * data_{nullptr};
+        string keyPrefix_{};
+        
+        bool isSubScope() { return not isnil (keyPrefix_); }
+        
+        DataSource()  = default;
+        DataSource(MapS const& map)
+          : data_{&map}
+          { }
+        
+        
+        using Value = std::string_view;
+        using Iter = decltype(iterNestedKeys("",""));
+        
+        bool
+        contains (string key)
+          {
+            return (isSubScope() and util::contains (*data_, keyPrefix_+key))
+                or util::contains (*data_, key);
+          }
+        
+        Value
+        retrieveContent (string key)
+          {
+            MapS::const_iterator elm;
+            if (isSubScope())
+              {
+                elm = data_->find (keyPrefix_+key);
+                if (elm == data_->end())
+                  elm = data_->find (key);
+              }
+            else
+              elm = data_->find (key);
+            ENSURE (elm != data_->end());
+            return elm->second;
+          }
+        
+        Iter
+        getSequence (string key)
+          {
+            if (not contains(key))
+              return Iter{};
+            else
+              return iterNestedKeys (key, retrieveContent(key));
+          }
+        
+        DataSource
+        openContext (Iter& iter)
+          {
+            REQUIRE (iter);
+            DataSource nested{*this};
+            nested.keyPrefix_ += *iter;
+            return nested;
+          }
+      };
+    
+    
+    using PairS = std::pair<string,string>;
+    
+    /** Adapter for the Map-Data-Source to consume a string spec (for testing) */
+    template<>
+    struct DataSource<string>
+      : DataSource<MapS>
+      {
+        std::shared_ptr<MapS> spec_;
+        
+        DataSource (string const& dataSpec)
+          : spec_{new MapS}
+          {
+            data_ = spec_.get();
+            explore (iterBindingSeq (dataSpec))
+              .foreach([this](PairS const& bind){ spec_->insert (bind); });
+          }
+        
+        DataSource
+        openContext (Iter& iter)
+          {
+            DataSource nested(*this);
+            auto nestedBase = DataSource<MapS>::openContext (iter);
+            nested.keyPrefix_ = nestedBase.keyPrefix_;
+            return nested;
+          }
+      };
+    
+    /**
+     * Deduction Guide: help the compiler with picking the proper specialisation
+     * for a test-data source defined through a string spec or char literal
+     */
+    template<class STR,                 typename = meta::enable_if<meta::is_StringLike<STR>> >
+    DataSource(STR const&) -> DataSource<string>;
+    
+  }// namespace text_template
+  
   
   
   
@@ -834,7 +839,7 @@ namespace lib {
   TextTemplate::InstanceCore<SRC>::instantiateNext()
   {
     return actionIter_? actionIter_->instantiate(*this)
-                      : StrView{};
+                      : Value{};
   }
   
   /**
@@ -859,7 +864,7 @@ namespace lib {
   inline typename SRC::Value
   TextTemplate::InstanceCore<SRC>::getContent (string key)
   {
-    static StrView nil{""};
+    static Value nil{};
     return dataSrc_.contains(key)? dataSrc_.retrieveContent(key) : nil;
   }
   
@@ -957,7 +962,7 @@ namespace lib {
   inline auto
   TextTemplate::submit (DAT const& data)  const
   {
-    return explore (InstanceCore{actions_, bindDataSource(data)});
+    return explore (InstanceCore{actions_, text_template::DataSource(data)});
   }
   
   /** submit data and materialise rendered results into a single string */
