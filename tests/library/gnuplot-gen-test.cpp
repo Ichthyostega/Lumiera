@@ -29,13 +29,14 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"///////////////////////TODO
 #include "lib/gnuplot-gen.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/format-cout.hpp"///////////////////////TODO
 #include "lib/test/diagnostic-output.hpp"///////////////////////TODO
 
 //#include <chrono>
-//#include <array>
+#include <array>
 
-//using std::array;
+using std::array;
 
 
 namespace lib {
@@ -72,6 +73,19 @@ namespace test {
       void
       simpeUsage()
         {
+          using CSVlines = std::initializer_list<string>;
+          auto data = CSVlines{"x,y"
+                              ,"0,1"
+                              ,"1,1"
+                              ,"2,2"
+                              ,"3,3"
+                              ,"4,5"
+                              ,"5,8"
+                              ,"6,13"
+                              };
+          auto csvIter = explore(data).asIterSource();
+          string gnuplot = gnuplot_gen::dataPlot (csvIter);
+          
         }
       
       

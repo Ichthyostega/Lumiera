@@ -39,7 +39,7 @@
  ** @see GnuplotGen_test
  ** @see SchedulerStress_test
  ** @see text-template.hpp
- ** [gnuplot]: https://booooooooooooo
+ ** [gnuplot]: http://gnuplot.info/documentation.html
  */
 
 
@@ -48,12 +48,12 @@
 
 
 //#include "lib/format-util.hpp"
-#include "lib/text-template.hpp"
+#include "lib/iter-source.hpp"
 //#include "lib/util.hpp"
 
 //#include <utility>
 //#include <sstream>
-//#include <string>
+#include <string>
 //#include <vector>
 
 
@@ -62,10 +62,14 @@ namespace gnuplot_gen { ///< preconfigured setup for Gnuplot data visualisation
   
 //  using util::toString;
 //  using util::isnil;
-//  using std::string;
+  using std::string;
 //  using std::move;
+  using CSVRowIter = lib::IterSource<const string>::iterator;
   
-  
+  /**
+   * Generate a Gnuplot diagram to visualise the given data points.
+   */
+  string dataPlot (CSVRowIter&);
   
   
 }} // namespace lib::gnuplot_gen
