@@ -85,7 +85,7 @@ namespace test {
                               };
           auto csvIter = explore(data).asIterSource();
           string gnuplot = gnuplot_gen::dataPlot (csvIter);
-          
+          cout << gnuplot <<endl;
         }
       
       

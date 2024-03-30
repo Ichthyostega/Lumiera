@@ -35,52 +35,28 @@
 
 
 #include "lib/text-template.hpp"
+#include "lib/text-template-gen-node-binding.hpp"
 #include "lib/gnuplot-gen.hpp"
+#include "lib/format-util.hpp"
 
 #include <string>
 
 using std::string;
 
+using util::join;
+using lib::diff::MakeRec;
+
 
 namespace lib {
 namespace gnuplot_gen {
-  namespace {
+  
+  namespace { // Template and defaults definitions for diagram generation
     
-    const string GNUPLOT_SCATTER_REGRESSION = R"~(#
-#
-#
-
-set term wxt size 600,800
-
-set datafile separator ",;"
-
-$RunData << _End_of_Data_
-"graph length";"duration (ms)";"concurrency";"job time"
-49, 24.3764, 5
-5 , 4.30955, 5, 700
-32, 16.039 , 5, 740
-20, 6.47043, 4, 930
-39, 19.424 , 4, 888
-49, 15.951 , 4, 688
-51, 32.7247, 5, 1200
-62, 31.4712, 5, 812
-15, 13.552 , 4
-56, 36.1978, 4
-32, 16.4677, 5
-57, 22.2576, 6, 833
-17, 14.3244, 5, 844
-54, 27.4692, 5
-46, 12.4055
-52, 19.9593
-39, 19.4265
-41, 22.0513
-64, 33.744
-2,  3.04284
-_End_of_Data_
-
-
-set style line 1 linetype  1 linewidth 2 linecolor rgb '#1700D4'
-set style line 2 linetype  3 linewidth 2 linecolor rgb '#113DD6'
+    
+    const string GNUPLOT_CommonStyleDef = R"~(#
+#---common-styles-for-plots-from-Lumiera----
+set style line 1 linetype  1 linewidth 2 linecolor rgb '#240CC3'
+set style line 2 linetype  3 linewidth 2 linecolor rgb '#1149D6'
 set style line 3 linetype  2 linewidth 2 linecolor rgb '#0B7FCC'
 set style line 4 linetype  6 linewidth 2 linecolor rgb '#37999D'
 set style line 5 linetype  7 linewidth 2 linecolor rgb '#248269'
@@ -91,19 +67,65 @@ set style line 9 linetype  4 linewidth 2 linecolor rgb '#AA0519'
 
 set style line 10 linetype 1 linewidth 1 linecolor rgb '#303030'
 set style line 11 linetype 0 linewidth 1 linecolor rgb '#A0A0A0' dashtype 3
-
+#---(End)styles-----------------------------
+)~";
+    
+    const string GNUPLOT_AxisGridSetup = R"~(#
+#---axis-and-grid-setup---------------------
 unset border
 set tics nomirror
 set grid back linestyle 11
 
-#set size ratio 0.6
-
 set arrow 10 from graph 0,0 to graph 1.04,0 size screen 0.025,15,60 filled ls 10
 set arrow 11 from graph 0,0 to graph 0,1.05 size screen 0.025,15,60 filled ls 10
+)~";
+    
+    
+    const string GNUPLOT_BASIC_PLOT_DEF = R"~(#
+#
+#   GNUPLOT - data plot from Lumiera
+#
 
-set key autotitle columnheader
-set x2label 'X axis'
-set ylabel 'Y axis'
+${if Term}set term ${Term} ${
+if TermSizeSpec}size ${TermSizeSpec}${endif}${
+endif Term}
+
+set datafile separator ",;"
+
+####---------Data---------------------------
+$RunData << _End_of_Data_
+${CSVData}
+_End_of_Data_
+
+
+${CommonStyleDef}
+${AxisGridSetup}
+
+${if XLabel
+}set xlabel '${XLabel}'
+${else
+}stats $RunData using (abscissaName=strcol(1)) every ::0::0 nooutput
+
+set xlabel abscissaName
+${end if XLabel
+}${if YLabel
+}set ylabel '${YLabel}'
+${end if YLabel
+}
+set key autotitle columnheader tmargin
+
+)~";
+    
+    const string GNUPLOT_SIMPLE_DATA_PLOT = R"~(#
+####----------------------------------------
+plot for [i=2:*] $RunData using 1:i with ${DiagramKind} linestyle i-1
+
+)~";
+    
+    
+    const string GNUPLOT_SCATTER_REGRESSION = R"~(#
+#
+#
 
 set arrow 1 from graph 0, first 1 to graph 1, first 30 nohead ls 9
 
@@ -131,14 +153,31 @@ plot $RunData using 1:3 with impulses linestyle 3, \
 
 )~";
     
-  }
+    template<class IT>
+    inline string
+    renderCSV (IT& iter)
+    {
+      return join (iter, "\n");
+    }
+  }//(End)template and defaults definitions
   
   
   /** */
   string
   dataPlot (CSVRowIter& rowIT)
   {
-    UNIMPLEMENTED ("generate gnuplot");
+    TextTemplate plot{GNUPLOT_BASIC_PLOT_DEF
+                     +GNUPLOT_SIMPLE_DATA_PLOT};
+    
+    auto config
+      = MakeRec()
+          .set ("CommonStyleDef", GNUPLOT_CommonStyleDef)
+          .set ("AxisGridSetup",  GNUPLOT_AxisGridSetup)
+          .set ("DiagramKind",    "points")
+          .set ("CSVData", renderCSV(rowIT))
+        .genNode();
+    
+    return plot.render(config);
   }
   
 }} // namespace lib::gnuplot_gen
