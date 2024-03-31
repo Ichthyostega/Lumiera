@@ -43,9 +43,6 @@
 
 using std::string;
 
-using util::join;
-using lib::diff::MakeRec;
-
 
 namespace lib {
 namespace gnuplot_gen {
@@ -153,31 +150,27 @@ plot $RunData using 1:3 with impulses linestyle 3, \
 
 )~";
     
-    template<class IT>
-    inline string
-    renderCSV (IT& iter)
-    {
-      return join (iter, "\n");
-    }
   }//(End)template and defaults definitions
   
   
-  /** */
+  
+  /**
+   * @remark each column of the given data is featured as sequence
+   * over the first column interpreted as common abscissa. The name
+   * of the abscissa and the row names in the legend are extracted
+   * from the header names expected in the first row of CSV data.
+   */
   string
-  dataPlot (CSVRowIter& rowIT)
+  dataPlot (ParamRecord params)
   {
     TextTemplate plot{GNUPLOT_BASIC_PLOT_DEF
                      +GNUPLOT_SIMPLE_DATA_PLOT};
     
-    auto config
-      = MakeRec()
-          .set ("CommonStyleDef", GNUPLOT_CommonStyleDef)
+    params.set ("CommonStyleDef", GNUPLOT_CommonStyleDef)
           .set ("AxisGridSetup",  GNUPLOT_AxisGridSetup)
-          .set ("DiagramKind",    "points")
-          .set ("CSVData", renderCSV(rowIT))
-        .genNode();
-    
-    return plot.render(config);
+          .set (KEY_DiagramKind,  "points")
+          ;
+    return plot.render (params.genNode());
   }
   
 }} // namespace lib::gnuplot_gen

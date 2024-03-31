@@ -47,29 +47,77 @@
 #define LIB_GNUPLOT_GEN_H
 
 
-//#include "lib/format-util.hpp"
-#include "lib/iter-source.hpp"
-//#include "lib/util.hpp"
+#include "lib/stat/csv.hpp"
+#include "lib/format-util.hpp"
+#include "lib/diff/gen-node.hpp"
 
-//#include <utility>
-//#include <sstream>
 #include <string>
-//#include <vector>
+#include <vector>
+#include <tuple>
 
+using std::string;
 
 namespace lib {
 namespace gnuplot_gen { ///< preconfigured setup for Gnuplot data visualisation
   
-//  using util::toString;
-//  using util::isnil;
-  using std::string;
-//  using std::move;
-  using CSVRowIter = lib::IterSource<const string>::iterator;
+  
+  /**
+   * Wrapper to simplify notation in tests.
+   * Accepts data suitable for representation as CSV
+   * - either as an std::initializer_list<string> for pre-formatted rows
+   * - or a list of strings for the header, and then a list of data tuples,
+   *   which will be rendered into data rows in CSV format
+   * Since this wrapper is-a `vector<string>`, the rows can be retrieved
+   * directly and then rendered, or the \ref operator string() can be used
+   * to retrieve the complete data set in a single string of data lines.
+   */
+  struct CSVData
+    : std::vector<string>
+    {
+      CSVData (std::initializer_list<string> lines)
+        : vector<string>(lines)
+        { }
+      
+      template<class DAT>
+      CSVData (std::initializer_list<string> header
+              ,std::initializer_list<std::initializer_list<DAT>> data)
+        {
+          resize (data.size()+1);
+          string line;
+          for (string key : header)
+            stat::appendCsvField (line, key);
+          emplace_back (move(line));
+          for (auto& row : data)
+            {
+              line = "";
+              for (DAT const& val : row)
+                stat::appendCsvField (line, val);
+              emplace_back (move(line));
+            }
+        }
+      
+      // standard copy operations acceptable
+      
+      
+      operator string()  const
+        {
+          return util::join (*this, "\n");
+        }
+    };
+  
+  
+  using ParamRecord = diff::Rec::Mutator;
+  
+  const string KEY_CSVData     = "CSVData";
+  const string KEY_DiagramKind = "DiagramKind";
+  
+  
   
   /**
    * Generate a Gnuplot diagram to visualise the given data points.
    */
-  string dataPlot (CSVRowIter&);
+  string dataPlot (ParamRecord);
+  string dataPlot (string csvData) { return dataPlot (ParamRecord().set (KEY_CSVData, csvData)); }
   
   
 }} // namespace lib::gnuplot_gen

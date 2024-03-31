@@ -42,6 +42,8 @@ using std::array;
 namespace lib {
 namespace test {
   
+  using gnuplot_gen::CSVData;
+  
   
   /***************************************************************************//**
    * @test verify data visualisation by generated Gnuplot scripts
@@ -73,18 +75,16 @@ namespace test {
       void
       simpeUsage()
         {
-          using CSVlines = std::initializer_list<string>;
-          auto data = CSVlines{"x,y"
-                              ,"0,1"
-                              ,"1,1"
-                              ,"2,2"
-                              ,"3,3"
-                              ,"4,5"
-                              ,"5,8"
-                              ,"6,13"
-                              };
-          auto csvIter = explore(data).asIterSource();
-          string gnuplot = gnuplot_gen::dataPlot (csvIter);
+          string gnuplot = gnuplot_gen::dataPlot (CSVData{{"step","fib"}
+                                                         ,{{0,1}
+                                                          ,{1,1}
+                                                          ,{2,2}
+                                                          ,{3,3}
+                                                          ,{4,5}
+                                                          ,{5,8}
+                                                          ,{6,13}
+                                                          ,{7,21}
+                                                         }});
           cout << gnuplot <<endl;
         }
       
