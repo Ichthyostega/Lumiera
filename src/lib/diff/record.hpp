@@ -298,8 +298,9 @@ namespace diff{
       Record (Mutator const& mut)
         : Record((Record const&) mut)
         { }
+      explicit
       Record (Mutator && mut)
-        : Record(std::move ((Record) mut))
+        : Record(std::move (Record(mut)))
         { }
       
       friend class Mutator;
@@ -335,7 +336,7 @@ namespace diff{
       /** Implementation of Iteration-logic: detect iteration end.
        * @remarks seamless continuation of the iteration when reaching
        *     the end of the attribute collection. In this implementation,
-       *     we use the default constructed \c ITER() to mark iteration end.
+       *     we use the default constructed `ITER()` to mark iteration end.
        */
       friend bool
       checkPoint (const Record* src, ElmIter& pos)
@@ -405,7 +406,7 @@ namespace diff{
   
   template<typename VAL>
   class Record<VAL>::Mutator
-    : util::NonCopyable
+    : util::MoveOnly
     {
       using Rec = Record<VAL>;
       
@@ -452,22 +453,22 @@ namespace diff{
           record_.type_ = newTypeID;
         }
       
-      Mutator&
+      Mutator&&
       type (string const& typeID)
         {
           setType (typeID);
-          return *this;
+          return move(*this);
         }
       
       template<typename X>
-      Mutator&
+      Mutator&&
       set (string const& key, X&& content)
         {
           VAL attribute(Rec::buildAttribute (key, std::forward<X>(content)));
           return set (std::move (attribute));
         }
       
-      Mutator&
+      Mutator&&
       set (VAL&& attribute)
         {
           string key = Rec::extractKey(attribute);
@@ -484,29 +485,29 @@ namespace diff{
             as.push_back (std::forward<VAL> (attribute));
           else
             (*found) = (std::forward<VAL> (attribute));
-          return *this;
+          return move(*this);
         }
       
-      Mutator&
+      Mutator&&
       appendAttrib (VAL const& newAttrib)
         {
           REQUIRE (Rec::isAttribute(newAttrib));
           record_.attribs_.push_back (newAttrib);
-          return *this;
+          return move(*this);
         }
       
-      Mutator&
+      Mutator&&
       appendChild (VAL const& newChild)
         {
           record_.children_.push_back (newChild);
-          return *this;
+          return move(*this);
         }
       
-      Mutator&
+      Mutator&&
       prependChild (VAL const& newChild)
         {
           record_.children_.insert (record_.children_.begin(), newChild);
-          return *this;
+          return move(*this);
         }
       
       /* === low-level access (for diff application) === */
@@ -568,21 +569,21 @@ namespace diff{
       VAL genNode(string const& symbolicID);
       
       template<typename X, typename...ARGS>
-      Mutator& attrib (string const& key, X&& initialiser, ARGS&& ...args)
+      Mutator&& attrib (string const& key, X&& initialiser, ARGS&& ...args)
         {
           set (key, std::forward<X>(initialiser));
           return attrib (std::forward<ARGS>(args)...);
         }
-      Mutator& attrib () { return *this; } // argument recursion end
+      Mutator&& attrib () { return move(*this); } // argument recursion end
       
       
       template<typename X, typename...ARGS>
-      Mutator& scope (X const& initialiser, ARGS&& ...args)
+      Mutator&& scope (X const& initialiser, ARGS&& ...args)
         {
           appendChild (VAL(initialiser));
           return scope (std::forward<ARGS>(args)...);
         }
-      Mutator& scope () { return *this; }
+      Mutator&& scope () { return move(*this); }
       
     };
   

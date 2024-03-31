@@ -22,22 +22,22 @@
 
 
 /** @file virtual-copy-support.hpp
- ** Helper for building "virtual copy" operations.
+ ** Helper for building »virtual copy« operations.
  ** Especially in conjunction with type erasure, sometimes we have to deal with
  ** situations, where we want to copy or assign an object without knowing the
  ** full implementation type. Obviously, the default (compiler generated) operations
  ** will not work in such situations -- even worse, they will slice the objects on
- ** copy. The reason is: we \em must know the full implementation and storage layout
+ ** copy. The reason is: we _must know the full implementation and storage layout_
  ** of a type do provide any meaningful copy, assignment or move operation.
  ** 
  ** A possible workaround is to call into the actual implementation type through
- ** a virtual function (which requires a VTable): Even if for everyone else any
- ** knowledge regarding the exact implementation type has been discarded ("erased"),
- ** the function pointers in the VTable still implicitly hold onto that precise
- ** implementation type, since they were set up during construction, where the
- ** type was still available. Such a scheme of dealing with "opaque" copy operations
- ** is known as <b>virtual copy</b> -- it can be dangerous and tricky to get right
- ** and is preferably used only in flat class hierarchies.
+ ** a virtual function (which requires a VTable): Even if everyone else has ceded
+ ** ("erased") any knowledge regarding the exact implementation type, the function
+ ** pointers in the VTable still implicitly hold onto that precise implementation type,
+ ** since they were set up during construction, where the type was still available.
+ ** Such a scheme of dealing with "opaque" copy operations is known as **virtual copy**
+ ** — it can be dangerous and tricky to get right and preferably it is used only
+ ** in flat and effectively closed class hierarchies.
  ** 
  ** This helper template simplifies the construction of such a scheme.
  ** - a base interface defines the available virtual copy operations
@@ -49,19 +49,21 @@
  ** - we use type traits and a policy template to pick the correct implementation
  **   for a given data type. Any assignment or copy operations not supported by the
  **   target type will be replaced by an implementation which raises a runtime error
- **   (Exception).
+ **   (Exception); due to relying on virtual functions, unfortunately the check and
+ **   error can not happen at compile time.
  ** 
  ** \par prerequisites
  ** The actual implementation type needs to provide the necessary standard / custom
  ** copy and assignment operations with the usual signature. Moreover, the implementation
- ** type provides a static function \c downcast(Base&) to perform a suitable dynamic
+ ** type provides a static function `downcast(Base&)` to perform a suitable dynamic
  ** or static downcast from the interface type to the concrete implementation type.
  ** 
- ** \par usage
+ ** # Usage
+ ** 
  ** The provided virtual operations are to be used in "backward" direction: invoked
  ** on the source and affecting the target. The source, through the VTable, knows its
  ** precise type and data layout. The target is handed in as parameter and treated
- ** by the \c downcast() function -- which preferably performs a dynamic cast
+ ** by the `downcast()` function — which preferably performs a dynamic cast
  ** (or at least asserts the correct type). This whole scheme can only work for
  ** copy and assignment of objects, which actually have the same implementation
  ** type -- it will never be possible to "cross copy" to an completely unrelated
@@ -87,19 +89,19 @@
  **       return *reinterpret_cast<const Buffer*> (&storage_);
  **     }
  ** \endcode
- ** In this example, the concrete implementation of the \c Buffer interface
+ ** In this example, the concrete implementation of the \a Buffer interface
  ** will mix in the Policy template with the implementations of the virtual copy
- ** operations. The copy constructor uses the virtual \c copyInto(void*) to perform
- ** a "placement new", whereas the assignment operator calls the virtual \c copyInto(Buffer&)
- ** to downcast the target \c Buffer and in the end invokes the assignment operator on
- ** the concrete \c Buffer implementation subclass.
+ ** operations. The copy constructor uses the virtual `copyInto(void*)` to perform
+ ** a "placement new", whereas the assignment operator calls the virtual `copyInto(Buffer&)`
+ ** to downcast the target \a Buffer and in the end invokes the assignment operator on
+ ** the concrete \a Buffer implementation subclass.
  ** 
- ** @warning please make sure that \em only the virtual copy operation is invoked, since
+ ** @warning please make sure that _only the virtual copy operation_ is invoked, since
  **          this operation will delegate to the copy operation on the implementation class
  **          and thus already invoke the whole chain of custom / compiler generated copy
  **          implementations. Ignoring this warning can lead to insidious slicing or partial
- **          copies. Additionally, if you \em really need multiple level deep inheritance,
- **          you need to mix in the copy implementations on \em every level \em again, and
+ **          copies. Additionally, if you _really need multiple level deep_ inheritance,
+ **          you need to mix in the copy implementations on _every_ level _again,_ and
  **          you need to provide custom copy operations on every level.
  ** @warning please ensure the target storage for copy/clone is properly aligned. TICKET #1204
  ** 
@@ -158,25 +160,25 @@ namespace meta{
       virtual void
       copyInto (void*)  const override
         {
-          throw error::Logic("Copy construction invoked but target is noncopyable");
+          throw error::Logic{"Copy construction invoked but target is noncopyable"};
         }
       
       virtual void
       moveInto (void*)  override
         {
-          throw error::Logic("Move construction invoked but target is noncopyable");
+          throw error::Logic{"Move construction invoked but target is noncopyable"};
         }
       
       virtual void
       copyInto (I&)  const override
         {
-          throw error::Logic("Assignment invoked but target is not assignable");
+          throw error::Logic{"Assignment invoked but target is not assignable"};
         }
       
       virtual void
       moveInto (I&)  override
         {
-          throw error::Logic("Assignment invoked but target is not assignable");
+          throw error::Logic{"Assignment invoked but target is not assignable"};
         }
     };
   
@@ -188,7 +190,7 @@ namespace meta{
       virtual void
       copyInto (void*)  const override
         {
-          throw error::Logic("Copy construction invoked but target allows only move construction");
+          throw error::Logic{"Copy construction invoked but target allows only move construction"};
         }
       
       virtual void
