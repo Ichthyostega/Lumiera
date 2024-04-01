@@ -357,7 +357,7 @@ namespace test{
               installInitialiser(fun, buildInit([](int){ return 0; }));
             }
                                                  // prevent this ctor from shadowing the copy ctors    //////TICKET #963
-          template<typename FUN,      typename =disable_if_self<FUN, LazyDemo>>
+          template<typename FUN,      typename =disable_if_self<LazyDemo, FUN>>
           LazyDemo (FUN&& someFun)
             : LazyInit{MarkDisabled()}
             , fun{}

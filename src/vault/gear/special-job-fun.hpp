@@ -164,7 +164,7 @@ namespace gear {
        *          this reference is dangling and using it further will
        *          lead to SEGFAULT or memory corruption.
        */
-      template<class FUN,            typename =disable_if_self<FUN, SpecialJobFun>>
+      template<class FUN,            typename =disable_if_self<SpecialJobFun, FUN>>
       explicit
       SpecialJobFun (FUN&& someFun)
         : _Handle{selfAttached (new SpecialExecutor(forward<FUN> (someFun)))}

@@ -136,9 +136,28 @@ namespace meta {
   
   
   
+  namespace {
+    template<typename...>
+    struct _ExtractFirst
+      {
+        using Type = void;
+      };
+    template<typename X, typename...XS>
+    struct _ExtractFirst<X,XS...>
+      {
+        using Type = X;
+      };
+  }
+  /** helper to extract the first argument from a variadic arg pack, if any */
+  template<typename...XS>
+  using extractFirst_t = typename _ExtractFirst<XS...>::Type;
+  
+  
+  
   /** helper to prevent a template constructor from shadowing inherited copy ctors */
-  template<typename ARG, class SELF>
-  using disable_if_self = disable_if<std::is_same<std::remove_reference_t<ARG>, SELF>>;
+  template<class SELF, typename ...ARGS>
+  using disable_if_self = disable_if<std::is_same<std::remove_cv_t<std::remove_reference_t<extractFirst_t<ARGS...>>>
+                                                 , SELF>>;
   
   
   

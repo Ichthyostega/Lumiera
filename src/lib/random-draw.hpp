@@ -282,7 +282,7 @@ namespace lib {
        * - `void(RandomDraw&, ...)` : the function manipulates the current
        *   instance, to control parameters dynamically, based on input.
        */
-      template<class FUN,      typename =disable_if_self<FUN, RandomDraw>>
+      template<class FUN,      typename =disable_if_self<RandomDraw, FUN>>
       RandomDraw(FUN&& fun)
         : Lazy{Disabled()}
         , probability_{1.0}
