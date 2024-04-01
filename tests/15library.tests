@@ -251,13 +251,13 @@ out-lit: can_lexical2string<StringRRef>	 : Yes
 out-lit: can_convertToString<StringRRef>	 : Yes
 out-lit: use_StringConversion4Stream<StringRRef>	 : No
 out-lit: Type: StrConstRef ......
-out-lit: is_StringLike<StrConstRef>	 : No
-out-lit: BasicallyString<StrConstRef>	 : No
+out-lit: is_StringLike<StrConstRef>	 : Yes
+out-lit: BasicallyString<StrConstRef>	 : Yes
 out-lit: BasicallyCString<StrConstRef>	 : No
 out-lit: std::is_arithmetic<StrConstRef>	 : No
-out-lit: can_lexical2string<StrConstRef>	 : No
+out-lit: can_lexical2string<StrConstRef>	 : Yes
 out-lit: can_convertToString<StrConstRef>	 : Yes
-out-lit: use_StringConversion4Stream<StrConstRef>	 : Yes
+out-lit: use_StringConversion4Stream<StrConstRef>	 : No
 out-lit: Type: CharLit ......
 out-lit: is_StringLike<CharLit>	 : Yes
 out-lit: BasicallyString<CharLit>	 : No

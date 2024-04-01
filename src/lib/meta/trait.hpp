@@ -308,7 +308,7 @@ namespace meta {
   
   /** compare unadorned types, disregarding const and references */
   template<typename T, typename U>
-  struct is_basically
+  struct is_basicallySame
     : is_same <typename Strip<T>::TypeReferred
               ,typename Strip<U>::TypeReferred>
     { };
@@ -322,6 +322,13 @@ namespace meta {
                    >
            , is_same<I,S>
            >
+    { };
+    
+  /** compare for unadorned base type, disregarding const and references */
+  template<typename S, typename I>
+  struct is_basically
+    : is_Subclass <typename Strip<S>::TypeReferred
+                  ,typename Strip<I>::TypeReferred>
     { };
   
   /** verify the first (special) type can stand-in for the second */
