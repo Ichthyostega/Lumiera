@@ -33,16 +33,11 @@
 #include "lib/format-cout.hpp"///////////////////////TODO
 #include "lib/test/diagnostic-output.hpp"///////////////////////TODO
 
-//#include <chrono>
-#include <array>
-
-using std::array;
-
+using lib::stat::CSVData;
 
 namespace lib {
-namespace test {
+namespace test{
   
-  using gnuplot_gen::CSVData;
   
   
   /***************************************************************************//**

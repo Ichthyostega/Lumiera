@@ -70,6 +70,26 @@ namespace util { // forward declaration
 namespace lib {
 namespace meta {
   
+  /**
+   * Helper: perform some arbitrary operation on each element of a tuple.
+   * @note the given functor must be generic, since each position of the tuple
+   *       may hold a data element of different type.
+   * @remark credits to David Vandevoorde (member of C++ committee) for using
+   *       std::apply to unpack the tuple's contents into an argument pack and
+   *       then employ a fold expression with the comma operator.
+   */
+  template<class FUN, typename...ELMS>
+  void forEach (std::tuple<ELMS...>&& tuple, FUN fun)
+  {
+      std::apply ([&fun](auto&... elms)
+                       {
+                         (fun(elms), ...);
+                       }
+                 ,tuple);
+  }
+  
+  
+  
   namespace { // rebinding helper to create std::tuple from a type sequence
     
     template<typename SEQ>

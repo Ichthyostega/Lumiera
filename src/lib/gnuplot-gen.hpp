@@ -61,50 +61,6 @@ namespace lib {
 namespace gnuplot_gen { ///< preconfigured setup for Gnuplot data visualisation
   
   
-  /**
-   * Wrapper to simplify notation in tests.
-   * Accepts data suitable for representation as CSV
-   * - either as an std::initializer_list<string> for pre-formatted rows
-   * - or a list of strings for the header, and then a list of data tuples,
-   *   which will be rendered into data rows in CSV format
-   * Since this wrapper is-a `vector<string>`, the rows can be retrieved
-   * directly and then rendered, or the \ref operator string() can be used
-   * to retrieve the complete data set in a single string of data lines.
-   */
-  struct CSVData
-    : std::vector<string>
-    {
-      CSVData (std::initializer_list<string> lines)
-        : vector<string>(lines)
-        { }
-      
-      template<class DAT>
-      CSVData (std::initializer_list<string> header
-              ,std::initializer_list<std::initializer_list<DAT>> data)
-        {
-          resize (data.size()+1);
-          string line;
-          for (string key : header)
-            stat::appendCsvField (line, key);
-          emplace_back (move(line));
-          for (auto& row : data)
-            {
-              line = "";
-              for (DAT const& val : row)
-                stat::appendCsvField (line, val);
-              emplace_back (move(line));
-            }
-        }
-      
-      // standard copy operations acceptable
-      
-      
-      operator string()  const
-        {
-          return util::join (*this, "\n");
-        }
-    };
-  
   
   using ParamRecord = diff::Rec::Mutator;
   

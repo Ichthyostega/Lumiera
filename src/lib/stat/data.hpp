@@ -84,8 +84,8 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "lib/stat/file.hpp"
 #include "lib/stat/csv.hpp"
+#include "lib/stat/file.hpp"
 #include "lib/format-string.hpp"
 #include "lib/util.hpp"
 
@@ -96,7 +96,6 @@
 #include <string>
 #include <limits>
 #include <deque>
-#include <tuple>
 
 
 namespace lib {
@@ -112,27 +111,6 @@ namespace stat{
   using util::unConst;
   using util::_Fmt;
   using util::min;
-  
-  
-  
-  /**
-   * Helper: perform some arbitrary operation on each element of a tuple.
-   * @note the given functor must be generic, since each position of the tuple
-   *       may hold a data element of different type.
-   * @remark credits to David Vandevoorde (member of C++ committee) for using
-   *       std::apply to unpack the tuple's contents into an argument pack and
-   *       then using a fold expression with the comma operator.
-   */
-  template<class FUN, typename...ELMS>
-  void forEach(tuple<ELMS...>&& tuple, FUN fun)
-  {
-      std::apply([&fun](auto&... elms)
-                      {
-                        (fun(elms), ...);
-                      }
-                ,tuple);
-  }
-  
   
   
   
@@ -236,11 +214,11 @@ namespace stat{
         {
           if (0 == columnCnt) return 0;
           size_t rowCnt = std::numeric_limits<size_t>::max();
-          forEach (unConst(this)->allColumns()
-                  ,[&](auto& col)
-                    {
-                      rowCnt = min (rowCnt, col.data.size());
-                    }); // the smallest number of data points found in any column
+          forAllColumns(
+                    [&](auto& col)
+                      {
+                        rowCnt = min (rowCnt, col.data.size());
+                      }); // the smallest number of data points found in any column
           return rowCnt;
         }
       
@@ -260,9 +238,9 @@ namespace stat{
       void
       newRow()
         {
-            forEach (TAB::allColumns()
-                    ,[siz = size()+1]
-                     (auto& col)
+            forAllColumns(
+                    [siz = size()+1]
+                    (auto& col)
                       {
                         col.data.resize (siz);
                       });
@@ -274,8 +252,8 @@ namespace stat{
           if (empty())
             newRow();
           else
-            forEach (TAB::allColumns()
-                    ,[](auto& col)
+            forAllColumns(
+                    [](auto& col)
                       {
                         col.data.emplace_back (col.data.back());
                       });
@@ -285,8 +263,8 @@ namespace stat{
       dropLastRow()
         {
           if (not empty())
-            forEach (TAB::allColumns()
-                    ,[](auto& col)
+            forAllColumns(
+                    [](auto& col)
                       {
                         size_t siz = col.data.size();
                         col.data.resize (siz>0? siz-1 : 0);
@@ -296,8 +274,8 @@ namespace stat{
       void
       reserve (size_t expectedCapacity)
         {
-            forEach (TAB::allColumns()
-                    ,[=](auto& col)
+            forAllColumns(
+                    [=](auto& col)
                       {
                         col.data.reserve(expectedCapacity);
                       });
@@ -306,8 +284,8 @@ namespace stat{
       void
       clear()
         {
-            forEach (TAB::allColumns()
-                    ,[](auto& col)
+            forAllColumns(
+                    [](auto& col)
                       {
                         col.data.clear();
                       });
@@ -362,6 +340,15 @@ namespace stat{
       
     private: /* === Implementation === */
       
+      /** apply a generic Lambda to all columns */
+      template<class OP>
+      void
+      forAllColumns (OP&& doIt)  const
+        {
+          lib::meta::forEach (unConst(this)->allColumns()
+                             ,std::forward<OP> (doIt));
+        }
+      
       void
       loadData()
         {
@@ -409,9 +396,9 @@ namespace stat{
       void
       verifyHeaderSpec (string headerLine)
         {
-          CsvLine header{headerLine};
-          forEach (TAB::allColumns()
-                  ,[&](auto& col)
+          CsvParser header{headerLine};
+          forAllColumns(
+                  [&](auto& col)
                     {
                       if (*header != col.header)
                         throw error::Invalid{_Fmt{"Header mismatch in CSV file %s. "
@@ -425,8 +412,8 @@ namespace stat{
       generateHeaderSpec()
         {
           string csv;
-          forEach (TAB::allColumns()
-                  ,[&](auto& col)
+          forAllColumns(
+                  [&](auto& col)
                     {
                       appendCsvField (csv, col.header);
                     });
@@ -438,9 +425,9 @@ namespace stat{
       appendRowFromCSV (string line)
         {
           newRow();
-          CsvLine csv(line);
-          forEach (TAB::allColumns()
-                  ,[&](auto& col)
+          CsvParser csv(line);
+          forAllColumns(
+                  [&](auto& col)
                     {
                       if (not csv)
                         {
@@ -471,8 +458,8 @@ namespace stat{
                                    % rownum % (size()-1)};
           
           string csvLine;
-          forEach (unConst(this)->allColumns()
-                  ,[&](auto& col)
+          forAllColumns(
+                  [&](auto& col)
                     {
                       appendCsvField (csvLine, col.data.at(rownum));
                     });

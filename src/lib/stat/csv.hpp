@@ -49,12 +49,14 @@
 
 #include "lib/error.hpp"
 #include "lib/null-value.hpp"
+#include "lib/meta/tuple-helper.hpp"
 #include "lib/format-string.hpp"
-#include "lib/format-obj.hpp"
+#include "lib/format-util.hpp"
 #include "lib/regex.hpp"
 
 #include <limits>
 #include <string>
+#include <vector>
 
 namespace lib {
 namespace stat {
@@ -72,6 +74,8 @@ namespace stat {
     const string MATCH_SINGLE_TOKEN { R"~(([^,;"\s]*)\s*)~"};
     const string MATCH_QUOTED_TOKEN { R"~("([^"]*)"\s*)~" };
     const string MATCH_DELIMITER    { R"~((?:^|,|;)\s*)~" };
+    
+    const regex FIND_DELIMITER_TOKEN{"[,;]"};
     
     const regex ACCEPT_FIELD{ MATCH_DELIMITER + "(?:"+ MATCH_QUOTED_TOKEN +"|"+ MATCH_SINGLE_TOKEN +")"
                             , regex::optimize};
@@ -104,6 +108,106 @@ namespace stat {
   }
   
   
+  /**
+   * A string with the ability to construct
+   * or append the CSV-rendering of data fields
+   */
+  struct CSVLine
+    : std::string
+    {
+      using value_type = string;
+      
+      template<typename...ELMS,                 typename = meta::disable_if_self<CSVLine,ELMS...>>
+      CSVLine (ELMS&& ...items)
+        {
+          meta::forEach (std::make_tuple (items...)
+                        ,[this](auto const& it){ *this += it; }
+                        );
+        }
+      // Standard copy acceptable
+      
+      
+      template<typename X>
+      CSVLine&
+      operator+= (X const& x)
+      {
+        stat::appendCsvField (*this, x);
+        return *this;
+      }
+    };
+  
+  /**
+   * Wrapper to simplify notation in tests.
+   * Accepts data suitable for representation as CSV
+   * - either as an std::initializer_list<string> for pre-formatted rows
+   * - or as a sequence of strings (words) to form a single header line
+   * - or a list of strings for the header, and then a list of data tuples,
+   *   which will be rendered into data rows in CSV format
+   * Since this wrapper is-a `vector<string>`, the rows can be retrieved
+   * directly and then rendered, or the \ref operator string() can be used
+   * to retrieve the complete data set in a single string of data lines.
+   */
+  struct CSVData
+    : std::vector<CSVLine>
+    {
+      using VecCSV = std::vector<CSVLine>;
+      
+      CSVData (std::initializer_list<string> lines)
+        : VecCSV(detectHeader(lines))
+        { }
+      
+      CSVData (std::initializer_list<string> header
+              ,std::initializer_list<CSVLine> data)
+        {
+          reserve (data.size()+1);
+          appendHeaderLine(*this, header);
+          for (CSVLine const& line : data)
+            emplace_back (line);
+        }
+      
+      // standard copy operations acceptable
+      
+      
+      operator string()  const
+        {
+          return util::join (*this, "\n");
+        }
+      
+      
+    private:
+      static bool
+      containsCSV (string const& line)
+        {
+          return std::regex_search (line, FIND_DELIMITER_TOKEN);
+        }
+      
+      static void
+      appendHeaderLine (VecCSV& data, std::initializer_list<string> const& input)
+        {
+          CSVLine header;
+          for (string const& s : input)
+            header += s;
+          data.emplace_back (move(header));
+        }
+      
+      static VecCSV
+      detectHeader (std::initializer_list<string> input)
+        {
+          VecCSV csv;
+          if (input.size() > 0 and containsCSV(*input.begin()))
+            {// the first line is a header => slurp in all as lines
+              csv.reserve (input.size());
+              for (string const& s : input)
+                csv.emplace_back (s);
+            }
+          else // combine all strings into a single header line
+            appendHeaderLine (csv, input);
+          return csv;
+        }
+    };
+  
+  
+  
   /** parse string representation into typed value */
   template<typename TAR>
   inline TAR
@@ -119,13 +223,13 @@ namespace stat {
   
   template<>
   inline bool
-  parseAs(string const& encodedBool)
+  parseAs (string const& encodedBool)
   {
       return util::boolVal(encodedBool);
   }
   template<>
   inline string
-  parseAs(string const& string)
+  parseAs (string const& string)
   {
       return string; // pass-through (even if empty)
   }
@@ -141,7 +245,7 @@ namespace stat {
    *  - increment to move to the next field
    * @throws error::Invalid on CSV format violation
    */
-  class CsvLine
+  class CsvParser
     : public util::RegexSearchIter
     {
       string const& line_{};
@@ -152,11 +256,11 @@ namespace stat {
       util::RegexSearchIter        end()  const { return util::RegexSearchIter{}; }
 
     public:
-      CsvLine()
+      CsvParser()
         : line_{lib::NullValue<string>::get()}
         { }
       
-      CsvLine (string& line) // NOTE: string and reg-exp must exist elsewhere
+      CsvParser (string& line) // NOTE: string and reg-exp must exist elsewhere
         : RegexSearchIter(line, ACCEPT_FIELD)
         , line_{line}
         { }
@@ -166,7 +270,7 @@ namespace stat {
           return isValid();
         }
 
-      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (CsvLine);
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (CsvParser);
       
       
       string operator*()  const

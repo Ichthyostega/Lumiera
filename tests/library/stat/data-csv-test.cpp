@@ -92,6 +92,7 @@ namespace test{
           verify_rowHandling();
           verify_CSV_Format();
           verify_persistentDataFile();
+          demonnstrate_CSV_Notation();
         }
       
       
@@ -197,9 +198,9 @@ namespace test{
           CHECK ( 42 == tab.val);
           CHECK (-11 == tab.off);
           
-          forEach(tab.allColumns()
-                 ,[](auto& col){ col.data.resize(2); }
-                 );
+          meta::forEach (tab.allColumns()
+                        ,[](auto& col){ col.data.resize(2); }
+                        );
           CHECK (2 == tab.size());
           CHECK ("◆" == string{tab.id});
           CHECK ( 42 == tab.val);
@@ -253,28 +254,28 @@ namespace test{
           CHECK (line == "-100000,0.333333333333333,true,\"Raptor\""_expect);
           
           
-          CsvLine csvLine(line);
-          CHECK (csvLine.isValid());
-          CHECK (*csvLine == "-100000"_expect);
-          CHECK (-100000 == parseAs<int>(*csvLine));
-          ++csvLine;
-          CHECK (csvLine.isValid());
-          CHECK (*csvLine == "0.333333333333333"_expect);
-          CHECK (0.333333343f == parseAs<float>(*csvLine));
-          ++csvLine;
-          CHECK (csvLine.isValid());
+          CsvParser parse{line};
+          CHECK (parse.isValid());
+          CHECK (*parse == "-100000"_expect);
+          CHECK (-100000 == parseAs<int>(*parse));
+          ++parse;
+          CHECK (parse.isValid());
+          CHECK (*parse == "0.333333333333333"_expect);
+          CHECK (0.333333343f == parseAs<float>(*parse));
+          ++parse;
+          CHECK (parse.isValid());
 
-          CHECK (*csvLine == "true"_expect);
-          CHECK (true == parseAs<bool>(*csvLine));
-          ++csvLine;
-          CHECK (csvLine.isValid());
-          CHECK (*csvLine == "Raptor"_expect);
-          CHECK ("Raptor" == parseAs<string>(*csvLine));
-          ++csvLine;
-          CHECK (not csvLine.isValid());
+          CHECK (*parse == "true"_expect);
+          CHECK (true == parseAs<bool>(*parse));
+          ++parse;
+          CHECK (parse.isValid());
+          CHECK (*parse == "Raptor"_expect);
+          CHECK ("Raptor" == parseAs<string>(*parse));
+          ++parse;
+          CHECK (not parse.isValid());
           
           line = " ◐0◑. ; \t \"' \" \n ,oh my ;";
-          CsvLine horror(line);
+          CsvParser horror{line};
           CHECK ("◐0◑." == *horror);           // as far as our CSV format is concerned, this is valid
           CHECK (0 == horror.getParsedFieldCnt());
           ++horror;
@@ -290,8 +291,8 @@ namespace test{
           CHECK (not horror.isValid());
           CHECK (horror.isParseFail());
           
-          // CsvLine is a »Lumiera Forward Iterator«
-          CHECK (meta::can_IterForEach<CsvLine>::value);
+          // CsvParser is a »Lumiera Forward Iterator«
+          CHECK (meta::can_IterForEach<CsvParser>::value);
         }
       
       
@@ -348,10 +349,43 @@ R"("ID","Value","Offset"
 )"_expect);
          // note again the reversed order in storage: last line at top
         }
+      
+      
+      
+      /** @test simplified notation of inline CSV data for tests */
+      void
+      demonnstrate_CSV_Notation()
+        {
+          CHECK (CSVLine(1,"2",3.4,5555/55) == "1,\"2\",3.4,101"_expect);
+          CHECK (CSVLine(string{"himself"}) == "\"himself\""_expect);
+          CHECK (CSVLine{CSVLine{1e9}}      == "1000000000"_expect);
+          CHECK (CSVLine{}                  == ""_expect);
+          
+          auto appended = (CSVLine{} += 5.5) += Symbol();
+          CHECK (appended == "5.5,\"⟂\""_expect);
+          
+          CHECK (CSVData({"eeny","meeny","miny","moe"}) == "\"eeny\",\"meeny\",\"miny\",\"moe\""_expect);
+          CHECK (CSVData({"eeny , meeny","miny","moe"}) == "\"eeny , meeny\"\n\"miny\"\n\"moe\""_expect); // you dirty dirty dishrag you
+          
+          auto csv = CSVData{{"la","la","schland"}
+                            ,{{3.2,1l,88}
+                             ,{"mit", string{"mia"}, Literal("ned")}
+                             ,CSVLine(string(";"))
+                             ,{false}
+                             ,{}
+                             }};
+          CHECK (csv.size() == 6);
+          CHECK (string(csv) ==
+R"("la","la","schland"
+3.2,1,88
+"mit","mia","ned"
+";"
+false
+)"_expect);
+        }
     };
   
   LAUNCHER (DataCSV_test, "unit calculation");
   
   
 }}} // namespace lib::stat::test
-
