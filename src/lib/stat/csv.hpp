@@ -51,7 +51,6 @@
 #include "lib/null-value.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/format-string.hpp"
-#include "lib/format-util.hpp"
 #include "lib/regex.hpp"
 
 #include <limits>
@@ -170,7 +169,10 @@ namespace stat {
       
       operator string()  const
         {
-          return util::join (*this, "\n");
+          std::ostringstream buffer;
+          for (string const& line : *this)
+            buffer << line << '\n';
+          return buffer.str();
         }
       
       

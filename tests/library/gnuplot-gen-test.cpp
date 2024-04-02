@@ -65,7 +65,7 @@ namespace test{
       
       
       /** @test TODO
-       * @todo WIP 4/24 🔁 define ⟶ implement
+       * @todo WIP 4/24 🔁 define ⟶ ✔ implement
        */
       void
       simpeUsage()
@@ -78,10 +78,11 @@ namespace test{
                                                           ,{4,5}
                                                           ,{5,8}
                                                           ,{6,13}
-                                                          ,{7,21}
+                                                          ,{7,21.55}
                                                          }});
           cout << gnuplot <<endl;
         }
+      
       
       
       /** @test TODO

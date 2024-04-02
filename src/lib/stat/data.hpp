@@ -71,7 +71,13 @@
  ** 
  ** std::vector<int>& counters = daz.n.data;
  ** \endcode
- ** 
+ ** \par Variations
+ ** The standard case is to have a table backed by persistent file storage,
+ ** which can be initially empty. Under some conditions, especially for tests
+ ** - the DataFile can be created without filename
+ ** - it can be created from a CSVData, which is a `std::vector` of CSV-strings
+ ** - it can be [rendered into CSV strings](\ref #renderCSV)
+ ** - a (new) storage file name can be [given later](\ref saveAs)
  ** @see DataCSV_test
  **
  */
@@ -198,6 +204,12 @@ namespace stat{
           loadData();
         }
       
+      DataFile (CSVData const& csv)
+        : filename_{}
+        {
+          appendFrom (csv);
+        }
+      
       
       /* === Data Access === */
       
@@ -222,12 +234,15 @@ namespace stat{
           return rowCnt;
         }
       
-      string
-      dumpCSV()  const
+      CSVData
+      renderCSV()  const
         {
-          string csv;
+          CSVData csv{{}};
+          csv.reserve (size()+1);
+          auto header = generateHeaderSpec();
+          std::swap (csv[0], header);
           for (uint i=0; i < size(); ++i)
-            csv += formatCSVRow(i) + '\n';
+            csv.emplace_back (formatCSVRow(i));
           return csv;
         }
       
@@ -290,6 +305,17 @@ namespace stat{
                         col.data.clear();
                       });
         }
+      
+      void
+      appendFrom (CSVData const& csv)
+        {
+          if (isnil (csv)) return;
+          verifyHeaderSpec (csv[0]);
+          for (size_t row=1; row<csv.size(); ++row)
+            if (not isnil (csv[row]))
+              appendRowFromCSV (csv[row]);
+        }
+      
       
       
       /** @param lineLimit number of rows to retain, back from the newest */
@@ -408,14 +434,14 @@ namespace stat{
                     });
         }
       
-      string
-      generateHeaderSpec()
+      CSVLine
+      generateHeaderSpec()  const
         {
-          string csv;
+          CSVLine csv;
           forAllColumns(
                   [&](auto& col)
                     {
-                      appendCsvField (csv, col.header);
+                      csv += col.header;
                     });
           return csv;
         }
@@ -448,7 +474,7 @@ namespace stat{
         }
       
       
-      string
+      CSVLine
       formatCSVRow (size_t rownum)  const
         {
           if (this->empty())
@@ -457,11 +483,11 @@ namespace stat{
             throw error::Logic{_Fmt{"Attempt to access row #%d beyond range [0..%d]."}
                                    % rownum % (size()-1)};
           
-          string csvLine;
+          CSVLine csvLine;
           forAllColumns(
                   [&](auto& col)
                     {
-                      appendCsvField (csvLine, col.data.at(rownum));
+                      csvLine += col.data.at(rownum);
                     });
           return csvLine;
         }

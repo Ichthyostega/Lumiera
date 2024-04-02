@@ -327,9 +327,10 @@ namespace test{
           dat.dupRow();
           dat.id = "last";
           dat.off *= -1;
-          // can dump the contents as CSV
-          CHECK (dat.dumpCSV() ==
-R"("",0,0
+          // can render the contents as CSV
+          CHECK (dat.renderCSV() ==
+R"("ID","Value","Offset"
+"",0,0
 "mid",5.5,1
 "last",5.5,-1
 )"_expect);
@@ -364,8 +365,8 @@ R"("ID","Value","Offset"
           auto appended = (CSVLine{} += 5.5) += Symbol();
           CHECK (appended == "5.5,\"⟂\""_expect);
           
-          CHECK (CSVData({"eeny","meeny","miny","moe"}) == "\"eeny\",\"meeny\",\"miny\",\"moe\""_expect);
-          CHECK (CSVData({"eeny , meeny","miny","moe"}) == "\"eeny , meeny\"\n\"miny\"\n\"moe\""_expect); // you dirty dirty dishrag you
+          CHECK (CSVData({"eeny","meeny","miny","moe"}) == "\"eeny\",\"meeny\",\"miny\",\"moe\"\n"_expect);
+          CHECK (CSVData({"eeny , meeny","miny","moe"}) == "\"eeny , meeny\"\n\"miny\"\n\"moe\"\n"_expect); // you dirty dirty dishrag you
           
           auto csv = CSVData{{"la","la","schland"}
                             ,{{3.2,1l,88}
@@ -381,7 +382,23 @@ R"("la","la","schland"
 "mit","mia","ned"
 ";"
 false
+
 )"_expect);
+          
+          VERIFY_FAIL ("Header mismatch in CSV file", TestTab{csv} );
+          
+          csv = CSVData{{"ID","Value","Offset"}
+                       ,{{"Baby","toe"}
+                        }};
+          VERIFY_FAIL ("unable to parse \"toe\"", TestTab{csv} );
+          
+          csv = CSVData{{"ID","Value","Offset"}
+                       ,{{"Baby",1.6180,23}
+                        ,{"Tiger",10101,-5}
+                        }};
+          TestTab dat{csv};
+          CHECK (dat.val == 1.0101e4);
+          CHECK (dat.renderCSV() == string(csv));
         }
     };
   
