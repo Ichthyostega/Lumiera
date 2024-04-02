@@ -34,6 +34,7 @@
 #include "lib/test/diagnostic-output.hpp"///////////////////////TODO
 
 using lib::stat::CSVData;
+using util::contains;
 
 namespace lib {
 namespace test{
@@ -64,8 +65,8 @@ namespace test{
         }
       
       
-      /** @test TODO
-       * @todo WIP 4/24 🔁 define ⟶ ✔ implement
+      /** @test Create simple (x,y) data point visualisation
+       * @todo WIP 4/24 ✔ define ⟶ ✔ implement
        */
       void
       simpeUsage()
@@ -81,6 +82,12 @@ namespace test{
                                                           ,{7,21.55}
                                                          }});
           cout << gnuplot <<endl;
+          
+          CHECK (contains (gnuplot, "set datafile separator \",;\""));
+          CHECK (contains (gnuplot, "\"step\",\"fib\""));
+          CHECK (contains (gnuplot, "7,21.55"));
+          CHECK (contains (gnuplot, "set key autotitle columnheader"));
+          CHECK (contains (gnuplot, "plot for [i=2:*] $RunData using 1:i with points"));
         }
       
       

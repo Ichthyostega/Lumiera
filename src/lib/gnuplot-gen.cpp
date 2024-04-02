@@ -51,7 +51,7 @@ namespace gnuplot_gen {
     
     
     const string GNUPLOT_CommonStyleDef = R"~(#
-#---common-styles-for-plots-from-Lumiera----
+#---common-styles-for-plots-from-Lumiera---------
 set style line 1 linetype  1 linewidth 2 linecolor rgb '#240CC3'
 set style line 2 linetype  3 linewidth 2 linecolor rgb '#1149D6'
 set style line 3 linetype  2 linewidth 2 linecolor rgb '#0B7FCC'
@@ -64,17 +64,17 @@ set style line 9 linetype  4 linewidth 2 linecolor rgb '#AA0519'
 
 set style line 10 linetype 1 linewidth 1 linecolor rgb '#303030'
 set style line 11 linetype 0 linewidth 1 linecolor rgb '#A0A0A0' dashtype 3
-#---(End)styles-----------------------------
+#---(End)styles----------------------------------
 )~";
     
     const string GNUPLOT_AxisGridSetup = R"~(#
-#---axis-and-grid-setup---------------------
+#---axis-and-grid-setup--------------------------
 unset border
 set tics nomirror
 set grid back linestyle 11
 
 set arrow 10 from graph 0,0 to graph 1.04,0 size screen 0.025,15,60 filled ls 10
-set arrow 11 from graph 0,0 to graph 0,1.05 size screen 0.025,15,60 filled ls 10
+set arrow 11 from graph 0,0 to graph 0,1.08 size screen 0.025,15,60 filled ls 10
 )~";
     
     
@@ -89,7 +89,7 @@ endif Term}
 
 set datafile separator ",;"
 
-####---------Data---------------------------
+####---------Data--------------------------------
 $RunData << _End_of_Data_
 ${CSVData}
 _End_of_Data_
@@ -114,7 +114,7 @@ set key autotitle columnheader tmargin
 )~";
     
     const string GNUPLOT_SIMPLE_DATA_PLOT = R"~(#
-####----------------------------------------
+####---------------------------------------------
 plot for [i=2:*] $RunData using 1:i with ${DiagramKind} linestyle i-1
 
 )~";
