@@ -153,11 +153,12 @@ if (plots > 1) {
     unset arrow 10
     unset arrow 11
     set border 2+8
+    set key bmargin
 
 ${if Y2range}
     set yrange [${Y2range}]
 ${endif
-}    unset x2label
+}    unset xlabel
     set format x ""
 ${if Y2label
 }    set ylabel '${Y2label}' ${endif

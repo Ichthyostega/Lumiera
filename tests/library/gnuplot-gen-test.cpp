@@ -115,7 +115,7 @@ namespace test{
                       ,{6,13}
                       ,{7,21.55}
                      }});
-          cout << gnuplot <<endl;
+//        cout << gnuplot <<endl;
           
           CHECK (contains (gnuplot, "\"step\",\"fib\""));
           CHECK (contains (gnuplot, "7,21.55"));
@@ -123,8 +123,24 @@ namespace test{
           CHECK (contains (gnuplot, "set arrow 1 from graph 0, first regLine(STATS_min_x)"));
           CHECK (contains (gnuplot, "plot $RunData using 1:2 with points"));
           
-          // only one data row given => no multiplot layout
-          CHECK (not contains (gnuplot, "set multiplot"));
+          
+          gnuplot = gnuplot_gen::scatterRegression(
+              CSVData{{"step","fib","one","two","three"}
+                     ,{{0,1 , 1.0, 170,200}
+                      ,{1,1 , 0.1, 160,210}
+                      ,{2,2 , 1.1, 150,220}
+                      ,{3,3 , 0.0, "" ,230}
+                      ,{4,5 , 1.1, 130,240}
+                      ,{5,8 , 1.2, 120,250}
+                      ,{6,13, 1.3, 110    }
+                      ,{7,21, 1.4, 100    }
+                     }});
+          cout << gnuplot <<endl;
+          
+          // more than one data row given => using multiplot layout
+          CHECK (contains (gnuplot, "set multiplot"));
+          CHECK (contains (gnuplot, "\"step\",\"fib\",\"one\",\"two\",\"three\""));
+          CHECK (contains (gnuplot, "0,1,1,170,200"));
         }
       
       
