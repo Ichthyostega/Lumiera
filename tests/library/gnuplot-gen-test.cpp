@@ -55,7 +55,7 @@ namespace test{
       run (Arg)
         {
           simpeUsage();
-          verify_instantiation();
+          plot_scatter_regression();
           verify_keySubstituton();
           verify_conditional();
           verify_iteration();
@@ -71,17 +71,19 @@ namespace test{
       void
       simpeUsage()
         {
-          string gnuplot = gnuplot_gen::dataPlot (CSVData{{"step","fib"}
-                                                         ,{{0,1}
-                                                          ,{1,1}
-                                                          ,{2,2}
-                                                          ,{3,3}
-                                                          ,{4,5}
-                                                          ,{5,8}
-                                                          ,{6,13}
-                                                          ,{7,21.55}
-                                                         }});
-          cout << gnuplot <<endl;
+          string gnuplot = gnuplot_gen::dataPlot(
+              CSVData{{"step","fib"}
+                     ,{{0,1}
+                      ,{1,1}
+                      ,{2,2}
+                      ,{3,3}
+                      ,{4,5}
+                      ,{5,8}
+                      ,{6,13}
+                      ,{7,21.55}
+                     }});
+//        cout << gnuplot <<endl;
+          //Hint: gnuplot -p <scriptfile>
           
           CHECK (contains (gnuplot, "set datafile separator \",;\""));
           CHECK (contains (gnuplot, "\"step\",\"fib\""));
@@ -92,12 +94,37 @@ namespace test{
       
       
       
-      /** @test TODO
-       * @todo WIP 4/24 🔁 define ⟶ implement
+      /** @test Create a (x,y) scatter plot with regression line
+       *      - in the simple case, there is only one diagram
+       *      - use the `stats` command to let Gnuplot calculate the linear regression
+       *      - draw a regrsssion line using the `arrow` command
+       *        and a function representing the linear regression model
+       * @todo WIP 4/24 🔁 define ⟶ ✔ implement
        */
       void
-      verify_instantiation()
+      plot_scatter_regression()
         {
+          string gnuplot = gnuplot_gen::scatterRegression(
+              CSVData{{"step","fib"}
+                     ,{{0,1}
+                      ,{1,1}
+                      ,{2,2}
+                      ,{3,3}
+                      ,{4,5}
+                      ,{5,8}
+                      ,{6,13}
+                      ,{7,21.55}
+                     }});
+          cout << gnuplot <<endl;
+          
+          CHECK (contains (gnuplot, "\"step\",\"fib\""));
+          CHECK (contains (gnuplot, "7,21.55"));
+          CHECK (contains (gnuplot, "regLine(x) = STATS_slope * x + STATS_intercept"));
+          CHECK (contains (gnuplot, "set arrow 1 from graph 0, first regLine(STATS_min_x)"));
+          CHECK (contains (gnuplot, "plot $RunData using 1:2 with points"));
+          
+          // only one data row given => no multiplot layout
+          CHECK (not contains (gnuplot, "set multiplot"));
         }
       
       

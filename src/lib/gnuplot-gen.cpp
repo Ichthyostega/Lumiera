@@ -106,8 +106,11 @@ ${else
 set xlabel abscissaName
 ${end if XLabel
 }${if YLabel
-}set ylabel '${YLabel}'
-${end if YLabel
+}set ylabel '${YLabel}' ${end if YLabel
+}
+${if Yrange}
+set yrange [${Yrange}]
+${endif
 }
 set key autotitle columnheader tmargin
 
@@ -122,33 +125,63 @@ plot for [i=2:*] $RunData using 1:i with ${DiagramKind} linestyle i-1
     
     const string GNUPLOT_SCATTER_REGRESSION = R"~(#
 #
+####---------Scatter-Regression-Plot-------------
 #
+stats $RunData using 1:2 nooutput
 
-set arrow 1 from graph 0, first 1 to graph 1, first 30 nohead ls 9
+# draw regression line as arrow
+regLine(x) = STATS_slope * x + STATS_intercept
+set arrow 1 from graph 0, first regLine(STATS_min_x) \
+              to graph 1, first regLine(STATS_max_x) \
+              nohead linestyle 9
 
-set multiplot layout 2,1
-set lmargin at screen 0.12
-set rmargin at screen 0.88
-
+plots = STATS_columns - 1
+# Adjust layout based on number of data sequences;
+# additional sequences placed into secondary diagram
+#
+if (plots > 1) {
+    set multiplot layout 2,1     # 2 rows 1 column
+    set lmargin at screen 0.12   # fixed margins to align diagrams
+    set rmargin at screen 0.88
+}
+####-------------------------------
 plot $RunData using 1:2 with points linestyle 1
-unset arrow 1
-unset arrow 10
-unset arrow 11
-set border 2+8
 
-set yrange [0:8]
-set y2range [500:2000]
+if (plots > 1) {
+    # switch off decorations for secondary diagram
+    unset arrow 1
+    unset arrow 10
+    unset arrow 11
+    set border 2+8
 
-unset x2label
-set format x ""
-set ylabel "Y1 axis"
-set y2label "Y2 axis" offset -2
-set y2tics
-plot $RunData using 1:3 with impulses linestyle 3, \
-     $RunData using 1:4 with points   linestyle 5 axes x1y2
+${if Y2range}
+    set yrange [${Y2range}]
+${endif
+}    unset x2label
+    set format x ""
+${if Y2label
+}    set ylabel '${Y2label}' ${endif
+}
+    if (plots <= 2) {
+        ####---------------------------------
+        plot $RunData using 1:3 with impulses linestyle 3
 
-
+    } else {
+        # more than one additional data sequence
+        #
+${if Y3range
+}        set y2range [${Y3range}] ${endif
+}        set y2tics
+${if Y3label
+}        set y2label '${Y3label}'  offset -1 ${endif
+}
+        ####---------------------------------------------
+        plot             $RunData using 1:3 with impulses linestyle 3, \
+             for [i=4:*] $RunData using 1:i with points   linestyle 5+(i-4) axes x1y2
+    }
+}
 )~";
+    
     
   }//(End)template and defaults definitions
   
@@ -169,6 +202,19 @@ plot $RunData using 1:3 with impulses linestyle 3, \
     params.set ("CommonStyleDef", GNUPLOT_CommonStyleDef)
           .set ("AxisGridSetup",  GNUPLOT_AxisGridSetup)
           .set (KEY_DiagramKind,  "points")
+          ;
+    return plot.render (params.genNode());
+  }
+  
+  
+  string
+  scatterRegression (ParamRecord params)
+  {
+    TextTemplate plot{GNUPLOT_BASIC_PLOT_DEF
+                     +GNUPLOT_SCATTER_REGRESSION};
+    
+    params.set ("CommonStyleDef", GNUPLOT_CommonStyleDef)
+          .set ("AxisGridSetup",  GNUPLOT_AxisGridSetup)
           ;
     return plot.render (params.genNode());
   }

@@ -67,13 +67,38 @@ namespace gnuplot_gen { ///< preconfigured setup for Gnuplot data visualisation
   const string KEY_CSVData     = "CSVData";
   const string KEY_DiagramKind = "DiagramKind";
   
+  const string KEY_Yrange      = "Yrange";
+  const string KEY_Y2range     = "Y2range";
+  const string KEY_Y3range     = "Y3range";
+  const string KEY_Xlabel      = "Xlabel";
+  const string KEY_Ylabel      = "Ylabel";
+  const string KEY_Y2label     = "Y2label";
+  const string KEY_Y3label     = "Y2label";
+  
   
   
   /**
    * Generate a Gnuplot diagram to visualise the given data points.
    */
   string dataPlot (ParamRecord);
-  string dataPlot (string csvData) { return dataPlot (ParamRecord().set (KEY_CSVData, csvData)); }
+  
+  inline string
+  dataPlot (string csvData)
+  {
+    return dataPlot (ParamRecord().set (KEY_CSVData, csvData));
+  }
+  
+  
+  /**
+   * Generate a (X,Y)-scatter plot with regression line
+   */
+  string scatterRegression (ParamRecord);
+  
+  inline string
+  scatterRegression (string csvData)
+  {
+    return scatterRegression (ParamRecord().set (KEY_CSVData, csvData));
+  }
   
   
 }} // namespace lib::gnuplot_gen
