@@ -32,6 +32,7 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/gnuplot-gen.hpp"
 #include "lib/test/diagnostic-output.hpp"//////////////////////////TODO work in distress
 //#include "lib/format-string.hpp"
 #include "lib/test/transiently.hpp"
@@ -394,24 +395,33 @@ namespace test {
                 uint CONCURRENCY = 4;
                 bool showRuns = true;
                 
-                auto testLoad(size_t nodes)
+                using Param = size_t;
+                using Table = bench::DataTable<Param>;
+                
+                auto
+                testLoad(Param nodes)
                   {
                     TestChainLoad testLoad{nodes};
-//                  return testLoad.seedingRule(testLoad.rule().probability(0.6).minVal(2))
-//                                 .pruningRule(testLoad.rule().probability(0.44))
-//                                 .weightRule(testLoad.value(1))
-//                                 .setSeed(55);
-//                  return testLoad.setWeight(1);
                     return testLoad.configure_isolated_nodes();
+                  }
+                
+                void
+                collectResult(Table& data, double millis, bench::IncidenceStat const& stat)
+                  {
+                    data.time = stat.coveredTime / 1000;
+                    data.conc = stat.avgConcurrency;
+                    data.jobtime = stat.activeTime/stat.activationCnt;
+                    data.overhead = stat.timeAtConc(1) / stat.activationCnt;   ////OOO not really clear if sensible
                   }
               };
             
           auto results = StressRig::with<Setup>()
                                    .perform<bench::ParameterRange> (2,64);
-
-cout<<"\"len\";\"dur\""<<endl;
-for (auto val : results)
-  cout<<val.first<<";"<<val.second<<endl;
+          
+          auto csv = results.renderCSV();
+          cout << csv <<endl;
+          cout << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───"<<endl;
+          cout << lib::gnuplot_gen::scatterRegression(csv);
         }
       
       

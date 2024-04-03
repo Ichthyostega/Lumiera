@@ -93,6 +93,7 @@
 #include "lib/meta/function.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"//////////////////////////TODO RLY?
+#include "lib/stat/data.hpp"
 #include "lib/util.hpp"
 
 //#include <functional>
@@ -421,6 +422,34 @@ namespace test {
     
     
     
+    using lib::stat::Column;
+    using lib::stat::DataFile;
+    using lib::stat::CSVData;
+    using IncidenceStat = lib::IncidenceCount::Statistic;
+    
+    template<typename PAR>
+    struct DataRow
+      {
+        Column<PAR>    param   {"test param"};     // independent variable / control parameter
+        Column<double> time    {"result time"};
+        Column<double> conc    {"concurrency"};
+        Column<double> jobtime {"avg jobtime"};
+        Column<double> overhead{"overhead"};
+    
+        auto allColumns()
+        {   return std::tie(param
+                           ,time
+                           ,conc
+                           ,jobtime
+                           ,overhead
+                           );
+        }
+      };
+    
+    template<typename PAR>
+    using DataTable = DataFile<DataRow<PAR>>;
+    
+    
     
     /**************************************************//**
      * Specific test scheme to perform a Scheduler setup
@@ -431,18 +460,17 @@ namespace test {
     class ParameterRange
       : public CONF
       {
-        using TestLoad  = decltype(declval<ParameterRange>().testLoad(1));
+        using Table = typename CONF::Table;
+        using Param = typename CONF::Param;
+        
+        using TestLoad  = decltype(declval<ParameterRange>().testLoad(Param()));
         using TestSetup = decltype(declval<ParameterRange>().testSetup (declval<TestLoad&>()));
         
-        template<typename PAR>
-        using Point = std::pair<PAR, double>;
         
-        
-        template<typename PAR>
         void
-        runTest (Point<PAR>& point)
+        runTest (Table& data)
           {
-            PAR param = point.first;
+            Param param = data.param;
             double stressFac = 1.0;
             TestLoad testLoad = CONF::testLoad(param).buildTopology();
             TestSetup testSetup = CONF::testSetup (testLoad)
@@ -452,10 +480,9 @@ namespace test {
                                        .withSchedDepends(CONF::SCHED_DEPENDS)
                                        .withAdaptedSchedule(stressFac, CONF::CONCURRENCY)
                                        .withInstrumentation();
-            double testMillis = testSetup.launch_and_wait() / 1000;
+            double millis = testSetup.launch_and_wait() / 1000;
             auto stat = testSetup.getInvocationStatistic();
-            point.second = stat.coveredTime / 1000;
-cout << "x="<<point.first<<"\t y="<<point.second<<"\t e2e="<<testMillis<<"\t conc:"<<stat.avgConcurrency<<" ∅t="<<stat.activeTime/stat.activationCnt<<" ("<<stat.activationCnt<<")"<<endl;
+            CONF::collectResult (data, millis, stat);
           }
         
       public:
@@ -464,31 +491,35 @@ cout << "x="<<point.first<<"\t y="<<point.second<<"\t e2e="<<testMillis<<"\t con
          * varying parameter value to investigate (x,y) correlations.
          * @return ////TODO a tuple `[stress-factor, ∅delta, ∅run-time]`
          */
-        template<typename PAR>
-        auto
-        perform (PAR lower, PAR upper)
+        Table
+        perform (Param lower, Param upper)
           {
             TRANSIENTLY(work::Config::COMPUTATION_CAPACITY) = CONF::CONCURRENCY;
             
-            PAR dist = upper - lower;
+            Param dist = upper - lower;
             uint cnt = CONF::REPETITIONS;
-            vector<Point<PAR>> results(cnt);
-            PAR minP{upper}, maxP{lower};
+            vector<Param> points;
+            points.reserve (cnt);
+            Param minP{upper}, maxP{lower};
             for (uint i=0; i<cnt; ++i)
               {
                 auto random = double(rand())/RAND_MAX;
-                PAR pos = lower + PAR(floor (random*dist + 0.5));
-                results[i].first = pos;
+                Param pos = lower + Param(floor (random*dist + 0.5));
+                points.push_back(pos);
                 minP = min (pos, minP);
                 maxP = max (pos, maxP);
               }
             // ensure the bounds participate in test
-            if (maxP < upper) results[cnt-2].first = upper;
-            if (minP > lower) results[cnt-1].first = lower;
+            if (maxP < upper) points[cnt-2] = upper;
+            if (minP > lower) points[cnt-1] = lower;
             
-            for (auto& point : results)
-              runTest (point);
-            
+            Table results;
+            for (Param& point : points)
+              {
+                results.newRow();
+                results.param = point;
+                runTest (results);
+              }
             return results;
           }
       };

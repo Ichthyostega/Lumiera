@@ -188,11 +188,11 @@ namespace lib {
               return idx < data.size()? data[idx]
                                       : VAL{};
             }
-          size_t cntCase  (size_t  id) { return access (caseCntr, id); }
-          size_t cntThread(size_t  id) { return access (thrdCntr, id); }
-          double timeCase  (size_t id) { return access (caseTime, id); }
-          double timeThread(size_t id) { return access (thrdTime, id); }
-          double timeAtConc(size_t id) { return access (concTime, id); }
+          size_t cntCase  (size_t  id) const { return access (caseCntr, id); }
+          size_t cntThread(size_t  id) const { return access (thrdCntr, id); }
+          double timeCase  (size_t id) const { return access (caseTime, id); }
+          double timeThread(size_t id) const { return access (thrdTime, id); }
+          double timeAtConc(size_t id) const { return access (concTime, id); }
         };
       
       Statistic evaluate();

@@ -128,7 +128,7 @@ namespace stat{
    */
   template<typename VAL>
   struct Column
-    : util::NonCopyable
+    : util::MoveOnly
     {
       string header;
       vector<VAL> data;
@@ -193,7 +193,7 @@ namespace stat{
   template<class TAB>
   class DataFile
       : public TAB
-      , util::NonCopyable
+      , util::MoveOnly
     {
       fs::path filename_;
       
