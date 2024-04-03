@@ -414,7 +414,7 @@ return: 0
 END
 
 
-PLANNED "generate a Gnuplot diagram" GnuplotGen_test <<END
+TEST "generate a Gnuplot diagram" GnuplotGen_test <<END
 return: 0
 END
 

@@ -25,16 +25,18 @@
  ** The visualisation tool [gnuplot] allows for simple data visualisation
  ** in various formats, integrated into a *NIX commandline work environment.
  ** 
- ** The namespace lib::gnuplot_gen provides ....
+ ** The namespace lib::gnuplot_gen allows to generate diagrams relying on
+ ** some common layout schemes, which can be customised. Data is passed in
+ ** as CSV string; the generated Gnuplot script adapts dynamically to the
+ ** number of data columns given, where the first column always holds
+ ** the common x-axis values. Additional parameters can be added to
+ ** the _data binding_ used for script generation; this binding
+ ** is comprised of key = value settings in a `Rec<GenNode>`
+ ** (Lumiera's »ETD« format for structural data)
  ** 
  ** @todo 3/2024 this is an initial draft, shaped by the immediate need to visualise
  **       [measurement data](\ref vault::gear::test::SchedulerStress_test) collected
  **       while testing the new [Scheduler](\ref scheduler.hpp) implementation.
- ** 
- ** ## Usage
- ** TBW
- ** - blah
- ** - blubb
  ** 
  ** @see GnuplotGen_test
  ** @see SchedulerStress_test
@@ -67,13 +69,21 @@ namespace gnuplot_gen { ///< preconfigured setup for Gnuplot data visualisation
   const string KEY_CSVData     = "CSVData";
   const string KEY_DiagramKind = "DiagramKind";
   
+  const string KEY_Term        = "Term";
+  const string KEY_TermSize    = "TermSize";
+  
+  const string KEY_Xtics       = "Xtics";
+  const string KEY_Xrange      = "Xrange";
   const string KEY_Yrange      = "Yrange";
   const string KEY_Y2range     = "Y2range";
   const string KEY_Y3range     = "Y3range";
   const string KEY_Xlabel      = "Xlabel";
   const string KEY_Ylabel      = "Ylabel";
   const string KEY_Y2label     = "Y2label";
-  const string KEY_Y3label     = "Y2label";
+  const string KEY_Y3label     = "Y3label";
+  
+  const string KEY_RegrSocket  = "RegrSocket";
+  const string KEY_RegrSlope   = "RegrSlope";
   
   
   

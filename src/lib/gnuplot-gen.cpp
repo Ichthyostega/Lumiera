@@ -30,7 +30,42 @@
  ** without much structure or preconceptions and written in a way to encourage adding
  ** more use-cases by copy-and-paste. Following this pragmatic approach, generalisations
  ** and common schemes will emerge eventually.
- ** @todo WIP-WIP 4/2024 first usage as part of Scheduler stress testing.
+ ** 
+ ** # Script generation
+ ** The resulting Gnuplot script is combined from several building blocks, and
+ ** passed through the lib::TextTemplate engine to substitute the data and further
+ ** configuration parameters at designated places into the code. Notably, the script
+ ** performs further evaluations at run time, especially in reaction to the number
+ ** of given data rows (relying on the `stats` command of Gnuplot). Data input is
+ ** configured to CSV format and data is pasted as »here document« into a
+ ** _data block variable_ `$RunData`
+ ** 
+ ** \par simple plot
+ ** By default, the `points` plotting style is used; this can be overridden
+ ** through the placeholder #KEY_DiagramKind. All given data rows are combined
+ ** into a single plot, using a common x and y axis, and assigning consecutive
+ ** line drawing styles to each data row (from blue to green, yellow, red).
+ ** A maximum of 9 line styles is prepared for drawing. The x/y-ranges and
+ ** custom labels can be added.
+ ** 
+ ** \par scatter plot with regression line
+ ** Typically this is used for measurement data, assuming linear relation.
+ ** The data is visualised as (x,y) points, overlaying a linear regression line
+ ** plotted in red. Possibly further data rows can be given, which are then
+ ** plotted into a secondary diagram, arranged below the main measurement data
+ ** and using the same x-axis layout. This additional display is featured only
+ ** when more than 2 columns are present in the data; the number of columns is
+ ** picked up from the _second data row_ (since the first row provides the
+ ** key names used for the legend). In further rows, some data points can be
+ ** omitted. The 3rd data column will be shown as »impulse diagram«, while all
+ ** further data columns will be displayed as points, using the _secondary_
+ ** Y-axis. All axis ranges and labels can be customised. By default, the
+ ** **linear regression model** is calculated by Gnuplot, based on the
+ ** data in columns 1 and 2 (the main measurement data), yet an
+ ** alternative regression line can be defined by parameters.
+ ** 
+ ** @todo WIP 4/2024 first usage as part of Scheduler stress testing.
+ ** @see GnuplotGen_test
  */
 
 
@@ -83,9 +118,12 @@ set arrow 11 from graph 0,0 to graph 0,1.08 size screen 0.025,15,60 filled ls 10
 #   GNUPLOT - data plot from Lumiera
 #
 
-${if Term}set term ${Term} ${
-if TermSizeSpec}size ${TermSizeSpec}${endif}${
-endif Term}
+${if Term
+}set term ${Term} ${
+if TermSize}size ${TermSize}${endif}
+${else}${if TermSize
+}set term wxt size ${TermSize}
+${endif}${endif Term}
 
 set datafile separator ",;"
 
@@ -98,19 +136,20 @@ _End_of_Data_
 ${CommonStyleDef}
 ${AxisGridSetup}
 
-${if XLabel
-}set xlabel '${XLabel}'
+${if Xlabel
+}set xlabel '${Xlabel}'
 ${else
 }stats $RunData using (abscissaName=strcol(1)) every ::0::0 nooutput
 
 set xlabel abscissaName
-${end if XLabel
-}${if YLabel
-}set ylabel '${YLabel}' ${end if YLabel
+${end if Xlabel
+}${if Ylabel
+}set ylabel '${Ylabel}' ${end if Ylabel
 }
-${if Yrange}
-set yrange [${Yrange}]
-${endif
+${if Xrange}
+set xrange [${Xrange}] ${endif
+}${if Yrange}
+set yrange [${Yrange}] ${endif
 }
 set key autotitle columnheader tmargin
 
@@ -124,17 +163,23 @@ plot for [i=2:*] $RunData using 1:i with ${DiagramKind} linestyle i-1
     
     
     const string GNUPLOT_SCATTER_REGRESSION = R"~(#
-#
-####---------Scatter-Regression-Plot-------------
-#
 stats $RunData using 1:2 nooutput
 
-# draw regression line as arrow
+${if RegrSlope
+}# regression line function (given as parameter)
+regLine(x) = ${RegrSlope} * x + ${RegrSocket}
+${else
+}# regression line function derived from data
 regLine(x) = STATS_slope * x + STATS_intercept
-set arrow 1 from graph 0, first regLine(STATS_min_x) \
-              to graph 1, first regLine(STATS_max_x) \
-              nohead linestyle 9
-
+${end if
+}
+${if Xtics
+}set xtics ${Xtics}
+${else}${if Xrange}${else
+}set xrange [0:*]
+set xtics 1
+${end if}${end if Xtics
+}
 plots = STATS_columns - 1
 # Adjust layout based on number of data sequences;
 # additional sequences placed into secondary diagram
@@ -144,21 +189,22 @@ if (plots > 1) {
     set lmargin at screen 0.12   # fixed margins to align diagrams
     set rmargin at screen 0.88
 }
-####-------------------------------
-plot $RunData using 1:2 with points linestyle 1
+#
+#
+####---------Scatter-Regression-Plot-------------
+plot $RunData using 1:2 with points linestyle 1, \
+     regLine(x)         with line   linestyle 9
 
 if (plots > 1) {
     # switch off decorations for secondary diagram
-    unset arrow 1
     unset arrow 10
     unset arrow 11
     set border 2+8
     set key bmargin
-
 ${if Y2range}
     set yrange [${Y2range}]
-${endif
-}    unset xlabel
+${endif}
+    unset xlabel
     set format x ""
 ${if Y2label
 }    set ylabel '${Y2label}' ${endif
@@ -171,11 +217,13 @@ ${if Y2label
         # more than one additional data sequence
         #
 ${if Y3range
-}        set y2range [${Y3range}] ${endif
+}        set y2range [${Y3range}]
+
+${endif
 }        set y2tics
 ${if Y3label
-}        set y2label '${Y3label}'  offset -1 ${endif
-}
+}        set y2label '${Y3label}'  offset -1.5
+${endif}
         ####---------------------------------------------
         plot             $RunData using 1:3 with impulses linestyle 3, \
              for [i=4:*] $RunData using 1:i with points   linestyle 5+(i-4) axes x1y2
@@ -185,6 +233,8 @@ ${if Y3label
     
     
   }//(End)template and defaults definitions
+  
+  
   
   
   
@@ -208,6 +258,16 @@ ${if Y3label
   }
   
   
+  /**
+   * @remark the layout of this diagram differs, based on the given
+   * number of data columns. The main measurement data is expected in
+   * columns `[1:2]` and showed in the primary display, adding a
+   * regression line. When further columns are given, a `multiplot`
+   * layout is established, showing those additional related series
+   * in a second diagram below. It may be necessary to define a larger
+   * canvas with different aspect ratio, which is possibly using the
+   * placeholder #KEY_TermSize
+   */
   string
   scatterRegression (ParamRecord params)
   {
