@@ -168,6 +168,7 @@ namespace test {
       using usec = std::chrono::microseconds;
       
       usec LOAD_BASE = 500us;
+      usec LEVEL_STEP = 200us;
       usec BASE_EXPENSE = 0us;
       bool SCHED_NOTIFY  = true;
       bool SCHED_DEPENDS = false;
@@ -206,6 +207,11 @@ namespace test {
       testSetup (TL& testLoad)
         {
           return testLoad.setupSchedule(scheduler)
+                         .withLoadTimeBase(LOAD_BASE)
+                         .withLevelDuration(LEVEL_STEP)
+                         .withBaseExpense (BASE_EXPENSE)
+                         .withSchedNotify (SCHED_NOTIFY)
+                         .withSchedDepends(SCHED_DEPENDS)
                          .withJobDeadline(100ms)
                          .withUpfrontPlanning();
         }
@@ -257,11 +263,7 @@ namespace test {
         void
         configureTest (TestSetup& testSetup, double stressFac)
           {
-            testSetup.withLoadTimeBase(CONF::LOAD_BASE)
-                     .withBaseExpense (CONF::BASE_EXPENSE)
-                     .withSchedNotify (CONF::SCHED_NOTIFY)
-                     .withSchedDepends(CONF::SCHED_DEPENDS)
-                     .withInstrumentation(CONF::INSTRUMENTATION)          // side-effect: clear existing statistics
+            testSetup.withInstrumentation(CONF::INSTRUMENTATION)          // side-effect: clear existing statistics
                      .withAdaptedSchedule(stressFac, CONF::CONCURRENCY, adjustmentFac);
           }
         
@@ -468,21 +470,14 @@ namespace test {
         
         
         void
-        runTest (Table& data)
+        runTest (Param param, Table& data)
           {
-            Param param = data.param;
-            double stressFac = 1.0;
             TestLoad testLoad = CONF::testLoad(param).buildTopology();
             TestSetup testSetup = CONF::testSetup (testLoad)
-                                       .withLoadTimeBase(CONF::LOAD_BASE)
-                                       .withBaseExpense (CONF::BASE_EXPENSE)
-                                       .withSchedNotify (CONF::SCHED_NOTIFY)
-                                       .withSchedDepends(CONF::SCHED_DEPENDS)
-                                       .withAdaptedSchedule(stressFac, CONF::CONCURRENCY)
-                                       .withInstrumentation();
+                                       .withInstrumentation();    // Note: by default Schedule with CONF::LEVEL_STEP
             double millis = testSetup.launch_and_wait() / 1000;
             auto stat = testSetup.getInvocationStatistic();
-            CONF::collectResult (data, millis, stat);
+            CONF::collectResult (data, param, millis, stat);
           }
         
       public:
@@ -514,12 +509,8 @@ namespace test {
             if (minP > lower) points[cnt-1] = lower;
             
             Table results;
-            for (Param& point : points)
-              {
-                results.newRow();
-                results.param = point;
-                runTest (results);
-              }
+            for (Param point : points)
+              runTest (point, results);
             return results;
           }
       };

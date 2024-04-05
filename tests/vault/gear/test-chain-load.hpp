@@ -1944,12 +1944,6 @@ namespace test {
           return move(*this);
         }
       
-      ScheduleCtx&&
-      withBaseExpense ()
-        {
-          return move(*this);
-        }
-      
       /**
        * Establish a differentiated schedule per level, taking node weights into account
        * @param stressFac   further proportional tightening of the schedule times

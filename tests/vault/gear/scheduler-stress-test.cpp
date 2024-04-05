@@ -393,7 +393,6 @@ namespace test {
               {
                 usec LOAD_BASE = 500us;
                 uint CONCURRENCY = 4;
-                bool showRuns = true;
                 
                 using Param = size_t;
                 using Table = bench::DataTable<Param>;
@@ -406,10 +405,12 @@ namespace test {
                   }
                 
                 void
-                collectResult(Table& data, double millis, bench::IncidenceStat const& stat)
+                collectResult(Table& data, Param param, double millis, bench::IncidenceStat const& stat)
                   {
-                    data.time = stat.coveredTime / 1000;
-                    data.conc = stat.avgConcurrency;
+                    data.newRow();
+                    data.param = param;
+                    data.time  = stat.coveredTime / 1000;
+                    data.conc  = stat.avgConcurrency;
                     data.jobtime = stat.activeTime/stat.activationCnt;
                     data.overhead = stat.timeAtConc(1) / stat.activationCnt;   ////OOO not really clear if sensible
                   }
