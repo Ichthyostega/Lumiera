@@ -1865,6 +1865,14 @@ namespace test {
                                   : lib::IncidenceCount::Statistic{};
         }
       
+      double
+      calcRuntimeReference()
+        {
+          microseconds timeBase = compuLoad_->timeBase;
+          size_t sizeBase = compuLoad_->useAllocation? compuLoad_->sizeBase : 0;
+          return chainLoad_.calcRuntimeReference (timeBase, sizeBase);
+        }
+      
       double getStressFac() { return stressFac_; }
       
       

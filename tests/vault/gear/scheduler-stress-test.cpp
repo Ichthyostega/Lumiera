@@ -329,6 +329,7 @@ namespace test {
         }                                                            // should ideally spend most of the time at highest concurrency levels
       
       
+      using StressRig = StressTestRig<16>;
       
       /** @test determine the breaking point towards scheduler overload
        *      - use the integrated StressRig
@@ -356,11 +357,18 @@ namespace test {
           
             struct Setup : StressRig
               {
-                usec LOAD_BASE = 500us;
                 uint CONCURRENCY = 4;
                 bool showRuns = true;
                 
-                auto testLoad() { return TestChainLoad<>{64}.configureShape_chain_loadBursts(); }
+                auto testLoad()
+                  { return TestLoad{64}.configureShape_chain_loadBursts(); }
+                
+                auto testSetup (TestLoad& testLoad)
+                  {
+                    return StressRig::testSetup(testLoad)
+                                     .withLoadTimeBase(500us);
+                  }
+                
               };
             
           auto [stress,delta,time] = StressRig::with<Setup>()
@@ -391,17 +399,21 @@ namespace test {
           
             struct Setup : StressRig
               {
-                usec LOAD_BASE = 500us;
                 uint CONCURRENCY = 4;
                 
                 using Param = size_t;
                 using Table = bench::DataTable<Param>;
                 
-                auto
-                testLoad(Param nodes)
+                auto testLoad(Param nodes)
                   {
-                    TestChainLoad testLoad{nodes};
+                    TestLoad testLoad{nodes};
                     return testLoad.configure_isolated_nodes();
+                  }
+                
+                auto testSetup (TestLoad& testLoad)
+                  {
+                    return StressRig::testSetup(testLoad)
+                                     .withLoadTimeBase(500us);
                   }
                 
                 void
@@ -469,11 +481,10 @@ SHOW_EXPR(loadMicros)
 //SHOW_EXPR(runTime)
 //SHOW_EXPR(expected)
 //SHOW_EXPR(refTime)
+      using StressRig = StressTestRig<8>;
           
             struct Setup : StressRig
               {
-                usec LOAD_BASE = 500us;
-                usec BASE_EXPENSE = 200us;
                 double UPPER_STRESS = 12;
                 //
                 double FAIL_LIMIT   = 1.0; //0.7;
@@ -486,12 +497,19 @@ SHOW_EXPR(loadMicros)
                 auto
                 testLoad()
                   {
-                    TestChainLoad<8> testLoad{256};
+                    TestLoad testLoad{256};
                     testLoad.seedingRule(testLoad.rule().probability(0.6).minVal(2))
                             .pruningRule(testLoad.rule().probability(0.44))
                             .weightRule(testLoad.value(1))
                             .setSeed(55);
                     return testLoad;
+                  }
+                
+                auto testSetup (TestLoad& testLoad)
+                  {
+                    return StressRig::testSetup(testLoad)
+                                     .withBaseExpense(200us)
+                                     .withLoadTimeBase(500us);
                   }
               };
           auto [stress,delta,time] = StressRig::with<Setup>()

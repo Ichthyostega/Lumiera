@@ -143,11 +143,15 @@ namespace test {
   
   
   /** configurable template framework for running Scheduler Stress tests */
-  class StressRig
+  template<size_t maxFan =DEFAULT_FAN>
+  class StressTestRig
     : util::NonCopyable
     {
-      
     public:
+      using TestLoad  = TestChainLoad<maxFan>;
+      using TestSetup = typename TestLoad::ScheduleCtx;
+      
+      
       /***********************************************************************//**
        * Entrance Point: build a stress test measurement setup using a dedicated
        * \a TOOL class, takes the configuration \a CONF as template parameter
@@ -165,13 +169,6 @@ namespace test {
       
       /* ======= default configuration (inherited) ======= */
       
-      using usec = std::chrono::microseconds;
-      
-      usec LOAD_BASE = 500us;
-      usec LEVEL_STEP = 200us;
-      usec BASE_EXPENSE = 0us;
-      bool SCHED_NOTIFY  = true;
-      bool SCHED_DEPENDS = false;
       uint CONCURRENCY = work::Config::getDefaultComputationCapacity();
       bool INSTRUMENTATION = true;
       double EPSILON      = 0.01;          ///< error bound to abort binary search
@@ -198,20 +195,16 @@ namespace test {
       auto
       testLoad(size_t nodes =64)
         {
-          return TestChainLoad<>{nodes};
+          return TestLoad{nodes};
         }
       
-      /** (optional) extension point: base configuration of the test ScheduleCtx */
-      template<class TL>
+      /** (optional) extension point: base configuration of the test ScheduleCtx
+       * @warning the actual setup \a CONF is layered, beware of shadowing. */
       auto
-      testSetup (TL& testLoad)
+      testSetup (TestLoad& testLoad)
         {
           return testLoad.setupSchedule(scheduler)
-                         .withLoadTimeBase(LOAD_BASE)
-                         .withLevelDuration(LEVEL_STEP)
-                         .withBaseExpense (BASE_EXPENSE)
-                         .withSchedNotify (SCHED_NOTIFY)
-                         .withSchedDepends(SCHED_DEPENDS)
+                         .withLevelDuration(200us)
                          .withJobDeadline(100ms)
                          .withUpfrontPlanning();
         }
@@ -244,8 +237,8 @@ namespace test {
     class BreakingPoint
       : public CONF
       {
-        using TestLoad  = decltype(declval<BreakingPoint>().testLoad());
-        using TestSetup = decltype(declval<BreakingPoint>().testSetup (declval<TestLoad&>()));
+        using TestLoad  = typename CONF::TestLoad;
+        using TestSetup = typename TestLoad::ScheduleCtx;
         
         struct Res
           {
@@ -383,11 +376,11 @@ namespace test {
           }
         
         void
-        showRef(TestLoad& testLoad)
+        showRef(TestSetup& testSetup)
           {
             if (CONF::showRef)
               cout << fmtResVal_ % "refTime"
-                                 % (testLoad.calcRuntimeReference(CONF::LOAD_BASE) /1000)
+                                 % (testSetup.calcRuntimeReference() /1000)
                                  % "ms" << endl;
           }
         
@@ -417,7 +410,7 @@ namespace test {
             
             Res res = conductBinarySearch (move(performEvaluation), observations);
             showRes (res);
-            showRef (testLoad);
+            showRef (testSetup);
             return make_tuple (res.stressFac, res.avgDelta, res.avgTime);
           }
       };
@@ -465,8 +458,8 @@ namespace test {
         using Table = typename CONF::Table;
         using Param = typename CONF::Param;
         
-        using TestLoad  = decltype(declval<ParameterRange>().testLoad(Param()));
-        using TestSetup = decltype(declval<ParameterRange>().testSetup (declval<TestLoad&>()));
+        using TestLoad  = typename CONF::TestLoad;
+        using TestSetup = typename TestLoad::ScheduleCtx;
         
         
         void
