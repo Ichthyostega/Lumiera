@@ -47,7 +47,7 @@
  ** the most recent row of data can be accessed directly through these sub-components.
  ** 
  ** # Usage
- ** Create an actual instantiation of the DataFile template, passing a structure
+ ** Create an actual instantiation of the DataTable template, passing a structure
  ** with util::Column descriptors. You may then directly access the values of the
  ** _actual column_ or save/load from a persistent CSV file.
  ** @note mandatory to define a method `allColumns()`
@@ -62,7 +62,7 @@
  **     auto allColumns(){ return std::tie(name,n,x,y); }
  **   };
  ** 
- ** using Dataz = lib::stat::DataFile<Storage>;
+ ** using Dataz = lib::stat::DataTable<Storage>;
  ** 
  ** Dataz daz("filename.csv");
  ** 
@@ -74,7 +74,7 @@
  ** \par Variations
  ** The standard case is to have a table backed by persistent file storage,
  ** which can be initially empty. Under some conditions, especially for tests
- ** - the DataFile can be created without filename
+ ** - the DataTable can be created without filename
  ** - it can be created from a CSVData, which is a `std::vector` of CSV-strings
  ** - it can be [rendered into CSV strings](\ref #renderCSV)
  ** - a (new) storage file name can be [given later](\ref saveAs)
@@ -122,7 +122,7 @@ namespace stat{
   
   
   /**
-   * Descriptor and Accessor for a data column within a DataFile table.
+   * Descriptor and Accessor for a data column within a DataTable table.
    * @tparam VAL type of values contained within this column;
    *             this type must be _default constructible_ and _copyable._
    */
@@ -191,20 +191,20 @@ namespace stat{
    *         within the table and persistent CSV storage.
    */
   template<class TAB>
-  class DataFile
+  class DataTable
       : public TAB
       , util::MoveOnly
     {
       fs::path filename_;
       
     public:
-      DataFile(fs::path csvFile ="")
+      DataTable(fs::path csvFile ="")
         : filename_{fs::consolidated (csvFile)}
         {
           loadData();
         }
       
-      DataFile (CSVData const& csv)
+      DataTable (CSVData const& csv)
         : filename_{}
         {
           appendFrom (csv);

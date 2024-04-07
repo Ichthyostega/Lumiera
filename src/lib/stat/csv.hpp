@@ -39,7 +39,7 @@
  ** - only quoted fields may contain whitespace or comma
  ** - no escaping of quotes, i.e. no quotes within quotes
  ** [RFC 4180]: https://datatracker.ietf.org/doc/html/rfc4180
- ** @see lib::stat::DataFile
+ ** @see lib::stat::DataTable
  **
  */
 

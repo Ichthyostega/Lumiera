@@ -68,7 +68,7 @@ namespace test{
         }
     };
     
-    using TestTab = DataFile<TableForm>;
+    using TestTab = DataTable<TableForm>;
     
   }//(End)Test setup
   
@@ -221,7 +221,7 @@ namespace test{
         }
       
       
-      /** @test validate the simple CSV conversion functions used by DataFile */
+      /** @test validate the simple CSV conversion functions used by DataTable */
       void
       verify_CSV_Format()
         {

@@ -45,15 +45,68 @@
  ** indicated by an increasing variance of the overall runtime, and a departure from
  ** the nominal runtime of the executed schedule.
  ** 
+ ** Another, complimentary observation method is to inject a defined and homogeneous
+ ** load peak into the scheduler and then watch the time it takes to process, the
+ ** processing overhead and achieved degree of concurrency. The actual observation
+ ** using this measurement setup attempts to establish a single _control parameter_
+ ** as free variable, allowing to look for correlations and to build a linear
+ ** regression model to characterise a supposed functional dependency. Simply put,
+ ** given a number of fixed sizes jobs (not further correlated) as input, this
+ ** approach yields a »number of jobs per time unit« and »socked overhead« —
+ ** thereby distilling a _behaviour model_ to describe the actual stochastic data.
+ ** 
  ** ## Setup
  ** To perform this test scheme, an operational Scheduler is required, and an instance
  ** of the TestChainLoad must be provided, configured with desired load properties.
- ** The _stressFactor_ of the corresponding generated schedule will be the active parameter
- ** of this test, performing a binary search for the _breaking point._ The Measurement
- ** attempts to narrow down to the point of massive failure, when the ability to somehow
- ** cope with the schedule completely break down. Based on watching the Scheduler in
- ** operation, the detection was linked to three conditions, which typically will
- ** be triggered together, and within a narrow and reproducible parameter range:
+ ** Moreover, the actual measurement setup requires to perform several test executions,
+ ** controlling some parameters in accordance to the observation scheme. The control
+ ** parameters and the specifics of the actual setup should be clearly visible, while
+ ** hiding the complexities of measurement execution.
+ ** 
+ ** This can be achieved by a »Toolbench«, which is a framework with building blocks,
+ ** providing a pre-arranged _measurement rig_ for the various kinds of measurement setup.
+ ** The implementation code is arranged as a »sandwich« structure...
+ ** - StressTestRig, which is also the framework class, acts as _bottom layer_ to
+ **   provide an anchor point, some common definitions implying an invocation scheme
+ **   ** first a TestChainLoad topology is constructed, based on test parameters
+ **   ** this is used to create a TestChainLoad::SchedulerCtx, which is then
+ **      outfitted specifically for each test run
+ ** - the _middle layer_ is a custom `Setup` class, which inherits from the bottom
+ **   layer and fills in the actual topology and configuration for the desired test
+ ** - the test performance is then initiated by layering a specific _test tool_ on
+ **   top of the compound, which in turn picks up the parametrisation from the Setup
+ **   and base configuration, visible as base class (template param) \a CONF
+ ** Together, this leads to the following code scheme, which aims to simplify experimentation:
+ ** \code
+ ** using StressRig = StressTestRig<16>;
+ ** 
+ ** struct Setup : StressRig
+ **   {
+ **     uint CONCURRENCY = 4;
+ **     //// more definitions
+ **     
+ **     auto testLoad()
+ **       {....define a Test-Chain-Load topology....}
+ **     
+ **     auto testSetup (TestLoad& testLoad)
+ **       { return StressRig::testSetup(testLoad)
+ **                          .withLoadTimeBase(500us)
+ **                       // ....more customisation here
+ **       }
+ **   };
+ ** 
+ ** auto result = StressRig::with<Setup>()
+ **                         .perform<bench::SpecialToolClass>();
+ ** \endcode
+ ** 
+ ** ## Breaking Point search
+ ** The bench::BreakingPoint tool typically uses a complex interwoven job plan, which is
+ ** tightened until the timing breaks. The _stressFactor_ of the generated schedule will be
+ ** the active parameter of this test, performing a _binary search_ for the _breaking point._
+ ** The Measurement attempts to narrow down to the point of massive failure, when the ability
+ ** to somehow cope with the schedule completely break down. Based on watching the Scheduler
+ ** in operation, the detection was linked to three conditions, which typically will be
+ ** triggered together, and within a narrow and reproducible parameter range:
  ** - an individual run counts as _accidentally failed_ when the execution slips
  **   away by more than 2ms with respect to the defined overall schedule. When more
  **   than 55% of all observed runs are considered as failed, the first condition is met
@@ -63,18 +116,24 @@
  ** - the third condition is that the ''averaged delta'' has surpassed 4ms,
  **   which is 2 times the basic failure indicator.
  ** 
- ** ## Observation tools
- ** As a complement to the bench::BreakingPoint tool, another tool is provided to
- ** run a specific Scheduler setup while varying a single control parameter within
- ** defined limits. This produces a set of (x,y) data, which can be used to search
- ** for correlations or build a linear regression model to describe the Scheduler's
- ** behaviour as function of the control parameter. The typical use case would be
- ** to use the input length (number of Jobs) as control parameter, leading to a
- ** model for the Scheduler's expense.
+ ** ## Parameter Correlation
+ ** As a complement, the bench::ParameterRange tool is provided to run a specific Scheduler setup
+ ** while varying a single control parameter within defined limits. This produces a set of (x,y) data,
+ ** which can be used to search for correlations or build a linear regression model to describe the
+ ** Scheduler's behaviour as function of the control parameter. The typical use case would be to use
+ ** the input length (number of Jobs) as control parameter, leading to a model for Scheduling expense.
  ** 
+ ** ## Observation tools
+ ** The TestChainLoad, together with its helpers and framework, already offers some tools to visualise
+ ** the generated topology and to calculate statistics, and to watch an performance with instrumentation.
+ ** In addition, the individual tools provide some debugging output to watch the measurement scheme.
+ ** Result data is either a tuple of values (in case of bench::BreakingPoint), or a table of result
+ ** data as function of the control parameter (for bench::ParameterRange). Result data, when converted
+ ** to CSV, can be visualised as Gnuplot diagram.
  ** @see TestChainLoad_test
  ** @see SchedulerStress_test
  ** @see binary-search.hpp
+ ** @see gnuplot-gen.hpp
  */
 
 
@@ -109,40 +168,18 @@ namespace vault{
 namespace gear {
 namespace test {
   
-  using util::_Fmt;
-  using util::min;
-  using util::max;
-//  using util::isnil;
-//  using util::limited;
-//  using util::unConst;
-//  using util::toString;
-//  using util::isLimited;
-//  using lib::time::Time;
-//  using lib::time::TimeValue;
-//  using lib::time::FrameRate;
-//  using lib::time::Duration;
-//  using lib::test::Transiently;
-//  using lib::meta::_FunRet;
-
-//  using std::string;
-//  using std::function;
-  using std::make_pair;
   using std::make_tuple;
-//  using std::forward;
-//  using std::string;
-//  using std::swap;
-  using std::vector;
-  using std::move;
-  
-  namespace err = lumiera::error;  //////////////////////////TODO RLY?
-  
-  namespace { // Default definitions ....
-    
-  }
+  using std::forward;
   
   
-  
-  /** configurable template framework for running Scheduler Stress tests */
+  /**
+   * Configurable template framework for running Scheduler Stress tests
+   * Use to build a custom setup class, which is then [injected](\ref StressTestRig::with)
+   * to [perform](\ref StressTestRig::Launcher::perform) a _specific measurement tool._
+   * Several tools and detailed customisations are available in `namespace bench`
+   * - bench::BreakingPoint conducts a binary search to _break a schedule_
+   * - bench::ParameterRange performs a randomised series of parametrised test runs
+   */
   template<size_t maxFan =DEFAULT_FAN>
   class StressTestRig
     : util::NonCopyable
@@ -226,6 +263,10 @@ namespace test {
   
   namespace bench { ///< Specialised tools to investigate scheduler performance
     
+    using util::_Fmt;
+    using util::min;
+    using util::max;
+    using std::vector;
     using std::declval;
     
     
@@ -417,33 +458,6 @@ namespace test {
     
     
     
-    using lib::stat::Column;
-    using lib::stat::DataFile;
-    using lib::stat::CSVData;
-    using IncidenceStat = lib::IncidenceCount::Statistic;
-    
-    template<typename PAR>
-    struct DataRow
-      {
-        Column<PAR>    param   {"test param"};     // independent variable / control parameter
-        Column<double> time    {"result time"};
-        Column<double> conc    {"concurrency"};
-        Column<double> jobtime {"avg jobtime"};
-        Column<double> overhead{"overhead"};
-    
-        auto allColumns()
-        {   return std::tie(param
-                           ,time
-                           ,conc
-                           ,jobtime
-                           ,overhead
-                           );
-        }
-      };
-    
-    template<typename PAR>
-    using DataTable = DataFile<DataRow<PAR>>;
-    
     
     
     /**************************************************//**
@@ -455,11 +469,12 @@ namespace test {
     class ParameterRange
       : public CONF
       {
-        using Table = typename CONF::Table;
-        using Param = typename CONF::Param;
-        
         using TestLoad  = typename CONF::TestLoad;
         using TestSetup = typename TestLoad::ScheduleCtx;
+        
+        // Type binding for data evaluation
+        using Param = typename CONF::Param;
+        using Table = typename CONF::Table;
         
         
         void
@@ -505,6 +520,61 @@ namespace test {
             for (Param point : points)
               runTest (point, results);
             return results;
+          }
+      };
+    
+    
+    
+    /* ====== Preconfigured ParamRange-Evaluations ====== */
+    
+    using lib::stat::Column;
+    using lib::stat::DataTable;
+    using lib::stat::CSVData;
+    using IncidenceStat = lib::IncidenceCount::Statistic;
+    
+    /**
+     * Mix-in for setup of a #ParameterRange evaluation to watch
+     * the processing of a single load peak, using the number of
+     * added job as independent parameter.
+     * @remark inject this definition (by inheritance) into the
+     *   Setup, which should then also define a TestChainLoad
+     *   graph with an overall size controlled by the #Param
+     * @see SchedulerStress_test#watch_expenseFunction()
+     */
+    struct LoadPeak_ParamRange_Evaluation
+      {
+        using Param = size_t;
+        
+        struct DataRow
+          {
+            Column<Param>  param   {"load size"};    // independent variable / control parameter
+            Column<double> time    {"result time"};
+            Column<double> conc    {"concurrency"};
+            Column<double> jobtime {"avg jobtime"};
+            Column<double> overhead{"overhead"};
+            
+            auto allColumns()
+            { return std::tie(param
+                             ,time
+                             ,conc
+                             ,jobtime
+                             ,overhead
+                             );
+            }
+          };
+        
+        using Table = DataTable<DataRow>;
+        
+        void
+        collectResult(Table& data, Param param, double millis, bench::IncidenceStat const& stat)
+          {
+            (void)millis;
+            data.newRow();
+            data.param = param;
+            data.time  = stat.coveredTime / 1000;
+            data.conc  = stat.avgConcurrency;
+            data.jobtime = stat.activeTime/stat.activationCnt;
+            data.overhead = stat.timeAtConc(1) / stat.activationCnt;   ////OOO not really clear if sensible
           }
       };
     //

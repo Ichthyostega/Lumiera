@@ -397,12 +397,10 @@ namespace test {
                             .printTopologyDOT()
                             .printTopologyStatistics();
           
-            struct Setup : StressRig
+            struct Setup
+              : StressRig, bench::LoadPeak_ParamRange_Evaluation
               {
                 uint CONCURRENCY = 4;
-                
-                using Param = size_t;
-                using Table = bench::DataTable<Param>;
                 
                 auto testLoad(Param nodes)
                   {
@@ -414,17 +412,6 @@ namespace test {
                   {
                     return StressRig::testSetup(testLoad)
                                      .withLoadTimeBase(500us);
-                  }
-                
-                void
-                collectResult(Table& data, Param param, double millis, bench::IncidenceStat const& stat)
-                  {
-                    data.newRow();
-                    data.param = param;
-                    data.time  = stat.coveredTime / 1000;
-                    data.conc  = stat.avgConcurrency;
-                    data.jobtime = stat.activeTime/stat.activationCnt;
-                    data.overhead = stat.timeAtConc(1) / stat.activationCnt;   ////OOO not really clear if sensible
                   }
               };
             
