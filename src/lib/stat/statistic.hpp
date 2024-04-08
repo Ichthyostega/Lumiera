@@ -245,6 +245,12 @@ namespace stat{
       double x;
       double y;
       double w;
+      
+      RegressionPoint (double vx, double vy, double vw=1.0)
+        : x{vx}
+        , y{vy}
+        , w{vw}
+        { }
     };
   
   using RegressionData = std::vector<RegressionPoint>;

@@ -390,16 +390,39 @@ namespace test {
           cpuLoad.calibrate();
 //////////////////////////////////////////////////////////////////TODO for development only
           MARK_TEST_FUN
-//                    TestChainLoad testLoad{64};
-//                    testLoad.configure_isolated_nodes()
-//                            .buildTopology()
+                    TestChainLoad testLoad{50};
+                    testLoad.configure_isolated_nodes()
+                            .buildTopology()
 //                            .printTopologyDOT()
-//                            .printTopologyStatistics();
+                            .printTopologyStatistics();
+          {
+              
+          TRANSIENTLY(work::Config::COMPUTATION_CAPACITY) = 4;
+          BlockFlowAlloc bFlow;
+          EngineObserver watch;
+          Scheduler scheduler{bFlow, watch};
+                    
+          auto set1 = testLoad.setupSchedule(scheduler)
+                         .withLevelDuration(200us)
+                         .withJobDeadline(100ms)
+                         .withUpfrontPlanning()
+                         .withLoadTimeBase(2ms)
+                         .withInstrumentation();
+          double runTime = set1.launch_and_wait();
+          auto stat = set1.getInvocationStatistic();
+cout << "time="<<runTime/1000
+     << " covered="<<stat.coveredTime / 1000
+     << " avgconc="<<stat.avgConcurrency
+     <<endl;          
+          }
+          
+          return;
           
             struct Setup
               : StressRig, bench::LoadPeak_ParamRange_Evaluation
               {
                 uint CONCURRENCY = 4;
+                uint REPETITIONS = 40;
                 
                 auto testLoad(Param nodes)
                   {
@@ -410,15 +433,20 @@ namespace test {
                 auto testSetup (TestLoad& testLoad)
                   {
                     return StressRig::testSetup(testLoad)
-                                     .withLoadTimeBase(500us);
+                                     .withLoadTimeBase(2ms);
                   }
               };
             
           auto results = StressRig::with<Setup>()
-                                   .perform<bench::ParameterRange> (2,64);
+                                   .perform<bench::ParameterRange> (10,100);
           
           cout << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───"<<endl;
           cout << Setup::renderGnuplot (results);
+          cout << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───"<<endl;
+          auto [socket,gradient,v1,v2,corr,maxDelta,stdev] = bench::linearRegression (results.param, results.time);
+          cout << _Fmt{"Model: %3.2f·p + %3.2f  corr=%4.2f Δmax=%4.2f σ=%4.2f"}
+                      % gradient % socket % corr % maxDelta % stdev
+               << endl;
         }
       
       

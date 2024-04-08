@@ -151,6 +151,7 @@
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/gnuplot-gen.hpp"
+#include "lib/stat/statistic.hpp"
 #include "lib/stat/data.hpp"
 #include "lib/util.hpp"
 
@@ -528,6 +529,22 @@ namespace test {
     using lib::stat::DataTable;
     using lib::stat::CSVData;
     using IncidenceStat = lib::IncidenceCount::Statistic;
+    
+    /**
+     * Calculate a linear regression model for two table columns
+     * @return a tuple `(socket,gradient,Vector(predicted),Vector(deltas),correlation,maxDelta,stdev)`
+     */
+    template<typename F, typename G>
+    auto
+    linearRegression (Column<F> const& x, Column<G> const& y)
+    {
+      lib::stat::RegressionData points;
+      size_t cnt = min (x.data.size(), y.data.size());
+      points.reserve (cnt);
+      for (size_t i=0; i < cnt; ++i)
+        points.emplace_back (x.data[i], y.data[i]);
+      return lib::stat::computeLinearRegression (points);
+    }
     
     /**
      * Mix-in for setup of a #ParameterRange evaluation to watch

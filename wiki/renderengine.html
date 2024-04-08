@@ -7174,7 +7174,7 @@ Later on we expect a distinct __query subsystem__ to emerge, presumably embeddin
 
 &amp;rarr; QuantiserImpl</pre>
 </div>
-<div title="Scheduler" creator="Ichthyostega" modifier="Ichthyostega" created="202304140131" modified="202312281735" tags="Rendering spec draft" changecount="29">
+<div title="Scheduler" creator="Ichthyostega" modifier="Ichthyostega" created="202304140131" modified="202404081719" tags="Rendering spec draft" changecount="31">
 <pre>//Invoke and control the dependency and time based execution of  [[render jobs|RenderJob]]//
 The Scheduler acts as the central hub in the implementation of the RenderEngine and coordinates the //processing resources// of the application. Regarding architecture, the Scheduler is located in the Vault-Layer and //running// the Scheduler is equivalent to activating the »Vault Subsystem«. An EngineFaçade acts as entrance point, providing high-level render services to other parts of the application: [[render jobs|RenderJob]] can be activated under various timing and dependency constraints. Internally, the implementation is organised into two layers:
 ;Layer-2: Coordination
@@ -7213,7 +7213,20 @@ The Scheduler is now considered an implementation-level facility with an interfa
 &amp;rarr; [[Memory|SchedulerMemory]]
 &amp;rarr; [[Workers|SchedulerWorker]]
 &amp;rarr; [[Internals|SchedulerProcessing]]
+&amp;rarr; [[Behaviour|SchedulerBehaviour]]
 &amp;rarr; [[Testing|SchedulerTest]]
+</pre>
+</div>
+<div title="SchedulerBehaviour" creator="Ichthyostega" modifier="Ichthyostega" created="202404081716" modified="202404081717" tags="Rendering operational draft" changecount="6">
+<pre>//Characteristic behaviour traits of the [[Scheduler]] implementation//
+The design of the scheduler was chosen to fulfil some fundamental requirements..
+* flexibility to accommodate a wide array of processing patterns
+* direct integration of some notion of //dependency//
+* ability to be re-triggered by external events
+* reactive, but not over-reactive response to load peaks
+* ability to withstand extended periods of excessive overload
+* roughly precise timing with a margin of ≈ ''5''ms
+The above list immediately indicates that this scheduler implementation is not oriented towards high throughput or extremely low latency, and thus can be expected to exhibit some //traits of response and behaviour.// These traits were confirmed and further investigated in the efforts for [[stress testing|SchedulerTest]] of the new Scheduler implementation. {{red{As of 4/2024}}} it remains to be seen, if the characteristics of the chosen approach are beneficial or even detrimental to the emerging actual usage -- it may well turn out that some adjustments must be made or even a complete rewrite of the Scheduler may be necessary.
 </pre>
 </div>
 <div title="SchedulerLoadControl" creator="Ichthyostega" modifier="Ichthyostega" created="202310240240" modified="202311010317" tags="Rendering operational spec draft" changecount="60">
@@ -7304,8 +7317,8 @@ The primary scaling effects exploited to achieve this level of performance are t
 &amp;rarr; [[Scheduler performance testing|SchedulerTest]]
 </pre>
 </div>
-<div title="SchedulerProcessing" creator="Ichthyostega" modifier="Ichthyostega" created="202312281750" modified="202312281756" tags="Rendering operational draft" changecount="5">
-<pre>At first sight, the internals of [[Activity|RenderActivity]] processing may seem overwhelmingly complex -- especially since there is no active »processing loop« which might serve as a starting point for the understanding. It is thus necessary to restate the working mode of the Scheduler: it is an //accounting and direction service// for the //active// [[render workers|SchedulerWorker]]. Any processing happens stochastically and is driven by events
+<div title="SchedulerProcessing" creator="Ichthyostega" modifier="Ichthyostega" created="202312281750" modified="202404081703" tags="Rendering operational draft" changecount="6">
+<pre>At first sight, the internals of [[Activity|RenderActivity]] processing may seem overwhelmingly complex -- especially since there is no active »processing loop« which might serve as a starting point for the understanding. It is thus necessary to restate the working mode of the Scheduler: it is an //accounting and direction service// for the //active// [[render workers|SchedulerWorker]]. Any processing happens stochastically and is driven by various kinds of events --
 * a //worker// becoming ready to perform further tasks
 * an external //IO event// {{red{12/23 only planned yet}}}
 * a //planning job// to add new elements to the schedule
@@ -7327,7 +7340,7 @@ The last point highlights a //circular structure:// the planning job itself was 
 The way other parts of the system are built, requires us to obtain a guaranteed knowledge of some job's termination. It is possible to obtain that knowledge with some limited delay, but it nees to be absoultely reliable (violations leading to segfault). The requirements stated above assume this can be achieved through //jobs with guaranteed execution.// Alternatively we could consider installing specific callbacks -- in this case the scheduler itself has to guarantee the invocation of these callbacks, even if the corresponding job fails or is never invoked. It doesn't seem there is any other option.
 </pre>
 </div>
-<div title="SchedulerTest" creator="Ichthyostega" modifier="Ichthyostega" created="202312281814" modified="202401022341" tags="Rendering operational draft" changecount="9">
+<div title="SchedulerTest" creator="Ichthyostega" modifier="Ichthyostega" created="202312281814" modified="202404081720" tags="Rendering operational draft" changecount="11">
 <pre>With the Scheduler testing effort [[#1344|https://issues.lumiera.org/ticket/1344]], several goals are pursued
 * by exposing the new scheduler implementation to excessive overload, its robustness can be assessed and defects can be spotted
 * with the help of a systematic, calibrated load, characteristic performance limits and breaking points can be established
@@ -7363,6 +7376,8 @@ The point of departure for any stress testing is to show that the subject is res
 A method to determine such a »''breaking point''« in a systematic way relies on the //synthetic calculation load// mentioned above, the {{{TestChainLoad}}}. Using a simplified model of expected computation expense, a timing grid for scheduling can be established, which is then //scaled and condensed// to provoke loss of control in the Scheduler -- a condition that can be determined by statistical observation: since the process of scheduling contains an element of //essential randomness,// persistent overload will be indicated by an increasing variance of the overall runtime, and a departure from the nominal runtime of the executed schedule. This consideration leads to a formalised condition, which can be used to control a //binary search// to find the breaking point in terms of a //critical stress factor.//
 
 Observing this breaking point in correlation with various load patterns will unveil performance characteristics and weak spots of the implementation.
+&amp;rarr; [[Scheduler behaviour traits|SchedulerBehaviour]]
+
 </pre>
 </div>
 <div title="SchedulerWorker" creator="Ichthyostega" modifier="Ichthyostega" created="202309041605" modified="202312281745" tags="Rendering operational spec draft" changecount="21">
