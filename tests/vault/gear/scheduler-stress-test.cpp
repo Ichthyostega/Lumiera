@@ -32,7 +32,6 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
-#include "lib/gnuplot-gen.hpp"
 #include "lib/test/diagnostic-output.hpp"//////////////////////////TODO work in distress
 //#include "lib/format-string.hpp"
 #include "lib/test/transiently.hpp"
@@ -391,11 +390,11 @@ namespace test {
           cpuLoad.calibrate();
 //////////////////////////////////////////////////////////////////TODO for development only
           MARK_TEST_FUN
-                    TestChainLoad testLoad{64};
-                    testLoad.configure_isolated_nodes()
-                            .buildTopology()
-                            .printTopologyDOT()
-                            .printTopologyStatistics();
+//                    TestChainLoad testLoad{64};
+//                    testLoad.configure_isolated_nodes()
+//                            .buildTopology()
+//                            .printTopologyDOT()
+//                            .printTopologyStatistics();
           
             struct Setup
               : StressRig, bench::LoadPeak_ParamRange_Evaluation
@@ -418,10 +417,8 @@ namespace test {
           auto results = StressRig::with<Setup>()
                                    .perform<bench::ParameterRange> (2,64);
           
-          auto csv = results.renderCSV();
-          cout << csv <<endl;
           cout << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───"<<endl;
-          cout << lib::gnuplot_gen::scatterRegression(csv);
+          cout << Setup::renderGnuplot (results);
         }
       
       

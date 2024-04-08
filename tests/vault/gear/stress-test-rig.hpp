@@ -141,24 +141,21 @@
 #define VAULT_GEAR_TEST_STRESS_TEST_RIG_H
 
 
-#include "vault/common.hpp"
+#include "test-chain-load.hpp"
 #include "lib/binary-search.hpp"
-//#include "test-chain-load.hpp"
-//#include "lib/test/transiently.hpp"
+#include "lib/test/transiently.hpp"
 
 #include "vault/gear/scheduler.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/iter-explorer.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/format-string.hpp"
-#include "lib/format-cout.hpp"//////////////////////////TODO RLY?
+#include "lib/format-cout.hpp"
+#include "lib/gnuplot-gen.hpp"
 #include "lib/stat/data.hpp"
 #include "lib/util.hpp"
 
-//#include <functional>
+#include <algorithm>
 #include <utility>
-//#include <memory>
-//#include <string>
 #include <vector>
 #include <tuple>
 #include <array>
@@ -551,14 +548,14 @@ namespace test {
             Column<double> time    {"result time"};
             Column<double> conc    {"concurrency"};
             Column<double> jobtime {"avg jobtime"};
-            Column<double> overhead{"overhead"};
+            Column<double> impeded {"avg impeded"};
             
             auto allColumns()
             { return std::tie(param
                              ,time
                              ,conc
                              ,jobtime
-                             ,overhead
+                             ,impeded
                              );
             }
           };
@@ -573,8 +570,30 @@ namespace test {
             data.param = param;
             data.time  = stat.coveredTime / 1000;
             data.conc  = stat.avgConcurrency;
-            data.jobtime = stat.activeTime/stat.activationCnt;
-            data.overhead = stat.timeAtConc(1) / stat.activationCnt;   ////OOO not really clear if sensible
+            data.jobtime = stat.activeTime / stat.activationCnt;
+            data.impeded = (stat.timeAtConc(1) + stat.timeAtConc(0))/stat.activationCnt;
+          }
+        
+        
+        static string
+        renderGnuplot (Table const& results)
+          {
+            using namespace lib::gnuplot_gen;
+            string csv = results.renderCSV();
+            Param maxParam = * std::max_element (results.param.data.begin(), results.param.data.end());
+            Param xtics = maxParam > 500? 50
+                        : maxParam > 200? 20
+                        : maxParam > 100? 10
+                        :                  5;
+            return scatterRegression(
+                    ParamRecord().set (KEY_CSVData,  csv)
+                                 .set (KEY_TermSize, "600,600")
+                                 .set (KEY_Xtics,    int64_t(xtics))
+                                 .set (KEY_Xlabel,  "load size ⟶ number of jobs")
+                                 .set (KEY_Ylabel,  "active time ⟶ ms")
+                                 .set (KEY_Y2label, "concurrent threads ⟶")
+                                 .set (KEY_Y3label, "avg job time ⟶ µs")
+                                );
           }
       };
     //

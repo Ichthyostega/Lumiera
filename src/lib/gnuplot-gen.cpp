@@ -93,7 +93,7 @@ set style line 3 linetype  2 linewidth 2 linecolor rgb '#0B7FCC'
 set style line 4 linetype  6 linewidth 2 linecolor rgb '#37999D'
 set style line 5 linetype  7 linewidth 2 linecolor rgb '#248269'
 set style line 6 linetype 13 linewidth 2 linecolor rgb '#00C443'
-set style line 7 linetype 12 linewidth 2 linecolor rgb '#B86E1C'
+set style line 7 linetype 12 linewidth 2 linecolor rgb '#EBE83E'
 set style line 8 linetype  5 linewidth 2 linecolor rgb '#762C14'
 set style line 9 linetype  4 linewidth 2 linecolor rgb '#AA0519'
 
@@ -150,8 +150,7 @@ ${if Xrange}
 set xrange [${Xrange}] ${endif
 }${if Yrange}
 set yrange [${Yrange}] ${endif
-}
-set key autotitle columnheader tmargin
+}set key autotitle columnheader tmargin
 
 )~";
     
@@ -172,7 +171,10 @@ ${else
 }# regression line function derived from data
 regLine(x) = STATS_slope * x + STATS_intercept
 ${end if
-}
+}#
+regLabel = sprintf("Model: %3.2f·p + %3.2f", STATS_slope, STATS_intercept)
+
+set key horizontal width -4
 ${if Xtics
 }set xtics ${Xtics}
 ${else}${if Xrange}${else
@@ -193,14 +195,14 @@ if (plots > 1) {
 #
 ####---------Scatter-Regression-Plot-------------
 plot $RunData using 1:2 with points linestyle 1, \
-     regLine(x)         with line   linestyle 9
+     regLine(x)         with line   linestyle 9 title regLabel
 
 if (plots > 1) {
     # switch off decorations for secondary diagram
     unset arrow 10
     unset arrow 11
     set border 2+8
-    set key bmargin
+    set key bmargin vertical
 ${if Y2range}
     set yrange [${Y2range}]
 ${endif}
