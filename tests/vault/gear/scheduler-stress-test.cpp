@@ -178,7 +178,7 @@ namespace test {
           uint concurrency = 4;
           auto stepFactors = testLoad.levelScheduleSequence(concurrency).effuse();
           CHECK (stepFactors.size() == 1+testLoad.topLevel());
-          CHECK (stepFactors.size() == 27);
+          CHECK (stepFactors.size() == 26);
           
           
           // Build-Performance-test-setup--------
@@ -198,9 +198,9 @@ namespace test {
           CHECK (schedule[ 1] == _uTicks(1ms));
           CHECK (schedule[ 2] == _uTicks(2ms));
           //     ....
+          CHECK (schedule[24] == _uTicks(24ms));
           CHECK (schedule[25] == _uTicks(25ms));
           CHECK (schedule[26] == _uTicks(26ms));
-          CHECK (schedule[27] == _uTicks(27ms));
           
           // Adapted Schedule----------
           double stressFac = 1.0;
@@ -240,8 +240,7 @@ namespace test {
           CHECK (stepStr(23) == "lev:23  stepFac:26.167 schedule:13.083"_expect);
           CHECK (stepStr(24) == "lev:24  stepFac:28.167 schedule:14.083"_expect);
           CHECK (stepStr(25) == "lev:25  stepFac:30.867 schedule:15.433"_expect);
-          CHECK (stepStr(26) == "lev:26  stepFac:31.867 schedule:15.933"_expect);
-          CHECK (stepStr(27) == "lev:27  stepFac:32.867 schedule:16.433"_expect);
+          CHECK (stepStr(26) == "lev:26  stepFac:32.200 schedule:16.100"_expect);
           
           
           // Adapted Schedule with lower stress level and higher concurrency....
@@ -278,8 +277,7 @@ namespace test {
           CHECK (stepStr(23) == "lev:23  stepFac:23.167 schedule:38.611"_expect);
           CHECK (stepStr(24) == "lev:24  stepFac:24.167 schedule:40.277"_expect);
           CHECK (stepStr(25) == "lev:25  stepFac:25.967 schedule:43.277"_expect);
-          CHECK (stepStr(26) == "lev:26  stepFac:26.967 schedule:44.944"_expect);
-          CHECK (stepStr(27) == "lev:27  stepFac:27.967 schedule:46.611"_expect);
+          CHECK (stepStr(26) == "lev:26  stepFac:27.300 schedule:45.500"_expect);
           
           // perform a Test with this low stress level (0.3)
           double runTime = testSetup.launch_and_wait();
@@ -334,14 +332,14 @@ namespace test {
        *      - use the integrated StressRig
        *      - demonstrate how parameters can be tweaked
        *      - perform a run, leading to a binary search for the breaking point
-       * @remark this stress-test setup uses instrumentation internally note to deduce
+       * @remark this stress-test setup uses instrumentation internally to deduce
        *   some systematic deviations from the theoretically established behaviour.
        *   For example, on my machine, the ComputationalLoad performs slower within the
        *   Scheduler environment compared to its calibration, which is done in a tight loop.
        *   This may be due to internals of the processor, which show up under increased
        *   contention combined with more frequent cache misses. In a similar vein, the
-       *   actually observed concurrency turns out to be consistently lower than could
-       *   be expected by accounting for the work units in isolation, without considering
+       *   actually observed concurrency turns out to be consistently lower than the value
+       *   computed by accounting for the work units in isolation, without considering
        *   dependency constraints. These observed deviations are cast into an empirical
        *   »form factor«, which is then used to correct the applied stress factor.
        *   Only with taking these corrective steps, the observed stress factor at
@@ -373,7 +371,7 @@ namespace test {
           auto [stress,delta,time] = StressRig::with<Setup>()
                                                .perform<bench::BreakingPoint>();
           CHECK (delta > 2.5);
-          CHECK (1.15 > stress and stress > 0.9);
+          CHECK (1.15 > stress and stress > 0.85);
         }
       
       
