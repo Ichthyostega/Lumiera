@@ -173,7 +173,7 @@ namespace gear {
                       res = contentionWait();
                     else
                       if (kickLevel_)
-                        --kickLevel_;
+                        kickLevel_ /= 2;
                     if (res == activity::WAIT)
                       res = idleWait();
                     else

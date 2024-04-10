@@ -68,9 +68,9 @@
  ** The implementation code is arranged as a »sandwich« structure...
  ** - StressTestRig, which is also the framework class, acts as _bottom layer_ to
  **   provide an anchor point, some common definitions implying an invocation scheme
- **   ** first a TestChainLoad topology is constructed, based on test parameters
- **   ** this is used to create a TestChainLoad::SchedulerCtx, which is then
- **      outfitted specifically for each test run
+ **   + first a TestChainLoad topology is constructed, based on test parameters
+ **   + this is used to create a TestChainLoad::SchedulerCtx, which is then
+ **     outfitted specifically for each test run
  ** - the _middle layer_ is a custom `Setup` class, which inherits from the bottom
  **   layer and fills in the actual topology and configuration for the desired test
  ** - the test performance is then initiated by layering a specific _test tool_ on
@@ -240,7 +240,7 @@ namespace test {
         {
           return testLoad.setupSchedule(scheduler)
                          .withLevelDuration(200us)
-                         .withJobDeadline(100ms)
+                         .withJobDeadline(500ms)
                          .withUpfrontPlanning();
         }
       
@@ -527,6 +527,7 @@ namespace test {
     
     using lib::stat::Column;
     using lib::stat::DataTable;
+    using lib::stat::DataSpan;
     using lib::stat::CSVData;
     using IncidenceStat = lib::IncidenceCount::Statistic;
     
@@ -535,7 +536,7 @@ namespace test {
      * @return a tuple `(socket,gradient,Vector(predicted),Vector(deltas),correlation,maxDelta,stdev)`
      */
     template<typename F, typename G>
-    auto
+    inline auto
     linearRegression (Column<F> const& x, Column<G> const& y)
     {
       lib::stat::RegressionData points;
@@ -591,6 +592,12 @@ namespace test {
             data.impeded = (stat.timeAtConc(1) + stat.timeAtConc(0))/stat.activationCnt;
           }
         
+        
+        static double
+        avgConcurrency (Table const& results)
+          {
+            return lib::stat::average (DataSpan<double> (results.conc.data));
+          }
         
         static string
         renderGnuplot (Table const& results)

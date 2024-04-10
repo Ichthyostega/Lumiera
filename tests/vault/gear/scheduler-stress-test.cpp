@@ -390,7 +390,8 @@ namespace test {
           cpuLoad.calibrate();
 //////////////////////////////////////////////////////////////////TODO for development only
           MARK_TEST_FUN
-                    TestChainLoad testLoad{50};
+/*
+                    TestChainLoad testLoad{200};
                     testLoad.configure_isolated_nodes()
                             .buildTopology()
 //                            .printTopologyDOT()
@@ -404,7 +405,7 @@ namespace test {
                     
           auto set1 = testLoad.setupSchedule(scheduler)
                          .withLevelDuration(200us)
-                         .withJobDeadline(100ms)
+                         .withJobDeadline(500ms)
                          .withUpfrontPlanning()
                          .withLoadTimeBase(2ms)
                          .withInstrumentation();
@@ -417,12 +418,12 @@ cout << "time="<<runTime/1000
           }
           
           return;
-          
+*/
             struct Setup
               : StressRig, bench::LoadPeak_ParamRange_Evaluation
               {
-                uint CONCURRENCY = 4;
-                uint REPETITIONS = 40;
+                uint CONCURRENCY = 8;
+                uint REPETITIONS = 80;
                 
                 auto testLoad(Param nodes)
                   {
@@ -438,14 +439,15 @@ cout << "time="<<runTime/1000
               };
             
           auto results = StressRig::with<Setup>()
-                                   .perform<bench::ParameterRange> (10,100);
+                                   .perform<bench::ParameterRange> (20,200);
           
           cout << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───"<<endl;
           cout << Setup::renderGnuplot (results);
           cout << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───"<<endl;
           auto [socket,gradient,v1,v2,corr,maxDelta,stdev] = bench::linearRegression (results.param, results.time);
-          cout << _Fmt{"Model: %3.2f·p + %3.2f  corr=%4.2f Δmax=%4.2f σ=%4.2f"}
-                      % gradient % socket % corr % maxDelta % stdev
+          double avgConc = Setup::avgConcurrency (results);
+          cout << _Fmt{"Model: %3.2f·p + %3.2f  corr=%4.2f Δmax=%4.2f σ=%4.2f ∅concurrency: %3.1f"}
+                      % gradient % socket % corr % maxDelta % stdev % avgConc
                << endl;
         }
       
