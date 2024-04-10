@@ -198,9 +198,13 @@ namespace gear {
               layer1.feedPrioritisation();
               while (layer1.isOutdated (now) and not layer1.isOutOfTime(now))
                 layer1.pullHead();
-              if (layer1.isDue (now) and not layer1.isOutOfTime(now))
-                return layer1.pullHead();
-            }
+              if (layer1.isDue (now))
+                {
+                  if (layer1.isOutOfTime(now))
+                    UNIMPLEMENTED ("how to trigger a Scheduler-Emergency from here");   ///////////////////////TICKET #1362 : not clear where Scheduler-Emergency is to be handled and how it can be triggered. See Scheduler::triggerEmergency()
+                  else
+                    return layer1.pullHead();
+            }   }
           return ActivationEvent();
         }
       

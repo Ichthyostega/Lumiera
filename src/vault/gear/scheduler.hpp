@@ -704,6 +704,12 @@ namespace gear {
   
   /**
    * Trip the emergency brake and unwind processing while retaining all state.
+   * @todo as of 4/2024 it is not clear what Scheduler-Emergency actually entails;
+   *       thus it can not be determined at which level of the component the handler
+   *       must reside, and how it can be reached. Notably there exists a situation
+   *       in `SchedulerCommutatior::findWork()`, where emergency can happen, yet
+   *       in its current configuration, the Layer-2 has no access to the top-level
+   *       Scheduler component.                             /////////////////////////////////////////////////TICKET #1362 : where to handle Scheduler-Emergency
    */
   inline void
   Scheduler::triggerEmergency()
