@@ -33,36 +33,17 @@
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/test/diagnostic-output.hpp"//////////////////////////TODO work in distress
-//#include "lib/format-string.hpp"
-#include "lib/test/transiently.hpp"
-//#include "lib/test/microbenchmark.hpp"
-//#include "lib/util.hpp"
-
-//#include <utility>
-//#include <vector>
-#include <array>
+#include "lib/util.hpp"
 
 using test::Test;
-//using std::move;
-//using util::isSameObject;
 
 
 namespace vault{
 namespace gear {
 namespace test {
   
-//  using lib::time::FrameRate;
-//  using lib::time::Offset;
-//  using lib::time::Time;
   using util::_Fmt;
-//  using std::vector;
-  using std::array;
-  
-  namespace { // Test definitions and setup...
-    
-  }
-  
-  
+  using util::isLimited;
   
   
   
@@ -79,13 +60,12 @@ namespace test {
       virtual void
       run (Arg)
         {
-           //smokeTest();
-//           setup_systematicSchedule();
-//           verify_instrumentation();
-//           search_breaking_point();
+           smokeTest();
+           setup_systematicSchedule();
+           verify_instrumentation();
+           search_breaking_point();
            watch_expenseFunction();
-//           investigateWorkProcessing();
-           walkingDeadline();
+           investigateWorkProcessing();
         }
       
       
@@ -376,12 +356,68 @@ namespace test {
       
       
       
-      /** @test TODO Investigate the relation of run time (expense) to input length.
+      /** @test Investigate the relation of run time (expense) to input length.
+       *      - again use the integrated StressRig
+       *      - this time overload the scheduler with a peak of uncorrelated jobs
+       *        and watch the time and load required to work through this challenge
+       *      - conduct a series of runs with random number of jobs (within bounds)
+       *      - collect the observed data (as CSV), calculate a **linear regression model**
+       *      - optionally generate a **Gnuplot** script for visualisation
        * @see vault::gear::bench::ParameterRange
-       * @todo WIP 1/24 🔁 define ⟶ 🔁 implement
+       * @see gnuplot-gen.hpp
+       * @todo WIP 4/24 ✔ define ⟶ ✔ implement
        */
       void
       watch_expenseFunction()
+        {
+          MARK_TEST_FUN
+          
+            struct Setup
+              : StressRig, bench::LoadPeak_ParamRange_Evaluation
+              {
+                uint CONCURRENCY = 4;
+                uint REPETITIONS = 50;
+                
+                auto testLoad(Param nodes)
+                  {
+                    TestLoad testLoad{nodes};
+                    return testLoad.configure_isolated_nodes();
+                  }
+                
+                auto testSetup (TestLoad& testLoad)
+                  {
+                    return StressRig::testSetup(testLoad)
+                                     .withLoadTimeBase(2ms);
+                  }
+              };
+            
+          auto results = StressRig::with<Setup>()
+                                   .perform<bench::ParameterRange> (33,128);
+          
+          auto [socket,gradient,v1,v2,corr,maxDelta,stdev] = bench::linearRegression (results.param, results.time);
+          double avgConc = Setup::avgConcurrency (results);
+/*
+          cout << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───"<<endl;
+          cout << Setup::renderGnuplot (results);
+          cout << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───"<<endl;
+          cout << _Fmt{"Model: %3.2f·p + %3.2f  corr=%4.2f Δmax=%4.2f σ=%4.2f ∅concurrency: %3.1f"}
+                      % gradient % socket % corr % maxDelta % stdev % avgConc
+               << endl;
+*/          
+          CHECK (corr > 0.80);                     // clearly a linear correlated behaviour
+          CHECK (isLimited (0.4, gradient, 0.7));  // should be slightly above 0.5 (2ms and 4 threads => 0.5ms / Job)
+          CHECK (isLimited (3,   socket,   9  ));  // we have a spin-up and a shut-down both ~ 2ms plus some further overhead
+          
+          CHECK (avgConc > 3);                     // should be able to utilise 4 workers (minus the spin-up/shut-down phase)
+        }
+      
+      
+      
+      /** @test TODO build a load pattern to emolate a typical high work load
+       * @todo WIP 4/24 🔁 define ⟶ implement
+       */
+      void
+      investigateWorkProcessing()
         {
           ComputationalLoad cpuLoad;
           cpuLoad.timeBase = 200us;
@@ -415,49 +451,6 @@ cout << "time="<<runTime/1000
      <<endl;          
           }
           
-          return;
-*/
-            struct Setup
-              : StressRig, bench::LoadPeak_ParamRange_Evaluation
-              {
-                uint CONCURRENCY = 8;
-                uint REPETITIONS = 80;
-                
-                auto testLoad(Param nodes)
-                  {
-                    TestLoad testLoad{nodes};
-                    return testLoad.configure_isolated_nodes();
-                  }
-                
-                auto testSetup (TestLoad& testLoad)
-                  {
-                    return StressRig::testSetup(testLoad)
-                                     .withLoadTimeBase(2ms);
-                  }
-              };
-            
-          auto results = StressRig::with<Setup>()
-                                   .perform<bench::ParameterRange> (20,200);
-          
-          cout << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───"<<endl;
-          cout << Setup::renderGnuplot (results);
-          cout << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───"<<endl;
-          auto [socket,gradient,v1,v2,corr,maxDelta,stdev] = bench::linearRegression (results.param, results.time);
-          double avgConc = Setup::avgConcurrency (results);
-          cout << _Fmt{"Model: %3.2f·p + %3.2f  corr=%4.2f Δmax=%4.2f σ=%4.2f ∅concurrency: %3.1f"}
-                      % gradient % socket % corr % maxDelta % stdev % avgConc
-               << endl;
-        }
-      
-      
-      
-      /** @test TODO
-       * @todo WIP 1/24 🔁 define ⟶ implement
-       */
-      void
-      investigateWorkProcessing()
-        {
-          MARK_TEST_FUN
           TestChainLoad<8> testLoad{256};
           testLoad.seedingRule(testLoad.rule().probability(0.6).minVal(2))
                   .pruningRule(testLoad.rule().probability(0.44))
@@ -466,21 +459,9 @@ cout << "time="<<runTime/1000
 //                .printTopologyDOT()
 //                .printTopologyStatistics()
                   ;
-//          ////////////////////////////////////////////////////////WIP : Run test directly for investigation of SEGFAULT....
-//          BlockFlowAlloc bFlow;
-//          EngineObserver watch;
-//          Scheduler scheduler{bFlow, watch};
-          auto LOAD_BASE = 500us;
+
 //          auto stressFac = 1.0;
 //          auto concurrency = 8;
-//          
-          ComputationalLoad cpuLoad;
-          cpuLoad.timeBase = LOAD_BASE;
-          cpuLoad.calibrate();
-//          
-          double loadMicros = cpuLoad.invoke();
-//          double refTime = testLoad.calcRuntimeReference(LOAD_BASE);
-SHOW_EXPR(loadMicros)
 //          
 //          auto testSetup =
 //            testLoad.setupSchedule(scheduler)
@@ -490,9 +471,12 @@ SHOW_EXPR(loadMicros)
 //                    .withAdaptedSchedule (stressFac, concurrency);
 //          double runTime = testSetup.launch_and_wait();
 //          double expected = testSetup.getExpectedEndTime();
+//          auto stat = testSetup.getInvocationStatistic();
 //SHOW_EXPR(runTime)
 //SHOW_EXPR(expected)
 //SHOW_EXPR(refTime)
+          return;
+*/
       using StressRig = StressTestRig<8>;
           
             struct Setup : StressRig
@@ -529,16 +513,6 @@ SHOW_EXPR(loadMicros)
 SHOW_EXPR(stress)
 SHOW_EXPR(delta)
 SHOW_EXPR(time)
-        }
-      
-      
-      
-      /** @test TODO
-       * @todo WIP 1/24 🔁 define ⟶ implement
-       */
-      void
-      walkingDeadline()
-        {
         }
     };
   

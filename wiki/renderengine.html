@@ -7317,12 +7317,20 @@ The primary scaling effects exploited to achieve this level of performance are t
 &amp;rarr; [[Scheduler performance testing|SchedulerTest]]
 </pre>
 </div>
-<div title="SchedulerProcessing" creator="Ichthyostega" modifier="Ichthyostega" created="202312281750" modified="202404081703" tags="Rendering operational draft" changecount="6">
+<div title="SchedulerProcessing" creator="Ichthyostega" modifier="Ichthyostega" created="202312281750" modified="202404111651" tags="Rendering operational draft" changecount="7">
 <pre>At first sight, the internals of [[Activity|RenderActivity]] processing may seem overwhelmingly complex -- especially since there is no active »processing loop« which might serve as a starting point for the understanding. It is thus necessary to restate the working mode of the Scheduler: it is an //accounting and direction service// for the //active// [[render workers|SchedulerWorker]]. Any processing happens stochastically and is driven by various kinds of events --
 * a //worker// becoming ready to perform further tasks
 * an external //IO event// {{red{12/23 only planned yet}}}
 * a //planning job// to add new elements to the schedule
 The last point highlights a //circular structure:// the planning job itself was part of the schedule, picked up by a worker and activated; this way, the system feeds itself.
+
+!Participants and Realms
+From the outside, the Scheduler appears as a service component, exposing two points-of-access: Jobs can be added to the schedule (planned), and a worker can retrieve the next instruction, which is either to perform an (opaque) computation, or to sleep for some given short period of time. Jobs are further distinguished into processing tasks, IO activities and meta jobs, which are related to the self-regulation of the scheduling process. On a closer look however, several distinct realms can be identified, each offering an unique perspective of operation.
+
+!!!The Activity Realm
+!!!Queues and Activation Events
+!!!The Worker Aspect
+!!!Process Control
 </pre>
 </div>
 <div title="SchedulerRequirements" modifier="Ichthyostega" created="201107080145" modified="201112171835" tags="Rendering spec draft discuss">
@@ -7340,7 +7348,7 @@ The last point highlights a //circular structure:// the planning job itself was 
 The way other parts of the system are built, requires us to obtain a guaranteed knowledge of some job's termination. It is possible to obtain that knowledge with some limited delay, but it nees to be absoultely reliable (violations leading to segfault). The requirements stated above assume this can be achieved through //jobs with guaranteed execution.// Alternatively we could consider installing specific callbacks -- in this case the scheduler itself has to guarantee the invocation of these callbacks, even if the corresponding job fails or is never invoked. It doesn't seem there is any other option.
 </pre>
 </div>
-<div title="SchedulerTest" creator="Ichthyostega" modifier="Ichthyostega" created="202312281814" modified="202404081720" tags="Rendering operational draft" changecount="11">
+<div title="SchedulerTest" creator="Ichthyostega" modifier="Ichthyostega" created="202312281814" modified="202404112327" tags="Rendering operational draft img" changecount="99">
 <pre>With the Scheduler testing effort [[#1344|https://issues.lumiera.org/ticket/1344]], several goals are pursued
 * by exposing the new scheduler implementation to excessive overload, its robustness can be assessed and defects can be spotted
 * with the help of a systematic, calibrated load, characteristic performance limits and breaking points can be established
@@ -7377,6 +7385,79 @@ A method to determine such a »''breaking point''« in a systematic way relies o
 
 Observing this breaking point in correlation with various load patterns will unveil performance characteristics and weak spots of the implementation.
 &amp;rarr; [[Scheduler behaviour traits|SchedulerBehaviour]]
+
+Another, quite different avenue of testing is to investigate a ''steady full-load state'' of processing. Contrary to the //breaking point// technique discussed above, for this method a fluid, homogenous schedule is required, and effects of scaffolding, ramp-up and load adaptation should be minimised. By watching a constant flow of back-to-back processing, in a state of //saturation,// the boundary capabilities for throughput and parallelisation can be derived, ideally expressed as a model of processing efficiency. A setup for this kind of investigation would be to challenge the scheduler with a massive load peak of predetermined size: a set of jobs //without any further interdependencies,// which are scheduled effectively instantaneously, so that the scheduler is immediately in a state of total overload. The actual measurement entails to watch the time until completing this work load, together with the individual job activation times during that period; the latter can be integrated to account for the //effective parallelism// and the amount of time in //impeded state,// where at most single threaded processing is observed. Challenging the Scheduler with a random series of such homogenous load peaks allows build a correlation table and to compute a linear regression model.
+
+! Observations
+!!!Breaking Point and Stress
+Several investigations to determine the »breaking point« of a schedule were conducted with the load topology depicted to the right. This load pattern is challenging on various levels. There are dependency chains leading from the single start node to the three exit nodes, and thus the order of processing must be strictly observed. Moreover, several nodes bear //no weight,// and so the processing for those jobs returns immediately, producing mostly administrative overhead. Some nodes however are attributed with a weight up to 3.
+
+&lt;html&gt;&lt;img title=&quot;Load topology with 64 nodes joined into a dependency chain, used for »breaking point« search&quot;  src=&quot;dump/2024-04-08.Scheduler-LoadTest/Topo-10.svg&quot;  style=&quot;float:right; margin-left:2ex&quot;/&gt;&lt;/html&gt;For execution, this weight is loaded with a base time, for example ''500''µs. An //adapted schedule// is generated based on the //node layers,// and using a simplified heuristic to account both for the accumulated node weight found within a given level, and the ability for speed-up through concurrency. Nodes without a weight are assumed to take no time (a deliberate simplification), while possible parallelisation is applied solely as factor based on the node count, completely disregarding any concerns of »optimal stacking«. This leads to the following schedule:
+
+|! Level|!stepFac|!Schedule |
+| 0|  0.000|  0.000ms|
+| 1|  0.000|  0.000ms|
+| 2|  0.000|  0.000ms|
+| 3|  2.000|  1.000ms|
+| 4|  2.000|  1.000ms|
+| 5|  2.000|  1.000ms|
+| 6|  2.000|  1.000ms|
+| 7|  3.000|  1.500ms|
+| 8|  5.000|  2.500ms|
+| 9|  7.000|  3.500ms|
+| 10|  8.000|  4.000ms|
+| 11|  8.000|  4.000ms|
+| 12|  8.000|  4.000ms|
+| 13|  9.000|  4.500ms|
+| 14| 10.000|  5.000ms|
+| 15| 12.000|  6.000ms|
+| 16| 12.000|  6.000ms|
+| 17| 13.000|  6.500ms|
+| 18| 16.000|  8.000ms|
+| 19| 16.000|  8.000ms|
+| 20| 20.000| 10.000ms|
+| 21| 22.500| 11.250ms|
+| 22| 24.167| 12.083ms|
+| 23| 26.167| 13.083ms|
+| 24| 28.167| 14.083ms|
+| 25| 30.867| 15.433ms|
+| 26| 32.200| 16.100ms|
+The tests were typically performed with ''4 workers''. Thus e.g. at begin of Layer-3, a factor 2 is added as increment, since Node-2 is attributed with weight≔2; in the .dot-diagram, the weight is added as suffix, behind the node hash mark, in this case ({{{2: 95.2}}}). With 500µs as weight, the node(s) in Layer-2 will thus be scheduled at t=1ms. To discuss a more interesting example, Layer-19 holds 5 nodes with weight≔2. Scheduling for 4 workers will allow to parallelise 4 nodes, but require another round for the remaining node. Thus an increment of +4 is added at the beginning of Layer-20, thus scheduling the two following nodes ({{{34: D8.3}}}) and  ({{{35: B0.2}}}) at t=10ms. So there is a combined weight≡5 in Layer-20, and the two nodes are parallelised, thus allocating an offset of +5/2 · 500µs, placing Layer-21 at t=11.25ms
+
+This heuristic time allocation leads to a schedule, which somehow considers the weight distribution, yet is deliberately unrealistic, since it does not consider any base effort, nor does it fully account for the limited worker pool size. At the beginning, the Scheduler will thus be partially idle waiting, while at the end, a massive short overload peak is added, further exacerbated by the dependency constraints. After all, the objective of this test is to tighten or stretch this schedule by a constant ''stress factor'', and to search the point at which a cascading catastrophic slippage can be observed.
+
+And such a well defined breaking point can indeed be determined reliably. However -- initial experiments placed this event at a stress-factor closely above 0.5 -- which is way off any expectation. The point in question is not the absolute value of slippage, which is expectedly strong, due to the overload peak at end; rather, we are looking for the point, at which the scheduler is unable to follow even the general outline of this schedule. And the expectation would be that this happens close to the nominal schedule, which implies stress-factor ≡ 1. Further //instrumentation// was thus added, allowing to capture invocations of the actual processing function; values integrated from these events allowed to draw conclusions about various aspects of the actual behaviour, especially
+* the actual job run times consistently showed a significant drift towards longer run times (slower execution) than calibrated
+* the effective average concurrency deviates systematically from the average speed-up factor, as assumed in the schedule generation; notably this deviation is stable over a wide range of stress factors, but obviously depends strongly on the actual load graph topology and work pool size; is can thus be interpreted as a ''form factor'' to describe the topological ability to map a given local node connectivity to a scheduling situation.
+By virtue of the instrumentation, both effects can be determined //empirically// during the test run, and compounded into a correction factor, applied to the scale of the stress-factor value determined as result. With this correction in place, the observed »breaking point« moved ''very close to 1.0''. This is considered an //important result;// both corrected effects relate to circumstances considered external to the Scheduler implementation -- which, beyond that, seems to handle timings and the control of the processing path //without significant further overhead.//
+&lt;html&gt;&lt;div style=&quot;clear: both&quot;/&gt;&lt;/html&gt;
+
+!!!Overload
+Once the Scheduler is //overloaded,// the actual schedule does not matter much any more -- within the confines of an important limitation: the deadlines. The schedule may slip, but when a given job is pushed ahead beyond its deadline, the general promise of the schedule is //broken.// This draws on an important distinction; deadlines are hard, while start times can be shifted to accommodate. As long as the timings stay within the overall confines, as defined by the deadlines, the scheduling is able to absorb short load peaks. While in this mode of operation, no further timing waits are performed, rather, jobs are processed in order, as defined by their start times; when done with one job, a worker immediately retrieves the next job, which in state of overload is likewise overdue. So this setup allows to observe the efficiency of the „mechanics“ of job invocation.
+&lt;html&gt;&lt;img title=&quot;Load Peak with 8ms&quot;  src=&quot;dump/2024-04-08.Scheduler-LoadTest/Graph13.svg&quot;  style=&quot;float:right; width: 80ex; margin-left:2ex&quot;/&gt;&lt;/html&gt;
+The measurement shown to the right uses a pool of ''8 workers'' to processes a load peak of jobs, each loaded with a processing function calibrated to run ''8''ms. Workers are thus occupied with processing the job load for a significant amount of time -- and so the probability of workers asking for work at precisely the same time is low. Since the typical {{{ActicityTerm}}} for [[regular job processing|RenderOperationLogic]] entails dropping the {{{GroomingToken}}} prior to invocation of the actual {{{JobFunctor}}}, another worker can access the queues meanwhile, and process Activities up to invocation of the next {{{JobFunctor}}}
+With such a work load, the //worker pull processing// plays out to its full strength; since there is no »manager« thread, the administrative work is distributed evenly to all workers, and performed on average without imposing any synchronisation overhead to other workers. Especially with larger load peaks, the concurrency converges towards the theoretical maximum of 8, as can be seen at the light blue vertical bars in the secondary diagram below (left Y scale: concurrency). The remaining headroom can be linked (by investigation of trace dumps) to the inevitable ramp-up and tear-down; the work capacity shows up with some distribution of random delay, and thus it typically takes several milliseconds until all workers got their first task. Moreover, there is the overhead of the management work, which happens outside the measurement bracket inserted around the invocation of the job function -- even while in this load scenario also the management work is done concurrent to the other worker's payload processing, it is not accounted as part of the payload effort, and thus reduces the average concurrency.
+
+The dependency of load size to processing time is clearly linear, with a very high correlation (0.98). A ''linear regression model'' indicates a gradient very close to the expected value of 1ms/job (8ms nominal job time distributed to 8 cores). The slight deviation is due to the fact that //actual job times// (&amp;rarr; dark green dots) tend to diverge to higher values than calibrated, an effect consistently observed on this machine throughout this scheduler testing effort. An explanation might be that the calibration of the work load is done in a tight loop (single threaded or multi threaded does not make much of difference here), while in the actual processing within the scheduler, some global slowdown is generated by cache misses, pipeline stalls and the coordination overhead caused by accessing the atomic {{{GroomingToken}}} variable. Moreover, the linear model indicates a socket overhead, which largely can be attributed to the ramp-up / tear-down phase, where -- inevitably -- not all workers can be put to work. In accordance with that theory, the socket overhead indeed increases with larger job times. The probabilistic capacity management employed in this Scheduler implementation adds a further socket overhead; the actual work start depends on workers pulling further work, which, depending on the circumstances, happens more or less randomly at the begin of each test run. Incidentally, there is further significant scaffolding overhead, which is not accounted for in the numbers presented here: At start, the worker pool must be booted, the jobs for the processing load must be planned, and a dependency to a wake-up job will be maintained, prompting the controlling test-thread to collect the measurement data and to commence with the next run in the series.
+
+Note also that all these investigations were performed with ''debug builds''.
+&lt;html&gt;&lt;div style=&quot;clear: both&quot;/&gt;&lt;/html&gt;
+&lt;html&gt;&lt;img title=&quot;Load Peak with 8ms&quot;  src=&quot;dump/2024-04-08.Scheduler-LoadTest/Graph15.svg&quot;  style=&quot;float:right; width: 80ex; margin-left:2ex&quot;/&gt;&lt;/html&gt;
+However, ''very short jobs'' cause ''significant loss of efficiency''.
+The example presented to the right uses a similar setup (''8 workers''), but reduced the calibrated job-time to only ''200''µs. This comes close to the general overhead required for retrieving and launching the next job, which amounts to further 100µs running a debug build, including the ~30µs required solely to access, set and drop the {{{GroomingToken}}}. Consequently, only a small number of //other workers// get a chance to acquire the {{{GroomingToken}}} and then to work through the Activities up to the next Job invocation, before the first worker returns already -- causing a significant amount of ''contention'' on the {{{GroomingToken}}}. Now, the handling of work-pull requests in the Scheduler implementation is arranged in a way to prefer workers just returning from active processing. Thus (intentionally) only a small subset of the workers is able to pull work repeatedly, while the other workers will encounter a series of »contention {{{KICK}}}« events; an inbuilt //contention mitigation scheme// responds to this kind of repeated pull-failures by interspersing sleep cycles, thereby effectively throttling down the {{{WorkForce}}} until contention events return to an attainable level. This mitigation is important, since contention, even just on an atomic variable, can cause a significant global slow-down of the system.
+
+As net effect, most of the load peaks are just handled by two workers, especially for larger load sizes; most of the available processing capacity remains unused for such short running payloads. Moreover, on average a significant amount of time is spent with partially blocked or impeded operation (&amp;rarr; light green circles), since administrative work must be done non-concurrently. Depending on the perspective, this can be seen as a weakness -- or as the result of a deliberate trade-off made by the choice of active work-pulling and a passive Scheduler.
+
+The actual average in-job time (&amp;rarr; dark green dots) is offset significantly here, and closer to 400µs -- which is also confirmed by the gradient of the linear model (0.4ms / 2 Threads ≙ 0.2ms/job). With shorter load sizes below 90 jobs, increased variance can be observerd, and measurements can no longer be subsumed under a single linear relation -- in fact, data points seem to be arranged into several groups with differing, yet mostly linear correlation, which also explains the negative socket value of the overall computed model; using only the data points with &gt; 90 jobs would yield a model with slightly lower gradient but a positive offset of ~2ms.
+&lt;html&gt;&lt;div style=&quot;clear: both&quot;/&gt;&lt;/html&gt;
+Further measurement runs with other parameter values fit well in between the two extremes presented above. It can be concluded that this Scheduler implementation strongly favours larger job sizes starting with several milliseconds, when it comes to processing through a extended homogenous work load without much job interdependencies. Such larger lot sizes can be handled efficiently and close to expected limits, while very small jobs massively degrade the available performance. This can be attributed both to the choice of a randomised capacity distribution, and of pull processing without a central manager.
+
+!!!Stationary Processing
+
+lorem ipsum
+lorem ipsum nebbich
+ja luia sog I
+
 
 </pre>
 </div>
