@@ -7317,7 +7317,7 @@ The primary scaling effects exploited to achieve this level of performance are t
 &amp;rarr; [[Scheduler performance testing|SchedulerTest]]
 </pre>
 </div>
-<div title="SchedulerProcessing" creator="Ichthyostega" modifier="Ichthyostega" created="202312281750" modified="202404111651" tags="Rendering operational draft" changecount="7">
+<div title="SchedulerProcessing" creator="Ichthyostega" modifier="Ichthyostega" created="202312281750" modified="202404150019" tags="Rendering operational draft" changecount="9">
 <pre>At first sight, the internals of [[Activity|RenderActivity]] processing may seem overwhelmingly complex -- especially since there is no active »processing loop« which might serve as a starting point for the understanding. It is thus necessary to restate the working mode of the Scheduler: it is an //accounting and direction service// for the //active// [[render workers|SchedulerWorker]]. Any processing happens stochastically and is driven by various kinds of events --
 * a //worker// becoming ready to perform further tasks
 * an external //IO event// {{red{12/23 only planned yet}}}
@@ -7325,9 +7325,13 @@ The primary scaling effects exploited to achieve this level of performance are t
 The last point highlights a //circular structure:// the planning job itself was part of the schedule, picked up by a worker and activated; this way, the system feeds itself.
 
 !Participants and Realms
-From the outside, the Scheduler appears as a service component, exposing two points-of-access: Jobs can be added to the schedule (planned), and a worker can retrieve the next instruction, which is either to perform an (opaque) computation, or to sleep for some given short period of time. Jobs are further distinguished into processing tasks, IO activities and meta jobs, which are related to the self-regulation of the scheduling process. On a closer look however, several distinct realms can be identified, each offering an unique perspective of operation.
+From the outside, the Scheduler appears as a service component, exposing two points-of-access: Jobs can be added to the schedule (planned), and a worker can retrieve the next instruction, which implies either to perform an (opaque) computation, or to sleep for some given short period of time. Jobs are further distinguished into processing tasks, IO activities and meta jobs, which are related to the self-regulation of the scheduling process. On a closer look however, several distinct realms can be identified, each offering an unique perspective of operation.
 
 !!!The Activity Realm
+[[Activities|SchedulerActivity]] are part of an //activity language// to describe patterns of processing, and will be arranged into activity terms; what is scheduled is actually the entrance point to such a term. Within this scope it is assumed abstractly that there is some setup and arrangement to accomplish the //activation// of activities. At the level of the activity language, this is conceptualised and represented as an {{{ExecutionCtx}}}, providing a set of functions with defined signature and abstractly defined semantics. This allows to define and even implement the entirety of activity processing without any recurrence to implementation structures of the scheduler. Rather, the functions in the execution-context will absorb any concern not directly expressed in relations of activities (i.e. anything not directly expressed as language term).
+
+While the ability to reason about activities and verify their behaviour in isolation is crucial to allow for the //openness// of the activity language (able to accommodate future requirements not foreseeable at this time), it also creates some kind of »double bottom« -- which can be challenging when it comes to reasoning about the processing steps within the scheduler. While all functions of the execution-context are in fact wired into internals of the scheduler for the actual usage, it is indispensable to keep both levels separate and to ensure each level is logically consistent in itself. 
+
 !!!Queues and Activation Events
 !!!The Worker Aspect
 !!!Process Control

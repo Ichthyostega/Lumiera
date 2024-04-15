@@ -207,7 +207,7 @@ namespace test {
       uint CONCURRENCY = work::Config::getDefaultComputationCapacity();
       bool INSTRUMENTATION = true;
       double EPSILON      = 0.01;          ///< error bound to abort binary search
-      double UPPER_STRESS = 0.6;           ///< starting point for the upper limit, likely to fail
+      double UPPER_STRESS = 1.2;           ///< starting point for the upper limit, likely to fail
       double FAIL_LIMIT   = 2.0;           ///< delta-limit when to count a run as failure
       double TRIGGER_FAIL = 0.55;          ///< %-fact: criterion-1 failures above this rate
       double TRIGGER_SDEV = FAIL_LIMIT;    ///< in ms : criterion-2 standard derivation
