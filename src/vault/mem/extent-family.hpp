@@ -185,12 +185,12 @@ namespace mem {
           void
           validatePos (Extent* knownTarget)
             {
-              if (knownTarget == & yield())
+              if (exFam->matchPos (index,knownTarget))
                 return;
               size_t prevIdx = index;
               do{
                   iterNext();
-                  if (knownTarget == & yield())
+                  if (exFam->matchPos (index,knownTarget))
                     return;
                 }
               while (index != prevIdx);
@@ -348,6 +348,13 @@ namespace mem {
           return isWrapped()? (start_ <= idx and idx < slotCnt())
                                or idx < after_
                             : (start_ <= idx and idx < after_);
+        }
+      
+      bool
+      matchPos (size_t idx, void* address)
+        {
+          REQUIRE (idx < slotCnt());
+          return address == extents_[idx].get();
         }
       
       Extent&

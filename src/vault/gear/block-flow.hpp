@@ -54,6 +54,8 @@
  ** obsolete goals is pointless and can be just side stepped. Once the scheduling has
  ** passed a defined deadline (and no further pending IO operations are around), the
  ** Epoch can be abandoned as a whole and the storage extent can be re-used.
+ ** @warning this implies any access after the deadline is _undefined behaviour,_
+ **          spanning also further use of the AllocatorHandle obtained for a deadline.
  ** 
  ** Dynamic adjustments are necessary to keep this scheme running efficiently.
  ** Ideally, the temporal stepping between subsequent Epochs should be chosen such
@@ -516,6 +518,8 @@ namespace gear {
       /**
        * initiate allocations for activities to happen until some deadline
        * @return opaque handle allowing to perform several allocations.
+       * @warning should not be used after the deadline has passed,
+       *          since memory will then be re-used and overwritten.
        */
       AllocatorHandle
       until (Time deadline)
