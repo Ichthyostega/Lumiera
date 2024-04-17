@@ -1971,30 +1971,27 @@ namespace test {
           return move(*this);
         }
       
-      ScheduleCtx&&
-      adaptEmpirically (double stressFac =1.0, uint concurrency=0)
+      double
+      determineEmpiricFormFactor (uint concurrency=0)
         {
-          if (watchInvocations_)
-            {
-              auto stat = watchInvocations_->evaluate();
-              if (0 < stat.activationCnt)
-                {// looks like we have actual measurement data
-                  ENSURE (0.0 < stat.avgConcurrency);
-                  if (not concurrency)
-                    concurrency = defaultConcurrency();
-                  double worktimeRatio = 1 - stat.timeAtConc(0) / stat.coveredTime;
-                  double workConcurrency = stat.avgConcurrency / worktimeRatio;
-                  double weightSum = chainLoad_.calcWeightSum();
-                  double expectedCompoundedWeight = chainLoad_.calcExpectedCompoundedWeight(concurrency);
-                  double expectedConcurrency = weightSum / expectedCompoundedWeight;
-                  double formFac = 1 / (workConcurrency / expectedConcurrency);
-                  double expectedNodeTime = _uSec(compuLoad_->timeBase) * weightSum / chainLoad_.size();
-                  double realAvgNodeTime = stat.activeTime / stat.activationCnt;
-                  formFac *= realAvgNodeTime / expectedNodeTime;
-                  return withAdaptedSchedule (stressFac, concurrency, formFac);
-                }
-            }
-          return move(*this);
+          if (not watchInvocations_) return 1.0;
+          auto stat = watchInvocations_->evaluate();
+          if (0 == stat.activationCnt) return 1.0;
+          // looks like we have actual measurement data...
+          ENSURE (0.0 < stat.avgConcurrency);
+          if (not concurrency)
+            concurrency = defaultConcurrency();
+          double worktimeRatio = 1 - stat.timeAtConc(0) / stat.coveredTime;
+          double workConcurrency = stat.avgConcurrency / worktimeRatio;
+          double weightSum = chainLoad_.calcWeightSum();
+          double expectedCompoundedWeight = chainLoad_.calcExpectedCompoundedWeight(concurrency);
+          double expectedConcurrency = weightSum / expectedCompoundedWeight;
+          double formFac = 1 / (workConcurrency / expectedConcurrency);
+          double expectedNodeTime = _uSec(compuLoad_->timeBase) * weightSum / chainLoad_.size();
+          double realAvgNodeTime = stat.activeTime / stat.activationCnt;
+          formFac *= realAvgNodeTime / expectedNodeTime;
+cout<<"∅conc:"<<stat.avgConcurrency<<" ....f◇f="<<formFac<<endl;
+          return formFac;
         }
       
       ScheduleCtx&&

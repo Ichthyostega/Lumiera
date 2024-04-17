@@ -484,8 +484,8 @@ cout << "time="<<runTime/1000
 //                double UPPER_STRESS = 12;
                 //
 //                double FAIL_LIMIT   = 1.0; //0.7;
-                double TRIGGER_SDEV = 1.0; //0.25;
-                double TRIGGER_DELTA = 2.0; //0.5;
+//                double TRIGGER_SDEV = 1.0; //0.25;
+//                double TRIGGER_DELTA = 2.0; //0.5;
 //                uint CONCURRENCY = 4;
                 uint CONCURRENCY = 8;
 //                bool SCHED_DEPENDS = true;
@@ -506,7 +506,7 @@ cout << "time="<<runTime/1000
                   {
                     return StressRig::testSetup(testLoad)
 //                                     .withBaseExpense(200us)
-                                     .withLoadTimeBase(4ms);
+                                     .withLoadTimeBase(5ms);
                   }
               };
           auto [stress,delta,time] = StressRig::with<Setup>()

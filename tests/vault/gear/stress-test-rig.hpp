@@ -207,7 +207,7 @@ namespace test {
       uint CONCURRENCY = work::Config::getDefaultComputationCapacity();
       bool INSTRUMENTATION = true;
       double EPSILON      = 0.01;          ///< error bound to abort binary search
-      double UPPER_STRESS = 1.2;           ///< starting point for the upper limit, likely to fail
+      double UPPER_STRESS = 1.7;           ///< starting point for the upper limit, likely to fail
       double FAIL_LIMIT   = 2.0;           ///< delta-limit when to count a run as failure
       double TRIGGER_FAIL = 0.55;          ///< %-fact: criterion-1 failures above this rate
       double TRIGGER_SDEV = FAIL_LIMIT;    ///< in ms : criterion-2 standard derivation
@@ -289,8 +289,6 @@ namespace test {
             double expTime{0};
           };
         
-        double adjustmentFac{1.0};
-        
         /** prepare the ScheduleCtx for a specifically parametrised test series */
         void
         configureTest (TestSetup& testSetup, double stressFac)
@@ -312,8 +310,7 @@ namespace test {
               {
                 runTime[i] = testSetup.launch_and_wait() / 1000;
                 avgT += runTime[i];
-                testSetup.adaptEmpirically (stressFac, CONF::CONCURRENCY);
-                this->adjustmentFac = 1 / (testSetup.getStressFac() / stressFac);
+                maybeAdaptScaleEmpirically (testSetup, stressFac);
               }
             expT = testSetup.getExpectedEndTime() / 1000;
             avgT /= CONF::REPETITIONS;
@@ -337,9 +334,10 @@ namespace test {
         bool
         decideBreakPoint (Res& res)
           {
-            return res.percentOff > CONF::TRIGGER_FAIL
+            return res.percentOff > 0.99
+               or( res.percentOff > CONF::TRIGGER_FAIL
                and res.stdDev     > CONF::TRIGGER_SDEV
-               and res.avgDelta   > CONF::TRIGGER_DELTA;
+               and res.avgDelta   > CONF::TRIGGER_DELTA);
           }
         
         /**
@@ -375,6 +373,37 @@ namespace test {
             expT /= points;
             sf = breakPoint;
             return res;
+          }
+        
+        /** adaptive scale correction based on observed behaviour */
+        double adjustmentFac{1.0};
+        size_t gaugeProbes = 3 * CONF::REPETITIONS;
+        
+        /**
+         * Attempt to factor out some observable properties, which are considered circumstantial
+         * and not a direct result of scheduling overheads. The artificial computational load is
+         * known to drift towards larger values than calibrated; moreover the actual concurrency
+         * achieved can deviate from the heuristic assumptions built into the testing schedule.
+         * The latter is problematic to some degree however, since the Scheduler is bound to
+         * scale down capacity when idle. To strike a reasonable balance, this adjustment of
+         * the measurement scale is done only initially, and when the stress factor is high
+         * and some degree of pressure on the scheduler can thus be assumed.
+         */
+        void
+        maybeAdaptScaleEmpirically (TestSetup& testSetup, double stressFac)
+          {
+            double formFac = testSetup.determineEmpiricFormFactor (CONF::CONCURRENCY);
+            if (not gaugeProbes) return;
+            double gain = util::limited (0, pow(stressFac, 9), 1);
+            if (gain < 0.2) return;
+            //
+//            double formFac = testSetup.determineEmpiricFormFactor (CONF::CONCURRENCY);
+double afak = adjustmentFac;
+            adjustmentFac = gain*formFac + (1-gain)*adjustmentFac;
+cout << _Fmt{"g:%-2d|%3.1f stress:%4.2f formFac=%5.3f ▶ %5.3f -> %5.3f => %5.3f"}
+            % gaugeProbes % gain % stressFac% formFac % afak%adjustmentFac % (stressFac/adjustmentFac) <<endl;
+            testSetup.withAdaptedSchedule(stressFac, CONF::CONCURRENCY, adjustmentFac);
+            --gaugeProbes;
           }
         
         

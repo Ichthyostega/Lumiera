@@ -140,7 +140,7 @@ namespace gear {
     const auto   IDLE_WAIT = 20ms;            ///< sleep-recheck cycle for workers deemed _idle_
     const size_t DISMISS_CYCLES = 100;        ///< number of wait cycles before an idle worker terminates completely
     Offset DUTY_CYCLE_PERIOD{FSecs(1,20)};    ///< period of the regular scheduler »tick« for state maintenance.
-    Offset DUTY_CYCLE_TOLERANCE{FSecs(1,10)}; ///< maximum slip tolerated on duty-cycle start before triggering Scheduler-emergency
+    Offset DUTY_CYCLE_TOLERANCE{FSecs(2,10)}; ///< maximum slip tolerated on duty-cycle start before triggering Scheduler-emergency
     Offset FUTURE_PLANNING_LIMIT{FSecs{20}};  ///< limit timespan of deadline into the future (~360 MiB max)
   }
   
