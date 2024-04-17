@@ -515,6 +515,48 @@ cout << "time="<<runTime/1000
 SHOW_EXPR(stress)
 SHOW_EXPR(delta)
 SHOW_EXPR(time)
+          
+          /* ========== verify extended stable operation ============== */
+          
+          // Use the same pattern, but extended to 4 times the length;
+          // moreover, this time planning and execution will be interviened.
+          TestChainLoad<8> testLoad{1024};
+          testLoad.seedingRule(testLoad.rule().probability(0.6).maxVal(2))
+                  .pruningRule(testLoad.rule().probability(0.44))
+                  .weightRule(testLoad.value(1))
+                  .setSeed(60)
+                  .buildTopology()
+//                .printTopologyDOT()
+//                .printTopologyStatistics()
+                  ;
+          size_t expectedHash = testLoad.getHash();
+
+          TRANSIENTLY(work::Config::COMPUTATION_CAPACITY) = 4;
+          BlockFlowAlloc bFlow;
+          EngineObserver watch;
+          Scheduler scheduler{bFlow, watch};
+          
+          auto testSetup =
+            testLoad.setupSchedule(scheduler)
+                    .withLoadTimeBase(5ms)
+                    .withJobDeadline(50ms)            // ◁───────────────────── deadline is way shorter than overall run time
+                    .withChunkSize(32)                // ◁───────────────────── planning of the next 32 nodes interleaved with performance
+                    .withInstrumentation()
+                    .withAdaptedSchedule (1.0, 4);    // ◁───────────────────── stress factor 1.0 and 4 workers
+          double runTime = testSetup.launch_and_wait();
+          auto stat = testSetup.getInvocationStatistic();
+          
+SHOW_EXPR(runTime)          
+SHOW_EXPR(stat.activeTime);
+SHOW_EXPR(stat.coveredTime);
+SHOW_EXPR(stat.activationCnt);
+SHOW_EXPR(stat.avgConcurrency);
+SHOW_EXPR(expectedHash)
+SHOW_EXPR(testLoad.getHash());
+          CHECK (stat.activationCnt == 1024);
+          CHECK (expectedHash == testLoad.getHash());
+          CHECK (3.2 < stat.avgConcurrency);
+          CHECK (stat.coveredTime < 5 * time*1000);
         }
     };
   
