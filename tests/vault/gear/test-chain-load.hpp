@@ -1990,7 +1990,6 @@ namespace test {
           double expectedNodeTime = _uSec(compuLoad_->timeBase) * weightSum / chainLoad_.size();
           double realAvgNodeTime = stat.activeTime / stat.activationCnt;
           formFac *= realAvgNodeTime / expectedNodeTime;
-cout<<"∅conc:"<<stat.avgConcurrency<<" ....f◇f="<<formFac<<endl;
           return formFac;
         }
       

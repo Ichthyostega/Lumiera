@@ -7352,7 +7352,7 @@ While the ability to reason about activities and verify their behaviour in isola
 The way other parts of the system are built, requires us to obtain a guaranteed knowledge of some job's termination. It is possible to obtain that knowledge with some limited delay, but it nees to be absoultely reliable (violations leading to segfault). The requirements stated above assume this can be achieved through //jobs with guaranteed execution.// Alternatively we could consider installing specific callbacks -- in this case the scheduler itself has to guarantee the invocation of these callbacks, even if the corresponding job fails or is never invoked. It doesn't seem there is any other option.
 </pre>
 </div>
-<div title="SchedulerTest" creator="Ichthyostega" modifier="Ichthyostega" created="202312281814" modified="202404172013" tags="Rendering operational draft img" changecount="106">
+<div title="SchedulerTest" creator="Ichthyostega" modifier="Ichthyostega" created="202312281814" modified="202404172226" tags="Rendering operational draft img" changecount="119">
 <pre>With the Scheduler testing effort [[#1344|https://issues.lumiera.org/ticket/1344]], several goals are pursued
 * by exposing the new scheduler implementation to excessive overload, its robustness can be assessed and defects can be spotted
 * with the help of a systematic, calibrated load, characteristic performance limits and breaking points can be established
@@ -7459,9 +7459,24 @@ Further measurement runs with other parameter values fit well in between the two
 !!!Stationary Processing
 The ultimate goal of //load- and stress testing// is to establish a notion of //full load// and to demonstrate adequate performance under //nominal load conditions.// Thus, after investigating overheads and the breaking point of a complex schedule, a measurement setup was established with load patterns deemed „realistic“ -- based on knowledge regarding some typical media processing demands encountered for video editing. Such a setup entails small dependency trees of jobs loaded with computation times around 5ms, interleaving several challenges up to the available level of concurrency. To determine viable parameter bounds, the //breaking-point// measurement method can be applied to an extended graph with this structure, to find out at which level the computations will use the system's abilities to such a degree that it is not able to move along faster any more.
 &lt;html&gt;&lt;img title=&quot;Load topology for stationary processing with 8 cores&quot;  src=&quot;dump/2024-04-08.Scheduler-LoadTest/Topo-20.svg&quot;  style=&quot;width:100%&quot;/&gt;&lt;/html&gt;
+This pattern can be processed
+* with 8 workers in overall 192ms
+* processing 256 Nodes, each loaded with 5ms
+* since this graph has 35 levels, ∅ 5.6ms are required per level
+* on average, concurrency reaches 5.4 (some nodes have to wait for dependencies)
+This research revealed again the tendency of the given Scheduler implementation to ''scale-down capacity unless overloaded''. Using the breaking-point method with such a fine grained and rather homogenous schedule can thus be problematic, since a search for the limit will inevitably involve running several probes //below the limit// -- which can cause the scheduler to reduce the number of workers used to a level that fills the available time. Depending on the path taken, the search can thus find a breaking point corresponding to a throttled capacity, while taking a search path through parameter ranges of overload will reveal the ability to follow a much tighter schedule. While this is an inherent problem of this measurement approach, it can be mitigated to some degree by limiting the empiric adaption of the parameter scale to the initial phase of the measurement, while ensuring this initial phase is started from overload territory.
+&lt;html&gt;&lt;img title=&quot;Load topology for stationary processing with 8 cores&quot;  src=&quot;dump/2024-04-08.Scheduler-LoadTest/Topo-21.svg&quot;   style=&quot;float:right; width: 80ex; margin-left:2ex&quot;/&gt;&lt;/html&gt;
 
-This research revealed again the tendency of the given Scheduler implementation to ''scale-down capacity unless overloaded''. Using the breaking-point method with such a fine grained and rather homogenous schedule can be problematic, since a search for the limit will inevitably involve running several probes //below the limit// -- which can cause the scheduler to reduce the number of workers used to a level that fills the available time. Depending on the path taken, the search can thus find a breaking point corresponding to a throttled capacity, while taking a search path through parameter ranges of overload will reveal the ability to follow a much tighter schedule. While this is an inherent problem of this measurement approach, it can be mitigated to some degree by limiting the empiric adaption of the parameter scale to the initial phase of the measurement, while ensuring this initial phase is started from overload territory.
-</pre>
+For comparison, another, similar load pattern was used, which however is comprised entirely of interleaved 4-step linear chains. Each level can thus be handled with a maximum of 4 workers;  actually there are 66 levels — with ∅3.88 Nodes/Level, due to the ramp-up and ramp-down towards the ends.
+| !observation|!4 workers|!8 workers|
+| breaking point|stress 1.01 |stress 0.8 |
+| run time|340ms |234ms |
+| ≙ per level|5.15ms |3.5 |
+| avg.conc|3.5 |5.3 |
+These observations indicate ''adequate handling without tangible overhead''.
+When limited to 4 workers, the concurrency of ∅ 3.5 is only slightly below the average number of 3.88 Nodes/Level, and the time per level is near optimal, taking into account the fact (established by the overload measurements) that the actual job load tends to be slightly above the calibrated value of 5ms. The setup with 8 workers shows that further worker can be used to accommodate a tighter schedule, but then the symptoms for //breaking the schedule// are already reached at a nominally lower stress value, and only 5.3 of 8 workers will be active on average — this graph simply does not offer more work load locally, since 75% of all Nodes have a predecessor.
+
+&lt;html&gt;&lt;div style=&quot;clear: both&quot;/&gt;&lt;/html&gt;</pre>
 </div>
 <div title="SchedulerWorker" creator="Ichthyostega" modifier="Ichthyostega" created="202309041605" modified="202312281745" tags="Rendering operational spec draft" changecount="21">
 <pre>The Scheduler //maintains a ''Work Force'' (a pool of workers) to perform the next [[render activities|RenderActivity]] continuously.//

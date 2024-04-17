@@ -392,16 +392,12 @@ namespace test {
         void
         maybeAdaptScaleEmpirically (TestSetup& testSetup, double stressFac)
           {
-            double formFac = testSetup.determineEmpiricFormFactor (CONF::CONCURRENCY);
             if (not gaugeProbes) return;
             double gain = util::limited (0, pow(stressFac, 9), 1);
             if (gain < 0.2) return;
             //
-//            double formFac = testSetup.determineEmpiricFormFactor (CONF::CONCURRENCY);
-double afak = adjustmentFac;
+            double formFac = testSetup.determineEmpiricFormFactor (CONF::CONCURRENCY);
             adjustmentFac = gain*formFac + (1-gain)*adjustmentFac;
-cout << _Fmt{"g:%-2d|%3.1f stress:%4.2f formFac=%5.3f ▶ %5.3f -> %5.3f => %5.3f"}
-            % gaugeProbes % gain % stressFac% formFac % afak%adjustmentFac % (stressFac/adjustmentFac) <<endl;
             testSetup.withAdaptedSchedule(stressFac, CONF::CONCURRENCY, adjustmentFac);
             --gaugeProbes;
           }

@@ -144,3 +144,8 @@ Topo-20.dot::
  It is comprised of small yet interleaved dependency tries,
  filling each level up to the maximum capacity (limited here to 8 workers).
 
+Topo-21.dot::
+ Similar topology to emulate realistic load.
+ This graph requires only 4 parallel workers for maximum efficiency
+ and is comprised entirely of short, 4-step interleaved linear chains.
+ 

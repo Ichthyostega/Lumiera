@@ -452,13 +452,14 @@ cout << "time="<<runTime/1000
           }
           
           TestChainLoad<8> testLoad{256};
-          testLoad.seedingRule(testLoad.rule().probability(0.6).minVal(2))
+          testLoad.seedingRule(testLoad.rule().probability(0.6).maxVal(2))
                   .pruningRule(testLoad.rule().probability(0.44))
-                  .setSeed(55)
+                  .setSeed(60)
                   .buildTopology()
-//                .printTopologyDOT()
-//                .printTopologyStatistics()
+                .printTopologyDOT()
+                .printTopologyStatistics()
                   ;
+          return;
 
 //          auto stressFac = 1.0;
 //          auto concurrency = 8;
@@ -487,7 +488,7 @@ cout << "time="<<runTime/1000
 //                double TRIGGER_SDEV = 1.0; //0.25;
 //                double TRIGGER_DELTA = 2.0; //0.5;
 //                uint CONCURRENCY = 4;
-                uint CONCURRENCY = 8;
+                uint CONCURRENCY = 4;
 //                bool SCHED_DEPENDS = true;
                 bool showRuns = true;
                 
@@ -495,10 +496,10 @@ cout << "time="<<runTime/1000
                 testLoad()
                   {
                     TestLoad testLoad{256};
-                    testLoad.seedingRule(testLoad.rule().probability(0.6).minVal(2))
+                    testLoad.seedingRule(testLoad.rule().probability(0.6).maxVal(2))
                             .pruningRule(testLoad.rule().probability(0.44))
                             .weightRule(testLoad.value(1))
-                            .setSeed(55);
+                            .setSeed(60);
                     return testLoad;
                   }
                 
