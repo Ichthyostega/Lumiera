@@ -2,7 +2,7 @@
   SchedulerStress(Test)  -  verify scheduler performance characteristics
 
   Copyright (C)         Lumiera.org
-    2023,               Hermann Vosseler <Ichthyostega@web.de>
+    2024,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -28,11 +28,11 @@
 #include "lib/test/run.hpp"
 #include "test-chain-load.hpp"
 #include "stress-test-rig.hpp"
+#include "lib/test/test-helper.hpp"
 #include "vault/gear/scheduler.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
-#include "lib/test/diagnostic-output.hpp"//////////////////////////TODO work in distress
 #include "lib/util.hpp"
 
 using test::Test;
@@ -49,6 +49,13 @@ namespace test {
   
   /***************************************************************************//**
    * @test Investigate and verify non-functional characteristics of the Scheduler.
+   * @remark This test can require several seconds to run and might be brittle,
+   *      due to reliance on achieving performance within certain limits, which
+   *      may not be attainable on some systems; notably the platform is expected
+   *      to provide at least four independent cores for multithreaded execution.
+   *      The performance demonstrated here confirms that a typical load scenario
+   *      can be handled — while also documenting various measurement setups
+   *      usable for focused investigation.
    * @see SchedulerActivity_test
    * @see SchedulerInvocation_test
    * @see SchedulerCommutator_test
@@ -69,10 +76,7 @@ namespace test {
         }
       
       
-      /** @test TODO demonstrate sustained operation under load
-       *      - TODO this is a placeholder and works now, but need a better example
-       *      - it should not produce so much overload, rather some stretch of steady-state processing
-       * @todo WIP 12/23 🔁 define ⟶ implement
+      /** @test demonstrate test setup for sustained operation under load
        */
       void
       smokeTest()
@@ -132,11 +136,11 @@ namespace test {
        *      - as in many other tests, use the massively forking load pattern
        *      - demonstrate how TestChainLoad computes an idealised level expense
        *      - verify how schedule times are derived from this expense sequence
-       * @todo WIP 12/23 ✔ define ⟶ ✔ implement
        */
       void
       setup_systematicSchedule()
         {
+          MARK_TEST_FUN
           TestChainLoad testLoad{64};
           testLoad.configureShape_chain_loadBursts()
                   .buildTopology()
@@ -263,17 +267,18 @@ namespace test {
           double runTime = testSetup.launch_and_wait();
           double expected = testSetup.getExpectedEndTime();
           CHECK (fabs (runTime-expected) < 5000);
-        }    //  Scheduler should able to follow the expected schedule
+        }    //  Scheduler should be able to follow the expected schedule
+      
       
       
       
       /** @test verify capability for instrumentation of job invocations
        * @see IncidenceCount_test
-       * @todo WIP 2/24 ✔ define ⟶ ✔ implement
        */
       void
       verify_instrumentation()
         {
+          MARK_TEST_FUN
           const size_t NODES = 20;
           const size_t CORES = work::Config::COMPUTATION_CAPACITY;
           auto LOAD_BASE = 5ms;
@@ -306,6 +311,8 @@ namespace test {
         }                                                            // should ideally spend most of the time at highest concurrency levels
       
       
+      
+      
       using StressRig = StressTestRig<16>;
       
       /** @test determine the breaking point towards scheduler overload
@@ -322,10 +329,9 @@ namespace test {
        *   computed by accounting for the work units in isolation, without considering
        *   dependency constraints. These observed deviations are cast into an empirical
        *   »form factor«, which is then used to correct the applied stress factor.
-       *   Only with taking these corrective steps, the observed stress factor at
+       *   After applying these corrective steps, the observed stress factor at
        *   _breaking point_ comes close to the theoretically expected value of 1.0
        * @see stress-test-rig.hpp
-       * @todo WIP 1/24 ✔ define ⟶ ✔ implement
        */
       void
       search_breaking_point()
@@ -365,7 +371,6 @@ namespace test {
        *      - optionally generate a **Gnuplot** script for visualisation
        * @see vault::gear::bench::ParameterRange
        * @see gnuplot-gen.hpp
-       * @todo WIP 4/24 ✔ define ⟶ ✔ implement
        */
       void
       watch_expenseFunction()
@@ -396,15 +401,15 @@ namespace test {
           
           auto [socket,gradient,v1,v2,corr,maxDelta,stdev] = bench::linearRegression (results.param, results.time);
           double avgConc = Setup::avgConcurrency (results);
-/*
-          cout << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───"<<endl;
-          cout << Setup::renderGnuplot (results);
+
+//        cout << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───"<<endl;
+//        cout << Setup::renderGnuplot (results)                                   <<endl;
           cout << "───═══───═══───═══───═══───═══───═══───═══───═══───═══───═══───"<<endl;
           cout << _Fmt{"Model: %3.2f·p + %3.2f  corr=%4.2f Δmax=%4.2f σ=%4.2f ∅concurrency: %3.1f"}
                       % gradient % socket % corr % maxDelta % stdev % avgConc
                << endl;
-*/          
-          CHECK (corr > 0.80);                     // clearly a linear correlated behaviour
+          
+          CHECK (corr > 0.80);                     // clearly a linearly correlated behaviour
           CHECK (isLimited (0.4, gradient, 0.7));  // should be slightly above 0.5 (2ms and 4 threads => 0.5ms / Job)
           CHECK (isLimited (3,   socket,   9  ));  // we have a spin-up and a shut-down both ~ 2ms plus some further overhead
           
@@ -413,89 +418,30 @@ namespace test {
       
       
       
-      /** @test TODO build a load pattern to emolate a typical high work load
-       * @todo WIP 4/24 🔁 define ⟶ implement
+      /** @test use an extended load pattern to emulate a typical high work load
+       *      - using 4-step linear chains, interleaved such that each level holds 4 nodes
+       *      - the structure overall spans out to 66 levels, leading to ∅3.88 nodes/level
+       *      - load on each node is 5ms, so the overall run would take ~330ms back to back
+       *      - this structure is first performed on the bench::BreakingPoint
+       *      - in the second part, a similar structure with 4-times the size is performed
+       *        as a single run, but this time with planning and execution interleaved.
+       *      - this demonstrates the Scheduler can sustain stable high load performance
        */
       void
       investigateWorkProcessing()
         {
-          ComputationalLoad cpuLoad;
-          cpuLoad.timeBase = 200us;
-          cpuLoad.calibrate();
-//////////////////////////////////////////////////////////////////TODO for development only
           MARK_TEST_FUN
-/*
-                    TestChainLoad testLoad{200};
-                    testLoad.configure_isolated_nodes()
-                            .buildTopology()
-//                            .printTopologyDOT()
-                            .printTopologyStatistics();
-          {
-              
-          TRANSIENTLY(work::Config::COMPUTATION_CAPACITY) = 4;
-          BlockFlowAlloc bFlow;
-          EngineObserver watch;
-          Scheduler scheduler{bFlow, watch};
-                    
-          auto set1 = testLoad.setupSchedule(scheduler)
-                         .withLevelDuration(200us)
-                         .withJobDeadline(500ms)
-                         .withUpfrontPlanning()
-                         .withLoadTimeBase(2ms)
-                         .withInstrumentation();
-          double runTime = set1.launch_and_wait();
-          auto stat = set1.getInvocationStatistic();
-cout << "time="<<runTime/1000
-     << " covered="<<stat.coveredTime / 1000
-     << " avgconc="<<stat.avgConcurrency
-     <<endl;          
-          }
-          
-          TestChainLoad<8> testLoad{256};
-          testLoad.seedingRule(testLoad.rule().probability(0.6).maxVal(2))
-                  .pruningRule(testLoad.rule().probability(0.44))
-                  .setSeed(60)
-                  .buildTopology()
-                .printTopologyDOT()
-                .printTopologyStatistics()
-                  ;
-          return;
-
-//          auto stressFac = 1.0;
-//          auto concurrency = 8;
-//          
-//          auto testSetup =
-//            testLoad.setupSchedule(scheduler)
-//                    .withLoadTimeBase(LOAD_BASE)
-//                    .withJobDeadline(50ms)
-//                    .withUpfrontPlanning()
-//                    .withAdaptedSchedule (stressFac, concurrency);
-//          double runTime = testSetup.launch_and_wait();
-//          double expected = testSetup.getExpectedEndTime();
-//          auto stat = testSetup.getInvocationStatistic();
-//SHOW_EXPR(runTime)
-//SHOW_EXPR(expected)
-//SHOW_EXPR(refTime)
-          return;
-*/
-      using StressRig = StressTestRig<8>;
+          using StressRig = StressTestRig<8>;
           
             struct Setup : StressRig
               {
-//                double UPPER_STRESS = 12;
-                //
-//                double FAIL_LIMIT   = 1.0; //0.7;
-//                double TRIGGER_SDEV = 1.0; //0.25;
-//                double TRIGGER_DELTA = 2.0; //0.5;
-//                uint CONCURRENCY = 4;
                 uint CONCURRENCY = 4;
-//                bool SCHED_DEPENDS = true;
                 bool showRuns = true;
                 
                 auto
                 testLoad()
                   {
-                    TestLoad testLoad{256};
+                    TestLoad testLoad{256};    // use a pattern of 4-step interleaved linear chains
                     testLoad.seedingRule(testLoad.rule().probability(0.6).maxVal(2))
                             .pruningRule(testLoad.rule().probability(0.44))
                             .weightRule(testLoad.value(1))
@@ -506,20 +452,18 @@ cout << "time="<<runTime/1000
                 auto testSetup (TestLoad& testLoad)
                   {
                     return StressRig::testSetup(testLoad)
-//                                     .withBaseExpense(200us)
-                                     .withLoadTimeBase(5ms);
+                                     .withLoadTimeBase(5ms);// ◁─────────────── Load 5ms on each Node
                   }
               };
           auto [stress,delta,time] = StressRig::with<Setup>()
                                                .perform<bench::BreakingPoint>();
-SHOW_EXPR(stress)
-SHOW_EXPR(delta)
-SHOW_EXPR(time)
+          cout << "Time for 256 Nodes: "<<time<<"ms with stressFactor="<<stress<<endl;
+          
           
           /* ========== verify extended stable operation ============== */
           
           // Use the same pattern, but extended to 4 times the length;
-          // moreover, this time planning and execution will be interviened.
+          // moreover, this time planning and execution will be interleaved.
           TestChainLoad<8> testLoad{1024};
           testLoad.seedingRule(testLoad.rule().probability(0.6).maxVal(2))
                   .pruningRule(testLoad.rule().probability(0.44))
@@ -545,14 +489,8 @@ SHOW_EXPR(time)
                     .withAdaptedSchedule (1.0, 4);    // ◁───────────────────── stress factor 1.0 and 4 workers
           double runTime = testSetup.launch_and_wait();
           auto stat = testSetup.getInvocationStatistic();
+          cout << "Extended Scheduler Run: "<<runTime/1e6<<"sec concurrency:"<<stat.avgConcurrency<<endl;
           
-SHOW_EXPR(runTime)          
-SHOW_EXPR(stat.activeTime);
-SHOW_EXPR(stat.coveredTime);
-SHOW_EXPR(stat.activationCnt);
-SHOW_EXPR(stat.avgConcurrency);
-SHOW_EXPR(expectedHash)
-SHOW_EXPR(testLoad.getHash());
           CHECK (stat.activationCnt == 1024);
           CHECK (expectedHash == testLoad.getHash());
           CHECK (3.2 < stat.avgConcurrency);
