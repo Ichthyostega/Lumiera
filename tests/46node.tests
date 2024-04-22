@@ -6,13 +6,21 @@ PLANNED "Proc Node basics" NodeBasic_test <<END
 END
 
 
-PLANNED "Proc Node fabrication" NodeFabrication_test <<END
+PLANNED "Proc Node development" NodeDevel_test <<END
+END
+
+
+PLANNED "Proc Node fabrication" NodeFactory_test <<END
+END
+
+
+PLANNED "Proc Node connectivity" NodeLinkage_test <<END
+END
+
+
+PLANNED "Proc Node input reading" NodeInput_test <<END
 END
 
 
 PLANNED "Proc Node operation modes" NodeOperation_test <<END
-END
-
-
-PLANNED "source reading Node" NodeSource_test <<END
 END

@@ -6183,7 +6183,7 @@ This is the core service provided by the player subsystem. The purpose is to cre
 :any details of this processing remain opaque for the clients; even the player subsystem just accesses the EngineFaçade
 </pre>
 </div>
-<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202404192303" tags="overview impl discuss draft" changecount="38">
+<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202404222258" tags="overview impl discuss draft" changecount="39">
 <pre>//Integration effort to promote the development of rendering, playback and video display in the GUI//
 This IntegrationSlice was started in {{red{2023}}} as [[Ticket #1221|https://issues.lumiera.org/ticket/1221]] to coordinate the completion and integration of various implementation facilities, planned, drafted and built during the last years; this effort marks the return of development focus to the lower layers (after years of focussed UI development) and will implement the asynchronous and time-bound rendering coordinated by the [[Scheduler]] in the [[Vault|Vault-Layer]]
 
@@ -6206,17 +6206,22 @@ __May.23__: taking a //prototyping approach// now, since further development was
 * ✔ implement a »~Split-Splice« algorithm for &amp;rarr; SegmentationChange, rigged accordingly to generate a mocked Segementation for now
 * ✔ create a testbed to assemble a JobPlanningPipeline step by step (&amp;rarr; [[#920|https://issues.lumiera.org/ticket/920]] and [[#1275|https://issues.lumiera.org/ticket/1275|]])
 
-__June23__: building upon this prototyping approach, the dispatcher pipeline could be rearranged in the form of a pipeline builder, allowing to retract the originally used implementation scheme based on »Monads«. The implementation of the Dispatcher is complete, yet the build up of the [[»Render Drive« #1301|https://issues.lumiera.org/ticket/1301]] could not reasonably be completed, due to lack of a clear-shaped ''Scheduler interface''.
+__June.23__: building upon this prototyping approach, the dispatcher pipeline could be rearranged in the form of a pipeline builder, allowing to retract the originally used implementation scheme based on »Monads«. The implementation of the Dispatcher is complete, yet the build up of the [[»Render Drive« #1301|https://issues.lumiera.org/ticket/1301]] could not reasonably be completed, due to lack of a clear-shaped ''Scheduler interface''.
 
-__July23__: this leads to a shift of work focus towards implementing the [[Scheduler]] itself.
+__July.23__: this leads to a shift of work focus towards implementing the [[Scheduler]] itself.
 The Scheduler will be structured into two Layers, where the lower layer is implemented as //priority queue// (using the STL). So the most tricky part to solve is the representation of //dependencies// between jobs, with the possible extension to handling IO operations asynchronously. Analysis and planning of the implementation indicate that the [[scheduler memory managment|SchedulerMemory]] can be based on //Extents//, which are interpreted as »Epochs« with a deadline. These considerations imply what steps to take next for building up Scheduler functionality and memory management required for processing a simple job
 * ✔ build a first working draft for the {{{BlockFlow}}} allocation scheme [[#1311|https://issues.lumiera.org/ticket/1311]]
 * ✔ define and cover the basic [[Activities|RenderActivity]] necessary to implement a plain-simple-Job (without dependencies)
 * ✔ pass such an Activity through the two layers of the Scheduler
-* 🗘 establish a baseline for //performance measurements//
+* ✔ establish a baseline for //performance measurements//
 * ⌛ adapt the [[job planning pipeline|JobPlanningPipeline]] implemented thus far to produce the appropriate {{{Activity}}} records for the scheduler
 
-__December23__: building the Scheduler required some time and dedication, including some related topics like a [[dedicated memory management scheme|SchedulerMemory]], rework and modernisation of the [[#1279 thread handling framework|https://issues.lumiera.org/ticket/1279]], using a [[worker pool|SchedulerWorker]] and developing the [[foundation for load control|SchedulerLoadControl]]. This amounts to the creation of a considerable body of new code; some &amp;rarr;[[load- and stress testing|SchedulerTest]] helps to establish &amp;rarr;[[performance characteristics and traits|SchedulerBehaviour]].
+__December.23__: building the Scheduler required time and dedication, including some related topics like a [[suitable memory management scheme|SchedulerMemory]], rework and modernisation of the [[#1279 thread handling framework|https://issues.lumiera.org/ticket/1279]], using a [[worker pool|SchedulerWorker]] and developing the [[foundation for load control|SchedulerLoadControl]]. This amounts to the creation of a considerable body of new code; some &amp;rarr;[[load- and stress testing|SchedulerTest]] helps to establish &amp;rarr;[[performance characteristics and traits|SchedulerBehaviour]].
+
+__April.24__: after completing an extended round of performance tests for the new Scheduler, development focus is shifted now shifted upwards to the [[Render Node Network|ProcNode]], where Engine activity is carried out. This part was addressed at the very start of the project, and later again -- yet could never be completed, due to a lack of clear reference points and technical requirements. Hope to achieve a breakthrough rests on this integration effort now.
+* 🗘 establish a test setup for developing render node functionality
+* ⌛ introduce a middle layer for linking the JobTicket to the actual invocation
+* ⌛ rework and complete the existing node invocation code
 
 !Decisions
 ;Scheduler
@@ -7382,19 +7387,21 @@ A special operational condition mentioned above is the ''Scheduler Emergency''. 
 &amp;rarr; [[Rendering]]
 </pre>
 </div>
-<div title="SchedulerRequirements" modifier="Ichthyostega" created="201107080145" modified="201112171835" tags="Rendering spec draft discuss">
+<div title="SchedulerRequirements" modifier="Ichthyostega" created="201107080145" modified="202404212325" tags="Rendering spec draft discuss" changecount="1">
 <pre>The [[Scheduler]] is responsible for geting the individual [[render jobs|RenderJob]] to run. The basic idea is that individual render jobs //should never block// -- and thus the calculation of a single frame might be split into several jobs, including resource fetching. This, together with the data exchange protocol defined for the OutputSlot, and the requirements of storage management (especially releasing of superseded render nodes &amp;rarr; FixtureStorage), leads to certain requirements to be ensured by the scheduler:
 ;ordering of jobs
 :the scheduler has to ensure all prerequisites of a given job are met
 ;job time window
-:when it's not possible to run a job within the defined target time window, it must be marked as failure
-;failure propagation
-:when a job fails, either due to an job internal error, or by timing glitch, any dependent jobs need to receive that failure state
+:when it's not possible to run a job within the defined target time window, it should be silently dropped
+;event propagation
+:when some job is done, or due to an external event, a //notification// must be propagated to dependent jobs
 ;guaranteed execution
-:some jobs are marked as &quot;ensure run&quot;. These need to run reliable, even when prerequisite jobs fail -- and this failure state needs to be propagated
+:some jobs are marked as »compulsory«. These need to run reliable, even when prerequisite jobs fail -- and this failure state needs to be propagated
+;superseding groups of jobs
+:jobs can be marked as belonging to some group or stratum (called the »manifestation«); such a group can be masked out at a central registry, causing all the affected jobs to be //silently dropped//.
 
 !detecting termination
-The way other parts of the system are built, requires us to obtain a guaranteed knowledge of some job's termination. It is possible to obtain that knowledge with some limited delay, but it nees to be absoultely reliable (violations leading to segfault). The requirements stated above assume this can be achieved through //jobs with guaranteed execution.// Alternatively we could consider installing specific callbacks -- in this case the scheduler itself has to guarantee the invocation of these callbacks, even if the corresponding job fails or is never invoked. It doesn't seem there is any other option.
+The way other parts of the system are built, requires us to obtain a guaranteed knowledge of some job's termination. It is possible to obtain that knowledge with some limited delay, but propagation of this information needs to be absolutely reliable (violations leading either to segfault, or memory leaks). The requirements stated above assume this can be achieved through a combination of //compulsory jobs// and //notifications.// Alternatively we could consider using a separate messaging system within the engine (the »EngineObserver«), which shall also be used for timing observations, higher level capacity management and for signaling exceptional operational failures.
 </pre>
 </div>
 <div title="SchedulerTest" creator="Ichthyostega" modifier="Ichthyostega" created="202312281814" modified="202404182232" tags="Rendering operational draft img" changecount="170">
