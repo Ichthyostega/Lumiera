@@ -37,14 +37,14 @@
  ** @see operationpoint.hpp
  */
 
-#ifndef ENGINE_PROCNODE_H
-#define ENGINE_PROCNODE_H
+#ifndef ENGINE_PROC_NODE_H
+#define ENGINE_PROC_NODE_H
 
 #include "lib/error.hpp"
 #include "steam/common.hpp"
-#include "steam/state.hpp"
 #include "steam/asset/proc.hpp"
 #include "steam/mobject/parameter.hpp"
+#include "steam/engine/state-closure.hpp"
 #include "steam/engine/channel-descriptor.hpp"
 #include "lib/frameid.hpp"
 #include "lib/ref-array.hpp"
@@ -185,4 +185,4 @@ namespace engine {
   
   
 }} // namespace steam::engine
-#endif
+#endif /*ENGINE_PROC_NODE_H*/

@@ -37,7 +37,7 @@
 #define ENGINE_STATEPROXY_H
 
 
-#include "steam/state.hpp"
+#include "steam/engine/state-closure.hpp"
 
 
 namespace steam {

@@ -36,7 +36,7 @@
 #define ENGINE_RENDER_INVOCATION_H
 
 
-//#include "steam/state.hpp"
+//#include "steam/engine/state-closure.hpp"
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/buffhandle.hpp"
 //#include "steam/engine/bufftable-obsolete.hpp"

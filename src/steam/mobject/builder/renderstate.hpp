@@ -33,7 +33,7 @@
 #ifndef MOBJECT_BUILDER_RENDERSTATE_H
 #define MOBJECT_BUILDER_RENDERSTATE_H
 
-#include "steam/state.hpp"
+#include "steam/engine/state-closure.hpp"
 
 
 

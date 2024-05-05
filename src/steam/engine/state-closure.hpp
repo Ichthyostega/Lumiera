@@ -1,5 +1,5 @@
 /*
-  STATE.hpp  -  Key Interface representing a render process and encapsulating state
+  STATE-CLOSURE.hpp  -  Key Interface representing a render process and encapsulating state
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,13 +21,13 @@
 */
 
 
-/** @file state.hpp
+/** @file state-closure.hpp
  ** Access point to an ongoing render's processing state.
  */
 
 
-#ifndef STEAM_INTERFACE_STATE_H
-#define STEAM_INTERFACE_STATE_H
+#ifndef STEAM_ENGINE_STATE_CLOSURE_H
+#define STEAM_ENGINE_STATE_CLOSURE_H
 
 
 #include "lib/error.hpp"
@@ -125,4 +125,4 @@ namespace proc_interface {
     
     
 } // namespace proc_interface
-#endif
+#endif /*STEAM_ENGINE_STATE_CLOSURE_H*/

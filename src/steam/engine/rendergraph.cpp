@@ -27,8 +27,8 @@
 
 
 #include "steam/engine/rendergraph.hpp"
+#include "steam/engine/state-closure.hpp"
 #include "lib/frameid.hpp"
-#include "steam/state.hpp"
 
 namespace lumiera {
   
