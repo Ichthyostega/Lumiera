@@ -29,11 +29,11 @@
  ** \c pull() calls, which on the whole creates a stack-like assembly of local invocation
  ** state.
  ** The actual steps to be carried out for a \c pull() call are dependent on the configuration
- ** of the node to pull. Each node has been preconfigured by the builder with a WiringDescriptor
- ** and a concrete type of a StateAdapter. The actual sequence of steps is defined in the header
- ** nodeoperation.hpp out of a set of basic operation steps. These steps all use the passed in
- ** Invocation object (a sub-interface of StateAdapter) to access the various aspects of the
- ** invocation state.
+ ** of the node to pull. Each node has been preconfigured by the builder with a Connectivity
+ ** descriptor and a concrete type of a StateAdapter. The actual sequence of steps is defined
+ ** in the header nodeoperation.hpp out of a set of basic operation steps. These steps all use
+ ** the passed in Invocation object (a sub-interface of StateAdapter) to access the various
+ ** aspects of the invocation state.
  ** 
  ** # composition of the Invocation State
  ** 
@@ -41,7 +41,7 @@
  ** instance directly on the stack, managing the actual buffer pointers and state references. Using this
  ** StateAdapter, the predecessor nodes are pulled. The way these operations are carried out is encoded
  ** in the actual StateAdapter type known to the NodeWiring (WiringAdapter) instance. All of these actual
- ** StateAdapter types are built as implementing the engine::State interface.
+ ** StateAdapter types are built as implementing the engine::StateClosure interface.
  ** 
  ** @todo relies still on an [obsoleted implementation draft](\ref bufftable-obsolete.hpp)
  ** @see engine::ProcNode
@@ -58,7 +58,7 @@
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/state-closure.hpp"
 #include "steam/engine/channel-descriptor.hpp"
-#include "steam/engine/bufftable-obsolete.hpp"
+#include "steam/engine/feed-manifold.hpp"
 
 
 
@@ -76,22 +76,22 @@ namespace engine {
    * push / fetch and recursive downcall to render the source frames.
    */
   class StateAdapter
-    : public State
+    : public StateClosure
     {
     protected:
-      State& parent_;
-      State& current_;
+      StateClosure& parent_;
+      StateClosure& current_;
       
-      StateAdapter (State& callingProcess) 
+      StateAdapter (StateClosure& callingProcess)
         : parent_ (callingProcess),
           current_(callingProcess.getCurrentImplementation())
         { }
       
-      virtual State& getCurrentImplementation () { return current_; }
+      virtual StateClosure& getCurrentImplementation () { return current_; }
       
       
       
-    public: /* === proxying the State interface === */
+    public: /* === proxying the StateClosure interface === */
       
       virtual void releaseBuffer (BuffHandle& bh)       { current_.releaseBuffer (bh); }
       
@@ -99,7 +99,7 @@ namespace engine {
       
       virtual BuffHandle fetch (FrameID const& fID)     { return current_.fetch (fID); }
       
-      virtual BuffTableStorage& getBuffTableStorage()   { return current_.getBuffTableStorage(); } 
+      virtual BuffTableStorage& getBuffTableStorage()   { return current_.getBuffTableStorage(); }
 
       // note: allocateBuffer()  is chosen specifically based on the actual node wiring
       
@@ -124,14 +124,14 @@ namespace engine {
   struct Invocation
     : StateAdapter
     {
-      WiringDescriptor const& wiring;
+      Connectivity const& wiring;
       const uint outNr;
       
       BuffTable* buffTab;
       
     protected:
       /** creates a new invocation context state, without BuffTable */
-      Invocation (State& callingProcess, WiringDescriptor const& w, uint o)
+      Invocation (StateClosure& callingProcess, Connectivity const& w, uint o)
         : StateAdapter(callingProcess),
           wiring(w), outNr(o),
           buffTab(0)
@@ -176,36 +176,36 @@ namespace engine {
     
     
                                                                                                     ////////////TICKET #249  this strategy should better be hidden within the BuffHandle ctor (and type-erased after creation)
-    struct AllocBufferFromParent  ///< using the parent StateAdapter for buffer allocations
-      : Invocation
-      {
-        AllocBufferFromParent (State& sta, WiringDescriptor const& w, const uint outCh) 
-          : Invocation(sta, w, outCh) {}
-        
-        virtual BuffHandle
-        allocateBuffer (const lumiera::StreamType* ty) { return parent_.allocateBuffer(ty); }          ////////////TODO: actually implement the "allocate from parent" logic!
-      };
-    
-    struct AllocBufferFromCache   ///< using the global current State, which will delegate to Cache
-      : Invocation
-      {
-        AllocBufferFromCache (State& sta, WiringDescriptor const& w, const uint outCh) 
-          : Invocation(sta, w, outCh) {}
-        
-        virtual BuffHandle
-        allocateBuffer (const lumiera::StreamType* ty) { return current_.allocateBuffer(ty); }
-      };
-    
+  struct AllocBufferFromParent  ///< using the parent StateAdapter for buffer allocations
+    : Invocation
+    {
+      AllocBufferFromParent (StateClosure& sta, Connectivity const& w, const uint outCh)
+        : Invocation(sta, w, outCh) {}
+      
+      virtual BuffHandle
+      allocateBuffer (const lumiera::StreamType* ty) { return parent_.allocateBuffer(ty); }          ////////////TODO: actually implement the "allocate from parent" logic!
+    };
+  
+  struct AllocBufferFromCache   ///< using the global current StateClosure, which will delegate to Cache
+    : Invocation
+    {
+      AllocBufferFromCache (StateClosure& sta, Connectivity const& w, const uint outCh)
+        : Invocation(sta, w, outCh) {}
+      
+      virtual BuffHandle
+      allocateBuffer (const lumiera::StreamType* ty) { return current_.allocateBuffer(ty); }
+    };
+  
   
   /**
    * The real invocation context state implementation. It is created
-   * by the NodeWiring (WiringDescriptor) of the processing node which
+   * by the NodeWiring (Connectivity) of the processing node which
    * is pulled by this invocation, hereby using the internal configuration
-   * information to guide the selection of the real call sequence 
+   * information to guide the selection of the real call sequence
    * 
    * \par assembling the call sequence implementation
    * Each ProcNode#pull() call creates such a StateAdapter subclass on the stack,
-   * with a concrete type according to the WiringDescriptor of the node to pull.
+   * with a concrete type according to the Connectivity of the node to pull.
    * This concrete type encodes a calculation Strategy, which is assembled
    * as a chain of policy templates on top of OperationBase. For each of the
    * possible configurations we define such a chain (see bottom of nodeoperation.hpp).
@@ -218,12 +218,12 @@ namespace engine {
     , private Strategy
     {
     public:
-      ActualInvocationProcess (State& callingProcess, WiringDescriptor const& w, const uint outCh)
+      ActualInvocationProcess (StateClosure& callingProcess, Connectivity const& w, const uint outCh)
         : BufferProvider(callingProcess, w, outCh)
         { }
       
       /** contains the details of Cache query and recursive calls
-       *  to the predecessor node(s), eventually followed by the 
+       *  to the predecessor node(s), eventually followed by the
        *  ProcNode::process() callback
        */
       BuffHandle retrieve ()

@@ -1,5 +1,5 @@
 /*
-  BuffTable(Test)  -  check consistency of buffer table chunk allocation
+  FeedManifold(Test)  -  check consistency of buffer table chunk allocation
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-/** @file buff-table-test.cpp
- ** unit test \ref BuffTable_test
+/** @file feed-manifold-test.cpp
+ ** unit test \ref FeedManifold_test
  */
 
 
@@ -29,7 +29,7 @@
 #include "lib/error.hpp"
 
 #include "steam/engine/proc-node.hpp"
-#include "steam/engine/bufftable-obsolete.hpp"
+#include "steam/engine/feed-manifold.hpp"
 #include "lib/ref-array.hpp"
 #include "lib/format-cout.hpp"
 
@@ -61,15 +61,15 @@ namespace test  {
     DummyArray<InChanDescriptor>  dummy2;
     
     
-    /** a "hijacked" WiringDescriptor requesting
+    /** a "hijacked" Connectivity descriptor requesting
      *  a random number of inputs and outputs */
     struct MockSizeRequest
-      : WiringDescriptor
+      : Connectivity
       {
         uint ii,oo;
         
         MockSizeRequest()
-          : WiringDescriptor(dummy1,dummy2,0,NodeID()),
+          : Connectivity(dummy1,dummy2,0,NodeID()),
             ii(rand() % CHUNK_MAX),
             oo(rand() % CHUNK_MAX)
           { }
@@ -77,7 +77,7 @@ namespace test  {
         virtual uint getNrI()  const { return ii; }
         virtual uint getNrO()  const { return oo; }
         
-        virtual BuffHandle callDown (State&, uint) const
+        virtual BuffHandle callDown (StateClosure&, uint) const
         { throw lumiera::Error("not intended to be called"); }
       };
     
@@ -106,7 +106,7 @@ namespace test  {
     
     
     bool
-    consistencyCheck (BuffTable const& b, WiringDescriptor const& num, void* lastLevel)
+    consistencyCheck (BuffTable const& b, Connectivity const& num, void* lastLevel)
     {
       return (b.outHandle == lastLevel )  // storage is allocated continuously
           && (b.outBuff   <= b.inBuff  )  // input slots are behind the output slots
@@ -131,7 +131,7 @@ namespace test  {
    *       deallocated and the internal level in the storage vector
    *       should have doped to zero again.
    */
-  class BuffTable_test : public Test
+  class FeedManifold_test : public Test
     {
       using PSto = std::unique_ptr<BuffTableStorage>;
       
@@ -179,7 +179,7 @@ namespace test  {
   
   
   /** Register this test class... */
-  LAUNCHER (BuffTable_test, "unit engine");
+  LAUNCHER (FeedManifold_test, "unit engine");
   
   
   

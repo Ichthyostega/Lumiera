@@ -53,7 +53,7 @@
  ** Validity of these handles will be checked on each access. The actual
  ** model port descriptors are owned and managed by the fixture;
  ** @todo they might bulk allocated in a similar manner than the
- **       ProcNode and WiringDescriptor objects are.
+ **       ProcNode and Connectivity objects are.
  ** 
  ** @see ModelPortRegistry_test abstract usage example
  ** @see ModelPortRegistry management interface 

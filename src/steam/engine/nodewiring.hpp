@@ -32,8 +32,8 @@
 
 
 #include "steam/engine/proc-node.hpp"
+#include "steam/engine/node-wiring-builder.hpp"
 #include "lib/allocation-cluster.hpp"
-#include "steam/engine/nodewiring-def.hpp"
 
 #include <memory>
 
@@ -59,16 +59,16 @@ namespace engine {
    * @param STATE Invocation state object controlling the
    *        behaviour of callDown() while rendering.
    * @see StateAdapter
-   * @see NodeFactory 
+   * @see NodeFactory
    */
   template<class STATE>
   class NodeWiring
-    : public WiringDescriptor
+    : public Connectivity
     {
       
     public:
       NodeWiring(WiringSituation const& setup)
-        : WiringDescriptor(setup.makeOutDescriptor(), 
+        : Connectivity(setup.makeOutDescriptor(),
                            setup.makeInDescriptor(),
                            setup.resolveProcessingFunction(),
                            setup.createNodeID())
@@ -76,12 +76,11 @@ namespace engine {
       
     private:
       virtual BuffHandle
-      callDown (State& currentProcess, uint requestedOutputNr)  const 
+      callDown (StateClosure& currentProcess, uint requestedOutputNr)  const
         {
           STATE thisStep (currentProcess, *this, requestedOutputNr);
           return thisStep.retrieve (); // fetch or calculate results
         }
-      
     };
   
   
@@ -95,7 +94,7 @@ namespace engine {
       WiringFactory (lib::AllocationCluster& a);
      ~WiringFactory ();
       
-      WiringDescriptor&
+      Connectivity&
       operator() (WiringSituation const& setup);
     };
   

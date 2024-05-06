@@ -62,7 +62,7 @@ namespace engine {
   NodeFactory::operator() (Placement<Effect> const& effect, WiringSituation& intendedWiring)
   {
     intendedWiring.resolveProcessor(effect->getProcAsset());
-    WiringDescriptor& wiring = wiringFac_(intendedWiring);
+    Connectivity& wiring = wiringFac_(intendedWiring);
     
     ProcNode& newNode = alloc_.create<ProcNode> (wiring);
     ENSURE (newNode.isValid());

@@ -67,7 +67,7 @@ namespace engine {
     
     
     /**
-     * Fabricating a WiringDescriptor
+     * Fabricating a Connectivity descriptor
      * tailored for a specific node wiring situation.
      */
     template<class CONF>
@@ -87,7 +87,7 @@ namespace engine {
         WiringDescriptorFactory(AllocationCluster& a) 
         : alloc_(a) {}
         
-        WiringDescriptor&
+        Connectivity&
         operator() (WiringSituation const& intendedWiring)  
           { 
             return alloc_.create<ActualWiring> (intendedWiring);
@@ -95,7 +95,7 @@ namespace engine {
       };
     
     /** invocation signature of the factories */
-    typedef WiringDescriptor& (FunctionType)(WiringSituation const&);
+    typedef Connectivity& (FunctionType)(WiringSituation const&);
     
     /** preconfigured table of all possible factories */
     typedef ConfigSelector< WiringDescriptorFactory  ///< Factory template to instantiate 
@@ -147,7 +147,7 @@ namespace engine {
    *  with the actual predecessor nodes pointers and can then be used to create
    *  the new processing node to be wired up.  
    */
-  WiringDescriptor&
+  Connectivity&
   WiringFactory::operator() (WiringSituation const& setup)
   {
     long config = setup.getFlags();

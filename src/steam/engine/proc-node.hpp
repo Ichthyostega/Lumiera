@@ -24,10 +24,10 @@
  ** Interface to the processing nodes and the render nodes network.
  **
  ** Actually, there are three different interfaces to consider
- ** - the ProcNode#pull is the invocation interface. It is call-style (easily callable by C)
- ** - the builder interface, comprised by the NodeFactory and the WiringFactory. It's C++ (using templates)
- ** - the actual processing function is supposed to be a C function; it uses a set of C functions 
- **   for accessing the frame buffers with the data to be processed.
+ ** - the ProcNode#pull is the invocation interface. It is function-call style
+ ** - the builder interface, comprised by the NodeFactory and the WiringFactory.
+ ** - the actual processing function is supposed to be a C function and will be
+ **   hooked up within a thin wrapper.
  **
  ** By using the builder interface, concrete node and wiring descriptor classes are created,
  ** based on some templates. These concrete classes form the "glue" to tie the node network
@@ -57,7 +57,6 @@ namespace steam {
 namespace engine {
 
   using std::vector;
-  using proc_interface::State;
   using lumiera::NodeID;
   
   class ProcNode;
@@ -72,10 +71,10 @@ namespace engine {
    *       Basically, its left-over from a first prototypical implementation from 2008
    *       As of 1/2012, we're re-shaping that engine interface and invocation with a top-down approach,
    *       starting from the player. Anyhow, you can expect the basic setup to remain as-is: there will
-   *       be a ProcNode and a WiringDescriptor, telling how it's connected to its predecessors, and
-   *       defining how the Node is supposed to operate
+   *       be a ProcNode and a Connectivity descriptor, telling how it's connected to its predecessors,
+   *       and defining how the Node is supposed to operate
    */
-  class WiringDescriptor
+  class Connectivity
     {
     public: /* === public information record describing the node graph === */
       uint nrO;
@@ -90,10 +89,10 @@ namespace engine {
       
       NodeID const& nodeID;
       
-      virtual ~WiringDescriptor() {}
+      virtual ~Connectivity() {}
       
     protected:
-      WiringDescriptor (lib::RefArray<ChannelDescriptor>& o, 
+      Connectivity (lib::RefArray<ChannelDescriptor>& o,
                         lib::RefArray<InChanDescriptor>& i,
                         ProcFunc pFunc, NodeID const& nID)
         : out(o), in(i),
@@ -115,7 +114,7 @@ namespace engine {
        *  @see NodeWiring#callDown default implementation
        */
       virtual BuffHandle
-      callDown (State& currentProcess, uint requiredOutputNr)  const =0; 
+      callDown (StateClosure& currentProcess, uint requiredOutputNr)  const =0;
       
     };
   
@@ -129,7 +128,7 @@ namespace engine {
    *       It might be used as ABC (as was the original intention) when implementing
    *       several query/information functions. In that case, the ctor will become protected.
    *       The alternative would be to push down these information-retrieval part into a
-   *       configurable element within WiringDescriptor, in which case we even might drop
+   *       configurable element within Connectivity, in which case we even might drop
    *       ProcNode as a frontend entirely.
    */
   class ProcNode
@@ -138,10 +137,10 @@ namespace engine {
       typedef mobject::Parameter<double> Param;   //////TODO: just a placeholder for automation as of 6/2008
       vector<Param> params;
       
-      const WiringDescriptor& wiringConfig_;
+      const Connectivity& wiringConfig_;
       
     public:
-      ProcNode (WiringDescriptor const& wd)
+      ProcNode (Connectivity const& wd)
         : wiringConfig_(wd)
         { }
       
@@ -161,14 +160,14 @@ namespace engine {
        *  calculates a multichannel output, only one channel can be
        *  retrieved by such a \c pull() call, but you can expect data
        *  of the other channels to be processed and fed to cache.
-       *  @param currentProcess the current processing state for 
+       *  @param currentProcess the current processing state for
        *         managing buffers and accessing current parameter values
        *  @param requestedOutputNr the output channel requested
        *         (in case this node delivers more than one output channel)
        *  @return handle to the buffer containing the calculated result.
        */
       BuffHandle
-      pull (State& currentProcess, uint requestedOutputNr=0)  const
+      pull (StateClosure& currentProcess, uint requestedOutputNr=0)  const
         {
           return this->wiringConfig_.callDown (currentProcess, requestedOutputNr);
         }

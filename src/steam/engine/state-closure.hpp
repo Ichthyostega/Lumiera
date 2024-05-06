@@ -49,20 +49,20 @@ namespace engine {
   
   /**
    * Abstraction to access the state of a currently ongoing render/calculation process,
-   * as it is tied to the supporting facilities of the vault layer. An State (subclass) instance
+   * as it is tied to the supporting facilities of the vault layer. An StateClosure (subclass) instance
    * is the sole connection for the render node to invoke services of the vault needed
    * to carry out the calculations.
    * 
    * @see engine::RenderInvocation top-level entrance point
    * @see nodeinvocation.hpp impl. used from \em within the nodes
    */
-  class State
+  class StateClosure
     {
                                    ////////////////////////////////////////////////TICKET #826  expected to be reworked to quite some extent (9/2011)
     public:
       /** allocate a new writable buffer with type and size according to
        *  the BufferDescriptor. The actual provider of this buffer depends
-       *  on the State implementation; it could be a temporary, located in
+       *  on the StateClosure implementation; it could be a temporary, located in
        *  the cache, used for feeding calculated frames over a network, etc.
        *  @return a BuffHandle encapsulating the information necessary to get
        *          at the actual buffer address and for releasing the buffer.
@@ -102,27 +102,18 @@ namespace engine {
       
       
     protected:
-      virtual ~State() {};
+      virtual ~StateClosure() {};
       
-      /** resolves to the State object currently "in charge".
+      /** resolves to the StateClosure object currently "in charge".
        *  Intended as a performance shortcut to avoid calling
        *  up through a chain of virtual functions when deep down
        *  in chained ProcNode::pull() calls. This allows derived
        *  classes to proxy the state interface.
        */ 
-      virtual State& getCurrentImplementation () =0;
+      virtual StateClosure& getCurrentImplementation () =0;
       
       friend class engine::StateAdapter;
     };
   
 }} // namespace steam::engine
-
-
-
-namespace proc_interface {
-
-  using steam::engine::State;
-    
-    
-} // namespace proc_interface
 #endif /*STEAM_ENGINE_STATE_CLOSURE_H*/

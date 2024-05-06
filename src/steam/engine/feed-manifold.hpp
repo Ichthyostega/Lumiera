@@ -1,8 +1,9 @@
 /*
-  BUFFTABLE-OBSOLTE.hpp  -  Old dead code to be removed when rewriting ProcNode!!!!!
+  FEED-MANIFOLD.hpp  -  data feed connection system for render nodes
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2023,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,14 +22,15 @@
 */
 
 
-/** @file bufftable-obsolete.hpp
- ** @deprecated obsolete since 2009, left in tree to keep some likewise unfinished code alive.
+/** @file feed-manifold.hpp
+ ** @todo staled since 2009, picked up in 2024 in an attempt to finish the node invocation.
+ ** @todo WIP-WIP 2024 rename and re-interpret as a connection system
  ** @see nodeinvocation.hpp
  */
 
 
-#ifndef ENGINE_BUFFHTABLE_OBSOLETE_H
-#define ENGINE_BUFFHTABLE_OBSOLETE_H
+#ifndef ENGINE_FEED_MANIFOLD_H
+#define ENGINE_FEED_MANIFOLD_H
 
 
 #include "lib/error.hpp"
@@ -40,9 +42,7 @@
 #include <utility>
 
 
-////////////////////////////////WARNING: obsolete code
-////////////////////////////////WARNING: ...just left in tree to keep it compiling
-////////////////////////////////TICKET   #826  need to be reworked entirely
+////////////////////////////////TICKET   #826  will be reworked alltogether
 
 namespace steam {
 namespace engine {
@@ -65,7 +65,7 @@ namespace engine {
      *       to use a single contiguous memory area and just layer the object structure on top
      *       (by using placement new). Yet the idea of an stack-like organisation should be retained
      */
-  struct BuffTable
+  struct BuffTable                 ///////////////////////////////////OOO rename into FeedManifold
     {
       typedef BuffHandle        * PHa;
       typedef BuffHandle::PBuff * PBu;
@@ -164,7 +164,7 @@ namespace engine {
       BuffTableStorage& sto_;
       
     public:
-      BuffTableChunk (WiringDescriptor const& wd, BuffTableStorage& storage)
+      BuffTableChunk (Connectivity const& wd, BuffTableStorage& storage)
         : siz_(wd.nrI + wd.nrO),
           tab_(storage.claim (siz_)),
           sto_(storage)
@@ -191,4 +191,4 @@ namespace engine {
   
   
 }} // namespace steam::engine
-#endif
+#endif /*ENGINE_FEED_MANIFOLD_H*/

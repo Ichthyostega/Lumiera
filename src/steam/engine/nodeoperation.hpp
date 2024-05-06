@@ -46,7 +46,7 @@
  ** 
  ** @see engine::ProcNode
  ** @see engine::Invocation
- ** @see engine::State
+ ** @see engine::StateClosure
  ** @see engine::NodeFactory
  ** @see nodewiring-config.hpp
  ** @see nodewiring.hpp interface for building/wiring the nodes
@@ -60,8 +60,8 @@
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/state-closure.hpp"
 #include "steam/engine/channel-descriptor.hpp"
-#include "steam/engine/bufftable-obsolete.hpp"
 #include "steam/engine/nodeinvocation.hpp"
+#include "steam/engine/feed-manifold.hpp"
 
 #include "lib/meta/util.hpp"
 #include "lib/meta/configflags.hpp"

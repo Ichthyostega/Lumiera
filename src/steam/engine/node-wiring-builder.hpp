@@ -1,5 +1,5 @@
 /*
-  NODEWIRING-DEF.hpp  -  Implementation of the node network and operation control
+  NODE-WIRING-BUILDER.hpp  -  Setup of render nodes connectivity
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -24,7 +24,7 @@
  ** Helper for defining the desired wiring and operation mode for a render node.
  ** During the Builder run, the render nodes network is wired up starting from the
  ** source (generating) nodes up to the exit nodes. As the wiring is implemented through
- ** a const engine::WiringDescriptor, when a new node gets fabricated, all of the connections
+ ** a const engine::Connectivity, when a new node gets fabricated, all of the connections
  ** to its predecessors need to be completely settled; similarly, any information pertaining
  ** the desired operation mode of this node need to be available. Thus we use this temporary
  ** information record to assemble all these pieces of information.
@@ -36,8 +36,8 @@
  */
 
 
-#ifndef ENGINE_NODEWIRING_DEF_H
-#define ENGINE_NODEWIRING_DEF_H
+#ifndef ENGINE_NODE_WIRING_BUILDER_H
+#define ENGINE_NODE_WIRING_BUILDER_H
 
 
 #include "steam/engine/proc-node.hpp"
@@ -87,7 +87,7 @@ namespace engine {
           UNIMPLEMENTED ("build new input descriptors for the node under construction");
         }
       
-      WiringDescriptor::ProcFunc*
+      Connectivity::ProcFunc*
       resolveProcessingFunction()  const
         {
           REQUIRE (function_);
@@ -183,4 +183,4 @@ namespace engine {
   
   
 }} // namespace steam::engine
-#endif
+#endif /*ENGINE_NODE_WIRING_BUILDER_H*/

@@ -69,7 +69,7 @@ using lib::LUID;
    * Job tickets are created on demand, specialised for each segment
    * of the low-level model, and for each individual feed (corresponding
    * to a single model port). Once created, they are final for this segment,
-   * stored together with the other descriptor objects (ProcNode and WiringDescriptor)
+   * stored together with the other descriptor objects (ProcNode and Connectivity)
    * and finally discarded in bulk, in case that segment of the low-level model becomes
    * obsolete and is replaced by a newly built new version of this model segment.
    * 

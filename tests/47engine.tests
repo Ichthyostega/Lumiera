@@ -27,7 +27,7 @@ return: 0
 END
 
 
-PLANNED "buffer table" BuffTable_test <<END
+PLANNED "feed manifold" FeedManifold_test <<END
 return: 0
 END
 

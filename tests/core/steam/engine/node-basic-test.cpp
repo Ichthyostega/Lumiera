@@ -50,7 +50,7 @@ namespace test  {
   namespace { // Test fixture
     
     /**
-     * Mock State/Invocation object.
+     * Mock StateClosure/Invocation object.
      * Used as a replacement for the real RenderInvocation,
      * so the test can verify that calculations are actually
      * happening in correct order.
@@ -84,7 +84,7 @@ namespace test  {
           AllocationCluster alloc;
           NodeFactory nodeFab(alloc);
           
-          ProcNode * testSource;  ///////////TODO: how to fabricate a test-Node???
+          ProcNode * testSource;  ///////////TODO: how to fabricate a test Source-Node????
           
           
           WiringSituation setup(testSource);

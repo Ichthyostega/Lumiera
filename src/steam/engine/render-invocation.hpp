@@ -27,7 +27,7 @@
  ** @todo unfinished draft from 2009 regarding the render process
  ** 
  ** @see engine::ProcNode
- ** @see State
+ ** @see StateClosure
  ** @see node-basic-test.cpp
  **
  */

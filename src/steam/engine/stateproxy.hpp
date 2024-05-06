@@ -28,7 +28,7 @@
  ** into this recursive evaluation, beyond the data in the local call stack. Such
  ** additional statefull dependencies are problematic (regarding concurrency and
  ** throughput) and are thus abstracted from the actual processing operations
- ** with the help of the steam::engine::State interface
+ ** with the help of the steam::engine::StateClosure interface
  ** @todo unfinished draft from 2009 regarding the render process
  */
 
@@ -40,16 +40,16 @@
 #include "steam/engine/state-closure.hpp"
 
 
-namespace steam {
+namespace steam  {
 namespace engine {
 
 
 
   class StateProxy
-    : public proc_interface::State
+    : public StateClosure
     {
       
-    private: /* === top-level implementation of the State interface === */
+    private: /* === top-level implementation of the StateClosure interface === */
       
       BuffHandle allocateBuffer (const lumiera::StreamType*);              //////////////////////////TICKET #828
       
@@ -63,7 +63,7 @@ namespace engine {
 
       BuffTableStorage& getBuffTableStorage();
       
-      virtual State& getCurrentImplementation () { return *this; }
+      virtual StateClosure& getCurrentImplementation () { return *this; }
       
     };
     

@@ -38,7 +38,7 @@ the wiring interface
 This part of the design defines how nodes can be combined and wired up by the
 builder to form a network usable for rendering. For this purpose, the
 link:ProcNode[] is used as a shell / container, which is then configured by a
-const WiringDescriptor. Thus, the node gets to know its predecessor(s) and is
+Connectivity descriptor. Thus, the node gets to know its predecessor(s) and is
 preselected to use a combination of specific working modes:
 
  * participate in caching
