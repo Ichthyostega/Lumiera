@@ -11,6 +11,25 @@ spending time on the task of writing a summary.
 Anyone interested in Lumiera development is also encouraged to read mailing list
 archives and other documentation.
 
+13 Mar / 10 Apr 2024
+--------------------
+Status update and informal exchange regarding current development activities
+
+ * after factoring out further external influences, a _breaking point_ for
+   processing complex dependent schedules could be established, which closely
+   matches theoretical expectations
+ * a further measurement series (linear regression) was necessary to establish
+   performance characteristics of the scheduler under constant high load
+ * as expected, a serious weakness pertaining contention could be confirmed +
+   (yet contention is not expected to be a problem in practice)
+ * as mitigation, concurrency is scaled down on very short (100µs) jobs
+ * overall we are confident that the new scheduler is capable to handle the
+   expected load pattern and does not suffer from major (unknown) weaknesses.
+
+Moreover, the problems related to integration and use of external frameworks
+for video display were discussed further.
+
+
 14 Feb 2024
 -----------
 
