@@ -25,6 +25,8 @@
  ** 
  ** @todo as it stands (11/2011) this file is obsoleted and needs to be refactored,
  **       alongside with adapting the node invocation to the new BufferProvider interface.
+ ** @todo as of 5/2024, this will be retained as part of the `FeedManifold`,
+ **       which in turn takes on some aspects of the old buffer table draft.
  ** 
  ** @see nodewiring-def.hpp
  ** @see nodeoperation.hpp

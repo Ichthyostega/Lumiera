@@ -134,7 +134,7 @@ namespace config {
         {
           BuffTableChunk buffTab (ivo.wiring, ivo.getBuffTableStorage());
           ivo.setBuffTab(&buffTab);
-          ASSERT (ivo.buffTab);
+          ASSERT (ivo.feedManifold);
           ASSERT (ivo.buffTab_isConsistent());
           
           return NEXT::step (ivo);
@@ -148,8 +148,8 @@ namespace config {
       BuffHandle
       step (Invocation& ivo)
         {
-          BuffHandle        *   inH = ivo.buffTab->inHandle;
-          BuffHandle::PBuff *inBuff = ivo.buffTab->inBuff;
+          BuffHandle        *   inH = ivo.feedManifold->inHandle;
+          BuffHandle::PBuff *inBuff = ivo.feedManifold->inBuff;
           
           for (uint i = 0; i < ivo.nrI(); ++i )
             {
@@ -168,10 +168,10 @@ namespace config {
       BuffHandle
       step (Invocation& ivo)
         {
-          BuffHandle           *inH  = ivo.buffTab->inHandle;
-          BuffHandle           *outH = ivo.buffTab->outHandle;
-          BuffHandle::PBuff *inBuff  = ivo.buffTab->inBuff;
-          BuffHandle::PBuff *outBuff = ivo.buffTab->outBuff;
+          BuffHandle           *inH  = ivo.feedManifold->inHandle;
+          BuffHandle           *outH = ivo.feedManifold->outHandle;
+          BuffHandle::PBuff *inBuff  = ivo.feedManifold->inBuff;
+          BuffHandle::PBuff *outBuff = ivo.feedManifold->outBuff;
           
           ASSERT (ivo.nrO() == ivo.nrI() );
           
@@ -192,10 +192,10 @@ namespace config {
       BuffHandle 
       step (Invocation& ivo)
         {
-          ASSERT (ivo.buffTab);
+          ASSERT (ivo.feedManifold);
           ASSERT (ivo.nrO() < ivo.buffTabSize());
-          BuffHandle           *outH = ivo.buffTab->outHandle;
-          BuffHandle::PBuff *outBuff = ivo.buffTab->outBuff;
+          BuffHandle           *outH = ivo.feedManifold->outHandle;
+          BuffHandle::PBuff *outBuff = ivo.feedManifold->outBuff;
           
           for (uint i = 0; i < ivo.nrO(); ++i )
             {
@@ -214,13 +214,13 @@ namespace config {
       BuffHandle 
       step (Invocation& ivo)
         {
-          ASSERT (ivo.buffTab);
+          ASSERT (ivo.feedManifold);
           ASSERT (ivo.buffTab_isConsistent());
           ASSERT (this->validateBuffers(ivo));
           
            // Invoke our own process() function,
           //  providing the array of outBuffer+inBuffer ptrs
-          (*ivo.wiring.procFunction) (*ivo.buffTab->outBuff);
+          (*ivo.wiring.procFunction) (*ivo.feedManifold->outBuff);
           
           return NEXT::step (ivo);
         }
@@ -236,7 +236,7 @@ namespace config {
           for (uint i = 0; i < ivo.nrO(); ++i )
             {
               // declare all Outputs as finished
-              ivo.is_calculated(ivo.buffTab->outHandle[i]);
+              ivo.is_calculated(ivo.feedManifold->outHandle[i]);
             }
           
           return NEXT::step (ivo);
@@ -251,11 +251,11 @@ namespace config {
       step (Invocation& ivo)
         {
           // all buffers besides the required Output no longer needed
-          this->releaseBuffers(ivo.buffTab->outHandle,
+          this->releaseBuffers(ivo.feedManifold->outHandle,
                                ivo.buffTabSize(),
                                ivo.outNr);
           
-          return ivo.buffTab->outHandle[ivo.outNr];
+          return ivo.feedManifold->outHandle[ivo.outNr];
         }
     };
   

@@ -46,7 +46,7 @@
  ** @todo relies still on an [obsoleted implementation draft](\ref bufftable-obsolete.hpp)
  ** @see engine::ProcNode
  ** @see engine::StateProxy
- ** @see engine::BuffTable
+ ** @see engine::FeedManifold
  ** @see nodewiring.hpp interface for building/wiring the nodes
  **
  */
@@ -116,7 +116,7 @@ namespace engine {
    * access the context via the references in this struct, while also using the inherited
    * public State interface. The object instance actually used as Invocation is created
    * on the stack and parametrised according to the necessities of the invocation sequence
-   * actually configured. Initially, this real instance is configured without BuffTable,
+   * actually configured. Initially, this real instance is configured without FeedManifold,
    * because the invocation may be short-circuited due to Cache hit. Otherwise, when
    * the invocation sequence actually prepares to call the process function of this
    * ProcNode, a buffer table chunk is allocated by the StateProxy and wired in.
@@ -127,14 +127,14 @@ namespace engine {
       Connectivity const& wiring;
       const uint outNr;
       
-      BuffTable* buffTab;
+      FeedManifold* feedManifold;
       
     protected:
-      /** creates a new invocation context state, without BuffTable */
+      /** creates a new invocation context state, without FeedManifold */
       Invocation (StateClosure& callingProcess, Connectivity const& w, uint o)
         : StateAdapter(callingProcess),
           wiring(w), outNr(o),
-          buffTab(0)
+          feedManifold(0)
         { }
       
     public:
@@ -143,16 +143,16 @@ namespace engine {
       uint buffTabSize()  const { return nrO()+nrI(); }
       
       /** setup the link to an externally allocated buffer table */
-      void setBuffTab (BuffTable* b) { this->buffTab = b; }
+      void setBuffTab (FeedManifold* b) { this->feedManifold = b; }
       
       bool
       buffTab_isConsistent ()
         {
-          return (buffTab)
+          return (feedManifold)
               && (0 < buffTabSize())
               && (nrO()+nrI() <= buffTabSize())
-              && (buffTab->inBuff   == &buffTab->outBuff[nrO()]  )
-              && (buffTab->inHandle == &buffTab->outHandle[nrO()])
+              && (feedManifold->inBuff   == &feedManifold->outBuff[nrO()]  )
+              && (feedManifold->inHandle == &feedManifold->outHandle[nrO()])
                ;
         }
       
