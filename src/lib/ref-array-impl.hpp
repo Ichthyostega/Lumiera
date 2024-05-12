@@ -33,6 +33,7 @@
  ** storage of variant-records, able to hold a mixture of subclasses. (the latter cases
  ** will be implemented when needed).
  ** 
+ ** @warning in rework 5/2025
  ** @see ref-array-test.cpp
  ** 
  */

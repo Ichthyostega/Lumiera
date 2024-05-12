@@ -1,5 +1,5 @@
 /*
-  STATEPROXY.hpp  -  Encapsulation of the state corresponding to a render calculation
+  TURNOUT-SYSTEM.hpp  -  Encapsulation of the state corresponding to a render calculation
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 */
 
 
-/** @file stateproxy.hpp
+/** @file turnout-system.hpp
  ** Access point to the state of a frame rendering evaluation.
  ** The rendering of frames is triggered from a render job, and recursively
  ** retrieves the data from predecessor nodes. Some statefull aspects are involved
@@ -33,8 +33,8 @@
  */
 
 
-#ifndef ENGINE_STATEPROXY_H
-#define ENGINE_STATEPROXY_H
+#ifndef ENGINE_TURNOUT_SYSTEM_H
+#define ENGINE_TURNOUT_SYSTEM_H
 
 
 #include "steam/engine/state-closure.hpp"
@@ -70,4 +70,4 @@ namespace engine {
     
     
 }} // namespace steam::engine
-#endif
+#endif /*ENGINE_TURNOUT_SYSTEM_H*/

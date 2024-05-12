@@ -862,6 +862,8 @@ exposed elements within the ``array''. The Lumiera library provides a set
 of standard implementations for this +lib::RefArray+ interface, including
 a vector based and a directly array based variant.
 
+WARNING: in rework 2024 (Playback Vertical Slice)
+
 
 Unique Identifiers
 ~~~~~~~~~~~~~~~~~~

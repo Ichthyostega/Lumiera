@@ -25,6 +25,7 @@
  ** Abstraction interface: array-like access by subscript
  ** @todo as of 2016, this concept seems very questionable: do we _really_ want
  **       to abstract over random access, or do we _actually_ want for-iteration??
+ ** @warning in rework 5/2025
  */
 
 
@@ -43,6 +44,7 @@ namespace lib {
    * and the Implementation wraps some datastructure
    * holding subclasses.
    * @todo ouch -- a collection that isn't iterable...  ///////////////////////TICKET #1040
+   * @warning in rework 5/2025
    */
   template<class T>
   class RefArray

@@ -1,5 +1,5 @@
 /*
-  StateProxy  -  Encapsulation of the state corresponding to a render calculation
+  TurnoutSystem  -  Encapsulation of the state corresponding to a render calculation
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,13 +21,13 @@
 * *****************************************************/
 
 
-/** @file stateproxy.cpp
- ** Implementation details of some stateful operations needed from within the render calculation.
+/** @file turnout-system.cpp
+ ** Implementation details of some statefull operations needed from within the render calculation.
  ** @todo unfinished draft from 2009 regarding the render process
  */
 
 
-#include "steam/engine/stateproxy.hpp"
+#include "steam/engine/turnout-system.hpp"
 
 namespace steam {
 namespace engine {

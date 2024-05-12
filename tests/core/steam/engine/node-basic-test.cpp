@@ -28,7 +28,7 @@
 #include "lib/test/run.hpp"
 #include "steam/engine/nodefactory.hpp"
 #include "steam/engine/nodewiring.hpp"
-#include "steam/engine/stateproxy.hpp"
+#include "steam/engine/turnout-system.hpp"
 #include "steam/engine/channel-descriptor.hpp"
 #include "steam/mobject/session/effect.hpp"
 #include "lib/allocation-cluster.hpp"
