@@ -598,6 +598,11 @@ return: 0
 END
 
 
+PLANNED "Several elements" SeveralBuilder_test  <<END
+return: 0
+END
+
+
 TEST "Search path walking" SearchPathSplitter_test <<END
 out-lit: ➢➢a
 out-lit: ➢➢a

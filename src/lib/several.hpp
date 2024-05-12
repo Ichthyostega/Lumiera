@@ -1,8 +1,9 @@
 /*
-  REF-ARRAY.hpp  -  abstraction providing array-like access to a list of references
+  SEVERAL.hpp  -  abstraction providing a limited fixed number of elements
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2024,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,17 +22,17 @@
 */
 
 
-/** @file ref-array.hpp
+/** @file several.hpp
  ** Abstraction interface: array-like access by subscript
  ** @todo as of 2016, this concept seems very questionable: do we _really_ want
  **       to abstract over random access, or do we _actually_ want for-iteration??
- ** @deprecated 5/2025 to be obsoleted by a similar design
- ** @see several.hpp
+ ** @warning WIP-WIP-WIP in rework 5/2025
+ ** @see several-builder.hpp
  */
 
 
-#ifndef LIB_REF_ARRAY_H
-#define LIB_REF_ARRAY_H
+#ifndef LIB_SEVERAL_H
+#define LIB_SEVERAL_H
 
 
 #include "lib/nocopy.hpp"

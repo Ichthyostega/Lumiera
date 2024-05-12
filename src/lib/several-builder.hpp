@@ -1,8 +1,8 @@
 /*
-  REF-ARRAY-IMPL.hpp  -  some implementations of the ref-array interface
+  SEVERAL-BUILDER.hpp  -  builder for a limited fixed collection of elements
 
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2024,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -20,7 +20,7 @@
 
 */
 
-/** @file ref-array-impl.hpp
+/** @file several-builder.hpp
  ** Some (library-) implementations of the RefArray interface.
  ** 
  ** Being an array-like object exposing just a const ref, it is typically used
@@ -33,18 +33,17 @@
  ** storage of variant-records, able to hold a mixture of subclasses. (the latter cases
  ** will be implemented when needed).
  ** 
- ** @deprecated 5/2025 to be reworked and obsoleted — do not use further
- ** @see several-builder.hpp
- ** @see ref-array-test.cpp
+ ** @warning WIP and in rework 5/2025 -- not clear yet where this design leads to...
+ ** @see several-builder-test.cpp
  ** 
  */
 
 
-#ifndef LIB_REF_ARRAY_IMPL_H
-#define LIB_REF_ARRAY_IMPL_H
+#ifndef LIB_SEVERAL_BUILDER_H
+#define LIB_SEVERAL_BUILDER_H
 
 
-#include "lib/ref-array.hpp"
+#include "lib/several.hpp"
 #include "include/logging.h"
 
 #include <vector>
@@ -174,4 +173,4 @@ namespace lib {
   
   
 } // namespace lib
-#endif
+#endif /*LIB_SEVERAL_BUILDER_H*/

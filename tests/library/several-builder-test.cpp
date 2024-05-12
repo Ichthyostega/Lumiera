@@ -1,8 +1,9 @@
 /*
-  RefArray(Test)  -  unittest for wrapping with array-of-refs access
+  SeveralBuilder(Test)  -  building a limited fixed collection of elements
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2024,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -20,17 +21,15 @@
 
 * *****************************************************/
 
-/** @file ref-array-test.cpp
- ** unit test \ref RefArray_test
- ** @deprecated 5/2024 rework underway
- ** @see several-buider-test.cpp
+/** @file several-builder-test.cpp
+ ** unit test \ref SeveralBuilder_test
  */
 
 
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
-#include "lib/ref-array-impl.hpp"
+#include "lib/several-builder.hpp"
 
 #include <vector>
 
@@ -110,9 +109,9 @@ namespace test{
    * - RefArrayVector subclasses std::vector
    * - RefArrayTable holds a fix sized table, i.e. embedded storage
    * 
-   * @see ref-array-impl.hpp
+   * @see several-builder.hpp
    */
-  class RefArray_test : public Test
+  class SeveralBuilder_test : public Test
     {
       
       virtual void
@@ -240,7 +239,7 @@ namespace test{
   
   
   /** Register this test class... */
-  LAUNCHER (RefArray_test, "unit common");
+  LAUNCHER (SeveralBuilder_test, "unit common");
   
   
   
