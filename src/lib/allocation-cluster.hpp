@@ -29,14 +29,9 @@
  ** as a whole. AllocationCluster implements memory management to
  ** support this usage pattern.
  ** 
- ** @note this file is organised in a way which doesn't bind the
- ** client code to the memory manager implementation. Parts of the
- ** interface depending on the usage situation are implemented using
- ** templates, and thus need to be in the header. This way they can
- ** exploit the type information available in call context. This
- ** information is passed to generic implementation functions
- ** defined in allocation-cluster.cpp . In a similar vein, the 
- ** AllocationCluster::MemoryManger is just forward declared.
+ ** @warning in rework 5/2024 — with the goal to simplify the logic,
+ **          remove all thread safety and make the implementation
+ **          usable as standard conformant allocator for STL.
  **
  ** @see allocation-cluster-test.cpp
  ** @see builder::ToolFactory
@@ -89,8 +84,21 @@ namespace lib {
    *          Is this issue worth the hassle?            //////////////////////////////TICKET #169
    */
   class AllocationCluster
-    : util::NonCopyable
+    : util::MoveOnly
     {
+      
+      template<typename X>
+      struct Allocator
+        {
+          using value_type = X;
+          
+          [[nodiscard]] X* allocate (size_t n)   { return mother_->allot<X>(n); }
+          void deallocate (X*, size_t)  noexcept { /* rejoice */ }
+          
+          Allocator(AllocationCluster* m) : mother_{m} { }
+        private:
+          AllocationCluster* mother_;
+        };
       
     public:
       AllocationCluster ();
@@ -101,8 +109,14 @@ namespace lib {
       TY&
       create (ARGS&& ...args)
         {
-          TY* obj = new(allocation<TY>()) TY (std::forward<ARGS> (args)...);
-          return commit(obj);
+          return * new(allotMemory (sizeof(TY))) TY (std::forward<ARGS> (args)...);
+        }
+      
+      template<typename X>
+      Allocator<X>
+      getAllocator()
+        {
+          return Allocator<X>{this};
         }
       
       
@@ -115,6 +129,24 @@ namespace lib {
       
       
     private:
+      /**
+       * portion out the requested amount of memory,
+       * possibly claiming a new pool block.
+       */
+      void*
+      allotMemory (size_t bytes)
+        {
+          UNIMPLEMENTED ("actual memory management");
+        }
+      
+      template<typename X>
+      X*
+      allot (size_t cnt =1)
+        {
+          return static_cast<X*> (allotMemory (cnt * sizeof(X)));
+        }
+      
+      
       /** initiate an allocation for the given type */
       template<class TY>
       void*
