@@ -457,7 +457,7 @@ namespace test{
        *        all the elements might be added in one sway, by pulling them
        *        from a Lumiera Forward Iterator. In case this is done in the
        *        ctor, any exception while doing so will trigger cleanup
-       *        of all elements (and then failure of the ctor alltogether)
+       *        of all elements (and then failure of the ctor altogether)
        */
       void
       verify_RAII_safety()
@@ -486,11 +486,9 @@ namespace test{
             elements.emplace<Num<3>> (4,5);
             elements.emplace<Num<6>> (7,8,9);
             
+            const size_t EXPECT = sizeof(Num<1>) + sizeof(Num<3>) + sizeof(Num<6>);
+            CHECK (EXPECT == allocator.numBytes());
             CHECK (sum(9) == Dummy::checksum());
-            CHECK (3 == allocator.size());
-            CHECK (1 == allocator.count<Num<1>>());
-            CHECK (1 == allocator.count<Num<3>>());
-            CHECK (1 == allocator.count<Num<6>>());
             
             CHECK (3 == elements.size());
             CHECK (1+2 == elements[2].getVal());
@@ -498,7 +496,7 @@ namespace test{
             CHECK (6+7+8+9 == elements[0].getVal());
             
             elements.clear();
-            CHECK (3 == allocator.size());
+            CHECK (EXPECT == allocator.numBytes());
             CHECK (sum(9) == Dummy::checksum());
             // note: elements won't be discarded unless
             //       the AllocationCluster goes out of scope

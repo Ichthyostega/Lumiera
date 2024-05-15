@@ -122,11 +122,6 @@ namespace lib {
       
       /* === diagnostics === */
       
-      size_t size()  const;
-      
-      template<class TY>
-      size_t count() const;
-      
       size_t
       numExtents()  const
         {
@@ -157,73 +152,6 @@ namespace lib {
         {
           return static_cast<X*> (allotMemory (cnt * sizeof(X)));
         }
-      
-      
-      /** initiate an allocation for the given type */
-      template<class TY>
-      void*
-      allocation();
-      
-      /** finish the allocation after the ctor is successful */
-      template<class TY>
-      TY&
-      commit (TY* obj);
-      
-      
-      /**
-       * The type-specific configuration information
-       * any low-level memory manager needs to know
-       */
-      struct TypeInfo;
-      
-      /**
-       * low-level memory manager responsible for
-       * the allocations of one specific type.
-       */
-      class MemoryManager;
-      
-      /**
-       * organising the association Type -> table entry
-       */
-      template<class TY>
-      struct TypeSlot;
-      
-      static size_t maxTypeIDs;
-      
-      
-      using HMemManager  = ScopedPtrHolder<MemoryManager>;
-      using Allo         = Allocator_TransferNoncopyable<HMemManager>;
-      using ManagerTable = std::vector<HMemManager,Allo>;
-      
-      ManagerTable typeHandlers_;  ///< table of active MemoryManager instances
-      
-      
-      
-      HMemManager&
-      handler (size_t slot)
-        {
-          ASSERT (0<slot && slot<=typeHandlers_.size());
-          return typeHandlers_[slot-1];
-        }
-      
-      HMemManager const&
-      handler (size_t slot)  const
-        {
-          ASSERT (0<slot && slot<=typeHandlers_.size());
-          return typeHandlers_[slot-1];
-        }
-      
-      /** implementation of the actual memory allocation
-       *  is pushed down to the MemoryManager impl. */
-      void* initiateAlloc (size_t& slot);
-      void* initiateAlloc (TypeInfo type, size_t& slot);
-      
-      /** enrol the allocation after successful ctor call */
-      void finishAlloc (size_t& slot, void*);
-      
-      /** @internal helper for diagnostics,
-       *            delegating to actual memory manager */
-      size_t countActiveInstances (size_t& slot)  const;
     };
   
   
@@ -231,97 +159,6 @@ namespace lib {
   
   
   //-----implementation-details------------------------
-  
-  struct AllocationCluster::TypeInfo
-    {
-      size_t allocSize;
-      void (*killIt)(void*);  ///< deleter function
-      
-      template<class TY>
-      TypeInfo(TY*)
-        : allocSize(sizeof(TY)),
-          killIt(&TypeSlot<TY>::kill)
-        { }
-      
-      TypeInfo()  ///< denotes "unknown" type
-        : allocSize(0),
-          killIt(0)
-        { }  
-    };
-  
-  
-  
-  template<class TY>
-  struct AllocationCluster::TypeSlot
-    {
-      static size_t id_; ///< table pos+1 of the memory manager in charge for type TY
-      
-      static size_t &
-      get()
-        {
-          return id_; 
-        }
-      
-      static TypeInfo
-      setup()
-        {
-          ClassLock<AllocationCluster> guard;
-          if (0 == id_)
-            id_= ++maxTypeIDs;
-          
-          return TypeInfo ((TY*) 0 );
-        }
-      
-      static void
-      kill (void* obj)
-        {
-          TY* p = static_cast<TY*>(obj);
-          ASSERT (p);
-          ASSERT (INSTANCEOF (TY,p));
-          p->~TY();
-        }
-      
-    };
-  
-  
-  /** storage for static bookkeeping of type allocation slots */
-  template<class TY>
-  size_t AllocationCluster::TypeSlot<TY>::id_;
-  
-  
-  
-  template<class TY>
-  inline void*
-  AllocationCluster::allocation()
-  {
-    void *mem = initiateAlloc (TypeSlot<TY>::get());
-    if (not mem)
-      mem = initiateAlloc (TypeSlot<TY>::setup(),TypeSlot<TY>::get());
-    ENSURE (mem);
-    return mem;
-  }
-  
-  template<class TY>
-  inline TY&
-  AllocationCluster::commit (TY* obj)
-  {
-    REQUIRE (obj);
-    finishAlloc (TypeSlot<TY>::get(), obj);
-    return *obj;
-  }
-  
-  
-  /** helper for diagnostics
-   * @return number of currently allocated
-   *         object instances of the given type
-   */
-  template<class TY>
-  size_t
-  AllocationCluster::count()  const
-  {
-    return countActiveInstances (TypeSlot<TY>::get());
-  }
-  
   
   
 } // namespace lib
