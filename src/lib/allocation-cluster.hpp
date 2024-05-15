@@ -127,6 +127,18 @@ namespace lib {
       template<class TY>
       size_t count() const;
       
+      size_t
+      numExtents()  const
+        {
+          UNIMPLEMENTED ("Allocation management");
+        }
+      
+      size_t
+      numBytes()  const
+        {
+          UNIMPLEMENTED ("Allocation management");
+        }
+      
       
     private:
       /**

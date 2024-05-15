@@ -28,24 +28,27 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/util.hpp"
-#include "lib/util-foreach.hpp"
-
 #include "lib/allocation-cluster.hpp"
-#include "lib/scoped-holder.hpp"
+#include "lib/test/diagnostic-output.hpp"/////////////////TODO
+#include "lib/iter-explorer.hpp"
+#include "lib/util.hpp"
 
+#include <array>
 #include <vector>
 #include <limits>
-#include <boost/lexical_cast.hpp>
+#include <functional>
+//#include <boost/lexical_cast.hpp>
 
-using boost::lexical_cast;
+//using boost::lexical_cast;
+using lib::explore;
 using lib::test::showSizeof;
-using util::for_each;
 using util::isnil;
 using ::Test;
 
 using std::numeric_limits;
+using std::function;
 using std::vector;
+using std::array;
 
 
 
@@ -54,94 +57,74 @@ namespace test {
   
   namespace { // a family of test dummy classes
     
-    uint NUM_CLUSTERS = 5;
-    uint NUM_OBJECTS  = 500;
-    uint NUM_FAMILIES = 5;
+    const uint NUM_CLUSTERS = 5;
+    const uint NUM_TYPES    = 20;
+    const uint NUM_OBJECTS  = 500;
     
     long checksum = 0; // validate proper pairing of ctor/dtor calls
-    bool randomFailures = false;
     
     template<uint i>
     class Dummy
       {
-        char content[i];
+        static_assert (0 < i);
+        array<uchar,i> content_;
         
       public:
-        Dummy (char id=1)
+        Dummy (uchar id=1)
           {
-            content[0] = id;
-            checksum += id;
-          }
-        Dummy (char i1, char i2, char i3=0)
-          {
-            char id = i1 + i2 + i3;
-            content[0] = id;
-            checksum += id;
-            if (randomFailures && 0 == (rand() % 20))
-              throw id;
+            content_.fill(id);
+            checksum += explore(content_).resultSum();
           }
         
-        ~Dummy()
+       ~Dummy()
           {
-            checksum -= content[0];
+            checksum -= explore(content_).resultSum();
           }
         
-        char getID()  { return content[0]; }
+        char getID()  { return content_[0]; }
       };
     
-    typedef ScopedHolder<AllocationCluster> PCluster;
-    typedef vector<PCluster> ClusterList;
-    
-    inline char
-    truncChar (uint x)
-      {
-        return x % numeric_limits<char>::max();
-      }
     
     template<uint i>
     void
-    place_object (AllocationCluster& clu, uint id)
-      {
-        clu.create<Dummy<i>> (id);
-      }
+    place_object (AllocationCluster& clu, uchar id)
+    {
+      clu.create<Dummy<i>> (id);
+    }
     
-    typedef void (Invoker)(AllocationCluster&, uint);
     
-    Invoker* invoke[20] = { &place_object<1>
-                          , &place_object<2>
-                          , &place_object<3>
-                          , &place_object<5>
-                          , &place_object<10>
-                          , &place_object<13>
-                          , &place_object<14>
-                          , &place_object<15>
-                          , &place_object<16>
-                          , &place_object<17>
-                          , &place_object<18>
-                          , &place_object<19>
-                          , &place_object<20>
-                          , &place_object<25>
-                          , &place_object<30>
-                          , &place_object<35>
-                          , &place_object<40>
-                          , &place_object<50>
-                          , &place_object<100>
-                          , &place_object<200>
-                          };
+    inline array<function<void(AllocationCluster&, uchar)>, NUM_TYPES>
+    buildTrampoline()
+    {
+      return { place_object<1>
+             , place_object<2>
+             , place_object<3>
+             , place_object<5>
+             , place_object<10>
+             , place_object<13>
+             , place_object<14>
+             , place_object<15>
+             , place_object<16>
+             , place_object<17>
+             , place_object<18>
+             , place_object<19>
+             , place_object<20>
+             , place_object<25>
+             , place_object<30>
+             , place_object<35>
+             , place_object<40>
+             , place_object<50>
+             , place_object<100>
+             , place_object<200>
+             };
+    }
     
     void
-    fillIt (PCluster& clu)
+    fill (AllocationCluster& clu)
       {
-        clu.create();
-        
-        if (20<NUM_FAMILIES)
-          NUM_FAMILIES = 20;
-        
+        auto invoker = buildTrampoline();
         for (uint i=0; i<NUM_OBJECTS; ++i)
-          {
-            char id = truncChar(i);
-            (*(invoke[rand() % NUM_FAMILIES])) (*clu,id);
-          }
+          invoker[rand() % NUM_TYPES] (clu, uchar(i));
       }
     
   }
@@ -155,16 +138,11 @@ namespace test {
    */
   class AllocationCluster_test : public Test
     {
-      virtual void 
-      run (Arg arg)
+      virtual void
+      run (Arg)
         {
-          if (0 < arg.size()) NUM_CLUSTERS = lexical_cast<uint> (arg[0]);
-          if (1 < arg.size()) NUM_OBJECTS  = lexical_cast<uint> (arg[1]);
-          if (2 < arg.size()) NUM_FAMILIES = lexical_cast<uint> (arg[2]);
-          
           simpleUsage();
-          checkAllocation();
-          checkErrorHandling();
+          checkLifecycle();
         }
       
       
@@ -173,66 +151,35 @@ namespace test {
         {
           AllocationCluster clu;
           
-          char c1(123), c2(56), c3(3), c4(4), c5(5);
-          Dummy<44>& ref1 = clu.create<Dummy<44>> ();
-          Dummy<37>& ref2 = clu.create<Dummy<37>> (c1);
-          Dummy<37>& ref3 = clu.create<Dummy<37>> (c2);
-          Dummy<1234>& rX = clu.create<Dummy<1234>> (c3,c4,c5);
+          char c1(123), c2(45);
+          Dummy<66>& ref1 = clu.create<Dummy<66>> ();
+          Dummy<77>& ref2 = clu.create<Dummy<77>> (c1);
+          Dummy<77>& ref3 = clu.create<Dummy<77>> (c2);
           
-          CHECK (&ref1);
-          CHECK (&ref2);
-          CHECK (&ref3);
-          CHECK (&rX);
-          TRACE (test, "%s", showSizeof(rX).c_str());
+//          TRACE (test, "%s", showSizeof(rX).c_str());///////////////////////OOO
           
+          //returned references actually point at the objects we created
+          CHECK (1  ==ref1.getID());
           CHECK (123==ref2.getID());
-          CHECK (3+4+5==rX.getID());
-          // shows that the returned references actually
-          // point at the objects we created. Just use them
-          // and let them go. When clu goes out of scope,
-          // all created object's dtors will be invoked.
+          CHECK (45 ==ref3.getID());
           
-          CHECK (4 == clu.size());
-          CHECK (1 == clu.count<Dummy<44>>());
-          CHECK (2 == clu.count<Dummy<37>>());
-          CHECK (1 == clu.count<Dummy<1234>>());
+          CHECK (1        == clu.numExtents());
+          CHECK (66+77+77 == clu.numBytes());
+          
+          // now use objects and just let them go;
         }
       
       
       void
-      checkAllocation()
+      checkLifecycle()
         {
           CHECK (0==checksum);
           {
-            ClusterList clusters (NUM_CLUSTERS);
-            for_each (clusters, fillIt);
+            vector<AllocationCluster> clusters (NUM_CLUSTERS);
+            for (auto& clu : clusters)
+              fill(clu);
             CHECK (0!=checksum);
           }
-          CHECK (0==checksum);
-        }
-      
-      
-      void
-      checkErrorHandling()
-        {
-          CHECK (0==checksum);
-          {
-            randomFailures = true;
-            
-            AllocationCluster clu;
-            for (uint i=0; i<NUM_OBJECTS; ++i)
-              try
-                {
-                  char i1 = truncChar(i);
-                  char i2 = truncChar(rand() % 5);
-                  clu.create<Dummy<1>> (i1,i2);
-                }
-              catch (char id)
-                {
-                  checksum -= id;  // exception thrown from within constructor, 
-                }                 //  thus dtor won't be called. Repair the checksum!
-          }
-          randomFailures = false;
           CHECK (0==checksum);
         }
     };
