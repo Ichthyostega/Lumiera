@@ -44,19 +44,16 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "lib/sync-classlock.hpp"
-#include "lib/scoped-holder.hpp"
-#include "lib/scoped-holder-transfer.hpp"
 
-#include <utility>
-#include <vector>
+#include <utility> ///////////////////OOO woot?
+#include <memory>
 
 
 
 namespace lib {
   
   
-  /**
+  /** 
    * A pile of objects sharing common allocation and lifecycle.
    * AllocationCluster owns a number of object families of various types.
    * Each of those contains a initially undetermined (but rather large)
@@ -100,6 +97,10 @@ namespace lib {
           AllocationCluster* mother_;
         };
       
+      /* maintaining the Allocation */
+      void* storage_;
+      size_t remain_;
+      
     public:
       AllocationCluster ();
      ~AllocationCluster ()  noexcept;
@@ -109,7 +110,7 @@ namespace lib {
       TY&
       create (ARGS&& ...args)
         {
-          return * new(allotMemory (sizeof(TY))) TY (std::forward<ARGS> (args)...);
+          return * new(allot<TY>()) TY (std::forward<ARGS> (args)...);
         }
       
       template<typename X>
@@ -141,16 +142,20 @@ namespace lib {
        * possibly claiming a new pool block.
        */
       void*
-      allotMemory (size_t bytes)
+      allotMemory (size_t bytes, size_t alignment)
         {
+          void* loc = std::align(alignment, bytes, storage_, remain_);
+          if (loc)
+            return loc;
           UNIMPLEMENTED ("actual memory management");
+          ///////////////////////////////////////////////////////////OOO claim next macro block
         }
       
       template<typename X>
       X*
       allot (size_t cnt =1)
         {
-          return static_cast<X*> (allotMemory (cnt * sizeof(X)));
+          return static_cast<X*> (allotMemory (cnt * sizeof(X), alignof(X)));
         }
     };
   
