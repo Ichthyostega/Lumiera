@@ -97,9 +97,15 @@ namespace lib {
           AllocationCluster* mother_;
         };
       
-      /* maintaining the Allocation */
-      void* storage_;
-      size_t remain_;
+      class StorageManager;
+      
+      /** maintaining the Allocation */
+      struct Storage
+        {
+          void*  pos{nullptr};
+          size_t rest{0};
+        };
+      Storage storage_;
       
     public:
       AllocationCluster ();
@@ -144,10 +150,12 @@ namespace lib {
       void*
       allotMemory (size_t bytes, size_t alignment)
         {
-          void* loc = std::align(alignment, bytes, storage_, remain_);
+          ENSURE (_is_within_limits (bytes, alignment));
+          void* loc = std::align (alignment, bytes, storage_.pos, storage_.rest);
           if (loc)
             return loc;
-          UNIMPLEMENTED ("actual memory management");
+          expandStorage (bytes);
+          return allotMemory (bytes, alignment);
           ///////////////////////////////////////////////////////////OOO claim next macro block
         }
       
@@ -157,6 +165,9 @@ namespace lib {
         {
           return static_cast<X*> (allotMemory (cnt * sizeof(X), alignof(X)));
         }
+      
+      void expandStorage (size_t);
+      bool _is_within_limits (size_t,size_t);
     };
   
   
