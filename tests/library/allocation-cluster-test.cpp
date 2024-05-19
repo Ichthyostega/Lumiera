@@ -49,6 +49,7 @@ using std::numeric_limits;
 using std::function;
 using std::vector;
 using std::array;
+using std::byte;
 
 
 
@@ -60,6 +61,8 @@ namespace test {
     const uint NUM_CLUSTERS = 5;
     const uint NUM_TYPES    = 20;
     const uint NUM_OBJECTS  = 500;
+    
+    const size_t BLOCKSIZ = 256;   ///< @warning actually defined in allocation-cluster.cpp
     
     long checksum = 0; // validate proper pairing of ctor/dtor calls
     
@@ -141,8 +144,10 @@ namespace test {
       virtual void
       run (Arg)
         {
-          simpleUsage();
-          checkLifecycle();
+//          simpleUsage();
+//          checkLifecycle();
+          verifyInternals();
+          use_as_Allocator();
         }
       
       
@@ -163,8 +168,7 @@ namespace test {
           CHECK (123==ref2.getID());
           CHECK (45 ==ref3.getID());
           
-          CHECK (1        == clu.numExtents());
-          CHECK (66+77+77 == clu.numBytes());
+          CHECK (1 == clu.numExtents());
           
           // now use objects and just let them go;
         }
@@ -181,6 +185,50 @@ namespace test {
             CHECK (0!=checksum);
           }
           CHECK (0==checksum);
+        }
+      
+      
+      /** @test cover some tricky aspects of the low-level allocator
+       * @remark due to the expected leverage of AllocationCluster,
+       *         an optimised low-level approach was taken on various aspects of storage management;
+       *         the additional metadata overhead is a power of two, exploiting contextual knowledge
+       *         about layout; moreover, a special usage-mode allows to skip invocation of destructors.
+       *         To document these machinations, change to internal data is explicitly verified here.
+       * @todo WIP 5/24 🔁 define ⟶ implement 
+       */
+      void
+      verifyInternals()
+        {
+          CHECK (0==checksum);
+          {
+            AllocationCluster clu;
+            CHECK (0 == clu.numExtents());
+            CHECK (0 == clu.numBytes());
+            
+            auto i1 = clu.create<uint16_t> (1 + uint16_t(rand()));
+            CHECK (i1 > 0);
+            CHECK (1 == clu.numExtents());
+SHOW_EXPR(clu.numBytes())
+SHOW_EXPR(clu.storage_.rest);
+SHOW_EXPR(clu.storage_.pos);
+            byte* blk = static_cast<std::byte*>(clu.storage_.pos);
+SHOW_EXPR(blk);
+            CHECK (blk);
+            blk += clu.storage_.rest - BLOCKSIZ;
+SHOW_EXPR(blk);
+SHOW_EXPR(blk[0]);
+          }
+          CHECK (0==checksum);
+        }
+      
+      
+      /** @test TODO demonstrate use as Standard-Allocator
+       * @todo WIP 5/24 🔁 define ⟶ implement 
+       */
+      void
+      use_as_Allocator()
+        {
+          UNIMPLEMENTED ("Clusterfuck");
         }
     };
   

@@ -33,8 +33,6 @@
 #include "lib/linked-elements.hpp"
 #include "lib/util.hpp"
 
-#include <cstddef>
-#include <memory>
 
 using util::isnil;
 
@@ -87,6 +85,7 @@ namespace lib {
       using Destructors = lib::LinkedElements<Destructor>;
       
       struct Extent
+        : util::NonCopyable
         {
           Extent* next;
           Destructors dtors;
@@ -116,13 +115,21 @@ namespace lib {
           prependNextBlock();
         }
       
+      void
+      discardAll()
+        {
+          closeCurrentBlock();
+          view_.extents.clear();
+        }
+      
     private:
       void
       closeCurrentBlock()
         {
           ASSERT (view_.storage.pos);
           // relocate the pos-pointer to the start of the block
-          view_.storage.pos += view_.storage.rest - EXTENT_SIZ;
+          view_.storage.pos = static_cast<std::byte*>(view_.storage.pos)
+                            + view_.storage.rest - EXTENT_SIZ;
           view_.storage.rest = 0;
         }
       
@@ -154,9 +161,8 @@ namespace lib {
   AllocationCluster::~AllocationCluster()  noexcept
   try
     {
-      
       TRACE (memory, "shutting down AllocationCluster");
-      
+      StorageManager::access(*this).discardAll();
     }
   ERROR_LOG_AND_IGNORE (progress, "discarding AllocationCluster")
   
@@ -185,6 +191,17 @@ namespace lib {
     UNIMPLEMENTED ("size limits"); ///////////////////////////OOO enforce maximum size limits
   }
   
+  size_t
+  AllocationCluster::numExtents()  const
+  {
+    UNIMPLEMENTED ("Allocation management");
+  }
+  
+  size_t
+  AllocationCluster::numBytes()  const
+  {
+    UNIMPLEMENTED ("Allocation management");
+  }
   
   
 } // namespace lib

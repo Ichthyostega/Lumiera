@@ -45,12 +45,12 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 
-#include <utility> ///////////////////OOO woot?
 #include <memory>
 
 
 
 namespace lib {
+  namespace test { class AllocationCluster_test; } // declared friend for low-level-checks
   
   
   /** 
@@ -104,6 +104,18 @@ namespace lib {
         {
           void*  pos{nullptr};
           size_t rest{0};
+          
+          void*
+          allot (size_t bytes, size_t alignment)
+            {
+              void* loc = std::align (alignment, bytes, pos, rest);
+              if (loc)
+                { // requested allocation indeed fits in space
+                  pos = static_cast<std::byte*>(pos) + bytes;
+                  rest -= bytes;
+                }
+              return loc;
+            }
         };
       Storage storage_;
       
@@ -129,17 +141,8 @@ namespace lib {
       
       /* === diagnostics === */
       
-      size_t
-      numExtents()  const
-        {
-          UNIMPLEMENTED ("Allocation management");
-        }
-      
-      size_t
-      numBytes()  const
-        {
-          UNIMPLEMENTED ("Allocation management");
-        }
+      size_t numExtents() const;
+      size_t numBytes()   const;
       
       
     private:
@@ -151,12 +154,10 @@ namespace lib {
       allotMemory (size_t bytes, size_t alignment)
         {
           ENSURE (_is_within_limits (bytes, alignment));
-          void* loc = std::align (alignment, bytes, storage_.pos, storage_.rest);
-          if (loc)
-            return loc;
+          void* loc = storage_.allot(bytes, alignment);
+          if (loc) return loc;
           expandStorage (bytes);
           return allotMemory (bytes, alignment);
-          ///////////////////////////////////////////////////////////OOO claim next macro block
         }
       
       template<typename X>
@@ -168,6 +169,8 @@ namespace lib {
       
       void expandStorage (size_t);
       bool _is_within_limits (size_t,size_t);
+      
+      friend class test::AllocationCluster_test;
     };
   
   
