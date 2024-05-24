@@ -26,6 +26,15 @@
  ** for the render engine model. Here, in the actual translation unit, the generic part
  ** of these functions is emitted, while the corresponding header provides a strictly
  ** typed front-end, based on templates, which forward to the implementation eventually.
+ ** \par low-level trickery
+ **      The StorageManager implementation exploits object layout knowledge in order to
+ **      operate with the bare minimum of administrative overhead; notably the next allocation
+ **      is always located _within_ the current extent and by assuming that the remaining size
+ **      is tracked correctly, the start of the current extent can always be re-discovered;
+ **      the sequence of extents is managed as a linked list, where the `next*` resides in the
+ **      first »slot« within each Extent; this pointer is _dressed up_ (reinterpreted) as a
+ **      lib::LinkedElements with a heap allocator, which ends up performing the actual
+ **      allocation in blocks of EXTENT_SIZ.
  */
 
 
@@ -34,7 +43,9 @@
 #include "lib/util.hpp"
 
 
+using util::unConst;
 using util::isnil;
+using std::byte;
 
 
 namespace lib {
@@ -49,7 +60,7 @@ namespace lib {
     HeapAlloc heap;
     
     void*
-    allocate (size_t bytes)
+    allocate (size_t bytes) ////////////////////////OOO obsolete ... find a way to relocate this as custom allocator within LinkedElements!!!
     {
       return Alloc::allocate (heap, bytes);
     }
@@ -95,11 +106,13 @@ namespace lib {
       
       union ManagementView
         {
-          Storage storage{};
+          Storage storage;
           Extents extents;
         };
       
       ManagementView view_;
+      
+      StorageManager()  = delete;    ///< @warning used as _overlay view_ only, never created 
       
     public:
       static StorageManager&
@@ -122,14 +135,37 @@ namespace lib {
           view_.extents.clear();
         }
       
+      size_t
+      determineExtentCnt() ///< @warning finalises current block
+        {
+          closeCurrentBlock();
+          return view_.extents.size();
+        }
+      
+      size_t
+      calcAllocInCurrentBlock()  const
+        {
+          ENSURE (STORAGE_SIZ >= view_.storage.rest);
+          return STORAGE_SIZ - view_.storage.rest;
+        }
+      
+      static auto determineStorageSize (AllocationCluster const&);
+      
     private:
+      byte*
+      getCurrentBlockStart()  const
+        {
+          return static_cast<byte*>(view_.storage.pos)
+                                  + view_.storage.rest
+                                  - EXTENT_SIZ;
+        }
+      
       void
       closeCurrentBlock()
         {
-          ASSERT (view_.storage.pos);
+          if (not view_.storage.pos) return;
           // relocate the pos-pointer to the start of the block
-          view_.storage.pos = static_cast<std::byte*>(view_.storage.pos)
-                            + view_.storage.rest - EXTENT_SIZ;
+          view_.storage.pos = getCurrentBlockStart();
           view_.storage.rest = 0;
         }
       
@@ -144,19 +180,25 @@ namespace lib {
   
   
   
-  /** creating a new AllocationCluster prepares a table capable
-   *  of holding the individual object families to come. Each of those
-   *  is managed by a separate instance of the low-level memory manager.
+  
+  
+  /**
+   * Prepare a new clustered allocation to be expanded by extents of size
+   * EXTENT_SIZ, yet discarded all at once when the dtor is called.
+   * The constructor does not allocate anything immediately.
    */
   AllocationCluster::AllocationCluster()
+    : storage_{}
     {
       TRACE (memory, "new AllocationCluster");
     }
   
   
-  /** On shutdown of the AllocationCluster we need to assure a certain
-   *  destruction order is maintained by explicitly invoking a cleanup
-   *  operation on each of the low-level memory manager objects.
+  /**
+   * On shutdown of the AllocationCluster walks all extents and invokes all
+   * registered deleter functions and then discards the complete storage.
+   * @note it is possible to allocate objects as _disposable_ — meaning
+   *       that no destructors will be enrolled and called for such objects.
    */
   AllocationCluster::~AllocationCluster()  noexcept
   try
@@ -177,7 +219,6 @@ namespace lib {
   AllocationCluster::expandStorage (size_t allocRequest)
   {
     ENSURE (allocRequest + OVERHEAD <= EXTENT_SIZ);
-    void* newBlock = allocate (EXTENT_SIZ); ////////////////////////OOO obsolete ... use ManagementView instead!!!
     StorageManager::access(*this).addBlock();
   }
 
@@ -188,19 +229,52 @@ namespace lib {
   bool
   AllocationCluster::_is_within_limits (size_t size, size_t align)
   {
-    UNIMPLEMENTED ("size limits"); ///////////////////////////OOO enforce maximum size limits
+    auto isPower2 = [](size_t n){ return !(n & (n-1)); };
+    return 0 < size
+       and 0 < align
+       and size <= STORAGE_SIZ
+       and align <= STORAGE_SIZ
+       and isPower2 (align);
   }
+  
+  
+  /** @internal diagnostics helper for unit testing.
+   * Creates a shallow copy of the management data and then locates
+   * the start of the current extent to determine the allocation size
+   * @return a pair (extent-count, bytes-in-last-extent)
+   */
+  inline auto
+  AllocationCluster::StorageManager::determineStorageSize (AllocationCluster const& o)
+  {
+    size_t extents{0}, bytes{0};
+    if (o.storage_.pos)
+      {      // must manipulate pos pointer to find out count
+        Storage shallowCopy{o.storage_};
+        StorageManager& access = reinterpret_cast<StorageManager&> (shallowCopy);
+        bytes = access.calcAllocInCurrentBlock();
+        extents = access.determineExtentCnt();
+      }
+    return std::make_pair (extents, bytes);
+  }
+  
   
   size_t
   AllocationCluster::numExtents()  const
   {
-    UNIMPLEMENTED ("Allocation management");
+    return StorageManager::determineStorageSize(*this).first;
   }
-  
+
+  /**
+   * @warning whenever there are more than one extent,
+   *   the returned byte count is guessed only (upper bound), since
+   *   actually allocated size is not tracked to save some overhead.
+   */
   size_t
   AllocationCluster::numBytes()  const
   {
-    UNIMPLEMENTED ("Allocation management");
+    auto [extents,bytes] = StorageManager::determineStorageSize(*this);
+    return extents? bytes + (extents - 1) * STORAGE_SIZ
+                  : 0;
   }
   
   
