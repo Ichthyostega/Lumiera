@@ -205,18 +205,47 @@ namespace test {
             CHECK (0 == clu.numExtents());
             CHECK (0 == clu.numBytes());
             
-            auto i1 = clu.create<uint16_t> (1 + uint16_t(rand()));
+SHOW_EXPR(clu.storage_.rest);
+SHOW_EXPR(size_t(clu.storage_.pos));
+            CHECK (nullptr == clu.storage_.pos);
+            CHECK (      0 == clu.storage_.rest);
+
+            auto& i1 = clu.create<uint16_t> (1 + uint16_t(rand()));
             CHECK (i1 > 0);
             CHECK (1 == clu.numExtents());
 SHOW_EXPR(clu.numBytes())
+            CHECK (2 == clu.numBytes());
 SHOW_EXPR(clu.storage_.rest);
-SHOW_EXPR(clu.storage_.pos);
+SHOW_EXPR(size_t(clu.storage_.pos));
+            CHECK (clu.storage_.pos != nullptr);
+            CHECK (clu.storage_.rest == BLOCKSIZ - (2*sizeof(void*) +  sizeof(uint16_t)));
+            
             byte* blk = static_cast<std::byte*>(clu.storage_.pos);
-SHOW_EXPR(blk);
-            CHECK (blk);
+SHOW_EXPR(size_t(blk));
             blk += clu.storage_.rest - BLOCKSIZ;
-SHOW_EXPR(blk);
-SHOW_EXPR(blk[0]);
+SHOW_EXPR(size_t(blk));
+SHOW_EXPR((size_t*)blk);
+            CHECK(size_t(blk) < size_t(clu.storage_.pos));
+            
+            auto currBlock = [&]{
+                                  byte* blk = static_cast<std::byte*>(clu.storage_.pos);
+                                  blk += clu.storage_.rest - BLOCKSIZ;
+                                  return blk;
+                                };
+            auto slot = [&](size_t i)
+                                {
+                                  size_t* slot = reinterpret_cast<size_t*> (currBlock());
+                                  return slot[i];
+                                };
+            auto posOffset = [&]{
+                                  return size_t(clu.storage_.pos) - size_t(currBlock()); 
+                                };
+SHOW_EXPR(size_t(currBlock()))
+SHOW_EXPR(slot(0))
+SHOW_EXPR(slot(1))
+SHOW_EXPR(size_t(clu.storage_.pos) - size_t(currBlock()))
+            CHECK (posOffset() == 2 * sizeof(void*) + sizeof(uint16_t));
+            CHECK (slot(0) == 0);
           }
           CHECK (0==checksum);
         }
