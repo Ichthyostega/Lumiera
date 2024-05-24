@@ -42,6 +42,7 @@
 //using boost::lexical_cast;
 using lib::explore;
 using lib::test::showSizeof;
+using util::getAddr;
 using util::isnil;
 using ::Test;
 
@@ -194,7 +195,7 @@ namespace test {
        *         the additional metadata overhead is a power of two, exploiting contextual knowledge
        *         about layout; moreover, a special usage-mode allows to skip invocation of destructors.
        *         To document these machinations, change to internal data is explicitly verified here.
-       * @todo WIP 5/24 🔁 define ⟶ implement 
+       * @todo WIP 5/24 🔁 define ⟶ 🔁 implement
        */
       void
       verifyInternals()
@@ -229,7 +230,7 @@ namespace test {
                                   return blk;
                                 };
             auto posOffset = [&]{
-                                  return size_t(clu.storage_.pos) - size_t(currBlock()); 
+                                  return size_t(clu.storage_.pos) - size_t(currBlock());
                                 };
             auto slot = [&](size_t i)
                                 {
@@ -238,7 +239,7 @@ namespace test {
                                 };
             
             CHECK (blk == currBlock());
-            // current storage pos: 2 »slots« of admin overhead plus the first allocated element 
+            // current storage pos: 2 »slots« of admin overhead plus the first allocated element
             CHECK (posOffset() == 2 * sizeof(void*) + sizeof(uint16_t));
             CHECK (slot(0) == 0); // only one extent, thus next-* is NULL
             
@@ -257,18 +258,59 @@ namespace test {
             CHECK (posOffset() == 2 * sizeof(void*) + 2 * sizeof(uint16_t) + sizeof(char));
             auto& i3 = clu.create<int32_t> (42);
             CHECK (posOffset() == 2 * sizeof(void*) + 2 * sizeof(uint16_t) + sizeof(char) + 3*sizeof(byte) + sizeof(int32_t));
-            CHECK (i1 == i1pre);
+            CHECK (i1 == i1pre);                                                         // ^^^^Alignment
             CHECK (i2 == 55555);
             CHECK (c1 == 'X');
             CHECK (i3 == 42);
             CHECK (slot(0) == 0);
+            
+            // deliberately fill up the first extent completely
+SHOW_EXPR(size_t(currBlock()))
+SHOW_EXPR(size_t(clu.storage_.pos))
+SHOW_EXPR(clu.storage_.rest)
+SHOW_EXPR(posOffset())
+            for (uint i=clu.storage_.rest; i>0; --i)
+              clu.create<uchar> (i);
+SHOW_EXPR(size_t(currBlock()))
+SHOW_EXPR(size_t(clu.storage_.pos))
+SHOW_EXPR(clu.storage_.rest)
+SHOW_EXPR(posOffset())
+SHOW_EXPR(slot(0))
+            CHECK (clu.storage_.rest == 0);
+            CHECK (posOffset() == BLOCKSIZ);
+SHOW_EXPR(clu.numBytes())
+            CHECK (clu.numBytes() == BLOCKSIZ - 2*sizeof(void*));
+            CHECK (clu.numExtents() == 1);
+            CHECK (slot(0) == 0);
+            CHECK (blk == currBlock());                                // but still in the initial extent
+            
+            // trigger overflow and allocation of second extent
+            char& c2 = clu.create<char> ('U');
+SHOW_EXPR(size_t(currBlock()))
+SHOW_EXPR(size_t(clu.storage_.pos))
+SHOW_EXPR(clu.storage_.rest)
+SHOW_EXPR(posOffset())
+SHOW_EXPR(slot(0))
+SHOW_EXPR(clu.numBytes())
+SHOW_EXPR(clu.numExtents())
+            CHECK (blk != currBlock());                                // allocation moved to a new extent
+            CHECK (getAddr(c2) == currBlock() + 2*sizeof(void*));      // c2 resides immediately after the two administrative »slots«
+            CHECK (clu.storage_.rest == BLOCKSIZ - posOffset());
+            CHECK (clu.numBytes() == BLOCKSIZ - 2*sizeof(void*) + 1);  // accounted allocation for the full first block + one byte
+            CHECK (clu.numExtents() == 2);                             // we have two extents now
+            CHECK (slot(0) == size_t(blk));                            // first »slot« of the current block points back to previous block
+            CHECK (i1 == i1pre);
+            CHECK (i2 == 55555);
+            CHECK (c1 == 'X');
+            CHECK (c2 == 'U');
+            CHECK (i3 == 42);
           }
           CHECK (0==checksum);
         }
       
       
       /** @test TODO demonstrate use as Standard-Allocator
-       * @todo WIP 5/24 🔁 define ⟶ implement 
+       * @todo WIP 5/24 🔁 define ⟶ implement
        */
       void
       use_as_Allocator()
