@@ -202,49 +202,65 @@ namespace test {
           CHECK (0==checksum);
           {
             AllocationCluster clu;
+            // no allocation happened yet
             CHECK (0 == clu.numExtents());
             CHECK (0 == clu.numBytes());
-            
-SHOW_EXPR(clu.storage_.rest);
-SHOW_EXPR(size_t(clu.storage_.pos));
             CHECK (nullptr == clu.storage_.pos);
             CHECK (      0 == clu.storage_.rest);
-
+            
+            // build a simple object
             auto& i1 = clu.create<uint16_t> (1 + uint16_t(rand()));
             CHECK (i1 > 0);
             CHECK (1 == clu.numExtents());
-SHOW_EXPR(clu.numBytes())
             CHECK (2 == clu.numBytes());
-SHOW_EXPR(clu.storage_.rest);
-SHOW_EXPR(size_t(clu.storage_.pos));
             CHECK (clu.storage_.pos != nullptr);
+            CHECK (clu.storage_.pos == (& i1) + 1 ); // points directly behind the allocated integer
             CHECK (clu.storage_.rest == BLOCKSIZ - (2*sizeof(void*) +  sizeof(uint16_t)));
             
+            // Demonstration: how to reconstruct the start of the current extent
             byte* blk = static_cast<std::byte*>(clu.storage_.pos);
-SHOW_EXPR(size_t(blk));
             blk += clu.storage_.rest - BLOCKSIZ;
-SHOW_EXPR(size_t(blk));
-SHOW_EXPR((size_t*)blk);
             CHECK(size_t(blk) < size_t(clu.storage_.pos));
-            
+
+            // some abbreviations for navigating the raw storage blocks...
             auto currBlock = [&]{
                                   byte* blk = static_cast<std::byte*>(clu.storage_.pos);
                                   blk += clu.storage_.rest - BLOCKSIZ;
                                   return blk;
+                                };
+            auto posOffset = [&]{
+                                  return size_t(clu.storage_.pos) - size_t(currBlock()); 
                                 };
             auto slot = [&](size_t i)
                                 {
                                   size_t* slot = reinterpret_cast<size_t*> (currBlock());
                                   return slot[i];
                                 };
-            auto posOffset = [&]{
-                                  return size_t(clu.storage_.pos) - size_t(currBlock()); 
-                                };
-SHOW_EXPR(size_t(currBlock()))
-SHOW_EXPR(slot(0))
-SHOW_EXPR(slot(1))
-SHOW_EXPR(size_t(clu.storage_.pos) - size_t(currBlock()))
+            
+            CHECK (blk == currBlock());
+            // current storage pos: 2 »slots« of admin overhead plus the first allocated element 
             CHECK (posOffset() == 2 * sizeof(void*) + sizeof(uint16_t));
+            CHECK (slot(0) == 0); // only one extent, thus next-* is NULL
+            
+            // allocate another one
+            uint16_t i1pre = i1;
+            auto& i2 = clu.create<uint16_t> (55555);
+            CHECK (posOffset() == 2 * sizeof(void*) + 2 * sizeof(uint16_t));
+            CHECK (clu.storage_.rest == BLOCKSIZ - posOffset());
+            // existing storage unaffected
+            CHECK (i1 == i1pre);
+            CHECK (i2 == 55555);
+            CHECK (slot(0) == 0);
+            
+            // alignment is handled properly
+            char& c1 = clu.create<char> ('X');
+            CHECK (posOffset() == 2 * sizeof(void*) + 2 * sizeof(uint16_t) + sizeof(char));
+            auto& i3 = clu.create<int32_t> (42);
+            CHECK (posOffset() == 2 * sizeof(void*) + 2 * sizeof(uint16_t) + sizeof(char) + 3*sizeof(byte) + sizeof(int32_t));
+            CHECK (i1 == i1pre);
+            CHECK (i2 == 55555);
+            CHECK (c1 == 'X');
+            CHECK (i3 == 42);
             CHECK (slot(0) == 0);
           }
           CHECK (0==checksum);
