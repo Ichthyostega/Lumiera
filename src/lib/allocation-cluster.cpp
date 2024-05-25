@@ -163,11 +163,18 @@ namespace lib {
         }
       
       
-      size_t
-      determineExtentCnt() ///< @warning finalises current block
+      bool
+      empty()  const
         {
-          closeCurrentBlock();
-          return view_.extents.size();
+          return nullptr == view_.storage.pos;
+        }
+      
+      size_t
+      determineExtentCnt()  const
+        {
+          return empty()? 0
+                        : lib::asLinkedElements (getCurrentBlockStart())
+                              .size();
         }
       
       size_t
@@ -177,13 +184,12 @@ namespace lib {
           return STORAGE_SIZ - view_.storage.rest;
         }
       
-      static auto determineStorageSize (AllocationCluster const&);
-      
       
     private:
       Extent*
       getCurrentBlockStart()  const
         {
+          REQUIRE (not empty());
           void* pos = static_cast<byte*>(view_.storage.pos)
                                        + view_.storage.rest
                                        - EXTENT_SIZ;
@@ -193,7 +199,7 @@ namespace lib {
       void
       closeCurrentBlock()
         {
-          if (not view_.storage.pos) return;
+          if (empty()) return;
           // relocate the pos-pointer to the start of the block
           view_.storage.pos = getCurrentBlockStart();
           view_.storage.rest = 0;
@@ -281,30 +287,10 @@ namespace lib {
   }
   
   
-  /** @internal diagnostics helper for unit testing.
-   * Creates a shallow copy of the management data and then locates
-   * the start of the current extent to determine the allocation size
-   * @return a pair (extent-count, bytes-in-last-extent)
-   */
-  inline auto
-  AllocationCluster::StorageManager::determineStorageSize (AllocationCluster const& o)
-  {
-    size_t extents{0}, bytes{0};
-    if (o.storage_.pos)
-      {      // must manipulate pos pointer to find out count
-        Storage shallowCopy{o.storage_};
-        StorageManager& access = reinterpret_cast<StorageManager&> (shallowCopy);
-        bytes = access.calcAllocInCurrentBlock();
-        extents = access.determineExtentCnt();
-      }
-    return std::make_pair (extents, bytes);
-  }
-  
-  
   size_t
   AllocationCluster::numExtents()  const
   {
-    return StorageManager::determineStorageSize(*this).first;
+    return StorageManager::access (unConst(*this)).determineExtentCnt();
   }
 
   /**
@@ -315,9 +301,10 @@ namespace lib {
   size_t
   AllocationCluster::numBytes()  const
   {
-    auto [extents,bytes] = StorageManager::determineStorageSize(*this);
-    return extents? bytes + (extents - 1) * STORAGE_SIZ
-                  : 0;
+    size_t extents = numExtents();
+    if (not extents) return 0;
+    size_t bytes = StorageManager::access (unConst(*this)).calcAllocInCurrentBlock();
+    return (extents - 1) * STORAGE_SIZ + bytes;
   }
   
   

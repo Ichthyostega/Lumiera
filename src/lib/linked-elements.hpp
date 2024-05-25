@@ -471,6 +471,16 @@ namespace lib {
     };
   
   
+  /** transiently reinterpret an element pointer as const LinkedElements,
+   *  allowing to count, iterate or subscript a chain of elements */
+  template<class N>
+  auto&
+  asLinkedElements (N* const& anchor)
+  {
+    using Linked = LinkedElements<const N,linked_elements::NoOwnership>;
+    return reinterpret_cast<Linked const&>(anchor);
+  }
+  
   
   
 } // namespace lib
