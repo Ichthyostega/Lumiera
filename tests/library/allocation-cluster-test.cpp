@@ -37,14 +37,12 @@
 #include <vector>
 #include <limits>
 #include <functional>
-//#include <boost/lexical_cast.hpp>
 
-//using boost::lexical_cast;
+using ::Test;
 using lib::explore;
 using lib::test::showSizeof;
 using util::getAddr;
 using util::isnil;
-using ::Test;
 
 using std::numeric_limits;
 using std::function;
@@ -65,7 +63,7 @@ namespace test {
     
     const size_t BLOCKSIZ = 256;   ///< @warning actually defined in allocation-cluster.cpp
     
-    long checksum = 0; // validate proper pairing of ctor/dtor calls
+    int64_t checksum = 0;         // validate proper pairing of ctor/dtor calls
     
     template<uint i>
     class Dummy
@@ -85,7 +83,7 @@ namespace test {
             checksum -= explore(content_).resultSum();
           }
         
-        char getID()  { return content_[0]; }
+        uint getID()  { return content_[0]; }
       };
     
     
@@ -189,13 +187,14 @@ namespace test {
         }
       
       
+      
       /** @test cover some tricky aspects of the low-level allocator
        * @remark due to the expected leverage of AllocationCluster,
        *         an optimised low-level approach was taken on various aspects of storage management;
        *         the additional metadata overhead is a power of two, exploiting contextual knowledge
        *         about layout; moreover, a special usage-mode allows to skip invocation of destructors.
        *         To document these machinations, change to internal data is explicitly verified here.
-       * @todo WIP 5/24 🔁 define ⟶ 🔁 implement
+       * @todo WIP 5/24 ✔ define ⟶ ✔ implement
        */
       void
       verifyInternals()
@@ -252,7 +251,8 @@ namespace test {
             // existing storage unaffected
             CHECK (i1 == i1pre);
             CHECK (i2 == 55555);
-            CHECK (slot(0) == 0);
+            CHECK (slot(0) == 0);   // no administrative data yet...
+            CHECK (slot(1) == 0);
             
             // alignment is handled properly
             char& c1 = clu.create<char> ('X');
@@ -296,7 +296,7 @@ namespace test {
             markSum = checksum;
             CHECK (checksum == 4+4);
             CHECK (alignof(Dummy<2>) == alignof(char));
-            CHECK (posOffset() - pp == sizeof(Dummy<2>));
+            CHECK (posOffset() - pp == sizeof(Dummy<2>));              // for disposable objects only the object storage itself plus alignment
             
             // allocate a similar object,
             // but this time also enrolling the destructor
@@ -314,19 +314,40 @@ namespace test {
             // any other object with non-trivial destructor....
             string rands = lib::test::randStr(9);
             pp = posOffset();
-            string& s1 = clu.create<string> (rands);
-SHOW_EXPR(pp)
-SHOW_EXPR(posOffset())
-SHOW_EXPR(size_t(&s1))
+            string& s1 = clu.create<string> (rands);                   // a string that fits into the small-string optimisation
+            CHECK (s1 == rands);
+            
             CHECK (posOffset() - pp >= sizeof(string) + 2*sizeof(void*));
             CHECK (size_t(&s1) - slot(1) == 2*sizeof(void*));          // again the Destructor frame is placed immediately before the object
             auto dtor2 = (Dtor*)slot(1);                               // and it has been prepended to the destructors-list in current extent
-SHOW_EXPR(size_t(dtor2->next))
             CHECK (dtor2->next == dtor);                               // with the destructor of o2 hooked up behind
             CHECK (dtor->next == nullptr);
+            
+            // provoke overflow into a new extent
+            // by placing an object that does not fit
+            // into the residual space in current one
+            auto& o3 = clu.create<Dummy<223>> (3);
+            CHECK (clu.numExtents() == 3);                             // a third extent has been opened to accommodate this object
+            CHECK (checksum == markSum + 8+8 + uchar(223*3));
+            auto dtor3 = (Dtor*)slot(1);
+            CHECK (dtor3->next == nullptr);                            // Destructors are chained for each extent separately
+            CHECK (dtor3 != dtor2);
+            CHECK (dtor2->next == dtor);                               // the destructor chain from previous extent is also still valid
+            CHECK (dtor->next == nullptr);
+            
+            CHECK (i1 == i1pre);                                       // all data is intact (no corruption)
+            CHECK (s1 == rands);
+            CHECK (i2 == 55555);
+            CHECK (c1 == 'X');
+            CHECK (c2 == 'U');
+            CHECK (i3 == 42);
+            CHECK (o1.getID() == 4);
+            CHECK (o2.getID() == 8);
+            CHECK (o3.getID() == 3);
           }
-          CHECK (checksum == markSum);
+          CHECK (checksum == markSum);                                 // only the destructor of the "disposable" object o1 was not invoked
         }
+      
       
       
       /** @test TODO demonstrate use as Standard-Allocator

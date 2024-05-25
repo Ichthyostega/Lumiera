@@ -28,11 +28,6 @@
  ** created within a single build process and is replaced or released
  ** as a whole. AllocationCluster implements memory management to
  ** support this usage pattern.
- ** 
- ** @warning in rework 5/2024 — with the goal to simplify the logic,
- **          remove all thread safety and make the implementation
- **          usable as standard conformant allocator for STL.
- **
  ** @see allocation-cluster-test.cpp
  ** @see builder::ToolFactory
  ** @see linked-elements.hpp
