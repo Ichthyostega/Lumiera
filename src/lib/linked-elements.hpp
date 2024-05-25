@@ -323,20 +323,6 @@ namespace lib {
         }
       
       
-      /** extract the top-most element, if any
-       * @warning gives up ownership; if this list manages ownership,
-       *          then the caller is responsible for deallocating the removed entry
-       * @return pointer to the removed element
-       */
-      N*
-      pop()
-        {
-          N* elm = head_;
-          if (head_)
-            head_ = head_->next;
-          return elm;
-        }
-      
       
       /** prepend object of type TY, forwarding ctor args */
       template<class TY =N, typename...ARGS>

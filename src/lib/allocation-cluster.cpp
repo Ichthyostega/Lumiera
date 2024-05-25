@@ -100,7 +100,7 @@ namespace lib {
    * An _overlay view_ for the AllocationCluster to add functionality
    * for adding / clearing extents and registering optional deleter functions.
    * @warning this is a tricky construct to operate each Allocation Cluster
-   *          with the absolute necessary minimum of organisational overhead.
+   *          with the absolute minimum of organisational overhead necessary.
    *          The key point to note is that StorageManager is layout compatible
    *          with AllocationCluster itself — achieved through use of the union
    *          ManagementView, which holds a Storage descriptor member, but
@@ -112,19 +112,10 @@ namespace lib {
    */
   class AllocationCluster::StorageManager
     {
-      struct Destructor
-        {
-          Destructor* next;
-          DtorInvoker dtor;
-          
-         ~Destructor()
-            {
-              if (dtor)
-                (*dtor) (this);
-            }
-        };
+      
       using Destructors = lib::LinkedElements<Destructor, PolicyInvokeDtor>;
       
+      /** Block of allocated storage */
       struct Extent
         : util::NonCopyable
         {
@@ -142,7 +133,7 @@ namespace lib {
       
       ManagementView view_;
       
-      StorageManager()  = delete;    ///< @warning used as _overlay view_ only, never created
+      StorageManager()  = delete;    ///< @note used as _overlay view_ only, never created
       
     public:
       static StorageManager&
@@ -166,16 +157,9 @@ namespace lib {
         }
       
       void
-      addDestructor (void* dtor)
+      attach (Destructor& dtor)
         {
-          auto& destructor = * static_cast<Destructor*> (dtor);
-          getCurrentBlockStart()->dtors.push (destructor);
-        }
-      
-      void
-      discardLastDestructor()
-        {
-          getCurrentBlockStart()->dtors.pop();
+          getCurrentBlockStart()->dtors.push (dtor);
         }
       
       
@@ -194,6 +178,7 @@ namespace lib {
         }
       
       static auto determineStorageSize (AllocationCluster const&);
+      
       
     private:
       Extent*
@@ -240,7 +225,7 @@ namespace lib {
   
   
   /**
-   * On shutdown of the AllocationCluster walks all extents and invokes all
+   * The shutdown of an AllocationCluster walks all extents and invokes all
    * registered deleter functions and then discards the complete storage.
    * @note it is possible to allocate objects as _disposable_ — meaning
    *       that no destructors will be enrolled and called for such objects.
@@ -252,6 +237,11 @@ namespace lib {
       StorageManager::access(*this).discardAll();
     }
   ERROR_LOG_AND_IGNORE (progress, "discarding AllocationCluster")
+  
+  
+  /** virtual dtor to cause invocation of the payload's dtor on clean-up */
+  AllocationCluster::Destructor::~Destructor() { };
+  
   
   
   /**
@@ -269,16 +259,9 @@ namespace lib {
   
   
   void
-  AllocationCluster::registerDestructor (void* dtor)
+  AllocationCluster::registerDestructor (Destructor& dtor)
   {
-    StorageManager::access(*this).addDestructor (dtor);
-  }
-  
-  
-  void
-  AllocationCluster::discardLastDestructor()
-  {
-    StorageManager::access(*this).discardLastDestructor();
+    StorageManager::access(*this).attach (dtor);
   }
   
   

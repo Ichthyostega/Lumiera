@@ -290,14 +290,9 @@ namespace test {
             CHECK (i3 == 42);
             
             // allocate a "disposable" object (dtor will not be called)
-SHOW_EXPR(clu.numBytes())
-SHOW_EXPR(posOffset())
             size_t pp = posOffset();
             auto& o1 = clu.createDisposable<Dummy<2>> (4);
             CHECK (o1.getID() == 4);
-SHOW_EXPR(clu.numBytes())
-SHOW_EXPR(posOffset())
-SHOW_EXPR(checksum)
             markSum = checksum;
             CHECK (checksum == 4+4);
             CHECK (alignof(Dummy<2>) == alignof(char));
@@ -309,11 +304,27 @@ SHOW_EXPR(checksum)
             auto& o2 = clu.create<Dummy<2>> (8);
             CHECK (o2.getID() == 8);
             CHECK (checksum == markSum + 8+8);
-SHOW_EXPR(clu.numBytes())
+            CHECK (posOffset() - pp > sizeof(Dummy<2>) + 2*sizeof(void*));
+            CHECK (slot(1) > 0);
+            CHECK (size_t(&o2) - slot(1) == 2*sizeof(void*));          // Object resides in a Destructor frame,
+            using Dtor = AllocationCluster::Destructor;                // ... which has been hooked up into admin-slot-1 of the current extent
+            auto dtor = (Dtor*)slot(1);
+            CHECK (dtor->next == nullptr);
+            
+            // any other object with non-trivial destructor....
+            string rands = lib::test::randStr(9);
+            pp = posOffset();
+            string& s1 = clu.create<string> (rands);
+SHOW_EXPR(pp)
 SHOW_EXPR(posOffset())
-SHOW_EXPR(checksum)
+SHOW_EXPR(size_t(&s1))
+            CHECK (posOffset() - pp >= sizeof(string) + 2*sizeof(void*));
+            CHECK (size_t(&s1) - slot(1) == 2*sizeof(void*));          // again the Destructor frame is placed immediately before the object
+            auto dtor2 = (Dtor*)slot(1);                               // and it has been prepended to the destructors-list in current extent
+SHOW_EXPR(size_t(dtor2->next))
+            CHECK (dtor2->next == dtor);                               // with the destructor of o2 hooked up behind
+            CHECK (dtor->next == nullptr);
           }
-SHOW_EXPR(checksum)
           CHECK (checksum == markSum);
         }
       
