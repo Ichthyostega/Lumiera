@@ -66,6 +66,7 @@
 #include "lib/util.hpp"
 
 #include <utility>
+#include <memory>
 
 
 namespace lib {
@@ -107,6 +108,84 @@ namespace lib {
           {
             return *new TY (std::forward<ARGS> (args)...);
           }
+      };
+    
+    template<class ALO>
+    struct OwningAlloc
+      : util::MoveOnly
+      {
+        using Allo  = ALO;
+        using AlloT = std::allocator_traits<Allo>;
+        using BaseType = typename Allo::value_type;
+        
+        Allo allocator_;
+        
+        OwningAlloc (Allo allo = Allo{})
+          : allocator_{allo}
+          { }
+        
+        template<typename X>
+        auto
+        adaptAllocator (Allo const& baseAllocator)
+          {
+            using XAllo = typename AlloT::template rebind_alloc<X>;
+            if constexpr (std::is_constructible_v<XAllo, Allo>)
+              return XAllo(allocator_);
+            else
+              return XAllo();
+          }
+        
+        template<class ALOT, typename...ARGS>
+        auto&
+        construct (typename ALOT::alocator_type& allo, ARGS&& ...args)
+          {
+            auto loc = ALOT::allocate (allocator_, 1);
+            ALOT::construct (allocator_, loc, std::forward<ARGS>(args)...);
+            return *loc;
+          }
+        
+        template<class ALOT, typename...ARGS>
+        void
+        destroy (typename ALOT::alocator_type& allo, typename ALOT::pointer elm)
+          {
+            ALOT::destroy (allo, elm);
+            ALOT::deallocate (allo, elm, 1);
+          }
+        
+        
+        /** create new element using the embedded allocator */
+        template<class TY, typename...ARGS>
+        TY&
+        create (ARGS&& ...args)
+          {
+            if constexpr (std::is_same_v<TY, BaseType>)
+              {
+                return construct<AlloT> (allocator_, std::forward<ARGS>(args)...);
+              }
+            else
+              {
+                using XAlloT = typename AlloT::template rebind_traits<TY>;
+                auto xAllo = adaptAllocator<TY> (allocator_);
+                return construct<XAlloT> (xAllo, std::forward<ARGS>(args)...);
+              }
+          }
+        
+        template<class TY>
+        void
+        destroy (TY* elm)
+          {
+            if constexpr (std::is_same_v<TY, BaseType>)
+              {
+                destroy<AlloT> (allocator_, elm);
+              }
+            else
+              {
+                using XAlloT = typename AlloT::template rebind_traits<TY>;
+                auto xAllo = adaptAllocator<TY> (allocator_);
+                destroy<XAlloT> (xAllo, elm);
+              }
+          }
+        
       };
     
     
