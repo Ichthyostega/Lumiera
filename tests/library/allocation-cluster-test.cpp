@@ -201,6 +201,7 @@ namespace test {
       verifyInternals()
         {
           CHECK (0==checksum);
+          long markSum;
           {
             AllocationCluster clu;
             // no allocation happened yet
@@ -265,34 +266,17 @@ namespace test {
             CHECK (slot(0) == 0);
             
             // deliberately fill up the first extent completely
-SHOW_EXPR(size_t(currBlock()))
-SHOW_EXPR(size_t(clu.storage_.pos))
-SHOW_EXPR(clu.storage_.rest)
-SHOW_EXPR(posOffset())
             for (uint i=clu.storage_.rest; i>0; --i)
               clu.create<uchar> (i);
-SHOW_EXPR(size_t(currBlock()))
-SHOW_EXPR(size_t(clu.storage_.pos))
-SHOW_EXPR(clu.storage_.rest)
-SHOW_EXPR(posOffset())
-SHOW_EXPR(slot(0))
-            CHECK (clu.storage_.rest == 0);
+            CHECK (clu.storage_.rest == 0);                            // no space left in current extent
             CHECK (posOffset() == BLOCKSIZ);
-SHOW_EXPR(clu.numBytes())
-            CHECK (clu.numBytes() == BLOCKSIZ - 2*sizeof(void*));
+            CHECK (clu.numBytes() == BLOCKSIZ - 2*sizeof(void*));      // now using all the rest behind the admin »slots«
             CHECK (clu.numExtents() == 1);
             CHECK (slot(0) == 0);
             CHECK (blk == currBlock());                                // but still in the initial extent
             
             // trigger overflow and allocation of second extent
             char& c2 = clu.create<char> ('U');
-SHOW_EXPR(size_t(currBlock()))
-SHOW_EXPR(size_t(clu.storage_.pos))
-SHOW_EXPR(clu.storage_.rest)
-SHOW_EXPR(posOffset())
-SHOW_EXPR(slot(0))
-SHOW_EXPR(clu.numBytes())
-SHOW_EXPR(clu.numExtents())
             CHECK (blk != currBlock());                                // allocation moved to a new extent
             CHECK (getAddr(c2) == currBlock() + 2*sizeof(void*));      // c2 resides immediately after the two administrative »slots«
             CHECK (clu.storage_.rest == BLOCKSIZ - posOffset());
@@ -304,8 +288,33 @@ SHOW_EXPR(clu.numExtents())
             CHECK (c1 == 'X');
             CHECK (c2 == 'U');
             CHECK (i3 == 42);
+            
+            // allocate a "disposable" object (dtor will not be called)
+SHOW_EXPR(clu.numBytes())
+SHOW_EXPR(posOffset())
+            size_t pp = posOffset();
+            auto& o1 = clu.createDisposable<Dummy<2>> (4);
+            CHECK (o1.getID() == 4);
+SHOW_EXPR(clu.numBytes())
+SHOW_EXPR(posOffset())
+SHOW_EXPR(checksum)
+            markSum = checksum;
+            CHECK (checksum == 4+4);
+            CHECK (alignof(Dummy<2>) == alignof(char));
+            CHECK (posOffset() - pp == sizeof(Dummy<2>));
+            
+            // allocate a similar object,
+            // but this time also enrolling the destructor
+            pp = posOffset();
+            auto& o2 = clu.create<Dummy<2>> (8);
+            CHECK (o2.getID() == 8);
+            CHECK (checksum == markSum + 8+8);
+SHOW_EXPR(clu.numBytes())
+SHOW_EXPR(posOffset())
+SHOW_EXPR(checksum)
           }
-          CHECK (0==checksum);
+SHOW_EXPR(checksum)
+          CHECK (checksum == markSum);
         }
       
       

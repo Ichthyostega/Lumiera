@@ -45,6 +45,8 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 
+#include <type_traits>
+#include <utility>
 #include <memory>
 
 
@@ -125,11 +127,10 @@ namespace lib {
       
       
       template<class TY, typename...ARGS>
-      TY&
-      create (ARGS&& ...args)
-        {
-          return * new(allot<TY>()) TY (std::forward<ARGS> (args)...);
-        }
+      TY& create (ARGS&& ...);
+      
+      template<class TY, typename...ARGS>
+      TY& createDisposable (ARGS&& ...);
       
       template<typename X>
       Allocator<X>
@@ -167,7 +168,14 @@ namespace lib {
           return static_cast<X*> (allotMemory (cnt * sizeof(X), alignof(X)));
         }
       
+      typedef void (*DtorInvoker) (void*);
+      
+      template<typename X>
+      void* allotWithDeleter();
+      
       void expandStorage (size_t);
+      void registerDestructor (void*);
+      void discardLastDestructor();
       bool _is_within_limits (size_t,size_t);
       
       friend class test::AllocationCluster_test;
@@ -178,6 +186,75 @@ namespace lib {
   
   
   //-----implementation-details------------------------
+  
+  template<class TY, typename...ARGS>
+  TY&
+  AllocationCluster::createDisposable (ARGS&& ...args)
+  {
+    return * new(allot<TY>()) TY (std::forward<ARGS> (args)...);
+  }
+  
+  template<class TY, typename...ARGS>
+  TY&
+  AllocationCluster::create (ARGS&& ...args)
+  {
+    if constexpr (std::is_trivial_v<TY>)
+      return createDisposable<TY> (std::forward<ARGS> (args)...);
+    
+    void* storage = allotWithDeleter<TY>();
+    try {
+        return * new(storage) TY (std::forward<ARGS> (args)...);
+      }
+    catch(...)
+      {
+        discardLastDestructor();
+        throw;
+      }
+  }
+  
+  /**
+   * Establish a storage arrangement with a callback to invoke the destructor.
+   * @remark the purpose of AllocationCluster is to avoid deallocation of individual objects;
+   *         thus the position and type of allocated payload objects is discarded. However,
+   *         sometimes it is desirable to ensure invocation of object destructors; in this case,
+   *         a linked list of destructor callbacks is hooked up in the storage extent. These
+   *         callback records are always allocated directly before the actual payload object,
+   *         and use a special per-type trampoline function to invoke the destructor, passing
+   *         a properly adjusted self-pointer.
+   */
+  template<typename X>
+  void*
+  AllocationCluster::allotWithDeleter()
+  {
+    /**
+     * Memory layout frame to place a payload object
+     * and store a destructor callback as intrusive linked list.
+     * @note this object is never constructed, but it is used to
+     *       reinterpret the StorageManager::Destructor record,
+     *       causing invocation of the destructor of the payload object,
+     *       which is always placed immediately behind.
+     */
+    struct TypedDtorInvoker
+      {
+        void* next;
+        DtorInvoker dtor;
+        X payload;
+        
+        /** trampoline function: invoke the destructor of the payload type */
+        static void
+        invokePayloadDtor (void* self)
+          {
+            REQUIRE (self);
+            TypedDtorInvoker* instance = static_cast<TypedDtorInvoker*> (self);
+            instance->payload.~X();
+          }
+      };
+    
+    TypedDtorInvoker* allocation = allot<TypedDtorInvoker>();
+    allocation->dtor = &TypedDtorInvoker::invokePayloadDtor;
+    registerDestructor (allocation);
+    return & allocation->payload;
+  }
   
   
 } // namespace lib

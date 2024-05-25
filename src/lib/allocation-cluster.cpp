@@ -70,7 +70,31 @@ namespace lib {
     {
       Alloc::destroy (heap, static_cast<std::byte *> (storage));
     }
+
+    /**
+     * Special allocator-policy for lib::LinkedElements
+     * - does not allow to allocate new elements
+     * - can hook up elements allocated elsewhere
+     * - ensure the destructor of all elements is invoked
+     */
+    struct PolicyInvokeDtor
+      : lib::linked_elements::NoOwnership
+      {
+        /**
+         * while this policy doesn't take ownership,
+         * it ensures the destructor is invoked
+         */
+        template<class X>
+        void
+        destroy (X* elm)
+          {
+            REQUIRE (elm);
+            elm->~X();
+          }
+      };
+
   }
+  
   
   /**
    * An _overlay view_ for the AllocationCluster to add functionality
@@ -91,9 +115,15 @@ namespace lib {
       struct Destructor
         {
           Destructor* next;
-          ///////////////////////////////////////////////OOO store deleter function here
+          DtorInvoker dtor;
+          
+         ~Destructor()
+            {
+              if (dtor)
+                (*dtor) (this);
+            }
         };
-      using Destructors = lib::LinkedElements<Destructor>;
+      using Destructors = lib::LinkedElements<Destructor, PolicyInvokeDtor>;
       
       struct Extent
         : util::NonCopyable
@@ -112,7 +142,7 @@ namespace lib {
       
       ManagementView view_;
       
-      StorageManager()  = delete;    ///< @warning used as _overlay view_ only, never created 
+      StorageManager()  = delete;    ///< @warning used as _overlay view_ only, never created
       
     public:
       static StorageManager&
@@ -135,6 +165,20 @@ namespace lib {
           view_.extents.clear();
         }
       
+      void
+      addDestructor (void* dtor)
+        {
+          auto& destructor = * static_cast<Destructor*> (dtor);
+          getCurrentBlockStart()->dtors.push (destructor);
+        }
+      
+      void
+      discardLastDestructor()
+        {
+          getCurrentBlockStart()->dtors.pop();
+        }
+      
+      
       size_t
       determineExtentCnt() ///< @warning finalises current block
         {
@@ -152,12 +196,13 @@ namespace lib {
       static auto determineStorageSize (AllocationCluster const&);
       
     private:
-      byte*
+      Extent*
       getCurrentBlockStart()  const
         {
-          return static_cast<byte*>(view_.storage.pos)
-                                  + view_.storage.rest
-                                  - EXTENT_SIZ;
+          void* pos = static_cast<byte*>(view_.storage.pos)
+                                       + view_.storage.rest
+                                       - EXTENT_SIZ;
+          return static_cast<Extent*> (pos);
         }
       
       void
@@ -221,7 +266,22 @@ namespace lib {
     ENSURE (allocRequest + OVERHEAD <= EXTENT_SIZ);
     StorageManager::access(*this).addBlock();
   }
-
+  
+  
+  void
+  AllocationCluster::registerDestructor (void* dtor)
+  {
+    StorageManager::access(*this).addDestructor (dtor);
+  }
+  
+  
+  void
+  AllocationCluster::discardLastDestructor()
+  {
+    StorageManager::access(*this).discardLastDestructor();
+  }
+  
+  
   
   
   /* === diagnostics helpers === */
