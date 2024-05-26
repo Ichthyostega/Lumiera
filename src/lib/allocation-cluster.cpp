@@ -53,24 +53,8 @@ namespace lib {
     const size_t EXTENT_SIZ  = 256;
     const size_t OVERHEAD    = 2 * sizeof(void*);
     const size_t STORAGE_SIZ = EXTENT_SIZ - OVERHEAD;
-     
-    using HeapAlloc = std::allocator<std::byte>;
-    using Alloc     = std::allocator_traits<HeapAlloc>;
     
-    HeapAlloc heap;
     
-    void*
-    allocate (size_t bytes) ////////////////////////OOO obsolete ... find a way to relocate this as custom allocator within LinkedElements!!!
-    {
-      return Alloc::allocate (heap, bytes);
-    }
-    
-    void
-    destroy (void* storage)
-    {
-      Alloc::destroy (heap, static_cast<std::byte *> (storage));
-    }
-
     /**
      * Special allocator-policy for lib::LinkedElements
      * - does not allow to allocate new elements
@@ -86,7 +70,7 @@ namespace lib {
          */
         template<class X>
         void
-        destroy (X* elm)
+        dispose (X* elm)
           {
             REQUIRE (elm);
             elm->~X();

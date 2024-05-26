@@ -64,7 +64,7 @@
 
 
 namespace lib {
-  namespace allo { /** Concepts and Adapter for custom memory management */
+  namespace allo {///< Concepts and Adaptors for custom memory management
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1366 : define Allocator Concepts here
     /// TODO the following Concepts can be expected here (with C++20)
@@ -110,16 +110,16 @@ namespace lib {
         
         template<class ALOT, typename...ARGS>
         typename ALOT::pointer
-        construct (typename ALOT::alocator_type& allo, ARGS&& ...args)
+        construct (typename ALOT::allocator_type& allo, ARGS&& ...args)
           {
-            auto loc = ALOT::allocate (allocator_, 1);
-            ALOT::construct (allocator_, loc, std::forward<ARGS>(args)...);
+            auto loc = ALOT::allocate (allo, 1);
+            ALOT::construct (allo, loc, std::forward<ARGS>(args)...);
             return loc;
           }
         
-        template<class ALOT, typename...ARGS>
+        template<class ALOT>
         void
-        destroy (typename ALOT::alocator_type& allo, typename ALOT::pointer elm)
+        destroy (typename ALOT::allocator_type& allo, typename ALOT::pointer elm)
           {
             ALOT::destroy (allo, elm);
             ALOT::deallocate (allo, elm, 1);

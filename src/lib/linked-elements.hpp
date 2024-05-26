@@ -1,5 +1,5 @@
 /*
-  LINKED-ELEMENTS.hpp  -  configurable intrusive single linked list template 
+  LINKED-ELEMENTS.hpp  -  configurable intrusive single linked list template
 
   Copyright (C)         Lumiera.org
     2012,               Hermann Vosseler <Ichthyostega@web.de>
@@ -39,8 +39,8 @@
  ** 
  ** @note this linked list container is _intrusive_ and thus needs the help
  **       of the element type, which must *provide a pointer member* `next`.
- **       Consequently, each such node element can't be member in
- **       multiple collections at the same time
+ **       Consequently, each such node element can not be member in
+ **       several collections at the same time (unless they share all elements)
  ** @note as usual, any iterator relies on the continued existence and
  **       unaltered state of the container. There is no sanity check.
  ** @warning this container is deliberately not threadsafe
@@ -50,7 +50,7 @@
  **       this node element when going out of scope.
  ** 
  ** @see LinkedElements_test
- ** @see llist.h
+ ** @see allocator-handle.hpp
  ** @see ScopedCollection
  ** @see itertools.hpp
  */
@@ -80,38 +80,24 @@ namespace lib {
   namespace linked_elements { ///< allocation policies for the LinkedElements list container
     
     /**
-     * Policy for LinkedElements: taking ownership
-     * and possibly creating heap allocated Nodes
+     * Policy for LinkedElements: taking ownership and
+     * possibly creating new Nodes through a custom allocator.
+     * @tparam ALO a C++ standard conformant allocator
      * @note is util::MoveOnly to enforce ownership
      *       on behalf of LinkedElements
      */
-    struct OwningHeapAllocated
-      : util::MoveOnly
+    template<class ALO>
+    struct OwningAllocated
+      : lib::allo::StdFactory<ALO>
+      , util::MoveOnly
       {
-        typedef void* CustomAllocator;
+        using lib::allo::StdFactory<ALO>::StdFactory;
         
-        /** this policy discards elements
-         *  by deallocating them from heap
-         */
-        template<class X>
-        void 
-        destroy (X* elm)
-          {
-            delete elm;
-          }
-        
-        
-        /** this policy creates new elements
-         *  simply by heap allocation */
-        template<class TY, typename...ARGS>
-        TY&
-        create (ARGS&& ...args)
-          {
-            return *new TY (std::forward<ARGS> (args)...);
-          }
+        using CustomAllocator = ALO;
       };
     
-    
+    template<class N>
+    using OwningHeapAllocated = OwningAllocated<std::allocator<N>>;
     
     
     
@@ -120,7 +106,7 @@ namespace lib {
     /**
      * Policy for LinkedElements: never create or destroy
      * any elements, only allow to add already existing nodes.
-     * @note any added node needs to provide a \c next pointer
+     * @note any added node needs to provide a `next` pointer
      *       field, which is used ("intrusively") for managing
      *       the list datastructure. But besides that, the
      *       node element won't be altered or discarded
@@ -133,8 +119,8 @@ namespace lib {
         /** this policy doesn't take ownership
          *  and thus never discards anything
          */
-        void 
-        destroy (void*)
+        void
+        dispose (void*)
           {
             /* does nothing */
           }
@@ -181,18 +167,18 @@ namespace lib {
          *  within the cluster will be bulk de-allocated
          *  when the cluster as such goes out of scope.
          */
-        void 
-        destroy (void*)
+        void
+        dispose (void*)
           {
             /* does nothing */
           }
         
         
         template<class TY, typename...ARGS>
-        TY&
+        TY*
         create (ARGS&& ...args)
           {
-            return cluster_.create<TY> (std::forward<ARGS> (args)...);
+            return & cluster_.create<TY> (std::forward<ARGS> (args)...);
           }
       };
     
@@ -222,7 +208,7 @@ namespace lib {
    */
   template
     < class N                 ///< node class or Base/Interface class for nodes
-    , class ALO = linked_elements::OwningHeapAllocated
+    , class ALO = linked_elements::OwningHeapAllocated<N>
     >
   class LinkedElements
     : ALO
@@ -233,7 +219,7 @@ namespace lib {
     public:
       
      ~LinkedElements()
-        { 
+        {
           clear();
         }
       
@@ -290,7 +276,7 @@ namespace lib {
               N* elm = head_;
               head_ = head_->next;
               try {
-                  ALO::destroy(elm);
+                  ALO::dispose (elm);
                 }
               ERROR_LOG_AND_IGNORE (progress, "Clean-up of element in LinkedElements list")
             }
@@ -332,7 +318,7 @@ namespace lib {
       TY&
       emplace (ARGS&& ...args)
         {
-          return push (ALO::template create<TY> (std::forward<ARGS> (args)...));
+          return push (* ALO::template create<TY> (std::forward<ARGS> (args)...));
         }
       
       

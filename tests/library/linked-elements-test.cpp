@@ -28,6 +28,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/test/diagnostic-output.hpp"/////////////TODO
 #include "lib/util.hpp"
 
 #include "lib/allocation-cluster.hpp"
@@ -486,7 +487,7 @@ namespace test{
             elements.emplace<Num<3>> (4,5);
             elements.emplace<Num<6>> (7,8,9);
             
-            const size_t EXPECT = sizeof(Num<1>) + sizeof(Num<3>) + sizeof(Num<6>);
+            const size_t EXPECT = sizeof(Num<1>) + sizeof(Num<3>) + sizeof(Num<6>) + 3*2*sizeof(void*);
             CHECK (EXPECT == allocator.numBytes());
             CHECK (sum(9) == Dummy::checksum());
             
@@ -500,7 +501,9 @@ namespace test{
             CHECK (sum(9) == Dummy::checksum());
             // note: elements won't be discarded unless
             //       the AllocationCluster goes out of scope
+SHOW_EXPR(Dummy::checksum())
           }
+SHOW_EXPR(Dummy::checksum())
           CHECK (0 == Dummy::checksum());
         }
     };
