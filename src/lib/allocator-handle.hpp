@@ -64,12 +64,139 @@
 
 
 namespace lib {
+  namespace allo { /** Concepts and Adapter for custom memory management */
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1366 : define Allocator Concepts here
+    /// TODO the following Concepts can be expected here (with C++20)
+    /// - Allocator : for the bare memory allocation
+    /// - Factory : for object fabrication and disposal
+    /// - Handle : a functor front-end to be dependency-injected
+    
+    
+    /**
+     * Adapter to implement the *Factory* concept based on a `std::allocator`
+     * @tparam ALO a std::allocator instance or anything compliant to [Allocator]
+     * [Allocator]: https://en.cppreference.com/w/cpp/named_req/Allocator
+     * @note in addition to the abilities defined by the standard, this adapter
+     *       strives to provide some kind of _lateral leeway,_ attempting to
+     *       create dedicated allocators for other types than the BaseType
+     *       implied by the given \a ALO (standard-allocator).
+     *       - this is possible if the rebound allocator can be constructed
+     *         from the given base allocator
+     *       - alternatively, an attempt will be made to default-construct
+     *         the rebound allocator for the other type requested.
+     * @warn Both avenues for adaptation may fail, which could lead to
+     *       compilation or runtime failures.
+     */
+    template<class ALO>
+    class StdFactory
+      {
+        using Allo  = ALO;
+        using AlloT = std::allocator_traits<Allo>;
+        using BaseType = typename Allo::value_type;
+        
+        Allo allocator_;
+        
+        template<typename X>
+        auto
+        adaptAllocator (Allo const& baseAllocator)
+          {
+            using XAllo = typename AlloT::template rebind_alloc<X>;
+            if constexpr (std::is_constructible_v<XAllo, Allo>)
+              return XAllo(allocator_);
+            else
+              return XAllo();
+          }
+        
+        template<class ALOT, typename...ARGS>
+        typename ALOT::pointer
+        construct (typename ALOT::alocator_type& allo, ARGS&& ...args)
+          {
+            auto loc = ALOT::allocate (allocator_, 1);
+            ALOT::construct (allocator_, loc, std::forward<ARGS>(args)...);
+            return loc;
+          }
+        
+        template<class ALOT, typename...ARGS>
+        void
+        destroy (typename ALOT::alocator_type& allo, typename ALOT::pointer elm)
+          {
+            ALOT::destroy (allo, elm);
+            ALOT::deallocate (allo, elm, 1);
+          }
+        
+        
+      public:
+        /**
+         * Create an instance of the adapter factory,
+         * forwarding to the embedded standard conforming allocator
+         * for object creation and destruction and memory management.
+         * @param allo (optional) instance of the C++ standard allocator
+         *        used for delegation, will be default constructed if omitted.
+         * @remark the adapted standard allocator is assumed to be either a copyable
+         *        value object, or even a mono-state; in both cases, a dedicated
+         *        manager instance residing »elsewhere« is referred, rendering
+         *        all those front-end instances exchangeable.
+         */
+        StdFactory (Allo allo = Allo{})
+          : allocator_{std::move (allo)}
+          { }
+        
+        template<class XALO>
+        bool constexpr operator== (StdFactory<XALO> const& o)  const
+          {
+            return allocator_ == o.allocator_;
+          }
+        template<class XALO>
+        bool constexpr operator!= (StdFactory<XALO> const& o)  const
+          {
+            return not (allocator_ == o.allocator_);
+          }
+        
+        
+        /** create new element using the embedded allocator */
+        template<class TY, typename...ARGS>
+        TY*
+        create (ARGS&& ...args)
+          {
+            if constexpr (std::is_same_v<TY, BaseType>)
+              {
+                return construct<AlloT> (allocator_, std::forward<ARGS>(args)...);
+              }
+            else
+              {
+                using XAlloT = typename AlloT::template rebind_traits<TY>;
+                auto xAllo = adaptAllocator<TY> (allocator_);
+                return construct<XAlloT> (xAllo, std::forward<ARGS>(args)...);
+              }
+          }
+        
+        /** destroy the given element and discard the associated memory */
+        template<class TY>
+        void
+        dispose (TY* elm)
+          {
+            if constexpr (std::is_same_v<TY, BaseType>)
+              {
+                destroy<AlloT> (allocator_, elm);
+              }
+            else
+              {
+                using XAlloT = typename AlloT::template rebind_traits<TY>;
+                auto xAllo = adaptAllocator<TY> (allocator_);
+                destroy<XAlloT> (xAllo, elm);
+              }
+          }
+      };
+  }
   
+  
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1366 : the following code becomes obsolete in the long term
   
   /**
    * Placeholder implementation for a custom allocator
    * @todo shall be replaced by an AllocationCluster eventually
-   * @note conforming to a prospective C++20 Concept `Allo<TYPE>`
+   * @todo 5/2024 to be reworked and aligned with a prospective C++20 Allocator Concept /////////////////////TICKET #1366
    * @remark using `std::list` container, since re-entrant allocation calls are possible,
    *         meaning that further allocations will be requested recursively from a ctor.
    *         Moreover, for the same reason we separate the allocation from the ctor call,
@@ -98,7 +225,7 @@ namespace lib {
               return * std::launder (reinterpret_cast<TY*> (&buf_));
             }
           void
-          discard() /// @warning strong assumption made here: Payload was created 
+          discard() /// @warning strong assumption made here: Payload was created
             {
               access().~TY();
             }
