@@ -65,20 +65,6 @@ namespace lib {
   class AllocationCluster
     : util::MoveOnly
     {
-      
-      template<typename X>
-      struct Allocator
-        {
-          using value_type = X;
-          
-          [[nodiscard]] X* allocate (size_t n)   { return mother_->allot<X>(n); }
-          void deallocate (X*, size_t)  noexcept { /* rejoice */ }
-          
-          Allocator(AllocationCluster* m) : mother_{m} { }
-        private:
-          AllocationCluster* mother_;
-        };
-      
       class StorageManager;
       
       /** maintaining the Allocation */
@@ -106,12 +92,9 @@ namespace lib {
       AllocationCluster ();
      ~AllocationCluster ()  noexcept;
       
-      template<typename X>
-      Allocator<X>
-      getAllocator()
-        {
-          return Allocator<X>{this};
-        }
+      /* === diagnostics === */
+      size_t numExtents() const;
+      size_t numBytes()   const;
       
       
       template<class TY, typename...ARGS>
@@ -121,10 +104,24 @@ namespace lib {
       TY& createDisposable (ARGS&& ...);
       
       
-      /* === diagnostics === */
+      template<typename X>
+      struct Allocator
+        {
+          using value_type = X;
+          
+          [[nodiscard]] X* allocate (size_t n)   { return mother_->allot<X>(n); }
+          void deallocate (X*, size_t)  noexcept { /* rejoice */ }
+          
+          Allocator(AllocationCluster* m) : mother_{m} { }
+          // standard copy acceptable
+          template<typename T>
+          Allocator(Allocator<T> const& o) : mother_{o.mother_} { }
+          
+          AllocationCluster* mother_;
+        };
       
-      size_t numExtents() const;
-      size_t numBytes()   const;
+      template<typename X>
+      Allocator<X> getAllocator() { return this; }
       
       
     private:

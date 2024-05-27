@@ -28,7 +28,6 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/test/diagnostic-output.hpp"/////////////TODO
 #include "lib/util.hpp"
 
 #include "lib/allocation-cluster.hpp"
@@ -158,7 +157,7 @@ namespace test{
       return n*(n+1) / 2;
     }
       
-  }//(End) subversive test data
+  }//(End) test data and helpers
   
   
   
@@ -169,9 +168,6 @@ namespace test{
   
   /// managing existing node elements without taking ownership
   using ListNotOwner = LinkedElements<Nummy, linked_elements::NoOwnership>;
-  
-  /// creating nodes in-place, using a custom allocator for creation and disposal
-  using ListCustomAllocated = LinkedElements<Nummy, linked_elements::UseAllocationCluster>;
   
   
   
@@ -474,21 +470,56 @@ namespace test{
         }
       
       
+      
+          /** Policy to use an Allocation cluster,
+           *  but also to invoke all object destructors */
+          struct UseAllocationCluster
+            {
+              typedef AllocationCluster& CustomAllocator;
+              
+              CustomAllocator cluster_;
+              
+              UseAllocationCluster (CustomAllocator clu)
+                : cluster_(clu)
+                { }
+              
+              template<class TY, typename...ARGS>
+              TY*
+              create (ARGS&& ...args)
+                {
+                  return & cluster_.create<TY> (std::forward<ARGS> (args)...);
+                }
+              
+              void dispose (void*) { /* does nothing */ }
+            };
+      
+      /** @test use custom allocator to create list elements
+       *      - a dedicated policy allows to refer to an existing AllocationCluster
+       *        and to arrange for all object destructors to be called when this
+       *        cluster goes out of scope
+       *      - a C++ standard allocator can also be used; as an example, again an
+       *        AllocationCluster is used, but this time with the default adapter,
+       *        which places objects tight and skips invocation of destructors;
+       *        however, since the LinkedElements destructor is called, it
+       *        walks all elements and delegates through std::allocator_traits,
+       *        which will invoke the (virtual) base class destructors.
+       */
       void
       verify_customAllocator()
         {
           CHECK (0 == Dummy::checksum());
           {
-            AllocationCluster allocator;
+            AllocationCluster cluster;
             
-            ListCustomAllocated elements(allocator);
+            LinkedElements<Nummy, UseAllocationCluster> elements(cluster);
             
             elements.emplace<Num<1>> (2);
             elements.emplace<Num<3>> (4,5);
             elements.emplace<Num<6>> (7,8,9);
             
-            const size_t EXPECT = sizeof(Num<1>) + sizeof(Num<3>) + sizeof(Num<6>) + 3*2*sizeof(void*);
-            CHECK (EXPECT == allocator.numBytes());
+            const size_t EXPECT = sizeof(Num<1>) + sizeof(Num<3>) + sizeof(Num<6>)
+                                + 3*2*sizeof(void*);  // ◁┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄overhead for storing 3 dtor-invokers
+            CHECK (EXPECT == cluster.numBytes());
             CHECK (sum(9) == Dummy::checksum());
             
             CHECK (3 == elements.size());
@@ -497,13 +528,34 @@ namespace test{
             CHECK (6+7+8+9 == elements[0].getVal());
             
             elements.clear();
-            CHECK (EXPECT == allocator.numBytes());
+            CHECK (EXPECT == cluster.numBytes());
             CHECK (sum(9) == Dummy::checksum());
             // note: elements won't be discarded unless
             //       the AllocationCluster goes out of scope
-SHOW_EXPR(Dummy::checksum())
           }
-SHOW_EXPR(Dummy::checksum())
+          CHECK (0 == Dummy::checksum());
+          {
+            // now use AllocationCluster through the default allocator adapter...
+            AllocationCluster cluster;
+            using Allo = AllocationCluster::Allocator<Nummy>;
+            using Elms = LinkedElements<Nummy, linked_elements::OwningAllocated<Allo>>;
+            
+            Elms elements{cluster.getAllocator<Nummy>()};
+            
+            elements.emplace<Num<1>> (2);
+            elements.emplace<Num<3>> (4,5);
+            
+            const size_t EXPECT = sizeof(Num<1>) + sizeof(Num<3>);
+            CHECK (EXPECT == cluster.numBytes());
+            CHECK (sum(5) == Dummy::checksum());
+            
+            CHECK (2 == elements.size());
+            CHECK (1+2 == elements[1].getVal());
+            CHECK (3+4+5 == elements[0].getVal());
+            // note: this time the destructors will be invoked
+            //       from LinkedElements::clear(), but not from
+            //       the destructor of AllocationCluster
+          }
           CHECK (0 == Dummy::checksum());
         }
     };

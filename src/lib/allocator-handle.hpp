@@ -85,27 +85,31 @@ namespace lib {
      *         from the given base allocator
      *       - alternatively, an attempt will be made to default-construct
      *         the rebound allocator for the other type requested.
-     * @warn Both avenues for adaptation may fail, which could lead to
-     *       compilation or runtime failures.
+     * @warning Both avenues for adaptation may fail,
+     *         which could lead to compilation or runtime failure.
+     * @remark deliberately this class inherits from the allocator,
+     *         allowing to exploit empty-base-optimisation, since
+     *         usage of monostate allocators is quite common.
      */
     template<class ALO>
     class StdFactory
+      : private ALO
       {
         using Allo  = ALO;
         using AlloT = std::allocator_traits<Allo>;
         using BaseType = typename Allo::value_type;
         
-        Allo allocator_;
+        Allo& baseAllocator() { return *this; }
         
         template<typename X>
         auto
-        adaptAllocator (Allo const& baseAllocator)
+        adaptAllocator()
           {
             using XAllo = typename AlloT::template rebind_alloc<X>;
             if constexpr (std::is_constructible_v<XAllo, Allo>)
-              return XAllo(allocator_);
+              return XAllo{baseAllocator()};
             else
-              return XAllo();
+              return XAllo{};
           }
         
         template<class ALOT, typename...ARGS>
@@ -139,18 +143,18 @@ namespace lib {
          *        all those front-end instances exchangeable.
          */
         StdFactory (Allo allo = Allo{})
-          : allocator_{std::move (allo)}
+          : Allo{std::move (allo)}
           { }
         
         template<class XALO>
         bool constexpr operator== (StdFactory<XALO> const& o)  const
           {
-            return allocator_ == o.allocator_;
+            return baseAllocator() == o.baseAllocator();
           }
         template<class XALO>
         bool constexpr operator!= (StdFactory<XALO> const& o)  const
           {
-            return not (allocator_ == o.allocator_);
+            return not (*this == o);
           }
         
         
@@ -161,12 +165,12 @@ namespace lib {
           {
             if constexpr (std::is_same_v<TY, BaseType>)
               {
-                return construct<AlloT> (allocator_, std::forward<ARGS>(args)...);
+                return construct<AlloT> (baseAllocator(), std::forward<ARGS>(args)...);
               }
             else
               {
                 using XAlloT = typename AlloT::template rebind_traits<TY>;
-                auto xAllo = adaptAllocator<TY> (allocator_);
+                auto xAllo = adaptAllocator<TY>();
                 return construct<XAlloT> (xAllo, std::forward<ARGS>(args)...);
               }
           }
@@ -178,12 +182,12 @@ namespace lib {
           {
             if constexpr (std::is_same_v<TY, BaseType>)
               {
-                destroy<AlloT> (allocator_, elm);
+                destroy<AlloT> (baseAllocator(), elm);
               }
             else
               {
                 using XAlloT = typename AlloT::template rebind_traits<TY>;
-                auto xAllo = adaptAllocator<TY> (allocator_);
+                auto xAllo = adaptAllocator<TY>();
                 destroy<XAlloT> (xAllo, elm);
               }
           }

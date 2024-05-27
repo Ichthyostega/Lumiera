@@ -109,11 +109,14 @@ namespace lib {
         };
       using Extents = lib::LinkedElements<Extent>;
       
+      static_assert (sizeof(Destructors) == sizeof(void*));
+      static_assert (sizeof(Extents)     == sizeof(void*));
+      
       union ManagementView
         {
           Storage storage;
           Extents extents;
-        };
+        };         //Note: storage.pos and extents.head_ reside at the same location
       
       ManagementView view_;
       

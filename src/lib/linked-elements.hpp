@@ -37,6 +37,9 @@
  ** - convenient access through Lumiera Forward Iterators
  ** - the need to integrate tightly with a custom allocator
  ** 
+ ** @note effectively, LinkedElements is „just a dressed-up pointer“;
+ **       under the assumption that the allocator is a _monostate_, and
+ **       exploiting _empty-base-optimisation,_ footprint is minimal.
  ** @note this linked list container is _intrusive_ and thus needs the help
  **       of the element type, which must *provide a pointer member* `next`.
  **       Consequently, each such node element can not be member in
@@ -96,9 +99,10 @@ namespace lib {
         using CustomAllocator = ALO;
       };
     
+    
+    /** default policy: use standard heap allocation for new elements */
     template<class N>
     using OwningHeapAllocated = OwningAllocated<std::allocator<N>>;
-    
     
     
     
@@ -133,58 +137,7 @@ namespace lib {
           } //          ... you'll have to do that yourself (that's the whole point of using this strategy)
       };
     
-    
-    
-    
-    
-#ifdef LIB_ALLOCATION_CLUSTER_H
-    
-    /**
-     * Policy for LinkedElements: especially using a
-     * lib::AllocationCluster instance for creating
-     * new node elements. It is mandatory to pass
-     * this cluster instance to the ctor of any
-     * LinkedElements list using this policy
-     * @note AllocationCluster always de-allocates
-     *       any created elements in one sway.
-     */
-    struct UseAllocationCluster
-      {
-        typedef AllocationCluster& CustomAllocator;
-        
-        CustomAllocator cluster_;
-        
-        
-        explicit
-        UseAllocationCluster (CustomAllocator clu)
-          : cluster_(clu)
-          { }
-        
-        
-        /** while this policy indeed implies creating and owing
-         *  new objects, the AllocationCluster doesn't support
-         *  discarding individual instances. All created objects
-         *  within the cluster will be bulk de-allocated
-         *  when the cluster as such goes out of scope.
-         */
-        void
-        dispose (void*)
-          {
-            /* does nothing */
-          }
-        
-        
-        template<class TY, typename...ARGS>
-        TY*
-        create (ARGS&& ...args)
-          {
-            return & cluster_.create<TY> (std::forward<ARGS> (args)...);
-          }
-      };
-    
-#endif //(End)if lib/allocation-cluster.hpp was included
-    
-  }//(END)namespace linked_elements
+  }//(END)namespace linked_elements (predefined policies)
   
   
   
@@ -195,7 +148,7 @@ namespace lib {
   
   
   
-  /**
+  /****************************************************************************//**
    * Intrusive single linked list, possibly taking ownership of node elements.
    * Additional elements can be pushed (prepended) to the list; element access
    * is per index number (slow) or through an Lumiera Forward Iterator traversing
@@ -205,9 +158,10 @@ namespace lib {
    * The allocation and ownership related behaviour is controlled by a policy class
    * provided as template parameter. When this policy supports creation of new
    * elements, these might be created and prepended in one step.
+   * @note with the default policy, `sizeof(LinkedElements) == sizeof(N*)`
    */
   template
-    < class N                 ///< node class or Base/Interface class for nodes
+    < class N       ///< node class or Base/Interface class for nodes
     , class ALO = linked_elements::OwningHeapAllocated<N>
     >
   class LinkedElements
@@ -218,7 +172,7 @@ namespace lib {
       
     public:
       
-     ~LinkedElements()
+     ~LinkedElements()  noexcept
         {
           clear();
         }
@@ -244,7 +198,8 @@ namespace lib {
         , head_{nullptr}
         { }
       
-      /** creating a LinkedElements list in RAII-style:
+      /**
+       * creating a LinkedElements list in RAII-style:
        * @param elements iterator to provide all the elements
        *        to be pushed into this newly created collection
        * @note any exception while populating the container
@@ -269,7 +224,7 @@ namespace lib {
       
       /** @note EX_FREE */
       void
-      clear()
+      clear()  noexcept
         {
           while (head_)
             {
@@ -304,7 +259,7 @@ namespace lib {
        */
       template<typename TY>
       TY&
-      push (TY& elm)
+      push (TY& elm)  noexcept
         {
           elm.next = head_;
           head_ = &elm;
