@@ -50,7 +50,6 @@
  ** 
  ** @see scoped-holder-test.cpp
  ** @see scoped-holder-transfer.hpp use in std::vector
- ** @see AllocationCluster usage example
  ** @see scoped-ptrvect.hpp simple pointer-holding collection
  */
 

@@ -30,13 +30,15 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/allocation-cluster.hpp"
 #include "lib/test/diagnostic-output.hpp"/////////////////TODO
+#include "lib/format-util.hpp"/////////////TODO
 #include "lib/iter-explorer.hpp"
 #include "lib/util.hpp"
 
-#include <array>
-#include <vector>
-#include <limits>
 #include <functional>
+#include <limits>
+#include <vector>
+#include <array>
+#include <set>
 
 using ::Test;
 using lib::explore;
@@ -129,6 +131,11 @@ namespace test {
           invoker[rand() % NUM_TYPES] (clu, uchar(i));
       }
     
+    inline uint
+    sum (uint n)   ///< sum of integers 1...N
+    {
+      return n*(n+1) / 2;
+    }
   }
   
   
@@ -369,13 +376,50 @@ namespace test {
       
       
       
-      /** @test TODO demonstrate use as Standard-Allocator
-       * @todo WIP 5/24 🔁 define ⟶ implement
+          template<typename X>
+          using Allo = AllocationCluster::Allocator<X>;
+      
+      /** @test demonstrate use as Standard-Allocator
+       *      - define a vector, string and set to use the AllocationCluster as backend
+       *      - fill the vector with numbers and the set with random strings
+       *  @note the extent size (hard coded as of 5/24) imposes a serious limitation
+       *        regarding usable data structures; e.g. the std::deque immediately attempts
+       *        to allocate a node buffer with >500 bytes, which is not supported by
+       *        the current (rather simplistic) storage manager in AllocationCluster.
        */
       void
       use_as_Allocator()
         {
-          UNIMPLEMENTED ("Clusterfuck");
+          using VecI = std::vector<uint16_t, Allo<uint16_t>>;
+          using Strg = std::basic_string<char, std::char_traits<char>, Allo<char>>;
+          using SetS = std::set<Strg, std::less<Strg>, Allo<Strg>>;
+          
+          AllocationCluster clu;
+          CHECK (clu.numExtents() == 0);
+          
+          VecI veci{clu.getAllocator<uint16_t>()};
+          
+          // Since vector needs a contiguous allocation,
+          // the maximum number of elements is limited by the Extent size (256 bytes - 2*sizeof(void*))
+          // Moreover, the vector grows its capacity; AllocationCluster does not support re-allocation,
+          // and thus the initial smaller memory chunks will just be abandoned.
+          const uint MAX = 64;
+          
+          for (uint i=1; i<=MAX; ++i)
+            veci.push_back(i);
+          CHECK (clu.numExtents() == 2);
+          CHECK (veci.capacity() == 64);
+          
+          // fill a set with random strings...
+          SetS sets{clu.getAllocator<Strg>()};
+
+          for (uint i=0; i<NUM_OBJECTS; ++i)
+            sets.emplace (test::randStr(32), clu.getAllocator<char>());
+          CHECK (sets.size() > 0.9 * NUM_OBJECTS);
+          CHECK (clu.numExtents() > 200);
+          
+          // verify the data in the first allocation is intact
+          CHECK (explore(veci).resultSum() == sum(64));
         }
     };
   
