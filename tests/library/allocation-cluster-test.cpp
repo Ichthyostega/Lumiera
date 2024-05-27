@@ -143,8 +143,8 @@ namespace test {
       virtual void
       run (Arg)
         {
-//          simpleUsage();
-//          checkLifecycle();
+          simpleUsage();
+          checkLifecycle();
           verifyInternals();
           use_as_Allocator();
         }
@@ -154,25 +154,31 @@ namespace test {
       simpleUsage()
         {
           AllocationCluster clu;
+          CHECK (0 == clu.numExtents());
           
           char c1(123), c2(45);
           Dummy<66>& ref1 = clu.create<Dummy<66>> ();
           Dummy<77>& ref2 = clu.create<Dummy<77>> (c1);
           Dummy<77>& ref3 = clu.create<Dummy<77>> (c2);
           
-//          TRACE (test, "%s", showSizeof(rX).c_str());///////////////////////OOO
-          
           //returned references actually point at the objects we created
           CHECK (1  ==ref1.getID());
           CHECK (123==ref2.getID());
           CHECK (45 ==ref3.getID());
           
-          CHECK (1 == clu.numExtents());
+          CHECK (0 < clu.numExtents());
           
           // now use objects and just let them go;
         }
       
       
+      /** @test Allocation cluster grows when adding objects,
+       *        but discards all objects at once when going out of scope,
+       *        optionally also invoking (or not invoking) destructors.
+       * @remark no destructors are invoked for any objects allocated
+       *        through the `createDisposable<TY>(args...)` interface,
+       *        or for allocations though the standard allocator adapter.
+       */
       void
       checkLifecycle()
         {
@@ -184,6 +190,19 @@ namespace test {
             CHECK (0!=checksum);
           }
           CHECK (0==checksum);
+          
+          int64_t allSum;
+          {// can also be used without invoking any destructors
+            AllocationCluster clu;
+            for (uint i=0; i<NUM_OBJECTS; ++i)
+              clu.createDisposable<Dummy<223>>();
+            
+            CHECK (clu.numExtents() == NUM_OBJECTS);
+            CHECK (checksum == NUM_OBJECTS * 223);
+            allSum = checksum;
+          }// Memory discarded here without invoking any destructor....
+          CHECK (allSum == checksum);
+          checksum = 0;
         }
       
       

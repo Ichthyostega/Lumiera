@@ -117,7 +117,12 @@ namespace lib {
         construct (typename ALOT::allocator_type& allo, ARGS&& ...args)
           {
             auto loc = ALOT::allocate (allo, 1);
-            ALOT::construct (allo, loc, std::forward<ARGS>(args)...);
+            try { ALOT::construct (allo, loc, std::forward<ARGS>(args)...); }
+            catch(...)
+              {
+                ALOT::deallocate (allo, loc, 1);
+                throw;
+              }
             return loc;
           }
         

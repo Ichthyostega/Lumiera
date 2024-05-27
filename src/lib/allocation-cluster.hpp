@@ -24,10 +24,14 @@
  ** Memory management for the low-level model (render nodes network).
  ** The model is organised into temporal segments, which are considered
  ** to be structurally constant and uniform. The objects within each
- ** segment are strongly interconnected, and thus each segment is
- ** created within a single build process and is replaced or released
- ** as a whole. AllocationCluster implements memory management to
- ** support this usage pattern.
+ ** segment are strongly interconnected, and thus each segment is created
+ ** within a single build process and is replaced or released as a whole.
+ ** AllocationCluster implements memory management to support this usage
+ ** pattern. Optionally it is even possible to skip invocation of object
+ ** destructors, making de-allocation highly efficient (typically the
+ ** memory pages are already cache-cold when about to discarded).
+ ** @warning deliberately *not threadsafe*.
+ ** @remark confine usage to a single thread or use thread-local clusters.
  ** @see allocation-cluster-test.cpp
  ** @see builder::ToolFactory
  ** @see linked-elements.hpp
@@ -58,7 +62,7 @@ namespace lib {
    * is to bulk-allocate memory, and to avoid invoking destructors (and thus to access
    * a lot of _cache-cold memory pages_ on clean-up). A Stdlib compliant #Allocator
    * is provided for use with STL containers. The actual allocation uses heap memory
-   * in _extents_ of hard-wired size, by the accompanying StorageManager.
+   * in _extents_ of hard-wired size, maintained by the accompanying StorageManager.
    * @warning use #createDisposable whenever possible, but be sure to understand
    *          the ramifications of _not invoking_ an object's destructor.
    */
