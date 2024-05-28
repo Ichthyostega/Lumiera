@@ -44,17 +44,19 @@
 
 
 #include "lib/several.hpp"
-#include "include/logging.h"
+#include "lib/iter-explorer.hpp"
+#include "lib/util.hpp"
 
 #include <utility>
 #include <vector>
 
-using std::vector;
-using std::move;
 
 
 
 namespace lib {
+  using std::vector;
+  using std::forward;
+  using std::move;
   
   namespace {// Allocation managment policies
     
@@ -73,20 +75,77 @@ namespace lib {
     : Several<I>
     , POL
     {
-
+      using Col = Several<I>;
+      
+      size_t storageSiz_{0};
+      
     public:
+      SeveralBuilder() = default;
+      
+      /** start Several build using a custom allocator */
+      template<typename...ARGS,                  typename = meta::enable_if<std::is_constructible<POL,ARGS...>>>
+      SeveralBuilder (ARGS&& ...alloInit)
+        : Several<I>{}
+        , POL{forward<ARGS> (alloInit)...}
+        { }
+      
+      
+      SeveralBuilder&&
+      reserve (size_t cntElm)
+        {
+          adjustStorage (cntElm, sizeof(I));
+          return move(*this);
+        }
+      
+      template<class IT>
+      SeveralBuilder&&
+      appendAll (IT&& data)
+        {
+          explore(data).foreach ([this](auto it){ emplaceElm(it); });
+          return move(*this);
+        }
+      
       Several<I>
       build()
         {
           return move (*this);
         }
+      
+    private:
+      void
+      adjustStorage (size_t cnt, size_t spread)
+        {
+          UNIMPLEMENTED ("allocation");
+        }
+      
+      template<class IT>
+      void
+      emplaceElm (IT& dataSrc)
+        {
+          using Val = typename IT::value_type;
+          size_t elmSiz = sizeof(Val);
+          adjustStorage (Col::size_+1, requiredSpread(elmSiz));
+          UNIMPLEMENTED ("emplace data");
+        }
+      
+      size_t
+      requiredSpread (size_t elmSiz)
+        {
+          size_t currSpread = Col::empty()? 0 : Col::data_->spread;
+          return util::max (currSpread, elmSiz);
+        }
     };
+  
+  
+  
   
   template<typename X>
   SeveralBuilder<X>
   makeSeveral (std::initializer_list<X> ili)
   {
-    UNIMPLEMENTED ("start building a Several-Container");
+    return SeveralBuilder<X>{}
+            .reserve (ili.size())
+            .appendAll (ili);
   }
   
   

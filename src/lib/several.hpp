@@ -45,7 +45,8 @@ namespace lib {
   
   namespace {// Storage implementation details
     
-    struct Bucket
+    template<class I>
+    struct ArrayBucket
       {
         union Manager
           {
@@ -58,17 +59,13 @@ namespace lib {
         Manager manager;
         size_t spread;
         
-        template<class I>
-        auto access();
-      };
-    
-    template<class I, size_t bytes>
-    struct ArrayBucket
-      : Bucket
-      {
+        /** mark start of the storage area */
         alignas(I)
-          std::byte storage[bytes];
+          std::byte storage[sizeof(I)];
         
+        /** perform unchecked access into the storage area
+         * @note typically reaching behind the nominal end of this object
+         */
         I&
         subscript (size_t idx)
           {
@@ -78,16 +75,6 @@ namespace lib {
             return * std::launder (reinterpret_cast<I*> (elm));
           }
       };
-    
-    
-    /** @internal perform an unsafe down-cast to access the storage area */
-    template<class I>
-    auto
-    Bucket::access()
-    {
-      using Storage = ArrayBucket<I, sizeof(I)>;
-      return static_cast<Storage&> (*this);
-    }
     
   }//(End)implementation details
   
@@ -105,8 +92,10 @@ namespace lib {
     : util::MoveAssign
     {
     protected:
-      size_t  size_{0};
-      Bucket* data_{nullptr};
+      using Bucket = ArrayBucket<I>*;
+      
+      size_t size_{0};
+      Bucket data_{nullptr};
       
     public:
       
@@ -126,7 +115,7 @@ namespace lib {
       operator[] (size_t idx)
         {
           REQUIRE (data_);
-          return data_->access<I>().subscript (idx);
+          return data_->subscript (idx);
         }
       
       I& front() { return operator[] (size_-1); }
