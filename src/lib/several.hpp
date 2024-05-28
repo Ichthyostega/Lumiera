@@ -45,18 +45,43 @@ namespace lib {
    * Typically the return type is an interface, 
    * and the Implementation wraps some datastructure
    * holding subclasses.
-   * @todo ouch -- a collection that isn't iterable...  ///////////////////////TICKET #1040
+   * @todo ouch -- a collection that isn't iterable...  ///////////////////////TICKET #1040     //////////OOO cookie jar
    * @warning in rework 5/2025
    */
-  template<class T>
-  class RefArray
-    : util::NonCopyable
+  template<class I>
+  class Several
+    : util::MoveOnly
     {
     public:
-      virtual ~RefArray() {}  ///< this is an interface
       
-      virtual T const& operator[] (size_t i)  const =0;
-      virtual size_t size()                   const =0;
+      size_t
+      size()  const
+        {
+          UNIMPLEMENTED ("determine storage size");
+        }
+      
+      I&
+      operator[] (size_t i)
+        {
+          UNIMPLEMENTED ("subscript");
+        }
+      
+      I&
+      back()
+        {
+          UNIMPLEMENTED ("storage access");
+        }
+      
+      using iterator = I*;
+      using const_iterator = I const*;
+      
+      iterator begin() { UNIMPLEMENTED ("iteration"); }
+      iterator end()   { UNIMPLEMENTED ("iteration"); }
+      const_iterator begin() const { UNIMPLEMENTED ("iteration"); }
+      const_iterator end()   const { UNIMPLEMENTED ("iteration"); }
+      
+      friend auto begin (Several const& svl) { return svl.begin();}
+      friend auto end   (Several const& svl) { return svl.end();  }
     };
   
   

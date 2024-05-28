@@ -57,119 +57,24 @@ namespace lib {
    * Wrap a vector holding objects of a subtype and
    * provide array-like access using the interface type.
    */
-  template<class B, class IM = B>
-  class RefArrayVectorWrapper
-    : public RefArray<B>
+  template<class I>
+  class SeveralBuilder
     {
-      typedef vector<IM> const& Tab;
-      Tab table_;
-      
+
     public:
-      
-      RefArrayVectorWrapper (Tab toWrap)
-        : table_(toWrap)
-        { }
-      
-      virtual size_t size()  const
+      Several<I>
+      build()
         {
-          return table_.size();
-        }
-      
-      virtual B const& operator[] (size_t i)  const
-        {
-          REQUIRE (i < size());
-          return table_[i];
+          UNIMPLEMENTED ("materialise into Several-Container");
         }
     };
   
-  
-  /**
-   * This variation of the wrapper actually
-   *  \em is a vector, but can act as a RefArray
-   */
-  template<class B, class IM = B>
-  class RefArrayVector
-    : public vector<IM>,
-      public RefArrayVectorWrapper<B,IM>
-    {
-      typedef RefArrayVectorWrapper<B,IM> Wrap;
-      typedef vector<IM>                 Vect;
-      typedef typename Vect::size_type Size_t;
-      typedef typename Vect::value_type Val_t;
-      
-    public:
-      RefArrayVector()                                   : Vect(),    Wrap((Vect&)*this) {}
-      RefArrayVector(Size_t n, Val_t const& v = Val_t()) : Vect(n,v), Wrap((Vect&)*this) {}
-      RefArrayVector(Vect const& ref)                    : Vect(ref), Wrap((Vect&)*this) {}
-      
-      using Vect::size;
-      using Wrap::operator[];
-    };
-  
-  
-  
-  /**
-   * RefArray implementation based on a fixed size array,
-   * i.e. the storage is embedded. Embedded subclass obj
-   * either need to be default constructible or be
-   * placed directly by a factory
-   */
-  template<class B, size_t n, class IM = B>
-  class RefArrayTable
-    : public RefArray<B>
-    {
-      char storage_[n*sizeof(IM)];
-      IM* array_;
-      
-    public:
-      RefArrayTable() ///< objects created in-place by default ctor
-        : array_ (reinterpret_cast<IM*> (&storage_))
-        {
-          size_t i=0;
-          try
-            {
-              while (i<n)
-                new(&array_[i++]) IM();
-            }
-          catch(...) { cleanup(i); throw; }
-        }
-      
-      template<class FAC>
-      RefArrayTable(FAC& factory) ///< objects created in-place by factory
-        : array_ (reinterpret_cast<IM*> (&storage_))
-        {
-          size_t i=0;
-          try
-            {
-              while (i<n)
-                factory(&array_[i++]);
-            }
-          catch(...) { cleanup(i-1); throw; } // destroy finished part, without the failed object 
-        }
-      
-      ~RefArrayTable() { cleanup(); }
-      
-    private:
-      void cleanup(size_t top=n) noexcept
-        {
-          while (top) array_[--top].~IM();
-        }
-      
-      
-    public: //-----RefArray-Interface------------
-      
-      virtual size_t size()  const
-        { 
-          return n; 
-        }
-      
-      virtual B const& operator[] (size_t i)  const 
-        {
-          REQUIRE (i < size());
-          return array_[i];
-        }
-      
-    };
+  template<typename X>
+  SeveralBuilder<X>
+  makeSeveral (std::initializer_list<X> ili)
+  {
+    UNIMPLEMENTED ("start building a Several-Container");
+  }
   
   
 } // namespace lib
