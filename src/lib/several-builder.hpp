@@ -53,12 +53,22 @@ using std::vector;
 
 namespace lib {
   
+  namespace {// Allocation managment policies
+    
+    struct HeapOwn
+      {
+        
+      };
+  }
+  
   /**
    * Wrap a vector holding objects of a subtype and
    * provide array-like access using the interface type.
    */
-  template<class I>
+  template<class I, class POL =HeapOwn>
   class SeveralBuilder
+    : Several<I>
+    , POL
     {
 
     public:

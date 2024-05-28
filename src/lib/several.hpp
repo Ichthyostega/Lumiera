@@ -36,22 +36,56 @@
 
 
 #include "lib/nocopy.hpp"
+#include "lib/iter-adapter.hpp"
+
+#include <cstddef>
 
 
 namespace lib {
   
-  /**
-   * Abstraction: Array of const references.
+  namespace {// Storage implementation details
+    
+    struct Bucket
+      {
+        union Manager
+          {
+            typedef void (*Deleter) (void*, size_t);
+            
+            bool unmanaged :1;
+            Deleter deleter;
+          };
+        
+        Manager manager;
+        size_t spread;
+      };
+    
+    template<class I, size_t bytes>
+    struct ArrayBucket
+      : Bucket
+      {
+        alignas(I)
+          std::byte storage[bytes];
+      };
+    
+  }//(End)implementation details
+  
+  
+  
+  /************************************************//**
+   * Abstraction: Fixed array of elements.
    * Typically the return type is an interface, 
    * and the Implementation wraps some datastructure
    * holding subclasses.
-   * @todo ouch -- a collection that isn't iterable...  ///////////////////////TICKET #1040     //////////OOO cookie jar
    * @warning in rework 5/2025
    */
   template<class I>
   class Several
     : util::MoveOnly
     {
+    protected:
+      size_t  size_{0};
+      Bucket* data_{nullptr};
+      
     public:
       
       size_t
