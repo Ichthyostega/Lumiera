@@ -47,9 +47,9 @@
 #include "lib/iter-explorer.hpp"
 #include "lib/util.hpp"
 
+#include <cstring>
 #include <utility>
 #include <vector>
-
 
 
 
@@ -57,12 +57,17 @@ namespace lib {
   using std::vector;
   using std::forward;
   using std::move;
+  using std::byte;
   
-  namespace {// Allocation managment policies
+  namespace {// Allocation management policies
     
     struct HeapOwn
       {
-        
+        void*
+        realloc (void* data, size_t oldSiz, size_t newSiz)
+          {
+            UNIMPLEMENTED ("adjust memory allocation"); ///////////////////////////OOO Problem Objekte verschieben
+          }
       };
   }
   
@@ -115,7 +120,54 @@ namespace lib {
       void
       adjustStorage (size_t cnt, size_t spread)
         {
-          UNIMPLEMENTED ("allocation");
+          if (cnt*spread > storageSiz_)
+            {// need more storage..
+              Col::data_ = static_cast<typename Col::Bucket> (POL::realloc (Col::data_, storageSiz_, cnt*spread));
+              storageSiz_ = cnt*spread;
+            }
+          ENSURE (Col::data_);
+          if (spread != Col::data_->spread)
+            adjustSpread (spread);
+
+          if (cnt*spread < storageSiz_)
+            {// attempt to shrink storage
+              Col::data_ = static_cast<typename Col::Bucket> (POL::realloc (Col::data_, storageSiz_, cnt*spread));
+              storageSiz_ = cnt*spread;
+            }
+        }
+      
+      /** move existing data to accommodate spread */
+      void
+      adjustSpread (size_t newSpread)
+        {
+          REQUIRE (Col::size_);
+          REQUIRE (Col::data_);
+          REQUIRE (newSpread * Col::size_ <= storageSiz_);
+          size_t oldSpread = Col::data_->spread;
+          if (newSpread > oldSpread)
+            // need to spread out
+            for (size_t i=Col::size_-1; 0<i; --i)
+              shiftStorage (i, oldSpread, newSpread);
+          else
+            // attempt to condense spread
+            for (size_t i=1; i<Col::size_; ++i)
+              shiftStorage (i, oldSpread, newSpread);
+          // data elements now spaced by new spread
+          Col::data_->spread = newSpread;
+        }
+      
+      void
+      shiftStorage (size_t idx, size_t oldSpread, size_t newSpread)
+        {
+          REQUIRE (idx);
+          REQUIRE (oldSpread);
+          REQUIRE (newSpread);
+          REQUIRE (Col::data_);
+          byte* oldPos = Col::data_->storage;
+          byte* newPos = oldPos;
+          oldPos += idx * oldSpread;
+          newPos += idx * newSpread;
+          std::memmove (newPos, oldPos, util::min (oldSpread,newSpread));
         }
       
       template<class IT>
