@@ -57,6 +57,9 @@ namespace lib {
         
         Manager manager;
         size_t spread;
+        
+        template<class I>
+        auto access();
       };
     
     template<class I, size_t bytes>
@@ -65,7 +68,26 @@ namespace lib {
       {
         alignas(I)
           std::byte storage[bytes];
+        
+        I&
+        subscript (size_t idx)
+          {
+            std::byte* elm = storage;
+            size_t off = idx * spread;
+            elm += off;
+            return * std::launder (reinterpret_cast<I*> (elm));
+          }
       };
+    
+    
+    /** @internal perform an unsafe down-cast to access the storage area */
+    template<class I>
+    auto
+    Bucket::access()
+    {
+      using Storage = ArrayBucket<I, sizeof(I)>;
+      return static_cast<Storage&> (*this);
+    }
     
   }//(End)implementation details
   
@@ -80,7 +102,7 @@ namespace lib {
    */
   template<class I>
   class Several
-    : util::MoveOnly
+    : util::MoveAssign
     {
     protected:
       size_t  size_{0};
@@ -91,20 +113,24 @@ namespace lib {
       size_t
       size()  const
         {
-          UNIMPLEMENTED ("determine storage size");
+          return size_;
+        }
+      
+      bool
+      empty()  const
+        {
+          return not (size_ and data_);
         }
       
       I&
-      operator[] (size_t i)
+      operator[] (size_t idx)
         {
-          UNIMPLEMENTED ("subscript");
+          REQUIRE (data_);
+          return data_->access<I>().subscript (idx);
         }
       
-      I&
-      back()
-        {
-          UNIMPLEMENTED ("storage access");
-        }
+      I& front() { return operator[] (size_-1); }
+      I& back()  { return operator[] (0);       }
       
       using iterator = I*;
       using const_iterator = I const*;

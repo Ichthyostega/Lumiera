@@ -46,8 +46,11 @@
 #include "lib/several.hpp"
 #include "include/logging.h"
 
+#include <utility>
 #include <vector>
+
 using std::vector;
+using std::move;
 
 
 
@@ -75,7 +78,7 @@ namespace lib {
       Several<I>
       build()
         {
-          UNIMPLEMENTED ("materialise into Several-Container");
+          return move (*this);
         }
     };
   
