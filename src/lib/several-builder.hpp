@@ -47,6 +47,7 @@
 #include "lib/iter-explorer.hpp"
 #include "lib/util.hpp"
 
+#include <type_traits>
 #include <cstring>
 #include <utility>
 #include <vector>
@@ -69,13 +70,59 @@ namespace lib {
             UNIMPLEMENTED ("adjust memory allocation"); ///////////////////////////OOO Problem Objekte verschieben
           }
       };
+    
+    using std::is_trivially_move_constructible_v;
+    using std::is_trivially_destructible_v;
+    using std::has_virtual_destructor_v;
+    using std::is_same_v;
+    using lib::meta::is_Subclass;
+    
+    template<class I, class E>
+    struct MemStrategy
+      {
+        bool disposable :1 ;
+        bool wild_move :1 ;
+        
+        template<typename TY>
+        bool
+        canDestroy()
+          {
+            return disposable
+                or (is_trivially_destructible_v<TY> and is_trivially_destructible_v<I>)
+                or (has_virtual_destructor_v<I> and is_Subclass<TY,I>())
+                or (is_same_v<TY,E> and is_Subclass<E,I>());
+          }
+        
+        template<typename TY>
+        bool
+        canDynGrow()
+          {
+            return is_same_v<TY,E>
+                or (is_trivially_move_constructible_v<TY> and wild_move);
+          }
+        
+        auto
+        getDeleter()
+          {
+            if constexpr (disposable or
+                          (is_trivially_destructible_v<E> and is_trivially_destructible_v<I>))
+              return nullptr;
+            if constexpr (has_virtual_destructor_v<I>)
+              return nullptr;
+            else
+              return nullptr;
+          }
+      };
   }
   
   /**
    * Wrap a vector holding objects of a subtype and
    * provide array-like access using the interface type.
    */
-  template<class I, class POL =HeapOwn>
+  template<class I             ///< Interface or base type visible on resulting Several<I>
+          ,class E   =I        ///< a subclass element element type (relevant when not trivially movable and destructible)
+          ,class POL =HeapOwn  ///< Allocator policy
+          >
   class SeveralBuilder
     : Several<I>
     , POL
@@ -121,7 +168,7 @@ namespace lib {
       adjustStorage (size_t cnt, size_t spread)
         {
           if (cnt*spread > storageSiz_)
-            {// need more storage..
+            {  //  need more storage...
               Col::data_ = static_cast<typename Col::Bucket> (POL::realloc (Col::data_, storageSiz_, cnt*spread));
               storageSiz_ = cnt*spread;
             }
@@ -130,7 +177,7 @@ namespace lib {
             adjustSpread (spread);
 
           if (cnt*spread < storageSiz_)
-            {// attempt to shrink storage
+            {  //  attempt to shrink storage
               Col::data_ = static_cast<typename Col::Bucket> (POL::realloc (Col::data_, storageSiz_, cnt*spread));
               storageSiz_ = cnt*spread;
             }
