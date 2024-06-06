@@ -50,7 +50,7 @@ namespace lib {
       {
         union Manager
           {
-            typedef void (*Deleter) (void*, size_t, size_t);
+            typedef void (*Deleter) (ArrayBucket*, size_t);
             
             bool unmanaged :1;
             Deleter deleter;
@@ -89,7 +89,7 @@ namespace lib {
    */
   template<class I>
   class Several
-//  : util::MoveAssign          ////////////////////////////////////////OOO fundamental design mismatch with intended builder usage!
+    : util::MoveAssign
     {
     protected:
       using Bucket = ArrayBucket<I>*;
@@ -97,10 +97,16 @@ namespace lib {
       size_t size_{0};
       Bucket data_{nullptr};
       
+      Several() =default; ///< may only be created through SeveralBuilder
+      
     public:
      ~Several()  noexcept
         try { discardData(); }
         ERROR_LOG_AND_IGNORE (progress, "clean-up Several data")
+      
+      /// Move-Assignment allowed...
+      Several (Several&&)            =default;
+      Several& operator= (Several&&) =default;
       
       size_t
       size()  const
@@ -139,19 +145,8 @@ namespace lib {
       void
       discardData()
         {
-          if (data_ and not data_->manager.unmanaged)
-            {
-              if (data_->manager.deleter)
-                {
-                  (*data_->manager.deleter) (data_, size_, data_->spread);
-                }
-              else
-                {
-                  for (size_t i=0; i<size_; ++i)
-                    operator [](i).~I();
-                  ////////////////////////////////////////////OOO really a good idea to invoke the std::allocator_traits directly here??
-                }
-            }
+          if (data_ and data_->manager.deleter)
+            (*data_->manager.deleter) (data_, size_);
         }
     };
   

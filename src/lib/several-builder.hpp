@@ -71,6 +71,42 @@ namespace lib {
           }
       };
     
+        
+        
+    template<class I, class E>
+    struct DeleterTrampoline
+      {
+        using Allo = std::allocator<E>;
+        using AlloT = std::allocator_traits<Allo>;
+        
+        template<typename X>
+        static auto
+        adaptAllocator()
+          {
+            using XAllo = typename AlloT::template rebind_alloc<X>;
+            if constexpr (std::is_constructible_v<XAllo, Allo>)
+              return XAllo{Allo()};
+            else
+              return XAllo{};
+          }
+        
+        static void
+        destroy (ArrayBucket<I>* bucket, size_t size)
+          {
+            Allo allo{};
+            for (size_t i=0; i<size; ++i)
+              AlloT::destroy (allo, & bucket->subscript(i));
+            
+            size_t storageBytes = sizeof(ArrayBucket<I>) - sizeof(ArrayBucket<I>::storage)
+                                + size * sizeof(E);
+        
+            using BAlloT = typename AlloT::template rebind_traits<std::byte>;
+            auto bAllo = adaptAllocator<std::byte>();
+            BAlloT::deallocate (bAllo, bucket, storageBytes);
+          };
+      };
+    
+    
     using std::is_trivially_move_constructible_v;
     using std::is_trivially_destructible_v;
     using std::has_virtual_destructor_v;
@@ -125,6 +161,7 @@ namespace lib {
           >
   class SeveralBuilder
     : Several<I>
+    , util::MoveOnly
     , POL
     {
       using Col = Several<I>;
