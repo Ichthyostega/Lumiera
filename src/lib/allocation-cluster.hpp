@@ -121,6 +121,9 @@ namespace lib {
           template<typename T>
           Allocator(Allocator<T> const& o) : mother_{o.mother_} { }
           
+          template<typename T>
+          bool operator== (Allocator<T> const& o) const { return mother_ == o.mother_; }
+          
           AllocationCluster* mother_;
         };
       

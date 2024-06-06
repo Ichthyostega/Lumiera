@@ -62,17 +62,8 @@ namespace lib {
   
   namespace {// Allocation management policies
     
-    struct HeapOwn
-      {
-        void*
-        realloc (void* data, size_t oldSiz, size_t newSiz)
-          {
-            UNIMPLEMENTED ("adjust memory allocation"); ///////////////////////////OOO Problem Objekte verschieben
-          }
-      };
     
-        
-        
+    
     template<class I, template<typename> class ALO>
     class ElementFactory
       : private ALO<std::byte>
@@ -152,6 +143,24 @@ namespace lib {
       };
     
     
+    template<class I, template<typename> class ALO>
+    struct AllocationPolicy
+      : ElementFactory<I, ALO>
+      {
+        using Fac = ElementFactory<I, ALO>;
+        using Fac::Fac;
+        
+        void*
+        realloc (void* data, size_t oldSiz, size_t newSiz)
+          {
+            UNIMPLEMENTED ("adjust memory allocation"); ///////////////////////////OOO Problem Objekte verschieben
+          }
+      };
+    
+    template<class I>
+    using HeapOwn = AllocationPolicy<I, std::allocator>;
+    
+    
     using std::is_trivially_move_constructible_v;
     using std::is_trivially_destructible_v;
     using std::has_virtual_destructor_v;
@@ -202,7 +211,7 @@ namespace lib {
    */
   template<class I             ///< Interface or base type visible on resulting Several<I>
           ,class E   =I        ///< a subclass element element type (relevant when not trivially movable and destructible)
-          ,class POL =HeapOwn  ///< Allocator policy
+          ,class POL =HeapOwn<I>  ///< Allocator policy
           >
   class SeveralBuilder
     : Several<I>
