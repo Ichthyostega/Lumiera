@@ -48,15 +48,14 @@ namespace lib {
     template<class I>
     struct ArrayBucket
       {
-        union Manager
-          {
-            typedef void (*Deleter) (ArrayBucket*, size_t);
-            
-            bool unmanaged :1;
-            Deleter deleter;
-          };
+        ArrayBucket (size_t elmSize = sizeof(I))
+          : deleter{nullptr}
+          , spread{elmSize}
+          { }
         
-        Manager manager;
+        typedef void (*Deleter) (ArrayBucket*, size_t);
+        
+        Deleter deleter;
         size_t spread;
         
         /** mark start of the storage area */
@@ -145,8 +144,8 @@ namespace lib {
       void
       discardData()
         {
-          if (data_ and data_->manager.deleter)
-            (*data_->manager.deleter) (data_, size_);
+          if (data_ and data_->deleter)
+            (*data_->deleter) (data_, size_);
         }
     };
   

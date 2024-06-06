@@ -74,11 +74,12 @@ namespace lib {
         
         
     template<class I, template<typename> class ALO>
-    struct ElementFactory
+    class ElementFactory
       : private ALO<std::byte>
       {
         using Allo = ALO<std::byte>;
         using AlloT = std::allocator_traits<Allo>;
+        using Bucket = ArrayBucket<I>;
         
         Allo& baseAllocator() { return *this; }
         
@@ -93,9 +94,47 @@ namespace lib {
               return XAllo{};
           }
         
+        static size_t
+        calcSize (size_t cnt, size_t spread)
+          {
+            return sizeof(Bucket) - sizeof(Bucket::storage)
+                 + cnt * spread;
+          }
+        
+      public:
         ElementFactory (Allo allo = Allo{})
           : Allo{std::move (allo)}
           { }
+        
+        Bucket*
+        create (size_t cnt, size_t spread)
+          {
+            size_t storageBytes = calcSize (cnt, spread);
+            std::byte* loc = AlloT::allocate (baseAllocator(), storageBytes);
+            
+            using BucketAlloT = typename AlloT::template rebind_traits<Bucket>;
+            auto bucketAllo = adaptAllocator<Bucket>();
+            try { BucketAlloT::construct (bucketAllo, loc, spread); }
+            catch(...)
+              {
+                AlloT::deallocate (baseAllocator(), loc, storageBytes);
+                throw;
+              }
+            return static_cast<Bucket*> (loc);
+          };
+        
+        template<class E, typename...ARGS>
+        E&
+        createAt (Bucket* bucket, size_t idx, ARGS&& ...args)
+          {
+            REQUIRE (bucket);
+            using ElmAlloT = typename AlloT::template rebind_traits<E>;
+            auto elmAllo = adaptAllocator<E>();
+            E* loc = & bucket->subscript (idx);
+            ElmAlloT::construct (elmAllo, loc, forward<ARGS> (args)...);
+            ENSURE (loc);
+            return *loc;
+          };
         
         template<class E>
         void
@@ -107,9 +146,7 @@ namespace lib {
             for (size_t i=0; i<size; ++i)
               ElmAlloT::destroy (elmAllo, & bucket->subscript(i));
             
-            size_t storageBytes = sizeof(ArrayBucket<I>) - sizeof(ArrayBucket<I>::storage)
-                                + size * bucket->spread;
-        
+            size_t storageBytes = calcSize (size, bucket->spread);
             AlloT::deallocate (baseAllocator(), bucket, storageBytes);
           };
       };
