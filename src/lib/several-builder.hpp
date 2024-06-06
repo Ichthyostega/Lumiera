@@ -73,36 +73,44 @@ namespace lib {
     
         
         
-    template<class I, class E>
-    struct DeleterTrampoline
+    template<class I, template<typename> class ALO>
+    struct ElementFactory
+      : private ALO<std::byte>
       {
-        using Allo = std::allocator<E>;
+        using Allo = ALO<std::byte>;
         using AlloT = std::allocator_traits<Allo>;
         
+        Allo& baseAllocator() { return *this; }
+        
         template<typename X>
-        static auto
+        auto
         adaptAllocator()
           {
             using XAllo = typename AlloT::template rebind_alloc<X>;
             if constexpr (std::is_constructible_v<XAllo, Allo>)
-              return XAllo{Allo()};
+              return XAllo{baseAllocator()};
             else
               return XAllo{};
           }
         
-        static void
+        ElementFactory (Allo allo = Allo{})
+          : Allo{std::move (allo)}
+          { }
+        
+        template<class E>
+        void
         destroy (ArrayBucket<I>* bucket, size_t size)
           {
-            Allo allo{};
+            REQUIRE (bucket);
+            using ElmAlloT = typename AlloT::template rebind_traits<E>;
+            auto elmAllo = adaptAllocator<E>();
             for (size_t i=0; i<size; ++i)
-              AlloT::destroy (allo, & bucket->subscript(i));
+              ElmAlloT::destroy (elmAllo, & bucket->subscript(i));
             
             size_t storageBytes = sizeof(ArrayBucket<I>) - sizeof(ArrayBucket<I>::storage)
-                                + size * sizeof(E);
+                                + size * bucket->spread;
         
-            using BAlloT = typename AlloT::template rebind_traits<std::byte>;
-            auto bAllo = adaptAllocator<std::byte>();
-            BAlloT::deallocate (bAllo, bucket, storageBytes);
+            AlloT::deallocate (baseAllocator(), bucket, storageBytes);
           };
       };
     
