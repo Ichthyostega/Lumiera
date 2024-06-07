@@ -77,10 +77,10 @@ namespace lib {
     template<class I>
     struct ArrayBucket
       {
-        ArrayBucket (size_t elmSize = sizeof(I))
+        ArrayBucket (size_t bytes, size_t elmSize = sizeof(I))
           : cnt{0}
           , spread{elmSize}
-          , buffSiz{0}//////////////////////////////////////////////////////////////OOO sollte man das nicht besser zwingend korrekt setzen?
+          , buffSiz{bytes}
           , deleter{nullptr}
           { }
         
@@ -94,6 +94,14 @@ namespace lib {
         /** mark start of the storage area */
         alignas(I)
           std::byte storage[sizeof(I)];
+        
+        
+        static size_t
+        requiredStorage (size_t cnt, size_t spread)
+          {
+            return sizeof(ArrayBucket) - sizeof(storage)
+                 + cnt * spread;
+          }
         
         /** perform unchecked access into the storage area
          * @note typically reaching behind the nominal end of this object

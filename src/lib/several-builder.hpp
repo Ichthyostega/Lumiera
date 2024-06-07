@@ -92,13 +92,6 @@ namespace lib {
               return XAllo{};
           }
         
-        static size_t
-        calcSize (size_t cnt, size_t spread)
-          {
-            return sizeof(Bucket) - sizeof(Bucket::storage)
-                 + cnt * spread;
-          }
-        
       public:
         ElementFactory (Allo allo = Allo{})
           : Allo{std::move (allo)}
@@ -107,18 +100,19 @@ namespace lib {
         Bucket*
         create (size_t cnt, size_t spread)
           {
-            size_t storageBytes = calcSize (cnt, spread);
+            size_t storageBytes = Bucket::requiredStorage (cnt, spread);
             std::byte* loc = AlloT::allocate (baseAllocator(), storageBytes);
+            Bucket* bucket = reinterpret_cast<Bucket*> (loc);
             
             using BucketAlloT = typename AlloT::template rebind_traits<Bucket>;
             auto bucketAllo = adaptAllocator<Bucket>();
-            try { BucketAlloT::construct (bucketAllo, reinterpret_cast<Bucket*> (loc), spread); }
+            try { BucketAlloT::construct (bucketAllo, bucket, storageBytes, spread); }
             catch(...)
               {
                 AlloT::deallocate (baseAllocator(), loc, storageBytes);
                 throw;
               }
-            return reinterpret_cast<Bucket*> (loc);
+            return bucket;
           };
         
         template<class E, typename...ARGS>
@@ -136,16 +130,18 @@ namespace lib {
         
         template<class E>
         void
-        destroy (ArrayBucket<I>* bucket, size_t size)
+        destroy (ArrayBucket<I>* bucket)
           {
             REQUIRE (bucket);
+            size_t cnt = bucket->cnt;
+            size_t storageBytes = bucket->buffSiz;
             using ElmAlloT = typename AlloT::template rebind_traits<E>;
             auto elmAllo = adaptAllocator<E>();
-            for (size_t i=0; i<size; ++i)
-              ElmAlloT::destroy (elmAllo, & bucket->subscript(i));
+            for (size_t idx=0; idx<cnt; ++idx)
+              ElmAlloT::destroy (elmAllo, & bucket->subscript(idx));
             
-            size_t storageBytes = calcSize (size, bucket->spread);   ////////////////////////////////////OOO das ist naiv ... es kann mehr Storage sein
-            AlloT::deallocate (baseAllocator(), reinterpret_cast<std::byte*> (bucket), storageBytes);
+            std::byte* loc = reinterpret_cast<std::byte*> (bucket);
+            AlloT::deallocate (baseAllocator(), loc, storageBytes);
           };
       };
     
@@ -160,16 +156,17 @@ namespace lib {
         using Fac::Fac; // pass-through ctor
         
         Bucket*
-        realloc (Bucket* data, size_t cnt, size_t& storage, size_t demand)
+        realloc (Bucket* data, size_t demand)
           {
-            if (demand == storage)
+            size_t buffSiz{data? data->buffSiz : 0};
+            if (demand == buffSiz)
               return data;
-            if (demand > storage)
+            if (demand > buffSiz)
               {// grow into exponentially expanded new allocation
                 size_t spread = data? data->spread : sizeof(I);
                 size_t safetyLim = LUMIERA_MAX_ORDINAL_NUMBER * spread;
                 size_t expandAlloc = min (safetyLim
-                                         ,max (2*storage, demand));
+                                         ,max (2*buffSiz, demand));
                 if (expandAlloc < demand)
                   throw err::State{_Fmt{"Storage expansion for Several-collection "
                                         "exceeds safety limit of %d bytes"} % safetyLim
@@ -179,29 +176,28 @@ namespace lib {
                 if (newCnt * spread < demand) ++newCnt;
                 Bucket* newBucket = Fac::create (newCnt, spread);
                 // move (or copy) existing data...
-                ENSURE (data or cnt==0);
-                for (size_t i=0; i<cnt; ++i)
-                  Fac::template createAt<I> (newBucket, i
-                                            ,std::move_if_noexcept (data->subscript(i)));
+                size_t cnt = data? data->cnt : 0;
+                for (size_t idx=0; idx<cnt; ++idx)
+                  Fac::template createAt<I> (newBucket, idx
+                                            ,std::move_if_noexcept (data->subscript(idx)));
                                    ////////////////////////////////////////////////////////OOO schee... aba mia brauchn E, ned I !!!!!
                 // discard old storage
                 if (data)
-                  Fac::template destroy<I> (data, cnt);   /////////////////////////////////////////////OOO Problem mit der überschüssigen Storage
-                storage = newCnt*spread;
+                  Fac::template destroy<I> (data);
                 return newBucket;
               }
             else
               {// shrink into precisely fitting new allocation
                 Bucket* newBucket{nullptr};
-                if (cnt > 0)
+                if (data)
                   {
-                    REQUIRE (data);
+                    size_t cnt{data->cnt}; 
+                    ASSERT (cnt > 0);
                     newBucket = Fac::create (cnt, data->spread);
-                    for (size_t i=0; i<cnt; ++i)
-                      Fac::template createAt<I> (newBucket, i
-                                                ,std::move_if_noexcept (data->subscript(i)));    ////////////OOO selbes Problem: E hier
-                    Fac::template destroy<I> (data, cnt);       /////////////////////////////////////////////OOO nicht passende Storage!!
-                    storage = cnt * data->spread;
+                    for (size_t idx=0; idx<cnt; ++idx)
+                      Fac::template createAt<I> (newBucket, idx
+                                                ,std::move_if_noexcept (data->subscript(idx)));    ////////////OOO selbes Problem: E hier
+                    Fac::template destroy<I> (data);
                   }
                 return newBucket;
               }
@@ -310,12 +306,9 @@ namespace lib {
       adjustStorage (size_t cnt, size_t spread)
         {
           size_t demand{cnt*spread};
-          if (demand > storageSiz_)
-            {  //  need more storage...
-              Coll::data_ = static_cast<typename Coll::Bucket> (POL::realloc (Coll::data_, Coll::size_, storageSiz_, demand));
-            }
+          Coll::data_ = POL::realloc (Coll::data_, demand);
           ENSURE (Coll::data_);
-          if (spread != Coll::data_->spread)
+          if (spread != Coll::data_->spread) ///////////////OOO API für spread?
             adjustSpread (spread);
         }
       
@@ -324,10 +317,7 @@ namespace lib {
         {
           if (not Coll::data_) return;
           size_t demand{Coll::size_ * Coll::data_->spread};
-          if (demand < storageSiz_)
-            {  //  attempt to shrink storage
-              Coll::data_ = static_cast<typename Coll::Bucket> (POL::realloc (Coll::data_, Coll::size_, storageSiz_, demand));
-            }
+          Coll::data_ = POL::realloc (Coll::data_, demand);
         }
       
       /** move existing data to accommodate spread */
