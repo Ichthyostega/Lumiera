@@ -334,17 +334,16 @@ namespace lib {
       void
       adjustSpread (size_t newSpread)
         {
-          REQUIRE (Coll::size_);
           REQUIRE (Coll::data_);
           REQUIRE (newSpread * Coll::size_ <= storageSiz_);
           size_t oldSpread = Coll::data_->spread;
           if (newSpread > oldSpread)
             // need to spread out
-            for (size_t i=Coll::size_-1; 0<i; --i)
+            for (size_t i=Coll::size()-1; 0<i; --i)
               shiftStorage (i, oldSpread, newSpread);
           else
             // attempt to condense spread
-            for (size_t i=1; i<Coll::size_; ++i)
+            for (size_t i=1; i<Coll::size(); ++i)
               shiftStorage (i, oldSpread, newSpread);
           // data elements now spaced by new spread
           Coll::data_->spread = newSpread;
@@ -370,7 +369,7 @@ namespace lib {
         {
           using Val = typename IT::value_type;
           size_t elmSiz = sizeof(Val);
-          adjustStorage (Coll::size_+1, requiredSpread(elmSiz));
+          adjustStorage (Coll::size()+1, requiredSpread(elmSiz));
           UNIMPLEMENTED ("emplace data");
         }
       

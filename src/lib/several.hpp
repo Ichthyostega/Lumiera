@@ -78,14 +78,18 @@ namespace lib {
     struct ArrayBucket
       {
         ArrayBucket (size_t elmSize = sizeof(I))
-          : deleter{nullptr}
+          : cnt{0}
           , spread{elmSize}
+          , buffSiz{0}//////////////////////////////////////////////////////////////OOO sollte man das nicht besser zwingend korrekt setzen?
+          , deleter{nullptr}
           { }
         
-        typedef void (*Deleter) (ArrayBucket*, size_t);
+        typedef void (*Deleter) (ArrayBucket*);
         
-        Deleter deleter;
+        size_t cnt;
         size_t spread;
+        size_t buffSiz;
+        Deleter deleter;
         
         /** mark start of the storage area */
         alignas(I)
@@ -139,13 +143,13 @@ namespace lib {
       size_t
       size()  const
         {
-          return size_;
+          return data_? data_->cnt : 0;
         }
       
       bool
       empty()  const
         {
-          return not (size_ and data_);
+          return not data_;
         }
       
       I&
@@ -155,8 +159,8 @@ namespace lib {
           return data_->subscript (idx);
         }
       
-      I& front() { return operator[] (size_-1); }
-      I& back()  { return operator[] (0);       }
+      I& front() { return operator[] (data_? data_->size_-1 : 0); }
+      I& back()  { return operator[] (0);                         }
       
       using iterator = I*;
       using const_iterator = I const*;
@@ -174,7 +178,7 @@ namespace lib {
       discardData()
         {
           if (data_ and data_->deleter)
-            (*data_->deleter) (data_, size_);
+            (*data_->deleter) (data_);
         }
     };
   
