@@ -23,7 +23,36 @@
 
 
 /** @file several.hpp
- ** Abstraction interface: array-like access by subscript
+ ** Abstraction interface: array-like random access by subscript.
+ ** 
+ ** # Design
+ ** 
+ ** This is a data structure abstraction suitable for performance critical code.
+ ** It is used pervasively in the backbone of the Lumiera »Render Node Network«.
+ ** - usage is clear and concise, allowing to hide implementation details
+ ** - adaption and optimisation for various usage patterns is possible
+ ** - suitably fast read access with a limited amount of indirections
+ ** \par why not `std::vector`?
+ ** The most prevalent STL container _almost_ fulfils the above mentioned criteria,
+ ** and thus served as a blueprint for design and implementations. Some drawbacks
+ ** however prevent its direct use for this purpose. Notably, `std::vector` leaks
+ ** implementation details of the contained data and generally exposes way too much
+ ** operations; it is not possible to abstract away the concrete element type.
+ ** Moreover, using `vector` with a custom allocator is surprisingly complicated,
+ ** requires to embody the concrete allocator type into the container type and
+ ** requires to store an additional back-link whenever the allocator is not
+ ** a _monostate._ The intended use case calls for a large number of small
+ ** collection elements, which are repeatedly bulk- allocated and deallocated.
+ ** 
+ ** The lib::Several container is a smart front-end and exposes array-style
+ ** random access through references to a interface type. It can only be created
+ ** and populated through a builder, and is immutable during lifetime, while it
+ ** can hold non-const element data. The actual implementation data types and the
+ ** allocator framework used are _not exposed in the front-end's type signature._
+ ** The container is single-ownership (move-asignable); some additional metadata
+ ** and the data storage reside in an `ArrayBucket<I>`, managed by the allocator.
+ ** In its simplest form, this storage is heap allocated and automatically deleted.
+ ** 
  ** @todo as of 2016, this concept seems very questionable: do we _really_ want
  **       to abstract over random access, or do we _actually_ want for-iteration??
  ** @warning WIP-WIP-WIP in rework 5/2025
