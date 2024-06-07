@@ -155,6 +155,8 @@ namespace lib {
         
         using Fac::Fac; // pass-through ctor
         
+        const bool isDisposable{false};    ///< memory must be explicitly deallocated
+        
         Bucket*
         realloc (Bucket* data, size_t demand)
           {
@@ -191,7 +193,7 @@ namespace lib {
                 Bucket* newBucket{nullptr};
                 if (data)
                   {
-                    size_t cnt{data->cnt}; 
+                    size_t cnt{data->cnt};
                     ASSERT (cnt > 0);
                     newBucket = Fac::create (cnt, data->spread);
                     for (size_t idx=0; idx<cnt; ++idx)
@@ -220,6 +222,37 @@ namespace lib {
         bool disposable :1 ;
         bool wild_move :1 ;
         
+        MemStrategy (bool unmanaged)
+          : disposable{unmanaged or (is_trivially_destructible_v<E> and
+                                     is_trivially_destructible_v<I>)}
+          , wild_move{false}
+          { }
+        
+        /** mark that we're about to accept an otherwise unknown type,
+         *  which can be trivially moved (by `memmove`). This irrevocably
+         *  enables low-level`memove` usage for this container instance */
+        template<typename TY>
+        bool
+        markWildMovePossibility()
+          {
+            if (wild_move and not isWildMoveCapable<TY>())
+              return false;  // must reject, since it can not wild-moved
+            if (isWildMoveCapable<TY>()
+                and is_trivially_move_constructible_v<E>
+                and is_trivially_move_constructible_v<I>)
+              wild_move = true;
+            return true; // accept anyway (not sure yet if it must be moved)
+          }
+        
+        template<typename TY>
+        bool
+        isWildMoveCapable()
+          {
+            return not (is_same_v<TY,E> or is_same_v<TY,I>)
+                   and is_trivially_move_constructible_v<TY>;
+          }
+        
+        
         template<typename TY>
         bool
         canDestroy()
@@ -241,10 +274,9 @@ namespace lib {
         auto
         getDeleter()
           {
-            if constexpr (disposable or
-                          (is_trivially_destructible_v<E> and is_trivially_destructible_v<I>))
+            if (disposable)
               return nullptr;
-            if constexpr (has_virtual_destructor_v<I>)
+            if (has_virtual_destructor_v<I>)
               return nullptr;
             else
               return nullptr;
@@ -266,6 +298,8 @@ namespace lib {
     , POL
     {
       using Coll = Several<I>;
+      
+      MemStrategy<I,E> memStrategy_{POL::isDisposable};
       
     public:
       SeveralBuilder() = default;
@@ -289,7 +323,7 @@ namespace lib {
       SeveralBuilder&&
       appendAll (IT&& data)
         {
-          explore(data).foreach ([this](auto it){ emplaceElm(it); });
+          explore(data).foreach ([this](auto it){ emplaceCopy(it); });
           return move(*this);
         }
       
@@ -353,12 +387,35 @@ namespace lib {
       
       template<class IT>
       void
-      emplaceElm (IT& dataSrc)
+      emplaceCopy (IT& dataSrc)
         {
-          using Val = typename IT::value_type;
-          size_t elmSiz = sizeof(Val);
-          adjustStorage (Coll::size()+1, requiredSpread(elmSiz));
-          UNIMPLEMENTED ("emplace data");
+          using Val = std::remove_cv_t<typename IT::value_type>;
+          emplaceElm<Val> (*dataSrc);
+        }
+      
+      template<class TY, typename...ARGS>
+      void
+      emplaceElm (ARGS&& ...args)
+        {
+          if (not memStrategy_.template canDestroy<TY>())
+            throw err::Invalid{_Fmt{"Unable to handle destructor for element type %s"}
+                                   % util::typeStr<TY>()};
+          
+          // mark acceptance of trivially movable arbitrary data types
+          if (not memStrategy_.template markWildMovePossibility<TY>())
+            throw err::Invalid{_Fmt{"Unable to trivially move element type %s, "
+                                    "while other elements in this container are trivially movable."}
+                                   % util::typeStr<TY>()};
+          
+          ////////////////////////////////////OOO check here for suitable spread
+          
+          ////////////////////////////////////OOO check here for sufficient space
+          
+          size_t elmSiz = sizeof(TY);
+          size_t newCnt = Coll::size()+1;
+          adjustStorage (newCnt, requiredSpread(elmSiz));
+          Coll::data_->cnt = newCnt;
+          POL::template createAt<TY> (Coll::data_, Coll::size(), forward<ARGS> (args)...);
         }
       
       size_t
