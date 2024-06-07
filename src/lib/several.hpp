@@ -134,7 +134,6 @@ namespace lib {
     protected:
       using Bucket = ArrayBucket<I>*;
       
-      size_t size_{0};
       Bucket data_{nullptr};
       
       Several() =default; ///< may only be created through SeveralBuilder
@@ -180,6 +179,14 @@ namespace lib {
       
       friend auto begin (Several const& svl) { return svl.begin();}
       friend auto end   (Several const& svl) { return svl.end();  }
+      
+      
+    protected:
+      size_t
+      spread()  const
+        {
+          return data_? data_->spread : sizeof(I);
+        }
       
     private:
       void

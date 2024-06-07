@@ -267,8 +267,6 @@ namespace lib {
     {
       using Coll = Several<I>;
       
-      size_t storageSiz_{0};
-      
     public:
       SeveralBuilder() = default;
       
@@ -308,7 +306,7 @@ namespace lib {
           size_t demand{cnt*spread};
           Coll::data_ = POL::realloc (Coll::data_, demand);
           ENSURE (Coll::data_);
-          if (spread != Coll::data_->spread) ///////////////OOO API für spread?
+          if (spread != Coll::spread())
             adjustSpread (spread);
         }
       
@@ -316,7 +314,7 @@ namespace lib {
       fitStorage()
         {
           if (not Coll::data_) return;
-          size_t demand{Coll::size_ * Coll::data_->spread};
+          size_t demand{Coll::size() * Coll::spread()};
           Coll::data_ = POL::realloc (Coll::data_, demand);
         }
       
@@ -325,8 +323,8 @@ namespace lib {
       adjustSpread (size_t newSpread)
         {
           REQUIRE (Coll::data_);
-          REQUIRE (newSpread * Coll::size_ <= storageSiz_);
-          size_t oldSpread = Coll::data_->spread;
+          REQUIRE (newSpread * Coll::size() <= Coll::data_->buffSiz);
+          size_t oldSpread = Coll::spread();
           if (newSpread > oldSpread)
             // need to spread out
             for (size_t i=Coll::size()-1; 0<i; --i)
@@ -366,8 +364,7 @@ namespace lib {
       size_t
       requiredSpread (size_t elmSiz)
         {
-          size_t currSpread = Coll::empty()? 0 : Coll::data_->spread;
-          return util::max (currSpread, elmSiz);
+          return util::max (Coll::spread(), elmSiz);
         }
     };
   
