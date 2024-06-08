@@ -156,6 +156,8 @@ namespace lib {
         using Fac::Fac; // pass-through ctor
         
         const bool isDisposable{false};    ///< memory must be explicitly deallocated
+         
+        bool canExpand(size_t){ return false; }
         
         Bucket*
         realloc (Bucket* data, size_t demand)
@@ -217,12 +219,12 @@ namespace lib {
     using lib::meta::is_Subclass;
     
     template<class I, class E>
-    struct MemStrategy
+    struct HandlingStrategy
       {
         bool disposable :1 ;
         bool wild_move :1 ;
         
-        MemStrategy (bool unmanaged)
+        HandlingStrategy (bool unmanaged)
           : disposable{unmanaged or (is_trivially_destructible_v<E> and
                                      is_trivially_destructible_v<I>)}
           , wild_move{false}
@@ -257,7 +259,7 @@ namespace lib {
         bool
         canDestroy()
           {
-            return disposable
+            return (disposable and is_trivially_destructible_v<TY>)
                 or (is_trivially_destructible_v<TY> and is_trivially_destructible_v<I>)
                 or (has_virtual_destructor_v<I> and is_Subclass<TY,I>())
                 or (is_same_v<TY,E> and is_Subclass<E,I>());
@@ -267,8 +269,7 @@ namespace lib {
         bool
         canDynGrow()
           {
-            return is_same_v<TY,E>
-                or (is_trivially_move_constructible_v<TY> and wild_move);
+            return is_same_v<TY,E> or wild_move;
           }
         
         auto
@@ -299,7 +300,7 @@ namespace lib {
     {
       using Coll = Several<I>;
       
-      MemStrategy<I,E> memStrategy_{POL::isDisposable};
+      HandlingStrategy<I,E> handling_{POL::isDisposable};
       
     public:
       SeveralBuilder() = default;
@@ -397,31 +398,34 @@ namespace lib {
       void
       emplaceElm (ARGS&& ...args)
         {
-          if (not memStrategy_.template canDestroy<TY>())
+          if (not handling_.template canDestroy<TY>())
             throw err::Invalid{_Fmt{"Unable to handle destructor for element type %s"}
                                    % util::typeStr<TY>()};
           
           // mark acceptance of trivially movable arbitrary data types
-          if (not memStrategy_.template markWildMovePossibility<TY>())
+          if (not handling_.template markWildMovePossibility<TY>())
             throw err::Invalid{_Fmt{"Unable to trivially move element type %s, "
                                     "while other elements in this container are trivially movable."}
                                    % util::typeStr<TY>()};
           
-          ////////////////////////////////////OOO check here for suitable spread
+          // ensure sufficient element capacity or the ability to adapt element spread
+          if (Coll::spread() < sizeof(TY) and not (Coll::empty() or handling_.wild_move))
+            throw err::Invalid{_Fmt{"Unable to place element of type %s (size=%d)"
+                                    "into container for element size %d."}
+                                   % util::typeStr<TY>() % sizeof(TY) % Coll::spread()};
           
-          ////////////////////////////////////OOO check here for sufficient space
+          // ensure sufficient storage or verify the ability to re-allocate
+          if (not (Coll::hasReserve(sizeof(TY))
+                   or POL::canExpand(sizeof(TY))
+                   or handling_.template canDynGrow<TY>()))
+            throw err::Invalid{_Fmt{"Unable to accommodate further element of type %s "}
+                                   % util::typeStr<TY>()};
           
           size_t elmSiz = sizeof(TY);
           size_t newCnt = Coll::size()+1;
-          adjustStorage (newCnt, requiredSpread(elmSiz));
+          adjustStorage (newCnt, max (elmSiz, Coll::spread()));
           Coll::data_->cnt = newCnt;
-          POL::template createAt<TY> (Coll::data_, Coll::size(), forward<ARGS> (args)...);
-        }
-      
-      size_t
-      requiredSpread (size_t elmSiz)
-        {
-          return util::max (Coll::spread(), elmSiz);
+          POL::template createAt<TY> (Coll::data_, newCnt-1, forward<ARGS> (args)...);
         }
     };
   

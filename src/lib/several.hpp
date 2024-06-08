@@ -188,6 +188,15 @@ namespace lib {
           return data_? data_->spread : sizeof(I);
         }
       
+      bool
+      hasReserve (size_t extraSize)  const
+        {
+          if (extraSize > spread())
+            extraSize += (extraSize - spread())*size();
+          return data_
+             and data_->buffSiz >= size()*spread() + extraSize;
+        }
+      
     private:
       void
       discardData()
