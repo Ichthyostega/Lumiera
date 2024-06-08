@@ -146,7 +146,7 @@ namespace lib {
       };
     
     
-    template<class I, template<typename> class ALO>
+    template<class I, class E, template<typename> class ALO>
     struct AllocationPolicy
       : ElementFactory<I, ALO>
       {
@@ -205,53 +205,54 @@ namespace lib {
                   }
                 return newBucket;
               }
+          
+//          // ensure sufficient storage or verify the ability to re-allocate
+//          if (not (Coll::hasReserve(sizeof(TY))
+//                   or POL::canExpand(sizeof(TY))
+//                   or handling_.template canDynGrow<TY>()))
+//            throw err::Invalid{_Fmt{"Unable to accommodate further element of type %s "}
+//                                   % util::typeStr<TY>()};
           }
       };
     
-    template<class I>
-    using HeapOwn = AllocationPolicy<I, std::allocator>;
+    template<class I, class E>
+    using HeapOwn = AllocationPolicy<I, E, std::allocator>;
     
     
     using std::is_trivially_move_constructible_v;
     using std::is_trivially_destructible_v;
     using std::has_virtual_destructor_v;
+    using std::is_trivially_copyable_v;
     using std::is_same_v;
     using lib::meta::is_Subclass;
     
     template<class I, class E>
     struct HandlingStrategy
       {
-        bool disposable :1 ;
-        bool wild_move :1 ;
+        bool disposable ;
+        bool lock_move  ;
         
         HandlingStrategy (bool unmanaged)
           : disposable{unmanaged or (is_trivially_destructible_v<E> and
                                      is_trivially_destructible_v<I>)}
-          , wild_move{false}
+          , lock_move{false}
           { }
         
         /** mark that we're about to accept an otherwise unknown type,
-         *  which can be trivially moved (by `memmove`). This irrevocably
-         *  enables low-level`memove` usage for this container instance */
+         *  which can not be trivially moved. This irrevocably disables
+         *  relocations by low-level `memove` for this container instance */
         template<typename TY>
-        bool
-        markWildMovePossibility()
+        void
+        probeMoveCapability()
           {
-            if (wild_move and not isWildMoveCapable<TY>())
-              return false;  // must reject, since it can not wild-moved
-            if (isWildMoveCapable<TY>()
-                and is_trivially_move_constructible_v<E>
-                and is_trivially_move_constructible_v<I>)
-              wild_move = true;
-            return true; // accept anyway (not sure yet if it must be moved)
+            if (not (is_same_v<TY,E> or is_trivially_copyable_v<TY>))
+              lock_move = true;
           }
         
-        template<typename TY>
         bool
-        isWildMoveCapable()
+        canWildMove()
           {
-            return not (is_same_v<TY,E> or is_same_v<TY,I>)
-                   and is_trivially_move_constructible_v<TY>;
+            return is_trivially_copyable_v<E> and not lock_move;
           }
         
         
@@ -263,13 +264,6 @@ namespace lib {
                 or (is_trivially_destructible_v<TY> and is_trivially_destructible_v<I>)
                 or (has_virtual_destructor_v<I> and is_Subclass<TY,I>())
                 or (is_same_v<TY,E> and is_Subclass<E,I>());
-          }
-        
-        template<typename TY>
-        bool
-        canDynGrow()
-          {
-            return is_same_v<TY,E> or wild_move;
           }
         
         auto
@@ -289,9 +283,9 @@ namespace lib {
    * Wrap a vector holding objects of a subtype and
    * provide array-like access using the interface type.
    */
-  template<class I                ///< Interface or base type visible on resulting Several<I>
-          ,class E   =I           ///< a subclass element element type (relevant when not trivially movable and destructible)
-          ,class POL =HeapOwn<I>  ///< Allocator policy
+  template<class I                  ///< Interface or base type visible on resulting Several<I>
+          ,class E   =I             ///< a subclass element element type (relevant when not trivially movable and destructible)
+          ,class POL =HeapOwn<I,E>  ///< Allocator policy
           >
   class SeveralBuilder
     : Several<I>
@@ -402,24 +396,14 @@ namespace lib {
             throw err::Invalid{_Fmt{"Unable to handle destructor for element type %s"}
                                    % util::typeStr<TY>()};
           
-          // mark acceptance of trivially movable arbitrary data types
-          if (not handling_.template markWildMovePossibility<TY>())
-            throw err::Invalid{_Fmt{"Unable to trivially move element type %s, "
-                                    "while other elements in this container are trivially movable."}
-                                   % util::typeStr<TY>()};
+          // mark when target type is not trivially movable
+          handling_.template probeMoveCapability<TY>();
           
           // ensure sufficient element capacity or the ability to adapt element spread
-          if (Coll::spread() < sizeof(TY) and not (Coll::empty() or handling_.wild_move))
+          if (Coll::spread() < sizeof(TY) and not (Coll::empty() or handling_.canWildMove()))
             throw err::Invalid{_Fmt{"Unable to place element of type %s (size=%d)"
                                     "into container for element size %d."}
                                    % util::typeStr<TY>() % sizeof(TY) % Coll::spread()};
-          
-          // ensure sufficient storage or verify the ability to re-allocate
-          if (not (Coll::hasReserve(sizeof(TY))
-                   or POL::canExpand(sizeof(TY))
-                   or handling_.template canDynGrow<TY>()))
-            throw err::Invalid{_Fmt{"Unable to accommodate further element of type %s "}
-                                   % util::typeStr<TY>()};
           
           size_t elmSiz = sizeof(TY);
           size_t newCnt = Coll::size()+1;
