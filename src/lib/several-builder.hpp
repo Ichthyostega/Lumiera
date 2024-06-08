@@ -67,6 +67,12 @@ namespace lib {
   
   namespace {// Allocation management policies
     
+    /** number of storage slots to open initially;
+     *  starting with an over-allocation similar to `std::vector`
+     */
+    const uint INITIAL_ELM_CNT = 10;
+    
+    
     using util::max;
     using util::min;
     using util::_Fmt;
@@ -357,22 +363,72 @@ namespace lib {
         }
       
     private:
+      template<class IT>
+      void
+      emplaceCopy (IT& dataSrc)
+        {
+          using Val = std::remove_cv_t<typename IT::value_type>;
+          emplaceElm<Val> (*dataSrc);
+        }
+      
+      template<class TY, typename...ARGS>
+      void
+      emplaceElm (ARGS&& ...args)
+        {
+          if (not handling_.template canDestroy<TY>())
+            throw err::Invalid{_Fmt{"Unable to handle destructor for element type %s"}
+                                   % util::typeStr<TY>()};
+          
+          // mark when target type is not trivially movable
+          handling_.template probeMoveCapability<TY>();
+          
+          // ensure sufficient element capacity or the ability to adapt element spread
+          if (Coll::spread() < sizeof(TY) and not (Coll::empty() or handling_.canWildMove()))
+            throw err::Invalid{_Fmt{"Unable to place element of type %s (size=%d)"
+                                    "into container for element size %d."}
+                                   % util::typeStr<TY>() % sizeof(TY) % Coll::spread()};
+          
+          size_t elmSiz = sizeof(TY);
+          size_t newPos = Coll::size();
+          size_t newCnt = Coll::empty()? INITIAL_ELM_CNT : newPos+1;
+          adjustStorage (newCnt, max (elmSiz, Coll::spread()));
+          Coll::data_->cnt = newPos+1;
+          POL::template createAt<TY> (Coll::data_, newPos, forward<ARGS> (args)...);
+        }
+      
+      
       void
       adjustStorage (size_t cnt, size_t spread)
         {
           size_t demand{cnt*spread};
-          Coll::data_ = POL::realloc (Coll::data_, cnt,spread); /////////////////OOO anpassen
+          size_t buffSiz{Coll::data_? Coll::data_->buffSiz : 0};
+          if (demand == buffSiz)
+            return;
+          if (demand > buffSiz)
+            {// grow into exponentially expanded new allocation
+              size_t safetyLim = LUMIERA_MAX_ORDINAL_NUMBER * Coll::spread();
+              size_t expandAlloc = min (safetyLim
+                                       ,max (2*buffSiz, demand));
+              if (expandAlloc < demand)
+                throw err::State{_Fmt{"Storage expansion for Several-collection "
+                                      "exceeds safety limit of %d bytes"} % safetyLim
+                                ,LERR_(SAFETY_LIMIT)};
+              // allocate new storage block...
+              size_t newCnt = expandAlloc / spread;
+              if (newCnt * spread < expandAlloc) ++newCnt;
+              Coll::data_ = POL::realloc (Coll::data_, newCnt,spread);
+            }
           ENSURE (Coll::data_);
-          if (spread != Coll::spread())
+          if (handling_.canWildMove() and spread != Coll::spread())
             adjustSpread (spread);
         }
       
       void
       fitStorage()
         {
-          if (not Coll::data_) return;
-          size_t demand{Coll::size() * Coll::spread()};
-          Coll::data_ = POL::realloc (Coll::data_, demand);
+          if (handling_.lock_move or not Coll::data_)
+            return;
+          Coll::data_ = POL::realloc (Coll::data_, Coll::size(), Coll::spread());
         }
       
       /** move existing data to accommodate spread */
@@ -406,38 +462,6 @@ namespace lib {
           oldPos += idx * oldSpread;
           newPos += idx * newSpread;
           std::memmove (newPos, oldPos, util::min (oldSpread,newSpread));
-        }
-      
-      template<class IT>
-      void
-      emplaceCopy (IT& dataSrc)
-        {
-          using Val = std::remove_cv_t<typename IT::value_type>;
-          emplaceElm<Val> (*dataSrc);
-        }
-      
-      template<class TY, typename...ARGS>
-      void
-      emplaceElm (ARGS&& ...args)
-        {
-          if (not handling_.template canDestroy<TY>())
-            throw err::Invalid{_Fmt{"Unable to handle destructor for element type %s"}
-                                   % util::typeStr<TY>()};
-          
-          // mark when target type is not trivially movable
-          handling_.template probeMoveCapability<TY>();
-          
-          // ensure sufficient element capacity or the ability to adapt element spread
-          if (Coll::spread() < sizeof(TY) and not (Coll::empty() or handling_.canWildMove()))
-            throw err::Invalid{_Fmt{"Unable to place element of type %s (size=%d)"
-                                    "into container for element size %d."}
-                                   % util::typeStr<TY>() % sizeof(TY) % Coll::spread()};
-          
-          size_t elmSiz = sizeof(TY);
-          size_t newCnt = Coll::size()+1;
-          adjustStorage (newCnt, max (elmSiz, Coll::spread()));
-          Coll::data_->cnt = newCnt;
-          POL::template createAt<TY> (Coll::data_, newCnt-1, forward<ARGS> (args)...);
         }
     };
   
