@@ -145,6 +145,7 @@ namespace lib {
           };
       };
     
+    using std::is_trivially_copyable_v;
     
     template<class I, class E, template<typename> class ALO>
     struct AllocationPolicy
@@ -160,8 +161,18 @@ namespace lib {
         bool canExpand(size_t){ return false; }
         
         Bucket*
-        realloc (Bucket* data, size_t demand)
+        realloc (Bucket* data, size_t cnt, size_t spread)
           {
+            Bucket* newBucket = Fac::create (cnt, spread);
+            if (data)
+              {
+                size_t elms = min (cnt, data->cnt);
+                for (size_t idx=0; idx<elms; ++idx)
+                  moveElem(idx, data, newBucket);
+                data->destroy();
+              }
+            return newBucket;
+/*            
             size_t buffSiz{data? data->buffSiz : 0};
             if (demand == buffSiz)
               return data;
@@ -205,13 +216,30 @@ namespace lib {
                   }
                 return newBucket;
               }
-          
+  */        
 //          // ensure sufficient storage or verify the ability to re-allocate
 //          if (not (Coll::hasReserve(sizeof(TY))
 //                   or POL::canExpand(sizeof(TY))
 //                   or handling_.template canDynGrow<TY>()))
 //            throw err::Invalid{_Fmt{"Unable to accommodate further element of type %s "}
 //                                   % util::typeStr<TY>()};
+          }
+        
+        void
+        moveElem (size_t idx, Bucket* src, Bucket* tar)
+          {
+            if constexpr (is_trivially_copyable_v<E>)
+              {
+                void* oldPos = & src->subscript(idx);
+                void* newPos = & tar->subscript(idx);
+                size_t amount = min (src->spread, tar->spread);
+                std::memmove (newPos, oldPos, amount);
+              }
+            else
+              {
+                Fac::template createAt<E> (tar, idx
+                                          ,std::move_if_noexcept (src->subscript(idx)));
+              }
           }
       };
     
@@ -333,7 +361,7 @@ namespace lib {
       adjustStorage (size_t cnt, size_t spread)
         {
           size_t demand{cnt*spread};
-          Coll::data_ = POL::realloc (Coll::data_, demand);
+          Coll::data_ = POL::realloc (Coll::data_, cnt,spread); /////////////////OOO anpassen
           ENSURE (Coll::data_);
           if (spread != Coll::spread())
             adjustSpread (spread);

@@ -114,6 +114,13 @@ namespace lib {
             elm += off;
             return * std::launder (reinterpret_cast<I*> (elm));
           }
+        
+        void
+        destroy()
+          {
+            if (deleter)
+              (*deleter) (this);
+          }
       };
     
   }//(End)implementation details
@@ -140,7 +147,7 @@ namespace lib {
       
     public:
      ~Several()  noexcept
-        try { discardData(); }
+        try { if (data_) data_->destroy(); }
         ERROR_LOG_AND_IGNORE (progress, "clean-up Several data")
       
       /// Move-Assignment allowed...
@@ -198,12 +205,6 @@ namespace lib {
         }
       
     private:
-      void
-      discardData()
-        {
-          if (data_ and data_->deleter)
-            (*data_->deleter) (data_);
-        }
     };
   
   
