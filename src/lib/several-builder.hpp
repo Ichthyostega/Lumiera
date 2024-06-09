@@ -51,6 +51,7 @@
 #include "lib/util.hpp"
 
 #include <type_traits>
+#include <functional>
 #include <cstring>
 #include <utility>
 #include <vector>
@@ -171,12 +172,15 @@ namespace lib {
           {
             Bucket* newBucket = Fac::create (cnt, spread);
             if (data)
-              {
-                size_t elms = min (cnt, data->cnt);
-                for (size_t idx=0; idx<elms; ++idx)
-                  moveElem(idx, data, newBucket);
-                data->destroy();
-              }
+              try {
+                  newBucket->deleter = data->deleter;
+                  size_t elms = min (cnt, data->cnt);
+                  for (size_t idx=0; idx<elms; ++idx)
+                    moveElem(idx, data, newBucket);
+                  data->destroy();
+                }
+              catch(...)
+                { newBucket->destroy(); }
             return newBucket;
 /*            
             size_t buffSiz{data? data->buffSiz : 0};
@@ -246,6 +250,7 @@ namespace lib {
                 Fac::template createAt<E> (tar, idx
                                           ,std::move_if_noexcept (src->subscript(idx)));
               }
+            tar->cnt = idx+1; // mark fill continuously for proper clean-up after exception   
           }
       };
     
@@ -263,14 +268,26 @@ namespace lib {
     template<class I, class E>
     struct HandlingStrategy
       {
-        bool disposable ;
-        bool lock_move  ;
+        enum DestructionMethod { UNKNOWN
+                               , TRIVIAL
+                               , ELEMENT
+                               , VIRTUAL
+                               };
+        static Literal
+        render(DestructionMethod m)
+          {
+            switch (m)
+              { 
+                case TRIVIAL: return "trivial";
+                case ELEMENT: return "fixed-element-type";
+                case VIRTUAL: return "virtual-baseclass";
+                default:
+                  throw err::Logic{"unknown DestructionMethod"};
+              }
+          }
         
-        HandlingStrategy (bool unmanaged)
-          : disposable{unmanaged or (is_trivially_destructible_v<E> and
-                                     is_trivially_destructible_v<I>)}
-          , lock_move{false}
-          { }
+        DestructionMethod destructor{UNKNOWN};
+        bool              lock_move{false};
         
         /** mark that we're about to accept an otherwise unknown type,
          *  which can not be trivially moved. This irrevocably disables
@@ -291,24 +308,36 @@ namespace lib {
         
         
         template<typename TY>
-        bool
-        canDestroy()
+        std::function<void(I&)>
+        selectDestructor()
           {
-            return (disposable and is_trivially_destructible_v<TY>)
-                or (is_trivially_destructible_v<TY> and is_trivially_destructible_v<I>)
-                or (has_virtual_destructor_v<I> and is_Subclass<TY,I>())
-                or (is_same_v<TY,E> and is_Subclass<E,I>());
+            if (is_trivially_destructible_v<TY>)
+              {
+                __ensureMark (TRIVIAL, util::typeStr<TY>());
+                return [](auto){ /* calmness */ };
+              }
+            if (is_same_v<TY,E> and is_Subclass<E,I>())
+              {
+                __ensureMark (ELEMENT, util::typeStr<TY>());
+                return [](I& elm){ reinterpret_cast<E&>(elm).~E(); };
+              }
+            if (is_Subclass<TY,I>() and has_virtual_destructor_v<I>)
+              {
+                __ensureMark (VIRTUAL, util::typeStr<TY>());
+                return [](I& elm){ elm.~I(); };
+              }
+            throw err::Invalid{_Fmt{"Unsupported kind of destructor for element type %s."}
+                                   % util::typeStr<TY>()};
           }
         
-        auto
-        getDeleter()
+        void
+        __ensureMark(DestructionMethod expectedKind, string typeID)
           {
-            if (disposable)
-              return nullptr;
-            if (has_virtual_destructor_v<I>)
-              return nullptr;
-            else
-              return nullptr;
+            if (destructor != UNKNOWN and destructor != expectedKind)
+              throw err::Invalid{_Fmt{"Unable to handle destructor for element type %s, "
+                                      "since this container has been primed to use %s-deleters."}
+                                     % typeID % render(expectedKind)};
+            destructor = expectedKind;
           }
       };
   }
@@ -328,7 +357,7 @@ namespace lib {
     {
       using Coll = Several<I>;
       
-      HandlingStrategy<I,E> handling_{POL::isDisposable};
+      HandlingStrategy<I,E> handling_{};
       
     public:
       SeveralBuilder() = default;
@@ -375,9 +404,8 @@ namespace lib {
       void
       emplaceElm (ARGS&& ...args)
         {
-          if (not handling_.template canDestroy<TY>())
-            throw err::Invalid{_Fmt{"Unable to handle destructor for element type %s"}
-                                   % util::typeStr<TY>()};
+          // ensure proper configuration of clean-up for the container
+          auto invokeDestructor = handling_.template selectDestructor<TY>();
           
           // mark when target type is not trivially movable
           handling_.template probeMoveCapability<TY>();
@@ -392,10 +420,12 @@ namespace lib {
           size_t newPos = Coll::size();
           size_t newCnt = Coll::empty()? INITIAL_ELM_CNT : newPos+1;
           adjustStorage (newCnt, max (elmSiz, Coll::spread()));
+          ENSURE (Coll::data_);
+          if (not Coll::data_->deleter)
+            UNIMPLEMENTED ("setup deleter trampoline");
           Coll::data_->cnt = newPos+1;
           POL::template createAt<TY> (Coll::data_, newPos, forward<ARGS> (args)...);
         }
-      
       
       void
       adjustStorage (size_t cnt, size_t spread)
