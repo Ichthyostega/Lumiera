@@ -68,6 +68,7 @@
 #include "lib/iter-adapter.hpp"
 
 #include <cstddef>
+#include <functional>
 
 
 namespace lib {
@@ -84,7 +85,7 @@ namespace lib {
           , deleter{nullptr}
           { }
         
-        typedef void (*Deleter) (ArrayBucket*);
+        using Deleter = std::function<void(ArrayBucket*)>;
         
         size_t cnt;
         size_t spread;
@@ -119,7 +120,7 @@ namespace lib {
         destroy()
           {
             if (deleter)
-              (*deleter) (this);
+              deleter (this);
           }
       };
     

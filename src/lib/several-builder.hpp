@@ -77,6 +77,7 @@ namespace lib {
     using util::max;
     using util::min;
     using util::_Fmt;
+    using std::is_trivially_destructible_v;
     
     template<class I, template<typename> class ALO>
     class ElementFactory
@@ -140,13 +141,15 @@ namespace lib {
         destroy (ArrayBucket<I>* bucket)
           {
             REQUIRE (bucket);
-            size_t cnt = bucket->cnt;
+            if (not is_trivially_destructible_v<E>)
+              {
+                size_t cnt = bucket->cnt;
+                using ElmAlloT = typename AlloT::template rebind_traits<E>;
+                auto elmAllo = adaptAllocator<E>();
+                for (size_t idx=0; idx<cnt; ++idx)
+                  ElmAlloT::destroy (elmAllo, & bucket->subscript(idx));
+              }
             size_t storageBytes = bucket->buffSiz;
-            using ElmAlloT = typename AlloT::template rebind_traits<E>;
-            auto elmAllo = adaptAllocator<E>();
-            for (size_t idx=0; idx<cnt; ++idx)
-              ElmAlloT::destroy (elmAllo, & bucket->subscript(idx));
-            
             std::byte* loc = reinterpret_cast<std::byte*> (bucket);
             AlloT::deallocate (baseAllocator(), loc, storageBytes);
           };
@@ -227,12 +230,6 @@ namespace lib {
                 return newBucket;
               }
   */        
-//          // ensure sufficient storage or verify the ability to re-allocate
-//          if (not (Coll::hasReserve(sizeof(TY))
-//                   or POL::canExpand(sizeof(TY))
-//                   or handling_.template canDynGrow<TY>()))
-//            throw err::Invalid{_Fmt{"Unable to accommodate further element of type %s "}
-//                                   % util::typeStr<TY>()};
           }
         
         void
@@ -250,7 +247,7 @@ namespace lib {
                 Fac::template createAt<E> (tar, idx
                                           ,std::move_if_noexcept (src->subscript(idx)));
               }
-            tar->cnt = idx+1; // mark fill continuously for proper clean-up after exception   
+            tar->cnt = idx+1; // mark fill continuously for proper clean-up after exception
           }
       };
     
@@ -268,16 +265,16 @@ namespace lib {
     template<class I, class E>
     struct HandlingStrategy
       {
-        enum DestructionMethod { UNKNOWN
-                               , TRIVIAL
-                               , ELEMENT
-                               , VIRTUAL
-                               };
+        enum DestructionMethod{ UNKNOWN
+                              , TRIVIAL
+                              , ELEMENT
+                              , VIRTUAL
+                              };
         static Literal
-        render(DestructionMethod m)
+        render (DestructionMethod m)
           {
             switch (m)
-              { 
+              {
                 case TRIVIAL: return "trivial";
                 case ELEMENT: return "fixed-element-type";
                 case VIRTUAL: return "virtual-baseclass";
@@ -288,6 +285,7 @@ namespace lib {
         
         DestructionMethod destructor{UNKNOWN};
         bool              lock_move{false};
+        
         
         /** mark that we're about to accept an otherwise unknown type,
          *  which can not be trivially moved. This irrevocably disables
@@ -306,37 +304,37 @@ namespace lib {
             return is_trivially_copyable_v<E> and not lock_move;
           }
         
-        
-        template<typename TY>
-        std::function<void(I&)>
-        selectDestructor()
+        template<typename TY, class FAC>
+        typename ArrayBucket<I>::Deleter
+        selectDestructor (FAC const& factory)
           {
-            if (is_trivially_destructible_v<TY>)
+            if (is_Subclass<TY,I>() and has_virtual_destructor_v<I>)
               {
-                __ensureMark (TRIVIAL, util::typeStr<TY>());
-                return [](auto){ /* calmness */ };
+                __ensureMark<TY> (VIRTUAL);
+                return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<I> (bucket); };
               }
             if (is_same_v<TY,E> and is_Subclass<E,I>())
               {
-                __ensureMark (ELEMENT, util::typeStr<TY>());
-                return [](I& elm){ reinterpret_cast<E&>(elm).~E(); };
+                __ensureMark<TY> (ELEMENT);
+                return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<E> (bucket); };
               }
-            if (is_Subclass<TY,I>() and has_virtual_destructor_v<I>)
+            if (is_trivially_destructible_v<TY>)
               {
-                __ensureMark (VIRTUAL, util::typeStr<TY>());
-                return [](I& elm){ elm.~I(); };
+                __ensureMark<TY> (TRIVIAL);
+                return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<TY> (bucket); };
               }
             throw err::Invalid{_Fmt{"Unsupported kind of destructor for element type %s."}
                                    % util::typeStr<TY>()};
           }
         
+        template<typename TY>
         void
-        __ensureMark(DestructionMethod expectedKind, string typeID)
+        __ensureMark (DestructionMethod expectedKind)
           {
             if (destructor != UNKNOWN and destructor != expectedKind)
               throw err::Invalid{_Fmt{"Unable to handle destructor for element type %s, "
                                       "since this container has been primed to use %s-deleters."}
-                                     % typeID % render(expectedKind)};
+                                     % util::typeStr<TY>() % render(expectedKind)};
             destructor = expectedKind;
           }
       };
@@ -404,9 +402,6 @@ namespace lib {
       void
       emplaceElm (ARGS&& ...args)
         {
-          // ensure proper configuration of clean-up for the container
-          auto invokeDestructor = handling_.template selectDestructor<TY>();
-          
           // mark when target type is not trivially movable
           handling_.template probeMoveCapability<TY>();
           
@@ -416,15 +411,32 @@ namespace lib {
                                     "into container for element size %d."}
                                    % util::typeStr<TY>() % sizeof(TY) % Coll::spread()};
           
+          // ensure sufficient storage or verify the ability to re-allocate
+          if (not (Coll::hasReserve(sizeof(TY))
+                   or POL::canExpand(sizeof(TY))
+                   or not handling_.lock_move))
+            throw err::Invalid{_Fmt{"Unable to accommodate further element of type %s "}
+                                   % util::typeStr<TY>()};
+          
           size_t elmSiz = sizeof(TY);
           size_t newPos = Coll::size();
           size_t newCnt = Coll::empty()? INITIAL_ELM_CNT : newPos+1;
           adjustStorage (newCnt, max (elmSiz, Coll::spread()));
           ENSURE (Coll::data_);
-          if (not Coll::data_->deleter)
-            UNIMPLEMENTED ("setup deleter trampoline");
-          Coll::data_->cnt = newPos+1;
+          ensureDeleter<TY>();
           POL::template createAt<TY> (Coll::data_, newPos, forward<ARGS> (args)...);
+          Coll::data_->cnt = newPos+1;
+        }
+      
+      template<class TY>
+      void
+      ensureDeleter()
+        {
+          // ensure clean-up can be handled properly
+          typename POL::Fac& factory(*this);
+          typename ArrayBucket<I>::Deleter deleterFunctor = handling_.template selectDestructor<TY> (factory);
+          if (Coll::data_->deleter) return;
+          Coll::data_->deleter = deleterFunctor;
         }
       
       void
