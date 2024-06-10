@@ -21,19 +21,31 @@
 */
 
 /** @file several-builder.hpp
- ** Some (library-) implementations of the RefArray interface.
+ ** Builder to create and populate instances of the lib::Several container.
+ ** For mere usage, inclusion of several.hpp should be sufficient, since the
+ ** container front-end is generic and intends to hide most details of allocation
+ ** and element placement. It is an array-like container, but may hold subclass
+ ** elements, while exposing only a reference to the interface type.
  ** 
- ** Being an array-like object exposing just a const ref, it is typically used
- ** on interfaces, and the type of the array "elements" usually is a ABC or interface.
- ** The actual implementation typically holds a subclass, and is either based on a vector,
- ** or a fixed storage contained within the implementation. The only price to pay is
- ** a virtual call on element access.
+ ** # Implementation data layout
  ** 
- ** For advanced uses it would be possible to have a pointer-array or even an embedded
- ** storage of variant-records, able to hold a mixture of subclasses. (the latter cases
- ** will be implemented when needed).
+ ** The front-end container lib::Several<I> is actually just a smart-ptr referring
+ ** to the actual data storage, which resides within an _array bucket._ Typically
+ ** the latter is placed into memory managed by a custom allocator, most notably
+ ** lib::AllocationCluster. However, by default, the ArrayBucket<I> will be placed
+ ** into heap memory. All further meta information is also maintained alongside
+ ** this data allocation, including a _deleter function_ to invoke all element
+ ** destructors and de-allocate the bucket itself. Neither the type of the
+ ** actual elements, nor the type of the allocator is revealed.
  ** 
- ** @warning WIP and in rework 5/2025 -- not clear yet where this design leads to...
+ ** Since the actual data elements can (optionally) be of a different type than
+ ** the exposed interface type \a I, additional storage and spacing is required
+ ** in the element array. The field ArrayBucket<I>::spread defines this spacing
+ ** and thus the offset used for subscript access.
+ ** 
+ ** @todo this is a first implementation solution from 6/2025 — and was deemed
+ **       _roughly adequate_ at that time, yet should be revalidated once more
+ **       observations pertaining real-world usage are available...
  ** @see several-builder-test.cpp
  ** 
  */
@@ -78,6 +90,26 @@ namespace lib {
     using util::min;
     using util::_Fmt;
     using std::is_trivially_destructible_v;
+    
+    /**
+     * Helper to determine the »spread« required to hold
+     * elements of type \a TY in memory _with proper alignment._
+     * @warning assumes that the start of the buffer is also suitably aligned,
+     *          which _may not be the case_ for **over-aligned objects** with
+     *          `alignof(TY) > alignof(void*)`
+     */
+    template<typename TY>
+    size_t inline constexpr
+    reqSiz()
+      {
+        size_t quant = alignof(TY);
+        size_t siz = max (sizeof(TY), quant);
+        size_t req = (siz/quant) * quant;
+        if (req < siz)
+          req += quant;
+        return req;
+      }
+    
     
     template<class I, template<typename> class ALO>
     class ElementFactory
@@ -371,7 +403,7 @@ namespace lib {
       SeveralBuilder&&
       reserve (size_t cntElm)
         {
-          adjustStorage (cntElm, sizeof(E));
+          adjustStorage (cntElm, reqSiz<E>());
           return move(*this);
         }
       
@@ -406,19 +438,19 @@ namespace lib {
           handling_.template probeMoveCapability<TY>();
           
           // ensure sufficient element capacity or the ability to adapt element spread
-          if (Coll::spread() < sizeof(TY) and not (Coll::empty() or handling_.canWildMove()))
+          if (Coll::spread() < reqSiz<TY>() and not (Coll::empty() or handling_.canWildMove()))
             throw err::Invalid{_Fmt{"Unable to place element of type %s (size=%d)"
                                     "into container for element size %d."}
-                                   % util::typeStr<TY>() % sizeof(TY) % Coll::spread()};
+                                   % util::typeStr<TY>() % reqSiz<TY>() % Coll::spread()};
           
           // ensure sufficient storage or verify the ability to re-allocate
-          if (not (Coll::hasReserve(sizeof(TY))
-                   or POL::canExpand(sizeof(TY))
+          if (not (Coll::hasReserve(reqSiz<TY>())
+                   or POL::canExpand(reqSiz<TY>())
                    or not handling_.lock_move))
             throw err::Invalid{_Fmt{"Unable to accommodate further element of type %s "}
                                    % util::typeStr<TY>()};
           
-          size_t elmSiz = sizeof(TY);
+          size_t elmSiz = reqSiz<TY>();
           size_t newPos = Coll::size();
           size_t newCnt = Coll::empty()? INITIAL_ELM_CNT : newPos+1;
           adjustStorage (newCnt, max (elmSiz, Coll::spread()));

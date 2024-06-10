@@ -91,7 +91,7 @@ namespace lib {
         Deleter deleter;
         
         /** mark start of the storage area */
-        alignas(I)
+        alignas(void*)
           std::byte storage[sizeof(I)];
         
         
