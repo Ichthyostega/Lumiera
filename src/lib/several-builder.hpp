@@ -114,7 +114,7 @@ namespace lib {
             
             using BucketAlloT = typename AlloT::template rebind_traits<Bucket>;
             auto bucketAllo = adaptAllocator<Bucket>();
-            try { BucketAlloT::construct (bucketAllo, bucket, storageBytes, spread); }
+            try { BucketAlloT::construct (bucketAllo, bucket, cnt*spread, spread); }
             catch(...)
               {
                 AlloT::deallocate (baseAllocator(), loc, storageBytes);
@@ -149,7 +149,7 @@ namespace lib {
                 for (size_t idx=0; idx<cnt; ++idx)
                   ElmAlloT::destroy (elmAllo, & bucket->subscript(idx));
               }
-            size_t storageBytes = bucket->buffSiz;
+            size_t storageBytes = Bucket::requiredStorage (bucket->buffSiz);
             std::byte* loc = reinterpret_cast<std::byte*> (bucket);
             AlloT::deallocate (baseAllocator(), loc, storageBytes);
           };
@@ -313,15 +313,15 @@ namespace lib {
                 __ensureMark<TY> (VIRTUAL);
                 return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<I> (bucket); };
               }
-            if (is_same_v<TY,E> and is_Subclass<E,I>())
-              {
-                __ensureMark<TY> (ELEMENT);
-                return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<E> (bucket); };
-              }
             if (is_trivially_destructible_v<TY>)
               {
                 __ensureMark<TY> (TRIVIAL);
                 return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<TY> (bucket); };
+              }
+            if (is_same_v<TY,E> and is_Subclass<E,I>())
+              {
+                __ensureMark<TY> (ELEMENT);
+                return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<E> (bucket); };
               }
             throw err::Invalid{_Fmt{"Unsupported kind of destructor for element type %s."}
                                    % util::typeStr<TY>()};

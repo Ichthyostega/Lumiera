@@ -117,7 +117,7 @@ namespace test{
       
       
       /** @test TODO demonstrate basic behaviour
-       * @todo WIP 5/24 🔁 define ⟶ implement
+       * @todo WIP 6/24 ✔ define ⟶ 🔁 implement
        */
       void
       simpleUsage()
@@ -131,7 +131,7 @@ namespace test{
       
       
       /** @test TODO various ways to build an populate the container
-       * @todo WIP 5/24 🔁 define ⟶ implement
+       * @todo WIP 6/24 🔁 define ⟶ implement
        */
       void
       check_Builder()
@@ -140,7 +140,7 @@ namespace test{
       
       
       /** @test TODO proper handling of exceptions during population
-       * @todo WIP 5/24 🔁 define ⟶ implement
+       * @todo WIP 6/24 🔁 define ⟶ implement
        */
       void
       check_ErrorHandling()
@@ -149,7 +149,7 @@ namespace test{
       
       
       /** @test TODO verify access operations on the actual container
-       * @todo WIP 5/24 🔁 define ⟶ implement
+       * @todo WIP 6/24 🔁 define ⟶ implement
        */
       void 
       check_ElementAccess()
@@ -158,7 +158,7 @@ namespace test{
       
       
       /** @test TODO demonstrate integration with a custom allocator
-       * @todo WIP 5/24 🔁 define ⟶ implement
+       * @todo WIP 6/24 🔁 define ⟶ implement
        */
       void 
       check_CustomAllocator()

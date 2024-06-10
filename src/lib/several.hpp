@@ -48,14 +48,12 @@
  ** random access through references to a interface type. It can only be created
  ** and populated through a builder, and is immutable during lifetime, while it
  ** can hold non-const element data. The actual implementation data types and the
- ** allocator framework used are _not exposed in the front-end's type signature._
+ ** employed allocator framework are _not exposed in the front-end's type signature._
  ** The container is single-ownership (move-asignable); some additional metadata
- ** and the data storage reside in an `ArrayBucket<I>`, managed by the allocator.
+ ** and the data storage reside within an `ArrayBucket<I>`, managed by the allocator.
  ** In its simplest form, this storage is heap allocated and automatically deleted.
  ** 
- ** @todo as of 2016, this concept seems very questionable: do we _really_ want
- **       to abstract over random access, or do we _actually_ want for-iteration??
- ** @warning WIP-WIP-WIP in rework 5/2025
+ ** @warning WIP-WIP in rework 6/2025
  ** @see several-builder.hpp
  */
 
@@ -98,7 +96,7 @@ namespace lib {
         
         
         static size_t
-        requiredStorage (size_t cnt, size_t spread)
+        requiredStorage (size_t cnt, size_t spread =1)
           {
             return sizeof(ArrayBucket) - sizeof(storage)
                  + cnt * spread;
@@ -113,6 +111,7 @@ namespace lib {
             std::byte* elm = storage;
             size_t off = idx * spread;
             elm += off;
+            ENSURE (storage <= elm and elm < storage+buffSiz);
             return * std::launder (reinterpret_cast<I*> (elm));
           }
         
@@ -152,8 +151,15 @@ namespace lib {
         ERROR_LOG_AND_IGNORE (progress, "clean-up Several data")
       
       /// Move-Assignment allowed...
-      Several (Several&&)            =default;
-      Several& operator= (Several&&) =default;
+      Several (Several&& rr)
+        {
+          std::swap (data_, rr.data_);
+        }
+      Several& operator= (Several&& rr)
+        {
+          std::swap (data_, rr.data_);
+          return *this;
+        }
       
       size_t
       size()  const
@@ -174,8 +180,8 @@ namespace lib {
           return data_->subscript (idx);
         }
       
-      I& front() { return operator[] (data_? data_->size_-1 : 0); }
-      I& back()  { return operator[] (0);                         }
+      I& front() { return operator[] (0);                         }
+      I& back()  { return operator[] (data_? data_->cnt-1 : 0);   }
       
       using iterator = I*;
       using const_iterator = I const*;
