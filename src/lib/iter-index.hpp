@@ -29,7 +29,7 @@
  ** as »Lumiera Forward Iterator«, the current access position can be retrieved directly
  ** and it can be relocated to another valid index position; this implies also the ability
  ** to re-set the iteration to the container's start. Optionally, a smart-ptr can be
- ** embedded, allowing the handle also to owns and manage the data container.
+ ** embedded, allowing the handle also to own and manage the data container.
  ** 
  ** @see IterIndex_test
  ** @see iter-adapter.hpp

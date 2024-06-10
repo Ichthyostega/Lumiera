@@ -127,12 +127,11 @@ namespace test{
       
       
       
-      /** @test verify the ability of IterCursor to switch
-       * the direction of the iteration. This "gear switch" can be done
-       * any time, while in the middle of iteration, and even after
-       * iteration end. That means, even an exhausted iterator can be
-       * "turned back". This does not work on a default constructed
-       * IterCursor, though.
+      /** @test verify the ability of IterIndex to access and manipulate
+       * the current index position, which can be done any time, while in
+       * the middle of iteration, and even after iteration end. That means,
+       * even an exhausted iterator can be „reanimated“. This manipulation
+       * is not allowed on a default constructed IterIndex, though.
        */
       void
       verify_randomAccess ()
@@ -173,12 +172,17 @@ namespace test{
           CHECK (9 == iter.getIDX());
           VERIFY_ERROR (INDEX_BOUNDS, iter.setIDX(-1));
           CHECK (9 == iter.getIDX());
+          
+          Iter empty;
+          CHECK (isnil (empty));
+          VERIFY_ERROR (INDEX_BOUNDS, empty.setIDX(0));
+          VERIFY_ERROR (ITER_EXHAUST, empty.getIDX());
         }
       
       
       
-      /** @test verify the const and dereferencing variants,
-       *  based on the const-ness of the underlying STL iterator
+      /** @test verify possible variations of this iterator template,
+       *  using a const container or maintaining shared ownership.
        */
       void
       iterTypeVariations ()

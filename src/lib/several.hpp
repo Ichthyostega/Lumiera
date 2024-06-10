@@ -63,7 +63,7 @@
 
 
 #include "lib/nocopy.hpp"
-#include "lib/iter-adapter.hpp"
+#include "lib/iter-index.hpp"
 
 #include <cstddef>
 #include <functional>
@@ -180,17 +180,25 @@ namespace lib {
           return data_->subscript (idx);
         }
       
+      I const&
+      operator[] (size_t idx)  const
+        {
+          return const_cast<Several&>(*this).operator[] (idx);
+        }
+      
       I& front() { return operator[] (0);                         }
       I& back()  { return operator[] (data_? data_->cnt-1 : 0);   }
       
-      using iterator = I*;
-      using const_iterator = I const*;
+      using iterator       = lib::IterIndex<Several>;
+      using const_iterator = lib::IterIndex<const Several>;
       
-      iterator begin() { UNIMPLEMENTED ("iteration"); }
-      iterator end()   { UNIMPLEMENTED ("iteration"); }
-      const_iterator begin() const { UNIMPLEMENTED ("iteration"); }
-      const_iterator end()   const { UNIMPLEMENTED ("iteration"); }
+      iterator begin()             { return iterator{*this};      }
+      iterator end()               { return iterator{};           }
+      const_iterator begin() const { return const_iterator{*this};}
+      const_iterator end()   const { return const_iterator{};     }
       
+      friend auto begin (Several& svl)       { return svl.begin();}
+      friend auto end   (Several& svl)       { return svl.end();  }
       friend auto begin (Several const& svl) { return svl.begin();}
       friend auto end   (Several const& svl) { return svl.end();  }
       
