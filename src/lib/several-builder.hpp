@@ -540,13 +540,15 @@ namespace lib {
       
       template<typename TY>
       void
-      __ensureMark (DestructionMethod expectedKind)
+      __ensureMark (DestructionMethod requiredKind)
         {
-          if (destructor != UNKNOWN and destructor != expectedKind)
-            throw err::Invalid{_Fmt{"Unable to handle destructor for element type %s, "
-                                    "since this container has been primed to use %s-deleters."}
-                                   % util::typeStr<TY>() % render(expectedKind)};
-          destructor = expectedKind;
+          if (destructor != UNKNOWN and destructor != requiredKind)
+            throw err::Invalid{_Fmt{"Unable to handle (%s-)destructor for element type %s, "
+                                    "since this container has been primed to use %s-destructors."}
+                                   % render(requiredKind)
+                                   % util::typeStr<TY>()
+                                   % render(destructor)};
+          destructor = requiredKind;
         }
       
       

@@ -134,7 +134,14 @@ namespace test{
         }
       
       
-      /** @test TODO various ways to build an populate the container
+      /** @test various ways to build an populate the container
+       *      - with a defined interface type \a I, instances of arbitrary subclasses
+       *        can be added, assuming there is sufficient pre-allocated buffer space;
+       *        all these subclass instances are accessed through the common interface.
+       *      - yet the added elements can also be totally unrelated, in which case an
+       *        *unchecked wild cast* will happen on access; while certainly dangerous,
+       *        this behaviour allows for special low-level data layout tricks.
+       *      - the results from an iterator can be used to populate by copy
        * @todo WIP 6/24 🔁 define ⟶ ✔ implement
        */
       void
@@ -204,6 +211,43 @@ namespace test{
       void
       check_ErrorHandling()
         {
+          { // Scenario-1 : Baseclass and arbitrary subclass elements
+            SeveralBuilder<Dummy> builder;
+            
+            // The first element will _prime_ the container for a suitable usage pattern
+            builder.emplace<Num<1>>();
+            CHECK (1 == builder.size());
+            
+            // Notably the first element established the _spread_ between index positions,
+            // which effectively limits the size of objects to be added. Moreover, since
+            // the element type was detected to be non-trivial, we can not correct this
+            // element spacing by shifting existing allocations (`memmove()` not possible)
+            CHECK (sizeof(Num<1>) < sizeof(Num<5>));
+            VERIFY_FAIL ("Unable to place element of type Num<5u> (size="
+                        , builder.emplace<Num<5>>() );
+            CHECK (1 == builder.size());
+            
+            // Furthermore, the first element was detected to be a subclass,
+            // and the interface type `Dummy` has a virtual destructor;
+            // all added elements must comply to this scheme, once established
+            VERIFY_FAIL ("Unable to handle (trivial-)destructor for element type long, "
+                         "since this container has been primed to use virtual-baseclass-destructors."
+                        , builder.emplace<long>(55) );
+            CHECK (1 == builder.size());
+            
+            // the initial allocation added some reserve buffer space (for 10 elements)
+            // and we can fill that space with arbitrary subclass instances
+            builder.fillElm (5);
+            CHECK (6 == builder.size());
+            
+            // But the initial allocation can not be increased, since that would require
+            // a re-allocation of a larger buffer, followed by copying the elements;
+            // but since the established scheme allows for _arbitrary_ subclasses,
+            // the builder does not know the exact type for safe element relocation.
+            VERIFY_FAIL ("Unable to accommodate further element of type Dummy"
+                        , builder.fillElm (20) );
+            CHECK (10 == builder.size());
+          }
         }
       
       
