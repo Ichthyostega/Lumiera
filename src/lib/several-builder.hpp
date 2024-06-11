@@ -168,7 +168,7 @@ namespace lib {
             REQUIRE (bucket);
             using ElmAlloT = typename AlloT::template rebind_traits<E>;
             auto elmAllo = adaptAllocator<E>();
-            E* loc = & bucket->subscript (idx);
+            E* loc = reinterpret_cast<E*> (& bucket->subscript (idx));
             ElmAlloT::construct (elmAllo, loc, forward<ARGS> (args)...);
             ENSURE (loc);
             return *loc;
@@ -185,7 +185,10 @@ namespace lib {
                 using ElmAlloT = typename AlloT::template rebind_traits<E>;
                 auto elmAllo = adaptAllocator<E>();
                 for (size_t idx=0; idx<cnt; ++idx)
-                  ElmAlloT::destroy (elmAllo, & bucket->subscript(idx));
+                  {
+                    E* elm = reinterpret_cast<E*> (& bucket->subscript (idx));
+                    ElmAlloT::destroy (elmAllo, elm);
+                  }
               }
             size_t storageBytes = Bucket::requiredStorage (bucket->buffSiz);
             std::byte* loc = reinterpret_cast<std::byte*> (bucket);
@@ -295,6 +298,34 @@ namespace lib {
           return move(*this);
         }
       
+      template<class X>
+      SeveralBuilder&&
+      appendAll (std::initializer_list<X> ili)
+        {
+          using Val = typename meta::Strip<X>::TypeReferred;
+          for (Val const& x : ili)
+            emplaceNewElm<Val> (x);
+          return move(*this);
+        }
+      
+      template<typename...ARGS>
+      SeveralBuilder&&
+      fillElm (size_t cntNew, ARGS&& ...args)
+        {
+          for ( ; 0<cntNew; --cntNew)
+            emplaceNewElm<I> (forward<ARGS> (args)...);
+          return move(*this);
+        }
+      
+      template<class TY, typename...ARGS>
+      SeveralBuilder&&
+      emplace (ARGS&& ...args)
+        {
+          using Val = typename meta::RefTraits<TY>::Value;
+          emplaceNewElm<Val> (forward<ARGS> (args)...);
+          return move(*this);
+        }
+      
       
       /**
        * Terminal Builder: complete and lock the collection contents.
@@ -307,18 +338,22 @@ namespace lib {
           return move (*this);
         }
       
+      size_t size() const { return Coll::size(); }
+      bool empty()  const { return Coll::empty();}
+      
+      
     private:
       template<class IT>
       void
       emplaceCopy (IT& dataSrc)
         {
-          using Val = std::remove_cv_t<typename IT::value_type>;
-          emplaceElm<Val> (*dataSrc);
+          using Val = typename IT::value_type;
+          emplaceNewElm<Val> (*dataSrc);
         }
       
       template<class TY, typename...ARGS>
       void
-      emplaceElm (ARGS&& ...args)
+      emplaceNewElm (ARGS&& ...args)
         {
           // mark when target type is not trivially movable
           probeMoveCapability<TY>();
@@ -330,7 +365,7 @@ namespace lib {
                                    % util::typeStr<TY>() % reqSiz<TY>() % Coll::spread()};
           
           // ensure sufficient storage or verify the ability to re-allocate
-          if (not (Coll::hasReserve(reqSiz<TY>())
+          if (not (Coll::empty() or Coll::hasReserve(reqSiz<TY>())
                    or POL::canExpand(reqSiz<TY>())
                    or canDynGrow()))
             throw err::Invalid{_Fmt{"Unable to accommodate further element of type %s "}

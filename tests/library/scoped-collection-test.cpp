@@ -55,12 +55,12 @@ namespace test{
          * @param i when zero, the trigger value will be revealed
          */
         virtual long
-        acc (int i)
+        calc (int i)
           {
             if (!i)
               return getVal() + trigger_;
             else
-              return Dummy::acc(i);
+              return Dummy::calc(i);
           }
         
       public:
@@ -164,7 +164,7 @@ namespace test{
             while (ii)
               {
                 CHECK (check == ii->getVal());
-                CHECK (check == ii->acc(+5) - 5);
+                CHECK (check == ii->calc(+5) - 5);
                 ++check;
                 ++ii;
               }
@@ -262,11 +262,11 @@ namespace test{
             CHECK (sum + rr == Dummy::checksum());
             
             
-            CHECK (d0.acc(11) == coll[0].getVal() + 11 );
-            CHECK (d1.acc(22) == rr + 22);
-            CHECK (d2.acc(33) == rr + 33);
-            CHECK (d2.acc(0)  == rr + (rr+1) );     // SubDummy's special implementation of the acc()-function
-                                                   //  returns the trigger value, when the argument is zero
+            CHECK (d0.calc(11) == coll[0].getVal() + 11 );
+            CHECK (d1.calc(22) == rr + 22);
+            CHECK (d2.calc(33) == rr + 33);
+            CHECK (d2.calc(0)  == rr + (rr+1) );     // SubDummy's special implementation of the acc()-function
+                                                    //  returns the trigger value, when the argument is zero
             
             coll.clear();
             coll.emplace<SubDummy> (11,22);
@@ -277,10 +277,10 @@ namespace test{
             // NOTE DANGEROUS:
             // The previously obtained references just point into the object storage.
             // Thus we're now accessing a different object, even a different type!
-            CHECK (d0.acc(0) == 11 + 22);
+            CHECK (d0.calc(0) == 11 + 22);
             
             // The others even point into obsoleted storage holding zombie objects
-            CHECK (d1.acc(44) == rr + 44);
+            CHECK (d1.calc(44) == rr + 44);
             
           }
           CHECK (0 == Dummy::checksum());
@@ -317,12 +317,12 @@ namespace test{
             CHECK (6 == coll.size());
             CHECK (0 != Dummy::checksum());
             
-            CHECK (coll[0].acc(0) == 0 + rr);
-            CHECK (coll[1].acc(0) == 1 + rr + trigger);
-            CHECK (coll[2].acc(0) == 2 + rr);
-            CHECK (coll[3].acc(0) == 3 + rr + trigger);
-            CHECK (coll[4].acc(0) == 4 + rr);
-            CHECK (coll[5].acc(0) == 5 + rr + trigger);
+            CHECK (coll[0].calc(0) == 0 + rr);
+            CHECK (coll[1].calc(0) == 1 + rr + trigger);
+            CHECK (coll[2].calc(0) == 2 + rr);
+            CHECK (coll[3].calc(0) == 3 + rr + trigger);
+            CHECK (coll[4].calc(0) == 4 + rr);
+            CHECK (coll[5].calc(0) == 5 + rr + trigger);
             // what does this check prove?
             // - the container was indeed populated with DubDummy objects
             //   since the overridden version of Dummy::acc() did run and

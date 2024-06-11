@@ -72,8 +72,8 @@
  ** be expected from any such iterator. These rules are similar to STL's
  ** "forward iterator", with the addition of an bool check to detect
  ** iteration end. The latter is inspired by the \c hasNext() function
- ** found in many current languages supporting iterators. In a similar
- ** vein (inspired from functional programming), we deliberately don't
+ ** found in many current languages supporting iterators. However, by
+ ** inspiration from functional programming, we deliberately do not
  ** support the various extended iterator concepts from STL and boost
  ** (random access iterators, output iterators, arithmetics, difference
  ** between iterators and the like). According to this concept,
@@ -89,6 +89,13 @@
  ** - when an iterator is _not_ in the exhausted state, it may be
  **   _dereferenced_ to yield the "current" value.
  ** - moreover, iterators may be incremented until exhaustion.
+ ** 
+ ** Conceptually, a Lumiera Iterator represents a lazy stream of calculations
+ ** rather than a target value considered to be »within« a container. And while
+ ** the result is deliberately _always exposed as a reference,_ to keep the
+ ** door open for special-case manipulations, for the typical usage it is
+ ** _discouraged_ to assume anything about the source, beyond the limited
+ ** access to some transient state as exposed during active iteration.
  ** 
  ** @see iter-adapter-test.cpp
  ** @see itertools.hpp
@@ -326,7 +333,7 @@ namespace lib {
    * right into the iterator. Contrast this to IterAdapter, which refers to a managing
    * container behind the scenes. Here, all of the state is assumed to live in the
    * custom type embedded into this iterator, accessed and manipulated through
-   * a set of free functions, picked up through ADL.
+   * a dedicated _iteration control API_ exposed as member functions.
    * 
    * \par Assumptions when building iterators based on IterStateWrapper
    * There is a custom state representation type ST.

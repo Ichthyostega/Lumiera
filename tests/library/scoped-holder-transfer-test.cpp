@@ -147,7 +147,7 @@ namespace test {
             CHECK (rawP);
             CHECK (table[5]);
             CHECK (rawP == &(*table[5]));
-            CHECK (rawP->acc(-555) == table[5]->acc(-555));
+            CHECK (rawP->calc(-555) == table[5]->calc(-555));
           }
           CHECK (0 == Dummy::checksum());
         }

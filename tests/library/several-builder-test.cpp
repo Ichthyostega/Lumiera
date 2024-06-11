@@ -28,6 +28,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/testdummy.hpp"
+#include "lib/test/test-coll.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/test/diagnostic-output.hpp"////////////////TODO
 #include "lib/iter-explorer.hpp"
@@ -44,6 +45,8 @@ using std::vector;
 using std::rand;
 
 using lib::explore;
+using util::isLimited;
+using util::isnil;
 using util::join;
 
 
@@ -68,7 +71,7 @@ namespace test{
         
       public:
         Num (uint seed=i)
-          : Dummy{seed}
+          : Dummy(seed)
           {
             ext_.fill(seed);
             setVal ((i+1)*seed);
@@ -79,7 +82,7 @@ namespace test{
           }
           
         long
-        acc (int ii)  override
+        calc (int ii)  override
           {
             return i+ii + explore(ext_).resultSum();
           }
@@ -110,7 +113,7 @@ namespace test{
           simpleUsage();
           check_Builder();
           check_ErrorHandling();
-          check_ElementAccess();
+          check_ElementStorage();
           check_CustomAllocator();
         }
       
@@ -131,11 +134,47 @@ namespace test{
       
       
       /** @test TODO various ways to build an populate the container
-       * @todo WIP 6/24 🔁 define ⟶ implement
+       * @todo WIP 6/24 🔁 define ⟶ ✔ implement
        */
       void
       check_Builder()
         {
+          SeveralBuilder<Dummy> builder;
+          CHECK (isnil (builder));
+          
+          builder.emplace<Num<3>>()
+                 .emplace<Num<2>>(1);
+          CHECK (2 == builder.size());
+          builder.fillElm(2);
+          CHECK (4 == builder.size());
+          builder.fillElm(3, 5);
+          CHECK (7 == builder.size());
+          
+          Several<Dummy> elms = builder.build();
+          CHECK (    isnil(builder));
+          CHECK (not isnil(elms));
+          CHECK (7 == elms.size());
+SHOW_EXPR(elms[0])
+SHOW_EXPR(elms[0].getVal())
+          CHECK (elms[0].getVal() == (3+1)*3);                         // indeed a Num<3> with default-seed ≡ 3
+SHOW_EXPR(elms[0].calc(1))
+          CHECK (elms[0].calc(1)  == 3 + 1 + (3+3+3));                 // indeed called the overridden calc() operation
+SHOW_EXPR(elms[1].getVal())
+          CHECK (elms[1].getVal() == (2+1)*1);                         // indeed a Num<2> with seed ≡ 1
+SHOW_EXPR(elms[1].calc(1))
+          CHECK (elms[1].calc(1)  == 2 + 1 + (1+1));                   // indeed the overridden calc() picking from the Array(1,1)
+SHOW_EXPR(elms[2].getVal())
+          CHECK (isLimited (1, elms[2].getVal(), 100'000'000));        // indeed a Dummy with default random seed
+SHOW_EXPR(elms[3].getVal())
+          CHECK (isLimited (1, elms[3].getVal(), 100'000'000));        // and this one too, since we filled in two instances
+SHOW_EXPR(elms[4].getVal())
+          CHECK (elms[4].getVal() == 5);                               // followed by tree instances Dummy(5)
+SHOW_EXPR(elms[5].getVal())
+          CHECK (elms[5].getVal() == 5);
+SHOW_EXPR(elms[6].getVal())
+          CHECK (elms[6].getVal() == 5);
+SHOW_EXPR(elms[6].calc(1))
+          CHECK (elms[6].calc(1)  == 5+1);                             // indeed invoking the base implementation of calc()
         }
       
       
@@ -148,11 +187,11 @@ namespace test{
         }
       
       
-      /** @test TODO verify access operations on the actual container
+      /** @test TODO verify correct placement of instances within storage
        * @todo WIP 6/24 🔁 define ⟶ implement
        */
       void 
-      check_ElementAccess()
+      check_ElementStorage()
         {
         }
       

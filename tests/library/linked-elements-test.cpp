@@ -251,7 +251,7 @@ namespace test{
             while (ii)
               {
                 CHECK (check == ii->getVal());
-                CHECK (check == ii->acc(+5) - 5);
+                CHECK (check == ii->calc(+5) - 5);
                 --check;
                 ++ii;
               }

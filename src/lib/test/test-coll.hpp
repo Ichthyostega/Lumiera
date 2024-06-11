@@ -44,7 +44,7 @@ namespace test{
   
   template<class VEC>
   inline VEC
-  getTestSeq_int(const uint NUM_ELMS)
+  getTestSeq_int (const uint NUM_ELMS)
   {
     VEC vec;
     for (uint i=0; i<NUM_ELMS; ++i)
@@ -63,7 +63,7 @@ namespace test{
   
   template<class MAP>
   inline MAP
-  getTestMap_int(const uint NUM_ELMS)
+  getTestMap_int (const uint NUM_ELMS)
   {
     MAP map;
     for (uint i=0; i<NUM_ELMS; ++i)
@@ -74,7 +74,7 @@ namespace test{
   
   template<class MUMAP>
   inline MUMAP
-  getTestMultiMap_int(const uint NUM_ELMS)
+  getTestMultiMap_int (const uint NUM_ELMS)
   {
     MUMAP map;
     for (uint i=0; i<NUM_ELMS; ++i)

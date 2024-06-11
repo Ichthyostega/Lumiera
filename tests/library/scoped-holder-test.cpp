@@ -100,13 +100,13 @@ namespace test{
             
             CHECK (0 < Dummy::checksum());
             CHECK ( &(*holder));
-            CHECK (holder->acc(2) == 2 + Dummy::checksum());
+            CHECK (holder->calc(2) == 2 + Dummy::checksum());
             
             Dummy *rawP = holder.get();
             CHECK (rawP);
             CHECK (holder);
             CHECK (rawP == &(*holder));
-            CHECK (rawP->acc(-5) == holder->acc(-5));
+            CHECK (rawP->calc(-5) == holder->calc(-5));
             
             TRACE (test, "holder at %p", &holder);
             TRACE (test, "object at %p", holder.get() );
@@ -214,7 +214,7 @@ namespace test{
                 HO & contained = maph[i];
                 CHECK (!contained);
               }                      // 100 holder objects created by sideeffect
-                                    // ..... without creating any contained object!  
+                                    // ..... without creating any contained object!
             CHECK (0 == Dummy::checksum());
             CHECK (!isnil (maph));
             CHECK (100==maph.size());
@@ -223,13 +223,13 @@ namespace test{
               {
                 create_contained_object (maph[i]);
                 CHECK (maph[i]);
-                CHECK (0 < maph[i]->acc(12));
+                CHECK (0 < maph[i]->calc(12));
               }
             CHECK (100==maph.size());
             CHECK (0 != Dummy::checksum());
             
             
-            long value55 = maph[55]->acc(0); 
+            long value55 = maph[55]->calc(0);
             long currSum = Dummy::checksum();
             
             CHECK (1 == maph.erase(55));

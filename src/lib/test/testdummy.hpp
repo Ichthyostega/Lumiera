@@ -63,7 +63,7 @@ namespace test{
         }
       
       Dummy ()
-        : val_(1 + (rand() % 100000000))
+        : val_(1 + (rand() % 100'000'000))
         { init(); }
       
       Dummy (int v)
@@ -87,7 +87,7 @@ namespace test{
       
       /** a dummy API operation */
       virtual long
-      acc (int i)
+      calc (int i)
         {
           return val_+i;
         }
@@ -118,7 +118,7 @@ namespace test{
         }
       
       static void
-      activateCtorFailure(bool indeed =true)
+      activateCtorFailure (bool indeed =true)
         {
           _throw_in_ctor = indeed;
         }
