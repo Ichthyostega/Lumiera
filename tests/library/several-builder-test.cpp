@@ -154,26 +154,15 @@ namespace test{
           CHECK (    isnil(builder));
           CHECK (not isnil(elms));
           CHECK (7 == elms.size());
-SHOW_EXPR(elms[0])
-SHOW_EXPR(elms[0].getVal())
           CHECK (elms[0].getVal() == (3+1)*3);                         // indeed a Num<3> with default-seed ≡ 3
-SHOW_EXPR(elms[0].calc(1))
           CHECK (elms[0].calc(1)  == 3 + 1 + (3+3+3));                 // indeed called the overridden calc() operation
-SHOW_EXPR(elms[1].getVal())
           CHECK (elms[1].getVal() == (2+1)*1);                         // indeed a Num<2> with seed ≡ 1
-SHOW_EXPR(elms[1].calc(1))
           CHECK (elms[1].calc(1)  == 2 + 1 + (1+1));                   // indeed the overridden calc() picking from the Array(1,1)
-SHOW_EXPR(elms[2].getVal())
           CHECK (isLimited (1, elms[2].getVal(), 100'000'000));        // indeed a Dummy with default random seed
-SHOW_EXPR(elms[3].getVal())
           CHECK (isLimited (1, elms[3].getVal(), 100'000'000));        // and this one too, since we filled in two instances
-SHOW_EXPR(elms[4].getVal())
           CHECK (elms[4].getVal() == 5);                               // followed by tree instances Dummy(5)
-SHOW_EXPR(elms[5].getVal())
           CHECK (elms[5].getVal() == 5);
-SHOW_EXPR(elms[6].getVal())
           CHECK (elms[6].getVal() == 5);
-SHOW_EXPR(elms[6].calc(1))
           CHECK (elms[6].calc(1)  == 5+1);                             // indeed invoking the base implementation of calc()
         }
       

@@ -93,6 +93,9 @@ namespace lib {
     using std::is_trivially_destructible_v;
     using std::has_virtual_destructor_v;
     using std::is_trivially_copyable_v;
+    using std::is_object_v;
+    using std::is_volatile_v;
+    using std::is_const_v;
     using std::is_same_v;
     using lib::meta::is_Subclass;
 
@@ -290,6 +293,17 @@ namespace lib {
           return move(*this);
         }
       
+      template<typename VAL, typename...VALS>
+      SeveralBuilder&&
+      append (VAL&& val, VALS&& ...vals)
+        {
+          emplace<VAL> (forward<VAL> (val));
+          if constexpr (0 < sizeof...(VALS))
+            return append (forward<VALS> (vals)...);
+          else
+            return move(*this);
+        }
+      
       template<class IT>
       SeveralBuilder&&
       appendAll (IT&& data)
@@ -321,7 +335,7 @@ namespace lib {
       SeveralBuilder&&
       emplace (ARGS&& ...args)
         {
-          using Val = typename meta::RefTraits<TY>::Value;
+          using Val = typename meta::Strip<TY>::TypeReferred;
           emplaceNewElm<Val> (forward<ARGS> (args)...);
           return move(*this);
         }
@@ -355,6 +369,8 @@ namespace lib {
       void
       emplaceNewElm (ARGS&& ...args)
         {
+          static_assert (is_object_v<TY> and not (is_const_v<TY> or is_volatile_v<TY>));
+              
           // mark when target type is not trivially movable
           probeMoveCapability<TY>();
           
