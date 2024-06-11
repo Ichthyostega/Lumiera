@@ -586,6 +586,13 @@ namespace lib {
             .appendAll (ili);
   }
   
+  template<typename I, typename E =I>
+  SeveralBuilder<I,E>
+  makeSeveral()
+  {
+    return SeveralBuilder<I,E>{};
+  }
+  
   
 } // namespace lib
 #endif /*LIB_SEVERAL_BUILDER_H*/

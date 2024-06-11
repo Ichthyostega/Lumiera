@@ -42,6 +42,7 @@
 
 using ::test::Test;
 using std::vector;
+using std::array;
 using std::rand;
 
 using lib::explore;
@@ -139,31 +140,61 @@ namespace test{
       void
       check_Builder()
         {
-          SeveralBuilder<Dummy> builder;
-          CHECK (isnil (builder));
+          { // Scenario-1 : Baseclass and arbitrary subclass elements
+            SeveralBuilder<Dummy> builder;
+            CHECK (isnil (builder));
+            
+            builder.emplace<Num<3>>()
+                   .emplace<Num<2>>(1);
+            CHECK (2 == builder.size());
+            builder.fillElm(2);
+            CHECK (4 == builder.size());
+            builder.fillElm(3, 5);
+            CHECK (7 == builder.size());
+            
+            Several<Dummy> elms = builder.build();
+            CHECK (    isnil(builder));
+            CHECK (not isnil(elms));
+            CHECK (7 == elms.size());
+            CHECK (elms[0].getVal() == (3+1)*3);                         // indeed a Num<3> with default-seed ≡ 3
+            CHECK (elms[0].calc(1)  == 3 + 1 + (3+3+3));                 // indeed called the overridden calc() operation
+            CHECK (elms[1].getVal() == (2+1)*1);                         // indeed a Num<2> with seed ≡ 1
+            CHECK (elms[1].calc(1)  == 2 + 1 + (1+1));                   // indeed the overridden calc() picking from the Array(1,1)
+            CHECK (isLimited (1, elms[2].getVal(), 100'000'000));        // indeed a Dummy with default random seed
+            CHECK (isLimited (1, elms[3].getVal(), 100'000'000));        // and this one too, since we filled in two instances
+            CHECK (elms[4].getVal() == 5);                               // followed by tree instances Dummy(5)
+            CHECK (elms[5].getVal() == 5);
+            CHECK (elms[6].getVal() == 5);
+            CHECK (elms[6].calc(1)  == 5+1);                             // indeed invoking the base implementation of calc()
+          }
           
-          builder.emplace<Num<3>>()
-                 .emplace<Num<2>>(1);
-          CHECK (2 == builder.size());
-          builder.fillElm(2);
-          CHECK (4 == builder.size());
-          builder.fillElm(3, 5);
-          CHECK (7 == builder.size());
+          { // Scenario-2 : unrelated element types
+            SeveralBuilder<uint32_t> builder;
+            
+            auto urgh = array<char,5>{"Urgh"};
+            auto phi  = (1+sqrtf(5))/2;
+            
+            builder.append (urgh, phi, -1);                              // can emplace arbitrary data
+            CHECK (3 == builder.size());
+            
+            Several<uint32_t> elms = builder.build();                    // WARNING: data accessed by wild cast to interface type
+            CHECK (3 == elms.size());
+            CHECK (elms[0] == * reinterpret_cast<const uint32_t*> ("Urgh"));
+            CHECK (elms[1] == * reinterpret_cast<uint32_t*> (&phi));
+            CHECK (elms[2] == uint32_t(-1));
+          }
           
-          Several<Dummy> elms = builder.build();
-          CHECK (    isnil(builder));
-          CHECK (not isnil(elms));
-          CHECK (7 == elms.size());
-          CHECK (elms[0].getVal() == (3+1)*3);                         // indeed a Num<3> with default-seed ≡ 3
-          CHECK (elms[0].calc(1)  == 3 + 1 + (3+3+3));                 // indeed called the overridden calc() operation
-          CHECK (elms[1].getVal() == (2+1)*1);                         // indeed a Num<2> with seed ≡ 1
-          CHECK (elms[1].calc(1)  == 2 + 1 + (1+1));                   // indeed the overridden calc() picking from the Array(1,1)
-          CHECK (isLimited (1, elms[2].getVal(), 100'000'000));        // indeed a Dummy with default random seed
-          CHECK (isLimited (1, elms[3].getVal(), 100'000'000));        // and this one too, since we filled in two instances
-          CHECK (elms[4].getVal() == 5);                               // followed by tree instances Dummy(5)
-          CHECK (elms[5].getVal() == 5);
-          CHECK (elms[6].getVal() == 5);
-          CHECK (elms[6].calc(1)  == 5+1);                             // indeed invoking the base implementation of calc()
+          { // Scenario-3 : copy values from iterator
+            SeveralBuilder<int> builder;
+            
+            VecI seq = getTestSeq_int<VecI> (10);
+            builder.appendAll (seq);
+            CHECK (10 == builder.size());
+            
+            auto elms = builder.build();
+            CHECK (10 == elms.size());
+            CHECK (join (elms,"-") == "0-1-2-3-4-5-6-7-8-9"_expect);
+          }
         }
       
       
