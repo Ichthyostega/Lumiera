@@ -116,8 +116,8 @@ namespace test{
       
       
       
-      /** @test TODO demonstrate basic behaviour
-       * @todo WIP 6/24 ✔ define ⟶ 🔁 implement
+      /** @test demonstrate basic behaviour
+       * @todo WIP 6/24 ✔ define ⟶ ✔ implement
        */
       void
       simpleUsage()

@@ -89,7 +89,13 @@ namespace lib {
     using util::max;
     using util::min;
     using util::_Fmt;
+    using std::is_trivially_move_constructible_v;
     using std::is_trivially_destructible_v;
+    using std::has_virtual_destructor_v;
+    using std::is_trivially_copyable_v;
+    using std::is_same_v;
+    using lib::meta::is_Subclass;
+
     
     /**
      * Helper to determine the »spread« required to hold
@@ -187,7 +193,6 @@ namespace lib {
           };
       };
     
-    using std::is_trivially_copyable_v;
     
     template<class I, class E, template<typename> class ALO>
     struct AllocationPolicy
@@ -217,51 +222,6 @@ namespace lib {
               catch(...)
                 { newBucket->destroy(); }
             return newBucket;
-/*            
-            size_t buffSiz{data? data->buffSiz : 0};
-            if (demand == buffSiz)
-              return data;
-            if (demand > buffSiz)
-              {// grow into exponentially expanded new allocation
-                size_t spread = data? data->spread : sizeof(I);
-                size_t safetyLim = LUMIERA_MAX_ORDINAL_NUMBER * spread;
-                size_t expandAlloc = min (safetyLim
-                                         ,max (2*buffSiz, demand));
-                if (expandAlloc < demand)
-                  throw err::State{_Fmt{"Storage expansion for Several-collection "
-                                        "exceeds safety limit of %d bytes"} % safetyLim
-                                  ,LERR_(SAFETY_LIMIT)};
-                // allocate new storage block...
-                size_t newCnt = demand / spread;
-                if (newCnt * spread < demand) ++newCnt;
-                Bucket* newBucket = Fac::create (newCnt, spread);
-                // move (or copy) existing data...
-                size_t cnt = data? data->cnt : 0;
-                for (size_t idx=0; idx<cnt; ++idx)
-                  Fac::template createAt<I> (newBucket, idx
-                                            ,std::move_if_noexcept (data->subscript(idx)));
-                                   ////////////////////////////////////////////////////////OOO schee... aba mia brauchn E, ned I !!!!!
-                // discard old storage
-                if (data)
-                  Fac::template destroy<I> (data);
-                return newBucket;
-              }
-            else
-              {// shrink into precisely fitting new allocation
-                Bucket* newBucket{nullptr};
-                if (data)
-                  {
-                    size_t cnt{data->cnt};
-                    ASSERT (cnt > 0);
-                    newBucket = Fac::create (cnt, data->spread);
-                    for (size_t idx=0; idx<cnt; ++idx)
-                      Fac::template createAt<I> (newBucket, idx
-                                                ,std::move_if_noexcept (data->subscript(idx)));    ////////////OOO selbes Problem: E hier
-                    Fac::template destroy<I> (data);
-                  }
-                return newBucket;
-              }
-  */        
           }
         
         void
@@ -286,91 +246,8 @@ namespace lib {
     template<class I, class E>
     using HeapOwn = AllocationPolicy<I, E, std::allocator>;
     
-    
-    using std::is_trivially_move_constructible_v;
-    using std::is_trivially_destructible_v;
-    using std::has_virtual_destructor_v;
-    using std::is_trivially_copyable_v;
-    using std::is_same_v;
-    using lib::meta::is_Subclass;
-    
-    template<class I, class E>
-    struct HandlingStrategy
-      {
-        enum DestructionMethod{ UNKNOWN
-                              , TRIVIAL
-                              , ELEMENT
-                              , VIRTUAL
-                              };
-        static Literal
-        render (DestructionMethod m)
-          {
-            switch (m)
-              {
-                case TRIVIAL: return "trivial";
-                case ELEMENT: return "fixed-element-type";
-                case VIRTUAL: return "virtual-baseclass";
-                default:
-                  throw err::Logic{"unknown DestructionMethod"};
-              }
-          }
-        
-        DestructionMethod destructor{UNKNOWN};
-        bool              lock_move{false};
-        
-        
-        /** mark that we're about to accept an otherwise unknown type,
-         *  which can not be trivially moved. This irrevocably disables
-         *  relocations by low-level `memove` for this container instance */
-        template<typename TY>
-        void
-        probeMoveCapability()
-          {
-            if (not (is_same_v<TY,E> or is_trivially_copyable_v<TY>))
-              lock_move = true;
-          }
-        
-        bool
-        canWildMove()
-          {
-            return is_trivially_copyable_v<E> and not lock_move;
-          }
-        
-        template<typename TY, class FAC>
-        typename ArrayBucket<I>::Deleter
-        selectDestructor (FAC const& factory)
-          {
-            if (is_Subclass<TY,I>() and has_virtual_destructor_v<I>)
-              {
-                __ensureMark<TY> (VIRTUAL);
-                return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<I> (bucket); };
-              }
-            if (is_trivially_destructible_v<TY>)
-              {
-                __ensureMark<TY> (TRIVIAL);
-                return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<TY> (bucket); };
-              }
-            if (is_same_v<TY,E> and is_Subclass<E,I>())
-              {
-                __ensureMark<TY> (ELEMENT);
-                return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<E> (bucket); };
-              }
-            throw err::Invalid{_Fmt{"Unsupported kind of destructor for element type %s."}
-                                   % util::typeStr<TY>()};
-          }
-        
-        template<typename TY>
-        void
-        __ensureMark (DestructionMethod expectedKind)
-          {
-            if (destructor != UNKNOWN and destructor != expectedKind)
-              throw err::Invalid{_Fmt{"Unable to handle destructor for element type %s, "
-                                      "since this container has been primed to use %s-deleters."}
-                                     % util::typeStr<TY>() % render(expectedKind)};
-            destructor = expectedKind;
-          }
-      };
-  }
+  }//(End)implementation details
+  
   
   /**
    * Wrap a vector holding objects of a subtype and
@@ -387,7 +264,8 @@ namespace lib {
     {
       using Coll = Several<I>;
       
-      HandlingStrategy<I,E> handling_{};
+      using Bucket = ArrayBucket<I>;
+      using Deleter = typename Bucket::Deleter;
       
     public:
       SeveralBuilder() = default;
@@ -399,6 +277,8 @@ namespace lib {
         , POL{forward<ARGS> (alloInit)...}
         { }
       
+      
+      /* ===== Builder API ===== */
       
       SeveralBuilder&&
       reserve (size_t cntElm)
@@ -415,6 +295,12 @@ namespace lib {
           return move(*this);
         }
       
+      
+      /**
+       * Terminal Builder: complete and lock the collection contents.
+       * @note the SeveralBuilder is sliced away, effectively
+       *       returning only the pointer to the ArrayBucket.
+       */
       Several<I>
       build()
         {
@@ -435,10 +321,10 @@ namespace lib {
       emplaceElm (ARGS&& ...args)
         {
           // mark when target type is not trivially movable
-          handling_.template probeMoveCapability<TY>();
+          probeMoveCapability<TY>();
           
           // ensure sufficient element capacity or the ability to adapt element spread
-          if (Coll::spread() < reqSiz<TY>() and not (Coll::empty() or handling_.canWildMove()))
+          if (Coll::spread() < reqSiz<TY>() and not (Coll::empty() or canWildMove()))
             throw err::Invalid{_Fmt{"Unable to place element of type %s (size=%d)"
                                     "into container for element size %d."}
                                    % util::typeStr<TY>() % reqSiz<TY>() % Coll::spread()};
@@ -446,7 +332,7 @@ namespace lib {
           // ensure sufficient storage or verify the ability to re-allocate
           if (not (Coll::hasReserve(reqSiz<TY>())
                    or POL::canExpand(reqSiz<TY>())
-                   or not handling_.lock_move))
+                   or canDynGrow()))
             throw err::Invalid{_Fmt{"Unable to accommodate further element of type %s "}
                                    % util::typeStr<TY>()};
           
@@ -465,8 +351,7 @@ namespace lib {
       ensureDeleter()
         {
           // ensure clean-up can be handled properly
-          typename POL::Fac& factory(*this);
-          typename ArrayBucket<I>::Deleter deleterFunctor = handling_.template selectDestructor<TY> (factory);
+          Deleter deleterFunctor = selectDestructor<TY>();
           if (Coll::data_->deleter) return;
           Coll::data_->deleter = deleterFunctor;
         }
@@ -493,15 +378,18 @@ namespace lib {
               Coll::data_ = POL::realloc (Coll::data_, newCnt,spread);
             }
           ENSURE (Coll::data_);
-          if (handling_.canWildMove() and spread != Coll::spread())
+          if (canWildMove() and spread != Coll::spread())
             adjustSpread (spread);
         }
       
       void
       fitStorage()
         {
-          if (handling_.lock_move or not Coll::data_)
+          if (not Coll::data)
             return;
+          if (not canDynGrow())
+            throw err::Invalid{"Unable to shrink storage for Several-collection, "
+                               "since at least one element can not be moved."};
           Coll::data_ = POL::realloc (Coll::data_, Coll::size(), Coll::spread());
         }
       
@@ -536,6 +424,102 @@ namespace lib {
           oldPos += idx * oldSpread;
           newPos += idx * newSpread;
           std::memmove (newPos, oldPos, util::min (oldSpread,newSpread));
+        }
+      
+      
+      
+      /* ==== Logic do decide about possible element handling ==== */
+      
+      enum DestructionMethod{ UNKNOWN
+                            , TRIVIAL
+                            , ELEMENT
+                            , VIRTUAL
+                            };
+      static Literal
+      render (DestructionMethod m)
+        {
+          switch (m)
+            {
+              case TRIVIAL: return "trivial";
+              case ELEMENT: return "fixed-element-type";
+              case VIRTUAL: return "virtual-baseclass";
+              default:
+                throw err::Logic{"unknown DestructionMethod"};
+            }
+        }
+      
+      DestructionMethod destructor{UNKNOWN};
+      bool              lock_move{false};
+      
+      
+      /**
+       * Select a suitable method for invoking the element destructors
+       * and build a λ-object to be stored as deleter function alongside
+       * with the data; this includes a _copy_ of the embedded allocator,
+       * which in many cases is a monostate empty base class.
+       * @note this collection is _primed_ by the first element added,
+       *       causing to lock into one of the possible destructor schemes;
+       *       the reason is, we do not retain the information of the individual
+       *       element types and thus we must employ one coherent scheme for all.
+       */
+      template<typename TY>
+      Deleter
+      selectDestructor ()
+        {
+          typename POL::Fac& factory(*this);
+          
+          if (is_Subclass<TY,I>() and has_virtual_destructor_v<I>)
+            {
+              __ensureMark<TY> (VIRTUAL);
+              return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<I> (bucket); };
+            }
+          if (is_trivially_destructible_v<TY>)
+            {
+              __ensureMark<TY> (TRIVIAL);
+              return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<TY> (bucket); };
+            }
+          if (is_same_v<TY,E> and is_Subclass<E,I>())
+            {
+              __ensureMark<TY> (ELEMENT);
+              return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<E> (bucket); };
+            }
+          throw err::Invalid{_Fmt{"Unsupported kind of destructor for element type %s."}
+                                 % util::typeStr<TY>()};
+        }
+      
+      template<typename TY>
+      void
+      __ensureMark (DestructionMethod expectedKind)
+        {
+          if (destructor != UNKNOWN and destructor != expectedKind)
+            throw err::Invalid{_Fmt{"Unable to handle destructor for element type %s, "
+                                    "since this container has been primed to use %s-deleters."}
+                                   % util::typeStr<TY>() % render(expectedKind)};
+          destructor = expectedKind;
+        }
+      
+      
+      /** mark that we're about to accept an otherwise unknown type,
+       *  which can not be trivially moved. This irrevocably disables
+       *  relocations by low-level `memove` for this container instance */
+      template<typename TY>
+      void
+      probeMoveCapability()
+        {
+          if (not (is_same_v<TY,E> or is_trivially_copyable_v<TY>))
+            lock_move = true;
+        }
+      
+      bool
+      canWildMove()
+        {
+          return is_trivially_copyable_v<E> and not lock_move;
+        }
+      
+      bool
+      canDynGrow()
+        {
+          return not lock_move;
         }
     };
   
