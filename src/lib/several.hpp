@@ -217,10 +217,13 @@ namespace lib {
         }
       
       bool
-      hasReserve (size_t extraSize)  const
+      hasReserve (size_t requiredSize, size_t newElms =1)  const
         {
-          if (extraSize > spread())
-            extraSize += (extraSize - spread())*size();
+          if (requiredSize < spread())
+            requiredSize = spread();
+          size_t extraSize{requiredSize * newElms};
+          if (requiredSize > spread())
+            extraSize += (requiredSize - spread())*size();
           return data_
              and data_->buffSiz >= size()*spread() + extraSize;
         }

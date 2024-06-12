@@ -299,10 +299,15 @@ namespace lib {
       
       /* ===== Builder API ===== */
       
+      template<typename TY =E>
       SeveralBuilder&&
-      reserve (size_t cntElm)
+      reserve (size_t cntElm =1
+              ,size_t elmSiz =reqSiz<TY>())
         {
-          adjustStorage (cntElm, reqSiz<E>());
+          ensureElementCapacity<TY> (elmSiz);
+          ensureStorageCapacity<TY> (elmSiz,cntElm);
+          elmSiz = max (elmSiz, Coll::spread());
+          adjustStorage (cntElm, elmSiz);
           return move(*this);
         }
       
@@ -365,8 +370,10 @@ namespace lib {
           return move (*this);
         }
       
-      size_t size() const { return Coll::size(); }
-      bool empty()  const { return Coll::empty();}
+      size_t size()       const { return Coll::size(); }
+      bool empty()        const { return Coll::empty();}
+      size_t capacity()   const { return Coll::storageBuffSiz() / Coll::spread(); }
+      size_t capReserve() const { return capacity() - size(); }
       
       
     private:
@@ -384,23 +391,9 @@ namespace lib {
         {
           static_assert (is_object_v<TY> and not (is_const_v<TY> or is_volatile_v<TY>));
               
-          // mark when target type is not trivially movable
-          probeMoveCapability<TY>();
-          
-          // ensure sufficient element capacity or the ability to adapt element spread
-          if (Coll::spread() < reqSiz<TY>() and not (Coll::empty() or canWildMove()))
-            throw err::Invalid{_Fmt{"Unable to place element of type %s (size=%d)"
-                                    "into Several-container for element size %d."}
-                                   % util::typeStr<TY>() % reqSiz<TY>() % Coll::spread()};
-          
-          // ensure sufficient storage or verify the ability to re-allocate
-          if (not (Coll::empty() or Coll::hasReserve(reqSiz<TY>())
-                   or POL::canExpand(reqSiz<TY>())
-                   or canDynGrow()))
-            throw err::Invalid{_Fmt{"Several-container is unable to accommodate further element of type %s; "
-                                    "storage reserve (%s bytes) exhausted and unable to move elements "
-                                    "of mixed unknown detail type, which are not trivially movable." }
-                                   % util::typeStr<TY>() % Coll::storageBuffSiz()};
+          probeMoveCapability<TY>();   // mark when target type is not (trivially) movable
+          ensureElementCapacity<TY>(); // sufficient or able to adapt spread
+          ensureStorageCapacity<TY>(); // sufficient or able to grow buffer
           
           size_t elmSiz = reqSiz<TY>();
           size_t newPos = Coll::size();
@@ -424,6 +417,34 @@ namespace lib {
           Coll::data_->deleter = deleterFunctor;
         }
       
+      /** ensure sufficient element capacity or the ability to adapt element spread */
+      template<class TY>
+      void
+      ensureElementCapacity (size_t requiredSiz =reqSiz<TY>())
+        {
+          if (Coll::spread() < requiredSiz and not (Coll::empty() or canWildMove()))
+            throw err::Invalid{_Fmt{"Unable to place element of type %s (size=%d)"
+                                    "into Several-container for element size %d."}
+                                   % util::typeStr<TY>() % requiredSiz % Coll::spread()};
+        }
+      
+      /** ensure sufficient storage reserve or verify the ability to re-allocate */
+      template<class TY>
+      void
+      ensureStorageCapacity (size_t requiredSiz =reqSiz<TY>(), size_t newElms =1)
+        {
+          if (not (Coll::empty()
+                   or Coll::hasReserve (requiredSiz, newElms)
+                   or POL::canExpand (requiredSiz*newElms)
+                   or canDynGrow()))
+            throw err::Invalid{_Fmt{"Several-container is unable to accommodate further element of type %s; "
+                                    "storage reserve (%d bytes ≙ %d elms) exhausted and unable to move "
+                                    "elements of mixed unknown detail type, which are not trivially movable." }
+                                   % util::typeStr<TY>() % Coll::storageBuffSiz() % capacity()};
+        }
+      
+      
+      /** possibly grow storage and re-arrange elements to accommodate desired capacity */
       void
       adjustStorage (size_t cnt, size_t spread)
         {
@@ -433,9 +454,11 @@ namespace lib {
             return;
           if (demand > buffSiz)
             {// grow into exponentially expanded new allocation
+              if (spread > Coll::spread())
+                cnt = max (cnt, buffSiz / Coll::spread()); // retain reserve
               size_t safetyLim = LUMIERA_MAX_ORDINAL_NUMBER * Coll::spread();
               size_t expandAlloc = min (safetyLim
-                                       ,max (2*buffSiz, demand));
+                                       ,max (2*buffSiz, cnt*spread));
               if (expandAlloc < demand)
                 throw err::State{_Fmt{"Storage expansion for Several-collection "
                                       "exceeds safety limit of %d bytes"} % safetyLim

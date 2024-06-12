@@ -321,6 +321,8 @@ namespace test{
             // but we aren't able to move elements safely any more, since we don't capture the type.
             builder.emplace<Num<1>>();
             CHECK (20 == builder.size());
+            CHECK (20 == builder.capacity());
+            CHECK ( 0 == builder.capReserve());
             
             // But here comes the catch: since we choose to accept arbitrary sub-types not identified in detail,
             // the container has lost its ability of move-reallocation; with 20 elements the current reserve
@@ -335,6 +337,23 @@ namespace test{
             for (uint i=0; i<=18; ++i)
               CHECK (elms[i].calc(i) == 5 + i + (5+5+5+5+5));
             CHECK (elms.back().calc(0) == 1 + 0 + (1));
+          }
+          
+          { // Scenario-3 : arbitrary elements of trivial type
+            SeveralBuilder<uint8_t> builder;
+            
+            string BFR{"starship is cool"};
+            builder.appendAll (BFR);
+            CHECK (16 == builder.size());
+            CHECK ( 4 == builder.capReserve());
+            
+            builder.append(int64_t(33));
+            CHECK (17 == builder.size());
+            CHECK ( 3 == builder.capReserve());
+            
+            auto elms = builder.build();
+SHOW_EXPR(elms.size())
+SHOW_EXPR(join(elms, "·")) 
           }
         }
       
