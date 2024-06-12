@@ -89,10 +89,12 @@ namespace lib {
     using util::max;
     using util::min;
     using util::_Fmt;
+    using std::is_nothrow_move_constructible_v;
     using std::is_trivially_move_constructible_v;
     using std::is_trivially_destructible_v;
     using std::has_virtual_destructor_v;
     using std::is_trivially_copyable_v;
+    using std::is_copy_constructible_v;
     using std::is_object_v;
     using std::is_volatile_v;
     using std::is_const_v;
@@ -241,10 +243,20 @@ namespace lib {
                 std::memmove (newPos, oldPos, amount);
               }
             else
+            if constexpr (is_nothrow_move_constructible_v<E>
+                          or is_copy_constructible_v<E>)
               {
                 E& oldElm = reinterpret_cast<E&> (src->subscript (idx));
                 Fac::template createAt<E> (tar, idx
                                           ,std::move_if_noexcept (oldElm));
+              }
+            else
+              {
+                NOTREACHED("realloc immovable type (neither trivially nor typed movable)");
+                // this alternative code section is very important, because it allows
+                // to instantiate this code even for »noncopyable« types, assuming that
+                // sufficient storage is reserved beforehand, and thus copying is irrelevant.
+                // For context: the std::vector impl. from libStdC++ is lacking this option.
               }
             tar->cnt = idx+1; // mark fill continuously for proper clean-up after exception
           }
@@ -516,7 +528,7 @@ namespace lib {
        */
       template<typename TY>
       Deleter
-      selectDestructor ()
+      selectDestructor()
         {
           typename POL::Fac& factory(*this);
           

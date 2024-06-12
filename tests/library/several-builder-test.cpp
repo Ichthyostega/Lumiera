@@ -288,6 +288,12 @@ SHOW_EXPR(ne5.getVal())
             builder.fillElm(5);
             CHECK (5 == builder.size());
             
+            // trigger re-alloc by moving into larger memory block
+            builder.fillElm(14);
+            CHECK (19 == builder.size());
+            
+            builder.emplace<short>();
+            
             builder.emplace<Num<1>>();  ///////////////////////////////////OOO this should trigger an exception -> need to code an explicit check right at the start of emplaceNewElm()
           }
         }
