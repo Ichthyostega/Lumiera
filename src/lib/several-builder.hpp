@@ -277,7 +277,7 @@ namespace lib {
           ,class POL =HeapOwn<I,E>  ///< Allocator policy
           >
   class SeveralBuilder
-    : Several<I>
+    : private Several<I>
     , util::MoveOnly
     , POL
     {
@@ -390,15 +390,17 @@ namespace lib {
           // ensure sufficient element capacity or the ability to adapt element spread
           if (Coll::spread() < reqSiz<TY>() and not (Coll::empty() or canWildMove()))
             throw err::Invalid{_Fmt{"Unable to place element of type %s (size=%d)"
-                                    "into container for element size %d."}
+                                    "into Several-container for element size %d."}
                                    % util::typeStr<TY>() % reqSiz<TY>() % Coll::spread()};
           
           // ensure sufficient storage or verify the ability to re-allocate
           if (not (Coll::empty() or Coll::hasReserve(reqSiz<TY>())
                    or POL::canExpand(reqSiz<TY>())
                    or canDynGrow()))
-            throw err::Invalid{_Fmt{"Unable to accommodate further element of type %s "}
-                                   % util::typeStr<TY>()};
+            throw err::Invalid{_Fmt{"Several-container is unable to accommodate further element of type %s; "
+                                    "storage reserve (%s bytes) exhausted and unable to move elements "
+                                    "of mixed unknown detail type, which are not trivially movable." }
+                                   % util::typeStr<TY>() % Coll::storageBuffSiz()};
           
           size_t elmSiz = reqSiz<TY>();
           size_t newPos = Coll::size();
@@ -410,11 +412,13 @@ namespace lib {
           Coll::data_->cnt = newPos+1;
         }
       
+      /** ensure clean-up can be handled properly.
+       * @throw err::Invalid when \a TY requires a different style
+       *        of deleter than was established for this instance */
       template<class TY>
       void
       ensureDeleter()
         {
-          // ensure clean-up can be handled properly
           Deleter deleterFunctor = selectDestructor<TY>();
           if (Coll::data_->deleter) return;
           Coll::data_->deleter = deleterFunctor;
@@ -424,7 +428,7 @@ namespace lib {
       adjustStorage (size_t cnt, size_t spread)
         {
           size_t demand{cnt*spread};
-          size_t buffSiz{Coll::data_? Coll::data_->buffSiz : 0};
+          size_t buffSiz{Coll::storageBuffSiz()};
           if (demand == buffSiz)
             return;
           if (demand > buffSiz)
@@ -462,7 +466,7 @@ namespace lib {
       adjustSpread (size_t newSpread)
         {
           REQUIRE (Coll::data_);
-          REQUIRE (newSpread * Coll::size() <= Coll::data_->buffSiz);
+          REQUIRE (newSpread * Coll::size() <= Coll::storageBuffSiz());
           size_t oldSpread = Coll::spread();
           if (newSpread > oldSpread)
             // need to spread out

@@ -111,6 +111,18 @@ namespace test{
         }
       };
     
+    
+    /**
+     * A non-copyable struct with 16bit alignment
+     * - not trivially default constructible
+     * - but trivially destructible
+     */
+    struct ShortBlocker
+      : util::NonCopyable
+      {
+        int16_t val{short(1 + (rand() % 1'000))};
+      };
+    
   } // (END) test types
   
   
@@ -164,7 +176,7 @@ namespace test{
        *        *unchecked wild cast* will happen on access; while certainly dangerous,
        *        this behaviour allows for special low-level data layout tricks.
        *      - the results from an iterator can be used to populate by copy
-       * @todo WIP 6/24 🔁 define ⟶ ✔ implement
+       * @todo WIP 6/24 ✔ define ⟶ ✔ implement
        */
       void
       check_Builder()
@@ -228,7 +240,17 @@ namespace test{
       
       
       /** @test TODO proper handling of exceptions during population
-       * @todo WIP 6/24 🔁 define ⟶ implement
+       *      - when the container is filled with arbitrary subclasses
+       *        of a base interface with virtual destructor, the first element is used
+       *        to accommodate the storage spread; larger elements or elements of a completely
+       *        different type can not be accommodated and the container can not grow beyond
+       *        the initially allocated reserve (defined to be 10 elements by default).
+       *      - when the container is defined to hold elements of a specific fixed subclass,
+       *        it can be filled with default-constructed instances, and the initial allocation
+       *        can be expanded by move-relocation. Yet totally unrelated elements can not be
+       *        accepted (due to unknown destructor); and when accepting another unspecific
+       *        subclass instance, the ability to grow by move-relocation is lost.
+       * @todo WIP 6/24 🔁 define ⟶ ✔ implement
        */
       void
       check_ErrorHandling()
@@ -266,7 +288,7 @@ namespace test{
             // a re-allocation of a larger buffer, followed by copying the elements;
             // but since the established scheme allows for _arbitrary_ subclasses,
             // the builder does not know the exact type for safe element relocation.
-            VERIFY_FAIL ("Unable to accommodate further element of type Dummy"
+            VERIFY_FAIL ("Several-container is unable to accommodate further element of type Dummy"
                         , builder.fillElm (20) );
             CHECK (10 == builder.size());
           }
@@ -274,27 +296,45 @@ namespace test{
           { // Scenario-2 : Baseclass and elements of a single fixed subclass
             SeveralBuilder<Dummy, Num<5>> builder;
             
-            Dummy dum;
-SHOW_EXPR(dum.getVal())
-            Dummy nem{move(dum)};
-SHOW_EXPR(dum.getVal())
-SHOW_EXPR(nem.getVal())
-            Num<5> no5;
-SHOW_EXPR(no5.getVal())
-            Num<5> ne5{move(no5)};
-SHOW_EXPR(no5.getVal())
-SHOW_EXPR(ne5.getVal())
-            
             builder.fillElm(5);
             CHECK (5 == builder.size());
             
             // trigger re-alloc by moving into larger memory block
             builder.fillElm(14);
             CHECK (19 == builder.size());
+            CHECK (builder.size() > INITIAL_ELM_CNT);
             
-            builder.emplace<short>();
+            // with the elements added thus far, this instance has been primed to
+            // rely on a fixed well known element type for move-growth and to use
+            // the virtual base class destructor for clean-up. It is thus not possible
+            // to add another element that is not related to this baseclass...
+            VERIFY_FAIL ("Unable to handle (trivial-)destructor for element type ShortBlocker, "
+                         "since this container has been primed to use virtual-baseclass-destructors."
+                        , builder.emplace<ShortBlocker>() );
+            CHECK (19 == builder.size());
             
-            builder.emplace<Num<1>>();  ///////////////////////////////////OOO this should trigger an exception -> need to code an explicit check right at the start of emplaceNewElm()
+            CHECK (sizeof(ShortBlocker) < sizeof(Num<5>)); // it was not rejected due to size...
+            
+            // However, a subclass /different than the defined element type/ is acceptable,
+            // but only to the condition to lock any further container growth by move-reallocation.
+            // The rationale is that we can still destroy through the virtual base destructor,
+            // but we aren't able to move elements safely any more, since we don't capture the type.
+            builder.emplace<Num<1>>();
+            CHECK (20 == builder.size());
+            
+            // But here comes the catch: since we choose to accept arbitrary sub-types not identified in detail,
+            // the container has lost its ability of move-reallocation; with 20 elements the current reserve
+            // is exhausted and we are now unable to add any further elements beyond that point.
+            VERIFY_FAIL ("unable to move elements of mixed unknown detail type, which are not trivially movable"
+                        , builder.fillElm(5); );
+            
+            // the container is still sound however
+            auto elms = builder.build();
+            CHECK (20 == elms.size());
+            // verify that member fields were not corrupted
+            for (uint i=0; i<=18; ++i)
+              CHECK (elms[i].calc(i) == 5 + i + (5+5+5+5+5));
+            CHECK (elms.back().calc(0) == 1 + 0 + (1));
           }
         }
       
@@ -302,7 +342,7 @@ SHOW_EXPR(ne5.getVal())
       /** @test TODO verify correct placement of instances within storage
        * @todo WIP 6/24 🔁 define ⟶ implement
        */
-      void 
+      void
       check_ElementStorage()
         {
         }
@@ -311,7 +351,7 @@ SHOW_EXPR(ne5.getVal())
       /** @test TODO demonstrate integration with a custom allocator
        * @todo WIP 6/24 🔁 define ⟶ implement
        */
-      void 
+      void
       check_CustomAllocator()
         {
         }

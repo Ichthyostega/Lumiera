@@ -210,6 +210,12 @@ namespace lib {
           return data_? data_->spread : sizeof(I);
         }
       
+      size_t
+      storageBuffSiz()  const
+        {
+          return data_? data_->buffSiz : 0;
+        }
+      
       bool
       hasReserve (size_t extraSize)  const
         {
