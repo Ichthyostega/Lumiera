@@ -87,6 +87,28 @@ namespace test{
           {
             return i+ii + explore(ext_).resultSum();
           }
+        
+        /// allow for move construction
+        Num (Num && oNum)  noexcept
+          : Num(0)
+          {
+            swap (*this, oNum);
+          }
+        Num&
+        operator= (Num && oNum)
+          {
+            if (&oNum != this)
+              swap (*this, oNum);
+            return *this;
+          }
+        
+        friend void
+        swap (Num& num1, Num& num2)  ///< checksum neutral
+        {
+          std::swap (static_cast<Dummy&> (num1)
+                    ,static_cast<Dummy&> (num2));
+          std::swap (num1.ext_, num2.ext_);
+        }
       };
     
   } // (END) test types
@@ -247,6 +269,26 @@ namespace test{
             VERIFY_FAIL ("Unable to accommodate further element of type Dummy"
                         , builder.fillElm (20) );
             CHECK (10 == builder.size());
+          }
+          
+          { // Scenario-2 : Baseclass and elements of a single fixed subclass
+            SeveralBuilder<Dummy, Num<5>> builder;
+            
+            Dummy dum;
+SHOW_EXPR(dum.getVal())
+            Dummy nem{move(dum)};
+SHOW_EXPR(dum.getVal())
+SHOW_EXPR(nem.getVal())
+            Num<5> no5;
+SHOW_EXPR(no5.getVal())
+            Num<5> ne5{move(no5)};
+SHOW_EXPR(no5.getVal())
+SHOW_EXPR(ne5.getVal())
+            
+            builder.fillElm(5);
+            CHECK (5 == builder.size());
+            
+            builder.emplace<Num<1>>();  ///////////////////////////////////OOO this should trigger an exception -> need to code an explicit check right at the start of emplaceNewElm()
           }
         }
       

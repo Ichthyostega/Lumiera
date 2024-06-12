@@ -242,8 +242,9 @@ namespace lib {
               }
             else
               {
+                E& oldElm = reinterpret_cast<E&> (src->subscript (idx));
                 Fac::template createAt<E> (tar, idx
-                                          ,std::move_if_noexcept (src->subscript(idx)));
+                                          ,std::move_if_noexcept (oldElm));
               }
             tar->cnt = idx+1; // mark fill continuously for proper clean-up after exception
           }
@@ -327,7 +328,7 @@ namespace lib {
       fillElm (size_t cntNew, ARGS&& ...args)
         {
           for ( ; 0<cntNew; --cntNew)
-            emplaceNewElm<I> (forward<ARGS> (args)...);
+            emplaceNewElm<E> (forward<ARGS> (args)...);
           return move(*this);
         }
       

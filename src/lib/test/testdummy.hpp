@@ -70,7 +70,7 @@ namespace test{
         : val_(v)
         { init(); }
       
-      Dummy (Dummy && oDummy)
+      Dummy (Dummy && oDummy)  noexcept
         : Dummy(0)
         {
           swap (*this, oDummy);
