@@ -120,7 +120,11 @@ namespace test{
     struct ShortBlocker
       : util::NonCopyable
       {
-        int16_t val{short(1 + (rand() % 1'000))};
+        int16_t val;
+        
+        ShortBlocker (short r = 1 + (rand() % 1'000))
+          : val(r)
+          { };
       };
     
   } // (END) test types
@@ -239,7 +243,7 @@ namespace test{
         }
       
       
-      /** @test TODO proper handling of exceptions during population
+      /** @test proper handling of exceptions during population
        *      - when the container is filled with arbitrary subclasses
        *        of a base interface with virtual destructor, the first element is used
        *        to accommodate the storage spread; larger elements or elements of a completely
@@ -250,11 +254,25 @@ namespace test{
        *        can be expanded by move-relocation. Yet totally unrelated elements can not be
        *        accepted (due to unknown destructor); and when accepting another unspecific
        *        subclass instance, the ability to grow by move-relocation is lost.
+       *      - a container defined for trivial data elements (trivially movable and destructible)
+       *        can grow dynamically just by moving data around with `memmove`. Only in this case
+       *        the _element spread_ can easily be adjusted after the fact, since a trivial element
+       *        can be relocated to accommodate an increased spread. It is possible to add various
+       *        different data elements into such a container, yet all will be accessed through an
+       *        unchecked hard cast to the base element (`uint8_t` in this case). However, once we
+       *        add a _non-copyable_ element, this capability for arbitrarily moving elements around
+       *        is lost — we can not adapt the spread any more and the container can no longer
+       *        grow dynamically.
+       *      - all these failure conditions are handled properly, including exceptions emanating
+       *        from element constructors; the container remains sane and no memory is leaked.
        * @todo WIP 6/24 🔁 define ⟶ ✔ implement
        */
       void
       check_ErrorHandling()
         {
+          // prepare to verify proper invocation of all constructors / destructors          
+          Dummy::checksum() = 0;
+          
           { // Scenario-1 : Baseclass and arbitrary subclass elements
             SeveralBuilder<Dummy> builder;
             
@@ -292,6 +310,10 @@ namespace test{
                         , builder.fillElm (20) );
             CHECK (10 == builder.size());
           }
+          // in spite of all the provoked failures,
+          // all element destructors were invoked
+          CHECK (0 == Dummy::checksum());
+          
           
           { // Scenario-2 : Baseclass and elements of a single fixed subclass
             SeveralBuilder<Dummy, Num<5>> builder;
@@ -338,23 +360,107 @@ namespace test{
               CHECK (elms[i].calc(i) == 5 + i + (5+5+5+5+5));
             CHECK (elms.back().calc(0) == 1 + 0 + (1));
           }
+          CHECK (0 == Dummy::checksum());
+          
           
           { // Scenario-3 : arbitrary elements of trivial type
             SeveralBuilder<uint8_t> builder;
             
-            string BFR{"starship is cool"};
-            builder.appendAll (BFR);
-            CHECK (16 == builder.size());
-            CHECK ( 4 == builder.capReserve());
+            builder.reserve(16);
+            CHECK ( 0 == builder.size());
+            CHECK (16 == builder.capacity());
+            CHECK (16 == builder.capReserve());
             
-            builder.append(int64_t(33));
-            CHECK (17 == builder.size());
-            CHECK ( 3 == builder.capReserve());
+            string BFR{"starship is"};
+            builder.appendAll (BFR);
+            CHECK (11 == builder.size());
+            CHECK (16 == builder.capacity());
+            CHECK ( 5 == builder.capReserve());
+            
+            // append element that is much larger than a char
+            // => since elements are trivial, they can be moved to accommodate
+            builder.append (int64_t(32));
+            CHECK (12 == builder.size());
+            CHECK (16 == builder.capacity());       // note: capacity remained nominally the same
+            CHECK ( 4 == builder.capReserve());    //        while in fact the spread and thus the buffer were increased
+            
+            // emplace a completely unrelated object type,
+            // which is also trivially destructible, but non-copyable
+            builder.emplace<ShortBlocker> ('c');
+            
+            // can emplace further trivial objects, since there is still capacity left
+            builder.append (int('o'), long('o'));
+            CHECK (15 == builder.size());
+            CHECK ( 1 == builder.capReserve());
+            
+            VERIFY_FAIL ("Unable to place element of type Num<5u>"
+                        , builder.append (Num<5>{}) );
+            CHECK (sizeof(Num<5>) > sizeof(int64_t));
+            // not surprising: this one was too large,
+            // and due to the non-copyable element we can not adapt anymore
+            
+            class NonTrivial
+              {
+              public:
+               ~NonTrivial() { }
+              };
+            
+            // adding data of a non-trivial type is rejected,
+            // since the container does not capture individual element types
+            // and thus does not know how to delete it
+            CHECK (sizeof(NonTrivial) <= sizeof(int64_t));
+            VERIFY_FAIL ("Unsupported kind of destructor for element type SeveralBuilder_test::check_ErrorHandling()::NonTrivial"
+                        , builder.append (NonTrivial{}) );
+            CHECK ( 1 == builder.capReserve());
+            
+            // space for a single one left...
+            builder.append ('l');
+            CHECK (16 == builder.size());
+            CHECK ( 0 == builder.capReserve());
+            
+            // and now we've run out of space, and due to the non-copyable object, move-relocation is rejected
+            VERIFY_FAIL ("Several-container is unable to accommodate further element of type char; "
+                         "storage reserve (128 bytes ≙ 16 elms) exhausted and unable to move "
+                         "elements of mixed unknown detail type, which are not trivially movable."
+                        , builder.append ('!') );
+            
+            // yet the container is still fine....
+            auto elms = builder.build();
+            CHECK (16 == elms.size());
+            CHECK (join(elms, "·") == "s·t·a·r·s·h·i·p· ·i·s· ·c·o·o·l"_expect);
+          }
+          CHECK (0 == Dummy::checksum());
+          
+          { // Scenario-4 : exception from element constructor
+            SeveralBuilder<Dummy> builder;
+            
+            builder.emplace<Num<3>>(42);
+            CHECK (1 == builder.size());
+            
+            Dummy::activateCtorFailure(true);
+            try {
+                builder.emplace<Num<3>>(23);
+                NOTREACHED ("did not throw");
+              }
+            catch(...)
+              {
+                // Exception emanated from Dummy(baseclass) ctor;
+                // at that point, the local val was set to the seed (≙23).
+                // When a constructor fails in C++, the destructor is not called,
+                // thus we have to compensate here to balance the checksum
+                Dummy::checksum() -= 23;
+              }
+            CHECK (1 == builder.size());
+            Dummy::activateCtorFailure(false);
+            builder.emplace<Num<3>>(23);
             
             auto elms = builder.build();
-SHOW_EXPR(elms.size())
-SHOW_EXPR(join(elms, "·")) 
+            CHECK (2 == elms.size());
+            CHECK (elms.front().calc(1)  == 3 + 1 + (42+42+42));
+            CHECK (elms.back().calc(5)   == 3 + 5 + (23+23+23));
           }
+          // all other destructors properly invoked...
+          CHECK (0 == Dummy::checksum());
         }
       
       
