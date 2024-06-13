@@ -46,7 +46,9 @@ using std::array;
 using std::rand;
 
 using lib::explore;
+using util::isSameObject;
 using util::isLimited;
+using util::getAddr;
 using util::isnil;
 using util::join;
 
@@ -185,6 +187,9 @@ namespace test{
       void
       check_Builder()
         {
+          // prepare to verify proper invocation of all constructors / destructors          
+          Dummy::checksum() = 0;
+          
           { // Scenario-1 : Baseclass and arbitrary subclass elements
             SeveralBuilder<Dummy> builder;
             CHECK (isnil (builder));
@@ -240,6 +245,8 @@ namespace test{
             CHECK (10 == elms.size());
             CHECK (join (elms,"-") == "0-1-2-3-4-5-6-7-8-9"_expect);
           }
+          
+          CHECK (0 == Dummy::checksum());
         }
       
       
@@ -265,13 +272,12 @@ namespace test{
        *        grow dynamically.
        *      - all these failure conditions are handled properly, including exceptions emanating
        *        from element constructors; the container remains sane and no memory is leaked.
-       * @todo WIP 6/24 🔁 define ⟶ ✔ implement
+       * @todo WIP 6/24 ✔ define ⟶ ✔ implement
        */
       void
       check_ErrorHandling()
         {
-          // prepare to verify proper invocation of all constructors / destructors          
-          Dummy::checksum() = 0;
+          CHECK (0 == Dummy::checksum());
           
           { // Scenario-1 : Baseclass and arbitrary subclass elements
             SeveralBuilder<Dummy> builder;
@@ -464,12 +470,83 @@ namespace test{
         }
       
       
-      /** @test TODO verify correct placement of instances within storage
-       * @todo WIP 6/24 🔁 define ⟶ implement
+      /** @test verify correct placement of instances within storage
+       *      - use a low-level pointer calculation for this test to
+       *        draw conclusions regarding the spacing of objects accepted
+       *        into the lib::Several-container
+       *      - demonstrate the simple data elements are packed efficiently
+       *      - verify that special alignment requirements are observed
+       *      - emplace several ''non copyable objects'' and then
+       *        move-assign the lib::Several container instance; this
+       *        demonstrates that the latter is just a access front-end,
+       *        while the data elements reside in a fixed storage buffer
+       * @todo WIP 6/24 ✔ define ⟶ ✔ implement
        */
       void
       check_ElementStorage()
         {
+          auto loc        = [](auto& something){ return size_t(getAddr (something)); };
+          auto calcSpread = [&](auto& several){ return loc(several[1]) - loc(several[0]); };
+          
+          { // Scenario-1 : tightly packed values
+            Several<int> elms = makeSeveral({21,34,55}).build();
+            CHECK (21 == elms[0]);
+            CHECK (34 == elms[1]);
+            CHECK (55 == elms[2]);
+            CHECK (3 == elms.size());
+            CHECK (sizeof(elms) == sizeof(void*));
+            
+            CHECK (sizeof(int) == alignof(int));
+            size_t spread = calcSpread (elms);
+            CHECK (spread == sizeof(int));
+            CHECK (loc(elms.back()) == loc(elms.front()) + 2*spread);
+          }
+          
+          { // Scenario-2 : alignment
+            struct Ali
+              {
+                alignas(32)
+                  char charm = 'u';
+              };
+            
+            auto elms = makeSeveral<Ali>().fillElm(5).build();
+            CHECK (5 == elms.size());
+            CHECK (sizeof(elms) == sizeof(void*));
+            
+            size_t spread = calcSpread (elms);
+            CHECK (spread == alignof(Ali));
+            CHECK (loc(elms.front()) % alignof(Ali) == 0);
+            CHECK (loc(elms.back()) == loc(elms.front()) + 4*spread);
+          }
+          
+          { // Scenario-3 : noncopyable objects
+            auto elms = makeSeveral<ShortBlocker>().fillElm(5).build();
+            
+            auto v0 = elms[0].val;  auto p0 = loc(elms[0]);
+            auto v1 = elms[1].val;  auto p1 = loc(elms[1]);
+            auto v2 = elms[2].val;  auto p2 = loc(elms[2]);
+            auto v3 = elms[3].val;  auto p3 = loc(elms[3]);
+            auto v4 = elms[4].val;  auto p4 = loc(elms[4]);
+            
+            CHECK (5 == elms.size());
+            auto moved = move(elms);
+            CHECK (5 == moved.size());
+            CHECK (isnil (elms));
+            
+            CHECK (loc(moved[0]) == p0);
+            CHECK (loc(moved[1]) == p1);
+            CHECK (loc(moved[2]) == p2);
+            CHECK (loc(moved[3]) == p3);
+            CHECK (loc(moved[4]) == p4);
+            
+            CHECK (moved[0].val == v0);
+            CHECK (moved[1].val == v1);
+            CHECK (moved[2].val == v2);
+            CHECK (moved[3].val == v3);
+            CHECK (moved[4].val == v4);
+            
+            CHECK (calcSpread(moved) == sizeof(ShortBlocker));
+          }
         }
       
       

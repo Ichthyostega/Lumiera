@@ -43,9 +43,48 @@
  ** in the element array. The field ArrayBucket<I>::spread defines this spacing
  ** and thus the offset used for subscript access.
  ** 
+ ** # Handling of data elements
+ ** 
+ ** The ability to emplace a mixture of data types into the storage exposed through
+ ** the lib::Several front-end creates some complexities related to element handling.
+ ** The implementation relies on a rules and criteria based approach to decide on
+ ** a case by case base if some given data content is still acceptable. This allows
+ ** for rather tricky low-level usages, but has the downside to detect errors only
+ ** at runtime — which in this case is ameliorated by the limitation that elements
+ ** must be provided completely up-front, through the SeveralBuilder.
+ ** - in order to handle any data element, we must be able to invoke its destructor
+ ** - an arbitrary mixture of types can thus only be accepted if either we can
+ **   rely on a common virtual base class destructor, or if all data elements
+ **   are trivially destructible; these properties can be detected at compile
+ **   time with the help of the C++ `<type_traits>` library
+ ** - this container can accommodate _non-copyable_ data types, under the proviso
+ **   that the complete storage required is pre-allocated (using `reserve()` from
+ **   the builder API)
+ ** - otherwise, data can be filled in dynamically, expanding the storage as needed,
+ **   given that all existing elements can be safely re-located by move or copy
+ **   constructor into a new, larger storage buffer.
+ ** - alternatively, when data elements are even ''trivially copyable'' (e.g. POD data),
+ **   then it is even possible to increase the placement spread in the storage at the
+ **   point when the requirement to do so is discovered dynamically; objects can be
+ **   shifted to other locations by `std::memmove()` in this case.
+ ** - notably, lib::AllocationCluster has the ability to dynamically adapt an allocation,
+ **   but only if this happens to be currently the last allocation handed out; it can
+ **   thus be arranged even for an unknown number of non-copyable objects to be emplaced
+ **   when creating the suitable operational conditions.
+ ** A key point to note is the fact that the container does not capture and store the
+ ** actual data types persistently. Thus, the above rules must be applied in a way
+ ** to always ensure safe handling of the contained data. Typically, the first element
+ ** actually added will »prime« the container for a certain usage style, and after that,
+ ** some other usage patterns may be rejected.
+ ** 
  ** @todo this is a first implementation solution from 6/2025 — and was deemed
  **       _roughly adequate_ at that time, yet should be revalidated once more
  **       observations pertaining real-world usage are available...
+ ** @warning there is a known problem with _over-alligned-types,_ which becomes
+ **       relevant when the _interface type_ has only lower alignment requirement,
+ **       but an individual element is added with higher alignment requirements.
+ **       In this case, while the spread is increased, still the placement of
+ **       the interface-type is used as anchor, possibly leading to misalignment.
  ** @see several-builder-test.cpp
  ** 
  */
