@@ -154,6 +154,7 @@ namespace test {
           checkLifecycle();
           verifyInternals();
           use_as_Allocator();
+          dynamicAdjustment();
         }
       
       
@@ -220,7 +221,6 @@ namespace test {
        *         the additional metadata overhead is a power of two, exploiting contextual knowledge
        *         about layout; moreover, a special usage-mode allows to skip invocation of destructors.
        *         To document these machinations, change to internal data is explicitly verified here.
-       * @todo WIP 5/24 ✔ define ⟶ ✔ implement
        */
       void
       verifyInternals()
@@ -397,7 +397,7 @@ namespace test {
           AllocationCluster clu;
           CHECK (clu.numExtents() == 0);
           
-          VecI veci{clu.getAllocator<uint16_t>()};
+          VecI vecI{clu.getAllocator<uint16_t>()};
           
           // Since vector needs a contiguous allocation,
           // the maximum number of elements is limited by the Extent size (256 bytes - 2*sizeof(void*))
@@ -406,20 +406,91 @@ namespace test {
           const uint MAX = 64;
           
           for (uint i=1; i<=MAX; ++i)
-            veci.push_back(i);
+            vecI.push_back(i);
           CHECK (clu.numExtents() == 2);
-          CHECK (veci.capacity() == 64);
+          CHECK (vecI.capacity() == 64);
           
           // fill a set with random strings...
-          SetS sets{clu.getAllocator<Strg>()};
+          SetS setS{clu.getAllocator<Strg>()};
 
           for (uint i=0; i<NUM_OBJECTS; ++i)
-            sets.emplace (test::randStr(32), clu.getAllocator<char>());
-          CHECK (sets.size() > 0.9 * NUM_OBJECTS);
+            setS.emplace (test::randStr(32), clu.getAllocator<char>());
+          CHECK (setS.size() > 0.9 * NUM_OBJECTS);
           CHECK (clu.numExtents() > 200);
           
           // verify the data in the first allocation is intact
-          CHECK (explore(veci).resultSum() == sum(64));
+          CHECK (explore(vecI).resultSum() == sum(64));
+        }
+      
+      
+      /** @test verify the ability to adjust the latest allocation dynamically.
+       */
+      void
+      dynamicAdjustment()
+        {
+          AllocationCluster clu;
+          auto& l1 = clu.create<array<uchar,12>>();
+          CHECK (clu.numExtents() == 1);
+          CHECK (clu.numBytes() == 12);
+          
+          auto& l2 = clu.create<array<uchar,5>>();
+          CHECK (clu.numExtents() == 1);
+          CHECK (clu.numBytes() == 17);
+          
+          CHECK (    clu.canAdjust (&l2,  5, 8));              // possible since l2 is verifiable as last allocation
+          CHECK (    clu.canAdjust (&l2,  5, 5));              // arbitrary adjustments are then possible
+          CHECK (    clu.canAdjust (&l2,  5, 2));
+          CHECK (    clu.canAdjust (&l2,  5, 0));              // even shrinking to zero
+          CHECK (not clu.canAdjust (&l1, 12,24));              // but the preceding allocation can not be changed anymore
+          CHECK (not clu.canAdjust (&l2,  6, 8));              // similarly, reject requests when passing wrong original size
+          CHECK (not clu.canAdjust (&l2,  4, 8));
+          CHECK (not clu.canAdjust (&l2,  5, 1000));           // also requests exceeding the remaining extent space are rejected
+          CHECK (    clu.canAdjust (&l1, 17,24));              // however, can not detect if a passed wrong size accidentally matches
+          
+          CHECK (clu.numExtents() == 1);
+          CHECK (clu.numBytes() == 17);
+          l1[11] = 11;                                         // put some marker values into the storage
+          l2[0] = 5;
+          l2[1] = 4;
+          l2[2] = 3;
+          l2[3] = 2;
+          l2[4] = 1;
+          l2[5] = 55;                                          // yes, even behind the valid range (subscript is unchecked)
+          l2[6] = 66;
+          
+          using LERR_(INVALID);
+          
+          VERIFY_ERROR (INVALID, clu.doAdjust(&l1, 12,24) );
+          CHECK (clu.numExtents() == 1);
+          CHECK (clu.numBytes() == 17);
+          
+          // perform a size adjustment on the latest allocation
+          clu.doAdjust (&l2, 5,12);
+          CHECK (clu.numExtents() == 1);
+          CHECK (clu.numBytes() == 24);
+          // no memory corruption
+          CHECK (l1[11] == 11);
+          CHECK (l2[0]  ==  5);
+          CHECK (l2[1]  ==  4);
+          CHECK (l2[2]  ==  3);
+          CHECK (l2[3]  ==  2);
+          CHECK (l2[4]  ==  1);
+          CHECK (l2[5]  == 55);
+          CHECK (l2[6]  == 66);
+          
+          // scale down the latest allocation completely
+          clu.doAdjust (&l2, 12,0);
+          CHECK (clu.numExtents() == 1);
+          CHECK (clu.numBytes() == 12);
+          // no memory corruption
+          CHECK (l1[11] == 11);
+          CHECK (l2[0]  ==  5);
+          CHECK (l2[1]  ==  4);
+          CHECK (l2[2]  ==  3);
+          CHECK (l2[3]  ==  2);
+          CHECK (l2[4]  ==  1);
+          CHECK (l2[5]  == 55);
+          CHECK (l2[6]  == 66);
         }
     };
   

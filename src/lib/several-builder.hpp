@@ -250,8 +250,6 @@ namespace lib {
         
         using Fac::Fac; // pass-through ctor
         
-        const bool isDisposable{false};    ///< memory must be explicitly deallocated
-         
         bool canExpand(size_t){ return false; }
         
         Bucket*
