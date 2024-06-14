@@ -37,6 +37,11 @@
  ** including the invocation of their destructors, while relying on the allocator
  ** to allot and discard bare memory. However, to avoid invoking any destructors,
  ** the container itself can be created with AllocationCluster::createDisposable.
+ ** \par dynamic adjustments
+ ** Under controlled conditions, it is possible to change the size of the latest
+ ** raw allocation handed out, within the limits of the available reserve in the
+ ** current memory extent. Obviously, this is a dangerous low-level feature, yet
+ ** offers some flexibility for containers and allocation schemes built on top.
  ** @warning deliberately *not threadsafe*.
  ** @remark confine usage to a single thread or use thread-local clusters.
  ** @see allocation-cluster-test.cpp
@@ -269,7 +274,7 @@ namespace lib {
   AllocationCluster::Storage::adjustPos (int offset)  ///< @warning be sure a negative offset is properly limited
   {
     REQUIRE (pos);
-    REQUIRE (hasReserve (rest));
+    REQUIRE (hasReserve (offset));
     pos = bytePos() + offset;
     rest -= offset;
   }
@@ -285,6 +290,53 @@ namespace lib {
   {
     return loc == static_cast<std::byte const*> (pos) - siz;
   }
+  
+  
+  
+  
+  
+  //-----Policies-to-use-AllocationCluster------------------------
+  
+  namespace {
+    // Forward declaration: configuration policy for lib::SeveralBuilder
+    template<class I, class E, template<typename> class ALO>
+    struct AllocationPolicy;
+  }
+  
+  namespace allo { // Setup for custom allocator policies
+    
+    template<template<typename> class ALO, typename...ARGS>
+    struct SetupSeveral;
+    
+    /**
+     * Specialisation to use lib::Several with storage managed by an
+     * AllocationCluster instance, which must be provided as argument.
+     * \code
+     * AllocationCluster clu;
+     * using Data = ....
+     * Several<Data> elms = makeSeveral<Data>()
+     *                        .withAllocator(clu)
+     *                        .fillElm(5)
+     *                        .build();
+     * \endcode
+     */
+    template<>
+    struct SetupSeveral<std::void_t, lib::AllocationCluster&>
+      {
+        template<typename X>
+        using Adapter = typename AllocationCluster::template Allocator<X>;
+        
+        template<class I, class E>
+        struct Policy
+          : AllocationPolicy<I,E,Adapter>
+          {
+            Policy (AllocationCluster& clu)
+              : AllocationPolicy<I,E,Adapter> (clu.getAllocator<std::byte>())
+              { }
+          };
+      };
+    //
+  }//(End)Allocator configuration
   
   
 } // namespace lib

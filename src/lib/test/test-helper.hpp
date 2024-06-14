@@ -145,33 +145,6 @@ namespace test{
                                                    : "VAL";
   }
   
-  /** helper for investigating a variadic argument pack
-   * @warning always spell out the template arguments explicitly
-   *          when invoking this diagnostics, e.g. \c showVariadicTypes<ARGS...>(args...)
-   *          otherwise the template argument matching for functions might mess up the
-   *          kind of reference you'll see in the diagnostics.
-   * @see test-helper-variadic-test.cpp
-   */
-  template<typename... EMPTY>
-  inline string
-  showVariadicTypes ()
-  {
-    return " :.";
-  }
-  
-  template<typename X, typename... XS>
-  inline string
-  showVariadicTypes (X const& x, XS const&... xs)
-  {
-    return " :---#"
-         + boost::lexical_cast<string>(1 + sizeof...(xs))
-         + "  -- Type: " + util::typeStr(x)
-         + "  "          + showRefKind<X>()
-         + "  Address* " + boost::lexical_cast<string>(&x)
-         + "\n"
-         + showVariadicTypes<XS...> (xs...);
-  }
-  
   
   
   /**
@@ -192,6 +165,8 @@ namespace test{
   {
     static_assert (not sizeof(X), "### Type Debugging ###");
   }
+  
+  
   
   
   
@@ -295,6 +270,36 @@ namespace test{
          + meta::humanReadableTypeID (typeid(Type).name())
          + Case::postfix;
   }
+  
+  
+  /** helper for investigating a variadic argument pack
+   * @remark you can pass arguments directly to this function,
+   *  but be sure to use `std::forward<ARGS>(args)...` when forwarding
+   *  universal references received from a variadic argument pack \a ARG.
+   * @note due to reference collapsing it is not possible to distinguish receiving
+   *  a value from receiving a rvalue-reference.
+   * @see test-helper-variadic-test.cpp
+   */
+  template<typename... EMPTY>
+  inline string
+  showVariadicTypes ()
+  {
+    return " :.";
+  }
+  
+  template<typename XX, typename... XS>
+  inline string
+  showVariadicTypes (XX&& x, XS&&... xs)
+  {
+    return " :---#"
+         + util::toString (1 + sizeof...(xs))
+         + " -- Type: "  + showType<XX&&>()
+         + "  \tAdr"     + util::showAddr (x)
+         + "\n"
+         + showVariadicTypes (std::forward<XS>(xs)...);
+  }
+  
+  
   
   
   

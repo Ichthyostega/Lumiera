@@ -336,6 +336,13 @@ namespace lib {
       
       /* ===== Builder API ===== */
       
+      /** cross-builder to use a custom allocator for the lib::Several container */
+      template<template<typename> class ALO  =std::void_t
+              ,typename...ARGS>
+      auto withAllocator (ARGS&& ...args);
+      
+      
+      /** ensure sufficient memory allocation up-front */
       template<typename TY =E>
       SeveralBuilder&&
       reserve (size_t cntElm =1
@@ -348,6 +355,7 @@ namespace lib {
           return move(*this);
         }
       
+      /** append copies of one or several arbitrary elements */
       template<typename VAL, typename...VALS>
       SeveralBuilder&&
       append (VAL&& val, VALS&& ...vals)
@@ -359,6 +367,7 @@ namespace lib {
             return move(*this);
         }
       
+      /** append a copy of all values exposed through an iterator */
       template<class IT>
       SeveralBuilder&&
       appendAll (IT&& data)
@@ -377,6 +386,7 @@ namespace lib {
           return move(*this);
         }
       
+      /** emplace a number of elements of the defined element type \a E */
       template<typename...ARGS>
       SeveralBuilder&&
       fillElm (size_t cntNew, ARGS&& ...args)
@@ -386,6 +396,7 @@ namespace lib {
           return move(*this);
         }
       
+      /** create a new content element within the managed storage */
       template<class TY, typename...ARGS>
       SeveralBuilder&&
       emplace (ARGS&& ...args)
@@ -656,6 +667,84 @@ namespace lib {
   
   
   
+  /* ===== Helpers and convenience-functions for creating SeveralBuilder ===== */
+  
+  
+  namespace allo { // Setup for custom allocator policies
+    
+    template<template<typename> class ALO, typename...ARGS>
+    struct SetupSeveral;
+    
+    template<template<typename> class ALO>
+    struct SetupSeveral<ALO>
+      {
+        template<class I, class E>
+        using Policy = AllocationPolicy<I,E,ALO>;
+      };
+    
+    template<template<typename> class ALO, typename X>
+    struct SetupSeveral<ALO, ALO<X>>
+      {
+        template<class I, class E>
+        struct Policy
+          : AllocationPolicy<I,E,ALO>
+          {
+            Policy (ALO<X> refAllocator)
+              : AllocationPolicy<I,E,ALO>(move(refAllocator))
+              { }
+          };
+      };
+    //
+  }//(End)Allocator configuration
+  
+  
+  
+  /**
+   * @remarks this builder notation configures the new lib::Several container
+   *     to perform memory management through a standard conformant allocation adapter.
+   *     Moreover, optionally the behaviour can be configured through an extension point
+   *     lib::allo::SetupSeveral, for which the custom allocator may provide an explicit
+   *     template specialisation.
+   * @tparam ALO a C++ standard conformant allocator template, which can be instantiated
+   *     for creating various data elements. Notably, this will be instantiated as
+   *     `ALO<std::byte>` to create and destroy the memory buffer for content data
+   * @param args optional dependency wiring arguments, to be passed to the allocator
+   * @return a new empty SeveralBuilder, configured to use the custom allocator.
+   */
+  template<class I, class E, class POL>
+  template<template<typename> class ALO, typename...ARGS>
+  inline auto
+  SeveralBuilder<I,E,POL>::withAllocator (ARGS&& ...args)
+  {
+    if (not empty())
+      throw err::Logic{"lib::Several builder withAllocator() must be invoked "
+                       "prior to adding any elements to the container"};
+    
+    using Setup = allo::SetupSeveral<ALO,ARGS...>;
+    using PolicyForAllo = typename Setup::template Policy<I,E>;
+    using BuilderWithAllo = SeveralBuilder<I,E,PolicyForAllo>;
+    
+    return BuilderWithAllo(forward<ARGS> (args)...);
+  }
+  
+  
+  
+  
+  
+  /*********************************************************//**
+   * Entrance Point: start building a lib::Several instance
+   * @tparam I Interface type to use for element access
+   * @tparam E (optional) standard element implementation type
+   * @return a builder instance with methods to create or copy
+   *     data elements to populate the container...
+   */
+  template<typename I, typename E =I>
+  SeveralBuilder<I,E>
+  makeSeveral()
+  {
+    return SeveralBuilder<I,E>{};
+  }
+  
   template<typename X>
   SeveralBuilder<X>
   makeSeveral (std::initializer_list<X> ili)
@@ -663,13 +752,6 @@ namespace lib {
     return SeveralBuilder<X>{}
             .reserve (ili.size())
             .appendAll (ili);
-  }
-  
-  template<typename I, typename E =I>
-  SeveralBuilder<I,E>
-  makeSeveral()
-  {
-    return SeveralBuilder<I,E>{};
   }
   
   

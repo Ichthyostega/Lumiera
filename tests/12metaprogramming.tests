@@ -389,26 +389,23 @@ END
 TEST "Variadic template diagnostics" TestHelperVariadic_test <<END
 out-lit: --no-arg--
 out-lit:  :.
-out-lit: --value--
-out: .+#1.+ Type: double  VAL  Address. 0x.+
-out-lit:  :.
 out-lit: --reference--
-out: .+#1.+ Type: double  REF  Address. 0x.+
+out: .+#1.+ Type: double& .+Adr╲.+
 out-lit:  :.
-out-lit: --move--
-out: .+#1.+ Type: double  MOV  Address. 0x.+
+out-lit: --value--
+out: .+#1.+ Type: double && .+Adr╲.+
 out-lit:  :.
 out-lit: --two values--
-out: .+#2.+ Type: char  REF  Address. 0x.+
-out: .+#1.+ Type: long  MOV  Address. 0x.+
+out: .+#2.+ Type: char \[4\] const& .+Adr╲.+
+out: .+#1.+ Type: long && .+Adr╲.+
 out-lit:  :.
-out-lit: --matched--
-out: .+#3.+ Type: double  REF  Address. 0x.+
-out: .+#2.+ Type: double  REF  Address. 0x.+
-out: .+#1.+ Type: double  MOV  Address. 0x.+
+out-lit: --references--
+out: .+#3.+ Type: double& .+Adr╲.+
+out: .+#2.+ Type: double const& .+Adr╲.+
+out: .+#1.+ Type: double && .+Adr╲.+
 out-lit:  :.
 out-lit: --baseclass--
-out: .+#1.+ Type: Impl  REF  Address. 0x.+
+out: .+#1.+ Type: Interface const& .+Adr╲.+
 out-lit:  :.
 return: 0
 END

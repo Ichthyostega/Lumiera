@@ -103,20 +103,19 @@ namespace test{
       run (Arg)
         {
           double d = makeRvalue();
-          double& dr = d;
+          double const& cr = d;
           
           Impl obj;
           Interface const& ref = obj;
           
           cout << "--no-arg--\n"    << showVariadicTypes() <<"\n";
-          cout << "--value--\n"     << showVariadicTypes<double>(d) <<"\n";
-          cout << "--reference--\n" << showVariadicTypes<double&>(d) <<"\n";
-          cout << "--move--\n"      << showVariadicTypes<double&&>(d) <<"\n";
+          cout << "--reference--\n" << showVariadicTypes(d) <<"\n";
+          cout << "--value--\n"     << showVariadicTypes(makeRvalue()) <<"\n";
           
-          forwardFunction("two values", "foo", 42L);        // passed as REF, MOV
-          forwardFunction("matched", d,dr,std::move(dr));   // passed as REF, REF, MOV
+          forwardFunction("two values", "foo", 42L);         // displayed as char [4] const&, long &&
+          forwardFunction("references", d,cr,std::move(d));  // displayed as double&, double const&, double &&
           
-          forwardFunction<Interface const&>("baseclass", ref);
+          forwardFunction("baseclass", ref);                 // displayed as Interface const&
         }
       
       
@@ -127,10 +126,8 @@ namespace test{
       void
       forwardFunction (string id, ARGS&&... args)
         {
-          // in reality here you'd invoke some factory(<std::forward<ARGS>(args)...)
-          //
           cout << "--"<<id<<"--\n"
-               << showVariadicTypes<ARGS&&...>(args...)
+               << showVariadicTypes (std::forward<ARGS>(args)...)
                << "\n"
                ;
         }
