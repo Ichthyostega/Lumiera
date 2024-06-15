@@ -101,3 +101,7 @@ return: 0
 END
 
 
+TEST "Object and allocation tracking" TestTracking_test <<END
+return: 0
+END
+

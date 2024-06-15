@@ -27,7 +27,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/thread.hpp"
-#include "lib/test/testdummy.hpp"
+#include "lib/test/tracking-dummy.hpp"
 
 #include <atomic>
 #include <chrono>

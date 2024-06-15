@@ -31,7 +31,7 @@
 #include "lib/util.hpp"
 
 #include "lib/scoped-ptrvect.hpp"
-#include "lib/test/testdummy.hpp"
+#include "lib/test/tracking-dummy.hpp"
 
 
 namespace lib {

@@ -31,7 +31,7 @@
 #include "lib/util.hpp"
 
 #include "lib/scoped-collection.hpp"
-#include "lib/test/testdummy.hpp"
+#include "lib/test/tracking-dummy.hpp"
 
 #include <cstdlib>
 

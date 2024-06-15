@@ -31,7 +31,7 @@
 
 #include "lib/scoped-holder.hpp"
 #include "lib/scoped-holder-transfer.hpp"
-#include "lib/test/testdummy.hpp"
+#include "lib/test/tracking-dummy.hpp"
 
 #include <iostream>
 #include <vector>

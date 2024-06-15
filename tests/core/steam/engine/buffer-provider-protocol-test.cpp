@@ -28,7 +28,7 @@
 #include "lib/error.hpp"
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/test/testdummy.hpp"
+#include "lib/test/tracking-dummy.hpp"
 #include "lib/util-foreach.hpp"
 #include "steam/engine/testframe.hpp"
 #include "steam/engine/diagnostic-buffer-provider.hpp"
