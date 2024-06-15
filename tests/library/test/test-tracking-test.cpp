@@ -30,11 +30,14 @@
 #include "lib/test/tracking-dummy.hpp"
 #include "lib/test/tracking-allocator.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/format-util.hpp"
+#include "lib/test/diagnostic-output.hpp"///////////////////////TODO
 
 #include <string>
 
 using std::string;
 using util::toString;
+using util::join;
 
 
 namespace lib {
@@ -113,16 +116,81 @@ namespace test{
       void
       demonstrate_checkObject ()
         {
-          UNIMPLEMENTED ("dummy");
+          CHECK (Dummy::checksum() == 0);
+          {
+            Dummy dum1;  // picks a random positive int by default...
+            CHECK (0 < dum1.getVal() and dum1.getVal() <= 100'000'000);
+            CHECK (Dummy::checksum() == dum1.getVal());
+            
+            Dummy dum2{55};
+            CHECK (55 == dum2.getVal());
+            CHECK (Dummy::checksum() == dum1.getVal() + 55);
+            
+            Dummy dum3{move (dum2)};
+            CHECK (55 == dum3.getVal());
+            CHECK (0  == dum2.getVal());
+            
+            dum3.setVal (23);
+            CHECK (23 == dum3.getVal());
+            
+            dum1 = move (dum3);
+            CHECK (23 == dum1.getVal());
+            CHECK (0  == dum2.getVal());
+            CHECK (0  == dum3.getVal());
+            CHECK (Dummy::checksum() == 23);
+            
+            Dummy::activateCtorFailure (true);
+            try {
+                Dummy kabooom;
+              }
+            catch (int v)
+              {
+                CHECK (0 < v and v <= 100'000'000);
+                CHECK (Dummy::checksum() == 23 + v);
+                Dummy::checksum() -= v;
+              }
+            Dummy::activateCtorFailure (false);
+            CHECK (23 == dum1.getVal());
+            CHECK (0  == dum2.getVal());
+            CHECK (0  == dum3.getVal());
+            CHECK (Dummy::checksum() == 23);
+          }
+          CHECK (Dummy::checksum() == 0);
         }
       
       
       /** @test custom allocator to track memory handling.
        */
       void
-      demonstrate_checkAllocator ()
+      demonstrate_checkAllocator()
         {
-          UNIMPLEMENTED ("allo");
+          // setup a common lock for the tracking objects and -allocator
+          auto& log = TrackingAllocator::log;
+          Tracker::log.clear("Tracking-Allocator-Test");
+          Tracker::log.joinInto(log);
+          
+          
+          CHECK (TrackingAllocator::checksum() == 0);
+          {
+            using SpyVec = std::vector<Tracker, TrackAlloc<Tracker>>;
+            
+            SpyVec vec1(3);
+            
+            int v3 = vec1.back().val;
+SHOW_EXPR(v3);
+SHOW_EXPR(join(vec1))
+            
+            SpyVec vec2;
+            vec2.emplace_back (move (vec1[2]));
+SHOW_EXPR(join(vec1))
+SHOW_EXPR(join(vec2))
+            
+          }
+          CHECK (TrackingAllocator::checksum() == 0);
+          
+          cout << "____Tracking-Allo-Log_________\n"
+               << util::join(Tracker::log,      "\n")
+               << "\n───╼━━━━━━━━━━━━━━━━━╾────────"<<endl;
         }
     };
   

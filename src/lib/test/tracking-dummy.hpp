@@ -84,7 +84,10 @@ namespace test{
       operator= (Dummy && oDummy)
         {
           if (&oDummy != this)
-            swap (*this, oDummy);
+            {
+              swap (*this, oDummy);
+              oDummy.setVal(0);
+            }
           return *this;
         }
       

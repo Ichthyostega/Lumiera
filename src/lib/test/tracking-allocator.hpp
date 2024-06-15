@@ -32,151 +32,114 @@
 #define LIB_TEST_TRACKING_ALLOCATOR_H
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
+#include "lib/hash-value.h"
+#include "lib/symbol.hpp"
+#include "lib/test/event-log.hpp"
 
-#include <cstddef>
+//#include <cstddef>
 #include <utility>
+#include <memory>
 #include <list>
 
+using std::byte;
 
 
 namespace lib {
-  namespace allo {///< Concepts and Adaptors for custom memory management
+namespace test {
+  
     
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1366 : define Allocator Concepts here
-    /// TODO the following Concepts can be expected here (with C++20)
-    /// - Allocator : for the bare memory allocation
-    /// - Factory : for object fabrication and disposal
-    /// - Handle : a functor front-end to be dependency-injected
+  namespace { // common memory management for the TrackingAllocator
     
+    const Symbol GLOBAL{"GLOBAL"};
     
-    /**
-     * Adapter to implement the *Factory* concept based on a `std::allocator`
-     * @tparam ALO a std::allocator instance or anything compliant to [Allocator]
-     * [Allocator]: https://en.cppreference.com/w/cpp/named_req/Allocator
-     * @note in addition to the abilities defined by the standard, this adapter
-     *       strives to provide some kind of _lateral leeway,_ attempting to
-     *       create dedicated allocators for other types than the BaseType
-     *       implied by the given \a ALO (standard-allocator).
-     *       - this is possible if the rebound allocator can be constructed
-     *         from the given base allocator
-     *       - alternatively, an attempt will be made to default-construct
-     *         the rebound allocator for the other type requested.
-     * @warning Both avenues for adaptation may fail,
-     *         which could lead to compilation or runtime failure.
-     * @remark deliberately this class inherits from the allocator,
-     *         allowing to exploit empty-base-optimisation, since
-     *         usage of monostate allocators is quite common.
-     */
-    template<class ALO>
-    class StdFactory
-      : private ALO
-      {
-        using Allo  = ALO;
-        using AlloT = std::allocator_traits<Allo>;
-        using BaseType = typename Allo::value_type;
-        
-        Allo& baseAllocator() { return *this; }
-        
-        template<typename X>
-        auto
-        adaptAllocator()
-          {
-            using XAllo = typename AlloT::template rebind_alloc<X>;
-            if constexpr (std::is_constructible_v<XAllo, Allo>)
-              return XAllo{baseAllocator()};
-            else
-              return XAllo{};
-          }
-        
-        template<class ALOT, typename...ARGS>
-        typename ALOT::pointer
-        construct (typename ALOT::allocator_type& allo, ARGS&& ...args)
-          {
-            auto loc = ALOT::allocate (allo, 1);
-            try { ALOT::construct (allo, loc, std::forward<ARGS>(args)...); }
-            catch(...)
-              {
-                ALOT::deallocate (allo, loc, 1);
-                throw;
-              }
-            return loc;
-          }
-        
-        template<class ALOT>
-        void
-        destroy (typename ALOT::allocator_type& allo, typename ALOT::pointer elm)
-          {
-            ALOT::destroy (allo, elm);
-            ALOT::deallocate (allo, elm, 1);
-          }
-        
-        
-      public:
-        /**
-         * Create an instance of the adapter factory,
-         * forwarding to the embedded standard conforming allocator
-         * for object creation and destruction and memory management.
-         * @param allo (optional) instance of the C++ standard allocator
-         *        used for delegation, will be default constructed if omitted.
-         * @remark the adapted standard allocator is assumed to be either a copyable
-         *        value object, or even a mono-state; in both cases, a dedicated
-         *        manager instance residing »elsewhere« is referred, rendering
-         *        all those front-end instances exchangeable.
-         */
-        StdFactory (Allo allo = Allo{})
-          : Allo{std::move (allo)}
-          { }
-        
-        template<class XALO>
-        bool constexpr operator== (StdFactory<XALO> const& o)  const
-          {
-            return baseAllocator() == o.baseAllocator();
-          }
-        template<class XALO>
-        bool constexpr operator!= (StdFactory<XALO> const& o)  const
-          {
-            return not (*this == o);
-          }
-        
-        
-        /** create new element using the embedded allocator */
-        template<class TY, typename...ARGS>
-        TY*
-        create (ARGS&& ...args)
-          {
-            if constexpr (std::is_same_v<TY, BaseType>)
-              {
-                return construct<AlloT> (baseAllocator(), std::forward<ARGS>(args)...);
-              }
-            else
-              {
-                using XAlloT = typename AlloT::template rebind_traits<TY>;
-                auto xAllo = adaptAllocator<TY>();
-                return construct<XAlloT> (xAllo, std::forward<ARGS>(args)...);
-              }
-          }
-        
-        /** destroy the given element and discard the associated memory */
-        template<class TY>
-        void
-        dispose (TY* elm)
-          {
-            if constexpr (std::is_same_v<TY, BaseType>)
-              {
-                destroy<AlloT> (baseAllocator(), elm);
-              }
-            else
-              {
-                using XAlloT = typename AlloT::template rebind_traits<TY>;
-                auto xAllo = adaptAllocator<TY>();
-                destroy<XAlloT> (xAllo, elm);
-              }
-          }
-      };
+    /** common registration table and memory pool */
+    class MemoryPool;
   }
   
   
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1366 : the following code becomes obsolete in the long term
+  class TrackingAllocator
+    {
+      std::shared_ptr<MemoryPool> mem_;
+      
+    public:
+      /** can be default created to attach to a common pool */
+      TrackingAllocator();
+      
+      /** create a separate, marked memory pool */
+      TrackingAllocator (Literal id);
+      
+      // standard copy operations acceptable
+      
+      
+      [[nodiscard]] void* allocate (size_t n);
+      void deallocate (void*) noexcept;
+      
+      
+      friend bool
+      operator== (TrackingAllocator const& a1, TrackingAllocator const& a2)
+      {
+        return a1.mem_ == a2.mem_;
+      }
+      friend bool
+      operator!= (TrackingAllocator const& a1, TrackingAllocator const& a2)
+      {
+        return not (a1 == a2);
+      }
+      
+      
+      /* ===== Diagnostics ===== */
+      
+      static HashVal checksum (Literal pool =GLOBAL);
+      static size_t numAlloc  (Literal pool =GLOBAL);
+      static size_t numBytes  (Literal pool =GLOBAL);
+      
+      static EventLog log;      
+    };
+  
+  
+  template<typename TY>
+  class TrackAlloc
+    : public TrackingAllocator
+    {
+    public:
+      using TrackingAllocator::TrackingAllocator;
+
+      /** cross-building for another type, using a common pool */
+      template<typename X>
+      TrackAlloc (TrackAlloc<X> const& anchor)
+        : TrackingAllocator{anchor}
+        { }
+      
+      
+      /* ===== C++ standard allocator interface ===== */
+        
+      using value_type = TY;
+      
+      [[nodiscard]] TY* allocate (size_t cnt);
+      void deallocate (TY*, size_t) noexcept;
+    };
+  
+  
+  /**
+   * 
+   */
+  template<typename TY>
+  TY*
+  TrackAlloc<TY>::allocate (size_t cnt)
+  {
+    UNIMPLEMENTED ("type-sized alloc");
+  }
+  
+  /**
+   * 
+   */
+  template<typename TY>
+  void
+  TrackAlloc<TY>::deallocate (TY* loc, size_t cnt) noexcept
+  {
+    UNIMPLEMENTED ("type-sized de-alloc");
+  }
   
   /**
    * Placeholder implementation for a custom allocator
@@ -251,5 +214,5 @@ namespace lib {
   
   
   
-} // namespace lib
+}} // namespace lib::test
 #endif /*LIB_TEST_TRACKING_ALLOCATOR_H*/
