@@ -1,5 +1,5 @@
 /*
-  TrackingAllocator  -  test dummy objects for tracking ctor/dtor calls
+  TrackingAllocator  -  custom allocator for memory management diagnostics
 
   Copyright (C)         Lumiera.org
     2024,               Hermann Vosseler <Ichthyostega@web.de>
@@ -23,6 +23,18 @@
 
 /** @file tracking-allocator.cpp
  ** Implementation of the common storage backend for the tracking test allocator.
+ ** - PoolRegistry maintains a common hashtable with all MemoryPool instances;
+ **   when using the standard accessors, registration and pool creating happens
+ **   automatically.
+ ** - in this setup, the pool with ID="GLOBAL" is just one further pool, which
+ **   will be established when a front-end function is used with the default
+ **   pool-ID (i.e. without explicit pool specification). Note however, that
+ **   such a factory is still statefull (since it embeds a shared-ownership
+ **   smart-pointer)
+ ** - each MemoryPool contains a hashtable, where each active allocation is
+ **   stored, using the storage-location as hashtable key. Each such entry
+ **   gets a further consecutive internal ID, which is visible in the EventLog
+ ** - ////////////////////OOO Mutex locking
  ** 
  ** @see tracking-allocator.hpp
  ** @see TestTracking_test#demonstrate_checkAllocator()
@@ -30,27 +42,23 @@
  */
 
 
-//#include "lib/test/test-helper.hpp"
 #include "lib/test/tracking-allocator.hpp"
-//#include "lib/format-string.hpp"
-//#include "lib/format-cout.hpp"
-//#include "lib/unique-malloc-owner.hpp"
+#include "lib/uninitialised-storage.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/depend.hpp"
-#include "lib/uninitialised-storage.hpp"
 #include "lib/util.hpp"
 
 
-//#include <string>
+#include <string>
 #include <unordered_map>
 
-//using util::_Fmt;
+using std::string;
 using std::make_shared;
 using std::make_pair;
-//using std::string;
 using util::contains;
 using util::joinDash;
 using util::showAddr;
+
 
 namespace lib {
 namespace test{
@@ -101,6 +109,8 @@ namespace test{
       HashVal getChecksum()     const;
       size_t getAllocationCnt() const;
       size_t calcAllocSize()    const;
+      
+      Literal getPoolID()  const { return poolID_; }
     };
   
   
@@ -176,19 +186,30 @@ namespace test{
     { }
   
   
-  void*
-  TrackingAllocator::allocate (size_t cnt)
+  /**
+   * Allot a memory block with size \a bytes.
+   * This allocation is recorded in the associated MemoryPool
+   * and proper deallocation can thus be verified.
+   * @return a `void*` to the start of the bare memory location
+   */
+  TrackingAllocator::Location
+  TrackingAllocator::allocate (size_t bytes)
   {
     ENSURE (mem_);
-    return mem_->addAlloc (cnt)
+    return mem_->addAlloc (bytes)
                     .buff.front();
   }
   
+  /**
+   * Discard and forget an allocation created through this allocator.
+   * The \a bytes argument serves as sanity check (since the actual allocation
+   * size is recorded anyway); a mismatch is logged as error, yet silently ignored.
+   */
   void
-  TrackingAllocator::deallocate (Location loc, size_t cnt) noexcept
+  TrackingAllocator::deallocate (Location loc, size_t bytes) noexcept
   {
     ENSURE (mem_);
-    mem_->discardAlloc (loc, cnt);
+    mem_->discardAlloc (loc, bytes);
   }
   
   MemoryPool::Allocation&
@@ -199,7 +220,7 @@ namespace test{
     Location loc = newAlloc.buff.front();
     ASSERT (not contains (allocs_, loc));
     newAlloc.entryID = ++entryNr_;
-    logAlloc (poolID_, "allocate", entryNr_, bytes, showAddr(loc));
+    logAlloc (poolID_, "allocate", bytes, entryNr_, showAddr(loc));
     checksum_ += entryNr_ * bytes;
     return allocs_.emplace (loc, move(newAlloc))
                   .first->second;
@@ -213,9 +234,10 @@ namespace test{
         auto& entry = allocs_[loc];
         ASSERT (entry.buff);
         ASSERT (entry.buff.front() == loc);
-        if (entry.buff.size() != bytes)                                          // *deliberately* tolerating wrong data
-          logAlarm ("SizeMismatch", entry.entryID, bytes, showAddr(loc));       //  but log as incident to support diagnostics
-        logAlloc (poolID_, "deallocate", entry.entryID, bytes, showAddr(loc));
+        if (entry.buff.size() != bytes)     // *deliberately* tolerating wrong data, but log incident to support diagnostics
+          logAlarm ("SizeMismatch", bytes, "≠", entry.buff.size(), entry.entryID, showAddr(loc));
+        
+        logAlloc (poolID_, "deallocate", bytes, entry.entryID, bytes, showAddr(loc));
         checksum_ -= entryNr_ * bytes;      // Note: using the given size (if wrong ⟿ checksum mismatch)
         allocs_.erase(loc);
       }
@@ -295,6 +317,7 @@ namespace test{
   bool
   TrackingAllocator::manages (Location memLoc)  const
   {
+    ENSURE (mem_);
     return bool(mem_->findAlloc (memLoc));
   }
   
@@ -302,6 +325,7 @@ namespace test{
   size_t
   TrackingAllocator::getSize(Location memLoc) const
   {
+    ENSURE (mem_);
     auto* entry = mem_->findAlloc (memLoc);
     return entry? entry->buff.size()
                 : 0;
@@ -311,10 +335,19 @@ namespace test{
   HashVal
   TrackingAllocator::getID (Location memLoc) const
   {
+    ENSURE (mem_);
     auto* entry = mem_->findAlloc (memLoc);
     return entry? entry->entryID
                 : 0;
   }
+  
+  Literal
+  TrackingAllocator::poolID()  const
+  {
+    ENSURE (mem_);
+    return mem_->getPoolID();
+  }
+
   
   
   

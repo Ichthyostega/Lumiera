@@ -164,6 +164,7 @@ namespace lib {
           }
         
         
+        
         /** create new element using the embedded allocator */
         template<class TY, typename...ARGS>
         TY*
@@ -195,6 +196,92 @@ namespace lib {
                 using XAlloT = typename AlloT::template rebind_traits<TY>;
                 auto xAllo = adaptAllocator<TY>();
                 destroy<XAlloT> (xAllo, elm);
+              }
+          }
+      };
+    
+    
+    
+    
+    /** Metafunction: probe if the given base factory is possibly monostate */
+    template<class FAC>
+    struct is_Stateless
+      : std::__and_< std::is_empty<FAC>
+                   , std::is_default_constructible<FAC>
+                   >
+      { };
+    template<class FAC>
+    auto is_Stateless_v = is_Stateless<FAC>{};
+    
+    
+    
+    
+    
+    /**
+     * Adapter to use a _generic factory_ \a FAC for
+     * creating managed object instances with unique ownership.
+     * Generated objects are attached to a `std::unique_ptr` handle,
+     * which enforces scoped ownership and destroys automatically.
+     * The factory can either be stateless (≙monostate) or tied
+     * to a distinct, statefull allocator or manager backend.
+     * In the latter case, this adapter must be created with
+     * appropriate wiring and each generated `unique_ptr` handle
+     * will also carry a back-reference to the manager instance.
+     */
+    template<class FAC>
+    class OwnUniqueAdapter
+      : protected FAC
+      {
+        template<typename TY>
+        static void
+        dispose (TY* elm)            ///< @internal callback for unique_ptr using stateless FAC
+          {
+            FAC factory;
+            factory.dispose (elm);
+          };
+        
+        template<typename TY>
+        struct StatefulDeleter       ///< @internal callback for unique_ptr using statefull FAC
+          : protected FAC
+          {
+            void
+            operator() (TY* elm)
+              {
+                FAC::dispose (elm);
+              }
+            
+            StatefulDeleter (FAC const& anchor)
+              : FAC{anchor}
+              { }
+          };
+        
+        
+      public:
+        OwnUniqueAdapter (FAC const& factory)
+          : FAC{factory}
+          { }
+        using FAC::FAC;
+        
+        /**
+         * Factory function: generate object with scoped ownership and automated clean-up.
+         */
+        template<class TY, typename...ARGS>
+        auto
+        make_unique (ARGS&& ...args)
+          {
+            if constexpr (is_Stateless_v<FAC>)
+              {
+                using Handle = std::unique_ptr<TY, void(TY*)>;
+                return Handle{FAC::template create<TY> (std::forward<ARGS> (args)...)
+                             , &OwnUniqueAdapter::dispose
+                             };
+              }
+            else
+              {
+                using Handle = std::unique_ptr<TY, StatefulDeleter<TY>>;
+                return Handle{FAC::template create<TY> (std::forward<ARGS> (args)...)
+                             , StatefulDeleter<TY>{*this}
+                             };
               }
           }
       };

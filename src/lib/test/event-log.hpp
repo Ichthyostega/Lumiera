@@ -364,6 +364,14 @@ namespace test{
        */
       EventLog& event (string classifier, string text);
       
+      template<typename...ELMS>
+      EventLog&
+      event (string classifier, ELMS const& ...initialiser)
+        {
+          log ("event", ArgSeq{"ID="+classifier}, collectStr<ArgSeq> (initialiser...));
+          return *this;
+        }
+      
       /** Log occurrence of a function call with no arguments.
        * @param target the object or scope on which the function is invoked
        * @param function name of the function being invoked

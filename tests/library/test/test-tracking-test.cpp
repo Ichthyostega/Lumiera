@@ -29,6 +29,7 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/test/tracking-dummy.hpp"
 #include "lib/test/tracking-allocator.hpp"
+#include "lib/allocator-handle.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
 #include "lib/test/diagnostic-output.hpp"///////////////////////TODO
@@ -76,19 +77,19 @@ namespace test{
           Tracker alpha;                                                       // (1) create α
           auto randomAlpha = toString(alpha.val);
           
-          log.note("type=ID",alpha.val);                                       // (2) α has an random ID
+          log.event("ID",alpha.val);                                           // (2) α has an random ID
           {
             Tracker beta{55};                                                  // (3) create β
             alpha = beta;                                                      // (4) assign α ≔ β
           }
-          log.note("type=ID",alpha.val);                                       // (5) thus α now also bears the ID 55 of β
+          log.event ("ID",alpha.val);                                          // (5) thus α now also bears the ID 55 of β
           Tracker gamma = move(alpha);                                         // (6) create γ by move-defuncting α
           {
             Tracker delta(23);                                                 // (7) create δ with ID 23
             delta = move(gamma);                                               // (8) move-assign δ ⟵ γ
-            log.note("type=ID",delta.val);                                     // (9) thus δ now bears the ID 55 (moved α ⟶ γ ⟶ δ)
+            log.event ("ID",delta.val);                                        // (9) thus δ now bears the ID 55 (moved α ⟶ γ ⟶ δ)
           }
-          log.note("type=ID",alpha.val);                                       // (X) and thus α is now a zombie object
+          log.event("ID",alpha.val);                                           // (X) and thus α is now a zombie object
           
           cout << "____Tracker-Log_______________\n"
                << util::join(Tracker::log,      "\n")
@@ -159,7 +160,11 @@ namespace test{
         }
       
       
-      /** @test custom allocator to track memory handling.
+      /** @test custom allocator to track memory handling
+       *      - use the base allocator to perform raw memory allocation
+       *      - demonstrate checksum and diagnostic functions
+       *      - use a standard adapter to create objects with `unique_ptr`
+       *      - use as _custom allocator_ within STL containers
        */
       void
       demonstrate_checkAllocator()
@@ -169,9 +174,12 @@ namespace test{
           Tracker::log.clear("Tracking-Allocator-Test");
           Tracker::log.joinInto(log);
           
+          // everything is safe and sound initially....
           CHECK (TrackingAllocator::checksum() == 0, "Testsuite is broken");
           CHECK (TrackingAllocator::use_count() == 0);
-          {
+          
+          { // Test-1 : raw allocations....
+            log.event("Test-1");
             TrackingAllocator allo;
             CHECK (TrackingAllocator::use_count() == 1);
             CHECK (TrackingAllocator::numAlloc()  == 0);
@@ -195,35 +203,109 @@ namespace test{
             CHECK (TrackingAllocator::numAlloc()  == 0);
             CHECK (TrackingAllocator::numBytes()  == 0);
           }
-          
+          CHECK (log.verify("EventLogHeader").on("Tracking-Allocator-Test")
+                    .before("logJoin")
+                    .beforeEvent("Test-1")
+                    .beforeCall("allocate").on(GLOBAL).argPos(0, 55)
+                    .beforeEvent("error", "SizeMismatch-42-≠-55")
+                    .beforeCall("deallocate").on(GLOBAL).argPos(0, 42)
+                );
           CHECK (TrackingAllocator::checksum() == 0);
-          {
+          
+          
+          { // Test-2 : attach scoped-ownership-front-End
+            log.event("Test-2");
+            
+            allo::OwnUniqueAdapter<TrackingFactory> uniFab;
+            CHECK (sizeof(uniFab) == sizeof(TrackingFactory));
+            CHECK (sizeof(uniFab) == sizeof(std::shared_ptr<byte>));
+            CHECK (not allo::is_Stateless_v<decltype(uniFab)>);
+            
+            CHECK (TrackingAllocator::use_count() == 1);
+            CHECK (TrackingAllocator::numAlloc()  == 0);
+            CHECK (TrackingAllocator::numBytes()  == 0);
+            {
+              log.event("fabricate unique");
+              auto uniqueHandle = uniFab.make_unique<Tracker> (77);
+              CHECK (uniqueHandle);
+              CHECK (uniqueHandle->val == 77);
+              CHECK (TrackingAllocator::use_count() == 2);
+              CHECK (TrackingAllocator::numAlloc()  == 1);
+              CHECK (TrackingAllocator::numBytes()  == sizeof(Tracker));
+              
+              // all the default tracking allocators indeed attach to the same pool
+              TrackingAllocator allo;
+              void* mem = uniqueHandle.get();
+              CHECK (allo.manages (mem));
+              HashVal memID = allo.getID (mem);
+              CHECK (0 < memID);
+              CHECK (TrackingAllocator::checksum() == memID*sizeof(Tracker));
+              
+            }// and it's gone...
+            CHECK (TrackingAllocator::use_count() == 1);
+            CHECK (TrackingAllocator::numAlloc()  == 0);
+            CHECK (TrackingAllocator::numBytes()  == 0);
+          }
+          
+          CHECK (log.verifyEvent("Test-2")
+                    .beforeEvent("fabricate unique")
+                    .beforeCall("allocate").on(GLOBAL).argPos(0, sizeof(Tracker))
+                    .beforeCall("create-Tracker").on(GLOBAL).arg(77)
+                    .beforeCall("ctor").on("Tracker").arg(77)
+                    .beforeCall("destroy-Tracker").on(GLOBAL)
+                    .beforeCall("dtor").on("Tracker").arg(77)
+                    .beforeCall("deallocate").on(GLOBAL).argPos(0, sizeof(Tracker))
+                );
+          CHECK (TrackingAllocator::checksum() == 0);
+          
+          
+          Tracker *t1, *t2, *t3, *t4;
+          
+          { // Test-3 : use as STL allocator
+            log.event("Test-3");
             using SpyVec = std::vector<Tracker, TrackAlloc<Tracker>>;
             
+            log.event("fill with 3 default instances");
             SpyVec vec1(3);
             
             int v3 = vec1.back().val;
-SHOW_EXPR(v3);
-SHOW_EXPR(join(vec1))
             
             SpyVec vec2;
+            log.event("move last instance over into other vector");
             vec2.emplace_back (move (vec1[2]));
-SHOW_EXPR(join(vec1))
-SHOW_EXPR(join(vec2))
+            CHECK (vec2.back().val == v3);
+            CHECK (vec1.back().val == Tracker::DEFUNCT);
             
+            // capture object locations for log verification
+            t1 = & vec1[0];
+            t2 = & vec1[1];
+            t3 = & vec1[2];
+            t4 = & vec2.front();
+            log.event("leave scope");
           }
-          CHECK (TrackingAllocator::checksum() == 0);
+          CHECK (log.verifyEvent("Test-3")
+                    .beforeEvent("fill with 3 default instances")
+                    .beforeCall("allocate").on(GLOBAL)
+                    .beforeCall("ctor").on(t1)
+                    .beforeCall("ctor").on(t2)
+                    .beforeCall("ctor").on(t3)
+                    .beforeEvent("move last instance over into other vector")
+                    .beforeCall("allocate").on(GLOBAL)
+                    .beforeCall("ctor-move").on(t4)
+                    .beforeEvent("leave scope")
+                    .beforeCall("dtor").on(t4)
+                    .beforeCall("deallocate").on(GLOBAL)
+                    .beforeCall("dtor").on(t1)             // (problematic test? order may be implementation dependent)
+                    .beforeCall("dtor").on(t2)
+                    .beforeCall("dtor").on(t3)
+                    .beforeCall("deallocate").on(GLOBAL)
+                );
           
           cout << "____Tracking-Allo-Log_________\n"
                << util::join(Tracker::log,      "\n")
                << "\n───╼━━━━━━━━━━━━━━━━━╾────────"<<endl;
           
-          CHECK (log.verify("EventLogHeader").on("Tracking-Allocator-Test")
-                    .before("logJoin")
-                    .beforeCall("allocate").on(GLOBAL).argPos(1, 55)
-                    .beforeEvent("error", "SizeMismatch")
-                    .beforeCall("deallocate").on(GLOBAL).argPos(1, 42)
-                );
+          CHECK (TrackingAllocator::checksum() == 0);
         }
     };
   
