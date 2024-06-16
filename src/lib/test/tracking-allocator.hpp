@@ -75,7 +75,7 @@ namespace test {
       
       
       [[nodiscard]] void* allocate (size_t n);
-      void deallocate (void*) noexcept;
+      void deallocate (void*, size_t =0) noexcept;
       
       
       friend bool
@@ -130,7 +130,7 @@ namespace test {
   TY*
   TrackAlloc<TY>::allocate (size_t cnt)
   {
-    UNIMPLEMENTED ("type-sized alloc");
+    return static_cast<TY*> (TrackingAllocator::allocate (cnt * sizeof(TY)));
   }
   
   /**
@@ -141,79 +141,9 @@ namespace test {
   void
   TrackAlloc<TY>::deallocate (TY* loc, size_t cnt) noexcept
   {
-    UNIMPLEMENTED ("type-sized de-alloc");
+    TrackingAllocator::deallocate (loc, cnt * sizeof(TY));
   }
   
-  /**
-   * Placeholder implementation for a custom allocator
-   * @todo shall be replaced by an AllocationCluster eventually
-   * @todo 5/2024 to be reworked and aligned with a prospective C++20 Allocator Concept /////////////////////TICKET #1366
-   * @remark using `std::list` container, since re-entrant allocation calls are possible,
-   *         meaning that further allocations will be requested recursively from a ctor.
-   *         Moreover, for the same reason we separate the allocation from the ctor call,
-   *         so we can capture the address of the new allocation prior to any possible
-   *         re-entrant call, and handle clean-up of allocation without requiring any
-   *         additional state flags.....
-   */
-  template<typename TY>
-  class AllocatorHandle
-    {
-      struct Allocation
-        {
-          alignas(TY)
-            std::byte buf_[sizeof(TY)];
-          
-          template<typename...ARGS>
-          TY&
-          create (ARGS&& ...args)
-            {
-              return *new(&buf_) TY {std::forward<ARGS> (args)...};
-            }
-          
-          TY&
-          access()
-            {
-              return * std::launder (reinterpret_cast<TY*> (&buf_));
-            }
-          void
-          discard() /// @warning strong assumption made here: Payload was created
-            {
-              access().~TY();
-            }
-        };
-      
-      std::list<Allocation> storage_;
-      
-    public:
-      template<typename...ARGS>
-      TY&
-      operator() (ARGS&& ...args)
-        {                  // EX_STRONG
-          auto pos = storage_.emplace (storage_.end());  ////////////////////////////////////////////////////TICKET #230 : real implementation should care for concurrency here
-          try {
-              return pos->create (std::forward<ARGS> (args)...);
-            }
-          catch(...)
-            {
-              storage_.erase (pos); // EX_FREE
-              
-              const char* errID = lumiera_error();
-              ERROR (memory, "Allocation failed with unknown exception. "
-                             "Lumiera errorID=%s", errID?errID:"??");
-              throw;
-            }
-        }
-      
-      /** @note need to do explicit clean-up, since a ctor-call might have been failed,
-       *        and we have no simple way to record this fact internally in Allocation,
-       *        short of wasting additional memory for a flag to mark this situation */
-     ~AllocatorHandle()
-        try {
-            for (auto& alloc : storage_)
-              alloc.discard();
-          }
-        ERROR_LOG_AND_IGNORE (memory, "clean-up of custom AllocatorHandle")
-    };
   
   
   

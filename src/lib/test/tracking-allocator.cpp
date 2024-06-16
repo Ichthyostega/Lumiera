@@ -35,6 +35,7 @@
 //#include "lib/format-string.hpp"
 //#include "lib/format-cout.hpp"
 //#include "lib/unique-malloc-owner.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/depend.hpp"
 #include "lib/uninitialised-storage.hpp"
 #include "lib/util.hpp"
@@ -49,6 +50,7 @@ using std::make_pair;
 //using std::string;
 using util::contains;
 using util::joinDash;
+using util::showAddr;
 
 namespace lib {
 namespace test{
@@ -72,22 +74,31 @@ namespace test{
         : util::MoveOnly
         {
           UninitialisedDynBlock<byte> buff{};
+          size_t entryID;
         };
       
       using AllocTab = std::unordered_map<const Location, Allocation, LocationHash>;
       
       
       Literal poolID_;
-      AllocTab allocs_{};
+      AllocTab allocs_;
+      HashVal checksum_;
+      size_t entryNr_;
       
     public:
       MemoryPool (Literal id)
         : poolID_{id}
         , allocs_{}
+        , checksum_{0}
+        , entryNr_{0}
         { }
       
       Allocation& addAlloc (size_t bytes);
-      void discardAlloc (void* loc);
+      void discardAlloc (void* loc, size_t);
+      
+      HashVal getChecksum()     const;
+      size_t getAllocationCnt() const;
+      size_t calcAllocSize()    const;
     };
   
   
@@ -164,15 +175,18 @@ namespace test{
   
   
   void*
-  TrackingAllocator::allocate (size_t n)
+  TrackingAllocator::allocate (size_t cnt)
   {
-    UNIMPLEMENTED ("allocate memory block of size n");
+    ENSURE (mem_);
+    return mem_->addAlloc (cnt)
+                    .buff.front();
   }
   
   void
-  TrackingAllocator::deallocate (void* loc) noexcept
+  TrackingAllocator::deallocate (void* loc, size_t cnt) noexcept
   {
-    UNIMPLEMENTED ("allocate memory block of size n");
+    ENSURE (mem_);
+    mem_->discardAlloc (loc, cnt);
   }
   
   MemoryPool::Allocation&
@@ -182,24 +196,49 @@ namespace test{
     newAlloc.buff.allocate (bytes);
     Location loc = newAlloc.buff.front();
     ASSERT (not contains (allocs_, loc));
-    logAlloc (poolID_, "allocate", bytes, loc);
+    newAlloc.entryID = ++entryNr_;
+    logAlloc (poolID_, "allocate", entryNr_, bytes, showAddr(loc));
+    checksum_ += entryNr_ * bytes;
     return allocs_.emplace (loc, move(newAlloc))
                   .first->second;
   }
   
   void
-  MemoryPool::discardAlloc (void* loc)
+  MemoryPool::discardAlloc (void* loc, size_t bytes)
   {
     if (contains (allocs_, loc))
       {
         auto& entry = allocs_[loc];
         ASSERT (entry.buff);
         ASSERT (entry.buff.front() == loc);
-        logAlloc (poolID_, "deallocate", entry.buff.size());
+        if (entry.buff.size() != bytes)
+          logAlarm ("SizeMismatch", entry.entryID, bytes, showAddr(loc));
+        logAlloc (poolID_, "deallocate", entry.entryID, bytes, showAddr(loc));
+        checksum_ -= entryNr_ * bytes;
         allocs_.erase(loc);
       }
     else // deliberately no exception here (for better diagnostics)
-      logAlarm("FreeUnknown", loc);
+      logAlarm ("FreeUnknown", bytes, showAddr(loc));
+  }
+  
+  HashVal
+  MemoryPool::getChecksum()  const
+  {
+    return checksum_;
+  }
+  
+  size_t
+  MemoryPool::getAllocationCnt()  const
+  {
+    return allocs_.size();
+  }
+  
+  size_t
+  MemoryPool::calcAllocSize()  const
+  {
+    return explore(allocs_)
+              .transform ([](auto& it){ return it->second.buff.size(); })
+              .resultSum();
   }
   
   
@@ -209,22 +248,28 @@ namespace test{
   EventLog TrackingAllocator::log{"test::TrackingAllocator"};
   
   
+  /** get Checksum for mem-pool */
   HashVal
-  TrackingAllocator::checksum (Literal pool)
+  TrackingAllocator::checksum (Literal poolID)
   {
-    UNIMPLEMENTED ("get Checksum for mem-pool");
+    PoolHandle pool = PoolRegistry::locate (poolID);
+    return pool->getChecksum();
   }
   
+  /** get allocation count for mem-pool */
   size_t
-  TrackingAllocator::numAlloc  (Literal pool)
+  TrackingAllocator::numAlloc  (Literal poolID)
   {
-    UNIMPLEMENTED ("get allocation count for mem-pool");
+    PoolHandle pool = PoolRegistry::locate (poolID);
+    return pool->getAllocationCnt();
   }
   
+  /** calculate currently allotted Bytes for mem-pool */
   size_t
-  TrackingAllocator::numBytes  (Literal pool)
+  TrackingAllocator::numBytes  (Literal poolID)
   {
-    UNIMPLEMENTED ("calc allotted Bytes for mem-pool");
+    PoolHandle pool = PoolRegistry::locate (poolID);
+    return pool->calcAllocSize();
   }
   
 
