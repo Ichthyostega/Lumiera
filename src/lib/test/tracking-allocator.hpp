@@ -48,19 +48,21 @@ using std::byte;
 namespace lib {
 namespace test {
   
-    
-  namespace { // common memory management for the TrackingAllocator
-    
+  
+  namespace {
     const Symbol GLOBAL{"GLOBAL"};
-    
-    /** common registration table and memory pool */
-    class MemoryPool;
   }
+  
+  /** common registration table and memory pool */
+  class MemoryPool;
+  
+  using PoolHandle = std::shared_ptr<MemoryPool>;
+  
   
   
   class TrackingAllocator
     {
-      std::shared_ptr<MemoryPool> mem_;
+      PoolHandle mem_;
       
     public:
       /** can be default created to attach to a common pool */
@@ -94,7 +96,7 @@ namespace test {
       static size_t numAlloc  (Literal pool =GLOBAL);
       static size_t numBytes  (Literal pool =GLOBAL);
       
-      static EventLog log;      
+      static EventLog log;
     };
   
   
@@ -113,7 +115,7 @@ namespace test {
       
       
       /* ===== C++ standard allocator interface ===== */
-        
+      
       using value_type = TY;
       
       [[nodiscard]] TY* allocate (size_t cnt);
@@ -122,7 +124,7 @@ namespace test {
   
   
   /**
-   * 
+   * C++ standard allocator API : allot raw memory for \a cnt elements of type \a TY
    */
   template<typename TY>
   TY*
@@ -132,7 +134,8 @@ namespace test {
   }
   
   /**
-   * 
+   * C++ standard allocator API : clear an existing allocation,
+   * which must have been allocated into the same pool, with given element cnt.
    */
   template<typename TY>
   void
