@@ -169,6 +169,32 @@ namespace test{
           Tracker::log.clear("Tracking-Allocator-Test");
           Tracker::log.joinInto(log);
           
+          CHECK (TrackingAllocator::checksum() == 0, "Testsuite is broken");
+          CHECK (TrackingAllocator::use_count() == 0);
+          {
+            TrackingAllocator allo;
+            CHECK (TrackingAllocator::use_count() == 1);
+            CHECK (TrackingAllocator::numAlloc()  == 0);
+            CHECK (TrackingAllocator::numBytes()  == 0);
+            
+            void* mem = allo.allocate (55);
+            CHECK (TrackingAllocator::numAlloc()  == 1);
+            CHECK (TrackingAllocator::numBytes()  == 55);
+            
+            CHECK (allo.manages (mem));
+            CHECK (allo.getSize (mem) == 55);
+            HashVal memID = allo.getID (mem);
+            CHECK (0 < memID);
+            CHECK (TrackingAllocator::checksum() == memID*55);
+            
+            allo.deallocate (mem, 42);                      // note: passing a wrong number here is marked as ERROR in the log
+            CHECK (not allo.manages (mem));
+            CHECK (allo.getSize (mem) == 0);
+            CHECK (allo.getID (mem)   == 0);
+            CHECK (TrackingAllocator::use_count() == 1);
+            CHECK (TrackingAllocator::numAlloc()  == 0);
+            CHECK (TrackingAllocator::numBytes()  == 0);
+          }
           
           CHECK (TrackingAllocator::checksum() == 0);
           {
@@ -191,6 +217,13 @@ SHOW_EXPR(join(vec2))
           cout << "____Tracking-Allo-Log_________\n"
                << util::join(Tracker::log,      "\n")
                << "\n───╼━━━━━━━━━━━━━━━━━╾────────"<<endl;
+          
+          CHECK (log.verify("EventLogHeader").on("Tracking-Allocator-Test")
+                    .before("logJoin")
+                    .beforeCall("allocate").on(GLOBAL).argPos(1, 55)
+                    .beforeEvent("error", "SizeMismatch")
+                    .beforeCall("deallocate").on(GLOBAL).argPos(1, 42)
+                );
         }
     };
   

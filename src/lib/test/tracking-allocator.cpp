@@ -96,6 +96,8 @@ namespace test{
       Allocation& addAlloc (size_t bytes);
       void discardAlloc (void* loc, size_t);
       
+      Allocation const* findAlloc (Location)  const;
+      
       HashVal getChecksum()     const;
       size_t getAllocationCnt() const;
       size_t calcAllocSize()    const;
@@ -150,7 +152,7 @@ namespace test{
     PoolHandle
     PoolRegistry::fetch_or_create (Literal poolID)
     {
-      auto entry = pools_[poolID];
+      auto& entry = pools_[poolID];
       auto handle = entry.lock();
       if (handle) return handle;
       
@@ -183,7 +185,7 @@ namespace test{
   }
   
   void
-  TrackingAllocator::deallocate (void* loc, size_t cnt) noexcept
+  TrackingAllocator::deallocate (Location loc, size_t cnt) noexcept
   {
     ENSURE (mem_);
     mem_->discardAlloc (loc, cnt);
@@ -204,22 +206,30 @@ namespace test{
   }
   
   void
-  MemoryPool::discardAlloc (void* loc, size_t bytes)
+  MemoryPool::discardAlloc (Location loc, size_t bytes)
   {
     if (contains (allocs_, loc))
       {
         auto& entry = allocs_[loc];
         ASSERT (entry.buff);
         ASSERT (entry.buff.front() == loc);
-        if (entry.buff.size() != bytes)
-          logAlarm ("SizeMismatch", entry.entryID, bytes, showAddr(loc));
+        if (entry.buff.size() != bytes)                                          // *deliberately* tolerating wrong data
+          logAlarm ("SizeMismatch", entry.entryID, bytes, showAddr(loc));       //  but log as incident to support diagnostics
         logAlloc (poolID_, "deallocate", entry.entryID, bytes, showAddr(loc));
-        checksum_ -= entryNr_ * bytes;
+        checksum_ -= entryNr_ * bytes;      // Note: using the given size (if wrong ⟿ checksum mismatch)
         allocs_.erase(loc);
       }
     else // deliberately no exception here (for better diagnostics)
       logAlarm ("FreeUnknown", bytes, showAddr(loc));
   }
+  
+  MemoryPool::Allocation const*
+  MemoryPool::findAlloc (Location loc)  const
+  {
+    return contains (allocs_, loc)? & allocs_.at(loc)
+                                  : nullptr;
+  }
+  
   
   HashVal
   MemoryPool::getChecksum()  const
@@ -256,6 +266,14 @@ namespace test{
     return pool->getChecksum();
   }
   
+  /** determine number of active front-end handles */
+  size_t
+  TrackingAllocator::use_count (Literal poolID)
+  {
+    PoolHandle pool = PoolRegistry::locate (poolID);
+    return pool.use_count() - 1;
+  }
+  
   /** get allocation count for mem-pool */
   size_t
   TrackingAllocator::numAlloc  (Literal poolID)
@@ -272,7 +290,32 @@ namespace test{
     return pool->calcAllocSize();
   }
   
-
+  
+  /** probe if this allocator pool did allocate the given memory location */
+  bool
+  TrackingAllocator::manages (Location memLoc)  const
+  {
+    return bool(mem_->findAlloc (memLoc));
+  }
+  
+  /** retrieve the registered size of this allocation, if known. */
+  size_t
+  TrackingAllocator::getSize(Location memLoc) const
+  {
+    auto* entry = mem_->findAlloc (memLoc);
+    return entry? entry->buff.size()
+                : 0;
+  }
+  
+  /** retrieve the internal registration ID for this allocation. */
+  HashVal
+  TrackingAllocator::getID (Location memLoc) const
+  {
+    auto* entry = mem_->findAlloc (memLoc);
+    return entry? entry->entryID
+                : 0;
+  }
+  
   
   
 }} // namespace lib::test

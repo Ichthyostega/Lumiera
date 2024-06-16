@@ -73,9 +73,10 @@ namespace test {
       
       // standard copy operations acceptable
       
+      using Location = void*;
       
-      [[nodiscard]] void* allocate (size_t n);
-      void deallocate (void*, size_t =0) noexcept;
+      [[nodiscard]] Location allocate (size_t n);
+      void deallocate (Location, size_t =0) noexcept;
       
       
       friend bool
@@ -92,7 +93,12 @@ namespace test {
       
       /* ===== Diagnostics ===== */
       
+      bool manages (Location)  const;
+      size_t getSize(Location) const;
+      HashVal getID (Location) const;
+      
       static HashVal checksum (Literal pool =GLOBAL);
+      static size_t use_count (Literal pool =GLOBAL);
       static size_t numAlloc  (Literal pool =GLOBAL);
       static size_t numBytes  (Literal pool =GLOBAL);
       
