@@ -32,7 +32,6 @@
 #include "lib/allocator-handle.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
-#include "lib/test/diagnostic-output.hpp"///////////////////////TODO
 
 #include <string>
 
@@ -88,8 +87,11 @@ namespace test{
             Tracker delta(23);                                                 // (7) create δ with ID 23
             delta = move(gamma);                                               // (8) move-assign δ ⟵ γ
             log.event ("ID",delta.val);                                        // (9) thus δ now bears the ID 55 (moved α ⟶ γ ⟶ δ)
+            CHECK (delta.val == 55);
           }
           log.event("ID",alpha.val);                                           // (X) and thus α is now a zombie object
+          CHECK (alpha.val == Tracker::DEFUNCT);
+          
           
           cout << "____Tracker-Log_______________\n"
                << util::join(Tracker::log,      "\n")
@@ -110,6 +112,7 @@ namespace test{
                     .beforeEvent("ID", toString(Tracker::DEFUNCT))             // (X) and thus α is now a zombie object
                 );
         }
+      
       
       
       /** @test dummy object with a tracking checksum.
@@ -160,11 +163,14 @@ namespace test{
         }
       
       
+      
       /** @test custom allocator to track memory handling
        *      - use the base allocator to perform raw memory allocation
        *      - demonstrate checksum and diagnostic functions
        *      - use a standard adapter to create objects with `unique_ptr`
        *      - use as _custom allocator_ within STL containers
+       *      - can use several distinct pools
+       *      - swapping containers will move allocators alongside
        */
       void
       demonstrate_checkAllocator()
@@ -190,7 +196,7 @@ namespace test{
             CHECK (TrackingAllocator::numBytes()  == 55);
             
             CHECK (allo.manages (mem));
-            CHECK (allo.getSize (mem) == 55);
+            CHECK (allo.getSize (mem) == 55);               // individual registration recalls the allocation's size
             HashVal memID = allo.getID (mem);
             CHECK (0 < memID);
             CHECK (TrackingAllocator::checksum() == memID*55);
@@ -259,18 +265,22 @@ namespace test{
           CHECK (TrackingAllocator::checksum() == 0);
           
           
-          Tracker *t1, *t2, *t3, *t4;
+          // define a vector type to use the TrackingAllocator internally
+          using TrackVec = std::vector<Tracker, TrackAlloc<Tracker>>;
+          
+          // the following pointers are used later to identify log entries...
+          Tracker *t1, *t2, *t3, *t4, *t5, *t6;
+          
           
           { // Test-3 : use as STL allocator
             log.event("Test-3");
-            using SpyVec = std::vector<Tracker, TrackAlloc<Tracker>>;
             
             log.event("fill with 3 default instances");
-            SpyVec vec1(3);
+            TrackVec vec1(3);
             
             int v3 = vec1.back().val;
             
-            SpyVec vec2;
+            TrackVec vec2;
             log.event("move last instance over into other vector");
             vec2.emplace_back (move (vec1[2]));
             CHECK (vec2.back().val == v3);
@@ -300,12 +310,115 @@ namespace test{
                     .beforeCall("dtor").on(t3)
                     .beforeCall("deallocate").on(GLOBAL)
                 );
+          CHECK (TrackingAllocator::checksum() == 0);
+          
+          
+          { // Test-4 : intermingled use of several pools
+            log.event("Test-4");
+            
+            TrackAlloc<Tracker> allo1{"POOL-1"};
+            TrackAlloc<Tracker> allo2{"POOL-2"};
+            CHECK (allo1 != allo2);
+            
+            CHECK (TrackingAllocator::use_count(GLOBAL)   == 0);
+            CHECK (TrackingAllocator::use_count("POOL-1") == 1);  // referred by allo1
+            CHECK (TrackingAllocator::use_count("POOL-2") == 1);  // referred by allo2
+            CHECK (TrackingAllocator::checksum ("POOL-1") == 0);
+            CHECK (TrackingAllocator::checksum ("POOL-2") == 0);
+            
+            TrackVec vec1{allo1};
+            TrackVec vec2{allo2};
+            CHECK (TrackingAllocator::use_count("POOL-1") == 2);  // now also referred by the copy in the vectors
+            CHECK (TrackingAllocator::use_count("POOL-2") == 2);
+            
+            log.event("reserve space in vectors");
+            vec1.reserve(20);
+            vec2.reserve(2);
+            CHECK (TrackingAllocator::numBytes("POOL-1") == 20*sizeof(Tracker));
+            CHECK (TrackingAllocator::numBytes("POOL-2") ==  2*sizeof(Tracker));
+
+            CHECK (TrackingAllocator::numBytes(GLOBAL) == 0);
+            CHECK (TrackingAllocator::numBytes()       == 0);
+            
+            log.event("create elements in vec1");
+            vec1.resize(5);
+            vec1.back().val = 11;
+            log.event("add element to vec2");
+            vec2.push_back (Tracker{22});
+            
+            // capture object locations for log verification later
+            t1 = & vec1[0];
+            t2 = & vec1[1];
+            t3 = & vec1[2];
+            t4 = & vec1[3];
+            t5 = & vec1[4];
+            t6 = & vec2.front();
+            
+            log.event ("swap vectors");
+            std::swap (vec1, vec2);
+            
+            CHECK (vec1.back().val == 22);
+            CHECK (vec2.back().val == 11);
+            CHECK (vec1.size() == 1);
+            CHECK (vec2.size() == 5);
+            // the allocators were migrated alongside with the swap
+            CHECK (TrackingAllocator::numBytes("POOL-1") == 20*sizeof(Tracker));
+            CHECK (TrackingAllocator::numBytes("POOL-2") ==  2*sizeof(Tracker));
+            // this can be demonstrated....
+            log.event ("clear the elements migrated to vec2");
+            vec2.clear();
+            vec2.shrink_to_fit();
+            CHECK (vec2.capacity() == 0);
+            CHECK (TrackingAllocator::numBytes("POOL-1") ==  0                );
+            CHECK (TrackingAllocator::numBytes("POOL-2") ==  2*sizeof(Tracker));
+            CHECK (vec1.size()     == 1);
+            CHECK (vec1.capacity() == 2); // unaffected
+            
+            log.event ("leave scope");
+          }
+          
+          CHECK (log.verifyEvent("Test-4")
+                    .beforeEvent("reserve space in vectors")
+                    .beforeCall("allocate").on("POOL-1").argPos(0, 20*sizeof(Tracker))
+                    .beforeCall("allocate").on("POOL-2").argPos(0,  2*sizeof(Tracker))
+                    
+                    .beforeEvent("create elements in vec1")
+                    .beforeCall("ctor").on(t1)
+                    .beforeCall("ctor").on(t2)
+                    .beforeCall("ctor").on(t3)
+                    .beforeCall("ctor").on(t4)
+                    .beforeCall("ctor").on(t5)
+                    
+                    .beforeEvent("add element to vec2")
+                    .beforeCall("ctor").arg(22)
+                    .beforeCall("ctor-move").on(t6).arg("Track{22}")
+                    .beforeCall("dtor").arg(Tracker::DEFUNCT)
+                    
+                    .beforeEvent("swap vectors")
+                    .beforeEvent("clear the elements migrated to vec2")
+                    .beforeCall("dtor").on(t1)
+                    .beforeCall("dtor").on(t2)
+                    .beforeCall("dtor").on(t3)
+                    .beforeCall("dtor").on(t4)
+                    .beforeCall("dtor").on(t5).arg(11)
+                    .beforeCall("deallocate").on("POOL-1").argPos(0, 20*sizeof(Tracker))
+
+                    .beforeEvent("leave scope")
+                    .beforeCall("dtor").on(t6).arg(22)
+                    .beforeCall("deallocate").on("POOL-2").argPos(0,  2*sizeof(Tracker))
+                );
+          // everything clean and all pools empty again...
+          CHECK (TrackingAllocator::use_count(GLOBAL)   == 0);
+          CHECK (TrackingAllocator::use_count("POOL-1") == 0);
+          CHECK (TrackingAllocator::use_count("POOL-2") == 0);
+          CHECK (TrackingAllocator::checksum("POOL-1") == 0);
+          CHECK (TrackingAllocator::checksum("POOL-2") == 0);
+          CHECK (TrackingAllocator::checksum(GLOBAL) == 0);
+          
           
           cout << "____Tracking-Allo-Log_________\n"
                << util::join(Tracker::log,      "\n")
                << "\n───╼━━━━━━━━━━━━━━━━━╾────────"<<endl;
-          
-          CHECK (TrackingAllocator::checksum() == 0);
         }
     };
   

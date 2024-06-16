@@ -34,11 +34,8 @@
  ** - each MemoryPool contains a hashtable, where each active allocation is
  **   stored, using the storage-location as hashtable key. Each such entry
  **   gets a further consecutive internal ID, which is visible in the EventLog
- ** - ////////////////////OOO Mutex locking
- ** 
  ** @see tracking-allocator.hpp
  ** @see TestTracking_test#demonstrate_checkAllocator()
- ** 
  */
 
 
@@ -82,7 +79,7 @@ namespace test{
         : util::MoveOnly
         {
           UninitialisedDynBlock<byte> buff{};
-          size_t entryID;
+          size_t entryID{0};
         };
       
       using AllocTab = std::unordered_map<const Location, Allocation, LocationHash>;
@@ -135,18 +132,22 @@ namespace test{
     }
     
     
+    /** keep track of any distinct memory pools used */
     class PoolRegistry
       : util::NonCopyable
-      {
-        std::unordered_map<Literal, std::weak_ptr<MemoryPool>> pools_{};
-      public:
+      {                                          // note: obsolete entries never discarded
+        using PoolTab = std::unordered_map<Literal, std::weak_ptr<MemoryPool>>;
         
+        PoolTab pools_{};
+        
+      public:
         static PoolHandle locate (Literal poolID);
         
       private:
         PoolHandle fetch_or_create (Literal poolID);
       };
     
+    /** singleton for default pool */
     Depend<MemoryPool> globalPool;
     Depend<PoolRegistry> poolReg;
     
@@ -187,7 +188,7 @@ namespace test{
   
   
   /**
-   * Allot a memory block with size \a bytes.
+   * Allot a memory block of given size \a bytes.
    * This allocation is recorded in the associated MemoryPool
    * and proper deallocation can thus be verified.
    * @return a `void*` to the start of the bare memory location
@@ -245,6 +246,7 @@ namespace test{
       logAlarm ("FreeUnknown", bytes, showAddr(loc));
   }
   
+  
   MemoryPool::Allocation const*
   MemoryPool::findAlloc (Location loc)  const
   {
@@ -280,7 +282,7 @@ namespace test{
   EventLog TrackingAllocator::log{"test::TrackingAllocator"};
   
   
-  /** get Checksum for mem-pool */
+  /** get Checksum for specific mem-pool */
   HashVal
   TrackingAllocator::checksum (Literal poolID)
   {
@@ -296,7 +298,7 @@ namespace test{
     return pool.use_count() - 1;
   }
   
-  /** get allocation count for mem-pool */
+  /** get active allocation count for mem-pool */
   size_t
   TrackingAllocator::numAlloc  (Literal poolID)
   {
@@ -348,7 +350,6 @@ namespace test{
     return mem_->getPoolID();
   }
 
-  
   
   
 }} // namespace lib::test

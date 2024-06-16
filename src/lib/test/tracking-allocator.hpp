@@ -22,7 +22,7 @@
 
 
 /** @file tracking-allocator.hpp
- ** unittest helper code: a custom allocator to track memory usage.
+ ** Unittest helper code: a custom allocator to track memory usage.
  ** By registering each allocation and deallocation, correct memory handling
  ** can be verified and memory usage can be investigated in practice.
  ** \par TrackingAllocator
@@ -43,6 +43,11 @@
  ** @remark these classes also work in concert with the building blocks
  **         from allocator-handle.hpp; notably it is possible to create
  **         a OwnUniqueAdapter front-end for fabricating `unique_ptr`
+ ** @warning deliberately *not threadsafe*
+ **        - generally speaking, allocation should be kept outside of
+ **          any multithreaded environment, or at least requires
+ **          dedicated care beyond any standard scheme
+ **        - this is a test feature...
  ** @see TestTracking_test
  */
 
@@ -156,6 +161,12 @@ namespace test {
       /* ===== C++ standard allocator interface ===== */
       
       using value_type = TY;
+      
+      // define that (non-equivalent) allocators migrate alongside on assignments....
+      using propagate_on_container_copy_assignment = std::true_type; ///< for sake of consistency
+      using propagate_on_container_move_assignment = std::true_type; ///< otherwise all elements must be copied
+      using propagate_on_container_swap            = std::true_type; ///< otherwise they would have to deallocate cross-wise
+      
       
       [[nodiscard]] TY* allocate (size_t cnt);
       void deallocate (TY*, size_t) noexcept;
