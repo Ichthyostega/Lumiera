@@ -71,15 +71,21 @@
 
 namespace lib {
   
-  namespace {// Storage implementation details
+  namespace {// Storage header implementation details
     
-    template<class I, class E =I, size_t space = sizeof(I)>
+    /**
+     * Metadata record placed immediately before the data storage.
+     * @remark SeveralBuilder uses a custom allocation scheme to acquire
+     *         a sufficiently sized allocation for ArrayBucket + the data.
+     */
+    template<class I>
     struct ArrayBucket
       {
-        ArrayBucket (size_t bytes, size_t elmSize = sizeof(I))
+        ArrayBucket (size_t storageSize, size_t buffStart, size_t elmSize = sizeof(I))
           : cnt{0}
           , spread{elmSize}
-          , buffSiz{bytes}
+          , buffSiz{storageSize - buffStart}
+          , buffOffset{buffStart}
           , deleter{nullptr}
           { }
         
@@ -88,30 +94,24 @@ namespace lib {
         size_t cnt;
         size_t spread;
         size_t buffSiz;
+        size_t buffOffset;
         Deleter deleter;
         
-        /** mark start of the storage area */
-        alignas(E)
-          std::byte storage[space];
+        static constexpr size_t storageOffset = sizeof(ArrayBucket);
         
-        
-        static size_t
-        requiredStorage (size_t cnt, size_t spread =1)
+        /** data storage area starts immediately behind the ArrayBucket */
+        std::byte*
+        storage()
           {
-            return sizeof(ArrayBucket) - sizeof(storage)
-                 + cnt * spread;
+            return reinterpret_cast<std::byte*>(this) + buffOffset;
           }
         
-        /** perform unchecked access into the storage area
-         * @note typically reaching behind the nominal end of this object
-         */
+        /** perform unchecked access into the storage area */
         I&
         subscript (size_t idx)
           {
-            std::byte* elm = storage;
-            size_t off = idx * spread;
-            elm += off;
-            ENSURE (storage <= elm and elm < storage+buffSiz);
+            std::byte* elm = storage() + (idx * spread);
+            ENSURE (storage() <= elm and elm < storage()+buffSiz);
             return * std::launder (reinterpret_cast<I*> (elm));
           }
         

@@ -506,29 +506,9 @@ namespace test{
           { // Scenario-2 : alignment
             struct Ali
               {
-                alignas(32)
+                alignas(64)
                   char charm = 'u';
               };
-SHOW_EXPR(sizeof(Ali))
-SHOW_EXPR(alignof(Ali))
-SHOW_EXPR(sizeof(ArrayBucket<Ali>))
-SHOW_EXPR(alignof(ArrayBucket<Ali>))
-SHOW_EXPR(sizeof(ArrayBucket<Ali, Ali, 10>))
-SHOW_EXPR(alignof(ArrayBucket<Ali, Ali, 10>))
-SHOW_EXPR(sizeof(ArrayBucket<char, Ali, 10>))
-SHOW_EXPR(alignof(ArrayBucket<char, Ali, 10>))
-
-            std::allocator<ArrayBucket<Ali>> aliAllo;
-            std::allocator<std::byte> byteAllo;
-            
-            ArrayBucket<Ali> * locAli = aliAllo.allocate(1);
-            std::byte* locByte = byteAllo.allocate(96);
-SHOW_EXPR(loc(locAli))
-SHOW_EXPR(loc(locAli) % alignof(Ali))
-SHOW_EXPR(loc(locByte))
-SHOW_EXPR(loc(locByte) % alignof(Ali))
-            aliAllo.destroy(locAli);
-            byteAllo.destroy(locByte);
             
             auto elms = makeSeveral<Ali>().fillElm(5).build();
             CHECK (5 == elms.size());

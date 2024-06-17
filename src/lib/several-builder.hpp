@@ -41,7 +41,15 @@
  ** Since the actual data elements can (optionally) be of a different type than
  ** the exposed interface type \a I, additional storage and spacing is required
  ** in the element array. The field ArrayBucket<I>::spread defines this spacing
- ** and thus the offset used for subscript access.
+ ** and thus the offset used for subscript access. The actual data storage starts
+ ** immediately behind the ArrayBucket, which thus acts as a metadata header.
+ ** This arrangement requires a sufficiently sized raw memory allocation to place
+ ** the ArrayBucket and the actual data into. Moreover, the allocation code in
+ ** ElementFactory::create() is responsible to ensure proper alignment of the
+ ** data storage, especially when the payload data type has alignment requirements
+ ** beyond `alignof(void*)`, which is typically used by the standard heap allocator;
+ ** additional headroom is added proactively in this case, to be able to shift the
+ ** storage buffer ahead to the next alignment boundrary.
  ** 
  ** # Handling of data elements
  ** 
@@ -144,9 +152,6 @@ namespace lib {
     /**
      * Helper to determine the »spread« required to hold
      * elements of type \a TY in memory _with proper alignment._
-     * @warning assumes that the start of the buffer is also suitably aligned,
-     *          which _may not be the case_ for **over-aligned objects** with
-     *          `alignof(TY) > alignof(void*)`
      */
     template<typename TY>
     size_t inline constexpr
@@ -187,16 +192,30 @@ namespace lib {
           : Allo{std::move (allo)}
           { }
         
+        
         Bucket*
-        create (size_t cnt, size_t spread)
+        create (size_t cnt, size_t spread, size_t alignment =alignof(I))
           {
-            size_t storageBytes = Bucket::requiredStorage (cnt, spread);
+            REQUIRE (cnt);
+            REQUIRE (spread);
+            size_t storageBytes = Bucket::storageOffset + cnt*spread;
+            if (alignment > alignof(void*)) // over-aligned data => reserve for alignment padding
+              storageBytes += (alignment - alignof(void*));
+            // Step-1 : acquire the raw storage buffer
             std::byte* loc = AlloT::allocate (baseAllocator(), storageBytes);
+            ENSURE (0 == size_t(loc) % alignof(void*));
+            
+            size_t offset = (size_t(loc) + Bucket::storageOffset) % alignment;
+            if (offset)     // padding needed to next aligned location
+              offset = alignment - offset;
+            offset += Bucket::storageOffset;
+            ASSERT (storageBytes - offset >= cnt*spread);
             Bucket* bucket = reinterpret_cast<Bucket*> (loc);
             
             using BucketAlloT = typename AlloT::template rebind_traits<Bucket>;
             auto bucketAllo = adaptAllocator<Bucket>();
-            try { BucketAlloT::construct (bucketAllo, bucket, cnt*spread, spread); }
+            // Step-2 : construct the Bucket metadata       | ▽ ArrayBucket ctor arg ▽  
+            try { BucketAlloT::construct (bucketAllo, bucket, storageBytes, offset, spread); }
             catch(...)
               {
                 AlloT::deallocate (baseAllocator(), loc, storageBytes);
@@ -204,6 +223,7 @@ namespace lib {
               }
             return bucket;
           };
+        
         
         template<class E, typename...ARGS>
         E&
@@ -217,6 +237,7 @@ namespace lib {
             ENSURE (loc);
             return *loc;
           };
+        
         
         template<class E>
         void
@@ -234,7 +255,7 @@ namespace lib {
                     ElmAlloT::destroy (elmAllo, elm);
                   }
               }
-            size_t storageBytes = Bucket::requiredStorage (bucket->buffSiz);
+            size_t storageBytes = bucket->buffOffset + bucket->buffSiz;
             std::byte* loc = reinterpret_cast<std::byte*> (bucket);
             AlloT::deallocate (baseAllocator(), loc, storageBytes);
           };
@@ -255,7 +276,7 @@ namespace lib {
         Bucket*
         realloc (Bucket* data, size_t cnt, size_t spread)
           {
-            Bucket* newBucket = Fac::create (cnt, spread);
+            Bucket* newBucket = Fac::create (cnt, spread, alignof(E));
             if (data)
               try {
                   newBucket->deleter = data->deleter;
@@ -558,7 +579,7 @@ namespace lib {
           REQUIRE (oldSpread);
           REQUIRE (newSpread);
           REQUIRE (Coll::data_);
-          byte* oldPos = Coll::data_->storage;
+          byte* oldPos = Coll::data_->storage();
           byte* newPos = oldPos;
           oldPos += idx * oldSpread;
           newPos += idx * newSpread;
