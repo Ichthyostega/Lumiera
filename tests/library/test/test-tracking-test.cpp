@@ -175,7 +175,7 @@ namespace test{
       void
       demonstrate_checkAllocator()
         {
-          // setup a common lock for the tracking objects and -allocator
+          // setup a common event-log for the tracking objects and -allocator
           auto& log = TrackingAllocator::log;
           Tracker::log.clear("Tracking-Allocator-Test");
           Tracker::log.joinInto(log);

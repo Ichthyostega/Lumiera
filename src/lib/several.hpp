@@ -73,7 +73,7 @@ namespace lib {
   
   namespace {// Storage implementation details
     
-    template<class I>
+    template<class I, class E =I, size_t space = sizeof(I)>
     struct ArrayBucket
       {
         ArrayBucket (size_t bytes, size_t elmSize = sizeof(I))
@@ -91,9 +91,8 @@ namespace lib {
         Deleter deleter;
         
         /** mark start of the storage area */
-        alignas(I)
-        alignas(void*)
-          std::byte storage[sizeof(I)];
+        alignas(E)
+          std::byte storage[space];
         
         
         static size_t
