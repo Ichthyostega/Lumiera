@@ -131,6 +131,8 @@ namespace lib {
         size_t buffOffset;
         
         static constexpr size_t storageOffset = sizeof(ArrayBucket);
+        size_t getAllocSize()  const { return buffOffset +buffSiz; }
+        
         
         /** data storage area starts immediately behind the ArrayBucket */
         std::byte*
@@ -147,6 +149,7 @@ namespace lib {
             ENSURE (storage() <= elm and elm < storage()+buffSiz);
             return * std::launder (reinterpret_cast<I*> (elm));
           }
+        
       };
     
   }//(End)implementation details
@@ -155,7 +158,7 @@ namespace lib {
   
   /************************************************//**
    * Abstraction: Fixed array of elements.
-   * Typically the return type is an interface, 
+   * Typically the return type is an interface,
    * and the Implementation wraps some datastructure
    * holding subclasses.
    * @note may only be populated through SeveralBuilder

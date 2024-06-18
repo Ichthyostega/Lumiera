@@ -168,7 +168,7 @@ namespace lib {
     
     template<class I, template<typename> class ALO>
     class ElementFactory
-      : private ALO<std::byte>
+      : protected ALO<std::byte>
       {
         using Allo = ALO<std::byte>;
         using AlloT = std::allocator_traits<Allo>;
@@ -261,7 +261,7 @@ namespace lib {
                     ElmAlloT::destroy (elmAllo, elm);
                   }
               }
-            size_t storageBytes = bucket->buffOffset + bucket->buffSiz;
+            size_t storageBytes = bucket->getAllocSize();
             std::byte* loc = reinterpret_cast<std::byte*> (bucket);
             AlloT::deallocate (baseAllocator(), loc, storageBytes);
           };
@@ -277,7 +277,7 @@ namespace lib {
         
         using Fac::Fac; // pass-through ctor
         
-        bool canExpand(size_t){ return false; }
+        bool canExpand(Bucket*, size_t){ return false; }
         
         Bucket*
         realloc (Bucket* data, size_t cnt, size_t spread)
@@ -510,7 +510,7 @@ namespace lib {
         {
           if (not (Coll::empty()
                    or Coll::hasReserve (requiredSiz, newElms)
-                   or POL::canExpand (requiredSiz*newElms)
+                   or POL::canExpand (Coll::data_, requiredSiz*newElms)
                    or canDynGrow()))
             throw err::Invalid{_Fmt{"Several-container is unable to accommodate further element of type %s; "
                                     "storage reserve (%d bytes ≙ %d elms) exhausted and unable to move "

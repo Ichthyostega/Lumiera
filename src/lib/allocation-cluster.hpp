@@ -330,9 +330,37 @@ namespace lib {
         struct Policy
           : AllocationPolicy<I,E,Adapter>
           {
+            using Base = AllocationPolicy<I,E,Adapter>;
+            using Bucket = typename Base::Bucket;
+                
             Policy (AllocationCluster& clu)
               : AllocationPolicy<I,E,Adapter> (clu.getAllocator<std::byte>())
               { }
+            
+            bool
+            canExpand (Bucket* bucket, size_t request)
+              {
+                if (not bucket) return false;
+                size_t currSize = bucket->getAllocSize();
+                size_t delta = request - bucket->buffSiz;
+                return this->mother_->canAdjust (bucket,currSize, currSize+delta);
+              }
+            
+            Bucket*
+            realloc (Bucket* bucket, size_t cnt, size_t spread)
+              {
+                size_t request = cnt*spread;
+                REQUIRE (request);
+                if (not canExpand (bucket,request))
+                  return Base::realloc (bucket,cnt,spread);
+                
+                size_t currSize = bucket->getAllocSize();
+                size_t delta = request - bucket->buffSiz;
+                this->mother_->doAdjust (bucket, currSize, currSize+delta);
+                bucket->buffSiz += delta;
+                ENSURE (bucket->buffSiz == request);
+                return bucket;
+              }
           };
       };
     //
