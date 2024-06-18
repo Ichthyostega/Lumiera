@@ -244,6 +244,12 @@ namespace lib {
         destroy (ArrayBucket<I>* bucket)
           {
             REQUIRE (bucket);
+            if (bucket->isArmed())
+              { // ensure the bucket's destructor is invoked
+                // and in turn itself invokes this function
+                bucket->destroy();
+                return;
+              }
             if (not is_trivially_destructible_v<E>)
               {
                 size_t cnt = bucket->cnt;
@@ -279,7 +285,7 @@ namespace lib {
             Bucket* newBucket = Fac::create (cnt, spread, alignof(E));
             if (data)
               try {
-                  newBucket->deleter = data->deleter;
+                  newBucket->installDestructor (data->getDtor());
                   size_t elms = min (cnt, data->cnt);
                   for (size_t idx=0; idx<elms; ++idx)
                     moveElem(idx, data, newBucket);
@@ -482,8 +488,8 @@ namespace lib {
       ensureDeleter()
         {
           Deleter deleterFunctor = selectDestructor<TY>();
-          if (Coll::data_->deleter) return;
-          Coll::data_->deleter = deleterFunctor;
+          if (Coll::data_->isArmed()) return;
+          Coll::data_->installDestructor (move (deleterFunctor));
         }
       
       /** ensure sufficient element capacity or the ability to adapt element spread */

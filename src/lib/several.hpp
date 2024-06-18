@@ -73,6 +73,40 @@ namespace lib {
   
   namespace {// Storage header implementation details
     
+    /** @internal mix-in for self-destruction capabilities
+     *  @remark the destructor function is assumed to perform deallocation;
+     *          thus the functor is moved in the local stack frame, where it
+     *          can be invoked safely; this also serves to prevent re-entrance.
+     */
+    template<class TAR>
+    class SelfDestructor
+      {
+        std::function<void(TAR*)> dtor_{};
+        
+      public:
+        template<class FUN>
+        void
+        installDestructor (FUN&& dtor)
+          {
+            dtor_ = std::forward<FUN> (dtor);
+          }
+        
+       ~SelfDestructor()
+          {
+            if (isArmed())
+              {
+                auto destructionFun = std::move(dtor_);
+                ENSURE (not dtor_);
+                destructionFun (target());
+              }
+          }
+       
+        bool isArmed() const { return bool(dtor_); }
+        auto getDtor() const { return dtor_;       }
+        void destroy()       { target()->~TAR();   }
+        TAR* target()        { return static_cast<TAR*>(this); }
+      };
+    
     /**
      * Metadata record placed immediately before the data storage.
      * @remark SeveralBuilder uses a custom allocation scheme to acquire
@@ -80,13 +114,13 @@ namespace lib {
      */
     template<class I>
     struct ArrayBucket
+      : SelfDestructor<ArrayBucket<I>>
       {
         ArrayBucket (size_t storageSize, size_t buffStart, size_t elmSize = sizeof(I))
           : cnt{0}
           , spread{elmSize}
           , buffSiz{storageSize - buffStart}
           , buffOffset{buffStart}
-          , deleter{nullptr}
           { }
         
         using Deleter = std::function<void(ArrayBucket*)>;
@@ -95,7 +129,6 @@ namespace lib {
         size_t spread;
         size_t buffSiz;
         size_t buffOffset;
-        Deleter deleter;
         
         static constexpr size_t storageOffset = sizeof(ArrayBucket);
         
@@ -113,13 +146,6 @@ namespace lib {
             std::byte* elm = storage() + (idx * spread);
             ENSURE (storage() <= elm and elm < storage()+buffSiz);
             return * std::launder (reinterpret_cast<I*> (elm));
-          }
-        
-        void
-        destroy()
-          {
-            if (deleter)
-              deleter (this);
           }
       };
     
