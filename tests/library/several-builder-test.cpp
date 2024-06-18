@@ -32,6 +32,7 @@
 #include "lib/test/test-coll.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/test/diagnostic-output.hpp"////////////////TODO
+#include "lib/allocation-cluster.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/format-util.hpp"
 #include "lib/util.hpp"
@@ -604,6 +605,34 @@ namespace test{
           CHECK (0 == TrackingAllocator::numAlloc());
           CHECK (0 == TrackingAllocator::use_count());
           CHECK (0 == TrackingAllocator::checksum());
+          
+          AllocationCluster clu;
+          {
+            auto builder = makeSeveral<Dummy>()
+                              .withAllocator(clu)
+                              .reserve(5)
+                              .fillElm(5);
+            
+            size_t buffSiz = sizeof(Dummy) * builder.capacity();
+            size_t headerSiz = sizeof(ArrayBucket<Dummy>);
+            expectedAlloc = headerSiz + buffSiz;
+SHOW_EXPR(expectedAlloc)
+SHOW_EXPR(builder.size())
+SHOW_EXPR(builder.capacity())
+SHOW_EXPR(clu.numExtents())
+SHOW_EXPR(clu.numBytes())
+            builder.append (Dummy{23});
+SHOW_EXPR(builder.capacity())
+
+            buffSiz = sizeof(Dummy) * builder.capacity();
+SHOW_EXPR(buffSiz)
+SHOW_EXPR(buffSiz + expectedAlloc)
+SHOW_EXPR(buffSiz + headerSiz)
+SHOW_EXPR(builder.size())
+SHOW_EXPR(builder.capacity())
+SHOW_EXPR(clu.numExtents())
+SHOW_EXPR(clu.numBytes())
+          }
         }
     };
   
