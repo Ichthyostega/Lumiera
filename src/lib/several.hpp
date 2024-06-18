@@ -158,7 +158,7 @@ namespace lib {
    * Typically the return type is an interface, 
    * and the Implementation wraps some datastructure
    * holding subclasses.
-   * @warning in rework 5/2025
+   * @note may only be populated through SeveralBuilder
    */
   template<class I>
   class Several
@@ -169,9 +169,9 @@ namespace lib {
       
       Bucket data_{nullptr};
       
-      Several() =default; ///< may only be created through SeveralBuilder
-      
     public:
+      Several() =default; ///< usually to be created through SeveralBuilder
+      
      ~Several()  noexcept
         try { if (data_) data_->destroy(); }
         ERROR_LOG_AND_IGNORE (progress, "clean-up Several data")

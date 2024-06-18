@@ -551,7 +551,10 @@ namespace test{
         }
       
       
+      
       /** @test TODO demonstrate integration with a custom allocator
+       *      - use the TrackingAllocator to verify balanced handling
+       *        of the underlying raw memory allocations
        * @todo WIP 6/24 🔁 define ⟶ 🔁 implement
        */
       void
@@ -559,36 +562,47 @@ namespace test{
         {
           CHECK (0 == Dummy::checksum());
           CHECK (0 == TrackingAllocator::checksum());
-SHOW_EXPR(TrackingAllocator::numAlloc());
-SHOW_EXPR(TrackingAllocator::numBytes());
-SHOW_EXPR(TrackingAllocator::use_count());
-          auto& log = TrackingAllocator::log;
-          log.clear("Several-Builder-Test");
+          
+          Several<Dummy> elms;
+          size_t expectedAlloc;
+          CHECK (0 == TrackingAllocator::numAlloc());
+          CHECK (0 == TrackingAllocator::use_count());
           {
             auto builder = makeSeveral<Dummy>()
-                              .withAllocator<test::TrackAlloc>();
-SHOW_TYPE(decltype(builder))
-SHOW_EXPR(builder.size())
-SHOW_EXPR(builder.capacity())
-            builder.fillElm(55);
-SHOW_EXPR(builder.size())
-SHOW_EXPR(builder.capacity())
-
-SHOW_EXPR(TrackingAllocator::numAlloc());
-SHOW_EXPR(TrackingAllocator::numBytes());
-SHOW_EXPR(TrackingAllocator::use_count());
-SHOW_EXPR(TrackingAllocator::checksum());
+                              .withAllocator<test::TrackAlloc>()
+                              .fillElm(55);
+            
+            size_t elmSiz = sizeof(Dummy);
+            size_t buffSiz = elmSiz * builder.capacity();
+            size_t headerSiz = sizeof(ArrayBucket<Dummy>);
+            expectedAlloc = headerSiz + buffSiz;
+            
+            CHECK (TrackingAllocator::numBytes() == expectedAlloc);
+            CHECK (TrackingAllocator::numAlloc() == 1);
+            CHECK (TrackingAllocator::use_count()== 2);              // one instance in the builder, one in the deleter
+            CHECK (TrackingAllocator::checksum() > 0);
+            
+            elms = builder.build();
           }
+          CHECK (elms.size() == 55);
+          CHECK (TrackingAllocator::numBytes() == expectedAlloc);
+          CHECK (TrackingAllocator::numAlloc() == 1);
+          CHECK (TrackingAllocator::use_count()== 1);                // only one allocator instance in the deleter left
+          
+          auto others = move(elms);
+          CHECK (elms.size() == 0);
+          CHECK (others.size() == 55);
+          CHECK (TrackingAllocator::numBytes() == expectedAlloc);
+          CHECK (TrackingAllocator::numAlloc() == 1);
+          CHECK (TrackingAllocator::use_count()== 1);
+          
+          others = move(Several<Dummy>{});                           // automatically triggers de-allocation
+          CHECK (others.size() == 0);
+          
           CHECK (0 == Dummy::checksum());
-SHOW_EXPR(TrackingAllocator::numAlloc());
-SHOW_EXPR(TrackingAllocator::numBytes());
-SHOW_EXPR(TrackingAllocator::use_count());
-SHOW_EXPR(TrackingAllocator::checksum());
-
-          cout << "____Tracking-Allo-Log_________\n"
-               << util::join(TrackingAllocator::log,"\n")
-               << "\n───╼━━━━━━━━━━━━━━━━━╾────────"<<endl;
-
+          CHECK (0 == TrackingAllocator::numBytes());
+          CHECK (0 == TrackingAllocator::numAlloc());
+          CHECK (0 == TrackingAllocator::use_count());
           CHECK (0 == TrackingAllocator::checksum());
         }
     };
