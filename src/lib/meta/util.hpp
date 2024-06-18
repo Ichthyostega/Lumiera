@@ -469,7 +469,8 @@ namespace util {
   std::string showAddr (void const* addr) noexcept;
   
   template<typename X>
-  inline std::string
+  inline                   lib::meta::disable_if<std::is_pointer<X>,
+  std::string              >
   showAddr (X& elm)  noexcept
   {
     return showAddr(&elm);

@@ -417,7 +417,7 @@ namespace test{
           
           
           cout << "____Tracking-Allo-Log_________\n"
-               << util::join(Tracker::log,      "\n")
+               << util::join(TrackingAllocator::log,"\n")
                << "\n───╼━━━━━━━━━━━━━━━━━╾────────"<<endl;
         }
     };

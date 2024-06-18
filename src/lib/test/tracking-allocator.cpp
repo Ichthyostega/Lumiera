@@ -221,8 +221,8 @@ namespace test{
     Location loc = newAlloc.buff.front();
     ASSERT (not contains (allocs_, loc));
     newAlloc.entryID = ++entryNr_;
-    logAlloc (poolID_, "allocate", bytes, entryNr_, showAddr(loc));
-    checksum_ += entryNr_ * bytes;
+    logAlloc (poolID_, "allocate", bytes, newAlloc.entryID, showAddr(loc));
+    checksum_ += newAlloc.entryID * bytes;
     return allocs_.emplace (loc, move(newAlloc))
                   .first->second;
   }
@@ -239,7 +239,7 @@ namespace test{
           logAlarm ("SizeMismatch", bytes, "≠", entry.buff.size(), entry.entryID, showAddr(loc));
         
         logAlloc (poolID_, "deallocate", bytes, entry.entryID, bytes, showAddr(loc));
-        checksum_ -= entryNr_ * bytes;      // Note: using the given size (if wrong ⟿ checksum mismatch)
+        checksum_ -= entry.entryID * bytes;  // Note: using the given size (if wrong ⟿ checksum mismatch)
         allocs_.erase(loc);
       }
     else // deliberately no exception here (for better diagnostics)

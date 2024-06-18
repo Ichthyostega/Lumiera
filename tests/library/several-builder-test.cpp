@@ -557,13 +557,39 @@ namespace test{
       void
       check_CustomAllocator()
         {
+          CHECK (0 == Dummy::checksum());
+          CHECK (0 == TrackingAllocator::checksum());
+SHOW_EXPR(TrackingAllocator::numAlloc());
+SHOW_EXPR(TrackingAllocator::numBytes());
+SHOW_EXPR(TrackingAllocator::use_count());
+          auto& log = TrackingAllocator::log;
+          log.clear("Several-Builder-Test");
           {
             auto builder = makeSeveral<Dummy>()
                               .withAllocator<test::TrackAlloc>();
 SHOW_TYPE(decltype(builder))
 SHOW_EXPR(builder.size())
 SHOW_EXPR(builder.capacity())
+            builder.fillElm(11);
+SHOW_EXPR(builder.size())
+SHOW_EXPR(builder.capacity())
+
+SHOW_EXPR(TrackingAllocator::numAlloc());
+SHOW_EXPR(TrackingAllocator::numBytes());
+SHOW_EXPR(TrackingAllocator::use_count());
+SHOW_EXPR(TrackingAllocator::checksum());
           }
+          CHECK (0 == Dummy::checksum());
+SHOW_EXPR(TrackingAllocator::numAlloc());
+SHOW_EXPR(TrackingAllocator::numBytes());
+SHOW_EXPR(TrackingAllocator::use_count());
+SHOW_EXPR(TrackingAllocator::checksum());
+
+          cout << "____Tracking-Allo-Log_________\n"
+               << util::join(TrackingAllocator::log,"\n")
+               << "\n───╼━━━━━━━━━━━━━━━━━╾────────"<<endl;
+
+          CHECK (0 == TrackingAllocator::checksum());
         }
     };
   
