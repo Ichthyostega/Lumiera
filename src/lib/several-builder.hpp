@@ -166,6 +166,12 @@ namespace lib {
         return req;
       }
     
+    size_t inline constexpr
+    alignRes (size_t alignment)
+      {
+        return positiveDiff (alignment, alignof(void*));
+      }
+    
     
     template<class I, template<typename> class ALO>
     class ElementFactory
@@ -200,8 +206,7 @@ namespace lib {
             REQUIRE (cnt);
             REQUIRE (spread);
             size_t storageBytes = Bucket::storageOffset + cnt*spread;
-            if (alignment > alignof(void*)) // over-aligned data => reserve for alignment padding
-              storageBytes += (alignment - alignof(void*));
+            storageBytes += alignRes (alignment);  // over-aligned data => reserve for alignment padding
             // Step-1 : acquire the raw storage buffer
             std::byte* loc = AlloT::allocate (baseAllocator(), storageBytes);
             ENSURE (0 == size_t(loc) % alignof(void*));
@@ -277,6 +282,9 @@ namespace lib {
         using Bucket = ArrayBucket<I>;
         
         using Fac::Fac; // pass-through ctor
+        
+        /** by default assume that memory is practically unlimited... */
+        size_t static constexpr ALLOC_LIMIT = size_t(-1) / sizeof(E);
         
         bool canExpand(Bucket*, size_t){ return false; }
         
@@ -533,16 +541,20 @@ namespace lib {
             {// grow into exponentially expanded new allocation
               if (spread > Coll::spread())
                 cnt = max (cnt, buffSiz / Coll::spread()); // retain reserve
+              size_t overhead = sizeof(Bucket) + alignRes(alignof(E));
               size_t safetyLim = LUMIERA_MAX_ORDINAL_NUMBER * Coll::spread();
-              size_t expandAlloc = min (safetyLim
+              size_t expandAlloc = min (positiveDiff (min (safetyLim
+                                                          ,POL::ALLOC_LIMIT)
+                                                     ,overhead)
                                        ,max (2*buffSiz, cnt*spread));
+              // round down to an even number of elements
+              size_t newCnt = expandAlloc / spread;
+              expandAlloc = newCnt * spread;
               if (expandAlloc < demand)
                 throw err::State{_Fmt{"Storage expansion for Several-collection "
                                       "exceeds safety limit of %d bytes"} % safetyLim
                                 ,LERR_(SAFETY_LIMIT)};
               // allocate new storage block...
-              size_t newCnt = expandAlloc / spread;
-              if (newCnt * spread < expandAlloc) ++newCnt;
               Coll::data_ = POL::realloc (Coll::data_, newCnt,spread);
             }
           ENSURE (Coll::data_);

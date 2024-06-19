@@ -556,7 +556,8 @@ namespace test{
       /** @test TODO demonstrate integration with a custom allocator
        *      - use the TrackingAllocator to verify balanced handling
        *        of the underlying raw memory allocations
-       * @todo WIP 6/24 🔁 define ⟶ 🔁 implement
+       *      - use an AllocationCluster instance to manage the storage
+       * @todo WIP 6/24 🔁 define ⟶ ✔ implement
        */
       void
       check_CustomAllocator()
@@ -610,38 +611,67 @@ namespace test{
           {
             auto builder = makeSeveral<Dummy>()
                               .withAllocator(clu)
-                              .reserve(4)
-                              .fillElm(4);
+                              .reserve(4)                            // use a limited pre-reservation
+                              .fillElm(4);                           // fill all the allocated space with 4 new elements
             
             size_t buffSiz = sizeof(Dummy) * builder.capacity();
             size_t headerSiz = sizeof(ArrayBucket<Dummy>);
             expectedAlloc = headerSiz + buffSiz;
 SHOW_EXPR(expectedAlloc)
 SHOW_EXPR(builder.size())
+            CHECK (4 == builder.size());
 SHOW_EXPR(builder.capacity())
+            CHECK (4 == builder.capacity());
 SHOW_EXPR(clu.numExtents())
+            CHECK (1 == clu.numExtents());                           // AllocationCluster has only opened one extent thus far
 SHOW_EXPR(clu.numBytes())
-            builder.append (Dummy{23});
+            CHECK (expectedAlloc == clu.numBytes());                 // and the allocated space matches the demand precisely
+
+            builder.append (Dummy{23});                              // now request to add just one further element
 SHOW_EXPR(builder.capacity())
+            CHECK (8 == builder.capacity());                         // ...which causes the builder to double up the reserve capacity
 
             buffSiz = sizeof(Dummy) * builder.capacity();
+            expectedAlloc = headerSiz + buffSiz;
 SHOW_EXPR(buffSiz)
 SHOW_EXPR(buffSiz + expectedAlloc)
 SHOW_EXPR(buffSiz + headerSiz)
 SHOW_EXPR(builder.size())
 SHOW_EXPR(builder.capacity())
 SHOW_EXPR(clu.numExtents())
+            CHECK (1 == clu.numExtents());                           // However, AllocationCluster was able to adjust allocation in-place
 SHOW_EXPR(clu.numBytes())
+            CHECK (expectedAlloc == clu.numBytes());                 // and thus the new increased buffer is still placed in the first extent
+
             // now perform another unrelated allocation
             Dummy& extraDummy = clu.create<Dummy>(55);
 SHOW_EXPR(clu.numExtents())
+            CHECK (1 == clu.numExtents());
 SHOW_EXPR(clu.numBytes())
-            builder.reserve(9);
+            CHECK (clu.numBytes() > expectedAlloc + sizeof(Dummy));  // but now we've used some further space behind that point
+            
+            builder.reserve(9);                                      // ...which means that the AllocationCluster can no longer adjust dynamically
 SHOW_EXPR(builder.size())
+            CHECK (5 == builder.size());                             // .....because this is only possible on the latest allocation opened
 SHOW_EXPR(builder.capacity())
+            CHECK (9 <= builder.capacity());                         // And while we still got out increased capacity,
 SHOW_EXPR(clu.numExtents())
+            CHECK (2 == clu.numExtents());                           // this was only possible by wasting space and copying into a new extent
 SHOW_EXPR(clu.numBytes())
-          }
+            buffSiz = sizeof(Dummy) * builder.capacity();
+            expectedAlloc = headerSiz + buffSiz;
+            CHECK (expectedAlloc <= AllocationCluster::max_size());
+            CHECK (clu.numBytes() == AllocationCluster::max_size()
+                                   + expectedAlloc);
+            
+            elms = builder.build();                                  // Note: assigning to the existing front-end (which is storage agnostic)
+            CHECK (5 == elms.size());
+            CHECK (23 == elms.back().getVal());
+            CHECK (55 == extraDummy.getVal());
+          }                                                          // Now the Builder and the ExtraDummy is gone...
+          CHECK (5 == elms.size());                                  // while all created elements are still there, sitting in the Allocationcluster
+          CHECK (23 == elms.back().getVal());
+          CHECK (2 == clu.numExtents());
         }
     };
   

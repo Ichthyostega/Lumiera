@@ -352,7 +352,11 @@ namespace lib {
           {
             using Base = AllocationPolicy<I,E,Adapter>;
             using Bucket = typename Base::Bucket;
-                
+            
+            /** @warning allocation size is severely limited in AllocationCluster. */
+            size_t static constexpr ALLOC_LIMIT = AllocationCluster::max_size();
+            
+            
             Policy (AllocationCluster& clu)
               : AllocationPolicy<I,E,Adapter> (clu.getAllocator<std::byte>())
               { }
