@@ -115,6 +115,11 @@ namespace lib {
       AllocationCluster ();
      ~AllocationCluster ()  noexcept;
       
+      /** hard wired size of storage extents */
+      static size_t constexpr EXTENT_SIZ = 256;
+      static size_t constexpr max_size();
+      
+      
       /* === diagnostics === */
       size_t numExtents() const;
       size_t numBytes()   const;
@@ -161,7 +166,7 @@ namespace lib {
       void*
       allotMemory (size_t bytes, size_t alignment)
         {
-          ENSURE (_is_within_limits (bytes, alignment));
+          __enforce_limits (bytes, alignment);
           void* loc = storage_.allot(bytes, alignment);
           if (loc) return loc;
           expandStorage (bytes);
@@ -201,7 +206,7 @@ namespace lib {
       
       void expandStorage (size_t);
       void registerDestructor (Destructor&);
-      bool _is_within_limits (size_t,size_t);
+      void __enforce_limits (size_t,size_t);
       
       friend class test::AllocationCluster_test;
     };
@@ -212,6 +217,21 @@ namespace lib {
   
   //-----implementation-details------------------------
   
+  /**
+   * Maximum individual allocation size that can be handled.
+   * @remark AllocationCluser expands its storage buffer in steps
+   *         of fixed sized _tiles_ or _extents._ Doing so can be beneficial
+   *         when clusters are frequently created and thrown away (which is the
+   *         intended usage pattern). However, using such extents is inherently
+   *         wasteful, and thus the size must be rather tightly limited.
+   */
+  size_t constexpr
+  AllocationCluster::max_size()
+  {
+    size_t ADMIN_OVERHEAD = 2 * sizeof(void*);
+    return EXTENT_SIZ - ADMIN_OVERHEAD;
+  }
+
   /**
    * Factory function: place a new instance into this AllocationCluster,
    * but *without invoking its destructor* on clean-up (for performance reasons).

@@ -136,6 +136,7 @@ namespace lib {
     using util::max;
     using util::min;
     using util::_Fmt;
+    using util::positiveDiff;
     using std::is_nothrow_move_constructible_v;
     using std::is_trivially_move_constructible_v;
     using std::is_trivially_destructible_v;
@@ -369,14 +370,15 @@ namespace lib {
       auto withAllocator (ARGS&& ...args);
       
       
-      /** ensure sufficient memory allocation up-front */
+      /** ensure up-front that a desired capacity is allocated */
       template<typename TY =E>
       SeveralBuilder&&
       reserve (size_t cntElm =1
               ,size_t elmSiz =reqSiz<TY>())
         {
+          size_t extraElm = positiveDiff (cntElm, Coll::size());
           ensureElementCapacity<TY> (elmSiz);
-          ensureStorageCapacity<TY> (elmSiz,cntElm);
+          ensureStorageCapacity<TY> (elmSiz,extraElm);
           elmSiz = max (elmSiz, Coll::spread());
           adjustStorage (cntElm, elmSiz);
           return move(*this);
@@ -503,7 +505,7 @@ namespace lib {
                                    % util::typeStr<TY>() % requiredSiz % Coll::spread()};
         }
       
-      /** ensure sufficient storage reserve or verify the ability to re-allocate */
+      /** ensure sufficient storage reserve for \a newElms or verify the ability to re-allocate */
       template<class TY>
       void
       ensureStorageCapacity (size_t requiredSiz =reqSiz<TY>(), size_t newElms =1)

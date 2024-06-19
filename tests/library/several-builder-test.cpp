@@ -610,8 +610,8 @@ namespace test{
           {
             auto builder = makeSeveral<Dummy>()
                               .withAllocator(clu)
-                              .reserve(5)
-                              .fillElm(5);
+                              .reserve(4)
+                              .fillElm(4);
             
             size_t buffSiz = sizeof(Dummy) * builder.capacity();
             size_t headerSiz = sizeof(ArrayBucket<Dummy>);
@@ -628,6 +628,15 @@ SHOW_EXPR(builder.capacity())
 SHOW_EXPR(buffSiz)
 SHOW_EXPR(buffSiz + expectedAlloc)
 SHOW_EXPR(buffSiz + headerSiz)
+SHOW_EXPR(builder.size())
+SHOW_EXPR(builder.capacity())
+SHOW_EXPR(clu.numExtents())
+SHOW_EXPR(clu.numBytes())
+            // now perform another unrelated allocation
+            Dummy& extraDummy = clu.create<Dummy>(55);
+SHOW_EXPR(clu.numExtents())
+SHOW_EXPR(clu.numBytes())
+            builder.reserve(9);
 SHOW_EXPR(builder.size())
 SHOW_EXPR(builder.capacity())
 SHOW_EXPR(clu.numExtents())

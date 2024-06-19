@@ -38,6 +38,13 @@
 
 namespace util {
   
+  template<typename N>
+  inline bool constexpr
+  isPow2 (N n)
+    {
+      return n > 0 and !(n & (n-1));
+    };    // at each power of 2, a new bit is set for the first time
+  
   
   /** helper to treat int or long division uniformly */
   template<typename I>

@@ -112,6 +112,14 @@ namespace util {
        and val <= upperBound;
   }
   
+  template <typename UN, typename N2>
+  inline UN constexpr
+  positiveDiff (N2 newVal, UN refVal)
+  {
+    return UN(newVal) > refVal? UN(newVal) - refVal
+                              : UN(0);
+  }
+  
   /** positive integral number from textual representation
    * @return always a number, 0 in case of unparseable text,
    *         limited to 0 <= num <= LUMIERA_MAX_ORDINAL_NUMBER */

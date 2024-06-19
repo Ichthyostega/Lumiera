@@ -40,20 +40,20 @@
 
 #include "lib/allocation-cluster.hpp"
 #include "lib/linked-elements.hpp"
+#include "lib/format-string.hpp"
+#include "lib/util-quant.hpp"
 #include "lib/util.hpp"
 
 
 using util::unConst;
+using util::isPow2;
 using util::isnil;
+using util::_Fmt;
 using std::byte;
 
 
 namespace lib {
-  namespace {// Configuration constants
-    const size_t EXTENT_SIZ  = 256;
-    const size_t OVERHEAD    = 2 * sizeof(void*);
-    const size_t STORAGE_SIZ = EXTENT_SIZ - OVERHEAD;
-    
+  namespace {// Internals...
     
     /**
      * Special allocator-policy for lib::LinkedElements
@@ -77,7 +77,10 @@ namespace lib {
           }
       };
 
-  }
+  }//(End)configuration and internals
+  
+  
+  
   
   
   /**
@@ -105,7 +108,7 @@ namespace lib {
         {
           Extent* next;
           Destructors dtors;
-          std::byte storage[STORAGE_SIZ];
+          std::byte storage[max_size()];
         };
       using Extents = lib::LinkedElements<Extent>;
       
@@ -167,8 +170,8 @@ namespace lib {
       size_t
       calcAllocInCurrentBlock()  const
         {
-          ENSURE (STORAGE_SIZ >= view_.storage.rest);
-          return STORAGE_SIZ - view_.storage.rest;
+          ENSURE (max_size() >= view_.storage.rest);
+          return max_size() - view_.storage.rest;
         }
       
       
@@ -197,7 +200,7 @@ namespace lib {
         {
           view_.extents.emplace();
           view_.storage.pos = & view_.extents.top().storage;
-          view_.storage.rest = STORAGE_SIZ;
+          view_.storage.rest = max_size();
         }
     };
   
@@ -246,7 +249,7 @@ namespace lib {
   void
   AllocationCluster::expandStorage (size_t allocRequest)
   {
-    ENSURE (allocRequest + OVERHEAD <= EXTENT_SIZ);
+    ENSURE (allocRequest <= max_size());
     StorageManager::access(*this).addBlock();
   }
   
@@ -259,20 +262,33 @@ namespace lib {
   
   
   
-  
-  /* === diagnostics helpers === */
-  
-  bool
-  AllocationCluster::_is_within_limits (size_t size, size_t align)
+  /**
+   * Allocation cluster uses a comparatively small tile size for its extents,
+   * which turns out to be a frequently encountered limitation in practice.
+   * This was deemed acceptable, due to its orientation towards performance.
+   * @throws err::Fatal when a desired allocation can not be accommodated
+   */
+  void
+  AllocationCluster::__enforce_limits (size_t allocSiz, size_t align)
   {
-    auto isPower2 = [](size_t n){ return !(n & (n-1)); };
-    return 0 < size
-       and 0 < align
-       and size <= STORAGE_SIZ
-       and align <= STORAGE_SIZ
-       and isPower2 (align);
+    REQUIRE (allocSiz);
+    REQUIRE (align);
+    REQUIRE (isPow2 (align));
+    
+    if (allocSiz > max_size())
+      throw err::Fatal{_Fmt{"AllocationCluster: desired allocation of %d bytes "
+                            "exceeds the fixed extent size of %d"} % allocSiz % max_size()
+                      ,LERR_(CAPACITY)};
+    
+    if (align > max_size())
+      throw err::Fatal{_Fmt{"AllocationCluster: data requires alignment at %d bytes, "
+                            "which is beyond the fixed extent size of %d"} % align % max_size()
+                      ,LERR_(CAPACITY)};
   }
   
+  
+  
+  /* === diagnostics helpers === */
   
   size_t
   AllocationCluster::numExtents()  const
@@ -291,7 +307,7 @@ namespace lib {
     size_t extents = numExtents();
     if (not extents) return 0;
     size_t bytes = StorageManager::access (unConst(*this)).calcAllocInCurrentBlock();
-    return (extents - 1) * STORAGE_SIZ + bytes;
+    return (extents - 1) * max_size() + bytes;
   }
   
   

@@ -63,7 +63,7 @@ namespace test {
     const uint NUM_TYPES    = 20;
     const uint NUM_OBJECTS  = 500;
     
-    const size_t BLOCKSIZ = 256;   ///< @warning actually defined in allocation-cluster.cpp
+    const size_t EXTSIZ = AllocationCluster::EXTENT_SIZ;
     
     int64_t checksum = 0;         // validate proper pairing of ctor/dtor calls
     
@@ -242,17 +242,17 @@ namespace test {
             CHECK (2 == clu.numBytes());
             CHECK (clu.storage_.pos != nullptr);
             CHECK (clu.storage_.pos == (& i1) + 1 ); // points directly behind the allocated integer
-            CHECK (clu.storage_.rest == BLOCKSIZ - (2*sizeof(void*) +  sizeof(uint16_t)));
+            CHECK (clu.storage_.rest == EXTSIZ - (2*sizeof(void*) +  sizeof(uint16_t)));
             
             // Demonstration: how to reconstruct the start of the current extent
             byte* blk = static_cast<std::byte*>(clu.storage_.pos);
-            blk += clu.storage_.rest - BLOCKSIZ;
+            blk += clu.storage_.rest - EXTSIZ;
             CHECK(size_t(blk) < size_t(clu.storage_.pos));
 
             // some abbreviations for navigating the raw storage blocks...
             auto currBlock = [&]{
                                   byte* blk = static_cast<std::byte*>(clu.storage_.pos);
-                                  blk += clu.storage_.rest - BLOCKSIZ;
+                                  blk += clu.storage_.rest - EXTSIZ;
                                   return blk;
                                 };
             auto posOffset = [&]{
@@ -273,7 +273,7 @@ namespace test {
             uint16_t i1pre = i1;
             auto& i2 = clu.create<uint16_t> (55555);
             CHECK (posOffset() == 2 * sizeof(void*) + 2 * sizeof(uint16_t));
-            CHECK (clu.storage_.rest == BLOCKSIZ - posOffset());
+            CHECK (clu.storage_.rest == EXTSIZ - posOffset());
             // existing storage unaffected
             CHECK (i1 == i1pre);
             CHECK (i2 == 55555);
@@ -295,8 +295,8 @@ namespace test {
             for (uint i=clu.storage_.rest; i>0; --i)
               clu.create<uchar> (i);
             CHECK (clu.storage_.rest == 0);                            // no space left in current extent
-            CHECK (posOffset() == BLOCKSIZ);
-            CHECK (clu.numBytes() == BLOCKSIZ - 2*sizeof(void*));      // now using all the rest behind the admin »slots«
+            CHECK (posOffset() == EXTSIZ);
+            CHECK (clu.numBytes() == EXTSIZ - 2*sizeof(void*));        // now using all the rest behind the admin »slots«
             CHECK (clu.numExtents() == 1);
             CHECK (slot(0) == 0);
             CHECK (blk == currBlock());                                // but still in the initial extent
@@ -305,8 +305,8 @@ namespace test {
             char& c2 = clu.create<char> ('U');
             CHECK (blk != currBlock());                                // allocation moved to a new extent
             CHECK (getAddr(c2) == currBlock() + 2*sizeof(void*));      // c2 resides immediately after the two administrative »slots«
-            CHECK (clu.storage_.rest == BLOCKSIZ - posOffset());
-            CHECK (clu.numBytes() == BLOCKSIZ - 2*sizeof(void*) + 1);  // accounted allocation for the full first block + one byte
+            CHECK (clu.storage_.rest == EXTSIZ - posOffset());
+            CHECK (clu.numBytes() == EXTSIZ - 2*sizeof(void*) + 1);    // accounted allocation for the full first block + one byte
             CHECK (clu.numExtents() == 2);                             // we have two extents now
             CHECK (slot(0) == size_t(blk));                            // first »slot« of the current block points back to previous block
             CHECK (i1 == i1pre);
