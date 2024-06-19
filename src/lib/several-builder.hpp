@@ -49,24 +49,24 @@
  ** data storage, especially when the payload data type has alignment requirements
  ** beyond `alignof(void*)`, which is typically used by the standard heap allocator;
  ** additional headroom is added proactively in this case, to be able to shift the
- ** storage buffer ahead to the next alignment boundrary.
+ ** storage buffer ahead to the next alignment boundary.
  ** 
  ** # Handling of data elements
  ** 
  ** The ability to emplace a mixture of data types into the storage exposed through
  ** the lib::Several front-end creates some complexities related to element handling.
- ** The implementation relies on a rules and criteria based approach to decide on
+ ** The implementation uses generic rules and criteria based approach to decide on
  ** a case by case base if some given data content is still acceptable. This allows
  ** for rather tricky low-level usages, but has the downside to detect errors only
  ** at runtime — which in this case is ameliorated by the limitation that elements
  ** must be provided completely up-front, through the SeveralBuilder.
  ** - in order to handle any data element, we must be able to invoke its destructor
- ** - an arbitrary mixture of types can thus only be accepted if either we can
+ ** - an arbitrary mixture of types can thus only be accepted if we can either
  **   rely on a common virtual base class destructor, or if all data elements
  **   are trivially destructible; these properties can be detected at compile
  **   time with the help of the C++ `<type_traits>` library
  ** - this container can accommodate _non-copyable_ data types, under the proviso
- **   that the complete storage required is pre-allocated (using `reserve()` from
+ **   that the all the necessary storage is pre-allocated (using `reserve()` from
  **   the builder API)
  ** - otherwise, data can be filled in dynamically, expanding the storage as needed,
  **   given that all existing elements can be safely re-located by move or copy
@@ -92,9 +92,8 @@
  **       relevant when the _interface type_ has only lower alignment requirement,
  **       but an individual element is added with higher alignment requirements.
  **       In this case, while the spread is increased, still the placement of
- **       the interface-type is used as anchor, possibly leading to misalignment.
+ **       the element-type \a E is used as anchor, possibly leading to misalignment.
  ** @see several-builder-test.cpp
- ** 
  */
 
 
@@ -166,6 +165,7 @@ namespace lib {
         return req;
       }
     
+    /** determine size of a reserve buffer to place with proper alignment */
     size_t inline constexpr
     alignRes (size_t alignment)
       {
@@ -173,6 +173,13 @@ namespace lib {
       }
     
     
+    /**
+     * Generic factory to manage objects within an ArrayBucket<I> storage,
+     * delegating to a custom allocator \a ALO for memory handling.
+     * - #create a storage block for a number of objects
+     * - #createAt construct a single payload object at index position
+     * - #destroy a storage block with proper clean-up (invoke dtors)
+     */
     template<class I, template<typename> class ALO>
     class ElementFactory
       : protected ALO<std::byte>
@@ -220,7 +227,7 @@ namespace lib {
             
             using BucketAlloT = typename AlloT::template rebind_traits<Bucket>;
             auto bucketAllo = adaptAllocator<Bucket>();
-            // Step-2 : construct the Bucket metadata       | ▽ ArrayBucket ctor arg ▽  
+            // Step-2 : construct the Bucket metadata       | ▽ ArrayBucket ctor arg ▽
             try { BucketAlloT::construct (bucketAllo, bucket, storageBytes, offset, spread); }
             catch(...)
               {
@@ -274,6 +281,12 @@ namespace lib {
       };
     
     
+    /**
+     * Policy Mix-In used to adapt to the ElementFactory and Allocator.
+     * @tparam I   Interface type (also used in the lib::Several<I> front-end
+     * @tparam E   a common _element type_ to use by default
+     * @tparam ALO custom allocator template
+     */
     template<class I, class E, template<typename> class ALO>
     struct AllocationPolicy
       : ElementFactory<I, ALO>
@@ -286,6 +299,7 @@ namespace lib {
         /** by default assume that memory is practically unlimited... */
         size_t static constexpr ALLOC_LIMIT = size_t(-1) / sizeof(E);
         
+        ///  Extension point: able to adjust dynamically to the requested size?
         bool canExpand(Bucket*, size_t){ return false; }
         
         Bucket*
@@ -335,15 +349,35 @@ namespace lib {
           }
       };
     
+    /** Default configuration to use heap memory for lib::Several */
     template<class I, class E>
     using HeapOwn = AllocationPolicy<I, E, std::allocator>;
     
   }//(End)implementation details
   
   
-  /**
-   * Wrap a vector holding objects of a subtype and
-   * provide array-like access using the interface type.
+  
+  
+  
+  /*************************************************//**
+   * Builder to create and populate a lib::Several<I>.
+   * Content elements can be of the _interface type_ \a I,
+   * or the _default element type_ \a E. When possible, even
+   * elements of an ad-hoc given, unrelated type can be used.
+   * The expected standard usage is to place elements of a
+   * subclass of \a I — but in fact the only limitation is that
+   * later, when using the created lib::Several, all content
+   * will be accessed through a (forced) cast to type \a I.
+   * Data (and metadata) will be placed into an _extent,_ which
+   * lives at a different location, as managed by an Allocator
+   * (With default configuration, data is heap allocated).
+   * The expansion behaviour is similar to std::vector, meaning
+   * that the buffer grows with exponential stepping. However,
+   * other than std::vector, even non-copyable objects can be
+   * handled, using #reserve to prepare a suitable allocation.
+   * @warning due to the flexibility and possible low-level usage
+   *          patterns, consistency checks may throw at runtime,
+   *          when attempting to add an unsuitable element.
    */
   template<class I                  ///< Interface or base type visible on resulting Several<I>
           ,class E   =I             ///< a subclass element element type (relevant when not trivially movable and destructible)
@@ -370,6 +404,7 @@ namespace lib {
         { }
       
       
+      
       /* ===== Builder API ===== */
       
       /** cross-builder to use a custom allocator for the lib::Several container */
@@ -389,6 +424,18 @@ namespace lib {
           ensureStorageCapacity<TY> (elmSiz,extraElm);
           elmSiz = max (elmSiz, Coll::spread());
           adjustStorage (cntElm, elmSiz);
+          return move(*this);
+        }
+      
+      /** discard excess reserve capacity.
+       * @warning typically this requires re-allocation and copy
+       */
+      SeveralBuilder&&
+      shrinkFit()
+        {
+          if (not Coll::empty()
+              or size() < capacity())
+            fitStorage();
           return move(*this);
         }
       
@@ -444,7 +491,7 @@ namespace lib {
         }
       
       
-      /**
+      /***********************************************************//**
        * Terminal Builder: complete and lock the collection contents.
        * @note the SeveralBuilder is sliced away, effectively
        *       returning only the pointer to the ArrayBucket.
@@ -461,7 +508,7 @@ namespace lib {
       size_t capReserve() const { return capacity() - size(); }
       
       
-    private:
+    private: /* ========= Implementation of element placement ================ */
       template<class IT>
       void
       emplaceCopy (IT& dataSrc)
@@ -475,7 +522,7 @@ namespace lib {
       emplaceNewElm (ARGS&& ...args)
         {
           static_assert (is_object_v<TY> and not (is_const_v<TY> or is_volatile_v<TY>));
-              
+          
           probeMoveCapability<TY>();   // mark when target type is not (trivially) movable
           ensureElementCapacity<TY>(); // sufficient or able to adapt spread
           ensureStorageCapacity<TY>(); // sufficient or able to grow buffer
@@ -520,7 +567,7 @@ namespace lib {
         {
           if (not (Coll::empty()
                    or Coll::hasReserve (requiredSiz, newElms)
-                   or POL::canExpand (Coll::data_, requiredSiz*newElms)
+                   or POL::canExpand (Coll::data_, requiredSiz*(Coll::size() + newElms))
                    or canDynGrow()))
             throw err::Invalid{_Fmt{"Several-container is unable to accommodate further element of type %s; "
                                     "storage reserve (%d bytes ≙ %d elms) exhausted and unable to move "
@@ -565,9 +612,9 @@ namespace lib {
       void
       fitStorage()
         {
-          if (not Coll::data)
-            return;
-          if (not canDynGrow())
+          REQUIRE (not Coll::empty());
+          if (not (POL::canExpand (Coll::data_, Coll::size())
+                   or canDynGrow()))
             throw err::Invalid{"Unable to shrink storage for Several-collection, "
                                "since at least one element can not be moved."};
           Coll::data_ = POL::realloc (Coll::data_, Coll::size(), Coll::spread());
@@ -751,6 +798,8 @@ namespace lib {
    *     `ALO<std::byte>` to create and destroy the memory buffer for content data
    * @param args optional dependency wiring arguments, to be passed to the allocator
    * @return a new empty SeveralBuilder, configured to use the custom allocator.
+   * @see lib::AllocationCluster (which provides a custom adaptation)
+   * @see SeveralBuilder_test::check_CustomAllocator()
    */
   template<class I, class E, class POL>
   template<template<typename> class ALO, typename...ARGS>

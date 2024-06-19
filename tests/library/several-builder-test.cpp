@@ -31,7 +31,6 @@
 #include "lib/test/tracking-allocator.hpp"
 #include "lib/test/test-coll.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/test/diagnostic-output.hpp"////////////////TODO
 #include "lib/allocation-cluster.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/format-util.hpp"
@@ -39,11 +38,9 @@
 
 #include "lib/several-builder.hpp"
 
-#include <vector>
 #include <array>
 
 using ::test::Test;
-using std::vector;
 using std::array;
 using std::rand;
 
@@ -58,7 +55,7 @@ using util::join;
 namespace lib {
 namespace test{
   
-  namespace { // diagnostic test types
+  namespace { // invocation tracking diagnostic subclass...
     
     /**
      * Instance tracking sub-dummy
@@ -85,7 +82,7 @@ namespace test{
           {
             setVal (getVal() - explore(ext_).resultSum());
           }
-          
+        
         long
         calc (int ii)  override
           {
@@ -163,7 +160,6 @@ namespace test{
       
       
       /** @test demonstrate basic behaviour
-       * @todo WIP 6/24 ✔ define ⟶ ✔ implement
        */
       void
       simpleUsage()
@@ -184,12 +180,11 @@ namespace test{
        *        *unchecked wild cast* will happen on access; while certainly dangerous,
        *        this behaviour allows for special low-level data layout tricks.
        *      - the results from an iterator can be used to populate by copy
-       * @todo WIP 6/24 ✔ define ⟶ ✔ implement
        */
       void
       check_Builder()
         {
-          // prepare to verify proper invocation of all constructors / destructors          
+          // prepare to verify proper invocation of all constructors / destructors
           Dummy::checksum() = 0;
           
           { // Scenario-1 : Baseclass and arbitrary subclass elements
@@ -274,7 +269,6 @@ namespace test{
        *        grow dynamically.
        *      - all these failure conditions are handled properly, including exceptions emanating
        *        from element constructors; the container remains sane and no memory is leaked.
-       * @todo WIP 6/24 ✔ define ⟶ ✔ implement
        */
       void
       check_ErrorHandling()
@@ -472,6 +466,7 @@ namespace test{
         }
       
       
+      
       /** @test verify correct placement of instances within storage
        *      - use a low-level pointer calculation for this test to
        *        draw conclusions regarding the spacing of objects accepted
@@ -482,7 +477,6 @@ namespace test{
        *        move-assign the lib::Several container instance; this
        *        demonstrates that the latter is just a access front-end,
        *        while the data elements reside in a fixed storage buffer
-       * @todo WIP 6/24 ✔ define ⟶ ✔ implement
        */
       void
       check_ElementStorage()
@@ -553,15 +547,15 @@ namespace test{
       
       
       
-      /** @test TODO demonstrate integration with a custom allocator
+      /** @test demonstrate integration with a custom allocator
        *      - use the TrackingAllocator to verify balanced handling
        *        of the underlying raw memory allocations
        *      - use an AllocationCluster instance to manage the storage
-       * @todo WIP 6/24 🔁 define ⟶ ✔ implement
        */
       void
       check_CustomAllocator()
         {
+          // Setup-1: use the TrackingAllocator
           CHECK (0 == Dummy::checksum());
           CHECK (0 == TrackingAllocator::checksum());
           
@@ -607,72 +601,75 @@ namespace test{
           CHECK (0 == TrackingAllocator::use_count());
           CHECK (0 == TrackingAllocator::checksum());
           
-          AllocationCluster clu;
-          {
-            auto builder = makeSeveral<Dummy>()
-                              .withAllocator(clu)
-                              .reserve(4)                            // use a limited pre-reservation
-                              .fillElm(4);                           // fill all the allocated space with 4 new elements
-            
-            size_t buffSiz = sizeof(Dummy) * builder.capacity();
-            size_t headerSiz = sizeof(ArrayBucket<Dummy>);
-            expectedAlloc = headerSiz + buffSiz;
-SHOW_EXPR(expectedAlloc)
-SHOW_EXPR(builder.size())
-            CHECK (4 == builder.size());
-SHOW_EXPR(builder.capacity())
-            CHECK (4 == builder.capacity());
-SHOW_EXPR(clu.numExtents())
-            CHECK (1 == clu.numExtents());                           // AllocationCluster has only opened one extent thus far
-SHOW_EXPR(clu.numBytes())
-            CHECK (expectedAlloc == clu.numBytes());                 // and the allocated space matches the demand precisely
+          
+          
+          {// Setup-2: use an AllocationCLuster instance
+            AllocationCluster clu;
+            size_t allotted = clu.numBytes();
+            CHECK (allotted == 0);
+            {
+              auto builder = makeSeveral<Dummy>()
+                                .withAllocator(clu)
+                                .reserve(4)                          // use a limited pre-reservation
+                                .fillElm(4);                         // fill all the allocated space with 4 new elements
+              
+              size_t buffSiz = sizeof(Dummy) * builder.capacity();
+              size_t headerSiz = sizeof(ArrayBucket<Dummy>);
+              expectedAlloc = headerSiz + buffSiz;
+              CHECK (4 == builder.size());
+              CHECK (4 == builder.capacity());
+              CHECK (1 == clu.numExtents());                         // AllocationCluster has only opened one extent thus far
+              CHECK (expectedAlloc == clu.numBytes());               // and the allocated space matches the demand precisely
 
-            builder.append (Dummy{23});                              // now request to add just one further element
-SHOW_EXPR(builder.capacity())
-            CHECK (8 == builder.capacity());                         // ...which causes the builder to double up the reserve capacity
+              builder.append (Dummy{23});                            // now request to add just one further element
+              CHECK (8 == builder.capacity());                       // ...which causes the builder to double up the reserve capacity
 
-            buffSiz = sizeof(Dummy) * builder.capacity();
-            expectedAlloc = headerSiz + buffSiz;
-SHOW_EXPR(buffSiz)
-SHOW_EXPR(buffSiz + expectedAlloc)
-SHOW_EXPR(buffSiz + headerSiz)
-SHOW_EXPR(builder.size())
-SHOW_EXPR(builder.capacity())
-SHOW_EXPR(clu.numExtents())
-            CHECK (1 == clu.numExtents());                           // However, AllocationCluster was able to adjust allocation in-place
-SHOW_EXPR(clu.numBytes())
-            CHECK (expectedAlloc == clu.numBytes());                 // and thus the new increased buffer is still placed in the first extent
+              buffSiz = sizeof(Dummy) * builder.capacity();
+              expectedAlloc = headerSiz + buffSiz;
+              CHECK (1 == clu.numExtents());                         // However, AllocationCluster was able to adjust allocation in-place
+              CHECK (expectedAlloc == clu.numBytes());               // and thus the new increased buffer is still placed in the first extent
 
-            // now perform another unrelated allocation
-            Dummy& extraDummy = clu.create<Dummy>(55);
-SHOW_EXPR(clu.numExtents())
-            CHECK (1 == clu.numExtents());
-SHOW_EXPR(clu.numBytes())
-            CHECK (clu.numBytes() > expectedAlloc + sizeof(Dummy));  // but now we've used some further space behind that point
-            
-            builder.reserve(9);                                      // ...which means that the AllocationCluster can no longer adjust dynamically
-SHOW_EXPR(builder.size())
-            CHECK (5 == builder.size());                             // .....because this is only possible on the latest allocation opened
-SHOW_EXPR(builder.capacity())
-            CHECK (9 <= builder.capacity());                         // And while we still got out increased capacity,
-SHOW_EXPR(clu.numExtents())
-            CHECK (2 == clu.numExtents());                           // this was only possible by wasting space and copying into a new extent
-SHOW_EXPR(clu.numBytes())
-            buffSiz = sizeof(Dummy) * builder.capacity();
-            expectedAlloc = headerSiz + buffSiz;
-            CHECK (expectedAlloc <= AllocationCluster::max_size());
-            CHECK (clu.numBytes() == AllocationCluster::max_size()
-                                   + expectedAlloc);
-            
-            elms = builder.build();                                  // Note: assigning to the existing front-end (which is storage agnostic)
-            CHECK (5 == elms.size());
+              // perform another unrelated allocation
+              Dummy& extraDummy = clu.create<Dummy>(55);
+              CHECK (1 == clu.numExtents());
+              CHECK (clu.numBytes() > expectedAlloc+sizeof(Dummy));  // but now we've used some further space behind that point
+              
+              builder.reserve(9);                                    // ...which means that the AllocationCluster can no longer adjust dynamically
+              CHECK (5 == builder.size());                           // .....because this is only possible on the latest allocation opened
+              CHECK (9 <= builder.capacity());                       // And while we still got the increased capacity as desired,
+              CHECK (2 == clu.numExtents());                         // this was only possible by wasting space and copying into a new extent
+              buffSiz = sizeof(Dummy) * builder.capacity();
+              expectedAlloc = headerSiz + buffSiz;
+              CHECK (expectedAlloc <= AllocationCluster::max_size());
+              CHECK (clu.numBytes() == AllocationCluster::max_size()
+                                     + expectedAlloc);
+              
+              allotted = clu.numBytes();
+              // request to throw away excess reserve
+              builder.shrinkFit();
+              CHECK (5 == builder.size());
+              CHECK (5 == builder.capacity());
+              CHECK (allotted > clu.numBytes());                     // dynamic adjustment was possible, since it is the latest allocation
+              allotted = clu.numBytes();
+              
+              elms = builder.build();                                // Note: assigning to the existing front-end (which is storage agnostic)
+              CHECK (5 == elms.size());
+              CHECK (23 == elms.back().getVal());
+              CHECK (55 == extraDummy.getVal());
+            }                                                        // Now the Builder and the ExtraDummy is gone...
+            CHECK (5 == elms.size());                                // while all created elements are still there, sitting in the Allocationcluster
             CHECK (23 == elms.back().getVal());
-            CHECK (55 == extraDummy.getVal());
-          }                                                          // Now the Builder and the ExtraDummy is gone...
-          CHECK (5 == elms.size());                                  // while all created elements are still there, sitting in the Allocationcluster
-          CHECK (23 == elms.back().getVal());
-          CHECK (2 == clu.numExtents());
-        }
+            CHECK (2 == clu.numExtents());
+            CHECK (clu.numBytes() == allotted);
+            
+            CHECK (Dummy::checksum() > 0);
+            elms = move(Several<Dummy>{});
+            CHECK (Dummy::checksum() == 55);                         // all elements within Several were cleaned-up...
+            CHECK (2 == clu.numExtents());                           // but the base allocation itself lives as long as the AllocationCluster
+            CHECK (clu.numBytes() == allotted);
+          }// AllocationCluster goes out of scope...
+          CHECK (Dummy::checksum() == 0);                            // now the (already unreachable) extraDummy was cleaned up
+        }                                                            // WARNING: contents in Several would now be dangling (if we haden't killed them)
     };
   
   

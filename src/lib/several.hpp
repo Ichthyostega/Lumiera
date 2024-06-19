@@ -52,8 +52,6 @@
  ** The container is single-ownership (move-asignable); some additional metadata
  ** and the data storage reside within an `ArrayBucket<I>`, managed by the allocator.
  ** In its simplest form, this storage is heap allocated and automatically deleted.
- ** 
- ** @warning WIP-WIP in rework 6/2025
  ** @see several-builder.hpp
  */
 
@@ -256,8 +254,6 @@ namespace lib {
           return data_
              and data_->buffSiz >= size()*spread() + extraSize;
         }
-      
-    private:
     };
   
   

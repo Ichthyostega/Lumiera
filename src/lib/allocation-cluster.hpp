@@ -366,7 +366,7 @@ namespace lib {
               {
                 if (not bucket) return false;
                 size_t currSize = bucket->getAllocSize();
-                size_t delta = request - bucket->buffSiz;
+                long delta = long(request) - long(bucket->buffSiz);
                 return this->mother_->canAdjust (bucket,currSize, currSize+delta);
               }
             
