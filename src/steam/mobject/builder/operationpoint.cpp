@@ -31,7 +31,7 @@
 #include "steam/engine/proc-node.hpp"
 #include "steam/asset/media.hpp"
 #include "steam/asset/proc.hpp"
-#include "steam/engine/nodefactory.hpp"
+#include "steam/engine/node-factory.hpp"
 #include "steam/streamtype.hpp"
 //#include "common/util.hpp"
 

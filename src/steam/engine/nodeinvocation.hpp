@@ -56,7 +56,7 @@
 
 
 #include "steam/engine/proc-node.hpp"
-#include "steam/engine/state-closure.hpp"
+#include "steam/engine/state-closure-obsolete.hpp"
 #include "steam/engine/channel-descriptor.hpp"
 #include "steam/engine/feed-manifold.hpp"
 
@@ -76,18 +76,18 @@ namespace engine {
    * push / fetch and recursive downcall to render the source frames.
    */
   class StateAdapter
-    : public StateClosure
+    : public StateClosure_OBSOLETE
     {
     protected:
-      StateClosure& parent_;
-      StateClosure& current_;
+      StateClosure_OBSOLETE& parent_;
+      StateClosure_OBSOLETE& current_;
       
-      StateAdapter (StateClosure& callingProcess)
+      StateAdapter (StateClosure_OBSOLETE& callingProcess)
         : parent_ (callingProcess),
           current_(callingProcess.getCurrentImplementation())
         { }
       
-      virtual StateClosure& getCurrentImplementation () { return current_; }
+      virtual StateClosure_OBSOLETE& getCurrentImplementation () { return current_; }
       
       
       
@@ -131,7 +131,7 @@ namespace engine {
       
     protected:
       /** creates a new invocation context state, without FeedManifold */
-      Invocation (StateClosure& callingProcess, Connectivity const& w, uint o)
+      Invocation (StateClosure_OBSOLETE& callingProcess, Connectivity const& w, uint o)
         : StateAdapter(callingProcess),
           wiring(w), outNr(o),
           feedManifold(0)
@@ -179,7 +179,7 @@ namespace engine {
   struct AllocBufferFromParent  ///< using the parent StateAdapter for buffer allocations
     : Invocation
     {
-      AllocBufferFromParent (StateClosure& sta, Connectivity const& w, const uint outCh)
+      AllocBufferFromParent (StateClosure_OBSOLETE& sta, Connectivity const& w, const uint outCh)
         : Invocation(sta, w, outCh) {}
       
       virtual BuffHandle
@@ -189,7 +189,7 @@ namespace engine {
   struct AllocBufferFromCache   ///< using the global current StateClosure, which will delegate to Cache
     : Invocation
     {
-      AllocBufferFromCache (StateClosure& sta, Connectivity const& w, const uint outCh)
+      AllocBufferFromCache (StateClosure_OBSOLETE& sta, Connectivity const& w, const uint outCh)
         : Invocation(sta, w, outCh) {}
       
       virtual BuffHandle
@@ -218,7 +218,7 @@ namespace engine {
     , private Strategy
     {
     public:
-      ActualInvocationProcess (StateClosure& callingProcess, Connectivity const& w, const uint outCh)
+      ActualInvocationProcess (StateClosure_OBSOLETE& callingProcess, Connectivity const& w, const uint outCh)
         : BufferProvider(callingProcess, w, outCh)
         { }
       

@@ -26,7 +26,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "steam/engine/nodefactory.hpp"
+#include "steam/engine/node-factory.hpp"
 #include "steam/engine/nodewiring.hpp"
 #include "steam/engine/turnout-system.hpp"
 #include "steam/engine/channel-descriptor.hpp"
@@ -94,10 +94,12 @@ namespace test  {
           CHECK (pNode);
           
           TestContext simulatedInvocation;
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
           BuffHandle result = pNode->pull(simulatedInvocation, 0);
           
           CHECK (result);
           // CHECK we got calculated data in the result buffer
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
         } 
     };
   

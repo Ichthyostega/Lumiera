@@ -20,7 +20,7 @@
 
 */
 
-/** @file nodewiring-def.hpp
+/** @file node-wiring-builder.hpp
  ** Helper for defining the desired wiring and operation mode for a render node.
  ** During the Builder run, the render nodes network is wired up starting from the
  ** source (generating) nodes up to the exit nodes. As the wiring is implemented through
@@ -28,6 +28,8 @@
  ** to its predecessors need to be completely settled; similarly, any information pertaining
  ** the desired operation mode of this node need to be available. Thus we use this temporary
  ** information record to assemble all these pieces of information.
+ ** 
+ ** @deprecated WIP-WIP-WIP 2024 Node-Invocation is reworked from ground up -- not clear yet what happens with the builder
  ** 
  ** @see steam::engine::NodeFactory
  ** @see nodewiring.hpp
@@ -66,7 +68,9 @@ namespace engine {
    * Thus, we start with one or several existing nodes, specifying which
    * output should go to which input pin of the yet-to-be created new node.
    * When intending to create a source node, a default WiringSituation
-   * should be used, without adding any connection information. 
+   * should be used, without adding any connection information.
+   *  
+   * @deprecated WIP-WIP-WIP 2024 Node-Invocation is reworked from ground up for the »Playback Vertical Slice«
    */
   class WiringSituation
     : util::NonCopyable

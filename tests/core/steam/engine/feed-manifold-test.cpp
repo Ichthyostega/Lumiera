@@ -77,7 +77,7 @@ namespace test  {
         virtual uint getNrI()  const { return ii; }
         virtual uint getNrO()  const { return oo; }
         
-        virtual BuffHandle callDown (StateClosure&, uint) const
+        virtual BuffHandle callDown (StateClosure_OBSOLETE&, uint) const
         { throw lumiera::Error("not intended to be called"); }
       };
     

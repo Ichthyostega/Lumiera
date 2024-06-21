@@ -30,7 +30,7 @@
 #define STEAM_ENGINE_RENDERGRAPH_H
 
 #include "steam/common.hpp"
-#include "steam/engine/state-closure.hpp"
+#include "steam/engine/state-closure-obsolete.hpp"
 #include "lib/time/timevalue.hpp"
 
 

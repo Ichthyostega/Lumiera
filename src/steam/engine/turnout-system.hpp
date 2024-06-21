@@ -33,11 +33,13 @@
  */
 
 
-#ifndef ENGINE_TURNOUT_SYSTEM_H
-#define ENGINE_TURNOUT_SYSTEM_H
+#ifndef STEAM_ENGINE_TURNOUT_SYSTEM_H
+#define STEAM_ENGINE_TURNOUT_SYSTEM_H
 
 
+#include "steam/engine/proc-node.hpp"
 #include "steam/engine/state-closure.hpp"
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
 
 
 namespace steam  {
@@ -45,6 +47,7 @@ namespace engine {
 
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   class StateProxy
     : public StateClosure
     {
@@ -66,8 +69,9 @@ namespace engine {
       virtual StateClosure& getCurrentImplementation () { return *this; }
       
     };
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
     
     
     
 }} // namespace steam::engine
-#endif /*ENGINE_TURNOUT_SYSTEM_H*/
+#endif /*STEAM_ENGINE_TURNOUT_SYSTEM_H*/

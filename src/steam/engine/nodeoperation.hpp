@@ -58,7 +58,7 @@
 
 
 #include "steam/engine/proc-node.hpp"
-#include "steam/engine/state-closure.hpp"
+#include "steam/engine/state-closure-obsolete.hpp"
 #include "steam/engine/channel-descriptor.hpp"
 #include "steam/engine/nodeinvocation.hpp"
 #include "steam/engine/feed-manifold.hpp"

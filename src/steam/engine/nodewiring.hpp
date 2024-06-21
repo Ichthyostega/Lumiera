@@ -76,7 +76,7 @@ namespace engine {
       
     private:
       virtual BuffHandle
-      callDown (StateClosure& currentProcess, uint requestedOutputNr)  const
+      callDown (StateClosure_OBSOLETE& currentProcess, uint requestedOutputNr)  const
         {
           STATE thisStep (currentProcess, *this, requestedOutputNr);
           return thisStep.retrieve (); // fetch or calculate results

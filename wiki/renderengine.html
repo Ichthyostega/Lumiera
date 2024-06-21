@@ -6183,7 +6183,7 @@ This is the core service provided by the player subsystem. The purpose is to cre
 :any details of this processing remain opaque for the clients; even the player subsystem just accesses the EngineFaçade
 </pre>
 </div>
-<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202404222258" tags="overview impl discuss draft" changecount="39">
+<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202406211422" tags="overview impl discuss draft" changecount="40">
 <pre>//Integration effort to promote the development of rendering, playback and video display in the GUI//
 This IntegrationSlice was started in {{red{2023}}} as [[Ticket #1221|https://issues.lumiera.org/ticket/1221]] to coordinate the completion and integration of various implementation facilities, planned, drafted and built during the last years; this effort marks the return of development focus to the lower layers (after years of focussed UI development) and will implement the asynchronous and time-bound rendering coordinated by the [[Scheduler]] in the [[Vault|Vault-Layer]]
 
@@ -6219,7 +6219,9 @@ The Scheduler will be structured into two Layers, where the lower layer is imple
 __December.23__: building the Scheduler required time and dedication, including some related topics like a [[suitable memory management scheme|SchedulerMemory]], rework and modernisation of the [[#1279 thread handling framework|https://issues.lumiera.org/ticket/1279]], using a [[worker pool|SchedulerWorker]] and developing the [[foundation for load control|SchedulerLoadControl]]. This amounts to the creation of a considerable body of new code; some &amp;rarr;[[load- and stress testing|SchedulerTest]] helps to establish &amp;rarr;[[performance characteristics and traits|SchedulerBehaviour]].
 
 __April.24__: after completing an extended round of performance tests for the new Scheduler, development focus is shifted now shifted upwards to the [[Render Node Network|ProcNode]], where Engine activity is carried out. This part was addressed at the very start of the project, and later again -- yet could never be completed, due to a lack of clear reference points and technical requirements. Hope to achieve a breakthrough rests on this integration effort now.
+__June.24__: assessment of the existing code indicated some parts not well suited to the expected usage. Notably the {{{AllocationCluster}}}, which is the custom allocator used by the render nodes network, was reworked and simplified. Moreover, a new custom container was developed, to serve as //link to connect the nodes.// Beyond that, in-depth review validated the existing design for the render nodes, while also implying some renaming and rearrangements
 * 🗘 establish a test setup for developing render node functionality
+* 🗘 build, connect and invoke some dummy render nodes directly in a test setup
 * ⌛ introduce a middle layer for linking the JobTicket to the actual invocation
 * ⌛ rework and complete the existing node invocation code
 

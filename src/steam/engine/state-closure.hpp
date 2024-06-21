@@ -23,6 +23,9 @@
 
 /** @file state-closure.hpp
  ** Access point to an ongoing render's processing state.
+ ** 
+ ** @todo WIP-WIP-WIP 2024 Node-Invocation is reworked from ground up for the »Playback Vertical Slice«
+ ** 
  */
 
 
@@ -58,7 +61,7 @@ namespace engine {
    */
   class StateClosure
     {
-                                   ////////////////////////////////////////////////TICKET #826  expected to be reworked to quite some extent (9/2011)
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : to be Reworked for »Playback Vertical Slice«
     public:
       /** allocate a new writable buffer with type and size according to
        *  the BufferDescriptor. The actual provider of this buffer depends

@@ -32,19 +32,21 @@
  ** By using the builder interface, concrete node and wiring descriptor classes are created,
  ** based on some templates. These concrete classes form the "glue" to tie the node network
  ** together and contain much of the operation behaviour in a hard wired fashion.
- **
+ ** 
+ ** @todo WIP-WIP-WIP 2024 Node-Invocation is reworked from ground up for the »Playback Vertical Slice«
+ ** 
  ** @see nodefactory.hpp
  ** @see operationpoint.hpp
  */
 
-#ifndef ENGINE_PROC_NODE_H
-#define ENGINE_PROC_NODE_H
+#ifndef STEAM_ENGINE_PROC_NODE_H
+#define STEAM_ENGINE_PROC_NODE_H
 
 #include "lib/error.hpp"
 #include "steam/common.hpp"
 #include "steam/asset/proc.hpp"
 #include "steam/mobject/parameter.hpp"
-#include "steam/engine/state-closure.hpp"
+#include "steam/engine/state-closure-obsolete.hpp"  /////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
 #include "steam/engine/channel-descriptor.hpp"
 #include "lib/frameid.hpp"
 #include "lib/ref-array.hpp"
@@ -59,8 +61,10 @@ namespace engine {
   using std::vector;
   using lumiera::NodeID;
   
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   class ProcNode;
   typedef ProcNode* PNode;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   
   
   /**
@@ -73,10 +77,13 @@ namespace engine {
    *       starting from the player. Anyhow, you can expect the basic setup to remain as-is: there will
    *       be a ProcNode and a Connectivity descriptor, telling how it's connected to its predecessors,
    *       and defining how the Node is supposed to operate
+   * 
+   * @todo WIP-WIP-WIP 2024 Node-Invocation is reworked from ground up for the »Playback Vertical Slice«
    */
   class Connectivity
     {
     public: /* === public information record describing the node graph === */
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       uint nrO;
       uint nrI;
       
@@ -90,8 +97,10 @@ namespace engine {
       NodeID const& nodeID;
       
       virtual ~Connectivity() {}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
     protected:
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       Connectivity (lib::RefArray<ChannelDescriptor>& o,
                         lib::RefArray<InChanDescriptor>& i,
                         ProcFunc pFunc, NodeID const& nID)
@@ -102,8 +111,10 @@ namespace engine {
           nrO = out.size();
           nrI = in.size();
         }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
       
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       /* ==== strategy API for configuring the node operation ==== */
       
       friend class ProcNode;                               /////////////////////////////////TODO 1/12 : wouldn't it be better to extract that API into a distinct strategy?
@@ -114,7 +125,8 @@ namespace engine {
        *  @see NodeWiring#callDown default implementation
        */
       virtual BuffHandle
-      callDown (StateClosure& currentProcess, uint requiredOutputNr)  const =0;
+      callDown (StateClosure_OBSOLETE& currentProcess, uint requiredOutputNr)  const =0;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
     };
   
@@ -130,6 +142,7 @@ namespace engine {
    *       The alternative would be to push down these information-retrieval part into a
    *       configurable element within Connectivity, in which case we even might drop
    *       ProcNode as a frontend entirely.
+   * @todo WIP-WIP-WIP 2024 Node-Invocation is reworked from ground up for the »Playback Vertical Slice«
    */
   class ProcNode
     : util::NonCopyable
@@ -140,18 +153,22 @@ namespace engine {
       const Connectivity& wiringConfig_;
       
     public:
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       ProcNode (Connectivity const& wd)
         : wiringConfig_(wd)
         { }
       
       virtual ~ProcNode() {};  /////////////////////////TODO: do we still intend to build a hierarchy below ProcNode???
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
       
     public:
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       bool isValid()  const;
       
       /** output channel count */
       uint nrO() { return wiringConfig_.nrO; }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
       
       /** Engine Core operation: render and pull output from this node.
@@ -167,14 +184,16 @@ namespace engine {
        *  @return handle to the buffer containing the calculated result.
        */
       BuffHandle
-      pull (StateClosure& currentProcess, uint requestedOutputNr=0)  const
+      pull (StateClosure_OBSOLETE& currentProcess, uint requestedOutputNr=0)  const
         {
           return this->wiringConfig_.callDown (currentProcess, requestedOutputNr);
         }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
     };
   
   
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   inline bool
   ProcNode::isValid()  const
   {
@@ -184,4 +203,4 @@ namespace engine {
   
   
 }} // namespace steam::engine
-#endif /*ENGINE_PROC_NODE_H*/
+#endif /*STEAM_ENGINE_PROC_NODE_H*/
