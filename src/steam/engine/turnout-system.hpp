@@ -37,7 +37,7 @@
 #define STEAM_ENGINE_TURNOUT_SYSTEM_H
 
 
-#include "steam/engine/proc-node.hpp"
+//#include "steam/engine/proc-node.hpp"  /////////////////////OOO dependency cycle ProcNode <-> TurnoutSystem
 #include "steam/engine/state-closure.hpp"
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
 
@@ -71,6 +71,11 @@ namespace engine {
     };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
     
+  class TurnoutSystem
+    /////////////////////////////////////////OOO von wo erbt das?? laut ursprünglichem Konzept von StateClosure ... bin mir aber nicht mehr sicher
+    {
+    public:
+    };
     
     
 }} // namespace steam::engine
