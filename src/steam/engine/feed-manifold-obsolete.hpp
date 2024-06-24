@@ -22,21 +22,22 @@
 */
 
 
-/** @file feed-manifold.hpp
+/** @file feed-manifold-obsolete.hpp
  ** @todo staled since 2009, picked up in 2024 in an attempt to finish the node invocation.
- ** @todo WIP-WIP 2024 rename and re-interpret as a connection system
+ ** deprecated 2024 this file is a dead-end! It is retained in tree to keep other obsolete code buildable
  ** @see nodeinvocation.hpp
  */
 
 
-#ifndef ENGINE_FEED_MANIFOLD_H
-#define ENGINE_FEED_MANIFOLD_H
+#ifndef ENGINE_FEED_MANIFOLD_OBSOLETE_H
+#define ENGINE_FEED_MANIFOLD_OBSOLETE_H
 
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "steam/engine/channel-descriptor.hpp"
-#include "steam/engine/proc-node.hpp"
+//#include "steam/engine/proc-node.hpp"    ///////////////////////////////TODO this is a dead end
+#include "steam/engine/connectivity-obsolete.hpp"
 
 #include <vector>
 #include <utility>
@@ -65,7 +66,7 @@ namespace engine {
      *       to use a single contiguous memory area and just layer the object structure on top
      *       (by using placement new). Yet the idea of an stack-like organisation should be retained
      */
-  struct FeedManifold
+  struct FeedManifold                 ///////////////////////////////////OOO rename into FeedManifold
     {
       typedef BuffHandle        * PHa;
       typedef BuffHandle::PBuff * PBu;
@@ -77,7 +78,6 @@ namespace engine {
       PBu inBuff;
     };
   
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : presumably obsolete
   class BufferDescriptor;
   
     /** Obsolete, to be rewritten  /////TICKET #826 */
@@ -186,10 +186,10 @@ namespace engine {
                   "buffer management logic broken.");
         }
     };
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : (End)presumably obsolete
+  
   
   
   
   
 }} // namespace steam::engine
-#endif /*ENGINE_FEED_MANIFOLD_H*/
+#endif /*ENGINE_FEED_MANIFOLD_OBSOLETE_H*/

@@ -42,7 +42,8 @@
 #define ENGINE_NODE_WIRING_BUILDER_H
 
 
-#include "steam/engine/proc-node.hpp"
+//#include "steam/engine/proc-node.hpp"    //////////////////////////////////////////////////////////////////TICKET #1367 : switch to new Node Invocation scheme
+#include "steam/engine/connectivity-obsolete.hpp"
 #include "lib/ref-array.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/nocopy.hpp"
@@ -183,7 +184,34 @@ namespace engine {
         }
       
     };
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   
+  class NodeWiringBuilder
+    : util::MoveOnly
+    {
+    public:
+      
+      /****************************************************//**
+       * Terminal: complete the Connectivity defined thus far.
+       */
+//    Connectivity
+      void*   /////////////////////////////////////////////////OOO Connectivity no longer needs to be abstract
+      build()
+        {
+          UNIMPLEMENTED("Node-Connectivity Setup");
+        }
+    };
+  
+  
+  /**
+   * Entrance point for building node Connectivity
+   */
+  template<class ONT>
+  auto
+  buildPatternFor()
+  {
+    UNIMPLEMENTED("instantiate Domain Ontology Facade and outfit the NodeWiringBuilder");
+  }
   
   
 }} // namespace steam::engine

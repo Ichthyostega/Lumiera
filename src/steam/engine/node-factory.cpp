@@ -35,7 +35,7 @@
 #include "steam/mobject/session/effect.hpp"
 #include "lib/allocation-cluster.hpp"
 
-#include "steam/engine/nodewiring.hpp"
+//#include "steam/engine/nodewiring-obsolete.hpp"
 
 namespace steam {
 namespace engine {
@@ -62,12 +62,15 @@ namespace engine {
   PNode
   NodeFactory::operator() (Placement<Effect> const& effect, WiringSituation& intendedWiring)
   {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
     intendedWiring.resolveProcessor(effect->getProcAsset());
     Connectivity& wiring = wiringFac_(intendedWiring);
     
     ProcNode& newNode = alloc_.create<ProcNode> (wiring);
     ENSURE (newNode.isValid());
     return &newNode;
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
+    UNIMPLEMENTED ("Node Factory for reworked Render Node Connectivity");
   }
 
 

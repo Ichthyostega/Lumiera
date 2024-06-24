@@ -77,8 +77,10 @@ namespace test  {
         virtual uint getNrI()  const { return ii; }
         virtual uint getNrO()  const { return oo; }
         
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
         virtual BuffHandle callDown (StateClosure_OBSOLETE&, uint) const
         { throw lumiera::Error("not intended to be called"); }
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
       };
     
     

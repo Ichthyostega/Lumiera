@@ -57,11 +57,12 @@
 #define ENGINE_NODEOPERATION_H
 
 
-#include "steam/engine/proc-node.hpp"
+//#include "steam/engine/proc-node.hpp"    ///////////////////////////////TODO clarify if required further on
+#include "steam/engine/connectivity-obsolete.hpp"
 #include "steam/engine/state-closure-obsolete.hpp"
 #include "steam/engine/channel-descriptor.hpp"
 #include "steam/engine/nodeinvocation.hpp"
-#include "steam/engine/feed-manifold.hpp"
+#include "steam/engine/feed-manifold-obsolete.hpp"
 
 #include "lib/meta/util.hpp"
 #include "lib/meta/configflags.hpp"

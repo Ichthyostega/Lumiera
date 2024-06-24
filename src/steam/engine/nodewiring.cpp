@@ -27,8 +27,9 @@
  */
 
 
-#include "steam/engine/proc-node.hpp"
-#include "steam/engine/nodewiring.hpp"
+//#include "steam/engine/proc-node.hpp"    ///////////////////////////////TODO clarify if required further on
+#include "steam/engine/connectivity-obsolete.hpp"
+#include "steam/engine/nodewiring-obsolete.hpp"
 #include "steam/engine/nodeoperation.hpp"
 #include "steam/engine/nodewiring-config.hpp"
 

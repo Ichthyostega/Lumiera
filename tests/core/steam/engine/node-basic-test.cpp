@@ -27,7 +27,7 @@
 
 #include "lib/test/run.hpp"
 #include "steam/engine/node-factory.hpp"
-#include "steam/engine/nodewiring.hpp"
+//#include "steam/engine/nodewiring-obsolete.hpp"       /////////////////////////////////////////////////////TICKET #1367 : sort out dependencies for reworked Node Invocation
 #include "steam/engine/turnout-system.hpp"
 #include "steam/engine/channel-descriptor.hpp"
 #include "steam/mobject/session/effect.hpp"
@@ -87,11 +87,13 @@ namespace test  {
           ProcNode * testSource;  ///////////TODO: how to fabricate a test Source-Node????
           
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
           WiringSituation setup(testSource);
           
           PEffect pEffect = createTestEffectMObject();
           ProcNode* pNode = nodeFab (pEffect, setup);
           CHECK (pNode);
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
           
           TestContext simulatedInvocation;
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation

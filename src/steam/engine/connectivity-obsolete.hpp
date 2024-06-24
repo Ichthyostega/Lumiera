@@ -20,8 +20,8 @@
 
 */
 
-/** @file proc-node.hpp
- ** Interface to the processing nodes and the render nodes network.
+/** @file connectivity-obsolete.hpp
+ ** @deprecated 2024 old variant of render node definition stashed away to keep other obsolete code buildable.
  **
  ** Actually, there are three different interfaces to consider
  ** - the ProcNode#pull is the invocation interface. It is function-call style
@@ -33,21 +33,24 @@
  ** based on some templates. These concrete classes form the "glue" to tie the node network
  ** together and contain much of the operation behaviour in a hard wired fashion.
  ** 
- ** @todo WIP-WIP-WIP 2024 Node-Invocation is reworked from ground up for the »Playback Vertical Slice«
+ ** @todo WIP-WIP-WIP 2024 delete this file!!!!
  ** 
  ** @see nodefactory.hpp
  ** @see operationpoint.hpp
  */
 
-#ifndef STEAM_ENGINE_PROC_NODE_H
-#define STEAM_ENGINE_PROC_NODE_H
+#ifndef STEAM_ENGINE_CONNECTIVITY_OBSOLETE_H
+#define STEAM_ENGINE_CONNECTIVITY_OBSOLETE_H
+
+#ifdef STEAM_ENGINE_PROC_NODE_H
+  #error "can not include both the old and new Render Node Connectivity scheme"
+#endif
 
 #include "lib/error.hpp"
 #include "steam/common.hpp"
 #include "steam/asset/proc.hpp"
 #include "steam/mobject/parameter.hpp"
-//#include "steam/engine/state-closure-obsolete.hpp"  ///////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-#include "steam/engine/state-closure.hpp"           /////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
+#include "steam/engine/state-closure-obsolete.hpp"  /////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
 #include "steam/engine/channel-descriptor.hpp"
 #include "steam/engine/turnout-system.hpp"
 #include "lib/frameid.hpp"
@@ -133,10 +136,8 @@ namespace engine {
        *  holding the actual buffer pointers and issuing the recursive pull() calls
        *  @see NodeWiring#callDown default implementation
        */
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
       virtual BuffHandle
       callDown (StateClosure_OBSOLETE& currentProcess, uint requiredOutputNr)  const =0;
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
     };
@@ -194,13 +195,11 @@ namespace engine {
        *         (in case this node delivers more than one output channel)
        *  @return handle to the buffer containing the calculated result.
        */
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
       BuffHandle
       pull (StateClosure_OBSOLETE& currentProcess, uint requestedOutputNr=0)  const
         {
           return this->wiringConfig_.callDown (currentProcess, requestedOutputNr);
         }
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
     };
@@ -216,4 +215,4 @@ namespace engine {
   
   
 }} // namespace steam::engine
-#endif /*STEAM_ENGINE_PROC_NODE_H*/
+#endif /*STEAM_ENGINE_CONNECTIVITY_OBSOLETE_H*/

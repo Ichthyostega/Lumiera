@@ -24,16 +24,22 @@
 /** @file nodewiring.hpp
  ** Mechanism to wire ProcNode instances for a render network
  ** @todo unfinished draft from 2009 regarding the render process
+ ** @deprecated 2024 this header will likely be obsoleted
+ ** @see node-wiring-builder.hpp for the rewritten node-builder
  */
 
 
-#ifndef ENGINE_NODEWIRING_H
-#define ENGINE_NODEWIRING_H
+#ifndef ENGINE_NODEWIRING_OBSOLETE_H
+#define ENGINE_NODEWIRING_OBSOLETE_H
 
 
-#include "steam/engine/proc-node.hpp"
+//#include "steam/engine/proc-node.hpp"    ///////////////////////////////TODO clarify if required further on
+#include "steam/engine/connectivity-obsolete.hpp"
 #include "steam/engine/node-wiring-builder.hpp"
 #include "lib/allocation-cluster.hpp"
+#include "lib/ref-array.hpp"
+#include "lib/util-foreach.hpp"
+#include "lib/nocopy.hpp"
 
 #include <memory>
 

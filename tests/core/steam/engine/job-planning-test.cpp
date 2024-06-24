@@ -143,7 +143,7 @@ namespace test  {
       setupDependentJob()
         {
           MockDispatcher dispatcher{MakeRec()                                       // »master job« for each frame
-                                       .attrib("runtime", Duration{Time{30,0}})
+                                     .attrib("runtime", Duration{Time{30,0}})
                                      .scope(MakeRec()                               // a »prerequisite job« on which the »master job« depends
                                              .attrib("runtime", Duration{Time{50,0}})
                                            .genNode())

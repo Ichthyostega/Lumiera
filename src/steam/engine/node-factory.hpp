@@ -35,7 +35,7 @@
 
 #include "steam/engine/proc-node.hpp"
 #include "steam/mobject/placement.hpp"
-#include "steam/engine/nodewiring.hpp"
+//#include "steam/engine/nodewiring-obsolete.hpp"   /////////////////////////////////////////////////////////TICKET #1367 : Adapt to rework of Node Invocation
 
 
   ////////////////////////////////////TODO: make inclusions / forward definitions a bit more orthogonal....
@@ -72,12 +72,16 @@ namespace engine {
   class NodeFactory
     {
       AllocationCluster& alloc_;
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
       WiringFactory wiringFac_;
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
       
     public:
       NodeFactory (AllocationCluster& a)
         : alloc_(a)
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
         , wiringFac_(alloc_)
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
         { }
       
       

@@ -37,7 +37,8 @@
 
 
 //#include "steam/engine/state-closure.hpp"
-#include "steam/engine/proc-node.hpp"
+//#include "steam/engine/proc-node.hpp"    ///////////////////////////////TODO clarify if required further on
+#include "steam/engine/connectivity-obsolete.hpp"
 #include "steam/engine/buffhandle.hpp"
 //#include "steam/engine/bufftable-obsolete.hpp"
 
