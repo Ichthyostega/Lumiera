@@ -11,6 +11,18 @@ spending time on the task of writing a summary.
 Anyone interested in Lumiera development is also encouraged to read mailing list
 archives and other documentation.
 
+8 May / 12 June 2024
+--------------------
+Discussion regarding the approach taken towards the next core topic, which
+is how to structure the render nodes in the low-level model and how to perform
+an invocation, leading to the calculation of media data. It is considered very
+important for Lumiera to remain library / framework agnostic, even while we
+use some frameworks and libraries for prototyping. The structure drafted over
+the course of the last years and about to be integrated now must be flexible
+enough to support adapt to the requirements of various libraries, _without
+attempting to build a super structure_ to ``rule them all''.
+
+
 13 Mar / 10 Apr 2024
 --------------------
 Status update and informal exchange regarding current development activities
