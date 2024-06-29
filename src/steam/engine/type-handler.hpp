@@ -45,6 +45,7 @@
 #include "lib/error.hpp"
 #include "lib/hash-value.h"
 
+#include <utility>
 #include <functional>
 #include <boost/functional/hash.hpp>
 
@@ -54,6 +55,7 @@ namespace engine {
   
   using lib::HashVal;
   using std::bind;
+  using std::forward;
   using std::function;
   using std::placeholders::_1;
   
@@ -62,18 +64,11 @@ namespace engine {
   
   namespace { // (optional) helpers to build an object embedded into a buffer...
     
-    template<class X>
+    template<class X, typename...ARGS>
     inline void
-    buildIntoBuffer (void* storageBuffer)
+    buildIntoBuffer (void* storageBuffer, ARGS&& ...args)
     {
-      new(storageBuffer) X();
-    }
-    
-    template<class X, typename A1>
-    inline void
-    buildIntoBuffer_A1 (void* storageBuffer, A1 arg1)
-    {
-      new(storageBuffer) X(arg1);
+      new(storageBuffer) X(forward<ARGS> (args)...);
     }
     
     template<class X>
@@ -145,20 +140,13 @@ namespace engine {
         { }
       
       /** builder function defining a TypeHandler
-       *  to place a default-constructed object
-       *  into the buffer. */
-      template<class X>
+       *  to place an object into the buffer,
+       *  possibly with given ctor arguments. */
+      template<class X, typename...ARGS>
       static TypeHandler
-      create ()
+      create (ARGS&& ...args)
         {
-          return TypeHandler (buildIntoBuffer<X>, destroyInBuffer<X>);
-        }
-      
-      template<class X, typename A1>
-      static TypeHandler
-      create (A1 a1)
-        {
-          return TypeHandler ( bind (buildIntoBuffer_A1<X,A1>, _1, a1)
+          return TypeHandler ( bind (buildIntoBuffer<X,ARGS...>, _1, forward<ARGS> (args)...)
                              , destroyInBuffer<X>);
         }
       

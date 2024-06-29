@@ -26,6 +26,9 @@
 
 
 #include "lib/test/run.hpp"
+#include "steam/engine/proc-node.hpp"
+#include "steam/engine/node-wiring-builder.hpp"
+#include "steam/engine/test-rand-ontology.hpp"
 //#include "lib/util.hpp"
 
 
@@ -40,14 +43,56 @@ namespace test  {
   
   
   /***************************************************************//**
-   * @test check render node operation modes and collaboration.
+   * @test demonstrate and document how [render nodes](\ref proc-node.hpp)
+   *       are connected into a processing network, allowing to _invoke_
+   *       a \ref Port on a node to pull-generate a render result.
+   *     - the foundation layer is formed by the nodes as linked into a network
+   *     - starting from any Port, a TurnoutSystem can be established
+   *     - which in turn allows _turn out_ a render result from this port.
    */
   class NodeLinkage_test : public Test
     {
-      virtual void run(Arg) 
+      virtual void
+      run (Arg)
+        {
+          build_connected_nodes();
+          generate_turnout_system();
+          trigger_node_port_invocation();
+        }
+      
+      
+      
+      
+      /** @test TODO Build render nodes linked into a connectivity network
+       * @todo WIP 7/24 🔁 define ⟶ ✔ implement
+       */
+      void
+      build_connected_nodes()
+        {
+          auto con = buildPatternFor<TestRandOntology>()
+                        .build();
+          UNIMPLEMENTED ("build render nodes linked into a connectivity network");
+        }
+      
+      
+      /** @test TODO Use existing node connectivity to generate a TurnoutSystem
+       * @todo WIP 7/24 🔁 define ⟶ implement
+       */
+      void
+      generate_turnout_system()
+        {
+          UNIMPLEMENTED ("use existing node connectivity to generate a TurnoutSystem");
+        }
+      
+      
+      /** @test TODO Invoke some render nodes as linked together
+       * @todo WIP 7/24 🔁 define ⟶ implement
+       */
+      void
+      trigger_node_port_invocation()
         {
           UNIMPLEMENTED ("operate some render nodes as linked together");
-        } 
+        }
     };
   
   

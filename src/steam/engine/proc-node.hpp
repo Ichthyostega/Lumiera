@@ -51,7 +51,8 @@
 #include "steam/engine/channel-descriptor.hpp"
 #include "steam/engine/turnout-system.hpp"
 #include "lib/frameid.hpp"
-#include "lib/ref-array.hpp"
+#include "lib/ref-array.hpp" /////////////////////OOO phase out
+#include "lib/several.hpp"
 
 #include <vector>
 

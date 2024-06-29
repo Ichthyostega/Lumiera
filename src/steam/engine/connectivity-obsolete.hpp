@@ -52,7 +52,6 @@
 #include "steam/mobject/parameter.hpp"
 #include "steam/engine/state-closure-obsolete.hpp"  /////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
 #include "steam/engine/channel-descriptor.hpp"
-#include "steam/engine/turnout-system.hpp"
 #include "lib/frameid.hpp"
 #include "lib/ref-array.hpp"
 
@@ -71,13 +70,6 @@ namespace engine {
   typedef ProcNode* PNode;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   
-  class Port
-    {
-    public:
-      virtual ~Port();  ///< this is an interface
-       
-      virtual TurnoutSystem enactTurnout()   =0;
-    };
   
   /**
    * Interface: Description of the input and output ports,

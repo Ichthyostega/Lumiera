@@ -50,6 +50,7 @@
 #include "steam/engine/buffer-local-key.hpp"
 #include "lib/nocopy.hpp"
 
+#include <utility>
 #include <memory>
 
 
@@ -58,6 +59,7 @@ namespace engine {
   
   using lib::Literal;
   using std::unique_ptr;
+  using std::forward;
   
   
   class BufferMetadata;
@@ -105,8 +107,8 @@ namespace engine {
       void       emitBuffer (BuffHandle const&);
       void    releaseBuffer (BuffHandle const&);
       
-      template<typename BU>
-      BuffHandle lockBufferFor ();
+      template<typename BU, typename...ARGS>
+      BuffHandle lockBufferFor (ARGS ...args);
       
       /** allow for attaching and owing an object within an already created buffer */
       void attachTypeHandler (BuffHandle const& target, BufferDescriptor const& reference);
@@ -118,8 +120,8 @@ namespace engine {
       BufferDescriptor getDescriptorFor(size_t storageSize=0);
       BufferDescriptor getDescriptorFor(size_t storageSize, TypeHandler specialTreatment);
       
-      template<typename BU>
-      BufferDescriptor getDescriptor();
+      template<typename BU, typename...ARGS>
+      BufferDescriptor getDescriptor (ARGS ...args);
       
       
       
@@ -146,11 +148,11 @@ namespace engine {
    *         buffer descriptor. The corresponding buffer
    *         has been allocated and marked for exclusive use
    */
-  template<typename BU>
+  template<typename BU, typename...ARGS>
   BuffHandle
-  BufferProvider::lockBufferFor()
+  BufferProvider::lockBufferFor (ARGS ...args)
   {
-    BufferDescriptor attach_object_automatically = getDescriptor<BU>();
+    BufferDescriptor attach_object_automatically = getDescriptor<BU> (forward<ARGS> (args)...);
     return lockBuffer (attach_object_automatically);
   }
   
@@ -159,11 +161,11 @@ namespace engine {
    *  an instance of the template type embedded into the buffer
    *  and destroying that embedded object when releasing the buffer.
    */
-  template<typename BU>
+  template<typename BU, typename...ARGS>
   BufferDescriptor
-  BufferProvider::getDescriptor()
+  BufferProvider::getDescriptor (ARGS ...args)
   {
-    return getDescriptorFor (sizeof(BU), TypeHandler::create<BU>());
+    return getDescriptorFor (sizeof(BU), TypeHandler::create<BU> (forward<ARGS> (args)...));
   }
   
   

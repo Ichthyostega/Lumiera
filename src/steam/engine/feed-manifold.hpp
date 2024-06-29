@@ -35,11 +35,10 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "steam/engine/channel-descriptor.hpp"
 #include "steam/engine/proc-node.hpp"
+#include "lib/several.hpp"
 
-#include <vector>
-#include <utility>
+//#include <utility>
 
 
 ////////////////////////////////TICKET   #826  will be reworked alltogether
@@ -61,133 +60,11 @@ namespace engine {
      * thus the array of real buffer pointers can be fed directly to the
      * processing function of the respective node.
      * 
-     * @todo this whole design is a first attempt and rather clumsy. It should be reworked
-     *       to use a single contiguous memory area and just layer the object structure on top
-     *       (by using placement new). Yet the idea of an stack-like organisation should be retained
+     * @todo WIP-WIP-WIP 7/24 now reworking the old design in the light of actual render engine requirements...
      */
   struct FeedManifold
     {
-      typedef BuffHandle        * PHa;
-      typedef BuffHandle::PBuff * PBu;
-      typedef pair<PHa const,PBu const> Chunk;
-      
-      PHa outHandle;
-      PHa inHandle;
-      PBu outBuff;
-      PBu inBuff;
     };
-  
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : presumably obsolete
-  class BufferDescriptor;
-  
-    /** Obsolete, to be rewritten  /////TICKET #826 */
-  class BuffTableStorage
-    {
-      /////////////////////////////////////////////////////////////////////////TICKET #826  need to be reworked entirely
-      /** just a placeholder to decouple the existing code
-       *  from the reworked BuffHandle logic. The existing
-       *  code in turn will be reworked rather fundamentally
-       */
-      struct BuffHaXXXX
-        : BuffHandle
-        {
-          BuffHaXXXX() : BuffHandle(just_satisfy_the_compiler()) { /* wont work ever */ }
-          static BufferDescriptor const& 
-          just_satisfy_the_compiler() { }
-        };
-        
-                                           ////////////////////////////////////TICKET #825  should be backed by mpool and integrated with node invocation
-      vector<BuffHaXXXX>        hTab_;
-      vector<BuffHandle::PBuff> pTab_;
-      size_t level_;
-      
-    public:
-      BuffTableStorage (const size_t maxSiz)
-        : hTab_(maxSiz),
-          pTab_(maxSiz),
-          level_(0)
-        { }
-      
-      ~BuffTableStorage() { ASSERT (0==level_, "buffer management logic broken."); }
-      
-    protected:
-      
-      friend class BuffTableChunk;
-      
-      /** allocate the given number of slots
-       *  starting at current level to be used
-       *  by the newly created BuffTableChunk
-       */
-      FeedManifold::Chunk
-      claim (uint slots)
-        {
-          ASSERT (pTab_.size() == hTab_.size());
-          REQUIRE (level_+slots <= hTab_.size());
-          
-          size_t prev_level (level_);
-          level_ += slots;
-          return std::make_pair (&hTab_[prev_level],
-                                 &pTab_[prev_level]);
-        }
-      
-      void
-      release (uint slots)
-        {
-          ASSERT (slots <= level_);
-          REQUIRE (level_ <= hTab_.size());
-          REQUIRE (level_ <= pTab_.size());
-          
-          level_ -= slots;
-        }
-      
-      bool
-      level_check (FeedManifold::Chunk& prev_level)
-        {
-          return prev_level.first  == &hTab_[level_]
-              && prev_level.second == &pTab_[level_];
-        }
-    };
-  
-  
-  /** Obsolete, to be rewritten  /////TICKET #826 
-   * to be allocated on the stack while evaluating a ProcNode#pull() call.
-   * The "current" State (StateProxy) maintains a BuffTableStorage (=pool),
-   * which can be used to crate such chunks. The claiming and releasing of
-   * slots in the BuffTableStorage is automatically tied to BuffTableChunk
-   * object's lifecycle.
-   */
-  class BuffTableChunk
-    : public FeedManifold,
-      util::NonCopyable
-    {
-      const uint siz_;
-      FeedManifold::Chunk tab_;
-      BuffTableStorage& sto_;
-      
-    public:
-      BuffTableChunk (Connectivity const& wd, BuffTableStorage& storage)
-        : siz_(wd.nrI + wd.nrO),
-          tab_(storage.claim (siz_)),
-          sto_(storage)
-        {
-          const uint nrO(wd.nrO);
-          
-          // Setup the publicly visible table locations
-          this->outHandle = &tab_.first[ 0 ];
-          this->inHandle  = &tab_.first[nrO];
-          this->outBuff   = &tab_.second[ 0 ];
-          this->inBuff    = &tab_.second[nrO];
-        }
-      
-      ~BuffTableChunk ()
-        {
-          sto_.release (siz_);
-          ASSERT ( sto_.level_check (tab_),
-                  "buffer management logic broken.");
-        }
-    };
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : (End)presumably obsolete
-  
   
   
   

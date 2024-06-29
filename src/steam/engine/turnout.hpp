@@ -59,11 +59,11 @@
 #ifndef STEAM_ENGINE_TURNOUT_H
 #define STEAM_ENGINE_TURNOUT_H
 
-#include <steam/engine/state-closure-obsolete.hpp>
 #include "steam/common.hpp"
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/turnout-system.hpp"
 #include "steam/engine/feed-manifold.hpp"
+#include "steam/engine/state-closure.hpp"
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
 #include "steam/engine/channel-descriptor.hpp"
 //#include "vault/gear/job.h"
