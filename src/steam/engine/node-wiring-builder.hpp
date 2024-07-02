@@ -45,10 +45,13 @@
 #include "steam/engine/proc-node.hpp"
 #include "lib/nocopy.hpp"
 
+#include <utility>
 
 
 namespace steam {
 namespace engine {
+  
+  using std::move;
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   
@@ -56,6 +59,28 @@ namespace engine {
     : util::MoveOnly
     {
     public:
+      
+      NodeWiringBuilder
+      inSlots (uint s)
+        {
+          UNIMPLEMENTED ("define number of predecessor-source slots");
+          return move(*this);
+        }
+      
+      NodeWiringBuilder
+      outSlots (uint r)
+        {
+          UNIMPLEMENTED ("define number of result slots");
+          return move(*this);
+        }
+      
+      template<class ILA, typename...ARGS>
+      NodeWiringBuilder
+      createBuffers (ARGS&& ...args)
+        {
+          UNIMPLEMENTED ("define builder for all buffers to use");
+          return move(*this);
+        }
       
       /****************************************************//**
        * Terminal: complete the Connectivity defined thus far.

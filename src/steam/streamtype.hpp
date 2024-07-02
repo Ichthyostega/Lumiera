@@ -67,7 +67,7 @@ namespace steam {
           RAW,
           SOURCE,
           TARGET,
-          INTERMEDIARY
+          TRANSIENT
         };
       
       struct Prototype;
