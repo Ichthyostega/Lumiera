@@ -27,7 +27,7 @@
 
 #include "lib/test/run.hpp"
 #include "steam/engine/proc-node.hpp"
-#include "steam/engine/node-wiring-builder.hpp"
+#include "steam/engine/node-builder.hpp"
 #include "steam/engine/test-rand-ontology.hpp"
 //#include "lib/util.hpp"
 

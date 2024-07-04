@@ -1,8 +1,9 @@
 /*
-  NODE-WIRING-BUILDER.hpp  -  Setup of render nodes connectivity
+  NODE-BUILDER.hpp  -  Setup of render nodes connectivity
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
+    2024    ,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -20,7 +21,7 @@
 
 */
 
-/** @file node-wiring-builder.hpp
+/** @file node-builder.hpp
  ** Helper for defining the desired wiring and operation mode for a render node.
  ** During the Builder run, the render nodes network is wired up starting from the
  ** source (generating) nodes up to the exit nodes. As the wiring is implemented through
@@ -38,8 +39,8 @@
  */
 
 
-#ifndef ENGINE_NODE_WIRING_BUILDER_H
-#define ENGINE_NODE_WIRING_BUILDER_H
+#ifndef ENGINE_NODE_BUILDER_H
+#define ENGINE_NODE_BUILDER_H
 
 
 #include "steam/engine/proc-node.hpp"
@@ -106,4 +107,4 @@ namespace engine {
   
   
 }} // namespace steam::engine
-#endif /*ENGINE_NODE_WIRING_BUILDER_H*/
+#endif /*ENGINE_NODE_BUILDER_H*/
