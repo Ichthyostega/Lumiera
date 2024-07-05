@@ -28,7 +28,7 @@
 #include "lib/test/run.hpp"
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/node-builder.hpp"
-#include "steam/engine/test-rand-ontology.hpp"
+#include "steam/engine/test-rand-ontology.hpp" ///////////TODO
 //#include "lib/util.hpp"
 
 
@@ -69,7 +69,7 @@ namespace test  {
       void
       build_connected_nodes()
         {
-          auto con = buildPatternFor<TestRandOntology>()
+          auto con = prepareNode()
                         .build();
           UNIMPLEMENTED ("build render nodes linked into a connectivity network");
         }

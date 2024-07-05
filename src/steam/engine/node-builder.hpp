@@ -3,7 +3,7 @@
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
-    2024    ,               Hermann Vosseler <Ichthyostega@web.de>
+    2024,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -22,15 +22,48 @@
 */
 
 /** @file node-builder.hpp
- ** Helper for defining the desired wiring and operation mode for a render node.
- ** During the Builder run, the render nodes network is wired up starting from the
- ** source (generating) nodes up to the exit nodes. As the wiring is implemented through
- ** a const engine::Connectivity, when a new node gets fabricated, all of the connections
- ** to its predecessors need to be completely settled; similarly, any information pertaining
- ** the desired operation mode of this node need to be available. Thus we use this temporary
- ** information record to assemble all these pieces of information.
+ ** Specialised shorthand notation for building the Render Node network.
+ ** During the Builder run, the render nodes network will be constructed by gradually
+ ** refining the connectivity structure derived from interpreting the »high-level model«
+ ** from the current Session. At some point, it is essentially clear what data streams
+ ** must be produced and what media processing functionality from external libraries
+ ** will be utilised to achieve this goal. This is when the fluent builder notation
+ ** defined in this header comes into play, allowing to package the fine grained and
+ ** in part quite confusing details of parameter wiring and invocation preparation into
+ ** some goal oriented building blocks, that can be combined and directed with greater
+ ** clarity by the control structure to govern the build process.
  ** 
- ** @deprecated WIP-WIP-WIP 2024 Node-Invocation is reworked from ground up -- not clear yet what happens with the builder
+ ** # Levels of connectivity building
+ ** 
+ ** The actual node connectivity is established by a process of gradual refinement,
+ ** operating over several levels of abstraction. Each of these levels uses its associated
+ ** builder and descriptor records to collect information, which is then emitted by a
+ ** _terminal invocation_ to produce the result; the higher levels thereby rely on the
+ ** lower levels to fill in and elaborate the details.
+ ** - Level-1 is the preparation of an actual frame processing operation; the Level-1-builder
+ **   is in fact the implementation class sitting behind a Render Node's _Port._ It is called
+ **   a _Turnout_ and contains a preconfigured »blue print« for the data structure layout
+ **   used for the invocation; its purpose is to generate the actual data structure on the
+ **   stack, holding all the necessary buffers and parameters ready for invoking the external
+ **   library functions. Since the actual data processing is achieved by a _pull processing,_
+ **   originating at the top level exit nodes and propagating down towards the data sources,
+ **   all the data feeds at all levels gradually link together, forming a _TurnoutSystem._
+ ** - Level-2 generates the actual network of Render Nodes, which in turn will have the
+ **   Turnout instances for Level-1 embedded into its internal ports. Conceptually, a
+ **   _Port_ is where data production can be requested, and the processing will then
+ **   retrieve its prerequisite data from the ports of the _Leads,_ which are the
+ **   prerequisite nodes situated one level below or one step closer to the source.
+ ** - Level-3 establishes the processing steps and data retrieval links between them;
+ **   at this level, thus the outline of possible processing pathways is established.
+ **   After spelling out the desired connectivity at a high level, the so called »Level-3 build
+ **   walk« is triggered by invoking the [terminal builder operation](\ref ProcBuilder::build()
+ **   on the [processing builder](\ref ProcBuilder) corresponding to the topmost node. This
+ **   build walk will traverse the connectivity graph depth-first, and then start invoking the
+ **   Level-2 builder operations bottom-up to generate and wire up the corresponding Render Nodes.
+ ** 
+ ** @todo WIP-WIP-WIP 7/2024 Node-Invocation is reworked from ground up -- some parts can not be
+ **       spelled out completely yet, since we have to build this tightly interlocked system of
+ **       code moving bottom up, and then filling in further details later working top-down.
  ** 
  ** @see steam::engine::NodeFactory
  ** @see nodewiring.hpp
@@ -101,18 +134,12 @@ namespace engine {
     public:
       
       NodeBuilder
-      inSlots (uint s)
+      addLead (ProcNode const& lead)
         {
-          UNIMPLEMENTED ("define number of predecessor-source slots");
+          UNIMPLEMENTED ("append the given predecessor node to the sequence of leads");
           return move(*this);
         }
       
-      NodeBuilder
-      outSlots (uint r)
-        {
-          UNIMPLEMENTED ("define number of result slots");
-          return move(*this);
-        }
       
       void //////////////////////////////////////////////////////////OOO return type
       preparePort ()
@@ -131,6 +158,16 @@ namespace engine {
         }
     };
   
+  /**
+   * Entrance point for building actual Render Node Connectivity (Level-2)
+   */
+  inline auto
+  prepareNode()
+  {
+    UNIMPLEMENTED("start building a new Render Node at Level-2");
+    return NodeBuilder{};
+  }
+    
   
   class ProcBuilder
     : util::MoveOnly
@@ -176,14 +213,14 @@ namespace engine {
     };
   
   
+  
   /**
-   * Entrance point for building node Connectivity
+   * Entrance point for defining data flows and processing steps.
    */
-  template<class ONT>
-  auto
-  buildPatternFor()
+  inline auto
+  retrieve(void* streamType)
   {
-    UNIMPLEMENTED("instantiate Domain Ontology Facade and outfit the NodeWiringBuilder");
+    UNIMPLEMENTED("start a connectivity definition at Level-3");
     return NodeBuilder{};
   }
   
