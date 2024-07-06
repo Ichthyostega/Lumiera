@@ -61,12 +61,14 @@
 namespace steam {
 namespace engine {
 
-  using std::vector;
+  using std::move;
+  using std::vector; //////////////TODO;
   using lumiera::NodeID;
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   class ProcNode;
-  typedef ProcNode* PNode;
+//  typedef ProcNode* PNode;
+  using ProcNodeRef = std::reference_wrapper<ProcNode>;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   
   class Port
@@ -94,33 +96,23 @@ namespace engine {
     {
     public: /* === public information record describing the node graph === */
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-      uint nrO;
-      uint nrI;
+      using Ports = lib::Several<Port>;
+      using Leads = lib::Several<ProcNodeRef>;
       
-      lib::RefArray<ChannelDescriptor>& out;
-      lib::RefArray<InChanDescriptor>&  in;
-      
-      typedef asset::Proc::ProcFunc ProcFunc;
-      
-      ProcFunc* procFunction;
+      Ports ports;
+      Leads leads;
       
       NodeID const& nodeID;
       
-      virtual ~Connectivity() {}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
-    protected:
+//  protected:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-      Connectivity (lib::RefArray<ChannelDescriptor>& o,
-                        lib::RefArray<InChanDescriptor>& i,
-                        ProcFunc pFunc, NodeID const& nID)
-        : out(o), in(i),
-          procFunction(pFunc),
-          nodeID(nID)
-        {
-          nrO = out.size();
-          nrI = in.size();
-        }
+      Connectivity (Ports&& pr, Leads&& lr, NodeID const& nID)
+        : ports(move(pr))
+        , leads(move(lr))
+        , nodeID(nID)
+        { }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
       
@@ -159,27 +151,19 @@ namespace engine {
   class ProcNode
     : util::NonCopyable
     {
-      typedef mobject::Parameter<double> Param;   //////TODO: just a placeholder for automation as of 6/2008
-      vector<Param> params;
       
-      const Connectivity& wiringConfig_;
+      Connectivity wiring_;
       
     public:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-      ProcNode (Connectivity const& wd)
-        : wiringConfig_(wd)
+      ProcNode (Connectivity&& con)
+        : wiring_(move(con))
         { }
       
-      virtual ~ProcNode() {};  /////////////////////////TODO: do we still intend to build a hierarchy below ProcNode???
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
       
     public:
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-      bool isValid()  const;
-      
-      /** output channel count */
-      uint nrO() { return wiringConfig_.nrO; }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
       
@@ -208,12 +192,6 @@ namespace engine {
   
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-  inline bool
-  ProcNode::isValid()  const
-  {
-    UNIMPLEMENTED ("ProcNode validity self-check");
-    return false; //////////////////////////TODO
-  }
   
   
 }} // namespace steam::engine

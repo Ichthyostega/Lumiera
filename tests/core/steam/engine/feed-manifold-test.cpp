@@ -30,8 +30,7 @@
 
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/feed-manifold.hpp"
-#include "lib/ref-array.hpp"
-#include "lib/format-cout.hpp"
+#include "lib/format-cout.hpp" ////////////////TODO
 
 #include <memory>
 
@@ -49,6 +48,7 @@ namespace test  {
     const uint WIDTH_MAX = 3;
     
     
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
     /** just some crap to pass in as ctor argument... */
     template<class E>
     struct DummyArray : lib::RefArray<E>
@@ -77,11 +77,10 @@ namespace test  {
         virtual uint getNrI()  const { return ii; }
         virtual uint getNrO()  const { return oo; }
         
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
         virtual BuffHandle callDown (StateClosure_OBSOLETE&, uint) const
         { throw lumiera::Error("not intended to be called"); }
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
       };
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
     
     
     
@@ -164,13 +163,13 @@ namespace test  {
        */
       void invocation (uint consumed, void* lastLevel)
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #833
           MockSizeRequest numbers;
           consumed += numbers.getNrI()+numbers.getNrO();
           if (TABLE_SIZ <= consumed)
             return; // end recursion
           
           ++counter;
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #833
           BuffTableChunk thisChunk (numbers, *pStorage);
           CHECK (consistencyCheck (thisChunk, numbers, lastLevel));
           

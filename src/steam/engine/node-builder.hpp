@@ -77,9 +77,11 @@
 
 
 #include "steam/engine/proc-node.hpp"
+#include "lib/several-builder.hpp"
 #include "lib/nocopy.hpp"
 
 #include <utility>
+#include <vector>
 
 
 namespace steam {
@@ -89,8 +91,47 @@ namespace engine {
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   
-  class PortBuilder
+  class PortBuilder;
+  
+  
+  class NodeBuilder
     : util::MoveOnly
+    {
+      lib::SeveralBuilder<Port> ports_;
+      std::vector<ProcNodeRef>  leads_;
+    public:
+      
+      NodeBuilder
+      addLead (ProcNode const& lead)
+        {
+          UNIMPLEMENTED ("append the given predecessor node to the sequence of leads");
+          return move(*this);
+        }
+      
+      
+      void //////////////////////////////////////////////////////////OOO return type
+      preparePort ()
+        {
+          UNIMPLEMENTED ("recursively enter detailed setup of a single processing port");
+//        return move(*this);
+        }
+      
+      /****************************************************//**
+       * Terminal: complete the Connectivity defined thus far.
+       */
+      Connectivity
+      build()
+        {
+          /////////////////////////////////////////////////////////////////////OOO actually use the collected data to build
+          return Connectivity{ports_.build()
+                             ,lib::makeSeveral<ProcNodeRef>().build()
+                             ,NodeID{}};
+        }
+    };
+  
+  class PortBuilder
+    : protected NodeBuilder
+    , util::MoveOnly
     {
     public:
       
@@ -126,37 +167,6 @@ namespace engine {
         }
     };
   
-  
-  
-  class NodeBuilder
-    : util::MoveOnly
-    {
-    public:
-      
-      NodeBuilder
-      addLead (ProcNode const& lead)
-        {
-          UNIMPLEMENTED ("append the given predecessor node to the sequence of leads");
-          return move(*this);
-        }
-      
-      
-      void //////////////////////////////////////////////////////////OOO return type
-      preparePort ()
-        {
-          UNIMPLEMENTED ("recursively enter detailed setup of a single processing port");
-//        return move(*this);
-        }
-      
-      /****************************************************//**
-       * Terminal: complete the Connectivity defined thus far.
-       */
-      Connectivity
-      build()
-        {
-          UNIMPLEMENTED("Node-Connectivity Setup");
-        }
-    };
   
   /**
    * Entrance point for building actual Render Node Connectivity (Level-2)
