@@ -91,7 +91,7 @@ namespace engine {
   using std::forward;
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-  namespace {
+  namespace { // policy configuration
     
     template<template<typename> class ALO =std::void_t, typename...INIT>
     struct AlloPolicySelector
@@ -123,7 +123,9 @@ namespace engine {
     
     template<class POL, class I, class E=I>
     using DataBuilder = typename POL::template BuilderType<I,E>;
-  }
+    
+  }//(End) internal policy configuration
+  
   
   template<class POL>
   class PortBuilder;
@@ -132,6 +134,13 @@ namespace engine {
   class NodeBuilder
     : util::MoveOnly
     {
+      template<class I, class E=I, typename...INIT>
+      static auto
+      setupBuilder (INIT&& ...alloInit)
+        {
+          return POL::template setupBuilder<I,E> (forward<INIT> (alloInit)...);
+        }
+      
       
       using PortData = DataBuilder<POL, Port>;
       
@@ -140,7 +149,7 @@ namespace engine {
     public:
       template<typename...INIT>
       NodeBuilder (INIT&& ...alloInit)
-        : ports_{POL::template setupBuilder<Port> (forward<INIT> (alloInit)...)}
+        : ports_{setupBuilder<Port> (forward<INIT> (alloInit)...)}
         { }
       
       NodeBuilder
@@ -157,6 +166,16 @@ namespace engine {
           UNIMPLEMENTED ("recursively enter detailed setup of a single processing port");
 //        return move(*this);
         }
+      
+      
+      /** cross-builder function to specify usage of a dedicated *node allocator* */
+      template<template<typename> class ALO =std::void_t, typename...INIT>
+      auto
+      withAllocator (INIT&& ...alloInit)
+        {
+          return NodeBuilder<AlloPolicySelector<ALO,INIT...>>{forward<INIT>(alloInit)...};
+        }
+      
       
       /****************************************************//**
        * Terminal: complete the Connectivity defined thus far.
