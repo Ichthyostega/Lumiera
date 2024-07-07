@@ -61,6 +61,21 @@
  **   build walk will traverse the connectivity graph depth-first, and then start invoking the
  **   Level-2 builder operations bottom-up to generate and wire up the corresponding Render Nodes.
  ** 
+ ** ## Using custom allocators
+ ** 
+ ** Since the low-level-Model is a massive data structure comprising thousands of nodes, each with
+ ** specialised parametrisation for some media handling library, and a lot of cross-linking pointers,
+ ** it is important to care for efficient usage of memory with good locality. Furthermore, the higher
+ ** levels of the build process will generate additional temporary data structures, which is gradually
+ ** refined until the actual render node network can be emitted. Each builder level can thus be
+ ** outfitted with a custom allocator — typically an instance of lib::AllocationCluster. Notably
+ ** the higher levels can be attached to a separate AllocationCluster instance, which will be
+ ** discarded when the build process is complete, while Level-2 (and below) uses the allocator
+ ** for the actual target data structure, which will be retained and until a complete segment
+ ** of the timeline is superseded and has been re-built.
+ ** @remark syntactically, the custom allocator specification is given after opening a top-level
+ **         builder, by means of the builder function `.withAllocator<ALO> (args...)`
+ ** 
  ** @todo WIP-WIP-WIP 7/2024 Node-Invocation is reworked from ground up -- some parts can not be
  **       spelled out completely yet, since we have to build this tightly interlocked system of
  **       code moving bottom up, and then filling in further details later working top-down.
@@ -90,8 +105,8 @@ namespace engine {
   using std::move;
   using std::forward;
   
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-  namespace { // policy configuration
+  
+  namespace { // policy configuration for allocator
     
     template<template<typename> class ALO =std::void_t, typename...INIT>
     struct AlloPolicySelector
@@ -120,11 +135,35 @@ namespace engine {
         template<class I, class E=I>
         using BuilderType = lib::SeveralBuilder<I,E>;
       };
-    
-    template<class POL, class I, class E=I>
-    using DataBuilder = typename POL::template BuilderType<I,E>;
-    
+    //
   }//(End) internal policy configuration
+  
+  
+  /**
+   * Convenience builder to collect working data.
+   * Implemented through a suitable configuration of lib::SeveralBuilder,
+   * such as to embed and connect to the configured custom allocator, which
+   * serves the goal to package all generated node configuration data together
+   * into a compact memory block, which can be discarded in bulk, once a given
+   * segment of the low-level-Model has been superseded.
+   * @tparam POL policy configuration pick the desired allocator
+   * @tparam I interface type for lib::Several<I>
+   * @remark in essence, this wrapper class creates the following setup
+   * \code
+   *   makeSeveral<I>()
+   *     .withAllocator<ALO> (args...);
+   * \endcode
+   */
+  template<class POL, class I, class E=I>
+  class DataBuilder
+    : public POL::template BuilderType<I,E>
+    {
+    public:
+      template<typename...INIT>
+      DataBuilder (INIT&& ...alloInit)
+        : POL::template BuilderType<I,E>{forward<INIT> (alloInit)...}
+        { }
+    };
   
   
   template<class POL>
@@ -134,23 +173,19 @@ namespace engine {
   class NodeBuilder
     : util::MoveOnly
     {
-      template<class I, class E=I, typename...INIT>
-      static auto
-      setupBuilder (INIT&& ...alloInit)
-        {
-          return POL::template setupBuilder<I,E> (forward<INIT> (alloInit)...);
-        }
-      
-      
       using PortData = DataBuilder<POL, Port>;
+      using LeadRefs = DataBuilder<POL, ProcNodeRef>;
       
       PortData ports_;
-      std::vector<ProcNodeRef>  leads_{};
+      LeadRefs leads_;
+      
     public:
       template<typename...INIT>
       NodeBuilder (INIT&& ...alloInit)
-        : ports_{setupBuilder<Port> (forward<INIT> (alloInit)...)}
+        : ports_{forward<INIT> (alloInit)...}
+        , leads_{forward<INIT> (alloInit)...}
         { }
+      
       
       NodeBuilder
       addLead (ProcNode const& lead)
@@ -168,25 +203,39 @@ namespace engine {
         }
       
       
-      /** cross-builder function to specify usage of a dedicated *node allocator* */
+      /**
+       * cross-builder function to specify usage of a dedicated *node allocator*
+       * @tparam ALO (optional) spec for the allocator to use
+       * @tparam INIT (optional) initialisation arguments for the allocator
+       * @remarks this is a front-end to the extension point for allocator specification
+       *          exposed through lib::SeveralBuilder::withAllocator(). The actual meaning
+       *          of the given parameters and the choice of the actual allocator happens
+       *          through resolution of partial template specialisations of the extension
+       *          point lib::allo::SetupSeveral. Some notable examples
+       *          - withAllocator<ALO>() attaches to a _monostate_ allocator type.
+       *          - `withAllocator<ALO> (ALO<X> allo)` uses a C++ standard allocator
+       *            instance `allo`, dedicated to produce objects of type `X`
+       *          - `withAllocator (AllocationCluster&)` attaches to a specific
+       *            AllocationCluster; this is the most relevant usage pattern
+       */
       template<template<typename> class ALO =std::void_t, typename...INIT>
       auto
       withAllocator (INIT&& ...alloInit)
         {
-          return NodeBuilder<AlloPolicySelector<ALO,INIT...>>{forward<INIT>(alloInit)...};
+          using AllocatorPolicy = AlloPolicySelector<ALO,INIT...>;
+          return NodeBuilder<AllocatorPolicy>{forward<INIT>(alloInit)...};
         }
       
       
-      /****************************************************//**
-       * Terminal: complete the Connectivity defined thus far.
+      /************************************************************//**
+       * Terminal: complete the ProcNode Connectivity defined thus far.
        */
       Connectivity
       build()
         {
-          /////////////////////////////////////////////////////////////////////OOO actually use the collected data to build
           return Connectivity{ports_.build()
-                             ,lib::makeSeveral<ProcNodeRef>().build()
-                             ,NodeID{}};
+                             ,leads_.build()
+                             ,NodeID{}}; //////////////////////////////////////OOO what's the purpose of the NodeID??
         }
     };
   
@@ -232,13 +281,19 @@ namespace engine {
   
   /**
    * Entrance point for building actual Render Node Connectivity (Level-2)
+   * @note when using a custom allocator, the first follow-up builder function
+   *       to apply should be `withAllocator<ALO>(args...)`, prior to adding
+   *       any further specifications and data elements.
    */
   inline auto
   prepareNode()
   {
     return NodeBuilder<UseHeapAlloc>{};
   }
-    
+  
+  
+  
+  
   
   class ProcBuilder
     : util::MoveOnly
