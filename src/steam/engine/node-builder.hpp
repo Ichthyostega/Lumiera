@@ -88,18 +88,60 @@ namespace steam {
 namespace engine {
   
   using std::move;
+  using std::forward;
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
+  namespace {
+    
+    template<template<typename> class ALO =std::void_t, typename...INIT>
+    struct AlloPolicySelector
+      {
+        template<class I, class E=I>
+        static auto
+        setupBuilder (INIT&& ...alloInit)
+        {
+          return lib::makeSeveral<I,E>()
+                     .template withAllocator<ALO> (forward<INIT> (alloInit)...);
+        }
+        
+        template<class I, class E=I>
+        using BuilderType = decltype(setupBuilder<I,E> (std::declval<INIT>()...));
+      };
+    
+    struct UseHeapAlloc
+      {
+        template<class I, class E=I>
+        static auto
+        setupBuilder()
+        {
+          return lib::makeSeveral<I,E>();
+        }
+        
+        template<class I, class E=I>
+        using BuilderType = lib::SeveralBuilder<I,E>;
+      };
+    
+    template<class POL, class I, class E=I>
+    using DataBuilder = typename POL::template BuilderType<I,E>;
+  }
   
+  template<class POL>
   class PortBuilder;
   
-  
+  template<class POL>
   class NodeBuilder
     : util::MoveOnly
     {
-      lib::SeveralBuilder<Port> ports_;
-      std::vector<ProcNodeRef>  leads_;
+      
+      using PortData = DataBuilder<POL, Port>;
+      
+      PortData ports_;
+      std::vector<ProcNodeRef>  leads_{};
     public:
+      template<typename...INIT>
+      NodeBuilder (INIT&& ...alloInit)
+        : ports_{POL::template setupBuilder<Port> (forward<INIT> (alloInit)...)}
+        { }
       
       NodeBuilder
       addLead (ProcNode const& lead)
@@ -129,8 +171,9 @@ namespace engine {
         }
     };
   
+  template<class POL>
   class PortBuilder
-    : protected NodeBuilder
+    : protected NodeBuilder<POL>
     , util::MoveOnly
     {
     public:
@@ -174,8 +217,7 @@ namespace engine {
   inline auto
   prepareNode()
   {
-    UNIMPLEMENTED("start building a new Render Node at Level-2");
-    return NodeBuilder{};
+    return NodeBuilder<UseHeapAlloc>{};
   }
     
   
@@ -231,7 +273,7 @@ namespace engine {
   retrieve(void* streamType)
   {
     UNIMPLEMENTED("start a connectivity definition at Level-3");
-    return NodeBuilder{};
+    return LinkBuilder{};  ///////////////////////////////////////////////////////////////////OOO this is placeholder code; should at least open a ticket
   }
   
   

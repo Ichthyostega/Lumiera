@@ -776,9 +776,21 @@ namespace lib {
   
   namespace allo { // Setup for custom allocator policies
     
+    /**
+     * Extension point: how to configure the SeveralBuilder
+     * to use an allocator \a ALO, initialised by \a ARGS
+     * @note must define a nested type `Policy`,
+     *       usable as policy mix-in for SeveralBuilder
+     * @remark the meaning of the template parameter is defined
+     *       by the partial specialisations; notably it is possible
+     *       to give `ALO ≔ std::void_t` and to infer the intended
+     *       allocator type from the initialisation \a ARGS altogether.
+     * @see allocation-cluster.hpp
+     */
     template<template<typename> class ALO, typename...ARGS>
     struct SetupSeveral;
     
+    /** Specialisation: use a _monostate_ allocator type \a ALO */
     template<template<typename> class ALO>
     struct SetupSeveral<ALO>
       {
@@ -786,6 +798,8 @@ namespace lib {
         using Policy = AllocationPolicy<I,E,ALO>;
       };
     
+    /** Specialisation: store a C++ standard allocator instance,
+     *  which can be used to allocate objects of type \a X   */
     template<template<typename> class ALO, typename X>
     struct SetupSeveral<ALO, ALO<X>>
       {
