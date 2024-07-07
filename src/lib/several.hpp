@@ -69,7 +69,7 @@
 
 namespace lib {
   
-  namespace {// Storage header implementation details
+  namespace several {// Storage header implementation details
     
     /** @internal mix-in for self-destruction capabilities
      *  @remark the destructor function is assumed to perform deallocation;
@@ -166,7 +166,7 @@ namespace lib {
     : util::MoveAssign
     {
     protected:
-      using Bucket = ArrayBucket<I>*;
+      using Bucket = several::ArrayBucket<I>*;
       
       Bucket data_{nullptr};
       

@@ -147,6 +147,8 @@ namespace lib {
     using std::is_const_v;
     using std::is_same_v;
     using lib::meta::is_Subclass;
+    
+    using several::ArrayBucket;
 
     
     /**
@@ -506,6 +508,20 @@ namespace lib {
       bool empty()        const { return Coll::empty();}
       size_t capacity()   const { return Coll::storageBuffSiz() / Coll::spread(); }
       size_t capReserve() const { return capacity() - size(); }
+      
+      /** allow to peek into data emplaced thus far...
+       * @warning contents may be re-allocated until the final \ref build()
+       */
+      I&
+      operator[] (size_t idx)
+        {
+          if (idx >= Coll::size())
+            throw err::Invalid{_Fmt{"Access index %d >= size(%d)."}
+                                   % idx % Coll::size()
+                              ,LERR_(INDEX_BOUNDS)
+                              };
+          return Coll::operator[] (idx);
+        }
       
       
     private: /* ========= Implementation of element placement ================ */

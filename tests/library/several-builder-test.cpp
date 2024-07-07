@@ -55,6 +55,8 @@ using util::join;
 namespace lib {
 namespace test{
   
+  using LERR_(INDEX_BOUNDS);
+  
   namespace { // invocation tracking diagnostic subclass...
     
     /**
@@ -193,7 +195,9 @@ namespace test{
             
             builder.emplace<Num<3>>()
                    .emplace<Num<2>>(1);
-            CHECK (2 == builder.size());
+            CHECK (2 == builder.size());                                 // use information functions...
+            CHECK (3 == builder[1].getVal());                            // to peek into contents assembled thus far...
+            VERIFY_ERROR (INDEX_BOUNDS, builder[2] );                    // runtime bounds check on the builder (but not on the product!)
             builder.fillElm(2);
             CHECK (4 == builder.size());
             builder.fillElm(3, 5);
