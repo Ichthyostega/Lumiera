@@ -139,6 +139,7 @@ namespace engine {
    * the invocation sequence actually prepares to call the process function of this
    * ProcNode, a buffer table chunk is allocated by the StateProxy and wired in.
    */
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
   struct Invocation
     : StateAdapter
     {
@@ -213,6 +214,7 @@ namespace engine {
       virtual BuffHandle
       allocateBuffer (const lumiera::StreamType* ty) { return current_.allocateBuffer(ty); }
     };
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
   
   
   /**
@@ -250,6 +252,19 @@ namespace engine {
         }
     };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
+  
+  class Turnout
+    : public Port
+      //////////////////////////////OOO non-copyable? move-only??
+    {
+    public:
+      
+      TurnoutSystem
+      enactTurnout()  override
+        {
+          UNIMPLEMENTED ("generate next layer of the TurnoutSystem on the stack");
+        }
+    };
   
   
   

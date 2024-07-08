@@ -92,6 +92,7 @@
 
 
 #include "steam/engine/proc-node.hpp"
+#include "steam/engine/turnout.hpp"
 #include "lib/several-builder.hpp"
 #include "lib/nocopy.hpp"
 
@@ -176,6 +177,7 @@ namespace engine {
       using PortData = DataBuilder<POL, Port>;
       using LeadRefs = DataBuilder<POL, ProcNodeRef>;
       
+    protected:
       PortData ports_;
       LeadRefs leads_;
       
@@ -195,12 +197,8 @@ namespace engine {
         }
       
       
-      void //////////////////////////////////////////////////////////OOO return type
-      preparePort ()
-        {
-          UNIMPLEMENTED ("recursively enter detailed setup of a single processing port");
-//        return move(*this);
-        }
+      /** recursively enter detailed setup of a single processing port */
+      PortBuilder<POL> preparePort ();
       
       
       /**
@@ -245,7 +243,6 @@ namespace engine {
     , util::MoveOnly
     {
     public:
-      
       PortBuilder
       inSlots (uint s)
         {
@@ -271,13 +268,35 @@ namespace engine {
       /****************************************************//**
        * Terminal: complete the Port wiring and return to the node level.
        */
-      void //////////////////////////////////////////////////////////OOO return type
+      NodeBuilder<POL>
       completePort()
         {
-          UNIMPLEMENTED("finish and link-in port definition");
-        }
+          //////////////////////////////////////////////////////////OOO finish port data setup here
+          return static_cast<NodeBuilder<POL>&&> (*this);
+        }                  // slice away the subclass
+      
+    private:
+      PortBuilder(NodeBuilder<POL>&& anchor)
+        { }
+      
+      friend PortBuilder NodeBuilder<POL>::preparePort();
     };
   
+  
+  /**
+   * @remark while _logically_ this builder-function _descends_ into the
+   *  definition of a port, for the implementation we _wrap_ the existing
+   *  NodeBuilder and layer a PortBuilder subclass „on top“ — thereby shadowing
+   *  the enclosed original builder temporarily; the terminal builder operation
+   *  PortBuilder::completePort() will unwrap and return the original NodeBuilder.
+   */
+  template<class POL>
+  inline PortBuilder<POL>
+  NodeBuilder<POL>::preparePort ()
+  {
+    return PortBuilder<POL>{move(*this)};
+  }
+
   
   /**
    * Entrance point for building actual Render Node Connectivity (Level-2)
