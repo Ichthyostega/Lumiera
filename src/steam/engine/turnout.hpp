@@ -259,8 +259,8 @@ namespace engine {
     {
     public:
       
-      TurnoutSystem
-      enactTurnout()  override
+      BuffHandle
+      weave(TurnoutSystem&)  override
         {
           UNIMPLEMENTED ("generate next layer of the TurnoutSystem on the stack");
         }

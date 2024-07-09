@@ -76,7 +76,7 @@ namespace engine {
     public:
       virtual ~Port();  ///< this is an interface
        
-      virtual TurnoutSystem enactTurnout()   =0;
+      virtual BuffHandle weave (TurnoutSystem&)   =0;
     };
   
   /**
