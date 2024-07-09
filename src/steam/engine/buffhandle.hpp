@@ -49,7 +49,7 @@
  ** @see BufferProvider
  ** @see BufferProviderProtocol_test usage demonstration
  ** @see OutputSlot
- ** @see bufftable.hpp      storage for the buffer table
+ ** @see bufftable.hpp      storage for the buffer table /////////////////////OOO where to point into the new structure for documentation?
  ** @see engine::RenderInvocation
  */
 

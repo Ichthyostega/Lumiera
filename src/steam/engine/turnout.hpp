@@ -253,16 +253,49 @@ namespace engine {
     };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   
-  class Turnout
-    : public Port
+  
+  struct WeavingPatternBase
       //////////////////////////////OOO non-copyable? move-only??
     {
+      using Feed = FeedManifold<0>;
+      
+      Feed mount() { return Feed{}; }
+      void pull (Feed&, TurnoutSystem&) { /* NOP */ }
+      void shed (Feed&)                 { /* NOP */ }
+      void weft (Feed&)                 { /* NOP */ }
+      void fix  (Feed&)                 { /* NOP */ }
+    };
+  
+  
+  /**
+   * Processing structure to activate a Render Node and produce result data.
+   * @tparam PAT a _Weaving Pattern,_ which defines in detail how data is retrieved,
+   *             combined and processed to yield the results; actually this implementation
+   *             is assembled from several building blocks, in accordance to the specific
+   *             situation as established by the _Builder_ for a given render node.
+   */
+  template<class PAT>
+  class Turnout
+    : public Port
+    , public PAT
+    {
+      using Feed = typename PAT::Feed;
     public:
       
+      /**
+       * Entrance point to the next recursive step of media processing.
+       * @param turnoutSys anchor context with parameters and services
+       * @return a BuffHandle exposing the generated result data
+       */
       BuffHandle
-      weave(TurnoutSystem&)  override
+      weave (TurnoutSystem& turnoutSys)  override
         {
-          UNIMPLEMENTED ("generate next layer of the TurnoutSystem on the stack");
+          Feed feed = PAT::mount();
+          PAT::pull(feed, turnoutSys);
+          PAT::shed(feed);
+          PAT::weft(feed);
+          PAT::fix (feed);
+          return feed.result();
         }
     };
   

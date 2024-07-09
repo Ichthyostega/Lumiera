@@ -35,10 +35,13 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "steam/engine/proc-node.hpp"
-#include "lib/several.hpp"
+//#include "steam/engine/proc-node.hpp"
+#include "steam/engine/buffhandle.hpp"
+#include "lib/uninitialised-storage.hpp"
+//#include "lib/several.hpp"
 
 //#include <utility>
+//#include <array>
 
 
 ////////////////////////////////TICKET   #826  will be reworked alltogether
@@ -46,8 +49,8 @@
 namespace steam {
 namespace engine {
   
-  using std::pair;
-  using std::vector;
+//  using std::pair;
+//  using std::vector;
   
   
     /**
@@ -62,9 +65,16 @@ namespace engine {
      * 
      * @todo WIP-WIP-WIP 7/24 now reworking the old design in the light of actual render engine requirements...
      */
+  template<uint N>
   struct FeedManifold
+    : util::NonCopyable
     {
+      using BuffS = lib::UninitialisedStorage<BuffHandle,N>;
+      
+      BuffS inBuff;
+      BuffS outBuff;
     };
+  
   
   
   
