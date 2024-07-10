@@ -72,6 +72,7 @@
 //#include "lib/linked-elements.hpp"
 //#include "lib/util-foreach.hpp"
 //#include "lib/iter-adapter.hpp"
+#include "lib/meta/function.hpp"
 //#include "lib/itertools.hpp"
 //#include "lib/util.hpp"
 
@@ -253,6 +254,24 @@ namespace engine {
     };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   
+    /**
+     * Definition to emulate a _Concept_ for the *Invocation Adapter*.
+     * For each Proc-Asset, the corresponding Library Adapter must provide
+     * such adapters to access the input and result buffers and finally to
+     * invoke the processing functions from this library.
+     * - `connect(MAN&,fanIn,fanOut)` access the _Feed Manifold_ and link the buffers
+     * - `invoke()` invoke the processing function, passing the connected buffers
+     * @tparam MAN the concrete type of the Feed Manifold, holding an array with
+     *             input and output _Buffer Handles_
+     */
+    template<class ADA, class MAN>
+    constexpr void
+    _verify_usable_as_InvocationAdapter()
+    {
+      ASSERT_MEMBER_FUNCTOR (&ADA::connect, void(MAN&, uint, uint));
+      ASSERT_MEMBER_FUNCTOR (&ADA::invoke, void());
+    }
+  
   
   struct WeavingPatternBase
       //////////////////////////////OOO non-copyable? move-only??
@@ -267,11 +286,19 @@ namespace engine {
     };
   
   
-  template<class PAR, uint N>
+  template<uint N, class FUN>
+  struct InvocationAdapter
+    : FeedManifold<N>
+    {
+      FUN process;
+    };
+  
+  
+  template<class PAR, uint N, class FUN>
   struct SimpleWeavingPattern
     : PAR
     {
-      using Feed = FeedManifold<N>;
+      using Feed = InvocationAdapter<N, FUN>;
       
       uint fanIn{0};
       uint fanOut{0};
