@@ -267,6 +267,61 @@ namespace engine {
     };
   
   
+  template<class PAR, uint N>
+  struct SimpleWeavingPattern
+    : PAR
+    {
+      using Feed = FeedManifold<N>;
+      
+      uint fanIn{0};
+      uint fanOut{0};
+      
+      template<class X>
+      using Storage = lib::UninitialisedStorage<X,N>;
+      
+      
+      Storage<PortRef> leadPort;
+      Storage<BufferDescriptor> inDescr;
+      Storage<BufferDescriptor> outDescr;
+      
+      //////////////////////////////////////////OOO builder must set-up those descriptors
+      
+      Feed
+      mount()
+        {
+          return Feed{};
+        }
+      
+      void
+      pull (Feed& feed, TurnoutSystem& turnoutSys)
+        {
+          for (uint i=0; i<fanIn; ++i)
+            {
+              BuffHandle inputData = leadPort[i].weave (turnoutSys);
+              feed.inBuff.createAt(i, move(inputData));
+            }
+        }
+      
+      void
+      shed (Feed&)
+        {
+          /* NOP */
+        }
+      
+      void
+      weft (Feed&)
+        {
+          /* NOP */
+        }
+      
+      void
+      fix (Feed&)
+        {
+          /* NOP */
+        }
+    };
+  
+  
   /**
    * Processing structure to activate a Render Node and produce result data.
    * @tparam PAT a _Weaving Pattern,_ which defines in detail how data is retrieved,

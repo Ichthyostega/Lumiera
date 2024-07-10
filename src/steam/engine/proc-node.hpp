@@ -79,6 +79,8 @@ namespace engine {
       virtual BuffHandle weave (TurnoutSystem&)   =0;
     };
   
+  using PortRef = std::reference_wrapper<Port>;
+  
   /**
    * Interface: Description of the input and output ports,
    * processing function and predecessor nodes for a given ProcNode.
