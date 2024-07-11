@@ -76,7 +76,7 @@
 //#include "lib/itertools.hpp"
 //#include "lib/util.hpp"
 
-//#include <utility>
+#include <utility>
 #include <array>
 //#include <stack>
 
@@ -84,7 +84,7 @@
 namespace steam {
 namespace engine {
   
-  
+  using std::forward;
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   /**
@@ -288,6 +288,7 @@ namespace engine {
     
     using lib::meta::_Fun;
     using lib::meta::is_BinaryFun;
+    using std::remove_reference_t;
     
     /** Helper to pick up the parameter dimensions from the processing function
      * @remark this is the rather simple yet common case that media processing
@@ -303,8 +304,8 @@ namespace engine {
         static_assert(_Fun<FUN>()         , "something funktion-like required");
         static_assert(is_BinaryFun<FUN>() , "function with two arguments expected");
         
-        using ArgI = typename _Fun<FUN>::Args::List::Head;
-        using ArgO = typename _Fun<FUN>::Args::List::Tail::Head;
+        using ArgI = remove_reference_t<typename _Fun<FUN>::Args::List::Head>;
+        using ArgO = remove_reference_t<typename _Fun<FUN>::Args::List::Tail::Head>;
         
         template<class ARG>
         struct MatchBuffArray
@@ -361,18 +362,26 @@ namespace engine {
       ArrayI inParam;
       ArrayO outParam;
       
+      template<typename...INIT>
+      SimpleFunctionInvocationAdapter (INIT&& ...funSetup)
+        : FUN{forward<INIT> (funSetup)...}
+        { }
+      
       
       void
       connect (uint fanIn, uint fanOut)
         {
-          REQUIRE (fanIn <= N and fanOut <= N);
-          UNIMPLEMENTED ("wire up all input/output buffers");
+          REQUIRE (fanIn >= FAN_I and fanOut >= FAN_O);
+          for (uint i=0; i<FAN_I; ++i)
+            inParam[i] = MAN::inBuff[i].template accessAs<BuffI*>();
+          for (uint i=0; i<FAN_O; ++i)
+            outParam[i] = MAN::outBuff[i].template accessAs<BuffO*>();
         }
       
       void
       invoke()
         {
-          process();
+          process (inParam, outParam);
         }
     };
   
@@ -430,19 +439,24 @@ namespace engine {
         }
       
       void
-      shed (Feed&)
+      shed (Feed& feed)
+        {
+          for (uint i=0; i<fanOut; ++i)
+            {
+              BuffHandle resultData = outDescr[i].lockBuffer();
+              feed.outBuff.createAt(i, move(resultData));
+            }
+          feed.connect (fanIn,fanOut);
+        }
+      
+      void
+      weft (Feed& feed)
         {
           /* NOP */
         }
       
       void
-      weft (Feed&)
-        {
-          /* NOP */
-        }
-      
-      void
-      fix (Feed&)
+      fix (Feed& feed)
         {
           /* NOP */
         }

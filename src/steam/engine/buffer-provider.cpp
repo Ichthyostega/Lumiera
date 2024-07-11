@@ -251,6 +251,7 @@ namespace engine {
   bool
   BufferDescriptor::verifyValidity()  const
   {
+    ENSURE (provider_);
     return provider_->verifyValidity(*this);
   }
   
@@ -258,7 +259,24 @@ namespace engine {
   size_t
   BufferDescriptor::determineBufferSize() const
   {
+    ENSURE (provider_);
     return provider_->getBufferSize (*this);
+  }
+  
+  
+  uint
+  BufferDescriptor::announce (uint count)
+  {
+    ENSURE (provider_);
+    return provider_->announce(count, *this);
+  }
+  
+  
+  BuffHandle
+  BufferDescriptor::lockBuffer()
+  {
+    ENSURE (provider_);
+    return provider_->lockBuffer(*this);
   }
   
   

@@ -103,6 +103,10 @@ namespace engine {
       size_t determineBufferSize() const;
       
       operator HashVal()  const { return subClassification_; }
+      
+      /** convenience shortcut to start a buffer handling cycle */
+      uint announce (uint count);
+      BuffHandle lockBuffer();
     };
   
   
