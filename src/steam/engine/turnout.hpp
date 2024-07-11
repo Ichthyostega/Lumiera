@@ -272,7 +272,7 @@ namespace engine {
     }
   
   
-  struct WeavingPatternBase
+  struct WeavingPatternBase   ///////OOO seems to be obsolete...??
       //////////////////////////////OOO non-copyable? move-only??
     {
       using Feed = FeedManifold<0>;
@@ -284,14 +284,83 @@ namespace engine {
       void fix  (Feed&)                 { /* NOP */ }
     };
   
+  namespace {// Introspection helpers....
+    
+    using lib::meta::_Fun;
+    using lib::meta::is_BinaryFun;
+    
+    /** Helper to pick up the parameter dimensions from the processing function
+     * @remark this is the rather simple yet common case that media processing
+     *         is done by a function, which takes an array of input and output
+     *         buffer pointers with a common type; this simple case is used
+     *         7/2024 for prototyping and validate the design.
+     * @tparam FUN a _function-like_ object, expected to accept two arguments,
+     *         which both are arrays of buffer pointers (input, output).
+     */
+    template<class FUN>
+    struct _ProcFun
+      {
+        static_assert(_Fun<FUN>()         , "something funktion-like required");
+        static_assert(is_BinaryFun<FUN>() , "function with two arguments expected");
+        
+        using ArgI = typename _Fun<FUN>::Args::List::Head;
+        using ArgO = typename _Fun<FUN>::Args::List::Tail::Head;
+        
+        template<class ARG>
+        struct MatchBuffArray
+          {
+            static_assert(not sizeof(ARG), "processing function expected to take array-of-buffer-pointers");
+          };
+        template<class BUF, size_t N>
+        struct MatchBuffArray<std::array<BUF*,N>>
+          {
+            using Buff = BUF;
+            enum{ SIZ = N };
+          };
+        
+        using BuffI = typename MatchBuffArray<ArgI>::Buff;
+        using BuffO = typename MatchBuffArray<ArgO>::Buff;
+        
+        enum{ FAN_I = MatchBuffArray<ArgI>::SIZ
+            , FAN_O = MatchBuffArray<ArgO>::SIZ
+            };
+      };
+  }//(End)Introspection helpers.
   
+  
+  /**
+   * Adapter to handle a simple yet common setup for media processing
+   * - somehow we can invoke processing as a simple function
+   * - this function takes two arrays: the input- and output buffers
+   * @remark this setup is useful for testing, and as documentation example;
+   *         actually the FeedManifold is mixed in as baseclass, and the
+   *         buffer pointers are retrieved from the BuffHandles.
+   * @tparam MAN a FeedManifold, providing arrays of BuffHandles
+   * @tparam FUN the processing function
+   */
   template<class MAN, class FUN>
-  struct InvocationAdapter
+  struct SimpleFunctionInvocationAdapter
     : MAN
     {
-      static constexpr auto N = MAN::inBuff::size();
+      using BuffI = typename _ProcFun<FUN>::BuffI;
+      using BuffO = typename _ProcFun<FUN>::BuffO;
+      
+      enum{ N = MAN::inBuff::size()
+          , FAN_I = _ProcFun<FUN>::FAN_I
+          , FAN_O = _ProcFun<FUN>::FAN_O
+      };
+      
+      static_assert(FAN_I <= N and FAN_O <= N);
+      
+      using ArrayI = std::array<BuffI*, FAN_I>;
+      using ArrayO = std::array<BuffO*, FAN_O>;
+      
       
       FUN process;
+      
+      ArrayI inParam;
+      ArrayO outParam;
+      
       
       void
       connect (uint fanIn, uint fanOut)
@@ -307,13 +376,27 @@ namespace engine {
         }
     };
   
-  
-  template<class PAR, uint N, class FUN>
-  struct SimpleWeavingPattern
-    : PAR
+  /**
+   * Example base configuration for a Weaving-Pattern chain:
+   * - use a simple processing function
+   * - pass an input/output buffer array to this function
+   * - map all »slots« directly without any re-ordering
+   * - use a sufficiently sized FeedManifold as storage scheme
+   */
+  template<uint N, class FUN>
+  struct Conf_DirectFunctionInvocation
     {
       using Manifold = FeedManifold<N>;
-      using Feed = InvocationAdapter<Manifold, FUN>;
+      using Feed = SimpleFunctionInvocationAdapter<Manifold, FUN>;
+      enum{ MAX_SIZ = N };
+    };
+  
+  
+  template<class CONF>
+  struct SimpleWeavingPattern
+    : CONF
+    {
+      using Feed = typename CONF::Feed;
       
       static_assert (_verify_usable_as_InvocationAdapter<Feed>());
       
@@ -321,7 +404,7 @@ namespace engine {
       uint fanOut{0};
       
       template<class X>
-      using Storage = lib::UninitialisedStorage<X,N>;
+      using Storage = lib::UninitialisedStorage<X,CONF::MAX_SIZ>;
       
       
       Storage<PortRef> leadPort;
