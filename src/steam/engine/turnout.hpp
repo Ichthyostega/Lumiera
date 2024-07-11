@@ -77,6 +77,7 @@
 //#include "lib/util.hpp"
 
 //#include <utility>
+#include <array>
 //#include <stack>
 
 
@@ -259,16 +260,14 @@ namespace engine {
      * For each Proc-Asset, the corresponding Library Adapter must provide
      * such adapters to access the input and result buffers and finally to
      * invoke the processing functions from this library.
-     * - `connect(MAN&,fanIn,fanOut)` access the _Feed Manifold_ and link the buffers
+     * - `connect(fanIn,fanOut)` access the _Feed Manifold_ and link the buffers
      * - `invoke()` invoke the processing function, passing the connected buffers
-     * @tparam MAN the concrete type of the Feed Manifold, holding an array with
-     *             input and output _Buffer Handles_
      */
-    template<class ADA, class MAN>
+    template<class ADA>
     constexpr void
     _verify_usable_as_InvocationAdapter()
     {
-      ASSERT_MEMBER_FUNCTOR (&ADA::connect, void(MAN&, uint, uint));
+      ASSERT_MEMBER_FUNCTOR (&ADA::connect, void(uint, uint));
       ASSERT_MEMBER_FUNCTOR (&ADA::invoke, void());
     }
   
@@ -286,11 +285,26 @@ namespace engine {
     };
   
   
-  template<uint N, class FUN>
+  template<class MAN, class FUN>
   struct InvocationAdapter
-    : FeedManifold<N>
+    : MAN
     {
+      static constexpr auto N = MAN::inBuff::size();
+      
       FUN process;
+      
+      void
+      connect (uint fanIn, uint fanOut)
+        {
+          REQUIRE (fanIn <= N and fanOut <= N);
+          UNIMPLEMENTED ("wire up all input/output buffers");
+        }
+      
+      void
+      invoke()
+        {
+          process();
+        }
     };
   
   
@@ -298,7 +312,10 @@ namespace engine {
   struct SimpleWeavingPattern
     : PAR
     {
-      using Feed = InvocationAdapter<N, FUN>;
+      using Manifold = FeedManifold<N>;
+      using Feed = InvocationAdapter<Manifold, FUN>;
+      
+      static_assert (_verify_usable_as_InvocationAdapter<Feed>());
       
       uint fanIn{0};
       uint fanOut{0};

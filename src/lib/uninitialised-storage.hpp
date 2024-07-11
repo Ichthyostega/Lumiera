@@ -123,6 +123,8 @@ namespace lib {
         {
           operator[](idx).~T();
         }
+      
+      static constexpr size_t size() { return cnt; }
     };
   
   
