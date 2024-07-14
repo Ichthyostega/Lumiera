@@ -373,9 +373,9 @@ namespace engine {
         {
           REQUIRE (fanIn >= FAN_I and fanOut >= FAN_O);
           for (uint i=0; i<FAN_I; ++i)
-            inParam[i] = MAN::inBuff[i].template accessAs<BuffI*>();
+            inParam[i] = & MAN::inBuff[i].template accessAs<BuffI>();
           for (uint i=0; i<FAN_O; ++i)
-            outParam[i] = MAN::outBuff[i].template accessAs<BuffO*>();
+            outParam[i] = & MAN::outBuff[i].template accessAs<BuffO>();
         }
       
       void
@@ -452,13 +452,22 @@ namespace engine {
       void
       weft (Feed& feed)
         {
-          /* NOP */
+          feed.invoke();
         }
       
       void
       fix (Feed& feed)
         {
-          /* NOP */
+          for (uint i=0; i<fanIn; ++i)
+            {
+              feed.inBuff[i].release();
+            }
+          for (uint i=0; i<fanOut; ++i)
+            {
+              feed.outBuff[i].emit();
+              if (i != feed.resultSlot)
+                feed.outBuff[i].release();
+            }
         }
     };
   

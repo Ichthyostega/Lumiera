@@ -161,7 +161,7 @@ namespace engine {
    *        may be emitted, and at most once.
    * @warning by convention, emitting a buffer implies that the contained data is ready and
    *        might be used by other parts of the application.
-   *        An emitted buffer should not be modified anymore. 
+   *        While an emitted buffer should not be modified anymore, it can still be accessed. 
    */
   void
   BufferProvider::emitBuffer (BuffHandle const& handle)
