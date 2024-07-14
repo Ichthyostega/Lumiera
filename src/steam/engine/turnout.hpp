@@ -394,6 +394,7 @@ namespace engine {
    */
   template<uint N, class FUN>
   struct Conf_DirectFunctionInvocation
+      //////////////////////////////OOO non-copyable? move-only??
     {
       using Manifold = FeedManifold<N>;
       using Feed = SimpleFunctionInvocationAdapter<Manifold, FUN>;
@@ -416,8 +417,7 @@ namespace engine {
       using Storage = lib::UninitialisedStorage<X,CONF::MAX_SIZ>;
       
       
-      Storage<PortRef> leadPort;
-      Storage<BufferDescriptor> inDescr;
+      Storage<PortRef>          leadPort;
       Storage<BufferDescriptor> outDescr;
       
       //////////////////////////////////////////OOO builder must set-up those descriptors
@@ -483,6 +483,7 @@ namespace engine {
   class Turnout
     : public Port
     , public PAT
+      //////////////////////////////OOO non-copyable? move-only??
     {
       using Feed = typename PAT::Feed;
     public:
@@ -503,6 +504,32 @@ namespace engine {
           return feed.result();
         }
     };
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Prototyping: how to assemble a Turnout
+  template<uint N, class FUN>
+  using SimpleDirectInvoke = SimpleWeavingPattern<Conf_DirectFunctionInvocation<N,FUN>>;
+  
+  template<uint N, class FUN>
+  struct SimpleWeavingBuilder
+    : Turnout<SimpleDirectInvoke<N,FUN>>
+    {
+      SimpleWeavingBuilder
+      attachToLeadPort(ProcNode& lead, uint portNr)
+        {
+          ASSERT (this->fanIn < N);
+          PortRef leadPort; /////////////////////////////////////OOO TODO need Accessor on ProcNode!!!!! 
+          this->leadPort.createAt(this->fanIn, leadPort)
+          ++(this->fanIn);
+          return move(*this);
+        }
+      
+      Turnout<SimpleDirectInvoke<N,FUN>>
+      build()
+        {
+          return move(*this);
+        }
+    };
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : (End)Prototyping: how to assemble a Turnout
   
   
   
