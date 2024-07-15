@@ -32,18 +32,19 @@
  ** buffers, and for accessing those buffers, the node needs to keep a table of buffer
  ** pointers, and for releasing the buffers later on, we utilise the buffer handles.
  ** 
- ** These buffer handles are based on a buffer descriptor record, which is opaque as far
- ** as the client is concerned. BufferDescriptor acts as a representation of the type or
- ** kind of buffer. The only way to obtain such a BufferDescriptor is from a concrete
- ** BufferProvider implementation. A back-link to this owning and managing provider is
- ** embedded into the BufferDescriptor, allowing to retrieve an buffer handle, corresponding
- ** to an actual buffer provided and managed behind the scenes. There is no automatic
- ** resource management; clients are responsible to invoke BuffHandle#release when done.
+ ** These buffer handles are based on a [Buffer Descriptor record](\ref BuffDescr),
+ ** which is opaque as far as the client is concerned. BuffDescr acts as a representation
+ ** of the type or kind of buffer. The only way to obtain such a BuffDescr is from a concrete
+ ** BufferProvider implementation. A back-link to this owning and managing provider is embedded
+ ** into the BuffDescr, which thus may be used as a _configuration tag,_ allowing to retrieve a
+ ** concrete buffer handle when needed, corresponding to an actual buffer provided and managed
+ ** behind the scenes. There is no automatic resource management; clients are responsible to
+ ** invoke BuffHandle#release when done.
  ** 
- ** @warning buffer management via BuffHandle and BufferDescriptor does _not automatically
- **          maintain proper alignment._ Rather, it relies on the storage allocator to provide
- **          a buffer suitably aligned for the target type to hold. In most cases, this target
- **          location will actually be storage maintained on heap through some STL collection;
+ ** @warning buffer management via BuffHandle and BuffDescr does _not automatically maintain
+ **          proper alignment._ Rather, it relies on the storage allocator to provide a buffer
+ **          suitably aligned for the target type to hold. In most cases, this target location
+ **          will actually be storage maintained on heap through some STL collection;
  **          this topic is a possible subtle pitfall non the less.
  ** 
  ** @see BufferProvider
@@ -82,13 +83,13 @@ namespace engine {
    *       by the BufferProvider, which may use (and even change) the opaque contents
    *       to organise the internal buffer management.
    */
-  class BufferDescriptor
+  class BuffDescr
     {
     protected:
       BufferProvider* provider_;
       HashVal subClassification_;
       
-      BufferDescriptor(BufferProvider& manager, HashVal detail)
+      BuffDescr(BufferProvider& manager, HashVal detail)
         : provider_(&manager)
         , subClassification_(detail)
       { }
@@ -120,8 +121,8 @@ namespace engine {
     {
       typedef StreamType::ImplFacade::DataBuffer Buff;
       
-      BufferDescriptor descriptor_;
-      Buff* pBuffer_; 
+      BuffDescr descriptor_;
+      Buff*     pBuffer_;
       
       
     public:
@@ -129,7 +130,7 @@ namespace engine {
       
       /** @internal a buffer handle may be obtained by "locking"
        *  a buffer from the corresponding BufferProvider */
-      BuffHandle(BufferDescriptor const& typeInfo, void* storage = 0)
+      BuffHandle(BuffDescr const& typeInfo, void* storage = 0)
         : descriptor_(typeInfo)
         , pBuffer_(static_cast<PBuff>(storage))
         { }
@@ -181,7 +182,7 @@ namespace engine {
     private:
       template<typename BU>
       void takeOwnershipFor();
-      void takeOwnershipFor(BufferDescriptor const& type);
+      void takeOwnershipFor(BuffDescr const& type);
       
       void emergencyCleanup();
     };

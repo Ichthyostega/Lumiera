@@ -126,8 +126,8 @@ namespace test  {
           // will be preconfigured, depending on the usage context
           BufferProvider& provider = DiagnosticBufferProvider::build();
           
-          BufferDescriptor desc1 = provider.getDescriptor<TestFrame>();   // note: implies also sizeof(TestFrame)
-          BufferDescriptor desc2 = provider.getDescriptorFor(TEST_SIZE);
+          BuffDescr desc1 = provider.getDescriptor<TestFrame>();   // note: implies also sizeof(TestFrame)
+          BuffDescr desc2 = provider.getDescriptorFor(TEST_SIZE);
           CHECK (desc1.verifyValidity());
           CHECK (desc2.verifyValidity());
           
@@ -158,9 +158,9 @@ namespace test  {
       verifyObjectAttachment()
         {
           BufferProvider& provider = DiagnosticBufferProvider::build();
-          BufferDescriptor type_A = provider.getDescriptorFor(sizeof(TestFrame));
-          BufferDescriptor type_B = provider.getDescriptorFor(sizeof(int));
-          BufferDescriptor type_C = provider.getDescriptor<int>();
+          BuffDescr type_A = provider.getDescriptorFor(sizeof(TestFrame));
+          BuffDescr type_B = provider.getDescriptorFor(sizeof(int));
+          BuffDescr type_C = provider.getDescriptor<int>();
           
           BuffHandle handle_A = provider.lockBuffer(type_A);
           BuffHandle handle_B = provider.lockBuffer(type_B);
@@ -195,7 +195,7 @@ namespace test  {
       verifyObjectAttachmentFailure()
         {
           BufferProvider& provider = DiagnosticBufferProvider::build();
-          BufferDescriptor type_D = provider.getDescriptorFor(sizeof(Dummy));
+          BuffDescr type_D = provider.getDescriptorFor(sizeof(Dummy));
           
           Dummy::checksum() = 0;
           BuffHandle handle_D = provider.lockBuffer(type_D);

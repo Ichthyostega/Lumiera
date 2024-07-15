@@ -80,7 +80,7 @@ namespace engine {
       class Builder
         {
         public:
-          Builder& announce (uint count, BufferDescriptor const& type);
+          Builder& announce (uint count, BuffDescr const& type);
           BuffTable& build();
         };
       
@@ -110,7 +110,7 @@ namespace engine {
   
   
   inline BuffTable::Builder&
-  BuffTable::Builder::announce (uint count, BufferDescriptor const& type)
+  BuffTable::Builder::announce (uint count, BuffDescr const& type)
   {
     UNIMPLEMENTED ("accept announcement of additional buffer table entries required");
   }

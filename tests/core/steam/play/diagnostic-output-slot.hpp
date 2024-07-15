@@ -64,7 +64,7 @@ namespace play {
   using lib::time::FrameRate;
   using steam::asset::meta::PGrid;
   using steam::asset::meta::TimeGrid;
-  using steam::engine::BufferDescriptor;
+  using steam::engine::BuffDescr;
   using steam::engine::test::TestFrame;
   using steam::engine::TrackingHeapBlockProvider;
   namespace diagn = steam::engine::diagn;
@@ -104,7 +104,7 @@ namespace play {
       
       
       TrackingHeapBlockProvider buffProvider_;
-      BufferDescriptor bufferType_;
+      BuffDescr bufferType_;
       
       FrameTrackingInfo frameTrackingIndex_;
       PGrid frameGrid_;

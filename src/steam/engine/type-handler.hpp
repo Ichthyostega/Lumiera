@@ -30,7 +30,7 @@
  ** Within the Lumiera Engine, the BufferProvider default implementation utilises instances
  ** of TypeHandler to _describe specific buffer types_ capable of managing an attached object,
  ** or requiring some other kind of special treatment of the memory area used for the buffer.
- ** This BufferDescriptor is embodied into the BufferMetadata::Key and used later on to invoke
+ ** This BuffDescr is embodied into the BufferMetadata::Key and used later on to invoke
  ** the contained ctor / dtor functors, passing a concrete buffer (memory area).
  ** 
  ** @see buffer-metadata.hpp

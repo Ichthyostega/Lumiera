@@ -103,7 +103,7 @@ namespace engine {
   inline void
   BuffHandle::takeOwnershipFor()
   {
-    BufferDescriptor howto_attach_object_automatically
+    BuffDescr howto_attach_object_automatically
       = descriptor_.provider_->getDescriptor<BU>();
     takeOwnershipFor (howto_attach_object_automatically); // EX_STRONG
   }

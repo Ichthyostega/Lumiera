@@ -40,10 +40,10 @@
  ** just accesses yet another buffer to place the results of calculations.
  ** 
  ** These additional distinctions and properties are associated with the help of the
- ** BufferDescriptor, embedded into each BuffHandle. While the engine just uses these
- ** handles in the way of a pointer, the buffer descriptor acts as an additional tag
- ** attached to the buffer access, allowing to re-access a context within the
- ** buffer provider implementation.
+ ** [Buffer Descriptor](\ref BuffDescr), embedded into each BuffHandle. While the engine
+ ** mostly uses these handles in the way of a pointer, the buffer descriptor acts as a
+ ** configuration tag attached to the buffer access, allowing to re-access a context
+ ** within the buffer provider implementation.
  ** 
  ** @see buffer-provider.hpp
  ** @see BufferMetadata_test
@@ -140,7 +140,7 @@ namespace engine {
     /**
      * Description of a Buffer-"type".
      * Key elements will be used to generate hash IDs,
-     * to be embedded into a BufferDescriptor.
+     * to be embedded into a [Buffer Descriptor](\ref BuffDescr).
      * Keys are chained hierarchically.
      */
     class Key

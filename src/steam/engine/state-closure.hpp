@@ -64,7 +64,7 @@ namespace engine {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : to be Reworked for »Playback Vertical Slice«
     public:
       /** allocate a new writable buffer with type and size according to
-       *  the BufferDescriptor. The actual provider of this buffer depends
+       *  the BuffDescr. The actual provider of this buffer depends
        *  on the StateClosure implementation; it could be a temporary, located in
        *  the cache, used for feeding calculated frames over a network, etc.
        *  @return a BuffHandle encapsulating the information necessary to get

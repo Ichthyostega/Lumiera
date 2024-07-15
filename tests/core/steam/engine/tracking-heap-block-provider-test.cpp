@@ -113,7 +113,7 @@ namespace test  {
         {
           TrackingHeapBlockProvider provider;
           
-          BufferDescriptor buffType = provider.getDescriptorFor(TEST_ELM_SIZE);
+          BuffDescr buffType = provider.getDescriptorFor(TEST_ELM_SIZE);
           uint numElms = provider.announce(MAX_ELMS, buffType);
           CHECK (0 < numElms);
           CHECK (numElms <= MAX_ELMS);
@@ -138,7 +138,7 @@ namespace test  {
         {
           TrackingHeapBlockProvider provider;
           
-          BufferDescriptor buffType = provider.getDescriptorFor(TEST_ELM_SIZE);
+          BuffDescr buffType = provider.getDescriptorFor(TEST_ELM_SIZE);
           
           BuffHandle bu1 = provider.lockBuffer (buffType);
           BuffHandle bu2 = provider.lockBuffer (buffType);

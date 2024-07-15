@@ -70,6 +70,8 @@
 //#include "steam/engine/exit-node.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/linked-elements.hpp"
+#include "lib/several.hpp"
+#include "lib/several-builder.hpp"/////////////////TODO extract with a WeavingPattern builder
 //#include "lib/util-foreach.hpp"
 //#include "lib/iter-adapter.hpp"
 #include "lib/meta/function.hpp"
@@ -85,6 +87,7 @@ namespace steam {
 namespace engine {
   
   using std::forward;
+  using lib::Several;
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   /**
@@ -394,7 +397,7 @@ namespace engine {
    */
   template<uint N, class FUN>
   struct Conf_DirectFunctionInvocation
-      //////////////////////////////OOO non-copyable? move-only??
+    : util::MoveOnly
     {
       using Manifold = FeedManifold<N>;
       using Feed = SimpleFunctionInvocationAdapter<Manifold, FUN>;
@@ -413,12 +416,8 @@ namespace engine {
       uint fanIn{0};
       uint fanOut{0};
       
-      template<class X>
-      using Storage = lib::UninitialisedStorage<X,CONF::MAX_SIZ>;
-      
-      
-      Storage<PortRef>          leadPort;
-      Storage<BufferDescriptor> outDescr;
+      Several<PortRef>   leadPort;
+      Several<BuffDescr> outDescr;
       
       //////////////////////////////////////////OOO builder must set-up those descriptors
       
@@ -433,7 +432,7 @@ namespace engine {
         {
           for (uint i=0; i<fanIn; ++i)
             {
-              BuffHandle inputData = leadPort[i].weave (turnoutSys);
+              BuffHandle inputData = leadPort[i].get().weave (turnoutSys);
               feed.inBuff.createAt(i, move(inputData));
             }
         }
@@ -511,7 +510,7 @@ namespace engine {
   
   template<uint N, class FUN>
   struct SimpleWeavingBuilder
-    : Turnout<SimpleDirectInvoke<N,FUN>>
+    : Turnout<SimpleDirectInvoke<N,FUN>> /////////////////////////////////OOO can no longer directly inherit from the product(Turnout), due to SeveralBuilder!!!
     {
       SimpleWeavingBuilder
       attachToLeadPort(ProcNode& lead, uint portNr)
@@ -526,6 +525,7 @@ namespace engine {
       Turnout<SimpleDirectInvoke<N,FUN>>
       build()
         {
+          ///////////////////////////////OOO need a way to prepare SeveralBuilder-instances for leadPort and outDescr --> see NodeBuilder
           return move(*this);
         }
     };

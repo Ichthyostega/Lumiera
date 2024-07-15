@@ -63,23 +63,23 @@ namespace engine {
    *          currently locked and usable by client code
    */
   bool
-  BufferProvider::verifyValidity (BufferDescriptor const& bufferID)  const
+  BufferProvider::verifyValidity (BuffDescr const& bufferID)  const
   {
     return meta_->isLocked (bufferID);
   }
   
   
-  BufferDescriptor
+  BuffDescr
   BufferProvider::getDescriptorFor (size_t storageSize)
   {
-    return BufferDescriptor (*this, meta_->key (storageSize));
+    return BuffDescr (*this, meta_->key (storageSize));
   }
   
   
-  BufferDescriptor
+  BuffDescr
   BufferProvider::getDescriptorFor(size_t storageSize, TypeHandler specialTreatment)
   {
-    return BufferDescriptor (*this, meta_->key (storageSize, specialTreatment));
+    return BuffDescr (*this, meta_->key (storageSize, specialTreatment));
   }
   
   
@@ -103,7 +103,7 @@ namespace engine {
     metadata::Key& typeKey = meta_->get (typeID);
     metadata::Entry& entry = meta_->markLocked(typeKey, storage, implID);
     
-    return BuffHandle (BufferDescriptor(*this, entry), storage);
+    return BuffHandle (BuffDescr(*this, entry), storage);
   }
   
   
@@ -113,14 +113,14 @@ namespace engine {
    *  client may reasonably assume to get the actual number of buffers, as
    *  indicated by the return value. A provider may be able to handle
    *  various kinds of buffers (e.g. of differing size), which are
-   *  distinguished by the \em type embodied into the BufferDescriptor.
+   *  distinguished by _the type embodied into_ the BuffDescr.
    * @return maximum number of simultaneously usable buffers of this type,
    *         to be retrieved later through calls to #lockBuffer.
    * @throw error::State when no buffer of this kind can be provided
    * @note the returned count may differ from the requested count.
    */
   uint
-  BufferProvider::announce (uint count, BufferDescriptor const& type)
+  BufferProvider::announce (uint count, BuffDescr const& type)
   {
     uint actually_possible = prepareBuffers (count, type);
     if (!actually_possible)
@@ -143,7 +143,7 @@ namespace engine {
    *       to establish a reliably available baseline.
    */
   BuffHandle
-  BufferProvider::lockBuffer (BufferDescriptor const& type)
+  BufferProvider::lockBuffer (BuffDescr const& type)
   {
     REQUIRE (was_created_by_this_provider (type));
     
@@ -203,7 +203,7 @@ namespace engine {
    *  @note EX_STRONG
    */
   void
-  BufferProvider::attachTypeHandler (BuffHandle const& target, BufferDescriptor const& reference)
+  BufferProvider::attachTypeHandler (BuffHandle const& target, BuffDescr const& reference)
   {
     metadata::Entry& metaEntry = meta_->get (target.entryID());
     metadata::Entry& refEntry = meta_->get (reference);
@@ -237,7 +237,7 @@ namespace engine {
   
   
   bool
-  BufferProvider::was_created_by_this_provider (BufferDescriptor const& descr)  const
+  BufferProvider::was_created_by_this_provider (BuffDescr const& descr)  const
   {
     return isSameObject (*this, *descr.provider_);
   }
@@ -246,10 +246,10 @@ namespace engine {
   
   
   
-  /* === BufferDescriptor and BuffHandle === */
+  /* === BuffDescr and BuffHandle === */
   
   bool
-  BufferDescriptor::verifyValidity()  const
+  BuffDescr::verifyValidity()  const
   {
     ENSURE (provider_);
     return provider_->verifyValidity(*this);
@@ -257,7 +257,7 @@ namespace engine {
   
   
   size_t
-  BufferDescriptor::determineBufferSize() const
+  BuffDescr::determineBufferSize() const
   {
     ENSURE (provider_);
     return provider_->getBufferSize (*this);
@@ -265,7 +265,7 @@ namespace engine {
   
   
   uint
-  BufferDescriptor::announce (uint count)
+  BuffDescr::announce (uint count)
   {
     ENSURE (provider_);
     return provider_->announce(count, *this);
@@ -273,7 +273,7 @@ namespace engine {
   
   
   BuffHandle
-  BufferDescriptor::lockBuffer()
+  BuffDescr::lockBuffer()
   {
     ENSURE (provider_);
     return provider_->lockBuffer(*this);
@@ -313,7 +313,7 @@ namespace engine {
    *  This causes the dtor function to be invoked when releasing this buffer.
    *  The assumption is that client code will placement-construct an object
    *  into this buffer right away, and thus we're taking ownership on that object.
-   * @param type a reference BufferDescriptor defining an embedded TypeHandler to use
+   * @param type a reference BuffDescr defining an embedded TypeHandler to use
    *        A copy of this TypeHandler will be stored into the local metadata for
    *        this buffer only, not altering the basic buffer type in any way
    * @throw lifecycle error when attempting to treat an buffer not in locked state
@@ -322,7 +322,7 @@ namespace engine {
    * @note EX_STRONG
    */
   void
-  BuffHandle::takeOwnershipFor(BufferDescriptor const& type)
+  BuffHandle::takeOwnershipFor(BuffDescr const& type)
   {
     if (!this->isValid())
       throw error::Logic ("attaching an object requires an buffer in locked state", LERR_(LIFECYCLE));

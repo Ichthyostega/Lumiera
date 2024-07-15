@@ -49,9 +49,9 @@ namespace engine {
   
   using lib::HashVal;
   
+  class BuffDescr;
   class BuffHandle;
   class BufferProvider;
-  class BufferDescriptor;
   
   
   

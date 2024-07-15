@@ -101,9 +101,9 @@ namespace engine {
       virtual ~BufferProvider();  ///< this is an ABC
       
       
-      uint announce (uint count, BufferDescriptor const&);
+      uint announce (uint count, BuffDescr const&);
       
-      BuffHandle lockBuffer (BufferDescriptor const&);
+      BuffHandle lockBuffer (BuffDescr  const&);
       void       emitBuffer (BuffHandle const&);
       void    releaseBuffer (BuffHandle const&);
       
@@ -111,29 +111,29 @@ namespace engine {
       BuffHandle lockBufferFor (ARGS ...args);
       
       /** allow for attaching and owing an object within an already created buffer */
-      void attachTypeHandler (BuffHandle const& target, BufferDescriptor const& reference);
+      void attachTypeHandler (BuffHandle const& target, BuffDescr const& reference);
       
       void emergencyCleanup (BuffHandle const& target, bool invokeDtor =false);
       
       
       /** describe the kind of buffer managed by this provider */
-      BufferDescriptor getDescriptorFor(size_t storageSize=0);
-      BufferDescriptor getDescriptorFor(size_t storageSize, TypeHandler specialTreatment);
+      BuffDescr getDescriptorFor(size_t storageSize=0);
+      BuffDescr getDescriptorFor(size_t storageSize, TypeHandler specialTreatment);
       
       template<typename BU, typename...ARGS>
-      BufferDescriptor getDescriptor (ARGS ...args);
+      BuffDescr getDescriptor (ARGS ...args);
       
       
       
       /* === API for BuffHandle internal access === */
       
-      bool verifyValidity (BufferDescriptor const&)  const;
-      size_t getBufferSize (HashVal typeID)          const;
+      bool verifyValidity (BuffDescr const&)  const;
+      size_t getBufferSize (HashVal typeID)   const;
       
     protected:
       BuffHandle buildHandle (HashVal typeID, void* storage, LocalKey const&);
       
-      bool was_created_by_this_provider (BufferDescriptor const&)  const;
+      bool was_created_by_this_provider (BuffDescr const&)  const;
     };
   
   
@@ -152,7 +152,7 @@ namespace engine {
   BuffHandle
   BufferProvider::lockBufferFor (ARGS ...args)
   {
-    BufferDescriptor attach_object_automatically = getDescriptor<BU> (forward<ARGS> (args)...);
+    BuffDescr attach_object_automatically = getDescriptor<BU> (forward<ARGS> (args)...);
     return lockBuffer (attach_object_automatically);
   }
   
@@ -162,7 +162,7 @@ namespace engine {
    *  and destroying that embedded object when releasing the buffer.
    */
   template<typename BU, typename...ARGS>
-  BufferDescriptor
+  BuffDescr
   BufferProvider::getDescriptor (ARGS ...args)
   {
     return getDescriptorFor (sizeof(BU), TypeHandler::create<BU> (forward<ARGS> (args)...));

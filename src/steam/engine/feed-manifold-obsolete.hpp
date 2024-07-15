@@ -78,7 +78,7 @@ namespace engine {
       PBu inBuff;
     };
   
-  class BufferDescriptor;
+  class BuffDescr;
   
     /** Obsolete, to be rewritten  /////TICKET #826 */
   class BuffTableStorage
@@ -92,7 +92,7 @@ namespace engine {
         : BuffHandle
         {
           BuffHaXXXX() : BuffHandle(just_satisfy_the_compiler()) { /* wont work ever */ }
-          static BufferDescriptor const& 
+          static BuffDescr const& 
           just_satisfy_the_compiler() { }
         };
         
