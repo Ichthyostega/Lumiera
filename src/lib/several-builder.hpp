@@ -124,8 +124,7 @@ namespace lib {
   using std::move;
   using std::byte;
   
-  namespace {// Allocation management policies
-    
+  namespace {
     /** number of storage slots to open initially;
      *  starting with an over-allocation similar to `std::vector`
      */
@@ -173,7 +172,10 @@ namespace lib {
       {
         return positiveDiff (alignment, alignof(void*));
       }
-    
+  }//(End)helpers
+  
+  
+  namespace allo {// Allocation management policies
     
     /**
      * Generic factory to manage objects within an ArrayBucket<I> storage,
@@ -355,7 +357,7 @@ namespace lib {
     template<class I, class E>
     using HeapOwn = AllocationPolicy<I, E, std::allocator>;
     
-  }//(End)implementation details
+  }//(End) namespace several
   
   
   
@@ -381,28 +383,29 @@ namespace lib {
    *          patterns, consistency checks may throw at runtime,
    *          when attempting to add an unsuitable element.
    */
-  template<class I                  ///< Interface or base type visible on resulting Several<I>
-          ,class E   =I             ///< a subclass element element type (relevant when not trivially movable and destructible)
-          ,class POL =HeapOwn<I,E>  ///< Allocator policy
+  template<class I         ///< Interface or base type visible on resulting Several<I>
+          ,class E   =I    ///< a subclass element element type (relevant when not trivially movable and destructible)
+          ,template<class,class> class POL =allo::HeapOwn  ///< Allocator policy template (parametrised `POL<I,E>`)
           >
   class SeveralBuilder
     : private Several<I>
     , util::MoveOnly
-    , POL
+    , POL<I,E>
     {
       using Coll = Several<I>;
+      using Policy = POL<I,E>;
       
-      using Bucket = ArrayBucket<I>;
+      using Bucket = several::ArrayBucket<I>;
       using Deleter = typename Bucket::Deleter;
       
     public:
       SeveralBuilder() = default;
       
       /** start Several build using a custom allocator */
-      template<typename...ARGS,                  typename = meta::enable_if<std::is_constructible<POL,ARGS...>>>
+      template<typename...ARGS,                  typename = meta::enable_if<std::is_constructible<Policy,ARGS...>>>
       SeveralBuilder (ARGS&& ...alloInit)
         : Several<I>{}
-        , POL{forward<ARGS> (alloInit)...}
+        , Policy{forward<ARGS> (alloInit)...}
         { }
       
       
@@ -549,7 +552,7 @@ namespace lib {
           adjustStorage (newCnt, max (elmSiz, Coll::spread()));
           ENSURE (Coll::data_);
           ensureDeleter<TY>();
-          POL::template createAt<TY> (Coll::data_, newPos, forward<ARGS> (args)...);
+          Policy::template createAt<TY> (Coll::data_, newPos, forward<ARGS> (args)...);
           Coll::data_->cnt = newPos+1;
         }
       
@@ -583,7 +586,7 @@ namespace lib {
         {
           if (not (Coll::empty()
                    or Coll::hasReserve (requiredSiz, newElms)
-                   or POL::canExpand (Coll::data_, requiredSiz*(Coll::size() + newElms))
+                   or Policy::canExpand (Coll::data_, requiredSiz*(Coll::size() + newElms))
                    or canDynGrow()))
             throw err::Invalid{_Fmt{"Several-container is unable to accommodate further element of type %s; "
                                     "storage reserve (%d bytes ≙ %d elms) exhausted and unable to move "
@@ -607,7 +610,7 @@ namespace lib {
               size_t overhead = sizeof(Bucket) + alignRes(alignof(E));
               size_t safetyLim = LUMIERA_MAX_ORDINAL_NUMBER * Coll::spread();
               size_t expandAlloc = min (positiveDiff (min (safetyLim
-                                                          ,POL::ALLOC_LIMIT)
+                                                          ,Policy::ALLOC_LIMIT)
                                                      ,overhead)
                                        ,max (2*buffSiz, cnt*spread));
               // round down to an even number of elements
@@ -618,7 +621,7 @@ namespace lib {
                                       "exceeds safety limit of %d bytes"} % safetyLim
                                 ,LERR_(SAFETY_LIMIT)};
               // allocate new storage block...
-              Coll::data_ = POL::realloc (Coll::data_, newCnt,spread);
+              Coll::data_ = Policy::realloc (Coll::data_, newCnt,spread);
             }
           ENSURE (Coll::data_);
           if (canWildMove() and spread != Coll::spread())
@@ -629,11 +632,11 @@ namespace lib {
       fitStorage()
         {
           REQUIRE (not Coll::empty());
-          if (not (POL::canExpand (Coll::data_, Coll::size())
+          if (not (Policy::canExpand (Coll::data_, Coll::size())
                    or canDynGrow()))
             throw err::Invalid{"Unable to shrink storage for Several-collection, "
                                "since at least one element can not be moved."};
-          Coll::data_ = POL::realloc (Coll::data_, Coll::size(), Coll::spread());
+          Coll::data_ = Policy::realloc (Coll::data_, Coll::size(), Coll::spread());
         }
       
       /** move existing data to accommodate spread */
@@ -709,7 +712,7 @@ namespace lib {
       Deleter
       selectDestructor()
         {
-          typename POL::Fac& factory(*this);
+          typename Policy::Fac& factory(*this);
           
           if (is_Subclass<TY,I>() and has_virtual_destructor_v<I>)
             {
@@ -831,7 +834,7 @@ namespace lib {
    * @see lib::AllocationCluster (which provides a custom adaptation)
    * @see SeveralBuilder_test::check_CustomAllocator()
    */
-  template<class I, class E, class POL>
+  template<class I, class E, template<class,class> class POL>
   template<template<typename> class ALO, typename...ARGS>
   inline auto
   SeveralBuilder<I,E,POL>::withAllocator (ARGS&& ...args)
@@ -841,8 +844,7 @@ namespace lib {
                        "prior to adding any elements to the container"};
     
     using Setup = allo::SetupSeveral<ALO,ARGS...>;
-    using PolicyForAllo = typename Setup::template Policy<I,E>;
-    using BuilderWithAllo = SeveralBuilder<I,E,PolicyForAllo>;
+    using BuilderWithAllo = SeveralBuilder<I,E, Setup::template Policy>;
     
     return BuilderWithAllo(forward<ARGS> (args)...);
   }

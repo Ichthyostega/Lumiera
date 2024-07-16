@@ -118,7 +118,7 @@ namespace engine {
         using PolicyForAllo = typename Setup::template Policy<I,E>;
         
         template<class I, class E=I>
-        using BuilderType = lib::SeveralBuilder<I,E, PolicyForAllo<I,E>>;
+        using BuilderType = lib::SeveralBuilder<I,E, PolicyForAllo>;
       };
     
     struct UseHeapAlloc

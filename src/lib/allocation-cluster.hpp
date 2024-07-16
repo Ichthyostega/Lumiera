@@ -317,13 +317,11 @@ namespace lib {
   
   //-----Policies-to-use-AllocationCluster------------------------
   
-  namespace {
+  namespace allo { // Setup for custom allocator policies
+    
     // Forward declaration: configuration policy for lib::SeveralBuilder
     template<class I, class E, template<typename> class ALO>
     struct AllocationPolicy;
-  }
-  
-  namespace allo { // Setup for custom allocator policies
     
     template<template<typename> class ALO, typename...ARGS>
     struct SetupSeveral;
