@@ -112,27 +112,17 @@ namespace engine {
     template<template<typename> class ALO =std::void_t, typename...INIT>
     struct AlloPolicySelector
       {
-        template<class I, class E=I>
-        static auto
-        setupBuilder (INIT&& ...alloInit)
-        {
-          return lib::makeSeveral<I,E>()
-                     .template withAllocator<ALO> (forward<INIT> (alloInit)...);
-        }
+        using Setup = lib::allo::SetupSeveral<ALO,INIT...>;
+        
+        template<class I, class E>
+        using PolicyForAllo = typename Setup::template Policy<I,E>;
         
         template<class I, class E=I>
-        using BuilderType = decltype(setupBuilder<I,E> (std::declval<INIT>()...));
+        using BuilderType = lib::SeveralBuilder<I,E, PolicyForAllo<I,E>>;
       };
     
     struct UseHeapAlloc
       {
-        template<class I, class E=I>
-        static auto
-        setupBuilder()
-        {
-          return lib::makeSeveral<I,E>();
-        }
-        
         template<class I, class E=I>
         using BuilderType = lib::SeveralBuilder<I,E>;
       };
