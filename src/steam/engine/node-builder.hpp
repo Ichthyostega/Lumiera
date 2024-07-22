@@ -110,21 +110,12 @@ namespace engine {
   namespace { // policy configuration for allocator
     
     template<template<typename> class ALO =std::void_t, typename...INIT>
-    struct AlloPolicySelector
-      {
-        using Setup = lib::allo::SetupSeveral<ALO,INIT...>;
-        
-        template<class I, class E>
-        using PolicyForAllo = typename Setup::template Policy<I,E>;
-        
-        template<class I, class E=I>
-        using BuilderType = lib::SeveralBuilder<I,E, PolicyForAllo>;
-      };
+    using AlloPolicySelector = lib::allo::SetupSeveral<ALO,INIT...>;
     
     struct UseHeapAlloc
       {
         template<class I, class E=I>
-        using BuilderType = lib::SeveralBuilder<I,E>;
+        using Policy = lib::allo::HeapOwn<I,E>;
       };
     //
   }//(End) internal policy configuration
@@ -146,15 +137,7 @@ namespace engine {
    * \endcode
    */
   template<class POL, class I, class E=I>
-  class DataBuilder
-    : public POL::template BuilderType<I,E>
-    {
-    public:
-      template<typename...INIT>
-      DataBuilder (INIT&& ...alloInit)
-        : POL::template BuilderType<I,E>{forward<INIT> (alloInit)...}
-        { }
-    };
+  using DataBuilder = lib::SeveralBuilder<I,E, POL::template Policy>;
   
   
   template<class POL>
