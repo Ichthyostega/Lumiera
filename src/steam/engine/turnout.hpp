@@ -71,7 +71,6 @@
 //#include "lib/time/timevalue.hpp"
 //#include "lib/linked-elements.hpp"
 #include "lib/several.hpp"
-#include "lib/several-builder.hpp"/////////////////TODO extract with a WeavingPattern builder
 //#include "lib/util-foreach.hpp"
 //#include "lib/iter-adapter.hpp"
 #include "lib/meta/function.hpp"
@@ -413,13 +412,16 @@ namespace engine {
       
       static_assert (_verify_usable_as_InvocationAdapter<Feed>());
       
-      uint fanIn{0};
-      uint fanOut{0};
-      
       Several<PortRef>   leadPort;
-      Several<BuffDescr> outDescr;
+      Several<BuffDescr> outTypes;
       
       //////////////////////////////////////////OOO builder must set-up those descriptors
+      SimpleWeavingPattern(Several<PortRef>&& pr, Several<BuffDescr> dr)
+        : CONF{}
+        , leadPort{move(pr)}
+        , outTypes{move(dr)}
+        { }
+      
       
       Feed
       mount()
@@ -430,7 +432,7 @@ namespace engine {
       void
       pull (Feed& feed, TurnoutSystem& turnoutSys)
         {
-          for (uint i=0; i<fanIn; ++i)
+          for (uint i=0; i<leadPort.size(); ++i)
             {
               BuffHandle inputData = leadPort[i].get().weave (turnoutSys);
               feed.inBuff.createAt(i, move(inputData));
@@ -440,12 +442,12 @@ namespace engine {
       void
       shed (Feed& feed)
         {
-          for (uint i=0; i<fanOut; ++i)
+          for (uint i=0; i<outTypes.size(); ++i)
             {
-              BuffHandle resultData = outDescr[i].lockBuffer();
+              BuffHandle resultData = outTypes[i].lockBuffer();
               feed.outBuff.createAt(i, move(resultData));
             }
-          feed.connect (fanIn,fanOut);
+          feed.connect (leadPort.size(),outTypes.size());
         }
       
       void
@@ -457,11 +459,11 @@ namespace engine {
       void
       fix (Feed& feed)
         {
-          for (uint i=0; i<fanIn; ++i)
+          for (uint i=0; i<leadPort.size(); ++i)
             {
               feed.inBuff[i].release();
             }
-          for (uint i=0; i<fanOut; ++i)
+          for (uint i=0; i<outTypes.size(); ++i)
             {
               feed.outBuff[i].emit();
               if (i != feed.resultSlot)
@@ -485,6 +487,8 @@ namespace engine {
       //////////////////////////////OOO non-copyable? move-only??
     {
       using Feed = typename PAT::Feed;
+      using PAT::PAT;
+      
     public:
       
       /**
@@ -504,32 +508,6 @@ namespace engine {
         }
     };
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Prototyping: how to assemble a Turnout
-  template<uint N, class FUN>
-  using SimpleDirectInvoke = SimpleWeavingPattern<Conf_DirectFunctionInvocation<N,FUN>>;
-  
-  template<uint N, class FUN>
-  struct SimpleWeavingBuilder
-    : Turnout<SimpleDirectInvoke<N,FUN>> /////////////////////////////////OOO can no longer directly inherit from the product(Turnout), due to SeveralBuilder!!!
-    {
-      SimpleWeavingBuilder
-      attachToLeadPort(ProcNode& lead, uint portNr)
-        {
-          ASSERT (this->fanIn < N);
-          PortRef leadPort; /////////////////////////////////////OOO TODO need Accessor on ProcNode!!!!! 
-          this->leadPort.createAt(this->fanIn, leadPort)
-          ++(this->fanIn);
-          return move(*this);
-        }
-      
-      Turnout<SimpleDirectInvoke<N,FUN>>
-      build()
-        {
-          ///////////////////////////////OOO need a way to prepare SeveralBuilder-instances for leadPort and outDescr --> see NodeBuilder
-          return move(*this);
-        }
-    };
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : (End)Prototyping: how to assemble a Turnout
   
   
   

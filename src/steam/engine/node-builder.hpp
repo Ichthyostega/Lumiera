@@ -91,6 +91,7 @@
 #define ENGINE_NODE_BUILDER_H
 
 
+#include "steam/engine/weaving-pattern-builder.hpp"
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/turnout.hpp"
 #include "lib/several-builder.hpp"
@@ -107,10 +108,7 @@ namespace engine {
   using std::forward;
   
   
-  namespace { // policy configuration for allocator
-    
-    template<template<typename> class ALO =std::void_t, typename...INIT>
-    using AlloPolicySelector = lib::allo::SetupSeveral<ALO,INIT...>;
+  namespace { // default policy configuration to use heap allocator
     
     struct UseHeapAlloc
       {
@@ -118,23 +116,13 @@ namespace engine {
         using Policy = lib::allo::HeapOwn<I,E>;
       };
     //
-  }//(End) internal policy configuration
+  }//(End) policy
   
   
   /**
-   * Convenience builder to collect working data.
+   * A builder to collect working data.
    * Implemented through a suitable configuration of lib::SeveralBuilder,
-   * such as to embed and connect to the configured custom allocator, which
-   * serves the goal to package all generated node configuration data together
-   * into a compact memory block, which can be discarded in bulk, once a given
-   * segment of the low-level-Model has been superseded.
-   * @tparam POL policy configuration pick the desired allocator
-   * @tparam I interface type for lib::Several<I>
-   * @remark in essence, this wrapper class creates the following setup
-   * \code
-   *   makeSeveral<I>()
-   *     .withAllocator<ALO> (args...);
-   * \endcode
+   * with a policy configuration parameter to define the allocator to use.
    */
   template<class POL, class I, class E=I>
   using DataBuilder = lib::SeveralBuilder<I,E, POL::template Policy>;
@@ -193,7 +181,7 @@ namespace engine {
       auto
       withAllocator (INIT&& ...alloInit)
         {
-          using AllocatorPolicy = AlloPolicySelector<ALO,INIT...>;
+          using AllocatorPolicy = lib::allo::SetupSeveral<ALO,INIT...>;
           return NodeBuilder<AllocatorPolicy>{forward<INIT>(alloInit)...};
         }
       
