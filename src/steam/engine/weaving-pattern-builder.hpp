@@ -41,6 +41,7 @@
 //#include "vault/gear/job.h"
 #include "lib/several-builder.hpp"
 #include "steam/engine/turnout.hpp"
+#include "steam/engine/buffer-provider.hpp"
 //#include "lib/util-foreach.hpp"
 //#include "lib/iter-adapter.hpp"
 //#include "lib/meta/function.hpp"
@@ -48,7 +49,9 @@
 //#include "lib/util.hpp"
 
 //#include <utility>
+#include <functional>
 //#include <array>
+#include <vector>
 
 
 namespace steam {
@@ -72,6 +75,20 @@ namespace engine {
       DataBuilder<POL, PortRef>   leadPort;
       DataBuilder<POL, BuffDescr> outTypes;
       
+      using TypeMarker = std::function<BuffDescr(BufferProvider&)>;
+      using ProviderRef = std::reference_wrapper<BufferProvider>;
+      
+      std::vector<TypeMarker> buffTypes;
+      std::vector<ProviderRef> providers;
+      
+      struct ServiceCtx
+        {
+          ProviderRef mem;
+          ProviderRef cache;
+          ProviderRef output;
+        };
+      ServiceCtx ctx; //////////////////////////////////////////OOO need to wire that top-down through all builders!
+      
       SimpleWeavingBuilder
       attachToLeadPort(ProcNode& lead, uint portNr)
         {
@@ -81,21 +98,49 @@ namespace engine {
           return move(*this);
         }
       
+      template<class BU>
       SimpleWeavingBuilder
-      appendBufferTypes(size_t cnt, BuffDescr const& descriptor)
+      appendBufferTypes(size_t cnt)
         {
-          outTypes.fillElm (cnt, descriptor); 
-          ENSURE (outTypes.size() < N);
+          while (cnt--)
+            buffTypes.emplace_back([](BufferProvider& provider)
+                                    { return provider.getDescriptor<BU>(); });
+          ENSURE (buffTypes.size() < N);
           return move(*this);
         }
+      
+      SimpleWeavingBuilder
+      selectOutputSlot(size_t i)
+        {
+          maybeFillDefaultProviders (i+1);
+          ENSURE (providers.size() > i);
+          providers[i] = ctx.output;
+        }
+      
       
       auto
       build()
         {
+          maybeFillDefaultProviders (buffTypes.size());
+          uint i=0;
+          for (auto& typeCtor : buffTypes)
+            outTypes.emplace (typeCtor(providers[i]));
+          
+          ENSURE (leadPort.size() < N);
+          ENSURE (outTypes.size() < N);
+          
           using Product = Turnout<SimpleDirectInvoke<N,FUN>>;
           ///////////////////////////////OOO need a way to prepare SeveralBuilder-instances for leadPort and outDescr --> see NodeBuilder
           return Product{leadPort.build(), outTypes.build};
         }
+      
+      private:
+        void
+        maybeFillDefaultProviders (size_t maxSlots)
+          {
+            for (uint i=providers.size(); i < maxSlots; ++i)
+              providers.emplace_back (ctx.mem);
+          }
     };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : (End)Prototyping: how to assemble a Turnout
   
