@@ -73,7 +73,7 @@ namespace engine {
    * The pointer to actual buffer storage can be retrieved by
    * - optionally announcing the required buffer(s) beforehand
    * - "locking" a buffer to yield a buffer handle
-   * - dereferencing this smart-handle class
+   * - then dereferencing the obtained smart-handle
    * 
    * @warning all of BufferProvider is assumed to run within a threadsafe environment.
    * 
@@ -93,8 +93,8 @@ namespace engine {
       virtual uint prepareBuffers (uint count, HashVal typeID)    =0;
       
       virtual BuffHandle provideLockedBuffer  (HashVal typeID)    =0;
-      virtual void mark_emitted (HashVal typeID, LocalKey const&) =0;
-      virtual void detachBuffer (HashVal typeID, LocalKey const&) =0;
+      virtual void mark_emitted (HashVal typeID, LocalTag const&) =0;
+      virtual void detachBuffer (HashVal typeID, LocalTag const&) =0;
       
       
     public:
@@ -131,7 +131,7 @@ namespace engine {
       size_t getBufferSize (HashVal typeID)   const;
       
     protected:
-      BuffHandle buildHandle (HashVal typeID, void* storage, LocalKey const&);
+      BuffHandle buildHandle (HashVal typeID, void* storage, LocalTag const& =LocalTag::UNKNOWN);
       
       bool was_created_by_this_provider (BuffDescr const&)  const;
     };

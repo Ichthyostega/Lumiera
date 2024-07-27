@@ -118,6 +118,9 @@ namespace engine {
       DoInBuffer destroyAttached;
       HashVal identity;
       
+      /** Marker for the default case: raw buffer without type handling */
+      static const TypeHandler RAW;
+      
       /** build an invalid NIL TypeHandler */
       TypeHandler()
         : createAttached()

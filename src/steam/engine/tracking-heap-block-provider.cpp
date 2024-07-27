@@ -252,9 +252,9 @@ namespace engine {
   
   
   void
-  TrackingHeapBlockProvider::mark_emitted (HashVal typeID, LocalKey const& implID)
+  TrackingHeapBlockProvider::mark_emitted (HashVal typeID, LocalTag const& specifics)
   {
-    diagn::Block* block4buffer = locateBlock (typeID, implID);
+    diagn::Block* block4buffer = locateBlock (typeID, specifics);
     if (!block4buffer)
       throw error::Logic ("Attempt to emit a buffer not known to this BufferProvider"
                          , LUMIERA_ERROR_BUFFER_MANAGEMENT);
@@ -265,9 +265,9 @@ namespace engine {
   
   /** mark a buffer as officially discarded */
   void
-  TrackingHeapBlockProvider::detachBuffer (HashVal typeID, LocalKey const& implID)
+  TrackingHeapBlockProvider::detachBuffer (HashVal typeID, LocalTag const& specifics)
   {
-    diagn::Block* block4buffer = locateBlock (typeID, implID);
+    diagn::Block* block4buffer = locateBlock (typeID, specifics);
     REQUIRE (block4buffer, "releasing a buffer not allocated through this provider");
     block4buffer->markReleased();
   }

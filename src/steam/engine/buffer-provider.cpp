@@ -36,6 +36,10 @@ using util::isSameObject;
 namespace steam {
 namespace engine {
   
+  // storage for the default-marker constants
+  const TypeHandler TypeHandler::RAW{};
+  const LocalTag LocalTag::UNKNOWN{};
+  
   
   namespace { // impl. details and definitions
     
@@ -98,10 +102,10 @@ namespace engine {
    * actual buffer, which is locked for exclusive use by one client.
    */ 
   BuffHandle
-  BufferProvider::buildHandle (HashVal typeID, void* storage, LocalKey const& implID)
+  BufferProvider::buildHandle (HashVal typeID, void* storage, LocalTag const& localTag)
   {
     metadata::Key& typeKey = meta_->get (typeID);
-    metadata::Entry& entry = meta_->markLocked(typeKey, storage, implID);
+    metadata::Entry& entry = meta_->markLocked(typeKey, storage, localTag);
     
     return BuffHandle (BuffDescr(*this, entry), storage);
   }
@@ -167,7 +171,7 @@ namespace engine {
   BufferProvider::emitBuffer (BuffHandle const& handle)
   {
     metadata::Entry& metaEntry = meta_->get (handle.entryID());
-    mark_emitted (metaEntry.parentKey(), metaEntry.localKey());
+    mark_emitted (metaEntry.parentKey(), metaEntry.localTag());
     metaEntry.mark(EMITTED);
   }
   
@@ -185,7 +189,7 @@ namespace engine {
   try {
     metadata::Entry& metaEntry = meta_->get (handle.entryID());
     metaEntry.mark(FREE);   // might invoke embedded dtor function
-    detachBuffer (metaEntry.parentKey(), metaEntry.localKey());
+    detachBuffer (metaEntry.parentKey(), metaEntry.localTag());
     meta_->release (metaEntry);
   }
   ERROR_LOG_AND_IGNORE (engine, "releasing a buffer from BufferProvider")
@@ -229,7 +233,7 @@ namespace engine {
   try {
     metadata::Entry& metaEntry = meta_->get (target.entryID());
     metaEntry.invalidate (invokeDtor);
-    detachBuffer (metaEntry.parentKey(), metaEntry.localKey());
+    detachBuffer (metaEntry.parentKey(), metaEntry.localTag());
     meta_->release (metaEntry);
   }
   ERROR_LOG_AND_IGNORE (engine, "cleanup of buffer metadata while handling an error")

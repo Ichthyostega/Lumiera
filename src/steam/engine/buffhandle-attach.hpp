@@ -111,7 +111,7 @@ namespace engine {
   
   /** convenience shortcut: access the buffer contents casted to a specific type.
    * @warning this is a \em blind cast, there is no type safety.
-   * @note clients can utilise the metadata::LocalKey to keep track of some
+   * @note clients can utilise the metadata::LocalTag to keep track of some
    *       specific property of the buffer, like e.g. the type of object.
    */
   template<typename BU>

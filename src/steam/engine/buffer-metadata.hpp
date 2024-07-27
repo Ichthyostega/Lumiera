@@ -104,19 +104,16 @@ namespace engine {
   
   namespace { // internal constants to mark the default case
     
-    const LocalKey UNSPECIFIC;
-    const TypeHandler RAW_BUFFER;
-    
     inline bool
     nontrivial (TypeHandler const& toVerify)
     {
-      return RAW_BUFFER != toVerify;
+      return TypeHandler::RAW != toVerify;
     }
     
     inline bool
-    nontrivial (LocalKey const& toVerify)
+    nontrivial (LocalTag const& toVerify)
     {
-      return UNSPECIFIC != toVerify;
+      return LocalTag::UNKNOWN != toVerify;
     }
   }
   
@@ -151,7 +148,7 @@ namespace engine {
       protected:
         size_t storageSize_;
         TypeHandler instanceFunc_;
-        LocalKey specifics_;
+        LocalTag specifics_;
         
         
       public:
@@ -165,8 +162,8 @@ namespace engine {
           : parent_(familyID)
           , hashID_(chainedHash (familyID, storageSize))
           , storageSize_(storageSize)
-          , instanceFunc_(RAW_BUFFER)
-          , specifics_(UNSPECIFIC)
+          , instanceFunc_(TypeHandler::RAW)
+          , specifics_(LocalTag::UNKNOWN)
           { }
         
         // standard copy operations permitted
@@ -201,12 +198,12 @@ namespace engine {
          *  Using a different private ID than the parent type,
          *  all else remaining the same
          */
-        Key (Key const& parent, LocalKey anotherTypeSpecificInternalID) 
+        Key (Key const& parent, LocalTag anotherTypeSpecificInternalTag) 
           : parent_(parent.hashID_)
-          , hashID_(chainedHash (parent_, anotherTypeSpecificInternalID))
+          , hashID_(chainedHash (parent_, anotherTypeSpecificInternalTag))
           , storageSize_(parent.storageSize_)
           , instanceFunc_(parent.instanceFunc_)
-          , specifics_(anotherTypeSpecificInternalID)  // differing from parent
+          , specifics_(anotherTypeSpecificInternalTag)  // differing from parent
           { }
         
         
@@ -217,19 +214,19 @@ namespace engine {
          *         For NULL buffer a copy of the parent is returned.
          */
         static Key
-        forEntry (Key const& parent, const void* bufferAddr, LocalKey const& implID =UNSPECIFIC)
+        forEntry (Key const& parent, const void* bufferAddr, LocalTag const& localTag =LocalTag::UNKNOWN)
           {
-            Key newKey(parent);
+            Key newKey{parent};  // copy of parent as baseline
             if (bufferAddr)
               {
                 newKey.parent_ = HashVal(parent);
                 newKey.hashID_ = chainedHash(parent, bufferAddr);
-                if (nontrivial(implID))
+                if (nontrivial(localTag))
                   {
-                    REQUIRE (!newKey.specifics_.isDefined(),
-                             "Implementation defined local key should not be overridden. "
-                             "Underlying buffer type already defines a nontrivial LocalKey");
-                    newKey.specifics_ = implID;
+                    if (nontrivial(parent.specifics_))
+                      throw error::Logic{"Implementation defined local key should not be overridden. "
+                                         "Underlying buffer type already defines a nontrivial LocalTag"};
+                    newKey.specifics_ = localTag;
               }   }
             return newKey; 
           }
@@ -244,7 +241,7 @@ namespace engine {
           }
         
         
-        LocalKey const& localKey() const { return specifics_;}
+        LocalTag const& localTag() const { return specifics_;}
         size_t storageSize() const { return storageSize_; }
         
         HashVal parentKey()  const { return parent_;}
@@ -273,10 +270,13 @@ namespace engine {
         void*       buffer_;
         
       protected:
-        Entry (Key const& parent, void* bufferPtr =0, LocalKey const& implID =UNSPECIFIC)
-          : Key (Key::forEntry (parent, bufferPtr, implID))
-          , state_(bufferPtr? LOCKED:NIL)
-          , buffer_(bufferPtr)
+        Entry (Key const& parent
+              ,void* bufferPtr =nullptr
+              ,LocalTag const& specialTag =LocalTag::UNKNOWN
+              )
+          : Key{Key::forEntry (parent, bufferPtr, specialTag)}
+          , state_{bufferPtr? LOCKED:NIL}
+          , buffer_{bufferPtr}
           { }
         
         /// BufferMetadata is allowed to create 
@@ -290,7 +290,7 @@ namespace engine {
         bool
         isLocked()  const
           {
-            ASSERT (!buffer_ || (NIL != state_ && FREE != state_));
+            ASSERT (!buffer_ or (NIL != state_ and FREE != state_));
             return bool(buffer_);
           }
         
@@ -300,7 +300,7 @@ namespace engine {
         bool
         isTypeKey()  const
           {
-            return NIL == state_ && !buffer_;
+            return NIL == state_ and not buffer_;
           }
         
         
@@ -326,13 +326,13 @@ namespace engine {
           {
             __must_not_be_NIL();
             
-            if ( (state_ == FREE    && newState == LOCKED)
-               ||(state_ == LOCKED  && newState == EMITTED)
-               ||(state_ == LOCKED  && newState == BLOCKED)
-               ||(state_ == LOCKED  && newState == FREE)
-               ||(state_ == EMITTED && newState == BLOCKED)
-               ||(state_ == EMITTED && newState == FREE)
-               ||(state_ == BLOCKED && newState == FREE))
+            if (  (state_ == FREE    and newState == LOCKED)
+               or (state_ == LOCKED  and newState == EMITTED)
+               or (state_ == LOCKED  and newState == BLOCKED)
+               or (state_ == LOCKED  and newState == FREE)
+               or (state_ == EMITTED and newState == BLOCKED)
+               or (state_ == EMITTED and newState == FREE)
+               or (state_ == BLOCKED and newState == FREE))
               {
                 // allowed transition
                 if (newState == FREE)
@@ -357,7 +357,7 @@ namespace engine {
         Entry&
         invalidate (bool invokeDtor =true)
           {
-            if (buffer_ && invokeDtor)
+            if (buffer_ and invokeDtor)
               invokeEmbeddedDtor_and_clear();
             buffer_ = 0;
             state_ = FREE;
@@ -546,8 +546,8 @@ namespace engine {
                                           ///////////////////////////TICKET #854 : ensure proper locking happens "somewhere" when mutating metadata
       
     public:
-      typedef metadata::Key Key;
-      typedef metadata::Entry Entry;
+      using Key   = metadata::Key;
+      using Entry = metadata::Entry;
       
       /** establish a metadata registry.
        *  Such will maintain a family of buffer type entries
@@ -566,15 +566,15 @@ namespace engine {
        *  from that point on. Properties are combined according to
        *  a fixed type specialisation order, with the buffer size
        *  forming the base level, possible TypeHandler functors the
-       *  second level, and implementation defined LocalKey entries
+       *  second level, and implementation defined LocalTag entries
        *  the third level. All these levels describe abstract type
        *  keys, not entries for concrete buffers. The latter are
        *  always created as children of a known type key.  
        */
       Key
       key ( size_t storageSize
-          , TypeHandler instanceFunc =RAW_BUFFER
-          , LocalKey specifics       =UNSPECIFIC)
+          , TypeHandler instanceFunc =TypeHandler::RAW
+          , LocalTag specifics       =LocalTag::UNKNOWN)
         {
           REQUIRE (storageSize);
           Key typeKey = trackKey (family_, storageSize);
@@ -598,7 +598,7 @@ namespace engine {
       /** create a sub-type,
        *  using a different private-ID (implementation defined) */
       Key
-      key (Key const& parentKey, LocalKey specifics)
+      key (Key const& parentKey, LocalTag specifics)
         {
           return trackKey (parentKey, specifics);
         }
@@ -608,13 +608,13 @@ namespace engine {
        * @note might create/register a new Entry as a side-effect 
        */ 
       Key const&
-      key (Key const& parentKey, void* concreteBuffer, LocalKey const& implID =UNSPECIFIC)
+      key (Key const& parentKey, void* concreteBuffer, LocalTag const& specifics =LocalTag::UNKNOWN)
         {
           Key derivedKey = Key::forEntry (parentKey, concreteBuffer);
           Entry* existing = table_.fetch (derivedKey);
           
           return existing? *existing
-                         : markLocked (parentKey,concreteBuffer,implID);
+                         : markLocked (parentKey,concreteBuffer,specifics);
         }
       
       /** core operation to access or create a concrete buffer metadata entry.
@@ -642,21 +642,21 @@ namespace engine {
       Entry&
       lock (Key const& parentKey
            ,void* concreteBuffer
-           ,LocalKey const& implID =UNSPECIFIC
+           ,LocalTag const& specifics =LocalTag::UNKNOWN
            ,bool onlyNew =false)
         {
           if (!concreteBuffer)
             throw error::Invalid{"Attempt to lock a slot for a NULL buffer"
                                 , LERR_(BOTTOM_VALUE)};
           
-          Entry newEntry(parentKey, concreteBuffer, implID);
+          Entry newEntry{parentKey, concreteBuffer, specifics};
           Entry* existing = table_.fetch (newEntry);
           
-          if (existing && onlyNew)
+          if (existing and onlyNew)
             throw error::Logic{"Attempt to lock a slot for a new buffer, "
                                "while actually the old buffer is still locked"
                               , LERR_(LIFECYCLE)};
-          if (existing && existing->isLocked())
+          if (existing and existing->isLocked())
             throw error::Logic{"Attempt to re-lock a buffer still in use"
                               , LERR_(LIFECYCLE)};
           
@@ -695,7 +695,7 @@ namespace engine {
         {
           const Entry* entry = table_.fetch (key);
           return entry
-              && entry->isLocked();
+             and entry->isLocked();
         }
       
       
@@ -713,13 +713,13 @@ namespace engine {
        *        created, but is marked as FREE
        */
       Entry&
-      markLocked (Key const& parentKey, void* buffer, LocalKey const& implID =UNSPECIFIC)
+      markLocked (Key const& parentKey, void* buffer, LocalTag const& specifics =LocalTag::UNKNOWN)
         {
           if (!buffer)
             throw error::Fatal{"Attempt to lock for a NULL buffer. Allocation floundered?"
                               , LERR_(BOTTOM_VALUE)};
           
-          return this->lock(parentKey, buffer, implID, true); // force creation of a new entry
+          return this->lock (parentKey, buffer, specifics, true); // force creation of a new entry
         }
       
       /** purge the bare metadata Entry from the metadata tables.
@@ -731,7 +731,7 @@ namespace engine {
           Entry* entry = table_.fetch (key);
           if (!entry) return;
           
-          ASSERT (entry && (key == HashVal(*entry)));
+          ASSERT (entry and (key == HashVal(*entry)));
           release (*entry);
         }
       
@@ -787,6 +787,5 @@ namespace engine {
   
   
   
-  
 }} // namespace steam::engine
-#endif
+#endif /*STEAM_ENGINE_BUFFR_METADATA_H*/

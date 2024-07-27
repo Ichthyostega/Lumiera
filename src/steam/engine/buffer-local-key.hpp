@@ -50,12 +50,12 @@ namespace engine {
   
   
   /**
-   * an opaque ID to be used by the BufferProvider implementation.
+   * an opaque mark to be used by the BufferProvider implementation.
    * Typically this will be used, to set apart some pre-registered
    * kinds of buffers. It is treated as being part of the buffer type.
-   * LocalKey objects may be copied but not re-assigned or changed.
+   * LocalTag objects may be copied but not re-assigned or changed.
    */
-  class LocalKey
+  class LocalTag
     {
       union OpaqueData
         {
@@ -67,17 +67,19 @@ namespace engine {
       
     public:
       explicit
-      LocalKey (uint64_t opaqueValue=0)
+      LocalTag (uint64_t opaqueValue=0)
         { 
           privateID_._as_number = opaqueValue;
         }
       
-      LocalKey (void* impl_related_ptr)
+      LocalTag (void* impl_related_ptr)
         { 
           privateID_._as_number  = 0;          
           privateID_._as_pointer = impl_related_ptr;
         }
       
+      /** Marker when no distinct local key is given */
+      static const LocalTag UNKNOWN;
       
       operator uint64_t()  const
         {
@@ -89,26 +91,26 @@ namespace engine {
           return privateID_._as_pointer;
         }
       
-      bool
-      isDefined()  const
+      explicit
+      operator bool()  const
         {
           return bool(privateID_._as_number); 
         }
       
       friend size_t
-      hash_value (LocalKey const& lkey)
+      hash_value (LocalTag const& lkey)
       {
         boost::hash<uint64_t> hashFunction;
         return hashFunction(lkey.privateID_._as_number);
       }
       
       friend bool
-      operator== (LocalKey const& left, LocalKey const& right)
+      operator== (LocalTag const& left, LocalTag const& right)
       {
         return uint64_t(left) == uint64_t(right);
       }
       friend bool
-      operator!= (LocalKey const& left, LocalKey const& right)
+      operator!= (LocalTag const& left, LocalTag const& right)
       {
         return uint64_t(left) != uint64_t(right);
       }
@@ -116,7 +118,7 @@ namespace engine {
       
     private:
       /** assignment usually prohibited */
-      LocalKey& operator= (LocalKey const& o)
+      LocalTag& operator= (LocalTag const& o)
         {
           privateID_ = o.privateID_;
           return *this;

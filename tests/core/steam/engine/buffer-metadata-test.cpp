@@ -193,7 +193,7 @@ namespace test  {
        *        BufferProviderProtocol_test#verifyStandardCase()
        *        This testcase here performs precisely the metadata related
        *        operations necessary to carry out the standard case
-       *        outlined on a higher level in the mentioned test.
+       *        outlined at a higher level in the aforementioned test.
        */
       void
       verifyStandardCase()
@@ -206,8 +206,8 @@ namespace test  {
           metadata::Key rawBuffType = meta_->key(SIZE_B);
           
           // to announce using a number of buffers of this type
-          LocalKey transaction1(1);
-          LocalKey transaction2(2);
+          LocalTag transaction1(1);
+          LocalTag transaction2(2);
           bufferType1 = meta_->key(bufferType1, transaction1);
           rawBuffType = meta_->key(rawBuffType, transaction2);
           // these type keys are now handed over to the client,
@@ -235,11 +235,11 @@ namespace test  {
           CHECK (LOCKED == r0.state());
           CHECK (LOCKED == r1.state());
           
-          CHECK (transaction1 == f0.localKey());
-          CHECK (transaction1 == f1.localKey());
-          CHECK (transaction1 == f2.localKey());
-          CHECK (transaction2 == r0.localKey());
-          CHECK (transaction2 == r1.localKey());
+          CHECK (transaction1 == f0.localTag());
+          CHECK (transaction1 == f1.localTag());
+          CHECK (transaction1 == f2.localTag());
+          CHECK (transaction2 == r0.localTag());
+          CHECK (transaction2 == r1.localTag());
           
           
           CHECK (f0.access() == frames+0);

@@ -120,7 +120,7 @@ namespace test  {
       {
         size_t const& investigateSize()         const { return this->storageSize_; }
         TypeHandler const& investigateHandler() const { return this->instanceFunc_; }
-        LocalKey const& investigateSpecifics()  const { return this->specifics_; }
+        LocalTag const& investigateSpecifics()  const { return this->specifics_; }
         
         KeyTypeSpecialisationDiagnostics (Key const& toInvestigate)
           : Key(toInvestigate)
@@ -140,7 +140,7 @@ namespace test  {
       return KeyTypeSpecialisationDiagnostics(subject).investigateHandler();
     }
     
-    inline const LocalKey
+    inline const LocalTag
     verifySpecifics (Key const& subject)
     {
       return KeyTypeSpecialisationDiagnostics(subject).investigateSpecifics();
@@ -191,7 +191,7 @@ namespace test  {
           HashVal family(123);
           Key k1(family, SIZE_A);
           Key k12(k1, SIZE_B);
-          Key k123(k12, LocalKey(56));
+          Key k123(k12, LocalTag(56));
           
           CHECK (HashVal (k1));
           CHECK (HashVal (k12));
@@ -257,8 +257,8 @@ namespace test  {
           TypeHandler placeMarker = TypeHandler::create<Marker>();
           TypeHandler noHandler;
           
-          LocalKey opaque1 (rand() % 1000);
-          LocalKey opaque2 (1000 + rand() % 1000);
+          LocalTag opaque1 (rand() % 1000);
+          LocalTag opaque2 (1000 + rand() % 1000);
           
           Key k_siz (kb, SIZE_B);        // sub-key to "root": use a different buffer size
           Key k_han0(kb, noHandler);     // sub-key to "root": use a locally defined type functor
@@ -305,19 +305,19 @@ namespace test  {
           CHECK (SIZE_A == verifySize(k_loc1));
           CHECK (SIZE_A == verifySize(k_loc2));
           
-          CHECK (RAW_BUFFER  == verifyHandler(kb    ));
-          CHECK (RAW_BUFFER  == verifyHandler(k_siz ));
-          CHECK (noHandler   == verifyHandler(k_han0));
-          CHECK (placeMarker == verifyHandler(k_han1));
-          CHECK (RAW_BUFFER  == verifyHandler(k_loc1));
-          CHECK (RAW_BUFFER  == verifyHandler(k_loc2));
+          CHECK (TypeHandler::RAW  == verifyHandler(kb    ));
+          CHECK (TypeHandler::RAW  == verifyHandler(k_siz ));
+          CHECK (       noHandler  == verifyHandler(k_han0));
+          CHECK (     placeMarker  == verifyHandler(k_han1));
+          CHECK (TypeHandler::RAW  == verifyHandler(k_loc1));
+          CHECK (TypeHandler::RAW  == verifyHandler(k_loc2));
           
-          CHECK (UNSPECIFIC == verifySpecifics(kb    ));
-          CHECK (UNSPECIFIC == verifySpecifics(k_siz ));
-          CHECK (UNSPECIFIC == verifySpecifics(k_han0));
-          CHECK (UNSPECIFIC == verifySpecifics(k_han1));
-          CHECK (opaque1    == verifySpecifics(k_loc1));
-          CHECK (opaque2    == verifySpecifics(k_loc2));
+          CHECK (LocalTag::UNKNOWN == verifySpecifics(kb    ));
+          CHECK (LocalTag::UNKNOWN == verifySpecifics(k_siz ));
+          CHECK (LocalTag::UNKNOWN == verifySpecifics(k_han0));
+          CHECK (LocalTag::UNKNOWN == verifySpecifics(k_han1));
+          CHECK (          opaque1 == verifySpecifics(k_loc1));
+          CHECK (          opaque2 == verifySpecifics(k_loc2));
           
           
           // Verify 2nd level specialisation (some examples)
@@ -338,8 +338,8 @@ namespace test  {
           CHECK (placeMarker == verifyHandler(k_han1_siz_loc2));
           CHECK (placeMarker == verifyHandler(k_loc2_han1_siz));
           
-          CHECK (UNSPECIFIC  == verifySpecifics(k_han1_siz     ));
-          CHECK (UNSPECIFIC  == verifySpecifics(k_siz_han1     ));
+          CHECK (LocalTag::UNKNOWN  == verifySpecifics(k_han1_siz     ));
+          CHECK (LocalTag::UNKNOWN  == verifySpecifics(k_siz_han1     ));
           CHECK (opaque2     == verifySpecifics(k_han1_siz_loc2));
           CHECK (opaque2     == verifySpecifics(k_loc2_han1_siz));
           

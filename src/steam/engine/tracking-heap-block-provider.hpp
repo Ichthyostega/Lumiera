@@ -28,7 +28,7 @@
  ** the fact.
  ** 
  ** The allocated buffers are numbered with a simple ascending sequence of integers,
- ** used as LocalKey (see BufferMetadata). Clients can just request a Buffer with the
+ ** used as LocalTag (see BufferMetadata). Clients can just request a Buffer with the
  ** given number, causing that block to be allocated. There is a "backdoor", allowing
  ** to access any allocated block, even if it is considered "released" by the terms
  ** of the usual lifecycle. Only when the provider object itself gets destroyed,
@@ -136,8 +136,8 @@ namespace engine {
       
       virtual uint prepareBuffers (uint count, HashVal typeID);
       virtual BuffHandle provideLockedBuffer  (HashVal typeID);
-      virtual void mark_emitted (HashVal entryID, LocalKey const&);
-      virtual void detachBuffer (HashVal entryID, LocalKey const&);
+      virtual void mark_emitted (HashVal entryID, LocalTag const&);
+      virtual void detachBuffer (HashVal entryID, LocalTag const&);
       
     public:
       TrackingHeapBlockProvider();
