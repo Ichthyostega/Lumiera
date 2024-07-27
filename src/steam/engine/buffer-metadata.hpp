@@ -217,17 +217,20 @@ namespace engine {
         forEntry (Key const& parent, const void* bufferAddr, LocalTag const& localTag =LocalTag::UNKNOWN)
           {
             Key newKey{parent};  // copy of parent as baseline
+            if (nontrivial(localTag))
+              {
+                if (nontrivial(parent.specifics_))
+                  throw error::Logic{"Implementation defined local key should not be overridden. "
+                                     "Underlying buffer type already defines a nontrivial LocalTag"};
+                newKey.parent_ = HashVal(parent);
+                newKey.hashID_ = chainedHash(newKey.hashID_, localTag);
+                newKey.specifics_ = localTag;
+              }
             if (bufferAddr)
               {
                 newKey.parent_ = HashVal(parent);
-                newKey.hashID_ = chainedHash(parent, bufferAddr);
-                if (nontrivial(localTag))
-                  {
-                    if (nontrivial(parent.specifics_))
-                      throw error::Logic{"Implementation defined local key should not be overridden. "
-                                         "Underlying buffer type already defines a nontrivial LocalTag"};
-                    newKey.specifics_ = localTag;
-              }   }
+                newKey.hashID_ = chainedHash(newKey.hashID_, bufferAddr);
+              }
             return newKey; 
           }
         
@@ -482,9 +485,8 @@ namespace engine {
         Entry&
         store (Entry const& newEntry)
           {
-            using std::make_pair;
             REQUIRE (!fetch (newEntry), "duplicate buffer metadata entry");
-            MetadataStore::iterator pos = entries_.insert (make_pair (HashVal(newEntry), newEntry))
+            MetadataStore::iterator pos = entries_.emplace (HashVal(newEntry), newEntry)
                                                   .first;
             
             ENSURE (pos != entries_.end());
@@ -610,7 +612,7 @@ namespace engine {
       Key const&
       key (Key const& parentKey, void* concreteBuffer, LocalTag const& specifics =LocalTag::UNKNOWN)
         {
-          Key derivedKey = Key::forEntry (parentKey, concreteBuffer);
+          Key derivedKey = Key::forEntry (parentKey, concreteBuffer, specifics);
           Entry* existing = table_.fetch (derivedKey);
           
           return existing? *existing
@@ -619,16 +621,18 @@ namespace engine {
       
       /** core operation to access or create a concrete buffer metadata entry.
        *  The hashID of the entry in question is built, based on the parentKey,
-       *  which denotes a buffer type, and the concrete buffer address. If yet
-       *  unknown, a new concrete buffer metadata Entry is created and initialised
-       *  to LOCKED state. Otherwise just the existing Entry is fetched.
+       *  which denotes a buffer type, optionally a implementation defined LocalTag,
+       *  and the concrete buffer address. If yet unknown, a new concrete buffer
+       *  metadata Entry is created and initialised to LOCKED state. Otherwise
+       *  just the existing Entry is fetched and locked.
        * @note  this function really \em activates the buffer.
        *        In case the type (Key) involves a TypeHandler (functor),
        *        its constructor function will be invoked, if actually a new
        *        entry gets created. Typically this mechanism will be used
        *        to placement-create an object into the buffer.
-       * @param parentKey a key describing the \em type of the buffer
+       * @param parentKey a key describing the _type_ of the buffer
        * @param concreteBuffer storage pointer, must not be NULL
+       * @param specifics an implementation defined tag
        * @param onlyNew disallow fetching an existing entry
        * @throw error::Logic when #onlyNew is set, but an equivalent entry
        *        was registered previously. This indicates a serious error
@@ -660,8 +664,8 @@ namespace engine {
             throw error::Logic{"Attempt to re-lock a buffer still in use"
                               , LERR_(LIFECYCLE)};
           
-          if (!existing)
-            return store_and_lock (newEntry); // actual creation
+          if (not existing)
+            return store_as_locked (newEntry); // actual creation
           else
             return existing->lock (concreteBuffer);
         }
@@ -753,7 +757,7 @@ namespace engine {
       Key
       trackKey (PAR parent, DEF specialisation)
         {
-          Key newKey (parent,specialisation);
+          Key newKey{parent, specialisation};
           maybeStore (newKey);
           return newKey;
         }
@@ -762,12 +766,20 @@ namespace engine {
       maybeStore (Key const& key)
         {
           if (isKnown (key)) return;
-          table_.store (Entry (key, NULL));
+          table_.store (Entry{key, nullptr});
         }
       
+      /** store a fully populated entry immediately starting with locked state
+       * @remark the (optional) constructor function for a type embedded into the
+       *         buffer is invoked when a _persistent_ entry transitions to _locked_ state;
+       *         since a new buffer created with storage location is already marked as _locked,_
+       *         for sake of consistency the embedded constructor must now be invoked; if this
+       *         fails, the state has to be transitioned back to FREE before re-throwing.
+       */
       Entry&
-      store_and_lock (Entry const& metadata)
+      store_as_locked (Entry const& metadata)
         {
+          REQUIRE (metadata.isLocked());
           Entry& newEntry = table_.store (metadata);
           try
             {
