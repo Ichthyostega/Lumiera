@@ -28,12 +28,10 @@
 #include "lib/error.hpp"
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/util.hpp"
 #include "steam/engine/buffer-metadata.hpp"
 #include "steam/engine/testframe.hpp"
+#include "lib/util.hpp"
 
-#include <cstdlib>
-#include <cstring>
 #include <memory>
 
 using std::strncpy;
@@ -54,15 +52,6 @@ namespace test  {
   
   namespace { // Test fixture
     
-    const size_t TEST_MAX_SIZE = 1024 * 1024;
-    
-    const size_t SIZE_A = 1 + rand() % TEST_MAX_SIZE;
-    const size_t SIZE_B = 1 + rand() % TEST_MAX_SIZE;
-    
-    HashVal JUST_SOMETHING = 123;
-    void* const  SOME_POINTER = &JUST_SOMETHING;
-    
-    
     template<typename TY>
     TY&
     accessAs (metadata::Entry& entry)
@@ -71,6 +60,23 @@ namespace test  {
       ASSERT (ptr);
       return *ptr;
     }
+    
+    template<typename X>
+    metadata::Buff*
+    mark_as_Buffer(X& something)
+      {
+        return reinterpret_cast<metadata::Buff*> (std::addressof(something));
+      }
+    
+    
+    const size_t TEST_MAX_SIZE = 1024 * 1024;
+    
+    const size_t SIZE_A = 1 + rand() % TEST_MAX_SIZE;
+    const size_t SIZE_B = 1 + rand() % TEST_MAX_SIZE;
+    
+    HashVal JUST_SOMETHING = 123;
+    auto SOME_POINTER = mark_as_Buffer(JUST_SOMETHING);
+    
   }//(End) Test fixture and helpers
   
   
@@ -214,7 +220,7 @@ namespace test  {
           // embedded into a Buffer Descriptor...
           
           // later, when it comes to actually *locking* those buffers...
-          typedef char RawBuffer[SIZE_B];
+          using RawBuffer = std::byte;
           void* storage = malloc (2*SIZE_B);
           
           // do the necessary memory allocations behind the scenes...
@@ -222,12 +228,12 @@ namespace test  {
           TestFrame* frames = new TestFrame[3];     //  a real-world BufferProvider would use some kind of allocator
           
           // track individual buffers by metadata entries
-          metadata::Entry& f0 = meta_->markLocked(bufferType1, &frames[0]);
-          metadata::Entry& f1 = meta_->markLocked(bufferType1, &frames[1]);
-          metadata::Entry& f2 = meta_->markLocked(bufferType1, &frames[2]);
+          metadata::Entry& f0 = meta_->markLocked(bufferType1, mark_as_Buffer(frames[0]));
+          metadata::Entry& f1 = meta_->markLocked(bufferType1, mark_as_Buffer(frames[1]));
+          metadata::Entry& f2 = meta_->markLocked(bufferType1, mark_as_Buffer(frames[2]));
           
-          metadata::Entry& r0 = meta_->markLocked(rawBuffType, &rawbuf[0]);
-          metadata::Entry& r1 = meta_->markLocked(rawBuffType, &rawbuf[1]);
+          metadata::Entry& r0 = meta_->markLocked(rawBuffType, mark_as_Buffer(rawbuf[     0]));
+          metadata::Entry& r1 = meta_->markLocked(rawBuffType, mark_as_Buffer(rawbuf[SIZE_B]));
           
           CHECK (LOCKED == f0.state());
           CHECK (LOCKED == f1.state());
@@ -241,12 +247,13 @@ namespace test  {
           CHECK (transaction2 == r0.localTag());
           CHECK (transaction2 == r1.localTag());
           
+          auto adr =[](auto* x){ return reinterpret_cast<size_t>(x); };
           
-          CHECK (f0.access() == frames+0);
-          CHECK (f1.access() == frames+1);
-          CHECK (f2.access() == frames+2);
-          CHECK (r0.access() == rawbuf+0);
-          CHECK (r1.access() == rawbuf+1);
+          CHECK (adr(f0.access()) == adr(frames+0));
+          CHECK (adr(f1.access()) == adr(frames+1));
+          CHECK (adr(f2.access()) == adr(frames+2));
+          CHECK (adr(r0.access()) == adr(rawbuf+0     ));
+          CHECK (adr(r1.access()) == adr(rawbuf+SIZE_B));
           
           TestFrame defaultFrame;
           CHECK (defaultFrame == f0.access());
@@ -359,8 +366,8 @@ namespace test  {
           VERIFY_ERROR (FATAL, entry.mark(NIL) );
           
           // re-use buffer slot, start new lifecycle
-          void* OTHER_LOCATION = this;
-          entry.lock (OTHER_LOCATION);
+          auto* SOME_OTHER_LOCATION = mark_as_Buffer(*this);
+          entry.lock (SOME_OTHER_LOCATION);
           CHECK (LOCKED == entry.state());
           CHECK (entry.isLocked());
           
@@ -373,7 +380,7 @@ namespace test  {
           VERIFY_ERROR (FATAL, entry.mark(BLOCKED) );
           VERIFY_ERROR (FATAL, entry.mark(NIL) );
           
-          CHECK (OTHER_LOCATION == entry.access());
+          CHECK (SOME_OTHER_LOCATION == entry.access());
           
           entry.mark (FREE);
           CHECK (!entry.isLocked());

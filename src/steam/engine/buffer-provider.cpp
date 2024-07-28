@@ -102,7 +102,7 @@ namespace engine {
    * actual buffer, which is locked for exclusive use by one client.
    */ 
   BuffHandle
-  BufferProvider::buildHandle (HashVal typeID, void* storage, LocalTag const& localTag)
+  BufferProvider::buildHandle (HashVal typeID, Buff* storage, LocalTag const& localTag)
   {
     metadata::Key& typeKey = meta_->get (typeID);
     metadata::Entry& entry = meta_->markLocked(typeKey, storage, localTag);
@@ -189,7 +189,7 @@ namespace engine {
   try {
     metadata::Entry& metaEntry = meta_->get (handle.entryID());
     metaEntry.mark(FREE);   // might invoke embedded dtor function
-    detachBuffer (metaEntry.parentKey(), metaEntry.localTag());
+    detachBuffer (metaEntry.parentKey(), metaEntry.localTag(), *handle);
     meta_->release (metaEntry);
   }
   ERROR_LOG_AND_IGNORE (engine, "releasing a buffer from BufferProvider")
@@ -233,7 +233,7 @@ namespace engine {
   try {
     metadata::Entry& metaEntry = meta_->get (target.entryID());
     metaEntry.invalidate (invokeDtor);
-    detachBuffer (metaEntry.parentKey(), metaEntry.localTag());
+    detachBuffer (metaEntry.parentKey(), metaEntry.localTag(), *target);
     meta_->release (metaEntry);
   }
   ERROR_LOG_AND_IGNORE (engine, "cleanup of buffer metadata while handling an error")

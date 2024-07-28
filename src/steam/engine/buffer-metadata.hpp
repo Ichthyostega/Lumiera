@@ -59,6 +59,7 @@
 #include "lib/hash-value.h"
 #include "lib/util-foreach.hpp"
 #include "include/logging.h"
+#include "steam/streamtype.hpp"
 #include "steam/engine/type-handler.hpp"
 #include "steam/engine/buffer-local-key.hpp"
 #include "lib/nocopy.hpp"
@@ -76,6 +77,8 @@ namespace engine {
   namespace error = lumiera::error;
   
   namespace metadata {
+    using Buff = StreamType::ImplFacade::DataBuffer;
+    
     class Key;
     class Entry;
   }
@@ -214,7 +217,7 @@ namespace engine {
          *         For NULL buffer a copy of the parent is returned.
          */
         static Key
-        forEntry (Key const& parent, const void* bufferAddr, LocalTag const& localTag =LocalTag::UNKNOWN)
+        forEntry (Key const& parent, const Buff* bufferAddr, LocalTag const& localTag =LocalTag::UNKNOWN)
           {
             Key newKey{parent};  // copy of parent as baseline
             if (nontrivial(localTag))
@@ -270,11 +273,11 @@ namespace engine {
       : public Key
       {
         BufferState state_;
-        void*       buffer_;
+        Buff*       buffer_;
         
       protected:
         Entry (Key const& parent
-              ,void* bufferPtr =nullptr
+              ,Buff* bufferPtr =nullptr
               ,LocalTag const& specialTag =LocalTag::UNKNOWN
               )
           : Key{Key::forEntry (parent, bufferPtr, specialTag)}
@@ -313,7 +316,7 @@ namespace engine {
             return state_;
           }
         
-        void*
+        Buff*
         access()
           {
             __must_not_be_NIL();
@@ -350,7 +353,7 @@ namespace engine {
           }
         
         Entry&
-        lock (void* newBuffer)
+        lock (Buff* newBuffer)
           {
             __must_be_FREE();
             buffer_ = newBuffer;
@@ -362,7 +365,7 @@ namespace engine {
           {
             if (buffer_ and invokeDtor)
               invokeEmbeddedDtor_and_clear();
-            buffer_ = 0;
+            buffer_ = nullptr;
             state_ = FREE;
             return *this;
           }
@@ -610,7 +613,7 @@ namespace engine {
        * @note might create/register a new Entry as a side-effect 
        */ 
       Key const&
-      key (Key const& parentKey, void* concreteBuffer, LocalTag const& specifics =LocalTag::UNKNOWN)
+      key (Key const& parentKey, metadata::Buff* concreteBuffer, LocalTag const& specifics =LocalTag::UNKNOWN)
         {
           Key derivedKey = Key::forEntry (parentKey, concreteBuffer, specifics);
           Entry* existing = table_.fetch (derivedKey);
@@ -645,7 +648,7 @@ namespace engine {
        */
       Entry&
       lock (Key const& parentKey
-           ,void* concreteBuffer
+           ,metadata::Buff* concreteBuffer
            ,LocalTag const& specifics =LocalTag::UNKNOWN
            ,bool onlyNew =false)
         {
@@ -717,7 +720,7 @@ namespace engine {
        *        created, but is marked as FREE
        */
       Entry&
-      markLocked (Key const& parentKey, void* buffer, LocalTag const& specifics =LocalTag::UNKNOWN)
+      markLocked (Key const& parentKey, metadata::Buff* buffer, LocalTag const& specifics =LocalTag::UNKNOWN)
         {
           if (!buffer)
             throw error::Fatal{"Attempt to lock for a NULL buffer. Allocation floundered?"

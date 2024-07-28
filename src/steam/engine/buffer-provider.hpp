@@ -88,13 +88,16 @@ namespace engine {
       
     protected: /* === for Implementation by concrete providers === */
       
+      /// placeholder marker type for an actual data buffer
+      using Buff = StreamType::ImplFacade::DataBuffer;
+      
       BufferProvider (Literal implementationID);
       
       virtual uint prepareBuffers (uint count, HashVal typeID)    =0;
       
       virtual BuffHandle provideLockedBuffer  (HashVal typeID)    =0;
-      virtual void mark_emitted (HashVal typeID, LocalTag const&) =0;
-      virtual void detachBuffer (HashVal typeID, LocalTag const&) =0;
+      virtual void mark_emitted (HashVal, LocalTag const&)        =0;
+      virtual void detachBuffer (HashVal, LocalTag const&, Buff&) =0;
       
       
     public:
@@ -131,7 +134,7 @@ namespace engine {
       size_t getBufferSize (HashVal typeID)   const;
       
     protected:
-      BuffHandle buildHandle (HashVal typeID, void* storage, LocalTag const& =LocalTag::UNKNOWN);
+      BuffHandle buildHandle (HashVal typeID, Buff* storage, LocalTag const& =LocalTag::UNKNOWN);
       
       bool was_created_by_this_provider (BuffDescr const&)  const;
     };

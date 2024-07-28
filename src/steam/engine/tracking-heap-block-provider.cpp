@@ -49,8 +49,17 @@ namespace engine {
   
   namespace error = lumiera::error;
   
+  using Buff = StreamType::ImplFacade::DataBuffer;
+  
   
   namespace { // implementation helpers... 
+    
+    inline Buff*
+    asBuffer(void* mem)
+      {// type tag to mark memory address as Buffer
+        return static_cast<Buff*> (mem);
+      }
+    
     
     using diagn::Block;
     
@@ -247,7 +256,7 @@ namespace engine {
   {
     diagn::BlockPool& blocks = getBlockPoolFor (typeID);
     diagn::Block& newBlock = blocks.createBlock();
-    return buildHandle (typeID, newBlock.accessMemory(), &newBlock);
+    return buildHandle (typeID, asBuffer(newBlock.accessMemory()), &newBlock);
   }
   
   
@@ -265,10 +274,11 @@ namespace engine {
   
   /** mark a buffer as officially discarded */
   void
-  TrackingHeapBlockProvider::detachBuffer (HashVal typeID, LocalTag const& specifics)
+  TrackingHeapBlockProvider::detachBuffer (HashVal typeID, LocalTag const& specifics, Buff& storage)
   {
     diagn::Block* block4buffer = locateBlock (typeID, specifics);
     REQUIRE (block4buffer, "releasing a buffer not allocated through this provider");
+    REQUIRE (util::isSameObject(storage, block4buffer->accessMemory()));
     block4buffer->markReleased();
   }
   

@@ -119,7 +119,7 @@ namespace engine {
    */
   class BuffHandle
     {
-      typedef StreamType::ImplFacade::DataBuffer Buff;
+      using Buff = StreamType::ImplFacade::DataBuffer;  ///< marker type for an actual data buffer
       
       BuffDescr descriptor_;
       Buff*     pBuffer_;

@@ -134,10 +134,10 @@ namespace engine {
     public:
       /* === BufferProvider interface === */
       
-      virtual uint prepareBuffers (uint count, HashVal typeID);
-      virtual BuffHandle provideLockedBuffer  (HashVal typeID);
-      virtual void mark_emitted (HashVal entryID, LocalTag const&);
-      virtual void detachBuffer (HashVal entryID, LocalTag const&);
+      virtual uint prepareBuffers (uint count, HashVal typeID)    override;
+      virtual BuffHandle provideLockedBuffer  (HashVal typeID)    override;
+      virtual void mark_emitted (HashVal, LocalTag const&)        override;
+      virtual void detachBuffer (HashVal, LocalTag const&, Buff&) override;
       
     public:
       TrackingHeapBlockProvider();
