@@ -73,15 +73,6 @@ namespace engine {
       
       BuffS inBuff;
       BuffS outBuff;
-      
-      uint resultSlot{0};
-      
-      BuffHandle
-      result()  const
-        {
-          ENSURE (resultSlot < N, "invalid result buffer retrieved.");
-          return outBuff[resultSlot];
-        }
     };
   
   

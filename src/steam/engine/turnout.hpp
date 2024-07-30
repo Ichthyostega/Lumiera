@@ -415,6 +415,8 @@ namespace engine {
       Several<PortRef>   leadPort;
       Several<BuffDescr> outTypes;
       
+      uint resultSlot{0};
+      
       //////////////////////////////////////////OOO builder must set-up those descriptors
       SimpleWeavingPattern(Several<PortRef>&& pr, Several<BuffDescr> dr)
         : CONF{}
@@ -456,7 +458,7 @@ namespace engine {
           feed.invoke();
         }
       
-      void
+      BuffHandle
       fix (Feed& feed)
         {
           for (uint i=0; i<leadPort.size(); ++i)
@@ -469,7 +471,10 @@ namespace engine {
               if (i != feed.resultSlot)
                 feed.outBuff[i].release();
             }
+          ENSURE (resultSlot < CONF::MAX_SIZ, "invalid result buffer configured.");
+          return feed.outBuff[resultSlot];
         }
+      
     };
   
   
@@ -503,8 +508,7 @@ namespace engine {
           PAT::pull(feed, turnoutSys);
           PAT::shed(feed);
           PAT::weft(feed);
-          PAT::fix (feed);
-          return feed.result();
+          return PAT::fix (feed);
         }
     };
 
