@@ -446,7 +446,7 @@ namespace engine {
         {
           for (uint i=0; i<outTypes.size(); ++i)
             {
-              BuffHandle resultData = outTypes[i].lockBuffer();
+              BuffHandle resultData = outTypes[i].lockBuffer();  //////////////////////////OOO LocalTag for output must be injected here -- just HOW???
               feed.outBuff.createAt(i, move(resultData));
             }
           feed.connect (leadPort.size(),outTypes.size());

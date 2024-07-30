@@ -81,6 +81,9 @@ namespace engine {
       std::vector<TypeMarker> buffTypes;
       std::vector<ProviderRef> providers;
       
+      uint resultSlot{0};
+      bool isOutput{false};
+      
       struct ServiceCtx
         {
           ProviderRef mem;
@@ -100,7 +103,7 @@ namespace engine {
       
       template<class BU>
       SimpleWeavingBuilder
-      appendBufferTypes(size_t cnt)
+      appendBufferTypes(uint cnt)
         {
           while (cnt--)
             buffTypes.emplace_back([](BufferProvider& provider)
@@ -110,11 +113,20 @@ namespace engine {
         }
       
       SimpleWeavingBuilder
-      selectOutputSlot(size_t i)
+      selectResultSlot(uint idx)
         {
-          maybeFillDefaultProviders (i+1);
-          ENSURE (providers.size() > i);
-          providers[i] = ctx.output;
+          this->resultSlot = idx;
+          return move(*this);
+        }
+      
+      SimpleWeavingBuilder
+      markAsOutputNode()
+        {
+          maybeFillDefaultProviders (resultSlot+1);
+          ENSURE (providers.size() > resultSlot);
+          providers[resultSlot] = ctx.output;
+          this->isOutput = true;
+          return move(*this);
         }
       
       
@@ -123,15 +135,16 @@ namespace engine {
         {
           maybeFillDefaultProviders (buffTypes.size());
           uint i=0;
-          for (auto& typeCtor : buffTypes)
-            outTypes.emplace (typeCtor(providers[i]));
+          for (auto& typeConstructor : buffTypes)
+            outTypes.emplace (
+              typeConstructor (providers[i]));
           
           ENSURE (leadPort.size() < N);
           ENSURE (outTypes.size() < N);
           
           using Product = Turnout<SimpleDirectInvoke<N,FUN>>;
           ///////////////////////////////OOO need a way to prepare SeveralBuilder-instances for leadPort and outDescr --> see NodeBuilder
-          return Product{leadPort.build(), outTypes.build};
+          return Product{leadPort.build(), outTypes.build()};
         }
       
       private:
