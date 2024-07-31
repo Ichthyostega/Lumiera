@@ -442,11 +442,13 @@ namespace engine {
         }
       
       void
-      shed (Feed& feed)
+      shed (Feed& feed, OptionalBuff outBuff)
         {
           for (uint i=0; i<outTypes.size(); ++i)
             {
-              BuffHandle resultData = outTypes[i].lockBuffer();  //////////////////////////OOO LocalTag for output must be injected here -- just HOW???
+              BuffHandle resultData =
+                i == resultSlot and outBuff? *outBuff
+                                           : outTypes[i].lockBuffer();
               feed.outBuff.createAt(i, move(resultData));
             }
           feed.connect (leadPort.size(),outTypes.size());
@@ -468,7 +470,7 @@ namespace engine {
           for (uint i=0; i<outTypes.size(); ++i)
             {
               feed.outBuff[i].emit();
-              if (i != feed.resultSlot)
+              if (i != resultSlot)
                 feed.outBuff[i].release();
             }
           ENSURE (resultSlot < CONF::MAX_SIZ, "invalid result buffer configured.");
@@ -502,11 +504,11 @@ namespace engine {
        * @return a BuffHandle exposing the generated result data
        */
       BuffHandle
-      weave (TurnoutSystem& turnoutSys)  override
+      weave (TurnoutSystem& turnoutSys, OptionalBuff outBuff =std::nullopt)  override
         {
           Feed feed = PAT::mount();
           PAT::pull(feed, turnoutSys);
-          PAT::shed(feed);
+          PAT::shed(feed, outBuff);
           PAT::weft(feed);
           return PAT::fix (feed);
         }

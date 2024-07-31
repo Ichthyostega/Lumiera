@@ -82,7 +82,6 @@ namespace engine {
       std::vector<ProviderRef> providers;
       
       uint resultSlot{0};
-      bool isOutput{false};
       
       struct ServiceCtx
         {
@@ -116,16 +115,6 @@ namespace engine {
       selectResultSlot(uint idx)
         {
           this->resultSlot = idx;
-          return move(*this);
-        }
-      
-      SimpleWeavingBuilder
-      markAsOutputNode()
-        {
-          maybeFillDefaultProviders (resultSlot+1);
-          ENSURE (providers.size() > resultSlot);
-          providers[resultSlot] = ctx.output;
-          this->isOutput = true;
           return move(*this);
         }
       

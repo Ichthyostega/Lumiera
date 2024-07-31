@@ -55,6 +55,7 @@
 #include "lib/several.hpp"
 
 #include <vector>
+#include <optional>
 
 
 
@@ -69,6 +70,7 @@ namespace engine {
   class ProcNode;
 //  typedef ProcNode* PNode;
   using ProcNodeRef = std::reference_wrapper<ProcNode>;
+  using OptionalBuff = std::optional<BuffHandle>;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   
   class Port
@@ -76,7 +78,7 @@ namespace engine {
     public:
       virtual ~Port();  ///< this is an interface
        
-      virtual BuffHandle weave (TurnoutSystem&)   =0;
+      virtual BuffHandle weave (TurnoutSystem&, OptionalBuff =std::nullopt)   =0;
     };
   
   using PortRef = std::reference_wrapper<Port>;
