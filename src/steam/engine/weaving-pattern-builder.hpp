@@ -41,6 +41,7 @@
 //#include "vault/gear/job.h"
 #include "lib/several-builder.hpp"
 #include "steam/engine/turnout.hpp"
+#include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/buffer-provider.hpp"
 //#include "lib/util-foreach.hpp"
 //#include "lib/iter-adapter.hpp"

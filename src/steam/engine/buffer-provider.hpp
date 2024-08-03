@@ -46,8 +46,9 @@
 #include "lib/symbol.hpp"
 #include "lib/hash-value.h"
 #include "steam/engine/buffhandle.hpp"
+#include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/type-handler.hpp"
-#include "steam/engine/buffer-local-key.hpp"
+#include "steam/engine/buffer-local-tag.hpp"
 #include "lib/nocopy.hpp"
 
 #include <utility>
@@ -173,4 +174,4 @@ namespace engine {
   
   
 }} // namespace steam::engine
-#endif
+#endif /*STEAM_ENGINE_BUFFR_PROVIDER_H*/

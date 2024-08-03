@@ -61,7 +61,7 @@
 #include "include/logging.h"
 #include "steam/streamtype.hpp"
 #include "steam/engine/type-handler.hpp"
-#include "steam/engine/buffer-local-key.hpp"
+#include "steam/engine/buffer-local-tag.hpp"
 #include "lib/nocopy.hpp"
 
 #include <unordered_map>
