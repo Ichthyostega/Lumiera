@@ -204,17 +204,20 @@ namespace engine {
     , util::MoveOnly
     {
     public:
+      
+      template<typename FUN>
       PortBuilder
-      inSlots (uint s)
+      invoke (FUN&& fun)
         {
-          UNIMPLEMENTED ("define number of predecessor-source slots");
+          UNIMPLEMENTED ("setup standard wiring to adapt the given processing function");
           return move(*this);
         }
       
+      template<class ADA, typename...ARGS>
       PortBuilder
-      outSlots (uint r)
+      adaptInvocation(ARGS&& ...args)
         {
-          UNIMPLEMENTED ("define number of result slots");
+          UNIMPLEMENTED ("specify an `InvocationAdapter` to use explicitly");
           return move(*this);
         }
       
@@ -225,6 +228,49 @@ namespace engine {
           UNIMPLEMENTED ("define builder for all buffers to use");
           return move(*this);
         }
+      
+      PortBuilder
+      asResultSlot (uint r)
+        {
+          UNIMPLEMENTED ("define the output slot to use as result (default is the first one)");
+          return move(*this);
+        }
+      
+      PortBuilder
+      connectLead (uint idx)
+        {
+          UNIMPLEMENTED ("connect the next input slot to existing lead-node given by index");
+          return move(*this);
+        }
+      
+      PortBuilder
+      conectLead (ProcNode& leadNode)
+        {
+          UNIMPLEMENTED ("connect the next input slot to either existing or new lead-node");
+          return move(*this);
+        }
+      
+      PortBuilder
+      connectLeadPort (uint idx, uint port)
+        {
+          UNIMPLEMENTED ("connect next input to lead-node, using a specific port-number");
+          return move(*this);
+        }
+      
+      PortBuilder
+      connectLeadPort (ProcNode& leadNode, uint port)
+        {
+          UNIMPLEMENTED ("connect next input to existing or new lead-node, with given port-number");
+          return move(*this);
+        }
+      
+      PortBuilder
+      useLeadPort (uint defaultPort)
+        {
+          UNIMPLEMENTED ("use given port-index as default for all following connections");
+          return move(*this);
+        }
+      
       
       /****************************************************//**
        * Terminal: complete the Port wiring and return to the node level.
