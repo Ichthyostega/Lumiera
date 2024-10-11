@@ -26,11 +26,13 @@
  ** render node connectivity, where they are used for each invocation of a render job.
  ** 
  ** The EngineCtx itself is meant to be [dependency injected](\ref lib::Depend), so that
- ** tests can use suitably adapted variants for verifications.
+ ** tests can use suitably adapted variants for verifications. The default instantiation
+ ** provides a naive self-contained implementation suitable for demonstration and test.
  ** @todo who is responsible for setup of the services for the actual render engine?
  **       Might be closely related to brining up façade interfaces.
- ** @todo WIP 8/2024 provide render node structures
+ ** @todo WIP-WIP 10/2024 provide render node structures
  ** 
+ ** @see engine-ctx-facilities.hpp implementation
  ** @see buffer-provider.hpp
  ** @see buffhandle.hpp
  */
@@ -44,14 +46,14 @@
 #include "lib/nocopy.hpp"
 
 //#include <utility>
-#include <memory>
+//#include <memory>
 
 
 namespace steam {
 namespace engine {
   
 //  using lib::Literal;
-  using std::unique_ptr;
+//  using std::unique_ptr;
 //  using std::forward;
   
   class EngineCtx
@@ -60,11 +62,16 @@ namespace engine {
     public:
       BufferProvider& mem;
       BufferProvider& cache;
-      BufferProvider& output;
+//      BufferProvider& output;  /////////////////////////OOO presumably no longer necessary
       
-      class Services;
+      class Facilities;
       
+      static lib::Depend<EngineCtx> access;
+      
+    private:
       EngineCtx();
+      
+      friend class lib::DependencyFactory<EngineCtx>;
     };
   
   

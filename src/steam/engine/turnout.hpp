@@ -280,9 +280,9 @@ namespace engine {
      * the input and output data feeds (buffers) into a processing function.
      * @tparam CONF a configuration / policy base class
      * @note assumptions made regarding the overall structure
-     *     - CONF::Feed defines an _invocation adapter_ for the processing function
-     *     - CONF::buildFeed is a functor to (repeatedly) build `Feed` instances
-     *     - this adapter in turn embeds a `FeedManifold<N>` to hold
+     *     - `CONF::Feed` defines an _invocation adapter_ for the processing function
+     *     - `CONF::buildFeed()` is a functor to (repeatedly) build `Feed` instances
+     *     - the _invocation adapter_ in turn embeds a `FeedManifold<N>` to hold
      *       + an array of input buffer pointers
      *       + an array of output buffer pointers
      *       + `CONF::MAX_SIZ` limits both arrays
