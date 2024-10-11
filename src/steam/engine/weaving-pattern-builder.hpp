@@ -70,7 +70,7 @@ namespace engine {
   using SimpleDirectInvoke = SimpleWeavingPattern<Conf_DirectFunctionInvocation<N,FUN>>;
   
   template<class POL, uint N, class FUN>
-  struct SimpleWeavingBuilder
+  struct WeavingBuilder
     : util::MoveOnly
     {
       DataBuilder<POL, PortRef>   leadPort;
@@ -92,7 +92,7 @@ namespace engine {
         };
       ServiceCtx ctx; //////////////////////////////////////////OOO need to wire that top-down through all builders!
       
-      SimpleWeavingBuilder
+      WeavingBuilder
       attachToLeadPort(ProcNode& lead, uint portNr)
         {
           PortRef portRef; /////////////////////////////////////OOO TODO need Accessor on ProcNode!!!!!
@@ -102,7 +102,7 @@ namespace engine {
         }
       
       template<class BU>
-      SimpleWeavingBuilder
+      WeavingBuilder
       appendBufferTypes(uint cnt)
         {
           while (cnt--)
@@ -112,7 +112,7 @@ namespace engine {
           return move(*this);
         }
       
-      SimpleWeavingBuilder
+      WeavingBuilder
       selectResultSlot(uint idx)
         {
           this->resultSlot = idx;

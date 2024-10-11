@@ -75,7 +75,7 @@
 //#include "lib/iter-adapter.hpp"
 #include "lib/meta/function.hpp"
 //#include "lib/itertools.hpp"
-//#include "lib/util.hpp"
+//#include "lib/util.hpp"      ////////OOO wegen manifoldSiz<FUN>()
 
 #include <utility>
 #include <array>
@@ -328,6 +328,29 @@ namespace engine {
             , FAN_O = MatchBuffArray<ArgO>::SIZ
             };
       };
+    
+    
+    /**
+     * Pick a suitable size for the FeedManifold to accommodate the given function.
+     * @remark only returning one of a small selection of sizes, to avoid
+     *         excessive generation of template instances.
+     * @todo 10/24 this is a premature safety guard;
+     *       need to assess if there is actually a problem
+     *       (chances are that the optimiser absorbs most of the combinatoric complexity,
+     *       or that, to the contrary, other proliferation mechanisms cause more harm)
+     */
+    template<class FUN>
+    inline constexpr uint
+    manifoldSiz()
+    {
+      using _F = _ProcFun<FUN>;
+      auto bound = std::max (_F::FAN_I, _F::FAN_O);
+      static_assert (bound <= 10,
+           "Limitation of template instances exceeded");
+      return bound < 3? bound
+           : bound < 6? 5
+                      : 10;
+    }
   }//(End)Introspection helpers.
   
   

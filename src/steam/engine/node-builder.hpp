@@ -129,7 +129,7 @@ namespace engine {
   
   
   template<class POL>
-  class PortBuilder;
+  class PortBuilderRoot;
   
   template<class POL>
   class NodeBuilder
@@ -159,7 +159,7 @@ namespace engine {
       
       
       /** recursively enter detailed setup of a single processing port */
-      PortBuilder<POL> preparePort ();
+      PortBuilderRoot<POL> preparePort();
       
       
       /**
@@ -198,28 +198,63 @@ namespace engine {
         }
     };
   
+  
+  
   template<class POL>
-  class PortBuilder
+  class PortBuilderRoot
     : protected NodeBuilder<POL>
     , util::MoveOnly
     {
-    public:
+      NodeBuilder<POL>
+      completePort()
+        {
+          static_assert(not sizeof(POL),
+            "can not build a port without specifying a processing function");
+        }
       
+      /** setup standard wiring to adapt the given processing function.
+       * @return a PortBuilder specialised to wrap the given \a FUN */
       template<typename FUN>
-      PortBuilder
-      invoke (FUN&& fun)
-        {
-          UNIMPLEMENTED ("setup standard wiring to adapt the given processing function");
-          return move(*this);
-        }
+      auto invoke (FUN&& fun);
       
+      /** specify an `InvocationAdapter` to use explicitly. */
       template<class ADA, typename...ARGS>
-      PortBuilder
-      adaptInvocation(ARGS&& ...args)
-        {
-          UNIMPLEMENTED ("specify an `InvocationAdapter` to use explicitly");
-          return move(*this);
-        }
+      auto adaptInvocation(ARGS&& ...args);
+      
+      
+    private:
+      PortBuilderRoot(NodeBuilder<POL>&& anchor)
+        : NodeBuilder<POL>{move(anchor)}
+        { }
+      
+      friend PortBuilderRoot NodeBuilder<POL>::preparePort();
+    };
+  
+  /**
+   * @remark while _logically_ this builder-function _descends_ into the
+   *  definition of a port, for the implementation we _wrap_ the existing
+   *  NodeBuilder and layer a PortBuilder subclass „on top“ — thereby shadowing
+   *  the enclosed original builder temporarily; the terminal builder operation
+   *  PortBuilder::completePort() will unwrap and return the original NodeBuilder.
+   */
+  template<class POL>
+  inline PortBuilderRoot<POL>
+  NodeBuilder<POL>::preparePort ()
+  {
+    return PortBuilderRoot<POL>{move(*this)};
+  }
+  
+  
+  
+  template<class POL, class WAB>
+  class PortBuilder
+    : public PortBuilderRoot<POL>
+    {
+      using _Par = PortBuilderRoot<POL>;
+      
+      WAB weavingBuilder_;
+      
+    public:
       
       template<class ILA, typename...ARGS>
       PortBuilder
@@ -283,27 +318,31 @@ namespace engine {
         }                  // slice away the subclass
       
     private:
-      PortBuilder(NodeBuilder<POL>&& anchor)
+      PortBuilder(_Par&& base)
+        : _Par{move(base)}
         { }
       
-      friend PortBuilder NodeBuilder<POL>::preparePort();
+      friend class PortBuilderRoot<POL>;
     };
   
   
-  /**
-   * @remark while _logically_ this builder-function _descends_ into the
-   *  definition of a port, for the implementation we _wrap_ the existing
-   *  NodeBuilder and layer a PortBuilder subclass „on top“ — thereby shadowing
-   *  the enclosed original builder temporarily; the terminal builder operation
-   *  PortBuilder::completePort() will unwrap and return the original NodeBuilder.
-   */
   template<class POL>
-  inline PortBuilder<POL>
-  NodeBuilder<POL>::preparePort ()
-  {
-    return PortBuilder<POL>{move(*this)};
-  }
-
+  template<typename FUN>
+  auto
+  PortBuilderRoot<POL>::invoke (FUN&& fun)
+    {
+      using WeavingBuilder_FUN = WeavingBuilder<POL, manifoldSiz<FUN>(), FUN>;
+      return PortBuilder<POL, WeavingBuilder_FUN>{move(*this)};
+    }
+/*
+  template<class POL>
+  template<class ADA, typename...ARGS>
+  auto
+  PortBuilderRoot<POL>::adaptInvocation(ARGS&& ...args)
+    {
+      return move(*this);
+    }
+  */
   
   /**
    * Entrance point for building actual Render Node Connectivity (Level-2)
