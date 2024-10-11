@@ -307,7 +307,7 @@ namespace engine {
         }
       
       
-      /****************************************************//**
+      /*************************************************************//**
        * Terminal: complete the Port wiring and return to the node level.
        */
       NodeBuilder<POL>
