@@ -28,6 +28,7 @@
 
 
 #include "steam/engine/engine-ctx-facilities.hpp"
+#include "steam/engine/tracking-heap-block-provider.hpp"
 
 //#include <string>
 //#include <memory>
@@ -42,14 +43,12 @@ namespace engine{
 //    using lumiera::Subsys;
 //  using std::function;
 //  using std::bind;
+  using std::make_unique;
 //  using std::ref;
 
   
   namespace { // hidden local details of the service implementation....
     
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Temp Placeholder
-    BufferProvider* kabooom{nullptr};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Temp Placeholder    
   } // (End) hidden service impl details
   
   
@@ -63,8 +62,16 @@ namespace engine{
   
   /** */
   EngineCtx::EngineCtx()
-    : mem{*kabooom}
-    , cache{*kabooom}
+    : services_{make_unique<Facilities>()}
+    , mem  {services_->getMemProvider()}
+    , cache{services_->getCacheProvider()}
+    { }
+  
+  
+  /** */
+  EngineCtx::Facilities::Facilities()
+    : memProvider_{make_unique<TrackingHeapBlockProvider>()}         ////////////////////////////////////////TICKET #1367 : only suitable for first prototype
+    , cacheProvider_{}
     { }
   
   

@@ -46,7 +46,7 @@
 #include "lib/nocopy.hpp"
 
 //#include <utility>
-//#include <memory>
+#include <memory>
 
 
 namespace steam {
@@ -59,12 +59,13 @@ namespace engine {
   class EngineCtx
     : util::NonCopyable
     {
+      class Facilities;
+      std::unique_ptr<Facilities> services_;
+      
     public:
       BufferProvider& mem;
       BufferProvider& cache;
 //      BufferProvider& output;  /////////////////////////OOO presumably no longer necessary
-      
-      class Facilities;
       
       static lib::Depend<EngineCtx> access;
       

@@ -60,6 +60,7 @@ namespace engine {
   
   using std::forward;
   using lib::Several;
+  using lib::Depend;
   
   
   namespace {// Introspection helpers....
@@ -230,13 +231,7 @@ namespace engine {
       
       uint resultSlot{0};
       
-      struct ServiceCtx
-        {
-          ProviderRef mem;
-          ProviderRef cache;
-          ProviderRef output;
-        };
-      ServiceCtx ctx; //////////////////////////////////////////OOO need to wire that top-down through all builders!
+      Depend<EngineCtx> ctx;
       
       FUN fun_;
       
@@ -294,7 +289,7 @@ namespace engine {
         maybeFillDefaultProviders (size_t maxSlots)
           {
             for (uint i=providers.size(); i < maxSlots; ++i)
-              providers.emplace_back (ctx.mem);
+              providers.emplace_back (ctx().mem);
           }
     };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : (End)Prototyping: how to assemble a Turnout

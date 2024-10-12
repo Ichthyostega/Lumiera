@@ -39,21 +39,42 @@
 
 
 #include "steam/engine/engine-ctx.hpp"
+#include "steam/engine/buffer-provider.hpp"
+#include "lib/nocopy.hpp"
 
 //#include <utility>
-//#include <memory>
+#include <memory>
 
 
 namespace steam {
 namespace engine {
   
 //  using lib::Literal;
-//  using std::unique_ptr;
+  using std::unique_ptr;
 //  using std::forward;
   
   class EngineCtx::Facilities
+    : util::NonCopyable
     {
+      unique_ptr<BufferProvider> memProvider_;
+      unique_ptr<BufferProvider> cacheProvider_;
+      
     public:
+      Facilities();
+      
+      BufferProvider&
+      getMemProvider()
+        {
+          REQUIRE (memProvider_);
+          return *memProvider_;
+        }
+      
+      BufferProvider&
+      getCacheProvider()
+        {
+          return cacheProvider_? *cacheProvider_
+                               : *memProvider_;
+        }
     };
   
   
