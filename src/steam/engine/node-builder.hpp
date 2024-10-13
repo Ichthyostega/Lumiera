@@ -203,8 +203,8 @@ namespace engine {
   template<class POL>
   class PortBuilderRoot
     : protected NodeBuilder<POL>
-    , util::MoveOnly
     {
+    public:
       NodeBuilder<POL>
       completePort()
         {
@@ -318,8 +318,10 @@ namespace engine {
         }                  // slice away the subclass
       
     private:
-      PortBuilder(_Par&& base)
+      template<typename FUN>
+      PortBuilder(_Par&& base, FUN&& fun)
         : _Par{move(base)}
+        , weavingBuilder_{forward<FUN> (fun)}
         { }
       
       friend class PortBuilderRoot<POL>;
@@ -332,7 +334,7 @@ namespace engine {
   PortBuilderRoot<POL>::invoke (FUN&& fun)
     {
       using WeavingBuilder_FUN = WeavingBuilder<POL, manifoldSiz<FUN>(), FUN>;
-      return PortBuilder<POL, WeavingBuilder_FUN>{move(*this)};
+      return PortBuilder<POL, WeavingBuilder_FUN>{move(*this), forward<FUN> (fun)};
     }
 /*
   template<class POL>

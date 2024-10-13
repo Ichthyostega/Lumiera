@@ -121,7 +121,7 @@ namespace engine {
     manifoldSiz()
     {
       using _F = _ProcFun<FUN>;
-      auto bound = std::max (_F::FAN_I, _F::FAN_O);
+      auto constexpr bound = std::max (_F::FAN_I, _F::FAN_O);
       static_assert (bound <= 10,
            "Limitation of template instances exceeded");
       return bound < 3? bound

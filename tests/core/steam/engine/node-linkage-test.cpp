@@ -70,6 +70,9 @@ namespace test  {
       build_connected_nodes()
         {
           auto con = prepareNode()
+                        .preparePort()
+                          .invoke(dummyOp)
+                          .completePort()
                         .build();
           UNIMPLEMENTED ("build render nodes linked into a connectivity network");
         }

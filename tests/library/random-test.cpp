@@ -35,7 +35,7 @@ namespace test {
   
   /******************************************************************//**
    * @test demonstrate simple access to random number generation,
-   *       as well as  the setup of controlled random number sequences.
+   *       as well as the setup of controlled random number sequences.
    * @see  random.hpp
    */
   class Random_test : public Test

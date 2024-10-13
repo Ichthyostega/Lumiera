@@ -31,12 +31,24 @@
 
 #include "steam/engine/testframe.hpp"
 
+#include <array>
+
 
 namespace steam {
 namespace engine{
 namespace test  {
   
-  
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Dummy / Placeholder
+  using SoloArg = std::array<char*, 1>;
+  /** @todo a placeholder operation to wire a prototypical render node
+   */
+  inline void
+  dummyOp (SoloArg in, SoloArg out)
+  {
+    UNIMPLEMENTED ("a sincerely nonsensical operation");
+  }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Dummy / Placeholder
   /**
    * A fake _Domain Ontology_ to describe mocked »render operations« on
    * dummy data frames filled with random numbers.
