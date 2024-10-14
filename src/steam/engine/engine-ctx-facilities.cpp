@@ -60,6 +60,8 @@ namespace engine{
   
   
   
+  EngineCtx::~EngineCtx() { }
+  
   /** */
   EngineCtx::EngineCtx()
     : services_{make_unique<Facilities>()}

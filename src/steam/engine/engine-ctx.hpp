@@ -70,6 +70,7 @@ namespace engine {
       static lib::Depend<EngineCtx> access;
       
     private:
+     ~EngineCtx();
       EngineCtx();
       
       friend class lib::DependencyFactory<EngineCtx>;

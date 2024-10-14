@@ -266,11 +266,12 @@ namespace engine {
      * - `invoke()` invoke the processing function, passing the connected buffers
      */
     template<class ADA>
-    constexpr void
+    constexpr bool
     _verify_usable_as_InvocationAdapter()
     {
       ASSERT_MEMBER_FUNCTOR (&ADA::connect, void(uint, uint));
       ASSERT_MEMBER_FUNCTOR (&ADA::invoke, void());
+      return sizeof(ADA);
     }
   
   
@@ -302,7 +303,7 @@ namespace engine {
       
       //////////////////////////////////////////OOO builder must set-up those descriptors
       template<typename...ARGS>
-      SimpleWeavingPattern(Several<PortRef>&& pr, Several<BuffDescr> dr, ARGS&& ...args)
+      SimpleWeavingPattern(Several<PortRef>&& pr, Several<BuffDescr>&& dr, ARGS&& ...args)
         : CONF{forward<ARGS>(args)...}
         , leadPort{move(pr)}
         , outTypes{move(dr)}

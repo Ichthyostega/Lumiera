@@ -70,6 +70,7 @@ namespace engine {
     : util::NonCopyable
     {
       using BuffS = lib::UninitialisedStorage<BuffHandle,N>;
+      enum{ STORAGE_SIZ = N };
       
       BuffS inBuff;
       BuffS outBuff;

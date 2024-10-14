@@ -29,9 +29,11 @@
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/node-builder.hpp"
 #include "steam/engine/test-rand-ontology.hpp" ///////////TODO
-//#include "lib/util.hpp"
+#include "lib/test/diagnostic-output.hpp"/////////////////TODO
+#include "lib/util.hpp"
 
 
+using util::isnil;
 //using std::string;
 
 
@@ -74,7 +76,8 @@ namespace test  {
                           .invoke(dummyOp)
                           .completePort()
                         .build();
-          UNIMPLEMENTED ("build render nodes linked into a connectivity network");
+          CHECK (isnil (con.leads));
+          CHECK (1 == con.ports.size());
         }
       
       

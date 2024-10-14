@@ -43,6 +43,8 @@
 #include "steam/engine/turnout.hpp"
 #include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/buffer-provider.hpp"
+#include "steam/engine/buffhandle-attach.hpp"  /////////////////OOO why do we need to include this? we need the accessAs<TY>() template function
+#include "lib/test/test-helper.hpp"
 //#include "lib/util-foreach.hpp"
 //#include "lib/iter-adapter.hpp"
 //#include "lib/meta/function.hpp"
@@ -148,7 +150,7 @@ namespace engine {
       using BuffI = typename _ProcFun<FUN>::BuffI;
       using BuffO = typename _ProcFun<FUN>::BuffO;
       
-      enum{ N = MAN::inBuff::size()
+      enum{ N = MAN::STORAGE_SIZ
           , FAN_I = _ProcFun<FUN>::FAN_I
           , FAN_O = _ProcFun<FUN>::FAN_O
       };
@@ -166,7 +168,7 @@ namespace engine {
       
       template<typename...INIT>
       SimpleFunctionInvocationAdapter (INIT&& ...funSetup)
-        : FUN{forward<INIT> (funSetup)...}
+        : process{forward<INIT> (funSetup)...}
         { }
       
       
@@ -203,6 +205,16 @@ namespace engine {
       enum{ MAX_SIZ = N };
       
       std::function<Feed()> buildFeed;
+      
+//      template<typename INIT>
+      Conf_DirectFunctionInvocation(FUN fun)
+        : buildFeed{[=]//procFun = forward<INIT> (fun)]
+                     {
+//          using URGS = decltype(procFun);
+//          lib::test::TypeDebugger<URGS> murks;
+          return Feed{fun};
+                     }}
+        { }
     };
   
   
@@ -243,7 +255,7 @@ namespace engine {
       attachToLeadPort(ProcNode& lead, uint portNr)
         {
           PortRef portRef; /////////////////////////////////////OOO TODO need Accessor on ProcNode!!!!!
-          leadPort.emplace (portRef); 
+          leadPort.append (portRef);
           ENSURE (leadPort.size() < N);
           return move(*this);
         }
@@ -260,6 +272,16 @@ namespace engine {
         }
       
       WeavingBuilder
+      fillRemainingBufferTypes()
+        {
+          using FunSpec = _ProcFun<FUN>;
+          auto constexpr FAN_O = FunSpec::FAN_O;
+          using BuffO = typename FunSpec::BuffO;
+          uint cnt = FAN_O - buffTypes.size();
+          return appendBufferTypes<BuffO>(cnt);
+        }
+      
+      WeavingBuilder
       selectResultSlot(uint idx)
         {
           this->resultSlot = idx;
@@ -271,10 +293,11 @@ namespace engine {
       build()
         {
           maybeFillDefaultProviders (buffTypes.size());
+          REQUIRE (providers.size() == buffTypes.size());
           uint i=0;
           for (auto& typeConstructor : buffTypes)
-            outTypes.emplace (
-              typeConstructor (providers[i]));
+            outTypes.append (
+              typeConstructor (providers[i++]));
           
           ENSURE (leadPort.size() < N);
           ENSURE (outTypes.size() < N);

@@ -313,7 +313,9 @@ namespace engine {
       NodeBuilder<POL>
       completePort()
         {
-          //////////////////////////////////////////////////////////OOO finish port data setup here
+          //////////////////////////////////////////////////////////OOO need to provide all links to lead nodes here
+          weavingBuilder_.fillRemainingBufferTypes();
+          _Par::ports_.append(weavingBuilder_.build());
           return static_cast<NodeBuilder<POL>&&> (*this);
         }                  // slice away the subclass
       
