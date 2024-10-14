@@ -376,12 +376,16 @@ namespace engine {
   class Turnout
     : public Port
     , public PAT
-      //////////////////////////////OOO non-copyable? move-only??
+//    , util::MoveOnly
     {
       using Feed = typename PAT::Feed;
       using PAT::PAT;
       
     public:
+      Turnout(Turnout&& rr)  ////////////////////////////////////////////OOO investigation of MoveOnly and problems with the builder logic
+        : Port(static_cast<Port&&>(rr))
+        , PAT(static_cast<PAT&&>(rr))
+        { }
       
       /**
        * Entrance point to the next recursive step of media processing.

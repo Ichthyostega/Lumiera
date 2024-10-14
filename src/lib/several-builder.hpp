@@ -343,6 +343,7 @@ namespace lib {
               }
             else
               {
+                (void)src; (void)tar;
                 NOTREACHED("realloc immovable type (neither trivially nor typed movable)");
                 // this alternative code section is very important, because it allows
                 // to instantiate this code even for »noncopyable« types, assuming that

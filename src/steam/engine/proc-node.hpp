@@ -43,6 +43,7 @@
 #define STEAM_ENGINE_PROC_NODE_H
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "steam/common.hpp"
 #include "steam/asset/proc.hpp"
 #include "steam/mobject/parameter.hpp"
@@ -74,11 +75,16 @@ namespace engine {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   
   class Port
+    : util::MoveOnly     //////////////////////////////////////////////////OOO not clear if necessary here, and requires us to declare the ctors!!! See Turnout
     {
     public:
       virtual ~Port();  ///< this is an interface
-       
+      
       virtual BuffHandle weave (TurnoutSystem&, OptionalBuff =std::nullopt)   =0;
+      
+      // compiler does not generate a move-ctor automatically due to explicit dtor
+      Port()       = default;
+      Port(Port&&) = default;
     };
   
   using PortRef = std::reference_wrapper<Port>;
