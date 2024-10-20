@@ -614,7 +614,7 @@ namespace lib {
                                                           ,Policy::ALLOC_LIMIT)
                                                      ,overhead)
                                        ,max (2*buffSiz, cnt*spread));
-              // round down to an even number of elements
+              // round down to an straight number of elements
               size_t newCnt = expandAlloc / spread;
               expandAlloc = newCnt * spread;
               if (expandAlloc < demand)

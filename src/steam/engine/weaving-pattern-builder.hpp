@@ -22,7 +22,7 @@
 
 
 /** @file weaving-pattern-builder.hpp
- ** Construction kit for establishing an invocation scheme for media calculations.
+ ** Construction kit to establish an invocation scheme for media calculations.
  ** 
  ** @see turnout.hpp
  ** @see node-builder.hpp
@@ -49,7 +49,7 @@
 //#include "lib/iter-adapter.hpp"
 //#include "lib/meta/function.hpp"
 //#include "lib/itertools.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <utility>
 #include <functional>
@@ -63,6 +63,7 @@ namespace engine {
   using std::forward;
   using lib::Several;
   using lib::Depend;
+  using util::max;
   
   
   namespace {// Introspection helpers....
@@ -225,6 +226,45 @@ namespace engine {
   
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Prototyping: how to assemble a Turnout
+  
+  /**
+   * Recursive functional data structure to collect weaving pattern data
+   * and finally to emplace a Turnout instance into the data storage
+   * for each port, as specified by preceding builder-API invocations.
+   * @tparam PAR   recursive layering for preceding entries
+   * @tparam BUILD a builder functor to emplace one Turnout instance,
+   *               opaquely embedding all specific data typing.
+   * @tparam siz   storage in bytes to hold data produced by \a BUILD
+   */
+  template<class PAR, class BUILD, uint siz>
+  struct PatternData
+    : PAR
+    {
+      BUILD buildEntry;
+      
+      template<class DAB>
+      void
+      collectEntries (DAB& dataBuilder, uint cntElm =0, uint maxSiz =0)
+        {
+          PAR::collectEntries (dataBuilder, cntElm+1, max (siz,maxSiz));
+          buildEntry (dataBuilder);
+        }
+    };
+  
+  /**
+   * Data recursion end: prime the port data storage
+   * by reserving appropriate storage to hold all known Turnout elements.
+   */
+  struct DimData
+    {
+      template<class DAB>
+      void
+      collectEntries (DAB& dataBuilder, uint cntElm, uint maxSiz)
+        {
+          dataBuilder.reserve (cntElm, maxSiz);
+        }
+    };
+  
   template<uint N, class FUN>
   using SimpleDirectInvoke = SimpleWeavingPattern<Conf_DirectFunctionInvocation<N,FUN>>;
   
