@@ -128,10 +128,10 @@ namespace engine {
   using DataBuilder = lib::SeveralBuilder<I,E, POL::template Policy>;
   
   
-  template<class POL>
+  template<class POL, class DAT>
   class PortBuilderRoot;
   
-  template<class POL>
+  template<class POL, class DAT = PatternDataAnchor>
   class NodeBuilder
     : util::MoveOnly
     {
@@ -139,14 +139,23 @@ namespace engine {
       using LeadRefs = DataBuilder<POL, ProcNodeRef>;
       
     protected:
-      PortData ports_;
+      PortData ports_; ///////////////////////////////////////OOO obsolete and replaced by patternData_
       LeadRefs leads_;
+      
+      DAT patternData_;
       
     public:
       template<typename...INIT>
       NodeBuilder (INIT&& ...alloInit)
-        : ports_{forward<INIT> (alloInit)...}
+        : ports_{forward<INIT> (alloInit)...}    /////////////OOO obsolete and replaced by patternData_
         , leads_{forward<INIT> (alloInit)...}
+        { }
+      
+      template<class BUILD, uint siz, class D0>
+      NodeBuilder (NodeBuilder<POL,D0>&& pred, BUILD&& entryBuilder)
+        : ports_{}                               /////////////OOO obsolete and replaced by patternData_
+        , leads_{move (pred.leads_)}
+        , patternData_{move (pred.patternData_), forward<BUILD> (entryBuilder)}
         { }
       
       
@@ -159,7 +168,7 @@ namespace engine {
       
       
       /** recursively enter detailed setup of a single processing port */
-      PortBuilderRoot<POL> preparePort();
+      PortBuilderRoot<POL,DAT> preparePort();
       
       
       /**
@@ -200,12 +209,12 @@ namespace engine {
   
   
   
-  template<class POL>
+  template<class POL, class DAT>
   class PortBuilderRoot
-    : protected NodeBuilder<POL>
+    : protected NodeBuilder<POL,DAT>
     {
     public:
-      NodeBuilder<POL>
+      NodeBuilder<POL,DAT>
       completePort()
         {
           static_assert(not sizeof(POL),
@@ -237,20 +246,20 @@ namespace engine {
    *  the enclosed original builder temporarily; the terminal builder operation
    *  PortBuilder::completePort() will unwrap and return the original NodeBuilder.
    */
-  template<class POL>
-  inline PortBuilderRoot<POL>
-  NodeBuilder<POL>::preparePort ()
+  template<class POL, class DAT>
+  inline PortBuilderRoot<POL, DAT>
+  NodeBuilder<POL,DAT>::preparePort ()
   {
-    return PortBuilderRoot<POL>{move(*this)};
+    return PortBuilderRoot<POL,DAT>{move(*this)};
   }
   
   
   
-  template<class POL, class WAB>
+  template<class POL, class DAT, class WAB>
   class PortBuilder
-    : public PortBuilderRoot<POL>
+    : public PortBuilderRoot<POL,DAT>
     {
-      using _Par = PortBuilderRoot<POL>;
+      using _Par = PortBuilderRoot<POL,DAT>;
       
       WAB weavingBuilder_;
       
@@ -310,13 +319,13 @@ namespace engine {
       /*************************************************************//**
        * Terminal: complete the Port wiring and return to the node level.
        */
-      NodeBuilder<POL>
+      NodeBuilder<POL,DAT>  ////////////////////////////////////////OOO need to extend and evolve the DAT parameter here
       completePort()
         {
           //////////////////////////////////////////////////////////OOO need to provide all links to lead nodes here
           weavingBuilder_.fillRemainingBufferTypes();
           _Par::ports_.append(weavingBuilder_.build());
-          return static_cast<NodeBuilder<POL>&&> (*this);
+          return static_cast<NodeBuilder<POL,DAT>&&> (*this);
         }                  // slice away the subclass
       
     private:
@@ -326,17 +335,17 @@ namespace engine {
         , weavingBuilder_{forward<FUN> (fun)}
         { }
       
-      friend class PortBuilderRoot<POL>;
+      friend class PortBuilderRoot<POL,DAT>;
     };
   
   
-  template<class POL>
+  template<class POL, class DAT>
   template<typename FUN>
   auto
-  PortBuilderRoot<POL>::invoke (FUN&& fun)
+  PortBuilderRoot<POL,DAT>::invoke (FUN&& fun)
     {
       using WeavingBuilder_FUN = WeavingBuilder<POL, manifoldSiz<FUN>(), FUN>;
-      return PortBuilder<POL, WeavingBuilder_FUN>{move(*this), forward<FUN> (fun)};
+      return PortBuilder<POL,DAT, WeavingBuilder_FUN>{move(*this), forward<FUN> (fun)};
     }
 /*
   template<class POL>

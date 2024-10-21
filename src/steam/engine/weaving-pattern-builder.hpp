@@ -249,13 +249,19 @@ namespace engine {
           PAR::collectEntries (dataBuilder, cntElm+1, max (siz,maxSiz));
           buildEntry (dataBuilder);
         }
+      
+      
+      PatternData(PAR&& predecessor, BUILD&& entryBuilder)
+        : PAR{move (predecessor)}
+        , buildEntry{move (entryBuilder)}
+        { }
     };
   
   /**
    * Data recursion end: prime the port data storage
    * by reserving appropriate storage to hold all known Turnout elements.
    */
-  struct DimData
+  struct PatternDataAnchor
     {
       template<class DAB>
       void
@@ -264,6 +270,7 @@ namespace engine {
           dataBuilder.reserve (cntElm, maxSiz);
         }
     };
+  
   
   template<uint N, class FUN>
   using SimpleDirectInvoke = SimpleWeavingPattern<Conf_DirectFunctionInvocation<N,FUN>>;
