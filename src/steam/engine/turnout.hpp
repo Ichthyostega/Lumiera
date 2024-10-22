@@ -218,7 +218,6 @@ namespace engine {
       virtual BuffHandle
       allocateBuffer (const lumiera::StreamType* ty) { return current_.allocateBuffer(ty); }
     };
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
   
   
   /**
@@ -255,6 +254,7 @@ namespace engine {
           return Strategy::step (*this);
         }
     };
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   
     /**
@@ -288,11 +288,11 @@ namespace engine {
      *       + an array of output buffer pointers
      *       + `CONF::MAX_SIZ` limits both arrays
      */
-  template<class CONF>
+  template<class INVO>
   struct SimpleWeavingPattern
-    : CONF
+    : INVO
     {
-      using Feed = typename CONF::Feed;
+      using Feed = typename INVO::Feed;
       
       static_assert (_verify_usable_as_InvocationAdapter<Feed>());
       
@@ -301,19 +301,23 @@ namespace engine {
       
       uint resultSlot{0};
       
-      //////////////////////////////////////////OOO builder must set-up those descriptors
+      /** forwarding-ctor to provide the detailed input/output connections */
       template<typename...ARGS>
-      SimpleWeavingPattern(Several<PortRef>&& pr, Several<BuffDescr>&& dr, ARGS&& ...args)
-        : CONF{forward<ARGS>(args)...}
+      SimpleWeavingPattern (Several<PortRef>&&   pr
+                           ,Several<BuffDescr>&& dr
+                           ,uint resultIdx
+                           ,ARGS&& ...args)
+        : INVO{forward<ARGS>(args)...}
         , leadPort{move(pr)}
         , outTypes{move(dr)}
+        , resultSlot{resultIdx}
         { }
       
       
       Feed
       mount()
         {
-          return CONF::buildFeed();
+          return INVO::buildFeed();
         }
       
       void
@@ -358,7 +362,7 @@ namespace engine {
               if (i != resultSlot)
                 feed.outBuff[i].release();
             }
-          ENSURE (resultSlot < CONF::MAX_SIZ, "invalid result buffer configured.");
+          ENSURE (resultSlot < INVO::MAX_SIZ, "invalid result buffer configured.");
           return feed.outBuff[resultSlot];
         }
       

@@ -96,6 +96,7 @@
 #include "steam/engine/turnout.hpp"
 #include "lib/several-builder.hpp"
 #include "lib/nocopy.hpp"
+#include "lib/test/test-helper.hpp"/////////////////////TODO TOD-oh
 
 #include <utility>
 #include <vector>
@@ -119,6 +120,7 @@ namespace engine {
   }//(End) policy
   
   
+  
   /**
    * A builder to collect working data.
    * Implemented through a suitable configuration of lib::SeveralBuilder,
@@ -127,9 +129,35 @@ namespace engine {
   template<class POL, class I, class E=I>
   using DataBuilder = lib::SeveralBuilder<I,E, POL::template Policy>;
   
+
+  template<class POL, class DAT>
+  class NodeBuilder;
   
   template<class POL, class DAT>
   class PortBuilderRoot;
+
+  
+  namespace { // Metaprogramming helper to pick the proper constructor...
+    
+    using lib::meta::disable_if;
+    using std::bool_constant;
+    using std::__and_;
+    
+    template<typename ...ARGS>
+    struct ArgMatch : std::false_type { };
+    
+//    template<class POL, class D, uint siz, typename...XS>
+//    struct ArgMatch<NodeBuilder<POL,D>&&, SizMark<siz>, XS...> : std::true_type { };  // the chaining-ctor takes a NodeBuilder and a size-mark...
+    template<typename X, uint siz, typename...XS>
+    struct ArgMatch<X, SizMark<siz> const&, XS...> : std::true_type { };  // the chaining-ctor takes a NodeBuilder and a size-mark...
+    
+    /** Metaprogramming: prevent the var-args ctor from shadowing the chaining ctor */
+    template<typename ...ARGS>
+    using disable_if_Chain = disable_if<__and_<bool_constant<3 == sizeof...(ARGS)>  // do not use this constructor if 3 arguments given
+                                              ,ArgMatch<ARGS...>                    // and these match the signature for the chaining-constructor
+                                              >>;
+  }
+  
   
   template<class POL, class DAT = PatternDataAnchor>
   class NodeBuilder
@@ -139,30 +167,36 @@ namespace engine {
       using LeadRefs = DataBuilder<POL, ProcNodeRef>;
       
     protected:
-      PortData ports_; ///////////////////////////////////////OOO obsolete and replaced by patternData_
       LeadRefs leads_;
-      
       DAT patternData_;
       
     public:
-      template<typename...INIT>
+      template<typename...INIT>//,                   typename = disable_if_Chain<INIT...>>
       NodeBuilder (INIT&& ...alloInit)
-        : ports_{forward<INIT> (alloInit)...}    /////////////OOO obsolete and replaced by patternData_
-        , leads_{forward<INIT> (alloInit)...}
-        { }
+        : leads_{forward<INIT> (alloInit)...}
+        { 
+//lib::test::TypeDebugger<lib::meta::TySeq<INIT...>> muggi;
+//lib::test::TypeDebugger<disable_if_Chain<INIT...>> muggi;
+//          if constexpr (ArgMatch<INIT...>())
+//              static_assert(not sizeof(POL), "YESSS!");
+//          else
+//              static_assert(not sizeof(POL), "OH_NO");
+        }
       
       template<class BUILD, uint siz, class D0>
-      NodeBuilder (NodeBuilder<POL,D0>&& pred, BUILD&& entryBuilder)
-        : ports_{}                               /////////////OOO obsolete and replaced by patternData_
-        , leads_{move (pred.leads_)}
+      NodeBuilder (NodeBuilder<POL,D0>&& pred, SizMark<siz>, BUILD&& entryBuilder)
+        : leads_{move (pred.leads_)}
         , patternData_{move (pred.patternData_), forward<BUILD> (entryBuilder)}
         { }
+      
+      template<class P, class D0>
+      friend class NodeBuilder;
       
       
       NodeBuilder
       addLead (ProcNode const& lead)
         {
-          UNIMPLEMENTED ("append the given predecessor node to the sequence of leads");
+          leads_.append (lead);
           return move(*this);
         }
       
@@ -201,11 +235,17 @@ namespace engine {
       Connectivity
       build()
         {
-          return Connectivity{ports_.build()
+          PortData ports;
+          patternData_.collectEntries(ports);
+          return Connectivity{ports.build()
                              ,leads_.build()
                              ,NodeID{}}; //////////////////////////////////////OOO what's the purpose of the NodeID??
         }
     };
+  
+  /** Deduction Guide: help the compiler with deducing follow-up NodeBuilder parameters */
+  template<class POL, class D0, uint siz, class BUILD>
+  NodeBuilder (NodeBuilder<POL,D0>&&, SizMark<siz>, BUILD&&) -> NodeBuilder<POL, PatternData<D0,BUILD,siz>>;
   
   
   
@@ -319,14 +359,21 @@ namespace engine {
       /*************************************************************//**
        * Terminal: complete the Port wiring and return to the node level.
        */
-      NodeBuilder<POL,DAT>  ////////////////////////////////////////OOO need to extend and evolve the DAT parameter here
+      auto
       completePort()
         {
           //////////////////////////////////////////////////////////OOO need to provide all links to lead nodes here
           weavingBuilder_.fillRemainingBufferTypes();
-          _Par::ports_.append(weavingBuilder_.build());
-          return static_cast<NodeBuilder<POL,DAT>&&> (*this);
-        }                  // slice away the subclass
+          using MoThi = decltype(move(*this));
+//          if constexpr (ArgMatch<MoThi&&, SizMark<5>, void*>())
+//              static_assert(not sizeof(POL), "YESSS!");
+//          else
+//              static_assert(not sizeof(POL), "OH_NO");
+//          lib::test::TypeDebugger<disable_if_Chain<MoThi&&, int, void*>> buggi;
+          return NodeBuilder{static_cast<NodeBuilder<POL,DAT>&&> (*this) //move (*this)
+                            ,weavingBuilder_.sizMark
+                            ,weavingBuilder_.build()};
+        }                  // chain to builder with extended patternData
       
     private:
       template<typename FUN>

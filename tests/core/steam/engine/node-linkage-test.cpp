@@ -73,7 +73,7 @@ namespace test  {
         {
           auto con = prepareNode()
                         .preparePort()
-                          .invoke(dummyOp)
+                          .invoke(&dummyOp)
                           .completePort()
                         .build();
           CHECK (isnil (con.leads));

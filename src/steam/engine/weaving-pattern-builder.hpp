@@ -198,7 +198,7 @@ namespace engine {
    * - use a sufficiently sized FeedManifold as storage scheme
    */
   template<uint N, class FUN>
-  struct Conf_DirectFunctionInvocation
+  struct DirectFunctionInvocation
     : util::MoveOnly
     {
       using Manifold = FeedManifold<N>;
@@ -208,7 +208,7 @@ namespace engine {
       std::function<Feed()> buildFeed;
       
 //      template<typename INIT>
-      Conf_DirectFunctionInvocation(FUN fun)
+      DirectFunctionInvocation(FUN fun)
         : buildFeed{[=]//procFun = forward<INIT> (fun)]
                      {
 //          using URGS = decltype(procFun);
@@ -224,8 +224,11 @@ namespace engine {
   template<class POL, class I, class E=I>
   using DataBuilder = lib::SeveralBuilder<I,E, POL::template Policy>;
   
+  template<uint siz>
+  using SizMark = std::integral_constant<uint,siz>;
+  
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Prototyping: how to assemble a Turnout
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1371 : Prototyping: how to assemble a Turnout
   
   /**
    * Recursive functional data structure to collect weaving pattern data
@@ -273,18 +276,19 @@ namespace engine {
   
   
   template<uint N, class FUN>
-  using SimpleDirectInvoke = SimpleWeavingPattern<Conf_DirectFunctionInvocation<N,FUN>>;
+  using SimpleDirectInvoke = SimpleWeavingPattern<DirectFunctionInvocation<N,FUN>>;
   
   template<class POL, uint N, class FUN>
   struct WeavingBuilder
     : util::MoveOnly
     {
-      DataBuilder<POL, PortRef>   leadPort;
-      DataBuilder<POL, BuffDescr> outTypes;
+      using TurnoutWeaving = Turnout<SimpleDirectInvoke<N,FUN>>;
+      static constexpr SizMark<sizeof(TurnoutWeaving)> sizMark{};
       
       using TypeMarker = std::function<BuffDescr(BufferProvider&)>;
       using ProviderRef = std::reference_wrapper<BufferProvider>;
       
+      DataBuilder<POL, PortRef> leadPort;
       std::vector<TypeMarker> buffTypes;
       std::vector<ProviderRef> providers;
       
@@ -339,19 +343,37 @@ namespace engine {
       auto
       build()
         {
+          // discard excess storage prior to allocating the output types sequence
+          leadPort.shrinkFit();
+          
           maybeFillDefaultProviders (buffTypes.size());
           REQUIRE (providers.size() == buffTypes.size());
+          auto outTypes = DataBuilder<POL, BuffDescr>{}
+                                     .reserve (buffTypes.size());
           uint i=0;
           for (auto& typeConstructor : buffTypes)
             outTypes.append (
               typeConstructor (providers[i++]));
           
-          ENSURE (leadPort.size() < N);
-          ENSURE (outTypes.size() < N);
+          ENSURE (leadPort.size() <= N);
+          ENSURE (outTypes.size() <= N);
           
-          using Product = Turnout<SimpleDirectInvoke<N,FUN>>;
-          ///////////////////////////////OOO need a way to prepare SeveralBuilder-instances for leadPort and outDescr --> see NodeBuilder
-          return Product{leadPort.build(), outTypes.build(), move(fun_)};
+          using PortDataBuilder = DataBuilder<POL, Port>;
+          // provide a free-standing functor to build a suitable Port impl (≙Turnout)
+          return [leads = move(leadPort.build())
+                 ,types = move(outTypes.build())
+                 ,procFun = move(fun_)
+                 ,resultIdx = resultSlot
+                 ]
+                 (PortDataBuilder& portData) mutable -> void
+                   {
+//lib::test::TypeDebugger<decltype(procFun)> uggi;
+                     portData.template emplace<TurnoutWeaving> (move(leads)
+                                                               ,move(types)
+                                                               ,resultIdx
+                                                               ,move(procFun)
+                                                               );
+                   };
         }
       
       private:
