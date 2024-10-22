@@ -75,16 +75,17 @@ namespace engine {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   
   class Port
-    : util::MoveOnly     //////////////////////////////////////////////////OOO not clear if necessary here, and requires us to declare the ctors!!! See Turnout
+//  : util::MoveOnly     //////////////////////////////////////////////////OOO not clear if necessary here, and requires us to declare the ctors!!! See Turnout
+    : util::NonCopyable  //////////////////////////////////////////////////OOO this would be the perfect solution, if we manage to handle this within the builder
     {
     public:
       virtual ~Port();  ///< this is an interface
       
       virtual BuffHandle weave (TurnoutSystem&, OptionalBuff =std::nullopt)   =0;
       
-      // compiler does not generate a move-ctor automatically due to explicit dtor
-      Port()       = default;
-      Port(Port&&) = default;
+//    // compiler does not generate a move-ctor automatically due to explicit dtor
+//    Port()       = default;
+//    Port(Port&&) = default;
     };
   
   using PortRef = std::reference_wrapper<Port>;

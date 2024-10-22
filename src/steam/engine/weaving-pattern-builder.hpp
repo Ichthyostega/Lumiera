@@ -23,12 +23,74 @@
 
 /** @file weaving-pattern-builder.hpp
  ** Construction kit to establish an invocation scheme for media calculations.
+ ** Adapters and configuration is provided to invoke the actual _media processing function_
+ ** in accordance to a fixed _wiring scheme:_
+ ** - the function takes two arguments
+ ** - these are an array of input and output buffer pointers
+ ** - buffer sizes or types are assumed to be uniform over all »slots«
+ ** - yet the input side my use another type than the output side
+ ** @todo as of 10/2024, this scheme is established as prototype to explore how processing nodes
+ **       can be build, connected and invoked; the expectation is however that this simple scheme
+ **       is suitable to adapt and handle many common cases of invoking media processing functions,
+ **       because the given _functor_ is constructed within a plug-in tailored to a specific
+ **       media processing library (e.g. FFmpeg) and thus can be a lambda to forward to the
+ **       actual function.
+ ** @note steam::engine::Turnout mixes-in the steam::engine::SimpleWeavingPattern, which in turn
+ **       inherits from an *Invocation Adapter* given as template parameter. So this constitutes
+ **       an *extension point* where other, more elaborate invocation schemes could be integrated.
+ ** 
+ ** # Interplay of NodeBuider, PortBuilder and WeavingBuilder
+ ** 
+ ** The steam::engine::WeavingBuilder defined here serves as the low-level builder and adapter to
+ ** prepare the wiring and invocation. The builder-API allows to setup the wiring of input and
+ ** output-»slots« and control some detail aspects like caching. However, without defining any
+ ** connections explicitly, a simple 1:1 wiring scheme is employed
+ ** - each _input slot_ of the function gets an input buffer, which is filled by _pulling_
+ **   (i.e. invoking) a predecessor node (a so called »lead«).
+ ** - for each _output slot_ a buffer is allocated for the processing function to drop off
+ **   the calculated media data
+ ** - only one of these output buffers is used as actual result, while the other buffers
+ **   are just discarded (but may possibly be fed to the frame cache).
+ ** 
+ ** Each [Processing Node](\ref ProcNode) represents one specific processing functionality on
+ ** a logical level; yet such a node may be able to generate several „flavours“ of this processing,
+ ** which are represented as *ports* on this node. Actually, each such port stands for one specific
+ ** setup of a function invocation, with appropriate _wiring_ of input and output connections.
+ ** For example, an audio filtering function may be exposed on port-#1 for stereo sound, while
+ ** port-#2 may process the left, and port-#3 the right channel in isolation. It is entirely
+ ** up to the library-adapter-plug-in what processing functions to expose, and in which flavours.
+ ** The WeavingBuilder is used to generate a single \ref Turnout object, which corresponds to
+ ** the invocation of a single port and thus one flavour of processing.
+ ** 
+ ** On the architectural level above, the \ref NodeBuilder exposes the ability to set up a
+ ** ProcNode, complete with several ports and connected to possibly several predecessor nodes.
+ ** Using several NodeBuilder invocations, the _processing node graph_ can be built up starting
+ ** from the source (predecessors) and moving up to the _exit nodes,_ which produce the desired
+ ** calculation results. The NodeBuilder offers a function to define the predecessor nodes
+ ** (also designated as _lead nodes_), and it offers an entrance point to descend into a
+ ** PortBuilder, allowing to add the port definitions for this node step by step.
+ ** 
+ ** On the implementation level, the PortBuilder inherits from the NodeBuilder and embeds a
+ ** WeavingBuilder instance. Moreover, the actual parametrisations of the NodeBuilder template
+ ** are chained to create a _functional data structure._ This intricate setup is necessary because
+ ** the actual data structure of the node graph comprises several small descriptor arrays and
+ ** interconnected pointers, which are all placed into consecutive chunks of memory, using a
+ ** custom allocator, the AllocationCluster. The lib::Several is used as front-end to access
+ ** these small collections of related objects, and the associated lib::SeveralBuilder provides
+ ** the low-level memory allocation and object creation functionality. The purpose of this
+ ** admittedly quite elaborate scheme is to generate a compact data structure, with high
+ ** cache locality and without wasting too much memory. Since the exact number of elements
+ ** and the size of those elements can be concluded only after the builder-API usage has
+ ** been completed, the aforementioned functional datastructure is used to collect the
+ ** parametrisation information for all ports, while delaying the actual object creation.
+ ** With this technique, it is possible to generate all descriptors or entries of one
+ ** kind in a single run, and placed optimally and compact into the memory allocation.
  ** 
  ** @see turnout.hpp
  ** @see node-builder.hpp
  ** @see NodeLinkage_test
  ** 
- ** @todo WIP-WIP-WIP as of 7/2024 prototyping how to build and invoke render nodes /////////////////////////TICKET #1367
+ ** @todo WIP-WIP-WIP as of 10/2024 prototyping how to build and invoke render nodes /////////////////////////TICKET #1371
  ** 
  */
 
@@ -191,11 +253,14 @@ namespace engine {
     };
   
   /**
-   * Example base configuration for a Weaving-Pattern chain:
+   * Typical base configuration for a Weaving-Pattern chain:
    * - use a simple processing function
    * - pass an input/output buffer array to this function
    * - map all »slots« directly without any re-ordering
    * - use a sufficiently sized FeedManifold as storage scheme
+   * @remark actual media handling plug-ins may choose to
+   *         employ more elaborate _invocation adapters_
+   *         specifically tailored to the library's needs.
    */
   template<uint N, class FUN>
   struct DirectFunctionInvocation
@@ -207,14 +272,13 @@ namespace engine {
       
       std::function<Feed()> buildFeed;
       
-//      template<typename INIT>
+      /** when building the Turnout, prepare the _invocation adapter_
+       * @note processing function \a fun is bound by value into the closure,
+       *       so that each invocation will create a copy of that function,
+       *       embedded (and typically inlined) into the invocation adapter.
+       */
       DirectFunctionInvocation(FUN fun)
-        : buildFeed{[=]//procFun = forward<INIT> (fun)]
-                     {
-//          using URGS = decltype(procFun);
-//          lib::test::TypeDebugger<URGS> murks;
-          return Feed{fun};
-                     }}
+        : buildFeed{[=]{ return Feed{fun}; }}
         { }
     };
   
@@ -275,8 +339,11 @@ namespace engine {
     };
   
   
+  
+  
   template<uint N, class FUN>
   using SimpleDirectInvoke = SimpleWeavingPattern<DirectFunctionInvocation<N,FUN>>;
+  
   
   template<class POL, uint N, class FUN>
   struct WeavingBuilder
@@ -307,7 +374,7 @@ namespace engine {
         {
           PortRef portRef; /////////////////////////////////////OOO TODO need Accessor on ProcNode!!!!!
           leadPort.append (portRef);
-          ENSURE (leadPort.size() < N);
+          ENSURE (leadPort.size() <= N);
           return move(*this);
         }
       
@@ -318,7 +385,7 @@ namespace engine {
           while (cnt--)
             buffTypes.emplace_back([](BufferProvider& provider)
                                     { return provider.getDescriptor<BU>(); });
-          ENSURE (buffTypes.size() < N);
+          ENSURE (buffTypes.size() <= N);
           return move(*this);
         }
       
@@ -367,7 +434,6 @@ namespace engine {
                  ]
                  (PortDataBuilder& portData) mutable -> void
                    {
-//lib::test::TypeDebugger<decltype(procFun)> uggi;
                      portData.template emplace<TurnoutWeaving> (move(leads)
                                                                ,move(types)
                                                                ,resultIdx

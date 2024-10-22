@@ -279,14 +279,14 @@ namespace engine {
     /**
      * Standard implementation for a _Weaving Pattern_ to connect
      * the input and output data feeds (buffers) into a processing function.
-     * @tparam CONF a configuration / policy base class
+     * @tparam INVO a configuration / policy base class to _adapt for invocation_
      * @note assumptions made regarding the overall structure
-     *     - `CONF::Feed` defines an _invocation adapter_ for the processing function
-     *     - `CONF::buildFeed()` is a functor to (repeatedly) build `Feed` instances
+     *     - `INVO::Feed` defines an _invocation adapter_ for the processing function
+     *     - `INVO::buildFeed()` is a functor to (repeatedly) build `Feed` instances
      *     - the _invocation adapter_ in turn embeds a `FeedManifold<N>` to hold
      *       + an array of input buffer pointers
      *       + an array of output buffer pointers
-     *       + `CONF::MAX_SIZ` limits both arrays
+     *       + `INVO::MAX_SIZ` limits both arrays
      */
   template<class INVO>
   struct SimpleWeavingPattern
@@ -386,10 +386,10 @@ namespace engine {
       using PAT::PAT;
       
     public:
-      Turnout(Turnout&& rr)  ////////////////////////////////////////////OOO investigation of MoveOnly and problems with the builder logic
-        : Port(static_cast<Port&&>(rr))
-        , PAT(static_cast<PAT&&>(rr))
-        { }
+//    Turnout(Turnout&& rr)  ////////////////////////////////////////////OOO investigation of MoveOnly and problems with the builder logic
+//      : Port(static_cast<Port&&>(rr))
+//      , PAT(static_cast<PAT&&>(rr))
+//      { }
       
       /**
        * Entrance point to the next recursive step of media processing.

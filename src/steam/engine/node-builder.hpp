@@ -137,26 +137,6 @@ namespace engine {
   class PortBuilderRoot;
 
   
-  namespace { // Metaprogramming helper to pick the proper constructor...
-    
-    using lib::meta::disable_if;
-    using std::bool_constant;
-    using std::__and_;
-    
-    template<typename ...ARGS>
-    struct ArgMatch : std::false_type { };
-    
-//    template<class POL, class D, uint siz, typename...XS>
-//    struct ArgMatch<NodeBuilder<POL,D>&&, SizMark<siz>, XS...> : std::true_type { };  // the chaining-ctor takes a NodeBuilder and a size-mark...
-    template<typename X, uint siz, typename...XS>
-    struct ArgMatch<X, SizMark<siz> const&, XS...> : std::true_type { };  // the chaining-ctor takes a NodeBuilder and a size-mark...
-    
-    /** Metaprogramming: prevent the var-args ctor from shadowing the chaining ctor */
-    template<typename ...ARGS>
-    using disable_if_Chain = disable_if<__and_<bool_constant<3 == sizeof...(ARGS)>  // do not use this constructor if 3 arguments given
-                                              ,ArgMatch<ARGS...>                    // and these match the signature for the chaining-constructor
-                                              >>;
-  }
   
   
   template<class POL, class DAT = PatternDataAnchor>
@@ -171,17 +151,10 @@ namespace engine {
       DAT patternData_;
       
     public:
-      template<typename...INIT>//,                   typename = disable_if_Chain<INIT...>>
+      template<typename...INIT>
       NodeBuilder (INIT&& ...alloInit)
         : leads_{forward<INIT> (alloInit)...}
-        { 
-//lib::test::TypeDebugger<lib::meta::TySeq<INIT...>> muggi;
-//lib::test::TypeDebugger<disable_if_Chain<INIT...>> muggi;
-//          if constexpr (ArgMatch<INIT...>())
-//              static_assert(not sizeof(POL), "YESSS!");
-//          else
-//              static_assert(not sizeof(POL), "OH_NO");
-        }
+        { }
       
       template<class BUILD, uint siz, class D0>
       NodeBuilder (NodeBuilder<POL,D0>&& pred, SizMark<siz>, BUILD&& entryBuilder)
@@ -249,6 +222,7 @@ namespace engine {
   
   
   
+  
   template<class POL, class DAT>
   class PortBuilderRoot
     : protected NodeBuilder<POL,DAT>
@@ -264,7 +238,7 @@ namespace engine {
       /** setup standard wiring to adapt the given processing function.
        * @return a PortBuilder specialised to wrap the given \a FUN */
       template<typename FUN>
-      auto invoke (FUN&& fun);
+      auto invoke (FUN fun);
       
       /** specify an `InvocationAdapter` to use explicitly. */
       template<class ADA, typename...ARGS>
@@ -313,10 +287,12 @@ namespace engine {
           return move(*this);
         }
       
+      /** define the output slot to use as result
+       * @remark default is to use the first one */
       PortBuilder
       asResultSlot (uint r)
         {
-          UNIMPLEMENTED ("define the output slot to use as result (default is the first one)");
+          weavingBuilder_.selectResultSlot(r);
           return move(*this);
         }
       
@@ -364,16 +340,10 @@ namespace engine {
         {
           //////////////////////////////////////////////////////////OOO need to provide all links to lead nodes here
           weavingBuilder_.fillRemainingBufferTypes();
-          using MoThi = decltype(move(*this));
-//          if constexpr (ArgMatch<MoThi&&, SizMark<5>, void*>())
-//              static_assert(not sizeof(POL), "YESSS!");
-//          else
-//              static_assert(not sizeof(POL), "OH_NO");
-//          lib::test::TypeDebugger<disable_if_Chain<MoThi&&, int, void*>> buggi;
-          return NodeBuilder{static_cast<NodeBuilder<POL,DAT>&&> (*this) //move (*this)
+          return NodeBuilder{static_cast<NodeBuilder<POL,DAT>&&> (*this) // slice away PortBulder subclass data
                             ,weavingBuilder_.sizMark
                             ,weavingBuilder_.build()};
-        }                  // chain to builder with extended patternData
+        }                 // chain to builder with extended patternData
       
     private:
       template<typename FUN>
@@ -389,10 +359,10 @@ namespace engine {
   template<class POL, class DAT>
   template<typename FUN>
   auto
-  PortBuilderRoot<POL,DAT>::invoke (FUN&& fun)
+  PortBuilderRoot<POL,DAT>::invoke (FUN fun)
     {
       using WeavingBuilder_FUN = WeavingBuilder<POL, manifoldSiz<FUN>(), FUN>;
-      return PortBuilder<POL,DAT, WeavingBuilder_FUN>{move(*this), forward<FUN> (fun)};
+      return PortBuilder<POL,DAT, WeavingBuilder_FUN>{move(*this), move(fun)};
     }
 /*
   template<class POL>
