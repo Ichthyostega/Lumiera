@@ -39,12 +39,13 @@
  **       inherits from an *Invocation Adapter* given as template parameter. So this constitutes
  **       an *extension point* where other, more elaborate invocation schemes could be integrated.
  ** 
+ ** 
  ** # Interplay of NodeBuider, PortBuilder and WeavingBuilder
  ** 
- ** The steam::engine::WeavingBuilder defined here serves as the low-level builder and adapter to
- ** prepare the wiring and invocation. The builder-API allows to setup the wiring of input and
- ** output-»slots« and control some detail aspects like caching. However, without defining any
- ** connections explicitly, a simple 1:1 wiring scheme is employed
+ ** The steam::engine::WeavingBuilder defined here serves as the low-level builder and adapter
+ ** to prepare the wiring and invocation. The builder-API allows to setup the wiring of input
+ ** and output-»slots« and control some detail aspects like caching. However, without defining
+ ** any connections explicitly, a simple 1:1 wiring scheme is employed
  ** - each _input slot_ of the function gets an input buffer, which is filled by _pulling_
  **   (i.e. invoking) a predecessor node (a so called »lead«).
  ** - for each _output slot_ a buffer is allocated for the processing function to drop off
@@ -52,8 +53,8 @@
  ** - only one of these output buffers is used as actual result, while the other buffers
  **   are just discarded (but may possibly be fed to the frame cache).
  ** 
- ** Each [Processing Node](\ref ProcNode) represents one specific processing functionality on
- ** a logical level; yet such a node may be able to generate several „flavours“ of this processing,
+ ** Each [Processing Node](\ref ProcNode) represents one specific processing functionality on a
+ ** logical level; yet such a node may be able to generate several „flavours“ of this processing,
  ** which are represented as *ports* on this node. Actually, each such port stands for one specific
  ** setup of a function invocation, with appropriate _wiring_ of input and output connections.
  ** For example, an audio filtering function may be exposed on port-#1 for stereo sound, while
@@ -62,13 +63,13 @@
  ** The WeavingBuilder is used to generate a single \ref Turnout object, which corresponds to
  ** the invocation of a single port and thus one flavour of processing.
  ** 
- ** On the architectural level above, the \ref NodeBuilder exposes the ability to set up a
+ ** At one architectural level above, the \ref NodeBuilder exposes the ability to set up a
  ** ProcNode, complete with several ports and connected to possibly several predecessor nodes.
- ** Using several NodeBuilder invocations, the _processing node graph_ can be built up starting
- ** from the source (predecessors) and moving up to the _exit nodes,_ which produce the desired
- ** calculation results. The NodeBuilder offers a function to define the predecessor nodes
- ** (also designated as _lead nodes_), and it offers an entrance point to descend into a
- ** PortBuilder, allowing to add the port definitions for this node step by step.
+ ** Using a sequence of NodeBuilder invocations, the _processing node graph_ can be built gradually,
+ ** starting from the source (predecessors) and moving up to the _exit nodes,_ which produce the
+ ** desired calculation results. The NodeBuilder offers a function to define the predecessor nodes
+ ** (also designated as _lead nodes_), and it offers an [entrance point](\ref NodeBuilder::preparePort)
+ ** to descend into a \ref PortBuilder, allowing to add the port definitions for this node step by step.
  ** 
  ** On the implementation level, the PortBuilder inherits from the NodeBuilder and embeds a
  ** WeavingBuilder instance. Moreover, the actual parametrisations of the NodeBuilder template
@@ -80,7 +81,7 @@
  ** the low-level memory allocation and object creation functionality. The purpose of this
  ** admittedly quite elaborate scheme is to generate a compact data structure, with high
  ** cache locality and without wasting too much memory. Since the exact number of elements
- ** and the size of those elements can be concluded only after the builder-API usage has
+ ** and the size of those elements can be deduced only after the builder-API usage has
  ** been completed, the aforementioned functional datastructure is used to collect the
  ** parametrisation information for all ports, while delaying the actual object creation.
  ** With this technique, it is possible to generate all descriptors or entries of one
@@ -355,9 +356,9 @@ namespace engine {
       using TypeMarker = std::function<BuffDescr(BufferProvider&)>;
       using ProviderRef = std::reference_wrapper<BufferProvider>;
       
-      DataBuilder<POL, PortRef> leadPort;
-      std::vector<TypeMarker> buffTypes;
-      std::vector<ProviderRef> providers;
+      DataBuilder<POL, PortRef> leadPorts;
+      std::vector<TypeMarker>   buffTypes;
+      std::vector<ProviderRef>  providers;
       
       uint resultSlot{0};
       
@@ -365,16 +366,18 @@ namespace engine {
       
       FUN fun_;
       
-      WeavingBuilder(FUN&& init)
-        : fun_{move(init)}
+      template<typename...INIT>
+      WeavingBuilder(FUN&& init, INIT&& ...alloInit)
+        : leadPorts{forward<INIT> (alloInit)...}
+        , fun_{move(init)}
         { }
       
       WeavingBuilder
       attachToLeadPort(ProcNode& lead, uint portNr)
         {
-          PortRef portRef; /////////////////////////////////////OOO TODO need Accessor on ProcNode!!!!!
-          leadPort.append (portRef);
-          ENSURE (leadPort.size() <= N);
+          PortRef portRef{lead.getPort (portNr)};
+          leadPorts.append (portRef);
+          ENSURE (leadPorts.size() <= N);
           return move(*this);
         }
       
@@ -411,23 +414,23 @@ namespace engine {
       build()
         {
           // discard excess storage prior to allocating the output types sequence
-          leadPort.shrinkFit();
+          leadPorts.shrinkFit();
           
           maybeFillDefaultProviders (buffTypes.size());
           REQUIRE (providers.size() == buffTypes.size());
-          auto outTypes = DataBuilder<POL, BuffDescr>{}
+          auto outTypes = DataBuilder<POL, BuffDescr>{leadPorts.policyConnect()}
                                      .reserve (buffTypes.size());
           uint i=0;
           for (auto& typeConstructor : buffTypes)
             outTypes.append (
               typeConstructor (providers[i++]));
           
-          ENSURE (leadPort.size() <= N);
-          ENSURE (outTypes.size() <= N);
+          ENSURE (leadPorts.size() <= N);
+          ENSURE (outTypes.size()  <= N);
           
           using PortDataBuilder = DataBuilder<POL, Port>;
           // provide a free-standing functor to build a suitable Port impl (≙Turnout)
-          return [leads = move(leadPort.build())
+          return [leads = move(leadPorts.build())
                  ,types = move(outTypes.build())
                  ,procFun = move(fun_)
                  ,resultIdx = resultSlot

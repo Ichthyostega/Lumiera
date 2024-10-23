@@ -130,7 +130,7 @@ namespace engine {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       /* ==== strategy API for configuring the node operation ==== */
       
-      friend class ProcNode;                               /////////////////////////////////TODO 1/12 : wouldn't it be better to extract that API into a distinct strategy?
+      friend class ProcNode;                               /////////////////////////////////OOO who needs friendship?
       
       /** the wiring-dependent part of the node operation.
        *  Includes the creation of a one-way state object on the stack
@@ -177,6 +177,12 @@ namespace engine {
     public:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
+      Port&
+      getPort (uint portIdx)
+        {
+          REQUIRE (portIdx <= wiring_.ports.size());
+          return wiring_.ports[portIdx];
+        }
       
       /** Engine Core operation: render and pull output from this node.
        *  On return, currentProcess will hold onto output buffer(s)

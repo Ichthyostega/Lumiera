@@ -33,6 +33,7 @@
  ** some goal oriented building blocks, that can be combined and directed with greater
  ** clarity by the control structure to govern the build process.
  ** 
+ ** 
  ** # Levels of connectivity building
  ** 
  ** The actual node connectivity is established by a process of gradual refinement,
@@ -40,7 +41,7 @@
  ** builder and descriptor records to collect information, which is then emitted by a
  ** _terminal invocation_ to produce the result; the higher levels thereby rely on the
  ** lower levels to fill in and elaborate the details.
- ** - Level-1 is the preparation of an actual frame processing operation; the Level-1-builder
+ ** - *Level-1* is the preparation of an actual frame processing operation; the Level-1-builder
  **   is in fact the implementation class sitting behind a Render Node's _Port._ It is called
  **   a _Turnout_ and contains a preconfigured »blue print« for the data structure layout
  **   used for the invocation; its purpose is to generate the actual data structure on the
@@ -48,12 +49,12 @@
  **   library functions. Since the actual data processing is achieved by a _pull processing,_
  **   originating at the top level exit nodes and propagating down towards the data sources,
  **   all the data feeds at all levels gradually link together, forming a _TurnoutSystem._
- ** - Level-2 generates the actual network of Render Nodes, which in turn will have the
- **   Turnout instances for Level-1 embedded into its internal ports. Conceptually, a
+ ** - *Level-2* generates the actual network of Render Nodes, which in turn will have the
+ **   Turnout instances for Level-1 embedded into their internal ports. Conceptually, a
  **   _Port_ is where data production can be requested, and the processing will then
  **   retrieve its prerequisite data from the ports of the _Leads,_ which are the
  **   prerequisite nodes situated one level below or one step closer to the source.
- ** - Level-3 establishes the processing steps and data retrieval links between them;
+ ** - *Level-3* establishes the processing steps and data retrieval links between them;
  **   at this level, thus the outline of possible processing pathways is established.
  **   After spelling out the desired connectivity at a high level, the so called »Level-3 build
  **   walk« is triggered by invoking the [terminal builder operation](\ref ProcBuilder::build()
@@ -66,17 +67,17 @@
  ** Since the low-level-Model is a massive data structure comprising thousands of nodes, each with
  ** specialised parametrisation for some media handling library, and a lot of cross-linking pointers,
  ** it is important to care for efficient usage of memory with good locality. Furthermore, the higher
- ** levels of the build process will generate additional temporary data structures, which is gradually
- ** refined until the actual render node network can be emitted. Each builder level can thus be
- ** outfitted with a custom allocator — typically an instance of lib::AllocationCluster. Notably
- ** the higher levels can be attached to a separate AllocationCluster instance, which will be
- ** discarded when the build process is complete, while Level-2 (and below) uses the allocator
- ** for the actual target data structure, which will be retained and until a complete segment
- ** of the timeline is superseded and has been re-built.
+ ** levels of the build process will generate additional temporary data structures, refined gradually
+ ** until the actual render node network can be emitted. Each builder level can thus be  outfitted
+ ** with a custom allocator — typically an instance of lib::AllocationCluster. Notably the higher
+ ** levels can be attached to a separate AllocationCluster instance, which will be discarded once
+ ** the build process is complete, while Level-2 (and below) uses the allocator for the actual
+ ** target data structure, which has to be retained while the render graph is used; more
+ ** specifically until a complete segment of the timeline is superseded and has been re-built.
  ** @remark syntactically, the custom allocator specification is given after opening a top-level
  **         builder, by means of the builder function `.withAllocator<ALO> (args...)`
  ** 
- ** @todo WIP-WIP-WIP 7/2024 Node-Invocation is reworked from ground up -- some parts can not be
+ ** @todo WIP-WIP-WIP 10/2024 Node-Invocation is reworked from ground up -- some parts can not be
  **       spelled out completely yet, since we have to build this tightly interlocked system of
  **       code moving bottom up, and then filling in further details later working top-down.
  ** 
@@ -129,7 +130,8 @@ namespace engine {
   template<class POL, class I, class E=I>
   using DataBuilder = lib::SeveralBuilder<I,E, POL::template Policy>;
   
-
+  
+  
   template<class POL, class DAT>
   class NodeBuilder;
   
@@ -349,7 +351,7 @@ namespace engine {
       template<typename FUN>
       PortBuilder(_Par&& base, FUN&& fun)
         : _Par{move(base)}
-        , weavingBuilder_{forward<FUN> (fun)}
+        , weavingBuilder_{forward<FUN> (fun), _Par::leads_.policyConnect()}
         { }
       
       friend class PortBuilderRoot<POL,DAT>;

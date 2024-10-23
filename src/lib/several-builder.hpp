@@ -210,6 +210,15 @@ namespace lib {
           : Allo{std::move (allo)}
           { }
         
+        /** allow cross-initialisation when using same kind of base allocator */
+        template<typename X>
+        ElementFactory (ElementFactory<X,ALO>& relatedFac)
+          : ElementFactory{relatedFac.baseAllocator()}
+          { }
+        
+        template<typename O, template<typename> class XALO>
+        friend class ElementFactory;
+        
         
         Bucket*
         create (size_t cnt, size_t spread, size_t alignment =alignof(I))
@@ -403,11 +412,14 @@ namespace lib {
       SeveralBuilder() = default;
       
       /** start Several build using a custom allocator */
-      template<typename...ARGS,                  typename = meta::enable_if<std::is_constructible<Policy,ARGS...>>>
+      template<typename...ARGS,                  typename = meta::enable_if<std::is_constructible<Policy,ARGS&&...>>>
       SeveralBuilder (ARGS&& ...alloInit)
         : Several<I>{}
         , Policy{forward<ARGS> (alloInit)...}
         { }
+      
+      /** expose policy to configure other ServeralBuilder */
+      Policy& policyConnect() { return *this; }
       
       
       
