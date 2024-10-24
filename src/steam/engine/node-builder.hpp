@@ -278,6 +278,7 @@ namespace engine {
       using _Par = PortBuilderRoot<POL,DAT>;
       
       WAB weavingBuilder_;
+      uint defaultPort_;
       
     public:
       
@@ -352,12 +353,33 @@ namespace engine {
       PortBuilder(_Par&& base, FUN&& fun)
         : _Par{move(base)}
         , weavingBuilder_{forward<FUN> (fun), _Par::leads_.policyConnect()}
+        , defaultPort_{0} ////////////////////////////////////////////////////////////////OOO brauche separaten Zähler! wo?
         { }
       
       friend class PortBuilderRoot<POL,DAT>;
     };
   
   
+  /**
+   * @param fun invocation of the actual _data processing operation._
+   * @remarks
+   *  - a _»weaving pattern«_ is applied for the actual implementation, which amounts
+   *    to a specific style how to route data input and output and how to actually integrate
+   *    with the underlying media handling library, which exposes the processing functionality.
+   *  - the standard case of this connectivity is to associate input and output connections
+   *    directly with the »parameter slots« of the processing function; a function suitable
+   *    for this pattern takes two arguments (input, output) — each of which is a std::array
+   *    of buffer pointers, corresponding to the »parameter slots«
+   *  - what is bound as \a FUN here thus typically is either an adapter function provided by
+   *    the media-library plug-in, or it is a lambda directly invoking implementation functions
+   *    of the underlying library, using a buffer type (size) suitable for this library and for
+   *    the actual media frame data to be processed.
+   *  - the `fun` is deliberately _taken by-value_ and then moved into a »prototype copy« within
+   *    the generated `Turnout`, from which an actual copy is drawn anew for each node invocation.
+   *  - notably this implies that the implementation code of a lambda will be _inlined_ into the
+   *    actual invocation call, while possibly _creating a copy_ of value-captured closure data;
+   *    this arrangement aims at exposing the actual invocation for the optimiser.
+   */
   template<class POL, class DAT>
   template<typename FUN>
   auto

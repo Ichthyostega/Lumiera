@@ -350,6 +350,7 @@ namespace engine {
   struct WeavingBuilder
     : util::MoveOnly
     {
+      using FunSpec = _ProcFun<FUN>;
       using TurnoutWeaving = Turnout<SimpleDirectInvoke<N,FUN>>;
       static constexpr SizMark<sizeof(TurnoutWeaving)> sizMark{};
       
@@ -395,7 +396,6 @@ namespace engine {
       WeavingBuilder
       fillRemainingBufferTypes()
         {
-          using FunSpec = _ProcFun<FUN>;
           auto constexpr FAN_O = FunSpec::FAN_O;
           using BuffO = typename FunSpec::BuffO;
           uint cnt = FAN_O - buffTypes.size();
@@ -426,7 +426,9 @@ namespace engine {
               typeConstructor (providers[i++]));
           
           ENSURE (leadPorts.size() <= N);
+          ENSURE (leadPorts.size() == FunSpec::FAN_I);
           ENSURE (outTypes.size()  <= N);
+          ENSURE (outTypes.size()  == FunSpec::FAN_O);
           
           using PortDataBuilder = DataBuilder<POL, Port>;
           // provide a free-standing functor to build a suitable Port impl (≙Turnout)
