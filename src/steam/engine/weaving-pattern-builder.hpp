@@ -310,6 +310,8 @@ namespace engine {
     {
       BUILD buildEntry;
       
+      uint size() { return 1 + PAR::size(); }
+      
       template<class DAB>
       void
       collectEntries (DAB& dataBuilder, uint cntElm =0, uint maxSiz =0)
@@ -331,6 +333,8 @@ namespace engine {
    */
   struct PatternDataAnchor
     {
+      uint size() { return 0; }
+      
       template<class DAB>
       void
       collectEntries (DAB& dataBuilder, uint cntElm, uint maxSiz)
@@ -373,18 +377,18 @@ namespace engine {
         , fun_{move(init)}
         { }
       
-      WeavingBuilder
-      attachToLeadPort(ProcNode& lead, uint portNr)
+      WeavingBuilder&&
+      attachToLeadPort (ProcNode& lead, uint portNr)
         {
           PortRef portRef{lead.getPort (portNr)};
           leadPorts.append (portRef);
-          ENSURE (leadPorts.size() <= N);
+          ENSURE (leadPorts.size() <= N); /////////////////////////////////////OOO must throw exception here, since bounds can be violated by API usage
           return move(*this);
         }
       
       template<class BU>
-      WeavingBuilder
-      appendBufferTypes(uint cnt)
+      WeavingBuilder&&
+      appendBufferTypes (uint cnt)
         {
           while (cnt--)
             buffTypes.emplace_back([](BufferProvider& provider)
@@ -393,7 +397,7 @@ namespace engine {
           return move(*this);
         }
       
-      WeavingBuilder
+      WeavingBuilder&&
       fillRemainingBufferTypes()
         {
           auto constexpr FAN_O = FunSpec::FAN_O;
@@ -402,8 +406,20 @@ namespace engine {
           return appendBufferTypes<BuffO>(cnt);
         }
       
-      WeavingBuilder
-      selectResultSlot(uint idx)
+      WeavingBuilder&&
+      connectRemainingInputs (DataBuilder<POL, ProcNodeRef>& knownLeads, uint defaultPort)
+        {
+          auto constexpr FAN_I = FunSpec::FAN_I;
+          REQUIRE (leadPorts.size() <= FAN_I);
+          uint cnt = FAN_I - leadPorts.size();
+          REQUIRE (leadPorts.size() + cnt <= knownLeads.size()); ////////////////////OOO determine if this should also be rather an exception?
+          while (cnt--)
+            attachToLeadPort (knownLeads[leadPorts.size()], defaultPort);
+          return move(*this);
+        }
+      
+      WeavingBuilder&&
+      selectResultSlot (uint idx)
         {
           this->resultSlot = idx;
           return move(*this);

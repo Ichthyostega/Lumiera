@@ -78,9 +78,9 @@ namespace test{
   
   
   
-  /*****************************************************************//**
-   * @test demonstrate and cover the properties of IterCursor.
-   * This wrapper allows to change between iterating forward and backwards.
+  /************************************************************************//**
+   * @test verify adapter to iterate and navigate over array-like content,
+   *       that can be accessed through subscript operator and `size()` function.
    *
    * @see iter-cursor.hpp
    * @see iter-adapter.hpp

@@ -92,11 +92,14 @@
 #define ENGINE_NODE_BUILDER_H
 
 
+#include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "steam/engine/weaving-pattern-builder.hpp"
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/turnout.hpp"
 #include "lib/several-builder.hpp"
-#include "lib/nocopy.hpp"
+#include "lib/format-string.hpp"
+#include "lib/iter-index.hpp"
 #include "lib/test/test-helper.hpp"/////////////////////TODO TOD-oh
 
 #include <utility>
@@ -105,9 +108,11 @@
 
 namespace steam {
 namespace engine {
+  namespace err = lumiera::error;
   
-  using std::move;
+  using util::_Fmt;
   using std::forward;
+  using std::move;
   
   
   namespace { // default policy configuration to use heap allocator
@@ -299,38 +304,56 @@ namespace engine {
           return move(*this);
         }
       
+      /** connect the next input slot to existing lead-node given by index */
       PortBuilder
       connectLead (uint idx)
         {
-          UNIMPLEMENTED ("connect the next input slot to existing lead-node given by index");
-          return move(*this);
+          return connectLeadPort (idx, this->defaultPort_);
         }
       
+      /** connect the next input slot to either existing or new lead-node" */
       PortBuilder
       conectLead (ProcNode& leadNode)
         {
-          UNIMPLEMENTED ("connect the next input slot to either existing or new lead-node");
-          return move(*this);
+          return connectLeadPort (leadNode, this->defaultPort_);
         }
       
+      /** connect next input to lead-node, using a specific port-number */
       PortBuilder
       connectLeadPort (uint idx, uint port)
         {
-          UNIMPLEMENTED ("connect next input to lead-node, using a specific port-number");
+          if (idx >= _Par::leads_.size())
+            throw err::Logic{_Fmt{"Builder refers to lead-node #%d, yet only %d are currently defined."}
+                                 % idx % _Par::leads_.size()
+                            ,LERR_(INDEX_BOUNDS)
+                            };
+          weavingBuilder_.attachToLeadPort (_Par::leads_[idx], port);
           return move(*this);
         }
       
+      /** connect next input to existing or new lead-node, with given port-number */
       PortBuilder
       connectLeadPort (ProcNode& leadNode, uint port)
         {
-          UNIMPLEMENTED ("connect next input to existing or new lead-node, with given port-number");
+          uint knownEntry{0};
+          for (auto& lead : lib::IterIndex{_Par::leads_})
+            if (util::isSameObject (leadNode, lead))
+              break;
+            else
+              ++knownEntry;
+          if (knownEntry == _Par::leads_.size())
+            _Par::addLead (leadNode);
+          
+          ENSURE (knownEntry < _Par::leads_.size());
+          weavingBuilder_.attachToLeadPort (knownEntry, port);
           return move(*this);
         }
       
+      /** use given port-index as default for all following connections */
       PortBuilder
       useLeadPort (uint defaultPort)
         {
-          UNIMPLEMENTED ("use given port-index as default for all following connections");
+          this->defaultPort_ = defaultPort;
           return move(*this);
         }
       
@@ -341,7 +364,7 @@ namespace engine {
       auto
       completePort()
         {
-          //////////////////////////////////////////////////////////OOO need to provide all links to lead nodes here
+          weavingBuilder_.connectRemainingInputs (_Par::leads_, this->defaultPort_);
           weavingBuilder_.fillRemainingBufferTypes();
           return NodeBuilder{static_cast<NodeBuilder<POL,DAT>&&> (*this) // slice away PortBulder subclass data
                             ,weavingBuilder_.sizMark
@@ -353,7 +376,7 @@ namespace engine {
       PortBuilder(_Par&& base, FUN&& fun)
         : _Par{move(base)}
         , weavingBuilder_{forward<FUN> (fun), _Par::leads_.policyConnect()}
-        , defaultPort_{0} ////////////////////////////////////////////////////////////////OOO brauche separaten Zähler! wo?
+        , defaultPort_{_Par::patternData_.size()}
         { }
       
       friend class PortBuilderRoot<POL,DAT>;

@@ -53,6 +53,7 @@
 #include "steam/engine/turnout-system.hpp"
 #include "lib/frameid.hpp"
 #include "lib/ref-array.hpp" /////////////////////OOO phase out
+#include "lib/format-string.hpp"
 #include "lib/several.hpp"
 
 #include <vector>
@@ -62,10 +63,12 @@
 
 namespace steam {
 namespace engine {
+  namespace err = lumiera::error;
 
   using std::move;
   using std::vector; //////////////TODO;
   using lumiera::NodeID;
+  using util::_Fmt;
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   class ProcNode;
@@ -180,7 +183,11 @@ namespace engine {
       Port&
       getPort (uint portIdx)
         {
-          REQUIRE (portIdx <= wiring_.ports.size());
+          if (portIdx >= wiring_.ports.size())
+            throw err::Logic{_Fmt{"Accessing node-port #%d, while only %d ports are defined."}
+                     % portIdx % wiring_.ports.size()
+                ,LERR_(INDEX_BOUNDS)
+                };
           return wiring_.ports[portIdx];
         }
       
