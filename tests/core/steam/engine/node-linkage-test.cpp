@@ -78,6 +78,12 @@ namespace test  {
                         .build();
           CHECK (isnil (con.leads));
           CHECK (1 == con.ports.size());
+          
+          // can build a ProcNode with this connectivity
+          ProcNode n1{move(con)};
+          CHECK (watch(n1).isValid());
+          CHECK (watch(n1).leads().empty());
+          CHECK (watch(n1).ports().size() == 1);
         }
       
       

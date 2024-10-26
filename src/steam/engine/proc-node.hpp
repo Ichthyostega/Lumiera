@@ -72,6 +72,8 @@ namespace engine {
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   class ProcNode;
+  class ProcNodeDiagnostic;
+  
 //  typedef ProcNode* PNode;
   using ProcNodeRef = std::reference_wrapper<ProcNode>;
   using OptionalBuff = std::optional<BuffHandle>;
@@ -116,7 +118,7 @@ namespace engine {
       Ports ports;
       Leads leads;
       
-      NodeID const& nodeID;
+      NodeID const& nodeID;  /////////////////////////////////OOO seems to belong rather into the ProcNode
       
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
@@ -212,10 +214,38 @@ namespace engine {
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
+      /// „backdoor“ to watch internals from tests
+      friend class ProcNodeDiagnostic;
     };
   
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
+  class ProcNodeDiagnostic
+    : util::MoveOnly
+    {
+      ProcNode& n_;
+      
+    public:
+      ProcNodeDiagnostic (ProcNode& theNode)
+        : n_{theNode}
+        { }
+      
+      auto& leads() { return n_.wiring_.leads; }
+      auto& ports() { return n_.wiring_.ports; }
+      
+      bool
+      isValid()
+        {
+          return 0 < ports().size();
+          ///////////////////////////////////////////////////TODO 10/2024 more to verify here
+        }
+    };
+  
+  inline ProcNodeDiagnostic
+  watch (ProcNode& theNode)
+  {
+    return ProcNodeDiagnostic{theNode};
+  }
   
   
 }} // namespace steam::engine
