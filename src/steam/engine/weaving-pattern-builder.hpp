@@ -100,6 +100,7 @@
 #define STEAM_ENGINE_WEAVING_PATTERN_BUILDER_H
 
 //#include "steam/common.hpp"
+#include "lib/error.hpp"
 //#include "steam/engine/channel-descriptor.hpp"
 //#include "vault/gear/job.h"
 #include "lib/several-builder.hpp"
@@ -107,7 +108,8 @@
 #include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/buffer-provider.hpp"
 #include "steam/engine/buffhandle-attach.hpp"  /////////////////OOO why do we need to include this? we need the accessAs<TY>() template function
-#include "lib/test/test-helper.hpp"
+#include "lib/test/test-helper.hpp" ////////////////////////////OOO TODO added for test
+#include "lib/format-string.hpp"
 //#include "lib/util-foreach.hpp"
 //#include "lib/iter-adapter.hpp"
 //#include "lib/meta/function.hpp"
@@ -122,10 +124,12 @@
 
 namespace steam {
 namespace engine {
+  namespace err = lumiera::error;
   
   using std::forward;
   using lib::Several;
   using lib::Depend;
+  using util::_Fmt;
   using util::max;
   
   
@@ -357,6 +361,9 @@ namespace engine {
       using FunSpec = _ProcFun<FUN>;
       using TurnoutWeaving = Turnout<SimpleDirectInvoke<N,FUN>>;
       static constexpr SizMark<sizeof(TurnoutWeaving)> sizMark{};
+      static constexpr uint FAN_I = FunSpec::FAN_I;
+      static constexpr uint FAN_O = FunSpec::FAN_O;
+
       
       using TypeMarker = std::function<BuffDescr(BufferProvider&)>;
       using ProviderRef = std::reference_wrapper<BufferProvider>;
@@ -380,9 +387,13 @@ namespace engine {
       WeavingBuilder&&
       attachToLeadPort (ProcNode& lead, uint portNr)
         {
+          if (leadPorts.size() >= FAN_I)
+            throw err::Logic{_Fmt{"Builder: attempt to add further input, "
+                                  "but all %d »input slots« of the processing function are already connected."}
+                                 % FAN_I
+                            };
           PortRef portRef{lead.getPort (portNr)};
           leadPorts.append (portRef);
-          ENSURE (leadPorts.size() <= N); /////////////////////////////////////OOO must throw exception here, since bounds can be violated by API usage
           return move(*this);
         }
       
@@ -390,6 +401,11 @@ namespace engine {
       WeavingBuilder&&
       appendBufferTypes (uint cnt)
         {
+          if (buffTypes.size()+cnt > FAN_O)
+            throw err::Logic{_Fmt{"Builder: attempt add %d further output buffers, "
+                                  "while %d of %d possible outputs are already connected."}
+                                 % cnt % buffTypes.size() % FAN_O
+                            };
           while (cnt--)
             buffTypes.emplace_back([](BufferProvider& provider)
                                     { return provider.getDescriptor<BU>(); });
@@ -400,7 +416,6 @@ namespace engine {
       WeavingBuilder&&
       fillRemainingBufferTypes()
         {
-          auto constexpr FAN_O = FunSpec::FAN_O;
           using BuffO = typename FunSpec::BuffO;
           uint cnt = FAN_O - buffTypes.size();
           return appendBufferTypes<BuffO>(cnt);
@@ -409,10 +424,14 @@ namespace engine {
       WeavingBuilder&&
       connectRemainingInputs (DataBuilder<POL, ProcNodeRef>& knownLeads, uint defaultPort)
         {
-          auto constexpr FAN_I = FunSpec::FAN_I;
           REQUIRE (leadPorts.size() <= FAN_I);
           uint cnt = FAN_I - leadPorts.size();
-          REQUIRE (leadPorts.size() + cnt <= knownLeads.size()); ////////////////////OOO determine if this should also be rather an exception?
+          if (FAN_I > knownLeads.size())
+            throw err::Logic{_Fmt{"Builder: attempt to auto-connect %d further »input slots«, "
+                                  "but this ProcNode has only %d predecessor nodes, while the "
+                                  "given processing function expects %d inputs."}
+                                 % cnt % knownLeads.size() % FAN_I
+                            };
           while (cnt--)
             attachToLeadPort (knownLeads[leadPorts.size()], defaultPort);
           return move(*this);

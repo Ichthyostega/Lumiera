@@ -40,11 +40,12 @@ namespace test  {
   
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Dummy / Placeholder
+  using NoArg   = std::array<char*, 0>;
   using SoloArg = std::array<char*, 1>;
   /** @todo a placeholder operation to wire a prototypical render node
    */
   inline void
-  dummyOp (SoloArg in, SoloArg out)
+  dummyOp (NoArg in, SoloArg out)
   {
     UNIMPLEMENTED ("a sincerely nonsensical operation");
   }
