@@ -20,7 +20,7 @@
 
 */
 
-/** @file testframe-rand-ontology.hpp
+/** @file test-rand-ontology.hpp
  ** A faked »media calculation« environment to validate the render node network.
  */
 
@@ -29,6 +29,8 @@
 #define STEAM_ENGINE_TEST_RAND_ONTOLOGY_H
 
 
+#include "lib/error.hpp"
+#include "lib/symbol.hpp"
 #include "steam/engine/testframe.hpp"
 
 #include <array>
@@ -38,10 +40,14 @@ namespace steam {
 namespace engine{
 namespace test  {
   
+  using lib::Literal;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Dummy / Placeholder
   using NoArg   = std::array<char*, 0>;
   using SoloArg = std::array<char*, 1>;
+  
+  extern Literal TEST_DUMMY;
+  
   /** @todo a placeholder operation to wire a prototypical render node
    */
   inline void

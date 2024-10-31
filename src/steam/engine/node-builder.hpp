@@ -93,6 +93,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/symbol.hpp"
 #include "lib/nocopy.hpp"
 #include "steam/engine/weaving-pattern-builder.hpp"
 #include "steam/engine/proc-node.hpp"
@@ -110,6 +111,7 @@ namespace steam {
 namespace engine {
   namespace err = lumiera::error;
   
+  using lib::Literal;
   using util::_Fmt;
   using std::forward;
   using std::move;
@@ -245,7 +247,7 @@ namespace engine {
       /** setup standard wiring to adapt the given processing function.
        * @return a PortBuilder specialised to wrap the given \a FUN */
       template<typename FUN>
-      auto invoke (FUN fun);
+      auto invoke (Literal qualifier, FUN fun);
       
       /** specify an `InvocationAdapter` to use explicitly. */
       template<class ADA, typename...ARGS>
@@ -373,9 +375,9 @@ namespace engine {
       
     private:
       template<typename FUN>
-      PortBuilder(_Par&& base, FUN&& fun)
+      PortBuilder(_Par&& base, FUN&& fun, Literal qualifier)
         : _Par{move(base)}
-        , weavingBuilder_{forward<FUN> (fun), _Par::leads_.policyConnect()}
+        , weavingBuilder_{forward<FUN> (fun), qualifier, _Par::leads_.policyConnect()}
         , defaultPort_{_Par::patternData_.size()}
         { }
       
@@ -384,6 +386,7 @@ namespace engine {
   
   
   /**
+   * @param qualifier a semantic distinction of the implementation function
    * @param fun invocation of the actual _data processing operation._
    * @remarks
    *  - a _»weaving pattern«_ is applied for the actual implementation, which amounts
@@ -406,10 +409,10 @@ namespace engine {
   template<class POL, class DAT>
   template<typename FUN>
   auto
-  PortBuilderRoot<POL,DAT>::invoke (FUN fun)
+  PortBuilderRoot<POL,DAT>::invoke (Literal qualifier, FUN fun)
     {
       using WeavingBuilder_FUN = WeavingBuilder<POL, manifoldSiz<FUN>(), FUN>;
-      return PortBuilder<POL,DAT, WeavingBuilder_FUN>{move(*this), move(fun)};
+      return PortBuilder<POL,DAT, WeavingBuilder_FUN>{move(*this), move(fun), qualifier};
     }
 /*
   template<class POL>

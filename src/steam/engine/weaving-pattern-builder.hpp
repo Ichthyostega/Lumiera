@@ -101,6 +101,7 @@
 
 //#include "steam/common.hpp"
 #include "lib/error.hpp"
+#include "lib/symbol.hpp"
 //#include "steam/engine/channel-descriptor.hpp"
 //#include "vault/gear/job.h"
 #include "lib/several-builder.hpp"
@@ -127,6 +128,7 @@ namespace engine {
   namespace err = lumiera::error;
   
   using std::forward;
+  using lib::Literal;
   using lib::Several;
   using lib::Depend;
   using util::_Fmt;
@@ -376,11 +378,13 @@ namespace engine {
       
       Depend<EngineCtx> ctx;
       
+      Literal qualifier_;
       FUN fun_;
       
       template<typename...INIT>
-      WeavingBuilder(FUN&& init, INIT&& ...alloInit)
+      WeavingBuilder(FUN&& init, Literal qual, INIT&& ...alloInit)
         : leadPorts{forward<INIT> (alloInit)...}
+        , qualifier_{qual}
         , fun_{move(init)}
         { }
       
