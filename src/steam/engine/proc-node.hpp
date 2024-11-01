@@ -44,7 +44,7 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "steam/common.hpp"
+#include "lib/hash-value.h"
 #include "steam/asset/proc.hpp"
 #include "steam/mobject/parameter.hpp"
 //#include "steam/engine/state-closure-obsolete.hpp"  ///////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
@@ -56,6 +56,7 @@
 #include "lib/format-string.hpp"
 #include "lib/several.hpp"
 
+#include <string>
 #include <vector>
 #include <optional>
 
@@ -66,8 +67,10 @@ namespace engine {
   namespace err = lumiera::error;
 
   using std::move;
+  using std::string;
   using std::vector; //////////////TODO;
-  using lumiera::NodeID;
+  using lib::HashVal;
+  using lumiera::NodeID; ///////////////////////TODO likely to be removed
   using util::_Fmt;
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
@@ -238,6 +241,30 @@ namespace engine {
         {
           return 0 < ports().size();
           ///////////////////////////////////////////////////TODO 10/2024 more to verify here
+        }
+      
+      string
+      getNodeSpec()
+        {
+          UNIMPLEMENTED ("generate a descriptive Spec of this ProcNode for diagnostics");
+        }
+      
+      HashVal
+      getNodeHash() ///< @todo not clear yet if this has to include predecessor info
+        {
+          UNIMPLEMENTED ("calculate an unique hash-key to designate this node");
+        }
+      
+      string
+      getPortSpec (uint portIdx)
+        {
+          UNIMPLEMENTED ("generate a descriptive diagnostic Spec for the designated Turnout");
+        }
+      
+      HashVal
+      getPortHash (uint portIdx)
+        {
+          UNIMPLEMENTED ("calculate an unique, stable and reproducible hash-key to identify the Turnout");
         }
     };
   

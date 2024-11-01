@@ -30,6 +30,9 @@
  **       tweak of the edit. This marker was added as a preview in 2010
  **       but we didn't get to the point of actually putting that idea
  **       into practical use. Yet the basic idea remains desirable...
+ ** @deprecated 10/2024 seems very likely that similar functionality moves down
+ **       into the render-engine implementation and will no longer be considered
+ **       a constituent of the public interface.
  */
 
 
