@@ -73,7 +73,7 @@ namespace test  {
         {
           auto con = prepareNode()
                         .preparePort()
-                          .invoke(TEST_DUMMY, dummyOp)
+                          .invoke(DUMMY_FUN_ID, dummyOp)
                           .completePort()
                         .build();
           CHECK (isnil (con.leads));
@@ -84,6 +84,7 @@ namespace test  {
           CHECK (watch(n1).isValid());
           CHECK (watch(n1).leads().empty());
           CHECK (watch(n1).ports().size() == 1);
+SHOW_EXPR(watch(n1).getPortSpec(0))
         }
       
       

@@ -46,7 +46,7 @@ namespace test  {
   using NoArg   = std::array<char*, 0>;
   using SoloArg = std::array<char*, 1>;
   
-  extern Literal TEST_DUMMY;
+  extern Literal DUMMY_FUN_ID;
   
   /** @todo a placeholder operation to wire a prototypical render node
    */

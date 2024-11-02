@@ -74,6 +74,7 @@ namespace engine {
   using util::_Fmt;
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
+  class ProcID;
   class ProcNode;
   class ProcNodeDiagnostic;
   
@@ -88,12 +89,14 @@ namespace engine {
     {
     public:
       virtual ~Port();  ///< this is an interface
+      Port (ProcID& id) : procID{id} { }
       
       virtual BuffHandle weave (TurnoutSystem&, OptionalBuff =std::nullopt)   =0;
       
 //    // compiler does not generate a move-ctor automatically due to explicit dtor
 //    Port()       = default;
 //    Port(Port&&) = default;
+      ProcID& procID;
     };
   
   using PortRef = std::reference_wrapper<Port>;
@@ -243,29 +246,11 @@ namespace engine {
           ///////////////////////////////////////////////////TODO 10/2024 more to verify here
         }
       
-      string
-      getNodeSpec()
-        {
-          UNIMPLEMENTED ("generate a descriptive Spec of this ProcNode for diagnostics");
-        }
+      string getNodeSpec();   ///< generate a descriptive Spec of this ProcNode for diagnostics
+      HashVal getNodeHash();  ///< calculate an unique hash-key to designate this node
       
-      HashVal
-      getNodeHash() ///< @todo not clear yet if this has to include predecessor info
-        {
-          UNIMPLEMENTED ("calculate an unique hash-key to designate this node");
-        }
-      
-      string
-      getPortSpec (uint portIdx)
-        {
-          UNIMPLEMENTED ("generate a descriptive diagnostic Spec for the designated Turnout");
-        }
-      
-      HashVal
-      getPortHash (uint portIdx)
-        {
-          UNIMPLEMENTED ("calculate an unique, stable and reproducible hash-key to identify the Turnout");
-        }
+      string getPortSpec  (uint portIdx);  ///< generate a descriptive diagnostic Spec for the designated Turnout
+      HashVal getPortHash (uint portIdx);  ///< calculate an unique, stable and reproducible hash-key to identify the Turnout
     };
   
   inline ProcNodeDiagnostic

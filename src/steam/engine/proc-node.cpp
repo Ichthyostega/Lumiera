@@ -28,6 +28,7 @@
  */
 
 
+#include "steam/engine/proc-id.hpp"
 #include "steam/engine/proc-node.hpp"
 
 namespace steam {
@@ -45,7 +46,37 @@ namespace engine {
   Port::~Port() { }  ///< @remark VTables for the Port-Turnout hierarchy emitted from \ref proc-node.cpp
   
   
+  ProcID&
+  ProcID::describe()
+  {
+    UNIMPLEMENTED ("establish and possibly enrol new processing descriptor");
+  }
+  
   /** @internal */
+  
+  string
+  ProcNodeDiagnostic::getNodeSpec()
+  {
+    UNIMPLEMENTED ("generate a descriptive Spec of this ProcNode for diagnostics");
+  }
+  
+  HashVal
+  ProcNodeDiagnostic::getNodeHash() ///< @todo not clear yet if this has to include predecessor info
+  {
+    UNIMPLEMENTED ("calculate an unique hash-key to designate this node");
+  }
+  
+  string
+  ProcNodeDiagnostic::getPortSpec (uint portIdx)
+  {
+    UNIMPLEMENTED ("generate a descriptive diagnostic Spec for the designated Turnout");
+  }
+  
+  HashVal
+  ProcNodeDiagnostic::getPortHash (uint portIdx)
+  {
+    UNIMPLEMENTED ("calculate an unique, stable and reproducible hash-key to identify the Turnout");
+  }
   
   
 }} // namespace steam::engine

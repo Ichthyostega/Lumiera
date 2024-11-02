@@ -42,7 +42,7 @@ namespace test  {
   } // (End) hidden impl details
   
   
-  Literal TEST_DUMMY{"Test-Dummy"};
+  Literal DUMMY_FUN_ID{"DummyFun"};
 
   
   

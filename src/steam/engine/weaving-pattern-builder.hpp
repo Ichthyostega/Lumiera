@@ -105,6 +105,7 @@
 //#include "steam/engine/channel-descriptor.hpp"
 //#include "vault/gear/job.h"
 #include "lib/several-builder.hpp"
+#include "steam/engine/proc-id.hpp"
 #include "steam/engine/turnout.hpp"
 #include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/buffer-provider.hpp"
@@ -478,7 +479,8 @@ namespace engine {
                  ]
                  (PortDataBuilder& portData) mutable -> void
                    {
-                     portData.template emplace<TurnoutWeaving> (move(leads)
+                     portData.template emplace<TurnoutWeaving> (ProcID::describe()
+                                                               ,move(leads)
                                                                ,move(types)
                                                                ,resultIdx
                                                                ,move(procFun)

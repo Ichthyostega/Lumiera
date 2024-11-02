@@ -383,9 +383,13 @@ namespace engine {
 //    , util::MoveOnly
     {
       using Feed = typename PAT::Feed;
-      using PAT::PAT;
       
     public:
+      template<typename...INIT>
+      Turnout (ProcID& id, INIT&& ...init)
+        : Port{id}
+        , PAT{forward<INIT> (init)...}
+        { }
 //    Turnout(Turnout&& rr)  ////////////////////////////////////////////OOO investigation of MoveOnly and problems with the builder logic
 //      : Port(static_cast<Port&&>(rr))
 //      , PAT(static_cast<PAT&&>(rr))
