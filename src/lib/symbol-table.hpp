@@ -60,7 +60,7 @@
 namespace lib {
   
   using std::string;
-  using std::forward;
+  using std::move;
   
   
   /** 
@@ -81,7 +81,7 @@ namespace lib {
       internedString (string && symbolString)
         {
           Lock sync{this};
-          auto res = table_.insert (forward<string> (symbolString));
+          auto res = table_.insert (move (symbolString));
           return res.first->c_str();
         }
     };

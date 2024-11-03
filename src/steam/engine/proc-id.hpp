@@ -33,15 +33,18 @@
  ** 
  ** @see turnout.hpp
  ** @see engine::ProcNodeDiagnostic
+ ** @see proc-node.cpp for the implementation backend
  */
 
 #ifndef ENGINE_PROC_ID_H
 #define ENGINE_PROC_ID_H
 
 
+#include "lib/hash-standard.hpp"
 #include "lib/error.hpp"
-#include "lib/hash-value.h"
 //#include "steam/streamtype.hpp"
+
+#include <string>
 
 
 namespace steam {
@@ -49,13 +52,27 @@ namespace engine {
   namespace err = lumiera::error;
   
   using lib::HashVal;
+  using std::string;
   
   class ProcID
     {
     public:
       /** build and register a processing ID descriptor */
       static ProcID& describe();
+      
+      /* === symbolic descriptors === */
+      
+      string
+      genProcSpec()
+        {
+          return "Lalü";
+        }
+      
+      friend bool operator== (ProcID const& l, ProcID const& r) { return true; }
     };
+  
+  HashVal hash_value (ProcID const&);
+  
   
   
 }} // namespace steam::engine

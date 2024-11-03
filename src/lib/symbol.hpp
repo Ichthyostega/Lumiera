@@ -179,8 +179,8 @@ namespace lib {
   
   /* ===== to be picked up by ADL ===== */
   
-  size_t hash_value (Literal);
-  size_t hash_value (Symbol);
+  HashVal hash_value (Literal);
+  HashVal hash_value (Symbol);
   
 
   /* === equality comparisons === */

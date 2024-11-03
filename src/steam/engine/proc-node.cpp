@@ -30,13 +30,19 @@
 
 #include "steam/engine/proc-id.hpp"
 #include "steam/engine/proc-node.hpp"
+#include "lib/format-string.hpp"
+#include "lib/util.hpp"
+
+#include <unordered_set>
 
 namespace steam {
 namespace engine {
   
+  using util::unConst;
   
   namespace { // Details...
-
+    
+    std::unordered_set<ProcID> procRegistry;
     
   } // (END) Details...
   
@@ -46,13 +52,30 @@ namespace engine {
   Port::~Port() { }  ///< @remark VTables for the Port-Turnout hierarchy emitted from \ref proc-node.cpp
   
   
+  /**
+   * @remark this is the only public access point to ProcID entries,
+   *   which are automatically deduplicated and managed in a common registry
+   *   and retained until end of the Lumiera process (never deleted).
+   */
   ProcID&
   ProcID::describe()
   {
-    UNIMPLEMENTED ("establish and possibly enrol new processing descriptor");
+    auto res = procRegistry.emplace ();
+    return unConst (*res.first);
   }
   
   /** @internal */
+  
+  /** generate registry hash value based on the distinct data in ProcID.
+   *  This function is intended to be picked up by ADL, and should be usable
+   *  both with `std::hash` and `<boost/functional/hash.hpp>`.
+   */
+  HashVal
+  hash_value (ProcID const& procID)
+  {
+    return 47; //UNIMPLEMENTED ("ProcID hash");
+  }
+  
   
   string
   ProcNodeDiagnostic::getNodeSpec()
@@ -66,10 +89,16 @@ namespace engine {
     UNIMPLEMENTED ("calculate an unique hash-key to designate this node");
   }
   
+  /**
+   * @return symbolic string with format `NodeSymb[.portQualifier](inType[/#][,inType[/#]])(outType[/#][,outType[/#]][ >N])`
+   * @remark information presented here is passed-through from builder Level-3, based on semantic markup present there
+   */
   string
   ProcNodeDiagnostic::getPortSpec (uint portIdx)
   {
-    UNIMPLEMENTED ("generate a descriptive diagnostic Spec for the designated Turnout");
+    auto& p{n_.wiring_.ports};
+    return p.size() < portIdx? util::FAILURE_INDICATOR
+                             : p[portIdx].procID.genProcSpec();
   }
   
   HashVal

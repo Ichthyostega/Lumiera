@@ -109,7 +109,7 @@ namespace lib {
    *  This function is intended to be picked up by ADL, and should be usable
    *  both with  `std::hash` and `<boost/functional/hash.hpp>`. It is implemented
    *  similar as the boost::hash specialisation for std::string */
-  size_t
+  HashVal
   hash_value (Literal literal)
   {
     size_t hash=0;
@@ -125,7 +125,7 @@ namespace lib {
   }
   
   /** hash value for Symbols is directly based on the symbol table entry */
-  size_t
+  HashVal
   hash_value (Symbol sym)
   {
     return sym? boost::hash_value (sym.c())
