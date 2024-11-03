@@ -70,11 +70,8 @@ namespace engine {
       
       /* === symbolic descriptors === */
       
-      string
-      genProcSpec()
-        {
-          return "Lalü";
-        }
+      string genProcSpec();  ///< render a descriptor for the operation (without predecessors)
+      
       
       friend bool
       operator== (ProcID const& l, ProcID const& r)
@@ -87,9 +84,10 @@ namespace engine {
       friend bool
       operator!= (ProcID const& l, ProcID const& r)
       { return not (l == r); }
+      
+      friend HashVal hash_value (ProcID const&);
     };
   
-  HashVal hash_value (ProcID const&);
   
   
   

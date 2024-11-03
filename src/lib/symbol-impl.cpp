@@ -118,7 +118,7 @@ namespace lib {
         size_t cnt = 1;
         const char *pos = literal;
         for ( ; cnt <= STRING_MAX_RELEVANT and *pos ; ++cnt, ++pos )
-          hash_combine(hash, *pos);
+          hash_combine (hash, *pos);
       }
     
     return hash;

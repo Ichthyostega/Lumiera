@@ -40,7 +40,11 @@
 namespace steam {
 namespace engine {
   
+  using util::_Fmt;
+  using util::isnil;
   using util::unConst;
+  using util::contains;
+  using boost::hash_combine;
   
   namespace { // Details...
     
@@ -62,7 +66,16 @@ namespace engine {
   ProcID&
   ProcID::describe (StrView nodeSymb, StrView portSpec)
   {
-    auto res = procRegistry.insert (ProcID{"bla","blubb","murks"});
+    REQUIRE (not isnil (nodeSymb));
+    REQUIRE (not isnil (portSpec));
+    REQUIRE (not contains (nodeSymb, ' '));
+    auto p = portSpec.find('(');
+    if (p == string::npos)
+      throw err::Invalid{_Fmt{"Spec for processing operation must contain at least one argument list. "
+                              "Node:%s Spec:%s"}
+                             % nodeSymb % portSpec
+                        };
+    auto res = procRegistry.insert (ProcID{nodeSymb, portSpec.substr(0,p), portSpec.substr(p)});
     return unConst (*res.first);
   }
   
@@ -80,8 +93,21 @@ namespace engine {
   HashVal
   hash_value (ProcID const& procID)
   {
-    return 47; //UNIMPLEMENTED ("ProcID hash");
+    HashVal hash = boost::hash_value (procID.nodeSymb_);
+    if (not isnil(procID.portQual_))
+      hash_combine (hash, procID.portQual_);
+    hash_combine   (hash, procID.argLists_);
+    return hash;
   }
+  
+  string
+  ProcID::genProcSpec()
+  {
+    return nodeSymb_
+         + (isnil(portQual_)? string{} : "."+portQual_)
+         + argLists_;
+  }
+  
   
   
   string
@@ -104,8 +130,8 @@ namespace engine {
   ProcNodeDiagnostic::getPortSpec (uint portIdx)
   {
     auto& p{n_.wiring_.ports};
-    return p.size() < portIdx? util::FAILURE_INDICATOR
-                             : p[portIdx].procID.genProcSpec();
+    return portIdx < p.size()? p[portIdx].procID.genProcSpec()
+                             : util::FAILURE_INDICATOR;
   }
   
   HashVal

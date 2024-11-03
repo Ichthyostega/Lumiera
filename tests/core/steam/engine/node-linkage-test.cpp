@@ -35,6 +35,7 @@
 
 using util::isnil;
 //using std::string;
+using util::isSameObject;
 
 
 namespace steam {
@@ -85,6 +86,9 @@ namespace test  {
           CHECK (watch(n1).leads().empty());
           CHECK (watch(n1).ports().size() == 1);
 SHOW_EXPR(watch(n1).getPortSpec(0))
+          CHECK (watch(n1).getPortSpec(0) == "Test:Src.dummyFun(TestFrame)"_expect);
+SHOW_EXPR(watch(n1).getPortSpec(1))
+          CHECK (watch(n1).getPortSpec(1) == "↯"_expect);
         }
       
       
