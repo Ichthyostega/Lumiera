@@ -30,23 +30,23 @@
 
 
 #include "lib/error.hpp"
-#include "lib/symbol.hpp"
 #include "steam/engine/testframe.hpp"
 
 #include <array>
+#include <string>
 
 
 namespace steam {
 namespace engine{
 namespace test  {
   
-  using lib::Literal;
+  using std::string;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Dummy / Placeholder
   using NoArg   = std::array<char*, 0>;
   using SoloArg = std::array<char*, 1>;
   
-  extern Literal DUMMY_FUN_ID;
+  extern const string DUMMY_FUN_ID;
   
   /** @todo a placeholder operation to wire a prototypical render node
    */

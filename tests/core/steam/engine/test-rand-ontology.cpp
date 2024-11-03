@@ -42,7 +42,7 @@ namespace test  {
   } // (End) hidden impl details
   
   
-  Literal DUMMY_FUN_ID{"DummyFun"};
+  const string DUMMY_FUN_ID{"DummyFun"};
 
   
   

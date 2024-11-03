@@ -93,7 +93,7 @@
 
 
 #include "lib/error.hpp"
-#include "lib/symbol.hpp"
+//#include "lib/symbol.hpp"//////////////////////////////TODO RLY?
 #include "lib/nocopy.hpp"
 #include "steam/engine/weaving-pattern-builder.hpp"
 #include "steam/engine/proc-node.hpp"
@@ -111,7 +111,7 @@ namespace steam {
 namespace engine {
   namespace err = lumiera::error;
   
-  using lib::Literal;
+//  using lib::Literal;
   using util::_Fmt;
   using std::forward;
   using std::move;
@@ -156,18 +156,21 @@ namespace engine {
       using LeadRefs = DataBuilder<POL, ProcNodeRef>;
       
     protected:
+      StrView symbol_;
       LeadRefs leads_;
       DAT patternData_;
       
     public:
       template<typename...INIT>
-      NodeBuilder (INIT&& ...alloInit)
-        : leads_{forward<INIT> (alloInit)...}
+      NodeBuilder (StrView nodeSymbol, INIT&& ...alloInit)
+        : symbol_{nodeSymbol}
+        , leads_{forward<INIT> (alloInit)...}
         { }
       
       template<class BUILD, uint siz, class D0>
       NodeBuilder (NodeBuilder<POL,D0>&& pred, SizMark<siz>, BUILD&& entryBuilder)
-        : leads_{move (pred.leads_)}
+        : symbol_{pred.symbol_}
+        , leads_{move (pred.leads_)}
         , patternData_{move (pred.patternData_), forward<BUILD> (entryBuilder)}
         { }
       
@@ -207,7 +210,7 @@ namespace engine {
       withAllocator (INIT&& ...alloInit)
         {
           using AllocatorPolicy = lib::allo::SetupSeveral<ALO,INIT...>;
-          return NodeBuilder<AllocatorPolicy>{forward<INIT>(alloInit)...};
+          return NodeBuilder<AllocatorPolicy>{symbol_, forward<INIT>(alloInit)...};
         }
       
       
@@ -247,7 +250,7 @@ namespace engine {
       /** setup standard wiring to adapt the given processing function.
        * @return a PortBuilder specialised to wrap the given \a FUN */
       template<typename FUN>
-      auto invoke (Literal qualifier, FUN fun);
+      auto invoke (StrView portSpec, FUN fun);
       
       /** specify an `InvocationAdapter` to use explicitly. */
       template<class ADA, typename...ARGS>
@@ -375,9 +378,9 @@ namespace engine {
       
     private:
       template<typename FUN>
-      PortBuilder(_Par&& base, FUN&& fun, Literal qualifier)
+      PortBuilder(_Par&& base, FUN&& fun, StrView portSpec)
         : _Par{move(base)}
-        , weavingBuilder_{forward<FUN> (fun), qualifier, _Par::leads_.policyConnect()}
+        , weavingBuilder_{forward<FUN> (fun), _Par::symbol_, portSpec, _Par::leads_.policyConnect()}
         , defaultPort_{_Par::patternData_.size()}
         { }
       
@@ -409,10 +412,10 @@ namespace engine {
   template<class POL, class DAT>
   template<typename FUN>
   auto
-  PortBuilderRoot<POL,DAT>::invoke (Literal qualifier, FUN fun)
+  PortBuilderRoot<POL,DAT>::invoke (StrView portSpec, FUN fun)
     {
       using WeavingBuilder_FUN = WeavingBuilder<POL, manifoldSiz<FUN>(), FUN>;
-      return PortBuilder<POL,DAT, WeavingBuilder_FUN>{move(*this), move(fun), qualifier};
+      return PortBuilder<POL,DAT, WeavingBuilder_FUN>{move(*this), move(fun), portSpec};
     }
 /*
   template<class POL>
@@ -431,9 +434,9 @@ namespace engine {
    *       any further specifications and data elements.
    */
   inline auto
-  prepareNode()
+  prepareNode (StrView nodeSymbol)
   {
-    return NodeBuilder<UseHeapAlloc>{};
+    return NodeBuilder<UseHeapAlloc>{nodeSymbol};
   }
   
   

@@ -100,7 +100,7 @@
  ** 
  ** ## Data Access
  ** 
- **  ** The [instantiation processing logic](\ref TextTemplate::Action::instantiate) is
+ ** The [instantiation processing logic](\ref TextTemplate::Action::instantiate) is
  ** defined in terms of a *data binding*, represented as TextTemplate::DataSource.
  ** This binding, assuming a _generic data access protocol,_ has to be supplied by
  ** a concrete (partial) specialisation of the template `DataSource<DAT>`. This
@@ -108,11 +108,11 @@
  ** actual format the data is available. Notably, bindings are pre-defined
  ** for string data in a Map, and for Lumiera's »[External Tree Description]«
  ** format, based on a [generic data node](\ref gen-node.hpp). Generally speaking,
- ** the following _abstracted primitive operations_ are required to access data:
+ ** the following _abstracted primitive operations_ are required for accessing data:
  ** - the `DataSource<DAT>` object itself is a copyable value object, representing
  **   an _abstracted reference to the data._ We can assume that it stores a `const *`
  **   internally, pointing to some data entity residing elsewhere in memory.
- ** - it must somehow be possible, to generate a nested sub-data context, represented
+ ** - it must somehow be possible to generate a nested sub-data context, represented
  **   by the same reference data type; this implies that there is some implementation
  **   mechanism in place to tap into a _nested sub-scope_ within the data.
  ** - `bool dataSrc.contains(key)` checks if a binding is available for the given \a key.
@@ -121,8 +121,8 @@
  **   the _content_ bound to this \a key. This string content is assumed to remain stable
  **   in memory during the instantiation process, which exposes a `std::string_view`
  ** - `Iter getSequence(key)` attempts to _»open« a data sequence,_ assuming that the
- **   \a key somehow links to data that can somehow be interpreted as a sequence of
- **   nested sub-data-entities. The result is expected as »[Lumiera Forward Iterator]«.
+ **   \a key somehow links to data that can be interpreted in a way to yield a sequence
+ **   of nested sub-data-entities. The result is expected as »[Lumiera Forward Iterator]«.
  ** - `DataSource<DAT> openContext(Iter)` is supplied with the \a Iter from `getSequence()`
  **   and assumed to return a new data binding as `DataSource` object, tied to the nested
  **   data entity or context corresponding to the current »yield« of the Iterator. This
@@ -148,7 +148,7 @@
  ** \par ETD Binding
  ** While the _Map Binding_ detailed in the preceding paragraph is mostly intended to handle
  ** simple key substitutions, the more elaborate binding to `GenNode` data (ETD), which is
- ** provided in the separate header text-template-gen-node-binding.hpp,  is meant to handle
+ ** provided in the separate header text-template-gen-node-binding.hpp, is meant to handle
  ** structural data, as encountered in the internal communication of components within the
  ** Lumiera application — notably the »diff binding« used to populate the GUI with entities
  ** represented in the _Session Model_ in Steam-Layer. The mapping is straight-forward, as the
@@ -470,9 +470,9 @@ namespace lib {
       void
       compile (PAR& parseIter, ActionSeq& actions)
         {
-          auto currIDX   = [&]{ return actions.size(); };
-          auto valid     = [&](Idx i){ return 0 < i and i < actions.size(); };
-          auto clause    = [](Clause c)-> string { return c==IF? "if" : "for"; };
+          auto currIDX     = [&]{ return actions.size(); };
+          auto valid       = [&](Idx i){ return 0 < i and i < actions.size(); };
+          auto clause      = [](Clause c)-> string { return c==IF? "if" : "for"; };
           auto scopeClause = [&]{ return scope_.empty()? "??" : clause(scope_.top().clause); };
           
            //  Support for bracketing constructs (if / for)

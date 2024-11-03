@@ -71,7 +71,7 @@ namespace test  {
       void
       build_connected_nodes()
         {
-          auto con = prepareNode()
+          auto con = prepareNode("Test:Src")
                         .preparePort()
                           .invoke(DUMMY_FUN_ID, dummyOp)
                           .completePort()

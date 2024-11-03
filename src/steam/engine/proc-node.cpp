@@ -33,7 +33,9 @@
 #include "lib/format-string.hpp"
 #include "lib/util.hpp"
 
+#include <boost/functional/hash.hpp>
 #include <unordered_set>
+
 
 namespace steam {
 namespace engine {
@@ -58,13 +60,18 @@ namespace engine {
    *   and retained until end of the Lumiera process (never deleted).
    */
   ProcID&
-  ProcID::describe()
+  ProcID::describe (StrView nodeSymb, StrView portSpec)
   {
-    auto res = procRegistry.emplace ();
+    auto res = procRegistry.insert (ProcID{"bla","blubb","murks"});
     return unConst (*res.first);
   }
   
   /** @internal */
+  ProcID::ProcID (StrView nodeSymb, StrView portQual, StrView argLists)
+    : nodeSymb_{nodeSymb}  /////////////////////////////////////////////////////////OOO intern these strings!!
+    , portQual_{portQual}
+    , argLists_{argLists}
+    { }
   
   /** generate registry hash value based on the distinct data in ProcID.
    *  This function is intended to be picked up by ADL, and should be usable

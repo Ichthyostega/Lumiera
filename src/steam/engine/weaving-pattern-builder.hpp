@@ -122,12 +122,14 @@
 #include <functional>
 //#include <array>
 #include <vector>
+#include <string>
 
 
 namespace steam {
 namespace engine {
   namespace err = lumiera::error;
   
+  using StrView = std::string_view;
   using std::forward;
   using lib::Literal;
   using lib::Several;
@@ -379,13 +381,15 @@ namespace engine {
       
       Depend<EngineCtx> ctx;
       
-      Literal qualifier_;
+      StrView nodeSymb_;
+      StrView portSpec_;
       FUN fun_;
       
       template<typename...INIT>
-      WeavingBuilder(FUN&& init, Literal qual, INIT&& ...alloInit)
+      WeavingBuilder(FUN&& init, StrView nodeSymb, StrView portSpec, INIT&& ...alloInit)
         : leadPorts{forward<INIT> (alloInit)...}
-        , qualifier_{qual}
+        , nodeSymb_{nodeSymb}
+        , portSpec_{portSpec}
         , fun_{move(init)}
         { }
       
@@ -476,10 +480,11 @@ namespace engine {
                  ,types = move(outTypes.build())
                  ,procFun = move(fun_)
                  ,resultIdx = resultSlot
+                 ,procID = ProcID::describe (nodeSymb_,portSpec_)
                  ]
                  (PortDataBuilder& portData) mutable -> void
                    {
-                     portData.template emplace<TurnoutWeaving> (ProcID::describe()
+                     portData.template emplace<TurnoutWeaving> (procID
                                                                ,move(leads)
                                                                ,move(types)
                                                                ,resultIdx

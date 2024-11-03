@@ -53,12 +53,20 @@ namespace engine {
   
   using lib::HashVal;
   using std::string;
+  using StrView = std::string_view;
+  
   
   class ProcID
     {
+      string nodeSymb_;
+      string portQual_;
+      string argLists_;
+      
+      ProcID (StrView nodeSymb, StrView portQual, StrView argLists);
+      
     public:
       /** build and register a processing ID descriptor */
-      static ProcID& describe();
+      static ProcID& describe (StrView nodeSymb, StrView portSpec);
       
       /* === symbolic descriptors === */
       
@@ -68,7 +76,17 @@ namespace engine {
           return "Lalü";
         }
       
-      friend bool operator== (ProcID const& l, ProcID const& r) { return true; }
+      friend bool
+      operator== (ProcID const& l, ProcID const& r)
+      {
+        return l.nodeSymb_ == r.nodeSymb_
+           and l.portQual_ == r.portQual_
+           and l.argLists_ == r.argLists_;
+      }
+      
+      friend bool
+      operator!= (ProcID const& l, ProcID const& r)
+      { return not (l == r); }
     };
   
   HashVal hash_value (ProcID const&);
