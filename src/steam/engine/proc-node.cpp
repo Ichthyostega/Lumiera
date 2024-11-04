@@ -49,7 +49,14 @@ namespace engine {
   namespace { // Details...
     
     std::unordered_set<ProcID> procRegistry;
+    std::unordered_set<string> symbRegistry;
     
+    void inline
+    dedupSymbol (StrView& symbol)
+    {
+      auto res = symbRegistry.emplace (symbol);
+      symbol = *res.first;
+    }
   } // (END) Details...
   
   
@@ -76,7 +83,15 @@ namespace engine {
                              % nodeSymb % portSpec
                         };
     auto res = procRegistry.insert (ProcID{nodeSymb, portSpec.substr(0,p), portSpec.substr(p)});
-    return unConst (*res.first);
+    ProcID& entry{unConst (*res.first)};
+    if (res.second)
+      {// new record placed into the registry
+        dedupSymbol (entry.nodeSymb_);
+        dedupSymbol (entry.argLists_);
+        if (not isnil(entry.portQual_))
+          dedupSymbol (entry.portQual_);
+      }
+    return entry;
   }
   
   /** @internal */
@@ -103,9 +118,12 @@ namespace engine {
   string
   ProcID::genProcSpec()
   {
-    return nodeSymb_
-         + (isnil(portQual_)? string{} : "."+portQual_)
-         + argLists_;
+    std::ostringstream buffer;
+    buffer << nodeSymb_;
+    if (not isnil(portQual_))
+      buffer << '.' << portQual_;
+    buffer << argLists_;
+    return buffer.str();
   }
   
   

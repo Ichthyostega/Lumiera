@@ -58,9 +58,9 @@ namespace engine {
   
   class ProcID
     {
-      string nodeSymb_;
-      string portQual_;
-      string argLists_;
+      StrView nodeSymb_;
+      StrView portQual_;
+      StrView argLists_;
       
       ProcID (StrView nodeSymb, StrView portQual, StrView argLists);
       
