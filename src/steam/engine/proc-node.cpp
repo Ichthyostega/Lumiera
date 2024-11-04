@@ -30,27 +30,32 @@
 
 #include "steam/engine/proc-id.hpp"
 #include "steam/engine/proc-node.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/format-string.hpp"
+#include "lib/format-util.hpp"
 #include "lib/util.hpp"
 
 #include <boost/functional/hash.hpp>
 #include <unordered_set>
+#include <set>
 
 
 namespace steam {
 namespace engine {
   
+  using lib::explore;
   using util::_Fmt;
   using util::isnil;
   using util::unConst;
   using util::contains;
   using boost::hash_combine;
   
-  namespace { // Details...
+  namespace {// Details: registration and symbol table for node spec data...
     
     std::unordered_set<ProcID> procRegistry;
     std::unordered_set<string> symbRegistry;
     
+    /** deduplicate and re-link to the entry in the symbol table */
     void inline
     dedupSymbol (StrView& symbol)
     {
@@ -60,7 +65,6 @@ namespace engine {
   } // (END) Details...
   
   
-//  using mobject::Placement;
   
   Port::~Port() { }  ///< @remark VTables for the Port-Turnout hierarchy emitted from \ref proc-node.cpp
   
@@ -96,14 +100,15 @@ namespace engine {
   
   /** @internal */
   ProcID::ProcID (StrView nodeSymb, StrView portQual, StrView argLists)
-    : nodeSymb_{nodeSymb}  /////////////////////////////////////////////////////////OOO intern these strings!!
+    : nodeSymb_{nodeSymb}
     , portQual_{portQual}
     , argLists_{argLists}
     { }
   
-  /** generate registry hash value based on the distinct data in ProcID.
-   *  This function is intended to be picked up by ADL, and should be usable
-   *  both with `std::hash` and `<boost/functional/hash.hpp>`.
+  /**
+   * generate registry hash value based on the distinct data in ProcID.
+   * This function is intended to be picked up by ADL, and should be usable
+   * both with `std::hash` and `<boost/functional/hash.hpp>`.
    */
   HashVal
   hash_value (ProcID const& procID)
@@ -113,6 +118,16 @@ namespace engine {
       hash_combine (hash, procID.portQual_);
     hash_combine   (hash, procID.argLists_);
     return hash;
+  }
+  
+  string
+  ProcID::genProcName()
+  {
+    std::ostringstream buffer;
+    buffer << nodeSymb_;
+    if (not isnil(portQual_))
+      buffer << '.' << portQual_;
+    return buffer.str();
   }
   
   string
@@ -126,12 +141,65 @@ namespace engine {
     return buffer.str();
   }
   
+  string
+  ProcID::genNodeName()
+  {
+    return string{nodeSymb_};
+  }
   
   
+  namespace { // Helper to access ProcID recursively
+    ProcID&
+    procID (ProcNode& node)
+    {
+      REQUIRE (not isnil(watch(node).ports()));
+      return watch(node).ports().front().procID;
+    }
+  }
+  
+  string
+  ProcID::genNodeSpec (Leads& leads)
+  {
+    std::ostringstream buffer;
+    buffer << nodeSymb_;
+    if (1 != leads.size())
+      buffer << genSrcSpec(leads);
+    else
+      { // single chain....
+        ProcNode& p{leads.front().get()};
+        buffer << "◁—"
+               << procID(p).genNodeName()      // show immediate predecessor
+               << procID(p).genSrcSpec(leads); // and behind that recursively the source(s)
+      }
+    return buffer.str();
+  }
+  
+  string
+  ProcID::genSrcSpec (Leads& leads)
+  {
+    return isnil(leads)? string{"-◎"}  // no leads => starting point itself is a source node
+                       : "┉┉{"
+                         + util::join(
+                             explore(leads)
+                               .expandAll([](ProcNode& n){ return explore(watch(n).leads()); })  // depth-first expand all predecessors
+                               .filter   ([](ProcNode& n){ return watch(n).isSrc(); })           // but retain only leafs (≙ source nodes)
+                               .transform([](ProcNode& n){ return procID(n).nodeSymb_;})         // render the node-symbol of each src
+                               .deduplicate())                                                   // sort and deduplicate
+                         + "}";
+  }
+  
+  
+  
+  /**
+   * @return symbolic string with format `NodeSymb--<predecessorSpec>`
+   * @remark connectivity information is abbreviated and foremost
+   *         indicates the data source(s)
+   */
   string
   ProcNodeDiagnostic::getNodeSpec()
   {
-    UNIMPLEMENTED ("generate a descriptive Spec of this ProcNode for diagnostics");
+    REQUIRE (not isnil(ports()));
+    return ports().front().procID.genNodeSpec (leads());
   }
   
   HashVal

@@ -68,6 +68,7 @@
 #include <string>
 #include <tuple>
 #include <cmath>
+#include <set>
 
 
 namespace lib {
@@ -291,6 +292,7 @@ namespace test{
           verify_IterSource();
           verify_reduceVal();
           verify_effuse();
+          verify_dedup();
           
           verify_depthFirstExploration();
           demonstrate_LayeredEvaluation();
@@ -1231,6 +1233,20 @@ namespace test{
           using Res = decltype(solidified);
           CHECK (lib::test::showType<Res>()  == "vector<double>"_expect);
           CHECK (util::join(solidified, "|") == "9.5|8.5|7.5|6.5|5.5|4.5|3.5|2.5|1.5|0.5"_expect);
+        }
+      
+      
+      /** @test verify to deduplicate the iterator's results into a std::set
+       */
+      void
+      verify_dedup()
+        {
+          CHECK (materialise (
+                    explore(CountDown{23})
+                      .transform([](uint j){ return j % 5; })
+                      .deduplicate()
+                    )
+                 == "0-1-2-3-4"_expect);  // note: values were also sorted ascending by std::set
         }
       
       

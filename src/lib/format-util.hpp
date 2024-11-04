@@ -240,7 +240,7 @@ namespace util {
     return join (stringify (args...), "-");
   }
   
-  /** shortcut: join directly with dashes */
+  /** shortcut: join directly with dots */
   template<typename...ARGS>
   inline string
   joinDot (ARGS const& ...args)

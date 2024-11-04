@@ -578,6 +578,52 @@ namespace lib {
   
   
   
+  /**
+   * Adapter to »piggy-back« a STL iterable container inline and expose it as »state core«.
+   * @warning be sure to understand the implications of this setup
+   *  - when initialised by reference, the container's contents will be copied
+   *  - when move-initialised, the container will be destroyed with this iterator
+   *  - the container API remains visible (baseclass), which could confuse trait detection
+   */
+  template<class CON>
+  class ContainerCore
+    : public CON
+    {
+      using Iter = typename CON::iterator;
+      
+      Iter p_;
+      
+    public:
+      ContainerCore (CON&& container)
+        : CON(std::forward<CON>(container))
+        , p_{CON::begin()}
+        { }
+      
+      // copy and assignment acceptable (warning!)
+      
+      
+      /* === »state core« protocol API === */
+      bool
+      checkPoint()  const
+        {
+          return p_ != CON::end();
+        }
+      
+      decltype(auto)
+      yield()  const
+        {
+          return *p_;
+        }
+      
+      void
+      iterNext()
+        {
+          ++p_;
+        }
+    };
+  
+  
+  
   
   /**
    * Decorator-Adapter to make a »state core« iterable as Lumiera Forward Iterator.

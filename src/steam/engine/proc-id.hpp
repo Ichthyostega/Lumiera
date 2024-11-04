@@ -40,8 +40,9 @@
 #define ENGINE_PROC_ID_H
 
 
-#include "lib/hash-standard.hpp"
 #include "lib/error.hpp"
+#include "lib/hash-standard.hpp"
+#include "lib/several.hpp"
 //#include "steam/streamtype.hpp"
 
 #include <string>
@@ -55,6 +56,7 @@ namespace engine {
   using std::string;
   using StrView = std::string_view;
   
+  class ProcNode;
   
   class ProcID
     {
@@ -64,14 +66,20 @@ namespace engine {
       
       ProcID (StrView nodeSymb, StrView portQual, StrView argLists);
       
+      using ProcNodeRef = std::reference_wrapper<ProcNode>;
+      using Leads = lib::Several<ProcNodeRef>;
+      
     public:
       /** build and register a processing ID descriptor */
       static ProcID& describe (StrView nodeSymb, StrView portSpec);
       
       /* === symbolic descriptors === */
       
-      string genProcSpec();  ///< render a descriptor for the operation (without predecessors)
-      
+      string genProcName();
+      string genProcSpec();        ///< render a descriptor for the operation (without predecessors)
+      string genNodeName();
+      string genNodeSpec(Leads&);
+      string genSrcSpec (Leads&);  ///< transitively enumerate all unique source nodes
       
       friend bool
       operator== (ProcID const& l, ProcID const& r)

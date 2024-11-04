@@ -239,6 +239,8 @@ namespace engine {
       auto& leads() { return n_.wiring_.leads; }
       auto& ports() { return n_.wiring_.ports; }
       
+      bool isSrc()  { return n_.wiring_.leads.empty(); }
+      
       bool
       isValid()
         {

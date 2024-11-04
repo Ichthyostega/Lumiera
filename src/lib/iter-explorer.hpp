@@ -124,6 +124,7 @@
 //Forward declaration to allow a default result container for IterExplorer::effuse
 namespace std {
   template<typename T, class A> class vector;
+  template<typename K, typename CMP, class A> class set;
 }
 
 
@@ -1878,6 +1879,24 @@ namespace lib {
         {
           using Ptr = typename meta::ValueTypeBinding<SRC>::value_type;
           return IterExplorer::transform ([](Ptr ptr){ return *ptr; });
+        }
+      
+      
+      /** preconfigured decorator to materialise, sort and deduplicate all source elements.
+       * @warning uses heap storage to effuse the source pipeline immediately
+       */
+      template<template<typename> class SET =std::set>
+      auto
+      deduplicate()
+        {
+          using Value   = typename meta::ValueTypeBinding<SRC>::value_type;
+          using ResCore = ContainerCore<SET<Value>>;
+          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          SET<Value> buffer;
+          for (auto& val : *this)
+            buffer.emplace (val);
+          // »piggiy-back« the collected data into the result iterator
+          return IterExplorer<ResIter>{ResCore{move (buffer)}};
         }
       
       
