@@ -29,8 +29,9 @@
 #define STEAM_ENGINE_TESTFRAME_H
 
 
-#include <cstdlib>
-#include <stdint.h>
+#include "lib/integral.hpp"
+
+#include <array>
 
 
 namespace steam {
@@ -63,12 +64,15 @@ namespace test   {
           CREATED, EMITTED, DISCARDED
         };
       
-      static const size_t BUFFSIZ = 1024;
+      static constexpr size_t BUFFSIZ = 1024;
+      using _Arr = std::array<char,BUFFSIZ>;
       
       uint64_t distinction_;
       StageOfLife stage_;
       
-      char data_[BUFFSIZ];
+      /** inline storage buffer for the payload media data */
+      alignas(uint64_t)
+        std::byte buffer_[sizeof(_Arr)];
       
     public:
      ~TestFrame();
@@ -95,6 +99,10 @@ namespace test   {
       
       friend bool operator== (TestFrame const& f1, TestFrame const& f2) { return  f1.contentEquals(f2); }
       friend bool operator!= (TestFrame const& f1, TestFrame const& f2) { return !f1.contentEquals(f2); }
+
+      /** Array-style direct access to the payload data */
+      _Arr&       data()       { return * std::launder (reinterpret_cast<_Arr* > (&buffer_));      }
+      _Arr const& data() const { return * std::launder (reinterpret_cast<_Arr const*> (&buffer_)); }
       
     private:
       bool contentEquals (TestFrame const& o)  const;

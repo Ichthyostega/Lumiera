@@ -30,6 +30,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/depend.hpp"
 #include "steam/engine/testframe.hpp"
 
 #include <array>
@@ -41,6 +42,20 @@ namespace engine{
 namespace test  {
   
   using std::string;
+  
+  /** produce sequences of frames with (reproducible) random data */
+  void generateFrame (TestFrame* buff, size_t frameNr, uint flavour);
+  
+  /** produce planar multi channel output of random data frames */
+  void generateMultichan (uint chanCnt, TestFrame* buffArry, size_t frameNr, uint flavour);
+  
+  /** »process« random frame date by multiply-wrapping with a parameter */
+  void manipulateFrame (TestFrame* out, TestFrame* in, int param);
+  
+  /** mix two random data frames by a parameter-controlled proportion */
+  void combineFrames (TestFrame* out, TestFrame* srcA, TestFrame* srcB, int mix);
+  
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Dummy / Placeholder
   using NoArg   = std::array<char*, 0>;

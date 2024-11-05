@@ -64,7 +64,7 @@ namespace test  {
    *       TestFrame instances can be created right away, without any
    *       external library dependencies. A test frame is automatically
    *       filled with random data; multiple frames are arranged in
-   *       sequences and channels, causing the random data to be 
+   *       sequences and channels, causing the random data to be
    *       reproducible yet different in each frame.
    *       
    *       To ease writing unit tests, TestFrame provides comparison
@@ -77,7 +77,7 @@ namespace test  {
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           verifyBasicProperties();
           verifyFrameLifecycle();

@@ -25,8 +25,8 @@
  */
 
 
-#include "steam/engine/testframe.hpp"
 #include "lib/error.hpp"
+#include "steam/engine/testframe.hpp"
 
 #include <boost/random/linear_congruential.hpp>
 
@@ -83,7 +83,7 @@ namespace test   {
      * Some tests might rely on the actual memory locations, using the
      * test frames to simulate a real input frame data stream.
      * @param CHA the maximum number of channels to expect
-     * @param FRA the maximum number of frames to expect per channel 
+     * @param FRA the maximum number of frames to expect per channel
      * @warning choose the maximum number parameters wisely.
      *          We're allocating memory to hold a table of test frames
      *          e.g. sizeof(TestFrame) * 20channels * 100frames ≈ 2 MiB
@@ -193,7 +193,7 @@ namespace test   {
     : distinction_(o.distinction_)
     , stage_(CREATED)
     {
-      memcpy (data_, o.data_, BUFFSIZ);
+      memcpy (buffer_, o.buffer_, BUFFSIZ);
     }
   
   TestFrame&
@@ -205,7 +205,7 @@ namespace test   {
         {
           distinction_ = o.distinction_;
           stage_ = CREATED;
-          memcpy (data_, o.data_, BUFFSIZ);
+          memcpy (buffer_, o.buffer_, BUFFSIZ);
         }
       return *this;
     }
@@ -245,7 +245,7 @@ namespace test   {
   TestFrame::contentEquals (TestFrame const& o)  const
   {
     for (uint i=0; i<BUFFSIZ; ++i)
-      if (data_[i] != o.data_[i])
+      if (data()[i] != o.data()[i])
         return false;
     return true;
   }
@@ -255,7 +255,7 @@ namespace test   {
   {
     PseudoRandom gen(distinction_);
     for (uint i=0; i<BUFFSIZ; ++i)
-      if (data_[i] != char(gen() % CHAR_MAX))
+      if (data()[i] != char(gen() % CHAR_MAX))
         return false;
     return true;
   }
@@ -265,7 +265,7 @@ namespace test   {
   {
     PseudoRandom gen(distinction_);
     for (uint i=0; i<BUFFSIZ; ++i)
-      data_[i] = char(gen() % CHAR_MAX);
+      data()[i] = char(gen() % CHAR_MAX);
   }
   
   
