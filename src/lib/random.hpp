@@ -98,7 +98,7 @@ namespace lib {
   
   /* ===== convenience accessors ===== */
   
-  inline int      rani() { return defaultGen.i32(); }
+  inline int      rani() { return defaultGen.i32(); }  ///< using default params: min ≡ 0, max ≡ numeric_limits
   inline uint64_t ranu() { return defaultGen.u64(); }
   inline double   runi() { return defaultGen.uni(); }
   

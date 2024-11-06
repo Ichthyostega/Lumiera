@@ -1,8 +1,8 @@
 /*
-  NodeDevel(Test)  -  verify proper render node operation and calldown
+  NodeDevel(Test)  -  Render Node development and test support
 
   Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+    2024,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -26,6 +26,9 @@
 
 
 #include "lib/test/run.hpp"
+#include "steam/engine/test-rand-ontology.hpp" ///////////TODO
+#include "lib/test/diagnostic-output.hpp"/////////////////TODO
+#include "lib/random.hpp"
 //#include "lib/util.hpp"
 
 
@@ -36,18 +39,79 @@ namespace steam {
 namespace engine{
 namespace test  {
   
+  using lib::ranu;
+  
+  namespace {
+    /** uninitialised local storage that can be passed
+     *  as working buffer and accessed as TestFrame */
+    struct Buffer
+      : util::NonCopyable
+      {
+        alignas(TestFrame)
+          std::byte storage[sizeof(TestFrame)];
+        
+        operator TestFrame*  () { return   std::launder (reinterpret_cast<TestFrame* > (&storage)); } 
+        TestFrame* operator->() { return   std::launder (reinterpret_cast<TestFrame* > (&storage)); } 
+        TestFrame& operator* () { return * std::launder (reinterpret_cast<TestFrame* > (&storage)); } 
+      };
+  }
   
   
   
   /***************************************************************//**
-   * @test check render node operation modes and collaboration.
+   * @test verify support for developing Render Node functionality.
    */
   class NodeDevel_test : public Test
     {
-      virtual void run(Arg) 
+      virtual void
+      run (Arg)
         {
-          UNIMPLEMENTED ("operate some render nodes as linked together");
-        } 
+          lib::randomiseRandomness(); // inject entropy sees
+          
+          processing_generateFrame();
+          processing_generateMultichan();
+        }
+      
+      
+      /** @test function to generate random test data frames
+       */
+      void
+      processing_generateFrame()
+        {
+          size_t frameNr = ranu();
+          uint flavour   = uint(ranu());
+          
+          Buffer buff;
+          CHECK (not buff->isSane());
+          
+          generateFrame (buff, frameNr, flavour);
+          CHECK ( buff->isSane());
+          CHECK (*buff == TestFrame(frameNr,flavour));
+        }
+      
+      /** @test function to generate an array of random test data frames
+       *        for consecutive channels
+       */
+      void
+      processing_generateMultichan()
+        {
+          size_t frameNr = ranu();
+          uint flavour   = uint(ranu());
+          
+          uint channels  = uint(1 + ranu() % 50);
+          CHECK (1 <= channels and channels <= 50);
+          
+          Buffer buffs[50];
+          for (uint i=0; i<channels; ++i)
+            CHECK (not buffs[i]->isSane());
+          
+          generateMultichan (channels, buffs[0], frameNr, flavour);
+          for (uint i=0; i<channels; ++i)
+            {
+              CHECK (buffs[i]->isSane());
+              CHECK (*(buffs[i]) == TestFrame(frameNr,flavour+i));
+            }
+        }
     };
   
   
