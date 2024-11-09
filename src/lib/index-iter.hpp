@@ -1,5 +1,5 @@
 /*
-  ITER-INDEX.hpp  -  iterator with indexed random-access to referred container
+  INDEX-ITER.hpp  -  iterator with indexed random-access to referred container
 
   Copyright (C)         Lumiera.org
     2024,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 */
 
 
-/** @file iter-index.hpp
+/** @file index-iter.hpp
  ** Iterator-style access handle to a referred container with subscript index.
  ** This wrapper packages a current index number and a back-link to some data container
  ** with subscript operator and range check. This allows to hand out a navigable access point
@@ -31,14 +31,14 @@
  ** to re-set the iteration to the container's start. Optionally, a smart-ptr can be
  ** embedded, allowing the handle also to own and manage the data container.
  ** 
- ** @see IterIndex_test
+ ** @see IndexIter_test
  ** @see iter-adapter.hpp
  ** @see [usage example](\ref lib::TextTemplate::InstanceCore)
  */
 
 
-#ifndef SRC_LIB_ITER_INDEX_H
-#define SRC_LIB_ITER_INDEX_H
+#ifndef SRC_LIB_INDEX_ITER_H
+#define SRC_LIB_INDEX_ITER_H
 
 
 #include "lib/iter-adapter.hpp"
@@ -114,20 +114,20 @@ namespace lib {
    * @tparam CON a container with `operator[]` and a function `size()`
    * @tparam PTR how to refer to this container; can be defined as smart-ptr,
    *             additionally allowing to manage this container automatically.
-   * @remark while a default constructed IterIndex and some _exhausted_ IterIndex
+   * @remark while a default constructed IndexIter and some _exhausted_ IndexIter
    *             compare equal, only the latter can be re-set into active state.
    */
   template<class CON, typename PTR = CON*>
-  class IterIndex
+  class IndexIter
     : public iter::IndexAccessCore<PTR>::IterWrapper
     {
       using _Cor = iter::IndexAccessCore<PTR>;
       using _Par = typename _Cor::IterWrapper;
       
     public:
-      IterIndex()  = default;
-      IterIndex (CON& container)  : IterIndex{&container}{ };
-      IterIndex (PTR pContainer)
+      IndexIter()  = default;
+      IndexIter (CON& container)  : IndexIter{&container}{ };
+      IndexIter (PTR pContainer)
         : _Par{_Cor{pContainer, 0}}
         { }
       
@@ -152,4 +152,4 @@ namespace lib {
   
   
 } // namespace lib
-#endif /*SRC_LIB_ITER_INDEX_H*/
+#endif /*SRC_LIB_INDEX_ITER_H*/

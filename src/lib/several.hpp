@@ -61,7 +61,7 @@
 
 
 #include "lib/nocopy.hpp"
-#include "lib/iter-index.hpp"
+#include "lib/index-iter.hpp"
 
 #include <cstddef>
 #include <functional>
@@ -216,8 +216,8 @@ namespace lib {
       I& front() { return operator[] (0);                         }
       I& back()  { return operator[] (data_? data_->cnt-1 : 0);   }
       
-      using iterator       = lib::IterIndex<Several>;
-      using const_iterator = lib::IterIndex<const Several>;
+      using iterator       = lib::IndexIter<Several>;
+      using const_iterator = lib::IndexIter<const Several>;
       
       iterator begin()             { return iterator{*this};      }
       iterator end()               { return iterator{};           }

@@ -317,6 +317,11 @@ return: 0
 END
 
 
+TEST "index-based iterator" IndexIter_test 20 <<END
+return: 0
+END
+
+
 TEST "Iterable data source" IterSource_test 13 <<END
 out: ::13::12::11::10::9::8::7::6::5::4::3::2::1
 out: ::.............::............::...........::..........::.........::........::.......::......::.....::....::...::..::.$

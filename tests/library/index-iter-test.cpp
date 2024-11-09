@@ -1,5 +1,5 @@
 /*
-  IterIndex(Test)  -  verify index access packaged as iterator handle
+  IndexIter(Test)  -  verify index access packaged as iterator handle
 
   Copyright (C)         Lumiera.org
     2024,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,13 +21,13 @@
 * *****************************************************/
 
 /** @file iter-index-test.cpp
- ** unit test \ref IterIndex_test
+ ** unit test \ref IndexIter_test
  */
 
 
 
 #include "lib/test/run.hpp"
-#include "lib/iter-index.hpp"
+#include "lib/index-iter.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/format-util.hpp"
@@ -57,9 +57,9 @@ namespace test{
     const uint NUM_ELMS = 10;
     
     using Numz = vector<uint>;
-    using Iter = IterIndex<Numz>;
-    using CIter = IterIndex<const Numz>;
-    using SMIter = IterIndex<Numz, shared_ptr<Numz>>;
+    using Iter = IndexIter<Numz>;
+    using CIter = IndexIter<const Numz>;
+    using SMIter = IndexIter<Numz, shared_ptr<Numz>>;
     
     inline Numz
     makeNumz()
@@ -86,7 +86,7 @@ namespace test{
    * @see iter-adapter.hpp
    * @see [usage example](\ref event-log.hpp)
    */
-  class IterIndex_test : public Test
+  class IndexIter_test : public Test
     {
       
       virtual void
@@ -127,11 +127,11 @@ namespace test{
       
       
       
-      /** @test verify the ability of IterIndex to access and manipulate
+      /** @test verify the ability of IndexIter to access and manipulate
        * the current index position, which can be done any time, while in
        * the middle of iteration, and even after iteration end. That means,
        * even an exhausted iterator can be „reanimated“. This manipulation
-       * is not allowed on a default constructed IterIndex, though.
+       * is not allowed on a default constructed IndexIter, though.
        */
       void
       verify_randomAccess ()
@@ -289,7 +289,7 @@ namespace test{
         }
     };
   
-  LAUNCHER (IterIndex_test, "unit common");
+  LAUNCHER (IndexIter_test, "unit common");
   
   
 }} // namespace lib::test

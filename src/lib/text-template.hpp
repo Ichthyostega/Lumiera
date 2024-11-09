@@ -175,7 +175,7 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "lib/iter-index.hpp"
+#include "lib/index-iter.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-util.hpp"
@@ -380,7 +380,7 @@ namespace lib {
       template<class SRC>
       class InstanceCore
         {
-          using ActionIter = IterIndex<const ActionSeq>;
+          using ActionIter = IndexIter<const ActionSeq>;
           using DataCtxIter = typename SRC::Iter;
           using NestedCtx = std::pair<DataCtxIter, SRC>;
           using CtxStack = std::stack<NestedCtx, std::vector<NestedCtx>>;

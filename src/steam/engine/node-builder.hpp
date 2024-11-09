@@ -100,7 +100,7 @@
 #include "steam/engine/turnout.hpp"
 #include "lib/several-builder.hpp"
 #include "lib/format-string.hpp"
-#include "lib/iter-index.hpp"
+#include "lib/index-iter.hpp"
 #include "lib/test/test-helper.hpp"/////////////////////TODO TOD-oh
 
 #include <utility>
@@ -341,7 +341,7 @@ namespace engine {
       connectLeadPort (ProcNode& leadNode, uint port)
         {
           uint knownEntry{0};
-          for (auto& lead : lib::IterIndex{_Par::leads_})
+          for (auto& lead : lib::IndexIter{_Par::leads_})
             if (util::isSameObject (leadNode, lead))
               break;
             else
