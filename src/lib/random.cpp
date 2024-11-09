@@ -84,8 +84,8 @@ namespace lib {
   void
   randomiseRandomness()
   {
-    entropyGen.randomise(entropyNucleus);
-    defaultGen.randomise(entropyNucleus);
+    entropyGen.reseed(entropyNucleus);
+    defaultGen.reseed(entropyNucleus);
   }
   
 } // namespace lib

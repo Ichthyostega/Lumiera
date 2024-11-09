@@ -80,7 +80,7 @@ namespace lib {
       double   uni() { return uniformD_(generator_); }
       
       /** inject controlled randomisation */
-      void randomise(SeedNucleus&);
+      void reseed (SeedNucleus&);
     };
   
   /**
@@ -121,9 +121,9 @@ namespace lib {
   
   template<class GEN>
   inline void
-  RandomSequencer<GEN>::randomise (SeedNucleus& nucleus)
+  RandomSequencer<GEN>::reseed (SeedNucleus& nucleus)
   {
-    generator_.discard (nucleus.getSeed() % 55555);
+    generator_.seed (nucleus.getSeed());
   }
   
   

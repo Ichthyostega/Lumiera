@@ -90,11 +90,15 @@ namespace test {
           CHECK (r2 == src2.u64());
           CHECK (r3 == src2.uni());
           
-          src1.randomise(coreOfEvil);
-          CHECK (src1.i32() != src2.i32());
+          src1.reseed (coreOfEvil);
+          CHECK (src1.u64() != src2.u64());
           
-          src2.randomise(coreOfEvil);
+          src2.reseed (coreOfEvil);
+          CHECK (src1.u64() != src2.u64());
+          (void) src2.u64();
+          CHECK (src1.u64() == src2.u64());
           CHECK (src1.i32() == src2.i32());
+          CHECK (src1.uni() == src2.uni());
         }
     };
   
