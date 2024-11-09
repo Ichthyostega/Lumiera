@@ -36,8 +36,8 @@
 #ifndef TESTHELPER_RUN_H
 #define TESTHELPER_RUN_H
 
-#include "steam/common.hpp"
-#include "include/logging.h"
+#include "lib/error.hpp"
+#include "lib/random.hpp"
 
 #include "lib/test/suite.hpp"
 #include "lib/util.hpp"
@@ -62,8 +62,11 @@ namespace test {
   class Test
     {
     public:
-      virtual ~Test() {}
-      virtual void run(Arg arg) = 0;
+      virtual ~Test()            = default;
+      virtual void run(Arg arg)  = 0;
+      
+      void seedRand();
+      lib::Random makeRandGen();
     };
     
     
@@ -72,7 +75,7 @@ namespace test {
   class Launcher
     {
     public:
-      virtual ~Launcher() {}
+      virtual ~Launcher()    = default;
       virtual shared_ptr<Test> makeInstance()  =0;
     };
     

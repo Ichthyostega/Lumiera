@@ -30,6 +30,7 @@
 #include "lib/util.hpp"
 
 #include <cstdlib>
+#include <climits>
 #include <memory>
 
 using test::Test;

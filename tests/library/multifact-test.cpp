@@ -32,6 +32,7 @@
 
 #include <boost/lexical_cast.hpp>
 #include <functional>
+#include <memory>
 #include <string>
 
 
@@ -42,7 +43,8 @@ namespace test{
   using boost::lexical_cast;
   using util::isSameObject;
   using util::isnil;
-  
+
+  using std::shared_ptr;
   using std::function;
   using std::string;
   using std::bind;

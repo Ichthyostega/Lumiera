@@ -27,13 +27,12 @@
 
 
 
-#include "include/logging.h"
-#include "lib/hash-standard.hpp"
+#include "lib/error.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/test/suite.hpp"
 #include "lib/test/run.hpp"
 #include "lib/cmdline.hpp"
-#include "lib/error.hpp"
+#include "lib/random.hpp"
 #include "lib/util.hpp"
 
 #include <boost/algorithm/string.hpp>
@@ -55,6 +54,7 @@ namespace test {
   using util::isnil;
   using util::contains;
   using util::typeStr;
+  using lib::Random;
   
   typedef map<string, Launcher*> TestMap;
   typedef shared_ptr<TestMap>  PTestMap;
@@ -192,6 +192,21 @@ namespace test {
   }
   
   
+  void
+  Test::seedRand()
+  {
+    UNIMPLEMENTED ("draw a new random seed from a common nucleus, and re-seed the default-Gen");
+  }
+  
+  
+  Random
+  Test::makeRandGen()
+  {
+    UNIMPLEMENTED ("build a dedicated new RandomGen, seeded from the default-Gen");
+  }
+
+  
+  
   /** run all testcases contained in this Suite.
    *  The first argument in the commandline, if present, 
    *  will select one single testcase with a matching ID.
@@ -244,10 +259,13 @@ namespace test {
   
   
   /** print to stdout an enumeration of all testcases in this suite,
-   *  in a format suitable for use with Cehteh's ./test.sh 
+   *  in a format suitable for use with Cehteh's ./test.sh
+   * @todo this function war rarely used and is kind of broken by the fact
+   *  that Nobug-assertions terminate the program instead of throwing,
+   *  rendering the feature to integrate output mostly useless.
    */
   void
-  Suite::describe ()
+  Suite::describe()
   {
     lib::Cmdline noCmdline("");
     PTestMap tests = testcases.getGroup(groupID_);

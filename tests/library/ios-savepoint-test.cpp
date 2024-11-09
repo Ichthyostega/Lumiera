@@ -29,6 +29,7 @@
 #include "lib/format-cout.hpp"
 #include "lib/ios-savepoint.hpp"
 
+#include <iomanip>
 #include <string>
 
 

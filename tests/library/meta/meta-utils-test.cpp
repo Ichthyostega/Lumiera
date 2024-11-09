@@ -25,6 +25,7 @@
  */
 
 
+#include "lib/symbol.hpp"
 #include "lib/test/run.hpp"
 #include "lib/meta/util.hpp"
 #include "lib/meta/typelist.hpp"
