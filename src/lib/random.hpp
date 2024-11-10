@@ -81,7 +81,28 @@ namespace lib {
       
       /** inject controlled randomisation */
       void reseed (SeedNucleus&);
+      
+      /** wrapper to use this generator for seeding other generators */
+      class Seed;
     };
+  
+  template<class GEN>
+  class RandomSequencer<GEN>::Seed
+    : public SeedNucleus
+    {
+      RandomSequencer& srcGen_;
+    public:
+      Seed(RandomSequencer& parent)
+        : srcGen_{parent}
+        { }
+      
+      uint64_t
+      getSeed() override
+        {
+          return srcGen_.u64();
+        }
+    };
+  
   
   /**
    * PRNG engine to use by default: 64bit mersenne twister.
@@ -105,6 +126,10 @@ namespace lib {
   
   /** inject true randomness into the #defaultGen */
   void randomiseRandomness();
+  
+  /** draw seed another Generator from the default RandomSequencer  */
+  SeedNucleus& seedFromDefaultGen();
+  
   
   
   /* ===== Implementation details ===== */

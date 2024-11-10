@@ -36,7 +36,7 @@
 #include "lib/util.hpp"
 
 #include <boost/algorithm/string.hpp>
-#include <memory>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <memory>
@@ -48,12 +48,14 @@ namespace test {
   
   using std::map;
   using std::vector;
+  using std::optional;
   using std::shared_ptr;
   using boost::algorithm::trim;
   
   using util::isnil;
   using util::contains;
   using util::typeStr;
+  using lib::SeedNucleus;
   using lib::Random;
   
   typedef map<string, Launcher*> TestMap;
@@ -97,7 +99,22 @@ namespace test {
             (*group)[testID] = test;
           }
       };
-      
+    
+    class SuiteSeedNucleus
+      : public SeedNucleus
+      {
+        optional<uint64_t> fixedSeed_;
+        
+        uint64_t
+        getSeed()  override
+          {
+            return fixedSeed_? *fixedSeed_
+                             : lib::entropyGen.u64();
+          }
+      };
+    
+    /* ===== global implementation state ===== */
+    SuiteSeedNucleus suiteSeed;
     Registry testcases;
   }
   
@@ -192,17 +209,19 @@ namespace test {
   }
   
   
+  /** draw a new random seed from a common nucleus, and re-seed the default-Gen. */
   void
   Test::seedRand()
   {
-    UNIMPLEMENTED ("draw a new random seed from a common nucleus, and re-seed the default-Gen");
+    lib::defaultGen.reseed (suiteSeed);
   }
   
   
+  /** build a dedicated new RandomGen, seeded from the default-Gen */
   Random
   Test::makeRandGen()
   {
-    UNIMPLEMENTED ("build a dedicated new RandomGen, seeded from the default-Gen");
+    return Random{lib::seedFromDefaultGen()};
   }
 
   

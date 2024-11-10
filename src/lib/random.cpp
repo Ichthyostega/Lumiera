@@ -72,14 +72,21 @@ namespace lib {
     
     /// @todo this one should somehow be configurable
     EternalNucleus eternalNucleus;
+    
+    Random::Seed defaultNucleus{defaultGen};
   }
-  
-  
-  SeedNucleus::~SeedNucleus() { }
   
   Random defaultGen{eternalNucleus};
   Random entropyGen{entropyNucleus};
   
+  SeedNucleus&
+  seedFromDefaultGen()
+  {
+    return defaultNucleus;
+  }
+  
+  
+  SeedNucleus::~SeedNucleus() { }
   
   void
   randomiseRandomness()
@@ -87,5 +94,6 @@ namespace lib {
     entropyGen.reseed(entropyNucleus);
     defaultGen.reseed(entropyNucleus);
   }
+  
   
 } // namespace lib
