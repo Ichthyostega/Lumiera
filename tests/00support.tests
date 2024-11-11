@@ -65,38 +65,55 @@ END
 
 
 TEST "Testsuite option handling" TestOption_test <<END
-out: Testing invocation with cmdline: ...
-out: --> Testgroup=ALL
-out: --> Test-ID  =--missing--
-out: --> remaining=
-out: Testing invocation with cmdline: --help...
-out: --> Testgroup=ALL
-out: --> Test-ID  =--missing--
-out: --> remaining=
-out: Testing invocation with cmdline: --group TestGroupID...
-out: --> Testgroup=TestGroupID
-out: --> Test-ID  =--missing--
-out: --> remaining=
-out: Testing invocation with cmdline:  SingleTestID...
-out: --> Testgroup=ALL
-out: --> Test-ID  =SingleTestID
-out: --> remaining=SingleTestID
-out: Testing invocation with cmdline:  SingleTestID --group TestGroupID...
-out: --> Testgroup=TestGroupID
-out: --> Test-ID  =SingleTestID
-out: --> remaining=SingleTestID
-out: Testing invocation with cmdline:  --group TestGroupID SingleTestID ...
-out: --> Testgroup=TestGroupID
-out: --> Test-ID  =SingleTestID
-out: --> remaining=SingleTestID
-out: Testing invocation with cmdline:  --group TestGroupID SingleTestID spam eggs...
-out: --> Testgroup=TestGroupID
-out: --> Test-ID  =SingleTestID
-out: --> remaining=SingleTestID spam eggs
-out: Testing invocation with cmdline: 		SingleTestID spam --group TestGroupID    	 --eggs...
-out: --> Testgroup=TestGroupID
-out: --> Test-ID  =SingleTestID
-out: --> remaining=SingleTestID spam --eggs
+out-lit: Testing invocation with cmdline: ...
+out-lit: --> Testgroup=ALL
+out-lit: --> Test-ID  =--missing--
+out-lit: --> remaining=
+out-lit: Testing invocation with cmdline: --help...
+out-lit: --> Testgroup=ALL
+out-lit: --> Test-ID  =--missing--
+out-lit: --> remaining=
+out-lit: Testing invocation with cmdline: --group TestGroupID...
+out-lit: --> Testgroup=TestGroupID
+out-lit: --> Test-ID  =--missing--
+out-lit: --> remaining=
+out-lit: Testing invocation with cmdline:  SingleTestID...
+out-lit: --> Testgroup=ALL
+out-lit: --> Test-ID  =SingleTestID
+out-lit: --> remaining=SingleTestID
+out-lit: Testing invocation with cmdline:  SingleTestID --group TestGroupID...
+out-lit: --> Testgroup=TestGroupID
+out-lit: --> Test-ID  =SingleTestID
+out-lit: --> remaining=SingleTestID
+out-lit: Testing invocation with cmdline:  --group TestGroupID SingleTestID ...
+out-lit: --> Testgroup=TestGroupID
+out-lit: --> Test-ID  =SingleTestID
+out-lit: --> remaining=SingleTestID
+out-lit: Testing invocation with cmdline:  --group TestGroupID SingleTestID spam eggs...
+out-lit: --> Testgroup=TestGroupID
+out-lit: --> Test-ID  =SingleTestID
+out-lit: --> remaining=SingleTestID spam eggs
+out: Testing invocation with cmdline: .+SingleTestID spam --group TestGroupID.+--eggs...
+out-lit: --> Testgroup=TestGroupID
+out-lit: --> Test-ID  =SingleTestID
+out-lit: --> remaining=SingleTestID spam --eggs
+out-lit: Testing invocation with cmdline: ham --group spam...
+out-lit: --> Testgroup=spam
+out-lit: --> Test-ID  =ham
+out-lit: --> remaining=ham
+out-lit: Testing invocation with cmdline: ham --seed 7 spam...
+out-lit: --> Testgroup=ALL
+out-lit: --> Test-ID  =ham
+out-lit: --> remaining=ham spam
+out-lit: Testing invocation with cmdline: ham --seed 0 spam...
+out-lit: --> Testgroup=ALL
+out-lit: --> Test-ID  =ham
+out-lit: --> remaining=ham spam
+out-lit: Testing invocation with cmdline: ham --seed spam...
+out-lit: Testing invocation with cmdline: --seed=-1...
+out-lit: --> Testgroup=ALL
+out-lit: --> Test-ID  =--missing--
+out-lit: --> remaining=
 return: 0
 END
 

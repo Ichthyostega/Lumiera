@@ -42,12 +42,14 @@
 
 #include <vector>
 #include <string>
+#include <optional>
 
 
 
 namespace test {
   
   using std::string;
+  using opt_uint64 = std::optional<uint64_t>;
   
   // Forward declarations for run.hpp
   class Test;
@@ -69,7 +71,7 @@ namespace test {
       int exitCode_;
       
     public:
-      Suite (string groupID);
+      Suite (string groupID, opt_uint64 seed);
       bool run (Arg cmdline);
       void describe ();
       int getExitCode ()  const;

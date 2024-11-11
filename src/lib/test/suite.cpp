@@ -28,6 +28,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/symbol.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/test/suite.hpp"
 #include "lib/test/run.hpp"
@@ -50,10 +51,12 @@ namespace test {
   using std::vector;
   using std::optional;
   using std::shared_ptr;
+  using std::string_literals::operator ""s;
   using boost::algorithm::trim;
   
   using util::isnil;
   using util::contains;
+  using util::toString;
   using util::typeStr;
   using lib::SeedNucleus;
   using lib::Random;
@@ -103,13 +106,17 @@ namespace test {
     class SuiteSeedNucleus
       : public SeedNucleus
       {
-        optional<uint64_t> fixedSeed_;
+      public:
+        /** optionally a fixed random seed to inject in each invoked test */
+        opt_uint64 fixedSeed;
         
         uint64_t
         getSeed()  override
           {
-            return fixedSeed_? *fixedSeed_
-                             : lib::entropyGen.u64();
+            auto seed = fixedSeed? *fixedSeed : lib::entropyGen.u64();
+            auto kind = fixedSeed? "!fix" : "rand";
+            NOTICE (test, "     ++>>> SEED(%s) <<<: %s", kind, toString(seed).c_str());
+            return seed;
           }
       };
     
@@ -128,9 +135,8 @@ namespace test {
    *  @param test the Launcher object used to run this test
    *  @param testID unique ID to refer to this test (will be used as std::map key)
    *  @param groups List of group-IDs selected by whitespace
-   * 
    */
-  void 
+  void
   Suite::enrol (Launcher* test, string testID, string groups)
   {
     REQUIRE( test );
@@ -154,12 +160,11 @@ namespace test {
 
   
   
-  /** create a suite comprised of all the testcases 
-   *  previously @link #enrol() registered @endlink with this
-   *  this group. 
-   *  @see #run() running tests in a Suite 
+  /** create a suite comprised of all the testcases
+   *  previously @link #enrol() registered @endlink with this this group.
+   *  @see #run() running tests in a Suite
    */
-  Suite::Suite(string groupID) 
+  Suite::Suite (string groupID, opt_uint64 optSeed)
     : groupID_(groupID)
     , exitCode_(0)
   {
@@ -168,6 +173,8 @@ namespace test {
     
     // Seed random number generator
     std::srand (std::time (nullptr));
+    
+    suiteSeed.fixedSeed = optSeed;
     
     if (!testcases.getGroup(groupID))
       throw lumiera::error::Invalid ("empty testsuite");
@@ -181,7 +188,7 @@ namespace test {
     }
   
   
-    
+  
 #define IS_VALID(test,testID) \
   ASSERT ((test), "NULL testcase launcher for test '%s' found in testsuite '%s'", groupID_.c_str(),testID.c_str());
   
@@ -191,8 +198,7 @@ namespace test {
     int
     invokeTestCase (Test& theTest, Arg cmdline)
     {
-      try 
-        {
+      try {
           INFO (test, "++------------------- invoking TEST: %s", cStr(typeStr (theTest)));
           theTest.run (cmdline);
           return Suite::TEST_OK;
@@ -227,13 +233,13 @@ namespace test {
   
   
   /** run all testcases contained in this Suite.
-   *  The first argument in the commandline, if present, 
+   *  The first argument in the commandline, if present,
    *  will select one single testcase with a matching ID.
    *  In case of invoking a single testcase, the given cmdline
    *  will be forwarded to the testcase, after removing the
-   *  testcaseID from cmdline[0]. Otherwise, every testcase 
+   *  testcaseID from cmdline[0]. Otherwise, every testcase
    *  in this suite is invoked with a empty cmdline vector.
-   *  @param cmdline ref to the vector of commandline tokens  
+   *  @param cmdline ref to the vector of commandline tokens
    */
   bool
   Suite::run (Arg cmdline)
@@ -248,7 +254,7 @@ namespace test {
         trim(testID);
         if ( contains (*tests, testID))
           {
-            // first cmdline argument denotes a valid testcase registered in 
+            // first cmdline argument denotes a valid testcase registered in
             // this group: invoke just this test with the remaining cmdline
             Launcher* test = (*tests)[testID];
             IS_VALID (test,testID);
@@ -303,7 +309,7 @@ namespace test {
           {
             test->makeInstance()->run(noCmdline); // run it to insert test generated output
           }
-        catch (...) 
+        catch (...)
           {
             cout << "PLANNED ============= " << lumiera_error() << "\n";
           }

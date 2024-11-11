@@ -48,7 +48,7 @@ int main (int argc, const char* argv[])
 {
   lib::Cmdline args (argc,argv);
   test::TestOption optparser (args);
-  test::Suite suite (optparser.getTestgroup());
+  test::Suite suite (optparser.getTestgroup(), optparser.optSeed());
   LifecycleHook::trigger (ON_GLOBAL_INIT);
   
   if (optparser.shouldDescribe())

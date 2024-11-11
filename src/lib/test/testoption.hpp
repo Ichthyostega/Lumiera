@@ -34,6 +34,7 @@
 
 #include <string>
 #include <iostream>
+#include <optional>
 #include <boost/program_options.hpp>
 #include <boost/utility.hpp>
 
@@ -61,10 +62,12 @@ namespace test {
     {
     public:
       TestOption (lib::Cmdline& cmdline);
-      const string getTestgroup ();
-      const string getTestID ();
+      const string getTestgroup();
+      const string getTestID();
       bool handleHelpRequest();
-      bool shouldDescribe ();
+      bool shouldDescribe();
+      
+      std::optional<uint64_t> optSeed();
       
     private:
       boost::program_options::options_description syntax;

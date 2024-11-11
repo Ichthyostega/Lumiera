@@ -39,6 +39,7 @@ typedef boost::program_options::variables_map VarMap;
 namespace op = boost::program_options;
 
 using lib::VectS;
+using std::optional;
 
 namespace test {
   
@@ -61,6 +62,8 @@ namespace test {
                         "the group (selection) of testcases to execute")
         ("describe",    op::bool_switch(),
                         "enumerate all testcases in this Suite in a format usable with ./test.sh.")
+        ("seed",        op::value<uint64_t>(),
+                        "the group (selection) of testcases to execute")
         ("id",          op::value<VectS>(),
                         "an individual testcase to be called.\nIf not specified, run all.")
         ;
@@ -105,6 +108,15 @@ namespace test {
       return parameters["id"].as<VectS>()[0];
     else
       return string ();
+  }
+  
+  optional<uint64_t>
+  TestOption::optSeed()
+  {
+    if (parameters.count ("seed"))
+      return parameters["seed"].as<uint64_t>();
+    else
+      return std::nullopt;
   }
   
   /** @return \c true if --describe switch was given */

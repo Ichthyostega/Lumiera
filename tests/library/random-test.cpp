@@ -49,10 +49,14 @@ namespace test {
         }
       
       
-      /** @test demonstrate usage of default random number generators */
+      /** @test demonstrate usage of default random number generators.
+       *  @note should [draw a seed](\ref Test::seedRand()) once per Test instance
+       */
       void
       simpleUsage()
         {
+          seedRand();
+          
           int r1 = rani();
           CHECK (0 <= r1 and r1 < RAND_MAX);
           
