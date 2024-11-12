@@ -38,6 +38,7 @@
 
 
 #include "lib/integral.hpp"
+#include "lib/hash-value.h"
 #include "lib/nocopy.hpp"
 
 #include <random>
@@ -79,6 +80,11 @@ namespace lib {
       uint64_t u64() { return uniformU_(generator_); }
       double   uni() { return uniformD_(generator_); }
       
+      friend int rani(uint);
+      friend double ranRange(double,double);
+      friend double ranNormal(double,double);
+      friend HashVal ranHash();
+      
       /** inject controlled randomisation */
       void reseed (SeedNucleus&);
       
@@ -119,7 +125,42 @@ namespace lib {
   
   /* ===== convenience accessors ===== */
   
-  inline int      rani() { return defaultGen.i32(); }  ///< using default params: min ≡ 0, max ≡ numeric_limits
+  /** @return a random integer ∈ [0 ... bound[  */
+  inline int
+  rani (uint bound =1u<<31)
+  {
+    if (!bound) ++bound;
+    --bound;
+    uint upper{std::numeric_limits<int>::max()};
+    upper = bound < upper? bound : upper;
+    std::uniform_int_distribution<int> dist(0, upper);
+    return dist (defaultGen.generator_);
+  }
+  
+  /** @return a random double ∈ [start ... bound[  */
+  inline double
+  ranRange (double start, double bound)
+  {
+    std::uniform_real_distribution<double> dist{start,bound};
+    return dist (defaultGen.generator_);
+  }
+  
+  inline double
+  ranNormal (double mean =0.0, double stdev =1.0)
+  {
+    std::normal_distribution<double> dist{mean,stdev};
+    return dist (defaultGen.generator_);
+  }
+  
+  /** @return a random *non-zero* HashVal  */
+  inline lib::HashVal
+  ranHash()
+  {
+    static std::uniform_int_distribution<lib::HashVal> dist{lib::HashVal(1)};
+    return dist (defaultGen.generator_);
+  }
+  
+  /// @deprecated
   inline uint64_t ranu() { return defaultGen.u64(); }
   inline double   runi() { return defaultGen.uni(); }
   

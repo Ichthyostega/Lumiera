@@ -28,7 +28,10 @@
 
 #include "lib/test/run.hpp"
 #include "lib/random.hpp"
+#include "lib/util.hpp"
+#include "lib/test/diagnostic-output.hpp"
 
+using util::isLimited;
 
 namespace lib {
 namespace test {
@@ -45,6 +48,7 @@ namespace test {
       run (Arg)
         {
           simpleUsage();
+          verify_distributionVariants();
           verify_reproducibleSequence();
         }
       
@@ -62,8 +66,42 @@ namespace test {
           
           int r2 = rani();
           CHECK (0 <= r2 and r2 < RAND_MAX);
-          CHECK (r1 != r2);
+          CHECK (r1 != r2);              // may fail with very low probability
         }
+      
+      
+      /** @test properties of predefined distributions provided for convenience
+       *      - the upper bound for `rani(bound)` is exclusive
+       *      - uniform distributions are sufficiently uniform
+       *      - spread of normal distribution is within expected scale
+       */
+      void
+      verify_distributionVariants()
+        {
+          double avg{0.0};
+          const uint N = 1e6;
+          for (uint i=0; i < N; ++i)
+            avg += 1.0/N * rani (1000);
+          
+          auto expect = 500;
+          auto error = fabs(avg/expect - 1);
+          CHECK (error < 0.005);
+          
+          for (uint i=0; i < N; ++i)
+            CHECK (isLimited(0, rani(5), 4));
+          
+          for (uint i=0; i < N; ++i)
+            CHECK (0 != ranHash());
+          
+          auto sqr = [](double v){ return v*v; };
+          
+          double spread{0.0};
+          for (uint i=0; i < N; ++i)
+            spread += sqr (ranNormal() - 0.5);
+          spread = sqrt (spread/N);
+          CHECK (spread < 1.12);
+        }
+      
       
       
       /** @test demonstrate that random number sequences can be reproduced
