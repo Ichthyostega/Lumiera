@@ -113,6 +113,11 @@ namespace test {
 using ::test::Arg;
 using ::test::Test;
 using ::test::Launch;
+using lib::rani;
+using lib::ranHash;
+using lib::ranRange;
+using lib::ranNormal;
+using lib::defaultGen;
 
 // and provide shortcut for registration
 #define LAUNCHER(_TEST_CLASS_, _GROUPS_) \

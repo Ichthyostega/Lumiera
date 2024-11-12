@@ -165,7 +165,7 @@ namespace test{
       void
       check_TimeSeriesLinearRegression()
         {
-          auto dirt = []        { return runi() - 0.5; };
+          auto dirt = []        { return ranRange(-0.5,+0.5); };
           auto fun = [&](uint i){ auto x = double(i)/NUM_POINTS;
                                   return x*x;
                                 };

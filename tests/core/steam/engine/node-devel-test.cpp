@@ -39,7 +39,6 @@ namespace steam {
 namespace engine{
 namespace test  {
   
-  using lib::ranu;
   
   namespace {
     /** uninitialised local storage that can be passed
@@ -66,7 +65,7 @@ namespace test  {
       virtual void
       run (Arg)
         {
-          lib::randomiseRandomness(); // inject entropy sees
+          seedRand();
           
           processing_generateFrame();
           processing_generateMultichan();
@@ -78,8 +77,8 @@ namespace test  {
       void
       processing_generateFrame()
         {
-          size_t frameNr = ranu();
-          uint flavour   = uint(ranu());
+          size_t frameNr = defaultGen.u64();
+          uint flavour   = defaultGen.u64();
           
           Buffer buff;
           CHECK (not buff->isSane());
@@ -95,10 +94,10 @@ namespace test  {
       void
       processing_generateMultichan()
         {
-          size_t frameNr = ranu();
-          uint flavour   = uint(ranu());
+          size_t frameNr = defaultGen.u64();
+          uint flavour   = defaultGen.u64();
           
-          uint channels  = uint(1 + ranu() % 50);
+          uint channels  = 1 + rani(50);
           CHECK (1 <= channels and channels <= 50);
           
           Buffer buffs[50];

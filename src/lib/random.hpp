@@ -160,10 +160,6 @@ namespace lib {
     return dist (defaultGen.generator_);
   }
   
-  /// @deprecated
-  inline uint64_t ranu() { return defaultGen.u64(); }
-  inline double   runi() { return defaultGen.uni(); }
-  
   
   /** inject true randomness into the #defaultGen */
   void randomiseRandomness();

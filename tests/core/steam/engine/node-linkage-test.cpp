@@ -58,6 +58,8 @@ namespace test  {
       virtual void
       run (Arg)
         {
+          seedRand();
+          
           build_connected_nodes();
           generate_turnout_system();
           trigger_node_port_invocation();
