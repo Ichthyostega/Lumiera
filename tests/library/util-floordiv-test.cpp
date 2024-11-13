@@ -37,7 +37,6 @@
 #include <vector>
 
 using ::Test;
-using std::rand;
 using util::isnil;
 using util::_Fmt;
 
@@ -60,8 +59,8 @@ namespace test {
         VecI data;
         for (uint i=0; i<cnt; ++i)
           {
-            int someNumber (rand() % (2*NUMBER_LIMIT) -NUMBER_LIMIT);
-            if (!someNumber) someNumber -=(1 +rand() % NUMBER_LIMIT);
+            int someNumber { rani (2*NUMBER_LIMIT) - NUMBER_LIMIT};
+            if (!someNumber) someNumber -= 1 + rani (NUMBER_LIMIT);
             
             data.push_back (someNumber);
           }
@@ -116,6 +115,8 @@ namespace test {
       virtual void
       run (Arg arg)
         {
+          seedRand();
+          
           verifyBehaviour ();
           
           verifyIntegerTypes<int>();

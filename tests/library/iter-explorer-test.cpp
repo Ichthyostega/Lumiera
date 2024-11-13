@@ -161,7 +161,7 @@ namespace test{
         static char
         rndLetter()
           {
-            return 'A' + rand() % 26;
+            return 'A' + rani(26);
           }
         
       public:
@@ -274,6 +274,8 @@ namespace test{
       virtual void
       run (Arg)
         {
+          seedRand();
+          
           verify_wrappedState();
           verify_wrappedIterator();
           

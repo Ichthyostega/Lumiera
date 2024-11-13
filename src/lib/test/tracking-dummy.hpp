@@ -36,6 +36,7 @@
 #include "lib/nocopy.hpp"
 #include "lib/test/event-log.hpp"
 #include "lib/format-string.hpp"
+#include "lib/random.hpp"
 #include "lib/util.hpp"
 
 #include <algorithm>
@@ -67,7 +68,7 @@ namespace test{
         }
       
       Dummy ()
-        : val_(1 + (rand() % 100'000'000))
+        : val_{1 + rani (100'000'000)}
         { init(); }
       
       Dummy (int v)
@@ -165,7 +166,7 @@ namespace test{
         }
       
       Tracker()
-        : val{rand() % 1000}
+        : val{rani (1000)}
         {
           log.call (this,"ctor");
         }

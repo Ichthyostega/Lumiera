@@ -60,6 +60,7 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
            simpleUsage();
            use_and_drop();
            iteration();
@@ -78,7 +79,7 @@ namespace test {
           Extent& extent = *extents.begin();
           CHECK (10 == extent.size());
           
-          int num = rand() % 1000;
+          int num = rani(1000);
           extent[2] = num;
           extent[5] = num+5;
           CHECK (num   == extent[2]);

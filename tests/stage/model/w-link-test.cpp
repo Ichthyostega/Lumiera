@@ -50,7 +50,7 @@ namespace test {
     struct DummyWidget
       : public sigc::trackable
       {
-        X val = 1 + rand() % 100;
+        X val = 1 + rani(100);
       };
   }
   
@@ -67,6 +67,7 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
           verify_standardUsage();
           verify_reconnect();
           verify_copy();

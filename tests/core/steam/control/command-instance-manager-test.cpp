@@ -34,7 +34,6 @@
 #include "lib/util.hpp"
 
 #include <algorithm>
-#include <cstdlib>
 #include <utility>
 #include <string>
 #include <deque>
@@ -48,7 +47,6 @@ namespace test {
   using std::string;
   using util::_Fmt;
   using std::move;
-  using std::rand;
   
   using LERR_(LIFECYCLE);
   using LERR_(INVALID_COMMAND);
@@ -119,6 +117,7 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
           verify_simpleUsage();
           verify_extendedUsage();
           verify_instanceIdentity();
@@ -145,7 +144,7 @@ namespace test {
           CommandInstanceManager iManager{fixture};
           CHECK (not iManager.contains (COMMAND_PROTOTYPE));
           
-          int r1{rand()%1000}, r2{rand()%2000};
+          int r1{rani(1000)}, r2{rani(2000)};
           command1::check_ = 0; // commands will add to this on invocation
           
           iManager.bindAndDispatch (COMMAND_PROTOTYPE, Rec{r1});
@@ -230,7 +229,7 @@ namespace test {
           CHECK (c11.isValid());
           CHECK (not c11.canExec());
           
-          int r1{rand()%100}, r2{rand()%200}, r3{rand()%300};
+          int r1{rani(100)}, r2{rani(200)}, r3{rani(300)};
           command1::check_ = 0; // commands will add to this on invocation
           
           c11.bind (r1);

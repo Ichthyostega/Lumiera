@@ -71,7 +71,7 @@ namespace test {
         uint i_;
         static int instanceCnt;
         
-        N (uint x = rand() % (abs(n)+1))
+        N (uint x = rani(1 + abs(n)))
           : i_{x}
           {
             ++instanceCnt;
@@ -136,6 +136,7 @@ namespace test {
       virtual void
       run (Arg) 
         {
+          seedRand();
           verify_fixture();
           check_pickArg ();
           check_pickInit();

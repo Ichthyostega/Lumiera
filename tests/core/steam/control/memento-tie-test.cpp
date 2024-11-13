@@ -30,11 +30,9 @@
 #include "steam/control/memento-tie.hpp"
 
 #include <functional>
-#include <cstdlib>
 
 using std::function;
 using std::bind;
-using std::rand;
 
 
 namespace steam   {
@@ -85,6 +83,7 @@ namespace test    {
       virtual void
       run (Arg) 
         {
+          seedRand();
           checkStateCapturingMechanism();
         }
       
@@ -112,7 +111,7 @@ namespace test    {
           VERIFY_ERROR (MISSING_MEMENTO, bound_undo_func(123) );
           VERIFY_ERROR (MISSING_MEMENTO, mementoHolder.getState() );
           
-          short rr (rand() %100);
+          short rr (rani (100));
           testVal = 0;
           bound_cap_func(rr);     // invoke state capturing 
           
@@ -123,7 +122,7 @@ namespace test    {
           CHECK (testVal == 10-rr);
           
           // this cycle can be repeated with different state values
-          rr = (rand() %100);
+          rr = rani (100);
           testVal = rr;
           bound_cap_func(5);      // capture new state
           CHECK (5+rr == mementoHolder.getState());

@@ -35,11 +35,9 @@
 #include "lib/util.hpp"
 
 #include <string>
-#include <cstdlib>
 
 using boost::lexical_cast;
 using util::isnil;
-using std::rand;
 using std::string;
 
 
@@ -60,7 +58,7 @@ namespace test{
     {
       FrameCnt frameNr(0);
       while (!frameNr)
-        frameNr = rand() % (2*MAX_FRAME) - MAX_FRAME;
+        frameNr = rani(2*MAX_FRAME) - MAX_FRAME;
       
       return toString(frameNr)+"#";
     }
@@ -80,6 +78,7 @@ namespace test{
       virtual void
       run (Arg) 
         {
+          seedRand();
           TimeGrid::build("pal0", FrameRate::PAL);
           
           checkTimecodeUsageCycle ();

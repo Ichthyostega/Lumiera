@@ -56,6 +56,8 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
+          
           simpleUsage();
           
           verifyActivity_Post();
@@ -140,7 +142,7 @@ namespace test {
         {
           ActivityDetector detector;
           
-          uint64_t x1=rand(), x2=rand();
+          uint64_t x1=rani(), x2=rani();
           Time nomTime = lib::test::randTime();
           Activity feed{x1,x2};
           Activity feed2{x1+1,x1+2};

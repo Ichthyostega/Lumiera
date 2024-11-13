@@ -74,6 +74,7 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
           createGrid_fullProcedure();
           createGrid_simplified();
         }
@@ -98,12 +99,12 @@ namespace test {
           
            // now verify the grid
           //  by performing some conversions...
-          int randomFrame = (rand() % MAX_FRAMES);
+          int randomFrame = rani(MAX_FRAMES);
           
           Time point (myGrid->timeOf (randomFrame));
           CHECK (point == TEST_ORIGIN + randomFrame * TEST_FPS.duration());
           
-          int fract = 2 + rand() % DIRT_GRAIN;
+          int fract = 2 + rani(DIRT_GRAIN);
           FSecs dirt = (1/TEST_FPS) / fract;
           ASSERT (Time(dirt) < TEST_FPS.duration());
           ASSERT (0 < dirt);

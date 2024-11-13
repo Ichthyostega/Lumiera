@@ -93,6 +93,7 @@ namespace test{
       virtual void
       run (Arg)
         {
+          seedRand();
           SyncOnBool token;
           
           ThreadJoinable ping ("SyncWaiting ping", [&]{ token.getIt(); });
@@ -105,7 +106,7 @@ namespace test{
           sleep_for (100ms);  // if the threads don't block correctly, they've missed their chance by now...
           
           // kick off the notification cascade...
-          uint val = (rand() % 1000);
+          uint val = rani(1000);
           token.provide (val);
           
           // wait for the two Threads to finish their handshake

@@ -29,17 +29,14 @@
 #include "lib/simple-allocator.hpp"
 #include "lib/util.hpp"
 
-#include <cstdlib>
 #include <string>
 
 
 namespace lib {
 namespace test{
   
-  
   using util::isSameObject;
   using std::string;
-  using std::rand;
   
   
   
@@ -60,7 +57,7 @@ namespace test{
           {
             REQUIRE (siz);
             for (uint i=0; i<siz; ++i)
-              checksum_ += (crap_[i] = rand() % 128);
+              checksum_ += (crap_[i] = rani(128));
           }
         
         DummyObj (DummyObj const& o)
@@ -102,6 +99,7 @@ namespace test{
       run (Arg) 
         {
           CHECK (0 == checksum_);
+          seedRand();
           
           TestAllocator allocator;
           

@@ -31,6 +31,7 @@
 
 
 #include "lib/format-string.hpp"
+#include "lib/random.hpp"
 
 using util::_Fmt;
 using std::string;
@@ -44,8 +45,8 @@ namespace test {
   
   namespace {// implementation constants
     
-    _Fmt predicatePattern ("%s_%02i( %s )");
-    const string garbage ("asanisimasabibeddiboom");
+    _Fmt predicatePattern{"%s_%02i( %s )"};
+    const string garbage {"asanisimasasmicksmaggtutti"};
     
     const uint MAX_DEGREE_RAND = 9;
     
@@ -57,9 +58,9 @@ namespace test {
   garbage_term ()         ///< yields a random string of 3 letters
   {
     return predicatePattern
-         % char ('a'+ rand() % 26)
-         % (rand() % 100)
-         % garbage.substr(rand() % 19 , 3);
+         % char ('a'+ rani(26))
+         % rani (100)
+         % garbage.substr (rani(23) , 3);
   }
   
   inline string
@@ -67,7 +68,7 @@ namespace test {
   {
     string fake;
     if (!degree) 
-      degree = 1 + rand() % MAX_DEGREE_RAND;
+      degree = 1 + rani(MAX_DEGREE_RAND);
     while (0 < --degree)
       fake += garbage_term() + ", ";
     fake += garbage_term() + ".";

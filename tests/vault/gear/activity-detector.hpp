@@ -83,6 +83,7 @@
 #include "lib/meta/function.hpp"
 #include "lib/wrapper.hpp"
 #include "lib/format-util.hpp"
+#include "lib/random.hpp"
 #include "lib/util.hpp"
 
 #include <functional>
@@ -104,6 +105,7 @@ namespace test {
   using lib::meta::RebindVariadic;
   using util::unConst;
   using util::isnil;
+  using lib::rani;
   using std::forward;
   using std::move;
   
@@ -531,7 +533,7 @@ namespace test {
       Job
       buildMockJob (string id =""
                    ,Time nominal = lib::test::randTime()
-                   ,size_t extra = rand())
+                   ,size_t extra = rani())
         {
           InvocationInstanceID invoKey;
           invoKey.part.a = extra;

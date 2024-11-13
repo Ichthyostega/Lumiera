@@ -29,12 +29,10 @@
 #include "steam/engine/testframe.hpp"
 #include "lib/util.hpp"
 
-#include <cstdlib>
 #include <climits>
 #include <memory>
 
 using test::Test;
-using std::rand;
 using util::isSameObject;
 using std::unique_ptr;
 
@@ -54,7 +52,7 @@ namespace test  {
     {
       char* accessor = reinterpret_cast<char*> (base);
       while (count--)
-        accessor[offset+count] = rand() % CHAR_MAX;
+        accessor[offset+count] = rani(CHAR_MAX);
     }
   } // (End) internal defs
   
@@ -80,6 +78,7 @@ namespace test  {
       virtual void
       run (Arg)
         {
+          seedRand();
           verifyBasicProperties();
           verifyFrameLifecycle();
           verifyFrameSeries();

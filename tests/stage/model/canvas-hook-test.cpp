@@ -57,7 +57,7 @@ namespace test {
     
     struct DummyWidget
       {
-        int i = rand(); // "identity"
+        int i = rani(); // "identity"
         
         friend bool
         operator== (DummyWidget const& wa, DummyWidget const& wb)
@@ -180,6 +180,7 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
           attach2canvas();
           relocateWidget();
         }
@@ -219,12 +220,12 @@ namespace test {
       void
       relocateWidget()
         {
-          int x1 = rand() % 100;
-          int y1 = rand() % 100;
-          int x2 = rand() % 100;
-          int y2 = rand() % 100;
-          int x3 = rand() % 100;
-          int y3 = rand() % 100;
+          int x1 = rani (100);
+          int y1 = rani (100);
+          int x2 = rani (100);
+          int y2 = rani (100);
+          int x3 = rani (100);
+          int y3 = rani (100);
           
           FakeCanvas canvas;
           HookedWidget w1{canvas.hookedAt(x1,y1)};

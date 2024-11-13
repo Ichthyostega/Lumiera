@@ -70,6 +70,7 @@ namespace test  {
       virtual void
       run (Arg)
         {
+           seedRand();
            resolveModelPort();
            accessJobTicket();
            pipelineBuilder();

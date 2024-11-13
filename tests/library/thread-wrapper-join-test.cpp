@@ -65,6 +65,8 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
+          
           simpleUse();
           returnValue();
           detectFailure();
@@ -100,7 +102,7 @@ namespace test {
       void
       returnValue()
         {
-          int mySecret = rand() % 1000;
+          int mySecret = rani(1000);
           
           ThreadJoinable theThread{"test join-2"
                                   ,&ThreadWrapperJoin_test::theAction

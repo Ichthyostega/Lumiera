@@ -72,7 +72,7 @@ lumiera_uid_gen (lumiera_uid* luid)
       if (fd >= 0)
         fcntl (fd, F_SETFD, FD_CLOEXEC);
       else
-        srand (getpid () + time (NULL));
+        srand (getpid () + time (NULL));   //////////////////////////////////////////////////////////////////TICKET #1381 : entropy source should be configurable
     }
 
   do
@@ -80,7 +80,7 @@ lumiera_uid_gen (lumiera_uid* luid)
       if (fd < 0)
         {
           for (int i = 0; i < 16; ++i)
-            ((unsigned char*)luid)[i] = (unsigned char)(rand()>>7);
+            ((unsigned char*)luid)[i] = (unsigned char)(rand()>>7);   ///////////////////////////////////////TICKET #1381 : this fallback should certainly not happen silently
         }
       else
         {

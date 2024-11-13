@@ -62,6 +62,7 @@ namespace steam    {
 namespace mobject {
 namespace test    {
   
+  using lib::rani;
   using lib::Symbol;
   using builder::BuilderTool;
   
@@ -75,7 +76,7 @@ namespace test    {
       int id_;
       
     public:
-      DummyMO() : id_(rand() % 1000) {}
+      DummyMO() : id_{rani(1000)} {}
       DummyMO(int i) : id_(i) {}
       
       DEFINE_PROCESSABLE_BY (BuilderTool);

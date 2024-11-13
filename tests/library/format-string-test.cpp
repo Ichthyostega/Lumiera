@@ -34,7 +34,6 @@
 
 #include <boost/lexical_cast.hpp>
 #include <iostream>
-#include <cstdlib>
 
 using boost::lexical_cast;
 using std::cout;
@@ -94,7 +93,7 @@ namespace test {
           string formatString = "%p %|20T_| %u";
           _Fmt formatter (formatString);
           
-          uint val = rand() % 100;
+          uint val = rani (100);
           void *pt = &val;
           
           formatter % pt;

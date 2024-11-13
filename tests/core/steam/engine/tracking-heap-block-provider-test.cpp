@@ -31,10 +31,7 @@
 #include "steam/engine/buffhandle-attach.hpp"
 #include "steam/engine/testframe.hpp"
 
-#include <cstdlib>
 #include <vector>
-
-using std::rand;
 
 
 namespace steam  {
@@ -82,6 +79,8 @@ namespace test  {
       virtual void
       run (Arg) 
         {
+          seedRand();
+          
           simpleExample();
           verifyStandardCase();
           verifyTestProtocol();
@@ -97,7 +96,7 @@ namespace test  {
           CHECK (testBuff);
           CHECK (testBuff.accessAs<TestFrame>().isSane());
           
-          uint dataID = 1 + rand() % 29;
+          uint dataID = 1 + rani(29);
           testBuff.accessAs<TestFrame>() = testData(dataID);
           
           provider.emitBuffer   (testBuff);
@@ -121,7 +120,7 @@ namespace test  {
           for (uint i=0; i<numElms; ++i)
             {
               BuffHandle buff = provider.lockBuffer(buffType);
-              buff.accessAs<uint>() = testNumbers[i] = rand() % 100000;
+              buff.accessAs<uint>() = testNumbers[i] = rani(100000);
               provider.emitBuffer   (buff);
               provider.releaseBuffer(buff);
             }

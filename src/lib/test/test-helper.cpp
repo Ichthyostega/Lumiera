@@ -32,9 +32,10 @@
 
 #include "lib/test/test-helper.hpp"
 #include "lib/test/tracking-dummy.hpp"
+#include "lib/unique-malloc-owner.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
-#include "lib/unique-malloc-owner.hpp"
+#include "lib/random.hpp"
 
 #include <string>
 
@@ -68,13 +69,13 @@ namespace test{
   string
   randStr (size_t len)
   {
-    static const string alpha ("aaaabbccddeeeeffgghiiiijjkkllmmnnooooppqqrrssttuuuuvvwwxxyyyyzz0123456789");
-    static const size_t MAXAL (alpha.size());
+    static const string alpha{"aaaabbccddeeeeffgghiiiijjkkllmmnnooooppqqrrssttuuuuvvwwxxyyyyzz0123456789"};
+    static const size_t MAXAL{alpha.size()};
     
     string garbage(len,'\0');
     size_t p = len;
     while (p)
-      garbage[--p] = alpha[rand() % MAXAL];
+      garbage[--p] = alpha[rani (MAXAL)];
     return garbage;
   }
   

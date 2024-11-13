@@ -44,7 +44,6 @@ using test::Test;
 using util::isnil;
 //using std::vector;
 //using std::function;
-using std::rand;
 
 
 namespace steam {
@@ -70,7 +69,7 @@ namespace test  {
     FSecs
     randTicks()
     {
-      return FSecs{1 + rand() % 600, 1 + rand() % 600};
+      return FSecs{1 + rani(600), 1 + rani(600)};
     }
 
   } // (End) Test fixture
@@ -90,6 +89,7 @@ namespace test  {
       virtual void
       run (Arg)
         {
+          seedRand();
            verify_simpleFrameStep();
            verify_next_startPoint();
         }

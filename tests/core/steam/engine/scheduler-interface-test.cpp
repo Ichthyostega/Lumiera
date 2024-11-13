@@ -84,6 +84,7 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
           SchedulerFrontend& scheduler = SchedulerFrontend::instance();
           
           verify_simple_job_specification (scheduler);

@@ -28,12 +28,12 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/time/quantiser.hpp"
+#include "lib/random.hpp"
 #include "lib/util.hpp"
-#include <cstdlib>
 
 using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
 using util::isnil;
-using std::rand;
+using lib::rani;
 
 
 
@@ -80,7 +80,8 @@ namespace test{
       virtual void
       run (Arg) 
         {
-          checkSimpleQuantisation ();
+          seedRand();
+          checkSimpleQuantisation();
           coverQuantisationStandardCases();
           coverQuantisationCornerCases();
         }
@@ -91,8 +92,8 @@ namespace test{
         {
           FixedFrameQuantiser fixQ(25);
           
-          int frames = (rand() % MAX_FRAMES);
-          FSecs dirt  = (F25 / (2 + rand() % DIRT_GRAIN));
+          int frames = rani(MAX_FRAMES);
+          FSecs dirt  = (F25 / (2 + rani(DIRT_GRAIN)));
           
           Time rawTime = Time(frames*F25) + Duration(dirt);
           

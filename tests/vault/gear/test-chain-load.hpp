@@ -689,7 +689,7 @@ namespace test {
        * @note does not propagate seed to consecutive start nodes
        */
       TestChainLoad&&
-      setSeed (size_t seed = rand())
+      setSeed (size_t seed = rani())
         {
           frontNode()->hash = seed;
           return move(*this);

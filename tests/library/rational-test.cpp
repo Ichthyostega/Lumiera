@@ -264,7 +264,7 @@ namespace test {
           array<uint64_t, 1000> numz;
           for (auto& n : numz)
             {
-              n = rand() * uint64_t(1 << 31);
+              n = rani() * uint64_t(1 << 31);
               CHECK (ilog2(n) == floatLog(n));
               CHECK (ilog2(n) == bitshift(n));
             }

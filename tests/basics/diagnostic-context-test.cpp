@@ -201,7 +201,7 @@ namespace test{
       static VecI
       verifyDiagnosticStack()
         {
-          uint seed (1 + rand() % MAX_RAND);
+          uint seed (1 + rand() % MAX_RAND);            /////////////////////////OOO brauche rani() auf lokalem Generator
           return descend (seed);
         }
       

@@ -128,7 +128,7 @@ namespace test {
       {
         auto invoker = buildTrampoline();
         for (uint i=0; i<NUM_OBJECTS; ++i)
-          invoker[rand() % NUM_TYPES] (clu, uchar(i));
+          invoker[rani (NUM_TYPES)] (clu, uchar(i));
       }
     
     inline uint
@@ -150,6 +150,8 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
+          
           simpleUsage();
           checkLifecycle();
           verifyInternals();
@@ -236,7 +238,7 @@ namespace test {
             CHECK (      0 == clu.storage_.rest);
             
             // build a simple object
-            auto& i1 = clu.create<uint16_t> (1 + uint16_t(rand()));
+            auto& i1 = clu.create<uint16_t> (1 + uint16_t(rani()));
             CHECK (i1 > 0);
             CHECK (1 == clu.numExtents());
             CHECK (2 == clu.numBytes());

@@ -61,6 +61,7 @@ namespace test{
       virtual void
       run (Arg)
         {
+          seedRand();
           demonstrate_boost_hash_weakness();
           verify_Knuth_workaround();
         }
@@ -133,7 +134,7 @@ namespace test{
         {
           StringsTable hashValues;
           string prefix = "Entry.";
-          const size_t seed = rand();
+          const size_t seed = rani();
           
           const size_t KNUTH_MAGIC = 2654435761;
           

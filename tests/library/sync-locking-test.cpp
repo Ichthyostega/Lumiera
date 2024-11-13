@@ -71,7 +71,7 @@ namespace test{
           uint
           createVal() ///< generating test values, remembering the control sum
             {
-              uint val{rand() % MAX_RAND_SUMMAND};
+              uint val = rani (MAX_RAND_SUMMAND);
               control_sum_ += val;
               return val;
             }
@@ -111,6 +111,7 @@ namespace test{
         virtual void
         run (Arg)
           {
+            seedRand();
             CHECK (can_calc_without_Error<NonrecursiveLock_NoWait>());
             CHECK (can_calc_without_Error<RecursiveLock_NoWait>());
             CHECK (not can_calc_without_Error<sync::NoLocking>());

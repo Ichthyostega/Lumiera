@@ -63,6 +63,8 @@ namespace test{
       void
       run (Arg)
         {
+          seedRand();
+          
           verify_trojanLambda();
           verify_inlineStorage();
           verify_TargetRelocation();
@@ -91,7 +93,7 @@ namespace test{
           using Sig = size_t(uint);
           CHECK (isFunMember<Sig> (&fun));
           
-          beacon = rand();
+          beacon = rani();
           uint c = beacon % 42;
           // verify we can invoke the target function
           CHECK (beacon+c == fun(c));
@@ -130,7 +132,7 @@ namespace test{
           
           // repeat same with a copy, and changed beacon value
           auto trojanClone = trojanLambda;
-          beacon = rand();
+          beacon = rani();
           c = beacon % 55;
           CHECK (beacon+c == trojanClone(c));
           CHECK (location == &trojanClone);
@@ -193,8 +195,8 @@ namespace test{
         {
           struct Nested
             {
-              int unrelated{rand()};
-              int anchor{rand()};
+              int unrelated{rani()};
+              int anchor{rani()};
             };
           struct Demo
             {
@@ -262,7 +264,7 @@ namespace test{
           CHECK (0 == report);
           
           // invoke function
-          int feed{1+rand()%100};
+          int feed{1 + rani (100)};
           float res = theFun (feed);
           
           // delegate *and* realFun were invoked
@@ -271,7 +273,7 @@ namespace test{
           
           // again...
           report = 0;
-          feed = -1-rand()%20;
+          feed = -1-rani(20);
           res = theFun (feed);
           
           // this time the delegate was *not* invoked,
@@ -307,7 +309,7 @@ namespace test{
           CHECK (not init);
           CHECK (funny);
           
-          int feed = 1 + rand()%99;
+          int feed = 1 + rani(99);
           CHECK (feed*0.555f == funny(feed));
           CHECK (1 == invoked);
           CHECK (init);

@@ -44,7 +44,6 @@ using lib::P;
 
 using std::unique_ptr;
 using std::string;
-using std::rand;
 using std::map;
 
 
@@ -62,7 +61,7 @@ namespace test    {
     string
     newID (string prefix)
     {
-      return instancePatt % prefix % rand();
+      return instancePatt % prefix % rani(10'000);
     }
     
     
@@ -139,6 +138,7 @@ namespace test    {
       virtual void
       run (Arg)
         {
+          seedRand();
           this->reg_.reset (new DefsRegistry);
           
           fill_table ();

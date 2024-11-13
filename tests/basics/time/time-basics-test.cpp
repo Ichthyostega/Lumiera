@@ -29,14 +29,13 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/time/diagnostics.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/random.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <cstdlib>
 
 using boost::lexical_cast;
 using util::isnil;
-using std::rand;
 
 
 namespace lib {
@@ -131,10 +130,11 @@ namespace test{
       void
       checkComponentDiagnostics()
         {
-          int millis = rand() % 1000;
-          int secs   = rand() % 60;
-          int mins   = rand() % 60;
-          int hours  = rand() % 100;
+          seedRand();
+          int millis = rani(1000);
+          int secs   = rani  (60);
+          int mins   = rani  (60);
+          int hours  = rani (100);
           
           Time time(millis,secs,mins,hours);
           CHECK (Time()  < time);

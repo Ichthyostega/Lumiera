@@ -29,18 +29,14 @@
 #include "lib/typed-allocation-manager.hpp"
 #include "lib/util.hpp"
 
-
 #include <memory>
-#include <cstdlib>
 
 
 namespace lib {
 namespace test{
   
-  
   using util::isSameObject;
   using std::shared_ptr;
-  using std::rand;
   
   
   
@@ -61,7 +57,7 @@ namespace test{
           {
             REQUIRE (siz);
             for (uint i=0; i<siz; ++i)
-              checksum_ += (crap_[i] = rand() % 128);
+              checksum_ += (crap_[i] = rani(128));
           }
         
        ~DummyObj()
@@ -91,6 +87,7 @@ namespace test{
       run (Arg) 
         {
           CHECK (0 == checksum_);
+          seedRand();
           
           TypedAllocationManager allocator;
           

@@ -26,6 +26,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/random.hpp"
 #include "steam/engine/testframe.hpp"
 
 #include <boost/random/linear_congruential.hpp>
@@ -42,6 +43,7 @@ namespace test   {
   
   using std::vector;
   using std::memcpy;
+  using lib::rani;
   
   typedef boost::rand48 PseudoRandom;
   
@@ -62,7 +64,7 @@ namespace test   {
     generateDistinction(uint seq, uint family)
     {
       // random offset, but fixed per executable run
-      static uint base(10 + rand() % 990);
+      static uint base(10 + rani(990)); /////////////////////////////////////////////////////////////////////TICKET #1372 this is not reproducible!!
       
       // use the family as stepping
       return (seq+1) * (base+family);

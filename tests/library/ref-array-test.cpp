@@ -36,12 +36,10 @@
 
 using ::test::Test;
 using std::vector;
-using std::rand;
 
 
 namespace lib {
 namespace test{
-  
   
   namespace { // test types
     
@@ -118,6 +116,8 @@ namespace test{
       virtual void
       run (Arg)
         {
+          seedRand();
+          
           checkWrapper();
           checkVector();
           checkTable();
@@ -216,7 +216,7 @@ namespace test{
           for (uint i=0; i<500; ++i)
             {
               Sub3::sum = 0;
-              Sub3::trigger = (rand() % 50);  // when hitting the trigger Sub3 throws
+              Sub3::trigger = rani(50);   // when hitting the trigger Sub3 throws
               try
                 {
                   {

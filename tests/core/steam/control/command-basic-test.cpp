@@ -30,10 +30,6 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/p.hpp"
 
-#include <cstdlib>
-
-using std::rand;
-
 
 namespace steam {
 namespace control {
@@ -96,7 +92,8 @@ namespace test    {
       virtual void
       run (Arg) 
         {
-          int randVal ((rand() % 10) - 5);
+          seedRand();
+          int randVal{rani(10) - 5};
           Time five(TimeValue(5));
           TimeValue randomTime(randVal);
           auto obj = makeP<TimeVar>(five);

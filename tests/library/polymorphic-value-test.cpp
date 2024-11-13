@@ -121,7 +121,7 @@ namespace test{
         virtual long
         apiFunc()
           {
-            long rr = ii * (1 + rand() % MAX_RAND);
+            long rr = ii * (1 + rani(MAX_RAND));
             mark (rr);
             _callSum += rr;
             return rr;
@@ -180,6 +180,7 @@ namespace test{
           _checkSum = 0;
           _callSum  = 0;
           _created  = 0;
+          seedRand();
           
           verifyBasics();
           

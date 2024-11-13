@@ -30,8 +30,8 @@
 
 #include "lib/scoped-holder-transfer.hpp"
 #include "lib/test/tracking-dummy.hpp"
+#include "lib/format-cout.hpp"
 
-#include <iostream>
 #include <vector>
 
 
@@ -40,7 +40,6 @@ namespace test {
   
   using ::Test;
   using std::vector;
-  using std::cout;
   
   namespace { // extending the Dummy for our special purpose....
     
@@ -84,7 +83,7 @@ namespace test {
         void
         setup (int x=0)
           {
-            setVal (x? x : (rand() % 10000));
+            setVal (x? x : rani (10000));
             TRACE  (test, "CREATE    val=%d ---> this=%p", getVal(),this);
           }
         
@@ -131,6 +130,8 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
+          
           cout << "\n..setup table space for 2 elements\n";
           TransDummyVector table;
           table.reserve(2);

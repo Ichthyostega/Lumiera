@@ -45,6 +45,7 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/test/transiently.hpp"
 #include "lib/format-obj.hpp"
+#include "lib/random.hpp"
 
 #include <boost/lexical_cast.hpp>
 #include <typeinfo>
@@ -60,7 +61,7 @@ namespace test{
   
   using lib::Literal;
   using std::string;
-  using std::rand;
+  using lib::rani;
   using lib::meta::demangleCxx;
   
   
@@ -308,7 +309,7 @@ namespace test{
   inline lib::time::Time
   randTime ()
   {
-    return lib::time::Time (500 * (rand() % 2), (rand() % 600) + 1);
+    return lib::time::Time (500 * rani(2), 1 + rani(600));
   }
   
   /** create garbage string of given length

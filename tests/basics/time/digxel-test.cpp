@@ -30,15 +30,13 @@
 #include "lib/format-string.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/time/digxel.hpp"
+#include "lib/random.hpp"
 #include "lib/util.hpp"
-
-#include <time.h>
-#include <cstdlib>
 
 using lumiera::error::LUMIERA_ERROR_ASSERTION;
 using util::isSameObject;
 using util::isnil;
-using std::rand;
+using lib::rani;
 
 
 namespace lib {
@@ -55,8 +53,8 @@ namespace test{
     inline double
     randomFrac()
       {
-        double arbitrary = (1 + rand() % RAND_RANGE);
-        arbitrary /= (1 + rand() % RAND_DENOM);
+        double arbitrary = 1 + rani(RAND_RANGE);
+        arbitrary /= 1 + rani(RAND_DENOM);
         
         static double prevVal;
         if (arbitrary != prevVal)
@@ -150,6 +148,8 @@ namespace test{
       virtual void
       run (Arg arg) 
         {
+          seedRand();
+          
           checkSimpleUsage();
           checkMutation ();
           verifyMutatorInfluence();

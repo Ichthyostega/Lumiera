@@ -44,9 +44,9 @@
 #include "lib/test/run.hpp"
 #include "lib/typed-counter.hpp"
 #include "lib/test/microbenchmark.hpp"
+#include "lib/random.hpp"
 #include "lib/util.hpp"
 
-#include <cstdlib>
 #include <utility>
 #include <array>
 
@@ -55,7 +55,7 @@ namespace lib {
 namespace test{
   
   using util::isnil;
-  using std::rand;
+  using lib::rani;
   
   
   namespace { // test parametrisation...
@@ -176,16 +176,16 @@ namespace test{
       void
       tortureTest()
         {
-          std::srand (::time (NULL));
+          seedRand();
           
           using IDX = std::make_index_sequence<MAX_INDEX>;
           auto operators = buildOperatorsTable(IDX{});
           
           TypedCounter testCounter;
           
-          auto testSubject = [&](size_t) -> size_t
+          auto testSubject = [&, i = rani(MAX_INDEX)]
+                             (size_t) -> size_t
                                 {
-                                  uint i = rand() % MAX_INDEX;
                                   operators[i](testCounter);
                                   return 1;
                                 };

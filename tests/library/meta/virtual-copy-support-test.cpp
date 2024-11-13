@@ -133,7 +133,7 @@ namespace test {
           }
         Sub()
           {
-            access() = 'A' + rand() % 23;
+            access() = 'A' + rani(23);
             _CheckSum_ += access();
           }
         Sub (Sub const& osub)
@@ -253,6 +253,7 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
           CHECK(0 == _CheckSum_);
           
           verify_TestFixture();

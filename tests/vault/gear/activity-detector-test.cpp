@@ -58,6 +58,8 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
+          
           simpleUsage();
           
           verifyMockInvocation();
@@ -101,7 +103,7 @@ namespace test {
         {
           ActivityDetector detector;
           auto fun = detector.buildDiagnosticFun<void(uint)> ("funny");
-          uint rnd = rand() % 10000;
+          uint rnd = rani(10000);
           
           detector.incrementSeq();
           CHECK (1 == detector.currSeq());
@@ -147,7 +149,7 @@ namespace test {
         {
           ActivityDetector detector;
           auto fun = detector.buildDiagnosticFun<int(uint)> ("fakeFun");
-          uint rnd = rand() % 10000;
+          uint rnd = rani(10000);
           
           CHECK (0 == fun (rnd));
           
@@ -219,7 +221,7 @@ namespace test {
           
           Time t = randTime();
           Time td{t+Time(0,1)};
-          size_t x = rand();
+          size_t x = rani();
           Activity a;
           
           CHECK (detector.ensureNoInvocation(CTX_WORK));

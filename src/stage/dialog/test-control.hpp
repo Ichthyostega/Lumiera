@@ -294,7 +294,7 @@ namespace dialog {
           pickDummyID()
             {
               string dummyID = sanitise (dummy_.get_text());
-              dummy_.set_text (string{_Fmt{"d%s%02d"} % lib::test::randStr(2) % (1 + rand() % 99)});
+              dummy_.set_text (string{_Fmt{"d%s%02d"} % lib::test::randStr(2) % (1 + lib::rani(99))});
               return dummyID;
             }
           

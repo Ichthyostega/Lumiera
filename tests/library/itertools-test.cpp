@@ -35,7 +35,6 @@
 #include "lib/itertools.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <cstdlib>
 #include <vector>
 
 
@@ -48,7 +47,6 @@ namespace test{
   using util::for_each;
   using util::isnil;
   using std::vector;
-  using std::rand;
   
   using LERR_(ITER_EXHAUST);
   
@@ -246,7 +244,7 @@ namespace test{
           vector<uint> numberz;
           for (uint i=0; i<NUM_ELMS; ++i)
             {
-              uint n = 1 + rand() % 100;
+              uint n = 1 + rani (100);
               do numberz.push_back(i);
               while (--n);
             }

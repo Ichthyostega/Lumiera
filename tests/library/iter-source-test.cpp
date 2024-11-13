@@ -36,7 +36,6 @@
 
 #include <boost/lexical_cast.hpp>
 #include <unordered_map>
-#include <cstdlib>
 #include <string>
 #include <list>
 #include <map>
@@ -47,15 +46,14 @@ namespace lib {
 namespace test{
   
   using ::Test;
+  using util::isnil;
   using boost::lexical_cast;
   using lib::time::TimeVar;
   using lib::test::randStr;
   using lib::test::randTime;
-  using util::isnil;
   using std::make_pair;
   using std::string;
   using std::list;
-  using std::rand;
   
   using LERR_(ITER_EXHAUST);
   
@@ -186,6 +184,7 @@ namespace test{
       virtual void
       run (Arg arg)
         {
+          seedRand();
           if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[1]);
           
           verify_simpleIters();
@@ -329,7 +328,7 @@ namespace test{
           MAP testMap;
           for (uint i=0; i<NUM_ELMS; ++i)
             {
-              uint n = 1 + rand() % 100;
+              uint n = 1 + rani(100);
               do testMap.insert (make_pair (i,n));
               while (--n);
             }

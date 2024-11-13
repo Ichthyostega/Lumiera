@@ -57,7 +57,10 @@ namespace test{
       random_or_get (Arg arg)
         {
           if (isnil(arg))
-            return 1 + (rand() % 10000);
+            {// use random time value for all tests
+              seedRand();
+              return 1 + rani(10000);
+            }
           else
             return lexical_cast<gavl_time_t> (arg[1]);
         }

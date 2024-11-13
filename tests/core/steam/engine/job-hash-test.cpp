@@ -62,6 +62,7 @@ namespace test  {
       virtual void
       run (Arg)
         {
+          seedRand();
           verify_simple_job_properties();
           verify_job_identity();
         }

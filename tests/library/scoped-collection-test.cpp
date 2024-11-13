@@ -33,8 +33,6 @@
 #include "lib/scoped-collection.hpp"
 #include "lib/test/tracking-dummy.hpp"
 
-#include <cstdlib>
-
 
 namespace lib {
 namespace test{
@@ -109,6 +107,7 @@ namespace test{
       virtual void
       run (Arg)
         {
+          seedRand();
           simpleUsage();
           building_RAII_Style();
           building_StackStyle();
@@ -229,7 +228,7 @@ namespace test{
           CHECK (0 == Dummy::checksum());
           {
               
-            int rr = rand() % 100;
+            int rr = rani(100);
             
             CollD coll(3);
             CHECK (0 == coll.size());
@@ -308,7 +307,7 @@ namespace test{
         {
           CHECK (0 == Dummy::checksum());
           {
-            int rr = rand() % 100;
+            int rr = rani(100);
             int trigger = 100 + 5 + 1;   // prevents the bomb from exploding (since rr < 100) 
             
             CollD coll (6, Populator(rr, trigger));

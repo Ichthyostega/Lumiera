@@ -82,6 +82,8 @@ namespace test   {
   using lib::time::TimeValue;
   using lib::time::Time;
   using lib::HashVal;
+  using lib::ranHash;
+  using lib::rani;
   using util::isnil;
   using util::isSameObject;
   using fixture::Segmentation;
@@ -152,7 +154,7 @@ namespace test   {
       
       /** provide a test specification wired to MockJob */
       static ExitNode
-      defineSimpleSpec (HashVal seed = 1+rand())
+      defineSimpleSpec (HashVal seed =ranHash())
         {
           return ExitNode{seed, DUMMY_JOB_RUNTIME
                          ,ExitNodes{}
@@ -239,7 +241,7 @@ namespace test   {
       buildSeed (GenNode const& spec)
         {
           auto seed = spec.retrieveAttribute<int> ("mark");
-          return seed? HashVal(*seed) : HashVal(rand() % 1000);
+          return seed? HashVal(*seed) : HashVal(1 +rani(1000));
         }
       
       Duration

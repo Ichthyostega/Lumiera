@@ -49,7 +49,6 @@
 #include "lib/depend.hpp"
 #include "lib/util.hpp"
 
-#include <cstdlib>
 #include <functional>
 #include <unordered_map>
 
@@ -60,6 +59,7 @@ namespace test  {
   
   namespace { // MockJob and DummyClosure implementation details...
     
+    using lib::rani;
     using lib::HashVal;
     using lib::NullValue;
     using lib::time::TimeVar;
@@ -185,8 +185,8 @@ namespace test  {
   MockJob::build()
   {
     InvocationInstanceID invoKey;
-    invoKey.part.a = rand() % MAX_PARAM_A;
-    invoKey.part.b = rand() % (2*MAX_PARAM_B)  - MAX_PARAM_B;
+    invoKey.part.a = rani (MAX_PARAM_A);
+    invoKey.part.b = rani (2*MAX_PARAM_B - MAX_PARAM_B);
     
     Time nominalTime = lib::test::randTime();
     
@@ -199,7 +199,7 @@ namespace test  {
   {
     InvocationInstanceID invoKey;
     invoKey.part.a = additionalKey;
-    invoKey.part.b = rand() % (2*MAX_PARAM_B)  - MAX_PARAM_B;
+    invoKey.part.b = rani (2*MAX_PARAM_B - MAX_PARAM_B);
     
     return Job(dummyClosure, invoKey, nominalTime);
   }

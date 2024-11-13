@@ -76,6 +76,7 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
            simpleUsage();
            verify_StartStop();
            verify_LoadFactor();

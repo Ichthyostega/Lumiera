@@ -35,17 +35,12 @@
 
 #include "steam/control/test-dummy-commands.hpp"
 
-#include <cstdlib>
 
-
-namespace steam {
-namespace control {
-namespace test    {
-  
+namespace steam  {
+namespace control{
+namespace test   {
   
   using std::function;
-  using std::rand;
-  
   
   namespace { // test fixture...
     
@@ -128,6 +123,7 @@ namespace test    {
       virtual void
       run (Arg)
         {
+          seedRand();
           CommandRegistry& registry = CommandRegistry::instance();
           CHECK (&registry);
           
@@ -182,7 +178,7 @@ namespace test    {
           CHECK (!com->canExec());
           
           typedef Types<int> ArgType;
-          const int ARGR (1 + rand() % 1000);
+          const int ARGR{1 + rani (1000)};
           Tuple<ArgType> tuple(ARGR);
           TypedArguments<Tuple<ArgType>> arg(tuple);
           com->setArguments(arg);

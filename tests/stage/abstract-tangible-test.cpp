@@ -176,6 +176,8 @@ namespace test  {
       virtual void
       run (Arg)
         {
+          seedRand();
+          
           verify_mockManipulation();
           invokeCommand();
           markState();
@@ -327,7 +329,7 @@ namespace test  {
           MockElm mock("uiElm");
           
           int prevState = dummyState;
-          int concreteParam = 1 +rand() % 100;
+          int concreteParam = 1 + rani(100);
           
           // on bus no traces from this command yet...
           CHECK (nexusLog.ensureNot(string(DUMMY_CMD_ID)));

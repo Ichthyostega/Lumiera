@@ -70,8 +70,8 @@ namespace test  {
         
         MockSizeRequest()
           : Connectivity(dummy1,dummy2,0,NodeID()),
-            ii(rand() % CHUNK_MAX),
-            oo(rand() % CHUNK_MAX)
+            ii(rani (CHUNK_MAX)),
+            oo(rani (CHUNK_MAX))
           { }
         
         virtual uint getNrI()  const { return ii; }
@@ -141,8 +141,10 @@ namespace test  {
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #852
       ulong counter;
       
-      virtual void run(Arg) 
+      void
+      run(Arg)  override 
         {
+          seedRand(); ////////////////TODO RLY?
            counter = 0;
            
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #852
@@ -173,7 +175,7 @@ namespace test  {
           BuffTableChunk thisChunk (numbers, *pStorage);
           CHECK (consistencyCheck (thisChunk, numbers, lastLevel));
           
-          uint nrBranches ( 1 + (rand() % WIDTH_MAX));
+          uint nrBranches ( 1 + rani(WIDTH_MAX));
           while (nrBranches--)
             invocation (consumed, first_behind (thisChunk,numbers.getNrI()));
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #833

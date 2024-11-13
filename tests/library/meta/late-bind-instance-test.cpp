@@ -36,7 +36,6 @@
 
 #include <tuple>
 #include <string>
-#include <cstdlib>
 
 
 namespace lib  {
@@ -44,7 +43,6 @@ namespace meta {
 namespace test {
   
   using std::move;
-  using std::rand;
   using std::tuple;
   using std::string;
   using lib::meta::dump;
@@ -68,6 +66,7 @@ namespace test {
       void
       run (Arg)
         {
+          seedRand();
           demonstrateUsage();
           verify_forwarding();
           verify_cornerCases();
@@ -84,7 +83,7 @@ namespace test {
       void
       demonstrateUsage()
         {
-          uint randomLimit = 2 + rand() % 98;
+          uint randomLimit = 2 + rani(98);
           
           auto plannedArgs
             = tuple{InstancePlaceholder<LateBindInstance_test>{}
@@ -104,7 +103,7 @@ namespace test {
       uint
       theMember (uint limit)
         {
-          return rand() % limit;
+          return rani (limit);
         }
       
       

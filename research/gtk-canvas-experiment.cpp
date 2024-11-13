@@ -35,6 +35,7 @@
 
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/random.hpp"
 #include "lib/util.hpp"
 
 #include <algorithm>
@@ -43,6 +44,7 @@
 
 
 
+using lib::rani;
 using util::_Fmt;
 using util::isnil;
 using Gtk::Widget;
@@ -136,8 +138,8 @@ namespace demo {
     
     ChildEx* chld = makeChld();
     childz_.push_back(chld);
-    uint x = rand() % 1000;
-    uint y = rand() % 500;
+    uint x = rani (1000);
+    uint y = rani (500);
     canvas_.put(*chld, x, y);
     chld->show();
     canvas_.adjustSize();
@@ -152,8 +154,8 @@ namespace demo {
       {
         uint x = canvas_.child_property_x(*chld);
         uint y = canvas_.child_property_y(*chld);
-        int deltaX = -20 + rand() % 41;
-        int deltaY = -15 + rand() % 31;
+        int deltaX = -20 + rani(41);
+        int deltaY = -15 + rani(31);
         x = uint(max (0, int(x) + deltaX));
         y = uint(max (0, int(y) + deltaY));
         
@@ -170,7 +172,7 @@ namespace demo {
     uint pos=0;
     for (Widget* chld : childz_)
       {
-        uint y = rand() % 30;
+        uint y = rani(30);
         canvas_.move (*chld, pos, y);
         
         int width = chld->get_allocated_width();
@@ -189,7 +191,7 @@ namespace demo {
         ERROR (test, "need to fabricate more childz before you can grow 'em...");
         return;
       }
-    uint selector = rand() % childz_.size();
+    uint selector = rani(childz_.size());
     ChildEx& toGrow = *childz_[selector];
     toGrow.set_label ("***"+toGrow.get_label()+"***");
   }
@@ -204,7 +206,7 @@ namespace demo {
         WARN (test, "no children to kill. so sad.");
         return;
       }
-    uint killPos = rand() % childz_.size();
+    uint killPos = rani (childz_.size());
     ChildV::iterator killThat(&childz_[killPos]);
     ChildEx* victim = *killThat;
     childz_.erase (killThat);

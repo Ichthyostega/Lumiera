@@ -63,6 +63,7 @@ namespace test  {
       virtual void
       run (Arg)
         {
+          seedRand();
           fabricate_MockSegment();
           retrieve_JobTicket();
         }

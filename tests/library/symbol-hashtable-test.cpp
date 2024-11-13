@@ -73,6 +73,7 @@ namespace test{
       virtual void
       run (Arg)
         {
+          seedRand();
           checkHashFunction();
           
           HTable table;
@@ -114,10 +115,10 @@ namespace test{
           copy1[5] = '\0';      // truncate the c-String to 5 chars
           
           string copy2(random);
-          copy2[rand() % STRING_MAX_RELEVANT] = '*';  // modify a random position
+          copy2[rani (STRING_MAX_RELEVANT)] = '*';  // modify a random position
           
           string copy3(copy2);
-          copy3[STRING_MAX_RELEVANT]          = '*';  // modify behind observation limit
+          copy3[STRING_MAX_RELEVANT]        = '*';  // modify behind observation limit
           
           Symbol  l0;
           Literal l51 (copy1.c_str());

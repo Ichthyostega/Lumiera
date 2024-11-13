@@ -74,6 +74,7 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
           usageExample();
           verify_Node();
           verify_Topology();

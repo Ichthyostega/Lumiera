@@ -60,13 +60,14 @@ namespace test    {
     {
     
       int randVal;
-      int random() { return randVal = 10 + (rand() % 40); }
+      int random() { return randVal = 10 + rani(40); }
       
       
       
       virtual void
       run (Arg)
         {
+          seedRand();
           command1::check_ = 0;
           uint cnt_defs = Command::definition_count();
           uint cnt_inst = Command::instance_count();

@@ -65,6 +65,8 @@ namespace test  {
       virtual void
       run (Arg)
         {
+          seedRand();
+          
           simpleUsage();
           verify_MockJob();
           verify_MockJobTicket();
@@ -103,7 +105,7 @@ namespace test  {
       verify_MockJob()
         {
           Time nominalTime = lib::test::randTime();
-          int additionalKey = rand() % 5000;
+          int additionalKey = rani(5000);
           MockJob mockJob{nominalTime, additionalKey};
           CHECK (mockJob.getNominalTime() == nominalTime);
           CHECK (not MockJob::was_invoked (mockJob));
@@ -188,7 +190,7 @@ namespace test  {
           //-----------------------------------------------------------------/// Segmentation with a segment spanning part of the timeline > 10s
           {
              // Marker to verify the job calls back into the right segment
-            int marker = rand() % 1000;
+            int marker = rani(1000);
             //
             //  Build a Segmentation partitioned at 10s
             MockSegmentation mockSegs{MakeRec()
@@ -224,7 +226,7 @@ namespace test  {
           }
           //-----------------------------------------------------------------/// Segmentation with one delineated segment, and otherwise empty
           {
-            int marker = rand() % 1000;
+            int marker = rani(1000);
             //  Build Segmentation with one fully defined segment
             MockSegmentation mockSegs{MakeRec()
                                      .attrib ("start", Time{0,10}

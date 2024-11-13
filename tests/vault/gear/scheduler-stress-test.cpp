@@ -67,6 +67,7 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
            smokeTest();
            setup_systematicSchedule();
            verify_instrumentation();

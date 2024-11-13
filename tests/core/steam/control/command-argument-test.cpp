@@ -158,7 +158,7 @@ namespace test    {
     
     ///  another dummy-UNDO function
     void dummyU (int,int,int) { }
-    int  dummyC (int u,int o) { return u + rand() % (o-u+1); }
+    int  dummyC (int u,int o) { return u + rani(o-u+1); }
     
     
     
@@ -181,7 +181,7 @@ namespace test    {
     int
     twoRandomDigits()
       {
-        return 10 + rand() % 90;
+        return 10 + rani(90);
       }
     
     
@@ -206,6 +206,7 @@ namespace test    {
       virtual void
       run (Arg)
         {
+          seedRand();
           ArgTuples testTuples;
           prepareEmptyMemento();
           Tracker<TimeVar>::instanceCnt = 0;
@@ -256,9 +257,9 @@ namespace test    {
           for_each (tup, showIt);
           
           arg1->storeTuple (std::tuple<>());
-          arg2->storeTuple (make_tuple (rand() % 10));
-          arg3->storeTuple (make_tuple (rand() % 10, TimeVar(randTime())));
-          arg4->storeTuple (make_tuple (rand() % 10, TimeVar(randTime())));
+          arg2->storeTuple (make_tuple (rani(10)));
+          arg3->storeTuple (make_tuple (rani(10), TimeVar(randTime())));
+          arg4->storeTuple (make_tuple (rani(10), TimeVar(randTime())));
           
           arg5->storeTuple (make_tuple (TTime (randTime()), Tstr("glorious"), twoRandomDigits() ));
           

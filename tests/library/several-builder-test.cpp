@@ -42,7 +42,6 @@
 
 using ::test::Test;
 using std::array;
-using std::rand;
 
 using lib::explore;
 using util::isSameObject;
@@ -125,7 +124,7 @@ namespace test{
       {
         int16_t val;
         
-        ShortBlocker (short r = 1 + (rand() % 1'000))
+        ShortBlocker (short r = 1 + rani(1'000))
           : val(r)
           { };
       };
@@ -152,6 +151,8 @@ namespace test{
       virtual void
       run (Arg)
         {
+          seedRand();
+          
           simpleUsage();
           check_Builder();
           check_ErrorHandling();

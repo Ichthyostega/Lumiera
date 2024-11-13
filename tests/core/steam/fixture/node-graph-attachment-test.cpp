@@ -60,6 +60,7 @@ namespace test  {
       virtual void
       run (Arg)
         {
+          seedRand();
           access_ExitNodeTree();
           fabricate_MockExitNode();
         }

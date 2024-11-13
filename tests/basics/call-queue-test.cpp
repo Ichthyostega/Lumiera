@@ -198,7 +198,7 @@ namespace test{
           Worker(CallQueue& queue, SyncBarrier& commonTrigger)
             : ThreadJoinable{"CallQueue_test: concurrent dispatch"
                             , [&]() {
-                                uint cnt    = rand() % MAX_RAND_STEPS;
+                                uint cnt    = rand() % MAX_RAND_STEPS; //////////////////////////////OOO brauche rani auf lokalem Generator!
                                 uint delay  = rand() % MAX_RAND_DELAY;
                                 
                                 trigger_.sync();            // block until all threads are ready
@@ -227,6 +227,7 @@ namespace test{
       void
       verify_ThreadSafety()
         {
+          ////////////////////////////////////////////////OOO seedRandom()
           CallQueue queue;
           SyncBarrier trigger{NUM_OF_THREADS + 1};
           

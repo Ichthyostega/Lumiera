@@ -28,11 +28,6 @@
 #include "lib/test/run.hpp"
 #include "common/advice.hpp"
 
-#include <cstdlib>
-
-using std::rand;
-
-
 
 namespace lumiera {
 namespace advice {
@@ -116,6 +111,8 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
+          
           simpleExchange();
           createCollaboration();
           overwriting_and_retracting();
@@ -133,7 +130,7 @@ namespace test {
           TheAdvisor server;         // implicitly prepares an advice provision
           CHECK (client.got (0));    // but as no advice was provided yet, nothing happens
           
-          int rr (1 + (rand() % 1000));
+          int rr{ 1 + rani(1000)};
           
           server.publish (rr);       // now an match is detected, creating an advice channel
           CHECK (client.got (rr));   // ..so the client can pick up the provided advice value
@@ -147,8 +144,8 @@ namespace test {
           TheAdvised client1 ("topic1()");
           TheAdvisor server2 ("topic2()");
           
-          int r1 (1 + (rand() % 1000));
-          int r2 (1 + (rand() % 1000));
+          int r1{ 1 + rani(1000)};
+          int r2{ 1 + rani(1000)};
           
           server2.publish (r2);
           CHECK (client1.got(0));
@@ -186,8 +183,8 @@ namespace test {
           CHECK (client1.got(0));
           CHECK (client2.got(0));
           
-          int r1 (1 + (rand() % 1000));
-          int r2 (1 + (rand() % 1000));
+          int r1{ 1 + rani(1000)};
+          int r2{ 1 + rani(1000)};
           
           {
             TheAdvisor server("slot1()");

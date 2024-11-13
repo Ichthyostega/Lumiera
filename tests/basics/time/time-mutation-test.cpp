@@ -74,7 +74,7 @@ namespace test{
       random_or_get (string arg)
         {
           if (isnil(arg))
-            return gavl_time_t (1 + (rand() % 100000)) * TimeValue::SCALE;
+            return gavl_time_t(1 + rani (100000)) * TimeValue::SCALE;
           else
             return lexical_cast<gavl_time_t> (arg);
         }
@@ -98,6 +98,8 @@ namespace test{
       virtual void
       run (Arg arg) 
         {
+          if (isnil(arg))
+            seedRand();
           TimeValue o (random_or_get (pop(arg)));
           TimeValue c (random_or_get (pop(arg)));
           CHECK (o != c, "unsuitable testdata");

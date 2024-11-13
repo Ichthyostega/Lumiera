@@ -47,9 +47,6 @@ namespace test  {
     
     const size_t TEST_MAX_SIZE = 1024 * 1024;
     
-    const size_t SIZE_A = 1 + rand() % TEST_MAX_SIZE;
-    const size_t SIZE_B = 1 + rand() % TEST_MAX_SIZE;
-    
     
     /**
      * Test Mock to verify the attachment of objects to the buffer.
@@ -166,10 +163,17 @@ namespace test  {
    */
   class BufferMetadataKey_test : public Test
     {
+      size_t SIZE_A{0};
+      size_t SIZE_B{0};
+      
       
       virtual void
       run (Arg) 
         {
+          seedRand();
+          SIZE_A = 1 + rani(TEST_MAX_SIZE);
+          SIZE_B = 1 + rani(TEST_MAX_SIZE);
+          
           CHECK (ensure_proper_fixture());
           buildSimpleKeys();
           verifyChainedHashes();
@@ -190,7 +194,7 @@ namespace test  {
         {
           HashVal family(123);
           Key k1(family, SIZE_A);
-          Key k12(k1, SIZE_B);
+          Key k12(k1,    SIZE_B);
           Key k123(k12, LocalTag(56));
           
           CHECK (HashVal (k1));
@@ -213,7 +217,7 @@ namespace test  {
           CHECK (HashVal(k1) == HashVal(Key(family, SIZE_A)));
           
           // differentiate on buffer size
-          Key k12(k1, SIZE_B);
+          Key k12(k1,  SIZE_B);
           Key k121(k12, SIZE_A);
           Key k2(family, SIZE_B);
           
@@ -257,8 +261,8 @@ namespace test  {
           TypeHandler placeMarker = TypeHandler::create<Marker>();
           TypeHandler noHandler;
           
-          LocalTag opaque1 (rand() % 1000);
-          LocalTag opaque2 (1000 + rand() % 1000);
+          LocalTag opaque1 (rani(1000));
+          LocalTag opaque2 (1000 + rani(1000));
           
           Key k_siz (kb, SIZE_B);        // sub-key to "root": use a different buffer size
           Key k_han0(kb, noHandler);     // sub-key to "root": use a locally defined type functor

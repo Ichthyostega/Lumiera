@@ -148,7 +148,7 @@ namespace test{
             DependInject<TestSingO>::Local<Mock_2> mock_2 ([&]{ return new Mock_2{"Mock", instanceID}; });
             
             // NOTE: the ctor call for the Mock really happens delayed...
-            instanceID = rand() % 10;
+            instanceID = rani(10);
             sing().doIt();             // ctor invoked on first access
             CHECK (sing().getCnt() == 1);
             

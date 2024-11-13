@@ -28,16 +28,10 @@
 #include "lib/test/run.hpp"
 #include "lib/del-stash.hpp"
 
-#include <cstdlib>
-
 
 
 namespace lib {
 namespace test{
-  
-  using std::rand;
-  
-  
   
   namespace { // probe victims
     
@@ -59,7 +53,7 @@ namespace test{
             REQUIRE (siz);
             for (uint i=0; i<siz; ++i)
               {
-                char c (rand() % 256);
+                char c (rani(256));
                 checksum += c;
                 myCrap_[i] = c;
               }
@@ -110,7 +104,9 @@ namespace test{
       virtual void
       run (Arg)
         {
+          seedRand();
           checksum = 0;
+          
           checkSingleKill();
           checkCustomKill();
           checkMassKill();

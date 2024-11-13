@@ -92,6 +92,7 @@ namespace test  {
       virtual void
       run (Arg)
         {
+          seedRand();
           demonstrateScaffolding();
           buildBaseTickGenerator();
           accessTopLevelJobTicket();
@@ -105,7 +106,7 @@ namespace test  {
       demonstrateScaffolding()
         {
           Time nominalTime = lib::test::randTime();
-          int additionalKey = rand() % 5000;
+          int additionalKey = rani(5000);
           
           // (1) mocked render Job
           MockJob mockJob{nominalTime, additionalKey};

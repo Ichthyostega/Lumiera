@@ -93,6 +93,7 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
           demonstrateSimpleUsage();
           verify_GroomingToken();
           verify_GroomingGuard();

@@ -33,9 +33,7 @@
 #include "lib/variant.hpp"
 #include "lib/util.hpp"
 
-
 #include <string>
-
 
 
 namespace lib {
@@ -78,6 +76,7 @@ namespace test{
       virtual void
       run (Arg)
         {
+          seedRand();
           createVariant();
           accessVariant();
           acceptPredicate();
@@ -123,7 +122,7 @@ namespace test{
       void
       accessVariant()
         {
-          int    someVal = rand() % 10000;
+          int    someVal = rani(10000);
           string someStr = randStr(55);
           Time  someTime = randTime();
           

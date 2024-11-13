@@ -77,6 +77,7 @@ namespace test    {
       virtual void
       run (Arg) 
         {
+          seedRand();
           CommandRegistry& registry = CommandRegistry::instance();
           CHECK (&registry);
           uint cnt_inst = registry.instance_count();
@@ -120,7 +121,7 @@ namespace test    {
       bindRandArgument (CommandImpl& cmd)
         {
           typedef Types<int> ArgType;
-          TypedArguments<Tuple<ArgType>> arg (std::make_tuple (rand() % 10000));
+          TypedArguments<Tuple<ArgType>> arg (std::make_tuple (rani (10000)));
           cmd.setArguments (arg);
           CHECK (cmd.canExec());
         }

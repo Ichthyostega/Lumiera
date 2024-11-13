@@ -97,7 +97,7 @@ namespace test    {
         {
           _Fmt fmt ("invoked( %2d )");
           
-          randVal_ = rand() % 100;
+          randVal_ = rani (100);
           return fmt % randVal_;
         }
       
@@ -107,6 +107,7 @@ namespace test    {
       virtual void
       run (Arg) 
         {
+          seedRand();
           command2::check_.seekp(0);
           uint cnt_defs = Command::definition_count();
           uint cnt_inst = Command::instance_count();

@@ -153,6 +153,7 @@
 #include "lib/gnuplot-gen.hpp"
 #include "lib/stat/statistic.hpp"
 #include "lib/stat/data.hpp"
+#include "lib/random.hpp"
 #include "lib/util.hpp"
 
 #include <algorithm>
@@ -529,7 +530,7 @@ namespace test {
             Param minP{upper}, maxP{lower};
             for (uint i=0; i<cnt; ++i)
               {
-                auto random = double(rand())/RAND_MAX;
+                auto random = lib::defaultGen.uni(); // [0 .. 1.0[
                 Param pos = lower + Param(floor (random*dist + 0.5));
                 points.push_back(pos);
                 minP = min (pos, minP);

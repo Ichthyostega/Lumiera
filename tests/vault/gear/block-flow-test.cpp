@@ -84,6 +84,7 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
            simpleUsage();
            handleEpoch();
            placeActivity();
@@ -425,7 +426,7 @@ namespace test {
               const size_t MIN_DEAD = _raw(BASE_DEADLINE) - _raw(SPREAD_DEAD);
               
               auto&[t,r] = testData[i];
-              r = rand() % SPREAD;
+              r = rani (SPREAD);
               t = TimeValue(i*STP + MIN_DEAD + r);
             }
           

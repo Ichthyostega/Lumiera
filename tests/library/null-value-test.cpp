@@ -31,15 +31,11 @@
 #include "lib/null-value.hpp"
 #include "lib/util.hpp"
 
-#include <cstdlib>
-
 
 namespace lib {
 namespace test{
   
   using util::isSameObject;
-  using std::rand;
-  
   
   namespace { // test data and helpers...
     
@@ -52,7 +48,7 @@ namespace test{
         uint id_;
         
         DummyType()
-          : id_(1 + (rand() % 100))
+          : id_(1 + rani(100))
           {
             created = true;
           }
@@ -78,6 +74,7 @@ namespace test{
       void
       run (Arg) 
         {
+          seedRand();
           CHECK (long() == NullValue<long>::get());
           CHECK (short() == NullValue<short>::get());
           CHECK (isSameObject(NullValue<short>::get(), NullValue<short>::get()));

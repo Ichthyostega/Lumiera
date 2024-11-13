@@ -33,12 +33,10 @@
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <cstdlib>
 
 using boost::lexical_cast;
 using util::isnil;
 using util::contains;
-using std::rand;
 
 
 namespace lib {
@@ -63,7 +61,10 @@ namespace test{
       random_or_get (Arg arg)
         {
           if (isnil(arg))
-            return 1 + (rand() % 10000);
+            {// use random time value for all tests
+              seedRand();
+              return 1 + rani(10000);
+            }
           else
             return lexical_cast<int> (arg[1]);
         }

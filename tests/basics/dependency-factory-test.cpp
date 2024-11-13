@@ -37,8 +37,6 @@
 #include "lib/depend-inject.hpp"
 #include "test-target-obj.hpp"
 
-#include <cstdlib>
-
 
 
 namespace lib {
@@ -106,6 +104,7 @@ namespace test{
       virtual void
       run (Arg)
         {
+          seedRand();
           verify_defaultSingletonCreation();
           verify_SubclassCreation();
           verify_FactoryDefinition_is_sticky();

@@ -88,6 +88,7 @@ namespace test    {
       virtual void
       run (Arg arg)
         {
+          seedRand();
           string pipeID   = isnil(arg)?  "Black Hole" : arg[1];
           string streamID = 2>arg.size()? "teststream" : arg[2];
           
@@ -149,7 +150,7 @@ namespace test    {
           
           string new_pID = _Fmt{"dummy_%s_%i"}
                                % pipe1->getPipeID()
-                               % std::rand()
+                               % rani(10'000)
                                ;  // make random new pipeID
           Query<Pipe> query_for_new{"pipe("+new_pID+")"};
           

@@ -44,7 +44,6 @@ namespace test{
   using time::Time;
   using time::Duration;
   using std::string;
-  using std::rand;
   using std::swap;
   
   
@@ -57,10 +56,10 @@ namespace test{
       {
         uint i_;
         
-        Tracker()                  : i_(rand() % 500) { ++cntTracker; }
-        Tracker(Tracker const& ot) : i_(ot.i_)        { ++cntTracker; }
-        Tracker(uint i)            : i_(i)            { ++cntTracker; }
-       ~Tracker()                                     { --cntTracker; }
+        Tracker()                  : i_(rani(500)) { ++cntTracker; }
+        Tracker(Tracker const& ot) : i_(ot.i_)     { ++cntTracker; }
+        Tracker(uint i)            : i_(i)         { ++cntTracker; }
+       ~Tracker()                                  { --cntTracker; }
       };
     
     struct NonAssign
@@ -101,8 +100,9 @@ namespace test{
       virtual void
       run (Arg)
         {
-          ulong l1 (1 + rand() % 1000);
-          ulong l2 (1 + rand() % 1000);
+          seedRand();
+          ulong l1 (1 + rani(1000));
+          ulong l2 (1 + rani(1000));
           string s1 (randStr(50));
           string s2 (randStr(50));
           const char* cp (s1.c_str());
@@ -239,7 +239,7 @@ namespace test{
         {
           struct Wrap
             {
-              int i = -10 + rand() % 21;
+              int i = -10 + rani(21);
             };
           
           ReplaceableItem<Wrap> w1 =Wrap{},
@@ -268,7 +268,7 @@ namespace test{
         {
           struct Cagey
             {
-              int i = -10 + rand() % 21;
+              int i = -10 + rani(21);
               
               Cagey(Cagey && privy)
                 : i(55)

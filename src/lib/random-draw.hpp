@@ -73,7 +73,7 @@
  ** ## Copy inhibition
  ** The configuration of the RandomDraw processing pipeline makes heavy use of function composition
  ** and adaptation to handle a wide selection of input types and usage patterns. Unfortunately this
- ** requires to like the generated configuration-λ to the object instance (capturing by reference);
+ ** requires to link the generated configuration-λ to the object instance (capturing by reference);
  ** not allowing this would severely limit the possible configurations. This implies that an object
  ** instance must not be moved anymore, once the processing pipeline has been configured. And this
  ** in turn would severely limit it's usage in a DSL. As a compromise, RandomDraw relies on
@@ -96,6 +96,7 @@
 
 
 #include "lib/error.h"
+#include "lib/random.hpp"
 #include "lib/lazy-init.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
@@ -163,7 +164,7 @@ namespace lib {
     struct LimitedRandomGenerate
       : function<Limited<uint, max>(void)>
       {
-        static double defaultSrc() { return rand()/double(RAND_MAX); }
+        static double defaultSrc() { return lib::defaultGen.uni(); }
       };
     
   }//(End)Policy definitions

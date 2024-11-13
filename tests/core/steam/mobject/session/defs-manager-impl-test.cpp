@@ -79,7 +79,7 @@ namespace test    {
     string
     newID (Symbol prefix)
     {
-      return pattern % prefix % std::rand();
+      return pattern % prefix % rani(10'000);
     }
   }//(end)test fixture
   
@@ -96,6 +96,8 @@ namespace test    {
       virtual void
       run(Arg)
         {
+          seedRand();
+          
           define_and_search();
           string pipeID = create();
           forget(pipeID);

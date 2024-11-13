@@ -90,6 +90,8 @@ namespace test    {
       virtual void
       run (Arg) 
         {
+          seedRand();
+          
           checkMutation();
           checkUndoMutation();
           checkStateCapturingMechanism();
@@ -203,7 +205,7 @@ namespace test    {
           function<void()> bound_cap_func  = mementoHolder.tieCaptureFunc();
           
           
-          int rr (rand() % 100);
+          int rr{rani (100)};
           testVal = rr;
           bound_cap_func();       // invoke state capturing 
           CHECK (rr == mementoHolder.getState());

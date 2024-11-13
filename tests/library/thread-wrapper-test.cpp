@@ -65,6 +65,7 @@ namespace test{
         virtual void
         run (Arg)
           {
+            seedRand();
             demonstrateSimpleUsage();
             verifyConcurrentExecution();
           }
@@ -122,7 +123,7 @@ namespace test{
                                   {
                                     for (uint i=1; i<=NUM_THREADS; ++i)
                                       {
-                                        uint x = rand() % 1000;
+                                        uint x = rani(1000);
                                         globalSum += (i + x);
                                         threads.emplace (&TestThread::doIt, i, x);
                                       }                            // Note: bind to member function, copying arguments

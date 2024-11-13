@@ -71,9 +71,6 @@ namespace test  {
     
     const size_t TEST_MAX_SIZE = 1024 * 1024;
     
-    const size_t SIZE_A = 1 + rand() % TEST_MAX_SIZE;
-    const size_t SIZE_B = 1 + rand() % TEST_MAX_SIZE;
-    
     HashVal JUST_SOMETHING = 123;
     auto SOME_POINTER = mark_as_Buffer(JUST_SOMETHING);
     
@@ -91,12 +88,19 @@ namespace test  {
    */
   class BufferMetadata_test : public Test
     {
+      size_t SIZE_A{0};
+      size_t SIZE_B{0};
+      
       /** common Metadata table to be tested */
       unique_ptr<BufferMetadata> meta_;
       
       virtual void
       run (Arg) 
         {
+          seedRand();
+          SIZE_A = 1 + rani(TEST_MAX_SIZE);
+          SIZE_B = 1 + rani(TEST_MAX_SIZE);
+          
           CHECK (ensure_proper_fixture());
           verifyBasicProperties();
           verifyStandardCase();

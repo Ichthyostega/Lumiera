@@ -62,6 +62,8 @@ namespace test  {
       virtual void
       run (Arg)
         {
+           seedRand();
+           
            simpleUsage();
            calculateDeadline();
            setupDependentJob();

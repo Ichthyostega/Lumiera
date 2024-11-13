@@ -69,6 +69,13 @@ namespace test  {
       const uint MAX_RUNNING_TIME_ms = 80;
       const uint MIN_RUNNING_TIME_ms = 20;
       
+      inline int
+      draw_rand_runtime()
+      {
+        return MIN_RUNNING_TIME_ms
+             + rani (MAX_RUNNING_TIME_ms - MIN_RUNNING_TIME_ms);
+      }
+      
       /** the "running" subsystem checks for a
        *  shutdown request every XX milliseconds */
       const uint TICK_DURATION_ms = 5;
@@ -110,6 +117,7 @@ namespace test  {
           atomic_bool started_{false};
           atomic_bool termRequest_{false};
           int running_duration_{0};
+          const int TIME_GOAL{draw_rand_runtime()};
           
           lib::SyncBarrier barrier_{};
           unique_ptr<Thread> thread_{};
@@ -193,8 +201,7 @@ namespace test  {
               
               if (isUp_) //-------------actually enter running state for some time
                 {
-                  running_duration_  =  MIN_RUNNING_TIME_ms;
-                  running_duration_ += (rand() % (MAX_RUNNING_TIME_ms - MIN_RUNNING_TIME_ms));
+                  running_duration_ = TIME_GOAL;    // prepared when creating instance 
                   
                   INFO (test, "thread %s now running....", cStr(*this));
                   
@@ -275,6 +282,7 @@ namespace test  {
         virtual void
         run (Arg)
           {
+            seedRand();
             singleSubsys_complete_cycle();
             singleSubsys_start_failure();
             singleSubsys_emegency_exit();

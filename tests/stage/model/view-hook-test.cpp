@@ -56,7 +56,7 @@ namespace test {
     
     struct DummyWidget
       {
-        int i = rand(); // "identity"
+        int i = rani(); // "identity"
         
         friend bool
         operator== (DummyWidget const& wa, DummyWidget const& wb)
@@ -167,6 +167,7 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
           verify_standardUsage();
           verify_multiplicity();
           reOrderHooked();
