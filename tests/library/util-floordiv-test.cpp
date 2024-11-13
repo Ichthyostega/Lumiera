@@ -59,8 +59,8 @@ namespace test {
         VecI data;
         for (uint i=0; i<cnt; ++i)
           {
-            int someNumber { rani (2*NUMBER_LIMIT) - NUMBER_LIMIT};
-            if (!someNumber) someNumber -= 1 + rani (NUMBER_LIMIT);
+            int someNumber = -int(NUMBER_LIMIT)+rani(2*NUMBER_LIMIT);
+            if (!someNumber) someNumber -= 1 +  rani(NUMBER_LIMIT);
             
             data.push_back (someNumber);
           }

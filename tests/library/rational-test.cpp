@@ -30,6 +30,7 @@
 #include "lib/test/run.hpp"
 #include "lib/integral.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/test/test-helper.hpp"
 
 #include "lib/rational.hpp"
 
@@ -87,9 +88,9 @@ namespace test {
           CHECK (2_r/3 /(3_r/4)== 8_r/9);
           CHECK (2_r/3 / 3  /4 == 1_r/18);                                       // usual precedence and brace rules apply, yielding 2/36 here
           
-          CHECK (util::toString(23_r/55) == "23/55sec");  //////////////////////////TICKET #1259 and #1261 : FSecs should really be a distinct (wrapper) type,
-                                                          //////////////////////////TICKET #1259 and #1261 : ...then this custom conversion with the suffix "sec" would not kick in here
-          CHECK (util::toString(24_r/56) == "3/7sec"  );                         // rational numbers are normalised and reduced immediately
+          CHECK (util::toString(23_r/55) == "23/55sec"_expect);  ///////////////////TICKET #1259 and #1261 : FSecs should really be a distinct (wrapper) type,
+                                                                 ///////////////////TICKET #1259 and #1261 : ...then this custom conversion with the suffix "sec" would not kick in here
+          CHECK (util::toString(24_r/56) == "3/7sec"_expect  );                  // rational numbers are normalised and reduced immediately
           
           CHECK (Rat(10,3).numerator() == int64_t(10));
           CHECK (Rat(10,3).denominator() == int64_t(3));
@@ -118,32 +119,32 @@ namespace test {
           CHECK (MAXI > 0);                                                      // so this one still works
           CHECK (MAXI+1 < 0);                                                    // but one more and we get a wrap-around
           CHECK (MAXI+1 < -MAXI);
-          CHECK (util::toString(MAXI)   ==  "9223372036854775807sec");     /////////TICKET #1259 should be "9223372036854775807/1  -- get rid of the "sec" suffix
-          CHECK (util::toString(MAXI+1) == "-9223372036854775808sec");     /////////TICKET #1259 should be "-9223372036854775808/1"
-          CHECK (util::toString(-MAXI)  == "-9223372036854775807sec");     /////////TICKET #1259 should be "-9223372036854775807/1"
+          CHECK (util::toString(MAXI)   ==  "9223372036854775807sec"_expect);     /////////TICKET #1259 should be "9223372036854775807/1  -- get rid of the "sec" suffix
+          CHECK (util::toString(MAXI+1) == "-9223372036854775808sec"_expect);     /////////TICKET #1259 should be "-9223372036854775808/1"
+          CHECK (util::toString(-MAXI)  == "-9223372036854775807sec"_expect);     /////////TICKET #1259 should be "-9223372036854775807/1"
 
           CHECK (MINI > 0);                                                      // smallest representable number above zero
           CHECK (1-MINI < 1);
           CHECK (0 < 1-MINI);                                                    // can be used below 1 just fine
           CHECK (0 > 1+MINI);                                                    // but above we get a wrap-around in normalised numerator
-          CHECK (util::toString(MINI)   ==  "1/9223372036854775807sec");
-          CHECK (util::toString(-MINI)  == "-1/9223372036854775807sec");
-          CHECK (util::toString(1-MINI) ==  "9223372036854775806/9223372036854775807sec");
-          CHECK (util::toString(1+MINI) == "-9223372036854775808/9223372036854775807sec");
+          CHECK (util::toString(MINI)   ==  "1/9223372036854775807sec"_expect);
+          CHECK (util::toString(-MINI)  == "-1/9223372036854775807sec"_expect);
+          CHECK (util::toString(1-MINI) ==  "9223372036854775806/9223372036854775807sec"_expect);
+          CHECK (util::toString(1+MINI) == "-9223372036854775808/9223372036854775807sec"_expect);
           
           CHECK ((MAXI-1)/MAXI == 1-MINI);
           CHECK (MAXI/(MAXI-1) >  1);                                            // as workaround we have to use a slightly larger ULP
           CHECK (MAXI/(MAXI-1) - 1 > MINI);                                      // ...this slightly larger one works without wrap-around
           CHECK (1 - MAXI/(MAXI-1) < -MINI);
-          CHECK (util::toString(MAXI/(MAXI-1))      ==  "9223372036854775807/9223372036854775806sec");
-          CHECK (util::toString(MAXI/(MAXI-1) - 1)  ==  "1/9223372036854775806sec");
-          CHECK (util::toString(1 - MAXI/(MAXI-1))  == "-1/9223372036854775806sec");
+          CHECK (util::toString(MAXI/(MAXI-1))      ==  "9223372036854775807/9223372036854775806sec"_expect);
+          CHECK (util::toString(MAXI/(MAXI-1) - 1)  ==  "1/9223372036854775806sec"_expect);
+          CHECK (util::toString(1 - MAXI/(MAXI-1))  == "-1/9223372036854775806sec"_expect);
           
           // Now entering absolute danger territory....
           const Rat MIMI = -MAXI-1;                                              // this is the most extreme negative representable value
           CHECK (MIMI < 0);
-          CHECK (util::toString(MIMI)   ==  "-9223372036854775808sec");    /////////TICKET #1259 should be "-9223372036854775808/1"
-          CHECK (util::toString(1/MIMI) ==  "-1/-9223372036854775808sec");
+          CHECK (util::toString(MIMI)   ==  "-9223372036854775808sec"_expect);    /////////TICKET #1259 should be "-9223372036854775808/1"
+          CHECK (util::toString(1/MIMI) ==  "-1/-9223372036854775808sec"_expect);
           try
             {
               -1-1/MIMI;                                                         // ...but it can't be used for any calculation without blowing up
@@ -354,10 +355,10 @@ namespace test {
           CHECK (approx (sleazy+7) == 14);
           CHECK (approx (sleazy+9_r/5) == 8.80000019f);
           
-          CHECK (util::toString (poison)   == "9223372036854775719/1317624576693539401sec");
-          CHECK (util::toString (poison+1) =="-7905747460161236496/1317624576693539401sec");
-          CHECK (util::toString (sleazy)   == "117440511/16777216sec");
-          CHECK (util::toString (sleazy+1) == "134217727/16777216sec");
+          CHECK (util::toString (poison)   == "9223372036854775719/1317624576693539401sec"_expect);
+          CHECK (util::toString (poison+1) =="-7905747460161236496/1317624576693539401sec"_expect);
+          CHECK (util::toString (sleazy)   == "117440511/16777216sec"_expect);
+          CHECK (util::toString (sleazy+1) == "134217727/16777216sec"_expect);
           
           // also works towards larger denominator, or with negative numbers...
           CHECK (reQuant (1/poison, MAX) == 1317624576693539413_r/9223372036854775807);

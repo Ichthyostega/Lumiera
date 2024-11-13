@@ -65,7 +65,7 @@ namespace lumiera {
   
   namespace { // implementation details
     
-    void
+    inline void
     throwIfError()
     {
       if (lumiera_error_peek())
@@ -78,7 +78,7 @@ namespace lumiera {
      *  \em given instance descriptor to open an instance handle.
      *  @throws error::Config when the registration process fails
      */
-    LumieraInterface
+    inline LumieraInterface
     register_and_open (LumieraInterface descriptor)
     {
       if (!descriptor) return NULL;
@@ -93,7 +93,7 @@ namespace lumiera {
     /** do a lookup within the interfaceregistry
      *  using the name/version found within the interface
      *  handle, to ensure it is still valid and registered */
-    bool
+    inline bool
     verify_validity (LumieraInterface ifa)
     {
       REQUIRE (ifa);
@@ -156,9 +156,10 @@ namespace lumiera {
       : util::NonCopyable
       {
         using IH = InstanceHandle<I,I>;
+        
         IH& ih_;
         
-        Link (IH& ih)
+        Link(IH& ih)
           : ih_{ih}
         { }
         
@@ -226,7 +227,7 @@ namespace lumiera {
           throwIfError();
         }
       
-      ~InstanceHandle ()
+     ~InstanceHandle()
         {
           lumiera_interface_close (&instance_->interface_header_);
           if (desc_)
@@ -239,14 +240,14 @@ namespace lumiera {
        *  @note we don't provide `operator*`
        */
       FA*
-      operator-> ()  const
+      operator->()  const
         {
           return facadeLink_.operator ->();
         }
       
       /** directly access the instance via the CL interface */
       I&
-      get ()  const
+      get()  const
         {
           ENSURE(instance_);
           return *instance_;
@@ -270,11 +271,10 @@ namespace lumiera {
       isValid()  const
         {
           return instance_
-              && verify_validity (&instance_->interface_header_);
+             and verify_validity (&instance_->interface_header_);
         }
     };
   
   
 } // namespace lumiera
-
-#endif
+#endif /*LUMIERA_INSTANCEHANDLE_H*/
