@@ -43,7 +43,7 @@
 using ::Test;
 using lib::explore;
 using lib::test::showSizeof;
-using util::getAddr;
+using util::getAdr;
 using util::isnil;
 
 using std::numeric_limits;
@@ -306,7 +306,7 @@ namespace test {
             // trigger overflow and allocation of second extent
             char& c2 = clu.create<char> ('U');
             CHECK (blk != currBlock());                                // allocation moved to a new extent
-            CHECK (getAddr(c2) == currBlock() + 2*sizeof(void*));      // c2 resides immediately after the two administrative »slots«
+            CHECK (getAdr(c2) == currBlock() + 2*sizeof(void*));       // c2 resides immediately after the two administrative »slots«
             CHECK (clu.storage_.rest == EXTSIZ - posOffset());
             CHECK (clu.numBytes() == EXTSIZ - 2*sizeof(void*) + 1);    // accounted allocation for the full first block + one byte
             CHECK (clu.numExtents() == 2);                             // we have two extents now

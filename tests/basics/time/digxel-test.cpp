@@ -306,7 +306,7 @@ namespace test{
           
           TestDigxel d2(d1);
           CHECK (d2 == someValue);
-          CHECK (!isSameObject (d1, d2));
+          CHECK (not isSameObject (d1, d2));
           
           d1 = randomFrac();
           CHECK (d1 != d2);

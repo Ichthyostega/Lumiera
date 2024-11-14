@@ -278,7 +278,7 @@ namespace engine {
   {
     diagn::Block* block4buffer = locateBlock (typeID, specifics);
     REQUIRE (block4buffer, "releasing a buffer not allocated through this provider");
-    REQUIRE (util::isSameObject(storage, block4buffer->accessMemory()));
+    REQUIRE (util::isSameAdr (storage, block4buffer->accessMemory()));
     block4buffer->markReleased();
   }
   

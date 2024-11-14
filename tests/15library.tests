@@ -656,12 +656,17 @@ return: 0
 END
 
 
-TEST "integer rounding utility" UtilFloordiv_test <<END
+TEST "collection utils" UtilCollection_test <<END
 return: 0
 END
 
 
-TEST "integer scale wrapping utility" UtilFloorwrap_test <<END
+TEST "util: integer rounding" UtilFloordiv_test <<END
+return: 0
+END
+
+
+TEST "util: integer scale wrapping" UtilFloorwrap_test <<END
 out-lit: --------int--------12/4
 out-lit:  12 / 4 = 3  % = 0     floor= 3.0  wrap = ( 3, 0)
 out-lit:  11 / 4 = 2  % = 3     floor= 2.0  wrap = ( 2, 3)
@@ -770,7 +775,7 @@ return: 0
 END
 
 
-TEST "collection utils" UtilCollection_test <<END
+TEST "util: address identity" UtilIdentity_test <<END
 return: 0
 END
 

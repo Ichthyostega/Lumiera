@@ -295,7 +295,7 @@ namespace test{
     return " :---#"
          + util::toString (1 + sizeof...(xs))
          + " -- Type: "  + showType<XX&&>()
-         + "  \tAdr"     + util::showAddr (x)
+         + "  \tAdr"     + util::showAdr (x)
          + "\n"
          + showVariadicTypes (std::forward<XS>(xs)...);
   }

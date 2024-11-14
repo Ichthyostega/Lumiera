@@ -25,12 +25,11 @@
  ** Tiny helper functions and shortcuts to be used _everywhere_
  ** Consider this header to be effectively included in almost every translation unit.
  ** @remark The motivation of using these helpers is conciseness and uniformity of expression.
- **         There are several extensions and not-so-frequently used supplements packaged into
- **         separate headers.
+ **         Further extensions and not-so-frequently used supplements are packaged into separate headers.
  ** @warning be sure to understand the ramifications of including _anything_ here...
  ** @see util-coll.hpp
- ** @see util-foreach.hpp
  ** @see util-quant.hpp
+ ** @see util-foreach.hpp
  */
 
 
@@ -187,6 +186,8 @@ namespace util {
   }
   
   
+  
+  /*  ======== string and containment =========  */
   
   /** check if string starts with a given prefix */
   inline bool
@@ -354,8 +355,12 @@ namespace util {
     }
   
   
+  
+  
   /** shortcut to save some typing when having to define
    *  const and non-const variants of member functions
+   * @remark the »social contract« when using this function is
+   *  that the programmer has to ensure effective const correctness!
    */
   template<class OBJ>
   inline OBJ*
@@ -372,8 +377,53 @@ namespace util {
   }
   
   
+  
+  /*  ======== address and identity =========  */
+  
+  /** extract address but strip any type info */
+  template<class X>
+  inline const void*
+  getAdr (X& x)
+  {
+    return static_cast<const void*> (std::addressof(x));
+  }
+  template<class X>
+  inline const void*
+  getAdr (X* x)
+  {
+    return static_cast<const void*> (x);
+  }
+  
+  /** generate an unique numeric ID based on the referred entity */
+  template<class X>
+  inline size_t
+  addrID (X const& x)
+  {
+    return size_t(getAdr (x));
+  }
+  
+  
+  /** the addressable memory »slot« — platform dependent. */
+  template<typename X>
+  inline size_t
+  slotNr (X const& x)
+  {
+    return addrID(x) / sizeof(size_t);
+  }
+  
+  
+  /** compare plain object address identity, disregarding type.
+   * @note the pointee is compared when passing pointer(s)
+   */
+  template<class A, class B>
+  inline bool
+  isSameAdr (A const& a, B const& b)
+  {
+    return getAdr(a) == getAdr(b);
+  }
+  
   /** compare plain object identity,
-   *  bypassing any custom comparison operators.
+   *  based directly on the referee's memory identities.
    */
   template<class A, class B>
   inline bool
@@ -383,38 +433,10 @@ namespace util {
         == static_cast<const void*> (std::addressof(b));
   }
   
-  /** extract address but strip any type info */
-  template<class X>
-  inline const void*
-  getAddr (X& x)
-  {
-    return static_cast<const void*> (std::addressof(x));
-  }
-  template<class X>
-  inline const void*
-  getAddr (X* x)
-  {
-    return static_cast<const void*> (x);
-  }
-  
-  /** the addressable memory »slot« — platform dependent */
-  template<typename X>
-  inline size_t
-  slotNr (X const& x)
-  {
-    return reinterpret_cast<size_t> (std::addressof(x)) / sizeof(size_t);
-  }
-  template<typename X>
-  inline size_t
-  slotNr (X const* x)
-  {
-    return reinterpret_cast<size_t> (x)  / sizeof(size_t);;
-  }
-  
-  
   /** determine heuristically if two objects
    *  are located „close to each other“ in memory.
-   * @remark can be used to find out about heap vs. stack allocation
+   * @remark can be used to find out about heap versus stack allocation
+   * @warning relies on platform and implementation-defined observable behaviour
    */
   template<typename A, typename B>
   inline bool
@@ -480,6 +502,7 @@ namespace util {
   bool isNo (string const&) noexcept;
   
 } // namespace util
+
 
 
 

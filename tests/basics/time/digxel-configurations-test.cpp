@@ -32,12 +32,8 @@
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
-#include <cstdlib>
-
 using LERR_(ASSERTION);
-using util::isSameObject;
 using util::typeStr;
-using std::rand;
 
 
 namespace lib {
@@ -62,7 +58,7 @@ namespace test{
   class DigxelConfigurations_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           verifyConfiguration<Digxel<int>   > (123);
           verifyConfiguration<Digxel<double>> (123.4567);

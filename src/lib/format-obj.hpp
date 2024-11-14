@@ -83,16 +83,16 @@ namespace meta {
 
 namespace util {
   
-  std::string showDouble (double) noexcept;
-  std::string showFloat (float)   noexcept;
-  std::string showSize (size_t)   noexcept;
-  std::string showAddr (void const* addr) noexcept;
+  std::string showDouble (double)        noexcept;
+  std::string showFloat (float)          noexcept;
+  std::string showSize (size_t)          noexcept;
+  std::string showAdr (void const* addr) noexcept;
   
   /** preconfigured format for pretty-printing of addresses */
-  std::ostream& showAddr (std::ostream&, void const* addr);
+  std::ostream& showAdr (std::ostream&, void const* addr);
   
   /** renders the size_t in hex, optionally only trailing bytes */
-  std::string showHash   (size_t hash, uint showBytes=8)  noexcept;
+  std::string showHash (size_t hash, uint showBytes=8)  noexcept;
   
   inline std::string
   showHashLSB (size_t hash)  noexcept

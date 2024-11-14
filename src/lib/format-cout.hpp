@@ -93,7 +93,7 @@ namespace std {
   operator<< (basic_ostream<_CharT, _Traits>& os, X const* ptr)
   {
     if (ptr)
-      return util::showAddr(os, ptr) << " ↗" << util::StringConv<X>::invoke (*ptr);
+      return util::showAdr(os, ptr) << " ↗" << util::StringConv<X>::invoke (*ptr);
     else
       return os << "⟂ «" << lib::meta::typeStr<X>() << "»";
   }

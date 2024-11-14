@@ -54,7 +54,7 @@ using std::make_shared;
 using std::make_pair;
 using util::contains;
 using util::joinDash;
-using util::showAddr;
+using util::showAdr;
 
 
 namespace lib {
@@ -221,7 +221,7 @@ namespace test{
     Location loc = newAlloc.buff.front();
     ASSERT (not contains (allocs_, loc));
     newAlloc.entryID = ++entryNr_;
-    logAlloc (poolID_, "allocate", bytes, newAlloc.entryID, showAddr(loc));
+    logAlloc (poolID_, "allocate", bytes, newAlloc.entryID, showAdr(loc));
     checksum_ += newAlloc.entryID * bytes;
     return allocs_.emplace (loc, move(newAlloc))
                   .first->second;
@@ -236,14 +236,14 @@ namespace test{
         ASSERT (entry.buff);
         ASSERT (entry.buff.front() == loc);
         if (entry.buff.size() != bytes)     // *deliberately* tolerating wrong data, but log incident to support diagnostics
-          logAlarm ("SizeMismatch", bytes, "≠", entry.buff.size(), entry.entryID, showAddr(loc));
+          logAlarm ("SizeMismatch", bytes, "≠", entry.buff.size(), entry.entryID, showAdr(loc));
         
-        logAlloc (poolID_, "deallocate", bytes, entry.entryID, bytes, showAddr(loc));
+        logAlloc (poolID_, "deallocate", bytes, entry.entryID, bytes, showAdr(loc));
         checksum_ -= entry.entryID * bytes;  // Note: using the given size (if wrong ⟿ checksum mismatch)
         allocs_.erase(loc);
       }
     else // deliberately no exception here (for better diagnostics)
-      logAlarm ("FreeUnknown", bytes, showAddr(loc));
+      logAlarm ("FreeUnknown", bytes, showAdr(loc));
   }
   
   

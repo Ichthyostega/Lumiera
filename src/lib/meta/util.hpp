@@ -466,14 +466,14 @@ namespace util {
   
   
   /** pretty-print an address as hex-suffix */
-  std::string showAddr (void const* addr) noexcept;
+  std::string showAdr (void const* addr) noexcept;
   
   template<typename X>
   inline                   lib::meta::disable_if<std::is_pointer<X>,
   std::string              >
-  showAddr (X& elm)  noexcept
+  showAdr (X& elm)  noexcept
   {
-    return showAddr(&elm);
+    return showAdr(&elm);
   }
   
   
@@ -482,7 +482,7 @@ namespace util {
   inline std::string
   showPtr (X* ptr =nullptr)
   {
-    return ptr? showAddr(ptr) + " ↗" + StringConv<X>::invoke(*ptr)
+    return ptr? showAdr(ptr) + " ↗" + StringConv<X>::invoke(*ptr)
               : BOTTOM_INDICATOR + " «" + typeStr(ptr) + "»";
   }
   
@@ -492,7 +492,7 @@ namespace util {
   {
     using TargetType = typename SP::element_type;
     
-    return smPtr? label+"("+showAddr(smPtr.get()) + ") ↗" + StringConv<TargetType>::invoke(*smPtr)
+    return smPtr? label+"("+showAdr(smPtr.get()) + ") ↗" + StringConv<TargetType>::invoke(*smPtr)
                 : BOTTOM_INDICATOR + " «" + typeStr(smPtr) + "»";
   }
   

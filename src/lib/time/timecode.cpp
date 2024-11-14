@@ -335,7 +335,7 @@ namespace time {
   SmpteTC&
   SmpteTC::operator= (SmpteTC const& o)
     {
-      if (!isSameObject (*this, o))
+      if (not isSameObject (*this, o))
         {
           TCode::operator= (o);
           effectiveFramerate_ = o.effectiveFramerate_;

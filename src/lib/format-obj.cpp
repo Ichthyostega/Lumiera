@@ -384,7 +384,7 @@ namespace util {
   
   /** @note show only the trailing X bytes of any address */
   ostream&
-  showAddr (ostream& stream, void const* addr)
+  showAdr (ostream& stream, void const* addr)
   {
     IosSavepoint save{stream};
     size_t suffix_modulus = size_t(1) << DIAGNOSTICS_ADDRESS_SUFFIX_LEN * 8;
@@ -399,10 +399,10 @@ namespace util {
   
   
   string
-  showAddr (void const* addr)  noexcept
+  showAdr (void const* addr)  noexcept
     try {
       ostringstream buffer;
-      showAddr (buffer, addr);
+      showAdr (buffer, addr);
       return buffer.str();
     }
     catch(...)

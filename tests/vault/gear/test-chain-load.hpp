@@ -1623,7 +1623,7 @@ namespace test {
         {
           return _Fmt{"ChainCalc(w:%d)◀%s"}
                      % maxFan
-                     % util::showAddr(startNode_);
+                     % util::showAdr(startNode_);
         }
     };
   

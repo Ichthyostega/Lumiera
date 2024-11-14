@@ -41,9 +41,8 @@ using std::tuple_size_v;
 namespace util {
 namespace test {
   
-  typedef std::vector<uint> VecI;
-  typedef lib::RangeIter<VecI::iterator> RangeI;
-  
+  using VecI   = std::vector<uint>;
+  using RangeI = lib::RangeIter<VecI::iterator>;
   
   
   namespace{ // Test data and operations

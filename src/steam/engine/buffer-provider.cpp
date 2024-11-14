@@ -31,7 +31,7 @@
 #include "steam/engine/buffer-metadata.hpp"
 #include "lib/util.hpp"
 
-using util::isSameObject;
+using util::isSameAdr;
 
 namespace steam {
 namespace engine {
@@ -243,7 +243,7 @@ namespace engine {
   bool
   BufferProvider::was_created_by_this_provider (BuffDescr const& descr)  const
   {
-    return isSameObject (*this, *descr.provider_);
+    return isSameAdr (this, descr.provider_);
   }
   
   

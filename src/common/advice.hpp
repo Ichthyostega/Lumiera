@@ -271,10 +271,10 @@ namespace advice {
       Provision&
       operator= (Provision const& o)
         {
-          if (!isSameObject(*this, o))
+          if (not isSameObject (*this, o))
             {
               AdviceLink::operator= (o);
-              setSolution ( NULL );
+              setSolution (nullptr);
             }
           return *this;
         }

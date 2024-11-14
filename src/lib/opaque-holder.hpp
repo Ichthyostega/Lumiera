@@ -86,9 +86,8 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include <cstddef>
-#include <utility>
 #include <type_traits>
+#include <utility>
 
 
 namespace lib {
@@ -98,6 +97,7 @@ namespace lib {
   using LERR_(WRONG_TYPE);
   
   using util::isSameObject;
+  using util::isSameAdr;
   using util::unConst;
   
   
@@ -430,7 +430,7 @@ namespace lib {
       operator= (SUB const& newContent)
         {
           if (empty()
-             or not isSameObject (*buff().getBase(), newContent)
+             or not isSameAdr (buff().getBase(), &newContent)    // caution: BaseP may be void* and SUB might be a pointer
              )
             {
               killBuffer();

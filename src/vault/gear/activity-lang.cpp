@@ -66,11 +66,11 @@ namespace gear {
   {
     return string{"Act("}
          + showVerb()
-         + util::showAddr(this)
+         + util::showAdr(this)
          + ": "
          + showData()
          + "; ⤵ "
-         + (next? next->showVerb()+util::showAddr(*next)
+         + (next? next->showVerb()+util::showAdr(*next)
                 : util::BOTTOM_INDICATOR)
          + ")";
   }
@@ -106,7 +106,7 @@ namespace gear {
              + ", quality="
              + util::toString(data_.timing.quality);
       case NOTIFY:
-        return util::showAddr(data_.notification.target)
+        return util::showAdr(data_.notification.target)
              + ", timing:"
              + util::toString(Time{data_.notification.timing});
       case GATE:

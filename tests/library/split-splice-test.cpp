@@ -57,7 +57,7 @@ namespace test {
   
   using util::_Fmt;
   using util::isnil;
-  using util::getAddr;
+  using util::getAdr;
   using util::isSameObject;
   using std::string;
   using std::move;
@@ -509,14 +509,14 @@ namespace test {
           CHECK (s->start == -100);
           CHECK (s->after == 2);
           CHECK (s->id == id1);
-          CHECK (adr1 == getAddr(*s));
+          CHECK (adr1 == getAdr(*s));
           CHECK (s != p);
           ++s;
           CHECK (s == p);
           CHECK (s->start == 2);
           CHECK (s->after == 3);
           CHECK (s->id == id2);
-          CHECK (adr2 != getAddr(*s));  // this is the first part of the split segment (new allocation)
+          CHECK (adr2 != getAdr(*s));  // this is the first part of the split segment (new allocation)
           ++s;
           CHECK (s != p);
           CHECK (s == n);
@@ -525,7 +525,7 @@ namespace test {
           CHECK (s->id != id1);
           CHECK (s->id != id2);
           CHECK (s->id != id3);
-          CHECK (adr2 != getAddr(*s));
+          CHECK (adr2 != getAdr(*s));
           ++s;
           CHECK (s != n);
           CHECK (s != a);
@@ -534,7 +534,7 @@ namespace test {
           CHECK (s->id != id1);
           CHECK (s->id == id2);
           CHECK (s->id != id3);
-          CHECK (adr2 != getAddr(*s));  // this is the second part of the split segment (new allocation)
+          CHECK (adr2 != getAdr(*s));  // this is the second part of the split segment (new allocation)
           ++s;
           CHECK (s == a);
           CHECK (s->start == 6);
@@ -542,7 +542,7 @@ namespace test {
           CHECK (s->id != id1);
           CHECK (s->id != id2);
           CHECK (s->id == id3);
-          CHECK (adr3 == getAddr(*s));
+          CHECK (adr3 == getAdr(*s));
           ++s;
           CHECK (s == segs.end());
         }

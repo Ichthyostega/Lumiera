@@ -70,8 +70,6 @@
 
 namespace lib {
   
-  using util::isSameObject;
-  
   /**
    * Registry for tracking object instances.
    * Custom implementation of the RefArray interface,

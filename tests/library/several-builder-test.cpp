@@ -44,9 +44,7 @@ using ::test::Test;
 using std::array;
 
 using lib::explore;
-using util::isSameObject;
 using util::isLimited;
-using util::getAddr;
 using util::isnil;
 using util::join;
 
@@ -486,7 +484,7 @@ namespace test{
       void
       check_ElementStorage()
         {
-          auto loc        = [](auto& something){ return size_t(getAddr (something)); };
+          auto loc        = [](auto& something){ return util::addrID (something);         };
           auto calcSpread = [&](auto& several){ return loc(several[1]) - loc(several[0]); };
           
           { // Scenario-1 : tightly packed values
@@ -532,6 +530,7 @@ namespace test{
             CHECK (5 == elms.size());
             auto moved = move(elms);
             CHECK (5 == moved.size());
+            CHECK (loc(elms) != loc(moved));
             CHECK (isnil (elms));
             
             CHECK (loc(moved[0]) == p0);

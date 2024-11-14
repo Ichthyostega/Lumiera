@@ -555,7 +555,7 @@ namespace test {
       buildActivationTap (Activity const& subject, string id ="")
         {
           return mockActs_.emplace_back (subject
-                                        ,isnil(id)? "tap-"+subject.showVerb()+util::showAddr(subject)
+                                        ,isnil(id)? "tap-"+subject.showVerb()+util::showAdr(subject)
                                                   : id
                                         ,eventLog_
                                         ,invocationSeq_);
@@ -566,14 +566,14 @@ namespace test {
       insertActivationTap (Activity*& wiring, string id ="")
         {
           wiring = wiring? & buildActivationTap (*wiring, id)
-                         : & buildActivationProbe (isnil(id)? "tail-"+util::showAddr(&wiring) : id);
+                         : & buildActivationProbe (isnil(id)? "tail-"+util::showAdr(&wiring) : id);
           return *wiring;
         }
       
       Activity&
       buildGateWatcher (Activity& gate, string id ="")
         {
-          insertActivationTap (gate.next, "after-" + (isnil(id)? gate.showVerb()+util::showAddr(gate) : id));
+          insertActivationTap (gate.next, "after-" + (isnil(id)? gate.showVerb()+util::showAdr(gate) : id));
           return buildActivationTap (gate, id);
         }
       
@@ -581,7 +581,7 @@ namespace test {
       watchGate (Activity*& wiring, string id ="")
         {
           wiring = wiring? & buildGateWatcher (*wiring, id)
-                         : & buildActivationProbe (isnil(id)? "tail-"+util::showAddr(&wiring) : id);
+                         : & buildActivationProbe (isnil(id)? "tail-"+util::showAdr(&wiring) : id);
           return *wiring;
         }
       
