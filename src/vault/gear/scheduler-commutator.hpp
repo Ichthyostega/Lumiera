@@ -184,6 +184,21 @@ namespace gear {
             layer1.feedPrioritisation();
         }
       
+      /** update queue head to discard obsolete content.
+       * @param now _current time_ to use for decision about dropping tasks
+       * @return `false` when failing to establish a consistent state due to
+       *         missed **compulsory** entries; should cause **Emergency halt**.
+       */
+      bool
+      maintainQueueHead (SchedulerInvocation& layer1, Time now)
+        {
+          ENSURE (holdsGroomingToken (thisThread()));
+          layer1.feedPrioritisation();
+          while (layer1.isOutdated (now) and not layer1.isOutOfTime(now))
+            layer1.pullHead();
+          return not layer1.isOutOfTime(now);
+        }
+      
       /**
        * Look into the queues and possibly retrieve work due by now.
        * @note transparently discards any outdated entries,
@@ -198,15 +213,15 @@ namespace gear {
               layer1.feedPrioritisation();
               while (layer1.isOutdated (now) and not layer1.isOutOfTime(now))
                 layer1.pullHead();
+              if (not maintainQueueHead (layer1,now))
+                ALERT (engine, "MISSED compulsory job -- should raise Scheduler-Emergency");   //////////////TICKET #1362 : not clear where Scheduler-Emergency is to be handled and how it can be triggered. See Scheduler::triggerEmergency()
+              else
               if (layer1.isDue (now))
-                {
-                  if (layer1.isOutOfTime(now))
-                    UNIMPLEMENTED ("how to trigger a Scheduler-Emergency from here");   ///////////////////////TICKET #1362 : not clear where Scheduler-Emergency is to be handled and how it can be triggered. See Scheduler::triggerEmergency()
-                  else
-                    return layer1.pullHead();
-            }   }
+                return layer1.pullHead();
+            }
           return ActivationEvent();
         }
+      
       
       
       /***********************************************************//**

@@ -278,10 +278,10 @@ namespace gear {
              and priority_.top().starting <= waterLevel(now);
         }
 
-      /** determine if Activity at scheduler head missed it's deadline
+      /** determine if the Activity at scheduler head missed it's deadline.
        * @warning due to memory management, such an Activity must not be dereferenced */
       bool
-      isMissed  (Time now)  const
+      isMissed (Time now)  const
         {
           return not priority_.empty()
              and waterLevel(now) > priority_.top().deadline;

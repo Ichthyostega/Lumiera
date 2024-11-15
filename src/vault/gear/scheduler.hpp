@@ -71,7 +71,7 @@
  ** 
  ** If however a thread is put to work, it will start dequeuing an entry from
  ** the head of the [priority queue](\ref SchedulerInvocation::pullHead),
- ** and start interpreting this entry as a _chain of render activities_  with
+ ** and start interpreting this entry as a _chain of render activities,_ with
  ** the help of the [»Activity Language«](\ref ActivityLang::dispatchChain).
  ** In the typical scenario, after some preparatory checks and notifications,
  ** the thread [transitions into work mode](\ref Scheduler::ExecutionCtx::work),
@@ -94,8 +94,10 @@
  ** @see SchedulerCommutator Layer-2
  ** @see activity.hpp description of »Render Activities«
  ** 
- ** @todo WIP 11/2023 »Playback Vertical Slice«
- ** 
+ ** @todo WIP 11/2024 »Playback Vertical Slice«
+ **     - initial version of Scheduler was built and validated by \ref scheduler-stress-test.cpp
+ **     - now awaiting integration with Render-Node invocation and Job-Planning
+ **     - very likely we'll extract a Scheduler-Interface (and this file then becomes a service-impl) 
  */
 
 
@@ -112,11 +114,8 @@
 #include "vault/gear/load-controller.hpp"
 #include "vault/gear/engine-observer.hpp"
 #include "vault/real-clock.hpp"
-//#include "lib/symbol.hpp"
 #include  "lib/nocopy.hpp"
-//#include "lib/util.hpp"
 
-//#include <string>
 #include <optional>
 #include <utility>
 
@@ -124,8 +123,6 @@
 namespace vault{
 namespace gear {
   
-//  using util::isnil;
-//  using std::string;
   using std::move;
   using lib::time::Time;
   using lib::time::FSecs;
@@ -216,6 +213,9 @@ namespace gear {
   /******************************************************//**
    * »Scheduler-Service« : coordinate render activities.
    * @todo WIP 11/2023
+   *     - largely completed spring 2024
+   *     - passes stress testing with good performance
+   *     - **TODO** further integration will require to extract a Scheduler-Interface
    * @see BlockFlow
    * @see SchedulerUsage_test
    */
@@ -515,6 +515,16 @@ namespace gear {
     };
   
   
+  
+  
+  /***********************************************************************//**
+   * @remark this is the »internal service entrance point« for render workers
+   *         and is implemented by _combining all parts_ of the Scheduler
+   *       - the processing environment of the ActivityLang
+   *       - Layer-1 for queue management
+   *       - Layer-2 for execution
+   *       - the LoadController
+   */
   inline activity::Proc
   Scheduler::doWork()
   {
@@ -525,7 +535,7 @@ namespace gear {
                                               ExecutionCtx ctx{*this, toDispatch};
                                               return ActivityLang::dispatchChain (toDispatch, ctx);
                                             }
-                                    ,[this]{ return getSchedTime(); }
+                                    ,[this] { return getSchedTime(); }
                                     );
   }
   
@@ -544,10 +554,10 @@ namespace gear {
    */
   inline ScheduleSpec
   ScheduleSpec::post()
-  {                                  // protect allocation
-//  auto guard = theScheduler_->layer2_.requireGroomingTokenHere();//////////////////////////////////////TODO  can we avoid that?
+  {  // execute term-builder on-demand...
     maybeBuildTerm();
-     //set up new schedule by retrieving the Activity-chain...
+    
+     // set up new schedule by retrieving the Activity-chain...
     theScheduler_->postChain ({term_->post(), start_
                                             , death_
                                             , manID_
@@ -607,7 +617,9 @@ namespace gear {
     }
   
   
-  /**
+  
+  
+  /*****************************************************************//**
    * Enqueue for time-bound execution, possibly dispatch immediately.
    * This is the »main entrance« to get some Activity scheduled.
    * @param actEvent the Activity, start time and deadline
@@ -625,7 +637,7 @@ namespace gear {
 
   
   /**
-   * »Tick-hook« : code to maintain sane running status.
+   * »Tick-hook« : code to maintain a sane running status.
    * This function will be invoked [regularly](\ref DUTY_CYCLE_PERIOD) while the scheduler
    * is actively processing; in fact this function determines when the scheduler falls empty
    * and can be shut down — and thus regular invocation is equivalent to running state.
@@ -645,16 +657,11 @@ namespace gear {
   {
     auto guard = layer2_.requireGroomingTokenHere();
     
-    // consolidate queue content
-    layer1_.feedPrioritisation();
-    // clean-up of outdated tasks here
-    while (layer1_.isOutdated (now) and not layer1_.isOutOfTime(now))
-      layer1_.pullHead();
-    // protect against missing the deadline of a compulsory task
-    if (layer1_.isOutOfTime (now))
-      {
+    //  consolidate queue and discard outdated tasks
+    if (not layer2_.maintainQueueHead(layer1_,now))
+      {          // missed deadline of compulsory task
         triggerEmergency();
-        return; // leave everything as-is
+        return;//   leave everything as-is
       }
     
     // clean-up of obsolete Activities
