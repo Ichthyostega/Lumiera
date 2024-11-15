@@ -83,7 +83,7 @@ namespace test{
       virtual void
       run (Arg arg)
         {
-          uint num= isnil(arg)? 1 : lexical_cast<uint>(arg[1]);
+          uint num{firstVal (arg)};
           
           Depend<TargetObj> singleton;
           

@@ -52,11 +52,9 @@ namespace test{
   
   
   namespace {
-  
-    uint NUM_ELMS = 10;
-    
-    /** example of simply wrapping an STL container
-     *  and exposing a range as Lumiera Forward Iterator
+    /**
+     * example of simply wrapping an STL container
+     * and exposing a range as Lumiera Forward Iterator
      */
     struct WrappedVector
       {
@@ -81,7 +79,7 @@ namespace test{
       };
     
     
-    /** 
+    /**
      * Example of a more elaborate custom container exposing an iteration API.
      * While the demo implementation here is based on pointers within a vector,
      * we hand out a IterAdapter, which will call back when used by the client,
@@ -188,15 +186,16 @@ namespace test{
    * @note see Ticket #182
    * @see IterAdapter
    * @see itertools.hpp
-   * @see IterSource         
+   * @see IterSource
    */
   class IterAdapter_test : public Test
     {
+      uint NUM_ELMS{0};
       
       virtual void
       run (Arg arg)
         {
-          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[1]);
+          NUM_ELMS = firstVal (arg, 10);
           
           useSimpleWrappedContainer ();
           
@@ -414,7 +413,7 @@ namespace test{
           
           // building a const iterator needs to be done in a somewhat weird way;
           // since we're exposing the pointer as value, the solution is to add
-          // the const on the immediately wrapped iterator type 
+          // the const on the immediately wrapped iterator type
           typedef vector<int>::const_iterator     ConstRawIter;
           typedef RangeIter<ConstRawIter>         ConstRange;
           typedef AddressExposingIter<ConstRange> ConstAddrIter;

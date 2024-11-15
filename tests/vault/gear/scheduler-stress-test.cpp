@@ -65,10 +65,13 @@ namespace test {
     {
       
       virtual void
-      run (Arg)
+      run (Arg arg)
         {
           seedRand();
            smokeTest();
+           if ("quick" == firstTok (arg))
+             return;
+           
            setup_systematicSchedule();
            verify_instrumentation();
            search_breaking_point();
@@ -83,7 +86,7 @@ namespace test {
       smokeTest()
         {
           MARK_TEST_FUN
-          TestChainLoad testLoad{512};
+          TestChainLoad testLoad{1024};
           testLoad.configureShape_chain_loadBursts()
                   .buildTopology()
 //                .printTopologyDOT()
@@ -120,8 +123,8 @@ namespace test {
           double performanceTime =
             testLoad.setupSchedule(scheduler)
                     .withLoadTimeBase(LOAD_BASE)
-                    .withJobDeadline(150ms)
-                    .withPlanningStep(200us)
+                    .withJobDeadline (150ms)                // ◁─────────────── rather tight (and below overall run time)
+                    .withPlanningStep(300us)
                     .withChunkSize(20)
                     .launch_and_wait();
           

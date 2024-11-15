@@ -22,13 +22,14 @@
 */
 
 /** @file run.hpp
- ** Simple test class runner. Allows for writing unit tests as subclass of
+ ** Simplistic test class runner. Allows for writing unit tests as subclass of
  ** test::Test . They may be installed for automatic invocation through test::Suite
  ** by defining a Launcher instance, which can be done conveniently by the macro LAUNCHER
  ** 
  ** @see HelloWorld_test
  ** @see test::Suite
  ** @see testrunner.cpp
+ ** @see random.hpp
  ** @see main.cpp
  */
 
@@ -51,7 +52,7 @@ namespace test {
   using std::string;
   using std::shared_ptr;
   
-  typedef std::vector<string> & Arg; 
+  using Arg = std::vector<string> &;
   
   
   
@@ -62,15 +63,17 @@ namespace test {
   class Test
     {
     public:
-      virtual ~Test()            = default;
+      virtual ~Test()            = default;             ///< this is an interface
       virtual void run(Arg arg)  = 0;
       
-      void seedRand();
-      lib::Random makeRandGen();
+      void seedRand();                                  ///< draw a new random seed from a common nucleus, and re-seed the default-Gen.
+      lib::Random makeRandGen();                        ///< build a dedicated new RandomGen, seeded from the default-Gen
+      static string firstTok (Arg);                     ///< conveniently pick the first token from the argument line
+      static uint   firstVal (Arg, uint =1);            ///< conveniently use some number given as argument, with optional default
     };
-    
-    
-    
+  
+  
+  
   /** interface: generic testcase creating functor. */
   class Launcher
     {
@@ -78,7 +81,7 @@ namespace test {
       virtual ~Launcher()    = default;
       virtual shared_ptr<Test> makeInstance()  =0;
     };
-    
+  
   
   /**
    * Helper class for running a collection of tests.
@@ -109,7 +112,7 @@ namespace test {
     
 } // namespace test
 
-// make them global for convenience 
+// make those global for convenience....
 using ::test::Arg;
 using ::test::Test;
 using ::test::Launch;
@@ -121,8 +124,8 @@ using lib::defaultGen;
 
 // and provide shortcut for registration
 #define LAUNCHER(_TEST_CLASS_, _GROUPS_) \
-  /** Register _TEST_CLASS_ to be invoked in some test suites (groups) _GROUPS_ */    \
-  Launch<_TEST_CLASS_> run_##_TEST_CLASS_##_(STRINGIFY(_TEST_CLASS_), _GROUPS_); 
+  /** Register _TEST_CLASS_ to be invoked in some test suites (groups) _GROUPS_ */  \
+  Launch<_TEST_CLASS_> run_##_TEST_CLASS_##_(STRINGIFY(_TEST_CLASS_), _GROUPS_);
 
 
-#endif
+#endif /*TESTHELPER_RUN_H*/

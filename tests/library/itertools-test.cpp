@@ -54,8 +54,6 @@ namespace test{
   
   namespace { // Test data
     
-    uint NUM_ELMS = 10;
-    
     struct TestSource
       {
         vector<int> data_;
@@ -94,11 +92,13 @@ namespace test{
       
       typedef TestSource::iterator Iter;
       
+      uint NUM_ELMS{0};
+      
       
       virtual void
       run (Arg arg)
         {
-          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[1]);
+          NUM_ELMS = firstVal (arg, 10);
           
           TestSource source(NUM_ELMS);
           

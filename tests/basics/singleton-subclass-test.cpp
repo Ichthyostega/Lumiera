@@ -101,8 +101,7 @@ namespace test{
       virtual void
       run(Arg arg)
         {
-          uint num= isnil(arg)? 1 : lexical_cast<uint>(arg[1]);
-          
+          uint num{firstVal (arg)};
           cout << _Fmt("using the Singleton should create TargetObj(%d)...\n") % num;
           
           Interface::setCountParam(num);

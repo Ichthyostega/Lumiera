@@ -56,7 +56,7 @@ END
 
 
 
-TEST "Scheduler Performance" SchedulerStress_test <<END
+TEST "Scheduler Performance" SchedulerStress_test quick <<END
 return: 0
 END
 

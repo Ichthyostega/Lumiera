@@ -69,11 +69,6 @@ namespace test{
   
   namespace { // Subject of test
     
-    
-    uint NUM_ELMS = 10;
-    
-    typedef const char* CStr;
-    
     /**
      * Explicit implementation of the IterSource interface (test dummy)
      * Creates a random string and chops off a character on each iteration
@@ -181,11 +176,13 @@ namespace test{
       typedef std::unordered_multimap<int,int>HashMultimap;
       
       
+      uint NUM_ELMS{0};
+      
       virtual void
       run (Arg arg)
         {
           seedRand();
-          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[1]);
+          NUM_ELMS = firstVal (arg, 10);
           
           verify_simpleIters();
           verify_transformIter();

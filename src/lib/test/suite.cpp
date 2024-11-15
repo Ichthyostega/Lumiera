@@ -215,7 +215,7 @@ namespace test {
   }
   
   
-  /** draw a new random seed from a common nucleus, and re-seed the default-Gen. */
+
   void
   Test::seedRand()
   {
@@ -223,13 +223,28 @@ namespace test {
   }
   
   
-  /** build a dedicated new RandomGen, seeded from the default-Gen */
   Random
   Test::makeRandGen()
   {
     return Random{lib::seedFromDefaultGen()};
   }
-
+  
+  
+  uint
+  Test::firstVal (Arg arg, uint someNumber)
+  {
+    if (not isnil(arg))
+      someNumber = boost::lexical_cast<uint> (arg[1]); // may throw
+    return someNumber;
+  }
+  
+  string
+  Test::firstTok (Arg arg)
+  {
+    return isnil(arg)? util::BOTTOM_INDICATOR
+                     : arg[1];
+  }
+  
   
   
   /** run all testcases contained in this Suite.

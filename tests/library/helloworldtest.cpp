@@ -49,8 +49,7 @@ namespace test   {
       virtual void
       run (Arg arg)
         {
-          int num= isnil(arg)?  1 : lexical_cast<int> (arg[1]);
-          
+          uint num{firstVal (arg)};
           for ( ; 0 < num-- ; )
             greeting();
         }

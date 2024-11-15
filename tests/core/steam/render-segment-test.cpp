@@ -49,7 +49,8 @@ namespace test {
    */
   class RenderSegment_test : public Test
     {
-      virtual void run(Arg arg) 
+      virtual void
+      run (Arg)
         {
           UNIMPLEMENTED ("complete render process for a given test segment of the Session");
         } 

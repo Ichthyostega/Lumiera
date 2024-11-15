@@ -59,8 +59,6 @@ namespace test {
   
   namespace{ // Test data and operations
     
-    uint NUM_ELMS = 20;
-    
     VecI
     someNumberz (uint count)
     {
@@ -85,14 +83,12 @@ namespace test {
    */
   class UtilCollection_test : public Test
     {
-      
-      void
+      virtual void
       run (Arg arg)
         {
           verify_typeDetectors();
           
-          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[0]);
-          
+          uint NUM_ELMS = firstVal (arg, 20);
           VecI container = someNumberz (NUM_ELMS);
           RangeI iterator(container.begin(), container.end());
           

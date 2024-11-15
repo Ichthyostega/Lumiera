@@ -60,11 +60,6 @@ namespace test{
       cout << "-----"<<STRINGIFY(_F_NAME_)<<"---" << util::typeStr<_F_TYPE_>() << endl;
   
   
-  namespace {
-    uint NUM_ELMS = 10; 
-  }
-  
-  
   
   
   
@@ -90,11 +85,12 @@ namespace test{
    */
   class IterAdapterSTL_test : public Test
     {
+      uint NUM_ELMS{0};
       
       virtual void
       run (Arg arg)
         {
-          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[1]);
+          NUM_ELMS = firstVal (arg, 10);
           
           checkDistinctValIter();
           

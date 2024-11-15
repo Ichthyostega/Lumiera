@@ -59,8 +59,6 @@ namespace test {
   
   namespace{ // Test data and operations
     
-    uint NUM_ELMS = 10;
-    
     // Placeholder for argument in bind-expressions
     std::_Placeholder<1> _1;
     
@@ -122,12 +120,12 @@ namespace test {
    */
   class UtilForeach_test : public Test
     {
+      uint NUM_ELMS{0};
       
-      void
+      virtual void
       run (Arg arg)
         {
-          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[1]);
-          
+          NUM_ELMS = firstVal (arg, 10);
           VecI container = buildTestNumberz (NUM_ELMS);
           RangeI iterator(container.begin(), container.end());
           
@@ -377,9 +375,9 @@ namespace test {
           CHECK ( and_all (coll, [] (uint elm) { return 0 < elm; }));
           CHECK (!and_all (coll, [] (uint elm) { return 1 < elm; }));
           
-          CHECK ( has_any (coll, [] (uint elm) { return 0 < elm; }));
-          CHECK ( has_any (coll, [] (uint elm) { return elm == NUM_ELMS; }));
-          CHECK (!has_any (coll, [] (uint elm) { return elm >  NUM_ELMS; }));
+          CHECK ( has_any (coll, []    (uint elm) { return 0 < elm; }));
+          CHECK ( has_any (coll, [this](uint elm) { return elm == NUM_ELMS; }));
+          CHECK (!has_any (coll, [this](uint elm) { return elm >  NUM_ELMS; }));
         }
       
       

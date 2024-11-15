@@ -246,10 +246,10 @@ function compare_template() # template plainfile
 #tests `TESTSUITES` environment variable.
 #tests
 #tests HEAD~ Testsuites; test files; writing tests
-#tests It is common to start the name of the '.test' files with a 2 digi number to give them a proper
+#tests It is common to start the name of the '.test' files with a 2 digit number to give them a proper
 #tests order: '10foo.test', '20bar.test' and so on. Each such test should only test a certain aspect of
 #tests the system. You have to select the testing binary with the `TESTING` function and then write
-#tests certain TEST's defining how the test should react. Since tests are shell scripts it is possible
+#tests certain TESTs defining how the test should react. Since tests are shell scripts it is possible
 #tests to add some supplemental commands there to set and clean up the given test environment.
 #tests
 #tests HEAD^ TESTING; TESTING; set the test binary
