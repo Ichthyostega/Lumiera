@@ -110,7 +110,7 @@ namespace test {
        */
       void
       demonstrateSimpleUsage()
-        {
+        { MARK_TEST_FUN
           SchedulerInvocation queue;
           SchedulerCommutator sched;
           Activity activity;
@@ -141,7 +141,8 @@ namespace test {
        */
       void
       verify_GroomingToken()
-        {
+        { MARK_TEST_FUN
+          
           SchedulerCommutator sched;
           
           auto myself = std::this_thread::get_id();
@@ -173,7 +174,8 @@ namespace test {
        */
       void
       verify_GroomingGuard()
-        {
+        { MARK_TEST_FUN
+          
           SchedulerCommutator sched;
           
           // Case-1: if a thread already holds the token....
@@ -206,7 +208,8 @@ namespace test {
        */
       void
       torture_GroomingToken()
-        {
+        { MARK_TEST_FUN
+          
           SchedulerCommutator sched;
           
           size_t checkSum{0};
@@ -281,61 +284,12 @@ namespace test {
       
       
       
-      
-      
-//    /** @test verify the logic to decide where and when to perform
-//     *        the dispatch of a Scheduler Activity chain.
-//     */
-//    void
-//    verify_DispatchDecision()
-//      {
-//        SchedulerCommutator sched;
-//        ___ensureGroomingTokenReleased(sched);
-//        
-//        Time t1{10,0};
-//        Time t2{20,0};
-//        Time t3{30,0};
-//        Time now{t2};
-//        
-//        auto myself = std::this_thread::get_id();
-//        CHECK (sched.decideDispatchNow (t1, now));               // time is before now => good to execute
-//        CHECK (sched.holdsGroomingToken (myself));               // Side-Effect: acquired the Grooming-Token
-//        
-//        CHECK (sched.decideDispatchNow (t1, now));               // also works if Grooming-Token is already acquired
-//        CHECK (sched.holdsGroomingToken (myself));
-//        
-//        CHECK (sched.decideDispatchNow (t2, now));               // Boundary case time == now  => good to execute
-//        CHECK (sched.holdsGroomingToken (myself));
-//        
-//        CHECK (not sched.decideDispatchNow (t3, now));           // Task in the future shall not be dispatched now
-//        CHECK (sched.holdsGroomingToken (myself));               // ...and this case has no impact on the Grooming-Token
-//        sched.dropGroomingToken();
-//        
-//        CHECK (not sched.decideDispatchNow (t3, now));
-//        CHECK (not sched.holdsGroomingToken (myself));
-//        
-//        blockGroomingToken(sched);
-//        CHECK (not sched.acquireGoomingToken());
-//        
-//        CHECK (not sched.decideDispatchNow (t1, now));           // unable to acquire => can not decide positively
-//        CHECK (not sched.holdsGroomingToken (myself));
-//        
-//        CHECK (not sched.decideDispatchNow (t2, now));
-//        CHECK (not sched.holdsGroomingToken (myself));
-//        
-//        unblockGroomingToken();
-//        
-//        CHECK (sched.decideDispatchNow (t2, now));
-//        CHECK (sched.holdsGroomingToken (myself));
-//      }
-      
-      
-      
       /** @test verify logic of queue updates and work prioritisation.
        */
       void
       verify_findWork()
-        {
+        { MARK_TEST_FUN
+          
           SchedulerInvocation queue;
           SchedulerCommutator sched;
           
@@ -399,7 +353,8 @@ namespace test {
        */
       void
       verify_Significance()
-        {
+        { MARK_TEST_FUN
+          
           SchedulerInvocation queue;
           SchedulerCommutator sched;
           
@@ -407,7 +362,7 @@ namespace test {
           Time t2{20,0};   Activity a2{2u,2u};
           Time t3{30,0};   Activity a3{3u,3u};
           Time t4{40,0};   Activity a4{4u,4u};
-                     //     start,deadline, manif.ID,       isCompulsory
+                     //    start,deadline, manif.ID,        isCompulsory
           queue.instruct ({a1, t1, t4, ManifestationID{5}});
           queue.instruct ({a2, t2, t2});
           queue.instruct ({a3, t3, t3, ManifestationID{23}, true});
@@ -473,7 +428,8 @@ namespace test {
        */
       void
       verify_postChain()
-        {
+        { MARK_TEST_FUN
+          
           // rigged execution environment to detect activations--------------
           ActivityDetector detector;
           Activity& activity = detector.buildActivationProbe ("testActivity");
@@ -552,7 +508,8 @@ namespace test {
        */
       void
       verify_dispatch()
-        {
+        { MARK_TEST_FUN
+          
           // rigged execution environment to detect activations--------------
           ActivityDetector detector;
           Activity& activity = detector.buildActivationProbe ("testActivity");
@@ -621,6 +578,7 @@ namespace test {
       void
       integratedWorkCycle()
         { //   ·==================================================================== setup a rigged Job
+          MARK_TEST_FUN
           Time nominal{7,7};
           Time start{0,1};
           Time dead{0,10};
