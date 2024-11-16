@@ -132,9 +132,9 @@ namespace test {
       
       
       void
-      joinOnceOnly ()
+      joinOnceOnly()
         {
-          ThreadJoinable theThread{"joining-4"
+          ThreadJoinable theThread{"test join-4"
                                   ,[]{ sleep_for (10ms); }};
           theThread.join();
           
