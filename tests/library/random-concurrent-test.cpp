@@ -37,15 +37,20 @@
 #include "lib/test/diagnostic-output.hpp"
 
 #include <deque>
+#include <tuple>
+//#include <array>
 //using util::isLimited;
+//using std::array;
+using std::tuple;
+using std::deque;
 
 namespace lib {
 namespace test {
   
   namespace {
     const uint NUM_THREADS = 8;
-    
-    const uint NUM_INVOKE = 1'000'000;
+    const uint NUM_REPEATS = 10;
+    const uint NUM_INVOKES = 1'000'000;
     
     
   }
@@ -71,36 +76,47 @@ namespace test {
       investigate_concurrentAccess()
         {
           struct Results
-            : std::deque<double>
+            : deque<tuple<double,uint>>
             , Sync<>
             {
               void
-              post (double val)
+              post (double err, uint fails)
                 {
                   Lock sync(this);
-                  push_back (val);
+                  emplace_back (err, fails);
                 }
             };
             
             Results results;
           
-          const uint N = NUM_INVOKE;
-          auto expect = RAND_MAX / 2;
+          using Engine = std::mt19937;
+//        using Engine = std::mt19937_64;
+          
+          Engine ranGen{defaultGen.u64()};
+          
+          const uint N = NUM_INVOKES;
+          auto expect = (Engine::max() - Engine::min()) / 2;
           
           auto drawRandom = [&]()
                               {
+                                uint fail{0};
                                 double avg{0.0};
                                 for (uint i=0; i<N; ++i)
-                                  avg += 1.0/N * rani();
+                                  {
+                                    auto r = ranGen();
+                                    if (r < Engine::min() or r > Engine::max())
+                                      ++fail;
+                                    avg += 1.0/N * (r % Engine::max());
+                                  }
                                 auto error = avg/expect - 1;
-                                results.post (error);
+                                results.post (error, fail);
                               };
           
-          auto [dur,sum] = threadBenchmark<NUM_THREADS> (drawRandom, 1);
+          auto [dur,sum] = threadBenchmark<NUM_THREADS> (drawRandom, NUM_REPEATS);
           for (auto res : results)
             SHOW_EXPR(res);
           SHOW_EXPR(sum)
-          SHOW_EXPR(dur/NUM_INVOKE)
+          SHOW_EXPR(dur/NUM_INVOKES)
         }
     };
   
