@@ -37,8 +37,9 @@
 
 
 #include "lib/hash-standard.hpp"
-#include "vault/gear/job.h"
+#include "lib/hash-combine.hpp"
 #include "lib/time/timevalue.hpp"
+#include "vault/gear/job.h"
 
 #include <string>
 

@@ -32,6 +32,7 @@
 
 #include "steam/engine/job-ticket.hpp"
 #include "vault/gear/nop-job-functor.hpp"
+#include "lib/hash-combine.hpp"
 #include "lib/depend.hpp"
 #include "lib/util.hpp"
 

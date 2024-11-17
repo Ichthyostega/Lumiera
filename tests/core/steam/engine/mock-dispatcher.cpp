@@ -44,8 +44,8 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
 #include "vault/real-clock.hpp"
+#include "lib/hash-combine.hpp"
 #include "lib/null-value.hpp"
-#include "lib/hash-value.h"
 #include "lib/depend.hpp"
 #include "lib/util.hpp"
 

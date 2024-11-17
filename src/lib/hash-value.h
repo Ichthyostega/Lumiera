@@ -26,6 +26,10 @@
  ** This header defines the basic hash value types and provides some simple
  ** utilities to support working with hash values.
  **
+ ** @todo 11/2024 : to ensure a strong and reproducible implementation of hash-chaining,
+ **                 the implementation of LibBoost is used directly. This breaks portability.
+ **                 ///////////////////////////////////////////////////////////////////////////////TICKET #722
+ ** @see hash-combine.hpp
  ** @see HashIndexed
  **
  */
@@ -49,6 +53,7 @@ typedef lumiera_uid* LumieraUid;
 
 #ifdef __cplusplus  /* =========== C++ definitions ====================== */
 
+#include <climits>
 
 namespace lib {
   
@@ -59,57 +64,8 @@ namespace lib {
   typedef lumiera_uid* LUID;
   
   
-  
-  namespace hash {
-    
-    /** meld the additional hash value into the given
-     *  base hash value. This is the standard formula
-     *  used by the STL and Boost to combine the
-     *  hash values of parts into a composite.
-     */
-    inline void
-    combine (size_t & combinedHash, size_t additionalHash)
-    {
-      combinedHash ^= additionalHash
-                    + 0x9e3779b9
-                    + (combinedHash<<6)
-                    + (combinedHash>>2);
-    }
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #722 : Boost uses a stronger impl here on 64bit platforms
-    /// see: Boost 1.67 <include>/boost/container_has/hash.hpp
-    ///
- /*
-// Don't define 64-bit hash combine on platforms without 64 bit integers,
-// and also not for 32-bit gcc as it warns about the 64-bit constant.
-#if !defined(BOOST_NO_INT64_T) && \
-        !(defined(__GNUC__) && ULONG_MAX == 0xffffffff)
-
-        inline void hash_combine_impl(boost::uint64_t& h,
-                boost::uint64_t k)
-        {
-            const boost::uint64_t m = UINT64_C(0xc6a4a7935bd1e995);
-            const int r = 47;
-
-            k *= m;
-            k ^= k >> r;
-            k *= m;
-
-            h ^= k;
-            h *= m;
-
-            // Completely arbitrary number, to prevent 0's
-            // from hashing to 0.
-            h += 0xe6546b64;
-        }
-
-#endif // BOOST_NO_INT64_T
-      */
-     //
-    // WIP more utils to come here....
-  }
-  
-  
-  
+  //////////////////////////////////////TICKET #722 : hash_combine utility extracted into separate header 11/2024
+  ///
 } // namespace lib
 #endif /* C++ */
 #endif /*LIB_HASH_UTIL_H*/

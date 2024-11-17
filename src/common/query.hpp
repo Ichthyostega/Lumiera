@@ -75,11 +75,11 @@
 #define LUMIERA_QUERY_H
 
 
+#include "lib/hash-combine.hpp"
 #include "lib/typed-counter.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/query-text.hpp"
 #include "lib/query-util.hpp"
-#include "lib/hash-value.h"
 #include "lib/nocopy.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
