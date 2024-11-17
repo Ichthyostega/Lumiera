@@ -138,6 +138,8 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
+          
           attachNewBusTerm();
           commandInvocation();
           captureStateMark();
@@ -669,17 +671,20 @@ namespace test {
                 : ThreadJoinable{"BusTerm_test: asynchronous diff mutation"
                                 , [=]
                                     {
-                                      uint cnt       = rand() % MAX_RAND_BORGS;
+                                      uint cnt       = randGen_.i(MAX_RAND_BORGS);
                                       for (uint i=0; i<cnt; ++i)
                                         {
-                                          uint delay = rand() % MAX_RAND_DELAY;
-                                          uint id    = rand() % MAX_RAND_NUMBS;
+                                          uint delay = randGen_.i(MAX_RAND_DELAY);
+                                          uint id    = randGen_.i(MAX_RAND_NUMBS);
                                           usleep (delay);
                                           scheduleBorg (id);
                                           notifyGUI (new BorgGenerator{*this, i});
                                         }
                                     }}
                 { }
+                
+              private:
+                lib::Random randGen_{lib::seedFromDefaultGen()};
             };
           
           

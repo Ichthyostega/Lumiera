@@ -230,7 +230,7 @@ namespace test{
             public:
               Special()
                 : Probe<555>()
-                , secret_('a' + (rand() % (1+'z'-'a')))
+                , secret_('a' + rani('z'-'a' +1))
                 {
                   checksum += secret_;
                 }

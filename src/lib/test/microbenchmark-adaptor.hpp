@@ -83,7 +83,7 @@ namespace microbenchmark {
       wrap (FUN&& fun)
         {
           return [functor=std::forward<FUN>(fun)]
-                 (size_t)
+                 (size_t) mutable
                     {
                       functor();
                       return size_t(1);
@@ -101,7 +101,7 @@ namespace microbenchmark {
       wrap (FUN&& fun)
         {
           return [functor=std::forward<FUN>(fun)]
-                 (size_t i)
+                 (size_t i)  mutable
                     {
                       return size_t(functor(i));
                     };
@@ -117,7 +117,7 @@ namespace microbenchmark {
       wrap (FUN&& fun)
         {
           return [functor=std::forward<FUN>(fun)]
-                 (size_t)
+                 (size_t) mutable
                     {
                       return size_t(functor());
                     };
@@ -133,7 +133,7 @@ namespace microbenchmark {
       wrap (FUN&& fun)
         {
           return [functor=std::forward<FUN>(fun)]
-                 (size_t i)
+                 (size_t i) mutable
                     {
                       functor(i);
                       return size_t(1);

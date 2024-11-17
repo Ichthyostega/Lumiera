@@ -162,6 +162,7 @@ namespace test{
       void
       verify_heavilyParallelUsage()
         {
+          seedRand();
           auto verifyResult = [](VecI sequence)
                                {
                                   uint prev = 0;
@@ -183,27 +184,20 @@ namespace test{
         }
       
       
-      /** build a call stack within separate thread and capture diagnostics */
+      /**
+       * Build a call stack within separate thread and capture diagnostics.
+       * The actual test operation produces a descending number sequence,
+       * and only odd values will be captured into the diagnostic stack-
+       */
       struct TestThread
         : ThreadJoinable<VecI>
         {
           TestThread()
-            : ThreadJoinable("test context stack"
-                            ,&verifyDiagnosticStack)
+            : ThreadJoinable{"test context stack"
+                            ,[seed = 1+rani(MAX_RAND)]
+                             { return descend (seed); }}
             { }
         };
-      
-      
-      /** the actual test operation running in a separate thread
-       *  produces a descending number sequence, and only odd values
-       *  will be captured into the diagnostic stack
-       */
-      static VecI
-      verifyDiagnosticStack()
-        {
-          uint seed (1 + rand() % MAX_RAND);            /////////////////////////OOO brauche rani() auf lokalem Generator
-          return descend (seed);
-        }
       
       static VecI
       descend (uint current)
@@ -213,7 +207,7 @@ namespace test{
           
           sleep_for (500us);
           
-          if (isOdd(current))
+          if (isOdd (current))
             {
               Marker remember(current);
               return descend (current+1);

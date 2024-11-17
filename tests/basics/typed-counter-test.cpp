@@ -47,6 +47,7 @@
 #include "lib/random.hpp"
 #include "lib/util.hpp"
 
+#include <cstdlib>
 #include <utility>
 #include <array>
 
@@ -183,9 +184,11 @@ namespace test{
           
           TypedCounter testCounter;
           
-          auto testSubject = [&, i = rani(MAX_INDEX)]
-                             (size_t) -> size_t
+          auto testSubject = [&
+                             ,gen = makeRandGen()]
+                             (size_t) mutable -> size_t
                                 {
+                                  uint i = gen.i(MAX_INDEX);
                                   operators[i](testCounter);
                                   return 1;
                                 };

@@ -133,7 +133,7 @@ namespace test {
           Extent& extent{*it};
           CHECK (10 == extent.size());
           
-          int num = rand() % 1000;
+          int num = rani(1000);
           extent[2] = num;
           CHECK (num == extent[2]);
           
@@ -173,7 +173,7 @@ namespace test {
             struct Probe
               {
                 short val;
-                Probe() : val(1 + rand() % 1000) { }
+                Probe() : val(1 + rani(1000)) { }
                ~Probe() { val = 0; }
               };
           

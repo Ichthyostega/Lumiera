@@ -63,6 +63,8 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
+          auto gen = buildCappedSubSequence(defaultGen);
           int contended = 0;
           
           using Threads = lib::ScopedCollection<ThreadJoinable<>>;
@@ -75,7 +77,7 @@ namespace test {
                                                                 ,[&]{
                                                                       for (uint i=0; i<NUM_LOOP; ++i)
                                                                         {
-                                                                          uint delay = rand() % 10;
+                                                                          uint delay = gen.i(10);
                                                                           usleep (delay);
                                                                           {
                                                                             ClassLock<void> guard;
@@ -87,7 +89,7 @@ namespace test {
                          };
           
           for (auto& thread : threads)
-            thread.join(); // block until thread terminates
+            thread.join(); // block until thread terminates   // @suppress("Return value not evaluated")
           
           CHECK (contended == NUM_THREADS * NUM_LOOP,
                  "ALARM: Lock failed, concurrent modification "

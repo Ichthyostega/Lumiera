@@ -165,9 +165,10 @@ namespace test{
     struct Thread
       : lib::ThreadJoinable<>
       {
-        Thread(Subject const& testSubject, size_t loopCnt, SyncBarrier& testStart)
+        Thread(Subject const& subject, size_t loopCnt, SyncBarrier& testStart)
           : ThreadJoinable{"Micro-Benchmark"
-                          ,[=, &testStart]()       // local copy of the test-subject-Functor
+                          ,[this,loopCnt, testSubject=subject, &testStart]
+                           () mutable              // local (mutable) copy of the test-subject-Functor
                              {
                                testStart.sync();   // block until all threads are ready
                                auto start = steady_clock::now();

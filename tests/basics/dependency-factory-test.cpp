@@ -57,7 +57,7 @@ namespace test{
         
         Sub()
           : TestTargetObj(created++)
-          ,instanceID_(rand() % MAX_ID)
+          ,instanceID_(rani(MAX_ID))
           { }
         
         virtual operator string()  const

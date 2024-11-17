@@ -464,7 +464,7 @@ namespace test {
           CHECK (3 == wof.size());
           
           while (check < 6'000)
-            sleep_for(10ms);  // .....sufficiently long to count way beyond 10'000
+            sleep_for(15ms);  // .....sufficiently long to count way beyond 10'000
           CHECK (check > 6'000);
           CHECK (1 == wof.size());
         }

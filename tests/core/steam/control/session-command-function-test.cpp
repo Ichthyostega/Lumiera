@@ -58,7 +58,7 @@
  ** Astute readers might have noticed, that the test fixture is sloppy with respect to proper
  ** locking and synchronisation. Rather, some explicit sleep commands are interspersed in a way
  ** tuned to work satisfactory in practice. This whole approach can only work, because each
- ** Posix locking call actually requires the runtime system to issue a read/write barrier,
+ ** POSIX locking call actually requires the runtime system to issue a read/write barrier,
  ** which are known to have global effects on the relevant platforms (x86 and x86_64).
  ** And because the production relevant code in SteamDispatcher uses sufficient (in fact
  ** even excessive) locking, the state variables of the test fixture are properly synced
@@ -322,11 +322,12 @@ namespace test    {
        *          sequential calculation and summation
        */
       void
-      perform_massivelyParallel(Arg args_for_stresstest)
+      perform_massivelyParallel (Arg args_for_stresstest)
         {
-          maybeOverride(NUM_THREADS_DEFAULT, args_for_stresstest, 1);
-          maybeOverride(NUM_INVOC_PER_THRED, args_for_stresstest, 2);
-          maybeOverride(MAX_RAND_DELAY_us,   args_for_stresstest, 3);
+          seedRand();
+          maybeOverride (NUM_THREADS_DEFAULT, args_for_stresstest, 1);
+          maybeOverride (NUM_INVOC_PER_THRED, args_for_stresstest, 2);
+          maybeOverride (MAX_RAND_DELAY_us,   args_for_stresstest, 3);
           
           
           // we'll run several instances of the following thread....
@@ -336,11 +337,12 @@ namespace test    {
               SyncBarrier& barrier_;
               FamilyMember<InvocationProducer> id_;
               vector<string> cmdIDs_;
+              lib::Random random_;
               
               lib::ThreadJoinable<void> thread_;
               
               Symbol
-              cmdID(uint j)
+              cmdID (uint j)
                 {
                   cmdIDs_.push_back (_Fmt("%s.thread-%02d.%d") % COMMAND_ID % id_ % j);
                   return cStr(cmdIDs_.back());
@@ -350,6 +352,7 @@ namespace test    {
             public:
               InvocationProducer (SyncBarrier& trigger)
                 : barrier_{trigger}
+                , random_{defaultGen}
                 , thread_{"producer", [&]{ fabricateCommands(); }}
                 { }
               
@@ -376,16 +379,16 @@ namespace test    {
                 }
               
               static void
-              sendCommandMessage(GenNode msg)
+              sendCommandMessage (GenNode msg)
                 {
                   SessionCommand::facade().trigger (msg.idi.getSym(), msg.data.get<Rec>());
                 }
               
-              static void
+              void
               __randomDelay()
                 {
                   if (not MAX_RAND_DELAY_us) return;
-                  sleep_for (microseconds (1 + rand() % MAX_RAND_DELAY_us));   // random delay varying in steps of 1µs
+                  sleep_for (microseconds (1 + random_.i(MAX_RAND_DELAY_us)));   // random delay varying in steps of 1µs
                 }
             };
           

@@ -187,6 +187,7 @@ namespace test{
           uint64_t consumerSum = 0;
           
           SyncBarrier& trigger_;
+          Random rand_;
           
           void
           countConsumerCall (uint increment)
@@ -198,13 +199,13 @@ namespace test{
           Worker(CallQueue& queue, SyncBarrier& commonTrigger)
             : ThreadJoinable{"CallQueue_test: concurrent dispatch"
                             , [&]() {
-                                uint cnt    = rand() % MAX_RAND_STEPS; //////////////////////////////OOO brauche rani auf lokalem Generator!
-                                uint delay  = rand() % MAX_RAND_DELAY;
+                                uint cnt    = rand_.i(MAX_RAND_STEPS);
+                                uint delay  = rand_.i(MAX_RAND_DELAY);
                                 
                                 trigger_.sync();            // block until all threads are ready
                                 for (uint i=0; i<cnt; ++i)
                                   {
-                                    uint increment = rand() % MAX_RAND_INCMT;
+                                    uint increment = rand_.i(MAX_RAND_INCMT);
                                     queue.feed ([=]() { countConsumerCall(increment); });
                                     producerSum += increment;
                                     usleep (delay);
@@ -212,6 +213,7 @@ namespace test{
                                   }                 //        and thus belonging to some random other thread
                             }}
             , trigger_{commonTrigger}
+            , rand_{defaultGen}
             { }
         };
       
@@ -227,7 +229,7 @@ namespace test{
       void
       verify_ThreadSafety()
         {
-          ////////////////////////////////////////////////OOO seedRandom()
+          seedRand();
           CallQueue queue;
           SyncBarrier trigger{NUM_OF_THREADS + 1};
           

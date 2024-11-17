@@ -17,6 +17,6 @@ return: 0
 END
 
 
-TEST "Concurrent PRNG access" RandomConcurrent_test << END
+TEST "Concurrent PRNG access" RandomConcurrent_test quick << END
 return: 0
 END

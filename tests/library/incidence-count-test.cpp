@@ -222,8 +222,11 @@ namespace test{
           watch.expectThreads(CONCURR)
                .expectIncidents(10000);
           
-          auto act = [&]{ // two nested activities with random delay
-                          uint delay = 100 + rand() % 800;
+          auto act = [&
+                     ,gen = makeRandGen()]// local random generator per thread
+                     () mutable
+                        { // two nested activities with random delay
+                          uint delay = 100 + gen.i(800);
                           watch.markEnter();
                           sleep_for (microseconds(delay));
                           watch.markEnter(2);

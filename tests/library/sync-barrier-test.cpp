@@ -69,15 +69,16 @@ namespace test {
         public:
           TestThread()
             : Thread{"Load Test"
-                    ,[&]()
+                    ,[&, ran=lib::Random{seedFromDefaultGen()}]
+                     () mutable
                         {                                   //-STAGE-1------------------------------
-                          localSum = rand() % 1000;         // generate local value
+                          localSum = ran.i(1000);           // generate local value
                           stage1.fetch_add (localSum);      // book in local value
                           interThread.sync();               // wait for all other threads to have booked in
                           
                                                             //-STAGE-2------------------------------
                           uint sync = stage1;               // pick up compounded sum from STAGE-1
-                          localSum += rand() % 1000;        // add further local value for STAGE-2
+                          localSum += ran.i(1000);          // add further local value for STAGE-2
                           stage2.fetch_add (localSum+sync); // book in both local values and synced sum
                           afterThread.sync();               // wait for other threads and supervisor
                           
@@ -117,6 +118,8 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
+          // Launch several TestThread
           array<TestThread,NUM_THREADS> threads;
           
           CHECK (0 == finish);
