@@ -1,26 +1,17 @@
 /*
   XvDisplayer  -  XVideo display
 
-  Copyright (C)         Lumiera.org
-    2000,               Arne Schirmacher <arne@schirmacher.de>
-    2001-2007,          Dan Dennedy <dan@dennedy.org>
-    2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
+   Copyright (C)
+     2000,            Arne Schirmacher <arne@schirmacher.de>
+     2001-2007,       Dan Dennedy <dan@dennedy.org>
+     2008,            Joel Holdsworth <joel@airwebreathe.org.uk>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+* *****************************************************************/
 
 
 /** @file xvdisplayer.cpp
@@ -64,26 +55,26 @@ namespace output {
       window = GDK_WINDOW_XID (area_window->gobj());
       display = GDK_WINDOW_XDISPLAY (area_window->gobj());
     
-      unsigned int  count;
+      uint  count;
       XvAdaptorInfo* adaptorInfo;
     
       if (XvQueryAdaptors (display, window, &count, &adaptorInfo) == Success)
         {
           INFO(stage, "XvQueryAdaptors count: %d", count);
-          for (unsigned int n = 0; gotPort == false && n < count; ++n )
+          for (uint n = 0; gotPort == false && n < count; ++n )
             {
               // Diagnostics
               INFO(stage, "%s, %lu, %lu", adaptorInfo[ n ].name,
                 adaptorInfo[ n ].base_id, adaptorInfo[ n ].num_ports - 1);
     
-              for ( unsigned int port = adaptorInfo[ n ].base_id;
+              for (uint port = adaptorInfo[ n ].base_id;
                       port < adaptorInfo[ n ].base_id + adaptorInfo[ n ].num_ports;
                       port ++ )
                 {
                   if ( XvGrabPort( display, port, CurrentTime ) == Success )
                     {
                       int formats;
-                      XvImageFormatValues *list;
+                      XvImageFormatValues* list;
     
                       list = XvListImageFormats( display, port, &formats );
     
@@ -118,11 +109,11 @@ namespace output {
           if ( gotPort )
             {
               int num;
-              unsigned int unum;
-              XvEncodingInfo *enc;
+              uint unum;
+              XvEncodingInfo* enc;
               
               XvQueryEncodings( display, grabbedPort, &unum, &enc );
-              for ( unsigned int index = 0; index < unum; index ++ )
+              for (uint index = 0; index < unum; ++index )
                 {
                   INFO (stage, "%d: %s, %ldx%ld rate = %d/%d"
                              , index, enc->name
@@ -131,18 +122,19 @@ namespace output {
                              , enc->rate.denominator);
                 }
               
-              XvAttribute *xvattr = XvQueryPortAttributes (display, grabbedPort, &num);
+              XvAttribute* xvattr = XvQueryPortAttributes (display, grabbedPort, &num);
               for (int k = 0; k < num; k++ )
                 {
                   if ( xvattr[k].flags & XvSettable ) 
                     {
-                      if ( strcmp( xvattr[k].name, "XV_AUTOPAINT_COLORKEY") == 0 )
+                      if (strcmp (xvattr[k].name, "XV_AUTOPAINT_COLORKEY") == 0 )
                         {
                           Atom val_atom = XInternAtom( display, xvattr[k].name, False );
                           if (XvSetPortAttribute(display, grabbedPort, val_atom, 1 ) != Success )
                             NOBUG_ERROR(stage, "Couldn't set Xv attribute %s\n", xvattr[k].name);
                         }
-                      else if (  strcmp( xvattr[k].name, "XV_COLORKEY") == 0 )
+                      else 
+                      if (strcmp (xvattr[k].name, "XV_COLORKEY") == 0 )
                         {
                           Atom val_atom = XInternAtom( display, xvattr[k].name, False );
                           if ( XvSetPortAttribute( display, grabbedPort, val_atom, 0x010102 ) != Success )
@@ -167,11 +159,11 @@ namespace output {
                 }
               else
                 {
-                  shmInfo.shmaddr = (char *) shmat (shmInfo.shmid, 0, 0);
+                  shmInfo.shmaddr = (char*) shmat (shmInfo.shmid, 0, 0);
                   xvImage->data = shmInfo.shmaddr;
                   shmInfo.readOnly = 0;
     
-                  if ( !XShmAttach( display, &shmInfo ))
+                  if (!XShmAttach (display, &shmInfo))
                   {
                     gotPort = false;
                   }

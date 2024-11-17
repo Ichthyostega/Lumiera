@@ -1,24 +1,15 @@
 /*
   XVDISPLAYER.hpp  -  XVideo display
 
-  Copyright (C)         Lumiera.org
-    2000,               Arne Schirmacher <arne@schirmacher.de>
-    2001-2007,          Dan Dennedy <dan@dennedy.org>
-    2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
+   Copyright (C)
+     2000,            Arne Schirmacher <arne@schirmacher.de>
+     2001-2007,       Dan Dennedy <dan@dennedy.org>
+     2008,            Joel Holdsworth <joel@airwebreathe.org.uk>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -72,7 +63,7 @@ namespace output {
        * @param height The height of the video image in pixels. This value
        *            must be greater than zero.
        */
-      XvDisplayer (Gtk::Widget *drawing_area, int width, int height);
+      XvDisplayer (Gtk::Widget* drawing_area, int width, int height);
       
      ~XvDisplayer();
       
@@ -99,18 +90,18 @@ namespace output {
        * The current port being used.
        * @remarks This value is meaningless unless gotPort is true.
        */
-      unsigned int grabbedPort;
+      uint grabbedPort;
       
       /**
        * The widget that video will be drawn into.
        * @remarks This value must be a valid pointer.
        */
-      Gtk::Widget *drawingArea;
+      Gtk::Widget* drawingArea;
       
       /**
        * The display that video will be drawn into.
        */
-      Display *display;
+      Display* display;
       
       /**
        * The X11 window that video will be drawn into.
@@ -125,7 +116,7 @@ namespace output {
       /**
        * The shared memory image object which video will be written into.
        */
-      XvImage *xvImage;
+      XvImage* xvImage;
       
       /**
        * Info about the shared memory segment.

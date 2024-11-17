@@ -1,24 +1,15 @@
 /*
   DummyPlayerService  -  access point and service implementing a dummy test player
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+* *****************************************************************/
 
 
 /** @file dummy-player-service.cpp
@@ -138,8 +129,8 @@ namespace steam  {
                                                                {
                                                                  (void)ifa;
                                                                  return
-                                                                   "Copyright (C)        Lumiera.org\n"
-                                                                   "  2009               Hermann Vosseler <Ichthyostega@web.de>";
+                                                                 "Copyright (C)\n"
+                                                                 "  2009,            Hermann Vosseler <Ichthyostega@web.de>";
                                                                }
                                                             )
                                  , LUMIERA_INTERFACE_INLINE (license,
@@ -147,19 +138,11 @@ namespace steam  {
                                                                {
                                                                  (void)ifa;
                                                                  return
-                                                                   "This program is free software; you can redistribute it and/or modify\n"
-                                                                   "it under the terms of the GNU General Public License as published by\n"
-                                                                   "the Free Software Foundation; either version 2 of the License, or\n"
-                                                                   "(at your option) any later version.\n"
-                                                                   "\n"
-                                                                   "This program is distributed in the hope that it will be useful,\n"
-                                                                   "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-                                                                   "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
-                                                                   "GNU General Public License for more details.\n"
-                                                                   "\n"
-                                                                   "You should have received a copy of the GNU General Public License\n"
-                                                                   "along with this program; if not, write to the Free Software\n"
-                                                                   "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA";
+                                                                 "**Lumiera** is free software; you can redistribute it and/or modify it\n"
+                                                                 "under the terms of the GNU General Public License as published by the\n"
+                                                                 "Free Software Foundation; either version 2 of the License, or (at your\n"
+                                                                 "option) any later version. See the file COPYING for further details."
+                                                                 ;
                                                                }
                                                             )
                                  , LUMIERA_INTERFACE_INLINE (state,

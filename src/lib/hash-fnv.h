@@ -1,11 +1,10 @@
 /*
   HASH-FNV.h  -  FNV hash functions
 
-  adapted by            Lumiera.org
-    2010, 2011          Christian Thaeter <ct@pipapo.org>
-
   original by           chongo <Landon Curt Noll> /\oo/\
                           http://www.isthe.com/chongo/
+  adapted for Lumiera
+    2010, 2011          Christian Thaeter <ct@pipapo.org>
 
   Please do not copyright this code.  This code is in the public domain.
 

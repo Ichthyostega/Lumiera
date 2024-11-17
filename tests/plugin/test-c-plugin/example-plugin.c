@@ -1,24 +1,15 @@
 /*
   ExamplePlugin  -  example plugin for testing the interface/plugin system
 
-  Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
+   Copyright (C)
+     2008,            Christian Thaeter <ct@pipapo.org>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+* *****************************************************************/
 
 /** @file example-plugin.c
  ** Dummy C plug-in to cover the plugin loader for unit test
@@ -136,8 +127,8 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                                                       {
                                                         (void)iface;
                                                         return
-                                                          "Copyright (C)        Lumiera.org\n"
-                                                          "  2008               Christian Thaeter <ct@pipapo.org>";
+                                                                 "Copyright (C)\n"
+                                                                 "  2008,            Christian Thaeter <ct@pipapo.org>";
                                                       }
                                                       ),
                             LUMIERA_INTERFACE_INLINE (license,
@@ -145,19 +136,11 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                                                       {
                                                         (void)iface; 
                                                         return
-                                                          "This program is free software; you can redistribute it and/or modify\n"
-                                                          "it under the terms of the GNU General Public License as published by\n"
-                                                          "the Free Software Foundation; either version 2 of the License, or\n"
-                                                          "(at your option) any later version.\n"
-                                                          "\n"
-                                                          "This program is distributed in the hope that it will be useful,\n"
-                                                          "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-                                                          "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
-                                                          "GNU General Public License for more details.\n"
-                                                          "\n"
-                                                          "You should have received a copy of the GNU General Public License\n"
-                                                          "along with this program; if not, write to the Free Software\n"
-                                                          "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA";
+                                                                 "**Lumiera** is free software; you can redistribute it and/or modify it\n"
+                                                                 "under the terms of the GNU General Public License as published by the\n"
+                                                                 "Free Software Foundation; either version 2 of the License, or (at your\n"
+                                                                 "option) any later version. See the file COPYING for further details."
+                                                                 ;
                                                       }
                                                       ),
 
