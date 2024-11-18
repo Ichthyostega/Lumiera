@@ -18,12 +18,13 @@
 
 #include "lib/error.hpp"
 #include "lib/random.hpp"
+#include "lib/hash-standard.hpp"
+#include "lib/hash-combine.hpp"
 #include "steam/engine/testframe.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
 #include <climits>
-#include <cstring>
 #include <memory>
 #include <vector>
 
@@ -33,10 +34,8 @@ namespace steam {
 namespace engine {
 namespace test   {
   
-  using lib::HashVal;
+  using util::unConst;
   using std::vector;
-  using std::memcpy;
-  using lib::rani;
   
   /** @note using a random-congruential engine to generate the payload data */
   using PseudoRandom = lib::RandomSequencer<std::minstd_rand>;
@@ -69,14 +68,16 @@ namespace test   {
     HashVal dataSeed{drawSeed(lib::entropyGen)};
     
     /** @internal helper for generating unique test frames.
-     * This "discriminator" is used as a random seed when filling the test frame data buffers.
+     * This »discriminator« is used as a random seed when filling the test frame data buffers.
      * It is generated to be very likely different on adjacent frames of the same series,
      * as well as to differ to all nearby neighbouring channels.
+     * @note the #dataSeed hash is limited by #SEQUENCE_SPREAD to prevent „risky“ families;
+     *   the extreme case would be dataSeed+family ≡ 0 (all frames would be equal then)
      * @param seq the sequence number of the frame within the channel
      * @param family the channel this frame belongs to
      */
     uint64_t
-    generateDistinction(uint seq, uint family)
+    generateDiscriminator(uint seq, uint family)
     {
       // use the family as stepping
       return (seq+1) * (dataSeed+family);
@@ -98,6 +99,15 @@ namespace test   {
             return fixPoint_;
           }
       };
+    
+    /** @return a stable characteristic memory marker for the metadata record */
+    HashVal
+    stampHeader()
+    {
+      static const HashVal MARK = lib::entropyGen.hash()
+                                | 0b1000'1000'1000'1000'1000'1000'1000'1000;
+      return MARK;
+    }
     
     /** @internal build a PRNG starting from the referred fixed seed */
     auto
@@ -225,43 +235,68 @@ namespace test   {
   
   /* ===== TestFrame class ===== */
   
+  TestFrame::Meta::Meta (uint seq, uint family)
+    : _MARK_{stampHeader()}
+    , checksum{0}
+    , distinction{generateDiscriminator (seq,family)}
+    , stage{CREATED}
+    { }
+  
   TestFrame::~TestFrame()
     {
-      stage_ = DISCARDED;
+      header_.stage = DISCARDED;
     }
   
   
-  TestFrame::TestFrame(uint seq, uint family)
-    : distinction_(generateDistinction (seq,family))
-    , stage_(CREATED)
+  TestFrame::TestFrame (uint seq, uint family)
+    : header_{seq,family}
     {
-      ASSERT (0 < distinction_);
-      buildData();
+      ASSERT (0 < header_.distinction);
+      header_.checksum = buildData();
+      ENSURE (CREATED == header_.stage);
+      ENSURE (isPristine());
     }
   
   
   TestFrame::TestFrame (TestFrame const& o)
-    : distinction_(o.distinction_)
-    , stage_(CREATED)
+    : header_{o.header_}
     {
-      memcpy (buffer_, o.buffer_, BUFFSIZ);
+      data() = o.data();
+      header_.stage = CREATED;
     }
   
   TestFrame&
   TestFrame::operator= (TestFrame const& o)
     {
-      if (DISCARDED == stage_)
-        throw new error::Logic ("target TestFrame is already dead");
+      if (not isAlive())
+        throw new error::Logic ("target TestFrame already dead or unaccessible");
       if (not util::isSameAdr (this, o))
         {
-          distinction_ = o.distinction_;
-          stage_ = CREATED;
-          memcpy (buffer_, o.buffer_, BUFFSIZ);
+          data() = o.data();
+          header_ = o.header_;
+          header_.stage = CREATED;
         }
       return *this;
     }
   
   
+  TestFrame::Meta&
+  TestFrame::accessHeader()
+  {
+    return header_;
+  }
+  TestFrame::Meta const&
+  TestFrame::accessHeader()  const
+  {
+    ///////////////////////OOO detect if valid header present and else throw
+    return unConst(this)->accessHeader();
+  }
+  
+  TestFrame::StageOfLife
+  TestFrame::currStage()  const
+  {
+    ///////////////////////OOO detect if valid header present and then access
+  }
   
   /** @note performing an unchecked conversion of the given
    *        memory location to be accessed as TestFrame.
@@ -301,45 +336,72 @@ namespace test   {
     return true;
   }
   
+  
+  HashVal
+  TestFrame::buildData()
+  {
+    auto gen = buildDataGenFrom (accessHeader().distinction);
+    for (uint i=0; i<BUFFSIZ; ++i)
+      data()[i] = char(gen.i(CHAR_MAX));
+  }
+  
   bool
   TestFrame::verifyData()  const
   {
-    auto gen = buildDataGenFrom (distinction_);
+    auto gen = buildDataGenFrom (accessHeader().distinction);
     for (uint i=0; i<BUFFSIZ; ++i)
       if (data()[i] != char(gen.i(CHAR_MAX)))
         return false;
     return true;
   }
   
-  void
-  TestFrame::buildData()
+  HashVal
+  TestFrame::computeChecksum()  const
   {
-    auto gen = buildDataGenFrom (distinction_);
-    for (uint i=0; i<BUFFSIZ; ++i)
-      data()[i] = char(gen.i(CHAR_MAX));
+    HashVal hash{0};
+    ////////////////////////////////////////////OOO actually compute it
   }
   
+  bool
+  TestFrame::hasValidChecksum()  const
+  {
+    ////////////////////////////////////////////OOO actually compute checksum and verify
+  }
   
   bool
   TestFrame::isAlive() const
   {
-    return (CREATED == stage_)
-        || (EMITTED == stage_);
+    return (CREATED == currStage())
+        || (EMITTED == currStage());
   }
   
   bool
   TestFrame::isDead()  const
   {
-    return (DISCARDED == stage_);
+    return (DISCARDED == currStage());
   }
   
   bool
   TestFrame::isSane()  const
   {
-    return ( (CREATED == stage_)
-           ||(EMITTED == stage_)
-           ||(DISCARDED == stage_))
+    return ( (CREATED == currStage())
+           ||(EMITTED == currStage())
+           ||(DISCARDED == currStage()))
         && verifyData();
+  }
+  
+  bool
+  TestFrame::isValid()  const
+  {
+    return isSane()
+       and hasValidChecksum();
+  }
+  
+  bool
+  TestFrame::isPristine()  const
+  {
+    return isSane()
+       and hasValidChecksum();
   }
   
   

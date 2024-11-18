@@ -33,7 +33,7 @@
 #include <stdlib.h>
 
 
-/** 
+/**
  * storage for a Lumiera unique ID,
  * based on a 128bit random number
  */

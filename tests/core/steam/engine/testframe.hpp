@@ -30,6 +30,7 @@ namespace steam {
 namespace engine {
 namespace test   {
   
+  using lib::HashVal;
   
   /**
    * Mock data frame for simulated rendering.
@@ -58,13 +59,23 @@ namespace test   {
       
       static constexpr size_t BUFFSIZ = 1024;
       using _Arr = std::array<char,BUFFSIZ>;
-      
-      uint64_t distinction_;
-      StageOfLife stage_;
+
+      struct Meta
+        {
+          HashVal _MARK_;
+          HashVal checksum;
+          uint64_t distinction;
+          StageOfLife stage;
+          
+          Meta (uint seq, uint family);
+        };
       
       /** inline storage buffer for the payload media data */
       alignas(uint64_t)
         std::byte buffer_[sizeof(_Arr)];
+      
+      /** Metadata record located behind the data buffer */
+      Meta header_;
       
     public:
       /** discard all cached #testData and recalibrate data generation */
@@ -86,9 +97,11 @@ namespace test   {
        *  an already destroyed TestFrame instance */
       static bool isDead (void* memLocation);
       
-      bool isAlive() const;
-      bool isDead()  const;
-      bool isSane()  const;
+      bool isAlive()    const;
+      bool isDead()     const;
+      bool isSane()     const;
+      bool isValid()    const;
+      bool isPristine() const;
       
       bool operator== (void* memLocation) const;
       
@@ -102,7 +115,12 @@ namespace test   {
     private:
       bool contentEquals (TestFrame const& o)  const;
       bool verifyData()  const;
-      void buildData ();
+      HashVal buildData();
+      Meta& accessHeader();
+      Meta const& accessHeader()  const;
+      StageOfLife currStage()  const;
+      HashVal computeChecksum()  const;
+      bool hasValidChecksum()  const;
     };
   
   
