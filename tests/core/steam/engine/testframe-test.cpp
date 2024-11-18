@@ -190,7 +190,7 @@ namespace test  {
           CHECK ( testData(3,51).isSane());
           CHECK ( testData(3,49).isSane());
           
-          resetTestFrames();
+          TestFrame::reseed();
           
           CHECK ( testData(3,50).isSane());
         }

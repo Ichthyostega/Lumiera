@@ -19,9 +19,10 @@
 #include "lib/error.hpp"
 #include "lib/random.hpp"
 #include "steam/engine/testframe.hpp"
+#include "lib/nocopy.hpp"
+#include "lib/util.hpp"
 
-#include <boost/random/linear_congruential.hpp>
-
+#include <climits>
 #include <cstring>
 #include <memory>
 #include <vector>
@@ -32,33 +33,78 @@ namespace steam {
 namespace engine {
 namespace test   {
   
+  using lib::HashVal;
   using std::vector;
   using std::memcpy;
   using lib::rani;
   
-  typedef boost::rand48 PseudoRandom;
+  /** @note using a random-congruential engine to generate the payload data */
+  using PseudoRandom = lib::RandomSequencer<std::minstd_rand>;
   
   
   namespace error = lumiera::error;
   
   namespace { // hidden local support facilities....
     
+    /**
+     * Offset to set the seed values of »families« apart.
+     * The data in the test frames is generated from a distinctive ID-seed,
+     * which is controlled by the _family_ and the _seq-No_ within each family.
+     * The seeds for consecutive frames are spread apart by the #dataSeed,
+     * and the SEQUENCE_SPREAD constant acts as minimum spread. While seed
+     * values can wrap within the 64bit number range, this generation scheme
+     * makes it very unlikely that neighbouring frames end up with the same seed.
+     */
+    const size_t SEQUENCE_SPREAD = 100;
+    
+    HashVal
+    drawSeed (lib::Random& srcGen)
+    {
+      return srcGen.distribute(
+                std::uniform_int_distribution<HashVal>{SEQUENCE_SPREAD
+                                                      ,std::numeric_limits<HashVal>::max()-SEQUENCE_SPREAD});
+    }
+    
+    /** @internal a static seed hash used to anchor the data distinction ID-seeds */
+    HashVal dataSeed{drawSeed(lib::entropyGen)};
+    
     /** @internal helper for generating unique test frames.
-     * This "discriminator" is used as a random seed when
-     * filling the test frame data buffers. It is generated
-     * to be different on adjacent frames of the same series,
-     * as well as to differ to all near by neighbouring channels.
+     * This "discriminator" is used as a random seed when filling the test frame data buffers.
+     * It is generated to be very likely different on adjacent frames of the same series,
+     * as well as to differ to all nearby neighbouring channels.
      * @param seq the sequence number of the frame within the channel
      * @param family the channel this frame belongs to
      */
     uint64_t
     generateDistinction(uint seq, uint family)
     {
-      // random offset, but fixed per executable run
-      static uint base(10 + rani(990)); /////////////////////////////////////////////////////////////////////TICKET #1372 this is not reproducible!!
-      
       // use the family as stepping
-      return (seq+1) * (base+family);
+      return (seq+1) * (dataSeed+family);
+    }
+    
+    class DistinctNucleus
+      : public lib::SeedNucleus
+      , util::MoveOnly
+      {
+        uint64_t const& fixPoint_;
+      public:
+        DistinctNucleus(uint64_t const& anchor)
+          : fixPoint_{anchor}
+          { }
+        
+        uint64_t
+        getSeed()  override
+          {
+            return fixPoint_;
+          }
+      };
+    
+    /** @internal build a PRNG starting from the referred fixed seed */
+    auto
+    buildDataGenFrom (uint64_t const& anchor)
+    {
+      DistinctNucleus seed{anchor};
+      return PseudoRandom{seed};
     }
     
     
@@ -155,11 +201,23 @@ namespace test   {
   {
     return accessTestFrame (seqNr,chanNr);
   }
+
   
+  
+  /**
+   * @remark this function should be invoked at the start of any test
+   *         which requires reproducible data values in the TestFrame.
+   *         It generates a new base seed to distinguish individual data frames.
+   *         The seed is drawn from the \ref lib::defaultGen, and thus will be
+   *         reproducible if the latter has been reseeded beforehand.
+   * @warning after invoking reseed(), the validity of previously generated
+   *         frames can no longer be verified.
+   */
   void
-  resetTestFrames()
+  TestFrame::reseed()
   {
-    testFrames.reset(0);
+    testFrames.reset();
+    drawSeed (lib::defaultGen);
   }
   
   
@@ -194,7 +252,7 @@ namespace test   {
     {
       if (DISCARDED == stage_)
         throw new error::Logic ("target TestFrame is already dead");
-      if (this != &o)
+      if (not util::isSameAdr (this, o))
         {
           distinction_ = o.distinction_;
           stage_ = CREATED;
@@ -246,9 +304,9 @@ namespace test   {
   bool
   TestFrame::verifyData()  const
   {
-    PseudoRandom gen(distinction_);
+    auto gen = buildDataGenFrom (distinction_);
     for (uint i=0; i<BUFFSIZ; ++i)
-      if (data()[i] != char(gen() % CHAR_MAX))
+      if (data()[i] != char(gen.i(CHAR_MAX)))
         return false;
     return true;
   }
@@ -256,9 +314,9 @@ namespace test   {
   void
   TestFrame::buildData()
   {
-    PseudoRandom gen(distinction_);
+    auto gen = buildDataGenFrom (distinction_);
     for (uint i=0; i<BUFFSIZ; ++i)
-      data()[i] = char(gen() % CHAR_MAX);
+      data()[i] = char(gen.i(CHAR_MAX));
   }
   
   

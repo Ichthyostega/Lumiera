@@ -21,6 +21,7 @@
 
 
 #include "lib/integral.hpp"
+#include "lib/hash-value.h"
 
 #include <array>
 
@@ -66,6 +67,9 @@ namespace test   {
         std::byte buffer_[sizeof(_Arr)];
       
     public:
+      /** discard all cached #testData and recalibrate data generation */
+      static void reseed();
+      
      ~TestFrame();
       TestFrame (uint seq=0, uint family=0);
       TestFrame (TestFrame const&);
@@ -112,11 +116,6 @@ namespace test   {
   TestFrame& testData (uint seqNr);
   
   TestFrame& testData (uint chanNr, uint seqNr);
-  
-  
-  /** discards all the TestFrame instances and
-   *  initialises an empty table of test frames */
-  void resetTestFrames();
   
   
   
