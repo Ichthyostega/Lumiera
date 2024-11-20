@@ -2,7 +2,7 @@
   TESTFRAME.hpp  -  test data frame (stub) for checking Render engine functionality
 
    Copyright (C)
-     2011,            Hermann Vosseler <Ichthyostega@web.de>
+     2011, 2024       Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -20,13 +20,13 @@
  ** and stores a lifecycle phase and a data checksum.
  ** 
  ** The contents of each TestFrame are filled on creation with pseudo-random data,
- ** which is created from a _discriminator seed,_ based on a »family« and a »frame-nr«
- ** within the family. Due to the deterministic nature of these computations, the
- ** _pristine state_ of any frame can be determined. But the payload data is accessible
+ ** which is created from a _discriminator seed,_ based on a »family« and a »frameNr«
+ ** within each family(≙channel). Due to the deterministic nature of these computations,
+ ** the _pristine state_ of any frame can be determined. But the payload data is accessible
  ** and can be manipulated, and a new [checksum can be recorded](\ref TestFrame::markChecksum).
  ** 
- ** For ease of testing, a static store of TestFrame instances is maintained internally,
- ** and an arbitrary memory location can be treated as TestFrame.
+ ** For ease of testing, a static [store of TestFrame instances](\ref #testData) is built and
+ ** retained in heap memory, and an arbitrary memory location can be treated as TestFrame.
  */
 
 
@@ -132,14 +132,14 @@ namespace test   {
       _Arr const& data() const { return * std::launder (reinterpret_cast<_Arr const*> (&buffer_)); }
       
     private:
-      bool contentEquals (TestFrame const& o)  const;
-      bool matchDistinction()  const;
       void buildData();
-      Meta& accessHeader();
+      Meta&       accessHeader();
       Meta const& accessHeader()  const;
-      StageOfLife currStage()  const;
-      HashVal computeChecksum()  const;
-      bool hasValidChecksum()  const;
+      bool contentEquals (TestFrame const& o) const;
+      bool matchDistinction()   const;
+      StageOfLife currStage()   const;
+      HashVal computeChecksum() const;
+      bool hasValidChecksum()   const;
     };
   
   
@@ -147,11 +147,11 @@ namespace test   {
   /** Helper to access a specific frame of test data at a fixed memory location.
    *  The series of test frames is generated on demand, but remains in memory thereafter,
    *  similar to real data accessible from some kind of source stream. Each of these generated
-   *  test frames filled with different yet reproducible pseudo random data.
+   *  test frames is filled with different yet reproducible pseudo random data.
    *  Client code is free to access and corrupt this data.
+   * @note TestFrame::reseed() discards this data and draws a new base seed from `defaultGen`
    */
   TestFrame& testData (uint seqNr =0, uint chanNr =0);
-  
   
   
 }}} // namespace steam::engine::test

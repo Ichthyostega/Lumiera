@@ -2,7 +2,7 @@
   TestFrame  -  test data frame (stub) for checking Render engine functionality
 
    Copyright (C)
-     2011,            Hermann Vosseler <Ichthyostega@web.de>
+     2011, 2024       Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -41,7 +41,7 @@
 
 #include <climits>
 #include <memory>
-#include <vector>
+#include <deque>
 
 
 
@@ -50,14 +50,12 @@ namespace engine{
 namespace test  {
   namespace err = lumiera::error;
   
+  using std::deque;
   using util::unConst;
-  using std::vector;
   
   /** @note using a random-congruential engine to generate the payload data */
   using PseudoRandom = lib::RandomSequencer<std::minstd_rand>;
   
-  
-  namespace error = lumiera::error;
   
   namespace { // hidden local support facilities....
     
@@ -103,16 +101,17 @@ namespace test  {
       : public lib::SeedNucleus
       , util::MoveOnly
       {
-        uint64_t const& fixPoint_;
+        uint64_t const& distinction_;
+        
       public:
         DistinctNucleus(uint64_t const& anchor)
-          : fixPoint_{anchor}
+          : distinction_{anchor}
           { }
         
         uint64_t
         getSeed()  override
           {
-            return fixPoint_;
+            return distinction_;
           }
       };
     
@@ -142,76 +141,43 @@ namespace test  {
     }
     
     
-    /**
-     * @internal table to hold test data frames.
+    /* ======= static TestFrame repository ======= */
+    
+    /** @internal table to hold test data frames in heap memory.
      * These frames are built on demand, but retained thereafter.
      * Some tests might rely on the actual memory locations, using the
      * test frames to simulate a real input frame data stream.
-     * @param CHA the maximum number of channels to expect
-     * @param FRA the maximum number of frames to expect per channel
-     * @warning choose the maximum number parameters wisely.
-     *          We're allocating memory to hold a table of test frames
-     *          e.g. sizeof(TestFrame) * 20channels * 100frames ≈ 2 MiB
-     *          The table uses vectors, and thus will grow on demand,
-     *          but this might cause existing frames to be relocated in memory;
-     *          some tests might rely on fixed memory locations. Just be cautious!
+     * @note \ref TestFrame::reseed() also discards this storage, which
+     *       otherwise is retained at stable location until process end.
      */
-    template<uint CHA, uint FRA>
     struct TestFrameTable
-      : vector<vector<TestFrame>>
+      : deque<deque<TestFrame>>
       {
-        typedef vector<vector<TestFrame>> VECT;
-        
-        TestFrameTable()
-          : VECT(CHA)
-          {
-            for (uint i=0; i<CHA; ++i)
-              at(i).reserve(FRA);
-          }
+        TestFrameTable() = default;
         
         TestFrame&
-        getFrame (uint seqNr, uint chanNr=0)
+        getFrame (uint seqNr, uint chanNr)
           {
             if (chanNr >= this->size())
-              {
-                WARN (test, "Growing table of test frames to %d channels, "
-                            "which is > the default (%d)", chanNr, CHA);
                 resize(chanNr+1);
-              }
             ENSURE (chanNr < this->size());
-            vector<TestFrame>& channel = at(chanNr);
+            deque<TestFrame>& channel = at(chanNr);
             
             if (seqNr >= channel.size())
               {
-                WARN_IF (seqNr >= FRA, test,
-                         "Growing channel #%d of test frames to %d elements, "
-                            "which is > the default (%d)", chanNr, seqNr, FRA);
-                for (uint i=channel.size(); i<=seqNr; ++i)
-                  channel.push_back (TestFrame (i,chanNr));
+                INFO (test, "Growing channel #%d of test frames %d -> %d elements."
+                          , chanNr, channel.size(), seqNr+1);
+                for (uint nr=channel.size(); nr<=seqNr; ++nr)
+                  channel.emplace_back (nr, chanNr);
               }
             ENSURE (seqNr < channel.size());
-            
             return channel[seqNr];
           }
       };
-    
-    const uint INITIAL_CHAN = 20;
-    const uint INITIAL_FRAMES = 100;
-    
-    typedef TestFrameTable<INITIAL_CHAN,INITIAL_FRAMES> TestFrames;
-    
-    std::unique_ptr<TestFrames> testFrames;
-    
-    
-    TestFrame&
-    accessTestFrame (uint seqNr, uint chanNr)
-    {
-      if (!testFrames) testFrames.reset (new TestFrames);
-      
-      return testFrames->getFrame(seqNr,chanNr);
-    }
-    
-  } // (End) hidden impl details
+      //
+    std::unique_ptr<TestFrameTable> testFrames;
+    //
+  }// (End) hidden impl details
   
   
   
@@ -219,10 +185,11 @@ namespace test  {
   TestFrame&
   testData (uint seqNr, uint chanNr)
   {
-    return accessTestFrame (seqNr,chanNr);
+    if (not testFrames)
+      testFrames = std::make_unique<TestFrameTable>();
+    return testFrames->getFrame (seqNr, chanNr);
   }
 
-  
   
   /**
    * @remark this function should be invoked at the start of any test
@@ -236,14 +203,15 @@ namespace test  {
   void
   TestFrame::reseed()
   {
-    testFrames.reset();
+    testFrames.reset(); // discard existing test data repository
     dataSeed = drawSeed (lib::defaultGen);
   }
   
   
   
   
-  /* ===== TestFrame class ===== */
+  
+  /* ======= TestFrame class ======= */
   
   TestFrame::Meta::Meta (uint seq, uint family)
     : _MARK_{stampHeader()}
@@ -266,7 +234,6 @@ namespace test  {
       ENSURE (CREATED == header_.stage);
       ENSURE (isPristine());
     }
-  
   
   TestFrame::TestFrame (TestFrame const& o)
     : header_{o.header_}
@@ -294,11 +261,11 @@ namespace test  {
    * Sanity check on the metadata header.
    * @remark Relevant to detect memory corruption or when accessing some
    *  arbitrary memory location, which may or may not actually hold a TestFrame.
-   *  Based on the assumption that it is unlikely that some random memory location
-   *  just happens to hold our [marker word](\ref stampHeader()).
+   *  Based on the assumption that it is unlikely that any given memory location
+   *  just happens to hold our [marker word](\ref stampHeader()) by accident.
    * @note this is only the base level of verification, because in addition
    *  \ref isValid verifies the checksum and \ref isPristine additionally
-   *  recomputes the data generation to see if it matches the Meta::distinction
+   *  recomputes the data generation to see if it matches the Meta::distinction.
    */
   bool
   TestFrame::Meta::isPlausible()  const
@@ -328,20 +295,20 @@ namespace test  {
   }
   
   bool
-  TestFrame::operator== (void* memLocation)  const
-  {
-    TestFrame& candidate (accessAsTestFrame (memLocation));
-    return candidate.isSane()
-        && candidate == *this;
-  }
-  
-  bool
   TestFrame::Meta::operator== (Meta const&o)  const
   {
     return isPlausible() and o.isPlausible()
        and stage == o.stage
        and checksum == o.checksum
        and distinction == o.distinction;
+  }
+  
+  bool
+  TestFrame::operator== (void* memLocation)  const
+  {
+    TestFrame& candidate (accessAsTestFrame (memLocation));
+    return candidate.isSane()
+        && candidate == *this;
   }
 
   bool
@@ -371,8 +338,7 @@ namespace test  {
   
   /** verify the current data was not touched since initialisation
    * @remark implemented by regenerating the data sequence deterministically,
-   *         based on the Meta::distinction mark recorded in the metadata.
-   */
+   *         based on the Meta::distinction mark recorded in the metadata. */
   bool
   TestFrame::matchDistinction()  const
   {
@@ -460,7 +426,6 @@ namespace test  {
     TestFrame& candidate (accessAsTestFrame (memLocation));
     return candidate.isDead();
   }
-  
   
   
 }}} // namespace steam::engine::test
