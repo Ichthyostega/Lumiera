@@ -12,7 +12,21 @@
 */
 
 /** @file testframe.hpp
- ** Unit test helper to generate fake test data frames
+ ** Unit test helper to generate fake test data frames.
+ ** Each TestFrame holds a 1k buffer of byte data, which can be
+ ** verified, accessed and manipulated to emulate media computations.
+ ** A [metadata header](\ref steam::engine::test::TestFrame::Meta) is placed
+ ** in memory behind the working buffer, which allows to detect data corruption
+ ** and stores a lifecycle phase and a data checksum.
+ ** 
+ ** The contents of each TestFrame are filled on creation with pseudo-random data,
+ ** which is created from a _discriminator seed,_ based on a »family« and a »frame-nr«
+ ** within the family. Due to the deterministic nature of these computations, the
+ ** _pristine state_ of any frame can be determined. But the payload data is accessible
+ ** and can be manipulated, and a new [checksum can be recorded](\ref TestFrame::markChecksum).
+ ** 
+ ** For ease of testing, a static store of TestFrame instances is maintained internally,
+ ** and an arbitrary memory location can be treated as TestFrame.
  */
 
 
@@ -68,6 +82,8 @@ namespace test   {
           StageOfLife stage;
           
           Meta (uint seq, uint family);
+          bool isPlausible()             const;
+          bool operator== (Meta const&)  const;
         };
       
       /** inline storage buffer for the payload media data */
@@ -85,6 +101,9 @@ namespace test   {
       TestFrame (uint seq=0, uint family=0);
       TestFrame (TestFrame const&);
       TestFrame& operator= (TestFrame const&);
+      
+      /** recompute and store checksum based on current contents */
+      HashVal markChecksum();
       
       /** Helper to verify that a given memory location holds
        *  an active TestFrame instance (created, not yet destroyed)
@@ -114,8 +133,8 @@ namespace test   {
       
     private:
       bool contentEquals (TestFrame const& o)  const;
-      bool verifyData()  const;
-      HashVal buildData();
+      bool matchDistinction()  const;
+      void buildData();
       Meta& accessHeader();
       Meta const& accessHeader()  const;
       StageOfLife currStage()  const;
@@ -131,9 +150,7 @@ namespace test   {
    *  test frames filled with different yet reproducible pseudo random data.
    *  Client code is free to access and corrupt this data.
    */
-  TestFrame& testData (uint seqNr);
-  
-  TestFrame& testData (uint chanNr, uint seqNr);
+  TestFrame& testData (uint seqNr =0, uint chanNr =0);
   
   
   

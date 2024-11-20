@@ -12,7 +12,22 @@
 * *****************************************************************/
 
 /** @file testframe.cpp
- ** Implementation of fake data frames to support unit testing
+ ** Implementation of fake data frames to support unit testing.
+ ** The data generation is based on a _discriminator seed value,_
+ ** which is computed as a linear combination of a statically fixed anchor-seed
+ ** combined with the family-number and sequence number. Based on this seed,
+ ** the contents are then filled by a pseudo-random sequence.
+ ** @note while initially drawn from real entropy, the anchor-seed can be
+ **       reset from the default PRNG, which allows to establish a totally
+ **       deterministically setup from test code, because the test itself
+ **       can seed the default PRNG and thus establish a reproducible state.
+ ** 
+ ** Additionally, beyond this basic test-data feature, the contents can be
+ ** manipulated freely, and a new checksum can be stored in the metadata,
+ ** which allows to build pseudo media computation functions with a
+ ** reproducible effect — so that the proper invocation of several
+ ** computation steps invoked deep down in the render engine can
+ ** be verified after completing a test invocation.
  */
 
 
@@ -31,8 +46,9 @@
 
 
 namespace steam {
-namespace engine {
-namespace test   {
+namespace engine{
+namespace test  {
+  namespace err = lumiera::error;
   
   using util::unConst;
   using std::vector;
@@ -105,7 +121,7 @@ namespace test   {
     stampHeader()
     {
       static const HashVal MARK = lib::entropyGen.hash()
-                                | 0b1000'1000'1000'1000'1000'1000'1000'1000;
+                                | 0b1000'1000'1000'1000'1000'1000'1000'1000;   //////////////////////////////TICKET #722 : not portable because HashVal ≡ size_t — should it be?
       return MARK;
     }
     
@@ -201,13 +217,7 @@ namespace test   {
   
   
   TestFrame&
-  testData (uint seqNr)
-  {
-    return accessTestFrame (seqNr, 0);
-  }
-  
-  TestFrame&
-  testData (uint chanNr, uint seqNr)
+  testData (uint seqNr, uint chanNr)
   {
     return accessTestFrame (seqNr,chanNr);
   }
@@ -227,7 +237,7 @@ namespace test   {
   TestFrame::reseed()
   {
     testFrames.reset();
-    drawSeed (lib::defaultGen);
+    dataSeed = drawSeed (lib::defaultGen);
   }
   
   
@@ -251,8 +261,8 @@ namespace test   {
   TestFrame::TestFrame (uint seq, uint family)
     : header_{seq,family}
     {
+      buildData();
       ASSERT (0 < header_.distinction);
-      header_.checksum = buildData();
       ENSURE (CREATED == header_.stage);
       ENSURE (isPristine());
     }
@@ -269,7 +279,7 @@ namespace test   {
   TestFrame::operator= (TestFrame const& o)
     {
       if (not isAlive())
-        throw new error::Logic ("target TestFrame already dead or unaccessible");
+        throw err::Logic ("target TestFrame already dead or unaccessible");
       if (not util::isSameAdr (this, o))
         {
           data() = o.data();
@@ -280,43 +290,41 @@ namespace test   {
     }
   
   
+  /**
+   * Sanity check on the metadata header.
+   * @remark Relevant to detect memory corruption or when accessing some
+   *  arbitrary memory location, which may or may not actually hold a TestFrame.
+   *  Based on the assumption that it is unlikely that some random memory location
+   *  just happens to hold our [marker word](\ref stampHeader()).
+   * @note this is only the base level of verification, because in addition
+   *  \ref isValid verifies the checksum and \ref isPristine additionally
+   *  recomputes the data generation to see if it matches the Meta::distinction
+   */
+  bool
+  TestFrame::Meta::isPlausible()  const
+  {
+    return _MARK_ == stampHeader()
+       and stage <= DISCARDED;
+  }
+  
   TestFrame::Meta&
   TestFrame::accessHeader()
   {
+    if (not header_.isPlausible())
+      throw err::Invalid{"TestFrame: missing or corrupted metadata"};
     return header_;
   }
   TestFrame::Meta const&
   TestFrame::accessHeader()  const
   {
-    ///////////////////////OOO detect if valid header present and else throw
     return unConst(this)->accessHeader();
   }
   
   TestFrame::StageOfLife
   TestFrame::currStage()  const
   {
-    ///////////////////////OOO detect if valid header present and then access
-  }
-  
-  /** @note performing an unchecked conversion of the given
-   *        memory location to be accessed as TestFrame.
-   *        The sanity of the data found at that location
-   *        is checked as well, not only the lifecycle flag.
-   */
-  bool
-  TestFrame::isAlive (void* memLocation)
-  {
-    TestFrame& candidate (accessAsTestFrame (memLocation));
-    return candidate.isSane()
-        && candidate.isAlive();
-  }
-  
-  bool
-  TestFrame::isDead (void* memLocation)
-  {
-    TestFrame& candidate (accessAsTestFrame (memLocation));
-    return candidate.isSane()
-        && candidate.isDead();
+    return header_.isPlausible()? header_.stage
+                                : DISCARDED;
   }
   
   bool
@@ -328,66 +336,82 @@ namespace test   {
   }
   
   bool
+  TestFrame::Meta::operator== (Meta const&o)  const
+  {
+    return isPlausible() and o.isPlausible()
+       and stage == o.stage
+       and checksum == o.checksum
+       and distinction == o.distinction;
+  }
+
+  bool
   TestFrame::contentEquals (TestFrame const& o)  const
   {
-    for (uint i=0; i<BUFFSIZ; ++i)
-      if (data()[i] != o.data()[i])
-        return false;
-    return true;
+    return header_ == o.header_
+       and data() == o.data();
   }
   
   
-  HashVal
+  /**
+   * Generate baseline data content based on the Meta::distinction seed.
+   * @remark the seed is a [discriminator](\ref buildDiscriminator) based
+   *         on both the »family« and the frameNo within this family;
+   *         thus closely related frames are very unlikely to hold the same
+   *         baseline data. Of course, follow-up manipulations could change
+   *         the data, which should be documented by \ref markChecksum().
+   */
+  void
   TestFrame::buildData()
   {
     auto gen = buildDataGenFrom (accessHeader().distinction);
-    for (uint i=0; i<BUFFSIZ; ++i)
-      data()[i] = char(gen.i(CHAR_MAX));
+    for (char& dat : data())
+      dat = char(gen.i(CHAR_MAX));
+    markChecksum();
   }
   
+  /** verify the current data was not touched since initialisation
+   * @remark implemented by regenerating the data sequence deterministically,
+   *         based on the Meta::distinction mark recorded in the metadata.
+   */
   bool
-  TestFrame::verifyData()  const
+  TestFrame::matchDistinction()  const
   {
     auto gen = buildDataGenFrom (accessHeader().distinction);
-    for (uint i=0; i<BUFFSIZ; ++i)
-      if (data()[i] != char(gen.i(CHAR_MAX)))
+    for (char const& dat : data())
+      if (dat != char(gen.i(CHAR_MAX)))
         return false;
     return true;
   }
   
+  /** @return a hash checksum computed over current data content */
   HashVal
   TestFrame::computeChecksum()  const
   {
-    HashVal hash{0};
-    ////////////////////////////////////////////OOO actually compute it
+    HashVal checksum{0};
+    std::hash<char> getHash;
+    for (char const& dat : data())
+      lib::hash::combine (checksum, getHash (dat));
+    return checksum;
   }
+  
+  /** @remark can be used to mark a manipulated new content as _valid_ */
+  HashVal
+  TestFrame::markChecksum()
+  {
+    return accessHeader().checksum = computeChecksum();
+  }
+
   
   bool
   TestFrame::hasValidChecksum()  const
   {
-    ////////////////////////////////////////////OOO actually compute checksum and verify
-  }
-  
-  bool
-  TestFrame::isAlive() const
-  {
-    return (CREATED == currStage())
-        || (EMITTED == currStage());
-  }
-  
-  bool
-  TestFrame::isDead()  const
-  {
-    return (DISCARDED == currStage());
+    return accessHeader().checksum == computeChecksum();
   }
   
   bool
   TestFrame::isSane()  const
   {
-    return ( (CREATED == currStage())
-           ||(EMITTED == currStage())
-           ||(DISCARDED == currStage()))
-        && verifyData();
+    return header_.isPlausible();
   }
   
   bool
@@ -400,8 +424,41 @@ namespace test   {
   bool
   TestFrame::isPristine()  const
   {
+    return isValid()
+       and matchDistinction();
+  }
+  
+  bool
+  TestFrame::isAlive() const
+  {
     return isSane()
-       and hasValidChecksum();
+       and not isDead();
+  }
+  
+  bool
+  TestFrame::isDead()  const
+  {
+    return isSane()
+       and (DISCARDED == currStage());
+  }
+  
+  /** @note performing an unchecked conversion of the given
+   *        memory location to be accessed as TestFrame.
+   *        The sanity of the data found at that location
+   *        is checked as well, not only the lifecycle flag.
+   */
+  bool
+  TestFrame::isAlive (void* memLocation)
+  {
+    TestFrame& candidate (accessAsTestFrame (memLocation));
+    return candidate.isAlive();
+  }
+  
+  bool
+  TestFrame::isDead (void* memLocation)
+  {
+    TestFrame& candidate (accessAsTestFrame (memLocation));
+    return candidate.isDead();
   }
   
   

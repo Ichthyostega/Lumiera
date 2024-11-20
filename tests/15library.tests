@@ -598,7 +598,7 @@ return: 0
 END
 
 
-PLANNED "Several elements" SeveralBuilder_test  <<END
+TEST "Several elements" SeveralBuilder_test  <<END
 return: 0
 END
 

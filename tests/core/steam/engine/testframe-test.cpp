@@ -17,6 +17,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "steam/engine/testframe.hpp"
 #include "lib/util.hpp"
 
@@ -70,7 +71,10 @@ namespace test  {
       run (Arg)
         {
           seedRand();
-          verifyBasicProperties();
+          TestFrame::reseed();
+          
+          simpleUsage();
+          verifyDataContent();
           verifyFrameLifecycle();
           verifyFrameSeries();
           useFrameTable();
@@ -78,10 +82,27 @@ namespace test  {
       
       
       void
-      verifyBasicProperties()
+      simpleUsage()
         {
           CHECK (1024 < sizeof(TestFrame));
           
+          TestFrame frame;
+          CHECK (frame.isValid());
+          
+          ++frame.data()[5];
+          CHECK (not frame.isValid());
+          
+          frame.markChecksum();
+          CHECK (frame.isValid());
+          
+          CHECK (isSameObject(frame, frame.data()));           // payload data stored embedded
+          CHECK (sizeof(TestFrame) > frame.data().size());     // additional metadata placed behind
+        }
+      
+      
+      void
+      verifyDataContent()
+        {
           TestFrame frameA;
           TestFrame frameB;
           TestFrame frameC(5);
@@ -89,6 +110,11 @@ namespace test  {
           CHECK (frameA == frameB);
           CHECK (frameA != frameC);
           CHECK (frameB != frameC);
+          
+          CHECK (frameA.data() == frameB.data());
+          CHECK (frameA.data() != frameC.data());
+          for (uint i=0; i<frameA.data().size(); ++i)
+            CHECK (frameA.data()[i] == frameB.data()[i]);
           
           CHECK (frameA.isAlive());
           CHECK (frameB.isAlive());
@@ -98,11 +124,26 @@ namespace test  {
           CHECK (frameB.isSane());
           CHECK (frameC.isSane());
           
+          CHECK (frameA.isValid());
+          CHECK (frameB.isValid());
+          CHECK (frameC.isValid());
+          
+          CHECK (frameA.isPristine());
+          CHECK (frameB.isPristine());
+          CHECK (frameC.isPristine());
+          
           void * frameMem = &frameB;
           
           CHECK (frameA == frameMem);
-          corruptMemory(frameMem,20,5);
-          CHECK (!frameB.isSane());
+          corruptMemory (frameMem,20,5);
+          CHECK (    frameB.isSane());           // still has valid metadata header
+          CHECK (not frameB.isValid());          // data checksum does not match any more
+          CHECK (not frameB.isPristine());       // data does not match the original generation sequence
+          
+          frameB.markChecksum();
+          CHECK (    frameB.isSane());           // still has valid metadata header
+          CHECK (    frameB.isValid());          // data matches the new recorded checksum
+          CHECK (not frameB.isPristine());       // but data still does not match the original generation sequence
           
           frameB = frameC;
           
@@ -110,26 +151,36 @@ namespace test  {
           CHECK (frameA != frameB);
           CHECK (frameA != frameC);
           CHECK (frameB == frameC);
+          
+          corruptMemory (frameMem, 0,sizeof(TestFrame));
+          CHECK (not frameB.isSane());           // now also the metadata was corrupted...
+          CHECK (not frameB.isValid());
+          VERIFY_FAIL ("corrupted metadata"
+                      , frameB.markChecksum() ); // reject to store new checksum in the corrupted header
+          VERIFY_FAIL ("target TestFrame already dead or unaccessible"
+                      , frameB = frameC);        // reject to assign new content to a corrupted target
         }
       
       
       void
       verifyFrameLifecycle()
         {
-          CHECK (!TestFrame::isDead  (this));
-          CHECK (!TestFrame::isAlive (this));
+          CHECK (not TestFrame::isDead  (this));
+          CHECK (not TestFrame::isAlive (this));
           
           static char buffer[sizeof(TestFrame)];
           TestFrame* frame = new(&buffer) TestFrame(23);
           
           CHECK ( TestFrame::isAlive (frame));
-          CHECK (!frame->isDead());
-          CHECK (frame->isAlive());
-          CHECK (frame->isSane());
+          CHECK (not frame->isDead());
+          CHECK (    frame->isAlive());
+          CHECK (    frame->isValid());
           
           frame->~TestFrame();
-          CHECK ( TestFrame::isDead  (frame));
-          CHECK (!TestFrame::isAlive (frame));
+          CHECK (    TestFrame::isDead  (frame));
+          CHECK (not TestFrame::isAlive (frame));
+          CHECK (    frame->isValid());
+          CHECK (    frame->isSane());
         }
       
       
@@ -151,8 +202,8 @@ namespace test  {
               {
                 thisFrames[i].swap (prevFrames[i]);
                 thisFrames[i].reset (new TestFrame(nr, i));
-                CHECK (thisFrames[i]->isSane());
-                CHECK (prevFrames[i]->isSane());
+                CHECK (thisFrames[i]->isPristine());
+                CHECK (prevFrames[i]->isPristine());
                 CHECK (prevFrames[i]->isAlive());
                 
                 CHECK (*thisFrames[i] != *prevFrames[i]);      // differs from predecessor within the same channel
@@ -165,18 +216,18 @@ namespace test  {
         }     }   }
       
       
-      /** @test the table of test frames
-       *        computed on demand */
+      
+      /** @test the table of test frames computed on demand */
       void
       useFrameTable()
         {
-          TestFrame& frX = testData(3,50);
-          TestFrame& frY = testData(3,25);
-          TestFrame& frZ = testData(3,50);
+          TestFrame& frX = testData(50,3);
+          TestFrame& frY = testData(50,2);
+          TestFrame& frZ = testData(50,3);
           
-          CHECK (frX.isSane());
-          CHECK (frY.isSane());
-          CHECK (frZ.isSane());
+          CHECK (frX.isPristine());
+          CHECK (frY.isPristine());
+          CHECK (frZ.isPristine());
           
           CHECK (frX != frY);
           CHECK (frX == frZ);
@@ -185,14 +236,22 @@ namespace test  {
           CHECK (isSameObject (frX, frZ));
           
           corruptMemory(&frZ,40,20);
-          CHECK (!frX.isSane());
-          CHECK (!testData(3,50).isSane());
-          CHECK ( testData(3,51).isSane());
-          CHECK ( testData(3,49).isSane());
+          CHECK (not frX.isPristine());
+          CHECK (not testData(50,3).isPristine());
+          CHECK (    testData(51,3).isPristine());
+          CHECK (    testData(49,3).isPristine());
+          
+          char c = testData(49,3).data()[5];         // some arbitrary content
           
           TestFrame::reseed();
           
-          CHECK ( testData(3,50).isSane());
+          CHECK ( testData(50,3).isPristine());
+          CHECK (c != testData(49,3).data()[5]);     // content regenerated with different seed
+          
+          TestFrame o{49,3};                         // all data content is reproducible with the new seed
+          CHECK (not isSameObject(o, testData(49,3)));
+          CHECK (o == testData(49,3));
+          CHECK (o.data()[5] == testData(49,3).data()[5]);
         }
     };
   
