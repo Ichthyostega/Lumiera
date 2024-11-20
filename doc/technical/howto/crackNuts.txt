@@ -1,0 +1,117 @@
+how to crack nut #47
+====================
+:toc:
+
+.collection of successfully employed technical solutions
+Some nasty problems are recurring time and again. Maybe a trick could be found somewhere
+in the net, and a library function was created to settle this damn topic once and for all.
+Maybe even a nice test and demo is provided. And then the whole story will be forgotten.
+
+_Sounds familiar?_  => ☹☻☺ ~[red]#then please leave a note here...#~
+
+
+Methods
+-------
+Mathematics
+~~~~~~~~~~~
+- some basic descriptive statistics computation are defined in 'lib/stat/statistic.hpp'
+- the simple case for _linear regression_ is also implemented there
+- Gnuplot provides also common statistics functions, which may come in handy when the
+  goal is anyway to create a visualisation (-> see <<investigation,below>>)
+  
+
+
+
+Situations
+----------
+Investigation
+~~~~~~~~~~~~~
+summary test::
+  Reformulate the research and the findings into a test, which can be read top-down like a novel.
+  Start with documenting the basics, package helpers into a tool class, or package setup into a
+  workbench-style class, with individual tool modules. Provide a short version of this test with
+  the basic demo, which should be able to run with the regular test suite. Extended long-running
+  tests can be started conditionally with commandline-arguments. See 'scheduler-stress-test.cpp'
+visualisation::
+  Use code generation to visualise data structures or functions and observation statistics.
+  Typically these generation statements can be packaged into an invocation helper and included
+  into a relevant test, but commented-out there.
++
+- generate Graphviz diagrams: 'lib/dot-gen.hpp' provides a simple DSL. See 'test-chain-load-test.cpp'
+- generate Gnuplot scripts: use the Text-Template engine to fill in data, possibly from a data table
+
+  * 'lib/gnuplot-gen.hpp' provides some pre-canned scripts for statistics plots
+  * used by the 'stress-test-rig.cpp', in combination with 'data.hpp' to collect measurement results
+
+
+
+Common Tasks
+------------
+Data handling
+~~~~~~~~~~~~~
+persistent data set::
+  use the `lib::stat::DataTable` ('data.hpp') with CSV rendering -> see 'data-csv-test.cpp'
+
+
+Formatting
+~~~~~~~~~~
+- implement a conversion-to-string operator.
+- include the C++ IOStreams via 'lib/format-cout.hpp' -> this magically uses the `util::toString()`
+- for testing, temporarily include 'lib/test/diagnostic-output' and use the `SHOW_EXPR` macro.
+- use 'util::join' ('lib/format-util.hpp') to join arbitrary elements with `util::toString()` conversion
+- use _printf-style formatters_ from Boost-format. We provide a light-weight front-end via 'lib/format-string.hpp'
+
+  * the heavyweight boost-format include is only required once, for 'lib/format-string.cpp'.
+  * the templated front-end passes-through most basic types and types with string-conversion
+  * all invocations are strictly error safe (never throw) and can thus be used from catch-handlers
+
+- use the *Text-Template* engine. See 'text-template-test.cpp'. Can be used with simple map bindings,
+  but also from a `lib::GenNode` tree, or with a custom defined `DataSource` template
+
+
+Language constructs
+-------------------
+Templates
+~~~~~~~~~
+build-from-anything::
+  use a templated constructor, possibly even with varargs
++
+- use a _deduction guide_ to pick the right ctor and arguments -> see
+
+  * `ThreadJoinable` in 'thread.hpp', 698
+  * `DataSource<string>` specialisation only when argument can be converted to string,
+     in 'text-template.hpp', 745
+
+- prevent shadowing of _automatically generated copy operations._
+  See https://issues.lumiera.org/ticket/963[#963]. Based on the ``disable if'' SFINAE technique.
+  A ready-made templated typedef `lib::metadisable_if_self` can be found in 'lib/meta/util.hpp'  
+
+
+Varargs
+~~~~~~~
+pick and manipulate individually::
+  The key trick is to define an _index sequence template,_ which can then be matched against
+  a processing template for a single argument; and the latter can have partial specialisations
++
+- see 'variadic-argument-picker-test.cpp'
+- but sometimes it is easier to use the tried and true technique of the Loki-Typelists, which
+  can be programmed recursively, similar to LISP. The »bridge« is to unpack the variadic argument pack
+  into the `lib::meta::Types<ARGS...>` ([yellow-background]#⚠ still broken in 2024#
+  see https://issues.lumiera.org/ticket/987[#987], use `lib::meta::TySeq` from 'variadic-helper.hpp' as workaround... 
++
+apply functor to each::
+  A common trick is to use `std::apply` in combination with a _fold-expression_
++
+- provided as `lib::meta::forEach` in 'lib/meta/util.hpp
+- The design of the `DataTable` with CSV-Formatting is based on this technique, see 'lib/stat/data.hpp'
+- 'test-rand-ontology.cpp' uses this in `manipulateFrame()` to accept an arbitrary number of input chains
++
+unpack iterator into tuple::
+  Under controlled conditions this is possible (even while it seems like time travel from the runtime into
+  the compile-time domain). The number of results to extract from the iterator must be known at compile time,
+  and the possible result types must be limited, so that a visitor can be used for double-dispatch.
++
+- see tuple-record-init-test.cpp
+- used in 'command-simple-closure.hpp' to receive parameter values sent via UI-Bus and package them
+  into a tuple for invocation of a Steam-Layer command.
+

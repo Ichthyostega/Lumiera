@@ -51,10 +51,10 @@
 namespace lib {
 namespace hash{
     
-    /** meld the additional hash value into the given
-     *  base hash value. This is the standard formula
-     *  used by Lib-Boost to combine the hash values
-     *  of parts into a composite.
+    /** meld the additional hash value into the given base hash value.
+     *  This is the standard formula used by Lib-Boost to combine the hash values
+     *  of parts into a composite, and is based on the [Murmur-2.64A] hash algorithm.
+     * [Murmur-2.64A]: https://github.com/aappleby/smhasher/blob/master/src/MurmurHash2.cpp
      */
     inline void
     combine (size_t & combinedHash, size_t additionalHash)

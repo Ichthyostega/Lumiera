@@ -43,3 +43,9 @@ When relying on that hack, we should make sure always to place some kind of
 `static_assert` into the corresponding implementation files to ensure the real
 facilites actually _do fit_ into the guessed storage dimensions.
 
+
+Portability
+-----------
+- Linux-only solution to discover the path of the executable: `findExePath` in 'lib/searchpath.hpp'
+- hard-coded usage of `/dev/urandom` (e.g. in 'lib/random.cpp' as spec for the `std::random_device`
+- using the 64bit Murmur-2.64A hash function in '/lib/hash-combine.hpp'

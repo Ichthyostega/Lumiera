@@ -116,6 +116,13 @@ namespace test  {
           for (uint i=0; i<frameA.data().size(); ++i)
             CHECK (frameA.data()[i] == frameB.data()[i]);
           
+          // can access data as uint64_t
+          CHECK (frameA.data()[ 8] == char(frameA.data64()[1]));  // assuming little-endian
+          CHECK (frameA.data()[16] == char(frameA.data64()[2]));
+          CHECK (frameA.data()[24] == char(frameA.data64()[3]));
+          CHECK (frameA.data()[32] == char(frameA.data64()[4]));
+          CHECK (frameA.data().size() == 8*frameA.data64().size());
+          
           CHECK (frameA.isAlive());
           CHECK (frameB.isAlive());
           CHECK (frameC.isAlive());

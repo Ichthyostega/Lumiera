@@ -40,11 +40,11 @@ namespace test  {
   /** produce planar multi channel output of random data frames */
   void generateMultichan (uint chanCnt, TestFrame* buffArry, size_t frameNr, uint flavour);
   
-  /** »process« random frame date by multiply-wrapping with a parameter */
-  void manipulateFrame (TestFrame* out, TestFrame* in, int param);
+  /** »process« random frame date by hash-chaining with a parameter */
+  void manipulateFrame (TestFrame* out, TestFrame const* in, uint64_t param);
   
   /** mix two random data frames by a parameter-controlled proportion */
-  void combineFrames (TestFrame* out, TestFrame* srcA, TestFrame* srcB, int mix);
+  void combineFrames (TestFrame* out, TestFrame const* srcA, TestFrame const* srcB, int mix);
   
 
 

@@ -73,6 +73,7 @@ namespace test   {
       
       static constexpr size_t BUFFSIZ = 1024;
       using _Arr = std::array<char,BUFFSIZ>;
+      using _A64 = std::array<uint64_t, BUFFSIZ/sizeof(uint64_t)>;
 
       struct Meta
         {
@@ -128,8 +129,10 @@ namespace test   {
       friend bool operator!= (TestFrame const& f1, TestFrame const& f2) { return !f1.contentEquals(f2); }
 
       /** Array-style direct access to the payload data */
-      _Arr&       data()       { return * std::launder (reinterpret_cast<_Arr* > (&buffer_));      }
-      _Arr const& data() const { return * std::launder (reinterpret_cast<_Arr const*> (&buffer_)); }
+      _Arr&       data()         { return * std::launder (reinterpret_cast<_Arr* > (&buffer_));      }
+      _Arr const& data()   const { return * std::launder (reinterpret_cast<_Arr const*> (&buffer_)); }
+      _A64&       data64()       { return * std::launder (reinterpret_cast<_A64* > (&buffer_));      }
+      _A64 const& data64() const { return * std::launder (reinterpret_cast<_A64 const*> (&buffer_)); }
       
     private:
       void buildData();

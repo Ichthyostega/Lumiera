@@ -13,11 +13,18 @@
 
 /** @file test-rand-ontology.cpp
  ** Implementation of fake data processing to verify invocation logic.
+ ** The emulated »media computations« work on TestFrame data buffers, which can be
+ ** filled with deterministically generated pseudo-random data, that can be verified afterwards.
+ ** Computations manipulate or combine individual data points, and mark the result again with a
+ ** valid checksum. Hash-chaining computations are used in order to ensure that the resulting
+ ** data values depend on all input- and parameter values, and the _exact order_ of processing.
+ ** All computations are reproducible, and thus a test can verify a computation carried out
+ ** within the context of the Render-Engine code.
  */
 
 
 #include "steam/engine/test-rand-ontology.hpp"
-#include "lib/error.hpp"
+#include "lib/hash-combine.hpp"
 
 //#include <vector>
 
@@ -70,18 +77,19 @@ namespace test  {
   /**
    * @param out   existing allocation to place the generated TestFrame into
    * @param in    allocation holding the input TestFrame data
-   * @param param parameter to control the data manipulation (to be multiplied into the data)
-   * @remark this function emulates „media data processing“: each byte of the input data is multiplied
-   *         with the given \a param, wrapping each result into the corresponding output byte. The
-   *         generated result TestFrame is marked with a valid checksum.
+   * @param param parameter to control or »mark« the data manipulation (hash-combining)
+   * @remark this function emulates „media data processing“: data is processed in 64-bit words,
+   *         by hash-chaining with \a param. The generated result is marked with a valid checksum.
    */
   void
-  manipulateFrame (TestFrame* out, TestFrame* in, int param)
+  manipulateFrame (TestFrame* out, TestFrame const* in, uint64_t param)
   {
     REQUIRE (in);
     REQUIRE (out);
-    for (size_t i=0; i < in->data().size(); ++i)
-        out->data()[i] = char(param * in->data()[i]);
+    auto calculate = [](uint64_t chain, uint64_t val){ lib::hash::combine(chain,val); return chain; };
+    for (size_t i=0; i < in->data64().size(); ++i)
+        out->data64()[i] = calculate(param, in->data64()[i]);
+    out->markChecksum();
   }
   
   /**
@@ -93,13 +101,14 @@ namespace test  {
    *         each result byte is the linear interpolation between the corresponding inputs.
    */
   void
-  combineFrames (TestFrame* out, TestFrame* srcA, TestFrame* srcB, int mix)
+  combineFrames (TestFrame* out, TestFrame const* srcA, TestFrame const* srcB, int mix)
   {
     REQUIRE (srcA);
     REQUIRE (srcB);
     REQUIRE (out);
     for (size_t i=0; i < srcA->data().size(); ++i)
         out->data()[i] = char((1-mix) * srcA->data()[i] + mix * srcB->data()[i]);
+    out->markChecksum();
   }
   
   

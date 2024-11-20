@@ -17,6 +17,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/hash-combine.hpp"
 #include "steam/engine/test-rand-ontology.hpp" ///////////TODO
 #include "lib/test/diagnostic-output.hpp"/////////////////TODO
 #include "lib/random.hpp"
@@ -40,9 +41,15 @@ namespace test  {
         alignas(TestFrame)
           std::byte storage[sizeof(TestFrame)];
         
-        operator TestFrame*  () { return   std::launder (reinterpret_cast<TestFrame* > (&storage)); } 
-        TestFrame* operator->() { return   std::launder (reinterpret_cast<TestFrame* > (&storage)); } 
-        TestFrame& operator* () { return * std::launder (reinterpret_cast<TestFrame* > (&storage)); } 
+        operator TestFrame*  () { return   std::launder (reinterpret_cast<TestFrame* > (&storage)); }
+        TestFrame* operator->() { return   std::launder (reinterpret_cast<TestFrame* > (&storage)); }
+        TestFrame& operator* () { return * std::launder (reinterpret_cast<TestFrame* > (&storage)); }
+        
+        TestFrame&
+        buildData (uint seq=0, uint family=0)
+          {
+            return * new(&storage) TestFrame{seq,family};
+          }
       };
   }
   
@@ -57,9 +64,11 @@ namespace test  {
       run (Arg)
         {
           seedRand();
+          TestFrame::reseed();
           
           processing_generateFrame();
           processing_generateMultichan();
+          processing_manipulateFrame();
         }
       
       
@@ -101,6 +110,42 @@ namespace test  {
               CHECK (buffs[i]->isSane());
               CHECK (*(buffs[i]) == TestFrame(frameNr,flavour+i));
             }
+        }
+      
+      /** @test function to apply a numeric computation to test data frames
+       */
+      void
+      processing_manipulateFrame()
+        {
+          size_t frameNr = defaultGen.u64();
+          uint flavour   = defaultGen.u64();
+          
+          Buffer iBuff, oBuff;
+          iBuff.buildData(frameNr,flavour);
+          oBuff.buildData(frameNr,flavour);
+          CHECK (iBuff->isPristine());
+          CHECK (iBuff->isPristine());
+          
+          uint64_t param = defaultGen.u64();
+          manipulateFrame (oBuff, iBuff, param);
+          CHECK (    oBuff->isValid());
+          CHECK (not oBuff->isPristine());
+          CHECK (    iBuff->isPristine());
+          
+          for (uint i=0; i<oBuff->data64().size(); ++i)
+            {
+              uint64_t feed = param;
+              uint64_t data = iBuff->data64()[i];
+              lib::hash::combine (feed, data);
+              CHECK (data  == iBuff->data64()[i]);
+              CHECK (feed  != iBuff->data64()[i]);
+              CHECK (feed  == oBuff->data64()[i]);
+            }
+           // can also process in-place
+          manipulateFrame (iBuff, iBuff, param);
+          CHECK (not iBuff->isPristine());
+          CHECK (    iBuff->isValid());
+          CHECK (*iBuff == *oBuff);  // second invocation exactly reproduced data from first invocation
         }
     };
   

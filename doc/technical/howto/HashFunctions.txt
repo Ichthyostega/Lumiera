@@ -90,6 +90,14 @@ calculated hash values of the parts forming a composite data structure.
   uses the standard implementation of a string hash function combining the individual
   character's hashes.
 
+Hash-chaining
+~~~~~~~~~~~~~
+We use a dedicated function `lib::hash::combine(s,h)` to join several source(component) hashes.
+This usage pattern was pioneered by Boost and is based on the
+https://github.com/aappleby/smhasher/blob/master/src/MurmurHash2.cpp[Murmur-2.64A] hash algorithm. 
+
+WARNING: as of [yellow-background]#11/2024#, portability of hash values is an unresolved issue;
+         this code does not work on 32bit systems https://issues.lumiera.org/ticket/722#comment:10[see #722]
 
 
 LUID values
@@ -103,9 +111,10 @@ the meltdown of an atomic power plant, which, as we all know, won't ever happen 
 
 Relation to hash values
 ~~~~~~~~~~~~~~~~~~~~~~~
-When objects incorporate sich an unique LUID, this provides for a prime candidate to
+When objects incorporate such an unique LUID, this provides for a prime candidate to
 derive hash values as a side-effect of that design: Since incorporating an LUID typically
 means that this object has an _distinguishable identity_, all objects with the same LUID
 should be considered _equivalent_ and thus hash to the same value. Consequently we can just
 use a +size_t+ prefix of the LUID bitstring as hash value, without any further calculations.
+This relies on LUID being generated from a reliable _entropy source._
 
