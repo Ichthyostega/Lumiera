@@ -160,8 +160,8 @@ out-lit: Digxel<int, digxel::Formatter<int> >--empty--  0--(val=123)--123|
 out-lit: Digxel<double, digxel::Formatter<double> >--empty--00.000--(val=123.457)--123.457|
 out-lit: Digxel<int, digxel::SexaFormatter>--empty--00--(val=42)--42|
 out-lit: Digxel<int, digxel::SexaFormatter>--empty--00--(val=-5)---5|
-out-lit: Digxel<unsigned int, digxel::HexaFormatter>--empty--00--(val=12)--0C|
-out-lit: Digxel<unsigned int, digxel::HexaFormatter>--empty--00--(val=111)--6F|
+out-lit: Digxel<uint, digxel::HexaFormatter>--empty--00--(val=12)--0C|
+out-lit: Digxel<uint, digxel::HexaFormatter>--empty--00--(val=111)--6F|
 out-lit: Digxel<long, digxel::CountFormatter>--empty--0000--(val=-1234567890)---1234567890|
 return: 0
 END

@@ -694,7 +694,7 @@ namespace test{
           CHECK(not ii.getRestElms());
           CHECK (materialise(ii.getGroupedElms()) == "23-22-21-20-19"_expect);
           
-          CHECK ( test::showType<decltype(*ii)>()== "array<unsigned int, 5ul>&"_expect);
+          CHECK ( test::showType<decltype(*ii)>()== "array<uint, 5ul>&"_expect);
           
           uint s = *(ii.getGroupedElms());
           for ( ; ii; ++ii)

@@ -26,8 +26,12 @@
 #include <cstdint>
 
 /* === minimal common place === */
-using uchar = unsigned char;
 using uint  = unsigned int;
+using uchar = unsigned char;
+using ulong = unsigned long int;
+using llong = long long int;
+using ullong = unsigned long long int;
+using ushort = unsigned short int;
 
 using f128  = long double;
 static_assert(10 <= sizeof(f128));

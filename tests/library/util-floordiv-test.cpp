@@ -114,7 +114,7 @@ namespace test {
           verifyIntegerTypes<long>();
           verifyIntegerTypes<short>();
           verifyIntegerTypes<int64_t>();
-          verifyIntegerTypes<long long int>();
+          verifyIntegerTypes<llong>();
           
           if (!isnil (arg))
             runPerformanceTest();

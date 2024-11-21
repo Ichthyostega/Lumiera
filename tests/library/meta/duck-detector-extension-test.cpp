@@ -53,14 +53,14 @@ namespace test{
         double funny (char, char, string);
         void funky()  const;
         short fuzzy (float, float);
-        long long fuzzy();
+        llong fuzzy();
         double fully;
       };
     
     class Fishy
       {
         /** @note private function can never be detected */
-        long long fuzzy();
+        llong fuzzy();
         
         /** @note type Fishy exposes an extension point `fun` */
         friend void fun (Fishy&);
@@ -94,7 +94,7 @@ namespace test{
       META_DETECT_EXTENSION_POINT (fun);
       
       META_DETECT_FUNCTION (double, funny, (char, char, string));
-      META_DETECT_FUNCTION (long long, fuzzy, (void));
+      META_DETECT_FUNCTION (llong, fuzzy, (void));
       META_DETECT_FUNCTION_NAME (funny);
       META_DETECT_FUNCTION_NAME (funky);
       META_DETECT_FUNCTION_NAME (fuzzy);

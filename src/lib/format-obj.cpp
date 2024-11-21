@@ -207,6 +207,11 @@ apologies for that."
                                 "|lumiera::"
                                 , regex::ECMAScript | regex::optimize};
     
+    static regex lolong    {"long long"
+                                , regex::ECMAScript | regex::optimize};
+    static regex unSigned  {"unsigned (\\w+)"
+                                , regex::ECMAScript | regex::optimize};
+    
     static regex stdString {"(__cxx11::)?basic_string<char, char_traits<char>, allocator<char>\\s*>(\\s+\\B)?"
                                 , regex::ECMAScript | regex::optimize};
     
@@ -219,7 +224,7 @@ apologies for that."
     static regex uniquePtr {"unique_ptr<(\\w+), default_delete<\\1>\\s*"
                                 , regex::ECMAScript | regex::optimize};
     
-    static regex lumieraP {"P<(\\w+), shared_ptr<\\1>\\s*"
+    static regex lumieraP  {"P<(\\w+), shared_ptr<\\1>\\s*"
                                 , regex::ECMAScript | regex::optimize};
     
     
@@ -227,6 +232,8 @@ apologies for that."
     auto end = typeName.end();
     
     end = regex_replace(pos, pos, end, commonPrefixes, "");
+    end = regex_replace(pos, pos, end, lolong, "llong");
+    end = regex_replace(pos, pos, end, unSigned, "u$1");
     end = regex_replace(pos, pos, end, stdString, "string");
     end = regex_replace(pos, pos, end, stdAllocator, "$1");
     end = regex_replace(pos, pos, end, mapAllocator, "$1");

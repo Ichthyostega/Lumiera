@@ -162,7 +162,7 @@ namespace util {
  * \endcode
  */
 inline util::Rat
-operator""_r (unsigned long long num)
+operator""_r (ullong num)
 {
   return util::Rat{num};
 }

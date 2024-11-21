@@ -69,10 +69,10 @@ namespace util {
     };
   
   template<>
-  struct IDiv<long long>
+  struct IDiv<llong>
     : lldiv_t
     {
-      IDiv<long long> (long long num, long long den)
+      IDiv<llong> (llong num, llong den)
         : lldiv_t(lldiv (num,den))
         { }
     };

@@ -133,7 +133,7 @@ namespace test {
           // this is how the key trick of the _Fun traits template works:
           // for anything "function like" we retrieve a member-pointer to the function call operator
           // which we then pass on to the dedicated overload for member pointers
-          CHECK ("int (Functor::*)(unsigned int)" == typeStr<decltype(&Functor::operator())>());
+          CHECK ("int (Functor::*)(uint)" == typeStr<decltype(&Functor::operator())>());
           
           
           Func f1{freeFun};
@@ -150,60 +150,60 @@ namespace test {
           
           Func f5{lambda};
           
-          CHECK ("int (unsigned int)" == showSig (freeFun));
-          CHECK ("int (unsigned int)" == showSig (&freeFun));
-          CHECK ("int (unsigned int)" == showSig (Functor::staticFun));
-          CHECK ("int (unsigned int)" == showSig (lambda));
-          CHECK ("int (unsigned int)" == showSig (f5));
+          CHECK ("int (uint)" == showSig (freeFun));
+          CHECK ("int (uint)" == showSig (&freeFun));
+          CHECK ("int (uint)" == showSig (Functor::staticFun));
+          CHECK ("int (uint)" == showSig (lambda));
+          CHECK ("int (uint)" == showSig (f5));
           
           
-          CHECK ("int (unsigned int)" == showSigRef (freeFun));
-          CHECK ("int (unsigned int)" == showSigRef (lambda));
-          CHECK ("int (unsigned int)" == showSigRef (f5));
+          CHECK ("int (uint)" == showSigRef (freeFun));
+          CHECK ("int (uint)" == showSigRef (lambda));
+          CHECK ("int (uint)" == showSigRef (f5));
           
-          CHECK ("int (unsigned int)" == showSigCRef (freeFun));
-          CHECK ("int (unsigned int)" == showSigCRef (lambda));
-          CHECK ("int (unsigned int)" == showSigCRef (f5));
+          CHECK ("int (uint)" == showSigCRef (freeFun));
+          CHECK ("int (uint)" == showSigCRef (lambda));
+          CHECK ("int (uint)" == showSigCRef (f5));
           
-          CHECK ("int (unsigned int)" == showSigRRef (move(lambda)));
-          CHECK ("int (unsigned int)" == showSigRRef (move(f5)));
+          CHECK ("int (uint)" == showSigRRef (move(lambda)));
+          CHECK ("int (uint)" == showSigRRef (move(f5)));
           
-          CHECK ("int (unsigned int)" == showSig (move(&freeFun)));
-          CHECK ("int (unsigned int)" == showSig (move(lambda)));
-          CHECK ("int (unsigned int)" == showSig (move(f5)));
+          CHECK ("int (uint)" == showSig (move(&freeFun)));
+          CHECK ("int (uint)" == showSig (move(lambda)));
+          CHECK ("int (uint)" == showSig (move(f5)));
           
           
           Func& funRef = f1;
           Functor& funkyRef = funk;
           Func const& funCRef = f1;
           Functor const& funkyCRef = funk;
-          CHECK ("int (unsigned int)" == showSig (funRef));
-          CHECK ("int (unsigned int)" == showSig (funkyRef));
-          CHECK ("int (unsigned int)" == showSig (funCRef));
-          CHECK ("int (unsigned int)" == showSig (funkyCRef));
+          CHECK ("int (uint)" == showSig (funRef));
+          CHECK ("int (uint)" == showSig (funkyRef));
+          CHECK ("int (uint)" == showSig (funCRef));
+          CHECK ("int (uint)" == showSig (funkyCRef));
           
           
-          CHECK ("int (unsigned int)" == typeStr<_Fun<int(uint)>::Sig     >());
-          CHECK ("int (unsigned int)" == typeStr<_Fun<Func&>::Sig         >());
-          CHECK ("int (unsigned int)" == typeStr<_Fun<Func&&>::Sig        >());
-          CHECK ("int (unsigned int)" == typeStr<_Fun<Func const&>::Sig   >());
-          CHECK ("int (unsigned int)" == typeStr<_Fun<Functor&>::Sig      >());
-          CHECK ("int (unsigned int)" == typeStr<_Fun<Functor&&>::Sig     >());
-          CHECK ("int (unsigned int)" == typeStr<_Fun<Functor const&>::Sig>());
+          CHECK ("int (uint)" == typeStr<_Fun<int(uint)>::Sig     >());
+          CHECK ("int (uint)" == typeStr<_Fun<Func&>::Sig         >());
+          CHECK ("int (uint)" == typeStr<_Fun<Func&&>::Sig        >());
+          CHECK ("int (uint)" == typeStr<_Fun<Func const&>::Sig   >());
+          CHECK ("int (uint)" == typeStr<_Fun<Functor&>::Sig      >());
+          CHECK ("int (uint)" == typeStr<_Fun<Functor&&>::Sig     >());
+          CHECK ("int (uint)" == typeStr<_Fun<Functor const&>::Sig>());
           
           using Siggy = _Fun<Func>::Sig;
-          CHECK ("int (unsigned int)" == typeStr<_Fun<Siggy&>::Sig        >());
-          CHECK ("int (unsigned int)" == typeStr<_Fun<Siggy&&>::Sig       >());
-          CHECK ("int (unsigned int)" == typeStr<_Fun<Siggy const&>::Sig  >());
+          CHECK ("int (uint)" == typeStr<_Fun<Siggy&>::Sig        >());
+          CHECK ("int (uint)" == typeStr<_Fun<Siggy&&>::Sig       >());
+          CHECK ("int (uint)" == typeStr<_Fun<Siggy const&>::Sig  >());
           
           
           auto memfunP = &Functor::fun;
           FuncF fM{memfunP};
           Func fMF{bind (fM, funk, _1)};
           
-          CHECK ("int (unsigned int)"           == typeStr<_Fun<decltype(memfunP)>::Sig>());
-          CHECK ("int (Functor&, unsigned int)" == typeStr<_Fun<decltype(fM)>::Sig     >());
-          CHECK ("int (unsigned int)"           == typeStr<_Fun<decltype(fMF)>::Sig    >());
+          CHECK ("int (uint)"           == typeStr<_Fun<decltype(memfunP)>::Sig>());
+          CHECK ("int (Functor&, uint)" == typeStr<_Fun<decltype(fM)>::Sig     >());
+          CHECK ("int (uint)"           == typeStr<_Fun<decltype(fMF)>::Sig    >());
           
           
           // _Fun<F> can be used for metaprogramming with enable_if

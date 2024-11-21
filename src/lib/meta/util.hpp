@@ -495,19 +495,19 @@ namespace util {
 /* === Literals for common size designations === */
 
 inline uint
-operator""_KiB (unsigned long long const siz)
+operator""_KiB (ullong const siz)
 {
   return uint(siz) * 1024u;
 }
 
 inline uint
-operator""_MiB (unsigned long long const siz)
+operator""_MiB (ullong const siz)
 {
   return uint(siz) * 1024u*1024u;
 }
 
-inline unsigned long long
-operator""_GiB (unsigned long long const siz)
+inline ullong
+operator""_GiB (ullong const siz)
 {
   return siz * 1024uLL*1024uLL*1024uLL;
 }

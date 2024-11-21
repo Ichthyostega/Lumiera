@@ -113,7 +113,7 @@ namespace test{
           
           auto breed = Result{evil, 55ll};                   // an odd number...
           VERIFY_ERROR (STATE, breed.maybeThrow()  );
-          CHECK (Type(breed) == "Result<long long>"_expect);
+          CHECK (Type(breed) == "Result<llong>"_expect);
           
           auto dead = Result{[]{ throw 55; }};
           auto deed = Result{[]{ /* :-) */ }};

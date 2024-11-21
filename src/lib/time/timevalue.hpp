@@ -257,7 +257,7 @@ namespace time {
           return *this;
         }
       
-      /// Support mixing with plain long int arithmetics
+      /// Support mixing with plain 64bit int arithmetics
       operator gavl_time_t()  const { return t_; }
       /// Support for micro-tick precise time arithmetics
       operator FSecs()  const { return FSecs{t_, TimeValue::SCALE}; }

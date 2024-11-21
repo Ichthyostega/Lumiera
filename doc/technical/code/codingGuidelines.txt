@@ -1,16 +1,20 @@
 Coding Guidelines
 =================
-:Date: Spring 2023
+:Date: Autumn 2024
 :toc:
 
 
-_this page summarises some style and coding guidelines for the Lumiera code base_
+.Basic Tenet
+Code is written for humans. Use your judgement and common sense above all.
+
+
 
 Style Guide
 -----------
 The Lumiera project uses GNU indentation style with slight adaptations.
 
-- *no tabs* please. The typical ``semi indent'' of GNU style thus becomes 2 spaces.
+- *no tabs* please. +
+  The typical ``semi indent'' of GNU style thus becomes 2 spaces.
 - maximum line length is rather around *110 characters*.footnote:[This is not a hard
   limit, rather a guideline -- however, you should never try to stuff several distinct
   topics into a single line...]
@@ -20,25 +24,59 @@ The Lumiera project uses GNU indentation style with slight adaptations.
   * the braces for a class scope are indented by 2 spaces
   * the access modifiers start at this brace level, while all declarations and definitions
     within the class are again indented by 2 spaces
+  * the braces for free-standing functions however are not indented and thus placed directly
+    below the name of the function in the definition. This holds also for member functions
+    defined out-line and not within the class body.
   * the line breaking rules are relaxed. Definitions and statements may be written as single line,
-    provided that the length remains below 110 chars and the result _remains legible_. Otherwise,
-    we'll fall back to the default and wrap the lines. More specifically
+    provided that the length remains below 110 chars and the result _remains legible_.
+    More specifically...
   
     ** function declarations may be written in one line
     ** same for definitions with just a single statement in the body
     ** same for simple if-statements without else-branch.
+    ** If in doubt however, we prefer to wrap the lines.
   
+  * it is OK to write if-then-else without braces, but only as long as the structure
+    is uttermost clear and poses no danger for maintenance. Use your common sense on this one.
+    Often, a ternary operator is a viable alternative. When a `?` ... `:` becomes long and
+    hard to read, the alternative clause starting with `:` is placed directly below the `?`
   * the space between function name and opening parenthesis of the argument list is not
-    enforced when this doesn't make sense, esp. for argument-less functions, chained calls
+    enforced when this doesn't make sense, notably for argument-less functions, chained calls
     or constructor syntax. But in all other cases, we really value this additional space,
     it improves legibility.
   * template argument declarations are _always_ written on a separate line, above the
     return type declaration. This rule holds even if the rest of a definition can be
     written within a single line.
+  * the body of λ-functions is indented beyond the capture clause, i.e. it is rather
+    starkly offset with respect to the regular code. When capture clauses become complicated
+    beyond just a short list of names -- especially when including initialisers -- they are
+    preferably written on a separate line, directly above the argument list in parenthesis  
   * the opening brace of namespaces is placed on the same line. Optionally, the namespace
     body may be indented, as long as this helps underpinning the nesting structure. But
     there is no need to use 3 indents on a 3 level nested namespace. One level is enough
     to highlight the presence of a nesting.
+
+- the shorthand type names `uint`, `ulong`, `uchar`, `short`, `ushort`, `llong`, `ullong`
+  are preferred, as it is clearer to write the fundamental type in a single word. Index
+  variables _should always be unsigned._ Use `size_t` whenever applicable.footnote:[yet it is OK
+  to use `uint` in a for-loop where the limits are clear; likewise it is acceptable to use
+  a direct conversion signed ⟷ unsigned when the situation is simple and obvious. No need
+  to be pedantic on everything]
+  When the bit-size matters, please use explicit designations like `int32_t`, `uint64_t`.
+- we prefer to highlight the _typing as distinct_ from the names and entities; notably
+  the `*` pointer and `&` reference modifier are attached post-fix to the type, as opposed
+  to sticking it to the name: write ```int* thing`'', not ```int *thing`''. Whenever types
+  become difficult to parse, we introduce a type alias (`using Alias =`... with an uppercase
+  type alias name). This is especially relevant with function pointers, where we prefer
+  to define a type alias for the _function signature_ first.
+- in a similar vein, we distinguish between an ```const object`'' which _is really in-itself_
+  unmodifiable, as opposed to _taking a const-reference,_ which is always spelled out
+  post-fix as `object const&`, or a constant-pointer spelled as `const*`.
+- we use the textual form of the boolean operators `and`, `or` and `not`, because this
+  allows to make the code resemble complete meaningful sentences in human language.
+  We _do use_ the »line noise« variant however for all low-level bit manipulation,
+  `&`,`|`, `^`, sometimes also for `!` -- using those is taken as an indication of
+  entering the ``danger zone''...
 
 Naming conventions
 ~~~~~~~~~~~~~~~~~~
@@ -159,7 +197,7 @@ Recommendations at code level
   * always consider the _ownership_ and _lifecycle_ -- value objects can not have any, should
     ideally be immutable, and stored inline or avoid heap allocation. If in doubt, decompose
     and turn unclear and changing parts into a service / dependency, attached by (value) handle
-  * objects with reference semantics should be made _noncopyable_, while value objects should use
+  * objects with reference semantics should be made _non-copyable_, while value objects should use
     default copy semantics. Use 'lib/nocopy.hpp' to express the flavours of move only / no copy.
   * equality comparisons of ref objects are to be based on their identity solely, while for
     value objects, all properties must be included which are tangible and independently variable.
@@ -175,7 +213,7 @@ Recommendations at code level
   +
   * if is something is ``just a number'' yet has some specific meaning,
     better use a lightweight wrapper object to tag it with semantics
-  * if a common pattern works involving distinct, unrelated entities,
+  * if a common pattern works by involving distinct, unrelated entities,
     then better use generic programming or even higher-kinded types,
     instead of forcing unrelated types to inherit from some supertype.
   * avoid downcasts, `void*` and switch-on-type programming; this
