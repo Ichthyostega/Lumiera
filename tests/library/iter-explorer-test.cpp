@@ -184,11 +184,11 @@ namespace test{
       };
     
     
-    /** Diagnostic helper: join all the elements from a _copy_ of the iterator */
+    /** Diagnostic helper: join all the elements from the iterator */
     template<class II>
     inline string
     materialise (II&& ii)
-    {
+    {                    // note: copy here when given by-ref
       return util::join (std::forward<II> (ii), "-");
     }
     

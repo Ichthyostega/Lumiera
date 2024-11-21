@@ -393,7 +393,7 @@ for} tail...
           TextTemplate t3{" 1 ${if a} 2 ${if b} 3 ${else} ${b} ${endif b} 4 ${else}${if a} 5 ${else} ${a} ${endif a}${endif a} 6 "};
           CHECK (t3.render("a=2,b=3") == " 1  2  3  4  6 "_expect );             // ^^^^^ Note can never be true here
           CHECK (t3.render("a=2,b=0") == " 1  2  0  4  6 "_expect );
-          CHECK (t3.render("a=0,b=3") == " 1  0  6 "_expect       );             // thus if a ≙ false we see only 1 §{a} 6
+          CHECK (t3.render("a=0,b=3") == " 1  0  6 "_expect       );             // thus if a ≙ false we see only 1 ${a} 6
           CHECK (t3.render("a=0,b=0") == " 1  0  6 "_expect       );
         }
       

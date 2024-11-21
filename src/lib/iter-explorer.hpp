@@ -517,8 +517,8 @@ namespace lib {
         BaseAdapter(SRC const& src) : SRC{src}                { }
         BaseAdapter(SRC && src)     : SRC{forward<SRC> (src)} { }
         
-        void expandChildren() { }
-        size_t depth()  const { return 0; }
+        void expandChildren() { }                             ///< collaboration: recurse into nested scope
+        size_t depth()  const { return 0; }                   ///< collaboration: number of nested scopes
       };
     
     

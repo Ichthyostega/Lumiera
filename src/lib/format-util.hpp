@@ -160,7 +160,7 @@ namespace util {
         _RangeIter(IT&& srcIter)
           : iter(std::forward<IT>(srcIter))
           { }
-        _RangeIter(IT const& srcIter)
+        _RangeIter(IT const& srcIter)          // note: copy here
           : iter(srcIter)
           { }
         
@@ -170,7 +170,9 @@ namespace util {
   
   /**
    * enumerate a collection's contents, separated by delimiter.
-   * @param coll something that is standard-iterable
+   * @param coll something that is standard- or Lumiera-iterable
+   * @note Lumiera-iterator is copied when given by ref, otherwise moved,
+   *       while in all other cases the source container is taken by const&
    * @return all contents converted to string and joined into
    *         a single string, with separators interspersed.
    * @remarks based `ostringstream`; additionally, we use our
@@ -191,7 +193,7 @@ namespace util {
   join (CON&& coll, string const& delim =", ")
   {
     using Coll = typename lib::meta::Strip<CON>::TypePlain;
-    _RangeIter<Coll> range(std::forward<CON>(coll));
+    _RangeIter<Coll> range(std::forward<CON>(coll));    // copies when CON is reference
     
     auto strings = stringify (std::move (range.iter));
     if (!strings) return "";

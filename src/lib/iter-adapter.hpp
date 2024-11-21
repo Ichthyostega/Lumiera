@@ -936,7 +936,7 @@ namespace lib {
       bool
       isValid ()  const
         {
-          return (i_!= INT()) && (i_ < e_);   // NOTE: use comparison to detect iteration end
+          return i_ < e_;     // NOTE: use comparison to detect iteration end
         }
       
       bool

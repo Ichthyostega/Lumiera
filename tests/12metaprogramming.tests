@@ -356,6 +356,11 @@ return: 0
 END
 
 
+PLANNED "Tuple-zipped iterators" IterZip_test <<END
+return: 0
+END
+
+
 TEST "Iterable type detection" IterableClassification_test <<END
 out: can_STL_ForEach<LongVector>	 : Yes
 out: can_STL_ForEach<TimeSet>	 : Yes

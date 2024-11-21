@@ -48,6 +48,7 @@
 #include "lib/meta/util.hpp"
 
 #include <tuple>
+#include <utility>
 
 
 namespace util { // forward declaration
@@ -61,23 +62,75 @@ namespace util { // forward declaration
 namespace lib {
 namespace meta {
   
+  /** trait to detect tuple types */
+  template<typename T>
+  struct is_Tuple
+    : std::false_type
+    { };
+  
+  template<typename...TYPES>
+  struct is_Tuple<std::tuple<TYPES...>>
+    : std::true_type
+    { };
+  
+  template<typename...TYPES>
+  struct is_Tuple<const std::tuple<TYPES...>>
+    : std::true_type
+    { };
+
+  template<class TUP>
+  using enable_if_Tuple = lib::meta::enable_if<lib::meta::is_Tuple<std::remove_reference_t<TUP>>>;
+
+  template<class TUP>
+  using disable_if_Tuple = lib::meta::disable_if<lib::meta::is_Tuple<std::remove_reference_t<TUP>>>;
+  
+  
   /**
-   * Helper: perform some arbitrary operation on each element of a tuple.
+   * Tuple iteration: perform some arbitrary operation on each element of a tuple.
    * @note the given functor must be generic, since each position of the tuple
    *       may hold a data element of different type.
    * @remark credits to David Vandevoorde (member of C++ committee) for using
    *       std::apply to unpack the tuple's contents into an argument pack and
    *       then employ a fold expression with the comma operator.
    */
-  template<class FUN, typename...ELMS>
-  void forEach (std::tuple<ELMS...>&& tuple, FUN fun)
+  template<class TUP, class FUN, typename = enable_if_Tuple<TUP>>
+  void
+  forEach (TUP&& tuple, FUN fun)
   {
-      std::apply ([&fun](auto&... elms)
-                       {
-                         (fun(elms), ...);
-                       }
-                 ,tuple);
+           std::apply ([&fun](auto&&... elms)
+                            {
+                              (fun (std::forward<decltype(elms)> (elms)), ...);
+                            }
+                      ,std::forward<TUP> (tuple));
   }
+  
+  /**
+   * Apply some arbitrary function onto all elements of a tuple.
+   * @return a new tuple constructed from the results of this function
+   * @note the functor must be generic and able to work with all element types
+   * @warning pay attention to references; the function can take arguments by-ref
+   *          and manipulate them (side-effect), and it may return references,
+   *          which will be placed as such into the result tuple; furthermore,
+   *          the argument tuple can also be taken as reference...
+   * @remark The tuple constructor invocation is preceded by a regular argument evaluation,
+   *          which has unspecified evaluation order (even in C++17); _no assumptions_ can be
+   *          made regarding the order the functor will see the source tuple elements.
+   *          Notably this differs from #forEach, where a fold-expression with comma-operator
+   *          is used, which is guaranteed to evaluate from left to right.
+   */
+  template<class TUP, class FUN, typename = enable_if_Tuple<TUP>>
+  auto
+  mapEach (TUP&& tuple, FUN fun)
+  {
+    return std::apply ([&fun](auto&&... elms)
+                            {  //..construct the type explicitly (make_tuple would decay fun result types)
+                              using Tuple = std::tuple<decltype(fun (std::forward<decltype(elms)> (elms))) ...>;
+                              return Tuple (fun (std::forward<decltype(elms)> (elms)) ...);
+                            }
+                      ,std::forward<TUP> (tuple));
+  }
+  
+  
   
   
   
@@ -152,17 +205,6 @@ namespace meta {
       using List = typename Seq::List;
     };
   
-  
-  /** trait to detect tuple types */
-  template<typename T>
-  struct is_Tuple
-    : std::false_type
-    { };
-  
-  template<typename...TYPES>
-  struct is_Tuple<std::tuple<TYPES...>>
-    : std::true_type
-    { };
   
   
   
