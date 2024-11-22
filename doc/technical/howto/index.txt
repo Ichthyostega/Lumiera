@@ -2,6 +2,7 @@ Developer HOWTOs
 ================
 
 //MENU: title Dev HOWTOs
+//MENU: prepend child crackNuts
 
 
 This section contains a loose collection of instructions, recipes, tutorials and
@@ -9,8 +10,10 @@ similar usefull pieces of information targeted at Lumiera developers. See also
 
 - the general link:{l}/project/faq.html[Lumiera FAQ]
 - the link:{ldoc}/user/index.html[User documentation]
+- link::{ldoc}/technical/code/index.html[Codebase organisation]
 
 == Notepad
+- a link:crackNuts.html[collection] of solution ideas
 - link:DebugGdbPretty.html[Python pretty printers for GDB]
 - link:HashFunctions.html[Notes regarding standard hash functions]
 

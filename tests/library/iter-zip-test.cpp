@@ -25,6 +25,7 @@
 #include "lib/util.hpp"
 
 #include <array>
+#include <vector>
 
 
 namespace lib {
@@ -84,12 +85,33 @@ namespace test{
       virtual void
       run (Arg)
         {
+          simpleUsage();
           test_Fixture();
           demo_mapToTuple();
           demo_construction();
           UNIMPLEMENTED ("nebbich.");
         }
       
+      
+      /** @test demonstrate combined iteration */
+      void
+      simpleUsage()
+        {
+          auto a = std::array{1u,2u,3u};
+          auto v = std::vector{{2l,3l}};
+          
+          for (auto [u,f] : zip(a,v))
+            CHECK (u + 1 == f);
+          
+          auto it = izip(v);
+          CHECK (it);
+SHOW_EXPR(*it)
+          ++it;
+SHOW_EXPR(*it)
+          CHECK (it);
+          ++it;
+          CHECK (not it);
+        }
       
       /** @test demonstrate how the test Fixture is used */
       void
@@ -120,7 +142,7 @@ namespace test{
           CHECK (t1   == "«tuple<uint, double, char>»──(42,1.61803,7)"_expect );   // src-tuple t1 affected by side-effect
           
           // tuple may hold a reference....
-          tuple<char, char&> t2{get<2>(t1),get<2>(t1ff)};
+          tuple<char, char&> t2{get<2>(t1), get<2>(t1ff)};
           CHECK (t2 == "«tuple<char, char&>»──(7,7)"_expect );
           
           auto t2f = mapEach (t2, [](auto& v){ v -= 1; return v; });
@@ -139,11 +161,11 @@ namespace test{
           CHECK (t2r == "«tuple<char&, char&>»──(6,6)"_expect );                   // function yields references, which are placed into res-tuple
           
           forEach (t2r, [](auto& v){ v +=23; });
-          CHECK (t2r == "«tuple<char&, char&>»──(M,M)"_expect );                   // apply operation with side-effect to the last res-tuple t2r
-          CHECK (t2  == "«tuple<char, char&>»──(M,M)"_expect );                    // the referred src-tuple t2 is also affected
-          CHECK (t2f == "«tuple<char, char>»──(6,6)"_expect );                     // (while previously constructed t2f holds values unaffected)
-          CHECK (t1  == "«tuple<uint, double, char>»──(42,1.61803,7)"_expect );    // the first elm in t2 was bound by value, so no side-effect
-          CHECK (t1ff =="«tuple<uint, double, char>»──(42,1.61803,M)"_expect );    // but the second elm in t2 was bound by ref to t1ff
+          CHECK (t2r ==  "«tuple<char&, char&>»──(M,M)"_expect );                  // apply operation with side-effect to the last res-tuple t2r
+          CHECK (t2  ==  "«tuple<char, char&>»──(M,M)"_expect );                   // the referred src-tuple t2 is also affected
+          CHECK (t2f ==  "«tuple<char, char>»──(6,6)"_expect );                    // (while previously constructed t2f holds values unaffected)
+          CHECK (t1  ==  "«tuple<uint, double, char>»──(42,1.61803,7)"_expect );   // the first elm in t2 was bound by value, so no side-effect
+          CHECK (t1ff == "«tuple<uint, double, char>»──(42,1.61803,M)"_expect );   // but the second elm in t2 was bound by ref to t1ff
         }
       
       
@@ -200,7 +222,7 @@ namespace test{
               ITup&
               yield()  const
                 {
-                  return unConst(iters_);        // ◁─────────────── note: we expose the iterator-touple itself as »product«
+                  return unConst(iters_);        // ◁─────────────── note: we expose the iterator-tuple itself as »product«
                 }
               
               void

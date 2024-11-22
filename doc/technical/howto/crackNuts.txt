@@ -38,7 +38,8 @@ visualisation::
   into a relevant test, but commented-out there.
 +
 - generate Graphviz diagrams: 'lib/dot-gen.hpp' provides a simple DSL. See 'test-chain-load-test.cpp'
-- generate Gnuplot scripts: use the Text-Template engine to fill in data, possibly from a data table
+- generate Gnuplot scripts: use the xref:texttemplate[Text-Template] engine to fill in data, possibly
+  from a generated data table
 
   * 'lib/gnuplot-gen.hpp' provides some pre-canned scripts for statistics plots
   * used by the 'stress-test-rig.cpp', in combination with 'data.hpp' to collect measurement results
@@ -147,8 +148,11 @@ Formatting
   * the templated front-end passes-through most basic types and types with string-conversion
   * all invocations are strictly error safe (never throw) and can thus be used from catch-handlers
 
-- use the *Text-Template* engine. See 'text-template-test.cpp'. Can be used with simple map bindings,
-  but also from a `lib::GenNode` tree, or with a custom defined `DataSource` template
+- use the anchor:texttemplate[lib/text-template]*Text-Template* engine. See 'text-template-test.cpp'.
+  Can be used with simple map bindings, or even a _definition string_ `"x=42, y=why-not?"`, but can also
+  draw data o from a `lib::GenNode` tree, or even from a custom defined `DataSource` template.
+  Supports placeholders, conditionals and simple loops (and that's it --
+  because there are way more capable solutions _out there_ ☺)
 
 
 Language constructs
@@ -166,7 +170,7 @@ build-from-anything::
 
 - prevent shadowing of _automatically generated copy operations._
   See https://issues.lumiera.org/ticket/963[#963]. Based on the ``disable if'' SFINAE technique.
-  A ready-made templated typedef `lib::metadisable_if_self` can be found in 'lib/meta/util.hpp'  
+  A ready-made templated typedef `lib::meta::disable_if_self` can be found in 'lib/meta/util.hpp'  
 
 
 Variadics
@@ -179,7 +183,7 @@ pick and manipulate individually::
 - but sometimes it is easier to use the tried and true technique of the Loki-Typelists, which
   can be programmed recursively, similar to LISP. The »bridge« is to unpack the variadic argument pack
   into the `lib::meta::Types<ARGS...>` ([yellow-background]#⚠ still broken in 2024#
-  see https://issues.lumiera.org/ticket/987[#987], use `lib::meta::TySeq` from 'variadic-helper.hpp' as workaround... 
+  see https://issues.lumiera.org/ticket/987[#987], use `lib::meta::TySeq` from 'variadic-helper.hpp' as workaround...)
 +
 apply functor to each tuple element::
   A common trick is to use `std::apply` in combination with a _fold-expression_

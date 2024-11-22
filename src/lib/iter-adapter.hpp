@@ -977,7 +977,8 @@ namespace lib {
   /** convenience function to iterate "each number" */
   template<typename INT>
   inline NumIter<INT>
-  eachNum (INT start, INT end)
+  eachNum (INT start = std::numeric_limits<INT>::min()
+          ,INT end   = std::numeric_limits<INT>::max())
   {
     return NumIter<INT> (start, end);
   }
