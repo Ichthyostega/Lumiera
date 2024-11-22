@@ -97,9 +97,8 @@ namespace util {
    *  @note the container is taken by \c const& and
    *        the \c const is \em stripped before access.
    */
-  template <typename COLL>
-  inline                    enable_if< treat_as_STL_Container<COLL>,
-  typename COLL::reference  >
+  template <typename COLL,  typename = enable_if< treat_as_STL_Container<COLL>>>
+  inline auto
   first (COLL const& coll)
   {
     using lib::meta::unwrap;
@@ -113,9 +112,8 @@ namespace util {
    *  @note the container is taken by \c const& and
    *        the \c const is \em stripped before access.
    */
-  template <typename COLL>
-  inline                    enable_if< can_direct_access_Last<COLL>,
-  typename COLL::reference  >
+  template <typename COLL,  typename = enable_if< can_direct_access_Last<COLL>>>
+  inline auto
   last (COLL const& coll)
   {
     using lib::meta::unwrap;
@@ -129,9 +127,8 @@ namespace util {
   /** extract the first element yielded by an Lumiera Forward Iterator.
    * @warning the iterator is modified.
    */
-  template <typename IT>
-  inline                    enable_if< treat_as_LumieraIterator<IT>,
-  typename IT::reference    >
+  template <typename IT,    typename = enable_if<treat_as_LumieraIterator<IT>>>
+  inline auto
   first (IT ii)
   {
     __ensure_nonempty(ii);
@@ -145,9 +142,8 @@ namespace util {
    * @note returning by-value, contrary to the other tools in this suite
    * @note only available when including itertools.hpp beforehand
    */
-  template <typename IT>
-  inline                    enable_if< treat_as_LumieraIterator<IT>,
-  typename IT::value_type   >
+  template <typename IT,    typename = enable_if<treat_as_LumieraIterator<IT>>>
+  inline auto
   last (IT ii)
   {
     __ensure_nonempty(ii);

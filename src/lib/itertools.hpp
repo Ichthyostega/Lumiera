@@ -280,7 +280,7 @@ namespace lib {
     : IdentityCore<IT>
     {
       using Raw = IdentityCore<IT>;
-      using Val = typename IT::reference;
+      using Val = iter::Yield<IT>;
       
       
       function<bool(Val)> predicate_;
@@ -678,8 +678,8 @@ namespace lib {
   template<class IT, class VAL>
   class TransformingCore
     {
-      typedef typename IT::reference InType;
-      typedef wrapper::ItemWrapper<VAL> Item;
+      using InType = iter::Yield<IT>;
+      using Item = wrapper::ItemWrapper<VAL>;
       
       function<VAL(InType)> trafo_;
       

@@ -312,9 +312,9 @@ namespace test{
           VERIFY_ERROR (ITER_EXHAUST, ++ii );
           
           ii = explore (CountDown{5});
-          CHECK (materialise(ii) == "5-4-3-2-1");
+          CHECK (materialise(ii) == "5-4-3-2-1"_expect);
           ii = explore (CountDown{7,4});
-          CHECK (materialise(ii) == "7-6-5");
+          CHECK (materialise(ii) == "7-6-5"_expect);
           ii = explore (CountDown{});
           CHECK ( isnil (ii));
           CHECK (!ii);

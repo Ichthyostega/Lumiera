@@ -19,6 +19,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/iter-zip.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/test/diagnostic-output.hpp"/////////////TODO
 #include "lib/format-util.hpp"
@@ -33,7 +34,8 @@ namespace test{
   
 //  using ::Test;
 //  using util::isnil;
-//  using LERR_(ITER_EXHAUST);
+  using util::join;
+  using LERR_(ITER_EXHAUST);
   using lib::meta::forEach;
   using lib::meta::mapEach;
   using std::make_tuple;
@@ -89,6 +91,9 @@ namespace test{
           test_Fixture();
           demo_mapToTuple();
           demo_construction();
+          
+          verify_iteration();
+          verify_references();
           UNIMPLEMENTED ("nebbich.");
         }
       
@@ -100,17 +105,21 @@ namespace test{
           auto a = std::array{1u,2u,3u};
           auto v = std::vector{{2l,3l}};
           
-          for (auto [u,f] : zip(a,v))
-            CHECK (u + 1 == f);
+          // loop over both in lockstep
+          for (auto [u,l] : zip(a,v))
+            CHECK (u + 1 == l);
           
+          // iterate-with index
           auto it = izip(v);
           CHECK (it);
-SHOW_EXPR(*it)
+          CHECK (*it == "«tuple<ulong, long&>»──(0,2)"_expect );
           ++it;
-SHOW_EXPR(*it)
+          CHECK (*it == "«tuple<ulong, long&>»──(1,3)"_expect );
           CHECK (it);
           ++it;
           CHECK (not it);
+          VERIFY_ERROR (ITER_EXHAUST, *it  );
+          VERIFY_ERROR (ITER_EXHAUST, ++it );
         }
       
       /** @test demonstrate how the test Fixture is used */
@@ -272,12 +281,78 @@ SHOW_EXPR(*it)
                                      "«tuple<int, uint>»──(1,2)-"
                                      "«tuple<int, uint>»──(2,1)"_expect);
         }
+      
+      
+      
+      
+      /** @test create various product (tuple) iterators
+       *   from mixed source iterators and verify basic iteration.
+       */
+      void
+      verify_iteration()
+        {
+          CHECK (materialise (
+                    zip (num31(), num32(), num33())
+                )
+                == "«tuple<uint&, uint&, uint&>»──(1,2,3)-"
+                   "«tuple<uint&, uint&, uint&>»──(4,5,6)-"
+                   "«tuple<uint&, uint&, uint&>»──(7,8,9)-"
+                   "«tuple<uint&, uint&, uint&>»──(10,11,12)-"
+                   "«tuple<uint&, uint&, uint&>»──(13,14,15)"_expect);
+          
+          CHECK (materialise(
+                    izip (num31(), num32(), num33())
+                )
+                == "«tuple<ulong, uint&, uint&, uint&>»──(0,1,2,3)-"
+                   "«tuple<ulong, uint&, uint&, uint&>»──(1,4,5,6)-"
+                   "«tuple<ulong, uint&, uint&, uint&>»──(2,7,8,9)-"
+                   "«tuple<ulong, uint&, uint&, uint&>»──(3,10,11,12)-"
+                   "«tuple<ulong, uint&, uint&, uint&>»──(4,13,14,15)"_expect);
+        }
+      
+      
+      /** @test verify pass-through of references */
+      void
+      verify_references()
+        {
+          auto vec = std::vector{1,5};
+          auto arr = std::array{2,3};
+          
+          // Case-1
+          auto i1 = izip (vec,arr);
+          
+          CHECK (*i1 == "«tuple<ulong, int&, int&>»──(0,1,2)"_expect );        // initial state points to the first elements, prefixed with index≡0
+          get<1>(*i1) = 5;                                                     // manipulate through the exposed reference
+          CHECK (*i1 == "«tuple<ulong, int&, int&>»──(0,5,2)"_expect );        // effect of manipulation is visible
+
+          CHECK (join(vec) == "5, 5"_expect );                                 // manipulation indeed flipped the first element in the vector
+          CHECK (join(arr) == "2, 3"_expect );                                 // (while the array remains unaffected)
+          
+          // Case-1
+          auto i2 = izip (explore(vec).transform([](uint v){ return v-1; })    // this time the first iterator is a pipeline with a transformer
+                         ,arr);                                                // while the second one is again a direct iteration of the array
+          
+          CHECK (*i2 == "«tuple<ulong, uint&, int&>»──(0,4,2)"_expect );       // again can see the first elements, and the effect of the transformer
+          get<0>(*i2) = 9;                                                     // manipulate complete result tuple
+          get<1>(*i2) = 9;
+          get<2>(*i2) = 9;
+          CHECK (*i2 == "«tuple<ulong, uint&, int&>»──(9,9,9)"_expect );       // effect of the manipulation is visible
+          
+          ++i2;                                                                // ...but iteration re-uses the internal result-tuple storage
+          CHECK (*i2 == "«tuple<ulong, uint&, int&>»──(1,4,3)"_expect );       // and so the effect of the manipulation seems gone
+          CHECK (join(vec) == "5, 5"_expect );                                 // ...which is in fact true for the vector, due to the transformer
+          CHECK (join(arr) == "9, 3"_expect );                                 // ...while the array could be reached through the reference
+        }
 /*
 SHOW_EXPR          
                 (materialise (
-                    num32().transform(hexed)
+                    zip (num31(), num32(), num33())
                 )
                 )
+          CHECK (materialise (
+                    zip (num31(), num32(), num33())
+                )
+                == ""_expect);
 */
     };
   

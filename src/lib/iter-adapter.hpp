@@ -136,6 +136,13 @@ namespace lib {
         }
   
   
+  namespace iter {
+    /** type binding helper: an iterato's actual result type */
+    template<class IT>
+    using Yield = decltype(std::declval<IT>().operator*());
+  }
+  
+  
 
   /**
    * Adapter for building an implementation of the »Lumiera Forward Iterator« concept.
@@ -869,8 +876,11 @@ namespace lib {
    * This allows to build pipelines based on all
    * numbers "for `i` from `1...N`". This range is _half open_,
    * i.e. the start is inclusive and the end point is exclusive.
-   * @remarks basically this is `boost::irange` without any boost `#include`
+   * @remark default constructed iters are empty and compare equal with
+   *         any other exhausted NumIter; essential requirement for a
+   *         Lumiera Forward Iterator (allows use in range-for-loops).
    * @tparam INT a number like type, which can be incremented and compared.
+   * @note deliberately yields by-value and has no `operator->`
    */
   template<typename INT>
   class NumIter
@@ -879,9 +889,9 @@ namespace lib {
       INT e_;
       
     public:
-      typedef const INT* pointer;
-      typedef const INT& reference;
-      typedef       INT  value_type;
+      typedef INT* pointer;
+      typedef INT& reference;
+      typedef INT  value_type;
       
       NumIter (INT start, INT end)
         : i_(start)
@@ -911,18 +921,11 @@ namespace lib {
       
       /* === lumiera forward iterator concept === */
       
-      reference
+      value_type
       operator*() const
         {
           _maybe_throw();
           return i_;
-        }
-      
-      pointer
-      operator->() const
-        {
-          _maybe_throw();
-          return &i_;
         }
       
       NumIter&
@@ -947,12 +950,17 @@ namespace lib {
       
       
       /** access wrapped index elements */
-      const INT&  getPos()  const { return i_; }
-      const INT&  getEnd()  const { return e_; }
+      INT&  getPos()  const { return i_; }
+      INT&  getEnd()  const { return e_; }
       
       
       ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (NumIter);
       
+      
+      /// Supporting equality comparisons...
+      bool operator!= (NumIter const& o) const  { return not operator==(o); }
+      bool operator== (NumIter const& o) const  { return (empty() and o.empty())    // empty iters must be equal (Lumiera iter requirement) 
+                                                      or (i_ == o.i_ and e_ == o.e_); }
       
     private:
       void
@@ -965,12 +973,6 @@ namespace lib {
   
   
   
-  /// Supporting equality comparisons...
-  template<class I1, class I2>
-  inline bool operator== (NumIter<I1> const& il, NumIter<I2> const& ir)  { return (!il && !ir) || (il.getPos() == ir.getPos()); }
-  
-  template<class I1, class I2>
-  inline bool operator!= (NumIter<I1> const& il, NumIter<I2> const& ir)  { return !(il == ir); }
   
   
   

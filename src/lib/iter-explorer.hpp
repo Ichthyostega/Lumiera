@@ -258,16 +258,9 @@ namespace lib {
       { };
     
     
-    /** the _value type_ yielded by a »state core« */
+    /** the _result type_ yielded by a »state core« */
     template<class COR>
-    struct CoreYield
-      {
-        using Res = remove_reference_t<decltype(std::declval<COR>().yield())>;
-        
-        using value_type = typename meta::RefTraits<Res>::Value;
-        using reference  = typename meta::RefTraits<Res>::Reference;
-        using pointer    = typename meta::RefTraits<Res>::Pointer;
-      };
+    using CoreYield = decltype(std::declval<COR>().yield());
     
     
     /** decide how to adapt and embed the source sequence into the resulting IterExplorer */
@@ -281,7 +274,7 @@ namespace lib {
     struct _DecoratorTraits<SRC,   enable_if<is_StateCore<SRC>>>
       {
         using SrcRaw  = typename lib::meta::Strip<SRC>::Type;
-        using SrcVal  = typename CoreYield<SrcRaw>::value_type;
+        using SrcVal  = typename meta::RefTraits<CoreYield<SrcRaw>>::Value;
         using SrcIter = lib::IterableDecorator<SrcVal, lib::CheckedCore<SrcRaw>>;
       };
     
@@ -434,7 +427,7 @@ namespace lib {
         
         /** adapt to a functor, which accepts the value type of the source sequence ("monadic" usage pattern) */
         template<class IT>
-        struct ArgAdapter<IT,   enable_if<__and_<is_convertible<typename IT::reference, Arg>
+        struct ArgAdapter<IT,   enable_if<__and_<is_convertible<iter::Yield<IT>, Arg>
                                                  ,__not_<is_convertible<IT, Arg>>>>>        // need to exclude the latter, since IterableDecorator
           {                                                                                //  often seems to accept IT::value_type (while in fact it doesn't)
             static auto
@@ -765,6 +758,11 @@ namespace lib {
      * storing the treated result into an universal value holder buffer. The given functor
      * is adapted in a similar way as the "expand functor", so to detect and convert the
      * expected input on invocation.
+     * @note the result-type of the #yield() function _must be_ `reference`, even when
+     *       the TransformFunctor produces a value; otherwise we can not provide a safe
+     *       `operator->` on any iterator downstream. This is also the reason why the
+     *       ItemWrapper is necessary, precisely _because we want to support_ functions
+     *       producing a value; it provides a safe location for this value to persist.
      */
     template<class SRC, class RES>
     class Transformer

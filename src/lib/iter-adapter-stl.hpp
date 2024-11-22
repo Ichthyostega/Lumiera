@@ -429,10 +429,10 @@ namespace iter_stl {
        *           this might or might not yield side-effects.
        */
       template<class IT>
-      IterSnapshot (IT& src)
+      IterSnapshot (IT&& src)
         {
           for ( ; src; ++src)
-            buffer_.push_back(*src);
+            buffer_.emplace_back (*src);
         }
       
       /** build snapshot from a copy of the Lumiera Iterator
@@ -443,15 +443,15 @@ namespace iter_stl {
       IterSnapshot (IT const& src)
         {
           for (IT copy{src}; copy; ++copy)
-            buffer_.push_back(*copy);
+            buffer_.emplace_back (*copy);
         }
       
       /** take snapshot by consuming a STL iterator */
       template<class IT>
-      IterSnapshot (IT& pos, IT const& end)
+      IterSnapshot (IT&& pos, IT const& end)
         {
           for ( ; pos!=end; ++pos)
-            buffer_.push_back(*pos);
+            buffer_.emplace_back (*pos);
         }
       
       /** take snapshot from STL iterator */
@@ -459,7 +459,7 @@ namespace iter_stl {
       IterSnapshot (IT const& begin, IT const& end)
         {
           for (IT pos{begin}; pos!=end; ++pos)
-            buffer_.push_back(*pos);
+            buffer_.emplace_back (*pos);
         }
       
       IterSnapshot(IterSnapshot &&)                 = default;
