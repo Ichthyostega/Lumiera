@@ -119,7 +119,7 @@ Lumiera iterators::
   construct and in while-loops.
 IterExplorer::
   The function `lib::explore(IT)` builds on top of these features and is meant to basically
-  iterate anything that is iterable -- so use it to abstract away the details.
+  iterate anything that is iterable -- this can be used to level and abstract away the details.
 +
 - can be filtered and transformed
 - can be reduced or collected into a vector

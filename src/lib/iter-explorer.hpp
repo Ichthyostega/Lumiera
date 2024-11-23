@@ -79,10 +79,11 @@
  ** 
  ** @warning all builder operations work by _moving_ the existing pipeline built thus far into the parent
  **          of the newly built subclass object. The previously existing pipeline is defunct after that
- **          move; if you captured it into a variable, be sure to capture the _result_ of the new
- **          builder operation as well and don't use the old variable anymore. Moreover, it should
- **          be ensured that any "state core" used within IterExplorer has an efficient move ctor;
- **          including RVO, the compiler is typically able to optimise such move calls away altogether.
+ **          move; if you captured it into a variable, be sure to capture the _result_ of the new builder
+ **          operation as well and don't use the old variable anymore. An insidious trap can be to store
+ **          references to source iterator state _from within_ the pipeline. Moreover, it should be ensured
+ **          that any "state core" used within IterExplorer has an efficient move ctor; including RVO,
+ **          the compiler is typically able to optimise such move calls away altogether.
  ** 
  ** @see IterExplorer_test
  ** @see iter-adapter.hpp
@@ -763,6 +764,10 @@ namespace lib {
      *       `operator->` on any iterator downstream. This is also the reason why the
      *       ItemWrapper is necessary, precisely _because we want to support_ functions
      *       producing a value; it provides a safe location for this value to persist.
+     * @warning handling a transformer function which exposes references can be dangerous.
+     *       For this reason, Transformer attempts to »dis-engage« on each copy / assignment,
+     *       in order to provoke a re-invocation of the transformer function, which hopefully
+     *       picks up references to the copied / moved / swapped location. Be careful though!
      */
     template<class SRC, class RES>
     class Transformer
@@ -782,14 +787,37 @@ namespace lib {
         using pointer    = typename meta::ValueTypeBinding<RES>::pointer;
         
         
-        Transformer() =default;
-        // inherited default copy operations
-        
         template<typename FUN>
         Transformer (SRC&& dataSrc, FUN&& transformFunctor)
           : SRC{move (dataSrc)}                            // NOTE: slicing move to strip IterExplorer (Builder)
           , trafo_{_FunTraits<FUN,SRC>::adaptFunctor (forward<FUN> (transformFunctor))}
           { }
+        
+        Transformer() =default;
+        Transformer (Transformer const& o)
+          : SRC{o}
+          , trafo_{o.trafo_}
+          , treated_{/* deliberately empty: force re-engage */}
+          { }
+        Transformer (Transformer && o)
+          : SRC{move (o)}
+          , trafo_{move (o.trafo_)}
+          , treated_{/* deliberately empty: force re-engage */}
+          { }
+        Transformer&
+        operator= (Transformer changed)
+          {
+            swap (*this,changed);
+            return *this;
+          }
+        friend void
+        swap (Transformer& t1, Transformer& t2)
+          {
+            using std::swap;
+            t1.treated_.reset();
+            t2.treated_.reset();
+            swap (t1.trafo_, t2.trafo_);
+          }
         
         
         /** refresh state when other layers manipulate the source sequence
@@ -981,6 +1009,8 @@ namespace lib {
      *       This limitation was deemed acceptable (adapting a function with several arguments would
      *       require quite some nasty technicalities). The first argument of this `aggFun` refers
      *       to the accumulator by value, and thereby also implicitly defines the aggregate result type.
+     * @warning the Aggregator \a AGG *must not capture references* to upstream internal state, because
+     *       the overall pipeline will be moved into final location _after the initial ctor call._
      */
     template<class SRC, typename AGG, class GRP>
     class GroupAggregator

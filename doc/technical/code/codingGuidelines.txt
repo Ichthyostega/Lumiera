@@ -78,6 +78,11 @@ The Lumiera project uses GNU indentation style with slight adaptations.
   `&`,`|`, `^`, sometimes also for `!` -- using those is taken as an indication of
   entering the ``danger zone''...
 
+
+Spelling
+~~~~~~~~
+Lumiera uses _British spelling._ Please set your spell checker accordingly.
+
 Naming conventions
 ~~~~~~~~~~~~~~~~~~
 Naming conventions are used to characterise the kind of element at hand and give a visual
@@ -108,11 +113,6 @@ In case a definition actually denotes an object, there should be
 - plus an object pointer/handle: `typedef namespace_foo* NamespaceFoo;`
 
 The object pointer/handle should be passed as 1^st^ argument with the name +self+
-
-
-Spelling
-~~~~~~~~
-Lumiera uses _British spelling._ Please set your spell checker accordingly.
 
 
 General Code Arrangement and Layout
