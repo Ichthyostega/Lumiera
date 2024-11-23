@@ -27,15 +27,11 @@
 #include "lib/iter-adapter.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/meta/tuple-helper.hpp"
-#include "lib/util.hpp"
 
-//#include <deque>
 #include <utility>
 
 
 namespace lib {
-  
-//  using util::unConst;
   
   namespace iter {
     
@@ -71,11 +67,9 @@ namespace lib {
         
         bool
         checkPoint()  const
-          {
-            bool active{true};
-            meta::forEach (iters_      // optimiser can unroll and short-circuit
-                          ,[&](auto& it){ active = active and bool(it); });
-            return active;
+          {                                        //note: short-circuit
+            return std::apply ([](auto&... its) { return (bool(its) and ...); }
+                              , iters_);
           }
         
         ITUP&

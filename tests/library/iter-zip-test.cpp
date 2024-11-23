@@ -32,9 +32,8 @@
 namespace lib {
 namespace test{
   
-//  using ::Test;
-//  using util::isnil;
   using util::join;
+  using util::isnil;
   using LERR_(ITER_EXHAUST);
   using lib::meta::forEach;
   using lib::meta::mapEach;
@@ -64,10 +63,6 @@ namespace test{
     }
   }
   
-  
-  
-/////////////////////////////////////////
-/////////////////////////////////////////
   #define TYPE(_EXPR_) showType<decltype(_EXPR_)>()
 
   
@@ -77,7 +72,10 @@ namespace test{
   /*********************************************************************************//**
    * @test demonstrate construction and verify behaviour of a combined-iterator builder.
    *     - construction from arbitrary arguments by tuple-mapping a builder function
-   * 
+   *     - defining the operation on the product type by lifting individual operations
+   *     - use the library building blocks to construct a zip-iter-builder
+   *     - iterate a mix of source iterators and containers
+   *     - apply additional processing logic by pipelining
    * @see IterExplorer
    * @see IterExplorer_test
    */
@@ -94,7 +92,7 @@ namespace test{
           
           verify_iteration();
           verify_references();
-          UNIMPLEMENTED ("nebbich.");
+          verify_pipelining();
         }
       
       
@@ -308,7 +306,70 @@ namespace test{
                    "«tuple<ulong, uint&, uint&, uint&>»──(2,7,8,9)-"
                    "«tuple<ulong, uint&, uint&, uint&>»──(3,10,11,12)-"
                    "«tuple<ulong, uint&, uint&, uint&>»──(4,13,14,15)"_expect);
+          
+          
+          auto s6 = std::array{1,1,2,3,5,8};
+          auto s3 = {3,2,1};
+          auto s0 = eachNum(5u,5u);
+          CHECK (TYPE(s6) == "array<int, 6ul>"_expect );
+          CHECK (TYPE(s3) == "initializer_list<int>"_expect );
+          CHECK (TYPE(s0) == "NumIter<uint>"_expect );
+          
+          CHECK (materialise (
+                    zip (s6,s6,s6,eachNum('a'))
+                )
+                == "«tuple<int&, int&, int&, char>»──(1,1,1,a)-"
+                   "«tuple<int&, int&, int&, char>»──(1,1,1,b)-"
+                   "«tuple<int&, int&, int&, char>»──(2,2,2,c)-"
+                   "«tuple<int&, int&, int&, char>»──(3,3,3,d)-"
+                   "«tuple<int&, int&, int&, char>»──(5,5,5,e)-"
+                   "«tuple<int&, int&, int&, char>»──(8,8,8,f)"_expect);
+          
+          CHECK (materialise (
+                    zip (s6,s3,s6,eachNum('a'))
+                )
+                == "«tuple<int&, int const&, int&, char>»──(1,3,1,a)-"
+                   "«tuple<int&, int const&, int&, char>»──(1,2,1,b)-"
+                   "«tuple<int&, int const&, int&, char>»──(2,1,2,c)"_expect);
+          
+          CHECK (isnil (s0));
+          CHECK (materialise (
+                    zip (s0,s3,s6,eachNum('a'))
+                )
+                == ""_expect);
+          
+          CHECK (materialise (
+                    zip (eachNum('a'),eachNum(-1),s0,s0)
+                )
+                == ""_expect);
+          
+          CHECK (materialise (
+                    zip (eachNum('a'),eachNum(-1),s3,s0)
+                )
+                == ""_expect);
+          
+          CHECK (materialise (
+                    zip (eachNum('a'),eachNum(-1),s3,s3)
+                )
+                == "«tuple<char, int, int const&, int const&>»──(a,-1,3,3)-"
+                   "«tuple<char, int, int const&, int const&>»──(b,0,2,2)-"
+                   "«tuple<char, int, int const&, int const&>»──(c,1,1,1)"_expect);
+          
+          // a wild mix of data sources,
+          // including infinite and virtual ones....
+          CHECK (materialise (
+                    izip (s6                                                   // a STL container given by reference
+                         ,explore(s6).filter([](int i){ return i%2; })         // IterExplorer pipeline with filtering
+                         ,numS<17,170>().transform(hexed)                      // IterExplorer pipeline with transformer and object value result
+                         ,eachNum((1+sqrt(5))/2)                               // a Lumiera iterator which happens to be almost inexhaustible
+                         ,explore(s3).asIterSource()                           // an IterSource, which is a virtual (OO) iterator interface
+                         )
+                )
+                == "«tuple<ulong, int&, int&, string&, double, int const&>»──(0,1,1,AA,1.618034,3)-"
+                   "«tuple<ulong, int&, int&, string&, double, int const&>»──(1,1,1,BB,2.618034,2)-"
+                   "«tuple<ulong, int&, int&, string&, double, int const&>»──(2,2,3,CC,3.618034,1)"_expect);
         }
+      
       
       
       /** @test verify pass-through of references */
@@ -318,7 +379,7 @@ namespace test{
           auto vec = std::vector{1,5};
           auto arr = std::array{2,3};
           
-          // Case-1
+          // Case-1 ------
           auto i1 = izip (vec,arr);
           
           CHECK (*i1 == "«tuple<ulong, int&, int&>»──(0,1,2)"_expect );        // initial state points to the first elements, prefixed with index≡0
@@ -328,7 +389,7 @@ namespace test{
           CHECK (join(vec) == "5, 5"_expect );                                 // manipulation indeed flipped the first element in the vector
           CHECK (join(arr) == "2, 3"_expect );                                 // (while the array remains unaffected)
           
-          // Case-1
+          // Case-2 ------
           auto i2 = izip (explore(vec).transform([](uint v){ return v-1; })    // this time the first iterator is a pipeline with a transformer
                          ,arr);                                                // while the second one is again a direct iteration of the array
           
@@ -342,6 +403,33 @@ namespace test{
           CHECK (*i2 == "«tuple<ulong, uint&, int&>»──(1,4,3)"_expect );       // and so the effect of the manipulation seems gone
           CHECK (join(vec) == "5, 5"_expect );                                 // ...which is in fact true for the vector, due to the transformer
           CHECK (join(arr) == "9, 3"_expect );                                 // ...while the array could be reached through the reference
+        }
+      
+      
+      
+      
+      /** @test the result is actually an IterExplorer pipeline builder,
+       *        which can be used to attach further processing
+       */
+      void
+      verify_pipelining()
+        {
+SHOW_EXPR          
+                (materialise (
+                    zip (num31(), num32(), num33())
+                      . transform([](auto& it){ auto [a,b,c] = *it;
+                                                return a+b+c;
+                                              })
+                )
+                )
+SHOW_EXPR          
+                (materialise (
+                    zip (num31(), num32(), num33())
+                      . filter   ([](auto& it){ auto [a,b,c] = *it;
+                                                return not ((a+b+c) % 2);
+                                              })
+                )
+                )
         }
 /*
 SHOW_EXPR          

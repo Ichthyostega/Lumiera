@@ -356,7 +356,7 @@ return: 0
 END
 
 
-PLANNED "Tuple-zipped iterators" IterZip_test <<END
+TEST "Tuple-zipped iterators" IterZip_test <<END
 return: 0
 END
 
