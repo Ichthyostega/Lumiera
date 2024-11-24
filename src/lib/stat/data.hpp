@@ -231,7 +231,8 @@ namespace stat{
           CSVData csv{{}};
           csv.reserve (size()+1);
           auto header = generateHeaderSpec();
-          std::swap (csv[0], header);
+          using std::swap;
+          swap (csv[0], header);
           for (uint i=0; i < size(); ++i)
             csv.emplace_back (formatCSVRow(i));
           return csv;

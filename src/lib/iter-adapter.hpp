@@ -551,6 +551,8 @@ namespace lib {
       CheckedCore& operator= (CheckedCore&&)      =default;
       CheckedCore& operator= (CheckedCore const&) =default;
       
+      using TAG_CheckedCore_Raw = COR;        ///< marker to allow unwrapping the raw core
+      
       
       /* === state protocol API for IterStateWrapper === */
       bool

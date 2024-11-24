@@ -169,7 +169,7 @@ namespace test {
           CHECK (w1->val == l1->val);
           CHECK (w1->val == l3->val);
           
-          std::swap (l2, l3);
+          swap (l2, l3);
           CHECK (w1->val == l1->val);
           CHECK (w1->val == l2->val);
           CHECK (w2->val == l3->val);

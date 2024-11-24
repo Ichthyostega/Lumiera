@@ -179,8 +179,9 @@ namespace lib {
       friend void
       swap (UninitialisedDynBlock& u1, UninitialisedDynBlock& u2)
       {
-        std::swap (u1.size_, u2.size_);
-        std::swap (u1.buff_, u2.buff_);
+        using std::swap;
+        swap (u1.size_, u2.size_);
+        swap (u1.buff_, u2.buff_);
       }
       
       explicit

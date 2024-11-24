@@ -912,7 +912,8 @@ namespace lib {
       }
     else
       {         // restore original data context
-        std::swap (dataSrc_, ctxStack_.top().second);
+        using std::swap;
+        swap (dataSrc_, ctxStack_.top().second);
         ctxStack_.pop();
         return false;
       }

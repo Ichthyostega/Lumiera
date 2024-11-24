@@ -380,7 +380,7 @@ namespace lib {
       
       /** @internal adapt output side of a given function, allowing to handle it's results
        *   - a function producing the overall result-type is installed as-is
-       *   - a `size_t` result is assumed be a hash and passed into #drawLimited
+       *   - a `size_t` result is assumed to be a hash and passed into #drawLimited
        *   - likewise a `double` is assumed to be already a random val to be #limited
        *   - special treatment is given to a function returning a `RandomDraw` instance
        *     by value; such a function is assumed to set some parametrisation based

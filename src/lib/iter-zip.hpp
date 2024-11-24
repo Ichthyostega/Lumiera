@@ -84,6 +84,32 @@ namespace lib {
             meta::forEach (iters_
                           ,[](auto& it){ ++it; });
           }
+        
+        
+        /* === connector for IterAdapter internal protocol === */
+
+        /**
+         * instruct a follow-up IterAdapter not to add a BaseAdapter
+         * but rather to connect to the dispatcher functions defined here
+         */
+        using TAG_IterExplorer_BaseAdapter = ITUP;
+        
+        /** delegate to the IterExplorers in the tuple */
+        void
+        expandChildren()
+          {
+            meta::forEach (iters_
+                          ,[](auto& it){ it.expandChildren(); });
+          }
+        
+        size_t
+        depth()  const
+          {
+            size_t maxDepth{0};
+            meta::forEach (iters_
+                          ,[&](auto& it){ maxDepth = std::max (maxDepth, it.depth()); });
+            return maxDepth;
+          }
       };
   } // namespace lib::iter
   

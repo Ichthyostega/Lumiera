@@ -426,7 +426,8 @@ namespace diff{
       void
       swap (Rec& existingInstance)  noexcept
         {
-          std::swap (existingInstance, record_);
+          using std::swap;
+          swap (existingInstance, record_);
         }
       
       bool
@@ -641,7 +642,7 @@ namespace diff{
       RecordRef&
       operator= (RecordRef &&o)
         {
-          std::swap(record_, o.record_);
+          std::swap (record_, o.record_);
           return *this;
         }
       

@@ -130,26 +130,9 @@ namespace lib {
               std::swap (storage_, rr.storage_);
           }
         
-        Extension& operator= (Extension const& o)
+        Extension& operator= (Extension o)
           {
-            if (this != &o)
-              {
-                std::unique_ptr<Literal[]> cp;
-                if (o.storage_)
-                  cp.reset (o.newCopy());
-                if (storage_)
-                  delete[] storage_;
-                storage_ = cp.release();
-              }
-            return *this;
-          }
-        
-        Extension& operator= (Extension&& rr)  noexcept
-          {
-            if (this != &rr)
-              {
-                std::swap (storage_, rr.storage_);
-              }
+            std::swap (storage_, o.storage_);
             return *this;
           }
         

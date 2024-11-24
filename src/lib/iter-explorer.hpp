@@ -264,7 +264,9 @@ namespace lib {
     using CoreYield = decltype(std::declval<COR>().yield());
     
     
-    /** decide how to adapt and embed the source sequence into the resulting IterExplorer */
+    /**
+     * @internal Type-selector template to adapt for IterExplorer:
+     *           decide how to adapt and embed the source sequence */
     template<class SRC, typename SEL=void>
     struct _DecoratorTraits
       {
@@ -513,6 +515,8 @@ namespace lib {
         
         void expandChildren() { }                             ///< collaboration: recurse into nested scope
         size_t depth()  const { return 0; }                   ///< collaboration: number of nested scopes
+        
+        using TAG_IterExplorer_BaseAdapter = SRC;             ///< @internal for \ref _BaseDetector
       };
     
     
@@ -1578,6 +1582,8 @@ namespace lib {
       using reference  = typename meta::ValueTypeBinding<SRC>::reference;
       using pointer    = typename meta::ValueTypeBinding<SRC>::pointer;
       
+      using TAG_IterExplorer_Src = SRC; ///< @internal for \ref _PipelineDetector
+      
       /** pass-through ctor */
       using SRC::SRC;
       
@@ -2056,6 +2062,61 @@ namespace lib {
     };
   
   
+  namespace {// internal logic to pick suitable pipeline adapters...
+    
+    /** Detect or otherwise add BaseAdapter.
+     * @remark in addition to just iteration, IterExplorer uses an internal wiring for some
+     *   of the additional processing layers, which works by calling to the base class.
+     *   When building a new pipeline, a BaseAdapter is added on top of the raw iterator
+     *   to absorb these internal calls (and do nothing); however, if the raw iterator
+     *   in fact is already a pipeline built by IterExplorer, than no BaseAdapter is
+     *   required and rather both pipelines can be connected together
+     */
+    template<class SRC, class SEL =void>
+    struct _BaseDetector
+      {
+        using BaseAdapter = iter_explorer::BaseAdapter<SRC>;
+      };
+    
+    template<class SRC>                // used when type tag is present on some baseclass
+    struct _BaseDetector<SRC, std::void_t<typename SRC::TAG_IterExplorer_BaseAdapter> >
+      {
+        using BaseAdapter = SRC;
+      };
+    
+    
+    /** Detect and remove typical adapter layers added by a preceding IterExplorer usage */
+    template<class SRC, class SEL =void>
+    struct _UnstripAdapter
+      {
+        using RawIter = SRC;
+      };
+    
+    template<class COR>                // used when actually a CheckedCore was attached
+    struct _UnstripAdapter<COR, std::void_t<typename COR::TAG_CheckedCore_Raw> >
+      {
+        using RawIter = typename COR::TAG_CheckedCore_Raw;
+      };
+    
+    
+    /** Detect if given source was already built by IterExplorer;
+     * @remark when building on-top of an existing pipeline, some adapter can be stripped
+     *   to simplify the type hierarchy; for this purpose, IterExplorer places a tag type
+     *   into its own products, which point to a suitable source type below the adapter.
+     */
+    template<class SRC, class SEL =void>
+    struct _PipelineDetector
+      {
+        using RawIter = SRC;
+      };
+    template<class SRC>
+    struct _PipelineDetector<SRC, std::void_t<typename SRC::TAG_IterExplorer_Src> >
+      {
+        using _SrcIT  = typename SRC::TAG_IterExplorer_Src;
+        using RawIter = typename _UnstripAdapter<_SrcIT>::RawIter;
+      };
+  }//(End)internal adapter logic
+  
   
   
   
@@ -2116,8 +2177,9 @@ namespace lib {
   inline auto
   explore (IT&& srcSeq)
   {
-    using SrcIter = typename _DecoratorTraits<IT>::SrcIter;
-    using Base = iter_explorer::BaseAdapter<SrcIter>;
+    using RawIter = typename _PipelineDetector<IT>::RawIter;        // possibly strip an underlying IterExplorer
+    using SrcIter = typename _DecoratorTraits<RawIter>::SrcIter;    // then decide how to adapt the source / iterator
+    using Base    = typename _BaseDetector<SrcIter>::BaseAdapter;   // detect if a BaseAdapter exists or must be added
     
     return IterExplorer<Base> (std::forward<IT> (srcSeq));
   }

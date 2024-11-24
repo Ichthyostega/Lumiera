@@ -66,7 +66,48 @@ namespace test{
   #define TYPE(_EXPR_) showType<decltype(_EXPR_)>()
 
   
+    template<class SRC, class SEL =void>
+    struct _PipelineDetector
+      {
+        using RawIter = SRC;
+      };
+    template<class SRC>
+    struct _PipelineDetector<SRC, std::void_t<typename SRC::TAG_Explode> >
+      {
+        using RawIter = typename SRC::TAG_Explode;
+      };
   
+  struct BOO
+    {
+        int uh{42};
+    };
+  
+  template<class SRC>
+  struct Moo
+    : SRC
+    {
+        using TAG_Explode = SRC; 
+    };
+  
+  template<class SRC>
+  struct D
+    : SRC
+    { };
+  
+  void
+  plonk()
+    {
+      using P1 = D<D<BOO>>;
+      using P2 = D<D<Moo<D<BOO>>>>;
+      
+      using R1 = typename _PipelineDetector<P1>::RawIter;
+      using R2 = typename _PipelineDetector<P2>::RawIter;
+
+SHOW_TYPE(P1)
+SHOW_TYPE(R1)
+SHOW_TYPE(P2)
+SHOW_TYPE(R2)
+    }
   
   
   /*********************************************************************************//**
@@ -85,6 +126,7 @@ namespace test{
       virtual void
       run (Arg)
         {
+          plonk();
           simpleUsage();
           test_Fixture();
           demo_mapToTuple();
@@ -409,27 +451,41 @@ namespace test{
       
       
       /** @test the result is actually an IterExplorer pipeline builder,
-       *        which can be used to attach further processing
+       *        which can be used to attach further processing.
+       *  @note the design of IterExplorer inherently requires that
+       *        generic lambdas accept the _iterator type_ by reference;
+       *        structural bindings can only be used in a second step.
        */
       void
       verify_pipelining()
         {
-SHOW_EXPR          
-                (materialise (
+          // transform the tuple into another data value
+          CHECK (materialise (
                     zip (num31(), num32(), num33())
                       . transform([](auto& it){ auto [a,b,c] = *it;
                                                 return a+b+c;
                                               })
                 )
-                )
-SHOW_EXPR          
-                (materialise (
+                == "6-15-24-33-42"_expect);
+          
+          // filter tuples based on inspecting contents
+          CHECK (materialise (
                     zip (num31(), num32(), num33())
                       . filter   ([](auto& it){ auto [a,b,c] = *it;
                                                 return not ((a+b+c) % 2);
                                               })
                 )
-                )
+                == "«tuple<uint&, uint&, uint&>»──(1,2,3)-"
+                   "«tuple<uint&, uint&, uint&>»──(7,8,9)-"
+                   "«tuple<uint&, uint&, uint&>»──(13,14,15)"_expect);
+          
+          // reduce with accessor and std::plus
+          CHECK (zip (num31(), num32(), num33())
+                      . reduce   ([](auto& it){ auto [a,b,c] = *it;
+                                                return a+b+c;
+                                              })
+                == 6+15+24+33+42);
+SHOW_EXPR(TYPE(izip(num31())))
         }
 /*
 SHOW_EXPR          
