@@ -119,6 +119,43 @@ namespace meta {
     };
   
   
+  /**
+   * Decision helper to select between returning results by value or reference.
+   * - when both types can not be reconciled, not type result is provided
+   * - when one of both types is `const`, the `ResType` will be const
+   * - when both types are LValue-references, then the result will be a reference,
+   *   otherwise the result will be a value type
+   */
+  template<typename T1, typename T2,  bool = has_TypeResult<std::common_type<T1,T2>>()>
+  struct CommonResultYield
+    : std::false_type
+    { };
+  
+  template<typename T1, typename T2>
+  struct CommonResultYield<T1, T2, true >
+    : std::true_type
+    {
+      using _Common = std::common_type_t<T1,T2>;
+      // NOTE: unfortunately std::common_type decays (strips cv and reference)
+      static constexpr bool isConst = isConst_v<T1> or isConst_v<T2>;
+      static constexpr bool isRef   = isLRef_v<T1> and isLRef_v<T2>;
+      
+      using _ConstT = std::conditional_t<isConst
+                                        , const _Common
+                                        ,       _Common
+                                        >;
+      using _ValRef = std::conditional_t<isRef
+                                        , std::add_lvalue_reference_t<_ConstT>
+                                        , std::remove_reference_t<_ConstT>
+                                        >;
+      
+      using ResType    = _ValRef;
+      using value_type = typename RefTraits<ResType>::Value;
+      using reference  = typename RefTraits<ResType>::Reference;
+      using pointer    = typename RefTraits<ResType>::Pointer;
+    };
+  
+  
   
 }} // namespace lib::meta
 #endif /*LIB_META_VALUE_TYPE_BINDING_H*/

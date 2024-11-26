@@ -637,13 +637,15 @@ namespace lib {
    *          checks; it might be a good idea to build safety checks into the Core
    *          API functions instead, or to wrap the Core into \ref CheckedCore.
    * @tparam T nominal result type (maybe const, but without reference).
-   *         The resulting iterator will yield a reference to this type T
    * @tparam COR type of the »state core«. The resulting iterator will _mix-in_
    *         this type, and thus inherit properties like copy, move, compare, VTable, POD.
    *         The COR must implement the following _iteration control API:_
    *          -# `checkPoint` establishes if the given state element represents a valid state
    *          -# ´iterNext` evolves this state by one step (sideeffect)
    *          -# `yield` realises the given state, exposing a result of type `T&`
+   * @note the resulting iterator will attempt to yield a reference to type \a T when possible;
+   *         but when the wrapped `COR::yield()` produces a value, this is passed and also
+   *         #operator-> is then disabled, to prevent taking the adress of the value (temporary)
    * @see IterExplorer a pipeline builder framework on top of IterableDecorator
    * @see iter-explorer-test.hpp
    * @see iter-adaptor-test.cpp
@@ -664,9 +666,17 @@ namespace lib {
         }
       
     public:
-      typedef T* pointer;
-      typedef T& reference;
-      typedef T  value_type;
+//      typedef T* pointer;
+//      typedef T& reference;
+//      typedef T  value_type;
+      /////////////////////////////////////////////////////////////////////////////OOO new YieldRes code
+      using CoreYield  = decltype(std::declval<COR>().yield());
+      using _CommonT   = meta::CommonResultYield<T&, CoreYield>;
+      using YieldRes   = typename _CommonT::ResType;
+      using value_type = typename _CommonT::value_type;
+      using reference  = typename _CommonT::reference;
+      using pointer    = typename _CommonT::pointer;
+      
       
       /** by default, pass anything down for initialisation of the core.
        * @note especially this allows move-initialisation from an existing core.
@@ -689,22 +699,30 @@ namespace lib {
       
       explicit operator bool() const { return isValid(); }
       
-      reference
+      YieldRes
+//      reference
       operator*() const
         {
-          return _core().yield();      // core interface: yield
+          return _core().yield();        // core interface: yield
         }
       
+//                            lib::meta::enable_if_c<_CommonT::isRef,
+//      pointer                                     >
       pointer
       operator->() const
         {
-          return & _core().yield();    // core interface: yield
+          if constexpr (_CommonT::isRef)
+            return & _core().yield();    // core interface: yield
+          else
+            static_assert (_CommonT::isRef,
+               "can not provide operator-> "
+               "since iterator pipeline generates a value");
         }
       
       IterableDecorator&
       operator++()
         {
-          _core().iterNext();          // core interface: iterNext
+          _core().iterNext();            // core interface: iterNext
           return *this;
         }
       

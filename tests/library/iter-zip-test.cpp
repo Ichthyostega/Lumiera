@@ -34,6 +34,7 @@ namespace test{
   
   using util::join;
   using util::isnil;
+  using util::noneg;
   using LERR_(ITER_EXHAUST);
   using lib::meta::forEach;
   using lib::meta::mapEach;
@@ -66,48 +67,6 @@ namespace test{
   #define TYPE(_EXPR_) showType<decltype(_EXPR_)>()
 
   
-    template<class SRC, class SEL =void>
-    struct _PipelineDetector
-      {
-        using RawIter = SRC;
-      };
-    template<class SRC>
-    struct _PipelineDetector<SRC, std::void_t<typename SRC::TAG_Explode> >
-      {
-        using RawIter = typename SRC::TAG_Explode;
-      };
-  
-  struct BOO
-    {
-        int uh{42};
-    };
-  
-  template<class SRC>
-  struct Moo
-    : SRC
-    {
-        using TAG_Explode = SRC; 
-    };
-  
-  template<class SRC>
-  struct D
-    : SRC
-    { };
-  
-  void
-  plonk()
-    {
-      using P1 = D<D<BOO>>;
-      using P2 = D<D<Moo<D<BOO>>>>;
-      
-      using R1 = typename _PipelineDetector<P1>::RawIter;
-      using R2 = typename _PipelineDetector<P2>::RawIter;
-
-SHOW_TYPE(P1)
-SHOW_TYPE(R1)
-SHOW_TYPE(P2)
-SHOW_TYPE(R2)
-    }
   
   
   /*********************************************************************************//**
@@ -126,7 +85,6 @@ SHOW_TYPE(R2)
       virtual void
       run (Arg)
         {
-          plonk();
           simpleUsage();
           test_Fixture();
           demo_mapToTuple();
@@ -135,6 +93,7 @@ SHOW_TYPE(R2)
           verify_iteration();
           verify_references();
           verify_pipelining();
+          verify_exploration();
         }
       
       
@@ -485,7 +444,140 @@ SHOW_TYPE(R2)
                                                 return a+b+c;
                                               })
                 == 6+15+24+33+42);
-SHOW_EXPR(TYPE(izip(num31())))
+        }
+      
+      
+      template<typename T1, typename T2>
+      void
+      resu()
+        { MARK_TEST_FUN
+          using RT = meta::CommonResultYield<T1,T2>;
+SHOW_EXPR(RT())
+          if constexpr (RT())
+            {
+SHOW_EXPR(RT::isConst)
+SHOW_EXPR(RT::isRef)
+SHOW_TYPE(typename RT::_Common  )
+SHOW_TYPE(typename RT::_ConstT  )
+SHOW_TYPE(typename RT::_ValRef  )
+SHOW_TYPE(typename RT::ResType  )
+SHOW_TYPE(typename RT::reference)
+            }
+        }
+      /** @test verify the interplay of _child expansion_ and tuple-zipping.
+       * @remark the expansion mechanism implies that a _child sequence_ is generated
+       *         by an _expand functor,_ based on the current iterator value at that point.
+       *         The tricky part here is that this expand functor can sit somewhere in the
+       *         source iterators, while the actual signal to expand is sent from »downstream«
+       *         and has to be propagated to all children.
+       *         Thus two expander-setups are demonstrated first, and then triggered from
+       *         a combined iterator, dispatching the trigger over the tuple-zipping step.
+       *   - the expansion-sequences unfold the same in each case
+       *   - the shortest sequence terminates the overall zip()-evaluation
+       *   - when generating the `expandChildrem()` call _after_ the `zip()`,
+       *     it is also passed to other iterators that have no expand-functor defined;
+       *     for those, it is absorbed without effect. Now, since the expandAll()
+       *     actually works by replacing the iterate() by expandChildern(), this means
+       *     that the _other sequences_ just do not make any progress.
+       */
+      void
+      verify_exploration()
+        {
+/*
+          resu<string,string>();
+          resu<string&,string>();
+          resu<string&,string&>();
+          resu<string&&,string&&>();
+          resu<string const&,string const&>();
+          resu<int, long const&>();
+          resu<double&, long const&>();
+          resu<int, string>();
+          resu<int, long*>();
+*/
+          
+          CHECK (materialise (
+                    num31()
+                )
+                == "1-4-7-10-13"_expect);
+
+          CHECK (materialise (
+                    explore(num31())
+                      .expand ([](int i){ return NumIter{noneg(i-1),i}; })
+                      .expandAll()
+                )
+                == "1-0-4-3-2-1-0-7-6-5-4-3-2-1-0-10-9-8-7-6-5-4-3-2-1-0-13-12-11-10-9-8-7-6-5-4-3-2-1-0"_expect);
+
+          CHECK (materialise (
+                    explore(num31())
+                      .expand ([](int i){ return NumIter{noneg(i-2),i-1}; })
+                      .expandAll()
+                )
+                == "1-4-2-0-7-5-3-1-10-8-6-4-2-0-13-11-9-7-5-3-1"_expect);
+
+          CHECK (materialise (
+                  zip
+                    ( eachNum(10)
+                    , explore(num31())
+                        .expand ([](int i){ return NumIter{noneg(i-1),i}; })
+                        .expandAll()
+                    , explore(num31())
+                        .expand ([](int i){ return NumIter{noneg(i-2),i-1}; })
+                        .expandAll()
+                    )
+                )
+                == "«tuple<int, uint, uint>»──(10,1,1)-"
+                   "«tuple<int, uint, uint>»──(11,0,4)-"
+                   "«tuple<int, uint, uint>»──(12,4,2)-"
+                   "«tuple<int, uint, uint>»──(13,3,0)-"
+                   "«tuple<int, uint, uint>»──(14,2,7)-"
+                   "«tuple<int, uint, uint>»──(15,1,5)-"
+                   "«tuple<int, uint, uint>»──(16,0,3)-"
+                   "«tuple<int, uint, uint>»──(17,7,1)-"
+                   "«tuple<int, uint, uint>»──(18,6,10)-"
+                   "«tuple<int, uint, uint>»──(19,5,8)-"
+                   "«tuple<int, uint, uint>»──(20,4,6)-"
+                   "«tuple<int, uint, uint>»──(21,3,4)-"
+                   "«tuple<int, uint, uint>»──(22,2,2)-"
+                   "«tuple<int, uint, uint>»──(23,1,0)-"
+                   "«tuple<int, uint, uint>»──(24,0,13)-"
+                   "«tuple<int, uint, uint>»──(25,10,11)-"
+                   "«tuple<int, uint, uint>»──(26,9,9)-"
+                   "«tuple<int, uint, uint>»──(27,8,7)-"
+                   "«tuple<int, uint, uint>»──(28,7,5)-"
+                   "«tuple<int, uint, uint>»──(29,6,3)-"
+                   "«tuple<int, uint, uint>»──(30,5,1)"_expect);
+
+          CHECK (materialise (
+                  zip
+                    ( eachNum(10)
+                    , explore(num31())
+                        .expand ([](int i){ return NumIter{noneg(i-1),i}; })
+                    , explore(num31())
+                        .expand ([](int i){ return NumIter{noneg(i-2),i-1}; })
+                    )
+                    .expandAll()  // ◁──────────┲━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ note the difference: expand triggered after the zip()
+                )                //             ▽
+                == "«tuple<int, uint, uint>»──(10,1,1)-"
+                   "«tuple<int, uint, uint>»──(10,0,4)-"
+                   "«tuple<int, uint, uint>»──(10,4,2)-"
+                   "«tuple<int, uint, uint>»──(10,3,0)-"
+                   "«tuple<int, uint, uint>»──(10,2,7)-"
+                   "«tuple<int, uint, uint>»──(10,1,5)-"
+                   "«tuple<int, uint, uint>»──(10,0,3)-"
+                   "«tuple<int, uint, uint>»──(10,7,1)-"
+                   "«tuple<int, uint, uint>»──(10,6,10)-"
+                   "«tuple<int, uint, uint>»──(10,5,8)-"
+                   "«tuple<int, uint, uint>»──(10,4,6)-"
+                   "«tuple<int, uint, uint>»──(10,3,4)-"
+                   "«tuple<int, uint, uint>»──(10,2,2)-"
+                   "«tuple<int, uint, uint>»──(10,1,0)-"
+                   "«tuple<int, uint, uint>»──(10,0,13)-"
+                   "«tuple<int, uint, uint>»──(10,10,11)-"
+                   "«tuple<int, uint, uint>»──(10,9,9)-"
+                   "«tuple<int, uint, uint>»──(10,8,7)-"
+                   "«tuple<int, uint, uint>»──(10,7,5)-"
+                   "«tuple<int, uint, uint>»──(10,6,3)-"
+                   "«tuple<int, uint, uint>»──(10,5,1)"_expect);
         }
 /*
 SHOW_EXPR          

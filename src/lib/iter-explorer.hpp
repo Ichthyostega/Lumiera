@@ -320,30 +320,29 @@ namespace lib {
      * helper to derive a suitable common type when expanding children
      * @tparam SRC source iterator fed into the Expander
      * @tparam RES result type of the expansion function
+     * @note this also implies the decision, if the common result
+     *       can be exposed by-ref or must be delivered as value,
+     *       which may have further ramification down the pipeline.
      */
     template<class SRC, class RES>
     struct _ExpanderTraits
       {
         using ResIter = typename _DecoratorTraits<RES>::SrcIter;
-        using SrcYield = typename ValueTypeBinding<SRC>::value_type;
-        using ResYield = typename ValueTypeBinding<ResIter>::value_type;
-        static constexpr bool can_reconcile =
-           has_TypeResult<common_type<SrcYield,ResYield>>();
+        using SrcYield = iter::Yield<SRC>;
+        using ResYield = iter::Yield<ResIter>;
+        using _CommonT = meta::CommonResultYield<SrcYield,ResYield>;
+        static constexpr bool can_reconcile = _CommonT::value;
+        static constexpr bool isRefResult = _CommonT::isRef;
         
         static_assert (can_reconcile,
                        "source iterator and result from the expansion must yield compatible values");
         static_assert (is_const_v<SrcYield> == is_const_v<ResYield>,
                        "source and expanded types differ in const-ness");
         
-        // NOTE: unfortunately std::common_type decays (strips cv and reference)
-        //       in C++20, there would be std::common_reference; for now we have to work around that
-        using CommonType = conditional_t<is_const_v<SrcYield> or is_const_v<ResYield>
-                                        , const common_type_t<SrcYield,ResYield>
-                                        ,       common_type_t<SrcYield,ResYield>
-                                        >;
-        using value_type = typename ValueTypeBinding<CommonType>::value_type;
-        using reference  = typename ValueTypeBinding<CommonType>::reference;
-        using pointer    = typename ValueTypeBinding<CommonType>::pointer;
+        using YieldRes   = typename _CommonT::ResType;
+        using value_type = typename _CommonT::value_type;
+        using reference  = typename _CommonT::reference;
+        using pointer    = typename _CommonT::pointer;
       };
     
   }//(End) IterExplorer traits
@@ -545,6 +544,14 @@ namespace lib {
      *         need not be implemented in the same way, which simplifies the definition of algorithms.
      * @tparam SRC the wrapped source iterator, typically a IterExplorer or nested decorator.
      * @tparam FUN the concrete type of the functor passed. Will be dissected to find the signature
+     * @note the _return type_ of #yield depends _both_ on the return type produced from the original
+     *         sequence and the return type of the sequence established through the expand functor.
+     *         An attempt is made to _reconcile these_ and this attempt may fail (at compile time).
+     *         The reason is, any further processing downstream can not tell if data was produced
+     *         by the original sequence of the expansion sequence. Notably, if one of these two
+     *         delivers results by-value, then the Expander will _always_ deliver all results
+     *         by-value, because it would not be possible to expose a reference to some value
+     *         that was just delivered temporarily from a source iterator.
      */
     template<class SRC, class RES>
     class Expander
@@ -617,9 +624,10 @@ namespace lib {
       public: /* === Iteration control API for IterableDecorator === */
         
         /** @note result type bindings based on a common type of source and expanded result */
+        using YieldRes   = typename _Trait::YieldRes;
         using value_type = typename _Trait::value_type;
-        using reference = typename _Trait::reference;
-        using pointer = typename _Trait::pointer;
+        using reference  = typename _Trait::reference;
+        using pointer    = typename _Trait::pointer;
         
         
         bool
@@ -631,7 +639,7 @@ namespace lib {
                 or SRC::isValid();
           }
         
-        reference
+        YieldRes
         yield()  const
           {
             return hasChildren()? **expansions_

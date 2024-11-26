@@ -312,6 +312,11 @@ return: 0
 END
 
 
+TEST "Lumiera state-core iteration" IterCoreAdapter_test 20 <<END
+return: 0
+END
+
+
 TEST "forward/backward iterator" IterCursor_test 20 <<END
 return: 0
 END
