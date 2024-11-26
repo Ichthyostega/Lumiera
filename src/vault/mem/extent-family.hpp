@@ -257,7 +257,7 @@ namespace mem {
       
       /** allow transparent iteration of Extents,
        *  with the ability to expand storage */
-      using iterator = lib::IterableDecorator<Extent, IdxLink>;
+      using iterator = lib::IterableDecorator<IdxLink>;
       
       /** iterate over all the currently active Extents */
       iterator begin() { return iterator{IdxLink{this, start_}}; }

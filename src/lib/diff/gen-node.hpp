@@ -594,7 +594,7 @@ namespace diff{
    */
   class GenNode::ScopeExplorer
     {
-      using ScopeIter = IterStateWrapper<const GenNode, DataCap::Locator>;
+      using ScopeIter = IterStateWrapper<DataCap::Locator>;
       
       std::deque<ScopeIter> scopes_;
       
@@ -660,7 +660,7 @@ namespace diff{
   
   
   struct GenNode::ScopeExplorerIterator
-    : IterStateWrapper<const GenNode, ScopeExplorer>
+    : IterStateWrapper<ScopeExplorer>
     {
       using IterStateWrapper::IterStateWrapper;
       

@@ -112,7 +112,7 @@ namespace test{
       void
       simpleUsage()
         {
-          auto it = IterableDecorator<int, StepDown>{3};
+          auto it = IterableDecorator<StepDown>{3};
           CHECK (it);
           CHECK (*it == 3);
           ++it;
@@ -130,7 +130,7 @@ namespace test{
       void
       stateManipulation()
         {
-          auto it = IterableDecorator<int, StepDown>{};
+          auto it = IterableDecorator<StepDown>{};
           CHECK (not it);
           CHECK (*it == 0);
           ++it;
@@ -166,7 +166,7 @@ namespace test{
           VERIFY_ERROR (ITER_EXHAUST, cc.yield() );
           VERIFY_ERROR (ITER_EXHAUST, cc.iterNext() );
           
-          auto it = IterStateWrapper<uint,StepDown>{StepDown{2}};
+          auto it = IterStateWrapper{StepDown{2}};
           CHECK (it);
           CHECK (*it == 2u);
           ++it;
@@ -206,7 +206,7 @@ namespace test{
               int yield()  const { return StepDown::yield(); }
             };
           
-          auto it = IterableDecorator<int, CheckedCore<ValueStep>>{2};
+          auto it = IterableDecorator<CheckedCore<ValueStep>>{2};
           CHECK (it);
           CHECK (*it == 2);
           CHECK (it.n == 2);

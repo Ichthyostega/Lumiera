@@ -275,7 +275,7 @@ namespace lib {
       {
         using SrcRaw  = typename lib::meta::Strip<SRC>::Type;
         using SrcVal  = typename meta::RefTraits<iter::CoreYield<SrcRaw>>::Value;
-        using SrcIter = lib::IterableDecorator<SrcVal, lib::CheckedCore<SrcRaw>>;
+        using SrcIter = lib::IterableDecorator<lib::CheckedCore<SrcRaw>>;
       };
     
     template<class SRC>

@@ -246,23 +246,13 @@ namespace test{
                       .transform ([&](ITup& iTup){ return mapEach (iTup, access_val); })
                       ;
           
-          // hold onto your hat!!!
+          // demonstrate the composed pipeline type...
           CHECK (TYPE(ii) == "IterExplorer<"
                                  "IterableDecorator<"
-                                     "tuple<int, uint>, "                   // ◁──────────────────────────────── this is the overall result type
                                      "CheckedCore<"
                                          "iter_explorer::Transformer<"      // ◁──────────────────────────────── the top-layer is a Transformer (to access the value from each src-iter)
                                              "iter_explorer::BaseAdapter<"
                                                  "IterableDecorator<"           // ◁──────────────────────────── the product-iterator we constructed
-                                                     "tuple<"                   // ◁──────────────────────────── ....exposing the iterator-tuple as „result“
-                                                           "IterExplorer<"      // ◁───────────────────────────────── the first source iterator  (directly wrapping NumIter)
-                                                               "iter_explorer::BaseAdapter<NumIter<int> > >, "
-                                                           "IterExplorer<"      // ◁───────────────────────────────── the second source iterator (based on a STL collection)
-                                                               "iter_explorer::BaseAdapter<"
-                                                                   "iter_explorer::StlRange<array<uint, 3ul>&> "
-                                                               "> "
-                                                            "> "
-                                                     ">, "
                                                      "CheckedCore<"             // ◁──────────────────────────── ....and using the given ProductCore as »state core«
                                                          "IterZip_test::demo_construction()::ProductCore> > >, "
                                              "tuple<int, uint> "            // ◁──────────────────────────────── back to top-layer: result-type of the Transformer

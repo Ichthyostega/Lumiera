@@ -441,7 +441,7 @@ namespace gear {
       
       
       /** Adapted storage-Extent iterator, directly exposing Epoch& */
-      using EpochIter = lib::IterableDecorator<Epoch, StorageAdaptor>;
+      using EpochIter = lib::IterableDecorator<StorageAdaptor>;
       
       
       /**

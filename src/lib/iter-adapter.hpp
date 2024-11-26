@@ -360,25 +360,24 @@ namespace lib {
    *   -# \c checkPoint establishes if the given state element represents a valid active state
    *   -# \c iterNext evolves this state by one step (sideeffect)
    *   -# \c yield realises the given state, yielding an element of _result type_ \a T
-   * @tparam T nominal result type (maybe const, but without reference).
-   *         The resulting iterator will yield a reference to this type T
    * @tparam ST type of the »state core«, defaults to T.
    *         The resulting iterator will hold an instance of ST, which thus
    *         needs to be copyable and default constructible to the extent
    *         this is required for the iterator as such.
+   * @tparam T (optional) result type, usually deduced from ST::yield
    * @see IterableDecorator for variation of the same concept
    * @see iter-explorer-test.hpp
    * @see iter-adaptor-test.cpp
    */
-  template<typename T, class ST>
+  template<class ST, typename T =iter::CoreYield<ST>>
   class IterStateWrapper
     {
       ST core_;
       
     public:
-      typedef T* pointer;
-      typedef T& reference;
-      typedef T  value_type;
+      using value_type = typename meta::RefTraits<T>::Value;
+      using reference  = typename meta::RefTraits<T>::Reference;
+      using pointer    = typename meta::RefTraits<T>::Pointer;
       
       IterStateWrapper (ST&& initialState)
         : core_(std::forward<ST>(initialState))
@@ -401,7 +400,7 @@ namespace lib {
       
       /* === lumiera forward iterator concept === */
       
-      reference
+      T
       operator*() const
         {
           __throw_if_empty();
@@ -411,8 +410,15 @@ namespace lib {
       pointer
       operator->() const
         {
-          __throw_if_empty();
-          return & core_.yield();    // core interface: yield
+          if constexpr (meta::isLRef_v<T>)
+            {
+              __throw_if_empty();
+              return & core_.yield();    // core interface: yield
+            }
+          else
+            static_assert (!sizeof(T),
+               "can not provide operator-> "
+               "since iterator pipeline generates a value");
         }
       
       IterStateWrapper&
@@ -455,24 +461,24 @@ namespace lib {
       ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (IterStateWrapper);
       
       /// comparison is allowed to access state implementation core
-      template<class T1, class T2, class STX>
-      friend bool operator== (IterStateWrapper<T1,STX> const&, IterStateWrapper<T2,STX> const&);
+      template<class STX, class T1, class T2>
+      friend bool operator== (IterStateWrapper<STX,T1> const&, IterStateWrapper<STX,T2> const&);
     };
   
   
   
   /// Supporting equality comparisons of equivalent iterators (same state type)...
-  template<class T1, class T2, class ST>
+  template<class ST, class T1, class T2>
   inline bool
-  operator== (IterStateWrapper<T1,ST> const& il, IterStateWrapper<T2,ST> const& ir)
+  operator== (IterStateWrapper<ST,T1> const& il, IterStateWrapper<ST,T2> const& ir)
   {
     return (il.empty()   and ir.empty())
         or (il.isValid() and ir.isValid() and il.core_ == ir.core_);
   }
   
-  template<class T1, class T2, class ST>
+  template<class ST, class T1, class T2>
   inline bool
-  operator!= (IterStateWrapper<T1,ST> const& il, IterStateWrapper<T2,ST> const& ir)
+  operator!= (IterStateWrapper<ST,T1> const& il, IterStateWrapper<ST,T2> const& ir)
   {
     return not (il == ir);
   }
@@ -656,13 +662,12 @@ namespace lib {
    *          it is guaranteed to be valid (by contextual knowledge). It might be a good idea
    *          to build some safety checks into the Core API functions instead, maybe even just
    *          as assertions, or to wrap the Core into \ref CheckedCore for most usages.
-   * @tparam T nominal result type (maybe const, but without reference).
    * @tparam COR type of the »state core«. The resulting iterator will _mix-in_ this type,
    *         and thus inherit properties like copy, move, compare, VTable, „POD-ness“.
    *         The COR must implement the following _iteration control API:_
    *          -# `checkPoint` establishes if the given state element represents a valid state
    *          -# ´iterNext` evolves this state by one step (sideeffect)
-   *          -# `yield` realises the given state, exposing a result of type `T&`
+   *          -# `yield` realises the given state, exposing a result reference or value
    *         Furthermore, COR must be default-constructible in _disabled_ state
    * @note the resulting iterator will attempt to yield a reference to type \a T when possible;
    *         but when the wrapped `COR::yield()` produces a value, this is passed as such, moreover
@@ -671,7 +676,7 @@ namespace lib {
    * @see iter-explorer-test.hpp
    * @see iter-adaptor-test.cpp
    */
-  template<typename T, class COR>
+  template<class COR>
   class IterableDecorator
     : public COR
     {
@@ -687,12 +692,10 @@ namespace lib {
         }
       
     public:
-      using CoreYield  = iter::CoreYield<COR>;
-      using _CommonT   = meta::CommonResultYield<T&, CoreYield>;
-      using YieldRes   = typename _CommonT::ResType;
-      using value_type = typename _CommonT::value_type;
-      using reference  = typename _CommonT::reference;
-      using pointer    = typename _CommonT::pointer;
+      using YieldRes   = iter::CoreYield<COR>;
+      using value_type = typename meta::RefTraits<YieldRes>::Value;
+      using reference  = typename meta::RefTraits<YieldRes>::Reference;
+      using pointer    = typename meta::RefTraits<YieldRes>::Pointer;
       
       
       /** by default, pass anything down for initialisation of the core.
@@ -725,10 +728,10 @@ namespace lib {
       pointer
       operator->() const
         {
-          if constexpr (_CommonT::isRef)
+          if constexpr (meta::isLRef_v<YieldRes>)
             return & _core().yield();      // core interface: yield
           else
-            static_assert (_CommonT::isRef,
+            static_assert (!sizeof(COR),
                "can not provide operator-> "
                "since iterator pipeline generates a value");
         }
@@ -758,17 +761,14 @@ namespace lib {
       
       
       /// Supporting equality comparisons of equivalent iterators (equivalent state core)...
-      template<class T1, class T2>
       friend bool
-      operator== (IterableDecorator<T1,COR> const& il, IterableDecorator<T2,COR> const& ir)
+      operator== (IterableDecorator const& il, IterableDecorator const& ir)
       {
         return (il.empty()   and ir.empty())
             or (il.isValid() and ir.isValid() and il._core() == ir._core());
       }
-      
-      template<class T1, class T2>
       friend bool
-      operator!= (IterableDecorator<T1,COR> const& il, IterableDecorator<T2,COR> const& ir)
+      operator!= (IterableDecorator const& il, IterableDecorator const& ir)
       {
         return not (il == ir);
       }

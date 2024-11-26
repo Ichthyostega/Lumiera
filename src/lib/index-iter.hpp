@@ -53,8 +53,6 @@ namespace lib {
         using value_type = typename meta::RefTraits<ResVal>::Value;
         using reference  = typename meta::RefTraits<ResVal>::Reference;
         
-        using IterWrapper = lib::IterStateWrapper<value_type, IndexAccessCore>;
-        
         bool
         checkPoint() const
           {
@@ -80,6 +78,8 @@ namespace lib {
             return bool(data_)
                and idx < data_->size();
           }
+        
+        using IterWrapper = lib::IterStateWrapper<IndexAccessCore>;
         
         
         friend bool operator== (IndexAccessCore const& c1, IndexAccessCore const& c2)

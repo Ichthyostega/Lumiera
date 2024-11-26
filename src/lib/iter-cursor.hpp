@@ -155,10 +155,10 @@ namespace lib {
    */
   template<class IT>
   class IterCursor
-    : public IterStateWrapper<typename iter::CursorGear<IT>::value_type, iter::CursorGear<IT>>
+    : public IterStateWrapper<iter::CursorGear<IT>>
     {
       using _Core = iter::CursorGear<IT>;
-      using _Parent = IterStateWrapper<typename _Core::value_type, _Core>;
+      using _Parent = IterStateWrapper<_Core>;
       
     public:
       IterCursor()                              =default;

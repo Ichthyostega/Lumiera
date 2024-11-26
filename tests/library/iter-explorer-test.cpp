@@ -124,16 +124,16 @@ namespace test{
      * @note the "state core" is not accessible from the outside
      */
     class NumberSequence
-      : public IterStateWrapper<uint, CountDown>
+      : public IterStateWrapper<CountDown>
       {
         
       public:
         explicit
         NumberSequence(uint start = 0)
-          : IterStateWrapper<uint,CountDown> (CountDown{start})
+          : IterStateWrapper{CountDown{start}}
           { }
         NumberSequence(uint start, uint end)
-          : IterStateWrapper<uint,CountDown> (CountDown(start,end))
+          : IterStateWrapper{CountDown(start,end)}
           { }
       };
     

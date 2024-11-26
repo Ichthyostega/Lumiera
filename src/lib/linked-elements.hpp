@@ -394,8 +394,8 @@ namespace lib {
         };
       
     public:
-      using       iterator = IterStateWrapper<      N, IterationState>;
-      using const_iterator = IterStateWrapper<const N, IterationState>;
+      using       iterator = IterStateWrapper<IterationState,       N&>;
+      using const_iterator = IterStateWrapper<IterationState, const N&>;
       
       
       iterator       begin()       { return iterator       (head_); }

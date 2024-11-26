@@ -461,7 +461,7 @@ for} tail...
           auto it = binding.getSequence("i");
           CHECK (it);
           CHECK (*it == "i.p."_expect );
-          CHECK (meta::typeStr(it) == "IterExplorer<IterableDecorator<string, CheckedCore<iter_explorer::Transformer<iter_explorer::BaseAdapter<RegexSearchIter>, string> > > >"_expect );
+          CHECK (meta::typeStr(it) == "IterExplorer<IterableDecorator<CheckedCore<iter_explorer::Transformer<iter_explorer::BaseAdapter<RegexSearchIter>, string> > > >"_expect );
           
           auto subBind = binding.openContext(it);
           CHECK (subBind.isSubScope());

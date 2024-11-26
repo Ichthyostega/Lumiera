@@ -118,7 +118,7 @@ namespace diff{
       
       
       /** Diff is a iterator to yield a sequence of DiffStep elements */
-      using Diff = lib::IterStateWrapper<DiffStep, DiffFrame>;
+      using Diff = lib::IterStateWrapper<DiffFrame>;
       
       /** Diff generation core operation.
        * Take a snapshot of the \em current state of the underlying sequence

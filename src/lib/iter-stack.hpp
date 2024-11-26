@@ -111,7 +111,7 @@ namespace lib {
    */
   template<class TY>
   struct IterStack
-    : IterStateWrapper<TY, iter::IterDequeStorage<TY>>
+    : IterStateWrapper<iter::IterDequeStorage<TY>>
     {
       
       // using default create and copy operations
@@ -186,7 +186,7 @@ namespace lib {
    */
   template<class TY>
   struct IterQueue
-    : IterStateWrapper<TY, iter::IterDequeStorage<TY>>
+    : IterStateWrapper<iter::IterDequeStorage<TY>>
     {
       
       // using default create and copy operations
