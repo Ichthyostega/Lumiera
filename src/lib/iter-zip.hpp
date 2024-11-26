@@ -13,6 +13,11 @@
 
 /** @file iter-zip.hpp
  ** Iterator builder to combine several iterables into a tuple sequence.
+ ** Adaptation is based on the capabilities of IterExplorer, and the result
+ ** will again be a »Lumiera Forward Iterator« and an IterExplorer pipeline builder.
+ ** Depending on the source sequences, references may be exposed. Moreover, a variant
+ ** \ref izip() is provided where the result tuple is prefixed with a counter sequence,
+ ** allowing to perform _iterator with counter_ style evaluations.
  ** 
  ** @see IterZip_test
  ** @see iter-explorer.hpp
@@ -32,7 +37,6 @@
 
 
 namespace lib {
-  
   namespace iter {
     
     /** construction-helper: apply IterExplorer builder packaged tuple */
@@ -43,6 +47,10 @@ namespace lib {
         return std::make_tuple (lib::explore (std::forward<ITS> (iters)) ...);
       }
     
+    /**
+     * Building block for a tupeled-iterator.
+     * exposes the iterator API lifted to the product type (tuple).
+     */
     template<class ITUP>
     class ProductCore
       {

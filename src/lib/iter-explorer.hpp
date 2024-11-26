@@ -3,6 +3,7 @@
 
    Copyright (C)
      2017,            Hermann Vosseler <Ichthyostega@web.de>
+     2024,            Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -259,10 +260,6 @@ namespace lib {
       { };
     
     
-    /** the _result type_ yielded by a »state core« */
-    template<class COR>
-    using CoreYield = decltype(std::declval<COR>().yield());
-    
     
     /**
      * @internal Type-selector template to adapt for IterExplorer:
@@ -277,7 +274,7 @@ namespace lib {
     struct _DecoratorTraits<SRC,   enable_if<is_StateCore<SRC>>>
       {
         using SrcRaw  = typename lib::meta::Strip<SRC>::Type;
-        using SrcVal  = typename meta::RefTraits<CoreYield<SrcRaw>>::Value;
+        using SrcVal  = typename meta::RefTraits<iter::CoreYield<SrcRaw>>::Value;
         using SrcIter = lib::IterableDecorator<SrcVal, lib::CheckedCore<SrcRaw>>;
       };
     
@@ -1599,19 +1596,21 @@ namespace lib {
       
       /* ==== Builder functions ==== */
       
-      /** preconfigure this IterExplorer to allow for _"expansion of children"_.
-       * The resulting iterator exposes an `expandChildren()` function, which consumes
-       * the current head element of this iterator and feeds it through the
-       * _expansion functor_, which was provided to this builder function here.
-       * The _expansion functor_ is expected to yield a sequence of "child" elements,
-       * which will be integrated into the overall result sequence instead of the
-       * consumed source element. Thus, repeatedly invoking `expand()` until exhaustion
-       * generates a _depth-first evaluation_, since every child will be expanded until
-       * reaching the leaf nodes of a tree like structure.
+      /** preconfigure this IterExplorer to allow for _»expansion of children«_.
+       * The resulting iterator exposes an `expandChildren()` function, which must be
+       * invoked explicitly and consumes then the current head element of this iterator
+       * and feeds it through the _expansion functor_, which was provided to this builder
+       * function here. This _expansion functor_ is expected to yield a compatible sequence
+       * of "child" elements, which will be integrated into the overall result sequence
+       * instead of the consumed source element. Thus, repeatedly invoking `expand()`
+       * until exhaustion generates a _depth-first evaluation_, since every child
+       * will be expanded until reaching the leaf nodes of a tree like structure.
+       * The result-type of the compound will be  chosen appropriately
+       * (which may imply to return by-value instead of by-reference)
        * 
        * @param expandFunctor a "function-like" entity to perform the actual "expansion".
        *        There are two distinct usage patterns, as determined by the signature
-       *        of the provided function or functor:
+       *        of the provided callable, function or functor:
        *        - _"monad style"_: the functor takes a _value_ from the sequence and
        *          produces a new sequence, iterator or collection of compatible values
        *        - _"opaque state manipulation"_: the functor accepts the concrete source
@@ -1623,6 +1622,10 @@ namespace lib {
        *          new "child state core" may likewise collaborate with that original
        *          data source or state core behind the scenes; the latter is guaranteed
        *          to exist during the whole lifetime of this IterExplorer.
+       * @warning be cautions when relying on stored references into the wrapped state core,
+       *       because the IterExplorer pipeline as a whole is meant to be movable; either
+       *       take those references only after the pipeline is »engaged« and placed at its
+       *       final storage location, or ensure a way to „refresh“ this information on move.
        * @note there is limited support for generic lambdas, but only for the second case.
        *       The reason is, we can not "probe" a template or generic lambda for possible
        *       argument and result types. Thus, if you provide a generic lambda, IterExplorer

@@ -410,7 +410,7 @@ namespace test{
       
       
       /** @test the result is actually an IterExplorer pipeline builder,
-       *        which can be used to attach further processing.
+       *        which can be used to attach further processing downstream.
        *  @note the design of IterExplorer inherently requires that
        *        generic lambdas accept the _iterator type_ by reference;
        *        structural bindings can only be used in a second step.
@@ -418,6 +418,16 @@ namespace test{
       void
       verify_pipelining()
         {
+          // for reference: this is the base data.......
+          CHECK (materialise (
+                    zip (num31(), num32(), num33())
+                )
+                == "«tuple<uint&, uint&, uint&>»──(1,2,3)-"
+                   "«tuple<uint&, uint&, uint&>»──(4,5,6)-"
+                   "«tuple<uint&, uint&, uint&>»──(7,8,9)-"
+                   "«tuple<uint&, uint&, uint&>»──(10,11,12)-"
+                   "«tuple<uint&, uint&, uint&>»──(13,14,15)"_expect);
+          
           // transform the tuple into another data value
           CHECK (materialise (
                     zip (num31(), num32(), num33())
@@ -447,23 +457,7 @@ namespace test{
         }
       
       
-      template<typename T1, typename T2>
-      void
-      resu()
-        { MARK_TEST_FUN
-          using RT = meta::CommonResultYield<T1,T2>;
-SHOW_EXPR(RT())
-          if constexpr (RT())
-            {
-SHOW_EXPR(RT::isConst)
-SHOW_EXPR(RT::isRef)
-SHOW_TYPE(typename RT::_Common  )
-SHOW_TYPE(typename RT::_ConstT  )
-SHOW_TYPE(typename RT::_ValRef  )
-SHOW_TYPE(typename RT::ResType  )
-SHOW_TYPE(typename RT::reference)
-            }
-        }
+      
       /** @test verify the interplay of _child expansion_ and tuple-zipping.
        * @remark the expansion mechanism implies that a _child sequence_ is generated
        *         by an _expand functor,_ based on the current iterator value at that point.
@@ -483,18 +477,6 @@ SHOW_TYPE(typename RT::reference)
       void
       verify_exploration()
         {
-/*
-          resu<string,string>();
-          resu<string&,string>();
-          resu<string&,string&>();
-          resu<string&&,string&&>();
-          resu<string const&,string const&>();
-          resu<int, long const&>();
-          resu<double&, long const&>();
-          resu<int, string>();
-          resu<int, long*>();
-*/
-          
           CHECK (materialise (
                     num31()
                 )
@@ -519,7 +501,7 @@ SHOW_TYPE(typename RT::reference)
                     ( eachNum(10)
                     , explore(num31())
                         .expand ([](int i){ return NumIter{noneg(i-1),i}; })
-                        .expandAll()
+                        .expandAll() // ◁────────────────────────────────────────────── expand triggered in source pipeline, before the zip()
                     , explore(num31())
                         .expand ([](int i){ return NumIter{noneg(i-2),i-1}; })
                         .expandAll()
@@ -579,17 +561,6 @@ SHOW_TYPE(typename RT::reference)
                    "«tuple<int, uint, uint>»──(10,6,3)-"
                    "«tuple<int, uint, uint>»──(10,5,1)"_expect);
         }
-/*
-SHOW_EXPR          
-                (materialise (
-                    zip (num31(), num32(), num33())
-                )
-                )
-          CHECK (materialise (
-                    zip (num31(), num32(), num33())
-                )
-                == ""_expect);
-*/
     };
   
   

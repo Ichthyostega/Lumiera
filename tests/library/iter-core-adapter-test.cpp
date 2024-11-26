@@ -20,31 +20,24 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
-#include "lib/test/diagnostic-output.hpp"////////////TODO
 
 #include "lib/iter-adapter.hpp"
 
-//#include <boost/lexical_cast.hpp>
-//#include <vector>
+#include <string>
 
 
 
 namespace lib {
-  using util::unConst;
 namespace test{
   
   using LERR_(ITER_EXHAUST);
-//  using boost::lexical_cast;
-//  using util::for_each;
-//  using util::isnil;
   using util::isSameObject;
-//  using std::vector;
+  using std::string;
   
-  
-  namespace {
+  namespace { // Test fixture
     
     /**
-     * A »*State Core*« to step down numbers to zero.
+     * A test »*State Core*« which steps down a number to zero.
      * @note this is a minimal description of a state progression towards a goal
      *     - default constructed is equivalent to _goal was reached_
      *     - can be copied, manipulated and compared
@@ -83,7 +76,7 @@ namespace test{
             return n == o.n;
           }
       };
-  } // (END) impl test dummy container
+  }// (END) test dummy
   
   
   
@@ -95,6 +88,7 @@ namespace test{
    * @test cover the concept of a »state core«, which is used in Lumiera
    *       for various aspects of data generation and iteration.
    * @see IterStateWrapper
+   * @see iter-adapter.hpp
    * @see iter-explorer.hpp
    */
   class IterCoreAdapter_test : public Test
@@ -106,14 +100,14 @@ namespace test{
           stateManipulation();
           checked_and_protected();
           value_and_reference_yield();
+          verify_TypeReconciliation();
         }
       
       
       
       
-      
       /** @test build a »Lumiera Forward Iterator«
-       *   to transition a State-Core towards it final state
+       * to transition a State-Core towards it final state.
        */
       void
       simpleUsage()
@@ -186,10 +180,10 @@ namespace test{
       
       
       /** @test adapters can (transparently) handle a core which yields values
-       *      - demonstrate how cores can be augmented by decoration
-       *      - the decorated core here yields by-value
-       *      - both CheckedCore and IterableDecorator can cope with that
-       *      - the result is then also delivered by-value from the iterator
+       *      - demonstrate how cores can be augmented by decoration...
+       *      - the decorated core here yields by-value, not by-ref.
+       *      - Both CheckedCore and IterableDecorator can cope with that
+       *      - the result is then also delivered by-value from the iterator.
        * @remark the »Lumiera Forward Iterator« concept does not exactly specify
        *   what to expect when dereferencing an iterator; yet for obvious reasons,
        *   most iterators in practice expose a reference to some underlying container
@@ -199,7 +193,7 @@ namespace test{
        *   for the compiler, the code using the iterator is not tightly coupled). This
        *   scheme has ramifications for the way any iterator pipeline works; notably
        *   any _transformation_ will have to capture a function result. However,
-       *   sometimes an iterator can only return a computed value; such a usage
+       *   sometimes an iterator can only return a computed value; such an usage
        *   can be valid and acceptable and is supported to the degree possible.
        */
       void
@@ -233,6 +227,61 @@ namespace test{
         }
       
       
+      /** @test construction of a common result type.
+       *      - based on `std::common_type`
+       *      - so there must be some common ground
+       *      - if any of the types is by-value, the result is
+       *      - if any of the types is const, the result is const
+       */
+      void
+      verify_TypeReconciliation()
+        {
+          using C1 = Common<int,string>;
+          CHECK (not C1());
+          CHECK (not C1::value);
+          
+          using C2 = Common<int,long*>;
+          CHECK (not C2());                                              // can not be reconciled
+          CHECK (not C2::value);
+//        using X = C2::ResType;                                         // does not (and should not) compile
+          
+          using C3 = Common<string,string>;
+          CHECK (C3());
+          CHECK (showType<C3::ResType>() == "string"_expect );
+          
+          using C4 = Common<string&,string>;
+          CHECK (showType<C4::ResType>() == "string"_expect );
+          
+          using C5 = Common<string&,string&>;
+          CHECK (showType<C5::ResType>() == "string&"_expect );          // ref access to both is possible
+          
+          using C6 = Common<string&,string&&>;
+          CHECK (showType<C6::ResType>() == "string"_expect );           // caution, RValue might be a temporary
+          
+          using C7 = Common<string&&,string&&>;
+          CHECK (showType<C7::ResType>() == "string"_expect );
+          
+          using C8 = Common<string const&, string const&>;
+          CHECK (showType<C8::ResType>() == "string const&"_expect );
+          
+          using C9 = Common<string const&, string&>;
+          CHECK (showType<C9::ResType>() == "string const&"_expect );    // reconcile to const&
+          
+          using C10 = Common<string const&, string>;
+          CHECK (showType<C10::ResType>() == "const string"_expect );
+          
+          using C11 = Common<string&&, string const&>;
+          CHECK (showType<C11::ResType>() == "const string"_expect );    // reconciled to value type
+          
+          using C12 = Common<long const&, int>;
+          CHECK (showType<C12::ResType>() == "const long"_expect );      // reconciled to the larger number type
+          
+          using C13 = Common<double&, long const&>;
+          CHECK (showType<C13::ResType>() == "double const&"_expect );   // usual in C++ (loss of precision possible)
+        }
+      
+      template<typename T1, typename T2>
+      using Common = meta::CommonResultYield<T1,T2>;
     };
   
   LAUNCHER (IterCoreAdapter_test, "unit common");

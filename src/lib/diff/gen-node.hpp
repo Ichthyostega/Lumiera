@@ -662,7 +662,7 @@ namespace diff{
   struct GenNode::ScopeExplorerIterator
     : IterStateWrapper<const GenNode, ScopeExplorer>
     {
-      using IterStateWrapper<const GenNode, ScopeExplorer>::IterStateWrapper;
+      using IterStateWrapper::IterStateWrapper;
       
       size_t level()  const { return unConst(this)->stateCore().depth(); }
     };

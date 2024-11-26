@@ -2,7 +2,7 @@
   VALUE-TYPE-BINDING.hpp  -  control type variations for custom containers
 
    Copyright (C)
-     2010,            Hermann Vosseler <Ichthyostega@web.de>
+     2010,2024        Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -13,7 +13,7 @@
 
 /** @file value-type-binding.hpp
  ** Type re-binding helper template for custom containers and adapters.
- ** This header defines a trait template which is used by the Iterator
+ ** This header defines trait templates which are used by the Iterator
  ** adapters and similar custom containers to figure out the value-,
  ** pointer- and reference types when wrapping iterators or containers.
  ** 
@@ -37,6 +37,11 @@
  ** creates an *Extension Point*: when some payload type requires special
  ** treatment, an explicit specialisation to this rebinding trait may be
  ** injected alongside with the definition of the payload type.
+ ** 
+ ** The CommonResultYield type rebinding helper allows to reconcile several
+ ** essentially compatible result types; it is used in iterator pipelines,
+ ** especially for the case of _child expansion,_ where some additional
+ ** sub-sequences are to be integrated into a main sequence.
  ** 
  ** @see ValueTypeBinding_test
  ** @see iter-adapter.hpp
@@ -119,12 +124,16 @@ namespace meta {
     };
   
   
+  
+  
   /**
    * Decision helper to select between returning results by value or reference.
-   * - when both types can not be reconciled, not type result is provided
+   * - when both types can not be reconciled, _no type result_ is provided;
+   *   this case can be detected by a compile-time bool-check
    * - when one of both types is `const`, the `ResType` will be const
    * - when both types are LValue-references, then the result will be a reference,
    *   otherwise the result will be a value type
+   * @see IterExplorer::expand()
    */
   template<typename T1, typename T2,  bool = has_TypeResult<std::common_type<T1,T2>>()>
   struct CommonResultYield

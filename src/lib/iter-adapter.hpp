@@ -3,6 +3,7 @@
 
    Copyright (C)
      2009,            Hermann Vosseler <Ichthyostega@web.de>
+     2017,2024,       Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -24,8 +25,8 @@
  ** - the IterAdapter retains an active callback connection to the
  **   controlling container, thus allowing arbitrary complex behaviour.
  ** - the IterStateWrapper uses a variation of that approach, where the
- **   representation of the current state is embedded as an state value
- **   element right into the iterator instance.
+ **   representation of the current state is embedded as a *State Core*
+ **   value element right into the iterator instance.
  ** - very similar is IterableDecorator, but this time directly as
  **   decorator to inherit from the »state core«, and without checks.
  ** - the RangeIter allows just to expose a range of elements defined
@@ -44,7 +45,7 @@
  **   references to pre-existing storage locations (not temporaries).
  ** 
  ** There are many further ways of building a Lumiera Forward Iterator.
- ** For example, lib::IterSource exposes a "iterable" source of data elements,
+ ** For example, lib::IterSource exposes an "iterable" source of data elements,
  ** while hiding the actual container or generator implementation behind a
  ** VTable call. Furthermore, complex processing chains with recursive
  ** expansion can be built with the \ref IterExporer builder function.
@@ -59,8 +60,8 @@
  ** # Lumiera Forward Iterator concept
  ** 
  ** Similar to the STL, instead of using a common "Iterator" base class,
- ** we rather define a common set of functions and behaviour which can
- ** be expected from any such iterator. These rules are similar to STL's
+ ** we rather define a common set of functions and behaviour which can be
+ ** expected from any such iterator. These rules are similar to STL's
  ** "forward iterator", with the addition of an bool check to detect
  ** iteration end. The latter is inspired by the \c hasNext() function
  ** found in many current languages supporting iterators. However, by
@@ -68,25 +69,28 @@
  ** support the various extended iterator concepts from STL and boost
  ** (random access iterators, output iterators, arithmetics, difference
  ** between iterators and the like). According to this concept,
- ** _an iterator is a promise for pulling values,_
+ ** _an iterator is a promise for pulling values once,_
  ** and nothing beyond that.
  ** 
- ** - Any Lumiera forward iterator can be in a "exhausted" (invalid) state,
- **   which can be checked by the bool conversion. Especially, any instance
+ ** Notably,
+ ** - any Lumiera forward iterator can be in a "exhausted" (invalid) state,
+ **   which can be checked by the bool conversion. Especially, an instance
  **   created by the default ctor is always fixed to that state. This
- **   state is final and can't be reset, meaning that any iterator is
- **   a disposable one-way-off object.
+ **   state is final and can not be reset, meaning that any iterator
+ **   is a disposable one-way-off object.
  ** - iterators are copyable and equality comparable
  ** - when an iterator is _not_ in the exhausted state, it may be
- **   _dereferenced_ to yield the "current" value.
+ **   _dereferenced_ to yield the _current value_.
+ ** - usually, the _current value_ is exposed by-ref (but by-val is possible)
  ** - moreover, iterators may be incremented until exhaustion.
  ** 
  ** Conceptually, a Lumiera Iterator represents a lazy stream of calculations
  ** rather than a target value considered to be »within« a container. And while
- ** the result is deliberately _always exposed as a reference,_ to keep the
- ** door open for special-case manipulations, for the typical usage it is
- ** _discouraged_ to assume anything about the source, beyond the limited
- ** access to some transient state as exposed during active iteration.
+ ** the result is in may cases deliberately _exposed as a reference,_ in order
+ ** to keep the door open for special-case manipulations, for the typical usage
+ ** it is _discouraged_ to assume anything about the source, beyond the limited
+ ** access to some transient state as exposed during active iteration. Together,
+ ** these rules enable a _loose coupling_ to the source of data.
  ** 
  ** @see iter-adapter-test.cpp
  ** @see itertools.hpp
@@ -105,6 +109,13 @@
 
 #include <iterator>
 
+
+namespace util {   // see lib/util.hpp
+  template<class OBJ>
+  OBJ* unConst (const OBJ*);
+  template<class OBJ>
+  OBJ& unConst (OBJ const&);
+}
 
 namespace lib {
   
@@ -140,6 +151,11 @@ namespace lib {
     /** type binding helper: an iterato's actual result type */
     template<class IT>
     using Yield = decltype(std::declval<IT>().operator*());
+    
+    /** the _result type_ yielded by a »state core« */
+    template<class COR>
+    using CoreYield = decltype(std::declval<COR>().yield());
+    
   }
   
   
@@ -328,20 +344,22 @@ namespace lib {
 
   /**
    * Another Lumiera Forward Iterator building block, based on incorporating a state type
-   * right into the iterator. Contrast this to IterAdapter, which refers to a managing
-   * container behind the scenes. Here, all of the state is assumed to live in the
-   * custom type embedded into this iterator, accessed and manipulated through
+   * as »*State Core*«, right into the iterator. Contrast this to IterAdapter, which refers to
+   * a managing container behind the scenes. To the contrary, here all of the state is assumed
+   * to live in the custom type embedded into this iterator, accessed and manipulated through
    * a dedicated _iteration control API_ exposed as member functions.
    * 
-   * \par Assumptions when building iterators based on IterStateWrapper
-   * There is a custom state representation type ST.
-   * - default constructible
-   * - this default state represents the _bottom_ (invalid) state.
-   * - copyable, because iterators are passed by value
+   * # Requirements for a »State Core«
+   * When building iterators with the help of IterStateWrapper or \ref IterableAdapter,
+   * it is assumed that the adapted _state core_ type represents a process of state evolution,
+   * which reaches a well defined end state eventually, but this end state is also the _bottom_
+   * - the core is default constructible
+   * - this default state represents the _bottom_ (final, invalid) state.
+   * - copyable, because iterators are passed by value; ideally also assignable
    * - this type needs to provide an *iteration control API* with the following operations
-   *   -# \c checkPoint establishes if the given state element represents a valid state
+   *   -# \c checkPoint establishes if the given state element represents a valid active state
    *   -# \c iterNext evolves this state by one step (sideeffect)
-   *   -# \c yield realises the given state, yielding an element of result type `T&`
+   *   -# \c yield realises the given state, yielding an element of _result type_ \a T
    * @tparam T nominal result type (maybe const, but without reference).
    *         The resulting iterator will yield a reference to this type T
    * @tparam ST type of the »state core«, defaults to T.
@@ -352,7 +370,7 @@ namespace lib {
    * @see iter-explorer-test.hpp
    * @see iter-adaptor-test.cpp
    */
-  template<typename T, class ST =T>
+  template<typename T, class ST>
   class IterStateWrapper
     {
       ST core_;
@@ -481,7 +499,7 @@ namespace lib {
       IT&
       srcIter()  const
         {
-          return unConst(*this);
+          return util::unConst(*this);
         }
       
     public:
@@ -526,7 +544,7 @@ namespace lib {
       COR&
       _rawCore()  const
         {
-          return unConst(*this);
+          return util::unConst(*this);
         }
       
       void
@@ -626,26 +644,29 @@ namespace lib {
   
   
   /**
-   * Decorator-Adapter to make a »state core« iterable as Lumiera Forward Iterator.
+   * Decorator-Adapter to make a »*State Core*« iterable as Lumiera Forward Iterator.
    * This is a fundamental (and low-level) building block and works essentially the
    * same as IterStateWrapper — with the significant difference however that the
    * _Core is mixed in by inheritance_ and thus its full interface remains publicly
    * accessible. Another notable difference is that this adapter deliberately
    * *performs no sanity-checks*. This can be dangerous, but allows to use this
    * setup even in performance critical code.
-   * @warning be sure to understand the consequences of using ´core.yield()´ without
-   *          checks; it might be a good idea to build safety checks into the Core
-   *          API functions instead, or to wrap the Core into \ref CheckedCore.
+   * @warning be sure to understand the consequences of _using_ ´core.yield()´ without
+   *          checks; an iterator built this way _must be checked_ before each use, unless
+   *          it is guaranteed to be valid (by contextual knowledge). It might be a good idea
+   *          to build some safety checks into the Core API functions instead, maybe even just
+   *          as assertions, or to wrap the Core into \ref CheckedCore for most usages.
    * @tparam T nominal result type (maybe const, but without reference).
-   * @tparam COR type of the »state core«. The resulting iterator will _mix-in_
-   *         this type, and thus inherit properties like copy, move, compare, VTable, POD.
+   * @tparam COR type of the »state core«. The resulting iterator will _mix-in_ this type,
+   *         and thus inherit properties like copy, move, compare, VTable, „POD-ness“.
    *         The COR must implement the following _iteration control API:_
    *          -# `checkPoint` establishes if the given state element represents a valid state
    *          -# ´iterNext` evolves this state by one step (sideeffect)
    *          -# `yield` realises the given state, exposing a result of type `T&`
+   *         Furthermore, COR must be default-constructible in _disabled_ state
    * @note the resulting iterator will attempt to yield a reference to type \a T when possible;
-   *         but when the wrapped `COR::yield()` produces a value, this is passed and also
-   *         #operator-> is then disabled, to prevent taking the adress of the value (temporary)
+   *         but when the wrapped `COR::yield()` produces a value, this is passed as such, moreover
+   *         #operator-> becomes disabled then, to prevent taking the address of the (temporary) value!
    * @see IterExplorer a pipeline builder framework on top of IterableDecorator
    * @see iter-explorer-test.hpp
    * @see iter-adaptor-test.cpp
@@ -666,11 +687,7 @@ namespace lib {
         }
       
     public:
-//      typedef T* pointer;
-//      typedef T& reference;
-//      typedef T  value_type;
-      /////////////////////////////////////////////////////////////////////////////OOO new YieldRes code
-      using CoreYield  = decltype(std::declval<COR>().yield());
+      using CoreYield  = iter::CoreYield<COR>;
       using _CommonT   = meta::CommonResultYield<T&, CoreYield>;
       using YieldRes   = typename _CommonT::ResType;
       using value_type = typename _CommonT::value_type;
@@ -700,19 +717,16 @@ namespace lib {
       explicit operator bool() const { return isValid(); }
       
       YieldRes
-//      reference
       operator*() const
         {
-          return _core().yield();        // core interface: yield
+          return _core().yield();          // core interface: yield
         }
       
-//                            lib::meta::enable_if_c<_CommonT::isRef,
-//      pointer                                     >
       pointer
       operator->() const
         {
           if constexpr (_CommonT::isRef)
-            return & _core().yield();    // core interface: yield
+            return & _core().yield();      // core interface: yield
           else
             static_assert (_CommonT::isRef,
                "can not provide operator-> "
@@ -722,14 +736,14 @@ namespace lib {
       IterableDecorator&
       operator++()
         {
-          _core().iterNext();            // core interface: iterNext
+          _core().iterNext();              // core interface: iterNext
           return *this;
         }
       
       bool
       isValid ()  const
         {
-          return _core().checkPoint(); // core interface: checkPoint
+          return _core().checkPoint();     // core interface: checkPoint
         }
       
       bool
@@ -774,7 +788,6 @@ namespace lib {
    * elements of an embedded STL container, without controlling
    * the details of the iteration (as is possible using the
    * more generic IterAdapter).
-   * 
    * @note
    *  - when IT is just a pointer, we use the pointee as value type
    *  - but when IT is a class, we expect the usual STL style nested typedefs
@@ -979,7 +992,7 @@ namespace lib {
       
       /// Supporting equality comparisons...
       bool operator!= (NumIter const& o) const  { return not operator==(o); }
-      bool operator== (NumIter const& o) const  { return (empty() and o.empty())    // empty iters must be equal (Lumiera iter requirement) 
+      bool operator== (NumIter const& o) const  { return (empty() and o.empty())    // empty iters must be equal (Lumiera iter requirement)
                                                       or (i_ == o.i_ and e_ == o.e_); }
       
     private:
