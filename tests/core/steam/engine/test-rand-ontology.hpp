@@ -35,16 +35,16 @@ namespace test  {
   using std::string;
   
   /** produce sequences of frames with (reproducible) random data */
-  void generateFrame (TestFrame* buff, size_t frameNr, uint flavour);
+  void generateFrame (TestFrame* buff, size_t frameNr =0, uint flavour =0);
   
   /** produce planar multi channel output of random data frames */
-  void generateMultichan (uint chanCnt, TestFrame* buffArry, size_t frameNr, uint flavour);
+  void generateMultichan (TestFrame* buffArry, uint chanCnt, size_t frameNr =0, uint flavour =0);
   
   /** »process« random frame date by hash-chaining with a parameter */
   void manipulateFrame (TestFrame* out, TestFrame const* in, uint64_t param);
   
   /** mix two random data frames by a parameter-controlled proportion */
-  void combineFrames (TestFrame* out, TestFrame const* srcA, TestFrame const* srcB, int mix);
+  void combineFrames (TestFrame* out, TestFrame const* srcA, TestFrame const* srcB, double mix);
   
 
 

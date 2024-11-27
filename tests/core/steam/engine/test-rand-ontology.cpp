@@ -25,9 +25,12 @@
 
 #include "steam/engine/test-rand-ontology.hpp"
 #include "lib/hash-combine.hpp"
+#include "lib/iter-zip.hpp"
 
-//#include <vector>
+#include <cmath>
 
+using std::lround;
+using lib::zip;
 
 
 namespace steam {
@@ -67,7 +70,7 @@ namespace test  {
    *         which will be offset commonly by adding the \a flavour parameter.
    */
   void
-  generateMultichan (uint chanCnt, TestFrame* buffArry, size_t frameNr, uint flavour)
+  generateMultichan (TestFrame* buffArry, uint chanCnt, size_t frameNr, uint flavour)
   {
     REQUIRE (buffArry);
     for (uint i=0; i<chanCnt; ++i)
@@ -87,8 +90,8 @@ namespace test  {
     REQUIRE (in);
     REQUIRE (out);
     auto calculate = [](uint64_t chain, uint64_t val){ lib::hash::combine(chain,val); return chain; };
-    for (size_t i=0; i < in->data64().size(); ++i)
-        out->data64()[i] = calculate(param, in->data64()[i]);
+    for (auto& [res,src] : zip (out->data64(), in->data64()))
+        res = calculate(param, src);
     out->markChecksum();
   }
   
@@ -101,13 +104,15 @@ namespace test  {
    *         each result byte is the linear interpolation between the corresponding inputs.
    */
   void
-  combineFrames (TestFrame* out, TestFrame const* srcA, TestFrame const* srcB, int mix)
+  combineFrames (TestFrame* out, TestFrame const* srcA, TestFrame const* srcB, double mix)
   {
     REQUIRE (srcA);
     REQUIRE (srcB);
     REQUIRE (out);
-    for (size_t i=0; i < srcA->data().size(); ++i)
-        out->data()[i] = char((1-mix) * srcA->data()[i] + mix * srcB->data()[i]);
+    for (auto& [res,inA,inB] : zip (out->data()
+                                   ,srcA->data()
+                                   ,srcB->data()))
+        res = lround((1-mix)*inA + mix*inB);
     out->markChecksum();
   }
   

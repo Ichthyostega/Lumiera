@@ -20,11 +20,12 @@
 #include "lib/hash-combine.hpp"
 #include "steam/engine/test-rand-ontology.hpp" ///////////TODO
 #include "lib/test/diagnostic-output.hpp"/////////////////TODO
+#include "lib/iter-zip.hpp"
 #include "lib/random.hpp"
 //#include "lib/util.hpp"
 
 
-//using std::string;
+using lib::zip;
 
 
 namespace steam {
@@ -69,6 +70,7 @@ namespace test  {
           processing_generateFrame();
           processing_generateMultichan();
           processing_manipulateFrame();
+          processing_combineFrames();
         }
       
       
@@ -104,7 +106,7 @@ namespace test  {
           for (uint i=0; i<channels; ++i)
             CHECK (not buffs[i]->isSane());
           
-          generateMultichan (channels, buffs[0], frameNr, flavour);
+          generateMultichan (buffs[0], channels, frameNr, flavour);
           for (uint i=0; i<channels; ++i)
             {
               CHECK (buffs[i]->isSane());
@@ -124,7 +126,7 @@ namespace test  {
           iBuff.buildData(frameNr,flavour);
           oBuff.buildData(frameNr,flavour);
           CHECK (iBuff->isPristine());
-          CHECK (iBuff->isPristine());
+          CHECK (oBuff->isPristine());
           
           uint64_t param = defaultGen.u64();
           manipulateFrame (oBuff, iBuff, param);
@@ -132,20 +134,56 @@ namespace test  {
           CHECK (not oBuff->isPristine());
           CHECK (    iBuff->isPristine());
           
-          for (uint i=0; i<oBuff->data64().size(); ++i)
+          for (auto [iDat,oDat] : zip (iBuff->data64()
+                                      ,oBuff->data64()))
             {
+              CHECK (oDat != iDat);
               uint64_t feed = param;
-              uint64_t data = iBuff->data64()[i];
-              lib::hash::combine (feed, data);
-              CHECK (data  == iBuff->data64()[i]);
-              CHECK (feed  != iBuff->data64()[i]);
-              CHECK (feed  == oBuff->data64()[i]);
+              lib::hash::combine (feed, iDat);
+              CHECK (feed  != param);
+              CHECK (feed  != iDat);
+              CHECK (feed  == oDat);
             }
            // can also process in-place
           manipulateFrame (iBuff, iBuff, param);
           CHECK (not iBuff->isPristine());
           CHECK (    iBuff->isValid());
           CHECK (*iBuff == *oBuff);  // second invocation exactly reproduced data from first invocation
+        }
+      
+      /** @test function to mix two test data frames
+       */
+      void
+      processing_combineFrames()
+        {
+          size_t frameNr = defaultGen.u64();
+          uint flavour   = defaultGen.u64();
+          
+          Buffer i1Buff, i2Buff, oBuff;
+          i1Buff.buildData(frameNr,flavour+0);
+          i2Buff.buildData(frameNr,flavour+1);
+          oBuff.buildData();
+          CHECK (i1Buff->isPristine());
+          CHECK (i2Buff->isPristine());
+          CHECK (oBuff->isPristine());
+          
+          double mix = defaultGen.uni();
+          combineFrames (oBuff, i1Buff, i2Buff, mix);
+          CHECK (    oBuff->isValid());
+          CHECK (not oBuff->isPristine());
+          CHECK (    i1Buff->isPristine());
+          CHECK (    i2Buff->isPristine());
+          
+          for (auto [oDat,i1Dat,i2Dat] : zip (oBuff->data()
+                                             ,i1Buff->data()
+                                             ,i2Buff->data()))
+            CHECK (oDat == std::lround((1-mix)*i1Dat + mix*i2Dat));
+          
+          // can also process in-place
+          combineFrames (i1Buff, i1Buff, i2Buff, mix);
+          CHECK (not i1Buff->isPristine());
+          CHECK (    i1Buff->isValid());
+          CHECK (*i1Buff == *oBuff); // second invocation exactly reproduced data from first invocation
         }
     };
   

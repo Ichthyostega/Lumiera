@@ -314,8 +314,7 @@ namespace test  {
   bool
   TestFrame::contentEquals (TestFrame const& o)  const
   {
-    return header_ == o.header_
-       and data() == o.data();
+    return data() == o.data();
   }
   
   
@@ -331,8 +330,8 @@ namespace test  {
   TestFrame::buildData()
   {
     auto gen = buildDataGenFrom (accessHeader().distinction);
-    for (char& dat : data())
-      dat = char(gen.i(CHAR_MAX));
+    for (uint64_t& dat : data64())
+      dat = gen.u64();
     markChecksum();
   }
   
@@ -343,8 +342,8 @@ namespace test  {
   TestFrame::matchDistinction()  const
   {
     auto gen = buildDataGenFrom (accessHeader().distinction);
-    for (char const& dat : data())
-      if (dat != char(gen.i(CHAR_MAX)))
+    for (uint64_t const& dat : data64())
+      if (dat != gen.u64())
         return false;
     return true;
   }

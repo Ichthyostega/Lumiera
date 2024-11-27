@@ -66,7 +66,7 @@ namespace test{
   roughEQ (F val, N target, F limit =ROUGH_PRECISION)
   {
     REQUIRE (0 < limit);
-    return abs (val/target - F(1)) < limit;
+    return abs (val - target) < limit * abs(target);
   }                                  //////////////////////////////////////////////////////////////////////////TICKET #1360 looks like this problem was solved several times
   
   
