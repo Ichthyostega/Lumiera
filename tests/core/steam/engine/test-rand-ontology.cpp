@@ -159,5 +159,11 @@ namespace test  {
   
   
   
+  /* =========== Test-Rand-Ontology ================ */
+  
+  /** Storage for the Singleton-Accessor/Factory */
+  lib::Depend<TestRandOntology> testRand;
+  
+  
   
 }}} // namespace steam::engine::test

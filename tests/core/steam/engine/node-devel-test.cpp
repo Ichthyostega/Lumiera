@@ -18,6 +18,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/hash-combine.hpp"
+#include "lib/test/test-helper.hpp"
 #include "steam/engine/test-rand-ontology.hpp" ///////////TODO
 #include "lib/test/diagnostic-output.hpp"/////////////////TODO
 #include "lib/iter-zip.hpp"
@@ -76,6 +77,8 @@ namespace test  {
           processing_manipulateMultichan();
           processing_manipulateFrame();
           processing_combineFrames();
+          
+          testRand_simpleUsage();
         }
       
       
@@ -262,6 +265,19 @@ namespace test  {
           CHECK (not i1Buff->isPristine());
           CHECK (    i1Buff->isValid());
           CHECK (*i1Buff == *oBuff); // second invocation exactly reproduced data from first invocation
+        }
+      
+      
+      /** @test demonstrate simple usage of test-render setup
+       *   - access the TestRandOntology as singleton
+       *   - create a Spec record
+       */
+      void
+      testRand_simpleUsage()
+        {
+          auto spec = testRand().setupGenerator();
+SHOW_EXPR(spec.PROTO);
+          CHECK (spec.PROTO == "generate-TestFrame"_expect);
         }
     };
   

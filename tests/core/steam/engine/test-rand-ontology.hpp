@@ -21,7 +21,10 @@
 
 
 #include "lib/error.hpp"
+#include "lib/symbol.hpp"
 #include "lib/depend.hpp"
+#include "lib/nocopy.hpp"
+#include "lib/format-string.hpp"
 #include "steam/engine/testframe.hpp"
 
 #include <array>
@@ -33,6 +36,8 @@ namespace engine{
 namespace test  {
   
   using std::string;
+  using lib::Literal;
+  using util::_Fmt;
   
   /** produce sequences of frames with (reproducible) random data */
   void generateFrame (TestFrame* buff, size_t frameNr =0, uint flavour =0);
@@ -81,15 +86,37 @@ namespace test  {
     {
       
     public:
+      struct Spec;
+      
      ~TestRandOntology()  = default;
       TestRandOntology()  = default;
       
+      Spec setupGenerator (string qual ="");
     private:
     };
   
   
+  struct TestRandOntology::Spec
+    : util::Cloneable
+    {
+      const string PROTO;
+      
+      Spec (Literal kind
+           ,Literal type
+           )
+        : PROTO{_Fmt{"%s-%s"} % kind % type}
+        { }
+    };
   
-  /** */
+  inline TestRandOntology::Spec
+  TestRandOntology::setupGenerator (string qual)
+  {
+    Spec spec{"generate","TestFrame"};
+    return spec;
+  }
+  
+  /** Singleton accessor */
+  extern lib::Depend<TestRandOntology> testRand;
   
   
   
