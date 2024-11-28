@@ -24,8 +24,11 @@
 #include "lib/random.hpp"
 //#include "lib/util.hpp"
 
+#include <vector>
 
 using lib::zip;
+using lib::izip;
+using std::vector;
 
 
 namespace steam {
@@ -69,6 +72,8 @@ namespace test  {
           
           processing_generateFrame();
           processing_generateMultichan();
+          processing_duplicateMultichan();
+          processing_manipulateMultichan();
           processing_manipulateFrame();
           processing_combineFrames();
         }
@@ -87,6 +92,7 @@ namespace test  {
           
           generateFrame (buff, frameNr, flavour);
           CHECK ( buff->isSane());
+          CHECK ( buff->isPristine());
           CHECK (*buff == TestFrame(frameNr,flavour));
         }
       
@@ -102,19 +108,91 @@ namespace test  {
           uint channels  = 1 + rani(50);
           CHECK (1 <= channels and channels <= 50);
           
-          Buffer buffs[50];
+          Buffer buff[50];
           for (uint i=0; i<channels; ++i)
-            CHECK (not buffs[i]->isSane());
+            CHECK (not buff[i]->isSane());
           
-          generateMultichan (buffs[0], channels, frameNr, flavour);
+          generateMultichan (buff[0], channels, frameNr, flavour);
           for (uint i=0; i<channels; ++i)
             {
-              CHECK (buffs[i]->isSane());
-              CHECK (*(buffs[i]) == TestFrame(frameNr,flavour+i));
+              CHECK (buff[i]->isPristine());
+              CHECK (*(buff[i]) == TestFrame(frameNr,flavour+i));
             }
         }
       
-      /** @test function to apply a numeric computation to test data frames
+      
+      /** @test clone copy of multichannel test data */
+      void
+      processing_duplicateMultichan()
+        {
+          size_t frameNr = defaultGen.u64();
+          uint flavour   = defaultGen.u64();
+          uint channels  = 1 + rani(50);
+          Buffer srcBuff[50];
+          generateMultichan (srcBuff[0], channels, frameNr, flavour);
+          
+          Buffer clone[50];
+          for (uint i=0; i<channels; ++i)
+            CHECK (not clone[i]->isSane());
+          
+          duplicateMultichan (clone[0],srcBuff[0], channels);
+          for (uint i=0; i<channels; ++i)
+            {
+              CHECK (clone[i]->isPristine());
+              CHECK (*(clone[i]) == *(srcBuff[i]));
+            }
+        }
+      
+      
+      /** @test multichannel data hash-chain manipulation
+       *   - use multichannel pseudo random input data
+       *   - store away a clone copy before manipulation
+       *   - the #manipulateMultichan() operates in-place in the buffers
+       *   - each buffer has been marked with a new checksum afterwards
+       *   - and each buffer now differs from original state
+       *   - verify that corresponding data points over all channels
+       *     have been linked by a hashcode-chain, seeded with the `param`
+       *     and then consecutively hashing in data from each channel.
+       */
+      void
+      processing_manipulateMultichan()
+        {
+          size_t frameNr = defaultGen.u64();
+          uint flavour   = defaultGen.u64();
+          uint channels  = 1 + rani(50);
+          Buffer buff[50], refData[50];
+          generateMultichan (buff[0], channels, frameNr, flavour);
+          // stash away a copy of the test data for verification
+          duplicateMultichan(refData[0],buff[0], channels);
+          
+          for (uint c=0; c<channels; ++c)
+            CHECK (buff[c]->isPristine());
+          
+          uint64_t param = defaultGen.u64();
+          manipulateMultichan(buff[0], channels, param);
+          
+          const uint SIZ = buff[0]->data64().size();
+          vector<uint64_t> xlink(SIZ, param);     // temporary storage for verifying the hash-chain
+          for (uint c=0; c<channels; ++c)
+            {
+              CHECK (buff[c]->isSane());          // checksum matches
+              CHECK (not buff[c]->isPristine());  // data was indeed changed
+              
+              CHECK (*(buff[c]) != *(refData[c]));
+              
+              for (auto& [i, link] : izip(xlink))
+                {
+                  auto const& refPoint = refData[c]->data64()[i];
+                  lib::hash::combine (link, refPoint);
+                  CHECK (link != refPoint);
+                  CHECK (link == buff[c]->data64()[i]);
+                }
+            }
+        }
+      
+      /** @test function to apply a numeric computation to test data frames;
+       * @remark here basically the same hash-chaining is used as for #manipulateMultichan,
+       *   but only one hash-chain per data point is used and output is written to a different buffer.
        */
       void
       processing_manipulateFrame()

@@ -78,6 +78,47 @@ namespace test  {
   }
   
   /**
+   * @param chanCnt size of the array of frames to clone
+   * @param inArry  pointer to storage holding a TestFrame[chanCnt]
+   * @param outArry pointer to allocated storage sufficient to hold a clone copy of these
+   */
+  void
+  duplicateMultichan (TestFrame* outArry, TestFrame* inArry, uint chanCnt)
+  {
+    REQUIRE (inArry);
+    REQUIRE (outArry);
+    for (uint i=0; i<chanCnt; ++i)
+      new(outArry+i) TestFrame{inArry[i]};
+  }
+  
+  /**
+   * @param chanCnt  size of the array of frames to manipulate
+   * @param buffArry pointer to an array of several frames (channels)
+   * @param param parameter to control or »mark« the data manipulation (hash-combining)
+   * @remark this function in-place processing of several channels in one step: data is processed
+   *         in 64-bit words, by hash-chaining with \a param and then joining in the data items.
+   *         All data buffers will be manipulated and marked with as valid with a new checksum.
+   */
+  void
+  manipulateMultichan (TestFrame* buffArry, uint chanCnt, uint64_t param)
+  {
+    REQUIRE (buffArry);
+    const uint SIZ = buffArry->data64().size();
+    for (uint i=0; i<SIZ; ++i)
+      {
+        uint64_t feed{param};
+        for (uint c=0; c<chanCnt; ++c)
+          {
+            auto& data = buffArry[c].data64()[i];
+            lib::hash::combine(feed, data);
+            data = feed;
+          }
+      }
+    for (uint c=0; c<chanCnt; ++c)
+      buffArry[c].markChecksum();
+  }
+  
+  /**
    * @param out   existing allocation to place the generated TestFrame into
    * @param in    allocation holding the input TestFrame data
    * @param param parameter to control or »mark« the data manipulation (hash-combining)

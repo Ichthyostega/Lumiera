@@ -40,6 +40,12 @@ namespace test  {
   /** produce planar multi channel output of random data frames */
   void generateMultichan (TestFrame* buffArry, uint chanCnt, size_t frameNr =0, uint flavour =0);
   
+  /** create an identical clone copy of the planar multi channel frame array */
+  void duplicateMultichan (TestFrame* outArry, TestFrame* inArry, uint chanCnt);
+
+  /** »process« a planar multi channel array of data frames in-place */
+  void manipulateMultichan (TestFrame* buffArry, uint chanCnt, uint64_t param);
+  
   /** »process« random frame date by hash-chaining with a parameter */
   void manipulateFrame (TestFrame* out, TestFrame const* in, uint64_t param);
   

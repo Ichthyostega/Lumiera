@@ -191,7 +191,6 @@ apply functor to each tuple element::
 - provided as `lib::meta::forEach` in 'lib/meta/tuple-helper.hpp
 - The design of the `DataTable` with CSV-Formatting is based on this technique, see 'lib/stat/data.hpp'
 - 'lib/iter-zip.hpp' uses this to construct a tuple-of-iterators
-- 'test-rand-ontology.cpp' uses this in `manipulateFrame()` to accept an arbitrary number of input chains
 +
 unpack iterator into tuple::
   Under controlled conditions this is possible (even while it seems like time travel from the runtime into
