@@ -76,7 +76,9 @@ namespace engine {
   constexpr bool
   _verify_usable_as_InvocationAdapter()
   {
-    ASSERT_MEMBER_FUNCTOR (&ADA::connect, void(uint, uint));
+    // also: array-like outBuff
+    // optionally array-like inBuff
+    ASSERT_MEMBER_FUNCTOR (&ADA::connect, void());
     ASSERT_MEMBER_FUNCTOR (&ADA::invoke, void());
     return sizeof(ADA);
   }
@@ -87,7 +89,7 @@ namespace engine {
   _verify_usable_as_WeavingPattern()
   {
     using Feed = typename PAT::Feed;
-    ASSERT_MEMBER_FUNCTOR (&PAT::mount, Feed());
+    ASSERT_MEMBER_FUNCTOR (&PAT::mount, Feed(TurnoutSystem&));
     ASSERT_MEMBER_FUNCTOR (&PAT::pull, void(Feed&, TurnoutSystem&));
     ASSERT_MEMBER_FUNCTOR (&PAT::shed, void(Feed&, OptionalBuff));
     ASSERT_MEMBER_FUNCTOR (&PAT::weft, void(Feed&));
@@ -129,7 +131,7 @@ namespace engine {
       BuffHandle
       weave (TurnoutSystem& turnoutSys, OptionalBuff outBuff =std::nullopt)  override
         {
-          Feed feed = PAT::mount();
+          Feed feed = PAT::mount(turnoutSys);
           PAT::pull(feed, turnoutSys);
           PAT::shed(feed, outBuff);
           PAT::weft(feed);

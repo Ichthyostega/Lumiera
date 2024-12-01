@@ -85,10 +85,12 @@ namespace engine {
      * @note assumptions made regarding the overall structure
      *     - `INVO::Feed` defines an _invocation adapter_ for the processing function
      *     - `INVO::buildFeed()` is a functor to (repeatedly) build `Feed` instances
-     *     - the _invocation adapter_ in turn embeds a `FeedManifold<N>` to hold
-     *       + an array of input buffer pointers
-     *       + an array of output buffer pointers
-     *       + `INVO::MAX_SIZ` limits both arrays
+     *     - the _invocation adapter_ in turn embeds a `FeedManifold<FUN>` to hold
+     *       + a setup of output buffer pointers (single, tuple or array)
+     *       + (optionally) a similar setup for input buffer pointers
+     *       + (optionally) a parameter or parameter tuple
+     *       + storage to configure BuffHandle entries for each «slot»
+     *       + storage to hold the actual processing functor
      */
   template<class INVO>
   struct MediaWeavingPattern
@@ -117,32 +119,35 @@ namespace engine {
       
       
       Feed
-      mount()
+      mount (TurnoutSystem& turnoutSys)
         {
-          return INVO::buildFeed();
+          ENSURE (leadPort.size() <= INVO::FAN_I);
+          ENSURE (outTypes.size() <= INVO::FAN_O);
+          return INVO::buildFeed (turnoutSys);
         }
       
       void
       pull (Feed& feed, TurnoutSystem& turnoutSys)
         {
-          for (uint i=0; i<leadPort.size(); ++i)
-            {
-              BuffHandle inputData = leadPort[i].get().weave (turnoutSys);
-              feed.inBuff.createAt(i, move(inputData));
-            }
+          if constexpr (Feed::hasInput())
+            for (uint i=0; i<leadPort.size(); ++i)
+              {
+                BuffHandle inputData = leadPort[i].get().weave (turnoutSys);
+                feed.inBuff.createAt(i, move(inputData));
+              }
         }
       
       void
       shed (Feed& feed, OptionalBuff outBuff)
         {
           for (uint i=0; i<outTypes.size(); ++i)
-            {
-              BuffHandle resultData =
-                i == resultSlot and outBuff? *outBuff
-                                           : outTypes[i].lockBuffer();
-              feed.outBuff.createAt(i, move(resultData));
-            }
-          feed.connect (leadPort.size(),outTypes.size());
+              {
+                BuffHandle resultData =
+                  i == resultSlot and outBuff? *outBuff
+                                             : outTypes[i].lockBuffer();
+                feed.outBuff.createAt(i, move(resultData));
+              }
+          feed.connect();
         }
       
       void
@@ -154,17 +159,18 @@ namespace engine {
       BuffHandle
       fix (Feed& feed)
         {
-          for (uint i=0; i<leadPort.size(); ++i)
-            {
-              feed.inBuff[i].release();
-            }
+          if constexpr (Feed::hasInput())
+            for (uint i=0; i<leadPort.size(); ++i)
+              {
+                feed.inBuff[i].release();
+              }
           for (uint i=0; i<outTypes.size(); ++i)
-            {
-              feed.outBuff[i].emit();    // state transition: data ready
-              if (i != resultSlot)
-                feed.outBuff[i].release();
-            }
-          ENSURE (resultSlot < INVO::MAX_SIZ, "invalid result buffer configured.");
+              {
+                feed.outBuff[i].emit();    // state transition: data ready
+                if (i != resultSlot)
+                  feed.outBuff[i].release();
+              }
+          ENSURE (resultSlot < INVO::FAN_O, "invalid result buffer configured.");
           return feed.outBuff[resultSlot];
         }
       

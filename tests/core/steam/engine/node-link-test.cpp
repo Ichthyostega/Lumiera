@@ -112,7 +112,7 @@ SHOW_EXPR(metaN1.genNodeSpec(con.leads))
       
       
       /** @test TODO Use existing node connectivity to generate a TurnoutSystem
-       * @todo WIP 7/24 🔁 define ⟶ implement
+       * @todo WIP 12/24 🔁 define ⟶ implement
        */
       void
       generate_turnout_system()
@@ -122,7 +122,7 @@ SHOW_EXPR(metaN1.genNodeSpec(con.leads))
       
       
       /** @test TODO Invoke some render nodes as linked together
-       * @todo WIP 7/24 🔁 define ⟶ implement
+       * @todo WIP 12/24 🔁 define ⟶ implement
        */
       void
       trigger_node_port_invocation()

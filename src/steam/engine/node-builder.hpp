@@ -361,7 +361,7 @@ namespace engine {
       completePort()
         {
           weavingBuilder_.connectRemainingInputs (_Par::leads_, this->defaultPort_);
-          weavingBuilder_.fillRemainingBufferTypes();
+          weavingBuilder_.fillRemainingBufferTypes(); ////////////////////////////////////////////////////////////////////OOO Nein! sollte gleich zu Beginn (automatisch) passieren
           return NodeBuilder{static_cast<NodeBuilder<POL,DAT>&&> (*this) // slice away PortBulder subclass data
                             ,weavingBuilder_.sizMark
                             ,weavingBuilder_.build()};

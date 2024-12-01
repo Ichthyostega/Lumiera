@@ -101,6 +101,7 @@
 #include "steam/engine/weaving-pattern.hpp"
 #include "steam/engine/buffer-provider.hpp"
 #include "steam/engine/buffhandle-attach.hpp"  /////////////////OOO why do we need to include this? we need the accessAs<TY>() template function
+#include "lib/meta/tuple-helper.hpp"
 #include "lib/test/test-helper.hpp" ////////////////////////////OOO TODO added for test
 #include "lib/format-string.hpp"
 #include "lib/iter-zip.hpp"
@@ -225,8 +226,8 @@ namespace engine {
   
   
   
-  template<class FUN>
-  using SimpleDirectInvoke = MediaWeavingPattern<DirectFunctionInvocation<FUN>>;
+//  template<class FUN>
+//  using SimpleDirectInvoke = MediaWeavingPattern<DirectFunctionInvocation<FUN>>;
   
   
   /**
@@ -246,11 +247,13 @@ namespace engine {
   struct WeavingBuilder
     : util::MoveOnly
     {
-      using FunSpec = _ProcFun<FUN>;
-      using TurnoutWeaving = Turnout<SimpleDirectInvoke<FUN>>;
+      using FunSpec = _ProcFun<FUN>; ///////////////////////////////////TODO remove this!!!
+      using Prototype = typename FeedManifold<FUN>::Prototype;
+      using WeavingPattern = MediaWeavingPattern<Prototype>;
+      using TurnoutWeaving = Turnout<WeavingPattern>;
       static constexpr SizMark<sizeof(TurnoutWeaving)> sizMark{};
-      static constexpr uint FAN_I = FunSpec::FAN_I;
-      static constexpr uint FAN_O = FunSpec::FAN_O;
+      static constexpr uint FAN_I = Prototype::FAN_I;
+      static constexpr uint FAN_O = Prototype::FAN_O;
 
       
       using TypeMarker = std::function<BuffDescr(BufferProvider&)>;
@@ -271,6 +274,7 @@ namespace engine {
       template<typename...INIT>
       WeavingBuilder(FUN&& init, StrView nodeSymb, StrView portSpec, INIT&& ...alloInit)
         : leadPorts{forward<INIT> (alloInit)...}
+        , buffTypes{fillDefaultBufferTypes()}
         , nodeSymb_{nodeSymb}
         , portSpec_{portSpec}
         , fun_{move(init)}
@@ -305,11 +309,16 @@ namespace engine {
           return move(*this);
         }
       
+      /** @deprecated handling of output buffer configuration should be "the other way round":
+       *              Instead of filling-in, a default should be established at start,
+       *              which can then arbitrarily be refined
+       */
       WeavingBuilder&&
-      fillRemainingBufferTypes()
+      fillRemainingBufferTypes()   ///////////////////////////////////////////////////OOO Buffer-Typen gleich zu Beginn default-belegen
         {
           using BuffO = typename FunSpec::BuffO;
           uint cnt = FAN_O - buffTypes.size();
+ENSURE (cnt == 0); ///////////////////////////////////////////////////////////////////OOO already filled in constructor now -- remove this code
           return appendBufferTypes<BuffO>(cnt);
         }
       
@@ -352,8 +361,8 @@ namespace engine {
             outTypes.append (
               typeConstructor (providers[i]));
           
-          ENSURE (leadPorts.size() == FunSpec::FAN_I);
-          ENSURE (outTypes.size()  == FunSpec::FAN_O);
+          ENSURE (leadPorts.size() == FAN_I);
+          ENSURE (outTypes.size()  == FAN_O);
           
           using PortDataBuilder = DataBuilder<POL, Port>;
           // provide a free-standing functor to build a suitable Port impl (≙Turnout)
@@ -380,6 +389,59 @@ namespace engine {
           {
             for (uint i=providers.size(); i < maxSlots; ++i)
               providers.emplace_back (ctx().mem);
+          }
+        
+        /**
+         * @internal configuration builder for buffer descriptors
+         * @tparam BU target type of the buffer (without pointer)
+         * The FeedPrototype can generate for the given \a FUN a
+         * type sequence of output buffer types, which are used
+         * to instantiate this template and then later to work
+         * on specific output buffer slots.
+         */
+        template<typename BU>
+        struct BufferDescriptor
+          {
+            /**
+             * Setup the constructor function for the default BufferDescriptors.
+             * @return a functor that can be applied to the actual BufferProviders
+             *         at the point when everything for this port is configured.
+             */
+            TypeMarker
+            makeBufferDescriptor()  const
+              {
+                return [](BufferProvider& provider)
+                          { return provider.getDescriptor<BU>(); };
+              }
+          };
+        
+        using OutTypesDescriptors = typename Prototype::template OutTypesApply<BufferDescriptor>;
+        using OutDescriptorTup = lib::meta::Tuple<OutTypesDescriptors>;
+        
+        /** A tuple of BufferDescriptor instances for all output buffer types */
+        static constexpr OutDescriptorTup outDescriptors{};
+        
+        /** @internal pre-initialise the buffTypes vector with a default configuration.
+         *  @remarks In the _terminal step,_ the buffTypes will be transformed into a
+         *           sequence of BufferDescriptor entries, which can later be used
+         *           by the node invocation to prepare a set of output buffers.
+         *         - each slot holds a function<BufferDescripter(BufferProvider&)>
+         *         - these can be used to configure specific setup for some buffers
+         *         - the default BufferDescriptor will just default-construct the
+         *           designated «output slot» of the media processing-function.
+         */
+        static auto
+        fillDefaultBufferTypes()
+          {
+            std::vector<TypeMarker> defaultBufferTypes;
+            defaultBufferTypes.reserve (std::tuple_size_v<OutDescriptorTup>);
+            lib::meta::forEach(outDescriptors
+                              ,[&](auto& desc)
+                                  {
+                                    defaultBufferTypes.emplace_back(
+                                        desc.makeBufferDescriptor());
+                                  });
+            return defaultBufferTypes;
           }
     };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : (End)Prototyping: how to assemble a Turnout

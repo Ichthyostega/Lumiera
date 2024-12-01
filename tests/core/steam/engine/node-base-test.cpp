@@ -346,7 +346,7 @@ namespace test  {
           CHECK (sizeof(p1) <= sizeof(void*));
           TurnoutSystem turSys{Time::NEVER};               // Each Node invocation uses a TurnoutSystem instance....
           
-          M1 m1 = p1.createFeed(turSys);                   //... and also will create a new FeedManifold from the prototype
+          M1 m1 = p1.buildFeed(turSys);                    //... and also will create a new FeedManifold from the prototype
           CHECK (m1.param == short{});                     // In this case here, the param value is default constructed.
           m1.outBuff.createAt(0, buff);                    // Perform the usual steps for an invocation....
           CHECK (buff.accessAs<long>() == -55);
@@ -370,7 +370,7 @@ namespace test  {
           CHECK (not P1x::canActivate());
           
           P1x p1x = p1.moveAdapted (move(fun_paramSimple));
-          M1 m1x = p1x.createFeed(turSys);                 // ◁————————— param-functor invoked here
+          M1 m1x = p1x.buildFeed(turSys);                  // ◁————————— param-functor invoked here
           CHECK (rr == m1x.param);                         //            ...as indicated by the side-effect
           short r1 = m1x.param;
           
@@ -387,7 +387,7 @@ namespace test  {
           CHECK (calcResult == r1 - 1);                    // as does m1x, without invoking the param-functor
           
           // create yet another instance from the prototype...
-          M1 m1y = p1x.createFeed(turSys);                 // ◁————————— param-functor invoked here
+          M1 m1y = p1x.buildFeed(turSys);                  // ◁————————— param-functor invoked here
           CHECK (rr == m1y.param);
           CHECK (r1 < m1y.param);                          //            ...note again the side-effect
           m1y.outBuff.createAt(0, buff);
@@ -423,18 +423,18 @@ namespace test  {
           CHECK (not p1f.isActivated());                   //        yet in current runtime configuration, the function is empty
           
           // create a FeedManifold instance from this prototype
-          M1 m1f1 = p1f.createFeed(turSys);                // no param-functor invoked,
+          M1 m1f1 = p1f.buildFeed(turSys);                 // no param-functor invoked,
           CHECK (m1f1.param == short{});                   // so this FeedManifold will use the default-constructed parameter
           
           // but since std::function is assignable, we can activate it...
           CHECK (not p1f.isActivated());
           p1f.assignParamFun ([](TurnoutSystem&){ return 47; });
           CHECK (    p1f.isActivated());
-          M1 m1f2 = p1f.createFeed(turSys);                // ◁————————— param-functor invoked here
+          M1 m1f2 = p1f.buildFeed(turSys);                 // ◁————————— param-functor invoked here
           CHECK (m1f2.param == 47);                        //            ...surprise: we got number 47...
           p1f.assignParamFun();
           CHECK (not p1f.isActivated());                   // can /deactivate/ it again...
-          M1 m1f3 = p1f.createFeed(turSys);                // so no param-functor invoked here
+          M1 m1f3 = p1f.buildFeed(turSys);                 // so no param-functor invoked here
           CHECK (m1f3.param == short{});
           
           // done with buffer

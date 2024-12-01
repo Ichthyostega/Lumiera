@@ -216,6 +216,10 @@ namespace engine {
         using ArgO = typename ElmTypes<SigO>::Seq;
         using ArgP = typename ElmTypes<SigP>::Seq;
         
+        // Metaprogramming helper for Buffer types (sans pointer)
+        using ElmsI = ElmTypes<typename ElmTypes<SigI>::template Apply<remove_pointer_t>>;
+        using ElmsO = ElmTypes<typename ElmTypes<SigO>::template Apply<remove_pointer_t>>;
+        
         enum{ FAN_I = ElmTypes<SigI>::SIZ
             , FAN_O = ElmTypes<SigO>::SIZ
             , FAN_P = ElmTypes<SigP>::SIZ
@@ -457,6 +461,7 @@ namespace engine {
   struct FeedManifold
     : _StorageSetup<FUN>::Storage
     {
+      using _T = _ProcFun<FUN>;
       using _S = _StorageSetup<FUN>;
       using _F = typename _S::Storage;
       
@@ -493,8 +498,8 @@ namespace engine {
             return arg;
         }
       
-      using TupI = typename ElmTypes<ArgI>::Tup;
-      using TupO = typename ElmTypes<ArgO>::Tup;
+      using TupI = typename _T::ElmsI::Tup;
+      using TupO = typename _T::ElmsO::Tup;
       
       
       void
@@ -504,7 +509,7 @@ namespace engine {
           {
             forEachIDX<TupI> ([&](auto i)
                                 {
-                                  using BuffI = remove_pointer_t<tuple_element_t<i, TupI>>;
+                                  using BuffI = tuple_element_t<i, TupI>;
                                   accessArg<i> (_F::inArgs) = & _F::inBuff[i].template accessAs<BuffI>();
                                 });
           }
@@ -512,7 +517,7 @@ namespace engine {
           {
             forEachIDX<TupO> ([&](auto i)
                                 {
-                                  using BuffO = remove_pointer_t<tuple_element_t<i, TupO>>;
+                                  using BuffO = tuple_element_t<i, TupO>;
                                   accessArg<i> (_F::outArgs) = & _F::outBuff[i].template accessAs<BuffO>();
                                 });
           }
@@ -552,7 +557,7 @@ namespace engine {
    * parameter-functor with the **cross-builder-API**, a _new instance_ of the prototype
    * is created _as a replacement_ of the old one (note: we move the processing functor).
    * This adds a parameter-functor to the configuration, which will then be invoked
-   * _whenever a new FeedManifold instance_ [is created](\ref #createFeed); the result of
+   * _whenever a new FeedManifold instance_ [is created](\ref #buildFeed); the result of
    * this parameter-functor invocation should be a parameter value, which can be passed
    * into the constructor of FeedManifold, together with a copy of the proc-functor.
    * @see NodeBase_test::verify_FeedPrototype()
@@ -561,13 +566,26 @@ namespace engine {
   class FeedPrototype
     : util::MoveOnly
     {
+      using _Proc = _ProcFun<FUN>;
       using _Trait = _ParamFun<FUN>;
-      using Feed = FeedManifold<FUN>;
       
       FUN procFun_;
       PAM paramFun_;
       
     public:
+      using Feed = FeedManifold<FUN>;
+      enum{ FAN_I = Feed::FAN_I
+          , FAN_O = Feed::FAN_O
+          , FAN_P = Feed::FAN_P
+      };
+      using ElmsI = typename _Proc::ElmsI;
+      using ElmsO = typename _Proc::ElmsO;
+      
+      template<template<class> class META>
+      using OutTypesApply = typename ElmsO::template Apply<META>;
+      
+      
+      /** setup with processing-functor only */
       FeedPrototype (FUN&& proc)
         : procFun_{move (proc)}
         , paramFun_{}
@@ -583,16 +601,16 @@ namespace engine {
       static constexpr bool hasParamFun() { return _Trait::template isParamFun<PAM>();  }
       static constexpr bool canActivate() { return _Trait::template canActivate<PAM>(); }
       
-      /** @return runtime test: there is actually usable parameter-functor to invoke? */
+      /** @return runtime test: actually usable parameter-functor available to invoke? */
       bool isActivated()  const           { return _Trait::isActivated(paramFun_); }
       
       
       
       /************************************************************//**
-       * build suitable Feed(Manifold) for processing a Node invocation
+       * create suitable Feed(Manifold) for processing a Node invocation
        */
       Feed
-      createFeed (TurnoutSystem& turnoutSys)
+      buildFeed (TurnoutSystem& turnoutSys)
         {
           if constexpr (hasParamFun())
             if (isActivated())
