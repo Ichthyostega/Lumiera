@@ -47,7 +47,7 @@ namespace test  {
      * happening in correct order.
      */
     class TestContext
-      : public StateProxy
+//      : public StateProxy
       {
         
         //////////////TODO: facility to verify the right access operations get called
@@ -73,12 +73,12 @@ namespace test  {
           UNIMPLEMENTED ("build a simple render node and then activate it");
           
           AllocationCluster alloc;
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
           NodeFactory nodeFab(alloc);
           
           ProcNode * testSource;  ///////////TODO: how to fabricate a test Source-Node????
           
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
           WiringSituation setup(testSource);
           
           PEffect pEffect = createTestEffectMObject();

@@ -350,6 +350,20 @@ namespace engine {
   using SimpleDirectInvoke = SimpleWeavingPattern<DirectFunctionInvocation<N,FUN>>;
   
   
+  /**
+   * A low-level Builder to prepare and adapt for a specific node invocation.
+   * In this context, »weaving« refers to the way parameters and results of an
+   * processing function are provided, combined and forwarded within the setup
+   * for an actual Render Node invocation. When the invocation happens, a kind
+   * of preconfigured _blue print_ or invocation plan is executed; the purpose
+   * of the build at »Level-2« (≙the purpose of this code) is to preconfigure
+   * this invocation scheme. Using a _low level builder_ as controlled by the
+   * actual NodeBuilder and PortBuilder allows to introduce extension points
+   * and helps to abstract away internal technical details of the invocation.
+   * @tparam POL allocation and context configuration policy
+   * @tparam N   maximum number of input and output slots
+   * @tparam FUN function or invocation adapter to invoke
+   */
   template<class POL, uint N, class FUN>
   struct WeavingBuilder
     : util::MoveOnly

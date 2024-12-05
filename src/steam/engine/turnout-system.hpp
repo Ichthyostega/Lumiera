@@ -13,14 +13,22 @@
 
 
 /** @file turnout-system.hpp
- ** Access point to the state of a frame rendering evaluation.
- ** The rendering of frames is triggered from a render job, and recursively
- ** retrieves the data from predecessor nodes. Some statefull aspects are involved
- ** into this recursive evaluation, beyond the data in the local call stack. Such
- ** additional statefull dependencies are problematic (regarding concurrency and
- ** throughput) and are thus abstracted from the actual processing operations
- ** with the help of the steam::engine::StateClosure interface
- ** @todo unfinished draft from 2009 regarding the render process
+ ** THe actual state of a frame rendering evaluation parametrised for a single job.
+ ** The rendering of frames is triggered from a render job, and recursively retrieves the data
+ ** from predecessor render nodes, prepared, configured and interconnected by the Builder.
+ ** Some statefull aspects can be involved into this recursive evaluation, beyond the data
+ ** passed directly through the recursive calls and interconnected data buffers. Notably,
+ ** some operations need direct call parameters, e.g. the frame number to retrieve or
+ ** the actual parametrisation of an effect, which draws from _parameter automation._
+ ** Moreover, when rendering interactively, parts of the render pipeline may be
+ ** changed dynamically by mute toggles or selecting an output in the viever's
+ ** _Switch Board.
+ ** 
+ ** The TurnoutSystem is related to the actual incidence and is created dynamically,
+ ** while connecting to all the existing \ref Turnout elements sitting in the render node ports.
+ ** It acts as mediator and data exchange hub, while gearing up the actual invocation to cause
+ ** calculation of media data in the render nodes connected below
+ ** @todo WIP-WIP-WIP 12/2024 now combining the draft from 2009 / 2012 with recent engine development
  */
 
 
@@ -28,8 +36,7 @@
 #define STEAM_ENGINE_TURNOUT_SYSTEM_H
 
 
-//#include "steam/engine/proc-node.hpp"  /////////////////////OOO dependency cycle ProcNode <-> TurnoutSystem
-#include "steam/engine/state-closure.hpp"
+#include "steam/engine/state-closure.hpp" /////////////////////OOO will take on a different role (if any)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
 
 
@@ -38,30 +45,12 @@ namespace engine {
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-  class StateProxy
-    : public StateClosure
-    {
-      
-    private: /* === top-level implementation of the StateClosure interface === */
-      
-      BuffHandle allocateBuffer (const lumiera::StreamType*);              //////////////////////////TICKET #828
-      
-      void releaseBuffer (BuffHandle& bh);
-      
-      BuffHandle fetch (FrameID const& fID);
-      
-      void is_calculated (BuffHandle const& bh);
-      
-      FrameID const& genFrameID (NodeID const&, uint chanNo);
-
-      BuffTableStorage& getBuffTableStorage();
-      
-      virtual StateClosure& getCurrentImplementation () { return *this; }
-      
-    };
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-    
+  /**
+   * Communication hub to coordinate and activate the »Render Node Network« performance.
+   * An instance will be created on the stack for each evaluation of a [render job](\ref RenderInvocation).
+   * It provides access to common invocation parameters, an extension system to register further _data slots,_
+   * and initiates the recursive pull()-call into the render node network as attached for this call.
+   */
   class TurnoutSystem
     /////////////////////////////////////////OOO von wo erbt das?? laut ursprünglichem Konzept von StateClosure ... bin mir aber nicht mehr sicher
     {

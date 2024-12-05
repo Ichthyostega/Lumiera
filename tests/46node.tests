@@ -6,6 +6,10 @@ PLANNED "Proc Node basics" NodeBasic_test <<END
 END
 
 
+PLANNED "Proc Node creation" NodeBuilder_test <<END
+END
+
+
 TEST "Proc Node test support" NodeDevel_test <<END
 END
 

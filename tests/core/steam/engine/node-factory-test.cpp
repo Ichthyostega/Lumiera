@@ -13,6 +13,9 @@
 
 /** @file node-factory-test.cpp
  ** unit test \ref NodeFactory_test
+ ** @todo 12/2024 this test will focus on the high-level integration,
+ **       which is future work and possibly addressed in the next »Vertical Slice«
+ **       when we add processing of a given media clip from disk.
  */
 
 
@@ -35,10 +38,11 @@ namespace test  {
    */
   class NodeFactory_test : public Test
     {
-      virtual void run(Arg) 
+      virtual void
+      run (Arg)
         {
           UNIMPLEMENTED ("build and wire some render nodes");
-        } 
+        }
     };
   
   

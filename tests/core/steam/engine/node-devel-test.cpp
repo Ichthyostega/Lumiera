@@ -268,9 +268,12 @@ namespace test  {
         }
       
       
+      
       /** @test demonstrate simple usage of test-render setup
        *   - access the TestRandOntology as singleton
        *   - create a Spec record
+       *   - retrieve a functor bound suitably to invoke
+       *     data processing code from the TestRandOntology
        */
       void
       testRand_simpleUsage()

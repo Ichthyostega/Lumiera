@@ -58,7 +58,7 @@ namespace engine {
    * @warning ExitNode should ideally be NonCopyable, since it is referred by the JobTicket
    *          However, we need to clone-and-remould Segments (Split-Splice-Algo), and this implies
    *          that the render nodes can be shared among multiple Segments. If all these assessments
-   *          are correct an only be decided when the actual memory management is settled.
+   *          are correct can only be decided when the actual memory management is settled.
    */
   class ExitNode
     : util::Cloneable

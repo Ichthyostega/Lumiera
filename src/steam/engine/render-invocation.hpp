@@ -15,11 +15,12 @@
  ** Initiate a single calculation unit within the renderengine.
  ** Usually, this will cause the rendering of a single frame or sub-frame.
  ** 
- ** @todo unfinished draft from 2009 regarding the render process
+ ** @todo WIP-WIP-WIP 2024-12 finally about to connect the unfinished draft from 2009
+ **       with the engine structures built bottom-up meanwhile    ///////////////////////////////////////////TICKET #905 : Work out what parameters are required to invoke the real code available now....
  ** 
  ** @see engine::ProcNode
- ** @see StateClosure
- ** @see node-basic-test.cpp
+ ** @see turnout-system.hpp
+ ** @see NodeBasic_test
  **
  */
 
@@ -27,11 +28,9 @@
 #define ENGINE_RENDER_INVOCATION_H
 
 
-//#include "steam/engine/state-closure.hpp"
-//#include "steam/engine/proc-node.hpp"    ///////////////////////////////TODO clarify if required further on
-#include "steam/engine/connectivity-obsolete.hpp"
-#include "steam/engine/buffhandle.hpp"
-//#include "steam/engine/bufftable-obsolete.hpp"
+#include "vault/gear/job.h"
+#include "steam/engine/proc-node.hpp"
+//#include "steam/engine/buffhandle.hpp"
 
 
 
@@ -41,31 +40,36 @@ namespace engine {
   
   
   /**
+   * A concrete JobFunctor with the ability to activate the »Render Node Network«.
    * @todo write type comment
+   * @warning WIP-WIP 2024-12 rework render node invocation for »Playback Vertical Slice«
    */
   class RenderInvocation
+    : public vault::gear::JobClosure                         ////////////////////////////////////////////////TICKET #1287 : should inherit from JobFunctor, get rid of the C-isms
     {
-      ProcNode* theNode_;
+      ProcNode& theNode_;
       
-    public:
-      RenderInvocation (ProcNode* exitNode)
-        : theNode_(exitNode)
+      
+      /* === JobFunctor Interface === */
+      
+      JobKind
+      getJobKind()  const override
         {
-          REQUIRE (theNode_);
+          return CALC_JOB;
         }
       
-      size_t size() { return theNode_->nrO(); }
+      string diagnostic()  const override;
       
-      /** pull calculated data from the N-th node output channel */
-      BuffHandle operator[] (size_t channel);
+      InvocationInstanceID buildInstanceID (HashVal)  const override;      //////////////////////////////////TICKET #1278 : so what do we need here for real, finally?
+      size_t hashOfInstance (InvocationInstanceID invoKey)  const override;
       
+      void invokeJobOperation (vault::gear::JobParameter);
       
-      
+    public:
+      RenderInvocation (ProcNode& exitNode)
+        : theNode_(exitNode)
+        { }
     };
-  
-  ///////////////////////////////////TODO: currently just fleshing out the API
-  
-  
   
   
   

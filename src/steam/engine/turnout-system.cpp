@@ -35,51 +35,6 @@ namespace engine {
   
   
   /** @internal */
-  BuffHandle
-  StateProxy::allocateBuffer (const lumiera::StreamType*)
-  {
-    UNIMPLEMENTED ("allocate a suitable buffer to hold a frame of the denoted type");
-  }
-  
-  
-      
-  void
-  StateProxy::releaseBuffer (BuffHandle& bh)
-  {
-    UNIMPLEMENTED ("free a buffer");
-  }
-  
-  
-      
-  BuffHandle
-  StateProxy::fetch (FrameID const& fID)
-  {
-    UNIMPLEMENTED ("fetch a buffer with input data");
-  }
-  
-  
-      
-  void
-  StateProxy::is_calculated (BuffHandle const& bh)
-  {
-    UNIMPLEMENTED ("declare a buffer as fully calculated and done");
-  }
-  
-  
-      
-  FrameID const&
-  StateProxy::genFrameID (NodeID const&, uint chanNo)
-  {
-    UNIMPLEMENTED ("derive/generate an ID to denote this specific fame+Node position in the graph");
-  }
-  
-  
-
-  BuffTableStorage&
-  StateProxy::getBuffTableStorage() /////////////TODO need somehow to denote the specific storage requirements
-  {
-    UNIMPLEMENTED ("allocate a chunk of storage suitable for holding the buffer pointer tables");
-  }
   
   
 }} // namespace engine
