@@ -79,7 +79,7 @@ namespace test  {
    * 
    * @see TestFrame_test
    * @see NodeDevel_test
-   * @see NodeLinkage_test
+   * @see NodeLink_test
    * 
    */
   class TestRandOntology

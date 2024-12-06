@@ -12,7 +12,7 @@
 * *****************************************************************/
 
 /** @file node-builder-test.cpp
- ** unit test \ref NodeBuilder_test
+ ** Unit test \ref NodeBuilder_test demonstrates how to build render nodes.
  */
 
 

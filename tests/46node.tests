@@ -2,7 +2,7 @@ TESTING "Component Test Suite: Render Engine parts" ./test-suite --group=node
 
 
 
-PLANNED "Proc Node basics" NodeBasic_test <<END
+PLANNED "Proc Node basics" NodeBase_test <<END
 END
 
 
@@ -10,21 +10,25 @@ PLANNED "Proc Node creation" NodeBuilder_test <<END
 END
 
 
-TEST "Proc Node test support" NodeDevel_test <<END
+TEST "Proc Node test setup" NodeDevel_test <<END
 END
 
 
-PLANNED "Proc Node fabrication" NodeFactory_test <<END
+PLANNED "Proc Node data feeds" NodeFeed_test <<END
 END
 
 
-PLANNED "Proc Node connectivity" NodeLinkage_test <<END
+PLANNED "Proc Node connectivity" NodeLink_test <<END
 END
 
 
-PLANNED "Proc Node input reading" NodeInput_test <<END
+PLANNED "Proc Node metadata key" NodeMeta_test <<END
 END
 
 
-PLANNED "Proc Node operation modes" NodeOperation_test <<END
+PLANNED "Proc Node operation modes" NodeOpera_test <<END
+END
+
+
+PLANNED "Proc Node engine storage setup" NodeStorage_test <<END
 END

@@ -12,7 +12,7 @@
 * *****************************************************************/
 
 /** @file node-devel-test.cpp
- ** unit test \ref NodeDevel_test
+ ** Unit test \ref NodeDevel_test verifies helpers for testing of render nodes.
  */
 
 
