@@ -17,13 +17,10 @@
 
 
 #include "lib/test/run.hpp"
+//#include "lib/test/test-helper.hpp"
 #include "steam/engine/proc-node.hpp"
-//#include "steam/engine/nodewiring-obsolete.hpp"       /////////////////////////////////////////////////////TICKET #1367 : sort out dependencies for reworked Node Invocation
 #include "steam/engine/turnout.hpp"
 #include "steam/engine/turnout-system.hpp"
-#include "steam/engine/channel-descriptor.hpp"
-#include "steam/mobject/session/effect.hpp"
-#include "lib/allocation-cluster.hpp"
 //#include "lib/format-cout.hpp"
 //#include "lib/util.hpp"
 
@@ -35,32 +32,10 @@ namespace steam {
 namespace engine{
 namespace test  {
   
-  using lib::AllocationCluster;
-  using mobject::session::PEffect;
-  
   
   namespace { // Test fixture
-    
     /**
-     * Mock StateClosure/Invocation object.
-     * Used as a replacement for the real RenderInvocation,
-     * so the test can verify that calculations are actually
-     * happening in correct order.
      */
-    class TestContext
-//      : public StateProxy
-      {
-        
-        //////////////TODO: facility to verify the right access operations get called
-        
-      };
-  
-      
-    inline PEffect
-    createTestEffectMObject()
-    {
-      UNIMPLEMENTED ("how to create a dummy Effect for tests");
-    }
   }
   
   
@@ -69,32 +44,22 @@ namespace test  {
    */
   class NodeBase_test : public Test
     {
-      virtual void run(Arg) 
+      virtual void
+      run (Arg)
         {
+          seedRand();
+          verify_TurnoutSystem();
           UNIMPLEMENTED ("build a simple render node and then activate it");
-          
-          AllocationCluster alloc;
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
-          NodeFactory nodeFab(alloc);
-          
-          ProcNode * testSource;  ///////////TODO: how to fabricate a test Source-Node????
-          
-          
-          WiringSituation setup(testSource);
-          
-          PEffect pEffect = createTestEffectMObject();
-          ProcNode* pNode = nodeFab (pEffect, setup);
-          CHECK (pNode);
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
-          
-          TestContext simulatedInvocation;
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
-          BuffHandle result = pNode->pull(simulatedInvocation, 0);
-          
-          CHECK (result);
-          // CHECK we got calculated data in the result buffer
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
-        } 
+        }
+      
+      /** @test the TurnoutSystem as transient coordinator for node invocation
+       */
+      void
+      verify_TurnoutSystem()
+        {
+          Time nomTime{rani(10'000),0};                    // drive test with a random »nominal Time« <10s with ms granularity
+          TurnoutSystem invoker{nomTime};                  // a time spec is mandatory, all further parameters are optional
+        }
     };
   
   

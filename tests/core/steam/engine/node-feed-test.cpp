@@ -30,15 +30,26 @@ namespace test  {
   
   
   
-  /***************************************************************//**
-   * @test the source reading render node.
+  /************************************************************************//**
+   * @test demonstrate how to feed data into, through and out of render nodes.
    */
   class NodeFeed_test : public Test
     {
-      virtual void run(Arg) 
+      virtual void
+      run (Arg)
         {
+          feedParam();
           UNIMPLEMENTED ("render node pulling source data from vault");
-        } 
+        }
+      
+      /** @test feed parameter data to nodes */
+      void
+      feedParam()
+        {
+          TODO ("implement the logic for the TurnoutSystem --> node-base-test.cpp");
+          TODO ("implement a simple Builder for ParamAgent-Node");
+          TODO ("then use both together to demonstrate a param data feed here");
+        }
     };
   
   

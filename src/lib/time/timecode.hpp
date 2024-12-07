@@ -177,7 +177,7 @@ namespace time {
   
   /**
    * @warning missing implementation
-   */
+   */        ////////////////////////////////////////////////////////////////////////////////////////////////TICKET #736 implement HMS format
   class HmsTC
     : public TCode
     {
@@ -202,7 +202,7 @@ namespace time {
   
   /**
    * @warning partially missing implementation
-   */
+   */        ////////////////////////////////////////////////////////////////////////////////////////////////TICKET #736 implement Seconds format
   class Secs
     : public TCode
     {

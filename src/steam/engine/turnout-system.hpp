@@ -25,9 +25,10 @@
  ** _Switch Board.
  ** 
  ** The TurnoutSystem is related to the actual incidence and is created dynamically,
- ** while connecting to all the existing \ref Turnout elements sitting in the render node ports.
- ** It acts as mediator and data exchange hub, while gearing up the actual invocation to cause
- ** calculation of media data in the render nodes connected below
+ ** while connecting to all the pre-existing \ref Turnout elements, sitting in the ports
+ ** of those render nodes touched by the actual render invocation. It acts as mediator and
+ ** data exchange hub, while gearing up the actual invocation to cause calculation of media data
+ ** in the render nodes connected below, passing coordination parameters alongside.
  ** @todo WIP-WIP-WIP 12/2024 now combining the draft from 2009 / 2012 with recent engine development
  */
 
@@ -38,10 +39,13 @@
 
 #include "steam/engine/state-closure.hpp" /////////////////////OOO will take on a different role (if any)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
+#include "lib/time/timevalue.hpp"
 
 
 namespace steam  {
 namespace engine {
+  
+  using lib::time::Time;
 
 
 
@@ -52,9 +56,12 @@ namespace engine {
    * and initiates the recursive pull()-call into the render node network as attached for this call.
    */
   class TurnoutSystem
-    /////////////////////////////////////////OOO von wo erbt das?? laut ursprünglichem Konzept von StateClosure ... bin mir aber nicht mehr sicher
     {
+      /////////////////////////////////////////////////////////OOO Storage: ich brauche Overflow-Buckets. KISS ==> erst mal intrusive linked List
     public:
+      TurnoutSystem (Time absoluteNominalTime)
+        { }
+      // this is a copyable front-end object
     };
     
     

@@ -61,7 +61,7 @@ namespace test{
    * value, the quantiser yields a time value aligned
    * at the next lower frame bound. Besides that,
    * time values are confined to be within
-   * the interval (Time::MIN, Time::Max)
+   * the interval (Time::MIN, Time::MAX)
    * 
    * @see TimeQuantisation_test
    */

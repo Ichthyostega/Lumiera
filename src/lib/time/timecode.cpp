@@ -343,14 +343,14 @@ namespace time {
   /** */
   HmsTC::HmsTC (QuTime const& quantisedTime)
     : TCode(quantisedTime)
-//  : tpoint_(quantisedTime)           /////////////////////////////TODO bullshit
+//  : tpoint_(quantisedTime)           //////////////////////////////////////////////////////////////////////TICKET #736 implement HMS format
     { }
   
   
   /** */
   Secs::Secs (QuTime const& quantisedTime)
     : TCode(quantisedTime)
-//  : sec_(TimeVar(quantisedTime) / GAVL_TIME_SCALE)   /////////////TODO bullshit
+//  : sec_(TimeVar(quantisedTime) / GAVL_TIME_SCALE)   //////////////////////////////////////////////////////TICKET #736 implement Seconds format
     { }
   
   
