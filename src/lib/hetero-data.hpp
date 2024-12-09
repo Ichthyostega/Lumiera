@@ -42,14 +42,15 @@
 #define LIB_HETERO_DATA_H
 
 
-//#include "lib/error.hpp"
+#include "lib/error.hpp"
 //#include "lib/symbol.hpp"
 #include "lib/nocopy.hpp"
-#include "lib/linked-elements.hpp"
+//#include "lib/linked-elements.hpp"
 #include "lib/meta/typelist.hpp"
 
 //#include <algorithm>
 //#include <vector>
+#include <tuple>
 
 
 namespace lib {
@@ -63,6 +64,7 @@ namespace lib {
   struct StorageFrame
     : StorageLoc
     , std::tuple<DATA...>
+    , util::NonCopyable
     {
       
     };
@@ -77,16 +79,57 @@ namespace lib {
   
   template<class TAIL, typename...DATA>
   class HeteroData<meta::Node<StorageFrame<DATA...>,TAIL>>
-    : protected StorageFrame<DATA...>
+    : StorageFrame<DATA...>
     {
-    public:
-      size_t constexpr size();
+      using _Self = HeteroData;
+      using _Tail = HeteroData<TAIL>;
+      using Frame = StorageFrame<DATA...>;
+      
+      static constexpr size_t localSiz = sizeof...(DATA);
       
       template<size_t slot>
+      static constexpr bool isLocal = slot < localSiz;
+      
+      _Tail&
+      accessTail()
+        {
+          REQUIRE (Frame::next, "HeteroData storage logic broken: follow-up extent not yet allocated");
+          return * reinterpret_cast<_Tail*> (Frame::next);
+        }
+      
+    public:
+      static constexpr size_t
+      size()
+        {
+          return localSiz + _Tail::size();
+        }
+      
+      template<size_t slot>
+      using Elm_t = std::conditional<isLocal<slot>, std::tuple_element_t<slot,Frame>
+                                                  , typename _Tail::template Elm_t<slot-localSiz>>;
+      
+      template<size_t slot>
+      Elm_t<slot>&
+      get()
+        {
+          static_assert (slot < size(), "HeteroData access index beyond defined data");
+          if constexpr (slot < localSiz)
+            return std::get<slot> (*this);
+          else
+            return accessTail().template get<slot-localSiz>();
+        }
+      
       struct Navigator
         {
           
         };
+    };
+  
+  template<>
+  class HeteroData<meta::NullType>
+    {
+    public:
+      static size_t constexpr size() { return 0; }
     };
   
   
