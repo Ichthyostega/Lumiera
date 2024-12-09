@@ -337,7 +337,7 @@ namespace engine {
       void
       weft (Feed& feed)
         {
-          feed.invoke();
+          feed.invoke();                 // process data
         }
       
       BuffHandle
@@ -349,7 +349,7 @@ namespace engine {
             }
           for (uint i=0; i<outTypes.size(); ++i)
             {
-              feed.outBuff[i].emit();
+              feed.outBuff[i].emit();    // state transition: data ready
               if (i != resultSlot)
                 feed.outBuff[i].release();
             }

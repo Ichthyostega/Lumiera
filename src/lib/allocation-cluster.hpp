@@ -21,6 +21,17 @@
  ** pattern. Optionally it is even possible to skip invocation of object
  ** destructors, making de-allocation highly efficient (typically the
  ** memory pages are already cache-cold when about to discarded).
+ ** \par base allocation
+ ** The actual allocation of storage extents uses heap memory expanded in blocks
+ ** of AllocationCluster::EXTENT_SIZ. While the idea is to perform allocations
+ ** mostly at start and then hold and use the memory, the allocation is never
+ ** actually _closed_ — implying that further allocations can be added during
+ ** the whole life time, which may possibly even trigger a further base allocation
+ ** if storage space in the last Extent is exhausted. In theory, it would be possible
+ ** to use a custom allocation (in the AllocationCluster::StorageManager::Extents,
+ ** which is a lib::LinkedElements and could be parametrised with a allocator template).
+ ** Allocations are never discarded, and thus any alloted memory will be kept until
+ ** the whole AllocationCluster is destroyed as a compound.
  ** \par using as STL allocator
  ** AllocationCluster::Allocator is an adapter to expose the interface
  ** expected by std::allocator_traits (and thus usable by all standard compliant
@@ -28,6 +39,9 @@
  ** including the invocation of their destructors, while relying on the allocator
  ** to allot and discard bare memory. However, to avoid invoking any destructors,
  ** the container itself can be created with AllocationCluster::createDisposable.
+ ** This causes the container (front-end) to be emplaced itself into the used
+ ** AllocationCluster — and since the container's destructor will not be invoked
+ ** in this arrangement, the container will not be able to invoke element dtors.
  ** \par dynamic adjustments
  ** Under controlled conditions, it is possible to change the size of the latest
  ** raw allocation handed out, within the limits of the available reserve in the

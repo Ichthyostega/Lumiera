@@ -58,10 +58,10 @@ namespace engine {
    * @warning ExitNode should ideally be NonCopyable, since it is referred by the JobTicket
    *          However, we need to clone-and-remould Segments (Split-Splice-Algo), and this implies
    *          that the render nodes can be shared among multiple Segments. If all these assessments
-   *          are correct can only be decided when the actual memory management is settled.
+   *          are correct after all can only be decided once actual memory management is settled.
    */
   class ExitNode
-    : util::Cloneable
+    : util::NonAssign
     {
       HashVal   pipelineIdentity_;                 //////////////////////////////////////////////////////////TICKET #1293 : Hash-Chaining for invocation-ID... derive from ProcNode wiring
       Duration  runtimeBound_;                    ///////////////////////////////////////////////////////////TICKET #1283 : integrate with dynamic runtime observation

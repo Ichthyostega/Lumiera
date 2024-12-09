@@ -242,7 +242,7 @@ namespace lib {
        * to prepare and pre-fill a sequence
        */
       struct Builder
-        : util::Cloneable
+        : util::NonCopyable
         {
           Builder(IterQueue& initialElements)
             : queue_(initialElements)

@@ -72,19 +72,32 @@ namespace util {
     };
   
   /**
-   * Types marked with this mix-in may be created by
-   * copy-construction (or move construction),
-   * but may be not reassigned thereafter.
-   * @remark especially this allows returning
-   *         by-value from a builder function,
-   *         while prohibiting any further copy
+   * Types marked with this mix-in may be created and moved
+   * liberally at construction, while any further assignment
+   * to object instances is prohibited thereafter.
+   */
+  class NonAssign
+    {
+    protected:
+     ~NonAssign()                               = default;
+      NonAssign()                               = default;
+      NonAssign (NonAssign&&)                   = default;
+      NonAssign (NonAssign const&)              = default;
+      NonAssign& operator= (NonAssign&&)        = delete;
+      NonAssign& operator= (NonAssign const&)   = delete;
+    };
+  
+  /**
+   * Types marked with this mix-in may be duplicated
+   * by copy-construction, yet may not be moved or
+   * transferred any further after creation.
    */
   class Cloneable
     {
     protected:
      ~Cloneable()                               = default;
       Cloneable()                               = default;
-      Cloneable (Cloneable&&)                   = default;
+      Cloneable (Cloneable&&)                   = delete;
       Cloneable (Cloneable const&)              = default;
       Cloneable& operator= (Cloneable&&)        = delete;
       Cloneable& operator= (Cloneable const&)   = delete;

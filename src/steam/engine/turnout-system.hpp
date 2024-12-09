@@ -39,6 +39,7 @@
 
 #include "steam/engine/state-closure.hpp" /////////////////////OOO will take on a different role (if any)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
+#include "lib/nocopy.hpp"
 #include "lib/time/timevalue.hpp"
 
 
@@ -46,7 +47,13 @@ namespace steam  {
 namespace engine {
   
   using lib::time::Time;
-
+  
+  template<typename VAL>
+  class ParamStorageFrame
+    : util::NonCopyable
+    {
+      
+    };
 
 
   /**
