@@ -56,6 +56,7 @@
 namespace lib {
   
   struct StorageLoc
+    : util::NonCopyable
     {
       StorageLoc* next{nullptr};
     };
@@ -64,9 +65,8 @@ namespace lib {
   struct StorageFrame
     : StorageLoc
     , std::tuple<DATA...>
-    , util::NonCopyable
     {
-      
+      using std::tuple<DATA...>::tuple;
     };
   
   /**
@@ -74,7 +74,7 @@ namespace lib {
   template<class SPEC>
   class HeteroData
     {
-      
+      /////////////////////////OOO do we need this as marker for an unspecified front-end?
     };
   
   template<class TAIL, typename...DATA>
@@ -119,10 +119,22 @@ namespace lib {
             return accessTail().template get<slot-localSiz>();
         }
       
-      struct Navigator
+      template<size_t slot>
+      struct Accessor
         {
+          using Type = Elm_t<slot>;
           
+          template<class SPEC>
+          Type&
+          get (HeteroData<SPEC>& frontEnd)
+            {
+              auto& fullChain = reinterpret_cast<_Self&> (frontEnd);
+              return fullChain.template get<slot>();
+            }
         };
+      
+      template<typename...VALS>
+      using Constructor = typename _Tail::template Constructor<VALS...>;
     };
   
   template<>
@@ -130,6 +142,19 @@ namespace lib {
     {
     public:
       static size_t constexpr size() { return 0; }
+      
+      template<typename...DATA>
+      struct Constructor
+        {
+          using Chain = HeteroData<meta::Node<StorageFrame<DATA...>, meta::NullType>>;
+          
+          template<typename...INIT>
+          typename Chain::Frame
+          operator() (INIT&& ...initArgs)
+            {
+              return {initArgs ...};
+            }
+        };
     };
   
   
