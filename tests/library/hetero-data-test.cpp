@@ -32,6 +32,8 @@ namespace test{
     
   }//(End) test data
   
+  #define TYPE(_EXPR_) showType<decltype(_EXPR_)>()
+  
   
   
   
@@ -51,19 +53,26 @@ namespace test{
 //          seedRand();
 //          checksum = 0;
           
-          checkSingleKill();
+          verify_FrontBlock();
         }
       
       
       void
-      checkSingleKill ()
+      verify_FrontBlock ()
         {
           using Block1 = HeteroData<uint,double>;
-          CHECK ((is_Subclass<Block1, std::tuple<uint,double>>()));
+          CHECK ((is_Subclass<Block1::NewFrame, std::tuple<uint,double>>()));
           
           auto b1 = Block1::build (42, 1.61803);
-SHOW_EXPR(b1)
-          CHECK (1.61803 == std::get<1> (b1));
+          CHECK (1.61803 == b1.get<1>());
+          CHECK (42      == b1.get<0>());
+          CHECK (showType<Block1::Elm_t<0>>() == "uint"_expect);
+          CHECK (showType<Block1::Elm_t<1>>() == "double"_expect);
+          
+          Block1 b2;
+          CHECK (0.0 == b2.get<1>());
+          b2.get<1>() = 3.14;
+          CHECK (3.14 == b2.get<1>());
         }
     };
   

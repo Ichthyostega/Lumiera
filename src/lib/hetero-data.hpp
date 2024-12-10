@@ -49,9 +49,11 @@
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-manip.hpp"
 #include "lib/meta/typeseq-util.hpp"
+#include "lib/test/test-helper.hpp"
 
 //#include <algorithm>
 //#include <vector>
+#include <utility>
 #include <tuple>
 
 
@@ -65,7 +67,7 @@ namespace lib {
   
   template<typename...DATA>
   struct StorageFrame
-    : StorageLoc
+    : protected StorageLoc
     , std::tuple<DATA...>
     {
       using std::tuple<DATA...>::tuple;
@@ -82,6 +84,7 @@ namespace lib {
     {
       using _Self = HeteroData;
       using _Tail = HeteroData<TAIL>;
+      using Tuple = std::tuple<DATA...>;
       using Frame = StorageFrame<DATA...>;
       
       static constexpr size_t localSiz = sizeof...(DATA);
@@ -99,7 +102,11 @@ namespace lib {
       template<typename...XX>
       friend class HeteroData;  ///< allow chained types to use recursive type definitions
       
+      using Frame::Frame;
+      
     public:
+      HeteroData() = default;
+      
       static constexpr size_t
       size()
         {
@@ -107,8 +114,8 @@ namespace lib {
         }
       
       template<size_t slot>
-      using Elm_t = std::conditional<isLocal<slot>, std::tuple_element_t<slot,Frame>
-                                                  , typename _Tail::template Elm_t<slot-localSiz>>;
+      using Elm_t = std::conditional_t<isLocal<slot>, std::tuple_element_t<slot,Tuple>
+                                                    , typename _Tail::template Elm_t<slot-localSiz>>;
       
       template<size_t slot>
       Elm_t<slot>&
@@ -180,7 +187,7 @@ namespace lib {
       using ChainType = _Front;
       
       template<typename...INIT>
-      static NewFrame
+      static _Front
       build (INIT&& ...initArgs)
         {
           return {initArgs ...};
