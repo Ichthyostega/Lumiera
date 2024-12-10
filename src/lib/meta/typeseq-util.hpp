@@ -56,6 +56,29 @@ namespace lib {
 namespace meta {
   
   
+  /**
+   * Find the index of the first incidence of a type in a type-sequence.
+   * @note static assertion if the type is not in the type sequence
+   * @see https://stackoverflow.com/a/60868425/444796
+   */
+  template<class X>
+  constexpr size_t
+  indexOfType()
+  {
+    static_assert (not sizeof(X), "Type not found in type-sequence");
+    return 0;
+  }
+  
+  template<class X, class T, class... TYPES>
+  constexpr size_t
+  indexOfType()
+  {
+    if constexpr (std::is_same_v<X,T>)
+      return 0;
+    else
+      return 1 + indexOfType<X,TYPES...>();
+  }
+  
   
   /** 
    * Helper: prepend a type to an existing type sequence,

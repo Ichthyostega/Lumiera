@@ -47,6 +47,8 @@
 #include "lib/nocopy.hpp"
 //#include "lib/linked-elements.hpp"
 #include "lib/meta/typelist.hpp"
+#include "lib/meta/typelist-manip.hpp"
+#include "lib/meta/typeseq-util.hpp"
 
 //#include <algorithm>
 //#include <vector>
@@ -134,7 +136,27 @@ namespace lib {
         };
       
       template<typename...VALS>
-      using Constructor = typename _Tail::template Constructor<VALS...>;
+      struct Constructor
+        {
+          using NewFrame = StorageFrame<VALS...>;
+          using ChainType = meta::Append<meta::Node<Frame,TAIL>,NewFrame>;
+          
+          template<typename...INIT>
+          NewFrame
+          operator() (INIT&& ...initArgs)
+            {
+              return {initArgs ...};
+            }
+          
+          template<typename...XVALS>
+          using ChainConstructor = typename ChainType::template Constructor<XVALS...>;
+          
+          template<size_t slot>
+          using Accessor = typename ChainType::template Accessor<_Self::size()+slot>;
+          
+          template<typename X>
+          using AccessorFor = Accessor<meta::indexOfType<X,VALS...>()>;
+        };
     };
   
   template<>

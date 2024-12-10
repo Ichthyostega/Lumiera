@@ -32,10 +32,9 @@
 #include "lib/meta/typeseq-util.hpp"
 #include "lib/meta/typelist-manip.hpp"
 #include "meta/typelist-diagnostics.hpp"
+#include "lib/format-cout.hpp"
 
 using std::string;
-using std::cout;
-using std::endl;
 
 
 namespace lib  {
@@ -45,8 +44,6 @@ namespace test {
   
   namespace { // test data
     
-    
-    
     typedef Types< Num<1>
                  , Num<2>
                  , Num<3>
@@ -55,7 +52,6 @@ namespace test {
                  , Num<8>
                  , Num<9>
                  >         Types2;
-    
     
     // see also the CountDown template in typelist-diagnostics.hpp...
     
@@ -78,10 +74,22 @@ namespace test {
       virtual void
       run (Arg) 
         {
+          check_indexOf ();
           check_buildSeq();
           check_prepend ();
           check_shift   ();
           check_split   ();
+        }
+      
+      
+      void
+      check_indexOf()
+        {
+          CHECK ((0 == indexOfType<int,    int, string, string>()));
+          CHECK ((1 == indexOfType<string, int, string, string>()));
+          CHECK ((2 == indexOfType<int,    string, string, int>()));
+//        indexOfType<int>();
+//        indexOfType<int,long,long>();                           // does not compile...
         }
       
       
