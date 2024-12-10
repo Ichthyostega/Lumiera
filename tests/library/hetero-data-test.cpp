@@ -18,11 +18,15 @@
 
 #include "lib/test/run.hpp"
 #include "lib/hetero-data.hpp"
+#include "lib/meta/trait.hpp"
+#include "lib/test/diagnostic-output.hpp"/////////////////TODO
 
 
 
 namespace lib {
 namespace test{
+  
+  using meta::is_Subclass;
   
   namespace { // probe victims
     
@@ -54,7 +58,12 @@ namespace test{
       void
       checkSingleKill ()
         {
+          using Block1 = HeteroData<uint,double>;
+          CHECK ((is_Subclass<Block1, std::tuple<uint,double>>()));
           
+          auto b1 = Block1::build (42, 1.61803);
+SHOW_EXPR(b1)
+          CHECK (1.61803 == std::get<1> (b1));
         }
     };
   

@@ -73,11 +73,8 @@ namespace lib {
   
   /**
    */
-  template<class SPEC>
-  class HeteroData
-    {
-      /////////////////////////OOO do we need this as marker for an unspecified front-end?
-    };
+  template<typename...DATA>
+  class HeteroData;
   
   template<class TAIL, typename...DATA>
   class HeteroData<meta::Node<StorageFrame<DATA...>,TAIL>>
@@ -98,6 +95,9 @@ namespace lib {
           REQUIRE (Frame::next, "HeteroData storage logic broken: follow-up extent not yet allocated");
           return * reinterpret_cast<_Tail*> (Frame::next);
         }
+      
+      template<typename...XX>
+      friend class HeteroData;  ///< allow chained types to use recursive type definitions
       
     public:
       static constexpr size_t
@@ -142,8 +142,8 @@ namespace lib {
           using ChainType = meta::Append<meta::Node<Frame,TAIL>,NewFrame>;
           
           template<typename...INIT>
-          NewFrame
-          operator() (INIT&& ...initArgs)
+          static NewFrame
+          build (INIT&& ...initArgs)
             {
               return {initArgs ...};
             }
@@ -165,18 +165,26 @@ namespace lib {
     public:
       static size_t constexpr size() { return 0; }
       
-      template<typename...DATA>
-      struct Constructor
+      template<size_t>
+      using Elm_t = void;
+    };
+  
+  template<typename...DATA>
+  class HeteroData
+    : public HeteroData<meta::Node<StorageFrame<DATA...>, meta::NullType>>
+    {
+      using _Front = HeteroData<meta::Node<StorageFrame<DATA...>, meta::NullType>>;
+      
+    public:
+      using NewFrame = typename _Front::Frame;
+      using ChainType = _Front;
+      
+      template<typename...INIT>
+      static NewFrame
+      build (INIT&& ...initArgs)
         {
-          using Chain = HeteroData<meta::Node<StorageFrame<DATA...>, meta::NullType>>;
-          
-          template<typename...INIT>
-          typename Chain::Frame
-          operator() (INIT&& ...initArgs)
-            {
-              return {initArgs ...};
-            }
-        };
+          return {initArgs ...};
+        }
     };
   
   
