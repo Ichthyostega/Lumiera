@@ -74,6 +74,10 @@ namespace test{
           CHECK (0.0 == b2.get<1>());
           b2.get<1>() = 3.14;
           CHECK (3.14 == b2.get<1>());
+          
+          CHECK (2 == std::tuple_size_v<Block1::NewFrame::Tuple>);     // referring to the embedded tuple type
+          CHECK (2 == std::tuple_size_v<Block1::NewFrame>);            // StorageFrame itself complies to the C++ tuple protocol
+          CHECK (2 == std::tuple_size_v<Block1>);                      // likewise for the complete HeteroData Chain
         }
       
       
@@ -92,7 +96,8 @@ namespace test{
           auto b2 = Constructor::build (1.61, "Φ");
           b2.linkInto(b1);
           
-          auto& chain2 = reinterpret_cast<Constructor::ChainType&> (b1);
+          using Chain2 = Constructor::ChainType;
+          Chain2& chain2 = reinterpret_cast<Chain2&> (b1);
           CHECK (b1.size()     == 1);
           CHECK (chain2.size() == 3);
           
@@ -109,6 +114,28 @@ namespace test{
           
           CHECK (isSameObject (chain2.get<0>() ,b1.get<0>()));
           CHECK (isSameObject (chain2.get<2>() ,std::get<1>(b2)));
+          
+          CHECK (1 == std::tuple_size_v<Block1::NewFrame::Tuple>);     // referring to the embedded tuple type
+          CHECK (1 == std::tuple_size_v<Block1::NewFrame>);
+          CHECK (1 == std::tuple_size_v<Block1>);
+          
+          CHECK (2 == std::tuple_size_v<Block2::Tuple>);               // referring to the embedded tuple type
+          CHECK (2 == std::tuple_size_v<Block2>);
+          
+          CHECK (3 == std::tuple_size_v<Chain2>);
+          CHECK ((showType<std::tuple_element_t<0, Chain2>>() == "uint"_expect));
+          CHECK ((showType<std::tuple_element_t<1, Chain2>>() == "double"_expect));
+          CHECK ((showType<std::tuple_element_t<2, Chain2>>() == "string"_expect));
+          
+          CHECK ((showType<std::tuple_element_t<0, Block2>>() == "double"_expect));
+          CHECK ((showType<std::tuple_element_t<1, Block2>>() == "string"_expect));
+          
+          CHECK (std::get<0> (chain2) == 42);
+//        CHECK (std::get<1> (chain2) == "1.618034"_expect);       ////////////////////////////TODO somehow the overload for std::tuple takes precedence here
+//        CHECK (std::get<2> (chain2) == "Φ"_expect);
+          
+          CHECK (std::get<0> (b2) == "1.618034"_expect);
+          CHECK (std::get<1> (b2) == "Φ"_expect);
         }
     };
   

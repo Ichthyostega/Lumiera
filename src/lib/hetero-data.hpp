@@ -77,7 +77,9 @@ namespace lib {
     : protected StorageLoc
     , std::tuple<DATA...>
     {
-      using std::tuple<DATA...>::tuple;
+      using Tuple = std::tuple<DATA...>;
+      
+      using Tuple::tuple;
       
       template<typename SPEC>
       void linkInto (HeteroData<SPEC>&);
@@ -129,7 +131,7 @@ namespace lib {
       
       template<size_t slot>
       Elm_t<slot>&
-      get()
+      get()  noexcept
         {
           static_assert (slot < size(), "HeteroData access index beyond defined data");
           if constexpr (slot < localSiz)
@@ -137,6 +139,13 @@ namespace lib {
           else
             return accessTail().template get<slot-localSiz>();
         }
+      
+      template<size_t slot>
+      Elm_t<slot> const&
+      get()  const noexcept
+      {
+        return const_cast<HeteroData*>(this)->get<slot>();
+      }
       
       template<size_t slot>
       struct Accessor
@@ -251,4 +260,75 @@ namespace lib {
   }
   
 } // namespace lib
+
+namespace std {// Specialisation to support C++ »Tuple Protocol«
+  
+  /** determine compile-time fixed size of a HeteroData */
+  template<typename...DATA>
+  struct tuple_size<lib::HeteroData<DATA...> >
+    : std::integral_constant<std::size_t, lib::HeteroData<DATA...>::size()>
+    { };
+  
+  /** expose the type of the I-th element of a HeteroData chain */
+  template<size_t I, typename...DATA>
+  struct tuple_element<I, lib::HeteroData<DATA...> >
+    {
+      using type = typename lib::HeteroData<DATA...>::template Elm_t<I>;
+    };
+  template<size_t I>
+  struct tuple_element<I, lib::HeteroData<lib::meta::NullType> >
+    {
+      static_assert ("accessing element-type of an empty HeteroData block");
+    };
+  
+  /** access by reference to the I-th data value held in a HeteroData chain */
+  template<size_t I, typename...DATA>
+  constexpr tuple_element_t<I, lib::HeteroData<DATA...>>&
+  get (lib::HeteroData<DATA...> & heDa) noexcept
+  {
+    return heDa.template get<I>();
+  }
+  template<size_t I, typename...DATA>
+  constexpr tuple_element_t<I, lib::HeteroData<DATA...>> const&
+  get (lib::HeteroData<DATA...> const& heDa) noexcept
+  {
+    return heDa.template get<I>();
+  }
+  template<size_t I, typename...DATA>
+  constexpr tuple_element_t<I, lib::HeteroData<DATA...>>&&
+  get (lib::HeteroData<DATA...>&& heDa) noexcept
+  {
+    using ElmType = tuple_element_t<I, lib::HeteroData<DATA...>>;
+    return forward<ElmType&&> (heDa.template get<I>());
+  }
+  template<std::size_t I, typename...DATA>
+  constexpr std::tuple_element_t<I, lib::HeteroData<DATA...>> const &&
+  get (lib::HeteroData<DATA...> const && heDa) noexcept
+  {
+    using ElmType = tuple_element_t<I, lib::HeteroData<DATA...>>;
+    return forward<ElmType const&&> (heDa.template get<I>());
+  }
+  
+  
+  /** determine compile-time fixed size of a StorageFrame */
+  template<size_t seg, typename...DATA>
+  struct tuple_size<lib::StorageFrame<seg,DATA...> >
+    : std::tuple_size<typename lib::StorageFrame<seg,DATA...>::Tuple>
+    { };
+
+  /** delegate to the type access of a StorageFrame's underlying tuple */
+  template<size_t I, size_t seg, typename...DATA>
+  struct tuple_element<I, lib::StorageFrame<seg,DATA...> >
+    : std::tuple_element<I, typename lib::StorageFrame<seg,DATA...>::Tuple>
+    { };
+
+  /** delegate to the element data access of a StorageFrame's underlying tuple */
+//  template<size_t I, size_t seg, typename...DATA>
+//  std::tuple_element_t<I, lib::StorageFrame<seg,DATA...>>&
+//  get (lib::StorageFrame<seg,DATA...>& block)
+//  {
+//    return std::get
+//  };
+  
+}// namespace std
 #endif /*LIB_HETERO_DATA_H*/
