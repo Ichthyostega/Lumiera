@@ -33,15 +33,7 @@ typedef unsigned int uint;
 #include <string>
 #include <tuple>
 
-using lib::test::showType;
-
-template<typename...TS>
-string
-showTypes()
-{
-  return "<" + ((showType<TS>()+",") + ... + ">");
-}
-
+using lib::test::showTypes;
 using std::tuple;
 
 struct B { };
@@ -104,18 +96,21 @@ main (int, char**)
     using Het = lib::HeteroData<uint,double>;
     Het h1;
     SHOW_EXPR(getty(h1));
-    SHOW_EXPR(std::get<1>(h1) = 5.5)
+//  SHOW_EXPR(std::get<1>(h1) = 5.5)
+    SHOW_EXPR(h1.get<1>() = 5.5)
     
     using Constructor = Het::Chain<bool,string>;
     auto h2 = Constructor::build (true, "Ψ");
     h2.linkInto(h1);
     
     using Het2 = Constructor::ChainType;
-    Het2& chain2 = reinterpret_cast<Het2&> (h1);
+    Het2& chain2 = Constructor::recast (h1);
     SHOW_TYPE(Het2)
     SHOW_EXPR(getty(chain2));
-    SHOW_EXPR(std::get<1>(chain2))
+//  SHOW_EXPR(std::get<1>(chain2))
 //  SHOW_EXPR(std::get<3>(chain2))
+    SHOW_EXPR(chain2.get<1>())
+    SHOW_EXPR(chain2.get<3>())
     SHOW_EXPR(gritty<1>(chain2))
     SHOW_EXPR(gritty<3>(chain2))
     

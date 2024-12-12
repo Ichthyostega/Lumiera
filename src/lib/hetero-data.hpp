@@ -29,6 +29,32 @@
  ** requires traversal in several steps, which, on the other hand, can be justified by a good
  ** cache locality of recently used stack frames, thereby avoiding heap allocations altogether.
  ** 
+ ** # Usage
+ ** @warning it is essential to understand where actual storage resides!
+ ** A HeteroData chain is built-up gradually, starting with a front-block
+ ** - the front-block is usually placed at an _anchor location_ and populated with data
+ ** - retrieve a _chain constructor type_ from the _type_ of the front-block,
+ **   i.e `HeteroData<D1,D2,...>::Chain<D21,...>`
+ ** - use this chain constructor to create a follow-up data block elsewhere
+ ** - need to link this data block explicitly into the front
+ ** - get _accessor types_ from the _chain constructor_
+ ** - use these to work with individual data elements _through the front-block._
+ ** @example
+ ** \code
+ **   using Front = lib::HeteroData<uint,double>;
+ **   auto h1 = Front::build (1,2.3);
+ **   using Cons1 = Front::Chain<bool,string>;
+ **   auto b2 = Cons1::build (true, "Ψ");
+ **   b2.linkInto(c1);
+ **   auto& [d1,d2,d3,d4] = Cons1::recast(h1);
+ **   CHECK (d1 == 1);
+ **   CHECK (d2 == 2.3);
+ **   CHECK (d3 == true);
+ **   CHECK (d4 == "Ψ");
+ **   Cons1::Accessor<string> get4;
+ **   CHECK (get4(h1) == "Ψ");
+ ** \endcode
+ ** 
  ** @todo WIP-WIP this is the draft of a design sketch regarding the render node network,
  **       which seems to be still pretty much in flux as of 12/2024
  ** @see HeteroData_test
@@ -61,17 +87,23 @@
 namespace lib {
   
   /**
+   * A setup with chained data tuples residing in distributed storage.
+   * A HeteroData-chain is started from a front-end block and can later be
+   * extended by a linked list of further data blocks allocated elsewhere.
+   * @warning this is a low-level memory layout without storage management.
+   * @see HeteroData_test
    */
   template<typename...DATA>
   class HeteroData;
   
-  
+  /** linked list of StorageFrame elements */
   struct StorageLoc
     : util::NonCopyable
     {
       StorageLoc* next{nullptr};
     };
   
+  /** individual storage frame in a chain, holding a data tuple */
   template<size_t seg, typename...DATA>
   struct StorageFrame
     : protected StorageLoc
@@ -86,6 +118,12 @@ namespace lib {
     };
   
   
+  /**
+   * @internal implementation specialisation to manage a sublist of StorageFrame elements
+   * @tparam seg  a type tag to mark the position of StorageFrame elements
+   * @tparam DATA tuple element types residing in the first segment
+   * @tparam TAIL recursive Loki-style type list to describe the rest of the chain
+   */
   template<size_t seg, typename...DATA, class TAIL>
   class HeteroData<meta::Node<StorageFrame<seg, DATA...>,TAIL>>
     : StorageFrame<seg, DATA...>
@@ -103,7 +141,7 @@ namespace lib {
       template<size_t slot>
       using PickType = std::conditional_t<isLocal<slot>, std::tuple_element<slot,Tuple>
                                                        , typename _Tail::template PickType<slot-localSiz>>;
-      
+                                                      // need to use this helper to prevent eager evaluation on Elm_t<i>
       _Tail&
       accessTail()
         {
@@ -114,7 +152,7 @@ namespace lib {
       template<typename...XX>
       friend class HeteroData;  ///< allow chained types to use recursive type definitions
       
-      using Frame::Frame;
+      using Frame::Frame;       ///< data elements shall be populated through the builder front-ends
       
     public:
       HeteroData() = default;
@@ -128,7 +166,7 @@ namespace lib {
       template<size_t slot>
       using Elm_t = typename PickType<slot>::type;
       
-      
+      /** access data elements within _complete chain_ by index pos */
       template<size_t slot>
       Elm_t<slot>&
       get()  noexcept
@@ -174,6 +212,19 @@ namespace lib {
               return {initArgs ...};
             }
           
+          template<typename...SPEC>
+          static ChainType&
+          recast (HeteroData<SPEC...>& frontChain)
+            {
+              return reinterpret_cast<ChainType&> (frontChain);
+            }
+          template<typename...SPEC>
+          static ChainType&
+          recast (HeteroData<SPEC...> const& frontChain)
+            {
+              return reinterpret_cast<ChainType const&> (frontChain);
+            }
+          
           template<typename...XVALS>
           using ChainExtension = typename ChainType::template Chain<XVALS...>;
           
@@ -185,6 +236,9 @@ namespace lib {
         };
     };
   
+  /**
+   * @internal implementation specialisation to mark the end of a chain
+   */
   template<>
   class HeteroData<meta::NullType>
     {
@@ -197,6 +251,12 @@ namespace lib {
       using PickType = void;
     };
   
+  /*************************************************************************//**
+   * @remark this is the front-end for regular usage
+   *       - create and populate with the #build operation
+   *       - data access with the `get<i>` member function (inherited)
+   *       - use `HeteroData<DATA...>::Chain<TY...>` to build follow-up segments
+   */
   template<typename...DATA>
   class HeteroData
     : public HeteroData<meta::Node<StorageFrame<0, DATA...>, meta::NullType>>
@@ -248,6 +308,22 @@ namespace lib {
     }
   }
   
+  
+  /**
+   * Attach a new storage frame at the end of an existing HeteroData-chain.
+   * @tparam seg the number of the separate data segment, must match target
+   * @param  prefixChain with `seg - 1` existing chained tuple-segments
+   * @remark The core function actually to extend a chain with a new segment,
+   *         which should have been built using a suitable nested `HeteroData::Chain`
+   *         constructor type. Further segments can be defined working from there,
+   *         since each such constructor in turn has a member type `ChainExtension`
+   * @note   Always use this strongly typed extension and access path, to prevent
+   *         out-of-bounds memory access. The actual HeteroData stores no run time
+   *         type information, and thus a force-cast is necessary internally to
+   *         access the follow-up data tuple frames. The typing, and especially
+   *         the `seg` template parameter used to mark each StorageFrame is
+   *         the only guard-rail provided, and ensures safe data access.
+   */
   template<size_t seg, typename...DATA>
   template<typename SPEC>
   inline void
@@ -258,10 +334,12 @@ namespace lib {
     ENSURE (lastLink == nullptr);
     lastLink = this;
   }
-  
-} // namespace lib
+}// namespace lib
 
-namespace std {// Specialisation to support C++ »Tuple Protocol«
+
+
+
+namespace std { // Specialisation to support C++ »Tuple Protocol« and structured bindings.
   
   /** determine compile-time fixed size of a HeteroData */
   template<typename...DATA>
@@ -281,33 +359,9 @@ namespace std {// Specialisation to support C++ »Tuple Protocol«
       static_assert ("accessing element-type of an empty HeteroData block");
     };
   
-  /** access by reference to the I-th data value held in a HeteroData chain */
-  template<size_t I, typename...DATA>
-  constexpr tuple_element_t<I, lib::HeteroData<DATA...>>&
-  get (lib::HeteroData<DATA...> & heDa) noexcept
-  {
-    return heDa.template get<I>();
-  }
-  template<size_t I, typename...DATA>
-  constexpr tuple_element_t<I, lib::HeteroData<DATA...>> const&
-  get (lib::HeteroData<DATA...> const& heDa) noexcept
-  {
-    return heDa.template get<I>();
-  }
-  template<size_t I, typename...DATA>
-  constexpr tuple_element_t<I, lib::HeteroData<DATA...>>&&
-  get (lib::HeteroData<DATA...>&& heDa) noexcept
-  {
-    using ElmType = tuple_element_t<I, lib::HeteroData<DATA...>>;
-    return forward<ElmType&&> (heDa.template get<I>());
-  }
-  template<std::size_t I, typename...DATA>
-  constexpr std::tuple_element_t<I, lib::HeteroData<DATA...>> const &&
-  get (lib::HeteroData<DATA...> const && heDa) noexcept
-  {
-    using ElmType = tuple_element_t<I, lib::HeteroData<DATA...>>;
-    return forward<ElmType const&&> (heDa.template get<I>());
-  }
+  // Note: deliberately NOT providing a free get<i> function.
+  //       Overload resolution would fail, since it attempts to instantiate std::get<i>(tuple) as a candidate,
+  //       which triggers an assertion failure when using an index valid only for the full chain, not the base tuple
   
   
   /** determine compile-time fixed size of a StorageFrame */
@@ -321,14 +375,9 @@ namespace std {// Specialisation to support C++ »Tuple Protocol«
   struct tuple_element<I, lib::StorageFrame<seg,DATA...> >
     : std::tuple_element<I, typename lib::StorageFrame<seg,DATA...>::Tuple>
     { };
-
-  /** delegate to the element data access of a StorageFrame's underlying tuple */
-//  template<size_t I, size_t seg, typename...DATA>
-//  std::tuple_element_t<I, lib::StorageFrame<seg,DATA...>>&
-//  get (lib::StorageFrame<seg,DATA...>& block)
-//  {
-//    return std::get
-//  };
+  
+  // no need to define an overload for std::get<i>
+  // (other than a template specialisation, it will use base-type conversion to std::tuple on its argument;
   
 }// namespace std
 #endif /*LIB_HETERO_DATA_H*/

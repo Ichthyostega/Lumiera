@@ -49,11 +49,9 @@ namespace test{
       virtual void
       run (Arg)
         {
-//          seedRand();
-//          checksum = 0;
-          
           verify_FrontBlock();
           verify_ChainBlock();
+//        verify_Accessors();
         }
       
       
@@ -78,6 +76,11 @@ namespace test{
           CHECK (2 == std::tuple_size_v<Block1::NewFrame::Tuple>);     // referring to the embedded tuple type
           CHECK (2 == std::tuple_size_v<Block1::NewFrame>);            // StorageFrame itself complies to the C++ tuple protocol
           CHECK (2 == std::tuple_size_v<Block1>);                      // likewise for the complete HeteroData Chain
+          
+          auto& [_,p] = b2;                                            // can use structured bindings...
+          CHECK (p == 3.14);
+          p = 3.14159;
+          CHECK (3.14159 == b2.get<1>());
         }
       
       
@@ -97,7 +100,7 @@ namespace test{
           b2.linkInto(b1);
           
           using Chain2 = Constructor::ChainType;
-          Chain2& chain2 = reinterpret_cast<Chain2&> (b1);
+          Chain2& chain2 = Constructor::recast (b1);
           CHECK (b1.size()     == 1);
           CHECK (chain2.size() == 3);
           
@@ -130,12 +133,24 @@ namespace test{
           CHECK ((showType<std::tuple_element_t<0, Block2>>() == "double"_expect));
           CHECK ((showType<std::tuple_element_t<1, Block2>>() == "string"_expect));
           
-          CHECK (std::get<0> (chain2) == 42);
-//        CHECK (std::get<1> (chain2) == "1.618034"_expect);       ////////////////////////////TODO somehow the overload for std::tuple takes precedence here
-//        CHECK (std::get<2> (chain2) == "Φ"_expect);
+//        CHECK (std::get<0> (chain2) == "42"_expect);                 // std::tuple is inaccessible base of HeteroData
+          CHECK (std::get<0> (b2)     == "1.618034"_expect);
+//        CHECK (std::get<1> (chain2) == "1.618034"_expect);           // does not compile due to range restriction for the base tuple
+                                                                       // (as such this is correct — yet prevents definition of a custom get-function)
+          auto& [u0] = b1;
+          CHECK (u0 == "42"_expect);
           
-          CHECK (std::get<0> (b2) == "1.618034"_expect);
-          CHECK (std::get<1> (b2) == "Φ"_expect);
+          auto& [v0,v1] = b2;                                          // b2 is typed as StorageFrame and thus the tuple base is accessible
+          CHECK (v0 == "1.618034"_expect);
+          CHECK (v1 == "Φ"_expect);
+          
+          auto& [x0,x1,x2] = chain2;                                   // Note: structured binding on the fully typed chain uses the get<i>-Member
+          CHECK (x0 == "42"_expect);
+          CHECK (x1 == "1.618034"_expect);
+          CHECK (x2 == "Φ"_expect);
+          
+//        auto& [z0,z1,z2,z3] = chain2;                                // Error: 4 names provided for structured binding, while HeteroData... decomposes into 3 elements
+//        auto& [z0,z1,z2] = b1;                                       // Error: HeteroData<Node<StorageFrame<0, uint>, NullType> >' decomposes into 1 element
         }
     };
   

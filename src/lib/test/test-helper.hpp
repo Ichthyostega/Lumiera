@@ -263,6 +263,13 @@ namespace test{
          + Case::postfix;
   }
   
+  template<typename...TS>
+  string
+  showTypes()
+  {
+    return "<| " + ((showType<TS>()+", ") + ... + "|>");
+  }
+  
   
   /** helper for investigating a variadic argument pack
    * @remark you can pass arguments directly to this function,
