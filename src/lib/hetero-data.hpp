@@ -45,13 +45,13 @@
  **   auto h1 = Front::build (1,2.3);
  **   using Cons1 = Front::Chain<bool,string>;
  **   auto b2 = Cons1::build (true, "Ψ");
- **   b2.linkInto(c1);
+ **   b2.linkInto(h1);
  **   auto& [d1,d2,d3,d4] = Cons1::recast(h1);
  **   CHECK (d1 == 1);
  **   CHECK (d2 == 2.3);
  **   CHECK (d3 == true);
  **   CHECK (d4 == "Ψ");
- **   Cons1::Accessor<string> get4;
+ **   Cons1::AccessorFor<string> get4;
  **   CHECK (get4(h1) == "Ψ");
  ** \endcode
  ** 
@@ -69,17 +69,12 @@
 
 
 #include "lib/error.hpp"
-//#include "lib/symbol.hpp"
 #include "lib/nocopy.hpp"
-//#include "lib/linked-elements.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-manip.hpp"
-//#include "lib/meta/typelist-util.hpp"
+#include "lib/meta/typelist-util.hpp"
 #include "lib/meta/typeseq-util.hpp"
-#include "lib/test/test-helper.hpp"
 
-//#include <algorithm>
-//#include <vector>
 #include <utility>
 #include <tuple>
 
@@ -115,6 +110,9 @@ namespace lib {
       
       template<typename SPEC>
       void linkInto (HeteroData<SPEC>&);
+      
+      template<size_t slot> auto& get() noexcept { return std::get<slot>(*this); }
+      template<typename X>  auto& get() noexcept { return std::get<X>(*this);    }
     };
   
   
@@ -149,10 +147,25 @@ namespace lib {
           return * reinterpret_cast<_Tail*> (Frame::next);
         }
       
+      template<typename...SPEC>
+      static _Self&
+      recast (HeteroData<SPEC...>& frontChain)
+        {
+          return reinterpret_cast<_Self&> (frontChain);
+        }
+      template<typename...SPEC>
+      static _Self const&
+      recast (HeteroData<SPEC...> const& frontChain)
+        {
+          return reinterpret_cast<_Self const&> (frontChain);
+        }
+      
+      
       template<typename...XX>
       friend class HeteroData;  ///< allow chained types to use recursive type definitions
       
       using Frame::Frame;       ///< data elements shall be populated through the builder front-ends
+      
       
     public:
       HeteroData() = default;
@@ -163,8 +176,10 @@ namespace lib {
           return localSiz + _Tail::size();
         }
       
+      /** access type to reside in the given slot of the _complete chain_ */
       template<size_t slot>
       using Elm_t = typename PickType<slot>::type;
+      
       
       /** access data elements within _complete chain_ by index pos */
       template<size_t slot>
@@ -185,48 +200,68 @@ namespace lib {
         return const_cast<HeteroData*>(this)->get<slot>();
       }
       
+      
+      /**
+       * Accessor-functor to get at the data residing within some tuple element
+       * Using the enclosing typed scope to ensure safe storage access
+       * @tparam slot numer of the data element, counting from zero over the full chain
+       * @note this functor holds no data, but shall be applied to some existing HeteroData.
+       */
       template<size_t slot>
       struct Accessor
         {
           using Type = Elm_t<slot>;
           
           template<class SPEC>
-          Type&
+          static Type&
           get (HeteroData<SPEC>& frontEnd)
             {
-              auto& fullChain = reinterpret_cast<_Self&> (frontEnd);
+              auto& fullChain = _Self::recast (frontEnd);
               return fullChain.template get<slot>();
             }
+          
+          template<typename HH>
+          Type& operator() (HH& frontEnd) const { return Accessor::get(frontEnd); }
         };
       
+      /**
+       * Constructor-functor to build an extra data segment, which can then be linked to the chain.
+       * @tparam VALS data types to use in the extra storage tuple
+       * @note Using this functor is the only safe path to create and add new data blocks.
+       *       Each such data block can be linked in once, and only if the base chain matches
+       *       the structure embedded into the type of the enclosing scope.
+       *     - storage frames can be default constructed, but not copied / moved thereafter
+       *     - the #build() function can be used to create the block and init the data
+       *     - after creating a frame, it must be explicitly linked in by invoking NewFrame::linkInto()
+       *     - the #recast() function will re-interpret _any_ `HeteroData&` into the storage structure
+       *       which can be expected after building the extension frame (use with care!)
+       *     - the nested template ChainExtent is a follow-up constructor-functor to add a further block
+       *     - the nested template Accessor shall be used for any type-save access to data values
+       *     - if all types are distinct, the Accessor can also be selected by-type
+       */
       template<typename...VALS>
       struct Chain
         {
-          using NewFrame = StorageFrame<seg+1, VALS...>;
-          using ChainType = HeteroData<typename meta::Append<meta::Node<Frame,TAIL>,NewFrame>::List>;
-          
+          using Segments = meta::Node<Frame,TAIL>; // ◁———this type describes current chain structure
+          using NewFrame = StorageFrame<meta::count<Segments>::value, VALS...>;
+          using ChainType = HeteroData<typename meta::Append<Segments,NewFrame>::List>;
+                                                // ...and this would be the extended chain structure
           template<typename...INIT>
           static NewFrame
           build (INIT&& ...initArgs)
             {
-              return {initArgs ...};
+              return {initArgs ...}; // Note: NewFrame is non-copyable
             }
           
-          template<typename...SPEC>
-          static ChainType&
-          recast (HeteroData<SPEC...>& frontChain)
+          template<class HET>
+          static auto&
+          recast (HET& frontChain)
             {
-              return reinterpret_cast<ChainType&> (frontChain);
-            }
-          template<typename...SPEC>
-          static ChainType&
-          recast (HeteroData<SPEC...> const& frontChain)
-            {
-              return reinterpret_cast<ChainType const&> (frontChain);
+              return ChainType::recast (frontChain);
             }
           
           template<typename...XVALS>
-          using ChainExtension = typename ChainType::template Chain<XVALS...>;
+          using ChainExtent = typename ChainType::template Chain<XVALS...>;
           
           template<size_t slot>
           using Accessor = typename ChainType::template Accessor<_Self::size()+slot>;
@@ -306,7 +341,7 @@ namespace lib {
              , segments);
       return last->next;
     }
-  }
+  }//(End)helper
   
   
   /**

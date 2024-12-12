@@ -434,7 +434,7 @@ return: 0
 END
 
 
-PLANNED "Heterogeneous data in local storage" HeteroData_test <<END
+TEST "Heterogeneous data in local storage" HeteroData_test <<END
 return: 0
 END
 

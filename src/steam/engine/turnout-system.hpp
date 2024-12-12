@@ -41,6 +41,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
 #include "lib/nocopy.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/hetero-data.hpp"
 
 
 namespace steam  {
