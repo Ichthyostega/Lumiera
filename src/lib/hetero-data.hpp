@@ -74,7 +74,7 @@ namespace lib {
   
   template<size_t seg, typename...DATA>
   struct StorageFrame
-    : protected StorageLoc
+    : StorageLoc
     , std::tuple<DATA...>
     {
       using Tuple = std::tuple<DATA...>;
@@ -88,12 +88,15 @@ namespace lib {
   
   template<size_t seg, typename...DATA, class TAIL>
   class HeteroData<meta::Node<StorageFrame<seg, DATA...>,TAIL>>
-    : StorageFrame<seg, DATA...>
+//  : StorageFrame<seg, DATA...>
+//    : util::NonCopyable
     {
       using _Self = HeteroData;
       using _Tail = HeteroData<TAIL>;
       using Tuple = std::tuple<DATA...>;
       using Frame = StorageFrame<seg, DATA...>;
+      
+      Frame frame_;
       
       static constexpr size_t localSiz = sizeof...(DATA);
       
@@ -107,14 +110,17 @@ namespace lib {
       _Tail&
       accessTail()
         {
-          REQUIRE (Frame::next, "HeteroData storage logic broken: follow-up extent not yet allocated");
-          return * reinterpret_cast<_Tail*> (Frame::next);
+          REQUIRE (frame_.next, "HeteroData storage logic broken: follow-up extent not yet allocated");
+          return * reinterpret_cast<_Tail*> (frame_.next);
         }
       
       template<typename...XX>
       friend class HeteroData;  ///< allow chained types to use recursive type definitions
       
-      using Frame::Frame;
+      template<typename...INIT>
+      HeteroData (INIT&& ...initArgs)
+        : frame_{std::forward<INIT> (initArgs)...}
+        { }
       
     public:
       HeteroData() = default;
@@ -135,7 +141,7 @@ namespace lib {
         {
           static_assert (slot < size(), "HeteroData access index beyond defined data");
           if constexpr (slot < localSiz)
-            return std::get<slot> (*this);
+            return std::get<slot> (frame_);
           else
             return accessTail().template get<slot-localSiz>();
         }
