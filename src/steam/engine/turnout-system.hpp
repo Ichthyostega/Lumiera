@@ -2,7 +2,7 @@
   TURNOUT-SYSTEM.hpp  -  Encapsulation of the state corresponding to a render calculation
 
    Copyright (C)
-     2008,            Hermann Vosseler <Ichthyostega@web.de>
+     2024,            Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -37,8 +37,6 @@
 #define STEAM_ENGINE_TURNOUT_SYSTEM_H
 
 
-#include "steam/engine/state-closure.hpp" /////////////////////OOO will take on a different role (if any)
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
 #include "lib/nocopy.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/hetero-data.hpp"

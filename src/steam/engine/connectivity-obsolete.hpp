@@ -42,7 +42,7 @@
 #include "steam/asset/proc.hpp"
 #include "steam/mobject/parameter.hpp"
 #include "steam/engine/state-closure-obsolete.hpp"  /////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-#include "steam/engine/channel-descriptor.hpp"
+#include "steam/engine/channel-descriptor-obsolete.hpp"
 #include "lib/frameid.hpp"
 #include "lib/ref-array.hpp"
 
@@ -57,8 +57,8 @@ namespace engine {
   using lumiera::NodeID;
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-  class ProcNode;
-  typedef ProcNode* PNode;
+  class ProcNode_Obsolete;
+  typedef ProcNode_Obsolete* PNode;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   
   
@@ -112,7 +112,7 @@ namespace engine {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       /* ==== strategy API for configuring the node operation ==== */
       
-      friend class ProcNode;                               /////////////////////////////////TODO 1/12 : wouldn't it be better to extract that API into a distinct strategy?
+      friend class ProcNode_Obsolete;                               /////////////////////////////////TODO 1/12 : wouldn't it be better to extract that API into a distinct strategy?
       
       /** the wiring-dependent part of the node operation.
        *  Includes the creation of a one-way state object on the stack
@@ -139,7 +139,7 @@ namespace engine {
    *       ProcNode as a frontend entirely.
    * @todo WIP-WIP-WIP 2024 Node-Invocation is reworked from ground up for the »Playback Vertical Slice«
    */
-  class ProcNode
+  class ProcNode_Obsolete
     : util::NonCopyable
     {
       typedef mobject::Parameter<double> Param;   //////TODO: just a placeholder for automation as of 6/2008
@@ -149,11 +149,11 @@ namespace engine {
       
     public:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-      ProcNode (Connectivity const& wd)
+      ProcNode_Obsolete (Connectivity const& wd)
         : wiringConfig_(wd)
         { }
       
-      virtual ~ProcNode() {};  /////////////////////////TODO: do we still intend to build a hierarchy below ProcNode???
+      virtual ~ProcNode_Obsolete() {};  /////////////////////////TODO: do we still intend to build a hierarchy below ProcNode???
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
       
@@ -190,7 +190,7 @@ namespace engine {
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   inline bool
-  ProcNode::isValid()  const
+  ProcNode_Obsolete::isValid()  const
   {
     UNIMPLEMENTED ("ProcNode validity self-check");
     return false; //////////////////////////TODO

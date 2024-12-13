@@ -215,7 +215,7 @@ namespace engine {
           patternData_.collectEntries(ports);
           return Connectivity{ports.build()
                              ,leads_.build()
-                             ,NodeID{}}; //////////////////////////////////////OOO what's the purpose of the NodeID??
+                             };
         }
     };
   

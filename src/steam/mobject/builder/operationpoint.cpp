@@ -15,11 +15,13 @@
 /** @file operationpoint.cpp
  ** Implementation of primitive builder operations on at the _current point of operation_.
  ** @todo stalled design draft from 2008 -- basically still considered relevant as of 2016
+ ** @todo confirmed 12/2024 : the ideas drafted here are considered relevant,
+ **       yet it is clear meanwhile that the Build will work on meta-descriptors,
+ **       and not the actual Render Nodes
  */
 
 
 #include "steam/mobject/builder/operationpoint.hpp"
-#include "steam/engine/proc-node.hpp"
 #include "steam/asset/media.hpp"
 #include "steam/asset/proc.hpp"
 #include "steam/engine/node-factory.hpp"
@@ -35,7 +37,11 @@ namespace builder {
 //  using util::isnil;
   using engine::NodeFactory;
   
-  using engine::PNode;
+  /** @todo placeholder introduced 12/2024 to abstract from the actual Render Nodes */
+  struct PNode
+    {
+      ;
+    };
   
   
   struct RefPoint

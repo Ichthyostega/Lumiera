@@ -36,13 +36,10 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/hash-value.h"
-#include "steam/asset/proc.hpp"
-#include "steam/mobject/parameter.hpp"
-//#include "steam/engine/state-closure-obsolete.hpp"  ///////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-#include "steam/engine/state-closure.hpp"           /////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-#include "steam/engine/channel-descriptor.hpp"
+//#include "steam/asset/proc.hpp"
+//#include "steam/mobject/parameter.hpp"
+#include "steam/engine/buffhandle.hpp"
 #include "steam/engine/turnout-system.hpp"
-#include "lib/frameid.hpp"
 #include "lib/ref-array.hpp" /////////////////////OOO phase out
 #include "lib/format-string.hpp"
 #include "lib/several.hpp"
@@ -59,20 +56,16 @@ namespace engine {
 
   using std::move;
   using std::string;
-  using std::vector; //////////////TODO;
   using lib::HashVal;
-  using lumiera::NodeID; ///////////////////////TODO likely to be removed
   using util::_Fmt;
   
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   class ProcID;
   class ProcNode;
   class ProcNodeDiagnostic;
   
-//  typedef ProcNode* PNode;
   using ProcNodeRef = std::reference_wrapper<ProcNode>;
   using OptionalBuff = std::optional<BuffHandle>;
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
+  
   
   class Port
 //  : util::MoveOnly     //////////////////////////////////////////////////OOO not clear if necessary here, and requires us to declare the ctors!!! See Turnout
@@ -115,16 +108,13 @@ namespace engine {
       Ports ports;
       Leads leads;
       
-      NodeID const& nodeID;  /////////////////////////////////OOO seems to belong rather into the ProcNode
-      
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
 //  protected:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-      Connectivity (Ports&& pr, Leads&& lr, NodeID const& nID)
+      Connectivity (Ports&& pr, Leads&& lr)
         : ports(move(pr))
         , leads(move(lr))
-        , nodeID(nID)
         { }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       

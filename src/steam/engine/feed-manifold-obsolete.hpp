@@ -26,7 +26,7 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "steam/engine/channel-descriptor.hpp"
+#include "steam/engine/channel-descriptor-obsolete.hpp"
 //#include "steam/engine/proc-node.hpp"    ///////////////////////////////TODO this is a dead end
 #include "steam/engine/connectivity-obsolete.hpp"
 

@@ -50,11 +50,7 @@ namespace engine {
   using std::vector;
   using lib::AllocationCluster;
   
-  ///////////////////////////// TODO: as of 9/09, it seems no longer necessary to use any subclasses of ProcNode
-  class Trafo;
-  typedef Trafo* PTrafo;    ///< @note ProcNode is handled by pointer and bulk allocated/deallocated
-  
-  class WiringSituation;
+//  class WiringSituation;
 
 
   /**
@@ -76,7 +72,10 @@ namespace engine {
         { }
       
       
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
       PNode operator() (mobject::session::PEffect const&, WiringSituation&);
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
+ 
         
     };
 
