@@ -26,7 +26,7 @@
  **       because the given _functor_ is constructed within a plug-in tailored to a specific
  **       media processing library (e.g. FFmpeg) and thus can be a lambda to forward to the
  **       actual function.
- ** @note steam::engine::Turnout mixes-in the steam::engine::SimpleWeavingPattern, which in turn
+ ** @note steam::engine::Turnout mixes-in the steam::engine::MediaWeavingPattern, which in turn
  **       inherits from an *Invocation Adapter* given as template parameter. So this constitutes
  **       an *extension point* where other, more elaborate invocation schemes could be integrated.
  ** 
@@ -97,8 +97,8 @@
 //#include "vault/gear/job.h"
 #include "lib/several-builder.hpp"
 #include "steam/engine/proc-id.hpp"
-#include "steam/engine/turnout.hpp"
 #include "steam/engine/engine-ctx.hpp"
+#include "steam/engine/weaving-pattern.hpp"
 #include "steam/engine/buffer-provider.hpp"
 #include "steam/engine/buffhandle-attach.hpp"  /////////////////OOO why do we need to include this? we need the accessAs<TY>() template function
 #include "lib/test/test-helper.hpp" ////////////////////////////OOO TODO added for test
@@ -347,7 +347,7 @@ namespace engine {
   
   
   template<uint N, class FUN>
-  using SimpleDirectInvoke = SimpleWeavingPattern<DirectFunctionInvocation<N,FUN>>;
+  using SimpleDirectInvoke = MediaWeavingPattern<DirectFunctionInvocation<N,FUN>>;
   
   
   /**

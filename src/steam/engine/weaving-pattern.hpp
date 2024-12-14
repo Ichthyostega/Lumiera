@@ -51,7 +51,7 @@
 #define STEAM_ENGINE_WEAVING_PATTERN_H
 
 #include "steam/common.hpp"
-#include "steam/engine/proc-node.hpp"
+#include "steam/engine/turnout.hpp"
 #include "steam/engine/turnout-system.hpp"
 #include "steam/engine/feed-manifold.hpp"
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
@@ -77,174 +77,6 @@ namespace engine {
   using std::forward;
   using lib::Several;
   
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
-  /**
-   * Adapter to shield the ProcNode from the actual buffer management,
-   * allowing the processing function within ProcNode to use logical
-   * buffer IDs. StateAdapter is created on the stack for each pull()
-   * call, using setup/wiring data preconfigured by the builder.
-   * Its job is to provide the actual implementation of the Cache
-   * push / fetch and recursive downcall to render the source frames.
-   */
-  class StateAdapter
-    : public StateClosure
-    {
-    protected:
-      StateClosure& parent_;
-      StateClosure& current_;
-      
-      StateAdapter (StateClosure& callingProcess)
-        : parent_ (callingProcess),
-          current_(callingProcess.getCurrentImplementation())
-        { }
-      
-      virtual StateClosure& getCurrentImplementation () { return current_; }
-      
-      
-      
-    public: /* === proxying the StateClosure interface === */
-      
-      virtual void releaseBuffer (BuffHandle& bh)       { current_.releaseBuffer (bh); }
-      
-      virtual void is_calculated (BuffHandle const& bh) { current_.is_calculated (bh); }
-      
-      virtual BuffHandle fetch (FrameID const& fID)     { return current_.fetch (fID); }
-      
-      virtual BuffTableStorage& getBuffTableStorage()   { return current_.getBuffTableStorage(); }
-
-      // note: allocateBuffer()  is chosen specifically based on the actual node wiring
-      
-    };
-  
-  
-  
-  
-  
-  /**
-   * Invocation context state.
-   * A ref to this type is carried through the chain of NEXT::step() functions
-   * which form the actual invocation sequence. The various operations in this sequence
-   * access the context via the references in this struct, while also using the inherited
-   * public State interface. The object instance actually used as Invocation is created
-   * on the stack and parametrised according to the necessities of the invocation sequence
-   * actually configured. Initially, this real instance is configured without FeedManifold,
-   * because the invocation may be short-circuited due to Cache hit. Otherwise, when
-   * the invocation sequence actually prepares to call the process function of this
-   * ProcNode, a buffer table chunk is allocated by the StateProxy and wired in.
-   */
-  struct Invocation
-    : StateAdapter
-    {
-      Connectivity const& wiring;
-      const uint outNr;
-      
-      FeedManifold* feedManifold;
-      
-    protected:
-      /** creates a new invocation context state, without FeedManifold */
-      Invocation (StateClosure& callingProcess, Connectivity const& w, uint o)
-        : StateAdapter(callingProcess),
-          wiring(w), outNr(o),
-          feedManifold(0)
-        { }
-      
-    public:
-      uint nrO()          const { return wiring.nrO; }
-      uint nrI()          const { return wiring.nrI; }
-      uint buffTabSize()  const { return nrO()+nrI(); }
-      
-      /** setup the link to an externally allocated buffer table */
-      void setBuffTab (FeedManifold* b) { this->feedManifold = b; }
-      
-      bool
-      buffTab_isConsistent ()
-        {
-          return (feedManifold)
-              && (0 < buffTabSize())
-              && (nrO()+nrI() <= buffTabSize())
-              && (feedManifold->inBuff   == &feedManifold->outBuff[nrO()]  )
-              && (feedManifold->inHandle == &feedManifold->outHandle[nrO()])
-               ;
-        }
-      
-      
-    public:
-      /** specialised version filling in the additional information, i.e
-       *  the concrete node id and the channel number in question */
-      virtual FrameID const&
-      genFrameID ()
-        {
-          return current_.genFrameID(wiring.nodeID, outNr);
-        }
-      
-      virtual FrameID const&
-      genFrameID (NodeID const& nID, uint chanNo)
-        {
-          return current_.genFrameID (nID,chanNo);
-        }
-      
-    };
-    
-    
-                                                                                                    ////////////TICKET #249  this strategy should better be hidden within the BuffHandle ctor (and type-erased after creation)
-  struct AllocBufferFromParent  ///< using the parent StateAdapter for buffer allocations
-    : Invocation
-    {
-      AllocBufferFromParent (StateClosure& sta, Connectivity const& w, const uint outCh)
-        : Invocation(sta, w, outCh) {}
-      
-      virtual BuffHandle
-      allocateBuffer (const lumiera::StreamType* ty) { return parent_.allocateBuffer(ty); }          ////////////TODO: actually implement the "allocate from parent" logic!
-    };
-  
-  struct AllocBufferFromCache   ///< using the global current StateClosure, which will delegate to Cache
-    : Invocation
-    {
-      AllocBufferFromCache (StateClosure& sta, Connectivity const& w, const uint outCh)
-        : Invocation(sta, w, outCh) {}
-      
-      virtual BuffHandle
-      allocateBuffer (const lumiera::StreamType* ty) { return current_.allocateBuffer(ty); }
-    };
-  
-  
-  /**
-   * The real invocation context state implementation. It is created
-   * by the NodeWiring (Connectivity) of the processing node which
-   * is pulled by this invocation, hereby using the internal configuration
-   * information to guide the selection of the real call sequence
-   * 
-   * \par assembling the call sequence implementation
-   * Each ProcNode#pull() call creates such a StateAdapter subclass on the stack,
-   * with a concrete type according to the Connectivity of the node to pull.
-   * This concrete type encodes a calculation Strategy, which is assembled
-   * as a chain of policy templates on top of OperationBase. For each of the
-   * possible configurations we define such a chain (see bottom of nodeoperation.hpp).
-   * The WiringFactory defined in nodewiring.cpp actually drives the instantiation
-   * of all those possible combinations.
-   */
-  template<class Strategy, class BufferProvider>
-  class ActualInvocationProcess
-    : public BufferProvider
-    , private Strategy
-    {
-    public:
-      ActualInvocationProcess (StateClosure& callingProcess, Connectivity const& w, const uint outCh)
-        : BufferProvider(callingProcess, w, outCh)
-        { }
-      
-      /** contains the details of Cache query and recursive calls
-       *  to the predecessor node(s), eventually followed by the
-       *  ProcNode::process() callback
-       */
-      BuffHandle retrieve ()
-        {
-          return Strategy::step (*this);
-        }
-    };
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
   
     /**
      * Standard implementation for a _Weaving Pattern_ to connect
@@ -259,7 +91,7 @@ namespace engine {
      *       + `INVO::MAX_SIZ` limits both arrays
      */
   template<class INVO>
-  struct SimpleWeavingPattern
+  struct MediaWeavingPattern
     : INVO
     {
       using Feed = typename INVO::Feed;
@@ -273,10 +105,10 @@ namespace engine {
       
       /** forwarding-ctor to provide the detailed input/output connections */
       template<typename...ARGS>
-      SimpleWeavingPattern (Several<PortRef>&&   pr
-                           ,Several<BuffDescr>&& dr
-                           ,uint resultIdx
-                           ,ARGS&& ...args)
+      MediaWeavingPattern (Several<PortRef>&&   pr
+                          ,Several<BuffDescr>&& dr
+                          ,uint resultIdx
+                          ,ARGS&& ...args)
         : INVO{forward<ARGS>(args)...}
         , leadPort{move(pr)}
         , outTypes{move(dr)}
@@ -337,46 +169,6 @@ namespace engine {
         }
       
     };
-  
-  
-  /**
-   * Processing structure to activate a Render Node and produce result data.
-   * @tparam PAT a _Weaving Pattern,_ which defines in detail how data is retrieved,
-   *             combined and processed to yield the results; actually this implementation
-   *             is assembled from several building blocks, in accordance to the specific
-   *             situation as established by the _Builder_ for a given render node.
-   */
-  template<class PAT>
-  class Turnout
-    : public Port
-    , public PAT
-//    , util::MoveOnly
-    {
-      using Feed = typename PAT::Feed;
-      
-    public:
-      template<typename...INIT>
-      Turnout (ProcID& id, INIT&& ...init)
-        : Port{id}
-        , PAT{forward<INIT> (init)...}
-        { }
-      
-      /**
-       * Entrance point to the next recursive step of media processing.
-       * @param turnoutSys anchor context with parameters and services
-       * @return a BuffHandle exposing the generated result data
-       */
-      BuffHandle
-      weave (TurnoutSystem& turnoutSys, OptionalBuff outBuff =std::nullopt)  override
-        {
-          Feed feed = PAT::mount();
-          PAT::pull(feed, turnoutSys);
-          PAT::shed(feed, outBuff);
-          PAT::weft(feed);
-          return PAT::fix (feed);
-        }
-    };
-
   
   
   

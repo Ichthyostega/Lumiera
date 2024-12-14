@@ -18,6 +18,7 @@
 
 #include "lib/test/run.hpp"
 //#include "lib/test/test-helper.hpp"
+#include "lib/meta/function.hpp"
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/turnout.hpp"
 #include "steam/engine/turnout-system.hpp"

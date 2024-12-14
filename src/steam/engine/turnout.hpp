@@ -54,29 +54,14 @@
 #include "steam/common.hpp"
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/turnout-system.hpp"
-#include "steam/engine/feed-manifold.hpp"
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-//#include "vault/gear/job.h"
-//#include "steam/engine/exit-node.hpp"
-//#include "lib/time/timevalue.hpp"
-//#include "lib/linked-elements.hpp"
-#include "lib/several.hpp"
-//#include "lib/util-foreach.hpp"
-//#include "lib/iter-adapter.hpp"
-#include "lib/meta/function.hpp"
-//#include "lib/itertools.hpp"
-//#include "lib/util.hpp"      ////////OOO wegen manifoldSiz<FUN>()
 
 #include <utility>
-#include <array>
-//#include <stack>
 
 
 namespace steam {
 namespace engine {
   
   using std::forward;
-  using lib::Several;
   
   
   /**
@@ -97,98 +82,19 @@ namespace engine {
   }
   
   
+  template<class PAT>
+  constexpr bool
+  _verify_usable_as_WeavingPattern()
+  {
+    using Feed = typename PAT::Feed;
+    ASSERT_MEMBER_FUNCTOR (&PAT::mount, Feed());
+    ASSERT_MEMBER_FUNCTOR (&PAT::pull, void(Feed&, TurnoutSystem&));
+    ASSERT_MEMBER_FUNCTOR (&PAT::shed, void(Feed&, OptionalBuff));
+    ASSERT_MEMBER_FUNCTOR (&PAT::weft, void(Feed&));
+    ASSERT_MEMBER_FUNCTOR (&PAT::fix,  BuffHandle(Feed&));
+    return sizeof(PAT);
+  }
   
-  /**
-   * Standard implementation for a _Weaving Pattern_ to connect
-   * the input and output data feeds (buffers) into a processing function.
-   * @tparam INVO a configuration / policy base class to _adapt for invocation_
-   * @note assumptions made regarding the overall structure
-   *     - `INVO::Feed` defines an _invocation adapter_ for the processing function
-   *     - `INVO::buildFeed()` is a functor to (repeatedly) build `Feed` instances
-   *     - the _invocation adapter_ in turn embeds a `FeedManifold<N>` to hold
-   *       + an array of input buffer pointers
-   *       + an array of output buffer pointers
-   *       + `INVO::MAX_SIZ` limits both arrays
-   */
-  template<class INVO>
-  struct SimpleWeavingPattern
-    : INVO
-    {
-      using Feed = typename INVO::Feed;
-      
-      static_assert (_verify_usable_as_InvocationAdapter<Feed>());
-      
-      Several<PortRef>   leadPort;
-      Several<BuffDescr> outTypes;
-      
-      uint resultSlot{0};
-      
-      /** forwarding-ctor to provide the detailed input/output connections */
-      template<typename...ARGS>
-      SimpleWeavingPattern (Several<PortRef>&&   pr
-                           ,Several<BuffDescr>&& dr
-                           ,uint resultIdx
-                           ,ARGS&& ...args)
-        : INVO{forward<ARGS>(args)...}
-        , leadPort{move(pr)}
-        , outTypes{move(dr)}
-        , resultSlot{resultIdx}
-        { }
-      
-      
-      Feed
-      mount()
-        {
-          return INVO::buildFeed();
-        }
-      
-      void
-      pull (Feed& feed, TurnoutSystem& turnoutSys)
-        {
-          for (uint i=0; i<leadPort.size(); ++i)
-            {
-              BuffHandle inputData = leadPort[i].get().weave (turnoutSys);
-              feed.inBuff.createAt(i, move(inputData));
-            }
-        }
-      
-      void
-      shed (Feed& feed, OptionalBuff outBuff)
-        {
-          for (uint i=0; i<outTypes.size(); ++i)
-            {
-              BuffHandle resultData =
-                i == resultSlot and outBuff? *outBuff
-                                           : outTypes[i].lockBuffer();
-              feed.outBuff.createAt(i, move(resultData));
-            }
-          feed.connect (leadPort.size(),outTypes.size());
-        }
-      
-      void
-      weft (Feed& feed)
-        {
-          feed.invoke();                 // process data
-        }
-      
-      BuffHandle
-      fix (Feed& feed)
-        {
-          for (uint i=0; i<leadPort.size(); ++i)
-            {
-              feed.inBuff[i].release();
-            }
-          for (uint i=0; i<outTypes.size(); ++i)
-            {
-              feed.outBuff[i].emit();    // state transition: data ready
-              if (i != resultSlot)
-                feed.outBuff[i].release();
-            }
-          ENSURE (resultSlot < INVO::MAX_SIZ, "invalid result buffer configured.");
-          return feed.outBuff[resultSlot];
-        }
-      
-    };
   
   
   /**
@@ -204,6 +110,8 @@ namespace engine {
     , public PAT
 //    , util::MoveOnly
     {
+      static_assert (_verify_usable_as_WeavingPattern<PAT>());
+      
       using Feed = typename PAT::Feed;
       
     public:
