@@ -149,8 +149,8 @@ namespace engine {
         static_assert(_Fun<FUN>()         , "something funktion-like required");
         static_assert(is_BinaryFun<FUN>() , "function with two arguments expected");
         
-        using ArgI = remove_reference_t<typename _Fun<FUN>::Args::List::Head>;
-        using ArgO = remove_reference_t<typename _Fun<FUN>::Args::List::Tail::Head>;
+        using SigI = remove_reference_t<typename _Fun<FUN>::Args::List::Head>;
+        using SigO = remove_reference_t<typename _Fun<FUN>::Args::List::Tail::Head>;
         
         template<class ARG>
         struct MatchBuffArray
@@ -164,36 +164,14 @@ namespace engine {
             enum{ SIZ = N };
           };
         
-        using BuffI = typename MatchBuffArray<ArgI>::Buff;
-        using BuffO = typename MatchBuffArray<ArgO>::Buff;
+        using BuffI = typename MatchBuffArray<SigI>::Buff;
+        using BuffO = typename MatchBuffArray<SigO>::Buff;
         
-        enum{ FAN_I = MatchBuffArray<ArgI>::SIZ
-            , FAN_O = MatchBuffArray<ArgO>::SIZ
+        enum{ FAN_I = MatchBuffArray<SigI>::SIZ
+            , FAN_O = MatchBuffArray<SigO>::SIZ
+            , MAXSZ = std::max (uint(FAN_I), uint(FAN_O))           /////////////////////OOO required temporarily until the switch to tuples
             };
       };
-    
-    
-    /**
-     * Pick a suitable size for the FeedManifold to accommodate the given function.
-     * @remark only returning one of a small selection of sizes, to avoid
-     *         excessive generation of template instances.
-     * @todo 10/24 this is a premature safety guard;
-     *       need to assess if there is actually a problem
-     *       (chances are that the optimiser absorbs most of the combinatoric complexity,
-     *       or that, to the contrary, other proliferation mechanisms cause more harm)
-     */
-    template<class FUN>
-    inline constexpr uint
-    manifoldSiz()
-    {
-      using _F = _ProcFun<FUN>;
-      auto constexpr bound = std::max (_F::FAN_I, _F::FAN_O);
-      static_assert (bound <= 10,
-           "Limitation of template instances exceeded");
-      return bound < 3? bound
-           : bound < 6? 5
-                      : 10;
-    }
   }//(End)Introspection helpers.
   
   
@@ -221,8 +199,8 @@ namespace engine {
       
       static_assert(FAN_I <= N and FAN_O <= N);
       
-      using ArrayI = std::array<BuffI*, FAN_I>;
-      using ArrayO = std::array<BuffO*, FAN_O>;
+      using ArrayI = typename _ProcFun<FUN>::SigI;
+      using ArrayO = typename _ProcFun<FUN>::SigO;
       
       
       FUN process;
@@ -239,7 +217,7 @@ namespace engine {
       void
       connect (uint fanIn, uint fanOut)
         {
-          REQUIRE (fanIn >= FAN_I and fanOut >= FAN_O);
+          REQUIRE (fanIn == FAN_I and fanOut == FAN_O);  //////////////////////////OOO this distinction is a left-over from the idea of fixed block sizes
           for (uint i=0; i<FAN_I; ++i)
             inParam[i] = & MAN::inBuff[i].template accessAs<BuffI>();
           for (uint i=0; i<FAN_O; ++i)
@@ -263,13 +241,13 @@ namespace engine {
    *         employ more elaborate _invocation adapters_
    *         specifically tailored to the library's needs.
    */
-  template<uint N, class FUN>
+  template<class FUN>
   struct DirectFunctionInvocation
     : util::MoveOnly
     {
-      using Manifold = FeedManifold<N>;
+      enum{ MAX_SIZ = _ProcFun<FUN>::MAXSZ };
+      using Manifold = FeedManifold<MAX_SIZ>;
       using Feed = SimpleFunctionInvocationAdapter<Manifold, FUN>;
-      enum{ MAX_SIZ = N };
       
       std::function<Feed()> buildFeed;
       
@@ -346,8 +324,8 @@ namespace engine {
   
   
   
-  template<uint N, class FUN>
-  using SimpleDirectInvoke = MediaWeavingPattern<DirectFunctionInvocation<N,FUN>>;
+  template<class FUN>
+  using SimpleDirectInvoke = MediaWeavingPattern<DirectFunctionInvocation<FUN>>;
   
   
   /**
@@ -364,12 +342,12 @@ namespace engine {
    * @tparam N   maximum number of input and output slots
    * @tparam FUN function or invocation adapter to invoke
    */
-  template<class POL, uint N, class FUN>
+  template<class POL, class FUN>
   struct WeavingBuilder
     : util::MoveOnly
     {
       using FunSpec = _ProcFun<FUN>;
-      using TurnoutWeaving = Turnout<SimpleDirectInvoke<N,FUN>>;
+      using TurnoutWeaving = Turnout<SimpleDirectInvoke<FUN>>;
       static constexpr SizMark<sizeof(TurnoutWeaving)> sizMark{};
       static constexpr uint FAN_I = FunSpec::FAN_I;
       static constexpr uint FAN_O = FunSpec::FAN_O;
@@ -423,7 +401,7 @@ namespace engine {
           while (cnt--)
             buffTypes.emplace_back([](BufferProvider& provider)
                                     { return provider.getDescriptor<BU>(); });
-          ENSURE (buffTypes.size() <= N);
+          ENSURE (buffTypes.size() <= FAN_O);
           return move(*this);
         }
       
@@ -474,9 +452,7 @@ namespace engine {
             outTypes.append (
               typeConstructor (providers[i++]));
           
-          ENSURE (leadPorts.size() <= N);
           ENSURE (leadPorts.size() == FunSpec::FAN_I);
-          ENSURE (outTypes.size()  <= N);
           ENSURE (outTypes.size()  == FunSpec::FAN_O);
           
           using PortDataBuilder = DataBuilder<POL, Port>;

@@ -405,7 +405,7 @@ namespace engine {
   auto
   PortBuilderRoot<POL,DAT>::invoke (StrView portSpec, FUN fun)
     {
-      using WeavingBuilder_FUN = WeavingBuilder<POL, manifoldSiz<FUN>(), FUN>;
+      using WeavingBuilder_FUN = WeavingBuilder<POL, FUN>;
       return PortBuilder<POL,DAT, WeavingBuilder_FUN>{move(*this), move(fun), portSpec};
     }
 /*
