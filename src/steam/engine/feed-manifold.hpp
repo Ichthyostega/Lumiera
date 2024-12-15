@@ -75,6 +75,7 @@
 #include "steam/engine/buffhandle.hpp"
 #include "lib/uninitialised-storage.hpp"
 #include "lib/meta/function.hpp"
+#include "lib/meta/typeseq-util.hpp"
 //#include "lib/several.hpp"
 
 //#include <utility>
@@ -92,8 +93,42 @@ namespace engine {
   namespace {// Introspection helpers....
     
     using lib::meta::_Fun;
+    using lib::meta::is_UnaryFun;
     using lib::meta::is_BinaryFun;
+    using lib::meta::is_TernaryFun;
     using std::remove_reference_t;
+    using lib::meta::enable_if;
+    using std::void_t;
+    using std::__and_;
+    using std::__not_;
+    
+    template<class X,  typename SEL=void>
+    struct is_Structured
+      : std::false_type
+      { };
+    template<class TUP>
+    struct is_Structured<TUP,   void_t<std::tuple_size<TUP>>>
+      : std::true_type
+      { };
+    
+    template<typename V>
+    struct is_Value
+      : __and_<__not_<std::is_pointer<V>>
+              ,__not_<std::is_reference<V>>
+              ,__not_<is_Structured<V>>
+              ,std::is_default_constructible<V>
+              ,std::is_copy_assignable<V>
+              >
+      { };
+    
+    template<typename B>
+    struct is_Buffer
+      : __and_<__not_<std::is_pointer<B>>
+              ,__not_<std::is_reference<B>>
+              ,std::is_default_constructible<B>
+              ,__not_<_Fun<B>>
+              >
+      { };
     
     /** Helper to pick up the parameter dimensions from the processing function
      * @remark this is the rather simple yet common case that media processing
@@ -107,32 +142,78 @@ namespace engine {
     struct _ProcFun
       {
         static_assert(_Fun<FUN>()         , "something funktion-like required");
-        static_assert(is_BinaryFun<FUN>() , "function with two arguments expected");
+        static_assert(0 <  _Fun<FUN>::ARITY , "function with at least one argument expected");
+        static_assert(3 >= _Fun<FUN>::ARITY , "function with up to three arguments accepted");
         
         using Sig  = typename _Fun<FUN>::Sig;
         
-        template<class ARG>
-        struct MatchBuffArray
+        template<class SIG, size_t i>
+        using _Arg = typename lib::meta::Pick<typename _Fun<SIG>::Args, i>::Type;
+        
+        
+        template<class ARG,  typename SEL =void>
+        struct _ArgTrait
           {
-            static_assert(not sizeof(ARG), "processing function expected to take array-of-buffer-pointers");
+            static_assert(not sizeof(ARG), "processing function expected to take parameters, "
+                                           "buffer-poiinters or tuples or arrays of these");
+          };
+        template<class PAR>
+        struct _ArgTrait<PAR,   enable_if<is_Value<PAR>>>
+          {
+            using Buff = PAR; ////////////////////////////////OOO not correct, remove this!
+            enum{ SIZ = 1 };
+          };
+        template<class BUF>
+        struct _ArgTrait<BUF*,  enable_if<is_Buffer<BUF>>>
+          {
+            using Buff = BUF;
+            enum{ SIZ = 1 };
           };
         template<class BUF, size_t N>
-        struct MatchBuffArray<std::array<BUF*,N>>
+        struct _ArgTrait<std::array<BUF*,N>>
           {
             using Buff = BUF;
             enum{ SIZ = N };
           };
         
-        using SigI = remove_reference_t<typename _Fun<FUN>::Args::List::Head>;
-        using SigO = remove_reference_t<typename _Fun<FUN>::Args::List::Tail::Head>;
         
-        using BuffI = typename MatchBuffArray<SigI>::Buff;
-        using BuffO = typename MatchBuffArray<SigO>::Buff;
+        template<class SIG,  typename SEL =void>
+        struct _Case
+          {
+            static_assert(not sizeof(SIG), "use case could not be determined from function stignature");
+          };
+        template<class SIG>
+        struct _Case<SIG,   enable_if<is_UnaryFun<SIG>>>
+          {
+            enum{ SLOT_O = 0
+                , SLOT_I = 0
+            };
+          };
+        template<class SIG>
+        struct _Case<SIG,   enable_if<is_BinaryFun<SIG>>>
+          {
+            enum{ SLOT_O = 1
+                , SLOT_I = is_Value<_Arg<SIG,0>>()? 1 : 0
+            };
+          };
+        template<class SIG>
+        struct _Case<SIG,   enable_if<is_TernaryFun<SIG>>>
+          {
+            enum{ SLOT_O = 2
+                , SLOT_I = 1
+            };
+          };
         
-        enum{ FAN_I = MatchBuffArray<SigI>::SIZ
-            , FAN_O = MatchBuffArray<SigO>::SIZ
-            , SLOT_I = 0
-            , SLOT_O = 1
+        using SigI = _Arg<FUN,_Case<Sig>::SLOT_I>;
+        using SigO = _Arg<FUN,_Case<Sig>::SLOT_O>;
+        
+        using BuffI = typename _ArgTrait<SigI>::Buff;
+        using BuffO = typename _ArgTrait<SigO>::Buff;
+        
+        enum{ FAN_I = _ArgTrait<SigI>::SIZ
+            , FAN_O = _ArgTrait<SigO>::SIZ
+            , SLOT_I = _Case<Sig>::SLOT_I
+            , SLOT_O = _Case<Sig>::SLOT_O
             , MAXSZ = std::max (uint(FAN_I), uint(FAN_O))           /////////////////////OOO required temporarily until the switch to tuples
             };
         
@@ -161,14 +242,24 @@ namespace engine {
      * @todo WIP-WIP-WIP 7/24 now reworking the old design in the light of actual render engine requirements...
      */
   template<class FUN>
-  struct FeedManifold
-    : FeedManifold_StorageSetup<FUN>
+  struct FoldManifeed
+    : util::NonCopyable
     {
       enum{ STORAGE_SIZ = _ProcFun<FUN>::MAXSZ };
       using BuffS = lib::UninitialisedStorage<BuffHandle,STORAGE_SIZ>;
       
       BuffS inBuff;
       BuffS outBuff;
+    };
+  
+  template<class FUN>
+  struct FeedManifold
+    : FeedManifold_StorageSetup<FUN>
+    {
+      using _Trait = _ProcFun<FUN>;
+      
+      static constexpr bool hasInput() { return _Trait::hasInput(); }
+      static constexpr bool hasParam() { return _Trait::hasParam(); }
     };
   
   

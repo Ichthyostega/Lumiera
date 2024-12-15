@@ -22,6 +22,7 @@
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/turnout.hpp"
 #include "steam/engine/turnout-system.hpp"
+#include "steam/engine/feed-manifold.hpp"
 //#include "lib/format-cout.hpp"
 //#include "lib/util.hpp"
 
@@ -50,6 +51,7 @@ namespace test  {
         {
           seedRand();
           verify_TurnoutSystem();
+          verify_FeedManifold();
           UNIMPLEMENTED ("build a simple render node and then activate it");
         }
       
@@ -60,6 +62,24 @@ namespace test  {
         {
           Time nomTime{rani(10'000),0};                    // drive test with a random »nominal Time« <10s with ms granularity
           TurnoutSystem invoker{nomTime};                  // a time spec is mandatory, all further parameters are optional
+        }
+      
+      
+      /** @test the FeedManifold as adapter between Engine and processing library
+       */
+      void
+      verify_FeedManifold()
+        {
+          // some random numbers to test...
+          long r1 = rani(100);
+          
+          // Type setup to build a suitable FeedManifold
+          using Buffer = long;
+          
+          auto fun_singleOut = [&](Buffer* buff) { *buff = r1; };
+          using M1 = FeedManifold<decltype(fun_singleOut)>;
+          CHECK (not M1::hasInput());
+          CHECK (not M1::hasParam());
         }
     };
   

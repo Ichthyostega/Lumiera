@@ -216,6 +216,9 @@ namespace meta{
   template<typename FUN>
   using is_BinaryFun = has_Arity<FUN,2>;
   
+  template<typename FUN>
+  using is_TernaryFun = has_Arity<FUN,3>;
+  
   
   
   

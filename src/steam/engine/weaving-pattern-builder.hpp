@@ -145,7 +145,7 @@ namespace engine {
     : util::MoveOnly
     {
       enum{ MAX_SIZ = _ProcFun<FUN>::MAXSZ };
-      using Manifold = FeedManifold<FUN>;
+      using Manifold = FoldManifeed<FUN>; ////////////////////////////////////////////////////OOO temporary fork between old-style and new-style implementation
       using Feed = SimpleFunctionInvocationAdapter<Manifold, FUN>;
       
       std::function<Feed()> buildFeed;
