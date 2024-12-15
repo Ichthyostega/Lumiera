@@ -27,11 +27,6 @@ return: 0
 END
 
 
-PLANNED "feed manifold" FeedManifold_test <<END
-return: 0
-END
-
-
 PLANNED "Engine Interface basics" EngineInterface_test <<END
 END
 

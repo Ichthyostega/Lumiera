@@ -39,7 +39,7 @@
  ** @todo relies still on an [obsoleted implementation draft](\ref bufftable-obsolete.hpp)
  ** @see engine::ProcNode
  ** @see engine::StateProxy
- ** @see engine::FeedManifold
+ ** @see engine::FeedManifold_BuffTable_OBSOLETE
  ** @see nodewiring.hpp interface for building/wiring the nodes
  **
  */
@@ -110,7 +110,7 @@ namespace engine {
    * access the context via the references in this struct, while also using the inherited
    * public State interface. The object instance actually used as Invocation is created
    * on the stack and parametrised according to the necessities of the invocation sequence
-   * actually configured. Initially, this real instance is configured without FeedManifold,
+   * actually configured. Initially, this real instance is configured without FeedManifold_BuffTable_OBSOLETE,
    * because the invocation may be short-circuited due to Cache hit. Otherwise, when
    * the invocation sequence actually prepares to call the process function of this
    * ProcNode, a buffer table chunk is allocated by the StateProxy and wired in.
@@ -121,10 +121,10 @@ namespace engine {
       Connectivity const& wiring;
       const uint outNr;
       
-      FeedManifold* feedManifold;
+      FeedManifold_BuffTable_OBSOLETE* feedManifold;
       
     protected:
-      /** creates a new invocation context state, without FeedManifold */
+      /** creates a new invocation context state, without FeedManifold_BuffTable_OBSOLETE */
       Invocation (StateClosure_OBSOLETE& callingProcess, Connectivity const& w, uint o)
         : StateAdapter(callingProcess),
           wiring(w), outNr(o),
@@ -137,7 +137,7 @@ namespace engine {
       uint buffTabSize()  const { return nrO()+nrI(); }
       
       /** setup the link to an externally allocated buffer table */
-      void setBuffTab (FeedManifold* b) { this->feedManifold = b; }
+      void setBuffTab (FeedManifold_BuffTable_OBSOLETE* b) { this->feedManifold = b; }
       
       bool
       buffTab_isConsistent ()

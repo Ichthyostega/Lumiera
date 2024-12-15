@@ -122,114 +122,13 @@ namespace engine {
   
   using StrView = std::string_view;
   using std::forward;
-  using lib::Literal;
+//  using lib::Literal;
   using lib::Several;
   using lib::Depend;
   using util::_Fmt;
   using util::max;
   
   
-  namespace {// Introspection helpers....
-    
-    using lib::meta::_Fun;
-    using lib::meta::is_BinaryFun;
-    using std::remove_reference_t;
-    
-    /** Helper to pick up the parameter dimensions from the processing function
-     * @remark this is the rather simple yet common case that media processing
-     *         is done by a function, which takes an array of input and output
-     *         buffer pointers with a common type; this simple case is used
-     *         7/2024 for prototyping and validate the design.
-     * @tparam FUN a _function-like_ object, expected to accept two arguments,
-     *         which both are arrays of buffer pointers (input, output).
-     */
-    template<class FUN>
-    struct _ProcFun
-      {
-        static_assert(_Fun<FUN>()         , "something funktion-like required");
-        static_assert(is_BinaryFun<FUN>() , "function with two arguments expected");
-        
-        using SigI = remove_reference_t<typename _Fun<FUN>::Args::List::Head>;
-        using SigO = remove_reference_t<typename _Fun<FUN>::Args::List::Tail::Head>;
-        
-        template<class ARG>
-        struct MatchBuffArray
-          {
-            static_assert(not sizeof(ARG), "processing function expected to take array-of-buffer-pointers");
-          };
-        template<class BUF, size_t N>
-        struct MatchBuffArray<std::array<BUF*,N>>
-          {
-            using Buff = BUF;
-            enum{ SIZ = N };
-          };
-        
-        using BuffI = typename MatchBuffArray<SigI>::Buff;
-        using BuffO = typename MatchBuffArray<SigO>::Buff;
-        
-        enum{ FAN_I = MatchBuffArray<SigI>::SIZ
-            , FAN_O = MatchBuffArray<SigO>::SIZ
-            , MAXSZ = std::max (uint(FAN_I), uint(FAN_O))           /////////////////////OOO required temporarily until the switch to tuples
-            };
-      };
-  }//(End)Introspection helpers.
-  
-  
-  /**
-   * Adapter to handle a simple yet common setup for media processing
-   * - somehow we can invoke processing as a simple function
-   * - this function takes two arrays: the input- and output buffers
-   * @remark this setup is useful for testing, and as documentation example;
-   *         actually the FeedManifold is mixed in as baseclass, and the
-   *         buffer pointers are retrieved from the BuffHandles.
-   * @tparam MAN a FeedManifold, providing arrays of BuffHandles
-   * @tparam FUN the processing function
-   */
-  template<class MAN, class FUN>
-  struct SimpleFunctionInvocationAdapter
-    : MAN
-    {
-      using BuffI = typename _ProcFun<FUN>::BuffI;
-      using BuffO = typename _ProcFun<FUN>::BuffO;
-      
-      enum{ N = MAN::STORAGE_SIZ
-          , FAN_I = _ProcFun<FUN>::FAN_I
-          , FAN_O = _ProcFun<FUN>::FAN_O
-      };
-      
-      static_assert(FAN_I <= N and FAN_O <= N);
-      
-      using ArrayI = typename _ProcFun<FUN>::SigI;
-      using ArrayO = typename _ProcFun<FUN>::SigO;
-      
-      
-      FUN process;
-      
-      ArrayI inParam;
-      ArrayO outParam;
-      
-      template<typename...INIT>
-      SimpleFunctionInvocationAdapter (INIT&& ...funSetup)
-        : process{forward<INIT> (funSetup)...}
-        { }
-      
-      
-      void
-      connect (uint fanIn, uint fanOut)
-        {
-          REQUIRE (fanIn == FAN_I and fanOut == FAN_O);  //////////////////////////OOO this distinction is a left-over from the idea of fixed block sizes
-          for (uint i=0; i<FAN_I; ++i)
-            inParam[i] = & MAN::inBuff[i].template accessAs<BuffI>();
-          for (uint i=0; i<FAN_O; ++i)
-            outParam[i] = & MAN::outBuff[i].template accessAs<BuffO>();
-        }
-      
-      void
-      invoke()
-        {
-          process (inParam, outParam);
-        }
-    };
   
   /**
    * Typical base configuration for a Weaving-Pattern chain:
@@ -246,7 +145,7 @@ namespace engine {
     : util::MoveOnly
     {
       enum{ MAX_SIZ = _ProcFun<FUN>::MAXSZ };
-      using Manifold = FeedManifold<MAX_SIZ>;
+      using Manifold = FeedManifold<FUN>;
       using Feed = SimpleFunctionInvocationAdapter<Manifold, FUN>;
       
       std::function<Feed()> buildFeed;
@@ -279,7 +178,7 @@ namespace engine {
    * for each port, as specified by preceding builder-API invocations.
    * @tparam PAR   recursive layering for preceding entries
    * @tparam BUILD a builder functor to emplace one Turnout instance,
-   *               opaquely embedding all specific data typing.
+   *               thereby opaquely embedding all specific data typing.
    * @tparam siz   storage in bytes to hold data produced by \a BUILD
    */
   template<class PAR, class BUILD, uint siz>

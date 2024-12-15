@@ -57,7 +57,7 @@ namespace engine {
      *       to use a single contiguous memory area and just layer the object structure on top
      *       (by using placement new). Yet the idea of an stack-like organisation should be retained
      */
-  struct FeedManifold                 ///////////////////////////////////OOO rename into FeedManifold
+  struct FeedManifold_BuffTable_OBSOLETE                 ///////////////////////////////////OOO this is obliterated by the new implementation of FeedManifold_BuffTable_OBSOLETE
     {
       typedef BuffHandle        * PHa;
       typedef BuffHandle::PBuff * PBu;
@@ -109,7 +109,7 @@ namespace engine {
        *  starting at current level to be used
        *  by the newly created BuffTableChunk
        */
-      FeedManifold::Chunk
+      FeedManifold_BuffTable_OBSOLETE::Chunk
       claim (uint slots)
         {
           ASSERT (pTab_.size() == hTab_.size());
@@ -132,7 +132,7 @@ namespace engine {
         }
       
       bool
-      level_check (FeedManifold::Chunk& prev_level)
+      level_check (FeedManifold_BuffTable_OBSOLETE::Chunk& prev_level)
         {
           return prev_level.first  == &hTab_[level_]
               && prev_level.second == &pTab_[level_];
@@ -148,11 +148,11 @@ namespace engine {
    * object's lifecycle.
    */
   class BuffTableChunk
-    : public FeedManifold,
+    : public FeedManifold_BuffTable_OBSOLETE,
       util::NonCopyable
     {
       const uint siz_;
-      FeedManifold::Chunk tab_;
+      FeedManifold_BuffTable_OBSOLETE::Chunk tab_;
       BuffTableStorage& sto_;
       
     public:
