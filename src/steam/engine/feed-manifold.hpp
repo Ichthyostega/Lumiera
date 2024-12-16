@@ -58,8 +58,16 @@
  ** - the trait functions #hasInput() and #hasParam() should be used by downstream code
  **   to find out if some part of the storage is present and branch accordingly
  ** @todo 12/2024 figure out how constructor-arguments can be passed flexibly
- ** @todo staled since 2009, picked up in 2024 in an attempt to finish the node invocation.
- ** @todo WIP-WIP 2024 rename and re-interpret as a connection system
+ ** @remark in the first draft version of the Render Engine from 2009/2012, there was an entity
+ **         called `BuffTable`, which however provided additional buffer-management functionality.
+ **         This name describes well the basic functionality, which can be hard to see with all
+ **         this additional meta-programming related to the flexible functor signature. When it
+ **         comes to actual invocation, we collect input buffers from predecessor nodes and
+ **         we prepare output buffers, and then we pass both to a processing function.
+ **      
+ ** @todo WIP-WIP 12/2024 now about to introduce support for arbitrary parameters into the
+ **       Render-Engine code, which has been reworked for the »Playback Vertical Slice«.
+ **       We have still to reach the point were the engine becomes operational!!!
  ** @see NodeBase_test
  ** @see weaving-pattern-builder.hpp
  */
@@ -75,6 +83,7 @@
 #include "steam/engine/buffhandle.hpp"
 #include "lib/uninitialised-storage.hpp"
 #include "lib/meta/function.hpp"
+#include "lib/meta/trait.hpp"
 #include "lib/meta/typeseq-util.hpp"
 //#include "lib/several.hpp"
 
@@ -82,7 +91,7 @@
 //#include <array>
 
 
-////////////////////////////////TICKET   #826  will be reworked alltogether
+////////////////////////////////TICKET #826  12/2024 the invocation sequence has been reworked and reoriented for integration with the Scheduler
 
 namespace steam {
 namespace engine {
@@ -206,26 +215,67 @@ namespace engine {
         
         using SigI = _Arg<FUN,_Case<Sig>::SLOT_I>;
         using SigO = _Arg<FUN,_Case<Sig>::SLOT_O>;
+        using SigP = _Arg<FUN, 0>;
         
         using BuffI = typename _ArgTrait<SigI>::Buff;
         using BuffO = typename _ArgTrait<SigO>::Buff;
         
         enum{ FAN_I = _ArgTrait<SigI>::SIZ
             , FAN_O = _ArgTrait<SigO>::SIZ
+            , FAN_P = _ArgTrait<SigP>::SIZ
             , SLOT_I = _Case<Sig>::SLOT_I
             , SLOT_O = _Case<Sig>::SLOT_O
+            , SLOT_P =  0
             , MAXSZ = std::max (uint(FAN_I), uint(FAN_O))           /////////////////////OOO required temporarily until the switch to tuples
             };
         
         static constexpr bool hasInput() { return SLOT_I != SLOT_O; }
         static constexpr bool hasParam() { return 0 < SLOT_I; }
       };
+
+    
+    template<class FUN>
+    struct ParamStorage
+      {
+        using ParSig = typename _ProcFun<FUN>::SigP;
+        ParSig param;
+      };
+    
+    template<class FUN>
+    struct BufferSlot_Input
+      {
+        using BuffS = lib::UninitialisedStorage<BuffHandle, _ProcFun<FUN>::FAN_I>;
+        using ArgSig = typename _ProcFun<FUN>::SigI;
+        
+        BuffS  inBuff;
+        ArgSig inArgs;
+      };
+    
+    template<class FUN>
+    struct BufferSlot_Output
+      {
+        using BuffS = lib::UninitialisedStorage<BuffHandle, _ProcFun<FUN>::FAN_O>;
+        using ArgSig = typename _ProcFun<FUN>::SigO;
+        
+        BuffS  outBuff;
+        ArgSig outArgs;
+      };
+    
+    template<class X>
+    struct NotProvided : lib::meta::NullType { };
+    
+    template<bool yes, class B>
+    using Provide_if = std::conditional_t<yes, B, NotProvided<B>>;
     
   }//(End)Introspection helpers.
+  
   
   template<class FUN>
   struct FeedManifold_StorageSetup
     : util::NonCopyable
+    ,                                       BufferSlot_Output<FUN>
+    , Provide_if<_ProcFun<FUN>::hasInput(), BufferSlot_Input<FUN>>
+    , Provide_if<_ProcFun<FUN>::hasParam(), ParamStorage<FUN>>
     {
       
     };
@@ -239,7 +289,7 @@ namespace engine {
      * This setup is used by a »weaving pattern« within the invocation of a processing node for the
      * purpose of media processing or data calculation.
      * 
-     * @todo WIP-WIP-WIP 7/24 now reworking the old design in the light of actual render engine requirements...
+     * @todo WIP-WIP 12/24 now adding support for arbitrary parameters  /////////////////////////////////////TICKET #1386
      */
   template<class FUN>
   struct FoldManifeed

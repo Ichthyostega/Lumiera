@@ -23,6 +23,8 @@
 #include "steam/engine/turnout.hpp"
 #include "steam/engine/turnout-system.hpp"
 #include "steam/engine/feed-manifold.hpp"
+#include "steam/engine/diagnostic-buffer-provider.hpp"
+#include "steam/engine/buffhandle-attach.hpp"
 //#include "lib/format-cout.hpp"
 //#include "lib/util.hpp"
 
@@ -80,6 +82,21 @@ namespace test  {
           using M1 = FeedManifold<decltype(fun_singleOut)>;
           CHECK (not M1::hasInput());
           CHECK (not M1::hasParam());
+          M1 m1{};
+          CHECK (1 == m1.outBuff.array().size());
+          CHECK (nullptr == m1.outArgs );
+//        CHECK (m1.inArgs );                              // does not compile because storage field is not provided
+//        CHECK (m1.param );
+          
+          BufferProvider& provider = DiagnosticBufferProvider::build();
+          BuffHandle buff = provider.lockBufferFor<long>();   ////////////////////////////OOO can not pass ctor-args directly here
+buff.accessAs<long>() = -55;           
+          CHECK (buff.isValid());
+          CHECK (buff.accessAs<long>() == -55);
+          
+          m1.outBuff.createAt (0, buff);
+          CHECK (m1.outBuff[0].isValid());
+          CHECK (m1.outBuff[0].accessAs<long>() == -55);
         }
     };
   
