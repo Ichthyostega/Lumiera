@@ -133,14 +133,19 @@ namespace engine {
         , identity{deriveCombinedTypeIdenity<CTOR,DTOR>()}
         { }
       
-      /** builder function defining a TypeHandler
-       *  to place an object into the buffer,
-       *  possibly with given ctor arguments. */
+      /** builder function for a pre-configured TypeHandler to place a
+       *  new instance into the buffer, possibly with given ctor arguments.
+       * @warning additional ctor arguments will be materialised
+       *  and stored as copy in the TypeHandler, for repeated use.
+       * @remark need to change the instantiation type to LValue-ref
+       *  as pointed out on [Stackoverflow]
+       * [Stackoverflow]: https://stackoverflow.com/q/30968573/444796
+       */
       template<class X, typename...ARGS>
       static TypeHandler
       create (ARGS&& ...args)
         {
-          return TypeHandler ( bind (buildIntoBuffer<X,ARGS...>, _1, forward<ARGS> (args)...)
+          return TypeHandler ( bind (buildIntoBuffer<X,ARGS&...>, _1, forward<ARGS> (args)...)
                              , destroyInBuffer<X>);
         }
       

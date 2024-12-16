@@ -89,8 +89,7 @@ namespace test  {
 //        CHECK (m1.param );
           
           BufferProvider& provider = DiagnosticBufferProvider::build();
-          BuffHandle buff = provider.lockBufferFor<long>();   ////////////////////////////OOO can not pass ctor-args directly here
-buff.accessAs<long>() = -55;           
+          BuffHandle buff = provider.lockBufferFor<long> (-55);
           CHECK (buff.isValid());
           CHECK (buff.accessAs<long>() == -55);
           
