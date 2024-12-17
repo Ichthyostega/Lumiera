@@ -20,20 +20,21 @@
 #include "lib/test/run.hpp"
 #include "lib/meta/util.hpp"
 #include "lib/meta/typelist.hpp"
+#include "lib/hetero-data.hpp"
+#include "lib/test/diagnostic-output.hpp"
 
 #include <string>
-#include <iostream>
-using std::cout;
-using std::endl;/////////////////////////TODO
-
+#include <array>
+#include <tuple>
 
 namespace lib  {
 namespace meta {
 namespace test {
   
   using std::string;
-  
-  
+  using std::array;
+  using std::tuple;
+  using std::pair;
   
   
   
@@ -42,6 +43,7 @@ namespace test {
    * @test verify basic type trait and metaprogramming helpers.
    *       - marker types to tell which overload the compiler picks
    *       - simple trait to detect the possibility of a string conversion
+   *       - trait to detect (possibly) structured types (»tuple-like«)
    *       - trait to detect a typelist type
    */
   class MetaUtils_test : public Test
@@ -53,6 +55,7 @@ namespace test {
           verify_genericTypeDisplay();
           
           detect_stringConversion();
+          detect_tupleProtocol();
           detect_typeList();
         }
       
@@ -159,6 +162,42 @@ namespace test {
           CHECK ( can_convert (stringy));
           CHECK ( can_convert (subsub));
           CHECK ( can_convert (subRef));
+        }
+      
+      
+      void
+      detect_tupleProtocol()
+        {
+          // verify arbitrary non-structured types
+          CHECK ((not is_Structured<void                 >()));
+          CHECK ((not is_Structured<void*                >()));
+          CHECK ((not is_Structured<const void*          >()));
+          CHECK ((not is_Structured<const int            >()));
+          CHECK ((not is_Structured<int                  >()));
+          CHECK ((not is_Structured<int &                >()));
+          CHECK ((not is_Structured<int const &          >()));
+          CHECK ((not is_Structured<int const *          >()));
+          CHECK ((not is_Structured<int *                >()));
+          CHECK ((not is_Structured<int * const          >()));
+          CHECK ((not is_Structured<int * const &        >()));
+          CHECK ((not is_Structured<int * &              >()));
+          CHECK ((not is_Structured<int * &&             >()));
+          CHECK ((not is_Structured<int &&               >()));
+          CHECK ((not is_Structured<int const &&         >()));
+          CHECK ((not is_Structured<double               >()));
+          CHECK ((not is_Structured<string               >()));
+          CHECK ((not is_Structured<Node<short,NullType> >()));
+          
+          // the following indeed support C++ tuple protocol
+          CHECK ((    is_Structured<tuple<int>           >()));
+          CHECK ((    is_Structured<tuple<int,char,long> >()));
+          CHECK ((    is_Structured<tuple<>              >()));
+          CHECK ((    is_Structured<pair<short,long>     >()));
+          CHECK ((    is_Structured<array<short,5>       >()));
+          CHECK ((    is_Structured<array<long,0>        >()));
+          CHECK ((    is_Structured<HeteroData<size_t>   >()));
+          CHECK ((    is_Structured<HeteroData<int,char> >()));
+          CHECK ((    is_Structured<HeteroData<>         >()));
         }
       
       

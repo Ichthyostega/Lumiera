@@ -107,23 +107,19 @@ namespace engine {
     using lib::meta::is_TernaryFun;
     using std::remove_reference_t;
     using lib::meta::enable_if;
+    using lib::meta::is_Structured;
+    using std::is_pointer;
+    using std::is_reference;
+    using std::tuple_size_v;
     using std::void_t;
     using std::__and_;
     using std::__not_;
     
-    template<class X,  typename SEL=void>
-    struct is_Structured
-      : std::false_type
-      { };
-    template<class TUP>
-    struct is_Structured<TUP,   void_t<std::tuple_size<TUP>>>
-      : std::true_type
-      { };
     
     template<typename V>
     struct is_Value
-      : __and_<__not_<std::is_pointer<V>>
-              ,__not_<std::is_reference<V>>
+      : __and_<__not_<is_pointer<V>>
+              ,__not_<is_reference<V>>
               ,__not_<is_Structured<V>>
               ,std::is_default_constructible<V>
               ,std::is_copy_assignable<V>
@@ -132,12 +128,16 @@ namespace engine {
     
     template<typename B>
     struct is_Buffer
-      : __and_<__not_<std::is_pointer<B>>
-              ,__not_<std::is_reference<B>>
+      : __and_<__not_<is_pointer<B>>
+              ,__not_<is_reference<B>>
               ,std::is_default_constructible<B>
               ,__not_<_Fun<B>>
               >
       { };
+    
+    
+    
+    
     
     /** Helper to pick up the parameter dimensions from the processing function
      * @remark this is the rather simple yet common case that media processing

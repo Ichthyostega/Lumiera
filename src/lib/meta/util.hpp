@@ -189,6 +189,34 @@ namespace meta {
   
   
   
+  namespace {
+    /**
+     * check for the necessary precondition, not sufficient.
+     * @remark Detecting the possibility of structured binding reliably will be possible with C++23.
+     *         Even a partial implementation, covering only `std::tuple_element` is surprisingly
+     *         complicated, due to the built-in limit checks. What do do with a `tuple<>`?
+     */
+    template<class TUP, size_t siz =std::tuple_size<TUP>::value>
+    struct _Probe_TupleProtocol
+      { };
+  }
+  template<class TUP>
+  using enable_if_TupleProtocol = std::void_t<_Probe_TupleProtocol<std::decay_t<TUP>>>;
+  
+  /** Trait template to detect a »tuple-like« type,
+   *  which can be used in structured bindings.
+   * @note we check only one precondition: the support for `std::tuple_size`
+   */
+  template<class X,          typename =void>
+  struct is_Structured
+    : std::false_type
+    { };
+    
+  template<class TUP>
+  struct is_Structured<TUP,  enable_if_TupleProtocol<TUP>>
+    : std::true_type
+    { };
+  
   
   /** Trait template for detecting a typelist type.
    *  For example, this allows to write specialisations
