@@ -26,10 +26,13 @@
 #include "steam/engine/diagnostic-buffer-provider.hpp"
 #include "steam/engine/buffhandle-attach.hpp"
 //#include "lib/format-cout.hpp"
+#include "lib/test/diagnostic-output.hpp"/////////////////////TODO
 //#include "lib/util.hpp"
 
 
 //using std::string;
+using std::tuple;/////////////TODO
+ using std::array;
 
 
 namespace steam {
@@ -77,13 +80,20 @@ namespace test  {
           
           // Type setup to build a suitable FeedManifold
           using Buffer = long;
-          
+/////////////////////////////////////////////////////////////////////////////////TODO
+  using T1 = tuple<int,double>;
+  using T2 = array<int*,3>;
+  using T3 = int;
+  using T4 = int*;
+  using T5 = lib::HeteroData<int*>;
+/////////////////////////////////////////////////////////////////////////////////TODO
           auto fun_singleOut = [&](Buffer* buff) { *buff = r1; };
           using M1 = FeedManifold<decltype(fun_singleOut)>;
           CHECK (not M1::hasInput());
           CHECK (not M1::hasParam());
-          M1 m1{};
+          M1 m1{fun_singleOut};
           CHECK (1 == m1.outBuff.array().size());
+SHOW_EXPR(m1.outArgs)
           CHECK (nullptr == m1.outArgs );
 //        CHECK (m1.inArgs );                              // does not compile because storage field is not provided
 //        CHECK (m1.param );
@@ -96,6 +106,16 @@ namespace test  {
           m1.outBuff.createAt (0, buff);
           CHECK (m1.outBuff[0].isValid());
           CHECK (m1.outBuff[0].accessAs<long>() == -55);
+          
+SHOW_TYPE(M1::ArgI)
+SHOW_TYPE(M1::TupI)
+SHOW_TYPE(M1::ArgO)
+SHOW_TYPE(M1::TupO)
+          m1.connect();
+SHOW_EXPR(m1.outArgs)
+SHOW_EXPR(m1.outBuff[0])
+SHOW_EXPR(util::showAdr(*buff))
+SHOW_EXPR(util::showAdr(*m1.outBuff[0]))
         }
     };
   

@@ -85,10 +85,14 @@
 #include "lib/meta/function.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/meta/typeseq-util.hpp"
+#include "lib/meta/variadic-helper.hpp"
+#include "lib/meta/generator.hpp"
+#include "lib/test/test-helper.hpp"
 //#include "lib/several.hpp"
 
 //#include <utility>
 //#include <array>
+#include <tuple>
 
 
 ////////////////////////////////TICKET #826  12/2024 the invocation sequence has been reworked and reoriented for integration with the Scheduler
@@ -108,8 +112,12 @@ namespace engine {
     using std::remove_reference_t;
     using lib::meta::enable_if;
     using lib::meta::is_Structured;
+    using lib::meta::forEachIDX;
+    using lib::meta::TySeq;
     using std::is_pointer;
     using std::is_reference;
+    using std::remove_pointer_t;
+    using std::tuple_element_t;
     using std::tuple_size_v;
     using std::void_t;
     using std::__and_;
@@ -128,16 +136,66 @@ namespace engine {
     
     template<typename B>
     struct is_Buffer
-      : __and_<__not_<is_pointer<B>>
-              ,__not_<is_reference<B>>
-              ,std::is_default_constructible<B>
+      : __and_<is_pointer<B>
               ,__not_<_Fun<B>>
+              ,std::is_default_constructible<remove_pointer_t<B>>
               >
       { };
     
     
     
+    template<class TUP, template<class> class COND>
+    struct isAllElements
+      {
+        template<typename>
+        struct AndAll;
+        template<size_t...idx>
+        struct AndAll<std::index_sequence<idx...>>
+          {
+        static constexpr bool value = 
+            __and_<COND<tuple_element_t<idx,TUP>> ...
+                       >::value;
+          };
+        using Elms = std::make_index_sequence<tuple_size_v<TUP>>;
+        static constexpr bool value = AndAll<Elms>::value; 
+      };
     
+    template<class TUP,  typename SEL = void>
+    struct is_StructBuffs
+      : std::false_type
+      { };
+    template<class TUP>
+    struct is_StructBuffs<TUP,  enable_if<is_Structured<TUP>> > 
+      : isAllElements<TUP, is_Buffer>
+      { };
+    
+    
+    template<class X,  typename SEL = void>
+    struct StructType
+      {
+//        static lib::test::TypeDebugger<X> kacki;
+        
+        using Seq = TySeq<X>;
+        using Tup = std::tuple<X>;
+      };
+    
+    template<class TUP>
+    struct StructType<TUP,   enable_if<is_Structured<TUP>> >
+      {
+//        static lib::test::TypeDebugger<TUP> drecky;
+        
+        template<typename>
+        struct AllZ;
+        template<size_t...idx>
+        struct AllZ<std::index_sequence<idx...>>
+          {
+            using Seq = TySeq<tuple_element_t<idx,TUP> ...>;
+          };
+        
+        using Elms = std::make_index_sequence<tuple_size_v<TUP>>;
+        using Seq = typename AllZ<Elms>::Seq;
+        using Tup = TUP;
+      };
     
     /** Helper to pick up the parameter dimensions from the processing function
      * @remark this is the rather simple yet common case that media processing
@@ -170,18 +228,27 @@ namespace engine {
         struct _ArgTrait<PAR,   enable_if<is_Value<PAR>>>
           {
             using Buff = PAR; ////////////////////////////////OOO not correct, remove this!
+            using Args = TySeq<PAR>;
             enum{ SIZ = 1 };
           };
         template<class BUF>
-        struct _ArgTrait<BUF*,  enable_if<is_Buffer<BUF>>>
+        struct _ArgTrait<BUF*,  enable_if<is_Buffer<BUF*>>>
           {
             using Buff = BUF;
+            using Args = TySeq<BUF*>;
             enum{ SIZ = 1 };
           };
+//        template<class TUP>
+//        struct _ArgTrait<TUP,   enable_if<is_StructBuffs<TUP>>>
+//          {
+//            using Args = typename StructType<TUP>::Seq;
+//            enum{ SIZ = std::tuple_size_v<TUP> };
+//          };
         template<class BUF, size_t N>
         struct _ArgTrait<std::array<BUF*,N>>
           {
             using Buff = BUF;
+            using Args = TySeq<BUF>;///////////////////////////OOO Schmuh!!!
             enum{ SIZ = N };
           };
         
@@ -202,7 +269,7 @@ namespace engine {
         struct _Case<SIG,   enable_if<is_BinaryFun<SIG>>>
           {
             enum{ SLOT_O = 1
-                , SLOT_I = is_Value<_Arg<SIG,0>>()? 1 : 0
+                , SLOT_I = is_StructBuffs<_Arg<SIG,0>>::value? 0 : 1                    ////////OOO maybe derive directly from std::conditional?
             };
           };
         template<class SIG>
@@ -216,6 +283,9 @@ namespace engine {
         using SigI = _Arg<FUN,_Case<Sig>::SLOT_I>;
         using SigO = _Arg<FUN,_Case<Sig>::SLOT_O>;
         using SigP = _Arg<FUN, 0>;
+        using ArgI = typename _ArgTrait<SigI>::Args;
+        using ArgO = typename _ArgTrait<SigO>::Args;
+        using ArgP = typename _ArgTrait<SigP>::Args;
         
         using BuffI = typename _ArgTrait<SigI>::Buff;
         using BuffO = typename _ArgTrait<SigO>::Buff;
@@ -238,7 +308,7 @@ namespace engine {
     struct ParamStorage
       {
         using ParSig = typename _ProcFun<FUN>::SigP;
-        ParSig param;
+        ParSig param{};
       };
     
     template<class FUN>
@@ -248,7 +318,7 @@ namespace engine {
         using ArgSig = typename _ProcFun<FUN>::SigI;
         
         BuffS  inBuff;
-        ArgSig inArgs;
+        ArgSig inArgs{};
       };
     
     template<class FUN>
@@ -258,7 +328,7 @@ namespace engine {
         using ArgSig = typename _ProcFun<FUN>::SigO;
         
         BuffS  outBuff;
-        ArgSig outArgs;
+        ArgSig outArgs{};
       };
     
     template<class X>
@@ -307,9 +377,78 @@ namespace engine {
     : FeedManifold_StorageSetup<FUN>
     {
       using _Trait = _ProcFun<FUN>;
+      using _F = FeedManifold;
       
       static constexpr bool hasInput() { return _Trait::hasInput(); }
       static constexpr bool hasParam() { return _Trait::hasParam(); }
+      
+      using ArgI  = typename _Trait::SigI;
+      using ArgO  = typename _Trait::SigO;
+      enum{ FAN_I = _Trait::FAN_I
+          , FAN_O = _Trait::FAN_O
+          };
+      
+      
+      FUN process;
+      
+      template<typename...INIT>
+      FeedManifold (INIT&& ...funSetup)
+        : process{forward<INIT> (funSetup)...}
+        { }
+      
+        
+      using TupI = typename StructType<ArgI>::Tup;
+      using TupO = typename StructType<ArgO>::Tup;
+      
+      template<size_t i, class ARG>
+      auto&
+      accessArg (ARG& arg)
+        {
+          if constexpr (is_Structured<ARG>())
+            return std::get<i> (arg);
+          else
+            return arg;
+        }
+      
+      void
+      connect()
+        {
+          if constexpr (hasInput())
+          {
+            forEachIDX<TupI> ([&](auto i)
+                                {
+                                  using BuffI = remove_pointer_t<tuple_element_t<i, TupI>>;
+                                  accessArg<i> (_F::inArgs) = & _F::inBuff[i].template accessAs<BuffI>();
+                                });
+//            if constexpr (is_Structured<ArgI>())
+//              for (uint i=0; i<FAN_I; ++i)
+//                std::get<i> (_F::inArgs) = & _F::inBuff[i].template accessAs<BuffI>();
+//            else
+//              _F::inArgs =  & _F::inBuff[0].template accessAs<BuffI>();
+          }
+          // always wire output buffer(s)
+          {
+            forEachIDX<TupO> ([&](auto i)
+                                {
+                                  using BuffO = remove_pointer_t<tuple_element_t<i, TupO>>;
+                                  accessArg<i> (_F::outArgs) = & _F::outBuff[i].template accessAs<BuffO>();
+                                });
+//            if constexpr (is_Structured<ArgO>())
+//              for (uint i=0; i<FAN_O; ++i)
+//                std::get<i> (_F::outArgs) = & _F::outBuff[i].template accessAs<BuffO>();
+//            else
+//              _F::outArgs =  & _F::inBuff[0].template accessAs<BuffI>();
+          }
+        }
+      
+      void
+      invoke()
+        {
+          if constexpr (hasInput())
+            process (_F::inArgs, _F::outArgs);
+          else
+            process (_F::outArgs);
+        }
     };
   
   

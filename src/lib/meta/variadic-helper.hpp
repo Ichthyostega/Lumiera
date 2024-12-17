@@ -116,24 +116,6 @@ namespace meta {
   
   
   
-//////////////////////////TICKET #943 : temporary workaround until full C++14 compliance (need constexpr)
-  template<typename X>
-  constexpr inline X const&
-  max (X const& a, X const& b)
-    {
-      return a < b? b : a;
-    }
-  
-  template<typename X>
-  constexpr inline X const&
-  min (X const& a, X const& b)
-    {
-      return b < a? b : a;
-    }
-//////////////////////////TICKET #943 : temporary workaround until full C++14 compliance (need constexpr)
-  
-  
-  
   
   
   
@@ -169,7 +151,7 @@ namespace meta {
       using FilledWith = typename BuildIndexSeq<n-1>::template FilledWith<x>::template AppendElm<x>;
       
       template<size_t c>
-      using First = typename BuildIndexSeq<min(c,n)>::Ascending;
+      using First = typename BuildIndexSeq<std::min(c,n)>::Ascending;
       
       template<size_t c>
       using After = typename BuildIndexSeq< (n>c)? n-c : 0>::template OffsetBy<c>;
@@ -250,7 +232,6 @@ namespace meta {
   
   
   
-  
   /* ==== Rebinding Variadic Arguments ==== **/
   
   /**
@@ -276,6 +257,65 @@ namespace meta {
   
   
   
+  
+
+  /* ==== Invoke with index from variadic ==== **/
+  
+  /** helper to invoke a functor, passing instances of std::integral_constant
+   * @tparam N size of the index-sequence to use for instantiation
+   */
+  template<size_t N>
+  class WithIdxSeq
+    {
+      template<class FUN, size_t...idx>
+      static void
+      invoke (FUN&& fun, std::index_sequence<idx...>)
+        {
+          (fun (std::integral_constant<size_t,idx>{}), ...);
+        }
+      
+    public:
+      template<class FUN>
+      static void
+      invoke (FUN&& fun)
+        {
+          invoke (std::forward<FUN>(fun), std::make_index_sequence<N>{});
+        }
+    };
+  
+  /**
+   * Invoke a function (or λ) with index numbers derived from some variadic count.
+   * Notably this construct can be used for compile-time iteration over a structure.
+   * Instances of `std::integral_constant` are passed in sequence to the functor.
+   * The _size_ of the index sequence is derived from the following sources
+   * - if the type \a TTX is _tuple-like,_ then std::tuple_size<TTX> is used
+   * - otherwise, if the type is a loki-style type sequence or type list,
+   *   the number of type nodes is used
+   * - otherwise, as fall-back the number of template parameters is used
+   */
+  template<class TTX, class FUN>
+  inline void
+  forEachIDX (FUN&& fun)
+  {
+    auto N = []{
+                  if constexpr (is_Structured<TTX>())
+                    return size_t(std::tuple_size<TTX>::value);
+                  else
+                  if constexpr (lib::meta::is_Typelist<TTX>::value)
+                    return lib::meta::count<typename TTX::List>::value;
+                  else
+                    { // Fallback: rebind template arguments into a type sequence
+                      using Seq = typename RebindVariadic<TySeq, TTX>::Type;
+                      return size_t(count<typename Seq::List>::value);
+                    }
+               };
+    
+    WithIdxSeq<N()>::invoke (std::forward<FUN> (fun));
+  }
+  
+  
+  
+
   
   
   
