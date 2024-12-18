@@ -106,21 +106,20 @@ namespace engine {
   namespace {// Introspection helpers....
     
     using lib::meta::_Fun;
+    using lib::meta::enable_if;
     using lib::meta::is_UnaryFun;
     using lib::meta::is_BinaryFun;
     using lib::meta::is_TernaryFun;
-    using std::remove_reference_t;
-    using lib::meta::enable_if;
     using lib::meta::is_Structured;
     using lib::meta::forEachIDX;
     using lib::meta::ElmTypes;
+    using lib::meta::Tagged;
     using lib::meta::TySeq;
     using std::is_pointer;
     using std::is_reference;
+    using std::remove_reference_t;
     using std::remove_pointer_t;
     using std::tuple_element_t;
-    using std::tuple_size_v;
-    using std::void_t;
     using std::__and_;
     using std::__not_;
     
@@ -129,7 +128,6 @@ namespace engine {
     struct is_Value
       : __and_<__not_<is_pointer<V>>
               ,__not_<is_reference<V>>
-              ,__not_<is_Structured<V>>
               ,std::is_default_constructible<V>
               ,std::is_copy_assignable<V>
               >
@@ -146,115 +144,49 @@ namespace engine {
     
     
     
-    template<class TUP, template<class> class COND>
-    struct isAllElements
-      {
-        template<typename>
-        struct AndAll;
-        template<size_t...idx>
-        struct AndAll<std::index_sequence<idx...>>
-          {
-        static constexpr bool value = 
-            __and_<COND<tuple_element_t<idx,TUP>> ...
-                       >::value;
-          };
-        using Elms = std::make_index_sequence<tuple_size_v<TUP>>;
-        static constexpr bool value = AndAll<Elms>::value; 
-      };
-    
-    template<class TUP,  typename SEL = void>
-    struct is_StructBuffs
-      : std::false_type
-      { };
-    template<class TUP>
-    struct is_StructBuffs<TUP,  enable_if<is_Structured<TUP>> > 
-      : isAllElements<TUP, is_Buffer>
-      { };
-    
-    
-    template<class X,  typename SEL = void>
-    struct StructType
-      {
-        using Seq = TySeq<X>;
-        using Tup = std::tuple<X>;
-      };
-    
-    template<class TUP>
-    struct StructType<TUP,   enable_if<is_Structured<TUP>> >
-      {
-        template<typename>
-        struct AllZ;
-        template<size_t...idx>
-        struct AllZ<std::index_sequence<idx...>>
-          {
-            using Seq = TySeq<tuple_element_t<idx,TUP> ...>;
-          };
-        
-        using Elms = std::make_index_sequence<tuple_size_v<TUP>>;
-        using Seq = typename AllZ<Elms>::Seq;
-        using Tup = TUP;
-      };
-    
-    /** Helper to pick up the parameter dimensions from the processing function
-     * @remark this is the rather simple yet common case that media processing
-     *         is done by a function, which takes an array of input and output
-     *         buffer pointers with a common type; this simple case is used
-     *         7/2024 for prototyping and validate the design.
-     * @tparam FUN a _function-like_ object, expected to accept two arguments,
-     *         which both are arrays of buffer pointers (input, output).
+    /**
+     * Trait template to analyse and adapt to the given processing function.
+     * The detection logic encoded here attempts to figure out the meaning of
+     * the function arguments by their arrangement and type. As a base rule,
+     * the arguments are expected in the order: Parameters, Input, Output
+     * - a single argument function can only be a data generator
+     * - a binary function can either be a processor input -> output,
+     *   or accept parameters at «slot-0» and provide output at «slot-1»
+     * - a ternary function is expected to accept Parameters, Input, Output.
+     * @tparam FUN a _function-like_ object, expected to accept 1 - 3 arguments,
+     *         which all may be simple types, tuples or arrays.
+     * @note »Buffers« are always accepted by pointer, which allows
+     *         to distinguish parameter and data «slots«
      */
     template<class FUN>
     struct _ProcFun
       {
-        static_assert(_Fun<FUN>()         , "something funktion-like required");
+        static_assert(_Fun<FUN>()           , "something funktion-like required");
         static_assert(0 <  _Fun<FUN>::ARITY , "function with at least one argument expected");
         static_assert(3 >= _Fun<FUN>::ARITY , "function with up to three arguments accepted");
         
         using Sig  = typename _Fun<FUN>::Sig;
         
-        template<class SIG, size_t i>
-        using _Arg = typename lib::meta::Pick<typename _Fun<SIG>::Args, i>::Type;
+        template<size_t i>
+        using _Arg = typename lib::meta::Pick<typename _Fun<Sig>::Args, i>::Type;
         
+        template<size_t i, template<class> class COND>
+        using AllElements = typename ElmTypes<_Arg<i>>::template AndAll<COND>;
         
-        template<class ARG,  typename SEL =void>
-        struct _ArgTrait
-          {
-            static_assert(not sizeof(ARG), "processing function expected to take parameters, "
-                                           "buffer-poiinters or tuples or arrays of these");
-          };
-        template<class PAR>
-        struct _ArgTrait<PAR,   enable_if<is_Value<PAR>>>
-          {
-            using Buff = PAR; ////////////////////////////////OOO not correct, remove this!
-            using Args = TySeq<PAR>;
-            enum{ SIZ = 1 };
-          };
-        template<class BUF>
-        struct _ArgTrait<BUF*,  enable_if<is_Buffer<BUF*>>>
-          {
-            using Buff = BUF;
-            using Args = TySeq<BUF*>;
-            enum{ SIZ = 1 };
-          };
-//        template<class TUP>
-//        struct _ArgTrait<TUP,   enable_if<is_StructBuffs<TUP>>>
-//          {
-//            using Args = typename StructType<TUP>::Seq;
-//            enum{ SIZ = std::tuple_size_v<TUP> };
-//          };
-        template<class BUF, size_t N>
-        struct _ArgTrait<std::array<BUF*,N>>
-          {
-            using Buff = BUF;
-            using Args = TySeq<BUF>;///////////////////////////OOO Schmuh!!!
-            enum{ SIZ = N };
-          };
-        
-        
+        template<size_t i>
+        static constexpr bool nonEmpty   =   ElmTypes<_Arg<i>>::SIZ;
+        template<size_t i>
+        static constexpr bool is_BuffSlot =  AllElements<i, is_Buffer>();
+        template<size_t i>
+        static constexpr bool is_ParamSlot = AllElements<i, is_Value>();
+
+        /**
+         * Detect use-case as indicated by the function signature
+         */
         template<class SIG,  typename SEL =void>
         struct _Case
           {
-            static_assert(not sizeof(SIG), "use case could not be determined from function stignature");
+            static_assert (not sizeof(SIG), "use case could not be determined from function signature");
           };
         template<class SIG>
         struct _Case<SIG,   enable_if<is_UnaryFun<SIG>>>
@@ -267,7 +199,7 @@ namespace engine {
         struct _Case<SIG,   enable_if<is_BinaryFun<SIG>>>
           {
             enum{ SLOT_O = 1
-                , SLOT_I = typename ElmTypes<_Arg<SIG,0>>::template AndAll<is_Buffer>()? 0 : 1
+                , SLOT_I = (nonEmpty<0> and is_BuffSlot<0>)? 0 : 1
             };
           };
         template<class SIG>
@@ -278,19 +210,16 @@ namespace engine {
             };
           };
         
-        using SigI = _Arg<FUN,_Case<Sig>::SLOT_I>;
-        using SigO = _Arg<FUN,_Case<Sig>::SLOT_O>;
-        using SigP = _Arg<FUN, 0>;
-        using ArgI = typename _ArgTrait<SigI>::Args;
-        using ArgO = typename _ArgTrait<SigO>::Args;
-        using ArgP = typename _ArgTrait<SigP>::Args;
+        using SigI = _Arg<_Case<Sig>::SLOT_I>;
+        using SigO = _Arg<_Case<Sig>::SLOT_O>;
+        using SigP = _Arg< 0>;
+        using ArgI = typename ElmTypes<SigI>::Seq;
+        using ArgO = typename ElmTypes<SigO>::Seq;
+        using ArgP = typename ElmTypes<SigP>::Seq;
         
-        using BuffI = typename _ArgTrait<SigI>::Buff;
-        using BuffO = typename _ArgTrait<SigO>::Buff;
-        
-        enum{ FAN_I = _ArgTrait<SigI>::SIZ
-            , FAN_O = _ArgTrait<SigO>::SIZ
-            , FAN_P = _ArgTrait<SigP>::SIZ
+        enum{ FAN_I = ElmTypes<SigI>::SIZ
+            , FAN_O = ElmTypes<SigO>::SIZ
+            , FAN_P = ElmTypes<SigP>::SIZ
             , SLOT_I = _Case<Sig>::SLOT_I
             , SLOT_O = _Case<Sig>::SLOT_O
             , SLOT_P =  0
@@ -299,9 +228,22 @@ namespace engine {
         
         static constexpr bool hasInput() { return SLOT_I != SLOT_O; }
         static constexpr bool hasParam() { return 0 < SLOT_I; }
+        
+        /* ========== |consistency checks| ========== */
+        static_assert (nonEmpty<SLOT_O> or nonEmpty<SLOT_I> or nonEmpty<SLOT_P>
+                      ,"At least one slot of the function must accept data");
+        static_assert (is_BuffSlot<SLOT_O>, "Output slot of the function must accept buffer pointers");
+        static_assert (is_BuffSlot<SLOT_I>, "Input slot of the function must accept buffer pointers");
+        static_assert (is_ParamSlot<SLOT_P> or not hasParam()
+                      ,"Param slot must accept value data");
+        
+        using BuffO = typename ArgO::List::Head;
+        using BuffI = typename std::conditional<hasInput(), typename ArgI::List::Head, BuffO>::type;  /////////////////////////TODO obsolete ... remove after switch
       };
 
     
+    
+    /** FeedManifold building block: hold parameter data */
     template<class FUN>
     struct ParamStorage
       {
@@ -330,7 +272,7 @@ namespace engine {
       };
     
     template<class X>
-    struct NotProvided : lib::meta::NullType { };
+    using NotProvided = Tagged<lib::meta::NullType, X>;
     
     template<bool yes, class B>
     using Provide_if = std::conditional_t<yes, B, NotProvided<B>>;
@@ -394,10 +336,6 @@ namespace engine {
         : process{forward<INIT> (funSetup)...}
         { }
       
-        
-      using TupI = typename StructType<ArgI>::Tup;
-      using TupO = typename StructType<ArgO>::Tup;
-      
       template<size_t i, class ARG>
       auto&
       accessArg (ARG& arg)
@@ -407,6 +345,10 @@ namespace engine {
           else
             return arg;
         }
+      
+      using TupI = typename ElmTypes<ArgI>::Tup;
+      using TupO = typename ElmTypes<ArgO>::Tup;
+      
       
       void
       connect()
@@ -418,11 +360,6 @@ namespace engine {
                                   using BuffI = remove_pointer_t<tuple_element_t<i, TupI>>;
                                   accessArg<i> (_F::inArgs) = & _F::inBuff[i].template accessAs<BuffI>();
                                 });
-//            if constexpr (is_Structured<ArgI>())
-//              for (uint i=0; i<FAN_I; ++i)
-//                std::get<i> (_F::inArgs) = & _F::inBuff[i].template accessAs<BuffI>();
-//            else
-//              _F::inArgs =  & _F::inBuff[0].template accessAs<BuffI>();
           }
           // always wire output buffer(s)
           {
@@ -431,11 +368,6 @@ namespace engine {
                                   using BuffO = remove_pointer_t<tuple_element_t<i, TupO>>;
                                   accessArg<i> (_F::outArgs) = & _F::outBuff[i].template accessAs<BuffO>();
                                 });
-//            if constexpr (is_Structured<ArgO>())
-//              for (uint i=0; i<FAN_O; ++i)
-//                std::get<i> (_F::outArgs) = & _F::outBuff[i].template accessAs<BuffO>();
-//            else
-//              _F::outArgs =  & _F::inBuff[0].template accessAs<BuffI>();
           }
         }
       
@@ -465,8 +397,8 @@ namespace engine {
   struct SimpleFunctionInvocationAdapter
     : MAN
     {
-      using BuffI = typename _ProcFun<FUN>::BuffI;
-      using BuffO = typename _ProcFun<FUN>::BuffO;
+      using BuffI = remove_pointer_t<typename _ProcFun<FUN>::BuffI>;
+      using BuffO = remove_pointer_t<typename _ProcFun<FUN>::BuffO>;
       
       enum{ N = MAN::STORAGE_SIZ
           , FAN_I = _ProcFun<FUN>::FAN_I
@@ -475,7 +407,8 @@ namespace engine {
       
       static_assert(FAN_I <= N and FAN_O <= N);
       
-      using ArrayI = typename _ProcFun<FUN>::SigI;
+//    using ArrayI = typename _ProcFun<FUN>::SigI;
+      using ArrayI = typename _Fun<FUN>::Args::List::Head; ///////////////////TODO workaround for obsolete code, about to be removed
       using ArrayO = typename _ProcFun<FUN>::SigO;
       
       

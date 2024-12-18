@@ -270,6 +270,12 @@ namespace meta {
       using BAS::BAS;
     };
   
+  template<class BAS, typename TAG =void>
+  struct Tagged
+    : BAS
+    {
+      using BAS::BAS;
+    };
   
   
   
