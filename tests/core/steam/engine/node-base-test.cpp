@@ -17,7 +17,7 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/test/test-helper.hpp"
+#include "lib/iter-zip.hpp"
 #include "lib/meta/function.hpp"
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/turnout.hpp"
@@ -25,15 +25,18 @@
 #include "steam/engine/feed-manifold.hpp"
 #include "steam/engine/diagnostic-buffer-provider.hpp"
 #include "steam/engine/buffhandle-attach.hpp"
+#include "lib/test/test-helper.hpp"
 //#include "lib/format-cout.hpp"
 #include "lib/test/diagnostic-output.hpp"/////////////////////TODO
+#include "lib/format-util.hpp"///////////////////////////////TODO
 #include "lib/util.hpp"
 
 
 //using std::string;
-using std::tuple;/////////////TODO
- using std::array;
+using std::tuple;
+using std::array;
 using util::isSameAdr;
+using lib::test::showType;
 
 
 namespace steam {
@@ -117,6 +120,7 @@ namespace test  {
           m1.invoke();                                     // invoke the adapted processing function (fun_singleOut)
           CHECK (buff.accessAs<long>() == r1);             // result: the random number r1 was written into the buffer.
           
+          
           // Example-2: adapt a function to process input -> output buffer
           auto fun_singleInOut = [](Buffer* in, Buffer* out) { *out = *in + 1; };
           using M2 = FeedManifold<decltype(fun_singleInOut)>;
@@ -135,8 +139,6 @@ namespace test  {
           // and get a new buffer to capture the output
           BuffHandle buffOut = provider.lockBufferFor<Buffer> (-99);
           CHECK (buff.accessAs<long>()    ==  r1);
-SHOW_EXPR(buff.accessAs<long>())
-SHOW_EXPR(buffOut.accessAs<long>())
           CHECK (buffOut.accessAs<long>() == -55);  ///////////////////////////////////////OOO should be -99 --> aliasing of buffer meta records due to bug with hash generation
           
           // configure the Manifold-2 with this input and output buffer
@@ -154,10 +156,97 @@ SHOW_EXPR(buffOut.accessAs<long>())
           CHECK (*m2.outArgs == -55);                      ////////////////////////////////OOO should be -99
           
           m2.invoke();
-SHOW_EXPR(r1)
-SHOW_EXPR(*m1.outArgs)
-SHOW_EXPR(*m2.outArgs)
           CHECK (buffOut.accessAs<long>() == r1+1);
+          
+          
+          // Example-3: accept complex buffer setup
+          using Sequence = array<Buffer,3>;
+          using Channels = array<Buffer*,3>;
+          using Compound = tuple<Sequence*, Buffer*>;
+          auto fun_complexInOut = [](Channels in, Compound out)
+                                    {
+                                      auto [seq,extra] = out;
+                                      for (auto [i,b] : lib::izip(in))
+                                        {
+                                          (*seq)[i] = *b + 1;
+                                          *extra += *b;
+                                        }
+                                    };
+          using M3 = FeedManifold<decltype(fun_complexInOut)>;
+          CHECK (    M3::hasInput());
+          CHECK (not M3::hasParam());
+          CHECK (3 == M3::FAN_I);
+          CHECK (2 == M3::FAN_O);
+          CHECK (showType<M3::ArgI>() == "array<long*, 3ul>"_expect);
+          CHECK (showType<M3::ArgO>() == "tuple<array<long, 3ul>*, long*>"_expect);
+          // instantiate...
+          M3 m3{fun_complexInOut};
+          CHECK (3 == m3.inBuff.array().size());
+          CHECK (2 == m3.outBuff.array().size());
+          
+          // use existing buffers and one additional buffer for input
+          BuffHandle buffI0 = buff;
+          BuffHandle buffI1 = buffOut;
+          BuffHandle buffI2 = provider.lockBufferFor<Buffer> (-22);
+SHOW_EXPR(buffI0.accessAs<long>())
+SHOW_EXPR(buffI1.accessAs<long>())
+SHOW_EXPR(buffI2.accessAs<long>())
+          CHECK (buffI0.accessAs<long>() == r1  );         // (result from Example-1)
+          CHECK (buffI1.accessAs<long>() == r1+1);         // (result from Example-2)
+          CHECK (buffI2.accessAs<long>() == -55 );  ///////////////////////////////////////OOO should be -22
+          // prepare a compound buffer and an extra buffer for output...
+          BuffHandle buffO0 = provider.lockBufferFor<Sequence> (Sequence{-111,-222,-333});
+          BuffHandle buffO1 = provider.lockBufferFor<Buffer> (-33);
+SHOW_EXPR(util::join(buffO0.accessAs<Sequence>()))
+SHOW_EXPR(buffO1.accessAs<long>())
+          CHECK ((buffO0.accessAs<Sequence>() == Sequence{-111,-222,-333}));
+          CHECK (buffO1.accessAs<long>() == -55 );  ///////////////////////////////////////OOO should be -33
+           
+          // configure the Manifold-3 with these input and output buffers
+          m3.inBuff.createAt (0, buffI0);
+          m3.inBuff.createAt (1, buffI1);
+          m3.inBuff.createAt (2, buffI2);
+          m3.outBuff.createAt(0, buffO0);
+          m3.outBuff.createAt(1, buffO1);
+          m3.connect();
+SHOW_EXPR(m3.inArgs)
+SHOW_EXPR(m3.outArgs)
+          // Verify data exposed prior to invocation....
+          auto& [ia0,ia1,ia2] = m3.inArgs;
+          auto& [oa0,oa1]     = m3.outArgs;
+          auto& [o00,o01,o02] = *oa0;
+SHOW_EXPR(ia0)
+SHOW_EXPR(ia1)
+SHOW_EXPR(ia2)
+SHOW_EXPR(oa0)
+SHOW_EXPR(o00)
+SHOW_EXPR(o01)
+SHOW_EXPR(o02)
+SHOW_EXPR(oa1)
+          CHECK (*ia0 == r1  );
+          CHECK (*ia1 == r1+1);
+          CHECK (*ia2 == -55 );       /////////////////////////////////////////////////////OOO should be -22
+          CHECK ( o00 == -111);
+          CHECK ( o01 == -222);
+          CHECK ( o02 == -333);
+          CHECK (*oa1 == -55 );       /////////////////////////////////////////////////////OOO should be -33
+          
+          m3.invoke();
+SHOW_EXPR(ia0)
+SHOW_EXPR(ia1)
+SHOW_EXPR(ia2)
+SHOW_EXPR(oa0)
+SHOW_EXPR(o00)
+SHOW_EXPR(o01)
+SHOW_EXPR(o02)
+SHOW_EXPR(oa1)
+          CHECK (*ia0 == r1  );                            // Input buffers unchanged
+          CHECK (*ia1 == r1+1);
+          CHECK (*ia2 == -55 );       /////////////////////////////////////////////////////OOO should be -22
+          CHECK ( o00 == *ia0+1);                          // Output buffers as processed by the function
+          CHECK ( o01 == *ia1+1);
+          CHECK ( o02 == *ia2+1);
+          CHECK (*oa1 == -55 + *ia0+*ia1+*ia2); ///////////////////////////////////////////OOO should be -33
         }
     };
   
