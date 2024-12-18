@@ -113,6 +113,7 @@ namespace engine {
     using lib::meta::enable_if;
     using lib::meta::is_Structured;
     using lib::meta::forEachIDX;
+    using lib::meta::ElmTypes;
     using lib::meta::TySeq;
     using std::is_pointer;
     using std::is_reference;
@@ -266,7 +267,7 @@ namespace engine {
         struct _Case<SIG,   enable_if<is_BinaryFun<SIG>>>
           {
             enum{ SLOT_O = 1
-                , SLOT_I = is_StructBuffs<_Arg<SIG,0>>::value? 0 : 1                    ////////OOO maybe derive directly from std::conditional?
+                , SLOT_I = typename ElmTypes<_Arg<SIG,0>>::template AndAll<is_Buffer>()? 0 : 1
             };
           };
         template<class SIG>
