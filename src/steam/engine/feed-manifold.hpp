@@ -144,6 +144,7 @@ namespace engine {
     
     
     
+    
     template<class TUP, template<class> class COND>
     struct isAllElements
       {
@@ -173,8 +174,6 @@ namespace engine {
     template<class X,  typename SEL = void>
     struct StructType
       {
-//        static lib::test::TypeDebugger<X> kacki;
-        
         using Seq = TySeq<X>;
         using Tup = std::tuple<X>;
       };
@@ -182,8 +181,6 @@ namespace engine {
     template<class TUP>
     struct StructType<TUP,   enable_if<is_Structured<TUP>> >
       {
-//        static lib::test::TypeDebugger<TUP> drecky;
-        
         template<typename>
         struct AllZ;
         template<size_t...idx>

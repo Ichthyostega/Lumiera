@@ -671,6 +671,11 @@ return: 0
 END
 
 
+TEST "variadic type manipulations" VariadicHelper_test <<END
+return: 0
+END
+
+
 TEST "variadic argument manipulation" VariadicArgumentPicker_test <<END
 out:  4╎N<1>──.─┼N<2>──.─┼N<3>──.─┼N<3>──.─┤
 out:  4╎N<0>──.─┼N<1>──.─┼N<2>──.─┼N<3>──.─┤

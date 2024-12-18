@@ -232,6 +232,8 @@ namespace meta {
   
   
   
+  
+  
   /* ==== Rebinding Variadic Arguments ==== **/
   
   /**
@@ -258,7 +260,101 @@ namespace meta {
   
   
   
-
+  
+  
+  /* ==== Build and Rebuild variadic type sequences ==== **/
+  
+  /**
+   * Variadic type sequence builder.
+   * This metaprogramming helper template provides an unified view
+   * to handle _»tuple-like« types and variadic _type sequences._
+   * - the constant #SIZ gives the number of elements
+   * - the nested type #Idx can be used as _index sequence_
+   * - #Seq is a _variadic type sequence_ with the extracted types
+   * - #Tup is a std::tuple over these types
+   * - the nested template #Apply wraps each type into another template
+   * - #Rebind likewise instantiates another template with the element types
+   * - #AndAll applies a predicate and combines the result with _logical and_
+   * - #OrAll similarly evaluates _logical or_ on the application results
+   */
+  template<class X,  typename =void>
+  struct ElmTypes
+    {
+      static constexpr size_t SIZ = 1;
+      using Idx = std::index_sequence<SIZ>;
+      using Seq = TySeq<X>;
+      using Tup = std::tuple<X>;
+      
+      template<template<class> class META>
+      using Apply = TySeq<META<X>>;
+      template<template<typename...> class O>
+      using Rebind = O<X>;
+      template<template<class> class PRED>
+      using AndAll = std::__and_<PRED<X>>;
+      template<template<class> class PRED>
+      using OrAll  = std::__or_<PRED<X>>;
+    };
+  
+  /** Partial specialisation to handle type sequences */
+  template<typename...TYPES>
+  struct ElmTypes<TySeq<TYPES...>>
+    {
+      static constexpr size_t SIZ = sizeof...(TYPES);
+      using Idx = std::make_index_sequence<SIZ>;
+      using Seq = TySeq<TYPES...>;
+      using Tup = std::tuple<TYPES...>;
+      
+      template<template<class> class META>
+      using Apply = TySeq<META<TYPES>...>;
+      
+      template<template<typename...> class O>
+      using Rebind = typename lib::meta::RebindVariadic<O, Seq>::Type;
+      
+      template<template<class> class PRED>
+      using AndAll = typename ElmTypes<Apply<PRED>>::template Rebind<std::__and_>;
+      
+      template<template<class> class PRED>
+      using OrAll  = typename ElmTypes<Apply<PRED>>::template Rebind<std::__or_>;
+    };
+  
+  /** partial specialisation to handle types
+   *  supporting the C++ »tuple protocol«
+   */
+  template<class TUP>
+  struct ElmTypes<TUP,    enable_if_TupleProtocol<TUP>>
+    {
+      template<typename>
+      struct Extract;
+      template<size_t...idx>
+      struct Extract<std::index_sequence<idx...>>
+        {
+          using ElmTypes = TySeq<typename std::tuple_element<idx,TUP>::type ...>;
+        };
+      
+      static constexpr size_t SIZ = std::tuple_size<TUP>::value;
+      
+      using Idx = std::make_index_sequence<SIZ>;
+      using Seq = typename Extract<Idx>::ElmTypes;
+      using Tup = typename RebindVariadic<std::tuple, Seq>::Type;
+      
+      template<template<class> class META>
+      using Apply = typename ElmTypes<Seq>::template Apply<META>;
+      
+      template<template<typename...> class O>
+      using Rebind = typename RebindVariadic<O, Seq>::Type;
+      
+      template<template<class> class PRED>
+      using AndAll = typename ElmTypes<Apply<PRED>>::template Rebind<std::__and_>;
+      
+      template<template<class> class PRED>
+      using OrAll  = typename ElmTypes<Apply<PRED>>::template Rebind<std::__or_>;
+    };
+  
+  
+  
+  
+  
+  
   /* ==== Invoke with index from variadic ==== **/
   
   /** helper to invoke a functor, passing instances of std::integral_constant

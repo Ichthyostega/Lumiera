@@ -27,12 +27,13 @@
 #include "steam/engine/buffhandle-attach.hpp"
 //#include "lib/format-cout.hpp"
 #include "lib/test/diagnostic-output.hpp"/////////////////////TODO
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 
 //using std::string;
 using std::tuple;/////////////TODO
  using std::array;
+using util::isSameAdr;
 
 
 namespace steam {
@@ -78,22 +79,42 @@ namespace test  {
           // some random numbers to test...
           long r1 = rani(100);
           
-          // Type setup to build a suitable FeedManifold
+          // Prepare setup to build a suitable FeedManifold
           using Buffer = long;
 /////////////////////////////////////////////////////////////////////////////////TODO
   using T1 = tuple<int,double>;
   using T2 = array<int*,3>;
   using T3 = int;
   using T4 = int*;
-  using T5 = lib::HeteroData<int*>;
+  using T5 = lib::HeteroData<int*,long,double*>;
 /////////////////////////////////////////////////////////////////////////////////TODO
+    using lib::meta::ElmTypes;
+    using S1 = ElmTypes<T5>;
+SHOW_TYPE(S1)
+SHOW_TYPE(S1::Seq)
+SHOW_TYPE(S1::Tup)
+SHOW_TYPE(S1::Idx)
+    using S1A = S1::Apply<is_Buffer>;
+SHOW_TYPE(S1A)
+    using S1AR = ElmTypes<S1A>::Rebind<std::__and_>;
+SHOW_TYPE(S1AR)
+SHOW_EXPR(S1AR::value)
+    using S1AA = S1::AndAll<is_Buffer>;
+SHOW_TYPE(S1AA)
+SHOW_EXPR(bool(S1AA()))
+    using S1OA = S1::OrAll<is_Buffer>;
+SHOW_TYPE(S1OA)
+SHOW_EXPR(S1OA::value)
+ 
           auto fun_singleOut = [&](Buffer* buff) { *buff = r1; };
+          
+          // Example-1: a FeedManifold to adapt a simple generator function
           using M1 = FeedManifold<decltype(fun_singleOut)>;
           CHECK (not M1::hasInput());
           CHECK (not M1::hasParam());
+          // instantiate...
           M1 m1{fun_singleOut};
           CHECK (1 == m1.outBuff.array().size());
-SHOW_EXPR(m1.outArgs)
           CHECK (nullptr == m1.outArgs );
 //        CHECK (m1.inArgs );                              // does not compile because storage field is not provided
 //        CHECK (m1.param );
@@ -103,19 +124,31 @@ SHOW_EXPR(m1.outArgs)
           CHECK (buff.isValid());
           CHECK (buff.accessAs<long>() == -55);
           
-          m1.outBuff.createAt (0, buff);
+          m1.outBuff.createAt (0, buff);                   // plant a copy of the BuffHandle into the output slot
           CHECK (m1.outBuff[0].isValid());
           CHECK (m1.outBuff[0].accessAs<long>() == -55);
           
-SHOW_TYPE(M1::ArgI)
-SHOW_TYPE(M1::TupI)
-SHOW_TYPE(M1::ArgO)
-SHOW_TYPE(M1::TupO)
-          m1.connect();
-SHOW_EXPR(m1.outArgs)
-SHOW_EXPR(m1.outBuff[0])
-SHOW_EXPR(util::showAdr(*buff))
-SHOW_EXPR(util::showAdr(*m1.outBuff[0]))
+          m1.connect();                                    // instruct the manifold to connect buffers to arguments
+          CHECK (isSameAdr (m1.outArgs, *buff));
+          CHECK (*m1.outArgs == -55);
+          
+          m1.invoke();                                     // invoke the adapted processing function (fun_singleOut)
+          CHECK (buff.accessAs<long>() == r1);             // result: the random number r1 was written into the buffer.
+          
+          // Example-2: adapt a function to process input -> output buffer
+          auto fun_singleInOut = [](Buffer* in, Buffer* out) { *out = *in; };
+          using M2 = FeedManifold<decltype(fun_singleInOut)>;
+          CHECK (    M2::hasInput());///////////////////////////TODO broken due to overly convoluted logic!!!!
+          CHECK (not M2::hasParam());
+          CHECK (1 == M2::FAN_I);
+          CHECK (1 == M2::FAN_O);
+          // instantiate...
+          M2 m2{fun_singleInOut};
+//          CHECK (1 == m2.inBuff.array().size());   ///////////TODO : need to »lift« plain types for simplfied logic!!!!
+          CHECK (1 == m2.outBuff.array().size());
+//          CHECK (nullptr == m2.inArgs );
+          CHECK (nullptr == m2.outArgs );
+
         }
     };
   
