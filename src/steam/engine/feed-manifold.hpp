@@ -25,7 +25,7 @@
  ** the aforementioned »network of Render Nodes.« At this point, external functionality must actually
  ** be connected to internal structures: this purpose is served by the FeedManifold.
  ** 
- ** This amounts to an tow-stage adaptation process. Firstly, the plug-in for an external library
+ ** This amounts to an two-stage adaptation process. Firstly, the plug-in for an external library
  ** has to wrap-up and package the library functions into an _invocation functor_ — which thereby
  ** creates a _low-level Specification_ of the functionality to invoke. This functor is picked up
  ** and stored as a prototype within the associated render node. More specifically, each node can
@@ -46,7 +46,7 @@
  **   might have to create a wrapper type in cases where the external library requires to use a
  **   specific constructor function for buffers (if this requirement turns out as problematic,
  **   there is leeway to pass constructor arguments to such a wrapper — yet Lumiera will insist
- **   on managing the memory, so frameworks insisting on their own memory management will have
+ **   on managing the memory, so frameworks enforcing their own memory management will have
  **   to be broken up and side-stepped, in order to be usable with Lumiera).
  ** - when several and even mixed types of a kind must be given, e.g. several buffers or
  **   several parameters, then the processing functor should be written such as to
@@ -56,12 +56,12 @@
  ** A suitable storage layout is chosen at compile type, based on the given functor type.
  ** - essentially, FeedManifold is structured storage with some default-wiring.
  ** - the trait functions #hasInput() and #hasParam() should be used by downstream code
- **   to find out if some part of the storage is present and branch accordingly
+ **   to find out if some part of the storage is present and branch accordingly...
  ** @todo 12/2024 figure out how constructor-arguments can be passed flexibly
  ** @remark in the first draft version of the Render Engine from 2009/2012, there was an entity
- **         called `BuffTable`, which however provided additional buffer-management functionality.
+ **         called `BuffTable`, which however provided additional buffer-management capabilities.
  **         This name describes well the basic functionality, which can be hard to see with all
- **         this additional meta-programming related to the flexible functor signature. When it
+ **         the additional meta-programming related to the flexible functor signature. When it
  **         comes to actual invocation, we collect input buffers from predecessor nodes and
  **         we prepare output buffers, and then we pass both to a processing function.
  **      
@@ -70,6 +70,7 @@
  **       We have still to reach the point were the engine becomes operational!!!
  ** @see NodeBase_test
  ** @see weaving-pattern-builder.hpp
+ ** @see lib::meta::ElmTypes in variadic-helper.hpp : uniform processing of »tuple-like« data
  */
 
 
@@ -158,6 +159,7 @@ namespace engine {
      *         which all may be simple types, tuples or arrays.
      * @note »Buffers« are always accepted by pointer, which allows
      *         to distinguish parameter and data «slots«
+     * @see VariadicHelper_test::rebuild_variadic()
      */
     template<class FUN>
     struct _ProcFun
@@ -247,33 +249,46 @@ namespace engine {
   
   
   
+  /**
+   * Configuration context for a FeedManifold.
+   * This type-rebinding helper provides a storage configuration
+   * specifically tailored to serve the invocation of \a FUN
+   * @note storage segments for input and parameters are only present
+   *       when the given function is classified by _ProcFun<FUN>
+   *       as handling input and / or parameters.
+   * @remark since BuffHandle is not default-constructible, but must be
+   *       retrieved from a BufferProvider rather, a chunk of uninitialised
+   *       storage is used to accept the `BuffHandle`s allocated and populated
+   *       with results from preceding Nodes.
+   */
   template<class FUN>
   struct _StorageSetup
     {
       using _Trait = _ProcFun<FUN>;
-      enum{ FAN_I = _Trait::FAN_I
-          , FAN_O = _Trait::FAN_O
-          };
       
       static constexpr bool hasInput() { return _Trait::hasInput(); }
       static constexpr bool hasParam() { return _Trait::hasParam(); }
       
-      using ParSig = typename _Trait::SigP;
+      enum{ FAN_P = hasParam()? _Trait::FAN_P : 0
+          , FAN_I = hasInput()? _Trait::FAN_I : 0
+          , FAN_O = _Trait::FAN_O
+          };
       
       template<size_t fan>
       using BuffS = lib::UninitialisedStorage<BuffHandle, fan>;
-
+                                           // ^^^ can not be default-constructed
       using BuffI = BuffS<FAN_I>;
       using BuffO = BuffS<FAN_O>;
       
-      using ArgI  = typename _Trait::SigI;
+      using Param = std::conditional_t<hasParam(), typename _Trait::SigP, std::tuple<>>;
+      using ArgI  = std::conditional_t<hasInput(), typename _Trait::SigI, std::tuple<>>;
       using ArgO  = typename _Trait::SigO;
       
       
       /** FeedManifold building block: hold parameter data */
       struct ParamStorage
         {
-          ParSig param;
+          Param param;
           
           ParamStorage() = default;
           
@@ -283,12 +298,14 @@ namespace engine {
             { }
         };
       
+      /** FeedManifold building block: hold input buffer pointers */
       struct BufferSlot_Input
         {
           BuffI inBuff;
           ArgI  inArgs{};
         };
       
+      /** FeedManifold building block: hold output buffer pointers */
       struct BufferSlot_Output
         {
           BuffO outBuff;
@@ -296,7 +313,7 @@ namespace engine {
         };
       
       template<typename F>
-      using enable_if_hasParam  = typename lib::meta::enable_if_c<_ProcFun<std::decay_t<F>>::hasParam()>::Type;
+      using enable_if_hasParam  = typename lib::meta::enable_if_c<_ProcFun<F>::hasParam()>::type;
       
       template<class X>
       using NotProvided = Tagged<lib::meta::NullType, X>;
@@ -304,13 +321,14 @@ namespace engine {
       template<bool yes, class B>
       using Provide_if = std::conditional_t<yes, B, NotProvided<B>>;
       
-      using FeedOutput =                        BufferSlot_Output;
-      using FeedInput  = Provide_if<hasInput(), BufferSlot_Input>;
-      using FeedParam  = Provide_if<hasParam(), ParamStorage>;
+      using FeedOutput =                         BufferSlot_Output;
+      using FeedInput  = Provide_if<hasInput(),  BufferSlot_Input>;
+      using FeedParam  = Provide_if<hasParam(),  ParamStorage>;
       
       /**
        * Data Storage block for the FeedManifold
        * Flexibly configured based on the processing function.
+       * @remark mixed-in as base-class
        */
       struct Storage
         : util::NonCopyable
@@ -325,10 +343,9 @@ namespace engine {
             : process{forward<F> (fun)}
             { }
           
-          template<typename F, typename...INIT,     typename =disable_if_self<Storage,F>
-                                              ,     typename =enable_if_hasParam<F>>
-          Storage (F&& fun, INIT&& ...paramInit)
-            : FeedParam{forward<INIT> (paramInit)...}
+          template<typename F,         typename =enable_if_hasParam<F>>
+          Storage (Param p, F&& fun)
+            : FeedParam{move (p)}
             , process{forward<F> (fun)}
             { }
         };
@@ -339,10 +356,33 @@ namespace engine {
      * Adapter to connect input/output buffers to a processing functor backed by an external library.
      * Essentially, this is structured storage tailored specifically to a given functor signature.
      * Tables of buffer handles are provided for the downstream code to store results received from
-     * preceding odes or to pick up calculated data after the invocation. From these BuffHandle entries,
+     * preceding nodes or to pick up calculated data after invocation. From these BuffHandle entries,
      * buffer pointers are retrieved and packaged suitably for use by the wrapped invocation functor.
-     * This setup is used by a »weaving pattern« within the invocation of a processing node for the
-     * purpose of media processing or data calculation.
+     * This setup is intended for use by a »weaving pattern« within the invocation of a processing node
+     * for the purpose of media processing or data calculation.
+     * 
+     * # Interface exposed to down-stream code
+     * Data fields are typed to suit the given functor \a FUN, and are present only when needed
+     * - `param` holds a parameter value or tuple of values, as passed to the constructor
+     * - `inBuff` and `outBuff` are chunks of \ref UninitialisedStorage with suitable dimension
+     *   to hold an array of \ref BuffHandle to organise input- and output-buffers
+     * - the constants `FAN_P`, `FAN_I` and `FAN_O` reflect the number of individual elements
+     *   connected for parameters, inputs and outputs respectively.
+     * - `inBuff.array()` and `outBuff.array()` expose the storage for handles as std::array,
+     *   with suitable dimension, subscript-operator and iteration. Note however that the
+     *   storage itself is _uninitialised_ and existing handles must be _emplaced_ by
+     *   invoking copy-construction e.g. `outBuff.createAt (idx, givenHandle)`
+     * - after completely populating all BuffHandle slots this way, FeedManifold::connect()
+     *   will pick up buffer pointers and transfer them into the associated locations in
+     *   the input and output arguments `inArgs` and `outArgs`
+     * - finally, FeedManifold::invoke() will trigger the stored processing functor,
+     *   passing `param`, `inArgs` and `outArgs` as appropriate.
+     * The `constexpr` functions #hasInput() and #hasParam() can be used to find out
+     * if the functor was classified to take inputs and / or parameters.
+     * @note destructors of parameter values will be invoked, but nothing will be done
+     *       for the BuffHandle elements; the caller is responsible to perform the
+     *       buffer management protocol, i.e. invoke BuffHandle::emit()
+     *       and BuffHandle::release()
      * 
      * @todo WIP-WIP 12/24 now adding support for arbitrary parameters  /////////////////////////////////////TICKET #1386
      */
@@ -369,8 +409,10 @@ namespace engine {
       
       using ArgI  = typename _S::ArgI;
       using ArgO  = typename _S::ArgO;
+      using Param = typename _S::Param;
       enum{ FAN_I = _S::FAN_I
           , FAN_O = _S::FAN_O
+          , FAN_P = _S::FAN_P
           };
       
       static constexpr bool hasInput() { return _S::hasInput(); }
@@ -415,10 +457,16 @@ namespace engine {
       void
       invoke()
         {
-          if constexpr (hasInput())
-            _F::process (_F::inArgs, _F::outArgs);
+          if constexpr (hasParam())
+            if constexpr (hasInput())
+              _F::process (_F::param, _F::inArgs, _F::outArgs);
+            else
+              _F::process (_F::param, _F::outArgs);
           else
-            _F::process (_F::outArgs);
+            if constexpr (hasInput())
+              _F::process (_F::inArgs, _F::outArgs);
+            else
+              _F::process (_F::outArgs);
         }
     };
   

@@ -37,6 +37,7 @@ using std::tuple;
 using std::array;
 using util::isSameAdr;
 using lib::test::showType;
+using lib::izip;
 
 
 namespace steam {
@@ -75,6 +76,23 @@ namespace test  {
       
       
       /** @test the FeedManifold as adapter between Engine and processing library
+       *      - bind local λ with various admissible signatures
+       *      - construct specifically tailored FeedManifold types
+       *      - use the DiagnosticBufferProvider for test buffers
+       *      - create FeedManifold instance, passing the λ and additional parameters
+       *      - connect BuffHandle for these buffers into the FeedManifold instance
+       *      - trigger invocation of the function
+       *      - look into the buffers and verify effect
+       * @remark within each Render Node, a FeedManifold is used as junction
+       *  to tap into processing functionality provided by external libraries.
+       *  Those will be adapted by a Plug-in, to be loaded by the Lumiera core
+       *  application. The _signature of a functor_ linked to the FeedManifold
+       *  is used as kind of a _low-level-specification_ how to invoke external
+       *  processing functions. Obviously this must be complemented by a more
+       *  high-level descriptor, which is interpreted by the Builder to connect
+       *  a suitable structure of Render Nodes.
+       * @see feed-manifold.h
+       * @see NodeLinkage_test
        */
       void
       verify_FeedManifold()
@@ -84,11 +102,15 @@ namespace test  {
           using Buffer = long;
           
           
+           //______________________________________________________________
           // Example-1: a FeedManifold to adapt a simple generator function
           auto fun_singleOut = [&](Buffer* buff) { *buff = r1; };
           using M1 = FeedManifold<decltype(fun_singleOut)>;
           CHECK (not M1::hasInput());
           CHECK (not M1::hasParam());
+          CHECK (0 == M1::FAN_P);
+          CHECK (0 == M1::FAN_I);
+          CHECK (1 == M1::FAN_O);
           // instantiate...
           M1 m1{fun_singleOut};
           CHECK (1 == m1.outBuff.array().size());
@@ -113,6 +135,7 @@ namespace test  {
           CHECK (buff.accessAs<long>() == r1);             // result: the random number r1 was written into the buffer.
           
           
+           //_____________________________________________________________
           // Example-2: adapt a function to process input -> output buffer
           auto fun_singleInOut = [](Buffer* in, Buffer* out) { *out = *in + 1; };
           using M2 = FeedManifold<decltype(fun_singleInOut)>;
@@ -151,6 +174,7 @@ namespace test  {
           CHECK (buffOut.accessAs<long>() == r1+1);
           
           
+           //______________________________________
           // Example-3: accept complex buffer setup
           using Sequence = array<Buffer,3>;
           using Channels = array<Buffer*,3>;
@@ -158,7 +182,7 @@ namespace test  {
           auto fun_complexInOut = [](Channels in, Compound out)
                                     {
                                       auto [seq,extra] = out;
-                                      for (auto [i,b] : lib::izip(in))
+                                      for (auto [i,b] : izip(in))
                                         {
                                           (*seq)[i] = *b + 1;
                                           *extra += *b;
@@ -216,6 +240,76 @@ namespace test  {
           CHECK ( o01 == *ia1+1);
           CHECK ( o02 == *ia2+1);
           CHECK (*oa1 == -55 + *ia0+*ia1+*ia2); ///////////////////////////////////////////OOO should be -33
+          
+          
+           //_________________________________
+          // Example-4: pass a parameter tuple
+          using Params = tuple<short,long>;
+          // Note: demonstrates mix of complex params, an array for input, but just a simple output buffer
+          auto fun_ParamInOut = [](Params param, Channels in, Buffer* out)
+                                    {
+                                      auto [s,l] = param;
+                                      *out = 0;
+                                      for (Buffer* b : in)
+                                        *out += (s+l) * (*b);
+                                    };
+          using M4 = FeedManifold<decltype(fun_ParamInOut)>;
+          CHECK (M4::hasInput());
+          CHECK (M4::hasParam());
+          CHECK (2 == M4::FAN_P);
+          CHECK (3 == M4::FAN_I);
+          CHECK (1 == M4::FAN_O);
+          CHECK (showType<M4::ArgI>()  == "array<long*, 3ul>"_expect);
+          CHECK (showType<M4::ArgO>()  == "long *"_expect);
+          CHECK (showType<M4::Param>() == "tuple<short, long>"_expect);
+          
+          // Note: instantiate passing param values as extra arguments
+          short r2 = 1+rani(10);
+          long  r3 = rani(1000);
+          M4 m4{Params{r2,r3}, fun_ParamInOut};            // parameters directly given by-value
+          auto& [p0,p1] = m4.param;
+          CHECK (p0 == r2);                                // parameter values exposed through manifold
+          CHECK (p1 == r3);
+          
+          // wire-in existing buffers for this example
+          m4.inBuff.createAt (0, buffI0);
+          m4.inBuff.createAt (1, buffI1);
+          m4.inBuff.createAt (2, buffI2);
+          m4.outBuff.createAt(0, buffO1);
+          CHECK (*ia0 == r1  );                            // existing values in the buffers....
+          CHECK (*ia1 == r1+1);
+          CHECK (*ia2 == -55 );       /////////////////////////////////////////////////////OOO should be -22
+          CHECK (*oa1 == -55 + *ia0+*ia1+*ia2); ///////////////////////////////////////////OOO should be -33
+          
+          m4.connect();
+          m4.invoke();                                     // processing combines input buffers with parameters
+          CHECK (*oa1 == (r2+r3) * (r1 + r1+1 -55));  /////////////////////////////////////OOO should be -22
+          
+          
+           //______________________________________
+          // Example-5: simple parameter and output
+          auto fun_singleParamOut = [&](short param, Buffer* buff) { *buff = param-1; };
+          using M5 = FeedManifold<decltype(fun_singleParamOut)>;
+          CHECK (not M5::hasInput());
+          CHECK (    M5::hasParam());
+          CHECK (1 == M5::FAN_P);
+          CHECK (0 == M5::FAN_I);
+          CHECK (1 == M5::FAN_O);
+          CHECK (showType<M5::ArgI>()  == "tuple<>"_expect);
+          CHECK (showType<M5::ArgO>()  == "long *"_expect);
+          CHECK (showType<M5::Param>() == "short"_expect);
+          
+          // instantiate, directly passing param value
+          M5 m5{r2, fun_singleParamOut};
+          // wire with one output buffer
+          m5.outBuff.createAt(0, buffO1);
+          m5.connect();
+          CHECK (m5.param    ==  r2);                      // the parameter value passed to the ctor
+//        CHECK (m5.inArgs );                              // does not compile because storage field is not provided
+          CHECK (*m5.outArgs == *oa1);                     // still previous value sitting in the buffer...
+          
+          m5.invoke();
+          CHECK (*oa1 == r2 - 1);                          // processing has placed result based on param into output buffer
         }
     };
   
