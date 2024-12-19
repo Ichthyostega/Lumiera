@@ -103,6 +103,7 @@
 #include "steam/engine/buffhandle-attach.hpp"  /////////////////OOO why do we need to include this? we need the accessAs<TY>() template function
 #include "lib/test/test-helper.hpp" ////////////////////////////OOO TODO added for test
 #include "lib/format-string.hpp"
+#include "lib/iter-zip.hpp"
 //#include "lib/util-foreach.hpp"
 //#include "lib/iter-adapter.hpp"
 //#include "lib/meta/function.hpp"
@@ -125,6 +126,7 @@ namespace engine {
 //  using lib::Literal;
   using lib::Several;
   using lib::Depend;
+  using lib::izip;
   using util::_Fmt;
   using util::max;
   
@@ -238,7 +240,6 @@ namespace engine {
    * actual NodeBuilder and PortBuilder allows to introduce extension points
    * and helps to abstract away internal technical details of the invocation.
    * @tparam POL allocation and context configuration policy
-   * @tparam N   maximum number of input and output slots
    * @tparam FUN function or invocation adapter to invoke
    */
   template<class POL, class FUN>
@@ -346,10 +347,10 @@ namespace engine {
           REQUIRE (providers.size() == buffTypes.size());
           auto outTypes = DataBuilder<POL, BuffDescr>{leadPorts.policyConnect()}
                                      .reserve (buffTypes.size());
-          uint i=0;
-          for (auto& typeConstructor : buffTypes)
+          
+          for (auto& [i,typeConstructor] : izip(buffTypes))
             outTypes.append (
-              typeConstructor (providers[i++]));
+              typeConstructor (providers[i]));
           
           ENSURE (leadPorts.size() == FunSpec::FAN_I);
           ENSURE (outTypes.size()  == FunSpec::FAN_O);

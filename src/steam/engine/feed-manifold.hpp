@@ -107,6 +107,7 @@ namespace engine {
     
     using lib::meta::_Fun;
     using lib::meta::enable_if;
+    using lib::meta::disable_if_self;
     using lib::meta::is_UnaryFun;
     using lib::meta::is_BinaryFun;
     using lib::meta::is_TernaryFun;
@@ -240,55 +241,99 @@ namespace engine {
         using BuffO = typename ArgO::List::Head;
         using BuffI = typename std::conditional<hasInput(), typename ArgI::List::Head, BuffO>::type;  /////////////////////////TODO obsolete ... remove after switch
       };
-
-    
-    
-    /** FeedManifold building block: hold parameter data */
-    template<class FUN>
-    struct ParamStorage
-      {
-        using ParSig = typename _ProcFun<FUN>::SigP;
-        ParSig param{};
-      };
-    
-    template<class FUN>
-    struct BufferSlot_Input
-      {
-        using BuffS = lib::UninitialisedStorage<BuffHandle, _ProcFun<FUN>::FAN_I>;
-        using ArgSig = typename _ProcFun<FUN>::SigI;
-        
-        BuffS  inBuff;
-        ArgSig inArgs{};
-      };
-    
-    template<class FUN>
-    struct BufferSlot_Output
-      {
-        using BuffS = lib::UninitialisedStorage<BuffHandle, _ProcFun<FUN>::FAN_O>;
-        using ArgSig = typename _ProcFun<FUN>::SigO;
-        
-        BuffS  outBuff;
-        ArgSig outArgs{};
-      };
-    
-    template<class X>
-    using NotProvided = Tagged<lib::meta::NullType, X>;
-    
-    template<bool yes, class B>
-    using Provide_if = std::conditional_t<yes, B, NotProvided<B>>;
     
   }//(End)Introspection helpers.
   
   
+  
+  
   template<class FUN>
-  struct FeedManifold_StorageSetup
-    : util::NonCopyable
-    ,                                       BufferSlot_Output<FUN>
-    , Provide_if<_ProcFun<FUN>::hasInput(), BufferSlot_Input<FUN>>
-    , Provide_if<_ProcFun<FUN>::hasParam(), ParamStorage<FUN>>
+  struct _StorageSetup
     {
+      using _Trait = _ProcFun<FUN>;
+      enum{ FAN_I = _Trait::FAN_I
+          , FAN_O = _Trait::FAN_O
+          };
       
+      static constexpr bool hasInput() { return _Trait::hasInput(); }
+      static constexpr bool hasParam() { return _Trait::hasParam(); }
+      
+      using ParSig = typename _Trait::SigP;
+      
+      template<size_t fan>
+      using BuffS = lib::UninitialisedStorage<BuffHandle, fan>;
+
+      using BuffI = BuffS<FAN_I>;
+      using BuffO = BuffS<FAN_O>;
+      
+      using ArgI  = typename _Trait::SigI;
+      using ArgO  = typename _Trait::SigO;
+      
+      
+      /** FeedManifold building block: hold parameter data */
+      struct ParamStorage
+        {
+          ParSig param;
+          
+          ParamStorage() = default;
+          
+          template<typename...INIT>
+          ParamStorage (INIT&& ...paramInit)
+            : param{forward<INIT> (paramInit)...}
+            { }
+        };
+      
+      struct BufferSlot_Input
+        {
+          BuffI inBuff;
+          ArgI  inArgs{};
+        };
+      
+      struct BufferSlot_Output
+        {
+          BuffO outBuff;
+          ArgO  outArgs{};
+        };
+      
+      template<typename F>
+      using enable_if_hasParam  = typename lib::meta::enable_if_c<_ProcFun<std::decay_t<F>>::hasParam()>::Type;
+      
+      template<class X>
+      using NotProvided = Tagged<lib::meta::NullType, X>;
+      
+      template<bool yes, class B>
+      using Provide_if = std::conditional_t<yes, B, NotProvided<B>>;
+      
+      using FeedOutput =                        BufferSlot_Output;
+      using FeedInput  = Provide_if<hasInput(), BufferSlot_Input>;
+      using FeedParam  = Provide_if<hasParam(), ParamStorage>;
+      
+      /**
+       * Data Storage block for the FeedManifold
+       * Flexibly configured based on the processing function.
+       */
+      struct Storage
+        : util::NonCopyable
+        , FeedOutput
+        , FeedInput
+        , FeedParam
+        {
+          FUN process;
+          
+          template<typename F>
+          Storage (F&& fun)
+            : process{forward<F> (fun)}
+            { }
+          
+          template<typename F, typename...INIT,     typename =disable_if_self<Storage,F>
+                                              ,     typename =enable_if_hasParam<F>>
+          Storage (F&& fun, INIT&& ...paramInit)
+            : FeedParam{forward<INIT> (paramInit)...}
+            , process{forward<F> (fun)}
+            { }
+        };
     };
+  
   
     /**
      * Adapter to connect input/output buffers to a processing functor backed by an external library.
@@ -314,27 +359,23 @@ namespace engine {
   
   template<class FUN>
   struct FeedManifold
-    : FeedManifold_StorageSetup<FUN>
+    : _StorageSetup<FUN>::Storage
     {
-      using _Trait = _ProcFun<FUN>;
-      using _F = FeedManifold;
+      using _S = _StorageSetup<FUN>;
+      using _F = typename _S::Storage;
       
-      static constexpr bool hasInput() { return _Trait::hasInput(); }
-      static constexpr bool hasParam() { return _Trait::hasParam(); }
+      /** pass-through constructor */
+      using _S::Storage::Storage;
       
-      using ArgI  = typename _Trait::SigI;
-      using ArgO  = typename _Trait::SigO;
-      enum{ FAN_I = _Trait::FAN_I
-          , FAN_O = _Trait::FAN_O
+      using ArgI  = typename _S::ArgI;
+      using ArgO  = typename _S::ArgO;
+      enum{ FAN_I = _S::FAN_I
+          , FAN_O = _S::FAN_O
           };
       
+      static constexpr bool hasInput() { return _S::hasInput(); }
+      static constexpr bool hasParam() { return _S::hasParam(); }
       
-      FUN process;
-      
-      template<typename...INIT>
-      FeedManifold (INIT&& ...funSetup)
-        : process{forward<INIT> (funSetup)...}
-        { }
       
       template<size_t i, class ARG>
       auto&
@@ -375,14 +416,34 @@ namespace engine {
       invoke()
         {
           if constexpr (hasInput())
-            process (_F::inArgs, _F::outArgs);
+            _F::process (_F::inArgs, _F::outArgs);
           else
-            process (_F::outArgs);
+            _F::process (_F::outArgs);
         }
     };
   
   
   
+  /**
+   * Builder-Prototype to create FeedManifold instances.
+   * This »Prototype« becomes part of the Turnout / WeavingPattern
+   * and holds processing- and parameter-functor instances as configuration.
+   * The Processing-Functor will be copied into the actual FeedManifold instance
+   * for each Node invocation.
+   * @tparam FUN type of the data processing-functor
+   * @tparam PAM type of an optional parameter-setup functor
+   */
+  template<class FUN, class PAM>
+  class FeedPrototype
+    : util::MoveOnly
+    {
+      FUN procFun_;
+      PAM paramFun_;
+      
+      ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1386 : elaborate setup / binding for parameter-creation
+    };
+  
+    
   /**
    * Adapter to handle a simple yet common setup for media processing
    * - somehow we can invoke processing as a simple function

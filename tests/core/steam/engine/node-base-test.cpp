@@ -79,21 +79,13 @@ namespace test  {
       void
       verify_FeedManifold()
         {
-          // some random numbers to test...
+          // Prepare setup to build a suitable FeedManifold...
           long r1 = rani(100);
-          
-          // Prepare setup to build a suitable FeedManifold
           using Buffer = long;
-/////////////////////////////////////////////////////////////////////////////////TODO
-  using T1 = tuple<int,double>;
-  using T2 = array<int*,3>;
-  using T3 = int;
-  using T4 = int*;
-  using T5 = lib::HeteroData<int*,long,double*>;
-/////////////////////////////////////////////////////////////////////////////////TODO
-          auto fun_singleOut = [&](Buffer* buff) { *buff = r1; };
+          
           
           // Example-1: a FeedManifold to adapt a simple generator function
+          auto fun_singleOut = [&](Buffer* buff) { *buff = r1; };
           using M1 = FeedManifold<decltype(fun_singleOut)>;
           CHECK (not M1::hasInput());
           CHECK (not M1::hasParam());
@@ -188,17 +180,12 @@ namespace test  {
           BuffHandle buffI0 = buff;
           BuffHandle buffI1 = buffOut;
           BuffHandle buffI2 = provider.lockBufferFor<Buffer> (-22);
-SHOW_EXPR(buffI0.accessAs<long>())
-SHOW_EXPR(buffI1.accessAs<long>())
-SHOW_EXPR(buffI2.accessAs<long>())
           CHECK (buffI0.accessAs<long>() == r1  );         // (result from Example-1)
           CHECK (buffI1.accessAs<long>() == r1+1);         // (result from Example-2)
           CHECK (buffI2.accessAs<long>() == -55 );  ///////////////////////////////////////OOO should be -22
           // prepare a compound buffer and an extra buffer for output...
           BuffHandle buffO0 = provider.lockBufferFor<Sequence> (Sequence{-111,-222,-333});
           BuffHandle buffO1 = provider.lockBufferFor<Buffer> (-33);
-SHOW_EXPR(util::join(buffO0.accessAs<Sequence>()))
-SHOW_EXPR(buffO1.accessAs<long>())
           CHECK ((buffO0.accessAs<Sequence>() == Sequence{-111,-222,-333}));
           CHECK (buffO1.accessAs<long>() == -55 );  ///////////////////////////////////////OOO should be -33
            
@@ -209,20 +196,10 @@ SHOW_EXPR(buffO1.accessAs<long>())
           m3.outBuff.createAt(0, buffO0);
           m3.outBuff.createAt(1, buffO1);
           m3.connect();
-SHOW_EXPR(m3.inArgs)
-SHOW_EXPR(m3.outArgs)
           // Verify data exposed prior to invocation....
           auto& [ia0,ia1,ia2] = m3.inArgs;
           auto& [oa0,oa1]     = m3.outArgs;
           auto& [o00,o01,o02] = *oa0;
-SHOW_EXPR(ia0)
-SHOW_EXPR(ia1)
-SHOW_EXPR(ia2)
-SHOW_EXPR(oa0)
-SHOW_EXPR(o00)
-SHOW_EXPR(o01)
-SHOW_EXPR(o02)
-SHOW_EXPR(oa1)
           CHECK (*ia0 == r1  );
           CHECK (*ia1 == r1+1);
           CHECK (*ia2 == -55 );       /////////////////////////////////////////////////////OOO should be -22
@@ -232,14 +209,6 @@ SHOW_EXPR(oa1)
           CHECK (*oa1 == -55 );       /////////////////////////////////////////////////////OOO should be -33
           
           m3.invoke();
-SHOW_EXPR(ia0)
-SHOW_EXPR(ia1)
-SHOW_EXPR(ia2)
-SHOW_EXPR(oa0)
-SHOW_EXPR(o00)
-SHOW_EXPR(o01)
-SHOW_EXPR(o02)
-SHOW_EXPR(oa1)
           CHECK (*ia0 == r1  );                            // Input buffers unchanged
           CHECK (*ia1 == r1+1);
           CHECK (*ia2 == -55 );       /////////////////////////////////////////////////////OOO should be -22
