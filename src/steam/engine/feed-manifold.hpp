@@ -117,11 +117,13 @@ namespace engine {
     using lib::meta::ElmTypes;
     using lib::meta::Tagged;
     using lib::meta::TySeq;
+    using std::declval;
     using std::is_pointer;
     using std::is_reference;
     using std::remove_reference_t;
     using std::remove_pointer_t;
     using std::tuple_element_t;
+    using std::void_t;
     using std::__and_;
     using std::__not_;
     
@@ -242,6 +244,44 @@ namespace engine {
         
         using BuffO = typename ArgO::List::Head;
         using BuffI = typename std::conditional<hasInput(), typename ArgI::List::Head, BuffO>::type;  /////////////////////////TODO obsolete ... remove after switch
+      };
+    
+    
+    /**
+     * Trait template to handle an _associated parameter functor._
+     * In those cases, where the basic processing function is classified such
+     * as to accept parameter(s), it may be desirable to _generate_ those parameters
+     * at invocation — be it as a fixed parametrisation chosen for this usage, or even
+     * by evaluation of an _Automation function_ for some parameters.
+     * @tparam FUN type of the underlying _processing function_
+     */
+    template<class FUN>
+    struct _ParamFun
+      {
+        using _Proc = _ProcFun<FUN>;
+        
+        static constexpr bool hasParam() { return _Proc::hasParam(); }
+        
+        using Param = std::conditional_t<hasParam(), typename _Proc::ArgP, std::tuple<>>;
+        
+        template<class PF>
+        using isSuitable  = std::is_constructible<Param, decltype(std::declval<PF> (std::declval<TurnoutSystem&>()))>;
+        
+        template<class PF>
+        using isConfigurable = std::is_constructible<bool, PF&>;
+        
+        template<class PF>
+        static bool
+        isActivated (PF const& paramFun)
+          {
+            if constexpr (isSuitable<PF>())
+              { if constexpr (isConfigurable<PF>())
+                  return bool(paramFun);
+                else
+                  return true;
+              }
+            return false;
+          }
       };
     
   }//(End)Introspection helpers.
@@ -485,9 +525,20 @@ namespace engine {
   class FeedPrototype
     : util::MoveOnly
     {
+      using _Trait = _ParamFun<FUN>;
+      using Feed = FeedManifold<FUN>;
+      
       FUN procFun_;
       PAM paramFun_;
       
+      Feed
+      createFeed (TurnoutSystem& turnoutSys)
+        {
+          if constexpr (_Trait::hasParam())
+            if (_Trait::isActivated(paramFun_))
+              return Feed{paramFun_(turnoutSys), procFun_};
+          return Feed{procFun_};
+        }
       ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1386 : elaborate setup / binding for parameter-creation
     };
   
