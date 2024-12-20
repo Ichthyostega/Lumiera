@@ -328,7 +328,6 @@ namespace test  {
       verify_FeedPrototype()
         {
           // Prepare setup to build a suitable FeedManifold...
-          long r1 = rani(100);
           using Buffer = long;
           BufferProvider& provider = DiagnosticBufferProvider::build();
           BuffHandle buff = provider.lockBufferFor<Buffer> (-55);
@@ -336,24 +335,66 @@ namespace test  {
           auto fun_singleParamOut = [](short param, Buffer* buff) { *buff = param-1; };
           using M1 = FeedManifold<decltype(fun_singleParamOut)>;
           using P1 = M1::Prototype;
-          CHECK (    P1::hasParam());
-          CHECK (not P1::hasParamFun());
+          CHECK (    P1::hasParam());                      // checks that the processing-function accepts a parameter
+          CHECK (not P1::hasParamFun());                   // while this prototype has no active param-functor
           CHECK (not P1::canActivate());
           
-          P1 p1{move (fun_singleParamOut)};
+          P1 p1{move (fun_singleParamOut)};                // create the instance of the prototype, moving the functor in
           CHECK (sizeof(p1) <= sizeof(void*));
-          TurnoutSystem turSys{Time::NEVER};
+          TurnoutSystem turSys{Time::NEVER};               // Each Node invocation uses a TurnoutSystem instance....
           
-          M1 m1 = p1.createFeed(turSys);
-          CHECK (m1.param == short{});
-          m1.outBuff.createAt(0, buff);
+          M1 m1 = p1.createFeed(turSys);                   //... and also will create a new FeedManifold from the prototype
+          CHECK (m1.param == short{});                     // In this case here, the param value is default constructed.
+          m1.outBuff.createAt(0, buff);                    // Perform the usual steps for an invocation....
           CHECK (buff.accessAs<long>() == -55);
           m1.connect();
           CHECK (*m1.outArgs == -55);
           
           m1.invoke();
-          CHECK (*m1.outArgs           == 0 - 1);
+          CHECK (*m1.outArgs           == 0 - 1);          // fun_singleParamOut() -> param - 1 and param ≡ 0
           CHECK (buff.accessAs<long>() == 0 - 1);
+          long& calcResult = buff.accessAs<long>();        // for convenience use a reference into the result buffer
+          
+          
+          
+           //_____________________________________
+          // Reconfigure to attach a param-functor
+          long rr{11};                                    // ▽▽▽▽  Note: side-effect
+          auto fun_paramSimple = [&](TurnoutSystem&){ return rr += 1+rani(100); };
+          using P1x = P1::Adapted<decltype(fun_paramSimple)>;
+          CHECK (    P1x::hasParam());
+          CHECK (    P1x::hasParamFun());
+          CHECK (not P1x::canActivate());
+          
+          P1x p1x = p1.moveAdapted (move(fun_paramSimple));
+          M1 m1x = p1x.createFeed(turSys);                 // ◁————————— param-functor invoked here
+          CHECK (rr == m1x.param);                         //            ...as indicated by the side-effect
+          short r1 = m1x.param;
+          
+          // the rest works as always with FeedManifold (which as such is agnostic of the param-functor!)
+          m1x.outBuff.createAt(0, buff);
+          m1x.connect();
+          m1x.invoke();                                    // Invoke the processing functor
+          CHECK (calcResult == r1 - 1);                    // ...which computes fun_singleParamOut() -> param-1
+          
+          // but let's play with the various instances...
+          m1.invoke();                                     // the previous FeedManifold is sill valid and connected
+          CHECK (calcResult ==  0 - 1);                    // and uses its baked in parameter value (0)
+          m1x.invoke();
+          CHECK (calcResult == r1 - 1);                    // as does m1x, without invoking the param-functor
+          
+          // create yet another instance from the prototype...
+          M1 m1y = p1x.createFeed(turSys);                 // ◁————————— param-functor invoked here
+          CHECK (rr == m1y.param);
+          CHECK (r1 < m1y.param);                          //            ...note again the side-effect
+          m1y.outBuff.createAt(0, buff);
+          m1y.connect();
+          m1y.invoke();                                    // ...and so this third FeedManifold instance...
+          CHECK (calcResult == rr - 1);                    // uses yet another baked-in param value;
+          m1x.invoke();                                    // recall that each Node invocation creates a new
+          CHECK (calcResult == r1 - 1);                    // FeedManifold on the stack, since invocations are
+          m1.invoke();                                     // performed concurrently, each with its own set of
+          CHECK (calcResult ==  0 - 1);                    // buffers and parameters.
         }
     };
   

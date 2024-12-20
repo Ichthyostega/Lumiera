@@ -263,7 +263,7 @@ namespace engine {
         
         static constexpr bool hasParam() { return _Proc::hasParam(); }
         
-        using Param = std::conditional_t<hasParam(), typename _Proc::ArgP, std::tuple<>>;
+        using Param = std::conditional_t<hasParam(), typename _Proc::SigP, std::tuple<>>;
         
         template<class PF>
         using Res = typename _Fun<PF>::Ret;
@@ -569,7 +569,7 @@ namespace engine {
         , paramFun_{move (par)}
         { }
       // default move acceptable : pass pre-established setup
-        
+      
       static constexpr bool hasParam()    { return _Trait::hasParam(); }
       static constexpr bool hasParamFun() { return _Trait::template isParamFun<PAM>();  }
       static constexpr bool canActivate() { return _Trait::template canActivate<PAM>(); }
@@ -582,8 +582,29 @@ namespace engine {
         {
           if constexpr (hasParamFun())
             if (_Trait::isActivated(paramFun_))
-              return Feed{paramFun_(turnoutSys), procFun_};
+              return Feed(paramFun_(turnoutSys), procFun_);
           return Feed{procFun_};
+        }
+      
+      
+      template<typename PFX>
+      using Adapted = FeedPrototype<FUN, PFX>;
+      
+      /**
+       * Cross-Builder to add configuration with a given parameter-functor.
+       * @return new FeedPrototype instance outfitted with the current
+       *         processing-functor and the given other param-functor
+       * @warning the current instance is likely **defunct** after this call,
+       *         and should not be used any more, due to the move-construct.
+       * @remark together with the move-ctor of FeedPrototype this helper
+       *         can be used to configure a Prototype in several steps.
+       */
+      template<typename PFX>
+      auto
+      moveAdapted (PFX otherParamFun)
+        {
+          using OtherParamFun = std::decay_t<PFX>;
+          return Adapted<OtherParamFun>{move(procFun_), move(otherParamFun)};
         }
     };
   
