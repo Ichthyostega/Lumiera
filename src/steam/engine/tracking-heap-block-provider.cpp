@@ -43,7 +43,7 @@ namespace engine {
   using Buff = StreamType::ImplFacade::DataBuffer;
   
   
-  namespace { // implementation helpers... 
+  namespace { // implementation helpers...
     
     inline Buff*
     asBuffer(void* mem)
@@ -130,11 +130,19 @@ namespace engine {
                "allocation pool. This might lead to Segfault and memory leaks.");
          }
         
+        /** mark all managed blocks as disposed */
+        void
+        discard()
+          {
+            if (blockList_)
+              for (Block& block : *blockList_)
+                block.markReleased();
+          }
         
-        uint 
+        uint
         prepare_for (uint number_of_expected_buffers)
           {
-            if (maxAllocCount_ && 
+            if (maxAllocCount_ &&
                 maxAllocCount_ < blockList_->size() + number_of_expected_buffers)
               {
                 ASSERT (maxAllocCount_ >= blockList_->size());
@@ -155,7 +163,7 @@ namespace engine {
         Block*
         find (void* blockLocation)
           {
-            return pick_Block_by_storage (*blockList_, blockLocation);            
+            return pick_Block_by_storage (*blockList_, blockLocation);
           }
         
         
@@ -205,8 +213,8 @@ namespace engine {
       };
   }
   
-    
-    
+  
+  
   namespace { // Details of allocation and accounting
     
     const uint MAX_BUFFERS = 50;
@@ -282,7 +290,14 @@ namespace engine {
   {
     return outSeq_.size();
   }
-
+  
+  void
+  TrackingHeapBlockProvider::markAllEmitted()
+  {
+    for (auto& [_, blockPool] : *pool_)
+         blockPool.discard();
+  }
+  
   diagn::Block&
   TrackingHeapBlockProvider::access_emitted (uint bufferID)
   {

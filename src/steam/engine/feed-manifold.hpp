@@ -115,6 +115,7 @@ namespace engine {
     using lib::meta::is_Structured;
     using lib::meta::forEachIDX;
     using lib::meta::ElmTypes;
+    using lib::meta::NullType;
     using lib::meta::Tagged;
     using lib::meta::TySeq;
     using std::declval;
@@ -265,7 +266,10 @@ namespace engine {
         using Param = std::conditional_t<hasParam(), typename _Proc::ArgP, std::tuple<>>;
         
         template<class PF>
-        using isSuitable  = std::is_constructible<Param, decltype(std::declval<PF> (std::declval<TurnoutSystem&>()))>;
+        using Res = typename _Fun<PF>::Ret;
+        
+        template<class PF>
+        using isSuitable  = std::is_constructible<Param, Res<PF>>;
         
         template<class PF>
         using isConfigurable = std::is_constructible<bool, PF&>;
@@ -282,12 +286,25 @@ namespace engine {
               }
             return false;
           }
+        
+        
+        template<class PF>
+        static constexpr bool isParamFun()  { return isSuitable<PF>();                          }
+        template<class PF>
+        static constexpr bool canActivate() { return isSuitable<PF>() and isConfigurable<PF>(); }
+      };
+    
+     /// a function of total void
+    struct _Disabled
+      {
+        void operator() (void) const {/*I do make a difference, I really do!*/}
       };
     
   }//(End)Introspection helpers.
   
   
-  
+  template<class FUN, class PAM =_Disabled>
+  class FeedPrototype;
   
   /**
    * Configuration context for a FeedManifold.
@@ -330,7 +347,9 @@ namespace engine {
         {
           Param param;
           
-          ParamStorage() = default;
+          ParamStorage()
+            : param{}
+            { }
           
           template<typename...INIT>
           ParamStorage (INIT&& ...paramInit)
@@ -356,7 +375,7 @@ namespace engine {
       using enable_if_hasParam  = typename lib::meta::enable_if_c<_ProcFun<F>::hasParam()>::type;
       
       template<class X>
-      using NotProvided = Tagged<lib::meta::NullType, X>;
+      using NotProvided = Tagged<NullType, X>;
       
       template<bool yes, class B>
       using Provide_if = std::conditional_t<yes, B, NotProvided<B>>;
@@ -459,6 +478,14 @@ namespace engine {
       static constexpr bool hasParam() { return _S::hasParam(); }
       
       
+      /**
+       * cross-builder: _Prototype_ can be used to attach parameter-provider-functors
+       * and then to create several further FeedManifold instances.
+       */
+      using Prototype = FeedPrototype<FUN>;
+      
+      
+      
       template<size_t i, class ARG>
       auto&
       accessArg (ARG& arg)
@@ -519,7 +546,7 @@ namespace engine {
    * The Processing-Functor will be copied into the actual FeedManifold instance
    * for each Node invocation.
    * @tparam FUN type of the data processing-functor
-   * @tparam PAM type of an optional parameter-setup functor
+   * @tparam PAM type of an optional parameter-setup functor (defaults to deactivated)
    */
   template<class FUN, class PAM>
   class FeedPrototype
@@ -531,15 +558,33 @@ namespace engine {
       FUN procFun_;
       PAM paramFun_;
       
+    public:
+      FeedPrototype (FUN&& proc)
+        : procFun_{move (proc)}
+        , paramFun_{}
+        { }
+      
+      FeedPrototype (FUN&& proc, PAM&& par)
+        : procFun_{move (proc)}
+        , paramFun_{move (par)}
+        { }
+      // default move acceptable : pass pre-established setup
+        
+      static constexpr bool hasParam()    { return _Trait::hasParam(); }
+      static constexpr bool hasParamFun() { return _Trait::template isParamFun<PAM>();  }
+      static constexpr bool canActivate() { return _Trait::template canActivate<PAM>(); }
+      
+      /**
+       * build suitable Feed(Manifold) for processing  Node invocation
+       */
       Feed
       createFeed (TurnoutSystem& turnoutSys)
         {
-          if constexpr (_Trait::hasParam())
+          if constexpr (hasParamFun())
             if (_Trait::isActivated(paramFun_))
               return Feed{paramFun_(turnoutSys), procFun_};
           return Feed{procFun_};
         }
-      ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1386 : elaborate setup / binding for parameter-creation
     };
   
     

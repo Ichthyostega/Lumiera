@@ -62,6 +62,7 @@ namespace test  {
           seedRand();
           verify_TurnoutSystem();
           verify_FeedManifold();
+          verify_FeedPrototype();
           UNIMPLEMENTED ("build a simple render node and then activate it");
         }
       
@@ -288,7 +289,7 @@ namespace test  {
           
            //______________________________________
           // Example-5: simple parameter and output
-          auto fun_singleParamOut = [&](short param, Buffer* buff) { *buff = param-1; };
+          auto fun_singleParamOut = [](short param, Buffer* buff) { *buff = param-1; };
           using M5 = FeedManifold<decltype(fun_singleParamOut)>;
           CHECK (not M5::hasInput());
           CHECK (    M5::hasParam());
@@ -310,6 +311,49 @@ namespace test  {
           
           m5.invoke();
           CHECK (*oa1 == r2 - 1);                          // processing has placed result based on param into output buffer
+          
+          // done with these buffers
+          buffI0.release();
+          buffI1.release();
+          buffI2.release();
+          buffO0.release();
+          buffO1.release();
+        }
+      
+      
+      
+      /** @test Setup of a FeeManifold to attach parameter-functors
+       */
+      void
+      verify_FeedPrototype()
+        {
+          // Prepare setup to build a suitable FeedManifold...
+          long r1 = rani(100);
+          using Buffer = long;
+          BufferProvider& provider = DiagnosticBufferProvider::build();
+          BuffHandle buff = provider.lockBufferFor<Buffer> (-55);
+          
+          auto fun_singleParamOut = [](short param, Buffer* buff) { *buff = param-1; };
+          using M1 = FeedManifold<decltype(fun_singleParamOut)>;
+          using P1 = M1::Prototype;
+          CHECK (    P1::hasParam());
+          CHECK (not P1::hasParamFun());
+          CHECK (not P1::canActivate());
+          
+          P1 p1{move (fun_singleParamOut)};
+          CHECK (sizeof(p1) <= sizeof(void*));
+          TurnoutSystem turSys{Time::NEVER};
+          
+          M1 m1 = p1.createFeed(turSys);
+          CHECK (m1.param == short{});
+          m1.outBuff.createAt(0, buff);
+          CHECK (buff.accessAs<long>() == -55);
+          m1.connect();
+          CHECK (*m1.outArgs == -55);
+          
+          m1.invoke();
+          CHECK (*m1.outArgs           == 0 - 1);
+          CHECK (buff.accessAs<long>() == 0 - 1);
         }
     };
   

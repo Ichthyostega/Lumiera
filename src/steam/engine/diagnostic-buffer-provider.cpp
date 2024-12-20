@@ -67,6 +67,8 @@ namespace engine {
   TrackingHeapBlockProvider&
   DiagnosticBufferProvider::reset()
   {
+    if (pImpl_)
+      pImpl_->markAllEmitted();
     pImpl_.reset(new TrackingHeapBlockProvider());
     return *pImpl_;
   }

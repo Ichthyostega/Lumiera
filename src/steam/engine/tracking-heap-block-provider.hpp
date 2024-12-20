@@ -120,7 +120,7 @@ namespace engine {
     : public BufferProvider
     {
       unique_ptr<diagn::PoolTable> pool_;
-      ScopedPtrVect<diagn::Block> outSeq_; 
+      ScopedPtrVect<diagn::Block> outSeq_;
       
     public:
       /* === BufferProvider interface === */
@@ -141,11 +141,13 @@ namespace engine {
       template<typename TY>
       TY&  accessAs (uint bufferID);
       
+      void markAllEmitted();
+      
     private:
       bool withinOutputSequence (uint bufferID)  const;
       diagn::BlockPool& getBlockPoolFor (HashVal typeID);
       diagn::Block* locateBlock (HashVal typeID, void*);
-      diagn::Block* searchInOutSeqeuence (void* storage);      
+      diagn::Block* searchInOutSeqeuence (void* storage);
     };
   
   
