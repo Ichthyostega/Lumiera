@@ -332,6 +332,9 @@ namespace test  {
           BufferProvider& provider = DiagnosticBufferProvider::build();
           BuffHandle buff = provider.lockBufferFor<Buffer> (-55);
           
+          
+           //_______________________________________
+          // Case-1: Prototype without param-functor
           auto fun_singleParamOut = [](short param, Buffer* buff) { *buff = param-1; };
           using M1 = FeedManifold<decltype(fun_singleParamOut)>;
           using P1 = M1::Prototype;
@@ -357,8 +360,8 @@ namespace test  {
           
           
           
-           //_____________________________________
-          // Reconfigure to attach a param-functor
+           //_____________________________________________
+          // Case-2: Reconfigure to attach a param-functor
           long rr{11};                                    // ▽▽▽▽  Note: side-effect
           auto fun_paramSimple = [&](TurnoutSystem&){ return rr += 1+rani(100); };
           using P1x = P1::Adapted<decltype(fun_paramSimple)>;
@@ -395,6 +398,74 @@ namespace test  {
           CHECK (calcResult == r1 - 1);                    // FeedManifold on the stack, since invocations are
           m1.invoke();                                     // performed concurrently, each with its own set of
           CHECK (calcResult ==  0 - 1);                    // buffers and parameters.
+          
+          
+          
+           //_______________________________
+          // Case-3: Integrate std::function
+          using ParamSig = short(TurnoutSystem&);
+          using ParamFunction = std::function<ParamSig>;
+          //  a Prototype to hold such a function...
+          using P1F = P1::Adapted<ParamFunction>;
+          CHECK (    P1F::hasParam());
+          CHECK (    P1F::hasParamFun());
+          CHECK (    P1F::canActivate());
+          
+          P1F p1f = p1x.clone()                            // if (and only if) the embedded functors allow clone-copy
+                       .moveAdapted<ParamFunction>();      // then we can fork-off and then adapt a cloned prototype
+          
+          // Need to distinguish between static capability and runtime state...
+          CHECK (not p1 .canActivate());                   // Case-1 had no param functor installed...
+          CHECK (not p1 .isActivated());                   //        and thus also can not invoke such a functor at runtime
+          CHECK (not p1x.canActivate());                   // Case-2 has a fixed param-λ, which can not be activated/deactivated
+          CHECK (    p1x.isActivated());                   //        yet at runtime this functor is always active and callable
+          CHECK (    p1f.canActivate());                   // Case-3 was defined to hold a std::function, which thus can be toggled
+          CHECK (not p1f.isActivated());                   //        yet in current runtime configuration, the function is empty
+          
+          // create a FeedManifold instance from this prototype
+          M1 m1f1 = p1f.createFeed(turSys);                // no param-functor invoked,
+          CHECK (m1f1.param == short{});                   // so this FeedManifold will use the default-constructed parameter
+          
+          // but since std::function is assignable, we can activate it...
+          CHECK (not p1f.isActivated());
+          p1f.assignParamFun ([](TurnoutSystem&){ return 47; });
+          CHECK (    p1f.isActivated());
+          M1 m1f2 = p1f.createFeed(turSys);                // ◁————————— param-functor invoked here
+          CHECK (m1f2.param == 47);                        //            ...surprise: we got number 47...
+          p1f.assignParamFun();
+          CHECK (not p1f.isActivated());                   // can /deactivate/ it again...
+          M1 m1f3 = p1f.createFeed(turSys);                // so no param-functor invoked here
+          CHECK (m1f3.param == short{});
+          
+          // done with buffer
+          buff.release();
+          
+          
+          
+           //_____________________________________
+          // Addendum: type conversion intricacies
+          auto lambdaSimple =  [ ](TurnoutSystem&){ return short(47); };
+          auto lambdaCapture = [&](TurnoutSystem&){ return short(47); };
+          using LambdaSimple  = decltype(lambdaSimple);
+          using LambdaCapture = decltype(lambdaCapture);
+          CHECK (    (std::is_constructible<bool,ParamFunction>::value));
+          CHECK (    (std::is_constructible<bool,LambdaSimple >::value));
+          CHECK (not (std::is_constructible<bool,LambdaCapture>::value));
+          //    Surprise! a non-capture-λ turns out to be bool convertible,
+          //              which however is also true for std::function,
+          //              yet for quite different reasons: While the latter has a
+          //              built-in conversion operator to detect /inactive/ state,
+          //              the simple λ decays to a function pointer, which makes it
+          //              usable as implementation for plain-C callback functions.
+          using FunPtr = short(*)(TurnoutSystem&);
+          CHECK (not (std::is_convertible<ParamFunction,FunPtr>::value));
+          CHECK (    (std::is_convertible<LambdaSimple ,FunPtr>::value));
+          CHECK (not (std::is_convertible<LambdaCapture,FunPtr>::value));
+          //             ..which allows to distinguish these cases..
+          //
+          CHECK (true  == _ParamFun<P1::ProcFun>::isConfigurable<ParamFunction>::value);
+          CHECK (false == _ParamFun<P1::ProcFun>::isConfigurable<LambdaSimple >::value);
+          CHECK (false == _ParamFun<P1::ProcFun>::isConfigurable<LambdaCapture>::value);
         }
     };
   

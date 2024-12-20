@@ -80,7 +80,6 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-//#include "steam/engine/proc-node.hpp"
 #include "steam/engine/buffhandle.hpp"
 #include "lib/uninitialised-storage.hpp"
 #include "lib/meta/function.hpp"
@@ -91,8 +90,6 @@
 #include "lib/test/test-helper.hpp"
 //#include "lib/several.hpp"
 
-//#include <utility>
-//#include <array>
 #include <tuple>
 
 
@@ -101,14 +98,10 @@
 namespace steam {
 namespace engine {
   
-//  using std::pair;
-//  using std::vector;
-  
   namespace {// Introspection helpers....
     
     using lib::meta::_Fun;
     using lib::meta::enable_if;
-    using lib::meta::disable_if_self;
     using lib::meta::is_UnaryFun;
     using lib::meta::is_BinaryFun;
     using lib::meta::is_TernaryFun;
@@ -117,14 +110,14 @@ namespace engine {
     using lib::meta::ElmTypes;
     using lib::meta::NullType;
     using lib::meta::Tagged;
-    using lib::meta::TySeq;
-    using std::declval;
     using std::is_pointer;
     using std::is_reference;
-    using std::remove_reference_t;
+    using std::is_convertible;
+    using std::is_constructible;
+    using std::is_copy_constructible;
     using std::remove_pointer_t;
     using std::tuple_element_t;
-    using std::void_t;
+    using std::add_pointer_t;
     using std::__and_;
     using std::__not_;
     
@@ -267,13 +260,17 @@ namespace engine {
         
         template<class PF>
         using Res = typename _Fun<PF>::Ret;
+        template<class PF>
+        using SigP = add_pointer_t<typename _Fun<PF>::Sig>;
         
         template<class PF>
-        using isSuitable  = std::is_constructible<Param, Res<PF>>;
+        using isSuitable  = is_constructible<Param, Res<PF>>;
         
         template<class PF>
-        using isConfigurable = std::is_constructible<bool, PF&>;
-        
+        using isConfigurable = __and_<is_constructible<bool, PF&>
+                                     ,__not_<is_convertible<PF&, SigP<PF>>>
+                                     >;   // non-capture-λ are convertible via function-ptr to bool
+                                         //  yet we want to detect a real built-in bool-conversion.
         template<class PF>
         static bool
         isActivated (PF const& paramFun)
@@ -547,6 +544,18 @@ namespace engine {
    * for each Node invocation.
    * @tparam FUN type of the data processing-functor
    * @tparam PAM type of an optional parameter-setup functor (defaults to deactivated)
+   * 
+   * # Usage
+   * The Prototype is typically first built solely from a processing-functor.
+   * It can even be constructed as type only, by `FeedManifold<FUN>::Prototype`.
+   * In this form, any parameter handling will be _disabled._ However, by adding a
+   * parameter-functor with the **cross-builder-API**, a _new instance_ of the prototype
+   * is created _as a replacement_ of the old one (note: we move the processing functor).
+   * This adds a parameter-functor to the configuration, which will then be invoked
+   * _whenever a new FeedManifold instance_ [is created](\ref #createFeed); the result of
+   * this parameter-functor invocation should be a parameter value, which can be passed
+   * into the constructor of FeedManifold, together with a copy of the proc-functor.
+   * @see NodeBase_test::verify_FeedPrototype()
    */
   template<class FUN, class PAM>
   class FeedPrototype
@@ -574,21 +583,32 @@ namespace engine {
       static constexpr bool hasParamFun() { return _Trait::template isParamFun<PAM>();  }
       static constexpr bool canActivate() { return _Trait::template canActivate<PAM>(); }
       
-      /**
-       * build suitable Feed(Manifold) for processing  Node invocation
+      /** @return runtime test: there is actually usable parameter-functor to invoke? */
+      bool isActivated()  const           { return _Trait::isActivated(paramFun_); }
+      
+      
+      
+      /************************************************************//**
+       * build suitable Feed(Manifold) for processing a Node invocation
        */
       Feed
       createFeed (TurnoutSystem& turnoutSys)
         {
           if constexpr (hasParamFun())
-            if (_Trait::isActivated(paramFun_))
+            if (isActivated())
               return Feed(paramFun_(turnoutSys), procFun_);
           return Feed{procFun_};
         }
       
       
+      
+      /* ======= cross-builder API ======= */
+      
+      using ProcFun = FUN;
+      using ParamFun = PAM;
+      
       template<typename PFX>
-      using Adapted = FeedPrototype<FUN, PFX>;
+      using Adapted = FeedPrototype<FUN,PFX>;
       
       /**
        * Cross-Builder to add configuration with a given parameter-functor.
@@ -601,10 +621,36 @@ namespace engine {
        */
       template<typename PFX>
       auto
-      moveAdapted (PFX otherParamFun)
+      moveAdapted (PFX otherParamFun =PFX{})
         {
           using OtherParamFun = std::decay_t<PFX>;
           return Adapted<OtherParamFun>{move(procFun_), move(otherParamFun)};
+        }
+      
+      
+      /** build a clone-copy of this prototype, holding the same functors
+       * @note possible only if both proc-functor and param-functor are copyable
+       */
+      enable_if<__and_<is_copy_constructible<FUN>
+                      ,is_copy_constructible<PAM>>, FeedPrototype>
+      clone()  const
+        {
+          return FeedPrototype{FUN(procFun_), PAM(paramFun_)};
+        }
+      
+      /**
+       * Change the current parameter-functor setup by assigning some value.
+       * @param paramFunDef something that is assignable to \a PAM
+       * @note  possible only if the param-functor accepts this kind of assignment;
+       *        especially when \a PAM was defined to be a `std::function`, then
+       *        the param-functor can not only be reconfigured, but also disabled.
+       */
+      template<typename PFX =PAM,      typename = enable_if<std::is_assignable<PAM,PFX>>>
+      FeedPrototype&&
+      assignParamFun (PFX&& paramFunDef =PAM{})
+        {
+          paramFun_ = forward<PFX> (paramFunDef);
+          return move(*this);
         }
     };
   
