@@ -12,22 +12,85 @@
 */
 
 /** @file proc-node.hpp
- ** Interface to the processing nodes and the render nodes network.
- **
- ** Actually, there are three different interfaces to consider
+ ** Interface to the processing nodes and the Render Nodes network.
+ ** The Lumiera Render Engine is based on a graph of interconnected Render Nodes.
+ ** This »Low-level-Model« is pre-arranged _by a Builder_ as result of compiling
+ ** and interpreting the arrangement created by the user in the Session, known as
+ ** »High-level-Model«. All ways to possibly _perform_ (play, render) the current
+ ** arrangement are thus encoded into the configuration and connectivity of
+ ** ProcNode elements.
+ ** 
+ ** # Usage
+ ** 
+ ** Regarding access, there are three different interfaces to consider
  ** - the ProcNode#pull is the invocation interface. It is function-call style
- ** - the builder interface, comprised by the NodeFactory and the WiringFactory.
- ** - the actual processing function is supposed to be a C function and will be
- **   hooked up within a thin wrapper.
+ ** - the builder interface, comprising the NodeBuilder (TODO 2024 what else actually?).
+ ** - the control of playback and rendering processes is accomplished by the Player.
+ ** For actual processing, Lumiera relies on functionality provided by dedicated
+ ** domain libraries (e.g. FFmpeg for video processing). A binding implemented
+ ** as a Lumiera Plug-in will expose such a Library's resources as _Assets_
+ ** and will set up _function bindings_ to be embedded into Render Nodes.
  **
- ** By using the builder interface, concrete node and wiring descriptor classes are created,
- ** based on some templates. These concrete classes form the "glue" to tie the node network
- ** together and contain much of the operation behaviour in a hard wired fashion.
+ ** By using the NodeBuilder interface, concrete \ref ProcNode and \ref Port instances
+ ** are created, interconnected and attached below the Fixture, which is the »backbone«
+ ** of the low-level-Model. The coordination and the act of invoking this NodeBuilder
+ ** is conducted by structures in the **Builder** subsystem of Lumiera, which works
+ ** similar to a compiler for programming languages — with the difference that within
+ ** this application an edit and media arrangement is compiled into „executable“ form,
+ ** ready for rendering and performance. In this context _performance_ implies to »play«
+ ** (render) part of a »Timeline«, which is accomplished through a PlayProcess, which
+ ** in turn breaks down the work into individual »Render Jobs« organised through the
+ ** [Scheduler](\ref scheduler.hpp). Through such a sequence of translations, the
+ ** processing of a frame ends up as a [job to invoke](\ref render-invocation.hpp)
+ ** some entrance point into the Render Node network.
  ** 
- ** @todo WIP-WIP-WIP 2024 Node-Invocation is reworked from ground up for the »Playback Vertical Slice«
+ ** # Arrangement of Render Nodes
  ** 
- ** @see nodefactory.hpp
- ** @see operationpoint.hpp
+ ** The arrangement of ProcNode elements in the render graph exhibits a [DAG] topology.
+ ** Each node _knows only its direct predecessors,_ designated as »Lead Nodes« or »Leads«.
+ ** Conceptually, each Node represents a specific processing capability, delegating internally
+ ** to some actual Library implementation of the desired processing algorithm. Yet in reality,
+ ** several _flavours_ of this processing capability are typically required. For example, maybe
+ ** sound processing will be expected in stereo format (channel interleaved blocks of audio samples),
+ ** but in addition also the two individual mono channels will be required independently. Or a video
+ ** processing pipeline might be required in full resolution, but also sampled down for display in
+ ** a GUI viewer window or for thumbnail images. The existence of several _flavours of computation_
+ ** might seem obvious or irrelevant — yet touches on a fundamental decision: in Lumiera,
+ ** **no media processing happens beyond the Render Nodes.** Even for the down-sampled
+ ** tiny preview images, a render pipeline is specifically preconfigured, and then
+ ** exposed through a \ref Port on the Render Node.
+ ** 
+ ** The actual rendering thus proceeds through the successive activation of Ports. Internally, each
+ ** Port is connected to _predecessor ports,_ which can be _»pulled«_ to generate the _input data_ for
+ ** the current processing step. Conducting the invocation of a single processing step in a Port thus
+ ** requires the interplay of several, intricately interwoven activities — forming a »Weaving Pattern«:
+ ** Establishing a frame, pulling from predecessors, spawning out further memory buffers to hold computed
+ ** result data and finally triggering the actual »weft«. The _Port on a Node_ is thus _an interface_,
+ ** actually implemented by a \ref Turnout, which comprises a _Weaving Pattern Template._ The most
+ ** common scheme for media processing is embodied by the \ref MediaWeavingPattern template, yet
+ ** other Weaving Patterns may be configured to adapt to different processing needs (e.g. hardware
+ ** accelerated computation).
+ ** 
+ ** Templates in C++ _must be instantiated,_ with arguments specific to the usage. Which would be
+ ** the signature of the processing function, the types and number of input- and output buffers
+ ** and an additional tuple of specific parameters to pass, like e.g. the frame number or the
+ ** (possibly automated) parameter settings for an effect. The invocation of a Port thus calls
+ ** through a (classical, function-virtual) interface into specific code instantiated within the
+ ** Library-adapter Plug-in. At compile time, consistency of involved buffer types and function
+ ** signatures and memory allocation schemes can be ensured, so that no further checks and dynamic
+ ** adaptation and transformation is necessary at runtime. The engine implementation works on
+ ** data tuples, typed buffer pointers and helpers checked for memory safety — and not on
+ ** plain arrays and void pointers.
+ ** @remark A future extension to this scheme is conceivable, where common processing pipelines
+ **         are pre-compiled in entirety, possibly combined with hardware acceleration.
+ ** 
+ ** @todo WIP-WIP 12/2024 Node-Invocation is reworked from ground up for the »Playback Vertical Slice«
+ ** 
+ ** @see turnout.hpp
+ ** @see turnout-system.hpp
+ ** @see node-builder.hpp
+ ** @see node-link.test.cpp
+ ** [DAG]: https://en.wikipedia.org/wiki/Directed_acyclic_graph
  */
 
 #ifndef STEAM_ENGINE_PROC_NODE_H
@@ -68,8 +131,7 @@ namespace engine {
   
   
   class Port
-//  : util::MoveOnly     //////////////////////////////////////////////////OOO not clear if necessary here, and requires us to declare the ctors!!! See Turnout
-    : util::NonCopyable  //////////////////////////////////////////////////OOO this would be the perfect solution, if we manage to handle this within the builder
+    : util::NonCopyable
     {
     public:
       virtual ~Port();  ///< this is an interface
@@ -77,9 +139,6 @@ namespace engine {
       
       virtual BuffHandle weave (TurnoutSystem&, OptionalBuff =std::nullopt)   =0;
       
-//    // compiler does not generate a move-ctor automatically due to explicit dtor
-//    Port()       = default;
-//    Port(Port&&) = default;
       ProcID& procID;
     };
   

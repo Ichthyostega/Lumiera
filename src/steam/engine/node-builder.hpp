@@ -14,11 +14,11 @@
 
 /** @file node-builder.hpp
  ** Specialised shorthand notation for building the Render Node network.
- ** During the Builder run, the render nodes network will be constructed by gradually
- ** refining the connectivity structure derived from interpreting the »high-level model«
+ ** During the Builder run, the Render Node network will be constructed by gradually
+ ** refining the connectivity structure derived from interpreting the »high-level Model«
  ** from the current Session. At some point, it is essentially clear what data streams
  ** must be produced and what media processing functionality from external libraries
- ** will be utilised to achieve this goal. This is when the fluent builder notation
+ ** will be utilised to achieve the goal. This is when the fluent builder notation
  ** defined in this header comes into play, allowing to package the fine grained and
  ** in part quite confusing details of parameter wiring and invocation preparation into
  ** some goal oriented building blocks, that can be combined and directed with greater
@@ -84,7 +84,6 @@
 
 
 #include "lib/error.hpp"
-//#include "lib/symbol.hpp"//////////////////////////////TODO RLY?
 #include "lib/nocopy.hpp"
 #include "steam/engine/weaving-pattern-builder.hpp"
 #include "steam/engine/proc-node.hpp"
@@ -92,7 +91,6 @@
 #include "lib/several-builder.hpp"
 #include "lib/format-string.hpp"
 #include "lib/index-iter.hpp"
-#include "lib/test/test-helper.hpp"/////////////////////TODO TOD-oh
 
 #include <utility>
 #include <vector>
@@ -102,7 +100,6 @@ namespace steam {
 namespace engine {
   namespace err = lumiera::error;
   
-//  using lib::Literal;
   using util::_Fmt;
   using std::forward;
   using std::move;
@@ -361,7 +358,6 @@ namespace engine {
       completePort()
         {
           weavingBuilder_.connectRemainingInputs (_Par::leads_, this->defaultPort_);
-          weavingBuilder_.fillRemainingBufferTypes(); ////////////////////////////////////////////////////////////////////OOO Nein! sollte gleich zu Beginn (automatisch) passieren
           return NodeBuilder{static_cast<NodeBuilder<POL,DAT>&&> (*this) // slice away PortBulder subclass data
                             ,weavingBuilder_.sizMark
                             ,weavingBuilder_.build()};

@@ -13,18 +13,18 @@
 
 
 /** @file turnout-system.hpp
- ** THe actual state of a frame rendering evaluation parametrised for a single job.
- ** The rendering of frames is triggered from a render job, and recursively retrieves the data
- ** from predecessor render nodes, prepared, configured and interconnected by the Builder.
+ ** A actual state of a rendering evaluation parametrised for a single job.
+ ** The rendering of frames is triggered from a render job, and recursively retrieves data
+ ** from predecessor Render Nodes, prepared, configured and interconnected by the Builder.
  ** Some statefull aspects can be involved into this recursive evaluation, beyond the data
  ** passed directly through the recursive calls and interconnected data buffers. Notably,
  ** some operations need direct call parameters, e.g. the frame number to retrieve or
  ** the actual parametrisation of an effect, which draws from _parameter automation._
  ** Moreover, when rendering interactively, parts of the render pipeline may be
  ** changed dynamically by mute toggles or selecting an output in the viever's
- ** _Switch Board.
+ ** _Switch Board._
  ** 
- ** The TurnoutSystem is related to the actual incidence and is created dynamically,
+ ** The TurnoutSystem is related to the actual invocation and is created dynamically,
  ** while connecting to all the pre-existing \ref Turnout elements, sitting in the ports
  ** of those render nodes touched by the actual render invocation. It acts as mediator and
  ** data exchange hub, while gearing up the actual invocation to cause calculation of media data

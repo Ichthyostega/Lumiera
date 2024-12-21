@@ -15,36 +15,39 @@
 
 /** @file turnout.hpp
  ** Fixed standard setup used in each Port of the Render Node to generate data.
- ** Organise the state related to the invocation of s single ProcNode::pull() call
- ** This header defines part of the "glue" which holds together the render node network
- ** and enables to pull result frames from the nodes. Doing so requires some invocation
- ** local state to be maintained, especially a table of buffers used to carry out the
- ** calculations. Further, getting the input buffers filled requires to issue recursive
- ** \c pull() calls, which on the whole creates a stack-like assembly of local invocation
+ ** This header defines part of the "glue" which holds together the Render Node network
+ ** and enables to pull result frames from the nodes. Doing so requires some local state
+ ** to be maintained, especially a collection of buffers used to hold data for computation.
+ ** Furthermore, getting the input buffers filled with prerequisite data leads to the issuance
+ ** of recursive `weave()` calls, together creating a stack-like assembly of local invocation
  ** state.
- ** The actual steps to be carried out for a \c pull() call are dependent on the configuration
- ** of the node to pull. Each node has been preconfigured by the builder with a Connectivity
- ** descriptor and a concrete type of a StateAdapter. The actual sequence of steps is defined
- ** in the header nodeoperation.hpp out of a set of basic operation steps. These steps all use
- ** the passed in Invocation object (a sub-interface of StateAdapter) to access the various
- ** aspects of the invocation state.
  ** 
- ** # composition of the Invocation State
- ** 
- ** For each individual ProcNode#pull() call, the WiringAdapter#callDown() builds an StateAdapter
- ** instance directly on the stack, managing the actual buffer pointers and state references. Using this
- ** StateAdapter, the predecessor nodes are pulled. The way these operations are carried out is encoded
- ** in the actual StateAdapter type known to the NodeWiring (WiringAdapter) instance. All of these actual
- ** StateAdapter types are built as implementing the engine::StateClosure interface.
- ** 
- ** @todo relies still on an [obsoleted implementation draft](\ref bufftable-obsolete.hpp)
- ** @see engine::ProcNode
- ** @see engine::StateProxy
- ** @see engine::FeedManifold
- ** @see nodewiring.hpp interface for building/wiring the nodes
- ** 
- ** @warning as of 4/2023 a complete rework of the Dispatcher is underway ///////////////////////////////////////////TICKET #1275
- ** 
+ ** The actual steps to be carried out for a `weave()` call are broken down into
+ ** a fixed arrangement of steps, in accordance to the _weaving metaphor:_
+ ** - `mount()` establish the framework of operation
+ ** - `pull()` recurse into predecessors to retrieve input data
+ ** - `shed()` allocate output buffers and spread out all connections
+ ** - `weft()` pass invocation to the processing operation
+ ** - `fix()`  detach from input, mark and commit results and pas output
+ ** As arranged in the Turnout template, the necessary interconnections are prepared
+ ** and this standard sequence of operations is issued, while delegating the actual
+ ** implementation of these steps into a **Weaving Pattern**, integrated as mix-in
+ ** base template. Notably an implementation data scheme is expected as a definition
+ ** nested into the weaving pattern, designated as `PAT::Feed`, and  created
+ ** _on the stack for each invocation_ by the `mount()` call. »The Feed«
+ ** is conceived both as an _Invocation Adapter_ and a _Pipe Manifold:_
+ ** - embedding an adapted processing-functor and a parameter-functor
+ ** - providing storage slots for \ref BuffHandle management entries
+ ** @note typically, a \ref MediaWeavingPattern is used as default implementation.
+ ** @remark The name »Turnout« plays upon the overlay of several metaphors, notably
+ **   the [Railroad Turnout]. A »Turnout System« may thus imply either a system for
+ **   generating and collecting turnout, or the complex interwoven system of tracks
+ **   and switches found in large railway stations.
+ ** @see \ref proc-node.hpp "Overview of Render Node structures"
+ ** @see turnout-system.hpp
+ ** @see weaving-pattern.hpp
+ ** @see weaving-pattern-builder.hpp
+ ** [Railroad Turnout]: https://en.wikipedia.org/wiki/Railroad_turnout
  */
 
 
@@ -65,7 +68,7 @@ namespace engine {
   
   
   /**
-   * Definition to emulate a _Concept_ for the *Invocation Adapter*.
+   * Definition to emulate a _Concept_ for the **Invocation Adapter**.
    * For each Proc-Asset, the corresponding Library Adapter must provide
    * such adapters to access the input and result buffers and finally to
    * invoke the processing functions from this library.
@@ -110,7 +113,6 @@ namespace engine {
   class Turnout
     : public Port
     , public PAT
-//    , util::MoveOnly
     {
       static_assert (_verify_usable_as_WeavingPattern<PAT>());
       
@@ -131,10 +133,10 @@ namespace engine {
       BuffHandle
       weave (TurnoutSystem& turnoutSys, OptionalBuff outBuff =std::nullopt)  override
         {
-          Feed feed = PAT::mount(turnoutSys);
-          PAT::pull(feed, turnoutSys);
-          PAT::shed(feed, outBuff);
-          PAT::weft(feed);
+          Feed feed = PAT::mount (turnoutSys);
+          PAT::pull (feed, turnoutSys);
+          PAT::shed (feed, outBuff);
+          PAT::weft (feed);
           return PAT::fix (feed);
         }
     };

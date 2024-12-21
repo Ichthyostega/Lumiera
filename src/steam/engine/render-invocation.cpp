@@ -14,7 +14,6 @@
 
 /** @file render-invocation.cpp
  ** Implementation details regarding the invocation of a single render node
- ** @deprecated very likely to happen in a different way, while the concept remains valid
  ** @todo WIP-WIP-WIP 12/2024 about to build a Render Node invocation, combining the old
  **                   unfinished draft from 2009 with the new Render Engine code
  */
@@ -54,8 +53,8 @@ namespace engine {
   size_t
   RenderInvocation::hashOfInstance (InvocationInstanceID invoKey)  const
   {                                                          ////////////////////////////////////////////////TICKET #1295 : settle upon the parameters actually needed and decide what goes into this hash
-    std::hash<size_t> hashr;
-    HashVal res = hashr (invoKey.frameNumber);
+    std::hash<size_t> hashCalc;
+    HashVal res = hashCalc (invoKey.frameNumber);
     return res;
   }
   
