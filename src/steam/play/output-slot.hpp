@@ -43,7 +43,7 @@
  ** Size and other characteristics of the data frames are assumed to be suitable, which typically
  ** won't be verified at that level anymore. Besides that, the allocation of an output slot reveals
  ** detailed timing expectations. The client is required to comply to these timings when _emitting_
- ** data -- he's even required to provide a current time specification, alongside with the data.
+ ** data -- they are even required to provide a current time specification, alongside with the data.
  ** Based on this information, the output slot has the ability to handle timing failures gracefully;
  ** the concrete output slot implementation is expected to provide some kind of de-click or
  ** de-flicker facility, which kicks in automatically when a timing failure is detected.
@@ -118,7 +118,7 @@ namespace play {
     public:
       virtual ~OutputSlot();
       
-      typedef lib::IterSource<DataSink>::iterator OpenedSinks;
+      using OpenedSinks = lib::IterSource<DataSink>::iterator;
       
       class Allocation
         {

@@ -17,12 +17,17 @@ return: 0
 END
 
 
-TEST "buffer metadata type keys" BufferMetadataKey_test <<END
+TEST "Bbuffer metadata type keys" BufferMetadataKey_test <<END
 return: 0
 END
 
 
-TEST "buffer metadata and state transitions" BufferMetadata_test <<END
+TEST "Buffer metadata and state transitions" BufferMetadata_test <<END
+return: 0
+END
+
+
+PLANNED "Proxy Buffer-provider" BufferProxyProvider_test <<END
 return: 0
 END
 

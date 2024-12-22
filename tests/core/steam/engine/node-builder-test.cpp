@@ -18,6 +18,7 @@
 
 #include "lib/test/run.hpp"
 #include "steam/engine/node-builder.hpp"
+#include "steam/engine/diagnostic-buffer-provider.hpp"
 //#include "lib/util.hpp"
 
 
@@ -63,6 +64,12 @@ namespace test  {
           
           CHECK (watch(node).isSrc());
           CHECK (watch(node).ports().size() == 1);
+          
+          // Prepare setup to invoke such a Render Node...
+          using Buffer = long;
+          BufferProvider& provider = DiagnosticBufferProvider::build();
+          BuffHandle buff = provider.lockBufferFor<Buffer> (-55);
+          
         }
       
       
