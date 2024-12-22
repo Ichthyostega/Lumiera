@@ -955,16 +955,30 @@ The attachment relation is hierarchical and has a clearly defined //active// and
 Attachment on itself does //not// keep an object alive. Rather, it's implemented by an opaque ID entry (&amp;rarr; PlacementRef), which can be resolved by the PlacementIndex. The existence of attachments should be taken into account when deleting an object, preferably removing any dangling attachments to prevent an exception to be thrown later on. On the other hand, contrary to the elements of the HighLevelModel, processing nodes in the render engine never depend on placements &amp;mdash; they always refer directly to the MObject instance or even the underlying asset. In the case of MObject instances, the pointer from within the engine will //share ownership// with the placement (remember: both are derived from {{{boost::shared_ptr}}}).
 </pre>
 </div>
-<div title="Automation" modifier="Ichthyostega" created="200706250751" modified="200906071813" tags="def img">
-<pre>Automation is treated as a function over time. It is always tied to a specific Parameter (which can thus be variable over the course of the timeline). All details //how// this function is defined are completely abstracted away. The Parameter uses a ParamProvider to get the value for a given Time (point). Typically, this will use linear or bezier interpolation over a set of keyframes internally. Parameters can be configured to have different value ranges and distribution types (on-off, stepped, continuous, bounded)
+<div title="Automation" modifier="Ichthyostega" created="200706250751" modified="202412221816" tags="def img rewrite" changecount="6">
+<pre>Automation is treated as a function over time.
+The purpose of automation is to vary a parameter of some data processing instance in the course of time while rendering.
+Thus, automation encompasses all the variability within the render network //which is not a structural change.//
+
+Everything beyond the minimalistic definition (&quot;function over time&quot;) is considered an implementation detail of the [[parameter provider|ParamProvider]] used to yield the value. Thus automation is closely tied to the concept of a [[Parameter]], because Automation is always tied to a specific Parameter (which can thus be variable over the course of the timeline). All details //how// this function is defined are completely abstracted away. The Parameter uses a ParamProvider to get the value for a given Time (point). Typically, this will use linear or bezier interpolation over a set of keyframes internally. Parameters can be configured to have different value ranges and distribution types (on-off, stepped, continuous, bounded)
+
+Parameters (and thus by indirection also Automation) play an important role in the communication with the GUI and while [[setting up and wiring the render nodes|BuildRenderNode]] in the course of the build process (&amp;rarr; see [[tag:Builder|Builder]])
+
+{{red{⚠ In-depth rework underway as of 12/2024...}}}
+^^┅┅┅┅┅┅the following text is ''superseded''┅┅┅┅┅┅┅┅┅^^
+
+{{red{Partially obsolete as of 12/2024}}}
+* most of the //Interface// on ProcNode -- beyond the capability of being rendered -- has been removed
+* thus certainly a Node will not have some &quot;Parameter&quot;, or anything which can be configured or manipulated dynamically
+* yet the rest of the drawing below -- especially the relation of [[Parameter]] and ParamProvider -- seem still valid
 
 [img[how to implement Automation|uml/fig129669.png]]
 </pre>
 </div>
-<div title="AutomationData" modifier="Ichthyostega" created="200805300105" tags="def automation">
+<div title="AutomationData" modifier="Ichthyostega" created="200805300105" modified="202412221806" tags="def" changecount="1">
 <pre>While generally automation is treated as a function over time, defining and providing such a function requires some //Automation Data.// The actual layout and meaning of this data is deemed an implementation detail of the [[parameter provider|ParamProvider]] used, but nevertheless an automation data set has object characteristics within the session (high-level-model), allowing it to be attached, moved and [[placed|Placement]] by the user.</pre>
 </div>
-<div title="BasicBuildingOperations" modifier="Ichthyostega" created="200712040334" modified="200805210230" tags="design operational Builder img">
+<div title="BasicBuildingOperations" modifier="Ichthyostega" created="200712040334" modified="202412221805" tags="design operational Builder discuss img" changecount="1">
 <pre>Starting out from the concepts of Objects, Placement to Tracks, render Pipes and connection properties (&amp;rarr; see [[here|TrackPipeSequence]]) within the session, we can identify the elementary operations occuring within the Builder. Overall, the Builder is organized as application of //visiting tools// to a collection of objects, so finally we have to consider some object kind appearing in the working function of the given builder tool, which holds at this moment some //context//. The job now is to organize this context such as to create a predictable build process from this //event driven// approach.
 &amp;rarr;see also: BuilderPrimitives for the elementary situations used to cary out the building operations
 
@@ -992,7 +1006,7 @@ Attachment on itself does //not// keep an object alive. Rather, it's implemented
 # ''Transitions'' are to be handled differently according to their placement (&amp;rarr; more on [[Transitions|TransitionsHandling]])
 #* when placed normally to two (or N) clips, they are inserted at the exit node of the clip's complete effect chain.
 #* otherwise, when placed to the source port(s) or when placed to some other pipes they are inserted at the exit side of those pipe's effect chains. (Note: this puts additional requirements on the transition processor, so not every transition can be placed this way)
-After consuming all input objects and satisfying all wiring requests, the result is a set of [[exit nodes|ExitNode]] ready for pulling data. We call the network reachable from such an exit node a [[Processor]], together all processors of all segments and output data types comprise the render engine.
+After consuming all input objects and satisfying all wiring requests, the result is a set of [[exit nodes|ExitNode]] ready for pulling data.
 
 !!!dependencies
 Pipes need to be there first, as everything else will be plugged (placed) to a pipe at some point. But, on the other hand, for the model as such, pipes are optional: We could create sequences with ~MObjects without configuring pipes (but won't be able then to build any render processor of course). Similarily, there is no direct relation between tracks and pipes. Each sequence is comprised of at least one root track, but this has no implications regarding any output pipe.
@@ -1214,7 +1228,7 @@ there are only limited sanity checks, and they can be expected to be optimised a
 Basically the client is responsible for sane buffer access.
 </pre>
 </div>
-<div title="BufferManagement" modifier="Ichthyostega" created="201109151420" modified="201109232234" tags="Rendering Player spec draft">
+<div title="BufferManagement" modifier="Ichthyostega" created="201109151420" modified="202412221803" tags="Rendering Player spec draft" changecount="1">
 <pre>Buffers are used to hold the media data for processing and output. Within the Lumiera RenderEngine and [[Player]] subsystem, we use some common concepts to handle the access and allocation of working buffers. Yet this doesn't imply having only one central authority in charge of every buffer -- such an approach wouldn't be possible (due to collaboration with external systems) and wouldn't be desirable either. Rather, there are some common basic usage //patterns// -- and there are some core interfaces used throughout the organisation of the rendering process.
 
 Mostly, the //client code,// i.e. code in need of using buffers, can access some BufferProvider, thereby delegating the actual buffer management. This binds the client to adhere to kind of a //buffer access protocol,// comprised of the ''announcing'', ''locking'', optionally ''attaching'' and finally the ''releasing'' steps. Here, the actual buffer management within the provider is a question of implementation and will be configured during build-up of the scope in question.
@@ -1228,7 +1242,7 @@ Mostly, the //client code,// i.e. code in need of using buffers, can access some
 !primary implementations
 ;memory pool
 :in all those situations, where we just need a working buffer for some time, we can rely on our internal custom memory allocator.
-:{{red{~Not-Yet-Implemented as of 9/11}}} -- as a fallback we just rely on heap allocations through the language runtime
+:{{red{only partially implemented as of 12/2024}}} -- as a fallback we just rely on heap allocations through the language runtime
 ;frame cache
 :whenever a calculated result may be of further interest, beyond the immediate need triggering the calculation, it might be eligible for caching.
 :The Lumiera ''frame cache'' is a special BufferProvider, maintaining a larger pool of buffers which can be pinned and kept around for some time,
@@ -2163,8 +2177,9 @@ Similar to an Asset, an identification tuple is available (generated on the fly)
 &amp;rarr; MetaAsset
 </pre>
 </div>
-<div title="ExitNode" modifier="Ichthyostega" created="200706220322" modified="201202032306" tags="def">
-<pre>a special ProcNode which is used to pull the finished output of one Render Pipeline (Tree or Graph). This term is already used in the Cinelerra2 codebase. I am unsure at the moment if it is a distinct subclass or rahter a specially configured ProcNode (a general design rule tells us to err in favour of the latter if in doubt).
+<div title="ExitNode" modifier="Ichthyostega" created="200706220322" modified="202412221801" tags="def discuss" changecount="2">
+<pre>//The point where to pull the finished output of one Render Pipeline (Tree or Graph).//
+This term is already used in the Cinelerra2 codebase. In Lumiera however it is a distinct term only related to the data retrieval point for a [[job|RenderJob]]. The precise relation to a concrete ProcNode and [[port #|NodePort]] still needs to be worked out {{red{as of 12/2024}}}.
 
 The render nodes network is always built separate for each [[timeline segment|Segmentation]], which is //constant in wiring configuration.// Thus, while exit node(s) are per segment, the corresponding exit nodes of consecutive segments together belong to a ModelPort, which in turn corresponds to a global pipe (master bus not connected any further). These relations guide the possible configuration for an exit node: It may still provide multiple channels -- but all those channels are bound to belong to a single logical stream -- same StreamPrototype, always handled as bundle, connected and routed in one step. For example, when there is an 5.1 Audio master bus with a single fader, then &quot;5.1 Audio&quot; would be a prototype and these 6 channels will always be handled together; in such a case it makes perfectly sense to access these 6 audio channels through a single exit node, which is keyed (identified) by the same PipeID as used at the corresponding ModelPort and the corresponding [[global pipe|GlobalPipe]] (&quot;5.1 Audio master bus&quot;)
 </pre>
@@ -2249,9 +2264,11 @@ The actual fabrication function is defined as function operator -- this way, the
 * the ''configurable factory'' is used to define a family of production lines, which are addressed by the client by virtue of some type-ID. Runtime data and criteria are used to form this type-ID and thus pick the suitable factory function
 </pre>
 </div>
-<div title="Feed" modifier="Ichthyostega" created="201202122115" modified="201202122123" tags="def Rendering">
+<div title="Feed" modifier="Ichthyostega" created="201202122115" modified="202412221755" tags="def Rendering" changecount="2">
 <pre>A grouping device within an ongoing [[playback or render process|PlayProcess]].
-Any feed corresponds to a specific ModelPort, which in turn typically corresponds to a given GlobalPipe.
+Any feed corresponds to a specific ModelPort, which in turn typically corresponds to a given GlobalPipe, possibly with further qualification.
+As a rule of thumb, everything which could also be produced and consumed in isolation //within this current setup// can be considered a Feed. So obviously the typical situation has an video feed and an audio feed. But -- to stress the nasty fine points -- also a setup for stereoscopic video with two beamers is //one// feed (you want to see one video on the screen in 3D, not two videos). Yet in this latter case, it can be quite common that the actual setup requires to deliver two channel streams at two distinct hardware interfaces; this is an unfortunate consequence of //this specific setup// however, and must not leak into the modelling of media arrangement or playback within the application (most existing applications fall short on this aspect)
+
 When starting playback or render, a play process (with a PlayController front-end for client code) is established to coordinate the processing. This ongoing data production might encompass multiple media streams, i.e. multiple feeds pulled from several model ports and delivered into several [[output slots|OutputSlot]]. Each feed in turn might carry structured MultichannelMedia, and is thus further structured into individual [[streams of calculation|CalcStream]]. Since the latter are //stateless descriptors,// while the player and play process obviously is stateful, it's the feed's role to mediate between a state-based (procedural) and a stateless (functional and parallelised) organisation model -- ensuring a seamless data feed even during modification of the playback parameters.
 </pre>
 </div>
@@ -2482,7 +2499,7 @@ Additionally, they may be used for resource management purposes by embedding a r
 #* one OpenGL Dataframe could contain raw texture data (but I am lacking expertise for this topic)
 </pre>
 </div>
-<div title="FrameDispatcher" modifier="Ichthyostega" created="201105222330" modified="202306202209" tags="def Player Rendering img" changecount="46">
+<div title="FrameDispatcher" modifier="Ichthyostega" created="201105222330" modified="202412221743" tags="def Player Rendering img" changecount="47">
 <pre>An entity within the RenderEngine, responsible for translating a logical [[calculation stream|CalcStream]] (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames. As a //service// the Dispatcher acts as //bridge// between [[»playback«|Player]] and the [[render nodes network|Rendering]].
 
 The Dispatcher works together with the [[job ticket(s)|JobTicket]] and the [[Scheduler]]; actually these are the //core abstractions//&amp;nbsp; the process of ''job planning'' relies on. While the actual scheduler implementation lives within the Vault, the job tickets and the dispatcher are located within the [[Segmentation]], which is the backbone of the [[low-level model|LowLevelModel]]. More specifically, the dispatcher interface is //implemented//&amp;nbsp; by a set of &amp;rarr; [[dispatcher tables|DispatcherTables]] within the segmentation.
@@ -2500,7 +2517,7 @@ The purpose of this interface is to support the planning of new jobs, for a give
 ** additional focussed context information:
 *** the relevant [[segment|Segmentation]] responsible for producing this frame
 *** the corresponding JobTicket to use at this point
-*** a concrete ExitNode to pull for this frame
+*** a concrete ExitNode and [[Port number|NodePort]] to pull for this frame
 *** possibly a real-time related [[deadline|JobDeadline]]
 
 !!!Planning Chunks
@@ -4738,12 +4755,11 @@ Moreover, the design of coordinate matching and resolving incurs a structure sim
 
 </pre>
 </div>
-<div title="NodeConfiguration" modifier="Ichthyostega" created="200909041806" modified="200909041807" tags="spec Builder Rendering">
-<pre>Various aspects of the individual [[render node|ProcNode]] are subject to configuration and may influence the output quality or the behaviour of the render process.
+<div title="NodeConfiguration" modifier="Ichthyostega" created="200909041806" modified="202412221650" tags="spec Builder Rendering" changecount="1">
+<pre>Various aspects of the individual [[render node|ProcNode]] are the result of configuration and may influence the output quality or the behaviour of the render process.
 * the selection //what// actual implementation (plugin) to used for a formally defined &amp;raquo;[[Effect|EffectHandling]]&amp;laquo;
 * the intermediary/common StreamType to use within a [[Pipe]]
 * the render technology (CPU, hardware accelerated {{red{&amp;rarr; Future}}})
-* the ScheduleStrategy (possibly subdividing the calculation of a single frame)
 * if this node becomes a possible CachePoint or DataMigrationPoint in RenderFarm mode
 * details of picking a suitable [[operation mode|RenderImplDetails]] of the node (e.g. utilitsing &quot;in-place&quot; calculation)
 </pre>
@@ -4758,27 +4774,31 @@ Moreover, the design of coordinate matching and resolving incurs a structure sim
 In the most general case the render network may be just a DAG (not just a tree). Especially, multiple exit points may lead down to the same node, and following each of this possible paths the node may be at a different depth on each. This rules out a simple counter starting from the exit level, leaving us with the possibility of either employing a rather convoluted addressing scheme or using arbitrary ID numbers.{{red{...which is what we do for now}}}
 </pre>
 </div>
-<div title="NodeOperationProtocol" modifier="Ichthyostega" created="200806010251" modified="202412220501" tags="Rendering operational" changecount="3">
-<pre>{{red{⚠ In-depth rework underway as of 7/2024...}}}
-^^┅┅┅┅┅┅the following text is ''superseded''┅┅┅┅┅┅┅┅┅^^
-The [[nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&quot;; each node knows its predecessor(s), but not its successor(s).  The RenderProcess is organized according to the ''pull principle'', thus we find an operation {{{pull()}}} at the core of this process. Meaning that there isn't a central entity to invoke nodes consecutively. Rather, the nodes themselves contain the detailed knowledge regarding prerequisites, so the calculation plan is worked out recursively. Yet still there are some prerequisite resources to be made available for any calculation to happen. So the actual calculation is broken down into atomic chunks of work, resulting in a 2-phase invocation whenever &quot;pulling&quot; a node. For this to work, we need the nodes to adhere to a specific protocol:
+<div title="NodeOperationProtocol" modifier="Ichthyostega" created="200806010251" modified="202412221642" tags="Rendering operational rewrite" changecount="9">
+<pre>{{red{⚠ In-depth rework underway as of 12/2024...}}}
+The [[Render Nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&quot; ([[DAG|https://en.wikipedia.org/wiki/Directed_acyclic_graph]]); each node knows its predecessor(s), but not its successor(s).  The RenderProcess is organized according to the ''pull principle''. This implies that there is no central entity to „activate and apply“ nodes consecutively. Rather, the ExitNode is prompted to produce results -- and since the nodes are interconnected in accordance to their required prerequisite, the calculation plan works itself out recursively. However, some prerequisite resources must be provided before any calculation can start. Notably, loading source media data is an I/O-intensive task and can not be precisely timed. The actual calculation is broken down thus into atomic chunks of work, resulting in a 2-phase invocation scheme for generating data:
 ;planning phase
-:when a node invocation is foreseeable to be required for getting a specific frame for a specific nominal and actual time, the engine has to find out the actual operations to happen
+:when data for a given part of the timeline shall be produced, the engine has to work out what ExitNode to activate and what further prerequisites must be fulfilled
 :# the planning is initiated by issuing an &quot;get me output&quot; request, finally resulting in a JobTicket
-:# recursively, the node propagates &quot;get me output&quot; requests for its prerequisites
-:# after retrieving the planning information for these prerequisites, the node encodes specifics of the actual invocation situation into a closure called StateAdapter &lt;br/&gt;{{red{TODO: why not just labeling this &amp;raquo;~StateClosure&amp;laquo;?}}}
-:# finally, all this information is packaged into a JobTicket representing the planning results.
+:# recursively, the ticket propagates &quot;get me output&quot; requests for its prerequisites
+:# after retrieving the planning information for these prerequisites, the JobPlanning pipeline generates [[job definitions|RenderJob]] for each frame and exit node involed, as well as I/O-jobs for preparing the prerequisites
+:# finally, all these jobs are handed over to the [[Scheduler]].
 ;pull phase
 :now the actual node invocation is embedded within a job, activated through the scheduler to deliver //just in time.//
-:# Node is pulled, with a StateProxy object as parameter (encapsulating BufferProvider for access to the required frames or buffers)
-:# Node may now retrieve current parameter values, using the state accessible via the StateProxy
-:# to prepare for the actual {{{process()}}} call, the node now has to retrieve the input prerequisites
+:# a TurnoutSystem is established in the local stack frame
+:# a suitable buffer to hold the output data is requested from the BufferProvider
+:# on the top-level Node, the appropriate [[Port|NodePort]] is »pulled«, passing the output buffer and the ~TurnoutSystem
+:# within the Port, a [[»weaving patern«|NodeWeavingPattern]] is executed to govern the following structure of preparation and invocation
+:# in the //»mount« phase//, a [[FeedManifold|NodeFeedManifold]] is generated into local stack memory. This implies also to invoke an embedded [[parameter-functor|NodeParamFunctor]].
+:# to prepare for the actual processing, input prerequisites must be retrieved in the //»pull« phase//
 :#* when the planning phase determined availability from the cache, then just these cached buffer(s) are now retrieved, dereferencing a BuffHandle
 :#* alternatively the planning might have arranged for some other kind of input to be provided through a prerequisite Job. Again, the corresponding BuffHandle can now be dereferenced
-:#* Nodes may be planned to have a nested structure, thus directly invoking {{{pull()}}} call(s) to prerequisite nodes without further scheduling
-:# when input is ready prior to the {{{process()}}} call, output buffers will be allocated by locking the output [[buffer handles|BuffHandle]] prepared during the planning phase
-:# since all buffers and prerequistes are available, the Node may now prepare a frame pointer array and finally invoke the external {{{process()}}} to kick off the actual calculations
-:# finally, when the {{{pull()}}} call returns, &quot;parent&quot; state originating the pull holds onto the buffers containing the calculated output result.
+:#* otherwise, ''recursive Node activation'' happens on the predecessor nodes (»Lead Nodes«)
+:# the next step is to complete the //»weaving shed«// -- which involves allocation of output buffers, relying on the BufferProvider(s) configured for each «slot». Notably, some of these providers might actually redirect the output data into the Cache. At this point, the invocation parameter tuples for input and output can be wired with appropriate buffer pointers.
+:# now everything is ready for the //»weft« phase:// the external [[processing-functor|NodeProcFunctor]] is triggered
+:# finally, in the //»fix« phase//, input buffers can be released and output buffers can be //committed//
+:# when the {{{weft()}}} call returns, &quot;parent&quot; state originating the pull-activation holds onto the result buffer containing the calculated output data.
+^^┅┅┅┅┅┅the following text is ''superseded''┅┅┅┅┅┅┅┅┅^^
 {{red{WIP as of 9/11  -- many details here are still to be worked out and might change as we go}}}
 
 {{red{Update  8/13  -- work on this part of the code base has stalled, but now the plain is to get back to this topic when coding down from the Player to the Engine interface and from there to the NodeInvocation. The design as outlined above was mostly coded in 2011, but never really tested or finished; you can expect some reworkings and simplifications, but basically this design looks OK}}}
@@ -4787,7 +4807,7 @@ some points to note:
 * when a node is &quot;inplace-capable&quot;, input and output buffer may actually point to the same location
 * but there is no guarantee for this to happen, because the cache may be involved (and we can't overwrite the contents of a cache frame)
 * nodes in general may require N inputs and M output frames, which are expected to be processed in a single call
-* some of the technical details of buffer management are encapsulated within the BufferTable of each invocation
+* the technical details of buffer management are encapsulated within the BufferProvider(s) used for each invocation
 
 &amp;rarr; the [[&quot;mechanics&quot; of the render process|RenderMechanics]]
 &amp;rarr; more fine grained [[implementation details|RenderImplDetails]]
@@ -5273,7 +5293,7 @@ Why is ''all of this so complicated''?
 &lt;!--}}}--&gt;
 </pre>
 </div>
-<div title="ParamProvider" modifier="Ichthyostega" created="200706220517" modified="200810170040" tags="def automation">
+<div title="ParamProvider" modifier="Ichthyostega" created="200706220517" modified="202412221806" tags="def" changecount="3">
 <pre>A ParamProvider is the counterpart for (one or many) [[Parameter]] instances. It implements the value access function made available by the Parameter object to its clients.
 
 To give a concrete example: 
@@ -5281,7 +5301,7 @@ To give a concrete example:
 * the Plugin has a Parameter Object (from which we could query the information of this parameter being a continuous float function)
 * this Parameter Object provides a getValue() function, which is internally linked (i.e. by configuration) to a //Parameter Provider//
 * the actual object implementing the ParamProvider Interface could be a Automation MObject located somewhere in the session and would do bezier interpolation on a given keyframe set.
-* Param providers are created on demand; while building the Render Engine configuration actually at work, the Builder would have to setup a link between the Plugin Parameter Object and the ParamProvider; he can do so, because he sees the link between the Automation MObject and the corresponding Effect MObject
+* Param providers are created on demand; while building the Render Engine configuration actually at work, the Builder would have to create an actual [[parameter-functor|NodeParamFunctor]], which is an actually invokable translation of the link between the Plugin Parameter Object and the ParamProvider. An open question {{red{as of 12/2024}}} is how to make this evaluation //safe to invoke// from the concurrent execution of render jobs -- especially since the HighLevelModel could have been changed while a render process is still underway...
 
 !!ParamProvider ownership and lifecycle
 Actually, ParamProvider is just an interface which is implemented either by a constant or an [[Automation]] function. In both cases, access is via direct reference, while the link to the ParamProvider is maintained by a smart-ptr, which &amp;mdash; in the case of automation may share ownership with the [[Placement]] of the automation data set.
@@ -5290,7 +5310,7 @@ Actually, ParamProvider is just an interface which is implemented either by a co
 &amp;rarr; see EffectHandling
 </pre>
 </div>
-<div title="Parameter" modifier="Ichthyostega" created="200706220505" modified="200805300124" tags="def automation">
+<div title="Parameter" modifier="Ichthyostega" created="200706220505" modified="202412221806" tags="def" changecount="1">
 <pre>Parameters are all possibly variable control values used within the Render Engine. Contrast this with configuration values, which are considered to be fixed and need an internal reset of the application (or session) state to take effect.
 
 A ''Parameter Object'' provides a descriptor of the kind of parameter, together with a function used to pull the //actual value// of this parameter. Here, //actual// has a two-fold meaning:
@@ -6136,7 +6156,7 @@ This is the core service provided by the player subsystem. The purpose is to cre
 :any details of this processing remain opaque for the clients; even the player subsystem just accesses the EngineFaçade
 </pre>
 </div>
-<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202412220549" tags="overview impl discuss draft" changecount="42">
+<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202412221832" tags="overview impl discuss draft" changecount="45">
 <pre>//Integration effort to promote the development of rendering, playback and video display in the GUI//
 This IntegrationSlice was started in {{red{2023}}} as [[Ticket #1221|https://issues.lumiera.org/ticket/1221]] to coordinate the completion and integration of various implementation facilities, planned, drafted and built during the last years; this effort marks the return of development focus to the lower layers (after years of focussed UI development) and will implement the asynchronous and time-bound rendering coordinated by the [[Scheduler]] in the [[Vault|Vault-Layer]]
 
@@ -6173,7 +6193,7 @@ __December.23__: building the Scheduler required time and dedication, including 
 
 __April.24__: after completing an extended round of performance tests for the new Scheduler, development focus is shifted now shifted upwards to the [[Render Node Network|ProcNode]], where Engine activity is carried out. This part was addressed at the very start of the project, and later again -- yet could never be completed, due to a lack of clear reference points and technical requirements. Hope to achieve a breakthrough rests on this integration effort now.
 __June.24__: assessment of the existing code indicated some parts not well suited to the expected usage. Notably the {{{AllocationCluster}}}, which is the custom allocator used by the render nodes network, was reworked and simplified. Moreover, a new custom container was developed, to serve as //link to connect the nodes.// Beyond that, in-depth review validated the existing design for the render nodes, while also indicating a clear need to rearrange and re-orient the internal structure within an node invocation to be better aligned with the structure of the Application developed thus far...
-__December.24__: after an extended break (due to family-related obligations), a re-oriented concept for the Render Node invocation was developed in a prototyping setup. Assessment of results and further analysis leads to the conclusion that a more flexible invocation scheme -- and especially structured invocation parameters -- must be retro-fitted into the code developed thus far. Features of this kind can not be added later by decoration and extension -- rather, the data structures used directly within the invocation required considerable elaboration. This could be accomplished in the end, through a bold move to abandon array-style storage and switch over to strictly typed data tuples and a functor-based binding to the implementation library.
+__December.24__: after an extended break of several months (due to family-related obligations), a re-oriented concept for the Render Node invocation was developed in a prototyping setup. Assessment of results and further analysis leads to the conclusion that a more flexible invocation scheme -- and especially structured invocation parameters -- must be retro-fitted into the code developed thus far. Features of this kind can not be added later by decoration and extension -- rather, the data structures used directly within the invocation required considerable elaboration. This could be accomplished in the end, through a bold move to abandon array-style storage and switch over to strictly typed data tuples and a functor-based binding to the implementation library.
 * ✔ establish a test setup for developing render node functionality
 * ✔ build and connect some dummy render nodes directly in a test setup
 * 🗘 invoke render nodes stand-alone, without framework
@@ -6196,6 +6216,9 @@ __December.24__: after an extended break (due to family-related obligations), a 
 :are active agents in the Lumiera ~Render-Engine and drive the processing collaboratively
 :there is no central »manager« or »dispatcher« thread, rather work is //pulled// and management work is handled alongside
 :Load and capacity management is [[handled stochastically|SchedulerLoadControl]] -- workers „sample the timeline“
+;Domain Ontology
+:Lumiera will ''not'' develop its own Ontology for the Video-, Audio- or »Media« domain in general.
+:Unfortunately, we are not sufficiently naïve to [[believe into the 15th standard to rule them all|https://xkcd.com/927/]]. And this implies that the design confronts the extremely challenging task to handle the mapping into several Domain Ontologies. The approach pursued for this is to //deflect decisions back// into a //binding,// which is provided by a Plug-in to attach an external Media-handling Library. Building such a Plug-in and binding will in itself be difficult for sure. It will have to respond to some pre-defined queries how to deal with aspects relevant for processing an arrangement of media. This includes the enumeration of [[processing assets|ProcAsset]] and [[Stream Type instances|StreamType]], and the implementation for a function to //outfit// a render node with a //function binding// to invoke the implementation of a processing asset.
 </pre>
 </div>
 <div title="Player" modifier="Ichthyostega" created="201012181700" modified="202304140114" tags="def overview" changecount="4">
@@ -6864,7 +6887,7 @@ Besides housing the planning pipeline, the RenderDrive is also a JobFunctor for 
 &amp;rarr; [[Player]]
 </pre>
 </div>
-<div title="RenderEntities" modifier="Ichthyostega" created="200706190715" modified="202412220511" tags="Rendering classes" changecount="5">
+<div title="RenderEntities" modifier="Ichthyostega" created="200706190715" modified="202412221727" tags="Rendering classes rewrite" changecount="6">
 <pre>{{red{⚠ In-depth rework underway as of 10/2024...}}}
 ^^┅┅┅┅┅┅the following text is ''superseded''┅┅┅┅┅┅┅┅┅^^
 The [[Render Engine|Rendering]] only carries out the low-level and performance critical tasks. All configuration and decision concerns are to be handled by [[Builder]] and [[Dispatcher|SteamDispatcher]]. While the actual connection of the Render Nodes can be highly complex, basically each Segment of the Timeline with uniform characteristics is handled by one Processor, which is a graph of [[Processing Nodes|ProcNode]] discharging into a ExitNode. The Render Engine Components as such are //stateless// themselves; for the actual calculations they are combined with a StateProxy object generated by and connected internally to the Controller {{red{really?? 2018}}}, while at the same time holding the Data Buffers (Frames) for the actual calculations.
@@ -6907,32 +6930,38 @@ Every node is actually decomposed into three parts
 @@clear(right):display(block):@@
 </pre>
 </div>
-<div title="RenderJob" modifier="Ichthyostega" created="201202162156" modified="202412220514" tags="spec Rendering" changecount="2">
+<div title="RenderJob" modifier="Ichthyostega" created="201202162156" modified="202412221726" tags="spec Rendering" changecount="6">
 <pre>An unit of operation, to be [[scheduled|Scheduler]] for calculating media frame data just in time.
 Within each CalcStream, render jobs are produced by the associated FrameDispatcher, based on the corresponding JobTicket used as blue print (execution plan).
 
 !Anatomy of a render job
 Basically, each render job is a //closure// -- hiding all the prepared, extended execution context and allowing the scheduler to trigger the job as a simple function.
 When activated, by virtue of this closure, the concrete ''node invocation'' is constructed, which is a private and safe execution environment for the actual frame data calculations. The node invocation sequence is what actually implements the ''pulling of data'': on exit, all cacluated data is expected to be available in the output buffers. Typically (but not necessarily) each node embodies a ''calculation function'', holding the actual data processing algorithm.
+!!!Parameters
+Each job is supplied with a fixed set of five arguments
+* //Deadline// in wall-clock time
+* //Absolute nominal time// on the consolidated model timeline
+* //Exit Port// to retrieve data (concrete ExitNode and [[Port number|NodePort]])
+* //Output Sink// handle, where to deliver generated data
+* //Process Key//
 
-!{{red{open questions 2/12}}}
-* what are the job's actual parameters?
-* how is prerequisite data passed?  &amp;rarr; maybe by an //invocation key?//
+!{{red{open questions 12/2024}}}
+* how is prerequisite data passed?  &amp;rarr; maybe by means of an //invocation key?//
 
 !Input and closure
-each job gets only the bare minimum information required to trigger the execution: the really variable part of the node's invocation. The job uses this pieces of information to re-activate a pre-calculated closure, representing a wider scope of environment information. Yet the key point is for this wider scope information to be //quasi static.// It is shared by a whole [[segment|Segmentation]] of the timeline in question, and it will be used and re-used, possibly concurrently. From the render job's point of view, the engine framework just ensures the availability and accessibility of all this wider scope information.
+each job gets only the bare minimum information required to trigger the execution: the really variable part of the node's invocation. The job uses this pieces of information to re-activate a pre-calculated closure, representing a wider scope of environmental information. Yet the key point is for this wider scope information to be //effectively static.// It is shared by a whole [[segment|Segmentation]] of the timeline in question, and it will be used and re-used, possibly concurrently. From the render job's point of view, the engine framework just ensures the availability and accessibility of all this wider scope information.
 
 Prerequisite data for the media calculations can be considered just part of that static environment, as far as the node is concerned. Actually, this prerequisite data is dropped off by other nodes, and the engine framework and the builder ensure the availability of this data just in time.
 
 !observations
 * the job's scope represents a strictly local view
-* the job doesn't need to know about its output
+* the job doesn't need to know about its actual output format and designation
 * the job doesn't need to know anything about the frame grid or frame number
 * all it needs to know is the ''effective nominal time'' and an ''invocation instance ID''
 </pre>
 </div>
-<div title="RenderMechanics" modifier="Ichthyostega" created="200806030230" modified="202412220529" tags="Rendering operational" changecount="4">
-<pre>{{red{⚠ In-depth rework underway as of 7/2024...}}}
+<div title="RenderMechanics" modifier="Ichthyostega" created="200806030230" modified="202412221601" tags="Rendering operational rewrite" changecount="6">
+<pre>{{red{⚠ In-depth rework underway as of 12/2024...}}}
 ^^┅┅┅┅┅┅the following text is ''superseded''┅┅┅┅┅┅┅┅┅^^
 While the render process, with respect to the dependencies, the builder and the processing function is sufficiently characterized by referring to the ''pull principle'' and by defining a [[protocol|NodeOperationProtocol]] each node has to adhere to &amp;mdash; for actually get it coded we have to care for some important details, especially //how to manage the buffers.// It may well be that the length of the code path necessary to invoke the individual processing functions is finally not so important, compared with the time spent at the inner pixel loop within these functions. But my guess is (as of 5/08), that the overall number of data moving and copying operations //will be//&amp;nbsp; of importance.
 {{red{WIP as of 9/11 -- need to mention the planning phase more explicitly}}}
@@ -7055,7 +7084,7 @@ An Activity is //performed// by invoking its {{{activate(now, ctx)}}} function -
 In a similar vein, also ''dependency notifications'' need to happen decoupled from the activity chain from which they originate; thus the Post-mechanism is also used for dispatching notifications. Yet notifications are to be treated specially, since they are directed towards a receiver, which in the standard case is a {{{GATE}}}-Activity and will respond by //decrementing its internal latch.// Consequently, notifications will be sent through the ''λ-post'' -- which operationally re-schedules a continuation as a follow-up job. Receiving such a notification may cause the Gate to become opened; in this case the trigger leads to //activation of the chain// hooked behind the Gate, which at some point typically enters into another calculation job. Otherwise, if the latch (in the Gate) is already zero (or the deadline has passed), nothing happens. Thus the implementation of state transition logic ensures the chain behind a Gate can only be //activated once.//
 </pre>
 </div>
-<div title="RenderProcess" modifier="Ichthyostega" created="200706190705" modified="202412220509" tags="Rendering operational" changecount="21">
+<div title="RenderProcess" modifier="Ichthyostega" created="200706190705" modified="202412221701" tags="Rendering operational" changecount="26">
 <pre>At a high level, the Render Process is what „runs“ a playback or render. Using the EngineFaçade, the [[Player]] creates a descriptor for such a process, which notably defines a [[»calculation stream«|CalcStream]] for each individual //data feed// to be produced. To actually implement such an //ongoing stream of timed calculations,// a series of data frames must be produced, for which some source data has to be loaded and then individual calculations will be scheduled to work on this data and deliver results within a well defined time window for each frame. Thus, on the implementation level, a {{{CalcStream}}} comprises a pipeline to define [[render jobs|RenderJob]], and a self-repeating re-scheduling mechanism to repeatedly plan and dispatch a //chunk of render jobs// to the [[Scheduler]], which cares to invoke the individual jobs in due time.
 
 This leads to a even more detailed description at implementation level of the ''render processing''. Within the [[Session]], the user has defined the »edit« or the definition of the media product as a collection of media elements placed and arranged into a [[Timeline]]. A repeatedly-running, demand-driven, compiler-like process (in Lumiera known as [[the Builder|Builder]]) consolidates this [[»high-level definition«|HighLevelModel]] into a [[Fixture]] and a [[network of Render Nodes|LowLevelModel]] directly attached below. The Fixture hereby defines a [[segment for each part of the timeline|Segmentation]], which can be represented as a distinct and non-changing topology of connected render nodes. So each segment spans a time range, quantised into a range of frames -- and the node network attached below this segment is capable of producing media data for each frame within definition range, when given the actual frame number, and some designation of the actual data feed required at that point. Yet it depends on the circumstances what this »data feed« //actually is;// as a rule, anything which can be produced and consumed as compound will be represented as //a single feed.// The typical video will thus comprise a video feed and a stereo sound feed, while another setup may require to deliver individual sound feeds for the left and right channel, or whatever channel layout the sound system has, and it may require two distinct beamer feeds for the two channels of stereoscopic video. However -- as a general rule of architecture -- the Lumiera Render Engine is tasked to perform //all of the processing work,// up to and including any adaptation step required to reach the desired final result. Thus, for rendering into a media container, only a single feed is required, which can be drawn from an encoder node, which in turn consumes several data feeds for its constituents.
@@ -7066,9 +7095,8 @@ To summarise this break-down of the rendering process defined thus far, the [[Sc
 * a specification of the Segment and the ExitNode to pull
 
 
-{{red{⚠ In-depth rework underway as of 7/2024...}}}
-^^┅┅┅┅┅┅the following text is ''superseded''┅┅┅┅┅┅┅┅┅^^
-For each segment (of the effective timeline), there is a Processor holding the exit node(s) of a processing network, which is a &quot;Directed Acyclic Graph&quot; of small, preconfigured, stateless [[processing nodes|ProcNode]]. This network is operated according to the ''pull principle'', meaning that the rendering is just initiated by &quot;pulling&quot; output from the exit node, causing a cascade of recursive downcalls or prerequisite calculations to be scheduled as individual [[jobs|RenderJob]]. Each node knows its predecessor(s), thus the necessary input can be pulled from there. Consequently, there is no centralized &quot;engine object&quot; which may invoke nodes iteratively or table driven &amp;mdash; rather, the rendering can be seen as a passive service provided for the Vault, which may pull from the exit nodes at any time, in any order (?), and possibly multithreaded.
+----
+//Notably// »The Render Process« is //dissolved// by this design into a complex interwoven setup of separate actors (Player, Scheduler, Builder, Render Nodes), which just „happen“ to work together to make the process happen. There is no &quot;engine object&quot; or &quot;processor&quot; to just &quot;do&quot; the rendering.
 
 __see also__
 &amp;rarr; the [[Entities involved in Rendering|RenderEntities]]
@@ -11212,14 +11240,6 @@ The above requirement analysis reveals a common handling scheme, which is best s
 Lumiera uses a µs-grid as base for the internal time representation {{red{11/2022 might revisit this decision, see #1258}}}, which generally is a good balance between performance and the addressable value range. However, for these calculations aimed at pixel precise drawing, even this micro grid turns out to be not precise enough, especially for sample accurate sound automation. To work around this limitation, the ~ZoomWindow //metric// (scale factor) is represented as fractional number (implemented as {{{boost::rational&lt;int64_t&gt;}}}. This allows to carry out internal calculations involving scale factors with lossless integral arithmetics, and thus precisely to retain a given window extension in screen pixels. Since the temporal extension is still determined on a µs scale, sometimes the (fractional) zoom factor must be adjusted slightly to match the grid -- preference is always to reduce the factor or increase the window to the next tick.
 
 </pre>
-</div>
-<div title="automation" modifier="Ichthyostega" created="200805300057" modified="200805300125" tags="overview">
-<pre>The purpose of automation is to vary a parameter of some data processing instance in the course of time while rendering. Thus, automation encompasses all the variability within the render network //which is not a structural change.//
-
-
-!Parameters and Automation
-
-[[Automation]] is treated as a function over time. Everything beyond this definition is considered an implementation detail of the [[parameter provider|ParamProvider]] used to yield the value. Thus automation is closely tied to the concept of a [[Parameter]], which also plays an important role in the communication with the GUI and while [[setting up and wiring the render nodes|BuildRenderNode]] in the course of the build process (&amp;rarr; see [[tag:Builder|Builder]])</pre>
 </div>
 <div title="def" modifier="Ichthyostega" created="200902080726">
 <pre>Definition of commonly used terms and facilities...</pre>

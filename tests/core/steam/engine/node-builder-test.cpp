@@ -32,15 +32,78 @@ namespace test  {
   
   
   /***************************************************************//**
-   * @test creating and configuring various kinds of render nodes.
+   * @test creating and configuring various kinds of Render Nodes.
    */
   class NodeBuilder_test : public Test
     {
       virtual void
       run (Arg)
         {
-          UNIMPLEMENTED ("build and wire some render nodes");
-        } 
+          build_simpleNode();
+          build_Node_fixedParam();
+          build_Node_dynamicParam();
+          build_connectedNodes();
+          build_ParamNode();
+        }
+      
+      
+      /** @test TODO build a simple output-only Render Node
+       * @todo WIP 12/24 🔁 define ⟶ implement
+       */
+      void
+      build_simpleNode()
+        {
+          auto fun = [](uint* buff){ *buff = LIFE_AND_UNIVERSE_4EVER; };
+          
+          ProcNode node{prepareNode("Test")
+                          .preparePort()
+                            .invoke("fun()", fun)
+                            .completePort()
+                          .build()};
+          
+          CHECK (watch(node).isSrc());
+          CHECK (watch(node).ports().size() == 1);
+        }
+      
+      
+      /** @test TODO build a Node with a fixed invocation parameter
+       * @todo WIP 12/24 🔁 define ⟶ implement
+       */
+      void
+      build_Node_fixedParam()
+        {
+          UNIMPLEMENTED ("build node with fixed param");
+        }
+      
+      
+      /** @test TODO build a Node with dynamically generated parameter
+       * @todo WIP 12/24 define ⟶ implement
+       */
+      void
+      build_Node_dynamicParam()
+        {
+          UNIMPLEMENTED ("build node with param-functor");
+        }
+      
+      
+      /** @test TODO build a chain with two connected Nodes
+       * @todo WIP 12/24 define ⟶ implement
+       */
+      void
+      build_connectedNodes()
+        {
+          UNIMPLEMENTED ("build two linked nodes");
+        }
+      
+      
+      /** @test TODO 
+       * @todo WIP 12/24 define ⟶ implement
+       */
+      void
+      build_ParamNode()
+        {
+          UNIMPLEMENTED ("build ParamNode + follow-up-Node");
+        }
     };
   
   
