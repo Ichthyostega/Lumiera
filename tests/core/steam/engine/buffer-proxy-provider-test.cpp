@@ -32,11 +32,11 @@ namespace test  {
   
   
   /***************************************************************//**
-   * @test verify the OutputSlot interface and base implementation
-   *       by performing full data exchange cycle. This is a
-   *       kind of "dry run" for documentation purposes,
-   *       both the actual OutputSlot implementation
-   *       as the client using this slot are Mocks.
+   * @test verify the design of OutputSlot and BufferProvider by
+   *       implementing a delegating BufferProvider to expose
+   *       output data buffers provided from _some implementation._
+   * @todo WIP-WIP 12/2024 this turned out to be impossible,
+   *       due to inconsistencies in the default implementation.  /////////////////////////////////////////////TICKET #1387 : need to consolidate BufferProvider default implementation
    */
   class OutputProxyProvider_test : public Test
     {
@@ -60,7 +60,7 @@ namespace test  {
           TestFrame dataBlock (frameNr);
           CHECK (    dataBlock.isPristine());
           
-          BuffHandle handle = proxPro.lockBuffer (dataBlock);
+          BuffHandle handle = proxPro.lockBuffer (dataBlock); ///////////////////////////////////////////////TICKET #1387 : unable to implement this
           
           // Now a »client« can do awful things to the buffer...
           CHECK (handle.isValid());

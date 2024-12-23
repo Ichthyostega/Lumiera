@@ -15,7 +15,7 @@
  ** Adapter to expose a given memory block through a BuffHandle.
  ** This allows to integrate a specific data access (e.g. related to input / output)
  ** with the buffer lifecycle protocol as defined by BufferProvider.
- ** @see state.hpp
+ ** @todo BROKEN as of 12/2024 //////////////////////////////////////////////////////////////////////////////TICKET #1387 : can not properly compose BufferProvider
  ** @see output-slot.hpp
  */
 
@@ -54,21 +54,64 @@ namespace engine {
    * @todo WIP-WIP 12/2024 this is a design sketch to explore extension capabilities of BufferProvider
    */
   class BufferProxyProvider
-    : util::MoveOnly
+    : util::NonCopyable
     {
       
-      std::function<void(size_t,BufferState)> listener_;
+      using Listener = std::function<void(size_t,BufferState)>;
+      
+      class ForwardingBufferProvider
+        : public BufferProvider
+        {
+          Listener listener_;
+            
+            /* === BufferProvider API === */
+            
+            uint
+            prepareBuffers (uint, HashVal)  override
+              {
+                NOTREACHED ("this part of the API should not be used");
+                return 1; // can not sensibly do anything for "pre-allocation",
+              }          //  other than telling the caller that we only "have one buffer to provide"
+            
+            BuffHandle
+            provideLockedBuffer (HashVal typeID)  override
+              {
+                        /////////////////////////////////////////////////////////////////////////////////////TICKET #1387 : BufferProvider default impl. is lacking means to compose and delegate
+//              return buildHandle (typeID, asBuffer(newBlock.accessMemory()), &newBlock);
+              }
+            
+            void
+            mark_emitted (HashVal, LocalTag const&)  override
+              {
+                  
+              }
+
+            void
+            detachBuffer (HashVal, LocalTag const&, Buff&)  override
+              {
+                  
+              }
+        public:
+          ForwardingBufferProvider (Listener listener)
+            : BufferProvider{"BufferProxyProvider"}
+            , listener_{std::move (listener)}
+            { }
+        };
+      
+      ForwardingBufferProvider passThroughProvider_;
+      
       
     public:
       template<class LIS,                  typename = lib::meta::disable_if_self<BufferProxyProvider, LIS>>
       BufferProxyProvider (LIS&& listener)
-        : listener_{std::forward<LIS> (listener)}
+        : passThroughProvider_{std::forward<LIS> (listener)}
         { }
       
       template<typename TAR>
       BuffHandle
       lockBuffer (TAR& dataBlock)
         {
+           //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1387 : impossible due to inner contradictions in BufferProvider and OutputSlot
           UNIMPLEMENTED ("setup type handler and then create a locked BuffHandle");
         }
       
