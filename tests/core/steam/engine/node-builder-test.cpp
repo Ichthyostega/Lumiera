@@ -19,6 +19,7 @@
 #include "lib/test/run.hpp"
 #include "steam/engine/node-builder.hpp"
 #include "steam/engine/diagnostic-buffer-provider.hpp"
+#include "lib/test/diagnostic-output.hpp"
 //#include "lib/util.hpp"
 
 
@@ -48,8 +49,8 @@ namespace test  {
         }
       
       
-      /** @test TODO build a simple output-only Render Node
-       * @todo WIP 12/24 🔁 define ⟶ implement
+      /** @test build a simple output-only Render Node
+       * @todo 12/24 ✔ define ⟶ ✔ implement
        */
       void
       build_simpleNode()
@@ -66,10 +67,18 @@ namespace test  {
           CHECK (watch(node).ports().size() == 1);
           
           // Prepare setup to invoke such a Render Node...
-          using Buffer = long;
           BufferProvider& provider = DiagnosticBufferProvider::build();
-          BuffHandle buff = provider.lockBufferFor<Buffer> (-55);
+          BuffHandle buff = provider.lockBufferFor<long> (-55);
+          Time nomTime = Time::ZERO;
+          ProcessKey key{0};
+          uint port{0};
           
+          CHECK (-55 == buff.accessAs<long>());
+          
+          // Trigger Node invocation...
+          buff = node.pull (port, buff, nomTime, key);
+          
+          CHECK (LIFE_AND_UNIVERSE_4EVER == buff.accessAs<uint>());
         }
       
       

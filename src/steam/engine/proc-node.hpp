@@ -239,25 +239,25 @@ namespace engine {
           return wiring_.ports[portIdx];
         }
       
-      /** Engine Core operation: render and pull output from this node.
-       *  On return, currentProcess will hold onto output buffer(s)
-       *  containing the calculated result frames. In case this node
-       *  calculates a multichannel output, only one channel can be
-       *  retrieved by such a \c pull() call, but you can expect data
-       *  of the other channels to be processed and fed to cache.
-       *  @param currentProcess the current processing state for
-       *         managing buffers and accessing current parameter values
-       *  @param requestedOutputNr the output channel requested
-       *         (in case this node delivers more than one output channel)
-       *  @return handle to the buffer containing the calculated result.
+      
+      /*************************************************************//**
+       * Engine Core operation: render and pull output from this node.
+       * Activate the indicated Port, which may recursively pull from
+       * »Lead Nodes« (predecessors) and invoke the operation embodied
+       * by this node. The stack frame of this call acts as anchor
+       * to hold the TurnoutSystem for parameter access and coordination.
+       * @param portIdx the port (≙flavour) to activate
+       * @param output  a BuffHandle configured suitably to hold results
+       * @param nomTime _absolute nominal Time_ to key this invocation
+       * @param procKey additional process key for context parameters
+       * @return handle to the buffer containing the calculated result.
        */
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
       BuffHandle
-      pull (StateClosure_OBSOLETE& currentProcess, uint requestedOutputNr=0)  const
+      pull (uint portIdx, BuffHandle output, Time nomTime, ProcessKey procKey)
         {
-          return this->wiringConfig_.callDown (currentProcess, requestedOutputNr);
+          TurnoutSystem turnoutSystem{nomTime, procKey};
+          return getPort(portIdx).weave (turnoutSystem, output);
         }
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
       /// „backdoor“ to watch internals from tests

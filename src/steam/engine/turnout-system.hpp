@@ -41,11 +41,14 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/hetero-data.hpp"
 
+#include <optional>
+
 
 namespace steam  {
 namespace engine {
   
   using lib::time::Time;
+  using ProcessKey = uint64_t;
   
   template<typename VAL>
   class ParamStorageFrame
@@ -65,7 +68,7 @@ namespace engine {
     {
       /////////////////////////////////////////////////////////OOO Storage: ich brauche Overflow-Buckets. KISS ==> erst mal intrusive linked List
     public:
-      TurnoutSystem (Time absoluteNominalTime)
+      TurnoutSystem (Time absoluteNominalTime, ProcessKey procKey =0)
         { }
       // this is a copyable front-end object
     };
