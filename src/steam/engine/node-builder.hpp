@@ -350,6 +350,25 @@ namespace engine {
           return move(*this);
         }
       
+      /**
+       * Embed the explicitly given parameter-functor into the FeedPrototype,
+       * so that it will be called on each Node invocation to generate parameters
+       * to be passed into the actual processing function. The TurnoutSystem acts
+       * as source for the base coordinates, typically the _absolute nominal Time._
+       * @return adapted PortBuilder marked with the `FeedPrototype` holding \a PFX
+       */
+      template<class PFX>
+      auto
+      attachParamFun (PFX paramFunctor)
+        {
+          using AdaptedWeavingBuilder = typename WAB::template Adapted<PFX>;
+          using AdaptedPortBuilder = PortBuilder<POL,DAT,AdaptedWeavingBuilder>;
+          //
+          return AdaptedPortBuilder{move(*this)
+                                   ,weavingBuilder_.adaptParam (move (paramFunctor))
+                                   };
+        }
+      
       
       /*************************************************************//**
        * Terminal: complete the Port wiring and return to the node level.

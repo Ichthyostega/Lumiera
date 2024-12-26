@@ -66,19 +66,32 @@ namespace test  {
           CHECK (watch(node).isSrc());
           CHECK (watch(node).ports().size() == 1);
           
-          // Prepare setup to invoke such a Render Node...
+          CHECK (LIFE_AND_UNIVERSE_4EVER == invokeRenderNode (node));
+        }
+      
+      /**
+       * @internal Helper for Render Node invocation
+       *  - use a DiagnosticBufferProvider to allocate a result buffer
+       *  - assuming that the Node internally does not allocate further buffers
+       *  - pull from Port #0 of the given node, passing the \a nomTime as argument
+       *  - expect the buffer to hold a single `uint` value after invocation
+       */
+      uint
+      invokeRenderNode (ProcNode& theNode, Time nomTime =Time::ZERO)
+        {
           BufferProvider& provider = DiagnosticBufferProvider::build();
           BuffHandle buff = provider.lockBufferFor<long> (-55);
-          Time nomTime = Time::ZERO;
           ProcessKey key{0};
           uint port{0};
           
           CHECK (-55 == buff.accessAs<long>());
           
           // Trigger Node invocation...
-          buff = node.pull (port, buff, nomTime, key);
+          buff = theNode.pull (port, buff, nomTime, key);
           
-          CHECK (LIFE_AND_UNIVERSE_4EVER == buff.accessAs<uint>());
+          uint result = buff.accessAs<uint>();
+          buff.release();
+          return result;
         }
       
       
@@ -88,6 +101,18 @@ namespace test  {
       void
       build_Node_fixedParam()
         {
+          auto procFun =  [](ushort param, uint* buff){ *buff = param; };
+          auto paramFun = [](TurnoutSystem&){ return LIFE_AND_UNIVERSE_4EVER; };
+          
+          ProcNode node{prepareNode("Test")
+                          .preparePort()
+                            .invoke("fun()",procFun)
+                            .attachParamFun(paramFun)
+                            .completePort()
+                          .build()};
+          
+          CHECK (LIFE_AND_UNIVERSE_4EVER == invokeRenderNode (node));
+          
           UNIMPLEMENTED ("build node with fixed param");
         }
       

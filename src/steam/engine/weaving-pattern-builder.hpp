@@ -286,6 +286,28 @@ namespace engine {
         , prototype_{move (adaptedPrototype)}
         { }
       
+      
+      /** type builder for FeedPrototype adapted to another parameter-fun */
+      template<class PFX>
+      using AdaptedPrototype = typename PROT::template Adapted<PFX>;
+      template<class PFX>
+      using Adapted = WeavingBuilder<POL, AdaptedPrototype<PFX>>;
+      
+      /** Adapt a parameter-functor into the _Feed Prototype,_
+       *  so that it is invoked whenever a new `FeedManifold` is built.
+       * @return adapted WeavingBuilder marked with changed `FeedManifold` type.
+       */
+      template<class PFX>
+      auto
+      adaptParam (PFX paramFunctor)
+        {
+          using AdaptedWeavingBuilder = Adapted<PFX>;
+          //
+          return AdaptedWeavingBuilder{move(*this)
+                                      ,prototype_.moveAdapted (move (paramFunctor))
+                                      };
+        }
+      
       WeavingBuilder&&
       attachToLeadPort (ProcNode& lead, uint portNr)
         {
