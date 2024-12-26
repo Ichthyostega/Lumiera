@@ -235,18 +235,19 @@ namespace engine {
    * actual NodeBuilder and PortBuilder allows to introduce extension points
    * and helps to abstract away internal technical details of the invocation.
    * @tparam POL allocation and context configuration policy
-   * @tparam FUN function or invocation adapter to invoke
+   * @tparam PROT Prototype to generate a Feed or invocation adapter to invoke
+   * @remark in the standard case, PROT is a FeedManifold<FUN>::Prototype and
+   *         thus embeds the processing-functor and possibly a parameter-functor
    */
-  template<class POL, class FUN>
+  template<class POL, class PROT>
   struct WeavingBuilder
     : util::MoveOnly
     {
-      using Prototype = typename FeedManifold<FUN>::Prototype;
-      using WeavingPattern = MediaWeavingPattern<Prototype>;
+      using WeavingPattern = MediaWeavingPattern<PROT>;
       using TurnoutWeaving = Turnout<WeavingPattern>;
       static constexpr SizMark<sizeof(TurnoutWeaving)> sizMark{};
-      static constexpr uint FAN_I = Prototype::FAN_I;
-      static constexpr uint FAN_O = Prototype::FAN_O;
+      static constexpr uint FAN_I = PROT::FAN_I;
+      static constexpr uint FAN_O = PROT::FAN_O;
 
       
       using TypeMarker = std::function<BuffDescr(BufferProvider&)>;
@@ -262,15 +263,27 @@ namespace engine {
       
       StrView nodeSymb_;
       StrView portSpec_;
-      FUN fun_;
+      PROT prototype_;
       
       template<typename...INIT>
-      WeavingBuilder(FUN&& init, StrView nodeSymb, StrView portSpec, INIT&& ...alloInit)
+      WeavingBuilder (PROT&& prototype, StrView nodeSymb, StrView portSpec, INIT&& ...alloInit)
         : leadPorts{forward<INIT> (alloInit)...}
         , buffTypes{fillDefaultBufferTypes()}
         , nodeSymb_{nodeSymb}
         , portSpec_{portSpec}
-        , fun_{move(init)}
+        , prototype_{move(prototype)}
+        { }
+      
+      /** cross-ctor to switch to another prototype */
+      template<class PREV>
+      WeavingBuilder (WeavingBuilder<POL,PREV>&& prevBuilder, PROT&& adaptedPrototype)
+        : leadPorts {move (prevBuilder.leadPorts)}
+        , buffTypes {move (prevBuilder.buffTypes)}
+        , providers {move (prevBuilder.providers)}
+        , resultSlot{move (prevBuilder.resultSlot)}
+        , nodeSymb_ {move (prevBuilder.nodeSymb_)}
+        , portSpec_ {move (prevBuilder.portSpec_)}
+        , prototype_{move (adaptedPrototype)}
         { }
       
       WeavingBuilder&&
@@ -333,7 +346,7 @@ namespace engine {
           // provide a free-standing functor to build a suitable Port impl (≙Turnout)
           return [leads = move(leadPorts.build())
                  ,types = move(outTypes.build())
-                 ,procFun = move(fun_)
+                 ,prototype = move(prototype_)
                  ,resultIdx = resultSlot
                  ,procID = ProcID::describe (nodeSymb_,portSpec_)
                  ]
@@ -343,7 +356,7 @@ namespace engine {
                                                                ,move(leads)
                                                                ,move(types)
                                                                ,resultIdx
-                                                               ,move(procFun)
+                                                               ,move(prototype)
                                                                );
                    };
         }
@@ -382,7 +395,7 @@ namespace engine {
             }
         };
       
-      using OutTypesDescriptors = typename Prototype::template OutTypesApply<BufferDescriptor>;
+      using OutTypesDescriptors = typename PROT::template OutTypesApply<BufferDescriptor>;
       using OutDescriptorTup = lib::meta::Tuple<OutTypesDescriptors>;
       
       /** A tuple of BufferDescriptor instances for all output buffer types */

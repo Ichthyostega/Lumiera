@@ -353,6 +353,9 @@ namespace engine {
       
       /*************************************************************//**
        * Terminal: complete the Port wiring and return to the node level.
+       * @remark this prepares a suitable Turnout instance for a port;
+       *         but due to constraints with memory allocation, actual build
+       *         is delayed and packaged as functor into a PatternData instance.
        */
       auto
       completePort()
@@ -369,9 +372,20 @@ namespace engine {
         : _Par{move(base)}
         , weavingBuilder_{forward<FUN> (fun), _Par::symbol_, portSpec, _Par::leads_.policyConnect()}
         , defaultPort_{_Par::patternData_.size()}
-        { }
+        { }               // ^^^ by default use next free port
       
       friend class PortBuilderRoot<POL,DAT>;
+      
+      /** cross-builder to adapt embedded WeavingBuilder type */
+      template<class WABO>
+      PortBuilder (PortBuilder<POL,DAT,WABO>&& prevBuilder, WAB&& adaptedWeavingBuilder)
+        : _Par{move(prevBuilder)}
+        , weavingBuilder_{move (adaptedWeavingBuilder)}
+        , defaultPort_{prevBuilder.defaultPort_}
+        { }
+      
+      template<class PX, class DX, class WX>
+      friend class PortBuilder;
     };
   
   
@@ -401,7 +415,8 @@ namespace engine {
   auto
   PortBuilderRoot<POL,DAT>::invoke (StrView portSpec, FUN fun)
     {
-      using WeavingBuilder_FUN = WeavingBuilder<POL, FUN>;
+      using Prototype = typename FeedManifold<FUN>::Prototype;
+      using WeavingBuilder_FUN = WeavingBuilder<POL, Prototype>;
       return PortBuilder<POL,DAT, WeavingBuilder_FUN>{move(*this), move(fun), portSpec};
     }
 /*
